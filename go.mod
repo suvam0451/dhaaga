@@ -1,4 +1,4 @@
-module changeme
+module browser
 
 go 1.18
 

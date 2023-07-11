@@ -10,13 +10,11 @@ function App() {
     const updateResultText = (result: string) => setResultText(result);
 
     async function greet() {
-        console.log("greet attempted")
-        const regex = new RegExp('https://www\.threads\.net/t/(.*?)/')
+        const regex = new RegExp('https://www\.threads\.net/t/(.*?)/?$')
 
         // item is a thread
         if(regex.test(name)) {
             const query = name.match(regex)![1]
-            
             const res = await GetImagesFromThread(query)
             console.log(query, res)
         }
