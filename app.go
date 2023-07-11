@@ -31,7 +31,6 @@ func ThreadsNetApiInvoke[T any](query map[string]string, docId string, lsd strin
 	// url
 	THREADS_API_URL := "https://www.threads.net/api/graphql"
 	IG_APP_ID := "238260118697367"
-	// DOC_ID := "6529829603744567"
 
 	// body
 	json_str, _ := json.Marshal(query)
@@ -124,7 +123,6 @@ func GetImagesForThread_Impl(postId string, lsd string) threadsapi.ThreadsApiPos
 
 // GetImageAssetsForPost returns a list of asset urls for a post
 func GetImageAssetsForPost(post *threadsapi.ThreadsApi_Post, depth int) (assets []string) {
-	fmt.Println(depth)
 	// TODO: add support for recursive post fetching
 	if depth >= 2 {
 		return
@@ -153,9 +151,47 @@ func GetImageAssetsForPost(post *threadsapi.ThreadsApi_Post, depth int) (assets 
 	return
 }
 
-//func GetPostsForProfile_Controller(username string) []string {
-//	url := "https://www.threads.net/t/" + username
-//}
+type getImagesForProfileReturnType struct {
+	user   threadsapi.ThreadsApi_User
+	assets []string
+}
+
+func GetImagesForProfile_Controller(username string) []string {
+	worker := services.CollyWorker{}
+	worker.Callback = func(r *colly.Response) {
+		worker.Body = r.Body
+
+		userId := worker.CollectUserId()
+
+		lsd := worker.CollectLsd()
+		docId := "6451898791498605"
+
+		if userId == nil || lsd == nil {
+			return
+		}
+
+		if data, apiErr := ThreadsNetApiInvoke[threadsapi.ThreadsApiUserThreadsQuery](map[string]string{
+			"userID": *userId,
+		}, docId, *lsd); apiErr != nil {
+			return
+		} else {
+			threads := data.MediaData.Threads
+			for i := 0; i < len(threads); i++ {
+				thread := threads[i]
+				for j := 0; j < len(thread.ThreadItems); j++ {
+					threadItem := thread.ThreadItems[j]
+					worker.Assets = append(worker.Assets, GetImageAssetsForPost(threadItem.Post, 0)...)
+				}
+			}
+		}
+	}
+
+	worker.Visit("https://www.threads.net/" + username)
+	retval := getImagesForProfileReturnType{}
+	retval.assets = worker.Assets
+
+	return worker.Assets
+}
 
 // GetImagesForThread_Controller returns a list of asset urls for a thread
 func GetImagesForThread_Controller(id string) []string {
@@ -200,16 +236,11 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
-}
-
 // GetImagesFromThread_Impl returns a list of asset urls
 func (a *App) GetImagesFromThread(url string) []string {
 	return GetImagesForThread_Controller(url)
 }
 
-// func (a *App) GetPostsForProfile(username string) []string {
-// return GetPostsForProfile_Controller(username)
-// }
+func (a *App) GetImagesForProfile(username string) []string {
+	return GetImagesForProfile_Controller(username)
+}
