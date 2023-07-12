@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"name": "Root",
+			"path": ".",
+		},
+		{
+			"name": "Frontend",
+			"path": "frontend"
+		},
+		{
+			"name": "Interop Guide",
+			"path": "frontend/wailsjs/go",
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true,
+			"LICENSE": true,
+			"go.sum": true,
+			"build": true,
+			"frontend/dist/**": true,
+			"frontend/node_modules/**": true,
+
+			// Wails generated stuff
+			"frontend/wailsjs/**": true
+		}
+	}
+}

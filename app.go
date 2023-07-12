@@ -244,3 +244,17 @@ func (a *App) GetImagesFromThread(url string) []string {
 func (a *App) GetImagesForProfile(username string) []string {
 	return GetImagesForProfile_Controller(username)
 }
+
+func (a *App) GetAsset(url string) []byte {
+	resp, respErr := http.Get(url)
+	if respErr != nil {
+		fmt.Println(respErr)
+		return nil
+	}
+	byteArray, readErr := ioutil.ReadAll(resp.Body)
+	if readErr != nil {
+		fmt.Println(readErr)
+		return nil
+	}
+	return byteArray
+}
