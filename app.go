@@ -3,6 +3,7 @@ package main
 import (
 	"browser/pkg/services"
 	"browser/pkg/threadsapi"
+	"browser/pkg/threadsdb"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -128,6 +129,11 @@ func GetImageAssetsForPost(post *threadsapi.ThreadsApi_Post, depth int) (assets 
 		return
 	}
 
+	dbClient := threadsdb.ThreadsDbClient{}
+	dbClient.LoadDatabase()
+	dbClient.UpsertUser(post.User)
+	dbClient.CloseDatabase()
+
 	// adding items from this post
 	if len(post.ImageVersions2.Candidates) == 0 {
 	} else {
@@ -225,6 +231,18 @@ func GetImagesForThread_Controller(id string) []string {
 	return worker.Assets
 }
 
+// SearchUsers_Impl returns a list of users matching the query
+func SearchUsers_Impl(query string) []threadsapi.ThreadsApi_User {
+	if len(query) < 3 {
+		return []threadsapi.ThreadsApi_User{}
+	}
+	client := threadsdb.ThreadsDbClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+
+	return client.SearchUsers(query)
+}
+
 // NewApp creates a new App application struct
 func NewApp() *App {
 	return &App{}
@@ -236,15 +254,17 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// GetImagesFromThread_Impl returns a list of asset urls
+// GetImagesFromThread returns a list of asset urls for a given thread
 func (a *App) GetImagesFromThread(url string) []string {
 	return GetImagesForThread_Controller(url)
 }
 
+// GetImagesForProfile returns a list of asset urls for a given username
 func (a *App) GetImagesForProfile(username string) []string {
 	return GetImagesForProfile_Controller(username)
 }
 
+// GetAsset returns a byte array of the requested image
 func (a *App) GetAsset(url string) []byte {
 	resp, respErr := http.Get(url)
 	if respErr != nil {
@@ -257,4 +277,8 @@ func (a *App) GetAsset(url string) []byte {
 		return nil
 	}
 	return byteArray
+}
+
+func (a *App) SearchUsers(query string) []threadsapi.ThreadsApi_User {
+	return SearchUsers_Impl(query)
 }

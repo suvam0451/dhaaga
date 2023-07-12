@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { gallerySlice } from "./stores/gallerySlice";
+import { recommendationsSlice } from "./stores/recommendationsSlice";
+import { searchSlice } from "./stores/searchSlice";
 
 const store = configureStore({
 	reducer: {
 		gallery: gallerySlice,
+    recommendations: recommendationsSlice,
+		search: searchSlice,
 	},
 });
 export default store;

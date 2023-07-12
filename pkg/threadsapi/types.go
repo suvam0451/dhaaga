@@ -1,11 +1,11 @@
 package threadsapi
 
 type ThreadsApi_User struct {
-	id              string
-	username        string
-	is_verified     bool
-	pk              string
-	profile_pic_url string
+	Id            string `json:"id"`
+	Username      string `json:"username"`
+	IsVerified    bool   `json:"is_verified"`
+	Pk            string `json:"pk"`
+	ProfilePicUrl string `json:"profile_pic_url"`
 }
 
 type ThreadsApi_Post_ImageVersions2_Candidates struct {

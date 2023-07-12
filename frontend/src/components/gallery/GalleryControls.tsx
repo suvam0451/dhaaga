@@ -8,6 +8,7 @@ import {
 	IconHeart,
 	IconSortDescending,
 	IconSettings,
+	IconDeselect,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -64,10 +65,15 @@ function GalleryControllerArray() {
 			<Flex direction={"column"} className="flex flex-row bg-red-400">
 				{/* Group 1 */}
 				<IconHeart size={48} />
+
 				<IconArrowsMaximize size={48} color="#ddd" />
 
+				<Box my={"lg"}></Box>
+
 				{/* Group 2 */}
-				<Box className="flex-1">
+				<Box bg={"#eee"} className={"flex-1 rounded-lg"}>
+					<IconDeselect size={48} color="#aaa" />
+
 					<IconChevronUp
 						size={48}
 						color="#aaa"
@@ -84,6 +90,7 @@ function GalleryControllerArray() {
 					/>
 				</Box>
 
+				<Box my={"lg"}></Box>
 				{/* Group 3 */}
 				<Box className="flex-1">
 					{SettingsHidden && (

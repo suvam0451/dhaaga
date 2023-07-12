@@ -13,3 +13,7 @@ export function GetImagesForProfile(arg1) {
 export function GetImagesFromThread(arg1) {
   return window['go']['main']['App']['GetImagesFromThread'](arg1);
 }
+
+export function SearchUsers(arg1) {
+  return window['go']['main']['App']['SearchUsers'](arg1);
+}

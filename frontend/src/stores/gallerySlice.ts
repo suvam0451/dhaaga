@@ -1,7 +1,4 @@
-import {
-	createAction,
-	createReducer,
-} from "@reduxjs/toolkit";
+import { createAction, createReducer } from "@reduxjs/toolkit";
 import { getImageBase64 } from "./workerSlice";
 
 interface GalleryState {
@@ -31,7 +28,6 @@ export const gallerySlice = createReducer<GalleryState>(
 				};
 			})
 			.addCase(setGallery, (state, action) => {
-				console.log("setGallery", action.payload);
 				return {
 					...state,
 					imageUrls: action.payload,

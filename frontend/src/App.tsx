@@ -5,22 +5,13 @@ import {
 	GetImagesForProfile,
 	GetImagesFromThread,
 } from "../wailsjs/go/main/App";
-import {
-	Button,
-	Tabs,
-	Input,
-	Image,
-	Flex,
-	Container,
-	Box,
-	Grid,
-	Loader,
-	Text,
-} from "@mantine/core";
-import { IconCheck, IconSearch } from "@tabler/icons-react";
+import { Tabs, Image, Flex, Container, Box, Grid, Text } from "@mantine/core";
 import Base64GalleryItem from "./components/Base64GalleryItem";
 import GalleryControllerArray from "./components/gallery/GalleryControls";
 import { useDispatch } from "react-redux";
+import SearchBox from "./components/search/Searchbox";
+import SearchLocalDatabase from "./components/search/SearchLocalDatabase";
+import { IconBrandInstagram, IconSlash } from "@tabler/icons-react";
 
 function App() {
 	const dispatch = useDispatch();
@@ -48,6 +39,61 @@ function App() {
 	const regex = new RegExp("https://www.threads.net/t/(.*?)/?$");
 	const profileRegex = new RegExp("https://www.threads.net/(@.*?)/?$");
 
+	function threadsLinkValidator(q: string) {
+		const regex = new RegExp("https://www.threads.net/t/(.*?)/?$");
+		const profileRegex = new RegExp("https://www.threads.net/(@.*?)/?$");
+
+		if (regex.test(q)) {
+			return {
+				valid: true,
+				tooltip: "This is a valid thread",
+			};
+		} else if (profileRegex.test(q)) {
+			return {
+				valid: true,
+				tooltip: "This is a valid profile",
+			};
+		} else {
+			return {
+				valid: false,
+				tooltip: undefined,
+			};
+		}
+	}
+
+	async function onSearchboxClick(q: string) {
+		setIsLoading(true);
+		setSearchEnabled(false);
+		dispatch({ type: "clearGallery" });
+
+		// item is a thread
+		if (regex.test(q)) {
+			const query = q.match(regex)![1];
+
+			try {
+				const res = await GetImagesFromThread(query);
+				if (res.length > 0) {
+					dispatch({ type: "setGallery", payload: res });
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		} else if (profileRegex.test(q)) {
+			const query = q.match(profileRegex)![1];
+
+			try {
+				const res = await GetImagesForProfile(query);
+				if (res.length > 0) {
+					dispatch({ type: "setGallery", payload: res });
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		setSearchEnabled(true);
+		setIsLoading(false);
+	}
+
 	// show the user than their url is a valid one
 	useEffect(() => {
 		if (regex.test(SearchTerm)) {
@@ -68,47 +114,6 @@ function App() {
 		}
 	}, [SearchTerm]);
 
-	async function greet() {
-		setIsLoading(true);
-		setSearchEnabled(false);
-		dispatch({ type: "clearGallery" });
-
-		// item is a thread
-		if (regex.test(SearchTerm)) {
-			const query = SearchTerm.match(regex)![1];
-
-			try {
-				setSearchQuery({
-					query,
-					type: "thread",
-				});
-				const res = await GetImagesFromThread(query);
-				if (res.length > 0) {
-					dispatch({ type: "setGallery", payload: res });
-				}
-			} catch (e) {
-				console.log(e);
-			}
-		} else if (profileRegex.test(SearchTerm)) {
-			const query = SearchTerm.match(profileRegex)![1];
-
-			try {
-				setSearchQuery({
-					query,
-					type: "profile",
-				});
-				const res = await GetImagesForProfile(query);
-				if (res.length > 0) {
-					dispatch({ type: "setGallery", payload: res });
-				}
-			} catch (e) {
-				console.log(e);
-			}
-		}
-		setSearchEnabled(true);
-		setIsLoading(false);
-	}
-
 	const FIXED_PREVIEW_WIDTH = "96px";
 	const FIXED_PREVIEW_HEIGHT = "128px";
 
@@ -128,30 +133,23 @@ function App() {
 
 					<Tabs.Panel value="search" pt="xs">
 						<Container size="xs" px="xs" h={"100%"}>
-							<div id="input" className="input-box">
-								<Flex>
-									<Input
-										icon={
-											SearchTermValid.validity ? (
-												<IconCheck color="green" />
-											) : (
-												<IconSearch />
-											)
-										}
-										onChange={updateName}
-										placeholder="Search for anything..."
-										ref={searchboxRef}
-										error={SearchTermValid.validity ? false : true}
-									/>
-									<Button onClick={greet}>
-										{IsLoading ? (
-											<Loader color="#fff" size={20} />
-										) : (
-											<Text>Go</Text>
-										)}
-									</Button>
-								</Flex>
-							</div>
+							<Flex dir="row">
+								<SearchBox
+									validator={threadsLinkValidator}
+									onClickCallback={onSearchboxClick}
+									isLoadingOverride={IsLoading}
+									placeholder="Paste URL here..."
+								/>
+								<Box mx={"xs"}>
+									<IconBrandInstagram size={36} color="#666" />
+								</Box>
+								<SearchLocalDatabase
+									validator={threadsLinkValidator}
+									onClickCallback={onSearchboxClick}
+									isLoadingOverride={IsLoading}
+									placeholder="Search local database..."
+								/>
+							</Flex>
 
 							<Flex py={"xl"}>
 								<Grid grow gutter="lg">
