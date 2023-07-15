@@ -2,8 +2,8 @@ import { Box, Button, Flex, Loader, Text, TextInput } from "@mantine/core";
 import { IconCheck, IconSearch, IconSlash } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store";
-import { SearchState } from "../../stores/searchSlice";
+import { AppDispatch, RootState } from "../../lib/redux/store";
+import { SearchState } from "../../lib/redux/slices/searchSlice";
 
 type SearchTermValidity = {
 	valid: boolean;
@@ -33,9 +33,7 @@ function SearchBox({
 	placeholder,
 }: SearchBoxProps) {
 	const dispatch = useDispatch<AppDispatch>();
-	const search = useSelector<RootState, SearchState>(
-		(o) => o.search)
-	const searchboxRef = useRef<HTMLInputElement>(null);
+	const search = useSelector<RootState, SearchState>((o) => o.search);
 
 	const [SearchTermValid, setSearchTermValid] = useState<SearchTermValidity>({
 		valid: false,
@@ -54,7 +52,6 @@ function SearchBox({
 		<Box>
 			<Flex>
 				<TextInput
-					ref={searchboxRef}
 					icon={
 						SearchTermValid.valid ? <IconCheck color="green" /> : <IconSearch />
 					}
@@ -64,7 +61,9 @@ function SearchBox({
 					}}
 					placeholder={placeholder || "Search for anything..."}
 					error={
-						search.searchTerm === "" || SearchTermValid.valid === true ? false : true
+						search.searchTerm === "" || SearchTermValid.valid === true
+							? false
+							: true
 					}
 				/>
 				<Button onClick={onClickCallbackHandler} ml={"xs"}>

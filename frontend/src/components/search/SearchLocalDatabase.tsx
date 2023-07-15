@@ -3,10 +3,10 @@ import { IconDatabase } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store";
-import { getThreadsRecommendations } from "../../stores/workerSlice";
+import { AppDispatch, RootState } from "../../lib/redux/store";
+import { getThreadsRecommendations } from "../../lib/redux/slices/workerSlice";
 import { SelectItem_ThreadsDesktop } from "../variants/search-recommendations/threadsDesktop";
-import { RecommendationsState } from "../../stores/recommendationsSlice";
+import { RecommendationsState } from "../../lib/redux/slices/recommendationsSlice";
 
 type SearchTermValidity = {
 	valid: boolean;
@@ -31,7 +31,6 @@ function SearchLocalDatabase({ placeholder, onClickCallback }: SearchBoxProps) {
 		(o) => o.recommendations
 	);
 
-	const searchboxRef = useRef<HTMLInputElement>(null);
 	const [SearchTerm, setSearchTerm] = useState<string | null>(null);
 	const [debounced] = useDebouncedValue(SearchTerm || "", 200);
 
@@ -64,7 +63,6 @@ function SearchLocalDatabase({ placeholder, onClickCallback }: SearchBoxProps) {
 		<Select
 			clearable
 			searchable
-			ref={searchboxRef}
 			icon={<IconDatabase />}
 			placeholder={placeholder || "Search for anything..."}
 			itemComponent={(e) => (

@@ -1,6 +1,6 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import { threadsapi } from "../../wailsjs/go/models";
 import { getThreadsRecommendations } from "./workerSlice";
+import { threadsapi } from "../../../../wailsjs/go/models";
 
 export interface RecommendationsState {
 	searchRecommendations: threadsapi.ThreadsApi_User[];

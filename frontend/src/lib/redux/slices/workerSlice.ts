@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { GetAsset, SearchUsers } from "../../wailsjs/go/main/App";
+import { GetAsset, SearchUsers } from "../../../../wailsjs/go/main/App";
 
 /**
  * Use worker to fetch image assets as base64,

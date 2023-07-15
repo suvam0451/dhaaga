@@ -162,7 +162,7 @@ type getImagesForProfileReturnType struct {
 	assets []string
 }
 
-func GetImagesForProfile_Controller(username string) []string {
+func GetImagesForProfile_Controller(url string) []string {
 	worker := services.CollyWorker{}
 	worker.Callback = func(r *colly.Response) {
 		worker.Body = r.Body
@@ -192,7 +192,7 @@ func GetImagesForProfile_Controller(username string) []string {
 		}
 	}
 
-	worker.Visit("https://www.threads.net/" + username)
+	worker.Visit(url)
 	retval := getImagesForProfileReturnType{}
 	retval.assets = worker.Assets
 
@@ -200,7 +200,7 @@ func GetImagesForProfile_Controller(username string) []string {
 }
 
 // GetImagesForThread_Controller returns a list of asset urls for a thread
-func GetImagesForThread_Controller(id string) []string {
+func GetImagesForThread_Controller(url string) []string {
 	worker := services.CollyWorker{}
 	worker.Callback = func(r *colly.Response) {
 		worker.Body = r.Body
@@ -226,7 +226,6 @@ func GetImagesForThread_Controller(id string) []string {
 		}
 	}
 
-	url := "https://www.threads.net/t/" + id
 	worker.Visit(url)
 	return worker.Assets
 }
