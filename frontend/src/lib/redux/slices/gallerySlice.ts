@@ -1,7 +1,7 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { getImageBase64 } from "./workerSlice";
 
-interface GalleryState {
+export interface GalleryState {
 	imageUrls: string[];
 	galleryIndex: number;
 	currentImage?: string | Uint8Array;

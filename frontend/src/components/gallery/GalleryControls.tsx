@@ -1,4 +1,4 @@
-import { Box, Flex, Space } from "@mantine/core";
+import { Box, Flex, RingProgress, Text } from "@mantine/core";
 import {
 	IconArrowsMaximize,
 	IconChevronDown,
@@ -11,10 +11,14 @@ import {
 	IconDeselect,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../lib/redux/store";
+import { GalleryState } from "../../lib/redux/slices/gallerySlice";
 
 function GalleryControllerArray() {
 	const dispatch = useDispatch();
+	const galleryState = useSelector<RootState, GalleryState>((o) => o.gallery);
+
 	/**
 	 * Handles key press actions
 	 * @param e
@@ -22,18 +26,15 @@ function GalleryControllerArray() {
 	function keyPressHandler(e: any) {
 		switch (e.keyCode) {
 			case 37: {
-				// console.log("Left Key pressed!");
 				break;
 			}
 			case 38: {
 				dispatch({
 					type: "galleryPrev",
 				});
-				// console.log("up Key pressed!");
 				break;
 			}
 			case 39: {
-				// console.log("right key pressed");
 				break;
 			}
 			case 40: {
@@ -43,7 +44,6 @@ function GalleryControllerArray() {
 				break;
 			}
 		}
-		// console.log(e);
 	}
 
 	useEffect(() => {
@@ -55,13 +55,7 @@ function GalleryControllerArray() {
 
 	const [SettingsHidden, setSettingsHidden] = useState(false);
 	return (
-		<Box
-			pos={"absolute"}
-			left={"100%"}
-			top={"0%"}
-			ml={"md"}
-			// className="bg-red-400"
-		>
+		<Box pos={"absolute"} left={"100%"} top={"0%"} ml={"md"}>
 			<Flex direction={"column"} className="flex flex-row bg-red-400">
 				{/* Group 1 */}
 				<IconHeart size={48} />
@@ -72,7 +66,32 @@ function GalleryControllerArray() {
 
 				{/* Group 2 */}
 				<Box bg={"#eee"} className={"flex-1 rounded-lg"}>
-					<IconDeselect size={48} color="#aaa" />
+					<RingProgress
+						label={
+							<Box>
+								<Text span fw={"bold"} align="center">
+									{galleryState.galleryIndex + 1}
+								</Text>
+								<Text span>/</Text>
+								<Text size={"xs"} span>
+									{galleryState.imageUrls.length}
+								</Text>
+							</Box>
+						}
+						thickness={3}
+						sections={[
+							{
+								value:
+									galleryState.imageUrls.length === 0
+										? 0
+										: ((galleryState.galleryIndex + 1) /
+												galleryState.imageUrls.length) *
+										  100,
+								color: "gray",
+							},
+						]}
+						size={64}
+					/>
 
 					<IconChevronUp
 						size={48}

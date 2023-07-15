@@ -1,7 +1,14 @@
 import { Box, Image, LoadingOverlay, ScrollArea } from "@mantine/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getImageBase64 } from "../lib/redux/slices/workerSlice"
+import { getImageBase64 } from "../lib/redux/slices/workerSlice";
+import {
+	GALLERY_FIXED_HEIGHT,
+	GALLERY_FIXED_WIDTH,
+	GALLERY_MAX_HEIGHT,
+} from "../constants/app-dimensions";
+import { AppDispatch, RootState } from "../lib/redux/store";
+import { GalleryState } from "../lib/redux/slices/gallerySlice";
 
 /**
  * Populates the gallery image for the "Search" page
@@ -9,15 +16,11 @@ import { getImageBase64 } from "../lib/redux/slices/workerSlice"
  * @returns
  */
 function Base64GalleryItem() {
-	const dispatch = useDispatch();
-	// @ts-ignore-next-line
-	const galleryState = useSelector((o) => o.gallery);
+	const dispatch = useDispatch<AppDispatch>();
+	const galleryState = useSelector<RootState, GalleryState>((o) => o.gallery);
 
 	useEffect(() => {
-		console.log(galleryState.galleryIndex);
 		if (galleryState.galleryIndex === -1) return;
-
-		// @ts-ignore-next-line
 		dispatch(getImageBase64(galleryState.imageUrls[galleryState.galleryIndex]));
 	}, [galleryState.galleryIndex]);
 
@@ -25,26 +28,30 @@ function Base64GalleryItem() {
 		? `data:image/png;base64,${galleryState?.currentImage}`
 		: undefined;
 
-	return galleryState.currentImageLoading ? (
-		<LoadingOverlay
-			visible={galleryState.currentImageLoading}
-			overlayBlur={2}
-		/>
-	) : galleryState.currentImage ? (
-		<ScrollArea w={500} h={560}>
-			<Box mah={500} maw={400}>
-				<Image
-					mx="auto"
-					radius="md"
-					src={imageSrc}
-					alt={"Image"}
-					pos={"relative"}
-					fit={"contain"}
+	return (
+		<Box w={GALLERY_FIXED_WIDTH} h={GALLERY_FIXED_HEIGHT}>
+			{galleryState.currentImageLoading ? (
+				<LoadingOverlay
+					visible={galleryState.currentImageLoading}
+					overlayBlur={2}
 				/>
-			</Box>
-		</ScrollArea>
-	) : (
-		<Box>We have nothing to show you right now.</Box>
+			) : galleryState.currentImage ? (
+				<ScrollArea w={GALLERY_FIXED_WIDTH} h={GALLERY_FIXED_HEIGHT}>
+					<Box w={GALLERY_FIXED_WIDTH} mah={GALLERY_MAX_HEIGHT}>
+						<Image
+							mx="auto"
+							radius="md"
+							src={imageSrc}
+							alt={"Image"}
+							pos={"relative"}
+							fit={"contain"}
+						/>
+					</Box>
+				</ScrollArea>
+			) : (
+				<Box>We have nothing to show you right now.</Box>
+			)}
+		</Box>
 	);
 }
 

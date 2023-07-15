@@ -10,6 +10,11 @@ import {
 	IconHome,
 } from "@tabler/icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
+import Link from "next/link";
+import {
+	APP_MAX_HEIGHT,
+	GALLERY_FIXED_HEIGHT,
+} from "../../constants/app-dimensions";
 
 interface MainLinkProps {
 	icon: React.ReactNode;
@@ -69,39 +74,28 @@ export function MainLinks() {
 
 function Sidebar() {
 	return (
-		<Navbar height={"100%"} p="xs" width={{ base: 240 }} bg={"#aaa"} mr={"md"}>
-			<Navbar.Section mt="0">
-				<Text>Prototype</Text>
+		<Navbar p="xs" h={"100%"} width={{ base: 240 }} pr={"md"}>
+			<Navbar.Section>
+				<Text>Prototype App</Text>
 			</Navbar.Section>
-			<Navbar height={500} p="xs" width={{ base: 160 }}>
-				<Navbar.Section mt="xs">{/* Header with logo */}</Navbar.Section>
-
-				<Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
-					{/* scrollable content here */}
+			<Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
+				{/* scrollable content here */}
+				<Link href="/">
 					<MainLink icon={<IconHome />} color={"#ddd"} label="Home" />
+				</Link>
+				<Link href="/search">
 					<MainLink icon={<IconSearch />} color={"#ddd"} label="Search" />
+				</Link>
+				<Link href="/database">
 					<MainLink
 						icon={<IconDatabase color="rgb(238, 190, 250)" />}
 						color={"rgba(156, 54, 181, 0.2)"}
 						label="Gallery"
 					/>
+				</Link>
+				<Link href="/settings">
 					<MainLink icon={<IconSettings />} color={"#ddd"} label="Settings" />
-				</Navbar.Section>
-
-				<Navbar.Section>{/* Footer with user */}</Navbar.Section>
-			</Navbar>
-			<Navbar.Section
-				grow
-				component={ScrollArea}
-				mx="-xs"
-				px="xs"
-			>
-
-        <Text>Placeholder</Text>
-      </Navbar.Section>
-
-			<Navbar.Section>
-				<Box></Box>
+				</Link>
 			</Navbar.Section>
 		</Navbar>
 	);
