@@ -1,4 +1,4 @@
-import { Box, Navbar, ScrollArea } from "@mantine/core";
+import { Navbar, ScrollArea } from "@mantine/core";
 import React from "react";
 import {
 	IconGitPullRequest,
@@ -10,11 +10,7 @@ import {
 	IconHome,
 } from "@tabler/icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
-import Link from "next/link";
-import {
-	APP_MAX_HEIGHT,
-	GALLERY_FIXED_HEIGHT,
-} from "../../constants/app-dimensions";
+import { Link } from "react-router-dom";
 
 interface MainLinkProps {
 	icon: React.ReactNode;
@@ -80,20 +76,20 @@ function Sidebar() {
 			</Navbar.Section>
 			<Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
 				{/* scrollable content here */}
-				<Link href="/">
+				<Link to="/home">
 					<MainLink icon={<IconHome />} color={"#ddd"} label="Home" />
 				</Link>
-				<Link href="/search">
+				<Link to="/search">
 					<MainLink icon={<IconSearch />} color={"#ddd"} label="Search" />
 				</Link>
-				<Link href="/database">
+				<Link to="/database">
 					<MainLink
 						icon={<IconDatabase color="rgb(238, 190, 250)" />}
 						color={"rgba(156, 54, 181, 0.2)"}
 						label="Gallery"
 					/>
 				</Link>
-				<Link href="/settings">
+				<Link to="/settings">
 					<MainLink icon={<IconSettings />} color={"#ddd"} label="Settings" />
 				</Link>
 			</Navbar.Section>

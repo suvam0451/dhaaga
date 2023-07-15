@@ -1,34 +1,25 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-import "../App.css";
+import { useEffect, useState } from "react";
 import {
 	GetImagesForProfile,
 	GetImagesFromThread,
-} from "../../../wailsjs/go/main/App";
-import { Image, Flex, Box, Grid } from "@mantine/core";
-import Base64GalleryItem from "../../components/Base64GalleryItem";
-import GalleryControllerArray from "../../components/gallery/GalleryControls";
+} from "../../wailsjs/go/main/App";
+import { Flex, Box } from "@mantine/core";
+import SearchGalleryMain from "../components/gallery/SearchGalleryMain";
+import SearchGalleryControls from "../components/gallery/SearchGalleryControls";
 import { useDispatch } from "react-redux";
-import SearchBox from "../../components/search/Searchbox";
-import SearchLocalDatabase from "../../components/search/SearchLocalDatabase";
+import SearchBox from "../components/search/Searchbox";
+import SearchLocalDatabase from "../components/search/SearchLocalDatabase";
 import { IconBrandInstagram } from "@tabler/icons-react";
-import AppScreenLayout from "../../layouts/AppScreenLayout";
-import ImageGalleryPreviewGrid from "../../components/gallery/GalleryPreview";
+import AppScreenLayout from "../layouts/AppScreenLayout";
+import ImageGalleryPreviewGrid from "../components/gallery/SearchGalleryPreview";
+
+import "../styles/App.css";
 
 function App() {
 	const dispatch = useDispatch();
 	const [SearchTerm, setSearchTerm] = useState("");
-	const updateName = (e: any) => setSearchTerm(e.target.value);
 
 	const [SearchEnabled, setSearchEnabled] = useState(false);
-	const [SearchQuery, setSearchQuery] = useState<{
-		query: string;
-		type?: "profile" | "thread";
-	}>({
-		query: "",
-		type: undefined,
-	});
 	const [IsLoading, setIsLoading] = useState(false);
 	const [SearchTermValid, setSearchTermValid] = useState<{
 		validity: boolean;
@@ -37,7 +28,6 @@ function App() {
 		validity: false,
 		tooltip: undefined,
 	});
-	const searchboxRef = useRef<HTMLInputElement>(null);
 
 	const regex = new RegExp("https://www.threads.net/@(.*?)/post/(.*?)/?$");
 	const profileRegex = new RegExp("https://www.threads.net/(@.*?)/?$");
@@ -71,8 +61,6 @@ function App() {
 
 		// item is a thread
 		if (regex.test(q)) {
-			// const query = q.match(regex)![1];
-
 			try {
 				console.log("query", q);
 				const res = await GetImagesFromThread(q);
@@ -84,8 +72,6 @@ function App() {
 				console.log(e);
 			}
 		} else if (profileRegex.test(q)) {
-			// const query = q.match(profileRegex)![1];
-
 			try {
 				const res = await GetImagesForProfile(q);
 				if (res.length > 0) {
@@ -119,9 +105,6 @@ function App() {
 		}
 	}, [SearchTerm]);
 
-	const FIXED_PREVIEW_WIDTH = 96;
-	const FIXED_PREVIEW_HEIGHT = 128;
-
 	return (
 		<AppScreenLayout>
 			<Flex dir="row">
@@ -145,8 +128,8 @@ function App() {
 			<Flex py={"md"} dir={"row"}>
 				<ImageGalleryPreviewGrid />
 				<Box pos={"relative"}>
-					<Base64GalleryItem />
-					<GalleryControllerArray />
+					<SearchGalleryMain />
+					<SearchGalleryControls />
 				</Box>
 			</Flex>
 		</AppScreenLayout>

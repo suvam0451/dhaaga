@@ -66,7 +66,13 @@ function SearchLocalDatabase({ placeholder, onClickCallback }: SearchBoxProps) {
 			icon={<IconDatabase />}
 			placeholder={placeholder || "Search for anything..."}
 			itemComponent={(e) => (
-				<SelectItem_ThreadsDesktop searchTerm={debounced} {...e} />
+				<SelectItem_ThreadsDesktop
+					searchTerm={debounced}
+					{...e}
+					// pk={e.pk}
+					// username={e.username}
+					// profile_pic_url={e.profile_pic_url}
+				/>
 			)}
 			nothingFound="No results found..."
 			data={items}

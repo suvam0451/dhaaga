@@ -8,7 +8,6 @@ import {
 	IconHeart,
 	IconSortDescending,
 	IconSettings,
-	IconDeselect,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,7 +67,13 @@ function GalleryControllerArray() {
 				<Box bg={"#eee"} className={"flex-1 rounded-lg"}>
 					<RingProgress
 						label={
-							<Box>
+							<Box
+								style={{
+									display: "flex",
+									alignItems: "end",
+									justifyContent: "center",
+								}}
+							>
 								<Text span fw={"bold"} align="center">
 									{galleryState.galleryIndex + 1}
 								</Text>
@@ -90,7 +95,7 @@ function GalleryControllerArray() {
 								color: "gray",
 							},
 						]}
-						size={64}
+						size={56}
 					/>
 
 					<IconChevronUp

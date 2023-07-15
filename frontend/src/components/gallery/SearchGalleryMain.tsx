@@ -1,14 +1,14 @@
 import { Box, Image, LoadingOverlay, ScrollArea } from "@mantine/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getImageBase64 } from "../lib/redux/slices/workerSlice";
+import { getImageBase64 } from "../../lib/redux/slices/workerSlice";
 import {
 	GALLERY_FIXED_HEIGHT,
 	GALLERY_FIXED_WIDTH,
 	GALLERY_MAX_HEIGHT,
-} from "../constants/app-dimensions";
-import { AppDispatch, RootState } from "../lib/redux/store";
-import { GalleryState } from "../lib/redux/slices/gallerySlice";
+} from "../../constants/app-dimensions";
+import { AppDispatch, RootState } from "../../lib/redux/store";
+import { GalleryState } from "../../lib/redux/slices/gallerySlice";
 
 /**
  * Populates the gallery image for the "Search" page

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { GetAsset } from "../../../wailsjs/go/main/App";
 import { Box, Grid, Image } from "@mantine/core";
 import { GALLERY_PREVIEW_ITEM_FIXED_PREVIEW_WIDTH } from "../../constants/app-dimensions";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../lib/redux/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/redux/store";
 import { GalleryState } from "../../lib/redux/slices/gallerySlice";
 
 type GalleryPreviewItemProps = {
@@ -85,7 +85,7 @@ function GalleryPreviewItem_Controller({
 	}, [offset, galleryState.galleryIndex, galleryState.imageUrls]);
 
 	return (
-		<GalleryPreviewItem url={ImageUrl || "https://placehold.co/600x400/png"} />
+		<GalleryPreviewItem url={ImageUrl || "https://placehold.co/360x480/png"} />
 	);
 }
 
