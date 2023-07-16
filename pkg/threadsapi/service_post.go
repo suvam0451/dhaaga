@@ -26,8 +26,17 @@ type ThreadsApi_Post struct {
 	TextPostAppInfo ThreadsApi_Post_TextPostAppInfo `json:"text_post_app_info"`
 	ImageVersions2  ThreadsApi_Post_ImageVersions2  `json:"image_versions2"`
 	Caption         ThreadsApi_Caption              `json:"caption"`
-	LikeCount       int                             `json:"like_count"`
+	LikeCount       int                             `json:"like_count" db:"like_count"`
 	ThreadsApi_Post_Methods
+
+	// database fields
+	RepostedPostFk *string `db:"reposted_post_fk"`
+	QuotedPostPk   *string `db:"quoted_post_pk"`
+	LikedLocal     bool    `db:"liked_local"`
+	CaptionText    string  `db:"caption_text"`
+	ReplyCount     int     `db:"reply_count"`
+	TakenAtDate    string  `db:"taken_at"`
+	UserPk         string  `db:"user_pk"`
 }
 
 func (post *ThreadsApi_Post) GetUser() *ThreadsApi_User {

@@ -21,7 +21,11 @@ function Base64GalleryItem() {
 
 	useEffect(() => {
 		if (galleryState.galleryIndex === -1) return;
-		dispatch(getImageBase64(galleryState.imageUrls[galleryState.galleryIndex]));
+		dispatch(
+			getImageBase64(
+				galleryState.imageUrls[galleryState.galleryIndex].asset_url
+			)
+		);
 	}, [galleryState.galleryIndex]);
 
 	const imageSrc = galleryState?.currentImage || null;

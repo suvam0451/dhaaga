@@ -1,15 +1,16 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { getImageBase64 } from "./workerSlice";
+import { threadsapi, utils } from "../../../../wailsjs/go/models";
 
 export interface GalleryState {
-	imageUrls: string[];
+	imageUrls: utils.PostImageDTO[];
 	galleryIndex: number;
 	currentImage?: string;
 	currentImageLoading: boolean;
 }
 
 const clearGallery = createAction("clearGallery");
-const setGallery = createAction<string[], "setGallery">("setGallery");
+const setGallery = createAction<utils.PostImageDTO[], "setGallery">("setGallery");
 const setPrimaryDisplayItem = createAction<string, "setPrimaryDisplayItem">(
 	"setPrimaryDisplayItem"
 );

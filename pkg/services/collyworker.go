@@ -1,6 +1,7 @@
 package services
 
 import (
+	"browser/pkg/utils"
 	"regexp"
 
 	"github.com/gocolly/colly"
@@ -21,7 +22,7 @@ type CollyWorkerInterface interface {
 type CollyWorker struct {
 	CollyWorkerInterface
 	Body     []byte
-	Assets   []string
+	Assets   []utils.PostImageDTO
 	Callback colly.ResponseCallback
 }
 

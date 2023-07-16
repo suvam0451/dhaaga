@@ -38,17 +38,16 @@ func (client *ThreadsDbClient) CloseDatabase() {
 
 func (client *ThreadsDbClient) InitializeSchema() {
 	// BEGIN -- v0.0.0 -- BEGIN
-	usersDb := `CREATE TABLE IF NOT EXISTS users (
+	usersDb := `
+	CREATE TABLE IF NOT EXISTS users (
 		pk TEXT PRIMARY KEY,
 		username TEXT,
 		profile_pic_url TEXT,
 		follower_count INT DEFAULT 0,
 		full_name TEXT,
 		is_verified INT DEFAULT 0,
-		visit_count INT DEFAULT 0,
-		favourite INT DEFAULT 0,
-		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-		updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		visit_count_local INT DEFAULT 0,
+		favourited_local INT DEFAULT 0
 	);`
 	// END -- v0.0.0 -- END
 
@@ -57,13 +56,15 @@ func (client *ThreadsDbClient) InitializeSchema() {
 		CREATE TABLE IF NOT EXISTS threads (
 			id TEXT PRIMARY KEY,
 			thread_type TEXT NOT NULL,
-			user_pk TEXT
+			user_pk TEXT,
+			favourited_local INT DEFAULT 0
 		);`
 
 	postsDb := `
 	CREATE TABLE IF NOT EXISTS posts (
 		id TEXT PRIMARY KEY,
 		pk TEXT NOT NULL,
+		user_pk TEXT NOT NULL,
 		code TEXT NOT NULL,
 
 		caption_text TEXT,
@@ -72,14 +73,24 @@ func (client *ThreadsDbClient) InitializeSchema() {
 
 		taken_at DATETIME NOT NULL,
 		like_count INT DEFAULT 0,
-		reply_count INT DEFAULT 0
+		reply_count INT DEFAULT 0,
+		liked_local INT DEFAULT 0
 	)`
+	assetsDb := `
+	CREATE TABLE IF NOT EXISTS assets (
+		asset_url TEXT,
+		post_id TEXT,
+		asset_type TEXT,
+		liked_local INT DEFAULT 0
+	);`
+	// END -- v0.2.0 -- END
 
 	db := client.Db
 
 	db.MustExec(usersDb)
 	db.MustExec(threadsDb)
 	db.MustExec(postsDb)
+	db.MustExec(assetsDb)
 
 	fmt.Println("Initialized schema")
 }

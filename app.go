@@ -1,6 +1,7 @@
 package main
 
 import (
+	"browser/pkg/dashboard"
 	"browser/pkg/services"
 	"browser/pkg/threadsapi"
 	"browser/pkg/threadsdb"
@@ -124,7 +125,7 @@ func GetImagesForThread_Impl(postId string, lsd string) threadsapi.ThreadsApiPos
 }
 
 // GetImageAssetsForPost returns a list of asset urls for a post
-func GetImageAssetsForPost(post *threadsapi.ThreadsApi_Post, depth int) (assets []string) {
+func GetImageAssetsForPost(parentPostId string, post *threadsapi.ThreadsApi_Post, depth int) (assets []utils.PostImageDTO) {
 	// TODO: add support for recursive post fetching
 	if post == nil || depth >= 2 {
 		return
@@ -153,7 +154,11 @@ func GetImageAssetsForPost(post *threadsapi.ThreadsApi_Post, depth int) (assets 
 		invalidRegex, _ := regexp.Compile("rsrc.php/null.jpg")
 		candidate := post.ImageVersions2.Candidates[0].Url
 		if !invalidRegex.MatchString(candidate) {
-			assets = append(assets, candidate)
+			dbClient.InsertUniqueImageAssetForPost(*post, candidate)
+			assets = append(assets, utils.PostImageDTO{
+				AssetUrl: candidate,
+				PostId:   parentPostId,
+			})
 		}
 	}
 
@@ -161,10 +166,10 @@ func GetImageAssetsForPost(post *threadsapi.ThreadsApi_Post, depth int) (assets 
 	shareInfo := post.TextPostAppInfo.ShareInfo
 
 	if shareInfo.QuotedPost != nil {
-		assets = append(assets, GetImageAssetsForPost(shareInfo.QuotedPost, depth+1)...)
+		assets = append(assets, GetImageAssetsForPost(parentPostId, shareInfo.QuotedPost, depth+1)...)
 	}
 	if shareInfo.RepostedPost != nil {
-		assets = append(assets, GetImageAssetsForPost(shareInfo.RepostedPost, depth+1)...)
+		assets = append(assets, GetImageAssetsForPost(parentPostId, shareInfo.RepostedPost, depth+1)...)
 	}
 
 	return
@@ -175,7 +180,7 @@ type getImagesForProfileReturnType struct {
 	assets []string
 }
 
-func GetImagesForProfile_Controller(url string) []string {
+func GetImagesForProfile_Controller(url string) []utils.PostImageDTO {
 	worker := services.CollyWorker{}
 	worker.Callback = func(r *colly.Response) {
 		worker.Body = r.Body
@@ -199,21 +204,21 @@ func GetImagesForProfile_Controller(url string) []string {
 				thread := threads[i]
 				for j := 0; j < len(thread.ThreadItems); j++ {
 					threadItem := thread.ThreadItems[j]
-					worker.Assets = append(worker.Assets, GetImageAssetsForPost(threadItem.Post, 0)...)
+					worker.Assets = append(worker.Assets, GetImageAssetsForPost(threadItem.Post.Id, threadItem.Post, 0)...)
 				}
 			}
 		}
 	}
 
 	worker.Visit(url)
-	retval := getImagesForProfileReturnType{}
-	retval.assets = worker.Assets
+	// retval := getImagesForProfileReturnType{}
+	// retval.assets = worker.Assets
 
 	return worker.Assets
 }
 
 // GetImagesForThread_Controller returns a list of asset urls for a thread
-func GetImagesForThread_Controller(url string) []string {
+func GetImagesForThread_Controller(url string) []utils.PostImageDTO {
 	worker := services.CollyWorker{}
 	worker.Callback = func(r *colly.Response) {
 		worker.Body = r.Body
@@ -241,7 +246,7 @@ func GetImagesForThread_Controller(url string) []string {
 
 			for i := 0; i < len(thread.ThreadItems); i++ {
 				item := thread.ThreadItems[i]
-				worker.Assets = append(worker.Assets, GetImageAssetsForPost(item.Post, 0)...)
+				worker.Assets = append(worker.Assets, GetImageAssetsForPost(item.Post.Id, item.Post, 0)...)
 			}
 		}
 	}
@@ -279,12 +284,12 @@ func (a *App) Startup() bool {
 }
 
 // GetImagesFromThread returns a list of asset urls for a given thread
-func (a *App) GetImagesFromThread(url string) []string {
+func (a *App) GetImagesFromThread(url string) []utils.PostImageDTO {
 	return GetImagesForThread_Controller(url)
 }
 
 // GetImagesForProfile returns a list of asset urls for a given username
-func (a *App) GetImagesForProfile(username string) []string {
+func (a *App) GetImagesForProfile(username string) []utils.PostImageDTO {
 	return GetImagesForProfile_Controller(username)
 }
 
@@ -295,4 +300,41 @@ func (a *App) GetAsset(url string) string {
 
 func (a *App) SearchUsers(query string) []threadsapi.ThreadsApi_User {
 	return SearchUsers_Impl(query)
+}
+
+func (a *App) DashboardSearchUsers(q dashboard.SearchUsersQuery) []threadsapi.ThreadsApi_User {
+	return dashboard.SearchUsers(q)
+}
+
+func GetDatabasePostInfo_Impl(postId string) utils.PostDetailsDTO {
+	client := threadsdb.ThreadsDbClient{}
+	var retval utils.PostDetailsDTO
+
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+
+	// fetch the original post
+	post := client.GetPostInfoUsingPostId(postId)
+	user := client.GetUserInfoUsingUserId(post.UserPk)
+	post.User = user
+	retval.OriginalPost = post
+	fmt.Println("original post retrieved", post.RepostedPostFk)
+
+	// fetch the reposted post (if applicable)
+	if post.RepostedPostFk != nil {
+		fmt.Println("getting reposted post for", *post.RepostedPostFk)
+		repostedPost := client.GetPostInfoUsingPostId(*post.RepostedPostFk)
+		repostedUser := client.GetUserInfoUsingUserId(repostedPost.UserPk)
+		repostedPost.User = repostedUser
+		retval.RepostedPost = &repostedPost
+		fmt.Println("reposted post retrieved", post)
+	}
+
+	return retval
+}
+
+// RequestPostInfo returns info for a post, aggregated from local db.
+// This includes OP info, repost info, etc.
+func (a *App) GetDatabasePostInfo(postId string) utils.PostDetailsDTO {
+	return GetDatabasePostInfo_Impl(postId)
 }

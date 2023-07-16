@@ -8,6 +8,7 @@ import (
 type ThreadsRepo interface {
 	UpsertThread(thread threadsapi.ThreadsApi_Thread, user *threadsapi.ThreadsApi_User)
 	GetPostsForThreadId(threadId string) []threadsapi.ThreadsApi_Post
+	GetThreadInfoUsingThreadId(threadId string) threadsapi.ThreadsApi_Thread
 }
 
 // UpsertThread inserts or updates a thread
@@ -58,4 +59,17 @@ func (client *ThreadsDbClient) GetPostsForThreadId(id string) []threadsapi.Threa
 		results = append(results, threadsapi.ThreadsApi_Post{})
 	}
 	return results
+}
+
+func (client *ThreadsDbClient) GetThreadInfoUsingThreadId(threadId string) (row threadsapi.ThreadsApi_Thread) {
+	db := client.Db
+
+	err := db.Get(&row, "SELECT * FROM threads WHERE id = ?", threadId)
+	if err != nil {
+		fmt.Println(err)
+		return row
+	}
+
+	fmt.Println(row)
+	return row
 }

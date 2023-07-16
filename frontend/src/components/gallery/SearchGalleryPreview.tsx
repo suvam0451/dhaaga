@@ -14,6 +14,11 @@ function GalleryPreviewItem({ url }: GalleryPreviewItemProps) {
 	const [Base64ImageData, setBase64ImageData] = useState<string | null>(null);
 	useEffect(() => {
 		if (!url) return;
+		const re = /placehold\.co/
+		if(re.test(url)) {
+			setBase64ImageData(url);
+			return;
+		}
 		GetAsset(url)
 			.then((o) => {
 				if (o === undefined) {
@@ -81,7 +86,7 @@ function GalleryPreviewItem_Controller({
 			setImageUrl("https://placehold.co/360x480/png");
 			return;
 		}
-		setImageUrl(galleryState.imageUrls[galleryState.galleryIndex + offset]);
+		setImageUrl(galleryState.imageUrls[galleryState.galleryIndex + offset].asset_url);
 	}, [offset, galleryState.galleryIndex, galleryState.imageUrls]);
 
 	return (

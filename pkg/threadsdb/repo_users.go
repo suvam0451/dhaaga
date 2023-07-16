@@ -8,6 +8,7 @@ import (
 type UsersRepo interface {
 	UpsertUser(user threadsapi.ThreadsApi_User)
 	SearchUsers(query string) []threadsapi.ThreadsApi_User
+	GetUserInfoUsingUserId(userId string) threadsapi.ThreadsApi_User
 }
 
 // UpsertUser inserts or updates a user
@@ -46,4 +47,17 @@ func (client *ThreadsDbClient) SearchUsers(query string) (results []threadsapi.T
 		return nil
 	}
 	return
+}
+
+func (client *ThreadsDbClient) GetUserInfoUsingUserId(userId string) (row threadsapi.ThreadsApi_User) {
+	db := client.Db
+
+	err := db.Get(&row, "SELECT * FROM users WHERE pk = ?", userId)
+	if err != nil {
+		fmt.Println(err)
+		return row
+	}
+
+	fmt.Println(row)
+	return row
 }

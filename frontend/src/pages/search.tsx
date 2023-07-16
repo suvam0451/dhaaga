@@ -14,6 +14,7 @@ import AppScreenLayout from "../layouts/AppScreenLayout";
 import ImageGalleryPreviewGrid from "../components/gallery/SearchGalleryPreview";
 
 import "../styles/App.css";
+import PostInformation from "../components/postinfo/PostInformation";
 
 function App() {
 	const dispatch = useDispatch();
@@ -128,7 +129,11 @@ function App() {
 			<Flex py={"md"} dir={"row"}>
 				<ImageGalleryPreviewGrid />
 				<Box pos={"relative"}>
-					<SearchGalleryMain />
+					<Flex dir={"col"}>
+						<SearchGalleryMain />
+						<PostInformation />
+					</Flex>
+
 					<SearchGalleryControls />
 				</Box>
 			</Flex>

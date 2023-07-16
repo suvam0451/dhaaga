@@ -5,10 +5,12 @@ import { APP_MAX_HEIGHT } from "../constants/app-dimensions";
 function AppScreenLayout({ children }: React.PropsWithChildren) {
 	return (
 		<div id="App">
-			<Container mah={APP_MAX_HEIGHT} pt={"md"}>
+			<Container p={"0"}>
 				<Flex dir="row">
 					<Sidebar />
-					<Box px={"md"}>{children}</Box>
+					<Box px={"md"} pt={"md"}>
+						{children}
+					</Box>
 				</Flex>
 			</Container>
 		</div>
