@@ -40,6 +40,9 @@ function GalleryPreviewItem({ url }: GalleryPreviewItemProps) {
 			alt={"Image"}
 			pos={"relative"}
 			fit={"fill"}
+			style={{
+				// boxShadow: "2px 2px 8px #888"
+			}}
 		/>
 	);
 }
@@ -59,6 +62,16 @@ function GalleryPreviewItem_Controller({
 			setImageUrl("https://placehold.co/360x480/png");
 			return;
 		}
+
+    if(galleryState.galleryIndex + offset == -1) {
+      setImageUrl("https://placehold.co/360x480/png?text=Start+of\\nGallery");
+      return;
+    }
+    if(galleryState.galleryIndex + offset == galleryState.imageUrls.length) {
+      setImageUrl("https://placehold.co/360x480/png?text=End+of\\nGallery");
+      return;
+    }
+
 		if (
 			offset > 1 &&
 			galleryState.galleryIndex + offset > galleryState.imageUrls.length - 1
@@ -71,14 +84,6 @@ function GalleryPreviewItem_Controller({
 			setImageUrl("https://placehold.co/360x480/png?text=");
 			return;
 		}
-    if(galleryState.galleryIndex + offset == -1) {
-      setImageUrl("https://placehold.co/360x480/png?text=Start+of\\nGallery");
-      return;
-    }
-    if(galleryState.galleryIndex + offset == galleryState.imageUrls.length) {
-      setImageUrl("https://placehold.co/360x480/png?text=End+of\\nGallery");
-      return;
-    }
 		if (
 			galleryState.galleryIndex + offset < 0 ||
 			galleryState.galleryIndex + offset > galleryState.imageUrls.length - 1

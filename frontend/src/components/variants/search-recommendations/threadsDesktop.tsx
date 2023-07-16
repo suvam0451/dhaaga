@@ -6,11 +6,23 @@ import { GetAsset } from "../../../../wailsjs/go/main/App";
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
 	pk: string;
 	username: string;
-
 	profile_pic_url: string;
 }
 
-function AvatarBase64Loader({ url, alt }: { url: string; alt?: string }) {
+/**
+ * Resolves the Mantine <Avatar/> component, after downloading
+ * @param param0
+ * @returns
+ */
+export function AvatarBase64Loader({
+	url,
+	alt,
+	radius,
+}: {
+	url: string;
+	alt?: string;
+	radius?: "sm" | "md" | "lg";
+}) {
 	const [ImageSrcBase64, setImageSrcBase64] = useState<string | undefined>(
 		undefined
 	);
@@ -23,7 +35,7 @@ function AvatarBase64Loader({ url, alt }: { url: string; alt?: string }) {
 		});
 	}, [url]);
 
-	return <Avatar src={ImageSrcBase64 as any} alt="pfp" />;
+	return <Avatar radius={radius || "sm"} src={ImageSrcBase64 as any} alt="pfp" />;
 }
 
 function HighlightedPartialMatch({

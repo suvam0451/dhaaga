@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../lib/redux/store";
 import { GalleryState } from "../../lib/redux/slices/gallerySlice";
+import { GALLERY_FIXED_HEIGHT } from "../../constants/app-dimensions";
 
 function GalleryControllerArray() {
 	const dispatch = useDispatch();
@@ -55,68 +56,68 @@ function GalleryControllerArray() {
 	const [SettingsHidden, setSettingsHidden] = useState(false);
 	return (
 		<Box pos={"absolute"} left={"100%"} top={"0%"} ml={"md"}>
-			<Flex direction={"column"} className="flex flex-row bg-red-400">
+			<Flex h={GALLERY_FIXED_HEIGHT} direction={"column"}>
 				{/* Group 1 */}
 				<IconHeart size={48} />
 
 				<IconArrowsMaximize size={48} color="#ddd" />
 
-				<Box my={"lg"}></Box>
-
 				{/* Group 2 */}
-				<Box bg={"#eee"} className={"flex-1 rounded-lg"}>
-					<RingProgress
-						label={
-							<Box
-								style={{
-									display: "flex",
-									alignItems: "end",
-									justifyContent: "center",
-								}}
-							>
-								<Text span fw={"bold"} align="center">
-									{galleryState.galleryIndex + 1}
-								</Text>
-								<Text span>/</Text>
-								<Text size={"xs"} span>
-									{galleryState.imageUrls.length}
-								</Text>
-							</Box>
-						}
-						thickness={3}
-						sections={[
-							{
-								value:
-									galleryState.imageUrls.length === 0
-										? 0
-										: ((galleryState.galleryIndex + 1) /
-												galleryState.imageUrls.length) *
-										  100,
-								color: "gray",
-							},
-						]}
-						size={56}
-					/>
+				<Box my={"lg"} style={{ flexGrow: 1 }}>
+					<Box h={"auto"} bg={"#eee"} style={{ borderRadius: "0.5em" }}>
+						<RingProgress
+							label={
+								<Box
+									style={{
+										display: "flex",
+										alignItems: "end",
+										justifyContent: "center",
+									}}
+								>
+									<Text span fw={"bold"} align="center">
+										{galleryState.galleryIndex + 1}
+									</Text>
+									<Text span>/</Text>
+									<Text size={"xs"} span>
+										{galleryState.imageUrls.length}
+									</Text>
+								</Box>
+							}
+							thickness={3}
+							sections={[
+								{
+									value:
+										galleryState.imageUrls.length === 0
+											? 0
+											: ((galleryState.galleryIndex + 1) /
+													galleryState.imageUrls.length) *
+											  100,
+									color: "gray",
+								},
+							]}
+							size={56}
+						/>
 
-					<IconChevronUp
-						size={48}
-						color="#aaa"
-						onClick={() => {
-							dispatch({ type: "galleryPrev" });
-						}}
-					/>
-					<IconChevronDown
-						size={48}
-						color="#aaa"
-						onClick={() => {
-							dispatch({ type: "galleryNext" });
-						}}
-					/>
+						<IconChevronUp
+							size={48}
+							color="#aaa"
+							onClick={() => {
+								dispatch({ type: "galleryPrev" });
+							}}
+						/>
+						<IconChevronDown
+							size={48}
+							color="#aaa"
+							onClick={() => {
+								dispatch({ type: "galleryNext" });
+							}}
+						/>
+					</Box>
 				</Box>
 
 				<Box my={"lg"}></Box>
 				{/* Group 3 */}
-				<Box className="flex-1">
+				<Box className="flex-1" style={{ flexGrow: 0 }}>
 					{SettingsHidden && (
 						<Box>
 							<IconEyeOff size={48} color="#ddd" />

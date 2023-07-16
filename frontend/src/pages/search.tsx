@@ -129,11 +129,8 @@ function App() {
 			<Flex py={"md"} dir={"row"}>
 				<ImageGalleryPreviewGrid />
 				<Box pos={"relative"}>
-					<Flex dir={"col"}>
-						<SearchGalleryMain />
-						<PostInformation />
-					</Flex>
-
+					<SearchGalleryMain />
+					<PostInformation />
 					<SearchGalleryControls />
 				</Box>
 			</Flex>

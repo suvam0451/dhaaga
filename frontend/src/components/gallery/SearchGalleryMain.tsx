@@ -1,4 +1,11 @@
-import { Box, Image, LoadingOverlay, ScrollArea } from "@mantine/core";
+import {
+	Box,
+	Flex,
+	Text,
+	Image,
+	LoadingOverlay,
+	ScrollArea,
+} from "@mantine/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getImageBase64 } from "../../lib/redux/slices/workerSlice";
@@ -10,6 +17,27 @@ import {
 import { AppDispatch, RootState } from "../../lib/redux/store";
 import { GalleryState } from "../../lib/redux/slices/gallerySlice";
 
+function GalleryEmpty() {
+	return (
+		<Flex
+			bg="#ddd"
+			h={GALLERY_FIXED_HEIGHT}
+			style={{
+				borderRadius: "0.25em",
+				alignItems: "center",
+				justifyContent: "center",
+			}}
+		>
+			<Box>
+			<Text>Looks like you have not searched for anything</Text>
+
+			<Text>https://www.threads.net/@crunchyroll</Text>
+		
+			</Box>
+
+		</Flex>
+	);
+}
 /**
  * Populates the gallery image for the "Search" page
  * @param param0
@@ -31,14 +59,14 @@ function Base64GalleryItem() {
 	const imageSrc = galleryState?.currentImage || null;
 
 	return (
-		<Box w={GALLERY_FIXED_WIDTH} h={GALLERY_FIXED_HEIGHT}>
+		<Box w={GALLERY_FIXED_WIDTH} mah={GALLERY_FIXED_HEIGHT}>
 			{galleryState.currentImageLoading ? (
 				<LoadingOverlay
 					visible={galleryState.currentImageLoading}
 					overlayBlur={2}
 				/>
 			) : galleryState.currentImage ? (
-				<ScrollArea w={GALLERY_FIXED_WIDTH} h={GALLERY_FIXED_HEIGHT}>
+				<ScrollArea w={GALLERY_FIXED_WIDTH} mah={GALLERY_FIXED_HEIGHT}>
 					<Box w={GALLERY_FIXED_WIDTH} mah={GALLERY_MAX_HEIGHT}>
 						<Image
 							mx="auto"
@@ -51,7 +79,7 @@ function Base64GalleryItem() {
 					</Box>
 				</ScrollArea>
 			) : (
-				<Box>We have nothing to show you right now.</Box>
+				<GalleryEmpty />
 			)}
 		</Box>
 	);
