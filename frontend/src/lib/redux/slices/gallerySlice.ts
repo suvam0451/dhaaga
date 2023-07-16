@@ -4,13 +4,13 @@ import { getImageBase64 } from "./workerSlice";
 export interface GalleryState {
 	imageUrls: string[];
 	galleryIndex: number;
-	currentImage?: string | Uint8Array;
+	currentImage?: string;
 	currentImageLoading: boolean;
 }
 
 const clearGallery = createAction("clearGallery");
 const setGallery = createAction<string[], "setGallery">("setGallery");
-const setPrimaryDisplayItem = createAction<Uint8Array, "setPrimaryDisplayItem">(
+const setPrimaryDisplayItem = createAction<string, "setPrimaryDisplayItem">(
 	"setPrimaryDisplayItem"
 );
 const galleryNext = createAction("galleryNext");

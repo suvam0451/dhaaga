@@ -69,9 +69,6 @@ function SearchLocalDatabase({ placeholder, onClickCallback }: SearchBoxProps) {
 				<SelectItem_ThreadsDesktop
 					searchTerm={debounced}
 					{...e}
-					// pk={e.pk}
-					// username={e.username}
-					// profile_pic_url={e.profile_pic_url}
 				/>
 			)}
 			nothingFound="No results found..."

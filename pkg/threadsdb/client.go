@@ -1,39 +1,39 @@
 package threadsdb
 
 import (
-	"browser/pkg/threadsapi"
-	"database/sql"
 	"fmt"
 	"log"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type ThreadsDb interface {
-	LoadDatabase()
+	LoadDatabase() *sqlx.DB
 	CloseDatabase()
 	InitializeSchema()
-	UpsertUser(user threadsapi.ThreadsApi_User)
+	Firstload()
+	UsersRepo
 }
 
 type ThreadsDbClient struct {
 	ThreadsDb
-	db *sql.DB
+	Db *sqlx.DB
 }
 
-func (client *ThreadsDbClient) LoadDatabase() *sql.DB {
-	db, err := sql.Open("sqlite3", "./threads.db")
+func (client *ThreadsDbClient) LoadDatabase() *sqlx.DB {
+	db, err := sqlx.Open("sqlite3", "./threads.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	client.db = db
+	client.Db = db
 	// run all migrations
 	client.InitializeSchema()
 	return db
 }
 
 func (client *ThreadsDbClient) CloseDatabase() {
-	client.db.Close()
+	client.Db.Close()
 }
 
 func (client *ThreadsDbClient) InitializeSchema() {
@@ -52,66 +52,47 @@ func (client *ThreadsDbClient) InitializeSchema() {
 	);`
 	// END -- v0.0.0 -- END
 
-	query, err := client.db.Prepare(usersDb)
-	if err != nil {
-		fmt.Println(err)
-	}
-	query.Exec()
+	// BEGIN -- v0.1.0 -- BEGIN
+	threadsDb := `
+		CREATE TABLE IF NOT EXISTS threads (
+			id TEXT PRIMARY KEY,
+			thread_type TEXT NOT NULL,
+			user_pk TEXT
+		);`
+
+	postsDb := `
+	CREATE TABLE IF NOT EXISTS posts (
+		id TEXT PRIMARY KEY,
+		pk TEXT NOT NULL,
+		code TEXT NOT NULL,
+
+		caption_text TEXT,
+		quoted_post_pk TEXT,
+		reposted_post_fk TEXT,
+
+		taken_at DATETIME NOT NULL,
+		like_count INT DEFAULT 0,
+		reply_count INT DEFAULT 0
+	)`
+
+	db := client.Db
+
+	db.MustExec(usersDb)
+	db.MustExec(threadsDb)
+	db.MustExec(postsDb)
+
+	fmt.Println("Initialized schema")
 }
 
-func (client *ThreadsDbClient) UpsertUser(user threadsapi.ThreadsApi_User) bool {
-	if user.Pk == "" {
-		fmt.Println("skipping user upsert operation")
-		return false
-	}
-	tx, err := client.db.Begin()
+// Firstload will run any pending migrations for this db
+func Firstload() {
+	dbClient := ThreadsDbClient{}
+	dbClient.LoadDatabase()
 
-	// fmt.Println("upserting user", user.Pk, user.Username, user.ProfilePicUrl)
-	query := `INSERT INTO users 
-		(pk, username, profile_pic_url) VALUES (?,?,?)
-		ON CONFLICT(pk) 
-		DO UPDATE SET username=excluded.username, profile_pic_url=excluded.profile_pic_url;`
-	statement, err := tx.Prepare(query)
-	defer statement.Close()
+	// runs migrations
+	dbClient.InitializeSchema()
 
-	if err != nil {
-		fmt.Println("statement prep error", err)
-		return false
-	} else {
-		result, execError := statement.Exec(user.Pk, user.Username, user.ProfilePicUrl)
-		if execError != nil {
-			fmt.Println("statement exec error", execError)
-			return false
-		}
-		commitErr := tx.Commit()
-		if commitErr != nil {
-			fmt.Println("commit error", commitErr)
-			return false
-		}
-		fmt.Println("upserted an user", result)
-		return true
-	}
-}
+	defer dbClient.CloseDatabase()
 
-// SearchUsers returns a list of users partially matching the query
-func (client *ThreadsDbClient) SearchUsers(query string) (results []threadsapi.ThreadsApi_User) {
-	rows, err := client.db.Query("SELECT pk, username, profile_pic_url FROM users WHERE username LIKE ?", "%"+query+"%")
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var pk string
-		var username string
-		var profile_pic_url string
-		rows.Scan(&pk, &username, &profile_pic_url)
-		results = append(results, threadsapi.ThreadsApi_User{
-			Pk:            pk,
-			Username:      username,
-			ProfilePicUrl: profile_pic_url,
-		})
-	}
-	return
+	fmt.Println("db setup complete for threads db")
 }

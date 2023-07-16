@@ -24,9 +24,7 @@ function Base64GalleryItem() {
 		dispatch(getImageBase64(galleryState.imageUrls[galleryState.galleryIndex]));
 	}, [galleryState.galleryIndex]);
 
-	const imageSrc = galleryState?.currentImage
-		? `data:image/png;base64,${galleryState?.currentImage}`
-		: undefined;
+	const imageSrc = galleryState?.currentImage || null;
 
 	return (
 		<Box w={GALLERY_FIXED_WIDTH} h={GALLERY_FIXED_HEIGHT}>

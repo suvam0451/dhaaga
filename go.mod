@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/gocolly/colly v1.2.0
+	github.com/jmoiron/sqlx v1.3.5
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/wailsapp/wails/v2 v2.5.1
 )

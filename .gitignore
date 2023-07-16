@@ -4,3 +4,4 @@ frontend/dist
 **.db
 frontend/.next/**
 frontend/out/**
+frontend/tsconfig.tsbuildinfo

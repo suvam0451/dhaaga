@@ -19,7 +19,7 @@ function GalleryPreviewItem({ url }: GalleryPreviewItemProps) {
 				if (o === undefined) {
 					setBase64ImageData(null);
 				} else {
-					setBase64ImageData(`data:image/png;base64,${o}`);
+					setBase64ImageData(o);
 				}
 			})
 			.catch((e) => {
@@ -31,7 +31,7 @@ function GalleryPreviewItem({ url }: GalleryPreviewItemProps) {
 		<Image
 			mx="auto"
 			radius="md"
-			src={Base64ImageData}
+			src={Base64ImageData as any}
 			alt={"Image"}
 			pos={"relative"}
 			fit={"fill"}

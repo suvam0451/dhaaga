@@ -18,12 +18,12 @@ function AvatarBase64Loader({ url, alt }: { url: string; alt?: string }) {
 	useEffect(() => {
 		GetAsset(url).then((res) => {
 			if (res) {
-				setImageSrcBase64(`data:image/png;base64,${res}`);
+				setImageSrcBase64(res);
 			}
 		});
 	}, [url]);
 
-	return <Avatar src={ImageSrcBase64} alt="pfp" />;
+	return <Avatar src={ImageSrcBase64 as any} alt="pfp" />;
 }
 
 function HighlightedPartialMatch({

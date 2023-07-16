@@ -17,3 +17,7 @@ export function GetImagesFromThread(arg1) {
 export function SearchUsers(arg1) {
   return window['go']['main']['App']['SearchUsers'](arg1);
 }
+
+export function Startup() {
+  return window['go']['main']['App']['Startup']();
+}

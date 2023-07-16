@@ -4,6 +4,7 @@ import (
 	"browser/pkg/services"
 	"browser/pkg/threadsapi"
 	"browser/pkg/threadsdb"
+	"browser/pkg/utils"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -125,13 +126,25 @@ func GetImagesForThread_Impl(postId string, lsd string) threadsapi.ThreadsApiPos
 // GetImageAssetsForPost returns a list of asset urls for a post
 func GetImageAssetsForPost(post *threadsapi.ThreadsApi_Post, depth int) (assets []string) {
 	// TODO: add support for recursive post fetching
-	if depth >= 2 {
+	if post == nil || depth >= 2 {
 		return
 	}
 
 	dbClient := threadsdb.ThreadsDbClient{}
 	dbClient.LoadDatabase()
 	dbClient.UpsertUser(post.User)
+
+	if depth == 0 {
+		if post.IsReposted() {
+			repostOrigin, upsertErr := dbClient.UpsertPost(post.TextPostAppInfo.ShareInfo.RepostedPost)
+			if upsertErr == true {
+				dbClient.UpsertRepostedPost(post, *repostOrigin)
+			}
+		} else {
+			dbClient.UpsertPost(post)
+		}
+	}
+
 	dbClient.CloseDatabase()
 
 	// adding items from this post
@@ -219,6 +232,13 @@ func GetImagesForThread_Controller(url string) []string {
 			return
 		} else {
 			thread := data.Data.ContainingThread
+			user := threadsapi.GetUserForThread(thread)
+
+			client := threadsdb.ThreadsDbClient{}
+			client.LoadDatabase()
+			client.UpsertThread(thread, user)
+			client.CloseDatabase()
+
 			for i := 0; i < len(thread.ThreadItems); i++ {
 				item := thread.ThreadItems[i]
 				worker.Assets = append(worker.Assets, GetImageAssetsForPost(item.Post, 0)...)
@@ -253,6 +273,11 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
+func (a *App) Startup() bool {
+	threadsdb.Firstload()
+	return true
+}
+
 // GetImagesFromThread returns a list of asset urls for a given thread
 func (a *App) GetImagesFromThread(url string) []string {
 	return GetImagesForThread_Controller(url)
@@ -264,18 +289,8 @@ func (a *App) GetImagesForProfile(username string) []string {
 }
 
 // GetAsset returns a byte array of the requested image
-func (a *App) GetAsset(url string) []byte {
-	resp, respErr := http.Get(url)
-	if respErr != nil {
-		fmt.Println(respErr)
-		return nil
-	}
-	byteArray, readErr := ioutil.ReadAll(resp.Body)
-	if readErr != nil {
-		fmt.Println(readErr)
-		return nil
-	}
-	return byteArray
+func (a *App) GetAsset(url string) string {
+	return utils.GetAsset(url)
 }
 
 func (a *App) SearchUsers(query string) []threadsapi.ThreadsApi_User {
