@@ -1,6 +1,6 @@
 {
   "name": "prototype-instagram-threads-browser",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A prototype multi-threaded desktop app to browse Instagram threads, built with go and web technologies.",
   "main": "index.js",
   "scripts": {

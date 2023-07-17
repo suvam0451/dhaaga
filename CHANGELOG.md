@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/suvam0451/prototype-instagram-threads-browser/compare/v0.1.0...v0.2.0) (2023-07-17)
+
+
+### Features
+
+* **db:** assets and repost relations are saved ([11798ba](https://github.com/suvam0451/prototype-instagram-threads-browser/commit/11798ba6759316dd49b0c3d3eb235f59a7d0a5bf))
+* **frontend:** section to show posted/repost info ([a7f4a1e](https://github.com/suvam0451/prototype-instagram-threads-browser/commit/a7f4a1ee9b75876c0c09a1e295467faaa1734574))
+* thread and post meta is now locally archived ([1540ac8](https://github.com/suvam0451/prototype-instagram-threads-browser/commit/1540ac87e73218b7dd45fb1c5a55271a7b5528ff))
+
 ## 0.1.0 (2023-07-15)
 
 
