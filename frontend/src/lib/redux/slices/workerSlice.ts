@@ -1,5 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { GetAsset, SearchUsers } from "../../../../wailsjs/go/main/App";
+import {
+	DashboardSearchUsers,
+	GetAsset,
+	SearchUsers,
+} from "../../../../wailsjs/go/main/App";
+import { dashboard } from "../../../../wailsjs/go/models";
 
 /**
  * Use worker to fetch image assets as base64,
@@ -23,4 +28,16 @@ export const getThreadsRecommendations = createAsyncThunk(
 	(searchTerm: string) => {
 		return SearchUsers(searchTerm).then((o) => o);
 	}
-)
+);
+
+export const getDashboardSearchResults = createAsyncThunk(
+	`api/dashboard/getUsers`,
+	({ query, limit, offset, favouritedOnly }: dashboard.SearchUsersQuery) => {
+		return DashboardSearchUsers({
+			query,
+			limit,
+			offset,
+			favouritedOnly,
+		}).then((o) => o);
+	}
+);

@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { gallerySlice } from "./slices/gallerySlice";
 import { recommendationsSlice } from "./slices/recommendationsSlice";
 import { searchSlice } from "./slices/searchSlice";
+import { threadsDiscoverReducer } from "./slices/discoverSearchSlice";
 
 const store = configureStore({
 	reducer: {
 		gallery: gallerySlice,
-    recommendations: recommendationsSlice,
+		recommendations: recommendationsSlice,
 		search: searchSlice,
+		threadsDiscover: threadsDiscoverReducer,
 	},
 });
 export default store;

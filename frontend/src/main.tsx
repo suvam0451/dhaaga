@@ -11,6 +11,10 @@ import HomePage from "./pages/home";
 import DatabasePage from "./pages/database";
 import SearchPage from "./pages/search";
 import SettingsPage from "./pages/settings";
+import FavouritesPage from "./pages/favourites";
+import LatestPage from "./pages/latest";
+import GalleryPage from "./pages/gallery";
+import AboutPage from "./pages/about";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
@@ -18,23 +22,40 @@ const root = createRoot(container!);
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <IndexPage />,
+		element: <HomePage />,
 	},
 	{
 		path: "/home",
 		element: <HomePage />,
 	},
 	{
-		path: "/database",
-		element: <DatabasePage />,
-	},
-	{
 		path: "/search",
 		element: <SearchPage />,
 	},
 	{
+		path: "/favourites",
+		element: <FavouritesPage />,
+	},
+	{
+		path: "/latest",
+		element: <LatestPage />,
+	},
+	{
+		path: "/gallery",
+		element: <GalleryPage />,
+	},
+	{
+		path: "/database",
+		element: <DatabasePage />,
+	},
+
+	{
 		path: "/settings",
 		element: <SettingsPage />,
+	},
+	{
+		path: "/about",
+		element: <AboutPage />,
 	},
 ]);
 

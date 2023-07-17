@@ -1,10 +1,17 @@
-import { Text } from "@mantine/core";
+import { Flex } from "@mantine/core";
 import AppScreenLayout from "../layouts/AppScreenLayout";
+import HomeScreenIntro from "../components/homescreen/HomeScreenIntro";
+import HomeScreenCoreValues from "../components/homescreen/HomeScreenCoreValues";
+import HomeScreenFooter from "../components/homescreen/HomeScreenFooter";
 
 function App() {
 	return (
 		<AppScreenLayout>
-			<Text>Home Page</Text>
+			<Flex direction={"column"}>
+				<HomeScreenIntro />
+				<HomeScreenCoreValues />
+				<HomeScreenFooter />
+			</Flex>
 		</AppScreenLayout>
 	);
 }

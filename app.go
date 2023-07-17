@@ -302,7 +302,7 @@ func (a *App) SearchUsers(query string) []threadsapi.ThreadsApi_User {
 	return SearchUsers_Impl(query)
 }
 
-func (a *App) DashboardSearchUsers(q dashboard.SearchUsersQuery) []threadsapi.ThreadsApi_User {
+func (a *App) DashboardSearchUsers(q dashboard.SearchUsersQuery) dashboard.SearchUsersResponse {
 	return dashboard.SearchUsers(q)
 }
 
