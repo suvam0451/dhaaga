@@ -1,4 +1,4 @@
-import { Box, Flex, RingProgress, Text } from "@mantine/core";
+import { Box, Flex, RingProgress, Text, Tooltip } from "@mantine/core";
 import {
 	IconArrowsMaximize,
 	IconChevronDown,
@@ -65,53 +65,71 @@ function GalleryControllerArray() {
 				{/* Group 2 */}
 				<Box my={"lg"} style={{ flexGrow: 1 }}>
 					<Box h={"auto"} bg={"#eee"} style={{ borderRadius: "0.5em" }}>
-						<RingProgress
-							label={
-								<Box
-									style={{
-										display: "flex",
-										alignItems: "end",
-										justifyContent: "center",
-									}}
-								>
-									<Text span fw={"bold"} align="center">
-										{galleryState.galleryIndex + 1}
-									</Text>
-									<Text span>/</Text>
-									<Text size={"xs"} span>
-										{galleryState.imageUrls.length}
-									</Text>
-								</Box>
-							}
-							thickness={3}
-							sections={[
-								{
-									value:
-										galleryState.imageUrls.length === 0
-											? 0
-											: ((galleryState.galleryIndex + 1) /
-													galleryState.imageUrls.length) *
-											  100,
-									color: "gray",
-								},
-							]}
-							size={56}
-						/>
+						<Tooltip label="press ↑↓ or interact to navigate gallery">
+							<RingProgress
+								label={
+									<Box
+										style={{
+											display: "flex",
+											alignItems: "end",
+											justifyContent: "center",
+										}}
+									>
+										<Text span fw={"bold"} align="center">
+											{galleryState.galleryIndex + 1}
+										</Text>
+										<Text span>/</Text>
+										<Text size={12} span>
+											{galleryState.imageUrls.length}
+										</Text>
+									</Box>
+								}
+								thickness={3}
+								sections={[
+									{
+										value:
+											galleryState.imageUrls.length === 0
+												? 0
+												: ((galleryState.galleryIndex + 1) /
+														galleryState.imageUrls.length) *
+												  100,
+										color: "gray",
+									},
+								]}
+								size={56}
+							/>
+						</Tooltip>
 
-						<IconChevronUp
-							size={48}
-							color="#aaa"
-							onClick={() => {
-								dispatch({ type: "galleryPrev" });
-							}}
-						/>
-						<IconChevronDown
-							size={48}
-							color="#aaa"
-							onClick={() => {
-								dispatch({ type: "galleryNext" });
-							}}
-						/>
+						<Box
+							sx={(theme) => ({
+								"&:hover": {
+									backgroundColor: theme.colors.gray[3],
+								},
+							})}
+						>
+							<IconChevronUp
+								size={48}
+								color="#aaa"
+								onClick={() => {
+									dispatch({ type: "galleryPrev" });
+								}}
+							/>
+						</Box>
+						<Box
+							sx={(theme) => ({
+								"&:hover": {
+									backgroundColor: theme.colors.gray[3],
+								},
+							})}
+						>
+							<IconChevronDown
+								size={48}
+								color="#aaa"
+								onClick={() => {
+									dispatch({ type: "galleryNext" });
+								}}
+							/>
+						</Box>
 					</Box>
 				</Box>
 

@@ -14,6 +14,10 @@ export function GetDatabasePostInfo(arg1) {
   return window['go']['main']['App']['GetDatabasePostInfo'](arg1);
 }
 
+export function GetDownloadsFolder() {
+  return window['go']['main']['App']['GetDownloadsFolder']();
+}
+
 export function GetImagesForProfile(arg1) {
   return window['go']['main']['App']['GetImagesForProfile'](arg1);
 }
@@ -22,10 +26,22 @@ export function GetImagesFromThread(arg1) {
   return window['go']['main']['App']['GetImagesFromThread'](arg1);
 }
 
+export function GetUserDataDirectory() {
+  return window['go']['main']['App']['GetUserDataDirectory']();
+}
+
 export function SearchUsers(arg1) {
   return window['go']['main']['App']['SearchUsers'](arg1);
 }
 
-export function Startup() {
-  return window['go']['main']['App']['Startup']();
+export function SelectDownloadsFolder() {
+  return window['go']['main']['App']['SelectDownloadsFolder']();
+}
+
+export function SetUserFavourite(arg1) {
+  return window['go']['main']['App']['SetUserFavourite'](arg1);
+}
+
+export function UnsetUserFavourite(arg1) {
+  return window['go']['main']['App']['UnsetUserFavourite'](arg1);
 }

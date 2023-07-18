@@ -10,10 +10,18 @@ export function GetAsset(arg1:string):Promise<string>;
 
 export function GetDatabasePostInfo(arg1:string):Promise<utils.PostDetailsDTO>;
 
+export function GetDownloadsFolder():Promise<string>;
+
 export function GetImagesForProfile(arg1:string):Promise<Array<utils.PostImageDTO>>;
 
 export function GetImagesFromThread(arg1:string):Promise<Array<utils.PostImageDTO>>;
 
+export function GetUserDataDirectory():Promise<string>;
+
 export function SearchUsers(arg1:string):Promise<Array<threadsapi.ThreadsApi_User>>;
 
-export function Startup():Promise<boolean>;
+export function SelectDownloadsFolder():Promise<string>;
+
+export function SetUserFavourite(arg1:string):Promise<void>;
+
+export function UnsetUserFavourite(arg1:string):Promise<void>;

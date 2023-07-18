@@ -1,9 +1,16 @@
 import { Box, Button, Flex, Loader, Text, TextInput } from "@mantine/core";
-import { IconCheck, IconSearch, IconSlash } from "@tabler/icons-react";
+import {
+	IconCheck,
+	IconClipboardCheck,
+	IconCopy,
+	IconSearch,
+	IconSlash,
+} from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../lib/redux/store";
 import { SearchState } from "../../lib/redux/slices/searchSlice";
+import ClickToPaste from "../utils/ClickToPaste";
 
 type SearchTermValidity = {
 	valid: boolean;
@@ -48,9 +55,15 @@ function SearchBox({
 		return onClickCallback(search.searchTerm);
 	}
 
+	function pasteFromClipboardCallback(text: string) {
+		dispatch({
+			type: "setSearchTerm",
+			payload: text,
+		});
+	}
 	return (
 		<Box>
-			<Flex>
+			<Flex style={{ alignItems: "center" }}>
 				<TextInput
 					icon={
 						SearchTermValid.valid ? <IconCheck color="green" /> : <IconSearch />
@@ -66,7 +79,12 @@ function SearchBox({
 							: true
 					}
 				/>
-				<Button onClick={onClickCallbackHandler} ml={"xs"}>
+				<ClickToPaste
+					callback={pasteFromClipboardCallback}
+					displayText="Pasted clipboard content !"
+					size={24}
+				/>
+				<Button onClick={onClickCallbackHandler}>
 					{isLoadingOverride ? (
 						<Loader color="#fff" size={20} />
 					) : (

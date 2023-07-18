@@ -114,40 +114,32 @@ function Sidebar() {
 					</Navbar.Section>
 					<Navbar.Section grow component={ScrollArea}>
 						{/* scrollable content here */}
-						<Link to="/home">
-							<MainLink
-								icon={<IconHome color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-								color={SIDEBAR_ICONS_ICON_COLOR}
-								label="Home"
-								pathname="/home"
-							/>
-						</Link>
-						<Link to="/search">
-							<MainLink
-								icon={<IconSearch color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-								color={SIDEBAR_ICONS_ICON_COLOR}
-								label="Search"
-								pathname="/search"
-							/>
-						</Link>
-						<Link to="/database">
-							<MainLink
-								icon={<IconDatabase color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-								color={SIDEBAR_ICONS_ICON_COLOR}
-								label="Gallery"
-								pathname="/database"
-							/>
-						</Link>
+						<MainLink
+							icon={<IconHome color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+							color={SIDEBAR_ICONS_ICON_COLOR}
+							label="Home"
+							pathname="/home"
+						/>
+						<MainLink
+							icon={<IconSearch color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+							color={SIDEBAR_ICONS_ICON_COLOR}
+							label="Search"
+							pathname="/search"
+						/>
+						<MainLink
+							icon={<IconDatabase color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+							color={SIDEBAR_ICONS_ICON_COLOR}
+							label="Gallery"
+							pathname="/database"
+						/>
 					</Navbar.Section>
 					<Navbar.Section>
-						<Link to="/settings">
-							<MainLink
-								icon={<IconSettings color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-								color={SIDEBAR_ICONS_ICON_COLOR}
-								label="Settings"
-								pathname="/settings"
-							/>
-						</Link>
+						<MainLink
+							icon={<IconSettings color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+							color={SIDEBAR_ICONS_ICON_COLOR}
+							label="Settings"
+							pathname="/settings"
+						/>
 						<MainLink
 							icon={<IconInfoCircle color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
 							color={SIDEBAR_ICONS_ICON_COLOR}

@@ -16,6 +16,7 @@ import (
 	"strings"
 
 	"github.com/gocolly/colly"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -276,11 +277,10 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-}
 
-func (a *App) Startup() bool {
+	// startup scripts for this app
 	threadsdb.Firstload()
-	return true
+	utils.VerifyUserSettings()
 }
 
 // GetImagesFromThread returns a list of asset urls for a given thread
@@ -337,4 +337,40 @@ func GetDatabasePostInfo_Impl(postId string) utils.PostDetailsDTO {
 // This includes OP info, repost info, etc.
 func (a *App) GetDatabasePostInfo(postId string) utils.PostDetailsDTO {
 	return GetDatabasePostInfo_Impl(postId)
+}
+
+func (a *App) SelectDownloadsFolder() string {
+	dialogOptions := runtime.OpenDialogOptions{}
+
+	selected, err := runtime.OpenDirectoryDialog(a.ctx, dialogOptions)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
+	utils.SetDownloadsDirectory(selected)
+	return selected
+}
+
+func (a *App) GetDownloadsFolder() string {
+	return utils.GetDownloadsDirectory()
+}
+
+func (a *App) GetUserDataDirectory() string {
+	return utils.GetUserDataDirectory()
+}
+
+func (a *App) SetUserFavourite(pk string) {
+	client := threadsdb.ThreadsDbClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+	client.SetUserFavourite(pk)
+	return
+}
+
+func (a *App) UnsetUserFavourite(pk string) {
+	client := threadsdb.ThreadsDbClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+	client.UnsetUserFavourite(pk)
+	return
 }

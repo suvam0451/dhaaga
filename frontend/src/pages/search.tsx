@@ -3,7 +3,7 @@ import {
 	GetImagesForProfile,
 	GetImagesFromThread,
 } from "../../wailsjs/go/main/App";
-import { Flex, Box } from "@mantine/core";
+import { Flex, Box, Tooltip } from "@mantine/core";
 import SearchGalleryMain from "../components/gallery/SearchGalleryMain";
 import SearchGalleryControls from "../components/gallery/SearchGalleryControls";
 import { useDispatch } from "react-redux";
@@ -115,9 +115,13 @@ function App() {
 					isLoadingOverride={IsLoading}
 					placeholder="Paste URL here..."
 				/>
+				<Tooltip label="Auth toggle coming soon™">
+					
+				
 				<Box mx={"xs"}>
 					<IconBrandInstagram size={36} color="#666" />
 				</Box>
+				</Tooltip>
 				<SearchLocalDatabase
 					validator={threadsLinkValidator}
 					onClickCallback={onSearchboxClick}

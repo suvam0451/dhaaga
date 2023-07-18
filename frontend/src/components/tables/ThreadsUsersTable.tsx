@@ -17,7 +17,6 @@ import {
 } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../lib/redux/store";
-import { SearchState } from "../../lib/redux/slices/searchSlice";
 import { DiscoverSearchState } from "../../lib/redux/slices/discoverSearchSlice";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
@@ -25,6 +24,7 @@ import { getDashboardSearchResults } from "../../lib/redux/slices/workerSlice";
 import { ThreadsUser } from "./tables.types";
 import { AvatarBase64Loader } from "../variants/search-recommendations/threadsDesktop";
 import { GALLERY_FIXED_WIDTH } from "../../constants/app-dimensions";
+import UserFavouriteController from "./utils/FavouriteUser";
 
 function CopyUsername({ text }: { text: string }) {
 	const [opened, setOpened] = useState(false);
@@ -44,17 +44,21 @@ function CopyUsername({ text }: { text: string }) {
 	return (
 		<Flex style={{ alignItems: "center" }}>
 			<Box>{text}</Box>
-			<Popover opened={opened}>
-				<Popover.Target>
-					<IconCopy color="#888" size={20} onClick={copyRequested} />
-				</Popover.Target>
-				<Popover.Dropdown>
-					<Flex>
-						<IconCheck color="green" />
-						<Text>Copied!</Text>
-					</Flex>
-				</Popover.Dropdown>
-			</Popover>
+			<Flex mx={"xs"}>
+				<Popover opened={opened}>
+					<Popover.Target>
+						<Flex style={{ alignItems: "center" }}>
+							<IconCopy color="#888" size={20} onClick={copyRequested} />
+						</Flex>
+					</Popover.Target>
+					<Popover.Dropdown>
+						<Flex>
+							<IconCheck color="green" />
+							<Text>Copied!</Text>
+						</Flex>
+					</Popover.Dropdown>
+				</Popover>
+			</Flex>
 		</Flex>
 	);
 }
@@ -70,6 +74,15 @@ function ThreadsUserTable() {
 
 	function onSearchClick() {}
 
+	// Reset the offset (pagination) when the search term changes
+	useEffect(() => {
+		dispatch({
+			type: "setDashboardOffset",
+			payload: 0,
+		})
+	}, [debounced])
+
+	// Fetch the discovery results when the search term/query changes
 	useEffect(() => {
 		dispatch(
 			getDashboardSearchResults({
@@ -79,10 +92,10 @@ function ThreadsUserTable() {
 				favouritedOnly: discover.query.favouritesOnly,
 			})
 		);
-	}, [debounced]);
+	}, [debounced, discover.query]);
 
 	const rows = discover?.searchResults?.items?.map((o: ThreadsUser, i) => (
-		<tr key={i}>
+		<tr key={o.pk}>
 			<td>{o.pk}</td>
 			<td>
 				<CopyUsername text={o.username} />
@@ -92,16 +105,30 @@ function ThreadsUserTable() {
 			</td>
 
 			<td>{o.FollowerCount}</td>
-			<td>{o.FavouritedLocal}</td>
+			<td>
+				<UserFavouriteController pk={o.pk} favourited={o.FavouritedLocal} />
+			</td>
 		</tr>
 	));
 
-	function setPage() {}
+	function setPage(ans: number) {
+		console.log(ans)
+		dispatch({
+			type: "setDashboardOffset",
+			payload: (ans-1) * 5,
+		})
+	}
 
 	function onInputChange(e: any) {
 		setSearchTerm(e.target.value);
 	}
 
+	function onFavouritesToggle() {
+		dispatch({
+			type: "setDashboardFavouritesOnly",
+			payload: !discover.query.favouritesOnly,
+		});
+	}
 	return (
 		<Box miw={GALLERY_FIXED_WIDTH}>
 			<Flex w={"100%"} style={{ alignItems: "center" }}>
@@ -120,9 +147,12 @@ function ThreadsUserTable() {
 					</Button>
 				</Box>
 
-				<Box>
+				<Box onClick={onFavouritesToggle}>
 					<Tooltip label="Favourites Only" withArrow>
-						<IconHeart size={32} />
+						<IconHeart
+							size={32}
+							color={discover.query.favouritesOnly ? "red" : "#888"}
+						/>
 					</Tooltip>
 				</Box>
 			</Flex>
@@ -140,7 +170,7 @@ function ThreadsUserTable() {
 								<Tooltip
 									multiline
 									width={220}
-									label="Unrelated to your follower list from the app. Click to toggle."
+									label="Unrelated to your favourite list from the offical app."
 								>
 									<IconInfoCircle size={20} />
 								</Tooltip>
@@ -151,7 +181,7 @@ function ThreadsUserTable() {
 				<tbody>{rows}</tbody>
 			</Table>
 			<Flex px={"lg"} py={"xl"} style={{ justifyContent: "center" }}>
-				<Pagination value={1} onChange={setPage} total={10} />
+				<Pagination value={discover.query.offset/5 + 1} onChange={setPage} total={discover.numPages} />
 			</Flex>
 		</Box>
 	);

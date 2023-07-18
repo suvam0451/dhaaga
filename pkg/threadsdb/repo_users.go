@@ -9,6 +9,8 @@ type UsersRepo interface {
 	UpsertUser(user threadsapi.ThreadsApi_User)
 	SearchUsers(query string) []threadsapi.ThreadsApi_User
 	GetUserInfoUsingUserId(userId string) threadsapi.ThreadsApi_User
+	SetUserFavourite(pk string)
+	UnsetUserFavourite(pk string)
 }
 
 // UpsertUser inserts or updates a user
@@ -60,4 +62,24 @@ func (client *ThreadsDbClient) GetUserInfoUsingUserId(userId string) (row thread
 
 	fmt.Println(row)
 	return row
+}
+
+func (client *ThreadsDbClient) SetUserFavourite(pk string) {
+	res, err := client.Db.Exec("UPDATE users SET favourited_local = 1 WHERE pk = ?;", pk)
+	if err != nil {
+		fmt.Println("error", err)
+		return
+	}
+	fmt.Println("res", res)
+	return
+}
+
+func (client *ThreadsDbClient) UnsetUserFavourite(pk string) {
+	res, err := client.Db.Exec("UPDATE users SET favourited_local = 0 WHERE pk = ?;", pk)
+	if err != nil {
+		fmt.Println("error", err)
+		return
+	}
+	fmt.Println("res", res)
+	return
 }

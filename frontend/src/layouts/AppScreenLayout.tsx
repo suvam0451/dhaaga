@@ -1,9 +1,6 @@
 import { Box, Container, Flex } from "@mantine/core";
 import Sidebar from "../components/sidebar/Sidebar";
-import {
-	APP_MAX_HEIGHT,
-	GALLERY_FIXED_HEIGHT,
-} from "../constants/app-dimensions";
+import { APP_MAX_HEIGHT } from "../constants/app-dimensions";
 import Footer from "../components/footer/Footer";
 
 function AppScreenLayout({ children }: React.PropsWithChildren) {

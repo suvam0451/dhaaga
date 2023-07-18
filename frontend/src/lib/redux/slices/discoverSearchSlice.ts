@@ -15,11 +15,16 @@ export interface DiscoverSearchState {
 		favouritesOnly: boolean;
 	};
 	searchResults: DiscoverSearchResults;
+	numPages: number;
 }
 
-const setSearchTerm = createAction<string, "setDashboardSearchTerm">("setDashboardSearchTerm");
+const setSearchTerm = createAction<string, "setDashboardSearchTerm">(
+	"setDashboardSearchTerm"
+);
 const setLimit = createAction<number, "setDashboardLimit">("setDashboardLimit");
-const setOffset = createAction<number, "setDashboardOffset">("setDashboardOffset");
+const setOffset = createAction<number, "setDashboardOffset">(
+	"setDashboardOffset"
+);
 const setFavouritesOnly = createAction<boolean, "setDashboardFavouritesOnly">(
 	"setDashboardFavouritesOnly"
 );
@@ -33,6 +38,7 @@ export const threadsDiscoverReducer = createReducer<DiscoverSearchState>(
 			favouritesOnly: false,
 		},
 		searchResults: { items: [], SearchTotal: 0 },
+		numPages: 0,
 	},
 	(builder) =>
 		builder
@@ -66,9 +72,16 @@ export const threadsDiscoverReducer = createReducer<DiscoverSearchState>(
 			}))
 			.addCase(getDashboardSearchResults.fulfilled, (state, action) => {
 				console.log("search results", action.payload);
+				let pageCount = 0;
+				try {
+					pageCount = Math.ceil(action.payload.total / 5);
+				} catch (e) {
+					console.log(e);
+				}
 				return {
 					...state,
 					searchResults: action.payload as any,
+					numPages: pageCount,
 				};
 			})
 			.addCase(getDashboardSearchResults.pending, (state, action) => {
@@ -77,7 +90,7 @@ export const threadsDiscoverReducer = createReducer<DiscoverSearchState>(
 				};
 			})
 			.addCase(getDashboardSearchResults.rejected, (state, action) => {
-        console.log("[WARN]: dashboard get failed for meta threads.")
+				console.log("[WARN]: dashboard get failed for meta threads.");
 				return {
 					...state,
 					searchResults: {

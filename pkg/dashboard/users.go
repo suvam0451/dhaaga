@@ -22,10 +22,20 @@ func SearchUsers(q SearchUsersQuery) SearchUsersResponse {
 	client.LoadDatabase()
 	defer client.CloseDatabase()
 
+	totalCount := 0
+
+	if q.FavouritedOnly {
+		client.Db.Get(&totalCount,
+			"SELECT COUNT(*) FROM users WHERE username LIKE ? AND favourited_local = 1", "%"+q.Query+"%")
+	} else {
+		client.Db.Get(&totalCount,
+			"SELECT COUNT(*) FROM users WHERE username LIKE ?", "%"+q.Query+"%")
+	}
+
 	var all []threadsapi.ThreadsApi_User
 	db := client.Db
 	db.Select(&all,
-		"SELECT pk, username, profile_pic_url FROM users WHERE username LIKE ? LIMIT ? OFFSET ?",
+		"SELECT * FROM users WHERE username LIKE ? LIMIT ? OFFSET ?",
 		"%"+q.Query+"%", q.Limit, q.Offset)
 
 	// filter for locally favourited
@@ -41,6 +51,6 @@ func SearchUsers(q SearchUsersQuery) SearchUsersResponse {
 	}
 	return SearchUsersResponse{
 		Items: all,
-		Total: len(all),
+		Total: totalCount,
 	}
 }
