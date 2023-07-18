@@ -25,40 +25,39 @@ type ThreadsDbClient struct {
 }
 
 func (client *ThreadsDbClient) LoadDatabase() *sqlx.DB {
-
+	databaseDir := "."
 	if runtime.GOOS == "windows" {
 		userCacheDir, userCacheDirErr := os.UserCacheDir()
 		if userCacheDirErr != nil {
 			println("Error:", userCacheDirErr.Error())
 		}
-
-		// ensure directory exists
-		if _, err := os.Stat(userCacheDir + "/DhaagaApp/databases"); errors.Is(err, os.ErrNotExist) {
-			err := os.Mkdir(userCacheDir+"/DhaagaApp/databases", os.ModePerm)
-			if err != nil {
-				log.Println(err)
-			}
+		databaseDir = userCacheDir + "/DhaagaApp/databases"
+	} else if runtime.GOOS == "darwin" {
+		userCacheDir, userCacheDirErr := os.UserCacheDir()
+		if userCacheDirErr != nil {
+			println("Error:", userCacheDirErr.Error())
 		}
-
-		db, err := sqlx.Open("sqlite3", userCacheDir+"/DhaagaApp/databases/threads.db")
-		if err != nil {
-			log.Fatal(err)
-		}
-		client.Db = db
-		// run all migrations
-		client.InitializeSchema()
-		return db
+		databaseDir = userCacheDir + "/com.suvam0451.DhaagaApp/databases"
 	} else {
-		db, err := sqlx.Open("sqlite3", "%APPDATA%/DhaagaApp/threads.db")
-		if err != nil {
-			log.Fatal(err)
-		}
-		client.Db = db
-		// run all migrations
-		client.InitializeSchema()
-		return db
+		fmt.Println("[INFO]: Linux platform is currently and Unsupported OS")
 	}
 
+	// ensure directory exists
+	if _, err := os.Stat(databaseDir); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(databaseDir, os.ModePerm)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	db, err := sqlx.Open("sqlite3", databaseDir+"/threads.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	client.Db = db
+	// run all migrations
+	client.InitializeSchema()
+	return db
 }
 
 func (client *ThreadsDbClient) CloseDatabase() {
