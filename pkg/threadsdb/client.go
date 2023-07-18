@@ -1,8 +1,11 @@
 package threadsdb
 
 import (
+	"errors"
 	"fmt"
 	"log"
+	"os"
+	"runtime"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
@@ -22,14 +25,40 @@ type ThreadsDbClient struct {
 }
 
 func (client *ThreadsDbClient) LoadDatabase() *sqlx.DB {
-	db, err := sqlx.Open("sqlite3", "./threads.db")
-	if err != nil {
-		log.Fatal(err)
+
+	if runtime.GOOS == "windows" {
+		userCacheDir, userCacheDirErr := os.UserCacheDir()
+		if userCacheDirErr != nil {
+			println("Error:", userCacheDirErr.Error())
+		}
+
+		// ensure directory exists
+		if _, err := os.Stat(userCacheDir + "/DhaagaApp/databases"); errors.Is(err, os.ErrNotExist) {
+			err := os.Mkdir(userCacheDir+"/DhaagaApp/databases", os.ModePerm)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+
+		db, err := sqlx.Open("sqlite3", userCacheDir+"/DhaagaApp/databases/threads.db")
+		if err != nil {
+			log.Fatal(err)
+		}
+		client.Db = db
+		// run all migrations
+		client.InitializeSchema()
+		return db
+	} else {
+		db, err := sqlx.Open("sqlite3", "%APPDATA%/DhaagaApp/threads.db")
+		if err != nil {
+			log.Fatal(err)
+		}
+		client.Db = db
+		// run all migrations
+		client.InitializeSchema()
+		return db
 	}
-	client.Db = db
-	// run all migrations
-	client.InitializeSchema()
-	return db
+
 }
 
 func (client *ThreadsDbClient) CloseDatabase() {
