@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/suvam0451/prototype-instagram-threads-browser/compare/v0.2.0...v0.3.0) (2023-07-19)
+
+
+### Features
+
+* **app:** search for users ([a1f252f](https://github.com/suvam0451/prototype-instagram-threads-browser/commit/a1f252f48bfa6e2cb4a5a0e6d7443bda54d0b0d6))
+* **app:** user favourite feature ([13daf50](https://github.com/suvam0451/prototype-instagram-threads-browser/commit/13daf50f623cf9b407c2ca83d77dbd5207666277))
+
 ## [0.2.0](https://github.com/suvam0451/prototype-instagram-threads-browser/compare/v0.1.0...v0.2.0) (2023-07-17)
 
 
