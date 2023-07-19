@@ -38,7 +38,7 @@ export function AvatarBase64Loader({
 	return <Avatar radius={radius || "sm"} src={ImageSrcBase64 as any} alt="pfp" />;
 }
 
-function HighlightedPartialMatch({
+export function HighlightedPartialMatch({
 	text,
 	searchTerm,
 }: {

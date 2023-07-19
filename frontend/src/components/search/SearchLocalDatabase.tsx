@@ -1,6 +1,6 @@
 import { Select } from "@mantine/core";
 import { IconDatabase } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../lib/redux/store";

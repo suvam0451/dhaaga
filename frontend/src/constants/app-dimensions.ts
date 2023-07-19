@@ -5,6 +5,8 @@ export const GALLERY_FIXED_WIDTH = 360;
 export const GALLERY_MAX_HEIGHT = 720;
 export const APP_MAX_HEIGHT = 760; // 1080p screen = 1080;
 
+export const TABLE_FIXED_WIDTH = 480
+
 
 // gallery preview (same dim as gallery)
 export const GALLERY_PREVIEW_ITEM_FIXED_PREVIEW_WIDTH = 96;

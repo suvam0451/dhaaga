@@ -98,126 +98,152 @@ function Sidebar() {
 			style={{
 				boxShadow: "0.1px 0px 4px #888",
 			}}
+			 bg={SIDEBAR_BG_COLOR}
 		>
-			<MediaQuery
-				query={HIDE_TABLET_STYLE_BREAKPOINT}
-				styles={{ display: "none" }}
-			>
-				<Navbar width={{ base: 64 }} bg={SIDEBAR_BG_COLOR}>
-					<Navbar.Section>
-						<MainLink
-							icon={<IconHome color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Home"
-							pathname="/home"
-						/>
-					</Navbar.Section>
-					<Navbar.Section grow component={ScrollArea}>
-						{/* scrollable content here */}
-						<MainLink
-							icon={<IconHome color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Home"
-							pathname="/home"
-						/>
-						<MainLink
-							icon={<IconSearch color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Search"
-							pathname="/search"
-						/>
-						<MainLink
-							icon={<IconDatabase color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Gallery"
-							pathname="/database"
-						/>
-					</Navbar.Section>
-					<Navbar.Section>
-						<MainLink
-							icon={<IconSettings color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Settings"
-							pathname="/settings"
-						/>
-						<MainLink
-							icon={<IconInfoCircle color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="About"
-							pathname="/about"
-						/>
-					</Navbar.Section>
-				</Navbar>
-			</MediaQuery>
-			<MediaQuery
-				query={HIDE_DESKTOP_STYLE_BREAKPOINT}
-				styles={{ display: "none" }}
-			>
-				<Navbar p="xs" h={"100%"} w={{ base: 164 }} bg={SIDEBAR_BG_COLOR}>
-					<Navbar.Section>
-						<Flex style={{ alignItems: "flex-end" }}>
-							<Text size={42} style={{ fontWeight: 500 }}>
-								धागा
-							</Text>
-							<Text size={16}>Dhaaga</Text>
-						</Flex>
-					</Navbar.Section>
-					<Divider my={"sm"} />
-					<Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
-						{/* scrollable content here */}
-						<MainLink
-							icon={<IconHome color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Home"
-							pathname="/home"
-						/>
-						<MainLink
-							icon={<IconSearch color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label={"Search"}
-							pathname={"/search"}
-						/>
-						<MainLink
-							icon={<IconHeart color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Favourites"
-							pathname="/favourites"
-						/>
-						<MainLink
-							icon={<IconRss color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Latest"
-							pathname="/latest"
-						/>
-						<MainLink
-							icon={<IconPhotoStar color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Gallery"
-							pathname="/gallery"
-						/>
-						<MainLink
-							icon={<IconDatabase color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Database"
-							pathname="/database"
-						/>
-					</Navbar.Section>
-					<Navbar.Section>
-						<MainLink
-							icon={<IconSettings color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="Settings"
-							pathname="/settings"
-						/>
-						<MainLink
-							icon={<IconInfoCircle color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
-							color={SIDEBAR_ICONS_ICON_COLOR}
-							label="About"
-							pathname="/about"
-						/>
-					</Navbar.Section>
-				</Navbar>
-			</MediaQuery>
+			<Box h={"100%"} mah={APP_MAX_HEIGHT}>
+				<MediaQuery
+					query={HIDE_TABLET_STYLE_BREAKPOINT}
+					styles={{ display: "none" }}
+				>
+					<Navbar width={{ base: 64 }}  bg={SIDEBAR_BG_COLOR}>
+						<Navbar.Section>
+							<Flex
+								pt={"sm"}
+								style={{ alignItems: "flex-end", justifyContent: "center" }}
+							>
+								<Text size={24} style={{ fontWeight: 500 }}>
+									धागा
+								</Text>
+							</Flex>
+						</Navbar.Section>
+						<Divider my={"sm"} />
+
+						<Navbar.Section grow component={ScrollArea}>
+							{/* scrollable content here */}
+							<MainLink
+								icon={<IconHome color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Home"
+								pathname="/home"
+							/>
+							<MainLink
+								icon={<IconSearch color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Search"
+								pathname="/search"
+							/>
+							<MainLink
+								icon={<IconHeart color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Favourites"
+								pathname="/favourites"
+							/>
+							<MainLink
+								icon={<IconRss color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Latest"
+								pathname="/latest"
+							/>
+							<MainLink
+								icon={<IconPhotoStar color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Gallery"
+								pathname="/gallery"
+							/>
+							<MainLink
+								icon={<IconDatabase color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Gallery"
+								pathname="/database"
+							/>
+						</Navbar.Section>
+						<Navbar.Section>
+							<MainLink
+								icon={<IconSettings color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Settings"
+								pathname="/settings"
+							/>
+							<MainLink
+								icon={<IconInfoCircle color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="About"
+								pathname="/about"
+							/>
+						</Navbar.Section>
+					</Navbar>
+				</MediaQuery>
+				<MediaQuery
+					query={HIDE_DESKTOP_STYLE_BREAKPOINT}
+					styles={{ display: "none" }}
+				>
+					<Navbar p="xs" h={"100%"} w={{ base: 164 }} bg={SIDEBAR_BG_COLOR}>
+						<Navbar.Section>
+							<Flex style={{ alignItems: "flex-end" }}>
+								<Text size={42} style={{ fontWeight: 500 }}>
+									धागा
+								</Text>
+								<Text size={16}>Dhaaga</Text>
+							</Flex>
+						</Navbar.Section>
+						<Divider my={"sm"} />
+						<Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
+							{/* scrollable content here */}
+							<MainLink
+								icon={<IconHome color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Home"
+								pathname="/home"
+							/>
+							<MainLink
+								icon={<IconSearch color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label={"Search"}
+								pathname={"/search"}
+							/>
+							<MainLink
+								icon={<IconHeart color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Favourites"
+								pathname="/favourites"
+							/>
+							<MainLink
+								icon={<IconRss color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Latest"
+								pathname="/latest"
+							/>
+							<MainLink
+								icon={<IconPhotoStar color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Gallery"
+								pathname="/gallery"
+							/>
+							<MainLink
+								icon={<IconDatabase color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Database"
+								pathname="/database"
+							/>
+						</Navbar.Section>
+						<Navbar.Section>
+							<MainLink
+								icon={<IconSettings color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Settings"
+								pathname="/settings"
+							/>
+							<MainLink
+								icon={<IconInfoCircle color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="About"
+								pathname="/about"
+							/>
+						</Navbar.Section>
+					</Navbar>
+				</MediaQuery>
+				<Divider/>
+			</Box>
 		</Box>
 	);
 }

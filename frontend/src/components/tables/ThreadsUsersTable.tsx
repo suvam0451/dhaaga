@@ -22,14 +22,22 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { getDashboardSearchResults } from "../../lib/redux/slices/workerSlice";
 import { ThreadsUser } from "./tables.types";
-import { AvatarBase64Loader } from "../variants/search-recommendations/threadsDesktop";
-import { GALLERY_FIXED_WIDTH } from "../../constants/app-dimensions";
+import {
+	AvatarBase64Loader,
+	HighlightedPartialMatch,
+} from "../variants/search-recommendations/threadsDesktop";
+import {
+	GALLERY_FIXED_WIDTH,
+	TABLE_FIXED_WIDTH,
+} from "../../constants/app-dimensions";
 import UserFavouriteController from "./utils/FavouriteUser";
 
 function CopyUsername({ text }: { text: string }) {
 	const [opened, setOpened] = useState(false);
 	const [CopyText, setCopyText] = useState<string>(text);
-
+	const discover = useSelector<RootState, DiscoverSearchState>(
+		(o) => o.threadsDiscover
+	);
 	useEffect(() => {
 		setCopyText("Copied!");
 	}, [setCopyText]);
@@ -43,6 +51,8 @@ function CopyUsername({ text }: { text: string }) {
 	}
 	return (
 		<Flex style={{ alignItems: "center" }}>
+			{/* FIXME: This is not working */}
+			{/* <HighlightedPartialMatch text={text} searchTerm={discover.query.searchTerm} /> */}
 			<Box>{text}</Box>
 			<Flex mx={"xs"}>
 				<Popover opened={opened}>
@@ -79,8 +89,8 @@ function ThreadsUserTable() {
 		dispatch({
 			type: "setDashboardOffset",
 			payload: 0,
-		})
-	}, [debounced])
+		});
+	}, [debounced]);
 
 	// Fetch the discovery results when the search term/query changes
 	useEffect(() => {
@@ -112,11 +122,11 @@ function ThreadsUserTable() {
 	));
 
 	function setPage(ans: number) {
-		console.log(ans)
+		console.log(ans);
 		dispatch({
 			type: "setDashboardOffset",
-			payload: (ans-1) * 5,
-		})
+			payload: (ans - 1) * 5,
+		});
 	}
 
 	function onInputChange(e: any) {
@@ -130,7 +140,7 @@ function ThreadsUserTable() {
 		});
 	}
 	return (
-		<Box miw={GALLERY_FIXED_WIDTH}>
+		<Box w={TABLE_FIXED_WIDTH}>
 			<Flex w={"100%"} style={{ alignItems: "center" }}>
 				<Box
 					style={{ flexGrow: 1, width: "100%s", display: "flex" }}
@@ -181,7 +191,11 @@ function ThreadsUserTable() {
 				<tbody>{rows}</tbody>
 			</Table>
 			<Flex px={"lg"} py={"xl"} style={{ justifyContent: "center" }}>
-				<Pagination value={discover.query.offset/5 + 1} onChange={setPage} total={discover.numPages} />
+				<Pagination
+					value={discover.query.offset / 5 + 1}
+					onChange={setPage}
+					total={discover.numPages}
+				/>
 			</Flex>
 		</Box>
 	);
