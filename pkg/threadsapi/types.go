@@ -1,13 +1,20 @@
 package threadsapi
 
 type ThreadsApi_Post_ImageVersions2_Candidates struct {
-	Height int    `json:"height"`
-	Url    string `json:"url"`
-	Width  int    `json:"width"`
+	Height   int    `json:"height"`
+	Url      string `json:"url"`
+	Width    int    `json:"width"`
+	Typename string `json:"__typename"` // XDTImageCandidate
 }
 
 type ThreadsApi_Post_ImageVersions2 struct {
 	Candidates []ThreadsApi_Post_ImageVersions2_Candidates `json:"candidates"`
+}
+
+type ThreadsApi_PostVideoVersions_ArrayItem struct {
+	Type     int    `json:"type"`
+	Url      string `json:"url"`
+	Typename string `json:"__typename"` // XDTVideoVersion
 }
 
 type ThreadsApi_ShareInfo struct {

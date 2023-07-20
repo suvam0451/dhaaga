@@ -16,6 +16,9 @@ import {
 } from "../../constants/app-dimensions";
 import { AppDispatch, RootState } from "../../lib/redux/store";
 import { GalleryState } from "../../lib/redux/slices/gallerySlice";
+import { IconPlayerPlay } from "@tabler/icons-react";
+import { GetAsset } from "../../../wailsjs/go/main/App";
+import SearchGalleryVideo from "./SearchGalleryVideo";
 
 function GalleryEmpty() {
 	return (
@@ -29,12 +32,10 @@ function GalleryEmpty() {
 			}}
 		>
 			<Box>
-			<Text>Looks like you have not searched for anything</Text>
+				<Text>Looks like you have not searched for anything</Text>
 
-			<Text>https://www.threads.net/@crunchyroll</Text>
-		
+				<Text>https://www.threads.net/@crunchyroll</Text>
 			</Box>
-
 		</Flex>
 	);
 }
@@ -49,14 +50,48 @@ function Base64GalleryItem() {
 
 	useEffect(() => {
 		if (galleryState.galleryIndex === -1) return;
+		if (galleryState?.HasVideo && galleryState?.VideoLoaded) return;
 		dispatch(
 			getImageBase64(
 				galleryState.imageUrls[galleryState.galleryIndex].asset_url
 			)
 		);
-	}, [galleryState.galleryIndex]);
+	}, [galleryState.galleryIndex, galleryState.VideoLoaded]);
+
+	function onVideoLoadRequested() {
+		if (
+			!galleryState.HasVideo ||
+			!galleryState?.currentItem?.video_download_url
+		)
+			return;
+
+		dispatch({ type: "setGalleryVideoLoading", payload: true });
+		GetAsset(galleryState?.currentItem?.video_download_url)
+			.then((res) => {
+				dispatch({
+					type: "setGalleryVideoContent",
+					payload: res,
+				});
+			})
+			.finally(() => {
+				dispatch({ type: "setGalleryVideoLoading", payload: false });
+			});
+	}
 
 	const imageSrc = galleryState?.currentImage || null;
+
+	useEffect(() => {
+		console.log(
+			"unmounting",
+			galleryState?.HasVideo,
+			galleryState?.VideoLoaded,
+			galleryState?.galleryIndex
+		);
+	}, [
+		galleryState?.HasVideo,
+		galleryState?.VideoLoaded,
+		galleryState?.galleryIndex,
+	]);
 
 	return (
 		<Box w={GALLERY_FIXED_WIDTH} mah={GALLERY_FIXED_HEIGHT}>
@@ -67,15 +102,73 @@ function Base64GalleryItem() {
 				/>
 			) : galleryState.currentImage ? (
 				<ScrollArea w={GALLERY_FIXED_WIDTH} mah={GALLERY_FIXED_HEIGHT}>
-					<Box w={GALLERY_FIXED_WIDTH} mah={GALLERY_MAX_HEIGHT}>
-						<Image
-							mx="auto"
-							radius="md"
-							src={imageSrc}
-							alt={"Image"}
-							pos={"relative"}
-							fit={"contain"}
-						/>
+					<Box
+						w={GALLERY_FIXED_WIDTH}
+						mah={GALLERY_MAX_HEIGHT}
+						pos={"relative"}
+					>
+						{galleryState?.HasVideo === true ? (
+							galleryState?.VideoLoaded === true ? (
+								<SearchGalleryVideo url={imageSrc as any} />
+							) : (
+								<Box>
+									<Flex
+										bg={"rgba(100, 100, 100, 0.75)"}
+										h={"100%"}
+										w={"100%"}
+										pos={"absolute"}
+										style={{
+											zIndex: 99,
+											alignItems: "center",
+											justifyContent: "center",
+										}}
+										onClick={() => {
+											if (galleryState?.VideoLoading) return;
+											onVideoLoadRequested();
+										}}
+									>
+										<Flex
+											style={{
+												border: "2px solid black",
+												borderRadius: "100%",
+											}}
+											bg={"rbga(200, 200, 200, 1)"}
+										>
+											{galleryState?.VideoLoading ? (
+												<LoadingOverlay
+													visible={galleryState?.VideoLoading}
+													overlayBlur={2}
+												/>
+											) : (
+												<IconPlayerPlay
+													style={{
+														backgroundColor: "rbga(200, 200, 200, 1)",
+													}}
+													size={48}
+												/>
+											)}
+										</Flex>
+									</Flex>
+									<Image
+										mx="auto"
+										radius="md"
+										src={imageSrc}
+										alt={"Image"}
+										pos={"relative"}
+										fit={"contain"}
+									/>
+								</Box>
+							)
+						) : (
+							<Image
+								mx="auto"
+								radius="md"
+								src={imageSrc}
+								alt={"Image"}
+								pos={"relative"}
+								fit={"contain"}
+							/>
+						)}
 					</Box>
 				</ScrollArea>
 			) : (
