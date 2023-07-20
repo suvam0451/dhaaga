@@ -67,10 +67,27 @@ export namespace threadsapi {
 	        this.text = source["text"];
 	    }
 	}
+	export class ThreadsApi_PostVideoVersions_ArrayItem {
+	    type: number;
+	    url: string;
+	    __typename: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ThreadsApi_PostVideoVersions_ArrayItem(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.type = source["type"];
+	        this.url = source["url"];
+	        this.__typename = source["__typename"];
+	    }
+	}
 	export class ThreadsApi_Post_ImageVersions2_Candidates {
 	    height: number;
 	    url: string;
 	    width: number;
+	    __typename: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new ThreadsApi_Post_ImageVersions2_Candidates(source);
@@ -81,6 +98,7 @@ export namespace threadsapi {
 	        this.height = source["height"];
 	        this.url = source["url"];
 	        this.width = source["width"];
+	        this.__typename = source["__typename"];
 	    }
 	}
 	export class ThreadsApi_Post_ImageVersions2 {
@@ -206,6 +224,7 @@ export namespace threadsapi {
 	    taken_at: number;
 	    text_post_app_info: ThreadsApi_Post_TextPostAppInfo;
 	    image_versions2: ThreadsApi_Post_ImageVersions2;
+	    video_versions?: ThreadsApi_PostVideoVersions_ArrayItem[];
 	    caption: ThreadsApi_Caption;
 	    like_count: number;
 	
@@ -225,6 +244,7 @@ export namespace threadsapi {
 	        this.taken_at = source["taken_at"];
 	        this.text_post_app_info = this.convertValues(source["text_post_app_info"], ThreadsApi_Post_TextPostAppInfo);
 	        this.image_versions2 = this.convertValues(source["image_versions2"], ThreadsApi_Post_ImageVersions2);
+	        this.video_versions = this.convertValues(source["video_versions"], ThreadsApi_PostVideoVersions_ArrayItem);
 	        this.caption = this.convertValues(source["caption"], ThreadsApi_Caption);
 	        this.like_count = source["like_count"];
 	    }
@@ -260,6 +280,9 @@ export namespace utils {
 	export class PostImageDTO {
 	    asset_url: string;
 	    post_id: string;
+	    asset_type: string;
+	    liked_local: boolean;
+	    video_download_url?: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new PostImageDTO(source);
@@ -269,6 +292,9 @@ export namespace utils {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.asset_url = source["asset_url"];
 	        this.post_id = source["post_id"];
+	        this.asset_type = source["asset_type"];
+	        this.liked_local = source["liked_local"];
+	        this.video_download_url = source["video_download_url"];
 	    }
 	}
 
