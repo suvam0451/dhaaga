@@ -135,6 +135,7 @@ func GetImageAssetsForPost(parentPostId string, post *threadsapi.ThreadsApi_Post
 	dbClient := threadsdb.ThreadsDbClient{}
 	dbClient.LoadDatabase()
 	dbClient.UpsertUser(post.User)
+	defer dbClient.CloseDatabase()
 
 	if depth == 0 {
 		if post.IsReposted() {
@@ -147,7 +148,13 @@ func GetImageAssetsForPost(parentPostId string, post *threadsapi.ThreadsApi_Post
 		}
 	}
 
-	dbClient.CloseDatabase()
+	var videoUrl *string
+	var assetType string
+	assetType = "image"
+	if post.VideoVersions != nil && len(*post.VideoVersions) > 0 {
+		videoUrl = &(*post.VideoVersions)[0].Url
+		assetType = "video"
+	}
 
 	// adding items from this post
 	if len(post.ImageVersions2.Candidates) == 0 {
@@ -155,10 +162,12 @@ func GetImageAssetsForPost(parentPostId string, post *threadsapi.ThreadsApi_Post
 		invalidRegex, _ := regexp.Compile("rsrc.php/null.jpg")
 		candidate := post.ImageVersions2.Candidates[0].Url
 		if !invalidRegex.MatchString(candidate) {
-			dbClient.InsertUniqueImageAssetForPost(*post, candidate)
+			dbClient.InsertUniqueImageAssetForPost(*post, candidate, videoUrl)
 			assets = append(assets, utils.PostImageDTO{
-				AssetUrl: candidate,
-				PostId:   parentPostId,
+				AssetUrl:         candidate,
+				PostId:           parentPostId,
+				AssetType:        assetType,
+				VideoDownloadUrl: videoUrl,
 			})
 		}
 	}
@@ -205,16 +214,14 @@ func GetImagesForProfile_Controller(url string) []utils.PostImageDTO {
 				thread := threads[i]
 				for j := 0; j < len(thread.ThreadItems); j++ {
 					threadItem := thread.ThreadItems[j]
-					worker.Assets = append(worker.Assets, GetImageAssetsForPost(threadItem.Post.Id, threadItem.Post, 0)...)
+					assetsToAdd := GetImageAssetsForPost(threadItem.Post.Id, threadItem.Post, 0)
+					worker.Assets = append(worker.Assets, assetsToAdd...)
 				}
 			}
 		}
 	}
 
 	worker.Visit(url)
-	// retval := getImagesForProfileReturnType{}
-	// retval.assets = worker.Assets
-
 	return worker.Assets
 }
 

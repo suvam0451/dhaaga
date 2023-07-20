@@ -21,7 +21,7 @@ func GetAsset(url string) string {
 		return ""
 	}
 
-	regex, _ := regexp.Compile("\\.(png|jpg)")
+	regex, _ := regexp.Compile("\\.(png|jpg|mp4)")
 	itemFound := regex.FindStringSubmatch(url)
 
 	if len(itemFound) >= 1 {

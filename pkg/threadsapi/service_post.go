@@ -15,18 +15,20 @@ type ThreadsApi_Caption struct {
 }
 
 type ThreadsApi_Post struct {
-	Pk              string                          `json:"pk"` // e.g. - xxxxx
-	Id              string                          `json:"id"` // e.g. - xxxxx_yyy
-	User            ThreadsApi_User                 `json:"user"`
-	Code            string                          `json:"code"`
-	OriginalHeight  int                             `json:"original_height"`
-	OriginalWidth   int                             `json:"original_width"`
-	HasAudio        bool                            `json:"has_audio"`
-	TakenAt         int64                           `json:"taken_at"`
-	TextPostAppInfo ThreadsApi_Post_TextPostAppInfo `json:"text_post_app_info"`
-	ImageVersions2  ThreadsApi_Post_ImageVersions2  `json:"image_versions2"`
-	Caption         ThreadsApi_Caption              `json:"caption"`
-	LikeCount       int                             `json:"like_count" db:"like_count"`
+	Pk              string                                    `json:"pk"` // e.g. - xxxxx
+	Id              string                                    `json:"id"` // e.g. - xxxxx_yyy
+	User            ThreadsApi_User                           `json:"user"`
+	Code            string                                    `json:"code"`
+	OriginalHeight  int                                       `json:"original_height"`
+	OriginalWidth   int                                       `json:"original_width"`
+	HasAudio        bool                                      `json:"has_audio"`
+	TakenAt         int64                                     `json:"taken_at"`
+	TextPostAppInfo ThreadsApi_Post_TextPostAppInfo           `json:"text_post_app_info"`
+	ImageVersions2  ThreadsApi_Post_ImageVersions2            `json:"image_versions2"`
+	VideoVersions   *[]ThreadsApi_PostVideoVersions_ArrayItem `json:"video_versions"`
+
+	Caption   ThreadsApi_Caption `json:"caption"`
+	LikeCount int                `json:"like_count" db:"like_count"`
 	ThreadsApi_Post_Methods
 
 	// database fields

@@ -96,12 +96,26 @@ func (client *ThreadsDbClient) InitializeSchema() {
 	);`
 	// END -- v0.2.0 -- END
 
+	// BEGIN -- v0.3.0 -- BEGIN
+	// END -- v0.3.0 -- END
+
+	// BEGIN -- v0.4.0 -- BEGIN
+	updateAssetsAddVideoUrl := `
+		ALTER TABLE assets
+		ADD video_download_url TEXT;
+		`
+	// END -- v0.4.0 -- END
+
 	db := client.Db
 
 	db.MustExec(usersDb)
 	db.MustExec(threadsDb)
 	db.MustExec(postsDb)
 	db.MustExec(assetsDb)
+
+	if _, err := db.Exec(updateAssetsAddVideoUrl); err != nil {
+
+	}
 
 	fmt.Println("Initialized schema")
 }
