@@ -381,3 +381,39 @@ func (a *App) UnsetUserFavourite(pk string) {
 	client.UnsetUserFavourite(pk)
 	return
 }
+
+// ------- Credentials Manager ----------------
+func (a *App) GetAccount(domain string, subdomain string, username string) *threadsdb.ThreadsDb_Account {
+	client := threadsdb.ThreadsDbAdminClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+	return client.GetAccount(domain, subdomain, username)
+}
+
+func (a *App) GetAccoutsBySubdomain(domain string, subdomain string) []threadsdb.ThreadsDb_Account {
+	client := threadsdb.ThreadsDbAdminClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+	return client.GetAccoutsBySubdomain(domain, subdomain)
+}
+
+func (a *App) UpsertAccount(account threadsdb.ThreadsDb_Account) bool {
+	client := threadsdb.ThreadsDbAdminClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+	return client.UpsertAccount(account)
+}
+
+func (a *App) UpsertCredential(account threadsdb.ThreadsDb_Account, name string, value string) bool {
+	client := threadsdb.ThreadsDbAdminClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+	return client.UpsertCredential(account, name, value)
+}
+
+func (a *App) GetCredentialsByAccountId(id int) []threadsdb.ThreadsDb_Credential {
+	client := threadsdb.ThreadsDbAdminClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+	return client.GetCredentialsByAccountId(id)
+}

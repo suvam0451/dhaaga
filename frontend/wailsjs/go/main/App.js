@@ -6,8 +6,20 @@ export function DashboardSearchUsers(arg1) {
   return window['go']['main']['App']['DashboardSearchUsers'](arg1);
 }
 
+export function GetAccount(arg1, arg2, arg3) {
+  return window['go']['main']['App']['GetAccount'](arg1, arg2, arg3);
+}
+
+export function GetAccoutsBySubdomain(arg1, arg2) {
+  return window['go']['main']['App']['GetAccoutsBySubdomain'](arg1, arg2);
+}
+
 export function GetAsset(arg1) {
   return window['go']['main']['App']['GetAsset'](arg1);
+}
+
+export function GetCredentialsByAccountId(arg1) {
+  return window['go']['main']['App']['GetCredentialsByAccountId'](arg1);
 }
 
 export function GetDatabasePostInfo(arg1) {
@@ -44,4 +56,12 @@ export function SetUserFavourite(arg1) {
 
 export function UnsetUserFavourite(arg1) {
   return window['go']['main']['App']['UnsetUserFavourite'](arg1);
+}
+
+export function UpsertAccount(arg1) {
+  return window['go']['main']['App']['UpsertAccount'](arg1);
+}
+
+export function UpsertCredential(arg1, arg2, arg3) {
+  return window['go']['main']['App']['UpsertCredential'](arg1, arg2, arg3);
 }

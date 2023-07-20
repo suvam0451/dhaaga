@@ -274,6 +274,55 @@ export namespace threadsapi {
 
 }
 
+export namespace threadsdb {
+	
+	export class ThreadsDb_Account {
+	    id: number;
+	    domain: string;
+	    subdomain: string;
+	    username: string;
+	    password: string;
+	    last_login_at?: string;
+	    verified: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new ThreadsDb_Account(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.domain = source["domain"];
+	        this.subdomain = source["subdomain"];
+	        this.username = source["username"];
+	        this.password = source["password"];
+	        this.last_login_at = source["last_login_at"];
+	        this.verified = source["verified"];
+	    }
+	}
+	export class ThreadsDb_Credential {
+	    id: number;
+	    account_id: string;
+	    credential_type: string;
+	    credential_value: string;
+	    updated_at: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ThreadsDb_Credential(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.account_id = source["account_id"];
+	        this.credential_type = source["credential_type"];
+	        this.credential_value = source["credential_value"];
+	        this.updated_at = source["updated_at"];
+	    }
+	}
+
+}
+
 export namespace utils {
 	
 	
