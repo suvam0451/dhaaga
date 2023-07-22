@@ -1,5 +1,7 @@
 package threadsapi
 
+import "encoding/json"
+
 type ThreadsApi_Post_Methods interface {
 	GetUser() *ThreadsApi_User
 	GetUsernameForOwner() string
@@ -15,7 +17,7 @@ type ThreadsApi_Caption struct {
 }
 
 type ThreadsApi_Post struct {
-	Pk              string                                    `json:"pk"` // e.g. - xxxxx
+	Pk              json.Number                               `json:"pk"` // e.g. - xxxxx
 	Id              string                                    `json:"id"` // e.g. - xxxxx_yyy
 	User            ThreadsApi_User                           `json:"user"`
 	Code            string                                    `json:"code"`

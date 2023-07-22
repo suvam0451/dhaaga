@@ -8,9 +8,6 @@ import {
 } from "@mantine/core";
 import React from "react";
 import {
-	IconGitPullRequest,
-	IconAlertCircle,
-	IconMessages,
 	IconDatabase,
 	IconSettings,
 	IconSearch,
@@ -19,6 +16,8 @@ import {
 	IconPhotoStar,
 	IconHeart,
 	IconRss,
+	IconKey,
+	IconSubtask,
 } from "@tabler/icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import { Link } from "react-router-dom";
@@ -98,14 +97,14 @@ function Sidebar() {
 			style={{
 				boxShadow: "0.1px 0px 4px #888",
 			}}
-			 bg={SIDEBAR_BG_COLOR}
+			bg={SIDEBAR_BG_COLOR}
 		>
 			<Box h={"100%"} mah={APP_MAX_HEIGHT}>
 				<MediaQuery
 					query={HIDE_TABLET_STYLE_BREAKPOINT}
 					styles={{ display: "none" }}
 				>
-					<Navbar width={{ base: 64 }}  bg={SIDEBAR_BG_COLOR}>
+					<Navbar width={{ base: 64 }} bg={SIDEBAR_BG_COLOR}>
 						<Navbar.Section>
 							<Flex
 								pt={"sm"}
@@ -156,7 +155,20 @@ function Sidebar() {
 								label="Gallery"
 								pathname="/database"
 							/>
+							<MainLink
+								icon={<IconSubtask color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Tasks"
+								pathname="/tasks"
+							/>
+							<MainLink
+								icon={<IconKey color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Accounts"
+								pathname="/accounts"
+							/>
 						</Navbar.Section>
+
 						<Navbar.Section>
 							<MainLink
 								icon={<IconSettings color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
@@ -225,6 +237,18 @@ function Sidebar() {
 								label="Database"
 								pathname="/database"
 							/>
+							<MainLink
+								icon={<IconSubtask color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Tasks"
+								pathname="/tasks"
+							/>
+							<MainLink
+								icon={<IconKey color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Accounts"
+								pathname="/accounts"
+							/>
 						</Navbar.Section>
 						<Navbar.Section>
 							<MainLink
@@ -242,7 +266,7 @@ function Sidebar() {
 						</Navbar.Section>
 					</Navbar>
 				</MediaQuery>
-				<Divider/>
+				<Divider />
 			</Box>
 		</Box>
 	);

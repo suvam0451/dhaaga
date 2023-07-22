@@ -2,6 +2,7 @@ import {
 	Box,
 	Button,
 	Flex,
+	Menu,
 	Pagination,
 	Popover,
 	Table,
@@ -10,10 +11,16 @@ import {
 	Tooltip,
 } from "@mantine/core";
 import {
+	IconArrowsLeftRight,
 	IconCheck,
 	IconCopy,
 	IconHeart,
 	IconInfoCircle,
+	IconMessageCircle,
+	IconPhoto,
+	IconSearch,
+	IconSettings,
+	IconTrash,
 } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../lib/redux/store";
@@ -22,17 +29,20 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { getDashboardSearchResults } from "../../lib/redux/slices/workerSlice";
 import { ThreadsUser } from "./tables.types";
-import {
-	AvatarBase64Loader,
-	HighlightedPartialMatch,
-} from "../variants/search-recommendations/threadsDesktop";
-import {
-	GALLERY_FIXED_WIDTH,
-	TABLE_FIXED_WIDTH,
-} from "../../constants/app-dimensions";
+import { AvatarBase64Loader } from "../variants/search-recommendations/threadsDesktop";
+import { TABLE_FIXED_WIDTH } from "../../constants/app-dimensions";
 import UserFavouriteController from "./utils/FavouriteUser";
+import { ProviderAuthState } from "../../lib/redux/slices/authSlice";
+import { GetCredentialsByAccountId } from "../../../wailsjs/go/main/App";
+import { KeystoreService } from "../../services/keystore.services";
+import { UserSettingsService } from "../../services/user-settings.service";
+import { TaskState, taskSlice } from "../../lib/redux/slices/tasksSlice";
+import { notifications } from "@mantine/notifications";
 
 function CopyUsername({ text }: { text: string }) {
+	const dispatch = useDispatch<AppDispatch>();
+	const tasks = useSelector<RootState, TaskState>((o) => o.tasks);
+
 	const [opened, setOpened] = useState(false);
 	const [CopyText, setCopyText] = useState<string>(text);
 	const discover = useSelector<RootState, DiscoverSearchState>(
@@ -78,6 +88,9 @@ function ThreadsUserTable() {
 	const discover = useSelector<RootState, DiscoverSearchState>(
 		(o) => o.threadsDiscover
 	);
+	const providerAuth = useSelector<RootState, ProviderAuthState>(
+		(o) => o.providerAuth
+	);
 
 	const [SearchTerm, setSearchTerm] = useState<string>("");
 	const [debounced] = useDebouncedValue(SearchTerm || "", 200);
@@ -104,6 +117,41 @@ function ThreadsUserTable() {
 		);
 	}, [debounced, discover.query]);
 
+	async function onMenuItemTimelineGetClick(pk: string) {
+		if (!providerAuth.selectedAccount) return;
+
+		console.log("fetching timeline for", pk, providerAuth.selectedAccount.id);
+
+		const creds = await GetCredentialsByAccountId(
+			providerAuth.selectedAccount.id
+		);
+		console.log("credentials", creds);
+		const deviceID = await UserSettingsService.getCustomDeviceId();
+
+		const { success: validCredSuccess, data: validCreds } =
+			await KeystoreService.verifyMetaThreadsCredentials(creds);
+		if (!validCredSuccess || !deviceID) return;
+
+		const taskDefition = {
+			access_token: validCreds?.accessToken,
+			user_id: pk,
+		};
+
+		dispatch(
+			taskSlice.actions.createTask({
+				domain: "meta",
+				subdomain: "threads",
+				taskDetails: taskDefition,
+				loginAs: providerAuth.selectedAccount,
+			})
+		);
+
+		notifications.show({
+			title: "Timeline Sync Task Added",
+			message: "Switch to tasks tab to start processing this task! 🤥",
+		});
+	}
+
 	const rows = discover?.searchResults?.items?.map((o: ThreadsUser, i) => (
 		<tr key={o.pk}>
 			<td>{o.pk}</td>
@@ -117,6 +165,35 @@ function ThreadsUserTable() {
 			<td>{o.FollowerCount}</td>
 			<td>
 				<UserFavouriteController pk={o.pk} favourited={o.FavouritedLocal} />
+			</td>
+			<td>
+				<Menu shadow="md" width={200}>
+					<Menu.Target>
+						<Button disabled={!providerAuth.selectedAccount} size={"sm"}>
+							Actions
+						</Button>
+					</Menu.Target>
+					<Menu.Dropdown>
+						<Menu.Label>Logged In Actions</Menu.Label>
+						<Menu.Item
+							icon={<IconPhoto size={14} />}
+							onClick={() => {
+								onMenuItemTimelineGetClick(o.pk);
+							}}
+						>
+							Sync Posts
+						</Menu.Item>
+						<Menu.Divider />
+
+						<Menu.Label>Danger zone</Menu.Label>
+						<Menu.Item icon={<IconArrowsLeftRight size={14} />}>
+							Clear Data
+						</Menu.Item>
+						<Menu.Item color="red" icon={<IconTrash size={14} />}>
+							Remove Account
+						</Menu.Item>
+					</Menu.Dropdown>
+				</Menu>
 			</td>
 		</tr>
 	));
@@ -139,6 +216,7 @@ function ThreadsUserTable() {
 			payload: !discover.query.favouritesOnly,
 		});
 	}
+
 	return (
 		<Box w={TABLE_FIXED_WIDTH}>
 			<Flex w={"100%"} style={{ alignItems: "center" }}>
@@ -181,6 +259,18 @@ function ThreadsUserTable() {
 									multiline
 									width={220}
 									label="Unrelated to your favourite list from the offical app."
+								>
+									<IconInfoCircle size={20} />
+								</Tooltip>
+							</Flex>
+						</th>
+						<th>
+							<Flex style={{ alignItems: "center" }}>
+								<Text>Actions</Text>
+								<Tooltip
+									multiline
+									width={220}
+									label="You need to be logged in as a threads account to perform these actions."
 								>
 									<IconInfoCircle size={20} />
 								</Tooltip>

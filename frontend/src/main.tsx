@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import store from "./lib/redux/store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Notifications } from "@mantine/notifications";
 
 // pages
 import IndexPage from "./pages/index";
@@ -15,6 +16,8 @@ import FavouritesPage from "./pages/favourites";
 import LatestPage from "./pages/latest";
 import GalleryPage from "./pages/gallery";
 import AboutPage from "./pages/about";
+import AccountsPage from "./pages/accounts";
+import TasksPage from "./pages/tasks";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
@@ -57,10 +60,19 @@ const router = createBrowserRouter([
 		path: "/about",
 		element: <AboutPage />,
 	},
+	{
+		path: "/accounts",
+		element: <AccountsPage />,
+	},
+	{
+		path: "/tasks",
+		element: <TasksPage />,
+	},
 ]);
 
 root.render(
 	<MantineProvider withGlobalStyles withNormalizeCSS>
+		<Notifications />
 		<Provider store={store}>
 			<RouterProvider router={router} />
 		</Provider>

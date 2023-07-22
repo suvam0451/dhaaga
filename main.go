@@ -1,8 +1,10 @@
 package main
 
 import (
+	"browser/pkg/threadsdb"
+	"browser/pkg/utils"
 	"embed"
-	"os"
+	"fmt"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -17,10 +19,9 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 
-	userCacheDir, userCacheDirErr := os.UserCacheDir()
-	if userCacheDirErr != nil {
-		println("Error:", userCacheDirErr.Error())
-	}
+	utils.GetDatabasesFolder()
+	fmt.Println(utils.GetUserDataFolder())
+	threadsdb.Firstload()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -36,7 +37,7 @@ func main() {
 			app,
 		},
 		Windows: &windows.Options{
-			WebviewUserDataPath: userCacheDir + "\\DhaagaApp",
+			WebviewUserDataPath: utils.GetUserDataFolder(),
 		},
 	})
 

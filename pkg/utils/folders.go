@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
+	"log"
 	"os"
 	"runtime"
 )
@@ -24,6 +26,15 @@ func GetDatabasesFolder() string {
 	} else {
 		fmt.Println("[INFO]: Linux platform is currently and Unsupported OS")
 	}
+
+	// ensure directory exists
+	if _, err := os.Stat(databaseDir); errors.Is(err, os.ErrNotExist) {
+		err := os.MkdirAll(databaseDir, os.ModePerm)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
 	return databaseDir
 }
 
@@ -55,5 +66,26 @@ func GetUserDataFolder() string {
 	} else {
 		fmt.Println("[INFO]: Linux platform is currently and Unsupported OS")
 	}
+
+	if _, err := os.Stat(userDataDir); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(userDataDir, os.ModePerm)
+		if err != nil {
+			log.Println(err)
+		}
+	}
 	return userDataDir
+}
+
+func GetApplicationCacheDir() string {
+	userCacheDir, _ := os.UserCacheDir()
+
+	userCacheDir = userCacheDir + "/com.suvam0451.DhaagaApp"
+	if _, err := os.Stat(userCacheDir); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(userCacheDir, os.ModePerm)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	return userCacheDir
 }
