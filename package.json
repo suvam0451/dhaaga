@@ -9,8 +9,5 @@
     "dev": "wails dev -debounce 5000"
   },
   "author": "Debashish Patra",
-  "license": "AGPL",
-  "devDependencies": {
-    "release-please": "^15.12.0"
-  }
+  "license": "AGPL"
 }
