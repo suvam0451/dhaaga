@@ -29,6 +29,8 @@ export function GetTextFeedUsingCursor(arg1:string,arg2:string,arg3:string):Prom
 
 export function GetUserDataDirectory():Promise<string>;
 
+export function InstagramSafeLogin(arg1:string,arg2:string):Promise<string>;
+
 export function SearchUsers(arg1:string):Promise<Array<threadsapi.ThreadsApi_User>>;
 
 export function SelectDownloadsFolder():Promise<string>;

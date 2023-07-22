@@ -29,20 +29,15 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { getDashboardSearchResults } from "../../lib/redux/slices/workerSlice";
 import { ThreadsUser } from "./tables.types";
-import {
-	AvatarBase64Loader,
-} from "../variants/search-recommendations/threadsDesktop";
-import {
-	TABLE_FIXED_WIDTH,
-} from "../../constants/app-dimensions";
+import { AvatarBase64Loader } from "../variants/search-recommendations/threadsDesktop";
+import { TABLE_FIXED_WIDTH } from "../../constants/app-dimensions";
 import UserFavouriteController from "./utils/FavouriteUser";
 import { ProviderAuthState } from "../../lib/redux/slices/authSlice";
-import {
-	GetCredentialsByAccountId,
-} from "../../../wailsjs/go/main/App";
+import { GetCredentialsByAccountId } from "../../../wailsjs/go/main/App";
 import { KeystoreService } from "../../services/keystore.services";
 import { UserSettingsService } from "../../services/user-settings.service";
 import { TaskState, taskSlice } from "../../lib/redux/slices/tasksSlice";
+import { notifications } from "@mantine/notifications";
 
 function CopyUsername({ text }: { text: string }) {
 	const dispatch = useDispatch<AppDispatch>();
@@ -150,6 +145,11 @@ function ThreadsUserTable() {
 				loginAs: providerAuth.selectedAccount,
 			})
 		);
+
+		notifications.show({
+			title: "Timeline Sync Task Added",
+			message: "Switch to tasks tab to start processing this task! 🤥",
+		});
 	}
 
 	const rows = discover?.searchResults?.items?.map((o: ThreadsUser, i) => (

@@ -17,6 +17,7 @@ import {
 	IconHeart,
 	IconRss,
 	IconKey,
+	IconSubtask,
 } from "@tabler/icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import { Link } from "react-router-dom";
@@ -155,7 +156,7 @@ function Sidebar() {
 								pathname="/database"
 							/>
 							<MainLink
-								icon={<IconKey color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								icon={<IconSubtask color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
 								color={SIDEBAR_ICONS_ICON_COLOR}
 								label="Tasks"
 								pathname="/tasks"
@@ -237,7 +238,7 @@ function Sidebar() {
 								pathname="/database"
 							/>
 							<MainLink
-								icon={<IconKey color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								icon={<IconSubtask color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
 								color={SIDEBAR_ICONS_ICON_COLOR}
 								label="Tasks"
 								pathname="/tasks"

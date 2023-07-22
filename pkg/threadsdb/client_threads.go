@@ -20,6 +20,8 @@ type ThreadsDbClient struct {
 	ThreadsDb
 	UsersRepo
 	PostsRepo
+	AccountsRepo
+	CredentialsRepo
 
 	ThreadsRepo
 	Db *sqlx.DB

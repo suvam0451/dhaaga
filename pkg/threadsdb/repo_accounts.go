@@ -15,9 +15,7 @@ type ThreadsDb_Account struct {
 type AccountsRepo interface {
 	GetAccount(domain string, subdomain string, username string) ThreadsDb_Account
 	UpsertAccount(account ThreadsDb_Account) bool
-	SearchAccountsBySubdomain(domain string, subdomain string)
-	[]ThreadsDb_Account
-	UpsertCredential(account ThreadsDb_Account, name string, value string) bool
+	SearchAccountsBySubdomain(domain string, subdomain string) []ThreadsDb_Account
 	GetCredentialForAccount(account ThreadsDb_Account, name string) *ThreadsDb_Credential
 	GetAccoutsBySubdomain(domain string, subdomain string) []ThreadsDb_Account
 }
@@ -35,7 +33,7 @@ func (client *ThreadsDbAdminClient) GetCredentialForAccount(account ThreadsDb_Ac
 }
 
 func (client *ThreadsDbAdminClient) GetAccount(domain string, subdomain string, username string) *ThreadsDb_Account {
-	var account ThreadsDb_Account
+	var account *ThreadsDb_Account = nil
 	err := client.Db.Get(&account,
 		`SELECT * FROM accounts 
 		WHERE domain = ? AND subdomain = ? AND username = ?;`,
@@ -43,7 +41,7 @@ func (client *ThreadsDbAdminClient) GetAccount(domain string, subdomain string, 
 	if err != nil {
 		return nil
 	}
-	return &account
+	return account
 }
 
 func (client *ThreadsDbAdminClient) UpsertAccount(account ThreadsDb_Account) bool {
@@ -73,37 +71,6 @@ func (client *ThreadsDbAdminClient) UpsertAccount(account ThreadsDb_Account) boo
 
 	fmt.Println("[INFO]: upserted account", account.Domain, account.Subdomain, account.Username)
 	return true
-}
-
-// UpsertCredential inserts or updates a credential for an account
-// provide domain, subdomain and username to use
-func (client *ThreadsDbAdminClient) UpsertCredential(account ThreadsDb_Account, name string, value string) bool {
-	//dedup
-	conflict := client.GetAccount(account.Domain, account.Subdomain, account.Username)
-	if conflict == nil {
-		fmt.Println("[INFO]: conflict while updating credential. user not found.")
-		return false
-	}
-
-	existingCredential := client.GetCredentialForAccount(*conflict, name)
-	if existingCredential == nil {
-		_, err := client.Db.Exec(`INSERT INTO credentials 
-			(account_id, credential_type, credential_value, updated_at) VALUES (?,?,?,?);`, conflict.Id, name, value, "now()")
-		if err != nil {
-			return false
-		}
-		fmt.Println("[INFO]: updated credential", name, "for account", account.Domain, account.Subdomain, account.Username)
-		return true
-	} else {
-		_, err := client.Db.Exec(`UPDATE credentials SET credential_value = ?, updated_at = ? WHERE account_id = ? AND credential_type = ?;`,
-			value, "now()", conflict.Id, name)
-		if err != nil {
-			return false
-		}
-
-		fmt.Println("[INFO]: updated credential", name, "for account", account.Domain, account.Subdomain, account.Username)
-		return true
-	}
 }
 
 func (client *ThreadsDbAdminClient) GetAccoutsBySubdomain(domain string, subdomain string) []ThreadsDb_Account {

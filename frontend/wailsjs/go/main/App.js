@@ -50,6 +50,10 @@ export function GetUserDataDirectory() {
   return window['go']['main']['App']['GetUserDataDirectory']();
 }
 
+export function InstagramSafeLogin(arg1, arg2) {
+  return window['go']['main']['App']['InstagramSafeLogin'](arg1, arg2);
+}
+
 export function SearchUsers(arg1) {
   return window['go']['main']['App']['SearchUsers'](arg1);
 }

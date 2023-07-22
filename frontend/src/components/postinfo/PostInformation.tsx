@@ -117,10 +117,6 @@ function PostInformation() {
 			});
 	}, [galleryState.galleryIndex]);
 
-	useEffect(() => {
-		console.log(PostDetailsDTO);
-	}, [PostDetailsDTO]);
-
 	return (
 		PostDetailsDTO && (
 			<Box

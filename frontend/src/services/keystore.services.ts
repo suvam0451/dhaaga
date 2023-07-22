@@ -1,3 +1,4 @@
+import { InstagramSafeLogin } from "../../wailsjs/go/main/App";
 import { threadsdb } from "../../wailsjs/go/models";
 
 export class KeystoreService {
@@ -5,25 +6,47 @@ export class KeystoreService {
 		creds: threadsdb.ThreadsDb_Credential[]
 	): Promise<{
 		success: boolean;
-		data?: { fbLsdToken: string; accessToken: string };
+		data?: { fbLsdToken?: string; accessToken: string };
 	}> {
 		if (!creds)
 			return {
 				success: false,
 			};
-		const fbLsdToken = creds.find((o) => o.credential_type === "lsd_token");
+		// const fbLsdToken = creds.find((o) => o.credential_type === "lsd_token");
 		const accessToken = creds.find((o) => o.credential_type === "access_token");
 
-		if (!fbLsdToken || !accessToken)
+		if (!accessToken)
 			return {
 				success: false,
 			};
 		return {
 			success: true,
 			data: {
-				fbLsdToken: fbLsdToken.credential_value,
+				// fbLsdToken: fbLsdToken.credential_value,
 				accessToken: accessToken.credential_value,
 			},
 		};
+	}
+
+	/**
+	 * Tries to generate access token for a given set of credentials.
+	 * If successful, the account and credentials will be saved in the db.
+	 *
+	 * If failed, an empty string ("") will be returned.
+	 * @param username
+	 * @param password
+	 * @returns Error, or empty string (success)
+	 */
+	static async verifyInstagramAccount(
+		username: string,
+		password: string
+	): Promise<string> {
+		try {
+			const res = await InstagramSafeLogin(username, password);
+			console.log(res);
+			return res;
+		} catch (e) {
+			return "Unknown error occured";
+		}
 	}
 }

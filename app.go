@@ -349,7 +349,7 @@ func (a *App) UpsertCredential(account threadsdb.ThreadsDb_Account, name string,
 	client := threadsdb.ThreadsDbAdminClient{}
 	client.LoadDatabase()
 	defer client.CloseDatabase()
-	return client.UpsertCredential(account, name, value)
+	return client.UpsertCredential(&account, name, value)
 }
 
 func (a *App) GetCredentialsByAccountId(id int) []threadsdb.ThreadsDb_Credential {
@@ -371,4 +371,12 @@ func (a *App) GetTextFeedUsingCursor(token string, userId string, maxId string) 
 	client := instagram.InstagramApiClient{}
 	client.SetAccessToken(token)
 	return client.GetUserProfileThreads(userId, maxId)
+}
+
+func (a *App) InstagramSafeLogin(username string, password string) string {
+	if _, err := instagram.SafeLogin(username, password); err != nil {
+		return err.Error()
+	} else {
+		return ""
+	}
 }

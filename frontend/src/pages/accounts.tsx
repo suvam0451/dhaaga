@@ -17,6 +17,7 @@ import {
 	ProviderAuthState,
 	providerAuthSlice,
 } from "../lib/redux/slices/authSlice";
+import MetaThreadsAddAccount from "../components/auth/MetaThreadsAddAccount";
 
 function App() {
 	const dispatch = useDispatch<AppDispatch>();
@@ -57,10 +58,10 @@ function App() {
 
 	return (
 		<AppScreenLayout>
-			<Flex>
+			<Flex w={"100%"}>
 				<Select
 					style={{ flex: 1 }}
-					mx={"xs"}
+					mr={"xs"}
 					label="Choose Provider"
 					placeholder="Pick one"
 					nothingFound="No results found..."
@@ -73,7 +74,7 @@ function App() {
 
 				<Select
 					style={{ flex: 1 }}
-					mx={"xs"}
+					ml={"xs"}
 					label="Choose Network"
 					placeholder="Pick one"
 					nothingFound="No results found..."
@@ -92,8 +93,8 @@ function App() {
 					}
 				/>
 			</Flex>
-			<Text style={{ fontWeight: 500 }} py={"md"}>
-				Accounts Found Based on your selection
+			<Text style={{ fontWeight: 500 }} pt={"lg"} pb={"xs"}>
+				Accounts Found for This Network
 			</Text>
 			{providerAuth?.accounts.map((o, i) => (
 				<Flex key={i} style={{ alignItems: "center" }} my={"xs"}>
@@ -104,7 +105,8 @@ function App() {
 						mx={"xs"}
 						type="password"
 					/>
-					{providerAuth.selectedAccount && providerAuth.selectedAccount.id === o.id ? (
+					{providerAuth.selectedAccount &&
+					providerAuth.selectedAccount.id === o.id ? (
 						<IconCheck color="green" size={32} />
 					) : (
 						<Button
@@ -117,11 +119,7 @@ function App() {
 					)}
 				</Flex>
 			))}
-			<Flex style={{ alignItems: "center" }}>
-				<TextInput placeholder="username" />
-				<TextInput placeholder="password" type="password" mx={"xs"} />
-				<Button>Add</Button>
-			</Flex>
+			<MetaThreadsAddAccount/>
 		</AppScreenLayout>
 	);
 }

@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import store from "./lib/redux/store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Notifications } from "@mantine/notifications";
 
 // pages
 import IndexPage from "./pages/index";
@@ -71,6 +72,7 @@ const router = createBrowserRouter([
 
 root.render(
 	<MantineProvider withGlobalStyles withNormalizeCSS>
+		<Notifications />
 		<Provider store={store}>
 			<RouterProvider router={router} />
 		</Provider>
