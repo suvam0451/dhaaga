@@ -1,9 +1,9 @@
 package threadsdb
 
 import (
+	"browser/pkg/utils"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -18,11 +18,9 @@ type ThreadsDbAdminClient struct {
 }
 
 func (client *ThreadsDbAdminClient) LoadDatabase() *sqlx.DB {
-	cacheDir, cacheDirErr := os.UserCacheDir()
-	if cacheDirErr != nil {
-		log.Fatal(cacheDirErr)
-	}
-	db, err := sqlx.Open("sqlite3", cacheDir+"/DhaagaApp/databases/threads_admin.db")
+	dbDir := utils.GetDatabasesFolder()
+
+	db, err := sqlx.Open("sqlite3", dbDir+"/threads_admin.db")
 	if err != nil {
 		log.Fatal(err)
 	}

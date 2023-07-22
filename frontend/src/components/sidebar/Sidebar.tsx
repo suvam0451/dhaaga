@@ -8,9 +8,6 @@ import {
 } from "@mantine/core";
 import React from "react";
 import {
-	IconGitPullRequest,
-	IconAlertCircle,
-	IconMessages,
 	IconDatabase,
 	IconSettings,
 	IconSearch,
@@ -160,6 +157,12 @@ function Sidebar() {
 							<MainLink
 								icon={<IconKey color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
 								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Tasks"
+								pathname="/tasks"
+							/>
+							<MainLink
+								icon={<IconKey color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
 								label="Accounts"
 								pathname="/accounts"
 							/>
@@ -232,6 +235,12 @@ function Sidebar() {
 								color={SIDEBAR_ICONS_ICON_COLOR}
 								label="Database"
 								pathname="/database"
+							/>
+							<MainLink
+								icon={<IconKey color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}
+								color={SIDEBAR_ICONS_ICON_COLOR}
+								label="Tasks"
+								pathname="/tasks"
 							/>
 							<MainLink
 								icon={<IconKey color={SIDEBAR_ICONS_FOREGROUND_COLOR} />}

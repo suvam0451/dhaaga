@@ -4,6 +4,7 @@ import { recommendationsSlice } from "./slices/recommendationsSlice";
 import { searchSlice } from "./slices/searchSlice";
 import { threadsDiscoverReducer } from "./slices/discoverSearchSlice";
 import { providerAuthSlice } from "./slices/authSlice";
+import { taskSlice } from "./slices/tasksSlice";
 
 const store = configureStore({
 	reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
 		search: searchSlice,
 		threadsDiscover: threadsDiscoverReducer,
 		providerAuth: providerAuthSlice.reducer,
+		tasks: taskSlice.reducer,
 	},
 });
 export default store;

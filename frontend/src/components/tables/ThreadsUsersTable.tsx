@@ -31,21 +31,23 @@ import { getDashboardSearchResults } from "../../lib/redux/slices/workerSlice";
 import { ThreadsUser } from "./tables.types";
 import {
 	AvatarBase64Loader,
-	HighlightedPartialMatch,
 } from "../variants/search-recommendations/threadsDesktop";
 import {
-	GALLERY_FIXED_WIDTH,
 	TABLE_FIXED_WIDTH,
 } from "../../constants/app-dimensions";
 import UserFavouriteController from "./utils/FavouriteUser";
 import { ProviderAuthState } from "../../lib/redux/slices/authSlice";
-import { GetCredentialsByAccountId } from "../../../wailsjs/go/main/App";
+import {
+	GetCredentialsByAccountId,
+} from "../../../wailsjs/go/main/App";
 import { KeystoreService } from "../../services/keystore.services";
-import { ThreadsAPI } from "threads-api";
-import ThreadsApiClient from "../../services/threads-api.service";
 import { UserSettingsService } from "../../services/user-settings.service";
+import { TaskState, taskSlice } from "../../lib/redux/slices/tasksSlice";
 
 function CopyUsername({ text }: { text: string }) {
+	const dispatch = useDispatch<AppDispatch>();
+	const tasks = useSelector<RootState, TaskState>((o) => o.tasks);
+
 	const [opened, setOpened] = useState(false);
 	const [CopyText, setCopyText] = useState<string>(text);
 	const discover = useSelector<RootState, DiscoverSearchState>(
@@ -128,17 +130,26 @@ function ThreadsUserTable() {
 		const creds = await GetCredentialsByAccountId(
 			providerAuth.selectedAccount.id
 		);
+		console.log("credentials", creds);
 		const deviceID = await UserSettingsService.getCustomDeviceId();
 
 		const { success: validCredSuccess, data: validCreds } =
 			await KeystoreService.verifyMetaThreadsCredentials(creds);
 		if (!validCredSuccess || !deviceID) return;
 
-		const client = new ThreadsApiClient({
-			...validCreds,
-			deviceId: deviceID,
-		});
-		console.log(client);
+		const taskDefition = {
+			access_token: validCreds?.accessToken,
+			user_id: pk,
+		};
+
+		dispatch(
+			taskSlice.actions.createTask({
+				domain: "meta",
+				subdomain: "threads",
+				taskDetails: taskDefition,
+				loginAs: providerAuth.selectedAccount,
+			})
+		);
 	}
 
 	const rows = discover?.searchResults?.items?.map((o: ThreadsUser, i) => (

@@ -16,6 +16,7 @@ import LatestPage from "./pages/latest";
 import GalleryPage from "./pages/gallery";
 import AboutPage from "./pages/about";
 import AccountsPage from "./pages/accounts";
+import TasksPage from "./pages/tasks";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
 	{
 		path: "/accounts",
 		element: <AccountsPage />,
+	},
+	{
+		path: "/tasks",
+		element: <TasksPage />,
 	},
 ]);
 

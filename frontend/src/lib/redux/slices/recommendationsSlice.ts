@@ -44,7 +44,6 @@ export const recommendationsSlice = createReducer<RecommendationsState>(
 				};
 			})
 			.addCase(getThreadsRecommendations.rejected, (state, action) => {
-				console.log("error caught successful");
 				return {
 					...state,
 					searchRecommendations: [],

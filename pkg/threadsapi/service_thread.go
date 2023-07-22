@@ -1,5 +1,7 @@
 package threadsapi
 
+import "encoding/json"
+
 type ThreadsApi_ThreadItem struct {
 	Post     *ThreadsApi_Post `json:"post"`
 	LineType string           `json:"line_type"`
@@ -7,7 +9,7 @@ type ThreadsApi_ThreadItem struct {
 }
 
 type ThreadsApi_Thread struct {
-	Id          string                  `json:"id" db:"id"`
+	Id          json.Number             `json:"id" db:"id"`
 	ThreadItems []ThreadsApi_ThreadItem `json:"thread_items"`
 	ThreadType  string                  `json:"thread_type" db:"thread_type"`
 

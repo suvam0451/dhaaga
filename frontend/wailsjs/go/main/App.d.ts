@@ -25,6 +25,8 @@ export function GetImagesForProfile(arg1:string):Promise<Array<utils.PostImageDT
 
 export function GetImagesFromThread(arg1:string):Promise<Array<utils.PostImageDTO>>;
 
+export function GetTextFeedUsingCursor(arg1:string,arg2:string,arg3:string):Promise<string>;
+
 export function GetUserDataDirectory():Promise<string>;
 
 export function SearchUsers(arg1:string):Promise<Array<threadsapi.ThreadsApi_User>>;

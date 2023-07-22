@@ -3,6 +3,7 @@ module browser
 go 1.18
 
 require (
+	github.com/Davincible/goinsta v0.0.0-20220425072628-96aad7267204
 	github.com/gocolly/colly v1.2.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/mattn/go-sqlite3 v1.14.17
@@ -10,7 +11,6 @@ require (
 )
 
 require (
-	github.com/Davincible/goinsta v0.0.0-20220425072628-96aad7267204 // indirect
 	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/antchfx/htmlquery v1.3.0 // indirect

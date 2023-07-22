@@ -71,7 +71,6 @@ export const threadsDiscoverReducer = createReducer<DiscoverSearchState>(
 				},
 			}))
 			.addCase(getDashboardSearchResults.fulfilled, (state, action) => {
-				console.log("search results", action.payload);
 				let pageCount = 0;
 				try {
 					pageCount = Math.ceil(action.payload.total / 5);
@@ -90,7 +89,6 @@ export const threadsDiscoverReducer = createReducer<DiscoverSearchState>(
 				};
 			})
 			.addCase(getDashboardSearchResults.rejected, (state, action) => {
-				console.log("[WARN]: dashboard get failed for meta threads.");
 				return {
 					...state,
 					searchResults: {

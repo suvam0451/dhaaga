@@ -2,6 +2,8 @@ package main
 
 import (
 	"browser/pkg/dashboard"
+	"browser/pkg/dbworker"
+	"browser/pkg/instagram"
 	"browser/pkg/services"
 	"browser/pkg/threadsapi"
 	"browser/pkg/threadsdb"
@@ -12,7 +14,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strings"
 
 	"github.com/gocolly/colly"
@@ -125,66 +126,6 @@ func GetImagesForThread_Impl(postId string, lsd string) threadsapi.ThreadsApiPos
 	return threadsapi.ThreadsApiPostQuery{}
 }
 
-// GetImageAssetsForPost returns a list of asset urls for a post
-func GetImageAssetsForPost(parentPostId string, post *threadsapi.ThreadsApi_Post, depth int) (assets []utils.PostImageDTO) {
-	// TODO: add support for recursive post fetching
-	if post == nil || depth >= 2 {
-		return
-	}
-
-	dbClient := threadsdb.ThreadsDbClient{}
-	dbClient.LoadDatabase()
-	dbClient.UpsertUser(post.User)
-	defer dbClient.CloseDatabase()
-
-	if depth == 0 {
-		if post.IsReposted() {
-			repostOrigin, upsertErr := dbClient.UpsertPost(post.TextPostAppInfo.ShareInfo.RepostedPost)
-			if upsertErr == true {
-				dbClient.UpsertRepostedPost(post, *repostOrigin)
-			}
-		} else {
-			dbClient.UpsertPost(post)
-		}
-	}
-
-	var videoUrl *string
-	var assetType string
-	assetType = "image"
-	if post.VideoVersions != nil && len(*post.VideoVersions) > 0 {
-		videoUrl = &(*post.VideoVersions)[0].Url
-		assetType = "video"
-	}
-
-	// adding items from this post
-	if len(post.ImageVersions2.Candidates) == 0 {
-	} else {
-		invalidRegex, _ := regexp.Compile("rsrc.php/null.jpg")
-		candidate := post.ImageVersions2.Candidates[0].Url
-		if !invalidRegex.MatchString(candidate) {
-			dbClient.InsertUniqueImageAssetForPost(*post, candidate, videoUrl)
-			assets = append(assets, utils.PostImageDTO{
-				AssetUrl:         candidate,
-				PostId:           parentPostId,
-				AssetType:        assetType,
-				VideoDownloadUrl: videoUrl,
-			})
-		}
-	}
-
-	// adding items from adjacent posts
-	shareInfo := post.TextPostAppInfo.ShareInfo
-
-	if shareInfo.QuotedPost != nil {
-		assets = append(assets, GetImageAssetsForPost(parentPostId, shareInfo.QuotedPost, depth+1)...)
-	}
-	if shareInfo.RepostedPost != nil {
-		assets = append(assets, GetImageAssetsForPost(parentPostId, shareInfo.RepostedPost, depth+1)...)
-	}
-
-	return
-}
-
 type getImagesForProfileReturnType struct {
 	user   threadsapi.ThreadsApi_User
 	assets []string
@@ -214,7 +155,7 @@ func GetImagesForProfile_Controller(url string) []utils.PostImageDTO {
 				thread := threads[i]
 				for j := 0; j < len(thread.ThreadItems); j++ {
 					threadItem := thread.ThreadItems[j]
-					assetsToAdd := GetImageAssetsForPost(threadItem.Post.Id, threadItem.Post, 0)
+					assetsToAdd := dbworker.GetImageAssetsForPost(threadItem.Post.Id, threadItem.Post, 0)
 					worker.Assets = append(worker.Assets, assetsToAdd...)
 				}
 			}
@@ -254,7 +195,7 @@ func GetImagesForThread_Controller(url string) []utils.PostImageDTO {
 
 			for i := 0; i < len(thread.ThreadItems); i++ {
 				item := thread.ThreadItems[i]
-				worker.Assets = append(worker.Assets, GetImageAssetsForPost(item.Post.Id, item.Post, 0)...)
+				worker.Assets = append(worker.Assets, dbworker.GetImageAssetsForPost(item.Post.Id, item.Post, 0)...)
 			}
 		}
 	}
@@ -424,4 +365,10 @@ func (a *App) GetCustomDeviceId() string {
 
 func (a *App) SetCustomDeviceId(deviceId string) bool {
 	return utils.SetCustomDeviceId(deviceId)
+}
+
+func (a *App) GetTextFeedUsingCursor(token string, userId string, maxId string) (string, error) {
+	client := instagram.InstagramApiClient{}
+	client.SetAccessToken(token)
+	return client.GetUserProfileThreads(userId, maxId)
 }

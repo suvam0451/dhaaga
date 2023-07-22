@@ -305,7 +305,7 @@ export namespace threadsdb {
 	    account_id: string;
 	    credential_type: string;
 	    credential_value: string;
-	    updated_at: string;
+	    updated_at?: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new ThreadsDb_Credential(source);

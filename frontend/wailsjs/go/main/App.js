@@ -42,6 +42,10 @@ export function GetImagesFromThread(arg1) {
   return window['go']['main']['App']['GetImagesFromThread'](arg1);
 }
 
+export function GetTextFeedUsingCursor(arg1, arg2, arg3) {
+  return window['go']['main']['App']['GetTextFeedUsingCursor'](arg1, arg2, arg3);
+}
+
 export function GetUserDataDirectory() {
   return window['go']['main']['App']['GetUserDataDirectory']();
 }

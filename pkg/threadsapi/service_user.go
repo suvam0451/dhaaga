@@ -1,11 +1,13 @@
 package threadsapi
 
+import "encoding/json"
+
 type ThreadsApi_User struct {
-	Pk            string `json:"pk" db:"pk"`
-	Id            string `json:"id"`
-	Username      string `json:"username" db:"username"`
-	IsVerified    bool   `json:"is_verified" db:"is_verified"`
-	ProfilePicUrl string `json:"profile_pic_url" db:"profile_pic_url"`
+	Pk            json.Number `json:"pk" db:"pk"`
+	Id            string      `json:"id"`
+	Username      string      `json:"username" db:"username"`
+	IsVerified    bool        `json:"is_verified" db:"is_verified"`
+	ProfilePicUrl string      `json:"profile_pic_url" db:"profile_pic_url"`
 
 	// db specific
 	FollowerCount   int     `db:"follower_count"`
