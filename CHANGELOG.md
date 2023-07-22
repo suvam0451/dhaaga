@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/suvam0451/dhaaga/compare/v0.3.0...v0.4.0) (2023-07-22)
+
+
+### Features
+
+* credentials manager, task manager and timeline sync support for threads ([#5](https://github.com/suvam0451/dhaaga/issues/5)) ([ef4ca44](https://github.com/suvam0451/dhaaga/commit/ef4ca4434339f6bb93260c6c9c0ee98179f4866b))
+
+
+### Bug Fixes
+
+* error due to missing user_pk column ([5326c0b](https://github.com/suvam0451/dhaaga/commit/5326c0b319b16eb6067482e07a89842dc48c7d4a))
+* thread records not indexed for profile query ([e7da1db](https://github.com/suvam0451/dhaaga/commit/e7da1db367f246bcbbcb4550c1b571dd0cb9a738))
+
 ## [0.3.0](https://github.com/suvam0451/prototype-instagram-threads-browser/compare/v0.2.0...v0.3.0) (2023-07-19)
 
 
