@@ -120,11 +120,15 @@ func (client *ThreadsDbClient) InitializeSchema() {
 	ALTER TABLE assets
   ADD video_download_url TEXT;
 	`
+
+	addUserPkToPostsTable := `
+	ALTER TABLE posts
+  ADD user_pk TEXT;
+	`
 	// END -- v0.4.0 -- END
 
-	if _, err := db.Exec(updateAssetsAddVideoUrl); err != nil {
-
-	}
+	db.Exec(updateAssetsAddVideoUrl)
+	db.Exec(addUserPkToPostsTable)
 
 	fmt.Println("Initialized schema for data db")
 }
