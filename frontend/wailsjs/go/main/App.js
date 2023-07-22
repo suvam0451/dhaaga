@@ -22,6 +22,10 @@ export function GetCredentialsByAccountId(arg1) {
   return window['go']['main']['App']['GetCredentialsByAccountId'](arg1);
 }
 
+export function GetCustomDeviceId() {
+  return window['go']['main']['App']['GetCustomDeviceId']();
+}
+
 export function GetDatabasePostInfo(arg1) {
   return window['go']['main']['App']['GetDatabasePostInfo'](arg1);
 }
@@ -48,6 +52,10 @@ export function SearchUsers(arg1) {
 
 export function SelectDownloadsFolder() {
   return window['go']['main']['App']['SelectDownloadsFolder']();
+}
+
+export function SetCustomDeviceId(arg1) {
+  return window['go']['main']['App']['SetCustomDeviceId'](arg1);
 }
 
 export function SetUserFavourite(arg1) {

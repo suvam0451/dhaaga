@@ -3,6 +3,7 @@ import { gallerySlice } from "./slices/gallerySlice";
 import { recommendationsSlice } from "./slices/recommendationsSlice";
 import { searchSlice } from "./slices/searchSlice";
 import { threadsDiscoverReducer } from "./slices/discoverSearchSlice";
+import { providerAuthSlice } from "./slices/authSlice";
 
 const store = configureStore({
 	reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
 		recommendations: recommendationsSlice,
 		search: searchSlice,
 		threadsDiscover: threadsDiscoverReducer,
+		providerAuth: providerAuthSlice.reducer,
 	},
 });
 export default store;

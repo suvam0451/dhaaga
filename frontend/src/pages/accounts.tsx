@@ -8,28 +8,33 @@ import {
 	TextInput,
 } from "@mantine/core";
 import AppScreenLayout from "../layouts/AppScreenLayout";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GetAccoutsBySubdomain } from "../../wailsjs/go/main/App";
-import { threadsdb } from "../../wailsjs/go/models";
 import { IconCheck } from "@tabler/icons-react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../lib/redux/store";
+import {
+	ProviderAuthState,
+	providerAuthSlice,
+} from "../lib/redux/slices/authSlice";
 
 function App() {
-	const [SelectedProvider, setSelectedProvider] = useState<string | null>(null);
-	const [SelectedNetwork, setSelectedNetwork] = useState<string | null>(null);
-	const [AccoutList, setAccountList] = useState<threadsdb.ThreadsDb_Account[]>(
-		[]
+	const dispatch = useDispatch<AppDispatch>();
+	const providerAuth = useSelector<RootState, ProviderAuthState>(
+		(o) => o.providerAuth
 	);
-	const [AccountSelected, setAccountSelected] =
-		useState<threadsdb.ThreadsDb_Account | null>(null);
 
 	useEffect(() => {
-		if (!SelectedProvider || !SelectedNetwork) return;
+		if (!providerAuth.selectedDomain || !providerAuth.selectedSubDomain) return;
 
-		GetAccoutsBySubdomain(SelectedProvider, SelectedNetwork).then((res) => {
-			console.log("account list", res);
-			setAccountList(res);
+		GetAccoutsBySubdomain(
+			providerAuth.selectedDomain,
+			providerAuth.selectedSubDomain
+		).then((res) => {
+			console.log("setting accounts", res);
+			dispatch(providerAuthSlice.actions.setAccounts(res));
 		});
-	}, [SelectedProvider, SelectedNetwork]);
+	}, [providerAuth.selectedDomain, providerAuth.selectedSubDomain]);
 
 	const staticDataMapping = [
 		{
@@ -43,11 +48,11 @@ function App() {
 	];
 
 	function onProviderSelected(x: any) {
-		setSelectedProvider(x);
+		dispatch(providerAuthSlice.actions.setSelectedDomain(x));
 	}
 
 	function onNetworkSelected(x: any) {
-		setSelectedNetwork(x);
+		dispatch(providerAuthSlice.actions.setSelectedSubdomain(x));
 	}
 
 	return (
@@ -73,14 +78,15 @@ function App() {
 					placeholder="Pick one"
 					nothingFound="No results found..."
 					data={
-						staticDataMapping.find((x) => x.key === SelectedProvider)?.values ||
-						[]
+						staticDataMapping.find((x) => x.key === providerAuth.selectedDomain)
+							?.values || []
 					}
 					onChange={onNetworkSelected}
-					disabled={!SelectedProvider}
+					disabled={providerAuth.selectedDomain === ""}
 					error={
-						staticDataMapping?.find((x) => x.key === SelectedProvider)?.values
-							?.length! > 0
+						staticDataMapping?.find(
+							(x) => x.key === providerAuth.selectedDomain
+						)?.values?.length! > 0
 							? null
 							: "No networks currently available for this provider"
 					}
@@ -89,7 +95,7 @@ function App() {
 			<Text style={{ fontWeight: 500 }} py={"md"}>
 				Accounts Found Based on your selection
 			</Text>
-			{AccoutList?.map((o, i) => (
+			{providerAuth?.accounts.map((o, i) => (
 				<Flex key={i} style={{ alignItems: "center" }} my={"xs"}>
 					<TextInput disabled={true} value={o.username} />
 					<TextInput
@@ -98,12 +104,12 @@ function App() {
 						mx={"xs"}
 						type="password"
 					/>
-					{AccountSelected && AccountSelected.id === o.id ? (
+					{providerAuth.selectedAccount && providerAuth.selectedAccount.id === o.id ? (
 						<IconCheck color="green" size={32} />
 					) : (
 						<Button
 							onClick={() => {
-								setAccountSelected(o);
+								dispatch(providerAuthSlice.actions.setSelectedAccount(o));
 							}}
 						>
 							Select
@@ -113,7 +119,7 @@ function App() {
 			))}
 			<Flex style={{ alignItems: "center" }}>
 				<TextInput placeholder="username" />
-				<TextInput placeholder="password" type="password" />
+				<TextInput placeholder="password" type="password" mx={"xs"} />
 				<Button>Add</Button>
 			</Flex>
 		</AppScreenLayout>

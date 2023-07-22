@@ -417,3 +417,11 @@ func (a *App) GetCredentialsByAccountId(id int) []threadsdb.ThreadsDb_Credential
 	defer client.CloseDatabase()
 	return client.GetCredentialsByAccountId(id)
 }
+
+func (a *App) GetCustomDeviceId() string {
+	return utils.GetCustomDeviceId()
+}
+
+func (a *App) SetCustomDeviceId(deviceId string) bool {
+	return utils.SetCustomDeviceId(deviceId)
+}

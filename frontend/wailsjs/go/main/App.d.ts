@@ -15,6 +15,8 @@ export function GetAsset(arg1:string):Promise<string>;
 
 export function GetCredentialsByAccountId(arg1:number):Promise<Array<threadsdb.ThreadsDb_Credential>>;
 
+export function GetCustomDeviceId():Promise<string>;
+
 export function GetDatabasePostInfo(arg1:string):Promise<utils.PostDetailsDTO>;
 
 export function GetDownloadsFolder():Promise<string>;
@@ -28,6 +30,8 @@ export function GetUserDataDirectory():Promise<string>;
 export function SearchUsers(arg1:string):Promise<Array<threadsapi.ThreadsApi_User>>;
 
 export function SelectDownloadsFolder():Promise<string>;
+
+export function SetCustomDeviceId(arg1:string):Promise<boolean>;
 
 export function SetUserFavourite(arg1:string):Promise<void>;
 

@@ -1,7 +1,6 @@
 import { Text, Box, Image, Flex } from "@mantine/core";
 import {
 	APP_MAX_HEIGHT,
-	GALLERY_FIXED_WIDTH,
 } from "../../constants/app-dimensions";
 import ThreadsLogo from "../../assets/icons/Logo_Threads.svg";
 

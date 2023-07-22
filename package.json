@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "standard-version"
+    "release": "standard-version",
+    "dev": "wails dev -debounce 5000"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Debashish Patra",
+  "license": "AGPL",
   "devDependencies": {
     "release-please": "^15.12.0"
   }
