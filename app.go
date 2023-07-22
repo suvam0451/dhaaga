@@ -153,6 +153,14 @@ func GetImagesForProfile_Controller(url string) []utils.PostImageDTO {
 			threads := data.MediaData.Threads
 			for i := 0; i < len(threads); i++ {
 				thread := threads[i]
+
+				if len(thread.ThreadItems) > 0 {
+					client := threadsdb.ThreadsDbClient{}
+					client.LoadDatabase()
+					client.UpsertThread(thread, thread.ThreadItems[0].Post.GetUser())
+					client.CloseDatabase()
+				}
+
 				for j := 0; j < len(thread.ThreadItems); j++ {
 					threadItem := thread.ThreadItems[j]
 					assetsToAdd := dbworker.GetImageAssetsForPost(threadItem.Post.Id, threadItem.Post, 0)

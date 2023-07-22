@@ -32,12 +32,8 @@ type ThreadsApiPostQuery struct {
 	// reply_threads     []object
 }
 
-type ThreadsApi_MediaData_ThreadFragment struct {
-	ThreadItems []ThreadsApi_ThreadItem `json:"thread_items"`
-}
-
 type ThreadsApi_MediaData struct {
-	Threads []ThreadsApi_MediaData_ThreadFragment `json:"threads"`
+	Threads []ThreadsApi_Thread `json:"threads"`
 }
 
 // userID query output
