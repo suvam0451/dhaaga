@@ -2,6 +2,7 @@ package instagram
 
 import (
 	"browser/pkg/threadsdb"
+	"browser/pkg/utils"
 	"errors"
 	"fmt"
 	"strconv"
@@ -33,7 +34,7 @@ func SafeLogin(username string, password string) (bool, error) {
 		userId := config.ID
 		accessToken := config.Token
 
-		accountCreated := client.UpsertAccount(threadsdb.ThreadsDb_Account{
+		accountCreated := client.UpsertAccount(utils.ThreadsDb_Account_Create_DTO{
 			Domain:    DOMAIN,
 			Subdomain: SUBDOMAIN,
 		})

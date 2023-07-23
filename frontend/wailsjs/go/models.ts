@@ -346,6 +346,26 @@ export namespace utils {
 	        this.video_download_url = source["video_download_url"];
 	    }
 	}
+	export class ThreadsDb_Account_Create_DTO {
+	    domain: string;
+	    subdomain: string;
+	    username: string;
+	    password: string;
+	    verified: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new ThreadsDb_Account_Create_DTO(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.domain = source["domain"];
+	        this.subdomain = source["subdomain"];
+	        this.username = source["username"];
+	        this.password = source["password"];
+	        this.verified = source["verified"];
+	    }
+	}
 
 }
 

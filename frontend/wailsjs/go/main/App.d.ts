@@ -41,6 +41,6 @@ export function SetUserFavourite(arg1:string):Promise<void>;
 
 export function UnsetUserFavourite(arg1:string):Promise<void>;
 
-export function UpsertAccount(arg1:threadsdb.ThreadsDb_Account):Promise<boolean>;
+export function UpsertAccount(arg1:utils.ThreadsDb_Account_Create_DTO):Promise<boolean>;
 
 export function UpsertCredential(arg1:threadsdb.ThreadsDb_Account,arg2:string,arg3:string):Promise<boolean>;

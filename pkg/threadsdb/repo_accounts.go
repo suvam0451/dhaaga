@@ -1,6 +1,9 @@
 package threadsdb
 
-import "fmt"
+import (
+	"browser/pkg/utils"
+	"fmt"
+)
 
 type ThreadsDb_Account struct {
 	Id          int64   `json:"id" db:"id"`
@@ -33,18 +36,19 @@ func (client *ThreadsDbAdminClient) GetCredentialForAccount(account ThreadsDb_Ac
 }
 
 func (client *ThreadsDbAdminClient) GetAccount(domain string, subdomain string, username string) *ThreadsDb_Account {
-	var account *ThreadsDb_Account = nil
+	var account ThreadsDb_Account
 	err := client.Db.Get(&account,
 		`SELECT * FROM accounts 
 		WHERE domain = ? AND subdomain = ? AND username = ?;`,
 		domain, subdomain, username)
+
 	if err != nil {
 		return nil
 	}
-	return account
+	return &account
 }
 
-func (client *ThreadsDbAdminClient) UpsertAccount(account ThreadsDb_Account) bool {
+func (client *ThreadsDbAdminClient) UpsertAccount(account utils.ThreadsDb_Account_Create_DTO) bool {
 	//dedup
 	conflict := client.GetAccount(account.Domain, account.Subdomain, account.Username)
 	if conflict != nil {

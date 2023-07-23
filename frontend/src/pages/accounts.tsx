@@ -18,6 +18,7 @@ import {
 	providerAuthSlice,
 } from "../lib/redux/slices/authSlice";
 import MetaThreadsAddAccount from "../components/auth/MetaThreadsAddAccount";
+import AddAccountMastadon from "../components/auth/AddAccountMastadon";
 
 function App() {
 	const dispatch = useDispatch<AppDispatch>();
@@ -119,7 +120,8 @@ function App() {
 					)}
 				</Flex>
 			))}
-			<MetaThreadsAddAccount/>
+			<MetaThreadsAddAccount />
+			<AddAccountMastadon />
 		</AppScreenLayout>
 	);
 }
