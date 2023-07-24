@@ -19,7 +19,7 @@ function TaskManager() {
 		meta: {
 			threads: ThreadsProfileSyncTask,
 		},
-		mastadon: {},
+		mastodon: {},
 	};
 
 	function GetTaskExecutor(domain: string, subdomain: string) {

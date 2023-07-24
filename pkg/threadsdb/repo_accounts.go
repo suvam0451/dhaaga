@@ -21,6 +21,7 @@ type AccountsRepo interface {
 	SearchAccountsBySubdomain(domain string, subdomain string) []ThreadsDb_Account
 	GetCredentialForAccount(account ThreadsDb_Account, name string) *ThreadsDb_Credential
 	GetAccoutsBySubdomain(domain string, subdomain string) []ThreadsDb_Account
+	GetSubdomainsForDomain(domain string) []string
 }
 
 func (client *ThreadsDbAdminClient) GetCredentialForAccount(account ThreadsDb_Account, name string) *ThreadsDb_Credential {
@@ -87,4 +88,17 @@ func (client *ThreadsDbAdminClient) GetAccoutsBySubdomain(domain string, subdoma
 		return nil
 	}
 	return accounts
+}
+
+func (client *ThreadsDbAdminClient) GetSubdomainsForDomain(domain string) []string {
+	var results []string
+
+	err := client.Db.Select(&results,
+		`SELECT DISTINCT subdomain FROM accounts
+		WHERE domain = ?;`, domain)
+	if err != nil {
+		fmt.Println("[WARN]: error while getting subdomains for domain", domain)
+		return []string{}
+	}
+	return results
 }

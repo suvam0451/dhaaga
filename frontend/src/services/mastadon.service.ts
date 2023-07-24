@@ -6,8 +6,8 @@ import axios from "axios";
 export class MastadonService {
 	/**
 	 * fetches the code used to generate the actual access token
-	 * @param instanceUr 
-	 * @returns 
+	 * @param instanceUr
+	 * @returns
 	 */
 	static async fetchCode(instanceUr: string) {
 		const authEndpoint = `${instanceUr}/oauth/authorize`;
@@ -86,5 +86,17 @@ export class MastadonService {
 		});
 
 		const result = await masto.v1.accounts.verifyCredentials();
+	}
+
+	async getHomeTimeline(instanceUrl: string, accessToken: string) {
+		const masto = await login({
+			url: instanceUrl,
+			accessToken: accessToken,
+		});
+
+		const result = await masto.v1.timelines.listHome();
+		console.log(result)
+		return result;
+
 	}
 }

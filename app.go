@@ -346,6 +346,13 @@ func (a *App) GetAccoutsBySubdomain(domain string, subdomain string) []threadsdb
 	return client.GetAccoutsBySubdomain(domain, subdomain)
 }
 
+func (a *App) GetSubdomainsForDomain(domain string) []string {
+	client := threadsdb.ThreadsDbAdminClient{}
+	client.LoadDatabase()
+	defer client.CloseDatabase()
+	return client.GetSubdomainsForDomain(domain)
+}
+
 func (a *App) UpsertAccount(account utils.ThreadsDb_Account_Create_DTO) bool {
 	client := threadsdb.ThreadsDbAdminClient{}
 	client.LoadDatabase()

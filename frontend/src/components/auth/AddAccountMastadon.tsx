@@ -27,7 +27,7 @@ function AddAccountMastadon() {
 		setDrawerOpen(true);
 	}
 
-	const mastadonServers = [
+	const mastodonServers = [
 		{
 			value: "https://mastodon.social",
 			label: "https://mastodon.social",
@@ -200,7 +200,7 @@ function AddAccountMastadon() {
 					onSearchChange={setMastadonServerURL}
 					style={{ flexGrow: 1 }}
 					placeholder="https://mastodon.social"
-					data={mastadonServers}
+					data={mastodonServers}
 					filter={(value, item) =>
 						item.url.toLowerCase().includes(value.toLowerCase().trim())
 					}

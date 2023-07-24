@@ -8,8 +8,11 @@ import {
 	TextInput,
 } from "@mantine/core";
 import AppScreenLayout from "../layouts/AppScreenLayout";
-import { useEffect } from "react";
-import { GetAccoutsBySubdomain } from "../../wailsjs/go/main/App";
+import { useEffect, useState } from "react";
+import {
+	GetAccoutsBySubdomain,
+	GetSubdomainsForDomain,
+} from "../../wailsjs/go/main/App";
 import { IconCheck } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../lib/redux/store";
@@ -26,6 +29,8 @@ function App() {
 		(o) => o.providerAuth
 	);
 
+	const [Subdomains, setSubdomains] = useState<string[]>([]);
+
 	useEffect(() => {
 		if (!providerAuth.selectedDomain || !providerAuth.selectedSubDomain) return;
 
@@ -33,7 +38,6 @@ function App() {
 			providerAuth.selectedDomain,
 			providerAuth.selectedSubDomain
 		).then((res) => {
-			console.log("setting accounts", res);
 			dispatch(providerAuthSlice.actions.setAccounts(res));
 		});
 	}, [providerAuth.selectedDomain, providerAuth.selectedSubDomain]);
@@ -51,6 +55,11 @@ function App() {
 
 	function onProviderSelected(x: any) {
 		dispatch(providerAuthSlice.actions.setSelectedDomain(x));
+		console.log("provider changed", x);
+		GetSubdomainsForDomain(x).then((res) => {
+			console.log("result", res);
+			setSubdomains(res || []);
+		});
 	}
 
 	function onNetworkSelected(x: any) {
@@ -79,16 +88,11 @@ function App() {
 					label="Choose Network"
 					placeholder="Pick one"
 					nothingFound="No results found..."
-					data={
-						staticDataMapping.find((x) => x.key === providerAuth.selectedDomain)
-							?.values || []
-					}
+					data={Subdomains}
 					onChange={onNetworkSelected}
 					disabled={providerAuth.selectedDomain === ""}
 					error={
-						staticDataMapping?.find(
-							(x) => x.key === providerAuth.selectedDomain
-						)?.values?.length! > 0
+						Subdomains.length! > 0
 							? null
 							: "No networks currently available for this provider"
 					}
