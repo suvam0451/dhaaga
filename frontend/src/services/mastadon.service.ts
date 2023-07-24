@@ -88,6 +88,29 @@ export class MastadonService {
 		const result = await masto.v1.accounts.verifyCredentials();
 	}
 
+	static async search(
+		instanceUrl: string,
+		accessToken: string,
+		q: string,
+		type?: "accounts" | "hashtags" | "statuses"
+	) {
+		const masto = await login({
+			url: instanceUrl,
+			accessToken: accessToken,
+		});
+
+		const results = await masto.v2.search({
+			limit: 20,
+			q,
+			type: type || undefined,
+		});
+
+		console.log(results);
+		return results;
+
+		// const result = await masto.v1.tags.fetch();
+	}
+
 	async getHomeTimeline(instanceUrl: string, accessToken: string) {
 		const masto = await login({
 			url: instanceUrl,
@@ -95,8 +118,18 @@ export class MastadonService {
 		});
 
 		const result = await masto.v1.timelines.listHome();
-		console.log(result)
+		console.log(result);
 		return result;
+	}
 
+	static async getUserProfile(instanceUrl: string, accessToken: string, id: string) {
+		const masto = await login({
+			url: instanceUrl,
+			accessToken: accessToken,
+		});
+
+		const result = await masto.v1.accounts.fetch(id);
+		console.log(result);
+		return result;
 	}
 }

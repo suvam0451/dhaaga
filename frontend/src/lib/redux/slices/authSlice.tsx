@@ -93,5 +93,11 @@ export const providerAuthSlice = createSlice({
 				selectedSubDomain: "",
 			};
 		},
+		setLoggedInCredentials: (
+			state,
+			action: PayloadAction<Record<string, string>>
+		) => {
+			state.loggedInCredentials = action.payload;
+		},
 	},
 });

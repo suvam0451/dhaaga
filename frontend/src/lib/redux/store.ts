@@ -6,6 +6,7 @@ import { threadsDiscoverReducer } from "./slices/discoverSearchSlice";
 import { providerAuthSlice } from "./slices/authSlice";
 import { taskSlice } from "./slices/tasksSlice";
 import { mastodonAccountSlice } from "./slices/mastodonAccountSlice";
+import { latestTabRendererSlice } from "./slices/latestTabRenderer";
 
 const store = configureStore({
 	reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
 		providerAuth: providerAuthSlice.reducer,
 		tasks: taskSlice.reducer,
 		mastodonAccount: mastodonAccountSlice.reducer,
+		latestTabPushHistory: latestTabRendererSlice.reducer,
 	},
 });
 export default store;

@@ -1,5 +1,6 @@
 import { InstagramSafeLogin } from "../../wailsjs/go/main/App";
 import { threadsdb } from "../../wailsjs/go/models";
+import { ProviderAuthItem } from "../lib/redux/slices/authSlice";
 
 export class KeystoreService {
 	static async verifyMetaThreadsCredentials(
@@ -26,6 +27,41 @@ export class KeystoreService {
 				accessToken: accessToken.credential_value,
 			},
 		};
+	}
+
+	static verifyMastadonCredentials(
+		instanceUrl: string,
+		creds: threadsdb.ThreadsDb_Credential[]
+	):{
+		success: boolean;
+		data?: {
+			instanceUrl: string
+			accessToken: string;
+			profilePicUrl?: string;
+			displayName?: string;
+		};
+	} {
+		const accessToken = creds.find((o) => o.credential_type === "access_token");
+		const profilePicUrl = creds.find(
+			(o) => o.credential_type === "profile_pic_url"
+		);
+		const displayName = creds.find((o) => o.credential_type === "display_name");
+
+		if (!accessToken) {
+			return {
+				success: false,
+			};
+		} else {
+			return {
+				success: true,
+				data: {
+					instanceUrl: instanceUrl,
+					accessToken: accessToken.credential_value,
+					profilePicUrl: profilePicUrl?.credential_value,
+					displayName: displayName?.credential_value,
+				},
+			};
+		}
 	}
 
 	/**

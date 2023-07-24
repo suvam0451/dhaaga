@@ -1,27 +1,18 @@
-import { Tabs, TextInput } from "@mantine/core";
-import React from "react";
+import { Box, Tabs, TextInput, Text } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/redux/store";
+import { ProviderAuthState } from "../../lib/redux/slices/authSlice";
+import { GetCredentialsByAccountId } from "../../../wailsjs/go/main/App";
+import { KeystoreService } from "../../services/keystore.services";
+import { MastadonService } from "../../services/mastadon.service";
+import { useDebouncedValue } from "@mantine/hooks";
+import { mastodon } from "masto";
+import MastadonUserListing from "../mastadon/UserListing";
+import MastadonTagListing from "../mastadon/TagListing";
 
 function MastadonDiscover() {
-	return (
-		<React.Fragment>
-			<TextInput placeholder="Search users, posts and tags" />
-
-			<Tabs defaultValue="first">
-				<Tabs.List>
-					<Tabs.Tab value="all">All</Tabs.Tab>
-					<Tabs.Tab value="users">Users</Tabs.Tab>
-					<Tabs.Tab value="tags">Tags</Tabs.Tab>
-					<Tabs.Tab value="posts">Posts</Tabs.Tab>
-				</Tabs.List>
-
-				<Tabs.Panel value="all">First panel</Tabs.Panel>
-				<Tabs.Panel value="users">Second panel</Tabs.Panel>
-				<Tabs.Panel value="tags">Second panel</Tabs.Panel>
-
-				<Tabs.Panel value="posts">Second panel</Tabs.Panel>
-			</Tabs>
-		</React.Fragment>
-	);
+	return <Box></Box>;
 }
 
 export default MastadonDiscover;
