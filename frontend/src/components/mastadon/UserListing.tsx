@@ -36,7 +36,7 @@ function MastadonUserListing({ user }: { user: mastodon.v1.Account }) {
 				<Box h={"48px"} w={"48px"}>
 					<Image src={user.avatar} />
 				</Box>
-				<Box maw={"300px"} ml={"xs"} style={{ flexGrow: 1 }}>
+				<Box maw={300} ml={"xs"} style={{ flexGrow: 1 }}>
 					<Text style={{ fontSize: 16, lineHeight: 1, fontWeight: 500 }}>
 						{user.displayName}
 					</Text>

@@ -2,7 +2,7 @@
 
 Dhaaga client is an unofficial, feature-rich social media client for popular social media websites.
 
-Currently supports Meta's [Threads](https://www.threads.net/) platform, with a direction to support other popular [Fediverse](https://en.wikipedia.org/wiki/Fediverse) platforms.
+Currently supports Meta's [Threads](https://www.threads.net/) and [Mastodon](https://joinmastodon.org/) platform, with a direction to support other popular [Fediverse](https://en.wikipedia.org/wiki/Fediverse) platforms.
 
 <p align="center">
   <img width = "720px" height="auto" src="/assets/client-showcase/Project_Home.png" alt="Home Screen">
@@ -33,7 +33,48 @@ This client is designed to be responsible and respectful and it is up to you to 
 
 ## List of Features
 
-And many, many more to come :)
+### New in v0.5.0
+
+<details>
+ <summary>Support for Mastodon is here !!! 🐘 🚀</summary>
+
+### Summary
+
+I am hard at work to figure out what would be the best way of browsing Mastadon from an universal fediverse client.
+
+The old school column based Mastadon clients really clicked with me and I am excited to share more about the navigation framework I will be using.
+
+- ✨ Stack based navigation with breadcrumbs
+- ✨ Fully keyboard based navigation for important modules
+- ✨ Scroll-To-Top for every page !
+
+<p align="center">
+  <img width = "720px" height="auto" src="/assets/client-showcase/Mastadon_Navigation_Design_01.png" alt="Search Screen">
+</p>
+
+I took design references from [IceCubes](https://github.com/Dimillian/IceCubesApp), because I believe it is the best compact client for Mastodon out there.
+
+<p align="center">
+  <img width = "720px" height="auto" src="/assets/client-showcase/Mastadon_Navigation_Design_02.png" alt="Search Screen">
+</p>
+
+A stack based navigation workflow sets me up for an easy way forward and code reuse, when I build a mobile app for this project. 📱
+
+### Key Learnings
+
+Did you know that Mastadon returns the full HTML for the post content? Of which, all links will initially point outside your app.
+
+It is quite an regular expression headache to
+
+- separate external links
+- identify tags and usernames
+- and redirect them to internal resources of your app
+
+
+### Next Update
+
+
+</details>
 
 ### Search Feature for Meta's Threads
 
@@ -77,6 +118,8 @@ And many, many more to come :)
 <p align="center">
   <img width = "720px" height="auto" src="/assets/client-showcase/Showcase_Sqlite.png" alt="Sqlite Showcase">
 </p>
+
+And many, many more to come :)
 
 ## FAQ
 

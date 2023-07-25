@@ -11,13 +11,12 @@ function PostRenderer() {
 		<Box
 			style={{
 				paddingBottom: "3em",
-
 				paddingTop: "0.75em",
 			}}
 		>
 			<Text mb={"md"} style={{ fontSize: 14, color: "gray" }}>
-				Showing for first {(store.page-1) * 100}-{(store.page-1) * 100 + store.posts.length}{" "}
-				results
+				Showing for first {(store.page - 1) * 100}-
+				{(store.page - 1) * 100 + store.posts.length} results
 			</Text>
 			{store.posts?.map((o, i) => (
 				<MastadonPostListing key={i} post={o} />

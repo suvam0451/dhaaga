@@ -11,7 +11,7 @@ function MastadonTagListing({ tag }: { tag: mastodon.v1.Tag }) {
 	}, [tag]);
 
 	return (
-		<Box mt={"xs"}>
+		<Box mt={"xs"} h={"100%"}>
 			<Text
 				style={{ fontWeight: 600, lineHeight: 1 }}
 				color={tag.following ? "yellow" : "black"}

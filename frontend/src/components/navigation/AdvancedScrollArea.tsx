@@ -12,7 +12,8 @@ function AdvancedScrollArea({ children }: any) {
 	const { store, dispatch } = useAdvancedScrollAreaProviderHook();
 	return (
 		<ScrollArea
-			style={{ height: "90vh", overflowY: "scroll" }}
+			h={"100%"}
+			style={{ display: "flex" }}
 			viewportRef={store?.scrollRef || null}
 			onScrollPositionChange={store.onScrollPositionChange}
 			offsetScrollbars

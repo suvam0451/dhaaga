@@ -17,7 +17,8 @@ function ExternalLinks({
 		fields?.length > 0 && (
 			<Box
 				px={"xs"}
-				py={"0.25em"}
+				pb={"0.25em"}
+				pt={"0em"}
 				bg={"#eee"}
 				style={{ borderRadius: "0.5rem" }}
 			>

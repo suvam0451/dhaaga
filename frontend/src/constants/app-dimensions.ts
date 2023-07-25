@@ -11,3 +11,6 @@ export const TABLE_FIXED_WIDTH = 480
 // gallery preview (same dim as gallery)
 export const GALLERY_PREVIEW_ITEM_FIXED_PREVIEW_WIDTH = 96;
 export const GALLERY_PREVIEW_ITEM_FIXED_PREVIEW_HEIGHT = 160;
+
+// various SNS columns
+export const COLUMN_MIN_WIDTH = 450

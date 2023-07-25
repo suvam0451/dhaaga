@@ -1,3 +1,4 @@
+import { Box } from "@mantine/core";
 import { createContext, useContext, useRef, useState } from "react";
 
 type StoreType = {
@@ -58,7 +59,15 @@ const AdvancedScrollAreaProvider = ({ children }: any) => {
 					scrollToTop: onScollToTop,
 				}}
 			>
-				{children}
+				<Box
+					display={"flex"}
+					style={{
+						flexDirection: "column",
+					}}
+					h={"100%"}
+				>
+					{children}
+				</Box>
 			</DispatchContext.Provider>
 		</StoreContext.Provider>
 	);

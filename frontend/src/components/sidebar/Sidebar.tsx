@@ -84,22 +84,18 @@ function MainLink({ icon, color, label, pathname }: MainLinkProps) {
 	);
 }
 
-const SIDEBAR_ICONS_ICON_COLOR_TABLET_MODE = "#aaa";
 const SIDEBAR_ICONS_ICON_COLOR = "#888";
 const SIDEBAR_ICONS_FOREGROUND_COLOR = "#ddd";
 
 function Sidebar() {
-	const location = useLocation();
-
 	return (
 		<Box
-			mih={APP_MAX_HEIGHT}
 			style={{
 				boxShadow: "0.1px 0px 4px #888",
 			}}
 			bg={SIDEBAR_BG_COLOR}
 		>
-			<Box h={"100%"} mah={APP_MAX_HEIGHT}>
+			<Box h={"100%"}>
 				<MediaQuery
 					query={HIDE_TABLET_STYLE_BREAKPOINT}
 					styles={{ display: "none" }}

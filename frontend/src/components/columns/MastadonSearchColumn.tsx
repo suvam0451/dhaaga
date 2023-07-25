@@ -1,4 +1,4 @@
-import { Box, Tabs, TextInput, Flex, ScrollArea } from "@mantine/core";
+import { Box, Tabs, TextInput, Flex } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/redux/store";
@@ -14,6 +14,7 @@ import { ColumnGeneratorProps } from "./columns.types";
 import DiscoverModuleBreadcrumbs from "../navigation/NavigationBreadcrumbs";
 import AdvancedScrollAreaProvider from "../../contexts/AdvancedScrollArea";
 import AdvancedScrollArea from "../navigation/AdvancedScrollArea";
+import { COLUMN_MIN_WIDTH } from "../../constants/app-dimensions";
 
 /**
  * this column is the mastadon entrypoint for the
@@ -68,46 +69,44 @@ function MastadonSearchColumn({ index, query }: ColumnGeneratorProps) {
 	}, [activeTab, debounced]);
 
 	return (
-		<Box miw={400}>
-			<AdvancedScrollAreaProvider>
-				<DiscoverModuleBreadcrumbs index={index} />
-				<AdvancedScrollArea>
-					<Flex direction={"column"}>
-						<TextInput
-							value={SearchQuery}
-							onChange={(e) => {
-								setSearchQuery(e.currentTarget.value);
-							}}
-							placeholder="Search users, posts and tags"
-						/>
+		<AdvancedScrollAreaProvider>
+			<DiscoverModuleBreadcrumbs index={index} />
+			<AdvancedScrollArea>
+				<Flex direction={"column"} h={"auto"} miw={COLUMN_MIN_WIDTH}>
+					<TextInput
+						value={SearchQuery}
+						onChange={(e) => {
+							setSearchQuery(e.currentTarget.value);
+						}}
+						placeholder="Search users, posts and tags"
+					/>
 
-						<Tabs value={activeTab} onTabChange={setActiveTab}>
-							<Tabs.List>
-								<Tabs.Tab value="all">All</Tabs.Tab>
-								<Tabs.Tab value="users">Users</Tabs.Tab>
-								<Tabs.Tab value="tags">Tags</Tabs.Tab>
-								<Tabs.Tab value="posts">Posts</Tabs.Tab>
-							</Tabs.List>
+					<Tabs value={activeTab} onTabChange={setActiveTab} h={"100%"}>
+						<Tabs.List>
+							<Tabs.Tab value="all">All</Tabs.Tab>
+							<Tabs.Tab value="users">Users</Tabs.Tab>
+							<Tabs.Tab value="tags">Tags</Tabs.Tab>
+							<Tabs.Tab value="posts">Posts</Tabs.Tab>
+						</Tabs.List>
 
-							<Tabs.Panel value="all">First panel</Tabs.Panel>
-							<Tabs.Panel value="users">
-								<Box>
-									{MastadonSearchResults.accounts.map((x, i) => (
-										<MastadonUserListing key={i} user={x} />
-									))}
-								</Box>
-							</Tabs.Panel>
-							<Tabs.Panel value="tags">
-								{MastadonSearchResults.hashtags.map((o, i) => (
-									<MastadonTagListing key={i} tag={o} />
+						<Tabs.Panel value="all">First panel</Tabs.Panel>
+						<Tabs.Panel value="users" h={"100%"}>
+							<Box h={"100%"}>
+								{MastadonSearchResults.accounts.map((x, i) => (
+									<MastadonUserListing key={i} user={x} />
 								))}
-							</Tabs.Panel>
-							<Tabs.Panel value="posts">Second panel</Tabs.Panel>
-						</Tabs>
-					</Flex>
-				</AdvancedScrollArea>
-			</AdvancedScrollAreaProvider>
-		</Box>
+							</Box>
+						</Tabs.Panel>
+						<Tabs.Panel value="tags">
+							{MastadonSearchResults.hashtags.map((o, i) => (
+								<MastadonTagListing key={i} tag={o} />
+							))}
+						</Tabs.Panel>
+						<Tabs.Panel value="posts">Second panel</Tabs.Panel>
+					</Tabs>
+				</Flex>
+			</AdvancedScrollArea>
+		</AdvancedScrollAreaProvider>
 	);
 }
 

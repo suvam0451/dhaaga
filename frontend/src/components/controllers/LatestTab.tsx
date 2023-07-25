@@ -47,7 +47,7 @@ function LatestTabRenderer() {
 							query: {
 								q: "",
 							},
-							label: "Discover"
+							label: "Discover",
 						},
 					])
 				);
@@ -64,13 +64,16 @@ function LatestTabRenderer() {
 	};
 
 	return (
-		<Flex direction={"row"}>
+		<Flex direction={"row"} h={"100%"}>
 			{latestTabPushHistory.stack.map((item, i) => {
 				const Component = ComponentMapper[item.type];
 				if (!Component) {
-					return <Box key={i}></Box>;
+					return <Box h={"100%"} key={i}></Box>;
 				}
-				return <Component key={i} index={i} query={item.query} />;
+				return (
+					<Box mx={"0.25rem"} h={"100%"}>
+						<Component key={i} index={i} query={item.query} />					</Box>
+				)
 			})}
 		</Flex>
 	);

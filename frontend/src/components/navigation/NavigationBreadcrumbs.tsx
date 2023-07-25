@@ -23,7 +23,13 @@ function DiscoverModuleBreadcrumbs({ index }: { index: number }) {
 
 	const nodes = latestTabPushHistory.stack.slice(0, index + 1);
 	return (
-		<Flex bg={"#eee"} p={"0.25em"} align={"center"} my={"md"} w={"100%"}>
+		<Flex
+			bg={"#eee"}
+			p={"0.25em"}
+			align={"center"}
+			mb={"md"}
+			style={{borderRadius: "0.5rem"}}
+		>
 			<Tooltip label={"Currently logged in as"}>
 				<Image
 					src={MastadonLogo}

@@ -1,6 +1,5 @@
 import { Box, Divider, Flex, Image, Text } from "@mantine/core";
 import { mastodon } from "masto";
-import { useLocation } from "react-router-dom";
 import { formatDistance } from "date-fns";
 import {
 	IconBackhoe,
@@ -13,8 +12,6 @@ import {
 import { Carousel } from "@mantine/carousel";
 
 function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
-	const location = useLocation();
-
 	function onLinkAccessAttempt(s: string) {
 		console.log("trying to access", s);
 	}
@@ -39,6 +36,10 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 		const $elems = document.querySelectorAll("a");
 		var elems = Array.from($elems);
 		elems.map((a) => {
+			const localLinks = /\/(.*?)/;
+			if (/\/(.*?)/.test(a.getAttribute("href")!)) {
+				return;
+			}
 			// @ts-ignore
 			a.onclick = (e) => {
 				e.preventDefault();
@@ -57,7 +58,7 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 
 	return (
 		<Box>
-			<Flex >
+			<Flex>
 				<Box h={"48px"} w={"48px"}>
 					<Image src={post.account.avatar} />
 				</Box>
@@ -81,9 +82,7 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 					</Flex>
 				</Flex>
 			</Flex>
-			<Box 
-			mt={0}
-			>
+			<Box mt={0}>
 				<div
 					style={{ lineHeight: 1.2, fontSize: 15 }}
 					dangerouslySetInnerHTML={{ __html: substituteHTML(post.content) }}
