@@ -12,6 +12,7 @@ import {
 	IconX,
 } from "@tabler/icons-react";
 import { mastodon } from "masto";
+import MastadonPostListing from "../mastadon/PostListing";
 
 function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 	const providerAuth = useSelector<RootState, ProviderAuthState>(
@@ -20,7 +21,11 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 
 	const [MastodonUserProfile, setMastodonUserProfile] =
 		useState<mastodon.v1.Account | null>(null);
-    const [ActiveTab, setActiveTab] = useState<string | null>("posts");
+	const [MastodonUserStatuses, setMastodonUserStatuses] = useState<
+		mastodon.v1.Status[] | null
+	>(null);
+
+	const [ActiveTab, setActiveTab] = useState<string | null>("posts");
 
 	useEffect(() => {
 		const account = providerAuth.selectedAccount;
@@ -37,7 +42,19 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 		).then((res) => {
 			setMastodonUserProfile(res);
 		});
+
+		MastadonService.getPostsForAccount(
+			account?.subdomain!,
+			token,
+			query.userId as unknown as string
+		).then((res) => {
+			setMastodonUserStatuses(res);
+		});
 	}, []);
+
+	useEffect(() => {
+		console.log("statuses", MastodonUserStatuses);
+	}, [MastodonUserStatuses]);
 
 	return (
 		<Flex direction={"column"}>
@@ -136,19 +153,22 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 								</Box>
 							))}
 						</Box>
-            <Tabs value={ActiveTab} onTabChange={setActiveTab}>
-                <Tabs.List grow >
-                  <Tabs.Tab value="posts">Posts</Tabs.Tab>
-                  <Tabs.Tab value="replies">Replies</Tabs.Tab>
-                  <Tabs.Tab value="boosts">Boosts</Tabs.Tab>
-                  <Tabs.Tab value="media">Media</Tabs.Tab>
-                </Tabs.List>
-                <Tabs.Panel value="posts">Posts</Tabs.Panel>
-                <Tabs.Panel value="replies">Replies</Tabs.Panel>
-                <Tabs.Panel value="boosts">Boosts</Tabs.Panel>
-                <Tabs.Panel value="media">Media</Tabs.Panel>
-              </Tabs>
-      
+						<Tabs value={ActiveTab} onTabChange={setActiveTab}>
+							<Tabs.List grow>
+								<Tabs.Tab value="posts">Posts</Tabs.Tab>
+								<Tabs.Tab value="replies">Replies</Tabs.Tab>
+								<Tabs.Tab value="boosts">Boosts</Tabs.Tab>
+								<Tabs.Tab value="media">Media</Tabs.Tab>
+							</Tabs.List>
+							<Tabs.Panel value="posts">
+								{MastodonUserStatuses?.map((o, i) => (
+									<MastadonPostListing key={i} post={o} />
+								))}
+							</Tabs.Panel>
+							<Tabs.Panel value="replies">Replies</Tabs.Panel>
+							<Tabs.Panel value="boosts">Boosts</Tabs.Panel>
+							<Tabs.Panel value="media">Media</Tabs.Panel>
+						</Tabs>
 					</Box>
 				</Flex>
 			)}

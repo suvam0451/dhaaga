@@ -132,4 +132,15 @@ export class MastadonService {
 		console.log(result);
 		return result;
 	}
+
+	static async getPostsForAccount(instanceUrl: string, accessToken: string, id: string) {
+		const masto = await login({
+			url: instanceUrl,
+			accessToken: accessToken,
+		});
+
+		const result = await masto.v1.accounts.listStatuses(id);
+		console.log(result);
+		return result;
+	}
 }
