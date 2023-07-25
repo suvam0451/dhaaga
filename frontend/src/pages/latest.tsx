@@ -12,7 +12,6 @@ function App() {
 
 	return (
 		<AppScreenLayout>
-			<Text size={32}>Discover</Text>
 			{providerAuth.selectedAccount?.domain === "mastodon" && (
 				<LatestTabRenderer />
 			)}

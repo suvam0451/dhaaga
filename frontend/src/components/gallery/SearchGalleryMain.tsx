@@ -80,19 +80,6 @@ function Base64GalleryItem() {
 
 	const imageSrc = galleryState?.currentImage || null;
 
-	useEffect(() => {
-		console.log(
-			"unmounting",
-			galleryState?.HasVideo,
-			galleryState?.VideoLoaded,
-			galleryState?.galleryIndex
-		);
-	}, [
-		galleryState?.HasVideo,
-		galleryState?.VideoLoaded,
-		galleryState?.galleryIndex,
-	]);
-
 	return (
 		<Box w={GALLERY_FIXED_WIDTH} mah={GALLERY_FIXED_HEIGHT}>
 			{galleryState.currentImageLoading ? (

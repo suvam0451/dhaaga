@@ -42,22 +42,9 @@ function App() {
 		});
 	}, [providerAuth.selectedDomain, providerAuth.selectedSubDomain]);
 
-	const staticDataMapping = [
-		{
-			key: "meta",
-			values: ["instagram", "threads"],
-		},
-		{
-			key: "mastodon",
-			values: [],
-		},
-	];
-
 	function onProviderSelected(x: any) {
 		dispatch(providerAuthSlice.actions.setSelectedDomain(x));
-		console.log("provider changed", x);
 		GetSubdomainsForDomain(x).then((res) => {
-			console.log("result", res);
 			setSubdomains(res || []);
 		});
 	}

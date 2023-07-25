@@ -25,6 +25,7 @@ function MastadonUserListing({ user }: { user: mastodon.v1.Account }) {
 				query: {
 					userId: user.id,
 				},
+				label: "User Profile",
 			})
 		);
 	}

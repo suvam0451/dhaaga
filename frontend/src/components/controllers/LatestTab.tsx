@@ -47,6 +47,7 @@ function LatestTabRenderer() {
 							query: {
 								q: "",
 							},
+							label: "Discover"
 						},
 					])
 				);
@@ -69,7 +70,7 @@ function LatestTabRenderer() {
 				if (!Component) {
 					return <Box key={i}></Box>;
 				}
-				return <Component index={i} query={item.query} />;
+				return <Component key={i} index={i} query={item.query} />;
 			})}
 		</Flex>
 	);

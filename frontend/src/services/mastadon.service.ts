@@ -122,25 +122,32 @@ export class MastadonService {
 		return result;
 	}
 
-	static async getUserProfile(instanceUrl: string, accessToken: string, id: string) {
+	static async getUserProfile(
+		instanceUrl: string,
+		accessToken: string,
+		id: string
+	) {
 		const masto = await login({
 			url: instanceUrl,
 			accessToken: accessToken,
 		});
 
 		const result = await masto.v1.accounts.fetch(id);
-		console.log(result);
 		return result;
 	}
 
-	static async getPostsForAccount(instanceUrl: string, accessToken: string, id: string) {
+	static async getPostsForAccount(
+		instanceUrl: string,
+		accessToken: string,
+		id: string,
+		{ minId, maxId }: { minId: string | null, maxId: string | null }
+	) {
 		const masto = await login({
 			url: instanceUrl,
 			accessToken: accessToken,
 		});
 
-		const result = await masto.v1.accounts.listStatuses(id);
-		console.log(result);
+		const result = await masto.v1.accounts.listStatuses(id, { minId, maxId });
 		return result;
 	}
 }

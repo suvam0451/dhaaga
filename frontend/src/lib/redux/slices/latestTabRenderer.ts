@@ -3,6 +3,7 @@ import { PayloadAction, createReducer, createSlice } from "@reduxjs/toolkit";
 export type ColumnItem = {
 	type: string;
 	query: Record<string, string>;
+	label: string
 };
 
 export interface LatestTabRendererState {
@@ -37,7 +38,7 @@ export const latestTabRendererSlice = createSlice({
 		 * back for page 2, both page 2 and 3 will be cleared
 		 */
 		sliceStackByIndex(state, action: PayloadAction<number>) {
-			state.stack = state.stack.slice(0, action.payload + 1);
+			state.stack = state.stack.slice(0, action.payload);
 		},
 	},
 });

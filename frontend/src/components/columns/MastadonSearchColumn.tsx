@@ -1,4 +1,4 @@
-import { Box, Tabs, TextInput, Text, Flex } from "@mantine/core";
+import { Box, Tabs, TextInput, Flex, ScrollArea } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/redux/store";
@@ -11,7 +11,9 @@ import { mastodon } from "masto";
 import MastadonUserListing from "../mastadon/UserListing";
 import MastadonTagListing from "../mastadon/TagListing";
 import { ColumnGeneratorProps } from "./columns.types";
-import { LatestTabRendererState } from "../../lib/redux/slices/latestTabRenderer";
+import DiscoverModuleBreadcrumbs from "../navigation/NavigationBreadcrumbs";
+import AdvancedScrollAreaProvider from "../../contexts/AdvancedScrollArea";
+import AdvancedScrollArea from "../navigation/AdvancedScrollArea";
 
 /**
  * this column is the mastadon entrypoint for the
@@ -20,9 +22,6 @@ import { LatestTabRendererState } from "../../lib/redux/slices/latestTabRenderer
 function MastadonSearchColumn({ index, query }: ColumnGeneratorProps) {
 	const providerAuth = useSelector<RootState, ProviderAuthState>(
 		(o) => o.providerAuth
-	);
-	const latestTabPushHistory = useSelector<RootState, LatestTabRendererState>(
-		(o) => o.latestTabPushHistory
 	);
 
 	const [activeTab, setActiveTab] = useState<string | null>("all");
@@ -41,7 +40,6 @@ function MastadonSearchColumn({ index, query }: ColumnGeneratorProps) {
 			hashtags: [],
 		});
 
-		
 	useEffect(() => {
 		if (!providerAuth.selectedAccount) return;
 		GetCredentialsByAccountId(providerAuth.selectedAccount!.id).then((res) => {
@@ -70,40 +68,46 @@ function MastadonSearchColumn({ index, query }: ColumnGeneratorProps) {
 	}, [activeTab, debounced]);
 
 	return (
-		<Flex direction={"column"}>
-			<TextInput
-				value={SearchQuery}
-				onChange={(e) => {
-					setSearchQuery(e.currentTarget.value);
-				}}
-				placeholder="Search users, posts and tags"
-			/>
+		<Box miw={400}>
+			<AdvancedScrollAreaProvider>
+				<DiscoverModuleBreadcrumbs index={index} />
+				<AdvancedScrollArea>
+					<Flex direction={"column"}>
+						<TextInput
+							value={SearchQuery}
+							onChange={(e) => {
+								setSearchQuery(e.currentTarget.value);
+							}}
+							placeholder="Search users, posts and tags"
+						/>
 
-			<Tabs value={activeTab} onTabChange={setActiveTab}>
-				<Tabs.List>
-					<Tabs.Tab value="all">All</Tabs.Tab>
-					<Tabs.Tab value="users">Users</Tabs.Tab>
-					<Tabs.Tab value="tags">Tags</Tabs.Tab>
-					<Tabs.Tab value="posts">Posts</Tabs.Tab>
-				</Tabs.List>
+						<Tabs value={activeTab} onTabChange={setActiveTab}>
+							<Tabs.List>
+								<Tabs.Tab value="all">All</Tabs.Tab>
+								<Tabs.Tab value="users">Users</Tabs.Tab>
+								<Tabs.Tab value="tags">Tags</Tabs.Tab>
+								<Tabs.Tab value="posts">Posts</Tabs.Tab>
+							</Tabs.List>
 
-				<Tabs.Panel value="all">First panel</Tabs.Panel>
-				<Tabs.Panel value="users">
-					<Box>
-						{MastadonSearchResults.accounts.map((x) => (
-							<MastadonUserListing user={x} />
-						))}
-					</Box>
-				</Tabs.Panel>
-				<Tabs.Panel value="tags">
-					{MastadonSearchResults.hashtags.map((o, i) => (
-						<MastadonTagListing key={i} tag={o} />
-					))}
-				</Tabs.Panel>
-
-				<Tabs.Panel value="posts">Second panel</Tabs.Panel>
-			</Tabs>
-		</Flex>
+							<Tabs.Panel value="all">First panel</Tabs.Panel>
+							<Tabs.Panel value="users">
+								<Box>
+									{MastadonSearchResults.accounts.map((x, i) => (
+										<MastadonUserListing key={i} user={x} />
+									))}
+								</Box>
+							</Tabs.Panel>
+							<Tabs.Panel value="tags">
+								{MastadonSearchResults.hashtags.map((o, i) => (
+									<MastadonTagListing key={i} tag={o} />
+								))}
+							</Tabs.Panel>
+							<Tabs.Panel value="posts">Second panel</Tabs.Panel>
+						</Tabs>
+					</Flex>
+				</AdvancedScrollArea>
+			</AdvancedScrollAreaProvider>
+		</Box>
 	);
 }
 
