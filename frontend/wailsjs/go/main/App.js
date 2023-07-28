@@ -10,6 +10,10 @@ export function GetAccount(arg1, arg2, arg3) {
   return window['go']['main']['App']['GetAccount'](arg1, arg2, arg3);
 }
 
+export function GetAccountsByDomain(arg1) {
+  return window['go']['main']['App']['GetAccountsByDomain'](arg1);
+}
+
 export function GetAccoutsBySubdomain(arg1, arg2) {
   return window['go']['main']['App']['GetAccoutsBySubdomain'](arg1, arg2);
 }

@@ -1,6 +1,13 @@
 import { Box, Divider, Flex, Text } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { mastodon } from "masto";
+import {
+	DangerouslySetHTML,
+	MastodonProfileLinkArray,
+	MastodonProfileLinkArrayItem,
+	TextTitle,
+} from "../../../styles/Mastodon";
+import React from "react";
 
 /**
  * Renders the external linksfor a mastodon profile
@@ -15,27 +22,19 @@ function ExternalLinks({
 	return (
 		fields &&
 		fields?.length > 0 && (
-			<Box
-				px={"xs"}
-				pb={"0.25em"}
-				pt={"0em"}
-				bg={"#eee"}
-				style={{ borderRadius: "0.5rem" }}
-			>
+			<MastodonProfileLinkArray>
 				{fields?.map((x, i) => (
-					<Box key={i} mb={"xs"}>
-						<Text style={{ fontSize: 15, fontWeight: 500 }}>{x.name}</Text>
-						<Flex style={{ fontSize: 14 }} align={"center"}>
-							{x.verifiedAt ? (
+					<React.Fragment key={i}>
+						<TextTitle $smaller>{x.name}</TextTitle>
+						<MastodonProfileLinkArrayItem>
+							{x.verifiedAt && (
 								<IconCheck
 									style={{
 										color: "green",
 									}}
 								/>
-							) : (
-								<></>
 							)}
-							<div
+							<DangerouslySetHTML
 								style={{
 									color: "#888",
 									fontSize: 14,
@@ -44,15 +43,10 @@ function ExternalLinks({
 								}}
 								dangerouslySetInnerHTML={{ __html: x.value }}
 							/>
-						</Flex>
-						{i === fields!.length - 1 ? (
-							<></>
-						) : (
-							<Divider color={"#aaa"} mt={"xs"} />
-						)}
-					</Box>
+						</MastodonProfileLinkArrayItem>
+					</React.Fragment>
 				))}
-			</Box>
+			</MastodonProfileLinkArray>
 		)
 	);
 }

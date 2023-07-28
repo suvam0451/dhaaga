@@ -140,7 +140,7 @@ export class MastadonService {
 		instanceUrl: string,
 		accessToken: string,
 		id: string,
-		{ minId, maxId }: { minId: string | null, maxId: string | null }
+		{ minId, maxId }: { minId: string | null; maxId: string | null }
 	) {
 		const masto = await login({
 			url: instanceUrl,
@@ -148,6 +148,66 @@ export class MastadonService {
 		});
 
 		const result = await masto.v1.accounts.listStatuses(id, { minId, maxId });
+		return result;
+	}
+
+	static async getPublicTimeline(
+		instanceUrl: string,
+		accessToken: string,
+		{ minId, maxId }: { minId: string | null; maxId: string | null }
+	) {
+		const masto = await login({
+			url: instanceUrl,
+			accessToken: accessToken,
+		});
+
+		const result = await masto.v1.timelines.listPublic({
+			limit: 20,
+			minId,
+			maxId,
+		});
+		return result;
+	}
+
+	static async bookmarkStatus(
+		instanceUrl: string,
+		accessToken: string,
+		statusId: string
+	) {
+		const masto = await login({
+			url: instanceUrl,
+			accessToken: accessToken,
+		});
+
+		const result = await masto.v1.statuses.bookmark(statusId);
+		return result;
+	}
+
+	static async unbookmarkStatus(
+		instanceUrl: string,
+		accessToken: string,
+		statusId: string
+	) {
+		const masto = await login({
+			url: instanceUrl,
+			accessToken: accessToken,
+		});
+
+		const result = await masto.v1.statuses.unbookmark(statusId);
+		return result;
+	}
+
+	static async fetchStatus(
+		instanceUrl: string,
+		accessToken: string,
+		statusId: string
+	) {
+		const masto = await login({
+			url: instanceUrl,
+			accessToken: accessToken,
+		});
+
+		const result = await masto.v1.statuses.fetch(statusId);
 		return result;
 	}
 }

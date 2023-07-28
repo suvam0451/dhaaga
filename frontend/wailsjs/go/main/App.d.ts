@@ -9,6 +9,8 @@ export function DashboardSearchUsers(arg1:dashboard.SearchUsersQuery):Promise<da
 
 export function GetAccount(arg1:string,arg2:string,arg3:string):Promise<threadsdb.ThreadsDb_Account>;
 
+export function GetAccountsByDomain(arg1:string):Promise<Array<threadsdb.ThreadsDb_Account>>;
+
 export function GetAccoutsBySubdomain(arg1:string,arg2:string):Promise<Array<threadsdb.ThreadsDb_Account>>;
 
 export function GetAsset(arg1:string):Promise<string>;

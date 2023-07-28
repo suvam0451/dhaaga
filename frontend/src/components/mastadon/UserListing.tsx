@@ -7,6 +7,7 @@ import {
 	latestTabRendererSlice,
 } from "../../lib/redux/slices/latestTabRenderer";
 import { COLUMNS } from "../utils/constansts";
+import { ProfilePicSearchResult } from "../../styles/Mastodon";
 
 function MastadonUserListing({ user }: { user: mastodon.v1.Account }) {
 	const latestTabPushHistory = useSelector<RootState, LatestTabRendererState>(
@@ -33,9 +34,9 @@ function MastadonUserListing({ user }: { user: mastodon.v1.Account }) {
 	return (
 		<Box my={"xs"}>
 			<Flex onClick={onComponentClicked}>
-				<Box h={"48px"} w={"48px"}>
+				<ProfilePicSearchResult>
 					<Image src={user.avatar} />
-				</Box>
+				</ProfilePicSearchResult>
 				<Box maw={300} ml={"xs"} style={{ flexGrow: 1 }}>
 					<Text style={{ fontSize: 16, lineHeight: 1, fontWeight: 500 }}>
 						{user.displayName}

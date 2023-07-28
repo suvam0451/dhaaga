@@ -8,6 +8,7 @@ import {
 import { IconChevronRight } from "@tabler/icons-react";
 import React from "react";
 import MastadonLogo from "../../assets/icons/Logo_Mastodon.svg";
+import { AppNavigationComponent } from "../../styles/AppNavigation";
 
 function DiscoverModuleBreadcrumbs({ index }: { index: number }) {
 	const latestTabPushHistory = useSelector<RootState, LatestTabRendererState>(
@@ -23,13 +24,7 @@ function DiscoverModuleBreadcrumbs({ index }: { index: number }) {
 
 	const nodes = latestTabPushHistory.stack.slice(0, index + 1);
 	return (
-		<Flex
-			bg={"#eee"}
-			p={"0.25em"}
-			align={"center"}
-			mb={"md"}
-			style={{borderRadius: "0.5rem"}}
-		>
+		<AppNavigationComponent>
 			<Tooltip label={"Currently logged in as"}>
 				<Image
 					src={MastadonLogo}
@@ -61,7 +56,7 @@ function DiscoverModuleBreadcrumbs({ index }: { index: number }) {
 					</Text>
 				</React.Fragment>
 			))}
-		</Flex>
+		</AppNavigationComponent>
 	);
 }
 

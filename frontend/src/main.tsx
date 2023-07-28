@@ -7,7 +7,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Notifications } from "@mantine/notifications";
 
 // pages
-import IndexPage from "./pages/index";
 import HomePage from "./pages/home";
 import DatabasePage from "./pages/database";
 import SearchPage from "./pages/search";

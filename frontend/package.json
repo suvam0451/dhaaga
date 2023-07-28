@@ -19,12 +19,14 @@
 		"@vitejs/plugin-react": "^4.0.3",
 		"axios": "^1.4.0",
 		"date-fns": "^2.30.0",
-		"embla-carousel-react": "^8.0.0-rc11",
+		"embla-carousel-react": "^7.0.0",
 		"masto": "^5.11.4",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"react-icons": "^4.10.1",
 		"react-redux": "^8.1.1",
 		"react-router-dom": "^6.14.2",
+		"styled-components": "^6.0.5",
 		"threads-api": "^1.5.4",
 		"uuid": "^9.0.0"
 	},
@@ -37,5 +39,8 @@
 		"@vitejs/plugin-react-swc": "^3.3.2",
 		"typescript": "^5.1.6",
 		"vite": "^4.4.5"
+	},
+	"resolutions": {
+		"styled-components": "^5"
 	}
 }

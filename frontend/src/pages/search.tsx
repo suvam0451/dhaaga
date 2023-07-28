@@ -3,7 +3,7 @@ import {
 	GetImagesForProfile,
 	GetImagesFromThread,
 } from "../../wailsjs/go/main/App";
-import { Flex, Box, Tooltip } from "@mantine/core";
+import { Flex, Box, Tooltip, ScrollArea } from "@mantine/core";
 import SearchGalleryMain from "../components/gallery/SearchGalleryMain";
 import SearchGalleryControls from "../components/gallery/SearchGalleryControls";
 import { useDispatch } from "react-redux";
@@ -13,7 +13,6 @@ import { IconBrandInstagram } from "@tabler/icons-react";
 import AppScreenLayout from "../layouts/AppScreenLayout";
 import ImageGalleryPreviewGrid from "../components/gallery/SearchGalleryPreview";
 
-import "../styles/App.css";
 import PostInformation from "../components/postinfo/PostInformation";
 
 function App() {
@@ -116,11 +115,9 @@ function App() {
 					placeholder="Paste URL here..."
 				/>
 				<Tooltip label="Auth toggle coming soon™">
-					
-				
-				<Box mx={"xs"}>
-					<IconBrandInstagram size={36} color="#666" />
-				</Box>
+					<Box mx={"xs"}>
+						<IconBrandInstagram size={36} color="#666" />
+					</Box>
 				</Tooltip>
 				<SearchLocalDatabase
 					validator={threadsLinkValidator}
@@ -130,11 +127,14 @@ function App() {
 				/>
 			</Flex>
 
-			<Flex py={"md"} dir={"row"}>
+			<Flex py={"md"} dir={"row"} h={"100%"}>
 				<ImageGalleryPreviewGrid />
-				<Box pos={"relative"}>
-					<SearchGalleryMain />
-					<PostInformation />
+
+				<Box pos={"relative"} h={"100%"}>
+					<ScrollArea h={"100%"} offsetScrollbars>
+						<SearchGalleryMain />
+						<PostInformation />
+					</ScrollArea>
 					<SearchGalleryControls />
 				</Box>
 			</Flex>

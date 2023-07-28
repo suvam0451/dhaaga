@@ -3,7 +3,7 @@ import { PayloadAction, createReducer, createSlice } from "@reduxjs/toolkit";
 export type ColumnItem = {
 	type: string;
 	query: Record<string, string>;
-	label: string
+	label: string;
 };
 
 export interface LatestTabRendererState {
@@ -39,6 +39,16 @@ export const latestTabRendererSlice = createSlice({
 		 */
 		sliceStackByIndex(state, action: PayloadAction<number>) {
 			state.stack = state.stack.slice(0, action.payload);
+		},
+		spliceStackAddItems(
+			state,
+			action: PayloadAction<{ index: number; items: ColumnItem[] }>
+		) {
+			state.stack.splice(
+				action.payload.index,
+				Infinity,
+				...action.payload.items
+			);
 		},
 	},
 });

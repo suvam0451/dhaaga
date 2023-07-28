@@ -21,6 +21,7 @@ type AccountsRepo interface {
 	SearchAccountsBySubdomain(domain string, subdomain string) []ThreadsDb_Account
 	GetCredentialForAccount(account ThreadsDb_Account, name string) *ThreadsDb_Credential
 	GetAccoutsBySubdomain(domain string, subdomain string) []ThreadsDb_Account
+	GetAccountsByDomain(domain string) []ThreadsDb_Account
 	GetSubdomainsForDomain(domain string) []string
 }
 
@@ -101,4 +102,16 @@ func (client *ThreadsDbAdminClient) GetSubdomainsForDomain(domain string) []stri
 		return []string{}
 	}
 	return results
+}
+
+func (client *ThreadsDbAdminClient) GetAccountsByDomain(domain string) []ThreadsDb_Account {
+	var accounts []ThreadsDb_Account
+	err := client.Db.Select(&accounts,
+		`SELECT * FROM accounts 
+		WHERE domain = ?;`,
+		domain)
+	if err != nil {
+		return nil
+	}
+	return accounts
 }

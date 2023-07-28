@@ -1,19 +1,27 @@
-import { Box, Flex, Text, Image, Divider, Tabs } from "@mantine/core";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../lib/redux/store";
+import { Box, Flex, Image, LoadingOverlay, Tabs } from "@mantine/core";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/redux/store";
 import { ProviderAuthState } from "../../lib/redux/slices/authSlice";
 import { ColumnGeneratorProps } from "./columns.types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { MastadonService } from "../../services/mastadon.service";
 import { mastodon } from "masto";
 import AdvancedScrollArea from "../navigation/AdvancedScrollArea";
 import MastadonAccountStatusesProvider from "../../contexts/MastadonAccountStatuses";
 import PostRenderer from "./PostRenderer";
-import { LatestTabRendererState } from "../../lib/redux/slices/latestTabRenderer";
 import AdvancedScrollAreaProvider from "../../contexts/AdvancedScrollArea";
 import MastadonProfileFields from "../mastadon/profile/MastadonProfileFields";
 import DiscoverModuleBreadcrumbs from "../navigation/NavigationBreadcrumbs";
 import { COLUMN_MIN_WIDTH } from "../../constants/app-dimensions";
+import {
+	ProfileOwnerImage,
+	StatReportGrid,
+	StatReportItem,
+	StatReportMaintext,
+	StatReportSubtext,
+	TextSubtitle,
+	TextTitle,
+} from "../../styles/Mastodon";
 
 function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 	const providerAuth = useSelector<RootState, ProviderAuthState>(
@@ -24,13 +32,17 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 		useState<mastodon.v1.Account | null>(null);
 
 	const [ActiveTab, setActiveTab] = useState<string | null>("posts");
+	const [IsLoading, setIsLoading] = useState<boolean>(true);
 
 	useEffect(() => {
+		setIsLoading(true);
+
 		const account = providerAuth.selectedAccount;
 		const token = providerAuth.loggedInCredentials["accessToken"];
 
 		if (!token) {
 			console.log("token not found");
+			setIsLoading(false);
 			return;
 		}
 
@@ -38,9 +50,13 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 			account?.subdomain!,
 			token,
 			query.userId as unknown as string
-		).then((res) => {
-			setMastodonUserProfile(res);
-		});
+		)
+			.then((res) => {
+				setMastodonUserProfile(res);
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
 	}, []);
 
 	return (
@@ -48,67 +64,72 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 			<AdvancedScrollAreaProvider>
 				<DiscoverModuleBreadcrumbs index={index} />
 				<AdvancedScrollArea>
+					<LoadingOverlay
+						h={"100%"}
+						visible={IsLoading}
+						overlayBlur={2}
+						transitionDuration={500}
+						w={"100%"}
+					/>
 					<Flex h={"auto"} direction={"column"} w={COLUMN_MIN_WIDTH}>
 						{MastodonUserProfile && (
 							<Flex h={"auto"} direction={"column"}>
 								<Box pos={"relative"} h={"128px"} style={{ overflow: "clip" }}>
-									<Box pos={"absolute"} style={{ overflow: "clip" }}>
-										<Image
-											fit="cover"
-											bg={"gray"}
-											src={MastodonUserProfile.header}
-										/>
+									<Box
+										pos={"absolute"}
+										style={{ overflow: "clip", width: "100%", height: "100%" }}
+									>
+										{MastodonUserProfile.header &&
+										!/original\/missing\.png/.test(
+											MastodonUserProfile.header
+										) ? (
+											<Image
+												fit="cover"
+												alt={"No Background Cover"}
+												src={MastodonUserProfile.header}
+											/>
+										) : (
+											<Box
+												bg={"#eee"}
+												// src="//:0"
+												style={{
+							
+													height: "100%",
+													width: "100%",
+												}}
+											/>
+										)}
 									</Box>
 								</Box>
-								<Box style={{ display: "relative", marginTop: "-32px" }}>
-									<Flex
-										h={"100%"}
-										mr={"md"}
-										direction={"row"}
-										justify={"space-between"}
-									>
+								<Box>
+									<Flex justify={"space-between"}>
 										<Box>
-											<Box ml={"md"} w={"64px"} h={"64px"}>
-												<Image src={MastodonUserProfile.avatar} />
-											</Box>
-											<Text
-												style={{
-													fontSize: 16,
-													lineHeight: 1,
-													fontWeight: 500,
-												}}
-											>
+											<ProfileOwnerImage
+												ml={"md"}
+												src={MastodonUserProfile.avatar}
+											/>
+											<TextTitle lh={1}>
 												{MastodonUserProfile.displayName}
-											</Text>
-											<Text
-												style={{
-													color: "#888",
-													fontSize: 14,
-												}}
-											>
+											</TextTitle>
+											<TextSubtitle>
 												@{MastodonUserProfile.username}
-											</Text>
+											</TextSubtitle>
 										</Box>
 										<Box mt={"8px"}>
-											<Box h={"32px"} />
-											<Flex align={"center"} justify={"space-between"}>
-												<Box>
-													<Flex direction={"column"} align={"center"}>
-														<Text style={{ fontWeight: 700, lineHeight: 1.25 }}>
-															{MastodonUserProfile.followingCount}
-														</Text>
-														<Text style={{ fontSize: 12 }}>Following</Text>
-													</Flex>
-												</Box>
-												<Box ml={"xs"}>
-													<Flex direction={"column"} align={"center"}>
-														<Text style={{ fontWeight: 700, lineHeight: 1.25 }}>
-															{MastodonUserProfile.followersCount}
-														</Text>
-														<Text style={{ fontSize: 12 }}>Followers</Text>
-													</Flex>
-												</Box>
-											</Flex>
+											<StatReportGrid>
+												<StatReportItem>
+													<StatReportMaintext>
+														{MastodonUserProfile.followingCount}
+													</StatReportMaintext>
+													<StatReportSubtext>Following</StatReportSubtext>
+												</StatReportItem>
+												<StatReportItem>
+													<StatReportMaintext>
+														{MastodonUserProfile.followersCount}
+													</StatReportMaintext>
+													<StatReportSubtext>Followers</StatReportSubtext>
+												</StatReportItem>
+											</StatReportGrid>
 										</Box>
 									</Flex>
 
