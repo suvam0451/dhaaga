@@ -1,4 +1,4 @@
-import { Box, Flex, LoadingOverlay, ScrollArea } from "@mantine/core";
+import { Box, Flex, ScrollArea } from "@mantine/core";
 import { IconChevronUp } from "@tabler/icons-react";
 import { useAdvancedScrollAreaProviderHook } from "../../contexts/AdvancedScrollArea";
 
@@ -19,38 +19,37 @@ function AdvancedScrollArea({
 	return (
 		<ScrollArea
 			h={"100%"}
-			style={{ display: "flex" }}
+			style={{ display: "flex", position: "relative" }}
 			viewportRef={store?.scrollRef || null}
 			onScrollPositionChange={store.onScrollPositionChange}
 			offsetScrollbars
 		>
-				<Box
-					pos={"absolute"}
+			<Box
+				pos={"absolute"}
+				style={{
+					transform: "translate(-50%, -50%)",
+					zIndex: 99,
+				}}
+				left={"50%"}
+				bottom={"20px"}
+				display={store.scrollPosition.y > 480 ? "flex" : "none"}
+			>
+				<Flex
+					bg={"rgba(100, 100, 100, 0.36)"}
 					style={{
+						borderRadius: "100%",
+						justifyContent: "center",
+						alignItems: "center",
 						transform: "translate(-50%, -50%)",
-						zIndex: 99,
+						padding: "8px",
 					}}
-					left={"50%"}
-					bottom={"20px"}
-					display={store.scrollPosition.y > 480 ? "flex" : "none"}
+					onClick={dispatch.scrollToTop}
 				>
-					<Flex
-						bg={"rgba(100, 100, 100, 0.36)"}
-						style={{
-							borderRadius: "100%",
-							justifyContent: "center",
-							alignItems: "center",
-							transform: "translate(-50%, -50%)",
-							padding: "8px",
-						}}
-						onClick={dispatch.scrollToTop}
-					>
-						<IconChevronUp />
-					</Flex>
-				</Box>
+					<IconChevronUp />
+				</Flex>
+			</Box>
 
-				{children}
-		
+			{children}
 		</ScrollArea>
 	);
 }

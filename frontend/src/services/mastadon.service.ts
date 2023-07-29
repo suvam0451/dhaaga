@@ -105,10 +105,7 @@ export class MastadonService {
 			type: type || undefined,
 		});
 
-		console.log(results);
 		return results;
-
-		// const result = await masto.v1.tags.fetch();
 	}
 
 	async getHomeTimeline(instanceUrl: string, accessToken: string) {
@@ -118,7 +115,6 @@ export class MastadonService {
 		});
 
 		const result = await masto.v1.timelines.listHome();
-		console.log(result);
 		return result;
 	}
 

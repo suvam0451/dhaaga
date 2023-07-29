@@ -99,11 +99,11 @@ export const DangerouslySetHTML = styled.div`
 `;
 
 // prettier-ignore
-export const PostInteractionElement = styled(Box)<BoxProps & { active?: boolean; activeBg?: string }>`
+export const PostInteractionElement = styled(Box)<BoxProps & { active?: boolean; activebg?: string }>`
 	display: flex;
-  color: ${(props) => props.active ? props.activeBg : "#777" };
+  color: ${(props) => props.active ? props.activebg : "#777" };
 	&:hover {
-		color: ${(props) => props.active ? "#777" : props.activeBg };
+		color: ${(props) => props.active ? "#777" : props.activebg };
 	}
 	& > svg {
 		color: inherit;
@@ -115,8 +115,11 @@ export const PostInteractionElement = styled(Box)<BoxProps & { active?: boolean;
   }
 `;
 
-export const MastadonStatusItem = styled(Box)<BoxProps>`
-	padding: 16px 4px 16px 4px;
+export const MastadonStatusItem = styled(Box)<
+	BoxProps & { reblogged?: boolean }
+>`
+	padding: ${(props) =>
+		props.reblogged === true ? "2px 4px 16px 4px" : "16px 4px 16px 4px"};
 	border-radius: 0.25rem;
 	margin: 0rem 0rem;
 	&:hover {

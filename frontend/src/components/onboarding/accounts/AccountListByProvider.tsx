@@ -1,8 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../lib/redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../lib/redux/store";
 import {
 	ProviderAuthItem,
-	ProviderAuthState,
 	providerAuthSlice,
 } from "../../../lib/redux/slices/authSlice";
 import {
@@ -18,22 +17,14 @@ import {
 	TextTitle,
 } from "../../../styles/Mastodon";
 import { HighlightOnHover } from "../../../styles/App";
-import { IconCheck, IconDots, IconTableOptions } from "@tabler/icons-react";
+import { IconCheck, IconDots } from "@tabler/icons-react";
 
 type AccountWithCredentials = threadsdb.ThreadsDb_Account & {
 	credentials?: threadsdb.ThreadsDb_Credential[];
 };
 function AccountListByProvider({ domain }: { domain: string }) {
 	const dispatch = useDispatch<AppDispatch>();
-	const providerAuth = useSelector<RootState, ProviderAuthState>(
-		(o) => o.providerAuth
-	);
-
 	const [AccountList, setAccountList] = useState<AccountWithCredentials[]>([]);
-
-	useEffect(() => {
-		console.log("domain", AccountList);
-	}, [AccountList]);
 
 	function onItemSelect(o: ProviderAuthItem) {
 		dispatch(providerAuthSlice.actions.setSelectedAccount(o));
@@ -72,8 +63,8 @@ function AccountListByProvider({ domain }: { domain: string }) {
 	}
 	return (
 		<Box ml={"md"}>
-			{AccountList.map((o) => (
-				<HighlightOnHover>
+			{AccountList.map((o, i) => (
+				<HighlightOnHover key={i}>
 					<ProfilePicSearchResult>
 						{o.credentials?.find(
 							(o) => o.credential_type === "profile_pic_url"

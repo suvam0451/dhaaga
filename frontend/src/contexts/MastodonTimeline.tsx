@@ -56,6 +56,11 @@ function MastodonTimelinesProvider({ children }: any) {
 		useState<StoreType>(storeDefault);
 
 	useEffect(() => {
+		setMastodonUserStatuses({
+			...MastodonUserStatuses,
+			loading: true,
+		});
+
 		const account = providerAuth.selectedAccount;
 		const token = providerAuth.loggedInCredentials["accessToken"];
 
@@ -63,11 +68,6 @@ function MastodonTimelinesProvider({ children }: any) {
 			console.log("token not found");
 			return;
 		}
-
-		setMastodonUserStatuses({
-			...MastodonUserStatuses,
-			loading: true,
-		});
 
 		MastadonService.getPublicTimeline(account?.subdomain!, token, {
 			maxId: null,
@@ -79,10 +79,11 @@ function MastodonTimelinesProvider({ children }: any) {
 
 				setMastodonUserStatuses({
 					...MastodonUserStatuses,
-					posts: res,
+					posts: [...res],
 					minId: nextMinId,
 					maxId: nextMaxId,
 					firstLoadFinished: true,
+					loading: false,
 					page: 1,
 				});
 			})
@@ -95,9 +96,11 @@ function MastodonTimelinesProvider({ children }: any) {
 			});
 	}, []);
 
-	// dispatchers
-
 	async function fetchMore() {
+		setMastodonUserStatuses({
+			...MastodonUserStatuses,
+			loading: true,
+		});
 		const account = providerAuth.selectedAccount;
 		const token = providerAuth.loggedInCredentials["accessToken"];
 
@@ -105,11 +108,6 @@ function MastodonTimelinesProvider({ children }: any) {
 			console.log("token not found");
 			return;
 		}
-
-		setMastodonUserStatuses({
-			...MastodonUserStatuses,
-			loading: true,
-		});
 
 		MastadonService.getPublicTimeline(account?.subdomain!, token, {
 			maxId: MastodonUserStatuses.maxId,

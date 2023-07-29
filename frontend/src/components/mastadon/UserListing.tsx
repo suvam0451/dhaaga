@@ -16,17 +16,18 @@ function MastadonUserListing({ user }: { user: mastodon.v1.Account }) {
 	const dispatch = useDispatch<AppDispatch>();
 
 	function onComponentClicked() {
-		if (latestTabPushHistory.stack.length > 1) {
-			console.log("cannot push user profile to this stack");
-			return;
-		}
 		dispatch(
-			latestTabRendererSlice.actions.addStack({
-				type: COLUMNS.MASTODON_V1_PROFILE_OTHER,
-				query: {
-					userId: user.id,
-				},
-				label: "User Profile",
+			latestTabRendererSlice.actions.spliceStackAddItems({
+				index: 1,
+				items: [
+					{
+						type: COLUMNS.MASTODON_V1_PROFILE_OTHER,
+						query: {
+							userId: user.id,
+						},
+						label: "User Profile",
+					},
+				],
 			})
 		);
 	}

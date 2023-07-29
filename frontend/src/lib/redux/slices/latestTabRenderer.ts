@@ -44,11 +44,17 @@ export const latestTabRendererSlice = createSlice({
 			state,
 			action: PayloadAction<{ index: number; items: ColumnItem[] }>
 		) {
-			state.stack.splice(
+			const currentState = [...state.stack];
+
+			currentState.splice(
 				action.payload.index,
-				Infinity,
+				state.stack.length - action.payload.index,
 				...action.payload.items
 			);
+			return {
+				...state,
+				stack: currentState,
+			};
 		},
 	},
 });

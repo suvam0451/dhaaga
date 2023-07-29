@@ -72,8 +72,6 @@ function ModuleAuthProvider({
 			return null;
 		}
 
-		console.log("account selected is", selectedAccount);
-
 		const creds = await GetCredentialsByAccountId(
 			providerAuth.selectedAccount!.id
 		);

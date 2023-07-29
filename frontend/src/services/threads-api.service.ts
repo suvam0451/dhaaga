@@ -39,7 +39,6 @@ class ThreadsApiClient {
 
 	async retrieveTokens() {
 		const res = await this.client.login();
-		console.log(res);
 	}
 
 	async fetchOnePageForUser(userId: string) {

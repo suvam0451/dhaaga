@@ -31,7 +31,13 @@ import { resolveProfileUrl } from "../../utils/Mastadon";
 import { NavigationManager } from "../../services/navigation-manager.service";
 import React from "react";
 
-function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
+function MastadonPostListing({
+	post,
+	reblogged,
+}: {
+	post: mastodon.v1.Status;
+	reblogged?: boolean;
+}) {
 	const dispatch = useDispatch<AppDispatch>();
 	const latestTabPushHistory = useSelector<RootState, LatestTabRendererState>(
 		(o) => o.latestTabPushHistory
@@ -99,15 +105,41 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 	function onPostClicked() {
 		if (!canPushAsColumn) return;
 
-		dispatch(
-			latestTabRendererSlice.actions.addStack({
-				type: COLUMNS.MASTADON_V1_STATUS,
-				query: {
-					id: post.id,
-				},
-				label: "Status",
-			})
-		);
+		if (
+			latestTabPushHistory.stack.length >= 2 &&
+			latestTabPushHistory.stack[1].type === COLUMNS.MASTODON_V1_PROFILE_OTHER
+		) {
+			console.log("there is a profile in page 1")
+			dispatch(
+				latestTabRendererSlice.actions.spliceStackAddItems({
+					index: 2,
+					items: [
+						{
+							type: COLUMNS.MASTADON_V1_STATUS,
+							query: {
+								id: post.id,
+							},
+							label: "Status",
+						},
+					],
+				})
+			);
+		} else {
+			dispatch(
+				latestTabRendererSlice.actions.spliceStackAddItems({
+					index: 1,
+					items: [
+						{
+							type: COLUMNS.MASTADON_V1_STATUS,
+							query: {
+								id: post.id,
+							},
+							label: "Status",
+						},
+					],
+				})
+			);
+		}
 	}
 
 	if (post && post.reblog !== undefined && post.reblog !== null) {
@@ -120,13 +152,17 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 
 	return (
 		<React.Fragment>
-			<MastadonStatusItem miw={"100%"} maw={COLUMN_MIN_WIDTH}>
+			<MastadonStatusItem
+				miw={"100%"}
+				maw={COLUMN_MIN_WIDTH}
+				reblogged={reblogged}
+			>
 				<Flex direction={"column"} onClick={onPostClicked}>
 					<Flex>
 						<PostOwnerImage src={post.account.avatar} />
 						<Flex justify={"space-between"} w={"100%"}>
 							<Flex direction={"column"} ml={"0.5rem"}>
-								<Flex align={"flex-end"} justify={"flex-end"}>
+								<Flex align={"flex-end"} justify={"flex-start"}>
 									<TextTitle lineClamp={1} maw={200}>
 										{post?.account?.displayName || post.account.username}
 									</TextTitle>
@@ -178,30 +214,30 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 				</Carousel>
 
 				<Flex mt={"xs"} justify={"space-between"}>
-					<PostInteractionElement activeBg={"lightgreen"}>
+					<PostInteractionElement activebg={"lightgreen"}>
 						<IconBackhoe />
 						<Text>{post.repliesCount}</Text>
 					</PostInteractionElement>
 
-					<PostInteractionElement activeBg="lightblue">
+					<PostInteractionElement activebg="lightblue">
 						<IconRocket />
 						<Text>{post.reblogsCount}</Text>
 					</PostInteractionElement>
-					<PostInteractionElement activeBg="orange">
+					<PostInteractionElement activebg="orange">
 						<IconStar />
 						<Text>{post.favouritesCount}</Text>
 					</PostInteractionElement>
-					<PostInteractionElement activeBg={"red"}>
+					<PostInteractionElement activebg={"red"}>
 						<IconBookmark />
 					</PostInteractionElement>
 					<PostInteractionElement
 						as={"div"}
-						activeBg={"lightgreen"}
+						activebg={"lightgreen"}
 						onClick={onDownloadClicked}
 					>
 						<IconDownload />
 					</PostInteractionElement>
-					<PostInteractionElement activeBg={"lightgreen"}>
+					<PostInteractionElement activebg={"lightgreen"}>
 						<IconExternalLink />
 					</PostInteractionElement>
 				</Flex>

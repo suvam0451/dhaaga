@@ -1,4 +1,4 @@
-import { Box, Tabs, TextInput, Flex } from "@mantine/core";
+import { Box, Tabs, TextInput, Flex, LoadingOverlay } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/redux/store";
@@ -7,7 +7,6 @@ import { GetCredentialsByAccountId } from "../../../wailsjs/go/main/App";
 import { KeystoreService } from "../../services/keystore.services";
 import { MastadonService } from "../../services/mastadon.service";
 import { useDebouncedValue } from "@mantine/hooks";
-import { mastodon } from "masto";
 import MastadonUserListing from "../mastadon/UserListing";
 import MastadonTagListing from "../mastadon/TagListing";
 import { ColumnGeneratorProps } from "./columns.types";
@@ -15,6 +14,8 @@ import DiscoverModuleBreadcrumbs from "../navigation/NavigationBreadcrumbs";
 import AdvancedScrollAreaProvider from "../../contexts/AdvancedScrollArea";
 import AdvancedScrollArea from "../navigation/AdvancedScrollArea";
 import { COLUMN_MIN_WIDTH } from "../../constants/app-dimensions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import MastadonPostListing from "../mastadon/PostListing";
 
 /**
  * this column is the mastadon entrypoint for the
@@ -34,13 +35,6 @@ function MastadonSearchColumn({ index, query }: ColumnGeneratorProps) {
 		displayName?: string;
 	} | null>(null);
 
-	const [MastadonSearchResults, setMastadonSearchResults] =
-		useState<mastodon.v2.Search>({
-			accounts: [],
-			statuses: [],
-			hashtags: [],
-		});
-
 	useEffect(() => {
 		if (!providerAuth.selectedAccount) return;
 		GetCredentialsByAccountId(providerAuth.selectedAccount!.id).then((res) => {
@@ -56,17 +50,24 @@ function MastadonSearchColumn({ index, query }: ColumnGeneratorProps) {
 
 	const [debounced] = useDebouncedValue(SearchQuery, 200);
 
-	useEffect(() => {
-		if (debounced === "") return;
-
-		MastadonService.search(
+	function mastodonSearch(term: string) {
+		if (term === "")
+			return Promise.resolve({
+				accounts: [],
+				statuses: [],
+				hashtags: [],
+			});
+		return MastadonService.search(
 			MastodonAuth?.instanceUrl!,
 			MastodonAuth?.accessToken!,
 			debounced
-		).then((res) => {
-			setMastadonSearchResults(res);
-		});
-	}, [activeTab, debounced]);
+		);
+	}
+
+	const { status, data } = useQuery({
+		queryKey: ["mastodon/v2/search", debounced],
+		queryFn: () => mastodonSearch(debounced),
+	});
 
 	return (
 		<AdvancedScrollAreaProvider>
@@ -90,19 +91,34 @@ function MastadonSearchColumn({ index, query }: ColumnGeneratorProps) {
 						</Tabs.List>
 
 						<Tabs.Panel value="all">First panel</Tabs.Panel>
-						<Tabs.Panel value="users" h={"100%"}>
+						<Tabs.Panel
+							value="users"
+							h={"100%"}
+							style={{ position: "relative" }}
+						>
+							<LoadingOverlay
+								h={"100%"}
+								visible={status === "pending"}
+								overlayBlur={2}
+								transitionDuration={500}
+							/>
 							<Box h={"100%"}>
-								{MastadonSearchResults.accounts.map((x, i) => (
-									<MastadonUserListing key={i} user={x} />
-								))}
+								{data &&
+									data.accounts.map((x, i) => (
+										<MastadonUserListing key={i} user={x} />
+									))}
 							</Box>
 						</Tabs.Panel>
 						<Tabs.Panel value="tags">
-							{MastadonSearchResults.hashtags.map((o, i) => (
-								<MastadonTagListing key={i} tag={o} />
-							))}
+							{data &&
+								data.hashtags.map((o, i) => (
+									<MastadonTagListing key={i} tag={o} />
+								))}
 						</Tabs.Panel>
-						<Tabs.Panel value="posts">Second panel</Tabs.Panel>
+						<Tabs.Panel value="posts">
+							{data &&
+								data.statuses.map((o, i) => <MastadonPostListing key={i} post={o!} />)}
+						</Tabs.Panel>
 					</Tabs>
 				</Flex>
 			</AdvancedScrollArea>
