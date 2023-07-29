@@ -139,7 +139,6 @@ function App() {
 		setSelectedSocialNetwork(e.target.value);
 	}
 
-	console.log(SelectedSocialNetwork, OnboardingComponent);
 	return (
 		<AppScreenLayout>
 			<Tabs

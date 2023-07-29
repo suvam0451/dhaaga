@@ -13,7 +13,7 @@ export class NavigationManager {
 					(item) => item.type === COLUMNS.MASTADON_V1_STATUS
 				);
 				if (existingStatusPage) {
-					return false;
+					return true;
 				}
 				return true;
 			}

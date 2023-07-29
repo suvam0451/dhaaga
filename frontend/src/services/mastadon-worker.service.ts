@@ -30,9 +30,7 @@ export class MastadonWorker {
 				verified: true,
 			});
 
-			console.log("searching for", "mastodon", subdomain, meta.username);
 			const account = await GetAccount("mastodon", subdomain, meta.username);
-			console.log(account);
 			await UpsertCredential(account, "access_token", meta!.accessToken);
 			await UpsertCredential(account, "display_name", meta!.display_name);
 			await UpsertCredential(account, "profile_pic_url", meta!.profile_pic_url);

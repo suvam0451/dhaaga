@@ -79,7 +79,6 @@ export class KeystoreService {
 	): Promise<string> {
 		try {
 			const res = await InstagramSafeLogin(username, password);
-			console.log(res);
 			return res;
 		} catch (e) {
 			return "Unknown error occured";

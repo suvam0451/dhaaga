@@ -100,12 +100,17 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 		if (!canPushAsColumn) return;
 
 		dispatch(
-			latestTabRendererSlice.actions.addStack({
-				type: COLUMNS.MASTADON_V1_STATUS,
-				query: {
-					id: post.id,
-				},
-				label: "Status",
+			latestTabRendererSlice.actions.spliceStackAddItems({
+				index: 1,
+				items: [
+					{
+						type: COLUMNS.MASTADON_V1_STATUS,
+						query: {
+							id: post.id,
+						},
+						label: "Status",
+					},
+				],
 			})
 		);
 	}

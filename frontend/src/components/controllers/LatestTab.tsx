@@ -6,10 +6,8 @@ import {
 	latestTabRendererSlice,
 } from "../../lib/redux/slices/latestTabRenderer";
 import MastadonSearchColumn from "../columns/MastadonSearchColumn";
-import {
-	providerAuthSlice,
-} from "../../lib/redux/slices/authSlice";
-import { useEffect } from "react";
+import { providerAuthSlice } from "../../lib/redux/slices/authSlice";
+import { useEffect, useState } from "react";
 import MastadonUserProfileColumn from "../columns/MastadonUserProfileColumn";
 import { ColumnGeneratorProps } from "../columns/columns.types";
 import { COLUMNS } from "../utils/constansts";
@@ -79,22 +77,31 @@ function LatestTabRenderer() {
 		[COLUMNS.MASTODON_V2_SEARCH]: MastadonSearchColumn,
 		[COLUMNS.MASTODON_V1_PROFILE_OTHER]: MastadonUserProfileColumn,
 		[COLUMNS.MASTODON_V1_TIMELINE_PUBLIC]: MastadonTimelineColumn,
-		[COLUMNS.MASTADON_V1_STATUS]: Status
+		[COLUMNS.MASTADON_V1_STATUS]: Status,
 	};
+
+	const [RenderSet, setRenderSet] = useState<React.JSX.Element[]>([]);
+
+	useEffect(() => {
+		const render = latestTabPushHistory.stack.map((item, i) => {
+			const Component = ComponentMapper[item.type];
+			if (!Component) {
+				return <Box h={"100%"} key={i}></Box>;
+			}
+
+			return (
+				<Box mx={"0.25rem"} h={"100%"} key={i}>
+					<Component index={i} query={item.query} />
+				</Box>
+			);
+		});
+
+		setRenderSet(render);
+	}, [latestTabPushHistory.stack]);
 
 	return (
 		<Flex direction={"row"} h={"100%"}>
-			{latestTabPushHistory.stack.map((item, i) => {
-				const Component = ComponentMapper[item.type];
-				if (!Component) {
-					return <Box h={"100%"} key={i}></Box>;
-				}
-				return (
-					<Box mx={"0.25rem"} h={"100%"} key={i}>
-						<Component key={i} index={i} query={item.query} />{" "}
-					</Box>
-				);
-			})}
+			{RenderSet}
 		</Flex>
 	);
 }

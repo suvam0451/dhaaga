@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MastadonService } from "../../../services/mastadon.service";
 import { ModuleAuthHook } from "../../../contexts/AuthContext";
 import { mastodon } from "masto";
-import { Box } from "@mantine/core";
+import { Box, LoadingOverlay } from "@mantine/core";
 import { ColumnGeneratorProps } from "../columns.types";
 import { COLUMN_MIN_WIDTH } from "../../../constants/app-dimensions";
 import MastadonPostListing from "../../mastadon/PostListing";
@@ -10,6 +10,7 @@ import AdvancedScrollAreaProvider from "../../../contexts/AdvancedScrollArea";
 import AdvancedScrollArea from "../../navigation/AdvancedScrollArea";
 import DiscoverModuleBreadcrumbs from "../../navigation/NavigationBreadcrumbs";
 import MastadonStatusInteractions from "../../mastadon/MastodonStatusInteraction";
+import { useQuery } from "@tanstack/react-query";
 
 /**
  * Shows details for a post
@@ -18,37 +19,41 @@ import MastadonStatusInteractions from "../../mastadon/MastodonStatusInteraction
  */
 function MastadonPostDetails({ index, query }: ColumnGeneratorProps) {
 	const { store, dispatch } = ModuleAuthHook();
-	const [PostData, setPostData] = useState<mastodon.v1.Status | null>(null);
 
-	useEffect(() => {
-		if (PostData || !query.id) return;
-		dispatch.verifyAuthStatus().then((res) => {
-			if (!res || res.provider !== "mastodon") return;
-			MastadonService.fetchStatus(
-				res.creds.instanceUrl,
-				res.creds.accessToken,
-				query.id as any
-			).then((res) => {
-				setPostData(res);
-			});
-		});
-	}, [query.id]);
+	async function getStatus(id: number | string) {
+		if (!query.id) return Promise.reject(new Error("no status found"));
+		const auth = await dispatch.verifyAuthStatus();
 
-	useEffect(() => {
-		return () => {};
-	}, [PostData]);
+		if (!auth || auth.provider !== "mastodon")
+			return Promise.reject(new Error("no status found"));
+		return MastadonService.fetchStatus(
+			auth.creds.instanceUrl,
+			auth.creds.accessToken,
+			id as any
+		);
+	}
+
+	const { status, data } = useQuery({
+		queryKey: ["mastodon/v1/status", query.id],
+		queryFn: () => getStatus(query.id),
+	});
 
 	return (
 		<Box h={"100%"} miw={COLUMN_MIN_WIDTH}>
-
-		<AdvancedScrollAreaProvider>
-			<DiscoverModuleBreadcrumbs index={index} />
-			<AdvancedScrollArea>
-				{PostData && <MastadonPostListing post={PostData} />}
-				{PostData && <MastadonStatusInteractions post={PostData} />}
-			</AdvancedScrollArea>
-		</AdvancedScrollAreaProvider>
-					
+			<AdvancedScrollAreaProvider>
+				<DiscoverModuleBreadcrumbs index={index} />
+				<AdvancedScrollArea>
+					<LoadingOverlay
+						h={"100%"}
+						visible={status === "pending"}
+						overlayBlur={2}
+						transitionDuration={500}
+						w={"100%"}
+					/>
+					{data && <MastadonPostListing post={data} />}
+					{data && <MastadonStatusInteractions post={data} />}
+				</AdvancedScrollArea>
+			</AdvancedScrollAreaProvider>
 		</Box>
 	);
 }

@@ -120,12 +120,9 @@ function ThreadsUserTable() {
 	async function onMenuItemTimelineGetClick(pk: string) {
 		if (!providerAuth.selectedAccount) return;
 
-		console.log("fetching timeline for", pk, providerAuth.selectedAccount.id);
-
 		const creds = await GetCredentialsByAccountId(
 			providerAuth.selectedAccount.id
 		);
-		console.log("credentials", creds);
 		const deviceID = await UserSettingsService.getCustomDeviceId();
 
 		const { success: validCredSuccess, data: validCreds } =
@@ -199,7 +196,6 @@ function ThreadsUserTable() {
 	));
 
 	function setPage(ans: number) {
-		console.log(ans);
 		dispatch({
 			type: "setDashboardOffset",
 			payload: (ans - 1) * 5,

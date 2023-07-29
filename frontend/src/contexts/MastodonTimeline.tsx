@@ -77,7 +77,6 @@ function MastodonTimelinesProvider({ children }: any) {
 				const nextMinId = res[0].id;
 				const nextMaxId = res[res.length - 1].id;
 
-				console.log("setting mastodon statuses", res);
 				setMastodonUserStatuses({
 					...MastodonUserStatuses,
 					posts: [...res],

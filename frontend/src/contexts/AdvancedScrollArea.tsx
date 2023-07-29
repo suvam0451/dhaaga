@@ -52,7 +52,6 @@ const AdvancedScrollAreaProvider = ({ children }: any) => {
 			scrollRef.current!.scrollHeight - scrollPosition.y - window.innerHeight <
 				100
 		) {
-			console.log("infinite power")
 			setIfBroadcastReachBottom(false);
 			setReachedBottom(true);
 		}
