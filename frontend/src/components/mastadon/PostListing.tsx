@@ -31,7 +31,13 @@ import { resolveProfileUrl } from "../../utils/Mastadon";
 import { NavigationManager } from "../../services/navigation-manager.service";
 import React from "react";
 
-function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
+function MastadonPostListing({
+	post,
+	reblogged,
+}: {
+	post: mastodon.v1.Status;
+	reblogged?: boolean;
+}) {
 	const dispatch = useDispatch<AppDispatch>();
 	const latestTabPushHistory = useSelector<RootState, LatestTabRendererState>(
 		(o) => o.latestTabPushHistory
@@ -125,7 +131,11 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 
 	return (
 		<React.Fragment>
-			<MastadonStatusItem miw={"100%"} maw={COLUMN_MIN_WIDTH}>
+			<MastadonStatusItem
+				miw={"100%"}
+				maw={COLUMN_MIN_WIDTH}
+				reblogged={reblogged}
+			>
 				<Flex direction={"column"} onClick={onPostClicked}>
 					<Flex>
 						<PostOwnerImage src={post.account.avatar} />

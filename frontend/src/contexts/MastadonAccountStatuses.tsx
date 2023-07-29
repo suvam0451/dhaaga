@@ -90,6 +90,7 @@ function MastadonAccountStatusesProvider({ query, children }: any) {
 					minId: nextMinId,
 					maxId: nextMaxId,
 					firstLoadFinished: true,
+					loading: false,
 					page: 1,
 				});
 			})
@@ -100,7 +101,7 @@ function MastadonAccountStatusesProvider({ query, children }: any) {
 					loading: false,
 				});
 			});
-	}, []);
+	}, [query.userId]);
 
 	// dispatchers
 

@@ -12,13 +12,13 @@ function RebloggedPost({
 	post: mastodon.v1.Status;
 }) {
 	return (
-		<Box h={"100%"}>
+		<Box h={"100%"} pt={"md"}>
 			<Flex direction={"row"} align={"center"} my={"4px"}>
 				<FaRetweet color="#aaa" size={20} />
 				<PostBoosterImage src={repostedBy.avatar} />
 				<TextSubtitle ml={"4px"}>{repostedBy.displayName} boosted</TextSubtitle>
 			</Flex>
-			<MastadonPostListing post={post!} />
+			<MastadonPostListing post={post!} reblogged />
 		</Box>
 	);
 }

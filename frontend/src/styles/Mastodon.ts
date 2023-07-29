@@ -115,8 +115,11 @@ export const PostInteractionElement = styled(Box)<BoxProps & { active?: boolean;
   }
 `;
 
-export const MastadonStatusItem = styled(Box)<BoxProps>`
-	padding: 16px 4px 16px 4px;
+export const MastadonStatusItem = styled(Box)<
+	BoxProps & { reblogged?: boolean }
+>`
+	padding: ${(props) =>
+		props.reblogged === true ? "2px 4px 16px 4px" : "16px 4px 16px 4px"};
 	border-radius: 0.25rem;
 	margin: 0rem 0rem;
 	&:hover {

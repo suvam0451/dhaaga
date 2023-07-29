@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../lib/redux/store";
 import { ProviderAuthState } from "../../lib/redux/slices/authSlice";
 import { ColumnGeneratorProps } from "./columns.types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MastadonService } from "../../services/mastadon.service";
 import AdvancedScrollArea from "../navigation/AdvancedScrollArea";
 import MastadonAccountStatusesProvider from "../../contexts/MastadonAccountStatuses";

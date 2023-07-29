@@ -5,6 +5,7 @@ import { MastodonTimelinesProviderHook } from "../../contexts/MastodonTimeline";
 import { useEffect } from "react";
 import { TextSubtitle } from "../../styles/Mastodon";
 import { useTimeout } from "@mantine/hooks";
+import LoadingStatusIndicator from "./common/LoadingStatusIndicator";
 
 function TimelineRenderer() {
 	const { store, dispatch } = MastodonTimelinesProviderHook();
@@ -34,6 +35,10 @@ function TimelineRenderer() {
 			scrollDispatch.setIfBroadcastReachBottom(true);
 		}
 	}, [store.posts]);
+
+	/**
+	 * --- "Load More" controller block end ---
+	 */
 
 	useEffect(() => {
 		// redirect all hrefs
@@ -70,22 +75,18 @@ function TimelineRenderer() {
 			</TextSubtitle>
 			{store.posts &&
 				store.posts.map((o, i) => <MastadonPostListing key={i} post={o} />)}
-			<Button
+			<LoadingStatusIndicator
+				loading={store.loading}
+				allowClicks={!store.loading}
 				onClick={async () => {
-					if (store.posts && store.posts.length >= 100) {
+					if (store.posts.length >= 100) {
 						await scrollDispatch.scrollToTop();
 						await dispatch.fetchNextPage();
 					} else {
 						dispatch.fetchMore();
 					}
 				}}
-				mt={"md"}
-				loading={store.loading}
-			>
-				{store.posts && store.posts.length >= 100
-					? "Load Next Page"
-					: "Loading More..."}
-			</Button>
+			/>
 		</Box>
 	);
 }
