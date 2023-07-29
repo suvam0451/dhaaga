@@ -105,20 +105,41 @@ function MastadonPostListing({
 	function onPostClicked() {
 		if (!canPushAsColumn) return;
 
-		dispatch(
-			latestTabRendererSlice.actions.spliceStackAddItems({
-				index: 1,
-				items: [
-					{
-						type: COLUMNS.MASTADON_V1_STATUS,
-						query: {
-							id: post.id,
+		if (
+			latestTabPushHistory.stack.length >= 2 &&
+			latestTabPushHistory.stack[1].type === COLUMNS.MASTODON_V1_PROFILE_OTHER
+		) {
+			console.log("there is a profile in page 1")
+			dispatch(
+				latestTabRendererSlice.actions.spliceStackAddItems({
+					index: 2,
+					items: [
+						{
+							type: COLUMNS.MASTADON_V1_STATUS,
+							query: {
+								id: post.id,
+							},
+							label: "Status",
 						},
-						label: "Status",
-					},
-				],
-			})
-		);
+					],
+				})
+			);
+		} else {
+			dispatch(
+				latestTabRendererSlice.actions.spliceStackAddItems({
+					index: 1,
+					items: [
+						{
+							type: COLUMNS.MASTADON_V1_STATUS,
+							query: {
+								id: post.id,
+							},
+							label: "Status",
+						},
+					],
+				})
+			);
+		}
 	}
 
 	if (post && post.reblog !== undefined && post.reblog !== null) {

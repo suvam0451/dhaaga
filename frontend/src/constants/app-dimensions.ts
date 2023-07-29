@@ -13,4 +13,4 @@ export const GALLERY_PREVIEW_ITEM_FIXED_PREVIEW_WIDTH = 96;
 export const GALLERY_PREVIEW_ITEM_FIXED_PREVIEW_HEIGHT = 160;
 
 // various SNS columns
-export const COLUMN_MIN_WIDTH = 450
+export const COLUMN_MIN_WIDTH = 440
