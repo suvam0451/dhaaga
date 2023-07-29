@@ -3,9 +3,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../lib/redux/store";
 import { ProviderAuthState } from "../../lib/redux/slices/authSlice";
 import { ColumnGeneratorProps } from "./columns.types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MastadonService } from "../../services/mastadon.service";
-import { mastodon } from "masto";
 import AdvancedScrollArea from "../navigation/AdvancedScrollArea";
 import MastadonAccountStatusesProvider from "../../contexts/MastadonAccountStatuses";
 import PostRenderer from "./PostRenderer";
@@ -22,42 +21,27 @@ import {
 	TextSubtitle,
 	TextTitle,
 } from "../../styles/Mastodon";
+import { useQuery } from "@tanstack/react-query";
 
 function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 	const providerAuth = useSelector<RootState, ProviderAuthState>(
 		(o) => o.providerAuth
 	);
 
-	const [MastodonUserProfile, setMastodonUserProfile] =
-		useState<mastodon.v1.Account | null>(null);
-
 	const [ActiveTab, setActiveTab] = useState<string | null>("posts");
-	const [IsLoading, setIsLoading] = useState<boolean>(true);
 
-	useEffect(() => {
-		setIsLoading(true);
-
+	function fetchProfile(query: string) {
 		const account = providerAuth.selectedAccount;
 		const token = providerAuth.loggedInCredentials["accessToken"];
 
-		if (!token) {
-			console.log("token not found");
-			setIsLoading(false);
-			return;
-		}
+		if (!token) return Promise.reject(new Error("token not found"));
+		return MastadonService.getUserProfile(account?.subdomain!, token, query);
+	}
 
-		MastadonService.getUserProfile(
-			account?.subdomain!,
-			token,
-			query.userId as unknown as string
-		)
-			.then((res) => {
-				setMastodonUserProfile(res);
-			})
-			.finally(() => {
-				setIsLoading(false);
-			});
-	}, []);
+	const { status, data } = useQuery({
+		queryKey: ["mastodon/v1/account", query.userId],
+		queryFn: () => fetchProfile(query.userId as unknown as string),
+	});
 
 	return (
 		<MastadonAccountStatusesProvider query={query}>
@@ -66,34 +50,30 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 				<AdvancedScrollArea>
 					<LoadingOverlay
 						h={"100%"}
-						visible={IsLoading}
+						visible={status === "pending"}
 						overlayBlur={2}
 						transitionDuration={500}
 						w={"100%"}
 					/>
 					<Flex h={"auto"} direction={"column"} w={COLUMN_MIN_WIDTH}>
-						{MastodonUserProfile && (
+						{data && (
 							<Flex h={"auto"} direction={"column"}>
 								<Box pos={"relative"} h={"128px"} style={{ overflow: "clip" }}>
 									<Box
 										pos={"absolute"}
 										style={{ overflow: "clip", width: "100%", height: "100%" }}
 									>
-										{MastodonUserProfile.header &&
-										!/original\/missing\.png/.test(
-											MastodonUserProfile.header
-										) ? (
+										{data.header &&
+										!/original\/missing\.png/.test(data.header) ? (
 											<Image
 												fit="cover"
 												alt={"No Background Cover"}
-												src={MastodonUserProfile.header}
+												src={data.header}
 											/>
 										) : (
 											<Box
 												bg={"#eee"}
-												// src="//:0"
 												style={{
-							
 													height: "100%",
 													width: "100%",
 												}}
@@ -104,28 +84,21 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 								<Box>
 									<Flex justify={"space-between"}>
 										<Box>
-											<ProfileOwnerImage
-												ml={"md"}
-												src={MastodonUserProfile.avatar}
-											/>
-											<TextTitle lh={1}>
-												{MastodonUserProfile.displayName}
-											</TextTitle>
-											<TextSubtitle>
-												@{MastodonUserProfile.username}
-											</TextSubtitle>
+											<ProfileOwnerImage ml={"md"} src={data.avatar} />
+											<TextTitle lh={1}>{data.displayName}</TextTitle>
+											<TextSubtitle>@{data.username}</TextSubtitle>
 										</Box>
 										<Box mt={"8px"}>
 											<StatReportGrid>
 												<StatReportItem>
 													<StatReportMaintext>
-														{MastodonUserProfile.followingCount}
+														{data.followingCount}
 													</StatReportMaintext>
 													<StatReportSubtext>Following</StatReportSubtext>
 												</StatReportItem>
 												<StatReportItem>
 													<StatReportMaintext>
-														{MastodonUserProfile.followersCount}
+														{data.followersCount}
 													</StatReportMaintext>
 													<StatReportSubtext>Followers</StatReportSubtext>
 												</StatReportItem>
@@ -136,10 +109,10 @@ function MastadonUserProfileColumn({ index, query }: ColumnGeneratorProps) {
 									<div
 										style={{ color: "#888", fontSize: 14, lineHeight: 1.2 }}
 										dangerouslySetInnerHTML={{
-											__html: MastodonUserProfile.note,
+											__html: data.note,
 										}}
 									/>
-									<MastadonProfileFields fields={MastodonUserProfile.fields} />
+									<MastadonProfileFields fields={data.fields} />
 									<Tabs value={ActiveTab} onTabChange={setActiveTab}>
 										<Tabs.List grow>
 											<Tabs.Tab value="posts">Posts</Tabs.Tab>

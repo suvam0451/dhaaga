@@ -178,30 +178,30 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 				</Carousel>
 
 				<Flex mt={"xs"} justify={"space-between"}>
-					<PostInteractionElement activeBg={"lightgreen"}>
+					<PostInteractionElement activebg={"lightgreen"}>
 						<IconBackhoe />
 						<Text>{post.repliesCount}</Text>
 					</PostInteractionElement>
 
-					<PostInteractionElement activeBg="lightblue">
+					<PostInteractionElement activebg="lightblue">
 						<IconRocket />
 						<Text>{post.reblogsCount}</Text>
 					</PostInteractionElement>
-					<PostInteractionElement activeBg="orange">
+					<PostInteractionElement activebg="orange">
 						<IconStar />
 						<Text>{post.favouritesCount}</Text>
 					</PostInteractionElement>
-					<PostInteractionElement activeBg={"red"}>
+					<PostInteractionElement activebg={"red"}>
 						<IconBookmark />
 					</PostInteractionElement>
 					<PostInteractionElement
 						as={"div"}
-						activeBg={"lightgreen"}
+						activebg={"lightgreen"}
 						onClick={onDownloadClicked}
 					>
 						<IconDownload />
 					</PostInteractionElement>
-					<PostInteractionElement activeBg={"lightgreen"}>
+					<PostInteractionElement activebg={"lightgreen"}>
 						<IconExternalLink />
 					</PostInteractionElement>
 				</Flex>

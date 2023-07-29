@@ -12,7 +12,7 @@ function MastadonTimelineColumn({ index, query }: ColumnGeneratorProps) {
 	const [activeTab, setActiveTab] = useState<string | null>("home");
 
 	return (
-		<Box h={"100%"} w={COLUMN_MIN_WIDTH+12}>
+		<Box h={"100%"} display={"flex"} style={{flexDirection: "column"}} w={COLUMN_MIN_WIDTH+12}>
 			<DiscoverModuleBreadcrumbs index={index} />
 			<AdvancedScrollAreaProvider>
 				<AdvancedScrollArea>

@@ -64,11 +64,6 @@ function MastodonTimelinesProvider({ children }: any) {
 			return;
 		}
 
-		setMastodonUserStatuses({
-			...MastodonUserStatuses,
-			loading: true,
-		});
-
 		MastadonService.getPublicTimeline(account?.subdomain!, token, {
 			maxId: null,
 			minId: null,
@@ -77,9 +72,10 @@ function MastodonTimelinesProvider({ children }: any) {
 				const nextMinId = res[0].id;
 				const nextMaxId = res[res.length - 1].id;
 
+				console.log("setting mastodon statuses", res);
 				setMastodonUserStatuses({
 					...MastodonUserStatuses,
-					posts: res,
+					posts: [...res],
 					minId: nextMinId,
 					maxId: nextMaxId,
 					firstLoadFinished: true,
@@ -95,9 +91,11 @@ function MastodonTimelinesProvider({ children }: any) {
 			});
 	}, []);
 
-	// dispatchers
-
 	async function fetchMore() {
+		setMastodonUserStatuses({
+			...MastodonUserStatuses,
+			loading: true,
+		});
 		const account = providerAuth.selectedAccount;
 		const token = providerAuth.loggedInCredentials["accessToken"];
 
@@ -105,11 +103,6 @@ function MastodonTimelinesProvider({ children }: any) {
 			console.log("token not found");
 			return;
 		}
-
-		setMastodonUserStatuses({
-			...MastodonUserStatuses,
-			loading: true,
-		});
 
 		MastadonService.getPublicTimeline(account?.subdomain!, token, {
 			maxId: MastodonUserStatuses.maxId,

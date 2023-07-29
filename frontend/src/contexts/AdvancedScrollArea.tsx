@@ -1,5 +1,5 @@
 import { Box } from "@mantine/core";
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 type StoreType = {
 	scrollPosition: {
@@ -13,10 +13,12 @@ type StoreType = {
 		}>
 	>;
 	scrollRef: React.MutableRefObject<HTMLDivElement | null> | null;
+	reachedBottm: boolean;
 };
 
 type DispatchType = {
 	scrollToTop: () => void;
+	setIfBroadcastReachBottom: (x: boolean) => void;
 };
 
 const storeDefault: StoreType = {
@@ -26,10 +28,12 @@ const storeDefault: StoreType = {
 	},
 	onScrollPositionChange: () => {},
 	scrollRef: null,
+	reachedBottm: false,
 };
 
 const dispatchDefault: DispatchType = {
 	scrollToTop: () => {},
+	setIfBroadcastReachBottom: () => {},
 };
 
 const StoreContext = createContext<StoreType>(storeDefault);
@@ -38,6 +42,21 @@ const DispatchContext = createContext<DispatchType>(dispatchDefault);
 const AdvancedScrollAreaProvider = ({ children }: any) => {
 	const [scrollPosition, onScrollPositionChange] = useState({ x: 0, y: 0 });
 	const scrollRef = useRef<HTMLDivElement | null>(null);
+	const [IfBroadcastReachBottom, setIfBroadcastReachBottom] = useState(false);
+	const [ReachedBottom, setReachedBottom] = useState(false);
+
+	useEffect(() => {
+		if (
+			IfBroadcastReachBottom &&
+			!ReachedBottom &&
+			scrollRef.current!.scrollHeight - scrollPosition.y - window.innerHeight <
+				100
+		) {
+			console.log("infinite power")
+			setIfBroadcastReachBottom(false);
+			setReachedBottom(true);
+		}
+	}, [scrollPosition]);
 
 	function onScollToTop() {
 		scrollRef?.current?.scroll({
@@ -46,17 +65,23 @@ const AdvancedScrollAreaProvider = ({ children }: any) => {
 		});
 	}
 
+	function _setIfBroadcastReachBottom(x: boolean) {
+		setReachedBottom(false);
+		setIfBroadcastReachBottom(x);
+	}
 	return (
 		<StoreContext.Provider
 			value={{
 				scrollPosition: scrollPosition,
 				onScrollPositionChange,
 				scrollRef,
+				reachedBottm: ReachedBottom,
 			}}
 		>
 			<DispatchContext.Provider
 				value={{
 					scrollToTop: onScollToTop,
+					setIfBroadcastReachBottom: _setIfBroadcastReachBottom,
 				}}
 			>
 				<Box

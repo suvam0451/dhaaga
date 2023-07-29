@@ -99,11 +99,11 @@ export const DangerouslySetHTML = styled.div`
 `;
 
 // prettier-ignore
-export const PostInteractionElement = styled(Box)<BoxProps & { active?: boolean; activeBg?: string }>`
+export const PostInteractionElement = styled(Box)<BoxProps & { active?: boolean; activebg?: string }>`
 	display: flex;
-  color: ${(props) => props.active ? props.activeBg : "#777" };
+  color: ${(props) => props.active ? props.activebg : "#777" };
 	&:hover {
-		color: ${(props) => props.active ? "#777" : props.activeBg };
+		color: ${(props) => props.active ? "#777" : props.activebg };
 	}
 	& > svg {
 		color: inherit;

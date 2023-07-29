@@ -72,8 +72,8 @@ function AccountListByProvider({ domain }: { domain: string }) {
 	}
 	return (
 		<Box ml={"md"}>
-			{AccountList.map((o) => (
-				<HighlightOnHover>
+			{AccountList.map((o, i) => (
+				<HighlightOnHover key={i}>
 					<ProfilePicSearchResult>
 						{o.credentials?.find(
 							(o) => o.credential_type === "profile_pic_url"

@@ -4,13 +4,28 @@ import { useAdvancedScrollAreaProviderHook } from "../../contexts/AdvancedScroll
 import { MastodonTimelinesProviderHook } from "../../contexts/MastodonTimeline";
 import { useEffect } from "react";
 import { TextSubtitle } from "../../styles/Mastodon";
+import { useTimeout } from "@mantine/hooks";
 
 function TimelineRenderer() {
 	const { store, dispatch } = MastodonTimelinesProviderHook();
-	const { dispatch: scrollDispatch } = useAdvancedScrollAreaProviderHook();
+	const { store: scrollStore, dispatch: scrollDispatch } =
+		useAdvancedScrollAreaProviderHook();
 	function onLinkAccessAttempt(s: string) {
 		console.log("trying to access", s);
 	}
+
+	useEffect(() => {
+		if (scrollStore.reachedBottm) {
+			scrollDispatch.setIfBroadcastReachBottom(false);
+			dispatch.fetchMore();
+		}
+	}, [scrollStore.reachedBottm]);
+
+	useEffect(() => {
+		if (store.posts.length > 0 && store.posts.length < 100) {
+			scrollDispatch.setIfBroadcastReachBottom(true);
+		}
+	}, [store.posts]);
 
 	useEffect(() => {
 		// redirect all hrefs
@@ -43,15 +58,14 @@ function TimelineRenderer() {
 		>
 			<TextSubtitle mb={"md"}>
 				Showing for first {(store.page - 1) * 100}-
-				{(store.page - 1) * 100 + store.posts.length} results
+				{store.posts && (store.page - 1) * 100 + store.posts.length} results
 			</TextSubtitle>
-			{store.posts?.map((o, i) => (
-				<MastadonPostListing key={i} post={o} />
-			))}
+			{store.posts &&
+				store.posts.map((o, i) => <MastadonPostListing key={i} post={o} />)}
 			<Button
 				onClick={async () => {
-					if (store.posts.length >= 100) {
-						await scrollDispatch.scrollToTop();
+					if (store.posts && store.posts.length >= 100) {
+						// await scrollDispatch.scrollToTop();
 						await dispatch.fetchNextPage();
 					} else {
 						dispatch.fetchMore();
@@ -59,7 +73,9 @@ function TimelineRenderer() {
 				}}
 				loading={store.loading}
 			>
-				{store.posts.length >= 100 ? "Load Next Page" : "Load More..."}
+				{store.posts && store.posts.length >= 100
+					? "Load Next Page"
+					: "Loading More..."}
 			</Button>
 		</Box>
 	);

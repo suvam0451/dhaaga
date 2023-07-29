@@ -90,7 +90,7 @@ function LatestTabRenderer() {
 					return <Box h={"100%"} key={i}></Box>;
 				}
 				return (
-					<Box mx={"0.25rem"} h={"100%"}>
+					<Box mx={"0.25rem"} h={"100%"} key={i}>
 						<Component key={i} index={i} query={item.query} />{" "}
 					</Box>
 				);
