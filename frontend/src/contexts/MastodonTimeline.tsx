@@ -56,6 +56,11 @@ function MastodonTimelinesProvider({ children }: any) {
 		useState<StoreType>(storeDefault);
 
 	useEffect(() => {
+		setMastodonUserStatuses({
+			...MastodonUserStatuses,
+			loading: true,
+		});
+
 		const account = providerAuth.selectedAccount;
 		const token = providerAuth.loggedInCredentials["accessToken"];
 
@@ -79,6 +84,7 @@ function MastodonTimelinesProvider({ children }: any) {
 					minId: nextMinId,
 					maxId: nextMaxId,
 					firstLoadFinished: true,
+					loading: false,
 					page: 1,
 				});
 			})

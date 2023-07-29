@@ -14,6 +14,14 @@ function TimelineRenderer() {
 		console.log("trying to access", s);
 	}
 
+	/**
+	 * NOTE: this avoids a deadlock in development
+	 * environment
+	 */
+	useEffect(() => {
+		scrollDispatch.setIfBroadcastReachBottom(false);
+	}, []);
+
 	useEffect(() => {
 		if (scrollStore.reachedBottm) {
 			scrollDispatch.setIfBroadcastReachBottom(false);
@@ -65,12 +73,13 @@ function TimelineRenderer() {
 			<Button
 				onClick={async () => {
 					if (store.posts && store.posts.length >= 100) {
-						// await scrollDispatch.scrollToTop();
+						await scrollDispatch.scrollToTop();
 						await dispatch.fetchNextPage();
 					} else {
 						dispatch.fetchMore();
 					}
 				}}
+				mt={"md"}
 				loading={store.loading}
 			>
 				{store.posts && store.posts.length >= 100

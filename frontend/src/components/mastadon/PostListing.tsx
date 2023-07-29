@@ -126,7 +126,7 @@ function MastadonPostListing({ post }: { post: mastodon.v1.Status }) {
 						<PostOwnerImage src={post.account.avatar} />
 						<Flex justify={"space-between"} w={"100%"}>
 							<Flex direction={"column"} ml={"0.5rem"}>
-								<Flex align={"flex-end"} justify={"flex-end"}>
+								<Flex align={"flex-end"} justify={"flex-start"}>
 									<TextTitle lineClamp={1} maw={200}>
 										{post?.account?.displayName || post.account.username}
 									</TextTitle>
