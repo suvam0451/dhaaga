@@ -1,5 +1,5 @@
 {
-  "name": "prototype-instagram-threads-browser",
+  "name": "dhaaga",
   "version": "0.4.0",
   "description": "A prototype multi-threaded desktop app to browse Instagram threads, built with go and web technologies.",
   "main": "index.js",
@@ -9,5 +9,8 @@
     "dev": "wails dev -debounce 5000"
   },
   "author": "Debashish Patra",
-  "license": "AGPL"
+  "license": "AGPL",
+  "resolutions": {
+		"styled-components": "^5"
+	}
 }

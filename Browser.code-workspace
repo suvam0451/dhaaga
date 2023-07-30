@@ -9,6 +9,10 @@
 			"path": "frontend"
 		},
 		{
+			"name": "Website",
+			"path": "website"
+		},
+		{
 			"name": "Interop Guide",
 			"path": "frontend/wailsjs/go",
 		}
