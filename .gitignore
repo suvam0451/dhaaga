@@ -8,3 +8,4 @@ frontend/tsconfig.tsbuildinfo
 **/.DS_Store
 frontend/.env
 frontend/.env.**
+.yarn/*

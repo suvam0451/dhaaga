@@ -3,14 +3,17 @@
   "version": "0.4.0",
   "description": "A prototype multi-threaded desktop app to browse Instagram threads, built with go and web technologies.",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "standard-version",
-    "dev": "wails dev -debounce 5000"
+    "dev2": "wails dev -debounce 5000",
+    "dev": "pnpm --stream -r dev"
   },
   "author": "Debashish Patra",
   "license": "AGPL",
-  "resolutions": {
-		"styled-components": "^5"
-	}
+  "workspaces": [
+    "website",
+    "frontend"
+  ]
 }
