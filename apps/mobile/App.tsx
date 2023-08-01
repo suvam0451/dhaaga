@@ -1,108 +1,93 @@
-import { StatusBar } from "expo-status-bar";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, StatusBar, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "./screens/HomeScreen";
 import SearchScreen from "./screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { FontAwesome } from "@expo/vector-icons";
 import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
 import AccountsScreen from "./screens/AccountsScreen";
 import { Animated } from "react-native";
+import { useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components/native";
+import { getCloser } from "./utils";
+import Header from "./components/Header";
+// import ListItem from "./components/ListItem";
+
+const { diffClamp } = Animated;
+const HIDDEN_SECTION_HEIGHT = 100;
+const SHOWN_SECTION_HEIGHT = 50;
 
 const Tab = createBottomTabNavigator();
 
-const HeaderComponent = styled.View`
-	background-color: black;
-	color: #fff;
-	height: 56px;
-	position: absolute;
-	right: 0;
-	left: 0;
-	align-items: center;
-	justify-content: center;
-`;
-
 export default function App() {
-	const SCROLL_Y = useRef(new Animated.Value(0)).current;
-	const OFFSET_ANIM = useRef(new Animated.Value(0)).current;
+	const ref = useRef(null);
 
-	const CONTAINER_HEIGHT = 56;
-	const clampedScroll = Animated.diffClamp(
-		Animated.add(
-			SCROLL_Y.interpolate({
-				inputRange: [0, 1],
-				outputRange: [0, 1],
-				extrapolateLeft: "clamp",
-			}),
-			OFFSET_ANIM
-		),
+	const scrollY = useRef(new Animated.Value(0));
+	const scrollYClamped = diffClamp(
+		scrollY.current,
 		0,
-		CONTAINER_HEIGHT
+		HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
 	);
 
-	var _clampedScrollValue = 0;
-	var _offsetValue = 0;
-	var _scrollValue = 0;
-
-	useEffect(() => {
-		SCROLL_Y.addListener(({ value }) => {
-			const diff = value - _scrollValue;
-			_scrollValue = value;
-			_clampedScrollValue = Math.min(
-				Math.max(_clampedScrollValue + diff, 0),
-				CONTAINER_HEIGHT
-			);
-		});
-
-		OFFSET_ANIM.addListener(({ value }) => {
-			_offsetValue = value;
-		});
-	}, []);
-
-	const headerTranslate = clampedScroll.interpolate({
-		inputRange: [0, CONTAINER_HEIGHT],
-		outputRange: [0, -CONTAINER_HEIGHT],
-		extrapolate: "clamp",
+	const translateY = scrollYClamped.interpolate({
+		inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
+		outputRange: [0, -HIDDEN_SECTION_HEIGHT],
 	});
 
-	let scrollEndTimer = null;
-	const onMomentumScrollBegin = () => {
-		clearTimeout(scrollEndTimer);
-	};
-	const onMomentumScrollEnd = () => {
-		const toValue =
-			_scrollValue > CONTAINER_HEIGHT &&
-			_clampedScrollValue > CONTAINER_HEIGHT / 2
-				? _offsetValue + CONTAINER_HEIGHT
-				: _offsetValue - CONTAINER_HEIGHT;
+	const translateYNumber = useRef();
 
-		Animated.timing(OFFSET_ANIM, {
-			toValue,
-			duration: 500,
+	translateY.addListener(({ value }) => {
+		translateYNumber.current = value;
+	});
+
+	const handleScroll = Animated.event(
+		[
+			{
+				nativeEvent: {
+					contentOffset: { y: scrollY.current },
+				},
+			},
+		],
+		{
 			useNativeDriver: true,
-		}).start();
+		}
+	);
+
+	/**
+	 * When scroll view has stopped moving,
+	 * snap to the nearest section
+	 * @param param0
+	 */
+	const handleSnap = ({ nativeEvent }) => {
+		const offsetY = nativeEvent.contentOffset.y;
+		if (
+			!(
+				translateYNumber.current === 0 ||
+				translateYNumber.current === -HIDDEN_SECTION_HEIGHT
+			)
+		) {
+			if (ref.current) {
+				try {
+					/**
+					 * ScrollView --> scrollo ???
+					 * FlatView --> scrollToOffset({offset: number}})
+					 */
+					ref.current.scrollTo({
+						// applies only for flat list
+						offset:
+							getCloser(translateYNumber.current, -HIDDEN_SECTION_HEIGHT, 0) ===
+							-HIDDEN_SECTION_HEIGHT
+								? offsetY + HIDDEN_SECTION_HEIGHT
+								: offsetY - HIDDEN_SECTION_HEIGHT,
+					});
+				} catch (e) {
+					console.log("[WARN]: component is not a flat list");
+				}
+			}
+		}
 	};
-	const onScrollEndDrag = () => {
-		scrollEndTimer = setTimeout(onMomentumScrollEnd, 250);
-	};
 
-	const [ScrollY, setScrollY] = useState(0);
-
-	// let AnimatedHeaderHeightValue = new Animated.Value(0);
-	// const HEADER_MAX_HEIGHT = 150;
-	// const HEADER_MIN_HEIGHT = 50;
-
-	// const animatedHeaderHeight = AnimatedHeaderHeightValue.interpolate({
-	// 	inputRange: [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT],
-	// 	outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
-	// 	extrapolate: "clamp",
-	// });
 	return (
 		<NavigationContainer>
 			<Tab.Navigator
@@ -126,57 +111,39 @@ export default function App() {
 							iconName = focused ? "person-outline" : "person-outline";
 						}
 
-						// You can return any component that you like here!
 						return <Ionicons name={iconName} size={size} color={color} />;
 					},
 					tabBarActiveTintColor: "tomato",
 					tabBarInactiveTintColor: "gray",
 					tabBarShowLabel: false,
 					headerShown: false,
-					// header: () => {
-					// 	return <SafeAreaView></SafeAreaView>;
-					// },
 				})}
 			>
 				<Tab.Screen
 					name="Home"
 					component={() => {
 						return (
-							<SafeAreaView>
-								<View style={{ position: "relative" }}>
-									<Animated.View
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											height: CONTAINER_HEIGHT,
-											transform: [{ translateY: headerTranslate }],
-											backgroundColor: "black",
-										}}
-									>
-										<Text style={{ color: "white" }}>HEllo</Text>
-									</Animated.View>
-								</View>
-
-								<ScrollView
-									scrollEventThrottle={1}
-									onScroll={Animated.event(
-										[
-											{
-												nativeEvent: {
-													contentOffset: { y: SCROLL_Y },
-												},
-											},
-										],
-										{ useNativeDriver: false }
-									)}
-									onMomentumScrollBegin={onMomentumScrollBegin}
-									onMomentumScrollEnd={onMomentumScrollEnd}
-									onScrollEndDrag={onScrollEndDrag}
-									style={{ paddingTop: CONTAINER_HEIGHT }}
+							<SafeAreaView style={styles.container}>
+								<StatusBar backgroundColor="#1c1c1c" />
+								<Animated.View
+									style={[styles.header, { transform: [{ translateY }] }]}
 								>
-									<HomeScreen ScrollY={ScrollY} setScrollYValue={setScrollY} />
-								</ScrollView>
+									<Header
+										SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
+										HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
+									/>
+								</Animated.View>
+								<Animated.ScrollView
+									contentContainerStyle={{
+										paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
+									}}
+									onScroll={handleScroll}
+									ref={ref}
+									onMomentumScrollEnd={handleSnap}
+									scrollEventThrottle={16}
+								>
+									<View style={{ height: 2000 }}></View>
+								</Animated.ScrollView>
 							</SafeAreaView>
 						);
 					}}
@@ -192,10 +159,21 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+	header: {
+		position: "absolute",
+		backgroundColor: "#1c1c1c",
+		left: 0,
+		right: 0,
+		width: "100%",
+		zIndex: 1,
+	},
+	subHeader: {
+		height: SHOWN_SECTION_HEIGHT,
+		width: "100%",
+		paddingHorizontal: 10,
+	},
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
+		backgroundColor: "#000",
 	},
 });

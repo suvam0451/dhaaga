@@ -12,6 +12,7 @@
     "@expo/vector-icons": "^13.0.0",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
+    "@react-navigation/stack": "^6.3.17",
     "@types/react": "~18.2.14",
     "expo": "~49.0.5",
     "expo-status-bar": "~1.6.0",
@@ -20,6 +21,7 @@
     "react-native-reanimated": "~3.3.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
+    "react-native-svg": "^13.10.0",
     "styled-components": "^6.0.5",
     "typescript": "^5.1.3"
   },
