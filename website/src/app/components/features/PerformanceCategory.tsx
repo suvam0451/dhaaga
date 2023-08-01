@@ -1,14 +1,12 @@
-import { Box, Button, Flex, Text } from "@mantine/core";
-import Image from "next/image";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { useMemo, useState } from "react";
 
 // assets
 import GalleryStyleSearchModuleShowcase from "../../../../../assets/client-showcase/Search_Showcase.png";
 import DesktopGallery from "../../../../../assets/desktop-showcase/Three_Column_Full_Size.png";
-import { useMemo, useState } from "react";
 import { ScrollImageHorizontallyOnHover } from "@/app/styles/App";
+import { Box, Flex, Text } from "@mantine/core";
 
-function QolCategory() {
+function PerformanceCategory() {
 	const [SelectedCard, setSelectedCard] = useState("media-gallery");
 
 	const ImageToShow: Record<string, any> = {
@@ -33,19 +31,20 @@ function QolCategory() {
 		() => ImageToShow[SelectedCard],
 		[SelectedCard]
 	);
+
 	return (
 		<Flex justify={"space-between"} w={"100%"}>
 			<Box color={"red"} maw={450}>
 				<Text size={16} color={"red"}>
-					Convenience
+					Productivity
 				</Text>
-				<Text size={28}>Every workflow is designed to be</Text>
+				<Text size={28}>Every integration is designed to be</Text>
 				<Text size={28} color={"red"}>
-					effortless and easy
+					{"utilitarian and hella' fun"}
 				</Text>
 				<Text>
-					Improve the way you browse social networks, be it with your mouse or
-					your keyboard.
+					Go beyond your community. Explore new art and cultures with AI powered
+					explanations.
 				</Text>
 
 				<Box
@@ -60,52 +59,53 @@ function QolCategory() {
 						color={"black"}
 						style={{ fontWeight: 600, fontSize: "0.875rem" }}
 					>
-						Media Gallery
+						AI Powered Explanations
 					</Text>
 					<Text color={"gray"} style={{ fontSize: "0.875rem" }}>
 						{
-							'"Media Only" timeline columns gets a new rework. Navigate gallery-style view with your keyboards.'
+							"No more missing out because of language/context barriers. ChatGPT integration comes to the rescue!"
 						}
 					</Text>
 				</Box>
 
 				<Box
-					mt={"md"}
+					my={"md"}
 					bg={"#fff"}
 					style={{ padding: "1rem" }}
 					onClick={() => {
-						setSelectedCard("three-column-layout");
+						setSelectedCard("media-gallery");
 					}}
 				>
 					<Text
 						color={"black"}
 						style={{ fontWeight: 600, fontSize: "0.875rem" }}
 					>
-						Three Column Layout
+						Background Task Runners
 					</Text>
 					<Text color={"gray"} style={{ fontSize: "0.875rem" }}>
 						{
-							"Perfect balance ⚖️ between the old-school multi-column layouts and newer single-column zen layouts."
+							"Run background tasks (Stream PeerTube 😉) from one account, while browsing posts from another."
 						}
 					</Text>
 				</Box>
+
 				<Box
-					mt={"md"}
+					my={"md"}
 					bg={"#fff"}
 					style={{ padding: "1rem" }}
 					onClick={() => {
-						setSelectedCard("scroll-to-top");
+						setSelectedCard("media-gallery");
 					}}
 				>
 					<Text
 						color={"black"}
 						style={{ fontWeight: 600, fontSize: "0.875rem" }}
 					>
-						Scroll to Top
+						Multi-Protocol Support
 					</Text>
 					<Text color={"gray"} style={{ fontSize: "0.875rem" }}>
 						{
-							"Every relevant column loads new set of posts automatically. A handy scroll-to-top button makes."
+							"Your protocol got emojis? What a coincidence. We got em' too 😎. Switch protocols/accounts at any time, from any page."
 						}
 					</Text>
 				</Box>
@@ -136,7 +136,11 @@ function QolCategory() {
 						objectFit="contain"
 						src={SelectedComponent.image}
 						alt={"showcase"}
-						style={{ boxShadow: "2px 2px", border: "4px solid #333", borderRadius: "0.25rem", }}
+						style={{
+							boxShadow: "2px 2px",
+							border: "4px solid #333",
+							borderRadius: "0.25rem",
+						}}
 						moveby={SelectedComponent.scrollBy}
 					/>
 				</Flex>
@@ -149,4 +153,4 @@ function QolCategory() {
 	);
 }
 
-export default QolCategory;
+export default PerformanceCategory;

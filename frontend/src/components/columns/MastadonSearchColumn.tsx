@@ -117,7 +117,7 @@ function MastadonSearchColumn({ index, query }: ColumnGeneratorProps) {
 						</Tabs.Panel>
 						<Tabs.Panel value="posts">
 							{data &&
-								data.statuses.map((o, i) => <MastadonPostListing key={i} post={o!} />)}
+								data.statuses.map((o, i) => <MastadonPostListing key={i} post={o!} index={i} />)}
 						</Tabs.Panel>
 					</Tabs>
 				</Flex>

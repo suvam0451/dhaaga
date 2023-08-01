@@ -7,9 +7,11 @@ import { FaRetweet } from "react-icons/fa";
 function RebloggedPost({
 	post,
 	repostedBy,
+	index
 }: {
 	repostedBy: mastodon.v1.Account;
 	post: mastodon.v1.Status;
+	index: number
 }) {
 	return (
 		<Box h={"100%"} pt={"md"}>
@@ -18,7 +20,7 @@ function RebloggedPost({
 				<PostBoosterImage src={repostedBy.avatar} />
 				<TextSubtitle ml={"4px"}>{repostedBy.displayName} boosted</TextSubtitle>
 			</Flex>
-			<MastadonPostListing post={post!} reblogged />
+			<MastadonPostListing post={post!} reblogged index={index} />
 		</Box>
 	);
 }

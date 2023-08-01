@@ -50,7 +50,7 @@ function MastadonPostDetails({ index, query }: ColumnGeneratorProps) {
 						transitionDuration={500}
 						w={"100%"}
 					/>
-					{data && <MastadonPostListing post={data} />}
+					{data && <MastadonPostListing post={data} index={0} />}
 					{data && <MastadonStatusInteractions post={data} />}
 				</AdvancedScrollArea>
 			</AdvancedScrollAreaProvider>

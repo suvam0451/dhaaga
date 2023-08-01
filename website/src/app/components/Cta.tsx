@@ -11,7 +11,7 @@ function IntroComponent() {
 			</Text>
 			<Text mt={"lg"} style={{ fontSize: "16px" }}>
 				Dhaaga client is an all-in-one fediverse browsing client with support
-				for multiple protocols, great design and boatloads of utility features,
+				for multiple protocols, intuitive design and boatloads of utility features,
 				repacked for your with features.
 			</Text>
 			<Button mt={"md"}>Quick Start</Button>

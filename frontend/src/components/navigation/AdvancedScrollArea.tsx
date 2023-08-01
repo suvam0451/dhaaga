@@ -1,6 +1,8 @@
 import { Box, Flex, ScrollArea } from "@mantine/core";
 import { IconChevronUp } from "@tabler/icons-react";
 import { useAdvancedScrollAreaProviderHook } from "../../contexts/AdvancedScrollArea";
+import { useEffect, useRef } from "react";
+import { useInViewHook } from "../../contexts/IntersectionContext";
 
 /**
  * Parent component must be wrapped with
@@ -16,6 +18,21 @@ function AdvancedScrollArea({
 	loading?: boolean;
 }) {
 	const { store, dispatch } = useAdvancedScrollAreaProviderHook();
+	const { store: inViewStore, dispatch: inViewDispatch } = useInViewHook();
+	const scrollbarRef = useRef(null);
+
+	useEffect(() => {
+		if (!scrollbarRef.current) return;
+		console.log("setting scrollbar ref", scrollbarRef.current)
+		inViewDispatch.setScrollbarRef(scrollbarRef);
+	}, [scrollbarRef.current]);
+
+	// useEffect(() => {
+	// 	if (!store?.scrollRef.current) return;
+	// 	console.log("setting scrollbar ref", store?.scrollRef.current)
+	// 	inViewDispatch.setScrollbarRef(store?.scrollRef);
+	// }, [store?.scrollRef]);
+
 	return (
 		<ScrollArea
 			h={"100%"}
@@ -23,6 +40,7 @@ function AdvancedScrollArea({
 			viewportRef={store?.scrollRef || null}
 			onScrollPositionChange={store.onScrollPositionChange}
 			offsetScrollbars
+			ref={scrollbarRef}
 		>
 			<Box
 				pos={"absolute"}

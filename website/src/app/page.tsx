@@ -6,6 +6,8 @@ import IntroComponent from "./components/Cta";
 import QolCategory from "./components/features/QolCategory";
 import { Divider, Flex } from "@mantine/core";
 import { MainContainer, RootContainer } from "./styles/App";
+import IntegrationCategory from "./components/features/IntegrationCategory";
+import PerformanceCategory from "./components/features/PerformanceCategory";
 
 export default function Home() {
 	return (
@@ -19,6 +21,14 @@ export default function Home() {
 					<Divider my={"4em"} />
 					<Flex>
 						<QolCategory />
+					</Flex>
+					<Divider my={"4em"} />
+					<Flex>
+						<IntegrationCategory />
+					</Flex>
+					<Divider my={"4em"} />
+					<Flex>
+						<PerformanceCategory />
 					</Flex>
 
 					<div className={styles.center}>

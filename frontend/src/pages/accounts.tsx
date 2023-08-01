@@ -18,7 +18,7 @@ import MastadonLogo from "../assets/icons/Logo_Mastodon.svg";
 import MetaLogo from "../assets/icons/Logo_Threads.svg";
 import MisskeyLogo from "../assets/icons/Logo_Misskey.svg";
 
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+// import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { TextSubtitle, TextTitle } from "../styles/Mastodon";
 import { AuthProvider_SelectItem } from "../styles/App";
 import MastadonOnboarding from "../components/onboarding/auth/Mastadon";
@@ -32,7 +32,7 @@ interface Provider_selectItem_Props
 	value: string;
 	label: string;
 	displayName: string;
-	icon: ReactJSXElement;
+	icon: any;
 	description: string;
 }
 

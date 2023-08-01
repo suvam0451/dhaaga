@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "standard-version",
     "dev2": "wails dev -debounce 5000",
-    "dev": "pnpm --stream -r dev"
+    "dev": "pnpm --stream -r dev",
+    "dev:website": "pnpm --filter website --stream -r dev"
   },
   "author": "Debashish Patra",
   "license": "AGPL",

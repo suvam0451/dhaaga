@@ -12,6 +12,7 @@
     "@mantine/carousel": "^6.0.17",
     "@mantine/core": "^6.0.17",
     "@mantine/hooks": "^6.0.17",
+    "@tabler/icons-react": "^2.24.0",
     "embla-carousel-react": "^7.0.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",

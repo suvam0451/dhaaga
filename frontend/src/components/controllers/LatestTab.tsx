@@ -16,6 +16,10 @@ import { useLocation } from "react-router-dom";
 import { ModuleAuthHook } from "../../contexts/AuthContext";
 import Status from "../columns/mastadon/Status";
 
+/**
+ * Renders columns for the three-column layout
+ * @returns 
+ */
 function LatestTabRenderer() {
 	const dispatch = useDispatch<AppDispatch>();
 	const { store: moduleAuthStore, dispatch: moduleAuthDispatch } =

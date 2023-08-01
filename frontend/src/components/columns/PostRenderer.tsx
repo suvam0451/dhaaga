@@ -54,7 +54,7 @@ function PostRenderer() {
 				{(store.page - 1) * 100 + store.posts.length} results
 			</Text>
 			{store.posts?.map((o, i) => (
-				<MastadonPostListing key={i} post={o} />
+				<MastadonPostListing key={i} post={o} index={i} />
 			))}
 			<LoadingStatusIndicator
 				loading={store.loading}

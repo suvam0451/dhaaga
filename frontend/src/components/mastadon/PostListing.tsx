@@ -30,18 +30,45 @@ import RebloggedPost from "./post/RebloggedPost";
 import { resolveProfileUrl } from "../../utils/Mastadon";
 import { NavigationManager } from "../../services/navigation-manager.service";
 import React from "react";
+import { useInView } from "react-intersection-observer";
+import { useInViewHook } from "../../contexts/IntersectionContext";
 
 function MastadonPostListing({
 	post,
 	reblogged,
+	index,
 }: {
 	post: mastodon.v1.Status;
 	reblogged?: boolean;
+	index: number;
 }) {
 	const dispatch = useDispatch<AppDispatch>();
 	const latestTabPushHistory = useSelector<RootState, LatestTabRendererState>(
 		(o) => o.latestTabPushHistory
 	);
+
+	const { store: inViewStore, dispatch: inViewDispatch } = useInViewHook();
+
+	const { ref, inView, entry } = useInView({
+		/* Optional options */
+		threshold: 0,
+
+	});
+
+
+	// useEffect(() => {
+	// 	console.log("visibility changed", inViewStore.inView)
+	// }, [inViewStore])
+	
+	useEffect(() => {
+		if(inView) {
+			inViewDispatch.add(index);
+		} else {
+			inViewDispatch.remove(index);
+		}
+
+		// console.log("item in view?", inView, ref, entry);
+	}, [inView]);
 
 	const [LocalState, setLocalState] = useState({
 		bookmarked: false,
@@ -109,7 +136,6 @@ function MastadonPostListing({
 			latestTabPushHistory.stack.length >= 2 &&
 			latestTabPushHistory.stack[1].type === COLUMNS.MASTODON_V1_PROFILE_OTHER
 		) {
-			console.log("there is a profile in page 1")
 			dispatch(
 				latestTabRendererSlice.actions.spliceStackAddItems({
 					index: 2,
@@ -144,14 +170,15 @@ function MastadonPostListing({
 
 	if (post && post.reblog !== undefined && post.reblog !== null) {
 		return (
-			<Box miw={"100%"} maw={COLUMN_MIN_WIDTH}>
-				<RebloggedPost post={post.reblog} repostedBy={post.account} />
+			<Box ref={ref} miw={"100%"} maw={COLUMN_MIN_WIDTH}>
+				<Text bg={"red"}>{index}</Text>
+				<RebloggedPost post={post.reblog} repostedBy={post.account} index={index} />
 			</Box>
 		);
 	}
 
 	return (
-		<React.Fragment>
+		<Box ref={ref}>
 			<MastadonStatusItem
 				miw={"100%"}
 				maw={COLUMN_MIN_WIDTH}
@@ -242,7 +269,7 @@ function MastadonPostListing({
 					</PostInteractionElement>
 				</Flex>
 			</MastadonStatusItem>
-		</React.Fragment>
+		</Box>
 	);
 }
 
