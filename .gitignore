@@ -9,3 +9,4 @@ frontend/tsconfig.tsbuildinfo
 frontend/.env
 frontend/.env.**
 .yarn/*
+apps/mobile/.env
