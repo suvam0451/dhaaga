@@ -119,35 +119,32 @@ export default function App() {
 					headerShown: false,
 				})}
 			>
-				<Tab.Screen
-					name="Home"
-					component={() => {
-						return (
-							<SafeAreaView style={styles.container}>
-								<StatusBar backgroundColor="#1c1c1c" />
-								<Animated.View
-									style={[styles.header, { transform: [{ translateY }] }]}
-								>
-									<Header
-										SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-										HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-									/>
-								</Animated.View>
-								<Animated.ScrollView
-									contentContainerStyle={{
-										paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
-									}}
-									onScroll={handleScroll}
-									ref={ref}
-									onMomentumScrollEnd={handleSnap}
-									scrollEventThrottle={16}
-								>
-									<View style={{ height: 2000 }}></View>
-								</Animated.ScrollView>
-							</SafeAreaView>
-						);
-					}}
-				/>
+				<Tab.Screen name="Home">
+					{(props) => (
+						<SafeAreaView style={styles.container}>
+							<StatusBar backgroundColor="#1c1c1c" />
+							<Animated.View
+								style={[styles.header, { transform: [{ translateY }] }]}
+							>
+								<Header
+									SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
+									HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
+								/>
+							</Animated.View>
+							<Animated.ScrollView
+								contentContainerStyle={{
+									paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
+								}}
+								onScroll={handleScroll}
+								ref={ref}
+								onMomentumScrollEnd={handleSnap}
+								scrollEventThrottle={16}
+							>
+								<View style={{ height: 2000 }}></View>
+							</Animated.ScrollView>
+						</SafeAreaView>
+					)}
+				</Tab.Screen>
 				<Tab.Screen name="Search" component={SearchScreen} />
 				<Tab.Screen name="Favourites" component={FavouritesScreen} />
 				<Tab.Screen name="Notifications" component={NotificationsScreen} />

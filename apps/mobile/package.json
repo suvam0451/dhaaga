@@ -1,7 +1,7 @@
 {
   "name": "awesomeproject",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "index.js",
   "scripts": {
     "dev": "expo start",
     "android": "expo start --android",
@@ -30,6 +30,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
+  },
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.71.7"
   },
   "private": true
 }
