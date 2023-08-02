@@ -7,6 +7,8 @@ import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
 import AccountsScreen from "./screens/AccountsScreen";
+import AccountsStack from "./screens/accounts";
+
 import { Animated } from "react-native";
 import { useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -148,7 +150,7 @@ export default function App() {
 				<Tab.Screen name="Search" component={SearchScreen} />
 				<Tab.Screen name="Favourites" component={FavouritesScreen} />
 				<Tab.Screen name="Notifications" component={NotificationsScreen} />
-				<Tab.Screen name="Accounts" component={AccountsScreen} />
+				<Tab.Screen name="Accounts" component={AccountsStack} />
 				<Tab.Screen name="Settings" component={SettingsScreen} />
 			</Tab.Navigator>
 		</NavigationContainer>
