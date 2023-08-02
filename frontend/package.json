@@ -1,5 +1,5 @@
 {
-	"name": "dhaaga-frontend",
+	"name": "@dhaaga/desktop-ui",
 	"private": true,
 	"version": "0.3.0",
 	"type": "module",

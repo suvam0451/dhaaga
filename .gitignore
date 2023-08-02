@@ -10,3 +10,5 @@ frontend/.env
 frontend/.env.**
 .yarn/*
 apps/mobile/.env
+
+.turbo/
