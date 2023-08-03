@@ -11,6 +11,7 @@ import {
 	RestServices,
 } from "@dhaaga/shared-provider-mastodon/dist";
 import { AccountsRepo } from "../../../libs/sqlite/repositories/accounts.repo";
+import { CredentialsRepo } from "../../../libs/sqlite/repositories/credentials.repo";
 
 function MastodonSignInStack({ route, navigation }) {
 	const [Code, setCode] = useState<string | null>(null);
@@ -60,11 +61,33 @@ function MastodonSignInStack({ route, navigation }) {
 		const verified =
 			await RestServices.v1.default.accounts.default.verifyCredentials(client);
 
-		AccountsRepo.add({
+		const accnt = await AccountsRepo.add({
 			subdomain: subdomain,
 			domain: "mastodon",
 			username: verified.username,
 		});
+
+		const creds = [
+			{
+				key: "display_name",
+				value: verified["display_name"],
+			},
+			{
+				key: "avatar",
+				value: verified["avatar_static"],
+			},
+			{
+				key: "url",
+				value: verified["url"],
+			},
+		];
+
+		for (const cred of creds) {
+			await CredentialsRepo.upsert(accnt, {
+				credential_type: cred.key,
+				credential_value: cred.value,
+			});
+		}
 
 		navigation.navigate("Select an Account");
 	}

@@ -1,4 +1,5 @@
 import db from "../_core";
+import { CredentialDTO } from "./credentials.repo";
 
 export type AccountCreateDTO = {
 	domain: string;
@@ -11,28 +12,75 @@ export type AccountCreateDTO = {
 
 export type AccountDTO = AccountCreateDTO & {
 	id: number;
-	credentials?: [];
+	credentials?: CredentialDTO[];
 };
 
 export class AccountsRepo {
+	static async search(account: AccountCreateDTO): Promise<AccountDTO | null> {
+		return new Promise((resolve, reject) => {
+			db.transaction(
+				(tx) => {
+					tx.executeSql(
+						`select * from accounts
+						WHERE domain = ? AND subdomain = ?
+						AND username = ?`,
+						[account.domain, account.subdomain, account.username],
+						(_, { rows }) => {
+							console.log("sample success", rows);
+							if (rows._array.length > 0) {
+								resolve(rows._array[0]);
+							} else {
+								resolve(null);
+							}
+						}
+					);
+				},
+				() => {
+					console.log("error block 1");
+					reject("Unknown error occured");
+				}
+			);
+		});
+	}
+
+	static async remove(id: number) {
+		db.transaction((tx) => {
+			tx.executeSql(
+				`delete from accounts
+			  WHERE id = ?`,
+				[id]
+			);
+		});
+	}
+
 	/**
 	 * upsert an account record
 	 * @param account
 	 */
 	static async add(account: AccountCreateDTO) {
+		const conflict = await this.search(account);
+		console.log("conflict is", conflict);
+		if (conflict) {
+			return conflict;
+		}
+
 		db.transaction((tx) => {
 			tx.executeSql(
 				`select * from accounts
-        WHERE domain = ? AND subdomain = ?
-        AND username = ?`,
+			  WHERE domain = ? AND subdomain = ?
+			  AND username = ?`,
 				[account.domain, account.subdomain, account.username],
-				(_, { rows }) => console.log("success 1", JSON.stringify(rows))
+				(_, { rows }) => console.log("success 1", JSON.stringify(rows)),
+				(_, error) => {
+					console.log("error", error);
+					return true;
+				}
 			);
 			tx.executeSql(
-				`insert into accounts 
-        (domain, subdomain, username, password, 
-          last_login_at, verified) 
-          values (?, ?, ?, ?, ?, ?)`,
+				`insert into accounts
+			  (domain, subdomain, username, password,
+			    last_login_at, verified)
+			    values (?, ?, ?, ?, ?, ?)`,
 				[
 					account.domain,
 					account.subdomain,
@@ -40,14 +88,37 @@ export class AccountsRepo {
 					account.password,
 					new Date(account.last_login_at).getTime(),
 					Number(account.verified || 0),
-				]
+				],
+				(_, { rows }) => console.log("success 2", JSON.stringify(rows)),
+				(_, error) => {
+					console.log("error", error);
+					return true;
+				}
 			);
 			tx.executeSql(
 				`select * from accounts
-        WHERE domain = ? AND subdomain = ?
-        AND username = ?`,
+			  WHERE domain = ? AND subdomain = ?
+			  AND username = ?`,
 				[account.domain, account.subdomain, account.username],
 				(_, { rows }) => console.log("success 2", JSON.stringify(rows))
+			);
+		});
+	}
+
+	static async get(): Promise<AccountDTO[]> {
+		return new Promise((resolve, reject) => {
+			db.transaction(
+				(tx) => {
+					tx.executeSql(`select * from accounts`, [], (_, { rows }) => {
+						resolve(rows._array);
+					});
+				},
+				() => {
+					reject("Unknown error occured");
+				},
+				() => {
+					reject("Unknown error occured");
+				}
 			);
 		});
 	}
