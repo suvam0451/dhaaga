@@ -97,12 +97,12 @@ This client is designed to be responsible and respectful and it is up to you to 
 
 <br/>
 
-## List of Features
+## ✨ List of Features
 
 ### New in v0.6.0
 
 <details>
- <summary>Auth workflow for Mastodon 🐘 + improved columns 🚀</summary>
+ <summary>Onboarding workflow for Mastodon 🐘 + Improved columns 🚀</summary>
 
 ### Summary
 
@@ -114,21 +114,21 @@ Features included:
 
 OAuth workflow for Mastodon is now supported.
 
-![](./assets/desktop-docs/mastodon-auth/Step3-Paste-Code-And-Create-Account.png)
-
----
+<p align="center">
+  <img width = "720px" height="auto" src="/assets/desktop-docs/mastodon-auth/Step3-Paste-Code-And-Create-Account.png" alt="Mastodon Auth">
+</p>
 
 ✨ Auto-Pagination feature for columns. Auto-Loading next set of posts in sets fo 20 is a nice QoL.
 
 However, to prevent memory issues, the user may only auto-scroll 100 posts. After that, the user will have to manually click to load the next set (100-200) of posts.
 
----
-
 ✨ **Snap Navigation:** The idea is to use arrow keys or in-app buttons to snap the tip of the column to the next/previous post. Example below, I use kyeboard to scroll through posts.
 
 The **Snap Navigation** feature is a unique selling point of this app, that I want to explore further.
 
-![](./assets/desktop-showcase/Snap-Navigation.gif)
+<p align="center">
+  <img width = "720px" height="auto" src="/assets/desktop-showcase/Snap-Navigation.gif" alt="Snap Navigation">
+</p>
 
 ### Key Learnings
 
@@ -154,6 +154,8 @@ const keyPressHandler = (e: any) => {
 ```
 
 </details>
+
+<br/>
 
 ### New in v0.5.0
 
@@ -194,6 +196,8 @@ It is quite an regular expression headache to
 
 </details>
 
+<br/>
+
 ### New in v0.4.0
 
 <details> 
@@ -206,6 +210,8 @@ Threads makes it very difficult to browse posts and discver new users from the d
 UPDATE: This section has been redacted, because I temporarily disabled auth support in v0.5.0 -- Third party instagram clients are a gray area and I do not have enough testing accounts to make this auth module robust for end users. Once I have more testing support, I will re-enable this feature.
 
 </details>
+
+<br/>
 
 ### New in v0.3.0 (First Public Release)
 
