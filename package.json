@@ -9,7 +9,9 @@
     "release": "standard-version",
     "dev2": "wails dev -debounce 5000",
     "dev": "pnpm --stream -r dev",
-    "dev:website": "pnpm --filter website --stream -r dev"
+    "turbo:dev": "turbo dev",
+    "dev:website": "pnpm --filter website --stream -r dev",
+    "dev:mobile": "pnpm --filter=\"...{./apps/mobile}\" -r dev"
   },
   "author": "Debashish Patra",
   "license": "AGPL",

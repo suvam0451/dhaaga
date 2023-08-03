@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"name": "Root",
-			"path": ".",
+			"path": "."
 		},
 		{
 			"name": "Frontend",
@@ -13,8 +13,12 @@
 			"path": "website"
 		},
 		{
+			"name": "Mobile",
+			"path": "apps/mobile"
+		},
+		{
 			"name": "Interop Guide",
-			"path": "frontend/wailsjs/go",
+			"path": "frontend/wailsjs/go"
 		}
 	],
 	"settings": {
