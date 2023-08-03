@@ -11,6 +11,19 @@ Currently supports Meta's [Threads](https://www.threads.net/) and [Mastodon](htt
 
 Special shotout to [The Wails Project](https://wails.io/) and it's creator [@leaanthony](https://github.com/leaanthony), without whose contribution in the go/js open source community, this project would not have been poossible.
 
+<br/>
+
+## Summary
+- [Vision](#vision)
+- [Disclaimer](#disclaimer)
+- [Features](#list-of-features)
+- [FAQ](#faq)
+- [Featured Roadmap](#feature-roadmap)
+- [Final Words](#final-words)
+- [License](#license)
+
+<br/>
+
 ## Vision
 
 ### What this app wants to be:
@@ -27,9 +40,55 @@ Special shotout to [The Wails Project](https://wails.io/) and it's creator [@lea
 - ❌ An alternative to the official apps (or third party alternatives thereof), with 100% feature coverage.
 - ❌ A content scraping tool.
 
+<br/>
+
+## How to install
+<div align="center">
+
+| OS | Download |
+|----|----------|
+| Windows | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-Windows-v0.4.0-installer.zip) |
+| MacOS Universal | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-MacOS-Universal-v0.4.0.zip) |
+| MacOS M1 | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-MacOS-M1-v0.4.0.zip) |
+
+</div>
+
+<br/>
+
+### Building on your own
+
+**Ensure you've [Node & NPM](https://nodejs.org/en/download) and [Go 1.18](https://go.dev/dl/) already installed**
+
+1. Install 'wails' CLI tool:
+```sh
+$ go install github.com/wailsapp/wails/v2/cmd/wails@latest
+```
+
+<br/>
+
+2. Building for your system (can take some time):
+```sh
+$ wails build
+```
+
+<br/>
+
+3. Moving builded binary/executable to a suitable location:
+#### MacOS
+```sh
+mv build/bin/Dhaaga <path> # Recommended paths indexed in $PATH env variable such as '/usr/bin/' or '~/.local/bin/'
+```
+
+#### Windows
+Just copy or cut 'build/bin/Dhaaga.exe' to any suitable location for easy access.
+
+<br/>
+
 ## Disclaimer
 
 This client is designed to be responsible and respectful and it is up to you to decide what you do with it. I don't claim any responsibility if any of your social media account is affected by how you use this client.
+
+<br/>
 
 ## List of Features
 
@@ -121,6 +180,8 @@ It is quite an regular expression headache to
 
 And many, many more to come :)
 
+<br/>
+
 ## FAQ
 
 Q. Looks good to me ! Where can I ping you for more features?
@@ -131,6 +192,8 @@ Q. Will you be supporting authenticated workflows?
 
 A. Well, writing and maintaining wrappers for multiple social media APIs is extremely time-consuming.
 However, thanks to the incredible work done by the open source community ([threads-api](https://github.com/junhoyeo/threads-api) by [@junhoyeo](https://github.com/junhoyeo) and co, [masto.js](https://github.com/neet/masto.js) by [@neet](https://github.com/neet) and co), I can solely focus on building the experience 💪.
+
+<br/>
 
 ## Feature Roadmap
 
@@ -144,6 +207,8 @@ Some features in immediate consideration are (sorted by priority):
 - ✨ [frontend] add threads-api support, to extend the posts that can be fetched
 - ✨ [worker] one click sync support, to populate all favourited feeds and delta patch the cache
 - ✨ ... or join [discord](https://discord.gg/k8Wzxea7) to suggest additional features 😇
+
+<br/>
 
 ## Final Words
 
@@ -160,6 +225,8 @@ In popular culture, strings are used to depict the basis of human interaction se
 If you find this project interesting, please consider starring it (⭐).
 
 I am a hardcore night owl bringing you interesting projects and stars in the sky 🌃 make burning the midnight oil feel worth it. 🙏
+
+<br/>
 
 ## License
 
