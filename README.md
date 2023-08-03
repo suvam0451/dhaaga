@@ -15,10 +15,11 @@ Special shotout to [The Wails Project](https://wails.io/) and it's creator [@lea
 
 ## Summary
 - [Vision](#vision)
+- [How to install](#how-to-install)
 - [Disclaimer](#disclaimer)
 - [Features](#list-of-features)
 - [FAQ](#faq)
-- [Featured Roadmap](#feature-roadmap)
+- [Feature Roadmap](#feature-roadmap)
 - [Final Words](#final-words)
 - [License](#license)
 
