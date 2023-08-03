@@ -8,12 +8,12 @@ Currently supports Meta's [Threads](https://www.threads.net/) and [Mastodon](htt
   <img width = "720px" height="auto" src="/assets/client-showcase/Project_Home.png" alt="Home Screen">
 </p>
 
-
 Special shotout to [The Wails Project](https://wails.io/) and it's creator [@leaanthony](https://github.com/leaanthony), without whose contribution in the go/js open source community, this project would not have been poossible.
 
 <br/>
 
 ## Summary
+
 - [Vision](#vision)
 - [How to install](#how-to-install)
 - [Disclaimer](#disclaimer)
@@ -44,13 +44,14 @@ Special shotout to [The Wails Project](https://wails.io/) and it's creator [@lea
 <br/>
 
 ## How to install
+
 <div align="center">
 
-| OS | Download |
-|----|----------|
-| Windows | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-Windows-v0.4.0-installer.zip) |
-| MacOS Universal | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-MacOS-Universal-v0.4.0.zip) |
-| MacOS M1 | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-MacOS-M1-v0.4.0.zip) |
+| OS              | Download                                                                                                     |
+| --------------- | ------------------------------------------------------------------------------------------------------------ |
+| Windows         | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-Windows-v0.4.0-installer.zip) |
+| MacOS Universal | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-MacOS-Universal-v0.4.0.zip)   |
+| MacOS M1        | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-MacOS-M1-v0.4.0.zip)          |
 
 </div>
 
@@ -61,6 +62,7 @@ Special shotout to [The Wails Project](https://wails.io/) and it's creator [@lea
 **Ensure you've [Node & NPM](https://nodejs.org/en/download) and [Go 1.18](https://go.dev/dl/) already installed**
 
 1. Install 'wails' CLI tool:
+
 ```sh
 $ go install github.com/wailsapp/wails/v2/cmd/wails@latest
 ```
@@ -68,6 +70,7 @@ $ go install github.com/wailsapp/wails/v2/cmd/wails@latest
 <br/>
 
 2. Building for your system (can take some time):
+
 ```sh
 $ wails build
 ```
@@ -75,12 +78,15 @@ $ wails build
 <br/>
 
 3. Moving builded binary/executable to a suitable location:
+
 #### MacOS
+
 ```sh
 mv build/bin/Dhaaga <path> # Recommended paths indexed in $PATH env variable such as '/usr/bin/' or '~/.local/bin/'
 ```
 
 #### Windows
+
 Just copy or cut 'build/bin/Dhaaga.exe' to any suitable location for easy access.
 
 <br/>
@@ -92,6 +98,62 @@ This client is designed to be responsible and respectful and it is up to you to 
 <br/>
 
 ## List of Features
+
+### New in v0.6.0
+
+<details>
+ <summary>Auth workflow for Mastodon 🐘 + improved columns 🚀</summary>
+
+### Summary
+
+I spent a lot of time to enhance column interactions and provide a decent authentication workflow for Mastodon users.
+
+Features included:
+
+✨ In-App Auth workflow for Mastodon
+
+OAuth workflow for Mastodon is now supported.
+
+![](./assets/desktop-docs/mastodon-auth/Step3-Paste-Code-And-Create-Account.png)
+
+---
+
+✨ Auto-Pagination feature for columns. Auto-Loading next set of posts in sets fo 20 is a nice QoL.
+
+However, to prevent memory issues, the user may only auto-scroll 100 posts. After that, the user will have to manually click to load the next set (100-200) of posts.
+
+---
+
+✨ **Snap Navigation:** The idea is to use arrow keys or in-app buttons to snap the tip of the column to the next/previous post. Example below, I use kyeboard to scroll through posts.
+
+The **Snap Navigation** feature is a unique selling point of this app, that I want to explore further.
+
+![](./assets/desktop-showcase/Snap-Navigation.gif)
+
+### Key Learnings
+
+After banging my head against a brick wall for hours, I now fully understand why useRef hook exists.
+
+State updates don't always work as expected, especially when a bunch of providers are wrapped around a component. The useEffect hooks may get triggered from modifications, but when you read the stole, you may get stale values.
+
+useRef is the best way to deal with these:
+
+```ts
+// this is a store/context provider (based on https://www.youtube.com/watch?v=5LrDIWkK_Bc)
+const { store: inViewStore, dispatch: inViewDispatch } = useInViewHook();
+// workaround to "copy" the store value to a ref
+const inViwStoreRef = useRef<any>();
+inViwStoreRef.current = inViewStore;
+
+const keyPressHandler = (e: any) => {
+	// ❌ stale data
+	console.log(inViewStore);
+	// ✅ fresh data
+	console.log(inViewStoreRef.current);
+};
+```
+
+</details>
 
 ### New in v0.5.0
 
@@ -130,11 +192,31 @@ It is quite an regular expression headache to
 - identify tags and usernames
 - and redirect them to internal resources of your app
 
+</details>
 
-### Next Update
+### New in v0.4.0
 
+<details> 
+ <summary>Profile Indexing for Threads (Needs Auth) + In-App Task Manager</summary>
+
+### Summary
+
+Threads makes it very difficult to browse posts and discver new users from the desktop. This update adds a task system to index all posts from a specific user in the background.
+
+UPDATE: This section has been redacted, because I temporarily disabled auth support in v0.5.0 -- Third party instagram clients are a gray area and I do not have enough testing accounts to make this auth module robust for end users. Once I have more testing support, I will re-enable this feature.
 
 </details>
+
+### New in v0.3.0 (First Public Release)
+
+<details>
+ <summary>Gallery View + User Favourites + Local Archival --> for Meta's Threads</summary>
+
+Alright. The new social media platform is in the town, and we are here to experience it from our desktops. But, threads does not have a desktop client. How can we fix that?
+
+Well, I am glad you asked. I have been working on a desktop client for threads for a while now. And I am happy to announce that the first public release is here.
+
+It allows searching, browsing and indexing posts and profiles, without the need for an account. And it is completely free and open source.
 
 ### Search Feature for Meta's Threads
 
@@ -174,12 +256,11 @@ It is quite an regular expression headache to
 - ✨ I try my best to design the app to be OSINT friendly for non-techie research scholars, who I am sure can make much better use of the data than me.
 - ✨ All features are opt-in. You can choose to not use the features that you don't want to use.
 
-
 <p align="center">
   <img width = "720px" height="auto" src="/assets/client-showcase/Showcase_Sqlite.png" alt="Sqlite Showcase">
 </p>
 
-And many, many more to come :)
+</details>
 
 <br/>
 
@@ -215,13 +296,11 @@ Some features in immediate consideration are (sorted by priority):
 
 `Dhaaga (धागा)` is a common word for `thread` `yarn` and `string` in Hindi.
 
-In popular culture, strings are used to depict the basis of human interaction self, with nature and each other. 
+In popular culture, strings are used to depict the basis of human interaction self, with nature and each other.
 
 ~~Also, I liked Kimi no na Wa and the name was mostly free in GitHub search results. Hence the name. 🤣~~
 
 ![Kimi no na Wa](/assets/client-showcase/Your_Name_Threads.jpg)
-
-
 
 If you find this project interesting, please consider starring it (⭐).
 

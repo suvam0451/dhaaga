@@ -38,9 +38,11 @@ function TimelineRenderer() {
 	const keyPressHandler = (e: any) => {
 		switch (e.keyCode) {
 			case 39: {
+				console.log(inViewStore)
 				if (!inViewStore.containerRef?.current) return;
 				const items = inViewStore.containerRef.current.children.length || 0;
 				const nextIdx = SecondSmallestInSet(inViewStore.inView, items);
+				console.log(nextIdx)
 				if (nextIdx === -1) return;
 
 				// const nextItems = inViewStore.containerRef.current.children[nextIdx];
@@ -61,8 +63,8 @@ function TimelineRenderer() {
 				if (nextIdx === -1) return;
 
 				const nextItem = inViewStore.containerRef.current.children[nextIdx];
-				console.log(nextItem);
-				var divTop = nextItem.getBoundingClientRect().bottom;
+				
+				var divTop = nextItem.getBoundingClientRect().top;
 				var scrollDivTop =
 					inViewStore.scrollbarRef?.current.getBoundingClientRect().top;
 
@@ -71,12 +73,15 @@ function TimelineRenderer() {
 				// to ensure that previous item is not in view
 				const SCROLL_PADDDING = 4;
 
+				console.log(inViewStore.scrollbarRef?.current.scrollTop, inViewStore.scrollbarRef?.current.scrollTop +
+					(divTop - scrollDivTop) +
+					SCROLL_PADDDING);
 				inViewStore.scrollbarRef?.current.scrollTo({
 					top:
 						inViewStore.scrollbarRef?.current.scrollTop +
 						(divTop - scrollDivTop) +
 						SCROLL_PADDDING,
-					behavior: "auto",
+					behavior: "smooth",
 				});
 				// console.log(elementTop, divTop);
 				// var delta = elementTop - divTop;

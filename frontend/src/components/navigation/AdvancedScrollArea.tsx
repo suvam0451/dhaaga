@@ -22,10 +22,10 @@ function AdvancedScrollArea({
 	const scrollbarRef = useRef(null);
 
 	useEffect(() => {
-		if (!scrollbarRef.current) return;
-		console.log("setting scrollbar ref", scrollbarRef.current)
-		inViewDispatch.setScrollbarRef(scrollbarRef);
-	}, [scrollbarRef.current]);
+		if (!store?.scrollRef.current) return;
+		console.log("setting scrollbar ref", store?.scrollRef.current)
+		inViewDispatch.setScrollbarRef(store?.scrollRef);
+	}, [store?.scrollRef.current]);
 
 	// useEffect(() => {
 	// 	if (!store?.scrollRef.current) return;
