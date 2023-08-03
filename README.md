@@ -155,8 +155,6 @@ const keyPressHandler = (e: any) => {
 
 </details>
 
-<br/>
-
 ### New in v0.5.0
 
 <details>
@@ -196,8 +194,6 @@ It is quite an regular expression headache to
 
 </details>
 
-<br/>
-
 ### New in v0.4.0
 
 <details> 
@@ -210,8 +206,6 @@ Threads makes it very difficult to browse posts and discver new users from the d
 UPDATE: This section has been redacted, because I temporarily disabled auth support in v0.5.0 -- Third party instagram clients are a gray area and I do not have enough testing accounts to make this auth module robust for end users. Once I have more testing support, I will re-enable this feature.
 
 </details>
-
-<br/>
 
 ### New in v0.3.0 (First Public Release)
 
