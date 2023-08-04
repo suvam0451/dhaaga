@@ -91,6 +91,11 @@ function SelectProviderStack({ navigation }) {
 									"linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))"
 								}
 								title={"Login"}
+								onPress={() => {
+									navigation.navigate("Add Misskey Account", {
+										type: "misskey",
+									});
+								}}
 							/>
 						</View>
 					</Card>

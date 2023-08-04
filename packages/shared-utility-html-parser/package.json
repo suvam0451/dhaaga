@@ -1,7 +1,6 @@
 {
-  "name": "@dhaaga/shared-provider-mastodon",
+  "name": "@dhaaga/shared-utility-html-parser",
   "version": "1.0.0",
-  "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,12 +11,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "axios": "^1.4.0",
-    "axios-case-converter": "^1.1.0",
-    "masto": "^6.0.5"
-  },
   "devDependencies": {
-    "tsup": "^7.1.0"
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "htmlparser2": "^9.0.0",
+    "mfm-js": "^0.23.3"
   }
 }

@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SearchScreen from "./screens/SearchScreen";
@@ -7,15 +7,14 @@ import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
 import AccountsStack from "./screens/accounts";
-
 import { Animated } from "react-native";
 import { useEffect, useRef } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { getCloser } from "./utils";
-import Header from "./components/Header";
 import { runMigrations } from "./libs/sqlite/_migrations";
 import { store } from "./libs/redux/store";
 import { Provider } from "react-redux";
+import HomeStack from "./screens/timelines";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const { diffClamp } = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;
@@ -96,72 +95,56 @@ export default function App() {
 		runMigrations();
 	}, []);
 
+	const queryClient = new QueryClient();
+
 	return (
-		<Provider store={store}>
-			<NavigationContainer>
-				<Tab.Navigator
-					screenOptions={({ route }) => ({
-						tabBarIcon: ({ focused, color, size }) => {
-							let iconName;
+		<QueryClientProvider client={queryClient}>
+			<Provider store={store}>
+				<NavigationContainer>
+					<Tab.Navigator
+						screenOptions={({ route }) => ({
+							tabBarIcon: ({ focused, color, size }) => {
+								let iconName;
 
-							if (route.name === "Home") {
-								iconName = focused ? "home" : "home";
-							} else if (route.name === "Settings") {
-								iconName = focused ? "menu-outline" : "menu-outline";
-							} else if (route.name === "Search") {
-								iconName = focused ? "search-sharp" : "search-sharp";
-							} else if (route.name === "Favourites") {
-								iconName = focused ? "bookmark-outline" : "bookmark-outline";
-							} else if (route.name === "Notifications") {
-								iconName = focused
-									? "notifications-outline"
-									: "notifications-outline";
-							} else if (route.name === "Accounts") {
-								iconName = focused ? "person-outline" : "person-outline";
-							}
+								if (route.name === "Home") {
+									iconName = focused ? "home" : "home";
+								} else if (route.name === "Settings") {
+									iconName = focused ? "menu-outline" : "menu-outline";
+								} else if (route.name === "Search") {
+									iconName = focused ? "search-sharp" : "search-sharp";
+								} else if (route.name === "Favourites") {
+									iconName = focused ? "bookmark-outline" : "bookmark-outline";
+								} else if (route.name === "Notifications") {
+									iconName = focused
+										? "notifications-outline"
+										: "notifications-outline";
+								} else if (route.name === "Accounts") {
+									iconName = focused ? "person-outline" : "person-outline";
+								}
 
-							return <Ionicons name={iconName} size={size} color={color} />;
-						},
-						tabBarActiveTintColor: "tomato",
-						tabBarInactiveTintColor: "gray",
-						tabBarShowLabel: false,
-						headerShown: false,
-					})}
-				>
-					<Tab.Screen name="Home">
-						{(props) => (
-							<SafeAreaView style={styles.container}>
-								<StatusBar backgroundColor="#1c1c1c" />
-								<Animated.View
-									style={[styles.header, { transform: [{ translateY }] }]}
-								>
-									<Header
-										SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-										HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-									/>
-								</Animated.View>
-								<Animated.ScrollView
-									contentContainerStyle={{
-										paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
-									}}
-									onScroll={handleScroll}
-									ref={ref}
-									onMomentumScrollEnd={handleSnap}
-									scrollEventThrottle={16}
-								>
-									<View style={{ height: 2000 }}></View>
-								</Animated.ScrollView>
-							</SafeAreaView>
-						)}
-					</Tab.Screen>
-					<Tab.Screen name="Search" component={SearchScreen} />
-					<Tab.Screen name="Favourites" component={FavouritesScreen} />
-					<Tab.Screen name="Notifications" component={NotificationsScreen} />
-					<Tab.Screen name="Accounts" component={AccountsStack} />
-					<Tab.Screen name="Settings" component={SettingsScreen} />
-				</Tab.Navigator>
-			</NavigationContainer>
-		</Provider>
+								return <Ionicons name={iconName} size={size} color={color} />;
+							},
+							tabBarStyle: {
+								paddingTop: 0,
+								borderTopWidth: 0,
+								backgroundColor: 'rgba(34,36,40,1)',
+							},
+							tabBarActiveTintColor: "white",
+							tabBarInactiveTintColor: "gray",
+							tabBarShowLabel: false,
+							headerShown: false,
+						})}
+					>
+						<Tab.Screen name="Home" component={HomeStack} />
+						<Tab.Screen name="Search" component={SearchScreen} />
+						<Tab.Screen name="Favourites" component={FavouritesScreen} />
+						<Tab.Screen name="Notifications" component={NotificationsScreen} />
+						<Tab.Screen name="Accounts" component={AccountsStack} />
+						<Tab.Screen name="Settings" component={SettingsScreen} />
+					</Tab.Navigator>
+				</NavigationContainer>
+			</Provider>
+		</QueryClientProvider>
 	);
 }
 

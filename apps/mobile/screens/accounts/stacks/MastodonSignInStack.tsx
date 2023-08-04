@@ -80,6 +80,10 @@ function MastodonSignInStack({ route, navigation }) {
 				key: "url",
 				value: verified["url"],
 			},
+			{
+				key: "access_token",
+				value: token,
+			},
 		];
 
 		for (const cred of creds) {

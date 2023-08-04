@@ -5,6 +5,8 @@ import SelectProviderStack from "./stacks/SelectProvider";
 import MastodonSignInStack from "./stacks/MastodonSignInStack";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import MisskeyServerSelection from "./stacks/Misskey/ServerSelection";
+import MisskeySignInStack from "./stacks/Misskey/SignIn";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +15,10 @@ function AccountsStack() {
 		// Select an Account
 		<Stack.Navigator initialRouteName={"Select an Account"}>
 			<Stack.Screen name="Add Mastodon Account" component={AddAccount} />
+			<Stack.Screen
+				name="Add Misskey Account"
+				component={MisskeyServerSelection}
+			/>
 			<Stack.Screen name="Select a Platform" component={SelectProviderStack} />
 			<Stack.Screen
 				name="Select an Account"
@@ -32,6 +38,11 @@ function AccountsStack() {
 			<Stack.Screen
 				name="Server Sign-In"
 				component={MastodonSignInStack}
+				options={{ animation: "none" }}
+			/>
+			<Stack.Screen
+				name="Misskey Sign-In"
+				component={MisskeySignInStack}
 				options={{ animation: "none" }}
 			/>
 		</Stack.Navigator>

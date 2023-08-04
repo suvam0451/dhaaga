@@ -25,6 +25,7 @@ function AccountListingFragment({ account }: AccountListingFragmentProps) {
 	useEffect(() => {
 		CredentialsRepo.getByAccountId(account.id).then((res) => {
 			setCredentials(res);
+			console.log(account.id, res)
 		});
 	}, [account.id]);
 
@@ -40,6 +41,11 @@ function AccountListingFragment({ account }: AccountListingFragmentProps) {
 		dispatch(accountSlice.actions.setAccount(o));
 		const creds = Credentials.filter((o) => o.account_id === account.id);
 		dispatch(accountSlice.actions.setCredentials(creds));
+	}
+
+	function onDeselectAccount(o: AccountDTO) {
+		dispatch(accountSlice.actions.setAccount(null));
+		dispatch(accountSlice.actions.setCredentials([]));
 	}
 
 	return (
@@ -61,6 +67,7 @@ function AccountListingFragment({ account }: AccountListingFragmentProps) {
 				{avatar && (
 					<View style={{ height: 48, width: 48 }}>
 						<Image
+							// @ts-ignore
 							style={styles.image}
 							source={avatar}
 							contentFit="fill"
@@ -84,14 +91,24 @@ function AccountListingFragment({ account }: AccountListingFragmentProps) {
 					alignItems: "center",
 				}}
 			>
-				{accountState.activeAccount?.id !== account.id && (
-					<TouchableOpacity
+				{accountState.activeAccount?.id !== account.id ? (
+					<Button
+						type="clear"
 						onPress={() => {
 							onSelectAccount(account);
 						}}
 					>
-						<Button type="clear">Select</Button>
-					</TouchableOpacity>
+						Select
+					</Button>
+				) : (
+					<Button
+						type="clear"
+						onPress={() => {
+							onDeselectAccount(account);
+						}}
+					>
+						Deselect
+					</Button>
 				)}
 
 				<Ionicons name="menu-outline" size={32} color="black" />

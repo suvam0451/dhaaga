@@ -27,6 +27,7 @@ function SelectAccountStack({ navigation }) {
 	}
 
 	const MastodonAccounts = Accounts.filter((o) => o.domain === "mastodon");
+	const MisskeyAccounts = Accounts.filter((o) => o.domain === "misskey");
 
 	return (
 		<View style={{ flex: 1, display: "flex" }}>
@@ -54,14 +55,17 @@ function SelectAccountStack({ navigation }) {
 						</Text>
 					</View>
 
-					{MastodonAccounts.map((o) => (
-						<AccountListingFragment account={o} />
+					{MastodonAccounts.map((o, i) => (
+						<AccountListingFragment key={i} account={o} />
 					))}
 				</View>
 				<Divider />
 				<View style={{ marginTop: 16, marginBottom: 16 }}>
 					<Text style={{ fontSize: 20, fontWeight: "500" }}>Misskey</Text>
 				</View>
+				{MisskeyAccounts.map((o, i) => (
+					<AccountListingFragment key={i} account={o} />
+				))}
 				<Divider />
 			</StandardView>
 			<StandardView style={{ marginBottom: 32 }}>
