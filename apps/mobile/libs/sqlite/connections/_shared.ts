@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 import * as SQLite from "expo-sqlite";
 
-function openDatabase(dbName = "db.db") {
+export function openDatabase(dbName = "db.activitypub") {
 	if (Platform.OS === "web") {
 		return {
 			transaction: () => {
@@ -20,6 +20,3 @@ function openDatabase(dbName = "db.db") {
 
 	return db;
 }
-
-const db = openDatabase();
-export default db;

@@ -60,8 +60,8 @@ var import_misskey_js = require("misskey-js");
 var import_react_native_uuid = __toESM(require("react-native-uuid"));
 var createClient = (instanceUrl, token) => {
   const cli = new import_misskey_js.api.APIClient({
-    origin: "https://misskey.test",
-    credential: "TOKEN"
+    origin: instanceUrl,
+    credential: token
   });
   return cli;
 };

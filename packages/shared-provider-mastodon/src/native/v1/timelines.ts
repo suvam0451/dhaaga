@@ -29,7 +29,6 @@ export default class TimelinesService {
 				},
 			});
 	
-			// console.log(res.data);
 			return res.data;
 		} catch(e) {
 			console.log(e)

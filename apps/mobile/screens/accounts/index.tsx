@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AddAccount from "./stacks/AddMastodonAccount";
 import SelectAccountStack from "./stacks/SelectAccount";
-import SelectProviderStack from "./stacks/SelectProvider";
-import MastodonSignInStack from "./stacks/MastodonSignInStack";
+import SelectProvider from "./stacks/SelectProvider";
+import MastodonServerSelect from "./stacks/Mastodon/ServerSelection";
+import MastodonSignIn from "./stacks/Mastodon/SignIn";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import MisskeyServerSelection from "./stacks/Misskey/ServerSelection";
-import MisskeySignInStack from "./stacks/Misskey/SignIn";
+import MisskeyServerSelect from "./stacks/Misskey/ServerSelection";
+import MisskeySignIn from "./stacks/Misskey/SignIn";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,12 +14,15 @@ function AccountsStack() {
 	return (
 		// Select an Account
 		<Stack.Navigator initialRouteName={"Select an Account"}>
-			<Stack.Screen name="Add Mastodon Account" component={AddAccount} />
 			<Stack.Screen
-				name="Add Misskey Account"
-				component={MisskeyServerSelection}
+				name="Select Mastodon Server"
+				component={MastodonServerSelect}
 			/>
-			<Stack.Screen name="Select a Platform" component={SelectProviderStack} />
+			<Stack.Screen
+				name="Select Misskey Server"
+				component={MisskeyServerSelect}
+			/>
+			<Stack.Screen name="Select a Platform" component={SelectProvider} />
 			<Stack.Screen
 				name="Select an Account"
 				component={SelectAccountStack}
@@ -36,13 +39,13 @@ function AccountsStack() {
 				}}
 			/>
 			<Stack.Screen
-				name="Server Sign-In"
-				component={MastodonSignInStack}
+				name="Mastodon Sign-In"
+				component={MastodonSignIn}
 				options={{ animation: "none" }}
 			/>
 			<Stack.Screen
 				name="Misskey Sign-In"
-				component={MisskeySignInStack}
+				component={MisskeySignIn}
 				options={{ animation: "none" }}
 			/>
 		</Stack.Navigator>

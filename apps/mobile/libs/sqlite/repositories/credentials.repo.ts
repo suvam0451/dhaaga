@@ -1,4 +1,4 @@
-import db from "../_core";
+import db from "../connections/core";
 import { AccountCreateDTO, AccountDTO } from "./accounts.repo";
 
 export type CredentialCreateDTO = {
@@ -19,7 +19,9 @@ export class CredentialsRepo {
 		account: AccountDTO,
 		credential_type: string
 	): Promise<CredentialDTO> {
+		
 		return new Promise((resolve, reject) => {
+			if(!account) return resolve(null)
 			db.transaction((tx) => {
 				tx.executeSql(
 					`select * from credentials

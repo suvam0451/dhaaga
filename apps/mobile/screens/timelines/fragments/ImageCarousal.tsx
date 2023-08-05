@@ -3,7 +3,9 @@ import { Dimensions, View, Image } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 // import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ImageWrapper, ImageViewer } from "react-native-reanimated-viewer";
+import React from "react";
 
 type ImageCarousalProps = {
 	attachments: mastodon.v1.MediaAttachment[];
@@ -11,6 +13,42 @@ type ImageCarousalProps = {
 
 const MEDIA_CONTAINER_MAX_HEIGHT = 540;
 const MEDIA_CONTAINER_WIDTH = Dimensions.get("window").width - 20;
+
+/**
+ * The image component is rendered
+ * by a third-party library
+ * @param param0
+ */
+function TimelineImageWrapped({
+	attachment,
+	CalculatedHeight,
+	index,
+	viewerRef,
+}: {
+	attachment: mastodon.v1.MediaAttachment;
+	CalculatedHeight: number;
+	index: number;
+	viewerRef: React.RefObject<any>;
+}) {
+	return (
+		<ImageWrapper
+			key={index}
+			viewerRef={viewerRef}
+			index={index}
+			source={{
+				uri: attachment.remoteUrl,
+			}}
+			style={{ marginTop: 8 }}
+		>
+			<Image
+				source={{
+					uri: attachment.previewUrl,
+				}}
+				style={{ width: MEDIA_CONTAINER_WIDTH, height: CalculatedHeight }}
+			/>
+		</ImageWrapper>
+	);
+}
 
 function TimelineImageRendered({
 	attachment,
@@ -43,6 +81,8 @@ function TimelineImageRendered({
 }
 
 function ImageCarousal({ attachments }: ImageCarousalProps) {
+	const imageRef = useRef(null);
+
 	const [CalculatedHeight, setCalculatedHeight] = useState(
 		MEDIA_CONTAINER_MAX_HEIGHT
 	);
@@ -64,10 +104,25 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 
 	if (attachments.length === 1) {
 		return (
-			<TimelineImageRendered
-				attachment={attachments[0]}
-				CalculatedHeight={CalculatedHeight}
-			/>
+			<React.Fragment>
+				<ImageViewer
+					ref={imageRef}
+					data={attachments.map((o) => ({
+						source: { uri: o.remoteUrl },
+						key: o.id,
+					}))}
+				/>
+				<TimelineImageRendered
+					attachment={attachments[0]}
+					CalculatedHeight={CalculatedHeight}
+				/>
+				{/* <TimelineImageWrapped
+					viewerRef={imageRef}
+					attachment={attachments[0]}
+					index={0}
+					CalculatedHeight={CalculatedHeight}
+				/> */}
+			</React.Fragment>
 		);
 	}
 	return (

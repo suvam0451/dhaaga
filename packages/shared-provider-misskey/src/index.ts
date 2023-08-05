@@ -5,8 +5,8 @@ import { MiauthSessionCheckResponse } from "./types";
 
 export const createClient = (instanceUrl: string, token: string) => {
 	const cli = new misskeyApi.APIClient({
-		origin: "https://misskey.test",
-		credential: "TOKEN",
+		origin: instanceUrl,
+		credential: token,
 	});
 	return cli;
 };

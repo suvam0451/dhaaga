@@ -42,7 +42,7 @@ function SelectProviderStack({ navigation }) {
 						<View style={{ paddingTop: 8 }}>
 							<Button
 								onPress={() => {
-									navigation.navigate("Add Mastodon Account", {
+									navigation.navigate("Select Mastodon Server", {
 										type: "mastodon",
 									});
 								}}
@@ -92,7 +92,7 @@ function SelectProviderStack({ navigation }) {
 								}
 								title={"Login"}
 								onPress={() => {
-									navigation.navigate("Add Misskey Account", {
+									navigation.navigate("Select Misskey Server", {
 										type: "misskey",
 									});
 								}}

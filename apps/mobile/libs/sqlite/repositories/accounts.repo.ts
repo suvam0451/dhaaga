@@ -1,4 +1,4 @@
-import db from "../_core";
+import db from "../connections/core";
 import { CredentialDTO } from "./credentials.repo";
 
 export type AccountCreateDTO = {
@@ -64,44 +64,31 @@ export class AccountsRepo {
 			return conflict;
 		}
 
-		db.transaction((tx) => {
-			tx.executeSql(
-				`select * from accounts
-			  WHERE domain = ? AND subdomain = ?
-			  AND username = ?`,
-				[account.domain, account.subdomain, account.username],
-				(_, { rows }) => console.log("success 1", JSON.stringify(rows)),
-				(_, error) => {
-					console.log("error", error);
-					return true;
-				}
-			);
-			tx.executeSql(
-				`insert into accounts
-			  (domain, subdomain, username, password,
-			    last_login_at, verified)
-			    values (?, ?, ?, ?, ?, ?)`,
-				[
-					account.domain,
-					account.subdomain,
-					account.username,
-					account.password,
-					new Date(account.last_login_at).getTime(),
-					Number(account.verified || 0),
-				],
-				(_, { rows }) => console.log("success 2", JSON.stringify(rows)),
-				(_, error) => {
-					console.log("error", error);
-					return true;
-				}
-			);
-			tx.executeSql(
-				`select * from accounts
-			  WHERE domain = ? AND subdomain = ?
-			  AND username = ?`,
-				[account.domain, account.subdomain, account.username],
-				(_, { rows }) => console.log("success 2", JSON.stringify(rows))
-			);
+		return new Promise((resolve, reject) => {
+			db.transaction((tx) => {
+				tx.executeSql(
+					`insert into accounts
+					(domain, subdomain, username, password,
+						last_login_at, verified)
+						values (?, ?, ?, ?, ?, ?)`,
+					[
+						account.domain,
+						account.subdomain,
+						account.username,
+						account.password,
+						new Date(account.last_login_at).getTime(),
+						Number(account.verified || 0),
+					],
+					(_, { rows }) => {
+						console.log(rows);
+						// console.log("success 2", JSON.stringify(rows))
+					},
+					(_, error) => {
+						reject("Unknown error occured");
+						return true;
+					}
+				);
+			});
 		});
 	}
 

@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { MastodonService } from "@dhaaga/shared-provider-mastodon/dist";
-import { MainText } from "../../../styles/Typography";
-import { StandardView } from "../../../styles/Containers";
+import { MainText } from "../../../../styles/Typography";
+import { StandardView } from "../../../../styles/Containers";
 import { Button } from "@rneui/base";
 
 function AccountsScreen({ navigation }) {
@@ -20,7 +20,7 @@ function AccountsScreen({ navigation }) {
 			process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID
 		);
 		const subdomain = `https://${InputText}`;
-		navigation.navigate("Server Sign-In", { signInUrl: authUrl, subdomain });
+		navigation.navigate("Mastodon Sign-In", { signInUrl: authUrl, subdomain });
 	}
 
 	const [isKeyboardVisible, setKeyboardVisible] = useState(false);

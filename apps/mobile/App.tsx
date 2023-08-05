@@ -10,11 +10,12 @@ import AccountsStack from "./screens/accounts";
 import { Animated } from "react-native";
 import { useEffect, useRef } from "react";
 import { getCloser } from "./utils";
-import { runMigrations } from "./libs/sqlite/_migrations";
+import { runCoreMigrations } from "./libs/sqlite/migrations/_migrations";
 import { store } from "./libs/redux/store";
 import { Provider } from "react-redux";
 import HomeStack from "./screens/timelines";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
 const { diffClamp } = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;
@@ -92,7 +93,7 @@ export default function App() {
 
 	// run initial migrations
 	useEffect(() => {
-		runMigrations();
+		runCoreMigrations();
 	}, []);
 
 	const queryClient = new QueryClient();
@@ -100,49 +101,56 @@ export default function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Provider store={store}>
-				<NavigationContainer>
-					<Tab.Navigator
-						screenOptions={({ route }) => ({
-							tabBarIcon: ({ focused, color, size }) => {
-								let iconName;
+				<ActionSheetProvider>
+					<NavigationContainer>
+						<Tab.Navigator
+							screenOptions={({ route }) => ({
+								tabBarIcon: ({ focused, color, size }) => {
+									let iconName;
 
-								if (route.name === "Home") {
-									iconName = focused ? "home" : "home";
-								} else if (route.name === "Settings") {
-									iconName = focused ? "menu-outline" : "menu-outline";
-								} else if (route.name === "Search") {
-									iconName = focused ? "search-sharp" : "search-sharp";
-								} else if (route.name === "Favourites") {
-									iconName = focused ? "bookmark-outline" : "bookmark-outline";
-								} else if (route.name === "Notifications") {
-									iconName = focused
-										? "notifications-outline"
-										: "notifications-outline";
-								} else if (route.name === "Accounts") {
-									iconName = focused ? "person-outline" : "person-outline";
-								}
+									if (route.name === "Home") {
+										iconName = focused ? "home" : "home";
+									} else if (route.name === "Settings") {
+										iconName = focused ? "menu-outline" : "menu-outline";
+									} else if (route.name === "Search") {
+										iconName = focused ? "search-sharp" : "search-sharp";
+									} else if (route.name === "Favourites") {
+										iconName = focused
+											? "bookmark-outline"
+											: "bookmark-outline";
+									} else if (route.name === "Notifications") {
+										iconName = focused
+											? "notifications-outline"
+											: "notifications-outline";
+									} else if (route.name === "Accounts") {
+										iconName = focused ? "person-outline" : "person-outline";
+									}
 
-								return <Ionicons name={iconName} size={size} color={color} />;
-							},
-							tabBarStyle: {
-								paddingTop: 0,
-								borderTopWidth: 0,
-								backgroundColor: 'rgba(34,36,40,1)',
-							},
-							tabBarActiveTintColor: "white",
-							tabBarInactiveTintColor: "gray",
-							tabBarShowLabel: false,
-							headerShown: false,
-						})}
-					>
-						<Tab.Screen name="Home" component={HomeStack} />
-						<Tab.Screen name="Search" component={SearchScreen} />
-						<Tab.Screen name="Favourites" component={FavouritesScreen} />
-						<Tab.Screen name="Notifications" component={NotificationsScreen} />
-						<Tab.Screen name="Accounts" component={AccountsStack} />
-						<Tab.Screen name="Settings" component={SettingsScreen} />
-					</Tab.Navigator>
-				</NavigationContainer>
+									return <Ionicons name={iconName} size={size} color={color} />;
+								},
+								tabBarStyle: {
+									paddingTop: 0,
+									borderTopWidth: 0,
+									backgroundColor: "rgba(34,36,40,1)",
+								},
+								tabBarActiveTintColor: "white",
+								tabBarInactiveTintColor: "gray",
+								tabBarShowLabel: false,
+								headerShown: false,
+							})}
+						>
+							<Tab.Screen name="Home" component={HomeStack} />
+							<Tab.Screen name="Search" component={SearchScreen} />
+							<Tab.Screen name="Favourites" component={FavouritesScreen} />
+							<Tab.Screen
+								name="Notifications"
+								component={NotificationsScreen}
+							/>
+							<Tab.Screen name="Accounts" component={AccountsStack} />
+							<Tab.Screen name="Settings" component={SettingsScreen} />
+						</Tab.Navigator>
+					</NavigationContainer>
+				</ActionSheetProvider>
 			</Provider>
 		</QueryClientProvider>
 	);

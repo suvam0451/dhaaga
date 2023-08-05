@@ -4,6 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "@rneui/base";
 import React from "react";
 import { Text } from "react-native";
+import HashtagProcessor from "../link-processors/Hashtags";
 
 export function parseNode(
 	node: MfmNode,
@@ -25,9 +26,7 @@ export function parseNode(
 		}
 		case "hashtag": {
 			return (
-				<Text key={count} style={{ color: "green" }}>
-					#{node.props.hashtag}
-				</Text>
+				<HashtagProcessor forwardedKey={count} content={node.props.hashtag} />
 			);
 		}
 		case "url": {

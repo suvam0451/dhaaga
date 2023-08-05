@@ -25,7 +25,6 @@ function AccountListingFragment({ account }: AccountListingFragmentProps) {
 	useEffect(() => {
 		CredentialsRepo.getByAccountId(account.id).then((res) => {
 			setCredentials(res);
-			console.log(account.id, res)
 		});
 	}, [account.id]);
 
