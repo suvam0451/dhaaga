@@ -2,6 +2,7 @@ import axios from "axios";
 import { api as misskeyApi } from "misskey-js";
 import uuid from "react-native-uuid";
 import { MiauthSessionCheckResponse } from "./types";
+export { Note, UserLite } from "misskey-js/built/entities";
 
 export const createClient = (instanceUrl: string, token: string) => {
 	const cli = new misskeyApi.APIClient({
@@ -12,7 +13,9 @@ export const createClient = (instanceUrl: string, token: string) => {
 };
 
 export const verifyToken = async (host: string, session: string) => {
-	const res = await axios.post<MiauthSessionCheckResponse>(`${host}/api/miauth/${session}/check`);
+	const res = await axios.post<MiauthSessionCheckResponse>(
+		`${host}/api/miauth/${session}/check`
+	);
 	return res.data;
 };
 
@@ -34,4 +37,10 @@ export const createCodeRequestUrl = (instanceUrl: string) => {
 	return `${authEndpoint}?${queryString}`;
 };
 
-// const meta = await cli.request("meta", { detail: true });
+export class NotesAPI {
+	static async localTimeline(client: misskeyApi.APIClient) {
+		const res = await client.request("notes/local-timeline", { limit: 20 });
+		console.log(res);
+		return res;
+	}
+}

@@ -230,7 +230,7 @@ importers:
     devDependencies:
       tsup:
         specifier: ^7.1.0
-        version: 7.1.0(typescript@5.1.6)
+        version: 7.1.0(@swc/core@1.3.56)
 
   packages/shared-provider-misskey:
     dependencies:
@@ -253,6 +253,9 @@ importers:
 
   packages/shared-utility-html-parser:
     dependencies:
+      html-entities:
+        specifier: ^2.4.0
+        version: 2.4.0
       htmlparser2:
         specifier: ^9.0.0
         version: 9.0.0
@@ -7182,6 +7185,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       lru-cache: 6.0.0
+    dev: false
+
+  /html-entities@2.4.0:
+    resolution: {integrity: sha512-igBTJcNNNhvZFRtm8uA6xMY6xYleeDwn3PeBCkDz7tHttv4F2hsDI2aPgNERWzvRcNYHNT3ymRaQzllmXj4YsQ==}
     dev: false
 
   /htmlparser2@7.2.0:

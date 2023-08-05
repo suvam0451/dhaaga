@@ -1,6 +1,8 @@
 import { parse } from "mfm-js";
 import type { MfmNode } from "mfm-js";
+import { decode } from "html-entities";
 export type { MfmNode, MfmEmojiCode } from "mfm-js";
+
 /**
  * Utility function that
  * 1. Removes <p> tags
@@ -33,15 +35,32 @@ export function parseStatusContent(str: string) {
 	// replace linsk with href
 	str = str.replaceAll(/<a href=\"(.*?)".*?a>/g, "$1");
 
-	while ((new_container = ex.exec(str)) !== null) {
-		let currStr = new_container[1];
+	// for masto-dono
+	if (ex.test(str)) {
+		while ((new_container = ex.exec(str)) !== null) {
+			let currStr = new_container[1];
+			currStr = currStr.replaceAll("&#39;", "'");
+			currStr = currStr.replaceAll("<span>", "");
+			currStr = currStr.replaceAll("</span>", "");
+			currStr = currStr.replaceAll(/<span.*?>/g, "");
+
+			const mfmTree = parse(currStr);
+			retval.push(mfmTree);
+		}
+	} else {
+		let currStr = str;
 		currStr = currStr.replaceAll("&#39;", "'");
 		currStr = currStr.replaceAll("<span>", "");
 		currStr = currStr.replaceAll("</span>", "");
+		currStr = currStr.replaceAll(/<span.*?>/g, "");
 
 		const mfmTree = parse(currStr);
 		retval.push(mfmTree);
 	}
 
 	return retval;
+}
+
+export function decodeHTMLString(str: string) {
+	return decode(str);
 }
