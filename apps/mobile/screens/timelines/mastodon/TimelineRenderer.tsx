@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AccountState } from "../../../libs/redux/slices/account";
 import { RootState } from "../../../libs/redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import {
 	View,
 	StyleSheet,
 	Text,
+	RefreshControl,
 } from "react-native";
 import { getCloser } from "../../../utils";
 import Header from "../../../components/Header";
@@ -19,6 +20,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
+import { NotesAPI, createClient } from "@dhaaga/shared-provider-misskey/dist";
 
 const { diffClamp } = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -39,19 +41,20 @@ function TimelineRenderer() {
 			throw new Error("client not initialized");
 		}
 
-		return RestServices.v1.default.timelines.default.getHomeTimeline(
-			restClient.current
-		);
+		if (accountState.activeAccount.domain === "mastodon") {
+			return RestServices.v1.default.timelines.default.getHomeTimeline(
+				restClient.current
+			);
+		} else if (accountState.activeAccount.domain === "misskey") {
+			return NotesAPI.localTimeline(restClient.current);
+		}
+		return [];
 	}
 	// Queries
-	const { status, data, error, fetchStatus } = useQuery({
-		queryKey: ["mastodon/timelines/home", restClient.current],
+	const { status, data, error, fetchStatus, refetch } = useQuery({
+		queryKey: ["mastodon/timelines/home", restClient],
 		queryFn: getHomeTimeline,
 	});
-
-	useEffect(() => {
-		// console.log("api fetch status update", status, data);
-	}, [data, status]);
 
 	useEffect(() => {
 		if (!accountState.activeAccount) {
@@ -69,8 +72,17 @@ function TimelineRenderer() {
 			return;
 		}
 
-		const client = new RestClient(accountState.activeAccount.subdomain, token);
-		restClient.current = client;
+		if (accountState.activeAccount.domain === "mastodon") {
+			const client = new RestClient(
+				accountState.activeAccount.subdomain,
+				token
+			);
+			restClient.current = client;
+		} else if (accountState.activeAccount.domain === "misskey") {
+			const client = createClient(accountState.activeAccount.subdomain, token);
+			console.log("successfully created client", client);
+			restClient.current = client;
+		}
 	}, [accountState]);
 
 	const ref = useRef(null);
@@ -140,6 +152,18 @@ function TimelineRenderer() {
 		}
 	};
 
+	useEffect(() => {
+		if (status === "success") {
+			setRefreshing(false);
+		}
+	}, [status, fetchStatus]);
+
+	const [refreshing, setRefreshing] = useState(false);
+	const onRefresh = useCallback(() => {
+		setRefreshing(true);
+		refetch();
+	}, []);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<StatusBar backgroundColor="#1c1c1c" />
@@ -149,14 +173,22 @@ function TimelineRenderer() {
 					HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
 				/>
 			</Animated.View>
+
 			<Animated.ScrollView
 				contentContainerStyle={{
 					paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
 				}}
 				onScroll={handleScroll}
 				ref={ref}
-				// onMomentumScrollEnd={handleSnap}
+				contentInset={{
+					top: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT + 1000,
+				}}
+				// contentOffset={{y: -headerHeight}}
+
 				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
 			>
 				<Text style={{ color: "white" }}>
 					Showing 0-{data?.length || 0} results

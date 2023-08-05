@@ -84,7 +84,7 @@ function MisskeySignInStack({ route, navigation }) {
 	}
 
 	async function onPressConfirm() {
-		const accnt = await AccountsRepo.add({
+		await AccountsRepo.add({
 			subdomain: subdomain,
 			domain: "misskey",
 			username: PreviewCard.username,
@@ -107,6 +107,12 @@ function MisskeySignInStack({ route, navigation }) {
 				value: Token,
 			},
 		];
+
+		const accnt = await AccountsRepo.search({
+			subdomain: subdomain,
+			domain: "misskey",
+			username: PreviewCard.username,
+		});
 
 		for (const cred of creds) {
 			await CredentialsRepo.upsert(accnt, {

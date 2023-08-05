@@ -22,7 +22,7 @@ const Header = ({
 				]}
 			>
 				<Ionicons name="menu" size={24} color="white" />
-				<Text style={styles.conversation}>Conversations</Text>
+				<Text style={styles.conversation}>Home</Text>
 				<Ionicons name="add" size={24} color="white" />
 			</View>
 			<View

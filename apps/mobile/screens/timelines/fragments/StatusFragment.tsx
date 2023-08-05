@@ -1,26 +1,25 @@
 import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
-import { Image } from "expo-image";
-import { View, Text, Dimensions } from "react-native";
-import HTML from "react-native-render-html";
+import { View, Text } from "react-native";
 import { StandardView } from "../../../styles/Containers";
 import { Divider } from "@rneui/base";
-import ImageCarousal from "./ImageCarousal";
-import StatusInteraction from "./StatusInteraction";
 import { Ionicons } from "@expo/vector-icons";
 import { formatDistance } from "date-fns";
-import EmojiBoard from "./EmojiBoard";
 import { useEffect, useState } from "react";
-import * as htmlparser2 from "htmlparser2";
-import { parseStatusContent } from "@dhaaga/shared-utility-html-parser/dist";
+import {
+	decodeHTMLString,
+	parseStatusContent,
+} from "@dhaaga/shared-utility-html-parser/dist";
 import React from "react";
 import { parseNode } from "./util";
-import { extractInstanceUrl, visibilityIcon } from "../../../utils/instances";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../libs/redux/store";
 import { AccountState } from "../../../libs/redux/slices/account";
+import OriginalPoster from "../../../components/post-fragments/OriginalPoster";
+import { Note, UserLite } from "@dhaaga/shared-provider-misskey/dist";
+import StatusInteraction from "./StatusInteraction";
 
 type StatusFragmentProps = {
-	status: mastodon.v1.Status;
+	status: mastodon.v1.Status | Note;
 	mt?: number;
 };
 
@@ -28,16 +27,80 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 	const dispatch = useDispatch();
 	const accountState = useSelector<RootState, AccountState>((o) => o.account);
 
+	const [PosterContent, setPosterContent] = useState(<View></View>);
+
+	// console.log(status);
+	useEffect(() => {
+		switch (accountState.activeAccount.domain) {
+			case "mastodon": {
+				const _status = status as mastodon.v1.Status;
+				setPosterContent(
+					<OriginalPoster
+						avatarUrl={_status.account.avatar}
+						displayName={_status.account.displayName}
+						createdAt={_status.createdAt}
+						username={_status.account.username}
+						subdomain={accountState?.activeAccount?.subdomain}
+						visibility={_status.visibility}
+						accountUrl={_status.account.url}
+					/>
+				);
+				break;
+			}
+			case "misskey": {
+				const _status = status as Note;
+				const { user, ...rest } = _status;
+
+				setPosterContent(
+					<OriginalPoster
+						avatarUrl={_status.user.avatarUrl}
+						displayName={_status.user.name}
+						username={_status.user.username}
+						createdAt={_status.createdAt}
+						subdomain={accountState?.activeAccount?.subdomain}
+						visibility={_status.visibility}
+						accountUrl={""}
+					/>
+				);
+				break;
+			}
+			default: {
+				setPosterContent(<View></View>);
+				break;
+			}
+		}
+	}, [status]);
+
 	const [Content, setContent] = useState([]);
 
 	useEffect(() => {
-		const parsed = parseStatusContent(status.content);
+		let content = "";
+		let emojis = [];
+		switch (accountState?.activeAccount?.domain) {
+			case "mastodon": {
+				content = (status as mastodon.v1.Status).content;
+				emojis = (status as mastodon.v1.Status).emojis;
+				break;
+			}
+			case "misskey": {
+				content = (status as Note).text;
+				console.log(status);
+				// emojis = (status as Note).reactions
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+
+		const parsed = parseStatusContent(decodeHTMLString(content));
 
 		let retval = [];
 		let count = 0; //
 		for (const para of parsed) {
 			for (const node of para) {
-				retval.push(parseNode(node, count.toString(), status.emojis));
+				// @ts-ignore
+				retval.push(parseNode(node, count.toString(), status?.emojis || []));
 				count++;
 			}
 		}
@@ -54,61 +117,15 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 					marginBottom: 8,
 				}}
 			>
-				<View
-					style={{
-						width: 52,
-						height: 52,
-						borderColor: "gray",
-						borderWidth: 1,
-						borderRadius: 4,
-					}}
-				>
-					<Image
-						style={{
-							flex: 1,
-							width: "100%",
-							backgroundColor: "#0553",
-							padding: 2,
-						}}
-						source={{ uri: status.account.avatar }}
-					/>
-				</View>
-				<View style={{ display: "flex", marginLeft: 8, flexGrow: 1 }}>
-					<Text style={{ color: "white", fontWeight: "600" }}>
-						{status.account.displayName}
-					</Text>
-					<Text style={{ color: "#888", fontWeight: "500", fontSize: 12 }}>
-						{extractInstanceUrl(
-							status.account.url,
-							status.account.username,
-							accountState?.activeAccount?.subdomain
-						)}
-					</Text>
-					<View style={{ display: "flex", flexDirection: "row" }}>
-						<Text style={{ color: "gray", fontSize: 12 }}>
-							{formatDistance(new Date(status.createdAt), new Date(), {
-								addSuffix: true,
-							})}
-						</Text>
-						<Text style={{ color: "gray", marginLeft: 2, marginRight: 2 }}>
-							•
-						</Text>
-						{visibilityIcon(status.visibility)}
-					</View>
-				</View>
+				{PosterContent}
 				<View>
 					<Ionicons name="ellipsis-horizontal" size={24} color="#888" />
 				</View>
 			</View>
 
-			{/* <HTML
-				baseStyle={{ color: "white" }}
-				contentWidth={Dimensions.get("window").width}
-				source={{ html: status.content as any }}
-			/> */}
-			<Text>{Content}</Text>
+			<Text style={{ marginBottom: 16, color: "white" }}>{Content}</Text>
 
-			<ImageCarousal attachments={status.mediaAttachments} />
+			{/* <ImageCarousal attachments={status.mediaAttachments} /> */}
 			{/* <EmojiBoard status={status} /> */}
 			<StatusInteraction post={status} statusId={status.id} />
 			<Divider />
@@ -118,7 +135,31 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 function SharedStatusFragment({
 	status,
 	postedBy,
-}: StatusFragmentProps & { postedBy: mastodon.v1.Account }) {
+	boostedStatus,
+}: StatusFragmentProps & {
+	postedBy: mastodon.v1.Account | UserLite;
+	boostedStatus: mastodon.v1.Status | Note;
+}) {
+	const dispatch = useDispatch();
+	const accountState = useSelector<RootState, AccountState>((o) => o.account);
+	const [Username, setUsername] = useState("");
+
+	useEffect(() => {
+		switch (accountState.activeAccount.domain) {
+			case "mastodon": {
+				setUsername((postedBy as mastodon.v1.Account).username);
+				break;
+			}
+			case "misskey": {
+				setUsername((postedBy as UserLite).username);
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+	}, [status, boostedStatus]);
+
 	return (
 		<View>
 			<StandardView
@@ -130,12 +171,14 @@ function SharedStatusFragment({
 				}}
 			>
 				<Ionicons color={"#888"} name={"rocket-outline"} size={12} />
-
 				<Text style={{ color: "#888", fontWeight: "500", marginLeft: 4 }}>
-					{postedBy.username}
+					{Username}
 				</Text>
-				<Text style={{ color: "#888", fontWeight: "500", marginLeft: 4 }}>
-					boosted
+				<Text style={{ color: "gray", marginLeft: 2, marginRight: 2 }}>•</Text>
+				<Text style={{ color: "#888" }}>
+					{formatDistance(new Date(boostedStatus.createdAt), new Date(), {
+						addSuffix: true,
+					})}
 				</Text>
 			</StandardView>
 
@@ -145,10 +188,35 @@ function SharedStatusFragment({
 }
 
 function StatusFragment({ status }: StatusFragmentProps) {
-	if (status.reblog) {
-		return (
-			<SharedStatusFragment status={status.reblog} postedBy={status.account} />
-		);
+	const dispatch = useDispatch();
+	const accountState = useSelector<RootState, AccountState>((o) => o.account);
+
+	switch (accountState.activeAccount.domain) {
+		case "mastodon": {
+			const _status = status as mastodon.v1.Status;
+			if (_status.reblog) {
+				return (
+					<SharedStatusFragment
+						status={_status.reblog}
+						postedBy={_status.account}
+						boostedStatus={_status}
+					/>
+				);
+			}
+			return <RootStatusFragment status={status} />;
+		}
+		case "misskey": {
+			const _status = status as Note;
+			if (_status.renote) {
+				return (
+					<SharedStatusFragment
+						status={_status.renote}
+						postedBy={_status.user}
+						boostedStatus={_status}
+					/>
+				);
+			}
+		}
 	}
 	return <RootStatusFragment status={status} />;
 }

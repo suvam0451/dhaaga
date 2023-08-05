@@ -1,6 +1,7 @@
 import { Text } from "react-native";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 function HashtagProcessor({
 	content,
@@ -10,6 +11,7 @@ function HashtagProcessor({
 	forwardedKey: string | number;
 }) {
 	const { showActionSheetWithOptions } = useActionSheet();
+	const navigation = useNavigation<any>();
 
 	const onPress = () => {
 		const options = ["Browse", "Follow", "Cancel"];
@@ -19,17 +21,22 @@ function HashtagProcessor({
 		showActionSheetWithOptions(
 			{
 				options,
-        message: "You do not follow this hashtag.",
+				message: "You do not follow this hashtag.",
 				cancelButtonIndex,
 				destructiveButtonIndex,
-        title: `#${content}`,
-        userInterfaceStyle: "dark"
+				title: `#${content}`,
+				userInterfaceStyle: "dark",
 			},
 			(selectedIndex: number) => {
 				switch (selectedIndex) {
-					case 1:
-						// Save
+					case 0: {
+						console.log("browe clicked");
+						navigation.navigate("Browse Hashtag", {
+							q: content,
+							title: `#${content}`,
+						});
 						break;
+					}
 
 					case destructiveButtonIndex:
 						// Delete

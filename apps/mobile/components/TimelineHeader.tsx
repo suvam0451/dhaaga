@@ -24,7 +24,7 @@ const TimelinesHeader = ({
 			>
 				<Ionicons name="menu" size={24} color="white" />
 				<View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-					<Text style={styles.conversation}>Conversations</Text>
+					<Text style={styles.conversation}>Home</Text>
 					<Ionicons name="chevron-down" color={"white"} size={20} />
 				</View>
 
