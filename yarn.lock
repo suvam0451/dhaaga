@@ -1840,6 +1840,7 @@ __metadata:
   dependencies:
     "@dhaaga/shared-provider-mastodon": "*"
     "@dhaaga/shared-provider-misskey": "*"
+    axios: ^1.4.0
     tsup: ^7.2.0
     typescript: ^5.1.6
   languageName: unknown

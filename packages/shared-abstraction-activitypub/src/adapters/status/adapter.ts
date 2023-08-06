@@ -1,6 +1,15 @@
-import { Note } from "@dhaaga/shared-provider-misskey/dist";
-import { StatusInterface } from "../interfaces/StatusInterface";
-import { StatusInstance } from "../interfaces/StatusInterface";
+import { DriveFile } from "@dhaaga/shared-provider-misskey/dist";
+import {
+	DriveFileToMediaAttachmentAdapter,
+	MediaAttachmentToMediaAttachmentAdapter,
+} from "../media-attachment/adapter";
+import {
+	DriveFileInstance,
+	MediaAttachmentInstance,
+} from "../media-attachment/unique";
+import { StatusInterface } from "./interface";
+import { NoteInstance, StatusInstance } from "./unique";
+import { MediaAttachmentInterface } from "../media-attachment/interface";
 
 export class NoteToStatusAdapter implements StatusInterface {
 	ref: NoteInstance;
@@ -39,8 +48,25 @@ export class NoteToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
-	isReposted(): boolean {
+	getMediaAttachments() {
+		if (!this.ref?.instance?.files) {
+			return [];
+		}
+		return this.ref.instance.files.map((o: DriveFile) => {
+			return new DriveFileToMediaAttachmentAdapter(new DriveFileInstance(o));
+		});
+	}
+
+	isReposted() {
 		return this.ref.instance.renote !== null;
+	}
+
+	getContent() {
+		return this.ref.instance.text;
+	}
+
+	print(): void {
+		console.log(this.ref.instance);
 	}
 }
 
@@ -51,19 +77,19 @@ export class StatusToStatusAdapter implements StatusInterface {
 	}
 
 	getUsername() {
-		return this.ref.instance.account.username;
+		return this.ref?.instance?.account.username || "";
 	}
 
 	getDisplayName() {
-		return this.ref.instance.account.displayName;
+		return this.ref?.instance?.account.displayName || "";
 	}
 
 	getAvatarUrl() {
-		return this.ref.instance.account.avatarStatic;
+		return this.ref?.instance?.account.avatarStatic || "";
 	}
 
 	getCreatedAt() {
-		return this.ref.instance.createdAt;
+		return this.ref.instance?.createdAt || "";
 	}
 
 	getVisibility() {
@@ -85,6 +111,22 @@ export class StatusToStatusAdapter implements StatusInterface {
 	isReposted(): boolean {
 		return this.ref.instance.reblog !== null;
 	}
+
+	getMediaAttachments() {
+		return this.ref.instance.mediaAttachments.map((o) => {
+			return new MediaAttachmentToMediaAttachmentAdapter(
+				new MediaAttachmentInstance(o)
+			);
+		});
+	}
+
+	getContent(): string | null {
+		return this.ref.instance.content;
+	}
+
+	print(): void {
+		console.log(this.ref.instance);
+	}
 }
 
 export class UnknownToStatusAdapter implements StatusInterface {
@@ -101,7 +143,7 @@ export class UnknownToStatusAdapter implements StatusInterface {
 	}
 
 	getCreatedAt() {
-		return "";
+		return new Date().toString();
 	}
 
 	getVisibility() {
@@ -119,10 +161,16 @@ export class UnknownToStatusAdapter implements StatusInterface {
 	isReposted() {
 		return false;
 	}
-}
-export class NoteInstance {
-	instance: Note;
-	constructor(instance: Note) {
-		this.instance = instance;
+
+	getContent() {
+		return "";
+	}
+
+	getMediaAttachments() {
+		return [];
+	}
+
+	print() {
+		console.log("Unknown status type");
 	}
 }

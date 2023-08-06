@@ -1,8 +1,9 @@
 import axios from "axios";
 import { api as misskeyApi } from "misskey-js";
 import { MiauthSessionCheckResponse } from "./types";
-export type { Note, UserLite } from "misskey-js/built/entities";
-export type { api as misskeyApi} from "misskey-js"
+export type { Note, UserLite, DriveFile } from "misskey-js/built/entities";
+export type { api as misskeyApi } from "misskey-js";
+export { Noteservice as MisskeyNotesService } from "./_notes";
 
 export const createClient = (instanceUrl: string, token: string) => {
 	const cli = new misskeyApi.APIClient({

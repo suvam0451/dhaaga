@@ -1,7 +1,7 @@
 import { api as misskeyApi } from "misskey-js";
 
 export class Noteservice {
-	async show({
+	static async show({
 		client,
 		noteId,
 	}: {
@@ -11,7 +11,7 @@ export class Noteservice {
 		return await client.request("notes/show", { noteId });
 	}
 
-	async getReactions({
+	static async getReactions({
 		client,
 		noteId,
 	}: {
@@ -21,7 +21,7 @@ export class Noteservice {
 		return await client.request("notes/reactions", { noteId });
 	}
 
-	async searchByTag({
+	static async searchByTag({
 		client,
 		tag,
 	}: {

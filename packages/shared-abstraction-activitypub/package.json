@@ -5,7 +5,8 @@
   "packageManager": "yarn@3.6.1",
   "dependencies": {
     "@dhaaga/shared-provider-mastodon": "*",
-    "@dhaaga/shared-provider-misskey": "*"
+    "@dhaaga/shared-provider-misskey": "*",
+    "axios": "^1.4.0"
   },
   "devDependencies": {
     "tsup": "^7.2.0",

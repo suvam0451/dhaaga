@@ -1,5 +1,4 @@
 import {
-	MastodonService,
 	RestClient,
 	RestServices,
 	mastodon,
@@ -9,16 +8,43 @@ import {
 	createClient,
 	misskeyApi,
 } from "@dhaaga/shared-provider-misskey/dist";
+import axios, { AxiosInstance } from "axios";
+
+// export status adapters and interfaces
 export {
 	NoteToStatusAdapter,
 	StatusToStatusAdapter,
 	UnknownToStatusAdapter,
-	NoteInstance,
-} from "./adapters/status";
-export { StatusInstance, StatusInterface } from "./interfaces/StatusInterface";
+} from "./adapters/status/adapter";
+export { NoteInstance, StatusInstance } from "./adapters/status/unique";
+export { StatusInterface } from "./adapters/status/interface";
+
+// export media atatchment adapters and interfaces
+export {
+	DriveFileToMediaAttachmentAdapter,
+	MediaAttachmentToMediaAttachmentAdapter,
+	UnknownToMediaAttachmentAdapter,
+} from "./adapters/media-attachment/adapter";
+export {
+	DriveFileInstance,
+	MediaAttachmentInstance,
+} from "./adapters/media-attachment/unique";
+export { MediaAttachmentInterface } from "./adapters/media-attachment/interface";
+
+// stub types
+export { ActivityPubStatus, ActivityPubStatuses } from "./types/activitypub";
+
+type TimelineQuery = {
+	maxId?: string;
+	minId?: string;
+};
 
 interface ActivityPubClient {
 	getHomeTimeline(): Promise<mastodon.v1.Status[] | Note[]>;
+	getTimelineByHashtag(
+		q: string,
+		query?: TimelineQuery
+	): Promise<mastodon.v1.Status[] | Note[]>;
 }
 
 type RestClientCreateDTO = {
@@ -28,12 +54,23 @@ type RestClientCreateDTO = {
 
 export class MisskeyRestClient implements ActivityPubClient {
 	client: misskeyApi.APIClient;
+	axiosClient: AxiosInstance;
 	constructor(dto: RestClientCreateDTO) {
 		this.client = createClient(dto.instance, dto.token);
+		this.axiosClient = axios.create({
+			baseURL: `${dto.instance}/api`,
+		});
 	}
 
 	async getHomeTimeline(): Promise<Note[]> {
 		return await this.client.request("notes/local-timeline", { limit: 20 });
+	}
+	async getTimelineByHashtag(q: string): Promise<Note[]> {
+		const res = await this.axiosClient.post<Note[]>("/notes/search-by-tag", {
+			limit: 20,
+			tag: q,
+		});
+		return res.data;
 	}
 }
 
@@ -47,17 +84,24 @@ export class MastodonRestClient implements ActivityPubClient {
 			this.client
 		);
 	}
+	async getTimelineByHashtag(q: string): Promise<mastodon.v1.Status[]> {
+		return RestServices.v1.default.timelines.default.getTimelineByHashtag(
+			this.client,
+			q
+		);
+	}
 }
 
 // null object pattern
 // https://en.wikipedia.org/wiki/Null_object_pattern
 export class UnknownRestClient implements ActivityPubClient {
-	// private client: ActivityPubClient;
-
 	async getHomeTimeline() {
 		console.log("");
 		return [];
-		// throw new Error("Method not implemented.");
+	}
+
+	async getTimelineByHashtag(q: string) {
+		return [];
 	}
 }
 

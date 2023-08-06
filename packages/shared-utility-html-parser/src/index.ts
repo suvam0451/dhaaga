@@ -14,7 +14,7 @@ export type { MfmNode, MfmEmojiCode } from "mfm-js";
 export function parseStatusContent(str: string) {
 	let retval: MfmNode[][] = [];
 
-	const ex = new RegExp(/<p>(.*?)<\/p>/, "g");
+	const ex = /<p>(.*?)<\/p>/g;
 	let new_container;
 
 	// str = str.replaceAll("<br>", "\n")
@@ -36,9 +36,11 @@ export function parseStatusContent(str: string) {
 	str = str.replaceAll(/<a href=\"(.*?)".*?a>/g, "$1");
 
 	// for masto-dono
-	if (ex.test(str)) {
-		while ((new_container = ex.exec(str)) !== null) {
-			let currStr = new_container[1];
+	if (ex.test(str) === true) {
+		for (const item of str.match(ex) || []) {
+			const exOne = /<p>(.*?)<\/p>/;
+			let currStr = item.match(exOne)![1];
+
 			currStr = currStr.replaceAll("&#39;", "'");
 			currStr = currStr.replaceAll("<span>", "");
 			currStr = currStr.replaceAll("</span>", "");
@@ -48,6 +50,7 @@ export function parseStatusContent(str: string) {
 			retval.push(mfmTree);
 		}
 	} else {
+		// console.log("[HTML Parser] misskey detected");
 		let currStr = str;
 		currStr = currStr.replaceAll("&#39;", "'");
 		currStr = currStr.replaceAll("<span>", "");
