@@ -6,7 +6,7 @@ import { MainText } from "../../../../styles/Typography";
 import { Button } from "@rneui/base";
 import { AccountsRepo } from "../../../../libs/sqlite/repositories/accounts.repo";
 import { CredentialsRepo } from "../../../../libs/sqlite/repositories/credentials.repo";
-import * as Crypto from 'expo-crypto';
+import * as Crypto from "expo-crypto";
 
 import { verifyToken } from "@dhaaga/shared-provider-misskey/dist";
 import AccountCreationPreview, {
@@ -70,9 +70,9 @@ function MisskeySignInStack({ route, navigation }) {
 		const res = await verifyToken(subdomain, Session);
 		if (res.ok) {
 			setPreviewCard({
-				displayName: res.user.name,
-				username: res.user.username,
-				avatar: res.user.avatarUrl,
+				displayName: res?.user?.name,
+				username: res?.user?.username,
+				avatar: res?.user?.avatarUrl,
 			});
 			setToken(res.token);
 			setMisskeyId(res.user.id);
@@ -110,12 +110,13 @@ function MisskeySignInStack({ route, navigation }) {
 			username: PreviewCard.username,
 		});
 
-		for (const cred of creds) {
+		for await (const cred of creds) {
 			await CredentialsRepo.upsert(accnt, {
 				credential_type: cred.key,
 				credential_value: cred.value,
 			});
 		}
+
 		navigation.navigate("Select an Account");
 	}
 

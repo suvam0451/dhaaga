@@ -10,6 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@dhaaga/shared-abstraction-activitypub": "workspace:^",
     "@dhaaga/shared-provider-mastodon": "*",
     "@dhaaga/shared-provider-misskey": "*",
     "@dhaaga/shared-utility-html-parser": "*",

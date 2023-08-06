@@ -3,7 +3,7 @@ import { RestClient } from "../../native-client";
 import axios from "axios";
 import applyCaseMiddleware from "axios-case-converter";
 
-type TimelineQuery = {
+export type TimelineQuery = {
 	maxId?: string;
 	minId?: string;
 };

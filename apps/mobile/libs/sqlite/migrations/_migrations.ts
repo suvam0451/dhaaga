@@ -1,5 +1,6 @@
 import coreDb from "../connections/core";
 import activitypubDb from "../connections/activity_pub";
+import cacheDb from "../connections/cache";
 
 export function runCoreMigrations() {
 	coreDb.transaction(
@@ -53,14 +54,14 @@ export function runActivityPubMigrations() {
         url TEXT,
         favourited INT DEFAULT 0,
         instance_id INTEGER,
-        FOREIGN KEY (instance_id) REFERENCES instance (id)) ON DELETE CASCADE;
+        FOREIGN KEY (instance_id) REFERENCES instance (id) ON DELETE CASCADE);
    `);
 			tx.executeSql(`
       CREATE TABLE IF NOT EXISTS emoji_alias (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         alias TEXT,
         emoji_id INTEGER,
-        FOREIGN KEY (emoji_id) REFERENCES emoji (id)) ON DELETE CASCADE;
+        FOREIGN KEY (emoji_id) REFERENCES emoji (id) ON DELETE CASCADE);
    `);
 		},
 		(e) => {
@@ -68,6 +69,23 @@ export function runActivityPubMigrations() {
 		},
 		() => {
 			console.log("activitypub db migration success");
+		}
+	);
+}
+
+export function runCacheMigrations() {
+	cacheDb.transaction(
+		(tx) => {
+			tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS cache (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        key TEXT UNIQUE,
+        value TEXT,
+        updated_at DATETIME
+      );`);
+		},
+		() => {
+			console.log("cache db migration success");
 		}
 	);
 }

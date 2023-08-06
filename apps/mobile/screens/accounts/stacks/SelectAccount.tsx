@@ -1,4 +1,10 @@
-import { View, Text, Dimensions, ScrollView } from "react-native";
+import {
+	View,
+	Text,
+	Dimensions,
+	ScrollView,
+	RefreshControl,
+} from "react-native";
 import { useEffect, useState } from "react";
 import { StandardView } from "../../../styles/Containers";
 import { Button, Divider } from "@rneui/base";
@@ -13,6 +19,8 @@ import { useWindowDimensions } from "react-native";
 function SelectAccountStack({ navigation }) {
 	const { height, width } = useWindowDimensions();
 	const [Accounts, setAccounts] = useState<AccountDTO[]>([]);
+	const [refreshing, setRefreshing] = useState(false);
+
 	useEffect(() => {
 		onRefresh();
 	}, []);
@@ -35,8 +43,10 @@ function SelectAccountStack({ navigation }) {
 		<ScrollView
 			contentContainerStyle={{
 				minHeight: height - 105,
-				backgroundColor: "red",
 			}}
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			}
 		>
 			<View style={{ flex: 1, display: "flex" }}>
 				<Divider />

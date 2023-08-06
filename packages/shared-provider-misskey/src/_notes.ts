@@ -20,4 +20,14 @@ export class Noteservice {
 	}) {
 		return await client.request("notes/reactions", { noteId });
 	}
+
+	async searchByTag({
+		client,
+		tag,
+	}: {
+		client: misskeyApi.APIClient;
+		tag: string;
+	}) {
+		return await client.request("notes/search-by-tag", { limit: 20, tag });
+	}
 }

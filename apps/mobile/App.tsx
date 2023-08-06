@@ -12,6 +12,7 @@ import { useEffect, useRef } from "react";
 import { getCloser } from "./utils";
 import {
 	runActivityPubMigrations,
+	runCacheMigrations,
 	runCoreMigrations,
 } from "./libs/sqlite/migrations/_migrations";
 import { store } from "./libs/redux/store";
@@ -98,6 +99,7 @@ export default function App() {
 	useEffect(() => {
 		runCoreMigrations();
 		runActivityPubMigrations();
+		runCacheMigrations();
 	}, []);
 
 	const queryClient = new QueryClient();

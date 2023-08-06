@@ -6,23 +6,30 @@ import {
 	Animated,
 	SafeAreaView,
 	StatusBar,
-	View,
 	StyleSheet,
 	Text,
 	RefreshControl,
 } from "react-native";
 import { getCloser } from "../../../utils";
-import Header from "../../../components/Header";
 import {
-	RestClient,
-	RestServices,
+	mastodon,
 } from "@dhaaga/shared-provider-mastodon/dist";
 import { useQuery } from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
-import { NotesAPI, createClient } from "@dhaaga/shared-provider-misskey/dist";
+import {
+	Note,
+	NotesAPI,
+	createClient,
+} from "@dhaaga/shared-provider-misskey/dist";
 import axios from "axios";
-import { EmojiRepo } from "../../../libs/sqlite/repositories/activitypub/emoji.repo";
+import { CacheRepo } from "../../../libs/sqlite/repositories/cache/cache.repo";
+import {
+	ActivityPubClientFactory,
+	MastodonRestClient,
+	MisskeyRestClient,
+	UnknownRestClient,
+} from "@dhaaga/shared-abstraction-activitypub/dist";
 
 const { diffClamp } = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -36,24 +43,20 @@ function TimelineRenderer() {
 	const dispatch = useDispatch();
 	const accountState = useSelector<RootState, AccountState>((o) => o.account);
 
-	const restClient = useRef(null);
+	const restClient = useRef<
+		MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
+	>(null);
 
 	function getHomeTimeline() {
 		if (!restClient.current) {
 			throw new Error("client not initialized");
 		}
-
-		if (accountState.activeAccount?.domain === "mastodon") {
-			return RestServices.v1.default.timelines.default.getHomeTimeline(
-				restClient.current
-			);
-		} else if (accountState.activeAccount?.domain === "misskey") {
-			return NotesAPI.localTimeline(restClient.current);
-		}
-		return [];
+		return restClient.current.getHomeTimeline();
 	}
 	// Queries
-	const { status, data, error, fetchStatus, refetch } = useQuery({
+	const { status, data, error, fetchStatus, refetch } = useQuery<
+		mastodon.v1.Status[] | Note[]
+	>({
 		queryKey: ["mastodon/timelines/home", restClient],
 		queryFn: getHomeTimeline,
 	});
@@ -74,40 +77,65 @@ function TimelineRenderer() {
 			return;
 		}
 
-		if (accountState.activeAccount?.domain === "mastodon") {
-			const client = new RestClient(
-				accountState.activeAccount.subdomain,
-				token
-			);
-			restClient.current = client;
-		} else if (accountState.activeAccount?.domain === "misskey") {
-			const client = createClient(accountState.activeAccount.subdomain, token);
-			// console.log("successfully created client", client);
-			restClient.current = client;
+		if (!["mastodon", "misskey"].includes(accountState.activeAccount.domain)) {
+			return;
 		}
+		const client = ActivityPubClientFactory.get(
+			accountState.activeAccount.domain as any,
+			{
+				instance: accountState.activeAccount.subdomain,
+				token,
+			}
+		);
+		restClient.current = client;
 	}, [accountState]);
+
+	async function getCustomEmojisForInstance(subdomain: string) {
+		return await axios.get(
+			`${accountState.activeAccount.subdomain}/api/emojis`
+		);
+	}
+
+	/**
+	 * Update the emoji raw cache eevryday
+	 * @param subdomain
+	 * @returns
+	 */
+	async function updateEmojiCache(subdomain: string) {
+		try {
+			const emojisUpdatedAt = await CacheRepo.getUpdatedAt(
+				`${subdomain}/api/emojis`
+			);
+
+			if (emojisUpdatedAt.length > 0) {
+				let lastUpdatedAt = new Date(emojisUpdatedAt[0].updated_at);
+				lastUpdatedAt.setDate(lastUpdatedAt.getDate() + 1);
+
+				const delta = lastUpdatedAt.getTime() < new Date().getTime();
+				if (!delta) {
+					console.log(`[INFO]: emoji cache is up to date for ${subdomain}`);
+					return;
+				}
+				const res = await getCustomEmojisForInstance(subdomain);
+				const payload = JSON.stringify(res.data);
+				CacheRepo.set(`${subdomain}/api/emojis`, payload);
+				console.log(`[INFO]: emojis updated for ${subdomain}`);
+			}
+		} catch (e) {
+			const res = await getCustomEmojisForInstance(subdomain);
+			const payload = JSON.stringify(res.data);
+			CacheRepo.set(`${subdomain}/api/emojis`, payload);
+			console.log(`[INFO]: emojis updated for ${subdomain}`);
+		}
+	}
 
 	/**
 	 * Load gloabal emoji database
 	 */
 	useEffect(() => {
-		if (accountState.activeAccount?.domain === "misskey") {
+		if (accountState.activeAccount?.domain) {
 			const url = accountState.activeAccount.subdomain;
-			axios
-				.get(`${accountState.activeAccount.subdomain}/api/emojis`)
-				.then(async (res) => {
-					// console.log("obtained emojis");
-					for await (const emoji of res?.data?.emojis) {
-						// console.log(emoji)
-						await EmojiRepo.upsert(url, {
-							name: emoji.name,
-							url: emoji.url,
-							category: emoji.category,
-						});
-						console.log("uploaded", emoji.name);
-					}
-					console.log("uploaded emojis");
-				});
+			updateEmojiCache(url);
 		}
 	}, [accountState]);
 
@@ -188,6 +216,11 @@ function TimelineRenderer() {
 	const onRefresh = useCallback(() => {
 		setRefreshing(true);
 		refetch();
+
+		const subdomain = accountState.activeAccount?.domain;
+		if (subdomain) {
+			updateEmojiCache(subdomain);
+		}
 	}, []);
 
 	return (

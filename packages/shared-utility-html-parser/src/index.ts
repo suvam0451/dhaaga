@@ -61,6 +61,11 @@ export function parseStatusContent(str: string) {
 	return retval;
 }
 
+export function parseUsername(str: string) {
+	const mfmTree = parse(str);
+	return mfmTree;
+}
+
 export function decodeHTMLString(str: string) {
 	return decode(str);
 }

@@ -1770,7 +1770,6 @@ __metadata:
     "@types/react": ^18.2.15
     "@types/react-dom": ^18.2.7
     "@types/react-router-dom": ^5.3.3
-    "@types/uuid": ^9.0.2
     "@vitejs/plugin-react": ^4.0.3
     "@vitejs/plugin-react-swc": ^3.3.2
     axios: ^1.4.0
@@ -1786,7 +1785,6 @@ __metadata:
     styled-components: ^6.0.5
     threads-api: ^1.5.4
     typescript: ^5.1.6
-    uuid: ^9.0.0
     vite: ^4.4.5
   languageName: unknown
   linkType: soft
@@ -1796,6 +1794,7 @@ __metadata:
   resolution: "@dhaaga/mobile@workspace:apps/mobile"
   dependencies:
     "@babel/core": ^7.20.0
+    "@dhaaga/shared-abstraction-activitypub": "workspace:^"
     "@dhaaga/shared-provider-mastodon": "*"
     "@dhaaga/shared-provider-misskey": "*"
     "@dhaaga/shared-utility-html-parser": "*"
@@ -1832,6 +1831,17 @@ __metadata:
     react-redux: ^8.1.2
     styled-components: ^6.0.5
     typescript: ^5.1.3
+  languageName: unknown
+  linkType: soft
+
+"@dhaaga/shared-abstraction-activitypub@workspace:^, @dhaaga/shared-abstraction-activitypub@workspace:packages/shared-abstraction-activitypub":
+  version: 0.0.0-use.local
+  resolution: "@dhaaga/shared-abstraction-activitypub@workspace:packages/shared-abstraction-activitypub"
+  dependencies:
+    "@dhaaga/shared-provider-mastodon": "*"
+    "@dhaaga/shared-provider-misskey": "*"
+    tsup: ^7.2.0
+    typescript: ^5.1.6
   languageName: unknown
   linkType: soft
 
@@ -4290,13 +4300,6 @@ __metadata:
   version: 0.0.3
   resolution: "@types/use-sync-external-store@npm:0.0.3"
   checksum: 161ddb8eec5dbe7279ac971531217e9af6b99f7783213566d2b502e2e2378ea19cf5e5ea4595039d730aa79d3d35c6567d48599f69773a02ffcff1776ec2a44e
-  languageName: node
-  linkType: hard
-
-"@types/uuid@npm:^9.0.2":
-  version: 9.0.2
-  resolution: "@types/uuid@npm:9.0.2"
-  checksum: 1754bcf3444e1e3aeadd6e774fc328eb53bc956665e2e8fb6ec127aa8e1f43d9a224c3d22a9a6233dca8dd81a12dc7fed4d84b8876dd5ec82d40f574f7ff8b68
   languageName: node
   linkType: hard
 
@@ -13822,7 +13825,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsup@npm:^7.1.0":
+"tsup@npm:^7.1.0, tsup@npm:^7.2.0":
   version: 7.2.0
   resolution: "tsup@npm:7.2.0"
   dependencies:

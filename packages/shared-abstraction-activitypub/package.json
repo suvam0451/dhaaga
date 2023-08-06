@@ -1,0 +1,19 @@
+{
+  "name": "@dhaaga/shared-abstraction-activitypub",
+  "description": "using design patterns to work around the differences between various Mastodon forks",
+  "private": true,
+  "packageManager": "yarn@3.6.1",
+  "dependencies": {
+    "@dhaaga/shared-provider-mastodon": "*",
+    "@dhaaga/shared-provider-misskey": "*"
+  },
+  "devDependencies": {
+    "tsup": "^7.2.0",
+    "typescript": "^5.1.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup --clean ./src/index.ts --dts",
+    "dev": "tsup ./src/index.ts --watch --dts --external pkgJson"
+  }
+}

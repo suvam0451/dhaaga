@@ -4,7 +4,7 @@ import { StandardView } from "../../../styles/Containers";
 import { Divider } from "@rneui/base";
 import { Ionicons } from "@expo/vector-icons";
 import { formatDistance } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
 	decodeHTMLString,
 	parseStatusContent,
@@ -17,6 +17,14 @@ import { AccountState } from "../../../libs/redux/slices/account";
 import OriginalPoster from "../../../components/post-fragments/OriginalPoster";
 import { Note, UserLite } from "@dhaaga/shared-provider-misskey/dist";
 import StatusInteraction from "./StatusInteraction";
+import {
+	NoteInstance,
+	NoteToStatusAdapter,
+	StatusInstance,
+	StatusInterface,
+	StatusToStatusAdapter,
+} from "@dhaaga/shared-abstraction-activitypub/dist";
+import { adaptSharedProtocol } from "../../../utils/activitypub-adapters";
 
 type StatusFragmentProps = {
 	status: mastodon.v1.Status | Note;
@@ -29,46 +37,24 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 
 	const [PosterContent, setPosterContent] = useState(<View></View>);
 
-	useEffect(() => {
-		switch (accountState.activeAccount?.domain) {
-			case "mastodon": {
-				const _status = status as mastodon.v1.Status;
-				setPosterContent(
-					<OriginalPoster
-						avatarUrl={_status.account.avatar}
-						displayName={_status.account.displayName}
-						createdAt={_status.createdAt}
-						username={_status.account.username}
-						subdomain={accountState?.activeAccount?.subdomain}
-						visibility={_status.visibility}
-						accountUrl={_status.account.url}
-					/>
-				);
-				break;
-			}
-			case "misskey": {
-				const _status = status as Note;
-				const { user, ...rest } = _status;
+	const _status = useMemo(
+		() => adaptSharedProtocol(status, accountState?.activeAccount?.domain),
+		[status, accountState?.activeAccount?.domain]
+	);
 
-				setPosterContent(
-					<OriginalPoster
-						avatarUrl={_status.user.avatarUrl}
-						displayName={_status.user.name}
-						username={_status.user.username}
-						createdAt={_status.createdAt}
-						subdomain={accountState?.activeAccount?.subdomain}
-						visibility={_status.visibility}
-						accountUrl={""}
-					/>
-				);
-				break;
-			}
-			default: {
-				setPosterContent(<View></View>);
-				break;
-			}
-		}
-	}, [status]);
+	useEffect(() => {
+		setPosterContent(
+			<OriginalPoster
+				avatarUrl={_status.getAvatarUrl()}
+				displayName={_status.getDisplayName()}
+				createdAt={_status.getCreatedAt()}
+				username={_status.getUsername()}
+				subdomain={accountState?.activeAccount?.subdomain}
+				visibility={_status?.getVisibility()}
+				accountUrl={_status.getAccountUrl()}
+			/>
+		);
+	}, [_status]);
 
 	const [Content, setContent] = useState([]);
 
@@ -99,7 +85,13 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 		for (const para of parsed) {
 			for (const node of para) {
 				// @ts-ignore
-				retval.push(parseNode(node, count.toString(), status?.emojis || []));
+				retval.push(
+					parseNode(node, count.toString(), {
+						emojis: status?.emojis || [],
+						domain: accountState?.activeAccount?.domain,
+						subdomain: accountState?.activeAccount?.subdomain,
+					})
+				);
 				count++;
 			}
 		}
@@ -141,23 +133,10 @@ function SharedStatusFragment({
 }) {
 	const dispatch = useDispatch();
 	const accountState = useSelector<RootState, AccountState>((o) => o.account);
-	const [Username, setUsername] = useState("");
-
-	useEffect(() => {
-		switch (accountState.activeAccount?.domain) {
-			case "mastodon": {
-				setUsername((postedBy as mastodon.v1.Account).username);
-				break;
-			}
-			case "misskey": {
-				setUsername((postedBy as UserLite).username);
-				break;
-			}
-			default: {
-				break;
-			}
-		}
-	}, [status, boostedStatus]);
+	const _status = useMemo(
+		() => adaptSharedProtocol(status, accountState?.activeAccount?.domain),
+		[status, accountState?.activeAccount?.domain]
+	);
 
 	return (
 		<View>
@@ -171,7 +150,7 @@ function SharedStatusFragment({
 			>
 				<Ionicons color={"#888"} name={"rocket-outline"} size={12} />
 				<Text style={{ color: "#888", fontWeight: "500", marginLeft: 4 }}>
-					{Username}
+					{_status.getUsername()}
 				</Text>
 				<Text style={{ color: "gray", marginLeft: 2, marginRight: 2 }}>•</Text>
 				<Text style={{ color: "#888" }}>
@@ -189,16 +168,20 @@ function SharedStatusFragment({
 function StatusFragment({ status }: StatusFragmentProps) {
 	const dispatch = useDispatch();
 	const accountState = useSelector<RootState, AccountState>((o) => o.account);
+	const _status = useMemo(
+		() => adaptSharedProtocol(status, accountState?.activeAccount?.domain),
+		[status, accountState?.activeAccount?.domain]
+	);
 
 	switch (accountState.activeAccount?.domain) {
 		case "mastodon": {
-			const _status = status as mastodon.v1.Status;
-			if (_status.reblog) {
+			const _statuss = status as mastodon.v1.Status;
+			if (_status.isReposted()) {
 				return (
 					<SharedStatusFragment
-						status={_status.reblog}
-						postedBy={_status.account}
-						boostedStatus={_status}
+						status={_statuss.reblog}
+						postedBy={_statuss.account}
+						boostedStatus={_statuss}
 					/>
 				);
 			}
