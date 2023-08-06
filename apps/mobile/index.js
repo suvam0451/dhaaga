@@ -1,4 +1,8 @@
 import { registerRootComponent } from 'expo';
+// import { polyfillWebCrypto } from "expo-standard-web-crypto";
+// import "react-native-get-random-values";
+
+// polyfillWebCrypto();
 
 import App from './App';
 

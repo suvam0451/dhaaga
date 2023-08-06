@@ -48,10 +48,8 @@ export function parseNode(
 		}
 		case "url": {
 			return (
-				<React.Fragment>
-					<Text key={count} style={{ color: "orange" }}>
-						{node.props.url}
-					</Text>
+				<React.Fragment key={count}>
+					<Text style={{ color: "orange" }}>{node.props.url}</Text>
 					<Ionicons
 						name="open-outline"
 						style={{
@@ -81,6 +79,7 @@ export function parseNode(
 			} else {
 				return (
 					<CustomEmojiFragment
+						key={count}
 						identifier={node.props.name}
 						domain={domain}
 						subdomain={subdomain}
@@ -110,7 +109,7 @@ export function parseNode(
 			// 	</Text>
 		}
 		default: {
-			console.log("[WARN]: node type not evaluated", node);
+			// console.log("[WARN]: node type not evaluated", node);
 			return <Text key={count}></Text>;
 		}
 	}

@@ -1,14 +1,14 @@
 import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
 import { Dimensions, View, Image } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-// import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { ImageWrapper, ImageViewer } from "react-native-reanimated-viewer";
 import React from "react";
+import { MediaAttachmentInterface } from "@dhaaga/shared-abstraction-activitypub/dist";
 
 type ImageCarousalProps = {
-	attachments: mastodon.v1.MediaAttachment[];
+	attachments: MediaAttachmentInterface[];
 };
 
 const MEDIA_CONTAINER_MAX_HEIGHT = 540;
@@ -54,7 +54,7 @@ function TimelineImageRendered({
 	attachment,
 	CalculatedHeight,
 }: {
-	attachment: mastodon.v1.MediaAttachment;
+	attachment: MediaAttachmentInterface;
 	CalculatedHeight: number;
 }) {
 	return (
@@ -74,7 +74,7 @@ function TimelineImageRendered({
 				}}
 				resizeMethod={"scale"}
 				resizeMode={"contain"}
-				source={{ uri: attachment.previewUrl }}
+				source={{ uri: attachment.getPreviewUrl() }}
 			/>
 		</View>
 	);
@@ -90,13 +90,15 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 	useEffect(() => {
 		let MIN_HEIGHT = 0;
 		for (const item of attachments) {
-			if (item?.meta?.original && item.meta.original.height > MIN_HEIGHT) {
+			const meta = item.getMeta();
+
+			const width = item.getWidth();
+			const height = item.getHeight();
+
+			if (height && height > MIN_HEIGHT) {
 				const deviceWidth = Dimensions.get("window").width;
-				const multiplier = deviceWidth / item.meta.original.width;
-				MIN_HEIGHT = Math.min(
-					item.meta.original.height * multiplier,
-					MEDIA_CONTAINER_MAX_HEIGHT
-				);
+				const multiplier = deviceWidth / width;
+				MIN_HEIGHT = Math.min(height * multiplier, MEDIA_CONTAINER_MAX_HEIGHT);
 			}
 		}
 		setCalculatedHeight(MIN_HEIGHT);
@@ -108,8 +110,8 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 				<ImageViewer
 					ref={imageRef}
 					data={attachments.map((o) => ({
-						source: { uri: o.remoteUrl },
-						key: o.id,
+						source: { uri: o.getUrl() },
+						key: o.getId(),
 					}))}
 				/>
 				<TimelineImageRendered

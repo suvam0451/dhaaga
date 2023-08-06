@@ -17,14 +17,8 @@ import { AccountState } from "../../../libs/redux/slices/account";
 import OriginalPoster from "../../../components/post-fragments/OriginalPoster";
 import { Note, UserLite } from "@dhaaga/shared-provider-misskey/dist";
 import StatusInteraction from "./StatusInteraction";
-import {
-	NoteInstance,
-	NoteToStatusAdapter,
-	StatusInstance,
-	StatusInterface,
-	StatusToStatusAdapter,
-} from "@dhaaga/shared-abstraction-activitypub/dist";
 import { adaptSharedProtocol } from "../../../utils/activitypub-adapters";
+import ImageCarousal from "./ImageCarousal";
 
 type StatusFragmentProps = {
 	status: mastodon.v1.Status | Note;
@@ -59,16 +53,16 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 	const [Content, setContent] = useState([]);
 
 	useEffect(() => {
-		let content = "";
+		let content = _status.getContent();
+		// console.log(content);
+
 		let emojis = [];
 		switch (accountState?.activeAccount?.domain) {
 			case "mastodon": {
-				content = (status as mastodon.v1.Status).content;
 				emojis = (status as mastodon.v1.Status).emojis;
 				break;
 			}
 			case "misskey": {
-				content = (status as Note).text;
 				// console.log(status);
 				// emojis = (status as Note).reactions
 				break;
@@ -116,7 +110,7 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 
 			<Text style={{ marginBottom: 16, color: "white" }}>{Content}</Text>
 
-			{/* <ImageCarousal attachments={status.mediaAttachments} /> */}
+			<ImageCarousal attachments={_status.getMediaAttachments()} />
 			{/* <EmojiBoard status={status} /> */}
 			<StatusInteraction post={status} statusId={status.id} />
 			<Divider />

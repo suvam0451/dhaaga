@@ -11,17 +11,11 @@ import {
 	RefreshControl,
 } from "react-native";
 import { getCloser } from "../../../utils";
-import {
-	mastodon,
-} from "@dhaaga/shared-provider-mastodon/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
 import { useQuery } from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
-import {
-	Note,
-	NotesAPI,
-	createClient,
-} from "@dhaaga/shared-provider-misskey/dist";
+import { Note } from "@dhaaga/shared-provider-misskey/dist";
 import axios from "axios";
 import { CacheRepo } from "../../../libs/sqlite/repositories/cache/cache.repo";
 import {

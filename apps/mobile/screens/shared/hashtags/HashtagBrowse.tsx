@@ -1,22 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RefreshControl, Text, View } from "react-native";
+import { RefreshControl, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../libs/redux/store";
 import { AccountState } from "../../../libs/redux/slices/account";
-import {
-	RestClient,
-	RestServices,
-} from "@dhaaga/shared-provider-mastodon/dist";
 import StatusFragment from "../../timelines/fragments/StatusFragment";
 import { ScrollView } from "react-native";
 import { Skeleton } from "@rneui/base";
+import {
+	ActivityPubClientFactory,
+	ActivityPubStatuses,
+	MastodonRestClient,
+	MisskeyRestClient,
+	UnknownRestClient,
+} from "@dhaaga/shared-abstraction-activitypub/dist";
 
 function HashtagBrowse({ route, navigation }) {
 	const dispatch = useDispatch();
 	const accountState = useSelector<RootState, AccountState>((o) => o.account);
 	const q = route?.params?.q;
-	const restClient = useRef(null);
+	const restClient = useRef<
+		MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
+	>(null);
 	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
@@ -35,7 +40,13 @@ function HashtagBrowse({ route, navigation }) {
 			return;
 		}
 
-		const client = new RestClient(accountState.activeAccount.subdomain, token);
+		const client = ActivityPubClientFactory.get(
+			accountState.activeAccount.domain as any,
+			{
+				instance: accountState.activeAccount.subdomain,
+				token,
+			}
+		);
 		restClient.current = client;
 	}, [accountState]);
 
@@ -43,19 +54,16 @@ function HashtagBrowse({ route, navigation }) {
 		if (!restClient.current) {
 			throw new Error("client not initialized");
 		}
-
-		return RestServices.v1.default.timelines.default.getTimelineByHashtag(
-			restClient.current,
-			q
-		);
+		return restClient.current.getTimelineByHashtag(q);
 	}
 
 	// Queries
-	const { status, data, error, fetchStatus, refetch } = useQuery({
-		queryKey: ["mastodon/timelines/tag", restClient.current, q],
-		queryFn: getStatusesWithTag,
-		enabled: q !== undefined,
-	});
+	const { status, data, error, fetchStatus, refetch } =
+		useQuery<ActivityPubStatuses>({
+			queryKey: ["mastodon/timelines/tag", restClient.current, q],
+			queryFn: getStatusesWithTag,
+			enabled: q !== undefined,
+		});
 
 	useEffect(() => {
 		if (status === "success") {
