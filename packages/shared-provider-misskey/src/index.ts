@@ -1,6 +1,5 @@
 import axios from "axios";
 import { api as misskeyApi } from "misskey-js";
-import uuid from "react-native-uuid";
 import { MiauthSessionCheckResponse } from "./types";
 export { Note, UserLite } from "misskey-js/built/entities";
 
@@ -19,8 +18,8 @@ export const verifyToken = async (host: string, session: string) => {
 	return res.data;
 };
 
-export const createCodeRequestUrl = (instanceUrl: string) => {
-	const authEndpoint = `${instanceUrl}/miauth/${uuid.v4()}`;
+export const createCodeRequestUrl = (instanceUrl: string, uuid: string) => {
+	const authEndpoint = `${instanceUrl}/miauth/${uuid}`;
 
 	// Set up parameters for the query string
 	const options: Record<string, string> = {
@@ -40,7 +39,7 @@ export const createCodeRequestUrl = (instanceUrl: string) => {
 export class NotesAPI {
 	static async localTimeline(client: misskeyApi.APIClient) {
 		const res = await client.request("notes/local-timeline", { limit: 20 });
-		console.log(res);
+		// console.log(res);
 		return res;
 	}
 }

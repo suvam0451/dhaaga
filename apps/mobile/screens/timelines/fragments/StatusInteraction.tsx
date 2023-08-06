@@ -23,7 +23,7 @@ function StatusInteraction({ statusId, post }: StatusInteractionProps) {
 	const [RepostCount, setRepostCount] = useState(-1);
 
 	useEffect(() => {
-		switch (accountState.activeAccount.domain) {
+		switch (accountState.activeAccount?.domain) {
 			case "mastodon": {
 				const _status = post as mastodon.v1.Status;
 				setRepliesCount(_status.repliesCount);

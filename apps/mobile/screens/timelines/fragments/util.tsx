@@ -1,5 +1,5 @@
 import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
-import { MfmEmojiCode, MfmNode } from "@dhaaga/shared-utility-html-parser/dist";
+import { MfmNode } from "@dhaaga/shared-utility-html-parser/dist";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "@rneui/base";
 import React from "react";
@@ -26,7 +26,7 @@ export function parseNode(
 		}
 		case "hashtag": {
 			return (
-				<HashtagProcessor forwardedKey={count} content={node.props.hashtag} />
+				<HashtagProcessor key={count} forwardedKey={count} content={node.props.hashtag} />
 			);
 		}
 		case "url": {
@@ -48,7 +48,7 @@ export function parseNode(
 			);
 		}
 		case "emojiCode": {
-			const renderer = emojis.find((o) => o.shortcode === node.props.name);
+			const renderer = emojis?.find((o) => o.shortcode === node.props.name);
 			if (renderer) {
 				return (
 					<Image

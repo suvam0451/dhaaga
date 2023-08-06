@@ -28,8 +28,8 @@ function SelectAccountStack({ navigation }) {
 			});
 	}
 
-	const MastodonAccounts = Accounts.filter((o) => o.domain === "mastodon");
-	const MisskeyAccounts = Accounts.filter((o) => o.domain === "misskey");
+	const MastodonAccounts = Accounts.filter((o) => o?.domain === "mastodon");
+	const MisskeyAccounts = Accounts.filter((o) => o?.domain === "misskey");
 
 	return (
 		<ScrollView

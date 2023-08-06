@@ -10,13 +10,17 @@ import { StandardView } from "../../../../styles/Containers";
 import { MainText } from "../../../../styles/Typography";
 import { Button } from "@rneui/base";
 import { createCodeRequestUrl } from "@dhaaga/shared-provider-misskey/dist";
+import * as Crypto from "expo-crypto";
 
 function MisskeyServerSelection({ navigation }) {
 	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 	const [InputText, setInputText] = useState("misskey.io");
 
 	async function onPressNext() {
-		const authUrl = await createCodeRequestUrl(`https://${InputText}`);
+		const authUrl = await createCodeRequestUrl(
+			`https://${InputText}`,
+			Crypto.randomUUID()
+		);
 		const subdomain = `https://${InputText}`;
 		navigation.navigate("Misskey Sign-In", { signInUrl: authUrl, subdomain });
 	}

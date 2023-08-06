@@ -10,7 +10,10 @@ import AccountsStack from "./screens/accounts";
 import { Animated } from "react-native";
 import { useEffect, useRef } from "react";
 import { getCloser } from "./utils";
-import { runCoreMigrations } from "./libs/sqlite/migrations/_migrations";
+import {
+	runActivityPubMigrations,
+	runCoreMigrations,
+} from "./libs/sqlite/migrations/_migrations";
 import { store } from "./libs/redux/store";
 import { Provider } from "react-redux";
 import HomeStack from "./screens/timelines";
@@ -94,6 +97,7 @@ export default function App() {
 	// run initial migrations
 	useEffect(() => {
 		runCoreMigrations();
+		runActivityPubMigrations();
 	}, []);
 
 	const queryClient = new QueryClient();

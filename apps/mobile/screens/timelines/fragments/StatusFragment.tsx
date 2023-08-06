@@ -29,9 +29,8 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 
 	const [PosterContent, setPosterContent] = useState(<View></View>);
 
-	// console.log(status);
 	useEffect(() => {
-		switch (accountState.activeAccount.domain) {
+		switch (accountState.activeAccount?.domain) {
 			case "mastodon": {
 				const _status = status as mastodon.v1.Status;
 				setPosterContent(
@@ -84,7 +83,7 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 			}
 			case "misskey": {
 				content = (status as Note).text;
-				console.log(status);
+				// console.log(status);
 				// emojis = (status as Note).reactions
 				break;
 			}
@@ -145,7 +144,7 @@ function SharedStatusFragment({
 	const [Username, setUsername] = useState("");
 
 	useEffect(() => {
-		switch (accountState.activeAccount.domain) {
+		switch (accountState.activeAccount?.domain) {
 			case "mastodon": {
 				setUsername((postedBy as mastodon.v1.Account).username);
 				break;
@@ -191,7 +190,7 @@ function StatusFragment({ status }: StatusFragmentProps) {
 	const dispatch = useDispatch();
 	const accountState = useSelector<RootState, AccountState>((o) => o.account);
 
-	switch (accountState.activeAccount.domain) {
+	switch (accountState.activeAccount?.domain) {
 		case "mastodon": {
 			const _status = status as mastodon.v1.Status;
 			if (_status.reblog) {

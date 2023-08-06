@@ -14,43 +14,60 @@ export type InstanceDTO = InstanceCreateDTO & {
 export class InstancesRepo {
 	static async search(url: string): Promise<InstanceDTO> {
 		return new Promise((resolve, reject) => {
-			db.transaction((tx) => {
-				tx.executeSql(
-					`select * from instances
+			db.transaction(
+				(tx) => {
+					tx.executeSql(
+						`select * from instance
             WHERE url = ?`,
-					[url],
-					(_, { rows }) => {
-						if (rows._array.length > 0) {
-							resolve(rows._array[0]);
-						} else {
-							resolve(null);
+						[url],
+						(_, { rows }) => {
+							if (rows._array.length > 0) {
+								resolve(rows._array[0]);
+							} else {
+								resolve(null);
+							}
 						}
-					}
-				);
-			});
+					);
+				},
+				(e) => {
+					console.log("[InstanceRepo] search error", e);
+				},
+				() => {
+					// console.log("[InstanceRepo] search success");
+				}
+			);
 		});
 	}
 
 	static async upsert(instance: InstanceCreateDTO) {
 		const match = await this.search(instance.url);
+		// console.log("instance match is", match);
 		if (match) {
-			db.transaction((tx) => {
-				tx.executeSql(
-					`update instances 
-          set name = ?, updated_at = ? 
-          where id = ?`,
-					[instance.name, new Date().getTime(), match.id]
-				);
-			});
+			db.transaction(
+				(tx) => {
+					tx.executeSql(`update instance set name = ? where id = ?`, [
+						instance.name,
+						match.id,
+					]);
+				},
+				(e) => {
+					console.log("[InstanceRepo] update error", e);
+				}
+			);
 		} else {
-			db.transaction((tx) => {
-				tx.executeSql(
-					`insert into instances 
-          (name, url, updated_at) 
-            values (?, ?, ?)`,
-					[instance.name, instance.url, new Date().getTime()]
-				);
-			});
+			db.transaction(
+				(tx) => {
+					tx.executeSql(
+						`insert into instance
+          (name, url) 
+            values (?, ?)`,
+						[instance.name, instance.url]
+					);
+				},
+				(e) => {
+					console.log("[InstanceRepo] create error", e);
+				}
+			);
 		}
 	}
 }

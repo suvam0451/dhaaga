@@ -59,7 +59,7 @@ export class AccountsRepo {
 	 */
 	static async add(account: AccountCreateDTO) {
 		const conflict = await this.search(account);
-		console.log("conflict is", conflict);
+		// console.log("conflict is", conflict);
 		if (conflict) {
 			return conflict;
 		}
@@ -80,7 +80,7 @@ export class AccountsRepo {
 						Number(account.verified || 0),
 					],
 					(_, { rows }) => {
-						console.log(rows);
+						// console.log(rows);
 						// console.log("success 2", JSON.stringify(rows))
 					},
 					(_, error) => {

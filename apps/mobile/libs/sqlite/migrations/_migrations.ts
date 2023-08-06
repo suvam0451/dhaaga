@@ -43,24 +43,24 @@ export function runActivityPubMigrations() {
         name TEXT,
         url TEXT,
         blocked INT DEFAULT 0,
-        favourited INT DEFAULT 0,
+        favourited INT DEFAULT 0);
       `);
 			tx.executeSql(`
       CREATE TABLE IF NOT EXISTS emoji (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name: TEXT,
-        category: TEXT,
-        url: TEXT,
-        favourited: INT DEFAULT 0),
+        name TEXT,
+        category TEXT,
+        url TEXT,
+        favourited INT DEFAULT 0,
         instance_id INTEGER,
-        FOREIGN KEY (instance_id) REFERENCES instance (id));
+        FOREIGN KEY (instance_id) REFERENCES instance (id)) ON DELETE CASCADE;
    `);
 			tx.executeSql(`
       CREATE TABLE IF NOT EXISTS emoji_alias (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         alias TEXT,
         emoji_id INTEGER,
-        FOREIGN KEY (emoji_id) REFERENCES emoji (id));
+        FOREIGN KEY (emoji_id) REFERENCES emoji (id)) ON DELETE CASCADE;
    `);
 		},
 		(e) => {

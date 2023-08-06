@@ -17,6 +17,8 @@
   "license": "AGPL",
   "workspaces": [
     "website",
-    "frontend"
+    "frontend",
+    "packages/*",
+    "apps/*"
   ]
 }

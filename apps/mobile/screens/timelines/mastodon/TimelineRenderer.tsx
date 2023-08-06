@@ -21,6 +21,8 @@ import { useQuery } from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
 import { NotesAPI, createClient } from "@dhaaga/shared-provider-misskey/dist";
+import axios from "axios";
+import { EmojiRepo } from "../../../libs/sqlite/repositories/activitypub/emoji.repo";
 
 const { diffClamp } = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -41,11 +43,11 @@ function TimelineRenderer() {
 			throw new Error("client not initialized");
 		}
 
-		if (accountState.activeAccount.domain === "mastodon") {
+		if (accountState.activeAccount?.domain === "mastodon") {
 			return RestServices.v1.default.timelines.default.getHomeTimeline(
 				restClient.current
 			);
-		} else if (accountState.activeAccount.domain === "misskey") {
+		} else if (accountState.activeAccount?.domain === "misskey") {
 			return NotesAPI.localTimeline(restClient.current);
 		}
 		return [];
@@ -72,16 +74,40 @@ function TimelineRenderer() {
 			return;
 		}
 
-		if (accountState.activeAccount.domain === "mastodon") {
+		if (accountState.activeAccount?.domain === "mastodon") {
 			const client = new RestClient(
 				accountState.activeAccount.subdomain,
 				token
 			);
 			restClient.current = client;
-		} else if (accountState.activeAccount.domain === "misskey") {
+		} else if (accountState.activeAccount?.domain === "misskey") {
 			const client = createClient(accountState.activeAccount.subdomain, token);
-			console.log("successfully created client", client);
+			// console.log("successfully created client", client);
 			restClient.current = client;
+		}
+	}, [accountState]);
+
+	/**
+	 * Load gloabal emoji database
+	 */
+	useEffect(() => {
+		if (accountState.activeAccount?.domain === "misskey") {
+			const url = accountState.activeAccount.subdomain;
+			axios
+				.get(`${accountState.activeAccount.subdomain}/api/emojis`)
+				.then(async (res) => {
+					// console.log("obtained emojis");
+					for await (const emoji of res?.data?.emojis) {
+						// console.log(emoji)
+						await EmojiRepo.upsert(url, {
+							name: emoji.name,
+							url: emoji.url,
+							category: emoji.category,
+						});
+						console.log("uploaded", emoji.name);
+					}
+					console.log("uploaded emojis");
+				});
 		}
 	}, [accountState]);
 

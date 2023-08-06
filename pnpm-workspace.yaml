@@ -1,5 +1,0 @@
-packages:
-  - website
-  - frontend
-  - apps/*
-  - packages/*

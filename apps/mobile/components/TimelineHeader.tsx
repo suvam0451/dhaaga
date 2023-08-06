@@ -10,7 +10,6 @@ const TimelinesHeader = ({
 	HIDDEN_SECTION_HEIGHT,
 	SHOWN_SECTION_HEIGHT,
 }: HeadersProps) => {
-	console.log("")
 	return (
 		<>
 			<View

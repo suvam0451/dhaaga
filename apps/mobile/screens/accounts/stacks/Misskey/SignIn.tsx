@@ -4,14 +4,10 @@ import WebView from "react-native-webview";
 import { StandardView } from "../../../../styles/Containers";
 import { MainText } from "../../../../styles/Typography";
 import { Button } from "@rneui/base";
-import {
-	MastodonService,
-	RestClient,
-	RestServices,
-} from "@dhaaga/shared-provider-mastodon/dist";
 import { AccountsRepo } from "../../../../libs/sqlite/repositories/accounts.repo";
 import { CredentialsRepo } from "../../../../libs/sqlite/repositories/credentials.repo";
-import uuid from "react-native-uuid";
+import * as Crypto from 'expo-crypto';
+
 import { verifyToken } from "@dhaaga/shared-provider-misskey/dist";
 import AccountCreationPreview, {
 	AccountCreationPreviewProps,
@@ -32,7 +28,7 @@ function MisskeySignInStack({ route, navigation }) {
 				setSession(session);
 			}
 		} catch (e) {
-			setSession(uuid.v4() as unknown as string);
+			setSession(Crypto.randomUUID() as unknown as string);
 		}
 	}, []);
 
