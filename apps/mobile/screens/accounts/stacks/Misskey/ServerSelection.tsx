@@ -1,31 +1,29 @@
+import { useEffect, useState } from "react";
 import {
-	View,
-	TextInput,
-	Text,
 	Keyboard,
 	TouchableOpacity,
-	Dimensions,
+	View,
+	Text,
+	TextInput,
 } from "react-native";
-import { useEffect, useState } from "react";
-import { MastodonService } from "@dhaaga/shared-provider-mastodon/dist";
-import { MainText } from "../../../styles/Typography";
-import { StandardView } from "../../../styles/Containers";
+import { StandardView } from "../../../../styles/Containers";
+import { MainText } from "../../../../styles/Typography";
 import { Button } from "@rneui/base";
-import WebView from "react-native-webview";
+import { createCodeRequestUrl } from "@dhaaga/shared-provider-misskey/dist";
+import * as Crypto from "expo-crypto";
 
-function AccountsScreen({ navigation }) {
-	const [InputText, setInputText] = useState("mastodon.social");
+function MisskeyServerSelection({ navigation }) {
+	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+	const [InputText, setInputText] = useState("misskey.io");
 
 	async function onPressNext() {
-		const authUrl = await MastodonService.createCodeRequestUrl(
+		const authUrl = await createCodeRequestUrl(
 			`https://${InputText}`,
-			process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID
+			Crypto.randomUUID()
 		);
 		const subdomain = `https://${InputText}`;
-		navigation.navigate("Server Sign-In", { signInUrl: authUrl, subdomain });
+		navigation.navigate("Misskey Sign-In", { signInUrl: authUrl, subdomain });
 	}
-
-	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
 	useEffect(() => {
 		const keyboardDidShowListener = Keyboard.addListener(
@@ -48,16 +46,10 @@ function AccountsScreen({ navigation }) {
 	}, []);
 
 	const popularServers = [
-		{ value: "mastodon.social", label: "mastodon.social" },
-		{ value: "fosstodon.org", label: "fosstodon.org" },
-		{ value: "pawoo.net", label: "🇯🇵 pawoo.net" },
-		{ value: "mastodon.art", label: "mastodon.art" },
-		{ value: "mstdn.social", label: "mstdn.social" },
-		{ value: "mastodon.world", label: "mastodon.world" },
-		{ value: "pixelfed.social", label: "pixelfed.social" },
-		{ value: "mstdn.jp", label: "🇯🇵 mstdn.jp" },
-		{ value: "mastodon.cloud", label: "mastodon.cloud" },
-		{ value: "mastodon.online", label: "mastodon.online" },
+		{ value: "misskey.io", label: "misskey.io" },
+		{ value: "misskey.dev", label: "misskey.dev" },
+		{ value: "misskey.id", label: " 🇮🇩misskey.id" },
+		{ value: "hallsofamenti.io", label: "hallsofamenti.io" },
 	];
 
 	return (
@@ -117,12 +109,14 @@ function AccountsScreen({ navigation }) {
 							color: "blue",
 							textDecorationLine: "underline",
 						}}
-						placeholder="mastodon.social"
-						defaultValue="mastodon.social"
+						placeholder="misskey.io"
+						defaultValue="misskey.io"
 						onChangeText={setInputText}
 						value={InputText}
 					/>
-					<Text style={{ fontSize: 16, color: "gray" }}>/oauth/authorize</Text>
+					<Text style={{ fontSize: 16, color: "gray" }}>
+						{"/miauth/{session}"}
+					</Text>
 				</View>
 			</View>
 			<View style={{ marginBottom: 32 }}>
@@ -134,4 +128,4 @@ function AccountsScreen({ navigation }) {
 	);
 }
 
-export default AccountsScreen;
+export default MisskeyServerSelection;

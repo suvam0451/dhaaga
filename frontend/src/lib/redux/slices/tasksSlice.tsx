@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ProviderAuthItem } from "./authSlice";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto"
 
 export type CreateTaskDTO = {
 	domain: string;
@@ -35,7 +35,7 @@ export const taskSlice = createSlice({
 	reducers: {
 		createTask: (state, action: PayloadAction<CreateTaskDTO>) => {
 			state.tasks.push({
-				uuid: uuidv4(),
+				uuid: crypto.randomUUID(),
 				taskInProgress: false,
 				...action.payload,
 			});

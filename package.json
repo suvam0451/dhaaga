@@ -17,6 +17,9 @@
   "license": "AGPL",
   "workspaces": [
     "website",
-    "frontend"
-  ]
+    "frontend",
+    "packages/*",
+    "apps/*"
+  ],
+  "packageManager": "yarn@3.6.1"
 }

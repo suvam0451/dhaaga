@@ -22,19 +22,16 @@ function PasteTokenStep({ Subdomain, Code }: PasteTokenStepProps) {
 			process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID,
 			process.env.EXPO_PUBLIC_MASTODON_CLIENT_SECRET
 		);
-		console.log("your token", token, Subdomain);
 
 		const client = new RestClient(Subdomain, token);
 		const verified =
 			await RestServices.v1.default.accounts.default.verifyCredentials(client);
-		console.log("assing", verified.username);
 		
 		AccountsRepo.add({
 			subdomain: Subdomain,
 			domain: "mastodon",
 			username: verified.username,
 		});
-		console.log(verified);
 	}
 
 	if (Code === null) return <></>;

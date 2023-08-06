@@ -7,7 +7,6 @@ import {
 	Flex,
 	Loader,
 	Drawer,
-	Image,
 } from "@mantine/core";
 import { MastadonWorker } from "../../../services/mastadon-worker.service";
 import { notifications } from "@mantine/notifications";
@@ -16,9 +15,6 @@ import { useState } from "react";
 import { MastadonService } from "../../../services/mastadon.service";
 import ClickToPaste from "../../utils/ClickToPaste";
 import { TextTitle } from "../../../styles/Mastodon";
-import MisskeyLogo from "../../../assets/icons/Logo_Misskey.svg";
-
-import { v4 as uuidv4 } from "uuid";
 
 function MisskeyOnboarding() {
 	const [AuthToken, setAuthToken] = useState("");

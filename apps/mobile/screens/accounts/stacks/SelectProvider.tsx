@@ -42,7 +42,7 @@ function SelectProviderStack({ navigation }) {
 						<View style={{ paddingTop: 8 }}>
 							<Button
 								onPress={() => {
-									navigation.navigate("Add Mastodon Account", {
+									navigation.navigate("Select Mastodon Server", {
 										type: "mastodon",
 									});
 								}}
@@ -91,6 +91,11 @@ function SelectProviderStack({ navigation }) {
 									"linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))"
 								}
 								title={"Login"}
+								onPress={() => {
+									navigation.navigate("Select Misskey Server", {
+										type: "misskey",
+									});
+								}}
 							/>
 						</View>
 					</Card>

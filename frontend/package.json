@@ -28,15 +28,13 @@
 		"react-redux": "^8.1.1",
 		"react-router-dom": "^6.14.2",
 		"styled-components": "^6.0.5",
-		"threads-api": "^1.5.4",
-		"uuid": "^9.0.0"
+		"threads-api": "^1.5.4"
 	},
 	"devDependencies": {
 		"@types/node": "^20.4.2",
 		"@types/react": "^18.2.15",
 		"@types/react-dom": "^18.2.7",
 		"@types/react-router-dom": "^5.3.3",
-		"@types/uuid": "^9.0.2",
 		"@vitejs/plugin-react-swc": "^3.3.2",
 		"typescript": "^5.1.6",
 		"vite": "^4.4.5"

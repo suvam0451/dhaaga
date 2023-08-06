@@ -1,17 +1,18 @@
-import { Box, Flex } from "@mantine/core";
+import { Box, Flex, Text } from "@mantine/core";
 import { mastodon } from "masto";
 import MastadonPostListing from "../PostListing";
 import { PostBoosterImage, TextSubtitle } from "../../../styles/Mastodon";
 import { FaRetweet } from "react-icons/fa";
+import { formatRelative } from "date-fns";
 
 function RebloggedPost({
 	post,
 	repostedBy,
-	index
+	index,
 }: {
 	repostedBy: mastodon.v1.Account;
 	post: mastodon.v1.Status;
-	index: number
+	index: number;
 }) {
 	return (
 		<Box h={"100%"} pt={"md"}>

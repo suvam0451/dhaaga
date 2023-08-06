@@ -12,3 +12,11 @@ frontend/.env.**
 apps/mobile/.env
 
 .turbo/
+
+# Yarn
+.yarn/*
+.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions

@@ -1,0 +1,23 @@
+{
+  "name": "@dhaaga/shared-utility-html-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup --clean ./src/index.ts --dts",
+    "dev": "tsup ./src/index.ts --watch --dts --external pkgJson"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "html-entities": "^2.4.0",
+    "htmlparser2": "^9.0.0",
+    "mfm-js": "^0.23.3"
+  }
+}

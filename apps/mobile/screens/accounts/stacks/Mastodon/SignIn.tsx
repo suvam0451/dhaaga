@@ -1,16 +1,17 @@
 import { Dimensions, View, Text, Keyboard } from "react-native";
-import PasteTokenStep from "../../accounts-comp/PasteTokenStep";
+import PasteTokenStep from "../../../accounts-comp/PasteTokenStep";
 import { useEffect, useState } from "react";
 import WebView from "react-native-webview";
-import { StandardView } from "../../../styles/Containers";
-import { MainText } from "../../../styles/Typography";
+import { StandardView } from "../../../../styles/Containers";
+import { MainText } from "../../../../styles/Typography";
 import { Button } from "@rneui/base";
 import {
 	MastodonService,
 	RestClient,
 	RestServices,
 } from "@dhaaga/shared-provider-mastodon/dist";
-import { AccountsRepo } from "../../../libs/sqlite/repositories/accounts.repo";
+import { AccountsRepo } from "../../../../libs/sqlite/repositories/accounts.repo";
+import { CredentialsRepo } from "../../../../libs/sqlite/repositories/credentials.repo";
 
 function MastodonSignInStack({ route, navigation }) {
 	const [Code, setCode] = useState<string | null>(null);
@@ -49,6 +50,7 @@ function MastodonSignInStack({ route, navigation }) {
 	}
 
 	async function onPressConfirm() {
+		console.log("user confirmed account creation");
 		const token = await MastodonService.getAccessToken(
 			subdomain,
 			Code,
@@ -59,12 +61,47 @@ function MastodonSignInStack({ route, navigation }) {
 		const client = new RestClient(subdomain, token);
 		const verified =
 			await RestServices.v1.default.accounts.default.verifyCredentials(client);
+		console.log("verifying token");
 
-		AccountsRepo.add({
+		await AccountsRepo.add({
 			subdomain: subdomain,
 			domain: "mastodon",
 			username: verified.username,
 		});
+
+		const accnt = await AccountsRepo.search({
+			subdomain: subdomain,
+			domain: "mastodon",
+			username: verified.username,
+		});
+
+		const creds = [
+			{
+				key: "display_name",
+				value: verified["display_name"],
+			},
+			{
+				key: "avatar",
+				value: verified["avatar_static"],
+			},
+			{
+				key: "url",
+				value: verified["url"],
+			},
+			{
+				key: "access_token",
+				value: token,
+			},
+		];
+
+		console.log("account added", accnt);
+		for (const cred of creds) {
+			await CredentialsRepo.upsert(accnt, {
+				credential_type: cred.key,
+				credential_value: cred.value,
+			});
+		}
+		console.log("credentials added");
 
 		navigation.navigate("Select an Account");
 	}
