@@ -8,7 +8,7 @@ import { AccountsRepo } from "../../../../libs/sqlite/repositories/accounts.repo
 import { CredentialsRepo } from "../../../../libs/sqlite/repositories/credentials.repo";
 import * as Crypto from "expo-crypto";
 
-import { verifyToken } from "@dhaaga/shared-provider-misskey/dist";
+import { verifyToken } from "@dhaaga/shared-provider-misskey/src";
 import AccountCreationPreview, {
 	AccountCreationPreviewProps,
 } from "../../../../components/app/AccountDisplay";

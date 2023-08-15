@@ -1,5 +1,5 @@
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
-import { MfmNode } from "@dhaaga/shared-utility-html-parser/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
+import { MfmNode } from "@dhaaga/shared-utility-html-parser/src";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "@rneui/base";
 import React, { useEffect, useState } from "react";

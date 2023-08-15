@@ -2,12 +2,12 @@ import {
 	RestClient,
 	RestServices,
 	mastodon,
-} from "@dhaaga/shared-provider-mastodon/dist";
+} from "@dhaaga/shared-provider-mastodon/src";
 import {
 	Note,
 	createClient,
 	misskeyApi,
-} from "@dhaaga/shared-provider-misskey/dist";
+} from "@dhaaga/shared-provider-misskey/src";
 import axios, { AxiosInstance } from "axios";
 
 // export status adapters and interfaces

@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import { extractInstanceUrl, visibilityIcon } from "../../utils/instances";
 import { formatDistance } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { parseUsername } from "@dhaaga/shared-utility-html-parser/dist";
+import { parseUsername } from "@dhaaga/shared-utility-html-parser/src";
 import { parseNode } from "../../screens/timelines/fragments/util";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../libs/redux/store";

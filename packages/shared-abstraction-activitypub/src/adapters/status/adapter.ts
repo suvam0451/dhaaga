@@ -1,4 +1,4 @@
-import { DriveFile } from "@dhaaga/shared-provider-misskey/dist";
+import { DriveFile } from "@dhaaga/shared-provider-misskey/src";
 import {
 	DriveFileToMediaAttachmentAdapter,
 	MediaAttachmentToMediaAttachmentAdapter,

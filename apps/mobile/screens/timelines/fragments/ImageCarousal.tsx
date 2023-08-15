@@ -1,11 +1,11 @@
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
 import { Dimensions, View, Image } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { ImageWrapper, ImageViewer } from "react-native-reanimated-viewer";
 import React from "react";
-import { MediaAttachmentInterface } from "@dhaaga/shared-abstraction-activitypub/dist";
+import { MediaAttachmentInterface } from "@dhaaga/shared-abstraction-activitypub/src";
 
 type ImageCarousalProps = {
 	attachments: MediaAttachmentInterface[];

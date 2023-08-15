@@ -9,7 +9,7 @@ import {
 import { StandardView } from "../../../../styles/Containers";
 import { MainText } from "../../../../styles/Typography";
 import { Button } from "@rneui/base";
-import { createCodeRequestUrl } from "@dhaaga/shared-provider-misskey/dist";
+import { createCodeRequestUrl } from "@dhaaga/shared-provider-misskey/src";
 import * as Crypto from "expo-crypto";
 
 function MisskeyServerSelection({ navigation }) {

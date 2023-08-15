@@ -9,7 +9,7 @@ import {
 	MastodonService,
 	RestClient,
 	RestServices,
-} from "@dhaaga/shared-provider-mastodon/dist";
+} from "@dhaaga/shared-provider-mastodon/src";
 import { AccountsRepo } from "../../../../libs/sqlite/repositories/accounts.repo";
 import { CredentialsRepo } from "../../../../libs/sqlite/repositories/credentials.repo";
 

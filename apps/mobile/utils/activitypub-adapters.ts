@@ -5,9 +5,9 @@ import {
 	StatusInterface,
 	StatusToStatusAdapter,
 	UnknownToStatusAdapter,
-} from "@dhaaga/shared-abstraction-activitypub/dist";
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
-import { Note } from "@dhaaga/shared-provider-misskey/dist";
+} from "@dhaaga/shared-abstraction-activitypub/src";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
+import { Note } from "@dhaaga/shared-provider-misskey/src";
 
 /**
  *

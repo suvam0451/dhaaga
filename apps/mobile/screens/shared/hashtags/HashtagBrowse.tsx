@@ -13,7 +13,7 @@ import {
 	MastodonRestClient,
 	MisskeyRestClient,
 	UnknownRestClient,
-} from "@dhaaga/shared-abstraction-activitypub/dist";
+} from "@dhaaga/shared-abstraction-activitypub/src";
 
 function HashtagBrowse({ route, navigation }) {
 	const dispatch = useDispatch();

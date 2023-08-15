@@ -11,11 +11,11 @@ import {
 	RefreshControl,
 } from "react-native";
 import { getCloser } from "../../../utils";
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
 import { useQuery } from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
-import { Note } from "@dhaaga/shared-provider-misskey/dist";
+import { Note } from "@dhaaga/shared-provider-misskey/src";
 import axios from "axios";
 import { CacheRepo } from "../../../libs/sqlite/repositories/cache/cache.repo";
 import {
@@ -23,7 +23,7 @@ import {
 	MastodonRestClient,
 	MisskeyRestClient,
 	UnknownRestClient,
-} from "@dhaaga/shared-abstraction-activitypub/dist";
+} from "@dhaaga/shared-abstraction-activitypub/src";
 
 const { diffClamp } = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;

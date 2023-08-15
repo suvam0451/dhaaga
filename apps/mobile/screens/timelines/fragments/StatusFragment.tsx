@@ -1,4 +1,4 @@
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
 import { View, Text } from "react-native";
 import { StandardView } from "../../../styles/Containers";
 import { Divider } from "@rneui/base";
@@ -8,14 +8,14 @@ import { useEffect, useMemo, useState } from "react";
 import {
 	decodeHTMLString,
 	parseStatusContent,
-} from "@dhaaga/shared-utility-html-parser/dist";
+} from "@dhaaga/shared-utility-html-parser/src";
 import React from "react";
 import { parseNode } from "./util";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../libs/redux/store";
 import { AccountState } from "../../../libs/redux/slices/account";
 import OriginalPoster from "../../../components/post-fragments/OriginalPoster";
-import { Note, UserLite } from "@dhaaga/shared-provider-misskey/dist";
+import { Note, UserLite } from "@dhaaga/shared-provider-misskey/src";
 import StatusInteraction from "./StatusInteraction";
 import { adaptSharedProtocol } from "../../../utils/activitypub-adapters";
 import ImageCarousal from "./ImageCarousal";

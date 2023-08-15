@@ -1,5 +1,5 @@
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
-import { Note } from "@dhaaga/shared-provider-misskey/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
+import { Note } from "@dhaaga/shared-provider-misskey/src";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { View, Text } from "react-native";

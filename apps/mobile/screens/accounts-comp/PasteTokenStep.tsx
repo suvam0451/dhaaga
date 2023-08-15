@@ -7,7 +7,7 @@ import {
 	MastodonService,
 	RestClient,
 	RestServices,
-} from "@dhaaga/shared-provider-mastodon/dist";
+} from "@dhaaga/shared-provider-mastodon/src";
 
 type PasteTokenStepProps = {
 	Subdomain: string;

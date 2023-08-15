@@ -15,7 +15,7 @@ import Header from "../../../components/Header";
 import {
 	RestClient,
 	RestServices,
-} from "@dhaaga/shared-provider-mastodon/dist";
+} from "@dhaaga/shared-provider-mastodon/src";
 import { useQuery } from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
 
