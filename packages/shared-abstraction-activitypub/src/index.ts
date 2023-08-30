@@ -5,6 +5,7 @@ import {
 } from "@dhaaga/shared-provider-mastodon/src";
 import {
 	Note,
+	UserDetailed,
 	createClient,
 	misskeyApi,
 } from "@dhaaga/shared-provider-misskey/src";
@@ -31,8 +32,20 @@ export {
 } from "./adapters/media-attachment/unique";
 export { MediaAttachmentInterface } from "./adapters/media-attachment/interface";
 
+// export user profile adapters and interfaces
+export { UserDetailedToUserProfileAdapter } from "./adapters/profile/adapter";
+export {
+	UserDetailedInstance,
+	AccountInstance,
+} from "./adapters/profile/unique";
+export { UserProfileInterface } from "./adapters/profile/interface";
+
 // stub types
-export { ActivityPubStatus, ActivityPubStatuses } from "./types/activitypub";
+export {
+	ActivityPubStatus,
+	ActivityPubStatuses,
+	ActivityPubAccount,
+} from "./types/activitypub";
 
 type TimelineQuery = {
 	maxId?: string;
@@ -45,6 +58,8 @@ interface ActivityPubClient {
 		q: string,
 		query?: TimelineQuery
 	): Promise<mastodon.v1.Status[] | Note[]>;
+	getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
+	getUserPosts(username: string): Promise<mastodon.v1.Status[] | Note[]>;
 }
 
 type RestClientCreateDTO = {
@@ -53,12 +68,20 @@ type RestClientCreateDTO = {
 };
 
 export class MisskeyRestClient implements ActivityPubClient {
+	// official, typed client from misskey.js
 	client: misskeyApi.APIClient;
+	// general axios client for untyped endpoints
 	axiosClient: AxiosInstance;
 	constructor(dto: RestClientCreateDTO) {
 		this.client = createClient(dto.instance, dto.token);
 		this.axiosClient = axios.create({
 			baseURL: `${dto.instance}/api`,
+		});
+	}
+	getUserPosts(userId: string) {
+		return this.client.request("users/notes", {
+			userId: userId,
+			limit: 10,
 		});
 	}
 
@@ -72,12 +95,21 @@ export class MisskeyRestClient implements ActivityPubClient {
 		});
 		return res.data;
 	}
+
+	getUserProfile(
+		username: string
+	): Promise<mastodon.v1.Account | UserDetailed> {
+		return this.client.request("users/show", { username });
+	}
 }
 
 export class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, dto.token);
+	}
+	getUserPosts(username: string): Promise<Note[] | mastodon.v1.Status[]> {
+		throw new Error("Method not implemented.");
 	}
 	async getHomeTimeline(): Promise<mastodon.v1.Status[]> {
 		return await RestServices.v1.default.timelines.default.getHomeTimeline(
@@ -90,11 +122,18 @@ export class MastodonRestClient implements ActivityPubClient {
 			q
 		);
 	}
+
+	getUserProfile(username: string): Promise<mastodon.v1.Account> {
+		throw new Error("Method not implemented.");
+	}
 }
 
 // null object pattern
 // https://en.wikipedia.org/wiki/Null_object_pattern
 export class UnknownRestClient implements ActivityPubClient {
+	getUserPosts(username: string): Promise<Note[] | mastodon.v1.Status[]> {
+		throw new Error("Method not implemented.");
+	}
 	async getHomeTimeline() {
 		console.log("");
 		return [];
@@ -102,6 +141,10 @@ export class UnknownRestClient implements ActivityPubClient {
 
 	async getTimelineByHashtag(q: string) {
 		return [];
+	}
+
+	getUserProfile(username: string): Promise<mastodon.v1.Account> {
+		throw new Error("Method not implemented.");
 	}
 }
 

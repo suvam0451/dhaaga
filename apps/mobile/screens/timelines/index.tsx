@@ -4,6 +4,7 @@ import MastodonTimeline from "./mastodon/TimelineRenderer";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import HashtagBrowse from "../shared/hashtags/HashtagBrowse";
+import UserProfile from "../shared/profile/UserProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,13 @@ function HomeStack() {
 				component={HashtagBrowse}
 				options={({ route }: any) => ({
 					title: route?.params?.title || "Hashtag",
+				})}
+			/>
+			<Stack.Screen
+				name="Profile"
+				component={UserProfile}
+				options={({ route }: any) => ({
+					// id: route?.params?.id || "Profile",
 				})}
 			/>
 		</Stack.Navigator>

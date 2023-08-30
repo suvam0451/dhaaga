@@ -1,7 +1,7 @@
 import axios from "axios";
 import { api as misskeyApi } from "misskey-js";
 import { MiauthSessionCheckResponse } from "./types";
-export type { Note, UserLite, DriveFile } from "misskey-js/built/entities";
+export type { Note, UserLite, DriveFile, UserDetailed } from "misskey-js/built/entities";
 export type { api as misskeyApi } from "misskey-js";
 export { Noteservice as MisskeyNotesService } from "./_notes";
 

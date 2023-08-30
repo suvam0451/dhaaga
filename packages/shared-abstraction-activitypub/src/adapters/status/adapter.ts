@@ -17,32 +17,49 @@ export class NoteToStatusAdapter implements StatusInterface {
 		this.ref = ref;
 	}
 
+	isValid() {
+		return this.ref?.instance !== undefined && this.ref?.instance !== null;
+	}
+
+	getId(): string {
+		return this.ref?.instance?.id;
+	}
+	getRepliesCount(): number {
+		return this.ref?.instance?.repliesCount;
+	}
+	getRepostsCount(): number {
+		return this.ref?.instance?.renoteCount;
+	}
+	getFavouritesCount(): number {
+		return -1;
+	}
+
 	getUsername() {
-		return this.ref.instance.user.username;
+		return this.ref?.instance?.user.username;
 	}
 	getDisplayName() {
-		return this.ref.instance.user.name;
+		return this.ref?.instance?.user.name;
 	}
 
 	getAvatarUrl() {
-		return this.ref.instance.user.avatarUrl;
+		return this.ref?.instance?.user.avatarUrl;
 	}
 
 	getCreatedAt() {
-		return this.ref.instance.createdAt;
+		return this.ref?.instance?.createdAt || new Date().toString();
 	}
 
 	getVisibility() {
-		return this.ref.instance.visibility;
+		return this.ref?.instance?.visibility;
 	}
 
 	getAccountUrl() {
-		return this.ref.instance.user.instance?.name;
+		return this.ref?.instance?.user.instance?.name;
 	}
 	getRepostedStatus(): StatusInterface | null | undefined {
-		if (this.ref.instance.renote) {
+		if (this.ref?.instance?.renote) {
 			return new NoteToStatusAdapter(
-				new NoteInstance(this.ref.instance.renote)
+				new NoteInstance(this.ref?.instance?.renote)
 			);
 		}
 		return null;
@@ -52,17 +69,17 @@ export class NoteToStatusAdapter implements StatusInterface {
 		if (!this.ref?.instance?.files) {
 			return [];
 		}
-		return this.ref.instance.files.map((o: DriveFile) => {
+		return this.ref?.instance?.files.map((o: DriveFile) => {
 			return new DriveFileToMediaAttachmentAdapter(new DriveFileInstance(o));
 		});
 	}
 
 	isReposted() {
-		return this.ref.instance.renote !== null;
+		return this.ref?.instance?.renote !== null;
 	}
 
 	getContent() {
-		return this.ref.instance.text;
+		return this.ref?.instance?.text;
 	}
 
 	print(): void {
@@ -74,6 +91,23 @@ export class StatusToStatusAdapter implements StatusInterface {
 	ref: StatusInstance;
 	constructor(ref: StatusInstance) {
 		this.ref = ref;
+	}
+
+	isValid() {
+		return this.ref?.instance !== undefined && this.ref?.instance !== null;
+	}
+
+	getId(): string {
+		return this.ref?.instance?.id;
+	}
+	getRepliesCount(): number {
+		return this.ref?.instance?.repliesCount;
+	}
+	getRepostsCount(): number {
+		return this.ref?.instance?.reblogsCount;
+	}
+	getFavouritesCount(): number {
+		return this.ref?.instance?.favouritesCount;
 	}
 
 	getUsername() {
@@ -89,31 +123,31 @@ export class StatusToStatusAdapter implements StatusInterface {
 	}
 
 	getCreatedAt() {
-		return this.ref.instance?.createdAt || "";
+		return this.ref.instance?.createdAt || new Date().toString();
 	}
 
 	getVisibility() {
-		return this.ref.instance.visibility;
+		return this.ref?.instance?.visibility;
 	}
 
 	getAccountUrl() {
-		return this.ref.instance.account.url;
+		return this.ref?.instance?.account.url;
 	}
 	getRepostedStatus(): StatusInterface | null | undefined {
-		if (this.ref.instance.reblog) {
+		if (this.ref?.instance?.reblog) {
 			return new StatusToStatusAdapter(
-				new StatusInstance(this.ref.instance.reblog)
+				new StatusInstance(this.ref?.instance?.reblog)
 			);
 		}
 		return null;
 	}
 
 	isReposted(): boolean {
-		return this.ref.instance.reblog !== null;
+		return this.ref?.instance?.reblog !== null;
 	}
 
 	getMediaAttachments() {
-		return this.ref.instance.mediaAttachments.map((o) => {
+		return this.ref?.instance?.mediaAttachments.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
 				new MediaAttachmentInstance(o)
 			);
@@ -121,7 +155,7 @@ export class StatusToStatusAdapter implements StatusInterface {
 	}
 
 	getContent(): string | null {
-		return this.ref.instance.content;
+		return this.ref?.instance?.content;
 	}
 
 	print(): void {
@@ -130,6 +164,23 @@ export class StatusToStatusAdapter implements StatusInterface {
 }
 
 export class UnknownToStatusAdapter implements StatusInterface {
+	getRepliesCount(): number {
+		return -1;
+	}
+	
+	isValid() {
+		return false
+	}
+
+	getId(): string {
+		return "";
+	}
+	getRepostsCount(): number {
+		return -1;
+	}
+	getFavouritesCount(): number {
+		return -1;
+	}
 	getUsername() {
 		return "";
 	}

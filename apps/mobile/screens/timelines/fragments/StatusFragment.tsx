@@ -112,7 +112,7 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 
 			<ImageCarousal attachments={_status.getMediaAttachments()} />
 			{/* <EmojiBoard status={status} /> */}
-			<StatusInteraction post={status} statusId={status.id} />
+			<StatusInteraction post={_status} statusId={status?.id} />
 			<Divider />
 		</StandardView>
 	);
@@ -131,6 +131,8 @@ function SharedStatusFragment({
 		() => adaptSharedProtocol(status, accountState?.activeAccount?.domain),
 		[status, accountState?.activeAccount?.domain]
 	);
+
+	if (!_status.isValid()) return <View></View>;
 
 	return (
 		<View>
@@ -167,6 +169,14 @@ function StatusFragment({ status }: StatusFragmentProps) {
 		[status, accountState?.activeAccount?.domain]
 	);
 
+	// useEffect(() => {
+	// 	console.log(
+	// 		"converted status object",
+	// 		accountState.activeAccount?.domain,
+	// 		_status.isReposted()
+	// 	);
+	// }, [_status]);
+
 	switch (accountState.activeAccount?.domain) {
 		case "mastodon": {
 			const _statuss = status as mastodon.v1.Status;
@@ -182,8 +192,8 @@ function StatusFragment({ status }: StatusFragmentProps) {
 			return <RootStatusFragment status={status} />;
 		}
 		case "misskey": {
-			const _status = status as Note;
-			if (_status.renote) {
+			if (_status.isReposted()) {
+				const _status = status as Note;
 				return (
 					<SharedStatusFragment
 						status={_status.renote}

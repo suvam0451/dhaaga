@@ -13,4 +13,12 @@ export interface StatusInterface {
 	isReposted(): boolean;
 	getMediaAttachments(): MediaAttachmentInterface[] | null | undefined;
 	print(): void;
+
+	getRepliesCount(): number;
+	getRepostsCount(): number;
+	getFavouritesCount(): number;
+
+	getId(): string;
+
+	isValid(): boolean;
 }

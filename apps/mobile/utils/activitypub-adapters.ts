@@ -5,9 +5,12 @@ import {
 	StatusInterface,
 	StatusToStatusAdapter,
 	UnknownToStatusAdapter,
+	UserDetailedInstance,
+	UserDetailedToUserProfileAdapter,
+	UserProfileInterface,
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
-import { Note } from "@dhaaga/shared-provider-misskey/src";
+import { Note, UserDetailed } from "@dhaaga/shared-provider-misskey/src";
 
 /**
  *
@@ -30,6 +33,22 @@ export function adaptSharedProtocol(
 		}
 		default: {
 			return new UnknownToStatusAdapter();
+		}
+	}
+}
+
+export function adaptUserProfile(
+	profile: any,
+	domain: string
+): UserProfileInterface {
+	switch (domain) {
+		case "misskey": {
+			return new UserDetailedToUserProfileAdapter(
+				new UserDetailedInstance(profile as UserDetailed)
+			);
+		}
+		default: {
+			// return new UnknownToStatusAdapter();
 		}
 	}
 }

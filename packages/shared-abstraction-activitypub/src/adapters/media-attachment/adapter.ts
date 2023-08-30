@@ -10,39 +10,39 @@ export class DriveFileToMediaAttachmentAdapter
 	}
 
 	getAltText() {
-		return this.ref.instance.comment;
+		return this.ref?.instance?.comment;
 	}
 
 	getBlurHash() {
-		return this.ref.instance.blurhash;
+		return this.ref?.instance?.blurhash;
 	}
 
 	getCreatedAt() {
-		return this.ref.instance.createdAt;
+		return this.ref?.instance?.createdAt;
 	}
 
 	getId(): string {
-		return this.ref.instance.id;
+		return this.ref?.instance?.id;
 	}
 
 	getMeta() {
-		return this.ref.instance.properties;
+		return this.ref?.instance?.properties;
 	}
 
 	getName() {
-		return this.ref.instance.name;
+		return this.ref?.instance?.name;
 	}
 
 	getPreviewUrl() {
-		return this.ref.instance.thumbnailUrl;
+		return this.ref?.instance?.thumbnailUrl;
 	}
 
 	getType() {
-		return this.ref.instance.type;
+		return this.ref?.instance?.type;
 	}
 
 	getUrl() {
-		return this.ref.instance.url;
+		return this.ref?.instance?.url;
 	}
 
 	getHeight(): number | null | undefined {
@@ -67,11 +67,11 @@ export class MediaAttachmentToMediaAttachmentAdapter
 	}
 
 	getAltText() {
-		return this.ref.instance.description;
+		return this.ref?.instance?.description;
 	}
 
 	getBlurHash() {
-		return this.ref.instance.blurhash;
+		return this.ref?.instance?.blurhash;
 	}
 
 	// no dates available for masto-dono
@@ -80,27 +80,27 @@ export class MediaAttachmentToMediaAttachmentAdapter
 	}
 
 	getId(): string {
-		return this.ref.instance.id;
+		return this.ref?.instance?.id;
 	}
 
 	getMeta() {
-		return this.ref.instance.meta as any;
+		return this.ref?.instance?.meta as any;
 	}
 
 	getName() {
-		return this.ref.instance.id;
+		return this.ref?.instance?.id;
 	}
 
 	getPreviewUrl() {
-		return this.ref.instance.previewUrl;
+		return this.ref?.instance?.previewUrl;
 	}
 
 	getType() {
-		return this.ref.instance.type;
+		return this.ref?.instance?.type;
 	}
 
 	getUrl() {
-		return this.ref.instance.url;
+		return this.ref?.instance?.url;
 	}
 
 	/**
@@ -143,7 +143,7 @@ export class UnknownToMediaAttachmentAdapter
 	}
 
 	getId(): string {
-		return this.ref.instance.id;
+		return this.ref?.instance?.id;
 	}
 
 	getMeta() {
