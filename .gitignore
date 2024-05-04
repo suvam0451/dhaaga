@@ -20,3 +20,5 @@ apps/mobile/.env
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+.idea/**
