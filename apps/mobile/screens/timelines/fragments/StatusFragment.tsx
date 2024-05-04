@@ -39,6 +39,7 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 	useEffect(() => {
 		setPosterContent(
 			<OriginalPoster
+				id={_status.getAccountId_Poster()}
 				avatarUrl={_status.getAvatarUrl()}
 				displayName={_status.getDisplayName()}
 				createdAt={_status.getCreatedAt()}
@@ -168,14 +169,6 @@ function StatusFragment({ status }: StatusFragmentProps) {
 		() => adaptSharedProtocol(status, accountState?.activeAccount?.domain),
 		[status, accountState?.activeAccount?.domain]
 	);
-
-	// useEffect(() => {
-	// 	console.log(
-	// 		"converted status object",
-	// 		accountState.activeAccount?.domain,
-	// 		_status.isReposted()
-	// 	);
-	// }, [_status]);
 
 	switch (accountState.activeAccount?.domain) {
 		case "mastodon": {

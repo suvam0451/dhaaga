@@ -9,7 +9,6 @@ import {
 } from "../media-attachment/unique";
 import { StatusInterface } from "./interface";
 import { NoteInstance, StatusInstance } from "./unique";
-import { MediaAttachmentInterface } from "../media-attachment/interface";
 
 export class NoteToStatusAdapter implements StatusInterface {
 	ref: NoteInstance;
@@ -85,6 +84,10 @@ export class NoteToStatusAdapter implements StatusInterface {
 	print(): void {
 		console.log(this.ref.instance);
 	}
+
+	getAccountId_Poster(): string {
+		return this?.ref?.instance?.user?.id;
+	}
 }
 
 export class StatusToStatusAdapter implements StatusInterface {
@@ -100,6 +103,11 @@ export class StatusToStatusAdapter implements StatusInterface {
 	getId(): string {
 		return this.ref?.instance?.id;
 	}
+
+	getAccountId() {
+
+	}
+
 	getRepliesCount(): number {
 		return this.ref?.instance?.repliesCount;
 	}
@@ -160,6 +168,10 @@ export class StatusToStatusAdapter implements StatusInterface {
 
 	print(): void {
 		console.log(this.ref.instance);
+	}
+
+	getAccountId_Poster(): string {
+		return this?.ref?.instance?.account?.id;
 	}
 }
 
@@ -223,5 +235,9 @@ export class UnknownToStatusAdapter implements StatusInterface {
 
 	print() {
 		console.log("Unknown status type");
+	}
+
+	getAccountId_Poster(): string {
+		return "";
 	}
 }

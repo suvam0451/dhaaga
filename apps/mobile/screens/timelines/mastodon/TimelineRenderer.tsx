@@ -1,23 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { AccountState } from "../../../libs/redux/slices/account";
-import { RootState } from "../../../libs/redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	Animated,
-	SafeAreaView,
-	StatusBar,
-	StyleSheet,
-	Text,
-	RefreshControl,
-} from "react-native";
-import { getCloser } from "../../../utils";
-import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
-import { useQuery } from "@tanstack/react-query";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {AccountState} from "../../../libs/redux/slices/account";
+import {RootState} from "../../../libs/redux/store";
+import {useDispatch, useSelector} from "react-redux";
+import {Animated, RefreshControl, SafeAreaView, StatusBar, StyleSheet, Text,} from "react-native";
+import {getCloser} from "../../../utils";
+import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
+import {useQuery} from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
-import { Note } from "@dhaaga/shared-provider-misskey/src";
+import {Note} from "@dhaaga/shared-provider-misskey/src";
 import axios from "axios";
-import { CacheRepo } from "../../../libs/sqlite/repositories/cache/cache.repo";
+import {CacheRepo} from "../../../libs/sqlite/repositories/cache/cache.repo";
 import {
 	ActivityPubClientFactory,
 	MastodonRestClient,
@@ -74,14 +67,13 @@ function TimelineRenderer() {
 		if (!["mastodon", "misskey"].includes(accountState.activeAccount.domain)) {
 			return;
 		}
-		const client = ActivityPubClientFactory.get(
-			accountState.activeAccount.domain as any,
-			{
-				instance: accountState.activeAccount.subdomain,
-				token,
-			}
+		restClient.current = ActivityPubClientFactory.get(
+				accountState.activeAccount.domain as any,
+				{
+					instance: accountState.activeAccount.subdomain,
+					token,
+				}
 		);
-		restClient.current = client;
 	}, [accountState]);
 
 	async function getCustomEmojisForInstance(subdomain: string) {
@@ -91,7 +83,7 @@ function TimelineRenderer() {
 	}
 
 	/**
-	 * Update the emoji raw cache eevryday
+	 * Update the emoji raw cache everyday
 	 * @param subdomain
 	 * @returns
 	 */
@@ -124,7 +116,7 @@ function TimelineRenderer() {
 	}
 
 	/**
-	 * Load gloabal emoji database
+	 * Load global emoji database
 	 */
 	useEffect(() => {
 		if (accountState.activeAccount?.domain) {
@@ -182,7 +174,7 @@ function TimelineRenderer() {
 			if (ref.current) {
 				try {
 					/**
-					 * ScrollView --> scrollo ???
+					 * ScrollView --> scroll ???
 					 * FlatView --> scrollToOffset({offset: number}})
 					 */
 					ref.current.scrollTo({
@@ -236,8 +228,6 @@ function TimelineRenderer() {
 				contentInset={{
 					top: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT + 1000,
 				}}
-				// contentOffset={{y: -headerHeight}}
-
 				scrollEventThrottle={16}
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

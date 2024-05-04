@@ -18,7 +18,7 @@ export interface StatusInterface {
 	getRepostsCount(): number;
 	getFavouritesCount(): number;
 
-	getId(): string;
+	getAccountId_Poster(): string;
 
 	isValid(): boolean;
 }

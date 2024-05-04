@@ -21,7 +21,7 @@ export const PostOwnerImage = styled(Image)<ImageProps>`
 export const PostBoosterImage = styled(Image)<ImageProps>`
 	max-width: 20px;
 	margin-left: 4px;
-	display: "span";
+	display: flex;
 	object-fit: cover;
 	border-radius: 2rem;
 `;
@@ -30,7 +30,6 @@ export const ProfileOwnerImage = styled(Image)<ImageProps>`
 	max-width: 64px;
 	height: 64px;
 	margin-bottom: -32px;
-	border-color: red;
 	border: 2px solid #888;
 	border-radius: 0.25rem;
 	transform: translate(0, -32px);
@@ -81,9 +80,10 @@ export const MastodonProfileLinkArrayItem = styled(Box)<BoxProps>`
 	padding-bottom: 0.625rem;
 	display: flex;
 	align-items: center;
+
 	&:last-child {
 		border-bottom: none;
-		padding-bottom: 0rem;
+		padding-bottom: 0;
 	}
 `;
 
@@ -119,13 +119,15 @@ export const MastadonStatusItem = styled(Box)<
 	BoxProps & { reblogged?: boolean }
 >`
 	padding: ${(props) =>
-		props.reblogged === true ? "2px 4px 16px 4px" : "16px 4px 16px 4px"};
+			props.reblogged === true ? "2px 4px 16px 4px" : "16px 4px 16px 4px"};
 	border-radius: 0.25rem;
-	margin: 0rem 0rem;
+	margin: 0 0;
+
 	&:hover {
 		transition: 200ms;
 		background-color: rgb(244, 244, 244);
 	}
+
 	&:focus {
 		background-color: #ccc;
 	}

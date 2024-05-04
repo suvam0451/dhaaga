@@ -1,4 +1,5 @@
 import {
+	AccountInstance,
 	NoteInstance,
 	NoteToStatusAdapter,
 	StatusInstance,
@@ -11,6 +12,7 @@ import {
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
 import { Note, UserDetailed } from "@dhaaga/shared-provider-misskey/src";
+import {MastodonUserProfileAdapter} from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/adapter";
 
 /**
  *
@@ -46,6 +48,11 @@ export function adaptUserProfile(
 			return new UserDetailedToUserProfileAdapter(
 				new UserDetailedInstance(profile as UserDetailed)
 			);
+		}
+		case "mastodon": {
+			return new MastodonUserProfileAdapter(
+					new AccountInstance(profile as mastodon.v1.Account)
+			)
 		}
 		default: {
 			// return new UnknownToStatusAdapter();

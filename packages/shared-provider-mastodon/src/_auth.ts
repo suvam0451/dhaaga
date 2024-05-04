@@ -3,11 +3,12 @@ import axios from "axios";
 export class MastodonService {
 	/**
 	 * fetches the code used to generate the actual access token
-	 * @param instanceUr
+	 * @param instanceUrl
+	 * @param clientId
 	 * @returns
 	 */
-	static async createCodeRequestUrl(instanceUr: string, clientId: string) {
-		const authEndpoint = `${instanceUr}/oauth/authorize`;
+	static async createCodeRequestUrl(instanceUrl: string, clientId: string) {
+		const authEndpoint = `${instanceUrl}/oauth/authorize`;
 
 		// Set up parameters for the query string
 		const options: Record<string, string> = {
@@ -23,8 +24,7 @@ export class MastodonService {
 			.join("&");
 
 		// Redirect the user with app credentials to instance sign in
-		const loginURI = `${authEndpoint}?${queryString}`;
-		return loginURI;
+		return `${authEndpoint}?${queryString}`;
 	}
 
 	/**

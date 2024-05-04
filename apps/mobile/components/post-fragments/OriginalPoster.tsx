@@ -13,6 +13,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { TouchableOpacity } from "react-native";
 
 type OriginalPosterProps = {
+	id: string
 	createdAt: string;
 	avatarUrl: string;
 	displayName: string;
@@ -23,6 +24,7 @@ type OriginalPosterProps = {
 };
 
 function OriginalPoster({
+		id,
 	avatarUrl,
 	createdAt,
 	displayName,
@@ -75,7 +77,7 @@ function OriginalPoster({
 				switch (selectedIndex) {
 					case 0: {
 						navigation.navigate("Profile", {
-							id: username,
+							id: id,
 						});
 						break;
 					}

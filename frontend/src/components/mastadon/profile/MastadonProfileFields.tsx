@@ -1,4 +1,3 @@
-import { Box, Divider, Flex, Text } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { mastodon } from "masto";
 import {
@@ -10,7 +9,7 @@ import {
 import React from "react";
 
 /**
- * Renders the external linksfor a mastodon profile
+ * Renders the external links for a mastodon profile
  * @param param0
  * @returns
  */

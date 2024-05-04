@@ -17,7 +17,7 @@ export interface UserProfileInterface {
   getId(): string
 
   getIsBot(): boolean
-  getDispalyName(): string
+  getDisplayName(): string
   getPostCount(): number
   getUsername(): string
 
