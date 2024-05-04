@@ -1,13 +1,18 @@
 import {
+	AccountInstance,
 	NoteInstance,
 	NoteToStatusAdapter,
 	StatusInstance,
 	StatusInterface,
 	StatusToStatusAdapter,
 	UnknownToStatusAdapter,
-} from "@dhaaga/shared-abstraction-activitypub/dist";
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
-import { Note } from "@dhaaga/shared-provider-misskey/dist";
+	UserDetailedInstance,
+	UserDetailedToUserProfileAdapter,
+	UserProfileInterface,
+} from "@dhaaga/shared-abstraction-activitypub/src";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
+import { Note, UserDetailed } from "@dhaaga/shared-provider-misskey/src";
+import {MastodonUserProfileAdapter} from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/adapter";
 
 /**
  *
@@ -30,6 +35,27 @@ export function adaptSharedProtocol(
 		}
 		default: {
 			return new UnknownToStatusAdapter();
+		}
+	}
+}
+
+export function adaptUserProfile(
+	profile: any,
+	domain: string
+): UserProfileInterface {
+	switch (domain) {
+		case "misskey": {
+			return new UserDetailedToUserProfileAdapter(
+				new UserDetailedInstance(profile as UserDetailed)
+			);
+		}
+		case "mastodon": {
+			return new MastodonUserProfileAdapter(
+					new AccountInstance(profile as mastodon.v1.Account)
+			)
+		}
+		default: {
+			// return new UnknownToStatusAdapter();
 		}
 	}
 }

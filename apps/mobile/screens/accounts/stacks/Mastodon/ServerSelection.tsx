@@ -6,7 +6,7 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { MastodonService } from "@dhaaga/shared-provider-mastodon/dist";
+import { MastodonService } from "@dhaaga/shared-provider-mastodon/src";
 import { MainText } from "../../../../styles/Typography";
 import { StandardView } from "../../../../styles/Containers";
 import { Button } from "@rneui/base";

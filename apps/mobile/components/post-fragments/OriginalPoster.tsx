@@ -3,13 +3,17 @@ import { Image } from "expo-image";
 import { extractInstanceUrl, visibilityIcon } from "../../utils/instances";
 import { formatDistance } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { parseUsername } from "@dhaaga/shared-utility-html-parser/dist";
+import { parseUsername } from "@dhaaga/shared-utility-html-parser/src";
 import { parseNode } from "../../screens/timelines/fragments/util";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../libs/redux/store";
 import { AccountState } from "../../libs/redux/slices/account";
+import { useNavigation } from "@react-navigation/native";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { TouchableOpacity } from "react-native";
 
 type OriginalPosterProps = {
+	id: string
 	createdAt: string;
 	avatarUrl: string;
 	displayName: string;
@@ -20,6 +24,7 @@ type OriginalPosterProps = {
 };
 
 function OriginalPoster({
+		id,
 	avatarUrl,
 	createdAt,
 	displayName,
@@ -33,6 +38,8 @@ function OriginalPoster({
 	const [UsernameWithEmojis, setUsernameWithEmojis] = useState<JSX.Element[]>(
 		[]
 	);
+	const navigation = useNavigation<any>();
+	const { showActionSheetWithOptions } = useActionSheet();
 
 	useEffect(() => {
 		const nodes = parseUsername(displayName || "");
@@ -52,27 +59,59 @@ function OriginalPoster({
 		setUsernameWithEmojis(retval);
 	}, [displayName]);
 
+	function onProfileClicked() {
+		const options = ["Browse", "Follow", "Cancel"];
+		const destructiveButtonIndex = options.length - 1;
+		const cancelButtonIndex = options.length - 1;
+
+		showActionSheetWithOptions(
+			{
+				options,
+				message: "You do not follow this person",
+				cancelButtonIndex,
+				destructiveButtonIndex,
+				title: "Profile",
+				userInterfaceStyle: "dark",
+			},
+			(selectedIndex: number) => {
+				switch (selectedIndex) {
+					case 0: {
+						navigation.navigate("Profile", {
+							id: id,
+						});
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+			}
+		);
+	}
+
 	return (
 		<React.Fragment>
-			<View
-				style={{
-					width: 52,
-					height: 52,
-					borderColor: "gray",
-					borderWidth: 1,
-					borderRadius: 4,
-				}}
-			>
-				<Image
+			<TouchableOpacity onPress={onProfileClicked}>
+				<View
 					style={{
-						flex: 1,
-						width: "100%",
-						backgroundColor: "#0553",
-						padding: 2,
+						width: 52,
+						height: 52,
+						borderColor: "gray",
+						borderWidth: 1,
+						borderRadius: 4,
 					}}
-					source={{ uri: avatarUrl }}
-				/>
-			</View>
+				>
+					<Image
+						style={{
+							flex: 1,
+							width: "100%",
+							backgroundColor: "#0553",
+							padding: 2,
+						}}
+						source={{ uri: avatarUrl }}
+					/>
+				</View>
+			</TouchableOpacity>
 			<View style={{ display: "flex", marginLeft: 8, flexGrow: 1 }}>
 				{/* <Text style={{ color: "white", fontWeight: "600" }}>{displayName}</Text> */}
 				<Text style={{ color: "white", fontWeight: "600" }}>

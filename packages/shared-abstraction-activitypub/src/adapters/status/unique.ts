@@ -1,4 +1,4 @@
-import { Note } from "@dhaaga/shared-provider-misskey/dist";
+import { Note } from "@dhaaga/shared-provider-misskey/src";
 import { mastodon } from "masto";
 
 export class StatusInstance {

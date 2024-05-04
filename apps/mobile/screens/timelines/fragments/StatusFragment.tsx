@@ -1,4 +1,4 @@
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
 import { View, Text } from "react-native";
 import { StandardView } from "../../../styles/Containers";
 import { Divider } from "@rneui/base";
@@ -8,14 +8,14 @@ import { useEffect, useMemo, useState } from "react";
 import {
 	decodeHTMLString,
 	parseStatusContent,
-} from "@dhaaga/shared-utility-html-parser/dist";
+} from "@dhaaga/shared-utility-html-parser/src";
 import React from "react";
 import { parseNode } from "./util";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../libs/redux/store";
 import { AccountState } from "../../../libs/redux/slices/account";
 import OriginalPoster from "../../../components/post-fragments/OriginalPoster";
-import { Note, UserLite } from "@dhaaga/shared-provider-misskey/dist";
+import { Note, UserLite } from "@dhaaga/shared-provider-misskey/src";
 import StatusInteraction from "./StatusInteraction";
 import { adaptSharedProtocol } from "../../../utils/activitypub-adapters";
 import ImageCarousal from "./ImageCarousal";
@@ -39,6 +39,7 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 	useEffect(() => {
 		setPosterContent(
 			<OriginalPoster
+				id={_status.getAccountId_Poster()}
 				avatarUrl={_status.getAvatarUrl()}
 				displayName={_status.getDisplayName()}
 				createdAt={_status.getCreatedAt()}
@@ -112,7 +113,7 @@ function RootStatusFragment({ status, mt }: StatusFragmentProps) {
 
 			<ImageCarousal attachments={_status.getMediaAttachments()} />
 			{/* <EmojiBoard status={status} /> */}
-			<StatusInteraction post={status} statusId={status.id} />
+			<StatusInteraction post={_status} statusId={status?.id} />
 			<Divider />
 		</StandardView>
 	);
@@ -131,6 +132,8 @@ function SharedStatusFragment({
 		() => adaptSharedProtocol(status, accountState?.activeAccount?.domain),
 		[status, accountState?.activeAccount?.domain]
 	);
+
+	if (!_status.isValid()) return <View></View>;
 
 	return (
 		<View>
@@ -182,8 +185,8 @@ function StatusFragment({ status }: StatusFragmentProps) {
 			return <RootStatusFragment status={status} />;
 		}
 		case "misskey": {
-			const _status = status as Note;
-			if (_status.renote) {
+			if (_status.isReposted()) {
+				const _status = status as Note;
 				return (
 					<SharedStatusFragment
 						status={_status.renote}

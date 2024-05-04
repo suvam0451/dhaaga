@@ -1,6 +1,6 @@
 import { Box, Image, Flex, Select, Text, Tabs } from "@mantine/core";
 import AppScreenLayout from "../layouts/AppScreenLayout";
-import { forwardRef, useEffect, useMemo, useState } from "react";
+import React, { forwardRef, useEffect, useMemo, useState } from "react";
 import {
 	GetAccoutsBySubdomain,
 	GetSubdomainsForDomain,
@@ -12,13 +12,9 @@ import {
 	ProviderAuthState,
 	providerAuthSlice,
 } from "../lib/redux/slices/authSlice";
-
-// icons
-import MastadonLogo from "../assets/icons/Logo_Mastodon.svg";
+import MastodonLogo from "../assets/icons/Logo_Mastodon.svg";
 import MetaLogo from "../assets/icons/Logo_Threads.svg";
 import MisskeyLogo from "../assets/icons/Logo_Misskey.svg";
-
-// import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { TextSubtitle, TextTitle } from "../styles/Mastodon";
 import { AuthProvider_SelectItem } from "../styles/App";
 import MastadonOnboarding from "../components/onboarding/auth/Mastadon";
@@ -29,7 +25,7 @@ import AccountSelection from "../components/onboarding/accounts/AccountSelection
 
 interface Provider_selectItem_Props
 	extends React.ComponentPropsWithoutRef<"div"> {
-	value: string;
+	value: string
 	label: string;
 	displayName: string;
 	icon: any;
@@ -42,7 +38,6 @@ export const Provider_SelectItem = forwardRef<
 >(
 	(
 		{
-			value,
 			displayName,
 			icon,
 			description,
@@ -98,7 +93,7 @@ function App() {
 			label: "mastodon",
 			displayName: "Mastodon",
 			description: "Decentralized social network that's not for sale.",
-			icon: <Image fit="contain" src={MastadonLogo} />,
+			icon: <Image fit="contain" src={MastodonLogo} />,
 		},
 		{
 			value: "misskey",

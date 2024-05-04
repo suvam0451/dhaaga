@@ -1,19 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { RefreshControl, Text } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../libs/redux/store";
-import { AccountState } from "../../../libs/redux/slices/account";
+import {useQuery} from "@tanstack/react-query";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {RefreshControl, ScrollView, Text} from "react-native";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../../libs/redux/store";
+import {AccountState} from "../../../libs/redux/slices/account";
 import StatusFragment from "../../timelines/fragments/StatusFragment";
-import { ScrollView } from "react-native";
-import { Skeleton } from "@rneui/base";
+import {Skeleton} from "@rneui/base";
 import {
 	ActivityPubClientFactory,
 	ActivityPubStatuses,
 	MastodonRestClient,
 	MisskeyRestClient,
 	UnknownRestClient,
-} from "@dhaaga/shared-abstraction-activitypub/dist";
+} from "@dhaaga/shared-abstraction-activitypub/src";
 
 function HashtagBrowse({ route, navigation }) {
 	const dispatch = useDispatch();
@@ -40,14 +39,13 @@ function HashtagBrowse({ route, navigation }) {
 			return;
 		}
 
-		const client = ActivityPubClientFactory.get(
-			accountState.activeAccount.domain as any,
-			{
-				instance: accountState.activeAccount.subdomain,
-				token,
-			}
+		restClient.current = ActivityPubClientFactory.get(
+				accountState.activeAccount.domain as any,
+				{
+					instance: accountState.activeAccount.subdomain,
+					token,
+				}
 		);
-		restClient.current = client;
 	}, [accountState]);
 
 	function getStatusesWithTag() {

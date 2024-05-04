@@ -200,7 +200,7 @@ function MastadonPostListing({
 									</TextSubtitle>
 								</Flex>
 								<TextSubtitle lh={1.2}>
-									{formatDistance(new Date(post.createdAt), new Date(), {
+									{formatDistance(new Date(post.createdAt || new Date()), new Date(), {
 										addSuffix: true,
 									})}
 								</TextSubtitle>

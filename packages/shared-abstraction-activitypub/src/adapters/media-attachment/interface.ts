@@ -1,4 +1,4 @@
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
 
 /**
  * For reference, see

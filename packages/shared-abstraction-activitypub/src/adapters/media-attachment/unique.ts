@@ -1,5 +1,5 @@
-import { mastodon } from "@dhaaga/shared-provider-mastodon/dist";
-import { DriveFile } from "@dhaaga/shared-provider-misskey/dist";
+import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
+import { DriveFile } from "@dhaaga/shared-provider-misskey/src";
 
 export class DriveFileInstance {
 	instance: DriveFile;
