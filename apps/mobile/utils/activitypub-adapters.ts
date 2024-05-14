@@ -1,10 +1,10 @@
 import {
 	AccountInstance,
 	NoteInstance,
-	NoteToStatusAdapter,
+	MisskeyToStatusAdapter,
 	StatusInstance,
 	StatusInterface,
-	StatusToStatusAdapter,
+	MastodonToStatusAdapter,
 	UnknownToStatusAdapter,
 	UserDetailedInstance,
 	UserDetailedToUserProfileAdapter,
@@ -26,10 +26,10 @@ export function adaptSharedProtocol(
 ): StatusInterface {
 	switch (domain) {
 		case "misskey": {
-			return new NoteToStatusAdapter(new NoteInstance(status as Note));
+			return new MisskeyToStatusAdapter(new NoteInstance(status as Note));
 		}
 		case "mastodon": {
-			return new StatusToStatusAdapter(
+			return new MastodonToStatusAdapter(
 				new StatusInstance(status as mastodon.v1.Status)
 			);
 		}

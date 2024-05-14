@@ -16,7 +16,7 @@ const TimelinesHeader = ({
 				style={[
 					styles.subHeader,
 					{
-						backgroundColor: "#1c1c1c",
+						backgroundColor: "#222222",
 						height: HIDDEN_SECTION_HEIGHT,
 					},
 				]}

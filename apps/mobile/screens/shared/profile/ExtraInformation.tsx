@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {Dimensions, TouchableOpacity, View} from "react-native";
 import {Text} from "@rneui/themed";
-import {IconCheck} from "@tabler/icons-react";
 import RenderHTML from "react-native-render-html";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -41,13 +40,14 @@ function UserProfileExtraInformation({fields}: UserProfileExtraInformationProps)
             <View style={{paddingTop: 8, paddingBottom: 8}}>
               <Text style={{color: "#fff"}}>{x.name}</Text>
               <View>
-                {x.verifiedAt && (
-                    <IconCheck
-                        style={{
-                          color: "green",
-                        }}
-                    />
-                )}
+                {/*NOTE: Bugged*/}
+                {/*{x.verifiedAt && (*/}
+                {/*    <IconCheck*/}
+                {/*        style={{*/}
+                {/*          color: "green",*/}
+                {/*        }}*/}
+                {/*    />*/}
+                {/*)}*/}
                 <RenderHTML baseStyle={{color: "#fff"}}
                             source={{html: x.value}}
                             contentWidth={Dimensions.get('window').width}

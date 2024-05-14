@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SearchScreen from "./screens/SearchScreen";
@@ -6,7 +5,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
 import NotificationsScreen from "./screens/NotificationsScreen";
-import AccountsStack from "./screens/accounts";
 import { Animated } from "react-native";
 import { useEffect, useRef } from "react";
 import { getCloser } from "./utils";
@@ -17,9 +15,10 @@ import {
 } from "./libs/sqlite/migrations/_migrations";
 import { store } from "./libs/redux/store";
 import { Provider } from "react-redux";
-import HomeStack from "./screens/timelines";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import AccountsScreen from "./screens/AccountsScreen";
+import HomeScreen from "./screens/HomeScreen";
 
 const { diffClamp } = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;
@@ -77,7 +76,7 @@ export default function App() {
 			if (ref.current) {
 				try {
 					/**
-					 * ScrollView --> scrollo ???
+					 * ScrollView --> scrollTo ???
 					 * FlatView --> scrollToOffset({offset: number}})
 					 */
 					ref.current.scrollTo({
@@ -145,14 +144,14 @@ export default function App() {
 								headerShown: false,
 							})}
 						>
-							<Tab.Screen name="Home" component={HomeStack} />
+							<Tab.Screen name="Home" component={HomeScreen} />
 							<Tab.Screen name="Search" component={SearchScreen} />
 							<Tab.Screen name="Favourites" component={FavouritesScreen} />
 							<Tab.Screen
 								name="Notifications"
 								component={NotificationsScreen}
 							/>
-							<Tab.Screen name="Accounts" component={AccountsStack} />
+							<Tab.Screen name="Accounts" component={AccountsScreen} />
 							<Tab.Screen name="Settings" component={SettingsScreen} />
 						</Tab.Navigator>
 					</NavigationContainer>
@@ -161,23 +160,3 @@ export default function App() {
 		</QueryClientProvider>
 	);
 }
-
-const styles = StyleSheet.create({
-	header: {
-		position: "absolute",
-		backgroundColor: "#1c1c1c",
-		left: 0,
-		right: 0,
-		width: "100%",
-		zIndex: 1,
-	},
-	subHeader: {
-		height: SHOWN_SECTION_HEIGHT,
-		width: "100%",
-		paddingHorizontal: 10,
-	},
-	container: {
-		flex: 1,
-		backgroundColor: "#000",
-	},
-});

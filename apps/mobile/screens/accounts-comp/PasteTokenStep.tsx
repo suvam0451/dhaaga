@@ -29,7 +29,7 @@ function PasteTokenStep({Subdomain, Code}: PasteTokenStepProps) {
       domain: "unknown"
     });
     const verified =
-        await RestServices.v1.accounts.default.verifyCredentials(client);
+        await RestServices.v1.accounts.verifyCredentials(client);
 
     AccountsRepo.add({
       subdomain: Subdomain,

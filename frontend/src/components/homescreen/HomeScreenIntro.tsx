@@ -4,8 +4,8 @@ import {
 } from "../../constants/app-dimensions";
 import ThreadsLogo from "../../assets/icons/Logo_Threads.svg";
 
-// A feature-rich desktop client for instagram Threads
-// A feature-rich desktop social media client for enthusiasts 
+// A feature-rich desktop _client for instagram Threads
+// A feature-rich desktop social media _client for enthusiasts
 
 function HomeScreenIntro() {
 	return (

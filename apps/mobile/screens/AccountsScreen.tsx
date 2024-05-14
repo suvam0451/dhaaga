@@ -1,28 +1,58 @@
-import { View, Text } from "react-native";
-import { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { StandardView } from "../styles/Containers";
+import {TouchableOpacity} from "react-native";
+import {Ionicons} from "@expo/vector-icons";
+import MastodonServerSelect from "./accounts/stacks/Mastodon/ServerSelection";
+import MisskeyServerSelect from "./accounts/stacks/Misskey/ServerSelection";
+import SelectProvider from "./accounts/stacks/SelectProvider";
+import SelectAccountStack from "./accounts/stacks/SelectAccount";
+import MastodonSignIn from "./accounts/stacks/Mastodon/SignIn";
+import MisskeySignIn from "./accounts/stacks/Misskey/SignIn";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 
 function AccountsScreen() {
-	return (
-		<View style={{ flex: 1 }}>
-			<StandardView
-				style={{
-					display: "flex",
-					marginTop: 40,
-					marginBottom: 20,
-					justifyContent: "space-between",
-					flexDirection: "row",
-				}}
-			>
-				<Text style={{ fontSize: 24 }}>Add an Account</Text>
-				<Ionicons name={"refresh-outline"} size={24} />
-			</StandardView>
+  return (
+      <Stack.Navigator initialRouteName={"Select an Account"}>
+        {/*default*/}
+        <Stack.Screen
+            name="Select an Account"
+            component={SelectAccountStack}
+            options={{
+              headerTintColor: "black",
+              headerRight: () => (
+                  <TouchableOpacity onPress={() => {
+                    console.log("refreshing account list...")
+                  }}>
+                    <Ionicons name="refresh" size={28} color="black"/>
+                  </TouchableOpacity>
+              ),
+            }}
+        />
 
-			{/* {Step > 0 && <SignInWebview uri={AuthUri} setCode={setCode} />} */}
-			{/* {Step > 0 && <PasteTokenStep Subdomain={Subdomain} Code={Code} />} */}
-		</View>
-	);
+        <Stack.Screen
+            name="Select Mastodon Server"
+            component={MastodonServerSelect}
+        />
+        <Stack.Screen
+            name="Select Misskey Server"
+            component={MisskeyServerSelect}
+        />
+        {/*Signup Phase 1*/}
+        <Stack.Screen name="Select a Platform" component={SelectProvider}/>
+
+        {/*Signup Phase 2*/}
+        <Stack.Screen
+            name="Mastodon Sign-In"
+            component={MastodonSignIn}
+            options={{animation: "none"}}
+        />
+        <Stack.Screen
+            name="Misskey Sign-In"
+            component={MisskeySignIn}
+            options={{animation: "none"}}
+        />
+      </Stack.Navigator>
+  );
 }
 
 export default AccountsScreen;
