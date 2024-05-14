@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Dhaaga",
-    "slug": "Dhaaga",
+    "slug": "dhaaga",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.suvam0451.Dhaaga"
+      "package": "com.suvam0451.dhaaga"
     },
     "web": {
       "favicon": "./assets/favicon.png"

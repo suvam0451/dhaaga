@@ -5,22 +5,21 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "dev:website": "pnpm --filter website --stream -r dev",
-    "dev:app": "npm run dev -w @dhaaga/mobile"
+    "dev:app": "npm run dev -w @dhaaga/mobile",
+    "dev:web": "npm run dev -w @dhaaga/web",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "author": "Debashish Patra",
   "license": "AGPL",
   "workspaces": [
-    "website",
     "frontend",
     "packages/*",
-    "apps/**"
+    "apps/*"
   ],
   "dependencies": {
-    "resolve": "^1.22.8",
-    "turbo": "^1.13.3"
-  },
-  "devDependencies": {
-    "@types/node": "^20.12.8"
+    "expo": "~51.0.5",
+    "react": "18.2.0",
+    "react-native": "0.74.1"
   }
 }

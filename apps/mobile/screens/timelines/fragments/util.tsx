@@ -90,7 +90,7 @@ export function parseNode(
     }
     case "italic": {
       return (
-          <Text style={{color: "white", fontStyle: "italic"}}>
+          <Text key={count} style={{color: "white", fontStyle: "italic"}}>
             Doesn't Work
             {/* <ItalicFormattedChildrenNodes
 						count={count}

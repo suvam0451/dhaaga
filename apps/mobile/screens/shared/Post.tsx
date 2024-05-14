@@ -16,10 +16,8 @@ function Post({route, navigation}) {
 
   function queryFn() {
     if (!client) {
-      console.log("_client not available")
       throw new Error("_client not initialized");
     }
-    console.log("_client is a available")
     return client.getStatus(q);
   }
 
