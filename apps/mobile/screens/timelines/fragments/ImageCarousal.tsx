@@ -88,6 +88,7 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 	);
 
 	useEffect(() => {
+		if(!attachments) return
 		let MIN_HEIGHT = 0;
 		for (const item of attachments) {
 			const meta = item.getMeta();
@@ -104,7 +105,7 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 		setCalculatedHeight(MIN_HEIGHT);
 	}, [attachments]);
 
-	if (attachments.length === 1) {
+	if (attachments?.length === 1) {
 		return (
 			<React.Fragment>
 				<ImageViewer
@@ -128,7 +129,7 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 		);
 	}
 	return (
-		attachments.length > 0 && (
+		attachments?.length > 0 && (
 			<View
 				style={{
 					display: "flex",
@@ -145,8 +146,8 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 							justifyContent: "flex-end",
 						}}
 					>
-						<Ionicons name="ios-arrow-back" size={32} color="white" />
-						<Ionicons name="ios-arrow-forward" size={32} color="white" />
+						<Ionicons name="arrow-back" size={32} color="white" />
+						<Ionicons name="arrow-forward" size={32} color="white" />
 					</View>
 				</View>
 

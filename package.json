@@ -5,28 +5,21 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "standard-version",
-    "dev2": "wails dev -debounce 5000",
-    "dev": "pnpm --stream -r dev",
-    "turbo:dev": "turbo dev",
-    "dev:website": "pnpm --filter website --stream -r dev",
-    "dev:mobile": "turbo dev --filter=\"...{./apps/mobile}\""
+    "dev:app": "npm run dev -w @dhaaga/mobile",
+    "dev:web": "npm run dev -w @dhaaga/web",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "author": "Debashish Patra",
   "license": "AGPL",
   "workspaces": [
-    "website",
     "frontend",
     "packages/*",
-    "apps/**"
+    "apps/*"
   ],
   "dependencies": {
-    "resolve": "^1.22.8",
-    "turbo": "^1.13.3"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
-  "devDependencies": {
-    "@types/node": "^20.12.8"
+    "expo": "~51.0.5",
+    "react": "18.2.0",
+    "react-native": "0.74.1"
   }
 }

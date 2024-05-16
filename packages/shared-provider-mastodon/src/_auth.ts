@@ -15,7 +15,7 @@ export class MastodonService {
 			client_id: clientId,
 			redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
 			response_type: "code",
-			scope: "read",
+			scope: "read write",
 		};
 
 		// Generate the query string

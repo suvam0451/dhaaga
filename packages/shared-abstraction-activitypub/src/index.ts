@@ -1,26 +1,18 @@
-import {
-  RestClient,
-  RestServices,
-  mastodon,
-} from "@dhaaga/shared-provider-mastodon/src";
-import {
-  Note,
-  UserDetailed,
-  createClient,
-  misskeyApi,
-} from "@dhaaga/shared-provider-misskey/src";
-import axios, {AxiosInstance} from "axios";
+import {RestClientCreateDTO} from "./adapters/_client/_interface";
+import MastodonRestClient from "./adapters/_client/mastodon";
+import MisskeyRestClient from "./adapters/_client/misskey";
+import UnknownRestClient from "./adapters/_client/default";
 
 // export status adapters and interfaces
 export {
-  NoteToStatusAdapter,
-  StatusToStatusAdapter,
+  MisskeyToStatusAdapter,
+  MastodonToStatusAdapter,
   UnknownToStatusAdapter,
 } from "./adapters/status/adapter";
 export {NoteInstance, StatusInstance} from "./adapters/status/unique";
 export {StatusInterface} from "./adapters/status/interface";
 
-// export media atatchment adapters and interfaces
+// export media attachment adapters and interfaces
 export {
   DriveFileToMediaAttachmentAdapter,
   MediaAttachmentToMediaAttachmentAdapter,
@@ -47,126 +39,10 @@ export {
   ActivityPubAccount,
 } from "./types/activitypub";
 
-type TimelineQuery = {
-  maxId?: string;
-  minId?: string;
-};
-
-type GetUserPostsQueryDTO = {
-  limit: number,
-  maxId?: string,
-  excludeReplies: boolean
-}
-
-interface ActivityPubClient {
-  getHomeTimeline(): Promise<mastodon.v1.Status[] | Note[]>;
-
-  getTimelineByHashtag(
-      q: string,
-      query?: TimelineQuery
-  ): Promise<mastodon.v1.Status[] | Note[]>;
-
-  getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
-
-  getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<mastodon.v1.Status[] | Note[]>;
-}
-
-type RestClientCreateDTO = {
-  instance: string;
-  token: string;
-};
-
-export class MisskeyRestClient implements ActivityPubClient {
-  // official, typed client from misskey.js
-  client: misskeyApi.APIClient;
-  // general axios client for untyped endpoints
-  axiosClient: AxiosInstance;
-
-  constructor(dto: RestClientCreateDTO) {
-    this.client = createClient(dto.instance, dto.token);
-    this.axiosClient = axios.create({
-      baseURL: `${dto.instance}/api`,
-    });
-  }
-
-  getUserPosts(userId: string, opts: GetUserPostsQueryDTO) {
-    return this.client.request("users/notes", {
-      userId: userId,
-      limit: opts.limit,
-    });
-  }
-
-  async getHomeTimeline(): Promise<Note[]> {
-    return await this.client.request("notes/local-timeline", {limit: 20});
-  }
-
-  async getTimelineByHashtag(q: string): Promise<Note[]> {
-    const res = await this.axiosClient.post<Note[]>("/notes/search-by-tag", {
-      limit: 20,
-      tag: q,
-    });
-    return res.data;
-  }
-
-  getUserProfile(
-      username: string
-  ): Promise<mastodon.v1.Account | UserDetailed> {
-    return this.client.request("users/show", {username});
-  }
-}
-
-export class MastodonRestClient implements ActivityPubClient {
-  client: RestClient;
-
-  constructor(dto: RestClientCreateDTO) {
-    this.client = new RestClient(dto.instance, {
-          accessToken: dto.token,
-          domain: "mastodon"
-        }
-    );
-  }
-
-  async getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<Note[] | mastodon.v1.Status[]> {
-    return await RestServices.v1.accounts.default.getStatuses(this.client, userId, opts);
-  }
-
-  async getHomeTimeline(): Promise<mastodon.v1.Status[]> {
-    return await RestServices.v1.timelines.default.getHomeTimeline(
-        this.client
-    );
-  }
-
-  async getTimelineByHashtag(q: string): Promise<mastodon.v1.Status[]> {
-    return RestServices.v1.timelines.default.getTimelineByHashtag(
-        this.client,
-        q
-    );
-  }
-
-  getUserProfile(userId: string): Promise<mastodon.v1.Account> {
-    return RestServices.v1.accounts.default.getByUserId(this.client, userId)
-  }
-}
-
-// null object pattern
-// https://en.wikipedia.org/wiki/Null_object_pattern
-export class UnknownRestClient implements ActivityPubClient {
-  getUserPosts(username: string): Promise<Note[] | mastodon.v1.Status[]> {
-    throw new Error("Method not implemented.");
-  }
-
-  async getHomeTimeline() {
-    console.log("");
-    return [];
-  }
-
-  async getTimelineByHashtag(q: string) {
-    return [];
-  }
-
-  getUserProfile(username: string): Promise<mastodon.v1.Account> {
-    throw new Error("Method not implemented.");
-  }
+export {
+  MastodonRestClient,
+  MisskeyRestClient,
+  UnknownRestClient
 }
 
 const userMap = {

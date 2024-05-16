@@ -1,243 +1,269 @@
-import { DriveFile } from "@dhaaga/shared-provider-misskey/src";
+import {DriveFile} from "@dhaaga/shared-provider-misskey/src";
 import {
-	DriveFileToMediaAttachmentAdapter,
-	MediaAttachmentToMediaAttachmentAdapter,
+  DriveFileToMediaAttachmentAdapter,
+  MediaAttachmentToMediaAttachmentAdapter,
 } from "../media-attachment/adapter";
 import {
-	DriveFileInstance,
-	MediaAttachmentInstance,
+  DriveFileInstance,
+  MediaAttachmentInstance,
 } from "../media-attachment/unique";
-import { StatusInterface } from "./interface";
-import { NoteInstance, StatusInstance } from "./unique";
+import {StatusInterface} from "./interface";
+import {NoteInstance, StatusInstance} from "./unique";
 
-export class NoteToStatusAdapter implements StatusInterface {
-	ref: NoteInstance;
-	constructor(ref: NoteInstance) {
-		this.ref = ref;
-	}
+export class MisskeyToStatusAdapter implements StatusInterface {
+  ref: NoteInstance;
 
-	isValid() {
-		return this.ref?.instance !== undefined && this.ref?.instance !== null;
-	}
+  constructor(ref: NoteInstance) {
+    this.ref = ref;
+  }
 
-	getId(): string {
-		return this.ref?.instance?.id;
-	}
-	getRepliesCount(): number {
-		return this.ref?.instance?.repliesCount;
-	}
-	getRepostsCount(): number {
-		return this.ref?.instance?.renoteCount;
-	}
-	getFavouritesCount(): number {
-		return -1;
-	}
+  getIsBookmarked(): boolean {
+    return false
+  }
 
-	getUsername() {
-		return this.ref?.instance?.user.username;
-	}
-	getDisplayName() {
-		return this.ref?.instance?.user.name;
-	}
+  isValid() {
+    return this.ref?.instance !== undefined && this.ref?.instance !== null;
+  }
 
-	getAvatarUrl() {
-		return this.ref?.instance?.user.avatarUrl;
-	}
+  getId(): string {
+    return this.ref?.instance?.id;
+  }
 
-	getCreatedAt() {
-		return this.ref?.instance?.createdAt || new Date().toString();
-	}
+  getRepliesCount(): number {
+    return this.ref?.instance?.repliesCount;
+  }
 
-	getVisibility() {
-		return this.ref?.instance?.visibility;
-	}
+  getRepostsCount(): number {
+    return this.ref?.instance?.renoteCount;
+  }
 
-	getAccountUrl() {
-		return this.ref?.instance?.user.instance?.name;
-	}
-	getRepostedStatus(): StatusInterface | null | undefined {
-		if (this.ref?.instance?.renote) {
-			return new NoteToStatusAdapter(
-				new NoteInstance(this.ref?.instance?.renote)
-			);
-		}
-		return null;
-	}
+  getFavouritesCount(): number {
+    return -1;
+  }
 
-	getMediaAttachments() {
-		if (!this.ref?.instance?.files) {
-			return [];
-		}
-		return this.ref?.instance?.files.map((o: DriveFile) => {
-			return new DriveFileToMediaAttachmentAdapter(new DriveFileInstance(o));
-		});
-	}
+  getUsername() {
+    return this.ref?.instance?.user.username;
+  }
 
-	isReposted() {
-		return this.ref?.instance?.renote !== null;
-	}
+  getDisplayName() {
+    return this.ref?.instance?.user.name;
+  }
 
-	getContent() {
-		return this.ref?.instance?.text;
-	}
+  getAvatarUrl() {
+    return this.ref?.instance?.user.avatarUrl;
+  }
 
-	print(): void {
-		console.log(this.ref.instance);
-	}
+  getCreatedAt() {
+    return this.ref?.instance?.createdAt || new Date().toString();
+  }
 
-	getAccountId_Poster(): string {
-		return this?.ref?.instance?.user?.id;
-	}
+  getVisibility() {
+    return this.ref?.instance?.visibility;
+  }
+
+  getAccountUrl() {
+    return this.ref?.instance?.user.instance?.name;
+  }
+
+  getRepostedStatus(): StatusInterface | null | undefined {
+    if (this.ref?.instance?.renote) {
+      return new MisskeyToStatusAdapter(
+          new NoteInstance(this.ref?.instance?.renote)
+      );
+    }
+    return null;
+  }
+
+  getMediaAttachments() {
+    if (!this.ref?.instance?.files) {
+      return [];
+    }
+    return this.ref?.instance?.files.map((o: DriveFile) => {
+      return new DriveFileToMediaAttachmentAdapter(new DriveFileInstance(o));
+    });
+  }
+
+  isReposted() {
+    return this.ref?.instance?.renote !== null;
+  }
+
+  getContent() {
+    return this.ref?.instance?.text;
+  }
+
+  print(): void {
+    console.log(this.ref.instance);
+  }
+
+  getAccountId_Poster(): string {
+    return this?.ref?.instance?.user?.id;
+  }
 }
 
-export class StatusToStatusAdapter implements StatusInterface {
-	ref: StatusInstance;
-	constructor(ref: StatusInstance) {
-		this.ref = ref;
-	}
+export class MastodonToStatusAdapter implements StatusInterface {
+  ref: StatusInstance;
 
-	isValid() {
-		return this.ref?.instance !== undefined && this.ref?.instance !== null;
-	}
+  constructor(ref: StatusInstance) {
+    this.ref = ref;
+  }
 
-	getId(): string {
-		return this.ref?.instance?.id;
-	}
+  getIsBookmarked() {
+    return this?.ref?.instance?.bookmarked
+  }
 
-	getAccountId() {
+  isValid() {
+    return this.ref?.instance !== undefined && this.ref?.instance !== null;
+  }
 
-	}
+  getId(): string {
+    return this.ref?.instance?.id;
+  }
 
-	getRepliesCount(): number {
-		return this.ref?.instance?.repliesCount;
-	}
-	getRepostsCount(): number {
-		return this.ref?.instance?.reblogsCount;
-	}
-	getFavouritesCount(): number {
-		return this.ref?.instance?.favouritesCount;
-	}
+  getAccountId() {
 
-	getUsername() {
-		return this.ref?.instance?.account.username || "";
-	}
+  }
 
-	getDisplayName() {
-		return this.ref?.instance?.account.displayName || "";
-	}
+  getRepliesCount(): number {
+    return this.ref?.instance?.repliesCount;
+  }
 
-	getAvatarUrl() {
-		return this.ref?.instance?.account.avatarStatic || "";
-	}
+  getRepostsCount(): number {
+    return this.ref?.instance?.reblogsCount;
+  }
 
-	getCreatedAt() {
-		return this.ref.instance?.createdAt || new Date().toString();
-	}
+  getFavouritesCount(): number {
+    return this.ref?.instance?.favouritesCount;
+  }
 
-	getVisibility() {
-		return this.ref?.instance?.visibility;
-	}
+  getUsername() {
+    // console.log("need username", this.ref.instance)
+    return this.ref?.instance?.account.displayName || "";
+  }
 
-	getAccountUrl() {
-		return this.ref?.instance?.account.url;
-	}
-	getRepostedStatus(): StatusInterface | null | undefined {
-		if (this.ref?.instance?.reblog) {
-			return new StatusToStatusAdapter(
-				new StatusInstance(this.ref?.instance?.reblog)
-			);
-		}
-		return null;
-	}
+  getDisplayName() {
+    return this.ref?.instance?.account.displayName || "";
+  }
 
-	isReposted(): boolean {
-		return this.ref?.instance?.reblog !== null;
-	}
+  getAvatarUrl() {
+    return this.ref?.instance?.account.avatarStatic || "";
+  }
 
-	getMediaAttachments() {
-		return this.ref?.instance?.mediaAttachments.map((o) => {
-			return new MediaAttachmentToMediaAttachmentAdapter(
-				new MediaAttachmentInstance(o)
-			);
-		});
-	}
+  getCreatedAt() {
+    return this.ref.instance?.createdAt || new Date().toString();
+  }
 
-	getContent(): string | null {
-		return this.ref?.instance?.content;
-	}
+  getVisibility() {
+    return this.ref?.instance?.visibility;
+  }
 
-	print(): void {
-		console.log(this.ref.instance);
-	}
+  getAccountUrl() {
+    return this.ref?.instance?.account.url;
+  }
 
-	getAccountId_Poster(): string {
-		return this?.ref?.instance?.account?.id;
-	}
+  getRepostedStatus(): StatusInterface | null | undefined {
+    if (this.ref?.instance?.reblog) {
+      return new MastodonToStatusAdapter(
+          new StatusInstance(this.ref?.instance?.reblog)
+      );
+    }
+    return null;
+  }
+
+  isReposted(): boolean {
+    return this.ref?.instance?.reblog !== null;
+  }
+
+  getMediaAttachments() {
+    return this.ref?.instance?.mediaAttachments.map((o) => {
+      return new MediaAttachmentToMediaAttachmentAdapter(
+          new MediaAttachmentInstance(o)
+      );
+    });
+  }
+
+  getContent(): string | null {
+    return this.ref?.instance?.content;
+  }
+
+  print(): void {
+    console.log(this.ref.instance);
+  }
+
+  getAccountId_Poster(): string {
+    return this?.ref?.instance?.account?.id;
+  }
 }
 
 export class UnknownToStatusAdapter implements StatusInterface {
-	getRepliesCount(): number {
-		return -1;
-	}
-	
-	isValid() {
-		return false
-	}
+  getIsBookmarked() {
+    return false
+  }
 
-	getId(): string {
-		return "";
-	}
-	getRepostsCount(): number {
-		return -1;
-	}
-	getFavouritesCount(): number {
-		return -1;
-	}
-	getUsername() {
-		return "";
-	}
+  getRepliesCount(): number {
+    return -1;
+  }
 
-	getDisplayName() {
-		return "";
-	}
+  isValid() {
+    return false
+  }
 
-	getAvatarUrl() {
-		return "";
-	}
+  getId(): string {
+    return "";
+  }
 
-	getCreatedAt() {
-		return new Date().toString();
-	}
+  getRepostsCount(): number {
+    return -1;
+  }
 
-	getVisibility() {
-		return "";
-	}
+  getFavouritesCount(): number {
+    return -1;
+  }
 
-	getAccountUrl() {
-		return "";
-	}
+  getUsername() {
+    return "";
+  }
 
-	getRepostedStatus(): StatusInterface | null | undefined {
-		return null;
-	}
+  getDisplayName() {
+    return "";
+  }
 
-	isReposted() {
-		return false;
-	}
+  getAvatarUrl() {
+    return "";
+  }
 
-	getContent() {
-		return "";
-	}
+  getCreatedAt() {
+    return new Date().toString();
+  }
 
-	getMediaAttachments() {
-		return [];
-	}
+  getVisibility() {
+    return "";
+  }
 
-	print() {
-		console.log("Unknown status type");
-	}
+  getAccountUrl() {
+    return "";
+  }
 
-	getAccountId_Poster(): string {
-		return "";
-	}
+  getRepostedStatus(): StatusInterface | null | undefined {
+    return null;
+  }
+
+  isReposted() {
+    return false;
+  }
+
+  getContent() {
+    return "";
+  }
+
+  getMediaAttachments() {
+    return [];
+  }
+
+  print() {
+    console.log("Unknown status type");
+  }
+
+  getAccountId_Poster(): string {
+    return "";
+  }
 }

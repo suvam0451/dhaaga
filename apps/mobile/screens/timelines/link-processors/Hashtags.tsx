@@ -1,6 +1,5 @@
 import { Text } from "react-native";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 function HashtagProcessor({
@@ -30,7 +29,6 @@ function HashtagProcessor({
 			(selectedIndex: number) => {
 				switch (selectedIndex) {
 					case 0: {
-						console.log("browe clicked");
 						navigation.navigate("Browse Hashtag", {
 							q: content,
 							title: `#${content}`,
@@ -50,7 +48,7 @@ function HashtagProcessor({
 	};
 
 	return (
-		<Text onPress={onPress} key={forwardedKey} style={{ color: "green" }}>
+		<Text onPress={onPress} key={forwardedKey} style={{ color: "#bb86fc" }}>
 			#{content}
 		</Text>
 	);

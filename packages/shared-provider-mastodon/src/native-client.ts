@@ -7,13 +7,13 @@ export class RestClient {
   domain: string
 
   constructor(url: string,
-              {
-                accessToken,
-                domain
-              }: {
-                domain: string
-                accessToken?: string
-              }
+      {
+        accessToken,
+        domain
+      }: {
+        domain: string
+        accessToken?: string
+      }
   ) {
     this.url = url;
     this.accessToken = accessToken;

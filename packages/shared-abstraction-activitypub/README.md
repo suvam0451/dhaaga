@@ -1,1 +1,0 @@
-# shared-adapter-activitypub

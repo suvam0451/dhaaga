@@ -1,28 +1,38 @@
-import {
-  View,
-} from "react-native";
-import styled from "styled-components/native";
+import Hashtag from "./shared/Hashtag";
+import UserProfile from "./shared/profile/UserProfile";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import PostWithClientContext from "./shared/Post";
+import WithActivityPubRestClient from "../states/useActivityPubRestClient";
+import TimelineRenderer from "./timelines/mastodon/TimelineRenderer";
 
-const DummyListItem = styled.View`
-    background-color: #ccc;
-    margin: 2rem 2rem;
-    height: 500px;
-`;
+const Stack = createNativeStackNavigator();
 
-const HeaderComponent = styled.View`
-    background-color: black;
-    color: #fff;
-    height: 56px;
-`;
-
-type HomeScreenProps = {
-  ScrollY: number;
-  setScrollYValue: (value: number) => void;
-};
-
-function HomeScreen({ScrollY, setScrollYValue}: HomeScreenProps) {
+function HomeScreen() {
   return (
-      <View></View>
+      <WithActivityPubRestClient>
+        <Stack.Navigator
+            initialRouteName={"Mastodon timeline"}
+            screenOptions={{headerShown: false}}
+        >
+          {/*default*/}
+          <Stack.Screen
+              name="Mastodon timeline"
+              component={TimelineRenderer}
+          />
+          <Stack.Screen
+              name="Browse Hashtag"
+              component={Hashtag}
+          />
+          <Stack.Screen
+              name="Profile"
+              component={UserProfile}
+          />
+          <Stack.Screen
+              name="Post"
+              component={PostWithClientContext}
+          />
+        </Stack.Navigator>
+      </WithActivityPubRestClient>
   );
 }
 

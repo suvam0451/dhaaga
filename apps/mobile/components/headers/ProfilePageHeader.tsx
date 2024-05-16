@@ -1,5 +1,11 @@
 import React from "react";
-import {GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+  GestureResponderEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 type HeadersProps = {
@@ -9,18 +15,17 @@ type HeadersProps = {
   onLeftIconPress: (event: GestureResponderEvent) => void
 };
 const TimelinesHeader = ({
-                           title,
-                           HIDDEN_SECTION_HEIGHT,
-                           SHOWN_SECTION_HEIGHT,
-                           onLeftIconPress
-                         }: HeadersProps) => {
+  title,
+  HIDDEN_SECTION_HEIGHT,
+  onLeftIconPress
+}: HeadersProps) => {
   return (
       <>
         <View
             style={[
               styles.subHeader,
               {
-                backgroundColor: "#1c1c1c",
+                backgroundColor: "#222222",
                 height: HIDDEN_SECTION_HEIGHT,
               },
             ]}
@@ -30,7 +35,11 @@ const TimelinesHeader = ({
           >
             <Ionicons name="chevron-back" size={24} color="white"/>
           </TouchableOpacity>
-          <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+          <View style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center"
+          }}>
             <Text style={styles.conversation}>{title}</Text>
           </View>
 

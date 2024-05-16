@@ -1,7 +1,9 @@
-import * as accounts from "./accounts"
-import * as timelines from "./timelines"
+import accounts from "./accounts"
+import timelines from "./timelines"
+import statuses from "./statuses"
 
 export {
   accounts,
-  timelines
+  timelines,
+  statuses
 }

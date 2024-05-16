@@ -1,5 +1,4 @@
 import {Dimensions, View, Text, Keyboard} from "react-native";
-import PasteTokenStep from "../../../accounts-comp/PasteTokenStep";
 import {useEffect, useState} from "react";
 import WebView from "react-native-webview";
 import {StandardView} from "../../../../styles/Containers";
@@ -62,8 +61,7 @@ function MastodonSignInStack({route, navigation}) {
       domain: "mastodon"
     });
     const verified =
-        await RestServices.v1.accounts.default.verifyCredentials(client);
-    console.log("verifying token");
+        await RestServices.v1.accounts.verifyCredentials(client);
 
     await AccountsRepo.add({
       subdomain: subdomain,
@@ -96,15 +94,12 @@ function MastodonSignInStack({route, navigation}) {
       },
     ];
 
-    console.log("account added", accnt);
     for (const cred of creds) {
       await CredentialsRepo.upsert(accnt, {
         credential_type: cred.key,
         credential_value: cred.value,
       });
     }
-    console.log("credentials added");
-
     navigation.navigate("Select an Account");
   }
 

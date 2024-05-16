@@ -3,10 +3,7 @@ import activitypubDb from "../connections/activity_pub";
 import cacheDb from "../connections/cache";
 
 export function runCoreMigrations() {
-	coreDb.transaction(
-		(tx) => {
-			tx.executeSql(
-				`CREATE TABLE IF NOT EXISTS accounts (
+  coreDb.execSync(`CREATE TABLE IF NOT EXISTS accounts (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         domain TEXT,
         subdomain TEXT,
@@ -14,9 +11,7 @@ export function runCoreMigrations() {
         password TEXT,
         last_login_at DATETIME,
         verified INT DEFAULT 0
-      );`
-			);
-			tx.executeSql(`
+      );
       CREATE TABLE IF NOT EXISTS credentials (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         credential_type TEXT,
@@ -24,30 +19,20 @@ export function runCoreMigrations() {
         updated_at DATETIME,
         account_id INTEGER,
         FOREIGN KEY (account_id) REFERENCES accounts (id)
-      );`);
-		},
-		(e) => {
-			console.log("core db migration error", e);
-		},
-		() => {
-			console.log("core db migration success");
-		}
-	);
+      );
+	`)
 }
 
 export function runActivityPubMigrations() {
-	activitypubDb.transaction(
-		(tx) => {
-			tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS instance (
+  activitypubDb.execSync(`
+        CREATE TABLE IF NOT EXISTS instance (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         url TEXT,
         blocked INT DEFAULT 0,
         favourited INT DEFAULT 0);
-      `);
-			tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS emoji (
+        
+        CREATE TABLE IF NOT EXISTS emoji (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         category TEXT,
@@ -55,37 +40,21 @@ export function runActivityPubMigrations() {
         favourited INT DEFAULT 0,
         instance_id INTEGER,
         FOREIGN KEY (instance_id) REFERENCES instance (id) ON DELETE CASCADE);
-   `);
-			tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS emoji_alias (
+        
+        CREATE TABLE IF NOT EXISTS emoji_alias (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         alias TEXT,
         emoji_id INTEGER,
         FOREIGN KEY (emoji_id) REFERENCES emoji (id) ON DELETE CASCADE);
-   `);
-		},
-		(e) => {
-			console.log("activitypub db migration error", e);
-		},
-		() => {
-			console.log("activitypub db migration success");
-		}
-	);
+  `)
 }
 
 export function runCacheMigrations() {
-	cacheDb.transaction(
-		(tx) => {
-			tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS cache (
+  cacheDb.execSync(`
+   CREATE TABLE IF NOT EXISTS cache (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         key TEXT UNIQUE,
         value TEXT,
-        updated_at DATETIME
-      );`);
-		},
-		() => {
-			console.log("cache db migration success");
-		}
-	);
+        updated_at DATETIME);
+  `)
 }

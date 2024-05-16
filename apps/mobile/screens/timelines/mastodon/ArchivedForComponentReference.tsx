@@ -18,6 +18,9 @@ import {
 } from "@dhaaga/shared-provider-mastodon/src";
 import {useQuery} from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
+import {
+  useActivityPubRestClientContext
+} from "../../../states/useActivityPubRestClient";
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;
@@ -28,17 +31,17 @@ const SHOWN_SECTION_HEIGHT = 50;
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
-  const dispatch = useDispatch();
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const clientCtx = useActivityPubRestClientContext()
 
   const restClient = useRef(null);
 
   function getHomeTimeline() {
-    if (!restClient.current) {
-      throw new Error("client not initialized");
+    if (!clientCtx.client) {
+      throw new Error("_client not initialized");
     }
 
-    return RestServices.v1.timelines.default.getHomeTimeline(
+    return RestServices.v1.timelines.getHomeTimeline(
         restClient.current
     );
   }
@@ -49,28 +52,6 @@ function TimelineRenderer() {
     queryFn: getHomeTimeline,
   });
 
-  useEffect(() => {
-    if (!accountState.activeAccount) {
-      restClient.current = null;
-      console.log("have not selected any account");
-      return;
-    }
-
-    const token = accountState.credentials.find(
-        (o) => o.credential_type === "access_token"
-    )?.credential_value;
-    if (!token) {
-      restClient.current = null;
-      console.log("token not found");
-      return;
-    }
-
-    const client = new RestClient(accountState.activeAccount.subdomain, {
-      accessToken: token,
-      domain: "mastodon"
-    });
-    restClient.current = client;
-  }, [accountState]);
 
   const ref = useRef(null);
 
@@ -157,7 +138,7 @@ function TimelineRenderer() {
             // onMomentumScrollEnd={handleSnap}
             scrollEventThrottle={16}
         >
-          {data && data.map((o, i) => <StatusFragment key={i} status={o}/>)}
+          {data && data.map((o, i) => <StatusFragment key={i}/>)}
         </Animated.ScrollView>
       </SafeAreaView>
   );

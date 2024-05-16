@@ -1,7 +1,7 @@
-import { Platform } from "react-native";
+import {Platform} from "react-native";
 import * as SQLite from "expo-sqlite";
 
-function openDatabase(dbName = "db.db") {
+async function openDatabase(dbName = "db.db") {
 	if (Platform.OS === "web") {
 		return {
 			transaction: () => {
@@ -12,8 +12,7 @@ function openDatabase(dbName = "db.db") {
 		};
 	}
 
-	const db = SQLite.openDatabase(dbName);
-	return db;
+	return await SQLite.openDatabaseAsync(dbName);
 }
 
 const db = openDatabase();
