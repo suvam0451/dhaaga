@@ -7,7 +7,8 @@
     "dev": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "android:preview": "eas build -p android --profile preview"
   },
   "dependencies": {
     "@babel/helper-module-imports": "^7.24.3",
@@ -29,7 +30,7 @@
     "chalk": "^5.3.0",
     "convert-source-map": "^2.0.0",
     "date-fns": "^2.30.0",
-    "expo": "~51.0.4",
+    "expo": "~51.0.6",
     "expo-crypto": "~13.0.2",
     "expo-image": "^1.12.9",
     "expo-sqlite": "~14.0.3",

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Dhaaga",
+    "name": "dhaaga",
     "slug": "dhaaga",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -29,7 +29,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "e3b8d123-9f7d-45ad-b977-6ef107f52b4e"
+        "projectId": "6a318c01-ca78-440f-840f-64c54ddc94fe"
       }
     }
   }
