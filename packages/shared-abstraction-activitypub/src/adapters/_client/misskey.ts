@@ -1,6 +1,9 @@
 import ActivityPubClient, {
+  GetSearchResultQueryDTO,
+  GetUserFavouritedPostQueryDTO,
   GetUserPostsQueryDTO,
-  RestClientCreateDTO
+  RestClientCreateDTO,
+  StatusArray
 } from "./_interface";
 import {
   createClient,
@@ -20,7 +23,15 @@ class MisskeyRestClient implements ActivityPubClient {
     });
   }
 
-  async getBookmarks() {
+  async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
+    return []
+  }
+
+  async getFavourites(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray> {
+    return []
+  }
+
+  async getBookmarks(opts: GetUserFavouritedPostQueryDTO) {
     return []
   }
 

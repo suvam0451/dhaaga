@@ -1,6 +1,9 @@
 import ActivityPubClient, {
+  GetSearchResultQueryDTO,
+  GetUserFavouritedPostQueryDTO,
   GetUserPostsQueryDTO,
-  RestClientCreateDTO
+  RestClientCreateDTO,
+  StatusArray
 } from "./_interface";
 import {
   mastodon,
@@ -21,12 +24,39 @@ class MastodonRestClient implements ActivityPubClient {
     );
   }
 
+  async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
+    const _client = this.createClient()
+    try {
+      return await _client.v2.search.list({
+        q,
+        type: dto.type,
+        following: dto.following,
+      })
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+
   createClient() {
     return createRestAPIClient({
       url: this.client.url,
       accessToken: this.client.accessToken
     })
   }
+
+
+  async getFavourites(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray> {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.favourites.list()
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
 
   async getBookmarks() {
     const _client = this.createClient()

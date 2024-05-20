@@ -2,7 +2,7 @@ import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {
   View,
   Text,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback, TouchableHighlight, TouchableOpacity
 } from "react-native";
 import {StandardView} from "../../../styles/Containers";
 import {Ionicons} from "@expo/vector-icons";
@@ -113,7 +113,7 @@ function RootStatusFragment({mt}: StatusFragmentProps) {
         borderRadius: 4,
         paddingBottom: 4
       }}>
-        <TouchableWithoutFeedback onPress={() => {
+        <TouchableOpacity delayPressIn={100} onPress={() => {
           navigation.navigate("Post", {
             id: status.getId()
           })
@@ -169,7 +169,7 @@ function RootStatusFragment({mt}: StatusFragmentProps) {
                   </View>}
             </View>
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
         <ImageCarousal attachments={status?.getMediaAttachments()}/>
         <StatusInteraction
             post={status} statusId={statusRaw?.id}

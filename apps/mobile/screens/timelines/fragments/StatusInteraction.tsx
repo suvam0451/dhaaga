@@ -116,7 +116,7 @@ function StatusInteraction({
         </View>
         <TouchableOpacity onPress={toggleBookmark}>
           <Ionicons color={isBookmarked ? "purple" : "#888"}
-                    name={"bookmark-outline"} size={ICON_SIZE}/>
+                    name={isBookmarked ? "bookmark": "bookmark-outline"} size={ICON_SIZE}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={OnTranslationClicked}>
           <Ionicons color={"#888"} name={"language-outline"} size={ICON_SIZE}/>

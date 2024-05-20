@@ -1,9 +1,20 @@
-import ActivityPubClient from "./_interface";
+import ActivityPubClient, {
+  GetSearchResultQueryDTO,
+  GetUserFavouritedPostQueryDTO
+} from "./_interface";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 
 class UnknownRestClient implements ActivityPubClient {
-  async getBookmarks() {
+  async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
+    return []
+  }
+
+  async getFavourites(opts: GetUserFavouritedPostQueryDTO) {
+    return []
+  }
+
+  async getBookmarks(opts: GetUserFavouritedPostQueryDTO) {
     return []
   }
 

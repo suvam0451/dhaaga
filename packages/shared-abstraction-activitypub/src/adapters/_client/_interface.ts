@@ -14,11 +14,27 @@ export type GetUserPostsQueryDTO = {
   excludeReplies: boolean
 }
 
+export type GetUserFavouritedPostQueryDTO = {
+  limit: number,
+  sinceId?: string,
+  min_id?: string,
+  maxId?: string,
+}
+
+
+export type GetSearchResultQueryDTO = {
+  type: "accounts" | "hashtags" | "statuses" | null | undefined
+  following: boolean
+}
 
 export type RestClientCreateDTO = {
   instance: string;
   token: string;
 };
+
+export type Status = mastodon.v1.Status | Note | null
+export type StatusArray = Status[]
+
 
 /**
  * What common functionalities do we want to support
@@ -35,22 +51,29 @@ interface ActivityPubClient {
   /** User */
   getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
 
-  getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<mastodon.v1.Status[] | Note[]>;
+  getFavourites(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray>
 
-  getBookmarks(): Promise<mastodon.v1.Status[] | Note[]>;
+  getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<StatusArray>;
+
+  getBookmarks(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray>;
 
   getFollowedTags(): Promise<mastodon.v1.Tag[] | any[]>;
 
   /** Status */
-  getStatus(id: string): Promise<mastodon.v1.Status | Note>
+  getStatus(id: string): Promise<Status>
 
-  bookmark(id: string): Promise<mastodon.v1.Status | Note | null>
+  bookmark(id: string): Promise<Status>
 
-  unBookmark(id: string): Promise<mastodon.v1.Status | Note | null>
+  unBookmark(id: string): Promise<Status>
 
-  favourite(id: string): Promise<mastodon.v1.Status | Note | null>
+  favourite(id: string): Promise<Status>
 
-  unFavourite(id: string): Promise<mastodon.v1.Status | Note | null>
+  unFavourite(id: string): Promise<Status>
+
+  search(q: string, dto: GetSearchResultQueryDTO): Promise<{
+    accounts: [],
+    hashtags: []
+  }>
 }
 
 
