@@ -2,28 +2,21 @@
   "name": "dhaaga",
   "version": "0.4.0",
   "description": "A prototype multi-threaded desktop app to browse Instagram threads, built with go and web technologies.",
-  "main": "index.js",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev:app": "npm run dev -w @dhaaga/mobile",
     "dev:web": "npm run dev -w @dhaaga/web",
-    "app:preview": "npm run preview -w @dhaaga/mobile",
-    "android": "expo run:android",
-    "ios": "expo run:ios"
+    "app:preview": "npm run preview -w @dhaaga/mobile"
   },
   "author": "Debashish Patra",
   "license": "AGPL",
   "workspaces": [
-    "frontend",
     "packages/*",
     "apps/*"
   ],
-  "dependencies": {
-    "expo": "~51.0.5",
-    "react": "18.2.0",
-    "react-native": "0.74.1"
-  },
   "overrides": {
-    "react-native-reanimated": "~3.10.1"
+    "styled-components": {
+      "react-dom": "18.2.0"
+    }
   }
 }

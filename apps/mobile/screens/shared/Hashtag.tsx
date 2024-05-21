@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {useCallback, useEffect, useRef, useState} from "react";
-import StatusFragment from "../timelines/fragments/StatusFragment";
+import StatusFragment from "../../components/common/status/StatusFragment";
 import {Skeleton} from "@rneui/base";
 import {
   ActivityPubStatuses,

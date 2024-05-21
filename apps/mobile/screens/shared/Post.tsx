@@ -1,6 +1,6 @@
 import TitleOnlyStackHeaderContainer
   from "../../components/containers/TitleOnlyStackHeaderContainer";
-import StatusFragment from "../timelines/fragments/StatusFragment";
+import StatusFragment from "../../components/common/status/StatusFragment";
 import {useEffect, useState} from "react";
 import {ActivityPubStatus,} from "@dhaaga/shared-abstraction-activitypub/src";
 import {useQuery} from "@tanstack/react-query";

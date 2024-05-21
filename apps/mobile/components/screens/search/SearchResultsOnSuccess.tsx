@@ -1,13 +1,11 @@
 import Animated, {
-  useAnimatedRef, useDerivedValue,
-  useScrollViewOffset
+  useAnimatedRef,
 } from "react-native-reanimated";
 import WithActivitypubStatusContext from "../../../states/useStatus";
 import StatusFragment
-  from "../../../screens/timelines/fragments/StatusFragment";
+  from "../../common/status/StatusFragment";
 import LoadingMore from "../home/LoadingMore";
 import React, {useEffect} from "react";
-import {Text} from "@rneui/themed"
 
 import {useScrollOnReveal} from "../../../states/useScrollOnReveal";
 import {NativeScrollEvent, NativeSyntheticEvent} from "react-native";
@@ -24,10 +22,6 @@ function SearchResultsOnSuccess({
 }: SearchResultsOnSuccess) {
   const {scrollHandler, resetOffset, isEndOfPage, resetEndOfPageFlag} = useScrollOnReveal()
   const animatedRef = useAnimatedRef<Animated.ScrollView>();
-  const offset = useScrollViewOffset(animatedRef);
-  const text = useDerivedValue(
-      () => `Scroll offset: ${offset.value.toFixed(1)}`
-  );
 
   function handlePagination(e: NativeSyntheticEvent<NativeScrollEvent>) {
     const {layoutMeasurement, contentOffset, contentSize} = e.nativeEvent
@@ -56,7 +50,6 @@ function SearchResultsOnSuccess({
       onScroll={scrollHandler}
       scrollEventThrottle={2}
   >
-    <Text>{text.value}</Text>
     {PageData && PageData.map((o, i) =>
         <WithActivitypubStatusContext status={o} key={i}>
           <StatusFragment/>

@@ -1,0 +1,73 @@
+import {
+  ActivityPubTagAdapter,
+  TagInterface, TagType
+} from "@dhaaga/shared-abstraction-activitypub/src";
+import {createContext, useContext, useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import {RootState} from "../libs/redux/store";
+import {AccountState} from "../libs/redux/slices/account";
+
+type Type = {
+  tag: TagInterface
+  setData: (o: TagInterface) => void
+  setDataRaw: (o: TagType) => void
+}
+
+const defaultValue: Type = {
+  tag: undefined,
+  setData: function (o: TagInterface): void {
+    throw new Error("Function not implemented.");
+  },
+  setDataRaw: function (o: TagType): void {
+    throw new Error("Function not implemented.");
+  }
+}
+
+const ActivitypubTagContext =
+    createContext<Type>(defaultValue);
+
+export function useActivitypubTagContext() {
+  return useContext(ActivitypubTagContext);
+}
+
+type Props = {
+  tag: TagType,
+  children: any
+}
+
+/**
+ * Wrap ActivityPub tag objects with this
+ */
+function WithActivitypubTagContext({tag, children}: Props) {
+  const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const domain = accountState?.activeAccount?.domain
+
+  const [Value, setValue] = useState<TagInterface | null>(
+      ActivityPubTagAdapter(null, domain)
+  )
+  const [RawValue, setRawValue] = useState<TagType | null>(
+      null
+  )
+
+  // init
+  useEffect(() => {
+    setRawValue(tag)
+    setValue(ActivityPubTagAdapter(tag, domain))
+  }, [tag]);
+
+  const set = (o: TagInterface) => setValue(o)
+  const setRaw = (o: TagType) => {
+    setRawValue(o)
+    setValue(ActivityPubTagAdapter(o, domain))
+  }
+
+  return <ActivitypubTagContext.Provider value={{
+    tag: Value,
+    setData: set,
+    setDataRaw: setRaw
+  }}>
+    {children}
+  </ActivitypubTagContext.Provider>
+}
+
+export default WithActivitypubTagContext;

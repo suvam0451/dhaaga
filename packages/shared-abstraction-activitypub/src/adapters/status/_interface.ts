@@ -1,6 +1,11 @@
 import {MediaAttachmentInterface} from "../media-attachment/interface";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
+import {
+  MastodonToStatusAdapter,
+  MisskeyToStatusAdapter,
+  UnknownToStatusAdapter
+} from "../../index";
 
 export type Status = mastodon.v1.Status | Note | null | undefined
 export type StatusArray = Status[]
@@ -10,9 +15,9 @@ export interface StatusInterface {
 
   getUsername(): string;
 
-  getDisplayName(): string;
+  getDisplayName(): string | null;
 
-  getAvatarUrl(): string;
+  getAvatarUrl(): string | null;
 
   getCreatedAt(): string;
 
@@ -50,4 +55,43 @@ export interface StatusInterface {
   getParentStatusId(): string | null | undefined
 
   getUserIdParentStatusUserId(): string | null | undefined
+}
+
+export class StatusInstance {
+  instance: mastodon.v1.Status;
+
+  constructor(instance: mastodon.v1.Status) {
+    this.instance = instance;
+  }
+}
+
+export class NoteInstance {
+  instance: Note;
+
+  constructor(instance: Note) {
+    this.instance = instance;
+  }
+}
+
+/**
+ * @param status any status object
+ * @param domain domain from database
+ * @returns StatusInterface
+ */
+export function ActivitypubStatusAdapter(
+    status: any,
+    domain: string): StatusInterface {
+  switch (domain) {
+    case "misskey": {
+      return new MisskeyToStatusAdapter(new NoteInstance(status as Note));
+    }
+    case "mastodon": {
+      return new MastodonToStatusAdapter(
+          new StatusInstance(status as mastodon.v1.Status)
+      );
+    }
+    default: {
+      return new UnknownToStatusAdapter();
+    }
+  }
 }

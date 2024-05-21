@@ -5,16 +5,13 @@ import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
 import {View} from "react-native";
-import {useState} from "react";
 import StatusFragment
-  from "../../../screens/timelines/fragments/StatusFragment";
+  from "../../common/status/StatusFragment";
 import WithActivitypubStatusContext from "../../../states/useStatus";
-import {Button, Text} from "@rneui/themed";
+import {Button} from "@rneui/themed";
 
 function FollowedPosts() {
-  // const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {client} = useActivityPubRestClientContext()
-  const [Pagination, setPagination] = useState({minId: -1, maxID: -1})
 
   async function api() {
     if (!client) {
@@ -28,7 +25,7 @@ function FollowedPosts() {
   }
 
   // Queries
-  const {status, data, fetchStatus, refetch} = useQuery<
+  const {data, refetch} = useQuery<
       mastodon.v1.Status[] | Note[]
   >({
     queryKey: ["favourites"],

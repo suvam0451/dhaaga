@@ -38,6 +38,13 @@ const theme = createTheme({
         color: "#fff",
         opacity: 0.87
       }
+    },
+    Skeleton: {
+      style: {
+        backgroundColor: "#fff",
+        opacity: 0.3
+      },
+      animation: "pulse",
     }
   },
 });
@@ -142,7 +149,7 @@ export default function App() {
                             iconName = focused ? "home" : "home";
                           } else if (route.name === "Settings") {
                             iconName = focused ? "menu-outline" : "menu-outline";
-                          } else if (route.name === "Search") {
+                          } else if (route.name === "SearchTab") {
                             iconName = focused ? "search-sharp" : "search-sharp";
                           } else if (route.name === "Favourites") {
                             iconName = focused
@@ -171,7 +178,7 @@ export default function App() {
                       })}
                   >
                     <Tab.Screen name="Home" component={HomeScreen}/>
-                    <Tab.Screen name="Search" component={SearchScreen}/>
+                    <Tab.Screen name="SearchTab" component={SearchScreen}/>
                     <Tab.Screen name="Favourites" component={FavouritesScreen}/>
                     <Tab.Screen
                         name="Notifications"

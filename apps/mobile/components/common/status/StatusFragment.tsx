@@ -16,16 +16,15 @@ import React from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../libs/redux/store";
 import {AccountState} from "../../../libs/redux/slices/account";
-import OriginalPoster from "../../../components/post-fragments/OriginalPoster";
-import {Note, UserLite} from "@dhaaga/shared-provider-misskey/src";
-import StatusInteraction from "./StatusInteraction";
-import ImageCarousal from "./ImageCarousal";
+import OriginalPoster from "../../post-fragments/OriginalPoster";
+import {Note} from "@dhaaga/shared-provider-misskey/src";
+import StatusInteraction
+  from "../../../screens/timelines/fragments/StatusInteraction";
+import ImageCarousal from "../../../screens/timelines/fragments/ImageCarousal";
 import {useNavigation} from "@react-navigation/native";
-import WithActivitypubStatusContext, {
-  useActivitypubStatusContext
-} from "../../../states/useStatus";
+import {useActivitypubStatusContext} from "../../../states/useStatus";
 import MfmService from "../../../services/mfm.service";
-import Status from "../../../components/bottom-sheets/Status";
+import Status from "../../bottom-sheets/Status";
 
 type StatusFragmentProps = {
   // status: mastodon.v1.Status | Note;
@@ -92,7 +91,7 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
     for (const para of parsed) {
       for (const node of para) {
         const item = MfmService.parseNode(node, count.toString(), {
-          emojis: statusRaw?.emojis || [],
+          emojis: statusRaw?.emojis || [] as any,
           domain: accountState?.activeAccount?.domain,
           subdomain: accountState?.activeAccount?.subdomain,
           isHighEmphasisText: false
@@ -148,7 +147,7 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
               </View>
             </View>
             <View style={{marginBottom: 16}}>
-              <Text>{Content}</Text>
+              <Text style={{color: "#fff", opacity: 0.87}}>{Content}</Text>
 
               {ExplanationObject !== null &&
                   <View style={{
@@ -221,7 +220,7 @@ function RepliedStatusFragment() {
 function SharedStatusFragment({
   boostedStatus,
 }: StatusFragmentProps & {
-  postedBy: mastodon.v1.Account | UserLite;
+  postedBy: mastodon.v1.Account;
   boostedStatus: mastodon.v1.Status | Note;
 }) {
   const {status: _status, statusRaw: status} = useActivitypubStatusContext()
@@ -281,7 +280,7 @@ function StatusFragment() {
       if (_status && _status.isReposted()) {
         const _status = statusRaw as Note;
         return <SharedStatusFragment
-            postedBy={_status.renote.user}
+            postedBy={_status.renote.user as any}
             isRepost={true}
             boostedStatus={_status}
         />

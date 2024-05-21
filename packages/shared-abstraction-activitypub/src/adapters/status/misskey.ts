@@ -1,5 +1,4 @@
-import {StatusInterface} from "./_interface";
-import {NoteInstance} from "./unique";
+import {NoteInstance, StatusInterface} from "./_interface";
 import {DriveFile} from "@dhaaga/shared-provider-misskey/src";
 import {DriveFileToMediaAttachmentAdapter} from "../media-attachment/adapter";
 import {DriveFileInstance} from "../media-attachment/unique";
@@ -64,7 +63,7 @@ class MisskeyToStatusAdapter implements StatusInterface {
       return [];
     }
     return this.ref?.instance?.files.map((o: DriveFile) => {
-      return new DriveFileToMediaAttachmentAdapter(new DriveFileInstance(o));
+      return new DriveFileToMediaAttachmentAdapter(new DriveFileInstance(o)) as any
     });
   }
 

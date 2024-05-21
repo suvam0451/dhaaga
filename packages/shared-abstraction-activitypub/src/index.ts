@@ -9,8 +9,6 @@ import MastodonToStatusAdapter from "./adapters/status/mastodon"
 import MisskeyToStatusAdapter from "./adapters/status/misskey"
 
 export {UnknownToStatusAdapter, MastodonToStatusAdapter, MisskeyToStatusAdapter}
-export {NoteInstance, StatusInstance} from "./adapters/status/unique";
-export {StatusInterface} from "./adapters/status/_interface";
 
 // export media attachment adapters and interfaces
 export {
@@ -25,12 +23,7 @@ export {
 export {MediaAttachmentInterface} from "./adapters/media-attachment/interface";
 
 // export user profile adapters and interfaces
-export {UserDetailedToUserProfileAdapter} from "./adapters/profile/adapter";
-export {
-  UserDetailedInstance,
-  AccountInstance,
-} from "./adapters/profile/unique";
-export {UserProfileInterface} from "./adapters/profile/interface";
+export {DefaultUser} from "./adapters/profile/default";
 
 // stub types
 export {
@@ -38,6 +31,15 @@ export {
   ActivityPubStatuses,
   ActivityPubAccount,
 } from "./types/activitypub";
+
+// export types, adapters and interfaces
+export {
+  ActivityPubUserAdapter, UserInterface
+} from "./adapters/profile/_interface"
+export {
+  ActivitypubStatusAdapter, StatusInterface
+} from "./adapters/status/_interface"
+export {ActivityPubTagAdapter, TagInterface, TagType} from "./adapters/tag/_interface"
 
 export {
   MastodonRestClient,
@@ -64,3 +66,10 @@ export class ActivityPubClientFactory {
     return new userMap[domain](payload);
   }
 }
+
+export {
+  StatusInstance
+} from "./adapters/status/_interface";
+export {NoteInstance} from "./adapters/status/_interface";
+export {UserDetailedInstance} from "./adapters/profile/_interface";
+export {AccountInstance} from "./adapters/profile/_interface";

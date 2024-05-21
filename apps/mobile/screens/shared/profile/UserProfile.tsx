@@ -5,14 +5,9 @@ import {RootState} from "../../../libs/redux/store";
 import {AccountState} from "../../../libs/redux/slices/account";
 import {
   ActivityPubAccount,
-  ActivityPubClientFactory,
   ActivityPubStatuses,
-  MastodonRestClient,
-  MisskeyRestClient,
-  UnknownRestClient,
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {useQuery} from "@tanstack/react-query";
-import {adaptUserProfile} from "../../../utils/activitypub-adapters";
 import {Image} from "expo-image";
 import {
   AvatarContainerWithInset,
@@ -20,7 +15,7 @@ import {
 } from "../../../styles/Containers";
 import {PrimaryText, SecondaryText} from "../../../styles/Typography";
 import {Text} from "@rneui/themed";
-import StatusFragment from "../../timelines/fragments/StatusFragment";
+import StatusFragment from "../../../components/common/status/StatusFragment";
 import UserPostsProvider, {UserPostsHook} from "../../../contexts/UserPosts";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RenderHTML from "react-native-render-html";
@@ -31,6 +26,10 @@ import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
 import WithActivitypubStatusContext from "../../../states/useStatus";
+import {Skeleton} from "@rneui/themed";
+import {
+  ActivityPubUserAdapter
+} from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface";
 
 
 type UserProfileBrowsePostsProps = {
@@ -122,53 +121,36 @@ function UserProfileBrowsePosts({userId}: UserProfileBrowsePostsProps) {
 
 function UserProfile({route, navigation}) {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const {client} = useActivityPubRestClientContext()
   const q = route?.params?.id;
-  const restClient = useRef<
-      MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
-  >(null);
 
-  useEffect(() => {
-    if (!accountState.activeAccount) {
-      restClient.current = null;
-      return;
-    }
 
-    const token = accountState.credentials.find(
-        (o) => o.credential_type === "access_token"
-    )?.credential_value;
-    if (!token) {
-      restClient.current = null;
-      return;
-    }
-
-    const client = ActivityPubClientFactory.get(
-        accountState.activeAccount.domain as any,
-        {
-          instance: accountState.activeAccount.subdomain,
-          token,
-        }
-    );
-
-    restClient.current = client;
-  }, [accountState]);
-
-  function queryFn() {
+  function api() {
+    if (!client) return null
     const username = route?.params?.id;
-    return restClient.current.getUserProfile(username);
+    return client.getUserProfile(username);
   }
 
   // Queries
   const {status, data, error, fetchStatus, refetch} =
       useQuery<ActivityPubAccount>({
-        queryKey: ["profile", restClient.current, q],
-        queryFn: queryFn,
-        enabled: q !== undefined,
+        queryKey: ["profile", q],
+        queryFn: api,
+        enabled: client && q !== undefined,
       });
 
   const _profile = useMemo(
-      () => adaptUserProfile(data, accountState?.activeAccount?.domain),
+      () => ActivityPubUserAdapter(data, accountState?.activeAccount?.domain),
       [status, accountState?.activeAccount?.domain]
   );
+
+  if (fetchStatus === "fetching" || !_profile)
+    return <View style={{backgroundColor: "black"}}>
+      {/*<Skeleton/>*/}
+      <Skeleton
+          height={128}
+          width={Dimensions.get("window").width}/>
+    </View>
 
   if (!_profile) {
     return (

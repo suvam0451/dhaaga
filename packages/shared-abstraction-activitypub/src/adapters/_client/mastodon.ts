@@ -1,6 +1,7 @@
 import ActivityPubClient, {
+  GetPostsQueryDTO,
   GetSearchResultQueryDTO,
-  GetUserFavouritedPostQueryDTO,
+  GetTrendingPostsQueryDTO,
   GetUserPostsQueryDTO,
   RestClientCreateDTO,
 } from "./_interface";
@@ -22,6 +23,18 @@ class MastodonRestClient implements ActivityPubClient {
           domain: "mastodon"
         }
     );
+  }
+
+  async getTrendingPosts(opts: GetTrendingPostsQueryDTO) {
+    return await RestServices.v1.trends.getTrendingPosts(this.client, opts);
+  }
+
+  async getTrendingTags(opts: GetTrendingPostsQueryDTO) {
+    return await RestServices.v1.trends.getTrendingTags(this.client, opts);
+  }
+
+  async getTrendingLinks(opts: GetTrendingPostsQueryDTO) {
+    return await RestServices.v1.trends.getTrendingLinks(this.client, opts);
   }
 
   async followTag(id: string) {
@@ -47,9 +60,7 @@ class MastodonRestClient implements ActivityPubClient {
   async getTag(id: string) {
     const _client = this.createPublicClient()
     try {
-      const data = await _client.v1.tags.$select(id).fetch()
-      console.log(data)
-      return data
+      return await _client.v1.tags.$select(id).fetch()
     } catch (e) {
       console.log(e)
       return null
@@ -98,7 +109,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
 
-  async getFavourites(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray> {
+  async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
     const _client = this.createClient()
     try {
       return await _client.v1.favourites.list()
@@ -153,7 +164,7 @@ class MastodonRestClient implements ActivityPubClient {
     return await RestServices.v1.accounts.getStatuses(this.client, userId, opts);
   }
 
-  async getHomeTimeline(opts?: GetUserFavouritedPostQueryDTO): Promise<mastodon.v1.Status[]> {
+  async getHomeTimeline(opts?: GetPostsQueryDTO): Promise<mastodon.v1.Status[]> {
     try {
       const _client = createRestAPIClient({
         url: this.client.url,

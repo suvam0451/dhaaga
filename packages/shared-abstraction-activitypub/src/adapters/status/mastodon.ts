@@ -1,5 +1,4 @@
-import {StatusInterface} from "./_interface";
-import {StatusInstance} from "./unique";
+import {StatusInstance, StatusInterface} from "./_interface";
 import {
   MediaAttachmentToMediaAttachmentAdapter
 } from "../media-attachment/adapter";

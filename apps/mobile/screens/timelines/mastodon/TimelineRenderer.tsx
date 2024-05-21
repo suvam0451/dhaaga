@@ -1,18 +1,18 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {AccountState} from "../../../libs/redux/slices/account";
 import {RootState} from "../../../libs/redux/store";
 import {useSelector} from "react-redux";
 import {
-  Animated, NativeScrollEvent, NativeSyntheticEvent,
+  Animated,
   RefreshControl,
   SafeAreaView,
   StatusBar,
-  StyleSheet,
+  StyleSheet, View,
 } from "react-native";
 import {getCloser} from "../../../utils";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
-import StatusFragment from "../fragments/StatusFragment";
+import StatusFragment from "../../../components/common/status/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import axios from "axios";
@@ -25,10 +25,24 @@ import WithAppPaginationContext, {
   useAppPaginationContext
 } from "../../../states/usePagination";
 import LoadingMore from "../../../components/screens/home/LoadingMore";
+import NavigationService from "../../../services/navigation.service";
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
+
+
+function Content() {
+  const {data: PageData} = useAppPaginationContext()
+
+  if (!PageData) return <View></View>
+  return <>
+    {PageData.map((o: mastodon.v1.Status | Note, i) =>
+        <WithActivitypubStatusContext status={o} key={i}>
+          <StatusFragment key={i}/>
+        </WithActivitypubStatusContext>)}
+  </>
+}
 
 /**
  *
@@ -52,12 +66,7 @@ function TimelineRenderer() {
     loading: false
   });
 
-  async function api() {
-    if (!client) {
-      throw new Error("_client not initialized");
-    }
-    return await client.getHomeTimeline({limit: 5, maxId})
-  }
+  const api = () => client ? client.getHomeTimeline({limit: 5, maxId}) : null
 
   // Queries
   const {status, data, fetchStatus, refetch, isPlaceholderData} = useQuery<
@@ -174,19 +183,12 @@ function TimelineRenderer() {
       }
   );
 
-  function handlePagination(e: NativeSyntheticEvent<NativeScrollEvent>) {
-    const {layoutMeasurement, contentOffset, contentSize} = e.nativeEvent
-    const paddingToBottom = 40;
-    if (layoutMeasurement.height + contentOffset.y >=
-        contentSize.height - paddingToBottom) {
-      refetch()
-      setLoadingMoreComponentProps({
-        visible: true,
-        loading: true
-      })
-    }
-    return layoutMeasurement.height + contentOffset.y >=
-        contentSize.height - paddingToBottom;
+  function onPageEndReached() {
+    refetch()
+    setLoadingMoreComponentProps({
+      visible: true,
+      loading: true
+    })
   }
 
   /**
@@ -256,7 +258,7 @@ function TimelineRenderer() {
               paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
             }}
             onScroll={(e) => {
-              handlePagination(e)
+              NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
               return handleScroll
             }}
             ref={ref}
@@ -268,14 +270,7 @@ function TimelineRenderer() {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
             }
         >
-          {/*<Text style={{color: "white"}}>*/}
-          {/*  Showing 0-{data?.length || 0} results*/}
-          {/*</Text>*/}
-          {PageData && PageData.map((o: mastodon.v1.Status | Note, i) =>
-              <WithActivitypubStatusContext status={o} key={i}>
-                <StatusFragment key={i}/>
-              </WithActivitypubStatusContext>
-          )}
+          <Content/>
           <LoadingMore visible={LoadingMoreComponentProps.visible}
                        loading={LoadingMoreComponentProps.loading}
           />

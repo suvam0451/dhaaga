@@ -1,7 +1,9 @@
-import {StatusInterface} from "@dhaaga/shared-abstraction-activitypub/src";
+import {
+  ActivitypubStatusAdapter,
+  StatusInterface,
+} from "@dhaaga/shared-abstraction-activitypub/src";
 import {createContext, useContext, useEffect, useState} from "react";
 import {useActivityPubRestClientContext} from "./useActivityPubRestClient";
-import {adaptSharedProtocol} from "../utils/activitypub-adapters";
 import {useSelector} from "react-redux";
 import {RootState} from "../libs/redux/store";
 import {AccountState} from "../libs/redux/slices/account";
@@ -37,7 +39,7 @@ export function useActivitypubStatusContext() {
   return useContext(ActivitypubStatusContext);
 }
 
-type WithActivitypubStatusContextProps = {
+type Props = {
   status: mastodon.v1.Status | Note,
   children: any
 }
@@ -45,24 +47,24 @@ type WithActivitypubStatusContextProps = {
 function WithActivitypubStatusContext({
   status,
   children
-}: WithActivitypubStatusContextProps) {
+}: Props) {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {client} = useActivityPubRestClientContext()
-
   const [Status, setStatus] = useState<StatusInterface | null>
-  (adaptSharedProtocol(null, accountState?.activeAccount?.domain))
+  (ActivitypubStatusAdapter(null, accountState?.activeAccount?.domain))
   const [SharedStatus, setSharedStatus] = useState<StatusInterface | null>(
-      adaptSharedProtocol(null, accountState?.activeAccount?.domain)
+      ActivitypubStatusAdapter(null, accountState?.activeAccount?.domain)
   )
 
   const [StatusRaw, setStatusRaw] = useState<mastodon.v1.Status | Note | null>(null)
+
+  // init
   useEffect(() => {
     setStatusRaw(status)
-    const adapted = adaptSharedProtocol(status, accountState?.activeAccount?.domain)
+    const adapted = ActivitypubStatusAdapter(status, accountState?.activeAccount?.domain)
     setStatus(adapted)
-    console.log(adapted.isReposted())
     if (adapted.isReposted()) {
-      const repostAdapted = adaptSharedProtocol(adapted.getRepostedStatusRaw(), accountState?.activeAccount?.domain)
+      const repostAdapted = ActivitypubStatusAdapter(adapted.getRepostedStatusRaw(), accountState?.activeAccount?.domain)
       setSharedStatus(repostAdapted)
     }
   }, [status]);
@@ -72,10 +74,9 @@ function WithActivitypubStatusContext({
   }
 
   function setDataRaw(o: mastodon.v1.Status | Note) {
-    const adapted = adaptSharedProtocol(o, accountState?.activeAccount?.domain)
-    console.log(adapted.isReposted())
+    const adapted = ActivitypubStatusAdapter(o, accountState?.activeAccount?.domain)
     if (adapted.isReposted()) {
-      const repostAdapted = adaptSharedProtocol(adapted.getRepostedStatusRaw(),
+      const repostAdapted = ActivitypubStatusAdapter(adapted.getRepostedStatusRaw(),
           accountState?.activeAccount?.domain)
       setSharedStatus(repostAdapted)
     }

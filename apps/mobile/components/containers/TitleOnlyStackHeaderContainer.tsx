@@ -2,6 +2,7 @@ import React, {useRef} from "react";
 import {Animated, StyleSheet, View} from "react-native";
 import diffClamp = Animated.diffClamp;
 import ProfilePageHeader from "../headers/ProfilePageHeader";
+import NavigationService from "../../services/navigation.service";
 
 type TitleOnlyStackHeaderContainerProps = {
   route: any,
@@ -10,6 +11,7 @@ type TitleOnlyStackHeaderContainerProps = {
   SHOWN_SECTION_HEIGHT?: number
   headerTitle: string
   children?: any
+  onScrollViewEndReachedCallback?: () => void
 }
 
 function TitleOnlyStackHeaderContainer(
@@ -18,7 +20,8 @@ function TitleOnlyStackHeaderContainer(
       route, navigation,
       HIDDEN_SECTION_HEIGHT = 50,
       SHOWN_SECTION_HEIGHT = 50,
-      children
+      children,
+      onScrollViewEndReachedCallback
     }: TitleOnlyStackHeaderContainerProps) {
   /**
    * Header bar auto-hide handler
@@ -54,6 +57,12 @@ function TitleOnlyStackHeaderContainer(
       }
   );
 
+  function onScrollViewEndReached() {
+    if (onScrollViewEndReachedCallback) {
+      onScrollViewEndReachedCallback()
+    }
+  }
+
   return <View style={{height: "100%"}}>
     <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
       <ProfilePageHeader
@@ -75,7 +84,10 @@ function TitleOnlyStackHeaderContainer(
           minHeight: "100%",
           paddingBottom: SHOWN_SECTION_HEIGHT,
         }}
-        onScroll={handleScroll}
+        onScroll={(e) => {
+          NavigationService.invokeWhenPageEndReached(e, onScrollViewEndReached)
+          return handleScroll
+        }}
     >{children}</Animated.ScrollView>
   </View>
 }

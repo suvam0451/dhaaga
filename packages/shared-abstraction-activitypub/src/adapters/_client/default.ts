@@ -1,11 +1,22 @@
 import ActivityPubClient, {
   GetSearchResultQueryDTO,
-  GetUserFavouritedPostQueryDTO
+  GetPostsQueryDTO,
+  TagArray
 } from "./_interface";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
+import {StatusArray} from "../status/_interface";
 
 class UnknownRestClient implements ActivityPubClient {
+  getTrendingPosts(opts: GetPostsQueryDTO): Promise<StatusArray> {
+      throw new Error("Method not implemented.");
+  }
+  getTrendingTags(): Promise<TagArray> {
+      throw new Error("Method not implemented.");
+  }
+  getTrendingLinks(): Promise<any[]> {
+      throw new Error("Method not implemented.");
+  }
   async followTag(id: string) {
     return null
   }
@@ -26,11 +37,11 @@ class UnknownRestClient implements ActivityPubClient {
     return []
   }
 
-  async getFavourites(opts: GetUserFavouritedPostQueryDTO) {
+  async getFavourites(opts: GetPostsQueryDTO) {
     return []
   }
 
-  async getBookmarks(opts: GetUserFavouritedPostQueryDTO) {
+  async getBookmarks(opts: GetPostsQueryDTO) {
     return []
   }
 

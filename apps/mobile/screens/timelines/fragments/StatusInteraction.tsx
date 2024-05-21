@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {View, Text, TouchableOpacity} from "react-native";
 import {StatusInterface} from "@dhaaga/shared-abstraction-activitypub/src";
 import {useActionSheet} from "@expo/react-native-action-sheet";
-import {OpenAiService} from "../../../service/openai.service";
+import {OpenAiService} from "../../../services/openai.service";
 import {
   POST_TRANSLATION_ACTION_SHEET_OPTIONS
 } from "../../../services/action-sheet.service";

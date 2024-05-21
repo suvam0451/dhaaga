@@ -2,12 +2,8 @@ import {useQuery} from "@tanstack/react-query";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useScrollOnReveal} from "../../../states/useScrollOnReveal";
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent
-} from "react-native";
 import NoResults from "../../error-screen/NoResults";
 import SearchScreenManual from "../../error-screen/SearchScreenManual";
 import AppLoadingIndicator from "../../error-screen/AppLoadingIndicator";
@@ -93,32 +89,12 @@ function SearchResults(props: SearchResultsProps) {
     })
   }, [fetchStatus, status, paginationLock]);
 
-  function handlePagination(e: NativeSyntheticEvent<NativeScrollEvent>) {
-    const {layoutMeasurement, contentOffset, contentSize} = e.nativeEvent
-    const paddingToBottom = 60;
-    if (layoutMeasurement.height + contentOffset.y >=
-        contentSize.height - paddingToBottom) {
-      refetch()
-      setLoadingMoreComponentProps({
-        visible: true,
-        loading: true
-      })
-    }
-    return layoutMeasurement.height + contentOffset.y >=
-        contentSize.height - paddingToBottom;
-  }
-
   useEffect(() => {
     if (status === "success") {
       setRefreshing(false)
       resetOffset()
     }
   }, [status, data, refreshing]);
-
-  const onRefresh = useCallback(() => {
-    refetch();
-    setRefreshing(true)
-  }, []);
 
   if (!props.q || props.q === "") return <SearchScreenManual/>
   if (fetchStatus === "fetching" && PageData.length === 0) return <AppLoadingIndicator

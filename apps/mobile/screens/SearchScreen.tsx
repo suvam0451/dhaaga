@@ -20,6 +20,8 @@ import Hashtag from "./shared/Hashtag";
 import UserProfile from "./shared/profile/UserProfile";
 import PostWithClientContext from "./shared/Post";
 import WithAppPaginationContext from "../states/usePagination";
+import TrendingPosts from "../components/screens/search/stack/TrendingPosts";
+import TrendingTags from "../components/screens/search/stack/TrendingTags";
 
 type CheckboxItemProps = {
   selected: boolean
@@ -86,7 +88,7 @@ function Multiselect() {
   </View>
 }
 
-function SearchScreenBase() {
+function FloatingMenuWrapper() {
   const [searchBoxText, setSearchBoxText] = useState("");
   const [SearchTerm, setSearchTerm] = useState("")
   const {outputStyle} = useScrollOnReveal()
@@ -130,30 +132,44 @@ function SearchScreenBase() {
   </View>
 }
 
+function HomeContainer() {
+  return <WithScrollOnRevealContext maxDisplacement={150}>
+    <FloatingMenuWrapper/>
+  </WithScrollOnRevealContext>
+}
+
 
 function SearchScreen() {
   return <WithActivityPubRestClient>
-    <WithScrollOnRevealContext maxDisplacement={150}>
-      <Stack.Navigator initialRouteName={"Search"}
-                       screenOptions={{headerShown: false}}
-      >
-        <Stack.Screen name={"Search"}
-                      component={SearchScreenBase}
-        />
-        <Stack.Screen
-            name="Browse Hashtag"
-            component={Hashtag}
-        />
-        <Stack.Screen
-            name="Profile"
-            component={UserProfile}
-        />
-        <Stack.Screen
-            name="Post"
-            component={PostWithClientContext}
-        />
-      </Stack.Navigator>
-    </WithScrollOnRevealContext>
+    <Stack.Navigator
+        initialRouteName={"Search"}
+        screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen
+          name={"Trending Posts"}
+          component={TrendingPosts}
+      />
+      <Stack.Screen
+          name={"Trending Tags"}
+          component={TrendingTags}
+      />
+      <Stack.Screen
+          name={"Search"}
+          component={HomeContainer}
+      />
+      <Stack.Screen
+          name="Browse Hashtag"
+          component={Hashtag}
+      />
+      <Stack.Screen
+          name="Profile"
+          component={UserProfile}
+      />
+      <Stack.Screen
+          name="Post"
+          component={PostWithClientContext}
+      />
+    </Stack.Navigator>
   </WithActivityPubRestClient>
 }
 

@@ -1,6 +1,6 @@
 import ActivityPubClient, {
   GetSearchResultQueryDTO,
-  GetUserFavouritedPostQueryDTO,
+  GetPostsQueryDTO,
   GetUserPostsQueryDTO,
   RestClientCreateDTO,
 } from "./_interface";
@@ -23,6 +23,18 @@ class MisskeyRestClient implements ActivityPubClient {
     });
   }
 
+  async getTrendingPosts() {
+    return []
+  }
+
+  async getTrendingTags() {
+    return []
+  }
+
+  async getTrendingLinks() {
+    return []
+  }
+
   async followTag(id: string) {
     return null
   }
@@ -43,11 +55,11 @@ class MisskeyRestClient implements ActivityPubClient {
     return []
   }
 
-  async getFavourites(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray> {
+  async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
     return []
   }
 
-  async getBookmarks(opts: GetUserFavouritedPostQueryDTO) {
+  async getBookmarks(opts: GetPostsQueryDTO) {
     return []
   }
 

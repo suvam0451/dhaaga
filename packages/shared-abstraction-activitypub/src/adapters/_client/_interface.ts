@@ -15,11 +15,16 @@ export type GetUserPostsQueryDTO = {
   excludeReplies: boolean
 }
 
-export type GetUserFavouritedPostQueryDTO = {
+export type GetPostsQueryDTO = {
   limit: number,
   sinceId?: string,
-  min_id?: string,
+  minId?: string,
   maxId?: string,
+}
+
+export type GetTrendingPostsQueryDTO = {
+  limit: number,
+  offset?: number
 }
 
 
@@ -35,13 +40,17 @@ export type RestClientCreateDTO = {
   token: string;
 };
 
+export type Tag = mastodon.v1.Tag | null | undefined
+export type TagArray = mastodon.v1.Tag[] | []
+
+export type TrendLinkArray = mastodon.v1.TrendLink[] | []
 
 /**
  * What common functionalities do we want to support
  * across all ActivityPub based clients
  */
 interface ActivityPubClient {
-  getHomeTimeline(opts?: GetUserFavouritedPostQueryDTO): Promise<StatusArray>;
+  getHomeTimeline(opts?: GetPostsQueryDTO): Promise<StatusArray>;
 
   getTimelineByHashtag(
       q: string,
@@ -51,12 +60,20 @@ interface ActivityPubClient {
   /** User */
   getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
 
-  getFavourites(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray>
+  getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray>
 
   getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<StatusArray>;
 
-  getBookmarks(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray>;
+  getBookmarks(opts: GetPostsQueryDTO): Promise<StatusArray>;
 
+  /**
+   * Trending
+   */
+  getTrendingPosts(opts: GetTrendingPostsQueryDTO): Promise<StatusArray>
+
+  getTrendingTags(opts: GetTrendingPostsQueryDTO): Promise<TagArray>
+
+  getTrendingLinks(opts: GetTrendingPostsQueryDTO): Promise<TrendLinkArray>
 
   /**
    * Tags

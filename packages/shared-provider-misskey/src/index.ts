@@ -1,11 +1,12 @@
 import axios from "axios";
-import {api as misskeyApi} from "misskey-js";
+import {api as misskeyApi} from "misskey-js/built/esm";
 import {MiauthSessionCheckResponse} from "./types";
 
+export {api as misskeyApi} from "misskey-js/built/esm";
+
 export type {
-  Note, UserLite, DriveFile, UserDetailed
-} from "misskey-js/built/entities";
-export type {api as misskeyApi} from "misskey-js";
+  Note, Hashtag, User, DriveFile, UserDetailed
+} from "misskey-js/built/esm/entities"
 
 export const createClient = (instanceUrl: string, token: string) => {
   return new misskeyApi.APIClient({

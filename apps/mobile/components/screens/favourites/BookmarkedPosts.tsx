@@ -4,20 +4,16 @@ import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
-import {RefreshControl, ScrollView} from "react-native";
+import {RefreshControl} from "react-native";
 import {useCallback, useEffect, useState} from "react";
 import StatusFragment
-  from "../../../screens/timelines/fragments/StatusFragment";
+  from "../../common/status/StatusFragment";
 import WithActivitypubStatusContext from "../../../states/useStatus";
 import {useScrollOnReveal} from "../../../states/useScrollOnReveal";
-import Animated, {
-  useAnimatedScrollHandler,
-  useSharedValue
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 function BookmarkedPosts() {
   const {client} = useActivityPubRestClientContext()
-  const [Pagination, setPagination] = useState({minId: -1, maxID: -1})
   const [refreshing, setRefreshing] = useState(false);
   const {scrollHandler} = useScrollOnReveal()
 
@@ -32,7 +28,7 @@ function BookmarkedPosts() {
 
 
   // Queries
-  const {status, data, fetchStatus, refetch} = useQuery<
+  const {status, data, refetch} = useQuery<
       mastodon.v1.Status[] | Note[]
   >({
     queryKey: ["bookmarks"],
