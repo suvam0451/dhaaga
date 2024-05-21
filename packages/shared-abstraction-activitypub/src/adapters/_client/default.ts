@@ -6,6 +6,22 @@ import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 
 class UnknownRestClient implements ActivityPubClient {
+  async followTag(id: string) {
+    return null
+  }
+
+  async unfollowTag(id: string) {
+    return null
+  }
+
+  async getTag() {
+    return null
+  }
+
+  async muteUser(id: string) {
+    return
+  }
+
   async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
     return []
   }

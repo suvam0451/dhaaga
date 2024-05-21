@@ -10,6 +10,7 @@ import {Note} from "@dhaaga/shared-provider-misskey/src";
 
 type Type = {
   status: StatusInterface | null
+  sharedStatus: StatusInterface | null
   statusRaw: mastodon.v1.Status | Note | null
   setData: (o: StatusInterface) => void
   setDataRaw: (o: mastodon.v1.Status | Note) => void
@@ -22,6 +23,7 @@ const defaultValue: Type = {
   setData(o: StatusInterface): void {
   },
   status: null,
+  sharedStatus: null,
   statusRaw: null,
   toggleBookmark: () => {
   }
@@ -49,10 +51,20 @@ function WithActivitypubStatusContext({
 
   const [Status, setStatus] = useState<StatusInterface | null>
   (adaptSharedProtocol(null, accountState?.activeAccount?.domain))
+  const [SharedStatus, setSharedStatus] = useState<StatusInterface | null>(
+      adaptSharedProtocol(null, accountState?.activeAccount?.domain)
+  )
+
   const [StatusRaw, setStatusRaw] = useState<mastodon.v1.Status | Note | null>(null)
   useEffect(() => {
     setStatusRaw(status)
-    setStatus(adaptSharedProtocol(status, accountState?.activeAccount?.domain))
+    const adapted = adaptSharedProtocol(status, accountState?.activeAccount?.domain)
+    setStatus(adapted)
+    console.log(adapted.isReposted())
+    if (adapted.isReposted()) {
+      const repostAdapted = adaptSharedProtocol(adapted.getRepostedStatusRaw(), accountState?.activeAccount?.domain)
+      setSharedStatus(repostAdapted)
+    }
   }, [status]);
 
   function setData(o: StatusInterface) {
@@ -60,7 +72,14 @@ function WithActivitypubStatusContext({
   }
 
   function setDataRaw(o: mastodon.v1.Status | Note) {
-    setStatus(adaptSharedProtocol(o, accountState?.activeAccount?.domain))
+    const adapted = adaptSharedProtocol(o, accountState?.activeAccount?.domain)
+    console.log(adapted.isReposted())
+    if (adapted.isReposted()) {
+      const repostAdapted = adaptSharedProtocol(adapted.getRepostedStatusRaw(),
+          accountState?.activeAccount?.domain)
+      setSharedStatus(repostAdapted)
+    }
+    setStatus(adapted)
   }
 
   async function toggleBookmark() {
@@ -80,6 +99,7 @@ function WithActivitypubStatusContext({
 
   return <ActivitypubStatusContext.Provider value={{
     status: Status,
+    sharedStatus: SharedStatus,
     statusRaw: StatusRaw,
     setData,
     setDataRaw,

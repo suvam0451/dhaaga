@@ -3,16 +3,15 @@ import {AccountState} from "../../../libs/redux/slices/account";
 import {RootState} from "../../../libs/redux/store";
 import {useSelector} from "react-redux";
 import {
-  Animated,
+  Animated, NativeScrollEvent, NativeSyntheticEvent,
   RefreshControl,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
 } from "react-native";
 import {getCloser} from "../../../utils";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {useQuery} from "@tanstack/react-query";
+import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import StatusFragment from "../fragments/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
@@ -22,6 +21,10 @@ import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
 import WithActivitypubStatusContext from "../../../states/useStatus";
+import WithAppPaginationContext, {
+  useAppPaginationContext
+} from "../../../states/usePagination";
+import LoadingMore from "../../../components/screens/home/LoadingMore";
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -34,22 +37,60 @@ const SHOWN_SECTION_HEIGHT = 50;
 function TimelineRenderer() {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {client} = useActivityPubRestClientContext()
+  const {
+    data: PageData,
+    setMaxId,
+    append,
+    maxId,
+    clear,
+    paginationLock
+  } = useAppPaginationContext()
 
-  function getHomeTimeline() {
+
+  const [LoadingMoreComponentProps, setLoadingMoreComponentProps] = useState({
+    visible: false,
+    loading: false
+  });
+
+  async function api() {
     if (!client) {
       throw new Error("_client not initialized");
     }
-    return client.getHomeTimeline();
+    return await client.getHomeTimeline({limit: 5, maxId})
   }
 
   // Queries
-  const {status, data, fetchStatus, refetch} = useQuery<
+  const {status, data, fetchStatus, refetch, isPlaceholderData} = useQuery<
       mastodon.v1.Status[] | Note[]
   >({
     queryKey: ["mastodon/timelines/home"],
-    queryFn: getHomeTimeline,
-    enabled: client !== null
+    queryFn: api,
+    enabled: client !== null && !paginationLock,
+    placeholderData: keepPreviousData,
   });
+
+  useEffect(() => {
+    if (fetchStatus === "fetching") {
+      if (PageData.length > 0) {
+        setLoadingMoreComponentProps({
+          visible: true,
+          loading: true
+        })
+      }
+      return
+    }
+    if (status !== "success") return
+
+    if (status === "success" && data.length > 0) {
+      setMaxId(data[data.length - 1]?.id)
+      append(data)
+    }
+
+    setLoadingMoreComponentProps({
+      visible: false,
+      loading: false
+    })
+  }, [fetchStatus]);
 
   async function getCustomEmojisForInstance(subdomain: string) {
     return await axios.get(
@@ -133,6 +174,21 @@ function TimelineRenderer() {
       }
   );
 
+  function handlePagination(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    const {layoutMeasurement, contentOffset, contentSize} = e.nativeEvent
+    const paddingToBottom = 40;
+    if (layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - paddingToBottom) {
+      refetch()
+      setLoadingMoreComponentProps({
+        visible: true,
+        loading: true
+      })
+    }
+    return layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - paddingToBottom;
+  }
+
   /**
    * When scroll view has stopped moving,
    * snap to the nearest section
@@ -169,22 +225,21 @@ function TimelineRenderer() {
 
   useEffect(() => {
     if (status === "success") {
-      console.log("[INFO] : loaded timeline...")
       setRefreshing(false);
     }
   }, [status, fetchStatus]);
 
   const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = useCallback(() => {
-    console.log("[INFO] : refreshing timeline...")
+  const onRefresh = () => {
     setRefreshing(true);
+    clear()
     refetch();
 
     const subdomain = accountState.activeAccount?.domain;
     if (subdomain) {
       updateEmojiCache(subdomain);
     }
-  }, []);
+  }
 
   return (
       <SafeAreaView style={styles.container}>
@@ -200,7 +255,10 @@ function TimelineRenderer() {
             contentContainerStyle={{
               paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
             }}
-            onScroll={handleScroll}
+            onScroll={(e) => {
+              handlePagination(e)
+              return handleScroll
+            }}
             ref={ref}
             contentInset={{
               top: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT + 1000,
@@ -210,20 +268,29 @@ function TimelineRenderer() {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
             }
         >
-          <Text style={{color: "white"}}>
-            Showing 0-{data?.length || 0} results
-          </Text>
-          {data && data.map((o: mastodon.v1.Status | Note, i) =>
+          {/*<Text style={{color: "white"}}>*/}
+          {/*  Showing 0-{data?.length || 0} results*/}
+          {/*</Text>*/}
+          {PageData && PageData.map((o: mastodon.v1.Status | Note, i) =>
               <WithActivitypubStatusContext status={o} key={i}>
                 <StatusFragment key={i}/>
               </WithActivitypubStatusContext>
           )}
+          <LoadingMore visible={LoadingMoreComponentProps.visible}
+                       loading={LoadingMoreComponentProps.loading}
+          />
         </Animated.ScrollView>
       </SafeAreaView>
   );
 }
 
-export default TimelineRenderer;
+function TimelineWrapper() {
+  return <WithAppPaginationContext>
+    <TimelineRenderer/>
+  </WithAppPaginationContext>
+}
+
+export default TimelineWrapper;
 
 const styles = StyleSheet.create({
   header: {

@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import { Image } from "expo-image";
 
 export const StandardView = styled.View`
-	padding: 0px 10px;
+	padding: 10px;
 `;
 
 export const AvatarContainerWithInset = styled.View`
@@ -29,3 +29,14 @@ export const AvatarExpoImage = styled(Image)`
 	background-color: #0553;
 	padding: 2px;
 `;
+
+
+export const BottomSheetActionButtonContainer = styled.View`
+    border-color: #ffffff30;
+    border-width: 1px;
+    border-radius: 4px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`

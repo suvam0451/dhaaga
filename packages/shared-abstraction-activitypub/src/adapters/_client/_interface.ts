@@ -1,5 +1,6 @@
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {Note, UserDetailed} from "@dhaaga/shared-provider-misskey/src";
+import {UserDetailed} from "@dhaaga/shared-provider-misskey/src";
+import {Status, StatusArray} from "../status/_interface";
 
 
 export type TimelineQuery = {
@@ -24,7 +25,9 @@ export type GetUserFavouritedPostQueryDTO = {
 
 export type GetSearchResultQueryDTO = {
   type: "accounts" | "hashtags" | "statuses" | null | undefined
-  following: boolean
+  following: boolean,
+  limit: number,
+  maxId?: string,
 }
 
 export type RestClientCreateDTO = {
@@ -32,21 +35,18 @@ export type RestClientCreateDTO = {
   token: string;
 };
 
-export type Status = mastodon.v1.Status | Note | null
-export type StatusArray = Status[]
-
 
 /**
  * What common functionalities do we want to support
  * across all ActivityPub based clients
  */
 interface ActivityPubClient {
-  getHomeTimeline(): Promise<mastodon.v1.Status[] | Note[]>;
+  getHomeTimeline(opts?: GetUserFavouritedPostQueryDTO): Promise<StatusArray>;
 
   getTimelineByHashtag(
       q: string,
       query?: TimelineQuery
-  ): Promise<mastodon.v1.Status[] | Note[]>;
+  ): Promise<StatusArray>;
 
   /** User */
   getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
@@ -57,7 +57,20 @@ interface ActivityPubClient {
 
   getBookmarks(opts: GetUserFavouritedPostQueryDTO): Promise<StatusArray>;
 
+
+  /**
+   * Tags
+   */
+  getTag(id: string): Promise<mastodon.v1.Tag | null>
+
+  followTag(id: string): Promise<mastodon.v1.Tag | null>
+
+  unfollowTag(id: string): Promise<mastodon.v1.Tag | null>
+
+
   getFollowedTags(): Promise<mastodon.v1.Tag[] | any[]>;
+
+  muteUser(id: string): Promise<void>;
 
   /** Status */
   getStatus(id: string): Promise<Status>

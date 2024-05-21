@@ -15,12 +15,20 @@ import {
   TextInputSubmitEditingEventData
 } from "react-native/Libraries/Components/TextInput/TextInput";
 import Animated from "react-native-reanimated";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import Hashtag from "./shared/Hashtag";
+import UserProfile from "./shared/profile/UserProfile";
+import PostWithClientContext from "./shared/Post";
+import WithAppPaginationContext from "../states/usePagination";
 
 type CheckboxItemProps = {
   selected: boolean
   title: string
   onPress: any
 }
+
+const Stack = createNativeStackNavigator();
+
 
 function CheckboxItem({selected, title, onPress}: CheckboxItemProps) {
   return <CheckBox
@@ -116,15 +124,35 @@ function SearchScreenBase() {
       />
       <Multiselect/>
     </Animated.View>
-    <SearchResults q={SearchTerm} type={null}/>
+    <WithAppPaginationContext>
+      <SearchResults q={SearchTerm} type={null}/>
+    </WithAppPaginationContext>
   </View>
 }
 
 
 function SearchScreen() {
   return <WithActivityPubRestClient>
-    <WithScrollOnRevealContext>
-      <SearchScreenBase/>
+    <WithScrollOnRevealContext maxDisplacement={150}>
+      <Stack.Navigator initialRouteName={"Search"}
+                       screenOptions={{headerShown: false}}
+      >
+        <Stack.Screen name={"Search"}
+                      component={SearchScreenBase}
+        />
+        <Stack.Screen
+            name="Browse Hashtag"
+            component={Hashtag}
+        />
+        <Stack.Screen
+            name="Profile"
+            component={UserProfile}
+        />
+        <Stack.Screen
+            name="Post"
+            component={PostWithClientContext}
+        />
+      </Stack.Navigator>
     </WithScrollOnRevealContext>
   </WithActivityPubRestClient>
 }

@@ -1,6 +1,7 @@
-import { parse } from "mfm-js";
-import type { MfmNode } from "mfm-js";
-import { decode } from "html-entities";
+import type {MfmNode} from "mfm-js";
+import {parse} from "mfm-js";
+import {decode} from "html-entities";
+
 export type { MfmNode, MfmEmojiCode } from "mfm-js";
 
 /**
@@ -65,8 +66,7 @@ export function parseStatusContent(str: string) {
 }
 
 export function parseUsername(str: string) {
-	const mfmTree = parse(str);
-	return mfmTree;
+	return parse(str);
 }
 
 export function decodeHTMLString(str: string) {

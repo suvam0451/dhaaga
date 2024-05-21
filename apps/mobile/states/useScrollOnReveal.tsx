@@ -1,6 +1,6 @@
 import {createContext, useContext, useState} from "react";
 import {
-  Easing,
+  Easing, runOnJS,
   ScrollHandlerProcessed, SharedValue,
   useAnimatedScrollHandler, useAnimatedStyle,
   useSharedValue, withTiming
@@ -16,14 +16,17 @@ type Type = {
   translateY: SharedValue<number>
   isScrolling: boolean
   isRefreshComponentVisible: boolean
+  isEndOfPage: boolean
   scrollHandler: ScrollHandlerProcessed<Record<string, unknown>>
   outputStyle: StyleProp<ViewStyle>
   resetOffset: () => void
+  resetEndOfPageFlag: () => void
 }
 
 const defaultValue: Type = {
   outputStyle: undefined,
   isScrolling: false,
+  isEndOfPage: false,
   isRefreshComponentVisible: false,
   translateY: undefined,
   scrollHandler(event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -31,6 +34,9 @@ const defaultValue: Type = {
   },
   resetOffset(): void {
   },
+  resetEndOfPageFlag(): void {
+
+  }
 }
 
 const ScrollOnRevealContext = createContext<Type>(defaultValue);
@@ -40,11 +46,15 @@ export function useScrollOnReveal() {
 }
 
 type PropsType = {
-  children: any,
+  maxDisplacement?: number
+  children: any
 }
 
 
-function WithScrollOnRevealContext({children}: PropsType) {
+function WithScrollOnRevealContext({
+  maxDisplacement = 100,
+  children
+}: PropsType) {
   // const [IsRefreshVisible, setIsRefreshVisible] = useState(false)
   /**
    * Scroll Handler to show/hide menu
@@ -55,6 +65,8 @@ function WithScrollOnRevealContext({children}: PropsType) {
   const lastContentOffset = useSharedValue(0);
   const isScrolling = useSharedValue(false);
   const isRefreshVisible = useSharedValue(false);
+
+  const [IsEndOfPage, setIsEndOfPage] = useState(false)
 
   const hideStyle = useAnimatedStyle(() => {
     return {
@@ -69,6 +81,10 @@ function WithScrollOnRevealContext({children}: PropsType) {
     };
   });
 
+  function resetEndOfPageFlag() {
+    setIsEndOfPage(false)
+  }
+
 
   function resetOffset() {
     translateY.value = 0;
@@ -77,20 +93,27 @@ function WithScrollOnRevealContext({children}: PropsType) {
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       totalPageOffsetY.value = event.contentOffset.y
-      isRefreshVisible.value = event.contentOffset.y <= 200;
+      isRefreshVisible.value = event.contentOffset.y <= 100;
 
       if (
-          lastContentOffset.value > event.contentOffset.y + 24 &&
+          lastContentOffset.value > event.contentOffset.y + 16 &&
           isScrolling.value
       ) {
         translateY.value = 0;
       } else if (
-          lastContentOffset.value + 8 < event.contentOffset.y &&
+          lastContentOffset.value + 12 < event.contentOffset.y &&
           isScrolling.value
       ) {
-        translateY.value = 100;
+        translateY.value = maxDisplacement;
       }
       lastContentOffset.value = event.contentOffset.y;
+
+      const {layoutMeasurement, contentOffset, contentSize} = event
+      const paddingToBottom = 60;
+      if (layoutMeasurement.height + contentOffset.y >=
+          contentSize.height - paddingToBottom) {
+        runOnJS(setIsEndOfPage)(true);
+      }
     },
     onMomentumBegin: (e) => {
       isScrolling.value = true;
@@ -109,7 +132,9 @@ function WithScrollOnRevealContext({children}: PropsType) {
     isRefreshComponentVisible: isRefreshVisible.value,
     translateY,
     outputStyle: hideStyle,
-    resetOffset
+    resetOffset,
+    resetEndOfPageFlag,
+    isEndOfPage: IsEndOfPage
   }}>
     {children}
   </ScrollOnRevealContext.Provider>

@@ -1,4 +1,9 @@
 import {MediaAttachmentInterface} from "../media-attachment/interface";
+import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
+import {Note} from "@dhaaga/shared-provider-misskey/src";
+
+export type Status = mastodon.v1.Status | Note | null | undefined
+export type StatusArray = Status[]
 
 export interface StatusInterface {
   getId(): string
@@ -16,6 +21,8 @@ export interface StatusInterface {
   getAccountUrl(): string | null | undefined;
 
   getRepostedStatus(): StatusInterface | null | undefined;
+
+  getRepostedStatusRaw(): Status;
 
   getContent(): string | null;
 
@@ -37,4 +44,10 @@ export interface StatusInterface {
   getAccountId_Poster(): string;
 
   isValid(): boolean;
+
+  isReply(): boolean
+
+  getParentStatusId(): string | null | undefined
+
+  getUserIdParentStatusUserId(): string | null | undefined
 }

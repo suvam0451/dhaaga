@@ -3,14 +3,14 @@ import MastodonRestClient from "./adapters/_client/mastodon";
 import MisskeyRestClient from "./adapters/_client/misskey";
 import UnknownRestClient from "./adapters/_client/default";
 
-// export status adapters and interfaces
-export {
-  MisskeyToStatusAdapter,
-  MastodonToStatusAdapter,
-  UnknownToStatusAdapter,
-} from "./adapters/status/adapter";
+//  status adapters
+import UnknownToStatusAdapter from "./adapters/status/default";
+import MastodonToStatusAdapter from "./adapters/status/mastodon"
+import MisskeyToStatusAdapter from "./adapters/status/misskey"
+
+export {UnknownToStatusAdapter, MastodonToStatusAdapter, MisskeyToStatusAdapter}
 export {NoteInstance, StatusInstance} from "./adapters/status/unique";
-export {StatusInterface} from "./adapters/status/interface";
+export {StatusInterface} from "./adapters/status/_interface";
 
 // export media attachment adapters and interfaces
 export {

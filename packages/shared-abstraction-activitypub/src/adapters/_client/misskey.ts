@@ -3,7 +3,6 @@ import ActivityPubClient, {
   GetUserFavouritedPostQueryDTO,
   GetUserPostsQueryDTO,
   RestClientCreateDTO,
-  StatusArray
 } from "./_interface";
 import {
   createClient,
@@ -11,6 +10,7 @@ import {
   Note
 } from "@dhaaga/shared-provider-misskey/src";
 import axios, {AxiosInstance} from "axios";
+import {StatusArray} from "../status/_interface";
 
 class MisskeyRestClient implements ActivityPubClient {
   client: misskeyApi.APIClient;
@@ -21,6 +21,22 @@ class MisskeyRestClient implements ActivityPubClient {
     this.axiosClient = axios.create({
       baseURL: `${dto.instance}/api`,
     });
+  }
+
+  async followTag(id: string) {
+    return null
+  }
+
+  async unfollowTag(id: string) {
+    return null
+  }
+
+  async getTag(id: string) {
+    return null
+  }
+
+  async muteUser(id: string): Promise<void> {
+    // throw new Error("Method not implemented.");
   }
 
   async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
