@@ -6,30 +6,32 @@ import {
 import {Text} from "react-native";
 import HashtagProcessor from "../components/common/tag/TagProcessor";
 import React from "react";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import {Image} from "@rneui/base";
 import {
   EmojiMapValue
 } from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface";
 import {randomUUID} from "expo-crypto";
+import LinkProcessor from "../components/common/link/LinkProcessor";
 
 class MfmService {
   static parseNode(
       node: MfmNode,
       count: string,
-      {emojiMap}: {
+      {emojiMap, linkMap}: {
         domain: string;
         subdomain: string;
         emojiMap: Map<string, EmojiMapValue>
+        linkMap?: Map<string, string>
         isHighEmphasisText: boolean
       }
-  ) {
+  ) 
     switch (node.type) {
       case "unicodeEmoji": {
         return <Text key={count}>{node.props.emoji}</Text>;
       }
       case "text": {
         let baseText = node.props.text;
+        console.log("text", baseText);
         baseText = baseText.replaceAll(/<br>/g, "\n");
         return (
             <Text key={count}
@@ -52,21 +54,18 @@ class MfmService {
         );
       }
       case "url": {
+        let displayName = null
+        if (linkMap) {
+          const match = linkMap.get(node.props.url)
+          if (match) {
+            displayName = match
+          }
+        }
         return (
-            <React.Fragment key={count}>
-              <Text style={{color: "orange", opacity: 1}}>
-                <Text style={{paddingRight: 4}}>{node.props.url}</Text>
-                <Ionicons
-                    name="open-outline"
-                    style={{
-                      marginLeft: 4,
-                      paddingLeft: 2,
-                    }}
-                    size={18}
-                    color="orange"
-                />
-              </Text>
-            </React.Fragment>
+            <LinkProcessor
+                key={count} url={node.props.url}
+                displayName={displayName}
+            />
         );
       }
       case "emojiCode": {
@@ -130,9 +129,12 @@ class MfmService {
     const mp = new Map<string, string>()
     const ex = /<a.*?href="(.*?)".*?>(.*?)<\/a>/gu
 
+    const aRefContentCleanupRegex = /(<([^>]+)>)/ig;
+
     const matches = item.matchAll(ex)
     for (const match of matches) {
-      mp.set(match[1], match[2])
+      const result = match[2].replace(aRefContentCleanupRegex, '');
+      mp.set(match[1], result)
     }
     return mp
   }
@@ -150,7 +152,6 @@ class MfmService {
     }
 
     const extractedUrls = this.extractUrls(input)
-    console.log(extractedUrls)
 
     const parsed = parseStatusContent(decodeHTMLString(input));
     let retval = [];
@@ -204,6 +205,7 @@ class MfmService {
         const key = randomUUID()
         const item = MfmService.parseNode(node, key, {
           emojiMap: emojiMap,
+          linkMap: extractedUrls,
           domain,
           subdomain,
           isHighEmphasisText: false

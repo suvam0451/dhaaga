@@ -2,8 +2,8 @@ import Animated, {
   useAnimatedRef,
 } from "react-native-reanimated";
 import WithActivitypubStatusContext from "../../../states/useStatus";
-import StatusFragment
-  from "../../common/status/StatusFragment";
+import StatusItem
+  from "../../common/status/StatusItem";
 import LoadingMore from "../home/LoadingMore";
 import React, {useEffect} from "react";
 
@@ -52,7 +52,7 @@ function SearchResultsOnSuccess({
   >
     {PageData && PageData.map((o, i) =>
         <WithActivitypubStatusContext status={o} key={i}>
-          <StatusFragment/>
+          <StatusItem/>
         </WithActivitypubStatusContext>
     )}
     <LoadingMore visible={LoadingMoreComponentProps.visible}

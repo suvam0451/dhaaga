@@ -8,10 +8,6 @@ import {StandardView} from "../../../styles/Containers";
 import {Ionicons} from "@expo/vector-icons";
 import {formatDistance} from "date-fns";
 import {useEffect, useState} from "react";
-import {
-  decodeHTMLString,
-  parseStatusContent,
-} from "@dhaaga/shared-utility-html-parser/src";
 import React from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../libs/redux/store";
@@ -76,7 +72,6 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
     );
   }, [_status]);
 
-  const [Content, setContent] = useState([]);
   const [OpenAiContext, setOpenAiContext] = useState([])
 
   let content = _status.getContent();
@@ -108,7 +103,8 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
 
   return (
       <StandardView style={{
-        backgroundColor: "#1e1e1e", marginTop: mt == undefined ? 4 : 0,
+        backgroundColor: "#1e1e1e",
+        marginTop: mt == undefined ? 4 : mt,
         marginBottom: 4,
         borderRadius: 4,
         paddingBottom: 4
@@ -192,12 +188,18 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
   );
 }
 
+/**
+ * Adds parent thread's information on top
+ *
+ * NOTE: pass negative values to RootStatus margin
+ * @constructor
+ */
 function RepliedStatusFragment() {
   const {status: _status, statusRaw: status} = useActivitypubStatusContext()
   if (!_status.isValid()) return <View></View>;
 
   return <View
-      style={{backgroundColor: "#1e1e1e"}}>
+      style={{backgroundColor: "#1e1e1e", marginTop: 4}}>
     <StandardView
         style={{
           display: "flex",
@@ -211,10 +213,17 @@ function RepliedStatusFragment() {
         Continues a thread
       </Text>
     </StandardView>
-    <RootStatusFragment mt={-16} isRepost={false}/>
+    <RootStatusFragment mt={-8} isRepost={false}/>
   </View>
 }
 
+/**
+ * Adds booster's information on top
+ *
+ * NOTE: pass negative values to RootStatus margin
+ * @param boostedStatus
+ * @constructor
+ */
 function SharedStatusFragment({
   boostedStatus,
 }: StatusFragmentProps & {
@@ -245,7 +254,6 @@ function SharedStatusFragment({
             })}
           </Text>
         </StandardView>
-
         <RootStatusFragment mt={-16} isRepost={true}/>
       </View>
   );
@@ -255,7 +263,7 @@ function SharedStatusFragment({
  * Renders a status/note
  * @constructor
  */
-function StatusFragment() {
+function StatusItem() {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {status: _status, statusRaw} = useActivitypubStatusContext()
 
@@ -285,7 +293,7 @@ function StatusFragment() {
       }
     }
   }
-  return <RootStatusFragment/>
+  return <RootStatusFragment mt={-16}/>
 }
 
-export default StatusFragment;
+export default StatusItem;

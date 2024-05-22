@@ -14,7 +14,7 @@ import {
   RestServices,
 } from "@dhaaga/shared-provider-mastodon/src";
 import {useQuery} from "@tanstack/react-query";
-import StatusFragment from "../../../components/common/status/StatusFragment";
+import StatusItem from "../../../components/common/status/StatusItem";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
@@ -134,7 +134,7 @@ function TimelineRenderer() {
             // onMomentumScrollEnd={handleSnap}
             scrollEventThrottle={16}
         >
-          {data && data.map((o, i) => <StatusFragment key={i}/>)}
+          {data && data.map((o, i) => <StatusItem key={i}/>)}
         </Animated.ScrollView>
       </SafeAreaView>
   );

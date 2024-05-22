@@ -1,6 +1,6 @@
 import TitleOnlyStackHeaderContainer
   from "../../components/containers/TitleOnlyStackHeaderContainer";
-import StatusFragment from "../../components/common/status/StatusFragment";
+import StatusItem from "../../components/common/status/StatusItem";
 import {useEffect, useState} from "react";
 import {ActivityPubStatus,} from "@dhaaga/shared-abstraction-activitypub/src";
 import {useQuery} from "@tanstack/react-query";
@@ -38,7 +38,7 @@ function Post({route, navigation}) {
                                         headerTitle={`#${q}`}>
     {data &&
         <WithActivitypubStatusContext status={data} key={0}>
-            <StatusFragment/>
+            <StatusItem/>
         </WithActivitypubStatusContext>
     }
   </TitleOnlyStackHeaderContainer>

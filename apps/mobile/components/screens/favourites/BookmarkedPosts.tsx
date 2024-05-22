@@ -6,8 +6,8 @@ import {
 } from "../../../states/useActivityPubRestClient";
 import {RefreshControl} from "react-native";
 import {useCallback, useEffect, useState} from "react";
-import StatusFragment
-  from "../../common/status/StatusFragment";
+import StatusItem
+  from "../../common/status/StatusItem";
 import WithActivitypubStatusContext from "../../../states/useStatus";
 import {useScrollOnReveal} from "../../../states/useScrollOnReveal";
 import Animated from "react-native-reanimated";
@@ -57,7 +57,7 @@ function BookmarkedPosts() {
   >
     {data && data.map((o, i) =>
         <WithActivitypubStatusContext status={o} key={i}>
-          <StatusFragment/>
+          <StatusItem/>
         </WithActivitypubStatusContext>
     )}
   </Animated.ScrollView>

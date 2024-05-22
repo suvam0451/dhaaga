@@ -12,7 +12,7 @@ import {
 } from "../../../styles/Containers";
 import {PrimaryText, SecondaryText} from "../../../styles/Typography";
 import {Text} from "@rneui/themed";
-import StatusFragment from "../../../components/common/status/StatusFragment";
+import StatusItem from "../../../components/common/status/StatusItem";
 import UserPostsProvider, {UserPostsHook} from "../../../contexts/UserPosts";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RenderHTML from "react-native-render-html";
@@ -116,7 +116,7 @@ function UserProfileBrowsePosts({userId}: UserProfileBrowsePostsProps) {
           {store.posts &&
               store.posts.map((o, i) =>
                   <WithActivitypubStatusContext status={o} key={i}>
-                    <StatusFragment/>
+                    <StatusItem/>
                   </WithActivitypubStatusContext>)}
         </View>
       </View>

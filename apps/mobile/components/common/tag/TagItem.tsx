@@ -11,6 +11,10 @@ import {
 } from "../../../states/useActivityPubRestClient";
 import {useNavigation} from "@react-navigation/native";
 
+/**
+ * Tag Item, as it appears on a Scrollable timeline
+ * @constructor
+ */
 function TagItem() {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const subdomain = accountState?.activeAccount?.subdomain

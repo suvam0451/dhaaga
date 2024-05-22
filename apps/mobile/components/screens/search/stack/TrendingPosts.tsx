@@ -15,8 +15,8 @@ import WithAppPaginationContext, {
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import WithActivitypubStatusContext from "../../../../states/useStatus";
-import StatusFragment
-  from "../../../common/status/StatusFragment";
+import StatusItem
+  from "../../../common/status/StatusItem";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import WithInfiniteScrollIndicator
   from "../../../containers/WithInfiniteScrollIndicator";
@@ -29,7 +29,7 @@ function Content() {
   return <>
     {PageData.map((o: mastodon.v1.Status | Note, i) =>
         <WithActivitypubStatusContext status={o} key={i}>
-          <StatusFragment key={i}/>
+          <StatusItem key={i}/>
         </WithActivitypubStatusContext>)}
   </>
 }

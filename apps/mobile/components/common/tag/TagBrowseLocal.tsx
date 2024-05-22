@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import React, {useCallback, useEffect, useState} from "react";
-import StatusFragment from "../status/StatusFragment";
+import StatusItem from "../status/StatusItem";
 import {Skeleton} from "@rneui/base";
 import {
   ActivityPubStatuses,
@@ -31,7 +31,7 @@ function Content() {
   return <>
     {PageData.map((o, i) => (
         <WithActivitypubStatusContext status={o} key={i}>
-          <StatusFragment key={i}/>
+          <StatusItem key={i}/>
         </WithActivitypubStatusContext>
     ))}
   </>

@@ -12,7 +12,7 @@ import {
 import {getCloser} from "../../../utils";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
-import StatusFragment from "../../../components/common/status/StatusFragment";
+import StatusItem from "../../../components/common/status/StatusItem";
 import TimelinesHeader from "../../../components/TimelineHeader";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {
@@ -38,7 +38,7 @@ function Content() {
   return <>
     {PageData.map((o: mastodon.v1.Status | Note, i) =>
         <WithActivitypubStatusContext status={o} key={i}>
-          <StatusFragment key={i}/>
+          <StatusItem key={i}/>
         </WithActivitypubStatusContext>)}
   </>
 }

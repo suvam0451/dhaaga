@@ -9,17 +9,24 @@ import {RootState} from "../libs/redux/store";
 import {AccountState} from "../libs/redux/slices/account";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
+import {OgObject} from "open-graph-scraper-lite/dist/lib/types";
 
 type Type = {
   status: StatusInterface | null
   sharedStatus: StatusInterface | null
+  openGraph: OgObject | null
+
   statusRaw: mastodon.v1.Status | Note | null
   setData: (o: StatusInterface) => void
   setDataRaw: (o: mastodon.v1.Status | Note) => void
+  updateOpenGraph: (og: OgObject | null) => void
   toggleBookmark: () => void,
 }
 
 const defaultValue: Type = {
+  openGraph: undefined,
+  updateOpenGraph(og: OgObject | null): void {
+  },
   setDataRaw(o: mastodon.v1.Status | Note): void {
   },
   setData(o: StatusInterface): void {
@@ -57,6 +64,8 @@ function WithActivitypubStatusContext({
   )
 
   const [StatusRaw, setStatusRaw] = useState<mastodon.v1.Status | Note | null>(null)
+  const [OpenGraph, setOpenGraph] = useState<OgObject | null>(null)
+
 
   // init
   useEffect(() => {
@@ -83,6 +92,10 @@ function WithActivitypubStatusContext({
     setStatus(adapted)
   }
 
+  function updateOpenGraph(og) {
+    setOpenGraph(og)
+  }
+
   async function toggleBookmark() {
     if (!client) return
     try {
@@ -100,11 +113,13 @@ function WithActivitypubStatusContext({
 
   return <ActivitypubStatusContext.Provider value={{
     status: Status,
+    openGraph: OpenGraph,
     sharedStatus: SharedStatus,
     statusRaw: StatusRaw,
     setData,
     setDataRaw,
-    toggleBookmark
+    toggleBookmark,
+    updateOpenGraph
   }}>
     {children}
   </ActivitypubStatusContext.Provider>

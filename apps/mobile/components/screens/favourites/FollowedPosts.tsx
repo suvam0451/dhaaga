@@ -5,8 +5,8 @@ import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
 import {View} from "react-native";
-import StatusFragment
-  from "../../common/status/StatusFragment";
+import StatusItem
+  from "../../common/status/StatusItem";
 import WithActivitypubStatusContext from "../../../states/useStatus";
 import {Button} from "@rneui/themed";
 
@@ -39,7 +39,7 @@ function FollowedPosts() {
     }}>Refresh</Button>
     {data && data.map((o, i) =>
         <WithActivitypubStatusContext status={o} key={i}>
-          <StatusFragment/>
+          <StatusItem/>
         </WithActivitypubStatusContext>
     )}
   </View>

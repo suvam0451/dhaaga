@@ -1,20 +1,23 @@
 import {Text, View} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
+import React, {useState} from "react";
+import WithOpenGraph from "./WithOpenGraph";
+import {BottomSheet} from "@rneui/themed";
 
 type LinkProcessorProps = {
   url: string,
   displayName: string
 }
 
+
+
 function LinkProcessor({url, displayName}: LinkProcessorProps) {
-  return <>
-    <View>
-      <Text style={{
-        color: "orange",
-        opacity: 1,
-        paddingRight: 4
-      }}>{displayName}</Text>
+  return <WithOpenGraph url={url}>
+    <Text style={{
+      color: "orange",
+      opacity: 1,
+      paddingRight: 4
+    }}>{displayName || url}
       <Ionicons
           name="open-outline"
           style={{
@@ -24,8 +27,8 @@ function LinkProcessor({url, displayName}: LinkProcessorProps) {
           size={18}
           color="orange"
       />
-    </View>
-  </>
+    </Text>
+  </WithOpenGraph>
 }
 
 export default LinkProcessor

@@ -13,7 +13,6 @@ function NoResults({text, subtext}: NoResultsProps) {
     alignItems: "center",
     marginTop: 32,
     padding: 16,
-
   }}>
     <View style={{
       borderWidth: 1,
