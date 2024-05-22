@@ -15,8 +15,6 @@ import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import StatusFragment from "../../../components/common/status/StatusFragment";
 import TimelinesHeader from "../../../components/TimelineHeader";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
-import axios from "axios";
-import {CacheRepo} from "../../../libs/sqlite/repositories/cache/cache.repo";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
@@ -26,6 +24,7 @@ import WithAppPaginationContext, {
 } from "../../../states/usePagination";
 import LoadingMore from "../../../components/screens/home/LoadingMore";
 import NavigationService from "../../../services/navigation.service";
+import {EmojiService} from "../../../services/emoji.service";
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -57,7 +56,9 @@ function TimelineRenderer() {
     append,
     maxId,
     clear,
-    paginationLock
+    paginationLock,
+    updateQueryCache,
+    queryCacheMaxId
   } = useAppPaginationContext()
 
 
@@ -69,10 +70,10 @@ function TimelineRenderer() {
   const api = () => client ? client.getHomeTimeline({limit: 5, maxId}) : null
 
   // Queries
-  const {status, data, fetchStatus, refetch, isPlaceholderData} = useQuery<
+  const {status, data, fetchStatus, refetch} = useQuery<
       mastodon.v1.Status[] | Note[]
   >({
-    queryKey: ["mastodon/timelines/home"],
+    queryKey: ["mastodon/timelines/home", queryCacheMaxId],
     queryFn: api,
     enabled: client !== null && !paginationLock,
     placeholderData: keepPreviousData,
@@ -101,52 +102,13 @@ function TimelineRenderer() {
     })
   }, [fetchStatus]);
 
-  async function getCustomEmojisForInstance(subdomain: string) {
-    return await axios.get(
-        `${accountState.activeAccount.subdomain}/api/emojis`
-    );
-  }
-
-  /**
-   * Update the emoji raw cache everyday
-   * @param subdomain
-   * @returns
-   */
-  async function updateEmojiCache(subdomain: string) {
-    try {
-      const emojisUpdatedAt = await CacheRepo.getUpdatedAt(
-          `${subdomain}/api/emojis`
-      );
-
-      if (emojisUpdatedAt.length > 0) {
-        let lastUpdatedAt = new Date(emojisUpdatedAt[0].updated_at);
-        lastUpdatedAt.setDate(lastUpdatedAt.getDate() + 1);
-
-        const delta = lastUpdatedAt.getTime() < new Date().getTime();
-        if (!delta) {
-          console.log(`[INFO]: emoji cache is up to date for ${subdomain}`);
-          return;
-        }
-        const res = await getCustomEmojisForInstance(subdomain);
-        const payload = JSON.stringify(res.data);
-        CacheRepo.set(`${subdomain}/api/emojis`, payload);
-        console.log(`[INFO]: emojis updated for ${subdomain}`);
-      }
-    } catch (e) {
-      const res = await getCustomEmojisForInstance(subdomain);
-      const payload = JSON.stringify(res.data);
-      CacheRepo.set(`${subdomain}/api/emojis`, payload);
-      console.log(`[INFO]: emojis updated for ${subdomain}`);
-    }
-  }
-
   /**
    * Load global emoji database
    */
   useEffect(() => {
     if (accountState.activeAccount?.domain) {
       const url = accountState.activeAccount.subdomain;
-      updateEmojiCache(url);
+      EmojiService.updateEmojiCacheForDomain(url);
     }
   }, [accountState]);
 
@@ -184,6 +146,8 @@ function TimelineRenderer() {
   );
 
   function onPageEndReached() {
+    console.log("[INFO]: page end reached. performing refetch")
+    updateQueryCache()
     refetch()
     setLoadingMoreComponentProps({
       visible: true,
@@ -239,7 +203,7 @@ function TimelineRenderer() {
 
     const subdomain = accountState.activeAccount?.domain;
     if (subdomain) {
-      updateEmojiCache(subdomain);
+      EmojiService.updateEmojiCacheForDomain(subdomain);
     }
   }
 

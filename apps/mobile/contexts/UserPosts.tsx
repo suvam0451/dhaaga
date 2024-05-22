@@ -10,7 +10,7 @@ type DispatchType = {
 };
 
 const storeDefault: StoreType = {
-	posts: [],
+	users: [],
 };
 
 const dispatchDefault: DispatchType = {
@@ -28,7 +28,7 @@ function UserPostsProvider({ children }: { children: React.ReactNode }) {
 	}
 
 	return (
-		<StoreContext.Provider value={{ posts }}>
+		<StoreContext.Provider value={{ posts: users }}>
 			<DispatchContext.Provider value={{ setPosts: setPostsFn }}>
 				{children}
 			</DispatchContext.Provider>

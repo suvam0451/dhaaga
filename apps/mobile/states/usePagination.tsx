@@ -2,6 +2,8 @@ import {createContext, useContext, useMemo, useState} from "react";
 
 type Type = {
   maxId?: string
+  // updating this should result in a refetch
+  queryCacheMaxId?: string
   sinceId?: string
   minId?: string,
   paginationLock: boolean
@@ -9,8 +11,9 @@ type Type = {
   length: number
   isReachPageLimit: boolean
   setMaxId: (maxId: string) => void
-  append: (data: any[]) => void
+  append: (data: any[], keygen?: (o: any) => any) => void
   clear: () => void
+  updateQueryCache: () => void
 }
 
 const defaultValue: Type = {
@@ -20,7 +23,10 @@ const defaultValue: Type = {
   isReachPageLimit: false,
   setMaxId: undefined,
   append: undefined,
-  clear: undefined
+  clear: undefined,
+  updateQueryCache: function (): void {
+    throw new Error("Function not implemented.");
+  }
 }
 
 const AppPaginationContext =
@@ -49,10 +55,19 @@ function WithAppPaginationContext({children}: any) {
     sinceId: null,
     minId: null,
   })
+  const [ApiCache, setApiCache] = useState({
+    queryCacheMaxId: null
+  })
 
   const Seen = useMemo(() => {
     return new Set<string>()
   }, [])
+
+  function updateQueryCache() {
+    setApiCache({
+      queryCacheMaxId: PaginationParams.maxId
+    })
+  }
 
   function clear() {
     setPaginationLock(true)
@@ -62,6 +77,9 @@ function WithAppPaginationContext({children}: any) {
       maxId: undefined,
       sinceId: undefined,
       minId: undefined
+    })
+    setApiCache({
+      queryCacheMaxId: undefined
     })
     setPaginationLock(false)
   }
@@ -74,12 +92,12 @@ function WithAppPaginationContext({children}: any) {
     })
   }
 
-  function append(data: any[]) {
+  function append(data: any[], keygen: Function) {
     const toAdd = []
     for (let i = 0; i < data.length; i++) {
-      const targetId = data[i]?.id
+      const targetId = keygen ? keygen(data[i]) : data[i]?.id
       if (Seen.has(targetId)) continue
-      Seen.add(data[i]?.id)
+      Seen.add(targetId)
       toAdd.push(data[i])
     }
     setPageData(PageData.concat(toAdd))
@@ -91,8 +109,10 @@ function WithAppPaginationContext({children}: any) {
     setMaxId,
     append,
     clear,
+    updateQueryCache,
     isReachPageLimit: PageData.length > ItemLimit,
     maxId: PaginationParams.maxId,
+    queryCacheMaxId: ApiCache.queryCacheMaxId,
     minId: PaginationParams.minId,
     sinceId: PaginationParams.sinceId,
     paginationLock: PaginationLock

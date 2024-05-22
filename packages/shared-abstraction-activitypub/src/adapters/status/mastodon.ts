@@ -3,12 +3,17 @@ import {
   MediaAttachmentToMediaAttachmentAdapter
 } from "../media-attachment/adapter";
 import {MediaAttachmentInstance} from "../media-attachment/unique";
+import {UserType} from "../profile/_interface";
 
 class MastodonToStatusAdapter implements StatusInterface {
   ref: StatusInstance;
 
   constructor(ref: StatusInstance) {
     this.ref = ref;
+  }
+
+  getUser(): UserType {
+    return this?.ref?.instance?.account
   }
 
   isReply() {

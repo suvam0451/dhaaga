@@ -2,12 +2,17 @@ import {NoteInstance, StatusInterface} from "./_interface";
 import {DriveFile} from "@dhaaga/shared-provider-misskey/src";
 import {DriveFileToMediaAttachmentAdapter} from "../media-attachment/adapter";
 import {DriveFileInstance} from "../media-attachment/unique";
+import {UserType} from "../profile/_interface";
 
 class MisskeyToStatusAdapter implements StatusInterface {
   ref: NoteInstance;
 
   constructor(ref: NoteInstance) {
     this.ref = ref;
+  }
+
+  getUser(): UserType {
+    return this?.ref?.instance?.user
   }
 
   isReply(): boolean {

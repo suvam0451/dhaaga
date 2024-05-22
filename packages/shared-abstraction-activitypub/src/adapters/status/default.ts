@@ -1,7 +1,12 @@
+import { UserType } from "../profile/_interface";
 import {Status, StatusInterface} from "./_interface";
 
 
 class UnknownToStatusAdapter implements StatusInterface {
+  getUser(): UserType {
+      throw new Error("Method not implemented.");
+  }
+
   isReply(): boolean {
       return false
   }

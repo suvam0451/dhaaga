@@ -43,7 +43,9 @@ function ApiWrapper() {
     data: PageData,
     setMaxId,
     append,
-    maxId
+    maxId,
+    queryCacheMaxId,
+    updateQueryCache
   } = useAppPaginationContext()
   const {resetEndOfPageFlag} = useScrollOnReveal()
 
@@ -54,17 +56,15 @@ function ApiWrapper() {
 
   // Queries
   const {status, data, fetchStatus, refetch} = useQuery({
-    queryKey: ["trending/posts", maxId],
+    queryKey: ["trending/posts", queryCacheMaxId],
     queryFn: api,
     enabled: client !== null,
   });
 
   function onScrollEndReach() {
-
     if (PageData.length > 0) {
-      // @ts-ignore-next-line
+      updateQueryCache()
       refetch()
-
     }
   }
 

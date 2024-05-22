@@ -34,12 +34,14 @@ export {
 
 // export types, adapters and interfaces
 export {
-  ActivityPubUserAdapter, UserInterface
+  ActivityPubUserAdapter, UserInterface, UserType
 } from "./adapters/profile/_interface"
 export {
-  ActivitypubStatusAdapter, StatusInterface
+  StatusInterface
 } from "./adapters/status/_interface"
-export {ActivityPubTagAdapter, TagInterface, TagType} from "./adapters/tag/_interface"
+export {
+  ActivityPubTagAdapter, TagInterface, TagType
+} from "./adapters/tag/_interface"
 
 export {
   MastodonRestClient,
@@ -73,3 +75,4 @@ export {
 export {NoteInstance} from "./adapters/status/_interface";
 export {UserDetailedInstance} from "./adapters/profile/_interface";
 export {AccountInstance} from "./adapters/profile/_interface";
+export {ActivitypubStatusAdapter} from "./adapters/status/_adapters";

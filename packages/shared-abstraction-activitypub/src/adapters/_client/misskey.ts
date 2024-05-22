@@ -23,6 +23,10 @@ class MisskeyRestClient implements ActivityPubClient {
     });
   }
 
+  async getRelationshipWith(ids: string[]) {
+    return []
+  }
+
   async getTrendingPosts() {
     return []
   }

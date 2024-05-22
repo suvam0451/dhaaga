@@ -1,11 +1,7 @@
 import {MediaAttachmentInterface} from "../media-attachment/interface";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
-import {
-  MastodonToStatusAdapter,
-  MisskeyToStatusAdapter,
-  UnknownToStatusAdapter
-} from "../../index";
+import {UserType} from "../profile/_interface";
 
 export type Status = mastodon.v1.Status | Note | null | undefined
 export type StatusArray = Status[]
@@ -31,7 +27,8 @@ export interface StatusInterface {
 
   getContent(): string | null;
 
-  // getUser()
+  getUser(): UserType | null
+
   isReposted(): boolean;
 
   getMediaAttachments(): MediaAttachmentInterface[] | null | undefined;
@@ -59,39 +56,20 @@ export interface StatusInterface {
 
 export class StatusInstance {
   instance: mastodon.v1.Status;
+  emojiMap: Map<string, URL>
 
   constructor(instance: mastodon.v1.Status) {
     this.instance = instance;
+    this.emojiMap = new Map()
   }
 }
 
 export class NoteInstance {
   instance: Note;
+  emojiMap: Map<string, URL>
 
   constructor(instance: Note) {
     this.instance = instance;
-  }
-}
-
-/**
- * @param status any status object
- * @param domain domain from database
- * @returns StatusInterface
- */
-export function ActivitypubStatusAdapter(
-    status: any,
-    domain: string): StatusInterface {
-  switch (domain) {
-    case "misskey": {
-      return new MisskeyToStatusAdapter(new NoteInstance(status as Note));
-    }
-    case "mastodon": {
-      return new MastodonToStatusAdapter(
-          new StatusInstance(status as mastodon.v1.Status)
-      );
-    }
-    default: {
-      return new UnknownToStatusAdapter();
-    }
+    this.emojiMap = new Map()
   }
 }

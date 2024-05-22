@@ -66,6 +66,8 @@ interface ActivityPubClient {
 
   getBookmarks(opts: GetPostsQueryDTO): Promise<StatusArray>;
 
+  getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>
+
   /**
    * Trending
    */
@@ -93,6 +95,10 @@ interface ActivityPubClient {
   getStatus(id: string): Promise<Status>
 
   bookmark(id: string): Promise<Status>
+
+  // https://mastodon.social/api/v1/statuses/:id/context
+  // mastodon specific
+  // getStatusContext(id: string): Promise<any>
 
   unBookmark(id: string): Promise<Status>
 

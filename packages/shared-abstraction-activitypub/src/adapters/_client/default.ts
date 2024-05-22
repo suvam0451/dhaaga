@@ -8,15 +8,22 @@ import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {StatusArray} from "../status/_interface";
 
 class UnknownRestClient implements ActivityPubClient {
+  async getRelationshipWith(ids: string[]) {
+    return []
+  }
+
   getTrendingPosts(opts: GetPostsQueryDTO): Promise<StatusArray> {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
+
   getTrendingTags(): Promise<TagArray> {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
+
   getTrendingLinks(): Promise<any[]> {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
+
   async followTag(id: string) {
     return null
   }

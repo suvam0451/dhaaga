@@ -38,6 +38,7 @@
     "expo-status-bar": "~1.12.1",
     "hoist-non-react-statics": "^3.3.2",
     "isomorphic-ws": "^5.0.0",
+    "mfm-js": "^0.24.0",
     "openai": "^4.40.2",
     "path-type": "^5.0.0",
     "react": "18.2.0",

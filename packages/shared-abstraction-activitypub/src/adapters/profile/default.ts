@@ -1,24 +1,32 @@
-import {UserInterface} from "./_interface";
+import {EmojiMapValue, UserInterface} from "./_interface";
 
 export class DefaultUser implements UserInterface {
+  getEmojiMap() {
+    return new Map()
+  }
+
+  findEmoji(q: string) {
+    return undefined
+  }
+
   getAvatarBlurHash(): string {
-    throw new Error("Method not implemented.");
+    return ""
   }
 
   getAvatarUrl(): string {
-    throw new Error("Method not implemented.");
+    return ""
   }
 
   getBannerUrl(): string | null {
-    throw new Error("Method not implemented.");
+    return ""
   }
 
   getBannerBlurHash(): string | null {
-    throw new Error("Method not implemented.");
+    return ""
   }
 
   getDescription(): string | null {
-    throw new Error("Method not implemented.");
+    return ""
   }
 
   getCreatedAt(): Date {
@@ -29,51 +37,49 @@ export class DefaultUser implements UserInterface {
     throw new Error("Method not implemented.");
   }
 
-  getFields(): any[] {
-    throw new Error("Method not implemented.");
+  getFields() {
+    return []
   }
 
   getFollowersCount(): number {
-    throw new Error("Method not implemented.");
+    return 0
   }
 
   getFollowingCount(): number {
-    throw new Error("Method not implemented.");
+    return 0
   }
 
   hasPendingFollowRequestFromYou(): boolean | null {
-    throw new Error("Method not implemented.");
+    return false
   }
 
   hasPendingFollowRequestToYou(): boolean | null {
-    throw new Error("Method not implemented.");
+    return false
   }
 
   getId(): string {
-    throw new Error("Method not implemented.");
+    return ""
   }
 
   getIsBot(): boolean {
-    throw new Error("Method not implemented.");
+    return false
   }
 
   getDisplayName(): string | null {
-    throw new Error("Method not implemented.");
+    return ""
   }
 
   getPostCount(): number {
-    throw new Error("Method not implemented.");
+    return 0
   }
 
   getUsername(): string {
-    throw new Error("Method not implemented.");
+    return ""
   }
 
   getOnlineStatus(): "unknown" | "online" | "active" | "offline" {
-    throw new Error("Method not implemented.");
+    return "unknown"
   }
-
-
 }
 
 export default DefaultUser

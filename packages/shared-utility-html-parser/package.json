@@ -16,8 +16,8 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "html-entities": "^2.4.0",
-    "htmlparser2": "^9.0.0",
-    "mfm-js": "^0.23.3"
+    "html-entities": "^2.5.2",
+    "htmlparser2": "^9.1.0",
+    "mfm-js": "^0.24.0"
   }
 }

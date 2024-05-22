@@ -24,12 +24,12 @@ function Content() {
   const {data: PageData} = useAppPaginationContext()
 
   if (!PageData) return <View></View>
-  return <>
+  return <View style={{display: "flex", backgroundColor: "#121212"}}>
     {PageData.map((o: TagType, i) =>
         <WithActivitypubTagContext tag={o} key={i}>
           <TagItem/>
         </WithActivitypubTagContext>)}
-  </>
+  </View>
 }
 
 /**
@@ -39,35 +39,39 @@ function ApiWrapper() {
   const {client} = useActivityPubRestClientContext()
   const {
     data: PageData,
-    maxId
+    queryCacheMaxId,
+    updateQueryCache,
+    append,
+    setMaxId
   } = useAppPaginationContext()
   const {resetEndOfPageFlag} = useScrollOnReveal()
 
   const api = () => client ? client.getTrendingTags({
     limit: 5,
-    offset: parseInt(maxId)
+    offset: parseInt(queryCacheMaxId)
   }) : null
 
   // Queries
   const {status, data, error, fetchStatus, refetch} = useQuery({
-    queryKey: ["trending/tags", maxId],
+    queryKey: ["trending/tags", queryCacheMaxId],
     queryFn: api,
     enabled: client !== null,
   });
 
   function onScrollEndReach() {
-    if (PageData.length > 0) refetch()
+    if (PageData.length > 0) {
+      updateQueryCache()
+      refetch()
+    }
   }
 
   useEffect(() => {
-    console.log(fetchStatus, data, error)
     if (status !== "success" || !data) return
-    console.log(data)
-    // if (data.length > 0) {
-    //   append(data)
-    //   setMaxId(PageData.length.toString())
-    //   resetEndOfPageFlag()
-    // }
+    if (data.length > 0) {
+      append(data, (o) => o.name)
+      setMaxId((PageData.length + data.length).toString())
+      resetEndOfPageFlag()
+    }
   }, [fetchStatus]);
 
   const navigation = useNavigation()

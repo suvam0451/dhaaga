@@ -1,10 +1,20 @@
-import {AccountInstance, UserInterface} from "./_interface";
+import {AccountInstance, EmojiMapValue, UserInterface} from "./_interface";
 
 class MastodonUser implements UserInterface {
   ref: AccountInstance;
+  mp: Map<string, EmojiMapValue>
 
-  constructor(ref: AccountInstance) {
+  constructor(ref: AccountInstance, mp: Map<string, EmojiMapValue>) {
     this.ref = ref;
+    this.mp = mp
+  }
+
+  getEmojiMap(): Map<string, EmojiMapValue> {
+    return this.mp
+  }
+
+  findEmoji(q: string) {
+    return this.mp.get(q)
   }
 
   getAvatarBlurHash(): string {
@@ -32,7 +42,6 @@ class MastodonUser implements UserInterface {
   }
 
   getDescription(): string | null {
-    console.log(this?.ref?.instance);
     return this?.ref?.instance?.note;
   }
 

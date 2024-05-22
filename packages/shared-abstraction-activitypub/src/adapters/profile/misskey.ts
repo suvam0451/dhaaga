@@ -1,4 +1,5 @@
 import {
+  EmojiMapValue,
   UserDetailedInstance,
   UserInterface
 } from "./_interface";
@@ -8,6 +9,14 @@ export class MisskeyUser implements UserInterface {
 
   constructor(ref: UserDetailedInstance) {
     this.ref = ref;
+  }
+
+  getEmojiMap(): Map<string, EmojiMapValue> {
+    return new Map()
+  }
+
+  findEmoji(q: string) {
+    return undefined
   }
 
   isValid() {

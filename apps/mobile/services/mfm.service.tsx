@@ -1,37 +1,26 @@
-import {MfmNode} from "@dhaaga/shared-utility-html-parser/src";
-import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
+import {
+  decodeHTMLString,
+  MfmNode,
+  parseStatusContent
+} from "@dhaaga/shared-utility-html-parser/src";
 import {Text} from "react-native";
-import HashtagProcessor from "../screens/timelines/link-processors/Hashtags";
+import HashtagProcessor from "../components/common/tag/TagProcessor";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {Image} from "@rneui/base";
-import CustomEmojiFragment
-  from "../screens/timelines/link-processors/CustomEmojis";
-
-export type MfmChildrenNodeType = {
-  nodes: any[];
-  count: string;
-  extras: {
-    emojis: any[];
-    domain: string;
-    subdomain: string,
-    isHighEmphasisText: boolean
-  };
-};
+import {
+  EmojiMapValue
+} from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface";
+import {randomUUID} from "expo-crypto";
 
 class MfmService {
   static parseNode(
       node: MfmNode,
       count: string,
-      {
-        domain,
-        subdomain,
-        emojis,
-        isHighEmphasisText = false
-      }: {
+      {emojiMap}: {
         domain: string;
         subdomain: string;
-        emojis?: mastodon.v1.CustomEmoji[] | any[];
+        emojiMap: Map<string, EmojiMapValue>
         isHighEmphasisText: boolean
       }
   ) {
@@ -53,7 +42,7 @@ class MfmService {
         );
       }
       case "hashtag": {
-        const hashtagName =  this.decodeUrlString(node.props.hashtag)
+        const hashtagName = this.decodeUrlString(node.props.hashtag)
         return (
             <HashtagProcessor
                 key={count}
@@ -81,35 +70,35 @@ class MfmService {
         );
       }
       case "emojiCode": {
-        if (!emojis || !emojis.find) return <Text key={count}></Text>;
-        const renderer = emojis?.find((o) => o.shortcode === node.props.name);
-        if (renderer) {
-          return (
-              <Image
-                  key={count}
-                  style={{
-                    width: 16,
-                    height: 16,
-                  }}
-                  source={{uri: renderer.staticUrl}}
-              />
-          );
-        } else {
-          return (
-              <CustomEmojiFragment
-                  key={count}
-                  identifier={node.props.name}
-                  domain={domain}
-                  subdomain={subdomain}
-              />
-          );
-        }
+        if (!emojiMap) return <Text key={count}></Text>;
+        const match = emojiMap.get(node.props.name)
+
+        if (!match) return <Text key={count} style={{color: "red"}}>
+          {`:${node.props.name}:`}
+        </Text>;
+        return <Image
+            key={count}
+            style={{
+              width: 16,
+              height: 16,
+            }}
+            source={{uri: match.url}}
+        />
+
+        // return (
+        //     <CustomEmojiFragment
+        //         key={count}
+        //         identifier={node.props.name}
+        //         domain={domain}
+        //         subdomain={subdomain}
+        //     />
+        // );
         break;
       }
-      case "italic": {
+      case "italic" : {
         return (
             <Text key={count} style={{color: "white", fontStyle: "italic"}}>
-              Doesn't Work
+              Dhaaga: Italics Not Supported
               {/* <ItalicFormattedChildrenNodes
 						count={count}
 						nodes={node.children}
@@ -135,6 +124,101 @@ class MfmService {
 
   static decodeUrlString(input: string) {
     return decodeURI(input)
+  }
+
+  private static extractUrls(item: string) {
+    const mp = new Map<string, string>()
+    const ex = /<a.*?href="(.*?)".*?>(.*?)<\/a>/gu
+
+    const matches = item.matchAll(ex)
+    for (const match of matches) {
+      mp.set(match[1], match[2])
+    }
+    return mp
+  }
+
+  static renderMfm(input: string,
+      {emojiMap, domain, subdomain}: {
+        domain?: string,
+        subdomain?: string
+        emojiMap: Map<string, EmojiMapValue>
+      }
+  ) {
+    if (!input || !domain || !subdomain || !emojiMap) return {
+      reactNodes: [],
+      openAiContext: []
+    }
+
+    const extractedUrls = this.extractUrls(input)
+    console.log(extractedUrls)
+
+    const parsed = parseStatusContent(decodeHTMLString(input));
+    let retval = [];
+    let openAiContext = []
+    let count = 0;
+    let paraCount = 0
+
+    for (const para of parsed) {
+      retval.push([])
+      for (const node of para) {
+        // handle line breaks
+        if (node.type === "text") {
+          const splits = node.props.text.split(/<br ?\/?>/)
+
+          const key = randomUUID()
+          // first item is always text
+          retval[paraCount].push(
+              <Text key={key}
+                    style={{
+                      color: "#fff",
+                      opacity: 0.87
+                    }}>
+                {splits[0]}
+              </Text>
+          )
+          count++
+
+          // each n-1 item results in a split
+          for (let i = 1; i < splits.length; i++) {
+            retval.push([])
+            paraCount++
+
+            const key = randomUUID()
+            retval[paraCount].push(
+                <Text key={key}
+                      style={{
+                        color: "#fff",
+                        opacity: 0.87
+                      }}>
+                  {splits[i]}
+                </Text>
+            )
+          }
+
+          const txt = node.props.text.trim()
+          txt.replaceAll(/<br>/g, "\n");
+          openAiContext.push(txt)
+          continue
+        }
+
+        const key = randomUUID()
+        const item = MfmService.parseNode(node, key, {
+          emojiMap: emojiMap,
+          domain,
+          subdomain,
+          isHighEmphasisText: false
+        })
+
+        retval[paraCount].push(item)
+        count++
+      }
+      paraCount++
+    }
+
+    return {
+      reactNodes: retval,
+      openAiContext
+    }
   }
 }
 

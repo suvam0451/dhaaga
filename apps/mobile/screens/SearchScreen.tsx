@@ -16,7 +16,7 @@ import {
 } from "react-native/Libraries/Components/TextInput/TextInput";
 import Animated from "react-native-reanimated";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import Hashtag from "./shared/Hashtag";
+import ApiWrapper from "../components/common/tag/TagBrowseLocal";
 import UserProfile from "./shared/profile/UserProfile";
 import PostWithClientContext from "./shared/Post";
 import WithAppPaginationContext from "../states/usePagination";
@@ -159,7 +159,7 @@ function SearchScreen() {
       />
       <Stack.Screen
           name="Browse Hashtag"
-          component={Hashtag}
+          component={ApiWrapper}
       />
       <Stack.Screen
           name="Profile"

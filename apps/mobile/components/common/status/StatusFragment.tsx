@@ -25,6 +25,10 @@ import {useNavigation} from "@react-navigation/native";
 import {useActivitypubStatusContext} from "../../../states/useStatus";
 import MfmService from "../../../services/mfm.service";
 import Status from "../../bottom-sheets/Status";
+import {
+  ActivityPubUserAdapter
+} from "@dhaaga/shared-abstraction-activitypub/src";
+import {randomUUID} from "expo-crypto";
 
 type StatusFragmentProps = {
   // status: mastodon.v1.Status | Note;
@@ -40,12 +44,22 @@ type StatusFragmentProps = {
  */
 function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const domain = accountState?.activeAccount?.domain
   const {status, statusRaw, sharedStatus} = useActivitypubStatusContext()
 
   const _status = isRepost ? sharedStatus : status
   const navigation = useNavigation<any>();
   const [PosterContent, setPosterContent] = useState(<View></View>);
   const [ExplanationObject, setExplanationObject] = useState<string | null>(null)
+
+  const [UserInterface, setUserInterface] = useState(ActivityPubUserAdapter(null, domain))
+  const [DescriptionContent, setDescriptionContent] = useState(<></>)
+
+
+  useEffect(() => {
+    if (!_status) return
+    setUserInterface(ActivityPubUserAdapter(_status.getUser(), domain))
+  }, [_status]);
 
   useEffect(() => {
     setPosterContent(
@@ -65,50 +79,26 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
   const [Content, setContent] = useState([]);
   const [OpenAiContext, setOpenAiContext] = useState([])
 
+  let content = _status.getContent();
   useEffect(() => {
-    let content = _status.getContent();
-
-    let emojis = [];
-    switch (accountState?.activeAccount?.domain) {
-      case "mastodon": {
-        emojis = (statusRaw as mastodon.v1.Status)?.emojis;
-        break;
-      }
-      case "misskey": {
-        // emojis = (status as Note).reactions
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-
-    const parsed = parseStatusContent(decodeHTMLString(content));
-
-    let retval = [];
-    let openAiContext = []
-    let count = 0;
-    for (const para of parsed) {
-      for (const node of para) {
-        const item = MfmService.parseNode(node, count.toString(), {
-          emojis: statusRaw?.emojis || [] as any,
-          domain: accountState?.activeAccount?.domain,
-          subdomain: accountState?.activeAccount?.subdomain,
-          isHighEmphasisText: false
-        })
-        if (node.type === "text") {
-          const txt = node.props.text.trim()
-          txt.replaceAll(/<br>/g, "\n");
-          openAiContext.push(txt)
-        }
-        retval.push(item)
-        count++;
-      }
-    }
-
+    const emojiMap = UserInterface.getEmojiMap()
+    const {openAiContext, reactNodes} = MfmService.renderMfm(content, {
+      emojiMap,
+      domain: accountState?.activeAccount?.domain,
+      subdomain: accountState?.activeAccount?.subdomain,
+    })
+    setDescriptionContent(<>
+      {reactNodes?.map(
+          (para, i) => {
+            const uuid = randomUUID()
+            return <Text key={uuid} style={{marginBottom: 8, opacity: 0.87}}>
+              {para.map((o, j) => o)}
+            </Text>
+          }
+      )}
+    </>)
     setOpenAiContext(openAiContext)
-    setContent(retval);
-  }, [_status]);
+  }, [content]);
 
   const [BottomSheetVisible, setBottomSheetVisible] = useState(false);
 
@@ -147,8 +137,7 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
               </View>
             </View>
             <View style={{marginBottom: 16}}>
-              <Text style={{color: "#fff", opacity: 0.87}}>{Content}</Text>
-
+              {DescriptionContent}
               {ExplanationObject !== null &&
                   <View style={{
                     backgroundColor: "#2E2E2E",
@@ -160,14 +149,24 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
                     borderRadius: 8
                   }}>
                       <View style={{display: "flex", flexDirection: "row"}}>
-                          <Text style={{flex: 1, flexGrow: 1}}>
-                              <Ionicons color={"#bb86fc"}
-                                        name={"language-outline"} size={16}/>
-                              <Text style={{
-                                color: "#bb86fc",
-                                marginLeft: 4,
-                                paddingLeft: 4
-                              }}>{" JP -> EN"}</Text>
+                          <Text style={{
+                            flex: 1,
+                            flexGrow: 1,
+                          }}>
+                              <View>
+                                  <Ionicons
+                                      color={"#bb86fc"}
+                                      name={"language-outline"}
+                                      size={15}/>
+                              </View>
+                              <View style={{
+                              }}>
+                                  <Text style={{
+                                    color: "#bb86fc",
+                                  }}>
+                                    {" JP -> EN"}
+                                  </Text>
+                              </View>
                           </Text>
                           <Text style={{
                             color: "#ffffff38",
@@ -177,7 +176,6 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
                           }}>Translated using
                               OpenAI</Text>
                       </View>
-
                       <Text
                           style={{color: "#ffffff87"}}>{ExplanationObject}</Text>
                   </View>}

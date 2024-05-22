@@ -18,6 +18,14 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, 'node_modules'),
 ];
 
+// config.resolver.sourceExts = ['jsx', 'js', 'ts', 'tsx', 'cjs', 'json'] //add here
+// config.transformer.getTransformOptions = async () => ({
+//   transform: {
+//     experimentalImportSupport: false,
+//     inlineRequires: true,
+//   },
+// })
+
 // Use turborepo to restore the cache when possible
 config.cacheStores = [
   new FileStore({ root: path.join(projectRoot, 'node_modules', '.cache', 'metro') }),

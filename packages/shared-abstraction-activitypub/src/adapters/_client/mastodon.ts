@@ -3,7 +3,7 @@ import ActivityPubClient, {
   GetSearchResultQueryDTO,
   GetTrendingPostsQueryDTO,
   GetUserPostsQueryDTO,
-  RestClientCreateDTO,
+  RestClientCreateDTO, TimelineQuery,
 } from "./_interface";
 import {
   mastodon,
@@ -23,6 +23,16 @@ class MastodonRestClient implements ActivityPubClient {
           domain: "mastodon"
         }
     );
+  }
+
+  async getRelationshipWith(ids: string[]) {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.accounts.relationships.fetch({id: ids})
+    } catch (e) {
+      console.log(e)
+      return []
+    }
   }
 
   async getTrendingPosts(opts: GetTrendingPostsQueryDTO) {
@@ -207,11 +217,20 @@ class MastodonRestClient implements ActivityPubClient {
     }
   }
 
-  async getTimelineByHashtag(q: string): Promise<mastodon.v1.Status[]> {
-    return RestServices.v1.timelines.getTimelineByHashtag(
-        this.client,
-        q
-    );
+  async getTimelineByHashtag(q: string, query?: TimelineQuery) {
+    try {
+      const _client = createRestAPIClient({
+        url: this.client.url,
+        accessToken: this.client.accessToken
+      })
+      return await _client.v1.timelines.tag.$select(q).list({
+        ...query,
+        limit: 5
+      })
+    } catch (e) {
+      console.log(e)
+      return []
+    }
   }
 
 

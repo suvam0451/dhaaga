@@ -1,5 +1,5 @@
 import {Text} from "react-native";
-import HashtagBottomSheet from "../../../components/bottom-sheets/Hashtag";
+import HashtagBottomSheet from "../../bottom-sheets/Hashtag";
 import {useState} from "react";
 
 function HashtagProcessor({
