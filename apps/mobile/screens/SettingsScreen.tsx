@@ -11,7 +11,7 @@ function SettingsScreen() {
 	async function onClick() {
 		console.log("button clicked!!!");
 		try {
-			const res = await EmojiRepo.searchAll();
+			const res: any  = await EmojiRepo.searchAll();
 			// console.log(res.length);
 			setEmojiCount(res.length);
 			setEmojis(res.slice(0, 10));

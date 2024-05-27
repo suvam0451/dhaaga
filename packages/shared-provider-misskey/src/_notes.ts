@@ -1,4 +1,4 @@
-import {api as misskeyApi} from "misskey-js";
+import {api as misskeyApi} from "misskey-js/built/esm";
 
 export class NoteService {
   static async show({

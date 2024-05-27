@@ -1,0 +1,32 @@
+import {MastodonTagInstance, TagInterface} from "./_interface";
+
+class MastodonTag implements TagInterface {
+  ref: MastodonTagInstance;
+
+  constructor(ref: MastodonTagInstance) {
+    this.ref = ref;
+  }
+
+  isFollowing() {
+    return this.ref.instance?.following
+  }
+
+  getHistory() {
+    return this.ref.instance?.history
+  }
+
+  getName(): string {
+    return this.ref.instance?.name
+  }
+
+  getUrl(): string {
+    return this.ref.instance?.url
+  }
+
+  print(): void {
+    console.log("[INFO]:", this.ref.instance)
+  }
+}
+
+export default MastodonTag
+

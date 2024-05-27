@@ -1,6 +1,6 @@
 import { Text } from "react-native";
 import { useEffect, useState } from "react";
-import { EmojiService } from "../../../service/emoji.service";
+import { EmojiService } from "../../../services/emoji.service";
 import { Image } from "@rneui/base";
 
 type CustomEmojiFragmentProps = {

@@ -1,4 +1,4 @@
-import type {UserDetailed} from "misskey-js/built/entities";
+import type {UserDetailed} from "misskey-js/built/esm/entities";
 
 export type MiauthSessionCheckResponse =
     | { ok: false }

@@ -1,4 +1,4 @@
-import Hashtag from "./shared/Hashtag";
+import ApiWrapper from "../components/common/tag/TagBrowseLocal";
 import UserProfile from "./shared/profile/UserProfile";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import PostWithClientContext from "./shared/Post";
@@ -21,7 +21,7 @@ function HomeScreen() {
           />
           <Stack.Screen
               name="Browse Hashtag"
-              component={Hashtag}
+              component={ApiWrapper}
           />
           <Stack.Screen
               name="Profile"

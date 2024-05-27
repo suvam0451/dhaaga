@@ -1,6 +1,8 @@
 import ActivityPubClient, {
+  GetSearchResultQueryDTO,
+  GetPostsQueryDTO,
   GetUserPostsQueryDTO,
-  RestClientCreateDTO
+  RestClientCreateDTO,
 } from "./_interface";
 import {
   createClient,
@@ -8,6 +10,7 @@ import {
   Note
 } from "@dhaaga/shared-provider-misskey/src";
 import axios, {AxiosInstance} from "axios";
+import {StatusArray} from "../status/_interface";
 
 class MisskeyRestClient implements ActivityPubClient {
   client: misskeyApi.APIClient;
@@ -20,7 +23,59 @@ class MisskeyRestClient implements ActivityPubClient {
     });
   }
 
-  async getBookmarks() {
+  async getMe() {
+    return null
+  }
+
+  async getMyConversations() {
+    return []
+  }
+
+  getStatusContext(id: string): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+
+  async getRelationshipWith(ids: string[]) {
+    return []
+  }
+
+  async getTrendingPosts() {
+    return []
+  }
+
+  async getTrendingTags() {
+    return []
+  }
+
+  async getTrendingLinks() {
+    return []
+  }
+
+  async followTag(id: string) {
+    return null
+  }
+
+  async unfollowTag(id: string) {
+    return null
+  }
+
+  async getTag(id: string) {
+    return null
+  }
+
+  async muteUser(id: string): Promise<void> {
+    // throw new Error("Method not implemented.");
+  }
+
+  async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
+    return []
+  }
+
+  async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
+    return []
+  }
+
+  async getBookmarks(opts: GetPostsQueryDTO) {
     return []
   }
 

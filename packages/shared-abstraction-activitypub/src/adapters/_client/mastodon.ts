@@ -1,6 +1,10 @@
 import ActivityPubClient, {
+  GetPostsQueryDTO,
+  GetSearchResultQueryDTO,
+  GetTrendingPostsQueryDTO,
   GetUserPostsQueryDTO,
-  RestClientCreateDTO
+  RestClientCreateDTO,
+  TimelineQuery,
 } from "./_interface";
 import {
   mastodon,
@@ -9,6 +13,7 @@ import {
 } from "@dhaaga/shared-provider-mastodon/src";
 import {createRestAPIClient} from "masto";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
+import {StatusArray} from "../status/_interface";
 
 class MastodonRestClient implements ActivityPubClient {
   client: RestClient;
@@ -21,12 +26,140 @@ class MastodonRestClient implements ActivityPubClient {
     );
   }
 
+  async getMe() {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.accounts.verifyCredentials()
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
+  async getMyConversations() {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.conversations.list()
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+  async getStatusContext(id: string) {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.statuses.$select(id).context.fetch()
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+  async getRelationshipWith(ids: string[]) {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.accounts.relationships.fetch({id: ids})
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+  async getTrendingPosts(opts: GetTrendingPostsQueryDTO) {
+    return await RestServices.v1.trends.getTrendingPosts(this.client, opts);
+  }
+
+  async getTrendingTags(opts: GetTrendingPostsQueryDTO) {
+    return await RestServices.v1.trends.getTrendingTags(this.client, opts);
+  }
+
+  async getTrendingLinks(opts: GetTrendingPostsQueryDTO) {
+    return await RestServices.v1.trends.getTrendingLinks(this.client, opts);
+  }
+
+  async followTag(id: string) {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.tags.$select(id).follow()
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
+  async unfollowTag(id: string) {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.tags.$select(id).unfollow()
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
+  async getTag(id: string) {
+    const _client = this.createPublicClient()
+    try {
+      return await _client.v1.tags.$select(id).fetch()
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
+  async muteUser(id: string) {
+    const _client = this.createClient()
+    try {
+      await _client.v1.accounts.$select(id).mute()
+      return
+    } catch (e) {
+      console.log(e)
+      return
+    }
+  }
+
+  async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
+    const _client = this.createClient()
+    try {
+      return await _client.v2.search.list({
+        q,
+        type: dto.type,
+        following: dto.following,
+        limit: dto.limit,
+        maxId: dto.maxId
+      })
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+
   createClient() {
     return createRestAPIClient({
       url: this.client.url,
       accessToken: this.client.accessToken
     })
   }
+
+  createPublicClient() {
+    return createRestAPIClient({
+      url: this.client.url,
+    })
+  }
+
+
+  async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.favourites.list()
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
 
   async getBookmarks() {
     const _client = this.createClient()
@@ -72,10 +205,20 @@ class MastodonRestClient implements ActivityPubClient {
     return await RestServices.v1.accounts.getStatuses(this.client, userId, opts);
   }
 
-  async getHomeTimeline(): Promise<mastodon.v1.Status[]> {
-    return await RestServices.v1.timelines.getHomeTimeline(
-        this.client
-    );
+  async getHomeTimeline(opts?: GetPostsQueryDTO): Promise<mastodon.v1.Status[]> {
+    try {
+      const _client = createRestAPIClient({
+        url: this.client.url,
+        accessToken: this.client.accessToken
+      })
+
+      return await _client.v1.timelines.home.list({
+        limit: 5,
+        maxId: opts?.maxId
+      })
+    } catch (e) {
+      return []
+    }
   }
 
   async bookmark(id: string) {
@@ -105,11 +248,20 @@ class MastodonRestClient implements ActivityPubClient {
     }
   }
 
-  async getTimelineByHashtag(q: string): Promise<mastodon.v1.Status[]> {
-    return RestServices.v1.timelines.getTimelineByHashtag(
-        this.client,
-        q
-    );
+  async getTimelineByHashtag(q: string, query?: TimelineQuery) {
+    try {
+      const _client = createRestAPIClient({
+        url: this.client.url,
+        accessToken: this.client.accessToken
+      })
+      return await _client.v1.timelines.tag.$select(q).list({
+        ...query,
+        limit: 5
+      })
+    } catch (e) {
+      console.log(e)
+      return []
+    }
   }
 
 

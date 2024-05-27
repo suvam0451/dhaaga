@@ -1,16 +1,15 @@
 import {View, Text} from "react-native";
 import {Image} from "expo-image";
 import {extractInstanceUrl, visibilityIcon} from "../../utils/instances";
-import {formatDistance} from "date-fns";
+import {formatDistanceToNowStrict} from "date-fns";
 import React, {useEffect, useState} from "react";
 import {parseUsername} from "@dhaaga/shared-utility-html-parser/src";
-import {parseNode} from "../../screens/timelines/fragments/util";
 import {useSelector} from "react-redux";
 import {RootState} from "../../libs/redux/store";
 import {AccountState} from "../../libs/redux/slices/account";
 import {useNavigation} from "@react-navigation/native";
-import {useActionSheet} from "@expo/react-native-action-sheet";
 import {TouchableOpacity} from "react-native";
+import MfmService from "../../services/mfm.service";
 
 type OriginalPosterProps = {
   id: string
@@ -38,7 +37,6 @@ function OriginalPoster({
       []
   );
   const navigation = useNavigation<any>();
-  const {showActionSheetWithOptions} = useActionSheet();
 
   useEffect(() => {
     const nodes = parseUsername(displayName || "");
@@ -47,7 +45,7 @@ function OriginalPoster({
     for (const node of nodes) {
       // @ts-ignore
       retval.push(
-          parseNode(node, count.toString(), {
+          MfmService.parseNode(node, count.toString(), {
             emojis: [],
             domain: accountState?.activeAccount?.domain,
             subdomain: accountState?.activeAccount?.subdomain,
@@ -115,8 +113,8 @@ function OriginalPoster({
           </Text>
           <View style={{display: "flex", flexDirection: "row"}}>
             <Text style={{color: "gray", fontSize: 12}}>
-              {formatDistance(new Date(createdAt), new Date(), {
-                addSuffix: true,
+              {formatDistanceToNowStrict(new Date(createdAt), {
+                addSuffix: false,
               })}
             </Text>
             <Text style={{color: "gray", marginLeft: 2, marginRight: 2}}>

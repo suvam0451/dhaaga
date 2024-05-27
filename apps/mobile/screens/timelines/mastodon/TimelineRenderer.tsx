@@ -1,106 +1,65 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {AccountState} from "../../../libs/redux/slices/account";
 import {RootState} from "../../../libs/redux/store";
 import {useSelector} from "react-redux";
 import {
-  Animated,
-  RefreshControl,
+  Animated, RefreshControl,
   SafeAreaView,
   StatusBar,
-  StyleSheet,
-  Text,
+  StyleSheet, View,
 } from "react-native";
 import {getCloser} from "../../../utils";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {useQuery} from "@tanstack/react-query";
-import StatusFragment from "../fragments/StatusFragment";
+import {keepPreviousData, useQuery} from "@tanstack/react-query";
+import StatusItem from "../../../components/common/status/StatusItem";
 import TimelinesHeader from "../../../components/TimelineHeader";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
-import axios from "axios";
-import {CacheRepo} from "../../../libs/sqlite/repositories/cache/cache.repo";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
 import WithActivitypubStatusContext from "../../../states/useStatus";
+import WithAppPaginationContext, {
+  useAppPaginationContext
+} from "../../../states/usePagination";
+import LoadingMore from "../../../components/screens/home/LoadingMore";
+import {EmojiService} from "../../../services/emoji.service";
+import {AnimatedFlashList} from "@shopify/flash-list"
+import NavigationService from "../../../services/navigation.service";
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
 
-/**
- *
- * @returns Timeline rendered for Mastodon
- */
-function TimelineRenderer() {
+
+function Content() {
+  const {data: PageData} = useAppPaginationContext()
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {client} = useActivityPubRestClientContext()
 
-  function getHomeTimeline() {
-    if (!client) {
-      throw new Error("_client not initialized");
-    }
-    return client.getHomeTimeline();
-  }
-
-  // Queries
-  const {status, data, fetchStatus, refetch} = useQuery<
-      mastodon.v1.Status[] | Note[]
-  >({
-    queryKey: ["mastodon/timelines/home"],
-    queryFn: getHomeTimeline,
-    enabled: client !== null
-  });
-
-  async function getCustomEmojisForInstance(subdomain: string) {
-    return await axios.get(
-        `${accountState.activeAccount.subdomain}/api/emojis`
-    );
-  }
-
-  /**
-   * Update the emoji raw cache everyday
-   * @param subdomain
-   * @returns
-   */
-  async function updateEmojiCache(subdomain: string) {
-    try {
-      const emojisUpdatedAt = await CacheRepo.getUpdatedAt(
-          `${subdomain}/api/emojis`
-      );
-
-      if (emojisUpdatedAt.length > 0) {
-        let lastUpdatedAt = new Date(emojisUpdatedAt[0].updated_at);
-        lastUpdatedAt.setDate(lastUpdatedAt.getDate() + 1);
-
-        const delta = lastUpdatedAt.getTime() < new Date().getTime();
-        if (!delta) {
-          console.log(`[INFO]: emoji cache is up to date for ${subdomain}`);
-          return;
-        }
-        const res = await getCustomEmojisForInstance(subdomain);
-        const payload = JSON.stringify(res.data);
-        CacheRepo.set(`${subdomain}/api/emojis`, payload);
-        console.log(`[INFO]: emojis updated for ${subdomain}`);
-      }
-    } catch (e) {
-      const res = await getCustomEmojisForInstance(subdomain);
-      const payload = JSON.stringify(res.data);
-      CacheRepo.set(`${subdomain}/api/emojis`, payload);
-      console.log(`[INFO]: emojis updated for ${subdomain}`);
-    }
-  }
-
-  /**
-   * Load global emoji database
-   */
-  useEffect(() => {
-    if (accountState.activeAccount?.domain) {
-      const url = accountState.activeAccount.subdomain;
-      updateEmojiCache(url);
-    }
-  }, [accountState]);
-
+  const [refreshing, setRefreshing] = useState(false);
   const ref = useRef(null);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    // clear()
+    // refetch();
+
+    const subdomain = accountState.activeAccount?.domain;
+    if (subdomain) {
+      EmojiService.updateEmojiCacheForDomain(subdomain);
+    }
+  }
+
+  function onPageEndReached() {
+    console.log("[INFO]: page end reached. performing refetch")
+
+    // updateQueryCache()
+    // refetch()
+    // setLoadingMoreComponentProps({
+    //   visible: true,
+    //   loading: true
+    // })
+  }
 
   const scrollY = useRef(new Animated.Value(0));
   const scrollYClamped = diffClamp(
@@ -132,6 +91,163 @@ function TimelineRenderer() {
         useNativeDriver: true,
       }
   );
+
+  if (!PageData) return <View></View>
+  return <>
+    <AnimatedFlashList
+        estimatedItemSize={200}
+        data={PageData}
+        ref={ref}
+        renderItem={(o) =>
+            <WithActivitypubStatusContext status={o.item} key={o.index}>
+              <StatusItem key={o.index}/>
+            </WithActivitypubStatusContext>
+        }
+        onScroll={(e) => {
+          NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+          return handleScroll
+        }}
+        contentContainerStyle={{
+          paddingTop: SHOWN_SECTION_HEIGHT + 4,
+        }}
+        // renderScrollComponent={() => <Animated.ScrollView
+        //     contentContainerStyle={{
+        //       paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
+        //     }}
+        //     onScroll={(e) => {
+        //       NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+        //       // return handleScroll
+        //     }}
+        //     contentInset={{
+        //       top: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT + 1000,
+        //     }}
+        //     scrollEventThrottle={16}
+        //     refreshControl={
+        //       <RefreshControl
+        //           refreshing={refreshing}
+        //           onRefresh={onRefresh}/>
+        //     }
+        // />}
+    />
+  </>
+}
+
+/**
+ *
+ * @returns Timeline rendered for Mastodon
+ */
+function TimelineRenderer() {
+  const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const {client} = useActivityPubRestClientContext()
+  const {
+    data: PageData,
+    setMaxId,
+    append,
+    maxId,
+    clear,
+    paginationLock,
+    updateQueryCache,
+    queryCacheMaxId
+  } = useAppPaginationContext()
+
+
+  const [LoadingMoreComponentProps, setLoadingMoreComponentProps] = useState({
+    visible: false,
+    loading: false
+  });
+
+  const api = () => client ? client.getHomeTimeline({limit: 5, maxId}) : null
+
+  // Queries
+  const {status, data, fetchStatus, refetch} = useQuery<
+      mastodon.v1.Status[] | Note[]
+  >({
+    queryKey: ["mastodon/timelines/home", queryCacheMaxId],
+    queryFn: api,
+    enabled: client !== null && !paginationLock,
+    placeholderData: keepPreviousData,
+  });
+
+  useEffect(() => {
+    if (fetchStatus === "fetching") {
+      if (PageData.length > 0) {
+        setLoadingMoreComponentProps({
+          visible: true,
+          loading: true
+        })
+      }
+      return
+    }
+    if (status !== "success") return
+
+    if (status === "success" && data.length > 0) {
+      setMaxId(data[data.length - 1]?.id)
+      append(data)
+    }
+
+    setLoadingMoreComponentProps({
+      visible: false,
+      loading: false
+    })
+  }, [fetchStatus]);
+
+  /**
+   * Load global emoji database
+   */
+  useEffect(() => {
+    if (accountState.activeAccount?.domain) {
+      const url = accountState.activeAccount.subdomain;
+      EmojiService.updateEmojiCacheForDomain(url);
+    }
+  }, [accountState]);
+
+  const ref = useRef(null);
+
+  const scrollY = useRef(new Animated.Value(0));
+  const scrollYClamped = diffClamp(
+      scrollY.current,
+      0,
+      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
+  );
+
+  const translateY = scrollYClamped.interpolate({
+    inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
+    outputRange: [0, -HIDDEN_SECTION_HEIGHT],
+  });
+
+  const translateYNumber = useRef();
+
+  translateY.addListener(({value}) => {
+    translateYNumber.current = value;
+  });
+
+  function handleScrollJs(e) {
+    NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+  }
+
+  const handleScrollAnimated = Animated.event(
+      [
+        {
+          nativeEvent: {
+            contentOffset: {y: scrollY.current},
+          },
+        },
+      ],
+      {
+        useNativeDriver: true,
+        listener: handleScrollJs
+      },
+  );
+
+  function onPageEndReached() {
+    console.log("[INFO]: page end reached. performing refetch")
+    updateQueryCache()
+    refetch()
+    setLoadingMoreComponentProps({
+      visible: true,
+      loading: true
+    })
+  }
 
   /**
    * When scroll view has stopped moving,
@@ -169,25 +285,24 @@ function TimelineRenderer() {
 
   useEffect(() => {
     if (status === "success") {
-      console.log("[INFO] : loaded timeline...")
       setRefreshing(false);
     }
   }, [status, fetchStatus]);
 
   const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = useCallback(() => {
-    console.log("[INFO] : refreshing timeline...")
+  const onRefresh = () => {
     setRefreshing(true);
+    clear()
     refetch();
 
     const subdomain = accountState.activeAccount?.domain;
     if (subdomain) {
-      updateEmojiCache(subdomain);
+      EmojiService.updateEmojiCacheForDomain(subdomain);
     }
-  }, []);
+  }
 
   return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, {position: "relative"}]}>
         <StatusBar backgroundColor="#121212"/>
         <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
           <TimelinesHeader
@@ -195,35 +310,41 @@ function TimelineRenderer() {
               HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
           />
         </Animated.View>
-
-        <Animated.ScrollView
-            contentContainerStyle={{
-              paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
-            }}
-            onScroll={handleScroll}
+        <AnimatedFlashList
+            estimatedItemSize={200}
+            data={PageData}
             ref={ref}
-            contentInset={{
-              top: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT + 1000,
+            renderItem={(o) =>
+                <WithActivitypubStatusContext status={o.item} key={o.index}>
+                  <StatusItem key={o.index}/>
+                </WithActivitypubStatusContext>
+            }
+            onScroll={handleScrollAnimated}
+            contentContainerStyle={{
+              paddingTop: SHOWN_SECTION_HEIGHT + 4,
             }}
             scrollEventThrottle={16}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+              <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}/>
             }
-        >
-          <Text style={{color: "white"}}>
-            Showing 0-{data?.length || 0} results
-          </Text>
-          {data && data.map((o: mastodon.v1.Status | Note, i) =>
-              <WithActivitypubStatusContext status={o} key={i}>
-                <StatusFragment key={i}/>
-              </WithActivitypubStatusContext>
-          )}
-        </Animated.ScrollView>
+        />
+        <LoadingMore
+            visible={LoadingMoreComponentProps.visible}
+            loading={LoadingMoreComponentProps.loading}
+        />
       </SafeAreaView>
   );
 }
 
-export default TimelineRenderer;
+function TimelineWrapper() {
+  return <WithAppPaginationContext>
+    <TimelineRenderer/>
+  </WithAppPaginationContext>
+}
+
+export default TimelineWrapper;
 
 const styles = StyleSheet.create({
   header: {

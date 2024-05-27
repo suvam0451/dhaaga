@@ -1,42 +1,42 @@
 {
-	"name": "@dhaaga/desktop-ui",
-	"private": true,
-	"version": "0.3.0",
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"preview": "vite preview"
-	},
-	"dependencies": {
-		"@mantine/carousel": "^6.0.17",
-		"@mantine/core": "^6.0.16",
-		"@mantine/hooks": "^6.0.16",
-		"@mantine/notifications": "^6.0.17",
-		"@reduxjs/toolkit": "^1.9.5",
-		"@tabler/icons-react": "^2.24.0",
-		"@tanstack/react-query": "^5.0.0-beta.5",
-		"@vitejs/plugin-react": "^4.0.3",
-		"axios": "^1.4.0",
-		"date-fns": "^2.30.0",
-		"embla-carousel-react": "^7.0.0",
-		"masto": "^5.11.4",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"react-icons": "^4.10.1",
-		"react-intersection-observer": "^9.5.2",
-		"react-redux": "^8.1.1",
-		"react-router-dom": "^6.14.2",
-		"styled-components": "^6.0.5",
-		"threads-api": "^1.5.4"
-	},
-	"devDependencies": {
-		"@types/node": "^20.4.2",
-		"@types/react": "^18.2.15",
-		"@types/react-dom": "^18.2.7",
-		"@types/react-router-dom": "^5.3.3",
-		"@vitejs/plugin-react-swc": "^3.3.2",
-		"typescript": "^5.1.6",
-		"vite": "^4.4.5"
-	}
+  "name": "@dhaaga/desktop-ui",
+  "private": true,
+  "version": "0.3.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mantine/carousel": "^6.0.17",
+    "@mantine/core": "^6.0.16",
+    "@mantine/hooks": "^6.0.16",
+    "@mantine/notifications": "^6.0.17",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@tabler/icons-react": "^2.24.0",
+    "@tanstack/react-query": "^5.0.0-beta.5",
+    "@vitejs/plugin-react": "^4.0.3",
+    "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
+    "embla-carousel-react": "^7.0.0",
+    "masto": "^5.11.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.10.1",
+    "react-intersection-observer": "^9.5.2",
+    "react-redux": "^8.1.1",
+    "react-router-dom": "^6.14.2",
+    "styled-components": "6.0.5",
+    "threads-api": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "@types/react": "18.2.15",
+    "@types/react-dom": "18.2.7",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.5"
+  }
 }

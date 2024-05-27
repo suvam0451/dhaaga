@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {View, Text, TouchableOpacity} from "react-native";
 import {StatusInterface} from "@dhaaga/shared-abstraction-activitypub/src";
 import {useActionSheet} from "@expo/react-native-action-sheet";
-import {OpenAiService} from "../../../service/openai.service";
+import {OpenAiService} from "../../../services/openai.service";
 import {
   POST_TRANSLATION_ACTION_SHEET_OPTIONS
 } from "../../../services/action-sheet.service";
@@ -116,7 +116,7 @@ function StatusInteraction({
         </View>
         <TouchableOpacity onPress={toggleBookmark}>
           <Ionicons color={isBookmarked ? "purple" : "#888"}
-                    name={"bookmark-outline"} size={ICON_SIZE}/>
+                    name={isBookmarked ? "bookmark": "bookmark-outline"} size={ICON_SIZE}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={OnTranslationClicked}>
           <Ionicons color={"#888"} name={"language-outline"} size={ICON_SIZE}/>

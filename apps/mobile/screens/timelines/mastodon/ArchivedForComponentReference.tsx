@@ -1,23 +1,20 @@
-import {useEffect, useRef} from "react";
+import {useRef} from "react";
 import {AccountState} from "../../../libs/redux/slices/account";
 import {RootState} from "../../../libs/redux/store";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {
   Animated,
   SafeAreaView,
   StatusBar,
-  View,
   StyleSheet,
-  Text,
 } from "react-native";
 import {getCloser} from "../../../utils";
 import Header from "../../../components/Header";
 import {
-  RestClient,
   RestServices,
 } from "@dhaaga/shared-provider-mastodon/src";
 import {useQuery} from "@tanstack/react-query";
-import StatusFragment from "../fragments/StatusFragment";
+import StatusItem from "../../../components/common/status/StatusItem";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
@@ -31,7 +28,6 @@ const SHOWN_SECTION_HEIGHT = 50;
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const clientCtx = useActivityPubRestClientContext()
 
   const restClient = useRef(null);
@@ -47,7 +43,7 @@ function TimelineRenderer() {
   }
 
   // Queries
-  const {status, data, error, fetchStatus} = useQuery({
+  const {data} = useQuery({
     queryKey: ["mastodon/timelines/home", restClient.current],
     queryFn: getHomeTimeline,
   });
@@ -138,7 +134,7 @@ function TimelineRenderer() {
             // onMomentumScrollEnd={handleSnap}
             scrollEventThrottle={16}
         >
-          {data && data.map((o, i) => <StatusFragment key={i}/>)}
+          {data && data.map((o, i) => <StatusItem key={i}/>)}
         </Animated.ScrollView>
       </SafeAreaView>
   );

@@ -1,5 +1,6 @@
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {Note, UserDetailed} from "@dhaaga/shared-provider-misskey/src";
+import {UserDetailed} from "@dhaaga/shared-provider-misskey/src";
+import {Status, StatusArray, StatusInterface} from "../status/_interface";
 
 
 export type TimelineQuery = {
@@ -14,43 +15,111 @@ export type GetUserPostsQueryDTO = {
   excludeReplies: boolean
 }
 
+export type GetPostsQueryDTO = {
+  limit: number,
+  sinceId?: string,
+  minId?: string,
+  maxId?: string,
+}
+
+export type GetTrendingPostsQueryDTO = {
+  limit: number,
+  offset?: number
+}
+
+
+export type GetSearchResultQueryDTO = {
+  type: "accounts" | "hashtags" | "statuses" | null | undefined
+  following: boolean,
+  limit: number,
+  maxId?: string,
+}
 
 export type RestClientCreateDTO = {
   instance: string;
   token: string;
 };
 
+export type Tag = mastodon.v1.Tag | null | undefined
+export type TagArray = mastodon.v1.Tag[] | []
+
+export type TrendLinkArray = mastodon.v1.TrendLink[] | []
+
 /**
  * What common functionalities do we want to support
  * across all ActivityPub based clients
  */
 interface ActivityPubClient {
-  getHomeTimeline(): Promise<mastodon.v1.Status[] | Note[]>;
+  getHomeTimeline(opts?: GetPostsQueryDTO): Promise<StatusArray>;
 
   getTimelineByHashtag(
       q: string,
       query?: TimelineQuery
-  ): Promise<mastodon.v1.Status[] | Note[]>;
+  ): Promise<StatusArray>;
+
+  /**
+   * My
+   */
+  getMyConversations(): Promise<mastodon.v1.Conversation[]>
+
+  // a.k.a. - verifyCredentials
+  getMe(): Promise<mastodon.v1.AccountCredentials | UserDetailed | null | undefined>
 
   /** User */
   getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
 
-  getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<mastodon.v1.Status[] | Note[]>;
+  getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray>
 
-  getBookmarks(): Promise<mastodon.v1.Status[] | Note[]>;
+  getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<StatusArray>;
+
+  getBookmarks(opts: GetPostsQueryDTO): Promise<StatusArray>;
+
+  getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>
+
+  /**
+   * Trending
+   */
+  getTrendingPosts(opts: GetTrendingPostsQueryDTO): Promise<StatusArray>
+
+  getTrendingTags(opts: GetTrendingPostsQueryDTO): Promise<TagArray>
+
+  getTrendingLinks(opts: GetTrendingPostsQueryDTO): Promise<TrendLinkArray>
+
+  /**
+   * Tags
+   */
+  getTag(id: string): Promise<mastodon.v1.Tag | null>
+
+  followTag(id: string): Promise<mastodon.v1.Tag | null>
+
+  unfollowTag(id: string): Promise<mastodon.v1.Tag | null>
+
 
   getFollowedTags(): Promise<mastodon.v1.Tag[] | any[]>;
 
+  muteUser(id: string): Promise<void>;
+
   /** Status */
-  getStatus(id: string): Promise<mastodon.v1.Status | Note>
+  getStatus(id: string): Promise<Status>
 
-  bookmark(id: string): Promise<mastodon.v1.Status | Note | null>
+  getStatusContext(id: string): Promise<mastodon.v1.Context | any>
 
-  unBookmark(id: string): Promise<mastodon.v1.Status | Note | null>
+  bookmark(id: string): Promise<Status>
 
-  favourite(id: string): Promise<mastodon.v1.Status | Note | null>
+  // https://mastodon.social/api/v1/statuses/:id/context
+  // mastodon specific
+  // getStatusContext(id: string): Promise<any>
 
-  unFavourite(id: string): Promise<mastodon.v1.Status | Note | null>
+  unBookmark(id: string): Promise<Status>
+
+  favourite(id: string): Promise<Status>
+
+  unFavourite(id: string): Promise<Status>
+
+  search(q: string, dto: GetSearchResultQueryDTO): Promise<{
+    accounts: [],
+    hashtags: []
+  }>
 }
 
 

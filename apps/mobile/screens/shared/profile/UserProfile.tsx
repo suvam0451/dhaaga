@@ -1,18 +1,10 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Dimensions, StyleSheet, TouchableOpacity, View,} from "react-native";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../libs/redux/store";
-import {AccountState} from "../../../libs/redux/slices/account";
 import {
   ActivityPubAccount,
-  ActivityPubClientFactory,
   ActivityPubStatuses,
-  MastodonRestClient,
-  MisskeyRestClient,
-  UnknownRestClient,
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {useQuery} from "@tanstack/react-query";
-import {adaptUserProfile} from "../../../utils/activitypub-adapters";
 import {Image} from "expo-image";
 import {
   AvatarContainerWithInset,
@@ -20,7 +12,7 @@ import {
 } from "../../../styles/Containers";
 import {PrimaryText, SecondaryText} from "../../../styles/Typography";
 import {Text} from "@rneui/themed";
-import StatusFragment from "../../timelines/fragments/StatusFragment";
+import StatusItem from "../../../components/common/status/StatusItem";
 import UserPostsProvider, {UserPostsHook} from "../../../contexts/UserPosts";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RenderHTML from "react-native-render-html";
@@ -31,6 +23,17 @@ import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
 import WithActivitypubStatusContext from "../../../states/useStatus";
+import {Skeleton} from "@rneui/themed";
+import {
+  ActivityPubUserAdapter
+} from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface";
+import WithActivitypubUserContext, {
+  useActivitypubUserContext
+} from "../../../states/useProfile";
+import MfmService from "../../../services/mfm.service";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../libs/redux/store";
+import {AccountState} from "../../../libs/redux/slices/account";
 
 
 type UserProfileBrowsePostsProps = {
@@ -113,130 +116,134 @@ function UserProfileBrowsePosts({userId}: UserProfileBrowsePostsProps) {
           {store.posts &&
               store.posts.map((o, i) =>
                   <WithActivitypubStatusContext status={o} key={i}>
-                    <StatusFragment/>
+                    <StatusItem/>
                   </WithActivitypubStatusContext>)}
         </View>
       </View>
   );
 }
 
-function UserProfile({route, navigation}) {
+function UserProfileContent() {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const q = route?.params?.id;
-  const restClient = useRef<
-      MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
-  >(null);
+  const {user} = useActivitypubUserContext()
+
+  const [DescriptionContent, setDescriptionContent] = useState(<></>)
+  const fields = user.getFields()
+  const desc = user.getDescription()
+  const avatarUrl = user.getAvatarUrl()
+  const bannerUrl = user.getBannerUrl()
+
 
   useEffect(() => {
-    if (!accountState.activeAccount) {
-      restClient.current = null;
-      return;
-    }
+    const mfmParseResult = MfmService.renderMfm(desc, {
+      emojiMap: user.getEmojiMap(),
+      domain: accountState?.activeAccount?.domain,
+      subdomain: accountState?.activeAccount?.subdomain
+    })
+    setDescriptionContent(<>
+      {mfmParseResult?.reactNodes?.map(
+          (para) => {
+            return para.map((o, i) => <Text key={i}>{o}</Text>)
+          }
+      )}
+    </>)
+  }, [desc]);
 
-    const token = accountState.credentials.find(
-        (o) => o.credential_type === "access_token"
-    )?.credential_value;
-    if (!token) {
-      restClient.current = null;
-      return;
-    }
+  return <>
+    <Image
+        source={{uri: bannerUrl}}
+        style={{height: 128, width: Dimensions.get("window").width}}
+    />
+    <View style={{display: "flex", flexDirection: "row"}}>
+      <AvatarContainerWithInset>
+        <AvatarExpoImage source={{uri: avatarUrl}}/>
+      </AvatarContainerWithInset>
+      <View style={{flexGrow: 1}}></View>
+      <View style={{display: "flex", flexDirection: "row"}}>
+        <View
+            style={{display: "flex", alignItems: "center", marginLeft: 8}}
+        >
+          <PrimaryText>{user.getPostCount()}</PrimaryText>
+          <SecondaryText>Posts</SecondaryText>
+        </View>
+        <View
+            style={{display: "flex", alignItems: "center", marginLeft: 8}}
+        >
+          <PrimaryText>{user.getFollowingCount()}</PrimaryText>
+          <SecondaryText>Following</SecondaryText>
+        </View>
+        <View
+            style={{display: "flex", alignItems: "center", marginLeft: 8}}
+        >
+          <PrimaryText>{user.getFollowersCount()}</PrimaryText>
+          <SecondaryText>Followers</SecondaryText>
+        </View>
+      </View>
+    </View>
+    <View style={{marginLeft: 8}}>
+      <PrimaryText>{user.getDisplayName()}</PrimaryText>
+      <SecondaryText>@{user.getUsername()}</SecondaryText>
+    </View>
+    <View>
+      <Text>{DescriptionContent}</Text>
+    </View>
+    <View style={{flex: 1, marginLeft: 8, marginRight: 8}}>
+      {/*{desc !== null ?*/}
+      {/*    <RenderHTML baseStyle={{color: "white", opacity: 0.87}}*/}
+      {/*                source={{html: desc}}*/}
+      {/*                contentWidth={Dimensions.get('window').width}*/}
+      {/*    /> : <View></View>}*/}
+    </View>
 
-    const client = ActivityPubClientFactory.get(
-        accountState.activeAccount.domain as any,
-        {
-          instance: accountState.activeAccount.subdomain,
-          token,
-        }
-    );
+    {/*Separator*/}
+    <View style={{flexGrow: 1}}/>
 
-    restClient.current = client;
-  }, [accountState]);
+    <UserProfileExtraInformation fields={fields}/>
+    <View style={{marginBottom: 16}}>
+      <UserPostsProvider>
+        <UserProfileBrowsePosts userId={user.getId()}/>
+      </UserPostsProvider>
+    </View>
+  </>
+}
 
-  function queryFn() {
+function UserProfile({route, navigation}) {
+  const {client} = useActivityPubRestClientContext()
+  const q = route?.params?.id;
+  const [Data, setData] = useState(null)
+
+  function api() {
+    if (!client) return null
     const username = route?.params?.id;
-    return restClient.current.getUserProfile(username);
+    return client.getUserProfile(username);
   }
 
   // Queries
-  const {status, data, error, fetchStatus, refetch} =
+  const {status, data, fetchStatus} =
       useQuery<ActivityPubAccount>({
-        queryKey: ["profile", restClient.current, q],
-        queryFn: queryFn,
-        enabled: q !== undefined,
+        queryKey: ["profile", q],
+        queryFn: api,
+        enabled: client && q !== undefined,
       });
 
-  const _profile = useMemo(
-      () => adaptUserProfile(data, accountState?.activeAccount?.domain),
-      [status, accountState?.activeAccount?.domain]
-  );
+  useEffect(() => {
+    if (status !== "success" || !data) return
+    setData(data)
+  }, [status]);
 
-  if (!_profile) {
-    return (
-        <View>
-          <Text>Not Found</Text>
-        </View>
-    );
-  }
-
-  const fields = _profile.getFields()
-  const desc = _profile.getDescription()
-  const avatarUrl = _profile.getAvatarUrl()
-  const bannerUrl = _profile.getBannerUrl()
+  if (fetchStatus === "fetching" || !Data)
+    return <View style={{backgroundColor: "black"}}>
+      <Skeleton
+          height={128}
+          width={Dimensions.get("window").width}/>
+    </View>
 
   return (
       <TitleOnlyStackHeaderContainer route={route} navigation={navigation}
                                      headerTitle={"Profile"}>
-        <Image
-            source={{uri: bannerUrl}}
-            style={{height: 128, width: Dimensions.get("window").width}}
-        />
-        <View style={{display: "flex", flexDirection: "row"}}>
-          <AvatarContainerWithInset>
-            <AvatarExpoImage source={{uri: avatarUrl}}/>
-          </AvatarContainerWithInset>
-          <View style={{flexGrow: 1}}></View>
-          <View style={{display: "flex", flexDirection: "row"}}>
-            <View
-                style={{display: "flex", alignItems: "center", marginLeft: 8}}
-            >
-              <PrimaryText>{_profile.getPostCount()}</PrimaryText>
-              <SecondaryText>Posts</SecondaryText>
-            </View>
-            <View
-                style={{display: "flex", alignItems: "center", marginLeft: 8}}
-            >
-              <PrimaryText>{_profile.getFollowingCount()}</PrimaryText>
-              <SecondaryText>Following</SecondaryText>
-            </View>
-            <View
-                style={{display: "flex", alignItems: "center", marginLeft: 8}}
-            >
-              <PrimaryText>{_profile.getFollowersCount()}</PrimaryText>
-              <SecondaryText>Followers</SecondaryText>
-            </View>
-          </View>
-        </View>
-        <View style={{marginLeft: 8}}>
-          <PrimaryText>{_profile.getDisplayName()}</PrimaryText>
-          <SecondaryText>@{_profile.getUsername()}</SecondaryText>
-        </View>
-        <View style={{flex: 1, marginLeft: 8, marginRight: 8}}>
-          {desc !== null ?
-              <RenderHTML baseStyle={{color: "white", opacity: 0.87}}
-                          source={{html: desc}}
-                          contentWidth={Dimensions.get('window').width}
-              /> : <View></View>}
-        </View>
-
-        {/*Separator*/}
-        <View style={{flexGrow: 1}}/>
-
-        <UserProfileExtraInformation fields={fields}/>
-        <View style={{marginBottom: 16}}>
-          <UserPostsProvider>
-            <UserProfileBrowsePosts userId={_profile.getId()}/>
-          </UserPostsProvider>
-        </View>
+        <WithActivitypubUserContext user={Data}>
+          <UserProfileContent/>
+        </WithActivitypubUserContext>
       </TitleOnlyStackHeaderContainer>
   );
 }

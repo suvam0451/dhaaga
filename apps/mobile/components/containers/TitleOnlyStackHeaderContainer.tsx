@@ -1,7 +1,8 @@
-import React, {useRef} from "react";
-import {Animated, StyleSheet, View} from "react-native";
+import React, {useRef, useState} from "react";
+import {Animated, RefreshControl, StyleSheet, View} from "react-native";
 import diffClamp = Animated.diffClamp;
 import ProfilePageHeader from "../headers/ProfilePageHeader";
+import NavigationService from "../../services/navigation.service";
 
 type TitleOnlyStackHeaderContainerProps = {
   route: any,
@@ -10,6 +11,8 @@ type TitleOnlyStackHeaderContainerProps = {
   SHOWN_SECTION_HEIGHT?: number
   headerTitle: string
   children?: any
+  onScrollViewEndReachedCallback?: () => void,
+  onRefresh?: () => Promise<void>
 }
 
 function TitleOnlyStackHeaderContainer(
@@ -18,7 +21,9 @@ function TitleOnlyStackHeaderContainer(
       route, navigation,
       HIDDEN_SECTION_HEIGHT = 50,
       SHOWN_SECTION_HEIGHT = 50,
-      children
+      children,
+      onScrollViewEndReachedCallback,
+      onRefresh
     }: TitleOnlyStackHeaderContainerProps) {
   /**
    * Header bar auto-hide handler
@@ -34,12 +39,26 @@ function TitleOnlyStackHeaderContainer(
     inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
     outputRange: [0, -HIDDEN_SECTION_HEIGHT],
   });
+  const [IsRefreshing, setIsRefreshing] = useState(false)
 
   const translateYNumber = useRef();
 
   translateY.addListener(({value}) => {
     translateYNumber.current = value;
   });
+
+
+  async function onPerformRefresh() {
+    setIsRefreshing(true)
+    if (onRefresh) {
+      try {
+        await onRefresh()
+      } finally {
+        setIsRefreshing(false)
+      }
+    }
+    setIsRefreshing(false)
+  }
 
   const handleScroll = Animated.event(
       [
@@ -53,6 +72,12 @@ function TitleOnlyStackHeaderContainer(
         useNativeDriver: true,
       }
   );
+
+  function onScrollViewEndReached() {
+    if (onScrollViewEndReachedCallback) {
+      onScrollViewEndReachedCallback()
+    }
+  }
 
   return <View style={{height: "100%"}}>
     <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
@@ -75,7 +100,14 @@ function TitleOnlyStackHeaderContainer(
           minHeight: "100%",
           paddingBottom: SHOWN_SECTION_HEIGHT,
         }}
-        onScroll={handleScroll}
+        onScroll={(e) => {
+          NavigationService.invokeWhenPageEndReached(e, onScrollViewEndReached)
+          return handleScroll
+        }}
+        refreshControl={
+          <RefreshControl refreshing={IsRefreshing}
+                          onRefresh={onPerformRefresh}/>
+        }
     >{children}</Animated.ScrollView>
   </View>
 }
