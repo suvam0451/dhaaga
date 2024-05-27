@@ -1,5 +1,5 @@
-import React, {useRef} from "react";
-import {Animated, StyleSheet, View} from "react-native";
+import React, {useRef, useState} from "react";
+import {Animated, RefreshControl, StyleSheet, View} from "react-native";
 import diffClamp = Animated.diffClamp;
 import ProfilePageHeader from "../headers/ProfilePageHeader";
 import NavigationService from "../../services/navigation.service";
@@ -11,7 +11,8 @@ type TitleOnlyStackHeaderContainerProps = {
   SHOWN_SECTION_HEIGHT?: number
   headerTitle: string
   children?: any
-  onScrollViewEndReachedCallback?: () => void
+  onScrollViewEndReachedCallback?: () => void,
+  onRefresh?: () => Promise<void>
 }
 
 function TitleOnlyStackHeaderContainer(
@@ -21,7 +22,8 @@ function TitleOnlyStackHeaderContainer(
       HIDDEN_SECTION_HEIGHT = 50,
       SHOWN_SECTION_HEIGHT = 50,
       children,
-      onScrollViewEndReachedCallback
+      onScrollViewEndReachedCallback,
+      onRefresh
     }: TitleOnlyStackHeaderContainerProps) {
   /**
    * Header bar auto-hide handler
@@ -37,12 +39,26 @@ function TitleOnlyStackHeaderContainer(
     inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
     outputRange: [0, -HIDDEN_SECTION_HEIGHT],
   });
+  const [IsRefreshing, setIsRefreshing] = useState(false)
 
   const translateYNumber = useRef();
 
   translateY.addListener(({value}) => {
     translateYNumber.current = value;
   });
+
+
+  async function onPerformRefresh() {
+    setIsRefreshing(true)
+    if (onRefresh) {
+      try {
+        await onRefresh()
+      } finally {
+        setIsRefreshing(false)
+      }
+    }
+    setIsRefreshing(false)
+  }
 
   const handleScroll = Animated.event(
       [
@@ -88,6 +104,10 @@ function TitleOnlyStackHeaderContainer(
           NavigationService.invokeWhenPageEndReached(e, onScrollViewEndReached)
           return handleScroll
         }}
+        refreshControl={
+          <RefreshControl refreshing={IsRefreshing}
+                          onRefresh={onPerformRefresh}/>
+        }
     >{children}</Animated.ScrollView>
   </View>
 }

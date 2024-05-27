@@ -11,6 +11,14 @@ export class MisskeyUser implements UserInterface {
     this.ref = ref;
   }
 
+  getAccountUrl(): string {
+    return this.ref.instance.url || ""
+  }
+
+  getAppDisplayAccountUrl(myDomain: string): string {
+    throw new Error("Method not implemented.");
+  }
+
   getEmojiMap(): Map<string, EmojiMapValue> {
     return new Map()
   }

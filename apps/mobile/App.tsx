@@ -21,6 +21,8 @@ import AccountsScreen from "./screens/AccountsScreen";
 import HomeScreen from "./screens/HomeScreen";
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {createTheme, ThemeProvider} from '@rneui/themed';
+import {RealmProvider} from "@realm/react"
+import {schemas} from "./entities/_index";
 
 const theme = createTheme({
   lightColors: {
@@ -135,63 +137,66 @@ export default function App() {
 
   return (
       <GestureHandlerRootView>
-        <QueryClientProvider client={queryClient}>
-          <Provider store={store}>
-            <ThemeProvider theme={theme}>
-              <ActionSheetProvider>
-                <NavigationContainer>
-                  <Tab.Navigator
-                      screenOptions={({route}) => ({
-                        tabBarIcon: ({focused, color, size}) => {
-                          let iconName;
+        <RealmProvider schema={schemas} schemaVersion={1}>
+          <QueryClientProvider client={queryClient}>
+            <Provider store={store}>
+              <ThemeProvider theme={theme}>
+                <ActionSheetProvider>
+                  <NavigationContainer>
+                    <Tab.Navigator
+                        screenOptions={({route}) => ({
+                          tabBarIcon: ({focused, color, size}) => {
+                            let iconName;
 
-                          if (route.name === "Home") {
-                            iconName = focused ? "home" : "home";
-                          } else if (route.name === "Settings") {
-                            iconName = focused ? "menu-outline" : "menu-outline";
-                          } else if (route.name === "SearchTab") {
-                            iconName = focused ? "search-sharp" : "search-sharp";
-                          } else if (route.name === "Favourites") {
-                            iconName = focused
-                                ? "bookmark-outline"
-                                : "bookmark-outline";
-                          } else if (route.name === "Notifications") {
-                            iconName = focused
-                                ? "notifications-outline"
-                                : "notifications-outline";
-                          } else if (route.name === "Accounts") {
-                            iconName = focused ? "person-outline" : "person-outline";
-                          }
+                            if (route.name === "Home") {
+                              iconName = focused ? "home" : "home";
+                            } else if (route.name === "Settings") {
+                              iconName = focused ? "menu-outline" : "menu-outline";
+                            } else if (route.name === "SearchTab") {
+                              iconName = focused ? "search-sharp" : "search-sharp";
+                            } else if (route.name === "Favourites") {
+                              iconName = focused
+                                  ? "bookmark-outline"
+                                  : "bookmark-outline";
+                            } else if (route.name === "Notifications") {
+                              iconName = focused
+                                  ? "notifications-outline"
+                                  : "notifications-outline";
+                            } else if (route.name === "Accounts") {
+                              iconName = focused ? "person-outline" : "person-outline";
+                            }
 
-                          return <Ionicons name={iconName} size={size}
-                                           color={color}/>;
-                        },
-                        tabBarStyle: {
-                          paddingTop: 0,
-                          borderTopWidth: 0,
-                          backgroundColor: "rgba(34,36,40,1)",
-                        },
-                        tabBarActiveTintColor: "white",
-                        tabBarInactiveTintColor: "gray",
-                        tabBarShowLabel: false,
-                        headerShown: false,
-                      })}
-                  >
-                    <Tab.Screen name="Home" component={HomeScreen}/>
-                    <Tab.Screen name="SearchTab" component={SearchScreen}/>
-                    <Tab.Screen name="Favourites" component={FavouritesScreen}/>
-                    <Tab.Screen
-                        name="Notifications"
-                        component={NotificationsScreen}
-                    />
-                    <Tab.Screen name="Accounts" component={AccountsScreen}/>
-                    <Tab.Screen name="Settings" component={SettingsScreen}/>
-                  </Tab.Navigator>
-                </NavigationContainer>
-              </ActionSheetProvider>
-            </ThemeProvider>
-          </Provider>
-        </QueryClientProvider>
+                            return <Ionicons name={iconName} size={size}
+                                             color={color}/>;
+                          },
+                          tabBarStyle: {
+                            paddingTop: 0,
+                            borderTopWidth: 0,
+                            backgroundColor: "rgba(34,36,40,1)",
+                          },
+                          tabBarActiveTintColor: "white",
+                          tabBarInactiveTintColor: "gray",
+                          tabBarShowLabel: false,
+                          headerShown: false,
+                        })}
+                    >
+                      <Tab.Screen name="Home" component={HomeScreen}/>
+                      <Tab.Screen name="SearchTab" component={SearchScreen}/>
+                      <Tab.Screen name="Favourites"
+                                  component={FavouritesScreen}/>
+                      <Tab.Screen
+                          name="Notifications"
+                          component={NotificationsScreen}
+                      />
+                      <Tab.Screen name="Accounts" component={AccountsScreen}/>
+                      <Tab.Screen name="Settings" component={SettingsScreen}/>
+                    </Tab.Navigator>
+                  </NavigationContainer>
+                </ActionSheetProvider>
+              </ThemeProvider>
+            </Provider>
+          </QueryClientProvider>
+        </RealmProvider>
       </GestureHandlerRootView>
   );
 }

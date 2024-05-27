@@ -1,6 +1,6 @@
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {UserDetailed} from "@dhaaga/shared-provider-misskey/src";
-import {Status, StatusArray} from "../status/_interface";
+import {Status, StatusArray, StatusInterface} from "../status/_interface";
 
 
 export type TimelineQuery = {
@@ -57,6 +57,14 @@ interface ActivityPubClient {
       query?: TimelineQuery
   ): Promise<StatusArray>;
 
+  /**
+   * My
+   */
+  getMyConversations(): Promise<mastodon.v1.Conversation[]>
+
+  // a.k.a. - verifyCredentials
+  getMe(): Promise<mastodon.v1.AccountCredentials | UserDetailed | null | undefined>
+
   /** User */
   getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
 
@@ -93,6 +101,8 @@ interface ActivityPubClient {
 
   /** Status */
   getStatus(id: string): Promise<Status>
+
+  getStatusContext(id: string): Promise<mastodon.v1.Context | any>
 
   bookmark(id: string): Promise<Status>
 

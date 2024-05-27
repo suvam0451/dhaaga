@@ -6,18 +6,35 @@ type LoadingMoreProps = {
 }
 
 function LoadingMore({visible, loading}: LoadingMoreProps) {
-  if (!visible) return <View
+  if (!visible) return <View></View>
+  if (visible && loading) return <View
       style={{
-        marginTop: 24,
-        marginBottom: 24,
+        position: "absolute",
+        height: 64,
+        width: "100%",
+        bottom: 0,
         display: "flex",
         alignItems: "center",
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
       }}
   >
-    <Text style={{color: "#fff", opacity: 0.3}}>{" "}</Text>
-
+    <View style={{
+      position: "relative",
+      display: "flex",
+      flexDirection: "row",
+      backgroundColor: "rgba(64,64,64,0.75)",
+      padding: 8,
+      borderRadius: 8
+    }}>
+      <ActivityIndicator size="small" color="#ffffff87"/>
+      <Text style={{
+        color: "#fff",
+        opacity: 0.87,
+        textAlign: "center",
+        marginLeft: 4
+      }}>{"Loading More..."}</Text>
+    </View>
   </View>
   if (loading) return <View
       style={{

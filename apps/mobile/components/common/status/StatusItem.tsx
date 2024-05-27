@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import {StandardView} from "../../../styles/Containers";
 import {Ionicons} from "@expo/vector-icons";
-import {formatDistance} from "date-fns";
+import {formatDistance, formatDistanceToNowStrict} from "date-fns";
 import {useEffect, useState} from "react";
 import React from "react";
 import {useSelector} from "react-redux";
@@ -25,12 +25,24 @@ import {
   ActivityPubUserAdapter
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {randomUUID} from "expo-crypto";
+import {useRealm} from "@realm/react";
+import {
+  ActivityPubServerRepository
+} from "../../../repositories/activitypub-server.repo";
+
+const POST_SPACING_VALUE = 4
+
+type StatusItemProps = {
+  // a list of color ribbons to indicate replies
+  replyContextIndicators?: string[]
+  hideReplyIndicator?: boolean
+}
 
 type StatusFragmentProps = {
   // status: mastodon.v1.Status | Note;
   mt?: number;
   isRepost?: boolean
-};
+} & StatusItemProps;
 
 /**
  * This is the individual status component (without the re-blogger info)
@@ -38,10 +50,26 @@ type StatusFragmentProps = {
  * @param mt
  * @constructor
  */
-function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
+function RootStatusFragment({
+  mt,
+  isRepost,
+}: StatusFragmentProps) {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const domain = accountState?.activeAccount?.domain
   const {status, statusRaw, sharedStatus} = useActivitypubStatusContext()
+
+  const realm = useRealm()
+
+  useEffect(() => {
+    const _user = ActivityPubUserAdapter(status.getUser(), domain)
+    const acctUrl = _user.getAccountUrl()
+    const ex = /^https?:\/\/(.*?)\/(.*?)/;
+    if (ex.test(acctUrl)) {
+      // @ts-ignore
+      const theirUrl = acctUrl.match(ex)[1];
+      ActivityPubServerRepository.upsert(realm, theirUrl)
+    }
+  }, [status]);
 
   const _status = isRepost ? sharedStatus : status
   const navigation = useNavigation<any>();
@@ -50,7 +78,6 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
 
   const [UserInterface, setUserInterface] = useState(ActivityPubUserAdapter(null, domain))
   const [DescriptionContent, setDescriptionContent] = useState(<></>)
-
 
   useEffect(() => {
     if (!_status) return
@@ -102,15 +129,10 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
   }
 
   return (
-      <StandardView style={{
-        backgroundColor: "#1e1e1e",
-        marginTop: mt == undefined ? 4 : mt,
-        marginBottom: 4,
-        borderRadius: 4,
-        paddingBottom: 4
-      }}>
-        <Status visible={BottomSheetVisible}
-                setVisible={setBottomSheetVisible}/>
+      <>
+        <Status
+            visible={BottomSheetVisible}
+            setVisible={setBottomSheetVisible}/>
         <TouchableOpacity delayPressIn={100} onPress={() => {
           navigation.navigate("Post", {
             id: status.getId()
@@ -121,7 +143,7 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  marginTop: mt === undefined ? 16 : mt,
+                  marginTop: mt === undefined ? 0 : mt,
                   marginBottom: 8,
                 }}
             >
@@ -132,7 +154,7 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{marginBottom: 16}}>
+            <View style={{marginBottom: 0}}>
               {DescriptionContent}
               {ExplanationObject !== null &&
                   <View style={{
@@ -155,8 +177,7 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
                                       name={"language-outline"}
                                       size={15}/>
                               </View>
-                              <View style={{
-                              }}>
+                              <View>
                                   <Text style={{
                                     color: "#bb86fc",
                                   }}>
@@ -184,8 +205,49 @@ function RootStatusFragment({mt, isRepost}: StatusFragmentProps) {
             openAiContext={OpenAiContext}
             setExplanationObject={setExplanationObject}
         />
-      </StandardView>
+      </>
   );
+}
+
+export function RootFragmentContainer({
+  mt,
+  isRepost,
+  replyContextIndicators
+}: StatusFragmentProps) {
+  const replyIndicatorsPresent = replyContextIndicators?.length > 0
+
+  return <View style={{
+    padding: replyIndicatorsPresent ? 0 : 10,
+    backgroundColor: "#1e1e1e",
+    marginTop: mt == undefined ? 0 : mt,
+    marginBottom: 4,
+    borderRadius: 8,
+  }}>
+    {replyIndicatorsPresent ?
+        <View style={{
+          borderLeftWidth: 2,
+          borderLeftColor: "red",
+        }}>
+          <View style={{
+            paddingBottom: 4,
+            padding: 10
+          }}>
+            <RootStatusFragment
+                mt={mt} isRepost={isRepost}
+                replyContextIndicators={replyContextIndicators}
+            />
+          </View>
+        </View> :
+        <View style={{
+          paddingBottom: 4
+        }}>
+          <RootStatusFragment
+              mt={mt} isRepost={isRepost}
+              replyContextIndicators={replyContextIndicators}
+          />
+        </View>
+    }
+  </View>
 }
 
 /**
@@ -199,7 +261,7 @@ function RepliedStatusFragment() {
   if (!_status.isValid()) return <View></View>;
 
   return <View
-      style={{backgroundColor: "#1e1e1e", marginTop: 4}}>
+      style={{backgroundColor: "#1e1e1e", marginBottom: POST_SPACING_VALUE}}>
     <StandardView
         style={{
           display: "flex",
@@ -213,7 +275,7 @@ function RepliedStatusFragment() {
         Continues a thread
       </Text>
     </StandardView>
-    <RootStatusFragment mt={-8} isRepost={false}/>
+    <RootFragmentContainer mt={-8} isRepost={false}/>
   </View>
 }
 
@@ -235,7 +297,10 @@ function SharedStatusFragment({
   if (!_status.isValid()) return <View></View>;
 
   return (
-      <View style={{backgroundColor: "#1e1e1e"}}>
+      <View style={{
+        backgroundColor: "#1e1e1e",
+        marginBottom: POST_SPACING_VALUE
+      }}>
         <StandardView
             style={{
               display: "flex",
@@ -249,12 +314,10 @@ function SharedStatusFragment({
           </Text>
           <Text style={{color: "gray", marginLeft: 2, marginRight: 2}}>•</Text>
           <Text style={{color: "#888"}}>
-            {formatDistance(new Date(boostedStatus.createdAt), new Date(), {
-              addSuffix: true,
-            })}
+            {formatDistanceToNowStrict(new Date(boostedStatus.createdAt))}
           </Text>
         </StandardView>
-        <RootStatusFragment mt={-16} isRepost={true}/>
+        <RootFragmentContainer mt={-8} isRepost={true}/>
       </View>
   );
 }
@@ -263,27 +326,32 @@ function SharedStatusFragment({
  * Renders a status/note
  * @constructor
  */
-function StatusItem() {
+function StatusItem({
+  replyContextIndicators,
+  hideReplyIndicator
+}: StatusItemProps) {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {status: _status, statusRaw} = useActivitypubStatusContext()
 
   switch (accountState.activeAccount?.domain) {
     case "mastodon": {
       const _statusRaw = statusRaw as mastodon.v1.Status;
-      if (_status && _status.isReposted()) {
+      if (_status && _status.isReposted() && !hideReplyIndicator) {
         return <SharedStatusFragment
             isRepost={true}
             postedBy={_statusRaw?.reblog?.account}
             boostedStatus={_statusRaw?.reblog}
         />
       }
-      if (_status && _status.isReply()) {
+      if (_status && _status.isReply() && !hideReplyIndicator) {
         return <RepliedStatusFragment/>
       }
-      return <RootStatusFragment/>
+
+      return <RootFragmentContainer
+          replyContextIndicators={replyContextIndicators}/>
     }
     case "misskey": {
-      if (_status && _status.isReposted()) {
+      if (_status && _status.isReposted() && !hideReplyIndicator) {
         const _status = statusRaw as Note;
         return <SharedStatusFragment
             postedBy={_status.renote.user as any}
@@ -293,7 +361,8 @@ function StatusItem() {
       }
     }
   }
-  return <RootStatusFragment mt={-16}/>
+
+  return <RootFragmentContainer/>
 }
 
 export default StatusItem;

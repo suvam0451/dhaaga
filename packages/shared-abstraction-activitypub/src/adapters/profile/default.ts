@@ -1,6 +1,14 @@
 import {EmojiMapValue, UserInterface} from "./_interface";
 
 export class DefaultUser implements UserInterface {
+  getAccountUrl(): string {
+    return ""
+  }
+
+  getAppDisplayAccountUrl(myDomain: string): string {
+    return ""
+  }
+
   getEmojiMap() {
     return new Map()
   }

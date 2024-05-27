@@ -24,14 +24,13 @@ class MfmService {
         linkMap?: Map<string, string>
         isHighEmphasisText: boolean
       }
-  ) 
+  ) {
     switch (node.type) {
       case "unicodeEmoji": {
         return <Text key={count}>{node.props.emoji}</Text>;
       }
       case "text": {
         let baseText = node.props.text;
-        console.log("text", baseText);
         baseText = baseText.replaceAll(/<br>/g, "\n");
         return (
             <Text key={count}
@@ -63,7 +62,8 @@ class MfmService {
         }
         return (
             <LinkProcessor
-                key={count} url={node.props.url}
+                key={count}
+                url={node.props.url}
                 displayName={displayName}
             />
         );
@@ -95,6 +95,7 @@ class MfmService {
         break;
       }
       case "italic" : {
+        console.log("[WARN]: unsupported mfm item", node)
         return (
             <Text key={count} style={{color: "white", fontStyle: "italic"}}>
               Dhaaga: Italics Not Supported
@@ -115,7 +116,7 @@ class MfmService {
         // 	</Text>
       }
       default: {
-        // console.log("[WARN]: node type not evaluated", node);
+        console.log("[WARN]: node type not evaluated", node);
         return <Text key={count}></Text>;
       }
     }

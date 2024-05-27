@@ -3,8 +3,7 @@ import {AccountState} from "../../../libs/redux/slices/account";
 import {RootState} from "../../../libs/redux/store";
 import {useSelector} from "react-redux";
 import {
-  Animated,
-  RefreshControl,
+  Animated, RefreshControl,
   SafeAreaView,
   StatusBar,
   StyleSheet, View,
@@ -23,8 +22,9 @@ import WithAppPaginationContext, {
   useAppPaginationContext
 } from "../../../states/usePagination";
 import LoadingMore from "../../../components/screens/home/LoadingMore";
-import NavigationService from "../../../services/navigation.service";
 import {EmojiService} from "../../../services/emoji.service";
+import {AnimatedFlashList} from "@shopify/flash-list"
+import NavigationService from "../../../services/navigation.service";
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -33,13 +33,102 @@ const SHOWN_SECTION_HEIGHT = 50;
 
 function Content() {
   const {data: PageData} = useAppPaginationContext()
+  const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const {client} = useActivityPubRestClientContext()
+
+  const [refreshing, setRefreshing] = useState(false);
+  const ref = useRef(null);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    // clear()
+    // refetch();
+
+    const subdomain = accountState.activeAccount?.domain;
+    if (subdomain) {
+      EmojiService.updateEmojiCacheForDomain(subdomain);
+    }
+  }
+
+  function onPageEndReached() {
+    console.log("[INFO]: page end reached. performing refetch")
+
+    // updateQueryCache()
+    // refetch()
+    // setLoadingMoreComponentProps({
+    //   visible: true,
+    //   loading: true
+    // })
+  }
+
+  const scrollY = useRef(new Animated.Value(0));
+  const scrollYClamped = diffClamp(
+      scrollY.current,
+      0,
+      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
+  );
+
+  const translateY = scrollYClamped.interpolate({
+    inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
+    outputRange: [0, -HIDDEN_SECTION_HEIGHT],
+  });
+
+  const translateYNumber = useRef();
+
+  translateY.addListener(({value}) => {
+    translateYNumber.current = value;
+  });
+
+  const handleScroll = Animated.event(
+      [
+        {
+          nativeEvent: {
+            contentOffset: {y: scrollY.current},
+          },
+        },
+      ],
+      {
+        useNativeDriver: true,
+      }
+  );
 
   if (!PageData) return <View></View>
   return <>
-    {PageData.map((o: mastodon.v1.Status | Note, i) =>
-        <WithActivitypubStatusContext status={o} key={i}>
-          <StatusItem key={i}/>
-        </WithActivitypubStatusContext>)}
+    <AnimatedFlashList
+        estimatedItemSize={200}
+        data={PageData}
+        ref={ref}
+        renderItem={(o) =>
+            <WithActivitypubStatusContext status={o.item} key={o.index}>
+              <StatusItem key={o.index}/>
+            </WithActivitypubStatusContext>
+        }
+        onScroll={(e) => {
+          NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+          return handleScroll
+        }}
+        contentContainerStyle={{
+          paddingTop: SHOWN_SECTION_HEIGHT + 4,
+        }}
+        // renderScrollComponent={() => <Animated.ScrollView
+        //     contentContainerStyle={{
+        //       paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
+        //     }}
+        //     onScroll={(e) => {
+        //       NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+        //       // return handleScroll
+        //     }}
+        //     contentInset={{
+        //       top: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT + 1000,
+        //     }}
+        //     scrollEventThrottle={16}
+        //     refreshControl={
+        //       <RefreshControl
+        //           refreshing={refreshing}
+        //           onRefresh={onRefresh}/>
+        //     }
+        // />}
+    />
   </>
 }
 
@@ -132,7 +221,11 @@ function TimelineRenderer() {
     translateYNumber.current = value;
   });
 
-  const handleScroll = Animated.event(
+  function handleScrollJs(e) {
+    NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+  }
+
+  const handleScrollAnimated = Animated.event(
       [
         {
           nativeEvent: {
@@ -142,7 +235,8 @@ function TimelineRenderer() {
       ],
       {
         useNativeDriver: true,
-      }
+        listener: handleScrollJs
+      },
   );
 
   function onPageEndReached() {
@@ -208,7 +302,7 @@ function TimelineRenderer() {
   }
 
   return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, {position: "relative"}]}>
         <StatusBar backgroundColor="#121212"/>
         <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
           <TimelinesHeader
@@ -216,29 +310,30 @@ function TimelineRenderer() {
               HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
           />
         </Animated.View>
-
-        <Animated.ScrollView
-            contentContainerStyle={{
-              paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
-            }}
-            onScroll={(e) => {
-              NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
-              return handleScroll
-            }}
+        <AnimatedFlashList
+            estimatedItemSize={200}
+            data={PageData}
             ref={ref}
-            contentInset={{
-              top: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT + 1000,
+            renderItem={(o) =>
+                <WithActivitypubStatusContext status={o.item} key={o.index}>
+                  <StatusItem key={o.index}/>
+                </WithActivitypubStatusContext>
+            }
+            onScroll={handleScrollAnimated}
+            contentContainerStyle={{
+              paddingTop: SHOWN_SECTION_HEIGHT + 4,
             }}
             scrollEventThrottle={16}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+              <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}/>
             }
-        >
-          <Content/>
-          <LoadingMore visible={LoadingMoreComponentProps.visible}
-                       loading={LoadingMoreComponentProps.loading}
-          />
-        </Animated.ScrollView>
+        />
+        <LoadingMore
+            visible={LoadingMoreComponentProps.visible}
+            loading={LoadingMoreComponentProps.loading}
+        />
       </SafeAreaView>
   );
 }

@@ -1,14 +1,56 @@
-import {NoteInstance, StatusInterface} from "./_interface";
+import {
+  NoteInstance, StatusContextInstance,
+  StatusContextInterface,
+  StatusInterface
+} from "./_interface";
 import {DriveFile} from "@dhaaga/shared-provider-misskey/src";
 import {DriveFileToMediaAttachmentAdapter} from "../media-attachment/adapter";
 import {DriveFileInstance} from "../media-attachment/unique";
 import {UserType} from "../profile/_interface";
+
+export class MisskeyToStatusContextAdapter implements StatusContextInterface {
+  ref: StatusInterface;
+  ctx: StatusContextInstance
+
+  constructor(ref: StatusInterface, ctx: StatusContextInstance) {
+    this.ref = ref;
+    this.ctx = ctx
+  }
+
+  addChildren(items: StatusInterface[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getId(): string {
+    throw new Error("Method not implemented.");
+  }
+
+  getChildren() {
+    return []
+  }
+
+  getParent() {
+    return null
+  }
+
+  getRoot() {
+    return null
+  }
+}
 
 class MisskeyToStatusAdapter implements StatusInterface {
   ref: NoteInstance;
 
   constructor(ref: NoteInstance) {
     this.ref = ref;
+  }
+
+  setDescendents(items: StatusInterface[]): void {
+    return
+  }
+
+  getDescendants(): StatusInterface[] {
+    return []
   }
 
   getUser(): UserType {

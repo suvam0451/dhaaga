@@ -1,4 +1,9 @@
-import {StatusInstance, StatusInterface} from "./_interface";
+import {
+  StatusContextInstance,
+  StatusContextInterface,
+  StatusInstance,
+  StatusInterface
+} from "./_interface";
 import {
   MediaAttachmentToMediaAttachmentAdapter
 } from "../media-attachment/adapter";
@@ -7,9 +12,19 @@ import {UserType} from "../profile/_interface";
 
 class MastodonToStatusAdapter implements StatusInterface {
   ref: StatusInstance;
+  descendants: StatusInterface[]
 
   constructor(ref: StatusInstance) {
     this.ref = ref;
+    this.descendants = []
+  }
+
+  setDescendents(items: StatusInterface[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getDescendants(): StatusInterface[] {
+    throw new Error("Method not implemented.");
   }
 
   getUser(): UserType {
@@ -118,6 +133,37 @@ class MastodonToStatusAdapter implements StatusInterface {
   getAccountId_Poster(): string {
     return this?.ref?.instance?.account?.id;
   }
+}
+
+export class MastodonToStatusContextAdapter implements StatusContextInterface {
+  ref: StatusInterface;
+  ctx: StatusContextInstance
+
+  constructor(ref: StatusInterface, ctx: StatusContextInstance) {
+    this.ref = ref;
+    this.ctx = ctx
+  }
+
+  addChildren(items: StatusInterface[]): void {
+    this.ctx.addChildren(items)
+  }
+
+  getId(): string {
+    return this.ref.getId()
+  }
+
+  getChildren() {
+    return this.ctx.children
+  }
+
+  getParent() {
+    return this.ctx.parent
+  }
+
+  getRoot() {
+    return null
+  }
+
 }
 
 export default MastodonToStatusAdapter;

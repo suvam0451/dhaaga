@@ -8,6 +8,18 @@ import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {StatusArray} from "../status/_interface";
 
 class UnknownRestClient implements ActivityPubClient {
+  async getMyConversations() {
+    return []
+  }
+
+  async getMe() {
+    return null
+  }
+
+  getStatusContext(id: string): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+
   async getRelationshipWith(ids: string[]) {
     return []
   }

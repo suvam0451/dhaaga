@@ -1,23 +1,25 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {
-  ActivityPubClientFactory,
+  ActivityPubClientFactory, ActivityPubUserAdapter,
   MastodonRestClient,
-  MisskeyRestClient, UnknownRestClient
+  MisskeyRestClient, UnknownRestClient, UserInterface
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {useSelector} from "react-redux";
 import {RootState} from "../libs/redux/store";
 import {AccountState} from "../libs/redux/slices/account";
 
-type YinAuthContextType = {
-  client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
+type Type = {
+  client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null,
+  me: UserInterface | null
 }
 
 const defaultValue = {
-  client: null
+  client: null,
+  me: null
 }
 
 const ActivityPubRestClientContext =
-    createContext<YinAuthContextType>(defaultValue);
+    createContext<Type>(defaultValue);
 
 export function useActivityPubRestClientContext() {
   return useContext(ActivityPubRestClientContext);
@@ -31,9 +33,12 @@ export function useActivityPubRestClientContext() {
  */
 function WithActivityPubRestClient({children}: any) {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const _domain = accountState?.activeAccount?.domain
+
   const [restClient, setRestClient] = useState<
       MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
   >(null);
+  const [Me, setMe] = useState(null)
 
   useEffect(() => {
     if (!accountState.activeAccount) {
@@ -58,8 +63,19 @@ function WithActivityPubRestClient({children}: any) {
     ))
   }, [accountState]);
 
+  useEffect(() => {
+    if (!restClient) {
+      setMe(null)
+      return
+    }
+    restClient.getMe().then((res) => {
+      setMe(ActivityPubUserAdapter(res, _domain))
+    })
+  }, [restClient])
+
   return <ActivityPubRestClientContext.Provider value={{
-    client: restClient
+    client: restClient,
+    me: Me
   }}>
     {children}
   </ActivityPubRestClientContext.Provider>

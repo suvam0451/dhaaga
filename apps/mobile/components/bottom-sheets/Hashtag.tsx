@@ -163,10 +163,10 @@ function Content() {
                         color: "orange", opacity: 0.87
                       }}>
                         Your Instance
-                        <Ionicons
-                            color={"orange"}
-                            style={{opacity: 0.6}} size={16}
-                            name={"globe-outline"}/>
+                        {/*<Ionicons*/}
+                        {/*    color={"orange"}*/}
+                        {/*    style={{opacity: 0.6}} size={16}*/}
+                        {/*    name={"globe-outline"}/>*/}
                       </Text>
                       <Text
                           style={{
@@ -203,9 +203,9 @@ function Content() {
                       color: "orange", opacity: 0.87
                     }}>
                       Their Instance
-                      <FontAwesome
-                          name={"external-link"} style={{opacity: 0.6}}
-                          color={"orange"} size={16}/>
+                      {/*<FontAwesome*/}
+                      {/*    name={"external-link"} style={{opacity: 0.6}}*/}
+                      {/*    color={"orange"} size={16}/>*/}
                     </Text>
                     <Text
                         style={{

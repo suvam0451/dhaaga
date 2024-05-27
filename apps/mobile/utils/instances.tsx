@@ -5,6 +5,8 @@ export function extractInstanceUrl(
     theirUsername: string,
     currentsubdomain: string
 ) {
+  if (!url) return ""
+
   let ourUrl = "";
   let theirUrl = "";
   const ex = /^https?:\/\/(.*?)\/(.*?)/;

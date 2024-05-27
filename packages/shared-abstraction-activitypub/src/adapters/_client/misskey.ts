@@ -23,6 +23,18 @@ class MisskeyRestClient implements ActivityPubClient {
     });
   }
 
+  async getMe() {
+    return null
+  }
+
+  async getMyConversations() {
+    return []
+  }
+
+  getStatusContext(id: string): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+
   async getRelationshipWith(ids: string[]) {
     return []
   }

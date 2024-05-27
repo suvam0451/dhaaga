@@ -9,6 +9,46 @@ class MastodonUser implements UserInterface {
     this.mp = mp
   }
 
+  getAccountUrl(): string {
+    return this.ref.instance.url
+  }
+
+  private extractInstanceUrl(url: string, username: string, myServer: string): string {
+    if (!url) return ""
+
+    let ourUrl = "";
+    let theirUrl = "";
+    const ex = /^https?:\/\/(.*?)\/(.*?)/;
+    const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
+
+    if (ex.test(myServer)) {
+      // @ts-ignore
+      ourUrl = myServer.match(subdomainExtractUrl)[1];
+    }
+
+    if (ex.test(url)) {
+      // @ts-ignore
+      theirUrl = url.match(ex)[1];
+    }
+
+    if (url.includes(myServer)) return "@" + username;
+
+
+    if (ourUrl === theirUrl) {
+      return "@" + username;
+    }
+    return "@" + username + "@" + theirUrl;
+  }
+
+  getAppDisplayAccountUrl(myDomain: string): string {
+    const url = this.getAccountUrl()
+    const username = this.getUsername()
+    return this.extractInstanceUrl
+    (url,
+        username, myDomain)
+
+  }
+
   getEmojiMap(): Map<string, EmojiMapValue> {
     return this.mp
   }

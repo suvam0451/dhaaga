@@ -3,27 +3,42 @@ import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {
   useActivityPubRestClientContext
-} from "../../../states/useActivityPubRestClient";
-import {RefreshControl} from "react-native";
+} from "../../../../states/useActivityPubRestClient";
 import {useCallback, useEffect, useState} from "react";
 import StatusItem
-  from "../../common/status/StatusItem";
-import WithActivitypubStatusContext from "../../../states/useStatus";
-import {useScrollOnReveal} from "../../../states/useScrollOnReveal";
-import Animated from "react-native-reanimated";
+  from "../../../common/status/StatusItem";
+import WithActivitypubStatusContext from "../../../../states/useStatus";
+import TitleOnlyStackHeaderContainer
+  from "../../../containers/TitleOnlyStackHeaderContainer";
+import {useNavigation, useRoute} from "@react-navigation/native";
+import {useAppPaginationContext} from "../../../../states/usePagination";
+import {useScrollOnReveal} from "../../../../states/useScrollOnReveal";
 
-function BookmarkedPosts() {
+function MyBookmarks() {
   const {client} = useActivityPubRestClientContext()
   const [refreshing, setRefreshing] = useState(false);
-  const {scrollHandler} = useScrollOnReveal()
+  const navigation = useNavigation()
+  const route = useRoute<any>()
+  const {
+    data: PageData,
+    updateQueryCache,
+  } = useAppPaginationContext()
 
   async function api() {
     if (!client) {
       return []
     }
     return await client.getBookmarks({
-      limit: 5
+      limit: 5,
     })
+  }
+
+
+  function onScrollEndReach() {
+    if (PageData.length > 0) {
+      updateQueryCache()
+      refetch()
+    }
   }
 
 
@@ -47,20 +62,17 @@ function BookmarkedPosts() {
     setRefreshing(true)
   }, []);
 
-
-  return <Animated.ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
-      }
-      onScroll={scrollHandler}
-      scrollEventThrottle={2}
+  return <TitleOnlyStackHeaderContainer
+      route={route} navigation={navigation}
+      headerTitle={`My Favourites`}
+      onScrollViewEndReachedCallback={onScrollEndReach}
   >
     {data && data.map((o, i) =>
         <WithActivitypubStatusContext status={o} key={i}>
           <StatusItem/>
         </WithActivitypubStatusContext>
     )}
-  </Animated.ScrollView>
+  </TitleOnlyStackHeaderContainer>
 }
 
-export default BookmarkedPosts;
+export default MyBookmarks;

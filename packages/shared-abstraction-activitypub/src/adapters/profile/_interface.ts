@@ -54,6 +54,13 @@ export interface UserInterface {
 
   getOnlineStatus(): "online" | "active" | "offline" | "unknown"
 
+  getAccountUrl(): string
+
+  /**
+   * App-Specific Logic
+   */
+  getAppDisplayAccountUrl(myDomain: string): string
+
   /**
    * Custom -- Emojis
    */

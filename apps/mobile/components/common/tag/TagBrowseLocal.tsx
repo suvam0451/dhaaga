@@ -25,8 +25,8 @@ import {View} from "react-native";
 
 function Content() {
   const {data: PageData} = useAppPaginationContext()
-
   if (!PageData) return <View></View>
+
 
   return <>
     {PageData.map((o, i) => (

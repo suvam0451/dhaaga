@@ -6,6 +6,18 @@ import {UserType} from "../profile/_interface";
 export type Status = mastodon.v1.Status | Note | null | undefined
 export type StatusArray = Status[]
 
+export interface StatusContextInterface {
+  getId(): string
+
+  getChildren(): StatusInterface[]
+
+  getParent(): StatusInterface | null | undefined
+
+  getRoot(): StatusInterface | null | undefined
+
+  addChildren(items: StatusInterface[]): void
+}
+
 export interface StatusInterface {
   getId(): string
 
@@ -52,7 +64,38 @@ export interface StatusInterface {
   getParentStatusId(): string | null | undefined
 
   getUserIdParentStatusUserId(): string | null | undefined
+
+  /**
+   * Reply Thread
+   */
+  setDescendents(items: StatusInterface[]): void
+
+  getDescendants(): StatusInterface[]
 }
+
+export class StatusContextInstance {
+  instance: StatusInterface
+  children: StatusInterface[]
+  parent: StatusInterface | null | undefined
+
+  constructor(instance: StatusInterface) {
+    this.instance = instance
+    this.children = []
+  }
+
+  setParent(parent: StatusInterface | null | undefined): void {
+    this.parent = parent
+  }
+
+  addChild(item: StatusInterface) {
+    this.children.push(item)
+  }
+
+  addChildren(items: StatusInterface[]) {
+    this.children = this.children.concat(items)
+  }
+}
+
 
 export class StatusInstance {
   instance: mastodon.v1.Status;

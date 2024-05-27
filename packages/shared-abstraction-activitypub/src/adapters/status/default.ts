@@ -1,21 +1,36 @@
-import { UserType } from "../profile/_interface";
-import {Status, StatusInterface} from "./_interface";
+import {UserType} from "../profile/_interface";
+import {
+  Status, StatusContextInstance,
+  StatusContextInterface,
+  StatusInterface
+} from "./_interface";
 
 
 class UnknownToStatusAdapter implements StatusInterface {
+  setDescendents(items: StatusInterface[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getDescendants(): StatusInterface[] {
+    return []
+  }
+
   getUser(): UserType {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
 
   isReply(): boolean {
-      return false
+    return false
   }
+
   getParentStatusId(): string {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
+
   getUserIdParentStatusUserId(): string {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
+
   getRepostedStatusRaw(): Status {
     return null
   }
@@ -90,6 +105,36 @@ class UnknownToStatusAdapter implements StatusInterface {
 
   getAccountId_Poster(): string {
     return "";
+  }
+}
+
+export class UnknownToStatusContextAdapter implements StatusContextInterface {
+  ref: StatusInterface;
+  ctx: StatusContextInstance
+
+  constructor(ref: StatusInterface, ctx: StatusContextInstance) {
+    this.ref = ref;
+    this.ctx = ctx
+  }
+
+  addChildren(items: StatusInterface[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  getId(): string {
+    throw new Error("Method not implemented.");
+  }
+
+  getChildren() {
+    return []
+  }
+
+  getParent() {
+    return null
+  }
+
+  getRoot() {
+    return null
   }
 }
 

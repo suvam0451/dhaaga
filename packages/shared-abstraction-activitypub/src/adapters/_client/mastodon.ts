@@ -3,7 +3,8 @@ import ActivityPubClient, {
   GetSearchResultQueryDTO,
   GetTrendingPostsQueryDTO,
   GetUserPostsQueryDTO,
-  RestClientCreateDTO, TimelineQuery,
+  RestClientCreateDTO,
+  TimelineQuery,
 } from "./_interface";
 import {
   mastodon,
@@ -23,6 +24,36 @@ class MastodonRestClient implements ActivityPubClient {
           domain: "mastodon"
         }
     );
+  }
+
+  async getMe() {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.accounts.verifyCredentials()
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
+  async getMyConversations() {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.conversations.list()
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+  async getStatusContext(id: string) {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.statuses.$select(id).context.fetch()
+    } catch (e) {
+      console.log(e)
+      return []
+    }
   }
 
   async getRelationshipWith(ids: string[]) {

@@ -39,8 +39,6 @@ export function parseStatusContent(str: string) {
   const rule3 = /(<a.*?>)(#+)(.+.*?<\/a>)/gm
   str = str.replaceAll(rule3, "$1$3");
 
-  console.log("final output", str)
-
   // [BUG] [mfm-js] -- 0.23/24.0 -- broken, if link text itself is a link
   // [FIX] remove "https://" from text
 
