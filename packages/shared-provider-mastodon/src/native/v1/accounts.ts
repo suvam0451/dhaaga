@@ -37,12 +37,6 @@ class AccountsService {
 
     return await get<mastodon.v1.Status[]>(url, client.accessToken);
   }
-
-  // static async bookmark(client: RestClient, postId: string) {
-  //   return await get<mastodon.v1.Account>(
-  //       `${client.url}/api/v1/accounts/${id}`,
-  //       client.accessToken);
-  // }
 }
 
 export default AccountsService

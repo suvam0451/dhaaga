@@ -60,13 +60,11 @@ class MfmService {
             displayName = match
           }
         }
-        return (
-            <LinkProcessor
-                key={count}
-                url={node.props.url}
-                displayName={displayName}
-            />
-        );
+        return <LinkProcessor
+            key={count}
+            url={node.props.url}
+            displayName={displayName}
+        />
       }
       case "emojiCode": {
         if (!emojiMap) return <Text key={count}></Text>;
@@ -95,7 +93,7 @@ class MfmService {
         break;
       }
       case "italic" : {
-        console.log("[WARN]: unsupported mfm item", node)
+        console.log("[WARN] Italic item", node.children)
         return (
             <Text key={count} style={{color: "white", fontStyle: "italic"}}>
               Dhaaga: Italics Not Supported

@@ -23,6 +23,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {createTheme, ThemeProvider} from '@rneui/themed';
 import {RealmProvider} from "@realm/react"
 import {schemas} from "./entities/_index";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 const theme = createTheme({
   lightColors: {
@@ -147,13 +148,16 @@ export default function App() {
                         screenOptions={({route}) => ({
                           tabBarIcon: ({focused, color, size}) => {
                             let iconName;
+                            let renderer = "ionicons"
+
 
                             if (route.name === "Home") {
                               iconName = focused ? "home" : "home";
                             } else if (route.name === "Settings") {
                               iconName = focused ? "menu-outline" : "menu-outline";
                             } else if (route.name === "SearchTab") {
-                              iconName = focused ? "search-sharp" : "search-sharp";
+                              iconName = focused ? "compass" : "compass";
+                              renderer = "fa6"
                             } else if (route.name === "Favourites") {
                               iconName = focused
                                   ? "bookmark-outline"
@@ -166,6 +170,11 @@ export default function App() {
                               iconName = focused ? "person-outline" : "person-outline";
                             }
 
+                            if (renderer === "fa6") {
+                              return <FontAwesome6
+                                  name={iconName} size={size}
+                                  color={color}/>
+                            }
                             return <Ionicons name={iconName} size={size}
                                              color={color}/>;
                           },

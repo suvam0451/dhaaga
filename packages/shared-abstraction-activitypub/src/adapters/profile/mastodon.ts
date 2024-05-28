@@ -106,7 +106,11 @@ class MastodonUser implements UserInterface {
   }
 
   getIsBot(): boolean {
-    return false;
+    return this?.ref?.instance?.bot;
+  }
+
+  getIsLockedProfile() {
+    return this?.ref?.instance?.locked
   }
 
   getOnlineStatus(): "online" | "active" | "offline" | "unknown" {
@@ -114,7 +118,7 @@ class MastodonUser implements UserInterface {
   }
 
   getPostCount(): number {
-    return 0;
+    return this.ref?.instance?.statusesCount;
   }
 
   getUsername(): string {

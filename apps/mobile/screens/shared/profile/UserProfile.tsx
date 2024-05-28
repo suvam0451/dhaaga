@@ -8,14 +8,13 @@ import {useQuery} from "@tanstack/react-query";
 import {Image} from "expo-image";
 import {
   AvatarContainerWithInset,
-  AvatarExpoImage,
+  AvatarExpoImage, ParsedDescriptionContainer,
 } from "../../../styles/Containers";
 import {PrimaryText, SecondaryText} from "../../../styles/Typography";
 import {Text} from "@rneui/themed";
 import StatusItem from "../../../components/common/status/StatusItem";
 import UserPostsProvider, {UserPostsHook} from "../../../contexts/UserPosts";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import RenderHTML from "react-native-render-html";
 import UserProfileExtraInformation from "./ExtraInformation";
 import TitleOnlyStackHeaderContainer
   from "../../../components/containers/TitleOnlyStackHeaderContainer";
@@ -24,9 +23,6 @@ import {
 } from "../../../states/useActivityPubRestClient";
 import WithActivitypubStatusContext from "../../../states/useStatus";
 import {Skeleton} from "@rneui/themed";
-import {
-  ActivityPubUserAdapter
-} from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface";
 import WithActivitypubUserContext, {
   useActivitypubUserContext
 } from "../../../states/useProfile";
@@ -34,6 +30,7 @@ import MfmService from "../../../services/mfm.service";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../libs/redux/store";
 import {AccountState} from "../../../libs/redux/slices/account";
+import {randomUUID} from "expo-crypto";
 
 
 type UserProfileBrowsePostsProps = {
@@ -125,6 +122,7 @@ function UserProfileBrowsePosts({userId}: UserProfileBrowsePostsProps) {
 
 function UserProfileContent() {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const subdomain = accountState?.activeAccount?.subdomain
   const {user} = useActivitypubUserContext()
 
   const [DescriptionContent, setDescriptionContent] = useState(<></>)
@@ -135,15 +133,18 @@ function UserProfileContent() {
 
 
   useEffect(() => {
-    const mfmParseResult = MfmService.renderMfm(desc, {
+    const {openAiContext, reactNodes} = MfmService.renderMfm(desc, {
       emojiMap: user.getEmojiMap(),
       domain: accountState?.activeAccount?.domain,
       subdomain: accountState?.activeAccount?.subdomain
     })
     setDescriptionContent(<>
-      {mfmParseResult?.reactNodes?.map(
-          (para) => {
-            return para.map((o, i) => <Text key={i}>{o}</Text>)
+      {reactNodes?.map(
+          (para, i) => {
+            const uuid = randomUUID()
+            return <Text key={uuid} style={{color: "#fff", opacity: 0.87}}>
+              {para.map((o, j) => o)}
+            </Text>
           }
       )}
     </>)
@@ -182,18 +183,11 @@ function UserProfileContent() {
     </View>
     <View style={{marginLeft: 8}}>
       <PrimaryText>{user.getDisplayName()}</PrimaryText>
-      <SecondaryText>@{user.getUsername()}</SecondaryText>
+      <SecondaryText>{user.getAppDisplayAccountUrl(subdomain)}</SecondaryText>
     </View>
-    <View>
-      <Text>{DescriptionContent}</Text>
-    </View>
-    <View style={{flex: 1, marginLeft: 8, marginRight: 8}}>
-      {/*{desc !== null ?*/}
-      {/*    <RenderHTML baseStyle={{color: "white", opacity: 0.87}}*/}
-      {/*                source={{html: desc}}*/}
-      {/*                contentWidth={Dimensions.get('window').width}*/}
-      {/*    /> : <View></View>}*/}
-    </View>
+    <ParsedDescriptionContainer>
+      {DescriptionContent}
+    </ParsedDescriptionContainer>
 
     {/*Separator*/}
     <View style={{flexGrow: 1}}/>

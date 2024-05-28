@@ -21,6 +21,9 @@ import PostWithClientContext from "./shared/Post";
 import MyFavourites from "../components/screens/favourites/stack/MyFavourites";
 import FavouritesScreenHomePageDefaultTutorial
   from "../components/tutorials/screens/favourites/HomePage";
+import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+import MyFollowings from "../components/screens/favourites/stack/MyFollowings";
+import MyFollowers from "../components/screens/favourites/stack/MyFollowers";
 
 const ICON_SIZE = 22;
 
@@ -100,8 +103,9 @@ function ActionableSection() {
         <Text style={{fontSize: 20, color: "#fff", opacity: 0.87}}>
           Saved by You
         </Text>
-        <FontAwesome name="chevron-down" size={24} color="#fff"
-                     style={{opacity: 0.87}}/>
+        <FontAwesome
+            name="chevron-down" size={24} color="#fff"
+            style={{opacity: 0.6}}/>
       </View>
 
       <Divider style={{opacity: 0.3, marginVertical: 8}}/>
@@ -145,9 +149,19 @@ function ActionableSection() {
       padding: 8,
       marginHorizontal: 8
     }}>
-      <Text style={{fontSize: 20, color: "#fff", opacity: 0.87, marginLeft: 8}}>
-        Social Network
-      </Text>
+      <View style={{
+        marginHorizontal: 8,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between"
+      }}>
+        <Text
+            style={{fontSize: 20, color: "#fff", opacity: 0.87}}>
+          Your Network
+        </Text>
+        <FontAwesome
+            name="chevron-down" size={24} color="#fff"
+            style={{opacity: 0.6}}/></View>
       <Divider style={{opacity: 0.3, marginVertical: 8}}/>
       <View style={{
         display: "flex",
@@ -156,18 +170,21 @@ function ActionableSection() {
         paddingHorizontal: 8,
         marginVertical: 8
       }}>
-        <FavouritesScreenNavigationItem
-            text={"My Followers"}
+        <FavouritesScreenNavigationItemIconOnly
             onPress={() => {
-              console.log("[INFO]: user wants to see their mute list")
-            }} icon={
-          <Ionicons
-              color={"#888"}
-              name={"star-outline"}
-              size={24}/>
-        }/>
-        <FavouritesScreenNavigationItem
-            text={"My Followings"}
+              navigation.push("MyFollowers")
+            }}
+            icon={
+              <SimpleLineIcons name="user-following" size={24} color="#888"/>
+            }/>
+        <FavouritesScreenNavigationItemIconOnly
+            onPress={() => {
+              navigation.push("MyFollowings")
+            }}
+            icon={
+              <SimpleLineIcons name="user-follow" size={24} color="#888"/>
+            }/>
+        <FavouritesScreenNavigationItemIconOnly
             onPress={() => {
               console.log("[INFO]: user wants to see their mute list")
             }} icon={
@@ -176,23 +193,7 @@ function ActionableSection() {
               name="volume-mute" size={24}
               color={"#888"}/>
         }/>
-      </View>
-      <View style={{
-        display: "flex",
-        flexDirection: "row",
-        width: "100%",
-        paddingHorizontal: 8
-      }}>
-        <FavouritesScreenNavigationItem text={"Muted"} onPress={() => {
-          console.log("[INFO]: user wants to see their mute list")
-        }} icon={
-          <Ionicons
-              style={{marginLeft: 4}}
-              name="volume-mute" size={24}
-              color={"#888"}/>
-        }/>
-        <FavouritesScreenNavigationItem
-            text={"Blocked"}
+        <FavouritesScreenNavigationItemIconOnly
             onPress={() => {
               console.log("[INFO]: user wants to see their block list")
             }} icon={
@@ -317,6 +318,8 @@ function WithStackNavigation() {
     />
     <Stack.Screen name={"MyFavourites"} component={MyFavourites}/>
     <Stack.Screen name={"MyBookmarks"} component={MyBookmarks}/>
+    <Stack.Screen name={"MyFollowings"} component={MyFollowings}/>
+    <Stack.Screen name={"MyFollowers"} component={MyFollowers}/>
   </Stack.Navigator>
 }
 

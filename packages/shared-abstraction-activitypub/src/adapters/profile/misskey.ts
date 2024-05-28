@@ -11,6 +11,10 @@ export class MisskeyUser implements UserInterface {
     this.ref = ref;
   }
 
+  getIsLockedProfile(): boolean | null | undefined {
+    return false
+  }
+
   getAccountUrl(): string {
     return this.ref.instance.url || ""
   }

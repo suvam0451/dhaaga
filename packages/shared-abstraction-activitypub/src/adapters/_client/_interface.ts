@@ -72,9 +72,13 @@ interface ActivityPubClient {
 
   getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<StatusArray>;
 
-  getBookmarks(opts: GetPostsQueryDTO): Promise<StatusArray>;
+  getBookmarks(opts: GetPostsQueryDTO): Promise<{data: StatusArray, minId?: string, maxId?: string}>;
 
   getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>
+
+  getFollowing(id: string): Promise<mastodon.v1.Account[] | null>
+
+  getFollowers(id: string): Promise<mastodon.v1.Account[] | null>
 
   /**
    * Trending

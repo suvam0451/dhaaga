@@ -46,6 +46,8 @@ export interface UserInterface {
 
   getIsBot(): boolean | undefined | null
 
+  getIsLockedProfile(): boolean | undefined | null
+
   getDisplayName(): string | null
 
   getPostCount(): number

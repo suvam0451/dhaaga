@@ -21,14 +21,12 @@ export default class TimelinesService {
 		}
 
 		const axiosClient = applyCaseMiddleware(axios.create());
-
 		try {
 			const res = await axiosClient.get<mastodon.v1.Status[]>(queryUrl, {
 				headers: {
 					Authorization: `Bearer ${client.accessToken}`,
 				},
 			});
-
 			return res.data;
 		} catch (e) {
 			console.log(e);

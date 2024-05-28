@@ -18,6 +18,11 @@ export const AvatarContainerWithInset = styled.View`
     margin-left: 13px;
 `;
 
+export const ParsedDescriptionContainer = styled.View`
+    margin-top: 12px;
+    padding: 8px 8px;
+`
+
 export const AvatarContainer = styled.View`
     width: 52px;
     height: 52px;

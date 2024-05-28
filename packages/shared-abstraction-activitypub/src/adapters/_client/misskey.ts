@@ -23,6 +23,14 @@ class MisskeyRestClient implements ActivityPubClient {
     });
   }
 
+  async getFollowing(id: string) {
+    return []
+  }
+
+  async getFollowers(id: string) {
+    return []
+  }
+
   async getMe() {
     return null
   }
@@ -76,7 +84,7 @@ class MisskeyRestClient implements ActivityPubClient {
   }
 
   async getBookmarks(opts: GetPostsQueryDTO) {
-    return []
+    return {data: []}
   }
 
   async getFollowedTags() {
