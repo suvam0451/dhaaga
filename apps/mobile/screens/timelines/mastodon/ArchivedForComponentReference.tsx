@@ -1,11 +1,7 @@
 import {useRef} from "react";
-import {AccountState} from "../../../libs/redux/slices/account";
-import {RootState} from "../../../libs/redux/store";
-import {useSelector} from "react-redux";
 import {
   Animated,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
 } from "react-native";
 import {getCloser} from "../../../utils";
@@ -18,6 +14,7 @@ import StatusItem from "../../../components/common/status/StatusItem";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
+import { StatusBar } from 'expo-status-bar';
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;

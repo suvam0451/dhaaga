@@ -9,6 +9,17 @@ class MastodonUser implements UserInterface {
     this.mp = mp
   }
 
+  getInstanceUrl(): string {
+    const ex = /^https?:\/\/(.*?)\/(.*?)/;
+    const subdomainExtractUrl = /^https?:\/\/(.*?)\/@?/;
+    const fullUrl = this.ref.instance.url
+    if (ex.test(fullUrl)) {
+      // @ts-ignore
+      return fullUrl.match(subdomainExtractUrl)[1]
+    }
+    return ""
+  }
+
   getAccountUrl(): string {
     return this.ref.instance.url
   }

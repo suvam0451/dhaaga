@@ -5,6 +5,9 @@ import {
 import {createContext, useContext, useMemo, useState} from "react";
 import CryptoService from "../services/crypto.service";
 import {useRealm} from "@realm/react";
+import {
+  useActivityPubRestClientContext
+} from "./useActivityPubRestClient";
 
 type AppConversationDTO = {
   id: string,
@@ -66,6 +69,7 @@ function WithActivitypubChatRoomContext({children}: Props) {
   const [Conversations, setConversations] = useState([])
   const [Rooms, setRooms] = useState([])
   const realm = useRealm()
+  const {me} = useActivityPubRestClientContext()
 
   const SeenRooms = useMemo(() => {
     return new Map<string, ActivityPubChatRoomDTO>()
@@ -76,7 +80,7 @@ function WithActivitypubChatRoomContext({children}: Props) {
       const participantIds = [...new Set(item.participants.map((o) => o.getId()))]
           .sort((a, b) => a.localeCompare(b))
       console.log("participants", participantIds)
-      const hash = CryptoService.encodeStringArray(participantIds)
+      const hash = await CryptoService.hashUserList(participantIds)
       console.log(hash)
 
       if (SeenRooms.has(hash)) {

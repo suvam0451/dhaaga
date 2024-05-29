@@ -39,6 +39,10 @@ class UnknownToStatusAdapter implements StatusInterface {
     return false
   }
 
+  getIsFavourited() {
+    return false
+  }
+
   getRepliesCount(): number {
     return -1;
   }

@@ -1,4 +1,4 @@
-import {ActivityPubServer} from "../entities/activityPubServer";
+import {ActivityPubServer} from "../entities/activitypub-server.entity";
 import {Realm} from "@realm/react"
 
 export class ActivityPubServerRepository {
@@ -10,8 +10,8 @@ export class ActivityPubServerRepository {
         .find((o) => o.url === url)
 
     if (!match) {
-      db.write(() => {
-        db.create(ActivityPubServer, {
+      return db.write(() => {
+        return db.create(ActivityPubServer, {
           _id: new Realm.BSON.UUID(),
           url,
           description: "N/A",
@@ -19,5 +19,11 @@ export class ActivityPubServerRepository {
         })
       })
     }
+    return match
+  }
+
+  static get(db: Realm, url: string) {
+    return db.objects(ActivityPubServer)
+        .find((o) => o.url === url)
   }
 }

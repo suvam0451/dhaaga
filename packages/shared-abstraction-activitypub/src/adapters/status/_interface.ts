@@ -50,7 +50,7 @@ export interface StatusInterface {
   getRepliesCount(): number;
 
   getIsBookmarked(): boolean | null | undefined
-
+  getIsFavourited(): boolean | null | undefined
   getRepostsCount(): number;
 
   getFavouritesCount(): number;

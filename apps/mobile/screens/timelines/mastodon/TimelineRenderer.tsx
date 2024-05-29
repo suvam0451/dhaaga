@@ -303,7 +303,7 @@ function TimelineRenderer() {
 
   return (
       <SafeAreaView style={[styles.container, {position: "relative"}]}>
-        <StatusBar backgroundColor="#121212"/>
+        <StatusBar backgroundColor="#222222"/>
         <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
           <TimelinesHeader
               SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}

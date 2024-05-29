@@ -11,6 +11,10 @@ export class MisskeyUser implements UserInterface {
     this.ref = ref;
   }
 
+  getInstanceUrl(): string {
+    throw new Error("Method not implemented.");
+  }
+
   getIsLockedProfile(): boolean | null | undefined {
     return false
   }

@@ -19,6 +19,10 @@ class MastodonToStatusAdapter implements StatusInterface {
     this.descendants = []
   }
 
+  getIsFavourited(): boolean | null | undefined {
+    return this.ref.instance.favourited
+  }
+
   setDescendents(items: StatusInterface[]): void {
     throw new Error("Method not implemented.");
   }

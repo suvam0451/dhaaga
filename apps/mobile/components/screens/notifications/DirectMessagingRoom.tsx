@@ -1,15 +1,20 @@
 import {useQuery} from "@tanstack/react-query";
+import {useQuery as useRealmQuery, useObject} from "@realm/react"
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {useActivitypubStatusContext} from "../../../states/useStatus";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
-import {useRoute} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 import {useEffect} from "react";
+import {View} from "react-native";
+import {
+  ActivityPubConversation
+} from "../../../entities/activitypub-conversation.entity";
 
 type DirectMessagingRoomProps = {
-  lastStatusId: string
+  conversationIds: string[]
 }
 
 function WithContextWrapped() {
@@ -38,39 +43,44 @@ function WithContextWrapped() {
     }
   }, [status, fetchStatus])
 
-  return <></>
+  return <View></View>
 }
 
-function DirectMessagingRoom({lastStatusId}: DirectMessagingRoomProps) {
+function DirectMessagingRoom() {
   const {client} = useActivityPubRestClientContext()
+  const navigation = useNavigation()
 
   const route = useRoute<any>()
-  const q = route?.params?.id;
+  const roomId = route?.params?.roomId;
 
-  async function api() {
-    if (!client) throw new Error("_client not initialized");
-    return await client.getStatus(q);
-  }
-
-  // Queries
-  const {status, data, refetch, fetchStatus} = useQuery<
-      mastodon.v1.Status | Note
-  >({
-    queryKey: ["conversation/latest"],
-    queryFn: api,
-    enabled: client !== null
-  });
+  const conversation = useRealmQuery(ActivityPubConversation).filter(
+      (o) => o.conversationId === roomId)
 
   useEffect(() => {
-    if (status === "success") {
-    }
-  }, [status, fetchStatus]);
+    console.log("[INFO]: room id is", roomId)
+    console.log("[INFO]: conversation is", conversation)
+  }, [roomId]);
 
-  return <><WithContextWrapped/></>
-}
+  // async function api() {
+  //   if (!client) throw new Error("_client not initialized");
+  //   return await client.getStatus(q);
+  // }
+  //
+  // // Queries
+  // const {status, data, refetch, fetchStatus} = useQuery<
+  //     mastodon.v1.Status | Note
+  // >({
+  //   queryKey: ["conversation/latest"],
+  //   queryFn: api,
+  //   enabled: client !== null
+  // });
 
-function ContextWrappers() {
+  // useEffect(() => {
+  //   if (status === "success") {
+  //   }
+  // }, [status, fetchStatus]);
 
+  return <></>
 }
 
 export default DirectMessagingRoom

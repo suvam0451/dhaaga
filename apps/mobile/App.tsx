@@ -1,36 +1,36 @@
-import {NavigationContainer} from "@react-navigation/native";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SearchScreen from "./screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
-import NotificationsScreen from "./screens/NotificationsScreen";
-import {Animated} from "react-native";
-import {useEffect, useRef} from "react";
-import {getCloser} from "./utils";
+import { Animated } from "react-native";
+import { useEffect, useRef } from "react";
+import { getCloser } from "./utils";
 import {
   runActivityPubMigrations,
   runCacheMigrations,
   runCoreMigrations,
 } from "./libs/sqlite/migrations/_migrations";
-import {store} from "./libs/redux/store";
-import {Provider} from "react-redux";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {ActionSheetProvider} from "@expo/react-native-action-sheet";
+import { store } from "./libs/redux/store";
+import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import AccountsScreen from "./screens/AccountsScreen";
 import HomeScreen from "./screens/HomeScreen";
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {createTheme, ThemeProvider} from '@rneui/themed';
-import {RealmProvider} from "@realm/react"
-import {schemas} from "./entities/_index";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { createTheme, ThemeProvider } from "@rneui/themed";
+import { RealmProvider } from "@realm/react";
+import { schemas } from "./entities/_index";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import NotificationsScreen from "./screens/NotificationsScreen";
 
 const theme = createTheme({
   lightColors: {
-    primary: 'red',
+    primary: "red",
   },
   darkColors: {
-    primary: 'blue',
+    primary: "blue",
   },
   components: {
     Button: {
@@ -39,34 +39,33 @@ const theme = createTheme({
     Text: {
       style: {
         color: "#fff",
-        opacity: 0.87
-      }
+        opacity: 0.87,
+      },
     },
     Skeleton: {
       style: {
         backgroundColor: "#fff",
-        opacity: 0.3
+        opacity: 0.3,
       },
       animation: "pulse",
-    }
+    },
   },
 });
 
-const {diffClamp} = Animated;
+const { diffClamp } = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;
 const SHOWN_SECTION_HEIGHT = 50;
 
 const Tab = createBottomTabNavigator();
-
 
 export default function App() {
   const ref = useRef(null);
 
   const scrollY = useRef(new Animated.Value(0));
   const scrollYClamped = diffClamp(
-      scrollY.current,
-      0,
-      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
+    scrollY.current,
+    0,
+    HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT,
   );
 
   const translateY = scrollYClamped.interpolate({
@@ -76,21 +75,21 @@ export default function App() {
 
   const translateYNumber = useRef();
 
-  translateY.addListener(({value}) => {
+  translateY.addListener(({ value }) => {
     translateYNumber.current = value;
   });
 
   const handleScroll = Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: {y: scrollY.current},
-          },
-        },
-      ],
+    [
       {
-        useNativeDriver: true,
-      }
+        nativeEvent: {
+          contentOffset: { y: scrollY.current },
+        },
+      },
+    ],
+    {
+      useNativeDriver: true,
+    },
   );
 
   /**
@@ -98,13 +97,13 @@ export default function App() {
    * snap to the nearest section
    * @param param0
    */
-  const handleSnap = ({nativeEvent}) => {
+  const handleSnap = ({ nativeEvent }) => {
     const offsetY = nativeEvent.contentOffset.y;
     if (
-        !(
-            translateYNumber.current === 0 ||
-            translateYNumber.current === -HIDDEN_SECTION_HEIGHT
-        )
+      !(
+        translateYNumber.current === 0 ||
+        translateYNumber.current === -HIDDEN_SECTION_HEIGHT
+      )
     ) {
       if (ref.current) {
         try {
@@ -115,10 +114,10 @@ export default function App() {
           ref.current.scrollTo({
             // applies only for flat list
             offset:
-                getCloser(translateYNumber.current, -HIDDEN_SECTION_HEIGHT, 0) ===
-                -HIDDEN_SECTION_HEIGHT
-                    ? offsetY + HIDDEN_SECTION_HEIGHT
-                    : offsetY - HIDDEN_SECTION_HEIGHT,
+              getCloser(translateYNumber.current, -HIDDEN_SECTION_HEIGHT, 0) ===
+              -HIDDEN_SECTION_HEIGHT
+                ? offsetY + HIDDEN_SECTION_HEIGHT
+                : offsetY - HIDDEN_SECTION_HEIGHT,
           });
         } catch (e) {
           console.log("[WARN]: component is not a flat list");
@@ -137,75 +136,83 @@ export default function App() {
   const queryClient = new QueryClient();
 
   return (
-      <GestureHandlerRootView>
-        <RealmProvider schema={schemas} schemaVersion={1}>
-          <QueryClientProvider client={queryClient}>
-            <Provider store={store}>
-              <ThemeProvider theme={theme}>
-                <ActionSheetProvider>
-                  <NavigationContainer>
-                    <Tab.Navigator
-                        screenOptions={({route}) => ({
-                          tabBarIcon: ({focused, color, size}) => {
-                            let iconName;
-                            let renderer = "ionicons"
+    <GestureHandlerRootView>
+      <RealmProvider schema={schemas} schemaVersion={7}>
+        <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <ActionSheetProvider>
+                <NavigationContainer>
+                  <Tab.Navigator
+                    screenOptions={({ route }) => ({
+                      tabBarIcon: ({ focused, color, size }) => {
+                        let iconName;
+                        let renderer = "ionicons";
 
+                        if (route.name === "Home") {
+                          iconName = focused ? "home" : "home";
+                        } else if (route.name === "Settings") {
+                          iconName = focused ? "menu-outline" : "menu-outline";
+                        } else if (route.name === "SearchTab") {
+                          iconName = focused ? "compass" : "compass";
+                          renderer = "fa6";
+                        } else if (route.name === "Favourites") {
+                          iconName = focused
+                            ? "bookmark-outline"
+                            : "bookmark-outline";
+                        } else if (route.name === "Notifications") {
+                          iconName = focused
+                            ? "notifications-outline"
+                            : "notifications-outline";
+                        } else if (route.name === "Accounts") {
+                          iconName = focused
+                            ? "person-outline"
+                            : "person-outline";
+                        }
 
-                            if (route.name === "Home") {
-                              iconName = focused ? "home" : "home";
-                            } else if (route.name === "Settings") {
-                              iconName = focused ? "menu-outline" : "menu-outline";
-                            } else if (route.name === "SearchTab") {
-                              iconName = focused ? "compass" : "compass";
-                              renderer = "fa6"
-                            } else if (route.name === "Favourites") {
-                              iconName = focused
-                                  ? "bookmark-outline"
-                                  : "bookmark-outline";
-                            } else if (route.name === "Notifications") {
-                              iconName = focused
-                                  ? "notifications-outline"
-                                  : "notifications-outline";
-                            } else if (route.name === "Accounts") {
-                              iconName = focused ? "person-outline" : "person-outline";
-                            }
-
-                            if (renderer === "fa6") {
-                              return <FontAwesome6
-                                  name={iconName} size={size}
-                                  color={color}/>
-                            }
-                            return <Ionicons name={iconName} size={size}
-                                             color={color}/>;
-                          },
-                          tabBarStyle: {
-                            paddingTop: 0,
-                            borderTopWidth: 0,
-                            backgroundColor: "rgba(34,36,40,1)",
-                          },
-                          tabBarActiveTintColor: "white",
-                          tabBarInactiveTintColor: "gray",
-                          tabBarShowLabel: false,
-                          headerShown: false,
-                        })}
-                    >
-                      <Tab.Screen name="Home" component={HomeScreen}/>
-                      <Tab.Screen name="SearchTab" component={SearchScreen}/>
-                      <Tab.Screen name="Favourites"
-                                  component={FavouritesScreen}/>
-                      <Tab.Screen
-                          name="Notifications"
-                          component={NotificationsScreen}
-                      />
-                      <Tab.Screen name="Accounts" component={AccountsScreen}/>
-                      <Tab.Screen name="Settings" component={SettingsScreen}/>
-                    </Tab.Navigator>
-                  </NavigationContainer>
-                </ActionSheetProvider>
-              </ThemeProvider>
-            </Provider>
-          </QueryClientProvider>
-        </RealmProvider>
-      </GestureHandlerRootView>
+                        if (renderer === "fa6") {
+                          return (
+                            <FontAwesome6
+                              name={iconName}
+                              size={size}
+                              color={color}
+                            />
+                          );
+                        }
+                        return (
+                          <Ionicons name={iconName} size={size} color={color} />
+                        );
+                      },
+                      tabBarStyle: {
+                        paddingTop: 0,
+                        borderTopWidth: 0,
+                        backgroundColor: "rgba(34,36,40,1)",
+                      },
+                      tabBarActiveTintColor: "white",
+                      tabBarInactiveTintColor: "gray",
+                      tabBarShowLabel: false,
+                      headerShown: false,
+                    })}
+                  >
+                    <Tab.Screen name="Home" component={HomeScreen} />
+                    <Tab.Screen name="SearchTab" component={SearchScreen} />
+                    <Tab.Screen
+                      name="Favourites"
+                      component={FavouritesScreen}
+                    />
+                    <Tab.Screen
+                      name="Notifications"
+                      component={NotificationsScreen}
+                    />
+                    <Tab.Screen name="Accounts" component={AccountsScreen} />
+                    <Tab.Screen name="Settings" component={SettingsScreen} />
+                  </Tab.Navigator>
+                </NavigationContainer>
+              </ActionSheetProvider>
+            </ThemeProvider>
+          </Provider>
+        </QueryClientProvider>
+      </RealmProvider>
+    </GestureHandlerRootView>
   );
 }

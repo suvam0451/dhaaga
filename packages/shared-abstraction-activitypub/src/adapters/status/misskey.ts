@@ -45,6 +45,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
     this.ref = ref;
   }
 
+  getIsFavourited(): boolean | null | undefined {
+    return false
+  }
+
   setDescendents(items: StatusInterface[]): void {
     return
   }

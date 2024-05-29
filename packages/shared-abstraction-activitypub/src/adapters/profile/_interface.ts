@@ -54,6 +54,11 @@ export interface UserInterface {
 
   getUsername(): string
 
+  /**
+   * e.g. - mastodon.social from "https://mastodon.social/@suvam"
+   */
+  getInstanceUrl(): string
+
   getOnlineStatus(): "online" | "active" | "offline" | "unknown"
 
   getAccountUrl(): string
