@@ -10,13 +10,11 @@ export class ActivityPubServerRepository {
         .find((o) => o.url === url)
 
     if (!match) {
-      return db.write(() => {
-        return db.create(ActivityPubServer, {
-          _id: new Realm.BSON.UUID(),
-          url,
-          description: "N/A",
-          type: "Mastodon"
-        })
+      return db.create(ActivityPubServer, {
+        _id: new Realm.BSON.UUID(),
+        url,
+        description: "N/A",
+        type: "Mastodon"
       })
     }
     return match

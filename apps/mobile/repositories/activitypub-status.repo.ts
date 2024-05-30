@@ -34,31 +34,20 @@ export class ActivityPubStatusRepository {
       visibility: status.getVisibility()
     }
     const match = this.find(db, status.getId(), subdomain)
-    const server = ActivityPubServerRepository.upsert(db, subdomain)
+    const savedServer = ActivityPubServerRepository.upsert(db, subdomain)
+    const savedPostedBy = ActivityPubUserRepository.upsert(db, {
+      user: postedBy,
+    })
 
-    if (match) {
-      return db.write(() => {
-        return db.create(
-            ActivityPubStatus,
-            {
-              _id: match._id,
-              ...payload, server},
-            UpdateMode.Modified,
-        );
-      })
-    } else {
-      return db.write(() => {
-        return db.create(
-            ActivityPubStatus, {
-              _id: new Realm.BSON.UUID(), ...payload,
-              server: ActivityPubServerRepository.get(db, subdomain),
-              postedBy: ActivityPubUserRepository.upsert(db, {
-                user: postedBy,
-              })
-            }
-        )
-      })
-    }
+    return db.create(
+        ActivityPubStatus,
+        {
+          _id: match?._id || new Realm.BSON.UUID(),
+          ...payload, server: savedServer,
+          postedBy: savedPostedBy
+        },
+        UpdateMode.Modified,
+    );
   }
 
   /**

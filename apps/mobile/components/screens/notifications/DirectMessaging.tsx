@@ -10,30 +10,20 @@ import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
-import {useEffect} from "react";
-import ConversationListItem from "./fragments/dm/ConversationListItem";
+import React, {useEffect} from "react";
 import {
   ActivitypubStatusAdapter,
-  ActivityPubUserAdapter, StatusInterface
+  ActivityPubUserAdapter
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../libs/redux/store";
 import {AccountState} from "../../../libs/redux/slices/account";
 import {View} from "react-native";
-import {
-  ActivityPubServerRepository
-} from "../../../repositories/activitypub-server.repo";
 import {useQuery as useRealmQuery} from "@realm/react"
 import {
   ActivityPubStatusRepository
 } from "../../../repositories/activitypub-status.repo";
 import {useRealm} from "@realm/react";
-import {
-  ActivityPubUserRepository
-} from "../../../repositories/activitypub-user.repo";
-import {
-  ActivityPubConversation
-} from "../../../entities/activitypub-conversation.entity";
 import {
   ActivityPubConversationRepository
 } from "../../../repositories/activitypub-conversation.repo";
@@ -41,10 +31,10 @@ import CryptoService from "../../../services/crypto.service";
 import {
   ActivityPubChatRoom
 } from "../../../entities/activitypub-chatroom.entity";
-import {ENTITY} from "../../../entities/_entities";
-import {
-  ActivityPubChatroomRepository
-} from "../../../repositories/activitypub-chatroom.repo";
+import ChatroomPreview from "./fragments/dm/ChatroomPreviewType";
+import ChatroomService from "../../../services/chatroom.service";
+import {Text} from "@rneui/themed";
+import {Divider} from "@rneui/base";
 
 
 function WithApi() {
@@ -61,6 +51,7 @@ function WithApi() {
     append
   } = useAppPaginationContext()
   const db = useRealm()
+  const chatrooms = useRealmQuery(ActivityPubChatRoom).filter((o) => o.me.userId === me?.getId())
 
   async function api() {
     if (!client) {
@@ -93,8 +84,7 @@ function WithApi() {
   }
 
   async function populateChatrooms() {
-    if(!me) return
-
+    if (!me) return
 
     for await (const _item of PageData) {
       const item: mastodon.v1.Conversation = _item
@@ -108,28 +98,15 @@ function WithApi() {
         item.accounts.push(meRaw)
       }
       const hash = await CryptoService.hashUserList(participantIds)
-      const latestStatus = ActivitypubStatusAdapter(item.lastStatus, _domain)
 
-
-      /**
-       * Save data to Realm
-       */
-      for (let i = 0; i < item.accounts.length; i++) {
-        ActivityPubStatusRepository.upsert(db,
-            {
-              status: latestStatus,
-              domain: _domain,
-              subdomain: _subdomain
-            })
-        ActivityPubConversationRepository.add(db,
-            {
-              me,
-              conversation: item,
-              hash,
-              subdomain: _subdomain,
-              domain: _domain
-            })
-      }
+      ChatroomService.upsertConversation(db,
+          {
+            me,
+            conversation: item,
+            hash,
+            subdomain: _subdomain,
+            domain: _domain
+          })
     }
   }
 
@@ -138,27 +115,28 @@ function WithApi() {
   }, [PageData]);
 
   async function onRefresh() {
-    // refetch()
-    const items = db.objects(ActivityPubConversation)
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i]
-      const chatrooms = item.linkingObjects<ActivityPubChatRoom>(
-          ENTITY.ACTIVITYPUB_CHATROOM,
-          "conversations"
-      )
+    refetch()
 
-      if (chatrooms.length === 1) {
-        console.log("users in conversation",
-            item.conversationId,
-            chatrooms[0].participants.map((o) => o.username))
-      } else {
-        console.log("cannot have multiple chatrooms", chatrooms.map((o) => o.hash))
-      }
-    }
-
-    const chatrooms = db.objects(ActivityPubChatRoom)
-
-    console.log(chatrooms.map((o) => o.conversations.map((o) => o.conversationId)))
+    // NOTE: no longer required
+    // const items = db.objects(ActivityPubConversation)
+    // for (let i = 0; i < items.length; i++) {
+    //   const item = items[i]
+    //   const chatrooms = item.linkingObjects<ActivityPubChatRoom>(
+    //       ENTITY.ACTIVITYPUB_CHATROOM,
+    //       "conversations"
+    //   )
+    //
+    //   if (chatrooms.length === 1) {
+    //     console.log("users in conversation",
+    //         item.conversationId,
+    //         chatrooms[0].participants.map((o) => o.username))
+    //   } else {
+    //     console.log("cannot have multiple chatrooms", chatrooms.map((o) => o.hash))
+    //   }
+    // }
+    //
+    // const chatrooms = db.objects(ActivityPubChatRoom)
+    // console.log(chatrooms.map((o) => o.conversations.map((o) => o.conversationId)))
   }
 
   return <TitleOnlyStackHeaderContainer
@@ -167,17 +145,34 @@ function WithApi() {
       onScrollViewEndReachedCallback={onScrollEndReach}
       onRefresh={onRefresh}
   >
-    <View style={{paddingVertical: 8, paddingHorizontal: 8}}>{
-      PageData.map((o: mastodon.v1.Conversation, i) =>
-          <ConversationListItem
-              key={i}
-              conversationId={o.id}
-              lastStatus={o.lastStatus}
-              accounts={
-                o.accounts.map((j) => ActivityPubUserAdapter(j, _domain))}/>
-      )}
+
+    <View style={{paddingHorizontal: 12, paddingTop: 16}}>
+      <Text style={{fontSize: 22, fontWeight: 700}}>Your private chat</Text>
+      <Divider style={{height: 8, opacity: 0.3}} width={2}/>
+    </View>
+    <View style={{paddingVertical: 8, paddingHorizontal: 8}}>
+      {
+        chatrooms.map((o, i) =>
+            <ChatroomPreview roomId={o._id} key={i} modeFilter={"me"}/>)
+      }
+    </View>
+    <View style={{paddingHorizontal: 12, paddingTop: 16}}>
+      <Text style={{fontSize: 22, fontWeight: 700}}>Your DMs</Text>
+      <Divider style={{height: 8, opacity: 0.3}} width={2}/>
+    </View>
+    <View style={{paddingVertical: 8, paddingHorizontal: 8}}>
+      {
+        chatrooms.map((o, i) =>
+            <ChatroomPreview roomId={o._id} key={i} modeFilter={"dm"}/>)
+      }
     </View>
 
+    <View style={{paddingVertical: 8, paddingHorizontal: 8}}>
+      {
+        chatrooms.map((o, i) =>
+            <ChatroomPreview roomId={o._id} key={i} modeFilter={"group"}/>)
+      }
+    </View>
   </TitleOnlyStackHeaderContainer>
 }
 
@@ -186,6 +181,7 @@ function WithContexts() {
     <WithApi/>
   </WithAppPaginationContext>
 }
+
 
 /**
  * This Screen lists the direct conversations

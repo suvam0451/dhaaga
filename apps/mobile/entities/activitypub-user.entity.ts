@@ -16,6 +16,8 @@ export class ActivityPubUser extends Realm.Object
   userId?: string //
   username: string // suvam
   accountId?: string // suvam@mastodon.social
+  avatarUrl?: string
+  displayName?: string
   server?: ActivityPubServer
 
 
@@ -26,6 +28,8 @@ export class ActivityPubUser extends Realm.Object
       _id: "uuid",
       userId: "string?",
       username: "string",
+      avatarUrl: "string",
+      displayName: "string",
       accountId: "string?",
       // relations
       server: "ActivityPubServer?"

@@ -6,9 +6,7 @@ import {UpdateMode} from "realm";
 
 export class ActivityPubUserRepository {
   static clearAll(db: Realm) {
-    db.write(() => {
-      db.delete(db.objects(ActivityPubUser))
-    })
+    db.delete(db.objects(ActivityPubUser))
   }
 
 
@@ -17,9 +15,7 @@ export class ActivityPubUserRepository {
       me: ActivityPubUser) {
     const existingIds = list.map((o) => o._id)
     const myId = me._id
-    console.log("[matching]", existingIds, myId)
-    const exists = existingIds.find((o) => o == myId)
-    console.log(exists)
+    const exists = existingIds.find((o) => o.toString() == myId.toString())
 
     if (!exists) {
       list.push(me)
@@ -40,14 +36,14 @@ export class ActivityPubUserRepository {
     const _user = this.getByUsername(db, user.getUsername())
 
     try {
-      return db.write(() => {
-        return db.create(ActivityPubUser, {
-          _id: _user._id || new Realm.BSON.UUID(),
-          username: user.getUsername(),
-          userId: user.getId(),
-          server: _server
-        }, UpdateMode.Modified)
-      })
+      return db.create(ActivityPubUser, {
+        _id: _user._id || new Realm.BSON.UUID(),
+        username: user.getUsername(),
+        userId: user.getId(),
+        avatarUrl: user.getAvatarUrl(),
+        displayName: user.getDisplayName(),
+        server: _server
+      }, UpdateMode.Modified)
     } catch (e) {
       console.log("[ERROR]: user db", e)
       return null

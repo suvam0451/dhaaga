@@ -15,9 +15,7 @@ import {UpdateMode} from "realm";
 
 export class ActivityPubConversationRepository {
   static clearAll(db: Realm) {
-    db.write(() => {
-      db.delete(db.objects(ActivityPubConversation))
-    })
+    db.delete(db.objects(ActivityPubConversation))
   }
 
   static add(db: Realm, {hash, me, conversation, domain, subdomain}: {
@@ -40,18 +38,16 @@ export class ActivityPubConversationRepository {
     const savedParticipants = ActivityPubUserRepository.upsertMultiple(db, {users: usersI})
     const savedChatroom = ActivityPubChatroomRepository.upsert(db, {hash, me})
     try {
-      const savedConversation = db.write(() => {
-        return db.create(ActivityPubConversation, {
-          _id: conflict?._id || new Realm.BSON.UUID(),
-          conversationId: conversation.id,
-          me: savedMe,
-          latestStatus: savedLatestStatus,
-          hash,
-          server: savedServer,
-          unread: conversation.unread,
-          participants: savedParticipants,
-        }, UpdateMode.Modified)
-      })
+      const savedConversation = db.create(ActivityPubConversation, {
+        _id: conflict?._id || new Realm.BSON.UUID(),
+        conversationId: conversation.id,
+        me: savedMe,
+        latestStatus: savedLatestStatus,
+        hash,
+        server: savedServer,
+        unread: conversation.unread,
+        participants: savedParticipants,
+      }, UpdateMode.Modified)
       ActivityPubChatroomRepository.addConversation(db, savedChatroom, savedConversation)
       ActivityPubChatroomRepository.updateParticipants(db, savedChatroom, savedParticipants)
     } catch (e) {
