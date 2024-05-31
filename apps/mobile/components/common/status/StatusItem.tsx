@@ -67,7 +67,7 @@ function RootStatusFragment({
     if (ex.test(acctUrl)) {
       // @ts-ignore
       const theirUrl = acctUrl.match(ex)[1];
-      ActivityPubServerRepository.upsert(realm, theirUrl)
+      // ActivityPubServerRepository.upsert(realm, theirUrl)
     }
   }, [status]);
 

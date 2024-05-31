@@ -7,6 +7,10 @@ import {
 
 
 class UnknownToStatusAdapter implements StatusInterface {
+  getRaw(): Status {
+      return null
+  }
+
   setDescendents(items: StatusInterface[]): void {
     throw new Error("Method not implemented.");
   }

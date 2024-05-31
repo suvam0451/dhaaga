@@ -1,4 +1,5 @@
 import {
+  Status,
   StatusContextInstance,
   StatusContextInterface,
   StatusInstance,
@@ -17,6 +18,10 @@ class MastodonToStatusAdapter implements StatusInterface {
   constructor(ref: StatusInstance) {
     this.ref = ref;
     this.descendants = []
+  }
+
+  getRaw(): Status {
+    return this?.ref?.instance
   }
 
   getIsFavourited(): boolean | null | undefined {

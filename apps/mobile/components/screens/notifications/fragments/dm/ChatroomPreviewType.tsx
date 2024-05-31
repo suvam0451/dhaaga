@@ -28,6 +28,7 @@ import {
   ParsedDescriptionContainerForChatroomPreview
 } from "../../../../../styles/Containers";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import {useNavigation} from "@react-navigation/native";
 
 
 type ChatroomPreviewType = {
@@ -42,6 +43,7 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
   const subdomain = accountState?.activeAccount?.subdomain
 
   const {client} = useActivityPubRestClientContext()
+  const navigation = useNavigation<any>()
 
   const [Participants, setParticipants] = useState<ActivityPubUser[]>([])
   const [IsGroupChat, setIsGroupChat] = useState(false)
@@ -96,6 +98,9 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
 
   function onClickChatroomItem() {
     console.log("user wanna access chatroom")
+    console.log("redirection id", chatroom._id)
+
+    navigation.push("DirectMessagingRoom", {roomId: chatroom._id})
   }
 
   return <View style={{

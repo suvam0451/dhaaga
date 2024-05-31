@@ -19,6 +19,8 @@ export interface StatusContextInterface {
 }
 
 export interface StatusInterface {
+  getRaw(): Status
+
   getId(): string
 
   getUsername(): string;
@@ -64,6 +66,8 @@ export interface StatusInterface {
   getParentStatusId(): string | null | undefined
 
   getUserIdParentStatusUserId(): string | null | undefined
+
+  print(): void
 
   /**
    * Reply Thread
