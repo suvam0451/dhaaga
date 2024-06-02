@@ -11,31 +11,29 @@ const Stack = createNativeStackNavigator();
 function HomeScreen() {
   return (
       <WithActivityPubRestClient>
-        <WithGorhomBottomSheetContext>
-          <Stack.Navigator
-              initialRouteName={"Mastodon timeline"}
-              screenOptions={{headerShown: false}}
-          >
-            {/*default*/}
-            <Stack.Screen
-                name="Mastodon timeline"
-                // component={() => <View style={{backgroundColor: "#121212", height: "100%"}}></View>}
-                component={TimelineRenderer}
-            />
-            <Stack.Screen
-                name="Browse Hashtag"
-                component={ApiWrapper}
-            />
-            <Stack.Screen
-                name="Profile"
-                component={UserProfile}
-            />
-            <Stack.Screen
-                name="Post"
-                component={PostWithClientContext}
-            />
-          </Stack.Navigator>
-        </WithGorhomBottomSheetContext>
+        <Stack.Navigator
+            initialRouteName={"Mastodon timeline"}
+            screenOptions={{headerShown: false}}
+        >
+          {/*default*/}
+          <Stack.Screen
+              name="Mastodon timeline"
+              // component={() => <View style={{backgroundColor: "#121212", height: "100%"}}></View>}
+              component={TimelineRenderer}
+          />
+          <Stack.Screen
+              name="Browse Hashtag"
+              component={ApiWrapper}
+          />
+          <Stack.Screen
+              name="Profile"
+              component={UserProfile}
+          />
+          <Stack.Screen
+              name="Post"
+              component={PostWithClientContext}
+          />
+        </Stack.Navigator>
       </WithActivityPubRestClient>
   );
 }

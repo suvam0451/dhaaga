@@ -18,7 +18,6 @@ function ExternalLinkDisplayName({displayName}: ExternalLinDisplayNameProps) {
     alignItems: "flex-end",
     justifyContent: "flex-end",
     marginBottom: -4,
-    marginLeft: 8,
     maxWidth: 196,
   }}>
     <Text

@@ -1,4 +1,4 @@
-import {useObject, useQuery as useRealmQuery} from "@realm/react"
+import {useObject} from "@realm/react"
 import {
   ActivityPubChatRoom
 } from "../../../../../entities/activitypub-chatroom.entity";
@@ -8,8 +8,6 @@ import {TouchableOpacity, View} from "react-native";
 import {BSON} from "realm";
 import UUID = BSON.UUID;
 import {Image} from "expo-image";
-import WithActivitypubStatusContext from "../../../../../states/useStatus";
-import ConversationItem from "../../../../common/status/ConversationItem";
 import {ActivityPubUser} from "../../../../../entities/activitypub-user.entity";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {
@@ -24,11 +22,10 @@ import {RootState} from "../../../../../libs/redux/store";
 import {AccountState} from "../../../../../libs/redux/slices/account";
 import {randomUUID} from "expo-crypto";
 import {
-  ParsedDescriptionContainer,
   ParsedDescriptionContainerForChatroomPreview
 } from "../../../../../styles/Containers";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import {useNavigation} from "@react-navigation/native";
+import {APP_FONT} from "../../../../../styles/AppTheme";
 
 
 type ChatroomPreviewType = {
@@ -58,7 +55,7 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
   useEffect(() => {
     if (!Status?.content) return
 
-    const {openAiContext, reactNodes} = MfmService.renderMfm(Status?.content, {
+    const {reactNodes} = MfmService.renderMfm(Status?.content, {
       emojiMap: new Map(),
       domain,
       subdomain
@@ -67,7 +64,15 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
       {reactNodes?.map(
           (para, i) => {
             const uuid = randomUUID()
-            return <Text key={uuid} style={{color: "#fff", opacity: 0.87}}>
+            return <Text
+                key={uuid}
+                style={{
+                  color: APP_FONT.MONTSERRAT_BODY,
+                  width: "100%",
+                  overflow: "hidden",
+                }}
+                numberOfLines={1}
+            >
               {para.map((o, j) => o)}
             </Text>
           }
@@ -76,12 +81,19 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
 
   }, [Status?.content]);
 
+
   useEffect(() => {
     if (chatroom.participants.length === 1 &&
         chatroom.participants[0].userId === chatroom.me.userId) {
       setIsSoloChat(true)
     } else if (chatroom.participants.length === 2) {
       setIsPairChat(true)
+      console.log("participants", chatroom.participants.map((o) => ({
+        name: o.displayName,
+        url: o.accountId,
+        // avatar: o.avatarUrl,
+        server: o.server.url
+      })))
       setParticipants(chatroom.participants.filter((o) => o.userId !== chatroom.me.userId))
     } else {
       setIsGroupChat(true)
@@ -97,16 +109,14 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
   }, [chatroom]);
 
   function onClickChatroomItem() {
-    console.log("user wanna access chatroom")
-    console.log("redirection id", chatroom._id)
-
     navigation.push("DirectMessagingRoom", {roomId: chatroom._id})
   }
 
   return <View style={{
     paddingHorizontal: 4,
     backgroundColor: "#141414",
-    borderRadius: 8
+    borderRadius: 8,
+    marginBottom: 8
   }}>
     {modeFilter === "me" && IsSoloChat ? <View>
       <TouchableOpacity onPress={onClickChatroomItem}>
@@ -139,29 +149,30 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
                     backgroundColor: "#0553",
                     padding: 2,
                   }}
-                  source={me.avatarUrl}
+                  source={me?.avatarUrl}
               />
             </View>
           </View>
           <View style={{marginLeft: 8}}>
             <Text style={{
               fontSize: 16,
-              color: "#fff",
-              opacity: 0.87
-            }}>{me.displayName}</Text>
+              color: APP_FONT.MONTSERRAT_HEADER,
+              fontFamily: "Montserrat-Bold"
+            }}>{me?.displayName}</Text>
             <Text style={{
               fontSize: 12,
-              color: "#fff",
-              opacity: 0.6
-            }}>@{me.username}@{me.server.url}</Text>
+              color: APP_FONT.MONTSERRAT_BODY,
+              fontFamily: "Montserrat-Bold"
+            }}>
+              @{me?.username}@{me.server.url}
+            </Text>
             {Status && Status?.postedBy?.userId === me.userId ?
                 <ParsedDescriptionContainerForChatroomPreview>
-                  <FontAwesome6 name="check" size={14} color="#fff"
-                                style={{marginRight: 4}}/>
                   {DescriptionContent}
                 </ParsedDescriptionContainerForChatroomPreview> :
                 <ParsedDescriptionContainerForChatroomPreview>
-                  <Text style={{color: "orange"}}>You: </Text>
+                  <Text
+                      style={{color: "orange"}}>You: </Text>
                   {DescriptionContent}
                 </ParsedDescriptionContainerForChatroomPreview>
             }
@@ -206,28 +217,28 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
                     backgroundColor: "#0553",
                     padding: 2,
                   }}
-                  source={Participants[0].avatarUrl}
+                  source={Participants[0]?.avatarUrl}
               />
             </View>
           </View>
           <View style={{marginLeft: 8}}>
             <Text style={{
               fontSize: 16,
-              color: "#fff",
-              opacity: 0.87
-            }}>{Participants[0].displayName}</Text>
+              color: APP_FONT.MONTSERRAT_HEADER,
+              fontFamily: "Montserrat-Bold"
+            }}>{Participants[0]?.displayName}</Text>
             <Text style={{
               fontSize: 12,
-              color: "#fff",
-              opacity: 0.6
-            }}>@{Participants[0].username}@{Participants[0]?.server?.url}</Text>
+              color: APP_FONT.MONTSERRAT_BODY,
+              fontFamily: "Montserrat-Bold"
+            }}>@{Participants[0]?.username}@{Participants[0]?.server?.url}</Text>
             {Status && Status?.postedBy?.userId === me.userId ?
                 <ParsedDescriptionContainerForChatroomPreview>
-                  <Text>You: </Text>
+                  <Text style={{color: APP_FONT.MONTSERRAT_BODY}}>You: </Text>
                   {DescriptionContent}
                 </ParsedDescriptionContainerForChatroomPreview> :
                 <ParsedDescriptionContainerForChatroomPreview>
-                  <Text>You: </Text>
+                  <Text style={{color: APP_FONT.MONTSERRAT_BODY}}>You: </Text>
                   {DescriptionContent}
                 </ParsedDescriptionContainerForChatroomPreview>
             }

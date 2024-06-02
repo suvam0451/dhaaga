@@ -26,9 +26,10 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import NotificationsScreen from "./screens/NotificationsScreen";
 import RneuiTheme from "./styles/RneuiTheme";
 import {useFonts} from "expo-font";
-import * as SplashScreen from 'expo-splash-screen';
+// import * as SplashScreen from 'expo-splash-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import WithGlobalMmkvContext from "./states/useGlobalMMkvCache";
+import WithGorhomBottomSheetContext from "./states/useGorhomBottomSheet";
 
 
 const {diffClamp} = Animated;
@@ -124,10 +125,12 @@ function App() {
     'Inter-Bold': require('../../packages/fonts/Inter/static/Inter-Bold.ttf'),
     'Inter-SemiBold': require('../../packages/fonts/Inter/static/Inter-SemiBold.ttf'),
     "Source_Sans_3-Regular": require('../../packages/fonts/Source_Sans_3/static/SourceSans3-Regular.ttf'),
+    "DM_Serif_Display-Regular": require("../../packages/fonts/DM_Serif_Display/DMSerifDisplay-Regular.ttf"),
+    "DM_Serif_Display-Italic": require("../../packages/fonts/DM_Serif_Display/DMSerifDisplay-Italic.ttf"),
   });
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded || fontError) {
-      await SplashScreen.hideAsync();
+      // await SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
 
@@ -135,6 +138,7 @@ function App() {
       <NavigationContainer>
         <View onLayout={onLayoutRootView} style={{height: "100%"}}>
           <Tab.Navigator
+              detachInactiveScreens={false}
               screenOptions={({route}) => ({
                 tabBarIcon: ({focused, color, size}) => {
                   let iconName;
@@ -219,6 +223,13 @@ function App() {
   );
 }
 
+function WithGorhomBottomSheetWrapper() {
+  // return <App/>
+  return <WithGorhomBottomSheetContext>
+    <App/>
+  </WithGorhomBottomSheetContext>
+}
+
 function WithContexts() {
   const queryClient = new QueryClient();
 
@@ -240,7 +251,7 @@ function WithContexts() {
                 <SafeAreaProvider>
                   {/* Action Sheet -- Expo */}
                   <ActionSheetProvider>
-                    <App/>
+                    <WithGorhomBottomSheetWrapper/>
                   </ActionSheetProvider>
                 </SafeAreaProvider>
               </ThemeProvider>

@@ -33,11 +33,11 @@ export class ActivityPubUserRepository {
     const _server = ActivityPubServerRepository.upsert(db, user.getInstanceUrl())
     if (!_server) return
 
-    const _user = this.getByUsername(db, user.getUsername())
+    const _user = this.getByUsername(db, user.getUsername(), user.getInstanceUrl())
 
     try {
       return db.create(ActivityPubUser, {
-        _id: _user._id || new Realm.BSON.UUID(),
+        _id: _user?._id || new Realm.BSON.UUID(),
         username: user.getUsername(),
         userId: user.getId(),
         avatarUrl: user.getAvatarUrl(),
@@ -64,8 +64,8 @@ export class ActivityPubUserRepository {
         .find((o) => o.accountId === acctId)
   }
 
-  static getByUsername(db: Realm, username: string) {
+  static getByUsername(db: Realm, username: string, instance: string) {
     return db.objects(ActivityPubUser)
-        .find((o) => o.username === username)
+        .find((o) => o.username === username && o.server.url === instance)
   }
 }

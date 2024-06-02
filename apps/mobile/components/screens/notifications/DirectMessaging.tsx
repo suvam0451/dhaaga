@@ -12,7 +12,6 @@ import {
 } from "../../../states/useActivityPubRestClient";
 import React, {useEffect} from "react";
 import {
-  ActivitypubStatusAdapter,
   ActivityPubUserAdapter
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {useSelector} from "react-redux";
@@ -20,13 +19,7 @@ import {RootState} from "../../../libs/redux/store";
 import {AccountState} from "../../../libs/redux/slices/account";
 import {View} from "react-native";
 import {useQuery as useRealmQuery} from "@realm/react"
-import {
-  ActivityPubStatusRepository
-} from "../../../repositories/activitypub-status.repo";
 import {useRealm} from "@realm/react";
-import {
-  ActivityPubConversationRepository
-} from "../../../repositories/activitypub-conversation.repo";
 import CryptoService from "../../../services/crypto.service";
 import {
   ActivityPubChatRoom
@@ -147,7 +140,11 @@ function WithApi() {
   >
 
     <View style={{paddingHorizontal: 12, paddingTop: 16}}>
-      <Text style={{fontSize: 22, fontWeight: 700}}>Your private chat</Text>
+      <Text style={{
+        fontSize: 36,
+        fontFamily: "DM_Serif_Display-Italic",
+        color: "rgba(255, 255, 255, 0.87)"
+      }}>Your private chat</Text>
       <Divider style={{height: 8, opacity: 0.3}} width={2}/>
     </View>
     <View style={{paddingVertical: 8, paddingHorizontal: 8}}>
@@ -157,7 +154,11 @@ function WithApi() {
       }
     </View>
     <View style={{paddingHorizontal: 12, paddingTop: 16}}>
-      <Text style={{fontSize: 22, fontWeight: 700}}>Your DMs</Text>
+      <Text style={{
+        fontSize: 36,
+        fontFamily: "DM_Serif_Display-Italic",
+        color: "rgba(255, 255, 255, 0.87)"
+      }}>Your DMs</Text>
       <Divider style={{height: 8, opacity: 0.3}} width={2}/>
     </View>
     <View style={{paddingVertical: 8, paddingHorizontal: 8}}>
