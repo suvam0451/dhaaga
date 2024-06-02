@@ -79,9 +79,7 @@ function WithActivitypubChatRoomContext({children}: Props) {
     for (const item of items) {
       const participantIds = [...new Set(item.participants.map((o) => o.getId()))]
           .sort((a, b) => a.localeCompare(b))
-      console.log("participants", participantIds)
       const hash = await CryptoService.hashUserList(participantIds)
-      console.log(hash)
 
       if (SeenRooms.has(hash)) {
         if (!SeenRooms.get(hash).conversationIdsSeen.has(item.id)) {

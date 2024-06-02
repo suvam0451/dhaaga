@@ -10,6 +10,10 @@ import {AccountState} from "../../libs/redux/slices/account";
 import {useNavigation} from "@react-navigation/native";
 import {TouchableOpacity} from "react-native";
 import MfmService from "../../services/mfm.service";
+import {useActivitypubStatusContext} from "../../states/useStatus";
+import activitypubAdapterService
+  from "../../services/activitypub-adapter.service";
+import {useActivitypubUserContext} from "../../states/useProfile";
 
 type OriginalPosterProps = {
   id: string
@@ -37,16 +41,25 @@ function OriginalPoster({
       []
   );
   const navigation = useNavigation<any>();
+  const {status} = useActivitypubStatusContext()
+  const {user, setDataRaw} = useActivitypubUserContext()
+
+  useEffect(() => {
+    if (status.getUser()) return
+    setDataRaw(status.getUser())
+  }, [status]);
 
   useEffect(() => {
     const nodes = parseUsername(displayName || "");
     let retval = [];
     let count = 0; //
+    const emojiMap = user?.getEmojiMap()
+
     for (const node of nodes) {
       // @ts-ignore
       retval.push(
           MfmService.parseNode(node, count.toString(), {
-            emojis: [],
+            emojiMap: emojiMap || new Map(),
             domain: accountState?.activeAccount?.domain,
             subdomain: accountState?.activeAccount?.subdomain,
             isHighEmphasisText: true
@@ -55,7 +68,7 @@ function OriginalPoster({
       count++;
     }
     setUsernameWithEmojis(retval);
-  }, [displayName]);
+  }, [user]);
 
   function onProfileClicked() {
     navigation.navigate("Profile", {
@@ -97,27 +110,54 @@ function OriginalPoster({
                   width: "100%",
                   backgroundColor: "#0553",
                   padding: 2,
+                  opacity: 0.87
                 }}
                 source={{uri: avatarUrl}}
             />
           </View>
         </TouchableOpacity>
-        <View style={{display: "flex", marginLeft: 8, flexGrow: 1}}>
+        <View style={{
+          display: "flex",
+          marginLeft: 8,
+          flexGrow: 1,
+          maxWidth: "100%"
+        }}>
           <TouchableOpacity onPress={onProfileClicked}>
-            <Text style={{color: "white", opacity: 0.87, fontWeight: "600"}}>
+            <Text style={{
+              color: "white",
+              opacity: 0.6,
+              fontFamily: "Montserrat-ExtraBold",
+              maxWidth: 196,
+            }} numberOfLines={1}>
               {UsernameWithEmojis}
             </Text>
           </TouchableOpacity>
-          <Text style={{color: "#888", fontWeight: "500", fontSize: 12}}>
+          <Text style={{
+            color: "#888",
+            fontWeight: "500",
+            fontSize: 12,
+            opacity: 0.6,
+            fontFamily: "Inter-Bold"
+          }}>
             {extractInstanceUrl(accountUrl, username, subdomain)}
           </Text>
           <View style={{display: "flex", flexDirection: "row"}}>
-            <Text style={{color: "gray", fontSize: 12}}>
+            <Text style={{
+              color: "gray",
+              fontSize: 12,
+              fontFamily: "Inter-Bold",
+              opacity: 0.87
+            }}>
               {formatDistanceToNowStrict(new Date(createdAt), {
                 addSuffix: false,
               })}
             </Text>
-            <Text style={{color: "gray", marginLeft: 2, marginRight: 2}}>
+            <Text style={{
+              color: "gray",
+              marginLeft: 2,
+              marginRight: 2,
+              opacity: 0.6
+            }}>
               •
             </Text>
             {visibilityIcon(visibility)}

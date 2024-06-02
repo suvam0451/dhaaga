@@ -1,4 +1,8 @@
-import {ActivityPubClient, ActivitypubStatusAdapter, StatusInterface}
+import {
+  ActivitypubStatusAdapter,
+  ActivityPubUserAdapter,
+  StatusInterface
+}
   from "@dhaaga/shared-abstraction-activitypub/src";
 
 /**
@@ -15,6 +19,10 @@ class ActivityPubAdapterService {
     const ancestors = await this.adaptManyStatuses(apiResponse.ancestors, domain)
     const descendants = await this.adaptManyStatuses(apiResponse.descendants, domain)
     return [...ancestors, ...descendants]
+  }
+
+  static async adaptUser(o: any, domain: string) {
+    return ActivityPubUserAdapter(o, domain)
   }
 }
 

@@ -91,7 +91,6 @@ function UserActionSheet({visible, setVisible}: StatusActionsProps) {
               borderBottomLeftRadius: 4,
               borderBottomRightRadius: 4,
             }}/>
-
         <View style={{display: "flex", flexDirection: "row"}}>
           <AvatarContainerWithInset>
             <AvatarExpoImage source={{uri: user.getAvatarUrl()}}/>

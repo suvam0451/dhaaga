@@ -8,7 +8,7 @@ import {
 
 class UnknownToStatusAdapter implements StatusInterface {
   getRaw(): Status {
-      return null
+    return null
   }
 
   setDescendents(items: StatusInterface[]): void {

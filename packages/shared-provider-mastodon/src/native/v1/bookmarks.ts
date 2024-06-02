@@ -45,12 +45,10 @@ export default class BookmarkService {
       let minId = null
       if (minIdRegex.test(linkHeader)) {
         const minMatch = linkHeader.match(minIdRegex)
-        console.log(minMatch)
         minId = minMatch[1]
       }
       if (maxIdRegex.test(linkHeader)) {
         const maxMatch = linkHeader.match(maxIdRegex)
-        console.log(maxMatch)
         maxId = maxMatch[1]
       }
       return {

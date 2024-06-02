@@ -15,6 +15,7 @@ const RneuiTheme = createTheme({
       style: {
         color: "#fff",
         opacity: 0.87,
+        fontFamily: "Inter-Regular",
       },
     },
     Skeleton: {

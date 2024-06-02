@@ -2,7 +2,7 @@ import ActivityPubClient, {
   GetPostsQueryDTO,
   GetSearchResultQueryDTO,
   GetTrendingPostsQueryDTO,
-  GetUserPostsQueryDTO,
+  GetUserPostsQueryDTO, MediaUploadDTO,
   RestClientCreateDTO,
   TimelineQuery,
 } from "./_interface";
@@ -24,6 +24,16 @@ class MastodonRestClient implements ActivityPubClient {
           domain: "mastodon"
         }
     );
+  }
+
+  async uploadMedia(params: MediaUploadDTO): Promise<any> {
+    const _client = this.createClient()
+    try {
+      return await _client.v2.media.create(params)
+    } catch (e) {
+      console.log(e)
+      return null
+    }
   }
 
   async getFollowing(id: string) {

@@ -8,6 +8,9 @@ import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {StatusArray} from "../status/_interface";
 
 class UnknownRestClient implements ActivityPubClient {
+  uploadMedia(): Promise<any> {
+      throw new Error("Method not implemented.");
+  }
   getFollowing(id: string): Promise<any[] | mastodon.v1.Account[]> {
       throw new Error("Method not implemented.");
   }

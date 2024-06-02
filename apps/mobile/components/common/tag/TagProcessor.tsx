@@ -1,6 +1,10 @@
-import {Text} from "react-native";
-import HashtagBottomSheet from "../../bottom-sheets/Hashtag";
-import {useState} from "react";
+import {Text, View, Pressable} from "react-native";
+
+import {
+  useGorhomActionSheetContext
+} from "../../../states/useGorhomBottomSheet";
+import GlobalMmkvCacheService from "../../../services/globalMmkvCache.services";
+import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 
 function HashtagProcessor({
   content,
@@ -9,22 +13,26 @@ function HashtagProcessor({
   content: string;
   forwardedKey: string | number;
 }) {
-  const [BottomSheetVisible, setBottomSheetVisible] = useState<boolean>(false)
+  const {
+    setVisible,
+    setBottomSheetType,
+    updateRequestId
+  } = useGorhomActionSheetContext()
+  const {globalDb} = useGlobalMmkvContext()
 
   const onPress = () => {
-    setBottomSheetVisible(true)
+    GlobalMmkvCacheService.setBottomSheetProp_Hashtag(globalDb, {
+      name: content,
+      remoteInstance: "N/A"
+    })
+    setBottomSheetType("Hashtag")
+    updateRequestId()
+    setVisible(true)
   };
 
-  return <>
-    <HashtagBottomSheet
-        visible={BottomSheetVisible}
-        setVisible={setBottomSheetVisible}
-        id={content}
-    />
-    <Text onPress={onPress} key={forwardedKey} style={{color: "#bb86fc"}}>
-      #{content}
-    </Text>
-  </>
+  return <Text onPress={onPress} key={forwardedKey} style={{color: "#bb86fc", opacity: 1}}>
+    #{content}
+  </Text>
 }
 
 export default HashtagProcessor;

@@ -4,8 +4,8 @@ import SearchScreen from "./screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
-import {Animated} from "react-native";
-import {useEffect, useRef} from "react";
+import {Animated, View} from "react-native";
+import {useCallback, useEffect, useRef} from "react";
 import {getCloser} from "./utils";
 import {
   runActivityPubMigrations,
@@ -25,6 +25,11 @@ import {schemas} from "./entities/_index";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import NotificationsScreen from "./screens/NotificationsScreen";
 import RneuiTheme from "./styles/RneuiTheme";
+import {useFonts} from "expo-font";
+import * as SplashScreen from 'expo-splash-screen';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import WithGlobalMmkvContext from "./states/useGlobalMMkvCache";
+
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;
@@ -107,82 +112,109 @@ function App() {
     runCacheMigrations();
   }, []);
 
+  /**
+   * Fonts
+   */
+  const [fontsLoaded, fontError] = useFonts({
+    'Montserrat-Regular': require('../../packages/fonts/Montserrat/static/Montserrat-Regular.ttf'),
+    'Montserrat-Bold': require('../../packages/fonts/Montserrat/static/Montserrat-Bold.ttf'),
+    'Montserrat-ExtraBold': require('../../packages/fonts/Montserrat/static/Montserrat-ExtraBold.ttf'),
+    'Montserrat-SemiBold': require('../../packages/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
+    'Inter-Regular': require('../../packages/fonts/Inter/static/Inter-Regular.ttf'),
+    'Inter-Bold': require('../../packages/fonts/Inter/static/Inter-Bold.ttf'),
+    'Inter-SemiBold': require('../../packages/fonts/Inter/static/Inter-SemiBold.ttf'),
+    "Source_Sans_3-Regular": require('../../packages/fonts/Source_Sans_3/static/SourceSans3-Regular.ttf'),
+  });
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
 
   return (
       <NavigationContainer>
-        <Tab.Navigator
-            screenOptions={({route}) => ({
-              tabBarIcon: ({focused, color, size}) => {
-                let iconName;
-                let renderer = "ionicons";
+        <View onLayout={onLayoutRootView} style={{height: "100%"}}>
+          <Tab.Navigator
+              screenOptions={({route}) => ({
+                tabBarIcon: ({focused, color, size}) => {
+                  let iconName;
+                  let renderer = "ionicons";
 
-                switch (route.name) {
-                  case "Home": {
-                    iconName = focused ? "home" : "home";
-                    break
+                  switch (route.name) {
+                    case "Home": {
+                      iconName = focused ? "home" : "home";
+                      break
+                    }
+                    case "Settings": {
+                      iconName = focused ? "menu-outline" : "menu-outline";
+                      break
+                    }
+                    case "SearchTab": {
+                      iconName = focused ? "compass" : "compass";
+                      renderer = "fa6";
+                      break
+                    }
+                    case "Favourites": {
+                      iconName = focused
+                          ? "bookmark-outline"
+                          : "bookmark-outline";
+                      break
+                    }
+                    case "Notifications": {
+                      iconName = focused
+                          ? "notifications-outline"
+                          : "notifications-outline";
+                      break
+                    }
+                    case "Accounts": {
+                      iconName = focused
+                          ? "person-outline"
+                          : "person-outline";
+                    }
                   }
-                  case "Settings": {
-                    iconName = focused ? "menu-outline" : "menu-outline";
-                    break
+                  switch (renderer) {
+                    case "fa6":
+                      return (
+                          <FontAwesome6
+                              name={iconName}
+                              size={size}
+                              color={color}
+                          />
+                      );
+                    default:
+                      return <Ionicons
+                          name={iconName} size={size}
+                          color={color}
+                      />
                   }
-                  case "SearchTab": {
-                    iconName = focused ? "compass" : "compass";
-                    renderer = "fa6";
-                    break
-                  }
-                  case "Favourites": {
-                    iconName = focused
-                        ? "bookmark-outline"
-                        : "bookmark-outline";
-                    break
-                  }
-                  case "Notifications": {
-                    iconName = focused
-                        ? "notifications-outline"
-                        : "notifications-outline";
-                    break
-                  }
-                  case "Accounts": {
-                    iconName = focused
-                        ? "person-outline"
-                        : "person-outline";
-                  }
-                }
-                switch (renderer) {
-                  case "fa6":
-                    return (
-                        <FontAwesome6
-                            name={iconName}
-                            size={size}
-                            color={color}
-                        />
-                    );
-                  default:
-                    return <Ionicons name={iconName} size={size} color={color}/>
-                }
-              },
-              tabBarStyle: {
-                backgroundColor: "rgba(34,36,40,1)",
-              },
-              tabBarActiveTintColor: "white",
-              tabBarInactiveTintColor: "gray",
-              tabBarShowLabel: false,
-              headerShown: false,
-            })}
-        >
-          <Tab.Screen name="Home" component={HomeScreen}/>
-          <Tab.Screen name="SearchTab" component={SearchScreen}/>
-          <Tab.Screen
-              name="Favourites"
-              component={FavouritesScreen}
-          />
-          <Tab.Screen
-              name="Notifications"
-              component={NotificationsScreen}
-          />
-          <Tab.Screen name="Accounts" component={AccountsScreen}/>
-          <Tab.Screen name="Settings" component={SettingsScreen}/>
-        </Tab.Navigator>
+                },
+                tabBarStyle: {
+                  backgroundColor: "#252525",
+                  borderTopWidth: 0,
+                },
+                tabBarIconStyle: {
+                  opacity: 0.6
+                },
+                tabBarActiveTintColor: "white",
+                tabBarInactiveTintColor: "gray",
+                tabBarShowLabel: false,
+                headerShown: false,
+              })}
+          >
+            <Tab.Screen name="Home" component={HomeScreen}/>
+            <Tab.Screen name="SearchTab" component={SearchScreen}/>
+            <Tab.Screen
+                name="Favourites"
+                component={FavouritesScreen}
+            />
+            <Tab.Screen
+                name="Notifications"
+                component={NotificationsScreen}
+            />
+            <Tab.Screen name="Accounts" component={AccountsScreen}/>
+            <Tab.Screen name="Settings" component={SettingsScreen}/>
+          </Tab.Navigator>
+        </View>
       </NavigationContainer>
   );
 }
@@ -190,19 +222,34 @@ function App() {
 function WithContexts() {
   const queryClient = new QueryClient();
 
-  return <GestureHandlerRootView>
-    <RealmProvider schema={schemas} schemaVersion={9}>
-      <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <ThemeProvider theme={RneuiTheme}>
-            <ActionSheetProvider>
-              <App/>
-            </ActionSheetProvider>
-          </ThemeProvider>
-        </Provider>
-      </QueryClientProvider>
-    </RealmProvider>
-  </GestureHandlerRootView>
+
+  return <>
+    {/* IDK */}
+    <GestureHandlerRootView>
+      {/* In-Memory Store -- MMKV */}
+      <WithGlobalMmkvContext>
+        {/* Main Database -- Realm */}
+        <RealmProvider schema={schemas} schemaVersion={9}>
+          {/* API Caching -- Tanstack */}
+          <QueryClientProvider client={queryClient}>
+            {/* Redux Store */}
+            <Provider store={store}>
+              {/* Rneui Custom Themes */}
+              <ThemeProvider theme={RneuiTheme}>
+                {/* IDK */}
+                <SafeAreaProvider>
+                  {/* Action Sheet -- Expo */}
+                  <ActionSheetProvider>
+                    <App/>
+                  </ActionSheetProvider>
+                </SafeAreaProvider>
+              </ThemeProvider>
+            </Provider>
+          </QueryClientProvider>
+        </RealmProvider>
+      </WithGlobalMmkvContext>
+    </GestureHandlerRootView>
+  </>
 }
 
 export default WithContexts

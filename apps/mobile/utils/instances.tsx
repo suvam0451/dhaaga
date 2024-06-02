@@ -32,12 +32,22 @@ export function extractInstanceUrl(
 export function visibilityIcon(visibility: string) {
   switch (visibility) {
     case "public":
-      return <Ionicons name="earth-outline" size={16} color={"#888"}/>;
+      return <Ionicons name="earth-outline" size={16} color={"#888"} style={{
+        opacity: 0.6
+      }}/>;
     case "direct":
-      return <Ionicons name={"lock-closed-outline"} size={16} color={"#888"}/>
+      return <Ionicons name={"lock-closed-outline"} size={16} color={"#888"}
+                       style={{
+                         opacity: 0.6
+                       }}/>
     case "unlisted":
-      return <Ionicons name={"lock-open-outline"} size={16} color={"#888"}/>
+      return <Ionicons name={"lock-open-outline"} size={16} color={"#888"}
+                       style={{
+                         opacity: 0.6
+                       }}/>
     default:
-      return <Ionicons name="earth-outline" size={16} color={"#888"}/>;
+      return <Ionicons name="earth-outline" size={16} color={"#888"} style={{
+        opacity: 0.6
+      }}/>;
   }
 }

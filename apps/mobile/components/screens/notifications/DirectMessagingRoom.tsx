@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {useQuery as useRealmQuery, useObject} from "@realm/react"
+import {useObject} from "@realm/react"
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import WithActivitypubStatusContext, {
@@ -10,13 +10,9 @@ import {
 } from "../../../states/useActivityPubRestClient";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {useEffect, useMemo, useState} from "react";
-import {TextInput, View} from "react-native";
-import {Text} from "@rneui/themed"
+import {TouchableOpacity, View} from "react-native";
 import {MMKV} from 'react-native-mmkv'
 
-import {
-  ActivityPubConversation
-} from "../../../entities/activitypub-conversation.entity";
 import {
   ActivityPubChatRoom
 } from "../../../entities/activitypub-chatroom.entity";
@@ -25,7 +21,7 @@ import TitleOnlyStackHeaderContainer
 import ActivitypubProviderService
   from "../../../services/activitypub-provider.service";
 import {
-  ActivitypubStatusAdapter, StatusInterface
+  StatusInterface
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import ActivityPubAdapterService
   from "../../../services/activitypub-adapter.service";
@@ -34,13 +30,12 @@ import {RootState} from "../../../libs/redux/store";
 import {AccountState} from "../../../libs/redux/slices/account";
 import ActivityPubProviderService
   from "../../../services/activitypub-provider.service";
-import {ActivityPubStatus} from "../../../entities/activitypub-status.entity";
 import MmkvService from "../../../services/mmkv.service";
 import ChatItem from "./fragments/dm/ChatItem";
 import {Input} from '@rneui/themed';
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import {FontAwesome} from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import PostComposerActionSheet from "../../bottom-sheets/PostComposer";
 
 type DirectMessagingRoomProps = {
   conversationIds: string[]
@@ -97,6 +92,7 @@ function DirectMessagingRoom() {
   const [MessageHistory, setMessageHistory] = useState<StatusInterface[]>([])
 
   const [ChatHistory, setChatHistory] = useState<ChatItemPointer[]>([])
+  const [PostComposerVisible, setPostComposerVisible] = useState(false)
 
   const conversationMapper = useMemo(() => {
     return new Map<string, string>()
@@ -228,18 +224,24 @@ function DirectMessagingRoom() {
         alignItems: "flex-start",
         marginTop: 32
       }}>
-        <View style={{
-          flexShrink: 1,
-          display: "flex",
-          flexDirection: "row",
-          marginTop: 8,
-          minWidth: 20,
+
+        <TouchableOpacity onPress={() => {
+          setPostComposerVisible(true)
         }}>
-          <FontAwesome5 name="plus" size={24} color="#fff"/>
-          {/*<FontAwesome6 name="face-smile" size={24} color="#fff"/>*/}
-          {/*<FontAwesome6 name="image" size={24} color="#fff"/>*/}
-          {/*<FontAwesome name="cog" size={24} color="#fff"/>*/}
-        </View>
+          <View style={{
+            flexShrink: 1,
+            display: "flex",
+            flexDirection: "row",
+            marginTop: 8,
+            minWidth: 20,
+          }}>
+            <FontAwesome5 name="plus" size={24} color="#fff"/>
+            {/*<FontAwesome6 name="face-smile" size={24} color="#fff"/>*/}
+            {/*<FontAwesome6 name="image" size={24} color="#fff"/>*/}
+            {/*<FontAwesome name="cog" size={24} color="#fff"/>*/}
+          </View>
+        </TouchableOpacity>
+
         <View style={{flexShrink: 1}}>
           <Input
               inputContainerStyle={{
@@ -273,8 +275,12 @@ function DirectMessagingRoom() {
         }}>
           <FontAwesome name="send" size={24} color="#fff"/>
         </View>
+
       </View>
     </View>
+    <PostComposerActionSheet
+        visible={PostComposerVisible}
+        setVisible={setPostComposerVisible}/>
   </TitleOnlyStackHeaderContainer>
 }
 

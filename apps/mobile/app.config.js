@@ -33,7 +33,12 @@ const expo = {
         }, "android": {
             "newArchEnabled": true
         }
-    }]]
+    }], [
+        "expo-image-picker",
+        {
+            "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+    ], ["expo-font", {"fonts": ["../../packages/fonts/Montserrat/static/Montserrat-Regular.ttf"]}]]
 };
 
 export default expo

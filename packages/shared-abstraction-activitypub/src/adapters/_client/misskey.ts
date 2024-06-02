@@ -3,6 +3,7 @@ import ActivityPubClient, {
   GetPostsQueryDTO,
   GetUserPostsQueryDTO,
   RestClientCreateDTO,
+  MediaUploadDTO,
 } from "./_interface";
 import {
   createClient,
@@ -22,6 +23,10 @@ class MisskeyRestClient implements ActivityPubClient {
       baseURL: `${dto.instance}/api`,
     });
   }
+
+  uploadMedia(params: MediaUploadDTO): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
 
   async getFollowing(id: string) {
     return []

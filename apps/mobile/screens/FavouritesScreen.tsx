@@ -24,6 +24,7 @@ import FavouritesScreenHomePageDefaultTutorial
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import MyFollowings from "../components/screens/favourites/stack/MyFollowings";
 import MyFollowers from "../components/screens/favourites/stack/MyFollowers";
+import WithGorhomBottomSheetContext from "../states/useGorhomBottomSheet";
 
 const ICON_SIZE = 22;
 
@@ -325,11 +326,15 @@ function WithStackNavigation() {
 
 function FavouritesScreen() {
   return (
+      <View style={{height: "100%"}}>
       <WithActivityPubRestClient>
-        <WithScrollOnRevealContext>
-          <WithStackNavigation/>
-        </WithScrollOnRevealContext>
+        <WithGorhomBottomSheetContext>
+          <WithScrollOnRevealContext>
+            <WithStackNavigation/>
+          </WithScrollOnRevealContext>
+        </WithGorhomBottomSheetContext>
       </WithActivityPubRestClient>
+      </View>
   );
 }
 
