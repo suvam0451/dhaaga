@@ -5,7 +5,7 @@ import {useState} from "react";
 type ReadMoreTextProps = {
   text: string
   maxLines?: number
-  bold?: boolean
+  bold?: boolean,
 }
 
 function ReadMoreText({text, maxLines = 2, bold = false}: ReadMoreTextProps) {

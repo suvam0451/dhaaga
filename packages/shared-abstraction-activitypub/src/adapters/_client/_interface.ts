@@ -45,6 +45,14 @@ export type TagArray = mastodon.v1.Tag[] | []
 
 export type TrendLinkArray = mastodon.v1.TrendLink[] | []
 
+export  type MediaUploadDTO = {
+  readonly file: Blob | string
+  readonly description?: string | null
+  readonly focus?: string | null
+  readonly thumbnail?: Blob | string | null
+  readonly skipPolling?: boolean
+}
+
 /**
  * What common functionalities do we want to support
  * across all ActivityPub based clients
@@ -72,9 +80,15 @@ interface ActivityPubClient {
 
   getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<StatusArray>;
 
-  getBookmarks(opts: GetPostsQueryDTO): Promise<StatusArray>;
+  getBookmarks(opts: GetPostsQueryDTO): Promise<{data: StatusArray, minId?: string, maxId?: string}>;
 
   getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>
+
+  getFollowing(id: string): Promise<mastodon.v1.Account[] | null>
+
+  getFollowers(id: string): Promise<mastodon.v1.Account[] | null>
+
+  uploadMedia(params: MediaUploadDTO): Promise<any>
 
   /**
    * Trending

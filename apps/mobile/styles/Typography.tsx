@@ -12,6 +12,6 @@ export const PrimaryText = styled.Text`
 
 export const SecondaryText = styled.Text`
 	color: #888;
-	font-size: 12;
+	font-size: 12px;
 	font-weight: 500;
 `;

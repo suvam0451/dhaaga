@@ -7,15 +7,18 @@ import {
 import {useSelector} from "react-redux";
 import {RootState} from "../libs/redux/store";
 import {AccountState} from "../libs/redux/slices/account";
+import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 
 type Type = {
   client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null,
   me: UserInterface | null
+  meRaw: mastodon.v1.Account | null
 }
 
 const defaultValue = {
   client: null,
-  me: null
+  me: null,
+  meRaw: null
 }
 
 const ActivityPubRestClientContext =
@@ -39,6 +42,7 @@ function WithActivityPubRestClient({children}: any) {
       MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
   >(null);
   const [Me, setMe] = useState(null)
+  const [MeRaw, setMeRaw] = useState(null)
 
   useEffect(() => {
     if (!accountState.activeAccount) {
@@ -69,13 +73,15 @@ function WithActivityPubRestClient({children}: any) {
       return
     }
     restClient.getMe().then((res) => {
+      setMeRaw(res)
       setMe(ActivityPubUserAdapter(res, _domain))
     })
   }, [restClient])
 
   return <ActivityPubRestClientContext.Provider value={{
     client: restClient,
-    me: Me
+    me: Me,
+    meRaw: MeRaw
   }}>
     {children}
   </ActivityPubRestClientContext.Provider>

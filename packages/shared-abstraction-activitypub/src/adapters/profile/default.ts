@@ -1,6 +1,12 @@
 import {EmojiMapValue, UserInterface} from "./_interface";
 
 export class DefaultUser implements UserInterface {
+  getInstanceUrl(): string {
+    return ""
+  }
+  getIsLockedProfile(): boolean | null | undefined {
+      return false
+  }
   getAccountUrl(): string {
     return ""
   }

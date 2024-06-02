@@ -3,6 +3,7 @@ import ActivityPubClient, {
   GetPostsQueryDTO,
   GetUserPostsQueryDTO,
   RestClientCreateDTO,
+  MediaUploadDTO,
 } from "./_interface";
 import {
   createClient,
@@ -21,6 +22,18 @@ class MisskeyRestClient implements ActivityPubClient {
     this.axiosClient = axios.create({
       baseURL: `${dto.instance}/api`,
     });
+  }
+
+  uploadMedia(params: MediaUploadDTO): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
+
+  async getFollowing(id: string) {
+    return []
+  }
+
+  async getFollowers(id: string) {
+    return []
   }
 
   async getMe() {
@@ -76,7 +89,7 @@ class MisskeyRestClient implements ActivityPubClient {
   }
 
   async getBookmarks(opts: GetPostsQueryDTO) {
-    return []
+    return {data: []}
   }
 
   async getFollowedTags() {

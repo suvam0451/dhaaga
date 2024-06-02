@@ -1,11 +1,11 @@
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {
   View,
-  Text,
   TouchableOpacity
 } from "react-native";
+import {Text} from "@rneui/themed"
 import {StandardView} from "../../../styles/Containers";
-import {Ionicons} from "@expo/vector-icons";
+import {FontAwesome, Ionicons} from "@expo/vector-icons";
 import {formatDistance, formatDistanceToNowStrict} from "date-fns";
 import {useEffect, useState} from "react";
 import React from "react";
@@ -29,6 +29,10 @@ import {useRealm} from "@realm/react";
 import {
   ActivityPubServerRepository
 } from "../../../repositories/activitypub-server.repo";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import activitypubAdapterService
+  from "../../../services/activitypub-adapter.service";
+import WithActivitypubUserContext from "../../../states/useProfile";
 
 const POST_SPACING_VALUE = 4
 
@@ -67,7 +71,7 @@ function RootStatusFragment({
     if (ex.test(acctUrl)) {
       // @ts-ignore
       const theirUrl = acctUrl.match(ex)[1];
-      ActivityPubServerRepository.upsert(realm, theirUrl)
+      // ActivityPubServerRepository.upsert(realm, theirUrl)
     }
   }, [status]);
 
@@ -85,23 +89,29 @@ function RootStatusFragment({
   }, [_status]);
 
   useEffect(() => {
+    const user = _status.getUser()
+    // console.log(user)
+    // const userI = activitypubAdapterService.adaptUser(user, domain)
     setPosterContent(
-        <OriginalPoster
-            id={_status.getAccountId_Poster()}
-            avatarUrl={_status.getAvatarUrl()}
-            displayName={_status.getDisplayName()}
-            createdAt={_status.getCreatedAt()}
-            username={_status.getUsername()}
-            subdomain={accountState?.activeAccount?.subdomain}
-            visibility={_status?.getVisibility()}
-            accountUrl={_status.getAccountUrl()}
-        />
+        <WithActivitypubUserContext user={user}>
+          <OriginalPoster
+              id={_status.getAccountId_Poster()}
+              avatarUrl={_status.getAvatarUrl()}
+              displayName={_status.getDisplayName()}
+              createdAt={_status.getCreatedAt()}
+              username={_status.getUsername()}
+              subdomain={accountState?.activeAccount?.subdomain}
+              visibility={_status?.getVisibility()}
+              accountUrl={_status.getAccountUrl()}
+          />
+        </WithActivitypubUserContext>
     );
   }, [_status]);
 
   const [OpenAiContext, setOpenAiContext] = useState([])
 
   let content = _status.getContent();
+
   useEffect(() => {
     const emojiMap = UserInterface.getEmojiMap()
     const {openAiContext, reactNodes} = MfmService.renderMfm(content, {
@@ -113,7 +123,12 @@ function RootStatusFragment({
       {reactNodes?.map(
           (para, i) => {
             const uuid = randomUUID()
-            return <Text key={uuid} style={{marginBottom: 8, opacity: 0.87}}>
+            return <Text key={uuid} style={{
+              marginBottom: 8,
+              // opacity: 0.6,
+              display: "flex",
+            }}
+            >
               {para.map((o, j) => o)}
             </Text>
           }
@@ -145,14 +160,23 @@ function RootStatusFragment({
                   flexDirection: "row",
                   marginTop: mt === undefined ? 0 : mt,
                   marginBottom: 8,
+                  position: "relative"
                 }}
             >
               {PosterContent}
-              <View>
-                <TouchableOpacity onPress={statusActionListClicked}>
-                  <Ionicons name="ellipsis-horizontal" size={24} color="#888"/>
-                </TouchableOpacity>
-              </View>
+              {/*<View style={{position: "absolute", left: "100%"}}>*/}
+              {/*<View style={{position: "relative"}}>*/}
+              {/*<View style={{position: "absolute", left: -36, top: -16, overflow: "visible"}}>*/}
+              {/*<TouchableOpacity onPress={statusActionListClicked}>*/}
+              {/*<FontAwesome name="bookmark" size={32} color="#888" style={{opacity: 0.87}} />*/}
+              {/*<MaterialIcons name="bookmark-add" size={36} color="#888"  style={{opacity: 0.6}} />*/}
+              {/*<MaterialIcons name="bookmark-add" size={32}
+                       color="#888" style={{opacity: 0.87}} />*/}
+              {/*<Ionicons name="ellipsis-horizontal" size={24} color="#888"/>*/}
+              {/*</TouchableOpacity>*/}
+              {/*</View>*/}
+              {/*</View>*/}
+              {/*</View>*/}
             </View>
             <View style={{marginBottom: 0}}>
               {DescriptionContent}
@@ -166,10 +190,17 @@ function RootStatusFragment({
                     marginTop: 8,
                     borderRadius: 8
                   }}>
-                      <View style={{display: "flex", flexDirection: "row"}}>
-                          <Text style={{
-                            flex: 1,
+                      <View style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        width: "100%",
+                        marginBottom: 4
+                      }}>
+                          <View style={{
+                            display: "flex",
+                            flexDirection: "row",
                             flexGrow: 1,
+                            alignItems: "center"
                           }}>
                               <View>
                                   <Ionicons
@@ -184,14 +215,15 @@ function RootStatusFragment({
                                     {" JP -> EN"}
                                   </Text>
                               </View>
-                          </Text>
-                          <Text style={{
-                            color: "#ffffff38",
-                            flex: 1,
-                            textAlign: "right",
-                            fontSize: 14
-                          }}>Translated using
-                              OpenAI</Text>
+                          </View>
+                          <View>
+                              <Text style={{
+                                color: "#ffffff38",
+                                flex: 1,
+                                textAlign: "right",
+                                fontSize: 14
+                              }}>Translated using OpenAI</Text>
+                          </View>
                       </View>
                       <Text
                           style={{color: "#ffffff87"}}>{ExplanationObject}</Text>

@@ -51,7 +51,7 @@ function Content() {
   }
 
   function onPageEndReached() {
-    console.log("[INFO]: page end reached. performing refetch")
+    // console.log("[INFO]: page end reached. performing refetch")
 
     // updateQueryCache()
     // refetch()
@@ -180,7 +180,7 @@ function TimelineRenderer() {
     }
     if (status !== "success") return
 
-    if (status === "success" && data.length > 0) {
+    if (status === "success" && data && data.length > 0) {
       setMaxId(data[data.length - 1]?.id)
       append(data)
     }
@@ -240,7 +240,7 @@ function TimelineRenderer() {
   );
 
   function onPageEndReached() {
-    console.log("[INFO]: page end reached. performing refetch")
+    // console.log("[INFO]: page end reached. performing refetch")
     updateQueryCache()
     refetch()
     setLoadingMoreComponentProps({
@@ -303,7 +303,7 @@ function TimelineRenderer() {
 
   return (
       <SafeAreaView style={[styles.container, {position: "relative"}]}>
-        <StatusBar backgroundColor="#121212"/>
+        <StatusBar backgroundColor="#222222"/>
         <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
           <TimelinesHeader
               SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}

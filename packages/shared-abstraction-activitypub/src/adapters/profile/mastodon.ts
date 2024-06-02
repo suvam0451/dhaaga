@@ -9,6 +9,17 @@ class MastodonUser implements UserInterface {
     this.mp = mp
   }
 
+  getInstanceUrl(): string {
+    const ex = /^https?:\/\/(.*?)\/(.*?)/;
+    const subdomainExtractUrl = /^https?:\/\/(.*?)\/@?/;
+    const fullUrl = this.ref.instance.url
+    if (ex.test(fullUrl)) {
+      // @ts-ignore
+      return fullUrl.match(subdomainExtractUrl)[1]
+    }
+    return ""
+  }
+
   getAccountUrl(): string {
     return this.ref.instance.url
   }
@@ -106,7 +117,11 @@ class MastodonUser implements UserInterface {
   }
 
   getIsBot(): boolean {
-    return false;
+    return this?.ref?.instance?.bot;
+  }
+
+  getIsLockedProfile() {
+    return this?.ref?.instance?.locked
   }
 
   getOnlineStatus(): "online" | "active" | "offline" | "unknown" {
@@ -114,7 +129,7 @@ class MastodonUser implements UserInterface {
   }
 
   getPostCount(): number {
-    return 0;
+    return this.ref?.instance?.statusesCount;
   }
 
   getUsername(): string {

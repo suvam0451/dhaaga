@@ -59,6 +59,7 @@ export class EmojiService {
    * @returns
    */
   static async updateEmojiCacheForDomain(subdomain: string) {
+
     try {
       const emojisUpdatedAt = await CacheRepo.getUpdatedAt(
           `${subdomain}/api/emojis`

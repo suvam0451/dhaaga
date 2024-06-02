@@ -66,7 +66,6 @@ function WithActivitypubChatRoomContext({
   const [Participants, setParticipants] = useState<UserInterface[]>([])
   const [Tails, setTails] = useState([])
   const [Heads, setHeads] = useState([])
-  const [ChatroomIds, setChatroomIds] = useState([])
 
   const {client, me} = useActivityPubRestClientContext()
 

@@ -1,5 +1,5 @@
 import {
-  NoteInstance, StatusContextInstance,
+  NoteInstance, Status, StatusContextInstance,
   StatusContextInterface,
   StatusInterface
 } from "./_interface";
@@ -43,6 +43,14 @@ class MisskeyToStatusAdapter implements StatusInterface {
 
   constructor(ref: NoteInstance) {
     this.ref = ref;
+  }
+
+  getRaw(): Status {
+    return this?.ref?.instance
+  }
+
+  getIsFavourited(): boolean | null | undefined {
+    return false
   }
 
   setDescendents(items: StatusInterface[]): void {

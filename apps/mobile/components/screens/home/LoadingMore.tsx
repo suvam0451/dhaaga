@@ -1,4 +1,5 @@
-import {View, ActivityIndicator, Text} from "react-native";
+import {View, ActivityIndicator} from "react-native";
+import {Text} from "@rneui/themed"
 
 type LoadingMoreProps = {
   visible: boolean
@@ -30,7 +31,7 @@ function LoadingMore({visible, loading}: LoadingMoreProps) {
       <ActivityIndicator size="small" color="#ffffff87"/>
       <Text style={{
         color: "#fff",
-        opacity: 0.87,
+        opacity: 0.6,
         textAlign: "center",
         marginLeft: 4
       }}>{"Loading More..."}</Text>

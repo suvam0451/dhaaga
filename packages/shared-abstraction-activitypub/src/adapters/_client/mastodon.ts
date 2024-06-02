@@ -2,7 +2,7 @@ import ActivityPubClient, {
   GetPostsQueryDTO,
   GetSearchResultQueryDTO,
   GetTrendingPostsQueryDTO,
-  GetUserPostsQueryDTO,
+  GetUserPostsQueryDTO, MediaUploadDTO,
   RestClientCreateDTO,
   TimelineQuery,
 } from "./_interface";
@@ -24,6 +24,36 @@ class MastodonRestClient implements ActivityPubClient {
           domain: "mastodon"
         }
     );
+  }
+
+  async uploadMedia(params: MediaUploadDTO): Promise<any> {
+    const _client = this.createClient()
+    try {
+      return await _client.v2.media.create(params)
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
+  async getFollowing(id: string) {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.accounts.$select(id).following.list()
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+
+  async getFollowers(id: string) {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.accounts.$select(id).followers.list()
+    } catch (e) {
+      console.log(e)
+      return null
+    }
   }
 
   async getMe() {
@@ -161,14 +191,8 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
 
-  async getBookmarks() {
-    const _client = this.createClient()
-    try {
-      return await _client.v1.bookmarks.list()
-    } catch (e) {
-      console.log(e)
-      return []
-    }
+  async getBookmarks(opts: GetPostsQueryDTO) {
+    return await RestServices.v1.bookmarks.getBookmarks(this.client, opts);
   }
 
   async getFollowedTags() {

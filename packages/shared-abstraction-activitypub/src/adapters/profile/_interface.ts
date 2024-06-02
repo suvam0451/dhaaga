@@ -46,11 +46,18 @@ export interface UserInterface {
 
   getIsBot(): boolean | undefined | null
 
+  getIsLockedProfile(): boolean | undefined | null
+
   getDisplayName(): string | null
 
   getPostCount(): number
 
   getUsername(): string
+
+  /**
+   * e.g. - mastodon.social from "https://mastodon.social/@suvam"
+   */
+  getInstanceUrl(): string
 
   getOnlineStatus(): "online" | "active" | "offline" | "unknown"
 

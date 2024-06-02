@@ -4,6 +4,8 @@ import DirectMessaging
 import MyNotifications
   from "../components/screens/notifications/MyNotifications";
 import WithActivityPubRestClient from "../states/useActivityPubRestClient";
+import DirectMessagingRoom
+  from "../components/screens/notifications/DirectMessagingRoom";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +17,10 @@ function WithStackNavigation() {
     <Stack.Screen
         name={"DirectMessaging"}
         component={DirectMessaging}
+    />
+    <Stack.Screen
+        name={"DirectMessagingRoom"}
+        component={DirectMessagingRoom}
     />
     <Stack.Screen
         name={"MyNotifications"}

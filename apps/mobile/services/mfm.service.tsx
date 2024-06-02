@@ -6,12 +6,13 @@ import {
 import {Text} from "react-native";
 import HashtagProcessor from "../components/common/tag/TagProcessor";
 import React from "react";
-import {Image} from "@rneui/base";
+import {Image} from "expo-image"
 import {
   EmojiMapValue
 } from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface";
 import {randomUUID} from "expo-crypto";
 import LinkProcessor from "../components/common/link/LinkProcessor";
+import {APP_THEME} from "../styles/AppTheme";
 
 class MfmService {
   static parseNode(
@@ -36,7 +37,7 @@ class MfmService {
             <Text key={count}
                   style={{
                     color: "#fff",
-                    opacity: 0.87
+                    opacity: 0.87,
                   }}>
               {baseText}
             </Text>
@@ -60,29 +61,29 @@ class MfmService {
             displayName = match
           }
         }
-        return (
-            <LinkProcessor
-                key={count}
-                url={node.props.url}
-                displayName={displayName}
-            />
-        );
+        return <LinkProcessor
+            key={count}
+            url={node.props.url}
+            displayName={displayName}
+        />
       }
       case "emojiCode": {
         if (!emojiMap) return <Text key={count}></Text>;
         const match = emojiMap.get(node.props.name)
 
-        if (!match) return <Text key={count} style={{color: "red"}}>
+        if (!match) return <Text
+            key={count}
+            style={{color: APP_THEME.INVALID_ITEM_BODY}}>
           {`:${node.props.name}:`}
         </Text>;
-        return <Image
-            key={count}
+        return <Text key={count}><Image
             style={{
-              width: 16,
-              height: 16,
+              width: 14,
+              height: 14,
+              opacity: 0.6
             }}
             source={{uri: match.url}}
-        />
+        /></Text>
 
         // return (
         //     <CustomEmojiFragment
@@ -95,7 +96,7 @@ class MfmService {
         break;
       }
       case "italic" : {
-        console.log("[WARN]: unsupported mfm item", node)
+        console.log("[WARN] Italic item", node.children)
         return (
             <Text key={count} style={{color: "white", fontStyle: "italic"}}>
               Dhaaga: Italics Not Supported
@@ -172,12 +173,10 @@ class MfmService {
           retval[paraCount].push(
               <Text key={key}
                     style={{
-                      color: "#fff",
-                      opacity: 0.87
+                      color: "rgba(255, 255, 255, 0.6)",
                     }}>
                 {splits[0]}
-              </Text>
-          )
+              </Text>)
           count++
 
           // each n-1 item results in a split
@@ -189,12 +188,10 @@ class MfmService {
             retval[paraCount].push(
                 <Text key={key}
                       style={{
-                        color: "#fff",
-                        opacity: 0.87
+                        color: "rgba(255, 255, 255, 0.6)",
                       }}>
                   {splits[i]}
-                </Text>
-            )
+                </Text>)
           }
 
           const txt = node.props.text.trim()

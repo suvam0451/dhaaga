@@ -19,6 +19,8 @@ export interface StatusContextInterface {
 }
 
 export interface StatusInterface {
+  getRaw(): Status
+
   getId(): string
 
   getUsername(): string;
@@ -50,7 +52,7 @@ export interface StatusInterface {
   getRepliesCount(): number;
 
   getIsBookmarked(): boolean | null | undefined
-
+  getIsFavourited(): boolean | null | undefined
   getRepostsCount(): number;
 
   getFavouritesCount(): number;
@@ -64,6 +66,8 @@ export interface StatusInterface {
   getParentStatusId(): string | null | undefined
 
   getUserIdParentStatusUserId(): string | null | undefined
+
+  print(): void
 
   /**
    * Reply Thread

@@ -1,5 +1,6 @@
 import Realm, {BSON, ObjectSchema} from 'realm';
-import {ActivityPubUser} from "./activityPub";
+import {ActivityPubUser} from "./activitypub-user.entity";
+import {ActivityPubStatus} from "./activitypub-status.entity";
 
 export class ActivityPubServer extends Realm.Object {
   _id: Realm.BSON.UUID;
@@ -9,6 +10,7 @@ export class ActivityPubServer extends Realm.Object {
   createdAt: Date
   // relations
   users: Realm.List<ActivityPubUser>
+  statuses: Realm.List<ActivityPubStatus>
 
   static schema: ObjectSchema = {
     name: "ActivityPubServer",
@@ -25,6 +27,7 @@ export class ActivityPubServer extends Realm.Object {
 
       // relations
       users: 'ActivityPubUser[]',
+      statuses: "ActivityPubStatus[]"
     }
   }
 }

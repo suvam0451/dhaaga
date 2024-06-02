@@ -20,7 +20,8 @@ export function parseStatusContent(str: string) {
   str = str.replaceAll(removeHttps, "$1$3")
 
   // Replace tags with #tag -- Used for highlighting
-  const tagExx = /<a href=".*?\/tags\/(.*?)\".*?<\/a>/gm;
+  // const tagExx = /<a href=".*?\/tags\/(.*?)\".*?<\/a>/gm;
+  const tagExx = /<a.*?#(.*?)<\/a>/gm;
   str = str.replaceAll(tagExx, "#$1");
 
   // NOTE: for corner case reports

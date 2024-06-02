@@ -47,7 +47,6 @@ function TitleOnlyStackHeaderContainer(
     translateYNumber.current = value;
   });
 
-
   async function onPerformRefresh() {
     setIsRefreshing(true)
     if (onRefresh) {
@@ -93,12 +92,13 @@ function TitleOnlyStackHeaderContainer(
     <Animated.ScrollView
         style={{
           backgroundColor: "black",
-          paddingTop: SHOWN_SECTION_HEIGHT,
+          marginTop: SHOWN_SECTION_HEIGHT,
         }}
         contentContainerStyle={{
           display: "flex",
           minHeight: "100%",
           paddingBottom: SHOWN_SECTION_HEIGHT,
+          marginTop: 4
         }}
         onScroll={(e) => {
           NavigationService.invokeWhenPageEndReached(e, onScrollViewEndReached)

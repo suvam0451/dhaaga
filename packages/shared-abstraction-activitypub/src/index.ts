@@ -2,13 +2,14 @@ import {RestClientCreateDTO} from "./adapters/_client/_interface";
 import MastodonRestClient from "./adapters/_client/mastodon";
 import MisskeyRestClient from "./adapters/_client/misskey";
 import UnknownRestClient from "./adapters/_client/default";
+import ActivityPubClient from "./adapters/_client/_interface"
 
 //  status adapters
 import UnknownToStatusAdapter from "./adapters/status/default";
 import MastodonToStatusAdapter from "./adapters/status/mastodon"
 import MisskeyToStatusAdapter from "./adapters/status/misskey"
 
-export {UnknownToStatusAdapter, MastodonToStatusAdapter, MisskeyToStatusAdapter}
+export {UnknownToStatusAdapter, MastodonToStatusAdapter, MisskeyToStatusAdapter, ActivityPubClient}
 
 // export media attachment adapters and interfaces
 export {

@@ -18,6 +18,19 @@ export const AvatarContainerWithInset = styled.View`
     margin-left: 13px;
 `;
 
+export const ParsedDescriptionContainer = styled.View`
+    margin-top: 12px;
+    padding: 8px 8px;
+`
+
+export const ParsedDescriptionContainerForChatroomPreview = styled.Text`
+    margin-top: 4px;
+    display: inline-flex;
+    line-clamp: max(1);
+    align-items: center;
+    flex-direction: row;
+`
+
 export const AvatarContainer = styled.View`
     width: 52px;
     height: 52px;
