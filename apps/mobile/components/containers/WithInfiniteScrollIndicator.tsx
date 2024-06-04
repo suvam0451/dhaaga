@@ -11,7 +11,7 @@ type AnimatedScrollViewWithLoadingIndicatorProps = {
 /**
  * Adds a loading indicator at the bottom of an Animated Scroll view
  *
- * ^ Used across many screens in this app
+ * ^ Used across many accounts in this app
  */
 function WithInfiniteScrollIndicator(props: AnimatedScrollViewWithLoadingIndicatorProps) {
   const [LoadingState, setLoadingState] = useState({

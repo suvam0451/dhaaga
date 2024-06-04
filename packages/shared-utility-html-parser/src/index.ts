@@ -1,13 +1,13 @@
-import type {MfmNode} from "mfm-js";
-import {parse} from "mfm-js";
+import * as mfm from "mfm-js"
+import type {MfmNode} from "mfm-js/built";
 import {decode} from "html-entities";
 
-export type {MfmNode, MfmEmojiCode} from "mfm-js";
+export type {MfmNode, MfmEmojiCode} from "mfm-js/built";
 
 /**
  * Utility function that
  * 1. Removes <p> tags
- * 2. Replaces &#39; with '
+ * 2. Replaces &#39; with
  * 3. Replaces tag urls with #tag
  * 4. Splits paragraphs
  * @param str
@@ -24,14 +24,6 @@ export function parseStatusContent(str: string) {
   const tagExx = /<a.*?#(.*?)<\/a>/gm;
   str = str.replaceAll(tagExx, "#$1");
 
-  // NOTE: for corner case reports
-  // let trigger = false;
-  // @ts-ignore
-  // if (str.includes("role_nsfw")) {
-  // 	console.log("important string", str);
-  // 	trigger = true;
-  // }
-
   // replace links with href
   str = str.replaceAll(/<a .*?href="(.*?)".*?a>/g, "$1");
 
@@ -39,9 +31,6 @@ export function parseStatusContent(str: string) {
   // Replace  leading "#" -- Confuses mfm-js
   const rule3 = /(<a.*?>)(#+)(.+.*?<\/a>)/gm
   str = str.replaceAll(rule3, "$1$3");
-
-  // [BUG] [mfm-js] -- 0.23/24.0 -- broken, if link text itself is a link
-  // [FIX] remove "https://" from text
 
 
   const ex = /<p>(.*?)<\/p>/g;
@@ -55,7 +44,7 @@ export function parseStatusContent(str: string) {
       currStr = currStr.replaceAll("</span>", "");
       currStr = currStr.replaceAll(/<span.*?>/g, "");
 
-      const mfmTree = parse(currStr);
+      const mfmTree = mfm.parse(currStr);
       retval.push(mfmTree);
     }
   } else {
@@ -66,7 +55,7 @@ export function parseStatusContent(str: string) {
     currStr = currStr.replaceAll("</span>", "");
     currStr = currStr.replaceAll(/<span.*?>/g, "");
 
-    const mfmTree = parse(currStr);
+    const mfmTree = mfm.parse(currStr);
     retval.push(mfmTree);
   }
 
@@ -74,7 +63,7 @@ export function parseStatusContent(str: string) {
 }
 
 export function parseUsername(str: string) {
-  return parse(str);
+  return mfm.parse(str);
 }
 
 export function decodeHTMLString(str: string) {

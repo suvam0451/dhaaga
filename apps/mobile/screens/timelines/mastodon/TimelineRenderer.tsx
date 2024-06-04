@@ -22,9 +22,10 @@ import WithAppPaginationContext, {
   useAppPaginationContext
 } from "../../../states/usePagination";
 import LoadingMore from "../../../components/screens/home/LoadingMore";
-import {EmojiService} from "../../../services/emoji.service";
 import {AnimatedFlashList} from "@shopify/flash-list"
 import NavigationService from "../../../services/navigation.service";
+import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
+import {useRealm} from "@realm/react";
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -35,19 +36,14 @@ function Content() {
   const {data: PageData} = useAppPaginationContext()
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {client} = useActivityPubRestClientContext()
+  const {globalDb} = useGlobalMmkvContext()
+  const db = useRealm()
 
   const [refreshing, setRefreshing] = useState(false);
   const ref = useRef(null);
 
   const onRefresh = () => {
     setRefreshing(true);
-    // clear()
-    // refetch();
-
-    const subdomain = accountState.activeAccount?.domain;
-    if (subdomain) {
-      EmojiService.updateEmojiCacheForDomain(subdomain);
-    }
   }
 
   function onPageEndReached() {
@@ -110,24 +106,6 @@ function Content() {
         contentContainerStyle={{
           paddingTop: SHOWN_SECTION_HEIGHT + 4,
         }}
-        // renderScrollComponent={() => <Animated.ScrollView
-        //     contentContainerStyle={{
-        //       paddingTop: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT,
-        //     }}
-        //     onScroll={(e) => {
-        //       NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
-        //       // return handleScroll
-        //     }}
-        //     contentInset={{
-        //       top: SHOWN_SECTION_HEIGHT + HIDDEN_SECTION_HEIGHT + 1000,
-        //     }}
-        //     scrollEventThrottle={16}
-        //     refreshControl={
-        //       <RefreshControl
-        //           refreshing={refreshing}
-        //           onRefresh={onRefresh}/>
-        //     }
-        // />}
     />
   </>
 }
@@ -190,16 +168,6 @@ function TimelineRenderer() {
       loading: false
     })
   }, [fetchStatus]);
-
-  /**
-   * Load global emoji database
-   */
-  useEffect(() => {
-    if (accountState.activeAccount?.domain) {
-      const url = accountState.activeAccount.subdomain;
-      EmojiService.updateEmojiCacheForDomain(url);
-    }
-  }, [accountState]);
 
   const ref = useRef(null);
 
@@ -294,11 +262,6 @@ function TimelineRenderer() {
     setRefreshing(true);
     clear()
     refetch();
-
-    const subdomain = accountState.activeAccount?.domain;
-    if (subdomain) {
-      EmojiService.updateEmojiCacheForDomain(subdomain);
-    }
   }
 
   return (

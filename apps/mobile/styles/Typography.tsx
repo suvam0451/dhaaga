@@ -1,13 +1,14 @@
 import styled from "styled-components/native";
 
 export const MainText = styled.Text`
-	font-size: 20px;
-	font-weight: 700;
+    color: rgba(255, 255, 255, 0.87);
+    font-size: 20px;
+    font-family: Montserrat-ExtraBold;
 `;
 
 export const PrimaryText = styled.Text`
-	color: white;
-	font-weight: 600;
+    color: rgba(255, 255, 255, 0.87);
+    font-family: Montserrat-Bold, serif;
 `;
 
 export const SecondaryText = styled.Text`

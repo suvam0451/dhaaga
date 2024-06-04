@@ -1,4 +1,5 @@
-import {Dimensions, View, Text, Keyboard} from "react-native";
+import {Dimensions, View, Keyboard, ScrollView} from "react-native";
+import {Text} from "@rneui/themed";
 import {useEffect, useState} from "react";
 import WebView from "react-native-webview";
 import {StandardView} from "../../../../styles/Containers";
@@ -9,11 +10,16 @@ import {
   RestClient,
   RestServices,
 } from "@dhaaga/shared-provider-mastodon/src";
-import {AccountsRepo} from "../../../../libs/sqlite/repositories/accounts.repo";
-import {CredentialsRepo} from "../../../../libs/sqlite/repositories/credentials.repo";
+import {useNavigation, useRoute} from "@react-navigation/native";
+import AccountRepository from "../../../../repositories/account.repo";
+import {useRealm} from "@realm/react";
+import TitleOnlyNoScrollContainer
+  from "../../../../components/containers/TitleOnlyNoScrollContainer";
 
-function MastodonSignInStack({route, navigation}) {
+function MastodonSignInStack() {
   const [Code, setCode] = useState<string | null>(null);
+  const route = useRoute<any>()
+  const navigation = useNavigation<any>();
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -39,6 +45,7 @@ function MastodonSignInStack({route, navigation}) {
 
   const signInUrl = route?.params?.signInUrl || "https://mastodon.social";
   const subdomain = route?.params?.subdomain;
+  const db = useRealm()
 
   function callback(state) {
     const regex = /^https:\/\/(.*?)\/oauth\/authorize\/native\?code=(.*?)$/;
@@ -60,77 +67,65 @@ function MastodonSignInStack({route, navigation}) {
       accessToken: token,
       domain: "mastodon"
     });
+
     const verified =
         await RestServices.v1.accounts.verifyCredentials(client);
 
-    await AccountsRepo.add({
-      subdomain: subdomain,
-      domain: "mastodon",
-      username: verified.username,
-    });
+    db.write(() => {
+      const acct = AccountRepository.upsert(db, {
+        subdomain: subdomain,
+        domain: "mastodon",
+        username: verified.username,
+        avatarUrl: verified.avatar
+      })
 
-    const accnt = await AccountsRepo.search({
-      subdomain: subdomain,
-      domain: "mastodon",
-      username: verified.username,
-    });
+      AccountRepository.setSecret(db, acct, "display_name", verified["display_name"])
+      AccountRepository.setSecret(db, acct, "avatar", verified["avatar_static"])
+      AccountRepository.setSecret(db, acct, "url", verified["url"])
+      AccountRepository.setSecret(db, acct, "access_token", token)
+    })
 
-    const creds = [
-      {
-        key: "display_name",
-        value: verified["display_name"],
-      },
-      {
-        key: "avatar",
-        value: verified["avatar_static"],
-      },
-      {
-        key: "url",
-        value: verified["url"],
-      },
-      {
-        key: "access_token",
-        value: token,
-      },
-    ];
-
-    for (const cred of creds) {
-      await CredentialsRepo.upsert(accnt, {
-        credential_type: cred.key,
-        credential_value: cred.value,
-      });
-    }
     navigation.navigate("Select an Account");
   }
 
   return (
-      <View style={{height: "100%"}}>
-        <WebView
-            style={{flex: 1, minWidth: Dimensions.get("window").width - 20}}
-            source={{uri: signInUrl}}
-            onNavigationStateChange={callback}
-        />
-        {!isKeyboardVisible && (
-            <StandardView style={{height: 160}}>
-              <MainText style={{marginBottom: 12, marginTop: 16}}>
-                Step 3: Confirm your account
-              </MainText>
-              {Code ? (
-                  <View>
-                    <Text style={{marginBottom: 12}}>
-                      A valid token was detected. Proceed with adding the account
-                      shown above?
-                    </Text>
-                  </View>
-              ) : (
-                  <View></View>
-              )}
-              <Button disabled={!Code} onPress={onPressConfirm}>
-                Proceed
-              </Button>
-            </StandardView>
-        )}
-      </View>
+      <TitleOnlyNoScrollContainer
+          headerTitle={`Mastodon Sign-In`}
+      >
+        <View style={{height: "100%", display: "flex"}}>
+          <ScrollView
+              contentContainerStyle={{flexGrow: 1}}>
+            <WebView
+                style={{flex: 1, minWidth: Dimensions.get("window").width - 20}}
+                source={{uri: signInUrl}}
+                onNavigationStateChange={callback}
+            />
+          </ScrollView>
+          {!isKeyboardVisible && (
+              <StandardView style={{height: 240}}>
+                <MainText style={{marginBottom: 12, marginTop: 16}}>
+                  Step 3: Confirm your account
+                </MainText>
+                {Code ? (
+                    <View>
+                      <Text style={{marginBottom: 12}}>
+                        A valid token was detected. Proceed with adding the
+                        account
+                        shown above?
+                      </Text>
+                    </View>
+                ) : (
+                    <View></View>
+                )}
+                <Button
+                    disabled={!Code} color={"rgb(99, 100, 255)"}
+                    onPress={onPressConfirm}>
+                  Proceed
+                </Button>
+              </StandardView>
+          )}
+        </View>
+      </TitleOnlyNoScrollContainer>
   );
 }
 

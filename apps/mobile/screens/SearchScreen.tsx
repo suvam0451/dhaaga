@@ -1,8 +1,7 @@
-import {GestureResponderEvent, View} from "react-native";
+import {View} from "react-native";
 import WithScrollOnRevealContext, {
   useScrollOnReveal
 } from "../states/useScrollOnReveal";
-import WithActivityPubRestClient from "../states/useActivityPubRestClient";
 import {SearchBar} from "@rneui/themed";
 import React, {useState} from "react";
 import {CheckBox} from "@rneui/base";
@@ -140,37 +139,35 @@ function HomeContainer() {
 
 
 function SearchScreen() {
-  return <WithActivityPubRestClient>
-    <Stack.Navigator
-        initialRouteName={"Search"}
-        screenOptions={{headerShown: false}}
-    >
-      <Stack.Screen
-          name={"Trending Posts"}
-          component={TrendingPosts}
-      />
-      <Stack.Screen
-          name={"Trending Tags"}
-          component={TrendingTags}
-      />
-      <Stack.Screen
-          name={"Search"}
-          component={HomeContainer}
-      />
-      <Stack.Screen
-          name="Browse Hashtag"
-          component={ApiWrapper}
-      />
-      <Stack.Screen
-          name="Profile"
-          component={UserProfile}
-      />
-      <Stack.Screen
-          name="Post"
-          component={PostWithClientContext}
-      />
-    </Stack.Navigator>
-  </WithActivityPubRestClient>
+  return <Stack.Navigator
+      initialRouteName={"Search"}
+      screenOptions={{headerShown: false}}
+  >
+    <Stack.Screen
+        name={"Trending Posts"}
+        component={TrendingPosts}
+    />
+    <Stack.Screen
+        name={"Trending Tags"}
+        component={TrendingTags}
+    />
+    <Stack.Screen
+        name={"Search"}
+        component={HomeContainer}
+    />
+    <Stack.Screen
+        name="Browse Hashtag"
+        component={ApiWrapper}
+    />
+    <Stack.Screen
+        name="Profile"
+        component={UserProfile}
+    />
+    <Stack.Screen
+        name="Post"
+        component={PostWithClientContext}
+    />
+  </Stack.Navigator>
 }
 
 export default SearchScreen;

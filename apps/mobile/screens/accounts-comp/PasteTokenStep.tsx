@@ -2,12 +2,6 @@ import {Button, Divider} from "@rneui/base";
 import {StandardView} from "../../styles/Containers";
 import {MainText} from "../../styles/Typography";
 import {Text} from "react-native";
-import {AccountsRepo} from "../../libs/sqlite/repositories/accounts.repo";
-import {
-  MastodonService,
-  RestClient,
-  RestServices,
-} from "@dhaaga/shared-provider-mastodon/src";
 
 type PasteTokenStepProps = {
   Subdomain: string;
@@ -16,26 +10,26 @@ type PasteTokenStepProps = {
 
 function PasteTokenStep({Subdomain, Code}: PasteTokenStepProps) {
   async function onPressConfirm() {
-    console.log(process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID, process.env.EXPO_PUBLIC_MASTODON_CLIENT_SECRET)
-    const token = await MastodonService.getAccessToken(
-        Subdomain,
-        Code,
-        process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID,
-        process.env.EXPO_PUBLIC_MASTODON_CLIENT_SECRET
-    );
+    // console.log(process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID, process.env.EXPO_PUBLIC_MASTODON_CLIENT_SECRET)
+    // const token = await MastodonService.getAccessToken(
+    //     Subdomain,
+    //     Code,
+    //     process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID,
+    //     process.env.EXPO_PUBLIC_MASTODON_CLIENT_SECRET
+    // );
 
-    const client = new RestClient(Subdomain, {
-      accessToken: token,
-      domain: "unknown"
-    });
-    const verified =
-        await RestServices.v1.accounts.verifyCredentials(client);
+    // const client = new RestClient(Subdomain, {
+    //   accessToken: token,
+    //   domain: "unknown"
+    // });
+    // const verified =
+    //     await RestServices.v1.accounts.verifyCredentials(client);
 
-    AccountsRepo.add({
-      subdomain: Subdomain,
-      domain: "mastodon",
-      username: verified.username,
-    });
+    // AccountsRepo.add({
+    //   subdomain: Subdomain,
+    //   domain: "mastodon",
+    //   username: verified.username,
+    // });
   }
 
   if (Code === null) return <></>;

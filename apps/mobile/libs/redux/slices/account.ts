@@ -1,28 +1,34 @@
-// export interface
+import {PayloadAction, createSlice} from "@reduxjs/toolkit";
 
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { AccountDTO } from "../../sqlite/repositories/accounts.repo";
-import { CredentialDTO } from "../../sqlite/repositories/credentials.repo";
+export type AccountCreateDTO = {
+  domain: string;
+  subdomain: string;
+  username: string;
+  password?: string;
+  last_login_at?: Date;
+  verified?: boolean;
+};
+
+export type AccountDTO = AccountCreateDTO & {
+  id: string;
+  // credentials?: CredentialDTO[];
+};
+
 
 export interface AccountState {
-	activeAccount: AccountDTO | null;
-  credentials: CredentialDTO[];
+  activeAccount: AccountDTO
 }
 
 export const initialState: AccountState = {
-	activeAccount: null,
-  credentials: [],
+  activeAccount: null,
 };
 
 export const accountSlice = createSlice({
-	name: "account",
-	initialState,
-	reducers: {
-		setAccount: (state, action: PayloadAction<AccountDTO>) => {
-			state.activeAccount = action.payload;
-		},
-    setCredentials: (state, action: PayloadAction<CredentialDTO[]>) => {
-      state.credentials = action.payload;
-    }
-	},
+  name: "account",
+  initialState,
+  reducers: {
+    setAccount: (state, action: PayloadAction<AccountDTO>) => {
+      state.activeAccount = action.payload;
+    },
+  },
 });

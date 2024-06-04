@@ -3,17 +3,15 @@ import React, {useEffect, useState} from "react";
 import {View, TouchableOpacity} from "react-native";
 import {Text} from "@rneui/themed"
 import {StatusInterface} from "@dhaaga/shared-abstraction-activitypub/src";
-import {useActionSheet} from "@expo/react-native-action-sheet";
 import {OpenAiService} from "../../../services/openai.service";
-import {
-  POST_TRANSLATION_ACTION_SHEET_OPTIONS
-} from "../../../services/action-sheet.service";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
 import {useActivitypubStatusContext} from "../../../states/useStatus";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {Divider} from "@rneui/themed";
+import PostStats from "../../../components/common/status/PostStats";
+import * as Haptics from 'expo-haptics';
 
 type StatusInteractionProps = {
   statusId: string;
@@ -31,13 +29,9 @@ function StatusInteraction({
   const [RepliesCount, setRepliesCount] = useState(0);
   const [FavouritesCount, setFavouritesCount] = useState(-1);
   const [RepostCount, setRepostCount] = useState(-1);
-  const {showActionSheetWithOptions} = useActionSheet();
   const {client} = useActivityPubRestClientContext()
   const {
     status: post,
-    statusRaw,
-    setDataRaw,
-    toggleBookmark
   } = useActivitypubStatusContext()
 
 
@@ -50,58 +44,24 @@ function StatusInteraction({
     setRepostCount(post?.getRepostsCount());
   }, [post]);
 
+  function onTranslationLongPress() {
+    console.log("translation long pressed")
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+    OpenAiService.explain(openAiContext.join(",")).then((res) => {
+      setExplanationObject(res)
+    })
+  }
+
   function OnTranslationClicked() {
-    showActionSheetWithOptions(
-        POST_TRANSLATION_ACTION_SHEET_OPTIONS,
-        (selectedIndex: number) => {
-          switch (selectedIndex) {
-            case 0: {
-              break;
-            }
-            case 1: {
-              OpenAiService.explain(openAiContext.join(",")).then((res) => {
-                setExplanationObject(res)
-              })
-              break
-            }
-            default: {
-              break;
-            }
-          }
-        }
-    );
+    console.log("translation short pressed")
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 
   return (
       <View style={{
         paddingHorizontal: 4
       }}>
-        <View style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          marginTop: 12,
-        }}>
-          <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-            <Text style={{
-              color: "#888",
-              marginLeft: 4,
-              fontSize: 12,
-              textAlign: "right"
-            }}>
-              {post?.getRepliesCount()} Replies
-            </Text>
-            <Text style={{color: "#888", marginLeft: 2, opacity: 0.3}}>&bull;</Text>
-            <Text style={{
-              color: "#888",
-              fontSize: 12,
-              marginLeft: 2,
-              textAlign: "right"
-            }}>
-              {RepostCount} Shares
-            </Text>
-          </View>
-        </View>
+        <PostStats/>
         <Divider color={"#cccccc"}
                  style={{opacity: 0.3, marginTop: 8, marginBottom: 4}}/>
         <View
@@ -124,7 +84,11 @@ function StatusInteraction({
                 }}
             >
               <FontAwesome5 name="comment" size={ICON_SIZE} color="#888"/>
-              <Text style={{color: "#888", marginLeft: 8, fontFamily: "Montserrat-Bold"}}>Reply</Text>
+              <Text style={{
+                color: "#888",
+                marginLeft: 8,
+                fontFamily: "Montserrat-Bold"
+              }}>Reply</Text>
             </View>
             <View
                 style={{
@@ -139,7 +103,11 @@ function StatusInteraction({
               {/*<Text style={{color: "#888", marginLeft: 4, fontSize: 16}}>*/}
               {/*  {RepostCount}*/}
               {/*</Text>*/}
-              <Text style={{color: "#888", marginLeft: 8, fontFamily: "Montserrat-Bold"}}>Boost</Text>
+              <Text style={{
+                color: "#888",
+                marginLeft: 8,
+                fontFamily: "Montserrat-Bold"
+              }}>Boost</Text>
 
             </View>
             <View
@@ -156,17 +124,29 @@ function StatusInteraction({
                     {/*<Text style={{color: "#888", marginLeft: 4, fontSize: 16}}>*/}
                     {/*  {FavouritesCount}*/}
                     {/*</Text>*/}
-                    <Text style={{color: "#888", marginLeft: 8, fontFamily: "Montserrat-Bold"}}>Star</Text>
+                    <Text style={{
+                      color: "#888",
+                      marginLeft: 8,
+                      fontFamily: "Montserrat-Bold"
+                    }}>Star</Text>
                   </>
               )}
             </View>
           </View>
-          <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-            <TouchableOpacity style={{marginRight: 20}} onPress={OnTranslationClicked}>
+          <View style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center"
+          }}>
+            <TouchableOpacity
+                style={{marginRight: 20}}
+                onPress={OnTranslationClicked}
+                onLongPress={onTranslationLongPress}
+            >
               <Ionicons color={"#888"} name={"language-outline"}
                         size={ICON_SIZE + 8}/>
             </TouchableOpacity>
-            <TouchableOpacity >
+            <TouchableOpacity>
               <Ionicons name="ellipsis-horizontal" size={ICON_SIZE + 8}
                         color="#888"/>
             </TouchableOpacity>

@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {
   useActivityPubRestClientContext
 } from "../../states/useActivityPubRestClient";
-import {BottomSheet, Button, ListItem, Skeleton, Text} from "@rneui/themed";
+import {Button, ListItem, Skeleton, Text} from "@rneui/themed";
 import {ScrollView, TouchableOpacity, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import {BottomSheetActionButtonContainer} from "../../styles/Containers";
@@ -16,15 +16,9 @@ import InstanceService from "../../services/instance.service";
 import {useSelector} from "react-redux";
 import {RootState} from "../../libs/redux/store";
 import {AccountState} from "../../libs/redux/slices/account";
-import {useActivitypubStatusContext} from "../../states/useStatus";
-import {useGlobalMmkvContext} from "../../states/useGlobalMMkvCache";
-import {
-  BottomSheetProp_HashtagType
-} from "../../services/globalMmkvCache.services";
 
 type HashtagActionsProps = {
   visible: boolean
-  // setVisible: React.Dispatch<React.SetStateAction<boolean>>
   id: string
 }
 
@@ -303,7 +297,9 @@ function HashtagBottomSheet({visible, id}: HashtagActionsProps) {
   const [Data, setData] = useState(null)
   const {client} = useActivityPubRestClientContext()
 
+  console.log(visible, id, client)
   async function api() {
+    console.log(client)
     if (!client) return null
     return await client.getTag(id)
   }
@@ -318,6 +314,7 @@ function HashtagBottomSheet({visible, id}: HashtagActionsProps) {
   });
 
   useEffect(() => {
+    console.log(status, data)
     if (status !== "success" || !data) return
     setData(data)
   }, [data, status]);

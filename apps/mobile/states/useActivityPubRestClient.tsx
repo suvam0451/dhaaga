@@ -8,6 +8,9 @@ import {useSelector} from "react-redux";
 import {RootState} from "../libs/redux/store";
 import {AccountState} from "../libs/redux/slices/account";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
+import AccountRepository from "../repositories/account.repo";
+import {useRealm} from "@realm/react";
+import {Account} from "../entities/account.entity";
 
 type Type = {
   client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null,
@@ -43,29 +46,34 @@ function WithActivityPubRestClient({children}: any) {
   >(null);
   const [Me, setMe] = useState(null)
   const [MeRaw, setMeRaw] = useState(null)
+  const db = useRealm()
 
   useEffect(() => {
-    if (!accountState.activeAccount) {
+    const acctI = accountState?.activeAccount
+    if (!acctI) {
       setRestClient(null)
       return;
     }
 
-    const token = accountState.credentials.find(
-        (o) => o.credential_type === "access_token"
-    )?.credential_value;
+    const acct = db.objects(Account)
+        .find((o) => o._id.toString() === acctI.id)
+
+    const token = AccountRepository.findSecret(
+        db, acct, "access_token")?.value
+
     if (!token) {
       setRestClient(null)
       return;
     }
 
     setRestClient(ActivityPubClientFactory.get(
-        accountState.activeAccount.domain as any,
+        acct.domain as any,
         {
-          instance: accountState.activeAccount.subdomain,
+          instance: acct?.subdomain,
           token,
         }
     ))
-  }, [accountState]);
+  }, [accountState?.activeAccount]);
 
   useEffect(() => {
     if (!restClient) {

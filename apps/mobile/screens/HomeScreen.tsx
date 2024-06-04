@@ -10,11 +10,12 @@ const Stack = createNativeStackNavigator();
 
 function HomeScreen() {
   return (
-      <WithActivityPubRestClient>
+      <WithGorhomBottomSheetContext>
         <Stack.Navigator
             initialRouteName={"Mastodon timeline"}
             screenOptions={{headerShown: false}}
         >
+
           {/*default*/}
           <Stack.Screen
               name="Mastodon timeline"
@@ -34,7 +35,7 @@ function HomeScreen() {
               component={PostWithClientContext}
           />
         </Stack.Navigator>
-      </WithActivityPubRestClient>
+      </WithGorhomBottomSheetContext>
   );
 }
 

@@ -30,9 +30,7 @@ function WithStackNavigation() {
 
 
 function NotificationsScreen() {
-  return <WithActivityPubRestClient>
-    <WithStackNavigation/>
-  </WithActivityPubRestClient>
+  return <WithStackNavigation/>
 }
 
 export default NotificationsScreen;

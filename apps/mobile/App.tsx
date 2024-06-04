@@ -5,31 +5,26 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
 import {Animated, View} from "react-native";
-import {useCallback, useEffect, useRef} from "react";
+import {useCallback, useRef} from "react";
 import {getCloser} from "./utils";
-import {
-  runActivityPubMigrations,
-  runCacheMigrations,
-  runCoreMigrations,
-} from "./libs/sqlite/migrations/_migrations";
 import {store} from "./libs/redux/store";
 import {Provider} from "react-redux";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {ActionSheetProvider} from "@expo/react-native-action-sheet";
 import AccountsScreen from "./screens/AccountsScreen";
 import HomeScreen from "./screens/HomeScreen";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-import {createTheme, ThemeProvider} from "@rneui/themed";
+import {ThemeProvider} from "@rneui/themed";
 import {RealmProvider} from "@realm/react";
 import {schemas} from "./entities/_index";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import NotificationsScreen from "./screens/NotificationsScreen";
 import RneuiTheme from "./styles/RneuiTheme";
 import {useFonts} from "expo-font";
-// import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from 'expo-splash-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import WithGlobalMmkvContext from "./states/useGlobalMMkvCache";
-import WithGorhomBottomSheetContext from "./states/useGorhomBottomSheet";
+import appFonts from "./styles/AppFonts";
+import WithActivityPubRestClient from "./states/useActivityPubRestClient";
 
 
 const {diffClamp} = Animated;
@@ -106,31 +101,13 @@ function App() {
     }
   };
 
-  // run initial migrations
-  useEffect(() => {
-    runCoreMigrations();
-    runActivityPubMigrations();
-    runCacheMigrations();
-  }, []);
-
   /**
    * Fonts
    */
-  const [fontsLoaded, fontError] = useFonts({
-    'Montserrat-Regular': require('../../packages/fonts/Montserrat/static/Montserrat-Regular.ttf'),
-    'Montserrat-Bold': require('../../packages/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-    'Montserrat-ExtraBold': require('../../packages/fonts/Montserrat/static/Montserrat-ExtraBold.ttf'),
-    'Montserrat-SemiBold': require('../../packages/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
-    'Inter-Regular': require('../../packages/fonts/Inter/static/Inter-Regular.ttf'),
-    'Inter-Bold': require('../../packages/fonts/Inter/static/Inter-Bold.ttf'),
-    'Inter-SemiBold': require('../../packages/fonts/Inter/static/Inter-SemiBold.ttf'),
-    "Source_Sans_3-Regular": require('../../packages/fonts/Source_Sans_3/static/SourceSans3-Regular.ttf'),
-    "DM_Serif_Display-Regular": require("../../packages/fonts/DM_Serif_Display/DMSerifDisplay-Regular.ttf"),
-    "DM_Serif_Display-Italic": require("../../packages/fonts/DM_Serif_Display/DMSerifDisplay-Italic.ttf"),
-  });
+  const [fontsLoaded, fontError] = useFonts(appFonts);
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded || fontError) {
-      // await SplashScreen.hideAsync();
+      await SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
 
@@ -224,10 +201,11 @@ function App() {
 }
 
 function WithGorhomBottomSheetWrapper() {
-  // return <App/>
-  return <WithGorhomBottomSheetContext>
+  return <WithActivityPubRestClient>
+    {/*<WithGorhomBottomSheetContext>*/}
     <App/>
-  </WithGorhomBottomSheetContext>
+    {/*</WithGorhomBottomSheetContext>*/}
+  </WithActivityPubRestClient>
 }
 
 function WithContexts() {
@@ -240,7 +218,7 @@ function WithContexts() {
       {/* In-Memory Store -- MMKV */}
       <WithGlobalMmkvContext>
         {/* Main Database -- Realm */}
-        <RealmProvider schema={schemas} schemaVersion={9}>
+        <RealmProvider schema={schemas} schemaVersion={10}>
           {/* API Caching -- Tanstack */}
           <QueryClientProvider client={queryClient}>
             {/* Redux Store */}
@@ -249,10 +227,7 @@ function WithContexts() {
               <ThemeProvider theme={RneuiTheme}>
                 {/* IDK */}
                 <SafeAreaProvider>
-                  {/* Action Sheet -- Expo */}
-                  <ActionSheetProvider>
-                    <WithGorhomBottomSheetWrapper/>
-                  </ActionSheetProvider>
+                  <WithGorhomBottomSheetWrapper/>
                 </SafeAreaProvider>
               </ThemeProvider>
             </Provider>

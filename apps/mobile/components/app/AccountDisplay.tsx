@@ -26,6 +26,7 @@ function AccountCreationPreview({
 				margin: 0,
 				padding: 8,
 				backgroundColor: "#E5FFDA",
+				borderRadius: 4
 			}}
 		>
 			<View>

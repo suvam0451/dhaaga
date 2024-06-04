@@ -1,16 +1,9 @@
 import {Text, View} from "react-native";
-import WithActivityPubRestClient from "../states/useActivityPubRestClient";
-import {Button, Tab, TabView} from "@rneui/themed";
-import FollowedPosts
-  from "../components/screens/favourites/stack/fragments/favourites/FollowedPosts";
+import {Button} from "@rneui/themed";
 import {Ionicons} from "@expo/vector-icons";
-import React, {useState} from "react";
+import React from "react";
 import MyBookmarks from "../components/screens/favourites/stack/MyBookmarks";
-import Animated from "react-native-reanimated";
-import WithScrollOnRevealContext, {
-  useScrollOnReveal
-} from "../states/useScrollOnReveal";
-import appStyling from "../styles/AppStyles";
+import WithScrollOnRevealContext, {} from "../states/useScrollOnReveal";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import {Divider} from "@rneui/base";
 import {useNavigation, useRoute} from "@react-navigation/native";
@@ -327,13 +320,9 @@ function WithStackNavigation() {
 function FavouritesScreen() {
   return (
       <View style={{height: "100%"}}>
-      <WithActivityPubRestClient>
-        <WithGorhomBottomSheetContext>
-          <WithScrollOnRevealContext>
-            <WithStackNavigation/>
-          </WithScrollOnRevealContext>
-        </WithGorhomBottomSheetContext>
-      </WithActivityPubRestClient>
+        <WithScrollOnRevealContext>
+          <WithStackNavigation/>
+        </WithScrollOnRevealContext>
       </View>
   );
 }

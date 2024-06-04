@@ -11,8 +11,6 @@ import {useNavigation} from "@react-navigation/native";
 import {TouchableOpacity} from "react-native";
 import MfmService from "../../services/mfm.service";
 import {useActivitypubStatusContext} from "../../states/useStatus";
-import activitypubAdapterService
-  from "../../services/activitypub-adapter.service";
 import {useActivitypubUserContext} from "../../states/useProfile";
 
 type OriginalPosterProps = {
@@ -100,8 +98,8 @@ function OriginalPoster({
                 width: 52,
                 height: 52,
                 borderColor: "gray",
-                borderWidth: 1,
-                borderRadius: 4,
+                borderWidth: 2,
+                borderRadius: 6,
               }}
           >
             <Image
@@ -110,7 +108,8 @@ function OriginalPoster({
                   width: "100%",
                   backgroundColor: "#0553",
                   padding: 2,
-                  opacity: 0.87
+                  opacity: 0.87,
+                  borderRadius: 4
                 }}
                 source={{uri: avatarUrl}}
             />

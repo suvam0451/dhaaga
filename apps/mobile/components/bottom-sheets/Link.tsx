@@ -1,33 +1,34 @@
-import {useActivitypubStatusContext} from "../../states/useStatus";
 import {useEffect, useMemo, useState} from "react";
 import {getLinkPreview} from "link-preview-js";
-import {TouchableOpacity, View} from "react-native";
-import {BottomSheet, Button, ListItem, Text} from "@rneui/themed";
+import {View} from "react-native";
+import {Button, Divider, Text} from "@rneui/themed";
 import AppLoadingIndicator from "../error-screen/AppLoadingIndicator";
 import NoOpengraph from "../error-screen/NoOpengraph";
 import {Image} from "expo-image";
 import ReadMoreText from "../utils/ReadMoreText";
+import React from "react";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import {APP_FONT} from "../../styles/AppTheme";
 
 type ExternalLinkActionSheetProps = {
-  visible: boolean
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>
-  url: string
+  url: string,
+  displayName: string
 }
 
 function ExternalLinkActionSheet({
   url,
-  visible,
-  setVisible
+  displayName
 }: ExternalLinkActionSheetProps) {
-  const {updateOpenGraph, openGraph} = useActivitypubStatusContext()
   const [Loading, setLoading] = useState(false)
   // avoid duplicate resolution
   const [IsParsed, setIsParsed] = useState(false)
+  const [OpenGraphData, setOpenGraphData] = useState(null)
 
   async function resolveOpenGraph() {
+    setOpenGraphData(null)
     setLoading(true)
     getLinkPreview(url).then((res) => {
-      updateOpenGraph(res as any)
+      setOpenGraphData(res as any)
     }).catch((e) => {
       console.log("[ERROR]: ogs", e)
     }).finally(() => {
@@ -37,73 +38,109 @@ function ExternalLinkActionSheet({
   }
 
   useEffect(() => {
-    if (!visible || IsParsed) return
     resolveOpenGraph()
-  }, [visible]);
+  }, [url]);
+
+  useEffect(() => {
+    console.log(OpenGraphData, Loading, IsParsed)
+  }, [OpenGraphData, Loading, IsParsed]);
 
   const domain = useMemo(() => {
-    if (!openGraph) return ""
+    if (!OpenGraphData) return ""
     try {
-      let domain = (new URL(openGraph.url));
+      let domain = (new URL(OpenGraphData.url));
       return domain.hostname
     } catch (e) {
-      return openGraph.url
+      return OpenGraphData.url
     }
-  }, [openGraph])
-  return <BottomSheet isVisible={visible} onBackdropPress={() => {
-    setVisible(false)
-  }}
-                      containerStyle={{width: "100%"}}
+  }, [OpenGraphData])
+  return <View
+      style={{
+        width: "100%",
+        paddingHorizontal: 12,
+        paddingBottom: 48
+      }}
   >
-    <ListItem containerStyle={{
-      backgroundColor: "#2C2C2C",
-      borderTopLeftRadius: 16,
-      borderTopRightRadius: 16,
-      display: "flex",
-      flexDirection: "column",
-      width: "100%"
-    }}
-              style={{
-                width: "100%",
-                display: "flex"
-              }}
-    >
-      <View style={{flex: 1, width: "100%", flexGrow: 1}}>
-        <View style={{
-          marginBottom: 16,
-          display: "flex",
-          flexDirection: "row"
-        }}>
-          <View style={{flexGrow: 1}}></View>
-          <Button type={"clear"} color={"white"}>Proceed</Button>
-        </View>
-        {Loading && <AppLoadingIndicator text={"Loading Preview"}/>}
-        {!Loading && !openGraph && <NoOpengraph/>}
-        {!Loading && openGraph && <View style={{
-          borderColor: "gray",
-          borderRadius: 8,
-          borderWidth: 1
-        }}>
-          {openGraph.images?.length > 0 &&
-              <View style={{height: 240, width: "100%"}}>
-                  <Image source={openGraph.images[0]}
-                         style={{
-                           height: 240,
-                           width: "100%",
-                           borderTopLeftRadius: 8,
-                           borderTopRightRadius: 8
-                         }}/>
-              </View>
-          }
-            <View style={{padding: 8}}>
-                <Text style={{opacity: 0.3}}>{domain}</Text>
-                <ReadMoreText text={openGraph.title} maxLines={1} bold/>
-                <ReadMoreText text={openGraph.description} maxLines={2}/>
+    <View>
+      {Loading && <AppLoadingIndicator text={"Loading Preview"}/>}
+      {!Loading && !OpenGraphData && <NoOpengraph/>}
+      {!Loading && OpenGraphData && <View>
+        {OpenGraphData.images?.length > 0 &&
+            <View style={{height: 200, width: "100%"}}>
+                <Image source={OpenGraphData.images[0]}
+                       style={{
+                         height: 200,
+                         width: "100%",
+                         borderRadius: 8
+                       }}/>
             </View>
-        </View>}
+        }
+          <View style={{padding: 8}}>
+              <Text style={{opacity: 0.3}}>{domain}</Text>
+              <ReadMoreText text={OpenGraphData.title} maxLines={1} bold/>
+              <ReadMoreText text={OpenGraphData.description} maxLines={2}/>
+          </View>
+      </View>}
+    </View>
+    <Divider style={{opacity: 0.6, marginBottom: 16}}/>
+    <View style={{
+      display: "flex",
+      flexDirection: "row",
+      marginHorizontal: 8
+    }}>
+      <View style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        marginRight: 20
+      }}>
+        <FontAwesome5
+            name="external-link-alt" size={18}
+            color={APP_FONT.MONTSERRAT_BODY}/>
+        <Text style={{
+          fontFamily: "Montserrat-ExtraBold",
+          color: APP_FONT.MONTSERRAT_BODY,
+          marginLeft: 8
+        }}>
+          Open
+        </Text>
       </View>
-    </ListItem>
-  </BottomSheet>
+      <View style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        marginRight: 20
+      }}>
+        <FontAwesome5
+            name="external-link-alt" size={18}
+            color={APP_FONT.MONTSERRAT_BODY}/>
+        <Text style={{
+          fontFamily: "Montserrat-ExtraBold",
+          color: APP_FONT.MONTSERRAT_BODY,
+          marginLeft: 8
+        }}>
+          Open
+        </Text>
+      </View>
+      <View style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        marginRight: 20
+      }}>
+        <FontAwesome5
+            name="external-link-alt" size={18}
+            color={APP_FONT.MONTSERRAT_BODY}/>
+        <Text style={{
+          fontFamily: "Montserrat-ExtraBold",
+          color: APP_FONT.MONTSERRAT_BODY,
+          marginLeft: 8
+        }}>
+          Open
+        </Text>
+      </View>
+    </View>
+  </View>
 }
 
 export default ExternalLinkActionSheet
