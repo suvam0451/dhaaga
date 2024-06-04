@@ -8,7 +8,7 @@ export const MainText = styled.Text`
 
 export const PrimaryText = styled.Text`
     color: rgba(255, 255, 255, 0.87);
-    font-family: Montserrat-Bold, serif;
+    font-family: Montserrat-Bold;
 `;
 
 export const SecondaryText = styled.Text`

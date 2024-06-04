@@ -7,7 +7,7 @@ import {Text} from "@rneui/themed"
 import {StandardView} from "../../../styles/Containers";
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
 import {formatDistance, formatDistanceToNowStrict} from "date-fns";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import React from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../libs/redux/store";
@@ -26,13 +26,8 @@ import {
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {randomUUID} from "expo-crypto";
 import {useRealm} from "@realm/react";
-import {
-  ActivityPubServerRepository
-} from "../../../repositories/activitypub-server.repo";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import activitypubAdapterService
-  from "../../../services/activitypub-adapter.service";
 import WithActivitypubUserContext from "../../../states/useProfile";
+import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 
 const POST_SPACING_VALUE = 4
 
@@ -58,40 +53,24 @@ function RootStatusFragment({
   mt,
   isRepost,
 }: StatusFragmentProps) {
+  const navigation = useNavigation<any>();
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const domain = accountState?.activeAccount?.domain
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
+
   const {status, statusRaw, sharedStatus} = useActivitypubStatusContext()
-
-  const realm = useRealm()
-
-  useEffect(() => {
-    const _user = ActivityPubUserAdapter(status.getUser(), domain)
-    const acctUrl = _user.getAccountUrl()
-    const ex = /^https?:\/\/(.*?)\/(.*?)/;
-    if (ex.test(acctUrl)) {
-      // @ts-ignore
-      const theirUrl = acctUrl.match(ex)[1];
-      // ActivityPubServerRepository.upsert(realm, theirUrl)
-    }
-  }, [status]);
-
   const _status = isRepost ? sharedStatus : status
-  const navigation = useNavigation<any>();
+
   const [PosterContent, setPosterContent] = useState(<View></View>);
   const [ExplanationObject, setExplanationObject] = useState<string | null>(null)
 
-  const [UserInterface, setUserInterface] = useState(ActivityPubUserAdapter(null, domain))
-  const [DescriptionContent, setDescriptionContent] = useState(<></>)
-
-  useEffect(() => {
-    if (!_status) return
-    setUserInterface(ActivityPubUserAdapter(_status.getUser(), domain))
-  }, [_status]);
+  const userI = useMemo(() => {
+    return ActivityPubUserAdapter(_status?.getUser() || null, domain)
+  }, [_status])
 
   useEffect(() => {
     const user = _status.getUser()
-    // console.log(user)
-    // const userI = activitypubAdapterService.adaptUser(user, domain)
     setPosterContent(
         <WithActivitypubUserContext user={user}>
           <OriginalPoster
@@ -108,34 +87,38 @@ function RootStatusFragment({
     );
   }, [_status]);
 
-  const [OpenAiContext, setOpenAiContext] = useState([])
-
   let content = _status.getContent();
 
-  useEffect(() => {
-    const emojiMap = UserInterface.getEmojiMap()
+  const xyz = useMemo(() => {
+    if (!_status?.getContent() || !userI?.getInstanceUrl()) {
+      return {aiContext: [], nodes: <View></View>}
+    }
+
+    const emojiMap = userI.getEmojiMap()
     const {openAiContext, reactNodes} = MfmService.renderMfm(content, {
       emojiMap,
       domain: accountState?.activeAccount?.domain,
       subdomain: accountState?.activeAccount?.subdomain,
+      remoteSubdomain: userI.getInstanceUrl(),
+      db, globalDb
     })
-    setDescriptionContent(<>
-      {reactNodes?.map(
-          (para, i) => {
+
+    return {
+      aiContext: openAiContext,
+      nodes: reactNodes?.map(
+          (para) => {
             const uuid = randomUUID()
             return <Text key={uuid} style={{
               marginBottom: 8,
-              // opacity: 0.6,
               display: "flex",
             }}
             >
               {para.map((o, j) => o)}
             </Text>
           }
-      )}
-    </>)
-    setOpenAiContext(openAiContext)
-  }, [content]);
+      )
+    }
+  }, [_status?.getContent(), userI?.getInstanceUrl()])
 
   const [BottomSheetVisible, setBottomSheetVisible] = useState(false);
 
@@ -179,7 +162,7 @@ function RootStatusFragment({
               {/*</View>*/}
             </View>
             <View style={{marginBottom: 0}}>
-              {DescriptionContent}
+              {xyz.nodes}
               {ExplanationObject !== null &&
                   <View style={{
                     backgroundColor: "#2E2E2E",
@@ -234,7 +217,7 @@ function RootStatusFragment({
         <ImageCarousal attachments={status?.getMediaAttachments()}/>
         <StatusInteraction
             post={status} statusId={statusRaw?.id}
-            openAiContext={OpenAiContext}
+            openAiContext={xyz.aiContext}
             setExplanationObject={setExplanationObject}
         />
       </>
@@ -338,16 +321,29 @@ function SharedStatusFragment({
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
+              justifyContent: "flex-start"
             }}
         >
           <Ionicons color={"#888"} name={"rocket-outline"} size={12}/>
-          <Text style={{color: "#888", fontWeight: "500", marginLeft: 4}}>
+          <Text style={{
+            color: "#888",
+            fontWeight: "500",
+            marginLeft: 4,
+            fontFamily: "Montserrat-ExtraBold",
+          }}>
             {_status.getDisplayName()}
           </Text>
           <Text style={{color: "gray", marginLeft: 2, marginRight: 2}}>•</Text>
-          <Text style={{color: "#888"}}>
-            {formatDistanceToNowStrict(new Date(boostedStatus.createdAt))}
-          </Text>
+          <View style={{marginTop: 2}}>
+            <Text style={{
+              color: "#888",
+              fontSize: 12,
+              fontFamily: "Inter-Bold",
+              opacity: 0.6
+            }}>
+              {formatDistanceToNowStrict(new Date(boostedStatus.createdAt))}
+            </Text>
+          </View>
         </StandardView>
         <RootFragmentContainer mt={-8} isRepost={true}/>
       </View>

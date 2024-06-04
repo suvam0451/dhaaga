@@ -11,6 +11,8 @@ import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import AccountRepository from "../repositories/account.repo";
 import {useRealm} from "@realm/react";
 import {Account} from "../entities/account.entity";
+import {EmojiService} from "../services/emoji.service";
+import {useGlobalMmkvContext} from "./useGlobalMMkvCache";
 
 type Type = {
   client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null,
@@ -47,6 +49,7 @@ function WithActivityPubRestClient({children}: any) {
   const [Me, setMe] = useState(null)
   const [MeRaw, setMeRaw] = useState(null)
   const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
 
   useEffect(() => {
     const acctI = accountState?.activeAccount
@@ -66,13 +69,15 @@ function WithActivityPubRestClient({children}: any) {
       return;
     }
 
-    setRestClient(ActivityPubClientFactory.get(
+    const client = ActivityPubClientFactory.get(
         acct.domain as any,
         {
           instance: acct?.subdomain,
           token,
         }
-    ))
+    )
+    setRestClient(client)
+    EmojiService.loadEmojisForInstance(db, globalDb, acct.subdomain)
   }, [accountState?.activeAccount]);
 
   useEffect(() => {

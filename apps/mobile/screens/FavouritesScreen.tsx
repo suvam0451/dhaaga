@@ -17,9 +17,6 @@ import FavouritesScreenHomePageDefaultTutorial
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import MyFollowings from "../components/screens/favourites/stack/MyFollowings";
 import MyFollowers from "../components/screens/favourites/stack/MyFollowers";
-import WithGorhomBottomSheetContext from "../states/useGorhomBottomSheet";
-
-const ICON_SIZE = 22;
 
 type FavouritesScreenNavigationItemIconOnlyProps = {
   icon: any

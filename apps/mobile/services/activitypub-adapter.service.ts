@@ -9,19 +9,19 @@ import {
  * Wrapper service to invoke provider functions
  */
 class ActivityPubAdapterService {
-  static async adaptManyStatuses(items: any[], domain: string): Promise<StatusInterface[]> {
+  static adaptManyStatuses(items: any[], domain: string): StatusInterface[] {
     return items.map((o) =>
         ActivitypubStatusAdapter(o, domain)
     )
   }
 
-  static async adaptContextChain(apiResponse: any, domain: string): Promise<StatusInterface[]> {
-    const ancestors = await this.adaptManyStatuses(apiResponse.ancestors, domain)
-    const descendants = await this.adaptManyStatuses(apiResponse.descendants, domain)
+  static adaptContextChain(apiResponse: any, domain: string): StatusInterface[] {
+    const ancestors = this.adaptManyStatuses(apiResponse.ancestors, domain)
+    const descendants = this.adaptManyStatuses(apiResponse.descendants, domain)
     return [...ancestors, ...descendants]
   }
 
-  static async adaptUser(o: any, domain: string) {
+  static adaptUser(o: any, domain: string) {
     return ActivityPubUserAdapter(o, domain)
   }
 }

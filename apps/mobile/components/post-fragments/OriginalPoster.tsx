@@ -2,8 +2,7 @@ import {View, Text} from "react-native";
 import {Image} from "expo-image";
 import {extractInstanceUrl, visibilityIcon} from "../../utils/instances";
 import {formatDistanceToNowStrict} from "date-fns";
-import React, {useEffect, useState} from "react";
-import {parseUsername} from "@dhaaga/shared-utility-html-parser/src";
+import React, {useEffect, useMemo, useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../libs/redux/store";
 import {AccountState} from "../../libs/redux/slices/account";
@@ -12,6 +11,8 @@ import {TouchableOpacity} from "react-native";
 import MfmService from "../../services/mfm.service";
 import {useActivitypubStatusContext} from "../../states/useStatus";
 import {useActivitypubUserContext} from "../../states/useProfile";
+import {useRealm} from "@realm/react";
+import {useGlobalMmkvContext} from "../../states/useGlobalMMkvCache";
 
 type OriginalPosterProps = {
   id: string
@@ -35,59 +36,39 @@ function OriginalPoster({
   visibility,
 }: OriginalPosterProps) {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const [UsernameWithEmojis, setUsernameWithEmojis] = useState<JSX.Element[]>(
-      []
-  );
   const navigation = useNavigation<any>();
   const {status} = useActivitypubStatusContext()
   const {user, setDataRaw} = useActivitypubUserContext()
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
+
 
   useEffect(() => {
     if (status.getUser()) return
     setDataRaw(status.getUser())
   }, [status]);
 
-  useEffect(() => {
-    const nodes = parseUsername(displayName || "");
-    let retval = [];
-    let count = 0; //
-    const emojiMap = user?.getEmojiMap()
-
-    for (const node of nodes) {
-      // @ts-ignore
-      retval.push(
-          MfmService.parseNode(node, count.toString(), {
-            emojiMap: emojiMap || new Map(),
-            domain: accountState?.activeAccount?.domain,
-            subdomain: accountState?.activeAccount?.subdomain,
-            isHighEmphasisText: true
-          })
-      );
-      count++;
+  const UsernameWithEmojis = useMemo(() => {
+    const content = user?.getDisplayName()
+    if (content === "") {
+      return <View></View>
     }
-    setUsernameWithEmojis(retval);
-  }, [user]);
+
+    const emojiMap = user?.getEmojiMap()
+    const {reactNodes} = MfmService.renderMfm(content, {
+      emojiMap,
+      domain: accountState?.activeAccount?.domain,
+      subdomain: accountState?.activeAccount?.subdomain,
+      remoteSubdomain: user.getInstanceUrl(),
+      db, globalDb
+    })
+    return reactNodes
+  }, [user?.getDisplayName()])
 
   function onProfileClicked() {
     navigation.navigate("Profile", {
       id: id,
     });
-    // showActionSheetWithOptions(
-    //     STATUS_USER_PROFILE_CLICK_ACTION_SHEET_OPTIONS,
-    //     (selectedIndex: number) => {
-    //       switch (selectedIndex) {
-    //         case 0: {
-    //           navigation.navigate("Profile", {
-    //             id: id,
-    //           });
-    //           break;
-    //         }
-    //         default: {
-    //           break;
-    //         }
-    //       }
-    //     }
-    // );
   }
 
   return (

@@ -26,6 +26,7 @@ import {AnimatedFlashList} from "@shopify/flash-list"
 import NavigationService from "../../../services/navigation.service";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 import {useRealm} from "@realm/react";
+import {EmojiService} from "../../../services/emoji.service";
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -116,7 +117,10 @@ function Content() {
  */
 function TimelineRenderer() {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const domain = accountState?.activeAccount?.domain
   const {client} = useActivityPubRestClientContext()
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
   const {
     data: PageData,
     setMaxId,
@@ -160,7 +164,15 @@ function TimelineRenderer() {
 
     if (status === "success" && data && data.length > 0) {
       setMaxId(data[data.length - 1]?.id)
-      append(data)
+      EmojiService.preloadInstanceEmojisForStatuses(
+          db,
+          globalDb,
+          data,
+          domain)
+          .then((res) => {
+          }).finally(() => {
+        append(data)
+      })
     }
 
     setLoadingMoreComponentProps({

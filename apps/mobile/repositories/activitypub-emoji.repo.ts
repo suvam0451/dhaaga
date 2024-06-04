@@ -8,10 +8,20 @@ import {
   ActivityPubCustomEmojiCategoryRepository
 } from "./activitypub-emoji-category.repo";
 import {UpdateMode} from "realm";
+import {
+  ActivityPubCustomEmojiCategory
+} from "../entities/activitypub-emoji-category.entity";
+import {ActivityPubServerRepository} from "./activitypub-server.repo";
 
 export class ActivityPubCustomEmojiRepository {
   static clearAll(db: Realm) {
     db.delete(db.objects(ActivityPubCustomEmojiItem))
+  }
+
+  static upsertMany(db: Realm, items: ActivityPubCustomEmojiItemDTO[], server: ActivityPubServer) {
+    for (let i = 0; i < items.length; i++) {
+      this.upsert(db, items[i], server);
+    }
   }
 
   /**
@@ -32,12 +42,18 @@ export class ActivityPubCustomEmojiRepository {
       server,
     }, UpdateMode.Modified)
 
-    const category = ActivityPubCustomEmojiCategoryRepository.upsert(db, item.category)
-    category.emojis.push(savedEmojiItem)
+    if (item.category) {
+      const category = ActivityPubCustomEmojiCategoryRepository.upsert(db, item.category)
+      ActivityPubCustomEmojiCategoryRepository.pushEmoji(db, category, savedEmojiItem)
+    } else {
+      const categoryNotFound = ActivityPubCustomEmojiCategoryRepository.upsert(db, "Category:404")
+      ActivityPubCustomEmojiCategoryRepository.pushEmoji(db, categoryNotFound, savedEmojiItem)
+    }
+    ActivityPubServerRepository.addEmoji(db, savedEmojiItem, server)
   }
 
   static search(db: Realm, shortcode: string, instance: string) {
-    return db.objects(ActivityPubCustomEmojiItem).find((o) =>
-        o.shortcode === shortcode && o.server?.url === instance)
+    const server = ActivityPubServerRepository.upsert(db, instance)
+    return server?.emojis?.find((o) => o.shortcode === shortcode)
   }
 }

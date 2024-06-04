@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useActivitypubUserContext} from "../../states/useProfile";
 import {BottomSheet, Text, ListItem, Button} from "@rneui/themed";
 import {ScrollView, View} from "react-native";
@@ -13,6 +13,8 @@ import {
   AvatarContainerWithInset,
   AvatarExpoImage
 } from "../../styles/Containers";
+import {useRealm} from "@realm/react";
+import {useGlobalMmkvContext} from "../../states/useGlobalMMkvCache";
 
 type StatusActionsProps = {
   visible: boolean
@@ -22,30 +24,32 @@ type StatusActionsProps = {
 function UserActionSheet({visible, setVisible}: StatusActionsProps) {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const subdomain = accountState?.activeAccount?.subdomain
-
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
 
   const {user} = useActivitypubUserContext()
   const desc = user.getDescription()
-  const [DescriptionContent, setDescriptionContent] = useState(<></>)
 
+  const DescriptionContent = useMemo(() => {
+    const target = user.getDescription()
+    if (!visible || target === "") return <View></View>
 
-  useEffect(() => {
-    const mfmParseResult = MfmService.renderMfm(desc, {
+    const {reactNodes} = MfmService.renderMfm(desc, {
       emojiMap: user.getEmojiMap(),
       domain: accountState?.activeAccount?.domain,
-      subdomain: accountState?.activeAccount?.subdomain
+      subdomain: accountState?.activeAccount?.subdomain,
+      db,
+      globalDb
     })
-    setDescriptionContent(<>
-      {mfmParseResult?.reactNodes?.map(
-          (para) => {
-            const uuid = randomUUID()
-            return <Text key={uuid} style={{marginBottom: 0, opacity: 0.87}}>
-              {para.map((o, j) => o)}
-            </Text>
-          }
-      )}
-    </>)
-  }, [desc]);
+    return reactNodes?.map(
+        (para) => {
+          const uuid = randomUUID()
+          return <Text key={uuid} style={{marginBottom: 0, opacity: 0.87}}>
+            {para.map((o, j) => o)}
+          </Text>
+        }
+    )
+  }, [user?.getDescription(), visible])
 
   return <BottomSheet
       isVisible={visible}
@@ -145,7 +149,6 @@ function UserActionSheet({visible, setVisible}: StatusActionsProps) {
             {DescriptionContent}
           </View>
         </ScrollView>
-
       </View>
     </ListItem>
   </BottomSheet>

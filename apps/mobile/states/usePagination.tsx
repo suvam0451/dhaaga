@@ -11,6 +11,11 @@ type Type = {
   length: number
   isReachPageLimit: boolean
   setMaxId: (maxId: string) => void
+  /**
+   * appends any form of data list
+   * @param data
+   * @param keygen
+   */
   append: (data: any[], keygen?: (o: any) => any) => void
   clear: () => void
   updateQueryCache: () => void

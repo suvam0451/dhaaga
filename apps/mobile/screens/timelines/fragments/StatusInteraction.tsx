@@ -12,6 +12,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {Divider} from "@rneui/themed";
 import PostStats from "../../../components/common/status/PostStats";
 import * as Haptics from 'expo-haptics';
+import {APP_THEME} from "../../../styles/AppTheme";
 
 type StatusInteractionProps = {
   statusId: string;
@@ -29,23 +30,22 @@ function StatusInteraction({
   const [RepliesCount, setRepliesCount] = useState(0);
   const [FavouritesCount, setFavouritesCount] = useState(-1);
   const [RepostCount, setRepostCount] = useState(-1);
+  const [IsFavourited, setIsFavourited] = useState(false)
   const {client} = useActivityPubRestClientContext()
   const {
     status: post,
+    setDataRaw
   } = useActivitypubStatusContext()
-
-
-  const isBookmarked = post?.getIsBookmarked() || false
 
   useEffect(() => {
     if (!post) return
     setRepliesCount(post?.getRepliesCount());
     setFavouritesCount(post?.getFavouritesCount());
     setRepostCount(post?.getRepostsCount());
+    setIsFavourited(post?.getIsFavourited())
   }, [post]);
 
   function onTranslationLongPress() {
-    console.log("translation long pressed")
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
     OpenAiService.explain(openAiContext.join(",")).then((res) => {
       setExplanationObject(res)
@@ -53,8 +53,25 @@ function StatusInteraction({
   }
 
   function OnTranslationClicked() {
-    console.log("translation short pressed")
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+  }
+
+  function onSavePress() {
+    if (post.getIsBookmarked()) {
+      client.unBookmark(post.getId()).then((res => {
+        setDataRaw(res)
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+      }))
+    } else {
+      client.bookmark(post.getId()).then((res => {
+        setDataRaw(res)
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+      }))
+    }
+  }
+
+  function onSaveLongPress() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
   }
 
   return (
@@ -100,38 +117,37 @@ function StatusInteraction({
             >
               <Ionicons color={"#888"} name={"rocket-outline"}
                         size={ICON_SIZE}/>
-              {/*<Text style={{color: "#888", marginLeft: 4, fontSize: 16}}>*/}
-              {/*  {RepostCount}*/}
-              {/*</Text>*/}
               <Text style={{
                 color: "#888",
                 marginLeft: 8,
                 fontFamily: "Montserrat-Bold"
               }}>Boost</Text>
-
             </View>
-            <View
+            <TouchableOpacity
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
                   marginRight: 8
                 }}
+                onPress={onSavePress}
+                onLongPress={onSaveLongPress}
             >
-              <Ionicons color={"#888"} name={"star-outline"} size={ICON_SIZE}/>
+              <Ionicons color={post?.getIsBookmarked()
+                  ? APP_THEME.INVALID_ITEM : "#888"} name={"bookmark-outline"}
+                        size={ICON_SIZE}/>
               {FavouritesCount !== -1 && (
                   <>
-                    {/*<Text style={{color: "#888", marginLeft: 4, fontSize: 16}}>*/}
-                    {/*  {FavouritesCount}*/}
-                    {/*</Text>*/}
                     <Text style={{
-                      color: "#888",
                       marginLeft: 8,
-                      fontFamily: "Montserrat-Bold"
-                    }}>Star</Text>
+                      fontFamily: "Montserrat-Bold",
+                      color: post?.getIsBookmarked()
+                          ? APP_THEME.INVALID_ITEM : "#888",
+                    }}
+                    >{post?.getIsBookmarked() ? "Saved" : "Save"}</Text>
                   </>
               )}
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={{
             display: "flex",
