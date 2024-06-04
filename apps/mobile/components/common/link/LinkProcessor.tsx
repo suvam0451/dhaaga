@@ -1,7 +1,12 @@
-import React, {useState} from "react";
-import ExternalLinkDisplayName from "../../utils/ExternalLinkDisplayName";
-import {TouchableOpacity} from "react-native";
-import ExternalLinkActionSheet from "../../bottom-sheets/Link";
+import React from "react";
+import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
+import {
+  useGorhomActionSheetContext
+} from "../../../states/useGorhomBottomSheet";
+import GlobalMmkvCacheServices
+  from "../../../services/globalMmkvCache.services";
+import {Text} from "@rneui/themed";
+import {APP_THEME} from "../../../styles/AppTheme";
 
 type LinkProcessorProps = {
   url: string,
@@ -9,18 +14,50 @@ type LinkProcessorProps = {
 }
 
 function LinkProcessor({url, displayName}: LinkProcessorProps) {
-  const [BottomSheetVisible, setBottomSheetVisible] = useState(false)
+  const httpsRemoved = url.replace(/(https:\/\/)(.+)/, "$2")
+  const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, httpsRemoved)
+  const {globalDb} = useGlobalMmkvContext()
+  const {
+    setVisible,
+    setBottomSheetType,
+    updateRequestId
+  } = useGorhomActionSheetContext()
 
-  return <>
-    <TouchableOpacity onPress={() => {
-      setBottomSheetVisible(true)
-    }}>
-      <ExternalLinkDisplayName displayName={displayName || url}/>
-    </TouchableOpacity>
-    {/*<ExternalLinkActionSheet*/}
-    {/*    visible={BottomSheetVisible}*/}
-    {/*    setVisible={setBottomSheetVisible} url={url}/>*/}
-  </>
+  function onTextPress() {
+
+    GlobalMmkvCacheServices.setBottomSheetProp_Link(globalDb, {
+      url: displayName,
+      displayName: wwwRemoved
+    })
+    setBottomSheetType("Link")
+    updateRequestId()
+    setVisible(true)
+  }
+
+  return <Text
+      numberOfLines={1}
+      style={{
+        color: APP_THEME.LINK,
+        fontFamily: "Inter-Bold",
+        maxWidth: 128,
+      }}
+      onPress={onTextPress}
+  >{wwwRemoved}</Text>
+}
+
+{/*<View style={{marginLeft: 2}}>*/
+}
+{/*  <Ionicons*/
+}
+{/*      name="open-outline"*/
+}
+{/*      size={16}*/
+}
+{/*      color={APP_THEME.LINK}*/
+}
+{/*  />*/
+}
+{/*</View>*/
 }
 
 export default LinkProcessor

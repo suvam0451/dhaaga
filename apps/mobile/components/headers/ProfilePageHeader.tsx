@@ -32,18 +32,40 @@ const TimelinesHeader = ({
         >
           <TouchableOpacity
               onPress={onLeftIconPress}
+              style={{
+                // backgroundColor: "red",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+                paddingHorizontal: 8
+              }}
           >
-            <Ionicons name="chevron-back" size={24} color="white"/>
+            <Ionicons name="chevron-back" size={24}
+                      color="rgba(255, 255, 255, 0.87)"/>
           </TouchableOpacity>
           <View style={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center"
           }}>
-            <Text style={styles.conversation}>{title}</Text>
+            <Text style={[styles.conversation, {
+              fontFamily: "Montserrat-Bold",
+            }]}>{title}</Text>
           </View>
 
-          <Ionicons name="menu-outline" size={24} color="white"/>
+          <View style={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            paddingHorizontal: 10,
+          }}>
+            <Ionicons
+                name="menu-outline" size={24}
+                color="rgba(255, 255, 255, 0.87)"/>
+          </View>
+
         </View>
       </>
   );
@@ -52,13 +74,19 @@ const TimelinesHeader = ({
 const styles = StyleSheet.create({
   subHeader: {
     width: "100%",
-    paddingHorizontal: 10,
-    backgroundColor: "#1c1c1c",
+    // paddingHorizontal: 10,
+    // backgroundColor: "#1c1c1c",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: "blue"
   },
-  conversation: {color: "white", fontSize: 16, fontWeight: "bold"},
+  conversation: {
+    color: "rgba(255, 255, 255, 0.87)",
+    fontSize: 16,
+    fontFamily: "Montserrat-Bold",
+    // fontWeight: "bold"
+  },
   searchText: {
     color: "#8B8B8B",
     fontSize: 17,

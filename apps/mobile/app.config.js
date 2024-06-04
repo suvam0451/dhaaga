@@ -27,18 +27,23 @@ const expo = {
             projectId: "6a318c01-ca78-440f-840f-64c54ddc94fe"
         }
     },
-    plugins: [["expo-build-properties", {
-        "ios": {
-            "newArchEnabled": true
-        }, "android": {
-            "newArchEnabled": true
-        }
-    }], [
-        "expo-image-picker",
-        {
-            "photosPermission": "The app accesses your photos to let you share them with your friends."
-        }
-    ], ["expo-font", {"fonts": ["../../packages/fonts/Montserrat/static/Montserrat-Regular.ttf"]}]]
+    plugins: [
+        ["expo-build-properties", {
+            "ios": {
+                "newArchEnabled": true
+            }, "android": {
+                "newArchEnabled": true
+            }
+        }],
+        [
+            "expo-image-picker",
+            {
+                "photosPermission": "Dhaaga needs gallery access to support media attachments."
+            }
+        ],
+        ["expo-font"],
+        ["expo-localization"]
+    ]
 };
 
 export default expo

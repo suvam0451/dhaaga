@@ -24,6 +24,7 @@ import {AccountState} from "../../../../libs/redux/slices/account";
 import {Image} from "expo-image";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import UserActionSheet from "../../../bottom-sheets/User";
+import {APP_FONT} from "../../../../styles/AppTheme";
 
 function UserItem() {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
@@ -47,7 +48,8 @@ function UserItem() {
         <View style={{
           borderWidth: 2,
           borderColor: "rgb(100,100,100)",
-          borderRadius: 8
+          borderRadius: 8,
+          opacity: 0.87
         }}>
           <Image source={user.getAvatarUrl()}
                  contentFit="fill"
@@ -61,12 +63,13 @@ function UserItem() {
         <View style={{marginLeft: 8}}>
           <Text
               style={{
-                color: "#fff",
-                opacity: 0.87
+                color: APP_FONT.MONTSERRAT_BODY,
+                fontFamily: "Montserrat-ExtraBold"
               }}>{user.getDisplayName()}</Text>
           <Text style={{
-            color: "#fff",
-            opacity: 0.6
+            color: APP_FONT.MONTSERRAT_BODY,
+            fontSize: 14,
+            fontFamily: "Inter-Bold"
           }}>{user.getAppDisplayAccountUrl(subdomain)}</Text>
           <View style={{
             opacity: 0.6,
@@ -88,7 +91,7 @@ function UserItem() {
       </View>
     </TouchableOpacity>
     <UserActionSheet
-        visible={BottomSheetVisible}
+        visible={false}
         setVisible={setBottomSheetVisible}/>
   </View>
 }
@@ -162,7 +165,8 @@ function WithApi() {
       textAlign: "center",
       marginVertical: 16,
       fontSize: 20,
-      fontWeight: 700
+      fontWeight: 700,
+      color: APP_FONT.MONTSERRAT_HEADER
     }}>All / People / Bots / Mutuals</Text>
     <WithItemList/>
   </TitleOnlyStackHeaderContainer>

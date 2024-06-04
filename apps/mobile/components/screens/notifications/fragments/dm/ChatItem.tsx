@@ -3,7 +3,7 @@ import {Text, View} from "react-native";
 import {
   useActivityPubRestClientContext
 } from "../../../../../states/useActivityPubRestClient";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import MfmService from "../../../../../services/mfm.service";
 import {randomUUID} from "expo-crypto";
 import {useSelector} from "react-redux";
@@ -11,32 +11,48 @@ import {RootState} from "../../../../../libs/redux/store";
 import {AccountState} from "../../../../../libs/redux/slices/account";
 import {Image} from "expo-image";
 import {format} from "date-fns";
+import {useRealm} from "@realm/react";
+import {useGlobalMmkvContext} from "../../../../../states/useGlobalMMkvCache";
+import {
+  ActivityPubUserAdapter
+} from "@dhaaga/shared-abstraction-activitypub/src";
 
 function ChatItem() {
-  const {status, statusRaw} = useActivitypubStatusContext()
-  const {me} = useActivityPubRestClientContext()
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const [DescriptionContent, setDescriptionContent] = useState(<></>)
+  const {status} = useActivitypubStatusContext()
+  const domain = accountState?.activeAccount?.domain
+
+  const {me} = useActivityPubRestClientContext()
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
+  const [UserInterface, setUserInterface] = useState(ActivityPubUserAdapter(null, domain))
 
   let content = status.getContent();
-  useEffect(() => {
+
+  const DescriptionContent = useMemo(() => {
+    const target = status?.getContent()
+    if (!target) return <View></View>
+
     const emojiMap = new Map()
-    const {openAiContext, reactNodes} = MfmService.renderMfm(content, {
+    const {reactNodes} = MfmService.renderMfm(content, {
       emojiMap,
       domain: accountState?.activeAccount?.domain,
       subdomain: accountState?.activeAccount?.subdomain,
+      remoteSubdomain: UserInterface?.getInstanceUrl(),
+      db,
+      globalDb
     })
-    setDescriptionContent(<>
-      {reactNodes?.map(
-          (para, i) => {
-            const uuid = randomUUID()
-            return <Text key={uuid} style={{marginBottom: 8, opacity: 0.87}}>
-              {para.map((o, j) => o)}
-            </Text>
-          }
-      )}
-    </>)
-  }, [content]);
+    return reactNodes?.map(
+        (para) => {
+          const uuid = randomUUID()
+          return <Text key={uuid} style={{marginBottom: 8, opacity: 0.87}}>
+            {para.map((o) => o)}
+          </Text>
+        }
+    )
+  }, [
+    status?.getContent()
+  ])
 
   const ownerIsMe = me?.getId() === status.getAccountId_Poster()
 

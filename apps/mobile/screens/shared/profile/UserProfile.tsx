@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Dimensions, StyleSheet, TouchableOpacity, View,} from "react-native";
 import {
   ActivityPubAccount,
@@ -31,6 +31,8 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../../libs/redux/store";
 import {AccountState} from "../../../libs/redux/slices/account";
 import {randomUUID} from "expo-crypto";
+import {useRealm} from "@realm/react";
+import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 
 
 type UserProfileBrowsePostsProps = {
@@ -122,33 +124,58 @@ function UserProfileBrowsePosts({userId}: UserProfileBrowsePostsProps) {
 
 function UserProfileContent() {
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const domain = accountState?.activeAccount?.domain
   const subdomain = accountState?.activeAccount?.subdomain
   const {user} = useActivitypubUserContext()
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
 
-  const [DescriptionContent, setDescriptionContent] = useState(<></>)
   const fields = user.getFields()
   const desc = user.getDescription()
   const avatarUrl = user.getAvatarUrl()
   const bannerUrl = user.getBannerUrl()
 
 
-  useEffect(() => {
-    const {openAiContext, reactNodes} = MfmService.renderMfm(desc, {
+  const DescriptionContent = useMemo(() => {
+    if (user?.getDescription() === "") return <View></View>
+    const {reactNodes} = MfmService.renderMfm(desc, {
       emojiMap: user.getEmojiMap(),
-      domain: accountState?.activeAccount?.domain,
-      subdomain: accountState?.activeAccount?.subdomain
+      domain,
+      subdomain,
+      db,
+      globalDb,
+      remoteSubdomain: user?.getInstanceUrl()
     })
-    setDescriptionContent(<>
-      {reactNodes?.map(
-          (para, i) => {
-            const uuid = randomUUID()
-            return <Text key={uuid} style={{color: "#fff", opacity: 0.87}}>
-              {para.map((o, j) => o)}
-            </Text>
-          }
-      )}
-    </>)
-  }, [desc]);
+    return reactNodes?.map(
+        (para, i) => {
+          const uuid = randomUUID()
+          return <Text key={uuid} style={{color: "#fff", opacity: 0.87}}>
+            {para.map((o, j) => o)}
+          </Text>
+        }
+    )
+  }, [user?.getDescription()])
+
+  const ParsedDisplayName = useMemo(() => {
+    const target = user?.getDisplayName()
+    if (target === "") return <View></View>
+    const {reactNodes} = MfmService.renderMfm(target, {
+      emojiMap: user.getEmojiMap(),
+      domain,
+      subdomain,
+      db,
+      globalDb,
+      remoteSubdomain: user?.getInstanceUrl()
+    })
+    return reactNodes?.map(
+        (para, i) => {
+          const uuid = randomUUID()
+          return <Text key={uuid} style={{color: "#fff", opacity: 0.87}}>
+            {para.map((o, j) => o)}
+          </Text>
+        }
+    )
+  }, [user?.getDisplayName()])
 
   return <>
     <Image
@@ -182,7 +209,7 @@ function UserProfileContent() {
       </View>
     </View>
     <View style={{marginLeft: 8}}>
-      <PrimaryText>{user.getDisplayName()}</PrimaryText>
+      <PrimaryText>{ParsedDisplayName}</PrimaryText>
       <SecondaryText>{user.getAppDisplayAccountUrl(subdomain)}</SecondaryText>
     </View>
     <ParsedDescriptionContainer>
@@ -233,8 +260,9 @@ function UserProfile({route, navigation}) {
     </View>
 
   return (
-      <TitleOnlyStackHeaderContainer route={route} navigation={navigation}
-                                     headerTitle={"Profile"}>
+      <TitleOnlyStackHeaderContainer
+          route={route} navigation={navigation}
+          headerTitle={"Profile"}>
         <WithActivitypubUserContext user={Data}>
           <UserProfileContent/>
         </WithActivitypubUserContext>

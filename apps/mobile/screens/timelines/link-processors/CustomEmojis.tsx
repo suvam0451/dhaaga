@@ -1,12 +1,13 @@
-import { Text } from "react-native";
-import { useEffect, useState } from "react";
-import { EmojiService } from "../../../services/emoji.service";
-import { Image } from "@rneui/base";
+import {Text} from "react-native";
+import {useEffect, useState} from "react";
+import {EmojiService} from "../../../services/emoji.service";
+import {Image} from "@rneui/base";
+import {useRealm} from "@realm/react";
 
 type CustomEmojiFragmentProps = {
-	identifier: string;
-	domain: string;
-	subdomain: string;
+  identifier: string;
+  domain: string;
+  subdomain: string;
 };
 
 /**
@@ -14,38 +15,42 @@ type CustomEmojiFragmentProps = {
  * @returns
  */
 function CustomEmojiFragment({
-	identifier,
-	domain,
-	subdomain,
+  identifier,
+  domain,
+  subdomain,
 }: CustomEmojiFragmentProps) {
-	const [Retval, setRetval] = useState(
-		<Text style={{ color: "white" }}>:{identifier}:</Text>
-	);
+  const db = useRealm()
+  const [Retval, setRetval] = useState(
+      <Text style={{color: "white"}}>:{identifier}:</Text>
+  );
 
-	async function resolveEmoji() {
-		const emojis = await EmojiService.get(identifier, domain, subdomain);
-		const match = emojis.find((o) => o.identifier === identifier);
-		if (match) {
-			setRetval(
-				<Image
-					style={{
-						alignSelf: "stretch",
-						minWidth: 16,
-						height: 16,
-					}}
-					source={{ uri: match.staticUrl }}
-				/>
-			);
-		} else {
-			setRetval(<Text style={{ color: "white" }}>:{identifier}:</Text>);
-		}
-	}
+  async function resolveEmoji() {
+    const found = await EmojiService.find(db, {
+      id: identifier,
+      domain,
+      subdomain
+    });
+    if (found) {
+      setRetval(
+          <Image
+              style={{
+                alignSelf: "stretch",
+                minWidth: 16,
+                height: 16,
+              }}
+              source={{uri: found.staticUrl}}
+          />
+      );
+    } else {
+      setRetval(<Text style={{color: "white"}}>:{identifier}:</Text>);
+    }
+  }
 
-	useEffect(() => {
-		resolveEmoji();
-	}, []);
+  useEffect(() => {
+    resolveEmoji();
+  }, []);
 
-	return Retval;
+  return Retval;
 }
 
 export default CustomEmojiFragment;

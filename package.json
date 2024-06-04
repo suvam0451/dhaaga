@@ -18,8 +18,5 @@
     "styled-components": {
       "react-dom": "18.2.0"
     }
-  },
-  "devDependencies": {
-    "expo": "^51.0.8"
   }
 }

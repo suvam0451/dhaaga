@@ -131,7 +131,10 @@ class MastodonRestClient implements ActivityPubClient {
   async getTag(id: string) {
     const _client = this.createPublicClient()
     try {
-      return await _client.v1.tags.$select(id).fetch()
+      console.log("started fetching tag", id, _client)
+      const data = await _client.v1.tags.$select(id).fetch()
+      console.log(data)
+      return data
     } catch (e) {
       console.log(e)
       return null

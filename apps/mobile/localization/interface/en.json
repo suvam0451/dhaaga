@@ -1,0 +1,9 @@
+{
+  "status": {
+    "actions": {
+      "reply": "Reply",
+      "boost": "Boost",
+      "Start": "Star"
+    }
+  }
+}

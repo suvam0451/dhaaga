@@ -1,8 +1,10 @@
 import {Text} from "@rneui/themed"
 import {View} from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
 import {APP_THEME} from "../../styles/AppTheme";
+import GlobalMmkvCacheServices from "../../services/globalMmkvCache.services";
+import {useGlobalMmkvContext} from "../../states/useGlobalMMkvCache";
+import {useGorhomActionSheetContext} from "../../states/useGorhomBottomSheet";
 
 type ExternalLinDisplayNameProps = {
   displayName: string
@@ -11,11 +13,27 @@ type ExternalLinDisplayNameProps = {
 function ExternalLinkDisplayName({displayName}: ExternalLinDisplayNameProps) {
   const httpsRemoved = displayName.replace(/(https:\/\/)(.+)/, "$2")
   const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, httpsRemoved)
+  const {globalDb} = useGlobalMmkvContext()
+  const {
+    setVisible,
+    setBottomSheetType,
+    updateRequestId
+  } = useGorhomActionSheetContext()
+
+  function onTextPress() {
+    GlobalMmkvCacheServices.setBottomSheetProp_Link(globalDb, {
+      url: displayName,
+      displayName: wwwRemoved
+    })
+    setBottomSheetType("Link")
+    updateRequestId()
+    setVisible(true)
+  }
 
   return <View style={{
     display: "flex",
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "center",
     justifyContent: "flex-end",
     marginBottom: -4,
     maxWidth: 196,
@@ -26,13 +44,15 @@ function ExternalLinkDisplayName({displayName}: ExternalLinDisplayNameProps) {
           color: APP_THEME.LINK,
           fontFamily: "Inter-Bold"
         }}
+        onPress={onTextPress}
     >{wwwRemoved}</Text>
-    <Ionicons
-        name="open-outline"
-        size={16}
-        color={APP_THEME.LINK}
-    />
-
+    {/*<View style={{marginLeft: 2}}>*/}
+    {/*  <Ionicons*/}
+    {/*      name="open-outline"*/}
+    {/*      size={16}*/}
+    {/*      color={APP_THEME.LINK}*/}
+    {/*  />*/}
+    {/*</View>*/}
   </View>
 }
 

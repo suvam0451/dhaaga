@@ -1,6 +1,6 @@
 import React, {
   createContext,
-  useContext,
+  useContext, useEffect,
   useMemo,
   useRef,
   useState
@@ -15,6 +15,7 @@ import HashtagBottomSheet from "../components/bottom-sheets/Hashtag";
 import {useGlobalMmkvContext} from "./useGlobalMMkvCache";
 import globalMmkvCacheServices from "../services/globalMmkvCache.services";
 import * as Crypto from "expo-crypto";
+import ExternalLinkActionSheet from "../components/bottom-sheets/Link";
 
 type Type = {
   visible: boolean,
@@ -73,6 +74,14 @@ function BottomSheetContent({type, requestId}: {
             id={x.name}
         />
       }
+      case "Link": {
+        const x = globalMmkvCacheServices.getBottomSheetProp_Link(globalDb)
+        if (!x) return <View></View>
+        return <ExternalLinkActionSheet
+            url={x.url}
+            displayName={x.displayName}
+        />
+      }
       default:
         return <View></View>
     }
@@ -81,10 +90,27 @@ function BottomSheetContent({type, requestId}: {
 
 function WithGorhomBottomSheetContext({children}: Props) {
   const [BottomSheetVisible, setBottomSheetVisible] = useState(false)
-  // const [BottomSheetContent, setBottomSheetContent] = useState(<View></View>)
   const [BottomSheetType, setBottomSheetType] = useState("N/A")
+  const [SnapPoints, setSnapPoints] = useState([])
   const [RequestId, setRequestId] = useState(null)
   const ref = useRef<BottomSheet>()
+
+  useEffect(() => {
+    switch (BottomSheetType) {
+      case "Hashtag": {
+        setSnapPoints(["40%"])
+        break
+      }
+      case "Link": {
+        setSnapPoints([600])
+        break
+      }
+      default: {
+        setSnapPoints(["40%"])
+        break
+      }
+    }
+  }, [BottomSheetType]);
 
   function setVisible(state: boolean) {
     setBottomSheetVisible(state)
@@ -104,7 +130,6 @@ function WithGorhomBottomSheetContext({children}: Props) {
   }
 
   function onBottomSheetChanged(index: number, position: number, type: SNAP_POINT_TYPE) {
-    console.log(index, position, type)
   }
 
   /**
@@ -130,7 +155,7 @@ function WithGorhomBottomSheetContext({children}: Props) {
         index={-1}
         enablePanDownToClose={true}
         enableOverDrag={false}
-        snapPoints={["40%"]}
+        snapPoints={["50%"]}
         backgroundStyle={{
           backgroundColor: "#2C2C2C"
         }}

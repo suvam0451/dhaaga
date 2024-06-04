@@ -13,17 +13,23 @@ import {
 import {randomUUID} from "expo-crypto";
 import LinkProcessor from "../components/common/link/LinkProcessor";
 import {APP_THEME} from "../styles/AppTheme";
+import {EmojiService} from "./emoji.service";
+import {MMKV} from "react-native-mmkv";
+import Realm from "realm"
 
 class MfmService {
   static parseNode(
       node: MfmNode,
       count: string,
-      {emojiMap, linkMap}: {
+      {emojiMap, linkMap, remoteInstance, db, globalDb}: {
         domain: string;
         subdomain: string;
         emojiMap: Map<string, EmojiMapValue>
         linkMap?: Map<string, string>
-        isHighEmphasisText: boolean
+        isHighEmphasisText: boolean,
+        db: Realm,
+        globalDb: MMKV,
+        remoteInstance: string
       }
   ) {
     switch (node.type) {
@@ -69,20 +75,25 @@ class MfmService {
       }
       case "emojiCode": {
         if (!emojiMap) return <Text key={count}></Text>;
-        const match = emojiMap.get(node.props.name)
+        const match = EmojiService.findCachedEmoji({
+          emojiMap,
+          db, globalDb,
+          id: node.props.name,
+          remoteInstance
+        })
 
         if (!match) return <Text
             key={count}
             style={{color: APP_THEME.INVALID_ITEM_BODY}}>
           {`:${node.props.name}:`}
         </Text>;
-        return <Text key={count}><Image
+        return <Text key={count} style={{marginTop: 0}}><Image
             style={{
-              width: 14,
-              height: 14,
-              opacity: 0.6
+              width: 18,
+              height: 18,
+              opacity: 0.87
             }}
-            source={{uri: match.url}}
+            source={{uri: match}}
         /></Text>
 
         // return (
@@ -141,13 +152,27 @@ class MfmService {
     return mp
   }
 
+  /**
+   *
+   * @param input
+   * @param emojiMap
+   * @param domain
+   * @param subdomain
+   * @param db
+   * @param globalDb
+   * @param remoteSubdomain is the subdomain of target user
+   */
   static renderMfm(input: string,
-      {emojiMap, domain, subdomain}: {
+      {emojiMap, domain, subdomain, db, globalDb, remoteSubdomain}: {
         domain?: string,
         subdomain?: string
-        emojiMap: Map<string, EmojiMapValue>
+        emojiMap: Map<string, EmojiMapValue>,
+        globalDb: MMKV,
+        db: Realm,
+        remoteSubdomain?: string
       }
   ) {
+
     if (!input || !domain || !subdomain || !emojiMap) return {
       reactNodes: [],
       openAiContext: []
@@ -160,6 +185,22 @@ class MfmService {
     let openAiContext = []
     let count = 0;
     let paraCount = 0
+
+    /**
+     * Ensure remote emojis are resolved
+     */
+    const emojiCodes = new Set<string>()
+    for (const para of parsed) {
+      for (const node of para) {
+        if (node.type === "emojiCode") {
+          emojiCodes.add(node.props.name)
+        }
+      }
+    }
+    if (emojiCodes.size > 0) {
+      EmojiService.loadEmojisForInstanceSync(db, globalDb, remoteSubdomain,
+          {selection: emojiCodes})
+    }
 
     for (const para of parsed) {
       retval.push([])
@@ -206,7 +247,10 @@ class MfmService {
           linkMap: extractedUrls,
           domain,
           subdomain,
-          isHighEmphasisText: false
+          isHighEmphasisText: false,
+          db,
+          globalDb,
+          remoteInstance: remoteSubdomain
         })
 
         retval[paraCount].push(item)

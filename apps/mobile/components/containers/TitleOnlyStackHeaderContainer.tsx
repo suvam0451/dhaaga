@@ -3,6 +3,7 @@ import {Animated, RefreshControl, StyleSheet, View} from "react-native";
 import diffClamp = Animated.diffClamp;
 import ProfilePageHeader from "../headers/ProfilePageHeader";
 import NavigationService from "../../services/navigation.service";
+import {APP_THEME} from "../../styles/AppTheme";
 
 type TitleOnlyStackHeaderContainerProps = {
   route: any,
@@ -13,6 +14,7 @@ type TitleOnlyStackHeaderContainerProps = {
   children?: any
   onScrollViewEndReachedCallback?: () => void,
   onRefresh?: () => Promise<void>
+  canRefresh?: boolean
 }
 
 function TitleOnlyStackHeaderContainer(
@@ -23,7 +25,8 @@ function TitleOnlyStackHeaderContainer(
       SHOWN_SECTION_HEIGHT = 50,
       children,
       onScrollViewEndReachedCallback,
-      onRefresh
+      onRefresh,
+      canRefresh
     }: TitleOnlyStackHeaderContainerProps) {
   /**
    * Header bar auto-hide handler
@@ -78,7 +81,7 @@ function TitleOnlyStackHeaderContainer(
     }
   }
 
-  return <View style={{height: "100%"}}>
+  return <View style={{height: "100%", backgroundColor: APP_THEME.BACKGROUND}}>
     <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
       <ProfilePageHeader
           title={headerTitle}
@@ -89,7 +92,7 @@ function TitleOnlyStackHeaderContainer(
           }
       />
     </Animated.View>
-    <Animated.ScrollView
+    {canRefresh && <Animated.ScrollView
         style={{
           backgroundColor: "black",
           marginTop: SHOWN_SECTION_HEIGHT,
@@ -104,11 +107,25 @@ function TitleOnlyStackHeaderContainer(
           NavigationService.invokeWhenPageEndReached(e, onScrollViewEndReached)
           return handleScroll
         }}
-        refreshControl={
-          <RefreshControl refreshing={IsRefreshing}
-                          onRefresh={onPerformRefresh}/>
-        }
-    >{children}</Animated.ScrollView>
+        refreshControl={<RefreshControl refreshing={IsRefreshing}
+                                        onRefresh={onPerformRefresh}/>}
+    >{children}</Animated.ScrollView>}
+    {!canRefresh && <Animated.ScrollView
+        style={{
+          backgroundColor: "black",
+          marginTop: SHOWN_SECTION_HEIGHT,
+        }}
+        contentContainerStyle={{
+          display: "flex",
+          minHeight: "100%",
+          paddingBottom: SHOWN_SECTION_HEIGHT,
+          marginTop: 4
+        }}
+        onScroll={(e) => {
+          NavigationService.invokeWhenPageEndReached(e, onScrollViewEndReached)
+          return handleScroll
+        }}
+    >{children}</Animated.ScrollView>}
   </View>
 }
 

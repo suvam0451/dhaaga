@@ -1,7 +1,6 @@
 import React, {useState} from "react";
-import {Dimensions, TouchableOpacity, View} from "react-native";
+import {TouchableOpacity, View} from "react-native";
 import {Text} from "@rneui/themed";
-import RenderHTML from "react-native-render-html";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 type UserProfileExtraInformationProps = {
@@ -48,10 +47,10 @@ function UserProfileExtraInformation({fields}: UserProfileExtraInformationProps)
                 {/*        }}*/}
                 {/*    />*/}
                 {/*)}*/}
-                <RenderHTML baseStyle={{color: "#fff"}}
-                            source={{html: x.value}}
-                            contentWidth={Dimensions.get('window').width}
-                />
+                {/*<RenderHTML baseStyle={{color: "#fff"}}*/}
+                {/*            source={{html: x.value}}*/}
+                {/*            contentWidth={Dimensions.get('window').width}*/}
+                {/*/>*/}
               </View>
             </View>
           </React.Fragment>

@@ -88,12 +88,6 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
       setIsSoloChat(true)
     } else if (chatroom.participants.length === 2) {
       setIsPairChat(true)
-      console.log("participants", chatroom.participants.map((o) => ({
-        name: o.displayName,
-        url: o.accountId,
-        // avatar: o.avatarUrl,
-        server: o.server.url
-      })))
       setParticipants(chatroom.participants.filter((o) => o.userId !== chatroom.me.userId))
     } else {
       setIsGroupChat(true)

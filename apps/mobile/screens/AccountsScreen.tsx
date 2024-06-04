@@ -2,7 +2,8 @@ import {TouchableOpacity} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import MastodonServerSelect from "./accounts/stacks/Mastodon/ServerSelection";
 import MisskeyServerSelect from "./accounts/stacks/Misskey/ServerSelection";
-import SelectProvider from "./accounts/stacks/SelectProvider";
+import SelectProvider
+  from "../components/screens/accounts/stack/SelectProvider";
 import SelectAccountStack from "./accounts/stacks/SelectAccount";
 import MastodonSignIn from "./accounts/stacks/Mastodon/SignIn";
 import MisskeySignIn from "./accounts/stacks/Misskey/SignIn";
@@ -10,10 +11,11 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
 
-function AccountsScreen() {
+function WithNavigation() {
   return (
-      <Stack.Navigator initialRouteName={"Select an Account"}>
-        {/*default*/}
+      <Stack.Navigator
+          initialRouteName={"Select an Account"}
+          screenOptions={{headerShown: false}}>
         <Stack.Screen
             name="Select an Account"
             component={SelectAccountStack}
@@ -53,6 +55,10 @@ function AccountsScreen() {
         />
       </Stack.Navigator>
   );
+}
+
+function AccountsScreen() {
+  return <WithNavigation/>
 }
 
 export default AccountsScreen;
