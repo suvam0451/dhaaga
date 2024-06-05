@@ -26,8 +26,12 @@ import {
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {randomUUID} from "expo-crypto";
 import {useRealm} from "@realm/react";
-import WithActivitypubUserContext from "../../../states/useProfile";
+import WithActivitypubUserContext, {
+  useActivitypubUserContext
+} from "../../../states/useProfile";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
+import activitypubAdapterService
+  from "../../../services/activitypub-adapter.service";
 
 const POST_SPACING_VALUE = 4
 
@@ -219,6 +223,7 @@ function RootStatusFragment({
             post={status} statusId={statusRaw?.id}
             openAiContext={xyz.aiContext}
             setExplanationObject={setExplanationObject}
+            ExplanationObject={ExplanationObject}
         />
       </>
   );
@@ -233,6 +238,7 @@ export function RootFragmentContainer({
 
   return <View style={{
     padding: replyIndicatorsPresent ? 0 : 10,
+    paddingBottom: 0,
     backgroundColor: "#1e1e1e",
     marginTop: mt == undefined ? 0 : mt,
     marginBottom: 4,
@@ -308,6 +314,39 @@ function SharedStatusFragment({
   boostedStatus: mastodon.v1.Status | Note;
 }) {
   const {status: _status, statusRaw: status} = useActivitypubStatusContext()
+  const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const domain = accountState?.activeAccount?.domain
+  const subdomain = accountState?.activeAccount?.subdomain
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
+
+  const userI = useMemo(() => {
+    return activitypubAdapterService.adaptUser(_status.getUser(), domain)
+  }, [_status])
+
+  const ParsedDisplayName = useMemo(() => {
+    const target = userI?.getDisplayName()
+    if (target === "") return <View></View>
+    const {reactNodes} = MfmService.renderMfm(target, {
+      emojiMap: new Map(),
+      domain,
+      subdomain,
+      db,
+      globalDb,
+      remoteSubdomain: userI?.getInstanceUrl()
+    })
+    return reactNodes?.map(
+        (para, i) => {
+          const uuid = randomUUID()
+          return <Text key={uuid} style={{
+            opacity: 0.6,
+            color: "#888",
+            fontFamily: "Montserrat-ExtraBold",}}>
+            {para.map((o, j) => o)}
+          </Text>
+        }
+    )
+  }, [userI?.getDisplayName()])
 
   if (!_status.isValid()) return <View></View>;
 
@@ -330,8 +369,9 @@ function SharedStatusFragment({
             fontWeight: "500",
             marginLeft: 4,
             fontFamily: "Montserrat-ExtraBold",
+            opacity: 0.6
           }}>
-            {_status.getDisplayName()}
+            {ParsedDisplayName}
           </Text>
           <Text style={{color: "gray", marginLeft: 2, marginRight: 2}}>•</Text>
           <View style={{marginTop: 2}}>

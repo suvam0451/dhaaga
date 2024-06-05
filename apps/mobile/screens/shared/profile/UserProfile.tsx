@@ -177,7 +177,7 @@ function UserProfileContent() {
     )
   }, [user?.getDisplayName()])
 
-  return <>
+  return <View style={{backgroundColor: "#121212", height: "100%"}}>
     <Image
         source={{uri: bannerUrl}}
         style={{height: 128, width: Dimensions.get("window").width}}
@@ -220,12 +220,12 @@ function UserProfileContent() {
     <View style={{flexGrow: 1}}/>
 
     <UserProfileExtraInformation fields={fields}/>
-    <View style={{marginBottom: 16}}>
+    <View style={{paddingBottom: 16}}>
       <UserPostsProvider>
         <UserProfileBrowsePosts userId={user.getId()}/>
       </UserPostsProvider>
     </View>
-  </>
+  </View>
 }
 
 function UserProfile({route, navigation}) {
@@ -253,7 +253,7 @@ function UserProfile({route, navigation}) {
   }, [status]);
 
   if (fetchStatus === "fetching" || !Data)
-    return <View style={{backgroundColor: "black"}}>
+    return <View style={{backgroundColor: "#1e1e1e", height: "100%"}}>
       <Skeleton
           height={128}
           width={Dimensions.get("window").width}/>
