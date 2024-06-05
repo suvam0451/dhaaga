@@ -26,6 +26,14 @@ class MastodonRestClient implements ActivityPubClient {
     );
   }
 
+  getIsSensitive(): boolean {
+    throw new Error("Method not implemented.");
+  }
+
+  getSpoilerText(): string | null {
+    throw new Error("Method not implemented.");
+  }
+
   async uploadMedia(params: MediaUploadDTO): Promise<any> {
     const _client = this.createClient()
     try {

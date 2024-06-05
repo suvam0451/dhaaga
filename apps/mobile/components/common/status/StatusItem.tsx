@@ -1,9 +1,9 @@
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {
   View,
-  TouchableOpacity
+  TouchableOpacity, Pressable
 } from "react-native";
-import {Text} from "@rneui/themed"
+import {Divider, Text} from "@rneui/themed"
 import {StandardView} from "../../../styles/Containers";
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
 import {formatDistance, formatDistanceToNowStrict} from "date-fns";
@@ -32,6 +32,9 @@ import WithActivitypubUserContext, {
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 import activitypubAdapterService
   from "../../../services/activitypub-adapter.service";
+import {APP_FONT} from "../../../styles/AppTheme";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const POST_SPACING_VALUE = 4
 
@@ -68,6 +71,7 @@ function RootStatusFragment({
 
   const [PosterContent, setPosterContent] = useState(<View></View>);
   const [ExplanationObject, setExplanationObject] = useState<string | null>(null)
+  const [ShowSensitiveContent, setShowSensitiveContent] = useState(false)
 
   const userI = useMemo(() => {
     return ActivityPubUserAdapter(_status?.getUser() || null, domain)
@@ -130,6 +134,13 @@ function RootStatusFragment({
     setBottomSheetVisible(!BottomSheetVisible)
   }
 
+  const isSensitive = status?.getIsSensitive()
+  const spoilerText = status?.getSpoilerText()
+
+  function onSpoilerClick() {
+    setShowSensitiveContent(!ShowSensitiveContent)
+  }
+
   return (
       <>
         <Status
@@ -151,6 +162,7 @@ function RootStatusFragment({
                 }}
             >
               {PosterContent}
+              <Entypo name="cross" size={28} color={APP_FONT.MONTSERRAT_BODY} />
               {/*<View style={{position: "absolute", left: "100%"}}>*/}
               {/*<View style={{position: "relative"}}>*/}
               {/*<View style={{position: "absolute", left: -36, top: -16, overflow: "visible"}}>*/}
@@ -165,60 +177,173 @@ function RootStatusFragment({
               {/*</View>*/}
               {/*</View>*/}
             </View>
-            <View style={{marginBottom: 0}}>
-              {xyz.nodes}
-              {ExplanationObject !== null &&
-                  <View style={{
-                    backgroundColor: "#2E2E2E",
-                    paddingLeft: 8,
-                    paddingRight: 8,
-                    paddingTop: 4,
-                    paddingBottom: 4,
-                    marginTop: 8,
-                    borderRadius: 8
-                  }}>
+            {isSensitive && spoilerText && <View>
+                <View style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}>
+                    <View style={{width: 24}}>
+                        <FontAwesome name="warning" size={24} color="yellow"
+                                     style={{opacity: 0.6}}/>
+                    </View>
+                    <View style={{marginLeft: 8,}}>
+                      {spoilerText && <Text
+                          style={{
+                            fontFamily: "Inter-Bold",
+                            color: "yellow",
+                            opacity: 0.6
+                          }}>{spoilerText}</Text>}
+                    </View>
+                </View>
+
+                <View style={{
+                  marginHorizontal: "auto",
+                  alignItems: "center",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  width: "100%",
+                  marginBottom: 8
+                }}>
+                    <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
+                    <Pressable style={{
+                      flexShrink: 1,
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingHorizontal: 8,
+                      paddingVertical: 8
+                    }}
+                               onPress={onSpoilerClick}
+                    >
+                        <View>
+                            <Text
+                                style={{
+                                  color: APP_FONT.MONTSERRAT_BODY,
+                                  // backgroundColor: "red",
+                                  flexShrink: 1,
+                                  textAlign: "center",
+                                  fontSize: 16,
+                                  fontFamily: "Montserrat-Bold"
+                                }}>
+                              {ShowSensitiveContent ? "Hide Sensitive" : "Show" +
+                                  " Sensitive"}
+                            </Text>
+                        </View>
+                        <View style={{width: 24, marginLeft: 4}}>
+                            <FontAwesome5 name="eye-slash" size={18}
+                                          color={APP_FONT.MONTSERRAT_BODY}/>
+                        </View>
+                    </Pressable>
+                    <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
+                </View>
+            </View>}
+            {isSensitive && !spoilerText && <View>
+                <View style={{
+                  marginHorizontal: "auto",
+                  alignItems: "center",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  width: "100%",
+                  marginBottom: 8
+                }}>
+                    <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
+                    <Pressable style={{
+                      flexShrink: 1,
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingHorizontal: 8,
+                      paddingVertical: 8
+                    }}
+                               onPress={onSpoilerClick}
+                    >
+                        <View style={{width: 24}}>
+                            <FontAwesome name="warning" size={24} color="yellow"
+                                         style={{opacity: 0.6}}/>
+                        </View>
+                        <View style={{marginLeft: 4}}>
+                            <Text
+                                style={{
+                                  color: APP_FONT.MONTSERRAT_BODY,
+                                  // backgroundColor: "red",
+                                  flexShrink: 1,
+                                  textAlign: "center",
+                                  fontSize: 16,
+                                  fontFamily: "Montserrat-Bold"
+                                }}>
+                              {ShowSensitiveContent ? "Hide Sensitive" : "Show" +
+                                  " Sensitive"}
+                            </Text>
+                        </View>
+                        <View style={{width: 24, marginLeft: 4}}>
+                            <FontAwesome5 name="eye-slash" size={18}
+                                          color={APP_FONT.MONTSERRAT_BODY}/>
+                        </View>
+                    </Pressable>
+                    <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
+                </View>
+            </View>}
+
+            {isSensitive && !ShowSensitiveContent ? <View></View> :
+                <View style={{marginBottom: 0}}>
+                  {xyz.nodes}
+                  {ExplanationObject !== null &&
                       <View style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        width: "100%",
-                        marginBottom: 4
+                        backgroundColor: "#2E2E2E",
+                        paddingLeft: 8,
+                        paddingRight: 8,
+                        paddingTop: 4,
+                        paddingBottom: 4,
+                        marginTop: 8,
+                        borderRadius: 8
                       }}>
                           <View style={{
                             display: "flex",
                             flexDirection: "row",
-                            flexGrow: 1,
-                            alignItems: "center"
+                            width: "100%",
+                            marginBottom: 4
                           }}>
-                              <View>
-                                  <Ionicons
-                                      color={"#bb86fc"}
-                                      name={"language-outline"}
-                                      size={15}/>
+                              <View style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                flexGrow: 1,
+                                alignItems: "center"
+                              }}>
+                                  <View>
+                                      <Ionicons
+                                          color={"#bb86fc"}
+                                          name={"language-outline"}
+                                          size={15}/>
+                                  </View>
+                                  <View>
+                                      <Text style={{
+                                        color: "#bb86fc",
+                                      }}>
+                                        {" JP -> EN"}
+                                      </Text>
+                                  </View>
                               </View>
                               <View>
                                   <Text style={{
-                                    color: "#bb86fc",
-                                  }}>
-                                    {" JP -> EN"}
-                                  </Text>
+                                    color: "#ffffff38",
+                                    flex: 1,
+                                    textAlign: "right",
+                                    fontSize: 14
+                                  }}>Translated using OpenAI</Text>
                               </View>
                           </View>
-                          <View>
-                              <Text style={{
-                                color: "#ffffff38",
-                                flex: 1,
-                                textAlign: "right",
-                                fontSize: 14
-                              }}>Translated using OpenAI</Text>
-                          </View>
-                      </View>
-                      <Text
-                          style={{color: "#ffffff87"}}>{ExplanationObject}</Text>
-                  </View>}
-            </View>
+                          <Text
+                              style={{color: "#ffffff87"}}>{ExplanationObject}</Text>
+                      </View>}
+                </View>
+            }
           </View>
         </TouchableOpacity>
-        <ImageCarousal attachments={status?.getMediaAttachments()}/>
+        {isSensitive && !ShowSensitiveContent ? <View></View> :
+            <ImageCarousal attachments={status?.getMediaAttachments()}/>}
         <StatusInteraction
             post={status} statusId={statusRaw?.id}
             openAiContext={xyz.aiContext}
@@ -341,7 +466,8 @@ function SharedStatusFragment({
           return <Text key={uuid} style={{
             opacity: 0.6,
             color: "#888",
-            fontFamily: "Montserrat-ExtraBold",}}>
+            fontFamily: "Montserrat-ExtraBold",
+          }}>
             {para.map((o, j) => o)}
           </Text>
         }

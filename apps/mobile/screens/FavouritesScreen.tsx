@@ -17,6 +17,7 @@ import FavouritesScreenHomePageDefaultTutorial
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import MyFollowings from "../components/screens/favourites/stack/MyFollowings";
 import MyFollowers from "../components/screens/favourites/stack/MyFollowers";
+import WithGorhomBottomSheetContext from "../states/useGorhomBottomSheet";
 
 type FavouritesScreenNavigationItemIconOnlyProps = {
   icon: any
@@ -295,23 +296,25 @@ function FavouritesScreenTabSetup() {
 
 
 function WithStackNavigation() {
-  return <Stack.Navigator
-      initialRouteName={"FavouritesModuleLandingPage"}
-      screenOptions={{headerShown: false}}
-  >
-    <Stack.Screen
-        name="FavouritesModuleLandingPage"
-        component={FavouritesScreenTabSetup}
-    />
-    <Stack.Screen
-        name="Post"
-        component={PostWithClientContext}
-    />
-    <Stack.Screen name={"MyFavourites"} component={MyFavourites}/>
-    <Stack.Screen name={"MyBookmarks"} component={MyBookmarks}/>
-    <Stack.Screen name={"MyFollowings"} component={MyFollowings}/>
-    <Stack.Screen name={"MyFollowers"} component={MyFollowers}/>
-  </Stack.Navigator>
+  return <WithGorhomBottomSheetContext>
+    <Stack.Navigator
+        initialRouteName={"FavouritesModuleLandingPage"}
+        screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen
+          name="FavouritesModuleLandingPage"
+          component={FavouritesScreenTabSetup}
+      />
+      <Stack.Screen
+          name="Post"
+          component={PostWithClientContext}
+      />
+      <Stack.Screen name={"MyFavourites"} component={MyFavourites}/>
+      <Stack.Screen name={"MyBookmarks"} component={MyBookmarks}/>
+      <Stack.Screen name={"MyFollowings"} component={MyFollowings}/>
+      <Stack.Screen name={"MyFollowers"} component={MyFollowers}/>
+    </Stack.Navigator>
+  </WithGorhomBottomSheetContext>
 }
 
 function FavouritesScreen() {

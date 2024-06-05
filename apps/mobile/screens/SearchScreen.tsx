@@ -21,6 +21,7 @@ import PostWithClientContext from "./shared/Post";
 import WithAppPaginationContext from "../states/usePagination";
 import TrendingPosts from "../components/screens/search/stack/TrendingPosts";
 import TrendingTags from "../components/screens/search/stack/TrendingTags";
+import WithGorhomBottomSheetContext from "../states/useGorhomBottomSheet";
 
 type CheckboxItemProps = {
   selected: boolean
@@ -139,35 +140,37 @@ function HomeContainer() {
 
 
 function SearchScreen() {
-  return <Stack.Navigator
-      initialRouteName={"Search"}
-      screenOptions={{headerShown: false}}
-  >
-    <Stack.Screen
-        name={"Trending Posts"}
-        component={TrendingPosts}
-    />
-    <Stack.Screen
-        name={"Trending Tags"}
-        component={TrendingTags}
-    />
-    <Stack.Screen
-        name={"Search"}
-        component={HomeContainer}
-    />
-    <Stack.Screen
-        name="Browse Hashtag"
-        component={ApiWrapper}
-    />
-    <Stack.Screen
-        name="Profile"
-        component={UserProfile}
-    />
-    <Stack.Screen
-        name="Post"
-        component={PostWithClientContext}
-    />
-  </Stack.Navigator>
+  return <WithGorhomBottomSheetContext>
+    <Stack.Navigator
+        initialRouteName={"Search"}
+        screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen
+          name={"Trending Posts"}
+          component={TrendingPosts}
+      />
+      <Stack.Screen
+          name={"Trending Tags"}
+          component={TrendingTags}
+      />
+      <Stack.Screen
+          name={"Search"}
+          component={HomeContainer}
+      />
+      <Stack.Screen
+          name="Browse Hashtag"
+          component={ApiWrapper}
+      />
+      <Stack.Screen
+          name="Profile"
+          component={UserProfile}
+      />
+      <Stack.Screen
+          name="Post"
+          component={PostWithClientContext}
+      />
+    </Stack.Navigator>
+  </WithGorhomBottomSheetContext>
 }
 
 export default SearchScreen;

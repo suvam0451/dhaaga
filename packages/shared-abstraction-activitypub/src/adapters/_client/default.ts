@@ -8,6 +8,12 @@ import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {StatusArray} from "../status/_interface";
 
 class UnknownRestClient implements ActivityPubClient {
+  getIsSensitive(): boolean {
+      throw new Error("Method not implemented.");
+  }
+  getSpoilerText(): string | null {
+      throw new Error("Method not implemented.");
+  }
   uploadMedia(): Promise<any> {
       throw new Error("Method not implemented.");
   }

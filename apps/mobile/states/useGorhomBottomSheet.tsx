@@ -91,26 +91,8 @@ function BottomSheetContent({type, requestId}: {
 function WithGorhomBottomSheetContext({children}: Props) {
   const [BottomSheetVisible, setBottomSheetVisible] = useState(false)
   const [BottomSheetType, setBottomSheetType] = useState("N/A")
-  const [SnapPoints, setSnapPoints] = useState([])
   const [RequestId, setRequestId] = useState(null)
   const ref = useRef<BottomSheet>()
-
-  useEffect(() => {
-    switch (BottomSheetType) {
-      case "Hashtag": {
-        setSnapPoints(["40%"])
-        break
-      }
-      case "Link": {
-        setSnapPoints([600])
-        break
-      }
-      default: {
-        setSnapPoints(["40%"])
-        break
-      }
-    }
-  }, [BottomSheetType]);
 
   function setVisible(state: boolean) {
     setBottomSheetVisible(state)
@@ -140,6 +122,10 @@ function WithGorhomBottomSheetContext({children}: Props) {
     setRequestId(Crypto.randomUUID())
   }
 
+  const Content = useMemo(() => {
+    return <BottomSheetContent type={BottomSheetType} requestId={RequestId}/>
+  }, [RequestId])
+
   return <GorhomBottomSheetContext.Provider value={{
     visible: BottomSheetVisible,
     type: "N/A",
@@ -152,7 +138,7 @@ function WithGorhomBottomSheetContext({children}: Props) {
     <BottomSheet
         onChange={onBottomSheetChanged}
         ref={ref}
-        index={-1}
+        index={BottomSheetVisible ? 0 : -1}
         enablePanDownToClose={true}
         enableOverDrag={false}
         snapPoints={["50%"]}
@@ -170,7 +156,7 @@ function WithGorhomBottomSheetContext({children}: Props) {
         handleIndicatorStyle={{backgroundColor: "#fff"}}
     >
       <BottomSheetView>
-        <BottomSheetContent type={BottomSheetType} requestId={RequestId}/>
+        {Content}
       </BottomSheetView>
     </BottomSheet>
   </GorhomBottomSheetContext.Provider>

@@ -90,6 +90,10 @@ interface ActivityPubClient {
 
   uploadMedia(params: MediaUploadDTO): Promise<any>
 
+  getIsSensitive(): boolean
+
+  getSpoilerText(): string | null
+
   /**
    * Trending
    */

@@ -27,10 +27,14 @@ function HashtagProcessor({
     })
     setBottomSheetType("Hashtag")
     updateRequestId()
-    setVisible(true)
+
+    setTimeout(() => {
+      setVisible(true)
+    }, 200)
   };
 
-  return <Text onPress={onPress} key={forwardedKey} style={{color: "#bb86fc", opacity: 1}}>
+  return <Text onPress={onPress} key={forwardedKey}
+               style={{color: "#bb86fc", opacity: 1}}>
     #{content}
   </Text>
 }

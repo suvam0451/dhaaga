@@ -69,6 +69,10 @@ export interface StatusInterface {
 
   print(): void
 
+  getIsSensitive(): boolean
+
+  getSpoilerText(): string | null | undefined
+
   /**
    * Reply Thread
    */

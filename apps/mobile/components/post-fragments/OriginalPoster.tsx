@@ -42,7 +42,6 @@ function OriginalPoster({
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
 
-
   useEffect(() => {
     if (status.getUser()) return
     setDataRaw(status.getUser())

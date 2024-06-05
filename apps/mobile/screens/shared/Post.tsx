@@ -17,14 +17,19 @@ import {useNavigation, useRoute} from "@react-navigation/native";
 function StatusContextComponent() {
   const {statusContext} = useActivitypubStatusContext()
 
+  // TODO: fix the context items giving error
+  useEffect(() => {
+    console.log("[INFO]: found context items", statusContext)
+  }, [statusContext]);
+
   return <View>
     <StatusItem/>
-    {statusContext.getChildren().map((o) =>
-        <WithActivitypubStatusContext statusInterface={o}>
-          <StatusItem hideReplyIndicator={true}
-                      replyContextIndicators={["red"]}/>
-        </WithActivitypubStatusContext>
-    )}
+    {/*{statusContext.getChildren().map((o) =>*/}
+    {/*    <WithActivitypubStatusContext statusInterface={o}>*/}
+    {/*      <StatusItem hideReplyIndicator={true}*/}
+    {/*                  replyContextIndicators={["red"]}/>*/}
+    {/*    </WithActivitypubStatusContext>*/}
+    {/*)}*/}
   </View>
 }
 

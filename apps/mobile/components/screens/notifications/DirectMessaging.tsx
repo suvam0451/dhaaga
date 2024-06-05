@@ -95,10 +95,10 @@ function WithApi() {
       ChatroomService.upsertConversation(db,
           {
             me,
-            conversation: item,
             hash,
             subdomain: _subdomain,
-            domain: _domain
+            domain: _domain,
+            conversation: item
           })
     }
   }

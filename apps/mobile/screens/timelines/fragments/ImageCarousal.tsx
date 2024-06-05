@@ -1,5 +1,5 @@
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {Dimensions, View, Image, Text} from "react-native";
+import {Dimensions, View, Image, Text, Pressable} from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import {useEffect, useRef, useState} from "react";
 import {ImageWrapper, ImageViewer} from "react-native-reanimated-viewer";
@@ -7,6 +7,10 @@ import React from "react";
 import {
   MediaAttachmentInterface
 } from "@dhaaga/shared-abstraction-activitypub/src";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import {APP_FONT} from "../../../styles/AppTheme";
+import {Dialog} from "@rneui/themed";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 type ImageCarousalProps = {
   attachments: MediaAttachmentInterface[];
@@ -54,10 +58,22 @@ function TimelineImageWrapped({
 function TimelineImageRendered({
   attachment,
   CalculatedHeight,
+  altText
 }: {
   attachment: MediaAttachmentInterface;
   CalculatedHeight: number;
+  altText?: string
 }) {
+  const [AltTextBackdropVisible, setAltTextBackdropVisible] = useState(false)
+
+  function altTextBackdropPressed() {
+    setAltTextBackdropVisible(false)
+  }
+
+  function onAltTextClicked() {
+    setAltTextBackdropVisible(true)
+  }
+
   return (
       <View
           style={{
@@ -66,6 +82,7 @@ function TimelineImageRendered({
             alignItems: "center",
             width: MEDIA_CONTAINER_WIDTH,
             height: CalculatedHeight,
+            position: "relative"
           }}
       >
         <Image
@@ -74,10 +91,53 @@ function TimelineImageRendered({
               width: MEDIA_CONTAINER_WIDTH,
               borderRadius: 16,
             }}
-            // resizeMethod={"scale"}
-            // resizeMode={"contain"}
             source={{uri: attachment.getPreviewUrl()}}
         />
+        <Dialog
+            isVisible={AltTextBackdropVisible}
+            onBackdropPress={altTextBackdropPressed}
+            overlayStyle={{backgroundColor: "#383838", borderRadius: 8}}
+        >
+          <View style={{
+            display: "flex", width: "100%",  flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+            marginBottom: 4
+          }}>
+            <View>
+              <Text
+                  style={{color: APP_FONT.MONTSERRAT_BODY, fontFamily: "Inter-Bold", fontSize: 20}}>Alt Text
+              </Text>
+            </View>
+
+            <View style={{padding: 8, marginRight: -8, marginTop: -12}}>
+              <MaterialCommunityIcons name="text-to-speech" size={28} color={APP_FONT.MONTSERRAT_BODY} />
+            </View>
+          </View>
+
+          <Text style={{
+            color: APP_FONT.MONTSERRAT_BODY
+          }}>{altText}</Text>
+        </Dialog>
+
+        {altText &&
+            <View style={{
+              position: "absolute",
+              top: "100%",
+              left: "0%",
+              zIndex: 99
+            }}
+            >
+                <View style={{position: "relative"}}>
+                    <Pressable style={{
+                      position: "absolute", top: -40, left: 8,
+                      backgroundColor: "rgba(100, 100, 100, 0.87)",
+                      padding: 4,
+                      borderRadius: 8,
+                    }} onPress={onAltTextClicked}>
+                        <FontAwesome5 name="info-circle" size={24}
+                                      color={APP_FONT.MONTSERRAT_BODY}/>
+                    </Pressable>
+                </View>
+            </View>}
       </View>
   );
 }
@@ -131,6 +191,7 @@ function ImageCarousal({attachments}: ImageCarousalProps) {
           <TimelineImageRendered
               attachment={attachments[0]}
               CalculatedHeight={CalculatedHeight}
+              altText={attachments[0].getAltText()}
           />
         </React.Fragment>
     );

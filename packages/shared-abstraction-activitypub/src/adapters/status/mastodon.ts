@@ -20,6 +20,14 @@ class MastodonToStatusAdapter implements StatusInterface {
     this.descendants = []
   }
 
+  getIsSensitive(): boolean {
+    return this.ref.instance.sensitive
+  }
+
+  getSpoilerText(): string | null | undefined {
+    return this.ref.instance.spoilerText
+  }
+
   getRaw(): Status {
     return this?.ref?.instance
   }

@@ -7,6 +7,7 @@ import {
   View
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import {APP_FONT} from "../../styles/AppTheme";
 
 type HeadersProps = {
   HIDDEN_SECTION_HEIGHT: number;
@@ -33,7 +34,6 @@ const TimelinesHeader = ({
           <TouchableOpacity
               onPress={onLeftIconPress}
               style={{
-                // backgroundColor: "red",
                 height: "100%",
                 display: "flex",
                 alignItems: "center",
@@ -41,19 +41,13 @@ const TimelinesHeader = ({
                 paddingHorizontal: 8
               }}
           >
-            <Ionicons name="chevron-back" size={24}
-                      color="rgba(255, 255, 255, 0.87)"/>
+            <Ionicons
+                name="chevron-back" size={24}
+                color="rgba(255, 255, 255, 0.6)"/>
           </TouchableOpacity>
-          <View style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center"
-          }}>
-            <Text style={[styles.conversation, {
-              fontFamily: "Montserrat-Bold",
-            }]}>{title}</Text>
+          <View style={styles.navbarTitleContainer}>
+            <Text style={styles.navbarTitle}>{title}</Text>
           </View>
-
           <View style={{
             height: "100%",
             display: "flex",
@@ -81,11 +75,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "blue"
   },
-  conversation: {
-    color: "rgba(255, 255, 255, 0.87)",
+  navbarTitleContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  navbarTitle: {
+    color: APP_FONT.MONTSERRAT_HEADER,
     fontSize: 16,
     fontFamily: "Montserrat-Bold",
-    // fontWeight: "bold"
   },
   searchText: {
     color: "#8B8B8B",
