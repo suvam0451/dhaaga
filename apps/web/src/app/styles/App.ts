@@ -1,5 +1,5 @@
 import {styled} from "styled-components";
-import Image from "next/image";
+import Image from 'next/image'
 
 export const RootContainer = styled.div`
     min-height: 100vh;
@@ -15,7 +15,7 @@ export const MainContainer = styled.div`
 `;
 
 // prettier-ignore
-export const ScrollImageHorizontallyOnHover = styled(Image)<{
+export const ScrollImageHorizontallyOnHover = styled.img<{
   moveby?: string
 }>`
     transform: translateX(0%);

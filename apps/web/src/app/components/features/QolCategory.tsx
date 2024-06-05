@@ -1,6 +1,4 @@
-import {Box, Button, Flex, Text} from "@mantine/core";
-import Image from "next/image";
-import {IconChevronLeft, IconChevronRight} from "@tabler/icons-react";
+import {Box, Flex, Text} from "@mantine/core";
 
 // assets
 import GalleryStyleSearchModuleShowcase
@@ -9,6 +7,7 @@ import DesktopGallery
   from "../../../../public/assets/desktop-showcase/Three_Column_Full_Size.png";
 import {useMemo, useState} from "react";
 import {ScrollImageHorizontallyOnHover} from "@/app/styles/App";
+import Image from "next/image"
 
 function QolCategory() {
   const [SelectedCard, setSelectedCard] = useState("media-gallery");
@@ -38,11 +37,11 @@ function QolCategory() {
   return (
       <Flex justify={"space-between"} w={"100%"}>
         <Box color={"red"} maw={450}>
-          <Text size={16} color={"red"}>
+          <Text size={"sm"} c={"red"}>
             Convenience
           </Text>
-          <Text size={28}>Every workflow is designed to be</Text>
-          <Text size={28} color={"red"}>
+          <Text size={"md"}>Every workflow is designed to be</Text>
+          <Text size={"md"} c={"red"}>
             effortless and easy
           </Text>
           <Text>
@@ -59,12 +58,12 @@ function QolCategory() {
               }}
           >
             <Text
-                color={"black"}
+                c={"black"}
                 style={{fontWeight: 600, fontSize: "0.875rem"}}
             >
               Media Gallery
             </Text>
-            <Text color={"gray"} style={{fontSize: "0.875rem"}}>
+            <Text c={"gray"} style={{fontSize: "0.875rem"}}>
               {
                 '"Media Only" timeline columns gets a new rework. Navigate gallery-style view with your keyboards.'
               }
@@ -80,12 +79,12 @@ function QolCategory() {
               }}
           >
             <Text
-                color={"black"}
+                c={"black"}
                 style={{fontWeight: 600, fontSize: "0.875rem"}}
             >
               Three Column Layout
             </Text>
-            <Text color={"gray"} style={{fontSize: "0.875rem"}}>
+            <Text c={"gray"} style={{fontSize: "0.875rem"}}>
               {
                 "Perfect balance ⚖️ between the old-school multi-column layouts and newer single-column zen layouts."
               }
@@ -100,12 +99,12 @@ function QolCategory() {
               }}
           >
             <Text
-                color={"black"}
+                c={"black"}
                 style={{fontWeight: 600, fontSize: "0.875rem"}}
             >
               Scroll to Top
             </Text>
-            <Text color={"gray"} style={{fontSize: "0.875rem"}}>
+            <Text c={"gray"} style={{fontSize: "0.875rem"}}>
               {
                 "Every relevant column loads new set of posts automatically. A handy scroll-to-top button makes."
               }
@@ -133,7 +132,7 @@ function QolCategory() {
                 SelectedComponent.layout === "carousal" ? "flex-start" : "center"
               }
           >
-            <ScrollImageHorizontallyOnHover
+            <Image
                 height={500}
                 objectFit="contain"
                 src={SelectedComponent.image}
@@ -143,7 +142,7 @@ function QolCategory() {
                   border: "4px solid #333",
                   borderRadius: "0.25rem",
                 }}
-                moveby={SelectedComponent.scrollBy}
+                // moveby={SelectedComponent.scrollBy}
             />
           </Flex>
           {/* <Flex align={"center"} justify={"center"} my={"xs"}>

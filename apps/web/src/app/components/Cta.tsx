@@ -3,10 +3,10 @@ import {Box, Button, Text} from "@mantine/core";
 function IntroComponent() {
   return (
       <Box maw={500}>
-        <Text size={48} style={{lineHeight: 1.2, fontWeight: 600}}>
+        <Text size={"lg"} style={{lineHeight: 1.2, fontWeight: 600}}>
           Experience Fediverse
         </Text>
-        <Text size={48} style={{lineHeight: 1.2, fontWeight: 600}}>
+        <Text size={"lg"} style={{lineHeight: 1.2, fontWeight: 600}}>
           with feature packed cross-platform clients
         </Text>
         <Text mt={"lg"} style={{fontSize: "16px"}}>
