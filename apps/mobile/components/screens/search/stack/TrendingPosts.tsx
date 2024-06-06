@@ -1,29 +1,18 @@
-import {Animated, RefreshControl, View} from "react-native";
+import {RefreshControl} from "react-native";
 import {
   useActivityPubRestClientContext
 } from "../../../../states/useActivityPubRestClient";
 import {useQuery} from "@tanstack/react-query";
 import React, {useEffect, useRef, useState} from "react";
-import TitleOnlyStackHeaderContainer
-  from "../../../containers/TitleOnlyStackHeaderContainer";
-import WithScrollOnRevealContext, {
-  useScrollOnReveal
-} from "../../../../states/useScrollOnReveal";
+import WithScrollOnRevealContext from "../../../../states/useScrollOnReveal";
 import WithAppPaginationContext, {
   useAppPaginationContext
 } from "../../../../states/usePagination";
-import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {Note} from "@dhaaga/shared-provider-misskey/src";
 import WithActivitypubStatusContext from "../../../../states/useStatus";
-import StatusItem
-  from "../../../common/status/StatusItem";
-import {useNavigation, useRoute} from "@react-navigation/native";
-import WithInfiniteScrollIndicator
-  from "../../../containers/WithInfiniteScrollIndicator";
+import StatusItem from "../../../common/status/StatusItem";
 import {AnimatedFlashList} from "@shopify/flash-list";
 import NavigationService from "../../../../services/navigation.service";
 import LoadingMore from "../../home/LoadingMore";
-import TimelinesHeader from "../../../TimelineHeader";
 import {EmojiService} from "../../../../services/emoji.service";
 import {useRealm} from "@realm/react";
 import {useGlobalMmkvContext} from "../../../../states/useGlobalMMkvCache";
@@ -31,7 +20,8 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../../../libs/redux/store";
 import {AccountState} from "../../../../libs/redux/slices/account";
 import WithAutoHideTopNavBar from "../../../containers/WithAutoHideTopNavBar";
-import diffClamp = Animated.diffClamp;
+import useTopbarSmoothTranslate
+  from "../../../../states/useTopbarSmoothTranslate";
 
 
 const SHOWN_SECTION_HEIGHT = 50;
@@ -46,10 +36,10 @@ function ApiWrapper() {
     data: PageData,
     setMaxId,
     append,
-    maxId,
     queryCacheMaxId,
     updateQueryCache,
-    clear
+    clear,
+    maxId
   } = useAppPaginationContext()
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const domain = accountState?.activeAccount?.domain
@@ -64,12 +54,10 @@ function ApiWrapper() {
 
   async function api() {
     if (!client) return null
-    const retval = await client.getTrendingPosts({
+    return await client.getTrendingPosts({
       limit: 5,
       offset: parseInt(queryCacheMaxId)
     })
-    console.log(queryCacheMaxId, retval.map((o) => o.id))
-    return retval
   }
 
   // Queries
@@ -108,13 +96,15 @@ function ApiWrapper() {
         })
         setIsNextPageLoading(false)
       })
+    } else {
+      setIsNextPageLoading(false)
     }
   }, [fetchStatus]);
 
   /**
    * Loads next set, when scroll end is reached
    */
-  function onPageEndReached() {
+  const onPageEndReached = () => {
     if (PageData.length === 0) return
     if (IsNextPageLoading) return
 
@@ -126,41 +116,15 @@ function ApiWrapper() {
     })
   }
 
-  function handleScrollJs(e) {
+  const handleScrollJs = (e: any) => {
     NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
   }
 
-  const scrollY = useRef(new Animated.Value(0));
-  const scrollYClamped = diffClamp(
-      scrollY.current,
-      0,
-      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
-  );
-
-  const translateY = scrollYClamped.interpolate({
-    inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
-    outputRange: [0, -HIDDEN_SECTION_HEIGHT],
-  });
-
-  const translateYNumber = useRef();
-
-  translateY.addListener(({value}) => {
-    translateYNumber.current = value;
-  });
-
-  const handleScrollAnimated = Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: {y: scrollY.current},
-          },
-        },
-      ],
-      {
-        useNativeDriver: true,
-        listener: handleScrollJs
-      },
-  );
+  const {onScroll, translateY} = useTopbarSmoothTranslate({
+    onScrollJsFn: handleScrollJs,
+    totalHeight: HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT,
+    hiddenHeight: HIDDEN_SECTION_HEIGHT
+  })
 
   const ref = useRef(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -170,7 +134,9 @@ function ApiWrapper() {
     refetch();
   }
 
-  return <WithAutoHideTopNavBar title={"Trending Posts"} translateY={translateY}>
+  return <WithAutoHideTopNavBar
+      title={"Trending Posts"}
+      translateY={translateY}>
     <AnimatedFlashList
         estimatedItemSize={200}
         data={PageData}
@@ -180,7 +146,7 @@ function ApiWrapper() {
               <StatusItem key={o.index}/>
             </WithActivitypubStatusContext>
         }
-        onScroll={handleScrollAnimated}
+        onScroll={onScroll}
         contentContainerStyle={{
           paddingTop: SHOWN_SECTION_HEIGHT + 4,
         }}

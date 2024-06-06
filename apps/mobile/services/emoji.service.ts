@@ -11,7 +11,6 @@ import {
 import {
   ActivityPubCustomEmojiRepository
 } from "../repositories/activitypub-emoji.repo";
-import {ActivityPubServer} from "../entities/activitypub-server.entity";
 import {
   Status
 } from "@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface";
@@ -122,10 +121,10 @@ export class EmojiService {
         })))
     await Promise.all(calls).then((results) => {
       results.forEach((res) => {
-        if (res["error"]) {
-          console.log("[WARN]: emoji fetch failed for", res["errorData"])
+        if (res?.["error"]) {
+          // console.log("[WARN]: emoji fetch failed for", res["errorData"])
         } else {
-          // console.log("[INFO]: emoji loaded for", res["errorData"])
+          // console.log("[INFO]: emoji not loaded for", res["errorData"])
         }
       })
     })

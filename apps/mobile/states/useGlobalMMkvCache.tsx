@@ -1,5 +1,5 @@
 import {MMKV} from "react-native-mmkv";
-import {createContext, useContext, useMemo} from "react";
+import {createContext, useContext, useMemo, useRef} from "react";
 
 type Type = {
   globalDb: MMKV | null
@@ -28,9 +28,8 @@ type Props = {
 
 
 function WithGlobalMmkvContext({children}: Props) {
-  const mmkv = useMemo(() => {
-    return new MMKV({id: `globalnode`})
-  }, [])
+  const _mmkv = useRef(new MMKV({id: `globalnode`}))
+  const mmkv = _mmkv.current
 
   /**
    * Clear all known keys used for exchanging raw objects

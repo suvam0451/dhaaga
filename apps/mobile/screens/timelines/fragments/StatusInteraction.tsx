@@ -136,7 +136,6 @@ function StatusInteraction({
                   flexDirection: "row",
                   alignItems: "center",
                   marginRight: 12,
-                  // backgroundColor: "red",
                   paddingTop: 8,
                   paddingBottom: 8
                 }}

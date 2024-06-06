@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 import {
   useGorhomActionSheetContext
@@ -7,6 +7,7 @@ import GlobalMmkvCacheServices
   from "../../../services/globalMmkvCache.services";
 import {Text} from "@rneui/themed";
 import {APP_THEME} from "../../../styles/AppTheme";
+import useLongLinkTextCollapse from "../../../states/useLongLinkTextCollapse";
 
 type LinkProcessorProps = {
   url: string,
@@ -23,8 +24,7 @@ function LinkProcessor({url, displayName}: LinkProcessorProps) {
     updateRequestId
   } = useGorhomActionSheetContext()
 
-  function onTextPress() {
-
+  const onTextPress = useCallback(() => {
     GlobalMmkvCacheServices.setBottomSheetProp_Link(globalDb, {
       url: displayName,
       displayName: wwwRemoved
@@ -32,17 +32,19 @@ function LinkProcessor({url, displayName}: LinkProcessorProps) {
     setBottomSheetType("Link")
     updateRequestId()
     setVisible(true)
-  }
+  }, [])
 
+  const {onTextLayout, Result} = useLongLinkTextCollapse(wwwRemoved, 32)
   return <Text
-      numberOfLines={1}
+      // numberOfLines={1}
       style={{
         color: APP_THEME.LINK,
         fontFamily: "Inter-Bold",
         maxWidth: 128,
       }}
       onPress={onTextPress}
-  >{wwwRemoved}</Text>
+      onTextLayout={onTextLayout}
+  >{Result}</Text>
 }
 
 {/*<View style={{marginLeft: 2}}>*/

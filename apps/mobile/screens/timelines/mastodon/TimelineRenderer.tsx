@@ -6,9 +6,8 @@ import {
   Animated, RefreshControl,
   SafeAreaView,
   StatusBar,
-  StyleSheet, View,
+  StyleSheet,
 } from "react-native";
-import {getCloser} from "../../../utils";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import StatusItem from "../../../components/common/status/StatusItem";
@@ -27,89 +26,11 @@ import NavigationService from "../../../services/navigation.service";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 import {useRealm} from "@realm/react";
 import {EmojiService} from "../../../services/emoji.service";
+import useTopbarSmoothTranslate from "../../../states/useTopbarSmoothTranslate";
 
-const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
 
-
-function Content() {
-  const {data: PageData} = useAppPaginationContext()
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const {client} = useActivityPubRestClientContext()
-  const {globalDb} = useGlobalMmkvContext()
-  const db = useRealm()
-
-  const [refreshing, setRefreshing] = useState(false);
-  const ref = useRef(null);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-  }
-
-  function onPageEndReached() {
-    // console.log("[INFO]: page end reached. performing refetch")
-
-    // updateQueryCache()
-    // refetch()
-    // setLoadingMoreComponentProps({
-    //   visible: true,
-    //   loading: true
-    // })
-  }
-
-  const scrollY = useRef(new Animated.Value(0));
-  const scrollYClamped = diffClamp(
-      scrollY.current,
-      0,
-      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
-  );
-
-  const translateY = scrollYClamped.interpolate({
-    inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
-    outputRange: [0, -HIDDEN_SECTION_HEIGHT],
-  });
-
-  const translateYNumber = useRef();
-
-  translateY.addListener(({value}) => {
-    translateYNumber.current = value;
-  });
-
-  const handleScroll = Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: {y: scrollY.current},
-          },
-        },
-      ],
-      {
-        useNativeDriver: true,
-      }
-  );
-
-  if (!PageData) return <View></View>
-  return <>
-    <AnimatedFlashList
-        estimatedItemSize={200}
-        data={PageData}
-        ref={ref}
-        renderItem={(o) =>
-            <WithActivitypubStatusContext status={o.item} key={o.index}>
-              <StatusItem key={o.index}/>
-            </WithActivitypubStatusContext>
-        }
-        onScroll={(e) => {
-          NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
-          return handleScroll
-        }}
-        contentContainerStyle={{
-          paddingTop: SHOWN_SECTION_HEIGHT + 4,
-        }}
-    />
-  </>
-}
 
 /**
  *
@@ -138,7 +59,7 @@ function TimelineRenderer() {
     loading: false
   });
 
-  const api = () => client ? client.getHomeTimeline({limit: 5, maxId}) : null
+  const api = () => client ? client.getHomeTimeline({limit: 5, maxId: queryCacheMaxId}) : null
 
   // Queries
   const {status, data, fetchStatus, refetch} = useQuery<
@@ -183,85 +104,23 @@ function TimelineRenderer() {
 
   const ref = useRef(null);
 
-  const scrollY = useRef(new Animated.Value(0));
-  const scrollYClamped = diffClamp(
-      scrollY.current,
-      0,
-      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
-  );
-
-  const translateY = scrollYClamped.interpolate({
-    inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
-    outputRange: [0, -HIDDEN_SECTION_HEIGHT],
-  });
-
-  const translateYNumber = useRef();
-
-  translateY.addListener(({value}) => {
-    translateYNumber.current = value;
-  });
-
-  function handleScrollJs(e) {
-    NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
-  }
-
-  const handleScrollAnimated = Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: {y: scrollY.current},
-          },
-        },
-      ],
-      {
-        useNativeDriver: true,
-        listener: handleScrollJs
-      },
-  );
-
   function onPageEndReached() {
-    // console.log("[INFO]: page end reached. performing refetch")
     updateQueryCache()
-    refetch()
     setLoadingMoreComponentProps({
       visible: true,
       loading: true
     })
   }
 
-  /**
-   * When scroll view has stopped moving,
-   * snap to the nearest section
-   * @param param0
-   */
-  const handleSnap = ({nativeEvent}) => {
-    const offsetY = nativeEvent.contentOffset.y;
-    if (
-        !(
-            translateYNumber.current === 0 ||
-            translateYNumber.current === -HIDDEN_SECTION_HEIGHT
-        )
-    ) {
-      if (ref.current) {
-        try {
-          /**
-           * ScrollView --> scroll ???
-           * FlatView --> scrollToOffset({offset: number}})
-           */
-          ref.current.scrollTo({
-            // applies only for flat list
-            offset:
-                getCloser(translateYNumber.current, -HIDDEN_SECTION_HEIGHT, 0) ===
-                -HIDDEN_SECTION_HEIGHT
-                    ? offsetY + HIDDEN_SECTION_HEIGHT
-                    : offsetY - HIDDEN_SECTION_HEIGHT,
-          });
-        } catch (e) {
-          console.log("[WARN]: component is not a flat list");
-        }
-      }
-    }
-  };
+  function handleScrollJs(e) {
+    NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+  }
+
+  const {onScroll, translateY} = useTopbarSmoothTranslate({
+    onScrollJsFn: handleScrollJs,
+    totalHeight: HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT,
+    hiddenHeight: HIDDEN_SECTION_HEIGHT
+  })
 
   useEffect(() => {
     if (status === "success") {
@@ -286,7 +145,7 @@ function TimelineRenderer() {
           />
         </Animated.View>
         <AnimatedFlashList
-            estimatedItemSize={200}
+            estimatedItemSize={100}
             data={PageData}
             ref={ref}
             renderItem={(o) =>
@@ -294,7 +153,7 @@ function TimelineRenderer() {
                   <StatusItem key={o.index}/>
                 </WithActivitypubStatusContext>
             }
-            onScroll={handleScrollAnimated}
+            onScroll={onScroll}
             contentContainerStyle={{
               paddingTop: SHOWN_SECTION_HEIGHT + 4,
             }}

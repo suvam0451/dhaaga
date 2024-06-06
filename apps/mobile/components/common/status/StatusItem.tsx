@@ -1,14 +1,10 @@
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {
-  View,
-  TouchableOpacity, Pressable
-} from "react-native";
-import {Divider, Text} from "@rneui/themed"
+import {Pressable, TouchableOpacity, View} from "react-native";
+import {Divider, Skeleton, Text} from "@rneui/themed"
 import {StandardView} from "../../../styles/Containers";
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
-import {formatDistance, formatDistanceToNowStrict} from "date-fns";
-import {useEffect, useMemo, useState} from "react";
-import React from "react";
+import {formatDistanceToNowStrict} from "date-fns";
+import React, {useEffect, useMemo, useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../libs/redux/store";
 import {AccountState} from "../../../libs/redux/slices/account";
@@ -26,15 +22,14 @@ import {
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {randomUUID} from "expo-crypto";
 import {useRealm} from "@realm/react";
-import WithActivitypubUserContext, {
-  useActivitypubUserContext
-} from "../../../states/useProfile";
+import WithActivitypubUserContext from "../../../states/useProfile";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 import activitypubAdapterService
   from "../../../services/activitypub-adapter.service";
 import {APP_FONT} from "../../../styles/AppTheme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Entypo from "@expo/vector-icons/Entypo";
+import ExplainOutput from "../explanation/ExplainOutput";
 
 const POST_SPACING_VALUE = 4
 
@@ -69,7 +64,7 @@ function RootStatusFragment({
   const {status, statusRaw, sharedStatus} = useActivitypubStatusContext()
   const _status = isRepost ? sharedStatus : status
 
-  const [PosterContent, setPosterContent] = useState(<View></View>);
+  const [PosterContent, setPosterContent] = useState(null);
   const [ExplanationObject, setExplanationObject] = useState<string | null>(null)
   const [ShowSensitiveContent, setShowSensitiveContent] = useState(false)
 
@@ -99,7 +94,7 @@ function RootStatusFragment({
 
   const xyz = useMemo(() => {
     if (!_status?.getContent() || !userI?.getInstanceUrl()) {
-      return {aiContext: [], nodes: <View></View>}
+      return {isLoaded: false, aiContext: [], nodes: <View></View>}
     }
 
     const emojiMap = userI.getEmojiMap()
@@ -112,6 +107,7 @@ function RootStatusFragment({
     })
 
     return {
+      isLoaded: true,
       aiContext: openAiContext,
       nodes: reactNodes?.map(
           (para) => {
@@ -141,217 +137,178 @@ function RootStatusFragment({
     setShowSensitiveContent(!ShowSensitiveContent)
   }
 
-  return (
-      <>
-        <Status
-            visible={BottomSheetVisible}
-            setVisible={setBottomSheetVisible}/>
-        <TouchableOpacity delayPressIn={100} onPress={() => {
-          navigation.navigate("Post", {
-            id: status.getId()
-          })
-        }}>
-          <View>
-            <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  marginTop: mt === undefined ? 0 : mt,
-                  marginBottom: 8,
-                  position: "relative"
-                }}
-            >
-              {PosterContent}
-              <Entypo name="cross" size={28} color={APP_FONT.MONTSERRAT_BODY} />
-              {/*<View style={{position: "absolute", left: "100%"}}>*/}
-              {/*<View style={{position: "relative"}}>*/}
-              {/*<View style={{position: "absolute", left: -36, top: -16, overflow: "visible"}}>*/}
-              {/*<TouchableOpacity onPress={statusActionListClicked}>*/}
-              {/*<FontAwesome name="bookmark" size={32} color="#888" style={{opacity: 0.87}} />*/}
-              {/*<MaterialIcons name="bookmark-add" size={36} color="#888"  style={{opacity: 0.6}} />*/}
-              {/*<MaterialIcons name="bookmark-add" size={32}
+  return useMemo(() => {
+    if (!xyz.isLoaded || !PosterContent) return <Skeleton/>
+    return <>
+      <Status
+          visible={BottomSheetVisible}
+          setVisible={setBottomSheetVisible}/>
+      <TouchableOpacity delayPressIn={100} onPress={() => {
+        navigation.navigate("Post", {
+          id: status.getId()
+        })
+      }}>
+        <View>
+          <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                marginTop: mt === undefined ? 0 : mt,
+                marginBottom: 8,
+                position: "relative"
+              }}
+          >
+            {PosterContent}
+            <Entypo name="cross" size={28} color={APP_FONT.MONTSERRAT_BODY}/>
+            {/*<View style={{position: "absolute", left: "100%"}}>*/}
+            {/*<View style={{position: "relative"}}>*/}
+            {/*<View style={{position: "absolute", left: -36, top: -16, overflow: "visible"}}>*/}
+            {/*<TouchableOpacity onPress={statusActionListClicked}>*/}
+            {/*<FontAwesome name="bookmark" size={32} color="#888" style={{opacity: 0.87}} />*/}
+            {/*<MaterialIcons name="bookmark-add" size={36} color="#888"  style={{opacity: 0.6}} />*/}
+            {/*<MaterialIcons name="bookmark-add" size={32}
                        color="#888" style={{opacity: 0.87}} />*/}
-              {/*<Ionicons name="ellipsis-horizontal" size={24} color="#888"/>*/}
-              {/*</TouchableOpacity>*/}
-              {/*</View>*/}
-              {/*</View>*/}
-              {/*</View>*/}
-            </View>
-            {isSensitive && spoilerText && <View>
-                <View style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}>
-                    <View style={{width: 24}}>
-                        <FontAwesome name="warning" size={24} color="yellow"
-                                     style={{opacity: 0.6}}/>
-                    </View>
-                    <View style={{marginLeft: 8,}}>
-                      {spoilerText && <Text
-                          style={{
-                            fontFamily: "Inter-Bold",
-                            color: "yellow",
-                            opacity: 0.6
-                          }}>{spoilerText}</Text>}
-                    </View>
-                </View>
-
-                <View style={{
-                  marginHorizontal: "auto",
-                  alignItems: "center",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  width: "100%",
-                  marginBottom: 8
-                }}>
-                    <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
-                    <Pressable style={{
-                      flexShrink: 1,
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingHorizontal: 8,
-                      paddingVertical: 8
-                    }}
-                               onPress={onSpoilerClick}
-                    >
-                        <View>
-                            <Text
-                                style={{
-                                  color: APP_FONT.MONTSERRAT_BODY,
-                                  // backgroundColor: "red",
-                                  flexShrink: 1,
-                                  textAlign: "center",
-                                  fontSize: 16,
-                                  fontFamily: "Montserrat-Bold"
-                                }}>
-                              {ShowSensitiveContent ? "Hide Sensitive" : "Show" +
-                                  " Sensitive"}
-                            </Text>
-                        </View>
-                        <View style={{width: 24, marginLeft: 4}}>
-                            <FontAwesome5 name="eye-slash" size={18}
-                                          color={APP_FONT.MONTSERRAT_BODY}/>
-                        </View>
-                    </Pressable>
-                    <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
-                </View>
-            </View>}
-            {isSensitive && !spoilerText && <View>
-                <View style={{
-                  marginHorizontal: "auto",
-                  alignItems: "center",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  width: "100%",
-                  marginBottom: 8
-                }}>
-                    <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
-                    <Pressable style={{
-                      flexShrink: 1,
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingHorizontal: 8,
-                      paddingVertical: 8
-                    }}
-                               onPress={onSpoilerClick}
-                    >
-                        <View style={{width: 24}}>
-                            <FontAwesome name="warning" size={24} color="yellow"
-                                         style={{opacity: 0.6}}/>
-                        </View>
-                        <View style={{marginLeft: 4}}>
-                            <Text
-                                style={{
-                                  color: APP_FONT.MONTSERRAT_BODY,
-                                  // backgroundColor: "red",
-                                  flexShrink: 1,
-                                  textAlign: "center",
-                                  fontSize: 16,
-                                  fontFamily: "Montserrat-Bold"
-                                }}>
-                              {ShowSensitiveContent ? "Hide Sensitive" : "Show" +
-                                  " Sensitive"}
-                            </Text>
-                        </View>
-                        <View style={{width: 24, marginLeft: 4}}>
-                            <FontAwesome5 name="eye-slash" size={18}
-                                          color={APP_FONT.MONTSERRAT_BODY}/>
-                        </View>
-                    </Pressable>
-                    <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
-                </View>
-            </View>}
-
-            {isSensitive && !ShowSensitiveContent ? <View></View> :
-                <View style={{marginBottom: 0}}>
-                  {xyz.nodes}
-                  {ExplanationObject !== null &&
-                      <View style={{
-                        backgroundColor: "#2E2E2E",
-                        paddingLeft: 8,
-                        paddingRight: 8,
-                        paddingTop: 4,
-                        paddingBottom: 4,
-                        marginTop: 8,
-                        borderRadius: 8
-                      }}>
-                          <View style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            width: "100%",
-                            marginBottom: 4
-                          }}>
-                              <View style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                flexGrow: 1,
-                                alignItems: "center"
-                              }}>
-                                  <View>
-                                      <Ionicons
-                                          color={"#bb86fc"}
-                                          name={"language-outline"}
-                                          size={15}/>
-                                  </View>
-                                  <View>
-                                      <Text style={{
-                                        color: "#bb86fc",
-                                      }}>
-                                        {" JP -> EN"}
-                                      </Text>
-                                  </View>
-                              </View>
-                              <View>
-                                  <Text style={{
-                                    color: "#ffffff38",
-                                    flex: 1,
-                                    textAlign: "right",
-                                    fontSize: 14
-                                  }}>Translated using OpenAI</Text>
-                              </View>
-                          </View>
-                          <Text
-                              style={{color: "#ffffff87"}}>{ExplanationObject}</Text>
-                      </View>}
-                </View>
-            }
+            {/*<Ionicons name="ellipsis-horizontal" size={24} color="#888"/>*/}
+            {/*</TouchableOpacity>*/}
+            {/*</View>*/}
+            {/*</View>*/}
+            {/*</View>*/}
           </View>
-        </TouchableOpacity>
-        {isSensitive && !ShowSensitiveContent ? <View></View> :
-            <ImageCarousal attachments={status?.getMediaAttachments()}/>}
-        <StatusInteraction
-            post={status} statusId={statusRaw?.id}
-            openAiContext={xyz.aiContext}
-            setExplanationObject={setExplanationObject}
-            ExplanationObject={ExplanationObject}
-        />
-      </>
-  );
+          {isSensitive && spoilerText && <View>
+              <View style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center"
+              }}>
+                  <View style={{width: 24}}>
+                      <FontAwesome name="warning" size={24} color="yellow"
+                                   style={{opacity: 0.6}}/>
+                  </View>
+                  <View style={{marginLeft: 8, maxWidth: "90%"}}>
+                    {spoilerText && <Text
+                        style={{
+                          fontFamily: "Inter-Bold",
+                          color: "yellow",
+                          opacity: 0.6
+                        }}>{spoilerText}</Text>}
+                  </View>
+              </View>
+
+              <View style={{
+                marginHorizontal: "auto",
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                width: "100%",
+                marginBottom: 8
+              }}>
+                  <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
+                  <Pressable style={{
+                    flexShrink: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 8,
+                    paddingVertical: 8
+                  }}
+                             onPress={onSpoilerClick}
+                  >
+                      <View>
+                          <Text
+                              style={{
+                                color: APP_FONT.MONTSERRAT_BODY,
+                                // backgroundColor: "red",
+                                flexShrink: 1,
+                                textAlign: "center",
+                                fontSize: 16,
+                                fontFamily: "Montserrat-Bold"
+                              }}>
+                            {ShowSensitiveContent ? "Hide Sensitive" : "Show" +
+                                " Sensitive"}
+                          </Text>
+                      </View>
+                      <View style={{width: 24, marginLeft: 4}}>
+                          <FontAwesome5 name="eye-slash" size={18}
+                                        color={APP_FONT.MONTSERRAT_BODY}/>
+                      </View>
+                  </Pressable>
+                  <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
+              </View>
+          </View>}
+          {isSensitive && !spoilerText && <View>
+              <View style={{
+                marginHorizontal: "auto",
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                width: "100%",
+                marginBottom: 8
+              }}>
+                  <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
+                  <Pressable style={{
+                    flexShrink: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 8,
+                    paddingVertical: 8
+                  }}
+                             onPress={onSpoilerClick}
+                  >
+                      <View style={{width: 24}}>
+                          <FontAwesome name="warning" size={24} color="yellow"
+                                       style={{opacity: 0.6}}/>
+                      </View>
+                      <View style={{marginLeft: 4}}>
+                          <Text
+                              style={{
+                                color: APP_FONT.MONTSERRAT_BODY,
+                                // backgroundColor: "red",
+                                flexShrink: 1,
+                                textAlign: "center",
+                                fontSize: 16,
+                                fontFamily: "Montserrat-Bold"
+                              }}>
+                            {ShowSensitiveContent ? "Hide Sensitive" : "Show" +
+                                " Sensitive"}
+                          </Text>
+                      </View>
+                      <View style={{width: 24, marginLeft: 4}}>
+                          <FontAwesome5 name="eye-slash" size={18}
+                                        color={APP_FONT.MONTSERRAT_BODY}/>
+                      </View>
+                  </Pressable>
+                  <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
+              </View>
+          </View>}
+
+          {isSensitive && !ShowSensitiveContent ? <View></View> :
+              <View style={{marginBottom: 0}}>
+                {xyz.nodes}
+                {ExplanationObject !== null &&
+                    <ExplainOutput
+                        additionalInfo={"Translated using OpenAI"}
+                        fromLang={"jp"}
+                        toLang={"en"}
+                        text={ExplanationObject}
+                    />
+                }
+              </View>
+          }
+        </View>
+      </TouchableOpacity>
+      {isSensitive && !ShowSensitiveContent ? <View></View> :
+          <ImageCarousal attachments={status?.getMediaAttachments()}/>}
+      <StatusInteraction
+          post={status} statusId={statusRaw?.id}
+          openAiContext={xyz.aiContext}
+          setExplanationObject={setExplanationObject}
+          ExplanationObject={ExplanationObject}
+      />
+    </>
+  }, [xyz.isLoaded, _status, ShowSensitiveContent, ExplanationObject, PosterContent])
 }
 
 export function RootFragmentContainer({
@@ -438,7 +395,7 @@ function SharedStatusFragment({
   postedBy: mastodon.v1.Account;
   boostedStatus: mastodon.v1.Status | Note;
 }) {
-  const {status: _status, statusRaw: status} = useActivitypubStatusContext()
+  const {status: _status} = useActivitypubStatusContext()
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const domain = accountState?.activeAccount?.domain
   const subdomain = accountState?.activeAccount?.subdomain
@@ -474,46 +431,46 @@ function SharedStatusFragment({
     )
   }, [userI?.getDisplayName()])
 
-  if (!_status.isValid()) return <View></View>;
+  return useMemo(() => {
+    if (!_status.isValid()) return <View></View>;
 
-  return (
-      <View style={{
-        backgroundColor: "#1e1e1e",
-        marginBottom: POST_SPACING_VALUE
-      }}>
-        <StandardView
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start"
-            }}
-        >
-          <Ionicons color={"#888"} name={"rocket-outline"} size={12}/>
+    return <View style={{
+      backgroundColor: "#1e1e1e",
+      marginBottom: POST_SPACING_VALUE
+    }}>
+      <StandardView
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-start"
+          }}
+      >
+        <Ionicons color={"#888"} name={"rocket-outline"} size={12}/>
+        <Text style={{
+          color: "#888",
+          fontWeight: "500",
+          marginLeft: 4,
+          fontFamily: "Montserrat-ExtraBold",
+          opacity: 0.6
+        }}>
+          {ParsedDisplayName}
+        </Text>
+        <Text style={{color: "gray", marginLeft: 2, marginRight: 2}}>•</Text>
+        <View style={{marginTop: 2}}>
           <Text style={{
             color: "#888",
-            fontWeight: "500",
-            marginLeft: 4,
-            fontFamily: "Montserrat-ExtraBold",
+            fontSize: 12,
+            fontFamily: "Inter-Bold",
             opacity: 0.6
           }}>
-            {ParsedDisplayName}
+            {formatDistanceToNowStrict(new Date(boostedStatus.createdAt))}
           </Text>
-          <Text style={{color: "gray", marginLeft: 2, marginRight: 2}}>•</Text>
-          <View style={{marginTop: 2}}>
-            <Text style={{
-              color: "#888",
-              fontSize: 12,
-              fontFamily: "Inter-Bold",
-              opacity: 0.6
-            }}>
-              {formatDistanceToNowStrict(new Date(boostedStatus.createdAt))}
-            </Text>
-          </View>
-        </StandardView>
-        <RootFragmentContainer mt={-8} isRepost={true}/>
-      </View>
-  );
+        </View>
+      </StandardView>
+      <RootFragmentContainer mt={-8} isRepost={true}/>
+    </View>
+  }, [_status, ParsedDisplayName])
 }
 
 /**
@@ -527,36 +484,41 @@ function StatusItem({
   const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {status: _status, statusRaw} = useActivitypubStatusContext()
 
-  switch (accountState.activeAccount?.domain) {
-    case "mastodon": {
-      const _statusRaw = statusRaw as mastodon.v1.Status;
-      if (_status && _status.isReposted() && !hideReplyIndicator) {
-        return <SharedStatusFragment
-            isRepost={true}
-            postedBy={_statusRaw?.reblog?.account}
-            boostedStatus={_statusRaw?.reblog}
-        />
-      }
-      if (_status && _status.isReply() && !hideReplyIndicator) {
-        return <RepliedStatusFragment/>
-      }
+  return useMemo(() => {
+    switch (accountState.activeAccount?.domain) {
+      case "mastodon": {
+        const _statusRaw = statusRaw as mastodon.v1.Status;
+        if (_status && _status.isReposted() && !hideReplyIndicator) {
+          return <SharedStatusFragment
+              isRepost={true}
+              postedBy={_statusRaw?.reblog?.account}
+              boostedStatus={_statusRaw?.reblog}
+          />
+        }
+        if (_status && _status.isReply() && !hideReplyIndicator) {
+          return <RepliedStatusFragment/>
+        }
 
-      return <RootFragmentContainer
-          replyContextIndicators={replyContextIndicators}/>
-    }
-    case "misskey": {
-      if (_status && _status.isReposted() && !hideReplyIndicator) {
-        const _status = statusRaw as Note;
-        return <SharedStatusFragment
-            postedBy={_status.renote.user as any}
-            isRepost={true}
-            boostedStatus={_status}
-        />
+        return <RootFragmentContainer
+            replyContextIndicators={replyContextIndicators}/>
+      }
+      case "misskey": {
+        if (_status && _status.isReposted() && !hideReplyIndicator) {
+          const _status = statusRaw as Note;
+          return <SharedStatusFragment
+              postedBy={_status.renote.user as any}
+              isRepost={true}
+              boostedStatus={_status}
+          />
+        }
+        return <RootFragmentContainer
+            replyContextIndicators={replyContextIndicators}/>
+      }
+      default: {
+        return <View></View>
       }
     }
-  }
-
-  return <RootFragmentContainer/>
+  }, [_status, accountState?.activeAccount])
 }
 
 export default StatusItem;
