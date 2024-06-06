@@ -18,6 +18,12 @@ import WithScrollOnRevealContext, {
   useScrollOnReveal
 } from "../../../../states/useScrollOnReveal";
 import LoadingMore from "../../home/LoadingMore";
+import useTopbarSmoothTranslate
+  from "../../../../states/useTopbarSmoothTranslate";
+import NavigationService from "../../../../services/navigation.service";
+import WithAutoHideTopNavBar from "../../../containers/WithAutoHideTopNavBar";
+import {AnimatedFlashList} from "@shopify/flash-list";
+import {RefreshControl} from "react-native";
 
 function WithApi() {
   const {client} = useActivityPubRestClientContext()
@@ -44,14 +50,6 @@ function WithApi() {
       limit: 5,
       maxId: queryCacheMaxId
     })
-  }
-
-
-  function onScrollEndReach() {
-    if (PageData.length > 0) {
-      updateQueryCache()
-      refetch()
-    }
   }
 
 
@@ -98,22 +96,49 @@ function WithApi() {
     })
   }
 
-  return <TitleOnlyStackHeaderContainer
-      route={route} navigation={navigation}
-      headerTitle={`My Bookmarks`}
-      onScrollViewEndReachedCallback={onScrollEndReach}
-      onRefresh={onRefresh}
-  >
-    {PageData && PageData.map((o, i) =>
-        <WithActivitypubStatusContext status={o} key={i}>
-          <StatusItem/>
-        </WithActivitypubStatusContext>
-    )}
+  function onPageEndReached() {
+    if (PageData.length > 0) {
+      updateQueryCache()
+      refetch()
+    }
+  }
+
+  const handleScrollJs = (e: any) => {
+    NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+  }
+  const {onScroll, translateY} = useTopbarSmoothTranslate({
+    onScrollJsFn: handleScrollJs,
+    totalHeight: 100,
+    hiddenHeight: 50
+  })
+
+  return <WithAutoHideTopNavBar
+      title={"My Bookmarks"}
+      translateY={translateY}>
+    <AnimatedFlashList
+        estimatedItemSize={200}
+        data={PageData}
+        renderItem={(o) =>
+            <WithActivitypubStatusContext status={o.item} key={o.index}>
+              <StatusItem/>
+            </WithActivitypubStatusContext>
+        }
+        onScroll={onScroll}
+        contentContainerStyle={{
+          paddingTop: 50 + 4,
+        }}
+        scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}/>
+        }
+    />
     <LoadingMore
         visible={LoadingMoreComponentProps.visible}
         loading={LoadingMoreComponentProps.loading}
     />
-  </TitleOnlyStackHeaderContainer>
+  </WithAutoHideTopNavBar>
 }
 
 function WithContext() {

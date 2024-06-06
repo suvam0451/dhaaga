@@ -16,6 +16,22 @@ import {
 import WithScrollOnRevealContext, {
   useScrollOnReveal
 } from "../../../../states/useScrollOnReveal";
+import WithAutoHideTopNavBar from "../../../containers/WithAutoHideTopNavBar";
+import NavigationService from "../../../../services/navigation.service";
+import useTopbarSmoothTranslate
+  from "../../../../states/useTopbarSmoothTranslate";
+import LoadingMore from "../../home/LoadingMore";
+import useLoadingMoreIndicatorState
+  from "../../../../states/useLoadingMoreIndicatorState";
+import WithActivitypubTagContext from "../../../../states/useTag";
+import TagItem from "../../../common/tag/TagItem";
+import {AnimatedFlashList} from "@shopify/flash-list";
+import WithActivitypubStatusContext from "../../../../states/useStatus";
+import usePageRefreshIndicatorState
+  from "../../../../states/usePageRefreshIndicatorState";
+import {RefreshControl} from "react-native";
+import StatusItem from "../../../common/status/StatusItem";
+import useScrollMoreOnPageEnd from "../../../../states/useScrollMoreOnPageEnd";
 
 function Content() {
   return <FollowedPosts/>
@@ -23,8 +39,6 @@ function Content() {
 
 function ApiWrapper() {
   const {client} = useActivityPubRestClientContext()
-  const navigation = useNavigation()
-  const route = useRoute<any>()
   const {
     data: PageData,
     updateQueryCache,
@@ -32,12 +46,12 @@ function ApiWrapper() {
     append,
     setMaxId
   } = useAppPaginationContext()
-  const {resetEndOfPageFlag} = useScrollOnReveal()
 
   async function api() {
     if (!client) throw new Error("_client not initialized");
     return await client.getFavourites({
-      limit: 5
+      limit: 5,
+      maxId: queryCacheMaxId
     })
   }
 
@@ -55,24 +69,56 @@ function ApiWrapper() {
     if (data.length > 0) {
       append(data, (o) => o.name)
       setMaxId((PageData.length + data.length).toString())
-      resetEndOfPageFlag()
     }
   }, [fetchStatus]);
 
-  function onScrollEndReach() {
-    if (PageData.length > 0) {
-      updateQueryCache()
-      refetch()
+  useEffect(() => {
+    if (status !== "success" || !data) return
+    if (data.length > 0) {
+      append(data)
+      setMaxId(data[data.length - 1].id)
     }
-  }
+  }, [fetchStatus]);
 
-  return <TitleOnlyStackHeaderContainer
-      route={route} navigation={navigation}
-      headerTitle={`My Favourites`}
-      onScrollViewEndReachedCallback={onScrollEndReach}
+  const {visible, loading} = useLoadingMoreIndicatorState({fetchStatus})
+
+  const {onScroll, translateY} = useScrollMoreOnPageEnd({
+    itemCount: PageData.length, updateQueryCache
+  })
+
+  const {onRefresh, refreshing} = usePageRefreshIndicatorState({
+    fetchStatus,
+    refetch
+  })
+
+  return <WithAutoHideTopNavBar
+      title={"My Bookmarks"}
+      translateY={translateY}
   >
-    <Content/>
-  </TitleOnlyStackHeaderContainer>
+    <AnimatedFlashList
+        estimatedItemSize={72}
+        data={PageData}
+        renderItem={(o) =>
+            <WithActivitypubStatusContext status={o.item} key={o.index}>
+              <StatusItem/>
+            </WithActivitypubStatusContext>
+        }
+        onScroll={onScroll}
+        contentContainerStyle={{
+          paddingTop: 50 + 4,
+        }}
+        scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}/>
+        }
+    />
+    <LoadingMore
+        visible={visible}
+        loading={loading}
+    />
+  </WithAutoHideTopNavBar>
 }
 
 function Wrapper() {

@@ -22,6 +22,8 @@ import {AccountState} from "../../../../libs/redux/slices/account";
 import WithAutoHideTopNavBar from "../../../containers/WithAutoHideTopNavBar";
 import useTopbarSmoothTranslate
   from "../../../../states/useTopbarSmoothTranslate";
+import useLoadingMoreIndicatorState
+  from "../../../../states/useLoadingMoreIndicatorState";
 
 
 const SHOWN_SECTION_HEIGHT = 50;
@@ -134,6 +136,7 @@ function ApiWrapper() {
     refetch();
   }
 
+  const {visible, loading} = useLoadingMoreIndicatorState({fetchStatus})
   return <WithAutoHideTopNavBar
       title={"Trending Posts"}
       translateY={translateY}>
@@ -158,8 +161,8 @@ function ApiWrapper() {
         }
     />
     <LoadingMore
-        visible={LoadingMoreComponentProps.visible}
-        loading={LoadingMoreComponentProps.loading}
+        visible={visible}
+        loading={loading}
     />
   </WithAutoHideTopNavBar>
 }

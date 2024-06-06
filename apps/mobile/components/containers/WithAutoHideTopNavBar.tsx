@@ -31,9 +31,13 @@ function WithAutoHideTopNavBar({
   translateY
 }: AutoHideNavBarProps) {
   const navigation = useNavigation()
-  return <View style={{height: "100%", backgroundColor: APP_THEME.BACKGROUND}}>
-    {translateY ?
-        <Animated.View style={[TopNavBarStyles.navbar,
+  return <Animated.View
+      style={[{height: "100%", backgroundColor: APP_THEME.BACKGROUND,
+      // paddingTop: translateY
+      }]}>
+    {translateY  !== undefined ?
+        <Animated.View style={[
+            TopNavBarStyles.navbar,
           {transform: [{translateY}]}]}>
           <ProfilePageHeader
               title={title}
@@ -52,7 +56,7 @@ function WithAutoHideTopNavBar({
             }
         />}
     {children}
-  </View>
+  </Animated.View>
 }
 
 
