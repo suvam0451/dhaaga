@@ -42,7 +42,8 @@ const expo = {
             }
         ],
         ["expo-font"],
-        ["expo-localization"]
+        ["expo-localization"],
+        ["expo-video"]
     ]
 };
 

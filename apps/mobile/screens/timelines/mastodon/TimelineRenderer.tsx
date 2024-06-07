@@ -27,6 +27,13 @@ import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 import {useRealm} from "@realm/react";
 import {EmojiService} from "../../../services/emoji.service";
 import useTopbarSmoothTranslate from "../../../states/useTopbarSmoothTranslate";
+import usePageRefreshIndicatorState
+  from "../../../states/usePageRefreshIndicatorState";
+import useLoadingMoreIndicatorState
+  from "../../../states/useLoadingMoreIndicatorState";
+import useScrollMoreOnPageEnd from "../../../states/useScrollMoreOnPageEnd";
+import Introduction
+  from "../../../components/tutorials/screens/home/new-user/Introduction";
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
@@ -46,18 +53,10 @@ function TimelineRenderer() {
     data: PageData,
     setMaxId,
     append,
-    maxId,
-    clear,
     paginationLock,
     updateQueryCache,
     queryCacheMaxId
   } = useAppPaginationContext()
-
-
-  const [LoadingMoreComponentProps, setLoadingMoreComponentProps] = useState({
-    visible: false,
-    loading: false
-  });
 
   const api = () => client ? client.getHomeTimeline({limit: 5, maxId: queryCacheMaxId}) : null
 
@@ -72,16 +71,7 @@ function TimelineRenderer() {
   });
 
   useEffect(() => {
-    if (fetchStatus === "fetching") {
-      if (PageData.length > 0) {
-        setLoadingMoreComponentProps({
-          visible: true,
-          loading: true
-        })
-      }
-      return
-    }
-    if (status !== "success") return
+    if (fetchStatus === "fetching" || status !== "success") return
 
     if (status === "success" && data && data.length > 0) {
       setMaxId(data[data.length - 1]?.id)
@@ -95,45 +85,23 @@ function TimelineRenderer() {
         append(data)
       })
     }
-
-    setLoadingMoreComponentProps({
-      visible: false,
-      loading: false
-    })
   }, [fetchStatus]);
 
   const ref = useRef(null);
 
-  function onPageEndReached() {
-    updateQueryCache()
-    setLoadingMoreComponentProps({
-      visible: true,
-      loading: true
-    })
-  }
-
-  function handleScrollJs(e) {
-    NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
-  }
-
-  const {onScroll, translateY} = useTopbarSmoothTranslate({
-    onScrollJsFn: handleScrollJs,
-    totalHeight: HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT,
-    hiddenHeight: HIDDEN_SECTION_HEIGHT
+  /**
+   * Composite Hook Collection
+   */
+  const {visible, loading} = useLoadingMoreIndicatorState({fetchStatus})
+  const {onScroll, translateY} = useScrollMoreOnPageEnd({
+    itemCount: PageData.length, updateQueryCache
+  })
+  const {onRefresh, refreshing} = usePageRefreshIndicatorState({
+    fetchStatus,
+    refetch
   })
 
-  useEffect(() => {
-    if (status === "success") {
-      setRefreshing(false);
-    }
-  }, [status, fetchStatus]);
-
-  const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = () => {
-    setRefreshing(true);
-    clear()
-    refetch();
-  }
+  if(!client) return <Introduction/>
 
   return (
       <SafeAreaView style={[styles.container, {position: "relative"}]}>
@@ -165,8 +133,8 @@ function TimelineRenderer() {
             }
         />
         <LoadingMore
-            visible={LoadingMoreComponentProps.visible}
-            loading={LoadingMoreComponentProps.loading}
+            visible={visible}
+            loading={loading}
         />
       </SafeAreaView>
   );

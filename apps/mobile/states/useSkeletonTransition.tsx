@@ -17,11 +17,11 @@ function useSkeletonSmoothTransition(
     input: boolean,
     {condition, preventLoadingForCondition}: {condition: boolean, preventLoadingForCondition: boolean}
 ) {
-  const IsOverallLoading = input
-  const [IsOverallLoaded] = useDebounce(input, 150)
+  const IsHardTruthy = input
+  const [ISSoftTruthy] = useDebounce(input, 150)
   const [IsConditionSatisfied] = useDebounce(condition, 150)
 
-  const retval = !IsOverallLoading && !IsOverallLoaded
+  const retval = IsHardTruthy || ISSoftTruthy
   if(preventLoadingForCondition && IsConditionSatisfied)
     return true
 

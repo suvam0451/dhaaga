@@ -1,5 +1,5 @@
-import {Text, View} from "react-native";
-import {Button} from "@rneui/themed";
+import {View} from "react-native";
+import {Button, Text} from "@rneui/themed";
 import {Ionicons} from "@expo/vector-icons";
 import React from "react";
 import MyBookmarks from "../components/screens/favourites/stack/MyBookmarks";
@@ -18,11 +18,14 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import MyFollowings from "../components/screens/favourites/stack/MyFollowings";
 import MyFollowers from "../components/screens/favourites/stack/MyFollowers";
 import WithGorhomBottomSheetContext from "../states/useGorhomBottomSheet";
+import {APP_FONT, APP_THEME} from "../styles/AppTheme";
+import {APP_FONTS} from "../styles/AppFonts";
 
 type FavouritesScreenNavigationItemIconOnlyProps = {
   icon: any
   onPress: () => void
   disabled?: boolean
+  borderColor?: string
 }
 
 type FavouritesScreenNavigationItemProps = {
@@ -35,15 +38,16 @@ type FavouritesScreenNavigationItemProps = {
 function FavouritesScreenNavigationItemIconOnly({
   icon,
   disabled,
-  onPress
+  onPress,
+  borderColor
 }: FavouritesScreenNavigationItemIconOnlyProps) {
   return <View style={{flex: 1, paddingHorizontal: 4}}>
     <Button type={"clear"} buttonStyle={{
       borderWidth: 1,
-      borderColor: "#333333",
+      borderColor: borderColor || "#333333",
       borderRadius: 8,
       padding: 4,
-      backgroundColor: "#1E1E1E"
+      backgroundColor: "#1E1E1E",
     }} onPress={onPress}>
       {icon}
     </Button>
@@ -92,12 +96,15 @@ function ActionableSection() {
         flexDirection: "row",
         justifyContent: "space-between"
       }}>
-        <Text style={{fontSize: 20, color: "#fff", opacity: 0.87}}>
+        <Text style={{
+          fontSize: 20,
+          fontFamily: "Montserrat-Bold",
+          color: APP_FONT.MONTSERRAT_BODY
+        }}>
           Saved by You
         </Text>
         <FontAwesome
-            name="chevron-down" size={24} color="#fff"
-            style={{opacity: 0.6}}/>
+            name="chevron-down" size={24} color={APP_FONT.MONTSERRAT_BODY}/>
       </View>
 
       <Divider style={{opacity: 0.3, marginVertical: 8}}/>
@@ -115,7 +122,10 @@ function ActionableSection() {
               navigation.push("MyBookmarks")
             }}
             icon={
-              <FontAwesome6 name="bookmark" size={24} color={"#888"}/>
+              <FontAwesome6 name="bookmark" size={24}
+                            color={APP_THEME.INVALID_ITEM} style={{
+                opacity: 0.87
+              }}/>
             }
         />
         <FavouritesScreenNavigationItemIconOnly
@@ -148,7 +158,11 @@ function ActionableSection() {
         justifyContent: "space-between"
       }}>
         <Text
-            style={{fontSize: 20, color: "#fff", opacity: 0.87}}>
+            style={{
+              fontSize: 20, fontFamily:
+              APP_FONTS.HEADER_BOLD,
+              color: APP_FONT.MONTSERRAT_BODY
+            }}>
           Your Network
         </Text>
         <FontAwesome
@@ -205,7 +219,12 @@ function ActionableSection() {
       marginVertical: 8,
       marginHorizontal: 8
     }}>
-      <Text style={{fontSize: 20, color: "#fff", opacity: 0.6}}>Coming
+      <Text style={{
+        fontSize: 20,
+        fontFamily: APP_FONTS.HEADER_BOLD,
+        color: APP_FONT.MONTSERRAT_BODY,
+        opacity: 0.6, marginLeft: 8
+      }}>Coming
         Soon™</Text>
       <Divider style={{opacity: 0.3, marginVertical: 8}}/>
       <View style={{

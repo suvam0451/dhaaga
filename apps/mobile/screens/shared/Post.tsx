@@ -13,6 +13,13 @@ import WithActivitypubStatusContext, {
 import Animated from "react-native-reanimated";
 import {RefreshControl, View} from "react-native";
 import {useNavigation, useRoute} from "@react-navigation/native";
+import WithAutoHideTopNavBar
+  from "../../components/containers/WithAutoHideTopNavBar";
+import useLoadingMoreIndicatorState
+  from "../../states/useLoadingMoreIndicatorState";
+import useScrollMoreOnPageEnd from "../../states/useScrollMoreOnPageEnd";
+import usePageRefreshIndicatorState
+  from "../../states/usePageRefreshIndicatorState";
 
 function StatusContextComponent() {
   const {statusContext} = useActivitypubStatusContext()
@@ -34,14 +41,10 @@ function StatusContextComponent() {
 }
 
 function StatusContextApiWrapper() {
-  const navigation = useNavigation()
   const route = useRoute<any>()
   const q = route?.params?.id;
-
-  const [refreshing, setRefreshing] = useState(false);
   const {client} = useActivityPubRestClientContext()
   const {setStatusContextData} = useActivitypubStatusContext()
-
   async function api() {
     if (!client) throw new Error("_client not initialized");
     return await client.getStatusContext(q);
@@ -102,22 +105,30 @@ function Post() {
     refetch()
   }
 
-  return <TitleOnlyStackHeaderContainer
-      route={route} navigation={navigation}
-      headerTitle={`#${q}`}>
+  const {onScroll, translateY} = useScrollMoreOnPageEnd({
+    itemCount: 0, updateQueryCache: () => {
+    }
+  })
+
+  return <WithAutoHideTopNavBar
+      title={"Post Details"}
+      translateY={translateY}
+  >
     {data &&
         <WithActivitypubStatusContext status={data} key={0}>
             <Animated.ScrollView
                 refreshControl={
-                  <RefreshControl refreshing={refreshing}
-                                  onRefresh={onRefresh}/>
+                  <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}/>
                 }
+                contentContainerStyle={{paddingTop: 54}}
             >
                 <StatusContextApiWrapper/>
             </Animated.ScrollView>
         </WithActivitypubStatusContext>
     }
-  </TitleOnlyStackHeaderContainer>
+  </WithAutoHideTopNavBar>
 }
 
 export default Post;

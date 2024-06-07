@@ -11,4 +11,8 @@ const appFonts = {
   "DM_Serif_Display-Italic": require("../../../packages/fonts/DM_Serif_Display/DMSerifDisplay-Italic.ttf"),
 }
 
+
+export enum APP_FONTS {
+  HEADER_BOLD = "Montserrat-Bold"
+}
 export default appFonts

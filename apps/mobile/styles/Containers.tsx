@@ -108,3 +108,11 @@ export const DhaagaText = styled(Text)<TextProps & StyledTextProps>`
 export const AppIonicon = styled(Ionicons)<IconProps<string> & StyledTextProps>`
     opacity: ${props => handleTextEmphasis(props)};
 `
+
+export const DialogButtonGroupItem = styled.View`
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0;
+`

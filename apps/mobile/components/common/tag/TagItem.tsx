@@ -32,7 +32,7 @@ function TagSkeleton() {
 }
 
 /**
- * Tag Item, as it appears on a Scrollable timeline
+ * Tag Item, as it appears on a Scrollable timeline-menu
  * @constructor
  */
 function TagItem() {

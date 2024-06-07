@@ -4,6 +4,7 @@ import ActivityPubClient, {
   GetUserPostsQueryDTO,
   RestClientCreateDTO,
   MediaUploadDTO,
+  GetTimelineQueryDTO,
 } from "./_interface";
 import {
   createClient,
@@ -22,6 +23,14 @@ class MisskeyRestClient implements ActivityPubClient {
     this.axiosClient = axios.create({
       baseURL: `${dto.instance}/api`,
     });
+  }
+
+  getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
+  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
   }
 
   getIsSensitive(): boolean {

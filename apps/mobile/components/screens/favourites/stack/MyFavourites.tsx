@@ -1,8 +1,4 @@
-import FollowedPosts from "./fragments/favourites/FollowedPosts";
 import React, {useEffect} from "react";
-import {useNavigation, useRoute} from "@react-navigation/native";
-import TitleOnlyStackHeaderContainer
-  from "../../../containers/TitleOnlyStackHeaderContainer";
 import WithAppPaginationContext, {
   useAppPaginationContext
 } from "../../../../states/usePagination";
@@ -13,18 +9,11 @@ import {useQuery} from "@tanstack/react-query";
 import {
   StatusArray
 } from "@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface";
-import WithScrollOnRevealContext, {
-  useScrollOnReveal
-} from "../../../../states/useScrollOnReveal";
+import WithScrollOnRevealContext from "../../../../states/useScrollOnReveal";
 import WithAutoHideTopNavBar from "../../../containers/WithAutoHideTopNavBar";
-import NavigationService from "../../../../services/navigation.service";
-import useTopbarSmoothTranslate
-  from "../../../../states/useTopbarSmoothTranslate";
 import LoadingMore from "../../home/LoadingMore";
 import useLoadingMoreIndicatorState
   from "../../../../states/useLoadingMoreIndicatorState";
-import WithActivitypubTagContext from "../../../../states/useTag";
-import TagItem from "../../../common/tag/TagItem";
 import {AnimatedFlashList} from "@shopify/flash-list";
 import WithActivitypubStatusContext from "../../../../states/useStatus";
 import usePageRefreshIndicatorState
@@ -32,10 +21,6 @@ import usePageRefreshIndicatorState
 import {RefreshControl} from "react-native";
 import StatusItem from "../../../common/status/StatusItem";
 import useScrollMoreOnPageEnd from "../../../../states/useScrollMoreOnPageEnd";
-
-function Content() {
-  return <FollowedPosts/>
-}
 
 function ApiWrapper() {
   const {client} = useActivityPubRestClientContext()
@@ -81,11 +66,9 @@ function ApiWrapper() {
   }, [fetchStatus]);
 
   const {visible, loading} = useLoadingMoreIndicatorState({fetchStatus})
-
   const {onScroll, translateY} = useScrollMoreOnPageEnd({
     itemCount: PageData.length, updateQueryCache
   })
-
   const {onRefresh, refreshing} = usePageRefreshIndicatorState({
     fetchStatus,
     refetch

@@ -1,6 +1,7 @@
 import ActivityPubClient, {
   GetPostsQueryDTO,
   GetSearchResultQueryDTO,
+  GetTimelineQueryDTO,
   GetTrendingPostsQueryDTO,
   GetUserPostsQueryDTO, MediaUploadDTO,
   RestClientCreateDTO,
@@ -24,6 +25,26 @@ class MastodonRestClient implements ActivityPubClient {
           domain: "mastodon"
         }
     );
+  }
+
+  async getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    const _client = this.createPublicClient()
+    try {
+      return await _client.v1.timelines.public.list(opts)
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+  async getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    const _client = this.createClient()
+    try {
+      return await _client.v1.timelines.public.list(opts)
+    } catch (e) {
+      console.log(e)
+      return []
+    }
   }
 
   getIsSensitive(): boolean {

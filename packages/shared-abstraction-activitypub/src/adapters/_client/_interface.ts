@@ -22,6 +22,15 @@ export type GetPostsQueryDTO = {
   maxId?: string,
 }
 
+export type GetTimelineQueryDTO = {
+  limit: number,
+  sinceId?: string,
+  minId?: string,
+  maxId?: string,
+  remote?: boolean
+  mediaOnly?: boolean
+}
+
 export type GetTrendingPostsQueryDTO = {
   limit: number,
   offset?: number
@@ -60,6 +69,10 @@ export  type MediaUploadDTO = {
 interface ActivityPubClient {
   getHomeTimeline(opts?: GetPostsQueryDTO): Promise<StatusArray>;
 
+  getPublicTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
+
+  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
+
   getTimelineByHashtag(
       q: string,
       query?: TimelineQuery
@@ -80,7 +93,11 @@ interface ActivityPubClient {
 
   getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<StatusArray>;
 
-  getBookmarks(opts: GetPostsQueryDTO): Promise<{data: StatusArray, minId?: string, maxId?: string}>;
+  getBookmarks(opts: GetPostsQueryDTO): Promise<{
+    data: StatusArray,
+    minId?: string,
+    maxId?: string
+  }>;
 
   getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>
 
