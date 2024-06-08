@@ -1,7 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
-import {AccountState} from "../../../libs/redux/slices/account";
-import {RootState} from "../../../libs/redux/store";
-import {useSelector} from "react-redux";
+import React, {useEffect, useRef} from "react";
 import {
   Animated, RefreshControl,
   SafeAreaView,
@@ -9,7 +6,10 @@ import {
   StyleSheet,
 } from "react-native";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {keepPreviousData, useQuery} from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+} from "@tanstack/react-query";
 import StatusItem from "../../../components/common/status/StatusItem";
 import TimelinesHeader from "../../../components/TimelineHeader";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
@@ -22,11 +22,9 @@ import WithAppPaginationContext, {
 } from "../../../states/usePagination";
 import LoadingMore from "../../../components/screens/home/LoadingMore";
 import {AnimatedFlashList} from "@shopify/flash-list"
-import NavigationService from "../../../services/navigation.service";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 import {useRealm} from "@realm/react";
 import {EmojiService} from "../../../services/emoji.service";
-import useTopbarSmoothTranslate from "../../../states/useTopbarSmoothTranslate";
 import usePageRefreshIndicatorState
   from "../../../states/usePageRefreshIndicatorState";
 import useLoadingMoreIndicatorState
@@ -44,9 +42,9 @@ const SHOWN_SECTION_HEIGHT = 50;
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
-  const {client} = useActivityPubRestClientContext()
+  const {client, primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
+
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
   const {
@@ -58,13 +56,16 @@ function TimelineRenderer() {
     queryCacheMaxId
   } = useAppPaginationContext()
 
-  const api = () => client ? client.getHomeTimeline({limit: 5, maxId: queryCacheMaxId}) : null
+  const api = () => client ? client.getHomeTimeline({
+    limit: 5,
+    maxId: queryCacheMaxId
+  }) : null
 
   // Queries
   const {status, data, fetchStatus, refetch} = useQuery<
       mastodon.v1.Status[] | Note[]
   >({
-    queryKey: ["mastodon/timelines/home", queryCacheMaxId],
+    queryKey: ["mastodon/timelines/home", queryCacheMaxId, primaryAcct?._id?.toString()],
     queryFn: api,
     enabled: client !== null && !paginationLock,
     placeholderData: keepPreviousData,
@@ -101,7 +102,7 @@ function TimelineRenderer() {
     refetch
   })
 
-  if(!client) return <Introduction/>
+  if (!client) return <Introduction/>
 
   return (
       <SafeAreaView style={[styles.container, {position: "relative"}]}>

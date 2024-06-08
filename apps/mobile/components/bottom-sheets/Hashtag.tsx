@@ -13,9 +13,6 @@ import WithActivitypubTagContext, {
 import {TagType} from "@dhaaga/shared-abstraction-activitypub/src";
 import {useNavigation} from "@react-navigation/native";
 import InstanceService from "../../services/instance.service";
-import {useSelector} from "react-redux";
-import {RootState} from "../../libs/redux/store";
-import {AccountState} from "../../libs/redux/slices/account";
 import useSkeletonSmoothTransition from "../../states/useSkeletonTransition";
 
 type HashtagActionsProps = {
@@ -28,8 +25,8 @@ type HashtagBottomSheetContentProps = {
 }
 
 export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheetContentProps) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const subdomain = primaryAcct?.subdomain
   const {client} = useActivityPubRestClientContext()
   const {tag, setDataRaw} = useActivitypubTagContext()
   const navigation = useNavigation<any>();

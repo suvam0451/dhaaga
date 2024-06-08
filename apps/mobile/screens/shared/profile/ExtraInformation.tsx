@@ -6,11 +6,11 @@ import {APP_FONT} from "../../../styles/AppTheme";
 import MfmService from "../../../services/mfm.service";
 import {randomUUID} from "expo-crypto";
 import {useActivitypubUserContext} from "../../../states/useProfile";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../libs/redux/store";
-import {AccountState} from "../../../libs/redux/slices/account";
 import {useRealm} from "@realm/react";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
+import {
+  useActivityPubRestClientContext
+} from "../../../states/useActivityPubRestClient";
 
 type ExtraInformationFieldProps = {
   fieldName: string,
@@ -18,9 +18,9 @@ type ExtraInformationFieldProps = {
 }
 
 function ExtraInformationField({fieldName, value}: ExtraInformationFieldProps) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
+  const subdomain = primaryAcct?.subdomain
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
   const {user} = useActivitypubUserContext()
@@ -115,7 +115,7 @@ function UserProfileExtraInformation({fields}: UserProfileExtraInformationProps)
       }}>
         {fields?.map((x, i) => (
             <React.Fragment key={i}>
-              <ExtraInformationField fieldName={x.name} value={x.value} />
+              <ExtraInformationField fieldName={x.name} value={x.value}/>
               <View style={{paddingTop: 8, paddingBottom: 8}}>
                 <Text style={{color: "#fff"}}>{x.name}</Text>
                 <View>

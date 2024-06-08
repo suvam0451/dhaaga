@@ -7,8 +7,6 @@ import FavouritesScreen from "./screens/FavouritesScreen";
 import {Animated, View} from "react-native";
 import {useCallback, useRef} from "react";
 import {getCloser} from "./utils";
-import {store} from "./libs/redux/store";
-import {Provider} from "react-redux";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import AccountsScreen from "./screens/AccountsScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -237,16 +235,13 @@ function WithContexts() {
         <RealmProvider schema={schemas} schemaVersion={10}>
           {/* API Caching -- Tanstack */}
           <QueryClientProvider client={queryClient}>
-            {/* Redux Store */}
-            <Provider store={store}>
-              {/* Rneui Custom Themes */}
-              <ThemeProvider theme={RneuiTheme}>
-                {/* IDK */}
-                <SafeAreaProvider>
-                  <WithGorhomBottomSheetWrapper/>
-                </SafeAreaProvider>
-              </ThemeProvider>
-            </Provider>
+            {/* Rneui Custom Themes */}
+            <ThemeProvider theme={RneuiTheme}>
+              {/* IDK */}
+              <SafeAreaProvider>
+                <WithGorhomBottomSheetWrapper/>
+              </SafeAreaProvider>
+            </ThemeProvider>
           </QueryClientProvider>
         </RealmProvider>
       </WithGlobalMmkvContext>

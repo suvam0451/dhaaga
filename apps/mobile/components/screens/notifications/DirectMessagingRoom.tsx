@@ -25,9 +25,6 @@ import {
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import ActivityPubAdapterService
   from "../../../services/activitypub-adapter.service";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../libs/redux/store";
-import {AccountState} from "../../../libs/redux/slices/account";
 import ActivityPubProviderService
   from "../../../services/activitypub-provider.service";
 import MmkvService from "../../../services/mmkv.service";
@@ -79,10 +76,9 @@ type ChatItemPointer = {
 }
 
 function DirectMessagingRoom() {
-  const {client} = useActivityPubRestClientContext()
+  const {client, primaryAcct} = useActivityPubRestClientContext()
   const navigation = useNavigation()
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const _domain = accountState?.activeAccount?.domain
+  const _domain = primaryAcct?.domain
 
   const route = useRoute<any>()
   const roomId = route?.params?.roomId;

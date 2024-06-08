@@ -43,7 +43,10 @@ const expo = {
         ],
         ["expo-font"],
         ["expo-localization"],
-        ["expo-video"]
+        ["expo-video"],
+        ["expo-asset", {
+            "assets": ["./assets/icons"]
+        }]
     ]
 };
 

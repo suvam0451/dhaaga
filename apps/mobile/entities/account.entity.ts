@@ -33,6 +33,7 @@ export class Account extends Realm.Object {
   verified?: boolean
   settings: Realm.List<KeyValuePair>
   secrets: Realm.List<KeyValuePair>
+  selected: boolean
 
   static schema: ObjectSchema = {
     name: "Account",
@@ -49,6 +50,7 @@ export class Account extends Realm.Object {
       verified: "bool?",
       settings: "KeyValuePair[]",
       secrets: "KeyValuePair[]",
+      selected: {type: "bool", default: false},
     }
   }
 }

@@ -27,9 +27,6 @@ import WithActivitypubUserContext, {
   useActivitypubUserContext
 } from "../../../states/useProfile";
 import MfmService from "../../../services/mfm.service";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../libs/redux/store";
-import {AccountState} from "../../../libs/redux/slices/account";
 import {randomUUID} from "expo-crypto";
 import {useRealm} from "@realm/react";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
@@ -123,9 +120,9 @@ function UserProfileBrowsePosts({userId}: UserProfileBrowsePostsProps) {
 }
 
 function UserProfileContent() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
+  const subdomain = primaryAcct?.subdomain
   const {user} = useActivitypubUserContext()
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()

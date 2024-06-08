@@ -3,9 +3,6 @@ import {useActivitypubTagContext} from "../../../states/useTag";
 import {Button, Skeleton, Text} from "@rneui/themed"
 import React, {useEffect, useMemo, useState} from "react";
 import InstanceService from "../../../services/instance.service";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../libs/redux/store";
-import {AccountState} from "../../../libs/redux/slices/account";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
@@ -36,8 +33,8 @@ function TagSkeleton() {
  * @constructor
  */
 function TagItem() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const subdomain = primaryAcct?.subdomain
   const navigation = useNavigation<any>()
 
   const {tag, setDataRaw} = useActivitypubTagContext()

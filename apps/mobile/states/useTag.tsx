@@ -3,9 +3,7 @@ import {
   TagInterface, TagType
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {createContext, useContext, useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import {RootState} from "../libs/redux/store";
-import {AccountState} from "../libs/redux/slices/account";
+import {useActivityPubRestClientContext} from "./useActivityPubRestClient";
 
 type Type = {
   tag: TagInterface
@@ -39,8 +37,8 @@ type Props = {
  * Wrap ActivityPub tag objects with this
  */
 function WithActivitypubTagContext({tag, children}: Props) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
 
   const [Value, setValue] = useState<TagInterface | null>(
       ActivityPubTagAdapter(null, domain)

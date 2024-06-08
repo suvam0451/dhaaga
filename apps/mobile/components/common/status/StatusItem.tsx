@@ -5,9 +5,6 @@ import {StandardView} from "../../../styles/Containers";
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
 import {formatDistanceToNowStrict} from "date-fns";
 import React, {useEffect, useMemo, useState} from "react";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../libs/redux/store";
-import {AccountState} from "../../../libs/redux/slices/account";
 import OriginalPoster from "../../post-fragments/OriginalPoster";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import StatusInteraction
@@ -30,6 +27,9 @@ import {APP_FONT} from "../../../styles/AppTheme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Entypo from "@expo/vector-icons/Entypo";
 import ExplainOutput from "../explanation/ExplainOutput";
+import {
+  useActivityPubRestClientContext
+} from "../../../states/useActivityPubRestClient";
 
 const POST_SPACING_VALUE = 4
 
@@ -56,8 +56,9 @@ function RootStatusFragment({
   isRepost,
 }: StatusFragmentProps) {
   const navigation = useNavigation<any>();
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
+  const subdomain = primaryAcct?.subdomain
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
 
@@ -82,7 +83,7 @@ function RootStatusFragment({
               displayName={_status.getDisplayName()}
               createdAt={_status.getCreatedAt()}
               username={_status.getUsername()}
-              subdomain={accountState?.activeAccount?.subdomain}
+              subdomain={subdomain}
               visibility={_status?.getVisibility()}
               accountUrl={_status.getAccountUrl()}
           />
@@ -100,8 +101,8 @@ function RootStatusFragment({
     const emojiMap = userI.getEmojiMap()
     const {openAiContext, reactNodes} = MfmService.renderMfm(content, {
       emojiMap,
-      domain: accountState?.activeAccount?.domain,
-      subdomain: accountState?.activeAccount?.subdomain,
+      domain,
+      subdomain,
       remoteSubdomain: userI.getInstanceUrl(),
       db, globalDb
     })
@@ -396,9 +397,9 @@ function SharedStatusFragment({
   boostedStatus: mastodon.v1.Status | Note;
 }) {
   const {status: _status} = useActivitypubStatusContext()
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const subdomain = primaryAcct?.subdomain
+  const domain = primaryAcct?.domain
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
 
@@ -481,11 +482,12 @@ function StatusItem({
   replyContextIndicators,
   hideReplyIndicator
 }: StatusItemProps) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
   const {status: _status, statusRaw} = useActivitypubStatusContext()
 
   return useMemo(() => {
-    switch (accountState.activeAccount?.domain) {
+    switch (domain) {
       case "mastodon": {
         const _statusRaw = statusRaw as mastodon.v1.Status;
         if (_status && _status.isReposted() && !hideReplyIndicator) {
@@ -518,7 +520,7 @@ function StatusItem({
         return <View></View>
       }
     }
-  }, [_status, accountState?.activeAccount])
+  }, [_status, primaryAcct])
 }
 
 export default StatusItem;

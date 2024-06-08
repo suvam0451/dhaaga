@@ -1,4 +1,4 @@
-import {useObject} from "@realm/react"
+import {useObject, useRealm} from "@realm/react"
 import {
   ActivityPubChatRoom
 } from "../../../../../entities/activitypub-chatroom.entity";
@@ -17,15 +17,13 @@ import MfmService from "../../../../../services/mfm.service";
 import {
   useActivityPubRestClientContext
 } from "../../../../../states/useActivityPubRestClient";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../../libs/redux/store";
-import {AccountState} from "../../../../../libs/redux/slices/account";
 import {randomUUID} from "expo-crypto";
 import {
   ParsedDescriptionContainerForChatroomPreview
 } from "../../../../../styles/Containers";
 import {useNavigation} from "@react-navigation/native";
 import {APP_FONT} from "../../../../../styles/AppTheme";
+import {useGlobalMmkvContext} from "../../../../../states/useGlobalMMkvCache";
 
 
 type ChatroomPreviewType = {
@@ -34,12 +32,12 @@ type ChatroomPreviewType = {
 }
 
 function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
+  const {client, primaryAcct} = useActivityPubRestClientContext()
   const chatroom = useObject(ActivityPubChatRoom, roomId)
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
-  const subdomain = accountState?.activeAccount?.subdomain
+  const domain = primaryAcct?.domain
+  const subdomain = primaryAcct?.subdomain
 
-  const {client} = useActivityPubRestClientContext()
+
   const navigation = useNavigation<any>()
 
   const [Participants, setParticipants] = useState<ActivityPubUser[]>([])
@@ -51,6 +49,8 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
   const [DescriptionContent, setDescriptionContent] = useState(<></>)
 
   const me = chatroom?.me
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
 
   useEffect(() => {
     if (!Status?.content) return
@@ -58,7 +58,9 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
     const {reactNodes} = MfmService.renderMfm(Status?.content, {
       emojiMap: new Map(),
       domain,
-      subdomain
+      subdomain,
+      db,
+      globalDb
     })
     setDescriptionContent(<>
       {reactNodes?.map(

@@ -18,17 +18,14 @@ import WithActivitypubUserContext, {
 } from "../../../../states/useProfile";
 import {TouchableOpacity, View} from "react-native";
 import {Text} from "@rneui/themed"
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../libs/redux/store";
-import {AccountState} from "../../../../libs/redux/slices/account";
 import {Image} from "expo-image";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import UserActionSheet from "../../../bottom-sheets/User";
 import {APP_FONT} from "../../../../styles/AppTheme";
 
 function UserItem() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const subdomain = primaryAcct?.subdomain
   const {user} = useActivitypubUserContext()
   const [BottomSheetVisible, setBottomSheetVisible] = useState(false)
 

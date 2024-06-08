@@ -14,9 +14,6 @@ import React, {useEffect} from "react";
 import {
   ActivityPubUserAdapter
 } from "@dhaaga/shared-abstraction-activitypub/src";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../libs/redux/store";
-import {AccountState} from "../../../libs/redux/slices/account";
 import {View} from "react-native";
 import {useQuery as useRealmQuery} from "@realm/react"
 import {useRealm} from "@realm/react";
@@ -31,10 +28,10 @@ import {Divider} from "@rneui/base";
 
 
 function WithApi() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const _domain = accountState?.activeAccount?.domain
-  const _subdomain = accountState?.activeAccount?.subdomain
-  const {client} = useActivityPubRestClientContext()
+  const {client, primaryAcct} = useActivityPubRestClientContext()
+  const _domain = primaryAcct?.domain
+  const _subdomain = primaryAcct?.subdomain
+
   const {me, meRaw} = useActivityPubRestClientContext()
   const navigation = useNavigation()
   const route = useRoute<any>()

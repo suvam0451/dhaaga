@@ -14,9 +14,6 @@ import {useQuery} from "@tanstack/react-query";
 import TitleOnlyStackHeaderContainer
   from "../../../containers/TitleOnlyStackHeaderContainer";
 import {Text} from "@rneui/themed";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../libs/redux/store";
-import {AccountState} from "../../../../libs/redux/slices/account";
 import WithActivitypubUserContext, {
   useActivitypubUserContext
 } from "../../../../states/useProfile";
@@ -25,8 +22,8 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {AnimatedFlashList} from "@shopify/flash-list";
 
 function UserItem() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const subdomain = primaryAcct?.subdomain
   const {user} = useActivitypubUserContext()
 
   return <View style={{

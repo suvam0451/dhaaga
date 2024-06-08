@@ -3,9 +3,6 @@ import {Image} from "expo-image";
 import {extractInstanceUrl, visibilityIcon} from "../../utils/instances";
 import {formatDistanceToNowStrict} from "date-fns";
 import React, {useEffect, useMemo, useState} from "react";
-import {useSelector} from "react-redux";
-import {RootState} from "../../libs/redux/store";
-import {AccountState} from "../../libs/redux/slices/account";
 import {useNavigation} from "@react-navigation/native";
 import {TouchableOpacity} from "react-native";
 import MfmService from "../../services/mfm.service";
@@ -14,6 +11,9 @@ import {useActivitypubUserContext} from "../../states/useProfile";
 import {useRealm} from "@realm/react";
 import {useGlobalMmkvContext} from "../../states/useGlobalMMkvCache";
 import {Skeleton} from "@rneui/themed";
+import {
+  useActivityPubRestClientContext
+} from "../../states/useActivityPubRestClient";
 
 type OriginalPosterProps = {
   id: string
@@ -49,10 +49,12 @@ function OriginalPoster({
   displayName,
   accountUrl,
   username,
-  subdomain,
   visibility,
 }: OriginalPosterProps) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
+  const subdomain = primaryAcct?.subdomain
+
   const navigation = useNavigation<any>();
   const {status} = useActivitypubStatusContext()
   const {user, setDataRaw} = useActivitypubUserContext()
@@ -73,8 +75,8 @@ function OriginalPoster({
     const emojiMap = user?.getEmojiMap()
     const {reactNodes} = MfmService.renderMfm(content, {
       emojiMap,
-      domain: accountState?.activeAccount?.domain,
-      subdomain: accountState?.activeAccount?.subdomain,
+      domain,
+      subdomain,
       remoteSubdomain: user.getInstanceUrl(),
       db, globalDb
     })

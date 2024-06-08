@@ -3,12 +3,9 @@ import {Text, View} from "react-native";
 import {
   useActivityPubRestClientContext
 } from "../../../../../states/useActivityPubRestClient";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 import MfmService from "../../../../../services/mfm.service";
 import {randomUUID} from "expo-crypto";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../../libs/redux/store";
-import {AccountState} from "../../../../../libs/redux/slices/account";
 import {Image} from "expo-image";
 import {format} from "date-fns";
 import {useRealm} from "@realm/react";
@@ -18,11 +15,12 @@ import {
 } from "@dhaaga/shared-abstraction-activitypub/src";
 
 function ChatItem() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const {status} = useActivitypubStatusContext()
-  const domain = accountState?.activeAccount?.domain
+  const {me, primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
+  const subdomain = primaryAcct?.subdomain
 
-  const {me} = useActivityPubRestClientContext()
+
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
   const [UserInterface, setUserInterface] = useState(ActivityPubUserAdapter(null, domain))
@@ -36,8 +34,8 @@ function ChatItem() {
     const emojiMap = new Map()
     const {reactNodes} = MfmService.renderMfm(content, {
       emojiMap,
-      domain: accountState?.activeAccount?.domain,
-      subdomain: accountState?.activeAccount?.subdomain,
+      domain,
+      subdomain,
       remoteSubdomain: UserInterface?.getInstanceUrl(),
       db,
       globalDb

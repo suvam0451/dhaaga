@@ -4,9 +4,6 @@ import {
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import {createContext, useContext, useEffect, useRef, useState} from "react";
 import {useActivityPubRestClientContext} from "./useActivityPubRestClient";
-import {useSelector} from "react-redux";
-import {RootState} from "../libs/redux/store";
-import {AccountState} from "../libs/redux/slices/account";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {
@@ -87,10 +84,9 @@ function WithActivitypubStatusContext({
   statusInterface,
   children
 }: Props) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const _domain = accountState?.activeAccount?.domain
+  const {primaryAcct, client} = useActivityPubRestClientContext()
+  const _domain = primaryAcct?.domain
 
-  const {client} = useActivityPubRestClientContext()
   const [Status, setStatus] = useState<StatusInterface | null>
   (ActivitypubStatusAdapter(null, _domain))
   const [StatusContext, setStatusContext] = useState<StatusContextInterface | null>(

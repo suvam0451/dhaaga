@@ -16,9 +16,6 @@ import LoadingMore from "../../home/LoadingMore";
 import {EmojiService} from "../../../../services/emoji.service";
 import {useRealm} from "@realm/react";
 import {useGlobalMmkvContext} from "../../../../states/useGlobalMMkvCache";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../libs/redux/store";
-import {AccountState} from "../../../../libs/redux/slices/account";
 import WithAutoHideTopNavBar from "../../../containers/WithAutoHideTopNavBar";
 import useTopbarSmoothTranslate
   from "../../../../states/useTopbarSmoothTranslate";
@@ -43,8 +40,8 @@ function ApiWrapper() {
     clear,
     maxId
   } = useAppPaginationContext()
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
   const [IsNextPageLoading, setIsNextPageLoading] = useState(false)

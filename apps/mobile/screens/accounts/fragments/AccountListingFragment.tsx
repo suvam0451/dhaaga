@@ -2,46 +2,44 @@ import {View, Text, StyleSheet} from "react-native";
 import {Image} from "expo-image";
 import {Ionicons} from "@expo/vector-icons";
 import {Button, Card} from "@rneui/base";
-import {AccountState, accountSlice} from "../../../libs/redux/slices/account";
-import {RootState} from "../../../libs/redux/store";
-import {useDispatch, useSelector} from "react-redux";
-import {useObject, useQuery, useRealm} from "@realm/react";
+import {useObject, useRealm} from "@realm/react";
 import {Account} from "../../../entities/account.entity";
 import AccountRepository from "../../../repositories/account.repo";
 import {Types} from "realm";
 import UUID = Types.UUID;
+import AccountService from "../../../services/account.service";
+import {
+  useActivityPubRestClientContext
+} from "../../../states/useActivityPubRestClient";
+import {useMemo} from "react";
 
 type Props = {
   id: UUID;
 };
 
 function AccountListingFragment({id}: Props) {
-  const dispatch = useDispatch();
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
   const account = useObject(Account, id)
   const db = useRealm()
-
-  const activeAccount =
-      useQuery(Account).find((o) =>
-          o._id.toString() === accountState.activeAccount?.id)
+  const {primaryAcct, regenerate} = useActivityPubRestClientContext()
 
   const avatar = AccountRepository.findSecret(db, account, "avatar")?.value
   const displayName = AccountRepository.findSecret(db, account, "display_name")?.value
 
   function onSelectAccount(o: Account) {
-    dispatch(accountSlice.actions.setAccount({
-          id: o._id.toString(),
-          domain: o.domain,
-          subdomain: o.subdomain,
-          username: o.username
-        }
-    ))
+    AccountService.selectAccount(db, o._id)
+    regenerate()
   }
 
 
   function onDeselectAccount(o: Account) {
-    dispatch(accountSlice.actions.setAccount(null));
+    AccountService.deselectAccount(db, o._id)
+    regenerate()
   }
+
+  const isActive = useMemo(() => {
+    return primaryAcct?._id?.toString()
+        === account._id.toString() && account.selected
+  }, [primaryAcct, account?.selected])
 
   return (
       <Card
@@ -54,9 +52,7 @@ function AccountListingFragment({id}: Props) {
           containerStyle={{
             margin: 0,
             padding: 8,
-            backgroundColor:
-                activeAccount?._id?.toString()
-                === account._id.toString() ? "#E5FFDA" : "white",
+            backgroundColor: isActive ? "#E5FFDA" : "white",
           }}
       >
         <View>
@@ -87,8 +83,7 @@ function AccountListingFragment({id}: Props) {
               alignItems: "center",
             }}
         >
-          {activeAccount?._id?.toString()
-          !== account._id?.toString() ? (
+          {!isActive ? (
               <Button
                   type="clear"
                   onPress={() => {
