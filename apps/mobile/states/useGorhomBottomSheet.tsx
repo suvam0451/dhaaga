@@ -1,6 +1,6 @@
 import React, {
   createContext,
-  useContext, useEffect,
+  useContext,
   useMemo,
   useRef,
   useState
@@ -16,6 +16,8 @@ import {useGlobalMmkvContext} from "./useGlobalMMkvCache";
 import globalMmkvCacheServices from "../services/globalMmkvCache.services";
 import * as Crypto from "expo-crypto";
 import ExternalLinkActionSheet from "../components/bottom-sheets/Link";
+import PostComposerBottomSheet from "../components/bottom-sheets/PostComposer";
+import {APP_FONT, APP_THEME} from "../styles/AppTheme";
 
 type Type = {
   visible: boolean,
@@ -82,6 +84,9 @@ function BottomSheetContent({type, requestId}: {
             displayName={x.displayName}
         />
       }
+      case "Composer": {
+        return <PostComposerBottomSheet/>
+      }
       default:
         return <View></View>
     }
@@ -89,13 +94,13 @@ function BottomSheetContent({type, requestId}: {
 }
 
 function WithGorhomBottomSheetContext({children}: Props) {
-  const [BottomSheetVisible, setBottomSheetVisible] = useState(false)
+  // const [BottomSheetVisible, setBottomSheetVisible] = useState(false)
   const [BottomSheetType, setBottomSheetType] = useState("N/A")
   const [RequestId, setRequestId] = useState(null)
   const ref = useRef<BottomSheet>()
 
   function setVisible(state: boolean) {
-    setBottomSheetVisible(state)
+    // setBottomSheetVisible(state)
     ref?.current?.expand()
   }
 
@@ -127,18 +132,18 @@ function WithGorhomBottomSheetContext({children}: Props) {
   }, [RequestId])
 
   return <GorhomBottomSheetContext.Provider value={{
-    visible: BottomSheetVisible,
+    visible: false,
     type: "N/A",
     setVisible,
     setBottomSheetContent: setter,
     setBottomSheetType: setBottomSheetTypeFn,
-    updateRequestId: updateRequestIdFn
+    updateRequestId: updateRequestIdFn,
   }}>
     {children}
     <BottomSheet
         onChange={onBottomSheetChanged}
         ref={ref}
-        index={BottomSheetVisible ? 0 : -1}
+        index={-1}
         enablePanDownToClose={true}
         enableOverDrag={false}
         snapPoints={["50%"]}
@@ -153,7 +158,7 @@ function WithGorhomBottomSheetContext({children}: Props) {
             opacity={0.5}
             enableTouchThrough={false}
         />}
-        handleIndicatorStyle={{backgroundColor: "#fff"}}
+        handleIndicatorStyle={{backgroundColor: APP_FONT.MONTSERRAT_BODY}}
     >
       <BottomSheetView>
         {Content}

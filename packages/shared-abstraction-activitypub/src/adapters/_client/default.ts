@@ -9,9 +9,14 @@ import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {StatusArray} from "../status/_interface";
 
 class UnknownRestClient implements ActivityPubClient {
-  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
-      throw new Error("Method not implemented.");
+  async getMyFollowedTags() {
+    return []
   }
+
+  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
   getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
     throw new Error("Method not implemented.");
   }

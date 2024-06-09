@@ -83,6 +83,8 @@ interface ActivityPubClient {
    */
   getMyConversations(): Promise<mastodon.v1.Conversation[]>
 
+  // getMyFollowedTags(opts ): Promise<mastodon.v1.Tag[]>
+
   // a.k.a. - verifyCredentials
   getMe(): Promise<mastodon.v1.AccountCredentials | UserDetailed | null | undefined>
 
@@ -130,7 +132,11 @@ interface ActivityPubClient {
   unfollowTag(id: string): Promise<mastodon.v1.Tag | null>
 
 
-  getFollowedTags(): Promise<mastodon.v1.Tag[] | any[]>;
+  getFollowedTags(opts: GetPostsQueryDTO): Promise<{
+    data: mastodon.v1.Tag[],
+    minId?: string,
+    maxId?: string
+  } | any[]>;
 
   muteUser(id: string): Promise<void>;
 

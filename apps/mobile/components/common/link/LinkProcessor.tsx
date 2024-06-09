@@ -31,7 +31,9 @@ function LinkProcessor({url, displayName}: LinkProcessorProps) {
     })
     setBottomSheetType("Link")
     updateRequestId()
-    setVisible(true)
+    setTimeout(() => {
+      setVisible(true)
+    }, 200)
   }, [])
 
   const {onTextLayout, Result} = useLongLinkTextCollapse(wwwRemoved, 32)

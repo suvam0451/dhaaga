@@ -5,13 +5,13 @@ import {RestClient} from "../../native-client";
 class StatusService {
   static getStatus = async (client: RestClient, id: number | string): Promise<mastodon.v1.Status> => {
     return await get<mastodon.v1.Status>(
-        `${client.url}/api/v1/statuses/${id}`,
+        `https://${client.url}/api/v1/statuses/${id}`,
         client.accessToken);
   }
 
   static getStatusContext = async (client: RestClient, id: number | string): Promise<mastodon.v1.Status> => {
     return await get<mastodon.v1.Status>(
-        `${client.url}/api/v1/statuses/${id}/context`,
+        `https://${client.url}/api/v1/statuses/${id}/context`,
         client.accessToken);
   }
 

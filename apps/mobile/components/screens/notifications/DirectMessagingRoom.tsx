@@ -32,7 +32,11 @@ import ChatItem from "./fragments/dm/ChatItem";
 import {Input} from '@rneui/themed';
 import {FontAwesome} from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import PostComposerActionSheet from "../../bottom-sheets/PostComposer";
+import PostComposerBottomSheet from "../../bottom-sheets/PostComposer";
+import {APP_FONT} from "../../../styles/AppTheme";
+import {
+  useGorhomActionSheetContext
+} from "../../../states/useGorhomBottomSheet";
 
 type DirectMessagingRoomProps = {
   conversationIds: string[]
@@ -89,11 +93,24 @@ function DirectMessagingRoom() {
 
   const [ChatHistory, setChatHistory] = useState<ChatItemPointer[]>([])
   const [PostComposerVisible, setPostComposerVisible] = useState(false)
+  const {
+    setVisible,
+    setBottomSheetType,
+    updateRequestId
+  } = useGorhomActionSheetContext()
 
   const conversationMapper = useMemo(() => {
     return new Map<string, string>()
   }, [roomId])
 
+
+  function onComposerRequested() {
+    setBottomSheetType("Composer")
+    updateRequestId()
+    setTimeout(() => {
+      setVisible(true)
+    }, 200)
+  }
 
   const mmkv = useMemo(() => {
     if (!roomId) return null
@@ -131,28 +148,33 @@ function DirectMessagingRoom() {
 
     Promise.all(promises).then(async (res) => {
       let statuses = []
+      /**
+       * For each conversation, we make two requests.
+       * One for the context chain. One for the status itself.
+       */
       let count = 0
       conversationMapper.clear()
       for await (const item of res) {
         if (item.ancestors !== undefined) {
-          const interfaces = await ActivityPubAdapterService.adaptContextChain(item, _domain)
+          const interfaces = ActivityPubAdapterService.adaptContextChain(item, _domain)
           statuses = statuses.concat(
               interfaces
           )
           for (let i = 0; i < interfaces.length; i++)
-            conversationMapper.set(interfaces[i].getId(), chatroom.conversations[(count % 2) + 1].conversationId)
+            conversationMapper.set(interfaces[i].getId(), chatroom.conversations[(count % 2)].conversationId)
 
           MmkvService.saveRawStatuses(mmkv, interfaces)
         } else {
-          const interfaces = await ActivityPubAdapterService.adaptManyStatuses(item, _domain)
+          const interfaces = ActivityPubAdapterService.adaptManyStatuses(item, _domain)
           for (let i = 0; i < interfaces.length; i++)
-            conversationMapper.set(interfaces[i].getId(), chatroom.conversations[(count % 2) + 1].conversationId)
+            conversationMapper.set(interfaces[i].getId(), chatroom.conversations[(count % 2)].conversationId)
 
           statuses = statuses.concat(
               interfaces
           )
           MmkvService.saveRawStatuses(mmkv, interfaces)
         }
+        count++
       }
       setMessageHistory(statuses)
     }).catch((e) => {
@@ -171,25 +193,6 @@ function DirectMessagingRoom() {
     ))
   }, [MessageHistory]);
 
-  // async function api() {
-  //   if (!client) throw new Error("_client not initialized");
-  //   return await client.getStatus(q);
-  // }
-  //
-  // // Queries
-  // const {status, data, refetch, fetchStatus} = useQuery<
-  //     mastodon.v1.Status | Note
-  // >({
-  //   queryKey: ["conversation/latest"],
-  //   queryFn: api,
-  //   enabled: client !== null
-  // });
-
-  // useEffect(() => {
-  //   if (status === "success") {
-  //   }
-  // }, [status, fetchStatus]);
-
   async function onRefresh() {
 
   }
@@ -203,7 +206,7 @@ function DirectMessagingRoom() {
   >
     <View style={{display: "flex", height: "100%"}}>
       <View style={{flexGrow: 1}}></View>
-      <View>
+      <View style={{flexShrink: 1}}>
         {ChatHistory.map((o, i) => <View key={i} style={{paddingHorizontal: 4}}>
           <WithActivitypubStatusContext
               status={MmkvService.getStatusRaw(mmkv, o.id)}>
@@ -214,16 +217,15 @@ function DirectMessagingRoom() {
       <View style={{
         display: "flex",
         flexDirection: "row",
-        maxWidth: "100%", height: "auto",
+        maxWidth: "100%",
+        height: "auto",
         backgroundColor: "#1c1c1c",
         padding: 8,
         alignItems: "flex-start",
-        marginTop: 32
+        marginTop: 32,
+        marginBottom: 0
       }}>
-
-        <TouchableOpacity onPress={() => {
-          setPostComposerVisible(true)
-        }}>
+        <TouchableOpacity onPress={onComposerRequested}>
           <View style={{
             flexShrink: 1,
             display: "flex",
@@ -231,13 +233,10 @@ function DirectMessagingRoom() {
             marginTop: 8,
             minWidth: 20,
           }}>
-            <FontAwesome5 name="plus" size={24} color="#fff"/>
-            {/*<FontAwesome6 name="face-smile" size={24} color="#fff"/>*/}
-            {/*<FontAwesome6 name="image" size={24} color="#fff"/>*/}
-            {/*<FontAwesome name="cog" size={24} color="#fff"/>*/}
+            <FontAwesome5 name="plus" size={24}
+                          color={APP_FONT.MONTSERRAT_BODY}/>
           </View>
         </TouchableOpacity>
-
         <View style={{flexShrink: 1}}>
           <Input
               inputContainerStyle={{
@@ -269,14 +268,10 @@ function DirectMessagingRoom() {
         <View style={{
           marginTop: 8
         }}>
-          <FontAwesome name="send" size={24} color="#fff"/>
+          <FontAwesome name="send" size={24} color={APP_FONT.MONTSERRAT_BODY}/>
         </View>
-
       </View>
     </View>
-    <PostComposerActionSheet
-        visible={PostComposerVisible}
-        setVisible={setPostComposerVisible}/>
   </TitleOnlyStackHeaderContainer>
 }
 

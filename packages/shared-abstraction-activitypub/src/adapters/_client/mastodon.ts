@@ -27,6 +27,10 @@ class MastodonRestClient implements ActivityPubClient {
     );
   }
 
+  // async getMyFollowedTags(opts: GetPostsQueryDTO): Promise<mastodon.v1.Tag[]> {
+  //     return await RestServices.v1.accounts.getFollowedTags(this.client, opts);
+  // }
+
   async getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
     const _client = this.createPublicClient()
     try {
@@ -38,7 +42,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.timelines.public.list(opts)
     } catch (e) {
@@ -56,7 +60,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async uploadMedia(params: MediaUploadDTO): Promise<any> {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v2.media.create(params)
     } catch (e) {
@@ -66,7 +70,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async getFollowing(id: string) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.accounts.$select(id).following.list()
     } catch (e) {
@@ -76,7 +80,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async getFollowers(id: string) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.accounts.$select(id).followers.list()
     } catch (e) {
@@ -86,17 +90,17 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async getMe() {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.accounts.verifyCredentials()
     } catch (e) {
-      console.log(e)
+      console.log("[ERROR]: fetching account info", e)
       return null
     }
   }
 
   async getMyConversations() {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.conversations.list()
     } catch (e) {
@@ -106,7 +110,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async getStatusContext(id: string) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.statuses.$select(id).context.fetch()
     } catch (e) {
@@ -116,7 +120,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async getRelationshipWith(ids: string[]) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.accounts.relationships.fetch({id: ids})
     } catch (e) {
@@ -138,7 +142,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async followTag(id: string) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.tags.$select(id).follow()
     } catch (e) {
@@ -148,7 +152,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async unfollowTag(id: string) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.tags.$select(id).unfollow()
     } catch (e) {
@@ -171,7 +175,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async muteUser(id: string) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       await _client.v1.accounts.$select(id).mute()
       return
@@ -182,7 +186,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v2.search.list({
         q,
@@ -200,20 +204,20 @@ class MastodonRestClient implements ActivityPubClient {
 
   createClient() {
     return createRestAPIClient({
-      url: this.client.url,
+      url: `https://${this.client.url}`,
       accessToken: this.client.accessToken
     })
   }
 
   createPublicClient() {
     return createRestAPIClient({
-      url: this.client.url,
+      url: `https://${this.client.url}`,
     })
   }
 
 
   async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.favourites.list()
     } catch (e) {
@@ -227,18 +231,12 @@ class MastodonRestClient implements ActivityPubClient {
     return await RestServices.v1.bookmarks.getBookmarks(this.client, opts);
   }
 
-  async getFollowedTags() {
-    const _client = this.createClient()
-    try {
-      return await _client.v1.followedTags.list()
-    } catch (e) {
-      console.log(e)
-      return []
-    }
+  async getFollowedTags(opts: GetPostsQueryDTO) {
+    return await RestServices.v1.accounts.getFollowedTags(this.client, opts);
   }
 
   async favourite(id: string) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.statuses.$select(id.toString()).favourite()
     } catch (e) {
@@ -248,7 +246,7 @@ class MastodonRestClient implements ActivityPubClient {
   }
 
   async unFavourite(id: string) {
-    const _client = this.createClient()
+    const _client = this.createMastoClient()
     try {
       return await _client.v1.statuses.$select(id.toString()).unfavourite()
     } catch (e) {
@@ -261,12 +259,16 @@ class MastodonRestClient implements ActivityPubClient {
     return await RestServices.v1.accounts.getStatuses(this.client, userId, opts);
   }
 
+  private createMastoClient() {
+    return createRestAPIClient({
+      url: `https://${this.client.url}`,
+      accessToken: this.client.accessToken
+    })
+  }
+
   async getHomeTimeline(opts?: GetPostsQueryDTO): Promise<mastodon.v1.Status[]> {
     try {
-      const _client = createRestAPIClient({
-        url: this.client.url,
-        accessToken: this.client.accessToken
-      })
+      const _client = this.createMastoClient()
 
       return await _client.v1.timelines.home.list({
         limit: 5,
@@ -279,10 +281,7 @@ class MastodonRestClient implements ActivityPubClient {
 
   async bookmark(id: string) {
     try {
-      const _client = createRestAPIClient({
-        url: this.client.url,
-        accessToken: this.client.accessToken
-      })
+      const _client = this.createMastoClient()
 
       return await _client.v1.statuses.$select(id.toString()).bookmark()
     } catch (e) {
@@ -293,10 +292,7 @@ class MastodonRestClient implements ActivityPubClient {
 
   async unBookmark(id: string) {
     try {
-      const _client = createRestAPIClient({
-        url: this.client.url,
-        accessToken: this.client.accessToken
-      })
+      const _client = this.createMastoClient()
       return await _client.v1.statuses.$select(id.toString()).unbookmark()
     } catch (e) {
       console.log(e)
@@ -306,10 +302,7 @@ class MastodonRestClient implements ActivityPubClient {
 
   async getTimelineByHashtag(q: string, query?: TimelineQuery) {
     try {
-      const _client = createRestAPIClient({
-        url: this.client.url,
-        accessToken: this.client.accessToken
-      })
+      const _client = this.createMastoClient()
       return await _client.v1.timelines.tag.$select(q).list({
         ...query,
         limit: 5

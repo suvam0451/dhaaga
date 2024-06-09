@@ -42,11 +42,13 @@ class AccountRepository {
   }
 
   static upsert(db: Realm, account: AccountCreateDTO): Account {
+    const removeHttps = account.subdomain?.replace(/^https?:\/\//, '');
+
     const match = this.find(db, account)
     return db.create(Account, {
       _id: match?._id || new Realm.BSON.UUID(),
       domain: account.domain,
-      subdomain: account.subdomain,
+      subdomain: removeHttps,
       username: account.username,
       avatarUrl: account.avatarUrl,
       password: account.password,

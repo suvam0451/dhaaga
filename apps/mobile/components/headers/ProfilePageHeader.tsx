@@ -57,7 +57,7 @@ const TimelinesHeader = ({
           }}>
             <Ionicons
                 name="menu-outline" size={24}
-                color="rgba(255, 255, 255, 0.87)"/>
+                color={APP_FONT.MONTSERRAT_BODY}/>
           </View>
 
         </View>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   navbarTitle: {
-    color: APP_FONT.MONTSERRAT_HEADER,
+    color: APP_FONT.MONTSERRAT_BODY,
     fontSize: 16,
     fontFamily: "Montserrat-Bold",
   },

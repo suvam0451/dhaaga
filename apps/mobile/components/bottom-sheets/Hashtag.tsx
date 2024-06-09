@@ -14,6 +14,7 @@ import {TagType} from "@dhaaga/shared-abstraction-activitypub/src";
 import {useNavigation} from "@react-navigation/native";
 import InstanceService from "../../services/instance.service";
 import useSkeletonSmoothTransition from "../../states/useSkeletonTransition";
+import {APP_FONT} from "../../styles/AppTheme";
 
 type HashtagActionsProps = {
   visible: boolean
@@ -36,7 +37,6 @@ export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheet
     posts: 0,
     users: 0
   })
-
   useEffect(() => {
     if (!tag) return
     setIsLoading(true)
@@ -65,7 +65,6 @@ export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheet
     }
   }
 
-  console.log(parentApiPending)
   const loaded = useSkeletonSmoothTransition(
       !tag || tag.getName() === "" || IsLoading || parentApiPending, {
         condition: !parentApiPending,
@@ -193,7 +192,9 @@ export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheet
                     <View>
                       <Text style={{
                         fontSize: 16,
-                        color: "orange", opacity: 0.87
+                        color: "orange",
+                        fontFamily: "Montserrat-Bold",
+                        opacity: 0.6
                       }}>
                         Your Instance
                         {/*<Ionicons*/}
@@ -205,8 +206,10 @@ export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheet
                           style={{
                             fontSize: 12,
                             opacity: 0.6,
-                            color: "orange"
-                          }}>{subdomain}</Text>
+                            color: "orange",
+                            fontFamily: "Inter-Bold",
+
+                          }} numberOfLines={1}>{subdomain}</Text>
                       <Text
                           style={{color: "#fff", opacity: 0.6, fontSize: 12}}>{
                         AggregatedData.posts} posts
@@ -233,7 +236,8 @@ export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheet
                   <View>
                     <Text style={{
                       fontSize: 16, marginRight: 4,
-                      color: "orange", opacity: 0.87
+                      fontFamily: "Montserrat-Bold",
+                      color: "orange", opacity: 0.6
                     }}>
                       Their Instance
                       {/*<FontAwesome*/}
@@ -244,6 +248,7 @@ export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheet
                         style={{
                           fontSize: 12,
                           opacity: 0.6,
+                          fontFamily: "Inter-Bold",
                           color: "orange"
                         }}>https://misskey.io</Text>
                     <Text
@@ -279,9 +284,13 @@ export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheet
             justifyContent: "center",
           }}>
             <View>
-              <Ionicons name={"add-outline"} color={"#fff"} size={24}/>
+              {/*<Ionicons name={"add-outline"} color={APP_FONT.MONTSERRAT_HEADER} size={24}/>*/}
             </View>
-            <Text style={{fontSize: 16}}>Add to Timeline</Text>
+            <Text style={{
+              fontSize: 16,
+              fontFamily: "Montserrat-Bold",
+              color: APP_FONT.MONTSERRAT_BODY
+            }}>Follow (Private)</Text>
           </View>
         </Button>
       </View>

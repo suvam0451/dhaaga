@@ -4,7 +4,7 @@ import SearchScreen from "./screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
-import {Animated, View} from "react-native";
+import {Animated, View, LogBox} from "react-native";
 import {useCallback, useRef} from "react";
 import {getCloser} from "./utils";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
@@ -26,6 +26,9 @@ import WithActivityPubRestClient from "./states/useActivityPubRestClient";
 import {getLocales} from 'expo-localization';
 import {I18n} from 'i18n-js';
 
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;

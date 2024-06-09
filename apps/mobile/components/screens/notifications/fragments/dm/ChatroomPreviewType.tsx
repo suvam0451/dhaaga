@@ -2,7 +2,7 @@ import {useObject, useRealm} from "@realm/react"
 import {
   ActivityPubChatRoom
 } from "../../../../../entities/activitypub-chatroom.entity";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Text} from "@rneui/themed"
 import {TouchableOpacity, View} from "react-native";
 import {BSON} from "realm";
@@ -46,42 +46,31 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
   const [IsPairChat, setIsPairChat] = useState(false)
   const [Status, setStatus] = useState<ActivityPubStatus>(null)
   const [LastMessageBefore, setLastMessageBefore] = useState(null)
-  const [DescriptionContent, setDescriptionContent] = useState(<></>)
 
   const me = chatroom?.me
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
 
-  useEffect(() => {
-    if (!Status?.content) return
+  const ParsedValue = useMemo(() => {
+    const target = Status?.content
+    if (!target) return <View></View>
 
-    const {reactNodes} = MfmService.renderMfm(Status?.content, {
+    const {reactNodes} = MfmService.renderMfm(target, {
       emojiMap: new Map(),
       domain,
       subdomain,
       db,
       globalDb
     })
-    setDescriptionContent(<>
-      {reactNodes?.map(
-          (para, i) => {
-            const uuid = randomUUID()
-            return <Text
-                key={uuid}
-                style={{
-                  color: APP_FONT.MONTSERRAT_BODY,
-                  width: "100%",
-                  overflow: "hidden",
-                }}
-                numberOfLines={1}
-            >
-              {para.map((o, j) => o)}
-            </Text>
-          }
-      )}
-    </>)
-
-  }, [Status?.content]);
+    return reactNodes?.map(
+        (para, i) => {
+          const uuid = randomUUID()
+          return <Text key={uuid} style={{color: "#fff", opacity: 0.87}}>
+            {para.map((o, j) => <Text key={j}>{o}</Text>)}
+          </Text>
+        }
+    )
+  }, [Status?.content])
 
 
   useEffect(() => {
@@ -107,6 +96,8 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
   function onClickChatroomItem() {
     navigation.push("DirectMessagingRoom", {roomId: chatroom._id})
   }
+
+  const activeUserIsSender = Status?.postedBy?.userId === me?.userId
 
   return <View style={{
     paddingHorizontal: 4,
@@ -141,7 +132,6 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
               <Image
                   style={{
                     flex: 1,
-                    width: "100%",
                     backgroundColor: "#0553",
                     padding: 2,
                   }}
@@ -162,16 +152,18 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
             }}>
               @{me?.username}@{me.server.url}
             </Text>
-            {Status && Status?.postedBy?.userId === me.userId ?
-                <ParsedDescriptionContainerForChatroomPreview>
-                  {DescriptionContent}
-                </ParsedDescriptionContainerForChatroomPreview> :
-                <ParsedDescriptionContainerForChatroomPreview>
-                  <Text
-                      style={{color: "orange"}}>You: </Text>
-                  {DescriptionContent}
-                </ParsedDescriptionContainerForChatroomPreview>
-            }
+            <View>
+              {activeUserIsSender ?
+                  <ParsedDescriptionContainerForChatroomPreview>
+                    {ParsedValue}
+                  </ParsedDescriptionContainerForChatroomPreview> :
+                  <ParsedDescriptionContainerForChatroomPreview>
+                    <Text
+                        style={{color: "orange"}}>You: </Text>
+                    {ParsedValue}
+                  </ParsedDescriptionContainerForChatroomPreview>
+              }
+            </View>
           </View>
 
           {/*<View style={{marginLeft: 4}}>*/}
@@ -196,7 +188,7 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
           paddingVertical: 4,
           marginVertical: 4
         }}>
-          <View style={{flexGrow: 0}}>
+          <View style={{display: "flex", flexDirection: "row"}}>
             <View
                 style={{
                   width: 48,
@@ -209,7 +201,6 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
               <Image
                   style={{
                     flex: 1,
-                    width: "100%",
                     backgroundColor: "#0553",
                     padding: 2,
                   }}
@@ -217,7 +208,7 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
               />
             </View>
           </View>
-          <View style={{marginLeft: 8}}>
+          <View style={{marginLeft: 8, flex: 1}}>
             <Text style={{
               fontSize: 16,
               color: APP_FONT.MONTSERRAT_HEADER,
@@ -228,16 +219,18 @@ function ChatroomPreview({roomId, modeFilter}: ChatroomPreviewType) {
               color: APP_FONT.MONTSERRAT_BODY,
               fontFamily: "Montserrat-Bold"
             }}>@{Participants[0]?.username}@{Participants[0]?.server?.url}</Text>
-            {Status && Status?.postedBy?.userId === me.userId ?
-                <ParsedDescriptionContainerForChatroomPreview>
-                  <Text style={{color: APP_FONT.MONTSERRAT_BODY}}>You: </Text>
-                  {DescriptionContent}
-                </ParsedDescriptionContainerForChatroomPreview> :
-                <ParsedDescriptionContainerForChatroomPreview>
-                  <Text style={{color: APP_FONT.MONTSERRAT_BODY}}>You: </Text>
-                  {DescriptionContent}
-                </ParsedDescriptionContainerForChatroomPreview>
-            }
+            <View style={{maxWidth: "100%"}}>
+              {activeUserIsSender ?
+                  <Text style={{marginTop: 4}} numberOfLines={2}>
+                    <Text style={{color: APP_FONT.MONTSERRAT_BODY}}>You: </Text>
+                    {ParsedValue}
+                  </Text> :
+                  <Text style={{marginTop: 4}} numberOfLines={2}>
+                    <Text style={{color: APP_FONT.MONTSERRAT_BODY}}>You: </Text>
+                    {ParsedValue}
+                  </Text>
+              }
+            </View>
           </View>
 
           {/*<View style={{marginLeft: 4}}>*/}

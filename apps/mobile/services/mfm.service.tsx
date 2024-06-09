@@ -16,12 +16,27 @@ import {APP_THEME} from "../styles/AppTheme";
 import {EmojiService} from "./emoji.service";
 import {MMKV} from "react-native-mmkv";
 import Realm from "realm"
+import MentionProcessor from "../components/common/user/MentionProcessor";
+
+type MentionMap = {
+  url: string,
+  text: string
+}[]
 
 class MfmService {
+  /**
+   * generates a map of mentions from content
+   */
+  static findMentions(content: string) {
+    const ex = new RegExp('<a.*?href="(.*?)".*?>@(.*?)</a>', 'g');
+    const matches = Array.from(content.matchAll(ex))
+    return matches.map((o) => ({url: o[1], text: o[2]}))
+  }
+
   static parseNode(
       node: MfmNode,
       count: string,
-      {emojiMap, linkMap, remoteInstance, db, globalDb}: {
+      {emojiMap, linkMap, remoteInstance, db, globalDb, opts, mentionMap}: {
         domain: string;
         subdomain: string;
         emojiMap: Map<string, EmojiMapValue>
@@ -29,7 +44,11 @@ class MfmService {
         isHighEmphasisText: boolean,
         db: Realm,
         globalDb: MMKV,
-        remoteInstance: string
+        remoteInstance: string,
+        mentionMap: MentionMap,
+        opts?: {
+          mentionsClickable?: boolean
+        }
       }
   ) {
     switch (node.type) {
@@ -60,6 +79,16 @@ class MfmService {
         );
       }
       case "url": {
+        const mention = mentionMap?.find((o) => o.url === node.props.url)
+
+        if (mention) {
+          return <MentionProcessor
+              url={mention.url}
+              text={mention.text}
+              interactable={false}
+          />
+        }
+
         let displayName = null
         if (linkMap) {
           const match = linkMap.get(node.props.url)
@@ -161,22 +190,27 @@ class MfmService {
    * @param db
    * @param globalDb
    * @param remoteSubdomain is the subdomain of target user
+   * @param opts
    */
   static renderMfm(input: string,
-      {emojiMap, domain, subdomain, db, globalDb, remoteSubdomain}: {
+      {emojiMap, domain, subdomain, db, globalDb, remoteSubdomain, opts}: {
         domain?: string,
         subdomain?: string
         emojiMap: Map<string, EmojiMapValue>,
         globalDb: MMKV,
         db: Realm,
-        remoteSubdomain?: string
+        remoteSubdomain?: string,
+        opts?: {
+          mentionsClickable?: boolean
+        }
       }
   ) {
-
     if (!input || !domain || !subdomain || !emojiMap) return {
       reactNodes: [],
       openAiContext: []
     }
+
+    const mentionMap = this.findMentions(input)
 
     const extractedUrls = this.extractUrls(input)
 
@@ -250,7 +284,8 @@ class MfmService {
           isHighEmphasisText: false,
           db,
           globalDb,
-          remoteInstance: remoteSubdomain
+          remoteInstance: remoteSubdomain,
+          mentionMap
         })
 
         retval[paraCount].push(item)

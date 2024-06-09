@@ -2,6 +2,7 @@ import applyCaseMiddleware from "axios-case-converter";
 import {RestClient} from "../../native-client";
 import axios from "axios";
 import type {mastodon} from "masto";
+import {extractPaginationFromLinkHeader} from "./_common";
 
 export type StatusQuery = {
   maxId?: string;
@@ -19,7 +20,7 @@ export default class BookmarkService {
     minId?: string,
     maxId?: string
   }> => {
-    let queryUrl = `${client.url}/api/v1/bookmarks`;
+    let queryUrl = `https://${client.url}/api/v1/bookmarks`;
     queryUrl = queryUrl.concat(`?limit=${query.limit}`)
     if (query?.maxId) {
       queryUrl = queryUrl.concat(`&max_id=${query?.maxId}`);
@@ -27,7 +28,6 @@ export default class BookmarkService {
     if (query?.minId) {
       queryUrl = queryUrl.concat(`&min_id=${query?.minId}`);
     }
-
 
     const axiosClient = applyCaseMiddleware(axios.create());
     try {
@@ -37,20 +37,7 @@ export default class BookmarkService {
         },
       });
 
-      const linkHeader = res.headers["link"]
-      const maxIdRegex = /max_id=([0-9]+)/
-      const minIdRegex = /min_id=([0-9]+)/
-
-      let maxId = null
-      let minId = null
-      if (minIdRegex.test(linkHeader)) {
-        const minMatch = linkHeader.match(minIdRegex)
-        minId = minMatch[1]
-      }
-      if (maxIdRegex.test(linkHeader)) {
-        const maxMatch = linkHeader.match(maxIdRegex)
-        maxId = maxMatch[1]
-      }
+      let {minId, maxId} = extractPaginationFromLinkHeader(res.headers)
       return {
         data: res.data,
         minId,

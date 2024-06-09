@@ -10,6 +10,7 @@ import {useRealm, useQuery} from "@realm/react";
 import {Account} from "../entities/account.entity";
 import {EmojiService} from "../services/emoji.service";
 import {useGlobalMmkvContext} from "./useGlobalMMkvCache";
+import AccountService from "../services/account.service";
 
 type Type = {
   client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null,
@@ -48,8 +49,8 @@ export function useActivityPubRestClientContext() {
  * @constructor
  */
 function WithActivityPubRestClient({children}: any) {
-  const {primaryAcct} = useActivityPubRestClientContext()
-  const _domain = primaryAcct?.domain
+  // const {primaryAcct} = useActivityPubRestClientContext()
+  // const _domain = primaryAcct?.domain
 
   const [restClient, setRestClient] = useState<
       MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
@@ -85,6 +86,7 @@ function WithActivityPubRestClient({children}: any) {
     setRestClient(client)
     setPrimaryAcct(acct)
     EmojiService.loadEmojisForInstance(db, globalDb, acct.subdomain)
+    AccountService.loadFollowedTags(db, client)
   }
 
   useEffect(() => {
@@ -96,9 +98,10 @@ function WithActivityPubRestClient({children}: any) {
       setMe(null)
       return
     }
+
     restClient.getMe().then((res) => {
       setMeRaw(res)
-      setMe(ActivityPubUserAdapter(res, _domain))
+      setMe(ActivityPubUserAdapter(res, PrimaryAcct?.domain))
     })
   }, [restClient])
 

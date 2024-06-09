@@ -62,7 +62,7 @@ function TimelineRenderer() {
   }) : null
 
   // Queries
-  const {status, data, fetchStatus, refetch} = useQuery<
+  const {status, data, error, fetchStatus, refetch} = useQuery<
       mastodon.v1.Status[] | Note[]
   >({
     queryKey: ["mastodon/timelines/home", queryCacheMaxId, primaryAcct?._id?.toString()],
