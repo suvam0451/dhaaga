@@ -24,7 +24,6 @@ function HomeScreen() {
           <Stack.Screen
               name={"What is Fediverse"}
               component={WhatIsFediverse}/>
-
           <Stack.Screen
               name={"New To Dhaaga"}
               component={NewToDhaaga}/>

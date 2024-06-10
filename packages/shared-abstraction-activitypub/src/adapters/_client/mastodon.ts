@@ -5,7 +5,7 @@ import ActivityPubClient, {
   GetTrendingPostsQueryDTO,
   GetUserPostsQueryDTO, MediaUploadDTO,
   RestClientCreateDTO,
-  TimelineQuery,
+  HashtagTimelineQuery,
 } from "./_interface";
 import {
   mastodon,
@@ -25,6 +25,26 @@ class MastodonRestClient implements ActivityPubClient {
           domain: "mastodon"
         }
     );
+  }
+
+  async getListTimeline(q: string, opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {
+    const _client = this.createMastoClient()
+    try {
+      return await _client.v1.timelines.list.$select(q).list(opts)
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+  async getLocalTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    const _client = this.createMastoClient()
+    try {
+      return await _client.v1.timelines.public.list(opts)
+    } catch (e) {
+      console.log(e)
+      return []
+    }
   }
 
   // async getMyFollowedTags(opts: GetPostsQueryDTO): Promise<mastodon.v1.Tag[]> {
@@ -300,12 +320,13 @@ class MastodonRestClient implements ActivityPubClient {
     }
   }
 
-  async getTimelineByHashtag(q: string, query?: TimelineQuery) {
+  async getTimelineByHashtag(q: string, query?: HashtagTimelineQuery) {
     try {
       const _client = this.createMastoClient()
       return await _client.v1.timelines.tag.$select(q).list({
         ...query,
-        limit: 5
+        limit: 5,
+        onlyMedia: query?.onlyMedia,
       })
     } catch (e) {
       console.log(e)

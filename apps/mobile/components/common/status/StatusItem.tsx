@@ -1,5 +1,5 @@
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {Pressable, TouchableOpacity, View} from "react-native";
+import {Pressable, TouchableOpacity, View, StyleSheet} from "react-native";
 import {Divider, Skeleton, Text} from "@rneui/themed"
 import {StandardView} from "../../../styles/Containers";
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
@@ -23,7 +23,7 @@ import WithActivitypubUserContext from "../../../states/useProfile";
 import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 import activitypubAdapterService
   from "../../../services/activitypub-adapter.service";
-import {APP_FONT} from "../../../styles/AppTheme";
+import {APP_FONT, APP_THEME} from "../../../styles/AppTheme";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Entypo from "@expo/vector-icons/Entypo";
 import ExplainOutput from "../explanation/ExplainOutput";
@@ -195,43 +195,22 @@ function RootStatusFragment({
                   </View>
               </View>
 
-              <View style={{
-                marginHorizontal: "auto",
-                alignItems: "center",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                width: "100%",
-                marginBottom: 8
-              }}>
+              <View style={sensitive.toggleHideContainer}>
                   <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
-                  <Pressable style={{
-                    flexShrink: 1,
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    paddingHorizontal: 8,
-                    paddingVertical: 8
-                  }}
-                             onPress={onSpoilerClick}
+                  <Pressable
+                      style={sensitive.toggleHidePressableAreaContainer}
+                      onPress={onSpoilerClick}
                   >
-                      <View>
-                          <Text
-                              style={{
-                                color: APP_FONT.MONTSERRAT_BODY,
-                                // backgroundColor: "red",
-                                flexShrink: 1,
-                                textAlign: "center",
-                                fontSize: 16,
-                                fontFamily: "Montserrat-Bold"
-                              }}>
-                            {ShowSensitiveContent ? "Hide Sensitive" : "Show" +
-                                " Sensitive"}
-                          </Text>
-                      </View>
-                      <View style={{width: 24, marginLeft: 4}}>
-                          <FontAwesome5 name="eye-slash" size={18}
-                                        color={APP_FONT.MONTSERRAT_BODY}/>
+                      <Text
+                          style={sensitive.toggleHideText}>
+                        {ShowSensitiveContent ? "Hide Sensitive" : "Show" +
+                            " Sensitive"}
+                      </Text>
+                      <View
+                          style={{width: 24, marginLeft: 4}}>
+                          <FontAwesome5
+                              name="eye-slash" size={18}
+                              color={APP_FONT.MONTSERRAT_BODY}/>
                       </View>
                   </Pressable>
                   <Divider style={{flex: 1, flexGrow: 1, opacity: 0.6}}/>
@@ -322,7 +301,7 @@ export function RootFragmentContainer({
   return <View style={{
     padding: replyIndicatorsPresent ? 0 : 10,
     paddingBottom: 0,
-    backgroundColor: "#1e1e1e",
+    backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
     marginTop: mt == undefined ? 0 : mt,
     marginBottom: 4,
     borderRadius: 8,
@@ -524,3 +503,31 @@ function StatusItem({
 }
 
 export default StatusItem;
+
+
+const sensitive = StyleSheet.create({
+  toggleHideContainer: {
+    marginHorizontal: "auto",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "100%",
+    marginBottom: 8
+  },
+  toggleHideText: {
+    color: APP_FONT.MONTSERRAT_BODY,
+    flexShrink: 1,
+    textAlign: "center",
+    fontSize: 16,
+    fontFamily: "Montserrat-Bold"
+  },
+  toggleHidePressableAreaContainer: {
+    flexShrink: 1,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 8
+  }
+})

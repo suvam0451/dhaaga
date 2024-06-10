@@ -25,6 +25,14 @@ class MisskeyRestClient implements ActivityPubClient {
     });
   }
 
+  getListTimeline(q: string, opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
+  getLocalTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
   getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
     throw new Error("Method not implemented.");
   }

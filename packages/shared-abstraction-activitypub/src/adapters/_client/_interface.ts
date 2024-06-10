@@ -3,9 +3,15 @@ import {UserDetailed} from "@dhaaga/shared-provider-misskey/src";
 import {Status, StatusArray, StatusInterface} from "../status/_interface";
 
 
-export type TimelineQuery = {
+export type HashtagTimelineQuery = {
+  limit: number,
+  sinceId?: string,
   maxId?: string;
   minId?: string;
+  any?: string[];
+  all?: string[];
+  none?: string[]
+  onlyMedia?: boolean
 };
 
 
@@ -67,7 +73,13 @@ export  type MediaUploadDTO = {
  * across all ActivityPub based clients
  */
 interface ActivityPubClient {
+  /**
+   * Timelines
+   * @param opts
+   */
   getHomeTimeline(opts?: GetPostsQueryDTO): Promise<StatusArray>;
+
+  getLocalTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>
 
   getPublicTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
 
@@ -75,8 +87,10 @@ interface ActivityPubClient {
 
   getTimelineByHashtag(
       q: string,
-      query?: TimelineQuery
+      query?: HashtagTimelineQuery
   ): Promise<StatusArray>;
+
+  getListTimeline(q: string, opts?: GetPostsQueryDTO): Promise<StatusArray>
 
   /**
    * My

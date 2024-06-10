@@ -1,18 +1,14 @@
 import React, {useEffect, useRef} from "react";
 import {
-  Animated, RefreshControl,
+  Animated,
+  RefreshControl,
   SafeAreaView,
   StatusBar,
   StyleSheet,
 } from "react-native";
-import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {
-  keepPreviousData,
-  useQuery,
-} from "@tanstack/react-query";
+import {keepPreviousData, useQuery,} from "@tanstack/react-query";
 import StatusItem from "../../../components/common/status/StatusItem";
 import TimelinesHeader from "../../../components/TimelineHeader";
-import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {
   useActivityPubRestClientContext
 } from "../../../states/useActivityPubRestClient";
@@ -32,6 +28,17 @@ import useLoadingMoreIndicatorState
 import useScrollMoreOnPageEnd from "../../../states/useScrollMoreOnPageEnd";
 import Introduction
   from "../../../components/tutorials/screens/home/new-user/Introduction";
+import WithTimelineControllerContext, {
+  TimelineFetchMode,
+  useTimelineControllerContext
+} from "../../../states/useTimelineController";
+import ActivityPubProviderService
+  from "../../../services/activitypub-provider.service";
+import {
+  StatusArray
+} from "@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface";
+import WelcomeBack
+  from "../../../components/screens/home/fragments/WelcomeBack";
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
@@ -42,6 +49,7 @@ const SHOWN_SECTION_HEIGHT = 50;
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
+  const {timelineType} = useTimelineControllerContext()
   const {client, primaryAcct} = useActivityPubRestClientContext()
   const domain = primaryAcct?.domain
 
@@ -56,14 +64,16 @@ function TimelineRenderer() {
     queryCacheMaxId
   } = useAppPaginationContext()
 
-  const api = () => client ? client.getHomeTimeline({
-    limit: 5,
-    maxId: queryCacheMaxId
-  }) : null
+  async function api() {
+    return await ActivityPubProviderService.getTimeline(client, timelineType, {
+      limit: 5,
+      maxId: queryCacheMaxId
+    }, {})
+  }
 
   // Queries
   const {status, data, error, fetchStatus, refetch} = useQuery<
-      mastodon.v1.Status[] | Note[]
+      StatusArray
   >({
     queryKey: ["mastodon/timelines/home", queryCacheMaxId, primaryAcct?._id?.toString()],
     queryFn: api,
@@ -104,6 +114,8 @@ function TimelineRenderer() {
 
   if (!client) return <Introduction/>
 
+  if (timelineType === TimelineFetchMode.IDLE) return <WelcomeBack/>
+
   return (
       <SafeAreaView style={[styles.container, {position: "relative"}]}>
         <StatusBar backgroundColor="#222222"/>
@@ -142,9 +154,11 @@ function TimelineRenderer() {
 }
 
 function TimelineWrapper() {
-  return <WithAppPaginationContext>
-    <TimelineRenderer/>
-  </WithAppPaginationContext>
+  return <WithTimelineControllerContext>
+    <WithAppPaginationContext>
+      <TimelineRenderer/>
+    </WithAppPaginationContext>
+  </WithTimelineControllerContext>
 }
 
 export default TimelineWrapper;

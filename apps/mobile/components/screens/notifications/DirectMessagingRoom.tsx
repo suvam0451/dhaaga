@@ -10,7 +10,7 @@ import {
 } from "../../../states/useActivityPubRestClient";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {useEffect, useMemo, useState} from "react";
-import {TouchableOpacity, View} from "react-native";
+import {TouchableOpacity, View, StyleSheet} from "react-native";
 import {MMKV} from 'react-native-mmkv'
 
 import {
@@ -33,10 +33,13 @@ import {Input} from '@rneui/themed';
 import {FontAwesome} from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import PostComposerBottomSheet from "../../bottom-sheets/PostComposer";
-import {APP_FONT} from "../../../styles/AppTheme";
+import {APP_FONT, APP_THEME} from "../../../styles/AppTheme";
 import {
   useGorhomActionSheetContext
 } from "../../../states/useGorhomBottomSheet";
+import WithAutoHideTopNavBar from "../../containers/WithAutoHideTopNavBar";
+import useTopbarSmoothTranslate from "../../../states/useTopbarSmoothTranslate";
+import NavigationService from "../../../services/navigation.service";
 
 type DirectMessagingRoomProps = {
   conversationIds: string[]
@@ -193,18 +196,18 @@ function DirectMessagingRoom() {
     ))
   }, [MessageHistory]);
 
-  async function onRefresh() {
 
-  }
+  const {onScroll, translateY} = useTopbarSmoothTranslate({
+    onScrollJsFn: () => {
+    },
+    totalHeight: 100,
+    hiddenHeight: 50
+  })
 
-  return <TitleOnlyStackHeaderContainer
-      route={route} navigation={navigation}
-      headerTitle={`Your Conversation With`}
-      onScrollViewEndReachedCallback={() => {
-      }}
-      onRefresh={onRefresh}
-  >
-    <View style={{display: "flex", height: "100%"}}>
+  return <WithAutoHideTopNavBar
+      title={"Your Conversation"}
+      translateY={translateY}>
+    <View style={styles.container}>
       <View style={{flexGrow: 1}}></View>
       <View style={{flexShrink: 1}}>
         {ChatHistory.map((o, i) => <View key={i} style={{paddingHorizontal: 4}}>
@@ -223,15 +226,15 @@ function DirectMessagingRoom() {
         padding: 8,
         alignItems: "flex-start",
         marginTop: 32,
-        marginBottom: 0
       }}>
         <TouchableOpacity onPress={onComposerRequested}>
           <View style={{
             flexShrink: 1,
             display: "flex",
             flexDirection: "row",
-            marginTop: 8,
+            paddingTop: 8,
             minWidth: 20,
+            backgroundColor: "red"
           }}>
             <FontAwesome5 name="plus" size={24}
                           color={APP_FONT.MONTSERRAT_BODY}/>
@@ -251,17 +254,7 @@ function DirectMessagingRoom() {
                 textDecorationLine: "none"
               }}
               multiline={true}
-              style={{
-                fontSize: 16,
-                borderRadius: 16,
-                paddingLeft: 8,
-                marginBottom: -24,
-                lineHeight: 24,
-                backgroundColor: "#363636",
-                color: "white",
-                textDecorationLine: "none",
-                // textDecorationStyle: "dotted"
-              }}
+              style={styles.inputStyle}
               placeholder={"Type Message here"}
           />
         </View>
@@ -272,7 +265,23 @@ function DirectMessagingRoom() {
         </View>
       </View>
     </View>
-  </TitleOnlyStackHeaderContainer>
+  </WithAutoHideTopNavBar>
 }
+
+const styles = StyleSheet.create({
+  container: {
+    display: "flex", height: "100%",
+    backgroundColor: APP_THEME.BACKGROUND
+  },
+  inputStyle: {
+    fontSize: 16,
+    borderRadius: 8,
+    paddingLeft: 8,
+    marginBottom: -24,
+    lineHeight: 24,
+    backgroundColor: "#363636",
+    textDecorationLine: "none",
+  }
+})
 
 export default DirectMessagingRoom
