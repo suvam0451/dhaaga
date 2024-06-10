@@ -1,5 +1,6 @@
 export const APP_THEME = {
   BACKGROUND: "#121212",
+  DARK_THEME_MENUBAR: "#383838",
   CARD_BACKGROUND_DARKEST: "#1e1e1e",
   LINK: "rgba(239,195,207, 0.87)",
   INVALID_ITEM: "rgba(254,103,102, 0.87)", //"rgba(221,157,106, 0.87)"

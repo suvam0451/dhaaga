@@ -56,14 +56,15 @@ function MastodonSignInStack() {
   }
 
   async function onPressConfirm() {
+    const instance = subdomain.replace(/^https?:\/\//, '')
     const token = await MastodonService.getAccessToken(
-        subdomain,
+        instance,
         Code,
         process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID,
         process.env.EXPO_PUBLIC_MASTODON_CLIENT_SECRET
     );
 
-    const client = new RestClient(subdomain, {
+    const client = new RestClient(instance, {
       accessToken: token,
       domain: "mastodon"
     });
@@ -73,7 +74,7 @@ function MastodonSignInStack() {
 
     db.write(() => {
       const acct = AccountRepository.upsert(db, {
-        subdomain: subdomain,
+        subdomain: instance,
         domain: "mastodon",
         username: verified.username,
         avatarUrl: verified.avatar

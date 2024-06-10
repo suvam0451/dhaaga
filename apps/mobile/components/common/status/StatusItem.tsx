@@ -426,7 +426,7 @@ function SharedStatusFragment({
             color: "#888",
             fontFamily: "Montserrat-ExtraBold",
           }}>
-            {para.map((o, j) => o)}
+            {para.map((o, j) => <Text key={j}>{o}</Text>)}
           </Text>
         }
     )

@@ -193,7 +193,6 @@ const TimelinesHeader = ({
           style={[
             styles.subHeader,
             {
-              backgroundColor: "#222222",
               height: HIDDEN_SECTION_HEIGHT,
             },
           ]}
@@ -235,7 +234,7 @@ const styles = StyleSheet.create({
   subHeader: {
     width: "100%",
     paddingHorizontal: 10,
-    backgroundColor: "#1c1c1c",
+    backgroundColor: APP_THEME.DARK_THEME_MENUBAR,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
