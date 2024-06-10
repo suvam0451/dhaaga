@@ -102,7 +102,7 @@ function SelectProviderStack() {
                 >
                   <Image
                       style={{width: 200, height: 64}}
-                      source={require("../../../../assets/icons/Misskey_icon.png")}
+                      source={require("../../../../assets/icons/misskey_icon.png")}
                       contentFit="contain"
                       transition={1000}
                   />

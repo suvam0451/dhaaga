@@ -39,7 +39,7 @@ function SelectAccountStack() {
 
   const MastodonAccounts = accounts.filter((o) => o?.domain === "mastodon");
   const MisskeyAccounts = accounts.filter((o) => o?.domain === "misskey");
-  const [assets, error] = useAssets([require('../../../assets/icons/MisskeyIcon.png')]);
+  const [assets, error] = useAssets([require('../../../assets/icons/misskeyicon.png')]);
   //
   if (error || !assets || !assets[0]?.downloaded) return <View></View>
   return (
