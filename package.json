@@ -4,7 +4,7 @@
   "description": "A prototype multi-threaded desktop app to browse Instagram threads, built with go and web technologies.",
   "private": true,
   "scripts": {
-    "dev:app": "pnpm --filter \"mobile\" dev\n",
+    "dev:app": "yarn workspace @dhaaga/mobile dev",
     "dev:app:turbo": "turbo dev --filter=\"...{./apps/mobile}\"",
     "dev:web": "npm run dev -w @dhaaga/web",
     "app:preview": "npm run preview -w @dhaaga/mobile"
@@ -21,6 +21,7 @@
     }
   },
   "dependencies": {
+    "prettier": "^3.3.2",
     "turbo": "^2.0.1"
   },
   "packageManager": "yarn@1.22.22"

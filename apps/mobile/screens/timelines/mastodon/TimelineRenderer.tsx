@@ -156,7 +156,7 @@ function TimelineRenderer() {
 function TimelineWrapper() {
   return <WithTimelineControllerContext>
     <WithAppPaginationContext>
-      <TimelineRenderer/>
+        <TimelineRenderer/>
     </WithAppPaginationContext>
   </WithTimelineControllerContext>
 }

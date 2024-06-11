@@ -53,7 +53,7 @@ i18n.locale = getLocales()[0].languageCode ?? 'en';
 // To see the fallback mechanism uncomment the line below to force the app to use the Japanese language.
 // i18n.locale = 'ja';
 
-function App() {
+export function App() {
   const db = useRealm()
   /**
    * DB Seed
