@@ -4,6 +4,7 @@ import ActivityPubClient, {
   GetUserPostsQueryDTO,
   RestClientCreateDTO,
   MediaUploadDTO,
+  GetTimelineQueryDTO,
 } from "./_interface";
 import {
   createClient,
@@ -24,9 +25,33 @@ class MisskeyRestClient implements ActivityPubClient {
     });
   }
 
+  getListTimeline(q: string, opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
+  getLocalTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
+  getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
+  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
+  getIsSensitive(): boolean {
+    throw new Error("Method not implemented.");
+  }
+
+  getSpoilerText(): string | null {
+    throw new Error("Method not implemented.");
+  }
+
   uploadMedia(params: MediaUploadDTO): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
+    throw new Error("Method not implemented.");
+  }
 
   async getFollowing(id: string) {
     return []

@@ -25,12 +25,6 @@ export const ParsedDescriptionContainer = styled.View`
 
 export const ParsedDescriptionContainerForChatroomPreview = styled.Text`
     margin-top: 4px;
-    //display: inline-flex;
-    //line-clamp: max(1);
-    //font-size: 12px;
-    align-items: center;
-    flex-direction: row;
-    max-width: 100%;
 `
 
 export const AvatarContainer = styled.View`
@@ -107,4 +101,12 @@ export const DhaagaText = styled(Text)<TextProps & StyledTextProps>`
 
 export const AppIonicon = styled(Ionicons)<IconProps<string> & StyledTextProps>`
     opacity: ${props => handleTextEmphasis(props)};
+`
+
+export const DialogButtonGroupItem = styled.View`
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0;
 `

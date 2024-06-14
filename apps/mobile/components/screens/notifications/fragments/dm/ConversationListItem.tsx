@@ -5,14 +5,14 @@ import {Image} from "expo-image";
 import React, {useEffect} from "react";
 import WithActivitypubStatusContext from "../../../../../states/useStatus";
 import ConversationItem from "../../../../common/status/ConversationItem";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../../libs/redux/store";
-import {AccountState} from "../../../../../libs/redux/slices/account";
 import {
   ActivityPubUserRepository
 } from "../../../../../repositories/activitypub-user.repo";
 import {useRealm} from "@realm/react";
 import {useNavigation} from "@react-navigation/native";
+import {
+  useActivityPubRestClientContext
+} from "../../../../../states/useActivityPubRestClient";
 
 type ConversationListItemProps = {
   lastStatus: mastodon.v1.Status,
@@ -27,10 +27,10 @@ function ConversationListItem({
   unread,
   conversationId
 }: ConversationListItemProps) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const subdomain = primaryAcct?.subdomain
   const navigation = useNavigation<any>()
 
-  const subdomain = accountState?.activeAccount?.subdomain
   const _account = accounts[0]
   const db = useRealm()
 

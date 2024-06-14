@@ -11,7 +11,6 @@ import {
 import {
   ActivityPubCustomEmojiRepository
 } from "../repositories/activitypub-emoji.repo";
-import {ActivityPubServer} from "../entities/activitypub-server.entity";
 import {
   Status
 } from "@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface";
@@ -19,6 +18,7 @@ import activitypubAdapterService from "./activitypub-adapter.service";
 import {
   EmojiMapValue
 } from "@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface";
+import {formatRelative} from "date-fns";
 
 export type EmojiAdapter = {
   // common
@@ -66,8 +66,8 @@ export class EmojiService {
       {forcedUpdate}: { forcedUpdate: boolean } = {forcedUpdate: true}) {
     const found = globalMmkvCacheServices.getEmojiCacheForInstance(globalDb, subdomain)
     if (found) {
-      // console.log("[INFO]: found cached emojis:", subdomain, found.data.length,
-      //     formatRelative(found.lastFetchedAt, new Date()))
+      console.log("[INFO]: found cached emojis:", subdomain, found.data.length,
+          formatRelative(found.lastFetchedAt, new Date()))
       return found.data
     }
 
@@ -76,6 +76,7 @@ export class EmojiService {
 
     // GlobalMmkvCacheService
     const emojis = await ActivityPubService.fetchEmojis(subdomain)
+    console.log("[INFO]: emojis fetched", subdomain, emojis.length)
     if (!emojis) return
     globalMmkvCacheServices.saveEmojiCacheForInstance(globalDb, subdomain, emojis)
     return emojis
@@ -122,10 +123,10 @@ export class EmojiService {
         })))
     await Promise.all(calls).then((results) => {
       results.forEach((res) => {
-        if (res["error"]) {
-          console.log("[WARN]: emoji fetch failed for", res["errorData"])
+        if (res?.["error"]) {
+          // console.log("[WARN]: emoji fetch failed for", res["errorData"])
         } else {
-          // console.log("[INFO]: emoji loaded for", res["errorData"])
+          // console.log("[INFO]: emoji not loaded for", res["errorData"])
         }
       })
     })
@@ -224,10 +225,11 @@ export class EmojiService {
         forcedUpdate: boolean
       } = {selection: new Set(), forcedUpdate: false}) {
     let data = await this.resolveEmojis(db, globalDb, subdomain, {forcedUpdate})
+    console.log("[DEBUG]: emojis obtained for", subdomain, data.length, selection)
 
     if (!data) return
 
-    if (selection)
+    if (selection.size > 0)
       data = data.filter((o) => selection.has(o.shortcode))
 
     const categories = new Set<string>()

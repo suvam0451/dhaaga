@@ -19,6 +19,9 @@ export class ActivityPubChatroomRepository {
   static addConversation(db: Realm,
       target: ActivityPubChatRoom,
       item: ActivityPubConversation) {
+    if (!target) {
+      return
+    }
     const _json = target?.conversations.toJSON()
 
     // Q: Why is this find function not matching?
@@ -45,7 +48,7 @@ export class ActivityPubChatroomRepository {
 
     const savedMe = ActivityPubUserRepository.upsert(db, {user: me})
     if (!savedMe) {
-      console.log("[WARN]: user not saved", savedMe)
+      console.log("[WARN]: user not saved", savedMe, me)
       return null
     }
 

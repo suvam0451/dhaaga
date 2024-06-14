@@ -2,11 +2,8 @@ import {
   ActivitypubStatusAdapter,
   StatusInterface,
 } from "@dhaaga/shared-abstraction-activitypub/src";
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useContext, useEffect, useRef, useState} from "react";
 import {useActivityPubRestClientContext} from "./useActivityPubRestClient";
-import {useSelector} from "react-redux";
-import {RootState} from "../libs/redux/store";
-import {AccountState} from "../libs/redux/slices/account";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {
@@ -15,6 +12,7 @@ import {
 import {
   ActivityPubStatusContextAdapter
 } from "@dhaaga/shared-abstraction-activitypub/src/adapters/status/_adapters";
+import MastodonService from "../services/mastodon.service";
 
 type OgObject = {
   url: string,
@@ -86,15 +84,18 @@ function WithActivitypubStatusContext({
   statusInterface,
   children
 }: Props) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const _domain = accountState?.activeAccount?.domain
+  const {primaryAcct, client} = useActivityPubRestClientContext()
+  const _domain = primaryAcct?.domain
 
-  const {client} = useActivityPubRestClientContext()
   const [Status, setStatus] = useState<StatusInterface | null>
   (ActivitypubStatusAdapter(null, _domain))
   const [StatusContext, setStatusContext] = useState<StatusContextInterface | null>(
       ActivityPubStatusContextAdapter(null, _domain)
   )
+
+  const contextItemLookup = useRef<Map<string, StatusInterface>>();
+  const contextChildrenLookup = useRef<Map<string, StatusInterface[]>>();
+  const contextRootLookup = useRef<StatusInterface>();
 
   const [SharedStatus, setSharedStatus] = useState<StatusInterface | null>(
       ActivitypubStatusAdapter(null, _domain)
@@ -128,39 +129,14 @@ function WithActivitypubStatusContext({
   }
 
   function setStatusContextData(data: mastodon.v1.Context | any) {
-    let deque: string[] = []
-    let mapper = new Map<string, StatusInterface>()
-    let seen = new Set<string>()
-
-    const adapter = ActivityPubStatusContextAdapter(Status, _domain)
-    seen.add(Status.getId())
-    mapper.set(Status.getId(), Status)
-    deque.push(Status.getId())
-
-    let _data: mastodon.v1.Context = data
-    while (deque.length > 0) {
-      const top = deque.shift()
-      const children = _data.descendants.filter
-      ((o) => o.inReplyToId === top).map((o) => {
-        return ActivitypubStatusAdapter(o, _domain)
-      })
-
-      adapter.addChildren(children)
-      if (children.length > 0) {
-        for (let j = 0; j < children.length; j++) {
-          const child = children[j]
-          seen.add(child.getId())
-          deque.push(child.getId())
-        }
-      }
-    }
-
-    const children = _data.descendants.filter((o) => o.inReplyToId === Status.getId()).map((o) => {
-      return ActivitypubStatusAdapter(o, _domain)
-    })
-    adapter.addChildren(children)
-
-    setStatusContext(adapter)
+    const {
+      root,
+      itemLookup,
+      childrenLookup
+    } = MastodonService.solveContext(Status, data, _domain)
+    contextRootLookup.current = root
+    contextItemLookup.current = itemLookup
+    contextChildrenLookup.current = childrenLookup
   }
 
   function setDataRaw(o: mastodon.v1.Status | Note) {

@@ -1,5 +1,6 @@
-import {Realm, UpdateMode} from "realm"
+import {BSON, Realm, UpdateMode} from "realm"
 import {Account, KeyValuePair} from "../entities/account.entity";
+import UUID = BSON.UUID;
 
 export type AccountCreateDTO = {
   domain: string;
@@ -20,12 +21,34 @@ class AccountRepository {
     db.delete(db.objects(Account).find((o) => o._id.toString() === id))
   }
 
+  static select(db: Realm, _id: UUID) {
+    const match = db.objectForPrimaryKey(Account, _id)
+    const rem = db.objects(Account).filter((o) =>
+        o._id.toString() !== _id.toString())
+    match.selected = true
+    rem.forEach((o) => {
+      o.selected = false
+    })
+  }
+
+  static deselect(db: Realm, _id: UUID) {
+    const match = db.objectForPrimaryKey(Account, _id)
+    const rem = db.objects(Account).filter((o) =>
+        o._id.toString() !== _id.toString())
+    match.selected = false
+    rem.forEach((o) => {
+      o.selected = false
+    })
+  }
+
   static upsert(db: Realm, account: AccountCreateDTO): Account {
+    const removeHttps = account.subdomain?.replace(/^https?:\/\//, '');
+
     const match = this.find(db, account)
     return db.create(Account, {
       _id: match?._id || new Realm.BSON.UUID(),
       domain: account.domain,
-      subdomain: account.subdomain,
+      subdomain: removeHttps,
       username: account.username,
       avatarUrl: account.avatarUrl,
       password: account.password,

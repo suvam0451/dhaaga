@@ -15,7 +15,7 @@ export interface MediaAttachmentInterface {
   getId(): string;
   getMeta(): any | mastodon.v1.MediaAttachmentMeta
 	getName(): string;
-	getPreviewUrl(): string;
+	getPreviewUrl(): string | null | undefined;
 	getType(): string;
 	getUrl(): string | null | undefined;
 

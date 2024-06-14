@@ -1,6 +1,6 @@
 ## TL;DR version
 
-Copyright © 2023-2024 Debashish Patra and contributors
+Copyright © 2023-2024 Debashish Patra
 
 #1 -- The software is distributed under The GNU AGPLv3 license.
 You should have received a copy of the license file as LICENSE.

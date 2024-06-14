@@ -1,9 +1,9 @@
-import {View} from "react-native";
+import {RefreshControl, View} from "react-native";
 import {
   useActivityPubRestClientContext
 } from "../../../../states/useActivityPubRestClient";
 import {useQuery} from "@tanstack/react-query";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import TitleOnlyStackHeaderContainer
   from "../../../containers/TitleOnlyStackHeaderContainer";
 import WithScrollOnRevealContext, {
@@ -18,6 +18,16 @@ import WithInfiniteScrollIndicator
 import {TagType} from "@dhaaga/shared-abstraction-activitypub/src";
 import WithActivitypubTagContext from "../../../../states/useTag";
 import TagItem from "../../../common/tag/TagItem";
+import WithAutoHideTopNavBar from "../../../containers/WithAutoHideTopNavBar";
+import useTopbarSmoothTranslate
+  from "../../../../states/useTopbarSmoothTranslate";
+import NavigationService from "../../../../services/navigation.service";
+import LoadingMore from "../../home/LoadingMore";
+import WithActivitypubStatusContext from "../../../../states/useStatus";
+import StatusItem from "../../../common/status/StatusItem";
+import {AnimatedFlashList} from "@shopify/flash-list";
+import useLoadingMoreIndicatorState
+  from "../../../../states/useLoadingMoreIndicatorState";
 
 
 function Content() {
@@ -47,7 +57,7 @@ function ApiWrapper() {
   const {resetEndOfPageFlag} = useScrollOnReveal()
 
   const api = () => client ? client.getTrendingTags({
-    limit: 5,
+    limit: 20,
     offset: parseInt(queryCacheMaxId)
   }) : null
 
@@ -74,22 +84,61 @@ function ApiWrapper() {
     }
   }, [fetchStatus]);
 
-  const navigation = useNavigation()
-  const route = useRoute()
+  const [IsNextPageLoading, setIsNextPageLoading] = useState(false)
+  const [LoadingMoreComponentProps, setLoadingMoreComponentProps] = useState({
+    visible: false,
+    loading: false
+  });
+  /**
+   * Loads next set, when scroll end is reached
+   */
+  const onPageEndReached = () => {
+    if (PageData.length === 0 || IsNextPageLoading) return
 
-  return <TitleOnlyStackHeaderContainer
-      route={route}
-      navigation={navigation}
-      headerTitle={"Trending Posts"}
-      onScrollViewEndReachedCallback={onScrollEndReach}
-  >
-    <WithInfiniteScrollIndicator
-        fetchStatus={fetchStatus}
-        hasNonZeroItems={PageData.length > 0}
-    >
-      <Content/>
-    </WithInfiniteScrollIndicator>
-  </TitleOnlyStackHeaderContainer>
+    setIsNextPageLoading(true)
+    updateQueryCache()
+    setLoadingMoreComponentProps({
+      visible: true,
+      loading: true
+    })
+  }
+  const handleScrollJs = (e: any) => {
+    NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
+  }
+  const {onScroll, translateY} = useTopbarSmoothTranslate({
+    onScrollJsFn: handleScrollJs,
+    totalHeight: 100,
+    hiddenHeight: 50
+  })
+
+  const {visible, loading} = useLoadingMoreIndicatorState({fetchStatus})
+  return <WithAutoHideTopNavBar
+      title={"Trending Tags"}
+      translateY={translateY}>
+    <AnimatedFlashList
+        estimatedItemSize={72}
+        data={PageData}
+        renderItem={(o) =>
+            <WithActivitypubTagContext tag={o.item} key={o.index}>
+              <TagItem/>
+            </WithActivitypubTagContext>
+        }
+        onScroll={onScroll}
+        contentContainerStyle={{
+          paddingTop: 50 + 4,
+        }}
+        scrollEventThrottle={16}
+        // refreshControl={
+        //   <RefreshControl
+        //       refreshing={refreshing}
+        //       onRefresh={onRefresh}/>
+        // }
+    />
+    <LoadingMore
+        visible={visible}
+        loading={loading}
+    />
+  </WithAutoHideTopNavBar>
 }
 
 function TrendingPostsContainer() {

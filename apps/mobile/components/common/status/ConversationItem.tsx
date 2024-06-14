@@ -3,13 +3,15 @@ import {Text, View} from "react-native";
 import {useActivitypubStatusContext} from "../../../states/useStatus";
 import MfmService from "../../../services/mfm.service";
 import {randomUUID} from "expo-crypto";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../libs/redux/store";
-import {AccountState} from "../../../libs/redux/slices/account";
 import {
   ActivityPubUserAdapter
 } from "@dhaaga/shared-abstraction-activitypub/src";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import {
+  useActivityPubRestClientContext
+} from "../../../states/useActivityPubRestClient";
+import {useRealm} from "@realm/react";
+import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
 
 type ConversationItem = {
   displayName: string
@@ -23,22 +25,25 @@ type ConversationItem = {
  * @constructor
  */
 function ConversationItem({accountUrl, displayName, unread}: ConversationItem) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
+  const subdomain = primaryAcct?.subdomain
 
   const [DescriptionContent, setDescriptionContent] = useState(<></>)
   const [UserInterface, setUserInterface] = useState(ActivityPubUserAdapter(null, domain))
 
   const {status, statusRaw, sharedStatus} = useActivitypubStatusContext()
-
+  const db = useRealm()
+  const {globalDb} = useGlobalMmkvContext()
   let content = status.getContent();
   useEffect(() => {
     const emojiMap = UserInterface.getEmojiMap()
-    const {openAiContext, reactNodes} = MfmService.renderMfm(content, {
+    const {reactNodes} = MfmService.renderMfm(content, {
       emojiMap,
       domain,
       subdomain,
+      db,
+      globalDb
     })
     setDescriptionContent(<>
       {reactNodes?.map(

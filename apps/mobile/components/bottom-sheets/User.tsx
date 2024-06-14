@@ -1,11 +1,8 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useMemo} from "react";
 import {useActivitypubUserContext} from "../../states/useProfile";
 import {BottomSheet, Text, ListItem, Button} from "@rneui/themed";
 import {ScrollView, View} from "react-native";
 import {Image} from "expo-image";
-import {useSelector} from "react-redux";
-import {RootState} from "../../libs/redux/store";
-import {AccountState} from "../../libs/redux/slices/account";
 import MfmService from "../../services/mfm.service";
 import {randomUUID} from "expo-crypto";
 import {PrimaryText, SecondaryText} from "../../styles/Typography";
@@ -15,6 +12,9 @@ import {
 } from "../../styles/Containers";
 import {useRealm} from "@realm/react";
 import {useGlobalMmkvContext} from "../../states/useGlobalMMkvCache";
+import {
+  useActivityPubRestClientContext
+} from "../../states/useActivityPubRestClient";
 
 type StatusActionsProps = {
   visible: boolean
@@ -22,8 +22,9 @@ type StatusActionsProps = {
 }
 
 function UserActionSheet({visible, setVisible}: StatusActionsProps) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const subdomain = accountState?.activeAccount?.subdomain
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const domain = primaryAcct?.domain
+  const subdomain = primaryAcct?.subdomain
   const db = useRealm()
   const {globalDb} = useGlobalMmkvContext()
 
@@ -36,8 +37,8 @@ function UserActionSheet({visible, setVisible}: StatusActionsProps) {
 
     const {reactNodes} = MfmService.renderMfm(desc, {
       emojiMap: user.getEmojiMap(),
-      domain: accountState?.activeAccount?.domain,
-      subdomain: accountState?.activeAccount?.subdomain,
+      domain,
+      subdomain,
       db,
       globalDb
     })

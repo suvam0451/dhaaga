@@ -7,6 +7,12 @@ import {
 
 
 class UnknownToStatusAdapter implements StatusInterface {
+  getIsSensitive(): boolean {
+      throw new Error("Method not implemented.");
+  }
+  getSpoilerText(): string | null | undefined {
+      throw new Error("Method not implemented.");
+  }
   getRaw(): Status {
     return null
   }

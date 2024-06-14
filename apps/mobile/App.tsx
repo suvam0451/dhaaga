@@ -4,17 +4,15 @@ import SearchScreen from "./screens/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SettingsScreen from "./screens/SettingsScreen";
 import FavouritesScreen from "./screens/FavouritesScreen";
-import {Animated, View} from "react-native";
-import {useCallback, useRef} from "react";
+import {Animated, View, LogBox} from "react-native";
+import {useCallback, useEffect, useRef} from "react";
 import {getCloser} from "./utils";
-import {store} from "./libs/redux/store";
-import {Provider} from "react-redux";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import AccountsScreen from "./screens/AccountsScreen";
 import HomeScreen from "./screens/HomeScreen";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {ThemeProvider} from "@rneui/themed";
-import {RealmProvider} from "@realm/react";
+import {RealmProvider, useRealm} from "@realm/react";
 import {schemas} from "./entities/_index";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import NotificationsScreen from "./screens/NotificationsScreen";
@@ -27,7 +25,11 @@ import appFonts from "./styles/AppFonts";
 import WithActivityPubRestClient from "./states/useActivityPubRestClient";
 import {getLocales} from 'expo-localization';
 import {I18n} from 'i18n-js';
+import AppSettingsService from "./services/app-settings.service";
 
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 100;
@@ -51,73 +53,14 @@ i18n.locale = getLocales()[0].languageCode ?? 'en';
 // To see the fallback mechanism uncomment the line below to force the app to use the Japanese language.
 // i18n.locale = 'ja';
 
-function App() {
-  const ref = useRef(null);
-
-  const scrollY = useRef(new Animated.Value(0));
-  const scrollYClamped = diffClamp(
-      scrollY.current,
-      0,
-      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT,
-  );
-
-  const translateY = scrollYClamped.interpolate({
-    inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
-    outputRange: [0, -HIDDEN_SECTION_HEIGHT],
-  });
-
-  const translateYNumber = useRef();
-
-  translateY.addListener(({value}) => {
-    translateYNumber.current = value;
-  });
-
-  const handleScroll = Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: {y: scrollY.current},
-          },
-        },
-      ],
-      {
-        useNativeDriver: true,
-      },
-  );
-
+export function App() {
+  const db = useRealm()
   /**
-   * When scroll view has stopped moving,
-   * snap to the nearest section
-   * @param param0
+   * DB Seed
    */
-  const handleSnap = ({nativeEvent}) => {
-    const offsetY = nativeEvent.contentOffset.y;
-    if (
-        !(
-            translateYNumber.current === 0 ||
-            translateYNumber.current === -HIDDEN_SECTION_HEIGHT
-        )
-    ) {
-      if (ref.current) {
-        try {
-          /**
-           * ScrollView --> scrollTo ???
-           * FlatView --> scrollToOffset({offset: number}})
-           */
-          ref.current.scrollTo({
-            // applies only for flat list
-            offset:
-                getCloser(translateYNumber.current, -HIDDEN_SECTION_HEIGHT, 0) ===
-                -HIDDEN_SECTION_HEIGHT
-                    ? offsetY + HIDDEN_SECTION_HEIGHT
-                    : offsetY - HIDDEN_SECTION_HEIGHT,
-          });
-        } catch (e) {
-          console.log("[WARN]: component is not a flat list");
-        }
-      }
-    }
-  };
+  useEffect(() => {
+    AppSettingsService.populateSeedData(db)
+  }, [])
 
   /**
    * Fonts
@@ -237,16 +180,13 @@ function WithContexts() {
         <RealmProvider schema={schemas} schemaVersion={10}>
           {/* API Caching -- Tanstack */}
           <QueryClientProvider client={queryClient}>
-            {/* Redux Store */}
-            <Provider store={store}>
-              {/* Rneui Custom Themes */}
-              <ThemeProvider theme={RneuiTheme}>
-                {/* IDK */}
-                <SafeAreaProvider>
-                  <WithGorhomBottomSheetWrapper/>
-                </SafeAreaProvider>
-              </ThemeProvider>
-            </Provider>
+            {/* Rneui Custom Themes */}
+            <ThemeProvider theme={RneuiTheme}>
+              {/* IDK */}
+              <SafeAreaProvider>
+                <WithGorhomBottomSheetWrapper/>
+              </SafeAreaProvider>
+            </ThemeProvider>
           </QueryClientProvider>
         </RealmProvider>
       </WithGlobalMmkvContext>

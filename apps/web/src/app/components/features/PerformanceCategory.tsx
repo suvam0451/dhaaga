@@ -7,6 +7,7 @@ import DesktopGallery
   from "../../../../public/assets/desktop-showcase/Three_Column_Full_Size.png";
 import {ScrollImageHorizontallyOnHover} from "@/app/styles/App";
 import {Box, Flex, Text} from "@mantine/core";
+import Image from "next/image"
 
 function PerformanceCategory() {
   const [SelectedCard, setSelectedCard] = useState("media-gallery");
@@ -37,11 +38,11 @@ function PerformanceCategory() {
   return (
       <Flex justify={"space-between"} w={"100%"}>
         <Box color={"red"} maw={450}>
-          <Text size={16} color={"red"}>
+          <Text size={"sm"} c={"red"}>
             Productivity
           </Text>
-          <Text size={28}>Every integration is designed to be</Text>
-          <Text size={28} color={"red"}>
+          <Text size={"sm"}>Every integration is designed to be</Text>
+          <Text size={"sm"} c={"red"}>
             {"utilitarian and hella' fun"}
           </Text>
           <Text>
@@ -59,12 +60,12 @@ function PerformanceCategory() {
               }}
           >
             <Text
-                color={"black"}
+                c={"black"}
                 style={{fontWeight: 600, fontSize: "0.875rem"}}
             >
               AI Powered Explanations
             </Text>
-            <Text color={"gray"} style={{fontSize: "0.875rem"}}>
+            <Text c={"gray"} style={{fontSize: "0.875rem"}}>
               {
                 "No more missing out because of language/context barriers. ChatGPT integration comes to the rescue!"
               }
@@ -80,12 +81,12 @@ function PerformanceCategory() {
               }}
           >
             <Text
-                color={"black"}
+                c={"black"}
                 style={{fontWeight: 600, fontSize: "0.875rem"}}
             >
               Background Task Runners
             </Text>
-            <Text color={"gray"} style={{fontSize: "0.875rem"}}>
+            <Text c={"gray"} style={{fontSize: "0.875rem"}}>
               {
                 "Run background tasks (Stream PeerTube 😉) from one account, while browsing posts from another."
               }
@@ -101,12 +102,12 @@ function PerformanceCategory() {
               }}
           >
             <Text
-                color={"black"}
+                c={"black"}
                 style={{fontWeight: 600, fontSize: "0.875rem"}}
             >
               Multi-Protocol Support
             </Text>
-            <Text color={"gray"} style={{fontSize: "0.875rem"}}>
+            <Text c={"gray"} style={{fontSize: "0.875rem"}}>
               {
                 "Your protocol got emojis? What a coincidence. We got em' too 😎. Switch protocols/accounts at any time, from any page."
               }
@@ -134,7 +135,7 @@ function PerformanceCategory() {
                 SelectedComponent.layout === "carousal" ? "flex-start" : "center"
               }
           >
-            <ScrollImageHorizontallyOnHover
+            <Image
                 height={500}
                 objectFit="contain"
                 src={SelectedComponent.image}
@@ -144,7 +145,7 @@ function PerformanceCategory() {
                   border: "4px solid #333",
                   borderRadius: "0.25rem",
                 }}
-                moveby={SelectedComponent.scrollBy}
+                // moveby={SelectedComponent.scrollBy}
             />
           </Flex>
           {/* <Flex align={"center"} justify={"center"} my={"xs"}>

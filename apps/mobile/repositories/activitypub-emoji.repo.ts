@@ -53,7 +53,7 @@ export class ActivityPubCustomEmojiRepository {
   }
 
   static search(db: Realm, shortcode: string, instance: string) {
-    const server = ActivityPubServerRepository.upsert(db, instance)
+    const server = ActivityPubServerRepository.get(db, instance)
     return server?.emojis?.find((o) => o.shortcode === shortcode)
   }
 }

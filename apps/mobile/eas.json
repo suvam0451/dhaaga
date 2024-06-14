@@ -3,11 +3,17 @@
     "apk": {
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "APP_VARIANT": "prod"
       }
     },
     "dev": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "ddv"
+      }
     }
   }
 }

@@ -1,342 +1,211 @@
-import React, {useEffect, useRef, useState} from "react";
-import {AccountState} from "../../../libs/redux/slices/account";
-import {RootState} from "../../../libs/redux/store";
-import {useSelector} from "react-redux";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Animated, RefreshControl,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet, View,
-} from "react-native";
-import {getCloser} from "../../../utils";
-import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {keepPreviousData, useQuery} from "@tanstack/react-query";
-import StatusItem from "../../../components/common/status/StatusItem";
-import TimelinesHeader from "../../../components/TimelineHeader";
-import {Note} from "@dhaaga/shared-provider-misskey/src";
-import {
-  useActivityPubRestClientContext
-} from "../../../states/useActivityPubRestClient";
-import WithActivitypubStatusContext from "../../../states/useStatus";
+	Animated,
+	RefreshControl,
+	SafeAreaView,
+	StatusBar,
+	StyleSheet,
+} from 'react-native';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import StatusItem from '../../../components/common/status/StatusItem';
+import TimelinesHeader from '../../../components/TimelineHeader';
+import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
+import WithActivitypubStatusContext from '../../../states/useStatus';
 import WithAppPaginationContext, {
-  useAppPaginationContext
-} from "../../../states/usePagination";
-import LoadingMore from "../../../components/screens/home/LoadingMore";
-import {AnimatedFlashList} from "@shopify/flash-list"
-import NavigationService from "../../../services/navigation.service";
-import {useGlobalMmkvContext} from "../../../states/useGlobalMMkvCache";
-import {useRealm} from "@realm/react";
-import {EmojiService} from "../../../services/emoji.service";
+	useAppPaginationContext,
+} from '../../../states/usePagination';
+import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { AnimatedFlashList } from '@shopify/flash-list';
+import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
+import { useRealm } from '@realm/react';
+import { EmojiService } from '../../../services/emoji.service';
+import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
+import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import Introduction from '../../../components/tutorials/screens/home/new-user/Introduction';
+import WithTimelineControllerContext, {
+	TimelineFetchMode,
+	useTimelineControllerContext,
+} from '../../../states/useTimelineController';
+import ActivityPubProviderService from '../../../services/activitypub-provider.service';
+import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface';
+import WelcomeBack from '../../../components/screens/home/fragments/WelcomeBack';
+import TimelineLoading from '../../../components/loading-screens/TimelineLoading';
+import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';
 
-const {diffClamp} = Animated;
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
-
-
-function Content() {
-  const {data: PageData} = useAppPaginationContext()
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const {client} = useActivityPubRestClientContext()
-  const {globalDb} = useGlobalMmkvContext()
-  const db = useRealm()
-
-  const [refreshing, setRefreshing] = useState(false);
-  const ref = useRef(null);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-  }
-
-  function onPageEndReached() {
-    // console.log("[INFO]: page end reached. performing refetch")
-
-    // updateQueryCache()
-    // refetch()
-    // setLoadingMoreComponentProps({
-    //   visible: true,
-    //   loading: true
-    // })
-  }
-
-  const scrollY = useRef(new Animated.Value(0));
-  const scrollYClamped = diffClamp(
-      scrollY.current,
-      0,
-      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
-  );
-
-  const translateY = scrollYClamped.interpolate({
-    inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
-    outputRange: [0, -HIDDEN_SECTION_HEIGHT],
-  });
-
-  const translateYNumber = useRef();
-
-  translateY.addListener(({value}) => {
-    translateYNumber.current = value;
-  });
-
-  const handleScroll = Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: {y: scrollY.current},
-          },
-        },
-      ],
-      {
-        useNativeDriver: true,
-      }
-  );
-
-  if (!PageData) return <View></View>
-  return <>
-    <AnimatedFlashList
-        estimatedItemSize={200}
-        data={PageData}
-        ref={ref}
-        renderItem={(o) =>
-            <WithActivitypubStatusContext status={o.item} key={o.index}>
-              <StatusItem key={o.index}/>
-            </WithActivitypubStatusContext>
-        }
-        onScroll={(e) => {
-          NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
-          return handleScroll
-        }}
-        contentContainerStyle={{
-          paddingTop: SHOWN_SECTION_HEIGHT + 4,
-        }}
-    />
-  </>
-}
 
 /**
  *
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const domain = accountState?.activeAccount?.domain
-  const {client} = useActivityPubRestClientContext()
-  const db = useRealm()
-  const {globalDb} = useGlobalMmkvContext()
-  const {
-    data: PageData,
-    setMaxId,
-    append,
-    maxId,
-    clear,
-    paginationLock,
-    updateQueryCache,
-    queryCacheMaxId
-  } = useAppPaginationContext()
+	const { timelineType } = useTimelineControllerContext();
+	const { client, primaryAcct } = useActivityPubRestClientContext();
+	const domain = primaryAcct?.domain;
 
+	const db = useRealm();
+	const { globalDb } = useGlobalMmkvContext();
+	const {
+		data: PageData,
+		setMaxId,
+		append,
+		paginationLock,
+		updateQueryCache,
+		queryCacheMaxId,
+	} = useAppPaginationContext();
 
-  const [LoadingMoreComponentProps, setLoadingMoreComponentProps] = useState({
-    visible: false,
-    loading: false
-  });
+	async function api() {
+		return await ActivityPubProviderService.getTimeline(
+			client,
+			timelineType,
+			{
+				limit: 5,
+				maxId: queryCacheMaxId,
+			},
+			{},
+		);
+	}
 
-  const api = () => client ? client.getHomeTimeline({limit: 5, maxId}) : null
+	// Queries
+	const { status, data, error, fetchStatus, refetch } = useQuery<StatusArray>({
+		queryKey: [
+			'mastodon/timelines/home',
+			queryCacheMaxId,
+			primaryAcct?._id?.toString(),
+			timelineType,
+		],
+		queryFn: api,
+		enabled: client !== null && !paginationLock,
+		// placeholderData: keepPreviousData,
+	});
 
-  // Queries
-  const {status, data, fetchStatus, refetch} = useQuery<
-      mastodon.v1.Status[] | Note[]
-  >({
-    queryKey: ["mastodon/timelines/home", queryCacheMaxId],
-    queryFn: api,
-    enabled: client !== null && !paginationLock,
-    placeholderData: keepPreviousData,
-  });
+	const [EmojisLoading, setEmojisLoading] = useState(false);
 
-  useEffect(() => {
-    if (fetchStatus === "fetching") {
-      if (PageData.length > 0) {
-        setLoadingMoreComponentProps({
-          visible: true,
-          loading: true
-        })
-      }
-      return
-    }
-    if (status !== "success") return
+	useEffect(() => {
+		if (fetchStatus === 'fetching' || status !== 'success') return;
 
-    if (status === "success" && data && data.length > 0) {
-      setMaxId(data[data.length - 1]?.id)
-      EmojiService.preloadInstanceEmojisForStatuses(
-          db,
-          globalDb,
-          data,
-          domain)
-          .then((res) => {
-          }).finally(() => {
-        append(data)
-      })
-    }
+		if (status === 'success' && data && data.length > 0) {
+			setMaxId(data[data.length - 1]?.id);
+			setEmojisLoading(true);
+			EmojiService.preloadInstanceEmojisForStatuses(db, globalDb, data, domain)
+				.then((res) => {})
+				.finally(() => {
+					append(data);
+					setEmojisLoading(false);
+				});
+		}
+	}, [fetchStatus]);
 
-    setLoadingMoreComponentProps({
-      visible: false,
-      loading: false
-    })
-  }, [fetchStatus]);
+	const Label = useMemo(() => {
+		switch (timelineType) {
+			case TimelineFetchMode.IDLE: {
+				return 'Your Social Hub';
+			}
+			case TimelineFetchMode.HOME: {
+				return 'Home';
+			}
+			case TimelineFetchMode.LOCAL: {
+				return 'Local';
+			}
+			default: {
+				return 'Unassigned';
+			}
+		}
+	}, [timelineType]);
 
-  const ref = useRef(null);
+	const ref = useRef(null);
 
-  const scrollY = useRef(new Animated.Value(0));
-  const scrollYClamped = diffClamp(
-      scrollY.current,
-      0,
-      HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT
-  );
+	/**
+	 * Composite Hook Collection
+	 */
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus,
+		additionalLoadingStates: EmojisLoading,
+	});
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: PageData.length,
+		updateQueryCache,
+	});
+	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
+		fetchStatus,
+		refetch,
+	});
 
-  const translateY = scrollYClamped.interpolate({
-    inputRange: [0, HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT],
-    outputRange: [0, -HIDDEN_SECTION_HEIGHT],
-  });
+	if (!client) return <Introduction />;
 
-  const translateYNumber = useRef();
+	if (timelineType === TimelineFetchMode.IDLE) return <WelcomeBack />;
 
-  translateY.addListener(({value}) => {
-    translateYNumber.current = value;
-  });
-
-  function handleScrollJs(e) {
-    NavigationService.invokeWhenPageEndReached(e, onPageEndReached)
-  }
-
-  const handleScrollAnimated = Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: {y: scrollY.current},
-          },
-        },
-      ],
-      {
-        useNativeDriver: true,
-        listener: handleScrollJs
-      },
-  );
-
-  function onPageEndReached() {
-    // console.log("[INFO]: page end reached. performing refetch")
-    updateQueryCache()
-    refetch()
-    setLoadingMoreComponentProps({
-      visible: true,
-      loading: true
-    })
-  }
-
-  /**
-   * When scroll view has stopped moving,
-   * snap to the nearest section
-   * @param param0
-   */
-  const handleSnap = ({nativeEvent}) => {
-    const offsetY = nativeEvent.contentOffset.y;
-    if (
-        !(
-            translateYNumber.current === 0 ||
-            translateYNumber.current === -HIDDEN_SECTION_HEIGHT
-        )
-    ) {
-      if (ref.current) {
-        try {
-          /**
-           * ScrollView --> scroll ???
-           * FlatView --> scrollToOffset({offset: number}})
-           */
-          ref.current.scrollTo({
-            // applies only for flat list
-            offset:
-                getCloser(translateYNumber.current, -HIDDEN_SECTION_HEIGHT, 0) ===
-                -HIDDEN_SECTION_HEIGHT
-                    ? offsetY + HIDDEN_SECTION_HEIGHT
-                    : offsetY - HIDDEN_SECTION_HEIGHT,
-          });
-        } catch (e) {
-          console.log("[WARN]: component is not a flat list");
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (status === "success") {
-      setRefreshing(false);
-    }
-  }, [status, fetchStatus]);
-
-  const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = () => {
-    setRefreshing(true);
-    clear()
-    refetch();
-  }
-
-  return (
-      <SafeAreaView style={[styles.container, {position: "relative"}]}>
-        <StatusBar backgroundColor="#222222"/>
-        <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
-          <TimelinesHeader
-              SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-              HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-          />
-        </Animated.View>
-        <AnimatedFlashList
-            estimatedItemSize={200}
-            data={PageData}
-            ref={ref}
-            renderItem={(o) =>
-                <WithActivitypubStatusContext status={o.item} key={o.index}>
-                  <StatusItem key={o.index}/>
-                </WithActivitypubStatusContext>
-            }
-            onScroll={handleScrollAnimated}
-            contentContainerStyle={{
-              paddingTop: SHOWN_SECTION_HEIGHT + 4,
-            }}
-            scrollEventThrottle={16}
-            refreshControl={
-              <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}/>
-            }
-        />
-        <LoadingMore
-            visible={LoadingMoreComponentProps.visible}
-            loading={LoadingMoreComponentProps.loading}
-        />
-      </SafeAreaView>
-  );
+	return (
+		<SafeAreaView style={[styles.container, { position: 'relative' }]}>
+			<StatusBar backgroundColor="#121212" />
+			<Animated.View
+				style={[styles.header, { transform: [{ translateY: translateY }] }]}
+			>
+				<TimelinesHeader
+					SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
+					HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
+					label={Label}
+				/>
+			</Animated.View>
+			{fetchStatus === 'fetching' && PageData.length === 0 ? (
+				<TimelineLoading />
+			) : (
+				<React.Fragment>
+					<AnimatedFlashList
+						numColumns={1}
+						estimatedItemSize={100}
+						data={PageData}
+						ref={ref}
+						renderItem={(o) => (
+							<WithActivitypubStatusContext status={o.item} key={o.index}>
+								<StatusItem key={o.index} />
+							</WithActivitypubStatusContext>
+						)}
+						onScroll={onScroll}
+						contentContainerStyle={{
+							paddingTop: SHOWN_SECTION_HEIGHT + 4,
+						}}
+						scrollEventThrottle={16}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+						}
+					/>
+					<LoadingMore visible={visible} loading={loading} />{' '}
+				</React.Fragment>
+			)}
+		</SafeAreaView>
+	);
 }
 
 function TimelineWrapper() {
-  return <WithAppPaginationContext>
-    <TimelineRenderer/>
-  </WithAppPaginationContext>
+	return (
+		<WithTimelineControllerContext>
+			<WithAppPaginationContext>
+				<TimelineRenderer />
+			</WithAppPaginationContext>
+		</WithTimelineControllerContext>
+	);
 }
 
 export default TimelineWrapper;
 
 const styles = StyleSheet.create({
-  header: {
-    position: "absolute",
-    backgroundColor: "#1c1c1c",
-    left: 0,
-    right: 0,
-    width: "100%",
-    zIndex: 1,
-  },
-  subHeader: {
-    height: SHOWN_SECTION_HEIGHT,
-    width: "100%",
-    paddingHorizontal: 10,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
+	header: {
+		position: 'absolute',
+		backgroundColor: '#1c1c1c',
+		left: 0,
+		right: 0,
+		width: '100%',
+		zIndex: 1,
+	},
+	subHeader: {
+		height: SHOWN_SECTION_HEIGHT,
+		width: '100%',
+		paddingHorizontal: 10,
+	},
+	container: {
+		flex: 1,
+		backgroundColor: '#000',
+	},
 });

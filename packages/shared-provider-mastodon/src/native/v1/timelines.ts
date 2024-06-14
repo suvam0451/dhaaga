@@ -12,7 +12,7 @@ export default class TimelinesService {
 		client: RestClient,
 		query?: TimelineQuery
 	): Promise<mastodon.v1.Status[]> => {
-		const queryUrl = `${client.url}/api/v1/timelines/home`;
+		const queryUrl = `https://${client.url}/api/v1/timelines/home`;
 		if (query?.maxId) {
 			queryUrl.concat(`max_id=${query?.maxId}&`);
 		}
@@ -39,7 +39,7 @@ export default class TimelinesService {
 		q: string,
 		query?: TimelineQuery
 	): Promise<mastodon.v1.Status[]> => {
-		const queryUrl = `${client.url}/api/v1/timelines/tag/${q}`;
+		const queryUrl = `https://${client.url}/api/v1/timelines/tag/${q}`;
 		if (query?.maxId) {
 			queryUrl.concat(`max_id=${query?.maxId}&`);
 		}

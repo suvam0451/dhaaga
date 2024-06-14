@@ -13,6 +13,8 @@ import {
   ActivityPubContentFilterRule
 } from "./activitypub-content-moderation.entity";
 import {Account, KeyValuePair} from "./account.entity";
+import {ActivityPubTag} from "./activitypub-tag.entity";
+import {UserDataTimeline} from "./userdata-timeline.entity";
 
 
 export const schemas = [
@@ -26,4 +28,6 @@ export const schemas = [
   ActivityPubServer,
   ActivityPubStatus,
   ActivityPubUser,
+  ActivityPubTag,
+  UserDataTimeline
 ];

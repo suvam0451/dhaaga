@@ -2,14 +2,15 @@
   "name": "dhaaga",
   "version": "0.4.0",
   "description": "A prototype multi-threaded desktop app to browse Instagram threads, built with go and web technologies.",
-  "private": false,
+  "private": true,
   "scripts": {
-    "dev:app": "npm run dev -w @dhaaga/mobile",
+    "dev:app": "yarn workspace @dhaaga/mobile dev",
+    "dev:app:turbo": "turbo dev --filter=\"...{./apps/mobile}\"",
     "dev:web": "npm run dev -w @dhaaga/web",
     "app:preview": "npm run preview -w @dhaaga/mobile"
   },
   "author": "Debashish Patra",
-  "license": "AGPL",
+  "license": "AGPLv3",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -18,5 +19,10 @@
     "styled-components": {
       "react-dom": "18.2.0"
     }
-  }
+  },
+  "dependencies": {
+    "prettier": "^3.3.2",
+    "turbo": "^2.0.1"
+  },
+  "packageManager": "yarn@1.22.22"
 }

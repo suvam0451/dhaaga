@@ -20,7 +20,15 @@ import WithScrollOnRevealContext, {
 } from "../../../states/useScrollOnReveal";
 import WithInfiniteScrollIndicator
   from "../../containers/WithInfiniteScrollIndicator";
-import {View} from "react-native";
+import {RefreshControl, View} from "react-native";
+import LoadingMore from "../../screens/home/LoadingMore";
+import useScrollMoreOnPageEnd from "../../../states/useScrollMoreOnPageEnd";
+import WithAutoHideTopNavBar from "../../containers/WithAutoHideTopNavBar";
+import useLoadingMoreIndicatorState
+  from "../../../states/useLoadingMoreIndicatorState";
+import usePageRefreshIndicatorState
+  from "../../../states/usePageRefreshIndicatorState";
+import {AnimatedFlashList} from "@shopify/flash-list";
 
 
 function Content() {
@@ -51,8 +59,6 @@ function ApiWrapper() {
   } = useAppPaginationContext()
   const {resetEndOfPageFlag} = useScrollOnReveal()
 
-  const [refreshing, setRefreshing] = useState(false);
-
   function api() {
     if (!client) throw new Error("_client not initialized");
     return client.getTimelineByHashtag(q, {maxId: queryCacheMaxId});
@@ -66,13 +72,6 @@ function ApiWrapper() {
         enabled: client && q !== undefined,
       });
 
-  function onScrollEndReach() {
-    if (PageData.length > 0) {
-      updateQueryCache()
-      refetch()
-    }
-  }
-
   useEffect(() => {
     if (status !== "success" || !data) return
     if (data.length > 0) {
@@ -80,27 +79,47 @@ function ApiWrapper() {
       setMaxId(data[data.length - 1]?.id)
       resetEndOfPageFlag()
     }
-    setRefreshing(false);
   }, [status, fetchStatus]);
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    refetch();
-  }, []);
+  const {visible, loading} = useLoadingMoreIndicatorState({fetchStatus})
+  const {onScroll, translateY} = useScrollMoreOnPageEnd({
+    itemCount: PageData.length, updateQueryCache
+  })
+  const {onRefresh, refreshing} = usePageRefreshIndicatorState({
+    fetchStatus,
+    refetch
+  })
+
 
   if (!data) return <Skeleton/>
-  return <TitleOnlyStackHeaderContainer
-      route={route} navigation={navigation}
-      headerTitle={`#${q}`}
-      onScrollViewEndReachedCallback={onScrollEndReach}
+  return <WithAutoHideTopNavBar
+      title={`#${q}`}
+      translateY={translateY}
   >
-    <WithInfiniteScrollIndicator
-        fetchStatus={fetchStatus}
-        hasNonZeroItems={PageData.length > 0}
-    >
-      <Content/>
-    </WithInfiniteScrollIndicator>
-  </TitleOnlyStackHeaderContainer>
+    <AnimatedFlashList
+        estimatedItemSize={72}
+        data={PageData}
+        renderItem={(o) =>
+            <WithActivitypubStatusContext status={o.item} key={o.index}>
+              <StatusItem/>
+            </WithActivitypubStatusContext>
+        }
+        onScroll={onScroll}
+        contentContainerStyle={{
+          paddingTop: 50 + 4,
+        }}
+        scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}/>
+        }
+    />
+    <LoadingMore
+        visible={visible}
+        loading={loading}
+    />
+  </WithAutoHideTopNavBar>
 }
 
 function TagBrowseLocal() {

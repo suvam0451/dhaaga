@@ -4,26 +4,34 @@ import {
   MastodonRestClient,
   MisskeyRestClient, UnknownRestClient, UserInterface
 } from "@dhaaga/shared-abstraction-activitypub/src";
-import {useSelector} from "react-redux";
-import {RootState} from "../libs/redux/store";
-import {AccountState} from "../libs/redux/slices/account";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import AccountRepository from "../repositories/account.repo";
-import {useRealm} from "@realm/react";
+import {useRealm, useQuery} from "@realm/react";
 import {Account} from "../entities/account.entity";
 import {EmojiService} from "../services/emoji.service";
 import {useGlobalMmkvContext} from "./useGlobalMMkvCache";
+import AccountService from "../services/account.service";
 
 type Type = {
   client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null,
   me: UserInterface | null
   meRaw: mastodon.v1.Account | null
+  primaryAcct: Account,
+  /**
+   * Call this function after change in
+   * primary account selection/active status
+   */
+  regenerate: () => void
 }
 
-const defaultValue = {
+const defaultValue : Type= {
   client: null,
   me: null,
-  meRaw: null
+  meRaw: null,
+  primaryAcct: null,
+  regenerate: function (): void {
+    throw new Error("Function not implemented.");
+  }
 }
 
 const ActivityPubRestClientContext =
@@ -35,13 +43,14 @@ export function useActivityPubRestClientContext() {
 
 
 /**
- * Provides context with ActivityPub _client
+ * Stores the currently active account and corresponding
+ * api client reference
  * @param children
  * @constructor
  */
 function WithActivityPubRestClient({children}: any) {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const _domain = accountState?.activeAccount?.domain
+  // const {primaryAcct} = useActivityPubRestClientContext()
+  // const _domain = primaryAcct?.domain
 
   const [restClient, setRestClient] = useState<
       MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
@@ -49,17 +58,16 @@ function WithActivityPubRestClient({children}: any) {
   const [Me, setMe] = useState(null)
   const [MeRaw, setMeRaw] = useState(null)
   const db = useRealm()
+  const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null)
   const {globalDb} = useGlobalMmkvContext()
+  const accounts = useQuery(Account)
 
-  useEffect(() => {
-    const acctI = accountState?.activeAccount
-    if (!acctI) {
+  function regenerateFn() {
+    const acct = accounts.find((o) => o.selected === true)
+    if (!acct) {
       setRestClient(null)
       return;
     }
-
-    const acct = db.objects(Account)
-        .find((o) => o._id.toString() === acctI.id)
 
     const token = AccountRepository.findSecret(
         db, acct, "access_token")?.value
@@ -68,7 +76,6 @@ function WithActivityPubRestClient({children}: any) {
       setRestClient(null)
       return;
     }
-
     const client = ActivityPubClientFactory.get(
         acct.domain as any,
         {
@@ -77,24 +84,33 @@ function WithActivityPubRestClient({children}: any) {
         }
     )
     setRestClient(client)
+    setPrimaryAcct(acct)
     EmojiService.loadEmojisForInstance(db, globalDb, acct.subdomain)
-  }, [accountState?.activeAccount]);
+    AccountService.loadFollowedTags(db, client)
+  }
+
+  useEffect(() => {
+    regenerateFn()
+  }, []);
 
   useEffect(() => {
     if (!restClient) {
       setMe(null)
       return
     }
+
     restClient.getMe().then((res) => {
       setMeRaw(res)
-      setMe(ActivityPubUserAdapter(res, _domain))
+      setMe(ActivityPubUserAdapter(res, PrimaryAcct?.domain))
     })
   }, [restClient])
 
   return <ActivityPubRestClientContext.Provider value={{
     client: restClient,
     me: Me,
-    meRaw: MeRaw
+    meRaw: MeRaw,
+    primaryAcct: PrimaryAcct,
+    regenerate: regenerateFn
   }}>
     {children}
   </ActivityPubRestClientContext.Provider>

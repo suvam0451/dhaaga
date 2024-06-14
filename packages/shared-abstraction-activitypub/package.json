@@ -2,14 +2,14 @@
   "name": "@dhaaga/shared-abstraction-activitypub",
   "description": "using design patterns to work around the differences between various Mastodon forks",
   "private": true,
-  "packageManager": "yarn@3.6.1",
+  "version": "1.0.0",
   "dependencies": {
     "@dhaaga/shared-provider-mastodon": "*",
     "@dhaaga/shared-provider-misskey": "*",
     "axios": "^1.4.0"
   },
   "devDependencies": {
-    "tsup": "^7.2.0",
+    "tsup": "^8.1.0",
     "typescript": "^5.1.6"
   },
   "scripts": {

@@ -1,22 +1,52 @@
 import ActivityPubClient, {
   GetSearchResultQueryDTO,
   GetPostsQueryDTO,
-  TagArray
+  TagArray,
+  GetTimelineQueryDTO
 } from "./_interface";
 import {Note} from "@dhaaga/shared-provider-misskey/src";
 import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
 import {StatusArray} from "../status/_interface";
 
 class UnknownRestClient implements ActivityPubClient {
+  getListTimeline(q: string, opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {
+      throw new Error("Method not implemented.");
+  }
+  getLocalTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+      throw new Error("Method not implemented.");
+  }
+  async getMyFollowedTags() {
+    return []
+  }
+
+  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
+  getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
+    throw new Error("Method not implemented.");
+  }
+
+  getIsSensitive(): boolean {
+    throw new Error("Method not implemented.");
+  }
+
+  getSpoilerText(): string | null {
+    throw new Error("Method not implemented.");
+  }
+
   uploadMedia(): Promise<any> {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
+
   getFollowing(id: string): Promise<any[] | mastodon.v1.Account[]> {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
+
   getFollowers(id: string): Promise<any[] | mastodon.v1.Account[]> {
-      throw new Error("Method not implemented.");
+    throw new Error("Method not implemented.");
   }
+
   async getMyConversations() {
     return []
   }

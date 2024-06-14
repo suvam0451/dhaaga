@@ -7,12 +7,10 @@ export class ActivityPubServerRepository {
    * add an ActivityPub server to list of known servers
    */
   static upsert(db: Realm, url: string) {
-    if(!url) return null
+    if (!url) return null
     const removeHttps = url.replace(/^https?:\/\//, '');
 
-    const match = db.objects(ActivityPubServer)
-        .find((o) => o.url === removeHttps)
-
+    const match = this.get(db, removeHttps)
     if (!match) {
       return db.create(ActivityPubServer, {
         _id: new Realm.BSON.UUID(),
@@ -32,6 +30,7 @@ export class ActivityPubServerRepository {
   }
 
   static get(db: Realm, url: string) {
+    url = url.replace(/^https?:\/\//, '');
     return db.objects(ActivityPubServer)
         .find((o) => o.url === url)
   }

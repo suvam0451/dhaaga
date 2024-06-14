@@ -13,30 +13,33 @@ import WithActivitypubTagContext, {
 import {TagType} from "@dhaaga/shared-abstraction-activitypub/src";
 import {useNavigation} from "@react-navigation/native";
 import InstanceService from "../../services/instance.service";
-import {useSelector} from "react-redux";
-import {RootState} from "../../libs/redux/store";
-import {AccountState} from "../../libs/redux/slices/account";
+import useSkeletonSmoothTransition from "../../states/useSkeletonTransition";
+import {APP_FONT} from "../../styles/AppTheme";
 
 type HashtagActionsProps = {
   visible: boolean
   id: string
 }
 
-export function HashtagBottomSheetContent() {
-  const accountState = useSelector<RootState, AccountState>((o) => o.account);
-  const subdomain = accountState?.activeAccount?.subdomain
+type HashtagBottomSheetContentProps = {
+  parentApiPending: boolean
+}
+
+export function HashtagBottomSheetContent({parentApiPending}: HashtagBottomSheetContentProps) {
+  const {primaryAcct} = useActivityPubRestClientContext()
+  const subdomain = primaryAcct?.subdomain
   const {client} = useActivityPubRestClientContext()
   const {tag, setDataRaw} = useActivitypubTagContext()
   const navigation = useNavigation<any>();
+  const [IsLoading, setIsLoading] = useState(false)
 
   const [AggregatedData, setAggregatedData] = useState({
     posts: 0,
     users: 0
   })
-
   useEffect(() => {
     if (!tag) return
-
+    setIsLoading(true)
     InstanceService.getTagInfoCrossDomain(tag, subdomain).then((res) => {
       setAggregatedData({
         users: res.common.users,
@@ -44,6 +47,10 @@ export function HashtagBottomSheetContent() {
       })
     }).catch((e) => {
       console.log("[ERROR]:", e)
+    }).finally(() => {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 150)
     })
   }, [tag]);
 
@@ -58,7 +65,13 @@ export function HashtagBottomSheetContent() {
     }
   }
 
-  if (!tag || tag.getName() === "") return <Skeleton/>
+  const loaded = useSkeletonSmoothTransition(
+      !tag || tag.getName() === "" || IsLoading || parentApiPending, {
+        condition: !parentApiPending,
+        preventLoadingForCondition: true
+      })
+  if (!loaded) return <HashtagSkeleton/>
+
   return <React.Fragment>
     <ListItem containerStyle={{
       backgroundColor: "#2C2C2C",
@@ -179,7 +192,9 @@ export function HashtagBottomSheetContent() {
                     <View>
                       <Text style={{
                         fontSize: 16,
-                        color: "orange", opacity: 0.87
+                        color: "orange",
+                        fontFamily: "Montserrat-Bold",
+                        opacity: 0.6
                       }}>
                         Your Instance
                         {/*<Ionicons*/}
@@ -191,8 +206,10 @@ export function HashtagBottomSheetContent() {
                           style={{
                             fontSize: 12,
                             opacity: 0.6,
-                            color: "orange"
-                          }}>{subdomain}</Text>
+                            color: "orange",
+                            fontFamily: "Inter-Bold",
+
+                          }} numberOfLines={1}>{subdomain}</Text>
                       <Text
                           style={{color: "#fff", opacity: 0.6, fontSize: 12}}>{
                         AggregatedData.posts} posts
@@ -219,7 +236,8 @@ export function HashtagBottomSheetContent() {
                   <View>
                     <Text style={{
                       fontSize: 16, marginRight: 4,
-                      color: "orange", opacity: 0.87
+                      fontFamily: "Montserrat-Bold",
+                      color: "orange", opacity: 0.6
                     }}>
                       Their Instance
                       {/*<FontAwesome*/}
@@ -230,6 +248,7 @@ export function HashtagBottomSheetContent() {
                         style={{
                           fontSize: 12,
                           opacity: 0.6,
+                          fontFamily: "Inter-Bold",
                           color: "orange"
                         }}>https://misskey.io</Text>
                     <Text
@@ -265,9 +284,13 @@ export function HashtagBottomSheetContent() {
             justifyContent: "center",
           }}>
             <View>
-              <Ionicons name={"add-outline"} color={"#fff"} size={24}/>
+              {/*<Ionicons name={"add-outline"} color={APP_FONT.MONTSERRAT_HEADER} size={24}/>*/}
             </View>
-            <Text style={{fontSize: 16}}>Add to Timeline</Text>
+            <Text style={{
+              fontSize: 16,
+              fontFamily: "Montserrat-Bold",
+              color: APP_FONT.MONTSERRAT_BODY
+            }}>Follow (Private)</Text>
           </View>
         </Button>
       </View>
@@ -293,19 +316,55 @@ export function HashtagBottomSheetContent() {
   </React.Fragment>
 }
 
+function HashtagSkeleton() {
+  return <View style={{
+    width: "100%",
+    paddingHorizontal: 16
+  }}>
+    <View style={{
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingTop: 16
+    }}>
+      <View style={{flexGrow: 1}}>
+        <Skeleton style={{height: 56, borderRadius: 8}} animation={"pulse"}/>
+      </View>
+      <View style={{
+        marginLeft: 32, height: 56, width: 128
+      }}>
+        <Skeleton style={{height: 56, width: 128, borderRadius: 8}}
+                  animation={"pulse"}/>
+      </View>
+    </View>
+    <View style={{marginBottom: 32}}>
+      <Skeleton style={{
+        marginTop: 32,
+        height: 72,
+        borderRadius: 8,
+      }} animation={"pulse"}/>
+    </View>
+    <View>
+      <Skeleton style={{
+        marginTop: 0,
+        height: 64,
+        borderRadius: 8,
+      }} animation={"pulse"}/>
+    </View>
+  </View>
+}
+
 function HashtagBottomSheet({visible, id}: HashtagActionsProps) {
   const [Data, setData] = useState(null)
   const {client} = useActivityPubRestClientContext()
 
-  console.log(visible, id, client)
   async function api() {
-    console.log(client)
     if (!client) return null
     return await client.getTag(id)
   }
 
   // Queries
-  const {status, data, fetchStatus} = useQuery<
+  const {status, data} = useQuery<
       TagType | null
   >({
     queryKey: ["/tags", id],
@@ -314,15 +373,13 @@ function HashtagBottomSheet({visible, id}: HashtagActionsProps) {
   });
 
   useEffect(() => {
-    console.log(status, data)
     if (status !== "success" || !data) return
     setData(data)
   }, [data, status]);
 
-  if (status !== "success" || !data) return <Skeleton/>
-
   return <WithActivitypubTagContext tag={Data}>
-    <HashtagBottomSheetContent/>
+    <HashtagBottomSheetContent
+        parentApiPending={status !== "success" || !data}/>
   </WithActivitypubTagContext>
 }
 

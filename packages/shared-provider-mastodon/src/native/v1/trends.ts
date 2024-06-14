@@ -10,7 +10,7 @@ export type TimelinePostsQuery = {
 
 class TrendsService {
   private static buildQueryUrl(client: RestClient, opts: TimelinePostsQuery, path: string) {
-    let queryUrl = `${client.url}/api/v1/trends/${path}`;
+    let queryUrl = `https://${client.url}/api/v1/trends/${path}`;
     queryUrl = queryUrl.concat(`?limit=${opts?.limit || 5}`);
     if (opts?.offset)
       queryUrl = queryUrl.concat(`&offset=${opts?.offset}`);
