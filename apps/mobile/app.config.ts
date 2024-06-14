@@ -1,6 +1,9 @@
+import { ExpoConfig, ConfigContext } from 'expo/config';
+
 const IS_DEV = process.env.APP_VARIANT === 'dev';
 
-const expo = {
+const expo = ({ config }: ConfigContext): ExpoConfig => ({
+	...config,
 	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
 	slug: 'dhaaga',
 	version: '0.1.0',
@@ -8,6 +11,10 @@ const expo = {
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'dark',
 	scheme: 'your-app-scheme',
+	platforms: ['android'],
+	developmentClient: {
+		silentLaunch: true,
+	},
 	ios: {
 		bundleIdentifier: IS_DEV ? 'com.suvam.dhaaga-dev' : 'com.suvam.dhaaga',
 		supportsTablet: false,
@@ -63,11 +70,14 @@ const expo = {
 		],
 		['expo-router'],
 	],
-	expo: {
-		experiments: {
-			typedRoutes: true,
-		},
-	},
-};
+	// experiments: {
+	// 	typedRoutes: true
+	// }
+	// expo: {
+	// 	experiments: {
+	// 		typedRoutes: true,
+	// 	},
+	// },
+});
 
 export default expo;

@@ -3,10 +3,13 @@ import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
+import { APP_THEME } from '../../styles/AppTheme';
+import { StatusBar } from 'expo-status-bar';
 
 export default function TabLayout() {
 	return (
 		<View style={{ backgroundColor: 'red', height: '100%' }}>
+			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<Tabs
 				initialRouteName={'home'}
 				detachInactiveScreens={false}
@@ -29,17 +32,15 @@ export default function TabLayout() {
 								break;
 							}
 							case 'Favourites': {
-								iconName = focused ? 'bookmark-outline' : 'bookmark-outline';
+								iconName = focused ? 'bookmark' : 'bookmark';
 								break;
 							}
 							case 'Notifications': {
-								iconName = focused
-									? 'notifications-outline'
-									: 'notifications-outline';
+								iconName = focused ? 'notifications' : 'notifications';
 								break;
 							}
 							case 'Accounts': {
-								iconName = focused ? 'person-outline' : 'person-outline';
+								iconName = focused ? 'person' : 'person';
 							}
 						}
 						switch (renderer) {

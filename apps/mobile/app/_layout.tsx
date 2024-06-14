@@ -13,15 +13,14 @@ import {
 import WithActivityPubRestClient from '../states/useActivityPubRestClient';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { APP_THEME } from '../styles/AppTheme';
 
 function WithGorhomBottomSheetWrapper() {
 	const { top, bottom } = useSafeAreaInsets();
 	return (
 		<WithActivityPubRestClient>
+			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<View style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}>
-				{/* IDK */}
-
-				<StatusBar backgroundColor={'#121212'} />
 				<Stack
 					initialRouteName={'(tabs)'}
 					screenOptions={{ headerShown: false }}
