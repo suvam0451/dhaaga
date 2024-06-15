@@ -52,20 +52,16 @@ function OriginalPoster({
 	id,
 	avatarUrl,
 	createdAt,
-	displayName,
 	accountUrl,
 	username,
 	visibility,
 }: OriginalPosterProps) {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
 	const subdomain = primaryAcct?.subdomain;
 
 	const navigation = useNavigation<any>();
 	const { status } = useActivitypubStatusContext();
 	const { user, setDataRaw } = useActivitypubUserContext();
-	const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
 
 	useEffect(() => {
 		if (status.getUser()) return;

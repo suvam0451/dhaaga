@@ -106,6 +106,7 @@ class MfmService {
 				if (mention) {
 					return (
 						<MentionProcessor
+							key={count}
 							url={mention.url}
 							text={mention.text}
 							interactable={false}
@@ -178,7 +179,7 @@ class MfmService {
 					}
 				}
 				return (
-					<Text>
+					<Text key={count}>
 						{nodes.map((o, i) => (
 							<Text key={i} style={{ fontStyle: 'italic' }}>
 								{o}

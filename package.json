@@ -21,8 +21,7 @@
     }
   },
   "dependencies": {
-    "prettier": "^3.3.2",
-    "turbo": "^2.0.1"
+    "prettier": "^3.3.2"
   },
   "packageManager": "yarn@1.22.22"
 }
