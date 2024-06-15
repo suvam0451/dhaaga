@@ -39,10 +39,10 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 
 	const children = useMemo(() => {
 		if (!contextChildrenLookup.current) return [];
-		return contextChildrenLookup.current.get(status?.getId());
+		return contextChildrenLookup.current?.get(status?.getId()) || [];
 	}, [status?.getId()]);
 
-	const { content, aiContext, isLoaded } = useMfm({
+	const { content } = useMfm({
 		content: status?.getContent(),
 		remoteSubdomain: userI?.getInstanceUrl(),
 		emojiMap: userI?.getEmojiMap(),

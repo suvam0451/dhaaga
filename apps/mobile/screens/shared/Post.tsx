@@ -33,13 +33,8 @@ function StatusContextReplyItem({ lookupId }: StatusContextReplyItemProps) {
 }
 
 function StatusContextComponent() {
-	const {
-		statusContext,
-		status,
-		contextChildrenLookup,
-		contextRootLookup,
-		stateKey,
-	} = useActivitypubStatusContext();
+	const { contextChildrenLookup, contextRootLookup, stateKey } =
+		useActivitypubStatusContext();
 
 	const root = useMemo(() => {
 		return contextRootLookup.current;
@@ -48,7 +43,7 @@ function StatusContextComponent() {
 	const children = useMemo(() => {
 		const root = contextRootLookup.current;
 		if (!root || !contextChildrenLookup.current) return [];
-		return contextChildrenLookup.current.get(root.getId());
+		return contextChildrenLookup.current?.get(root.getId()) || [];
 	}, [stateKey]);
 
 	if (!root) return <View></View>;

@@ -1,170 +1,186 @@
 import ActivityPubClient, {
-  GetSearchResultQueryDTO,
-  GetPostsQueryDTO,
-  GetUserPostsQueryDTO,
-  RestClientCreateDTO,
-  MediaUploadDTO,
-  GetTimelineQueryDTO,
-} from "./_interface";
+	GetSearchResultQueryDTO,
+	GetPostsQueryDTO,
+	GetUserPostsQueryDTO,
+	RestClientCreateDTO,
+	MediaUploadDTO,
+	GetTimelineQueryDTO,
+	FollowPostDto,
+} from './_interface';
 import {
-  createClient,
-  misskeyApi,
-  Note
-} from "@dhaaga/shared-provider-misskey/src";
-import axios, {AxiosInstance} from "axios";
-import {StatusArray} from "../status/_interface";
+	createClient,
+	misskeyApi,
+	Note,
+} from '@dhaaga/shared-provider-misskey/src';
+import axios, { AxiosInstance } from 'axios';
+import { StatusArray } from '../status/_interface';
 
 class MisskeyRestClient implements ActivityPubClient {
-  client: misskeyApi.APIClient;
-  axiosClient: AxiosInstance;
+	client: misskeyApi.APIClient;
+	axiosClient: AxiosInstance;
 
-  constructor(dto: RestClientCreateDTO) {
-    this.client = createClient(dto.instance, dto.token);
-    this.axiosClient = axios.create({
-      baseURL: `${dto.instance}/api`,
-    });
-  }
+	constructor(dto: RestClientCreateDTO) {
+		this.client = createClient(dto.instance, dto.token);
+		this.axiosClient = axios.create({
+			baseURL: `${dto.instance}/api`,
+		});
+	}
 
-  getListTimeline(q: string, opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {
-    throw new Error("Method not implemented.");
-  }
+	followUser(id: string, opts: FollowPostDto): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 
-  getLocalTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
-    throw new Error("Method not implemented.");
-  }
+	unfollowUser(id: string): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 
-  getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
-    throw new Error("Method not implemented.");
-  }
+	getListTimeline(
+		q: string,
+		opts?: GetPostsQueryDTO | undefined,
+	): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
-    throw new Error("Method not implemented.");
-  }
+	getLocalTimeline(
+		opts?: GetTimelineQueryDTO | undefined,
+	): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  getIsSensitive(): boolean {
-    throw new Error("Method not implemented.");
-  }
+	getPublicTimeline(
+		opts?: GetTimelineQueryDTO | undefined,
+	): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  getSpoilerText(): string | null {
-    throw new Error("Method not implemented.");
-  }
+	getPublicTimelineAsGuest(
+		opts?: GetTimelineQueryDTO | undefined,
+	): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  uploadMedia(params: MediaUploadDTO): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
+	getIsSensitive(): boolean {
+		throw new Error('Method not implemented.');
+	}
 
-  async getFollowing(id: string) {
-    return []
-  }
+	getSpoilerText(): string | null {
+		throw new Error('Method not implemented.');
+	}
 
-  async getFollowers(id: string) {
-    return []
-  }
+	uploadMedia(params: MediaUploadDTO): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 
-  async getMe() {
-    return null
-  }
+	async getFollowing(id: string) {
+		return [];
+	}
 
-  async getMyConversations() {
-    return []
-  }
+	async getFollowers(id: string) {
+		return [];
+	}
 
-  getStatusContext(id: string): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
+	async getMe() {
+		return null;
+	}
 
-  async getRelationshipWith(ids: string[]) {
-    return []
-  }
+	async getMyConversations() {
+		return [];
+	}
 
-  async getTrendingPosts() {
-    return []
-  }
+	getStatusContext(id: string): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 
-  async getTrendingTags() {
-    return []
-  }
+	async getRelationshipWith(ids: string[]) {
+		return [];
+	}
 
-  async getTrendingLinks() {
-    return []
-  }
+	async getTrendingPosts() {
+		return [];
+	}
 
-  async followTag(id: string) {
-    return null
-  }
+	async getTrendingTags() {
+		return [];
+	}
 
-  async unfollowTag(id: string) {
-    return null
-  }
+	async getTrendingLinks() {
+		return [];
+	}
 
-  async getTag(id: string) {
-    return null
-  }
+	async followTag(id: string) {
+		return null;
+	}
 
-  async muteUser(id: string): Promise<void> {
-    // throw new Error("Method not implemented.");
-  }
+	async unfollowTag(id: string) {
+		return null;
+	}
 
-  async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
-    return []
-  }
+	async getTag(id: string) {
+		return null;
+	}
 
-  async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
-    return []
-  }
+	async muteUser(id: string): Promise<void> {
+		// throw new Error("Method not implemented.");
+	}
 
-  async getBookmarks(opts: GetPostsQueryDTO) {
-    return {data: []}
-  }
+	async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
+		return [];
+	}
 
-  async getFollowedTags() {
-    return []
-  }
+	async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
+		return [];
+	}
 
-  async favourite(id: string) {
-    return null
-  }
+	async getBookmarks(opts: GetPostsQueryDTO) {
+		return { data: [] };
+	}
 
-  async unFavourite(id: string) {
-    return null
-  }
+	async getFollowedTags() {
+		return [];
+	}
 
-  async bookmark(id: string): Promise<Note> {
-    throw new Error("Method not implemented.");
-  }
+	async favourite(id: string) {
+		return null;
+	}
 
-  async unBookmark(id: string): Promise<Note> {
-    throw new Error("Method not implemented.");
-  }
+	async unFavourite(id: string) {
+		return null;
+	}
 
-  async getUserPosts(userId: string, opts: GetUserPostsQueryDTO) {
-    return this.client.request("users/notes", {
-      userId: userId,
-      limit: opts.limit,
-    });
-  }
+	async bookmark(id: string): Promise<Note> {
+		throw new Error('Method not implemented.');
+	}
 
-  async getHomeTimeline(): Promise<Note[]> {
-    return await this.client.request("notes/local-timeline", {limit: 20});
-  }
+	async unBookmark(id: string): Promise<Note> {
+		throw new Error('Method not implemented.');
+	}
 
-  async getTimelineByHashtag(q: string): Promise<Note[]> {
-    const res = await this.axiosClient.post<Note[]>("/notes/search-by-tag", {
-      limit: 20,
-      tag: q,
-    });
-    return res.data;
-  }
+	async getUserPosts(userId: string, opts: GetUserPostsQueryDTO) {
+		return this.client.request('users/notes', {
+			userId: userId,
+			limit: opts.limit,
+		});
+	}
 
-  async getUserProfile(
-      username: string
-  ) {
-    return this.client.request("users/show", {username});
-  }
+	async getHomeTimeline(): Promise<Note[]> {
+		return await this.client.request('notes/local-timeline', { limit: 20 });
+	}
 
-  async getStatus(id: string): Promise<Note> {
-    throw new Error("Not Implemented")
-  }
+	async getTimelineByHashtag(q: string): Promise<Note[]> {
+		const res = await this.axiosClient.post<Note[]>('/notes/search-by-tag', {
+			limit: 20,
+			tag: q,
+		});
+		return res.data;
+	}
+
+	async getUserProfile(username: string) {
+		return this.client.request('users/show', { username });
+	}
+
+	async getStatus(id: string): Promise<Note> {
+		throw new Error('Not Implemented');
+	}
 }
 
 export default MisskeyRestClient;

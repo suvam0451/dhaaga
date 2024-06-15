@@ -129,7 +129,7 @@ function PostReplyToReply({ colors, lookupId }: PostReplyToReplyProps) {
 
 	const children = useMemo(() => {
 		if (!contextChildrenLookup.current) return [];
-		return contextChildrenLookup.current.get(status?.getId());
+		return contextChildrenLookup.current?.get(status?.getId()) || [];
 	}, [status?.getId()]);
 
 	const [IsReplyThreadVisible, setIsReplyThreadVisible] = useState(false);
