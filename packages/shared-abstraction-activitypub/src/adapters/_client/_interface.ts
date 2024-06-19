@@ -101,6 +101,8 @@ interface ActivityPubClient {
 	 */
 	getMyConversations(): Promise<mastodon.v1.Conversation[]>;
 
+	getMyLists(): Promise<mastodon.v1.List[]>;
+
 	// getMyFollowedTags(opts ): Promise<mastodon.v1.Tag[]>
 
 	// a.k.a. - verifyCredentials

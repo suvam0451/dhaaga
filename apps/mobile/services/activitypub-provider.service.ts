@@ -39,8 +39,6 @@ class ActivityPubProviderService {
 	) {
 		if (!client) return [];
 
-		console.log(mode);
-
 		// to be adjusted based on performance
 		const TIMELINE_STATUS_LIMIT = 5;
 

@@ -10,6 +10,10 @@ import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
 import { StatusArray } from '../status/_interface';
 
 class UnknownRestClient implements ActivityPubClient {
+	async getMyLists() {
+		return [];
+	}
+
 	followUser(id: string, opts: FollowPostDto): Promise<any> {
 		throw new Error('Method not implemented.');
 	}

@@ -26,6 +26,10 @@ class MisskeyRestClient implements ActivityPubClient {
 		});
 	}
 
+	async getMyLists() {
+		return [];
+	}
+
 	followUser(id: string, opts: FollowPostDto): Promise<any> {
 		throw new Error('Method not implemented.');
 	}

@@ -479,7 +479,7 @@ function SharedStatusFragment({
 								opacity: 0.6,
 							}}
 						>
-							{formatDistanceToNowStrict(new Date(boostedStatus.createdAt))}
+							{formatDistanceToNowStrict(new Date(boostedStatus?.createdAt))}
 						</Text>
 					</View>
 				</StandardView>

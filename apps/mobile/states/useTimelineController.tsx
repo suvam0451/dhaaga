@@ -16,11 +16,26 @@ type Type = {
 	// the type of timeline to be shown in home screen
 	timelineType: TimelineFetchMode;
 	setTimelineType: (x: TimelineFetchMode) => void;
+	opts: {
+		listId?: string;
+		hashtagName?: string;
+	};
+	setQueryOptions: (obj: any) => void;
+	ShowTimelineSelection: boolean;
+	setShowTimelineSelection: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const defaultValue: Type = {
+	ShowTimelineSelection: false,
+	setShowTimelineSelection(
+		value: ((prevState: boolean) => boolean) | boolean,
+	): void {},
 	timelineType: TimelineFetchMode.IDLE,
 	setTimelineType: function (x: TimelineFetchMode): void {
+		throw new Error('Function not implemented.');
+	},
+	opts: {},
+	setQueryOptions: function (obj: any): void {
 		throw new Error('Function not implemented.');
 	},
 };
@@ -39,6 +54,12 @@ function WithTimelineControllerContext({ children }: Props) {
 	const [FetchMode, setFetchMode] = useState<TimelineFetchMode>(
 		TimelineFetchMode.IDLE,
 	);
+	const [Options, setOptions] = useState({});
+	const [ShowTimelineSelection, setShowTimelineSelection] = useState(false);
+
+	function setQueryOptions(obj: any) {
+		setOptions(obj);
+	}
 
 	function setTimelineTypeFn(x: TimelineFetchMode) {
 		setFetchMode(x);
@@ -49,6 +70,10 @@ function WithTimelineControllerContext({ children }: Props) {
 			value={{
 				timelineType: FetchMode,
 				setTimelineType: setTimelineTypeFn,
+				opts: Options,
+				setQueryOptions,
+				ShowTimelineSelection,
+				setShowTimelineSelection,
 			}}
 		>
 			{children}

@@ -1,5 +1,5 @@
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
-import { DependencyList, useMemo } from 'react';
+import { DependencyList, Fragment, useMemo } from 'react';
 import { View } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
@@ -7,6 +7,7 @@ import { Text } from '@rneui/themed';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
+import React from 'react';
 
 type Props = {
 	content: string;
@@ -53,7 +54,9 @@ function useMfm({ content, emojiMap, remoteSubdomain, deps }: Props) {
 				const uuid = randomUUID();
 				return (
 					<Text key={uuid} style={{ color: '#fff', opacity: 0.87 }}>
-						{para.map((o, j) => o)}
+						{para.map((o, j) => (
+							<Text key={j}>{o}</Text>
+						))}
 					</Text>
 				);
 			}),

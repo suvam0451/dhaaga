@@ -71,16 +71,17 @@ class MfmService {
 			};
 		},
 	) {
+		const k = randomUUID();
 		switch (node.type) {
 			case 'unicodeEmoji': {
-				return <Text key={count}>{node.props.emoji}</Text>;
+				return <Text key={k}>{node.props.emoji}</Text>;
 			}
 			case 'text': {
 				let baseText = node.props.text;
 				baseText = baseText.replaceAll(/<br>/g, '\n');
 				return (
 					<Text
-						key={count}
+						key={k}
 						style={{
 							color: '#fff',
 							opacity: 0.87,
@@ -93,11 +94,7 @@ class MfmService {
 			case 'hashtag': {
 				const hashtagName = this.decodeUrlString(node.props.hashtag);
 				return (
-					<HashtagProcessor
-						key={count}
-						forwardedKey={count}
-						content={hashtagName}
-					/>
+					<HashtagProcessor key={k} forwardedKey={k} content={hashtagName} />
 				);
 			}
 			case 'url': {
@@ -106,7 +103,7 @@ class MfmService {
 				if (mention) {
 					return (
 						<MentionProcessor
-							key={count}
+							key={k}
 							url={mention.url}
 							text={mention.text}
 							interactable={false}
@@ -123,14 +120,14 @@ class MfmService {
 				}
 				return (
 					<LinkProcessor
-						key={count}
+						key={k}
 						url={node.props.url}
 						displayName={displayName}
 					/>
 				);
 			}
 			case 'emojiCode': {
-				if (!emojiMap) return <Text key={count}></Text>;
+				if (!emojiMap) return <Text key={k}></Text>;
 				const match = EmojiService.findCachedEmoji({
 					emojiMap,
 					db,
@@ -141,12 +138,12 @@ class MfmService {
 
 				if (!match)
 					return (
-						<Text key={count} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
+						<Text key={k} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
 							{`:${node.props.name}:`}
 						</Text>
 					);
 				return (
-					<Text key={count} style={{ marginTop: 0 }}>
+					<Text key={k} style={{ marginTop: 0 }}>
 						<Image
 							style={{
 								width: 18,
@@ -159,32 +156,28 @@ class MfmService {
 				);
 			}
 			case 'italic': {
-				const nodes = [];
-				for (let i = 0; i < node.children.length; i++) {
-					const item = node.children[i];
-					if (item.type === 'text') {
-						nodes.push(item.props.text);
-					} else {
-						return (
-							<Text
-								key={count}
-								style={{
-									color: APP_FONT.MONTSERRAT_BODY,
-									fontStyle: 'italic',
-								}}
-							>
-								Dhaaga: Italics Not Supported
-							</Text>
-						);
-					}
-				}
 				return (
-					<Text key={count}>
-						{nodes.map((o, i) => (
-							<Text key={i} style={{ fontStyle: 'italic' }}>
-								{o}
-							</Text>
-						))}
+					<Text
+						key={k}
+						style={{
+							fontStyle: 'italic',
+							color: APP_THEME.INVALID_ITEM_BODY,
+						}}
+					>
+						{node.children.map((o, i) =>
+							this.parseNode(o, i.toString(), {
+								domain: '',
+								isHighEmphasisText: false,
+								subdomain: '',
+								emojiMap,
+								linkMap,
+								remoteInstance,
+								db,
+								globalDb,
+								opts,
+								mentionMap,
+							}),
+						)}
 					</Text>
 				);
 			}
@@ -192,6 +185,7 @@ class MfmService {
 				const nodes = [];
 				return (
 					<Text
+						key={k}
 						style={{
 							fontFamily: 'Inter-Bold',
 							color: APP_FONT.MONTSERRAT_BODY,
@@ -213,53 +207,31 @@ class MfmService {
 						)}
 					</Text>
 				);
-				// for (let i = 0; i < node.children.length; i++) {
-				// 	const item = node.children[i];
-				// 	if (item.type === 'text') {
-				// 		nodes.push(item.props.text);
-				// 	} else {
-				// 		return (
-				// 			<Text
-				// 				key={count}
-				// 				style={{
-				// 					color: APP_FONT.MONTSERRAT_BODY,
-				// 					fontStyle: 'italic',
-				// 				}}
-				// 			>
-				// 				Dhaaga: Italics Not Supported
-				// 			</Text>
-				// 		);
-				// 	}
-				// }
-				return (
-					<Text>
-						{nodes.map((o, i) => (
-							<Text key={i} style={{ fontStyle: 'italic' }}>
-								{o}
-							</Text>
-						))}
-					</Text>
-				);
 			}
 			case 'mention': {
 				return (
 					<MentionProcessor
+						key={k}
 						url={node.props.acct}
 						text={node.props.username}
 						interactable={false}
 					/>
 				);
-				// return <Text key={count}>{node.props.acct}</Text>;
 			}
 			default: {
 				console.log('[WARN]: node type not evaluated', node);
-				return <Text key={count}></Text>;
+				return <Text key={k}></Text>;
 			}
 		}
 	}
 
 	static decodeUrlString(input: string) {
-		return decodeURI(input);
+		try {
+			return decodeURI(input);
+		} catch (e) {
+			console.log('[ERROR]:', e, input);
+			return input;
+		}
 	}
 
 	private static extractUrls(item: string) {
@@ -337,10 +309,22 @@ class MfmService {
 			for (const node of para) {
 				if (node.type === 'emojiCode') {
 					emojiCodes.add(node.props.name);
+				} else if (['bold', 'italic'].includes(node.type)) {
+					console.log('detected bold/italic', node.children);
+					for (let i = 0; i < node.children.length; i++) {
+						const child = node.children[i];
+						if (child.type === 'emojiCode') {
+							console.log(child.props.name);
+							emojiCodes.add(child.props.name);
+						} else {
+							console.log(child.type);
+						}
+					}
 				}
 			}
 		}
 		if (emojiCodes.size > 0) {
+			console.log('[INFO]: need to parse emojis', emojiCodes);
 			EmojiService.loadEmojisForInstanceSync(db, globalDb, remoteSubdomain, {
 				selection: emojiCodes,
 			});

@@ -28,6 +28,16 @@ class MastodonRestClient implements ActivityPubClient {
 		});
 	}
 
+	async getMyLists() {
+		const _client = this.createMastoClient();
+		try {
+			return await _client.v1.lists.list();
+		} catch (e) {
+			console.log(e);
+			return [];
+		}
+	}
+
 	async followUser(id: string, opts: FollowPostDto): Promise<any> {
 		const _client = this.createMastoClient();
 		try {
@@ -54,6 +64,7 @@ class MastodonRestClient implements ActivityPubClient {
 	): Promise<StatusArray> {
 		const _client = this.createMastoClient();
 		try {
+			console.log(q);
 			return await _client.v1.timelines.list.$select(q).list(opts);
 		} catch (e) {
 			console.log(e);

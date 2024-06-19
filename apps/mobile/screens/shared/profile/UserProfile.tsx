@@ -35,6 +35,7 @@ import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 import AppButtonFollowIndicator from '../../../components/lib/Buttons';
 import useRelationshipWith from '../../../states/useRelationshipWith';
+import ConfirmRelationshipChangeDialog from '../../../components/screens/shared/fragments/ConfirmRelationshipChange';
 
 type UserProfileBrowsePostsProps = {
 	userId: string;
@@ -148,6 +149,11 @@ function UserProfileContent() {
 		user?.getId(),
 	);
 
+	const [
+		IsUnfollowConfirmationDialogVisible,
+		setIsUnfollowConfirmationDialogVisible,
+	] = useState(false);
+
 	function onFollowButtonClick() {
 		if (!relationship.following) {
 			client
@@ -162,9 +168,10 @@ function UserProfileContent() {
 					console.log('[ERROR]: following user', e);
 				});
 		} else {
-			client.unfollowUser(user?.getId()).then((res) => {
-				setter(res);
-			});
+			setIsUnfollowConfirmationDialogVisible(true);
+			// client.unfollowUser(user?.getId()).then((res) => {
+			// 	setter(res);
+			// });
 		}
 	}
 
@@ -241,6 +248,10 @@ function UserProfileContent() {
 					</UserPostsProvider>
 				</View>
 			</ScrollView>
+			<ConfirmRelationshipChangeDialog
+				visible={IsUnfollowConfirmationDialogVisible}
+				setVisible={setIsUnfollowConfirmationDialogVisible}
+			/>
 		</View>
 	);
 }

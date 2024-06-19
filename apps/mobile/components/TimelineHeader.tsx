@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	Modal,
+	Platform,
+	Pressable,
+	StyleSheet,
+	useWindowDimensions,
+	View,
+} from 'react-native';
+import {
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Dialog, Text } from '@rneui/themed';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { APP_THEME } from '../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -11,14 +24,23 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import { DialogButtonGroupItem } from '../styles/Containers';
 import CustomTimelineOptions from './widgets/timelines/fragments/CustomTimelineOptions';
 import DefaultTimelineOptions from './widgets/timelines/fragments/DefaultTimelineOptions';
+import ListTimelineOptions from './widgets/timelines/fragments/ListTimelineOptions';
+import { useTimelineControllerContext } from '../states/useTimelineController';
+import HashtagTimelineOptions from './widgets/timelines/fragments/HashtagTimelineOptions';
+import useKeyboard from './hooks/useKeyboard';
+import { FontAwesome } from '@expo/vector-icons';
 
 function FirstRoute() {
 	return <DefaultTimelineOptions />;
 }
 
-const SecondRoute = () => (
-	<View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-);
+const SecondRoute = () => {
+	return <ListTimelineOptions />;
+};
+
+const ThirdRoute = () => {
+	return <HashtagTimelineOptions />;
+};
 
 function FifthRoute() {
 	return <CustomTimelineOptions />;
@@ -27,7 +49,7 @@ function FifthRoute() {
 const renderScene = SceneMap({
 	pinned: FirstRoute,
 	lists: SecondRoute,
-	tags: FirstRoute,
+	tags: ThirdRoute,
 	users: FirstRoute,
 	custom: FifthRoute,
 });
@@ -42,7 +64,10 @@ const TimelinesHeader = ({
 	SHOWN_SECTION_HEIGHT,
 	label,
 }: HeadersProps) => {
-	const [ShowTimelineSelection, setShowTimelineSelection] = useState(false);
+	const { KeyboardVisible } = useKeyboard();
+
+	const { ShowTimelineSelection, setShowTimelineSelection } =
+		useTimelineControllerContext();
 
 	function onIconPress() {
 		setShowTimelineSelection(true);
@@ -63,7 +88,6 @@ const TimelinesHeader = ({
 			key: string;
 			title: string;
 		}[] = props.navigationState.routes;
-		console.log(routes);
 		return (
 			<View
 				style={{
@@ -160,13 +184,19 @@ const TimelinesHeader = ({
 					display: 'flex',
 					flexDirection: 'row',
 					alignItems: 'center',
-					// backgroundColor: 'red',
-					paddingVertical: 16,
+					paddingVertical: 12,
 					paddingHorizontal: 16,
 				}}
 				onPress={onIconPress}
 			>
-				<Text style={[styles.conversation, { opacity: 0.6 }]}>
+				<Text
+					style={[
+						styles.conversation,
+						{
+							opacity: 0.6,
+						},
+					]}
+				>
 					{label || 'Home'}
 				</Text>
 				<Ionicons
@@ -184,21 +214,86 @@ const TimelinesHeader = ({
 				style={{ opacity: 0.6 }}
 			/>
 
-			<Dialog
-				overlayStyle={{ backgroundColor: '#2c2c2c', height: 400 }}
-				isVisible={ShowTimelineSelection}
-				onBackdropPress={() => {
+			<Modal
+				animationType="slide"
+				visible={ShowTimelineSelection}
+				transparent={true}
+				onRequestClose={() => {
 					setShowTimelineSelection(false);
 				}}
 			>
-				<TabView
-					navigationState={{ index, routes }}
-					renderScene={renderScene}
-					onIndexChange={setIndex}
-					renderTabBar={renderTabBar}
-					initialLayout={{ width: layout.width, height: 400 }}
-				/>
-			</Dialog>
+				<View
+					style={{
+						height: '100%',
+						backgroundColor: 'rgba(0, 0, 0, 0.75)',
+					}}
+				>
+					<View
+						style={{
+							height: KeyboardVisible ? 300 + 32 : '100%',
+							paddingVertical: 'auto',
+							paddingHorizontal: 16,
+						}}
+					>
+						<View
+							style={{
+								backgroundColor: '#2c2c2c',
+								minHeight: KeyboardVisible ? 300 : 400,
+								width: 256,
+								margin: 'auto',
+								zIndex: 99,
+							}}
+						>
+							<TabView
+								navigationState={{ index, routes }}
+								renderScene={renderScene}
+								onIndexChange={setIndex}
+								renderTabBar={renderTabBar}
+								initialLayout={{ width: layout.width }}
+								onMoveShouldSetResponder={() => true}
+							/>
+							<View
+								style={{
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'center',
+									alignItems: 'center',
+									position: 'relative',
+								}}
+							>
+								<View
+									style={{
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'center',
+										alignItems: 'center',
+										position: 'absolute',
+										top: 16,
+										backgroundColor: 'rgba(70, 70, 70, 0.75)',
+										borderRadius: 8,
+										paddingVertical: 8,
+										paddingHorizontal: 16,
+									}}
+									onTouchEnd={() => {
+										setShowTimelineSelection(false);
+									}}
+								>
+									<View style={{ width: 32 }}>
+										<FontAwesome
+											name="close"
+											size={24}
+											color={APP_FONT.MONTSERRAT_BODY}
+										/>
+									</View>
+									<View style={{ flexShrink: 1, maxWidth: 72 }}>
+										<Text style={{ textAlign: 'center' }}>Cancel</Text>
+									</View>
+								</View>
+							</View>
+						</View>
+					</View>
+				</View>
+			</Modal>
 		</View>
 	);
 };

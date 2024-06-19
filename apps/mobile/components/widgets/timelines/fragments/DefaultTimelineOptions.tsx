@@ -13,10 +13,12 @@ import {
 const ICON_SIZE = 20;
 
 function DefaultTimelineOptions() {
-	const { setTimelineType } = useTimelineControllerContext();
+	const { setTimelineType, setShowTimelineSelection } =
+		useTimelineControllerContext();
 
 	function onClickGoToSocialHub() {
 		setTimelineType(TimelineFetchMode.IDLE);
+		setShowTimelineSelection(false);
 	}
 
 	return (
