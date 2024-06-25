@@ -1,7 +1,7 @@
 {
   "name": "dhaaga",
-  "version": "0.4.0",
-  "description": "A prototype multi-threaded desktop app to browse Instagram threads, built with go and web technologies.",
+  "version": "0.0.1",
+  "description": "An opinionated mobile client for Mastodon and Misskey",
   "private": true,
   "scripts": {
     "dev:app": "yarn workspace @dhaaga/mobile dev",

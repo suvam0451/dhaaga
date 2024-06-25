@@ -1,318 +1,100 @@
-# Dhaaga
+<h1 align="center">Dhaaga</h1>
 
-Dhaaga client is an unofficial, feature-rich social media client for popular social media websites.
-
-Currently supports Meta's [Threads](https://www.threads.net/) and [Mastodon](https://joinmastodon.org/) platform, with a direction to support other popular [Fediverse](https://en.wikipedia.org/wiki/Fediverse) platforms.
-
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/client-showcase/Project_Home.png" alt="Home Screen">
+<p align="center" style="max-width: 390px; margin: auto">
+    An opinionated, cross-platform (Android & iOS) mobile client for 
+Mastodon and Misskey
 </p>
 
-Special shotout to [The Wails Project](https://wails.io/) and it's creator [@leaanthony](https://github.com/leaanthony), without whose contribution in the go/js open source community, this project would not have been poossible.
+### About
 
-<br/>
+Welcome! This mobile client is my personal contribution to the fediverse.
 
-## Summary
+I started this project to build creative solutions to the little nuances and
+inconveniences of ActivityPub and it's implementations,
+which, in my opinion, drive a normal user like myself away from viewing
+fediverse as a viable social networking alternative.
 
-- [Vision](#vision)
-- [How to install](#how-to-install)
-- [Disclaimer](#disclaimer)
-- [Features](#list-of-features)
-- [FAQ](#faq)
-- [Feature Roadmap](#feature-roadmap)
-- [Final Words](#final-words)
-- [License](#license)
+The project is in it's **very early MVP stage**. But, after a month of
+groundwork, I am now comfortable in sharing builds and updates to get more
+eyes on the project.
 
-<br/>
+Some essential features like composing posts is not supported yet.
+So, star the project and be on the lookout for a stable build in upcoming
+months.
 
-## Vision
+^ Most of the browsing features are done already. If you don't mind the
+above, then please feel free to contribute.
 
-### What this app wants to be:
+### Features
 
-- 🫶 A reimagined way of browsing the Fediverse.
-- 🔍 A cross-platform, cross domain interest discovery and tracking tool.
-- 🖼️ A convenient and damn pretty ✨ gallery and daily newsletter app.
-- 🧑‍💻 An OSINT tool (Disclaimer: FOR EDUCATIONAL PURPOSE ONLY! The contributors do not assume any responsibility for the use of this tool.)
-- 😇 An API friendly client, with client-side caching and optimisations to prevent spam.
+#### Timeline Widget
 
-### What this app does not want to be:
+A convenient and intuitive way to switch between timelines/hashtags/lists.
 
-- ❌ An official client recognized by any social media platform.
-- ❌ An alternative to the official apps (or third party alternatives thereof), with 100% feature coverage.
-- ❌ A content scraping tool.
-
-<br/>
-
-## How to install
-
-<div align="center">
-
-| OS              | Download                                                                                                     |
-| --------------- | ------------------------------------------------------------------------------------------------------------ |
-| Windows         | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-Windows-v0.4.0-installer.zip) |
-| MacOS Universal | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-MacOS-Universal-v0.4.0.zip)   |
-| MacOS M1        | [Download](https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-MacOS-M1-v0.4.0.zip)          |
-
-</div>
-
-<br/>
-
-### Building on your own
-
-**Ensure you've [Node & NPM](https://nodejs.org/en/download) and [Go 1.18](https://go.dev/dl/) already installed**
-
-1. Install 'wails' CLI tool:
-
-```sh
-$ go install github.com/wailsapp/wails/v2/cmd/wails@latest
-```
-
-<br/>
-
-2. Building for your system (can take some time):
-
-```sh
-$ wails build
-```
-
-<br/>
-
-3. Moving builded binary/executable to a suitable location:
-
-#### MacOS
-
-```sh
-# M1 Mac
-wails build -platform darwin/amd64
-# Intel Mac
-wails build -platform darwin/universal
-```
-
-#### Windows
-
-Just copy or cut 'build/bin/Dhaaga.exe' to any suitable location for easy access.
-
-<br/>
-
-## Disclaimer
-
-This client is designed to be responsible and respectful and it is up to you to decide what you do with it. I don't claim any responsibility if any of your social media account is affected by how you use this client.
-
-<br/>
-
-## ✨ List of Features
-
-### New in v0.6.0
+No need to pin/set anything in advance. Just search, set and launch.
 
 <details>
- <summary>Onboarding workflow for Mastodon 🐘 + Improved columns 🚀</summary>
 
-### Summary
+<summary>Highlights:</summary>
 
-I spent a lot of time to enhance column interactions and provide a decent authentication workflow for Mastodon users.
-
-Features included:
-
-✨ In-App Auth workflow for Mastodon
-
-OAuth workflow for Mastodon is now supported.
-
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/desktop-docs/mastodon-auth/Step3-Paste-Code-And-Create-Account.png" alt="Mastodon Auth">
-</p>
-
-✨ Auto-Pagination feature for columns. Auto-Loading next set of posts in sets fo 20 is a nice QoL.
-
-However, to prevent memory issues, the user may only auto-scroll 100 posts. After that, the user will have to manually click to load the next set (100-200) of posts.
-
-✨ **Snap Navigation:** The idea is to use arrow keys or in-app buttons to snap the tip of the column to the next/previous post. Example below, I use kyeboard to scroll through posts.
-
-The **Snap Navigation** feature is a unique selling point of this app, that I want to explore further.
-
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/desktop-showcase/Snap-Navigation.gif" alt="Snap Navigation">
-</p>
-
-### Key Learnings
-
-After banging my head against a brick wall for hours, I now fully understand why useRef hook exists.
-
-State updates don't always work as expected, especially when a bunch of providers are wrapped around a component. The useEffect hooks may get triggered from modifications, but when you read the stole, you may get stale values.
-
-useRef is the best way to deal with these:
-
-```ts
-// this is a store/context provider (based on https://www.youtube.com/watch?v=5LrDIWkK_Bc)
-const { store: inViewStore, dispatch: inViewDispatch } = useInViewHook();
-// workaround to "copy" the store value to a ref
-const inViwStoreRef = useRef<any>();
-inViwStoreRef.current = inViewStore;
-
-const keyPressHandler = (e: any) => {
-	// ❌ stale data
-	console.log(inViewStore);
-	// ✅ fresh data
-	console.log(inViewStoreRef.current);
-};
-```
+- ✅ Search and browse hashtags
+    - 🚧 Guest browsing a hashtag from remote instance will be supported in the
+      future.
+- ✅ Search and browse a user's timeline directly
+- ✅ Browse your list timelines
+- 🚧 Remote instance browsing will be added in the future
 
 </details>
 
-### New in v0.5.0
+### Planned Features
 
-<details>
- <summary>Support for Mastodon is here !!! 🐘 🚀</summary>
+The usual features found in any other Mastodon/Misskey clients will
+continue to be added.
 
-### Summary
+Some distinctive features I am considering adding to the app, in the future:
 
-I am hard at work to figure out what would be the best way of browsing Mastadon from an universal fediverse client.
+- [Utility] A **bookmark gallery**, that lets us browse bookmarks by
+  hashtag/user.
+- [Utility] A dedicated **gallery mode** for user profile browsing, to better
+  appreciate Artist profiles.
+- [Privacy]: Ability to **privately follow hashtags/users** client-side.
+- [Privacy]: **A client-side block-list, that can be hosted online and shared
+  between users using a QR code** (similar to DNS filters). The user can
+  configure the rules in-app.
 
-The old school column based Mastadon clients really clicked with me and I am excited to share more about the navigation framework I will be using.
+### Building From Source
 
-- ✨ Stack based navigation with breadcrumbs
-- ✨ Fully keyboard based navigation for important modules
-- ✨ Scroll-To-Top for every page !
+This project is a monorepo. You can find individual README files in
+/packages and
+/apps/* folders with specific instructions.
 
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/client-showcase/Mastadon_Navigation_Design_01.png" alt="Search Screen">
-</p>
+### Legacy and Meaning
 
-I took design references from [IceCubes](https://github.com/Dimillian/IceCubesApp), because I believe it is the best compact client for Mastodon out there.
+Dhaaga (धागा) means "thin, twisted strands of fiber (used for sewing)".
+In many cultures, it also symbolizes connections, ties, or threads that bind
+people or things together.
 
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/client-showcase/Mastadon_Navigation_Design_02.png" alt="Search Screen">
-</p>
+This project started in 2023 to be a desktop app supporting Mastodon
+and Meta's Threads platform. Development was halted because of Meta's
+legal notice to various reverse-engineering APIs.
 
-A stack based navigation workflow sets me up for an easy way forward and code reuse, when I build a mobile app for this project. 📱
+You can read the legacy README [here]()
 
-### Key Learnings
+### License
 
-Did you know that Mastadon returns the full HTML for the post content? Of which, all links will initially point outside your app.
+The source code for this project is made available under [AGPL-3.0 license]()
 
-It is quite an regular expression headache to
+For explicit purpose of distribution via app stores,
+additional changes are requested by the developer.
+You can read
+more [here](https://github.com/suvam0451/dhaaga/blob/feat/better-comment-thread/COPYING.md#request-for-forksusers-intending-redistribution-of-binaries)
 
-- separate external links
-- identify tags and usernames
-- and redirect them to internal resources of your app
+As of now, there are no art assets that need separate licensing. If ever added,
+they will be put in a folder isolated from remaining source code and license
+made clear.
 
-</details>
+All fonts used have FLOSS license. You can find them in `/packages/fonts/*`.
 
-### New in v0.4.0
+--- 
 
-<details> 
- <summary>Profile Indexing for Threads (Needs Auth) + In-App Task Manager</summary>
-
-### Summary
-
-Threads makes it very difficult to browse posts and discver new users from the desktop. This update adds a task system to index all posts from a specific user in the background.
-
-UPDATE: This section has been redacted, because I temporarily disabled auth support in v0.5.0 -- Third party instagram clients are a gray area and I do not have enough testing accounts to make this auth module robust for end users. Once I have more testing support, I will re-enable this feature.
-
-</details>
-
-### New in v0.3.0 (First Public Release)
-
-<details>
- <summary>Gallery View + User Favourites + Local Archival --> for Meta's Threads</summary>
-
-Alright. The new social media platform is in the town, and we are here to experience it from our desktops. But, threads does not have a desktop client. How can we fix that?
-
-Well, I am glad you asked. I have been working on a desktop client for threads for a while now. And I am happy to announce that the first public release is here.
-
-It allows searching, browsing and indexing posts and profiles, without the need for an account. And it is completely free and open source.
-
-### Search Feature for Meta's Threads
-
-- ✨ Browse posts from your favourite creators !
-- ✨ Keyboard based navigation !
-- ✨ Gallery with strip for content peek !
-
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/client-showcase/Search_Showcase.png" alt="Search Screen">
-</p>
-
-### User Discovery (Integrated Module)
-
-- ✨ Discover your interests and add users on the fly !
-- ✨ Immediate mode lookup for related users !
-
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/client-showcase/Immediate_Mode_Lookup_Availability.png" alt="Immediate Mode Lookup">
-</p>
-
-^ For e.g. - I was able to discover this talented artist ([qtonagi](https://www.threads.net/@qtonagi), reposted by [risumi_illust](https://www.threads.net/@risumi_illust)) I never knew about. And I could immediately add them to my favourites and browse their timeline. 🤗
-
-### User Discovery (Dedicated Module)
-
-- ✨ Important parts of the cache for each social media platform will be available via an in-app dashboard.
-- ✨ Follow without showing that you follow 😉
-- ✨ Your copy of the client. Your login credentials.
-- ✨ That means you own all data generated by this client.
-
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/client-showcase/Showcase_Dashboard_User_Discovery.png" alt="Database Showcase">
-</p>
-
-### User Discovery (Database Module)
-
-- ✨ Full access and documentation for your sqlite store.
-- ✨ I try my best to design the app to be OSINT friendly for non-techie research scholars, who I am sure can make much better use of the data than me.
-- ✨ All features are opt-in. You can choose to not use the features that you don't want to use.
-
-<p align="center">
-  <img width = "720px" height="auto" src="/apps/web/public/assets/client-showcase/Showcase_Sqlite.png" alt="Sqlite Showcase">
-</p>
-
-</details>
-
-<br/>
-
-## FAQ
-
-Q. Looks good to me ! Where can I ping you for more features?
-
-A. You can join my [discord](https://discord.gg/k8Wzxea7) to help with development and suggest features.
-
-Q. Will you be supporting authenticated workflows?
-
-A. Well, writing and maintaining wrappers for multiple social media APIs is extremely time-consuming.
-However, thanks to the incredible work done by the open source community ([threads-api](https://github.com/junhoyeo/threads-api) by [@junhoyeo](https://github.com/junhoyeo) and co, [masto.js](https://github.com/neet/masto.js) by [@neet](https://github.com/neet) and co), I can solely focus on building the experience 💪.
-
-<br/>
-
-## Feature Roadmap
-
-Tentative to my availability. I try to ship one major feature per version.
-
-Some features in immediate consideration are (sorted by priority):
-
-- ✨ [favourites page] fovuriting posts and showing liked posts in
-- ✨ [search page] rendering support for shorts in gallery
-- ✨ [search page] [database] rendering support for multi-image posts
-- ✨ [frontend] add threads-api support, to extend the posts that can be fetched
-- ✨ [worker] one click sync support, to populate all favourited feeds and delta patch the cache
-- ✨ ... or join [discord](https://discord.gg/k8Wzxea7) to suggest additional features 😇
-
-<br/>
-
-## Final Words
-
-`Dhaaga (धागा)` is a common word for `thread` `yarn` and `string` in Hindi.
-
-In popular culture, strings are used to depict the basis of human interaction self, with nature and each other.
-
-~~Also, I liked Kimi no na Wa and the name was mostly free in GitHub search results. Hence the name. 🤣~~
-
-![Kimi no na Wa](/apps/web/public/assets/client-showcase/Your_Name_Threads.jpg)
-
-If you find this project interesting, please consider starring it (⭐).
-
-I am a hardcore night owl bringing you interesting projects and stars in the sky 🌃 make burning the midnight oil feel worth it. 🙏
-
-<br/>
-
-## License
-
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-
-Debashish Patra @ 2023
+© 2023-Present Debashish Patra 
