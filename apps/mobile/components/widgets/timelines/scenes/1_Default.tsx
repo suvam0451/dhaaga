@@ -16,6 +16,21 @@ function DefaultTimelineOptions() {
 	const { setTimelineType, setShowTimelineSelection } =
 		useTimelineControllerContext();
 
+	function onClickHome() {
+		setTimelineType(TimelineFetchMode.HOME);
+		setShowTimelineSelection(false);
+	}
+
+	function onClickLocal() {
+		setTimelineType(TimelineFetchMode.LOCAL);
+		setShowTimelineSelection(false);
+	}
+
+	function onClickFederated() {
+		setTimelineType(TimelineFetchMode.FEDERATED);
+		setShowTimelineSelection(false);
+	}
+
 	function onClickGoToSocialHub() {
 		setTimelineType(TimelineFetchMode.IDLE);
 		setShowTimelineSelection(false);
@@ -23,7 +38,9 @@ function DefaultTimelineOptions() {
 
 	return (
 		<View style={{ display: 'flex', height: '100%' }}>
-			<View style={{ display: 'flex', marginTop: 32, flexGrow: 1 }}>
+			<View
+				style={{ display: 'flex', marginTop: 16, flexGrow: 1, padding: 10 }}
+			>
 				<DefaultPinnedItem
 					label={'Home'}
 					Icon={
@@ -33,6 +50,7 @@ function DefaultTimelineOptions() {
 							color={APP_FONT.MONTSERRAT_HEADER}
 						/>
 					}
+					onClick={onClickHome}
 				/>
 				<DefaultPinnedItem
 					label={'Local'}
@@ -43,6 +61,7 @@ function DefaultTimelineOptions() {
 							color={APP_FONT.MONTSERRAT_HEADER}
 						/>
 					}
+					onClick={onClickLocal}
 				/>
 				<DefaultPinnedItem
 					label={'Federated'}
@@ -53,6 +72,7 @@ function DefaultTimelineOptions() {
 							color={APP_FONT.MONTSERRAT_HEADER}
 						/>
 					}
+					onClick={onClickFederated}
 				/>
 				<DefaultPinnedItem
 					label={'Private Mode'}
@@ -63,6 +83,10 @@ function DefaultTimelineOptions() {
 							color={APP_FONT.MONTSERRAT_HEADER}
 						/>
 					}
+					disabled
+					onClick={() => {
+						console.log('[INFO]: private mode is not implemented');
+					}}
 				/>
 			</View>
 			<View>

@@ -13,7 +13,7 @@ import {
 	Note,
 } from '@dhaaga/shared-provider-misskey/src';
 import axios, { AxiosInstance } from 'axios';
-import { StatusArray } from '../status/_interface';
+import { Status, StatusArray } from '../status/_interface';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: misskeyApi.APIClient;
@@ -24,6 +24,14 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.axiosClient = axios.create({
 			baseURL: `${dto.instance}/api`,
 		});
+	}
+
+	async reblog(id: string): Promise<Status> {
+		throw new Error('Method not implemented.');
+	}
+
+	async undoReblog(id: string): Promise<Status> {
+		throw new Error('Method not implemented.');
 	}
 
 	async getMyLists() {

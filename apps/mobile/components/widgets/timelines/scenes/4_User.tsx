@@ -1,7 +1,7 @@
 import TimelineWidgetUserApi from '../api/4_User';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import AppInput from '../../../lib/Inputs';
 import { CheckBox } from '@rneui/base';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
@@ -11,10 +11,16 @@ import ActivityPubAdapterService from '../../../../services/activitypub-adapter.
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { Image } from 'expo-image';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
+import {
+	TimelineFetchMode,
+	useTimelineControllerContext,
+} from '../../../../states/useTimelineController';
 
 function TimelineWidgetUserScene() {
 	const [SearchTerm, setSearchTerm] = useState('');
 	const [debouncedSearchTerm] = useDebounce(SearchTerm, 100);
+	const { setTimelineType, setQueryOptions, setShowTimelineSelection } =
+		useTimelineControllerContext();
 
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct.subdomain;
@@ -22,28 +28,16 @@ function TimelineWidgetUserScene() {
 	const { status, data, fetchStatus, transformedData } =
 		TimelineWidgetUserApi(debouncedSearchTerm);
 
-	const [Settings, setSettings] = useState({
-		useRemoteInstance: false,
-	});
+	function onUserClicked(o: string) {
+		setQueryOptions({ userId: o });
+		setTimelineType(TimelineFetchMode.USER);
+		setShowTimelineSelection(false);
+	}
 
 	return (
 		<View style={{ flexGrow: 1, padding: 8 }}>
 			<View style={{ flexGrow: 1 }}>
 				<HideOnKeyboardVisibleContainer>
-					{/*<AppCheckBox*/}
-					{/*	checked={false}*/}
-					{/*	onPress={() => {}}*/}
-					{/*	title={"View in user's instance"}*/}
-					{/*/>*/}
-					{/*<Text*/}
-					{/*	style={{*/}
-					{/*		fontFamily: 'Montserrat-Bold',*/}
-					{/*		fontSize: 12,*/}
-					{/*		color: APP_THEME.COLOR_SCHEME_C,*/}
-					{/*	}}*/}
-					{/*>*/}
-					{/*	Remote profile viewing is WIP*/}
-					{/*</Text>*/}
 					<Text
 						style={{
 							marginTop: 16,
@@ -56,12 +50,15 @@ function TimelineWidgetUserScene() {
 				</HideOnKeyboardVisibleContainer>
 				<View>
 					{transformedData.map((o, i) => (
-						<View
+						<TouchableOpacity
 							key={i}
 							style={{
 								display: 'flex',
 								flexDirection: 'row',
 								marginBottom: 8,
+							}}
+							onPress={() => {
+								onUserClicked(o.getId());
 							}}
 						>
 							<View
@@ -83,7 +80,7 @@ function TimelineWidgetUserScene() {
 									{o.getAppDisplayAccountUrl(subdomain)}
 								</Text>
 							</View>
-						</View>
+						</TouchableOpacity>
 					))}
 				</View>
 			</View>

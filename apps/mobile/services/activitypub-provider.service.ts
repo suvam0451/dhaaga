@@ -11,6 +11,8 @@ type TimelineGetMiscQueryDto = {
 	hashtagNone?: string[];
 	hashtagLocalOnly?: boolean;
 	hashtagRemoteOnly?: boolean;
+
+	userQuery?: string;
 };
 
 /**
@@ -69,6 +71,19 @@ class ActivityPubProviderService {
 					maxId: opts.maxId,
 					limit: TIMELINE_STATUS_LIMIT,
 				});
+			}
+			case TimelineFetchMode.USER: {
+				return client.getUserPosts(misc.userQuery, {
+					limit: 5,
+					maxId: opts.maxId,
+					excludeReplies: false,
+				});
+			}
+			case TimelineFetchMode.FEDERATED: {
+				return client.getPublicTimeline();
+			}
+			default: {
+				return [];
 			}
 		}
 	}

@@ -16,7 +16,7 @@ import {
 } from '@dhaaga/shared-provider-mastodon/src';
 import { createRestAPIClient } from 'masto';
 import { Note } from '@dhaaga/shared-provider-misskey/src';
-import { StatusArray } from '../status/_interface';
+import { Status, StatusArray } from '../status/_interface';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -26,6 +26,26 @@ class MastodonRestClient implements ActivityPubClient {
 			accessToken: dto.token,
 			domain: 'mastodon',
 		});
+	}
+
+	async reblog(id: string) {
+		const _client = this.createMastoClient();
+		try {
+			return _client.v1.statuses.$select(id).reblog();
+		} catch (e) {
+			console.log(e);
+			return null;
+		}
+	}
+
+	async undoReblog(id: string) {
+		const _client = this.createMastoClient();
+		try {
+			return _client.v1.statuses.$select(id).unreblog();
+		} catch (e) {
+			console.log(e);
+			return null;
+		}
 	}
 
 	async getMyLists() {

@@ -47,6 +47,15 @@ function StatusContextComponent() {
 	}, [stateKey]);
 
 	if (!root) return <View></View>;
+	// console.log(root?.getRaw());
+
+	// return (
+	// 	<View>
+	// 		<WithActivitypubStatusContext statusInterface={root}>
+	// 			<StatusItem />
+	// 		</WithActivitypubStatusContext>
+	// 	</View>
+	// );
 	return (
 		<View>
 			<WithActivitypubStatusContext statusInterface={root}>

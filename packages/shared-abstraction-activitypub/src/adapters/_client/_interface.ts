@@ -174,22 +174,24 @@ interface ActivityPubClient {
 
 	muteUser(id: string): Promise<void>;
 
-	/** Status */
+	/**
+	 * Status
+	 * */
 	getStatus(id: string): Promise<Status>;
 
 	getStatusContext(id: string): Promise<mastodon.v1.Context | any>;
 
 	bookmark(id: string): Promise<Status>;
 
-	// https://mastodon.social/api/v1/statuses/:id/context
-	// mastodon specific
-	// getStatusContext(id: string): Promise<any>
-
 	unBookmark(id: string): Promise<Status>;
 
 	favourite(id: string): Promise<Status>;
 
 	unFavourite(id: string): Promise<Status>;
+
+	reblog(id: string): Promise<Status | null>;
+
+	undoReblog(id: string): Promise<Status | null>;
 
 	search(
 		q: string,

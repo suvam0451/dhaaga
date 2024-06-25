@@ -210,20 +210,20 @@ function TimelineWidgetHashtagScene() {
 	const followedCount = useRef(tags.filter((o) => o.following).length);
 
 	function onHashtagClicked(o: string) {
-		setSelection(o);
-		// setQueryOptions({ hashtagName: o });
-		// setTimelineType(TimelineFetchMode.HASHTAG);
-		// setShowTimelineSelection(false);
+		// setSelection(o);
+		setQueryOptions({ hashtagName: o });
+		setTimelineType(TimelineFetchMode.HASHTAG);
+		setShowTimelineSelection(false);
 	}
 
 	function onSelectionCleared() {
 		setSelection(null);
 	}
 
-	if (Selection !== null)
-		return (
-			<TimelineWidgetHashtagOptions id={Selection} clear={onSelectionCleared} />
-		);
+	// if (Selection !== null)
+	// 	return (
+	// 		<TimelineWidgetHashtagOptions id={Selection} clear={onSelectionCleared} />
+	// 	);
 	return (
 		<View style={{ flexGrow: 1, padding: 8 }}>
 			<HideOnKeyboardVisibleContainer

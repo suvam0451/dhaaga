@@ -59,9 +59,9 @@ function TimelineRenderer() {
 	const PageLoadedAtLeastOnce = useRef(false);
 
 	useEffect(() => {
-		clear();
 		PageLoadedAtLeastOnce.current = false;
-	}, [timelineType, opts?.listId, opts?.hashtagName]);
+		clear();
+	}, [timelineType, opts?.listId, opts?.hashtagName, opts?.userId]);
 
 	async function api() {
 		return await ActivityPubProviderService.getTimeline(
@@ -74,6 +74,7 @@ function TimelineRenderer() {
 			{
 				listQuery: opts?.listId,
 				hashtagQuery: opts?.hashtagName,
+				userQuery: opts?.userId,
 			},
 		);
 	}
@@ -87,6 +88,7 @@ function TimelineRenderer() {
 			timelineType,
 			opts?.listId,
 			opts?.hashtagName,
+			opts?.userId,
 		],
 		queryFn: api,
 		enabled: client !== null && !paginationLock && timelineType !== 'Idle',
@@ -126,6 +128,12 @@ function TimelineRenderer() {
 			}
 			case TimelineFetchMode.HASHTAG: {
 				return `#${opts?.hashtagName}`;
+			}
+			case TimelineFetchMode.USER: {
+				return `ID: ${opts?.userId}`;
+			}
+			case TimelineFetchMode.FEDERATED: {
+				return `Federated`;
 			}
 			default: {
 				return 'Unassigned';
@@ -197,7 +205,6 @@ function TimelineRenderer() {
 			) : (
 				<TimelineLoading />
 			)}
-			)
 		</SafeAreaView>
 	);
 }

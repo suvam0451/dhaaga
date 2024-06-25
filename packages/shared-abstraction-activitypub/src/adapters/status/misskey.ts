@@ -1,142 +1,158 @@
 import {
-  NoteInstance, Status, StatusContextInstance,
-  StatusContextInterface,
-  StatusInterface
-} from "./_interface";
-import {DriveFile} from "@dhaaga/shared-provider-misskey/src";
-import {DriveFileToMediaAttachmentAdapter} from "../media-attachment/adapter";
-import {DriveFileInstance} from "../media-attachment/unique";
-import {UserType} from "../profile/_interface";
+	NoteInstance,
+	Status,
+	StatusContextInstance,
+	StatusContextInterface,
+	StatusInterface,
+} from './_interface';
+import { DriveFile } from '@dhaaga/shared-provider-misskey/src';
+import { DriveFileToMediaAttachmentAdapter } from '../media-attachment/adapter';
+import { DriveFileInstance } from '../media-attachment/unique';
+import { UserType } from '../profile/_interface';
 
 export class MisskeyToStatusContextAdapter implements StatusContextInterface {
-  ref: StatusInterface;
-  ctx: StatusContextInstance
+	ref: StatusInterface;
+	ctx: StatusContextInstance;
 
-  constructor(ref: StatusInterface, ctx: StatusContextInstance) {
-    this.ref = ref;
-    this.ctx = ctx
-  }
+	constructor(ref: StatusInterface, ctx: StatusContextInstance) {
+		this.ref = ref;
+		this.ctx = ctx;
+	}
 
-  addChildren(items: StatusInterface[]): void {
-    throw new Error("Method not implemented.");
-  }
+	addChildren(items: StatusInterface[]): void {
+		throw new Error('Method not implemented.');
+	}
 
-  getId(): string {
-    throw new Error("Method not implemented.");
-  }
+	getId(): string {
+		throw new Error('Method not implemented.');
+	}
 
-  getChildren() {
-    return []
-  }
+	getChildren() {
+		return [];
+	}
 
-  getParent() {
-    return null
-  }
+	getParent() {
+		return null;
+	}
 
-  getRoot() {
-    return null
-  }
+	getRoot() {
+		return null;
+	}
 }
 
 class MisskeyToStatusAdapter implements StatusInterface {
-  ref: NoteInstance;
+	ref: NoteInstance;
 
-  constructor(ref: NoteInstance) {
-    this.ref = ref;
-  }
+	constructor(ref: NoteInstance) {
+		this.ref = ref;
+	}
 
-  getRaw(): Status {
-    return this?.ref?.instance
-  }
+	getIsRebloggedByMe(): boolean | null | undefined {
+		return false;
+	}
 
-  getIsFavourited(): boolean | null | undefined {
-    return false
-  }
+	getIsSensitive(): boolean {
+		throw new Error('Method not implemented.');
+	}
 
-  setDescendents(items: StatusInterface[]): void {
-    return
-  }
+	getSpoilerText(): string | null | undefined {
+		throw new Error('Method not implemented.');
+	}
 
-  getDescendants(): StatusInterface[] {
-    return []
-  }
+	getRaw(): Status {
+		return this?.ref?.instance;
+	}
 
-  getUser(): UserType {
-    return this?.ref?.instance?.user
-  }
+	getIsFavourited(): boolean | null | undefined {
+		return false;
+	}
 
-  isReply(): boolean {
-    return false
-  }
+	setDescendents(items: StatusInterface[]): void {
+		return;
+	}
 
-  getParentStatusId(): string | null | undefined {
-    return null
-  }
+	getDescendants(): StatusInterface[] {
+		return [];
+	}
 
-  getUserIdParentStatusUserId(): string | null | undefined {
-    return null
-  }
+	getUser(): UserType {
+		return this?.ref?.instance?.user;
+	}
 
-  getRepostedStatusRaw = () => this.ref?.instance?.renote
+	isReply(): boolean {
+		return false;
+	}
 
-  getIsBookmarked(): boolean {
-    return false
-  }
+	getParentStatusId(): string | null | undefined {
+		return null;
+	}
 
-  isValid() {
-    return this.ref?.instance !== undefined && this.ref?.instance !== null;
-  }
+	getUserIdParentStatusUserId(): string | null | undefined {
+		return null;
+	}
 
-  getId = () => this.ref?.instance?.id;
-  getRepliesCount = () => this.ref?.instance?.repliesCount;
-  getRepostsCount = () => this.ref?.instance?.renoteCount;
-  getFavouritesCount = () => -1;
-  getUsername = () => this.ref?.instance?.user.username;
-  getDisplayName = () => this.ref?.instance?.user.name;
-  getAvatarUrl = () => this.ref?.instance?.user.avatarUrl;
-  getCreatedAt = () => this.ref?.instance?.createdAt || new Date().toString();
+	getRepostedStatusRaw = () => this.ref?.instance?.renote;
 
-  getVisibility() {
-    return this.ref?.instance?.visibility;
-  }
+	getIsBookmarked(): boolean {
+		return false;
+	}
 
-  getAccountUrl() {
-    return this.ref?.instance?.user.instance?.name;
-  }
+	isValid() {
+		return this.ref?.instance !== undefined && this.ref?.instance !== null;
+	}
 
-  getRepostedStatus(): StatusInterface | null | undefined {
-    if (this.ref?.instance?.renote) {
-      return new MisskeyToStatusAdapter(
-          new NoteInstance(this.ref?.instance?.renote)
-      ) as unknown as StatusInterface;
-    }
-    return null;
-  }
+	getId = () => this.ref?.instance?.id;
+	getRepliesCount = () => this.ref?.instance?.repliesCount;
+	getRepostsCount = () => this.ref?.instance?.renoteCount;
+	getFavouritesCount = () => -1;
+	getUsername = () => this.ref?.instance?.user.username;
+	getDisplayName = () => this.ref?.instance?.user.name;
+	getAvatarUrl = () => this.ref?.instance?.user.avatarUrl;
+	getCreatedAt = () => this.ref?.instance?.createdAt || new Date().toString();
 
-  getMediaAttachments() {
-    if (!this.ref?.instance?.files) {
-      return [];
-    }
-    return this.ref?.instance?.files.map((o: DriveFile) => {
-      return new DriveFileToMediaAttachmentAdapter(new DriveFileInstance(o)) as any
-    });
-  }
+	getVisibility() {
+		return this.ref?.instance?.visibility;
+	}
 
-  isReposted() {
-    return this.ref?.instance?.renote !== null;
-  }
+	getAccountUrl() {
+		return this.ref?.instance?.user.instance?.name;
+	}
 
-  getContent() {
-    return this.ref?.instance?.text;
-  }
+	getRepostedStatus(): StatusInterface | null | undefined {
+		if (this.ref?.instance?.renote) {
+			return new MisskeyToStatusAdapter(
+				new NoteInstance(this.ref?.instance?.renote),
+			) as unknown as StatusInterface;
+		}
+		return null;
+	}
 
-  print(): void {
-    console.log(this.ref.instance);
-  }
+	getMediaAttachments() {
+		if (!this.ref?.instance?.files) {
+			return [];
+		}
+		return this.ref?.instance?.files.map((o: DriveFile) => {
+			return new DriveFileToMediaAttachmentAdapter(
+				new DriveFileInstance(o),
+			) as any;
+		});
+	}
 
-  getAccountId_Poster(): string {
-    return this?.ref?.instance?.user?.id;
-  }
+	isReposted() {
+		return this.ref?.instance?.renote !== null;
+	}
+
+	getContent() {
+		return this.ref?.instance?.text;
+	}
+
+	print(): void {
+		console.log(this.ref.instance);
+	}
+
+	getAccountId_Poster(): string {
+		return this?.ref?.instance?.user?.id;
+	}
 }
 
-export default MisskeyToStatusAdapter
+export default MisskeyToStatusAdapter;

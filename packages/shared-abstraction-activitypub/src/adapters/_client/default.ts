@@ -7,9 +7,17 @@ import ActivityPubClient, {
 } from './_interface';
 import { Note } from '@dhaaga/shared-provider-misskey/src';
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { StatusArray } from '../status/_interface';
+import { Status, StatusArray } from '../status/_interface';
 
 class UnknownRestClient implements ActivityPubClient {
+	reblog(id: string): Promise<Status> {
+		throw new Error('Method not implemented.');
+	}
+
+	undoReblog(id: string): Promise<Status> {
+		throw new Error('Method not implemented.');
+	}
+
 	async getMyLists() {
 		return [];
 	}

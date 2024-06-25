@@ -1,155 +1,161 @@
-import {UserType} from "../profile/_interface";
+import { UserType } from '../profile/_interface';
 import {
-  Status, StatusContextInstance,
-  StatusContextInterface,
-  StatusInterface
-} from "./_interface";
-
+	Status,
+	StatusContextInstance,
+	StatusContextInterface,
+	StatusInterface,
+} from './_interface';
 
 class UnknownToStatusAdapter implements StatusInterface {
-  getIsSensitive(): boolean {
-      throw new Error("Method not implemented.");
-  }
-  getSpoilerText(): string | null | undefined {
-      throw new Error("Method not implemented.");
-  }
-  getRaw(): Status {
-    return null
-  }
+	getIsRebloggedByMe(): boolean | null | undefined {
+		throw new Error('Method not implemented.');
+	}
 
-  setDescendents(items: StatusInterface[]): void {
-    throw new Error("Method not implemented.");
-  }
+	getIsSensitive(): boolean {
+		throw new Error('Method not implemented.');
+	}
 
-  getDescendants(): StatusInterface[] {
-    return []
-  }
+	getSpoilerText(): string | null | undefined {
+		throw new Error('Method not implemented.');
+	}
 
-  getUser(): UserType {
-    throw new Error("Method not implemented.");
-  }
+	getRaw(): Status {
+		return null;
+	}
 
-  isReply(): boolean {
-    return false
-  }
+	setDescendents(items: StatusInterface[]): void {
+		throw new Error('Method not implemented.');
+	}
 
-  getParentStatusId(): string {
-    throw new Error("Method not implemented.");
-  }
+	getDescendants(): StatusInterface[] {
+		return [];
+	}
 
-  getUserIdParentStatusUserId(): string {
-    throw new Error("Method not implemented.");
-  }
+	getUser(): UserType {
+		throw new Error('Method not implemented.');
+	}
 
-  getRepostedStatusRaw(): Status {
-    return null
-  }
+	isReply(): boolean {
+		return false;
+	}
 
-  getIsBookmarked() {
-    return false
-  }
+	getParentStatusId(): string {
+		throw new Error('Method not implemented.');
+	}
 
-  getIsFavourited() {
-    return false
-  }
+	getUserIdParentStatusUserId(): string {
+		throw new Error('Method not implemented.');
+	}
 
-  getRepliesCount(): number {
-    return -1;
-  }
+	getRepostedStatusRaw(): Status {
+		return null;
+	}
 
-  isValid() {
-    return false
-  }
+	getIsBookmarked() {
+		return false;
+	}
 
-  getId(): string {
-    return "";
-  }
+	getIsFavourited() {
+		return false;
+	}
 
-  getRepostsCount(): number {
-    return -1;
-  }
+	getRepliesCount(): number {
+		return -1;
+	}
 
-  getFavouritesCount(): number {
-    return -1;
-  }
+	isValid() {
+		return false;
+	}
 
-  getUsername() {
-    return "";
-  }
+	getId(): string {
+		return '';
+	}
 
-  getDisplayName() {
-    return "";
-  }
+	getRepostsCount(): number {
+		return -1;
+	}
 
-  getAvatarUrl() {
-    return "";
-  }
+	getFavouritesCount(): number {
+		return -1;
+	}
 
-  getCreatedAt() {
-    return new Date().toString();
-  }
+	getUsername() {
+		return '';
+	}
 
-  getVisibility() {
-    return "";
-  }
+	getDisplayName() {
+		return '';
+	}
 
-  getAccountUrl() {
-    return "";
-  }
+	getAvatarUrl() {
+		return '';
+	}
 
-  getRepostedStatus(): StatusInterface | null | undefined {
-    return null;
-  }
+	getCreatedAt() {
+		return new Date().toString();
+	}
 
-  isReposted() {
-    return false;
-  }
+	getVisibility() {
+		return '';
+	}
 
-  getContent() {
-    return "";
-  }
+	getAccountUrl() {
+		return '';
+	}
 
-  getMediaAttachments() {
-    return [];
-  }
+	getRepostedStatus(): StatusInterface | null | undefined {
+		return null;
+	}
 
-  print() {
-    console.log("Unknown status type");
-  }
+	isReposted() {
+		return false;
+	}
 
-  getAccountId_Poster(): string {
-    return "";
-  }
+	getContent() {
+		return '';
+	}
+
+	getMediaAttachments() {
+		return [];
+	}
+
+	print() {
+		console.log('Unknown status type');
+	}
+
+	getAccountId_Poster(): string {
+		return '';
+	}
 }
 
 export class UnknownToStatusContextAdapter implements StatusContextInterface {
-  ref: StatusInterface;
-  ctx: StatusContextInstance
+	ref: StatusInterface;
+	ctx: StatusContextInstance;
 
-  constructor(ref: StatusInterface, ctx: StatusContextInstance) {
-    this.ref = ref;
-    this.ctx = ctx
-  }
+	constructor(ref: StatusInterface, ctx: StatusContextInstance) {
+		this.ref = ref;
+		this.ctx = ctx;
+	}
 
-  addChildren(items: StatusInterface[]): void {
-    throw new Error("Method not implemented.");
-  }
+	addChildren(items: StatusInterface[]): void {
+		throw new Error('Method not implemented.');
+	}
 
-  getId(): string {
-    throw new Error("Method not implemented.");
-  }
+	getId(): string {
+		throw new Error('Method not implemented.');
+	}
 
-  getChildren() {
-    return []
-  }
+	getChildren() {
+		return [];
+	}
 
-  getParent() {
-    return null
-  }
+	getParent() {
+		return null;
+	}
 
-  getRoot() {
-    return null
-  }
+	getRoot() {
+		return null;
+	}
 }
 
-export default UnknownToStatusAdapter
+export default UnknownToStatusAdapter;

@@ -19,6 +19,9 @@ import appFonts from '../styles/AppFonts';
 import { useCallback } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 
+// to get rid of realm warnings
+import 'react-native-get-random-values';
+
 function WithGorhomBottomSheetWrapper() {
 	const { top, bottom } = useSafeAreaInsets();
 

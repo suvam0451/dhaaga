@@ -19,6 +19,7 @@ type Type = {
 	opts: {
 		listId?: string;
 		hashtagName?: string;
+		userId?: string;
 	};
 	setQueryOptions: (obj: any) => void;
 	ShowTimelineSelection: boolean;

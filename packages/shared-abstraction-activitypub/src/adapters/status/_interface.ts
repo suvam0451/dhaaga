@@ -1,126 +1,129 @@
-import {MediaAttachmentInterface} from "../media-attachment/interface";
-import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {Note} from "@dhaaga/shared-provider-misskey/src";
-import {UserType} from "../profile/_interface";
+import { MediaAttachmentInterface } from '../media-attachment/interface';
+import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { Note } from '@dhaaga/shared-provider-misskey/src';
+import { UserType } from '../profile/_interface';
 
-export type Status = mastodon.v1.Status | Note | null | undefined
-export type StatusArray = Status[]
+export type Status = mastodon.v1.Status | Note | null | undefined;
+export type StatusArray = Status[];
 
 export interface StatusContextInterface {
-  getId(): string
+	getId(): string;
 
-  getChildren(): StatusInterface[]
+	getChildren(): StatusInterface[];
 
-  getParent(): StatusInterface | null | undefined
+	getParent(): StatusInterface | null | undefined;
 
-  getRoot(): StatusInterface | null | undefined
+	getRoot(): StatusInterface | null | undefined;
 
-  addChildren(items: StatusInterface[]): void
+	addChildren(items: StatusInterface[]): void;
 }
 
 export interface StatusInterface {
-  getRaw(): Status
+	getRaw(): Status;
 
-  getId(): string
+	getId(): string;
 
-  getUsername(): string;
+	getUsername(): string;
 
-  getDisplayName(): string | null;
+	getDisplayName(): string | null;
 
-  getAvatarUrl(): string | null;
+	getAvatarUrl(): string | null;
 
-  getCreatedAt(): string;
+	getCreatedAt(): string;
 
-  getVisibility(): string;
+	getVisibility(): string;
 
-  getAccountUrl(): string | null | undefined;
+	getAccountUrl(): string | null | undefined;
 
-  getRepostedStatus(): StatusInterface | null | undefined;
+	getRepostedStatus(): StatusInterface | null | undefined;
 
-  getRepostedStatusRaw(): Status;
+	getRepostedStatusRaw(): Status;
 
-  getContent(): string | null;
+	getContent(): string | null;
 
-  getUser(): UserType | null
+	getUser(): UserType | null;
 
-  isReposted(): boolean;
+	isReposted(): boolean;
 
-  getMediaAttachments(): MediaAttachmentInterface[] | null | undefined;
+	getMediaAttachments(): MediaAttachmentInterface[] | null | undefined;
 
-  print(): void;
+	print(): void;
 
-  getRepliesCount(): number;
+	getRepliesCount(): number;
 
-  getIsBookmarked(): boolean | null | undefined
-  getIsFavourited(): boolean | null | undefined
-  getRepostsCount(): number;
+	getIsRebloggedByMe(): boolean | null | undefined;
 
-  getFavouritesCount(): number;
+	getIsBookmarked(): boolean | null | undefined;
 
-  getAccountId_Poster(): string;
+	getIsFavourited(): boolean | null | undefined;
 
-  isValid(): boolean;
+	getRepostsCount(): number;
 
-  isReply(): boolean
+	getFavouritesCount(): number;
 
-  getParentStatusId(): string | null | undefined
+	getAccountId_Poster(): string;
 
-  getUserIdParentStatusUserId(): string | null | undefined
+	isValid(): boolean;
 
-  print(): void
+	isReply(): boolean;
 
-  getIsSensitive(): boolean
+	getParentStatusId(): string | null | undefined;
 
-  getSpoilerText(): string | null | undefined
+	getUserIdParentStatusUserId(): string | null | undefined;
 
-  /**
-   * Reply Thread
-   */
-  setDescendents(items: StatusInterface[]): void
+	print(): void;
 
-  getDescendants(): StatusInterface[]
+	getIsSensitive(): boolean;
+
+	getSpoilerText(): string | null | undefined;
+
+	/**
+	 * Reply Thread
+	 */
+	setDescendents(items: StatusInterface[]): void;
+
+	getDescendants(): StatusInterface[];
 }
 
 export class StatusContextInstance {
-  instance: StatusInterface
-  children: StatusInterface[]
-  parent: StatusInterface | null | undefined
+	instance: StatusInterface;
+	children: StatusInterface[];
+	parent: StatusInterface | null | undefined;
 
-  constructor(instance: StatusInterface) {
-    this.instance = instance
-    this.children = []
-  }
+	constructor(instance: StatusInterface) {
+		this.instance = instance;
+		this.children = [];
+	}
 
-  setParent(parent: StatusInterface | null | undefined): void {
-    this.parent = parent
-  }
+	setParent(parent: StatusInterface | null | undefined): void {
+		this.parent = parent;
+	}
 
-  addChild(item: StatusInterface) {
-    this.children.push(item)
-  }
+	addChild(item: StatusInterface) {
+		this.children.push(item);
+	}
 
-  addChildren(items: StatusInterface[]) {
-    this.children = this.children.concat(items)
-  }
+	addChildren(items: StatusInterface[]) {
+		this.children = this.children.concat(items);
+	}
 }
 
-
 export class StatusInstance {
-  instance: mastodon.v1.Status;
-  emojiMap: Map<string, URL>
+	instance: mastodon.v1.Status;
+	emojiMap: Map<string, URL>;
 
-  constructor(instance: mastodon.v1.Status) {
-    this.instance = instance;
-    this.emojiMap = new Map()
-  }
+	constructor(instance: mastodon.v1.Status) {
+		this.instance = instance;
+		this.emojiMap = new Map();
+	}
 }
 
 export class NoteInstance {
-  instance: Note;
-  emojiMap: Map<string, URL>
+	instance: Note;
+	emojiMap: Map<string, URL>;
 
-  constructor(instance: Note) {
-    this.instance = instance;
-    this.emojiMap = new Map()
-  }
+	constructor(instance: Note) {
+		this.instance = instance;
+		this.emojiMap = new Map();
+	}
 }

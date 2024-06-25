@@ -324,7 +324,7 @@ class MfmService {
 			}
 		}
 		if (emojiCodes.size > 0) {
-			console.log('[INFO]: need to parse emojis', emojiCodes);
+			// console.log('[INFO]: need to parse emojis', emojiCodes);
 			EmojiService.loadEmojisForInstanceSync(db, globalDb, remoteSubdomain, {
 				selection: emojiCodes,
 			});

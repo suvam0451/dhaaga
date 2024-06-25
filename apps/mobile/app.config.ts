@@ -70,14 +70,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		],
 		['expo-router'],
 	],
-	// experiments: {
-	// 	typedRoutes: true
-	// }
-	// expo: {
-	// 	experiments: {
-	// 		typedRoutes: true,
-	// 	},
-	// },
 });
 
 export default expo;

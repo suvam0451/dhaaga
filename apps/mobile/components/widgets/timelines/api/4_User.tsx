@@ -25,8 +25,10 @@ function TimelineWidgetUserApi(q: string) {
 	const transformedData = useMemo(() => {
 		if (queryResults.fetchStatus === 'fetching') return [];
 		if (queryResults.status !== 'success') return [];
-		return queryResults.data.accounts.map((o) =>
-			ActivityPubAdapterService.adaptUser(o, domain),
+		return (
+			queryResults?.data?.accounts?.map((o) =>
+				ActivityPubAdapterService.adaptUser(o, domain),
+			) || []
 		);
 	}, [queryResults.fetchStatus]);
 

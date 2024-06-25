@@ -1,6 +1,6 @@
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
 import { Pressable, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { Divider, Skeleton, Text } from '@rneui/themed';
+import { Divider, Text } from '@rneui/themed';
 import { StandardView } from '../../../styles/Containers';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { formatDistanceToNowStrict } from 'date-fns';
@@ -12,7 +12,6 @@ import ImageCarousal from '../../../screens/timelines/fragments/ImageCarousal';
 import { useNavigation } from '@react-navigation/native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
-import Status from '../../bottom-sheets/Status';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub/src';
 import { randomUUID } from 'expo-crypto';
 import { useRealm } from '@realm/react';
@@ -96,12 +95,6 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 		deps: [statusContent, !userI?.getInstanceUrl()],
 	});
 
-	const [BottomSheetVisible, setBottomSheetVisible] = useState(false);
-
-	function statusActionListClicked() {
-		setBottomSheetVisible(!BottomSheetVisible);
-	}
-
 	const isSensitive = status?.getIsSensitive();
 	const spoilerText = status?.getSpoilerText();
 
@@ -114,10 +107,6 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 			return <StatusItemSkeleton />;
 		return (
 			<>
-				<Status
-					visible={BottomSheetVisible}
-					setVisible={setBottomSheetVisible}
-				/>
 				<TouchableOpacity
 					delayPressIn={100}
 					onPress={() => {
