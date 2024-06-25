@@ -21,15 +21,42 @@ The project is in **very early MVP stage**.
 An intuitive way to switch between timelines/hashtags/lists.
 
 <details>
+<summary>Screenshots</summary>
+<img 
+    width = "384px" 
+    height="auto" 
+    src="https://github.com/suvam0451/dhaaga/assets/44526763/a22abeb0-105f-47cb-b9af-380789038a44" 
+/>
+</details>
 
-<summary>Highlights:</summary>
-
+<details>
+<summary>Highlights</summary>
+    
 - ✅ Search and browse hashtags
     - 🚧 Guest browsing a hashtag from remote instance will be supported in the
       future.
 - ✅ Search and browse a user's timeline directly
 - ✅ Browse your list timelines
 - 🚧 Remote instance browsing will be added in the future
+</details>
+
+#### Better Translation Support
+
+Ethical use of AI tools to break language barrier and improve communication.
+
+<img 
+    width = "384px" 
+    height="auto" 
+    src="https://github.com/suvam0451/dhaaga/assets/44526763/ac99610f-3479-4f7a-a890-3cc9547fbbe3" 
+/>
+
+<details>
+
+<summary>Highlights:</summary>
+
+- ✅ Long-Press translate button to generate explanation with openAI
+    - 🚧 Only english is supported for demonstration.
+- 🚧 This feature will be added for alt-texts
 
 </details>
 
@@ -46,13 +73,13 @@ Some distinctive features I am considering adding to the app:
   between users using a QR code** (similar to DNS filters). The user can
   configure the rules in-app.
 
-## Building From Source
+### Building From Source
 
 This project is a monorepo. You can find individual README files in
 `/packages` and
 `/apps/*` folders with specific instructions.
 
-## Meaning and Legacy
+### Meaning and Legacy
 
 Dhaaga (धागा) is the Hindi word for a type of thin, twisted strand of fiber (generally used for sewing).
 
@@ -70,7 +97,7 @@ The project was rebooted in May 2024 as a mobile Fediverse client.
 You can read the legacy README [here]()
 </details>
 
-## License
+### License
 
 The source code for this project is made available under [AGPL-3.0 license]()
 
