@@ -14,9 +14,9 @@ inconveniences in ActivityPub ecosystem.
 
 The project is in **very early MVP stage**.
 
-## Features
+## ✨ Features
 
-#### Timeline Widget
+#### 🌟 Timeline Widget
 
 An intuitive way to switch between timelines/hashtags/lists.
 
@@ -25,8 +25,26 @@ An intuitive way to switch between timelines/hashtags/lists.
 <img 
     width = "384px" 
     height="auto" 
+    src="https://github.com/suvam0451/dhaaga/assets/44526763/af8310f9-9701-4765-b212-6b3092c86af5" 
+/>
+<img 
+    width = "384px" 
+    height="auto" 
+    src="https://github.com/suvam0451/dhaaga/assets/44526763/aa9c4101-2106-41c1-a85c-2de4272f1e03" 
+/>
+<img 
+    width = "384px" 
+    height="auto" 
     src="https://github.com/suvam0451/dhaaga/assets/44526763/a22abeb0-105f-47cb-b9af-380789038a44" 
 />
+<img 
+    width = "384px" 
+    height="auto" 
+    src="https://github.com/suvam0451/dhaaga/assets/44526763/8b2cee3d-79d6-4938-a993-71302d3ac7cc" 
+/>
+
+
+
 </details>
 
 <details>
@@ -40,15 +58,18 @@ An intuitive way to switch between timelines/hashtags/lists.
 - 🚧 Remote instance browsing will be added in the future
 </details>
 
-#### Better Translation Support
+#### 🌟 Better Translation Support
 
 Ethical use of AI tools to break language barrier and improve communication.
 
+<details>
+<summary>Screenshots</summary>
 <img 
     width = "384px" 
     height="auto" 
     src="https://github.com/suvam0451/dhaaga/assets/44526763/ac99610f-3479-4f7a-a890-3cc9547fbbe3" 
 />
+</details>
 
 <details>
 
@@ -60,7 +81,32 @@ Ethical use of AI tools to break language barrier and improve communication.
 
 </details>
 
-## Planned Features
+#### 🌟 Better Comment Threads
+
+A cleaner comment browsing experience, taking references from lemmy clients.
+
+<details>
+<summary>Screenshots</summary>
+<img 
+    width = "384px" 
+    height="auto" 
+    src="https://github.com/suvam0451/dhaaga/assets/44526763/6d96bbf5-0a33-40e6-8155-6258951ff303" 
+/>
+</details>
+
+<details>
+<summary>Highlights:</summary>
+
+- ✅ Nested comments of any depth is supported
+- ✅ Replies are color-coded to make it easy to track origin
+- 🚧 Use a dedicated color palette, instead of random colors
+- 🚧 More interaction options
+- 🚧 Global actions like "Collapse/Expand All"
+
+</details>
+
+
+## ✨ Planned Features
 
 Some distinctive features I am considering adding to the app:
 
