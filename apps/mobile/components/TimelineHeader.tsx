@@ -1,36 +1,10 @@
-import React, { useState } from 'react';
-import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import React from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Dialog, Text } from '@rneui/themed';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { Text } from '@rneui/themed';
 import { APP_THEME } from '../styles/AppTheme';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { TabView, SceneMap } from 'react-native-tab-view';
-import { DialogButtonGroupItem } from '../styles/Containers';
-import CustomTimelineOptions from './widgets/timelines/fragments/CustomTimelineOptions';
-import DefaultTimelineOptions from './widgets/timelines/fragments/DefaultTimelineOptions';
-
-function FirstRoute() {
-	return <DefaultTimelineOptions />;
-}
-
-const SecondRoute = () => (
-	<View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-);
-
-function FifthRoute() {
-	return <CustomTimelineOptions />;
-}
-
-const renderScene = SceneMap({
-	pinned: FirstRoute,
-	lists: SecondRoute,
-	tags: FirstRoute,
-	users: FirstRoute,
-	custom: FifthRoute,
-});
+import { useTimelineControllerContext } from '../states/useTimelineController';
+import TimelineWidgetModal from './widgets/timelines/core/Modal';
 
 type HeadersProps = {
 	HIDDEN_SECTION_HEIGHT: number;
@@ -42,108 +16,11 @@ const TimelinesHeader = ({
 	SHOWN_SECTION_HEIGHT,
 	label,
 }: HeadersProps) => {
-	const [ShowTimelineSelection, setShowTimelineSelection] = useState(false);
+	const { setShowTimelineSelection } = useTimelineControllerContext();
 
 	function onIconPress() {
 		setShowTimelineSelection(true);
 	}
-
-	const [index, setIndex] = React.useState(0);
-	const [routes] = React.useState([
-		{ key: 'pinned', title: 'Pinned' },
-		{ key: 'lists', title: 'Lists' },
-		{ key: 'tags', title: 'Tags' },
-		{ key: 'users', title: 'Users' },
-		{ key: 'custom', title: 'Custom' },
-	]);
-	const layout = useWindowDimensions();
-
-	const renderTabBar = (props: any) => {
-		const routes: {
-			key: string;
-			title: string;
-		}[] = props.navigationState.routes;
-		console.log(routes);
-		return (
-			<View
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'space-around',
-					backgroundColor: '#555',
-					borderRadius: 8,
-					paddingHorizontal: 8,
-				}}
-			>
-				{routes.map((o, i) => {
-					switch (i) {
-						case 0:
-							return (
-								<DialogButtonGroupItem key={i}>
-									<View style={{ width: 24 }}>
-										<AntDesign
-											name="pushpin"
-											size={24}
-											color={index === 0 ? APP_THEME.LINK : '#888'}
-										/>
-									</View>
-								</DialogButtonGroupItem>
-							);
-						case 1:
-							return (
-								<DialogButtonGroupItem key={i} style={{ flex: 1 }}>
-									<View style={{ width: 24 }}>
-										<FontAwesome5
-											name="list"
-											size={24}
-											color={index === 1 ? APP_THEME.LINK : '#888'}
-										/>
-									</View>
-								</DialogButtonGroupItem>
-							);
-
-						case 2:
-							return (
-								<DialogButtonGroupItem key={i}>
-									<View style={{ width: 24 }}>
-										<FontAwesome6
-											name="hashtag"
-											size={24}
-											color={index === 2 ? APP_THEME.LINK : '#888'}
-										/>
-									</View>
-								</DialogButtonGroupItem>
-							);
-
-						case 3:
-							return (
-								<DialogButtonGroupItem key={i}>
-									<View style={{ width: 24 }}>
-										<FontAwesome5
-											name="user-alt"
-											size={24}
-											color={index === 3 ? APP_THEME.LINK : '#888'}
-										/>
-									</View>
-								</DialogButtonGroupItem>
-							);
-						case 4:
-							return (
-								<DialogButtonGroupItem key={i}>
-									<View style={{ width: 24 }}>
-										<MaterialIcons
-											name="dashboard-customize"
-											size={24}
-											color={index === 4 ? APP_THEME.LINK : '#888'}
-										/>
-									</View>
-								</DialogButtonGroupItem>
-							);
-					}
-				})}
-			</View>
-		);
-	};
 
 	return (
 		<View
@@ -160,13 +37,19 @@ const TimelinesHeader = ({
 					display: 'flex',
 					flexDirection: 'row',
 					alignItems: 'center',
-					// backgroundColor: 'red',
-					paddingVertical: 16,
+					paddingVertical: 12,
 					paddingHorizontal: 16,
 				}}
 				onPress={onIconPress}
 			>
-				<Text style={[styles.conversation, { opacity: 0.6 }]}>
+				<Text
+					style={[
+						styles.conversation,
+						{
+							opacity: 0.6,
+						},
+					]}
+				>
 					{label || 'Home'}
 				</Text>
 				<Ionicons
@@ -184,21 +67,7 @@ const TimelinesHeader = ({
 				style={{ opacity: 0.6 }}
 			/>
 
-			<Dialog
-				overlayStyle={{ backgroundColor: '#2c2c2c', height: 400 }}
-				isVisible={ShowTimelineSelection}
-				onBackdropPress={() => {
-					setShowTimelineSelection(false);
-				}}
-			>
-				<TabView
-					navigationState={{ index, routes }}
-					renderScene={renderScene}
-					onIndexChange={setIndex}
-					renderTabBar={renderTabBar}
-					initialLayout={{ width: layout.width, height: 400 }}
-				/>
-			</Dialog>
+			<TimelineWidgetModal />
 		</View>
 	);
 };

@@ -2,11 +2,16 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../styles/AppTheme';
 
-function TimelineLoading() {
+type TimelineLoadingProps = {
+	label?: string;
+};
+
+function TimelineLoading({ label }: TimelineLoadingProps) {
+	const _label = label || 'Loading Timeline';
 	return (
 		<View style={styles.containerWrapper}>
 			<View style={styles.container}>
-				<Text style={styles.titleText}>Loading Timeline</Text>
+				<Text style={styles.titleText}>{_label}</Text>
 				<View style={{ marginTop: 16 }}>
 					<ActivityIndicator size={24} />
 				</View>
@@ -19,7 +24,7 @@ const styles = StyleSheet.create({
 	containerWrapper: {
 		display: 'flex',
 		alignItems: 'center',
-		marginTop: 32,
+		marginTop: 64,
 		padding: 16,
 		backgroundColor: '#121212',
 		height: '100%',
@@ -36,6 +41,7 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		color: APP_FONT.MONTSERRAT_HEADER,
 		fontFamily: 'Montserrat-Bold',
+		textAlign: 'center',
 	},
 });
 

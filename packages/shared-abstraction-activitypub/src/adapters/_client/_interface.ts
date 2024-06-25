@@ -1,181 +1,205 @@
-import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {UserDetailed} from "@dhaaga/shared-provider-misskey/src";
-import {Status, StatusArray, StatusInterface} from "../status/_interface";
-
+import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { UserDetailed } from '@dhaaga/shared-provider-misskey/src';
+import { Status, StatusArray, StatusInterface } from '../status/_interface';
 
 export type HashtagTimelineQuery = {
-  limit: number,
-  sinceId?: string,
-  maxId?: string;
-  minId?: string;
-  any?: string[];
-  all?: string[];
-  none?: string[]
-  onlyMedia?: boolean
+	limit: number;
+	sinceId?: string;
+	maxId?: string;
+	minId?: string;
+	any?: string[];
+	all?: string[];
+	none?: string[];
+	onlyMedia?: boolean;
 };
-
 
 export type GetUserPostsQueryDTO = {
-  limit: number,
-  maxId?: string,
-  excludeReplies: boolean
-}
-
-export type GetPostsQueryDTO = {
-  limit: number,
-  sinceId?: string,
-  minId?: string,
-  maxId?: string,
-}
-
-export type GetTimelineQueryDTO = {
-  limit: number,
-  sinceId?: string,
-  minId?: string,
-  maxId?: string,
-  remote?: boolean
-  mediaOnly?: boolean
-}
-
-export type GetTrendingPostsQueryDTO = {
-  limit: number,
-  offset?: number
-}
-
-
-export type GetSearchResultQueryDTO = {
-  type: "accounts" | "hashtags" | "statuses" | null | undefined
-  following: boolean,
-  limit: number,
-  maxId?: string,
-}
-
-export type RestClientCreateDTO = {
-  instance: string;
-  token: string;
+	limit: number;
+	maxId?: string;
+	excludeReplies: boolean;
 };
 
-export type Tag = mastodon.v1.Tag | null | undefined
-export type TagArray = mastodon.v1.Tag[] | []
+export type GetPostsQueryDTO = {
+	limit: number;
+	sinceId?: string;
+	minId?: string;
+	maxId?: string;
+};
 
-export type TrendLinkArray = mastodon.v1.TrendLink[] | []
+export type GetTimelineQueryDTO = {
+	limit: number;
+	sinceId?: string;
+	minId?: string;
+	maxId?: string;
+	remote?: boolean;
+	mediaOnly?: boolean;
+};
 
-export  type MediaUploadDTO = {
-  readonly file: Blob | string
-  readonly description?: string | null
-  readonly focus?: string | null
-  readonly thumbnail?: Blob | string | null
-  readonly skipPolling?: boolean
-}
+export type GetTrendingPostsQueryDTO = {
+	limit: number;
+	offset?: number;
+};
+
+export type GetSearchResultQueryDTO = {
+	type: 'accounts' | 'hashtags' | 'statuses' | null | undefined;
+	following: boolean;
+	limit: number;
+	maxId?: string;
+};
+
+export type RestClientCreateDTO = {
+	instance: string;
+	token: string;
+};
+
+export type Tag = mastodon.v1.Tag | null | undefined;
+export type TagArray = mastodon.v1.Tag[] | [];
+
+export type TrendLinkArray = mastodon.v1.TrendLink[] | [];
+
+export type MediaUploadDTO = {
+	readonly file: Blob | string;
+	readonly description?: string | null;
+	readonly focus?: string | null;
+	readonly thumbnail?: Blob | string | null;
+	readonly skipPolling?: boolean;
+};
+
+export type FollowPostDto = {
+	reblogs: boolean;
+	notify: boolean;
+	// (ISO 639-1 language two-letter code)
+	languages?: string[];
+};
 
 /**
  * What common functionalities do we want to support
  * across all ActivityPub based clients
  */
 interface ActivityPubClient {
-  /**
-   * Timelines
-   * @param opts
-   */
-  getHomeTimeline(opts?: GetPostsQueryDTO): Promise<StatusArray>;
+	/**
+	 * Timelines
+	 * @param opts
+	 */
+	getHomeTimeline(opts?: GetPostsQueryDTO): Promise<StatusArray>;
 
-  getLocalTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>
+	getLocalTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
 
-  getPublicTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
+	getPublicTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
 
-  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
+	getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
 
-  getTimelineByHashtag(
-      q: string,
-      query?: HashtagTimelineQuery
-  ): Promise<StatusArray>;
+	getTimelineByHashtag(
+		q: string,
+		query?: HashtagTimelineQuery,
+	): Promise<StatusArray>;
 
-  getListTimeline(q: string, opts?: GetPostsQueryDTO): Promise<StatusArray>
+	getListTimeline(q: string, opts?: GetPostsQueryDTO): Promise<StatusArray>;
 
-  /**
-   * My
-   */
-  getMyConversations(): Promise<mastodon.v1.Conversation[]>
+	/**
+	 * My
+	 */
+	getMyConversations(): Promise<mastodon.v1.Conversation[]>;
 
-  // getMyFollowedTags(opts ): Promise<mastodon.v1.Tag[]>
+	getMyLists(): Promise<mastodon.v1.List[]>;
 
-  // a.k.a. - verifyCredentials
-  getMe(): Promise<mastodon.v1.AccountCredentials | UserDetailed | null | undefined>
+	// getMyFollowedTags(opts ): Promise<mastodon.v1.Tag[]>
 
-  /** User */
-  getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
+	// a.k.a. - verifyCredentials
+	getMe(): Promise<
+		mastodon.v1.AccountCredentials | UserDetailed | null | undefined
+	>;
 
-  getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray>
+	/** User */
+	getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
 
-  getUserPosts(userId: string, opts: GetUserPostsQueryDTO): Promise<StatusArray>;
+	followUser(
+		id: string,
+		opts: FollowPostDto,
+	): Promise<mastodon.v1.Relationship | any>;
 
-  getBookmarks(opts: GetPostsQueryDTO): Promise<{
-    data: StatusArray,
-    minId?: string,
-    maxId?: string
-  }>;
+	unfollowUser(id: string): Promise<mastodon.v1.Relationship | any>;
 
-  getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>
+	getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray>;
 
-  getFollowing(id: string): Promise<mastodon.v1.Account[] | null>
+	getUserPosts(
+		userId: string,
+		opts: GetUserPostsQueryDTO,
+	): Promise<StatusArray>;
 
-  getFollowers(id: string): Promise<mastodon.v1.Account[] | null>
+	getBookmarks(opts: GetPostsQueryDTO): Promise<{
+		data: StatusArray;
+		minId?: string;
+		maxId?: string;
+	}>;
 
-  uploadMedia(params: MediaUploadDTO): Promise<any>
+	getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>;
 
-  getIsSensitive(): boolean
+	getFollowing(id: string): Promise<mastodon.v1.Account[] | null>;
 
-  getSpoilerText(): string | null
+	getFollowers(id: string): Promise<mastodon.v1.Account[] | null>;
 
-  /**
-   * Trending
-   */
-  getTrendingPosts(opts: GetTrendingPostsQueryDTO): Promise<StatusArray>
+	uploadMedia(params: MediaUploadDTO): Promise<any>;
 
-  getTrendingTags(opts: GetTrendingPostsQueryDTO): Promise<TagArray>
+	getIsSensitive(): boolean;
 
-  getTrendingLinks(opts: GetTrendingPostsQueryDTO): Promise<TrendLinkArray>
+	getSpoilerText(): string | null;
 
-  /**
-   * Tags
-   */
-  getTag(id: string): Promise<mastodon.v1.Tag | null>
+	/**
+	 * Trending
+	 */
+	getTrendingPosts(opts: GetTrendingPostsQueryDTO): Promise<StatusArray>;
 
-  followTag(id: string): Promise<mastodon.v1.Tag | null>
+	getTrendingTags(opts: GetTrendingPostsQueryDTO): Promise<TagArray>;
 
-  unfollowTag(id: string): Promise<mastodon.v1.Tag | null>
+	getTrendingLinks(opts: GetTrendingPostsQueryDTO): Promise<TrendLinkArray>;
 
+	/**
+	 * Tags
+	 */
+	getTag(id: string): Promise<mastodon.v1.Tag | null>;
 
-  getFollowedTags(opts: GetPostsQueryDTO): Promise<{
-    data: mastodon.v1.Tag[],
-    minId?: string,
-    maxId?: string
-  } | any[]>;
+	followTag(id: string): Promise<mastodon.v1.Tag | null>;
 
-  muteUser(id: string): Promise<void>;
+	unfollowTag(id: string): Promise<mastodon.v1.Tag | null>;
 
-  /** Status */
-  getStatus(id: string): Promise<Status>
+	getFollowedTags(opts: GetPostsQueryDTO): Promise<
+		| {
+				data: mastodon.v1.Tag[];
+				minId?: string;
+				maxId?: string;
+		  }
+		| any[]
+	>;
 
-  getStatusContext(id: string): Promise<mastodon.v1.Context | any>
+	muteUser(id: string): Promise<void>;
 
-  bookmark(id: string): Promise<Status>
+	/**
+	 * Status
+	 * */
+	getStatus(id: string): Promise<Status>;
 
-  // https://mastodon.social/api/v1/statuses/:id/context
-  // mastodon specific
-  // getStatusContext(id: string): Promise<any>
+	getStatusContext(id: string): Promise<mastodon.v1.Context | any>;
 
-  unBookmark(id: string): Promise<Status>
+	bookmark(id: string): Promise<Status>;
 
-  favourite(id: string): Promise<Status>
+	unBookmark(id: string): Promise<Status>;
 
-  unFavourite(id: string): Promise<Status>
+	favourite(id: string): Promise<Status>;
 
-  search(q: string, dto: GetSearchResultQueryDTO): Promise<{
-    accounts: [],
-    hashtags: []
-  }>
+	unFavourite(id: string): Promise<Status>;
+
+	reblog(id: string): Promise<Status | null>;
+
+	undoReblog(id: string): Promise<Status | null>;
+
+	search(
+		q: string,
+		dto: GetSearchResultQueryDTO,
+	): Promise<{
+		accounts: [];
+		hashtags: [];
+	}>;
 }
 
-
-export default ActivityPubClient
+export default ActivityPubClient;

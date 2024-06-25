@@ -1,37 +1,74 @@
-import TitleOnlyStackHeaderContainer from '../../components/containers/TitleOnlyStackHeaderContainer';
 import StatusItem from '../../components/common/status/StatusItem';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ActivityPubStatus } from '@dhaaga/shared-abstraction-activitypub/src';
 import { useQuery } from '@tanstack/react-query';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
 } from '../../states/useStatus';
-import Animated from 'react-native-reanimated';
-import { RefreshControl, View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { Animated, RefreshControl, ScrollView, View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import WithAutoHideTopNavBar from '../../components/containers/WithAutoHideTopNavBar';
-import useLoadingMoreIndicatorState from '../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
-import usePageRefreshIndicatorState from '../../states/usePageRefreshIndicatorState';
+import PostReply from '../../components/common/status/PostReply';
+import { Text } from '@rneui/themed';
+import { APP_FONT } from '../../styles/AppTheme';
 
-function StatusContextComponent() {
-	const { statusContext } = useActivitypubStatusContext();
+type StatusContextReplyItemProps = {
+	lookupId: string;
+};
 
-	// TODO: fix the context items giving error
-	useEffect(() => {
-		console.log('[INFO]: found context items', statusContext);
-	}, [statusContext]);
+function StatusContextReplyItem({ lookupId }: StatusContextReplyItemProps) {
+	const { contextItemLookup } = useActivitypubStatusContext();
+
+	const root = useMemo(() => {
+		return contextItemLookup.current.get(lookupId);
+	}, [lookupId]);
 
 	return (
-		<View>
+		<WithActivitypubStatusContext statusInterface={root}>
 			<StatusItem />
-			{/*{statusContext.getChildren().map((o) =>*/}
-			{/*    <WithActivitypubStatusContext statusInterface={o}>*/}
-			{/*      <StatusItem hideReplyIndicator={true}*/}
-			{/*                  replyContextIndicators={["red"]}/>*/}
-			{/*    </WithActivitypubStatusContext>*/}
-			{/*)}*/}
+		</WithActivitypubStatusContext>
+	);
+}
+
+function StatusContextComponent() {
+	const { contextChildrenLookup, contextRootLookup, stateKey } =
+		useActivitypubStatusContext();
+
+	const root = useMemo(() => {
+		return contextRootLookup.current;
+	}, [stateKey]);
+
+	const children = useMemo(() => {
+		const root = contextRootLookup.current;
+		if (!root || !contextChildrenLookup.current) return [];
+		return contextChildrenLookup.current?.get(root.getId()) || [];
+	}, [stateKey]);
+
+	if (!root) return <View></View>;
+	// console.log(root?.getRaw());
+
+	// return (
+	// 	<View>
+	// 		<WithActivitypubStatusContext statusInterface={root}>
+	// 			<StatusItem />
+	// 		</WithActivitypubStatusContext>
+	// 	</View>
+	// );
+	return (
+		<View>
+			<WithActivitypubStatusContext statusInterface={root}>
+				<StatusItem />
+			</WithActivitypubStatusContext>
+			{children.map((o, i) => (
+				<PostReply key={i} lookupId={o.getId()} />
+			))}
+			<View style={{ marginVertical: 16 }}>
+				<Text style={{ textAlign: 'center', color: APP_FONT.MONTSERRAT_BODY }}>
+					No more replies
+				</Text>
+			</View>
 		</View>
 	);
 }
@@ -63,7 +100,6 @@ function StatusContextApiWrapper() {
 }
 
 function Post() {
-	const navigation = useNavigation();
 	const route = useRoute<any>();
 	const q = route?.params?.id;
 
@@ -72,7 +108,6 @@ function Post() {
 
 	async function queryFn() {
 		if (!client) throw new Error('_client not initialized');
-
 		return await client.getStatus(q);
 	}
 
@@ -98,7 +133,6 @@ function Post() {
 		updateQueryCache: () => {},
 	});
 
-	// console.log(data);
 	return (
 		<WithAutoHideTopNavBar title={'Post Details'} translateY={translateY}>
 			{data && (
@@ -108,6 +142,7 @@ function Post() {
 							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 						}
 						contentContainerStyle={{ paddingTop: 54 }}
+						onScroll={onScroll}
 					>
 						<StatusContextApiWrapper />
 					</Animated.ScrollView>

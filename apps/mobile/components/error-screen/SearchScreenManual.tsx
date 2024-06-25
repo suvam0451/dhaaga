@@ -48,16 +48,15 @@ function SearchScreenManual() {
 				</Text>
 
 				<View style={{ minWidth: '100%' }}>
-					<View>
-						<Text>Trending</Text>
-					</View>
 					<TouchableOpacity
 						onPress={() => {
 							navigation.navigate('Trending Posts');
 						}}
 					>
 						<ButtonGroupContainer first>
-							<DhaagaText primary>Posts</DhaagaText>
+							<DhaagaText secondary style={{ fontFamily: 'Inter-Bold' }}>
+								Trending Posts
+							</DhaagaText>
 							<AppIonicon
 								secondary
 								size={24}
@@ -72,7 +71,9 @@ function SearchScreenManual() {
 						}}
 					>
 						<ButtonGroupContainer>
-							<DhaagaText primary>Tags</DhaagaText>
+							<DhaagaText secondary style={{ fontFamily: 'Inter-Bold' }}>
+								Trending Tags
+							</DhaagaText>
 							<AppIonicon
 								secondary
 								size={24}
@@ -82,7 +83,9 @@ function SearchScreenManual() {
 						</ButtonGroupContainer>
 					</TouchableOpacity>
 					<ButtonGroupContainer last>
-						<DhaagaText primary>Links</DhaagaText>
+						<DhaagaText secondary style={{ fontFamily: 'Inter-Bold' }}>
+							Trending Links
+						</DhaagaText>
 						<AppIonicon
 							secondary
 							size={24}

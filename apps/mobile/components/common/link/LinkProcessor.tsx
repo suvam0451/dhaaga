@@ -1,6 +1,9 @@
 import React, { useCallback } from 'react';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import { useGorhomActionSheetContext } from '../../../states/useGorhomBottomSheet';
+import {
+	BOTTOM_SHEET_ENUM,
+	useGorhomActionSheetContext,
+} from '../../../states/useGorhomBottomSheet';
 import GlobalMmkvCacheServices from '../../../services/globalMmkvCache.services';
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
@@ -24,7 +27,7 @@ function LinkProcessor({ url, displayName }: LinkProcessorProps) {
 			url: url,
 			displayName: wwwRemoved,
 		});
-		setBottomSheetType('Link');
+		setBottomSheetType(BOTTOM_SHEET_ENUM.LINK);
 		updateRequestId();
 		setTimeout(() => {
 			setVisible(true);

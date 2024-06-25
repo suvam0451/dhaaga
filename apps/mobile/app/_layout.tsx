@@ -14,9 +14,24 @@ import WithActivityPubRestClient from '../states/useActivityPubRestClient';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { APP_THEME } from '../styles/AppTheme';
+import { useFonts } from 'expo-font';
+import appFonts from '../styles/AppFonts';
+import { useCallback } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+
+// to get rid of realm warnings
+import 'react-native-get-random-values';
 
 function WithGorhomBottomSheetWrapper() {
 	const { top, bottom } = useSafeAreaInsets();
+
+	const [fontsLoaded, fontError] = useFonts(appFonts);
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+			await SplashScreen.hideAsync();
+		}
+	}, [fontsLoaded, fontError]);
+
 	return (
 		<WithActivityPubRestClient>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
@@ -46,7 +61,7 @@ export default function Page() {
 				{/* In-Memory Store -- MMKV */}
 				<WithGlobalMmkvContext>
 					{/* Main Database -- Realm */}
-					<RealmProvider schema={schemas} schemaVersion={10}>
+					<RealmProvider schema={schemas} schemaVersion={11}>
 						{/* API Caching -- Tanstack */}
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}

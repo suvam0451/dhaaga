@@ -6,7 +6,7 @@ import {
 	StatusBar,
 	StyleSheet,
 } from 'react-native';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import StatusItem from '../../../components/common/status/StatusItem';
 import TimelinesHeader from '../../../components/TimelineHeader';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
@@ -31,6 +31,7 @@ import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/src/adapters
 import WelcomeBack from '../../../components/screens/home/fragments/WelcomeBack';
 import TimelineLoading from '../../../components/loading-screens/TimelineLoading';
 import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';
+import TimelineEmpty from '../../../components/error-screen/TimelineEmpty';
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
@@ -40,7 +41,7 @@ const SHOWN_SECTION_HEIGHT = 50;
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
-	const { timelineType } = useTimelineControllerContext();
+	const { timelineType, opts } = useTimelineControllerContext();
 	const { client, primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
 
@@ -53,7 +54,14 @@ function TimelineRenderer() {
 		paginationLock,
 		updateQueryCache,
 		queryCacheMaxId,
+		clear,
 	} = useAppPaginationContext();
+	const PageLoadedAtLeastOnce = useRef(false);
+
+	useEffect(() => {
+		PageLoadedAtLeastOnce.current = false;
+		clear();
+	}, [timelineType, opts?.listId, opts?.hashtagName, opts?.userId]);
 
 	async function api() {
 		return await ActivityPubProviderService.getTimeline(
@@ -63,7 +71,11 @@ function TimelineRenderer() {
 				limit: 5,
 				maxId: queryCacheMaxId,
 			},
-			{},
+			{
+				listQuery: opts?.listId,
+				hashtagQuery: opts?.hashtagName,
+				userQuery: opts?.userId,
+			},
 		);
 	}
 
@@ -74,10 +86,12 @@ function TimelineRenderer() {
 			queryCacheMaxId,
 			primaryAcct?._id?.toString(),
 			timelineType,
+			opts?.listId,
+			opts?.hashtagName,
+			opts?.userId,
 		],
 		queryFn: api,
-		enabled: client !== null && !paginationLock,
-		// placeholderData: keepPreviousData,
+		enabled: client !== null && !paginationLock && timelineType !== 'Idle',
 	});
 
 	const [EmojisLoading, setEmojisLoading] = useState(false);
@@ -93,6 +107,7 @@ function TimelineRenderer() {
 				.finally(() => {
 					append(data);
 					setEmojisLoading(false);
+					PageLoadedAtLeastOnce.current = true;
 				});
 		}
 	}, [fetchStatus]);
@@ -108,11 +123,23 @@ function TimelineRenderer() {
 			case TimelineFetchMode.LOCAL: {
 				return 'Local';
 			}
+			case TimelineFetchMode.LIST: {
+				return `List: ${opts?.listId}`;
+			}
+			case TimelineFetchMode.HASHTAG: {
+				return `#${opts?.hashtagName}`;
+			}
+			case TimelineFetchMode.USER: {
+				return `ID: ${opts?.userId}`;
+			}
+			case TimelineFetchMode.FEDERATED: {
+				return `Federated`;
+			}
 			default: {
 				return 'Unassigned';
 			}
 		}
-	}, [timelineType]);
+	}, [timelineType, opts?.hashtagName, opts?.listId]);
 
 	const ref = useRef(null);
 
@@ -148,31 +175,35 @@ function TimelineRenderer() {
 					label={Label}
 				/>
 			</Animated.View>
-			{fetchStatus === 'fetching' && PageData.length === 0 ? (
-				<TimelineLoading />
+			{PageLoadedAtLeastOnce ? (
+				PageData.length === 0 ? (
+					<TimelineEmpty />
+				) : (
+					<React.Fragment>
+						<AnimatedFlashList
+							numColumns={1}
+							estimatedItemSize={100}
+							data={PageData}
+							ref={ref}
+							renderItem={(o) => (
+								<WithActivitypubStatusContext status={o.item} key={o.index}>
+									<StatusItem key={o.index} />
+								</WithActivitypubStatusContext>
+							)}
+							onScroll={onScroll}
+							contentContainerStyle={{
+								paddingTop: SHOWN_SECTION_HEIGHT + 4,
+							}}
+							scrollEventThrottle={16}
+							refreshControl={
+								<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+							}
+						/>
+						<LoadingMore visible={visible} loading={loading} />{' '}
+					</React.Fragment>
+				)
 			) : (
-				<React.Fragment>
-					<AnimatedFlashList
-						numColumns={1}
-						estimatedItemSize={100}
-						data={PageData}
-						ref={ref}
-						renderItem={(o) => (
-							<WithActivitypubStatusContext status={o.item} key={o.index}>
-								<StatusItem key={o.index} />
-							</WithActivitypubStatusContext>
-						)}
-						onScroll={onScroll}
-						contentContainerStyle={{
-							paddingTop: SHOWN_SECTION_HEIGHT + 4,
-						}}
-						scrollEventThrottle={16}
-						refreshControl={
-							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-						}
-					/>
-					<LoadingMore visible={visible} loading={loading} />{' '}
-				</React.Fragment>
+				<TimelineLoading />
 			)}
 		</SafeAreaView>
 	);

@@ -1,147 +1,179 @@
 import ActivityPubClient, {
-  GetSearchResultQueryDTO,
-  GetPostsQueryDTO,
-  TagArray,
-  GetTimelineQueryDTO
-} from "./_interface";
-import {Note} from "@dhaaga/shared-provider-misskey/src";
-import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import {StatusArray} from "../status/_interface";
+	GetSearchResultQueryDTO,
+	GetPostsQueryDTO,
+	TagArray,
+	GetTimelineQueryDTO,
+	FollowPostDto,
+} from './_interface';
+import { Note } from '@dhaaga/shared-provider-misskey/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { Status, StatusArray } from '../status/_interface';
 
 class UnknownRestClient implements ActivityPubClient {
-  getListTimeline(q: string, opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {
-      throw new Error("Method not implemented.");
-  }
-  getLocalTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
-      throw new Error("Method not implemented.");
-  }
-  async getMyFollowedTags() {
-    return []
-  }
+	reblog(id: string): Promise<Status> {
+		throw new Error('Method not implemented.');
+	}
 
-  getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
-    throw new Error("Method not implemented.");
-  }
+	undoReblog(id: string): Promise<Status> {
+		throw new Error('Method not implemented.');
+	}
 
-  getPublicTimeline(opts?: GetTimelineQueryDTO | undefined): Promise<StatusArray> {
-    throw new Error("Method not implemented.");
-  }
+	async getMyLists() {
+		return [];
+	}
 
-  getIsSensitive(): boolean {
-    throw new Error("Method not implemented.");
-  }
+	followUser(id: string, opts: FollowPostDto): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 
-  getSpoilerText(): string | null {
-    throw new Error("Method not implemented.");
-  }
+	unfollowUser(id: string): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 
-  uploadMedia(): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
+	getListTimeline(
+		q: string,
+		opts?: GetPostsQueryDTO | undefined,
+	): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  getFollowing(id: string): Promise<any[] | mastodon.v1.Account[]> {
-    throw new Error("Method not implemented.");
-  }
+	getLocalTimeline(
+		opts?: GetTimelineQueryDTO | undefined,
+	): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  getFollowers(id: string): Promise<any[] | mastodon.v1.Account[]> {
-    throw new Error("Method not implemented.");
-  }
+	async getMyFollowedTags() {
+		return [];
+	}
 
-  async getMyConversations() {
-    return []
-  }
+	getPublicTimelineAsGuest(
+		opts?: GetTimelineQueryDTO | undefined,
+	): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  async getMe() {
-    return null
-  }
+	getPublicTimeline(
+		opts?: GetTimelineQueryDTO | undefined,
+	): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  getStatusContext(id: string): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
+	getIsSensitive(): boolean {
+		throw new Error('Method not implemented.');
+	}
 
-  async getRelationshipWith(ids: string[]) {
-    return []
-  }
+	getSpoilerText(): string | null {
+		throw new Error('Method not implemented.');
+	}
 
-  getTrendingPosts(opts: GetPostsQueryDTO): Promise<StatusArray> {
-    throw new Error("Method not implemented.");
-  }
+	uploadMedia(): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 
-  getTrendingTags(): Promise<TagArray> {
-    throw new Error("Method not implemented.");
-  }
+	getFollowing(id: string): Promise<any[] | mastodon.v1.Account[]> {
+		throw new Error('Method not implemented.');
+	}
 
-  getTrendingLinks(): Promise<any[]> {
-    throw new Error("Method not implemented.");
-  }
+	getFollowers(id: string): Promise<any[] | mastodon.v1.Account[]> {
+		throw new Error('Method not implemented.');
+	}
 
-  async followTag(id: string) {
-    return null
-  }
+	async getMyConversations() {
+		return [];
+	}
 
-  async unfollowTag(id: string) {
-    return null
-  }
+	async getMe() {
+		return null;
+	}
 
-  async getTag() {
-    return null
-  }
+	getStatusContext(id: string): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 
-  async muteUser(id: string) {
-    return
-  }
+	async getRelationshipWith(ids: string[]) {
+		return [];
+	}
 
-  async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
-    return []
-  }
+	getTrendingPosts(opts: GetPostsQueryDTO): Promise<StatusArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  async getFavourites(opts: GetPostsQueryDTO) {
-    return []
-  }
+	getTrendingTags(): Promise<TagArray> {
+		throw new Error('Method not implemented.');
+	}
 
-  async getBookmarks(opts: GetPostsQueryDTO) {
-    return {data: []}
-  }
+	getTrendingLinks(): Promise<any[]> {
+		throw new Error('Method not implemented.');
+	}
 
-  async getFollowedTags() {
-    return []
-  }
+	async followTag(id: string) {
+		return null;
+	}
 
-  async favourite(id: string) {
-    return null
-  }
+	async unfollowTag(id: string) {
+		return null;
+	}
 
-  async unFavourite(id: string) {
-    return null
-  }
+	async getTag() {
+		return null;
+	}
 
-  getUserPosts(): Promise<Note[] | mastodon.v1.Status[]> {
-    throw new Error("Method not implemented.");
-  }
+	async muteUser(id: string) {
+		return;
+	}
 
-  async bookmark(id: string): Promise<Note> {
-    throw new Error("Method not implemented.");
-  }
+	async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
+		return [];
+	}
 
-  async unBookmark(id: string): Promise<Note> {
-    throw new Error("Method not implemented.");
-  }
+	async getFavourites(opts: GetPostsQueryDTO) {
+		return [];
+	}
 
-  async getHomeTimeline() {
-    return [];
-  }
+	async getBookmarks(opts: GetPostsQueryDTO) {
+		return { data: [] };
+	}
 
-  async getTimelineByHashtag(q: string) {
-    return [];
-  }
+	async getFollowedTags() {
+		return [];
+	}
 
-  async getUserProfile(username: string): Promise<mastodon.v1.Account> {
-    throw new Error("Not Implemented")
-  }
+	async favourite(id: string) {
+		return null;
+	}
 
-  async getStatus(id: string): Promise<Note> {
-    throw new Error("Not Implemented")
-  }
+	async unFavourite(id: string) {
+		return null;
+	}
+
+	getUserPosts(): Promise<Note[] | mastodon.v1.Status[]> {
+		throw new Error('Method not implemented.');
+	}
+
+	async bookmark(id: string): Promise<Note> {
+		throw new Error('Method not implemented.');
+	}
+
+	async unBookmark(id: string): Promise<Note> {
+		throw new Error('Method not implemented.');
+	}
+
+	async getHomeTimeline() {
+		return [];
+	}
+
+	async getTimelineByHashtag(q: string) {
+		return [];
+	}
+
+	async getUserProfile(username: string): Promise<mastodon.v1.Account> {
+		throw new Error('Not Implemented');
+	}
+
+	async getStatus(id: string): Promise<Note> {
+		throw new Error('Not Implemented');
+	}
 }
 
-export default UnknownRestClient
+export default UnknownRestClient;

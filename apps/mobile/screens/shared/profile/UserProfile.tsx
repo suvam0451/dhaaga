@@ -23,7 +23,6 @@ import StatusItem from '../../../components/common/status/StatusItem';
 import UserPostsProvider, { UserPostsHook } from '../../../contexts/UserPosts';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import UserProfileExtraInformation from './ExtraInformation';
-import TitleOnlyStackHeaderContainer from '../../../components/containers/TitleOnlyStackHeaderContainer';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import WithActivitypubStatusContext from '../../../states/useStatus';
 import { Skeleton } from '@rneui/themed';
@@ -34,6 +33,9 @@ import useMfm from '../../../components/hooks/useMfm';
 import { APP_FONT } from '../../../styles/AppTheme';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
+import AppButtonFollowIndicator from '../../../components/lib/Buttons';
+import useRelationshipWith from '../../../states/useRelationshipWith';
+import ConfirmRelationshipChangeDialog from '../../../components/screens/shared/fragments/ConfirmRelationshipChange';
 
 type UserProfileBrowsePostsProps = {
 	userId: string;
@@ -71,7 +73,7 @@ function UserProfileBrowsePosts({ userId }: UserProfileBrowsePostsProps) {
 	}, [status, data]);
 
 	return (
-		<View style={{ paddingHorizontal: 16 }}>
+		<View style={{ paddingHorizontal: 8 }}>
 			<View style={styles.expandableSectionMarkerContainer}>
 				<Text
 					style={{
@@ -99,7 +101,7 @@ function UserProfileBrowsePosts({ userId }: UserProfileBrowsePostsProps) {
 							flexGrow: 1,
 						}}
 					>
-						Posts
+						Pinned Posts
 					</Text>
 					<Ionicons
 						name={RecentPostsCollapsed ? 'chevron-forward' : 'chevron-down'}
@@ -121,7 +123,7 @@ function UserProfileBrowsePosts({ userId }: UserProfileBrowsePostsProps) {
 }
 
 function UserProfileContent() {
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { primaryAcct, client } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();
 
@@ -143,6 +145,36 @@ function UserProfileContent() {
 		deps: [user?.getDisplayName()],
 	});
 
+	const { relationship, setter, relationshipLoading } = useRelationshipWith(
+		user?.getId(),
+	);
+
+	const [
+		IsUnfollowConfirmationDialogVisible,
+		setIsUnfollowConfirmationDialogVisible,
+	] = useState(false);
+
+	function onFollowButtonClick() {
+		if (!relationship.following) {
+			client
+				.followUser(user?.getId(), {
+					reblogs: true,
+					notify: false,
+				})
+				.then((res) => {
+					setter(res);
+				})
+				.catch((e) => {
+					console.log('[ERROR]: following user', e);
+				});
+		} else {
+			setIsUnfollowConfirmationDialogVisible(true);
+			// client.unfollowUser(user?.getId()).then((res) => {
+			// 	setter(res);
+			// });
+		}
+	}
+
 	return (
 		<View
 			style={{ backgroundColor: '#121212', minHeight: '100%', paddingTop: 54 }}
@@ -156,7 +188,25 @@ function UserProfileContent() {
 					<AvatarContainerWithInset>
 						<AvatarExpoImage source={{ uri: avatarUrl }} />
 					</AvatarContainerWithInset>
-					<View style={{ flexGrow: 1 }}></View>
+					<View
+						style={{
+							flexGrow: 1,
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<View style={{ paddingHorizontal: 12, width: '100%' }}>
+							<AppButtonFollowIndicator
+								size={'sm'}
+								activeLabel={'Following'}
+								passiveLabel={'Follow'}
+								onClick={onFollowButtonClick}
+								isCompleted={relationship.following}
+								loading={relationshipLoading}
+							/>
+						</View>
+					</View>
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
 						<View
 							style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
@@ -198,6 +248,10 @@ function UserProfileContent() {
 					</UserPostsProvider>
 				</View>
 			</ScrollView>
+			<ConfirmRelationshipChangeDialog
+				visible={IsUnfollowConfirmationDialogVisible}
+				setVisible={setIsUnfollowConfirmationDialogVisible}
+			/>
 		</View>
 	);
 }

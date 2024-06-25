@@ -15,6 +15,7 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 import Animated, { FadeInLeft } from 'react-native-reanimated';
 import { APP_FONT } from '../../styles/AppTheme';
 import useMfm from '../hooks/useMfm';
+import AstService from '../../services/ast.service';
 
 type OriginalPosterProps = {
 	id: string;
@@ -52,20 +53,16 @@ function OriginalPoster({
 	id,
 	avatarUrl,
 	createdAt,
-	displayName,
 	accountUrl,
 	username,
 	visibility,
 }: OriginalPosterProps) {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
 	const subdomain = primaryAcct?.subdomain;
 
 	const navigation = useNavigation<any>();
 	const { status } = useActivitypubStatusContext();
 	const { user, setDataRaw } = useActivitypubUserContext();
-	const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
 
 	useEffect(() => {
 		if (status.getUser()) return;
@@ -78,6 +75,9 @@ function OriginalPoster({
 		emojiMap: user?.getEmojiMap(),
 		deps: [user?.getDisplayName()],
 	});
+
+	const UsernameStyled =
+		AstService.applyTextStylingToChildren(UsernameWithEmojis);
 
 	function onProfileClicked() {
 		navigation.navigate('Profile', {
@@ -121,8 +121,8 @@ function OriginalPoster({
 					}}
 				>
 					<TouchableOpacity onPress={onProfileClicked}>
-						<Animated.View>
-							<Animated.Text
+						<View>
+							<Text
 								style={{
 									color: APP_FONT.MONTSERRAT_HEADER,
 									fontFamily: 'Inter-SemiBold',
@@ -130,24 +130,27 @@ function OriginalPoster({
 									marginTop: -3,
 								}}
 								numberOfLines={1}
-								entering={FadeInLeft}
-								sharedTransitionTag={`displayName-${user.getId()}`}
 							>
-								{UsernameWithEmojis}
-							</Animated.Text>
-						</Animated.View>
+								{UsernameStyled}
+							</Text>
+						</View>
 					</TouchableOpacity>
-					<Text
-						style={{
-							color: '#888',
-							fontWeight: '500',
-							fontSize: 12,
-							opacity: 0.6,
-							fontFamily: 'Inter-Bold',
-						}}
-					>
-						{extractInstanceUrl(accountUrl, username, subdomain)}
-					</Text>
+					<View>
+						<Text
+							style={{
+								color: '#888',
+								fontWeight: '500',
+								fontSize: 12,
+								opacity: 0.6,
+								fontFamily: 'Inter-Bold',
+								maxWidth: 196,
+							}}
+							numberOfLines={1}
+						>
+							{extractInstanceUrl(accountUrl, username, subdomain)}
+						</Text>
+					</View>
+
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
 						<Text
 							style={{

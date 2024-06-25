@@ -6,7 +6,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
 	slug: 'dhaaga',
-	version: '0.1.0',
+	version: '0.0.1',
 	orientation: 'portrait',
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'dark',
@@ -70,14 +70,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		],
 		['expo-router'],
 	],
-	// experiments: {
-	// 	typedRoutes: true
-	// }
-	// expo: {
-	// 	experiments: {
-	// 		typedRoutes: true,
-	// 	},
-	// },
 });
 
 export default expo;

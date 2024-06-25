@@ -67,7 +67,7 @@ function UserProfileExtraInformation({
 				style={{
 					borderTopLeftRadius: 8,
 					borderTopRightRadius: 8,
-					paddingHorizontal: 16,
+					paddingHorizontal: 8,
 				}}
 			>
 				<TouchableOpacity
