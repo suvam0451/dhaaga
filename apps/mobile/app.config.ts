@@ -16,15 +16,15 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		silentLaunch: true,
 	},
 	ios: {
-		bundleIdentifier: IS_DEV ? 'com.suvam.dhaaga-dev' : 'com.suvam.dhaaga',
+		bundleIdentifier: IS_DEV ? 'com.suvam.dhaaga.dev' : 'com.suvam.dhaaga',
 		supportsTablet: false,
 	},
 	android: {
-		package: IS_DEV ? 'com.suvam.dhaaga-dev' : 'com.suvam.dhaaga',
-		adaptiveIcon: {
-			foregroundImage: './assets/adaptive-icon.png',
-			backgroundColor: '#ffffff',
-		},
+		package: IS_DEV ? 'com.suvam.dhaaga.dev' : 'com.suvam.dhaaga',
+		// adaptiveIcon: {
+		// 	foregroundImage: './assets/adaptive-icon.png',
+		// 	backgroundColor: '#ffffff',
+		// },
 	},
 	splash: {
 		image: './assets/splash.png',

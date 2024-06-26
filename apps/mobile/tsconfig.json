@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "jsx": "react-native",
     "checkJs": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "extends": "expo/tsconfig.base",
   "include": [

@@ -3,7 +3,7 @@ import { schemas } from '../entities/_index';
 import RneuiTheme from '../styles/RneuiTheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import WithGlobalMmkvContext from '../states/useGlobalMMkvCache';
-import { RealmProvider } from '@realm/react';
+import { RealmProvider, useRealm } from '@realm/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@rneui/themed';
 import {
@@ -16,14 +16,23 @@ import { StatusBar } from 'expo-status-bar';
 import { APP_THEME } from '../styles/AppTheme';
 import { useFonts } from 'expo-font';
 import appFonts from '../styles/AppFonts';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 
 // to get rid of realm warnings
 import 'react-native-get-random-values';
+import AppSettingsService from '../services/app-settings.service';
 
 function WithGorhomBottomSheetWrapper() {
 	const { top, bottom } = useSafeAreaInsets();
+
+	const db = useRealm();
+	/**
+	 * DB Seed
+	 */
+	useEffect(() => {
+		AppSettingsService.populateSeedData(db);
+	}, []);
 
 	const [fontsLoaded, fontError] = useFonts(appFonts);
 	const onLayoutRootView = useCallback(async () => {

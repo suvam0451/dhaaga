@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -179,7 +179,7 @@ function TimelineRenderer() {
 				PageData.length === 0 ? (
 					<TimelineEmpty />
 				) : (
-					<React.Fragment>
+					<Fragment>
 						<AnimatedFlashList
 							numColumns={1}
 							estimatedItemSize={100}
@@ -200,7 +200,7 @@ function TimelineRenderer() {
 							}
 						/>
 						<LoadingMore visible={visible} loading={loading} />{' '}
-					</React.Fragment>
+					</Fragment>
 				)
 			) : (
 				<TimelineLoading />

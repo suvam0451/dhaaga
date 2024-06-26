@@ -1,7 +1,7 @@
 import { Pressable, StatusBar, StyleSheet, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import TimelinesHeader from '../../../TimelineHeader';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -313,17 +313,17 @@ function WelcomeBack() {
 					paddingHorizontal: 8,
 				}}
 			>
-				{TimeOfDay === TIME_OF_DAY.MORNING && <Text>Good Morning</Text>}
-				{TimeOfDay === TIME_OF_DAY.AFTERNOON && <Text>Good Afternoon</Text>}
+				{TimeOfDay === TIME_OF_DAY.MORNING && (
+					<Text style={styles.timeOfDayText}>Good Morning 🌄</Text>
+				)}
+				{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
+					<Text style={styles.timeOfDayText}>Good Afternoon</Text>
+				)}
 				{TimeOfDay === TIME_OF_DAY.EVENING && (
-					<Text style={{ fontSize: 28, fontFamily: 'Montserrat-Bold' }}>
-						Good Evening
-					</Text>
+					<Text style={styles.timeOfDayText}>Good Evening</Text>
 				)}
 				{TimeOfDay === TIME_OF_DAY.NIGHT && (
-					<Text style={{ fontSize: 28, fontFamily: 'Montserrat-Bold' }}>
-						Good Night 🌙
-					</Text>
+					<Text style={styles.timeOfDayText}>Good Night 🌙</Text>
 				)}
 				<View>
 					<Section>
@@ -348,6 +348,7 @@ function WelcomeBack() {
 										fontSize: 20,
 										marginLeft: 4,
 										flexGrow: 1,
+										color: APP_FONT.MONTSERRAT_HEADER,
 									}}
 								>
 									Continue browsing
@@ -387,6 +388,7 @@ function WelcomeBack() {
 									fontSize: 20,
 									marginLeft: 4,
 									flexGrow: 1,
+									color: APP_FONT.MONTSERRAT_HEADER,
 								}}
 							>
 								Pinned
@@ -446,6 +448,11 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		opacity: 0.6,
 		borderColor: APP_THEME.COLOR_SCHEME_C,
+	},
+	timeOfDayText: {
+		fontSize: 28,
+		fontFamily: 'Montserrat-Bold',
+		color: APP_FONT.MONTSERRAT_HEADER,
 	},
 });
 

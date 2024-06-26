@@ -1,11 +1,10 @@
 import { Dimensions, View, Text, Pressable, StyleSheet } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import React from 'react';
 import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub/src';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { Button, Dialog } from '@rneui/themed';
+import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Image } from 'expo-image';
 import MediaService from '../../../services/media.service';
@@ -265,12 +264,16 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 				width={Dimensions.get('window').width}
 				height={CalculatedHeight}
 				data={attachments}
-				scrollAnimationDuration={1000}
-				onSnapToItem={(index) => {
+				scrollAnimationDuration={160}
+				onSnapToItem={(index: number) => {
 					onCarousalItemChanged(index);
 				}}
+				panGestureHandlerProps={{
+					activeOffsetX: [-10, 10], // Enable horizontal panning
+					failOffsetY: [-5, 5], // Limit vertical movement to fail the gesture
+				}}
 				pagingEnabled={true}
-				renderItem={(o) => (
+				renderItem={(o: any) => (
 					<TimelineMediaRendered
 						attachment={o.item}
 						CalculatedHeight={CalculatedHeight}

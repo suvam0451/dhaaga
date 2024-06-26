@@ -1,5 +1,4 @@
 import { TouchableOpacity, View } from 'react-native';
-import React from 'react';
 import { Text } from '@rneui/themed';
 import {
 	AppIonicon,
@@ -32,20 +31,8 @@ function SearchScreenManual() {
 			>
 				<Text style={{ opacity: 0.87, fontSize: 20 }}>⌨️ to get started</Text>
 				<View style={{ width: '100%', display: 'flex', marginVertical: 16 }}>
-					<Text> --- OR --- </Text>
+					<Text style={{ textAlign: 'center' }}> --- OR --- </Text>
 				</View>
-
-				<Text>Browse some photography from your community.</Text>
-
-				<Text style={{ color: 'orange', fontSize: 18, margin: 8 }}>
-					sunset 🌆
-				</Text>
-				<Text style={{ color: 'orange', fontSize: 18, margin: 8 }}>
-					nightsky 🌙
-				</Text>
-				<Text style={{ color: 'orange', fontSize: 18, margin: 8 }}>
-					wildlifephotography 🐾
-				</Text>
 
 				<View style={{ minWidth: '100%' }}>
 					<TouchableOpacity
