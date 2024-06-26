@@ -175,7 +175,7 @@ function TimelineRenderer() {
 					label={Label}
 				/>
 			</Animated.View>
-			{PageLoadedAtLeastOnce ? (
+			{PageLoadedAtLeastOnce.current ? (
 				PageData.length === 0 ? (
 					<TimelineEmpty />
 				) : (

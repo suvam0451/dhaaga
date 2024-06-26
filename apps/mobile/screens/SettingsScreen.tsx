@@ -12,6 +12,7 @@ import Animated, {
 	withSpring,
 	withTiming,
 } from 'react-native-reanimated';
+import { Link } from 'expo-router';
 
 function SettingsScreen() {
 	const [EmojiCount, setEmojiCount] = useState(0);
@@ -84,7 +85,8 @@ function SettingsScreen() {
 					zIndex: 99,
 				}}
 			>
-				<Button onPress={() => {}}>Click Me</Button>
+				<Link href={'/settings/server-debugger'}>Server Debugger</Link>
+				{/*<Button onPress={() => {}}>Click Me</Button>*/}
 			</View>
 
 			<Animated.ScrollView

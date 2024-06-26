@@ -88,6 +88,7 @@ function TimelineMediaRendered({
 		switch (type) {
 			case 'image': {
 				return (
+					// @ts-ignore
 					<Image
 						style={{
 							flex: 1,
