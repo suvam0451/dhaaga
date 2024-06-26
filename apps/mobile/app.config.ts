@@ -8,7 +8,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	slug: 'dhaaga',
 	version: '0.0.1',
 	orientation: 'portrait',
-	icon: './assets/icon.png',
+	icon: './assets/placeholder_icon.png',
 	userInterfaceStyle: 'dark',
 	scheme: 'your-app-scheme',
 	platforms: ['android'],

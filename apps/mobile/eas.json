@@ -12,7 +12,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "APP_VARIANT": "ddv"
+        "APP_VARIANT": "dev"
       }
     }
   }
