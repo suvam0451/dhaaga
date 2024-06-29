@@ -6,7 +6,7 @@
   "scripts": {
     "dev:app": "yarn workspace @dhaaga/mobile dev",
     "dev:app:turbo": "turbo dev --filter=\"...{./apps/mobile}\"",
-    "dev:web": "npm run dev -w @dhaaga/web",
+    "dev:web": "yarn workspace @dhaaga/web dev",
     "app:preview": "npm run preview -w @dhaaga/mobile"
   },
   "author": "Debashish Patra",

@@ -1,101 +1,38 @@
 'use client';
 
-import Image from 'next/image';
 import styles from './page.module.css';
-import IntroComponent from './components/Cta';
-import QolCategory from './components/features/QolCategory';
-import { Divider, Flex } from '@mantine/core';
+import { Box } from '@mantine/core';
 import { MainContainer, RootContainer } from './styles/App';
-import IntegrationCategory from './components/features/IntegrationCategory';
-import PerformanceCategory from './components/features/PerformanceCategory';
+import AppNavBar from '@/app/components/shared/AppNavBar';
+import FeatureGalleryWidget from '@/app/components/widgets/feature-gallery';
+import AppFooter from '@/app/components/shared/AppFooter';
+import Introduction from '@/app/components/Introduction';
+import SeeAllFeatures from '@/app/SeeAllFeatures';
+import ModuleRouter from '@/app/components/ModuleRouter';
 
 export default function Home() {
 	return (
 		<main className={styles.main}>
 			<RootContainer>
 				<MainContainer>
-					<div className={styles.description}>
-						<IntroComponent />
-					</div>
+					<Box
+						style={{
+							minHeight: '100vh',
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<AppNavBar />
+						<Introduction />
+						<Box style={{ flexGrow: 1 }}></Box>
+						<SeeAllFeatures />
+					</Box>
 
-					<Divider my={'4em'} />
-					<Flex>
-						<QolCategory />
-					</Flex>
-					<Divider my={'4em'} />
-					<Flex>
-						<IntegrationCategory />
-					</Flex>
-					<Divider my={'4em'} />
-					<Flex>
-						<PerformanceCategory />
-					</Flex>
+					<FeatureGalleryWidget />
+					<ModuleRouter />
+					<Box style={{ flexGrow: 1 }}></Box>
 
-					<div className={styles.center}>
-						<Image
-							className={styles.logo}
-							src="/next.svg"
-							alt="Next.js Logo"
-							width={180}
-							height={37}
-							priority
-						/>
-					</div>
-
-					<div className={styles.grid}>
-						<a
-							href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-							className={styles.card}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<h2>
-								Docs <span>-&gt;</span>
-							</h2>
-							<p>Find in-depth information about Next.js features and API.</p>
-						</a>
-
-						<a
-							href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-							className={styles.card}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<h2>
-								Learn <span>-&gt;</span>
-							</h2>
-							<p>
-								Learn about Next.js in an interactive course with&nbsp;quizzes!
-							</p>
-						</a>
-
-						<a
-							href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-							className={styles.card}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<h2>
-								Templates <span>-&gt;</span>
-							</h2>
-							<p>Explore the Next.js 13 playground.</p>
-						</a>
-
-						<a
-							href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-							className={styles.card}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<h2>
-								Deploy <span>-&gt;</span>
-							</h2>
-							<p>
-								Instantly deploy your Next.js site to a shareable URL with
-								Vercel.
-							</p>
-						</a>
-					</div>
+					<AppFooter />
 				</MainContainer>
 			</RootContainer>
 		</main>
