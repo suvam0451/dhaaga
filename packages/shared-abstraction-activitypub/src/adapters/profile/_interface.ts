@@ -1,132 +1,126 @@
-import {UserDetailed, User} from "@dhaaga/shared-provider-misskey/src";
-import type {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import MisskeyUser from "./misskey";
-import MastodonUser from "./mastodon";
-import DefaultUser from "./default";
+import { UserDetailed, User } from '@dhaaga/shared-provider-misskey/src';
+import type { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import MisskeyUser from './misskey';
+import MastodonUser from './mastodon';
+import DefaultUser from './default';
 
 export type EmojiMapValue = {
-  url: string,
-  visibleInPicker: boolean
-}
+	url: string;
+	visibleInPicker: boolean;
+};
 
 export type UserType =
-    mastodon.v1.Account
-    | UserDetailed
-    | User
-    | null
-    | undefined
-
+	| mastodon.v1.Account
+	| UserDetailed
+	| User
+	| null
+	| undefined;
 
 export interface UserInterface {
-  getAvatarBlurHash(): string | null | undefined;
+	getAvatarBlurHash(): string | null | undefined;
 
-  getAvatarUrl(): string | null | undefined;
+	getAvatarUrl(): string | null | undefined;
 
-  getBannerUrl(): string | null
+	getBannerUrl(): string | null;
 
-  getBannerBlurHash(): string | null
+	getBannerBlurHash(): string | null;
 
-  getDescription(): string | null
+	getDescription(): string | null;
 
-  getCreatedAt(): Date
+	getCreatedAt(): Date;
 
-  getBirthday(): Date | null
+	getBirthday(): Date | null;
 
-  getFields(): any[]
+	getFields(): any[];
 
-  getFollowersCount(): number
+	getFollowersCount(): number;
 
-  getFollowingCount(): number
+	getFollowingCount(): number;
 
-  hasPendingFollowRequestFromYou(): boolean | null | undefined
+	hasPendingFollowRequestFromYou(): boolean | null | undefined;
 
-  hasPendingFollowRequestToYou(): boolean | null | undefined
+	hasPendingFollowRequestToYou(): boolean | null | undefined;
 
-  getId(): string
+	getId(): string;
 
-  getIsBot(): boolean | undefined | null
+	getIsBot(): boolean | undefined | null;
 
-  getIsLockedProfile(): boolean | undefined | null
+	getIsLockedProfile(): boolean | undefined | null;
 
-  getDisplayName(): string | null
+	getDisplayName(): string | null;
 
-  getPostCount(): number
+	getPostCount(): number;
 
-  getUsername(): string
+	getUsername(): string;
 
-  /**
-   * e.g. - mastodon.social from "https://mastodon.social/@suvam"
-   */
-  getInstanceUrl(): string
+	/**
+	 * e.g. - mastodon.social from "https://mastodon.social/@suvam"
+	 */
+	getInstanceUrl(): string;
 
-  getOnlineStatus(): "online" | "active" | "offline" | "unknown"
+	getOnlineStatus(): 'online' | 'active' | 'offline' | 'unknown';
 
-  getAccountUrl(): string
+	getAccountUrl(): string;
 
-  /**
-   * App-Specific Logic
-   */
-  getAppDisplayAccountUrl(myDomain: string): string
+	/**
+	 * AppNavBar-Specific Logic
+	 */
+	getAppDisplayAccountUrl(myDomain: string): string;
 
-  /**
-   * Custom -- Emojis
-   */
-  findEmoji(q: string): EmojiMapValue | undefined
+	/**
+	 * Custom -- Emojis
+	 */
+	findEmoji(q: string): EmojiMapValue | undefined;
 
-  getEmojiMap(): Map<string, EmojiMapValue>
+	getEmojiMap(): Map<string, EmojiMapValue>;
 }
 
 export class UserDetailedInstance {
-  instance: UserDetailed;
-  emojiMap: Map<string, EmojiMapValue>
+	instance: UserDetailed;
+	emojiMap: Map<string, EmojiMapValue>;
 
-  constructor(instance: UserDetailed) {
-    this.instance = instance;
-    this.emojiMap = new Map()
-  }
+	constructor(instance: UserDetailed) {
+		this.instance = instance;
+		this.emojiMap = new Map();
+	}
 }
 
 export class AccountInstance {
-  instance: mastodon.v1.Account;
-  emojiMap: Map<string, EmojiMapValue>
+	instance: mastodon.v1.Account;
+	emojiMap: Map<string, EmojiMapValue>;
 
-  constructor(instance: mastodon.v1.Account) {
-    this.instance = instance;
-    this.emojiMap = new Map()
-  }
+	constructor(instance: mastodon.v1.Account) {
+		this.instance = instance;
+		this.emojiMap = new Map();
+	}
 }
 
 export function ActivityPubUserAdapter(
-    profile: any,
-    domain: string
+	profile: any,
+	domain: string,
 ): UserInterface {
-  if (!profile) return new DefaultUser();
+	if (!profile) return new DefaultUser();
 
-  switch (domain) {
-    case "misskey": {
-      return new MisskeyUser(
-          new UserDetailedInstance(profile as UserDetailed)
-      );
-    }
-    case "mastodon": {
-      const instance = new AccountInstance(profile as mastodon.v1.Account)
-      const emojis = (profile as mastodon.v1.Account).emojis
-      const mp = new Map<string, EmojiMapValue>()
-      for (let i = 0; i < emojis.length; i++) {
-        let {shortcode, ...rest} = emojis[i]
+	switch (domain) {
+		case 'misskey': {
+			return new MisskeyUser(new UserDetailedInstance(profile as UserDetailed));
+		}
+		case 'mastodon': {
+			const instance = new AccountInstance(profile as mastodon.v1.Account);
+			const emojis = (profile as mastodon.v1.Account).emojis;
+			const mp = new Map<string, EmojiMapValue>();
+			for (let i = 0; i < emojis.length; i++) {
+				let { shortcode, ...rest } = emojis[i];
 
-        mp.set(shortcode, {
-          url: rest.url,
-          visibleInPicker: rest.visibleInPicker
-        })
-      }
-      return new MastodonUser(
-          instance,
-          mp
-      )
-    }
-    default: {
-      return new DefaultUser();
-    }
-  }
+				mp.set(shortcode, {
+					url: rest.url,
+					visibleInPicker: rest.visibleInPicker,
+				});
+			}
+			return new MastodonUser(instance, mp);
+		}
+		default: {
+			return new DefaultUser();
+		}
+	}
 }

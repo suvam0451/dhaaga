@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+	// image optimize
+	// images: {
+	// 	unoptimized: true,
+	// 	formats: ['image/webp'],
+	// 	disableStaticImages: true,
+	// },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

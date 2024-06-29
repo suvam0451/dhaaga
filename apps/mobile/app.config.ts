@@ -16,11 +16,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		silentLaunch: true,
 	},
 	ios: {
-		bundleIdentifier: IS_DEV ? 'com.suvam.dhaaga.dev' : 'com.suvam.dhaaga',
+		bundleIdentifier: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
 		supportsTablet: false,
 	},
 	android: {
-		package: IS_DEV ? 'com.suvam.dhaaga.dev' : 'com.suvam.dhaaga',
+		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
+		versionCode: 2,
 		// adaptiveIcon: {
 		// 	foregroundImage: './assets/adaptive-icon.png',
 		// 	backgroundColor: '#ffffff',
@@ -49,6 +50,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				},
 				android: {
 					newArchEnabled: true,
+					// enableProguardInReleaseBuilds: true,
+					// enableShrinkResourcesInReleaseBuilds: true
 				},
 			},
 		],

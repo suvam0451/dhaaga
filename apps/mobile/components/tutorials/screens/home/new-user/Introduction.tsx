@@ -6,7 +6,7 @@ import {
 	View,
 } from 'react-native';
 import TimelinesHeader from '../../../../TimelineHeader';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import { useNavigation } from '@react-navigation/native';

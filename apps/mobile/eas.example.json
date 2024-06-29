@@ -1,0 +1,33 @@
+{
+  "build": {
+    "aab": {
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "APP_VARIANT": "prod",
+        "EXPO_PUBLIC_MASTODON_CLIENT_ID": "",
+        "EXPO_PUBLIC_MASTODON_CLIENT_SECRET": "",
+        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+      }
+    },
+    "apk": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "APP_VARIANT": "prod",
+        "EXPO_PUBLIC_MASTODON_CLIENT_ID": "",
+        "EXPO_PUBLIC_MASTODON_CLIENT_SECRET": "",
+        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+      }
+    },
+    "dev": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "dev"
+      }
+    }
+  }
+}

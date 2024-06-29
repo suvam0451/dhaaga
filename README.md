@@ -49,13 +49,14 @@ An intuitive way to switch between timelines/hashtags/lists.
 
 <details>
 <summary>Highlights</summary>
-    
+
 - ✅ Search and browse hashtags
     - 🚧 Guest browsing a hashtag from remote instance will be supported in the
       future.
 - ✅ Search and browse a user's timeline directly
 - ✅ Browse your list timelines
 - 🚧 Remote instance browsing will be added in the future
+
 </details>
 
 #### 🌟 Better Translation Support
@@ -105,7 +106,6 @@ A cleaner comment browsing experience, taking references from lemmy clients.
 
 </details>
 
-
 ## ✨ Planned Features
 
 Some distinctive features I am considering adding to the app:
@@ -127,13 +127,14 @@ This project is a monorepo. You can find individual README files in
 
 ### Meaning and Legacy
 
-Dhaaga (धागा) is the Hindi word for a type of thin, twisted strand of fiber (generally used for sewing).
+Dhaaga (धागा) is the Hindi word for a type of thin, twisted strand of fiber (
+generally used for sewing).
 
 In many cultures, it also symbolizes connections, ties, or threads that bind
 people or things together.
 
 <details>
-<summary>The Old Desktop App</summary>
+<summary>The Old Desktop AppNavBar</summary>
 This project started in 2023 to be a desktop app supporting Mastodon
 and Meta's Threads platform. Development was halted because of Meta's
 legal notice to various reverse-engineering APIs to cease development.
