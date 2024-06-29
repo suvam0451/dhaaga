@@ -3,6 +3,7 @@ import { FaDiscord, FaGithub, FaMastodon } from 'react-icons/fa';
 import Image from 'next/image';
 import { styled } from 'styled-components';
 import { SiMisskey } from 'react-icons/si';
+import PlayStoreGetButtonImage from '../../../../public/assets/GetItOnGooglePlay_EN.png';
 
 export function GithubDownloadButton() {
 	return (
@@ -30,19 +31,22 @@ export function GithubDownloadButton() {
 }
 
 export function PlayStoreGetButton() {
+	function playStoreGetClick() {
+		window.open(
+			'https://play.google.com/apps/internaltest/4701558509354422797',
+			'_blank',
+		);
+	}
+
 	return (
-		<a
-			href={'https://play.google.com/apps/internaltest/4701558509354422797'}
-			target={'_blank'}
-		>
-			<Image
-				alt={'get it on google play'}
-				src={'/assets/GetItOnGooglePlay_EN.png'}
-				style={{ marginLeft: 6 }}
-				width={133.65}
-				height={40}
-			/>
-		</a>
+		<Image
+			alt={'get it on google play'}
+			src={PlayStoreGetButtonImage}
+			style={{ marginLeft: 6 }}
+			width={133.65}
+			height={40}
+			onClick={playStoreGetClick}
+		/>
 	);
 }
 

@@ -1,10 +1,7 @@
-import { Box, Button } from '@mantine/core';
-import { FaGithub, FaMastodon, FaDiscord } from 'react-icons/fa';
-import { SiMisskey } from 'react-icons/si';
+import { Box } from '@mantine/core';
 import { MdEmail } from 'react-icons/md';
 import Image from 'next/image';
 import { useState } from 'react';
-import ModuleRouter from '@/app/components/ModuleRouter';
 import {
 	FindMeOnDiscord,
 	FindMeOnGithub,
@@ -13,6 +10,7 @@ import {
 	GithubDownloadButton,
 	PlayStoreGetButton,
 } from '@/app/components/custom/Buttons';
+import TimelineWidget001 from '../../../public/assets/app-screenshots/Timeline_Widget_001.png';
 
 const features = [
 	{
@@ -159,10 +157,11 @@ function Introduction() {
 					}}
 				>
 					<Image
-						src={'/assets/app-screenshots/Timeline_Widget_001.jpg'}
+						src={TimelineWidget001}
 						alt={'Timeline Widget 001'}
 						width={225}
 						height={500}
+						aria-orientation={'vertical'}
 					/>
 					<Box style={{ marginTop: 8 }}>
 						<p
