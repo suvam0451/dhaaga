@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { styled } from 'styled-components';
 import { SiMisskey } from 'react-icons/si';
 
-import PlayStoreGetButtonImage from '../../../../public/assets/GetItOnGooglePlay_EN.png';
+// import PlayStoreGetButtonImage from '../../../../public/assets/GetItOnGooglePlay_EN.png';
 
 export function GithubDownloadButton() {
 	return (
@@ -42,7 +42,7 @@ export function PlayStoreGetButton() {
 	return (
 		<Image
 			alt={'get it on google play'}
-			src={PlayStoreGetButtonImage}
+			src={'/assets/GetItOnGooglePlay_EN.png'}
 			style={{ marginLeft: 6 }}
 			width={133.65}
 			height={40}

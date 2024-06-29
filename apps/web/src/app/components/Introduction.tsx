@@ -10,7 +10,7 @@ import {
 	GithubDownloadButton,
 	PlayStoreGetButton,
 } from '@/app/components/custom/Buttons';
-import TimelineWidget001 from '../../../public/assets/app-screenshots/Timeline_Widget_001.png';
+// import TimelineWidget001 from '../../../public/assets/app-screenshots/Timeline_Widget_001.png';
 
 const features = [
 	{
@@ -157,7 +157,7 @@ function Introduction() {
 					}}
 				>
 					<Image
-						src={TimelineWidget001}
+						src={'/assets/app-screenshots/Timeline_Widget_001.png'}
 						alt={'Timeline Widget 001'}
 						width={225}
 						height={500}
