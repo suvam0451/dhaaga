@@ -3,6 +3,7 @@ import { FaDiscord, FaGithub, FaMastodon } from 'react-icons/fa';
 import Image from 'next/image';
 import { styled } from 'styled-components';
 import { SiMisskey } from 'react-icons/si';
+
 import PlayStoreGetButtonImage from '../../../../public/assets/GetItOnGooglePlay_EN.png';
 
 export function GithubDownloadButton() {
