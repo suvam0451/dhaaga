@@ -13,7 +13,7 @@ export enum TimelineFetchMode {
 }
 
 type Type = {
-	// the type of timeline to be shown in home screen
+	// the type of timeline to be shown in index screen
 	timelineType: TimelineFetchMode;
 	setTimelineType: (x: TimelineFetchMode) => void;
 	opts: {

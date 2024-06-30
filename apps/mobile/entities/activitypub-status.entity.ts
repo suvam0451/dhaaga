@@ -1,4 +1,4 @@
-import Realm, { ObjectSchema } from 'realm';
+import { ObjectSchema, Object } from 'realm';
 import { ActivityPubServer } from './activitypub-server.entity';
 import { ActivityPubUser } from './activitypub-user.entity';
 import { z } from 'zod';
@@ -25,7 +25,7 @@ export type ActivityPubStatusUpsertDTOType = z.infer<
 	typeof ActivityPubStatusUpsertDTO
 >;
 
-export class ActivityPubStatus extends Realm.Object {
+export class ActivityPubStatus extends Object {
 	_id: Realm.BSON.UUID;
 	statusId: string;
 	content: string;

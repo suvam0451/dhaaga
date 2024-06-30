@@ -11,7 +11,7 @@ export default function TabLayout() {
 		<View style={{ backgroundColor: 'red', height: '100%' }}>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<Tabs
-				initialRouteName={'home'}
+				initialRouteName={'index'}
 				detachInactiveScreens={false}
 				screenOptions={({ route }) => ({
 					tabBarIcon: ({ focused, color, size }) => {
@@ -19,7 +19,7 @@ export default function TabLayout() {
 						let renderer = 'ionicons';
 						switch (route.name) {
 							case 'Home': {
-								iconName = focused ? 'home' : 'home';
+								iconName = focused ? 'index' : 'index';
 								break;
 							}
 							case 'Settings': {
@@ -84,7 +84,7 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name={'favourites'}
 					options={{
-						tabBarIcon: ({ focused, color, size }) => (
+						tabBarIcon: ({ color, size }) => (
 							<Ionicons size={size} name="bookmark-outline" color={color} />
 						),
 					}}

@@ -1,12 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import React, { useCallback, useEffect, useState } from 'react';
 import StatusItem from '../../../common/status/StatusItem';
 import WithActivitypubStatusContext from '../../../../states/useStatus';
-import TitleOnlyStackHeaderContainer from '../../../containers/TitleOnlyStackHeaderContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../../states/usePagination';

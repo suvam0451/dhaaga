@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
 import MyBookmarks from '../components/screens/favourites/stack/MyBookmarks';
 import WithScrollOnRevealContext from '../states/useScrollOnReveal';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -19,6 +18,7 @@ import MyFollowers from '../components/screens/favourites/stack/MyFollowers';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 import { APP_FONT, APP_THEME } from '../styles/AppTheme';
 import { APP_FONTS } from '../styles/AppFonts';
+import { Link, router } from 'expo-router';
 
 type FavouritesScreenNavigationItemIconOnlyProps = {
 	icon: any;
@@ -135,11 +135,27 @@ function ActionableSection() {
 						}}
 						icon={<Ionicons name="star-outline" size={24} color={'#888'} />}
 					/>
-					<FavouritesScreenNavigationItemIconOnly
-						onPress={() => {
-							navigation.push('MyBookmarks');
+
+					<View
+						style={{
+							flex: 1,
+							paddingHorizontal: 4,
 						}}
-						icon={
+					>
+						<Button
+							type={'clear'}
+							buttonStyle={{
+								borderWidth: 1,
+								borderColor: '#333333',
+								borderRadius: 8,
+								padding: 4,
+								backgroundColor: '#1E1E1E',
+							}}
+							onPress={() => {
+								console.log('navigating to bookmark portal');
+								router.navigate('/favourites/bookmark-portal');
+							}}
+						>
 							<FontAwesome6
 								name="bookmark"
 								size={24}
@@ -148,8 +164,9 @@ function ActionableSection() {
 									opacity: 0.87,
 								}}
 							/>
-						}
-					/>
+						</Button>
+					</View>
+
 					<FavouritesScreenNavigationItemIconOnly
 						onPress={() => {
 							console.log('[INFO]: user wants to see their mute list');

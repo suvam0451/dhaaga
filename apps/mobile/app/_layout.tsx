@@ -70,7 +70,7 @@ export default function Page() {
 				{/* In-Memory Store -- MMKV */}
 				<WithGlobalMmkvContext>
 					{/* Main Database -- Realm */}
-					<RealmProvider schema={schemas} schemaVersion={11}>
+					<RealmProvider schema={schemas} schemaVersion={12}>
 						{/* API Caching -- Tanstack */}
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}

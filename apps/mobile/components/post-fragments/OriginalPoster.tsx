@@ -28,6 +28,40 @@ type OriginalPosterProps = {
 	visibility: string;
 };
 
+export function OriginalPostedPfpFragment({
+	url,
+	onClick,
+}: {
+	url: string;
+	onClick: () => void;
+}) {
+	return (
+		<TouchableOpacity onPress={onClick}>
+			<View
+				style={{
+					width: 52,
+					height: 52,
+					borderColor: 'gray',
+					borderWidth: 2,
+					borderRadius: 6,
+				}}
+			>
+				<Image
+					style={{
+						flex: 1,
+						width: '100%',
+						backgroundColor: '#0553',
+						padding: 2,
+						opacity: 0.87,
+						borderRadius: 4,
+					}}
+					source={{ uri: url }}
+				/>
+			</View>
+		</TouchableOpacity>
+	);
+}
+
 function OriginalPosterSkeleton() {
 	return (
 		<View style={{ width: '90%' }}>
@@ -44,6 +78,73 @@ function OriginalPosterSkeleton() {
 						}}
 					/>
 				</View>
+			</View>
+		</View>
+	);
+}
+
+export function OriginalPosterPostedByFragment({
+	displayNameRaw,
+	onClick,
+	theirSubdomain,
+	emojiMap,
+	instanceUrl,
+}: {
+	displayNameRaw: string;
+	theirSubdomain: string;
+	onClick: () => void;
+	emojiMap?: any;
+	instanceUrl: string;
+}) {
+	// const { primaryAcct } = useActivityPubRestClientContext();
+	// const domain = primaryAcct?.domain;
+	// const subdomain = primaryAcct?.subdomain;
+
+	const { content: UsernameWithEmojis } = useMfm({
+		content: displayNameRaw,
+		remoteSubdomain: theirSubdomain,
+		emojiMap: emojiMap,
+		deps: [displayNameRaw],
+	});
+
+	return (
+		<View
+			style={{
+				display: 'flex',
+				marginLeft: 8,
+				flexGrow: 1,
+				maxWidth: '100%',
+			}}
+		>
+			<TouchableOpacity onPress={onClick}>
+				<View>
+					<Text
+						style={{
+							color: APP_FONT.MONTSERRAT_HEADER,
+							fontFamily: 'Inter-SemiBold',
+							maxWidth: 196,
+							marginTop: -3,
+						}}
+						numberOfLines={1}
+					>
+						{UsernameWithEmojis}
+					</Text>
+				</View>
+			</TouchableOpacity>
+			<View>
+				<Text
+					style={{
+						color: '#888',
+						fontWeight: '500',
+						fontSize: 12,
+						opacity: 0.6,
+						fontFamily: 'Inter-Bold',
+						maxWidth: 196,
+					}}
+					numberOfLines={1}
+				>
+					{instanceUrl}
+				</Text>
 			</View>
 		</View>
 	);
@@ -89,29 +190,7 @@ function OriginalPoster({
 		if (!user || !UsernameWithEmojis) return <OriginalPosterSkeleton />;
 		return (
 			<React.Fragment>
-				<TouchableOpacity onPress={onProfileClicked}>
-					<View
-						style={{
-							width: 52,
-							height: 52,
-							borderColor: 'gray',
-							borderWidth: 2,
-							borderRadius: 6,
-						}}
-					>
-						<Image
-							style={{
-								flex: 1,
-								width: '100%',
-								backgroundColor: '#0553',
-								padding: 2,
-								opacity: 0.87,
-								borderRadius: 4,
-							}}
-							source={{ uri: avatarUrl }}
-						/>
-					</View>
-				</TouchableOpacity>
+				<OriginalPostedPfpFragment url={avatarUrl} onClick={onProfileClicked} />
 				<View
 					style={{
 						display: 'flex',

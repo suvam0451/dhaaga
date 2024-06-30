@@ -17,8 +17,8 @@ function HomeScreen() {
 				screenOptions={{ headerShown: false }}
 			>
 				<Stack.Screen name="Mastodon timeline" component={TimelineRenderer} />
-				<Stack.Screen name="What is Fediverse" component={WhatIsFediverse} />
-				<Stack.Screen name="New To Dhaaga" component={NewToDhaaga} />
+				{/*<Stack.Screen name="What is Fediverse" component={WhatIsFediverse} />*/}
+				{/*<Stack.Screen name="New To Dhaaga" component={NewToDhaaga} />*/}
 				<Stack.Screen name="Mastodon Local" component={TimelineRenderer} />
 				<Stack.Screen name="Browse Hashtag" component={ApiWrapper} />
 				<Stack.Screen name="Profile" component={UserProfile} />
