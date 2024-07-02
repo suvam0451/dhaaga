@@ -2,6 +2,9 @@ import { ObjectSchema, Object } from 'realm';
 import { ActivityPubServer } from './activitypub-server.entity';
 import { ActivityPubUser } from './activitypub-user.entity';
 import { z } from 'zod';
+import { ActivityPubMediaAttachment } from './activitypub-media-attachment.entity';
+import { ENTITY } from './_entities';
+import { ActivityPubTag } from './activitypub-tag.entity';
 
 const ActivityPubStatusUpsertDTO = z.object({
 	statusId: z.string(),
@@ -46,6 +49,8 @@ export class ActivityPubStatus extends Object {
 
 	postedBy?: ActivityPubUser;
 	server?: ActivityPubServer;
+	mediaAttachments: ActivityPubMediaAttachment[];
+	hashtags: ActivityPubTag[];
 
 	static schema: ObjectSchema = {
 		name: 'ActivityPubStatus',
@@ -72,8 +77,10 @@ export class ActivityPubStatus extends Object {
 			repliedCount: 'int',
 			sensitive: 'bool',
 			// relations
-			server: 'ActivityPubServer?',
-			postedBy: 'ActivityPubUser?',
+			server: `${ENTITY.ACTIVITYPUB_SERVER}?`,
+			postedBy: `${ENTITY.ACTIVITYPUB_USER}?`,
+			mediaAttachments: `${ENTITY.ACTIVITYPUB_MEDIA_ATTACHMENT}[]`,
+			hashtags: `${ENTITY.ACTIVITYPUB_TAG}[]`,
 		},
 	};
 }

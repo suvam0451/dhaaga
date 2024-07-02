@@ -1,10 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import ExplainOutput from '../explanation/ExplainOutput';
-import ImageCarousal from '../../../screens/timelines/fragments/ImageCarousal';
-import WithActivitypubStatusContext, {
-	useActivitypubStatusContext,
-} from '../../../states/useStatus';
+import MediaItem from '../media/MediaItem';
+import { useActivitypubStatusContext } from '../../../states/useStatus';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub/src';
 import useMfm from '../../hooks/useMfm';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
@@ -79,7 +77,7 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 				/>
 			)}
 			{IsMediaShown && (
-				<ImageCarousal attachments={status?.getMediaAttachments()} />
+				<MediaItem attachments={status?.getMediaAttachments()} />
 			)}
 			<View
 				style={{

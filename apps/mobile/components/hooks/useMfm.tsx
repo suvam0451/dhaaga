@@ -1,5 +1,5 @@
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
-import { DependencyList, Fragment, useMemo } from 'react';
+import { DependencyList, useMemo } from 'react';
 import { View } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
@@ -7,7 +7,6 @@ import { Text } from '@rneui/themed';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import React from 'react';
 
 type Props = {
 	content: string;

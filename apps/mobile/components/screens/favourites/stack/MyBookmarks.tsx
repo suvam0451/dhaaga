@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import StatusItem from '../../../common/status/StatusItem';
 import WithActivitypubStatusContext from '../../../../states/useStatus';
 import WithAppPaginationContext, {

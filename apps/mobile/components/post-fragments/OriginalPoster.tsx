@@ -2,17 +2,13 @@ import { View, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { extractInstanceUrl, visibilityIcon } from '../../utils/instances';
 import { formatDistanceToNowStrict } from 'date-fns';
-import React, { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
-import MfmService from '../../services/mfm.service';
 import { useActivitypubStatusContext } from '../../states/useStatus';
 import { useActivitypubUserContext } from '../../states/useProfile';
-import { useRealm } from '@realm/react';
-import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { Skeleton } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import Animated, { FadeInLeft } from 'react-native-reanimated';
 import { APP_FONT } from '../../styles/AppTheme';
 import useMfm from '../hooks/useMfm';
 import AstService from '../../services/ast.service';
@@ -46,6 +42,7 @@ export function OriginalPostedPfpFragment({
 					borderRadius: 6,
 				}}
 			>
+				{/* @ts-ignore */}
 				<Image
 					style={{
 						flex: 1,
@@ -89,18 +86,18 @@ export function OriginalPosterPostedByFragment({
 	theirSubdomain,
 	emojiMap,
 	instanceUrl,
+	visibility,
+	postedAt,
 }: {
 	displayNameRaw: string;
 	theirSubdomain: string;
 	onClick: () => void;
 	emojiMap?: any;
 	instanceUrl: string;
+	visibility: string;
+	postedAt: Date;
 }) {
-	// const { primaryAcct } = useActivityPubRestClientContext();
-	// const domain = primaryAcct?.domain;
-	// const subdomain = primaryAcct?.subdomain;
-
-	const { content: UsernameWithEmojis } = useMfm({
+	const { content: UsernameWithEmojis, aiContext } = useMfm({
 		content: displayNameRaw,
 		remoteSubdomain: theirSubdomain,
 		emojiMap: emojiMap,
@@ -127,7 +124,7 @@ export function OriginalPosterPostedByFragment({
 						}}
 						numberOfLines={1}
 					>
-						{UsernameWithEmojis}
+						{displayNameRaw}
 					</Text>
 				</View>
 			</TouchableOpacity>
@@ -145,6 +142,31 @@ export function OriginalPosterPostedByFragment({
 				>
 					{instanceUrl}
 				</Text>
+			</View>
+			<View style={{ display: 'flex', flexDirection: 'row' }}>
+				<Text
+					style={{
+						color: 'gray',
+						fontSize: 12,
+						fontFamily: 'Inter-Bold',
+						opacity: 0.87,
+					}}
+				>
+					{formatDistanceToNowStrict(postedAt, {
+						addSuffix: false,
+					})}
+				</Text>
+				<Text
+					style={{
+						color: 'gray',
+						marginLeft: 2,
+						marginRight: 2,
+						opacity: 0.6,
+					}}
+				>
+					•
+				</Text>
+				{visibilityIcon(visibility)}
 			</View>
 		</View>
 	);
@@ -189,8 +211,17 @@ function OriginalPoster({
 	return useMemo(() => {
 		if (!user || !UsernameWithEmojis) return <OriginalPosterSkeleton />;
 		return (
-			<React.Fragment>
+			<Fragment>
 				<OriginalPostedPfpFragment url={avatarUrl} onClick={onProfileClicked} />
+				{/*TODO: replace the remaining component with this*/}
+				{/*<OriginalPosterPostedByFragment*/}
+				{/*	onClick={onProfileClicked}*/}
+				{/*	theirSubdomain={user?.getInstanceUrl()}*/}
+				{/*	displayNameRaw={user?.getDisplayName()}*/}
+				{/*	instanceUrl={extractInstanceUrl(accountUrl, username, subdomain)}*/}
+				{/*	postedAt={new Date(status?.getCreatedAt())}*/}
+				{/*	visibility={status?.getVisibility()}*/}
+				{/*/>*/}
 				<View
 					style={{
 						display: 'flex',
@@ -256,7 +287,7 @@ function OriginalPoster({
 						{visibilityIcon(visibility)}
 					</View>
 				</View>
-			</React.Fragment>
+			</Fragment>
 		);
 	}, [user, UsernameWithEmojis]);
 }

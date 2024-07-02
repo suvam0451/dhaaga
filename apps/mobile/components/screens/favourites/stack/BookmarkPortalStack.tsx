@@ -5,35 +5,29 @@ import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { Text } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { AppButtonVariantA } from '../../../lib/Buttons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import BookmarkBrowserService from '../../../../services/bookmark-browser.service';
-import AccountService from '../../../../services/account.service';
 import { formatRelative } from 'date-fns';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from 'expo-router';
+import useSyncWithProgress, {
+	ACTIVITYPUB_SYNC_TASK,
+} from '../../../hooks/tasks/useSyncWithProgress';
+import BookmarkGalleryAdvanced from '../../../dialogs/BookmarkGalleryAdvanced';
 
 function BookmarkNeverSyncedPrompt() {
-	const { client, primaryAcct } = useActivityPubRestClientContext();
-	const [ButtonActionLoading, setButtonActionLoading] = useState(false);
-	const [SyncedItemCount, setSyncedItemCount] = useState(0);
-	const db = useRealm();
+	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(
+		ACTIVITYPUB_SYNC_TASK.BOOKMARK_SYNC,
+		{},
+	);
 
 	async function onSyncBookmarks() {
-		setButtonActionLoading(true);
-		await BookmarkBrowserService.updateBookmarkCache(
-			primaryAcct,
-			client,
-			db,
-			setSyncedItemCount,
-		);
-		AccountService.updateBookmarkSyncStatus(db, primaryAcct);
-		setButtonActionLoading(false);
-		setSyncedItemCount(0);
+		if (!IsTaskRunning) {
+			Task();
+		}
 	}
 
-	useEffect(() => {}, []);
 	return (
 		<View>
 			<Text style={{ textAlign: 'center' }}>
@@ -44,11 +38,11 @@ function BookmarkNeverSyncedPrompt() {
 				<AppButtonVariantA
 					label={'Sync Now'}
 					onClick={onSyncBookmarks}
-					loading={ButtonActionLoading}
+					loading={IsTaskRunning}
 					opts={{ useHaptics: true }}
 					customLoadingState={
 						<View style={{ display: 'flex', flexDirection: 'row' }}>
-							<Text>{SyncedItemCount}/?</Text>
+							<Text>{Numerator}/?</Text>
 							<ActivityIndicator
 								size={20}
 								color={'white'}
@@ -73,6 +67,10 @@ function BookmarkNeverSyncedPrompt() {
 
 function BookmarkSyncedPrompt() {
 	const { primaryAcct } = useActivityPubRestClientContext();
+	const [
+		BookmarkGallerySettingDialogVisible,
+		setBookmarkGallerySettingDialogVisible,
+	] = useState(false);
 
 	function onBookmarkGalleryBrowseClick() {
 		router.navigate('/favourites/bookmark-gallery');
@@ -105,7 +103,12 @@ function BookmarkSyncedPrompt() {
 						loading={false}
 					/>
 				</View>
-				<View style={{ marginLeft: 12, marginRight: 4 }}>
+				<View
+					style={{ marginLeft: 12, marginRight: 4 }}
+					onTouchStart={() => {
+						setBookmarkGallerySettingDialogVisible(true);
+					}}
+				>
 					<FontAwesome5
 						name="cog"
 						size={24}
@@ -124,6 +127,10 @@ function BookmarkSyncedPrompt() {
 				Last Synced:{' '}
 				{formatRelative(new Date(), primaryAcct?.bookmarksLastSyncedAt)}
 			</Text>
+			<BookmarkGalleryAdvanced
+				IsVisible={BookmarkGallerySettingDialogVisible}
+				setIsVisible={setBookmarkGallerySettingDialogVisible}
+			/>
 			{/*<View style={{ marginTop: 16 }}></View>*/}
 		</View>
 	);

@@ -1,68 +1,22 @@
-import { Dimensions, View, Text, Pressable, StyleSheet } from 'react-native';
+import { Dimensions, View, Text, Pressable } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub/src';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Image } from 'expo-image';
 import MediaService from '../../../services/media.service';
-import { useVideoPlayer, VideoView } from 'expo-video';
+import {
+	MARGIN_TOP,
+	MEDIA_CONTAINER_MAX_HEIGHT,
+	MEDIA_CONTAINER_WIDTH,
+} from './_common';
+import { AppImageComponent, AppVideoComponent } from './_shared';
 
 type ImageCarousalProps = {
 	attachments: MediaAttachmentInterface[];
 };
-
-const MEDIA_CONTAINER_MAX_HEIGHT = 540;
-const MEDIA_CONTAINER_WIDTH = Dimensions.get('window').width - 20;
-
-const MARGIN_TOP = 8;
-
-function TimelineVideoRendered({
-	url,
-	height,
-	loop,
-}: {
-	url: string;
-	height: number;
-	loop?: boolean;
-}) {
-	const ref = useRef(null);
-	const [isPlaying, setIsPlaying] = useState(true);
-	const player = useVideoPlayer(url, (player) => {
-		if (loop) {
-			player.loop = true;
-		}
-		// player.play();
-	});
-
-	useEffect(() => {
-		const subscription = player.addListener('playingChange', (isPlaying) => {
-			setIsPlaying(isPlaying);
-		});
-
-		return () => {
-			subscription.remove();
-		};
-	}, [player]);
-
-	return (
-		<View style={[styles.contentContainer, { height }]}>
-			<VideoView
-				ref={ref}
-				style={{
-					width: MEDIA_CONTAINER_WIDTH,
-					height: height,
-					borderRadius: 8,
-				}}
-				player={player}
-				allowsFullscreen
-				allowsPictureInPicture
-			/>
-		</View>
-	);
-}
 
 function TimelineMediaRendered({
 	attachment,
@@ -88,21 +42,15 @@ function TimelineMediaRendered({
 		switch (type) {
 			case 'image': {
 				return (
-					// @ts-ignore
-					<Image
-						style={{
-							flex: 1,
-							width: MEDIA_CONTAINER_WIDTH,
-							borderRadius: 16,
-						}}
-						placeholder={{ blurhash: attachment?.getBlurHash() }}
-						source={{ uri: attachment.getUrl() }}
+					<AppImageComponent
+						url={attachment.getUrl()}
+						blurhash={attachment.getBlurHash()}
 					/>
 				);
 			}
 			case 'video': {
 				return (
-					<TimelineVideoRendered
+					<AppVideoComponent
 						url={attachment.getUrl()}
 						height={CalculatedHeight}
 					/>
@@ -110,7 +58,7 @@ function TimelineMediaRendered({
 			}
 			case 'gifv': {
 				return (
-					<TimelineVideoRendered
+					<AppVideoComponent
 						url={attachment.getUrl()}
 						height={CalculatedHeight}
 						loop
@@ -216,7 +164,7 @@ function TimelineMediaRendered({
 	);
 }
 
-function ImageCarousal({ attachments }: ImageCarousalProps) {
+function MediaItem({ attachments }: ImageCarousalProps) {
 	const [CarousalData, setCarousalData] = useState({
 		index: 0,
 		total: attachments?.length,
@@ -285,22 +233,4 @@ function ImageCarousal({ attachments }: ImageCarousalProps) {
 	);
 }
 
-const styles = StyleSheet.create({
-	contentContainer: {
-		flex: 1,
-		// height: 500,
-		// padding: 10,
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingHorizontal: 8,
-	},
-	video: {
-		width: 350,
-		height: 500,
-	},
-	controlsContainer: {
-		padding: 10,
-	},
-});
-
-export default ImageCarousal;
+export default MediaItem;

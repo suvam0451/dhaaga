@@ -1,4 +1,5 @@
 import { ObjectSchema, Object } from 'realm';
+import { ENTITY } from './_entities';
 
 export type ActivityPubTagCreateDTO = {
 	name: string;
@@ -13,7 +14,7 @@ export class ActivityPubTag extends Object {
 	privatelyFollowing: boolean;
 
 	static schema: ObjectSchema = {
-		name: 'ActivityPubTag',
+		name: `${ENTITY.ACTIVITYPUB_TAG}`,
 		primaryKey: '_id',
 		properties: {
 			_id: 'uuid',

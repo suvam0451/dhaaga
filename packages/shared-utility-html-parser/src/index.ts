@@ -6,16 +6,10 @@ import HtmlParserService from './htmlparser2';
 export type { MfmNode, MfmEmojiCode } from 'mfm-js/built';
 
 /**
- * Utility function that
- * 1. Removes <p> tags
- * 2. Replaces &#39; with
- * 3. Replaces tag urls with #tag
- * 4. Splits paragraphs
+ * Stops at the pre-processing step
  * @param str
  */
-export function parseStatusContent(str: string) {
-	let retval: MfmNode[][] = [];
-
+export function preprocessPostContent(str: string) {
 	// remove span tags
 	str = HtmlParserService.cleanup(str);
 
@@ -29,6 +23,22 @@ export function parseStatusContent(str: string) {
 	// Replace  leading "#" -- Confuses mfm-js
 	const rule3 = /(<a.*?>)(#+)(.+.*?<\/a>)/gm;
 	str = str.replaceAll(rule3, '$1$3');
+	return str;
+}
+
+/**
+ * Utility function that
+ * 1. Removes <p> tags
+ * 2. Replaces &#39; with
+ * 3. Replaces tag urls with #tag
+ * 4. Splits paragraphs
+ * @param str
+ */
+export function parseStatusContent(str: string) {
+	let retval: MfmNode[][] = [];
+
+	// remove span tags
+	str = preprocessPostContent(str);
 
 	const ex = /<p>(.*?)<\/p>/g;
 	if (ex.test(str)) {

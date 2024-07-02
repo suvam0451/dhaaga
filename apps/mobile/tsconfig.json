@@ -1,10 +1,15 @@
 {
+  "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "baseUrl": ".",
     "jsx": "react-native",
     "checkJs": false,
     "esModuleInterop": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "allowJs": true,
+    "lib": [
+      "ESNext"
+    ]
   },
   "include": [
     "*.ts",
@@ -13,5 +18,8 @@
   ],
   "exclude": [
     "node_modules"
+  ],
+  "files": [
+    "./**/*"
   ]
 }

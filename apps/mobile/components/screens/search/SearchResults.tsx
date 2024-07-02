@@ -1,13 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import React, { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useScrollOnReveal } from '../../../states/useScrollOnReveal';
 import NoResults from '../../error-screen/NoResults';
 import SearchScreenManual from '../../error-screen/SearchScreenManual';
 import AppLoadingIndicator from '../../error-screen/AppLoadingIndicator';
 import { useAppPaginationContext } from '../../../states/usePagination';
-import useTopbarSmoothTranslate from '../../../states/useTopbarSmoothTranslate';
-import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import WithActivitypubStatusContext from '../../../states/useStatus';
 import StatusItem from '../../common/status/StatusItem';
@@ -112,7 +110,7 @@ function SearchResults(props: SearchResultsProps) {
 		);
 
 	return (
-		<React.Fragment>
+		<Fragment>
 			<AnimatedFlashList
 				estimatedItemSize={200}
 				data={PageData}
@@ -131,7 +129,7 @@ function SearchResults(props: SearchResultsProps) {
 				visible={LoadingMoreComponentProps.visible}
 				loading={LoadingMoreComponentProps.loading}
 			/>
-		</React.Fragment>
+		</Fragment>
 	);
 }
 

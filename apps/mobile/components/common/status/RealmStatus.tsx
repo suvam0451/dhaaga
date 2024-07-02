@@ -1,16 +1,14 @@
 import { useObject } from '@realm/react';
 import { ActivityPubStatus } from '../../../entities/activitypub-status.entity';
 import { View } from 'react-native';
-import { Text } from '@rneui/themed';
 import useMfm from '../../hooks/useMfm';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
-import { Image } from 'expo-image';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import {
 	OriginalPostedPfpFragment,
 	OriginalPosterPostedByFragment,
-	OriginalPosterSkeleton,
 } from '../../post-fragments/OriginalPoster';
+import RealmMediaItem from '../media/RealmMediaItem';
 
 function getAccountDisplayName(
 	username: string,
@@ -25,6 +23,11 @@ function getAccountDisplayName(
 }
 
 /**
+ * Status Component for posts loaded from memory
+ *
+ * For posts loaded via API:
+ * @see StatusItem
+ *
  * The main differences from a normal status are:
  * - may not have boosted by info
  * @constructor
@@ -39,11 +42,10 @@ function RealmStatus({ _id }: { _id: Realm.BSON.UUID }) {
 		emojiMap: new Map<string, EmojiMapValue>(),
 		deps: [post._id],
 	});
-
 	return (
 		<View
 			style={{
-				marginBottom: 16,
+				marginBottom: 4,
 				backgroundColor: '#1e1e1e',
 				borderRadius: 8,
 				padding: 8,
@@ -65,9 +67,12 @@ function RealmStatus({ _id }: { _id: Realm.BSON.UUID }) {
 						post.postedBy.server.url,
 						primaryAcct.subdomain,
 					)}
+					postedAt={post.createdAt}
+					visibility={post.visibility}
 				/>
 			</View>
 			{content}
+			<RealmMediaItem data={post.mediaAttachments} />
 		</View>
 	);
 }

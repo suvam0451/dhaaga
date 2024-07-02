@@ -2,10 +2,7 @@ import { BSON, List, Realm, UpdateMode } from 'realm';
 import { Account, KeyValuePair } from '../entities/account.entity';
 import UUID = BSON.UUID;
 import { ActivityPubStatus } from '../entities/activitypub-status.entity';
-import {
-	ActivityPubAccount,
-	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub/src';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/src';
 import { ActivityPubStatusRepository } from './activitypub-status.repo';
 
 export type AccountCreateDTO = {
@@ -139,6 +136,7 @@ class AccountRepository {
 			domain: string;
 		},
 	) {
+		// FIXME: this should check for postedBy
 		const match = existing.find((o) => o.statusId === status.getId());
 		if (match)
 			return {
@@ -151,6 +149,7 @@ class AccountRepository {
 			subdomain,
 			domain,
 		});
+
 		const savedBookmark = acct.bookmarks.push(savedStatus);
 		return {
 			success: true,

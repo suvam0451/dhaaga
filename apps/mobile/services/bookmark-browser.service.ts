@@ -1,5 +1,5 @@
 import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub/src';
-import { Realm } from '@realm/react';
+import { Realm } from 'realm';
 import { Account } from '../entities/account.entity';
 import ActivityPubAdapterService from './activitypub-adapter.service';
 import AccountRepository from '../repositories/account.repo';
@@ -23,7 +23,7 @@ class BookmarkBrowserService {
 
 			db.write(() => {
 				for (const statusI of statusIs) {
-					const { success, data, message } = AccountRepository.upsertBookmark(
+					AccountRepository.upsertBookmark(
 						db,
 						primaryAcct,
 						primaryAcct.bookmarks,
@@ -33,7 +33,6 @@ class BookmarkBrowserService {
 							domain: primaryAcct.domain,
 						},
 					);
-					// console.log(message);
 				}
 			});
 
@@ -41,10 +40,19 @@ class BookmarkBrowserService {
 			if (callback) {
 				callback(syncedCount);
 			}
-			
+
 			if (maxId === res.maxId || res.maxId === null) break;
 			maxId = res.maxId;
 		} while (!done);
+	}
+
+	static clearBookmarkCache(db: Realm, primaryAcct: Account) {
+		db.write(() => {
+			while (primaryAcct.bookmarks.length > 0) {
+				primaryAcct.bookmarks.pop();
+			}
+			primaryAcct.bookmarksLastSyncedAt = null;
+		});
 	}
 }
 

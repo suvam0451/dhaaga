@@ -20,7 +20,6 @@ import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 
 // to get rid of realm warnings
-import 'react-native-get-random-values';
 import AppSettingsService from '../services/app-settings.service';
 
 function WithGorhomBottomSheetWrapper() {
@@ -70,7 +69,7 @@ export default function Page() {
 				{/* In-Memory Store -- MMKV */}
 				<WithGlobalMmkvContext>
 					{/* Main Database -- Realm */}
-					<RealmProvider schema={schemas} schemaVersion={12}>
+					<RealmProvider schema={schemas} schemaVersion={15}>
 						{/* API Caching -- Tanstack */}
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}

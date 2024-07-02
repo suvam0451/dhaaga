@@ -1,10 +1,6 @@
-import {
-	MfmNode,
-	parseStatusContent,
-} from '@dhaaga/shared-utility-html-parser/src';
+import { MfmNode } from '@dhaaga/shared-utility-html-parser/src';
 import { Text } from 'react-native';
 import HashtagProcessor from '../components/common/tag/TagProcessor';
-import React from 'react';
 import { Image } from 'expo-image';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
 import { randomUUID } from 'expo-crypto';
@@ -12,8 +8,9 @@ import LinkProcessor from '../components/common/link/LinkProcessor';
 import { APP_FONT, APP_THEME } from '../styles/AppTheme';
 import { EmojiService } from './emoji.service';
 import { MMKV } from 'react-native-mmkv';
-import Realm from 'realm';
+import { Realm } from 'realm';
 import MentionProcessor from '../components/common/user/MentionProcessor';
+import TextParserService from './text-parser';
 
 type MentionMap = {
 	url: string;
@@ -21,15 +18,6 @@ type MentionMap = {
 }[];
 
 class MfmService {
-	/**
-	 * generates a map of mentions from content
-	 */
-	static findMentions(content: string) {
-		const ex = new RegExp('<a.*?href="(.*?)".*?>@(.*?)</a>', 'g');
-		const matches = Array.from(content.matchAll(ex));
-		return matches.map((o) => ({ url: o[1], text: o[2] }));
-	}
-
 	/**
 	 * TODO: when parent node is bold/italic,
 	 * apply that styling to children, as well
@@ -78,6 +66,7 @@ class MfmService {
 			}
 			case 'text': {
 				let baseText = node.props.text;
+				// @ts-ignore-next-line
 				baseText = baseText.replaceAll(/<br>/g, '\n');
 				return (
 					<Text
@@ -144,6 +133,7 @@ class MfmService {
 					);
 				return (
 					<Text key={k} style={{ marginTop: 0 }}>
+						{/*@ts-ignore-next-line*/}
 						<Image
 							style={{
 								width: 18,
@@ -234,20 +224,6 @@ class MfmService {
 		}
 	}
 
-	private static extractUrls(item: string) {
-		const mp = new Map<string, string>();
-		const ex = /<a.*?href="(.*?)".*?>(.*?)<\/a>/gu;
-
-		const aRefContentCleanupRegex = /(<([^>]+)>)/gi;
-
-		const matches = item.matchAll(ex);
-		for (const match of matches) {
-			const result = match[2].replace(aRefContentCleanupRegex, '');
-			mp.set(match[1], result);
-		}
-		return mp;
-	}
-
 	/**
 	 *
 	 * @param input
@@ -270,8 +246,8 @@ class MfmService {
 			remoteSubdomain,
 			opts,
 		}: {
-			domain?: string;
-			subdomain?: string;
+			domain: string;
+			subdomain: string;
 			emojiMap: Map<string, EmojiMapValue>;
 			globalDb: MMKV;
 			db: Realm;
@@ -288,14 +264,12 @@ class MfmService {
 				openAiContext: [],
 			};
 
-		// console.log(input);
-		const mentionMap = this.findMentions(input);
+		const mentionMap = TextParserService.findMentions(input);
 
-		const extractedUrls = this.extractUrls(input);
+		const extractedUrls = TextParserService.findHyperlinks(input);
 
-		const parsed = parseStatusContent(input);
-		// console.log(input);
-		// console.log(parsed);
+		const parsed = TextParserService.preprocessPostContent(input);
+
 		let retval = [];
 		let openAiContext = [];
 		let count = 0;
@@ -370,6 +344,7 @@ class MfmService {
 					}
 
 					const txt = node.props.text.trim();
+					// @ts-ignore-next-line
 					txt.replaceAll(/<br>/g, '\n');
 					openAiContext.push(txt);
 					continue;

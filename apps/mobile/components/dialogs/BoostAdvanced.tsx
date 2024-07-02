@@ -1,11 +1,7 @@
 import { Dialog, Text } from '@rneui/themed';
+import { RneuiDialogProps } from './_types';
 
-type Props = {
-	IsVisible: boolean;
-	setIsVisible: (visible: boolean) => void;
-};
-
-function BoostAdvanced({ IsVisible, setIsVisible }: Props) {
+function BoostAdvanced({ IsVisible, setIsVisible }: RneuiDialogProps) {
 	return (
 		<Dialog
 			style={{
