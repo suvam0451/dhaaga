@@ -1,7 +1,7 @@
-import { View } from 'react-native';
+import MyBookmarks from '../../../components/screens/favourites/stack/MyBookmarks';
 
 function BookmarkClassic() {
-	return <View></View>;
+	return <MyBookmarks />;
 }
 
 export default BookmarkClassic;

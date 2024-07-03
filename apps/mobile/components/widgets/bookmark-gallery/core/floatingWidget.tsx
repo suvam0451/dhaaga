@@ -77,6 +77,8 @@ function BookmarkGalleryWidgetExpanded() {
 		onUserNoneSelected,
 		onTagAllSelected,
 		onTagNoneSelected,
+		postsTotalCount,
+		usersTotalCount,
 	} = useBookmarkGalleryControllerContext();
 
 	const DeviceWidth = useRef(Dimensions.get('window').width);
@@ -109,7 +111,7 @@ function BookmarkGalleryWidgetExpanded() {
 							fontFamily: 'Inter',
 						}}
 					>
-						{acct.bookmarks.length} Posts from {loadedUserData.length} users.
+						{postsTotalCount} Posts from {usersTotalCount} users.
 					</Text>
 				</View>
 				<View style={{ display: 'flex', flexDirection: 'row' }}>

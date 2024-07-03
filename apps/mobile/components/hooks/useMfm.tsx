@@ -39,7 +39,7 @@ function useMfm({
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
-	const [Data, setData] = useState<any>({
+	const defaultValue = useRef({
 		isLoaded: false,
 		content: (
 			<Skeleton
@@ -53,6 +53,8 @@ function useMfm({
 		aiContext: [],
 	});
 
+	const [Data, setData] = useState<any>(defaultValue);
+
 	const IsSolved = useRef(null);
 
 	useEffect(() => {
@@ -64,6 +66,7 @@ function useMfm({
 				aiContext: [],
 			});
 		}
+		setData(defaultValue);
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
 			domain,

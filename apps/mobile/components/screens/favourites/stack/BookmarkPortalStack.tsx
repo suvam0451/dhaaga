@@ -1,4 +1,4 @@
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useRealm } from '@realm/react';
 import { Button } from '@rneui/themed';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
@@ -59,6 +59,18 @@ function BookmarkNeverSyncedPrompt() {
 					}}
 				>
 					Last Synced: Never
+				</Text>
+			</View>
+		</View>
+	);
+}
+
+function RegularTimeline() {
+	return (
+		<View>
+			<View style={{ marginVertical: 8 }}>
+				<Text style={{ textAlign: 'left', paddingHorizontal: 8 }}>
+					Use the regular timeline interface
 				</Text>
 			</View>
 		</View>
@@ -141,22 +153,8 @@ function BookmarkPortalStack() {
 	const db = useRealm();
 	return (
 		<WithAutoHideTopNavBar title={'Bookmark Viewer'}>
-			<View
-				style={{
-					borderWidth: 2,
-					borderColor: '#383838',
-					borderRadius: 8,
-					padding: 8,
-					margin: 8,
-				}}
-			>
-				<Text
-					style={{
-						textAlign: 'center',
-						fontFamily: 'Montserrat-Bold',
-						fontSize: 20,
-					}}
-				>
+			<View style={style.sectionContainer}>
+				<Text style={style.texStyle}>
 					Bookmark Gallery
 					<MaterialCommunityIcons
 						name="beta"
@@ -171,11 +169,34 @@ function BookmarkPortalStack() {
 					<BookmarkSyncedPrompt />
 				)}
 			</View>
-			<View>
-				<Button>Just take me to the Simple View</Button>
+			<View style={style.sectionContainer}>
+				<Text style={style.texStyle}>Classic View</Text>
+				<RegularTimeline />
+				<AppButtonVariantA
+					label={'Take me There'}
+					onClick={() => {
+						router.navigate('/favourites/bookmark-classic');
+					}}
+					loading={false}
+				/>
 			</View>
 		</WithAutoHideTopNavBar>
 	);
 }
+
+const style = StyleSheet.create({
+	sectionContainer: {
+		borderWidth: 2,
+		borderColor: '#383838',
+		borderRadius: 8,
+		padding: 8,
+		margin: 8,
+	},
+	texStyle: {
+		textAlign: 'center',
+		fontFamily: 'Montserrat-Bold',
+		fontSize: 20,
+	},
+});
 
 export default BookmarkPortalStack;

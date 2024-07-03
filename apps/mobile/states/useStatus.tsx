@@ -156,8 +156,6 @@ function WithActivitypubStatusContext({
 			data,
 			_domain,
 		);
-
-		console.log('assigned root is', Status, root);
 		contextRootLookup.current = root;
 		contextItemLookup.current = itemLookup;
 		contextChildrenLookup.current = childrenLookup;

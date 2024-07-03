@@ -47,6 +47,9 @@ type Type = {
 
 	IsTagAllSelected: boolean;
 	IsTagNoneSelected: boolean;
+
+	postsTotalCount: number;
+	usersTotalCount: number;
 } & InheritedType;
 
 const defaultValue: Type = {
@@ -89,6 +92,8 @@ const defaultValue: Type = {
 	},
 	userStateHash: '',
 	tagStateHash: '',
+	postsTotalCount: 0,
+	usersTotalCount: 0,
 };
 
 const BookmarkGalleryControllerContext = createContext<Type>(defaultValue);
@@ -249,9 +254,23 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 	const IsTagAllSelected = TagSpecialSelection.current === 'all';
 	const IsTagNoneSelected = TagSpecialSelection.current === 'none';
 
+	const POST_TOTAL_COUNT = postsCached.length;
+	const USER_TOTAL_COUNT = useMemo(() => {
+		switch (UserSpecialSelection.current) {
+			case 'all':
+				return LoadedData?.length;
+			case 'none':
+				return 0;
+			default:
+				return userSet.current.size;
+		}
+	}, [LoadedData, UserStateHash, userSet.current]);
+
 	return (
 		<BookmarkGalleryControllerContext.Provider
 			value={{
+				postsTotalCount: POST_TOTAL_COUNT,
+				usersTotalCount: USER_TOTAL_COUNT,
 				loadMore,
 				posts: Posts,
 				isUserSelected,

@@ -181,8 +181,8 @@ function TimelineRenderer() {
 							estimatedItemSize={100}
 							data={PageData}
 							renderItem={(o) => (
-								<WithActivitypubStatusContext status={o.item} key={o.index}>
-									<StatusItem key={o.index} />
+								<WithActivitypubStatusContext status={o.item}>
+									<StatusItem />
 								</WithActivitypubStatusContext>
 							)}
 							onScroll={onScroll}
