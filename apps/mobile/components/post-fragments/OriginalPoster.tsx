@@ -97,11 +97,12 @@ export function OriginalPosterPostedByFragment({
 	visibility: string;
 	postedAt: Date;
 }) {
-	const { content: UsernameWithEmojis, aiContext } = useMfm({
+	const { content: UsernameWithEmojis } = useMfm({
 		content: displayNameRaw,
 		remoteSubdomain: theirSubdomain,
 		emojiMap: emojiMap,
 		deps: [displayNameRaw],
+		expectedHeight: 20,
 	});
 
 	return (
@@ -114,19 +115,7 @@ export function OriginalPosterPostedByFragment({
 			}}
 		>
 			<TouchableOpacity onPress={onClick}>
-				<View>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_HEADER,
-							fontFamily: 'Inter-SemiBold',
-							maxWidth: 196,
-							marginTop: -3,
-						}}
-						numberOfLines={1}
-					>
-						{displayNameRaw}
-					</Text>
-				</View>
+				<View>{UsernameWithEmojis}</View>
 			</TouchableOpacity>
 			<View>
 				<Text

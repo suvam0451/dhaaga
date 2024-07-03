@@ -28,10 +28,12 @@ export function AppVideoComponent({
 	url,
 	height,
 	loop,
+	type,
 }: {
 	url: string;
 	height: number;
 	loop?: boolean;
+	type: string;
 }) {
 	const ref = useRef(null);
 	const [isPlaying, setIsPlaying] = useState(true);

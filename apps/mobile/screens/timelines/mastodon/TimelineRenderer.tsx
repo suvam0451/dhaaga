@@ -141,8 +141,6 @@ function TimelineRenderer() {
 		}
 	}, [timelineType, opts?.hashtagName, opts?.listId]);
 
-	const ref = useRef(null);
-
 	/**
 	 * Composite Hook Collection
 	 */
@@ -166,9 +164,7 @@ function TimelineRenderer() {
 	return (
 		<SafeAreaView style={[styles.container, { position: 'relative' }]}>
 			<StatusBar backgroundColor="#121212" />
-			<Animated.View
-				style={[styles.header, { transform: [{ translateY: translateY }] }]}
-			>
+			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader
 					SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
 					HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
@@ -184,7 +180,6 @@ function TimelineRenderer() {
 							numColumns={1}
 							estimatedItemSize={100}
 							data={PageData}
-							ref={ref}
 							renderItem={(o) => (
 								<WithActivitypubStatusContext status={o.item} key={o.index}>
 									<StatusItem key={o.index} />

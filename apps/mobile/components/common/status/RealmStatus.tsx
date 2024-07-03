@@ -1,6 +1,6 @@
 import { useObject } from '@realm/react';
 import { ActivityPubStatus } from '../../../entities/activitypub-status.entity';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import useMfm from '../../hooks/useMfm';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
@@ -42,15 +42,9 @@ function RealmStatus({ _id }: { _id: Realm.BSON.UUID }) {
 		emojiMap: new Map<string, EmojiMapValue>(),
 		deps: [post._id],
 	});
+
 	return (
-		<View
-			style={{
-				marginBottom: 4,
-				backgroundColor: '#1e1e1e',
-				borderRadius: 8,
-				padding: 8,
-			}}
-		>
+		<View style={styles.container}>
 			<View style={{ display: 'flex', flexDirection: 'row', marginBottom: 16 }}>
 				<View style={{ width: 48, height: 48 }}>
 					<OriginalPostedPfpFragment
@@ -76,5 +70,14 @@ function RealmStatus({ _id }: { _id: Realm.BSON.UUID }) {
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		marginBottom: 4,
+		backgroundColor: '#1e1e1e',
+		borderRadius: 8,
+		padding: 8,
+	},
+});
 
 export default RealmStatus;

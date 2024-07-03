@@ -34,6 +34,9 @@ function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
 		(o) => o._id.toString() === primaryAcct._id.toString(),
 	);
 
+	const [UserFilters, setUserFilters] = useState([]);
+	const [TagFilters, setTagFilters] = useState([]);
+
 	useEffect(() => {
 		let start = performance.now();
 		const acctLookup = new Map<string, ActivityPubUser>();
@@ -95,7 +98,7 @@ function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
 
 		let end = performance.now();
 		console.log('[PERF]: bookmarks loaded in', end - start, 'ms');
-	}, []);
+	}, [q]);
 
 	const postsToShow = useMemo(() => {
 		return acct.bookmarks.slice(offset, offset + limit);
@@ -107,6 +110,10 @@ function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
 		LoadedData: LoadedUserData,
 		LoadedTagData,
 		isBuilding: LoadedUserData === null,
+		UserFilters,
+		setUserFilters,
+		TagFilters,
+		setTagFilters,
 	};
 }
 

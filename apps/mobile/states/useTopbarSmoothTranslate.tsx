@@ -36,13 +36,11 @@ function useTopbarSmoothTranslate({
 		inputRange: [0, totalHeight],
 		outputRange: [0, -hiddenHeight],
 	});
-	const translateYNumber = useRef();
 
-	translateY.addListener(({ value }) => {
-		translateYNumber.current = value;
-	});
+	function resetPosition() {
+		scrollY.current.setValue(0);
+	}
 
-	const ref = useRef(null);
 	const onScroll = Animated.event(
 		[
 			{
@@ -53,11 +51,11 @@ function useTopbarSmoothTranslate({
 		],
 		{
 			useNativeDriver: true,
-			listener: onScrollJsFn || undefined,
+			listener: onScrollJsFn,
 		},
 	);
 
-	return { onScroll, translateY, ref, scrollY };
+	return { onScroll, translateY, scrollY, resetPosition };
 }
 
 export default useTopbarSmoothTranslate;

@@ -1,12 +1,17 @@
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import { useState } from 'react';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import RealmStatus from '../../../common/status/RealmStatus';
-import useBookmarkGalleryBuilder from '../../../../hooks/realm/useBookmarkGalleryBuilder';
-import WithBookmarkGalleryControllerContext from '../../../../states/useBookmarkGalleryController';
+import WithBookmarkGalleryControllerContext, {
+	useBookmarkGalleryControllerContext,
+} from '../../../../states/useBookmarkGalleryController';
 import BookmarkGalleryWidgetExpanded from '../../../widgets/bookmark-gallery/core/floatingWidget';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
+import WithAppPaginationContext from '../../../../states/usePagination';
+import { AnimatedFlashList } from '@shopify/flash-list';
+import { useEffect, useRef } from 'react';
 
 function LoadingState() {
 	return (
@@ -38,18 +43,77 @@ function LoadingState() {
 	);
 }
 
-function BookmarkGalleryStack() {
-	const [Offset, setOffset] = useState(0);
+function ResultsRefreshing() {
+	return (
+		<View
+			style={{
+				marginTop: 54 + 8,
+				display: 'flex',
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
+		>
+			<Text style={{ textAlign: 'center', fontSize: 20 }}>Loading Results</Text>
+			<ActivityIndicator size={32} style={{ marginLeft: 8 }} />
+		</View>
+	);
+}
 
-	const { acct, LoadedData, LoadedTagData, postsToShow, isBuilding } =
-		useBookmarkGalleryBuilder({
-			q: '',
-			offset: Offset,
-			limit: 10,
-		});
+function NothingToSeeHere() {
+	return (
+		<View
+			style={{
+				marginTop: 54 + 8,
+				display: 'flex',
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
+		>
+			<Text style={{ textAlign: 'center', fontSize: 20 }}>No Results</Text>
+		</View>
+	);
+}
+
+type Props = {
+	posts: any[];
+	onScroll: any;
+	resetPosition: () => void;
+};
+
+function PostList({ posts, onScroll, resetPosition }: Props) {
+	useEffect(() => {
+		return () => {
+			resetPosition();
+		};
+	}, []);
+
+	const ref = useRef(null);
 
 	return (
-		<WithAutoHideTopNavBar title={'Bookmark Gallery'}>
+		<AnimatedFlashList
+			ref={ref}
+			estimatedItemSize={240}
+			data={posts}
+			renderItem={({ item }) => <RealmStatus _id={item._id} />}
+			scrollEventThrottle={16}
+			onScroll={onScroll}
+			contentContainerStyle={{ paddingTop: 50 + 4 }}
+		/>
+	);
+}
+
+function Core() {
+	const { posts, isBuilding, loadMore, isRefreshing } =
+		useBookmarkGalleryControllerContext();
+	const { onScroll, translateY, resetPosition } = useScrollMoreOnPageEnd({
+		itemCount: posts.length,
+		updateQueryCache: loadMore,
+	});
+
+	return (
+		<WithAutoHideTopNavBar title={'Bookmark Gallery'} translateY={translateY}>
 			{isBuilding ? (
 				<LoadingState />
 			) : (
@@ -57,28 +121,36 @@ function BookmarkGalleryStack() {
 					style={{
 						height: '100%',
 						display: 'flex',
-						paddingBottom: 54,
 					}}
 				>
-					<ScrollView style={{ flexGrow: 1 }}>
-						{postsToShow.map((o, i) => (
-							<RealmStatus key={i} _id={o._id} />
-						))}
-					</ScrollView>
-
+					{isRefreshing ? (
+						<ResultsRefreshing />
+					) : posts.length > 0 ? (
+						<PostList
+							posts={posts}
+							onScroll={onScroll}
+							resetPosition={resetPosition}
+						/>
+					) : (
+						<NothingToSeeHere />
+					)}
 					{/*This is an absolutely positioned component*/}
-					<WithBookmarkGalleryControllerContext
-						acct={acct}
-						loadedUserData={LoadedData}
-						loadedTagData={LoadedTagData}
-						isBuilding={isBuilding}
-						isRefreshing={false}
-					>
-						<BookmarkGalleryWidgetExpanded />
-					</WithBookmarkGalleryControllerContext>
+					<BookmarkGalleryWidgetExpanded />
 				</View>
 			)}
 		</WithAutoHideTopNavBar>
+	);
+}
+
+function BookmarkGalleryStack() {
+	return (
+		<WithScrollOnRevealContext maxDisplacement={150}>
+			<WithAppPaginationContext>
+				<WithBookmarkGalleryControllerContext>
+					<Core />
+				</WithBookmarkGalleryControllerContext>
+			</WithAppPaginationContext>
+		</WithScrollOnRevealContext>
 	);
 }
 

@@ -4,18 +4,22 @@ import {
 	StyleSheet,
 	ViewStyle,
 	TouchableOpacity,
+	Dimensions,
 } from 'react-native';
 import { Text } from '@rneui/themed';
 import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import { Image } from 'expo-image';
 import { useBookmarkGalleryControllerContext } from '../../../../states/useBookmarkGalleryController';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import RealmTag from '../../../common/tag/RealmTag';
+import BookmarkGalleryWidgetSkeleton from '../../../skeletons/widgets/BookmarkGalleryWidget';
+import { UserSelectionIndicator } from './indicators';
 
 const USER_SELECTION_BUBBLE_SIZE = 54;
+const SELECTED_COLOR = APP_THEME.REPLY_THREAD_COLOR_SWATCH[1];
+const SELECTED_COLOR_BG = 'rgba(172,196,46,0.25)';
 
 function BookmarkGalleryWidgetCollapsed({
 	expand,
@@ -57,8 +61,25 @@ function BookmarkGalleryWidgetCollapsed({
  * and allows filtering/searching for the module
  */
 function BookmarkGalleryWidgetExpanded() {
-	const { acct, loadedUserData, loadedTagData, isBuilding, isRefreshing } =
-		useBookmarkGalleryControllerContext();
+	const {
+		acct,
+		loadedUserData,
+		loadedTagData,
+		isBuilding,
+		isRefreshing,
+		IsUserNoneSelected,
+		IsUserAllSelected,
+		isUserSelected,
+		isTagSelected,
+		onUserSelected,
+		onTagSelected,
+		onUserAllSelected,
+		onUserNoneSelected,
+		onTagAllSelected,
+		onTagNoneSelected,
+	} = useBookmarkGalleryControllerContext();
+
+	const DeviceWidth = useRef(Dimensions.get('window').width);
 
 	const [IsExpanded, setIsExpanded] = useState(true);
 	if (!IsExpanded)
@@ -68,6 +89,8 @@ function BookmarkGalleryWidgetExpanded() {
 		setIsExpanded(false);
 	}
 
+	if (isBuilding) return <BookmarkGalleryWidgetSkeleton />;
+
 	return (
 		<View style={styles.widgetContainerExpanded}>
 			<View
@@ -75,10 +98,10 @@ function BookmarkGalleryWidgetExpanded() {
 					display: 'flex',
 					flexDirection: 'row',
 					width: '100%',
-					marginVertical: 16,
+					// marginVertical: 16,
 				}}
 			>
-				<View style={{ flexGrow: 1 }}>
+				<View style={{ flexGrow: 1, paddingVertical: 16 }}>
 					<Text
 						style={{
 							color: APP_FONT.MONTSERRAT_BODY,
@@ -90,7 +113,7 @@ function BookmarkGalleryWidgetExpanded() {
 					</Text>
 				</View>
 				<View style={{ display: 'flex', flexDirection: 'row' }}>
-					<View style={{ marginRight: 16 }}>
+					<View style={{ marginRight: 16, paddingVertical: 16 }}>
 						<FontAwesome
 							name="search"
 							size={24}
@@ -98,37 +121,78 @@ function BookmarkGalleryWidgetExpanded() {
 							style={{ opacity: 0.3 }}
 						/>
 					</View>
-
-					<View style={{ marginRight: 8 }}>
+					<View
+						style={{
+							paddingHorizontal: 8,
+							paddingVertical: 16,
+							borderRadius: 8,
+						}}
+						onTouchStart={onCollapsePress}
+					>
 						<FontAwesome
 							name="chevron-down"
 							size={24}
 							color={APP_FONT.MONTSERRAT_BODY}
-							onPress={onCollapsePress}
 						/>
 					</View>
 				</View>
 			</View>
 
 			<ScrollView horizontal style={{ height: 60, marginTop: 8 }}>
-				<View style={styles.userSelectionBoxSpecial}>
+				<View
+					onTouchEnd={onUserAllSelected}
+					style={[
+						styles.userSelectionBoxSpecial,
+						{
+							borderColor: IsUserAllSelected ? SELECTED_COLOR : 'gray',
+							backgroundColor: IsUserAllSelected
+								? SELECTED_COLOR_BG
+								: 'transparent',
+						},
+					]}
+				>
 					<Text
-						style={{
-							textAlign: 'center',
-							fontFamily: 'Montserrat-Bold',
-							color: APP_FONT.MONTSERRAT_HEADER,
-						}}
+						style={[
+							{
+								textAlign: 'center',
+								fontFamily: 'Montserrat-Bold',
+								color: APP_FONT.MONTSERRAT_BODY,
+							},
+							{
+								color: IsUserAllSelected
+									? SELECTED_COLOR
+									: APP_FONT.MONTSERRAT_BODY,
+							},
+						]}
 					>
 						ALL
 					</Text>
 				</View>
-				<View style={styles.userSelectionBoxSpecial}>
+				<View
+					style={[
+						styles.userSelectionBoxSpecial,
+						{
+							borderColor: IsUserNoneSelected ? SELECTED_COLOR : 'gray',
+							backgroundColor: IsUserNoneSelected
+								? SELECTED_COLOR_BG
+								: 'transparent',
+						},
+					]}
+					onTouchEnd={onUserNoneSelected}
+				>
 					<Text
-						style={{
-							textAlign: 'center',
-							fontFamily: 'Montserrat-Bold',
-							color: APP_FONT.MONTSERRAT_HEADER,
-						}}
+						style={[
+							{
+								textAlign: 'center',
+								fontFamily: 'Montserrat-Bold',
+								color: APP_FONT.MONTSERRAT_BODY,
+							},
+							{
+								color: IsUserNoneSelected
+									? SELECTED_COLOR
+									: APP_FONT.MONTSERRAT_BODY,
+							},
+						]}
 					>
 						NONE
 					</Text>
@@ -136,72 +200,21 @@ function BookmarkGalleryWidgetExpanded() {
 				<AnimatedFlashList
 					horizontal={true}
 					estimatedItemSize={32}
+					estimatedListSize={{
+						width: DeviceWidth.current,
+						height: 64,
+					}}
 					data={loadedUserData}
-					renderItem={(o) => (
-						<View key={o.index}>
-							<View style={styles.userSelectionBox}>
-								{/*@ts-ignore-next-line*/}
-								<Image
-									source={o.item.user.avatarUrl}
-									style={{
-										flex: 1,
-										width: '100%',
-										borderRadius: 4,
-										padding: 2,
-									}}
-								/>
-								<View
-									style={{
-										position: 'absolute',
-										zIndex: 99,
-										right: '100%',
-										bottom: 0,
-										left: 0,
-										backgroundColor: 'red',
-									}}
-								>
-									<View
-										style={{
-											position: 'relative',
-											width: '100%',
-										}}
-									>
-										<View
-											style={{
-												position: 'absolute',
-												left: -0,
-												bottom: 0,
-												display: 'flex',
-												flexDirection: 'row',
-												width: 52,
-											}}
-										>
-											<View style={{ flexGrow: 1 }}></View>
-											<View
-												style={{
-													backgroundColor: 'rgba(100,100, 100, 0.75)',
-													borderRadius: 8,
-													borderBottomRightRadius: 4,
-													borderBottomLeftRadius: 0,
-													borderTopRightRadius: 0,
-													paddingHorizontal: 8,
-												}}
-											>
-												<Text
-													style={{
-														textAlign: 'center',
-														color: APP_FONT.MONTSERRAT_HEADER,
-														fontSize: 12,
-													}}
-												>
-													{o.item.count}
-												</Text>
-											</View>
-										</View>
-									</View>
-								</View>
-							</View>
-						</View>
+					renderItem={({ item }) => (
+						<UserSelectionIndicator
+							_id={item.user._id}
+							count={item.count}
+							onClick={() => {
+								onUserSelected(item.user._id);
+							}}
+							isSelected={isUserSelected(item.user._id)}
+							avatarUrl={item.user.avatarUrl}
+						/>
 					)}
 				/>
 			</ScrollView>
@@ -234,18 +247,21 @@ function BookmarkGalleryWidgetExpanded() {
 					horizontal={true}
 					estimatedItemSize={100}
 					data={loadedTagData}
-					renderItem={(o) => (
-						<View key={o.index} style={styles.tagItemContainer}>
+					estimatedListSize={{
+						width: DeviceWidth.current,
+						height: 64,
+					}}
+					renderItem={({ item }) => (
+						<View style={styles.tagItemContainer}>
 							<RealmTag
 								onPress={() => {}}
 								dto={{
-									name: o.item.tag.name,
-									following: o.item.tag.following,
-									privatelyFollowing: o.item.tag.privatelyFollowing,
+									name: item.tag.name,
+									following: item.tag.following,
+									privatelyFollowing: item.tag.privatelyFollowing,
 								}}
-								count={o.item.count}
+								count={item.count}
 							/>
-							{/*<Text>#{o.item.tag.name}</Text>*/}
 						</View>
 					)}
 				/>
@@ -274,8 +290,8 @@ const styles = StyleSheet.create({
 
 	//
 	widgetContainerExpanded: {
-		marginBottom: 64,
-		backgroundColor: 'rgba(54,54,54,0.9)',
+		marginBottom: 8,
+		backgroundColor: 'rgba(54,54,54,0.87)',
 		display: 'flex',
 		position: 'absolute',
 		bottom: 0,
@@ -286,8 +302,8 @@ const styles = StyleSheet.create({
 		padding: 8,
 	},
 	widgetContainerCollapsed: {
-		marginBottom: 64,
-		backgroundColor: 'rgba(54,54,54,0.87)',
+		marginBottom: 16,
+		backgroundColor: 'rgba(54,54,54,0.85)',
 		display: 'flex',
 		position: 'absolute',
 		bottom: 0,

@@ -51,6 +51,7 @@ function TimelineMediaRendered({
 			case 'video': {
 				return (
 					<AppVideoComponent
+						type={'video'}
 						url={attachment.getUrl()}
 						height={CalculatedHeight}
 					/>
@@ -59,6 +60,7 @@ function TimelineMediaRendered({
 			case 'gifv': {
 				return (
 					<AppVideoComponent
+						type={'gifv'}
 						url={attachment.getUrl()}
 						height={CalculatedHeight}
 						loop

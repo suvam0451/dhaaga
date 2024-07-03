@@ -22,10 +22,19 @@ function RealmMediaComponentSingleItem({
 				);
 			}
 			case 'video': {
-				return <AppVideoComponent url={data.previewUrl} height={height} />;
+				return (
+					<AppVideoComponent url={data.url} height={height} type={'video'} />
+				);
 			}
 			case 'gifv': {
-				return <AppVideoComponent url={data.previewUrl} height={height} loop />;
+				return (
+					<AppVideoComponent
+						url={data.url}
+						height={height}
+						loop
+						type={'gifv'}
+					/>
+				);
 			}
 			default: {
 				console.log('[WARN]: unsupported media type', type);
