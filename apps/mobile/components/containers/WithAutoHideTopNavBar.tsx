@@ -1,7 +1,6 @@
 import ProfilePageHeader from '../headers/ProfilePageHeader';
-import React from 'react';
 import { APP_THEME } from '../../styles/AppTheme';
-import { Animated, View } from 'react-native';
+import { Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TopNavBarStyles } from '../../styles/NavaigationItems';
 
@@ -16,7 +15,7 @@ type AutoHideNavBarProps = {
 };
 
 /**
- * This container has a auto-hide Navbar.
+ * This container has an auto-hide Navbar.
  * The left side icon option is to always go back to previous page.
  * The right side icons may be customized
  * @param title
@@ -42,7 +41,16 @@ function WithAutoHideTopNavBar({
 		>
 			{translateY !== undefined ? (
 				<Animated.View
-					style={[TopNavBarStyles.navbar, { transform: [{ translateY }] }]}
+					style={[
+						TopNavBarStyles.navbar,
+						{
+							transform: [
+								{
+									translateY,
+								},
+							],
+						},
+					]}
 				>
 					<ProfilePageHeader
 						title={title}

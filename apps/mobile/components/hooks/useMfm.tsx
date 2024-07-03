@@ -1,13 +1,12 @@
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
-import { DependencyList, Fragment, useMemo } from 'react';
+import { DependencyList, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
-import { Text } from '@rneui/themed';
+import { Skeleton, Text } from '@rneui/themed';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import React from 'react';
 
 type Props = {
 	content: string;
@@ -16,6 +15,7 @@ type Props = {
 	// instance of the target user (will resolve emojis from there)
 	remoteSubdomain: string;
 	deps: DependencyList;
+	expectedHeight?: number;
 };
 
 /**
@@ -24,31 +24,58 @@ type Props = {
  * @param emojiMap
  * @param remoteSubdomain
  * @param deps
+ * @param expectedHeight
  */
-function useMfm({ content, emojiMap, remoteSubdomain, deps }: Props) {
+function useMfm({
+	content,
+	emojiMap,
+	remoteSubdomain,
+	deps,
+	expectedHeight,
+}: Props) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
 	const subdomain = primaryAcct?.subdomain;
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
-	return useMemo(() => {
+	const defaultValue = useRef({
+		isLoaded: false,
+		content: (
+			<Skeleton
+				style={{
+					height: expectedHeight || 54,
+					borderRadius: 8,
+					width: '100%',
+				}}
+			/>
+		),
+		aiContext: [],
+	});
+
+	const [Data, setData] = useState<any>(defaultValue);
+
+	const IsSolved = useRef(null);
+
+	useEffect(() => {
+		if (IsSolved.current === content) return;
 		if (content === '') {
-			return {
+			setData({
 				isLoaded: false,
 				content: <View></View>,
 				aiContext: [],
-			};
+			});
 		}
+		setData(defaultValue);
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
-			emojiMap: emojiMap,
+			emojiMap: emojiMap || new Map(),
 			domain,
 			subdomain,
 			db,
 			globalDb,
 			remoteSubdomain,
 		});
-		return {
+		setData({
 			isLoaded: true,
 			content: reactNodes?.map((para, i) => {
 				const uuid = randomUUID();
@@ -61,8 +88,15 @@ function useMfm({ content, emojiMap, remoteSubdomain, deps }: Props) {
 				);
 			}),
 			aiContext: openAiContext,
-		};
-	}, deps);
+		});
+		IsSolved.current = content;
+	}, [deps]);
+
+	return {
+		content: Data.content,
+		isLoaded: Data.isLoaded,
+		aiContext: Data.aiContext,
+	};
 }
 
 export default useMfm;

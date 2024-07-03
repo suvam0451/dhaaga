@@ -9,14 +9,13 @@ import TimelinesHeader from '../../../../TimelineHeader';
 import { useState } from 'react';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
-import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 function Introduction() {
 	const [DialogVisible, setDialogVisible] = useState(false);
-	const navigation = useNavigation<any>();
 
 	function takeUserToAccountsPage() {
-		navigation.navigate('Accounts');
+		router.navigate('accounts');
 	}
 
 	return (
@@ -195,7 +194,7 @@ function Introduction() {
 								}}
 								type={'clear'}
 								onPress={() => {
-									navigation.navigate('What is Fediverse');
+									router.navigate('/new-to-fedi');
 								}}
 							>
 								I am new to Mastodon
@@ -213,7 +212,7 @@ function Introduction() {
 									width: 256,
 								}}
 								onPress={() => {
-									navigation.navigate('New To Dhaaga');
+									router.navigate('/new-to-app');
 								}}
 							>
 								I am new to this app

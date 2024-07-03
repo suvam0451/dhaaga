@@ -4,11 +4,11 @@ import { Divider, Text } from '@rneui/themed';
 import { StandardView } from '../../../styles/Containers';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { formatDistanceToNowStrict } from 'date-fns';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
 import { Note } from '@dhaaga/shared-provider-misskey/src';
 import StatusInteraction from '../../../screens/timelines/fragments/StatusInteraction';
-import ImageCarousal from '../../../screens/timelines/fragments/ImageCarousal';
+import MediaItem from '../media/MediaItem';
 import { useNavigation } from '@react-navigation/native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
@@ -265,7 +265,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 				{isSensitive && !ShowSensitiveContent ? (
 					<View></View>
 				) : (
-					<ImageCarousal attachments={status?.getMediaAttachments()} />
+					<MediaItem attachments={status?.getMediaAttachments()} />
 				)}
 				<StatusInteraction
 					post={status}

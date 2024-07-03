@@ -1,12 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import StatusItem from '../../../common/status/StatusItem';
 import WithActivitypubStatusContext from '../../../../states/useStatus';
-import TitleOnlyStackHeaderContainer from '../../../containers/TitleOnlyStackHeaderContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../../states/usePagination';
@@ -22,11 +19,43 @@ import { RefreshControl } from 'react-native';
 import { EmojiService } from '../../../../services/emoji.service';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
+
+type Props = {
+	content: any[];
+	onScroll: any;
+	refreshing: any;
+	onRefresh: any;
+};
+
+function ListContent({ content, onScroll, refreshing, onRefresh }: Props) {
+	useEffect(() => {}, []);
+
+	return (
+		<AnimatedFlashList
+			estimatedItemSize={100}
+			data={content}
+			renderItem={({ item }) => (
+				<WithActivitypubStatusContext status={item}>
+					<StatusItem />
+				</WithActivitypubStatusContext>
+			)}
+			onScroll={onScroll}
+			contentContainerStyle={{
+				paddingTop: 50 + 4,
+			}}
+			scrollEventThrottle={16}
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			}
+		/>
+	);
+}
 
 function WithApi() {
 	const { client, primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
-	const [refreshing, setRefreshing] = useState(false);
 	const {
 		data: PageData,
 		updateQueryCache,
@@ -45,7 +74,6 @@ function WithApi() {
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
-
 		return await client.getBookmarks({
 			limit: 5,
 			maxId: queryCacheMaxId,
@@ -100,49 +128,23 @@ function WithApi() {
 		});
 	}, [fetchStatus]);
 
-	const onRefresh = async () => {
-		refetch();
-		setRefreshing(true);
-		setLoadingMoreComponentProps({
-			visible: true,
-			loading: true,
-		});
-	};
+	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
+		fetchStatus,
+		refetch,
+	});
 
-	function onPageEndReached() {
-		if (PageData.length > 0) {
-			updateQueryCache();
-			refetch();
-		}
-	}
-
-	const handleScrollJs = (e: any) => {
-		NavigationService.invokeWhenPageEndReached(e, onPageEndReached);
-	};
-	const { onScroll, translateY } = useTopbarSmoothTranslate({
-		onScrollJsFn: handleScrollJs,
-		totalHeight: 100,
-		hiddenHeight: 50,
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: PageData.length,
+		updateQueryCache,
 	});
 
 	return (
 		<WithAutoHideTopNavBar title={'My Bookmarks'} translateY={translateY}>
-			<AnimatedFlashList
-				estimatedItemSize={200}
-				data={PageData}
-				renderItem={(o) => (
-					<WithActivitypubStatusContext status={o.item} key={o.index}>
-						<StatusItem />
-					</WithActivitypubStatusContext>
-				)}
+			<ListContent
+				content={PageData}
 				onScroll={onScroll}
-				contentContainerStyle={{
-					paddingTop: 50 + 4,
-				}}
-				scrollEventThrottle={16}
-				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				}
+				onRefresh={onRefresh}
+				refreshing={refreshing}
 			/>
 			<LoadingMore
 				visible={LoadingMoreComponentProps.visible}

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import {
 	BOTTOM_SHEET_ENUM,
@@ -37,7 +37,6 @@ function LinkProcessor({ url, displayName }: LinkProcessorProps) {
 	const { onTextLayout, Result } = useLongLinkTextCollapse(wwwRemoved, 32);
 	return (
 		<Text
-			// numberOfLines={1}
 			style={{
 				color: APP_THEME.LINK,
 				fontFamily: 'Inter-Bold',
@@ -49,28 +48,6 @@ function LinkProcessor({ url, displayName }: LinkProcessorProps) {
 			{Result}
 		</Text>
 	);
-}
-
-{
-	/*<View style={{marginLeft: 2}}>*/
-}
-{
-	/*  <Ionicons*/
-}
-{
-	/*      name="open-outline"*/
-}
-{
-	/*      size={16}*/
-}
-{
-	/*      color={APP_THEME.LINK}*/
-}
-{
-	/*  />*/
-}
-{
-	/*</View>*/
 }
 
 export default LinkProcessor;

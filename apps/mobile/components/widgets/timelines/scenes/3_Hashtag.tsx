@@ -6,11 +6,10 @@ import {
 } from '../../../../states/useTimelineController';
 import { useQuery } from '@realm/react';
 import { ActivityPubTag } from '../../../../entities/activitypub-tag.entity';
-import { Button, ButtonGroup, Icon, Text } from '@rneui/themed';
+import { Button, Text } from '@rneui/themed';
 import { useEffect, useRef, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import useKeyboard from '../../../hooks/useKeyboard';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useDebounce } from 'use-debounce';
 import AppInput from '../../../lib/Inputs';

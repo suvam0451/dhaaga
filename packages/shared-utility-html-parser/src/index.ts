@@ -6,6 +6,28 @@ import HtmlParserService from './htmlparser2';
 export type { MfmNode, MfmEmojiCode } from 'mfm-js/built';
 
 /**
+ * Stops at the pre-processing step
+ * @param str
+ */
+export function preprocessPostContent(str: string) {
+	// remove span tags
+	str = HtmlParserService.cleanup(str);
+	// console.log('[INFO]: cleaned up input', str);
+
+	// Replace  leading "#" -- Confuses mfm-js
+	// const ruleA = /(<a.*?>)(#+)(.+.*?<\/a>)/gm;
+	// str = str.replaceAll(ruleA, '$1$3');
+
+	// Replace leading "https://" -- Used to shorten
+	const ruleB = /(<a.*?>)(https:\/\/)(.*?<\/a>)/gm;
+	str = str.replaceAll(ruleB, '$1$3');
+
+	// replace links with href
+	str = str.replaceAll(/<a .*?href="(.*?)".*?a>/g, '$1');
+	return str;
+}
+
+/**
  * Utility function that
  * 1. Removes <p> tags
  * 2. Replaces &#39; with
@@ -16,19 +38,7 @@ export type { MfmNode, MfmEmojiCode } from 'mfm-js/built';
 export function parseStatusContent(str: string) {
 	let retval: MfmNode[][] = [];
 
-	// remove span tags
-	str = HtmlParserService.cleanup(str);
-
-	// Replace leading "https://" -- Used to shorten
-	const removeHttps = /(<a.*?>)(https:\/\/)(.*?<\/a>)/gm;
-	str = str.replaceAll(removeHttps, '$1$3');
-
-	// replace links with href
-	str = str.replaceAll(/<a .*?href="(.*?)".*?a>/g, '$1');
-
-	// Replace  leading "#" -- Confuses mfm-js
-	const rule3 = /(<a.*?>)(#+)(.+.*?<\/a>)/gm;
-	str = str.replaceAll(rule3, '$1$3');
+	str = preprocessPostContent(str);
 
 	const ex = /<p>(.*?)<\/p>/g;
 	if (ex.test(str)) {

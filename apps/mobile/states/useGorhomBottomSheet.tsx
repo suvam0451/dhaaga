@@ -1,10 +1,4 @@
-import React, {
-	createContext,
-	useContext,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { createContext, useContext, useMemo, useRef, useState } from 'react';
 import BottomSheet, {
 	BottomSheetBackdrop,
 	BottomSheetView,

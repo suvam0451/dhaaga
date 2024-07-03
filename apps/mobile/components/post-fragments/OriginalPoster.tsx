@@ -2,17 +2,13 @@ import { View, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { extractInstanceUrl, visibilityIcon } from '../../utils/instances';
 import { formatDistanceToNowStrict } from 'date-fns';
-import React, { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
-import MfmService from '../../services/mfm.service';
 import { useActivitypubStatusContext } from '../../states/useStatus';
 import { useActivitypubUserContext } from '../../states/useProfile';
-import { useRealm } from '@realm/react';
-import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { Skeleton } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import Animated, { FadeInLeft } from 'react-native-reanimated';
 import { APP_FONT } from '../../styles/AppTheme';
 import useMfm from '../hooks/useMfm';
 import AstService from '../../services/ast.service';
@@ -27,6 +23,41 @@ type OriginalPosterProps = {
 	subdomain?: string;
 	visibility: string;
 };
+
+export function OriginalPostedPfpFragment({
+	url,
+	onClick,
+}: {
+	url: string;
+	onClick: () => void;
+}) {
+	return (
+		<TouchableOpacity onPress={onClick}>
+			<View
+				style={{
+					width: 52,
+					height: 52,
+					borderColor: 'gray',
+					borderWidth: 2,
+					borderRadius: 6,
+				}}
+			>
+				{/* @ts-ignore */}
+				<Image
+					style={{
+						flex: 1,
+						width: '100%',
+						backgroundColor: '#0553',
+						padding: 2,
+						opacity: 0.87,
+						borderRadius: 4,
+					}}
+					source={{ uri: url }}
+				/>
+			</View>
+		</TouchableOpacity>
+	);
+}
 
 function OriginalPosterSkeleton() {
 	return (
@@ -44,6 +75,87 @@ function OriginalPosterSkeleton() {
 						}}
 					/>
 				</View>
+			</View>
+		</View>
+	);
+}
+
+export function OriginalPosterPostedByFragment({
+	displayNameRaw,
+	onClick,
+	theirSubdomain,
+	emojiMap,
+	instanceUrl,
+	visibility,
+	postedAt,
+}: {
+	displayNameRaw: string;
+	theirSubdomain: string;
+	onClick: () => void;
+	emojiMap?: any;
+	instanceUrl: string;
+	visibility: string;
+	postedAt: Date;
+}) {
+	const { content: UsernameWithEmojis } = useMfm({
+		content: displayNameRaw,
+		remoteSubdomain: theirSubdomain,
+		emojiMap: emojiMap,
+		deps: [displayNameRaw],
+		expectedHeight: 20,
+	});
+
+	return (
+		<View
+			style={{
+				display: 'flex',
+				marginLeft: 8,
+				flexGrow: 1,
+				maxWidth: '100%',
+			}}
+		>
+			<TouchableOpacity onPress={onClick}>
+				<View>{UsernameWithEmojis}</View>
+			</TouchableOpacity>
+			<View>
+				<Text
+					style={{
+						color: '#888',
+						fontWeight: '500',
+						fontSize: 12,
+						opacity: 0.6,
+						fontFamily: 'Inter-Bold',
+						maxWidth: 196,
+					}}
+					numberOfLines={1}
+				>
+					{instanceUrl}
+				</Text>
+			</View>
+			<View style={{ display: 'flex', flexDirection: 'row' }}>
+				<Text
+					style={{
+						color: 'gray',
+						fontSize: 12,
+						fontFamily: 'Inter-Bold',
+						opacity: 0.87,
+					}}
+				>
+					{formatDistanceToNowStrict(postedAt, {
+						addSuffix: false,
+					})}
+				</Text>
+				<Text
+					style={{
+						color: 'gray',
+						marginLeft: 2,
+						marginRight: 2,
+						opacity: 0.6,
+					}}
+				>
+					•
+				</Text>
+				{visibilityIcon(visibility)}
 			</View>
 		</View>
 	);
@@ -88,30 +200,17 @@ function OriginalPoster({
 	return useMemo(() => {
 		if (!user || !UsernameWithEmojis) return <OriginalPosterSkeleton />;
 		return (
-			<React.Fragment>
-				<TouchableOpacity onPress={onProfileClicked}>
-					<View
-						style={{
-							width: 52,
-							height: 52,
-							borderColor: 'gray',
-							borderWidth: 2,
-							borderRadius: 6,
-						}}
-					>
-						<Image
-							style={{
-								flex: 1,
-								width: '100%',
-								backgroundColor: '#0553',
-								padding: 2,
-								opacity: 0.87,
-								borderRadius: 4,
-							}}
-							source={{ uri: avatarUrl }}
-						/>
-					</View>
-				</TouchableOpacity>
+			<Fragment>
+				<OriginalPostedPfpFragment url={avatarUrl} onClick={onProfileClicked} />
+				{/*TODO: replace the remaining component with this*/}
+				{/*<OriginalPosterPostedByFragment*/}
+				{/*	onClick={onProfileClicked}*/}
+				{/*	theirSubdomain={user?.getInstanceUrl()}*/}
+				{/*	displayNameRaw={user?.getDisplayName()}*/}
+				{/*	instanceUrl={extractInstanceUrl(accountUrl, username, subdomain)}*/}
+				{/*	postedAt={new Date(status?.getCreatedAt())}*/}
+				{/*	visibility={status?.getVisibility()}*/}
+				{/*/>*/}
 				<View
 					style={{
 						display: 'flex',
@@ -177,7 +276,7 @@ function OriginalPoster({
 						{visibilityIcon(visibility)}
 					</View>
 				</View>
-			</React.Fragment>
+			</Fragment>
 		);
 	}, [user, UsernameWithEmojis]);
 }

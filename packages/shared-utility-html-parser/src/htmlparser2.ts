@@ -52,6 +52,21 @@ class HtmlParserService {
 		return [node];
 	}
 
+	private static removeLinkDecorators(node: any) {
+		if (node.type === 'tag' && node.name === 'a') {
+			// Remove rel and target attributes
+			delete node.attribs.rel;
+			delete node.attribs.target;
+			delete node.attribs.class;
+		}
+		if (node.children) {
+			node.children = node.children.flatMap(
+				HtmlParserService.removeLinkDecorators,
+			);
+		}
+		return node;
+	}
+
 	private static replaceStrongTagsWithBoldTags(node: any) {
 		if (node.type === 'tag' && node.name === 'strong') {
 			node.name = 'b';
@@ -69,6 +84,7 @@ class HtmlParserService {
 	 * Remove all instance-specific stuff
 	 */
 	static cleanup(line: string) {
+		let retval = '';
 		const handler = new DomHandler((error, dom) => {
 			if (error) {
 				return '[ERROR]: Dhaaga failed to parse html';
@@ -82,7 +98,9 @@ class HtmlParserService {
 				const stepD = stepC.flatMap(
 					HtmlParserService.replaceStrongTagsWithBoldTags,
 				);
-				return DomSerializer(stepD);
+				const stepE = stepD.flatMap(HtmlParserService.removeLinkDecorators);
+				retval = DomSerializer(stepE);
+				return DomSerializer(stepE);
 			}
 		});
 
@@ -90,8 +108,7 @@ class HtmlParserService {
 		const parser = new Parser(handler);
 		parser.write(line);
 		parser.end();
-		const output = DomSerializer(handler.dom);
-		return decode(output);
+		return decode(retval);
 	}
 }
 
