@@ -6,24 +6,27 @@ import ActivityPubClient, {
 	MediaUploadDTO,
 	GetTimelineQueryDTO,
 	FollowPostDto,
-} from './_interface';
+} from '../_interface';
 import {
 	createClient,
 	misskeyApi,
 	Note,
 } from '@dhaaga/shared-provider-misskey/src';
 import axios, { AxiosInstance } from 'axios';
-import { Status, StatusArray } from '../status/_interface';
+import { Status, StatusArray } from '../../status/_interface';
+import { MisskeyInstanceRouter } from './instance';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: misskeyApi.APIClient;
 	axiosClient: AxiosInstance;
+	instance: MisskeyInstanceRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = createClient(dto.instance, dto.token);
 		this.axiosClient = axios.create({
 			baseURL: `${dto.instance}/api`,
 		});
+		this.instance = new MisskeyInstanceRouter();
 	}
 
 	async reblog(id: string): Promise<Status> {

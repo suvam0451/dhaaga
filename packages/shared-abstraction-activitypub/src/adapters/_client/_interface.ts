@@ -1,6 +1,8 @@
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
 import { UserDetailed } from '@dhaaga/shared-provider-misskey/src';
-import { Status, StatusArray, StatusInterface } from '../status/_interface';
+import { Status, StatusArray } from '../status/_interface';
+import { RouterInterface } from './_router/_index';
+import { InstanceRoute } from './_router/instance';
 
 export type HashtagTimelineQuery = {
 	limit: number;
@@ -76,7 +78,10 @@ export type FollowPostDto = {
  * What common functionalities do we want to support
  * across all ActivityPub based clients
  */
-interface ActivityPubClient {
+interface ActivityPubClient extends RouterInterface {
+	// routes
+	instance: InstanceRoute;
+
 	/**
 	 * Timelines
 	 * @param opts

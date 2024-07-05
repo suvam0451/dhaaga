@@ -71,14 +71,14 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 		setPosterContent(
 			<WithActivitypubUserContext user={user}>
 				<OriginalPoster
-					id={_status.getAccountId_Poster()}
-					avatarUrl={_status.getAvatarUrl()}
-					displayName={_status.getDisplayName()}
-					createdAt={_status.getCreatedAt()}
-					username={_status.getUsername()}
+					id={_status?.getAccountId_Poster()}
+					avatarUrl={_status?.getAvatarUrl()}
+					displayName={_status?.getDisplayName()}
+					createdAt={_status?.getCreatedAt()}
+					username={_status?.getUsername()}
 					subdomain={subdomain}
 					visibility={_status?.getVisibility()}
-					accountUrl={_status.getAccountUrl()}
+					accountUrl={_status?.getAccountUrl()}
 				/>
 			</WithActivitypubUserContext>,
 		);
@@ -268,8 +268,6 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 					<MediaItem attachments={status?.getMediaAttachments()} />
 				)}
 				<StatusInteraction
-					post={status}
-					statusId={statusRaw?.id}
 					openAiContext={aiContext}
 					setExplanationObject={setExplanationObject}
 					ExplanationObject={ExplanationObject}

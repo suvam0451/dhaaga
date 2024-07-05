@@ -1,10 +1,9 @@
-import { View, Text } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { extractInstanceUrl, visibilityIcon } from '../../utils/instances';
+import { visibilityIcon } from '../../utils/instances';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { Fragment, useEffect, useMemo } from 'react';
+import { Fragment, useCallback, useEffect, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
 import { useActivitypubStatusContext } from '../../states/useStatus';
 import { useActivitypubUserContext } from '../../states/useProfile';
 import { Skeleton } from '@rneui/themed';
@@ -12,6 +11,7 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 import { APP_FONT } from '../../styles/AppTheme';
 import useMfm from '../hooks/useMfm';
 import AstService from '../../services/ast.service';
+import { ActivitypubHelper } from '@dhaaga/shared-utility-html-parser/src';
 
 type OriginalPosterProps = {
 	id: string;
@@ -103,6 +103,7 @@ export function OriginalPosterPostedByFragment({
 		emojiMap: emojiMap,
 		deps: [displayNameRaw],
 		expectedHeight: 20,
+		fontFamily: 'Montserrat-Bold',
 	});
 
 	return (
@@ -166,7 +167,6 @@ function OriginalPoster({
 	avatarUrl,
 	createdAt,
 	accountUrl,
-	username,
 	visibility,
 }: OriginalPosterProps) {
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -177,8 +177,8 @@ function OriginalPoster({
 	const { user, setDataRaw } = useActivitypubUserContext();
 
 	useEffect(() => {
-		if (status.getUser()) return;
-		setDataRaw(status.getUser());
+		if (status?.getUser()) return;
+		setDataRaw(status?.getUser());
 	}, [status]);
 
 	const { content: UsernameWithEmojis } = useMfm({
@@ -191,14 +191,18 @@ function OriginalPoster({
 	const UsernameStyled =
 		AstService.applyTextStylingToChildren(UsernameWithEmojis);
 
-	function onProfileClicked() {
+	const onProfileClicked = useCallback(() => {
 		navigation.navigate('Profile', {
 			id: id,
 		});
-	}
+	}, []);
+
+	const handle = useMemo(() => {
+		return ActivitypubHelper.getHandle(accountUrl, subdomain);
+	}, [accountUrl]);
 
 	return useMemo(() => {
-		if (!user || !UsernameWithEmojis) return <OriginalPosterSkeleton />;
+		if (!user) return <OriginalPosterSkeleton />;
 		return (
 			<Fragment>
 				<OriginalPostedPfpFragment url={avatarUrl} onClick={onProfileClicked} />
@@ -246,7 +250,7 @@ function OriginalPoster({
 							}}
 							numberOfLines={1}
 						>
-							{extractInstanceUrl(accountUrl, username, subdomain)}
+							{handle}
 						</Text>
 					</View>
 

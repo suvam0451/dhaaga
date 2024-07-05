@@ -1,5 +1,5 @@
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
-import { DependencyList, useEffect, useRef, useState } from 'react';
+import { DependencyList, memo, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
@@ -7,6 +7,7 @@ import { Skeleton, Text } from '@rneui/themed';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
+import { APP_FONT } from '../../styles/AppTheme';
 
 type Props = {
 	content: string;
@@ -16,6 +17,7 @@ type Props = {
 	remoteSubdomain: string;
 	deps: DependencyList;
 	expectedHeight?: number;
+	fontFamily?: string;
 };
 
 /**
@@ -25,6 +27,7 @@ type Props = {
  * @param remoteSubdomain
  * @param deps
  * @param expectedHeight
+ * @param fontFamily
  */
 function useMfm({
 	content,
@@ -32,6 +35,7 @@ function useMfm({
 	remoteSubdomain,
 	deps,
 	expectedHeight,
+	fontFamily,
 }: Props) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
@@ -39,7 +43,7 @@ function useMfm({
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
-	const defaultValue = useRef({
+	const defaultValue = useRef<any>({
 		isLoaded: false,
 		content: (
 			<Skeleton
@@ -53,9 +57,15 @@ function useMfm({
 		aiContext: [],
 	});
 
-	const [Data, setData] = useState<any>(defaultValue);
+	const [Data, setData] = useState(defaultValue.current);
 
 	const IsSolved = useRef(null);
+
+	// since font remains same for each reusable component
+	const fontStyle = useRef({
+		color: APP_FONT.MONTSERRAT_HEADER,
+		fontFamily: fontFamily || 'Inter',
+	});
 
 	useEffect(() => {
 		if (IsSolved.current === content) return;
@@ -66,7 +76,7 @@ function useMfm({
 				aiContext: [],
 			});
 		}
-		setData(defaultValue);
+		setData(defaultValue.current);
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
 			domain,
@@ -80,9 +90,11 @@ function useMfm({
 			content: reactNodes?.map((para, i) => {
 				const uuid = randomUUID();
 				return (
-					<Text key={uuid} style={{ color: '#fff', opacity: 0.87 }}>
+					<Text key={uuid} style={fontStyle.current}>
 						{para.map((o, j) => (
-							<Text key={j}>{o}</Text>
+							<Text key={j} style={fontStyle.current}>
+								{o}
+							</Text>
 						))}
 					</Text>
 				);

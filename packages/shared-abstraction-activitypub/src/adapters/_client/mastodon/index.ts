@@ -1,31 +1,34 @@
 import ActivityPubClient, {
+	FollowPostDto,
 	GetPostsQueryDTO,
 	GetSearchResultQueryDTO,
 	GetTimelineQueryDTO,
 	GetTrendingPostsQueryDTO,
 	GetUserPostsQueryDTO,
+	HashtagTimelineQuery,
 	MediaUploadDTO,
 	RestClientCreateDTO,
-	HashtagTimelineQuery,
-	FollowPostDto,
-} from './_interface';
+} from '../_interface';
 import {
 	mastodon,
 	RestClient,
 	RestServices,
 } from '@dhaaga/shared-provider-mastodon/src';
+import { StatusArray } from '../../status/_interface';
 import { createRestAPIClient } from 'masto';
 import { Note } from '@dhaaga/shared-provider-misskey/src';
-import { Status, StatusArray } from '../status/_interface';
+import { MastodonInstanceRouter } from './instance';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
+	instance: MastodonInstanceRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
 			accessToken: dto.token,
 			domain: 'mastodon',
 		});
+		this.instance = new MastodonInstanceRouter(this.client);
 	}
 
 	async reblog(id: string) {

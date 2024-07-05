@@ -1,15 +1,22 @@
 import ActivityPubClient, {
-	GetSearchResultQueryDTO,
-	GetPostsQueryDTO,
-	TagArray,
-	GetTimelineQueryDTO,
 	FollowPostDto,
-} from './_interface';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
+	GetPostsQueryDTO,
+	GetSearchResultQueryDTO,
+	GetTimelineQueryDTO,
+	TagArray,
+} from '../_interface';
+import { Status, StatusArray } from '../../status/_interface';
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Status, StatusArray } from '../status/_interface';
+import { Note } from '@dhaaga/shared-provider-misskey/src';
+import { DefaultInstanceRouter } from './instance';
 
 class UnknownRestClient implements ActivityPubClient {
+	instance: DefaultInstanceRouter;
+
+	constructor() {
+		this.instance = new DefaultInstanceRouter();
+	}
+
 	reblog(id: string): Promise<Status> {
 		throw new Error('Method not implemented.');
 	}

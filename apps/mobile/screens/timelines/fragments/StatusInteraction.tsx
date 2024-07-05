@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Text } from '@rneui/themed';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/src';
@@ -23,8 +23,6 @@ import useGlobalMMkvCache, {
 import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 
 type StatusInteractionProps = {
-	statusId: string;
-	post: StatusInterface;
 	setExplanationObject: React.Dispatch<React.SetStateAction<string | null>>;
 	ExplanationObject: string | null;
 	openAiContext?: string[];
@@ -32,7 +30,7 @@ type StatusInteractionProps = {
 
 const ICON_SIZE = 18;
 
-function StatusInteraction({
+function StatusInteractionBase({
 	openAiContext,
 	setExplanationObject,
 	ExplanationObject,
@@ -66,8 +64,17 @@ function StatusInteraction({
 	}
 
 	function OnTranslationClicked() {
+		console.log('translation clicked', TranslationLoading);
 		if (TranslationLoading) return;
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+		client.instance
+			.getTranslation(post.getId(), 'en')
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((e) => {
+				console.log(e);
+			});
 	}
 
 	function onSavePress() {
@@ -261,7 +268,7 @@ function StatusInteraction({
 							paddingBottom: 8,
 						}}
 						onPress={OnTranslationClicked}
-						onLongPress={onTranslationLongPress}
+						// onLongPress={onTranslationLongPress}
 					>
 						{TranslationLoading ? (
 							<ActivityIndicator size={'small'} color="#988b3b" />
@@ -293,4 +300,5 @@ function StatusInteraction({
 	);
 }
 
+const StatusInteraction = memo(StatusInteractionBase);
 export default StatusInteraction;

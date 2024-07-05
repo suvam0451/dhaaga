@@ -6,12 +6,12 @@ import {
 	View,
 } from 'react-native';
 import TimelinesHeader from '../../../../TimelineHeader';
-import { useState } from 'react';
+import { Fragment, memo, useState } from 'react';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import { router } from 'expo-router';
 
-function Introduction() {
+function IntroductionBase() {
 	const [DialogVisible, setDialogVisible] = useState(false);
 
 	function takeUserToAccountsPage() {
@@ -19,10 +19,7 @@ function Introduction() {
 	}
 
 	return (
-		<SafeAreaView
-			style={{ height: '100%', flex: 1, backgroundColor: '#121212' }}
-		>
-			<StatusBar backgroundColor="#222222" />
+		<View style={{ height: '100%', flex: 1, backgroundColor: '#121212' }}>
 			<Animated.View style={styles.header}>
 				<TimelinesHeader SHOWN_SECTION_HEIGHT={50} HIDDEN_SECTION_HEIGHT={50} />
 			</Animated.View>
@@ -249,9 +246,11 @@ function Introduction() {
 					</View>
 				</View>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 }
+
+const Introduction = memo(IntroductionBase);
 
 export default Introduction;
 

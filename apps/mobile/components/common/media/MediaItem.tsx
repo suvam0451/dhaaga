@@ -1,6 +1,6 @@
 import { Dimensions, View, Text, Pressable } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub/src';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
@@ -12,7 +12,7 @@ import {
 	MEDIA_CONTAINER_MAX_HEIGHT,
 	MEDIA_CONTAINER_WIDTH,
 } from './_common';
-import { AppImageComponent, AppVideoComponent } from './_shared';
+import { AltTextDialog, AppImageComponent, AppVideoComponent } from './_shared';
 
 type ImageCarousalProps = {
 	attachments: MediaAttachmentInterface[];
@@ -87,81 +87,7 @@ function TimelineMediaRendered({
 			}}
 		>
 			{MediaItem}
-			<Dialog
-				isVisible={AltTextBackdropVisible}
-				onBackdropPress={altTextBackdropPressed}
-				overlayStyle={{ backgroundColor: '#383838', borderRadius: 8 }}
-			>
-				<View
-					style={{
-						display: 'flex',
-						width: '100%',
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'space-between',
-						marginBottom: 4,
-					}}
-				>
-					<View>
-						<Text
-							style={{
-								color: APP_FONT.MONTSERRAT_BODY,
-								fontFamily: 'Inter-Bold',
-								fontSize: 20,
-							}}
-						>
-							Alt Text
-						</Text>
-					</View>
-
-					<View style={{ padding: 8, marginRight: -8, marginTop: -12 }}>
-						<MaterialCommunityIcons
-							name="text-to-speech"
-							size={28}
-							color={APP_FONT.MONTSERRAT_BODY}
-						/>
-					</View>
-				</View>
-
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-					}}
-				>
-					{altText}
-				</Text>
-			</Dialog>
-
-			{altText && (
-				<View
-					style={{
-						position: 'absolute',
-						top: '100%',
-						left: '0%',
-						zIndex: 99,
-					}}
-				>
-					<View style={{ position: 'relative' }}>
-						<Pressable
-							style={{
-								position: 'absolute',
-								top: -40,
-								left: 8,
-								backgroundColor: 'rgba(100, 100, 100, 0.87)',
-								padding: 4,
-								borderRadius: 8,
-							}}
-							onPress={onAltTextClicked}
-						>
-							<FontAwesome5
-								name="info-circle"
-								size={24}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
-						</Pressable>
-					</View>
-				</View>
-			)}
+			<AltTextDialog altText={altText} />
 		</View>
 	);
 }
@@ -172,12 +98,19 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 		total: attachments?.length,
 	});
 
-	function onCarousalItemChanged(e: any) {
+	useEffect(() => {
+		setCarousalData({
+			index: 0,
+			total: attachments?.length,
+		});
+	}, [attachments]);
+
+	const onCarousalItemChanged = useCallback((e: any) => {
 		setCarousalData({
 			index: e,
 			total: attachments?.length,
 		});
-	}
+	}, []);
 
 	const CalculatedHeight = useMemo(() => {
 		if (!attachments) return MEDIA_CONTAINER_MAX_HEIGHT;
