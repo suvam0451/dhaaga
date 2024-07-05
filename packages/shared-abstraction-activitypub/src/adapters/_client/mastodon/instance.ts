@@ -1,6 +1,9 @@
-import { InstanceRoute } from '../_router/instance';
+import { InstanceApi_CustomEmojiDTO, InstanceRoute } from '../_router/instance';
 import { RestClient } from '@dhaaga/shared-provider-mastodon/src';
 import { createRestAPIClient } from 'masto';
+import { getSoftwareInfoShared } from '../_router/shared';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types';
+import { DhaagaMastoClient, MastoErrorHandler } from '../_router/_runner';
 
 export class MastodonInstanceRouter implements InstanceRoute {
 	client: RestClient;
@@ -9,11 +12,35 @@ export class MastodonInstanceRouter implements InstanceRoute {
 		this.client = forwarded;
 	}
 
+	async getCustomEmojis(
+		urlLike: string,
+	): Promise<LibraryResponse<InstanceApi_CustomEmojiDTO[]>> {
+		const fn = DhaagaMastoClient(urlLike).client.v1.customEmojis.list;
+		const { data, error } = await MastoErrorHandler(fn);
+		if (error) return { error };
+		const x = await data;
+		if (!x) return { error: { code: DhaagaErrorCode.UNKNOWN_ERROR } };
+		return {
+			data: x!.map((o) => ({
+				shortCode: o.shortcode,
+				url: o.url,
+				staticUrl: o.staticUrl,
+				visibleInPicker: o.visibleInPicker,
+				category: o.category,
+			})),
+			error,
+		};
+	}
+
 	private createMastoClient() {
 		return createRestAPIClient({
 			url: `https://${this.client.url}`,
 			accessToken: this.client.accessToken,
 		});
+	}
+
+	async getSoftwareInfo(urlLike: string) {
+		return getSoftwareInfoShared(urlLike);
 	}
 
 	async getTranslation(id: string, lang: string) {

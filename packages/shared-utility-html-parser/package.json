@@ -18,7 +18,8 @@
     "html-entities": "^2.5.2",
     "htmlparser2": "^9.1.0",
     "megalodon": "^10.0.2",
-    "mfm-js": "^0.23.3"
+    "mfm-js": "^0.23.3",
+    "misskey-js": "^2024.5.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

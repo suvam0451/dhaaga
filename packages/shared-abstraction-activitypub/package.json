@@ -6,7 +6,8 @@
   "dependencies": {
     "@dhaaga/shared-provider-mastodon": "*",
     "@dhaaga/shared-provider-misskey": "*",
-    "axios": "^1.4.0"
+    "axios": "^1.4.0",
+    "misskey-js": "^2024.5.0"
   },
   "devDependencies": {
     "tsup": "^8.1.0",
