@@ -5,10 +5,9 @@ import globalMmkvCacheServices from './globalMmkvCache.services';
 import { ActivityPubCustomEmojiCategoryRepository } from '../repositories/activitypub-emoji-category.repo';
 import { ActivityPubServerRepository } from '../repositories/activitypub-server.repo';
 import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-emoji.repo';
-import { Status } from '@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface';
 import activitypubAdapterService from './activitypub-adapter.service';
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
-import { formatRelative } from 'date-fns';
+import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
+import { Status } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 
 export type EmojiAdapter = {
 	// common

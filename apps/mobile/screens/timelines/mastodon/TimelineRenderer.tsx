@@ -27,7 +27,7 @@ import WithTimelineControllerContext, {
 	useTimelineControllerContext,
 } from '../../../states/useTimelineController';
 import ActivityPubProviderService from '../../../services/activitypub-provider.service';
-import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface';
+import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 import WelcomeBack from '../../../components/screens/home/fragments/WelcomeBack';
 import TimelineLoading from '../../../components/loading-screens/TimelineLoading';
 import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';

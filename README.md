@@ -134,7 +134,7 @@ In many cultures, it also symbolizes connections, ties, or threads that bind
 people or things together.
 
 <details>
-<summary>The Old Desktop AppNavBar</summary>
+<summary>The Desktop App</summary>
 This project started in 2023 to be a desktop app supporting Mastodon
 and Meta's Threads platform. Development was halted because of Meta's
 legal notice to various reverse-engineering APIs to cease development.
@@ -146,21 +146,20 @@ You can read the legacy README [here]()
 
 ### License
 
-The source code for this project is made available under [AGPL-3.0 license]()
+The source code is licensed to you under [AGPL-3.0](./LICENSE) only.
 
-For explicit purpose of distribution via app stores,
-additional changes are requested by the developer.
-You can read
-more [here](https://github.com/suvam0451/dhaaga/blob/feat/better-comment-thread/COPYING.md#request-for-forksusers-intending-redistribution-of-binaries)
+You agree to make your contributions be
+licensed under [MIT]().
 
-<details>
-<summary>Other licenses</summary>
-As of now, there are no art assets that need separate licensing. If ever added,
-they will be put in a folder isolated from remaining source code and license
-made clear.
+The author reserves the right to dual-license
+any package from this project
+under either of the above licenses.
 
-All fonts used have FLOSS license. You can find them in `/packages/fonts/*`.
-</details>
+If you are distributing a fork of this project via any app store
+or package manager, please
+consider using distinctive logo and name.
+
+For any other enquiries, please [mail the author](mailto:hi@suvam.io).
 
 --- 
 

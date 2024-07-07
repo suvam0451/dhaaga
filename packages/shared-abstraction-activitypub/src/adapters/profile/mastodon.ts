@@ -1,148 +1,148 @@
-import {AccountInstance, EmojiMapValue, UserInterface} from "./_interface";
+import { AccountInstance, EmojiMapValue, UserInterface } from './_interface.js';
 
 class MastodonUser implements UserInterface {
-  ref: AccountInstance;
-  mp: Map<string, EmojiMapValue>
+	ref: AccountInstance;
+	mp: Map<string, EmojiMapValue>;
 
-  constructor(ref: AccountInstance, mp: Map<string, EmojiMapValue>) {
-    this.ref = ref;
-    this.mp = mp
-  }
+	constructor(ref: AccountInstance, mp: Map<string, EmojiMapValue>) {
+		this.ref = ref;
+		this.mp = mp;
+	}
 
-  getInstanceUrl(): string {
-    const ex = /^https?:\/\/(.*?)\/(.*?)/;
-    const subdomainExtractUrl = /^https?:\/\/(.*?)\/@?/;
-    const fullUrl = this.ref.instance.url
-    if (ex.test(fullUrl)) {
-      // @ts-ignore
-      return fullUrl.match(subdomainExtractUrl)[1]
-    }
-    return ""
-  }
+	getInstanceUrl(): string {
+		const ex = /^https?:\/\/(.*?)\/(.*?)/;
+		const subdomainExtractUrl = /^https?:\/\/(.*?)\/@?/;
+		const fullUrl = this.ref.instance.url;
+		if (ex.test(fullUrl)) {
+			// @ts-ignore
+			return fullUrl.match(subdomainExtractUrl)[1];
+		}
+		return '';
+	}
 
-  getAccountUrl(): string {
-    return this.ref.instance.url
-  }
+	getAccountUrl(): string {
+		return this.ref.instance.url;
+	}
 
-  private extractInstanceUrl(url: string, username: string, myServer: string): string {
-    if (!url) return ""
+	private extractInstanceUrl(
+		url: string,
+		username: string,
+		myServer: string,
+	): string {
+		if (!url) return '';
 
-    let ourUrl = "";
-    let theirUrl = "";
-    const ex = /^https?:\/\/(.*?)\/(.*?)/;
-    const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
+		let ourUrl = '';
+		let theirUrl = '';
+		const ex = /^https?:\/\/(.*?)\/(.*?)/;
+		const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
 
-    if (ex.test(myServer)) {
-      // @ts-ignore
-      ourUrl = myServer.match(subdomainExtractUrl)[1];
-    }
+		if (ex.test(myServer)) {
+			// @ts-ignore
+			ourUrl = myServer.match(subdomainExtractUrl)[1];
+		}
 
-    if (ex.test(url)) {
-      // @ts-ignore
-      theirUrl = url.match(ex)[1];
-    }
+		if (ex.test(url)) {
+			// @ts-ignore
+			theirUrl = url.match(ex)[1];
+		}
 
-    if (url.includes(myServer)) return "@" + username;
+		if (url.includes(myServer)) return '@' + username;
 
+		if (ourUrl === theirUrl) {
+			return '@' + username;
+		}
+		return '@' + username + '@' + theirUrl;
+	}
 
-    if (ourUrl === theirUrl) {
-      return "@" + username;
-    }
-    return "@" + username + "@" + theirUrl;
-  }
+	getAppDisplayAccountUrl(myDomain: string): string {
+		const url = this.getAccountUrl();
+		const username = this.getUsername();
+		return this.extractInstanceUrl(url, username, myDomain);
+	}
 
-  getAppDisplayAccountUrl(myDomain: string): string {
-    const url = this.getAccountUrl()
-    const username = this.getUsername()
-    return this.extractInstanceUrl
-    (url,
-        username, myDomain)
+	getEmojiMap(): Map<string, EmojiMapValue> {
+		return this.mp;
+	}
 
-  }
+	findEmoji(q: string) {
+		return this.mp.get(q);
+	}
 
-  getEmojiMap(): Map<string, EmojiMapValue> {
-    return this.mp
-  }
+	getAvatarBlurHash(): string {
+		return this.ref?.instance?.avatarStatic;
+	}
 
-  findEmoji(q: string) {
-    return this.mp.get(q)
-  }
+	getAvatarUrl(): string {
+		return this.ref?.instance?.avatar;
+	}
 
-  getAvatarBlurHash(): string {
-    return this.ref?.instance?.avatarStatic;
-  }
+	getBannerBlurHash(): string | null {
+		return this?.ref?.instance?.headerStatic;
+	}
 
-  getAvatarUrl(): string {
-    return this.ref?.instance?.avatar;
-  }
+	getBannerUrl(): string | null {
+		return this?.ref?.instance?.header;
+	}
 
-  getBannerBlurHash(): string | null {
-    return this?.ref?.instance?.headerStatic;
-  }
+	getBirthday(): Date | null {
+		return null;
+	}
 
-  getBannerUrl(): string | null {
-    return this?.ref?.instance?.header;
-  }
+	getCreatedAt(): Date {
+		return new Date(this?.ref?.instance?.createdAt);
+	}
 
-  getBirthday(): Date | null {
-    return null;
-  }
+	getDescription(): string | null {
+		return this?.ref?.instance?.note;
+	}
 
-  getCreatedAt(): Date {
-    return new Date(this?.ref?.instance?.createdAt);
-  }
+	getDisplayName(): string {
+		return this?.ref?.instance?.displayName;
+	}
 
-  getDescription(): string | null {
-    return this?.ref?.instance?.note;
-  }
+	getFields(): any[] {
+		return this?.ref?.instance?.fields;
+	}
 
-  getDisplayName(): string {
-    return this?.ref?.instance?.displayName;
-  }
+	getFollowersCount(): number {
+		return this?.ref?.instance?.followersCount;
+	}
 
-  getFields(): any[] {
-    return this?.ref?.instance?.fields;
-  }
+	getFollowingCount(): number {
+		return this?.ref?.instance?.followingCount;
+	}
 
-  getFollowersCount(): number {
-    return this?.ref?.instance?.followersCount;
-  }
+	getId(): string {
+		return this?.ref?.instance?.id;
+	}
 
-  getFollowingCount(): number {
-    return this?.ref?.instance?.followingCount;
-  }
+	getIsBot(): boolean {
+		return this?.ref?.instance?.bot;
+	}
 
-  getId(): string {
-    return this?.ref?.instance?.id;
-  }
+	getIsLockedProfile() {
+		return this?.ref?.instance?.locked;
+	}
 
-  getIsBot(): boolean {
-    return this?.ref?.instance?.bot;
-  }
+	getOnlineStatus(): 'online' | 'active' | 'offline' | 'unknown' {
+		return 'unknown';
+	}
 
-  getIsLockedProfile() {
-    return this?.ref?.instance?.locked
-  }
+	getPostCount(): number {
+		return this.ref?.instance?.statusesCount;
+	}
 
-  getOnlineStatus(): "online" | "active" | "offline" | "unknown" {
-    return "unknown";
-  }
+	getUsername(): string {
+		return this?.ref?.instance?.username;
+	}
 
-  getPostCount(): number {
-    return this.ref?.instance?.statusesCount;
-  }
+	hasPendingFollowRequestFromYou(): boolean {
+		return false;
+	}
 
-  getUsername(): string {
-    return this?.ref?.instance?.username;
-  }
-
-  hasPendingFollowRequestFromYou(): boolean {
-    return false;
-  }
-
-  hasPendingFollowRequestToYou(): boolean {
-    return false;
-  }
+	hasPendingFollowRequestToYou(): boolean {
+		return false;
+	}
 }
 
-export default MastodonUser
+export default MastodonUser;

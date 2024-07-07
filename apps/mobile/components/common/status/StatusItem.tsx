@@ -1,30 +1,29 @@
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Pressable, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import { StandardView } from '../../../styles/Containers';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
 import StatusInteraction from '../../../screens/timelines/fragments/StatusInteraction';
 import MediaItem from '../media/MediaItem';
 import { useNavigation } from '@react-navigation/native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub/src';
+import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { randomUUID } from 'expo-crypto';
 import { useRealm } from '@realm/react';
 import WithActivitypubUserContext from '../../../states/useProfile';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import activitypubAdapterService from '../../../services/activitypub-adapter.service';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Entypo from '@expo/vector-icons/Entypo';
-import ExplainOutput from '../explanation/ExplainOutput';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import StatusItemSkeleton from '../../skeletons/StatusItemSkeleton';
 import useMfm from '../../hooks/useMfm';
+import ExplainOutput from '../explanation/ExplainOutput';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 const POST_SPACING_VALUE = 4;
 
@@ -56,6 +55,8 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 	const _status = isRepost ? sharedStatus : status;
 	const statusContent = _status?.getContent();
 
+	console.log(_status, statusContent);
+
 	const [PosterContent, setPosterContent] = useState(null);
 	const [ExplanationObject, setExplanationObject] = useState<string | null>(
 		null,
@@ -68,6 +69,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 
 	useEffect(() => {
 		const user = _status.getUser();
+		console.log(user);
 		setPosterContent(
 			<WithActivitypubUserContext user={user}>
 				<OriginalPoster
@@ -128,6 +130,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 							{PosterContent}
 							<Entypo name="cross" size={28} color={APP_FONT.MONTSERRAT_BODY} />
 						</View>
+
 						{isSensitive && spoilerText && (
 							<View>
 								<View
@@ -183,6 +186,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 								</View>
 							</View>
 						)}
+
 						{isSensitive && !spoilerText && (
 							<View>
 								<View
@@ -381,7 +385,7 @@ function SharedStatusFragment({
 	boostedStatus,
 }: StatusFragmentProps & {
 	postedBy: mastodon.v1.Account;
-	boostedStatus: mastodon.v1.Status | Note;
+	boostedStatus: mastodon.v1.Status | any;
 }) {
 	const { status: _status } = useActivitypubStatusContext();
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -416,9 +420,7 @@ function SharedStatusFragment({
 						fontFamily: 'Montserrat-ExtraBold',
 					}}
 				>
-					{para.map((o, j) => (
-						<Text key={j}>{o}</Text>
-					))}
+					{para?.map((o, j) => <Text key={j}>{o}</Text>)}
 				</Text>
 			);
 		});
@@ -513,7 +515,7 @@ function StatusItem({
 			}
 			case 'misskey': {
 				if (_status && _status.isReposted() && !hideReplyIndicator) {
-					const _status = statusRaw as Note;
+					const _status = statusRaw as any;
 					return (
 						<SharedStatusFragment
 							postedBy={_status.renote.user as any}

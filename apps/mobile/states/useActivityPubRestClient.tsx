@@ -1,46 +1,47 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import { createContext, useContext, useEffect, useState } from 'react';
 import {
-  ActivityPubClientFactory, ActivityPubUserAdapter,
-  MastodonRestClient,
-  MisskeyRestClient, UnknownRestClient, UserInterface
-} from "@dhaaga/shared-abstraction-activitypub/src";
-import {mastodon} from "@dhaaga/shared-provider-mastodon/src";
-import AccountRepository from "../repositories/account.repo";
-import {useRealm, useQuery} from "@realm/react";
-import {Account} from "../entities/account.entity";
-import {EmojiService} from "../services/emoji.service";
-import {useGlobalMmkvContext} from "./useGlobalMMkvCache";
-import AccountService from "../services/account.service";
+	ActivityPubClientFactory,
+	ActivityPubUserAdapter,
+	MastodonRestClient,
+	MisskeyRestClient,
+	UnknownRestClient,
+	UserInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
+import AccountRepository from '../repositories/account.repo';
+import { useRealm, useQuery } from '@realm/react';
+import { Account } from '../entities/account.entity';
+import { EmojiService } from '../services/emoji.service';
+import { useGlobalMmkvContext } from './useGlobalMMkvCache';
+import AccountService from '../services/account.service';
 
 type Type = {
-  client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null,
-  me: UserInterface | null
-  meRaw: mastodon.v1.Account | null
-  primaryAcct: Account,
-  /**
-   * Call this function after change in
-   * primary account selection/active status
-   */
-  regenerate: () => void
-}
+	client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null;
+	me: UserInterface | null;
+	meRaw: mastodon.v1.Account | null;
+	primaryAcct: Account;
+	/**
+	 * Call this function after change in
+	 * primary account selection/active status
+	 */
+	regenerate: () => void;
+};
 
-const defaultValue : Type= {
-  client: null,
-  me: null,
-  meRaw: null,
-  primaryAcct: null,
-  regenerate: function (): void {
-    throw new Error("Function not implemented.");
-  }
-}
+const defaultValue: Type = {
+	client: null,
+	me: null,
+	meRaw: null,
+	primaryAcct: null,
+	regenerate: function (): void {
+		throw new Error('Function not implemented.');
+	},
+};
 
-const ActivityPubRestClientContext =
-    createContext<Type>(defaultValue);
+const ActivityPubRestClientContext = createContext<Type>(defaultValue);
 
 export function useActivityPubRestClientContext() {
-  return useContext(ActivityPubRestClientContext);
+	return useContext(ActivityPubRestClientContext);
 }
-
 
 /**
  * Stores the currently active account and corresponding
@@ -48,72 +49,72 @@ export function useActivityPubRestClientContext() {
  * @param children
  * @constructor
  */
-function WithActivityPubRestClient({children}: any) {
-  // const {primaryAcct} = useActivityPubRestClientContext()
-  // const _domain = primaryAcct?.domain
+function WithActivityPubRestClient({ children }: any) {
+	// const {primaryAcct} = useActivityPubRestClientContext()
+	// const _domain = primaryAcct?.domain
 
-  const [restClient, setRestClient] = useState<
-      MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
-  >(null);
-  const [Me, setMe] = useState(null)
-  const [MeRaw, setMeRaw] = useState(null)
-  const db = useRealm()
-  const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null)
-  const {globalDb} = useGlobalMmkvContext()
-  const accounts = useQuery(Account)
+	const [restClient, setRestClient] = useState<
+		MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
+	>(null);
+	const [Me, setMe] = useState(null);
+	const [MeRaw, setMeRaw] = useState(null);
+	const db = useRealm();
+	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
+	const { globalDb } = useGlobalMmkvContext();
+	const accounts = useQuery(Account);
 
-  function regenerateFn() {
-    const acct = accounts.find((o) => o.selected === true)
-    if (!acct) {
-      setRestClient(null)
-      return;
-    }
+	function regenerateFn() {
+		const acct = accounts.find((o) => o.selected === true);
+		if (!acct) {
+			setRestClient(null);
+			return;
+		}
 
-    const token = AccountRepository.findSecret(
-        db, acct, "access_token")?.value
+		const token = AccountRepository.findSecret(db, acct, 'access_token')?.value;
 
-    if (!token) {
-      setRestClient(null)
-      return;
-    }
-    const client = ActivityPubClientFactory.get(
-        acct.domain as any,
-        {
-          instance: acct?.subdomain,
-          token,
-        }
-    )
-    setRestClient(client)
-    setPrimaryAcct(acct)
-    EmojiService.loadEmojisForInstance(db, globalDb, acct.subdomain)
-    AccountService.loadFollowedTags(db, client)
-  }
+		if (!token) {
+			setRestClient(null);
+			return;
+		}
+		const client = ActivityPubClientFactory.get(acct.domain as any, {
+			instance: acct?.subdomain,
+			token,
+		});
+		setRestClient(client);
+		setPrimaryAcct(acct);
+		EmojiService.loadEmojisForInstance(db, globalDb, acct.subdomain);
+		AccountService.loadFollowedTags(db, client);
+	}
 
-  useEffect(() => {
-    regenerateFn()
-  }, []);
+	useEffect(() => {
+		regenerateFn();
+	}, []);
 
-  useEffect(() => {
-    if (!restClient) {
-      setMe(null)
-      return
-    }
+	useEffect(() => {
+		if (!restClient) {
+			setMe(null);
+			return;
+		}
 
-    restClient.getMe().then((res) => {
-      setMeRaw(res)
-      setMe(ActivityPubUserAdapter(res, PrimaryAcct?.domain))
-    })
-  }, [restClient])
+		restClient.getMe().then((res) => {
+			setMeRaw(res);
+			setMe(ActivityPubUserAdapter(res, PrimaryAcct?.domain));
+		});
+	}, [restClient]);
 
-  return <ActivityPubRestClientContext.Provider value={{
-    client: restClient,
-    me: Me,
-    meRaw: MeRaw,
-    primaryAcct: PrimaryAcct,
-    regenerate: regenerateFn
-  }}>
-    {children}
-  </ActivityPubRestClientContext.Provider>
+	return (
+		<ActivityPubRestClientContext.Provider
+			value={{
+				client: restClient,
+				me: Me,
+				meRaw: MeRaw,
+				primaryAcct: PrimaryAcct,
+				regenerate: regenerateFn,
+			}}
+		>
+			{children}
+		</ActivityPubRestClientContext.Provider>
+	);
 }
 
-export default WithActivityPubRestClient
+export default WithActivityPubRestClient;

@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "commonjs",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
@@ -9,6 +10,15 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": false,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "composite": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "test",
+    "lib"
+  ]
 }

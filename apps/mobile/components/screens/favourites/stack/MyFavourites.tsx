@@ -4,7 +4,7 @@ import WithAppPaginationContext, {
 } from '../../../../states/usePagination';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
-import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface';
+import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import LoadingMore from '../../home/LoadingMore';

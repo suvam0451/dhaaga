@@ -4,10 +4,10 @@ import {
 	StatusContextInterface,
 	StatusInstance,
 	StatusInterface,
-} from './_interface';
-import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter';
-import { MediaAttachmentInstance } from '../media-attachment/unique';
-import { UserType } from '../profile/_interface';
+} from './_interface.js';
+import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
+import { MediaAttachmentInstance } from '../media-attachment/unique.js';
+import { UserType } from '../profile/_interface.js';
 
 class MastodonToStatusAdapter implements StatusInterface {
 	ref: StatusInstance;
@@ -125,16 +125,16 @@ class MastodonToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
-	getRepostedStatusRaw = () => {
-		return this.ref?.instance?.reblog;
-	};
+	getRepostedStatusRaw() {
+		return this.ref?.instance?.reblog as any;
+	}
 
 	isReposted(): boolean {
 		return this.ref?.instance?.reblog !== null;
 	}
 
 	getMediaAttachments() {
-		return this.ref?.instance?.mediaAttachments.map((o) => {
+		return this.ref?.instance?.mediaAttachments?.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
 				new MediaAttachmentInstance(o),
 			);

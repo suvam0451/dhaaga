@@ -6,27 +6,34 @@ import ActivityPubClient, {
 	MediaUploadDTO,
 	GetTimelineQueryDTO,
 	FollowPostDto,
-} from '../_interface';
-import {
-	createClient,
-	misskeyApi,
-	Note,
-} from '@dhaaga/shared-provider-misskey/src';
+} from '../_interface.js';
+import { Note } from 'misskey-js/autogen/models.js';
 import axios, { AxiosInstance } from 'axios';
-import { Status, StatusArray } from '../../status/_interface';
-import { MisskeyInstanceRouter } from './instance';
+import { Status, StatusArray } from '../../status/_interface.js';
+import { MisskeyInstanceRouter } from './instance.js';
+import { MisskeyAccountsRouter } from './accounts.js';
+import { RestClient } from '@dhaaga/shared-provider-mastodon';
+import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { MisskeyStatusesRouter } from './statuses.js';
 
 class MisskeyRestClient implements ActivityPubClient {
-	client: misskeyApi.APIClient;
+	client: RestClient;
 	axiosClient: AxiosInstance;
-	instance: MisskeyInstanceRouter;
+	instances: MisskeyInstanceRouter;
+	accounts: MisskeyAccountsRouter;
+	statuses: MisskeyStatusesRouter;
 
 	constructor(dto: RestClientCreateDTO) {
-		this.client = createClient(dto.instance, dto.token);
+		this.client = new RestClient(dto.instance, {
+			accessToken: dto.token,
+			domain: KNOWN_SOFTWARE.MISSKEY,
+		});
 		this.axiosClient = axios.create({
 			baseURL: `${dto.instance}/api`,
 		});
-		this.instance = new MisskeyInstanceRouter();
+		this.instances = new MisskeyInstanceRouter();
+		this.accounts = new MisskeyAccountsRouter(this.client);
+		this.statuses = new MisskeyStatusesRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<Status> {
@@ -171,14 +178,18 @@ class MisskeyRestClient implements ActivityPubClient {
 	}
 
 	async getUserPosts(userId: string, opts: GetUserPostsQueryDTO) {
-		return this.client.request('users/notes', {
-			userId: userId,
-			limit: opts.limit,
-		});
+		// throw new Error('Method not implemented.');
+
+		return [];
+		// return this.client.request('users/notes', {
+		// 	userId: userId,
+		// 	limit: opts.limit,
+		// });
 	}
 
 	async getHomeTimeline(): Promise<Note[]> {
-		return await this.client.request('notes/local-timeline', { limit: 20 });
+		// return await this.client.request('notes/local-timeline', { limit: 20 });
+		return [];
 	}
 
 	async getTimelineByHashtag(q: string): Promise<Note[]> {
@@ -190,7 +201,8 @@ class MisskeyRestClient implements ActivityPubClient {
 	}
 
 	async getUserProfile(username: string) {
-		return this.client.request('users/show', { username });
+		// return this.client.request('users/show', { username });
+		return [] as any;
 	}
 
 	async getStatus(id: string): Promise<Note> {

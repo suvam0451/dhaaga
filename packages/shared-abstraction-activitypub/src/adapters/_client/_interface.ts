@@ -1,8 +1,22 @@
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { UserDetailed } from '@dhaaga/shared-provider-misskey/src';
-import { Status, StatusArray } from '../status/_interface';
-import { RouterInterface } from './_router/_index';
-import { InstanceRoute } from './_router/instance';
+import type { mastodon } from 'masto';
+import type { UserDetailed } from 'misskey-js/autogen/models.js';
+import { Status, StatusArray } from '../status/_interface.js';
+import { RouterInterface } from './_router/_index.js';
+import { InstanceRoute } from './_router/instance.js';
+
+/**
+ * TS4053: Return type of public method
+ * from exported class has or is using
+ * name AccountCredentials from external module
+ * but cannot be named.
+ */
+export type MastoStatus = mastodon.v1.Status;
+export type MastoList = mastodon.v1.List;
+export type MastoAccountCredentials = mastodon.v1.AccountCredentials;
+export type MastoConversation = mastodon.v1.Conversation;
+export type MastoContext = mastodon.v1.Context;
+export type MastoRelationship = mastodon.v1.Relationship;
+export type MastoTrendLink = mastodon.v1.TrendLink;
 
 export type HashtagTimelineQuery = {
 	limit: number;
@@ -80,7 +94,7 @@ export type FollowPostDto = {
  */
 interface ActivityPubClient extends RouterInterface {
 	// routes
-	instance: InstanceRoute;
+	instances: InstanceRoute;
 
 	/**
 	 * Timelines

@@ -1,7 +1,7 @@
-import { MediaAttachmentInterface } from '../media-attachment/interface';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
-import { UserType } from '../profile/_interface';
+import { MediaAttachmentInterface } from '../media-attachment/interface.js';
+import { Note } from 'misskey-js/autogen/models.d.ts';
+import { UserType } from '../profile/_interface.js';
+import type { mastodon } from 'masto';
 
 export type Status = mastodon.v1.Status | Note | null | undefined;
 export type StatusArray = Status[];

@@ -1,5 +1,5 @@
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from './activitypub-adapter.service';
 
 class MastodonService {

@@ -1,7 +1,7 @@
 import {
 	parseStatusContent,
 	preprocessPostContent,
-} from '@dhaaga/shared-utility-html-parser/src';
+} from '@dhaaga/shared-abstraction-activitypub';
 
 class TextParserService {
 	static findHashtags(input: string) {

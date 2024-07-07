@@ -1,10 +1,10 @@
-import { UserType } from '../profile/_interface';
+import { UserType } from '../profile/_interface.js';
 import {
 	Status,
 	StatusContextInstance,
 	StatusContextInterface,
 	StatusInterface,
-} from './_interface';
+} from './_interface.js';
 
 class UnknownToStatusAdapter implements StatusInterface {
 	getIsRebloggedByMe(): boolean | null | undefined {

@@ -1,7 +1,7 @@
-import * as v1 from "./v1";
-import * as v2 from "./v2";
+import * as v1 from './v1/index.js';
+import * as v2 from './v2/index.js';
 
 export default {
-  v1,
-  v2
-}
+	v1,
+	v2,
+};

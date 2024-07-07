@@ -1,11 +1,7 @@
-import { Dimensions, View, Text, Pressable } from 'react-native';
+import { Dimensions, View, Text } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub/src';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { Dialog } from '@rneui/themed';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
 import MediaService from '../../../services/media.service';
 import {
 	MARGIN_TOP,

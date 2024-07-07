@@ -16,6 +16,7 @@ type Props = {
 function AppInput(props: Props) {
 	return (
 		<Input
+			// @ts-ignore
 			multiline={props?.multiline || false}
 			placeholder={props?.placeholder || ''}
 			containerStyle={{

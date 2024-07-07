@@ -1,8 +1,8 @@
-import { MfmNode } from '@dhaaga/shared-utility-html-parser/src';
+// import { MfmNode } from 'misskey-js/autogen/types.js';
 import { Text } from 'react-native';
 import HashtagProcessor from '../components/common/tag/TagProcessor';
 import { Image } from 'expo-image';
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
+import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { randomUUID } from 'expo-crypto';
 import LinkProcessor from '../components/common/link/LinkProcessor';
 import { APP_FONT, APP_THEME } from '../styles/AppTheme';
@@ -32,7 +32,7 @@ class MfmService {
 	 * @param mentionMap
 	 */
 	static parseNode(
-		node: MfmNode,
+		node: any,
 		count: string,
 		{
 			emojiMap,

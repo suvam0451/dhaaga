@@ -8,7 +8,7 @@ import { Image } from 'expo-image';
 import { format } from 'date-fns';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub/src';
+import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 

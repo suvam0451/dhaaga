@@ -1,4 +1,8 @@
 import axios from 'axios';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../adapters/_client/_router/_types.js';
 
 const NODEINFO_10 = 'http://nodeinfo.diaspora.software/ns/schema/1.0';
 const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
@@ -48,6 +52,7 @@ class ActivitypubHelper {
 		const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
 		const usernameExtract = /^https?:\/\/(.*?)\/@(.*?)$/;
 		const bridged = /^https?:\/\/(.*?)\/r\/(https?:\/\/)?(.*?)\/?$/;
+		const pleromaUsernameExtract = /https:\/\/(.*?)\/users\/(.*?)$/;
 
 		let ourUrl = '';
 		let theirUsername = '';
@@ -62,6 +67,10 @@ class ActivitypubHelper {
 
 		if (usernameExtract.test(url)) {
 			const x = url.match(usernameExtract);
+			theirUrl = x![1];
+			theirUsername = x![2];
+		} else if (pleromaUsernameExtract.test(url)) {
+			const x = url.match(pleromaUsernameExtract);
 			theirUrl = x![1];
 			theirUsername = x![2];
 		}
@@ -113,10 +122,117 @@ class ActivitypubHelper {
 		return null;
 	}
 
+	/**
+	 * obtain the software used by a (potential)
+	 * fediverse domain
+	 * @param urlLike
+	 */
+	static async getInstanceSoftware(
+		urlLike: string,
+	): Promise<LibraryResponse<any>> {
+		const OPTS = {
+			timeout: 5000,
+		};
+
+		try {
+			const nodeInfo = await axios.get<WelKnownNodeinfo>(
+				urlLike + '/.well-known/nodeinfo',
+				OPTS,
+			);
+			const nodeType = nodeInfo.data.links.find((l) =>
+				[NODEINFO_21, NODEINFO_20, NODEINFO_10].includes(l.rel),
+			);
+			if (!nodeType)
+				return {
+					error: {
+						message: 'E_MISSING_NODE_INFO',
+						code: 'E_MISSING_NODE_INFO',
+					},
+				};
+
+			switch (nodeType.rel) {
+				case NODEINFO_10:
+				case NODEINFO_20:
+				case NODEINFO_21: {
+					const res = await axios.get<NodeInfo21>(nodeType.href, OPTS);
+					switch (res.data.software.name) {
+						case 'mastodon':
+						case 'misskey':
+						case 'pleroma':
+						case 'akkoma':
+						case 'friendica':
+						case 'firefish':
+						case 'gotosocial':
+						case 'lemmy':
+						case 'peertube':
+						case 'pixelfed':
+						case 'sharkey':
+						case 'hometown':
+						case 'cherrypick':
+						case 'iceshrimp':
+						// map to misskey
+						case 'meisskey': {
+							return {
+								data: {
+									software: res.data.software.name,
+									version: this.getVersion(res.data.software.version),
+								},
+							};
+						}
+						// NOTE: will not implement
+						case 'writefreely': {
+							// js api is outdated
+							return {
+								error: {
+									code: DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY,
+								},
+							};
+						}
+						default: {
+							return {
+								data: {
+									software: 'unknown',
+									version: 'N/A',
+								},
+							};
+						}
+					}
+				}
+			}
+			return {
+				error: {
+					code: DhaagaErrorCode.UNKNOWN_ERROR,
+				},
+			};
+		} catch (e: any) {
+			if (e.code)
+				return {
+					error: {
+						code: e.code,
+						message: e.code,
+					},
+				};
+
+			return {
+				error: {
+					code: DhaagaErrorCode.UNKNOWN_ERROR,
+				},
+			};
+		}
+	}
+
 	static async getInstanceSoftwareByHandle(handle: string, myDomain: string) {
 		const OPTS = {
 			timeout: 5000,
 		};
+
+		const threadsMatcher = /https:\/\/(www.)?threads.net\/(@.*?)$/;
+		if (threadsMatcher.test(handle)) {
+			return {
+				software: 'threads',
+				version: 'N/A',
+			};
+		}
 		const url = this.getInstanceUrlFromHandle(handle, myDomain);
 		try {
 			const nodeInfo = await axios.get<WelKnownNodeinfo>(
@@ -168,7 +284,6 @@ class ActivitypubHelper {
 							return null;
 						}
 						default: {
-							console.log(res.data.software.name);
 							return {
 								software: 'unknown',
 							};

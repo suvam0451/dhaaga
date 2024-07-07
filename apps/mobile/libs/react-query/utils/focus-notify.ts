@@ -1,6 +1,6 @@
-import React from "react";
-import { NotifyOnChangeProps } from "@tanstack/query-core";
-import { useFocusEffect } from "@react-navigation/native";
+import { NotifyOnChangeProps } from '@tanstack/query-core';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useRef } from 'react';
 
 /**
  * Disables re-renders on out of focus Screens
@@ -8,18 +8,18 @@ import { useFocusEffect } from "@react-navigation/native";
  * @returns
  */
 export function useFocusNotifyOnChangeProps(
-	notifyOnChangeProps?: NotifyOnChangeProps
+	notifyOnChangeProps?: NotifyOnChangeProps,
 ) {
-	const focusedRef = React.useRef(true);
+	const focusedRef = useRef(true);
 
 	useFocusEffect(
-		React.useCallback(() => {
+		useCallback(() => {
 			focusedRef.current = true;
 
 			return () => {
 				focusedRef.current = false;
 			};
-		}, [])
+		}, []),
 	);
 
 	return () => {
@@ -27,7 +27,7 @@ export function useFocusNotifyOnChangeProps(
 			return [];
 		}
 
-		if (typeof notifyOnChangeProps === "function") {
+		if (typeof notifyOnChangeProps === 'function') {
 			return notifyOnChangeProps();
 		}
 

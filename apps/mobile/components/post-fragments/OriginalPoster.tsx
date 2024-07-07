@@ -11,7 +11,7 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 import { APP_FONT } from '../../styles/AppTheme';
 import useMfm from '../hooks/useMfm';
 import AstService from '../../services/ast.service';
-import { ActivitypubHelper } from '@dhaaga/shared-utility-html-parser/src';
+import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 
 type OriginalPosterProps = {
 	id: string;

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
+	Animated,
 	Dimensions,
-	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
 	View,
@@ -9,7 +9,7 @@ import {
 import {
 	ActivityPubAccount,
 	ActivityPubStatuses,
-} from '@dhaaga/shared-abstraction-activitypub/src';
+} from '@dhaaga/shared-abstraction-activitypub';
 import { useQuery } from '@tanstack/react-query';
 import { Image } from 'expo-image';
 import {
@@ -77,7 +77,8 @@ function UserProfileBrowsePosts({ userId }: UserProfileBrowsePostsProps) {
 			<View style={styles.expandableSectionMarkerContainer}>
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_HEADER,
+						color: APP_FONT.MONTSERRAT_BODY,
+						fontFamily: 'Montserrat-Bold',
 						flexGrow: 1,
 					}}
 				>
@@ -95,14 +96,7 @@ function UserProfileBrowsePosts({ userId }: UserProfileBrowsePostsProps) {
 				}}
 			>
 				<View style={styles.expandableSectionMarkerContainer}>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_HEADER,
-							flexGrow: 1,
-						}}
-					>
-						Pinned Posts
-					</Text>
+					<Text style={styles.collapsibleProfileSectionText}>Pinned Posts</Text>
 					<Ionicons
 						name={RecentPostsCollapsed ? 'chevron-forward' : 'chevron-down'}
 						size={24}
@@ -175,84 +169,105 @@ function UserProfileContent() {
 		}
 	}
 
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: 0,
+		updateQueryCache: () => {},
+	});
+
+	const ScrollRef = useRef(null);
+
 	return (
-		<View
-			style={{ backgroundColor: '#121212', minHeight: '100%', paddingTop: 54 }}
-		>
-			<ScrollView>
-				<Image
-					source={{ uri: bannerUrl }}
-					style={{ height: 128, width: Dimensions.get('window').width }}
-				/>
-				<View style={{ display: 'flex', flexDirection: 'row' }}>
-					<AvatarContainerWithInset>
-						<AvatarExpoImage source={{ uri: avatarUrl }} />
-					</AvatarContainerWithInset>
-					<View
-						style={{
-							flexGrow: 1,
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-						}}
-					>
-						<View style={{ paddingHorizontal: 12, width: '100%' }}>
-							<AppButtonFollowIndicator
-								size={'sm'}
-								activeLabel={'Following'}
-								passiveLabel={'Follow'}
-								onClick={onFollowButtonClick}
-								isCompleted={relationship.following}
-								loading={relationshipLoading}
-							/>
-						</View>
-					</View>
+		<WithAutoHideTopNavBar title={'Profile'} translateY={translateY}>
+			<View
+				style={{
+					backgroundColor: '#121212',
+					minHeight: '100%',
+					// paddingTop: 54,
+				}}
+			>
+				<Animated.ScrollView
+					ref={ScrollRef}
+					onScroll={onScroll}
+					contentContainerStyle={{
+						paddingTop: 54,
+						backgroundColor: '#121212',
+						minHeight: '100%',
+					}}
+				>
+					{/*@ts-ignore-next-line*/}
+					<Image
+						source={{ uri: bannerUrl }}
+						style={{ height: 128, width: Dimensions.get('window').width }}
+					/>
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
+						<AvatarContainerWithInset>
+							<AvatarExpoImage source={{ uri: avatarUrl }} />
+						</AvatarContainerWithInset>
 						<View
-							style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
+							style={{
+								flexGrow: 1,
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
 						>
-							<PrimaryText>{user.getPostCount()}</PrimaryText>
-							<SecondaryText>Posts</SecondaryText>
+							<View style={{ paddingHorizontal: 12, width: '100%' }}>
+								<AppButtonFollowIndicator
+									size={'sm'}
+									activeLabel={'Following'}
+									passiveLabel={'Follow'}
+									onClick={onFollowButtonClick}
+									isCompleted={relationship.following}
+									loading={relationshipLoading}
+								/>
+							</View>
 						</View>
-						<View
-							style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
-						>
-							<PrimaryText>{user.getFollowingCount()}</PrimaryText>
-							<SecondaryText>Following</SecondaryText>
-						</View>
-						<View
-							style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
-						>
-							<PrimaryText>{user.getFollowersCount()}</PrimaryText>
-							<SecondaryText>Followers</SecondaryText>
+						<View style={{ display: 'flex', flexDirection: 'row' }}>
+							<View
+								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
+							>
+								<PrimaryText>{user.getPostCount()}</PrimaryText>
+								<SecondaryText>Posts</SecondaryText>
+							</View>
+							<View
+								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
+							>
+								<PrimaryText>{user.getFollowingCount()}</PrimaryText>
+								<SecondaryText>Following</SecondaryText>
+							</View>
+							<View
+								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
+							>
+								<PrimaryText>{user.getFollowersCount()}</PrimaryText>
+								<SecondaryText>Followers</SecondaryText>
+							</View>
 						</View>
 					</View>
-				</View>
-				<View style={{ marginLeft: 8 }}>
-					<PrimaryText>{ParsedDisplayName}</PrimaryText>
-					<SecondaryText>
-						{user.getAppDisplayAccountUrl(subdomain)}
-					</SecondaryText>
-				</View>
-				<ParsedDescriptionContainer>
-					{DescriptionContent}
-				</ParsedDescriptionContainer>
+					<View style={{ marginLeft: 8 }}>
+						<PrimaryText>{ParsedDisplayName}</PrimaryText>
+						<SecondaryText>
+							{user.getAppDisplayAccountUrl(subdomain)}
+						</SecondaryText>
+					</View>
+					<ParsedDescriptionContainer>
+						{DescriptionContent}
+					</ParsedDescriptionContainer>
 
-				{/*Separator*/}
-				<View style={{ flexGrow: 1 }} />
-
-				<UserProfileExtraInformation fields={fields} />
-				<View style={{ paddingBottom: 16 }}>
-					<UserPostsProvider>
-						<UserProfileBrowsePosts userId={user.getId()} />
-					</UserPostsProvider>
-				</View>
-			</ScrollView>
-			<ConfirmRelationshipChangeDialog
-				visible={IsUnfollowConfirmationDialogVisible}
-				setVisible={setIsUnfollowConfirmationDialogVisible}
-			/>
-		</View>
+					{/*Separator*/}
+					<View style={{ flexGrow: 1 }} />
+					<UserProfileExtraInformation fields={fields} />
+					<View style={{ paddingBottom: 16 }}>
+						<UserPostsProvider>
+							<UserProfileBrowsePosts userId={user.getId()} />
+						</UserPostsProvider>
+					</View>
+				</Animated.ScrollView>
+				<ConfirmRelationshipChangeDialog
+					visible={IsUnfollowConfirmationDialogVisible}
+					setVisible={setIsUnfollowConfirmationDialogVisible}
+				/>
+			</View>
+		</WithAutoHideTopNavBar>
 	);
 }
 
@@ -279,11 +294,6 @@ function UserProfile({ route, navigation }) {
 		setData(data);
 	}, [status]);
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: 0,
-		updateQueryCache: () => {},
-	});
-
 	if (fetchStatus === 'fetching' || !Data)
 		return (
 			<View
@@ -297,11 +307,9 @@ function UserProfile({ route, navigation }) {
 		);
 
 	return (
-		<WithAutoHideTopNavBar title={'Profile'} translateY={translateY}>
-			<WithActivitypubUserContext user={Data}>
-				<UserProfileContent />
-			</WithActivitypubUserContext>
-		</WithAutoHideTopNavBar>
+		<WithActivitypubUserContext user={Data}>
+			<UserProfileContent />
+		</WithActivitypubUserContext>
 	);
 }
 
@@ -325,6 +333,11 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderRadius: 8,
+	},
+	collapsibleProfileSectionText: {
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: 'Montserrat-Bold',
+		flexGrow: 1,
 	},
 });
 export default UserProfile;

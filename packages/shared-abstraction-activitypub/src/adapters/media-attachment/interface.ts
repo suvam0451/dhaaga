@@ -1,4 +1,4 @@
-import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 
 /**
  * For reference, see
@@ -10,19 +10,27 @@ import { mastodon } from "@dhaaga/shared-provider-mastodon/src";
  */
 export interface MediaAttachmentInterface {
 	getAltText(): string | null | undefined;
+
 	getBlurHash(): string | null | undefined;
+
 	getCreatedAt(): string;
-  getId(): string;
-  getMeta(): any | mastodon.v1.MediaAttachmentMeta
+
+	getId(): string;
+
+	getMeta(): any | mastodon.v1.MediaAttachmentMeta;
+
 	getName(): string;
+
 	getPreviewUrl(): string | null | undefined;
+
 	getType(): string;
+
 	getUrl(): string | null | undefined;
 
+	// dimensions
+	getHeight(): number | null | undefined;
 
-  // dimensions
-  getHeight(): number | null | undefined;
-  getWidth(): number | null | undefined;
+	getWidth(): number | null | undefined;
 
 	print(): void;
 }

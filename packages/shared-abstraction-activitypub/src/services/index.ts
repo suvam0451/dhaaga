@@ -1,8 +1,8 @@
 import * as mfm from 'mfm-js';
 import type { MfmNode } from 'mfm-js/built';
 import { decode } from 'html-entities';
-import HtmlParserService from './htmlparser2';
-import ActivitypubHelper from './activitypub';
+import HtmlParserService from './htmlparser2.js';
+import ActivitypubHelper from './activitypub.js';
 
 export { ActivitypubHelper };
 export type { MfmNode, MfmEmojiCode } from 'mfm-js/built';

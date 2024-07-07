@@ -1,10 +1,11 @@
-import { MediaAttachmentInterface } from "./interface";
-import { DriveFileInstance, MediaAttachmentInstance } from "./unique";
+import { MediaAttachmentInterface } from './interface.js';
+import { DriveFileInstance, MediaAttachmentInstance } from './unique.js';
 
 export class DriveFileToMediaAttachmentAdapter
 	implements MediaAttachmentInterface
 {
 	ref: DriveFileInstance;
+
 	constructor(ref: DriveFileInstance) {
 		this.ref = ref;
 	}
@@ -62,6 +63,7 @@ export class MediaAttachmentToMediaAttachmentAdapter
 	implements MediaAttachmentInterface
 {
 	ref: MediaAttachmentInstance;
+
 	constructor(ref: MediaAttachmentInstance) {
 		this.ref = ref;
 	}
@@ -113,6 +115,7 @@ export class MediaAttachmentToMediaAttachmentAdapter
 	getHeight(): number | null | undefined {
 		return this.getMeta()?.original?.height;
 	}
+
 	getWidth(): number | null | undefined {
 		return this.getMeta()?.original?.width;
 	}
@@ -126,6 +129,7 @@ export class UnknownToMediaAttachmentAdapter
 	implements MediaAttachmentInterface
 {
 	ref: any;
+
 	constructor(ref: any) {
 		this.ref = ref;
 	}
@@ -151,19 +155,19 @@ export class UnknownToMediaAttachmentAdapter
 	}
 
 	getName() {
-		return "";
+		return '';
 	}
 
 	getPreviewUrl() {
-		return "";
+		return '';
 	}
 
 	getType() {
-		return "";
+		return '';
 	}
 
 	getUrl() {
-		return "";
+		return '';
 	}
 
 	getHeight(): number | null | undefined {
@@ -175,6 +179,6 @@ export class UnknownToMediaAttachmentAdapter
 	}
 
 	print() {
-		console.log("[WARN]: null media attachment entity");
+		console.log('[WARN]: null media attachment entity');
 	}
 }

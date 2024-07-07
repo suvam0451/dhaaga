@@ -2,7 +2,7 @@ import { BSON, List, Realm, UpdateMode } from 'realm';
 import { Account, KeyValuePair } from '../entities/account.entity';
 import UUID = BSON.UUID;
 import { ActivityPubStatus } from '../entities/activitypub-status.entity';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/src';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubStatusRepository } from './activitypub-status.repo';
 
 export type AccountCreateDTO = {

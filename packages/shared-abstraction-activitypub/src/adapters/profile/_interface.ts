@@ -1,8 +1,8 @@
-import { UserDetailed, User } from '@dhaaga/shared-provider-misskey/src';
-import type { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import MisskeyUser from './misskey';
-import MastodonUser from './mastodon';
-import DefaultUser from './default';
+import { UserDetailed, User } from 'misskey-js/autogen/models.js';
+import type { mastodon } from '@dhaaga/shared-provider-mastodon';
+import MisskeyUser from './misskey.js';
+import MastodonUser from './mastodon.js';
+import DefaultUser from './default.js';
 
 export type EmojiMapValue = {
 	url: string;

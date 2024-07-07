@@ -1,13 +1,13 @@
 import type { mastodon } from 'masto';
-import { RestClient } from '../../native-client';
+import { RestClient } from '../../native-client.js';
 import axios from 'axios';
-import { get } from './lib';
-import { StatusQuery } from './bookmarks';
+import { get } from './lib.js';
+import { StatusQuery } from './bookmarks.js';
 import {
 	buildQueryUrl,
 	extractPaginationFromLinkHeader,
 	getAxiosClient,
-} from './_common';
+} from './_common.js';
 
 class AccountsService {
 	static verifyCredentials = async (

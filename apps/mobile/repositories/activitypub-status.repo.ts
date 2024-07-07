@@ -3,7 +3,7 @@ import { ActivityPubServerRepository } from './activitypub-server.repo';
 import {
 	ActivityPubUserAdapter,
 	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub/src';
+} from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubUserRepository } from './activitypub-user.repo';
 import {
 	ActivityPubStatus,

@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useObject } from '@realm/react';
 import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
 } from '../../../states/useStatus';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MMKV } from 'react-native-mmkv';
@@ -14,7 +13,7 @@ import { MMKV } from 'react-native-mmkv';
 import { ActivityPubChatRoom } from '../../../entities/activitypub-chatroom.entity';
 import ActivitypubProviderService from '../../../services/activitypub-provider.service';
 import ActivityPubProviderService from '../../../services/activitypub-provider.service';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/src';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import MmkvService from '../../../services/mmkv.service';
 import ChatItem from './fragments/dm/ChatItem';
@@ -46,7 +45,7 @@ function WithContextWrapped() {
 
 	// Queries
 	const { status, data, refetch, fetchStatus } = useQuery<
-		mastodon.v1.Conversation[] | Note[]
+		mastodon.v1.Conversation[] | any[]
 	>({
 		queryKey: ['conversation/context'],
 		queryFn: api,
@@ -201,6 +200,7 @@ function DirectMessagingRoom() {
 		hiddenHeight: 50,
 	});
 
+	// @ts-ignore
 	return (
 		<WithAutoHideTopNavBar title={'Your Conversation'} translateY={translateY}>
 			<View style={styles.container}>
@@ -248,6 +248,8 @@ function DirectMessagingRoom() {
 					</TouchableOpacity>
 					<View style={{ flexShrink: 1 }}>
 						<Input
+							/*@ts-ignore-next-line*/
+							multiline={true}
 							inputContainerStyle={{
 								// borderRadius: 16,
 								paddingLeft: 8,
@@ -261,7 +263,6 @@ function DirectMessagingRoom() {
 							inputStyle={{
 								textDecorationLine: 'none',
 							}}
-							multiline={true}
 							style={styles.inputStyle}
 							placeholder={'Type Message here'}
 						/>

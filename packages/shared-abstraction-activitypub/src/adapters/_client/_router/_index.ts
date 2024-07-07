@@ -1,7 +1,11 @@
-import { InstanceRoute } from './instance';
+import { InstanceRoute } from './instance.js';
+import { AccountRoute } from './routes/accounts.js';
+import { StatusesRoute } from './routes/statuses.js';
 
 export interface RouterInterface {
-	instance: InstanceRoute;
+	instances: InstanceRoute;
+	accounts: AccountRoute;
+	statuses: StatusesRoute;
 }
 
-export type { InstanceRoute };
+export type { InstanceRoute, AccountRoute, StatusesRoute };

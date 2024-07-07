@@ -1,7 +1,7 @@
 import { Realm } from '@realm/react';
 import { ActivityPubUser } from '../entities/activitypub-user.entity';
 import { ActivityPubServerRepository } from './activitypub-server.repo';
-import { UserInterface } from '@dhaaga/shared-abstraction-activitypub/src';
+import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { UpdateMode } from 'realm';
 
 export class ActivityPubUserRepository {

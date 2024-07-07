@@ -1,11 +1,14 @@
-import Target from './activitypub';
+import Target from '../src/services/activitypub';
 
 test('return correct user handle', () => {
 	const MY_DOMAIN = 'mastodon.social';
-	const itemsA = ['https://mas.to/@foo'];
+	const itemsA = ['https://mas.to/@foo', 'https://fedi.pleroma.be/users/foo'];
+	const resA = ['@foo@mas.to', '@foo@fedi.pleroma.be'];
 
+	let count = 0;
 	for (const item of itemsA) {
-		expect(Target.getHandle(item, MY_DOMAIN)).toBe('@foo@mas.to');
+		expect(Target.getHandle(item, MY_DOMAIN)).toBe(resA[count]);
+		count++;
 	}
 
 	const itemsB = ['https://mastodon.social/@foo'];
@@ -14,7 +17,7 @@ test('return correct user handle', () => {
 	}
 });
 
-test('handle bridged accounts correctly', () => {
+test('handle bridged accounts.ts correctly', () => {
 	const MY_DOMAIN = 'mastodon.social';
 	const itemsA = [
 		'https://web.brid.gy/r/https://www.animenewsnetwork.com',
@@ -28,6 +31,34 @@ test('handle bridged accounts correctly', () => {
 	}
 });
 
+test('threads specific stuff', () => {
+	expect(
+		Promise.resolve(
+			Target.getInstanceSoftwareByHandle(
+				`https://www.threads.net/@foo`,
+				'mastodon.social',
+			),
+		),
+	).resolves.toHaveProperty('software', 'threads');
+});
+
+test('instance software is detcted for privated instances', () => {
+	const instances = ['suya.place'];
+	const software = ['akkoma'];
+
+	let index = 0;
+	for (const instance of instances) {
+		expect(
+			Promise.resolve(
+				Target.getInstanceSoftwareByHandle(
+					`@foo@${instance}`,
+					'mastodon.social',
+				),
+			),
+		).resolves.toHaveProperty('software', software[index]);
+		index++;
+	}
+});
 test('instance software is detected accurately', () => {
 	const instances = [
 		'mastodon.social',

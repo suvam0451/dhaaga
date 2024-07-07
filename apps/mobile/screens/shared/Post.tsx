@@ -1,12 +1,15 @@
 import StatusItem from '../../components/common/status/StatusItem';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityPubStatus } from '@dhaaga/shared-abstraction-activitypub/src';
+import {
+	ActivityPubStatus,
+	LibraryResponse,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { useQuery } from '@tanstack/react-query';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
 } from '../../states/useStatus';
-import { Animated, RefreshControl, ScrollView, View } from 'react-native';
+import { Animated, RefreshControl, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import WithAutoHideTopNavBar from '../../components/containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
@@ -47,23 +50,15 @@ function StatusContextComponent() {
 	}, [stateKey]);
 
 	if (!root) return <View></View>;
-	// console.log(root?.getRaw());
 
-	// return (
-	// 	<View>
-	// 		<WithActivitypubStatusContext statusInterface={root}>
-	// 			<StatusItem />
-	// 		</WithActivitypubStatusContext>
-	// 	</View>
-	// );
 	return (
 		<View>
-			<WithActivitypubStatusContext statusInterface={root}>
-				<StatusItem />
-			</WithActivitypubStatusContext>
-			{children.map((o, i) => (
-				<PostReply key={i} lookupId={o.getId()} />
-			))}
+			{root && (
+				<WithActivitypubStatusContext statusInterface={root}>
+					<StatusItem />
+				</WithActivitypubStatusContext>
+			)}
+			{children?.map((o, i) => <PostReply key={i} lookupId={o.getId()} />)}
 			<View style={{ marginVertical: 16 }}>
 				<Text style={{ textAlign: 'center', color: APP_FONT.MONTSERRAT_BODY }}>
 					No more replies
@@ -91,6 +86,7 @@ function StatusContextApiWrapper() {
 	});
 
 	useEffect(() => {
+		console.log(status, data);
 		if (status === 'success') {
 			setStatusContextData(data);
 		}
@@ -108,15 +104,16 @@ function Post() {
 
 	async function queryFn() {
 		if (!client) throw new Error('_client not initialized');
-		return await client.getStatus(q);
+		return await client.statuses.get(q);
 	}
 
-	const { status, data, error, fetchStatus, refetch } =
-		useQuery<ActivityPubStatus>({
-			queryKey: ['mastodon/statuses', q],
-			queryFn,
-			enabled: client && q !== undefined,
-		});
+	const { status, data, fetchStatus, refetch } = useQuery<
+		LibraryResponse<ActivityPubStatus>
+	>({
+		queryKey: ['mastodon/statuses', q],
+		queryFn,
+		enabled: client && q !== undefined,
+	});
 
 	useEffect(() => {
 		if (status === 'success') {
@@ -136,7 +133,7 @@ function Post() {
 	return (
 		<WithAutoHideTopNavBar title={'Post Details'} translateY={translateY}>
 			{data && (
-				<WithActivitypubStatusContext status={data} key={0}>
+				<WithActivitypubStatusContext status={data.data} key={0}>
 					<Animated.ScrollView
 						refreshControl={
 							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

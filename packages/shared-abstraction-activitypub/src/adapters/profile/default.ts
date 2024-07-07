@@ -1,99 +1,101 @@
-import {EmojiMapValue, UserInterface} from "./_interface";
+import { UserInterface } from './_interface.js';
 
 export class DefaultUser implements UserInterface {
-  getInstanceUrl(): string {
-    return ""
-  }
-  getIsLockedProfile(): boolean | null | undefined {
-      return false
-  }
-  getAccountUrl(): string {
-    return ""
-  }
+	getInstanceUrl(): string {
+		return '';
+	}
 
-  getAppDisplayAccountUrl(myDomain: string): string {
-    return ""
-  }
+	getIsLockedProfile(): boolean | null | undefined {
+		return false;
+	}
 
-  getEmojiMap() {
-    return new Map()
-  }
+	getAccountUrl(): string {
+		return '';
+	}
 
-  findEmoji(q: string) {
-    return undefined
-  }
+	getAppDisplayAccountUrl(myDomain: string): string {
+		return '';
+	}
 
-  getAvatarBlurHash(): string {
-    return ""
-  }
+	getEmojiMap() {
+		return new Map();
+	}
 
-  getAvatarUrl(): string {
-    return ""
-  }
+	findEmoji(q: string) {
+		return undefined;
+	}
 
-  getBannerUrl(): string | null {
-    return ""
-  }
+	getAvatarBlurHash(): string {
+		return '';
+	}
 
-  getBannerBlurHash(): string | null {
-    return ""
-  }
+	getAvatarUrl(): string {
+		return '';
+	}
 
-  getDescription(): string | null {
-    return ""
-  }
+	getBannerUrl(): string | null {
+		return '';
+	}
 
-  getCreatedAt(): Date {
-    throw new Error("Method not implemented.");
-  }
+	getBannerBlurHash(): string | null {
+		return '';
+	}
 
-  getBirthday(): Date | null {
-    throw new Error("Method not implemented.");
-  }
+	getDescription(): string | null {
+		return '';
+	}
 
-  getFields() {
-    return []
-  }
+	getCreatedAt(): Date {
+		throw new Error('Method not implemented.');
+	}
 
-  getFollowersCount(): number {
-    return 0
-  }
+	getBirthday(): Date | null {
+		throw new Error('Method not implemented.');
+	}
 
-  getFollowingCount(): number {
-    return 0
-  }
+	getFields() {
+		return [];
+	}
 
-  hasPendingFollowRequestFromYou(): boolean | null {
-    return false
-  }
+	getFollowersCount(): number {
+		return 0;
+	}
 
-  hasPendingFollowRequestToYou(): boolean | null {
-    return false
-  }
+	getFollowingCount(): number {
+		return 0;
+	}
 
-  getId(): string {
-    return ""
-  }
+	hasPendingFollowRequestFromYou(): boolean | null {
+		return false;
+	}
 
-  getIsBot(): boolean {
-    return false
-  }
+	hasPendingFollowRequestToYou(): boolean | null {
+		return false;
+	}
 
-  getDisplayName(): string | null {
-    return ""
-  }
+	getId(): string {
+		return '';
+	}
 
-  getPostCount(): number {
-    return 0
-  }
+	getIsBot(): boolean {
+		return false;
+	}
 
-  getUsername(): string {
-    return ""
-  }
+	getDisplayName(): string | null {
+		return '';
+	}
 
-  getOnlineStatus(): "unknown" | "online" | "active" | "offline" {
-    return "unknown"
-  }
+	getPostCount(): number {
+		return 0;
+	}
+
+	getUsername(): string {
+		return '';
+	}
+
+	getOnlineStatus(): 'unknown' | 'online' | 'active' | 'offline' {
+		return 'unknown';
+	}
 }
 
-export default DefaultUser
+export default DefaultUser;

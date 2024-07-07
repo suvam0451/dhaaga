@@ -1,5 +1,5 @@
-import * as accounts from "./accounts"
+import * as accounts from './accounts.js';
 
 export default {
-  accounts
-}
+	accounts,
+};

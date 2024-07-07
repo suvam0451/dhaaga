@@ -21,3 +21,6 @@ apps/mobile/.env
 !.yarn/versions
 
 .idea/**
+
+packages/**/dist/**
+packages/**/tsconfig.tsbuildinfo
