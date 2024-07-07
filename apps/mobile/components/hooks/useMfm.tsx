@@ -1,5 +1,5 @@
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/src/adapters/profile/_interface';
-import { DependencyList, memo, useEffect, useRef, useState } from 'react';
+import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
+import { DependencyList, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';

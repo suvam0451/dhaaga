@@ -1,7 +1,7 @@
 import { BSON, Realm } from 'realm';
 import UUID = BSON.UUID;
 import AccountRepository from '../repositories/account.repo';
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub/src';
+import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubTagRepository } from '../repositories/activitypub-tag.repo';
 import { Account } from '../entities/account.entity';
 

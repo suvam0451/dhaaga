@@ -1,9 +1,13 @@
-import { InstanceApi_CustomEmojiDTO, InstanceRoute } from '../_router/instance';
-import { RestClient } from '@dhaaga/shared-provider-mastodon/src';
+import {
+	InstanceApi_CustomEmojiDTO,
+	InstanceRoute,
+	MastoTranslation,
+} from '../_router/instance.js';
+import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { createRestAPIClient } from 'masto';
-import { getSoftwareInfoShared } from '../_router/shared';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types';
-import { DhaagaMastoClient, MastoErrorHandler } from '../_router/_runner';
+import { getSoftwareInfoShared } from '../_router/shared.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
+import { DhaagaMastoClient, MastoErrorHandler } from '../_router/_runner.js';
 
 export class MastodonInstanceRouter implements InstanceRoute {
 	client: RestClient;
@@ -21,7 +25,7 @@ export class MastodonInstanceRouter implements InstanceRoute {
 		const x = await data;
 		if (!x) return { error: { code: DhaagaErrorCode.UNKNOWN_ERROR } };
 		return {
-			data: x!.map((o) => ({
+			data: x!.map((o: any) => ({
 				shortCode: o.shortcode,
 				url: o.url,
 				staticUrl: o.staticUrl,
@@ -43,7 +47,10 @@ export class MastodonInstanceRouter implements InstanceRoute {
 		return getSoftwareInfoShared(urlLike);
 	}
 
-	async getTranslation(id: string, lang: string) {
+	async getTranslation(
+		id: string,
+		lang: string,
+	): Promise<LibraryResponse<MastoTranslation>> {
 		const _client = this.createMastoClient();
 		const data = await _client.v1.statuses
 			.$select(id)

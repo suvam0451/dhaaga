@@ -2,14 +2,14 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	InstanceRoute,
 	KNOWN_SOFTWARE,
-} from '../_router/instance';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types';
-import { getSoftwareInfoShared } from '../_router/shared';
+} from '../_router/instance.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
+import { getSoftwareInfoShared } from '../_router/shared.js';
 import {
 	DhaagaMastoClient,
 	DhaagaMisskeyClient,
 	MastoErrorHandler,
-} from '../_router/_runner';
+} from '../_router/_runner.js';
 
 export class DefaultInstanceRouter implements InstanceRoute {
 	/**

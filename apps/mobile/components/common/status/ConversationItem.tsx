@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub/src';
+import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useRealm } from '@realm/react';

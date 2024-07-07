@@ -1,6 +1,7 @@
-import axios from "axios";
-import {StatusQuery} from "./bookmarks";
-import applyCaseMiddleware from "axios-case-converter";
+import axios from 'axios';
+import { StatusQuery } from './bookmarks.js';
+
+// import applyCaseMiddleware from 'axios-case-converter';
 
 /**
  * Mastodon sometimes embeds the
@@ -11,22 +12,22 @@ import applyCaseMiddleware from "axios-case-converter";
  * @param headers
  */
 export function extractPaginationFromLinkHeader(headers: any) {
-  const linkHeader = headers["link"]
-  const maxIdRegex = /max_id=([0-9]+)/
-  const minIdRegex = /min_id=([0-9]+)/
+	const linkHeader = headers['link'];
+	const maxIdRegex = /max_id=([0-9]+)/;
+	const minIdRegex = /min_id=([0-9]+)/;
 
-  let maxId = null
-  let minId = null
-  if (minIdRegex.test(linkHeader)) {
-    const minMatch = linkHeader.match(minIdRegex)
-    minId = minMatch[1]
-  }
-  if (maxIdRegex.test(linkHeader)) {
-    const maxMatch = linkHeader.match(maxIdRegex)
-    maxId = maxMatch[1]
-  }
+	let maxId = null;
+	let minId = null;
+	if (minIdRegex.test(linkHeader)) {
+		const minMatch = linkHeader.match(minIdRegex);
+		minId = minMatch[1];
+	}
+	if (maxIdRegex.test(linkHeader)) {
+		const maxMatch = linkHeader.match(maxIdRegex);
+		maxId = maxMatch[1];
+	}
 
-  return {minId, maxId}
+	return { minId, maxId };
 }
 
 /**
@@ -35,16 +36,16 @@ export function extractPaginationFromLinkHeader(headers: any) {
  * @param query
  */
 export function buildQueryUrl(baseUrl: string, query?: StatusQuery) {
-  baseUrl = baseUrl.concat(`?limit=${query.limit}`)
-  if (query?.maxId) {
-    baseUrl = baseUrl.concat(`&max_id=${query?.maxId}`);
-  }
-  if (query?.minId) {
-    baseUrl = baseUrl.concat(`&min_id=${query?.minId}`);
-  }
-  return baseUrl
+	baseUrl = baseUrl.concat(`?limit=${query.limit}`);
+	if (query?.maxId) {
+		baseUrl = baseUrl.concat(`&max_id=${query?.maxId}`);
+	}
+	if (query?.minId) {
+		baseUrl = baseUrl.concat(`&min_id=${query?.minId}`);
+	}
+	return baseUrl;
 }
 
 export function getAxiosClient() {
-  return applyCaseMiddleware(axios.create());
+	return axios.create();
 }

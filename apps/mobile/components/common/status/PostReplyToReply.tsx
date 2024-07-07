@@ -1,13 +1,13 @@
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub/src';
+import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import useMfm from '../../hooks/useMfm';
 import WithActivitypubUserContext from '../../../states/useProfile';
 import ReplyOwner from '../user/ReplyOwner';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
+import { APP_FONT } from '../../../styles/AppTheme';
 import { Text } from '@rneui/themed';
 import StyleService from '../../../services/style.service';
 

@@ -1,7 +1,7 @@
 import {
 	ActivitypubStatusAdapter,
 	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub/src';
+} from '@dhaaga/shared-abstraction-activitypub';
 import {
 	createContext,
 	MutableRefObject,
@@ -11,10 +11,10 @@ import {
 	useState,
 } from 'react';
 import { useActivityPubRestClientContext } from './useActivityPubRestClient';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
-import { StatusContextInterface } from '@dhaaga/shared-abstraction-activitypub/src/adapters/status/_interface';
-import { ActivityPubStatusContextAdapter } from '@dhaaga/shared-abstraction-activitypub/src/adapters/status/_adapters';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
+// import { Note } from '@dhaaga/shared-provider-misskey';
+import { StatusContextInterface } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
+import { ActivityPubStatusContextAdapter } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_adapters';
 import MastodonService from '../services/mastodon.service';
 import { randomUUID } from 'expo-crypto';
 
@@ -42,10 +42,10 @@ type Type = {
 	sharedStatus: StatusInterface | null;
 	openGraph: OgObject | null;
 
-	statusRaw: mastodon.v1.Status | Note | null;
+	statusRaw: mastodon.v1.Status | any | null;
 	setData: (o: StatusInterface) => void;
 	setStatusContextData: (data: any) => void;
-	setDataRaw: (o: mastodon.v1.Status | Note) => void;
+	setDataRaw: (o: mastodon.v1.Status | any) => void;
 	updateOpenGraph: (og: OgObject | null) => void;
 	toggleBookmark: () => void;
 
@@ -61,7 +61,7 @@ type Type = {
 const defaultValue: Type = {
 	openGraph: undefined,
 	updateOpenGraph(og: OgObject | null): void {},
-	setDataRaw(o: mastodon.v1.Status | Note): void {},
+	setDataRaw(o: mastodon.v1.Status | any): void {},
 	setData(o: StatusInterface): void {},
 	status: null,
 	sharedStatus: null,
@@ -84,7 +84,7 @@ export function useActivitypubStatusContext() {
 }
 
 type Props = {
-	status?: mastodon.v1.Status | Note;
+	status?: mastodon.v1.Status | any;
 	statusInterface?: StatusInterface;
 	children: any;
 };
@@ -115,7 +115,7 @@ function WithActivitypubStatusContext({
 		ActivitypubStatusAdapter(null, _domain),
 	);
 
-	const [StatusRaw, setStatusRaw] = useState<mastodon.v1.Status | Note | null>(
+	const [StatusRaw, setStatusRaw] = useState<mastodon.v1.Status | any | null>(
 		null,
 	);
 	const [OpenGraph, setOpenGraph] = useState<OgObject | null>(null);
@@ -162,7 +162,7 @@ function WithActivitypubStatusContext({
 		setStateKey(randomUUID());
 	}
 
-	function setDataRaw(o: mastodon.v1.Status | Note) {
+	function setDataRaw(o: mastodon.v1.Status | any) {
 		const adapted = ActivitypubStatusAdapter(o, _domain);
 		if (adapted.isReposted()) {
 			const repostAdapted = ActivitypubStatusAdapter(

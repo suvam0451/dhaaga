@@ -2,7 +2,7 @@ import {
 	ActivityPubUserAdapter,
 	UserInterface,
 	UserType,
-} from '@dhaaga/shared-abstraction-activitypub/src';
+} from '@dhaaga/shared-abstraction-activitypub';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 

@@ -1,7 +1,6 @@
-import type { mastodon } from "masto";
-import { RestClient } from "../../native-client";
-import axios from "axios";
-import applyCaseMiddleware from "axios-case-converter";
+import type { mastodon } from 'masto';
+import { RestClient } from '../../native-client.js';
+import axios from 'axios';
 
 export type TimelineQuery = {
 	maxId?: string;
@@ -10,7 +9,7 @@ export type TimelineQuery = {
 export default class TimelinesService {
 	static getHomeTimeline = async (
 		client: RestClient,
-		query?: TimelineQuery
+		query?: TimelineQuery,
 	): Promise<mastodon.v1.Status[]> => {
 		const queryUrl = `https://${client.url}/api/v1/timelines/home`;
 		if (query?.maxId) {
@@ -20,7 +19,7 @@ export default class TimelinesService {
 			queryUrl.concat(`min_id=${query?.minId}&`);
 		}
 
-		const axiosClient = applyCaseMiddleware(axios.create());
+		const axiosClient = axios.create();
 		try {
 			const res = await axiosClient.get<mastodon.v1.Status[]>(queryUrl, {
 				headers: {
@@ -37,7 +36,7 @@ export default class TimelinesService {
 	static getTimelineByHashtag = async (
 		client: RestClient,
 		q: string,
-		query?: TimelineQuery
+		query?: TimelineQuery,
 	): Promise<mastodon.v1.Status[]> => {
 		const queryUrl = `https://${client.url}/api/v1/timelines/tag/${q}`;
 		if (query?.maxId) {
@@ -47,7 +46,7 @@ export default class TimelinesService {
 			queryUrl.concat(`min_id=${query?.minId}&`);
 		}
 
-		const axiosClient = applyCaseMiddleware(axios.create());
+		const axiosClient = axios.create();
 		try {
 			const res = await axiosClient.get<mastodon.v1.Status[]>(queryUrl, {
 				headers: {

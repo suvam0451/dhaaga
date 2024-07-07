@@ -1,8 +1,14 @@
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types';
-import { InstanceApi_CustomEmojiDTO, InstanceRoute } from '../_router/instance';
-import { RestClient } from '@dhaaga/shared-provider-mastodon/src';
-import { getSoftwareInfoShared } from '../_router/shared';
-import { DhaagaPleromaClient, PleromaErrorHandler } from '../_router/_runner';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
+import {
+	InstanceApi_CustomEmojiDTO,
+	InstanceRoute,
+} from '../_router/instance.js';
+import { RestClient } from '@dhaaga/shared-provider-mastodon';
+import { getSoftwareInfoShared } from '../_router/shared.js';
+import {
+	DhaagaPleromaClient,
+	PleromaErrorHandler,
+} from '../_router/_runner.js';
 
 export class PleromaInstanceRouter implements InstanceRoute {
 	client: RestClient;

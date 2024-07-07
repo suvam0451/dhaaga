@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Text } from '@rneui/themed';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/src';
 import { OpenAiService } from '../../../services/openai.service';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
@@ -67,7 +66,7 @@ function StatusInteractionBase({
 		console.log('translation clicked', TranslationLoading);
 		if (TranslationLoading) return;
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-		client.instance
+		client.instances
 			.getTranslation(post.getId(), 'en')
 			.then((res) => {
 				console.log(res);

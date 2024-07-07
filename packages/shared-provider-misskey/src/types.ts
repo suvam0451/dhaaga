@@ -1,9 +1,9 @@
-import type {UserDetailed} from "misskey-js/built/esm/entities";
+import { UserDetailed } from 'misskey-js/autogen/models.js';
 
 export type MiauthSessionCheckResponse =
-    | { ok: false }
-    | {
-  ok: true;
-  token: string;
-  user: UserDetailed;
-};
+	| { ok: false }
+	| {
+			ok: true;
+			token: string;
+			user: UserDetailed;
+	  };

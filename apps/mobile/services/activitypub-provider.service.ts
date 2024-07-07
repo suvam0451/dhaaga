@@ -1,6 +1,6 @@
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub/src';
-import { GetPostsQueryDTO } from '@dhaaga/shared-abstraction-activitypub/src/adapters/_client/_interface';
+import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../states/useTimelineController';
+import { GetPostsQueryDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 
 type TimelineGetMiscQueryDto = {
 	listQuery?: string;

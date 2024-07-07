@@ -1,16 +1,27 @@
 {
+  "type": "module",
   "name": "@dhaaga/shared-provider-misskey",
-  "version": "1.0.0",
+  "version": "0.3.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup --clean ./src/index.ts --dts",
-    "dev": "tsup ./src/index.ts --watch --dts --external pkgJson"
-  },
+  "author": "Debashish Patra<hi@suvam.io>",
+  "license": "AGPL-3.0",
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": {
+      "import": "./dist/*",
+      "types": "./dist/*"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "axios": "^1.7.2",
     "axios-case-converter": "^1.1.1"
@@ -18,5 +29,11 @@
   "devDependencies": {
     "misskey-js": "^2024.5.0",
     "tsup": "^8.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "tsup ./src/index.ts --watch --dts --external pkgJson",
+    "up": "tsc"
   }
 }

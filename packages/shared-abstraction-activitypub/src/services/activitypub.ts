@@ -2,8 +2,7 @@ import axios from 'axios';
 import {
 	DhaagaErrorCode,
 	LibraryResponse,
-} from '@dhaaga/shared-abstraction-activitypub/src/adapters/_client/_router/_types';
-import { InstanceApi_SoftwareInfoDTO } from '@dhaaga/shared-abstraction-activitypub/src/adapters/_client/_router/instance';
+} from '../adapters/_client/_router/_types.js';
 
 const NODEINFO_10 = 'http://nodeinfo.diaspora.software/ns/schema/1.0';
 const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
@@ -53,6 +52,7 @@ class ActivitypubHelper {
 		const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
 		const usernameExtract = /^https?:\/\/(.*?)\/@(.*?)$/;
 		const bridged = /^https?:\/\/(.*?)\/r\/(https?:\/\/)?(.*?)\/?$/;
+		const pleromaUsernameExtract = /https:\/\/(.*?)\/users\/(.*?)$/;
 
 		let ourUrl = '';
 		let theirUsername = '';
@@ -67,6 +67,10 @@ class ActivitypubHelper {
 
 		if (usernameExtract.test(url)) {
 			const x = url.match(usernameExtract);
+			theirUrl = x![1];
+			theirUsername = x![2];
+		} else if (pleromaUsernameExtract.test(url)) {
+			const x = url.match(pleromaUsernameExtract);
 			theirUrl = x![1];
 			theirUsername = x![2];
 		}
@@ -125,7 +129,7 @@ class ActivitypubHelper {
 	 */
 	static async getInstanceSoftware(
 		urlLike: string,
-	): Promise<LibraryResponse<InstanceApi_SoftwareInfoDTO>> {
+	): Promise<LibraryResponse<any>> {
 		const OPTS = {
 			timeout: 5000,
 		};
@@ -221,6 +225,14 @@ class ActivitypubHelper {
 		const OPTS = {
 			timeout: 5000,
 		};
+
+		const threadsMatcher = /https:\/\/(www.)?threads.net\/(@.*?)$/;
+		if (threadsMatcher.test(handle)) {
+			return {
+				software: 'threads',
+				version: 'N/A',
+			};
+		}
 		const url = this.getInstanceUrlFromHandle(handle, myDomain);
 		try {
 			const nodeInfo = await axios.get<WelKnownNodeinfo>(

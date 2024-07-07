@@ -1,5 +1,5 @@
-import type { mastodon } from 'masto';
-import { LibraryResponse } from './_types';
+import { LibraryResponse } from './_types.js';
+import { mastodon } from 'masto';
 
 export enum KNOWN_SOFTWARE {
 	MASTODON = 'mastodon',
@@ -34,11 +34,13 @@ export type InstanceApi_CustomEmojiDTO = {
 	category?: string | null;
 };
 
+export type MastoTranslation = mastodon.v1.Translation;
+
 export interface InstanceRoute {
 	getTranslation(
 		id: string,
 		lang: string,
-	): Promise<LibraryResponse<mastodon.v1.Translation>>;
+	): Promise<LibraryResponse<MastoTranslation>>;
 
 	getSoftwareInfo(
 		urlLike: string,

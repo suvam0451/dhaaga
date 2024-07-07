@@ -1,8 +1,7 @@
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/src';
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub/src';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import { SetStateAction } from 'react';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 
 class StatusService {
 	static async toggleBoost(
@@ -13,7 +12,7 @@ class StatusService {
 			setDataRaw,
 		}: {
 			setIsLoading: (value: SetStateAction<boolean>) => void;
-			setDataRaw: (o: mastodon.v1.Status | Note) => void;
+			setDataRaw: (o: mastodon.v1.Status | any) => void;
 		},
 	) {
 		setIsLoading(true);

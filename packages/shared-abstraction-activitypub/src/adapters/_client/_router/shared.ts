@@ -1,6 +1,6 @@
-import ActivitypubHelper from '@dhaaga/shared-utility-html-parser/src/activitypub';
-import { LibraryResponse } from './_types';
-import { InstanceApi_SoftwareInfoDTO } from './instance';
+import { LibraryResponse } from './_types.js';
+import { InstanceApi_SoftwareInfoDTO } from './instance.js';
+import { ActivitypubHelper } from '../../../index.js';
 
 export async function getSoftwareInfoShared(
 	urlLike: string,

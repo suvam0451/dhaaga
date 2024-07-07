@@ -4,11 +4,11 @@ import {
 	StatusContextInstance,
 	StatusContextInterface,
 	StatusInterface,
-} from './_interface';
-import { DriveFile } from '@dhaaga/shared-provider-misskey/src';
-import { DriveFileToMediaAttachmentAdapter } from '../media-attachment/adapter';
-import { DriveFileInstance } from '../media-attachment/unique';
-import { UserType } from '../profile/_interface';
+} from './_interface.js';
+import { DriveFile } from 'misskey-js/autogen/models.js';
+import { DriveFileToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
+import { DriveFileInstance } from '../media-attachment/unique.js';
+import { UserType } from '../profile/_interface.js';
 
 export class MisskeyToStatusContextAdapter implements StatusContextInterface {
 	ref: StatusInterface;

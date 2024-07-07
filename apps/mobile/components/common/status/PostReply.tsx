@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import ExplainOutput from '../explanation/ExplainOutput';
 import MediaItem from '../media/MediaItem';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub/src';
+import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import useMfm from '../../hooks/useMfm';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { Text } from '@rneui/themed';

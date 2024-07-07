@@ -4,17 +4,23 @@ import ActivityPubClient, {
 	GetSearchResultQueryDTO,
 	GetTimelineQueryDTO,
 	TagArray,
-} from '../_interface';
-import { Status, StatusArray } from '../../status/_interface';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
-import { DefaultInstanceRouter } from './instance';
+} from '../_interface.js';
+import { Status, StatusArray } from '../../status/_interface.js';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
+import type { Note } from 'misskey-js/autogen/models.js';
+import { DefaultInstanceRouter } from './instance.js';
+import { DefaultAccountsRouter } from './accounts.js';
+import { DefaultStatusesRouter } from './statuses.js';
 
 class UnknownRestClient implements ActivityPubClient {
-	instance: DefaultInstanceRouter;
+	instances: DefaultInstanceRouter;
+	accounts: DefaultAccountsRouter;
+	statuses: DefaultStatusesRouter;
 
 	constructor() {
-		this.instance = new DefaultInstanceRouter();
+		this.instances = new DefaultInstanceRouter();
+		this.accounts = new DefaultAccountsRouter();
+		this.statuses = new DefaultStatusesRouter();
 	}
 
 	reblog(id: string): Promise<Status> {

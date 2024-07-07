@@ -1,96 +1,98 @@
 import {
-  StatusInterface,
-  UserInterface
-} from "@dhaaga/shared-abstraction-activitypub/src";
-import {createContext, useContext, useEffect, useState} from "react";
-import {useActivityPubRestClientContext} from "./useActivityPubRestClient";
+	StatusInterface,
+	UserInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 
 type Type = {
-  participants: UserInterface[]
-  messages: StatusInterface[]
-  /**
-   * Oldest status fetched, against each conversation id
-   */
-  tails: StatusInterface[]
-  /**
-   * Latest status fetched, against each conversation id
-   */
-  heads: StatusInterface[]
-  /**
-   * Color allocated to each conversation thread
-   */
-  colors: string[]
-  chatroomName: string
+	participants: UserInterface[];
+	messages: StatusInterface[];
+	/**
+	 * Oldest status fetched, against each conversation id
+	 */
+	tails: StatusInterface[];
+	/**
+	 * Latest status fetched, against each conversation id
+	 */
+	heads: StatusInterface[];
+	/**
+	 * Color allocated to each conversation thread
+	 */
+	colors: string[];
+	chatroomName: string;
 
-  /**
-   * Need both the ids and tail statuses, because mastodon does
-   * not allow querying via conversation id
-   * @param ids list of chatroom ids
-   * @param items
-   */
-  setHeads: (ids: string[], items: StatusInterface[]) => void
-}
+	/**
+	 * Need both the ids and tail statuses, because mastodon does
+	 * not allow querying via conversation id
+	 * @param ids list of chatroom ids
+	 * @param items
+	 */
+	setHeads: (ids: string[], items: StatusInterface[]) => void;
+};
 
 const defaultValue: Type = {
-  participants: [],
-  messages: [],
-  tails: [],
-  heads: [],
-  colors: [],
-  chatroomName: "",
-  setHeads: function (ids: string[], items: StatusInterface[]): void {
-    throw new Error("Function not implemented.");
-  }
-}
+	participants: [],
+	messages: [],
+	tails: [],
+	heads: [],
+	colors: [],
+	chatroomName: '',
+	setHeads: function (ids: string[], items: StatusInterface[]): void {
+		throw new Error('Function not implemented.');
+	},
+};
 
-const ActivitypubChatRoomContext =
-    createContext<Type>(defaultValue);
-
+const ActivitypubChatRoomContext = createContext<Type>(defaultValue);
 
 export function useActivitypubChatRoomContext() {
-  return useContext(ActivitypubChatRoomContext);
+	return useContext(ActivitypubChatRoomContext);
 }
 
 type Props = {
-  participants: UserInterface[]
-  tails: StatusInterface[]
-  children: any
-}
+	participants: UserInterface[];
+	tails: StatusInterface[];
+	children: any;
+};
 
 function WithActivitypubChatRoomContext({
-  participants,
-  tails,
-  children
+	participants,
+	tails,
+	children,
 }: Props) {
-  const [Messages, setMessages] = useState<StatusInterface[]>([])
-  const [Participants, setParticipants] = useState<UserInterface[]>([])
-  const [Tails, setTails] = useState([])
-  const [Heads, setHeads] = useState([])
+	const [Messages, setMessages] = useState<StatusInterface[]>([]);
+	const [Participants, setParticipants] = useState<UserInterface[]>([]);
+	const [Tails, setTails] = useState([]);
+	const [Heads, setHeads] = useState([]);
 
-  const {client, me} = useActivityPubRestClientContext()
+	const { client, me } = useActivityPubRestClientContext();
 
-  useEffect(() => {
-    if (!client) return
-  }, [client, participants, tails]);
+	useEffect(() => {
+		if (!client) return;
+	}, [client, participants, tails]);
 
-  function setHeadsWithData(ids: string[], items: StatusInterface[]) {
-    if (ids.length !== items.length) {
-      console.warn("[WARN]: length mismatch while setting up the chatroom")
-    }
-    console.log("[INFO]: loading chatroom with", ids)
-  }
+	function setHeadsWithData(ids: string[], items: StatusInterface[]) {
+		if (ids.length !== items.length) {
+			console.warn('[WARN]: length mismatch while setting up the chatroom');
+		}
+		console.log('[INFO]: loading chatroom with', ids);
+	}
 
-  return <ActivitypubChatRoomContext.Provider value={{
-    chatroomName: "",
-    setHeads: setHeadsWithData,
-    colors: [],
-    heads: Heads,
-    tails: Tails,
-    messages: Messages,
-    participants: Participants
-  }}>
-    {children}
-  </ActivitypubChatRoomContext.Provider>
+	return (
+		<ActivitypubChatRoomContext.Provider
+			value={{
+				chatroomName: '',
+				setHeads: setHeadsWithData,
+				colors: [],
+				heads: Heads,
+				tails: Tails,
+				messages: Messages,
+				participants: Participants,
+			}}
+		>
+			{children}
+		</ActivitypubChatRoomContext.Provider>
+	);
 }
 
-export default WithActivitypubChatRoomContext
+export default WithActivitypubChatRoomContext;

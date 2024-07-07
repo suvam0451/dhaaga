@@ -6,6 +6,8 @@
     "checkJs": false,
     "esModuleInterop": true,
     "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "allowJs": true,
     "lib": [
       "ESNext"

@@ -1,6 +1,5 @@
 import type { MMKV } from 'react-native-mmkv';
 import { ActivityPubCustomEmojiItemDTO } from '../entities/activitypub-emoji.entity';
-import Status from '../components/bottom-sheets/Status';
 
 export type BottomSheetProp_HashtagType = {
 	name: string;

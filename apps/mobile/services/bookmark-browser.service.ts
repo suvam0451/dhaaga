@@ -1,4 +1,4 @@
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub/src';
+import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import { Realm } from 'realm';
 import { Account } from '../entities/account.entity';
 import ActivityPubAdapterService from './activitypub-adapter.service';

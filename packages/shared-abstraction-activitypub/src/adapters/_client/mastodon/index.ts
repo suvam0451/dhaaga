@@ -6,32 +6,43 @@ import ActivityPubClient, {
 	GetTrendingPostsQueryDTO,
 	GetUserPostsQueryDTO,
 	HashtagTimelineQuery,
+	MastoAccountCredentials,
+	MastoContext,
+	MastoConversation,
+	MastoList,
+	MastoRelationship,
+	MastoStatus,
+	MastoTrendLink,
 	MediaUploadDTO,
 	RestClientCreateDTO,
-} from '../_interface';
-import {
-	mastodon,
-	RestClient,
-	RestServices,
-} from '@dhaaga/shared-provider-mastodon/src';
-import { StatusArray } from '../../status/_interface';
+} from '../_interface.js';
+import type { mastodon } from 'masto';
+import { RestClient, RestServices } from '@dhaaga/shared-provider-mastodon';
+import { StatusArray } from '../../status/_interface.js';
 import { createRestAPIClient } from 'masto';
-import { Note } from '@dhaaga/shared-provider-misskey/src';
-import { MastodonInstanceRouter } from './instance';
+import { Note } from 'misskey-js/autogen/models.js';
+import { MastodonInstanceRouter } from './instance.js';
+import { MastodonAccountsRouter } from './accounts.js';
+import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { MastodonStatusesRouter } from './statuses.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
-	instance: MastodonInstanceRouter;
+	instances: MastodonInstanceRouter;
+	accounts: MastodonAccountsRouter;
+	statuses: MastodonStatusesRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
 			accessToken: dto.token,
-			domain: 'mastodon',
+			domain: KNOWN_SOFTWARE.MASTODON,
 		});
-		this.instance = new MastodonInstanceRouter(this.client);
+		this.instances = new MastodonInstanceRouter(this.client);
+		this.accounts = new MastodonAccountsRouter(this.client);
+		this.statuses = new MastodonStatusesRouter(this.client);
 	}
 
-	async reblog(id: string) {
+	async reblog(id: string): Promise<MastoStatus | null> {
 		const _client = this.createMastoClient();
 		try {
 			return _client.v1.statuses.$select(id).reblog();
@@ -41,7 +52,7 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async undoReblog(id: string) {
+	async undoReblog(id: string): Promise<MastoStatus | null> {
 		const _client = this.createMastoClient();
 		try {
 			return _client.v1.statuses.$select(id).unreblog();
@@ -51,7 +62,7 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getMyLists() {
+	async getMyLists(): Promise<MastoList[]> {
 		const _client = this.createMastoClient();
 		try {
 			return await _client.v1.lists.list();
@@ -108,7 +119,7 @@ class MastodonRestClient implements ActivityPubClient {
 	}
 
 	// async getMyFollowedTags(opts: GetPostsQueryDTO): Promise<mastodon.v1.Tag[]> {
-	//     return await RestServices.v1.accounts.getFollowedTags(this.client, opts);
+	//     return await RestServices.v1.accounts.ts.getFollowedTags(this.client, opts);
 	// }
 
 	async getPublicTimelineAsGuest(
@@ -173,7 +184,7 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getMe() {
+	async getMe(): Promise<MastoAccountCredentials | null> {
 		const _client = this.createMastoClient();
 		try {
 			return await _client.v1.accounts.verifyCredentials();
@@ -183,7 +194,7 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getMyConversations() {
+	async getMyConversations(): Promise<MastoConversation[]> {
 		const _client = this.createMastoClient();
 		try {
 			return await _client.v1.conversations.list();
@@ -193,17 +204,17 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getStatusContext(id: string) {
+	async getStatusContext(id: string): Promise<MastoContext | null> {
 		const _client = this.createMastoClient();
 		try {
 			return await _client.v1.statuses.$select(id).context.fetch();
 		} catch (e) {
 			console.log(e);
-			return [];
+			return null;
 		}
 	}
 
-	async getRelationshipWith(ids: string[]) {
+	async getRelationshipWith(ids: string[]): Promise<MastoRelationship[]> {
 		const _client = this.createMastoClient();
 		try {
 			return await _client.v1.accounts.relationships.fetch({ id: ids });
@@ -213,7 +224,9 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getTrendingPosts(opts: GetTrendingPostsQueryDTO) {
+	async getTrendingPosts(
+		opts: GetTrendingPostsQueryDTO,
+	): Promise<MastoStatus[]> {
 		return await RestServices.v1.trends.getTrendingPosts(this.client, opts);
 	}
 
@@ -221,7 +234,9 @@ class MastodonRestClient implements ActivityPubClient {
 		return await RestServices.v1.trends.getTrendingTags(this.client, opts);
 	}
 
-	async getTrendingLinks(opts: GetTrendingPostsQueryDTO) {
+	async getTrendingLinks(
+		opts: GetTrendingPostsQueryDTO,
+	): Promise<MastoTrendLink[]> {
 		return await RestServices.v1.trends.getTrendingLinks(this.client, opts);
 	}
 
@@ -308,7 +323,11 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getBookmarks(opts: GetPostsQueryDTO) {
+	async getBookmarks(opts: GetPostsQueryDTO): Promise<{
+		data: MastoStatus[];
+		minId?: string | undefined;
+		maxId?: string | undefined;
+	}> {
 		return await RestServices.v1.bookmarks.getBookmarks(this.client, opts);
 	}
 
@@ -316,7 +335,7 @@ class MastodonRestClient implements ActivityPubClient {
 		return await RestServices.v1.accounts.getFollowedTags(this.client, opts);
 	}
 
-	async favourite(id: string) {
+	async favourite(id: string): Promise<MastoStatus | null> {
 		const _client = this.createMastoClient();
 		try {
 			return await _client.v1.statuses.$select(id.toString()).favourite();
@@ -326,7 +345,7 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async unFavourite(id: string) {
+	async unFavourite(id: string): Promise<MastoStatus | null> {
 		const _client = this.createMastoClient();
 		try {
 			return await _client.v1.statuses.$select(id.toString()).unfavourite();
@@ -369,7 +388,7 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async bookmark(id: string) {
+	async bookmark(id: string): Promise<MastoStatus | null> {
 		try {
 			const _client = this.createMastoClient();
 
@@ -380,7 +399,7 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async unBookmark(id: string) {
+	async unBookmark(id: string): Promise<MastoStatus | null> {
 		try {
 			const _client = this.createMastoClient();
 			return await _client.v1.statuses.$select(id.toString()).unbookmark();
@@ -390,7 +409,10 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getTimelineByHashtag(q: string, query?: HashtagTimelineQuery) {
+	async getTimelineByHashtag(
+		q: string,
+		query?: HashtagTimelineQuery,
+	): Promise<MastoStatus[]> {
 		try {
 			const _client = this.createMastoClient();
 			return await _client.v1.timelines.tag.$select(q).list({

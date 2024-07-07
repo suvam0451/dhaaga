@@ -8,7 +8,7 @@ import { BottomSheetActionButtonContainer } from '../../styles/Containers';
 import WithActivitypubTagContext, {
 	useActivitypubTagContext,
 } from '../../states/useTag';
-import { TagType } from '@dhaaga/shared-abstraction-activitypub/src';
+import { TagType } from '@dhaaga/shared-abstraction-activitypub';
 import { useNavigation } from '@react-navigation/native';
 import InstanceService from '../../services/instance.service';
 import useSkeletonSmoothTransition from '../../states/useSkeletonTransition';

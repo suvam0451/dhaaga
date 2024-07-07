@@ -1,7 +1,10 @@
-import { InstanceApi_CustomEmojiDTO, InstanceRoute } from '../_router/instance';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types';
+import {
+	InstanceApi_CustomEmojiDTO,
+	InstanceRoute,
+} from '../_router/instance.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import type { mastodon } from 'masto';
-import { getSoftwareInfoShared } from '../_router/shared';
+import { getSoftwareInfoShared } from '../_router/shared.js';
 
 export class MisskeyInstanceRouter implements InstanceRoute {
 	getCustomEmojis(

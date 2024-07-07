@@ -8307,7 +8307,7 @@ marky@^1.2.2:
   resolved "https://registry.yarnpkg.com/marky/-/marky-1.2.5.tgz#55796b688cbd72390d2d399eaaf1832c9413e3c0"
   integrity sha512-q9JtQJKjpsVxCRVgQ+WapguSbKC3SQ5HEzFGPAJMStgh3QjCawp00UKv3MTTAArTmGmmPUvllHZoNbZ3gs0I+Q==
 
-masto@^6.7.7:
+masto@^6.7.7, masto@^6.8.0:
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/masto/-/masto-6.8.0.tgz#f1ae255d594257e32dbef281a3ec63628bac3c48"
   integrity sha512-amooNsp4mebu/dtBZfUHP6I0mcHSDB0JoTyrCWdw2YcCOIuPX6bM0gA60nEaLZqoHSF7xG63TpdDbAYI37Fnlg==

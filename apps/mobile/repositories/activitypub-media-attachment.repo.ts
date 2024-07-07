@@ -1,5 +1,5 @@
 import { ActivityPubMediaAttachment } from '../entities/activitypub-media-attachment.entity';
-import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub/src';
+import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { Realm } from 'realm';
 
 export class ActivityPubMediaAttachmentRepository {

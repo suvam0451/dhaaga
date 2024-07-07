@@ -1,6 +1,6 @@
 import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { useEffect, useState } from 'react';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 
 /**
  * Fetch and show relationship with user

@@ -8,7 +8,7 @@ import WithScrollOnRevealContext, {
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../../states/usePagination';
-import { TagType } from '@dhaaga/shared-abstraction-activitypub/src';
+import { TagType } from '@dhaaga/shared-abstraction-activitypub';
 import WithActivitypubTagContext from '../../../../states/useTag';
 import TagItem from '../../../common/tag/TagItem';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
