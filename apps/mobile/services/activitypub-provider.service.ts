@@ -29,7 +29,6 @@ class ActivityPubProviderService {
 
 	static async getStatusAsArray(client: ActivityPubClient, id: string) {
 		const status = await client.getStatus(id);
-		console.log(status.id);
 		return [status];
 	}
 
@@ -73,11 +72,14 @@ class ActivityPubProviderService {
 				});
 			}
 			case TimelineFetchMode.USER: {
-				return client.getUserPosts(misc.userQuery, {
+				const { data, error } = await client.accounts.statuses(misc.userQuery, {
+					userId: misc.userQuery,
 					limit: 5,
-					maxId: opts.maxId,
-					excludeReplies: false,
+					sinceId: opts.maxId,
+					// excludeReplies: false,
 				});
+				if (error) return [];
+				return data;
 			}
 			case TimelineFetchMode.FEDERATED: {
 				return client.getPublicTimeline();

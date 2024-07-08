@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Skeleton, Text } from '@rneui/themed';
 import { useQuery } from '@realm/react';
 import { ActivityPubServer } from '../../../entities/activitypub-server.entity';
 import { memo, useEffect, useState } from 'react';
@@ -11,6 +11,8 @@ import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTo
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { FontAwesome } from '@expo/vector-icons';
 import AddServerWidget from '../../../components/widgets/add-server/core/floatingWidget';
+import { useAssets } from 'expo-asset';
+import { Image } from 'expo-image';
 
 type ServerItemProps = {
 	url: string;
@@ -18,9 +20,194 @@ type ServerItemProps = {
 	emojiCount: number;
 };
 
-const SortControllerItem = memo(function Foo({}) {
+type ControllerProps = {
+	softwareServerCount: Map<string, { count: number }>;
+};
+
+type SoftwareStatItem = {
+	label: string;
+	count: number;
+	bgColor: string;
+	imgUrl: string;
+	width: number;
+	height: number;
+};
+const SortControllerItem = memo(function Foo({
+	softwareServerCount,
+}: ControllerProps) {
+	const [Data, setData] = useState<SoftwareStatItem[]>([]);
+	const [IsAssetsLoaded, setIsAssetsLoaded] = useState(false);
+
+	const [assets, error] = useAssets([
+		require('../../../assets/branding/akomma/logo.png'),
+		require('../../../assets/branding/firefish/logo.png'),
+		require('../../../assets/branding/mastodon/logo.png'),
+		require('../../../assets/branding/misskey/logo.png'),
+		require('../../../assets/branding/pleroma/logo.png'),
+		require('../../../assets/branding/iceshrimp/logo.png'),
+		require('../../../assets/branding/gotosocial/logo.png'),
+		require('../../../assets/branding/sharkey/logo.png'),
+		require('../../../assets/branding/peertube/logo.png'),
+		require('../../../assets/branding/pixelfed/logo.png'),
+		require('../../../assets/branding/cherrypick/logo.png'),
+		require('../../../assets/branding/friendica/logo.png'),
+		require('../../../assets/branding/lemmy/logo.png'),
+		require('../../../assets/branding/kmyblue/logo.png'),
+		require('../../../assets/branding/fedi/logo.png'),
+	]);
+
+	function getIcon(input: string) {
+		switch (input as KNOWN_SOFTWARE) {
+			case KNOWN_SOFTWARE.AKKOMA:
+				return { imgUrl: assets[0].localUri, width: 24, height: 24 };
+			case KNOWN_SOFTWARE.FIREFISH:
+				return { imgUrl: assets[1].localUri, width: 24, height: 24 };
+			case KNOWN_SOFTWARE.HOMETOWN:
+			case KNOWN_SOFTWARE.MASTODON:
+				return { imgUrl: assets[2].localUri, width: 24, height: 24 };
+			case KNOWN_SOFTWARE.MEISSKEY:
+			case KNOWN_SOFTWARE.MISSKEY:
+				return { imgUrl: assets[3].localUri, width: 32, height: 24 };
+			case KNOWN_SOFTWARE.PLEROMA:
+				return { imgUrl: assets[4].localUri, width: 14, height: 24 };
+			case KNOWN_SOFTWARE.ICESHRIMP:
+				return { imgUrl: assets[5].localUri, width: 24, height: 24 };
+			case KNOWN_SOFTWARE.GOTOSOCIAL:
+				return {
+					imgUrl: assets[6].localUri,
+					width: 28,
+					height: 24,
+				};
+			case KNOWN_SOFTWARE.SHARKEY: {
+				return {
+					imgUrl: assets[7].localUri,
+					width: 28,
+					height: 24,
+				};
+			}
+			case KNOWN_SOFTWARE.PEERTUBE: {
+				return {
+					imgUrl: assets[8].localUri,
+					width: 20,
+					height: 24,
+				};
+			}
+			case KNOWN_SOFTWARE.PIXELFED: {
+				return { imgUrl: assets[9].localUri, width: 24, height: 24 };
+			}
+			case KNOWN_SOFTWARE.CHERRYPICK: {
+				return { imgUrl: assets[10].localUri, width: 148, height: 24 };
+			}
+			case KNOWN_SOFTWARE.FRIENDICA: {
+				return { imgUrl: assets[11].localUri, width: 24, height: 24 };
+			}
+			case KNOWN_SOFTWARE.LEMMY: {
+				return { imgUrl: assets[12].localUri, width: 24, height: 24 };
+			}
+			// hometown is clubbed with mastodon
+			// meisskey is clubbed with misskey
+			case KNOWN_SOFTWARE.KMYBLUE: {
+				return { imgUrl: assets[13].localUri, width: 24, height: 24 };
+			}
+
+			case KNOWN_SOFTWARE.UNKNOWN:
+			default:
+				return { imgUrl: assets[14].localUri, width: 24, height: 24 };
+		}
+	}
+
+	useEffect(() => {
+		setIsAssetsLoaded(!error && assets?.every((o) => o?.downloaded));
+	}, [assets, error]);
+
+	function getBgColor(input: string) {
+		switch (input) {
+			case KNOWN_SOFTWARE.MASTODON:
+				return '#6364FF';
+			default:
+				return '#1e1e1e';
+		}
+	}
+
+	useEffect(() => {
+		if (!IsAssetsLoaded) return;
+
+		const items: SoftwareStatItem[] = [];
+		// @ts-ignore-next-line
+		for (let [key, value] of softwareServerCount) {
+			items.push({
+				label: key,
+				count: value.count,
+				bgColor: getBgColor(key),
+				...getIcon(key),
+			});
+		}
+		setData(items);
+	}, [softwareServerCount, IsAssetsLoaded]);
+
+	if (!IsAssetsLoaded) {
+		return (
+			<View>
+				<Skeleton style={{ width: '100%', height: 32 }} />
+			</View>
+		);
+	}
 	return (
 		<View>
+			<Text
+				style={{
+					color: APP_FONT.MONTSERRAT_BODY,
+					// marginBottom: 8,
+					textAlign: 'center',
+					fontSize: 16,
+					fontFamily: 'Montserrat-Bold',
+					marginTop: 24,
+					marginBottom: 16,
+				}}
+			>
+				You have met all these instances !
+			</Text>
+			<View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+				{Data.map((o, i) => (
+					<View
+						key={i}
+						style={{
+							backgroundColor: o.bgColor,
+							display: 'flex',
+							flexDirection: 'row',
+							padding: 8,
+							borderRadius: 8,
+							marginVertical: 4,
+							marginRight: 8,
+						}}
+					>
+						<View style={{ marginRight: 4 }}>
+							{/*@ts-ignore-next-line*/}
+							<Image
+								source={o.imgUrl}
+								style={{ width: o.width, height: o.height, opacity: 0.87 }}
+							/>
+						</View>
+						{/*<Text*/}
+						{/*	style={{*/}
+						{/*		fontFamily: 'Montserrat-Bold',*/}
+						{/*		color: APP_FONT.MONTSERRAT_HEADER,*/}
+						{/*	}}*/}
+						{/*>*/}
+						{/*	{o.label}*/}
+						{/*</Text>*/}
+						<Text
+							style={{
+								marginLeft: 8,
+								fontFamily: 'Montserrat-Bold',
+								color: APP_FONT.MONTSERRAT_HEADER,
+							}}
+						>
+							{o.count}
+						</Text>
+					</View>
+				))}
+			</View>
 			<View
 				style={{
 					display: 'flex',
@@ -102,9 +289,6 @@ const SortControllerItem = memo(function Foo({}) {
 					</Text>
 				</View>
 			</View>
-			<Text style={{ color: APP_FONT.MONTSERRAT_BODY, marginBottom: 8 }}>
-				This is a list of servers known to Dhaaga:
-			</Text>
 		</View>
 	);
 });
@@ -170,7 +354,9 @@ enum ListItemType {
 }
 
 interface TextMessage {
-	props: null;
+	props: {
+		softwareServerCount: Map<string, { count: number }>;
+	};
 	type: ListItemType.SortController;
 }
 
@@ -184,7 +370,11 @@ type ListItem = TextMessage | ImageMessage;
 const FlashListRenderer = ({ item }: { item: ListItem }) => {
 	switch (item.type) {
 		case ListItemType.SortController:
-			return <SortControllerItem />;
+			return (
+				<SortControllerItem
+					softwareServerCount={item.props.softwareServerCount}
+				/>
+			);
 		case ListItemType.ListItem:
 			return (
 				<ServerItem
@@ -202,14 +392,25 @@ function ServerDebuggerStack() {
 	const [FlashListProps, setFlashListProps] = useState<ListItem[]>([]);
 
 	useEffect(() => {
-		const lens = servers.map((o) => {
-			console.log(o.user);
-		});
-		console.log(lens);
+		const mapper = new Map<string, { count: number }>();
+
+		for (const server of servers) {
+			if (mapper.has(server.type.toLowerCase())) {
+				mapper.get(server.type.toLowerCase()).count++;
+			} else {
+				mapper.set(server.type.toLowerCase(), { count: 1 });
+			}
+		}
+		console.log(mapper);
 
 		setSearchResults(servers.slice(0, 10));
 		setFlashListProps([
-			{ type: ListItemType.SortController },
+			{
+				type: ListItemType.SortController,
+				props: {
+					softwareServerCount: mapper,
+				},
+			},
 			...servers.slice(0, 10).map((o) => ({
 				type: ListItemType.ListItem,
 				props: {

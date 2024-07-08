@@ -29,14 +29,12 @@ export class PleromaInstanceRouter implements InstanceRoute {
 		urlLike: string,
 	): Promise<LibraryResponse<InstanceApi_CustomEmojiDTO[]>> {
 		const x = DhaagaPleromaClient(urlLike).client;
-		console.log(x);
 		try {
 			const { data, error } = await PleromaErrorHandler(
 				x,
 				x.getInstanceCustomEmojis,
 			);
 			const dt = await data;
-			console.log(dt!.data);
 
 			if (error) return { error };
 			return {
@@ -46,6 +44,7 @@ export class PleromaInstanceRouter implements InstanceRoute {
 					staticUrl: o.static_url,
 					visibleInPicker: o.visible_in_picker,
 					category: o.category,
+					aliases: [],
 				})),
 			};
 		} catch (e: any) {

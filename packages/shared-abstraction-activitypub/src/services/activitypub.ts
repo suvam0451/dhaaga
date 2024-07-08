@@ -50,7 +50,10 @@ class ActivitypubHelper {
 	static getHandle(url: string, myDomain: string) {
 		const ex = /^https?:\/\/(.*?)\/(.*?)/;
 		const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
-		const usernameExtract = /^https?:\/\/(.*?)\/@(.*?)$/;
+		/**
+		 * - pixelfed does not use @ prefix
+		 */
+		const usernameExtract = /^https?:\/\/(.*?)\/@?(.*?)$/;
 		const bridged = /^https?:\/\/(.*?)\/r\/(https?:\/\/)?(.*?)\/?$/;
 		const pleromaUsernameExtract = /https:\/\/(.*?)\/users\/(.*?)$/;
 
@@ -82,6 +85,7 @@ class ActivitypubHelper {
 				const web = x![3];
 				return `${this.removeURLPrefixes(web)} (via ${bridge})`;
 			}
+			console.info('[WARN]: failed to resolve fedi handle', url, myDomain);
 			return '<invalid>';
 		}
 		return ourUrl === theirUrl
@@ -134,6 +138,12 @@ class ActivitypubHelper {
 			timeout: 5000,
 		};
 
+		// fix url
+		if (urlLike.startsWith('http://') || urlLike.startsWith('https://')) {
+		} else {
+			urlLike = 'https://' + urlLike;
+		}
+
 		try {
 			const nodeInfo = await axios.get<WelKnownNodeinfo>(
 				urlLike + '/.well-known/nodeinfo',
@@ -170,6 +180,7 @@ class ActivitypubHelper {
 						case 'hometown':
 						case 'cherrypick':
 						case 'iceshrimp':
+						case 'kmyblue':
 						// map to misskey
 						case 'meisskey': {
 							return {
@@ -205,14 +216,14 @@ class ActivitypubHelper {
 				},
 			};
 		} catch (e: any) {
-			if (e.code)
+			if (e.code) {
 				return {
 					error: {
 						code: e.code,
 						message: e.code,
 					},
 				};
-
+			}
 			return {
 				error: {
 					code: DhaagaErrorCode.UNKNOWN_ERROR,

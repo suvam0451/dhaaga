@@ -19,19 +19,24 @@
     "@dhaaga/shared-provider-mastodon": "*",
     "@dhaaga/shared-provider-misskey": "*",
     "axios": "^1.4.0",
+    "dom-serializer": "^2.0.0",
+    "domhandler": "^5.0.3",
+    "html-entities": "^2.5.2",
+    "htmlparser2": "^9.1.0",
     "masto": "^6.8.0",
     "megalodon": "^10.0.2",
     "misskey-js": "^2024.5.0"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.5",
-    "typescript": "^5.1.6"
+    "mocha": "^10.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.1.6",
+    "vitest": "^2.0.0"
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
     "script": "node --loader ts-node/esm workspace.ts",
-    "test": "jest --forceExit --rootDir=./test"
+    "test": "vitest"
   },
   "type": "module"
 }

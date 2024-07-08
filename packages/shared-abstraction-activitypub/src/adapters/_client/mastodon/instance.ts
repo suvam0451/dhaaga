@@ -31,6 +31,7 @@ export class MastodonInstanceRouter implements InstanceRoute {
 				staticUrl: o.staticUrl,
 				visibleInPicker: o.visibleInPicker,
 				category: o.category,
+				aliases: [],
 			})),
 			error,
 		};

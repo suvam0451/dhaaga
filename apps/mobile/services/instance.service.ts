@@ -40,7 +40,6 @@ class InstanceService {
 			const res = await axios.post(`${theirDomain}/api/hashtags/show`, {
 				tag: tag.getName(),
 			});
-			console.log(res);
 		} catch (e) {}
 
 		return {

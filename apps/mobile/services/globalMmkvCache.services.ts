@@ -1,5 +1,5 @@
 import type { MMKV } from 'react-native-mmkv';
-import { ActivityPubCustomEmojiItemDTO } from '../entities/activitypub-emoji.entity';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 export type BottomSheetProp_HashtagType = {
 	name: string;
@@ -62,7 +62,7 @@ class GlobalMmkvCacheService {
 	static saveEmojiCacheForInstance(
 		db: MMKV,
 		instance: string,
-		items: ActivityPubCustomEmojiItemDTO[],
+		items: InstanceApi_CustomEmojiDTO[],
 	) {
 		this.set(
 			db,
@@ -79,7 +79,7 @@ class GlobalMmkvCacheService {
 		db: MMKV,
 		instance: string,
 	): {
-		data: ActivityPubCustomEmojiItemDTO[];
+		data: InstanceApi_CustomEmojiDTO[];
 		lastFetchedAt: Date;
 	} | null {
 		const res = this.get(db, `emojis/${instance}`);

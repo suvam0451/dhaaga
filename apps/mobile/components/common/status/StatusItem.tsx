@@ -24,6 +24,7 @@ import StatusItemSkeleton from '../../skeletons/StatusItemSkeleton';
 import useMfm from '../../hooks/useMfm';
 import ExplainOutput from '../explanation/ExplainOutput';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import LocalizationService from '../../../services/localization.services';
 
 const POST_SPACING_VALUE = 4;
 
@@ -55,8 +56,6 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 	const _status = isRepost ? sharedStatus : status;
 	const statusContent = _status?.getContent();
 
-	console.log(_status, statusContent);
-
 	const [PosterContent, setPosterContent] = useState(null);
 	const [ExplanationObject, setExplanationObject] = useState<string | null>(
 		null,
@@ -68,8 +67,10 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 	}, [_status]);
 
 	useEffect(() => {
+		// reset
+		setExplanationObject(null);
+
 		const user = _status.getUser();
-		console.log(user);
 		setPosterContent(
 			<WithActivitypubUserContext user={user}>
 				<OriginalPoster
@@ -468,7 +469,9 @@ function SharedStatusFragment({
 								opacity: 0.6,
 							}}
 						>
-							{formatDistanceToNowStrict(new Date(boostedStatus?.createdAt))}
+							{LocalizationService.formatDistanceToNowStrict(
+								boostedStatus?.createdAt,
+							)}
 						</Text>
 					</View>
 				</StandardView>

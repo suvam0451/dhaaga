@@ -1,4 +1,4 @@
-import { ExpoConfig, ConfigContext } from 'expo/config';
+import { ExpoConfig, ConfigContext } from 'expo/config.js';
 
 const IS_DEV = process.env.APP_VARIANT === 'dev';
 
@@ -23,7 +23,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
 		versionCode: 2,
 		// adaptiveIcon: {
-		// 	foregroundImage: './assets/adaptive-icon.png',
+		// 	foregroundImage: './assets/adaptive-logo.png',
 		// 	backgroundColor: '#ffffff',
 		// },
 	},

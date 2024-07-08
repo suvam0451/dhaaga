@@ -7,6 +7,7 @@ import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import {
 	DhaagaMastoClient,
+	DhaagaMegalodonClient,
 	DhaagaMisskeyClient,
 	MastoErrorHandler,
 } from '../_router/_runner.js';
@@ -16,15 +17,25 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	 * For default client, we must
 	 * determine the instance on owr own
 	 * @param urlLike
+	 * @param software
 	 */
 	async getCustomEmojis(
 		urlLike: string,
+		software?: string,
 	): Promise<LibraryResponse<InstanceApi_CustomEmojiDTO[]>> {
-		const { data, error } = await this.getSoftwareInfo(urlLike);
-		if (error || !data) return { error };
+		if (!software) {
+			const { data, error } = await this.getSoftwareInfo(urlLike);
+			if (error || !data) return { error };
+			software = data.software;
+		}
 
-		switch (data.software) {
-			case KNOWN_SOFTWARE.MASTODON: {
+		switch (software) {
+			case KNOWN_SOFTWARE.PLEROMA:
+			case KNOWN_SOFTWARE.AKKOMA:
+			case KNOWN_SOFTWARE.MASTODON:
+			case KNOWN_SOFTWARE.FIREFISH:
+			case KNOWN_SOFTWARE.ICESHRIMP:
+			case KNOWN_SOFTWARE.KMYBLUE: {
 				const emojiFn = DhaagaMastoClient(urlLike).client.v1.customEmojis.list;
 				const { data, error } = await MastoErrorHandler(emojiFn);
 				if (error) return { error };
@@ -35,6 +46,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					staticUrl: o.staticUrl,
 					visibleInPicker: o.visibleInPicker,
 					category: o.category,
+					aliases: [],
 				}));
 				return {
 					data: mapped,
@@ -56,9 +68,49 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					})),
 				};
 			}
+			case KNOWN_SOFTWARE.GOTOSOCIAL: {
+				try {
+					const dt = await DhaagaMegalodonClient(
+						KNOWN_SOFTWARE.GOTOSOCIAL,
+						urlLike,
+					).client.getInstanceCustomEmojis();
+					return {
+						data: dt.data.map((o) => ({
+							shortCode: o.shortcode,
+							url: o.url,
+							staticUrl: o.static_url,
+							visibleInPicker: o.visible_in_picker,
+							aliases: [],
+							category: o.category,
+						})),
+					};
+				} catch (e: any) {
+					if (e?.response?.status && e?.response?.statusText) {
+						if (e?.response?.status === 401) {
+							return {
+								error: {
+									code: DhaagaErrorCode.UNAUTHORIZED,
+									message: e?.response?.statusText,
+								},
+							};
+						}
+					}
+					return {
+						error: {
+							code: DhaagaErrorCode.UNKNOWN_ERROR,
+							message: e,
+						},
+					};
+				}
+
+				return { data: [] };
+			}
 			default: {
 				return {
-					data: [],
+					error: {
+						code: DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY,
+						message: software,
+					},
 				};
 			}
 		}

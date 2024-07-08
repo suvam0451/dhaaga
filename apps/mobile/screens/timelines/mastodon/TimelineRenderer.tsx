@@ -5,6 +5,7 @@ import {
 	SafeAreaView,
 	StatusBar,
 	StyleSheet,
+	View,
 } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import StatusItem from '../../../components/common/status/StatusItem';
@@ -162,7 +163,7 @@ function TimelineRenderer() {
 	if (timelineType === TimelineFetchMode.IDLE) return <WelcomeBack />;
 
 	return (
-		<SafeAreaView style={[styles.container, { position: 'relative' }]}>
+		<View style={[styles.container, { position: 'relative' }]}>
 			<StatusBar backgroundColor="#121212" />
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader
@@ -200,7 +201,7 @@ function TimelineRenderer() {
 			) : (
 				<TimelineLoading />
 			)}
-		</SafeAreaView>
+		</View>
 	);
 }
 

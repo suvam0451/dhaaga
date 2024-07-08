@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import Target from '../src/services/activitypub';
 
 test('return correct user handle', () => {
@@ -59,6 +60,7 @@ test('instance software is detcted for privated instances', () => {
 		index++;
 	}
 });
+
 test('instance software is detected accurately', () => {
 	const instances = [
 		'mastodon.social',
@@ -67,7 +69,7 @@ test('instance software is detected accurately', () => {
 		'misskey.io',
 		'stereophonic.space',
 		'post.ebin.club', // private
-		'seafoam.space',
+		'seafoam.space', // ded
 		'social.trom.tf',
 		'calckey.world',
 		'lemmy.world',
@@ -77,6 +79,7 @@ test('instance software is detected accurately', () => {
 		'hcommons.social',
 		'k.lapy.link',
 		'misskey.m544.net',
+		'misskey.cloud',
 	];
 	const software = [
 		'mastodon',
@@ -95,6 +98,7 @@ test('instance software is detected accurately', () => {
 		'hometown',
 		'cherrypick',
 		'meisskey',
+		'misskey',
 	];
 	let index = 0;
 	for (const instance of instances) {
@@ -109,3 +113,9 @@ test('instance software is detected accurately', () => {
 		index++;
 	}
 });
+
+/**
+ * Ad test for GoToSocial emojis
+ * endpoint failing with token
+ * requirements
+ */

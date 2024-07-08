@@ -2,21 +2,26 @@ import { LibraryResponse } from './_types.js';
 import { mastodon } from 'masto';
 
 export enum KNOWN_SOFTWARE {
-	MASTODON = 'mastodon',
-	MISSKEY = 'misskey',
-	PLEROMA = 'pleroma',
 	AKKOMA = 'akkoma',
-	FRIENDICA = 'friendica',
+	CHERRYPICK = 'cherrypick',
 	FIREFISH = 'firefish',
+	FRIENDICA = 'friendica',
 	GOTOSOCIAL = 'gotosocial',
+	HOMETOWN = 'hometown',
+	ICESHRIMP = 'iceshrimp',
+	// smol fork
+	KMYBLUE = 'kmyblue',
 	LEMMY = 'lemmy',
+
+	MASTODON = 'mastodon',
+	MEISSKEY = 'meisskey',
+	MISSKEY = 'misskey',
+
 	PEERTUBE = 'peertube',
 	PIXELFED = 'pixelfed',
+	PLEROMA = 'pleroma',
 	SHARKEY = 'sharkey',
-	HOMETOWN = 'hometown',
-	CHERRYPICK = 'cherrypick',
-	ICESHRIMP = 'iceshrimp',
-	MEISSKEY = 'meisskey',
+
 	// software could not be detected
 	UNKNOWN = 'unknown',
 }
@@ -32,6 +37,7 @@ export type InstanceApi_CustomEmojiDTO = {
 	staticUrl: string;
 	visibleInPicker: boolean;
 	category?: string | null;
+	aliases: string[];
 };
 
 export type MastoTranslation = mastodon.v1.Translation;
@@ -44,6 +50,7 @@ export interface InstanceRoute {
 
 	getSoftwareInfo(
 		urlLike: string,
+		software?: string,
 	): Promise<LibraryResponse<InstanceApi_SoftwareInfoDTO>>;
 
 	getCustomEmojis(
