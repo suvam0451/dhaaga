@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 	containerWrapper: {
 		display: 'flex',
 		alignItems: 'center',
-		marginTop: 64,
+		marginTop: 50 + 0,
 		padding: 16,
 		backgroundColor: '#121212',
 		height: '100%',

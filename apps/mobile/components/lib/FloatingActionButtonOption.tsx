@@ -11,11 +11,12 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useLocalAppMenuControllerContext } from '../../states/useLocalAppMenuController';
 
 const Y_OFFSET_MENU_ITEM = 72;
 const ICON_SIZE = 24;
 
-type SUPPORTED_ICONS = 'add' | 'filter' | 'navigate';
+type SUPPORTED_ICONS = 'add' | 'filter' | 'navigate' | 'drawer';
 type Props = {
 	isExpanded: boolean;
 	index: number;
@@ -51,6 +52,14 @@ const DisplayIcon = memo(function Foo({ icon }: { icon: SUPPORTED_ICONS }) {
 						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				);
+			case 'drawer':
+				return (
+					<Ionicons
+						name="menu-outline"
+						size={ICON_SIZE}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+				);
 		}
 	}, [icon]);
 
@@ -81,7 +90,9 @@ function FloatingActionButtonOption({
 	onPress,
 	icon,
 }: Props) {
+	const { activeMenu } = useLocalAppMenuControllerContext();
 	const displacementY = useSharedValue(0);
+	// const { fabItemScale } = useLocalAppMenuControllerContext();
 
 	const yOffset = useRef(-(index + 1) * Y_OFFSET_MENU_ITEM);
 
@@ -100,9 +111,15 @@ function FloatingActionButtonOption({
 		}
 	}, [isExpanded]);
 
+	// @ts-ignore-next-line
 	const position = useAnimatedStyle(() => {
 		return {
-			transform: [{ translateY: displacementY.value }],
+			transform: [
+				{ translateY: displacementY.value },
+				// {
+				// 	scale: fabItemScale.value,
+				// },
+			],
 		};
 	});
 
@@ -126,7 +143,11 @@ function FloatingActionButtonOption({
 
 	return (
 		<Animated.View
-			style={[styles.widgetContainerCollapsedCore, position]}
+			style={[
+				styles.widgetContainerCollapsedCore,
+				position,
+				{ display: activeMenu === 'drawer' ? 'none' : 'flex' },
+			]}
 			onTouchEnd={onPressImpl}
 		>
 			<DisplayIcon icon={icon} />
