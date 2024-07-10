@@ -328,6 +328,8 @@ class MastodonRestClient implements ActivityPubClient {
 		minId?: string | undefined;
 		maxId?: string | undefined;
 	}> {
+		const _client = this.createMastoClient();
+		// return await _client.v1.bookmarks.list({maxId, minId})
 		return await RestServices.v1.bookmarks.getBookmarks(this.client, opts);
 	}
 

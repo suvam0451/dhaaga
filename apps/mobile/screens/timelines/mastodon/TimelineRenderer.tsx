@@ -101,14 +101,19 @@ function TimelineRenderer() {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
 		if (status === 'success' && data && data.length > 0) {
+			console.log('max id is', data[data.length - 1]?.id);
 			setMaxId(data[data.length - 1]?.id);
 			setEmojisLoading(true);
 			EmojiService.preloadInstanceEmojisForStatuses(db, globalDb, data, domain)
 				.then((res) => {})
 				.finally(() => {
+					console.log('appended', data.length);
 					append(data);
 					setEmojisLoading(false);
 					PageLoadedAtLeastOnce.current = true;
+				})
+				.catch((e) => {
+					console.log('[WARN]: failed to append items in timeline', e);
 				});
 		}
 	}, [fetchStatus]);

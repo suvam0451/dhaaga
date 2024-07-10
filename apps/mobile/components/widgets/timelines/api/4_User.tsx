@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useMemo } from 'react';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';

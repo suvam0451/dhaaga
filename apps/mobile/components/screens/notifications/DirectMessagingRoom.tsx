@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useObject } from '@realm/react';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
 } from '../../../states/useStatus';

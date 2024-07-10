@@ -75,8 +75,7 @@ class ActivityPubProviderService {
 				const { data, error } = await client.accounts.statuses(misc.userQuery, {
 					userId: misc.userQuery,
 					limit: 5,
-					sinceId: opts.maxId,
-					// excludeReplies: false,
+					maxId: opts.maxId,
 				});
 				if (error) return [];
 				return data;

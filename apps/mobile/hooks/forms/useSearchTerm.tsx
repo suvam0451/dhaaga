@@ -40,6 +40,7 @@ type Props = {
 function WithSearchTermContext({ children }: Props) {
 	const [SearchTerm, setSearchTerm] = useState('');
 	const [IsResultLoading, setIsResultLoading] = useState(false);
+
 	return (
 		<SearchTermContext.Provider
 			value={{

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import applyCaseMiddleware from 'axios-case-converter';
 
 export async function get<T>(url: string, token?: string) {
 	try {
@@ -18,4 +19,8 @@ export async function get<T>(url: string, token?: string) {
 	} catch (e) {
 		return null;
 	}
+}
+
+export function getClient() {
+	return applyCaseMiddleware.default(axios.create() as any);
 }

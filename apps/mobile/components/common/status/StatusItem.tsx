@@ -1,9 +1,8 @@
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import { StandardView } from '../../../styles/Containers';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
 import StatusInteraction from '../../../screens/timelines/fragments/StatusInteraction';

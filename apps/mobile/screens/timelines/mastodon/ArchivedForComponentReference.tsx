@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { Animated, SafeAreaView, StyleSheet } from 'react-native';
 import { getCloser } from '../../../utils';
 import Header from '../../../components/Header';
-import { RestServices } from '@dhaaga/shared-provider-mastodon/src';
+import { RestServices } from '@dhaaga/shared-provider-mastodon';
 import { useQuery } from '@tanstack/react-query';
 import StatusItem from '../../../components/common/status/StatusItem';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useEffect, useState } from 'react';
 import StatusItem from '../../../common/status/StatusItem';
@@ -11,8 +11,6 @@ import WithScrollOnRevealContext, {
 	useScrollOnReveal,
 } from '../../../../states/useScrollOnReveal';
 import LoadingMore from '../../home/LoadingMore';
-import useTopbarSmoothTranslate from '../../../../states/useTopbarSmoothTranslate';
-import NavigationService from '../../../../services/navigation.service';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { RefreshControl } from 'react-native';
