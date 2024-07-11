@@ -61,33 +61,7 @@ function LinkProcessor({ url, displayName }: LinkProcessorProps) {
 			onPress={onTextPress}
 			onTextLayout={onTextLayout}
 		>
-			{displayName ? (
-				<View
-					style={{
-						marginTop: -4,
-						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'center',
-					}}
-				>
-					<Text
-						style={{
-							color: APP_THEME.LINK,
-							fontFamily: 'Inter-Bold',
-							marginBottom: -5,
-						}}
-					>
-						{displayNameWwwRemoved}
-					</Text>
-					<View
-						style={{ marginLeft: 2, height: 16, width: 16, marginBottom: -5 }}
-					>
-						<Feather name="external-link" size={16} color={APP_THEME.LINK} />
-					</View>
-				</View>
-			) : (
-				Result
-			)}
+			{displayName ? displayNameWwwRemoved : Result}
 		</Text>
 	);
 }

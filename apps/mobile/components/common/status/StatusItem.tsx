@@ -3,7 +3,7 @@ import { TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import { StandardView } from '../../../styles/Containers';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
 import StatusInteraction from '../../../screens/timelines/fragments/StatusInteraction';
 import MediaItem from '../media/MediaItem';
@@ -51,7 +51,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 	const domain = primaryAcct?.domain;
 	const subdomain = primaryAcct?.subdomain;
 
-	const { status, statusRaw, sharedStatus } = useActivitypubStatusContext();
+	const { status, sharedStatus } = useActivitypubStatusContext();
 	const _status = isRepost ? sharedStatus : status;
 	const statusContent = _status?.getContent();
 
@@ -100,9 +100,9 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 	const isSensitive = status?.getIsSensitive();
 	const spoilerText = status?.getSpoilerText();
 
-	function onSpoilerClick() {
-		setShowSensitiveContent(!ShowSensitiveContent);
-	}
+	const onSpoilerClick = useCallback(() => {
+		setShowSensitiveContent((o) => !o);
+	}, []);
 
 	return useMemo(() => {
 		if ((statusContent !== '' && !isLoaded) || !PosterContent)
@@ -498,11 +498,13 @@ function StatusItem({
 				const _statusRaw = statusRaw as mastodon.v1.Status;
 				if (_status && _status.isReposted() && !hideReplyIndicator) {
 					return (
-						<SharedStatusFragment
-							isRepost={true}
-							postedBy={_statusRaw?.reblog?.account}
-							boostedStatus={_statusRaw?.reblog}
-						/>
+						<Fragment>
+							<SharedStatusFragment
+								isRepost={true}
+								postedBy={_statusRaw?.reblog?.account}
+								boostedStatus={_statusRaw?.reblog}
+							/>
+						</Fragment>
 					);
 				}
 				if (_status && _status.isReply() && !hideReplyIndicator) {
@@ -519,11 +521,13 @@ function StatusItem({
 				if (_status && _status.isReposted() && !hideReplyIndicator) {
 					const _status = statusRaw as any;
 					return (
-						<SharedStatusFragment
-							postedBy={_status.renote.user as any}
-							isRepost={true}
-							boostedStatus={_status}
-						/>
+						<Fragment>
+							<SharedStatusFragment
+								postedBy={_status.renote.user as any}
+								isRepost={true}
+								boostedStatus={_status}
+							/>
+						</Fragment>
 					);
 				}
 				return (

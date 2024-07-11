@@ -8,6 +8,10 @@ import {
  * Wrapper service to invoke provider functions
  */
 class ActivityPubAdapterService {
+	static adaptStatus(item: any, domain: string): StatusInterface {
+		return ActivitypubStatusAdapter(item, domain);
+	}
+
 	static adaptManyStatuses(items: any[], domain: string): StatusInterface[] {
 		return items.map((o) => ActivitypubStatusAdapter(o, domain));
 	}

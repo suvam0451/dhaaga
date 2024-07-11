@@ -1,8 +1,8 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { visibilityIcon } from '../../utils/instances';
+import { extractInstanceUrl, visibilityIcon } from '../../utils/instances';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { Fragment, useCallback, useEffect, useMemo } from 'react';
+import { Fragment, memo, useCallback, useEffect, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useActivitypubStatusContext } from '../../states/useStatus';
 import { useActivitypubUserContext } from '../../states/useProfile';
@@ -24,7 +24,10 @@ type OriginalPosterProps = {
 	visibility: string;
 };
 
-export function OriginalPostedPfpFragment({
+/**
+ * Renders the user (poster)'s avatar
+ */
+export const OriginalPostedPfpFragment = memo(function Foo({
 	url,
 	onClick,
 }: {
@@ -57,7 +60,7 @@ export function OriginalPostedPfpFragment({
 			</View>
 		</TouchableOpacity>
 	);
-}
+});
 
 function OriginalPosterSkeleton() {
 	return (
@@ -181,16 +184,6 @@ function OriginalPoster({
 		setDataRaw(status?.getUser());
 	}, [status]);
 
-	const { content: UsernameWithEmojis } = useMfm({
-		content: user?.getDisplayName(),
-		remoteSubdomain: user?.getInstanceUrl(),
-		emojiMap: user?.getEmojiMap(),
-		deps: [user?.getDisplayName()],
-	});
-
-	const UsernameStyled =
-		AstService.applyTextStylingToChildren(UsernameWithEmojis);
-
 	const onProfileClicked = useCallback(() => {
 		navigation.navigate('Profile', {
 			id: id,
@@ -206,83 +199,21 @@ function OriginalPoster({
 		return (
 			<Fragment>
 				<OriginalPostedPfpFragment url={avatarUrl} onClick={onProfileClicked} />
-				{/*TODO: replace the remaining component with this*/}
-				{/*<OriginalPosterPostedByFragment*/}
-				{/*	onClick={onProfileClicked}*/}
-				{/*	theirSubdomain={user?.getInstanceUrl()}*/}
-				{/*	displayNameRaw={user?.getDisplayName()}*/}
-				{/*	instanceUrl={extractInstanceUrl(accountUrl, username, subdomain)}*/}
-				{/*	postedAt={new Date(status?.getCreatedAt())}*/}
-				{/*	visibility={status?.getVisibility()}*/}
-				{/*/>*/}
-				<View
-					style={{
-						display: 'flex',
-						marginLeft: 8,
-						flexGrow: 1,
-						maxWidth: '100%',
-					}}
-				>
-					<TouchableOpacity onPress={onProfileClicked}>
-						<View>
-							<Text
-								style={{
-									color: APP_FONT.MONTSERRAT_HEADER,
-									fontFamily: 'Inter-SemiBold',
-									maxWidth: 196,
-									marginTop: -3,
-								}}
-								numberOfLines={1}
-							>
-								{UsernameStyled}
-							</Text>
-						</View>
-					</TouchableOpacity>
-					<View>
-						<Text
-							style={{
-								color: '#888',
-								fontWeight: '500',
-								fontSize: 12,
-								opacity: 0.6,
-								fontFamily: 'Inter-Bold',
-								maxWidth: 196,
-							}}
-							numberOfLines={1}
-						>
-							{handle}
-						</Text>
-					</View>
-
-					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<Text
-							style={{
-								color: 'gray',
-								fontSize: 12,
-								fontFamily: 'Inter-Bold',
-								opacity: 0.87,
-							}}
-						>
-							{formatDistanceToNowStrict(new Date(createdAt), {
-								addSuffix: false,
-							})}
-						</Text>
-						<Text
-							style={{
-								color: 'gray',
-								marginLeft: 2,
-								marginRight: 2,
-								opacity: 0.6,
-							}}
-						>
-							•
-						</Text>
-						{visibilityIcon(visibility)}
-					</View>
-				</View>
+				<OriginalPosterPostedByFragment
+					onClick={onProfileClicked}
+					theirSubdomain={user?.getInstanceUrl()}
+					displayNameRaw={user?.getDisplayName()}
+					instanceUrl={extractInstanceUrl(
+						accountUrl,
+						user.getUsername(),
+						subdomain,
+					)}
+					postedAt={new Date(status?.getCreatedAt())}
+					visibility={status?.getVisibility()}
+				/>
 			</Fragment>
 		);
-	}, [user, UsernameWithEmojis]);
+	}, [user]);
 }
 
 export default OriginalPoster;

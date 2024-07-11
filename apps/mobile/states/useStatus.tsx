@@ -5,6 +5,7 @@ import {
 import {
 	createContext,
 	MutableRefObject,
+	useCallback,
 	useContext,
 	useEffect,
 	useRef,
@@ -37,8 +38,11 @@ type OgObject = {
 };
 
 type Type = {
+	// the current status. could be report. could be a reply.
 	status: StatusInterface | null;
 	statusContext: StatusContextInterface | null;
+
+	// the original status being reposted
 	sharedStatus: StatusInterface | null;
 	openGraph: OgObject | null;
 
@@ -123,6 +127,10 @@ function WithActivitypubStatusContext({
 	// init
 	useEffect(() => {
 		if (status) {
+			console.log(
+				'[WARN]: passing raw status to this context is deprecated.' +
+					'please consider passing adapted object, instead',
+			);
 			setStatusRaw(status);
 			const adapted = ActivitypubStatusAdapter(status, _domain);
 			setStatus(adapted);
@@ -135,6 +143,7 @@ function WithActivitypubStatusContext({
 			}
 		} else if (statusInterface) {
 			setStatus(statusInterface);
+			console.log('[INFO]: setting raw status as', statusInterface?.getRaw());
 			setStatusRaw(statusInterface?.getRaw());
 			if (statusInterface.isReposted()) {
 				const repostAdapted = ActivitypubStatusAdapter(
@@ -145,10 +154,6 @@ function WithActivitypubStatusContext({
 			}
 		}
 	}, [status, statusInterface]);
-
-	function setData(o: StatusInterface) {
-		setStatus(o);
-	}
 
 	function setStatusContextData(data: mastodon.v1.Context | any) {
 		const { root, itemLookup, childrenLookup } = MastodonService.solveContext(
@@ -162,7 +167,11 @@ function WithActivitypubStatusContext({
 		setStateKey(randomUUID());
 	}
 
-	function setDataRaw(o: mastodon.v1.Status | any) {
+	const setData = useCallback((o: StatusInterface) => {
+		setStatus(o);
+	}, []);
+
+	const setDataRaw = useCallback((o: mastodon.v1.Status | any) => {
 		const adapted = ActivitypubStatusAdapter(o, _domain);
 		if (adapted.isReposted()) {
 			const repostAdapted = ActivitypubStatusAdapter(
@@ -172,13 +181,13 @@ function WithActivitypubStatusContext({
 			setSharedStatus(repostAdapted);
 		}
 		setStatus(adapted);
-	}
+	}, []);
 
-	function updateOpenGraph(og) {
+	const updateOpenGraph = useCallback((og: any) => {
 		setOpenGraph(og);
-	}
+	}, []);
 
-	async function toggleBookmark() {
+	const toggleBookmark = useCallback(async () => {
 		if (!client) return;
 		try {
 			if (Status?.getIsBookmarked()) {
@@ -191,7 +200,7 @@ function WithActivitypubStatusContext({
 		} catch (e) {
 			console.log('[ERROR] : toggling bookmark');
 		}
-	}
+	}, []);
 
 	return (
 		<ActivitypubStatusContext.Provider
