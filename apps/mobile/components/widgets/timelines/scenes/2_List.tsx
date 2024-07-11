@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { TouchableOpacity, View } from 'react-native';
 import TimelineLoading from '../../../loading-screens/TimelineLoading';

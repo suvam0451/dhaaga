@@ -8,6 +8,8 @@ import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-em
 import activitypubAdapterService from './activitypub-adapter.service';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { Status } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { formatRelative } from 'date-fns/formatRelative';
 
 export type EmojiAdapter = {
 	// common
@@ -71,9 +73,14 @@ export class EmojiService {
 			globalDb,
 			subdomain,
 		);
+		// TODO: this needs to be brought back
 		if (found) {
-			// console.log("[INFO]: found cached emojis:", subdomain, found.data.length,
-			//     formatRelative(found.lastFetchedAt, new Date()))
+			console.log(
+				'[INFO]: found cached emojis:',
+				subdomain,
+				found.data.length,
+				formatRelative(found.lastFetchedAt, new Date()),
+			);
 			return found.data;
 		}
 
@@ -81,15 +88,24 @@ export class EmojiService {
 		if (!forcedUpdate) return;
 
 		// GlobalMmkvCacheService
-		const emojis = await ActivityPubService.fetchEmojis(subdomain);
-		// console.log('[INFO]: emojis fetched', subdomain, emojis.length);
-		if (!emojis) return;
+		const result =
+			await ActivityPubService.fetchEmojisAndInstanceSoftware(subdomain);
+
+		db.write(() => {
+			ActivityPubServerRepository.updateSoftwareType(db, {
+				type: result.software,
+				url: subdomain,
+				description: 'N/A',
+			});
+		});
+
+		if (!result) return;
 		globalMmkvCacheServices.saveEmojiCacheForInstance(
 			globalDb,
 			subdomain,
-			emojis,
+			result.emojis,
 		);
-		return emojis;
+		return result.emojis;
 	}
 
 	/**
@@ -129,6 +145,8 @@ export class EmojiService {
 			statusesRaw,
 			domain,
 		);
+
+		// dedup
 		const instanceSet = new Set<string>();
 		for (let i = 0; i < statusIs.length; i++) {
 			const _user = activitypubAdapterService.adaptUser(
@@ -177,7 +195,6 @@ export class EmojiService {
 		id: string;
 		remoteInstance: string;
 	}) {
-		// console.log("[INFO]: resolving emoji", remoteInstance, id)
 		if (emojiMap.get(id)) {
 			return emojiMap.get(id).url;
 		} else {
@@ -208,7 +225,7 @@ export class EmojiService {
 		let data = this.getEmojiCache(globalDb, subdomain);
 		if (!data) return;
 
-		if (selection) data = data.filter((o) => selection.has(o.shortcode));
+		if (selection) data = data.filter((o) => selection.has(o.shortCode));
 
 		const categories = new Set<string>();
 		for (let i = 0; i < data.length; i++) {
@@ -275,7 +292,7 @@ export class EmojiService {
 		if (!data) return;
 
 		if (selection.size > 0)
-			data = data.filter((o) => selection.has(o.shortcode));
+			data = data.filter((o) => selection.has(o.shortCode));
 
 		const categories = new Set<string>();
 		for (let i = 0; i < data.length; i++) {

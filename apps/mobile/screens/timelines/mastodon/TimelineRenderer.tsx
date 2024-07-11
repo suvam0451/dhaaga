@@ -5,6 +5,7 @@ import {
 	SafeAreaView,
 	StatusBar,
 	StyleSheet,
+	View,
 } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import StatusItem from '../../../components/common/status/StatusItem';
@@ -99,16 +100,19 @@ function TimelineRenderer() {
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
-		if (status === 'success' && data && data.length > 0) {
+		if (data?.length > 0) {
 			setMaxId(data[data.length - 1]?.id);
 			setEmojisLoading(true);
-			EmojiService.preloadInstanceEmojisForStatuses(db, globalDb, data, domain)
-				.then((res) => {})
-				.finally(() => {
-					append(data);
-					setEmojisLoading(false);
-					PageLoadedAtLeastOnce.current = true;
-				});
+			EmojiService.preloadInstanceEmojisForStatuses(
+				db,
+				globalDb,
+				data,
+				domain,
+			).finally(() => {
+				append(data);
+				setEmojisLoading(false);
+				PageLoadedAtLeastOnce.current = true;
+			});
 		}
 	}, [fetchStatus]);
 
@@ -162,7 +166,7 @@ function TimelineRenderer() {
 	if (timelineType === TimelineFetchMode.IDLE) return <WelcomeBack />;
 
 	return (
-		<SafeAreaView style={[styles.container, { position: 'relative' }]}>
+		<View style={[styles.container, { position: 'relative' }]}>
 			<StatusBar backgroundColor="#121212" />
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader
@@ -200,7 +204,7 @@ function TimelineRenderer() {
 			) : (
 				<TimelineLoading />
 			)}
-		</SafeAreaView>
+		</View>
 	);
 }
 

@@ -17,12 +17,14 @@ import { StatusArray, Status } from '../../status/_interface.js';
 import type { mastodon } from 'masto';
 import { PleromaAccountsRouter } from './accounts.js';
 import { PleromaStatusesRouter } from './statuses.js';
+import { PleromaBookmarksRouter } from './bookmarks.js';
 
 class PleromaRestClient implements ActivityPubClient {
 	client: RestClient;
 	instances: PleromaInstanceRouter;
 	accounts: PleromaAccountsRouter;
 	statuses: PleromaStatusesRouter;
+	bookmarks: PleromaBookmarksRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -32,6 +34,7 @@ class PleromaRestClient implements ActivityPubClient {
 		this.instances = new PleromaInstanceRouter(this.client);
 		this.accounts = new PleromaAccountsRouter(this.client);
 		this.statuses = new PleromaStatusesRouter(this.client);
+		this.bookmarks = new PleromaBookmarksRouter(this.client);
 	}
 
 	getHomeTimeline(opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {

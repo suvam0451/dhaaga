@@ -68,7 +68,7 @@ function ApiWrapper() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'My Bookmarks'} translateY={translateY}>
+		<WithAutoHideTopNavBar title={'My Favourites'} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={72}
 				data={PageData}

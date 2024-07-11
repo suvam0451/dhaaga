@@ -50,9 +50,6 @@ export function useActivityPubRestClientContext() {
  * @constructor
  */
 function WithActivityPubRestClient({ children }: any) {
-	// const {primaryAcct} = useActivityPubRestClientContext()
-	// const _domain = primaryAcct?.domain
-
 	const [restClient, setRestClient] = useState<
 		MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
 	>(null);

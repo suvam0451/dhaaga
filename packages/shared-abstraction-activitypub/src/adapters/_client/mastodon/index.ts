@@ -25,12 +25,14 @@ import { MastodonInstanceRouter } from './instance.js';
 import { MastodonAccountsRouter } from './accounts.js';
 import { KNOWN_SOFTWARE } from '../_router/instance.js';
 import { MastodonStatusesRouter } from './statuses.js';
+import { MastodonBookmarksRouter } from './bookmarks.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
 	instances: MastodonInstanceRouter;
 	accounts: MastodonAccountsRouter;
 	statuses: MastodonStatusesRouter;
+	bookmarks: MastodonBookmarksRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -40,6 +42,7 @@ class MastodonRestClient implements ActivityPubClient {
 		this.instances = new MastodonInstanceRouter(this.client);
 		this.accounts = new MastodonAccountsRouter(this.client);
 		this.statuses = new MastodonStatusesRouter(this.client);
+		this.bookmarks = new MastodonBookmarksRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<MastoStatus | null> {

@@ -72,6 +72,7 @@ export default function TabLayout() {
 							<Ionicons size={size} name="home" color={color} />
 						),
 					}}
+					initialRouteName={'home-home'}
 				/>
 				<Tabs.Screen
 					name={'search'}

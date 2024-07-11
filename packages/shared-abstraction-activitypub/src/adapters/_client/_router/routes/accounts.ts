@@ -3,7 +3,15 @@ import { mastodon } from 'masto';
 import { Note } from 'misskey-js/autogen/models.js';
 import { Endpoints } from 'misskey-js';
 
-type ListAccountStatusesParams = {
+type DefaultPaginationParams = {
+	// masto.js
+	readonly maxId?: string | null;
+	readonly sinceId?: string | null;
+	readonly minId?: string | null;
+	readonly limit?: number | null;
+};
+
+type ListAccountStatusesParams = DefaultPaginationParams & {
 	// masto.js
 	readonly onlyMedia?: boolean | null;
 	readonly pinned?: boolean | null;

@@ -2,6 +2,7 @@ import { RestClient } from '../../native-client.js';
 import axios from 'axios';
 import type { mastodon } from 'masto';
 import { extractPaginationFromLinkHeader } from './_common.js';
+import applyCaseMiddleware from 'axios-case-converter';
 
 export type StatusQuery = {
 	maxId?: string;
@@ -28,7 +29,7 @@ export default class BookmarkService {
 			queryUrl = queryUrl.concat(`&min_id=${query?.minId}`);
 		}
 
-		const axiosClient = axios.create();
+		const axiosClient = applyCaseMiddleware.default(axios.create() as any);
 		try {
 			const res = await axiosClient.get<mastodon.v1.Status[]>(queryUrl, {
 				headers: {
@@ -37,6 +38,7 @@ export default class BookmarkService {
 			});
 
 			let { minId, maxId } = extractPaginationFromLinkHeader(res.headers);
+			console.log(res.data, minId, maxId);
 			return {
 				data: res.data,
 				minId,

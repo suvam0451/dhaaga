@@ -1,5 +1,5 @@
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { AccountRoute } from '../_router/_index.js';
+import { AccountRoute } from '../_router/routes/_index.js';
 import {
 	errorBuilder,
 	successWithData,

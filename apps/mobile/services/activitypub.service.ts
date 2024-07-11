@@ -1,58 +1,50 @@
-import axios from "axios";
-import {
-  ActivityPubCustomEmojiItemDTO
-} from "../entities/activitypub-emoji.entity";
+import axios from 'axios';
+import { ActivityPubCustomEmojiItemDTO } from '../entities/activitypub-emoji.entity';
+import { UnknownRestClient } from '@dhaaga/shared-abstraction-activitypub';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 class ActivityPubService {
-  /**
-   * Try fetching custom emojis
-   *
-   * Supported: Mastodon/Misskey API Spec
-   * @param instance
-   */
-  static async fetchEmojis(instance: string): Promise<ActivityPubCustomEmojiItemDTO[] | null> {
-
-    // Mastodon strategy
-    return axios.get(`https://${instance}/api/v2/instance`).then(async (res) => {
-      try {
-        const emojisRes = await axios.get(`https://${instance}/api/v1/custom_emojis`);
-        return emojisRes.data.map((o) => ({
-          shortcode: o.shortcode,
-          url: o.url,
-          staticUrl: o.static_url,
-          visibleInPicker: o.visible_in_picker,
-          category: o.category
-        }))
-      } catch (e) {
-        console.log("[INFO]: failed to fetch emojis, using mastodon schema")
-        return null
-      }
-    }).catch(async (e) => {
-      // Misskey strategy
-      console.log("[INFO]: not a mastodon server. trying misskey.")
-      try {
-        // NOT: needs http
-        let res = await axios.get(`https://${instance}/api/emojis`);
-
-        return res.data.emojis.map((o) => ({
-          shortcode: o.name,
-          url: o.url,
-          staticUrl: o.url,
-          visibleInPicker: true,
-          category: o.category,
-          aliases: o.aliases
-        }))
-      } catch (e1) {
-        /**
-         * NOTE: known instance which fall through to this stage are:
-         *
-         * - Pleroma -- api/v1/pleroma/emoji -- Uses KV map
-         */
-        console.log("[INFO]: failed emoji fetch. tried misskey schema", instance, e1)
-        return null
-      }
-    })
-  }
+	/**
+	 * Try fetching custom emojis
+	 *
+	 * Supported: Mastodon/Misskey API Spec
+	 * @param instance
+	 */
+	static async fetchEmojisAndInstanceSoftware(instance: string): Promise<{
+		emojis: InstanceApi_CustomEmojiDTO[];
+		software: string;
+	} | null> {
+		const x = new UnknownRestClient();
+		return x.instances
+			.getSoftwareInfo(instance)
+			.then(async ({ data, error }) => {
+				if (!error) {
+					try {
+						let result0 = await x.instances.getCustomEmojis(
+							instance,
+							data.software,
+						);
+						const { data: emojiData, error: emojiError } = result0;
+						if (!emojiError) {
+							return { emojis: emojiData, software: data.software };
+						} else {
+							console.log('[WARN]: emoji query failed', emojiError);
+							return { emojis: [], software: data.software };
+						}
+					} catch (e) {
+						console.log('[WARN]: emoji query failed', e);
+						return null;
+					}
+				} else {
+					console.log('[WARN]: software query failed', instance, error.code);
+					return null;
+				}
+			})
+			.catch((e) => {
+				console.log('[WARN]: error determining software', instance, e);
+				return null;
+			});
+	}
 }
 
 export default ActivityPubService;

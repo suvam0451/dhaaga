@@ -267,7 +267,7 @@ function StatusInteractionBase({
 							paddingBottom: 8,
 						}}
 						onPress={OnTranslationClicked}
-						// onLongPress={onTranslationLongPress}
+						onLongPress={onTranslationLongPress}
 					>
 						{TranslationLoading ? (
 							<ActivityIndicator size={'small'} color="#988b3b" />

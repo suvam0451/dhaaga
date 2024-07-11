@@ -15,7 +15,6 @@ export class MastodonStatusesRouter implements StatusesRoute {
 
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
 		try {
-			console.log(this.client.url, this.client.accessToken);
 			const client = createRestAPIClient({
 				url: this.client.url,
 				accessToken: this.client.accessToken || undefined,

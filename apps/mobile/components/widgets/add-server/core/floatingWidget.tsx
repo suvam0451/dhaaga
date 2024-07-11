@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import Animated, {
@@ -8,18 +8,28 @@ import Animated, {
 	withSpring,
 	withTiming,
 } from 'react-native-reanimated';
-import { Fragment, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import FloatingActionButtonOption from '../../../lib/FloatingActionButtonOption';
+import { useLocalAppMenuControllerContext } from '../../../../states/useLocalAppMenuController';
+import { useAppDrawerContext } from '../../../../states/useAppDrawer';
 
 const Y_OFFSET_MENU_ITEM = 72;
 
+/**
+ *
+ * @param onPress
+ * @constructor
+ */
 function AddServerWidget({ onPress }: { onPress: () => void }) {
+	const { fabItemScale, activeMenu, isFabExpanded, setIsFabExpanded } =
+		useLocalAppMenuControllerContext();
+	const { setOpen } = useAppDrawerContext();
+
 	const rotation = useSharedValue(0);
+
 	const displacementY = useSharedValue(0);
 
-	const [IsExpanded, setIsExpanded] = useState(false);
-
-	const rotateElement = () => {
+	const rotateElement = useCallback(() => {
 		rotation.value = withTiming(
 			rotation.value + 360,
 			{ duration: 200, easing: Easing.linear },
@@ -28,23 +38,24 @@ function AddServerWidget({ onPress }: { onPress: () => void }) {
 			},
 		);
 
-		if (IsExpanded) {
+		if (isFabExpanded) {
 			displacementY.value = withTiming(0, { duration: 360 });
 		} else {
 			displacementY.value = withSpring(-Y_OFFSET_MENU_ITEM);
 		}
 
-		setIsExpanded((IsExpanded) => !IsExpanded);
-	};
+		setIsFabExpanded(!isFabExpanded);
+	}, [isFabExpanded]);
+
+	// @ts-ignore
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
-			transform: [{ rotate: `${rotation.value}deg` }],
-		};
-	});
-
-	const menuItemAAnimated = useAnimatedStyle(() => {
-		return {
-			transform: [{ translateY: displacementY.value }],
+			transform: [
+				{ rotate: `${rotation.value}deg` },
+				// {
+				// 	scale: fabItemScale.value,
+				// },
+			],
 		};
 	});
 
@@ -54,31 +65,39 @@ function AddServerWidget({ onPress }: { onPress: () => void }) {
 
 	return (
 		<Fragment>
-			<TouchableOpacity
-				style={[styles.widgetContainerCollapsed, { zIndex: 30 }]}
-				onPress={onPressImpl}
+			<Animated.View
+				style={[
+					styles.widgetContainerCollapsed,
+					animatedStyle,
+					{
+						display: activeMenu === 'drawer' ? 'none' : 'flex',
+					},
+				]}
+				onTouchStart={onPressImpl}
 			>
-				<Animated.View
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						width: '100%',
-						justifyContent: 'center',
-						padding: 12,
-						paddingVertical: 16,
-					}}
+				<View
+					style={[
+						{
+							display: 'flex',
+							flexDirection: 'row',
+							width: '100%',
+							justifyContent: 'center',
+							padding: 12,
+							paddingVertical: 16,
+						},
+					]}
 				>
-					<Animated.View style={[{ width: 24 }, animatedStyle]}>
+					<View style={[{ width: 24 }]}>
 						<FontAwesome5
 							name="filter"
 							size={24}
 							color={APP_FONT.MONTSERRAT_BODY}
 						/>
-					</Animated.View>
-				</Animated.View>
-			</TouchableOpacity>
+					</View>
+				</View>
+			</Animated.View>
 			<FloatingActionButtonOption
-				isExpanded={IsExpanded}
+				isExpanded={isFabExpanded}
 				index={0}
 				label={'Navigate'}
 				onPress={() => {
@@ -87,7 +106,7 @@ function AddServerWidget({ onPress }: { onPress: () => void }) {
 				icon={'navigate'}
 			/>
 			<FloatingActionButtonOption
-				isExpanded={IsExpanded}
+				isExpanded={isFabExpanded}
 				index={1}
 				label={'Add a Server'}
 				onPress={() => {
@@ -96,13 +115,13 @@ function AddServerWidget({ onPress }: { onPress: () => void }) {
 				icon={'add'}
 			/>
 			<FloatingActionButtonOption
-				isExpanded={IsExpanded}
+				isExpanded={isFabExpanded}
 				index={2}
-				label={'Sync Status'}
+				label={'Open Drawer'}
 				onPress={() => {
-					console.log('ok');
+					setOpen(true);
 				}}
-				icon={'filter'}
+				icon={'drawer'}
 			/>
 		</Fragment>
 	);
@@ -121,6 +140,7 @@ const styles = StyleSheet.create({
 		borderRadius: 16,
 		maxWidth: 64,
 		marginRight: 16,
+		zIndex: 30,
 	},
 	widgetContainerCollapsedCore: {
 		marginBottom: 16,

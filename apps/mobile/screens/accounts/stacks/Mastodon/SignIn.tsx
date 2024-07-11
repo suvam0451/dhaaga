@@ -9,7 +9,7 @@ import {
 	MastodonService,
 	RestClient,
 	RestServices,
-} from '@dhaaga/shared-provider-mastodon/src';
+} from '@dhaaga/shared-provider-mastodon';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AccountRepository from '../../../../repositories/account.repo';
 import { useRealm } from '@realm/react';

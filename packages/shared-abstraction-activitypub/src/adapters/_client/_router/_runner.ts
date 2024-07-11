@@ -53,6 +53,15 @@ export class DhaagaRestClient<T extends COMPAT> {
 	 * Client Generators -- START
 	 */
 	private _MisskeyjsClient() {
+		// fix url
+		if (
+			this.baseUrl.startsWith('http://') ||
+			this.baseUrl.startsWith('https://')
+		) {
+		} else {
+			this.baseUrl = 'https://' + this.baseUrl;
+		}
+
 		return new misskeyApi.APIClient({
 			origin: this.baseUrl,
 			credential: this._token || undefined,
@@ -76,6 +85,15 @@ export class DhaagaRestClient<T extends COMPAT> {
 	}
 
 	private _MegalodonClient() {
+		// fix url
+		if (
+			this.baseUrl.startsWith('http://') ||
+			this.baseUrl.startsWith('https://')
+		) {
+		} else {
+			this.baseUrl = 'https://' + this.baseUrl;
+		}
+
 		switch (this._software) {
 			case KNOWN_SOFTWARE.PLEROMA:
 			case KNOWN_SOFTWARE.AKKOMA: {
@@ -83,6 +101,12 @@ export class DhaagaRestClient<T extends COMPAT> {
 			}
 			case KNOWN_SOFTWARE.FIREFISH: {
 				return generator.default(KNOWN_SOFTWARE.FIREFISH, this.baseUrl) as any;
+			}
+			case KNOWN_SOFTWARE.GOTOSOCIAL: {
+				return generator.default(
+					KNOWN_SOFTWARE.GOTOSOCIAL,
+					this.baseUrl,
+				) as any;
 			}
 			default: {
 				throw new Error(DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY);
@@ -135,7 +159,8 @@ export class DhaagaRestClient<T extends COMPAT> {
 				break;
 			}
 			case KNOWN_SOFTWARE.PLEROMA:
-			case KNOWN_SOFTWARE.AKKOMA: {
+			case KNOWN_SOFTWARE.AKKOMA:
+			case KNOWN_SOFTWARE.GOTOSOCIAL: {
 				this.client = this._MegalodonClient();
 				break;
 			}
@@ -193,7 +218,7 @@ export async function MastoErrorHandler<T extends (...args: any[]) => any>(
 ): Promise<LibraryResponse<ReturnType<T>>> {
 	try {
 		return {
-			data: await func(args),
+			data: args ? await func(...args) : await func(),
 		};
 	} catch (e) {
 		return CommonErrorHandler(e);
@@ -206,7 +231,7 @@ export async function PleromaErrorHandler<T extends (...args: any[]) => any>(
 ): Promise<LibraryResponse<ReturnType<T>>> {
 	try {
 		return {
-			data: await func.bind(foo)(),
+			data: await func.bind(foo).apply(foo),
 		};
 	} catch (e) {
 		return CommonErrorHandler(e);

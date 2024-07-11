@@ -11,16 +11,19 @@ import type { Note } from 'misskey-js/autogen/models.js';
 import { DefaultInstanceRouter } from './instance.js';
 import { DefaultAccountsRouter } from './accounts.js';
 import { DefaultStatusesRouter } from './statuses.js';
+import { DefaultBookmarksRouter } from './bookmarks.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
 	accounts: DefaultAccountsRouter;
 	statuses: DefaultStatusesRouter;
+	bookmarks: DefaultBookmarksRouter;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
 		this.accounts = new DefaultAccountsRouter();
 		this.statuses = new DefaultStatusesRouter();
+		this.bookmarks = new DefaultBookmarksRouter();
 	}
 
 	reblog(id: string): Promise<Status> {

@@ -3,7 +3,7 @@ import {
 	ActivityPubTag,
 	ActivityPubTagCreateDTO,
 } from '../entities/activitypub-tag.entity';
-import { mastodon } from '@dhaaga/shared-provider-mastodon/src';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 
 export class ActivityPubTagRepository {
 	static cleanAll(db: Realm) {
