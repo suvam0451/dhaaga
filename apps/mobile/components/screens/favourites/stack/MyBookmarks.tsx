@@ -19,6 +19,11 @@ import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
+import {
+	MastoStatus,
+	MegaStatus,
+} from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 
 type Props = {
 	content: any[];
@@ -61,26 +66,25 @@ function WithApi() {
 		append,
 		setMaxId,
 	} = useAppPaginationContext();
-	const { resetEndOfPageFlag } = useScrollOnReveal();
-	const [LoadingMoreComponentProps, setLoadingMoreComponentProps] = useState({
-		visible: false,
-		loading: false,
-	});
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 	const [EmojisLoading, setEmojisLoading] = useState(false);
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
-		return await client.getBookmarks({
+		const { data, error } = await client.bookmarks.get({
 			limit: 5,
 			maxId: queryCacheMaxId,
 		});
+		if (error) {
+			return { data: [], maxId: null, minId: null };
+		}
+		return data;
 	}
 
 	// Queries
 	const { status, data, refetch, fetchStatus } = useQuery<{
-		data: mastodon.v1.Status[];
+		data: MastoStatus[] | MegaStatus[];
 		minId?: string;
 		maxId?: string;
 	}>({
@@ -90,47 +94,36 @@ function WithApi() {
 	});
 
 	useEffect(() => {
-		if (fetchStatus === 'fetching') {
-			if (PageData.length > 0) {
-				setLoadingMoreComponentProps({
-					visible: true,
-					loading: true,
-				});
-			}
-			return;
-		}
+		if (fetchStatus === 'fetching' || status !== 'success') return;
 
-		if (status !== 'success' || !data) return;
 		if (data?.data?.length > 0) {
-			const statuses = data.data;
+			const statuses = data?.data;
 
+			setMaxId(data.maxId);
 			setEmojisLoading(true);
 			EmojiService.preloadInstanceEmojisForStatuses(
 				db,
 				globalDb,
 				statuses,
 				domain,
-			)
-				.then((res) => {})
-				.finally(() => {
-					append(statuses, (o) => o.id);
-					setMaxId(data.maxId);
-					resetEndOfPageFlag();
-					setEmojisLoading(false);
-				});
+			).finally(() => {
+				append(statuses, (o) => o.id);
+				setEmojisLoading(false);
+			});
 		}
-
-		setLoadingMoreComponentProps({
-			visible: false,
-			loading: false,
-		});
 	}, [fetchStatus]);
 
+	/**
+	 * Composite Hook Collection
+	 */
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus,
+		additionalLoadingStates: EmojisLoading,
+	});
 	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
 		fetchStatus,
 		refetch,
 	});
-
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: PageData.length,
 		updateQueryCache,
@@ -144,10 +137,7 @@ function WithApi() {
 				onRefresh={onRefresh}
 				refreshing={refreshing}
 			/>
-			<LoadingMore
-				visible={LoadingMoreComponentProps.visible}
-				loading={LoadingMoreComponentProps.loading}
-			/>
+			<LoadingMore visible={visible} loading={loading} />
 		</WithAutoHideTopNavBar>
 	);
 }

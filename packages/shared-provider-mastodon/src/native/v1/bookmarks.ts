@@ -38,6 +38,7 @@ export default class BookmarkService {
 			});
 
 			let { minId, maxId } = extractPaginationFromLinkHeader(res.headers);
+			console.log(res.data, minId, maxId);
 			return {
 				data: res.data,
 				minId,

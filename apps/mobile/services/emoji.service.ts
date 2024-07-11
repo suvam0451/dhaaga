@@ -9,6 +9,7 @@ import activitypubAdapterService from './activitypub-adapter.service';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { Status } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { formatRelative } from 'date-fns/formatRelative';
 
 export type EmojiAdapter = {
 	// common
@@ -73,14 +74,18 @@ export class EmojiService {
 			subdomain,
 		);
 		// TODO: this needs to be brought back
-		// if (found) {
-		// console.log("[INFO]: found cached emojis:", subdomain, found.data.length,
-		//     formatRelative(found.lastFetchedAt, new Date()))
-		// 	return found.data;
-		// }
+		if (found) {
+			console.log(
+				'[INFO]: found cached emojis:',
+				subdomain,
+				found.data.length,
+				formatRelative(found.lastFetchedAt, new Date()),
+			);
+			return found.data;
+		}
 
 		// do not refetch, if cache miss
-		// if (!forcedUpdate) return;
+		if (!forcedUpdate) return;
 
 		// GlobalMmkvCacheService
 		const result =

@@ -27,7 +27,8 @@
     "axios-case-converter": "^1.1.1",
     "install": "^0.13.0",
     "masto": "^6.7.7",
-    "npm": "^10.8.1"
+    "npm": "^10.8.1",
+    "snakecase-keys": "^8.0.1"
   },
   "devDependencies": {
     "tsup": "^8.1.0"

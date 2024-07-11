@@ -1,4 +1,4 @@
-import { DhaagaErrorCode } from '../_types.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_types.js';
 
 export function successWithData(data: any) {
 	return {
@@ -14,7 +14,7 @@ export function errorBuilder(error?: any) {
 	};
 }
 
-export function notImplementedErrorBuilder() {
+export function notImplementedErrorBuilder(): LibraryResponse<any> {
 	return {
 		error: {
 			code: DhaagaErrorCode.UNKNOWN_ERROR,
