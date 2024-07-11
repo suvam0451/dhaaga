@@ -35,8 +35,6 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p ./tsconfig.json",
-    "dev": "tsup ./src/index.ts --watch --dts --external pkgJson",
-    "up": "tsc"
+    "build": "tsc -p ./tsconfig.json"
   }
 }

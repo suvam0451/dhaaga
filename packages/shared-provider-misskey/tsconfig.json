@@ -18,6 +18,7 @@
   ],
   "exclude": [
     "test",
-    "lib"
+    "lib",
+    "dist/**/*"
   ]
 }
