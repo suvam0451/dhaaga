@@ -9,6 +9,8 @@ import {
 	OriginalPosterPostedByFragment,
 } from '../../post-fragments/OriginalPoster';
 import RealmMediaItem from '../media/RealmMediaItem';
+import { memo, useMemo } from 'react';
+import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 
 function getAccountDisplayName(
 	username: string,
@@ -32,7 +34,7 @@ function getAccountDisplayName(
  * - may not have boosted by info
  * @constructor
  */
-function RealmStatus({ _id }: { _id: Realm.BSON.UUID }) {
+const RealmStatus = memo(function Foo({ _id }: { _id: Realm.BSON.UUID }) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const post = useObject(ActivityPubStatus, _id);
 
@@ -69,7 +71,7 @@ function RealmStatus({ _id }: { _id: Realm.BSON.UUID }) {
 			<RealmMediaItem data={post.mediaAttachments} />
 		</View>
 	);
-}
+});
 
 const styles = StyleSheet.create({
 	container: {

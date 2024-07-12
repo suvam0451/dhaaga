@@ -1,4 +1,3 @@
-// import { MfmNode } from 'misskey-js/autogen/types.js';
 import { Text } from 'react-native';
 import HashtagProcessor from '../components/common/tag/TagProcessor';
 import { Image } from 'expo-image';
@@ -268,7 +267,8 @@ class MfmService {
 
 		const extractedUrls = TextParserService.findHyperlinks(input);
 
-		const parsed = TextParserService.preprocessPostContent(input);
+		// TextParserService.
+		const parsed = TextParserService.preprocessPostContent(input, true);
 
 		let retval = [];
 		let openAiContext = [];

@@ -141,9 +141,7 @@ function AppFeatureLargeGridItem({
 					style={{
 						fontFamily: 'Montserrat-Bold',
 						marginLeft: 8,
-						color: disabled
-							? APP_FONT.MONTSERRAT_BODY
-							: APP_FONT.MONTSERRAT_HEADER,
+						color: APP_FONT.MONTSERRAT_BODY,
 					}}
 				>
 					{label}
@@ -160,7 +158,7 @@ function SettingsScreenTopSection() {
 				style={{
 					fontFamily: 'Montserrat-Bold',
 					fontSize: 24,
-					color: APP_FONT.MONTSERRAT_HEADER,
+					color: APP_FONT.MONTSERRAT_BODY,
 					marginHorizontal: 8,
 					marginVertical: 16,
 				}}
@@ -176,7 +174,7 @@ function SettingsScreenTopSection() {
 							<FontAwesome6
 								name="server"
 								size={24}
-								color={APP_FONT.MONTSERRAT_HEADER}
+								color={APP_FONT.MONTSERRAT_BODY}
 							/>
 						}
 						alignment={'left'}
@@ -188,7 +186,7 @@ function SettingsScreenTopSection() {
 							<FontAwesome5
 								name="download"
 								size={24}
-								color={APP_FONT.MONTSERRAT_HEADER}
+								color={APP_FONT.MONTSERRAT_BODY}
 								disabled
 								style={{
 									opacity: 0.36,
@@ -319,7 +317,7 @@ function SettingsScreenBottomSection() {
 					<FontAwesome6
 						name="palette"
 						size={24}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				</View>
 				<View style={{ flexGrow: 1 }}>
@@ -344,7 +342,7 @@ function SettingsScreenBottomSection() {
 					<FontAwesome6
 						name="user-secret"
 						size={24}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				</View>
 
@@ -361,7 +359,7 @@ function SettingsScreenBottomSection() {
 					<Ionicons
 						name="cloud-offline"
 						size={24}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				</View>
 				<Text style={styles.collapsibleSettingsLabel}>Offline Features</Text>
@@ -408,7 +406,7 @@ const styles = StyleSheet.create({
 		fontFamily: 'Montserrat-Bold',
 		fontSize: 20,
 		marginLeft: 8,
-		color: APP_FONT.MONTSERRAT_HEADER,
+		color: APP_FONT.MONTSERRAT_BODY,
 	},
 	appFeaturesGridRow: {
 		marginHorizontal: 8,

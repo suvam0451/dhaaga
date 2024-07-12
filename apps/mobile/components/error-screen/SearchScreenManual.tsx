@@ -5,11 +5,10 @@ import {
 	ButtonGroupContainer,
 	DhaagaText,
 } from '../../styles/Containers';
-import { useNavigation } from '@react-navigation/native';
+import { APP_FONT } from '../../styles/AppTheme';
+import { router } from 'expo-router';
 
 function SearchScreenManual() {
-	const navigation = useNavigation<any>();
-
 	return (
 		<View
 			style={{
@@ -29,15 +28,31 @@ function SearchScreenManual() {
 					alignItems: 'center',
 				}}
 			>
-				<Text style={{ opacity: 0.87, fontSize: 20 }}>⌨️ to get started</Text>
+				<Text
+					style={{
+						opacity: 0.87,
+						fontSize: 20,
+						color: APP_FONT.MONTSERRAT_BODY,
+					}}
+				>
+					⌨️ to get started
+				</Text>
 				<View style={{ width: '100%', display: 'flex', marginVertical: 16 }}>
-					<Text style={{ textAlign: 'center' }}> --- OR --- </Text>
+					<Text
+						style={{
+							textAlign: 'center',
+							color: APP_FONT.MONTSERRAT_BODY,
+						}}
+					>
+						{' '}
+						--- OR ---{' '}
+					</Text>
 				</View>
 
 				<View style={{ minWidth: '100%' }}>
 					<TouchableOpacity
 						onPress={() => {
-							navigation.navigate('Trending Posts');
+							router.navigate('/discover/trending-posts');
 						}}
 					>
 						<ButtonGroupContainer first>
@@ -54,7 +69,7 @@ function SearchScreenManual() {
 					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={() => {
-							navigation.navigate('Trending Tags');
+							router.navigate('/discover/trending-tags');
 						}}
 					>
 						<ButtonGroupContainer>

@@ -1,9 +1,7 @@
 import { View, Animated } from 'react-native';
-import WithScrollOnRevealContext, {
-	useScrollOnReveal,
-} from '../states/useScrollOnReveal';
+import WithScrollOnRevealContext from '../states/useScrollOnReveal';
 import { SearchBar } from '@rneui/themed';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CheckBox } from '@rneui/base';
 import appStyling from '../styles/AppStyles';
 import SearchResults from '../components/screens/search/SearchResults';
@@ -14,12 +12,10 @@ import ApiWrapper from '../components/common/tag/TagBrowseLocal';
 import UserProfile from './shared/profile/UserProfile';
 import PostWithClientContext from './shared/Post';
 import WithAppPaginationContext from '../states/usePagination';
-import TrendingPosts from '../components/screens/search/stack/TrendingPosts';
-import TrendingTags from '../components/screens/search/stack/TrendingTags';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 import WithAutoHideTopNavBar from '../components/containers/WithAutoHideTopNavBar';
 import useTopbarSmoothTranslate from '../states/useTopbarSmoothTranslate';
-import { useSharedValue } from 'react-native-reanimated';
+import { APP_FONT } from '../styles/AppTheme';
 
 type CheckboxItemProps = {
 	selected: boolean;
@@ -44,15 +40,16 @@ function CheckboxItem({ selected, title, onPress }: CheckboxItemProps) {
 				padding: 0,
 				marginLeft: 4,
 				marginRight: 0,
+				opacity: 0.87,
 			}}
-			textStyle={{ color: '#fff', opacity: 0.6 }}
+			textStyle={{ color: APP_FONT.MONTSERRAT_BODY }}
 			title={title}
 		/>
 	);
 }
 
 function Multiselect() {
-	const [selectedIndex, setSelectedIndex] = React.useState(0);
+	const [selectedIndex, setSelectedIndex] = useState(0);
 
 	function onCheckboxPress(idx: number) {
 		setSelectedIndex(idx);
@@ -106,7 +103,6 @@ function Multiselect() {
 function FloatingMenuWrapper() {
 	const [searchBoxText, setSearchBoxText] = useState('');
 	const [SearchTerm, setSearchTerm] = useState('');
-	const { outputStyle } = useScrollOnReveal();
 
 	const updateSearch = (search: string) => {
 		setSearchBoxText(search);
@@ -124,26 +120,12 @@ function FloatingMenuWrapper() {
 		hiddenHeight: 50,
 	});
 
-	const width = useSharedValue(0);
-
-	// useAnimatedStyle(() => {
-	// 	return {
-	// 		transform: [
-	// 			{
-	// 				translateY: withTiming(translateY.value, {
-	// 					duration: 250,
-	// 					easing: Easing.inOut(Easing.ease),
-	// 				}),
-	// 			},
-	// 		],
-	// 	};
-	// });
-
 	return (
 		<WithAutoHideTopNavBar title={'Explore'} translateY={translateY}>
 			<SearchResults q={SearchTerm} type={null} onScroll={onScroll} />
 			<Animated.View style={[appStyling.inputAssistant]}>
 				<SearchBar
+					// @ts-ignore
 					onChangeText={updateSearch}
 					onSubmitEditing={submitSearch}
 					value={searchBoxText}
@@ -180,8 +162,6 @@ function SearchScreen() {
 				initialRouteName={'Search'}
 				screenOptions={{ headerShown: false }}
 			>
-				<Stack.Screen name={'Trending Posts'} component={TrendingPosts} />
-				<Stack.Screen name={'Trending Tags'} component={TrendingTags} />
 				<Stack.Screen name={'Search'} component={HomeContainer} />
 				<Stack.Screen name="Browse Hashtag" component={ApiWrapper} />
 				<Stack.Screen name="Profile" component={UserProfile} />

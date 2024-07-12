@@ -2,19 +2,16 @@ import { View } from 'react-native';
 import { Skeleton, Text } from '@rneui/themed';
 import { useQuery } from '@realm/react';
 import { ActivityPubServer } from '../../../entities/activitypub-server.entity';
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
-import Logo from '../../../assets/branding/mastodon/Logo';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { FontAwesome } from '@expo/vector-icons';
 import AddServerWidget from '../../../components/widgets/add-server/core/floatingWidget';
 import { useAssets } from 'expo-asset';
 import { Image } from 'expo-image';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Drawer } from 'expo-router/drawer';
 import KnownServersDrawer from '../../../components/drawers/known-servers';
 import WithAppDrawerContext from '../../../states/useAppDrawer';
 import KnownServerSearchWidget from '../../../components/widgets/add-server/core/floatingSearch';
@@ -22,12 +19,10 @@ import WithLocalAppMenuControllerContext from '../../../states/useLocalAppMenuCo
 import WithSearchTermContext, {
 	useSearchTermContext,
 } from '../../../hooks/forms/useSearchTerm';
-import useSearchTerm from '../../../hooks/forms/useSearchTerm';
 import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
 import WithAppAssetsContext, {
 	useAppAssetsContext,
 } from '../../../hooks/app/useAssets';
-import Animated, { FadeIn, FadeInLeft, FadeOut } from 'react-native-reanimated';
 
 type ServerItemProps = {
 	url: string;
@@ -76,7 +71,7 @@ const InstanceSoftwareCountIndicator = memo(function Foo(
 				{/*@ts-ignore-next-line*/}
 				<Image
 					source={o.imgUrl}
-					style={{ width: o.width, height: o.height, opacity: 0.87 }}
+					style={{ width: o.width, height: o.height, opacity: 0.75 }}
 				/>
 			</View>
 
@@ -101,7 +96,7 @@ const InstanceSoftwareCountIndicator = memo(function Foo(
 				style={{
 					marginLeft: 8,
 					fontFamily: 'Montserrat-Bold',
-					color: APP_FONT.MONTSERRAT_HEADER,
+					color: APP_FONT.MONTSERRAT_BODY,
 				}}
 			>
 				{o.count}
@@ -393,7 +388,7 @@ const ServerItem = memo(function Foo({
 					<Text
 						style={{
 							fontFamily: 'Montserrat-Bold',
-							color: APP_FONT.MONTSERRAT_HEADER,
+							color: APP_FONT.MONTSERRAT_BODY,
 						}}
 					>
 						{url}
@@ -417,6 +412,7 @@ const ServerItem = memo(function Foo({
 							style={{
 								width: renderData.width,
 								height: renderData.height,
+								opacity: 0.75,
 							}}
 						/>
 					</View>

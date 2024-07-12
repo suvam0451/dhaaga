@@ -11,7 +11,8 @@ import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import WithAppPaginationContext from '../../../../states/usePagination';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
+import { isLoaded } from 'expo-font';
 
 function LoadingState() {
 	return (
@@ -30,7 +31,7 @@ function LoadingState() {
 					style={{
 						fontFamily: 'Montserrat-Bold',
 						fontSize: 16,
-						color: APP_FONT.MONTSERRAT_HEADER,
+						color: APP_FONT.MONTSERRAT_BODY,
 					}}
 				>
 					Loading Gallery
@@ -54,7 +55,15 @@ function ResultsRefreshing() {
 				alignItems: 'center',
 			}}
 		>
-			<Text style={{ textAlign: 'center', fontSize: 20 }}>Loading Results</Text>
+			<Text
+				style={{
+					textAlign: 'center',
+					fontSize: 20,
+					color: APP_FONT.MONTSERRAT_BODY,
+				}}
+			>
+				Loading Results
+			</Text>
 			<ActivityIndicator size={32} style={{ marginLeft: 8 }} />
 		</View>
 	);
@@ -71,18 +80,37 @@ function NothingToSeeHere() {
 				alignItems: 'center',
 			}}
 		>
-			<Text style={{ textAlign: 'center', fontSize: 20 }}>No Results</Text>
+			<Text
+				style={{
+					textAlign: 'center',
+					fontSize: 20,
+					color: APP_FONT.MONTSERRAT_BODY,
+				}}
+			>
+				No Results
+			</Text>
 		</View>
 	);
 }
 
 type Props = {
-	posts: any[];
 	onScroll: any;
 	resetPosition: () => void;
 };
 
-function PostList({ posts, onScroll, resetPosition }: Props) {
+const ListHeaderComponent = memo(function Foo() {
+	const { posts, isBuilding, isRefreshing } =
+		useBookmarkGalleryControllerContext();
+
+	if (isBuilding) return <LoadingState />;
+	if (isRefreshing) return <ResultsRefreshing />;
+	if (posts.length === 0) return <NothingToSeeHere />;
+	return <View></View>;
+});
+
+function PostList({ onScroll, resetPosition }: Props) {
+	const { posts } = useBookmarkGalleryControllerContext();
+
 	useEffect(() => {
 		return () => {
 			resetPosition();
@@ -93,8 +121,9 @@ function PostList({ posts, onScroll, resetPosition }: Props) {
 
 	return (
 		<AnimatedFlashList
+			ListHeaderComponent={ListHeaderComponent}
 			ref={ref}
-			estimatedItemSize={240}
+			estimatedItemSize={320}
 			data={posts}
 			renderItem={({ item }) => <RealmStatus _id={item._id} />}
 			scrollEventThrottle={16}
@@ -105,8 +134,7 @@ function PostList({ posts, onScroll, resetPosition }: Props) {
 }
 
 function Core() {
-	const { posts, isBuilding, loadMore, isRefreshing } =
-		useBookmarkGalleryControllerContext();
+	const { posts, loadMore } = useBookmarkGalleryControllerContext();
 	const { onScroll, translateY, resetPosition } = useScrollMoreOnPageEnd({
 		itemCount: posts.length,
 		updateQueryCache: loadMore,
@@ -114,30 +142,15 @@ function Core() {
 
 	return (
 		<WithAutoHideTopNavBar title={'Bookmark Gallery'} translateY={translateY}>
-			{isBuilding ? (
-				<LoadingState />
-			) : (
-				<View
-					style={{
-						height: '100%',
-						display: 'flex',
-					}}
-				>
-					{isRefreshing ? (
-						<ResultsRefreshing />
-					) : posts.length > 0 ? (
-						<PostList
-							posts={posts}
-							onScroll={onScroll}
-							resetPosition={resetPosition}
-						/>
-					) : (
-						<NothingToSeeHere />
-					)}
-					{/*This is an absolutely positioned component*/}
-					<BookmarkGalleryWidgetExpanded />
-				</View>
-			)}
+			<View
+				style={{
+					height: '100%',
+					display: 'flex',
+				}}
+			>
+				<PostList onScroll={onScroll} resetPosition={resetPosition} />
+				<BookmarkGalleryWidgetExpanded />
+			</View>
 		</WithAutoHideTopNavBar>
 	);
 }

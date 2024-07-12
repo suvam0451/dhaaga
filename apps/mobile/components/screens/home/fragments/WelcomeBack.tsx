@@ -148,7 +148,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="home"
 						size={20}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				);
 			case TimelineFetchMode.LOCAL:
@@ -156,7 +156,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				);
 			case TimelineFetchMode.FEDERATED:
@@ -164,7 +164,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome6
 						name="globe"
 						size={20}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				);
 			case TimelineFetchMode.HASHTAG:
@@ -172,7 +172,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				);
 			case TimelineFetchMode.REMOTE_TIMELINE:
@@ -180,7 +180,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				);
 			case TimelineFetchMode.LIST:
@@ -188,7 +188,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				);
 			case TimelineFetchMode.USER:
@@ -196,7 +196,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_HEADER}
+						color={APP_FONT.MONTSERRAT_BODY}
 					/>
 				);
 			default:
@@ -244,7 +244,14 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 		<Pressable style={styles.quickActionButtonContainer} onPress={onPress}>
 			<View>{Icon}</View>
 			<View style={{ marginLeft: 8 }}>
-				<Text>{Label}</Text>
+				<Text
+					style={{
+						color: APP_FONT.MONTSERRAT_BODY,
+						fontFamily: 'Montserrat-Bold',
+					}}
+				>
+					{Label}
+				</Text>
 			</View>
 		</Pressable>
 	);
@@ -348,7 +355,7 @@ function WelcomeBack() {
 										fontSize: 20,
 										marginLeft: 4,
 										flexGrow: 1,
-										color: APP_FONT.MONTSERRAT_HEADER,
+										color: APP_FONT.MONTSERRAT_BODY,
 									}}
 								>
 									Continue browsing
@@ -361,7 +368,7 @@ function WelcomeBack() {
 							<FontAwesome6
 								name="toolbox"
 								size={24}
-								color={APP_FONT.MONTSERRAT_HEADER}
+								color={APP_FONT.MONTSERRAT_BODY}
 							/>
 						</View>
 						<Text>This feature is not available yet</Text>
@@ -388,7 +395,7 @@ function WelcomeBack() {
 									fontSize: 20,
 									marginLeft: 4,
 									flexGrow: 1,
-									color: APP_FONT.MONTSERRAT_HEADER,
+									color: APP_FONT.MONTSERRAT_BODY,
 								}}
 							>
 								Pinned
@@ -401,7 +408,9 @@ function WelcomeBack() {
 								}}
 							>
 								<View style={{ marginRight: 8 }}>
-									<Text>Show All</Text>
+									<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+										Show All
+									</Text>
 								</View>
 								<View>
 									<FontAwesome6
@@ -434,7 +443,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 8,
 		alignItems: 'center',
 		borderWidth: 1,
-		borderColor: APP_THEME.MENTION,
+		borderColor: APP_THEME.MENTION_LIGHT,
 		padding: 8,
 		borderRadius: 4,
 	},
@@ -452,7 +461,7 @@ const styles = StyleSheet.create({
 	timeOfDayText: {
 		fontSize: 28,
 		fontFamily: 'Montserrat-Bold',
-		color: APP_FONT.MONTSERRAT_HEADER,
+		color: APP_FONT.MONTSERRAT_BODY,
 	},
 });
 

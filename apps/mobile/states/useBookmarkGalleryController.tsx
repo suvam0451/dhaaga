@@ -4,6 +4,7 @@ import useBookmarkGalleryBuilder, {
 } from '../hooks/realm/useBookmarkGalleryBuilder';
 import {
 	createContext,
+	useCallback,
 	useContext,
 	useEffect,
 	useMemo,
@@ -161,7 +162,7 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 
 	const IsPaginationEnabled = useRef(true);
 
-	function loadMore() {
+	const loadMore = useCallback(() => {
 		if (!IsPaginationEnabled.current) return;
 		IsPaginationEnabled.current = false;
 
@@ -170,9 +171,9 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 		setTimeout(() => {
 			IsPaginationEnabled.current = true;
 		}, 500);
-	}
+	}, [IsPaginationEnabled.current]);
 
-	function isUserSelected(_id: BSON.UUID) {
+	const isUserSelected = useCallback((_id: BSON.UUID) => {
 		switch (UserSpecialSelection.current) {
 			case 'all':
 				return true;
@@ -182,9 +183,9 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 				return userSet.current.has(_id.toString());
 			}
 		}
-	}
+	}, []);
 
-	function isTagSelected(_id: BSON.UUID) {
+	const isTagSelected = useCallback((_id: BSON.UUID) => {
 		switch (TagSpecialSelection.current) {
 			case 'all': {
 				return true;
@@ -196,33 +197,33 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 				return tagSet.current.has(_id.toString());
 			}
 		}
-	}
+	}, []);
 
-	function onUserAllSelected() {
+	const onUserAllSelected = useCallback(() => {
 		UserSpecialSelection.current = 'all';
 		userSet.current.clear();
 		setUserStateHash(randomUUID());
-	}
+	}, []);
 
-	function onUserNoneSelected() {
+	const onUserNoneSelected = useCallback(() => {
 		UserSpecialSelection.current = 'none';
 		userSet.current.clear();
 		setUserStateHash(randomUUID());
-	}
+	}, []);
 
-	function onTagAllSelected() {
+	const onTagAllSelected = useCallback(() => {
 		TagSpecialSelection.current = 'all';
 		tagSet.current.clear();
 		setUserStateHash(randomUUID());
-	}
+	}, []);
 
-	function onTagNoneSelected() {
+	const onTagNoneSelected = useCallback(() => {
 		TagSpecialSelection.current = 'none';
 		tagSet.current.clear();
 		setUserStateHash(randomUUID());
-	}
+	}, []);
 
-	function onUserSelected(_id: UUID) {
+	const onUserSelected = useCallback((_id: UUID) => {
 		if (
 			UserSpecialSelection.current === 'all' ||
 			UserSpecialSelection.current === 'none'
@@ -239,7 +240,7 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 		if (UserSpecialSelection.current !== null)
 			UserSpecialSelection.current = null;
 		setUserStateHash(randomUUID());
-	}
+	}, []);
 
 	function onTagSelected(_id: UUID) {}
 
@@ -258,7 +259,7 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 	const USER_TOTAL_COUNT = useMemo(() => {
 		switch (UserSpecialSelection.current) {
 			case 'all':
-				return LoadedData?.length;
+				return LoadedData.current?.length;
 			case 'none':
 				return 0;
 			default:
@@ -284,8 +285,8 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 				onUserNoneSelected,
 				onTagAllSelected,
 				onTagNoneSelected,
-				loadedUserData: LoadedData,
-				loadedTagData: LoadedTagData,
+				loadedUserData: LoadedData.current,
+				loadedTagData: LoadedTagData.current,
 				IsUserAllSelected,
 				IsUserNoneSelected,
 				IsTagAllSelected,

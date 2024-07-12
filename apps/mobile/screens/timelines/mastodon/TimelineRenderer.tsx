@@ -139,7 +139,7 @@ function TimelineRenderer() {
 	}
 
 	// Queries
-	const { status, data, error, fetchStatus, refetch } = useQuery<StatusArray>({
+	const { status, data, fetchStatus, refetch } = useQuery<StatusArray>({
 		queryKey: [
 			'mastodon/timelines/index',
 			queryCacheMaxId,

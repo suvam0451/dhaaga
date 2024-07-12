@@ -83,6 +83,17 @@ const defaultValue: Type = {
 
 const ActivitypubStatusContext = createContext<Type>(defaultValue);
 
+/**
+ * When a raw status or it's interface
+ * is passed to the parent context of this hook,
+ *
+ * @return the post, as statusRaw
+ * @return the post interface, as status
+ * @return any reblogged post, as sharedStatus
+ *
+ * @returns status
+ * @returns sharedStatus
+ */
 export function useActivitypubStatusContext() {
 	return useContext(ActivitypubStatusContext);
 }
@@ -102,9 +113,23 @@ function WithActivitypubStatusContext({
 	const _domain = primaryAcct?.domain;
 
 	const [StateKey, setStateKey] = useState(randomUUID());
+
+	/**
+	 * Storing raw object and interfaces for:
+	 * Status and RebloggedStatus
+	 */
 	const [Status, setStatus] = useState<StatusInterface | null>(
 		ActivitypubStatusAdapter(null, _domain),
 	);
+	const [StatusRaw, setStatusRaw] = useState<mastodon.v1.Status | any | null>(
+		null,
+	);
+	const [SharedStatus, setSharedStatus] = useState<StatusInterface | null>(
+		ActivitypubStatusAdapter(null, _domain),
+	);
+	const [SharedStatusRaw, setSharedStatusRaw] = useState<
+		mastodon.v1.Status | any | null
+	>(null);
 
 	const [StatusContext, setStatusContext] =
 		useState<StatusContextInterface | null>(
@@ -115,13 +140,6 @@ function WithActivitypubStatusContext({
 	const contextChildrenLookup = useRef<Map<string, StatusInterface[]>>();
 	const contextRootLookup = useRef<StatusInterface>();
 
-	const [SharedStatus, setSharedStatus] = useState<StatusInterface | null>(
-		ActivitypubStatusAdapter(null, _domain),
-	);
-
-	const [StatusRaw, setStatusRaw] = useState<mastodon.v1.Status | any | null>(
-		null,
-	);
 	const [OpenGraph, setOpenGraph] = useState<OgObject | null>(null);
 
 	// init
@@ -140,10 +158,10 @@ function WithActivitypubStatusContext({
 					_domain,
 				);
 				setSharedStatus(repostAdapted);
+				setSharedStatusRaw(adapted.getRepostedStatusRaw());
 			}
 		} else if (statusInterface) {
 			setStatus(statusInterface);
-			console.log('[INFO]: setting raw status as', statusInterface?.getRaw());
 			setStatusRaw(statusInterface?.getRaw());
 			if (statusInterface.isReposted()) {
 				const repostAdapted = ActivitypubStatusAdapter(
@@ -151,6 +169,7 @@ function WithActivitypubStatusContext({
 					_domain,
 				);
 				setSharedStatus(repostAdapted);
+				setSharedStatusRaw(statusInterface.getRepostedStatusRaw());
 			}
 		}
 	}, [status, statusInterface]);

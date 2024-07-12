@@ -86,7 +86,6 @@ function StatusContextApiWrapper() {
 	});
 
 	useEffect(() => {
-		console.log(status, data);
 		if (status === 'success') {
 			setStatusContextData(data);
 		}

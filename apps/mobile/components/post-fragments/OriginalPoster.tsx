@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { extractInstanceUrl, visibilityIcon } from '../../utils/instances';
+import { visibilityIcon } from '../../utils/instances';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { Fragment, memo, useCallback, useEffect, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -8,9 +8,7 @@ import { useActivitypubStatusContext } from '../../states/useStatus';
 import { useActivitypubUserContext } from '../../states/useProfile';
 import { Skeleton } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import { APP_FONT } from '../../styles/AppTheme';
 import useMfm from '../hooks/useMfm';
-import AstService from '../../services/ast.service';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 
 type OriginalPosterProps = {
@@ -43,6 +41,7 @@ export const OriginalPostedPfpFragment = memo(function Foo({
 					borderColor: 'gray',
 					borderWidth: 2,
 					borderRadius: 6,
+					marginTop: 2,
 				}}
 			>
 				{/* @ts-ignore */}
@@ -83,7 +82,7 @@ function OriginalPosterSkeleton() {
 	);
 }
 
-export function OriginalPosterPostedByFragment({
+export const OriginalPosterPostedByFragment = memo(function Foo({
 	displayNameRaw,
 	onClick,
 	theirSubdomain,
@@ -163,21 +162,21 @@ export function OriginalPosterPostedByFragment({
 			</View>
 		</View>
 	);
-}
+});
 
-function OriginalPoster({
+const OriginalPoster = memo(function Foo({
 	id,
 	avatarUrl,
-	createdAt,
 	accountUrl,
-	visibility,
 }: OriginalPosterProps) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 
 	const navigation = useNavigation<any>();
-	const { status } = useActivitypubStatusContext();
+	const { status, sharedStatus } = useActivitypubStatusContext();
 	const { user, setDataRaw } = useActivitypubUserContext();
+
+	const op = status?.isReposted() ? sharedStatus : status;
 
 	useEffect(() => {
 		if (status?.getUser()) return;
@@ -188,7 +187,7 @@ function OriginalPoster({
 		navigation.navigate('Profile', {
 			id: id,
 		});
-	}, []);
+	}, [id]);
 
 	const handle = useMemo(() => {
 		return ActivitypubHelper.getHandle(accountUrl, subdomain);
@@ -203,17 +202,13 @@ function OriginalPoster({
 					onClick={onProfileClicked}
 					theirSubdomain={user?.getInstanceUrl()}
 					displayNameRaw={user?.getDisplayName()}
-					instanceUrl={extractInstanceUrl(
-						accountUrl,
-						user.getUsername(),
-						subdomain,
-					)}
-					postedAt={new Date(status?.getCreatedAt())}
+					instanceUrl={handle}
+					postedAt={new Date(op?.getCreatedAt())}
 					visibility={status?.getVisibility()}
 				/>
 			</Fragment>
 		);
 	}, [user]);
-}
+});
 
 export default OriginalPoster;

@@ -1,6 +1,5 @@
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useRealm } from '@realm/react';
-import { Button } from '@rneui/themed';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { Text } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
@@ -69,7 +68,13 @@ function RegularTimeline() {
 	return (
 		<View>
 			<View style={{ marginVertical: 8 }}>
-				<Text style={{ textAlign: 'left', paddingHorizontal: 8 }}>
+				<Text
+					style={{
+						textAlign: 'left',
+						paddingHorizontal: 8,
+						color: APP_FONT.MONTSERRAT_BODY,
+					}}
+				>
 					Use the regular timeline interface
 				</Text>
 			</View>
@@ -91,13 +96,25 @@ function BookmarkSyncedPrompt() {
 	return (
 		<View>
 			<View style={{ marginVertical: 8 }}>
-				<Text style={{ textAlign: 'left', paddingHorizontal: 8 }}>
+				<Text
+					style={{
+						textAlign: 'left',
+						paddingHorizontal: 8,
+						color: APP_FONT.MONTSERRAT_BODY,
+					}}
+				>
 					A better interface to browse your bookmarks.
 				</Text>
 				<View style={{ marginTop: 8, paddingHorizontal: 16 }}>
-					<Text>- ✨ Offline Support</Text>
-					<Text>- ✨ Full-text search</Text>
-					<Text>- Private bookmarks</Text>
+					<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+						- ✨ Offline Support
+					</Text>
+					<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+						- ✨ Full-text search
+					</Text>
+					<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+						- Private bookmarks
+					</Text>
 				</View>
 			</View>
 			<View
@@ -121,16 +138,12 @@ function BookmarkSyncedPrompt() {
 						setBookmarkGallerySettingDialogVisible(true);
 					}}
 				>
-					<FontAwesome5
-						name="cog"
-						size={24}
-						color={APP_FONT.MONTSERRAT_HEADER}
-					/>
+					<FontAwesome5 name="cog" size={24} color={APP_FONT.MONTSERRAT_BODY} />
 				</View>
 			</View>
 			<Text
 				style={{
-					color: APP_FONT.MONTSERRAT_HEADER,
+					color: APP_FONT.MONTSERRAT_BODY,
 					fontSize: 12,
 					marginLeft: 4,
 					marginTop: 4,
@@ -196,6 +209,7 @@ const style = StyleSheet.create({
 		textAlign: 'center',
 		fontFamily: 'Montserrat-Bold',
 		fontSize: 20,
+		color: APP_FONT.MONTSERRAT_BODY,
 	},
 });
 

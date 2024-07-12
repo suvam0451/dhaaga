@@ -4,7 +4,7 @@ import { Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { useBookmarkGalleryControllerContext } from '../../../../states/useBookmarkGalleryController';
 import { UUID } from 'bson';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 type Props = {
 	isSelected: boolean;
@@ -12,9 +12,9 @@ type Props = {
 };
 
 const USER_SELECTION_BUBBLE_SIZE = 54;
-const SELECTED_COLOR = APP_THEME.REPLY_THREAD_COLOR_SWATCH[1];
+const SELECTED_COLOR = 'rgba(172,196,46,0.87)';
 
-export function UserSelectionIndicator({
+export const UserSelectionIndicator = memo(function Foo({
 	_id,
 	onClick,
 	avatarUrl,
@@ -49,6 +49,7 @@ export function UserSelectionIndicator({
 					width: '100%',
 					borderRadius: 4,
 					padding: 2,
+					opacity: 0.8,
 				}}
 			/>
 			<View
@@ -108,7 +109,7 @@ export function UserSelectionIndicator({
 			</View>
 		</View>
 	);
-}
+});
 
 export function TagSelectionIndicator({ isSelected, onClick }: Props) {}
 

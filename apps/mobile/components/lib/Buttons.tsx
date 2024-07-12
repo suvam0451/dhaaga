@@ -105,7 +105,7 @@ export function AppButtonVariantA({
 			) : (
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_HEADER,
+						color: APP_FONT.MONTSERRAT_BODY,
 						opacity: 1,
 						fontFamily: 'Inter-Bold',
 					}}
@@ -160,7 +160,7 @@ export function AppButtonVariantDestructive({
 			) : (
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_HEADER,
+						color: APP_FONT.MONTSERRAT_BODY,
 						opacity: 1,
 						fontFamily: 'Inter-Bold',
 					}}

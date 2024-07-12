@@ -1,4 +1,3 @@
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import { StandardView } from '../../../styles/Containers';
@@ -9,12 +8,8 @@ import StatusInteraction from '../../../screens/timelines/fragments/StatusIntera
 import MediaItem from '../media/MediaItem';
 import { useNavigation } from '@react-navigation/native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
-import MfmService from '../../../services/mfm.service';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
-import { randomUUID } from 'expo-crypto';
-import { useRealm } from '@realm/react';
 import WithActivitypubUserContext from '../../../states/useProfile';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import activitypubAdapterService from '../../../services/activitypub-adapter.service';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -24,6 +19,8 @@ import useMfm from '../../hooks/useMfm';
 import ExplainOutput from '../explanation/ExplainOutput';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import LocalizationService from '../../../services/localization.services';
+import { Image } from 'expo-image';
+import { RepliedStatusFragment } from './_static';
 
 const POST_SPACING_VALUE = 4;
 
@@ -34,7 +31,6 @@ type StatusItemProps = {
 };
 
 type StatusFragmentProps = {
-	// status: mastodon.v1.Status | Note;
 	mt?: number;
 	isRepost?: boolean;
 } & StatusItemProps;
@@ -113,7 +109,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 					delayPressIn={100}
 					onPress={() => {
 						navigation.navigate('Post', {
-							id: status.getId(),
+							id: _status.getId(),
 						});
 					}}
 				>
@@ -292,6 +288,9 @@ export function RootFragmentContainer({
 	isRepost,
 	replyContextIndicators,
 }: StatusFragmentProps) {
+	const { status: _status } = useActivitypubStatusContext();
+	if (!_status?.isValid()) return <View></View>;
+
 	const replyIndicatorsPresent = replyContextIndicators?.length > 0;
 
 	return (
@@ -343,88 +342,25 @@ export function RootFragmentContainer({
 }
 
 /**
- * Adds parent thread's information on top
- *
- * NOTE: pass negative values to RootStatus margin
- * @constructor
- */
-function RepliedStatusFragment() {
-	const { status: _status, statusRaw: status } = useActivitypubStatusContext();
-	if (!_status.isValid()) return <View></View>;
-
-	return (
-		<View
-			style={{ backgroundColor: '#1e1e1e', marginBottom: POST_SPACING_VALUE }}
-		>
-			<StandardView
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					backgroundColor: '#1e1e1e',
-				}}
-			>
-				<Ionicons color={'#888'} name={'arrow-redo-outline'} size={12} />
-				<Text style={{ color: '#888', fontWeight: '500', marginLeft: 4 }}>
-					Continues a thread
-				</Text>
-			</StandardView>
-			<RootFragmentContainer mt={-8} isRepost={false} />
-		</View>
-	);
-}
-
-/**
  * Adds booster's information on top
  *
  * NOTE: pass negative values to RootStatus margin
- * @param boostedStatus
- * @constructor
  */
-function SharedStatusFragment({
-	boostedStatus,
-}: StatusFragmentProps & {
-	postedBy: mastodon.v1.Account;
-	boostedStatus: mastodon.v1.Status | any;
-}) {
+function SharedStatusFragment() {
 	const { status: _status } = useActivitypubStatusContext();
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
 	const domain = primaryAcct?.domain;
-	const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
 
 	const userI = useMemo(() => {
 		return activitypubAdapterService.adaptUser(_status.getUser(), domain);
 	}, [_status]);
 
-	const ParsedDisplayName = useMemo(() => {
-		const target = userI?.getDisplayName();
-		if (target === '') return <View></View>;
-		const { reactNodes } = MfmService.renderMfm(target, {
-			emojiMap: new Map(),
-			domain,
-			subdomain,
-			db,
-			globalDb,
-			remoteSubdomain: userI?.getInstanceUrl(),
-		});
-		return reactNodes?.map((para, i) => {
-			const uuid = randomUUID();
-			return (
-				<Text
-					key={uuid}
-					style={{
-						opacity: 0.6,
-						color: '#888',
-						fontFamily: 'Montserrat-ExtraBold',
-					}}
-				>
-					{para?.map((o, j) => <Text key={j}>{o}</Text>)}
-				</Text>
-			);
-		});
-	}, [userI?.getDisplayName()]);
+	const { content: ParsedDisplayName } = useMfm({
+		content: userI?.getDisplayName(),
+		remoteSubdomain: userI?.getInstanceUrl(),
+		emojiMap: userI?.getEmojiMap(),
+		deps: [userI],
+	});
 
 	return useMemo(() => {
 		if (!_status.isValid()) return <View></View>;
@@ -433,7 +369,8 @@ function SharedStatusFragment({
 			<View
 				style={{
 					backgroundColor: '#1e1e1e',
-					marginBottom: POST_SPACING_VALUE,
+					borderTopRightRadius: 8,
+					borderTopLeftRadius: 8,
 				}}
 			>
 				<StandardView
@@ -444,22 +381,36 @@ function SharedStatusFragment({
 						justifyContent: 'flex-start',
 					}}
 				>
-					<Ionicons color={'#888'} name={'rocket-outline'} size={12} />
-					<Text
-						style={{
-							color: '#888',
-							fontWeight: '500',
-							marginLeft: 4,
-							fontFamily: 'Montserrat-ExtraBold',
-							opacity: 0.6,
-						}}
-					>
-						{ParsedDisplayName}
-					</Text>
-					<Text style={{ color: 'gray', marginLeft: 2, marginRight: 2 }}>
-						•
-					</Text>
-					<View style={{ marginTop: 2 }}>
+					<View>
+						<Ionicons color={'#888'} name={'rocket-outline'} size={14} />
+					</View>
+					<View>
+						{/*@ts-ignore-next-line*/}
+						<Image
+							source={userI.getAvatarUrl()}
+							style={{
+								width: 20,
+								height: 20,
+								opacity: 0.75,
+								borderRadius: 4,
+								marginLeft: 4,
+							}}
+						/>
+					</View>
+					<View>
+						<Text
+							style={{
+								color: '#888',
+								fontWeight: '500',
+								marginLeft: 4,
+								fontFamily: 'Montserrat-ExtraBold',
+								opacity: 0.6,
+							}}
+						>
+							{ParsedDisplayName}
+						</Text>
+					</View>
+					<View>
 						<Text
 							style={{
 								color: '#888',
@@ -468,13 +419,13 @@ function SharedStatusFragment({
 								opacity: 0.6,
 							}}
 						>
+							{' • '}
 							{LocalizationService.formatDistanceToNowStrict(
-								boostedStatus?.createdAt,
+								new Date(_status?.getCreatedAt()),
 							)}
 						</Text>
 					</View>
 				</StandardView>
-				<RootFragmentContainer mt={-8} isRepost={true} />
 			</View>
 		);
 	}, [_status, ParsedDisplayName]);
@@ -490,43 +441,37 @@ function StatusItem({
 }: StatusItemProps) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
-	const { status: _status, statusRaw } = useActivitypubStatusContext();
+	const { status: _status, sharedStatus } = useActivitypubStatusContext();
 
 	return useMemo(() => {
 		switch (domain) {
 			case 'mastodon': {
-				const _statusRaw = statusRaw as mastodon.v1.Status;
-				if (_status && _status.isReposted() && !hideReplyIndicator) {
-					return (
-						<Fragment>
-							<SharedStatusFragment
-								isRepost={true}
-								postedBy={_statusRaw?.reblog?.account}
-								boostedStatus={_statusRaw?.reblog}
-							/>
-						</Fragment>
-					);
-				}
-				if (_status && _status.isReply() && !hideReplyIndicator) {
-					return <RepliedStatusFragment />;
-				}
-
 				return (
-					<RootFragmentContainer
-						replyContextIndicators={replyContextIndicators}
-					/>
+					<Fragment>
+						{_status.isReposted() && <SharedStatusFragment />}
+						{_status.isReposted() ? (
+							sharedStatus.isReply() ? (
+								<RepliedStatusFragment mt={-8} paddingVertical={6} />
+							) : (
+								<View></View>
+							)
+						) : (
+							_status.isReply() && <RepliedStatusFragment />
+						)}
+						<RootFragmentContainer
+							replyContextIndicators={replyContextIndicators}
+							mt={_status.isReposted() || _status.isReply() ? -8 : 0}
+							isRepost={_status.isReposted()}
+						/>
+					</Fragment>
 				);
 			}
 			case 'misskey': {
 				if (_status && _status.isReposted() && !hideReplyIndicator) {
-					const _status = statusRaw as any;
 					return (
 						<Fragment>
-							<SharedStatusFragment
-								postedBy={_status.renote.user as any}
-								isRepost={true}
-								boostedStatus={_status}
-							/>
+							<SharedStatusFragment />
+							<RootFragmentContainer mt={-8} isRepost={true} />
 						</Fragment>
 					);
 				}

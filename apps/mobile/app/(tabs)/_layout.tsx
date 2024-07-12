@@ -75,7 +75,7 @@ export default function TabLayout() {
 					initialRouteName={'home-home'}
 				/>
 				<Tabs.Screen
-					name={'search'}
+					name={'discover'}
 					options={{
 						tabBarIcon: ({ focused, color, size }) => (
 							<FontAwesome6 size={size} name="compass" color={color} />

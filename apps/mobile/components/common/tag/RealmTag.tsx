@@ -1,6 +1,7 @@
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { Pressable, StyleSheet } from 'react-native';
+import { memo } from 'react';
 
 type Props = {
 	onPress: () => void;
@@ -12,7 +13,7 @@ type Props = {
 	count?: number;
 };
 
-function RealmTag({ onPress, dto, count }: Props) {
+const RealmTag = memo(function Foo({ onPress, dto, count }: Props) {
 	return (
 		<Pressable style={styles.tagContainer} onPress={onPress}>
 			<Text style={styles.tagText} numberOfLines={1}>
@@ -21,7 +22,7 @@ function RealmTag({ onPress, dto, count }: Props) {
 			{count && <Text style={styles.tagSubtext}> ({count})</Text>}
 		</Pressable>
 	);
-}
+});
 
 const styles = StyleSheet.create({
 	tagContainer: {

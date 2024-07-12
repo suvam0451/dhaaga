@@ -16,6 +16,7 @@ import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { KNOWN_SOFTWARE } from '../_router/instance.js';
 import { MisskeyStatusesRouter } from './statuses.js';
 import { MisskeyBookmarksRouter } from './bookmarks.js';
+import { MisskeyTrendsRouter } from './trends.js';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -24,6 +25,7 @@ class MisskeyRestClient implements ActivityPubClient {
 	accounts: MisskeyAccountsRouter;
 	statuses: MisskeyStatusesRouter;
 	bookmarks: MisskeyBookmarksRouter;
+	trends: MisskeyTrendsRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -37,6 +39,7 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.accounts = new MisskeyAccountsRouter(this.client);
 		this.statuses = new MisskeyStatusesRouter(this.client);
 		this.bookmarks = new MisskeyBookmarksRouter(this.client);
+		this.trends = new MisskeyTrendsRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<Status> {

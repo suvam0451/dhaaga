@@ -3,13 +3,26 @@ import camelcaseKeys from 'camelcase-keys';
 import { extractPaginationFromLinkHeader } from '../_client/_router/utils/link-header.js';
 import * as snakecaseKeys from 'snakecase-keys';
 
+/**
+ * Use Fetch API to
+ * make requests ourselves
+ */
 class AppApi {
 	baseUrl: string;
 	token?: string;
+	requestHeader: HeadersInit;
 
 	constructor(urlLike: string, token?: string) {
 		this.baseUrl = this.cleanLink(urlLike);
 		this.token = token;
+		this.requestHeader = this.token
+			? {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${this.token}`,
+				}
+			: {
+					'Content-Type': 'application/json',
+				};
 		return this;
 	}
 
@@ -31,6 +44,13 @@ class AppApi {
 		return snakecaseKeys.default(obj) as Record<string, any>;
 	}
 
+	private withQuery(endpoint: string, query?: any) {
+		return query
+			? `${this.baseUrl}${endpoint}?` +
+					new URLSearchParams(this.cleanObject(query))
+			: `${this.baseUrl}${endpoint}?`;
+	}
+
 	async getCamelCaseWithLinkPagination<T>(
 		endpoint: string,
 		query?: Object | Record<string, string>,
@@ -41,26 +61,12 @@ class AppApi {
 			maxId?: string | null;
 		}>
 	> {
-		console.log('processing changes');
-		endpoint = query
-			? `${this.baseUrl}${endpoint}?` +
-				new URLSearchParams(this.cleanObject(query))
-			: `${this.baseUrl}${endpoint}?`;
-		console.log(endpoint, this.token);
+		endpoint = this.withQuery(endpoint, query);
 		return await fetch(endpoint, {
 			method: 'GET',
-			headers: this.token
-				? {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${this.token}`,
-					}
-				: {
-						'Content-Type': 'application/json',
-					},
-			// signal: AbortSignal.timeout(5000),
+			headers: this.requestHeader,
 		})
 			.then(async (response) => {
-				console.log(response);
 				if (!response.ok) {
 					throw new Error(
 						JSON.stringify({
@@ -69,7 +75,6 @@ class AppApi {
 						}),
 					);
 				}
-				console.log('done !!!');
 				const { minId, maxId } = extractPaginationFromLinkHeader(
 					response.headers,
 				);
@@ -97,20 +102,10 @@ class AppApi {
 		endpoint: string,
 		query?: Object | Record<string, string>,
 	): Promise<LibraryResponse<T>> {
-		endpoint = query
-			? `${this.baseUrl}${endpoint}?` +
-				new URLSearchParams(this.cleanObject(query))
-			: `${this.baseUrl}${endpoint}?`;
+		endpoint = this.withQuery(endpoint, query);
 		return await fetch(endpoint, {
 			method: 'GET',
-			headers: this.token
-				? {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${this.token}`,
-					}
-				: {
-						'Content-Type': 'application/json',
-					},
+			headers: this.requestHeader,
 		})
 			.then(async (response) => {
 				if (!response.ok) {
@@ -121,7 +116,6 @@ class AppApi {
 						}),
 					);
 				}
-				console.log(response.headers);
 				extractPaginationFromLinkHeader(response.headers);
 				const data = camelcaseKeys(await response.json(), { deep: true });
 				return { data };
