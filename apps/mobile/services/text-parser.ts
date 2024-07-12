@@ -48,9 +48,10 @@ class TextParserService {
 	 * for consumption by a parser
 	 * library (like mfm-js)
 	 * @param input
+	 * @param log
 	 */
-	static preprocessPostContent(input: string) {
-		return parseStatusContent(input);
+	static preprocessPostContent(input: string, log?: boolean) {
+		return parseStatusContent(input, log);
 	}
 
 	// static findHashtagsFromRaw(input: string) {

@@ -15,9 +15,9 @@ class BookmarkBrowserService {
 		const done = false;
 		let syncedCount = 0;
 		do {
-			const res = await client.getBookmarks({ limit: 20, maxId });
+			const { data } = await client.bookmarks.get({ limit: 40, maxId });
 			const statusIs = ActivityPubAdapterService.adaptManyStatuses(
-				res.data,
+				data.data,
 				primaryAcct.domain,
 			);
 
@@ -36,13 +36,13 @@ class BookmarkBrowserService {
 				}
 			});
 
-			syncedCount += res.data.length;
+			syncedCount += data.data.length;
 			if (callback) {
 				callback(syncedCount);
 			}
 
-			if (maxId === res.maxId || res.maxId === null) break;
-			maxId = res.maxId;
+			if (maxId === data.maxId || data.maxId === null) break;
+			maxId = data.maxId;
 		} while (!done);
 	}
 

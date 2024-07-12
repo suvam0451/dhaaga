@@ -3,7 +3,7 @@ import { ObjectSchema, Object } from 'realm';
 export class ActivityPubMediaAttachment extends Object {
 	_id: Realm.BSON.UUID;
 	altText?: string;
-	blurhash: string;
+	blurhash?: string;
 	attachmentId: string;
 	previewUrl?: string;
 	url?: string;
@@ -20,7 +20,7 @@ export class ActivityPubMediaAttachment extends Object {
 		properties: {
 			_id: 'uuid',
 			altText: 'string?',
-			blurhash: 'string',
+			blurhash: 'string?',
 			attachmentId: 'string',
 			previewUrl: 'string?',
 			url: 'string',

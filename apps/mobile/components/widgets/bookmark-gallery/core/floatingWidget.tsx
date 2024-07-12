@@ -11,7 +11,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { useBookmarkGalleryControllerContext } from '../../../../states/useBookmarkGalleryController';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { useRef, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import RealmTag from '../../../common/tag/RealmTag';
 import BookmarkGalleryWidgetSkeleton from '../../../skeletons/widgets/BookmarkGalleryWidget';
@@ -54,36 +54,127 @@ function BookmarkGalleryWidgetCollapsed({
 	);
 }
 
+const TagSelectionListHeaderComponent = memo(function Foo() {
+	return (
+		<View style={{ display: 'flex', flexDirection: 'row' }}>
+			<View style={styles.tagSelectionBoxSpecial}>
+				<Text
+					style={{
+						fontSize: 13,
+						color: APP_THEME.COLOR_SCHEME_D_EMPHASIS,
+						fontFamily: 'Montserrat-Bold',
+					}}
+				>
+					ALL
+				</Text>
+			</View>
+			<View style={styles.tagSelectionBoxSpecial}>
+				<Text
+					style={{
+						fontSize: 13,
+						color: APP_THEME.COLOR_SCHEME_D_EMPHASIS,
+						fontFamily: 'Montserrat-Bold',
+					}}
+				>
+					NONE
+				</Text>
+			</View>
+		</View>
+	);
+});
+
+const UserSelectionListHeaderComponent = memo(function Foo() {
+	const {
+		IsUserNoneSelected,
+		IsUserAllSelected,
+		onUserAllSelected,
+		onUserNoneSelected,
+	} = useBookmarkGalleryControllerContext();
+
+	return (
+		<View style={{ display: 'flex', flexDirection: 'row' }}>
+			<View
+				onTouchEnd={onUserAllSelected}
+				style={[
+					styles.userSelectionBoxSpecial,
+					{
+						borderColor: IsUserAllSelected ? SELECTED_COLOR : 'gray',
+						backgroundColor: IsUserAllSelected
+							? SELECTED_COLOR_BG
+							: 'transparent',
+					},
+				]}
+			>
+				<Text
+					style={[
+						{
+							textAlign: 'center',
+							fontFamily: 'Montserrat-Bold',
+							color: APP_FONT.MONTSERRAT_BODY,
+						},
+						{
+							color: IsUserAllSelected
+								? SELECTED_COLOR
+								: APP_FONT.MONTSERRAT_BODY,
+						},
+					]}
+				>
+					ALL
+				</Text>
+			</View>
+			<View
+				style={[
+					styles.userSelectionBoxSpecial,
+					{
+						borderColor: IsUserNoneSelected ? SELECTED_COLOR : 'gray',
+						backgroundColor: IsUserNoneSelected
+							? SELECTED_COLOR_BG
+							: 'transparent',
+					},
+				]}
+				onTouchEnd={onUserNoneSelected}
+			>
+				<Text
+					style={[
+						{
+							textAlign: 'center',
+							fontFamily: 'Montserrat-Bold',
+							color: APP_FONT.MONTSERRAT_BODY,
+						},
+						{
+							color: IsUserNoneSelected
+								? SELECTED_COLOR
+								: APP_FONT.MONTSERRAT_BODY,
+						},
+					]}
+				>
+					NONE
+				</Text>
+			</View>
+		</View>
+	);
+});
+
 /**
  * This is the Bookmark Gallery Widget
  *
  * It shows the aggregated counts per-user
  * and allows filtering/searching for the module
  */
-function BookmarkGalleryWidgetExpanded() {
+const BookmarkGalleryWidgetExpanded = memo(function Foo() {
 	const {
-		acct,
 		loadedUserData,
 		loadedTagData,
 		isBuilding,
-		isRefreshing,
-		IsUserNoneSelected,
-		IsUserAllSelected,
 		isUserSelected,
-		isTagSelected,
 		onUserSelected,
-		onTagSelected,
-		onUserAllSelected,
-		onUserNoneSelected,
-		onTagAllSelected,
-		onTagNoneSelected,
 		postsTotalCount,
 		usersTotalCount,
 	} = useBookmarkGalleryControllerContext();
 
 	const DeviceWidth = useRef(Dimensions.get('window').width);
 
-	const [IsExpanded, setIsExpanded] = useState(true);
+	const [IsExpanded, setIsExpanded] = useState(false);
 	if (!IsExpanded)
 		return <BookmarkGalleryWidgetCollapsed expand={setIsExpanded} />;
 
@@ -94,114 +185,63 @@ function BookmarkGalleryWidgetExpanded() {
 	if (isBuilding) return <BookmarkGalleryWidgetSkeleton />;
 
 	return (
-		<View style={styles.widgetContainerExpanded}>
-			<View
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					width: '100%',
-					// marginVertical: 16,
-				}}
-			>
-				<View style={{ flexGrow: 1, paddingVertical: 16 }}>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontSize: 13,
-							fontFamily: 'Inter',
-						}}
-					>
-						{postsTotalCount} Posts from {usersTotalCount} users.
-					</Text>
-				</View>
-				<View style={{ display: 'flex', flexDirection: 'row' }}>
-					<View style={{ marginRight: 16, paddingVertical: 16 }}>
-						<FontAwesome
-							name="search"
-							size={24}
-							color={APP_FONT.MONTSERRAT_BODY}
-							style={{ opacity: 0.3 }}
-						/>
+		<View style={[styles.widgetContainerExpanded]}>
+			<View style={[styles.widgetContainerExpandedInternal]}>
+				<View
+					style={{
+						display: 'flex',
+						flexDirection: 'row',
+						alignItems: 'center',
+						width: '100%',
+					}}
+				>
+					<View style={{ flexGrow: 1, paddingVertical: 4 }}>
+						<Text
+							style={{
+								color: APP_FONT.MONTSERRAT_BODY,
+								fontSize: 13,
+								fontFamily: 'Montserrat-Bold',
+								marginLeft: 4,
+							}}
+						>
+							{postsTotalCount} Posts from {usersTotalCount} users.
+						</Text>
 					</View>
-					<View
-						style={{
-							paddingHorizontal: 8,
-							paddingVertical: 16,
-							borderRadius: 8,
-						}}
-						onTouchStart={onCollapsePress}
-					>
-						<FontAwesome
-							name="chevron-down"
-							size={24}
-							color={APP_FONT.MONTSERRAT_BODY}
-						/>
+					<View style={{ display: 'flex', flexDirection: 'row' }}>
+						<View
+							style={{
+								marginRight: 16,
+								paddingVertical: 8,
+							}}
+						>
+							<FontAwesome
+								name="search"
+								size={24}
+								color={APP_FONT.MONTSERRAT_BODY}
+								style={{ opacity: 0.3 }}
+							/>
+						</View>
+						<View
+							style={{
+								paddingHorizontal: 8,
+								paddingVertical: 8,
+								borderRadius: 8,
+							}}
+							onTouchStart={onCollapsePress}
+						>
+							<FontAwesome
+								name="chevron-down"
+								size={24}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+						</View>
 					</View>
 				</View>
-			</View>
 
-			<ScrollView horizontal style={{ height: 60, marginTop: 8 }}>
-				<View
-					onTouchEnd={onUserAllSelected}
-					style={[
-						styles.userSelectionBoxSpecial,
-						{
-							borderColor: IsUserAllSelected ? SELECTED_COLOR : 'gray',
-							backgroundColor: IsUserAllSelected
-								? SELECTED_COLOR_BG
-								: 'transparent',
-						},
-					]}
-				>
-					<Text
-						style={[
-							{
-								textAlign: 'center',
-								fontFamily: 'Montserrat-Bold',
-								color: APP_FONT.MONTSERRAT_BODY,
-							},
-							{
-								color: IsUserAllSelected
-									? SELECTED_COLOR
-									: APP_FONT.MONTSERRAT_BODY,
-							},
-						]}
-					>
-						ALL
-					</Text>
-				</View>
-				<View
-					style={[
-						styles.userSelectionBoxSpecial,
-						{
-							borderColor: IsUserNoneSelected ? SELECTED_COLOR : 'gray',
-							backgroundColor: IsUserNoneSelected
-								? SELECTED_COLOR_BG
-								: 'transparent',
-						},
-					]}
-					onTouchEnd={onUserNoneSelected}
-				>
-					<Text
-						style={[
-							{
-								textAlign: 'center',
-								fontFamily: 'Montserrat-Bold',
-								color: APP_FONT.MONTSERRAT_BODY,
-							},
-							{
-								color: IsUserNoneSelected
-									? SELECTED_COLOR
-									: APP_FONT.MONTSERRAT_BODY,
-							},
-						]}
-					>
-						NONE
-					</Text>
-				</View>
 				<AnimatedFlashList
+					ListHeaderComponent={UserSelectionListHeaderComponent}
 					horizontal={true}
-					estimatedItemSize={32}
+					estimatedItemSize={48}
 					estimatedListSize={{
 						width: DeviceWidth.current,
 						height: 64,
@@ -219,58 +259,33 @@ function BookmarkGalleryWidgetExpanded() {
 						/>
 					)}
 				/>
-			</ScrollView>
-
-			<ScrollView horizontal style={{ height: 40, marginTop: 16 }}>
-				<View style={styles.tagSelectionBoxSpecial}>
-					<Text
-						style={{
-							fontSize: 13,
-							color: APP_THEME.COLOR_SCHEME_D_EMPHASIS,
-							fontFamily: 'Montserrat-Bold',
-						}}
-					>
-						ALL
-					</Text>
-				</View>
-				<View style={styles.tagSelectionBoxSpecial}>
-					<Text
-						style={{
-							fontSize: 13,
-							color: APP_THEME.COLOR_SCHEME_D_EMPHASIS,
-							fontFamily: 'Montserrat-Bold',
-						}}
-					>
-						NONE
-					</Text>
-				</View>
 
 				<AnimatedFlashList
+					ListHeaderComponent={TagSelectionListHeaderComponent}
 					horizontal={true}
-					estimatedItemSize={100}
+					estimatedItemSize={72}
 					data={loadedTagData}
 					estimatedListSize={{
 						width: DeviceWidth.current,
-						height: 64,
+						height: 32,
 					}}
+					contentContainerStyle={{ paddingBottom: 8 }}
 					renderItem={({ item }) => (
-						<View style={styles.tagItemContainer}>
-							<RealmTag
-								onPress={() => {}}
-								dto={{
-									name: item.tag.name,
-									following: item.tag.following,
-									privatelyFollowing: item.tag.privatelyFollowing,
-								}}
-								count={item.count}
-							/>
-						</View>
+						<RealmTag
+							onPress={() => {}}
+							dto={{
+								name: item.tag.name,
+								following: item.tag.following,
+								privatelyFollowing: item.tag.privatelyFollowing,
+							}}
+							count={item.count}
+						/>
 					)}
 				/>
-			</ScrollView>
+			</View>
 		</View>
 	);
-}
+});
 
 const base: ViewStyle = {
 	height: USER_SELECTION_BUBBLE_SIZE,
@@ -292,16 +307,18 @@ const styles = StyleSheet.create({
 
 	//
 	widgetContainerExpanded: {
-		marginBottom: 8,
-		backgroundColor: 'rgba(54,54,54,0.87)',
-		display: 'flex',
+		width: '100%',
 		position: 'absolute',
 		bottom: 0,
-		right: 0,
+	},
+	widgetContainerExpandedInternal: {
+		marginHorizontal: 12,
+		backgroundColor: 'rgba(54,54,54,0.87)',
+		marginBottom: 8,
+		display: 'flex',
 		borderRadius: 16,
-		// maxWidth: 64,
-		marginHorizontal: 8,
 		padding: 8,
+		paddingBottom: 0,
 	},
 	widgetContainerCollapsed: {
 		marginBottom: 16,
@@ -314,20 +331,13 @@ const styles = StyleSheet.create({
 		maxWidth: 64,
 		marginRight: 16,
 	},
-
 	// each tag item
-	tagItemContainer: {
-		// marginRight: 8,
-		// backgroundColor: 'red',
-		// borderRadius: 8,
-		// padding: 8,
-	},
+	tagItemContainer: {},
 	tagSelectionBoxSpecial: {
 		backgroundColor: 'rgba(240,185,56,0.16)',
 		margin: 4,
 		padding: 4,
 		paddingHorizontal: 12,
-		paddingVertical: 6,
 		borderRadius: 4,
 		flexShrink: 1,
 		display: 'flex',

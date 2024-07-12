@@ -17,6 +17,7 @@ import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useTopbarSmoothTranslate from '../../../../states/useTopbarSmoothTranslate';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 
 const SHOWN_SECTION_HEIGHT = 50;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -39,80 +40,47 @@ function ApiWrapper() {
 	const domain = primaryAcct?.domain;
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
-	const [IsNextPageLoading, setIsNextPageLoading] = useState(false);
-
-	const [LoadingMoreComponentProps, setLoadingMoreComponentProps] = useState({
-		visible: false,
-		loading: false,
-	});
+	const [EmojisLoading, setEmojisLoading] = useState(false);
+	const PageLoadedAtLeastOnce = useRef(false);
 
 	async function api() {
 		if (!client) return null;
-		return await client.getTrendingPosts({
+		const { data, error } = await client.trends.posts({
 			limit: 5,
 			offset: parseInt(queryCacheMaxId),
 		});
+		if (error) {
+			return [];
+		}
+		return data;
 	}
 
 	// Queries
 	const { status, data, fetchStatus, refetch } = useQuery({
-		queryKey: ['trending/posts', queryCacheMaxId],
+		queryKey: [queryCacheMaxId],
 		queryFn: api,
 		enabled: client !== null,
 	});
 
 	useEffect(() => {
-		if (fetchStatus === 'fetching') {
-			if (PageData.length > 0) {
-				setLoadingMoreComponentProps({
-					visible: true,
-					loading: true,
-				});
-			}
-			return;
-		}
+		if (fetchStatus === 'fetching' || status !== 'success') return;
 
-		if (status !== 'success' || !data || data.length === 0) return;
-		if (data.length > 0) {
+		if (data?.length > 0) {
 			setMaxId((PageData.length + data.length).toString());
+			setEmojisLoading(true);
 			EmojiService.preloadInstanceEmojisForStatuses(db, globalDb, data, domain)
 				.then((res) => {})
 				.finally(() => {
 					append(data);
-					setLoadingMoreComponentProps({
-						visible: false,
-						loading: false,
-					});
-					setIsNextPageLoading(false);
+					setEmojisLoading(false);
+					PageLoadedAtLeastOnce.current = true;
 				});
-		} else {
-			setIsNextPageLoading(false);
 		}
 	}, [fetchStatus]);
 
-	/**
-	 * Loads next set, when scroll end is reached
-	 */
-	const onPageEndReached = () => {
-		if (PageData.length === 0) return;
-		if (IsNextPageLoading) return;
-
-		setIsNextPageLoading(true);
-		updateQueryCache();
-		setLoadingMoreComponentProps({
-			visible: true,
-			loading: true,
-		});
-	};
-
-	const handleScrollJs = (e: any) => {
-		NavigationService.invokeWhenPageEndReached(e, onPageEndReached);
-	};
-
-	const { onScroll, translateY } = useTopbarSmoothTranslate({
-		onScrollJsFn: handleScrollJs,
-		totalHeight: HIDDEN_SECTION_HEIGHT + SHOWN_SECTION_HEIGHT,
-		hiddenHeight: HIDDEN_SECTION_HEIGHT,
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: PageData.length,
+		updateQueryCache,
 	});
 
 	const ref = useRef(null);
@@ -123,7 +91,10 @@ function ApiWrapper() {
 		refetch();
 	};
 
-	const { visible, loading } = useLoadingMoreIndicatorState({ fetchStatus });
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus,
+		additionalLoadingStates: EmojisLoading,
+	});
 	return (
 		<WithAutoHideTopNavBar title={'Trending Posts'} translateY={translateY}>
 			<AnimatedFlashList

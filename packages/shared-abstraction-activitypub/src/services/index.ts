@@ -36,11 +36,14 @@ export function preprocessPostContent(str: string) {
  * 3. Replaces tag urls with #tag
  * 4. Splits paragraphs
  * @param str
+ * @param log
  */
-export function parseStatusContent(str: string) {
+export function parseStatusContent(str: string, log?: boolean) {
 	let retval: MfmNode[][] = [];
 
+	if (log) console.log('[INFO]: html input', str);
 	str = preprocessPostContent(str);
+	if (log) console.log('[INFO]: html cleaned', str);
 
 	const ex = /<p>(.*?)<\/p>/g;
 	if (ex.test(str)) {

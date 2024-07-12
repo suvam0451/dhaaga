@@ -1,12 +1,13 @@
 import { Image } from 'expo-image';
 import { MEDIA_CONTAINER_WIDTH } from './_common';
-import { Fragment, memo, useEffect, useRef, useState } from 'react';
+import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Text } from '@rneui/themed';
 
 type Props = {
 	url?: string;
@@ -21,6 +22,7 @@ export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
 				flex: 1,
 				width: MEDIA_CONTAINER_WIDTH,
 				borderRadius: 16,
+				opacity: 0.75,
 			}}
 			placeholder={{ blurhash }}
 			source={{ uri: url }}
@@ -78,7 +80,7 @@ type AltTextDialogProps = {
 	altText?: string;
 };
 
-export const AltTextDialog = memo(function Foo({
+export const AltTextOverlay = memo(function Foo({
 	altText,
 }: AltTextDialogProps) {
 	const [IsVisible, setIsVisible] = useState(false);
@@ -161,6 +163,76 @@ export const AltTextDialog = memo(function Foo({
 					{altText}
 				</Text>
 			</Dialog>
+		</Fragment>
+	);
+});
+
+export const CarousalIndicatorOverlay = memo(function Foo({
+	index,
+	totalCount,
+}: {
+	index?: number;
+	totalCount?: number;
+}) {
+	const CarousalIndicators = useMemo(() => {
+		if (index === undefined || totalCount === undefined) return <View></View>;
+
+		const retval = [];
+		for (let i = 0; i < totalCount; i++) {
+			retval.push(
+				<View
+					style={{
+						height: 12,
+						width: 12,
+						borderRadius: 8,
+						backgroundColor: 'rgba(100, 100, 100, 0.87)',
+						marginHorizontal: 4,
+					}}
+				></View>,
+			);
+		}
+		return (
+			<View
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'center',
+					// backgroundColor: 'red',
+					width: '100%',
+					alignItems: 'center',
+				}}
+			>
+				{retval}
+			</View>
+		);
+	}, [index, totalCount]);
+
+	if (index === undefined || totalCount === undefined) return <View></View>;
+	return (
+		<Fragment>
+			<View
+				style={{
+					position: 'absolute',
+					left: '100%',
+					top: 0,
+				}}
+			>
+				<View
+					style={{
+						position: 'absolute',
+						left: -48,
+						backgroundColor: 'rgba(100, 100, 100, 0.87)',
+						top: 8,
+						padding: 4,
+						paddingHorizontal: 8,
+						borderRadius: 8,
+					}}
+				>
+					<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
+						{index + 1}/{totalCount}
+					</Text>
+				</View>
+			</View>
 		</Fragment>
 	);
 });

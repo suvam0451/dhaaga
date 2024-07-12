@@ -12,7 +12,7 @@ function VersionCode() {
 			<Text
 				style={{
 					textAlign: 'center',
-					color: APP_FONT.MONTSERRAT_HEADER,
+					color: APP_FONT.MONTSERRAT_BODY,
 					fontFamily: 'Inter-Bold',
 				}}
 			>

@@ -27,6 +27,7 @@ export const APP_THEME = {
 	COLOR_SCHEME_D_NORMAL: 'rgba(248,199,124,0.87)',
 
 	MENTION: 'rgba(139,148,21,1)',
+	MENTION_LIGHT: 'rgba(139,148,21,0.87)',
 	CHAT_BUBBLE_CLIENT_SIDE: 'rgba(10,46,52,0.87)',
 };
 

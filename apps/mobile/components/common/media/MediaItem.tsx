@@ -1,6 +1,6 @@
-import { Dimensions, View, Text } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
 import MediaService from '../../../services/media.service';
 import {
@@ -8,31 +8,31 @@ import {
 	MEDIA_CONTAINER_MAX_HEIGHT,
 	MEDIA_CONTAINER_WIDTH,
 } from './_common';
-import { AltTextDialog, AppImageComponent, AppVideoComponent } from './_shared';
+import {
+	AltTextOverlay,
+	AppImageComponent,
+	AppVideoComponent,
+	CarousalIndicatorOverlay,
+} from './_shared';
+import { Text } from '@rneui/themed';
 
 type ImageCarousalProps = {
 	attachments: MediaAttachmentInterface[];
 };
 
-function TimelineMediaRendered({
+const TimelineMediaRendered = memo(function Foo({
 	attachment,
 	CalculatedHeight,
 	altText,
+	index,
+	totalCount,
 }: {
 	attachment: MediaAttachmentInterface;
 	CalculatedHeight: number;
 	altText?: string;
+	index?: number;
+	totalCount?: number;
 }) {
-	const [AltTextBackdropVisible, setAltTextBackdropVisible] = useState(false);
-
-	function altTextBackdropPressed() {
-		setAltTextBackdropVisible(false);
-	}
-
-	function onAltTextClicked() {
-		setAltTextBackdropVisible(true);
-	}
-
 	const MediaItem = useMemo(() => {
 		const type = attachment?.getType();
 		switch (type) {
@@ -83,10 +83,11 @@ function TimelineMediaRendered({
 			}}
 		>
 			{MediaItem}
-			<AltTextDialog altText={altText} />
+			<CarousalIndicatorOverlay index={index} totalCount={totalCount} />
+			<AltTextOverlay altText={altText} />
 		</View>
 	);
-}
+});
 
 function MediaItem({ attachments }: ImageCarousalProps) {
 	const [CarousalData, setCarousalData] = useState({
@@ -101,12 +102,15 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 		});
 	}, [attachments]);
 
-	const onCarousalItemChanged = useCallback((e: any) => {
-		setCarousalData({
-			index: e,
-			total: attachments?.length,
-		});
-	}, []);
+	const onCarousalItemChanged = useCallback(
+		(e: any) => {
+			setCarousalData({
+				index: e,
+				total: attachments?.length,
+			});
+		},
+		[attachments],
+	);
 
 	const CalculatedHeight = useMemo(() => {
 		if (!attachments) return MEDIA_CONTAINER_MAX_HEIGHT;
@@ -128,18 +132,6 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 	}
 	return (
 		<View style={{ marginTop: MARGIN_TOP }}>
-			<View style={{ display: 'flex', flexDirection: 'row' }}>
-				<View style={{ flexGrow: 1 }} />
-				<Text
-					style={{
-						color: '#fff',
-						opacity: 0.6,
-						fontSize: 16,
-					}}
-				>
-					{CarousalData.index + 1}/{CarousalData.total}
-				</Text>
-			</View>
 			<Carousel
 				width={Dimensions.get('window').width}
 				height={CalculatedHeight}
@@ -157,6 +149,8 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 					<TimelineMediaRendered
 						attachment={o.item}
 						CalculatedHeight={CalculatedHeight}
+						totalCount={CarousalData.total}
+						index={CarousalData.index}
 					/>
 				)}
 			/>

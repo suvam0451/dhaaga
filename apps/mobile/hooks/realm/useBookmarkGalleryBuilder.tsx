@@ -1,5 +1,5 @@
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Account } from '../../entities/account.entity';
 import { useQuery } from '@realm/react';
 import { ActivityPubUser } from '../../entities/activitypub-user.entity';
@@ -26,13 +26,12 @@ type Props = {
 
 function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const [LoadedUserData, setLoadedUserData] =
-		useState<GalleryUserAggregationItem[]>(null);
-	const [LoadedTagData, setLoadedTagData] =
-		useState<GalleryTagAggregationItem[]>(null);
 	const acct: Account = useQuery(Account).find(
 		(o) => o._id.toString() === primaryAcct._id.toString(),
 	);
+
+	const LoadedUserData = useRef<GalleryUserAggregationItem[] | null>(null);
+	const LoadedTagData = useRef<GalleryTagAggregationItem[] | null>(null);
 
 	const [UserFilters, setUserFilters] = useState([]);
 	const [TagFilters, setTagFilters] = useState([]);
@@ -93,8 +92,8 @@ function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
 		}
 		const sortedTags = tags.sort((a, b) => b.count - a.count);
 
-		setLoadedUserData(usersSorted);
-		setLoadedTagData(sortedTags);
+		LoadedUserData.current = usersSorted;
+		LoadedTagData.current = sortedTags;
 
 		let end = performance.now();
 		console.log('[PERF]: bookmarks loaded in', end - start, 'ms');

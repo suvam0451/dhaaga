@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useEffect, useState } from 'react';
 import StatusItem from '../../../common/status/StatusItem';
@@ -7,9 +6,7 @@ import WithActivitypubStatusContext from '../../../../states/useStatus';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../../states/usePagination';
-import WithScrollOnRevealContext, {
-	useScrollOnReveal,
-} from '../../../../states/useScrollOnReveal';
+import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import LoadingMore from '../../home/LoadingMore';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { AnimatedFlashList } from '@shopify/flash-list';

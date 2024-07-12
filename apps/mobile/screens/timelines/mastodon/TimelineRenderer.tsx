@@ -1,8 +1,7 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
-	SafeAreaView,
 	StatusBar,
 	StyleSheet,
 	View,
@@ -33,9 +32,68 @@ import WelcomeBack from '../../../components/screens/home/fragments/WelcomeBack'
 import TimelineLoading from '../../../components/loading-screens/TimelineLoading';
 import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';
 import TimelineEmpty from '../../../components/error-screen/TimelineEmpty';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
+
+// A message can be either a text or an image
+enum ListItemEnum {
+	ListItemWithText,
+	ListItemWithImage,
+}
+
+interface ListItemWithTextInterface {
+	props: {
+		post: StatusInterface;
+	};
+	type: ListItemEnum.ListItemWithText;
+}
+
+interface ListItemWithImageInterface {
+	props: {
+		post: StatusInterface;
+	};
+	type: ListItemEnum.ListItemWithImage;
+}
+
+type ListItemType = ListItemWithTextInterface | ListItemWithImageInterface;
+
+const ListHeaderComponent = memo(function Foo({
+	loadedOnce,
+	itemCount,
+}: {
+	loadedOnce: boolean;
+	itemCount: number;
+}) {
+	if (!loadedOnce) {
+		return <TimelineLoading />;
+	}
+	if (itemCount === 0) {
+		return <TimelineEmpty />;
+	}
+	return <View></View>;
+});
+
+const FlashListRenderer = ({ item }: { item: ListItemType }) => {
+	switch (item.type) {
+		case ListItemEnum.ListItemWithImage: {
+			return (
+				<WithActivitypubStatusContext statusInterface={item.props.post}>
+					<StatusItem />
+				</WithActivitypubStatusContext>
+			);
+		}
+		case ListItemEnum.ListItemWithText: {
+			return (
+				<WithActivitypubStatusContext statusInterface={item.props.post}>
+					<StatusItem />
+				</WithActivitypubStatusContext>
+			);
+		}
+	}
+};
 
 /**
  *
@@ -81,7 +139,7 @@ function TimelineRenderer() {
 	}
 
 	// Queries
-	const { status, data, error, fetchStatus, refetch } = useQuery<StatusArray>({
+	const { status, data, fetchStatus, refetch } = useQuery<StatusArray>({
 		queryKey: [
 			'mastodon/timelines/index',
 			queryCacheMaxId,
@@ -161,6 +219,27 @@ function TimelineRenderer() {
 		refetch,
 	});
 
+	const ListItems = useMemo(() => {
+		return PageData.map((o) => {
+			const adapted = ActivityPubAdapterService.adaptStatus(o, domain);
+			if (adapted.getMediaAttachments().length > 0) {
+				return {
+					type: ListItemEnum.ListItemWithImage,
+					props: {
+						post: adapted,
+					},
+				};
+			} else {
+				return {
+					type: ListItemEnum.ListItemWithText,
+					props: {
+						post: adapted,
+					},
+				};
+			}
+		});
+	}, [PageData]);
+
 	if (!client) return <Introduction />;
 
 	if (timelineType === TimelineFetchMode.IDLE) return <WelcomeBack />;
@@ -175,35 +254,27 @@ function TimelineRenderer() {
 					label={Label}
 				/>
 			</Animated.View>
-			{PageLoadedAtLeastOnce.current ? (
-				PageData.length === 0 ? (
-					<TimelineEmpty />
-				) : (
-					<Fragment>
-						<AnimatedFlashList
-							numColumns={1}
-							estimatedItemSize={100}
-							data={PageData}
-							renderItem={(o) => (
-								<WithActivitypubStatusContext status={o.item}>
-									<StatusItem />
-								</WithActivitypubStatusContext>
-							)}
-							onScroll={onScroll}
-							contentContainerStyle={{
-								paddingTop: SHOWN_SECTION_HEIGHT + 4,
-							}}
-							scrollEventThrottle={16}
-							refreshControl={
-								<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-							}
-						/>
-						<LoadingMore visible={visible} loading={loading} />{' '}
-					</Fragment>
-				)
-			) : (
-				<TimelineLoading />
-			)}
+			<AnimatedFlashList
+				ListHeaderComponent={
+					<ListHeaderComponent
+						itemCount={ListItems.length}
+						loadedOnce={PageLoadedAtLeastOnce.current}
+					/>
+				}
+				estimatedItemSize={120}
+				data={ListItems}
+				renderItem={FlashListRenderer}
+				getItemType={(o) => o.type}
+				onScroll={onScroll}
+				contentContainerStyle={{
+					paddingTop: SHOWN_SECTION_HEIGHT + 4,
+				}}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
+			/>
+			<LoadingMore visible={visible} loading={loading} />
 		</View>
 	);
 }

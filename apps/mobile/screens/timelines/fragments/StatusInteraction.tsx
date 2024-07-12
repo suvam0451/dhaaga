@@ -16,9 +16,7 @@ import {
 	BOTTOM_SHEET_ENUM,
 	useGorhomActionSheetContext,
 } from '../../../states/useGorhomBottomSheet';
-import useGlobalMMkvCache, {
-	useGlobalMmkvContext,
-} from '../../../states/useGlobalMMkvCache';
+import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 
 type StatusInteractionProps = {

@@ -68,12 +68,12 @@ class ActivitypubHelper {
 			ourUrl = myDomain;
 		}
 
-		if (usernameExtract.test(url)) {
-			const x = url.match(usernameExtract);
+		if (pleromaUsernameExtract.test(url)) {
+			const x = url.match(pleromaUsernameExtract);
 			theirUrl = x![1];
 			theirUsername = x![2];
-		} else if (pleromaUsernameExtract.test(url)) {
-			const x = url.match(pleromaUsernameExtract);
+		} else if (usernameExtract.test(url)) {
+			const x = url.match(usernameExtract);
 			theirUrl = x![1];
 			theirUsername = x![2];
 		}
