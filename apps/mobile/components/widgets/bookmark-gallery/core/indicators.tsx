@@ -29,7 +29,7 @@ export const UserSelectionIndicator = memo(function Foo({
 
 	const isSelected = useMemo(() => {
 		return isUserSelected(_id);
-	}, [IsUserAllSelected, IsUserNoneSelected, userStateHash]);
+	}, [IsUserAllSelected, IsUserNoneSelected, userStateHash, _id]);
 
 	return (
 		<View

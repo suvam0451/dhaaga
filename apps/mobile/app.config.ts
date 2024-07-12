@@ -21,7 +21,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
-		versionCode: 2,
+		versionCode: 3,
 		// adaptiveIcon: {
 		// 	foregroundImage: './assets/adaptive-logo.png',
 		// 	backgroundColor: '#ffffff',
