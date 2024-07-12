@@ -10,7 +10,7 @@ export function GithubDownloadButton() {
 	return (
 		<a
 			href={
-				'https://github.com/suvam0451/dhaaga/releases/download/v0.2.0/Dhaaga-v0.2.0.apk'
+				'https://github.com/suvam0451/dhaaga/releases/download/v0.3.1/Dhaaga-v0.3.1.apk'
 			}
 		>
 			<Box
