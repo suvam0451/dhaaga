@@ -3,13 +3,13 @@ import { Image } from 'expo-image';
 import { visibilityIcon } from '../../utils/instances';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { Fragment, memo, useCallback, useEffect, useMemo } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { useActivitypubStatusContext } from '../../states/useStatus';
 import { useActivitypubUserContext } from '../../states/useProfile';
 import { Skeleton } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import useMfm from '../hooks/useMfm';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { router } from 'expo-router';
 
 type OriginalPosterProps = {
 	id: string;
@@ -118,7 +118,9 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 			}}
 		>
 			<TouchableOpacity onPress={onClick}>
-				<View>{UsernameWithEmojis}</View>
+				<View style={{ minHeight: 16 }}>
+					{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
+				</View>
 			</TouchableOpacity>
 			<View>
 				<Text
@@ -172,7 +174,6 @@ const OriginalPoster = memo(function Foo({
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 
-	const navigation = useNavigation<any>();
 	const { status, sharedStatus } = useActivitypubStatusContext();
 	const { user, setDataRaw } = useActivitypubUserContext();
 
@@ -184,9 +185,7 @@ const OriginalPoster = memo(function Foo({
 	}, [status]);
 
 	const onProfileClicked = useCallback(() => {
-		navigation.navigate('Profile', {
-			id: id,
-		});
+		router.push(`/${id}`);
 	}, [id]);
 
 	const handle = useMemo(() => {

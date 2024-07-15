@@ -2,6 +2,7 @@ import { LibraryResponse } from '../_types.js';
 import { mastodon } from 'masto';
 import { Note } from 'misskey-js/autogen/models.js';
 import { Endpoints } from 'misskey-js';
+import { MastoAccount, MastoStatus } from '../../_interface.js';
 
 type DefaultPaginationParams = {
 	// masto.js
@@ -26,6 +27,8 @@ export type AccountRouteStatusQueryDto = ListAccountStatusesParams &
 export interface AccountRoute {
 	statuses(
 		id: string,
-		params: AccountRouteStatusQueryDto,
+		params: AccountRouteStatusQueryDto
 	): Promise<LibraryResponse<mastodon.v1.Status[] | Note[] | any[]>>;
+
+	get(id: string): Promise<LibraryResponse<MastoAccount>>;
 }

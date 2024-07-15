@@ -20,6 +20,7 @@ export type MastoContext = mastodon.v1.Context;
 export type MastoRelationship = mastodon.v1.Relationship;
 export type MastoTrendLink = mastodon.v1.TrendLink;
 export type MastoTag = mastodon.v1.Tag;
+export type MastoAccount = mastodon.v1.Account;
 
 export type MegaStatus = MLStatus;
 export type MegaReaction = MLReaction;

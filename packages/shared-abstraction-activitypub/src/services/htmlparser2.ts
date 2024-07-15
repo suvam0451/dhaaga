@@ -81,6 +81,28 @@ class HtmlParserService {
 	}
 
 	/**
+	 * Only removes the nested spans
+	 * @param line
+	 */
+	static removeSpans(line: string) {
+		let retval = '';
+		const handler = new DomHandler((error, dom) => {
+			if (error) {
+			} else {
+				// Remove nested span tags from the DOM
+				const stepA = dom.flatMap(HtmlParserService.removeNestedSpans);
+				retval = DomSerializer(stepA);
+			}
+		});
+
+		// don't need all these...
+		const parser = new Parser(handler);
+		parser.write(line);
+		parser.end();
+		return decode(retval);
+	}
+
+	/**
 	 * Remove all instance-specific stuff
 	 */
 	static cleanup(line: string) {

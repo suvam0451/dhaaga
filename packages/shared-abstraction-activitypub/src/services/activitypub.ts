@@ -56,6 +56,7 @@ class ActivitypubHelper {
 		const usernameExtract = /^https?:\/\/(.*?)\/@?(.*?)$/;
 		const bridged = /^https?:\/\/(.*?)\/r\/(https?:\/\/)?(.*?)\/?$/;
 		const pleromaUsernameExtract = /https:\/\/(.*?)\/users\/(.*?)$/;
+		const lemmyUsernameExtract = /https:\/\/(.*?)\/u\/(.*?)$/;
 
 		let ourUrl = '';
 		let theirUsername = '';
@@ -70,6 +71,10 @@ class ActivitypubHelper {
 
 		if (pleromaUsernameExtract.test(url)) {
 			const x = url.match(pleromaUsernameExtract);
+			theirUrl = x![1];
+			theirUsername = x![2];
+		} else if (lemmyUsernameExtract.test(url)) {
+			const x = url.match(lemmyUsernameExtract);
 			theirUrl = x![1];
 			theirUsername = x![2];
 		} else if (usernameExtract.test(url)) {

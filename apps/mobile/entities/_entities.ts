@@ -12,6 +12,9 @@ export enum ENTITY {
 	ACTIVITYPUB_CUSTOM_EMOJI_CATEGORY = 'ActivityPubCustomEmojiCategory',
 
 	ACTIVITYPUB_MEDIA_ATTACHMENT = 'ActivityPubMediaAttachment',
-	
+
 	ACTIVITYPUB_TAG = 'ActivityPubTag',
+
+	APP_SETTING = 'AppSetting',
+	APP_PROFILE = 'AppProfile',
 }

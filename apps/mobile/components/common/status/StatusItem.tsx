@@ -93,8 +93,8 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 		deps: [statusContent, !userI?.getInstanceUrl()],
 	});
 
-	const isSensitive = status?.getIsSensitive();
-	const spoilerText = status?.getSpoilerText();
+	const isSensitive = _status?.getIsSensitive();
+	const spoilerText = _status?.getSpoilerText();
 
 	const onSpoilerClick = useCallback(() => {
 		setShowSensitiveContent((o) => !o);
@@ -265,12 +265,13 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 				{isSensitive && !ShowSensitiveContent ? (
 					<View></View>
 				) : (
-					<MediaItem attachments={status?.getMediaAttachments()} />
+					<MediaItem attachments={_status?.getMediaAttachments()} />
 				)}
 				<StatusInteraction
 					openAiContext={aiContext}
 					setExplanationObject={setExplanationObject}
 					ExplanationObject={ExplanationObject}
+					isRepost={isRepost}
 				/>
 			</>
 		);

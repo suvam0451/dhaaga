@@ -1,124 +1,36 @@
-import { useEffect, useRef, useState } from 'react';
-import {
-	Animated,
-	Dimensions,
-	StyleSheet,
-	TouchableOpacity,
-	View,
-} from 'react-native';
-import {
-	ActivityPubAccount,
-	ActivityPubStatuses,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
+import { useLocalSearchParams } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
+import { ActivityPubAccount } from '@dhaaga/shared-abstraction-activitypub';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Dimensions, View } from 'react-native';
+import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import { Image } from 'expo-image';
 import {
 	AvatarContainerWithInset,
 	AvatarExpoImage,
 	ParsedDescriptionContainer,
 } from '../../../styles/Containers';
+import AppButtonFollowIndicator from '../../lib/Buttons';
 import { PrimaryText, SecondaryText } from '../../../styles/Typography';
-import { Text } from '@rneui/themed';
-import StatusItem from '../../../components/common/status/StatusItem';
-import UserPostsProvider, { UserPostsHook } from '../../../contexts/UserPosts';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import UserProfileExtraInformation from './ExtraInformation';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import WithActivitypubStatusContext from '../../../states/useStatus';
-import { Skeleton } from '@rneui/themed';
+import UserProfileExtraInformation from '../../../screens/shared/profile/ExtraInformation';
+import UserPostsProvider from '../../../contexts/UserPosts';
+import ConfirmRelationshipChangeDialog from '../../screens/shared/fragments/ConfirmRelationshipChange';
 import WithActivitypubUserContext, {
 	useActivitypubUserContext,
 } from '../../../states/useProfile';
-import useMfm from '../../../components/hooks/useMfm';
-import { APP_FONT } from '../../../styles/AppTheme';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
-import AppButtonFollowIndicator from '../../../components/lib/Buttons';
+import useMfm from '../../hooks/useMfm';
 import useRelationshipWith from '../../../states/useRelationshipWith';
-import ConfirmRelationshipChangeDialog from '../../../components/screens/shared/fragments/ConfirmRelationshipChange';
+import { UserProfileBrowsePosts } from '../../../screens/shared/profile/UserProfile';
+import { Text } from '@rneui/themed';
+import { APP_FONT } from '../../../styles/AppTheme';
+import { router } from 'expo-router';
+import ErrorGoBack from '../../error-screen/ErrorGoBack';
 
-type UserProfileBrowsePostsProps = {
-	userId: string;
-};
+function ProfileContextWrapped() {
+	const { user: userParam } = useLocalSearchParams<{ user: string }>();
 
-/**
- * Component to allow users to view images and posts of a user
- * @param param0
- * @returns
- */
-export function UserProfileBrowsePosts({
-	userId,
-}: UserProfileBrowsePostsProps) {
-	const { store, dispatch } = UserPostsHook();
-	const [RecentPostsCollapsed, setRecentPostsCollapsed] = useState(true);
-	const { client } = useActivityPubRestClientContext();
-
-	async function queryFnPosts() {
-		return await client.getUserPosts(userId, {
-			excludeReplies: true,
-			limit: 5,
-		});
-	}
-
-	// Post Queries
-	const { status, data, error, fetchStatus, refetch } =
-		useQuery<ActivityPubStatuses>({
-			queryKey: ['profile/posts', client, userId],
-			queryFn: queryFnPosts,
-			enabled: userId !== undefined,
-		});
-
-	useEffect(() => {
-		if (status === 'success') {
-			dispatch.setPosts(data);
-		}
-	}, [status, data]);
-
-	return (
-		<View style={{ paddingHorizontal: 8 }}>
-			<View style={styles.expandableSectionMarkerContainer}>
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-						fontFamily: 'Montserrat-Bold',
-						flexGrow: 1,
-					}}
-				>
-					Images
-				</Text>
-				<Ionicons
-					name="chevron-forward"
-					size={24}
-					color={APP_FONT.MONTSERRAT_BODY}
-				/>
-			</View>
-			<TouchableOpacity
-				onPress={() => {
-					setRecentPostsCollapsed(!RecentPostsCollapsed);
-				}}
-			>
-				<View style={styles.expandableSectionMarkerContainer}>
-					<Text style={styles.collapsibleProfileSectionText}>Pinned Posts</Text>
-					<Ionicons
-						name={RecentPostsCollapsed ? 'chevron-forward' : 'chevron-down'}
-						size={24}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
-				</View>
-			</TouchableOpacity>
-			<View style={{ display: RecentPostsCollapsed ? 'none' : 'flex' }}>
-				{store.posts &&
-					store.posts.map((o, i) => (
-						<WithActivitypubStatusContext status={o} key={i}>
-							<StatusItem />
-						</WithActivitypubStatusContext>
-					))}
-			</View>
-		</View>
-	);
-}
-
-function UserProfileContent() {
 	const { primaryAcct, client } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();
@@ -145,10 +57,16 @@ function UserProfileContent() {
 		user?.getId(),
 	);
 
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: 0,
+		updateQueryCache: () => {},
+	});
+
 	const [
 		IsUnfollowConfirmationDialogVisible,
 		setIsUnfollowConfirmationDialogVisible,
 	] = useState(false);
+	const ScrollRef = useRef(null);
 
 	function onFollowButtonClick() {
 		if (!relationship.following) {
@@ -170,13 +88,6 @@ function UserProfileContent() {
 			// });
 		}
 	}
-
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: 0,
-		updateQueryCache: () => {},
-	});
-
-	const ScrollRef = useRef(null);
 
 	return (
 		<WithAutoHideTopNavBar title={'Profile'} translateY={translateY}>
@@ -272,22 +183,29 @@ function UserProfileContent() {
 	);
 }
 
-function UserProfile({ route, navigation }) {
+function Profile() {
 	const { client } = useActivityPubRestClientContext();
-	const q = route?.params?.id;
+	const { user } = useLocalSearchParams<{ user: string }>();
 	const [Data, setData] = useState(null);
 
-	function api() {
+	const [FetchError, setFetchError] = useState(null);
+
+	useEffect(() => {
+		setFetchError(null);
+	}, [user]);
+
+	async function api() {
 		if (!client) return null;
-		const username = route?.params?.id;
-		return client.getUserProfile(username);
+		const { data, error } = await client.accounts.get(user);
+		if (error) setFetchError({ message: error.code });
+		return data;
 	}
 
 	// Queries
-	const { status, data, fetchStatus } = useQuery<ActivityPubAccount>({
-		queryKey: ['profile', q],
+	const { status, data } = useQuery<ActivityPubAccount>({
+		queryKey: [user],
 		queryFn: api,
-		enabled: client && q !== undefined,
+		enabled: client !== undefined && client !== null,
 	});
 
 	useEffect(() => {
@@ -295,50 +213,15 @@ function UserProfile({ route, navigation }) {
 		setData(data);
 	}, [status]);
 
-	if (fetchStatus === 'fetching' || !Data)
-		return (
-			<View
-				style={{
-					backgroundColor: '#1e1e1e',
-					height: '100%',
-				}}
-			>
-				<Skeleton height={128} width={Dimensions.get('window').width} />
-			</View>
-		);
+	if (FetchError !== null) {
+		return <ErrorGoBack msg={FetchError?.message} />;
+	}
 
 	return (
 		<WithActivitypubUserContext user={Data}>
-			<UserProfileContent />
+			<ProfileContextWrapped />
 		</WithActivitypubUserContext>
 	);
 }
 
-const styles = StyleSheet.create({
-	header: {
-		position: 'absolute',
-		backgroundColor: '#1c1c1c',
-		left: 0,
-		right: 0,
-		width: '100%',
-		zIndex: 1,
-	},
-	expandableSectionMarkerContainer: {
-		marginVertical: 6,
-		paddingTop: 8,
-		paddingBottom: 8,
-		paddingLeft: 16,
-		paddingRight: 16,
-		backgroundColor: '#272727',
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		borderRadius: 8,
-	},
-	collapsibleProfileSectionText: {
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontFamily: 'Montserrat-Bold',
-		flexGrow: 1,
-	},
-});
-export default UserProfile;
+export default Profile;

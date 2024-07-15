@@ -18,9 +18,41 @@ import { useFonts } from 'expo-font';
 import appFonts from '../styles/AppFonts';
 import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
+import { LogBox } from 'react-native';
 
 // to get rid of realm warnings
 import AppSettingsService from '../services/app-settings.service';
+import { AppProfileRepository } from '../repositories/app-profile.repo';
+
+/**
+ * Suppress these warnings...
+ */
+const IGNORED_LOGS = [
+	'BSON: For React Native please polyfill crypto.getRandomValues',
+	// this would need to be fixed later
+	'Found screens with the same name nested inside one another',
+	'Require cycle',
+];
+LogBox.ignoreLogs(IGNORED_LOGS);
+LogBox.ignoreAllLogs(true);
+
+// Workaround for Expo 45
+if (__DEV__) {
+	const withoutIgnored =
+		(logger: any) =>
+		(...args: any[]) => {
+			const output = args.join(' ');
+
+			if (!IGNORED_LOGS.some((log) => output.includes(log))) {
+				logger(...args);
+			}
+		};
+
+	console.log = withoutIgnored(console.log);
+	console.info = withoutIgnored(console.info);
+	console.warn = withoutIgnored(console.warn);
+	console.error = withoutIgnored(console.error);
+}
 
 function WithGorhomBottomSheetWrapper() {
 	const { top, bottom } = useSafeAreaInsets();
@@ -31,6 +63,11 @@ function WithGorhomBottomSheetWrapper() {
 	 */
 	useEffect(() => {
 		AppSettingsService.populateSeedData(db);
+	}, []);
+
+	useEffect(() => {
+		const profiles = AppProfileRepository(db).upsert({ name: 'Default' });
+		console.log('[INFO]: profiles found', profiles);
 	}, []);
 
 	const [fontsLoaded, fontError] = useFonts(appFonts);
@@ -54,6 +91,12 @@ function WithGorhomBottomSheetWrapper() {
 							headerShown: false,
 						}}
 					/>
+					{/*<Stack.Screen*/}
+					{/*	name="(shared)"*/}
+					{/*	options={{*/}
+					{/*		headerShown: false,*/}
+					{/*	}}*/}
+					{/*/>*/}
 				</Stack>
 			</View>
 		</WithActivityPubRestClient>

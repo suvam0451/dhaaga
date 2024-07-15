@@ -34,6 +34,8 @@ import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicato
 import TimelineEmpty from '../../../components/error-screen/TimelineEmpty';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
+import NowBrowsingHeader from '../../../components/widgets/feed-controller/core/NowBrowsingHeader';
+import { TimelineType } from '../../../types/timeline.types';
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
@@ -42,6 +44,7 @@ const SHOWN_SECTION_HEIGHT = 50;
 enum ListItemEnum {
 	ListItemWithText,
 	ListItemWithImage,
+	ListItemWithSpoiler,
 }
 
 interface ListItemWithTextInterface {
@@ -58,7 +61,17 @@ interface ListItemWithImageInterface {
 	type: ListItemEnum.ListItemWithImage;
 }
 
-type ListItemType = ListItemWithTextInterface | ListItemWithImageInterface;
+interface ListItemWithSpoilerInterface {
+	props: {
+		post: StatusInterface;
+	};
+	type: ListItemEnum.ListItemWithSpoiler;
+}
+
+type ListItemType =
+	| ListItemWithTextInterface
+	| ListItemWithImageInterface
+	| ListItemWithSpoilerInterface;
 
 const ListHeaderComponent = memo(function Foo({
 	loadedOnce,
@@ -67,13 +80,14 @@ const ListHeaderComponent = memo(function Foo({
 	loadedOnce: boolean;
 	itemCount: number;
 }) {
+	console.log(loadedOnce, itemCount);
 	if (!loadedOnce) {
 		return <TimelineLoading />;
 	}
 	if (itemCount === 0) {
 		return <TimelineEmpty />;
 	}
-	return <View></View>;
+	return <NowBrowsingHeader feedType={TimelineType.LOCAL} />;
 });
 
 const FlashListRenderer = ({ item }: { item: ListItemType }) => {
@@ -115,10 +129,11 @@ function TimelineRenderer() {
 		queryCacheMaxId,
 		clear,
 	} = useAppPaginationContext();
-	const PageLoadedAtLeastOnce = useRef(false);
+
+	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
 	useEffect(() => {
-		PageLoadedAtLeastOnce.current = false;
+		setPageLoadedAtLeastOnce(false);
 		clear();
 	}, [timelineType, opts?.listId, opts?.hashtagName, opts?.userId]);
 
@@ -141,7 +156,6 @@ function TimelineRenderer() {
 	// Queries
 	const { status, data, fetchStatus, refetch } = useQuery<StatusArray>({
 		queryKey: [
-			'mastodon/timelines/index',
 			queryCacheMaxId,
 			primaryAcct?._id?.toString(),
 			timelineType,
@@ -169,7 +183,7 @@ function TimelineRenderer() {
 			).finally(() => {
 				append(data);
 				setEmojisLoading(false);
-				PageLoadedAtLeastOnce.current = true;
+				setPageLoadedAtLeastOnce(true);
 			});
 		}
 	}, [fetchStatus]);
@@ -229,6 +243,13 @@ function TimelineRenderer() {
 						post: adapted,
 					},
 				};
+			} else if (adapted.getIsSensitive()) {
+				return {
+					type: ListItemEnum.ListItemWithSpoiler,
+					props: {
+						post: adapted,
+					},
+				};
 			} else {
 				return {
 					type: ListItemEnum.ListItemWithText,
@@ -258,7 +279,7 @@ function TimelineRenderer() {
 				ListHeaderComponent={
 					<ListHeaderComponent
 						itemCount={ListItems.length}
-						loadedOnce={PageLoadedAtLeastOnce.current}
+						loadedOnce={PageLoadedAtLeastOnce}
 					/>
 				}
 				estimatedItemSize={120}

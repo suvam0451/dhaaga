@@ -32,7 +32,6 @@ class MfmService {
 	 */
 	static parseNode(
 		node: any,
-		count: string,
 		{
 			emojiMap,
 			linkMap,
@@ -71,8 +70,7 @@ class MfmService {
 					<Text
 						key={k}
 						style={{
-							color: '#fff',
-							opacity: 0.87,
+							color: APP_FONT.MONTSERRAT_BODY,
 						}}
 					>
 						{baseText}
@@ -89,6 +87,7 @@ class MfmService {
 				const mention = mentionMap?.find((o) => o.url === node.props.url);
 
 				if (mention) {
+					console.log(node.props.url, 'is a mention');
 					return (
 						<MentionProcessor
 							key={k}
@@ -150,11 +149,11 @@ class MfmService {
 						key={k}
 						style={{
 							fontStyle: 'italic',
-							color: APP_THEME.INVALID_ITEM_BODY,
+							color: APP_FONT.MONTSERRAT_BODY,
 						}}
 					>
 						{node.children.map((o, i) =>
-							this.parseNode(o, i.toString(), {
+							this.parseNode(o, {
 								domain: '',
 								isHighEmphasisText: false,
 								subdomain: '',
@@ -171,19 +170,18 @@ class MfmService {
 				);
 			}
 			case 'bold': {
-				const nodes = [];
 				return (
 					<Text
 						key={k}
 						style={{
 							fontFamily: 'Inter-Bold',
-							color: APP_FONT.MONTSERRAT_BODY,
+							color: APP_FONT.MONTSERRAT_HEADER,
 						}}
 					>
-						{node.children.map((o, i) =>
-							this.parseNode(o, i.toString(), {
+						{node.children.map((o) =>
+							this.parseNode(o, {
 								domain: '',
-								isHighEmphasisText: false,
+								isHighEmphasisText: true,
 								subdomain: '',
 								emojiMap,
 								linkMap,
@@ -264,11 +262,13 @@ class MfmService {
 			};
 
 		const mentionMap = TextParserService.findMentions(input);
+		// console.log(mentionMap);
 
 		const extractedUrls = TextParserService.findHyperlinks(input);
+		// console.log(extractedUrls);
 
 		// TextParserService.
-		const parsed = TextParserService.preprocessPostContent(input, true);
+		const parsed = TextParserService.preprocessPostContent(input, false);
 
 		let retval = [];
 		let openAiContext = [];
@@ -350,8 +350,7 @@ class MfmService {
 					continue;
 				}
 
-				const key = randomUUID();
-				const item = MfmService.parseNode(node, key, {
+				const item = MfmService.parseNode(node, {
 					emojiMap: emojiMap,
 					linkMap: extractedUrls,
 					domain,

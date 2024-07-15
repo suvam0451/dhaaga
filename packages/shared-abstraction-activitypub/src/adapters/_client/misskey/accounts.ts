@@ -10,12 +10,17 @@ import {
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { Endpoints } from 'misskey-js';
 import { successWithData } from '../_router/dto/api-responses.dto.js';
+import { BaseAccountsRouter } from '../default/accounts.js';
 
-export class MisskeyAccountsRouter implements AccountRoute {
+export class MisskeyAccountsRouter
+	extends BaseAccountsRouter
+	implements AccountRoute
+{
 	client: RestClient;
 	lib: DhaagaRestClient<COMPAT.MISSKEYJS>;
 
 	constructor(forwarded: RestClient) {
+		super();
 		this.client = forwarded;
 		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
 	}

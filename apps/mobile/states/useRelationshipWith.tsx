@@ -34,12 +34,13 @@ function useRelationshipWith(id: string) {
 	});
 
 	async function fn() {
+		console.log(await client.getRelationshipWith([id]));
 		return await client.getRelationshipWith([id]);
 	}
 
 	useEffect(() => {
 		refetch();
-	}, []);
+	}, [id]);
 
 	function refetch() {
 		setIsLoading(true);

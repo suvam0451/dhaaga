@@ -9,21 +9,21 @@ import { Status, StatusArray } from '../../status/_interface.js';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import type { Note } from 'misskey-js/autogen/models.js';
 import { DefaultInstanceRouter } from './instance.js';
-import { DefaultAccountsRouter } from './accounts.js';
+import { BaseAccountsRouter, DefaultAccountRouter } from './accounts.js';
 import { DefaultStatusesRouter } from './statuses.js';
 import { DefaultBookmarksRouter } from './bookmarks.js';
 import { DefaultTrendsRouter } from './trends.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
-	accounts: DefaultAccountsRouter;
+	accounts: DefaultAccountRouter;
 	statuses: DefaultStatusesRouter;
 	bookmarks: DefaultBookmarksRouter;
 	trends: DefaultTrendsRouter;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
-		this.accounts = new DefaultAccountsRouter();
+		this.accounts = new DefaultAccountRouter();
 		this.statuses = new DefaultStatusesRouter();
 		this.bookmarks = new DefaultBookmarksRouter();
 		this.trends = new DefaultTrendsRouter();

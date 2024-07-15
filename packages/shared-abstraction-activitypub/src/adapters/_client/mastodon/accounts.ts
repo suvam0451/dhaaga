@@ -11,12 +11,19 @@ import {
 	MastoErrorHandler,
 } from '../_router/_runner.js';
 import { AccountRouteStatusQueryDto } from '../_router/routes/accounts.js';
+import { BaseAccountsRouter } from '../default/accounts.js';
+import { LibraryResponse } from '../_router/_types.js';
+import { MastoAccount, MastoStatus } from '../_interface.js';
 
-export class MastodonAccountsRouter implements AccountRoute {
+export class MastodonAccountsRouter
+	extends BaseAccountsRouter
+	implements AccountRoute
+{
 	client: RestClient;
 	lib: DhaagaRestClient<COMPAT.MASTOJS>;
 
 	constructor(forwarded: RestClient) {
+		super();
 		this.client = forwarded;
 		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
 	}
@@ -24,6 +31,16 @@ export class MastodonAccountsRouter implements AccountRoute {
 	async statuses(id: string, query: AccountRouteStatusQueryDto) {
 		const fn = this.lib.client.v1.accounts.$select(id).statuses.list;
 		const { data, error } = await MastoErrorHandler(fn, [query]);
+		const resData = await data;
+		if (error || resData === undefined) {
+			return errorBuilder(error);
+		}
+		return successWithData(data);
+	}
+
+	async get(id: string): Promise<LibraryResponse<MastoAccount>> {
+		const fn = this.lib.client.v1.accounts.$select(id).fetch;
+		const { data, error } = await MastoErrorHandler(fn);
 		const resData = await data;
 		if (error || resData === undefined) {
 			return errorBuilder(error);
