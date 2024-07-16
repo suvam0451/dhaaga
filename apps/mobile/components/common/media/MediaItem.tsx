@@ -14,7 +14,6 @@ import {
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
 } from './_shared';
-import { Text } from '@rneui/themed';
 
 type ImageCarousalProps = {
 	attachments: MediaAttachmentInterface[];

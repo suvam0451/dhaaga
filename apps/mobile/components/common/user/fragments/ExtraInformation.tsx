@@ -2,9 +2,9 @@ import { memo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { useActivitypubUserContext } from '../../../states/useProfile';
-import useMfm from '../../../components/hooks/useMfm';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import { useActivitypubUserContext } from '../../../../states/useProfile';
+import useMfm from '../../../hooks/useMfm';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 type ExtraInformationFieldProps = {
@@ -68,7 +68,7 @@ function UserProfileExtraInformation({
 }: UserProfileExtraInformationProps) {
 	const [IsExpanded, setIsExpanded] = useState(false);
 
-	const fieldsCount = fields.length;
+	const fieldsCount = fields?.length;
 	return (
 		<View
 			style={{
@@ -116,7 +116,7 @@ function UserProfileExtraInformation({
 						key={i}
 						label={x.name}
 						value={x.value}
-						last={i === fields.length - 1}
+						last={i === fields?.length - 1}
 					/>
 				))}
 			</Animated.View>

@@ -6,7 +6,7 @@ export function successWithData(data: any) {
 	};
 }
 
-export function errorBuilder(error?: any) {
+export function errorBuilder<T>(error?: any): LibraryResponse<T> {
 	return {
 		error: {
 			code: error?.code || DhaagaErrorCode.UNKNOWN_ERROR,
@@ -14,7 +14,7 @@ export function errorBuilder(error?: any) {
 	};
 }
 
-export function notImplementedErrorBuilder(): LibraryResponse<any> {
+export function notImplementedErrorBuilder<T>(): LibraryResponse<T> {
 	return {
 		error: {
 			code: DhaagaErrorCode.UNKNOWN_ERROR,

@@ -9,7 +9,7 @@ import { Status, StatusArray } from '../../status/_interface.js';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import type { Note } from 'misskey-js/autogen/models.js';
 import { DefaultInstanceRouter } from './instance.js';
-import { BaseAccountsRouter, DefaultAccountRouter } from './accounts.js';
+import { DefaultAccountRouter } from './accounts.js';
 import { DefaultStatusesRouter } from './statuses.js';
 import { DefaultBookmarksRouter } from './bookmarks.js';
 import { DefaultTrendsRouter } from './trends.js';

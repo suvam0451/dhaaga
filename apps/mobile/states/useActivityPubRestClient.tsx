@@ -31,6 +31,9 @@ type Type = {
 	 * primary account selection/active status
 	 */
 	regenerate: () => void;
+
+	domain?: string;
+	subdomain?: string;
 };
 
 const defaultValue: Type = {
@@ -113,6 +116,8 @@ function WithActivityPubRestClient({ children }: any) {
 				meRaw: MeRaw,
 				primaryAcct: PrimaryAcct,
 				regenerate: regenerateFn,
+				domain: PrimaryAcct?.domain,
+				subdomain: PrimaryAcct?.subdomain,
 			}}
 		>
 			{children}

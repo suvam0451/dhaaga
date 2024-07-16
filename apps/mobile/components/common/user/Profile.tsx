@@ -1,8 +1,11 @@
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useLocalSearchParams } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
-import { ActivityPubAccount } from '@dhaaga/shared-abstraction-activitypub';
-import { useEffect, useRef, useState } from 'react';
+import {
+	ActivityPubAccount,
+	ActivitypubHelper,
+} from '@dhaaga/shared-abstraction-activitypub';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Dimensions, View } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
@@ -14,23 +17,19 @@ import {
 } from '../../../styles/Containers';
 import AppButtonFollowIndicator from '../../lib/Buttons';
 import { PrimaryText, SecondaryText } from '../../../styles/Typography';
-import UserProfileExtraInformation from '../../../screens/shared/profile/ExtraInformation';
-import UserPostsProvider from '../../../contexts/UserPosts';
+import UserProfileExtraInformation from './fragments/ExtraInformation';
 import ConfirmRelationshipChangeDialog from '../../screens/shared/fragments/ConfirmRelationshipChange';
 import WithActivitypubUserContext, {
 	useActivitypubUserContext,
 } from '../../../states/useProfile';
 import useMfm from '../../hooks/useMfm';
 import useRelationshipWith from '../../../states/useRelationshipWith';
-import { UserProfileBrowsePosts } from '../../../screens/shared/profile/UserProfile';
-import { Text } from '@rneui/themed';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { router } from 'expo-router';
 import ErrorGoBack from '../../error-screen/ErrorGoBack';
+import { AppRelationship } from '../../../types/ap.types';
+import PinnedPosts from './fragments/PinnedPosts';
+import ProfileImageGallery from './fragments/ProfileImageGallery';
 
 function ProfileContextWrapped() {
-	const { user: userParam } = useLocalSearchParams<{ user: string }>();
-
 	const { primaryAcct, client } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();
@@ -53,9 +52,12 @@ function ProfileContextWrapped() {
 		deps: [user?.getDisplayName()],
 	});
 
-	const { relationship, setter, relationshipLoading } = useRelationshipWith(
-		user?.getId(),
-	);
+	const handle = useMemo(() => {
+		return ActivitypubHelper.getHandle(user?.getAccountUrl(), subdomain);
+	}, [user?.getAccountUrl()]);
+
+	const { relationState, relation, setRelation, relationLoading } =
+		useRelationshipWith(user?.getId());
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
@@ -68,26 +70,44 @@ function ProfileContextWrapped() {
 	] = useState(false);
 	const ScrollRef = useRef(null);
 
+	function onUnfollow() {
+		setIsUnfollowConfirmationDialogVisible(false);
+		client.accounts.unfollow(user?.getId()).then((res) => {
+			setRelation(res.data);
+		});
+	}
+
 	function onFollowButtonClick() {
-		if (!relationship.following) {
-			client
-				.followUser(user?.getId(), {
-					reblogs: true,
-					notify: false,
-				})
+		if (!relation.following) {
+			client.accounts
+				.follow(user?.getId(), { reblogs: true, notify: false })
 				.then((res) => {
-					setter(res);
-				})
-				.catch((e) => {
-					console.log('[ERROR]: following user', e);
+					setRelation(res.data);
 				});
 		} else {
 			setIsUnfollowConfirmationDialogVisible(true);
-			// client.unfollowUser(user?.getId()).then((res) => {
-			// 	setter(res);
-			// });
 		}
 	}
+
+	const FollowLabel = useMemo(() => {
+		if (!relation.following && !relation.followedBy) {
+			return AppRelationship.UNRELATED;
+		}
+		if (relation.following && !relation.followedBy) {
+			return AppRelationship.FOLLOWING;
+		}
+		if (relation.following && relation.followedBy) {
+			return AppRelationship.FRIENDS;
+		}
+
+		if (relation.blocking) {
+			return AppRelationship.BLOCKED;
+		}
+		if (relation.blockedBy) {
+			return AppRelationship.BLOCKED_BY;
+		}
+		return AppRelationship.UNKNOWN;
+	}, [relation, relationLoading, relationState]);
 
 	return (
 		<WithAutoHideTopNavBar title={'Profile'} translateY={translateY}>
@@ -123,14 +143,17 @@ function ProfileContextWrapped() {
 								justifyContent: 'center',
 							}}
 						>
-							<View style={{ paddingHorizontal: 12, width: '100%' }}>
+							<View
+								style={{
+									paddingHorizontal: 8,
+									marginLeft: 8,
+									width: '100%',
+								}}
+							>
 								<AppButtonFollowIndicator
-									size={'sm'}
-									activeLabel={'Following'}
-									passiveLabel={'Follow'}
+									label={FollowLabel}
 									onClick={onFollowButtonClick}
-									isCompleted={relationship.following}
-									loading={relationshipLoading}
+									loading={relationLoading}
 								/>
 							</View>
 						</View>
@@ -156,10 +179,8 @@ function ProfileContextWrapped() {
 						</View>
 					</View>
 					<View style={{ marginLeft: 8 }}>
-						<PrimaryText>{ParsedDisplayName}</PrimaryText>
-						<SecondaryText>
-							{user.getAppDisplayAccountUrl(subdomain)}
-						</SecondaryText>
+						{ParsedDisplayName}
+						<SecondaryText>{handle}</SecondaryText>
 					</View>
 					<ParsedDescriptionContainer>
 						{DescriptionContent}
@@ -167,16 +188,19 @@ function ProfileContextWrapped() {
 
 					{/*Separator*/}
 					<View style={{ flexGrow: 1 }} />
-					<UserProfileExtraInformation fields={fields} />
+
+					{/* Collapsible Sections */}
 					<View style={{ paddingBottom: 16 }}>
-						<UserPostsProvider>
-							<UserProfileBrowsePosts userId={user.getId()} />
-						</UserPostsProvider>
+						<UserProfileExtraInformation fields={fields} />
+						<ProfileImageGallery userId={user.getId()} />
+						<PinnedPosts userId={user.getId()} />
 					</View>
 				</Animated.ScrollView>
+
 				<ConfirmRelationshipChangeDialog
 					visible={IsUnfollowConfirmationDialogVisible}
 					setVisible={setIsUnfollowConfirmationDialogVisible}
+					onUnfollow={onUnfollow}
 				/>
 			</View>
 		</WithAutoHideTopNavBar>

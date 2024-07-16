@@ -7,6 +7,10 @@ import { APP_THEME } from '../../../styles/AppTheme';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import * as Haptics from 'expo-haptics';
 
+type Props = {
+	isRepost: boolean;
+};
+
 /**
  * Show metrics for a post
  *
@@ -14,39 +18,44 @@ import * as Haptics from 'expo-haptics';
  * vertical screen estate
  * @constructor
  */
-const PostStats = memo(function Foo() {
-	const { status: post, setDataRaw } = useActivitypubStatusContext();
+const PostStats = memo(function Foo({ isRepost }: Props) {
+	const {
+		status: post,
+		setDataRaw,
+		sharedStatus,
+	} = useActivitypubStatusContext();
 	const { client } = useActivityPubRestClientContext();
 	const [RepliesCount, setRepliesCount] = useState(0);
 	const [FavouritesCount, setFavouritesCount] = useState(0);
 	const [RepostCount, setRepostCount] = useState(0);
 	const [IsFavourited, setIsFavourited] = useState(false);
 	const [SeparatorDotCount, setSeparatorDotCount] = useState(0);
+	const _status = isRepost ? sharedStatus : post;
 
 	useEffect(() => {
-		if (!post) return;
-		setRepliesCount(post?.getRepliesCount());
-		setFavouritesCount(post?.getFavouritesCount());
-		setRepostCount(post?.getRepostsCount());
-		setIsFavourited(post?.getIsFavourited());
+		if (!_status) return;
+		setRepliesCount(_status?.getRepliesCount());
+		setFavouritesCount(_status?.getFavouritesCount());
+		setRepostCount(_status?.getRepostsCount());
+		setIsFavourited(_status?.getIsFavourited());
 
 		let count = 0;
-		if (post?.getIsFavourited()) count++;
-		if (post?.getRepliesCount() > 0) count++;
-		if (post?.getFavouritesCount() > 0) count++;
-		if (post?.getRepostsCount()) count++;
+		if (_status?.getIsFavourited()) count++;
+		if (_status?.getRepliesCount() > 0) count++;
+		if (_status?.getFavouritesCount() > 0) count++;
+		if (_status?.getRepostsCount()) count++;
 
 		setSeparatorDotCount(count);
-	}, [post]);
+	}, [_status]);
 
 	function onFavouriteClick() {
 		if (IsFavourited) {
-			client.unFavourite(post?.getId()).then((res) => {
+			client.unFavourite(_status?.getId()).then((res) => {
 				setDataRaw(res);
 				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 			});
 		} else {
-			client.favourite(post?.getId()).then((res) => {
+			client.favourite(_status?.getId()).then((res) => {
 				setDataRaw(res);
 				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 			});

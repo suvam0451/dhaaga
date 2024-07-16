@@ -1,23 +1,19 @@
 import { Button, Text } from '@rneui/themed';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
+import { memo, useMemo } from 'react';
+import { AppRelationship } from '../../types/ap.types';
 
 type AppButtonFollowIndicatorProps = {
-	isCompleted: boolean;
 	onClick: () => void;
-	activeLabel: string;
-	passiveLabel: string;
-	size?: 'lg' | 'sm' | 'md';
+	label: AppRelationship;
 	loading: boolean;
 };
 
 function AppButtonFollowIndicator({
-	isCompleted,
 	onClick,
-	activeLabel,
-	passiveLabel,
-	size,
+	label,
 	loading,
 }: AppButtonFollowIndicatorProps) {
 	function onButtonClick() {
@@ -26,32 +22,73 @@ function AppButtonFollowIndicator({
 		}
 	}
 
-	const _size = size || 'md';
-	return isCompleted ? (
-		<Button
-			size={_size}
-			onPress={onButtonClick}
-			buttonStyle={styles.activeButtonStyle}
-		>
-			{loading ? (
-				<ActivityIndicator size={20} color={APP_THEME.COLOR_SCHEME_D_NORMAL} />
-			) : (
-				<Text style={styles.activeTextStyle}>{activeLabel}</Text>
-			)}
-		</Button>
-	) : (
-		<Button
-			size={_size}
-			onPress={onButtonClick}
-			buttonStyle={styles.passiveButtonStyle}
-		>
-			{loading ? (
-				<ActivityIndicator size={20} color={APP_THEME.COLOR_SCHEME_D_NORMAL} />
-			) : (
-				<Text style={styles.passiveTextStyle}>{passiveLabel}</Text>
-			)}
-		</Button>
-	);
+	return useMemo(() => {
+		switch (label) {
+			case AppRelationship.UNRELATED: {
+				return (
+					<Button
+						size={'sm'}
+						onPress={onButtonClick}
+						buttonStyle={styles.passiveButtonStyle}
+						containerStyle={{ borderRadius: 4 }}
+					>
+						{loading ? (
+							<ActivityIndicator
+								size={20}
+								color={APP_THEME.COLOR_SCHEME_D_NORMAL}
+							/>
+						) : (
+							<Text style={styles.passiveTextStyle}>
+								{AppRelationship.UNRELATED}
+							</Text>
+						)}
+					</Button>
+				);
+			}
+			case AppRelationship.FOLLOWING: {
+				return (
+					<Button
+						size={'sm'}
+						onPress={onButtonClick}
+						buttonStyle={styles.activeButtonStyle}
+						containerStyle={{ borderRadius: 4 }}
+					>
+						{loading ? (
+							<ActivityIndicator
+								size={20}
+								color={APP_THEME.COLOR_SCHEME_D_NORMAL}
+							/>
+						) : (
+							<Text style={styles.activeTextStyle}>
+								{AppRelationship.FOLLOWING}
+							</Text>
+						)}
+					</Button>
+				);
+			}
+			default: {
+				return (
+					<Button
+						size={'sm'}
+						onPress={onButtonClick}
+						buttonStyle={styles.passiveButtonStyle}
+						containerStyle={{ borderRadius: 4 }}
+					>
+						{loading ? (
+							<ActivityIndicator
+								size={20}
+								color={APP_THEME.COLOR_SCHEME_D_NORMAL}
+							/>
+						) : (
+							<Text style={styles.passiveTextStyle}>
+								{AppRelationship.UNKNOWN}
+							</Text>
+						)}
+					</Button>
+				);
+			}
+		}
+	}, [label, loading]);
 }
 
 type AppButtonVariantAProps = {
@@ -178,20 +215,56 @@ const styles = StyleSheet.create({
 		backgroundColor: '#2e6945', // '#cb6483',
 		maxWidth: 128,
 	},
-	activeButtonStyle: {
-		borderColor: '#cb6483',
-		backgroundColor: 'rgba(39, 39, 39, 1)',
-		maxWidth: 128,
-	},
+
 	passiveTextStyle: {
 		fontFamily: 'Montserrat-SemiBold',
 		color: APP_FONT.MONTSERRAT_HEADER,
 	},
+	activeButtonStyle: {
+		borderColor: '#cb6483',
+		// backgroundColor: 'rgba(39, 39, 39, 1)',
+		backgroundColor: '#363636',
+		maxWidth: 128,
+		borderRadius: 4,
+	},
 	activeTextStyle: {
 		fontFamily: 'Montserrat-Bold',
-		color: '#cb6483',
+		// color: '#cb6483',
+		color: APP_FONT.MONTSERRAT_BODY,
 		opacity: 0.87,
 	},
+});
+
+type AppButtonClassicInvertedProps = {
+	label: string;
+	onClick: () => void;
+};
+
+export const AppButtonClassicInverted = memo(function Foo({
+	label,
+	onClick,
+}: AppButtonClassicInvertedProps) {
+	return (
+		<View
+			style={{
+				borderRadius: 4,
+				backgroundColor: 'rgba(170, 170, 170, 0.87)',
+				padding: 8,
+				marginRight: 8,
+			}}
+			onTouchEnd={onClick}
+		>
+			<Text
+				style={{
+					color: 'rgba(0, 0, 0, 1)',
+					fontFamily: 'Montserrat-Bold',
+					textAlign: 'center',
+				}}
+			>
+				{label}
+			</Text>
+		</View>
+	);
 });
 
 export default AppButtonFollowIndicator;

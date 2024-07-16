@@ -15,7 +15,13 @@ export class MisskeyBookmarksRouter implements BookmarksRoute {
 		this.client = forwarded;
 	}
 
-	async get(query: BookmarkGetQueryDTO) {
+	async get(query: BookmarkGetQueryDTO): Promise<
+		LibraryResponse<{
+			data: MastoStatus[];
+			minId?: string | null;
+			maxId?: string | null;
+		}>
+	> {
 		return notImplementedErrorBuilder();
 	}
 }

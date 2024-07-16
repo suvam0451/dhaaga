@@ -1,9 +1,10 @@
 import { KNOWN_SOFTWARE } from './instance.js';
-import type { mastodon } from 'masto';
+import { mastodon } from 'masto';
 import { createRestAPIClient } from 'masto';
 import { DhaagaErrorCode, LibraryResponse } from './_types.js';
 import { api as misskeyApi } from 'misskey-js';
 import generator, { MegalodonInterface } from 'megalodon';
+import { errorBuilder, successWithData } from './dto/api-responses.dto.js';
 
 export enum COMPAT {
 	MASTOJS = 'mastodon',
@@ -224,6 +225,42 @@ export async function MastoErrorHandler<T extends (...args: any[]) => any>(
 		return CommonErrorHandler(e);
 	}
 }
+
+/**
+ * Why did you use these paginator stuff?
+ * Whyyyyyyyyy? Just keep it simple, smh
+ */
+export async function MastojsHandler<T>({
+	data,
+	error,
+}: LibraryResponse<Promise<T>>): Promise<LibraryResponse<T>> {
+	try {
+		const resData = await data;
+		if (error || resData === undefined) {
+			return errorBuilder(error);
+		}
+		return successWithData(data);
+	} catch (e) {
+		console.log(e);
+		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+	}
+}
+
+// export async function MastojsPaginatorHandler<T>({
+// 	data,
+// 	error,
+// }: LibraryResponse<Paginator<T>>): Promise<LibraryResponse<T>> {
+// 	try {
+// 		const resData = await data;
+// 		if (error || resData === undefined) {
+// 			return errorBuilder(error);
+// 		}
+// 		return successWithData(data);
+// 	} catch (e) {
+// 		console.log(e);
+// 		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+// 	}
+// }
 
 export async function PleromaErrorHandler<T extends (...args: any[]) => any>(
 	foo: ThisParameterType<T>,

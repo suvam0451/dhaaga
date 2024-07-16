@@ -10,11 +10,315 @@ import { MMKV } from 'react-native-mmkv';
 import { Realm } from 'realm';
 import MentionProcessor from '../components/common/user/MentionProcessor';
 import TextParserService from './text-parser';
+import { MfmNode } from 'mfm-js';
 
 type MentionMap = {
 	url: string;
 	text: string;
 }[];
+
+class MfmComponentBuilder {
+	protected readonly input: string;
+	protected readonly db: Realm;
+	protected readonly globalDb: MMKV;
+	protected readonly myDomain: string;
+	protected readonly mySubdomain: string;
+	protected readonly emojiMap?: Map<string, EmojiMapValue>;
+
+	links: Map<string, string>;
+	mentions: { url: string; text: string }[];
+	nodes: MfmNode[][];
+	emojis: Set<string>;
+	targetSubdomain?: string;
+
+	results: any[];
+	aiContext: any[];
+
+	constructor({
+		input,
+		db,
+		globalDb,
+		targetSubdomain,
+		mySubdomain,
+		myDomain,
+		emojiMap,
+	}: {
+		input: string;
+		db: Realm;
+		globalDb: MMKV;
+		myDomain: string;
+		mySubdomain: string;
+		targetSubdomain?: string;
+		emojiMap?: Map<string, EmojiMapValue>;
+	}) {
+		this.input = input;
+		this.db = db;
+		this.globalDb = globalDb;
+		this.emojis = new Set<string>();
+		this.targetSubdomain = targetSubdomain;
+		this.results = [];
+		this.aiContext = [];
+		this.mySubdomain = mySubdomain;
+		this.myDomain = myDomain;
+		this.emojiMap = emojiMap;
+	}
+
+	solve(perf: boolean) {
+		this.findMentions();
+		this.findLinks();
+
+		this.preprocess();
+
+		this.findEmojis();
+		this.loadEmojis();
+
+		this.process();
+	}
+
+	findEmojis() {
+		for (const para of this.nodes) {
+			for (const node of para) {
+				if (node.type === 'emojiCode') {
+					this.emojis.add(node.props.name);
+					continue;
+				}
+				if (['bold', 'italic'].includes(node.type)) {
+					// console.log('detected bold/italic', node.children);
+					for (let i = 0; i < node.children.length; i++) {
+						const child = node.children[i];
+						if (child.type === 'emojiCode') {
+							console.log(child.props.name);
+							this.emojis.add(child.props.name);
+						} else {
+							console.log(child.type);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	loadEmojis() {
+		if (this.emojis.size === 0) return;
+		EmojiService.loadEmojisForInstanceSync(
+			this.db,
+			this.globalDb,
+			this.targetSubdomain,
+			{
+				selection: this.emojis,
+			},
+		);
+	}
+
+	preprocess() {
+		this.nodes = TextParserService.preprocessPostContent(this.input, false);
+	}
+
+	findLinks() {
+		this.links = TextParserService.findHyperlinks(this.input);
+	}
+
+	findMentions() {
+		this.mentions = TextParserService.findMentions(this.input);
+	}
+
+	process() {
+		let count = 0;
+		let paraCount = 0;
+
+		for (const para of this.nodes) {
+			this.results.push([]);
+			for (const node of para) {
+				// handle line breaks
+				if (node.type === 'text') {
+					const splits = node.props.text.split(/<br ?\/?>/);
+
+					const key = randomUUID();
+					// first item is always text
+					this.results[paraCount].push(
+						<Text
+							key={key}
+							style={{
+								color: APP_FONT.MONTSERRAT_BODY,
+							}}
+						>
+							{splits[0]}
+						</Text>,
+					);
+					count++;
+
+					// each n-1 item results in a split
+					for (let i = 1; i < splits.length; i++) {
+						this.results.push([]);
+						paraCount++;
+
+						const key = randomUUID();
+						this.results[paraCount].push(
+							<Text
+								key={key}
+								style={{
+									color: 'rgba(255, 255, 255, 0.6)',
+								}}
+							>
+								{splits[i]}
+							</Text>,
+						);
+					}
+
+					const txt = node.props.text.trim();
+					// @ts-ignore-next-line
+					txt.replaceAll(/<br>/g, '\n');
+					this.aiContext.push(txt);
+					continue;
+				}
+
+				const item = this.parser(node);
+				this.results[paraCount].push(item);
+				count++;
+			}
+			paraCount++;
+		}
+	}
+
+	private parser(node: any) {
+		const k = randomUUID();
+		switch (node.type) {
+			case 'unicodeEmoji': {
+				return <Text key={k}>{node.props.emoji}</Text>;
+			}
+			case 'text': {
+				let baseText = node.props.text;
+				// @ts-ignore-next-line
+				baseText = baseText.replaceAll(/<br>/g, '\n');
+				return (
+					<Text
+						key={k}
+						style={{
+							color: APP_FONT.MONTSERRAT_BODY,
+						}}
+					>
+						{baseText}
+					</Text>
+				);
+			}
+			case 'hashtag': {
+				const hashtagName = this.decodeUrlString(node.props.hashtag);
+				return (
+					<HashtagProcessor key={k} forwardedKey={k} content={hashtagName} />
+				);
+			}
+			case 'url': {
+				const mention = this.mentions?.find((o) => o.url === node.props.url);
+
+				if (mention) {
+					console.log(node.props.url, 'is a mention');
+					return (
+						<MentionProcessor
+							key={k}
+							url={mention.url}
+							text={mention.text}
+							interactable={false}
+						/>
+					);
+				}
+
+				let displayName = null;
+				if (this.links) {
+					const match = this.links.get(node.props.url);
+					if (match) {
+						displayName = match;
+					}
+				}
+				return (
+					<LinkProcessor
+						key={k}
+						url={node.props.url}
+						displayName={displayName}
+					/>
+				);
+			}
+			case 'emojiCode': {
+				if (!this.emojiMap) return <Text key={k}></Text>;
+				const match = EmojiService.findCachedEmoji({
+					emojiMap: this.emojiMap,
+					db: this.db,
+					globalDb: this.globalDb,
+					id: node.props.name,
+					remoteInstance: this.targetSubdomain,
+				});
+
+				if (!match)
+					return (
+						<Text key={k} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
+							{`:${node.props.name}:`}
+						</Text>
+					);
+				return (
+					<Text key={k} style={{ marginTop: 0 }}>
+						{/*@ts-ignore-next-line*/}
+						<Image
+							style={{
+								width: 18,
+								height: 18,
+								opacity: 0.87,
+							}}
+							source={{ uri: match }}
+						/>
+					</Text>
+				);
+			}
+			case 'italic': {
+				return (
+					<Text
+						key={k}
+						style={{
+							fontStyle: 'italic',
+							color: APP_FONT.MONTSERRAT_BODY,
+						}}
+					>
+						{node.children.map((o: any) => this.parser(o))}
+					</Text>
+				);
+			}
+			case 'bold': {
+				return (
+					<Text
+						key={k}
+						style={{
+							fontFamily: 'Inter-Bold',
+							color: APP_FONT.MONTSERRAT_HEADER,
+						}}
+					>
+						{node.children.map((o: any) => this.parser(o))}
+					</Text>
+				);
+			}
+			case 'mention': {
+				return (
+					<MentionProcessor
+						key={k}
+						url={node.props.acct}
+						text={node.props.username}
+						interactable={false}
+					/>
+				);
+			}
+			default: {
+				console.log('[WARN]: node type not evaluated', node);
+				return <Text key={k}></Text>;
+			}
+		}
+	}
+
+	decodeUrlString(input: string) {
+		try {
+			return decodeURI(input);
+		} catch (e) {
+			console.log('[ERROR]:', e, input);
+			return input;
+		}
+	}
+}
 
 class MfmService {
 	/**
@@ -261,116 +565,19 @@ class MfmService {
 				openAiContext: [],
 			};
 
-		const mentionMap = TextParserService.findMentions(input);
-		// console.log(mentionMap);
-
-		const extractedUrls = TextParserService.findHyperlinks(input);
-		// console.log(extractedUrls);
-
-		// TextParserService.
-		const parsed = TextParserService.preprocessPostContent(input, false);
-
-		let retval = [];
-		let openAiContext = [];
-		let count = 0;
-		let paraCount = 0;
-
-		/**
-		 * Ensure remote emojis are resolved
-		 */
-		const emojiCodes = new Set<string>();
-		for (const para of parsed) {
-			for (const node of para) {
-				if (node.type === 'emojiCode') {
-					emojiCodes.add(node.props.name);
-				} else if (['bold', 'italic'].includes(node.type)) {
-					console.log('detected bold/italic', node.children);
-					for (let i = 0; i < node.children.length; i++) {
-						const child = node.children[i];
-						if (child.type === 'emojiCode') {
-							console.log(child.props.name);
-							emojiCodes.add(child.props.name);
-						} else {
-							console.log(child.type);
-						}
-					}
-				}
-			}
-		}
-		if (emojiCodes.size > 0) {
-			// console.log('[INFO]: need to parse emojis', emojiCodes);
-			EmojiService.loadEmojisForInstanceSync(db, globalDb, remoteSubdomain, {
-				selection: emojiCodes,
-			});
-		}
-
-		for (const para of parsed) {
-			retval.push([]);
-			for (const node of para) {
-				// handle line breaks
-				if (node.type === 'text') {
-					const splits = node.props.text.split(/<br ?\/?>/);
-
-					const key = randomUUID();
-					// first item is always text
-					retval[paraCount].push(
-						<Text
-							key={key}
-							style={{
-								color: APP_FONT.MONTSERRAT_BODY,
-							}}
-						>
-							{splits[0]}
-						</Text>,
-					);
-					count++;
-
-					// each n-1 item results in a split
-					for (let i = 1; i < splits.length; i++) {
-						retval.push([]);
-						paraCount++;
-
-						const key = randomUUID();
-						retval[paraCount].push(
-							<Text
-								key={key}
-								style={{
-									color: 'rgba(255, 255, 255, 0.6)',
-								}}
-							>
-								{splits[i]}
-							</Text>,
-						);
-					}
-
-					const txt = node.props.text.trim();
-					// @ts-ignore-next-line
-					txt.replaceAll(/<br>/g, '\n');
-					openAiContext.push(txt);
-					continue;
-				}
-
-				const item = MfmService.parseNode(node, {
-					emojiMap: emojiMap,
-					linkMap: extractedUrls,
-					domain,
-					subdomain,
-					isHighEmphasisText: false,
-					db,
-					globalDb,
-					remoteInstance: remoteSubdomain,
-					mentionMap,
-				});
-
-				retval[paraCount].push(item);
-				count++;
-			}
-			paraCount++;
-		}
-
+		const solver = new MfmComponentBuilder({
+			input,
+			db,
+			globalDb,
+			myDomain: domain,
+			mySubdomain: subdomain,
+			emojiMap,
+			targetSubdomain: remoteSubdomain,
+		});
+		solver.solve(true);
 		return {
-			reactNodes: retval,
-			openAiContext,
+			reactNodes: solver.results,
+			openAiContext: solver.aiContext,
 		};
 	}
 }

@@ -2,7 +2,15 @@ import { LibraryResponse } from '../_types.js';
 import { mastodon } from 'masto';
 import { Note } from 'misskey-js/autogen/models.js';
 import { Endpoints } from 'misskey-js';
-import { MastoAccount, MastoStatus } from '../../_interface.js';
+import {
+	FollowPostDto,
+	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
+	MastoList,
+	MastoRelationship,
+	MastoTag,
+} from '../../_interface.js';
 
 type DefaultPaginationParams = {
 	// masto.js
@@ -24,11 +32,70 @@ type ListAccountStatusesParams = DefaultPaginationParams & {
 export type AccountRouteStatusQueryDto = ListAccountStatusesParams &
 	Endpoints['users/notes']['req'];
 
+export type AccountMutePostDto = {
+	notifications: boolean;
+	duration: number;
+};
+
 export interface AccountRoute {
+	/**
+	 * Relations
+	 */
+
+	follow(
+		id: string,
+		opts: FollowPostDto,
+	): Promise<LibraryResponse<MastoRelationship>>;
+
+	unfollow(id: string): Promise<LibraryResponse<MastoRelationship>>;
+
+	/**
+	 * Moderation
+	 */
+
+	block(id: string): Promise<LibraryResponse<MastoRelationship>>;
+
+	unblock(id: string): Promise<LibraryResponse<MastoRelationship>>;
+
+	mute(
+		id: string,
+		opts: AccountMutePostDto,
+	): Promise<LibraryResponse<MastoRelationship>>;
+
+	unmute(id: string): Promise<LibraryResponse<MastoRelationship>>;
+
+	removeFollower(id: string): Promise<LibraryResponse<void>>;
+
+	/**
+	 * General
+	 */
+
+	/**
+	 * NOTE: masto.js returns the account first,
+	 * then the status array.
+	 *
+	 * be careful.
+	 * @param id
+	 * @param params
+	 */
 	statuses(
 		id: string,
-		params: AccountRouteStatusQueryDto
+		params: AccountRouteStatusQueryDto,
 	): Promise<LibraryResponse<mastodon.v1.Status[] | Note[] | any[]>>;
 
 	get(id: string): Promise<LibraryResponse<MastoAccount>>;
+
+	relationships(ids: string[]): Promise<LibraryResponse<MastoRelationship[]>>;
+
+	featuredTags(id: string): Promise<LibraryResponse<MastoFeaturedTag[]>>;
+
+	familiarFollowers(
+		ids: string[],
+	): Promise<LibraryResponse<MastoFamiliarFollowers[]>>;
+
+	/**
+	 * Lists this user is part of
+	 * @param id
+	 */
+	lists(id: string): Promise<LibraryResponse<MastoList[]>>;
 }

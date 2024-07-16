@@ -152,7 +152,7 @@ function StatusInteractionBase({
 				paddingHorizontal: 4,
 			}}
 		>
-			<PostStats />
+			<PostStats isRepost={isRepost} />
 			<Divider
 				color={'#cccccc'}
 				style={{
