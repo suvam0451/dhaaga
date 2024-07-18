@@ -10,7 +10,7 @@ import { APP_FONT } from '../../styles/AppTheme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useLocalAppMenuControllerContext } from '../../states/useLocalAppMenuController';
+import { useFabController } from '../shared/fab/hooks/useFabController';
 import Coffee from '../static/sponsorship/Coffee';
 
 type Props = {
@@ -27,7 +27,7 @@ const DRAWER_BG_COLOR = '#262626';
  */
 function KnownServersDrawer({ children }: Props) {
 	const { open, setOpen } = useAppDrawerContext();
-	const { setActiveMenu } = useLocalAppMenuControllerContext();
+	const { setActiveMenu } = useFabController();
 
 	useEffect(() => {
 		setActiveMenu(open ? 'drawer' : 'fab');

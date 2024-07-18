@@ -4,6 +4,7 @@ import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
 import { memo, useMemo } from 'react';
 import { AppRelationship } from '../../types/ap.types';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 type AppButtonFollowIndicatorProps = {
 	onClick: () => void;
@@ -259,6 +260,42 @@ export const AppButtonClassicInverted = memo(function Foo({
 					color: 'rgba(0, 0, 0, 1)',
 					fontFamily: 'Montserrat-Bold',
 					textAlign: 'center',
+				}}
+			>
+				{label}
+			</Text>
+		</View>
+	);
+});
+
+const ICON_SIZE = 18;
+
+type AppTimelineActionProps = {
+	label: string;
+	Icon: JSX.Element;
+};
+
+export const AppTimelineAction = memo(function Foo({
+	Icon,
+	label,
+}: AppTimelineActionProps) {
+	return (
+		<View
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+				alignItems: 'center',
+				marginRight: 8,
+				paddingVertical: 8,
+				paddingHorizontal: 4,
+			}}
+		>
+			{Icon}
+			<Text
+				style={{
+					color: APP_FONT.MONTSERRAT_BODY,
+					marginLeft: 4,
+					fontFamily: 'Montserrat-Bold',
 				}}
 			>
 				{label}

@@ -25,6 +25,10 @@ class MfmComponentBuilder {
 	protected readonly mySubdomain: string;
 	protected readonly emojiMap?: Map<string, EmojiMapValue>;
 
+	// settings
+	protected parseMentions: boolean = true;
+	protected parseLinks: boolean = true;
+
 	links: Map<string, string>;
 	mentions: { url: string; text: string }[];
 	nodes: MfmNode[][];
@@ -42,6 +46,7 @@ class MfmComponentBuilder {
 		mySubdomain,
 		myDomain,
 		emojiMap,
+		opts,
 	}: {
 		input: string;
 		db: Realm;
@@ -50,6 +55,10 @@ class MfmComponentBuilder {
 		mySubdomain: string;
 		targetSubdomain?: string;
 		emojiMap?: Map<string, EmojiMapValue>;
+		opts?: {
+			parseMentions?: boolean;
+			parseLinks?: boolean;
+		};
 	}) {
 		this.input = input;
 		this.db = db;
@@ -61,6 +70,11 @@ class MfmComponentBuilder {
 		this.mySubdomain = mySubdomain;
 		this.myDomain = myDomain;
 		this.emojiMap = emojiMap;
+
+		// options
+		if (opts?.parseMentions !== undefined)
+			this.parseMentions = opts?.parseMentions;
+		if (opts?.parseLinks !== undefined) this.parseLinks = opts?.parseLinks;
 	}
 
 	solve(perf: boolean) {

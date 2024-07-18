@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import FloatingActionButtonOption from '../../../lib/FloatingActionButtonOption';
-import { useLocalAppMenuControllerContext } from '../../../../states/useLocalAppMenuController';
+import { useFabController } from '../../../shared/fab/hooks/useFabController';
 import { useAppDrawerContext } from '../../../../states/useAppDrawer';
 
 const Y_OFFSET_MENU_ITEM = 72;
@@ -21,8 +21,7 @@ const Y_OFFSET_MENU_ITEM = 72;
  * @constructor
  */
 function AddServerWidget({ onPress }: { onPress: () => void }) {
-	const { fabItemScale, activeMenu, isFabExpanded, setIsFabExpanded } =
-		useLocalAppMenuControllerContext();
+	const { activeMenu, isFabExpanded, setIsFabExpanded } = useFabController();
 	const { setOpen } = useAppDrawerContext();
 
 	const rotation = useSharedValue(0);
@@ -50,12 +49,7 @@ function AddServerWidget({ onPress }: { onPress: () => void }) {
 	// @ts-ignore
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
-			transform: [
-				{ rotate: `${rotation.value}deg` },
-				// {
-				// 	scale: fabItemScale.value,
-				// },
-			],
+			transform: [{ rotate: `${rotation.value}deg` }],
 		};
 	});
 

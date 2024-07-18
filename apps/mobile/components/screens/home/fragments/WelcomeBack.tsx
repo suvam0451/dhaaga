@@ -13,6 +13,9 @@ import {
 import { useQuery } from '@realm/react';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import FabMenuCore from '../../../shared/fab/Core';
+import { FAB_MENU_MODULES } from '../../../../types/app.types';
+import AppSidebarCore, { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -305,7 +308,7 @@ function WelcomeBack() {
 	}, [userDataTimelines]);
 
 	return (
-		<View>
+		<AppSidebarCore variant={SIDEBAR_VARIANT.TIMELINE}>
 			<StatusBar backgroundColor="#121212" />
 			<TimelinesHeader
 				label={'Your Social Hub'}
@@ -425,7 +428,15 @@ function WelcomeBack() {
 					{PinnedItems}
 				</View>
 			</View>
-		</View>
+			<FabMenuCore
+				menuItems={[
+					FAB_MENU_MODULES.NAVIGATOR,
+					FAB_MENU_MODULES.CREATE_POST,
+					FAB_MENU_MODULES.TIMELINE_SWITCHER,
+					FAB_MENU_MODULES.OPEN_SIDEBAR,
+				]}
+			/>
+		</AppSidebarCore>
 	);
 }
 

@@ -3,13 +3,11 @@ import { AppInputSimpleSearch } from '../../../lib/Inputs';
 import { useEffect, useState } from 'react';
 import { useSearchTermContext } from '../../../../hooks/forms/useSearchTerm';
 import { useDebounce } from 'use-debounce';
-import { useLocalAppMenuControllerContext } from '../../../../states/useLocalAppMenuController';
+import { useFabController } from '../../../shared/fab/hooks/useFabController';
 
 function KnownServerSearchWidget() {
-	const { searchText, setIsResultLoading, setSearchText, isResultLoading } =
-		useSearchTermContext();
-	const { fabItemScale, isFabExpanded, setIsFabExpanded, activeMenu } =
-		useLocalAppMenuControllerContext();
+	const { setSearchText } = useSearchTermContext();
+	const { activeMenu } = useFabController();
 
 	const [Value, setValue] = useState('');
 
@@ -30,7 +28,6 @@ function KnownServerSearchWidget() {
 				marginBottom: 20,
 				zIndex: 99,
 				display: activeMenu === 'drawer' ? 'none' : 'flex',
-				// backgroundColor: 'red',
 			}}
 		>
 			<AppInputSimpleSearch
