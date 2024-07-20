@@ -8,6 +8,8 @@ import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Text } from '@rneui/themed';
+import { Audio } from 'expo-av';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 type Props = {
 	url?: string;
@@ -30,6 +32,54 @@ export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
 	);
 });
 
+export const AppAudioComponent = memo(function Foo({ url }: { url: string }) {
+	const [sound, setSound] = useState<Audio.Sound | null>(null);
+
+	async function create() {
+		const { sound } = await Audio.Sound.createAsync(
+			{ uri: url },
+			{ shouldPlay: true, isMuted: false },
+		);
+		setSound(sound);
+		await sound.playAsync();
+	}
+
+	useEffect(() => {
+		return sound
+			? () => {
+					console.log('Unloading Sound');
+					sound.unloadAsync();
+				}
+			: undefined;
+	}, [sound]);
+
+	return (
+		<View key={101}>
+			<View
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+					alignItems: 'center',
+					padding: 12,
+					borderRadius: 8,
+					paddingHorizontal: 16,
+					backgroundColor: '#3c3c3c',
+				}}
+			>
+				<AntDesign
+					onPress={create}
+					name="play"
+					size={24}
+					color={APP_FONT.MONTSERRAT_BODY}
+				/>
+				<Text style={{ color: APP_FONT.MONTSERRAT_BODY, marginLeft: 8 }}>
+					Audio Not Implemented
+				</Text>
+			</View>
+		</View>
+	);
+});
+
 export const AppVideoComponent = memo(function Foo({
 	url,
 	height,
@@ -47,6 +97,9 @@ export const AppVideoComponent = memo(function Foo({
 		if (loop) {
 			player.loop = true;
 		}
+		// if (type === 'gifv') {
+		// 	player.play();
+		// }
 	});
 
 	useEffect(() => {
@@ -71,6 +124,7 @@ export const AppVideoComponent = memo(function Foo({
 				player={player}
 				allowsFullscreen
 				allowsPictureInPicture
+				// nativeControls={type !== 'gifv'}
 			/>
 		</View>
 	);

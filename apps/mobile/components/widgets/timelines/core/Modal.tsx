@@ -5,7 +5,7 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { Text } from '@rneui/themed';
 import * as React from 'react';
 import useKeyboard from '../../../hooks/useKeyboard';
-import { useTimelineControllerContext } from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../../states/useTimelineController';
 import renderScene from './renderScene';
 import tabBarRenderer from './renderTabBar';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
@@ -23,7 +23,7 @@ function TimelineWidgetModal() {
 	const { KeyboardVisible } = useKeyboard();
 
 	const { ShowTimelineSelection, setShowTimelineSelection } =
-		useTimelineControllerContext();
+		useTimelineController();
 
 	const renderTabBar = tabBarRenderer(index);
 

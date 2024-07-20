@@ -40,7 +40,6 @@ class AppApi {
 				delete obj[key];
 			}
 		});
-		console.log(obj, typeof obj, snakecaseKeys.default(obj));
 		return snakecaseKeys.default(obj) as Record<string, any>;
 	}
 

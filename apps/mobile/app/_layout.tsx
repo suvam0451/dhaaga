@@ -23,6 +23,7 @@ import { LogBox } from 'react-native';
 // to get rid of realm warnings
 import AppSettingsService from '../services/app-settings.service';
 import { AppProfileRepository } from '../repositories/app-profile.repo';
+import { AppProfile } from '../entities/app-profile.entity';
 
 /**
  * Suppress these warnings...
@@ -66,8 +67,9 @@ function WithGorhomBottomSheetWrapper() {
 	}, []);
 
 	useEffect(() => {
-		const profiles = AppProfileRepository(db).upsert({ name: 'Default' });
-		console.log('[INFO]: profiles found', profiles);
+		AppProfileRepository(db).upsert({ name: 'Default' });
+		AppProfileRepository(db).ensureDefaultProfileIsActive();
+		AppProfileRepository(db).seedAppSettings({ name: 'Default' });
 	}, []);
 
 	const [fontsLoaded, fontError] = useFonts(appFonts);
@@ -91,12 +93,6 @@ function WithGorhomBottomSheetWrapper() {
 							headerShown: false,
 						}}
 					/>
-					{/*<Stack.Screen*/}
-					{/*	name="(shared)"*/}
-					{/*	options={{*/}
-					{/*		headerShown: false,*/}
-					{/*	}}*/}
-					{/*/>*/}
 				</Stack>
 			</View>
 		</WithActivityPubRestClient>

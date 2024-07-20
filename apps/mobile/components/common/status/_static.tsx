@@ -39,7 +39,7 @@ export const RepliedStatusFragment = memo(function Foo({
 			>
 				<Ionicons color={'#888'} name={'arrow-redo-outline'} size={14} />
 				<Text style={{ color: '#888', fontWeight: '500', marginLeft: 4 }}>
-					Continues a thread
+					Replied to a thread
 				</Text>
 			</View>
 		</View>

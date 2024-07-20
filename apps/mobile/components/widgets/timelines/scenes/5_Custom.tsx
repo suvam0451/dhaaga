@@ -4,7 +4,6 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { Text } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import React from 'react';
 
 function CustomTimelineOptions() {
 	return (

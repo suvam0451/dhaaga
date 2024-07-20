@@ -76,11 +76,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 		id: string,
 		query: AccountRouteStatusQueryDto,
 	): Promise<LibraryResponse<MastoStatus[]>> {
-		return {
-			error: {
-				code: DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY,
-			},
-		};
+		return notImplementedErrorBuilder<MastoStatus[]>();
 	}
 
 	async relationships(

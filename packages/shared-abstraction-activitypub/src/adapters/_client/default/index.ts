@@ -13,6 +13,7 @@ import { DefaultAccountRouter } from './accounts.js';
 import { DefaultStatusesRouter } from './statuses.js';
 import { DefaultBookmarksRouter } from './bookmarks.js';
 import { DefaultTrendsRouter } from './trends.js';
+import { DefaultNotificationsRouter } from './notifications.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
@@ -20,6 +21,7 @@ class UnknownRestClient implements ActivityPubClient {
 	statuses: DefaultStatusesRouter;
 	bookmarks: DefaultBookmarksRouter;
 	trends: DefaultTrendsRouter;
+	notifications: DefaultNotificationsRouter;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
@@ -27,6 +29,7 @@ class UnknownRestClient implements ActivityPubClient {
 		this.statuses = new DefaultStatusesRouter();
 		this.bookmarks = new DefaultBookmarksRouter();
 		this.trends = new DefaultTrendsRouter();
+		this.notifications = new DefaultNotificationsRouter();
 	}
 
 	reblog(id: string): Promise<Status> {

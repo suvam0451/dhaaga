@@ -34,6 +34,7 @@ type Type = {
 
 	domain?: string;
 	subdomain?: string;
+	_id?: string;
 };
 
 const defaultValue: Type = {

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	widgetContainerCollapsed: {
-		marginBottom: 50 + 16,
+		marginBottom: 16,
 		backgroundColor: 'rgba(54,54,54,0.85)',
 		display: 'flex',
 		position: 'absolute',
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
 		zIndex: 99,
 	},
 	widgetContainerCollapsedCore: {
-		marginBottom: 50 + 16,
+		marginBottom: 16,
 		display: 'flex',
 		position: 'absolute',
 		bottom: 0,

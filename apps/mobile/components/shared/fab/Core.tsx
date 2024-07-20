@@ -6,7 +6,7 @@ import Animated, {
 	withSpring,
 	withTiming,
 } from 'react-native-reanimated';
-import { Fragment, useCallback, useMemo } from 'react';
+import { Fragment, memo, useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
@@ -27,7 +27,7 @@ type Props = {
  * A FAB button
  * @constructor
  */
-function FabMenuCore({ menuItems }: Props) {
+const FabMenuCore = memo(function Foo({ menuItems }: Props) {
 	const { activeMenu, isFabExpanded, setIsFabExpanded } = useFabController();
 
 	const rotation = useSharedValue(0);
@@ -115,6 +115,6 @@ function FabMenuCore({ menuItems }: Props) {
 			{MenuItems}
 		</Fragment>
 	);
-}
+});
 
 export default FabMenuCore;

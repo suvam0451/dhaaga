@@ -1,4 +1,10 @@
-import { createContext, useContext, useState } from 'react';
+import {
+	createContext,
+	Dispatch,
+	SetStateAction,
+	useContext,
+	useState,
+} from 'react';
 
 export enum TimelineFetchMode {
 	IDLE = 'Idle',
@@ -12,38 +18,34 @@ export enum TimelineFetchMode {
 	ADD_NEW = 'Add New',
 }
 
+export type AppTimelineQuery = {
+	id: string;
+	label: string;
+};
+
 type Type = {
 	// the type of timeline to be shown in index screen
 	timelineType: TimelineFetchMode;
 	setTimelineType: (x: TimelineFetchMode) => void;
-	opts: {
-		listId?: string;
-		hashtagName?: string;
-		userId?: string;
-	};
-	setQueryOptions: (obj: any) => void;
+	opts: {};
+	query?: AppTimelineQuery;
+	setQuery: (obj: AppTimelineQuery) => void;
 	ShowTimelineSelection: boolean;
-	setShowTimelineSelection: React.Dispatch<React.SetStateAction<boolean>>;
+	setShowTimelineSelection: Dispatch<SetStateAction<boolean>>;
 };
 
 const defaultValue: Type = {
-	ShowTimelineSelection: false,
-	setShowTimelineSelection(
-		value: ((prevState: boolean) => boolean) | boolean,
-	): void {},
 	timelineType: TimelineFetchMode.IDLE,
-	setTimelineType: function (x: TimelineFetchMode): void {
-		throw new Error('Function not implemented.');
-	},
+	ShowTimelineSelection: false,
+	setShowTimelineSelection: () => {},
+	setTimelineType: () => {},
 	opts: {},
-	setQueryOptions: function (obj: any): void {
-		throw new Error('Function not implemented.');
-	},
+	setQuery: () => {},
 };
 
 const TimelineControllerContext = createContext<Type>(defaultValue);
 
-export function useTimelineControllerContext() {
+export function useTimelineController() {
 	return useContext(TimelineControllerContext);
 }
 
@@ -55,15 +57,18 @@ function WithTimelineControllerContext({ children }: Props) {
 	const [FetchMode, setFetchMode] = useState<TimelineFetchMode>(
 		TimelineFetchMode.IDLE,
 	);
-	const [Options, setOptions] = useState({});
-	const [ShowTimelineSelection, setShowTimelineSelection] = useState(false);
-
-	function setQueryOptions(obj: any) {
-		setOptions(obj);
-	}
 
 	function setTimelineTypeFn(x: TimelineFetchMode) {
 		setFetchMode(x);
+	}
+
+	const [ShowTimelineSelection, setShowTimelineSelection] = useState(false);
+
+	const [Query, setQuery] = useState<AppTimelineQuery | undefined>(undefined);
+	const [Opts, setOpts] = useState({});
+
+	function setQueryOptions(input: AppTimelineQuery) {
+		setQuery(input);
 	}
 
 	return (
@@ -71,8 +76,9 @@ function WithTimelineControllerContext({ children }: Props) {
 			value={{
 				timelineType: FetchMode,
 				setTimelineType: setTimelineTypeFn,
-				opts: Options,
-				setQueryOptions,
+				opts: Opts,
+				query: Query,
+				setQuery: setQueryOptions,
 				ShowTimelineSelection,
 				setShowTimelineSelection,
 			}}

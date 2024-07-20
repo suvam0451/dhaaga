@@ -8,8 +8,6 @@ import { BottomSheetActionButtonContainer } from '../../styles/Containers';
 import activitypubAdapterService from '../../services/activitypub-adapter.service';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import useMfm from '../hooks/useMfm';
-import { APP_FONT } from '../../styles/AppTheme';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { AppTimelineAction } from '../lib/Buttons';
 import Octicons from '@expo/vector-icons/Octicons';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
@@ -31,7 +29,6 @@ function Status() {
 		deps: [userI?.getDisplayName()],
 		fontFamily: 'Montserrat-Bold',
 	});
-	const acctUrl = userI?.getAccountUrl();
 
 	const handle = useMemo(() => {
 		return ActivitypubHelper.getHandle(userI?.getAccountUrl(), subdomain);

@@ -1,35 +1,35 @@
 import TimelineWidgetUserApi from '../api/4_User';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { TouchableOpacity, View } from 'react-native';
 import AppInput from '../../../lib/Inputs';
-import { CheckBox } from '@rneui/base';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import AppCheckBox from '../../../lib/Checkboxes';
+import { APP_FONT } from '../../../../styles/AppTheme';
 import { Text } from '@rneui/themed';
-import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { Image } from 'expo-image';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
 import {
 	TimelineFetchMode,
-	useTimelineControllerContext,
+	useTimelineController,
 } from '../../../../states/useTimelineController';
+import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 
 function TimelineWidgetUserScene() {
 	const [SearchTerm, setSearchTerm] = useState('');
 	const [debouncedSearchTerm] = useDebounce(SearchTerm, 100);
-	const { setTimelineType, setQueryOptions, setShowTimelineSelection } =
-		useTimelineControllerContext();
+	const { setTimelineType, setQuery, setShowTimelineSelection } =
+		useTimelineController();
 
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct.subdomain;
 
-	const { status, data, fetchStatus, transformedData } =
-		TimelineWidgetUserApi(debouncedSearchTerm);
+	const { transformedData } = TimelineWidgetUserApi(debouncedSearchTerm);
 
-	function onUserClicked(o: string) {
-		setQueryOptions({ userId: o });
+	function onUserClicked(o: string, acct: string) {
+		setQuery({
+			id: o,
+			label: ActivitypubHelper.getHandle(acct, subdomain),
+		});
 		setTimelineType(TimelineFetchMode.USER);
 		setShowTimelineSelection(false);
 	}
@@ -58,7 +58,7 @@ function TimelineWidgetUserScene() {
 								marginBottom: 8,
 							}}
 							onPress={() => {
-								onUserClicked(o.getId());
+								onUserClicked(o.getId(), o.getAccountUrl());
 							}}
 						>
 							<View
@@ -68,6 +68,7 @@ function TimelineWidgetUserScene() {
 									marginRight: 4,
 								}}
 							>
+								{/*@ts-ignore-next-line*/}
 								<Image
 									source={o.getAvatarUrl()}
 									placeholder={{ blurhash: o.getAvatarBlurHash() }}

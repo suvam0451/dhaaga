@@ -5,6 +5,7 @@ import { RouterInterface } from './_router/routes/_index.js';
 import { InstanceRoute } from './_router/instance.js';
 import type { Status as MLStatus } from 'megalodon/lib/esm/src/entities/status.js';
 import type { Reaction as MLReaction } from 'megalodon/lib/esm/src/entities/reaction.js';
+import type { Notification as MLNotification } from 'megalodon/lib/esm/src/entities/notification.js';
 
 /**
  * TS4053: Return type of public method
@@ -23,9 +24,11 @@ export type MastoTag = mastodon.v1.Tag;
 export type MastoAccount = mastodon.v1.Account;
 export type MastoFeaturedTag = mastodon.v1.FeaturedTag;
 export type MastoFamiliarFollowers = mastodon.v1.FamiliarFollowers;
+export type MastoNotification = mastodon.v1.Notification;
 
 export type MegaStatus = MLStatus;
 export type MegaReaction = MLReaction;
+export type MegaNotification = MLNotification;
 
 export type HashtagTimelineQuery = {
 	limit: number;
@@ -57,7 +60,8 @@ export type GetTimelineQueryDTO = {
 	minId?: string;
 	maxId?: string;
 	remote?: boolean;
-	mediaOnly?: boolean;
+	local?: boolean;
+	onlyMedia?: boolean;
 };
 
 export type GetTrendingPostsQueryDTO = {

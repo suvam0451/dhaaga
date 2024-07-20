@@ -20,7 +20,7 @@ function AppSidebarCore({ children, variant }: AppSidebarCoreProps) {
 				return <View></View>;
 			}
 		}
-	}, [variant]);
+	}, [variant, children]);
 }
 
 export default AppSidebarCore;

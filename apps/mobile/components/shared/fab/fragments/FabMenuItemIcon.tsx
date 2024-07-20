@@ -49,12 +49,14 @@ export const FabMenuItemText = memo(function Foo({
 				backgroundColor: 'rgba(54,54,54,0.87)',
 				padding: 8,
 				borderRadius: 8,
+				width: 'auto',
 			}}
 		>
 			<Text
 				style={{
 					fontFamily: 'Montserrat-Bold',
 					color: APP_FONT.MONTSERRAT_BODY,
+					flex: 1,
 				}}
 				numberOfLines={1}
 			>

@@ -9,3 +9,9 @@ export enum FAB_MENU_MODULES {
 	CREATE_POST,
 	TIMELINE_SWITCHER,
 }
+
+export enum APP_SETTINGS {
+	// timelines
+	TIMELINE_SENSITIVE_CONTENT = 'timeline/sensitive-content',
+	TIMELINE_CONTENT_WARNING = 'timeline/content-warning',
+}

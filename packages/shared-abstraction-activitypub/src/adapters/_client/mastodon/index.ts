@@ -27,6 +27,7 @@ import { KNOWN_SOFTWARE } from '../_router/instance.js';
 import { MastodonStatusesRouter } from './statuses.js';
 import { MastodonBookmarksRouter } from './bookmarks.js';
 import { MastodonTrendsRouter } from './trends.js';
+import { MastodonNotificationsRouter } from './notifications.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -35,6 +36,7 @@ class MastodonRestClient implements ActivityPubClient {
 	statuses: MastodonStatusesRouter;
 	bookmarks: MastodonBookmarksRouter;
 	trends: MastodonTrendsRouter;
+	notifications: MastodonNotificationsRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -46,6 +48,7 @@ class MastodonRestClient implements ActivityPubClient {
 		this.statuses = new MastodonStatusesRouter(this.client);
 		this.bookmarks = new MastodonBookmarksRouter(this.client);
 		this.trends = new MastodonTrendsRouter(this.client);
+		this.notifications = new MastodonNotificationsRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<MastoStatus | null> {

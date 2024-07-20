@@ -72,6 +72,13 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			},
 		],
 		['expo-router'],
+		[
+			'expo-av',
+			{
+				microphonePermission:
+					'Dhaaga needs microphone access to support audio attachments.',
+			},
+		],
 	],
 });
 

@@ -2,80 +2,35 @@ import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { memo, useMemo } from 'react';
 import { TimelineType } from '../../../../types/timeline.types';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import ControlSegment from '../components/ControlSegment';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import PublicTimelineController from '../controllers/PublicTimelineController';
+import {
+	TimelineFetchMode,
+	useTimelineController,
+} from '../../../../states/useTimelineController';
+import UserTimelineController from '../controllers/UserTimelineController';
+import HomeTimelineController from '../controllers/HomeTimelineController';
+import HashtagTimelineController from '../controllers/HashtagTimelineController';
 
 type Props = {
 	feedType: TimelineType;
 };
 
 const NowBrowsingHeader = memo(function Foo({ feedType }: Props) {
+	const { timelineType } = useTimelineController();
+
 	const Comp = useMemo(() => {
-		switch (feedType) {
-			case TimelineType.LOCAL: {
-				return (
-					<View>
-						<Text
-							style={{
-								fontFamily: 'Montserrat-Bold',
-								color: APP_FONT.MONTSERRAT_BODY,
-								fontSize: 16,
-							}}
-						>
-							Public Timeline
-						</Text>
-						<Text
-							style={{
-								fontFamily: 'Montserrat-Bold',
-								color: APP_THEME.COLOR_SCHEME_D_NORMAL,
-								fontSize: 14,
-								opacity: 0.75,
-							}}
-						>
-							mastodon.social
-						</Text>
-						<ControlSegment
-							label={'Show feed from:'}
-							buttons={[
-								{
-									label: 'All',
-									selected: true,
-									onClick: () => {},
-								},
-
-								{
-									label: 'Local',
-									selected: false,
-									onClick: () => {},
-								},
-								{
-									label: 'Remote',
-									selected: false,
-									onClick: () => {},
-								},
-							]}
-						/>
-
-						<ControlSegment
-							label={'More options:'}
-							buttons={[
-								{
-									label: 'All',
-									selected: true,
-									onClick: () => {},
-								},
-
-								{
-									label: 'Media Only',
-									selected: false,
-									onClick: () => {},
-								},
-							]}
-						/>
-					</View>
-				);
+		switch (timelineType) {
+			case TimelineFetchMode.LOCAL: {
+				return <PublicTimelineController />;
+			}
+			case TimelineFetchMode.HOME:
+				return <HomeTimelineController />;
+			case TimelineFetchMode.USER: {
+				return <UserTimelineController />;
+			}
+			case TimelineFetchMode.HASHTAG: {
+				return <HashtagTimelineController />;
 			}
 			default: {
 				return (
@@ -111,7 +66,6 @@ const NowBrowsingHeader = memo(function Foo({ feedType }: Props) {
 					</Text>
 				</View>
 			</View>
-
 			{Comp}
 		</View>
 	);

@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 
@@ -13,7 +13,7 @@ type Props = {
 
 function ControlSegment({ label, buttons }: Props) {
 	return (
-		<View style={{ marginTop: 16 }}>
+		<View style={{ marginTop: 16, overflow: 'scroll' }}>
 			<Text
 				style={{
 					fontFamily: 'Montserrat-Bold',
@@ -23,32 +23,34 @@ function ControlSegment({ label, buttons }: Props) {
 			>
 				{label}
 			</Text>
-			<View style={{ display: 'flex', flexDirection: 'row' }}>
-				{buttons.map((o, i) => (
-					<View
-						key={i}
-						style={{
-							borderRadius: 8,
-							backgroundColor: o.selected
-								? 'rgba(170, 170, 170, 0.87)'
-								: '#1e1e1e',
-							padding: 8,
-							marginRight: 8,
-						}}
-					>
-						<Text
+			<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+				<View style={{ display: 'flex', flexDirection: 'row' }}>
+					{buttons.map((o, i) => (
+						<View
+							key={i}
 							style={{
-								color: o.selected
-									? 'rgba(0, 0, 0, 1)'
-									: APP_FONT.MONTSERRAT_BODY,
-								fontFamily: 'Montserrat-Bold',
+								borderRadius: 8,
+								backgroundColor: o.selected
+									? 'rgba(170, 170, 170, 0.87)'
+									: '#1e1e1e',
+								padding: 8,
+								marginRight: 8,
 							}}
 						>
-							{o.label}
-						</Text>
-					</View>
-				))}
-			</View>
+							<Text
+								style={{
+									color: o.selected
+										? 'rgba(0, 0, 0, 1)'
+										: APP_FONT.MONTSERRAT_BODY,
+									fontFamily: 'Montserrat-Bold',
+								}}
+							>
+								{o.label}
+							</Text>
+						</View>
+					))}
+				</View>
+			</ScrollView>
 		</View>
 	);
 }

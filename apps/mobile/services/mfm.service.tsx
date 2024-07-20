@@ -1,21 +1,18 @@
 import { Text } from 'react-native';
-import HashtagProcessor from '../components/common/tag/TagProcessor';
-import { Image } from 'expo-image';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { randomUUID } from 'expo-crypto';
 import LinkProcessor from '../components/common/link/LinkProcessor';
-import { APP_FONT, APP_THEME } from '../styles/AppTheme';
+import { APP_FONT } from '../styles/AppTheme';
 import { EmojiService } from './emoji.service';
 import { MMKV } from 'react-native-mmkv';
 import { Realm } from 'realm';
-import MentionProcessor from '../components/common/user/MentionProcessor';
 import TextParserService from './text-parser';
 import { MfmNode } from 'mfm-js';
-
-type MentionMap = {
-	url: string;
-	text: string;
-}[];
+import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
+import MentionSegment from '../components/shared/mfm/MentionSegment';
+import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
+import HashtagSegment from '../components/shared/mfm/HashtagSegment';
+import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
@@ -197,44 +194,11 @@ class MfmComponentBuilder {
 	private parser(node: any) {
 		const k = randomUUID();
 		switch (node.type) {
-			case 'unicodeEmoji': {
-				return <Text key={k}>{node.props.emoji}</Text>;
-			}
-			case 'text': {
-				let baseText = node.props.text;
-				// @ts-ignore-next-line
-				baseText = baseText.replaceAll(/<br>/g, '\n');
-				return (
-					<Text
-						key={k}
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-						}}
-					>
-						{baseText}
-					</Text>
-				);
-			}
-			case 'hashtag': {
-				const hashtagName = this.decodeUrlString(node.props.hashtag);
-				return (
-					<HashtagProcessor key={k} forwardedKey={k} content={hashtagName} />
-				);
-			}
 			case 'url': {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 
-				if (mention) {
-					console.log(node.props.url, 'is a mention');
-					return (
-						<MentionProcessor
-							key={k}
-							url={mention.url}
-							text={mention.text}
-							interactable={false}
-						/>
-					);
-				}
+				// NOTE: mention.url is also an option
+				if (mention) return <MentionSegment value={mention.text} />;
 
 				let displayName = null;
 				if (this.links) {
@@ -251,36 +215,7 @@ class MfmComponentBuilder {
 					/>
 				);
 			}
-			case 'emojiCode': {
-				if (!this.emojiMap) return <Text key={k}></Text>;
-				const match = EmojiService.findCachedEmoji({
-					emojiMap: this.emojiMap,
-					db: this.db,
-					globalDb: this.globalDb,
-					id: node.props.name,
-					remoteInstance: this.targetSubdomain,
-				});
 
-				if (!match)
-					return (
-						<Text key={k} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
-							{`:${node.props.name}:`}
-						</Text>
-					);
-				return (
-					<Text key={k} style={{ marginTop: 0 }}>
-						{/*@ts-ignore-next-line*/}
-						<Image
-							style={{
-								width: 18,
-								height: 18,
-								opacity: 0.87,
-							}}
-							source={{ uri: match }}
-						/>
-					</Text>
-				);
-			}
 			case 'italic': {
 				return (
 					<Text
@@ -307,16 +242,27 @@ class MfmComponentBuilder {
 					</Text>
 				);
 			}
-			case 'mention': {
+			// NOTE: node.props.acct is also an option
+			case 'mention':
+				return <MentionSegment key={k} value={node.props.username} />;
+			case 'inlineCode':
+				return <InlineCodeSegment key={k} value={node.props.code} />;
+			case 'hashtag':
+				return <HashtagSegment key={k} value={node.props.hashtag} />;
+			case 'text':
+				return <RawTextSegment key={k} value={node.props.text} />;
+			case 'emojiCode':
 				return (
-					<MentionProcessor
+					<EmojiCodeSegment
 						key={k}
-						url={node.props.acct}
-						text={node.props.username}
-						interactable={false}
+						value={node.props.name}
+						remoteInstance={this.targetSubdomain}
+						emojiMap={this.emojiMap}
 					/>
 				);
-			}
+			case 'unicodeEmoji':
+				return <Text key={k}>{node.props.emoji}</Text>;
+
 			default: {
 				console.log('[WARN]: node type not evaluated', node);
 				return <Text key={k}></Text>;
@@ -335,210 +281,6 @@ class MfmComponentBuilder {
 }
 
 class MfmService {
-	/**
-	 * TODO: when parent node is bold/italic,
-	 * apply that styling to children, as well
-	 * @param node
-	 * @param count
-	 * @param emojiMap
-	 * @param linkMap
-	 * @param remoteInstance
-	 * @param db
-	 * @param globalDb
-	 * @param opts
-	 * @param mentionMap
-	 */
-	static parseNode(
-		node: any,
-		{
-			emojiMap,
-			linkMap,
-			remoteInstance,
-			db,
-			globalDb,
-			opts,
-			mentionMap,
-		}: {
-			domain: string;
-			subdomain: string;
-			emojiMap: Map<string, EmojiMapValue>;
-			linkMap?: Map<string, string>;
-			isHighEmphasisText: boolean;
-			db: Realm;
-			globalDb: MMKV;
-			remoteInstance: string;
-			mentionMap: MentionMap;
-			opts?: {
-				mentionsClickable?: boolean;
-				isBold?: boolean;
-				isItalic?: boolean;
-			};
-		},
-	) {
-		const k = randomUUID();
-		switch (node.type) {
-			case 'unicodeEmoji': {
-				return <Text key={k}>{node.props.emoji}</Text>;
-			}
-			case 'text': {
-				let baseText = node.props.text;
-				// @ts-ignore-next-line
-				baseText = baseText.replaceAll(/<br>/g, '\n');
-				return (
-					<Text
-						key={k}
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-						}}
-					>
-						{baseText}
-					</Text>
-				);
-			}
-			case 'hashtag': {
-				const hashtagName = this.decodeUrlString(node.props.hashtag);
-				return (
-					<HashtagProcessor key={k} forwardedKey={k} content={hashtagName} />
-				);
-			}
-			case 'url': {
-				const mention = mentionMap?.find((o) => o.url === node.props.url);
-
-				if (mention) {
-					console.log(node.props.url, 'is a mention');
-					return (
-						<MentionProcessor
-							key={k}
-							url={mention.url}
-							text={mention.text}
-							interactable={false}
-						/>
-					);
-				}
-
-				let displayName = null;
-				if (linkMap) {
-					const match = linkMap.get(node.props.url);
-					if (match) {
-						displayName = match;
-					}
-				}
-				return (
-					<LinkProcessor
-						key={k}
-						url={node.props.url}
-						displayName={displayName}
-					/>
-				);
-			}
-			case 'emojiCode': {
-				if (!emojiMap) return <Text key={k}></Text>;
-				const match = EmojiService.findCachedEmoji({
-					emojiMap,
-					db,
-					globalDb,
-					id: node.props.name,
-					remoteInstance,
-				});
-
-				if (!match)
-					return (
-						<Text key={k} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
-							{`:${node.props.name}:`}
-						</Text>
-					);
-				return (
-					<Text key={k} style={{ marginTop: 0 }}>
-						{/*@ts-ignore-next-line*/}
-						<Image
-							style={{
-								width: 18,
-								height: 18,
-								opacity: 0.87,
-							}}
-							source={{ uri: match }}
-						/>
-					</Text>
-				);
-			}
-			case 'italic': {
-				return (
-					<Text
-						key={k}
-						style={{
-							fontStyle: 'italic',
-							color: APP_FONT.MONTSERRAT_BODY,
-						}}
-					>
-						{node.children.map((o, i) =>
-							this.parseNode(o, {
-								domain: '',
-								isHighEmphasisText: false,
-								subdomain: '',
-								emojiMap,
-								linkMap,
-								remoteInstance,
-								db,
-								globalDb,
-								opts,
-								mentionMap,
-							}),
-						)}
-					</Text>
-				);
-			}
-			case 'bold': {
-				return (
-					<Text
-						key={k}
-						style={{
-							fontFamily: 'Inter-Bold',
-							color: APP_FONT.MONTSERRAT_HEADER,
-						}}
-					>
-						{node.children.map((o) =>
-							this.parseNode(o, {
-								domain: '',
-								isHighEmphasisText: true,
-								subdomain: '',
-								emojiMap,
-								linkMap,
-								remoteInstance,
-								db,
-								globalDb,
-								opts,
-								mentionMap,
-							}),
-						)}
-					</Text>
-				);
-			}
-			case 'mention': {
-				return (
-					<MentionProcessor
-						key={k}
-						url={node.props.acct}
-						text={node.props.username}
-						interactable={false}
-					/>
-				);
-			}
-			default: {
-				console.log('[WARN]: node type not evaluated', node);
-				return <Text key={k}></Text>;
-			}
-		}
-	}
-
-	static decodeUrlString(input: string) {
-		try {
-			return decodeURI(input);
-		} catch (e) {
-			console.log('[ERROR]:', e, input);
-			return input;
-		}
-	}
-
 	/**
 	 *
 	 * @param input

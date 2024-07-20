@@ -19,6 +19,7 @@ import { PleromaAccountsRouter } from './accounts.js';
 import { PleromaStatusesRouter } from './statuses.js';
 import { PleromaBookmarksRouter } from './bookmarks.js';
 import { PleromaTrendsRouter } from './trends.js';
+import { PleromaNotificationsRouter } from './notifications.js';
 
 class PleromaRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -27,6 +28,7 @@ class PleromaRestClient implements ActivityPubClient {
 	statuses: PleromaStatusesRouter;
 	bookmarks: PleromaBookmarksRouter;
 	trends: PleromaTrendsRouter;
+	notifications: PleromaNotificationsRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -38,6 +40,7 @@ class PleromaRestClient implements ActivityPubClient {
 		this.statuses = new PleromaStatusesRouter(this.client);
 		this.bookmarks = new PleromaBookmarksRouter(this.client);
 		this.trends = new PleromaTrendsRouter(this.client);
+		this.notifications = new PleromaNotificationsRouter(this.client);
 	}
 
 	getHomeTimeline(opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {

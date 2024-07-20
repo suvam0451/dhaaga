@@ -5,15 +5,21 @@ import { FabMenuItemText } from '../fragments/FabMenuItemIcon';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { useAppDrawerContext } from '../../../../states/useAppDrawer';
+import { useFabController } from '../hooks/useFabController';
 
 const MENU_ITEM_LABEL = 'Sidebar Toggle';
 
 const SidebarToggleModule = memo(({ index }: FabModuleProps) => {
 	const { setOpen } = useAppDrawerContext();
+	const { setIsFabExpanded } = useFabController();
 
 	const onClick = useCallback(() => {
-		console.log('sidebar toggle clicked...');
-		setOpen(true);
+		try {
+			setOpen(true);
+			setIsFabExpanded(false);
+		} catch (e) {
+			console.log('[WARN]: sidebar context is not hooked to the fab menu');
+		}
 	}, []);
 
 	return (

@@ -48,7 +48,7 @@ class AccountRepository {
 
 	static upsert(db: Realm, account: AccountCreateDTO): Account {
 		const removeHttps = account.subdomain?.replace(/^https?:\/\//, '');
-
+		
 		const match = this.find(db, account);
 		return db.create(
 			Account,

@@ -3,6 +3,7 @@ import Carousel from 'react-native-reanimated-carousel';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
 import MediaService from '../../../services/media.service';
+import { Text } from '@rneui/themed';
 import {
 	MARGIN_TOP,
 	MEDIA_CONTAINER_MAX_HEIGHT,
@@ -10,6 +11,7 @@ import {
 } from './_common';
 import {
 	AltTextOverlay,
+	AppAudioComponent,
 	AppImageComponent,
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
@@ -62,6 +64,9 @@ const TimelineMediaRendered = memo(function Foo({
 					/>
 				);
 			}
+			case 'audio': {
+				return <AppAudioComponent url={attachment.getUrl()} />;
+			}
 			default: {
 				console.log('[WARN]: unsupported media type', type);
 				return <View></View>;
@@ -76,7 +81,7 @@ const TimelineMediaRendered = memo(function Foo({
 				justifyContent: 'center',
 				alignItems: 'center',
 				width: MEDIA_CONTAINER_WIDTH,
-				height: CalculatedHeight,
+				height: attachment.getType() === 'audio' ? 48 : CalculatedHeight,
 				position: 'relative',
 				marginTop: MARGIN_TOP,
 			}}

@@ -7,15 +7,15 @@ import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import {
 	TimelineFetchMode,
-	useTimelineControllerContext,
+	useTimelineController,
 } from '../../../../states/useTimelineController';
 
 function ListTimelineOptions() {
 	const { client, primaryAcct } = useActivityPubRestClientContext();
 	const username = primaryAcct.username;
 	const subdomain = primaryAcct.subdomain;
-	const { setTimelineType, setQueryOptions, setShowTimelineSelection } =
-		useTimelineControllerContext();
+	const { setTimelineType, setQuery, setShowTimelineSelection } =
+		useTimelineController();
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
@@ -25,7 +25,7 @@ function ListTimelineOptions() {
 
 	// Queries
 	const { status, data, refetch, fetchStatus } = useQuery<mastodon.v1.List[]>({
-		queryKey: ['lists', username, subdomain],
+		queryKey: [username, subdomain],
 		queryFn: api,
 		enabled: client !== null,
 	});
@@ -35,7 +35,7 @@ function ListTimelineOptions() {
 	}
 
 	function onListSelected(idx: number) {
-		setQueryOptions({ listId: data[idx].id });
+		setQuery({ id: data[idx].id, label: data[idx].title });
 		setTimelineType(TimelineFetchMode.LIST);
 		setShowTimelineSelection(false);
 	}
