@@ -13,11 +13,11 @@ import {
 } from 'react';
 import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
-// import { Note } from '@dhaaga/shared-provider-misskey';
 import { StatusContextInterface } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 import { ActivityPubStatusContextAdapter } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_adapters';
 import MastodonService from '../services/mastodon.service';
-import { randomUUID } from 'expo-crypto';
+import ActivityPubAdapterService from '../services/activitypub-adapter.service';
+import useHookLoadingState from './useHookLoadingState';
 
 type OgObject = {
 	url: string;
@@ -50,6 +50,7 @@ type Type = {
 	setData: (o: StatusInterface) => void;
 	setStatusContextData: (data: any) => void;
 	setDataRaw: (o: mastodon.v1.Status | any) => void;
+	setSharedDataRaw: (o: mastodon.v1.Status | any) => void;
 	updateOpenGraph: (og: OgObject | null) => void;
 	toggleBookmark: () => void;
 
@@ -79,6 +80,9 @@ const defaultValue: Type = {
 	contextChildrenLookup: undefined,
 	contextRootLookup: undefined,
 	stateKey: '',
+	setSharedDataRaw: function (o: any): void {
+		throw new Error('Function not implemented.');
+	},
 };
 
 const ActivitypubStatusContext = createContext<Type>(defaultValue);
@@ -111,30 +115,24 @@ function WithActivitypubStatusContext({
 }: Props) {
 	const { primaryAcct, client } = useActivityPubRestClientContext();
 	const _domain = primaryAcct?.domain;
-
-	const [StateKey, setStateKey] = useState(randomUUID());
+	const { State, setLoading, forceUpdate } = useHookLoadingState();
 
 	/**
 	 * Storing raw object and interfaces for:
 	 * Status and RebloggedStatus
 	 */
-	const [Status, setStatus] = useState<StatusInterface | null>(
+	const Status = useRef<StatusInterface>(
 		ActivitypubStatusAdapter(null, _domain),
 	);
-	const [StatusRaw, setStatusRaw] = useState<mastodon.v1.Status | any | null>(
-		null,
-	);
-	const [SharedStatus, setSharedStatus] = useState<StatusInterface | null>(
+	const StatusRaw = useRef<mastodon.v1.Status | any | null>(null);
+	const SharedStatus = useRef<StatusInterface>(
 		ActivitypubStatusAdapter(null, _domain),
 	);
-	const [SharedStatusRaw, setSharedStatusRaw] = useState<
-		mastodon.v1.Status | any | null
-	>(null);
+	const SharedStatusRaw = useRef<mastodon.v1.Status | any | null>(null);
 
-	const [StatusContext, setStatusContext] =
-		useState<StatusContextInterface | null>(
-			ActivityPubStatusContextAdapter(null, _domain),
-		);
+	const StatusContext = useRef<StatusContextInterface>(
+		ActivityPubStatusContextAdapter(null, _domain),
+	);
 
 	const contextItemLookup = useRef<Map<string, StatusInterface>>();
 	const contextChildrenLookup = useRef<Map<string, StatusInterface[]>>();
@@ -149,57 +147,62 @@ function WithActivitypubStatusContext({
 				'[WARN]: passing raw status to this context is deprecated.' +
 					'please consider passing adapted object, instead',
 			);
-			setStatusRaw(status);
+			StatusRaw.current = status;
 			const adapted = ActivitypubStatusAdapter(status, _domain);
-			setStatus(adapted);
+			Status.current = adapted;
 			if (adapted.isReposted()) {
-				const repostAdapted = ActivitypubStatusAdapter(
+				SharedStatus.current = ActivitypubStatusAdapter(
 					adapted.getRepostedStatusRaw(),
 					_domain,
 				);
-				setSharedStatus(repostAdapted);
-				setSharedStatusRaw(adapted.getRepostedStatusRaw());
+				SharedStatusRaw.current = adapted.getRepostedStatusRaw();
 			}
 		} else if (statusInterface) {
-			setStatus(statusInterface);
-			setStatusRaw(statusInterface?.getRaw());
+			Status.current = statusInterface;
+			StatusRaw.current = statusInterface?.getRaw();
 			if (statusInterface.isReposted()) {
-				const repostAdapted = ActivitypubStatusAdapter(
+				SharedStatus.current = ActivitypubStatusAdapter(
 					statusInterface.getRepostedStatusRaw(),
 					_domain,
 				);
-				setSharedStatus(repostAdapted);
-				setSharedStatusRaw(statusInterface.getRepostedStatusRaw());
+				SharedStatusRaw.current = statusInterface.getRepostedStatusRaw();
 			}
 		}
+		forceUpdate();
 	}, [status, statusInterface]);
 
 	function setStatusContextData(data: mastodon.v1.Context | any) {
 		const { root, itemLookup, childrenLookup } = MastodonService.solveContext(
-			Status,
+			Status.current,
 			data,
 			_domain,
 		);
 		contextRootLookup.current = root;
 		contextItemLookup.current = itemLookup;
 		contextChildrenLookup.current = childrenLookup;
-		setStateKey(randomUUID());
+		forceUpdate();
 	}
 
 	const setData = useCallback((o: StatusInterface) => {
-		setStatus(o);
+		Status.current = o;
+		forceUpdate();
 	}, []);
 
 	const setDataRaw = useCallback((o: mastodon.v1.Status | any) => {
 		const adapted = ActivitypubStatusAdapter(o, _domain);
 		if (adapted.isReposted()) {
-			const repostAdapted = ActivitypubStatusAdapter(
+			SharedStatus.current = ActivitypubStatusAdapter(
 				adapted.getRepostedStatusRaw(),
 				_domain,
 			);
-			setSharedStatus(repostAdapted);
 		}
-		setStatus(adapted);
+		Status.current = adapted;
+		forceUpdate();
+	}, []);
+
+	const setSharedDataRaw = useCallback((o: mastodon.v1.Status | any) => {
+		SharedStatus.current = ActivityPubAdapterService.adaptStatus(o, _domain);
+		forceUpdate();
 	}, []);
 
 	const updateOpenGraph = useCallback((og: any) => {
@@ -209,26 +212,28 @@ function WithActivitypubStatusContext({
 	const toggleBookmark = useCallback(async () => {
 		if (!client) return;
 		try {
-			if (Status?.getIsBookmarked()) {
-				const res = await client.unBookmark(Status.getId());
+			if (Status.current?.getIsBookmarked()) {
+				const res = await client.unBookmark(Status.current.getId());
 				setDataRaw(res);
 			} else {
-				const res = await client.bookmark(Status.getId());
+				const res = await client.bookmark(Status.current.getId());
 				setDataRaw(res);
 			}
 		} catch (e) {
 			console.log('[ERROR] : toggling bookmark');
+		} finally {
+			forceUpdate();
 		}
 	}, []);
 
 	return (
 		<ActivitypubStatusContext.Provider
 			value={{
-				status: Status,
-				statusContext: StatusContext,
+				status: Status.current,
+				statusContext: StatusContext.current,
 				openGraph: OpenGraph,
-				sharedStatus: SharedStatus,
-				statusRaw: StatusRaw,
+				sharedStatus: SharedStatus.current,
+				statusRaw: StatusRaw.current,
 				setData,
 				setDataRaw,
 				toggleBookmark,
@@ -237,7 +242,8 @@ function WithActivitypubStatusContext({
 				contextItemLookup,
 				contextChildrenLookup,
 				contextRootLookup,
-				stateKey: StateKey,
+				stateKey: State,
+				setSharedDataRaw,
 			}}
 		>
 			{children}

@@ -1,9 +1,8 @@
-import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../styles/AppTheme';
-import { useTimelineControllerContext } from '../states/useTimelineController';
+import { useTimelineController } from '../states/useTimelineController';
 import TimelineWidgetModal from './widgets/timelines/core/Modal';
 
 type HeadersProps = {
@@ -16,7 +15,7 @@ const TimelinesHeader = ({
 	SHOWN_SECTION_HEIGHT,
 	label,
 }: HeadersProps) => {
-	const { setShowTimelineSelection } = useTimelineControllerContext();
+	const { setShowTimelineSelection } = useTimelineController();
 
 	function onIconPress() {
 		setShowTimelineSelection(true);

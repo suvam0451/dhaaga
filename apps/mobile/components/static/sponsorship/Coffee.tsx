@@ -35,6 +35,7 @@ function Coffee() {
 						maxWidth: 172,
 						height: 42,
 						borderRadius: 8,
+						opacity: 0.87,
 					}}
 				/>
 			</View>

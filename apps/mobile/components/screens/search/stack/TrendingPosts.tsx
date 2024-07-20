@@ -9,13 +9,11 @@ import WithAppPaginationContext, {
 import WithActivitypubStatusContext from '../../../../states/useStatus';
 import StatusItem from '../../../common/status/StatusItem';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import NavigationService from '../../../../services/navigation.service';
 import LoadingMore from '../../home/LoadingMore';
 import { EmojiService } from '../../../../services/emoji.service';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import useTopbarSmoothTranslate from '../../../../states/useTopbarSmoothTranslate';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 

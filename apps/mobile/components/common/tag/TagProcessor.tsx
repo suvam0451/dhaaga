@@ -1,5 +1,4 @@
-import { Text, View, Pressable } from 'react-native';
-
+import { Text } from 'react-native';
 import {
 	BOTTOM_SHEET_ENUM,
 	useGorhomActionSheetContext,
@@ -8,7 +7,7 @@ import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import { useQuery } from '@realm/react';
 import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { APP_THEME } from '../../../styles/AppTheme';
 
 function HashtagProcessor({

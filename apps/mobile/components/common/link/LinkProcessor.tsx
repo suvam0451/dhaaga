@@ -6,12 +6,8 @@ import {
 } from '../../../states/useGorhomBottomSheet';
 import GlobalMmkvCacheServices from '../../../services/globalMmkvCache.services';
 import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
+import { APP_THEME } from '../../../styles/AppTheme';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
-import { View } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Feather from '@expo/vector-icons/Feather';
 
 type LinkProcessorProps = {
 	url: string;

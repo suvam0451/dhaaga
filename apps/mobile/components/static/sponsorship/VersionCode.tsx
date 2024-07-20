@@ -8,7 +8,7 @@ import { APP_FONT } from '../../../styles/AppTheme';
  */
 function VersionCode() {
 	return (
-		<View style={{ marginVertical: 16, marginBottom: 8 }}>
+		<View style={{ marginTop: 16, marginBottom: 0 }}>
 			<Text
 				style={{
 					textAlign: 'center',

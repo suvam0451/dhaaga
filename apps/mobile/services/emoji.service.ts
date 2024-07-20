@@ -8,7 +8,6 @@ import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-em
 import activitypubAdapterService from './activitypub-adapter.service';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { Status } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { formatRelative } from 'date-fns/formatRelative';
 
 export type EmojiAdapter = {
@@ -75,12 +74,12 @@ export class EmojiService {
 		);
 		// TODO: this needs to be brought back
 		if (found) {
-			console.log(
-				'[INFO]: found cached emojis:',
-				subdomain,
-				found.data.length,
-				formatRelative(found.lastFetchedAt, new Date()),
-			);
+			// console.log(
+			// 	'[INFO]: found cached emojis:',
+			// 	subdomain,
+			// 	found.data.length,
+			// 	formatRelative(found.lastFetchedAt, new Date()),
+			// );
 			return found.data;
 		}
 
@@ -195,8 +194,8 @@ export class EmojiService {
 		id: string;
 		remoteInstance: string;
 	}) {
-		if (emojiMap.get(id)) {
-			return emojiMap.get(id).url;
+		if (emojiMap?.get(id)) {
+			return emojiMap?.get(id).url;
 		} else {
 			return ActivityPubCustomEmojiRepository.search(db, id, remoteInstance)
 				?.url;

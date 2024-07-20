@@ -15,7 +15,7 @@ import { Image } from 'expo-image';
 import KnownServersDrawer from '../../../components/drawers/known-servers';
 import WithAppDrawerContext from '../../../states/useAppDrawer';
 import KnownServerSearchWidget from '../../../components/widgets/add-server/core/floatingSearch';
-import WithLocalAppMenuControllerContext from '../../../states/useLocalAppMenuController';
+import WithLocalAppMenuControllerContext from '../../../components/shared/fab/hooks/useFabController';
 import WithSearchTermContext, {
 	useSearchTermContext,
 } from '../../../hooks/forms/useSearchTerm';

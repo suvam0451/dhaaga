@@ -6,6 +6,10 @@ import * as snakecaseKeys from 'snakecase-keys';
 /**
  * Use Fetch API to
  * make requests ourselves
+ *
+ * Use this when the library
+ * does not support the required
+ * functionality
  */
 class AppApi {
 	baseUrl: string;
@@ -40,7 +44,6 @@ class AppApi {
 				delete obj[key];
 			}
 		});
-		console.log(obj, typeof obj, snakecaseKeys.default(obj));
 		return snakecaseKeys.default(obj) as Record<string, any>;
 	}
 

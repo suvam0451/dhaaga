@@ -107,9 +107,11 @@ export function ActivityPubUserAdapter(
 		}
 		case 'mastodon': {
 			const instance = new AccountInstance(profile as mastodon.v1.Account);
-			const emojis = (profile as mastodon.v1.Account).emojis;
+			const emojis = (profile as mastodon.v1.Account)?.emojis;
 			const mp = new Map<string, EmojiMapValue>();
-			for (let i = 0; i < emojis.length; i++) {
+			if (!emojis) return new MastodonUser(instance, mp);
+
+			for (let i = 0; i < emojis?.length; i++) {
 				let { shortcode, ...rest } = emojis[i];
 
 				mp.set(shortcode, {

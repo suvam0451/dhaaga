@@ -2,7 +2,12 @@ import { TrendsRoute } from '../_router/routes/trends.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import AppApi from '../../_api/AppApi.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { GetTrendingPostsQueryDTO, MastoStatus } from '../_interface.js';
+import {
+	GetTrendingPostsQueryDTO,
+	MastoStatus,
+	MastoTag,
+	MastoTrendLink,
+} from '../_interface.js';
 import { LibraryResponse } from '../_router/_types.js';
 
 export class MastodonTrendsRouter implements TrendsRoute {
@@ -12,7 +17,7 @@ export class MastodonTrendsRouter implements TrendsRoute {
 		this.client = forwarded;
 	}
 
-	async tags() {
+	async tags(): Promise<LibraryResponse<MastoTag[]>> {
 		return notImplementedErrorBuilder();
 	}
 
@@ -25,7 +30,7 @@ export class MastodonTrendsRouter implements TrendsRoute {
 		).getCamelCase<MastoStatus[]>('/api/v1/trends/statuses', opts);
 	}
 
-	async links() {
+	async links(): Promise<LibraryResponse<MastoTrendLink[]>> {
 		return notImplementedErrorBuilder();
 	}
 }

@@ -52,6 +52,10 @@ export {
 } from './adapters/tag/_interface.js';
 
 export { MastodonRestClient, MisskeyRestClient, UnknownRestClient };
+export {
+	DhaagaJsTimelineQueryOptions,
+	DhaagaJsNotificationType,
+} from './adapters/_client/_router/routes/_index.js';
 
 const userMap = {
 	mastodon: MastodonRestClient,

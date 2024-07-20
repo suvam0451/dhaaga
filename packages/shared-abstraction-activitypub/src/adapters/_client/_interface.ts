@@ -5,6 +5,7 @@ import { RouterInterface } from './_router/routes/_index.js';
 import { InstanceRoute } from './_router/instance.js';
 import type { Status as MLStatus } from 'megalodon/lib/esm/src/entities/status.js';
 import type { Reaction as MLReaction } from 'megalodon/lib/esm/src/entities/reaction.js';
+import type { Notification as MLNotification } from 'megalodon/lib/esm/src/entities/notification.js';
 
 /**
  * TS4053: Return type of public method
@@ -20,9 +21,14 @@ export type MastoContext = mastodon.v1.Context;
 export type MastoRelationship = mastodon.v1.Relationship;
 export type MastoTrendLink = mastodon.v1.TrendLink;
 export type MastoTag = mastodon.v1.Tag;
+export type MastoAccount = mastodon.v1.Account;
+export type MastoFeaturedTag = mastodon.v1.FeaturedTag;
+export type MastoFamiliarFollowers = mastodon.v1.FamiliarFollowers;
+export type MastoNotification = mastodon.v1.Notification;
 
 export type MegaStatus = MLStatus;
 export type MegaReaction = MLReaction;
+export type MegaNotification = MLNotification;
 
 export type HashtagTimelineQuery = {
 	limit: number;
@@ -54,7 +60,8 @@ export type GetTimelineQueryDTO = {
 	minId?: string;
 	maxId?: string;
 	remote?: boolean;
-	mediaOnly?: boolean;
+	local?: boolean;
+	onlyMedia?: boolean;
 };
 
 export type GetTrendingPostsQueryDTO = {
@@ -103,25 +110,6 @@ interface ActivityPubClient extends RouterInterface {
 	instances: InstanceRoute;
 
 	/**
-	 * Timelines
-	 * @param opts
-	 */
-	getHomeTimeline(opts?: GetPostsQueryDTO): Promise<StatusArray>;
-
-	getLocalTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
-
-	getPublicTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
-
-	getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
-
-	getTimelineByHashtag(
-		q: string,
-		query?: HashtagTimelineQuery,
-	): Promise<StatusArray>;
-
-	getListTimeline(q: string, opts?: GetPostsQueryDTO): Promise<StatusArray>;
-
-	/**
 	 * My
 	 */
 	getMyConversations(): Promise<mastodon.v1.Conversation[]>;
@@ -165,19 +153,6 @@ interface ActivityPubClient extends RouterInterface {
 	getFollowers(id: string): Promise<mastodon.v1.Account[] | null>;
 
 	uploadMedia(params: MediaUploadDTO): Promise<any>;
-
-	getIsSensitive(): boolean;
-
-	getSpoilerText(): string | null;
-
-	/**
-	 * Trending
-	 */
-	getTrendingPosts(opts: GetTrendingPostsQueryDTO): Promise<StatusArray>;
-
-	getTrendingTags(opts: GetTrendingPostsQueryDTO): Promise<TagArray>;
-
-	getTrendingLinks(opts: GetTrendingPostsQueryDTO): Promise<TrendLinkArray>;
 
 	/**
 	 * Tags

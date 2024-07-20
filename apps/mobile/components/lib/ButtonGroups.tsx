@@ -11,6 +11,7 @@ type Props = {
 function AppButtonGroup(props: Props) {
 	return (
 		<ButtonGroup
+			activeOpacity={1}
 			selectedButtonStyle={{
 				backgroundColor: APP_THEME.COLOR_SCHEME_B,
 			}}

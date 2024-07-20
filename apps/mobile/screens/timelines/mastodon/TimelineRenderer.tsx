@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, memo, useEffect, useMemo, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -6,7 +6,6 @@ import {
 	StyleSheet,
 	View,
 } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
 import StatusItem from '../../../components/common/status/StatusItem';
 import TimelinesHeader from '../../../components/TimelineHeader';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
@@ -24,16 +23,21 @@ import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../components/tutorials/screens/home/new-user/Introduction';
 import WithTimelineControllerContext, {
 	TimelineFetchMode,
-	useTimelineControllerContext,
+	useTimelineController,
 } from '../../../states/useTimelineController';
-import ActivityPubProviderService from '../../../services/activitypub-provider.service';
-import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 import WelcomeBack from '../../../components/screens/home/fragments/WelcomeBack';
 import TimelineLoading from '../../../components/loading-screens/TimelineLoading';
 import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';
 import TimelineEmpty from '../../../components/error-screen/TimelineEmpty';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
+import NowBrowsingHeader from '../../../components/widgets/feed-controller/core/NowBrowsingHeader';
+import { TimelineType } from '../../../types/timeline.types';
+import useTimeline from '../../../states/useTimeline';
+import useTimelineLabel from '../../../components/common/timeline/utils';
+import { SIDEBAR_VARIANT } from '../../../components/shared/sidebar/Core';
+import { FAB_MENU_MODULES } from '../../../types/app.types';
+import WithAppMenu from '../../../components/containers/WithAppMenu';
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
@@ -42,6 +46,7 @@ const SHOWN_SECTION_HEIGHT = 50;
 enum ListItemEnum {
 	ListItemWithText,
 	ListItemWithImage,
+	ListItemWithSpoiler,
 }
 
 interface ListItemWithTextInterface {
@@ -58,7 +63,17 @@ interface ListItemWithImageInterface {
 	type: ListItemEnum.ListItemWithImage;
 }
 
-type ListItemType = ListItemWithTextInterface | ListItemWithImageInterface;
+interface ListItemWithSpoilerInterface {
+	props: {
+		post: StatusInterface;
+	};
+	type: ListItemEnum.ListItemWithSpoiler;
+}
+
+type ListItemType =
+	| ListItemWithTextInterface
+	| ListItemWithImageInterface
+	| ListItemWithSpoilerInterface;
 
 const ListHeaderComponent = memo(function Foo({
 	loadedOnce,
@@ -67,13 +82,23 @@ const ListHeaderComponent = memo(function Foo({
 	loadedOnce: boolean;
 	itemCount: number;
 }) {
-	if (!loadedOnce) {
-		return <TimelineLoading />;
-	}
-	if (itemCount === 0) {
-		return <TimelineEmpty />;
-	}
-	return <View></View>;
+	const AdditionalState = useMemo(() => {
+		if (!loadedOnce) {
+			return <View />;
+			// return <TimelineLoading />;
+		}
+		if (itemCount === 0) {
+			return <TimelineEmpty />;
+		}
+		return <View />;
+	}, [loadedOnce, itemCount]);
+
+	return (
+		<Fragment>
+			<NowBrowsingHeader />
+			{AdditionalState}
+		</Fragment>
+	);
 });
 
 const FlashListRenderer = ({ item }: { item: ListItemType }) => {
@@ -100,7 +125,7 @@ const FlashListRenderer = ({ item }: { item: ListItemType }) => {
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
-	const { timelineType, opts } = useTimelineControllerContext();
+	const { timelineType, query, opts } = useTimelineController();
 	const { client, primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
 
@@ -110,47 +135,23 @@ function TimelineRenderer() {
 		data: PageData,
 		setMaxId,
 		append,
-		paginationLock,
 		updateQueryCache,
 		queryCacheMaxId,
 		clear,
 	} = useAppPaginationContext();
-	const PageLoadedAtLeastOnce = useRef(false);
+
+	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
 	useEffect(() => {
-		PageLoadedAtLeastOnce.current = false;
+		setPageLoadedAtLeastOnce(false);
 		clear();
-	}, [timelineType, opts?.listId, opts?.hashtagName, opts?.userId]);
+	}, [timelineType, query, opts]);
 
-	async function api() {
-		return await ActivityPubProviderService.getTimeline(
-			client,
-			timelineType,
-			{
-				limit: 5,
-				maxId: queryCacheMaxId,
-			},
-			{
-				listQuery: opts?.listId,
-				hashtagQuery: opts?.hashtagName,
-				userQuery: opts?.userId,
-			},
-		);
-	}
-
-	// Queries
-	const { status, data, fetchStatus, refetch } = useQuery<StatusArray>({
-		queryKey: [
-			'mastodon/timelines/index',
-			queryCacheMaxId,
-			primaryAcct?._id?.toString(),
-			timelineType,
-			opts?.listId,
-			opts?.hashtagName,
-			opts?.userId,
-		],
-		queryFn: api,
-		enabled: client !== null && !paginationLock && timelineType !== 'Idle',
+	const { fetchStatus, data, status, refetch } = useTimeline({
+		type: timelineType,
+		query,
+		opts,
+		maxId: queryCacheMaxId,
 	});
 
 	const [EmojisLoading, setEmojisLoading] = useState(false);
@@ -169,39 +170,12 @@ function TimelineRenderer() {
 			).finally(() => {
 				append(data);
 				setEmojisLoading(false);
-				PageLoadedAtLeastOnce.current = true;
+				setPageLoadedAtLeastOnce(true);
 			});
 		}
 	}, [fetchStatus]);
 
-	const Label = useMemo(() => {
-		switch (timelineType) {
-			case TimelineFetchMode.IDLE: {
-				return 'Your Social Hub';
-			}
-			case TimelineFetchMode.HOME: {
-				return 'Home';
-			}
-			case TimelineFetchMode.LOCAL: {
-				return 'Local';
-			}
-			case TimelineFetchMode.LIST: {
-				return `List: ${opts?.listId}`;
-			}
-			case TimelineFetchMode.HASHTAG: {
-				return `#${opts?.hashtagName}`;
-			}
-			case TimelineFetchMode.USER: {
-				return `ID: ${opts?.userId}`;
-			}
-			case TimelineFetchMode.FEDERATED: {
-				return `Federated`;
-			}
-			default: {
-				return 'Unassigned';
-			}
-		}
-	}, [timelineType, opts?.hashtagName, opts?.listId]);
+	const label = useTimelineLabel();
 
 	/**
 	 * Composite Hook Collection
@@ -229,6 +203,13 @@ function TimelineRenderer() {
 						post: adapted,
 					},
 				};
+			} else if (adapted.getIsSensitive()) {
+				return {
+					type: ListItemEnum.ListItemWithSpoiler,
+					props: {
+						post: adapted,
+					},
+				};
 			} else {
 				return {
 					type: ListItemEnum.ListItemWithText,
@@ -245,37 +226,47 @@ function TimelineRenderer() {
 	if (timelineType === TimelineFetchMode.IDLE) return <WelcomeBack />;
 
 	return (
-		<View style={[styles.container, { position: 'relative' }]}>
-			<StatusBar backgroundColor="#121212" />
-			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-				<TimelinesHeader
-					SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-					HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-					label={Label}
-				/>
-			</Animated.View>
-			<AnimatedFlashList
-				ListHeaderComponent={
-					<ListHeaderComponent
-						itemCount={ListItems.length}
-						loadedOnce={PageLoadedAtLeastOnce.current}
+		<WithAppMenu
+			sidebarVariant={SIDEBAR_VARIANT.TIMELINE}
+			fabMenuItems={[
+				FAB_MENU_MODULES.NAVIGATOR,
+				FAB_MENU_MODULES.CREATE_POST,
+				FAB_MENU_MODULES.TIMELINE_SWITCHER,
+				FAB_MENU_MODULES.OPEN_SIDEBAR,
+			]}
+		>
+			<View style={[styles.container, { position: 'relative' }]}>
+				<StatusBar backgroundColor="#121212" />
+				<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
+					<TimelinesHeader
+						SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
+						HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
+						label={label}
 					/>
-				}
-				estimatedItemSize={120}
-				data={ListItems}
-				renderItem={FlashListRenderer}
-				getItemType={(o) => o.type}
-				onScroll={onScroll}
-				contentContainerStyle={{
-					paddingTop: SHOWN_SECTION_HEIGHT + 4,
-				}}
-				scrollEventThrottle={16}
-				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				}
-			/>
-			<LoadingMore visible={visible} loading={loading} />
-		</View>
+				</Animated.View>
+				<AnimatedFlashList
+					ListHeaderComponent={
+						<ListHeaderComponent
+							itemCount={ListItems.length}
+							loadedOnce={PageLoadedAtLeastOnce}
+						/>
+					}
+					estimatedItemSize={120}
+					data={ListItems}
+					renderItem={FlashListRenderer}
+					getItemType={(o) => o.type}
+					onScroll={onScroll}
+					contentContainerStyle={{
+						paddingTop: SHOWN_SECTION_HEIGHT + 4,
+					}}
+					scrollEventThrottle={16}
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+				/>
+				<LoadingMore visible={visible} loading={loading} />
+			</View>
+		</WithAppMenu>
 	);
 }
 

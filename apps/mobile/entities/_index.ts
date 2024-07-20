@@ -10,6 +10,8 @@ import { Account, KeyValuePair } from './account.entity';
 import { ActivityPubTag } from './activitypub-tag.entity';
 import { UserDataTimeline } from './userdata-timeline.entity';
 import { ActivityPubMediaAttachment } from './activitypub-media-attachment.entity';
+import { AppSetting } from './app-settings.entity';
+import { AppProfile } from './app-profile.entity';
 
 export const schemas = [
 	Account,
@@ -25,4 +27,6 @@ export const schemas = [
 	ActivityPubTag,
 	UserDataTimeline,
 	ActivityPubMediaAttachment,
+	AppSetting,
+	AppProfile,
 ];

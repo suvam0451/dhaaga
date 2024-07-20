@@ -8,11 +8,15 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import styled from 'styled-components/native';
 import {
 	TimelineFetchMode,
-	useTimelineControllerContext,
+	useTimelineController,
 } from '../../../../states/useTimelineController';
 import { useQuery } from '@realm/react';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import FabMenuCore from '../../../shared/fab/Core';
+import { FAB_MENU_MODULES } from '../../../../types/app.types';
+import AppSidebarCore, { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
+import { router } from 'expo-router';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -120,13 +124,13 @@ function PinnedItem({ timelineType }: PinnedItemProps) {
 			default:
 				return 'N/A';
 		}
-	}, []);
+	}, [timelineType]);
 
 	return (
 		<View style={styles.quickActionButtonContainer}>
-			<View>{Icon}</View>
-			<View style={{ marginLeft: 8 }}>
-				<Text>{Label}</Text>
+			<View style={{ width: 16 }}>{Icon}</View>
+			<View style={{ marginLeft: 8, flex: 1 }}>
+				<Text style={{ flex: 1 }}>{Label}</Text>
 			</View>
 		</View>
 	);
@@ -138,7 +142,7 @@ type UserDataPinnedItemProps = {
 
 function TimelineItem({ dto }: UserDataPinnedItemProps) {
 	const { type } = dto;
-	const { setTimelineType } = useTimelineControllerContext();
+	const { setTimelineType } = useTimelineController();
 	const Icon = useMemo(() => {
 		switch (type) {
 			case TimelineFetchMode.IDLE:
@@ -248,6 +252,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					style={{
 						color: APP_FONT.MONTSERRAT_BODY,
 						fontFamily: 'Montserrat-Bold',
+						flex: 1,
 					}}
 				>
 					{Label}
@@ -305,7 +310,7 @@ function WelcomeBack() {
 	}, [userDataTimelines]);
 
 	return (
-		<View>
+		<AppSidebarCore variant={SIDEBAR_VARIANT.TIMELINE}>
 			<StatusBar backgroundColor="#121212" />
 			<TimelinesHeader
 				label={'Your Social Hub'}
@@ -381,7 +386,7 @@ function WelcomeBack() {
 								alignItems: 'center',
 							}}
 						>
-							<View style={{ width: 24 }}>
+							<View style={{ width: 28 }}>
 								<AntDesign
 									name="pushpin"
 									size={24}
@@ -412,7 +417,15 @@ function WelcomeBack() {
 										Show All
 									</Text>
 								</View>
-								<View>
+								<View
+									style={{
+										paddingHorizontal: 8,
+										paddingVertical: 4,
+									}}
+									onTouchEnd={() => {
+										router.push('/pinned');
+									}}
+								>
 									<FontAwesome6
 										name="chevron-right"
 										size={20}
@@ -425,7 +438,15 @@ function WelcomeBack() {
 					{PinnedItems}
 				</View>
 			</View>
-		</View>
+			<FabMenuCore
+				menuItems={[
+					FAB_MENU_MODULES.NAVIGATOR,
+					FAB_MENU_MODULES.CREATE_POST,
+					FAB_MENU_MODULES.TIMELINE_SWITCHER,
+					FAB_MENU_MODULES.OPEN_SIDEBAR,
+				]}
+			/>
+		</AppSidebarCore>
 	);
 }
 

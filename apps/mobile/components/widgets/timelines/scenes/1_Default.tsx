@@ -7,14 +7,13 @@ import { Button, Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {
 	TimelineFetchMode,
-	useTimelineControllerContext,
+	useTimelineController,
 } from '../../../../states/useTimelineController';
 
 const ICON_SIZE = 20;
 
 function DefaultTimelineOptions() {
-	const { setTimelineType, setShowTimelineSelection } =
-		useTimelineControllerContext();
+	const { setTimelineType, setShowTimelineSelection } = useTimelineController();
 
 	function onClickHome() {
 		setTimelineType(TimelineFetchMode.HOME);

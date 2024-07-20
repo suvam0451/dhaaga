@@ -1,6 +1,26 @@
 import { useActivityPubRestClientContext } from './useActivityPubRestClient';
-import { useEffect, useState } from 'react';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { MastoRelationship } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import useHookLoadingState from './useHookLoadingState';
+
+const defaultValue = {
+	blockedBy: false,
+	blocking: false,
+	domainBlocking: false,
+	endorsed: false,
+	followedBy: false,
+	following: false,
+	id: '',
+	languages: null,
+	muting: false,
+	mutingNotifications: false,
+	note: '',
+	notifying: false,
+	requested: false,
+	requestedBy: false,
+	showingReblogs: false,
+	error: false,
+};
 
 /**
  * Fetch and show relationship with user
@@ -10,91 +30,71 @@ import { mastodon } from '@dhaaga/shared-provider-mastodon';
  * @constructor
  */
 function useRelationshipWith(id: string) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
+	const { domain } = useActivityPubRestClientContext();
 	const { client } = useActivityPubRestClientContext();
-	const [ApiResponse, setApiResponse] = useState(null);
-	const [IsLoading, setIsLoading] = useState(false);
-	const [Data, setData] = useState({
-		blockedBy: false,
-		blocking: false,
-		domainBlocking: false,
-		endorsed: false,
-		followedBy: false,
-		following: false,
-		id: '',
-		languages: null,
-		muting: false,
-		mutingNotifications: false,
-		note: '',
-		notifying: false,
-		requested: false,
-		requestedBy: false,
-		showingReblogs: false,
-	});
+	const { State, forceUpdate } = useHookLoadingState();
 
-	async function fn() {
-		return await client.getRelationshipWith([id]);
-	}
+	const [IsLoading, setIsLoading] = useState(false);
+	const Data = useRef(defaultValue);
 
 	useEffect(() => {
 		refetch();
-	}, []);
+	}, [id]);
 
-	function refetch() {
+	const setMastoRelation = useCallback(
+		(input: MastoRelationship) => {
+			Data.current.following = input.following;
+			Data.current.followedBy = input.followedBy;
+			Data.current.blockedBy = input.blockedBy;
+			Data.current.blocking = input.blocking;
+			Data.current.muting = input.muting;
+
+			Data.current.domainBlocking = input.domainBlocking;
+			Data.current.requested = input.requested;
+			Data.current.requestedBy = input.requestedBy;
+
+			// moderation
+			Data.current.mutingNotifications = input.mutingNotifications;
+			Data.current.notifying = input.notifying;
+			Data.current.showingReblogs = input.showingReblogs;
+		},
+		[Data, IsLoading],
+	);
+
+	function setRelation(input: MastoRelationship) {
 		setIsLoading(true);
-		fn()
-			.then((res) => {
-				setApiResponse(res);
-			})
-			.finally(() => {
-				setIsLoading(false);
-			});
+		switch (domain) {
+			case 'mastodon': {
+				setMastoRelation(input);
+			}
+		}
+		setIsLoading(false);
+		forceUpdate();
 	}
 
-	function setter(res: any) {
-		setApiResponse(res);
-	}
-
-	useEffect(() => {
-		const retval = {
-			blockedBy: false,
-			blocking: false,
-			domainBlocking: false,
-			endorsed: false,
-			followedBy: false,
-			following: false,
-			id: '',
-			languages: null,
-			muting: false,
-			mutingNotifications: false,
-			note: '',
-			notifying: false,
-			requested: false,
-			requestedBy: false,
-			showingReblogs: false,
-		};
-		if (!ApiResponse || ApiResponse.length === 0) return;
-
-		let _data = null;
-		if (Array.isArray(ApiResponse)) {
-			_data = ApiResponse[0];
-		} else {
-			_data = ApiResponse;
+	async function refetch() {
+		setIsLoading(true);
+		const { data, error } = await client.accounts.relationships([id]);
+		console.log(data);
+		if (error) {
+			Data.current.error = true;
+			return;
 		}
 		switch (domain) {
 			case 'mastodon': {
-				const __data = _data as mastodon.v1.Relationship;
-				retval.following = __data.following;
+				setMastoRelation(data[0]);
 			}
 		}
-		setData(retval);
-	}, [ApiResponse]);
+		setIsLoading(false);
+		forceUpdate();
+	}
 
 	return {
-		relationship: Data,
-		setter,
-		relationshipLoading: IsLoading,
+		relationState: State,
+		relation: Data.current,
+		refetchRelation: refetch,
+		setRelation,
+		relationLoading: IsLoading,
 	};
 }
 

@@ -23,6 +23,7 @@ type StatusInteractionProps = {
 	setExplanationObject: React.Dispatch<React.SetStateAction<string | null>>;
 	ExplanationObject: string | null;
 	openAiContext?: string[];
+	isRepost: boolean;
 };
 
 const ICON_SIZE = 18;
@@ -31,9 +32,16 @@ function StatusInteractionBase({
 	openAiContext,
 	setExplanationObject,
 	ExplanationObject,
+	isRepost,
 }: StatusInteractionProps) {
 	const { client } = useActivityPubRestClientContext();
-	const { status: post, setDataRaw } = useActivitypubStatusContext();
+	const {
+		status: post,
+		setDataRaw,
+		sharedStatus,
+		setSharedDataRaw,
+	} = useActivitypubStatusContext();
+	const _status = isRepost ? sharedStatus : post;
 	const { setVisible, setBottomSheetType, updateRequestId } =
 		useGorhomActionSheetContext();
 	const { globalDb } = useGlobalMmkvContext();
@@ -65,7 +73,7 @@ function StatusInteractionBase({
 		if (TranslationLoading) return;
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 		client.instances
-			.getTranslation(post.getId(), 'en')
+			.getTranslation(_status.getId(), 'en')
 			.then((res) => {
 				console.log(res);
 			})
@@ -78,11 +86,15 @@ function StatusInteractionBase({
 		if (ThirdCommandLoading) return;
 
 		setThirdCommandLoading(true);
-		if (post.getIsBookmarked()) {
+		if (_status.getIsBookmarked()) {
 			client
-				.unBookmark(post.getId())
+				.unBookmark(_status.getId())
 				.then((res) => {
-					setDataRaw(res);
+					if (isRepost) {
+						setSharedDataRaw(res);
+					} else {
+						setDataRaw(res);
+					}
 					Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 				})
 				.finally(() => {
@@ -90,9 +102,13 @@ function StatusInteractionBase({
 				});
 		} else {
 			client
-				.bookmark(post.getId())
+				.bookmark(_status.getId())
 				.then((res) => {
-					setDataRaw(res);
+					if (isRepost) {
+						setSharedDataRaw(res);
+					} else {
+						setDataRaw(res);
+					}
 					Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 				})
 				.finally(() => {
@@ -109,9 +125,9 @@ function StatusInteractionBase({
 
 	function onBoostPressed() {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		StatusService.toggleBoost(client, post, {
+		StatusService.toggleBoost(client, _status, {
 			setIsLoading: setSecondCommandLoading,
-			setDataRaw,
+			setDataRaw: isRepost ? setSharedDataRaw : setDataRaw,
 		});
 	}
 
@@ -121,7 +137,10 @@ function StatusInteractionBase({
 	}
 
 	function onShowAdvancedMenuPressed() {
-		GlobalMmkvCacheService.setBottomSheetProp_Status(globalDb, post.getRaw());
+		GlobalMmkvCacheService.setBottomSheetProp_Status(
+			globalDb,
+			_status.getRaw(),
+		);
 		setBottomSheetType(BOTTOM_SHEET_ENUM.STATUS_MENU);
 		updateRequestId();
 		setVisible(true);
@@ -133,7 +152,7 @@ function StatusInteractionBase({
 				paddingHorizontal: 4,
 			}}
 		>
-			<PostStats />
+			<PostStats isRepost={isRepost} />
 			<Divider
 				color={'#cccccc'}
 				style={{
@@ -195,7 +214,7 @@ function StatusInteractionBase({
 						) : (
 							<Ionicons
 								color={
-									post.getIsRebloggedByMe()
+									_status.getIsRebloggedByMe()
 										? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1]
 										: '#888'
 								}
@@ -205,7 +224,7 @@ function StatusInteractionBase({
 						)}
 						<Text
 							style={{
-								color: post.getIsRebloggedByMe()
+								color: _status.getIsRebloggedByMe()
 									? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1]
 									: '#888',
 								marginLeft: 8,
@@ -232,7 +251,7 @@ function StatusInteractionBase({
 						) : (
 							<Ionicons
 								color={
-									post?.getIsBookmarked() ? APP_THEME.INVALID_ITEM : '#888'
+									_status?.getIsBookmarked() ? APP_THEME.INVALID_ITEM : '#888'
 								}
 								name={'bookmark-outline'}
 								size={ICON_SIZE}
@@ -242,12 +261,12 @@ function StatusInteractionBase({
 							style={{
 								marginLeft: 8,
 								fontFamily: 'Montserrat-Bold',
-								color: post?.getIsBookmarked()
+								color: _status?.getIsBookmarked()
 									? APP_THEME.INVALID_ITEM
 									: '#888',
 							}}
 						>
-							{post?.getIsBookmarked() ? 'Saved' : 'Save'}
+							{_status?.getIsBookmarked() ? 'Saved' : 'Save'}
 						</Text>
 					</TouchableOpacity>
 				</View>

@@ -9,7 +9,6 @@ import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventType
 import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ApiWrapper from '../components/common/tag/TagBrowseLocal';
-import UserProfile from './shared/profile/UserProfile';
 import PostWithClientContext from './shared/Post';
 import WithAppPaginationContext from '../states/usePagination';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
@@ -164,7 +163,6 @@ function SearchScreen() {
 			>
 				<Stack.Screen name={'Search'} component={HomeContainer} />
 				<Stack.Screen name="Browse Hashtag" component={ApiWrapper} />
-				<Stack.Screen name="Profile" component={UserProfile} />
 				<Stack.Screen name="Post" component={PostWithClientContext} />
 			</Stack.Navigator>
 		</WithGorhomBottomSheetContext>

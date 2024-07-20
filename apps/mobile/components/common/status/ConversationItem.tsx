@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
@@ -53,6 +53,7 @@ function ConversationItem({
 					const uuid = randomUUID();
 					return (
 						<Text key={uuid} style={{ marginBottom: 8, opacity: 0.87 }}>
+							{/*<FlatList data={para} renderItem={({ item }) => item} />*/}
 							{para.map((o, j) => o)}
 						</Text>
 					);

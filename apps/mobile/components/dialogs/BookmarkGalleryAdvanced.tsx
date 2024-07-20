@@ -9,6 +9,7 @@ import LastSyncedStatus, {
 	LAST_SYNCED_STATUS_KEY,
 } from '../dataviz/LastSyncedStatus';
 import { ActivityIndicator, View } from 'react-native';
+import { APP_FONT } from '../../styles/AppTheme';
 
 function BookmarkGalleryAdvanced({
 	IsVisible,
@@ -45,10 +46,12 @@ function BookmarkGalleryAdvanced({
 				opts={{ useHaptics: true }}
 				customLoadingState={
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<Text>{Numerator}/?</Text>
+						<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
+							{Numerator}/?
+						</Text>
 						<ActivityIndicator
 							size={20}
-							color={'white'}
+							color={APP_FONT.MONTSERRAT_BODY}
 							style={{ marginLeft: 8 }}
 						/>
 					</View>

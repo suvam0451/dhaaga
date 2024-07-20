@@ -15,7 +15,7 @@ class BookmarkBrowserService {
 		const done = false;
 		let syncedCount = 0;
 		do {
-			const { data } = await client.bookmarks.get({ limit: 40, maxId });
+			const { data, error } = await client.bookmarks.get({ limit: 40, maxId });
 			const statusIs = ActivityPubAdapterService.adaptManyStatuses(
 				data.data,
 				primaryAcct.domain,

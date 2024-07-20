@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import {
 	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
@@ -25,6 +31,10 @@ type Type = {
 	 * primary account selection/active status
 	 */
 	regenerate: () => void;
+
+	domain?: string;
+	subdomain?: string;
+	_id?: string;
 };
 
 const defaultValue: Type = {
@@ -60,7 +70,7 @@ function WithActivityPubRestClient({ children }: any) {
 	const { globalDb } = useGlobalMmkvContext();
 	const accounts = useQuery(Account);
 
-	function regenerateFn() {
+	const regenerateFn = useCallback(() => {
 		const acct = accounts.find((o) => o.selected === true);
 		if (!acct) {
 			setRestClient(null);
@@ -81,7 +91,7 @@ function WithActivityPubRestClient({ children }: any) {
 		setPrimaryAcct(acct);
 		EmojiService.loadEmojisForInstance(db, globalDb, acct.subdomain);
 		AccountService.loadFollowedTags(db, client);
-	}
+	}, [accounts]);
 
 	useEffect(() => {
 		regenerateFn();
@@ -107,6 +117,8 @@ function WithActivityPubRestClient({ children }: any) {
 				meRaw: MeRaw,
 				primaryAcct: PrimaryAcct,
 				regenerate: regenerateFn,
+				domain: PrimaryAcct?.domain,
+				subdomain: PrimaryAcct?.subdomain,
 			}}
 		>
 			{children}

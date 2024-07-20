@@ -2,17 +2,13 @@ import ActivityPubClient, {
 	FollowPostDto,
 	GetPostsQueryDTO,
 	GetSearchResultQueryDTO,
-	GetTimelineQueryDTO,
-	GetTrendingPostsQueryDTO,
 	GetUserPostsQueryDTO,
-	HashtagTimelineQuery,
 	MastoAccountCredentials,
 	MastoContext,
 	MastoConversation,
 	MastoList,
 	MastoRelationship,
 	MastoStatus,
-	MastoTrendLink,
 	MediaUploadDTO,
 	RestClientCreateDTO,
 } from '../_interface.js';
@@ -27,6 +23,8 @@ import { KNOWN_SOFTWARE } from '../_router/instance.js';
 import { MastodonStatusesRouter } from './statuses.js';
 import { MastodonBookmarksRouter } from './bookmarks.js';
 import { MastodonTrendsRouter } from './trends.js';
+import { MastodonNotificationsRouter } from './notifications.js';
+import { MastodonTimelinesRouter } from './timelines.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -35,6 +33,8 @@ class MastodonRestClient implements ActivityPubClient {
 	statuses: MastodonStatusesRouter;
 	bookmarks: MastodonBookmarksRouter;
 	trends: MastodonTrendsRouter;
+	notifications: MastodonNotificationsRouter;
+	timelines: MastodonTimelinesRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -46,6 +46,8 @@ class MastodonRestClient implements ActivityPubClient {
 		this.statuses = new MastodonStatusesRouter(this.client);
 		this.bookmarks = new MastodonBookmarksRouter(this.client);
 		this.trends = new MastodonTrendsRouter(this.client);
+		this.notifications = new MastodonNotificationsRouter(this.client);
+		this.timelines = new MastodonTimelinesRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<MastoStatus | null> {
@@ -96,68 +98,6 @@ class MastodonRestClient implements ActivityPubClient {
 			console.log(e);
 			return [];
 		}
-	}
-
-	async getListTimeline(
-		q: string,
-		opts?: GetPostsQueryDTO | undefined,
-	): Promise<StatusArray> {
-		const _client = this.createMastoClient();
-		try {
-			console.log(q);
-			return await _client.v1.timelines.list.$select(q).list(opts);
-		} catch (e) {
-			console.log(e);
-			return [];
-		}
-	}
-
-	async getLocalTimeline(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.timelines.public.list(opts);
-		} catch (e) {
-			console.log(e);
-			return [];
-		}
-	}
-
-	// async getMyFollowedTags(opts: GetPostsQueryDTO): Promise<mastodon.v1.Tag[]> {
-	//     return await RestServices.v1.accounts.ts.getFollowedTags(this.client, opts);
-	// }
-
-	async getPublicTimelineAsGuest(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
-		const _client = this.createPublicClient();
-		try {
-			return await _client.v1.timelines.public.list(opts);
-		} catch (e) {
-			console.log(e);
-			return [];
-		}
-	}
-
-	async getPublicTimeline(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.timelines.public.list(opts);
-		} catch (e) {
-			console.log(e);
-			return [];
-		}
-	}
-
-	getIsSensitive(): boolean {
-		throw new Error('Method not implemented.');
-	}
-
-	getSpoilerText(): string | null {
-		throw new Error('Method not implemented.');
 	}
 
 	async uploadMedia(params: MediaUploadDTO): Promise<any> {
@@ -228,22 +168,6 @@ class MastodonRestClient implements ActivityPubClient {
 			console.log(e);
 			return [];
 		}
-	}
-
-	async getTrendingPosts(
-		opts: GetTrendingPostsQueryDTO,
-	): Promise<MastoStatus[]> {
-		return await RestServices.v1.trends.getTrendingPosts(this.client, opts);
-	}
-
-	async getTrendingTags(opts: GetTrendingPostsQueryDTO) {
-		return await RestServices.v1.trends.getTrendingTags(this.client, opts);
-	}
-
-	async getTrendingLinks(
-		opts: GetTrendingPostsQueryDTO,
-	): Promise<MastoTrendLink[]> {
-		return await RestServices.v1.trends.getTrendingLinks(this.client, opts);
 	}
 
 	async followTag(id: string) {
@@ -379,21 +303,6 @@ class MastodonRestClient implements ActivityPubClient {
 		});
 	}
 
-	async getHomeTimeline(
-		opts?: GetPostsQueryDTO,
-	): Promise<mastodon.v1.Status[]> {
-		try {
-			const _client = this.createMastoClient();
-
-			return await _client.v1.timelines.home.list({
-				limit: 5,
-				maxId: opts?.maxId,
-			});
-		} catch (e) {
-			return [];
-		}
-	}
-
 	async bookmark(id: string): Promise<MastoStatus | null> {
 		try {
 			const _client = this.createMastoClient();
@@ -412,23 +321,6 @@ class MastodonRestClient implements ActivityPubClient {
 		} catch (e) {
 			console.log(e);
 			return null;
-		}
-	}
-
-	async getTimelineByHashtag(
-		q: string,
-		query?: HashtagTimelineQuery,
-	): Promise<MastoStatus[]> {
-		try {
-			const _client = this.createMastoClient();
-			return await _client.v1.timelines.tag.$select(q).list({
-				...query,
-				limit: 5,
-				onlyMedia: query?.onlyMedia,
-			});
-		} catch (e) {
-			console.log(e);
-			return [];
 		}
 	}
 

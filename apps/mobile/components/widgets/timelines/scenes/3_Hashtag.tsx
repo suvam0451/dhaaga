@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import {
 	TimelineFetchMode,
-	useTimelineControllerContext,
+	useTimelineController,
 } from '../../../../states/useTimelineController';
 import { useQuery } from '@realm/react';
 import { ActivityPubTag } from '../../../../entities/activitypub-tag.entity';
@@ -175,8 +175,8 @@ function TimelineWidgetHashtagOptions(props: Props) {
 }
 
 function TimelineWidgetHashtagScene() {
-	const { setTimelineType, setQueryOptions, setShowTimelineSelection } =
-		useTimelineControllerContext();
+	const { setTimelineType, setQuery, setShowTimelineSelection } =
+		useTimelineController();
 	const [SearchTerm, setSearchTerm] = useState('');
 	const [Selection, setSelection] = useState<string | null>(null);
 
@@ -209,20 +209,11 @@ function TimelineWidgetHashtagScene() {
 	const followedCount = useRef(tags.filter((o) => o.following).length);
 
 	function onHashtagClicked(o: string) {
-		// setSelection(o);
-		setQueryOptions({ hashtagName: o });
+		setQuery({ id: o, label: o });
 		setTimelineType(TimelineFetchMode.HASHTAG);
 		setShowTimelineSelection(false);
 	}
 
-	function onSelectionCleared() {
-		setSelection(null);
-	}
-
-	// if (Selection !== null)
-	// 	return (
-	// 		<TimelineWidgetHashtagOptions id={Selection} clear={onSelectionCleared} />
-	// 	);
 	return (
 		<View style={{ flexGrow: 1, padding: 8 }}>
 			<HideOnKeyboardVisibleContainer

@@ -1,10 +1,8 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { useEffect, useMemo } from 'react';
-import { useRealm } from '@realm/react';
-import { ActivityPubServer } from '../../../entities/activitypub-server.entity';
-import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
+import { useMemo } from 'react';
+import { APP_THEME } from '../../../styles/AppTheme';
 
 type Props = {
 	url: string;
@@ -21,7 +19,7 @@ function MentionProcessor(props: Props) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 
-	const { url, text, interactable } = props;
+	const { text } = props;
 
 	const displayText = useMemo(() => {
 		let retval = text;

@@ -9,7 +9,6 @@ import {
 	DhaagaRestClient,
 } from '../_router/_runner.js';
 import { KNOWN_SOFTWARE } from '../_router/instance.js';
-import { Status } from 'megalodon/lib/esm/src/entities/status.js';
 
 export class PleromaBookmarksRouter implements BookmarksRoute {
 	client: RestClient;

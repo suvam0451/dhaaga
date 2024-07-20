@@ -3,7 +3,6 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import React from 'react';
 
 const ICON_SIZE = 20;
 
@@ -32,7 +31,7 @@ function DefaultPinnedItem({ label, Icon, disabled, onClick }: Props) {
 				<Text
 					style={{
 						fontSize: 16,
-						fontFamily: APP_FONTS.HEADER_BOLD,
+						fontFamily: APP_FONTS.MONTSERRAT_BOLD,
 					}}
 				>
 					{label}
