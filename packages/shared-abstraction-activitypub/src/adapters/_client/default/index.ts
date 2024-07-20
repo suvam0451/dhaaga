@@ -2,7 +2,6 @@ import ActivityPubClient, {
 	FollowPostDto,
 	GetPostsQueryDTO,
 	GetSearchResultQueryDTO,
-	GetTimelineQueryDTO,
 	TagArray,
 } from '../_interface.js';
 import { Status, StatusArray } from '../../status/_interface.js';
@@ -14,6 +13,7 @@ import { DefaultStatusesRouter } from './statuses.js';
 import { DefaultBookmarksRouter } from './bookmarks.js';
 import { DefaultTrendsRouter } from './trends.js';
 import { DefaultNotificationsRouter } from './notifications.js';
+import { DefaultTimelinesRouter } from './timelines.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
@@ -22,6 +22,7 @@ class UnknownRestClient implements ActivityPubClient {
 	bookmarks: DefaultBookmarksRouter;
 	trends: DefaultTrendsRouter;
 	notifications: DefaultNotificationsRouter;
+	timelines: DefaultTimelinesRouter;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
@@ -30,6 +31,7 @@ class UnknownRestClient implements ActivityPubClient {
 		this.bookmarks = new DefaultBookmarksRouter();
 		this.trends = new DefaultTrendsRouter();
 		this.notifications = new DefaultNotificationsRouter();
+		this.timelines = new DefaultTimelinesRouter();
 	}
 
 	reblog(id: string): Promise<Status> {
@@ -52,33 +54,8 @@ class UnknownRestClient implements ActivityPubClient {
 		throw new Error('Method not implemented.');
 	}
 
-	getListTimeline(
-		q: string,
-		opts?: GetPostsQueryDTO | undefined,
-	): Promise<StatusArray> {
-		throw new Error('Method not implemented.');
-	}
-
-	getLocalTimeline(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
-		throw new Error('Method not implemented.');
-	}
-
 	async getMyFollowedTags() {
 		return [];
-	}
-
-	getPublicTimelineAsGuest(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
-		throw new Error('Method not implemented.');
-	}
-
-	getPublicTimeline(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
-		throw new Error('Method not implemented.');
 	}
 
 	getIsSensitive(): boolean {
@@ -179,14 +156,6 @@ class UnknownRestClient implements ActivityPubClient {
 
 	async unBookmark(id: string): Promise<Note> {
 		throw new Error('Method not implemented.');
-	}
-
-	async getHomeTimeline() {
-		return [];
-	}
-
-	async getTimelineByHashtag(q: string) {
-		return [];
 	}
 
 	async getUserProfile(username: string): Promise<mastodon.v1.Account> {

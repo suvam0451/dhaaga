@@ -4,7 +4,6 @@ import ActivityPubClient, {
 	GetUserPostsQueryDTO,
 	RestClientCreateDTO,
 	MediaUploadDTO,
-	GetTimelineQueryDTO,
 	FollowPostDto,
 } from '../_interface.js';
 import { Note } from 'misskey-js/autogen/models.js';
@@ -18,6 +17,7 @@ import { MisskeyStatusesRouter } from './statuses.js';
 import { MisskeyBookmarksRouter } from './bookmarks.js';
 import { MisskeyTrendsRouter } from './trends.js';
 import { MisskeyNotificationsRouter } from './notifications.js';
+import { MisskeyTimelinesRouter } from './timelines.js';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -28,6 +28,7 @@ class MisskeyRestClient implements ActivityPubClient {
 	bookmarks: MisskeyBookmarksRouter;
 	trends: MisskeyTrendsRouter;
 	notifications: MisskeyNotificationsRouter;
+	timelines: MisskeyTimelinesRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -43,6 +44,7 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.bookmarks = new MisskeyBookmarksRouter(this.client);
 		this.trends = new MisskeyTrendsRouter(this.client);
 		this.notifications = new MisskeyNotificationsRouter(this.client);
+		this.timelines = new MisskeyTimelinesRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<Status> {
@@ -62,31 +64,6 @@ class MisskeyRestClient implements ActivityPubClient {
 	}
 
 	unfollowUser(id: string): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
-	getListTimeline(
-		q: string,
-		opts?: GetPostsQueryDTO | undefined,
-	): Promise<StatusArray> {
-		throw new Error('Method not implemented.');
-	}
-
-	getLocalTimeline(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
-		throw new Error('Method not implemented.');
-	}
-
-	getPublicTimeline(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
-		throw new Error('Method not implemented.');
-	}
-
-	getPublicTimelineAsGuest(
-		opts?: GetTimelineQueryDTO | undefined,
-	): Promise<StatusArray> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -187,26 +164,7 @@ class MisskeyRestClient implements ActivityPubClient {
 	}
 
 	async getUserPosts(userId: string, opts: GetUserPostsQueryDTO) {
-		// throw new Error('Method not implemented.');
-
 		return [];
-		// return this.client.request('users/notes', {
-		// 	userId: userId,
-		// 	limit: opts.limit,
-		// });
-	}
-
-	async getHomeTimeline(): Promise<Note[]> {
-		// return await this.client.request('notes/local-timeline', { limit: 20 });
-		return [];
-	}
-
-	async getTimelineByHashtag(q: string): Promise<Note[]> {
-		const res = await this.axiosClient.post<Note[]>('/notes/search-by-tag', {
-			limit: 20,
-			tag: q,
-		});
-		return res.data;
 	}
 
 	async getUserProfile(username: string) {

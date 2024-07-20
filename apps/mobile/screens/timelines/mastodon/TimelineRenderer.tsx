@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import { Fragment, memo, useEffect, useMemo, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -82,13 +82,23 @@ const ListHeaderComponent = memo(function Foo({
 	loadedOnce: boolean;
 	itemCount: number;
 }) {
-	if (!loadedOnce) {
-		return <TimelineLoading />;
-	}
-	if (itemCount === 0) {
-		return <TimelineEmpty />;
-	}
-	return <NowBrowsingHeader feedType={TimelineType.LOCAL} />;
+	const AdditionalState = useMemo(() => {
+		if (!loadedOnce) {
+			return <View />;
+			// return <TimelineLoading />;
+		}
+		if (itemCount === 0) {
+			return <TimelineEmpty />;
+		}
+		return <View />;
+	}, [loadedOnce, itemCount]);
+
+	return (
+		<Fragment>
+			<NowBrowsingHeader />
+			{AdditionalState}
+		</Fragment>
+	);
 });
 
 const FlashListRenderer = ({ item }: { item: ListItemType }) => {
@@ -115,7 +125,7 @@ const FlashListRenderer = ({ item }: { item: ListItemType }) => {
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
-	const { timelineType, query } = useTimelineController();
+	const { timelineType, query, opts } = useTimelineController();
 	const { client, primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
 
@@ -135,11 +145,12 @@ function TimelineRenderer() {
 	useEffect(() => {
 		setPageLoadedAtLeastOnce(false);
 		clear();
-	}, [timelineType, query]);
+	}, [timelineType, query, opts]);
 
 	const { fetchStatus, data, status, refetch } = useTimeline({
 		type: timelineType,
 		query,
+		opts,
 		maxId: queryCacheMaxId,
 	});
 

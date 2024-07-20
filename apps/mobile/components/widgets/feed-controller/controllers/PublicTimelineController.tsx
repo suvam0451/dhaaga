@@ -1,48 +1,20 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo } from 'react';
 import { Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import ControlSegment from '../components/ControlSegment';
 import { View } from 'react-native';
-
-const DEFAULT = {
-	remote: false,
-	local: false,
-};
+import useTimelineOptions from '../states/useTimelineOptions';
 
 const PublicTimelineController = memo(function Foo() {
-	const FeedSelected = useRef(new Set(['all']));
-	const [FeedQuery, setFeedQuery] = useState(DEFAULT);
-
-	useEffect(() => {}, [FeedQuery]);
-
-	function onAllSelected() {
-		FeedSelected.current.clear();
-		FeedSelected.current.add('all');
-	}
-
-	function onLocalSelected() {
-		if (FeedSelected.current.has('all')) {
-			FeedSelected.current.clear();
-			FeedSelected.current.add('local');
-		} else if (FeedSelected.current.has('remote')) {
-			FeedSelected.current.clear();
-			FeedSelected.current.add('all');
-		} else {
-			FeedSelected.current.add('local');
-		}
-	}
-
-	function onRemoteSelected() {
-		if (FeedSelected.current.has('all')) {
-			FeedSelected.current.clear();
-			FeedSelected.current.add('remote');
-		} else if (FeedSelected.current.has('local')) {
-			FeedSelected.current.clear();
-			FeedSelected.current.add('all');
-		} else {
-			FeedSelected.current.add('remote');
-		}
-	}
+	const {
+		FeedOpt,
+		MediaOpt,
+		onFeedOptSelected,
+		onFeedOptAllSelected,
+		onMediaOptSelected,
+		onMediaOptAllSelected,
+		State,
+	} = useTimelineOptions();
 
 	return (
 		<View>
@@ -70,20 +42,26 @@ const PublicTimelineController = memo(function Foo() {
 				buttons={[
 					{
 						label: 'All',
-						selected: true,
-						onClick: () => {},
+						lookupId: 'all',
+						onClick: onFeedOptAllSelected,
 					},
 					{
 						label: 'Local',
-						selected: false,
-						onClick: () => {},
+						lookupId: 'local',
+						onClick: () => {
+							onFeedOptSelected(0);
+						},
 					},
 					{
 						label: 'Remote',
-						selected: false,
-						onClick: () => {},
+						lookupId: 'remote',
+						onClick: () => {
+							onFeedOptSelected(1);
+						},
 					},
 				]}
+				selection={FeedOpt}
+				hash={State}
 			/>
 
 			<ControlSegment
@@ -91,15 +69,19 @@ const PublicTimelineController = memo(function Foo() {
 				buttons={[
 					{
 						label: 'All',
-						selected: true,
-						onClick: () => {},
+						lookupId: 'all',
+						onClick: onMediaOptAllSelected,
 					},
 					{
 						label: 'Media Only',
-						selected: false,
-						onClick: () => {},
+						lookupId: 'media-only',
+						onClick: () => {
+							onMediaOptSelected(0);
+						},
 					},
 				]}
+				selection={MediaOpt}
+				hash={State}
 			/>
 		</View>
 	);

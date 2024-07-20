@@ -110,25 +110,6 @@ interface ActivityPubClient extends RouterInterface {
 	instances: InstanceRoute;
 
 	/**
-	 * Timelines
-	 * @param opts
-	 */
-	getHomeTimeline(opts?: GetPostsQueryDTO): Promise<StatusArray>;
-
-	getLocalTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
-
-	getPublicTimeline(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
-
-	getPublicTimelineAsGuest(opts?: GetTimelineQueryDTO): Promise<StatusArray>;
-
-	getTimelineByHashtag(
-		q: string,
-		query?: HashtagTimelineQuery,
-	): Promise<StatusArray>;
-
-	getListTimeline(q: string, opts?: GetPostsQueryDTO): Promise<StatusArray>;
-
-	/**
 	 * My
 	 */
 	getMyConversations(): Promise<mastodon.v1.Conversation[]>;
@@ -172,19 +153,6 @@ interface ActivityPubClient extends RouterInterface {
 	getFollowers(id: string): Promise<mastodon.v1.Account[] | null>;
 
 	uploadMedia(params: MediaUploadDTO): Promise<any>;
-
-	getIsSensitive(): boolean;
-
-	getSpoilerText(): string | null;
-
-	/**
-	 * Trending
-	 */
-	getTrendingPosts(opts: GetTrendingPostsQueryDTO): Promise<StatusArray>;
-
-	getTrendingTags(opts: GetTrendingPostsQueryDTO): Promise<TagArray>;
-
-	getTrendingLinks(opts: GetTrendingPostsQueryDTO): Promise<TrendLinkArray>;
 
 	/**
 	 * Tags

@@ -1,5 +1,9 @@
 import { CheckBox } from '@rneui/base';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
+import { memo } from 'react';
+import { View } from 'react-native';
+import { Text } from '@rneui/themed';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 type Props = {
 	title?: string;
@@ -27,5 +31,47 @@ function AppCheckBox(props: Props) {
 		/>
 	);
 }
+
+type AppInlineCheckboxProps = {
+	label: string;
+	checked: boolean;
+	onClick: () => void;
+};
+export const AppInlineCheckbox = memo(function Foo({
+	label,
+	checked,
+	onClick,
+}: AppInlineCheckboxProps) {
+	{
+		return (
+			<View
+				style={{
+					borderRadius: 8,
+					backgroundColor: checked ? 'rgba(170, 170, 170, 0.87)' : '#1e1e1e',
+					padding: 8,
+					marginRight: 8,
+					flex: 0,
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}
+				onTouchEnd={onClick}
+			>
+				<Text
+					style={{
+						color: checked ? 'rgba(0, 0, 0, 1)' : APP_FONT.MONTSERRAT_BODY,
+						fontFamily: 'Montserrat-Bold',
+					}}
+				>
+					{label}
+				</Text>
+				{checked && (
+					<View style={{ marginLeft: 4 }}>
+						<Ionicons name="close" size={18} color={'rgba(0, 0, 0, 1)'} />
+					</View>
+				)}
+			</View>
+		);
+	}
+});
 
 export default AppCheckBox;

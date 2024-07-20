@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { memo, useMemo } from 'react';
-import { TimelineType } from '../../../../types/timeline.types';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import PublicTimelineController from '../controllers/PublicTimelineController';
 import {
@@ -11,12 +10,9 @@ import {
 import UserTimelineController from '../controllers/UserTimelineController';
 import HomeTimelineController from '../controllers/HomeTimelineController';
 import HashtagTimelineController from '../controllers/HashtagTimelineController';
+import ListTimelineController from '../controllers/ListTimelineController';
 
-type Props = {
-	feedType: TimelineType;
-};
-
-const NowBrowsingHeader = memo(function Foo({ feedType }: Props) {
+const NowBrowsingHeader = memo(function Foo() {
 	const { timelineType } = useTimelineController();
 
 	const Comp = useMemo(() => {
@@ -32,6 +28,9 @@ const NowBrowsingHeader = memo(function Foo({ feedType }: Props) {
 			case TimelineFetchMode.HASHTAG: {
 				return <HashtagTimelineController />;
 			}
+			case TimelineFetchMode.LIST: {
+				return <ListTimelineController />;
+			}
 			default: {
 				return (
 					<View>
@@ -40,7 +39,7 @@ const NowBrowsingHeader = memo(function Foo({ feedType }: Props) {
 				);
 			}
 		}
-	}, [feedType]);
+	}, [timelineType]);
 
 	return (
 		<View style={{ marginHorizontal: 8, marginBottom: 32 }}>

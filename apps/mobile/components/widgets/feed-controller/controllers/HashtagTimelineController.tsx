@@ -4,9 +4,19 @@ import { Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { View } from 'react-native';
 import ControlSegment from '../components/ControlSegment';
+import useTimelineOptions from '../states/useTimelineOptions';
 
 const HashtagTimelineController = memo(function Foo() {
 	const { query } = useTimelineController();
+	const {
+		FeedOpt,
+		MediaOpt,
+		onFeedOptSelected,
+		onFeedOptAllSelected,
+		onMediaOptSelected,
+		onMediaOptAllSelected,
+		State,
+	} = useTimelineOptions();
 
 	return (
 		<View>
@@ -34,21 +44,27 @@ const HashtagTimelineController = memo(function Foo() {
 				buttons={[
 					{
 						label: 'All',
-						selected: true,
-						onClick: () => {},
+						lookupId: 'all',
+						onClick: onFeedOptAllSelected,
 					},
 
 					{
 						label: 'Local',
-						selected: false,
-						onClick: () => {},
+						lookupId: 'local',
+						onClick: () => {
+							onFeedOptSelected(0);
+						},
 					},
 					{
 						label: 'Remote',
-						selected: false,
-						onClick: () => {},
+						lookupId: 'remote',
+						onClick: () => {
+							onFeedOptSelected(1);
+						},
 					},
 				]}
+				selection={FeedOpt}
+				hash={State}
 			/>
 
 			<ControlSegment
@@ -56,15 +72,19 @@ const HashtagTimelineController = memo(function Foo() {
 				buttons={[
 					{
 						label: 'All',
-						selected: true,
-						onClick: () => {},
+						lookupId: 'all',
+						onClick: onMediaOptAllSelected,
 					},
 					{
 						label: 'Media Only',
-						selected: false,
-						onClick: () => {},
+						lookupId: 'media-only',
+						onClick: () => {
+							onMediaOptSelected(0);
+						},
 					},
 				]}
+				selection={MediaOpt}
+				hash={State}
 			/>
 		</View>
 	);

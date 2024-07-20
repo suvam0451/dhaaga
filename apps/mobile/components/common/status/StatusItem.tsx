@@ -6,7 +6,6 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
 import StatusInteraction from '../../../screens/timelines/fragments/StatusInteraction';
 import MediaItem from '../media/MediaItem';
-import { useNavigation } from '@react-navigation/native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import WithActivitypubUserContext from '../../../states/useProfile';
@@ -21,8 +20,8 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import LocalizationService from '../../../services/localization.services';
 import { Image } from 'expo-image';
 import { RepliedStatusFragment } from './_static';
-
-const POST_SPACING_VALUE = 4;
+import { router, useNavigation } from 'expo-router';
+import useAppNavigator from '../../../states/useAppNavigator';
 
 type StatusItemProps = {
 	// a list of color ribbons to indicate replies
@@ -42,7 +41,7 @@ type StatusFragmentProps = {
  * @constructor
  */
 function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
-	const navigation = useNavigation<any>();
+	const { toPost } = useAppNavigator();
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
 	const subdomain = primaryAcct?.subdomain;
@@ -108,9 +107,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 				<TouchableOpacity
 					delayPressIn={100}
 					onPress={() => {
-						navigation.navigate('Post', {
-							id: _status.getId(),
-						});
+						toPost(_status.getId());
 					}}
 				>
 					<View>

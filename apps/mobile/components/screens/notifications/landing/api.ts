@@ -1,7 +1,7 @@
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import {
-	NotificationType,
+	DhaagaJsNotificationType,
 	StatusInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -10,7 +10,7 @@ import ActivityPubAdapterService from '../../../../services/activitypub-adapter.
 import ActivitypubAdapterService from '../../../../services/activitypub-adapter.service';
 
 type NotificationRenderType = {
-	type: NotificationType;
+	type: DhaagaJsNotificationType;
 	account?: UserInterface;
 	post?: StatusInterface;
 	createdAt: Date;
@@ -37,7 +37,11 @@ function useLandingPageStackApi() {
 		const { data } = await client.notifications.get({
 			limit: 80,
 			excludeTypes: [],
-			types: [NotificationType.FOLLOW, NotificationType.FAVOURITE],
+			types: [
+				DhaagaJsNotificationType.FOLLOW,
+				DhaagaJsNotificationType.FAVOURITE,
+				DhaagaJsNotificationType.MENTION,
+			],
 		});
 		return data as any;
 	}
@@ -60,17 +64,17 @@ function useLandingPageStackApi() {
 
 		for (const datum of (data as any).data) {
 			switch (datum.type) {
-				case NotificationType.STATUS:
-				case NotificationType.REBLOG:
-				case NotificationType.POLL_NOTIFICATION:
-				case NotificationType.FAVOURITE:
-				case NotificationType.FOLLOW:
-				case NotificationType.MENTION: {
+				case DhaagaJsNotificationType.STATUS:
+				case DhaagaJsNotificationType.REBLOG:
+				case DhaagaJsNotificationType.POLL_NOTIFICATION:
+				case DhaagaJsNotificationType.FAVOURITE:
+				case DhaagaJsNotificationType.FOLLOW:
+				case DhaagaJsNotificationType.MENTION: {
 					results.push({
 						account: datum.account
 							? ActivityPubAdapterService.adaptUser(datum.account, domain)
 							: undefined,
-						type: datum.type as NotificationType.FAVOURITE,
+						type: datum.type as DhaagaJsNotificationType.FAVOURITE,
 						createdAt: datum.createdAt,
 						groupKey: datum.groupKey,
 						id: datum.id,

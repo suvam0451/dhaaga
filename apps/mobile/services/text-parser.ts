@@ -13,7 +13,6 @@ class TextParserService {
 		const res = input.matchAll(ex);
 		// @ts-ignore-next-line
 		for (let match of res) {
-			console.log(match[1]);
 			if (!setter.has(match[1])) {
 				setter.add(match[1]);
 			}

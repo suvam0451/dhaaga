@@ -5,13 +5,15 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 type Props = {
 	label: string;
 	buttons: {
-		selected: boolean;
+		lookupId: string;
 		label: string;
 		onClick: () => void;
 	}[];
+	selection: Set<string>;
+	hash: string;
 };
 
-function ControlSegment({ label, buttons }: Props) {
+function ControlSegment({ label, buttons, selection }: Props) {
 	return (
 		<View style={{ marginTop: 16, overflow: 'scroll' }}>
 			<Text
@@ -30,16 +32,17 @@ function ControlSegment({ label, buttons }: Props) {
 							key={i}
 							style={{
 								borderRadius: 8,
-								backgroundColor: o.selected
+								backgroundColor: selection.has(o.lookupId)
 									? 'rgba(170, 170, 170, 0.87)'
 									: '#1e1e1e',
 								padding: 8,
 								marginRight: 8,
 							}}
+							onTouchEnd={o.onClick}
 						>
 							<Text
 								style={{
-									color: o.selected
+									color: selection.has(o.lookupId)
 										? 'rgba(0, 0, 0, 1)'
 										: APP_FONT.MONTSERRAT_BODY,
 									fontFamily: 'Montserrat-Bold',

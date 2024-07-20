@@ -16,6 +16,7 @@ import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
 import PostReply from '../../components/common/status/PostReply';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../styles/AppTheme';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
 
 type StatusContextReplyItemProps = {
 	lookupId: string;
@@ -95,23 +96,21 @@ function StatusContextApiWrapper() {
 }
 
 function Post() {
-	const route = useRoute<any>();
-	const q = route?.params?.id;
-
+	const { id } = useLocalSearchParams<{ id: string }>();
 	const [refreshing, setRefreshing] = useState(false);
 	const { client } = useActivityPubRestClientContext();
 
 	async function queryFn() {
 		if (!client) throw new Error('_client not initialized');
-		return await client.statuses.get(q);
+		return await client.statuses.get(id);
 	}
 
 	const { status, data, fetchStatus, refetch } = useQuery<
 		LibraryResponse<ActivityPubStatus>
 	>({
-		queryKey: ['mastodon/statuses', q],
+		queryKey: [id],
 		queryFn,
-		enabled: client && q !== undefined,
+		enabled: client && id !== undefined,
 	});
 
 	useEffect(() => {

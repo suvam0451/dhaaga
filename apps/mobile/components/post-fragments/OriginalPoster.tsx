@@ -9,7 +9,7 @@ import { Skeleton } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import useMfm from '../hooks/useMfm';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
-import { router } from 'expo-router';
+import useAppNavigator from '../../states/useAppNavigator';
 
 type OriginalPosterProps = {
 	id: string;
@@ -178,6 +178,7 @@ const OriginalPoster = memo(function Foo({
 	const { user, setDataRaw } = useActivitypubUserContext();
 
 	const op = status?.isReposted() ? sharedStatus : status;
+	const { toProfile } = useAppNavigator();
 
 	useEffect(() => {
 		if (status?.getUser()) return;
@@ -185,7 +186,7 @@ const OriginalPoster = memo(function Foo({
 	}, [status]);
 
 	const onProfileClicked = useCallback(() => {
-		router.push(`/${id}`);
+		toProfile(id);
 	}, [id]);
 
 	const handle = useMemo(() => {

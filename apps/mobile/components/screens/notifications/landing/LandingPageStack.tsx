@@ -1,28 +1,27 @@
 import { useRealm } from '@realm/react';
 import { Account } from '../../../../entities/account.entity';
-import { ScrollView, View } from 'react-native';
-import AppButtonGroup from '../../../lib/ButtonGroups';
+import { View } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import ControlSegment from '../../../widgets/feed-controller/components/ControlSegment';
 import { Text } from '@rneui/themed';
-import selection from '../../../../app/(tabs)/accounts/selection';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import useLandingPageStackApi, { AppNotificationGroup } from './api';
-import { useEffect } from 'react';
-import { AnimatedFlashList, FlashList } from '@shopify/flash-list';
-import { NotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { useRef } from 'react';
+import { AnimatedFlashList } from '@shopify/flash-list';
+import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import useHookLoadingState from '../../../../states/useHookLoadingState';
+import { APP_FONT } from '../../../../styles/AppTheme';
 
 interface MentionItem {
 	props: AppNotificationGroup;
-	type: NotificationType.MENTION;
+	type: DhaagaJsNotificationType.MENTION;
 }
 
 type ListItem = MentionItem;
 
 function FlashListRenderer({ item }: { item: ListItem }) {
 	switch (item.type) {
-		case NotificationType.MENTION: {
+		case DhaagaJsNotificationType.MENTION: {
 			return (
 				<View>
 					<Text>{item.props.id}</Text>
@@ -32,7 +31,9 @@ function FlashListRenderer({ item }: { item: ListItem }) {
 		default: {
 			return (
 				<View>
-					<Text>Notification Type not handled</Text>
+					<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+						Notification Type not handled
+					</Text>
 				</View>
 			);
 		}
@@ -40,23 +41,19 @@ function FlashListRenderer({ item }: { item: ListItem }) {
 }
 
 function LandingPageStack() {
-	const { primaryAcct, client } = useActivityPubRestClientContext();
-
 	const realm = useRealm();
 	const db = useRealm();
 	const accts = db.objects(Account);
 
-	function onInteractionFilterChange(idx: number) {}
-
-	function onSocialGraphFilterChange(idx: number) {}
-
-	const { onScroll, translateY, resetPosition } = useScrollMoreOnPageEnd({
+	const { translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
 
+	const { State, forceUpdate } = useHookLoadingState();
 	const { Notifications } = useLandingPageStackApi();
 
+	const NotificationFilters = useRef(new Set(['all']));
 	return (
 		<WithAutoHideTopNavBar
 			title={'Notification Center'}
@@ -70,30 +67,32 @@ function LandingPageStack() {
 							<Text>Conversations</Text>
 						</View>
 						<ControlSegment
+							hash={State}
+							selection={NotificationFilters.current}
 							label={'User Interactions'}
 							buttons={[
 								{
-									selected: true,
 									label: 'All',
+									lookupId: 'all',
 									onClick: () => {},
 								},
 								{
-									selected: false,
 									label: 'Mentions',
+									lookupId: DhaagaJsNotificationType.MENTION,
 									onClick: () => {},
 								},
 								{
-									selected: false,
 									label: 'Boosts',
+									lookupId: DhaagaJsNotificationType.REBLOG,
 									onClick: () => {},
 								},
 								{
-									selected: false,
 									label: 'Favourites',
+									lookupId: DhaagaJsNotificationType.FAVOURITE,
 									onClick: () => {},
 								},
 								{
-									selected: false,
+									lookupId: 'none',
 									label: 'None',
 									onClick: () => {},
 								},
@@ -101,25 +100,27 @@ function LandingPageStack() {
 						/>
 
 						<ControlSegment
+							hash={State}
+							selection={NotificationFilters.current}
 							label={'Social Links'}
 							buttons={[
 								{
-									selected: true,
+									lookupId: 'all',
 									label: 'All',
 									onClick: () => {},
 								},
 								{
-									selected: false,
+									lookupId: DhaagaJsNotificationType.FOLLOW,
 									label: 'Follow',
 									onClick: () => {},
 								},
 								{
-									selected: false,
+									lookupId: DhaagaJsNotificationType.FOLLOW_REQUEST,
 									label: 'Requests',
 									onClick: () => {},
 								},
 								{
-									selected: false,
+									lookupId: 'none',
 									label: 'None',
 									onClick: () => {},
 								},

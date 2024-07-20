@@ -31,7 +31,9 @@ export const FabMenuItemFactory = memo(function Foo({
 			onTouchEnd={onClick}
 		>
 			<FabMenuItemIcon Icon={IconComponent} />
-			<Animated.View style={[textAnim]}>{TextComponent}</Animated.View>
+			<Animated.View style={[textAnim, { width: isFabExpanded ? 'auto' : 0 }]}>
+				{TextComponent}
+			</Animated.View>
 		</Animated.View>
 	);
 });

@@ -30,7 +30,6 @@ export { MediaAttachmentInterface } from './adapters/media-attachment/interface.
 
 // export user profile adapters and interfaces
 export { DefaultUser } from './adapters/profile/default.js';
-export { NotificationType } from './adapters/_client/_router/routes/notifications.js';
 
 // stub types
 export {
@@ -53,6 +52,10 @@ export {
 } from './adapters/tag/_interface.js';
 
 export { MastodonRestClient, MisskeyRestClient, UnknownRestClient };
+export {
+	DhaagaJsTimelineQueryOptions,
+	DhaagaJsNotificationType,
+} from './adapters/_client/_router/routes/_index.js';
 
 const userMap = {
 	mastodon: MastodonRestClient,

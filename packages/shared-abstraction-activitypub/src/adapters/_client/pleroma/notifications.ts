@@ -4,14 +4,13 @@ import {
 } from '../_router/routes/notifications.js';
 import {
 	COMPAT,
-	DhaagaMastoClient,
 	DhaagaMegalodonClient,
 	DhaagaRestClient,
 } from '../_router/_runner.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { KNOWN_SOFTWARE } from '../_router/instance.js';
 import { LibraryResponse } from '../_router/_types.js';
-import { MastoNotification, MegaNotification } from '../_interface.js';
+import { MegaNotification } from '../_interface.js';
 import { toSnakeCase } from '../_router/utils/casing.utils.js';
 
 export class PleromaNotificationsRouter implements NotificationsRoute {

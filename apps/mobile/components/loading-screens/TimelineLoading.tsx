@@ -1,12 +1,13 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../styles/AppTheme';
+import { memo } from 'react';
 
 type TimelineLoadingProps = {
 	label?: string;
 };
 
-function TimelineLoading({ label }: TimelineLoadingProps) {
+const TimelineLoading = memo(({ label }: TimelineLoadingProps) => {
 	const _label = label || 'Loading Timeline';
 	return (
 		<View style={styles.containerWrapper}>
@@ -18,13 +19,13 @@ function TimelineLoading({ label }: TimelineLoadingProps) {
 			</View>
 		</View>
 	);
-}
+});
 
 const styles = StyleSheet.create({
 	containerWrapper: {
 		display: 'flex',
 		alignItems: 'center',
-		marginTop: 50 + 0,
+		marginTop: 50,
 		padding: 16,
 		backgroundColor: '#121212',
 		height: '100%',

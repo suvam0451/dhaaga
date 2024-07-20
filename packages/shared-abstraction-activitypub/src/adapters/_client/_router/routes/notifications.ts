@@ -1,7 +1,7 @@
 import { LibraryResponse } from '../_types.js';
 import { MastoNotification, MegaNotification } from '../../_interface.js';
 
-export enum NotificationType {
+export enum DhaagaJsNotificationType {
 	/**
 	 * Someone mentioned you in their status
 	 */
@@ -66,8 +66,8 @@ export type NotificationGetQueryDto = {
 	maxId?: string;
 	sinceId?: string;
 	accountId?: string; // restrict to notifications recieved from this account
-	types: NotificationType[];
-	excludeTypes: NotificationType[];
+	types: DhaagaJsNotificationType[];
+	excludeTypes: DhaagaJsNotificationType[];
 	markAsRead?: boolean; // misskey
 };
 

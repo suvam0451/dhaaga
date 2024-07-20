@@ -74,12 +74,12 @@ export class EmojiService {
 		);
 		// TODO: this needs to be brought back
 		if (found) {
-			console.log(
-				'[INFO]: found cached emojis:',
-				subdomain,
-				found.data.length,
-				formatRelative(found.lastFetchedAt, new Date()),
-			);
+			// console.log(
+			// 	'[INFO]: found cached emojis:',
+			// 	subdomain,
+			// 	found.data.length,
+			// 	formatRelative(found.lastFetchedAt, new Date()),
+			// );
 			return found.data;
 		}
 

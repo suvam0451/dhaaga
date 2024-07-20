@@ -80,10 +80,20 @@ export class ActivityPubStatusRepository {
 			db.delete(l);
 		}
 		const mediaI = status.getMediaAttachments();
-		for (const media of mediaI) {
-			const savedMedia = ActivityPubMediaAttachmentRepository.create(db, media);
-			retval.mediaAttachments.push(savedMedia);
+
+		try {
+			for (const media of mediaI) {
+				const savedMedia = ActivityPubMediaAttachmentRepository.create(
+					db,
+					media,
+				);
+				retval.mediaAttachments.push(savedMedia);
+			}
+		} catch (e) {
+			// FIX: media attachment could be null in some cases
+			console.log('[WARN]: failed to cache bookmark', status.getId());
 		}
+
 		return retval;
 	}
 
