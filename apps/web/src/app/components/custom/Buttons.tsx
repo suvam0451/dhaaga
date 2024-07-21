@@ -10,7 +10,7 @@ export function GithubDownloadButton() {
 	return (
 		<a
 			href={
-				'https://github.com/suvam0451/dhaaga/releases/download/v0.3.1/Dhaaga-v0.3.1.apk'
+				'https://github.com/suvam0451/dhaaga/releases/download/v0.4.0/Dhaaga-v0.4.0.apk'
 			}
 		>
 			<Box
@@ -34,7 +34,7 @@ export function GithubDownloadButton() {
 export function PlayStoreGetButton() {
 	function playStoreGetClick() {
 		window.open(
-			'https://play.google.com/apps/internaltest/4701558509354422797',
+			'https://play.google.com/apps/testing/io.suvam.dhaaga',
 			'_blank',
 		);
 	}
