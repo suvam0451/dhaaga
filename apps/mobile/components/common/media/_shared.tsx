@@ -93,7 +93,9 @@ export const AppVideoComponent = memo(function Foo({
 }) {
 	const ref = useRef(null);
 	const [isPlaying, setIsPlaying] = useState(true);
-	const player = useVideoPlayer(url, (player) => {
+	let modifiedUrl = url.replace('?sensitive=true', '');
+
+	const player = useVideoPlayer(modifiedUrl, (player) => {
 		if (loop) {
 			player.loop = true;
 		}

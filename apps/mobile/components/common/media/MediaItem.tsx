@@ -35,6 +35,7 @@ const TimelineMediaRendered = memo(function Foo({
 }) {
 	const MediaItem = useMemo(() => {
 		const type = attachment?.getType();
+
 		switch (type) {
 			case 'image':
 			case 'image/jpeg':
@@ -42,7 +43,7 @@ const TimelineMediaRendered = memo(function Foo({
 			case 'image/webp': {
 				return (
 					<AppImageComponent
-						url={attachment.getUrl()}
+						url={attachment.getPreviewUrl()}
 						blurhash={attachment.getBlurHash()}
 					/>
 				);
@@ -57,7 +58,8 @@ const TimelineMediaRendered = memo(function Foo({
 					/>
 				);
 			}
-			case 'gifv': {
+			case 'gifv':
+			case 'image/gif': {
 				return (
 					<AppVideoComponent
 						type={'gifv'}
@@ -138,7 +140,7 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 		);
 	}
 	return (
-		<View style={{ marginTop: MARGIN_TOP }}>
+		<View style={{ marginTop: MARGIN_TOP, flex: 1 }}>
 			<Carousel
 				width={Dimensions.get('window').width}
 				height={CalculatedHeight}

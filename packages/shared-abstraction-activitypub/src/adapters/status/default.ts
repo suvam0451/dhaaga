@@ -7,6 +7,19 @@ import {
 } from './_interface.js';
 
 class UnknownToStatusAdapter implements StatusInterface {
+	getReactions(): { id: string; count: number }[] {
+		return [];
+	}
+
+	getReactionEmojis(): {
+		height?: number | undefined;
+		width?: number | undefined;
+		name: string;
+		url: string;
+	}[] {
+		return [];
+	}
+
 	getIsRebloggedByMe(): boolean | null | undefined {
 		throw new Error('Method not implemented.');
 	}

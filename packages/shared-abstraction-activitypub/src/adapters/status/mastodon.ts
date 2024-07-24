@@ -18,6 +18,19 @@ class MastodonToStatusAdapter implements StatusInterface {
 		this.descendants = [];
 	}
 
+	getReactions(): { id: string; count: number }[] {
+		return [];
+	}
+
+	getReactionEmojis(): {
+		height?: number | undefined;
+		width?: number | undefined;
+		name: string;
+		url: string;
+	}[] {
+		return [];
+	}
+
 	getIsRebloggedByMe(): boolean | null | undefined {
 		return this.ref.instance.reblogged;
 	}

@@ -83,6 +83,15 @@ export interface StatusInterface {
 	setDescendents(items: StatusInterface[]): void;
 
 	getDescendants(): StatusInterface[];
+
+	getReactions(): { id: string; count: number }[];
+
+	getReactionEmojis(): {
+		height?: number;
+		width?: number;
+		name: string;
+		url: string;
+	}[];
 }
 
 export class StatusContextInstance {
