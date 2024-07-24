@@ -15,7 +15,9 @@ import {
 } from '../_router/dto/api-responses.dto.js';
 import { BaseAccountsRouter } from '../default/accounts.js';
 import { LibraryResponse } from '../_router/_types.js';
-import { MastoRelationship, MastoTrendLink } from '../_interface.js';
+import { MastoAccount, MastoRelationship } from '../_interface.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
+import { UserDetailed } from 'misskey-js/autogen/models.js';
 
 export class MisskeyAccountsRouter
 	extends BaseAccountsRouter
@@ -42,5 +44,10 @@ export class MisskeyAccountsRouter
 		ids: string[],
 	): Promise<LibraryResponse<MastoRelationship[]>> {
 		return notImplementedErrorBuilder();
+	}
+
+	async get(id: string): LibraryPromise<MastoAccount | UserDetailed> {
+		const data = await this.lib.client.request('users/show', { userId: id });
+		return { data };
 	}
 }

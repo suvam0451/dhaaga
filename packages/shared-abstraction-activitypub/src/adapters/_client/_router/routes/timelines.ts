@@ -1,6 +1,34 @@
-import { LibraryResponse } from '../_types.js';
-import { MastoStatus } from '../../_interface.js';
+import { MastoStatus, MegaStatus } from '../../_interface.js';
+import { LibraryPromise } from './_types.js';
+import { Endpoints } from 'misskey-js';
 
+type __MisskeyTimelineOptions = {
+	// common
+	limit?: number;
+	sinceId?: string;
+	untilId?: string;
+	sinceDate?: number;
+	untilDate?: number;
+
+	allowPartial?: boolean;
+	includeMyRenotes?: boolean;
+	includeRenotedMyNotes?: boolean;
+	includeLocalRenotes?: boolean;
+	withFiles?: boolean; // public, tags
+	withRenotes?: boolean; // public
+
+	// tag only
+	renote?: boolean;
+	poll?: boolean;
+	reply?: boolean;
+	// query?: string[][] // wtf is this???
+};
+
+/**
+ *
+ * Pleroma/Akkoma + Home = Local only
+ * Pleroma/Akkoma + Public = "Only Media" only
+ */
 export type DhaagaJsTimelineQueryOptions = {
 	limit: number;
 	sinceId?: string;
@@ -13,6 +41,7 @@ export type DhaagaJsTimelineQueryOptions = {
 	// public timeline
 	remote?: boolean;
 	local?: boolean;
+	social?: boolean; // bootstrap for "Social" timeline
 
 	// hashtag only
 	any?: string[];
@@ -24,35 +53,42 @@ export type DhaagaJsTimelineQueryOptions = {
 	excludeReplies?: boolean | null;
 	excludeReblogs?: boolean | null;
 	tagged?: string | null;
-};
+
+	// Akkoma specific thing?
+	withMuted?: boolean;
+} & __MisskeyTimelineOptions;
+
+export type DhaagaJsTimelineArrayPromise = LibraryPromise<
+	| MastoStatus[]
+	| MegaStatus[]
+	| Endpoints['notes/timeline']['res']
+	| Endpoints['notes/search-by-tag']['res']
+	| Endpoints['notes/user-list-timeline']['res']
+>;
 
 export interface TimelinesRoute {
-	home(
-		query: DhaagaJsTimelineQueryOptions,
-	): Promise<LibraryResponse<MastoStatus[]>>;
+	home(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise;
 
-	public(
-		query: DhaagaJsTimelineQueryOptions,
-	): Promise<LibraryResponse<MastoStatus[]>>;
+	public(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise;
 
 	publicAsGuest(
 		urlLike: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): Promise<LibraryResponse<MastoStatus[]>>;
+	): DhaagaJsTimelineArrayPromise;
 
 	hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): Promise<LibraryResponse<MastoStatus[]>>;
+	): DhaagaJsTimelineArrayPromise;
 
 	hashtagAsGuest(
 		urlLike: string,
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): Promise<LibraryResponse<MastoStatus[]>>;
+	): DhaagaJsTimelineArrayPromise;
 
 	list(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): Promise<LibraryResponse<MastoStatus[]>>;
+	): DhaagaJsTimelineArrayPromise;
 }

@@ -8,6 +8,7 @@ import {
 	NotificationsRoute,
 } from './notifications.js';
 import { DhaagaJsTimelineQueryOptions, TimelinesRoute } from './timelines.js';
+import { TagRoute } from './tags.js';
 
 export interface RouterInterface {
 	instances: InstanceRoute;
@@ -17,6 +18,7 @@ export interface RouterInterface {
 	trends: TrendsRoute;
 	notifications: NotificationsRoute;
 	timelines: TimelinesRoute;
+	tags: TagRoute;
 }
 
 export type { InstanceRoute, AccountRoute, StatusesRoute };

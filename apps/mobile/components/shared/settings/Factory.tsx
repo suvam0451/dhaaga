@@ -47,6 +47,7 @@ export const SingleChoiceSetting = memo(function Foo({
 			>
 				{items.map((o, i) => (
 					<View
+						key={i}
 						style={{
 							borderRadius: 8,
 							backgroundColor:

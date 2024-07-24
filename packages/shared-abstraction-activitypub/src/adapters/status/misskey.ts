@@ -52,11 +52,13 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	}
 
 	getIsSensitive(): boolean {
-		throw new Error('Method not implemented.');
+		return (
+			this.ref.instance?.cw !== undefined && this.ref.instance?.cw !== null
+		);
 	}
 
 	getSpoilerText(): string | null | undefined {
-		throw new Error('Method not implemented.');
+		return this.ref.instance?.cw;
 	}
 
 	getRaw(): Status {
@@ -80,7 +82,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	}
 
 	isReply(): boolean {
-		return false;
+		return (
+			this.ref.instance?.reply !== undefined &&
+			this.ref.instance?.reply !== null
+		);
 	}
 
 	getParentStatusId(): string | null | undefined {
@@ -115,11 +120,14 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	}
 
 	getAccountUrl() {
-		return this.ref?.instance?.user.instance?.name;
+		return `https://${this.ref.instance?.user?.host}/@${this.ref.instance?.user?.username}`;
 	}
 
 	getRepostedStatus(): StatusInterface | null | undefined {
-		if (this.ref?.instance?.renote) {
+		if (
+			this.ref?.instance?.renote !== undefined &&
+			this.ref.instance?.renote !== null
+		) {
 			return new MisskeyToStatusAdapter(
 				new NoteInstance(this.ref?.instance?.renote),
 			) as unknown as StatusInterface;
@@ -139,7 +147,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	}
 
 	isReposted() {
-		return this.ref?.instance?.renote !== null;
+		return (
+			this.ref?.instance?.renote !== undefined &&
+			this.ref?.instance?.renote !== null
+		);
 	}
 
 	getContent() {

@@ -33,7 +33,7 @@ export interface StatusInterface {
 
 	getVisibility(): string;
 
-	getAccountUrl(): string | null | undefined;
+	getAccountUrl(mySubdomain?: string): string | null | undefined;
 
 	getRepostedStatus(): StatusInterface | null | undefined;
 

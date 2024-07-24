@@ -6,6 +6,8 @@ import { InstanceRoute } from './_router/instance.js';
 import type { Status as MLStatus } from 'megalodon/lib/esm/src/entities/status.js';
 import type { Reaction as MLReaction } from 'megalodon/lib/esm/src/entities/reaction.js';
 import type { Notification as MLNotification } from 'megalodon/lib/esm/src/entities/notification.js';
+import type { Tag as MLTag } from 'megalodon/lib/esm/src/entities/tag.js';
+import type { FeaturedTag as MLFeaturedTag } from 'megalodon/lib/esm/src/entities/featured_tag.js';
 
 /**
  * TS4053: Return type of public method
@@ -29,6 +31,8 @@ export type MastoNotification = mastodon.v1.Notification;
 export type MegaStatus = MLStatus;
 export type MegaReaction = MLReaction;
 export type MegaNotification = MLNotification;
+export type MegaTag = MLTag;
+export type MegaFeaturedTag = MLFeaturedTag;
 
 export type HashtagTimelineQuery = {
 	limit: number;

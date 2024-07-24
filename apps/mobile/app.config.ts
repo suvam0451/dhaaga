@@ -50,8 +50,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				},
 				android: {
 					newArchEnabled: true,
-					// enableProguardInReleaseBuilds: true,
-					// enableShrinkResourcesInReleaseBuilds: true
+					enableProguardInReleaseBuilds: false,
+					enableShrinkResourcesInReleaseBuilds: false,
 				},
 			},
 		],

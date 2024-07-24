@@ -1,6 +1,6 @@
 import { LibraryResponse } from '../_types.js';
 import { mastodon } from 'masto';
-import { Note } from 'misskey-js/autogen/models.js';
+import { Note, UserDetailed } from 'misskey-js/autogen/models.js';
 import { Endpoints } from 'misskey-js';
 import {
 	FollowPostDto,
@@ -9,8 +9,8 @@ import {
 	MastoFeaturedTag,
 	MastoList,
 	MastoRelationship,
-	MastoTag,
 } from '../../_interface.js';
+import { LibraryPromise } from './_types.js';
 
 type DefaultPaginationParams = {
 	// masto.js
@@ -83,7 +83,7 @@ export interface AccountRoute {
 		params: AccountRouteStatusQueryDto,
 	): Promise<LibraryResponse<mastodon.v1.Status[] | Note[] | any[]>>;
 
-	get(id: string): Promise<LibraryResponse<MastoAccount>>;
+	get(id: string): LibraryPromise<MastoAccount | UserDetailed>;
 
 	relationships(ids: string[]): Promise<LibraryResponse<MastoRelationship[]>>;
 

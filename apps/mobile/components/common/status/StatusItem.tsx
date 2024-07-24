@@ -20,7 +20,6 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import LocalizationService from '../../../services/localization.services';
 import { Image } from 'expo-image';
 import { RepliedStatusFragment } from './_static';
-import { router, useNavigation } from 'expo-router';
 import useAppNavigator from '../../../states/useAppNavigator';
 
 type StatusItemProps = {
@@ -433,10 +432,7 @@ function SharedStatusFragment() {
  * Renders a status/note
  * @constructor
  */
-function StatusItem({
-	replyContextIndicators,
-	hideReplyIndicator,
-}: StatusItemProps) {
+function StatusItem({ replyContextIndicators }: StatusItemProps) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
 	const { status: _status, sharedStatus } = useActivitypubStatusContext();
@@ -465,18 +461,24 @@ function StatusItem({
 				);
 			}
 			case 'misskey': {
-				if (_status && _status.isReposted() && !hideReplyIndicator) {
-					return (
-						<Fragment>
-							<SharedStatusFragment />
-							<RootFragmentContainer mt={-8} isRepost={true} />
-						</Fragment>
-					);
-				}
 				return (
-					<RootFragmentContainer
-						replyContextIndicators={replyContextIndicators}
-					/>
+					<Fragment>
+						{_status.isReposted() && <SharedStatusFragment />}
+						{_status.isReposted() ? (
+							sharedStatus.isReply() ? (
+								<RepliedStatusFragment mt={-8} paddingVertical={6} />
+							) : (
+								<View></View>
+							)
+						) : (
+							_status.isReply() && <RepliedStatusFragment />
+						)}
+						<RootFragmentContainer
+							replyContextIndicators={replyContextIndicators}
+							mt={_status.isReposted() || _status.isReply() ? -8 : 0}
+							isRepost={_status.isReposted()}
+						/>
+					</Fragment>
 				);
 			}
 			default: {

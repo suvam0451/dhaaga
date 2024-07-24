@@ -3,7 +3,6 @@ import Carousel from 'react-native-reanimated-carousel';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
 import MediaService from '../../../services/media.service';
-import { Text } from '@rneui/themed';
 import {
 	MARGIN_TOP,
 	MEDIA_CONTAINER_MAX_HEIGHT,
@@ -37,7 +36,10 @@ const TimelineMediaRendered = memo(function Foo({
 	const MediaItem = useMemo(() => {
 		const type = attachment?.getType();
 		switch (type) {
-			case 'image': {
+			case 'image':
+			case 'image/jpeg':
+			case 'image/png':
+			case 'image/webp': {
 				return (
 					<AppImageComponent
 						url={attachment.getUrl()}
@@ -45,7 +47,8 @@ const TimelineMediaRendered = memo(function Foo({
 					/>
 				);
 			}
-			case 'video': {
+			case 'video':
+			case 'video/mp4': {
 				return (
 					<AppVideoComponent
 						type={'video'}

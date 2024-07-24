@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { ActivityPubCustomEmojiItemDTO } from '../entities/activitypub-emoji.entity';
-import { UnknownRestClient } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	ActivityPubClient,
+	UnknownRestClient,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 class ActivityPubService {
@@ -45,6 +46,8 @@ class ActivityPubService {
 				return null;
 			});
 	}
+
+	static async toggleBookmark(client: ActivityPubClient, localState: boolean) {}
 }
 
 export default ActivityPubService;

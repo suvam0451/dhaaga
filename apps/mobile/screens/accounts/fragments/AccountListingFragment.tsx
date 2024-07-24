@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button, Text } from '@rneui/themed';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
-import { Button, Card } from '@rneui/base';
+import { FontAwesome } from '@expo/vector-icons';
 import { useObject, useRealm } from '@realm/react';
 import { Account } from '../../../entities/account.entity';
 import AccountRepository from '../../../repositories/account.repo';
@@ -9,16 +9,81 @@ import { Types } from 'realm';
 import UUID = Types.UUID;
 import AccountService from '../../../services/account.service';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
+import Entypo from '@expo/vector-icons/Entypo';
+import { APP_FONT } from '../../../styles/AppTheme';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { AppButtonVariantA } from '../../../components/lib/Buttons';
 
 type Props = {
 	id: UUID;
 };
 
+type AccountOptionsProps = {
+	IsExpanded: boolean;
+};
+
+const AccountOptions = memo(function Foo({ IsExpanded }: AccountOptionsProps) {
+	return (
+		<Animated.View
+			entering={FadeIn}
+			style={{ display: IsExpanded ? 'flex' : 'none', marginTop: 16 }}
+		>
+			<View
+				style={{
+					flexDirection: 'row',
+					justifyContent: 'space-around',
+					marginVertical: 16,
+				}}
+			>
+				<Button
+					size={'md'}
+					buttonStyle={{ backgroundColor: '#333333', borderRadius: 8 }}
+					containerStyle={{ borderRadius: 8 }}
+					// onPress={onPress}
+					// onLongPress={onLongPress}
+				>
+					<Text style={{ color: APP_FONT.MONTSERRAT_HEADER, fontSize: 14 }}>
+						Sync Hashtags
+					</Text>
+					<View style={{ marginLeft: 8 }}>
+						<FontAwesome
+							name="refresh"
+							size={20}
+							color={APP_FONT.MONTSERRAT_BODY}
+						/>
+					</View>
+				</Button>
+
+				<Button
+					size={'md'}
+					buttonStyle={{ backgroundColor: '#333333', borderRadius: 8 }}
+					containerStyle={{ borderRadius: 8 }}
+					// onPress={onPress}
+					// onLongPress={onLongPress}
+				>
+					<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
+						Sync Followers
+					</Text>
+					<View style={{ marginLeft: 8 }}>
+						<FontAwesome
+							name="refresh"
+							size={20}
+							color={APP_FONT.MONTSERRAT_BODY}
+						/>
+					</View>
+				</Button>
+			</View>
+		</Animated.View>
+	);
+});
+
 function AccountListingFragment({ id }: Props) {
 	const account = useObject(Account, id);
 	const db = useRealm();
 	const { primaryAcct, regenerate } = useActivityPubRestClientContext();
+	const [IsExpanded, setIsExpanded] = useState(false);
 
 	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
 	const displayName = AccountRepository.findSecret(
@@ -45,70 +110,101 @@ function AccountListingFragment({ id }: Props) {
 	}, [primaryAcct, account?.selected]);
 
 	return (
-		<Card
-			wrapperStyle={{
-				height: 48,
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-			}}
-			containerStyle={{
-				margin: 0,
+		<View
+			style={{
+				backgroundColor: '#282828',
 				padding: 8,
-				backgroundColor: isActive ? '#E5FFDA' : 'white',
+				marginBottom: 8,
+				borderRadius: 8,
 			}}
 		>
-			<View>
-				{avatar && (
-					<View style={{ height: 48, width: 48 }}>
-						{/*@ts-ignore-next-line*/}
-						<Image
-							style={styles.image}
-							source={avatar}
-							contentFit="fill"
-							transition={1000}
-						/>
-					</View>
-				)}
-			</View>
-			<View style={{ marginLeft: 8, flexGrow: 1 }}>
-				{displayName && (
-					<Text style={{ fontWeight: '500' }}>{displayName}</Text>
-				)}
-				<Text style={{ color: 'gray', fontSize: 14 }}>{account.username}</Text>
-			</View>
 			<View
 				style={{
-					display: 'flex',
-					justifyContent: 'flex-end',
 					flexDirection: 'row',
-					marginRight: 8,
+
 					alignItems: 'center',
 				}}
 			>
-				{!isActive ? (
-					<Button
-						type="clear"
-						onPress={() => {
-							onSelectAccount(account);
+				<View>
+					{avatar && (
+						<View style={{ height: 48, width: 48 }}>
+							{/*@ts-ignore-next-line*/}
+							<Image
+								style={styles.image}
+								source={avatar}
+								contentFit="fill"
+								transition={1000}
+							/>
+						</View>
+					)}
+				</View>
+				<View style={{ marginLeft: 8, flexGrow: 1 }}>
+					<Text
+						style={{
+							fontWeight: '500',
+							color: APP_FONT.MONTSERRAT_HEADER,
 						}}
 					>
-						Select
-					</Button>
-				) : (
-					<Button
-						type="clear"
-						onPress={() => {
-							onDeselectAccount(account);
+						{displayName || ' '}
+					</Text>
+					<Text
+						style={{
+							color: APP_FONT.MONTSERRAT_BODY,
+							fontSize: 14,
 						}}
 					>
-						Deselect
-					</Button>
-				)}
-
-				<Ionicons name="menu-outline" size={32} color="black" />
+						{account.username}
+					</Text>
+					<Text style={{ color: APP_FONT.MONTSERRAT_HEADER, fontSize: 14 }}>
+						{account.subdomain}
+					</Text>
+				</View>
+				<View
+					style={{
+						display: 'flex',
+						justifyContent: 'flex-end',
+						flexDirection: 'row',
+						marginRight: 8,
+						alignItems: 'center',
+					}}
+				>
+					{!isActive ? (
+						<TouchableOpacity
+							onPress={() => {
+								onSelectAccount(account);
+							}}
+						>
+							<FontAwesome5
+								name="check-square"
+								size={28}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+						</TouchableOpacity>
+					) : (
+						<TouchableOpacity
+							onPress={() => {
+								onDeselectAccount(account);
+							}}
+						>
+							<FontAwesome5 name="check-square" size={28} color={'green'} />
+						</TouchableOpacity>
+					)}
+				</View>
+				<TouchableOpacity
+					style={{ paddingHorizontal: 8, paddingVertical: 8 }}
+					onPress={() => {
+						setIsExpanded((o) => !o);
+					}}
+				>
+					<Entypo
+						name="chevron-down"
+						size={32}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+				</TouchableOpacity>
 			</View>
-		</Card>
+			<AccountOptions IsExpanded={IsExpanded} />
+		</View>
 	);
 }
 

@@ -30,8 +30,6 @@ export class DefaultInstanceRouter implements InstanceRoute {
 		}
 
 		switch (software) {
-			case KNOWN_SOFTWARE.PLEROMA:
-			case KNOWN_SOFTWARE.AKKOMA:
 			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.FIREFISH:
 			case KNOWN_SOFTWARE.ICESHRIMP:
@@ -68,6 +66,42 @@ export class DefaultInstanceRouter implements InstanceRoute {
 						aliases: o.aliases,
 					})),
 				};
+			}
+			case KNOWN_SOFTWARE.PLEROMA:
+			case KNOWN_SOFTWARE.AKKOMA: {
+				try {
+					const dt = await DhaagaMegalodonClient(
+						KNOWN_SOFTWARE.PLEROMA,
+						urlLike,
+					).client.getInstanceCustomEmojis();
+					return {
+						data: dt.data.map((o) => ({
+							shortCode: o.shortcode,
+							url: o.url,
+							staticUrl: o.static_url,
+							visibleInPicker: o.visible_in_picker,
+							aliases: [],
+							category: o.category,
+						})),
+					};
+				} catch (e: any) {
+					if (e?.response?.status && e?.response?.statusText) {
+						if (e?.response?.status === 401) {
+							return {
+								error: {
+									code: DhaagaErrorCode.UNAUTHORIZED,
+									message: e?.response?.statusText,
+								},
+							};
+						}
+					}
+					return {
+						error: {
+							code: DhaagaErrorCode.UNKNOWN_ERROR,
+							message: e,
+						},
+					};
+				}
 			}
 			case KNOWN_SOFTWARE.GOTOSOCIAL: {
 				try {

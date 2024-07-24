@@ -25,9 +25,12 @@ export type AppNotificationGroup = {
 };
 
 function useLandingPageStackApi() {
-	const [Notifications, setNotifications] = useState<AppNotificationGroup[]>(
-		[],
-	);
+	const [Notifications, setNotifications] = useState<
+		{
+			type: string;
+			props: AppNotificationGroup;
+		}[]
+	>([]);
 	const { client, domain } = useActivityPubRestClientContext();
 
 	async function api() {
@@ -43,6 +46,8 @@ function useLandingPageStackApi() {
 				DhaagaJsNotificationType.MENTION,
 			],
 		});
+
+		console.log(data.data.map((o) => o.type));
 		return data as any;
 	}
 
@@ -112,9 +117,12 @@ function useLandingPageStackApi() {
 					a.createdAt > b.createdAt ? 1 : -1,
 			);
 			appNotifs.push({
-				id: k,
-				items: v,
-				createdAt: sorted[0].createdAt,
+				type: sorted[0].type,
+				props: {
+					id: k,
+					items: v,
+					createdAt: sorted[0].createdAt,
+				},
 			});
 		}
 		setNotifications(appNotifs);

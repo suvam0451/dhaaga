@@ -4,7 +4,6 @@ import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
 import { memo, useMemo } from 'react';
 import { AppRelationship } from '../../types/ap.types';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 type AppButtonFollowIndicatorProps = {
 	onClick: () => void;

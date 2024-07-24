@@ -315,6 +315,14 @@ class MfmService {
 			};
 		},
 	) {
+		/**
+		 * Misskey hack.
+		 *
+		 * When user belongs to same instance, host = null
+		 */
+		if (!remoteSubdomain && subdomain) {
+			remoteSubdomain = subdomain;
+		}
 		if (!input || !domain || !subdomain || !emojiMap)
 			return {
 				reactNodes: [],

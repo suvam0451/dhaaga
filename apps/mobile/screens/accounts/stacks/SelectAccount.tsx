@@ -12,6 +12,7 @@ import TitleOnlyStackHeaderContainer from '../../../components/containers/TitleO
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useAssets } from 'expo-asset';
+import { APP_FONT } from '../../../styles/AppTheme';
 
 function NoAccountsToShow({ service }: { service: string }) {
 	return (
@@ -37,6 +38,7 @@ function SelectAccountStack() {
 	const navigation = useNavigation<any>();
 
 	const accounts = useQuery(Account);
+	console.log(accounts);
 
 	const MastodonAccounts = accounts.filter((o) => o?.domain === 'mastodon');
 	const MisskeyAccounts = accounts.filter((o) => o?.domain === 'misskey');
@@ -130,7 +132,15 @@ function SelectAccountStack() {
 								navigation.navigate('Select a Platform', { type: 'mastodon' });
 							}}
 						>
-							Add an Account
+							<Text
+								style={{
+									color: APP_FONT.MONTSERRAT_HEADER,
+									fontFamily: 'Inter-Bold',
+									fontSize: 16,
+								}}
+							>
+								Add an Account
+							</Text>
 						</Button>
 					</StandardView>
 				</View>

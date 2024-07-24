@@ -26,13 +26,11 @@ import WithTimelineControllerContext, {
 	useTimelineController,
 } from '../../../states/useTimelineController';
 import WelcomeBack from '../../../components/screens/home/fragments/WelcomeBack';
-import TimelineLoading from '../../../components/loading-screens/TimelineLoading';
 import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';
 import TimelineEmpty from '../../../components/error-screen/TimelineEmpty';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import NowBrowsingHeader from '../../../components/widgets/feed-controller/core/NowBrowsingHeader';
-import { TimelineType } from '../../../types/timeline.types';
 import useTimeline from '../../../states/useTimeline';
 import useTimelineLabel from '../../../components/common/timeline/utils';
 import { SIDEBAR_VARIANT } from '../../../components/shared/sidebar/Core';
@@ -116,6 +114,16 @@ const FlashListRenderer = ({ item }: { item: ListItemType }) => {
 					<StatusItem />
 				</WithActivitypubStatusContext>
 			);
+		}
+		case ListItemEnum.ListItemWithSpoiler: {
+			return (
+				<WithActivitypubStatusContext statusInterface={item.props.post}>
+					<StatusItem />
+				</WithActivitypubStatusContext>
+			);
+		}
+		default: {
+			console.log('[WARN]: you have not indicated a timeline item type');
 		}
 	}
 };

@@ -1,22 +1,93 @@
-import { TimelinesRoute } from '../_router/routes/timelines.js';
-import { DefaultTimelinesRouter } from '../default/timelines.js';
+import {
+	DhaagaJsTimelineArrayPromise,
+	DhaagaJsTimelineQueryOptions,
+	TimelinesRoute,
+} from '../_router/routes/timelines.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
 	COMPAT,
 	DhaagaMisskeyClient,
 	DhaagaRestClient,
 } from '../_router/_runner.js';
+import { Endpoints } from 'misskey-js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
-export class MisskeyTimelinesRouter
-	extends DefaultTimelinesRouter
-	implements TimelinesRoute
-{
+export class MisskeyTimelinesRouter implements TimelinesRoute {
 	client: RestClient;
 	lib: DhaagaRestClient<COMPAT.MISSKEYJS>;
 
 	constructor(forwarded: RestClient) {
-		super();
 		this.client = forwarded;
 		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+	}
+
+	publicAsGuest(
+		urlLike: string,
+		query: DhaagaJsTimelineQueryOptions,
+	): DhaagaJsTimelineArrayPromise {
+		throw new Error('Method not implemented.');
+	}
+
+	hashtagAsGuest(
+		urlLike: string,
+		q: string,
+		query: DhaagaJsTimelineQueryOptions,
+	): DhaagaJsTimelineArrayPromise {
+		throw new Error('Method not implemented.');
+	}
+
+	async home(
+		query: DhaagaJsTimelineQueryOptions,
+	): LibraryPromise<Endpoints['notes/timeline']['res']> {
+		const data = await this.lib.client.request('notes/timeline', query);
+		return { data };
+	}
+
+	async public(
+		query: DhaagaJsTimelineQueryOptions,
+	): LibraryPromise<Endpoints['notes/global-timeline']['res']> {
+		if (query?.local) {
+			const data = await this.lib.client.request('notes/local-timeline', query);
+			return { data };
+		}
+		if (query?.social) {
+			const data = await this.lib.client.request(
+				'notes/hybrid-timeline',
+				query,
+			);
+			return { data };
+		} else {
+			// a.k.a. -- federated timeline
+			const data = await this.lib.client.request(
+				'notes/global-timeline',
+				query,
+			);
+			return { data };
+		}
+	}
+
+	async hashtag(
+		q: string,
+		query: DhaagaJsTimelineQueryOptions,
+	): LibraryPromise<Endpoints['notes/search-by-tag']['res']> {
+		const data = await this.lib.client.request<
+			'notes/search-by-tag',
+			Endpoints['notes/search-by-tag']['req']
+		>('notes/search-by-tag', {
+			tag: q,
+			...query,
+		});
+		return { data };
+	}
+
+	async list(
+		q: string,
+		query: DhaagaJsTimelineQueryOptions,
+	): DhaagaJsTimelineArrayPromise {
+		const data = await this.lib.client.request<
+			'notes/user-list-timeline',
+			Endpoints['notes/user-list-timeline']['req']
+		>('notes/user-list-timeline', { listId: q, ...query });
+		return { data };
 	}
 }

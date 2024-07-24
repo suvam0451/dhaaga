@@ -468,9 +468,8 @@ function ServerDebuggerStackBase() {
 	const servers = useQuery(ActivityPubServer);
 	const [SearchResults, setSearchResults] = useState<ActivityPubServer[]>([]);
 	const [FlashListProps, setFlashListProps] = useState<ListItem[]>([]);
-	const { searchText, setIsResultLoading, setSearchText, isResultLoading } =
-		useSearchTermContext();
-	const { branding, isAssetsLoaded } = useAppAssetsContext();
+	const { searchText } = useSearchTermContext();
+	const { isAssetsLoaded } = useAppAssetsContext();
 
 	useEffect(() => {
 		const mapper = new Map<string, { count: number }>();

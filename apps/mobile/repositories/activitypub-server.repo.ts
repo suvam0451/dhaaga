@@ -4,7 +4,6 @@ import {
 } from '../entities/activitypub-server.entity';
 import { Realm } from '@realm/react';
 import { ActivityPubCustomEmojiItem } from '../entities/activitypub-emoji.entity';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { UpdateMode } from 'realm';
 
 export class ActivityPubServerRepository {

@@ -3,6 +3,7 @@ import type { mastodon } from '@dhaaga/shared-provider-mastodon';
 import MisskeyUser from './misskey.js';
 import MastodonUser from './mastodon.js';
 import DefaultUser from './default.js';
+import { Note } from 'misskey-js/autogen/models.d.ts';
 
 export type EmojiMapValue = {
 	url: string;
@@ -56,7 +57,7 @@ export interface UserInterface {
 	/**
 	 * e.g. - mastodon.social from "https://mastodon.social/@suvam"
 	 */
-	getInstanceUrl(): string;
+	getInstanceUrl(): string | null;
 
 	getOnlineStatus(): 'online' | 'active' | 'offline' | 'unknown';
 
@@ -73,6 +74,8 @@ export interface UserInterface {
 	findEmoji(q: string): EmojiMapValue | undefined;
 
 	getEmojiMap(): Map<string, EmojiMapValue>;
+
+	getPinnedNotes(): Note[];
 }
 
 export class UserDetailedInstance {

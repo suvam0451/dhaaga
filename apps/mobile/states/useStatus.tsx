@@ -115,7 +115,7 @@ function WithActivitypubStatusContext({
 }: Props) {
 	const { primaryAcct, client } = useActivityPubRestClientContext();
 	const _domain = primaryAcct?.domain;
-	const { State, setLoading, forceUpdate } = useHookLoadingState();
+	const { State, forceUpdate } = useHookLoadingState();
 
 	/**
 	 * Storing raw object and interfaces for:

@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "dhaaga",
+    "slug": "dhaaga",
+    "version": "0.0.1",
+    "description": "An opinionated mobile client for Mastodon and Misskey",
+    "sdkVersion": "51.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}
