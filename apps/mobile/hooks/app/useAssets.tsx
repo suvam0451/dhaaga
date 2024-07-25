@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 import { Asset, useAssets } from 'expo-asset';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { undefined } from 'zod';
@@ -58,9 +58,7 @@ function WithAppAssetsContext({ children }: Props) {
 		require('../../assets/branding/fedi/logo.png'),
 	]);
 
-	const IsBrandingAssetsLoaded = !error && assets?.every((o) => o?.downloaded);
-
-	const IsAssetsLoaded = IsBrandingAssetsLoaded;
+	const IsAssetsLoaded = !error && assets?.every((o) => o?.downloaded);
 
 	function getBrandLogo(input: string) {
 		switch (input.toLowerCase() as KNOWN_SOFTWARE) {

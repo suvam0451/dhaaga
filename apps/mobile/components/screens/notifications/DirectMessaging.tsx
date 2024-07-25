@@ -1,10 +1,8 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
-// import { Note } from '@dhaaga/shared-provider-misskey/src';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useEffect } from 'react';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
@@ -20,6 +18,7 @@ import { Divider } from '@rneui/base';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { APP_FONT } from '../../../styles/AppTheme';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 function WithApi() {
 	const { client, primaryAcct } = useActivityPubRestClientContext();
@@ -27,8 +26,6 @@ function WithApi() {
 	const _subdomain = primaryAcct?.subdomain;
 
 	const { me, meRaw } = useActivityPubRestClientContext();
-	const navigation = useNavigation();
-	const route = useRoute<any>();
 	const {
 		data: PageData,
 		updateQueryCache,
@@ -61,13 +58,6 @@ function WithApi() {
 		if (status !== 'success') return;
 		append(data, (o: mastodon.v1.Conversation) => o.id);
 	}, [fetchStatus]);
-
-	function onScrollEndReach() {
-		if (PageData.length > 0) {
-			updateQueryCache();
-			refetch();
-		}
-	}
 
 	async function populateChatrooms() {
 		if (!me) return;
@@ -116,8 +106,8 @@ function WithApi() {
 				<View style={{ paddingHorizontal: 12, paddingTop: 16 }}>
 					<Text
 						style={{
-							fontSize: 36,
-							fontFamily: 'DM_Serif_Display-Italic',
+							fontSize: 28,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							color: 'rgba(255, 255, 255, 0.87)',
 						}}
 					>
@@ -133,8 +123,8 @@ function WithApi() {
 				<View style={{ paddingHorizontal: 12, paddingTop: 16 }}>
 					<Text
 						style={{
-							fontSize: 36,
-							fontFamily: 'DM_Serif_Display-Italic',
+							fontSize: 28,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							color: APP_FONT.MONTSERRAT_HEADER,
 						}}
 					>

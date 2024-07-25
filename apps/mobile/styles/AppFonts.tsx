@@ -1,19 +1,30 @@
 const appFonts = {
-	'Montserrat-Regular': require('../../../packages/fonts/Montserrat/static/Montserrat-Regular.ttf'),
 	'Montserrat-Bold': require('../../../packages/fonts/Montserrat/static/Montserrat-Bold.ttf'),
 	'Montserrat-ExtraBold': require('../../../packages/fonts/Montserrat/static/Montserrat-ExtraBold.ttf'),
-	'Montserrat-SemiBold': require('../../../packages/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
-	'Inter-Regular': require('../../../packages/fonts/Inter/static/Inter-Regular.ttf'),
 	'Inter-Bold': require('../../../packages/fonts/Inter/static/Inter-Bold.ttf'),
-	'Inter-SemiBold': require('../../../packages/fonts/Inter/static/Inter-SemiBold.ttf'),
-	'Source_Sans_3-Regular': require('../../../packages/fonts/Source_Sans_3/static/SourceSans3-Regular.ttf'),
-	'DM_Serif_Display-Regular': require('../../../packages/fonts/DM_Serif_Display/DMSerifDisplay-Regular.ttf'),
-	'DM_Serif_Display-Italic': require('../../../packages/fonts/DM_Serif_Display/DMSerifDisplay-Italic.ttf'),
 };
 
 export enum APP_FONTS {
-	MONTSERRAT_BOLD = 'Montserrat-Bold',
-	INTER_BOLD = 'Inter-Bold',
+	MONTSERRAT_100_THIN = 'Montserrat_100Thin',
+	MONTSERRAT_200_EXTRALIGHT = 'Montserrat_200ExtraLight',
+	MONTSERRAT_300_LIGHT = 'Montserrat_300Light',
+	MONTSERRAT_400_REGULAR = 'Montserrat_400Regular',
+	MONTSERRAT_500_MEDIUM = 'Montserrat_500Medium',
+	MONTSERRAT_600_SEMIBOLD = 'Montserrat_600SemiBold',
+	MONTSERRAT_700_BOLD = 'Montserrat_700Bold',
+	MONTSERRAT_800_EXTRABOLD = 'Montserrat_800ExtraBold',
+	MONTSERRAT_900_BLACK = 'Montserrat_900Black',
+
+	// Inter
+	INTER_100_THIN = 'Inter_100Thin',
+	INTER_200_EXTRALIGHT = 'Inter_200ExtraLight',
+	INTER_300_LIGHT = 'Inter_300Light',
+	INTER_400_REGULAR = 'Inter_400Regular',
+	INTER_500_MEDIUM = 'Inter_500Medium',
+	INTER_600_SEMIBOLD = 'Inter_600SemiBold',
+	INTER_700_BOLD = 'Inter_700Bold',
+	INTER_800_EXTRABOLD = 'Inter_800ExtraBold',
+	INTER_900_BLACK = 'Inter_900Black',
 }
 
 export default appFonts;

@@ -9,6 +9,7 @@ import { useQuery } from '@realm/react';
 import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
 import { useMemo } from 'react';
 import { APP_THEME } from '../../../styles/AppTheme';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 function HashtagProcessor({
 	content,
@@ -53,7 +54,9 @@ function HashtagProcessor({
 					? APP_THEME.COLOR_SCHEME_D_EMPHASIS
 					: APP_THEME.COLOR_SCHEME_D_NORMAL,
 				opacity: 1,
-				fontFamily: isFollowed ? 'Montserrat-Bold' : 'Montserrat-Regular',
+				fontFamily: isFollowed
+					? APP_FONTS.MONTSERRAT_700_BOLD
+					: APP_FONTS.MONTSERRAT_400_REGULAR,
 				backgroundColor: isPrivatelyFollowed
 					? 'rgba(240,185,56,0.16)'
 					: undefined,

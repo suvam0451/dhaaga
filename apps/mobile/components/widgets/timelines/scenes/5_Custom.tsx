@@ -4,6 +4,7 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { Text } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 function CustomTimelineOptions() {
 	return (
@@ -19,7 +20,7 @@ function CustomTimelineOptions() {
 						/>
 					</View>
 					<View style={{ flexGrow: 1, flex: 1 }}>
-						<Text style={{ fontFamily: 'Inter-Regular' }}>
+						<Text style={{ fontFamily: APP_FONTS.INTER_400_REGULAR }}>
 							Add Remote Timeline
 						</Text>
 					</View>

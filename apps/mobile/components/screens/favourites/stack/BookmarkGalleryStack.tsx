@@ -12,7 +12,6 @@ import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import WithAppPaginationContext from '../../../../states/usePagination';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { memo, useEffect, useRef } from 'react';
-import { isLoaded } from 'expo-font';
 
 function LoadingState() {
 	return (

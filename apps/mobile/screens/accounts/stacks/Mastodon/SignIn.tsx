@@ -2,7 +2,6 @@ import { Dimensions, View, Keyboard, ScrollView } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
-import { StandardView } from '../../../../styles/Containers';
 import { MainText } from '../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import {
@@ -109,7 +108,7 @@ function MastodonSignInStack() {
 					/>
 				</ScrollView>
 				{!isKeyboardVisible && (
-					<StandardView style={{ height: 240 }}>
+					<View style={{ height: 240 }}>
 						<MainText style={{ marginBottom: 12, marginTop: 16 }}>
 							Step 3: Confirm your account
 						</MainText>
@@ -130,7 +129,7 @@ function MastodonSignInStack() {
 						>
 							Proceed
 						</Button>
-					</StandardView>
+					</View>
 				)}
 			</View>
 		</TitleOnlyNoScrollContainer>

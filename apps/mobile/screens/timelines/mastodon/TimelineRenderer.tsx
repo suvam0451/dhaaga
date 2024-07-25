@@ -36,6 +36,7 @@ import useTimelineLabel from '../../../components/common/timeline/utils';
 import { SIDEBAR_VARIANT } from '../../../components/shared/sidebar/Core';
 import { FAB_MENU_MODULES } from '../../../types/app.types';
 import WithAppMenu from '../../../components/containers/WithAppMenu';
+import { APP_THEME } from '../../../styles/AppTheme';
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
@@ -244,7 +245,7 @@ function TimelineRenderer() {
 			]}
 		>
 			<View style={[styles.container, { position: 'relative' }]}>
-				<StatusBar backgroundColor="#121212" />
+				<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 				<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 					<TimelinesHeader
 						SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}

@@ -77,6 +77,8 @@ export class ActivityPubClientFactory {
 	}
 }
 
+export type { MfmNode } from './services/index.js';
+
 export {
 	LibraryResponse,
 	DhaagaErrorCode,

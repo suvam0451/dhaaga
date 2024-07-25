@@ -3,7 +3,6 @@ import { Text } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 import { MastodonService } from '@dhaaga/shared-provider-mastodon';
 import { MainText } from '../../../../styles/Typography';
-import { StandardView } from '../../../../styles/Containers';
 import { Button } from '@rneui/base';
 import TitleOnlyStackHeaderContainer from '../../../../components/containers/TitleOnlyStackHeaderContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -64,7 +63,7 @@ function AccountsScreen() {
 			navigation={navigation}
 			headerTitle={`Select Instance`}
 		>
-			<StandardView
+			<View
 				style={{
 					display: 'flex',
 					justifyContent: 'space-between',
@@ -149,7 +148,7 @@ function AccountsScreen() {
 						</Text>
 					</Button>
 				</View>
-			</StandardView>
+			</View>
 		</TitleOnlyStackHeaderContainer>
 	);
 }

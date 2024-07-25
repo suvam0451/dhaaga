@@ -2,7 +2,6 @@ import { Dimensions, View, Keyboard } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
-import { StandardView } from '../../../../styles/Containers';
 import { MainText } from '../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import * as Crypto from 'expo-crypto';
@@ -140,7 +139,7 @@ function MisskeySignInStack({ route, navigation }) {
 					/>
 				)}
 				{!isKeyboardVisible && (
-					<StandardView style={{ height: 160 }}>
+					<View style={{ height: 160 }}>
 						<MainText style={{ marginBottom: 12, marginTop: 16 }}>
 							Step 2: Confirm your account
 						</MainText>
@@ -216,7 +215,7 @@ function MisskeySignInStack({ route, navigation }) {
 								Confirm
 							</Text>
 						</Button>
-					</StandardView>
+					</View>
 				)}
 			</View>
 		</TitleOnlyStackHeaderContainer>

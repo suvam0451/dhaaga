@@ -62,7 +62,32 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					'Dhaaga needs gallery access to support media attachments.',
 			},
 		],
-		['expo-font'],
+		[
+			'expo-font',
+			{
+				fonts: [
+					'../../node_modules/@expo-google-fonts/inter/Inter_100Thin.ttf',
+					'../../node_modules/@expo-google-fonts/inter/Inter_200ExtraLight.ttf',
+					'../../node_modules/@expo-google-fonts/inter/Inter_300Light.ttf',
+					'../../node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf',
+					'../../node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf',
+					'../../node_modules/@expo-google-fonts/inter/Inter_600SemiBold.ttf',
+					'../../node_modules/@expo-google-fonts/inter/Inter_700Bold.ttf',
+					'../../node_modules/@expo-google-fonts/inter/Inter_800ExtraBold.ttf',
+					'../../node_modules/@expo-google-fonts/inter/Inter_900Black.ttf',
+					// Montserrat
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_100Thin.ttf',
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_200ExtraLight.ttf',
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_300Light.ttf',
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_400Regular.ttf',
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_500Medium.ttf',
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_600SemiBold.ttf',
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_700Bold.ttf',
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_800ExtraBold.ttf',
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_900Black.ttf',
+				],
+			},
+		],
 		['expo-localization'],
 		['expo-video'],
 		[
@@ -72,13 +97,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			},
 		],
 		['expo-router'],
-		[
-			'expo-av',
-			{
-				microphonePermission:
-					'Dhaaga needs microphone access to support audio attachments.',
-			},
-		],
 	],
 });
 

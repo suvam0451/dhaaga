@@ -20,9 +20,7 @@ import WithSearchTermContext, {
 	useSearchTermContext,
 } from '../../../hooks/forms/useSearchTerm';
 import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
-import WithAppAssetsContext, {
-	useAppAssetsContext,
-} from '../../../hooks/app/useAssets';
+import { useAppAssetsContext } from '../../../hooks/app/useAssets';
 
 type ServerItemProps = {
 	url: string;
@@ -540,15 +538,13 @@ function ServerDebuggerStackBase() {
 
 function ServerDebuggerStack() {
 	return (
-		<WithAppAssetsContext>
-			<WithSearchTermContext>
-				<WithLocalAppMenuControllerContext>
-					<WithAppDrawerContext>
-						<ServerDebuggerStackBase />
-					</WithAppDrawerContext>
-				</WithLocalAppMenuControllerContext>
-			</WithSearchTermContext>
-		</WithAppAssetsContext>
+		<WithSearchTermContext>
+			<WithLocalAppMenuControllerContext>
+				<WithAppDrawerContext>
+					<ServerDebuggerStackBase />
+				</WithAppDrawerContext>
+			</WithLocalAppMenuControllerContext>
+		</WithSearchTermContext>
 	);
 }
 

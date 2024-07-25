@@ -9,6 +9,7 @@ import {
 	MastoFeaturedTag,
 	MastoList,
 	MastoRelationship,
+	MegaAccount,
 } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 
@@ -65,6 +66,10 @@ export interface AccountRoute {
 	unmute(id: string): Promise<LibraryResponse<MastoRelationship>>;
 
 	removeFollower(id: string): Promise<LibraryResponse<void>>;
+
+	// 200/400
+	// mastodon/misskey/akkoma/pleroma
+	lookup(webfingerUrl: string): LibraryPromise<MastoAccount | MegaAccount>;
 
 	/**
 	 * General

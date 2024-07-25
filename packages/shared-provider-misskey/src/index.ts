@@ -35,9 +35,3 @@ export const createCodeRequestUrl = (instanceUrl: string, uuid: string) => {
 
 	return `${authEndpoint}?${queryString}`;
 };
-
-export class NotesAPI {
-	static async localTimeline(client: misskeyApi.APIClient) {
-		return await client.request('notes/local-timeline', { limit: 20 });
-	}
-}

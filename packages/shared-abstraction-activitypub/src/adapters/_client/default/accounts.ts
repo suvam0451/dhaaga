@@ -12,11 +12,19 @@ import {
 	MastoList,
 	MastoRelationship,
 	MastoStatus,
+	MegaAccount,
 } from '../_interface.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export abstract class BaseAccountsRouter implements AccountRoute {
+	async lookup(
+		webfingerUrl: string,
+	): LibraryPromise<MastoAccount | MegaAccount> {
+		throw new Error('Method not implemented.');
+	}
+
 	follow(
 		id: string,
 		opts: FollowPostDto,

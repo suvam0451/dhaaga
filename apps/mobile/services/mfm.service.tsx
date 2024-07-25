@@ -7,7 +7,7 @@ import { EmojiService } from './emoji.service';
 import { MMKV } from 'react-native-mmkv';
 import { Realm } from 'realm';
 import TextParserService from './text-parser';
-import { MfmNode } from 'mfm-js';
+import type { MfmNode } from '@dhaaga/shared-abstraction-activitypub';
 import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
 import MentionSegment from '../components/shared/mfm/MentionSegment';
 import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';

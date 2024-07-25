@@ -1,6 +1,4 @@
 import { View, Text } from 'react-native';
-import { StandardView } from '../../../../styles/Containers';
-import MastodonIcon from '../../../../assets/svg/Logo_Mastodon';
 import { Image } from 'expo-image';
 import { Button } from '@rneui/themed';
 import {
@@ -10,10 +8,12 @@ import {
 } from '../../../../styles/AppTheme';
 import TitleOnlyStackHeaderContainer from '../../../containers/TitleOnlyStackHeaderContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useAppAssetsContext } from '../../../../hooks/app/useAssets';
 
 function SelectProviderStack() {
 	const route = useRoute();
 	const navigation = useNavigation<any>();
+	const { branding } = useAppAssetsContext();
 
 	return (
 		<TitleOnlyStackHeaderContainer
@@ -28,7 +28,7 @@ function SelectProviderStack() {
 					height: '100%',
 				}}
 			>
-				<StandardView>
+				<View style={{ marginHorizontal: 12 }}>
 					<View
 						style={{
 							width: '100%',
@@ -47,7 +47,11 @@ function SelectProviderStack() {
 								justifyContent: 'center',
 							}}
 						>
-							<MastodonIcon />
+							{/*@ts-ignore-next-line*/}
+							<Image
+								source={{ uri: branding[2].localUri }}
+								style={{ width: 32, height: 32 }}
+							/>
 							<Text
 								style={{
 									fontSize: 28,
@@ -158,7 +162,7 @@ function SelectProviderStack() {
 							</Button>
 						</View>
 					</View>
-				</StandardView>
+				</View>
 			</View>
 		</TitleOnlyStackHeaderContainer>
 	);

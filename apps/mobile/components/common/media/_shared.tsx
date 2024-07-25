@@ -8,7 +8,7 @@ import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Text } from '@rneui/themed';
-import { Audio } from 'expo-av';
+// import { Audio } from 'expo-av';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 type Props = {
@@ -33,25 +33,25 @@ export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
 });
 
 export const AppAudioComponent = memo(function Foo({ url }: { url: string }) {
-	const [sound, setSound] = useState<Audio.Sound | null>(null);
+	// const [sound, setSound] = useState<Audio.Sound | null>(null);
+	//
+	// async function create() {
+	// 	const { sound } = await Audio.Sound.createAsync(
+	// 		{ uri: url },
+	// 		{ shouldPlay: true, isMuted: false },
+	// 	);
+	// 	setSound(sound);
+	// 	await sound.playAsync();
+	// }
 
-	async function create() {
-		const { sound } = await Audio.Sound.createAsync(
-			{ uri: url },
-			{ shouldPlay: true, isMuted: false },
-		);
-		setSound(sound);
-		await sound.playAsync();
-	}
-
-	useEffect(() => {
-		return sound
-			? () => {
-					console.log('Unloading Sound');
-					sound.unloadAsync();
-				}
-			: undefined;
-	}, [sound]);
+	// useEffect(() => {
+	// 	return sound
+	// 		? () => {
+	// 				console.log('Unloading Sound');
+	// 				sound.unloadAsync();
+	// 			}
+	// 		: undefined;
+	// }, [sound]);
 
 	return (
 		<View key={101}>
@@ -67,7 +67,7 @@ export const AppAudioComponent = memo(function Foo({ url }: { url: string }) {
 				}}
 			>
 				<AntDesign
-					onPress={create}
+					// onPress={create}
 					name="play"
 					size={24}
 					color={APP_FONT.MONTSERRAT_BODY}

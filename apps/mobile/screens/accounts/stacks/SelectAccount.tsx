@@ -1,10 +1,6 @@
-import { View, ScrollView } from 'react-native';
-import { StandardView } from '../../../styles/Containers';
-import { Button, Divider } from '@rneui/base';
+import { View, StyleSheet } from 'react-native';
+import { Button } from '@rneui/base';
 import AccountListingFragment from '../fragments/AccountListingFragment';
-import MastodonIcon from '../../../assets/svg/Logo_Mastodon_Smaller';
-
-import { useWindowDimensions } from 'react-native';
 import { useQuery } from '@realm/react';
 import { Account } from '../../../entities/account.entity';
 import { Text } from '@rneui/themed';
@@ -13,6 +9,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useAssets } from 'expo-asset';
 import { APP_FONT } from '../../../styles/AppTheme';
+import { useAppAssetsContext } from '../../../hooks/app/useAssets';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 function NoAccountsToShow({ service }: { service: string }) {
 	return (
@@ -33,19 +31,18 @@ function NoAccountsToShow({ service }: { service: string }) {
 }
 
 function SelectAccountStack() {
-	const { height } = useWindowDimensions();
 	const route = useRoute<any>();
 	const navigation = useNavigation<any>();
 
-	const accounts = useQuery(Account);
-	console.log(accounts);
+	const accounts: Account[] = useQuery(Account);
 
 	const MastodonAccounts = accounts.filter((o) => o?.domain === 'mastodon');
 	const MisskeyAccounts = accounts.filter((o) => o?.domain === 'misskey');
 	const [assets, error] = useAssets([
 		require('../../../assets/icons/misskeyicon.png'),
 	]);
-	//
+	const { branding } = useAppAssetsContext();
+
 	if (error || !assets || !assets[0]?.downloaded) return <View></View>;
 	return (
 		<TitleOnlyStackHeaderContainer
@@ -53,100 +50,87 @@ function SelectAccountStack() {
 			navigation={navigation}
 			headerTitle={`Select Account`}
 		>
-			<ScrollView
-				contentContainerStyle={{
-					minHeight: height - 105,
-				}}
-			>
-				<View style={{ flex: 1, display: 'flex' }}>
-					<StandardView style={{ flexGrow: 1 }}>
-						<View style={{ marginTop: 16 }}>
-							<View
-								style={{
-									display: 'flex',
-									flexDirection: 'row',
-									alignItems: 'flex-start',
-									marginBottom: 4,
-								}}
-							>
-								<MastodonIcon />
-								<Text
-									style={{
-										fontSize: 20,
-										fontWeight: '500',
-										marginLeft: 8,
-										fontFamily: 'Montserrat-Bold',
-									}}
-								>
-									Mastodon
-								</Text>
-							</View>
-						</View>
-						<Divider style={{ marginVertical: 16 }} />
-						{MastodonAccounts.length == 0 ? (
-							<NoAccountsToShow service={'Mastodon'} />
-						) : (
-							MastodonAccounts.map((o, i) => (
-								<AccountListingFragment key={i} id={o._id} />
-							))
-						)}
+			<View style={{ flex: 1, display: 'flex' }}>
+				<View style={{ flexGrow: 1, paddingHorizontal: 8 }}>
+					<View style={{ marginTop: 8, marginBottom: 12 }}>
 						<View
 							style={{
-								marginTop: 32,
-								marginBottom: 0,
 								display: 'flex',
 								flexDirection: 'row',
-								alignItems: 'center',
+								alignItems: 'flex-start',
+								marginBottom: 4,
 							}}
 						>
-							<View>
-								{/*@ts-ignore-next-line*/}
-								<Image
-									source={assets[0].localUri}
-									style={{ width: 36, height: 36 }}
-								/>
-							</View>
-							<Text
-								style={{
-									fontSize: 20,
-									fontWeight: '500',
-									fontFamily: 'Montserrat-Bold',
-									marginLeft: 4,
-								}}
-							>
-								Misskey
-							</Text>
+							{/*@ts-ignore-next-line*/}
+							<Image
+								source={{ uri: branding[2].localUri }}
+								style={{ width: 28, height: 28, opacity: 0.87 }}
+							/>
+							<Text style={styles.accountCategoryText}>Mastodon</Text>
 						</View>
-						<Divider style={{ marginVertical: 16 }} />
-						{MisskeyAccounts.length == 0 ? (
-							<NoAccountsToShow service={'Misskey'} />
-						) : (
-							MisskeyAccounts.map((o, i) => (
-								<AccountListingFragment key={i} id={o._id} />
-							))
-						)}
-					</StandardView>
-					<StandardView style={{ marginBottom: 32 }}>
-						<Button
-							onPress={() => {
-								navigation.navigate('Select a Platform', { type: 'mastodon' });
+					</View>
+					{MastodonAccounts.length == 0 ? (
+						<NoAccountsToShow service={'Mastodon'} />
+					) : (
+						MastodonAccounts.map((o, i) => (
+							<AccountListingFragment key={i} id={o._id} />
+						))
+					)}
+					<View
+						style={{
+							marginTop: 16,
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'center',
+							marginBottom: 12,
+						}}
+					>
+						<View>
+							{/*@ts-ignore-next-line*/}
+							<Image
+								source={assets[0].localUri}
+								style={{ width: 28, height: 36, opacity: 0.87 }}
+							/>
+						</View>
+						<Text style={styles.accountCategoryText}>Misskey</Text>
+					</View>
+					{MisskeyAccounts.length == 0 ? (
+						<NoAccountsToShow service={'Misskey'} />
+					) : (
+						MisskeyAccounts.map((o, i) => (
+							<AccountListingFragment key={i} id={o._id} />
+						))
+					)}
+				</View>
+				<View style={{ marginHorizontal: 16, marginBottom: 32 }}>
+					<Button
+						onPress={() => {
+							navigation.navigate('Select a Platform', { type: 'mastodon' });
+						}}
+					>
+						<Text
+							style={{
+								color: APP_FONT.MONTSERRAT_HEADER,
+								fontFamily: 'Inter-Bold',
+								fontSize: 16,
 							}}
 						>
-							<Text
-								style={{
-									color: APP_FONT.MONTSERRAT_HEADER,
-									fontFamily: 'Inter-Bold',
-									fontSize: 16,
-								}}
-							>
-								Add an Account
-							</Text>
-						</Button>
-					</StandardView>
+							Add an Account
+						</Text>
+					</Button>
 				</View>
-			</ScrollView>
+			</View>
 		</TitleOnlyStackHeaderContainer>
 	);
 }
+
+const styles = StyleSheet.create({
+	accountCategoryText: {
+		fontSize: 20,
+		marginLeft: 8,
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		color: APP_FONT.MONTSERRAT_HEADER,
+	},
+});
 
 export default SelectAccountStack;

@@ -4,6 +4,7 @@ import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
 import { memo, useMemo } from 'react';
 import { AppRelationship } from '../../types/ap.types';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 type AppButtonFollowIndicatorProps = {
 	onClick: () => void;
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
 	},
 
 	passiveTextStyle: {
-		fontFamily: 'Montserrat-SemiBold',
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		color: APP_FONT.MONTSERRAT_HEADER,
 	},
 	activeButtonStyle: {

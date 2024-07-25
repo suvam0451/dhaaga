@@ -311,7 +311,7 @@ function WelcomeBack() {
 
 	return (
 		<AppSidebarCore variant={SIDEBAR_VARIANT.TIMELINE}>
-			<StatusBar backgroundColor="#121212" />
+			<StatusBar backgroundColor="#1c1c1c" />
 			<TimelinesHeader
 				label={'Your Social Hub'}
 				SHOWN_SECTION_HEIGHT={50}

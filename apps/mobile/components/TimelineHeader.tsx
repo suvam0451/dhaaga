@@ -4,21 +4,23 @@ import { Text } from '@rneui/themed';
 import { APP_THEME } from '../styles/AppTheme';
 import { useTimelineController } from '../states/useTimelineController';
 import TimelineWidgetModal from './widgets/timelines/core/Modal';
+import { useActivityPubRestClientContext } from '../states/useActivityPubRestClient';
 
 type HeadersProps = {
 	HIDDEN_SECTION_HEIGHT: number;
 	SHOWN_SECTION_HEIGHT: number;
 	label?: string;
 };
-const TimelinesHeader = ({
-	HIDDEN_SECTION_HEIGHT,
-	SHOWN_SECTION_HEIGHT,
-	label,
-}: HeadersProps) => {
+const TimelinesHeader = ({ HIDDEN_SECTION_HEIGHT, label }: HeadersProps) => {
+	const { client } = useActivityPubRestClientContext();
 	const { setShowTimelineSelection } = useTimelineController();
 
 	function onIconPress() {
-		setShowTimelineSelection(true);
+		if (!client) {
+			setShowTimelineSelection(false);
+		} else {
+			setShowTimelineSelection(true);
+		}
 	}
 
 	return (

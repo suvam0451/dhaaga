@@ -201,7 +201,7 @@ function ActionableSection() {
 					<Text
 						style={{
 							fontSize: 20,
-							fontFamily: APP_FONTS.MONTSERRAT_BOLD,
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 							color: APP_FONT.MONTSERRAT_BODY,
 						}}
 					>
@@ -273,7 +273,7 @@ function ActionableSection() {
 				<Text
 					style={{
 						fontSize: 20,
-						fontFamily: APP_FONTS.MONTSERRAT_BOLD,
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 						color: APP_FONT.MONTSERRAT_BODY,
 						opacity: 0.6,
 						marginLeft: 8,

@@ -1,10 +1,4 @@
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useState,
-} from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import {
 	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
@@ -70,7 +64,7 @@ function WithActivityPubRestClient({ children }: any) {
 	const { globalDb } = useGlobalMmkvContext();
 	const accounts = useQuery(Account);
 
-	const regenerateFn = useCallback(() => {
+	function regenerateFn() {
 		const acct = accounts.find((o) => o.selected === true);
 		if (!acct) {
 			setRestClient(null);
@@ -91,7 +85,7 @@ function WithActivityPubRestClient({ children }: any) {
 		setPrimaryAcct(acct);
 		EmojiService.loadEmojisForInstance(db, globalDb, acct.subdomain);
 		AccountService.loadFollowedTags(db, client);
-	}, [accounts]);
+	}
 
 	useEffect(() => {
 		regenerateFn();

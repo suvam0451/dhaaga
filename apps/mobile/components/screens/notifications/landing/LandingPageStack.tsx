@@ -13,6 +13,7 @@ import useHookLoadingState from '../../../../states/useHookLoadingState';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import MentionNotificationFragment from './segments/MentionNotificationFragment';
 import FavouriteNotificationFragment from './segments/FavouriteNotificationFragment';
+import { Link } from 'expo-router';
 
 interface MentionItem {
 	props: AppNotificationGroup;
@@ -65,9 +66,11 @@ function LandingPageStack() {
 				contentContainerStyle={{ paddingTop: 54, paddingHorizontal: 8 }}
 				ListHeaderComponent={
 					<View>
-						<View>
-							<Text>Conversations</Text>
-						</View>
+						<Link href={'/notifications/conversations'}>
+							<View>
+								<Text>Conversations</Text>
+							</View>
+						</Link>
 						<ControlSegment
 							hash={State}
 							selection={NotificationFilters.current}

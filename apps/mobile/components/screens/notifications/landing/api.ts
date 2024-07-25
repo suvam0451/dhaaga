@@ -37,7 +37,7 @@ function useLandingPageStackApi() {
 		if (!client) {
 			return [];
 		}
-		const { data } = await client.notifications.get({
+		const { data, error } = await client.notifications.get({
 			limit: 80,
 			excludeTypes: [],
 			types: [
@@ -46,8 +46,6 @@ function useLandingPageStackApi() {
 				DhaagaJsNotificationType.MENTION,
 			],
 		});
-
-		console.log(data.data.map((o) => o.type));
 		return data as any;
 	}
 
@@ -63,6 +61,8 @@ function useLandingPageStackApi() {
 	});
 
 	useEffect(() => {
+		if (!client) return;
+
 		const { data, status } = queryResults;
 		if (!data || !status) return;
 		const results: NotificationRenderType[] = [];

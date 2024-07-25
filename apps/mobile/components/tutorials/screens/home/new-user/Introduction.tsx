@@ -1,4 +1,4 @@
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StatusBar, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../../TimelineHeader';
 import { memo, useState } from 'react';
 import { Button, Dialog, Text } from '@rneui/themed';
@@ -16,6 +16,7 @@ function IntroductionBase() {
 
 	return (
 		<View style={{ height: '100%', flex: 1, backgroundColor: '#121212' }}>
+			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<Animated.View style={styles.header}>
 				<TimelinesHeader SHOWN_SECTION_HEIGHT={50} HIDDEN_SECTION_HEIGHT={50} />
 			</Animated.View>

@@ -1,7 +1,6 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import { Image } from 'expo-image';
-import { FontAwesome } from '@expo/vector-icons';
 import { useObject, useRealm } from '@realm/react';
 import { Account } from '../../../entities/account.entity';
 import AccountRepository from '../../../repositories/account.repo';
@@ -9,12 +8,13 @@ import { Types } from 'realm';
 import UUID = Types.UUID;
 import AccountService from '../../../services/account.service';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { memo, useMemo, useState } from 'react';
+import { Fragment, memo, useMemo, useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
 import { APP_FONT } from '../../../styles/AppTheme';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { AppButtonVariantA } from '../../../components/lib/Buttons';
+import { APP_FONTS } from '../../../styles/AppFonts';
+import { SoftwareBadgeUpdateAccountOnClick } from '../../../components/common/software/SimpleBadge';
+import { FontAwesome } from '@expo/vector-icons';
 
 type Props = {
 	id: UUID;
@@ -28,54 +28,157 @@ const AccountOptions = memo(function Foo({ IsExpanded }: AccountOptionsProps) {
 	return (
 		<Animated.View
 			entering={FadeIn}
-			style={{ display: IsExpanded ? 'flex' : 'none', marginTop: 16 }}
+			style={{
+				display: IsExpanded ? 'flex' : 'none',
+				marginTop: 8,
+				backgroundColor: '#121212',
+				paddingHorizontal: 8,
+				borderRadius: 8,
+			}}
 		>
 			<View
 				style={{
 					flexDirection: 'row',
-					justifyContent: 'space-around',
-					marginVertical: 16,
+					justifyContent: 'flex-start',
+					marginTop: 16,
+					alignItems: 'center',
+					marginVertical: 8,
 				}}
 			>
-				<Button
-					size={'md'}
-					buttonStyle={{ backgroundColor: '#333333', borderRadius: 8 }}
-					containerStyle={{ borderRadius: 8 }}
-					// onPress={onPress}
-					// onLongPress={onLongPress}
+				<View
+					style={{
+						flexDirection: 'column',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
 				>
-					<Text style={{ color: APP_FONT.MONTSERRAT_HEADER, fontSize: 14 }}>
-						Sync Hashtags
-					</Text>
-					<View style={{ marginLeft: 8 }}>
-						<FontAwesome
-							name="refresh"
-							size={20}
-							color={APP_FONT.MONTSERRAT_BODY}
-						/>
+					<View style={styles.actionButton}>
+						<Text
+							style={{
+								fontFamily: APP_FONTS.INTER_400_REGULAR,
+								color: APP_FONT.MONTSERRAT_HEADER,
+								fontSize: 13,
+							}}
+						>
+							Sync Hashtags
+						</Text>
 					</View>
-				</Button>
-
-				<Button
-					size={'md'}
-					buttonStyle={{ backgroundColor: '#333333', borderRadius: 8 }}
-					containerStyle={{ borderRadius: 8 }}
-					// onPress={onPress}
-					// onLongPress={onLongPress}
+					<Text style={styles.syncStatusText}>Not Synced</Text>
+				</View>
+				<View
+					style={{
+						flexDirection: 'column',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
 				>
-					<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
-						Sync Followers
-					</Text>
-					<View style={{ marginLeft: 8 }}>
-						<FontAwesome
-							name="refresh"
-							size={20}
-							color={APP_FONT.MONTSERRAT_BODY}
-						/>
+					<View style={styles.actionButton}>
+						<Text
+							style={{
+								fontFamily: APP_FONTS.INTER_400_REGULAR,
+								color: APP_FONT.MONTSERRAT_HEADER,
+								fontSize: 13,
+							}}
+						>
+							Sync Followers
+						</Text>
 					</View>
-				</Button>
+					<Text style={styles.syncStatusText}>Not Synced</Text>
+				</View>
+				<View
+					style={{
+						flexGrow: 1,
+						flexDirection: 'row',
+						justifyContent: 'flex-end',
+					}}
+				>
+					<View style={{ paddingRight: 8 }}>
+						<FontAwesome name="trash-o" size={24} color={'rgba(255,0,0,0.8)'} />
+					</View>
+				</View>
 			</View>
 		</Animated.View>
+	);
+});
+
+type AccountPfpProps = {
+	url: string;
+	selected: boolean;
+};
+const AccountPfp = memo(function Foo({ url, selected }: AccountPfpProps) {
+	return (
+		<View
+			style={{
+				height: 48,
+				width: 48,
+				borderRadius: 8,
+				borderWidth: 1.5,
+				borderColor: selected ? '#9dced7' : 'gray',
+			}}
+		>
+			{/*@ts-ignore-next-line*/}
+			<Image
+				style={styles.image}
+				source={{ uri: url }}
+				contentFit="fill"
+				transition={1000}
+			/>
+			<View
+				style={[
+					{
+						display: selected ? 'flex' : 'none',
+					},
+					styles.selectedIndicator,
+				]}
+			/>
+		</View>
+	);
+});
+
+type selectedIndicatorProps = {
+	displayName?: string;
+	username: string;
+	subdomain: string;
+	selected: boolean;
+};
+const AccountDetails = memo(function Foo({
+	displayName,
+	username,
+	selected,
+	subdomain,
+}: selectedIndicatorProps) {
+	return (
+		<View style={{ marginLeft: 8, flexGrow: 1 }}>
+			<Text
+				style={{
+					fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+					color: APP_FONT.MONTSERRAT_HEADER,
+				}}
+				numberOfLines={1}
+			>
+				{displayName || ' '}
+			</Text>
+			<Text
+				style={{
+					fontFamily: APP_FONTS.INTER_400_REGULAR,
+					color: APP_FONT.MONTSERRAT_BODY,
+					fontSize: 12,
+				}}
+				numberOfLines={1}
+			>
+				@{username}
+			</Text>
+			<Text
+				style={{
+					fontFamily: APP_FONTS.INTER_400_REGULAR,
+					color: APP_FONT.MONTSERRAT_HEADER,
+					fontSize: 12,
+				}}
+				numberOfLines={1}
+			>
+				{subdomain}
+			</Text>
+		</View>
 	);
 });
 
@@ -94,6 +197,15 @@ function AccountListingFragment({ id }: Props) {
 
 	function onSelectAccount(o: Account) {
 		AccountService.selectAccount(db, o._id);
+		regenerate();
+	}
+
+	function onAccountSelection() {
+		if (account.selected) {
+			AccountService.deselectAccount(db, account._id);
+		} else {
+			AccountService.selectAccount(db, account._id);
+		}
 		regenerate();
 	}
 
@@ -116,92 +228,79 @@ function AccountListingFragment({ id }: Props) {
 				padding: 8,
 				marginBottom: 8,
 				borderRadius: 8,
+				maxWidth: '100%',
 			}}
 		>
 			<View
 				style={{
 					flexDirection: 'row',
-
 					alignItems: 'center',
 				}}
 			>
-				<View>
-					{avatar && (
-						<View style={{ height: 48, width: 48 }}>
-							{/*@ts-ignore-next-line*/}
-							<Image
-								style={styles.image}
-								source={avatar}
-								contentFit="fill"
-								transition={1000}
-							/>
-						</View>
-					)}
-				</View>
-				<View style={{ marginLeft: 8, flexGrow: 1 }}>
-					<Text
+				<AccountPfp selected={account.selected} url={avatar} />
+				<AccountDetails
+					selected={account.selected}
+					displayName={displayName}
+					username={account.username}
+					subdomain={account.subdomain}
+				/>
+				<View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+					<SoftwareBadgeUpdateAccountOnClick acct={account} />
+					<View
 						style={{
-							fontWeight: '500',
-							color: APP_FONT.MONTSERRAT_HEADER,
+							display: 'flex',
+							justifyContent: 'flex-end',
+							flexDirection: 'row',
+							alignItems: 'center',
 						}}
 					>
-						{displayName || ' '}
-					</Text>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontSize: 14,
-						}}
-					>
-						{account.username}
-					</Text>
-					<Text style={{ color: APP_FONT.MONTSERRAT_HEADER, fontSize: 14 }}>
-						{account.subdomain}
-					</Text>
-				</View>
-				<View
-					style={{
-						display: 'flex',
-						justifyContent: 'flex-end',
-						flexDirection: 'row',
-						marginRight: 8,
-						alignItems: 'center',
-					}}
-				>
-					{!isActive ? (
 						<TouchableOpacity
+							style={{
+								paddingHorizontal: 4,
+								paddingLeft: 8,
+								flexDirection: 'row',
+								alignItems: 'center',
+							}}
 							onPress={() => {
-								onSelectAccount(account);
+								setIsExpanded((o) => !o);
 							}}
 						>
-							<FontAwesome5
-								name="check-square"
-								size={28}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
+							{IsExpanded ? (
+								<Fragment>
+									<Text
+										style={{
+											fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
+											color: APP_FONT.MONTSERRAT_HEADER,
+										}}
+									>
+										Less
+									</Text>
+									<Entypo
+										name="chevron-up"
+										size={32}
+										color={APP_FONT.MONTSERRAT_BODY}
+									/>
+								</Fragment>
+							) : (
+								<Fragment>
+									<Text
+										style={{
+											fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
+											color: APP_FONT.MONTSERRAT_HEADER,
+										}}
+									>
+										More
+									</Text>
+									<Entypo
+										name="chevron-down"
+										size={32}
+										color={APP_FONT.MONTSERRAT_BODY}
+									/>
+								</Fragment>
+							)}
 						</TouchableOpacity>
-					) : (
-						<TouchableOpacity
-							onPress={() => {
-								onDeselectAccount(account);
-							}}
-						>
-							<FontAwesome5 name="check-square" size={28} color={'green'} />
-						</TouchableOpacity>
-					)}
+					</View>
 				</View>
-				<TouchableOpacity
-					style={{ paddingHorizontal: 8, paddingVertical: 8 }}
-					onPress={() => {
-						setIsExpanded((o) => !o);
-					}}
-				>
-					<Entypo
-						name="chevron-down"
-						size={32}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
-				</TouchableOpacity>
 			</View>
 			<AccountOptions IsExpanded={IsExpanded} />
 		</View>
@@ -218,7 +317,42 @@ const styles = StyleSheet.create({
 	image: {
 		flex: 1,
 		width: '100%',
-		backgroundColor: '#0553',
+		borderRadius: 6,
+	},
+	actionButton: {
+		elevation: 1,
+		backgroundColor: '#333333',
+		borderRadius: 8,
+		padding: 8,
+		paddingHorizontal: 12,
+		flexDirection: 'row',
+		alignItems: 'center',
+		shadowRadius: 8,
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.3,
+		marginRight: 8,
+	},
+	selectedIndicator: {
+		position: 'absolute',
+		height: 16,
+		width: 16,
+		backgroundColor: '#9dced7',
+		zIndex: 99,
+		right: 0,
+		bottom: 0,
+		borderTopLeftRadius: 8,
+		borderBottomEndRadius: 4,
+	},
+	syncStatusText: {
+		fontSize: 11,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		color: APP_FONT.MONTSERRAT_BODY,
+		textAlign: 'center',
+		width: '100%',
+		marginRight: 8,
 	},
 });
 

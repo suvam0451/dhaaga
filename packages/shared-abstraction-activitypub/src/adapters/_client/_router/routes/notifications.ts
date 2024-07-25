@@ -65,10 +65,14 @@ export type NotificationGetQueryDto = {
 	minId?: string;
 	maxId?: string;
 	sinceId?: string;
+	untilId?: string; // misskey
 	accountId?: string; // restrict to notifications recieved from this account
 	types: DhaagaJsNotificationType[];
 	excludeTypes: DhaagaJsNotificationType[];
 	markAsRead?: boolean; // misskey
+
+	excludeType?: string[];
+	includeType?: string[];
 };
 
 export type Pleroma_Notification_Type = '';

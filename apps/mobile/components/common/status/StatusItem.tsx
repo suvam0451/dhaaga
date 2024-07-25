@@ -1,6 +1,5 @@
 import { TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
-import { StandardView } from '../../../styles/Containers';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
@@ -42,7 +41,7 @@ type StatusFragmentProps = {
  */
 function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 	const { toPost } = useAppNavigator();
-	const { primaryAcct, domain, subdomain } = useActivityPubRestClientContext();
+	const { domain, subdomain } = useActivityPubRestClientContext();
 
 	const { status, sharedStatus } = useActivitypubStatusContext();
 	const _status = isRepost ? sharedStatus : status;
@@ -370,7 +369,7 @@ function SharedStatusFragment() {
 					borderTopLeftRadius: 8,
 				}}
 			>
-				<StandardView
+				<View
 					style={{
 						display: 'flex',
 						flexDirection: 'row',
@@ -422,7 +421,7 @@ function SharedStatusFragment() {
 							)}
 						</Text>
 					</View>
-				</StandardView>
+				</View>
 			</View>
 		);
 	}, [_status, ParsedDisplayName]);
