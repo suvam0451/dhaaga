@@ -18,13 +18,25 @@ import { FontAwesome } from '@expo/vector-icons';
 
 type Props = {
 	id: UUID;
+	setIsExpanded: (isExpanded: boolean) => void;
+	setDeleteDialogExpanded: (o: boolean) => void;
+	dialogTarget: React.MutableRefObject<Account>;
+	acct: Account;
 };
 
 type AccountOptionsProps = {
 	IsExpanded: boolean;
+	setDeleteDialogExpanded: (o: boolean) => void;
+	dialogTarget: React.MutableRefObject<Account>;
+	acct: Account;
 };
 
-const AccountOptions = memo(function Foo({ IsExpanded }: AccountOptionsProps) {
+export const AccountOptions = memo(function Foo({
+	IsExpanded,
+	dialogTarget,
+	setDeleteDialogExpanded,
+	acct,
+}: AccountOptionsProps) {
 	return (
 		<Animated.View
 			entering={FadeIn}
@@ -92,7 +104,13 @@ const AccountOptions = memo(function Foo({ IsExpanded }: AccountOptionsProps) {
 						justifyContent: 'flex-end',
 					}}
 				>
-					<View style={{ paddingRight: 8 }}>
+					<View
+						style={{ paddingRight: 8, padding: 8 }}
+						onTouchEnd={() => {
+							dialogTarget.current = acct;
+							setDeleteDialogExpanded(true);
+						}}
+					>
 						<FontAwesome name="trash-o" size={24} color={'rgba(255,0,0,0.8)'} />
 					</View>
 				</View>
@@ -104,10 +122,15 @@ const AccountOptions = memo(function Foo({ IsExpanded }: AccountOptionsProps) {
 type AccountPfpProps = {
 	url: string;
 	selected: boolean;
+	onClicked: () => void;
 };
-const AccountPfp = memo(function Foo({ url, selected }: AccountPfpProps) {
+export const AccountPfp = memo(function Foo({
+	url,
+	selected,
+	onClicked,
+}: AccountPfpProps) {
 	return (
-		<View
+		<TouchableOpacity
 			style={{
 				height: 48,
 				width: 48,
@@ -115,6 +138,7 @@ const AccountPfp = memo(function Foo({ url, selected }: AccountPfpProps) {
 				borderWidth: 1.5,
 				borderColor: selected ? '#9dced7' : 'gray',
 			}}
+			onPress={onClicked}
 		>
 			{/*@ts-ignore-next-line*/}
 			<Image
@@ -131,7 +155,7 @@ const AccountPfp = memo(function Foo({ url, selected }: AccountPfpProps) {
 					styles.selectedIndicator,
 				]}
 			/>
-		</View>
+		</TouchableOpacity>
 	);
 });
 
@@ -140,15 +164,20 @@ type selectedIndicatorProps = {
 	username: string;
 	subdomain: string;
 	selected: boolean;
+	onClicked: () => void;
 };
-const AccountDetails = memo(function Foo({
+export const AccountDetails = memo(function Foo({
 	displayName,
 	username,
 	selected,
 	subdomain,
+	onClicked,
 }: selectedIndicatorProps) {
 	return (
-		<View style={{ marginLeft: 8, flexGrow: 1 }}>
+		<TouchableOpacity
+			style={{ marginLeft: 8, flexGrow: 1 }}
+			onPress={onClicked}
+		>
 			<Text
 				style={{
 					fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
@@ -178,14 +207,20 @@ const AccountDetails = memo(function Foo({
 			>
 				{subdomain}
 			</Text>
-		</View>
+		</TouchableOpacity>
 	);
 });
 
-function AccountListingFragment({ id }: Props) {
+function AccountListingFragment({
+	id,
+	setIsExpanded: setIsDialogExpanded,
+	dialogTarget,
+	setDeleteDialogExpanded,
+	acct,
+}: Props) {
 	const account = useObject(Account, id);
 	const db = useRealm();
-	const { primaryAcct, regenerate } = useActivityPubRestClientContext();
+	const { regenerate } = useActivityPubRestClientContext();
 	const [IsExpanded, setIsExpanded] = useState(false);
 
 	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
@@ -195,9 +230,9 @@ function AccountListingFragment({ id }: Props) {
 		'display_name',
 	)?.value;
 
-	function onSelectAccount(o: Account) {
-		AccountService.selectAccount(db, o._id);
-		regenerate();
+	function onSoftwareClicked() {
+		dialogTarget.current = account;
+		setIsDialogExpanded(true);
 	}
 
 	function onAccountSelection() {
@@ -209,18 +244,7 @@ function AccountListingFragment({ id }: Props) {
 		regenerate();
 	}
 
-	function onDeselectAccount(o: Account) {
-		AccountService.deselectAccount(db, o._id);
-		regenerate();
-	}
-
-	const isActive = useMemo(() => {
-		return (
-			primaryAcct?._id?.toString() === account._id.toString() &&
-			account.selected
-		);
-	}, [primaryAcct, account?.selected]);
-
+	if (!account) return <View />;
 	return (
 		<View
 			style={{
@@ -237,15 +261,24 @@ function AccountListingFragment({ id }: Props) {
 					alignItems: 'center',
 				}}
 			>
-				<AccountPfp selected={account.selected} url={avatar} />
+				<AccountPfp
+					selected={account.selected}
+					url={avatar}
+					onClicked={onAccountSelection}
+				/>
 				<AccountDetails
+					onClicked={onAccountSelection}
 					selected={account.selected}
 					displayName={displayName}
 					username={account.username}
 					subdomain={account.subdomain}
 				/>
+
 				<View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-					<SoftwareBadgeUpdateAccountOnClick acct={account} />
+					<TouchableOpacity onPress={onSoftwareClicked}>
+						<SoftwareBadgeUpdateAccountOnClick acct={account} />
+					</TouchableOpacity>
+
 					<View
 						style={{
 							display: 'flex',
@@ -302,7 +335,12 @@ function AccountListingFragment({ id }: Props) {
 					</View>
 				</View>
 			</View>
-			<AccountOptions IsExpanded={IsExpanded} />
+			<AccountOptions
+				IsExpanded={IsExpanded}
+				dialogTarget={dialogTarget}
+				setDeleteDialogExpanded={setDeleteDialogExpanded}
+				acct={acct}
+			/>
 		</View>
 	);
 }

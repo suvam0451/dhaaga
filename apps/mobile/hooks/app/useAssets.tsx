@@ -31,6 +31,12 @@ const defaultValue: Type = {
 
 const AppAssetsContext = createContext<Type>(defaultValue);
 
+/**
+ * Make sure to check that the assets are loaded
+ * with a null check
+ *
+ * This thing fails without an error, dafuq?
+ */
 export function useAppAssetsContext() {
 	return useContext(AppAssetsContext);
 }

@@ -3,6 +3,16 @@ import { useAppAssetsContext } from './useAssets';
 
 function useKnownSoftware(software: string) {
 	const { branding } = useAppAssetsContext();
+
+	if (!branding)
+		return {
+			bg: '#8ae805',
+			fg: 'white',
+			label: 'Loading',
+			width: 24,
+			height: 24,
+		};
+
 	switch (software as KNOWN_SOFTWARE) {
 		case KNOWN_SOFTWARE.MISSKEY:
 			return {
@@ -30,6 +40,16 @@ function useKnownSoftware(software: string) {
 				label: 'Mastodon',
 				logo: branding[2],
 				width: 20,
+				height: 20,
+			};
+		}
+		case KNOWN_SOFTWARE.SHARKEY: {
+			return {
+				bg: '#6365fe',
+				fg: 'white',
+				label: 'Sharkey',
+				logo: branding[7],
+				width: 24,
 				height: 20,
 			};
 		}

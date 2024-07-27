@@ -23,7 +23,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
 		versionCode: 4,
 		// adaptiveIcon: {
-		// 	foregroundImage: './assets/adaptive-logo.png',
+		// 	foregroundImage: './assets/adaptive-logo_light.png',
 		// 	backgroundColor: '#ffffff',
 		// },
 	},

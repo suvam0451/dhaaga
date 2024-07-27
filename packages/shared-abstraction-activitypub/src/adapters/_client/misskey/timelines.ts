@@ -11,6 +11,8 @@ import {
 } from '../_router/_runner.js';
 import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import { DhaagaErrorCode } from '../_router/_types.js';
 
 export class MisskeyTimelinesRouter implements TimelinesRoute {
 	client: RestClient;
@@ -39,8 +41,17 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
 	): LibraryPromise<Endpoints['notes/timeline']['res']> {
-		const data = await this.lib.client.request('notes/timeline', query);
-		return { data };
+		try {
+			const data = await this.lib.client.request('notes/timeline', {
+				...query,
+			});
+			return { data };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			}
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async public(

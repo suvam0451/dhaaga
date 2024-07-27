@@ -3,12 +3,13 @@ import { Text, View } from 'react-native';
 import { APP_FONT } from '../../styles/AppTheme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AppDialogContainer from '../containers/AppDialogContainer';
+import { memo } from 'react';
 
 type Props = {
 	text: string;
 } & RneuiDialogProps;
 
-function AltText({ IsVisible, setIsVisible, text }: Props) {
+const AltText = memo(function Foo({ IsVisible, setIsVisible, text }: Props) {
 	return (
 		<AppDialogContainer IsVisible={IsVisible} setIsVisible={setIsVisible}>
 			<View
@@ -51,6 +52,6 @@ function AltText({ IsVisible, setIsVisible, text }: Props) {
 			</Text>
 		</AppDialogContainer>
 	);
-}
+});
 
 export default AltText;

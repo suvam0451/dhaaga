@@ -21,6 +21,7 @@ import { Image } from 'expo-image';
 import { RepliedStatusFragment } from './_static';
 import useAppNavigator from '../../../states/useAppNavigator';
 import EmojiReactions from './fragments/EmojiReactions';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 type StatusItemProps = {
 	// a list of color ribbons to indicate replies
@@ -356,6 +357,7 @@ function SharedStatusFragment() {
 		remoteSubdomain: userI?.getInstanceUrl(),
 		emojiMap: userI?.getEmojiMap(),
 		deps: [userI],
+		expectedHeight: 32,
 	});
 
 	return useMemo(() => {
@@ -367,6 +369,9 @@ function SharedStatusFragment() {
 					backgroundColor: '#1e1e1e',
 					borderTopRightRadius: 8,
 					borderTopLeftRadius: 8,
+					paddingHorizontal: 8,
+					paddingTop: 4,
+					paddingBottom: 4,
 				}}
 			>
 				<View
@@ -438,8 +443,12 @@ function StatusItem({ replyContextIndicators }: StatusItemProps) {
 
 	return useMemo(() => {
 		switch (domain) {
-			case 'mastodon':
-			case 'misskey': {
+			case KNOWN_SOFTWARE.MASTODON:
+			case KNOWN_SOFTWARE.MISSKEY:
+			case KNOWN_SOFTWARE.FIREFISH:
+			case KNOWN_SOFTWARE.MEISSKEY:
+			case KNOWN_SOFTWARE.KMYBLUE:
+			case KNOWN_SOFTWARE.CHERRYPICK: {
 				return (
 					<Fragment>
 						{_status.isReposted() && <SharedStatusFragment />}
@@ -454,7 +463,7 @@ function StatusItem({ replyContextIndicators }: StatusItemProps) {
 						)}
 						<RootFragmentContainer
 							replyContextIndicators={replyContextIndicators}
-							mt={_status.isReposted() || _status.isReply() ? -8 : 0}
+							mt={_status.isReposted() || _status.isReply() ? -4 : 0}
 							isRepost={_status.isReposted()}
 						/>
 					</Fragment>

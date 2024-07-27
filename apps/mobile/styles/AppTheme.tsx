@@ -39,4 +39,5 @@ export const APP_THIRD_PARTY_BRANDING = {
 export const APP_FONT = {
 	MONTSERRAT_HEADER: 'rgba(255, 255, 255, 0.87)',
 	MONTSERRAT_BODY: 'rgba(255, 255, 255, 0.6)',
+	DISABLED: 'rgba(255, 255, 255, 0.3)',
 };

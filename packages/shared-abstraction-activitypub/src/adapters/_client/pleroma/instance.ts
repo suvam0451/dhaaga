@@ -9,12 +9,25 @@ import {
 	DhaagaPleromaClient,
 	PleromaErrorHandler,
 } from '../_router/_runner.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class PleromaInstanceRouter implements InstanceRoute {
 	client: RestClient;
 
 	constructor(forwarded: RestClient) {
 		this.client = forwarded;
+	}
+
+	getLoginUrl(
+		urlLike: string,
+		{}: { appName: string; appCallback: string; uuid: string },
+	): LibraryPromise<{
+		software: string;
+		version?: string | null | undefined;
+		loginUrl: string;
+		loginStrategy: 'code' | 'miauth';
+	}> {
+		throw new Error('Method not implemented.');
 	}
 
 	getTranslation(id: string, lang: string): Promise<LibraryResponse<any>> {

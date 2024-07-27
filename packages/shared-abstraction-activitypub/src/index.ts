@@ -58,8 +58,10 @@ export {
 } from './adapters/_client/_router/routes/_index.js';
 
 const userMap = {
-	mastodon: MastodonRestClient,
-	misskey: MisskeyRestClient,
+	[KNOWN_SOFTWARE.MASTODON]: MastodonRestClient,
+	[KNOWN_SOFTWARE.MISSKEY]: MisskeyRestClient,
+	[KNOWN_SOFTWARE.FIREFISH]: MisskeyRestClient,
+	[KNOWN_SOFTWARE.SHARKEY]: MisskeyRestClient,
 };
 
 type UserMap = typeof userMap;
@@ -73,7 +75,11 @@ export class ActivityPubClientFactory {
 		domain: SingleKeys<K>,
 		payload: RestClientCreateDTO,
 	): ClassType<K> {
-		return new userMap[domain](payload);
+		try {
+			return new userMap[domain](payload);
+		} catch (e) {
+			return new userMap[KNOWN_SOFTWARE.MASTODON](payload);
+		}
 	}
 }
 
@@ -90,6 +96,7 @@ export { UserDetailedInstance } from './adapters/profile/_interface.js';
 export { AccountInstance } from './adapters/profile/_interface.js';
 export { ActivitypubStatusAdapter } from './adapters/status/_adapters.js';
 import ActivitypubHelper from './services/activitypub.js';
+import { KNOWN_SOFTWARE } from './adapters/_client/_router/instance.js';
 
 export { ActivitypubHelper };
 export { parseStatusContent, preprocessPostContent } from './services/index.js';

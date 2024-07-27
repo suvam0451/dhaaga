@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Image as RNImage } from 'react-native';
 
-const MAX_H = 24;
+const MAX_H = 20;
 
 /**
  * Evaluate the dimension of emoji to render

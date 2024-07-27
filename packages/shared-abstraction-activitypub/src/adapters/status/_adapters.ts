@@ -16,6 +16,7 @@ import {
 	StatusInstance,
 	StatusInterface,
 } from './_interface.js';
+import { KNOWN_SOFTWARE } from '../_client/_router/instance.js';
 
 /**
  * @param status any status object
@@ -27,10 +28,11 @@ export function ActivitypubStatusAdapter(
 	domain: string,
 ): StatusInterface {
 	switch (domain) {
-		case 'misskey': {
+		case KNOWN_SOFTWARE.MISSKEY:
+		case KNOWN_SOFTWARE.FIREFISH: {
 			return new MisskeyToStatusAdapter(new NoteInstance(status as Note));
 		}
-		case 'mastodon': {
+		case KNOWN_SOFTWARE.MASTODON: {
 			return new MastodonToStatusAdapter(
 				new StatusInstance(status as mastodon.v1.Status),
 			);
@@ -46,13 +48,17 @@ export function ActivityPubStatusContextAdapter(
 	domain: string,
 ): StatusContextInterface {
 	switch (domain) {
-		case 'misskey': {
+		case KNOWN_SOFTWARE.MISSKEY:
+		case KNOWN_SOFTWARE.FIREFISH:
+		case KNOWN_SOFTWARE.MEISSKEY:
+		case KNOWN_SOFTWARE.KMYBLUE:
+		case KNOWN_SOFTWARE.CHERRYPICK: {
 			const postInstance = new NoteInstance(status as Note);
 			const postInterface = new MisskeyToStatusAdapter(postInstance);
 			const ctxInstance = new StatusContextInstance(postInterface);
 			return new MisskeyToStatusContextAdapter(postInterface, ctxInstance);
 		}
-		case 'mastodon': {
+		case KNOWN_SOFTWARE.MASTODON: {
 			const postInstance = new StatusInstance(status as mastodon.v1.Status);
 			const postInterface = new MastodonToStatusAdapter(postInstance);
 			const ctxInstance = new StatusContextInstance(postInterface);

@@ -1,6 +1,7 @@
 import { ScrollView, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 type Props = {
 	label: string;
@@ -18,7 +19,7 @@ function ControlSegment({ label, buttons, selection }: Props) {
 		<View style={{ marginTop: 16, overflow: 'scroll' }}>
 			<Text
 				style={{
-					fontFamily: 'Montserrat-Bold',
+					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					color: APP_FONT.MONTSERRAT_BODY,
 					marginBottom: 4,
 				}}
@@ -45,7 +46,7 @@ function ControlSegment({ label, buttons, selection }: Props) {
 									color: selection.has(o.lookupId)
 										? 'rgba(0, 0, 0, 1)'
 										: APP_FONT.MONTSERRAT_BODY,
-									fontFamily: 'Montserrat-Bold',
+									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 								}}
 							>
 								{o.label}

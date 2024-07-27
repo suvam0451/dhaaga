@@ -50,6 +50,7 @@ const TimelineMediaRendered = memo(function Foo({
 			}
 			case 'video':
 			case 'video/mp4':
+			case 'video/webm':
 			case 'video/quicktime': {
 				return (
 					<AppVideoComponent

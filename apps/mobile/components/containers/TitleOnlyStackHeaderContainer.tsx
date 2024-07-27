@@ -81,7 +81,7 @@ function TitleOnlyStackHeaderContainer({
 	}
 
 	return (
-		<View style={{ height: '100%', backgroundColor: APP_THEME.BACKGROUND }}>
+		<View style={{ backgroundColor: APP_THEME.BACKGROUND }}>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<ProfilePageHeader
 					title={headerTitle}
@@ -98,9 +98,9 @@ function TitleOnlyStackHeaderContainer({
 					}}
 					contentContainerStyle={{
 						display: 'flex',
-						minHeight: '100%',
+						// minHeight: '100%',
 						paddingBottom: SHOWN_SECTION_HEIGHT,
-						marginTop: 4,
+						// marginTop: 200,
 					}}
 					onScroll={(e) => {
 						NavigationService.invokeWhenPageEndReached(

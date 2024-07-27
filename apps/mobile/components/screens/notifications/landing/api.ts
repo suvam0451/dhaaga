@@ -46,6 +46,7 @@ function useLandingPageStackApi() {
 				DhaagaJsNotificationType.MENTION,
 			],
 		});
+		if (error) return [];
 		return data as any;
 	}
 
@@ -64,7 +65,8 @@ function useLandingPageStackApi() {
 		if (!client) return;
 
 		const { data, status } = queryResults;
-		if (!data || !status) return;
+		console.log('data resp', data);
+		if (!data || status !== 'success') return;
 		const results: NotificationRenderType[] = [];
 
 		for (const datum of (data as any).data) {

@@ -32,6 +32,6 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 			'i/notifications-grouped',
 			Endpoints['i/notifications-grouped']['req']
 		>('i/notifications-grouped', query as any);
-		return { data: data as any };
+		return { data: { data: data as any } };
 	}
 }

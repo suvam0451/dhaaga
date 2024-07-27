@@ -1,5 +1,6 @@
 import { LibraryResponse } from './_types.js';
 import { mastodon } from 'masto';
+import { LibraryPromise } from './routes/_types.js';
 
 export enum KNOWN_SOFTWARE {
 	AKKOMA = 'akkoma',
@@ -56,4 +57,22 @@ export interface InstanceRoute {
 	getCustomEmojis(
 		urlLike: string,
 	): Promise<LibraryResponse<InstanceApi_CustomEmojiDTO[]>>;
+
+	/**
+	 *
+	 * @param urlLike
+	 */
+	getLoginUrl(
+		urlLike: string,
+		{}: {
+			appName: string;
+			appCallback: string;
+			uuid: string;
+		},
+	): LibraryPromise<{
+		software: string;
+		version?: string | null;
+		loginUrl: string;
+		loginStrategy: 'code' | 'miauth';
+	}>;
 }

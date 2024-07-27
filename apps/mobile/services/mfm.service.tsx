@@ -194,6 +194,7 @@ class MfmComponentBuilder {
 	private parser(node: any) {
 		const k = randomUUID();
 		switch (node.type) {
+			case 'link':
 			case 'url': {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 
@@ -216,6 +217,18 @@ class MfmComponentBuilder {
 				);
 			}
 
+			case 'plain': {
+				return (
+					<Text
+						key={k}
+						style={{
+							color: APP_FONT.MONTSERRAT_BODY,
+						}}
+					>
+						{node.children.map((o: any) => this.parser(o))}
+					</Text>
+				);
+			}
 			case 'italic': {
 				return (
 					<Text

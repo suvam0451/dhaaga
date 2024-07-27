@@ -61,13 +61,13 @@ function WithGorhomBottomSheetWrapper() {
 	 */
 	useEffect(() => {
 		AppSettingsService.populateSeedData(db);
-	}, []);
+	}, [db]);
 
 	useEffect(() => {
 		AppProfileRepository(db).upsert({ name: 'Default' });
 		AppProfileRepository(db).ensureDefaultProfileIsActive();
 		AppProfileRepository(db).seedAppSettings({ name: 'Default' });
-	}, []);
+	}, [db]);
 
 	const [fontsLoaded, fontError] = useFonts(appFonts);
 
@@ -103,7 +103,7 @@ export default function Page() {
 				{/* In-Memory Store -- MMKV */}
 				<WithGlobalMmkvContext>
 					{/* Main Database -- Realm */}
-					<RealmProvider schema={schemas} schemaVersion={16}>
+					<RealmProvider schema={schemas} schemaVersion={17}>
 						{/* API Caching -- Tanstack */}
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}

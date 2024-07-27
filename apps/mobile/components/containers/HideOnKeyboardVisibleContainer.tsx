@@ -23,4 +23,11 @@ function HideOnKeyboardVisibleContainer({ children, style }: Props) {
 	);
 }
 
+export function DisableOnKeyboardVisibleContainer({ children, style }: Props) {
+	const { KeyboardVisible } = useKeyboard();
+
+	if (KeyboardVisible) return <View />;
+	return <View style={style}>{children}</View>;
+}
+
 export default HideOnKeyboardVisibleContainer;
