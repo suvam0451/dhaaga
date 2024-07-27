@@ -84,7 +84,6 @@ export const AppVideoComponent = memo(function Foo({
 	url,
 	height,
 	loop,
-	type,
 }: {
 	url: string;
 	height: number;
@@ -120,7 +119,7 @@ export const AppVideoComponent = memo(function Foo({
 				ref={ref}
 				style={{
 					width: MEDIA_CONTAINER_WIDTH,
-					height: height,
+					height,
 					borderRadius: 8,
 				}}
 				player={player}

@@ -33,6 +33,8 @@ const TimelineMediaRendered = memo(function Foo({
 	index?: number;
 	totalCount?: number;
 }) {
+	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
+
 	const MediaItem = useMemo(() => {
 		const type = attachment?.getType();
 
@@ -56,7 +58,7 @@ const TimelineMediaRendered = memo(function Foo({
 					<AppVideoComponent
 						type={'video'}
 						url={attachment.getUrl()}
-						height={CalculatedHeight}
+						height={_height}
 					/>
 				);
 			}
@@ -88,7 +90,7 @@ const TimelineMediaRendered = memo(function Foo({
 				justifyContent: 'center',
 				alignItems: 'center',
 				width: MEDIA_CONTAINER_WIDTH,
-				height: attachment.getType() === 'audio' ? 48 : CalculatedHeight,
+				height: attachment.getType() === 'audio' ? 48 : _height,
 				position: 'relative',
 				marginTop: MARGIN_TOP,
 			}}
@@ -126,7 +128,7 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 	const CalculatedHeight = useMemo(() => {
 		if (!attachments) return MEDIA_CONTAINER_MAX_HEIGHT;
 		return MediaService.calculateHeightForMediaContentCarousal(attachments, {
-			deviceWidth: Dimensions.get('window').width,
+			deviceWidth: Dimensions.get('window').width - 32,
 			maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
 		});
 	}, [attachments]);
