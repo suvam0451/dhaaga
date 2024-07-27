@@ -165,12 +165,6 @@ interface ActivityPubClient extends RouterInterface {
 	/**
 	 * Tags
 	 */
-	getTag(id: string): Promise<mastodon.v1.Tag | null>;
-
-	followTag(id: string): Promise<mastodon.v1.Tag | null>;
-
-	unfollowTag(id: string): Promise<mastodon.v1.Tag | null>;
-
 	getFollowedTags(opts: GetPostsQueryDTO): Promise<
 		| {
 				data: mastodon.v1.Tag[];

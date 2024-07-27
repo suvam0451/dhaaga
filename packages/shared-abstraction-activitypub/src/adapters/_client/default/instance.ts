@@ -51,6 +51,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	 * @param uuid
 	 * @param appName
 	 * @param appCallback
+	 * @param appClientId
 	 */
 	async getLoginUrl(
 		urlLike: string,
@@ -58,9 +59,11 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			uuid,
 			appName,
 			appCallback,
+			appClientId,
 		}: {
 			appName: string;
 			appCallback: string;
+			appClientId: string;
 			uuid: string;
 		},
 	): LibraryPromise<{
@@ -172,9 +175,23 @@ export class DefaultInstanceRouter implements InstanceRoute {
 				};
 			}
 			case KNOWN_SOFTWARE.MASTODON: {
+				const authEndpoint = `https://${urlLike}/oauth/authorize`;
+
+				// Set up parameters for the query string
+				const options: Record<string, string> = {
+					client_id: appClientId,
+					redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+					response_type: 'code',
+					scope: 'read write follow push',
+				};
+				// Generate the query string
+				const queryString = Object.keys(options)
+					.map((key) => `${key}=${encodeURIComponent(options[key])}`)
+					.join('&');
+
 				return {
 					data: {
-						loginUrl: '',
+						loginUrl: `${authEndpoint}?${queryString}`,
 						loginStrategy: 'code',
 						version: data.version,
 						software: data.software,

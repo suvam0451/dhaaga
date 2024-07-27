@@ -9,8 +9,6 @@ import {
 	StyleSheet,
 } from 'react-native';
 import { Button } from '@rneui/base';
-import { createCodeRequestUrl } from '@dhaaga/shared-provider-misskey/src';
-import * as Crypto from 'expo-crypto';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
@@ -26,7 +24,11 @@ function MisskeyServerSelection() {
 		const subdomain = InputText;
 		router.push({
 			pathname: 'accounts/signin-mk',
-			params: { signInUrl: signInStrategy?.loginUrl, subdomain },
+			params: {
+				signInUrl: signInStrategy?.loginUrl,
+				subdomain,
+				domain: signInStrategy?.software,
+			},
 		});
 	}
 
@@ -51,7 +53,6 @@ function MisskeyServerSelection() {
 				<View
 					style={{
 						display: 'flex',
-
 						flexGrow: 1,
 						height: '100%',
 					}}

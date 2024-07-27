@@ -27,10 +27,10 @@ function MisskeySignInStack() {
 	const [MisskeyId, setMisskeyId] = useState<string | null>(null);
 	const db = useRealm();
 
-	const params2 = useLocalSearchParams();
-
-	const _signInUrl: string = params2['signInUrl'] as string;
-	const _subdomain: string = params2['subdomain'] as string;
+	const params = useLocalSearchParams();
+	const _signInUrl: string = params['signInUrl'] as string;
+	const _subdomain: string = params['subdomain'] as string;
+	const _domain: string = params['domain'] as string;
 
 	useEffect(() => {
 		try {
@@ -71,7 +71,7 @@ function MisskeySignInStack() {
 		try {
 			AccountService.upsert(db, {
 				subdomain: _subdomain,
-				domain: KNOWN_SOFTWARE.MISSKEY,
+				domain: _domain,
 				username: PreviewCard.username,
 				avatarUrl: PreviewCard.avatar,
 				displayName: PreviewCard.displayName,

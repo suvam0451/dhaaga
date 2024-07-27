@@ -60,10 +60,10 @@ export function HashtagBottomSheetContent({
 	async function onClickFollowTag() {
 		if (!tag) return;
 		if (tag?.isFollowing()) {
-			const data = await client.unfollowTag(tag.getName());
+			const { data, error } = await client.tags.unfollow(tag.getName());
 			setDataRaw(data);
 		} else {
-			const data = await client.followTag(tag.getName());
+			const { data, error } = await client.tags.follow(tag.getName());
 			setDataRaw(data);
 		}
 	}
@@ -438,20 +438,26 @@ function HashtagSkeleton() {
 	);
 }
 
-function HashtagBottomSheet({ visible, id }: HashtagActionsProps) {
+function HashtagBottomSheet({ id }: HashtagActionsProps) {
 	const [Data, setData] = useState(null);
 	const { client } = useActivityPubRestClientContext();
 
 	async function api() {
 		if (!client) return null;
-		return await client.getTag(id);
+		const { data, error } = await client.tags.get(id);
+		if (error) {
+			console.log(error);
+			return null;
+		}
+		console.log(id, data);
+		return data;
 	}
 
 	// Queries
 	const { status, data } = useQuery<TagType | null>({
-		queryKey: ['/tags', id],
+		queryKey: [id],
 		queryFn: api,
-		enabled: client !== null && id !== null && visible,
+		enabled: client !== null && id !== null,
 	});
 
 	useEffect(() => {

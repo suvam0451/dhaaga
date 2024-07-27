@@ -118,18 +118,6 @@ class MisskeyRestClient implements ActivityPubClient {
 		return [];
 	}
 
-	async followTag(id: string) {
-		return null;
-	}
-
-	async unfollowTag(id: string) {
-		return null;
-	}
-
-	async getTag(id: string) {
-		return null;
-	}
-
 	async muteUser(id: string): Promise<void> {
 		// throw new Error("Method not implemented.");
 	}

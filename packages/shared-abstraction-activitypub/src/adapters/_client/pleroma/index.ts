@@ -164,18 +164,6 @@ class PleromaRestClient implements ActivityPubClient {
 		throw new Error('Method not implemented.');
 	}
 
-	getTag(id: string): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
-	followTag(id: string): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
-	unfollowTag(id: string): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
 	getFollowedTags(opts: GetPostsQueryDTO): Promise<
 		| any[]
 		| {

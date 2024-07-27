@@ -1,6 +1,6 @@
-import { Dimensions, View, Keyboard, ScrollView } from 'react-native';
+import { Dimensions, View, ScrollView } from 'react-native';
 import { Text } from '@rneui/themed';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import WebView from 'react-native-webview';
 import { MainText } from '../../../../styles/Typography';
 import { Button } from '@rneui/base';
@@ -9,45 +9,24 @@ import {
 	RestClient,
 	RestServices,
 } from '@dhaaga/shared-provider-mastodon';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import AccountRepository from '../../../../repositories/account.repo';
 import { useRealm } from '@realm/react';
 import TitleOnlyNoScrollContainer from '../../../../components/containers/TitleOnlyNoScrollContainer';
+import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
+import { router, useLocalSearchParams } from 'expo-router';
+import AccountService from '../../../../services/account.service';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 function MastodonSignInStack() {
 	const [Code, setCode] = useState<string | null>(null);
-	const route = useRoute<any>();
-	const navigation = useNavigation<any>();
-
-	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-	useEffect(() => {
-		const keyboardDidShowListener = Keyboard.addListener(
-			'keyboardDidShow',
-			() => {
-				setKeyboardVisible(true); // or some other action
-			},
-		);
-		const keyboardDidHideListener = Keyboard.addListener(
-			'keyboardDidHide',
-			() => {
-				setKeyboardVisible(false); // or some other action
-			},
-		);
-
-		return () => {
-			keyboardDidHideListener.remove();
-			keyboardDidShowListener.remove();
-		};
-	}, []);
-
-	const signInUrl = route?.params?.signInUrl || 'https://mastodon.social';
-	const subdomain = route?.params?.subdomain;
 	const db = useRealm();
+
+	const params = useLocalSearchParams();
+	const _signInUrl: string = params['signInUrl'] as string;
+	const _subdomain: string = params['subdomain'] as string;
+	const _domain: string = params['domain'] as string;
 
 	function callback(state) {
 		const regex = /^https:\/\/(.*?)\/oauth\/authorize\/native\?code=(.*?)$/;
-		console.log(regex);
 		if (regex.test(state.url)) {
 			const code = state.url.match(regex)[2];
 			setCode(code);
@@ -55,7 +34,7 @@ function MastodonSignInStack() {
 	}
 
 	async function onPressConfirm() {
-		const instance = subdomain.replace(/^https?:\/\//, '');
+		const instance = _subdomain;
 		const token = await MastodonService.getAccessToken(
 			instance,
 			Code,
@@ -65,36 +44,42 @@ function MastodonSignInStack() {
 
 		const client = new RestClient(instance, {
 			accessToken: token,
-			domain: 'mastodon',
+			domain: KNOWN_SOFTWARE.MASTODON,
 		});
 
 		const verified = await RestServices.v1.accounts.verifyCredentials(client);
 
-		db.write(() => {
-			const acct = AccountRepository.upsert(db, {
-				subdomain: instance,
-				domain: 'mastodon',
+		try {
+			AccountService.upsert(db, {
+				subdomain: _subdomain,
+				domain: _domain,
 				username: verified.username,
 				avatarUrl: verified.avatar,
+				// TODO: this needs to be replaced with camelCase
+				displayName: verified['display_name'],
+				credentials: [
+					{
+						key: 'display_name',
+						value: verified['display_name'],
+					},
+					{
+						key: 'avatar',
+						value: verified['avatar'],
+					},
+					{
+						key: 'url',
+						value: verified.url,
+					},
+					{
+						key: 'access_token',
+						value: token,
+					},
+				],
 			});
-
-			AccountRepository.setSecret(
-				db,
-				acct,
-				'display_name',
-				verified['display_name'],
-			);
-			AccountRepository.setSecret(
-				db,
-				acct,
-				'avatar',
-				verified['avatar_static'],
-			);
-			AccountRepository.setSecret(db, acct, 'url', verified['url']);
-			AccountRepository.setSecret(db, acct, 'access_token', token);
-		});
-
-		navigation.navigate('Select an Account');
+			router.replace('/accounts/landing');
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	return (
@@ -103,11 +88,11 @@ function MastodonSignInStack() {
 				<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
 					<WebView
 						style={{ flex: 1, minWidth: Dimensions.get('window').width - 20 }}
-						source={{ uri: signInUrl }}
+						source={{ uri: _signInUrl }}
 						onNavigationStateChange={callback}
 					/>
 				</ScrollView>
-				{!isKeyboardVisible && (
+				<HideOnKeyboardVisibleContainer style={{ marginHorizontal: 12 }}>
 					<View style={{ height: 240 }}>
 						<MainText style={{ marginBottom: 12, marginTop: 16 }}>
 							Step 3: Confirm your account
@@ -130,7 +115,7 @@ function MastodonSignInStack() {
 							Proceed
 						</Button>
 					</View>
-				)}
+				</HideOnKeyboardVisibleContainer>
 			</View>
 		</TitleOnlyNoScrollContainer>
 	);

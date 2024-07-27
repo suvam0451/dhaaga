@@ -67,6 +67,7 @@ export interface InstanceRoute {
 		{}: {
 			appName: string;
 			appCallback: string;
+			appClientId: string;
 			uuid: string;
 		},
 	): LibraryPromise<{

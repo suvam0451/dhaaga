@@ -173,39 +173,6 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async followTag(id: string) {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.tags.$select(id).follow();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
-	async unfollowTag(id: string) {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.tags.$select(id).unfollow();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
-	async getTag(id: string) {
-		const _client = this.createPublicClient();
-		try {
-			console.log('started fetching tag', id, _client);
-			const data = await _client.v1.tags.$select(id).fetch();
-			console.log(data);
-			return data;
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
 	async muteUser(id: string) {
 		const _client = this.createMastoClient();
 		try {

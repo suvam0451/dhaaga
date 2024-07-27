@@ -7,11 +7,11 @@ import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import { useQuery } from '@realm/react';
 import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 
-function HashtagProcessor({
+const HashtagProcessor = memo(function Foo({
 	content,
 	forwardedKey,
 }: {
@@ -22,7 +22,7 @@ function HashtagProcessor({
 		useGorhomActionSheetContext();
 	const { globalDb } = useGlobalMmkvContext();
 	const item = useQuery(ActivityPubTag).find(
-		(o) => o.name.toLowerCase() === content.toLowerCase(),
+		(o: ActivityPubTag) => o.name.toLowerCase() === content.toLowerCase(),
 	);
 
 	const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
@@ -65,6 +65,6 @@ function HashtagProcessor({
 			#{content}
 		</Text>
 	);
-}
+});
 
 export default HashtagProcessor;

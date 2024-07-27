@@ -109,18 +109,6 @@ class UnknownRestClient implements ActivityPubClient {
 		throw new Error('Method not implemented.');
 	}
 
-	async followTag(id: string) {
-		return null;
-	}
-
-	async unfollowTag(id: string) {
-		return null;
-	}
-
-	async getTag() {
-		return null;
-	}
-
 	async muteUser(id: string) {
 		return;
 	}

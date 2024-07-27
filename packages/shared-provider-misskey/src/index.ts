@@ -17,21 +17,3 @@ export const verifyToken = async (host: string, session: string) => {
 	);
 	return res.data;
 };
-
-export const createCodeRequestUrl = (instanceUrl: string, uuid: string) => {
-	const authEndpoint = `${instanceUrl}/miauth/${uuid}`;
-
-	// Set up parameters for the query string
-	const options: Record<string, string> = {
-		name: 'Dhaaga',
-		callback: 'https://example.com/',
-		permission: 'write:notes,write:following,read:drive',
-	};
-
-	// Generate the query string
-	const queryString = Object.keys(options)
-		.map((key) => `${key}=${encodeURIComponent(options[key])}`)
-		.join('&');
-
-	return `${authEndpoint}?${queryString}`;
-};
