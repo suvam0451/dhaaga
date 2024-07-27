@@ -2,8 +2,13 @@ import { useEffect, useState } from 'react';
 import { useActivitypubUserContext } from '../../../../states/useProfile';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
-import { ActivityPubStatuses } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	ActivityPubStatuses,
+	MisskeyRestClient,
+} from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { UserDetailed } from 'misskey-js/built/autogen/models';
 
 /**
  * -- Obtain the pinned posts --
@@ -22,13 +27,27 @@ function usePinnedPosts(userId: string) {
 	}, [userId]);
 
 	async function fn() {
-		const { data, error } = (await client.accounts.statuses(userId, {
-			limit: 10,
-			pinned: true,
-			userId,
-		})) as any;
-		if (error) return [];
-		return data;
+		switch (domain) {
+			case KNOWN_SOFTWARE.MISSKEY:
+			case KNOWN_SOFTWARE.FIREFISH:
+			case KNOWN_SOFTWARE.SHARKEY: {
+				const { data, error } = await (
+					client as MisskeyRestClient
+				).accounts.get(userId);
+				if (error) return [];
+				const _data = data as UserDetailed;
+				return _data.pinnedNotes;
+			}
+			default: {
+				const { data, error } = (await client.accounts.statuses(userId, {
+					limit: 10,
+					pinned: true,
+					userId,
+				})) as any;
+				if (error) return [];
+				return data;
+			}
+		}
 	}
 
 	// Post Queries

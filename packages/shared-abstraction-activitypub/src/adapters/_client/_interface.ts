@@ -38,6 +38,8 @@ export type MegaTag = MLTag;
 export type MegaFeaturedTag = MLFeaturedTag;
 export type MegaAccount = MLAccount;
 
+export type MissUserDetailed = UserDetailed;
+
 export type HashtagTimelineQuery = {
 	limit: number;
 	sinceId?: string;

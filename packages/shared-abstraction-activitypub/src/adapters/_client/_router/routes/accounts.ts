@@ -1,6 +1,6 @@
 import { LibraryResponse } from '../_types.js';
 import { mastodon } from 'masto';
-import { Note, UserDetailed } from 'misskey-js/autogen/models.js';
+import { Note } from 'misskey-js/autogen/models.js';
 import { Endpoints } from 'misskey-js';
 import {
 	FollowPostDto,
@@ -10,6 +10,7 @@ import {
 	MastoList,
 	MastoRelationship,
 	MegaAccount,
+	MissUserDetailed,
 } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 
@@ -88,7 +89,7 @@ export interface AccountRoute {
 		params: AccountRouteStatusQueryDto,
 	): Promise<LibraryResponse<mastodon.v1.Status[] | Note[] | any[]>>;
 
-	get(id: string): LibraryPromise<MastoAccount | UserDetailed>;
+	get(id: string): LibraryPromise<MastoAccount | MissUserDetailed>;
 
 	relationships(ids: string[]): Promise<LibraryResponse<MastoRelationship[]>>;
 

@@ -13,6 +13,7 @@ import {
 	MastoRelationship,
 	MastoStatus,
 	MegaAccount,
+	MissUserDetailed,
 } from '../_interface.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
@@ -73,12 +74,14 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 		throw new Error('Method not implemented.');
 	}
 
-	async get(id: string): Promise<LibraryResponse<MastoAccount | UserDetailed>> {
+	async get(
+		id: string,
+	): Promise<LibraryResponse<MastoAccount | MissUserDetailed>> {
 		return {
 			error: {
 				code: DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY,
 			},
-		} as LibraryResponse<MastoAccount>;
+		} as LibraryResponse<MastoAccount | UserDetailed>;
 	}
 
 	async statuses(

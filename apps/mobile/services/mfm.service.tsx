@@ -262,6 +262,8 @@ class MfmComponentBuilder {
 				return <InlineCodeSegment key={k} value={node.props.code} />;
 			case 'hashtag':
 				return <HashtagSegment key={k} value={node.props.hashtag} />;
+			// TODO: quote resolver
+			case 'quote':
 			case 'text':
 				return <RawTextSegment key={k} value={node.props.text} />;
 			case 'emojiCode':

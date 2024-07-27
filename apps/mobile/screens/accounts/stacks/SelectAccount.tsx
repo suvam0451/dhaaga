@@ -96,7 +96,7 @@ function SelectAccountStack() {
 					))
 				)}
 
-				<SoftwareHeader software={KNOWN_SOFTWARE.MASTODON} mb={6} mt={20} />
+				<SoftwareHeader software={KNOWN_SOFTWARE.MASTODON} mb={6} mt={12} />
 				{MastodonAccounts.length == 0 ? (
 					<NoAccountsToShow service={'Mastodon'} />
 				) : (
@@ -112,7 +112,7 @@ function SelectAccountStack() {
 					))
 				)}
 
-				<SoftwareHeader software={KNOWN_SOFTWARE.MISSKEY} mb={4} mt={20} />
+				<SoftwareHeader software={KNOWN_SOFTWARE.MISSKEY} mb={4} mt={12} />
 				{MisskeyAccounts.length == 0 ? (
 					<NoAccountsToShow service={'Misskey'} />
 				) : (
@@ -128,7 +128,7 @@ function SelectAccountStack() {
 					))
 				)}
 
-				<SoftwareHeader software={KNOWN_SOFTWARE.SHARKEY} mb={6} mt={20} />
+				<SoftwareHeader software={KNOWN_SOFTWARE.SHARKEY} mb={6} mt={12} />
 				{SharkeyAccounts.length == 0 ? (
 					<NoAccountsToShow service={'Sharkey'} />
 				) : (
@@ -144,7 +144,7 @@ function SelectAccountStack() {
 					))
 				)}
 			</View>
-			<View style={{ marginHorizontal: 16, marginBottom: 32, marginTop: 32 }}>
+			<View style={{ marginHorizontal: 16, marginBottom: 32, marginTop: 28 }}>
 				<Button
 					onPress={() => {
 						router.navigate('/accounts/select-software');

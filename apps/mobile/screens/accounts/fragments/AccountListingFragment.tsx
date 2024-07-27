@@ -8,7 +8,7 @@ import { Types } from 'realm';
 import UUID = Types.UUID;
 import AccountService from '../../../services/account.service';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { Fragment, memo, useMemo, useState } from 'react';
+import { Fragment, memo, useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
 import { APP_FONT } from '../../../styles/AppTheme';
 import Animated, { FadeIn } from 'react-native-reanimated';
@@ -181,7 +181,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-					color: APP_FONT.MONTSERRAT_HEADER,
+					color: selected ? '#9dced7' : APP_FONT.MONTSERRAT_HEADER,
 				}}
 				numberOfLines={1}
 			>
@@ -190,7 +190,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: APP_FONT.MONTSERRAT_BODY,
+					color: selected ? '#9dced7' : APP_FONT.MONTSERRAT_BODY,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -200,7 +200,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: APP_FONT.MONTSERRAT_HEADER,
+					color: selected ? '#9dced7' : APP_FONT.MONTSERRAT_HEADER,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
