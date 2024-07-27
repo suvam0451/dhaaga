@@ -9,8 +9,10 @@ import {
 	MastoFeaturedTag,
 	MastoList,
 	MastoRelationship,
-	MastoTag,
+	MegaAccount,
+	MissUserDetailed,
 } from '../../_interface.js';
+import { LibraryPromise } from './_types.js';
 
 type DefaultPaginationParams = {
 	// masto.js
@@ -66,6 +68,10 @@ export interface AccountRoute {
 
 	removeFollower(id: string): Promise<LibraryResponse<void>>;
 
+	// 200/400
+	// mastodon/misskey/akkoma/pleroma
+	lookup(webfingerUrl: string): LibraryPromise<MastoAccount | MegaAccount>;
+
 	/**
 	 * General
 	 */
@@ -83,7 +89,7 @@ export interface AccountRoute {
 		params: AccountRouteStatusQueryDto,
 	): Promise<LibraryResponse<mastodon.v1.Status[] | Note[] | any[]>>;
 
-	get(id: string): Promise<LibraryResponse<MastoAccount>>;
+	get(id: string): LibraryPromise<MastoAccount | MissUserDetailed>;
 
 	relationships(ids: string[]): Promise<LibraryResponse<MastoRelationship[]>>;
 

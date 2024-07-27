@@ -1,15 +1,13 @@
-import { View, Text } from 'react-native';
-import { StandardView } from '../../../../styles/Containers';
-import MastodonIcon from '../../../../assets/svg/Logo_Mastodon';
-import { Image } from 'expo-image';
+import { View, StyleSheet } from 'react-native';
+import { Text } from '@rneui/themed';
 import { Button } from '@rneui/themed';
-import {
-	APP_FONT,
-	APP_THEME,
-	APP_THIRD_PARTY_BRANDING,
-} from '../../../../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import TitleOnlyStackHeaderContainer from '../../../containers/TitleOnlyStackHeaderContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import { router } from 'expo-router';
+import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 function SelectProviderStack() {
 	const route = useRoute();
@@ -28,140 +26,128 @@ function SelectProviderStack() {
 					height: '100%',
 				}}
 			>
-				<StandardView>
-					<View
-						style={{
-							width: '100%',
-							backgroundColor: APP_THIRD_PARTY_BRANDING.MASTODON_DARK_BG,
-							paddingHorizontal: 32,
-							paddingVertical: 16,
-							borderRadius: 8,
-							marginVertical: 32,
-						}}
-					>
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'center',
-							}}
-						>
-							<MastodonIcon />
-							<Text
-								style={{
-									fontSize: 28,
-									marginLeft: 8,
-									fontWeight: '400',
-									color: APP_FONT.MONTSERRAT_HEADER,
-									fontFamily: 'Montserrat-Bold',
-								}}
-							>
-								Mastodon
-							</Text>
+				<View style={{ marginHorizontal: 12 }}>
+					<View style={styles.selectSignInPlatformSection}>
+						<View style={styles.selectSignInPlatformCenter}>
+							<SoftwareHeader
+								software={KNOWN_SOFTWARE.MASTODON}
+								mb={0}
+								mt={0}
+							/>
 						</View>
-						<Text
-							style={{
-								fontSize: 16,
-								marginTop: 8,
-								marginBottom: 8,
-								textAlign: 'center',
-								color: APP_FONT.MONTSERRAT_BODY,
-							}}
-						>
+						<Text style={styles.platformDescription}>
 							Social networking that's not for sale.
 						</Text>
-						<View style={{ marginTop: 16 }}>
+						<View style={{ marginTop: 4 }}>
 							<Button
 								onPress={() => {
-									navigation.navigate('Select Mastodon Server', {
-										type: 'mastodon',
-									});
+									router.navigate('/accounts/add-mastodon');
 								}}
 								color={'rgb(99, 100, 255)'}
-								size={'lg'}
+								size={'md'}
 							>
-								<Text
-									style={{
-										color: APP_FONT.MONTSERRAT_HEADER,
-										fontSize: 16,
-										fontFamily: 'Inter-Bold',
-									}}
-								>
-									Login
-								</Text>
+								<Text style={styles.buttonText}>Login</Text>
 							</Button>
 						</View>
 					</View>
 
-					<View
-						style={{
-							width: '100%',
-							backgroundColor: APP_THIRD_PARTY_BRANDING.MISSKEY_DARK_BG,
-							paddingHorizontal: 32,
-							paddingVertical: 16,
-							borderRadius: 8,
-						}}
-					>
-						<View
-							style={{
-								margin: 'auto',
-								display: 'flex',
-								justifyContent: 'center',
-							}}
-						>
-							<View
-								style={{
-									width: 200,
-									height: 64,
-								}}
-							>
-								{/*@ts-ignore-next-line*/}
-								<Image
-									style={{ width: 200, height: 64 }}
-									source={require('../../../../assets/icons/misskey_icon.png')}
-									contentFit="contain"
-									transition={1000}
-								/>
-							</View>
+					<View style={styles.selectSignInPlatformSection}>
+						<View style={styles.selectSignInPlatformCenter}>
+							<SoftwareHeader software={KNOWN_SOFTWARE.MISSKEY} mb={0} mt={0} />
+							<Text style={styles.platformDescription}>
+								🌎 An Interplanetary microblogging platform 🚀
+							</Text>
+							<SoftwareHeader
+								software={KNOWN_SOFTWARE.FIREFISH}
+								mb={0}
+								mt={16}
+							/>
+							<Text style={styles.platformDescription}>
+								A fun, new, open way to experience social media
+							</Text>
 						</View>
-						<Text
-							style={{
-								fontSize: 16,
-								textAlign: 'center',
-								color: APP_FONT.MONTSERRAT_BODY,
-							}}
-						>
-							🌎 An Interplanetary microblogging platform 🚀
-						</Text>
+
 						<View style={{ paddingTop: 16 }}>
 							<Button
+								size={'md'}
 								color={
 									'linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))'
 								}
 								onPress={() => {
-									navigation.navigate('Select Misskey Server', {
-										type: 'misskey',
-									});
+									router.navigate('/accounts/add-misskey');
 								}}
-								size={'lg'}
 							>
-								<Text
-									style={{
-										color: APP_FONT.MONTSERRAT_HEADER,
-										fontSize: 16,
-										fontFamily: 'Inter-Bold',
-									}}
-								>
-									Login
-								</Text>
+								<Text style={styles.buttonText}>Login</Text>
 							</Button>
 						</View>
 					</View>
-				</StandardView>
+					<View
+						style={{
+							justifyContent: 'center',
+							alignItems: 'center',
+							width: '100%',
+							marginVertical: 16,
+						}}
+					>
+						<View
+							style={{
+								padding: 12,
+								backgroundColor: '#323232',
+								borderRadius: 8,
+							}}
+						>
+							<Text
+								style={{
+									color: APP_FONT.MONTSERRAT_HEADER,
+									fontSize: 14,
+									fontFamily: APP_FONTS.INTER_700_BOLD,
+								}}
+							>
+								I am Not Sure
+							</Text>
+						</View>
+						<Text
+							style={{
+								textAlign: 'center',
+								fontFamily: APP_FONTS.INTER_400_REGULAR,
+								color: APP_FONT.MONTSERRAT_BODY,
+							}}
+						>
+							I will try my best to auto-detect your instance software
+						</Text>
+					</View>
+				</View>
 			</View>
 		</TitleOnlyStackHeaderContainer>
 	);
 }
+
+const styles = StyleSheet.create({
+	selectSignInPlatformSection: {
+		width: '100%',
+		paddingHorizontal: 32,
+		paddingVertical: 16,
+		borderRadius: 8,
+		backgroundColor: '#242424',
+		marginVertical: 16,
+	},
+	selectSignInPlatformCenter: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	platformDescription: {
+		fontSize: 16,
+		marginVertical: 4,
+		textAlign: 'center',
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+	},
+	buttonText: {
+		color: APP_FONT.MONTSERRAT_HEADER,
+		fontSize: 16,
+		fontFamily: APP_FONTS.INTER_700_BOLD,
+	},
+});
 
 export default SelectProviderStack;

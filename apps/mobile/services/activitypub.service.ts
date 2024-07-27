@@ -1,7 +1,9 @@
-import axios from 'axios';
-import { ActivityPubCustomEmojiItemDTO } from '../entities/activitypub-emoji.entity';
-import { UnknownRestClient } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	ActivityPubClient,
+	UnknownRestClient,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import * as Crypto from 'expo-crypto';
 
 class ActivityPubService {
 	/**
@@ -44,6 +46,42 @@ class ActivityPubService {
 				console.log('[WARN]: error determining software', instance, e);
 				return null;
 			});
+	}
+
+	static async toggleBookmark(client: ActivityPubClient, localState: boolean) {}
+
+	/**
+	 * detect software for a subdomain
+	 * @param urlLike
+	 */
+	static async detectSoftware(urlLike: string) {
+		const client = new UnknownRestClient();
+		const { data, error } = await client.instances.getSoftwareInfo(urlLike);
+		if (error || !data) return null;
+		return data.software;
+	}
+
+	/**
+	 * Evaluates instance software/version and
+	 * generates the sign-in url to be used
+	 * in the webview
+	 *
+	 * Supported strategies are:
+	 *
+	 * - code
+	 * - miauth
+	 * @param urlLike
+	 */
+	static async signInUrl(urlLike: string) {
+		const client = new UnknownRestClient();
+		const { data, error } = await client.instances.getLoginUrl(urlLike, {
+			appCallback: 'https://example.com/',
+			appName: 'Dhaaga',
+			appClientId: process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID,
+			uuid: Crypto.randomUUID(),
+		});
+		if (error) return null;
+		return data;
 	}
 }
 

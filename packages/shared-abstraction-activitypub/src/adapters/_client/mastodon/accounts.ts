@@ -15,7 +15,6 @@ import {
 	AccountMutePostDto,
 	AccountRouteStatusQueryDto,
 } from '../_router/routes/accounts.js';
-import { BaseAccountsRouter } from '../default/accounts.js';
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	FollowPostDto,
@@ -27,17 +26,20 @@ import {
 	MastoStatus,
 } from '../_interface.js';
 
-export class MastodonAccountsRouter
-	extends BaseAccountsRouter
-	implements AccountRoute
-{
+export class MastodonAccountsRouter implements AccountRoute {
 	client: RestClient;
 	lib: DhaagaRestClient<COMPAT.MASTOJS>;
 
 	constructor(forwarded: RestClient) {
-		super();
 		this.client = forwarded;
 		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
+	}
+
+	async lookup(webfingerUrl: string): Promise<LibraryResponse<MastoAccount>> {
+		const fn = this.lib.client.v1.accounts.lookup;
+		return await MastojsHandler(
+			await MastoErrorHandler(fn, [{ acct: webfingerUrl }]),
+		);
 	}
 
 	async follow(

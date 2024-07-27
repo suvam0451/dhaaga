@@ -20,9 +20,7 @@ import WithSearchTermContext, {
 	useSearchTermContext,
 } from '../../../hooks/forms/useSearchTerm';
 import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
-import WithAppAssetsContext, {
-	useAppAssetsContext,
-} from '../../../hooks/app/useAssets';
+import { useAppAssetsContext } from '../../../hooks/app/useAssets';
 
 type ServerItemProps = {
 	url: string;
@@ -468,9 +466,8 @@ function ServerDebuggerStackBase() {
 	const servers = useQuery(ActivityPubServer);
 	const [SearchResults, setSearchResults] = useState<ActivityPubServer[]>([]);
 	const [FlashListProps, setFlashListProps] = useState<ListItem[]>([]);
-	const { searchText, setIsResultLoading, setSearchText, isResultLoading } =
-		useSearchTermContext();
-	const { branding, isAssetsLoaded } = useAppAssetsContext();
+	const { searchText } = useSearchTermContext();
+	const { isAssetsLoaded } = useAppAssetsContext();
 
 	useEffect(() => {
 		const mapper = new Map<string, { count: number }>();
@@ -541,15 +538,13 @@ function ServerDebuggerStackBase() {
 
 function ServerDebuggerStack() {
 	return (
-		<WithAppAssetsContext>
-			<WithSearchTermContext>
-				<WithLocalAppMenuControllerContext>
-					<WithAppDrawerContext>
-						<ServerDebuggerStackBase />
-					</WithAppDrawerContext>
-				</WithLocalAppMenuControllerContext>
-			</WithSearchTermContext>
-		</WithAppAssetsContext>
+		<WithSearchTermContext>
+			<WithLocalAppMenuControllerContext>
+				<WithAppDrawerContext>
+					<ServerDebuggerStackBase />
+				</WithAppDrawerContext>
+			</WithLocalAppMenuControllerContext>
+		</WithSearchTermContext>
 	);
 }
 

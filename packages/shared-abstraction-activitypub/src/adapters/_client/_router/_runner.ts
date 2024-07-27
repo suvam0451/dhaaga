@@ -98,16 +98,16 @@ export class DhaagaRestClient<T extends COMPAT> {
 		switch (this._software) {
 			case KNOWN_SOFTWARE.PLEROMA:
 			case KNOWN_SOFTWARE.AKKOMA: {
-				return generator.default(KNOWN_SOFTWARE.PLEROMA, this.baseUrl) as any;
+				// @ts-ignore-next-line
+				return generator(KNOWN_SOFTWARE.PLEROMA, this.baseUrl) as any;
 			}
 			case KNOWN_SOFTWARE.FIREFISH: {
-				return generator.default(KNOWN_SOFTWARE.FIREFISH, this.baseUrl) as any;
+				// @ts-ignore-next-line
+				return generator(KNOWN_SOFTWARE.FIREFISH, this.baseUrl) as any;
 			}
 			case KNOWN_SOFTWARE.GOTOSOCIAL: {
-				return generator.default(
-					KNOWN_SOFTWARE.GOTOSOCIAL,
-					this.baseUrl,
-				) as any;
+				// @ts-ignore-next-line
+				return generator(KNOWN_SOFTWARE.GOTOSOCIAL, this.baseUrl) as any;
 			}
 			default: {
 				throw new Error(DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY);

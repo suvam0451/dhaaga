@@ -8,23 +8,23 @@ class MisskeyTag implements TagInterface {
 	}
 
 	isFollowing(): boolean | null | undefined {
-		throw new Error('Method not implemented.');
+		return false;
 	}
 
 	getHistory() {
-		throw new Error('Method not implemented.');
+		return [];
 	}
 
 	getName(): string | null | undefined {
-		throw new Error('Method not implemented.');
+		return this.ref.instance.tag;
 	}
 
 	getUrl(): string | null | undefined {
-		throw new Error('Method not implemented.');
+		return '';
 	}
 
 	print(): void {
-		throw new Error('Method not implemented.');
+		console.log('[INFO]:', this.ref.instance);
 	}
 }
 

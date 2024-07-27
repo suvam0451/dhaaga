@@ -8,7 +8,7 @@ import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Text } from '@rneui/themed';
-import { Audio } from 'expo-av';
+// import { Audio } from 'expo-av';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 type Props = {
@@ -33,25 +33,25 @@ export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
 });
 
 export const AppAudioComponent = memo(function Foo({ url }: { url: string }) {
-	const [sound, setSound] = useState<Audio.Sound | null>(null);
+	// const [sound, setSound] = useState<Audio.Sound | null>(null);
+	//
+	// async function create() {
+	// 	const { sound } = await Audio.Sound.createAsync(
+	// 		{ uri: url },
+	// 		{ shouldPlay: true, isMuted: false },
+	// 	);
+	// 	setSound(sound);
+	// 	await sound.playAsync();
+	// }
 
-	async function create() {
-		const { sound } = await Audio.Sound.createAsync(
-			{ uri: url },
-			{ shouldPlay: true, isMuted: false },
-		);
-		setSound(sound);
-		await sound.playAsync();
-	}
-
-	useEffect(() => {
-		return sound
-			? () => {
-					console.log('Unloading Sound');
-					sound.unloadAsync();
-				}
-			: undefined;
-	}, [sound]);
+	// useEffect(() => {
+	// 	return sound
+	// 		? () => {
+	// 				console.log('Unloading Sound');
+	// 				sound.unloadAsync();
+	// 			}
+	// 		: undefined;
+	// }, [sound]);
 
 	return (
 		<View key={101}>
@@ -67,7 +67,7 @@ export const AppAudioComponent = memo(function Foo({ url }: { url: string }) {
 				}}
 			>
 				<AntDesign
-					onPress={create}
+					// onPress={create}
 					name="play"
 					size={24}
 					color={APP_FONT.MONTSERRAT_BODY}
@@ -84,7 +84,6 @@ export const AppVideoComponent = memo(function Foo({
 	url,
 	height,
 	loop,
-	type,
 }: {
 	url: string;
 	height: number;
@@ -93,7 +92,9 @@ export const AppVideoComponent = memo(function Foo({
 }) {
 	const ref = useRef(null);
 	const [isPlaying, setIsPlaying] = useState(true);
-	const player = useVideoPlayer(url, (player) => {
+	let modifiedUrl = url.replace('?sensitive=true', '');
+
+	const player = useVideoPlayer(modifiedUrl, (player) => {
 		if (loop) {
 			player.loop = true;
 		}
@@ -118,7 +119,7 @@ export const AppVideoComponent = memo(function Foo({
 				ref={ref}
 				style={{
 					width: MEDIA_CONTAINER_WIDTH,
-					height: height,
+					height,
 					borderRadius: 8,
 				}}
 				player={player}

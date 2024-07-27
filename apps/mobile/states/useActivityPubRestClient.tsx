@@ -1,10 +1,4 @@
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useState,
-} from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import {
 	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
@@ -20,6 +14,7 @@ import { Account } from '../entities/account.entity';
 import { EmojiService } from '../services/emoji.service';
 import { useGlobalMmkvContext } from './useGlobalMMkvCache';
 import AccountService from '../services/account.service';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 type Type = {
 	client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null;
@@ -42,9 +37,7 @@ const defaultValue: Type = {
 	me: null,
 	meRaw: null,
 	primaryAcct: null,
-	regenerate: function (): void {
-		throw new Error('Function not implemented.');
-	},
+	regenerate: () => {},
 };
 
 const ActivityPubRestClientContext = createContext<Type>(defaultValue);
@@ -68,30 +61,30 @@ function WithActivityPubRestClient({ children }: any) {
 	const db = useRealm();
 	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
 	const { globalDb } = useGlobalMmkvContext();
-	const accounts = useQuery(Account);
 
-	const regenerateFn = useCallback(() => {
-		const acct = accounts.find((o) => o.selected === true);
+	function regenerateFn() {
+		const acct = db.objects(Account).find((o: Account) => o.selected === true);
 		if (!acct) {
 			setRestClient(null);
 			return;
 		}
 
 		const token = AccountRepository.findSecret(db, acct, 'access_token')?.value;
-
 		if (!token) {
 			setRestClient(null);
 			return;
 		}
+
 		const client = ActivityPubClientFactory.get(acct.domain as any, {
 			instance: acct?.subdomain,
 			token,
 		});
 		setRestClient(client);
 		setPrimaryAcct(acct);
-		EmojiService.loadEmojisForInstance(db, globalDb, acct.subdomain);
-		AccountService.loadFollowedTags(db, client);
-	}, [accounts]);
+		EmojiService.resolveEmojis(db, globalDb, acct.subdomain, {
+			forcedUpdate: false,
+		});
+	}
 
 	useEffect(() => {
 		regenerateFn();

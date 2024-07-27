@@ -9,6 +9,9 @@ class MastodonUser implements UserInterface {
 		this.mp = mp;
 	}
 
+	// not implemented
+	getPinnedNotes = () => [];
+
 	getInstanceUrl(): string {
 		const ex = /^https?:\/\/(.*?)\/(.*?)/;
 		const subdomainExtractUrl = /^https?:\/\/(.*?)\/@?/;

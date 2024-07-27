@@ -1,9 +1,0 @@
-{
-  "name": "debugger",
-  "description": "A list of files, useful for debugging api logic and various text parsers.",
-  "license": "MIT",
-  "scripts": {
-    "mfm": "ts-node mfm.ts"
-  },
-  "private": true
-}

@@ -74,12 +74,6 @@ export class EmojiService {
 		);
 		// TODO: this needs to be brought back
 		if (found) {
-			// console.log(
-			// 	'[INFO]: found cached emojis:',
-			// 	subdomain,
-			// 	found.data.length,
-			// 	formatRelative(found.lastFetchedAt, new Date()),
-			// );
 			return found.data;
 		}
 
@@ -89,6 +83,7 @@ export class EmojiService {
 		// GlobalMmkvCacheService
 		const result =
 			await ActivityPubService.fetchEmojisAndInstanceSoftware(subdomain);
+		console.log(subdomain, result?.software, result?.emojis?.length);
 
 		db.write(() => {
 			ActivityPubServerRepository.updateSoftwareType(db, {
@@ -152,6 +147,16 @@ export class EmojiService {
 				statusIs[i].getUser(),
 				domain,
 			);
+			/**
+			 * when host == null, this means user
+			 * belongs to same instance.
+			 *
+			 * We can probably skip emoji lookup for
+			 * such occurrences
+			 */
+			if (!_user.getInstanceUrl()) {
+				continue;
+			}
 			if (!instanceSet.has(_user.getInstanceUrl()))
 				instanceSet.add(_user.getInstanceUrl());
 		}
@@ -184,7 +189,6 @@ export class EmojiService {
 	static findCachedEmoji({
 		emojiMap,
 		db,
-		globalDb,
 		id,
 		remoteInstance,
 	}: {

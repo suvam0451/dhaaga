@@ -10,6 +10,7 @@ import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { Text } from 'react-native';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { randomUUID } from 'expo-crypto';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type Props = {
 	value: string;
@@ -55,7 +56,9 @@ const HashtagSegment = memo(function Foo({ value }: Props) {
 					? APP_THEME.COLOR_SCHEME_D_EMPHASIS
 					: APP_THEME.COLOR_SCHEME_D_NORMAL,
 				opacity: 1,
-				fontFamily: isFollowed ? 'Montserrat-Bold' : 'Montserrat-Regular',
+				fontFamily: isFollowed
+					? APP_FONTS.MONTSERRAT_700_BOLD
+					: APP_FONTS.MONTSERRAT_400_REGULAR,
 				backgroundColor: isPrivatelyFollowed
 					? 'rgba(240,185,56,0.16)'
 					: undefined,

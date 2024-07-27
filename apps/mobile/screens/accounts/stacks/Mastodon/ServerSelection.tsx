@@ -1,49 +1,35 @@
-import { View, TextInput, Keyboard, TouchableOpacity } from 'react-native';
+import {
+	View,
+	TextInput,
+	TouchableOpacity,
+	KeyboardAvoidingView,
+	Platform,
+	StyleSheet,
+} from 'react-native';
 import { Text } from '@rneui/themed';
-import { useEffect, useState } from 'react';
-import { MastodonService } from '@dhaaga/shared-provider-mastodon';
-import { MainText } from '../../../../styles/Typography';
-import { StandardView } from '../../../../styles/Containers';
+import { useState } from 'react';
 import { Button } from '@rneui/base';
-import TitleOnlyStackHeaderContainer from '../../../../components/containers/TitleOnlyStackHeaderContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import ActivityPubService from '../../../../services/activitypub.service';
+import { router } from 'expo-router';
+import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
+import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 function AccountsScreen() {
-	const [InputText, setInputText] = useState('mastodon.social');
-	const route = useRoute();
-	const navigation = useNavigation<any>();
+	const [Subdomain, setSubdomain] = useState('mastodon.social');
 
 	async function onPressNext() {
-		const authUrl = await MastodonService.createCodeRequestUrl(
-			`https://${InputText}`,
-			process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID,
-		);
-		const subdomain = `https://${InputText}`;
-		navigation.navigate('Mastodon Sign-In', { signInUrl: authUrl, subdomain });
+		const signInStrategy = await ActivityPubService.signInUrl(Subdomain);
+		router.push({
+			pathname: 'accounts/signin-md',
+			params: {
+				signInUrl: signInStrategy?.loginUrl,
+				subdomain: Subdomain,
+				domain: signInStrategy?.software,
+			},
+		});
 	}
-
-	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-	useEffect(() => {
-		const keyboardDidShowListener = Keyboard.addListener(
-			'keyboardDidShow',
-			() => {
-				setKeyboardVisible(true); // or some other action
-			},
-		);
-		const keyboardDidHideListener = Keyboard.addListener(
-			'keyboardDidHide',
-			() => {
-				setKeyboardVisible(false); // or some other action
-			},
-		);
-
-		return () => {
-			keyboardDidHideListener.remove();
-			keyboardDidShowListener.remove();
-		};
-	}, []);
 
 	const popularServers = [
 		{ value: 'mastodon.social', label: 'mastodon.social' },
@@ -59,32 +45,33 @@ function AccountsScreen() {
 	];
 
 	return (
-		<TitleOnlyStackHeaderContainer
-			route={route}
-			navigation={navigation}
-			headerTitle={`Select Instance`}
-		>
-			<StandardView
+		<WithAutoHideTopNavBar title={`Select Instance`}>
+			<KeyboardAvoidingView
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				style={{
 					display: 'flex',
-					justifyContent: 'space-between',
-					height: '100%',
-					marginTop: 16,
+					paddingHorizontal: 12,
+					marginBottom: 54,
 				}}
 			>
-				<View>
-					{!isKeyboardVisible && (
-						<View>
-							<MainText style={{ marginBottom: 16 }}>
+				<View
+					style={{
+						display: 'flex',
+						flexGrow: 1,
+						height: '100%',
+					}}
+				>
+					<View style={{ flexGrow: 1 }}>
+						<HideOnKeyboardVisibleContainer>
+							<Text style={styles.sectionHeaderText}>
 								Step 1: Select your server
-							</MainText>
-
+							</Text>
 							<View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
 								{popularServers.map((server, i) => (
 									<TouchableOpacity
 										key={i}
 										onPress={() => {
-											setInputText(server.value);
+											setSubdomain(server.value);
 										}}
 									>
 										<View
@@ -95,63 +82,67 @@ function AccountsScreen() {
 												borderRadius: 4,
 											}}
 										>
-											<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
+											<Text
+												style={{
+													color: APP_FONT.MONTSERRAT_BODY,
+													fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+												}}
+											>
 												{server.label}
 											</Text>
 										</View>
 									</TouchableOpacity>
 								))}
 							</View>
-						</View>
-					)}
-
-					<MainText style={{ marginTop: 32, marginBottom: 12 }}>
-						Or, enter it manually
-					</MainText>
-					<View
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-						}}
-					>
-						<Text style={{ fontSize: 16, color: 'gray' }}>https://</Text>
-						<TextInput
+						</HideOnKeyboardVisibleContainer>
+						<Text style={styles.sectionHeaderText}>Or, enter it manually</Text>
+						<View
 							style={{
-								fontSize: 16,
-								color: APP_THEME.LINK,
-								textDecorationLine: 'underline',
-							}}
-							placeholder="mastodon.social"
-							defaultValue="mastodon.social"
-							onChangeText={setInputText}
-							value={InputText}
-						/>
-						<Text style={{ fontSize: 16, color: 'gray' }}>
-							/oauth/authorize
-						</Text>
-					</View>
-				</View>
-				<View style={{ marginBottom: 32 }}>
-					<Button
-						style={{ width: 100, marginBottom: 32 }}
-						onPress={onPressNext}
-						color={'rgb(99, 100, 255)'}
-					>
-						<Text
-							style={{
-								color: APP_FONT.MONTSERRAT_HEADER,
-								fontSize: 16,
-								fontFamily: 'Inter-Bold',
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
 							}}
 						>
+							<Text style={{ fontSize: 16, color: 'gray' }}>https://</Text>
+							<TextInput
+								style={{
+									fontSize: 16,
+									color: APP_THEME.LINK,
+									textDecorationLine: 'underline',
+								}}
+								placeholder="mastodon.social"
+								defaultValue="mastodon.social"
+								onChangeText={setSubdomain}
+								value={Subdomain}
+							/>
+							<Text style={{ fontSize: 16, color: 'gray' }}>
+								/oauth/authorize
+							</Text>
+						</View>
+					</View>
+					<View style={{ marginBottom: 32 }}>
+						<Button
+							style={{ width: 100, marginBottom: 32 }}
+							onPress={onPressNext}
+							color={'rgb(99, 100, 255)'}
+						>
 							Next
-						</Text>
-					</Button>
+						</Button>
+					</View>
 				</View>
-			</StandardView>
-		</TitleOnlyStackHeaderContainer>
+			</KeyboardAvoidingView>
+		</WithAutoHideTopNavBar>
 	);
 }
+
+const styles = StyleSheet.create({
+	sectionHeaderText: {
+		marginTop: 32,
+		marginBottom: 12,
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 20,
+		fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
+	},
+});
 
 export default AccountsScreen;

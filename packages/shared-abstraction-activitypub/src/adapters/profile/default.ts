@@ -5,6 +5,8 @@ export class DefaultUser implements UserInterface {
 		return '';
 	}
 
+	getPinnedNotes = () => [];
+
 	getIsLockedProfile(): boolean | null | undefined {
 		return false;
 	}

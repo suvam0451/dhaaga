@@ -8,12 +8,25 @@ import { createRestAPIClient } from 'masto';
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import { DhaagaMastoClient, MastoErrorHandler } from '../_router/_runner.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class MastodonInstanceRouter implements InstanceRoute {
 	client: RestClient;
 
 	constructor(forwarded: RestClient) {
 		this.client = forwarded;
+	}
+
+	getLoginUrl(
+		urlLike: string,
+		{}: { appName: string; appCallback: string; uuid: string },
+	): LibraryPromise<{
+		software: string;
+		version?: string | null | undefined;
+		loginUrl: string;
+		loginStrategy: 'code' | 'miauth';
+	}> {
+		throw new Error('Method not implemented.');
 	}
 
 	async getCustomEmojis(

@@ -28,6 +28,7 @@ export class Account extends Object {
 	domain: string; // abstraction layer --> mastodon/misskey
 	subdomain: string; // instance --> mastodon.social/misskey.io
 	username: string;
+	displayName?: string;
 	avatarUrl?: string;
 	password?: string;
 	createdAt: Date;
@@ -56,6 +57,7 @@ export class Account extends Object {
 			subdomain: 'string',
 			username: 'string',
 			password: 'string?',
+			displayName: 'string?',
 			createdAt: 'date',
 			updatedAt: 'date',
 			verified: 'bool?',

@@ -1,8 +1,7 @@
-import { Dimensions, View, Keyboard } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
-import { StandardView } from '../../../../styles/Containers';
 import { MainText } from '../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import * as Crypto from 'expo-crypto';
@@ -11,13 +10,16 @@ import { verifyToken } from '@dhaaga/shared-provider-misskey/src';
 import AccountCreationPreview, {
 	AccountCreationPreviewProps,
 } from '../../../../components/app/AccountDisplay';
-import TitleOnlyStackHeaderContainer from '../../../../components/containers/TitleOnlyStackHeaderContainer';
 import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import AccountRepository from '../../../../repositories/account.repo';
 import { useRealm } from '@realm/react';
+import { router, useLocalSearchParams } from 'expo-router';
+import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
+import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import AccountService from '../../../../services/account.service';
 
-function MisskeySignInStack({ route, navigation }) {
+function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');
 	const [PreviewCard, setPreviewCard] =
 		useState<AccountCreationPreviewProps | null>(null);
@@ -25,11 +27,16 @@ function MisskeySignInStack({ route, navigation }) {
 	const [MisskeyId, setMisskeyId] = useState<string | null>(null);
 	const db = useRealm();
 
+	const params = useLocalSearchParams();
+	const _signInUrl: string = params['signInUrl'] as string;
+	const _subdomain: string = params['subdomain'] as string;
+	const _domain: string = params['domain'] as string;
+
 	useEffect(() => {
 		try {
 			const regex = /^https:\/\/(.*?)\/miauth\/(.*?)\?.*?/;
-			if (regex.test(route?.params?.signInUrl)) {
-				const session = regex.exec(route?.params?.signInUrl)[2];
+			if (regex.test(_signInUrl)) {
+				const session = regex.exec(_signInUrl)[2];
 				setSession(session);
 			}
 		} catch (e) {
@@ -38,30 +45,6 @@ function MisskeySignInStack({ route, navigation }) {
 	}, []);
 
 	const [SessionConfirmed, setSessionConfirmed] = useState(false);
-	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-	useEffect(() => {
-		const keyboardDidShowListener = Keyboard.addListener(
-			'keyboardDidShow',
-			() => {
-				setKeyboardVisible(true); // or some other action
-			},
-		);
-		const keyboardDidHideListener = Keyboard.addListener(
-			'keyboardDidHide',
-			() => {
-				setKeyboardVisible(false); // or some other action
-			},
-		);
-
-		return () => {
-			keyboardDidHideListener.remove();
-			keyboardDidShowListener.remove();
-		};
-	}, []);
-
-	const signInUrl = route?.params?.signInUrl || 'https://mastodon.social';
-	const subdomain = route?.params?.subdomain;
 
 	function callback(state) {
 		const regex = /^https:\/\/example.com\/\?session=(.*?)/;
@@ -72,7 +55,7 @@ function MisskeySignInStack({ route, navigation }) {
 	}
 
 	async function autoVerifyFromSession() {
-		const res = await verifyToken(subdomain, Session);
+		const res = await verifyToken(`https://${_subdomain}`, Session);
 		if (res.ok) {
 			setPreviewCard({
 				displayName: res?.user?.name,
@@ -85,49 +68,28 @@ function MisskeySignInStack({ route, navigation }) {
 	}
 
 	async function onPressConfirm() {
-		console.log('confirm pressed...');
-		console.log(PreviewCard, subdomain);
 		try {
-			db.write(() => {
-				const acct = AccountRepository.upsert(db, {
-					subdomain: subdomain,
-					domain: 'misskey',
-					username: PreviewCard.username,
-					avatarUrl: PreviewCard.avatar,
-				});
-				console.log(
-					'reached here...',
-					PreviewCard.displayName,
-					PreviewCard.avatar,
-					MisskeyId,
-					Token,
-				);
-
-				AccountRepository.setSecret(
-					db,
-					acct,
-					'display_name',
-					PreviewCard.displayName || '',
-				);
-				AccountRepository.setSecret(db, acct, 'avatar', PreviewCard.avatar);
-				AccountRepository.setSecret(db, acct, 'misskey_id', MisskeyId);
-				AccountRepository.setSecret(db, acct, 'access_token', Token);
-
-				console.log('done', acct);
+			AccountService.upsert(db, {
+				subdomain: _subdomain,
+				domain: _domain,
+				username: PreviewCard.username,
+				avatarUrl: PreviewCard.avatar,
+				displayName: PreviewCard.displayName,
+				credentials: [
+					{ key: 'display_name', value: PreviewCard.displayName },
+					{ key: 'avatar', value: PreviewCard.avatar },
+					{ key: 'misskey_id', value: MisskeyId },
+					{ key: 'access_token', value: Token },
+				],
 			});
-
-			navigation.navigate('Select an Account');
+			router.replace('/accounts/landing');
 		} catch (e) {
 			console.log(e);
 		}
 	}
 
 	return (
-		<TitleOnlyStackHeaderContainer
-			route={route}
-			navigation={navigation}
-			headerTitle={`Misskey Sign-In`}
-		>
+		<WithAutoHideTopNavBar title={`Misskey Sign-In`}>
 			<View style={{ height: '100%' }}>
 				{!SessionConfirmed && (
 					<WebView
@@ -135,12 +97,13 @@ function MisskeySignInStack({ route, navigation }) {
 							flex: 1,
 							minWidth: Dimensions.get('window').width - 20,
 						}}
-						source={{ uri: signInUrl }}
+						source={{ uri: _signInUrl }}
 						onNavigationStateChange={callback}
 					/>
 				)}
-				{!isKeyboardVisible && (
-					<StandardView style={{ height: 160 }}>
+
+				<HideOnKeyboardVisibleContainer>
+					<View style={{ height: 160, marginHorizontal: 12 }}>
 						<MainText style={{ marginBottom: 12, marginTop: 16 }}>
 							Step 2: Confirm your account
 						</MainText>
@@ -216,10 +179,10 @@ function MisskeySignInStack({ route, navigation }) {
 								Confirm
 							</Text>
 						</Button>
-					</StandardView>
-				)}
+					</View>
+				</HideOnKeyboardVisibleContainer>
 			</View>
-		</TitleOnlyStackHeaderContainer>
+		</WithAutoHideTopNavBar>
 	);
 }
 

@@ -3,6 +3,7 @@ import type { Hashtag } from 'misskey-js/autogen/models.js';
 import MisskeyTag from './misskey.js';
 import MastodonTag from './mastodon.js';
 import DefaultTag from './default.js';
+import { KNOWN_SOFTWARE } from '../_client/_router/instance.js';
 
 export type TagType = mastodon.v1.Tag | Hashtag | null | undefined;
 
@@ -43,10 +44,14 @@ export class MisskeyTagInstance {
 
 export function ActivityPubTagAdapter(tag: any, domain: string): TagInterface {
 	switch (domain) {
-		case 'misskey': {
+		case KNOWN_SOFTWARE.MISSKEY:
+		case KNOWN_SOFTWARE.FIREFISH:
+		case KNOWN_SOFTWARE.MEISSKEY:
+		case KNOWN_SOFTWARE.KMYBLUE:
+		case KNOWN_SOFTWARE.CHERRYPICK: {
 			return new MisskeyTag(new MisskeyTagInstance(tag as Hashtag));
 		}
-		case 'mastodon': {
+		case KNOWN_SOFTWARE.MASTODON: {
 			return new MastodonTag(new MastodonTagInstance(tag as mastodon.v1.Tag));
 		}
 		default: {

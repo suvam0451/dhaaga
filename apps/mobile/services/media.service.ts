@@ -58,15 +58,16 @@ class MediaService {
 		if (!items) return;
 		let MIN_HEIGHT = 0;
 		for (const item of items) {
-			const meta = item.getMeta();
+			const seedWidth = item.getWidth();
+			const seedHeight = item.getHeight();
 
-			const width = item.getWidth();
-			const height = item.getHeight();
-
-			if (height && height > MIN_HEIGHT) {
-				const multiplier = deviceWidth / width;
-				MIN_HEIGHT = Math.min(height * multiplier, maxHeight);
-			}
+			const { height } = this.calculateDimensions({
+				maxW: deviceWidth,
+				maxH: maxHeight,
+				H: seedHeight,
+				W: seedWidth,
+			});
+			MIN_HEIGHT = Math.max(MIN_HEIGHT, height);
 		}
 		return MIN_HEIGHT;
 	}

@@ -3,7 +3,6 @@ import Carousel from 'react-native-reanimated-carousel';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
 import MediaService from '../../../services/media.service';
-import { Text } from '@rneui/themed';
 import {
 	MARGIN_TOP,
 	MEDIA_CONTAINER_MAX_HEIGHT,
@@ -34,27 +33,37 @@ const TimelineMediaRendered = memo(function Foo({
 	index?: number;
 	totalCount?: number;
 }) {
+	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
+
 	const MediaItem = useMemo(() => {
 		const type = attachment?.getType();
+
 		switch (type) {
-			case 'image': {
+			case 'image':
+			case 'image/jpeg':
+			case 'image/png':
+			case 'image/webp': {
 				return (
 					<AppImageComponent
-						url={attachment.getUrl()}
+						url={attachment.getPreviewUrl()}
 						blurhash={attachment.getBlurHash()}
 					/>
 				);
 			}
-			case 'video': {
+			case 'video':
+			case 'video/mp4':
+			case 'video/webm':
+			case 'video/quicktime': {
 				return (
 					<AppVideoComponent
 						type={'video'}
 						url={attachment.getUrl()}
-						height={CalculatedHeight}
+						height={_height}
 					/>
 				);
 			}
-			case 'gifv': {
+			case 'gifv':
+			case 'image/gif': {
 				return (
 					<AppVideoComponent
 						type={'gifv'}
@@ -81,7 +90,7 @@ const TimelineMediaRendered = memo(function Foo({
 				justifyContent: 'center',
 				alignItems: 'center',
 				width: MEDIA_CONTAINER_WIDTH,
-				height: attachment.getType() === 'audio' ? 48 : CalculatedHeight,
+				height: attachment.getType() === 'audio' ? 48 : _height,
 				position: 'relative',
 				marginTop: MARGIN_TOP,
 			}}
@@ -119,7 +128,7 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 	const CalculatedHeight = useMemo(() => {
 		if (!attachments) return MEDIA_CONTAINER_MAX_HEIGHT;
 		return MediaService.calculateHeightForMediaContentCarousal(attachments, {
-			deviceWidth: Dimensions.get('window').width,
+			deviceWidth: Dimensions.get('window').width - 32,
 			maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
 		});
 	}, [attachments]);
@@ -135,7 +144,7 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 		);
 	}
 	return (
-		<View style={{ marginTop: MARGIN_TOP }}>
+		<View style={{ marginTop: MARGIN_TOP, flex: 1 }}>
 			<Carousel
 				width={Dimensions.get('window').width}
 				height={CalculatedHeight}

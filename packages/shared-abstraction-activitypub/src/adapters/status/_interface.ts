@@ -33,7 +33,7 @@ export interface StatusInterface {
 
 	getVisibility(): string;
 
-	getAccountUrl(): string | null | undefined;
+	getAccountUrl(mySubdomain?: string): string | null | undefined;
 
 	getRepostedStatus(): StatusInterface | null | undefined;
 
@@ -83,6 +83,15 @@ export interface StatusInterface {
 	setDescendents(items: StatusInterface[]): void;
 
 	getDescendants(): StatusInterface[];
+
+	getReactions(): { id: string; count: number }[];
+
+	getReactionEmojis(): {
+		height?: number;
+		width?: number;
+		name: string;
+		url: string;
+	}[];
 }
 
 export class StatusContextInstance {

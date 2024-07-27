@@ -12,18 +12,15 @@ import {
 } from 'react-native-safe-area-context';
 import WithActivityPubRestClient from '../states/useActivityPubRestClient';
 import { View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { APP_THEME } from '../styles/AppTheme';
-import { useFonts } from 'expo-font';
 import appFonts from '../styles/AppFonts';
 import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
+import { useFonts } from '@expo-google-fonts/montserrat';
 
 // to get rid of realm warnings
 import AppSettingsService from '../services/app-settings.service';
 import { AppProfileRepository } from '../repositories/app-profile.repo';
-import { AppProfile } from '../entities/app-profile.entity';
 
 /**
  * Suppress these warnings...
@@ -64,35 +61,33 @@ function WithGorhomBottomSheetWrapper() {
 	 */
 	useEffect(() => {
 		AppSettingsService.populateSeedData(db);
-	}, []);
+	}, [db]);
 
 	useEffect(() => {
 		AppProfileRepository(db).upsert({ name: 'Default' });
 		AppProfileRepository(db).ensureDefaultProfileIsActive();
 		AppProfileRepository(db).seedAppSettings({ name: 'Default' });
-	}, []);
+	}, [db]);
 
 	const [fontsLoaded, fontError] = useFonts(appFonts);
+
 	const onLayoutRootView = useCallback(async () => {
-		if (fontsLoaded || fontError) {
+		if (!fontsLoaded || fontError) {
 			await SplashScreen.hideAsync();
 		}
 	}, [fontsLoaded, fontError]);
 
 	return (
 		<WithActivityPubRestClient>
-			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
-			<View style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}>
+			<View
+				style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
+				onLayout={onLayoutRootView}
+			>
 				<Stack
 					initialRouteName={'(tabs)'}
 					screenOptions={{ headerShown: false }}
 				>
-					<Stack.Screen
-						name="(tabs)"
-						options={{
-							headerShown: false,
-						}}
-					/>
+					<Stack.Screen name="(tabs)" />
 				</Stack>
 			</View>
 		</WithActivityPubRestClient>
@@ -108,7 +103,7 @@ export default function Page() {
 				{/* In-Memory Store -- MMKV */}
 				<WithGlobalMmkvContext>
 					{/* Main Database -- Realm */}
-					<RealmProvider schema={schemas} schemaVersion={16}>
+					<RealmProvider schema={schemas} schemaVersion={17}>
 						{/* API Caching -- Tanstack */}
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}

@@ -47,16 +47,56 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		this.ref = ref;
 	}
 
+	getReactions(): { id: string; count: number }[] {
+		const retval = [];
+		const src = this.ref.instance?.reactions || {};
+		for (const k in src) {
+			retval.push({ id: k, count: src[k] });
+		}
+		return retval;
+	}
+
+	// reactionAcceptance
+	// :
+	// "likeOnlyForRemote"
+
+	getReactionEmojis(): {
+		height?: number | undefined;
+		width?: number | undefined;
+		name: string;
+		url: string;
+	}[] {
+		const retval = [];
+		const src = this.ref.instance?.reactionEmojis || {};
+		for (const k in src) {
+			if (typeof src[k] === 'string') {
+				// misskey
+				retval.push({ name: k, url: src[k] });
+			} else {
+				// firefish
+				retval.push({
+					name: (src[k] as any)?.['name'],
+					url: (src[k] as any)?.['url'],
+					height: (src[k] as any)?.['height'],
+					width: (src[k] as any)?.['width'],
+				});
+			}
+		}
+		return retval;
+	}
+
 	getIsRebloggedByMe(): boolean | null | undefined {
 		return false;
 	}
 
 	getIsSensitive(): boolean {
-		throw new Error('Method not implemented.');
+		return (
+			this.ref.instance?.cw !== undefined && this.ref.instance?.cw !== null
+		);
 	}
 
 	getSpoilerText(): string | null | undefined {
-		throw new Error('Method not implemented.');
+		return this.ref.instance?.cw;
 	}
 
 	getRaw(): Status {
@@ -80,7 +120,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	}
 
 	isReply(): boolean {
-		return false;
+		return (
+			this.ref.instance?.reply !== undefined &&
+			this.ref.instance?.reply !== null
+		);
 	}
 
 	getParentStatusId(): string | null | undefined {
@@ -114,12 +157,21 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		return this.ref?.instance?.visibility;
 	}
 
-	getAccountUrl() {
-		return this.ref?.instance?.user.instance?.name;
+	getAccountUrl(mySubdomain?: string) {
+		if (
+			this.ref.instance?.user?.host === undefined ||
+			this.ref.instance?.user?.host === null
+		) {
+			return `https://${mySubdomain}/@${this.ref.instance?.user?.username}`;
+		}
+		return `https://${this.ref.instance?.user?.host}/@${this.ref.instance?.user?.username}`;
 	}
 
 	getRepostedStatus(): StatusInterface | null | undefined {
-		if (this.ref?.instance?.renote) {
+		if (
+			this.ref?.instance?.renote !== undefined &&
+			this.ref.instance?.renote !== null
+		) {
 			return new MisskeyToStatusAdapter(
 				new NoteInstance(this.ref?.instance?.renote),
 			) as unknown as StatusInterface;
@@ -139,7 +191,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	}
 
 	isReposted() {
-		return this.ref?.instance?.renote !== null;
+		return (
+			this.ref?.instance?.renote !== undefined &&
+			this.ref?.instance?.renote !== null
+		);
 	}
 
 	getContent() {

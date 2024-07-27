@@ -11,10 +11,13 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import { APP_FONT } from '../../../../styles/AppTheme';
+import MentionNotificationFragment from './segments/MentionNotificationFragment';
+import FavouriteNotificationFragment from './segments/FavouriteNotificationFragment';
+import { Link } from 'expo-router';
 
 interface MentionItem {
 	props: AppNotificationGroup;
-	type: DhaagaJsNotificationType.MENTION;
+	type: DhaagaJsNotificationType;
 }
 
 type ListItem = MentionItem;
@@ -22,13 +25,13 @@ type ListItem = MentionItem;
 function FlashListRenderer({ item }: { item: ListItem }) {
 	switch (item.type) {
 		case DhaagaJsNotificationType.MENTION: {
-			return (
-				<View>
-					<Text>{item.props.id}</Text>
-				</View>
-			);
+			return <MentionNotificationFragment item={item.props} />;
+		}
+		case DhaagaJsNotificationType.FAVOURITE: {
+			return <FavouriteNotificationFragment item={item.props} />;
 		}
 		default: {
+			console.log('notification type not handled', item.type);
 			return (
 				<View>
 					<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
@@ -63,9 +66,11 @@ function LandingPageStack() {
 				contentContainerStyle={{ paddingTop: 54, paddingHorizontal: 8 }}
 				ListHeaderComponent={
 					<View>
-						<View>
-							<Text>Conversations</Text>
-						</View>
+						<Link href={'/notifications/conversations'}>
+							<View>
+								<Text>Conversations</Text>
+							</View>
+						</Link>
 						<ControlSegment
 							hash={State}
 							selection={NotificationFilters.current}

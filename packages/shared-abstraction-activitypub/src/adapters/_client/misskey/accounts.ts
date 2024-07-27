@@ -14,8 +14,8 @@ import {
 	successWithData,
 } from '../_router/dto/api-responses.dto.js';
 import { BaseAccountsRouter } from '../default/accounts.js';
-import { LibraryResponse } from '../_router/_types.js';
-import { MastoRelationship, MastoTrendLink } from '../_interface.js';
+import { MastoRelationship, MissUserDetailed } from '../_interface.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class MisskeyAccountsRouter
 	extends BaseAccountsRouter
@@ -38,9 +38,12 @@ export class MisskeyAccountsRouter
 		return successWithData(data);
 	}
 
-	async relationships(
-		ids: string[],
-	): Promise<LibraryResponse<MastoRelationship[]>> {
+	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {
 		return notImplementedErrorBuilder();
+	}
+
+	async get(id: string): LibraryPromise<MissUserDetailed> {
+		const data = await this.lib.client.request('users/show', { userId: id });
+		return { data };
 	}
 }

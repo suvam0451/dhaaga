@@ -18,6 +18,7 @@ import { MisskeyBookmarksRouter } from './bookmarks.js';
 import { MisskeyTrendsRouter } from './trends.js';
 import { MisskeyNotificationsRouter } from './notifications.js';
 import { MisskeyTimelinesRouter } from './timelines.js';
+import { MisskeyTagsRouter } from './tags.js';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -29,6 +30,7 @@ class MisskeyRestClient implements ActivityPubClient {
 	trends: MisskeyTrendsRouter;
 	notifications: MisskeyNotificationsRouter;
 	timelines: MisskeyTimelinesRouter;
+	tags: MisskeyTagsRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -45,6 +47,7 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.trends = new MisskeyTrendsRouter(this.client);
 		this.notifications = new MisskeyNotificationsRouter(this.client);
 		this.timelines = new MisskeyTimelinesRouter(this.client);
+		this.tags = new MisskeyTagsRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<Status> {
@@ -113,18 +116,6 @@ class MisskeyRestClient implements ActivityPubClient {
 
 	async getTrendingLinks() {
 		return [];
-	}
-
-	async followTag(id: string) {
-		return null;
-	}
-
-	async unfollowTag(id: string) {
-		return null;
-	}
-
-	async getTag(id: string) {
-		return null;
 	}
 
 	async muteUser(id: string): Promise<void> {

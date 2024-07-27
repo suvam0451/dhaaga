@@ -14,6 +14,7 @@ import { DefaultBookmarksRouter } from './bookmarks.js';
 import { DefaultTrendsRouter } from './trends.js';
 import { DefaultNotificationsRouter } from './notifications.js';
 import { DefaultTimelinesRouter } from './timelines.js';
+import { DefaultTagRouter } from './tags.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
@@ -23,6 +24,7 @@ class UnknownRestClient implements ActivityPubClient {
 	trends: DefaultTrendsRouter;
 	notifications: DefaultNotificationsRouter;
 	timelines: DefaultTimelinesRouter;
+	tags: DefaultTagRouter;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
@@ -32,6 +34,7 @@ class UnknownRestClient implements ActivityPubClient {
 		this.trends = new DefaultTrendsRouter();
 		this.notifications = new DefaultNotificationsRouter();
 		this.timelines = new DefaultTimelinesRouter();
+		this.tags = new DefaultTagRouter();
 	}
 
 	reblog(id: string): Promise<Status> {
@@ -104,18 +107,6 @@ class UnknownRestClient implements ActivityPubClient {
 
 	getTrendingLinks(): Promise<any[]> {
 		throw new Error('Method not implemented.');
-	}
-
-	async followTag(id: string) {
-		return null;
-	}
-
-	async unfollowTag(id: string) {
-		return null;
-	}
-
-	async getTag() {
-		return null;
 	}
 
 	async muteUser(id: string) {

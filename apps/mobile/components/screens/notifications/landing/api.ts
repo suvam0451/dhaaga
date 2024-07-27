@@ -25,16 +25,19 @@ export type AppNotificationGroup = {
 };
 
 function useLandingPageStackApi() {
-	const [Notifications, setNotifications] = useState<AppNotificationGroup[]>(
-		[],
-	);
+	const [Notifications, setNotifications] = useState<
+		{
+			type: string;
+			props: AppNotificationGroup;
+		}[]
+	>([]);
 	const { client, domain } = useActivityPubRestClientContext();
 
 	async function api() {
 		if (!client) {
 			return [];
 		}
-		const { data } = await client.notifications.get({
+		const { data, error } = await client.notifications.get({
 			limit: 80,
 			excludeTypes: [],
 			types: [
@@ -43,6 +46,7 @@ function useLandingPageStackApi() {
 				DhaagaJsNotificationType.MENTION,
 			],
 		});
+		if (error) return [];
 		return data as any;
 	}
 
@@ -58,8 +62,11 @@ function useLandingPageStackApi() {
 	});
 
 	useEffect(() => {
+		if (!client) return;
+
 		const { data, status } = queryResults;
-		if (!data || !status) return;
+		console.log('data resp', data);
+		if (!data || status !== 'success') return;
 		const results: NotificationRenderType[] = [];
 
 		for (const datum of (data as any).data) {
@@ -112,9 +119,12 @@ function useLandingPageStackApi() {
 					a.createdAt > b.createdAt ? 1 : -1,
 			);
 			appNotifs.push({
-				id: k,
-				items: v,
-				createdAt: sorted[0].createdAt,
+				type: sorted[0].type,
+				props: {
+					id: k,
+					items: v,
+					createdAt: sorted[0].createdAt,
+				},
 			});
 		}
 		setNotifications(appNotifs);

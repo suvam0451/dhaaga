@@ -25,6 +25,7 @@ import { MastodonBookmarksRouter } from './bookmarks.js';
 import { MastodonTrendsRouter } from './trends.js';
 import { MastodonNotificationsRouter } from './notifications.js';
 import { MastodonTimelinesRouter } from './timelines.js';
+import { MastodonTagRouter } from './tags.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -35,6 +36,7 @@ class MastodonRestClient implements ActivityPubClient {
 	trends: MastodonTrendsRouter;
 	notifications: MastodonNotificationsRouter;
 	timelines: MastodonTimelinesRouter;
+	tags: MastodonTagRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -48,6 +50,7 @@ class MastodonRestClient implements ActivityPubClient {
 		this.trends = new MastodonTrendsRouter(this.client);
 		this.notifications = new MastodonNotificationsRouter(this.client);
 		this.timelines = new MastodonTimelinesRouter(this.client);
+		this.tags = new MastodonTagRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<MastoStatus | null> {
@@ -167,39 +170,6 @@ class MastodonRestClient implements ActivityPubClient {
 		} catch (e) {
 			console.log(e);
 			return [];
-		}
-	}
-
-	async followTag(id: string) {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.tags.$select(id).follow();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
-	async unfollowTag(id: string) {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.tags.$select(id).unfollow();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
-	async getTag(id: string) {
-		const _client = this.createPublicClient();
-		try {
-			console.log('started fetching tag', id, _client);
-			const data = await _client.v1.tags.$select(id).fetch();
-			console.log(data);
-			return data;
-		} catch (e) {
-			console.log(e);
-			return null;
 		}
 	}
 

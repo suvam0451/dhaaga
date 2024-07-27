@@ -10,6 +10,7 @@ export type AccountCreateDTO = {
 	subdomain: string;
 	username: string;
 	avatarUrl: string;
+	displayName?: string;
 	password?: string;
 	last_login_at?: Date;
 	verified?: boolean;
@@ -48,7 +49,7 @@ class AccountRepository {
 
 	static upsert(db: Realm, account: AccountCreateDTO): Account {
 		const removeHttps = account.subdomain?.replace(/^https?:\/\//, '');
-		
+
 		const match = this.find(db, account);
 		return db.create(
 			Account,
@@ -67,14 +68,12 @@ class AccountRepository {
 	}
 
 	static find(db: Realm, dto: AccountCreateDTO): Account {
-		return db
-			.objects(Account)
-			.find(
-				(o) =>
-					o.username === dto.username &&
-					o.domain === dto.domain &&
-					o.subdomain === dto.subdomain,
-			);
+		return db.objects(Account).find(
+			(o) =>
+				o.username === dto.username &&
+				// o.domain === dto.domain &&
+				o.subdomain === dto.subdomain,
+		);
 	}
 
 	static findSecret(
@@ -82,12 +81,16 @@ class AccountRepository {
 		account: Account,
 		key: string,
 	): KeyValuePair | null {
-		if (!account) return null;
-		const acct = db
-			.objects(Account)
-			.find((o) => o._id?.toString() === account._id?.toString());
-		if (!acct) return null;
-		return acct.secrets.find((o) => o.key === key);
+		try {
+			if (!account) return null;
+			const acct = db
+				.objects(Account)
+				.find((o) => o._id?.toString() === account._id?.toString());
+			if (!acct) return null;
+			return acct.secrets.find((o) => o.key === key);
+		} catch (e) {
+			return null;
+		}
 	}
 
 	static setSecret(
@@ -156,6 +159,12 @@ class AccountRepository {
 			data: savedBookmark,
 			message: 'New',
 		};
+	}
+
+	static updateSoftware(db: Realm, acct: Account, software: string) {
+		const match: Account = db.objectForPrimaryKey(Account, acct._id);
+		if (!match) return;
+		acct.domain = software;
 	}
 }
 

@@ -28,9 +28,10 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 
 		// injected
 		limit: TIMELINE_STATUS_LIMIT,
+		sinceId: minId,
+		untilId: maxId,
 		maxId,
 		minId,
-
 		// quirks
 		userId: _id,
 	};

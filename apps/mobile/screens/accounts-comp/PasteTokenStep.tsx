@@ -1,5 +1,5 @@
 import { Button, Divider } from '@rneui/base';
-import { StandardView } from '../../styles/Containers';
+import { View } from '../../styles/Containers';
 import { MainText } from '../../styles/Typography';
 import { Text } from 'react-native';
 
@@ -42,7 +42,7 @@ function PasteTokenStep({ Subdomain, Code }: PasteTokenStepProps) {
 	if (Code === null) return <></>;
 
 	return (
-		<StandardView
+		<View
 			style={{
 				display: 'flex',
 				justifyContent: 'flex-start',
@@ -58,7 +58,7 @@ function PasteTokenStep({ Subdomain, Code }: PasteTokenStepProps) {
 				A valid token was detected. Proceed with adding the account shown above?
 			</Text>
 			<Button onPress={onPressConfirm}>Proceed</Button>
-		</StandardView>
+		</View>
 	);
 }
 

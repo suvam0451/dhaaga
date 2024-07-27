@@ -147,7 +147,7 @@ export function AppInputSimpleSearch({
 						height: 48,
 						paddingVertical: 16,
 						paddingLeft: 16,
-						color: APP_FONT.MONTSERRAT_HEADER,
+						color: APP_FONT.MONTSERRAT_BODY,
 						fontSize: 16,
 						paddingBottom: 13,
 					}}

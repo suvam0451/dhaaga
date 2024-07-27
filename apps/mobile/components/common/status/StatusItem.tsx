@@ -1,6 +1,5 @@
 import { TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
-import { StandardView } from '../../../styles/Containers';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
@@ -20,8 +19,9 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import LocalizationService from '../../../services/localization.services';
 import { Image } from 'expo-image';
 import { RepliedStatusFragment } from './_static';
-import { router, useNavigation } from 'expo-router';
 import useAppNavigator from '../../../states/useAppNavigator';
+import EmojiReactions from './fragments/EmojiReactions';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 type StatusItemProps = {
 	// a list of color ribbons to indicate replies
@@ -42,9 +42,7 @@ type StatusFragmentProps = {
  */
 function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 	const { toPost } = useAppNavigator();
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-	const subdomain = primaryAcct?.subdomain;
+	const { domain, subdomain } = useActivityPubRestClientContext();
 
 	const { status, sharedStatus } = useActivitypubStatusContext();
 	const _status = isRepost ? sharedStatus : status;
@@ -75,7 +73,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 					username={_status?.getUsername()}
 					subdomain={subdomain}
 					visibility={_status?.getVisibility()}
-					accountUrl={_status?.getAccountUrl()}
+					accountUrl={_status?.getAccountUrl(subdomain)}
 				/>
 			</WithActivitypubUserContext>,
 		);
@@ -245,7 +243,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 						{isSensitive && !ShowSensitiveContent ? (
 							<View></View>
 						) : (
-							<View style={{ marginBottom: 0 }}>
+							<View>
 								{PostContent}
 								{ExplanationObject !== null && (
 									<ExplainOutput
@@ -264,6 +262,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 				) : (
 					<MediaItem attachments={_status?.getMediaAttachments()} />
 				)}
+				<EmojiReactions />
 				<StatusInteraction
 					openAiContext={aiContext}
 					setExplanationObject={setExplanationObject}
@@ -358,6 +357,7 @@ function SharedStatusFragment() {
 		remoteSubdomain: userI?.getInstanceUrl(),
 		emojiMap: userI?.getEmojiMap(),
 		deps: [userI],
+		expectedHeight: 32,
 	});
 
 	return useMemo(() => {
@@ -369,9 +369,12 @@ function SharedStatusFragment() {
 					backgroundColor: '#1e1e1e',
 					borderTopRightRadius: 8,
 					borderTopLeftRadius: 8,
+					paddingHorizontal: 8,
+					paddingTop: 4,
+					paddingBottom: 4,
 				}}
 			>
-				<StandardView
+				<View
 					style={{
 						display: 'flex',
 						flexDirection: 'row',
@@ -423,7 +426,7 @@ function SharedStatusFragment() {
 							)}
 						</Text>
 					</View>
-				</StandardView>
+				</View>
 			</View>
 		);
 	}, [_status, ParsedDisplayName]);
@@ -433,17 +436,19 @@ function SharedStatusFragment() {
  * Renders a status/note
  * @constructor
  */
-function StatusItem({
-	replyContextIndicators,
-	hideReplyIndicator,
-}: StatusItemProps) {
+function StatusItem({ replyContextIndicators }: StatusItemProps) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
 	const { status: _status, sharedStatus } = useActivitypubStatusContext();
 
 	return useMemo(() => {
 		switch (domain) {
-			case 'mastodon': {
+			case KNOWN_SOFTWARE.MASTODON:
+			case KNOWN_SOFTWARE.MISSKEY:
+			case KNOWN_SOFTWARE.FIREFISH:
+			case KNOWN_SOFTWARE.MEISSKEY:
+			case KNOWN_SOFTWARE.KMYBLUE:
+			case KNOWN_SOFTWARE.CHERRYPICK: {
 				return (
 					<Fragment>
 						{_status.isReposted() && <SharedStatusFragment />}
@@ -458,25 +463,10 @@ function StatusItem({
 						)}
 						<RootFragmentContainer
 							replyContextIndicators={replyContextIndicators}
-							mt={_status.isReposted() || _status.isReply() ? -8 : 0}
+							mt={_status.isReposted() || _status.isReply() ? -4 : 0}
 							isRepost={_status.isReposted()}
 						/>
 					</Fragment>
-				);
-			}
-			case 'misskey': {
-				if (_status && _status.isReposted() && !hideReplyIndicator) {
-					return (
-						<Fragment>
-							<SharedStatusFragment />
-							<RootFragmentContainer mt={-8} isRepost={true} />
-						</Fragment>
-					);
-				}
-				return (
-					<RootFragmentContainer
-						replyContextIndicators={replyContextIndicators}
-					/>
 				);
 			}
 			default: {

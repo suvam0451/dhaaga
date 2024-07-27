@@ -2,10 +2,11 @@ import { Linking, StyleSheet, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import SimpleTutorialContainer from '../../../components/containers/SimpleTutorialContainer';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 const styles = StyleSheet.create({
 	para: {
-		fontFamily: 'Montserrat-Regular',
+		fontFamily: APP_FONTS.MONTSERRAT_400_REGULAR,
 		color: APP_FONT.MONTSERRAT_HEADER,
 		marginBottom: 6,
 	},

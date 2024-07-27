@@ -11,20 +11,25 @@ export class MisskeyUser implements UserInterface {
 		this.ref = ref;
 	}
 
-	getInstanceUrl(): string {
-		throw new Error('Method not implemented.');
+	getPinnedNotes = () => this.ref.instance?.pinnedNotes || [];
+
+	getInstanceUrl() {
+		return this.ref.instance?.host;
 	}
 
 	getIsLockedProfile(): boolean | null | undefined {
 		return false;
 	}
 
-	getAccountUrl(): string {
-		return this.ref.instance.url || '';
+	getAccountUrl(mySubdomain?: string): string {
+		if (!this.ref.instance?.host && mySubdomain) {
+			return `https://${mySubdomain}/@${this.ref.instance?.username}`;
+		}
+		return `https://${this.ref.instance?.host}/@${this.ref.instance?.username}`;
 	}
 
 	getAppDisplayAccountUrl(myDomain: string): string {
-		throw new Error('Method not implemented.');
+		return '[ERROR]: acct url not implemented for misskey';
 	}
 
 	getEmojiMap(): Map<string, EmojiMapValue> {

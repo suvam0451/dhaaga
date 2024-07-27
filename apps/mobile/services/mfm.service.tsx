@@ -7,7 +7,7 @@ import { EmojiService } from './emoji.service';
 import { MMKV } from 'react-native-mmkv';
 import { Realm } from 'realm';
 import TextParserService from './text-parser';
-import { MfmNode } from 'mfm-js';
+import type { MfmNode } from '@dhaaga/shared-abstraction-activitypub';
 import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
 import MentionSegment from '../components/shared/mfm/MentionSegment';
 import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
@@ -194,6 +194,7 @@ class MfmComponentBuilder {
 	private parser(node: any) {
 		const k = randomUUID();
 		switch (node.type) {
+			case 'link':
 			case 'url': {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 
@@ -216,6 +217,18 @@ class MfmComponentBuilder {
 				);
 			}
 
+			case 'plain': {
+				return (
+					<Text
+						key={k}
+						style={{
+							color: APP_FONT.MONTSERRAT_BODY,
+						}}
+					>
+						{node.children.map((o: any) => this.parser(o))}
+					</Text>
+				);
+			}
 			case 'italic': {
 				return (
 					<Text
@@ -249,6 +262,8 @@ class MfmComponentBuilder {
 				return <InlineCodeSegment key={k} value={node.props.code} />;
 			case 'hashtag':
 				return <HashtagSegment key={k} value={node.props.hashtag} />;
+			// TODO: quote resolver
+			case 'quote':
 			case 'text':
 				return <RawTextSegment key={k} value={node.props.text} />;
 			case 'emojiCode':
@@ -315,6 +330,14 @@ class MfmService {
 			};
 		},
 	) {
+		/**
+		 * Misskey hack.
+		 *
+		 * When user belongs to same instance, host = null
+		 */
+		if (!remoteSubdomain && subdomain) {
+			remoteSubdomain = subdomain;
+		}
 		if (!input || !domain || !subdomain || !emojiMap)
 			return {
 				reactNodes: [],
