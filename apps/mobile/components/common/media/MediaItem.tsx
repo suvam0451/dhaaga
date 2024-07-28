@@ -102,7 +102,7 @@ const TimelineMediaRendered = memo(function Foo({
 	);
 });
 
-function MediaItem({ attachments }: ImageCarousalProps) {
+const MediaItem = memo(function Foo({ attachments }: ImageCarousalProps) {
 	const [CarousalData, setCarousalData] = useState({
 		index: 0,
 		total: attachments?.length,
@@ -169,6 +169,6 @@ function MediaItem({ attachments }: ImageCarousalProps) {
 			/>
 		</View>
 	);
-}
+});
 
 export default MediaItem;

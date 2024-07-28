@@ -62,7 +62,7 @@ export interface UserInterface {
 
 	getOnlineStatus(): 'online' | 'active' | 'offline' | 'unknown';
 
-	getAccountUrl(): string;
+	getAccountUrl(mySubdomain?: string): string;
 
 	/**
 	 * AppNavBar-Specific Logic

@@ -11,7 +11,7 @@ export class DefaultUser implements UserInterface {
 		return false;
 	}
 
-	getAccountUrl(): string {
+	getAccountUrl(mySubdomain?: string): string {
 		return '';
 	}
 

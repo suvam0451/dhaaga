@@ -1,7 +1,6 @@
 import ActivityPubClient, {
 	FollowPostDto,
 	GetPostsQueryDTO,
-	GetSearchResultQueryDTO,
 	TagArray,
 } from '../_interface.js';
 import { Status, StatusArray } from '../../status/_interface.js';
@@ -15,6 +14,7 @@ import { DefaultTrendsRouter } from './trends.js';
 import { DefaultNotificationsRouter } from './notifications.js';
 import { DefaultTimelinesRouter } from './timelines.js';
 import { DefaultTagRouter } from './tags.js';
+import { DefaultSearchRouter } from './search.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
@@ -25,6 +25,7 @@ class UnknownRestClient implements ActivityPubClient {
 	notifications: DefaultNotificationsRouter;
 	timelines: DefaultTimelinesRouter;
 	tags: DefaultTagRouter;
+	search: DefaultSearchRouter;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
@@ -35,6 +36,7 @@ class UnknownRestClient implements ActivityPubClient {
 		this.notifications = new DefaultNotificationsRouter();
 		this.timelines = new DefaultTimelinesRouter();
 		this.tags = new DefaultTagRouter();
+		this.search = new DefaultSearchRouter();
 	}
 
 	reblog(id: string): Promise<Status> {
@@ -111,10 +113,6 @@ class UnknownRestClient implements ActivityPubClient {
 
 	async muteUser(id: string) {
 		return;
-	}
-
-	async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
-		return [];
 	}
 
 	async getFavourites(opts: GetPostsQueryDTO) {

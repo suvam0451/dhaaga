@@ -148,9 +148,9 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	getRepliesCount = () => this.ref?.instance?.repliesCount;
 	getRepostsCount = () => this.ref?.instance?.renoteCount;
 	getFavouritesCount = () => -1;
-	getUsername = () => this.ref?.instance?.user.username;
-	getDisplayName = () => this.ref?.instance?.user.name;
-	getAvatarUrl = () => this.ref?.instance?.user.avatarUrl;
+	getUsername = () => this.ref?.instance?.user?.username;
+	getDisplayName = () => this.ref?.instance?.user?.name;
+	getAvatarUrl = () => this.ref?.instance?.user?.avatarUrl;
 	getCreatedAt = () => this.ref?.instance?.createdAt || new Date().toString();
 
 	getVisibility() {

@@ -21,6 +21,36 @@ export class MisskeyUser implements UserInterface {
 		return false;
 	}
 
+	private extractInstanceUrl(
+		url: string,
+		username: string,
+		myServer: string,
+	): string {
+		if (!url) return '';
+
+		let ourUrl = '';
+		let theirUrl = '';
+		const ex = /^https?:\/\/(.*?)\/(.*?)/;
+		const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
+
+		if (ex.test(myServer)) {
+			// @ts-ignore
+			ourUrl = myServer.match(subdomainExtractUrl)[1];
+		}
+
+		if (ex.test(url)) {
+			// @ts-ignore
+			theirUrl = url.match(ex)[1];
+		}
+
+		if (url.includes(myServer)) return '@' + username;
+
+		if (ourUrl === theirUrl) {
+			return '@' + username;
+		}
+		return '@' + username + '@' + theirUrl;
+	}
+
 	getAccountUrl(mySubdomain?: string): string {
 		if (!this.ref.instance?.host && mySubdomain) {
 			return `https://${mySubdomain}/@${this.ref.instance?.username}`;
@@ -29,7 +59,9 @@ export class MisskeyUser implements UserInterface {
 	}
 
 	getAppDisplayAccountUrl(myDomain: string): string {
-		return '[ERROR]: acct url not implemented for misskey';
+		const url = this.getAccountUrl();
+		const username = this.getUsername();
+		return this.extractInstanceUrl(url, username, myDomain);
 	}
 
 	getEmojiMap(): Map<string, EmojiMapValue> {

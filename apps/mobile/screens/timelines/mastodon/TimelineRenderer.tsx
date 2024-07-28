@@ -134,7 +134,8 @@ const FlashListRenderer = ({ item }: { item: ListItemType }) => {
  * @returns Timeline rendered for Mastodon
  */
 function TimelineRenderer() {
-	const { timelineType, query, opts } = useTimelineController();
+	const { timelineType, query, opts, setTimelineType } =
+		useTimelineController();
 	const { client, primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
 
@@ -150,6 +151,11 @@ function TimelineRenderer() {
 	} = useAppPaginationContext();
 
 	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
+
+	// reset to home
+	useEffect(() => {
+		setTimelineType(TimelineFetchMode.IDLE);
+	}, [primaryAcct]);
 
 	useEffect(() => {
 		setPageLoadedAtLeastOnce(false);

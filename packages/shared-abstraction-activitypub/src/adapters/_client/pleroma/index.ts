@@ -1,7 +1,6 @@
 import ActivityPubClient, {
 	FollowPostDto,
 	GetPostsQueryDTO,
-	GetSearchResultQueryDTO,
 	GetTimelineQueryDTO,
 	GetTrendingPostsQueryDTO,
 	GetUserPostsQueryDTO,
@@ -22,6 +21,7 @@ import { PleromaTrendsRouter } from './trends.js';
 import { PleromaNotificationsRouter } from './notifications.js';
 import { PleromaTimelinesRouter } from './timelines.js';
 import { PleromaTagsRouter } from './tags.js';
+import { PleromaSearchRouter } from './search.js';
 
 class PleromaRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -33,6 +33,7 @@ class PleromaRestClient implements ActivityPubClient {
 	notifications: PleromaNotificationsRouter;
 	timelines: PleromaTimelinesRouter;
 	tags: PleromaTagsRouter;
+	search: PleromaSearchRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -47,6 +48,7 @@ class PleromaRestClient implements ActivityPubClient {
 		this.notifications = new PleromaNotificationsRouter(this.client);
 		this.timelines = new PleromaTimelinesRouter(this.client);
 		this.tags = new PleromaTagsRouter(this.client);
+		this.search = new PleromaSearchRouter(this.client);
 	}
 
 	getHomeTimeline(opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {
@@ -208,13 +210,6 @@ class PleromaRestClient implements ActivityPubClient {
 	}
 
 	undoReblog(id: string): Promise<Status> {
-		throw new Error('Method not implemented.');
-	}
-
-	search(
-		q: string,
-		dto: GetSearchResultQueryDTO,
-	): Promise<{ accounts: []; hashtags: [] }> {
 		throw new Error('Method not implemented.');
 	}
 }

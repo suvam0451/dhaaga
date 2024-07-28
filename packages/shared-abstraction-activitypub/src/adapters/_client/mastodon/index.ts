@@ -1,7 +1,6 @@
 import ActivityPubClient, {
 	FollowPostDto,
 	GetPostsQueryDTO,
-	GetSearchResultQueryDTO,
 	GetUserPostsQueryDTO,
 	MastoAccountCredentials,
 	MastoContext,
@@ -26,6 +25,7 @@ import { MastodonTrendsRouter } from './trends.js';
 import { MastodonNotificationsRouter } from './notifications.js';
 import { MastodonTimelinesRouter } from './timelines.js';
 import { MastodonTagRouter } from './tags.js';
+import { MastodonSearchRouter } from './search.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -37,6 +37,7 @@ class MastodonRestClient implements ActivityPubClient {
 	notifications: MastodonNotificationsRouter;
 	timelines: MastodonTimelinesRouter;
 	tags: MastodonTagRouter;
+	search: MastodonSearchRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -51,6 +52,7 @@ class MastodonRestClient implements ActivityPubClient {
 		this.notifications = new MastodonNotificationsRouter(this.client);
 		this.timelines = new MastodonTimelinesRouter(this.client);
 		this.tags = new MastodonTagRouter(this.client);
+		this.search = new MastodonSearchRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<MastoStatus | null> {
@@ -181,22 +183,6 @@ class MastodonRestClient implements ActivityPubClient {
 		} catch (e) {
 			console.log(e);
 			return;
-		}
-	}
-
-	async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v2.search.list({
-				q,
-				type: dto.type,
-				following: dto.following,
-				limit: dto.limit,
-				maxId: dto.maxId,
-			});
-		} catch (e) {
-			console.log(e);
-			return [];
 		}
 	}
 

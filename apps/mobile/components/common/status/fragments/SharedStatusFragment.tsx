@@ -30,7 +30,7 @@ const SharedStatusFragment = memo(function Foo() {
 		remoteSubdomain: userI?.getInstanceUrl(),
 		emojiMap: userI?.getEmojiMap(),
 		deps: [userI],
-		expectedHeight: 32,
+		expectedHeight: 24,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 	});
 

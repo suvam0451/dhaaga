@@ -1,5 +1,10 @@
 import type { mastodon } from 'masto';
-import type { UserDetailed, Note } from 'misskey-js/autogen/models.js';
+import type {
+	UserDetailed,
+	Note,
+	User,
+	UserDetailedNotMe,
+} from 'misskey-js/autogen/models.js';
 import type { Status, StatusArray } from '../status/_interface.js';
 import { RouterInterface } from './_router/routes/_index.js';
 import { InstanceRoute } from './_router/instance.js';
@@ -40,6 +45,8 @@ export type MegaAccount = MLAccount;
 
 export type MissUserDetailed = UserDetailed;
 export type MissNote = Note;
+export type MissUser = User;
+export type MissUserDetailedNotMe = UserDetailedNotMe;
 
 export type HashtagTimelineQuery = {
 	limit: number;
@@ -198,13 +205,13 @@ interface ActivityPubClient extends RouterInterface {
 
 	undoReblog(id: string): Promise<Status | null>;
 
-	search(
-		q: string,
-		dto: GetSearchResultQueryDTO,
-	): Promise<{
-		accounts: [];
-		hashtags: [];
-	}>;
+	// search(
+	// 	q: string,
+	// 	dto: GetSearchResultQueryDTO,
+	// ): Promise<{
+	// 	accounts: [];
+	// 	hashtags: [];
+	// }>;
 }
 
 export default ActivityPubClient;
