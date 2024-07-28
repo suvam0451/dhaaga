@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import EmojiReactionImage from './EmojiReactionImage';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 	if (dto.type === 'text') {
@@ -11,17 +12,20 @@ const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 			<View style={styles.emojiContainer}>
 				<Text
 					style={{
-						fontFamily: 'Montserrat-Bold',
-						color: APP_FONT.MONTSERRAT_HEADER,
-						fontSize: 18,
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+						color:
+							dto.name.length < 3
+								? APP_FONT.MONTSERRAT_HEADER
+								: APP_FONT.MONTSERRAT_BODY,
+						fontSize: 14,
 					}}
 				>
 					{dto.name}
 				</Text>
 				<Text
 					style={{
-						fontFamily: 'Montserrat-Bold',
-						color: APP_FONT.MONTSERRAT_HEADER,
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+						color: APP_FONT.MONTSERRAT_BODY,
 						marginLeft: 8,
 					}}
 				>
@@ -49,8 +53,8 @@ const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 					<View>
 						<Text
 							style={{
-								fontFamily: 'Montserrat-Bold',
-								color: APP_FONT.MONTSERRAT_HEADER,
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+								color: APP_FONT.MONTSERRAT_BODY,
 								marginLeft: 8,
 							}}
 						>

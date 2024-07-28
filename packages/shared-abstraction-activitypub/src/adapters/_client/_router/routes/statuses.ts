@@ -1,6 +1,6 @@
-import { LibraryResponse } from '../_types.js';
-import { MastoStatus } from '../../_interface.js';
+import { MastoStatus, MissNote } from '../../_interface.js';
+import { LibraryPromise } from './_types.js';
 
 export interface StatusesRoute {
-	get(id: string): Promise<LibraryResponse<MastoStatus>>;
+	get(id: string): LibraryPromise<MastoStatus | MissNote>;
 }

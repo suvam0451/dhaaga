@@ -110,7 +110,8 @@ export function ActivityPubUserAdapter(
 		case KNOWN_SOFTWARE.FIREFISH:
 		case KNOWN_SOFTWARE.MEISSKEY:
 		case KNOWN_SOFTWARE.KMYBLUE:
-		case KNOWN_SOFTWARE.CHERRYPICK: {
+		case KNOWN_SOFTWARE.CHERRYPICK:
+		case KNOWN_SOFTWARE.SHARKEY: {
 			return new MisskeyUser(new UserDetailedInstance(profile as UserDetailed));
 		}
 		case KNOWN_SOFTWARE.MASTODON: {

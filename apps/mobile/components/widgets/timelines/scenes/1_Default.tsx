@@ -9,10 +9,13 @@ import {
 	TimelineFetchMode,
 	useTimelineController,
 } from '../../../../states/useTimelineController';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 const ICON_SIZE = 20;
 
 function DefaultTimelineOptions() {
+	const { domain } = useActivityPubRestClientContext();
 	const { setTimelineType, setShowTimelineSelection } = useTimelineController();
 
 	function onClickHome() {
@@ -34,6 +37,24 @@ function DefaultTimelineOptions() {
 		setTimelineType(TimelineFetchMode.IDLE);
 		setShowTimelineSelection(false);
 	}
+
+	function onClickBubble() {
+		setTimelineType(TimelineFetchMode.BUBBLE);
+		setShowTimelineSelection(false);
+	}
+
+	function onClickSocial() {
+		setTimelineType(TimelineFetchMode.SOCIAL);
+		setShowTimelineSelection(false);
+	}
+
+	const BUBBLE_AVAILABLE = [KNOWN_SOFTWARE.SHARKEY].includes(
+		domain as KNOWN_SOFTWARE,
+	);
+	const SOCIAL_AVAILABLE = [
+		KNOWN_SOFTWARE.SHARKEY,
+		KNOWN_SOFTWARE.MISSKEY,
+	].includes(domain as KNOWN_SOFTWARE);
 
 	return (
 		<View style={{ display: 'flex', height: '100%' }}>
@@ -62,6 +83,34 @@ function DefaultTimelineOptions() {
 					}
 					onClick={onClickLocal}
 				/>
+				{SOCIAL_AVAILABLE && (
+					<DefaultPinnedItem
+						label={'Social'}
+						Icon={
+							<FontAwesome6
+								name="handshake"
+								size={ICON_SIZE}
+								color={APP_FONT.MONTSERRAT_HEADER}
+							/>
+						}
+						onClick={onClickSocial}
+					/>
+				)}
+				{BUBBLE_AVAILABLE && (
+					<DefaultPinnedItem
+						label={'Bubble'}
+						Icon={
+							<FontAwesome6
+								name="droplet"
+								size={ICON_SIZE}
+								color={APP_FONT.MONTSERRAT_HEADER}
+								style={{ marginLeft: 4 }}
+							/>
+						}
+						onClick={onClickBubble}
+					/>
+				)}
+
 				<DefaultPinnedItem
 					label={'Federated'}
 					Icon={

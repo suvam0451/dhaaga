@@ -1,5 +1,5 @@
 import type { mastodon } from 'masto';
-import type { UserDetailed } from 'misskey-js/autogen/models.js';
+import type { UserDetailed, Note } from 'misskey-js/autogen/models.js';
 import type { Status, StatusArray } from '../status/_interface.js';
 import { RouterInterface } from './_router/routes/_index.js';
 import { InstanceRoute } from './_router/instance.js';
@@ -39,6 +39,7 @@ export type MegaFeaturedTag = MLFeaturedTag;
 export type MegaAccount = MLAccount;
 
 export type MissUserDetailed = UserDetailed;
+export type MissNote = Note;
 
 export type HashtagTimelineQuery = {
 	limit: number;

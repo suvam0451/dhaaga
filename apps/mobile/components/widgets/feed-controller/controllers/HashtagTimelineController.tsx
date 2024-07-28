@@ -1,10 +1,9 @@
 import { memo } from 'react';
 import { useTimelineController } from '../../../../states/useTimelineController';
-import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import ControlSegment from '../components/ControlSegment';
 import useTimelineOptions from '../states/useTimelineOptions';
+import { styles } from './_shared';
 
 const HashtagTimelineController = memo(function Foo() {
 	const { query } = useTimelineController();
@@ -20,25 +19,8 @@ const HashtagTimelineController = memo(function Foo() {
 
 	return (
 		<View>
-			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					color: APP_FONT.MONTSERRAT_BODY,
-					fontSize: 16,
-				}}
-			>
-				Hashtag Timeline
-			</Text>
-			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					color: APP_THEME.COLOR_SCHEME_D_NORMAL,
-					fontSize: 14,
-					opacity: 0.75,
-				}}
-			>
-				{query?.label}
-			</Text>
+			<Text style={styles.timelineTypeText}>Hashtag Timeline</Text>
+			<Text style={styles.timelineTargetText}>{query?.label}</Text>
 			<ControlSegment
 				label={'Show feed from:'}
 				buttons={[

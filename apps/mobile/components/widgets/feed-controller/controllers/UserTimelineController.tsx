@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import { View } from 'react-native';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import { View, Text } from 'react-native';
 import { useTimelineController } from '../../../../states/useTimelineController';
 import ControlSegment from '../components/ControlSegment';
 import useTimelineOptions from '../states/useTimelineOptions';
 import { AppInlineCheckbox } from '../../../lib/Checkboxes';
+import { styles } from './_shared';
 
 const UserTimelineController = memo(function Foo() {
 	const { query } = useTimelineController();
@@ -31,26 +31,8 @@ const UserTimelineController = memo(function Foo() {
 
 	return (
 		<View>
-			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					color: APP_FONT.MONTSERRAT_BODY,
-					fontSize: 16,
-				}}
-			>
-				User Timeline
-			</Text>
-			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					color: APP_THEME.COLOR_SCHEME_D_NORMAL,
-					fontSize: 14,
-					opacity: 0.75,
-				}}
-			>
-				{query?.label}
-			</Text>
-
+			<Text style={styles.timelineTypeText}>User Timeline</Text>
+			<Text style={styles.timelineTargetText}>{query?.label}</Text>
 			<ControlSegment
 				label={'More options:'}
 				buttons={[

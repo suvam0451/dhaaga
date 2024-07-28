@@ -29,7 +29,11 @@ export function ActivitypubStatusAdapter(
 ): StatusInterface {
 	switch (domain) {
 		case KNOWN_SOFTWARE.MISSKEY:
-		case KNOWN_SOFTWARE.FIREFISH: {
+		case KNOWN_SOFTWARE.FIREFISH:
+		case KNOWN_SOFTWARE.SHARKEY:
+		case KNOWN_SOFTWARE.MEISSKEY:
+		case KNOWN_SOFTWARE.KMYBLUE:
+		case KNOWN_SOFTWARE.CHERRYPICK: {
 			return new MisskeyToStatusAdapter(new NoteInstance(status as Note));
 		}
 		case KNOWN_SOFTWARE.MASTODON: {

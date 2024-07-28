@@ -1,14 +1,20 @@
 import { TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
+import {
+	Fragment,
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
 import StatusInteraction from '../../../screens/timelines/fragments/StatusInteraction';
 import MediaItem from '../media/MediaItem';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import WithActivitypubUserContext from '../../../states/useProfile';
-import activitypubAdapterService from '../../../services/activitypub-adapter.service';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
@@ -16,36 +22,24 @@ import StatusItemSkeleton from '../../skeletons/StatusItemSkeleton';
 import useMfm from '../../hooks/useMfm';
 import ExplainOutput from '../explanation/ExplainOutput';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import LocalizationService from '../../../services/localization.services';
-import { Image } from 'expo-image';
 import { RepliedStatusFragment } from './_static';
 import useAppNavigator from '../../../states/useAppNavigator';
 import EmojiReactions from './fragments/EmojiReactions';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
-
-type StatusItemProps = {
-	// a list of color ribbons to indicate replies
-	replyContextIndicators?: string[];
-	hideReplyIndicator?: boolean;
-};
-
-type StatusFragmentProps = {
-	mt?: number;
-	isRepost?: boolean;
-} & StatusItemProps;
+import SharedStatusFragment from './fragments/SharedStatusFragment';
 
 /**
  * This is the individual status component (without the re-blogger info)
- * @param status
- * @param mt
- * @constructor
  */
-function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
+const RootStatusFragment = memo(function Foo() {
 	const { toPost } = useAppNavigator();
 	const { domain, subdomain } = useActivityPubRestClientContext();
 
 	const { status, sharedStatus } = useActivitypubStatusContext();
-	const _status = isRepost ? sharedStatus : status;
+
+	const IS_REPOST = status?.isReposted();
+	const IS_REPLY_OR_BOOST = status?.isReposted() || status?.isReply();
+	const _status = IS_REPOST ? sharedStatus : status;
 	const statusContent = _status?.getContent();
 
 	const [PosterContent, setPosterContent] = useState(null);
@@ -98,8 +92,13 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 	}, []);
 
 	return useMemo(() => {
-		if ((statusContent !== '' && !isLoaded) || !PosterContent)
+		if (
+			(statusContent !== '' && statusContent !== null && !isLoaded) ||
+			!PosterContent
+		) {
 			return <StatusItemSkeleton />;
+		}
+
 		return (
 			<>
 				<TouchableOpacity
@@ -113,7 +112,6 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 							style={{
 								display: 'flex',
 								flexDirection: 'row',
-								marginTop: mt === undefined ? 0 : mt,
 								marginBottom: 8,
 								position: 'relative',
 							}}
@@ -134,12 +132,12 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 									<View style={{ width: 24 }}>
 										<FontAwesome
 											name="warning"
-											size={24}
+											size={18}
 											color="yellow"
 											style={{ opacity: 0.6 }}
 										/>
 									</View>
-									<View style={{ marginLeft: 8, maxWidth: '90%' }}>
+									<View style={{ marginLeft: 0, maxWidth: '90%' }}>
 										{spoilerText && (
 											<Text
 												style={{
@@ -267,7 +265,7 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 					openAiContext={aiContext}
 					setExplanationObject={setExplanationObject}
 					ExplanationObject={ExplanationObject}
-					isRepost={isRepost}
+					isRepost={IS_REPOST}
 				/>
 			</>
 		);
@@ -278,194 +276,57 @@ function RootStatusFragment({ mt, isRepost }: StatusFragmentProps) {
 		ExplanationObject,
 		PosterContent,
 	]);
-}
+});
 
-export function RootFragmentContainer({
-	mt,
-	isRepost,
-	replyContextIndicators,
-}: StatusFragmentProps) {
+export function RootFragmentContainer() {
 	const { status: _status } = useActivitypubStatusContext();
 	if (!_status?.isValid()) return <View></View>;
 
-	const replyIndicatorsPresent = replyContextIndicators?.length > 0;
+	const IS_REPLY_OR_BOOST = _status?.isReply() || _status?.isReposted();
 
 	return (
 		<View
 			style={{
-				padding: replyIndicatorsPresent ? 0 : 10,
-				paddingBottom: 0,
+				padding: 10,
+				paddingTop: IS_REPLY_OR_BOOST ? 4 : 10,
+				paddingBottom: 4,
 				backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
-				marginTop: mt == undefined ? 0 : mt,
 				marginBottom: 4,
 				borderRadius: 8,
+				borderTopLeftRadius: IS_REPLY_OR_BOOST ? 0 : 8,
+				borderTopRightRadius: IS_REPLY_OR_BOOST ? 0 : 8,
 			}}
 		>
-			{replyIndicatorsPresent ? (
-				<View
-					style={{
-						borderLeftWidth: 2,
-						borderLeftColor: 'red',
-					}}
-				>
-					<View
-						style={{
-							paddingBottom: 4,
-							padding: 10,
-						}}
-					>
-						<RootStatusFragment
-							mt={mt}
-							isRepost={isRepost}
-							replyContextIndicators={replyContextIndicators}
-						/>
-					</View>
-				</View>
-			) : (
-				<View
-					style={{
-						paddingBottom: 4,
-					}}
-				>
-					<RootStatusFragment
-						mt={mt}
-						isRepost={isRepost}
-						replyContextIndicators={replyContextIndicators}
-					/>
-				</View>
-			)}
+			<RootStatusFragment />
 		</View>
 	);
-}
-
-/**
- * Adds booster's information on top
- *
- * NOTE: pass negative values to RootStatus margin
- */
-function SharedStatusFragment() {
-	const { status: _status } = useActivitypubStatusContext();
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-
-	const userI = useMemo(() => {
-		return activitypubAdapterService.adaptUser(_status.getUser(), domain);
-	}, [_status]);
-
-	const { content: ParsedDisplayName } = useMfm({
-		content: userI?.getDisplayName(),
-		remoteSubdomain: userI?.getInstanceUrl(),
-		emojiMap: userI?.getEmojiMap(),
-		deps: [userI],
-		expectedHeight: 32,
-	});
-
-	return useMemo(() => {
-		if (!_status.isValid()) return <View></View>;
-
-		return (
-			<View
-				style={{
-					backgroundColor: '#1e1e1e',
-					borderTopRightRadius: 8,
-					borderTopLeftRadius: 8,
-					paddingHorizontal: 8,
-					paddingTop: 4,
-					paddingBottom: 4,
-				}}
-			>
-				<View
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'flex-start',
-					}}
-				>
-					<View>
-						<Ionicons color={'#888'} name={'rocket-outline'} size={14} />
-					</View>
-					<View>
-						{/*@ts-ignore-next-line*/}
-						<Image
-							source={userI.getAvatarUrl()}
-							style={{
-								width: 20,
-								height: 20,
-								opacity: 0.75,
-								borderRadius: 4,
-								marginLeft: 4,
-							}}
-						/>
-					</View>
-					<View>
-						<Text
-							style={{
-								color: '#888',
-								fontWeight: '500',
-								marginLeft: 4,
-								fontFamily: 'Montserrat-ExtraBold',
-								opacity: 0.6,
-							}}
-						>
-							{ParsedDisplayName}
-						</Text>
-					</View>
-					<View>
-						<Text
-							style={{
-								color: '#888',
-								fontSize: 12,
-								fontFamily: 'Inter-Bold',
-								opacity: 0.6,
-							}}
-						>
-							{' • '}
-							{LocalizationService.formatDistanceToNowStrict(
-								new Date(_status?.getCreatedAt()),
-							)}
-						</Text>
-					</View>
-				</View>
-			</View>
-		);
-	}, [_status, ParsedDisplayName]);
 }
 
 /**
  * Renders a status/note
  * @constructor
  */
-function StatusItem({ replyContextIndicators }: StatusItemProps) {
+const StatusItem = memo(function Foo() {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
 	const { status: _status, sharedStatus } = useActivitypubStatusContext();
 
 	return useMemo(() => {
-		switch (domain) {
+		switch (primaryAcct.domain) {
 			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.MISSKEY:
 			case KNOWN_SOFTWARE.FIREFISH:
 			case KNOWN_SOFTWARE.MEISSKEY:
 			case KNOWN_SOFTWARE.KMYBLUE:
+			case KNOWN_SOFTWARE.SHARKEY:
 			case KNOWN_SOFTWARE.CHERRYPICK: {
 				return (
 					<Fragment>
 						{_status.isReposted() && <SharedStatusFragment />}
-						{_status.isReposted() ? (
-							sharedStatus.isReply() ? (
-								<RepliedStatusFragment mt={-8} paddingVertical={6} />
-							) : (
-								<View></View>
-							)
-						) : (
-							_status.isReply() && <RepliedStatusFragment />
+						{_status.isReposted() && sharedStatus.isReply() && (
+							<RepliedStatusFragment />
 						)}
-						<RootFragmentContainer
-							replyContextIndicators={replyContextIndicators}
-							mt={_status.isReposted() || _status.isReply() ? -4 : 0}
-							isRepost={_status.isReposted()}
-						/>
+						{_status.isReply() && <RepliedStatusFragment />}
+						<RootFragmentContainer />
 					</Fragment>
 				);
 			}
@@ -474,7 +335,7 @@ function StatusItem({ replyContextIndicators }: StatusItemProps) {
 			}
 		}
 	}, [_status, primaryAcct]);
-}
+});
 
 export default StatusItem;
 
