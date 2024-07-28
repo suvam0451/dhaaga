@@ -133,6 +133,45 @@ class AppApi {
 			});
 	}
 
+	async post<T>(
+		endpoint: string,
+		body: object,
+		opts: {},
+	): Promise<LibraryResponse<T>> {
+		endpoint = `${this.baseUrl}${endpoint}`;
+		return await fetch(endpoint, {
+			method: 'POST',
+			headers: this.token
+				? {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${this.token}`,
+					}
+				: {
+						'Content-Type': 'application/json',
+					},
+			body: JSON.stringify(body),
+		})
+			.then(async (response) => {
+				if (!response.ok) {
+					throw new Error(
+						JSON.stringify({
+							status: response.status,
+							statusText: response.statusText,
+						}),
+					);
+				}
+				return { data: await response.json() };
+			})
+			.catch((e) => {
+				return {
+					error: {
+						code: DhaagaErrorCode.UNKNOWN_ERROR,
+						message: e,
+					},
+				};
+			});
+	}
+
 	async get<T>(
 		endpoint: string,
 		query?: Object | Record<string, string>,
@@ -141,6 +180,7 @@ class AppApi {
 			? `${this.baseUrl}${endpoint}?` +
 				new URLSearchParams(this.cleanObject(query))
 			: `${this.baseUrl}${endpoint}?`;
+
 		return await fetch(endpoint, {
 			method: 'GET',
 			headers: this.token

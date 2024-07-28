@@ -29,6 +29,10 @@ function useTimelineLabel() {
 			case TimelineFetchMode.FEDERATED: {
 				return `Federated`;
 			}
+			case TimelineFetchMode.SOCIAL:
+				return 'Social';
+			case TimelineFetchMode.BUBBLE:
+				return 'Bubble';
 			default: {
 				return 'Unassigned';
 			}

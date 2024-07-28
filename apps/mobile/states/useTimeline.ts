@@ -2,7 +2,10 @@ import { AppTimelineQuery, TimelineFetchMode } from './useTimelineController';
 import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
-import { DhaagaJsTimelineQueryOptions } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	DhaagaJsTimelineQueryOptions,
+	MisskeyRestClient,
+} from '@dhaaga/shared-abstraction-activitypub';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -66,6 +69,20 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 					_query,
 				)) as any;
 				if (error) return [];
+				return data;
+			}
+			case TimelineFetchMode.SOCIAL: {
+				const { data, error } = await client.timelines.public({
+					..._query,
+					social: true,
+				});
+				if (error) return [];
+				return data;
+			}
+			case TimelineFetchMode.BUBBLE: {
+				const { data } = await (client as MisskeyRestClient).timelines.bubble(
+					_query,
+				);
 				return data;
 			}
 			case TimelineFetchMode.FEDERATED: {

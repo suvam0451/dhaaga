@@ -23,7 +23,7 @@ class MastodonUser implements UserInterface {
 		return '';
 	}
 
-	getAccountUrl(): string {
+	getAccountUrl(mySubdomain?: string): string {
 		return this.ref.instance.url;
 	}
 

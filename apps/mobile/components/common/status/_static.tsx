@@ -2,8 +2,8 @@ import { memo } from 'react';
 import { View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
-
-const POST_SPACING_VALUE = 4;
+import { APP_THEME } from '../../../styles/AppTheme';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 /**
  * Adds a reply indicator to the post
@@ -12,19 +12,14 @@ const POST_SPACING_VALUE = 4;
  * then the post is boosted and
  * is also a reply
  */
-export const RepliedStatusFragment = memo(function Foo({
-	mt,
-	paddingVertical,
-}: {
-	mt?: number;
-	paddingVertical?: number;
-}) {
+export const RepliedStatusFragment = memo(function Foo() {
 	return (
 		<View
 			style={{
-				backgroundColor: '#1e1e1e',
-				marginBottom: POST_SPACING_VALUE,
-				marginVertical: mt || 0,
+				backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
+				borderRadius: 8,
+				borderBottomLeftRadius: 0,
+				borderBottomRightRadius: 0,
 			}}
 		>
 			<View
@@ -32,13 +27,20 @@ export const RepliedStatusFragment = memo(function Foo({
 					display: 'flex',
 					flexDirection: 'row',
 					alignItems: 'center',
-					backgroundColor: '#1e1e1e',
-					paddingVertical: paddingVertical === undefined ? 10 : paddingVertical,
-					paddingHorizontal: 10,
+					paddingTop: 6,
+					paddingHorizontal: 12,
 				}}
 			>
 				<Ionicons color={'#888'} name={'arrow-redo-outline'} size={14} />
-				<Text style={{ color: '#888', fontWeight: '500', marginLeft: 4 }}>
+				<Text
+					style={{
+						color: 'rgba(136,136,136,0.87)',
+						fontWeight: '500',
+						marginLeft: 4,
+						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+						fontSize: 13,
+					}}
+				>
 					Replied to a thread
 				</Text>
 			</View>

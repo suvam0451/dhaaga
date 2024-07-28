@@ -1,5 +1,4 @@
-import { Pressable, StatusBar, StyleSheet, View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Pressable, StatusBar, StyleSheet, View, Text } from 'react-native';
 import TimelinesHeader from '../../../TimelineHeader';
 import { useEffect, useMemo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
@@ -376,7 +375,9 @@ function WelcomeBack() {
 								color={APP_FONT.MONTSERRAT_BODY}
 							/>
 						</View>
-						<Text>This feature is not available yet</Text>
+						<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
+							This feature is not available yet
+						</Text>
 					</View>
 					<Section>
 						<View

@@ -1,8 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useMemo } from 'react';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
+import {
+	MastoAccount,
+	MegaAccount,
+} from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import { Endpoints } from 'misskey-js';
 
 function TimelineWidgetUserApi(q: string) {
 	const { client, primaryAcct } = useActivityPubRestClientContext();
@@ -12,27 +16,33 @@ function TimelineWidgetUserApi(q: string) {
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
-		return client.search(q, { type: 'accounts', limit: 5, following: false });
+		const { data, error } = await client.search.findUsers({
+			type: 'accounts',
+			limit: 5,
+			q,
+			query: q,
+		});
+		if (error) return [];
+		return data;
 	}
 
 	// Queries
-	const queryResults = useQuery<mastodon.v2.Search>({
-		queryKey: ['search/user', username, subdomain, q],
+	const { fetchStatus, data, status } = useQuery<
+		MastoAccount[] | Endpoints['users/search']['res'] | MegaAccount[]
+	>({
+		queryKey: [username, subdomain, q],
 		queryFn: api,
 		enabled: client !== null && q !== '',
 	});
 
 	const transformedData = useMemo(() => {
-		if (queryResults.fetchStatus === 'fetching') return [];
-		if (queryResults.status !== 'success') return [];
+		if (fetchStatus === 'fetching' || status !== 'success') return [];
 		return (
-			queryResults?.data?.accounts?.map((o) =>
-				ActivityPubAdapterService.adaptUser(o, domain),
-			) || []
+			data?.map((o) => ActivityPubAdapterService.adaptUser(o, domain)) || []
 		);
-	}, [queryResults.fetchStatus]);
+	}, [fetchStatus]);
 
-	return { ...queryResults, transformedData };
+	return { transformedData };
 }
 
 export default TimelineWidgetUserApi;

@@ -9,6 +9,11 @@ import {
 } from './notifications.js';
 import { DhaagaJsTimelineQueryOptions, TimelinesRoute } from './timelines.js';
 import { TagRoute } from './tags.js';
+import {
+	DhaagaJsPostSearchDTO,
+	DhaagaJsUserSearchDTO,
+	SearchRoute,
+} from './search.js';
 
 export interface RouterInterface {
 	instances: InstanceRoute;
@@ -19,6 +24,7 @@ export interface RouterInterface {
 	notifications: NotificationsRoute;
 	timelines: TimelinesRoute;
 	tags: TagRoute;
+	search: SearchRoute;
 }
 
 export type { InstanceRoute, AccountRoute, StatusesRoute };
@@ -26,4 +32,10 @@ export type { InstanceRoute, AccountRoute, StatusesRoute };
 /**
  * export typings and DTOs
  */
-export { DhaagaJsTimelineQueryOptions, DhaagaJsNotificationType };
+export {
+	DhaagaJsTimelineQueryOptions,
+	DhaagaJsNotificationType,
+	// search
+	DhaagaJsUserSearchDTO,
+	DhaagaJsPostSearchDTO,
+};

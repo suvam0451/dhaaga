@@ -52,7 +52,13 @@ const EmojiReactions = memo(function Foo() {
 	if (domain === 'mastodon') return <Fragment />;
 
 	return (
-		<View style={{ flexDirection: 'row', flexWrap: 'wrap', marginVertical: 8 }}>
+		<View
+			style={{
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				marginTop: Emojis.length > 0 ? 6 : 0,
+			}}
+		>
 			{Emojis.map((o, i) => (
 				<EmojiReaction key={i} dto={o} />
 			))}

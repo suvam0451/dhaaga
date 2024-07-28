@@ -1,11 +1,12 @@
 import { memo } from 'react';
 import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import ControlSegment from '../components/ControlSegment';
 import { View } from 'react-native';
 import useTimelineOptions from '../states/useTimelineOptions';
+import { styles } from './_shared';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 
-const PublicTimelineController = memo(function Foo() {
+const LocalTimelineController = memo(function Foo() {
 	const {
 		FeedOpt,
 		MediaOpt,
@@ -15,28 +16,12 @@ const PublicTimelineController = memo(function Foo() {
 		onMediaOptAllSelected,
 		State,
 	} = useTimelineOptions();
+	const { subdomain } = useActivityPubRestClientContext();
 
 	return (
 		<View>
-			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					color: APP_FONT.MONTSERRAT_BODY,
-					fontSize: 16,
-				}}
-			>
-				Public Timeline
-			</Text>
-			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					color: APP_THEME.COLOR_SCHEME_D_NORMAL,
-					fontSize: 14,
-					opacity: 0.75,
-				}}
-			>
-				mastodon.social
-			</Text>
+			<Text style={styles.timelineTypeText}>Local Timeline</Text>
+			<Text style={styles.timelineTargetText}>{subdomain}</Text>
 			<ControlSegment
 				label={'Show feed from:'}
 				buttons={[
@@ -83,8 +68,11 @@ const PublicTimelineController = memo(function Foo() {
 				selection={MediaOpt}
 				hash={State}
 			/>
+			<Text style={styles.timelineDescription}>
+				This timeline displays posts from you and other users in your instance
+			</Text>
 		</View>
 	);
 });
 
-export default PublicTimelineController;
+export default LocalTimelineController;

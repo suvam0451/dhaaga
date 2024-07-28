@@ -62,7 +62,7 @@ export interface UserInterface {
 
 	getOnlineStatus(): 'online' | 'active' | 'offline' | 'unknown';
 
-	getAccountUrl(): string;
+	getAccountUrl(mySubdomain?: string): string;
 
 	/**
 	 * AppNavBar-Specific Logic
@@ -110,7 +110,8 @@ export function ActivityPubUserAdapter(
 		case KNOWN_SOFTWARE.FIREFISH:
 		case KNOWN_SOFTWARE.MEISSKEY:
 		case KNOWN_SOFTWARE.KMYBLUE:
-		case KNOWN_SOFTWARE.CHERRYPICK: {
+		case KNOWN_SOFTWARE.CHERRYPICK:
+		case KNOWN_SOFTWARE.SHARKEY: {
 			return new MisskeyUser(new UserDetailedInstance(profile as UserDetailed));
 		}
 		case KNOWN_SOFTWARE.MASTODON: {

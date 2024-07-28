@@ -1,10 +1,9 @@
 import TimelineWidgetUserApi from '../api/4_User';
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import AppInput from '../../../lib/Inputs';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import { Text } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { Image } from 'expo-image';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
@@ -13,6 +12,7 @@ import {
 	useTimelineController,
 } from '../../../../states/useTimelineController';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 function TimelineWidgetUserScene() {
 	const [SearchTerm, setSearchTerm] = useState('');
@@ -43,6 +43,7 @@ function TimelineWidgetUserScene() {
 							marginTop: 16,
 							color: APP_FONT.MONTSERRAT_BODY,
 							marginBottom: 4,
+							fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
 						}}
 					>
 						Search Results:
@@ -76,8 +77,10 @@ function TimelineWidgetUserScene() {
 								/>
 							</View>
 							<View>
-								<Text>{o.getDisplayName()}</Text>
-								<Text style={{ fontSize: 12, color: APP_FONT.MONTSERRAT_BODY }}>
+								<Text style={styles.userDisplayName} numberOfLines={1}>
+									{o.getDisplayName()}
+								</Text>
+								<Text style={styles.userInstanceInfo} numberOfLines={1}>
 									{o.getAppDisplayAccountUrl(subdomain)}
 								</Text>
 							</View>
@@ -95,5 +98,18 @@ function TimelineWidgetUserScene() {
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	userInstanceInfo: {
+		fontSize: 12,
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+	},
+	userDisplayName: {
+		fontSize: 14,
+		color: APP_FONT.MONTSERRAT_HEADER,
+		fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
+	},
+});
 
 export default TimelineWidgetUserScene;

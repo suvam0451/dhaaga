@@ -1,6 +1,6 @@
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { DependencyList, useEffect, useRef, useState } from 'react';
-import { FlatList, View, VirtualizedList } from 'react-native';
+import { View } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { Skeleton, Text } from '@rneui/themed';
@@ -69,14 +69,19 @@ function useMfm({
 
 	useEffect(() => {
 		if (IsSolved.current === content) return;
-		if (content === '') {
+		setData(defaultValue.current);
+
+		// { text: null } is possible with misskey forks
+		if (content === '' || content === null) {
 			setData({
-				isLoaded: false,
+				isLoaded: true,
 				content: <View></View>,
 				aiContext: [],
 			});
+			IsSolved.current = content;
+			return;
 		}
-		setData(defaultValue.current);
+
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
 			domain,
@@ -99,23 +104,6 @@ function useMfm({
 					</Text>
 				);
 			}),
-			// content: (
-			// 	<FlatList
-			// 		data={reactNodes}
-			// 		renderItem={({ item }) => {
-			// 			const uuid = randomUUID();
-			// 			return (
-			// 				<Text key={uuid} style={fontStyle.current}>
-			// 					{item.map((o, j) => (
-			// 						<Text key={j} style={fontStyle.current}>
-			// 							{o}
-			// 						</Text>
-			// 					))}
-			// 				</Text>
-			// 			);
-			// 		}}
-			// 	/>
-			// ),
 			aiContext: openAiContext,
 		});
 		IsSolved.current = content;

@@ -30,7 +30,7 @@ const EmojiReactionImage = memo(function Foo({
 				style={{
 					height: Dims.H,
 					width: Dims.W,
-					opacity: 0.87,
+					opacity: 0.75,
 				}}
 			/>
 		</View>

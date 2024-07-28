@@ -11,7 +11,7 @@ export type EmojiDto = {
 
 export const styles = StyleSheet.create({
 	emojiContainer: {
-		backgroundColor: '#323232',
+		backgroundColor: '#303030',
 		padding: 8,
 		borderRadius: 8,
 		flexDirection: 'row',

@@ -8,6 +8,7 @@ import GlobalMmkvCacheServices from '../../../services/globalMmkvCache.services'
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type LinkProcessorProps = {
 	url: string;
@@ -47,8 +48,8 @@ function LinkProcessor({ url, displayName }: LinkProcessorProps) {
 	return (
 		<Text
 			style={{
-				color: APP_THEME.LINK,
-				fontFamily: 'Inter-Bold',
+				color: APP_THEME.LINK_SECONDARY,
+				fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 				maxWidth: 128,
 				display: 'flex',
 				flexDirection: 'row',

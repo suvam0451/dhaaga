@@ -1,5 +1,4 @@
 import ActivityPubClient, {
-	GetSearchResultQueryDTO,
 	GetPostsQueryDTO,
 	GetUserPostsQueryDTO,
 	RestClientCreateDTO,
@@ -19,6 +18,7 @@ import { MisskeyTrendsRouter } from './trends.js';
 import { MisskeyNotificationsRouter } from './notifications.js';
 import { MisskeyTimelinesRouter } from './timelines.js';
 import { MisskeyTagsRouter } from './tags.js';
+import { MisskeySearchRouter } from './search.js';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -31,6 +31,7 @@ class MisskeyRestClient implements ActivityPubClient {
 	notifications: MisskeyNotificationsRouter;
 	timelines: MisskeyTimelinesRouter;
 	tags: MisskeyTagsRouter;
+	search: MisskeySearchRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -48,6 +49,7 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.notifications = new MisskeyNotificationsRouter(this.client);
 		this.timelines = new MisskeyTimelinesRouter(this.client);
 		this.tags = new MisskeyTagsRouter(this.client);
+		this.search = new MisskeySearchRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<Status> {
@@ -120,10 +122,6 @@ class MisskeyRestClient implements ActivityPubClient {
 
 	async muteUser(id: string): Promise<void> {
 		// throw new Error("Method not implemented.");
-	}
-
-	async search(q: string, dto: GetSearchResultQueryDTO): Promise<any> {
-		return [];
 	}
 
 	async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {

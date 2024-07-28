@@ -13,6 +13,7 @@ import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { DhaagaErrorCode } from '../_router/_types.js';
+import AppApi from '../../_api/AppApi.js';
 
 export class MisskeyTimelinesRouter implements TimelinesRoute {
 	client: RestClient;
@@ -74,6 +75,23 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 				query,
 			);
 			return { data };
+		}
+	}
+
+	/**
+	 * Limited forks support this feature
+	 */
+	async bubble(query: DhaagaJsTimelineQueryOptions) {
+		try {
+			const { data, error } = await new AppApi(
+				this.client.url,
+				this.client.accessToken,
+			).post('/api/notes/bubble-timeline', query, {});
+			if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return { data };
+		} catch (e) {
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
