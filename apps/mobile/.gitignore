@@ -2,3 +2,4 @@ android/**
 .expo/devices.json
 eas.json
 ios/**
+.expo/**
