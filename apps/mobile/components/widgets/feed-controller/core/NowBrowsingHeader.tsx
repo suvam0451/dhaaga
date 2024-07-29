@@ -3,10 +3,7 @@ import { Text } from '@rneui/themed';
 import { memo, useMemo } from 'react';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import LocalTimelineController from '../controllers/LocalTimelineController';
-import {
-	TimelineFetchMode,
-	useTimelineController,
-} from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import UserTimelineController from '../controllers/UserTimelineController';
 import HomeTimelineController from '../controllers/HomeTimelineController';
 import HashtagTimelineController from '../controllers/HashtagTimelineController';
@@ -14,6 +11,7 @@ import ListTimelineController from '../controllers/ListTimelineController';
 import FederatedTimelineController from '../controllers/FederatedTimelineController';
 import SocialTimelineController from '../controllers/SocialTimelineController';
 import BubbleTimelineController from '../controllers/BubbleTimelineController';
+import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 
 const NowBrowsingHeader = memo(function Foo() {
 	const { timelineType } = useTimelineController();

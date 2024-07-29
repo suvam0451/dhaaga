@@ -5,10 +5,7 @@ import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import styled from 'styled-components/native';
-import {
-	TimelineFetchMode,
-	useTimelineController,
-} from '../../../../states/useTimelineController';
+import { useTimelineController } from '../api/useTimelineController';
 import { useQuery } from '@realm/react';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -16,6 +13,7 @@ import FabMenuCore from '../../../shared/fab/Core';
 import { FAB_MENU_MODULES } from '../../../../types/app.types';
 import AppSidebarCore, { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
 import { router } from 'expo-router';
+import { TimelineFetchMode } from '../utils/timeline.types';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -261,13 +259,13 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 	);
 }
 
-function WelcomeBack() {
+function SocialHub() {
 	const [TimeOfDay, setTimeOfDay] = useState<TIME_OF_DAY>(TIME_OF_DAY.UNKNOWN);
 	const userDataTimelines = useQuery(UserDataTimeline).filter((o) => o.pinned);
 
 	useEffect(() => {
 		const currentHours = new Date().getHours();
-		let timeOfDay: TIME_OF_DAY = null;
+		let timeOfDay: TIME_OF_DAY;
 		if (currentHours >= 21 || (currentHours >= 0 && currentHours < 6)) {
 			timeOfDay = TIME_OF_DAY.NIGHT;
 		} else if (currentHours >= 6 && currentHours < 12) {
@@ -487,4 +485,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default WelcomeBack;
+export default SocialHub;

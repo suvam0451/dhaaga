@@ -1,6 +1,6 @@
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import { useEffect, useRef } from 'react';
-import { useTimelineController } from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 
 const OPTION_GROUP_A = ['local', 'remote'];
 const OPTION_GROUP_B = ['media-only'];

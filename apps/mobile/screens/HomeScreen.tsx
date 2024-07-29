@@ -1,7 +1,7 @@
 import ApiWrapper from '../components/common/tag/TagBrowseLocal';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PostWithClientContext from './shared/Post';
-import TimelineRenderer from './timelines/mastodon/TimelineRenderer';
+import TimelineRenderer from '../components/common/timeline/core/Timeline';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 import WithLocalAppMenuControllerContext from '../components/shared/fab/hooks/useFabController';
 import WithAppDrawerContext from '../states/useAppDrawer';

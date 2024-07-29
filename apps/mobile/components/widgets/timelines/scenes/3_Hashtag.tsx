@@ -1,9 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import {
-	TimelineFetchMode,
-	useTimelineController,
-} from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { useQuery } from '@realm/react';
 import { ActivityPubTag } from '../../../../entities/activitypub-tag.entity';
 import { Button, Text } from '@rneui/themed';
@@ -16,6 +13,7 @@ import AppInput from '../../../lib/Inputs';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
 import AppButtonGroup from '../../../lib/ButtonGroups';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 
 type SearchResults = {
 	following: boolean;

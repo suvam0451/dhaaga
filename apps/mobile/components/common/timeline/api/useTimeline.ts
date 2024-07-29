@@ -1,11 +1,12 @@
-import { AppTimelineQuery, TimelineFetchMode } from './useTimelineController';
-import { useActivityPubRestClientContext } from './useActivityPubRestClient';
+import { AppTimelineQuery } from './useTimelineController';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 import {
 	DhaagaJsTimelineQueryOptions,
 	MisskeyRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
+import { TimelineFetchMode } from '../utils/timeline.types';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -40,6 +41,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 	};
 
 	async function api() {
+		if (client === null) return [];
 		switch (type) {
 			case TimelineFetchMode.IDLE:
 				return [];
@@ -99,7 +101,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 	return useQuery<StatusArray>({
 		queryKey: [type, _id, _query],
 		queryFn: api,
-		enabled: client !== null && type !== 'Idle',
+		enabled: client !== null && type !== TimelineFetchMode.IDLE,
 	});
 }
 

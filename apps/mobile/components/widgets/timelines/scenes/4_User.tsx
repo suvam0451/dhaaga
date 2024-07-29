@@ -7,12 +7,10 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { Image } from 'expo-image';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
-import {
-	TimelineFetchMode,
-	useTimelineController,
-} from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 
 function TimelineWidgetUserScene() {
 	const [SearchTerm, setSearchTerm] = useState('');
