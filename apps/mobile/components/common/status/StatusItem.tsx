@@ -38,7 +38,6 @@ const RootStatusFragment = memo(function Foo() {
 	const { status, sharedStatus } = useActivitypubStatusContext();
 
 	const IS_REPOST = status?.isReposted();
-	const IS_REPLY_OR_BOOST = status?.isReposted() || status?.isReply();
 	const _status = IS_REPOST ? sharedStatus : status;
 	const statusContent = _status?.getContent();
 
@@ -81,7 +80,8 @@ const RootStatusFragment = memo(function Foo() {
 		content: statusContent,
 		remoteSubdomain: userI?.getInstanceUrl(),
 		emojiMap: userI?.getEmojiMap(),
-		deps: [statusContent, !userI?.getInstanceUrl()],
+		deps: [statusContent, userI?.getInstanceUrl()],
+		// fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	});
 
 	const isSensitive = _status?.getIsSensitive();
@@ -177,64 +177,62 @@ const RootStatusFragment = memo(function Foo() {
 						)}
 
 						{isSensitive && !spoilerText && (
-							<View>
-								<View
+							<View
+								style={{
+									marginHorizontal: 'auto',
+									alignItems: 'center',
+									display: 'flex',
+									flexDirection: 'row',
+									justifyContent: 'center',
+									width: '100%',
+									marginBottom: 8,
+								}}
+							>
+								<Divider style={{ flex: 1, flexGrow: 1, opacity: 0.6 }} />
+								<Pressable
 									style={{
-										marginHorizontal: 'auto',
-										alignItems: 'center',
+										flexShrink: 1,
 										display: 'flex',
 										flexDirection: 'row',
-										justifyContent: 'center',
-										width: '100%',
-										marginBottom: 8,
+										alignItems: 'center',
+										paddingHorizontal: 8,
+										paddingVertical: 8,
 									}}
+									onPress={onSpoilerClick}
 								>
-									<Divider style={{ flex: 1, flexGrow: 1, opacity: 0.6 }} />
-									<Pressable
-										style={{
-											flexShrink: 1,
-											display: 'flex',
-											flexDirection: 'row',
-											alignItems: 'center',
-											paddingHorizontal: 8,
-											paddingVertical: 8,
-										}}
-										onPress={onSpoilerClick}
-									>
-										<View style={{ width: 24 }}>
-											<FontAwesome
-												name="warning"
-												size={24}
-												color="yellow"
-												style={{ opacity: 0.6 }}
-											/>
-										</View>
-										<View style={{ marginLeft: 4 }}>
-											<Text
-												style={{
-													color: APP_FONT.MONTSERRAT_BODY,
-													// backgroundColor: "red",
-													flexShrink: 1,
-													textAlign: 'center',
-													fontSize: 16,
-													fontFamily: 'Montserrat-Bold',
-												}}
-											>
-												{ShowSensitiveContent
-													? 'Hide Sensitive'
-													: 'Show' + ' Sensitive'}
-											</Text>
-										</View>
-										<View style={{ width: 24, marginLeft: 4 }}>
-											<FontAwesome5
-												name="eye-slash"
-												size={18}
-												color={APP_FONT.MONTSERRAT_BODY}
-											/>
-										</View>
-									</Pressable>
-									<Divider style={{ flex: 1, flexGrow: 1, opacity: 0.6 }} />
-								</View>
+									<View style={{ width: 24 }}>
+										<FontAwesome
+											name="warning"
+											size={24}
+											color="yellow"
+											style={{ opacity: 0.6 }}
+										/>
+									</View>
+									<View style={{ marginLeft: 4 }}>
+										<Text
+											style={{
+												color: APP_FONT.MONTSERRAT_BODY,
+												// backgroundColor: "red",
+												flexShrink: 1,
+												textAlign: 'center',
+												fontSize: 16,
+												fontFamily: 'Montserrat-Bold',
+											}}
+										>
+											{ShowSensitiveContent
+												? 'Hide Sensitive'
+												: 'Show' + ' Sensitive'}
+										</Text>
+									</View>
+									<View style={{ width: 24, marginLeft: 4 }}>
+										<FontAwesome5
+											name="eye-slash"
+											size={18}
+											color={APP_FONT.MONTSERRAT_BODY}
+										/>
+									</View>
+								</Pressable>
+								<Divider style={{ flex: 1, flexGrow: 1, opacity: 0.6 }} />
 							</View>
 						)}
 

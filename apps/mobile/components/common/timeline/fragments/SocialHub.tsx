@@ -14,6 +14,7 @@ import { FAB_MENU_MODULES } from '../../../../types/app.types';
 import AppSidebarCore, { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
 import { router } from 'expo-router';
 import { TimelineFetchMode } from '../utils/timeline.types';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -248,8 +249,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 				<Text
 					style={{
 						color: APP_FONT.MONTSERRAT_BODY,
-						fontFamily: 'Montserrat-Bold',
-						flex: 1,
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>
 					{Label}

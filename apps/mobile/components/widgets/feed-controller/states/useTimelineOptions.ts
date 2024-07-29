@@ -15,7 +15,6 @@ function useTimelineOptions() {
 	const HideReblog = useRef(false);
 
 	useEffect(() => {
-		console.log('first tine loading', opts);
 		if (opts?.onlyMedia) {
 			MediaSelected.current.clear();
 			MediaSelected.current.add('media-only');

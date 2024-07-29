@@ -1,34 +1,27 @@
-import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { View, Text, StyleSheet } from 'react-native';
 import { APP_FONT } from '../../../styles/AppTheme';
+import { memo } from 'react';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 /**
  * Renders the software version
  * and build flavor
  */
-function VersionCode() {
+const VersionCode = memo(() => {
 	return (
 		<View style={{ marginTop: 16, marginBottom: 0 }}>
-			<Text
-				style={{
-					textAlign: 'center',
-					color: APP_FONT.MONTSERRAT_BODY,
-					fontFamily: 'Inter-Bold',
-				}}
-			>
-				{'Built with' + ' 💛 by Debashish Patra'}
-			</Text>
-			<Text
-				style={{
-					textAlign: 'center',
-					color: APP_FONT.MONTSERRAT_BODY,
-					fontFamily: 'Inter-Bold',
-				}}
-			>
-				v0.3.0
-			</Text>
+			<Text style={styles.text}>{'Built with' + ' 💛 by Debashish Patra'}</Text>
+			<Text style={styles.text}>v0.5.0</Text>
 		</View>
 	);
-}
+});
+
+const styles = StyleSheet.create({
+	text: {
+		textAlign: 'center',
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+	},
+});
 
 export default VersionCode;

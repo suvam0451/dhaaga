@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import Animated from 'react-native-reanimated';
@@ -384,7 +384,7 @@ function SettingsScreen() {
 						<SettingsScreenTopSection />
 					</View>
 
-					<View style={{}}>
+					<View style={{ marginBottom: 8 }}>
 						<SettingsScreenBottomSection />
 						<SettingPageFooter />
 					</View>

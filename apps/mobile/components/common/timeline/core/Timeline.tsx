@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -43,7 +43,7 @@ const SHOWN_SECTION_HEIGHT = 50;
  *
  * @returns Timeline rendered for Mastodon
  */
-function Timeline() {
+const Timeline = memo(() => {
 	const { timelineType, query, opts, setTimelineType } =
 		useTimelineController();
 	const { client, primaryAcct } = useActivityPubRestClientContext();
@@ -157,7 +157,6 @@ function Timeline() {
 				FAB_MENU_MODULES.NAVIGATOR,
 				FAB_MENU_MODULES.CREATE_POST,
 				FAB_MENU_MODULES.TIMELINE_SWITCHER,
-				FAB_MENU_MODULES.OPEN_SIDEBAR,
 			]}
 		>
 			<View style={[styles.container, { position: 'relative' }]}>
@@ -193,7 +192,7 @@ function Timeline() {
 			</View>
 		</WithAppMenu>
 	);
-}
+});
 
 function TimelineWrapper() {
 	return (

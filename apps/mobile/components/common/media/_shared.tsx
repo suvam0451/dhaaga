@@ -8,13 +8,17 @@ import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Text } from '@rneui/themed';
-// import { Audio } from 'expo-av';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { ErrorBoundary } from 'react-error-boundary';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type Props = {
 	url?: string;
 	blurhash?: string;
 };
+
+const DEFAULT_BLURHASH =
+	'|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
 	return (
@@ -24,10 +28,20 @@ export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
 				flex: 1,
 				width: MEDIA_CONTAINER_WIDTH,
 				borderRadius: 16,
-				opacity: 0.75,
+				opacity: 0.87,
 			}}
-			placeholder={{ blurhash }}
-			source={{ uri: url }}
+			placeholder={{ blurhash: blurhash || DEFAULT_BLURHASH }}
+			source={{
+				uri: url,
+				blurhash: blurhash || DEFAULT_BLURHASH,
+				width: MEDIA_CONTAINER_WIDTH,
+			}}
+			transition={{
+				effect: 'flip-from-right',
+				duration: 120,
+				timing: 'ease-in',
+			}}
+			// autoplay={false}
 		/>
 	);
 });
@@ -92,7 +106,7 @@ export const AppVideoComponent = memo(function Foo({
 }) {
 	const ref = useRef(null);
 	const [isPlaying, setIsPlaying] = useState(true);
-	let modifiedUrl = url.replace('?sensitive=true', '');
+	let modifiedUrl = url?.replace('?sensitive=true', '');
 
 	const player = useVideoPlayer(modifiedUrl, (player) => {
 		if (loop) {
@@ -115,18 +129,26 @@ export const AppVideoComponent = memo(function Foo({
 
 	return (
 		<View style={[styles.contentContainer, { height }]}>
-			<VideoView
-				ref={ref}
-				style={{
-					width: MEDIA_CONTAINER_WIDTH,
-					height,
-					borderRadius: 8,
-				}}
-				player={player}
-				allowsFullscreen
-				allowsPictureInPicture
-				// nativeControls={type !== 'gifv'}
-			/>
+			<Text>{modifiedUrl}</Text>
+			<ErrorBoundary
+				fallback={
+					<View>
+						<Text style={{ fontFamily: APP_FONTS.INTER_600_SEMIBOLD }}>
+							Failed to render video. Url: ${modifiedUrl}
+						</Text>
+					</View>
+				}
+			>
+				<VideoView
+					ref={ref}
+					style={{
+						width: MEDIA_CONTAINER_WIDTH,
+						height,
+						borderRadius: 8,
+					}}
+					player={player}
+				/>
+			</ErrorBoundary>
 		</View>
 	);
 });
@@ -225,9 +247,13 @@ export const AltTextOverlay = memo(function Foo({
 export const CarousalIndicatorOverlay = memo(function Foo({
 	index,
 	totalCount,
+	top,
+	right,
 }: {
 	index?: number;
 	totalCount?: number;
+	top?: number;
+	right?: number;
 }) {
 	const CarousalIndicators = useMemo(() => {
 		if (index === undefined || totalCount === undefined) return <View></View>;
@@ -268,8 +294,8 @@ export const CarousalIndicatorOverlay = memo(function Foo({
 			<View
 				style={{
 					position: 'absolute',
-					left: '100%',
-					top: 0,
+					right: right || 0,
+					top: top || 0,
 				}}
 			>
 				<View

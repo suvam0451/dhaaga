@@ -13,6 +13,7 @@ import MentionSegment from '../components/shared/mfm/MentionSegment';
 import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 import RawTextSegment from '../components/shared/mfm/RawTextSegment';
+import { APP_FONTS } from '../styles/AppFonts';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
@@ -35,6 +36,8 @@ class MfmComponentBuilder {
 	results: any[];
 	aiContext: any[];
 
+	fontFamily: string;
+
 	constructor({
 		input,
 		db,
@@ -44,6 +47,7 @@ class MfmComponentBuilder {
 		myDomain,
 		emojiMap,
 		opts,
+		fontFamily,
 	}: {
 		input: string;
 		db: Realm;
@@ -56,6 +60,7 @@ class MfmComponentBuilder {
 			parseMentions?: boolean;
 			parseLinks?: boolean;
 		};
+		fontFamily?: string;
 	}) {
 		this.input = input;
 		this.db = db;
@@ -67,6 +72,7 @@ class MfmComponentBuilder {
 		this.mySubdomain = mySubdomain;
 		this.myDomain = myDomain;
 		this.emojiMap = emojiMap;
+		this.fontFamily = APP_FONTS.INTER_400_REGULAR;
 
 		// options
 		if (opts?.parseMentions !== undefined)
@@ -142,7 +148,7 @@ class MfmComponentBuilder {
 			for (const node of para) {
 				// handle line breaks
 				if (node.type === 'text') {
-					const splits = node.props.text.split(/<br ?\/?>/);
+					const splits = node.props?.text.split(/<br ?\/?>/);
 
 					const key = randomUUID();
 					// first item is always text
@@ -176,7 +182,7 @@ class MfmComponentBuilder {
 						);
 					}
 
-					const txt = node.props.text.trim();
+					const txt = node.props?.text.trim();
 					// @ts-ignore-next-line
 					txt.replaceAll(/<br>/g, '\n');
 					this.aiContext.push(txt);
@@ -199,7 +205,7 @@ class MfmComponentBuilder {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 
 				// NOTE: mention.url is also an option
-				if (mention) return <MentionSegment value={mention.text} />;
+				if (mention) return <MentionSegment key={k} value={mention.text} />;
 
 				let displayName = null;
 				if (this.links) {
@@ -265,7 +271,7 @@ class MfmComponentBuilder {
 			// TODO: quote resolver
 			case 'quote':
 			case 'text':
-				return <RawTextSegment key={k} value={node.props.text} />;
+				return <RawTextSegment key={k} value={node.props?.text} />;
 			case 'emojiCode':
 				return (
 					<EmojiCodeSegment
@@ -306,6 +312,7 @@ class MfmService {
 	 * @param globalDb
 	 * @param remoteSubdomain is the subdomain of target user
 	 * @param opts
+	 * @param fontFamily
 	 */
 	static renderMfm(
 		input: string,
@@ -316,6 +323,7 @@ class MfmService {
 			db,
 			globalDb,
 			remoteSubdomain,
+			fontFamily,
 			opts,
 		}: {
 			domain: string;
@@ -324,6 +332,7 @@ class MfmService {
 			globalDb: MMKV;
 			db: Realm;
 			remoteSubdomain?: string;
+			fontFamily?: string;
 			opts?: {
 				mentionsClickable?: boolean;
 				fontFamily?: string;
