@@ -1,10 +1,18 @@
 import { ExpoConfig, ConfigContext } from 'expo/config.js';
 
 const IS_DEV = process.env.APP_VARIANT === 'dev';
+const IS_LITE = process.env.APP_VARIANT === 'lite';
+
+const appId = IS_DEV
+	? 'io.suvam.dhaaga.dev'
+	: IS_LITE
+		? 'io.suvam.dhaaga.lite'
+		: 'io.suvam.dhaaga';
+const appName = IS_DEV ? 'Dhaaga (Dev)' : IS_LITE ? 'Dhaaga (Lite)' : 'Dhaaga';
 
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
-	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
+	name: appName,
 	slug: 'dhaaga',
 	version: '0.5.0',
 	orientation: 'portrait',
@@ -16,17 +24,17 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		silentLaunch: true,
 	},
 	ios: {
-		bundleIdentifier: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
+		bundleIdentifier: appId,
 		supportsTablet: false,
 	},
 	android: {
-		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
+		package: appId,
 		versionCode: 5,
 	},
 	splash: {
 		image: './assets/splash.png',
 		resizeMode: 'contain',
-		backgroundColor: '#ffffff',
+		backgroundColor: '#121212',
 	},
 	assetBundlePatterns: ['**/*'],
 	web: {

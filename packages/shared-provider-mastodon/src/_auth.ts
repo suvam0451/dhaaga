@@ -22,7 +22,7 @@ export class MastodonService {
 				redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
 				grant_type: 'authorization_code',
 				code,
-				scope: 'read write push',
+				scope: 'read write push follow',
 			});
 
 			return res?.data?.access_token;

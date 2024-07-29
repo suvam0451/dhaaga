@@ -32,56 +32,89 @@ of the box, and you don't need to build them.
 
 ### Building from Source
 
-This project uses and recommends [EAS](https://expo.dev/eas) to build app
-binaries.
+You are in the branch for `lite` edition of the app.
+Therefore, steps will cover scripts to build apks
+on your own infrastructure.
 
-EAS is a paid service (the first 30 credits per month are free, which
-can be used to generate 10 sets of android/iOS builds)
+p.s. - not tested for ios
 
-The benefit of using EAS is that you don't even need to have Android SDK/NDK,
-CocoaPod (iOS), fastlane (iOS) etc. setup locally.
+#### Preliminary Steps
 
-To get started, run the following commands *(you will need an EAS account)*:
+To generate the native library folders, we will need to
+setup expo and run `prebuild`
+
+p.s. - An expo account might be needed. Not tested.
 
 ```shell
 yarn global add eas-cli #anywhere
 eas login # anywhere
 eas build:configure # from this folder, and follow instructions
+expo prebuild
 ```
 
-#### Building Dev Client
+#### Modify android/gradle.properties
 
-A [Dev Client](https://docs.expo.dev/develop/development-builds/introduction/)
-is a installable apk that will contain
-all native portions of this project
-pre-built into the binary.
+```shell
+set reactNativeArchitectures=arm64-v8a # your arch here
+set useLegacyPackaging=true
+```
 
-By running `expo start --dev-client` from this folder and connecting your
-installed dev client apk to the corresponding server,
-you can get started with extending/debugging code from this project.
+### Modify android/app/build.gradle
 
-A dev client can be generated via EAS using `eas build -p android --profile
-dev` from this folder.
+```shell
+# android.namespace
+io.suvam.dhaaga -> "io.suvam.dhaaga" # keep it same as expo
+# android.defaultConfig.applicationId
+io.suvam.dhaaga -> "io.suvam.dhaaga.lite" # this can be whatever you need
+```
 
-##### Known issues
+### Modify app name
 
-- [Flash List](https://github.com/Shopify/flash-list) is known to have very
-  poor apparent performance and stuttering in development builds. Don't
-  worry, as a prod build will be snappy, as expected.
+```shell
+# android/app/src/main/res/values/strings.xml
+# Update as follows (or name your own)
+<string name="app_name">Dhaaga (Lite)</string>
 
-#### Building Prod Client
+```
 
-A production build is expected to produce the final apk/aab file,
-that is minified and ready for installation/distribution.
+### Signing
 
-To generate a production apk, run `eas build -p android --profile apk`
+You need
+to [generate your own keys]( https://reactnative.dev/docs/signed-apk-android)
 
-#### Building Without EAS
+If you don't, warnings will popup while installing the app.
 
-It is possible to generate the builds locally.
-However, the tool setup for such is outside the scope of this README.
-Please refer [this page](https://docs.expo.dev/build-reference/local-builds/)
-for instructions.
+```shell
+# OUTPUT: <keyfile-name>.keystore
+
+# Update android.signingConfigs.debug
+# if you followed steps from site,
+# keyPassword = storePassword
+storeFile file('<keyfile-name>.keystore')
+storePassword ''
+keyAlias ''
+keyPassword ''
+
+# link the configs
+set android.buildTypes.release.signingConfig -> signingConfigs.release
+            
+# add to android block
+dependenciesInfo {
+    // Disables dependency metadata when building APKs.
+    includeInApk = false
+    // Disables dependency metadata when building Android App Bundles.
+    includeInBundle = false
+}
+```
+
+### Building
+
+```shell
+# generate aab
+npx react-native build-android --mode=release
+# generate apk
+cd android && ./gradlew assembleRelease
+```
 
 ### Environment Variables
 
