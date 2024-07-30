@@ -1,5 +1,5 @@
-import { Button, Text } from '@rneui/themed';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { Button } from '@rneui/themed';
+import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
 import { memo, useMemo } from 'react';

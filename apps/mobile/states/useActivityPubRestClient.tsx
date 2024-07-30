@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import {
 	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
@@ -58,6 +58,9 @@ function WithActivityPubRestClient({ children }: any) {
 	const [MeRaw, setMeRaw] = useState(null);
 	const db = useRealm();
 	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
+
+	const PrimaryAcctPtr = useRef<Account>(null);
+
 	const { globalDb } = useGlobalMmkvContext();
 
 	function regenerateFn() {
@@ -79,6 +82,7 @@ function WithActivityPubRestClient({ children }: any) {
 		});
 		setRestClient(client);
 		setPrimaryAcct(acct);
+		PrimaryAcctPtr.current = acct;
 		EmojiService.resolveEmojis(db, globalDb, acct.subdomain, {
 			forcedUpdate: false,
 		});

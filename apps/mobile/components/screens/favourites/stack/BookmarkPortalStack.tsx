@@ -1,7 +1,5 @@
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import { useRealm } from '@realm/react';
+import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import { Text } from '@rneui/themed';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { AppButtonVariantA } from '../../../lib/Buttons';
 import { useState } from 'react';
@@ -14,6 +12,7 @@ import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
 } from '../../../hooks/tasks/useSyncWithProgress';
 import BookmarkGalleryAdvanced from '../../../dialogs/BookmarkGalleryAdvanced';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 function BookmarkNeverSyncedPrompt() {
 	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(
@@ -29,7 +28,14 @@ function BookmarkNeverSyncedPrompt() {
 
 	return (
 		<View>
-			<Text style={{ textAlign: 'center' }}>
+			<Text
+				style={{
+					textAlign: 'center',
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					color: APP_FONT.MONTSERRAT_BODY,
+					marginTop: 16,
+				}}
+			>
 				Perform a one-time sync to browse your bookmarks offline and other
 				gallery features.
 			</Text>
@@ -52,9 +58,10 @@ function BookmarkNeverSyncedPrompt() {
 				/>
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_HEADER,
+						color: APP_FONT.MONTSERRAT_BODY,
 						fontSize: 12,
 						marginLeft: 4,
+						marginTop: 6,
 					}}
 				>
 					Last Synced: Never
@@ -150,7 +157,9 @@ function BookmarkSyncedPrompt() {
 				}}
 			>
 				Last Synced:{' '}
-				{formatRelative(new Date(), primaryAcct?.bookmarksLastSyncedAt)}
+				{primaryAcct?.bookmarksLastSyncedAt
+					? formatRelative(new Date(), primaryAcct?.bookmarksLastSyncedAt)
+					: ''}
 			</Text>
 			<BookmarkGalleryAdvanced
 				IsVisible={BookmarkGallerySettingDialogVisible}
@@ -163,7 +172,7 @@ function BookmarkSyncedPrompt() {
 
 function BookmarkPortalStack() {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const db = useRealm();
+	console.log(primaryAcct.bookmarksLastSyncedAt);
 	return (
 		<WithAutoHideTopNavBar title={'Bookmark Viewer'}>
 			<View style={style.sectionContainer}>
@@ -176,7 +185,7 @@ function BookmarkPortalStack() {
 					/>
 				</Text>
 
-				{!primaryAcct.bookmarksLastSyncedAt ? (
+				{!primaryAcct?.bookmarksLastSyncedAt ? (
 					<BookmarkNeverSyncedPrompt />
 				) : (
 					<BookmarkSyncedPrompt />
