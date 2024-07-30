@@ -10,6 +10,7 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import WithActivitypubStatusContext from '../../../states/useStatus';
 import StatusItem from '../../common/status/StatusItem';
 import LoadingMore from '../home/LoadingMore';
+import { MastodonRestClient } from '@dhaaga/shared-abstraction-activitypub';
 
 type SearchResultsProps = {
 	q: string;
@@ -49,12 +50,22 @@ function SearchResults(props: SearchResultsProps) {
 			};
 		}
 		if (!props.q) return null;
-		return await client.search(props.q, {
+		const { data, error } = await (
+			client as MastodonRestClient
+		).search.unifiedSearch({
+			q: props.q,
 			following: false,
 			type: null,
-			limit: 5,
 			maxId,
 		});
+		if (error)
+			return {
+				statuses: [],
+				accounts: [],
+				hashtags: [],
+			};
+
+		return data;
 	}
 
 	// Queries

@@ -47,7 +47,7 @@ const EmojiReactions = memo(function Foo() {
 			retval = retval.sort((a, b) => b.count - a.count);
 			setEmojis(retval);
 		}
-	}, [_status]);
+	}, [status, sharedStatus]);
 
 	if (domain === 'mastodon') return <Fragment />;
 

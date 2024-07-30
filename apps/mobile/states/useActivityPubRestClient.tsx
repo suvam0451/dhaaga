@@ -9,12 +9,10 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import AccountRepository from '../repositories/account.repo';
-import { useRealm, useQuery } from '@realm/react';
+import { useRealm } from '@realm/react';
 import { Account } from '../entities/account.entity';
 import { EmojiService } from '../services/emoji.service';
 import { useGlobalMmkvContext } from './useGlobalMMkvCache';
-import AccountService from '../services/account.service';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 type Type = {
 	client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null;
@@ -96,9 +94,13 @@ function WithActivityPubRestClient({ children }: any) {
 			return;
 		}
 
-		restClient.getMe().then((res) => {
-			setMeRaw(res);
-			setMe(ActivityPubUserAdapter(res, PrimaryAcct?.domain));
+		restClient.me.getMe().then(({ data, error }) => {
+			if (error) {
+				console.log('[WARN]: error loading account data (i.e. - me)');
+				return;
+			}
+			setMeRaw(data);
+			setMe(ActivityPubUserAdapter(data, PrimaryAcct?.domain));
 		});
 	}, [restClient]);
 

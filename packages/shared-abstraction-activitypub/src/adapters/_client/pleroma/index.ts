@@ -22,6 +22,7 @@ import { PleromaNotificationsRouter } from './notifications.js';
 import { PleromaTimelinesRouter } from './timelines.js';
 import { PleromaTagsRouter } from './tags.js';
 import { PleromaSearchRouter } from './search.js';
+import { PleromaMeRouter } from './me.js';
 
 class PleromaRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -34,6 +35,7 @@ class PleromaRestClient implements ActivityPubClient {
 	timelines: PleromaTimelinesRouter;
 	tags: PleromaTagsRouter;
 	search: PleromaSearchRouter;
+	me: PleromaMeRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -49,6 +51,7 @@ class PleromaRestClient implements ActivityPubClient {
 		this.timelines = new PleromaTimelinesRouter(this.client);
 		this.tags = new PleromaTagsRouter(this.client);
 		this.search = new PleromaSearchRouter(this.client);
+		this.me = new PleromaMeRouter(this.client);
 	}
 
 	getHomeTimeline(opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {

@@ -15,7 +15,6 @@ import { Divider } from '@rneui/themed';
 import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
 import { APP_THEME } from '../../../../styles/AppTheme';
-import StatusService from '../../../../services/status.service';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import {
 	BOTTOM_SHEET_ENUM,
@@ -25,6 +24,7 @@ import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.services';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useBookmark from '../api/useBookmark';
+import useBoost from '../api/useBoost';
 
 type StatusInteractionProps = {
 	setExplanationObject: React.Dispatch<React.SetStateAction<string | null>>;
@@ -42,12 +42,7 @@ function StatusInteractionBase({
 	isRepost,
 }: StatusInteractionProps) {
 	const { client } = useActivityPubRestClientContext();
-	const {
-		status: post,
-		setDataRaw,
-		sharedStatus,
-		setSharedDataRaw,
-	} = useActivitypubStatusContext();
+	const { status: post, sharedStatus } = useActivitypubStatusContext();
 	const _status = isRepost ? sharedStatus : post;
 	const { setVisible, setBottomSheetType, updateRequestId } =
 		useGorhomActionSheetContext();
@@ -55,7 +50,6 @@ function StatusInteractionBase({
 
 	// Loading States
 	const [TranslationLoading, setTranslationLoading] = useState(false);
-	const [SecondCommandLoading, setSecondCommandLoading] = useState(false);
 
 	//
 	const [BoostOptionsVisible, setBoostOptionsVisible] = useState(false);
@@ -91,25 +85,11 @@ function StatusInteractionBase({
 		IsLoading: IsBookmarkLoading,
 		IsBookmarked,
 	} = useBookmark();
-
-	// function onSaveLongPress() {
-	// 	setThirdCommandLoading(true);
-	// 	Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-	// 	setThirdCommandLoading(false);
-	// }
-
-	function onBoostPressed() {
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		StatusService.toggleBoost(client, _status, {
-			setIsLoading: setSecondCommandLoading,
-			setDataRaw: isRepost ? setSharedDataRaw : setDataRaw,
-		});
-	}
-
-	function onBoostLongPressed() {
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-		// setBoostOptionsVisible(true);
-	}
+	const {
+		IsBoosted,
+		IsLoading: IsBoostLoading,
+		onPress: onBoostPress,
+	} = useBoost();
 
 	function onShowAdvancedMenuPressed() {
 		GlobalMmkvCacheService.setBottomSheetProp_Status(
@@ -182,17 +162,15 @@ function StatusInteractionBase({
 							paddingBottom: 8,
 							position: 'relative',
 						}}
-						onPress={onBoostPressed}
-						onLongPress={onBoostLongPressed}
+						onPress={onBoostPress}
+						// onLongPress={onBoostLongPressed}
 					>
-						{SecondCommandLoading ? (
+						{IsBoostLoading ? (
 							<ActivityIndicator size={'small'} />
 						) : (
 							<Ionicons
 								color={
-									_status.getIsRebloggedByMe()
-										? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1]
-										: '#888'
+									IsBoosted ? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1] : '#888'
 								}
 								name={'rocket-outline'}
 								size={ICON_SIZE}
@@ -202,7 +180,7 @@ function StatusInteractionBase({
 							style={[
 								styles.buttonText,
 								{
-									color: _status.getIsRebloggedByMe()
+									color: IsBoosted
 										? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1]
 										: '#888',
 								},
