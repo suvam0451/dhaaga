@@ -129,7 +129,6 @@ export const AppVideoComponent = memo(function Foo({
 
 	return (
 		<View style={[styles.contentContainer, { height }]}>
-			<Text>{modifiedUrl}</Text>
 			<ErrorBoundary
 				fallback={
 					<View>

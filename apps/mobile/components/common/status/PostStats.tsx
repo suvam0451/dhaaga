@@ -62,7 +62,7 @@ const PostStats = memo(function Foo({ isRepost }: Props) {
 		}
 	}
 
-	if (RepliesCount === 0 && FavouritesCount === 0 && RepostCount === 0)
+	if (RepliesCount < 1 && FavouritesCount < 1 && RepostCount < 1)
 		return <View></View>;
 
 	return (

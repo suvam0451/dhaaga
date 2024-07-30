@@ -10,7 +10,7 @@ import {
 	useState,
 } from 'react';
 import OriginalPoster from '../../post-fragments/OriginalPoster';
-import StatusInteraction from '../../../screens/timelines/fragments/StatusInteraction';
+import StatusInteraction from './fragments/StatusInteraction';
 import MediaItem from '../media/MediaItem';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
