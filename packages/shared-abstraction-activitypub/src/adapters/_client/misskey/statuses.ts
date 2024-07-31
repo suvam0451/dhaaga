@@ -1,6 +1,6 @@
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import { StatusesRoute } from '../_router/routes/statuses.js';
-import { MissNote } from '../_interface.js';
+import { MastoContext, MissContext, MissNote } from '../_interface.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
 	COMPAT,
@@ -177,6 +177,38 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			}
 			console.log(e);
 			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+		}
+	}
+
+	async getContext(id: string, limit?: number): LibraryPromise<MissContext> {
+		try {
+			const parents = this.lib.client.request('notes/conversation', {
+				noteId: id,
+				limit: limit || 40,
+			});
+			const children = this.lib.client.request('notes/children', {
+				noteId: id,
+				showQuotes: false,
+				limit: limit || 40,
+			});
+
+			return new Promise((resolve, reject) => {
+				Promise.all([parents, children])
+					.then(([_parents, _children]) => {
+						resolve({
+							data: {
+								ancestors: _parents,
+								descendants: _children,
+							},
+						});
+					})
+					.catch((e) => {
+						return resolve({ data: { ancestors: [], descendants: [] } });
+					});
+			});
+		} catch (e) {
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

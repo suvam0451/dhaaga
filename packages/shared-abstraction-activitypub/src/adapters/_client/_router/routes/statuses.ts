@@ -1,4 +1,10 @@
-import { MastoStatus, MissNote } from '../../_interface.js';
+import {
+	MastoContext,
+	MastoRelationship,
+	MastoStatus,
+	MissContext,
+	MissNote,
+} from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 import { Endpoints } from 'misskey-js';
 
@@ -12,4 +18,9 @@ export interface StatusesRoute {
 	unBookmark(
 		id: string,
 	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']>;
+
+	getContext(
+		id: string,
+		limit?: number,
+	): LibraryPromise<MastoContext | MissContext>;
 }

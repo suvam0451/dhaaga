@@ -103,10 +103,6 @@ class MisskeyRestClient implements ActivityPubClient {
 		return [];
 	}
 
-	getStatusContext(id: string): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
 	async getRelationshipWith(ids: string[]) {
 		return [];
 	}

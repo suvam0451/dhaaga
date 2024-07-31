@@ -188,10 +188,6 @@ class PleromaRestClient implements ActivityPubClient {
 		throw new Error('Method not implemented.');
 	}
 
-	getStatusContext(id: string): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
 	bookmark(id: string): Promise<Status> {
 		throw new Error('Method not implemented.');
 	}

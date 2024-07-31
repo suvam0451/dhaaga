@@ -158,16 +158,6 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getStatusContext(id: string): Promise<MastoContext | null> {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.statuses.$select(id).context.fetch();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
 	async getRelationshipWith(ids: string[]): Promise<MastoRelationship[]> {
 		const _client = this.createMastoClient();
 		try {

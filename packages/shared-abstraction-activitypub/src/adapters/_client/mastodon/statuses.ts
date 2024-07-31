@@ -1,7 +1,7 @@
-import { LibraryResponse } from '../_router/_types.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import { StatusesRoute } from '../_router/routes/statuses.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { MastoStatus } from '../_interface.js';
+import { MastoContext, MastoStatus } from '../_interface.js';
 import {
 	COMPAT,
 	DhaagaMastoClient,
@@ -36,5 +36,15 @@ export class MastodonStatusesRouter implements StatusesRoute {
 	async unBookmark(id: string): LibraryPromise<MastoStatus> {
 		const data = await this.lib.client.v1.statuses.$select(id).unbookmark();
 		return { data };
+	}
+
+	async getContext(id: string): LibraryPromise<MastoContext> {
+		try {
+			const ctx = await this.lib.client.v1.statuses.$select(id).context.fetch();
+			return { data: ctx };
+		} catch (e) {
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 }

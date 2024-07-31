@@ -6342,10 +6342,10 @@ expo-asset@~10.0.10:
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
-expo-build-properties@~0.12.3:
-  version "0.12.3"
-  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.12.3.tgz#48c2ef5f8c69ded1f28587405dac1099f4e61a3e"
-  integrity sha512-ihMKJyCHnKaiadI56UFYp2IdTxUhYa7e0ekHDfT+T3H2fk3jDYfh3n3wlUxFVeGyT7BE78tBTQ7QhMT6lluX2A==
+expo-build-properties@~0.12.4:
+  version "0.12.4"
+  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.12.4.tgz#b4844e8727bb163a2f31e130bf9fa6481b76e800"
+  integrity sha512-RzUQbL9c17jQevKEDvRynLZreurSSdSISSeK5LQkI0SeT/EzeuTH7hAqo3EFABv96E8qU811OOIAaJTBDK07Tg==
   dependencies:
     ajv "^8.11.0"
     semver "^7.6.0"
@@ -6485,10 +6485,10 @@ expo-modules-core@1.12.20:
   dependencies:
     invariant "^2.2.4"
 
-expo-router@~3.5.19:
-  version "3.5.19"
-  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-3.5.19.tgz#1b79550720fc058dc78550aadf327951750f092c"
-  integrity sha512-I9Agms2o4kJ+JaPgmRtAOMYvvvsvfhEDwkaKo6llwtskMo9U4jCGcf0qi4Iw6PBBa+HEKCGjK/JG5tlfGARFjg==
+expo-router@~3.5.20:
+  version "3.5.20"
+  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-3.5.20.tgz#c597a68f14149eb7ba8ebb85cfc22b43bd9dc7c5"
+  integrity sha512-walzIxz6okN/Ppq6DjrEsCiS99PMAz5GykkCSGyhxmweVWtD6j1E5Eqp0n6KVL1kcxDTSFAwypf/gezkaxLx6A==
   dependencies:
     "@expo/metro-runtime" "3.2.1"
     "@expo/server" "^0.4.0"
@@ -6529,10 +6529,10 @@ expo-video@^1.1.10:
   resolved "https://registry.yarnpkg.com/expo-video/-/expo-video-1.1.10.tgz#b47c0d40c21f401236639424bd25d70c09316b7b"
   integrity sha512-k9ecpgtwAK8Ut8enm8Jv398XkB/uVOyLLqk80M/d8pH9EN5CVrBQ7iEzWlR3quvVUFM7Uf5wRukJ4hk3mZ8NCg==
 
-expo@~51.0.23:
-  version "51.0.23"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-51.0.23.tgz#a2813c4ea45f5158838221093a6a08eae47534a1"
-  integrity sha512-tZv7hiDIlKMlQxzC/IxfiLEpp0xcm6VISuoeFobkvoelEWsj6bpjlsF0HP4k6pr3ELL++r7wE1VGYa/AceC6+w==
+expo@~51.0.24:
+  version "51.0.24"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-51.0.24.tgz#fb64a85ded249d3f64e9aecb40b9fa9e200b4bb4"
+  integrity sha512-HoOuNIWXzS6Gxifcb0N+qRt5K6iR9YitQaWIVNB8elyupvQdyI566IMgMBiO45NgpO5es0sfFNNBasxBHLkbUw==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/cli" "0.18.26"

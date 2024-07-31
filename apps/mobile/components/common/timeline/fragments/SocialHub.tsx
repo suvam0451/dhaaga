@@ -308,7 +308,7 @@ function SocialHub() {
 
 	return (
 		<AppSidebarCore variant={SIDEBAR_VARIANT.TIMELINE}>
-			<StatusBar backgroundColor="#1c1c1c" />
+			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<TimelinesHeader
 				label={'Your Social Hub'}
 				SHOWN_SECTION_HEIGHT={50}

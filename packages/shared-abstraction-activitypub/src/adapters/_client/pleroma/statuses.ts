@@ -45,4 +45,9 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		const data = await this.lib.client.unbookmarkStatus(id);
 		return { data: data.data };
 	}
+
+	async getContext(id: string) {
+		const data = await this.lib.client.getStatusContext(id);
+		return { data: data.data };
+	}
 }

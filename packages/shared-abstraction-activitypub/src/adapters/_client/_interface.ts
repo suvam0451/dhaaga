@@ -47,6 +47,10 @@ export type MissUserDetailed = UserDetailed;
 export type MissNote = Note;
 export type MissUser = User;
 export type MissUserDetailedNotMe = UserDetailedNotMe;
+export type MissContext = {
+	ancestors: any[];
+	descendants: any[];
+};
 
 export type HashtagTimelineQuery = {
 	limit: number;
@@ -190,9 +194,7 @@ interface ActivityPubClient extends RouterInterface {
 	 * Status
 	 * */
 	getStatus(id: string): Promise<Status>;
-
-	getStatusContext(id: string): Promise<mastodon.v1.Context | any>;
-
+	
 	bookmark(id: string): Promise<Status>;
 
 	unBookmark(id: string): Promise<Status>;

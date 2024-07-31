@@ -10,9 +10,12 @@ type Props = {
 
 const RawTextSegment = memo(({ value }: Props) => {
 	// @ts-ignore-next-line
-	const _value = value.replaceAll(/<br>/g, '\n');
+	const _value = value?.replaceAll(/<br>/g, '\n');
 	const k = randomUUID();
 
+	if (!_value) {
+		return <Text key={k}></Text>;
+	}
 	return (
 		<Text
 			key={k}

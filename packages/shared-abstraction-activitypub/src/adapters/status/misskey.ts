@@ -127,7 +127,7 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	}
 
 	getParentStatusId(): string | null | undefined {
-		return null;
+		return this.ref.instance?.replyId;
 	}
 
 	getUserIdParentStatusUserId(): string | null | undefined {

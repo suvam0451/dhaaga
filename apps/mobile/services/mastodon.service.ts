@@ -25,10 +25,10 @@ class MastodonService {
 		 *  this may not be performant nad/or complete
 		 */
 		let flat = ActivityPubAdapterService.adaptContextChain(data, domain);
+
 		flat.push(current);
 
 		// store all lookups
-		lookup.set(current?.getId(), current);
 		flat.forEach((o) => {
 			lookup.set(o.getId(), o);
 		});

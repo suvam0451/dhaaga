@@ -51,7 +51,10 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				return data;
 			}
 			case TimelineFetchMode.LOCAL: {
-				const { data, error } = await client.timelines.public(_query);
+				const { data, error } = await client.timelines.public({
+					..._query,
+					local: true,
+				});
 				if (error) return [];
 				return data;
 			}
