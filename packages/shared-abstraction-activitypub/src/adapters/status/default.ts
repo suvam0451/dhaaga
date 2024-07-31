@@ -1,5 +1,6 @@
 import { UserType } from '../profile/_interface.js';
 import {
+	DhaagaJsMentionObject,
 	Status,
 	StatusContextInstance,
 	StatusContextInterface,
@@ -7,6 +8,10 @@ import {
 } from './_interface.js';
 
 class UnknownToStatusAdapter implements StatusInterface {
+	getMentions(): DhaagaJsMentionObject[] {
+		return [];
+	}
+
 	getReactions(): { id: string; count: number }[] {
 		return [];
 	}

@@ -18,6 +18,7 @@ import {
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import { Endpoints } from 'misskey-js';
 
 export abstract class BaseAccountsRouter implements AccountRoute {
 	async lookup(
@@ -29,19 +30,25 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	follow(
 		id: string,
 		opts: FollowPostDto,
-	): Promise<LibraryResponse<MastoRelationship>> {
+	): LibraryPromise<MastoRelationship | Endpoints['following/create']['res']> {
 		throw new Error('Method not implemented.');
 	}
 
-	unfollow(id: string): Promise<LibraryResponse<MastoRelationship>> {
+	unfollow(
+		id: string,
+	): LibraryPromise<MastoRelationship | Endpoints['following/delete']['res']> {
 		throw new Error('Method not implemented.');
 	}
 
-	block(id: string): Promise<LibraryResponse<MastoRelationship>> {
+	block(
+		id: string,
+	): LibraryPromise<MastoRelationship | Endpoints['blocking/create']['res']> {
 		throw new Error('Method not implemented.');
 	}
 
-	unblock(id: string): Promise<LibraryResponse<MastoRelationship>> {
+	unblock(
+		id: string,
+	): LibraryPromise<MastoRelationship | Endpoints['blocking/delete']['res']> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -79,7 +86,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	): Promise<LibraryResponse<MastoAccount | MissUserDetailed>> {
 		return {
 			error: {
-				code: DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY,
+				code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
 			},
 		} as LibraryResponse<MastoAccount | UserDetailed>;
 	}

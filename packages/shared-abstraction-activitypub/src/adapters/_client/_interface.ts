@@ -86,7 +86,7 @@ export type GetTimelineQueryDTO = {
 	onlyMedia?: boolean;
 };
 
-export type GetTrendingPostsQueryDTO = {
+export type GetTrendingDTO = {
 	limit: number;
 	offset?: number;
 };
@@ -121,6 +121,8 @@ export type FollowPostDto = {
 	notify: boolean;
 	// (ISO 639-1 language two-letter code)
 	languages?: string[];
+	// misskey, default false
+	withReplies?: boolean;
 };
 
 /**
@@ -194,7 +196,7 @@ interface ActivityPubClient extends RouterInterface {
 	 * Status
 	 * */
 	getStatus(id: string): Promise<Status>;
-	
+
 	bookmark(id: string): Promise<Status>;
 
 	unBookmark(id: string): Promise<Status>;

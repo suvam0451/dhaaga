@@ -37,6 +37,12 @@ type AppInlineCheckboxProps = {
 	checked: boolean;
 	onClick: () => void;
 };
+
+/**
+ * Stylized checkbox,
+ * that turn white and add a
+ * cross sign at end
+ */
 export const AppInlineCheckbox = memo(function Foo({
 	label,
 	checked,
@@ -72,6 +78,33 @@ export const AppInlineCheckbox = memo(function Foo({
 			</View>
 		);
 	}
+});
+
+export const NativeCheckbox = memo(function Foo({
+	label,
+	checked,
+	onClick,
+}: AppInlineCheckboxProps) {
+	return (
+		<CheckBox
+			checked={checked}
+			onPress={onClick}
+			iconType="material-community"
+			checkedIcon="checkbox-outline"
+			uncheckedIcon={'checkbox-blank-outline'}
+			containerStyle={{
+				backgroundColor: '#252525',
+				flex: 1,
+				margin: 0,
+				padding: 0,
+				marginLeft: 4,
+				marginRight: 0,
+				opacity: 0.87,
+			}}
+			textStyle={{ color: APP_FONT.MONTSERRAT_BODY }}
+			title={label}
+		/>
+	);
 });
 
 export default AppCheckBox;

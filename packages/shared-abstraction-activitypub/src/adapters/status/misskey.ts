@@ -1,4 +1,5 @@
 import {
+	DhaagaJsMentionObject,
 	NoteInstance,
 	Status,
 	StatusContextInstance,
@@ -45,6 +46,14 @@ class MisskeyToStatusAdapter implements StatusInterface {
 
 	constructor(ref: NoteInstance) {
 		this.ref = ref;
+	}
+
+	getMentions(): DhaagaJsMentionObject[] {
+		return (
+			this.ref.instance?.mentions?.map((o) => ({
+				id: o,
+			})) || []
+		);
 	}
 
 	getReactions(): { id: string; count: number }[] {

@@ -10,7 +10,11 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import WithActivitypubStatusContext from '../../../states/useStatus';
 import StatusItem from '../../common/status/StatusItem';
 import LoadingMore from '../home/LoadingMore';
-import { MastodonRestClient } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	MastodonRestClient,
+	MisskeyRestClient,
+} from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 type SearchResultsProps = {
 	q: string;
@@ -19,7 +23,7 @@ type SearchResultsProps = {
 };
 
 function SearchResults(props: SearchResultsProps) {
-	const { client } = useActivityPubRestClientContext();
+	const { client, domain } = useActivityPubRestClientContext();
 	const { resetOffset, resetEndOfPageFlag } = useScrollOnReveal();
 
 	const {
@@ -50,26 +54,46 @@ function SearchResults(props: SearchResultsProps) {
 			};
 		}
 		if (!props.q) return null;
-		const { data, error } = await (
-			client as MastodonRestClient
-		).search.unifiedSearch({
-			q: props.q,
-			following: false,
-			type: null,
-			maxId,
-		});
-		if (error)
+		if (domain === KNOWN_SOFTWARE.MASTODON) {
+			const { data, error } = await (
+				client as MastodonRestClient
+			).search.unifiedSearch({
+				q: props.q,
+				following: false,
+				type: null,
+				maxId,
+			});
+			if (error)
+				return {
+					statuses: [],
+					accounts: [],
+					hashtags: [],
+				};
+			return data;
+		} else {
+			const { data, error } = await (
+				client as MisskeyRestClient
+			).search.findPosts({
+				q: props.q,
+				query: props.q,
+				limit: 20,
+			});
+			if (error)
+				return {
+					statuses: [],
+					accounts: [],
+					hashtags: [],
+				};
 			return {
-				statuses: [],
+				statuses: data,
 				accounts: [],
 				hashtags: [],
 			};
-
-		return data;
+		}
 	}
 
 	// Queries
-	const { status, data, fetchStatus, refetch } = useQuery({
+	const { status, data, fetchStatus } = useQuery({
 		queryKey: ['search', props.q, props.type],
 		queryFn: api,
 		enabled: client !== null && !paginationLock,

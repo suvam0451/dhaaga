@@ -2,7 +2,7 @@ import ActivityPubClient, {
 	FollowPostDto,
 	GetPostsQueryDTO,
 	GetTimelineQueryDTO,
-	GetTrendingPostsQueryDTO,
+	GetTrendingDTO,
 	GetUserPostsQueryDTO,
 	HashtagTimelineQuery,
 	MediaUploadDTO,
@@ -157,15 +157,15 @@ class PleromaRestClient implements ActivityPubClient {
 		throw new Error('Method not implemented.');
 	}
 
-	getTrendingPosts(opts: GetTrendingPostsQueryDTO): Promise<StatusArray> {
+	getTrendingPosts(opts: GetTrendingDTO): Promise<StatusArray> {
 		throw new Error('Method not implemented.');
 	}
 
-	getTrendingTags(opts: GetTrendingPostsQueryDTO): Promise<TagArray> {
+	getTrendingTags(opts: GetTrendingDTO): Promise<TagArray> {
 		throw new Error('Method not implemented.');
 	}
 
-	getTrendingLinks(opts: GetTrendingPostsQueryDTO): Promise<TrendLinkArray> {
+	getTrendingLinks(opts: GetTrendingDTO): Promise<TrendLinkArray> {
 		throw new Error('Method not implemented.');
 	}
 

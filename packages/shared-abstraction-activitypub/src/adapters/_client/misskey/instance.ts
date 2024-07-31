@@ -36,7 +36,7 @@ export class MisskeyInstanceRouter implements InstanceRoute {
 	): Promise<LibraryResponse<mastodon.v1.Translation>> {
 		return {
 			error: {
-				code: DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY,
+				code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
 			},
 		};
 	}

@@ -6,6 +6,14 @@ import type { mastodon } from 'masto';
 export type Status = mastodon.v1.Status | Note | null | undefined;
 export type StatusArray = Status[];
 
+export type DhaagaJsMentionObject = {
+	id: string;
+	// mastodon returns all this extra
+	username?: string;
+	url?: string; // "https://mastodon.social/@suvam",
+	acct?: string; // "suvam@mastodon.social"
+};
+
 export interface StatusContextInterface {
 	getId(): string;
 
@@ -46,6 +54,8 @@ export interface StatusInterface {
 	isReposted(): boolean;
 
 	getMediaAttachments(): MediaAttachmentInterface[] | null | undefined;
+
+	getMentions(): DhaagaJsMentionObject[];
 
 	print(): void;
 

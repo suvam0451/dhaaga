@@ -341,7 +341,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			default: {
 				return {
 					error: {
-						code: DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY,
+						code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
 						message: software,
 					},
 				};

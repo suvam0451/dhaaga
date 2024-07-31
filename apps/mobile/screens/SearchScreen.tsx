@@ -1,8 +1,7 @@
-import { View, Animated } from 'react-native';
+import { View, Animated, StyleSheet } from 'react-native';
 import WithScrollOnRevealContext from '../states/useScrollOnReveal';
 import { SearchBar } from '@rneui/themed';
-import { useState } from 'react';
-import { CheckBox } from '@rneui/base';
+import { useCallback, useState } from 'react';
 import appStyling from '../styles/AppStyles';
 import SearchResults from '../components/screens/search/SearchResults';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
@@ -11,90 +10,49 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ApiWrapper from '../components/common/tag/TagBrowseLocal';
 import PostWithClientContext from './shared/Post';
 import WithAppPaginationContext from '../states/usePagination';
-import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 import WithAutoHideTopNavBar from '../components/containers/WithAutoHideTopNavBar';
 import useTopbarSmoothTranslate from '../states/useTopbarSmoothTranslate';
-import { APP_FONT } from '../styles/AppTheme';
-
-type CheckboxItemProps = {
-	selected: boolean;
-	title: string;
-	onPress: any;
-};
+import { NativeCheckbox } from '../components/lib/Checkboxes';
 
 const Stack = createNativeStackNavigator();
-
-function CheckboxItem({ selected, title, onPress }: CheckboxItemProps) {
-	return (
-		<CheckBox
-			checked={selected}
-			onPress={onPress}
-			iconType="material-community"
-			checkedIcon="checkbox-outline"
-			uncheckedIcon={'checkbox-blank-outline'}
-			containerStyle={{
-				backgroundColor: '#252525',
-				flex: 1,
-				margin: 0,
-				padding: 0,
-				marginLeft: 4,
-				marginRight: 0,
-				opacity: 0.87,
-			}}
-			textStyle={{ color: APP_FONT.MONTSERRAT_BODY }}
-			title={title}
-		/>
-	);
-}
 
 function Multiselect() {
 	const [selectedIndex, setSelectedIndex] = useState(0);
 
-	function onCheckboxPress(idx: number) {
-		setSelectedIndex(idx);
-	}
+	const onCheckboxPress = useCallback(
+		(idx: number) => {
+			setSelectedIndex(idx);
+		},
+		[setSelectedIndex],
+	);
+
+	const Checkboxes = [
+		{
+			label: 'Posts',
+		},
+		{
+			label: 'Users',
+		},
+		{
+			label: 'Tags',
+		},
+		{
+			label: 'Links',
+		},
+	];
 
 	return (
-		<View
-			style={{
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'space-between',
-				width: '100%',
-				backgroundColor: '#252525',
-				paddingBottom: 12,
-				paddingHorizontal: 8,
-			}}
-		>
-			<CheckboxItem
-				onPress={() => {
-					onCheckboxPress(0);
-				}}
-				title={'All'}
-				selected={selectedIndex === 0}
-			/>
-			<CheckboxItem
-				onPress={() => {
-					onCheckboxPress(1);
-				}}
-				title={'Tags'}
-				selected={selectedIndex === 1}
-			/>
-			<CheckboxItem
-				onPress={() => {
-					onCheckboxPress(2);
-				}}
-				title={'Users'}
-				selected={selectedIndex === 2}
-			/>
-			<CheckboxItem
-				onPress={() => {
-					onCheckboxPress(3);
-				}}
-				title={'Posts'}
-				selected={selectedIndex === 3}
-			/>
+		<View style={styles.checkboxContainer}>
+			{Checkboxes.map((o, i) => (
+				<NativeCheckbox
+					key={i}
+					onClick={() => {
+						onCheckboxPress(i);
+					}}
+					label={o.label}
+					checked={selectedIndex === i}
+				/>
+			))}
 		</View>
 	);
 }
@@ -133,6 +91,8 @@ function FloatingMenuWrapper() {
 						height: 54,
 						backgroundColor: '#252525',
 						margin: 0,
+						borderTopRightRadius: 8,
+						borderTopLeftRadius: 8,
 					}}
 					style={{ width: '100%' }}
 					inputContainerStyle={{ height: 36 }}
@@ -156,17 +116,31 @@ function HomeContainer() {
 
 function SearchScreen() {
 	return (
-		<WithGorhomBottomSheetContext>
-			<Stack.Navigator
-				initialRouteName={'Search'}
-				screenOptions={{ headerShown: false }}
-			>
-				<Stack.Screen name={'Search'} component={HomeContainer} />
-				<Stack.Screen name="Browse Hashtag" component={ApiWrapper} />
-				<Stack.Screen name="Post" component={PostWithClientContext} />
-			</Stack.Navigator>
-		</WithGorhomBottomSheetContext>
+		<Stack.Navigator
+			initialRouteName={'Search'}
+			screenOptions={{ headerShown: false }}
+		>
+			<Stack.Screen name={'Search'} component={HomeContainer} />
+			<Stack.Screen name="Browse Hashtag" component={ApiWrapper} />
+			<Stack.Screen name="Post" component={PostWithClientContext} />
+		</Stack.Navigator>
 	);
 }
+
+const styles = StyleSheet.create({
+	checkboxContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		width: '100%',
+		backgroundColor: '#252525',
+		paddingBottom: 10,
+		paddingTop: 8,
+		paddingHorizontal: 8,
+		borderBottomRightRadius: 8,
+		borderBottomLeftRadius: 8,
+	},
+});
 
 export default SearchScreen;

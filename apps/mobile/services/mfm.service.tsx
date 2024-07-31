@@ -120,7 +120,7 @@ class MfmComponentBuilder {
 		EmojiService.loadEmojisForInstanceSync(
 			this.db,
 			this.globalDb,
-			this.targetSubdomain,
+			this.targetSubdomain || this.mySubdomain,
 			{
 				selection: this.emojis,
 			},
@@ -205,7 +205,10 @@ class MfmComponentBuilder {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 
 				// NOTE: mention.url is also an option
-				if (mention) return <MentionSegment key={k} value={mention.text} />;
+				if (mention)
+					return (
+						<MentionSegment key={k} value={mention.text} link={mention.url} />
+					);
 
 				let displayName = null;
 				if (this.links) {
@@ -262,8 +265,16 @@ class MfmComponentBuilder {
 				);
 			}
 			// NOTE: node.props.acct is also an option
-			case 'mention':
-				return <MentionSegment key={k} value={node.props.username} />;
+			case 'mention': {
+				const mention = this.mentions?.find((o) => o.url === node.props.url);
+				return (
+					<MentionSegment
+						key={k}
+						value={node.props.username}
+						link={mention?.url}
+					/>
+				);
+			}
 			case 'inlineCode':
 				return <InlineCodeSegment key={k} value={node.props.code} />;
 			case 'hashtag':

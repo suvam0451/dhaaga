@@ -90,7 +90,7 @@ class ActivitypubHelper {
 				const web = x![3];
 				return `${this.removeURLPrefixes(web)} (via ${bridge})`;
 			}
-			console.info('[WARN]: failed to resolve fedi handle', url, myDomain);
+			// console.info('[WARN]: failed to resolve fedi handle', url, myDomain);
 			return '<invalid>';
 		}
 		return ourUrl === theirUrl
@@ -200,7 +200,7 @@ class ActivitypubHelper {
 							// js api is outdated
 							return {
 								error: {
-									code: DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY,
+									code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
 								},
 							};
 						}
