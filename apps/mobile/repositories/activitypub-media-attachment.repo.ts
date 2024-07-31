@@ -20,11 +20,13 @@ export class ActivityPubMediaAttachmentRepository {
 				previewCacheKey: new Realm.BSON.UUID(),
 				previewUrl: dto.getPreviewUrl(),
 				type: dto.getType(),
-				height: dto.getHeight(),
-				width: dto.getWidth(),
+				height: dto.getHeight() || -1,
+				width: dto.getWidth() || -1,
 				blurhash: dto.getBlurHash(),
 			});
 		} catch (e) {
+			console.log('[ERROR]: uploading media item', e);
+			dto.print();
 			return null;
 		}
 	}

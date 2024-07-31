@@ -8,7 +8,6 @@ import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-em
 import activitypubAdapterService from './activitypub-adapter.service';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { Status } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
-import { formatRelative } from 'date-fns/formatRelative';
 
 export type EmojiAdapter = {
 	// common

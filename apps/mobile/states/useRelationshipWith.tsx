@@ -2,6 +2,13 @@ import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MastoRelationship } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 import useHookLoadingState from './useHookLoadingState';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import {
+	LibraryResponse,
+	MastodonRestClient,
+	MisskeyRestClient,
+} from '@dhaaga/shared-abstraction-activitypub';
+import { UserDetailed } from 'misskey-js/built/autogen/models';
 
 const defaultValue = {
 	blockedBy: false,
@@ -38,25 +45,48 @@ function useRelationshipWith(id: string) {
 	const Data = useRef(defaultValue);
 
 	useEffect(() => {
+		Data.current = defaultValue;
+		forceUpdate();
 		refetch();
 	}, [id]);
 
 	const setMastoRelation = useCallback(
-		(input: MastoRelationship) => {
-			Data.current.following = input.following;
-			Data.current.followedBy = input.followedBy;
-			Data.current.blockedBy = input.blockedBy;
-			Data.current.blocking = input.blocking;
-			Data.current.muting = input.muting;
+		({ data, error }: LibraryResponse<MastoRelationship[]>) => {
+			if (error || data.length === 0) {
+				Data.current.error = true;
+				return;
+			}
+			const _data = data[0];
+			Data.current.following = _data.following;
+			Data.current.followedBy = _data.followedBy;
+			Data.current.blockedBy = _data.blockedBy;
+			Data.current.blocking = _data.blocking;
+			Data.current.muting = _data.muting;
 
-			Data.current.domainBlocking = input.domainBlocking;
-			Data.current.requested = input.requested;
-			Data.current.requestedBy = input.requestedBy;
+			Data.current.domainBlocking = _data.domainBlocking;
+			Data.current.requested = _data.requested;
+			Data.current.requestedBy = _data.requestedBy;
 
 			// moderation
-			Data.current.mutingNotifications = input.mutingNotifications;
-			Data.current.notifying = input.notifying;
-			Data.current.showingReblogs = input.showingReblogs;
+			Data.current.mutingNotifications = _data.mutingNotifications;
+			Data.current.notifying = _data.notifying;
+			Data.current.showingReblogs = _data.showingReblogs;
+		},
+		[Data, IsLoading],
+	);
+
+	const setMisskeyRelation = useCallback(
+		({ data, error }: LibraryResponse<UserDetailed>) => {
+			if (error) {
+				Data.current.error = true;
+				return;
+			}
+
+			Data.current.following = data.isFollowing;
+			Data.current.followedBy = data.isFollowed;
+
+			Data.current.blocking = data.isBlocking;
+			Data.current.blockedBy = data.isBlocked;
 		},
 		[Data, IsLoading],
 	);
@@ -65,7 +95,8 @@ function useRelationshipWith(id: string) {
 		setIsLoading(true);
 		switch (domain) {
 			case 'mastodon': {
-				setMastoRelation(input);
+				// Mock API response, to avoid duplicate api calls
+				setMastoRelation({ data: [input] });
 			}
 		}
 		setIsLoading(false);
@@ -74,19 +105,35 @@ function useRelationshipWith(id: string) {
 
 	async function refetch() {
 		setIsLoading(true);
-		const { data, error } = await client.accounts.relationships([id]);
-		console.log(data);
-		if (error) {
-			Data.current.error = true;
-			return;
-		}
+
 		switch (domain) {
-			case 'mastodon': {
-				setMastoRelation(data[0]);
+			case KNOWN_SOFTWARE.MASTODON: {
+				(client as MastodonRestClient).accounts
+					.relationships([id])
+					.then(setMastoRelation)
+					.finally(() => {
+						setIsLoading(false);
+						forceUpdate();
+					});
+				break;
+			}
+			case KNOWN_SOFTWARE.MISSKEY:
+			case KNOWN_SOFTWARE.FIREFISH:
+			case KNOWN_SOFTWARE.SHARKEY: {
+				(client as MisskeyRestClient).accounts
+					.get(id)
+					.then(setMisskeyRelation)
+					.finally(() => {
+						setIsLoading(false);
+						forceUpdate();
+					});
+				break;
+			}
+			default: {
+				setIsLoading(false);
+				forceUpdate();
 			}
 		}
-		setIsLoading(false);
-		forceUpdate();
 	}
 
 	return {
@@ -95,6 +142,7 @@ function useRelationshipWith(id: string) {
 		refetchRelation: refetch,
 		setRelation,
 		relationLoading: IsLoading,
+		setRelationLoading: setIsLoading,
 	};
 }
 

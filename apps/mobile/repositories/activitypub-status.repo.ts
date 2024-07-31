@@ -25,7 +25,7 @@ export class ActivityPubStatusRepository {
 		const postedBy = ActivityPubUserAdapter(status.getUser(), domain);
 
 		const payload: ActivityPubStatusUpsertDTOType = {
-			url: status.getAccountUrl(),
+			url: status.getAccountUrl(subdomain),
 			statusId: status.getId(),
 			bookmarked: status.getIsBookmarked(),
 			boostedCount: status.getRepostsCount(),
@@ -43,13 +43,17 @@ export class ActivityPubStatusRepository {
 			replyToAcctId: null,
 			sensitive: false,
 			spoilerText: '',
-			visibility: status.getVisibility(),
+			visibility: status.getVisibility() || 'unknown',
 		};
 		const match = this.find(db, status.getId(), subdomain);
 		const savedServer = ActivityPubServerRepository.upsert(db, subdomain);
 		const savedPostedBy = ActivityPubUserRepository.upsert(db, {
 			user: postedBy,
+			userSubdomain: subdomain,
 		});
+		if (!savedPostedBy) {
+			console.log('[WARN]: postedBy not saved in db', status.getRaw());
+		}
 
 		const retval = db.create(
 			ActivityPubStatus,

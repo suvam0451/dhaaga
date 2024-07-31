@@ -4,7 +4,7 @@ import { FabMenuItemFactory } from '../fragments/FabMenuItemFactory';
 import { FabMenuItemText } from '../fragments/FabMenuItemIcon';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useTimelineController } from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { useFabController } from '../hooks/useFabController';
 
 const MENU_ITEM_LABEL = 'Switch Timeline';

@@ -1,4 +1,5 @@
 import {
+	DhaagaJsMentionObject,
 	Status,
 	StatusContextInstance,
 	StatusContextInterface,
@@ -16,6 +17,10 @@ class MastodonToStatusAdapter implements StatusInterface {
 	constructor(ref: StatusInstance) {
 		this.ref = ref;
 		this.descendants = [];
+	}
+
+	getMentions(): DhaagaJsMentionObject[] {
+		return this.ref.instance?.mentions || [];
 	}
 
 	getReactions(): { id: string; count: number }[] {

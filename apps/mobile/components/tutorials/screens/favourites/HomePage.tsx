@@ -1,21 +1,12 @@
-import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { View, Text, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 function FavouritesScreenHomePageDefaultTutorial() {
 	return (
 		<View style={{ padding: 8 }}>
-			<View
-				style={{
-					padding: 16,
-					position: 'relative',
-					borderWidth: 2,
-					borderColor: '#ffffff60',
-					borderRadius: 8,
-					marginTop: 16,
-				}}
-			>
+			<View style={styles.welcomeText}>
 				<View
 					style={{
 						display: 'flex',
@@ -38,27 +29,16 @@ function FavouritesScreenHomePageDefaultTutorial() {
 						fontSize: 24,
 						textAlign: 'center',
 						color: APP_FONT.MONTSERRAT_HEADER,
+						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 					}}
 				>
 					Welcome !
 				</Text>
 
-				<Text
-					style={{
-						fontSize: 18,
-						textAlign: 'center',
-						color: APP_FONT.MONTSERRAT_BODY,
-					}}
-				>
+				<Text style={styles.welcomeDescriptionSection}>
 					Here, you can browse your saved statuses/tags and manage your network.
 				</Text>
-				<Text
-					style={{
-						fontSize: 18,
-						textAlign: 'center',
-						color: APP_FONT.MONTSERRAT_BODY,
-					}}
-				>
+				<Text style={styles.welcomeDescriptionSection}>
 					If you are new to mastodon and need help, click help icon for a
 					explainer 😉
 				</Text>
@@ -66,5 +46,23 @@ function FavouritesScreenHomePageDefaultTutorial() {
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	welcomeText: {
+		padding: 16,
+		position: 'relative',
+		borderWidth: 2,
+		borderColor: '#ffffff60',
+		borderRadius: 8,
+		marginTop: 16,
+	},
+	welcomeDescriptionSection: {
+		fontSize: 16,
+		textAlign: 'center',
+		marginTop: 4,
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+	},
+});
 
 export default FavouritesScreenHomePageDefaultTutorial;

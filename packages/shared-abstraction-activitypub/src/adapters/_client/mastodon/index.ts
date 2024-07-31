@@ -26,6 +26,7 @@ import { MastodonNotificationsRouter } from './notifications.js';
 import { MastodonTimelinesRouter } from './timelines.js';
 import { MastodonTagRouter } from './tags.js';
 import { MastodonSearchRouter } from './search.js';
+import { MastodonMeRouter } from './me.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -38,6 +39,7 @@ class MastodonRestClient implements ActivityPubClient {
 	timelines: MastodonTimelinesRouter;
 	tags: MastodonTagRouter;
 	search: MastodonSearchRouter;
+	me: MastodonMeRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -53,6 +55,7 @@ class MastodonRestClient implements ActivityPubClient {
 		this.timelines = new MastodonTimelinesRouter(this.client);
 		this.tags = new MastodonTagRouter(this.client);
 		this.search = new MastodonSearchRouter(this.client);
+		this.me = new MastodonMeRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<MastoStatus | null> {
@@ -152,16 +155,6 @@ class MastodonRestClient implements ActivityPubClient {
 		} catch (e) {
 			console.log(e);
 			return [];
-		}
-	}
-
-	async getStatusContext(id: string): Promise<MastoContext | null> {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.statuses.$select(id).context.fetch();
-		} catch (e) {
-			console.log(e);
-			return null;
 		}
 	}
 

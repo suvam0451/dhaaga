@@ -5,10 +5,7 @@ import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import styled from 'styled-components/native';
-import {
-	TimelineFetchMode,
-	useTimelineController,
-} from '../../../../states/useTimelineController';
+import { useTimelineController } from '../api/useTimelineController';
 import { useQuery } from '@realm/react';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -16,6 +13,8 @@ import FabMenuCore from '../../../shared/fab/Core';
 import { FAB_MENU_MODULES } from '../../../../types/app.types';
 import AppSidebarCore, { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
 import { router } from 'expo-router';
+import { TimelineFetchMode } from '../utils/timeline.types';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -250,8 +249,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 				<Text
 					style={{
 						color: APP_FONT.MONTSERRAT_BODY,
-						fontFamily: 'Montserrat-Bold',
-						flex: 1,
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>
 					{Label}
@@ -261,13 +259,13 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 	);
 }
 
-function WelcomeBack() {
+function SocialHub() {
 	const [TimeOfDay, setTimeOfDay] = useState<TIME_OF_DAY>(TIME_OF_DAY.UNKNOWN);
 	const userDataTimelines = useQuery(UserDataTimeline).filter((o) => o.pinned);
 
 	useEffect(() => {
 		const currentHours = new Date().getHours();
-		let timeOfDay: TIME_OF_DAY = null;
+		let timeOfDay: TIME_OF_DAY;
 		if (currentHours >= 21 || (currentHours >= 0 && currentHours < 6)) {
 			timeOfDay = TIME_OF_DAY.NIGHT;
 		} else if (currentHours >= 6 && currentHours < 12) {
@@ -310,7 +308,7 @@ function WelcomeBack() {
 
 	return (
 		<AppSidebarCore variant={SIDEBAR_VARIANT.TIMELINE}>
-			<StatusBar backgroundColor="#1c1c1c" />
+			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<TimelinesHeader
 				label={'Your Social Hub'}
 				SHOWN_SECTION_HEIGHT={50}
@@ -444,7 +442,6 @@ function WelcomeBack() {
 					FAB_MENU_MODULES.NAVIGATOR,
 					FAB_MENU_MODULES.CREATE_POST,
 					FAB_MENU_MODULES.TIMELINE_SWITCHER,
-					FAB_MENU_MODULES.OPEN_SIDEBAR,
 				]}
 			/>
 		</AppSidebarCore>
@@ -487,4 +484,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default WelcomeBack;
+export default SocialHub;

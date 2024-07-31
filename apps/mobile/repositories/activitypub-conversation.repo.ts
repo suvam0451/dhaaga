@@ -39,7 +39,10 @@ export class ActivityPubConversationRepository {
 		);
 		const conflict = this.findById(db, conversation.id);
 
-		const savedMe = ActivityPubUserRepository.upsert(db, { user: me });
+		const savedMe = ActivityPubUserRepository.upsert(db, {
+			user: me,
+			userSubdomain: subdomain,
+		});
 		const savedLatestStatus = ActivityPubStatusRepository.upsert(db, {
 			status: latest,
 			domain,
@@ -52,6 +55,7 @@ export class ActivityPubConversationRepository {
 
 		const savedParticipants = ActivityPubUserRepository.upsertMultiple(db, {
 			users: usersI,
+			userSubdomain: subdomain,
 		});
 		const savedChatroom = ActivityPubChatroomRepository.upsert(db, {
 			hash,

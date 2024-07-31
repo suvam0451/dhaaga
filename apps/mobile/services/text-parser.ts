@@ -5,6 +5,7 @@ import {
 
 class TextParserService {
 	static findHashtags(input: string) {
+		if (!input) return [];
 		input = preprocessPostContent(input);
 
 		const setter = new Set<string>();

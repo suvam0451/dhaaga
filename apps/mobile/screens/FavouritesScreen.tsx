@@ -1,5 +1,5 @@
-import { View } from 'react-native';
-import { Button, Text } from '@rneui/themed';
+import { View, Text } from 'react-native';
+import { Button } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
 import MyBookmarks from '../components/screens/favourites/stack/MyBookmarks';
 import WithScrollOnRevealContext from '../states/useScrollOnReveal';
@@ -16,9 +16,9 @@ import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import MyFollowings from '../components/screens/favourites/stack/MyFollowings';
 import MyFollowers from '../components/screens/favourites/stack/MyFollowers';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
-import { APP_FONT, APP_THEME } from '../styles/AppTheme';
+import { APP_FONT } from '../styles/AppTheme';
 import { APP_FONTS } from '../styles/AppFonts';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 
 type FavouritesScreenNavigationItemIconOnlyProps = {
 	icon: any;
@@ -78,7 +78,12 @@ function FavouritesScreenNavigationItem({
 				}}
 				onPress={onPress}
 			>
-				<Text style={{ color: '#fff', opacity: disabled ? 0.3 : 0.6 }}>
+				<Text
+					style={{
+						color: disabled ? APP_FONT.DISABLED : APP_FONT.MONTSERRAT_BODY,
+						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					}}
+				>
 					{text}
 				</Text>
 				<View style={{ marginLeft: 6 }}>{icon}</View>
@@ -114,7 +119,7 @@ function ActionableSection() {
 					<Text
 						style={{
 							fontSize: 20,
-							fontFamily: 'Montserrat-Bold',
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 							color: APP_FONT.MONTSERRAT_BODY,
 						}}
 					>
@@ -152,7 +157,6 @@ function ActionableSection() {
 								backgroundColor: '#1E1E1E',
 							}}
 							onPress={() => {
-								console.log('navigating to bookmark portal');
 								router.navigate('/favourites/bookmark-portal');
 							}}
 						>
@@ -292,7 +296,7 @@ function ActionableSection() {
 					}}
 				>
 					<FavouritesScreenNavigationItem
-						text={'My Lists'}
+						text={'Lists'}
 						onPress={() => {
 							console.log('[INFO]: user wants to see their mute list');
 						}}
@@ -307,7 +311,7 @@ function ActionableSection() {
 						disabled
 					/>
 					<FavouritesScreenNavigationItem
-						text={'My Filters'}
+						text={'Filters'}
 						onPress={() => {
 							console.log('[INFO]: user wants to see their mute list');
 						}}
@@ -332,7 +336,7 @@ function ActionableSection() {
 					}}
 				>
 					<FavouritesScreenNavigationItem
-						text={'Scheduled Posts'}
+						text={'Scheduled'}
 						onPress={() => {
 							console.log('[INFO]: user wants to see their mute list');
 						}}
@@ -347,7 +351,7 @@ function ActionableSection() {
 						disabled
 					/>
 					<FavouritesScreenNavigationItem
-						text={'My Filters'}
+						text={'Antennas'}
 						onPress={() => {
 							console.log('[INFO]: user wants to see their mute list');
 						}}

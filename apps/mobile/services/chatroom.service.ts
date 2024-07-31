@@ -40,7 +40,10 @@ class ChatroomService {
 		);
 
 		db.write(() => {
-			const savedMe = ActivityPubUserRepository.upsert(db, { user: me });
+			const savedMe = ActivityPubUserRepository.upsert(db, {
+				user: me,
+				userSubdomain: subdomain,
+			});
 			const savedLatestStatus = ActivityPubStatusRepository.upsert(db, {
 				status: latest,
 				domain,
@@ -53,6 +56,7 @@ class ChatroomService {
 
 			const savedParticipants = ActivityPubUserRepository.upsertMultiple(db, {
 				users: usersI,
+				userSubdomain: subdomain,
 			});
 			const savedChatroom = ActivityPubChatroomRepository.upsert(db, {
 				hash,

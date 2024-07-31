@@ -2,6 +2,16 @@ import OpenAI from 'openai';
 
 export class OpenAiService {
 	static async explain(input: string) {
+		if (
+			!process.env.EXPO_PUBLIC_OPENAI_API_KEY ||
+			process.env.EXPO_PUBLIC_OPENAI_API_KEY === ''
+		) {
+			return (
+				'The lite edition of Dhaaga does not support AI features.' +
+				" Single tap the translation button to use your instance's" +
+				' translation, instead.'
+			);
+		}
 		try {
 			const client = new OpenAI({
 				apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY,

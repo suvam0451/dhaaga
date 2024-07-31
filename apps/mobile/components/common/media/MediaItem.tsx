@@ -1,6 +1,5 @@
 import { Dimensions, View } from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useMemo } from 'react';
 import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
 import MediaService from '../../../services/media.service';
 import {
@@ -15,6 +14,7 @@ import {
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
 } from './_shared';
+import AppImageCarousel from './fragments/AppImageCarousel';
 
 type ImageCarousalProps = {
 	attachments: MediaAttachmentInterface[];
@@ -42,10 +42,12 @@ const TimelineMediaRendered = memo(function Foo({
 			case 'image':
 			case 'image/jpeg':
 			case 'image/png':
-			case 'image/webp': {
+			case 'image/webp':
+			case 'gifv':
+			case 'image/gif': {
 				return (
 					<AppImageComponent
-						url={attachment.getPreviewUrl()}
+						url={attachment.getUrl()}
 						blurhash={attachment.getBlurHash()}
 					/>
 				);
@@ -62,18 +64,8 @@ const TimelineMediaRendered = memo(function Foo({
 					/>
 				);
 			}
-			case 'gifv':
-			case 'image/gif': {
-				return (
-					<AppVideoComponent
-						type={'gifv'}
-						url={attachment.getUrl()}
-						height={CalculatedHeight}
-						loop
-					/>
-				);
-			}
-			case 'audio': {
+			case 'audio':
+			case 'audio/mpeg': {
 				return <AppAudioComponent url={attachment.getUrl()} />;
 			}
 			default: {
@@ -103,28 +95,6 @@ const TimelineMediaRendered = memo(function Foo({
 });
 
 const MediaItem = memo(function Foo({ attachments }: ImageCarousalProps) {
-	const [CarousalData, setCarousalData] = useState({
-		index: 0,
-		total: attachments?.length,
-	});
-
-	useEffect(() => {
-		setCarousalData({
-			index: 0,
-			total: attachments?.length,
-		});
-	}, [attachments]);
-
-	const onCarousalItemChanged = useCallback(
-		(e: any) => {
-			setCarousalData({
-				index: e,
-				total: attachments?.length,
-			});
-		},
-		[attachments],
-	);
-
 	const CalculatedHeight = useMemo(() => {
 		if (!attachments) return MEDIA_CONTAINER_MAX_HEIGHT;
 		return MediaService.calculateHeightForMediaContentCarousal(attachments, {
@@ -145,27 +115,15 @@ const MediaItem = memo(function Foo({ attachments }: ImageCarousalProps) {
 	}
 	return (
 		<View style={{ marginTop: MARGIN_TOP, flex: 1 }}>
-			<Carousel
-				width={Dimensions.get('window').width}
-				height={CalculatedHeight}
-				data={attachments}
-				scrollAnimationDuration={160}
-				onSnapToItem={(index: number) => {
-					onCarousalItemChanged(index);
-				}}
-				panGestureHandlerProps={{
-					activeOffsetX: [-10, 10], // Enable horizontal panning
-					failOffsetY: [-5, 5], // Limit vertical movement to fail the gesture
-				}}
-				pagingEnabled={true}
-				renderItem={(o: any) => (
-					<TimelineMediaRendered
-						attachment={o.item}
-						CalculatedHeight={CalculatedHeight}
-						totalCount={CarousalData.total}
-						index={CarousalData.index}
-					/>
-				)}
+			<AppImageCarousel
+				timelineCacheId={'1'}
+				calculatedHeight={CalculatedHeight}
+				items={attachments.map((o) => ({
+					altText: o.getAltText(),
+					src: o.getPreviewUrl(),
+					type: o.getType(),
+					blurhash: o.getBlurHash(),
+				}))}
 			/>
 		</View>
 	);

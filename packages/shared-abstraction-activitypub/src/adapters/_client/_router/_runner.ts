@@ -110,7 +110,7 @@ export class DhaagaRestClient<T extends COMPAT> {
 				return generator(KNOWN_SOFTWARE.GOTOSOCIAL, this.baseUrl) as any;
 			}
 			default: {
-				throw new Error(DhaagaErrorCode.SOFTWARE_UNSUPPORTED_BY_LIBRARY);
+				throw new Error(DhaagaErrorCode.FEATURE_UNSUPPORTED);
 			}
 		}
 	}

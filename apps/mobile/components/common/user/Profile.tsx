@@ -1,36 +1,27 @@
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useLocalSearchParams } from 'expo-router';
-import { useQuery } from '@tanstack/react-query';
-import {
-	ActivityPubAccount,
-	ActivitypubHelper,
-} from '@dhaaga/shared-abstraction-activitypub';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, View } from 'react-native';
+import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { useMemo, useRef } from 'react';
+import { Animated, Dimensions, View, StyleSheet, Text } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import { Image } from 'expo-image';
-import {
-	AvatarContainerWithInset,
-	AvatarExpoImage,
-	ParsedDescriptionContainer,
-} from '../../../styles/Containers';
-import AppButtonFollowIndicator from '../../lib/Buttons';
-import { PrimaryText, SecondaryText } from '../../../styles/Typography';
+import { AvatarContainerWithInset } from '../../../styles/Containers';
 import UserProfileExtraInformation from './fragments/ExtraInformation';
-import ConfirmRelationshipChangeDialog from '../../screens/shared/fragments/ConfirmRelationshipChange';
 import WithActivitypubUserContext, {
 	useActivitypubUserContext,
 } from '../../../states/useProfile';
 import useMfm from '../../hooks/useMfm';
-import useRelationshipWith from '../../../states/useRelationshipWith';
 import ErrorGoBack from '../../error-screen/ErrorGoBack';
-import { AppRelationship } from '../../../types/ap.types';
 import PinnedPosts from './fragments/PinnedPosts';
 import ProfileImageGallery from './fragments/ProfileImageGallery';
+import { APP_FONT } from '../../../styles/AppTheme';
+import { APP_FONTS } from '../../../styles/AppFonts';
+import useProfile from './api/useProfile';
+import FollowIndicator from './fragments/FollowIndicator';
 
 function ProfileContextWrapped() {
-	const { primaryAcct, client } = useActivityPubRestClientContext();
+	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();
 
@@ -43,6 +34,7 @@ function ProfileContextWrapped() {
 		remoteSubdomain: user?.getInstanceUrl(),
 		emojiMap: user?.getEmojiMap(),
 		deps: [user?.getDescription()],
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	});
 
 	const { content: ParsedDisplayName } = useMfm({
@@ -50,64 +42,19 @@ function ProfileContextWrapped() {
 		remoteSubdomain: user?.getInstanceUrl(),
 		emojiMap: user?.getEmojiMap(),
 		deps: [user?.getDisplayName()],
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	});
 
 	const handle = useMemo(() => {
 		return ActivitypubHelper.getHandle(user?.getAccountUrl(), subdomain);
 	}, [user?.getAccountUrl()]);
 
-	const { relationState, relation, setRelation, relationLoading } =
-		useRelationshipWith(user?.getId());
-
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
 
-	const [
-		IsUnfollowConfirmationDialogVisible,
-		setIsUnfollowConfirmationDialogVisible,
-	] = useState(false);
 	const ScrollRef = useRef(null);
-
-	function onUnfollow() {
-		setIsUnfollowConfirmationDialogVisible(false);
-		client.accounts.unfollow(user?.getId()).then((res) => {
-			setRelation(res.data);
-		});
-	}
-
-	function onFollowButtonClick() {
-		if (!relation.following) {
-			client.accounts
-				.follow(user?.getId(), { reblogs: true, notify: false })
-				.then((res) => {
-					setRelation(res.data);
-				});
-		} else {
-			setIsUnfollowConfirmationDialogVisible(true);
-		}
-	}
-
-	const FollowLabel = useMemo(() => {
-		if (!relation.following && !relation.followedBy) {
-			return AppRelationship.UNRELATED;
-		}
-		if (relation.following && !relation.followedBy) {
-			return AppRelationship.FOLLOWING;
-		}
-		if (relation.following && relation.followedBy) {
-			return AppRelationship.FRIENDS;
-		}
-
-		if (relation.blocking) {
-			return AppRelationship.BLOCKED;
-		}
-		if (relation.blockedBy) {
-			return AppRelationship.BLOCKED_BY;
-		}
-		return AppRelationship.UNKNOWN;
-	}, [relation, relationLoading, relationState]);
 
 	return (
 		<WithAutoHideTopNavBar title={'Profile'} translateY={translateY}>
@@ -133,7 +80,11 @@ function ProfileContextWrapped() {
 					/>
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
 						<AvatarContainerWithInset>
-							<AvatarExpoImage source={{ uri: avatarUrl }} />
+							{/*@ts-ignore-next-line*/}
+							<Image
+								source={{ uri: avatarUrl }}
+								style={styles.avatarContainer}
+							/>
 						</AvatarContainerWithInset>
 						<View
 							style={{
@@ -150,41 +101,48 @@ function ProfileContextWrapped() {
 									width: '100%',
 								}}
 							>
-								<AppButtonFollowIndicator
-									label={FollowLabel}
-									onClick={onFollowButtonClick}
-									loading={relationLoading}
-								/>
+								<FollowIndicator userId={user?.getId()} />
 							</View>
 						</View>
 						<View style={{ display: 'flex', flexDirection: 'row' }}>
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getPostCount()}</PrimaryText>
-								<SecondaryText>Posts</SecondaryText>
+								<Text style={styles.primaryText}>{user.getPostCount()}</Text>
+								<Text style={styles.secondaryText}>Posts</Text>
 							</View>
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getFollowingCount()}</PrimaryText>
-								<SecondaryText>Following</SecondaryText>
+								<Text style={styles.primaryText}>
+									{user.getFollowingCount()}
+								</Text>
+								<Text style={styles.secondaryText}>Following</Text>
 							</View>
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getFollowersCount()}</PrimaryText>
-								<SecondaryText>Followers</SecondaryText>
+								<Text style={styles.primaryText}>
+									{user.getFollowersCount()}
+								</Text>
+								<Text style={styles.secondaryText}>Followers</Text>
 							</View>
 						</View>
 					</View>
 					<View style={{ marginLeft: 8 }}>
-						{ParsedDisplayName}
-						<SecondaryText>{handle}</SecondaryText>
+						<Text
+							style={{
+								fontFamily: APP_FONTS.MONTSERRAT_900_BLACK,
+								color: APP_FONT.MONTSERRAT_HEADER,
+							}}
+						>
+							{ParsedDisplayName}
+						</Text>
+						<Text style={styles.secondaryText}>{handle}</Text>
 					</View>
-					<ParsedDescriptionContainer>
+					<View style={styles.parsedDescriptionContainer}>
 						{DescriptionContent}
-					</ParsedDescriptionContainer>
+					</View>
 
 					{/*Separator*/}
 					<View style={{ flexGrow: 1 }} />
@@ -196,49 +154,17 @@ function ProfileContextWrapped() {
 						<PinnedPosts userId={user.getId()} />
 					</View>
 				</Animated.ScrollView>
-
-				<ConfirmRelationshipChangeDialog
-					visible={IsUnfollowConfirmationDialogVisible}
-					setVisible={setIsUnfollowConfirmationDialogVisible}
-					onUnfollow={onUnfollow}
-				/>
 			</View>
 		</WithAutoHideTopNavBar>
 	);
 }
 
 function Profile() {
-	const { client } = useActivityPubRestClientContext();
 	const { user } = useLocalSearchParams<{ user: string }>();
-	const [Data, setData] = useState(null);
+	const { Data, Error } = useProfile(user);
 
-	const [FetchError, setFetchError] = useState(null);
-
-	useEffect(() => {
-		setFetchError(null);
-	}, [user]);
-
-	async function api() {
-		if (!client) return null;
-		const { data, error } = await client.accounts.get(user);
-		if (error) setFetchError({ message: error.code });
-		return data;
-	}
-
-	// Queries
-	const { status, data } = useQuery<ActivityPubAccount>({
-		queryKey: [user],
-		queryFn: api,
-		enabled: client !== undefined && client !== null,
-	});
-
-	useEffect(() => {
-		if (status !== 'success' || !data) return;
-		setData(data);
-	}, [status]);
-
-	if (FetchError !== null) {
-		return <ErrorGoBack msg={FetchError?.message} />;
+	if (Error !== null) {
+		return <ErrorGoBack msg={Error} />;
 	}
 
 	return (
@@ -247,5 +173,27 @@ function Profile() {
 		</WithActivitypubUserContext>
 	);
 }
+
+const styles = StyleSheet.create({
+	primaryText: {
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+	},
+	secondaryText: {
+		color: '#888',
+		fontSize: 12,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+	},
+	parsedDescriptionContainer: {
+		marginTop: 12,
+		padding: 8,
+	},
+	avatarContainer: {
+		flex: 1,
+		width: '100%',
+		backgroundColor: '#0553',
+		padding: 2,
+	},
+});
 
 export default Profile;

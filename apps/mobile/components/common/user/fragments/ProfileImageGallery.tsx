@@ -175,6 +175,7 @@ function ProfileImageGallery({ userId }: Props) {
 			});
 		}
 	}, [MediaGalleryCtrl]);
+
 	const onPrev = useCallback(() => {
 		if (MediaGalleryCtrl.total === 0) return;
 		if (MediaGalleryCtrl.curr === 0) {

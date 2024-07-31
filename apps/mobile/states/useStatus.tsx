@@ -73,9 +73,7 @@ const defaultValue: Type = {
 	statusRaw: null,
 	toggleBookmark: () => {},
 	statusContext: undefined,
-	setStatusContextData: function (data: any): void {
-		throw new Error('Function not implemented.');
-	},
+	setStatusContextData: () => {},
 	contextItemLookup: undefined,
 	contextChildrenLookup: undefined,
 	contextRootLookup: undefined,
