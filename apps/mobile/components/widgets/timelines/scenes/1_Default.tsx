@@ -5,12 +5,10 @@ import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Button, Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import {
-	TimelineFetchMode,
-	useTimelineController,
-} from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 
 const ICON_SIZE = 20;
 

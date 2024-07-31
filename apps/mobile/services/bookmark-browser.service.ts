@@ -3,6 +3,7 @@ import { Realm } from 'realm';
 import { Account } from '../entities/account.entity';
 import ActivityPubAdapterService from './activitypub-adapter.service';
 import AccountRepository from '../repositories/account.repo';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 class BookmarkBrowserService {
 	static async updateBookmarkCache(
@@ -15,9 +16,23 @@ class BookmarkBrowserService {
 		const done = false;
 		let syncedCount = 0;
 		do {
-			const { data, error } = await client.bookmarks.get({ limit: 40, maxId });
+			const { data, error } = await client.bookmarks.get({ limit: 20, maxId });
+			console.log(data.data.length, data.minId, data.maxId, error);
+			let _data = data.data;
+			if (primaryAcct.domain !== KNOWN_SOFTWARE.MASTODON) {
+				_data = _data.map((o: any) => o.note);
+			}
+
+			/**
+			 * data format is different
+			 *
+			 * createdAt
+			 * id --> only useful for pagination
+			 * note --> the actual post object
+			 * noteId --> post id
+			 */
 			const statusIs = ActivityPubAdapterService.adaptManyStatuses(
-				data.data,
+				_data,
 				primaryAcct.domain,
 			);
 
@@ -36,7 +51,7 @@ class BookmarkBrowserService {
 				}
 			});
 
-			syncedCount += data.data.length;
+			syncedCount += _data.length;
 			if (callback) {
 				callback(syncedCount);
 			}

@@ -1,11 +1,11 @@
-import { Dispatch, memo, SetStateAction, useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, Dialog } from '@rneui/themed';
-import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { Dispatch, memo, SetStateAction } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { Dialog } from '@rneui/themed';
+import { APP_FONT } from '../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { AppButtonClassicInverted } from '../../../lib/Buttons';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 type Props = {
 	visible: boolean;
@@ -24,14 +24,7 @@ const ConfirmRelationshipChangeDialog = memo(
 				}}
 			>
 				<View>
-					<Text
-						style={{
-							fontFamily: 'Montserrat-Bold',
-							textAlign: 'center',
-							color: APP_FONT.MONTSERRAT_HEADER,
-							fontSize: 16,
-						}}
-					>
+					<Text style={styles.modalTitle}>
 						Are you sure you want to unfollow this user?
 					</Text>
 
@@ -48,17 +41,12 @@ const ConfirmRelationshipChangeDialog = memo(
 							<FontAwesome5
 								name="volume-mute"
 								size={20}
-								color={APP_FONT.MONTSERRAT_HEADER}
+								color={APP_FONT.MONTSERRAT_BODY}
 							/>
 						</View>
 						<View style={{ flexGrow: 1, marginLeft: 16 }}>
-							<Text
-								style={{
-									fontFamily: 'Montserrat-Bold',
-									color: APP_FONT.MONTSERRAT_HEADER,
-								}}
-							>
-								Mute posts in home timeline, instead
+							<Text style={styles.actionDescription}>
+								Mute posts in home timeline
 							</Text>
 						</View>
 					</View>
@@ -75,17 +63,12 @@ const ConfirmRelationshipChangeDialog = memo(
 							<FontAwesome6
 								name="bell-slash"
 								size={20}
-								color={APP_FONT.MONTSERRAT_HEADER}
+								color={APP_FONT.MONTSERRAT_BODY}
 							/>
 						</View>
 						<View style={{ flexGrow: 1, marginLeft: 16, marginRight: 16 }}>
-							<Text
-								style={{
-									fontFamily: 'Montserrat-Bold',
-									color: APP_FONT.MONTSERRAT_HEADER,
-								}}
-							>
-								Disable notifications, instead
+							<Text style={styles.actionDescription}>
+								Disable notifications
 							</Text>
 						</View>
 					</View>
@@ -97,5 +80,18 @@ const ConfirmRelationshipChangeDialog = memo(
 		);
 	},
 );
+
+const styles = StyleSheet.create({
+	modalTitle: {
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		textAlign: 'center',
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 16,
+	},
+	actionDescription: {
+		fontFamily: APP_FONTS.INTER_700_BOLD,
+		color: APP_FONT.MONTSERRAT_BODY,
+	},
+});
 
 export default ConfirmRelationshipChangeDialog;

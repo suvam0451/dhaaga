@@ -1,6 +1,7 @@
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Text } from '@rneui/themed';
+import { APP_FONT } from '../../../styles/AppTheme';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type Props = {
 	fromLang: string;
@@ -21,7 +22,7 @@ function ExplainOutput({ text, fromLang, toLang, additionalInfo }: Props) {
 	return (
 		<View
 			style={{
-				backgroundColor: '#2E2E2E',
+				backgroundColor: '#2a2a2a',
 				paddingLeft: 8,
 				paddingRight: 8,
 				paddingTop: 4,
@@ -53,8 +54,8 @@ function ExplainOutput({ text, fromLang, toLang, additionalInfo }: Props) {
 					<View>
 						<Text
 							style={{
-								color: '#bb86fc',
-								fontFamily: 'Montserrat-Bold',
+								color: 'rgba(187,134,252,0.87)',
+								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							}}
 						>
 							{` ${fromLang} -> ${toLang}`}
@@ -64,17 +65,24 @@ function ExplainOutput({ text, fromLang, toLang, additionalInfo }: Props) {
 				<View>
 					<Text
 						style={{
-							color: '#ffffff38',
-							flex: 1,
+							color: APP_FONT.DISABLED,
 							textAlign: 'right',
-							fontSize: 14,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							fontSize: 13,
 						}}
 					>
 						{additionalInfo}
 					</Text>
 				</View>
 			</View>
-			<Text style={{ color: '#ffffff87' }}>{text}</Text>
+			<Text
+				style={{
+					color: APP_FONT.MONTSERRAT_BODY,
+					fontFamily: APP_FONTS.INTER_400_REGULAR,
+				}}
+			>
+				{text}
+			</Text>
 		</View>
 	);
 }

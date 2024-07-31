@@ -1,7 +1,5 @@
 import { RefreshControl } from 'react-native';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
@@ -10,12 +8,13 @@ import WithActivitypubStatusContext from '../../../../states/useStatus';
 import StatusItem from '../../../common/status/StatusItem';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import LoadingMore from '../../home/LoadingMore';
-import { EmojiService } from '../../../../services/emoji.service';
-import { useRealm } from '@realm/react';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import useTrendingPosts from '../api/useTrendingPosts';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
 
 const SHOWN_SECTION_HEIGHT = 50;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -24,57 +23,10 @@ const HIDDEN_SECTION_HEIGHT = 50;
  * Search Module -- Trending Posts
  */
 function ApiWrapper() {
-	const { client } = useActivityPubRestClientContext();
-	const {
-		data: PageData,
-		setMaxId,
-		append,
-		queryCacheMaxId,
-		updateQueryCache,
-		clear,
-		maxId,
-	} = useAppPaginationContext();
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-	const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
-	const [EmojisLoading, setEmojisLoading] = useState(false);
-	const PageLoadedAtLeastOnce = useRef(false);
+	const { domain } = useActivityPubRestClientContext();
+	const { data: PageData, updateQueryCache, clear } = useAppPaginationContext();
 
-	async function api() {
-		if (!client) return null;
-		const { data, error } = await client.trends.posts({
-			limit: 5,
-			offset: parseInt(queryCacheMaxId),
-		});
-		if (error) {
-			return [];
-		}
-		return data;
-	}
-
-	// Queries
-	const { status, data, fetchStatus, refetch } = useQuery({
-		queryKey: [queryCacheMaxId],
-		queryFn: api,
-		enabled: client !== null,
-	});
-
-	useEffect(() => {
-		if (fetchStatus === 'fetching' || status !== 'success') return;
-
-		if (data?.length > 0) {
-			setMaxId((PageData.length + data.length).toString());
-			setEmojisLoading(true);
-			EmojiService.preloadInstanceEmojisForStatuses(db, globalDb, data, domain)
-				.then((res) => {})
-				.finally(() => {
-					append(data);
-					setEmojisLoading(false);
-					PageLoadedAtLeastOnce.current = true;
-				});
-		}
-	}, [fetchStatus]);
+	const { IsLoading, fetchStatus, refetch } = useTrendingPosts();
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: PageData.length,
@@ -91,29 +43,36 @@ function ApiWrapper() {
 
 	const { visible, loading } = useLoadingMoreIndicatorState({
 		fetchStatus,
-		additionalLoadingStates: EmojisLoading,
+		additionalLoadingStates: IsLoading,
 	});
+
 	return (
 		<WithAutoHideTopNavBar title={'Trending Posts'} translateY={translateY}>
-			<AnimatedFlashList
-				estimatedItemSize={200}
-				data={PageData}
-				ref={ref}
-				renderItem={(o) => (
-					<WithActivitypubStatusContext status={o.item} key={o.index}>
-						<StatusItem key={o.index} />
-					</WithActivitypubStatusContext>
-				)}
-				onScroll={onScroll}
-				contentContainerStyle={{
-					paddingTop: SHOWN_SECTION_HEIGHT + 4,
-				}}
-				scrollEventThrottle={100}
-				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				}
-			/>
-			<LoadingMore visible={visible} loading={loading} />
+			{domain === KNOWN_SOFTWARE.MASTODON ? (
+				<Fragment>
+					<AnimatedFlashList
+						estimatedItemSize={200}
+						data={PageData}
+						ref={ref}
+						renderItem={(o) => (
+							<WithActivitypubStatusContext status={o.item} key={o.index}>
+								<StatusItem key={o.index} />
+							</WithActivitypubStatusContext>
+						)}
+						onScroll={onScroll}
+						contentContainerStyle={{
+							paddingTop: SHOWN_SECTION_HEIGHT + 4,
+						}}
+						scrollEventThrottle={16}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+						}
+					/>
+					<LoadingMore visible={visible} loading={loading} />
+				</Fragment>
+			) : (
+				<FeatureUnsupported />
+			)}
 		</WithAutoHideTopNavBar>
 	);
 }

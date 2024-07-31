@@ -45,6 +45,7 @@ const SharedStatusFragment = memo(function Foo() {
 					borderTopLeftRadius: 8,
 					paddingHorizontal: 12,
 					paddingTop: 4,
+					maxWidth: '100%',
 				}}
 			>
 				<View
@@ -53,6 +54,7 @@ const SharedStatusFragment = memo(function Foo() {
 						flexDirection: 'row',
 						alignItems: 'center',
 						justifyContent: 'flex-start',
+						maxWidth: '100%',
 					}}
 				>
 					<View>
@@ -71,7 +73,7 @@ const SharedStatusFragment = memo(function Foo() {
 							}}
 						/>
 					</View>
-					<View>
+					<View style={{ flex: 1 }}>
 						<Text
 							style={{
 								color: '#888',
@@ -79,6 +81,7 @@ const SharedStatusFragment = memo(function Foo() {
 								fontSize: 14,
 								opacity: 0.6,
 							}}
+							numberOfLines={1}
 						>
 							{ParsedDisplayName}
 						</Text>

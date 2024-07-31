@@ -1,23 +1,30 @@
 import { Ionicons } from '@expo/vector-icons';
 import { memo, useState } from 'react';
-import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Text } from '@rneui/themed';
-import { OpenAiService } from '../../../services/openai.service';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { useActivitypubStatusContext } from '../../../states/useStatus';
+import {
+	View,
+	TouchableOpacity,
+	ActivityIndicator,
+	Text,
+	StyleSheet,
+} from 'react-native';
+import { OpenAiService } from '../../../../services/openai.service';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { useActivitypubStatusContext } from '../../../../states/useStatus';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Divider } from '@rneui/themed';
-import PostStats from '../../../components/common/status/PostStats';
+import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
-import { APP_THEME } from '../../../styles/AppTheme';
-import StatusService from '../../../services/status.service';
-import BoostAdvanced from '../../../components/dialogs/BoostAdvanced';
+import { APP_THEME } from '../../../../styles/AppTheme';
+import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import {
 	BOTTOM_SHEET_ENUM,
 	useGorhomActionSheetContext,
-} from '../../../states/useGorhomBottomSheet';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
+} from '../../../../states/useGorhomBottomSheet';
+import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
+import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.services';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import useBookmark from '../api/useBookmark';
+import useBoost from '../api/useBoost';
 
 type StatusInteractionProps = {
 	setExplanationObject: React.Dispatch<React.SetStateAction<string | null>>;
@@ -35,12 +42,7 @@ function StatusInteractionBase({
 	isRepost,
 }: StatusInteractionProps) {
 	const { client } = useActivityPubRestClientContext();
-	const {
-		status: post,
-		setDataRaw,
-		sharedStatus,
-		setSharedDataRaw,
-	} = useActivitypubStatusContext();
+	const { status: post, sharedStatus } = useActivitypubStatusContext();
 	const _status = isRepost ? sharedStatus : post;
 	const { setVisible, setBottomSheetType, updateRequestId } =
 		useGorhomActionSheetContext();
@@ -48,9 +50,6 @@ function StatusInteractionBase({
 
 	// Loading States
 	const [TranslationLoading, setTranslationLoading] = useState(false);
-	const [SecondCommandLoading, setSecondCommandLoading] = useState(false);
-
-	const [ThirdCommandLoading, setThirdCommandLoading] = useState(false);
 
 	//
 	const [BoostOptionsVisible, setBoostOptionsVisible] = useState(false);
@@ -69,7 +68,6 @@ function StatusInteractionBase({
 	}
 
 	function OnTranslationClicked() {
-		console.log('translation clicked', TranslationLoading);
 		if (TranslationLoading) return;
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 		client.instances
@@ -82,59 +80,16 @@ function StatusInteractionBase({
 			});
 	}
 
-	function onSavePress() {
-		if (ThirdCommandLoading) return;
-
-		setThirdCommandLoading(true);
-		if (_status.getIsBookmarked()) {
-			client
-				.unBookmark(_status.getId())
-				.then((res) => {
-					if (isRepost) {
-						setSharedDataRaw(res);
-					} else {
-						setDataRaw(res);
-					}
-					Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-				})
-				.finally(() => {
-					setThirdCommandLoading(false);
-				});
-		} else {
-			client
-				.bookmark(_status.getId())
-				.then((res) => {
-					if (isRepost) {
-						setSharedDataRaw(res);
-					} else {
-						setDataRaw(res);
-					}
-					Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-				})
-				.finally(() => {
-					setThirdCommandLoading(false);
-				});
-		}
-	}
-
-	function onSaveLongPress() {
-		setThirdCommandLoading(true);
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-		setThirdCommandLoading(false);
-	}
-
-	function onBoostPressed() {
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		StatusService.toggleBoost(client, _status, {
-			setIsLoading: setSecondCommandLoading,
-			setDataRaw: isRepost ? setSharedDataRaw : setDataRaw,
-		});
-	}
-
-	function onBoostLongPressed() {
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-		// setBoostOptionsVisible(true);
-	}
+	const {
+		onPress: onBookmarkPress,
+		IsLoading: IsBookmarkLoading,
+		IsBookmarked,
+	} = useBookmark();
+	const {
+		IsBoosted,
+		IsLoading: IsBoostLoading,
+		onPress: onBoostPress,
+	} = useBoost();
 
 	function onShowAdvancedMenuPressed() {
 		GlobalMmkvCacheService.setBottomSheetProp_Status(
@@ -182,11 +137,12 @@ function StatusInteractionBase({
 					>
 						<FontAwesome5 name="comment" size={ICON_SIZE} color="#888" />
 						<Text
-							style={{
-								color: '#888',
-								marginLeft: 8,
-								fontFamily: 'Montserrat-Bold',
-							}}
+							style={[
+								styles.buttonText,
+								{
+									color: '#888',
+								},
+							]}
 						>
 							Reply
 						</Text>
@@ -206,30 +162,29 @@ function StatusInteractionBase({
 							paddingBottom: 8,
 							position: 'relative',
 						}}
-						onPress={onBoostPressed}
-						onLongPress={onBoostLongPressed}
+						onPress={onBoostPress}
+						// onLongPress={onBoostLongPressed}
 					>
-						{SecondCommandLoading ? (
+						{IsBoostLoading ? (
 							<ActivityIndicator size={'small'} />
 						) : (
 							<Ionicons
 								color={
-									_status.getIsRebloggedByMe()
-										? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1]
-										: '#888'
+									IsBoosted ? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1] : '#888'
 								}
 								name={'rocket-outline'}
 								size={ICON_SIZE}
 							/>
 						)}
 						<Text
-							style={{
-								color: _status.getIsRebloggedByMe()
-									? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1]
-									: '#888',
-								marginLeft: 8,
-								fontFamily: 'Montserrat-Bold',
-							}}
+							style={[
+								styles.buttonText,
+								{
+									color: IsBoosted
+										? APP_THEME.REPLY_THREAD_COLOR_SWATCH[1]
+										: '#888',
+								},
+							]}
 						>
 							Boost
 						</Text>
@@ -243,28 +198,25 @@ function StatusInteractionBase({
 							paddingTop: 8,
 							paddingBottom: 8,
 						}}
-						onPress={onSavePress}
-						onLongPress={onSaveLongPress}
+						onPress={onBookmarkPress}
+						// onLongPress={onSaveLongPress}
 					>
-						{ThirdCommandLoading ? (
+						{IsBookmarkLoading ? (
 							<ActivityIndicator size={'small'} />
 						) : (
 							<Ionicons
-								color={
-									_status?.getIsBookmarked() ? APP_THEME.INVALID_ITEM : '#888'
-								}
+								color={IsBookmarked ? APP_THEME.INVALID_ITEM : '#888'}
 								name={'bookmark-outline'}
 								size={ICON_SIZE}
 							/>
 						)}
 						<Text
-							style={{
-								marginLeft: 8,
-								fontFamily: 'Montserrat-Bold',
-								color: _status?.getIsBookmarked()
-									? APP_THEME.INVALID_ITEM
-									: '#888',
-							}}
+							style={[
+								styles.buttonText,
+								{
+									color: IsBookmarked ? APP_THEME.INVALID_ITEM : '#888',
+								},
+							]}
 						>
 							{_status?.getIsBookmarked() ? 'Saved' : 'Save'}
 						</Text>
@@ -315,6 +267,13 @@ function StatusInteractionBase({
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	buttonText: {
+		marginLeft: 8,
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+	},
+});
 
 const StatusInteraction = memo(StatusInteractionBase);
 export default StatusInteraction;

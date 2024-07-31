@@ -16,9 +16,7 @@ type Props = {
  * @constructor
  */
 function MentionProcessor(props: Props) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
-
+	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
 	const { text } = props;
 
 	const displayText = useMemo(() => {

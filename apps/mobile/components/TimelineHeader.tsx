@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../styles/AppTheme';
-import { useTimelineController } from '../states/useTimelineController';
+import { useTimelineController } from './common/timeline/api/useTimelineController';
 import TimelineWidgetModal from './widgets/timelines/core/Modal';
 import { useActivityPubRestClientContext } from '../states/useActivityPubRestClient';
 

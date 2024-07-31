@@ -20,21 +20,38 @@ export class ActivityPubUserRepository {
 		return list;
 	}
 
+	/**
+	 *
+	 * @param db
+	 * @param user
+	 * @param userSubdomain used by misskey, when host = null
+	 */
 	static upsert(
 		db: Realm,
 		{
 			user,
+			userSubdomain,
 		}: {
 			user: UserInterface;
+			userSubdomain: string;
 		},
 	) {
-		if (!user) return null;
+		if (!user) {
+			console.log('[WARN]: object null while saving user');
+			return null;
+		}
 
 		const _server = ActivityPubServerRepository.upsert(
 			db,
-			user.getInstanceUrl(),
+			user.getInstanceUrl() || userSubdomain,
 		);
-		if (!_server) return;
+		if (!_server) {
+			console.log(
+				'[WARN]: server null while saving user',
+				user.getInstanceUrl() || userSubdomain,
+			);
+			return;
+		}
 
 		const _user = this.getByUsername(
 			db,
@@ -62,10 +79,19 @@ export class ActivityPubUserRepository {
 		}
 	}
 
-	static upsertMultiple(db: Realm, { users }: { users: UserInterface[] }) {
+	static upsertMultiple(
+		db: Realm,
+		{
+			users,
+			userSubdomain,
+		}: {
+			users: UserInterface[];
+			userSubdomain: string;
+		},
+	) {
 		const results: ActivityPubUser[] = [];
 		for (let i = 0; i < users.length; i++) {
-			const savedUser = this.upsert(db, { user: users[i] });
+			const savedUser = this.upsert(db, { user: users[i], userSubdomain });
 			results.push(savedUser);
 		}
 		return results;

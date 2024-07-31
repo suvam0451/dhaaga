@@ -47,17 +47,27 @@ export interface AccountRoute {
 	follow(
 		id: string,
 		opts: FollowPostDto,
-	): Promise<LibraryResponse<MastoRelationship>>;
+	): LibraryPromise<MastoRelationship | Endpoints['following/create']['res']>;
 
-	unfollow(id: string): Promise<LibraryResponse<MastoRelationship>>;
+	unfollow(
+		id: string,
+	): LibraryPromise<MastoRelationship | Endpoints['following/delete']['res']>;
 
 	/**
 	 * Moderation
 	 */
 
-	block(id: string): Promise<LibraryResponse<MastoRelationship>>;
+	block(
+		id: string,
+	): Promise<
+		LibraryResponse<MastoRelationship | Endpoints['blocking/create']['res']>
+	>;
 
-	unblock(id: string): Promise<LibraryResponse<MastoRelationship>>;
+	unblock(
+		id: string,
+	): Promise<
+		LibraryResponse<MastoRelationship | Endpoints['blocking/delete']['res']>
+	>;
 
 	mute(
 		id: string,

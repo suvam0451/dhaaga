@@ -7,7 +7,7 @@ function useAppNavigator() {
 	const toPost = useCallback(
 		(id: string) => {
 			const _id = navigator.getId();
-			if (!_id) {
+			if (!_id || _id === '/(tabs)/index') {
 				router.navigate(`/post/${id}`);
 			} else {
 				router.navigate(`${navigator.getId()}/post/${id}`);
@@ -19,7 +19,7 @@ function useAppNavigator() {
 	const toProfile = useCallback(
 		(id: string) => {
 			const _id = navigator.getId();
-			if (!_id) {
+			if (!_id || _id === '/(tabs)/index') {
 				router.navigate(`/profile/${id}`);
 			} else {
 				router.navigate(`${navigator.getId()}/profile/${id}`);

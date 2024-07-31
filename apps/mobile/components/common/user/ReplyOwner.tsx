@@ -1,11 +1,12 @@
 import { useActivitypubUserContext } from '../../../states/useProfile';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { Text } from '@rneui/themed';
 import useMfm from '../../hooks/useMfm';
-import { extractInstanceUrl } from '../../../utils/instances';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { APP_FONT } from '../../../styles/AppTheme';
+import { useMemo } from 'react';
+import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 /**
  *
@@ -14,7 +15,6 @@ import { APP_FONT } from '../../../styles/AppTheme';
 function ReplyOwner() {
 	const { user } = useActivitypubUserContext();
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
 	const subdomain = primaryAcct?.subdomain;
 
 	const { content: UsernameWithEmojis } = useMfm({
@@ -22,7 +22,15 @@ function ReplyOwner() {
 		remoteSubdomain: user?.getInstanceUrl(),
 		emojiMap: user?.getEmojiMap(),
 		deps: [user?.getDisplayName()],
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	});
+
+	const handle = useMemo(() => {
+		return ActivitypubHelper.getHandle(
+			user.getAccountUrl(subdomain),
+			subdomain,
+		);
+	}, [user]);
 
 	return (
 		<View style={{ display: 'flex', flexDirection: 'row', marginBottom: 8 }}>
@@ -35,12 +43,11 @@ function ReplyOwner() {
 					borderRadius: 6,
 				}}
 			>
+				{/*@ts-ignore-next-line*/}
 				<Image
 					style={{
 						flex: 1,
 						width: '100%',
-						// backgroundColor: '#0553',
-						// padding: 1,
 						opacity: 0.87,
 						borderRadius: 8,
 					}}
@@ -49,13 +56,15 @@ function ReplyOwner() {
 				/>
 			</View>
 			<View style={{ marginLeft: 8 }}>
-				<Text>{UsernameWithEmojis}</Text>
-				<Text style={{ color: APP_FONT.MONTSERRAT_BODY, fontSize: 12 }}>
-					{extractInstanceUrl(
-						user?.getAccountUrl(),
-						user?.getUsername(),
-						subdomain,
-					)}
+				{UsernameWithEmojis}
+				<Text
+					style={{
+						color: APP_FONT.MONTSERRAT_BODY,
+						fontSize: 12,
+						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					}}
+				>
+					{handle}
 				</Text>
 			</View>
 		</View>

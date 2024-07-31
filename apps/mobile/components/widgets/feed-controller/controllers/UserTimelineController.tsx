@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { View, Text } from 'react-native';
-import { useTimelineController } from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import ControlSegment from '../components/ControlSegment';
 import useTimelineOptions from '../states/useTimelineOptions';
 import { AppInlineCheckbox } from '../../../lib/Checkboxes';

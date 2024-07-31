@@ -1,9 +1,9 @@
-import { Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import { formatRelative } from 'date-fns';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import { Fragment, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 export enum LAST_SYNCED_STATUS_KEY {
 	BOOKMARK_SYNC = 'BOOKMARK_SYNC',
@@ -39,7 +39,7 @@ function LastSyncedStatus({ id }: Props) {
 				setLastSyncedDate(null);
 			}
 		}
-	}, [id]);
+	}, [id, primaryAcct]);
 
 	return (
 		<Fragment>
@@ -71,7 +71,8 @@ function LastSyncedStatus({ id }: Props) {
 
 const styles = {
 	text: {
-		color: APP_FONT.MONTSERRAT_HEADER,
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 		fontSize: 12,
 		marginLeft: 4,
 		marginTop: 4,

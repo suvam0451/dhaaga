@@ -5,14 +5,14 @@ import { Skeleton } from '@rneui/base';
 import { ActivityPubStatuses } from '@dhaaga/shared-abstraction-activitypub';
 import WithActivitypubStatusContext from '../../../states/useStatus';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../states/usePagination';
 import WithScrollOnRevealContext, {
 	useScrollOnReveal,
 } from '../../../states/useScrollOnReveal';
-import { RefreshControl, View } from 'react-native';
+import { RefreshControl } from 'react-native';
 import LoadingMore from '../../screens/home/LoadingMore';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
@@ -20,23 +20,7 @@ import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicato
 import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';
 import { AnimatedFlashList } from '@shopify/flash-list';
 
-function Content() {
-	const { data: PageData } = useAppPaginationContext();
-	if (!PageData) return <View></View>;
-
-	return (
-		<>
-			{PageData.map((o, i) => (
-				<WithActivitypubStatusContext status={o} key={i}>
-					<StatusItem key={i} />
-				</WithActivitypubStatusContext>
-			))}
-		</>
-	);
-}
-
 function ApiWrapper() {
-	const navigation = useNavigation();
 	const route = useRoute<any>();
 	const q = route?.params?.q;
 	const { client } = useActivityPubRestClientContext();
@@ -49,18 +33,22 @@ function ApiWrapper() {
 	} = useAppPaginationContext();
 	const { resetEndOfPageFlag } = useScrollOnReveal();
 
-	function api() {
+	async function api() {
 		if (!client) throw new Error('_client not initialized');
-		return client.getTimelineByHashtag(q, { maxId: queryCacheMaxId, limit: 5 });
+		const { data, error } = await client.timelines.hashtag(q, {
+			maxId: queryCacheMaxId,
+			limit: 5,
+		});
+		if (error) return [];
+		return data;
 	}
 
 	// Queries
-	const { status, data, error, fetchStatus, refetch } =
-		useQuery<ActivityPubStatuses>({
-			queryKey: ['local/tag', q],
-			queryFn: api,
-			enabled: client && q !== undefined,
-		});
+	const { status, data, fetchStatus, refetch } = useQuery<ActivityPubStatuses>({
+		queryKey: [q],
+		queryFn: api,
+		enabled: client && q !== undefined,
+	});
 
 	useEffect(() => {
 		if (status !== 'success' || !data) return;

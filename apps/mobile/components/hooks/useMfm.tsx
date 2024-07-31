@@ -8,6 +8,8 @@ import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import { APP_FONT } from '../../styles/AppTheme';
+import * as Crypto from 'expo-crypto';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 type Props = {
 	content: string;
@@ -37,9 +39,7 @@ function useMfm({
 	expectedHeight,
 	fontFamily,
 }: Props) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-	const subdomain = primaryAcct?.subdomain;
+	const { domain, subdomain } = useActivityPubRestClientContext();
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
@@ -59,12 +59,16 @@ function useMfm({
 
 	const [Data, setData] = useState(defaultValue.current);
 
-	const IsSolved = useRef(null);
+	/**
+	 * don't set this to null
+	 * some software actually use {content: null}
+	 * */
+	const IsSolved = useRef(Crypto.randomUUID());
 
 	// since font remains same for each reusable component
 	const fontStyle = useRef({
 		color: APP_FONT.MONTSERRAT_HEADER,
-		fontFamily: fontFamily || 'Inter',
+		fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
 	});
 
 	useEffect(() => {

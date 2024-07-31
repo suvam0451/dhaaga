@@ -7,11 +7,11 @@ import { randomUUID } from 'expo-crypto';
 
 type Props = {
 	value: string;
+	link: string;
 };
 
-const MentionSegment = memo(function Foo({ value }: Props) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
+const MentionSegment = memo(function Foo({ value, link }: Props) {
+	const { subdomain } = useActivityPubRestClientContext();
 	const k = randomUUID();
 
 	const displayText = useMemo(() => {
@@ -23,6 +23,8 @@ const MentionSegment = memo(function Foo({ value }: Props) {
 		} else {
 			retval = `${value}`;
 		}
+
+		console.log(value, retval, link);
 
 		const removeSpanEx = /<span>(.*?)<\/span>/g;
 		const removeSpanRes = Array.from(value.matchAll(removeSpanEx));

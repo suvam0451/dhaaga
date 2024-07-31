@@ -14,6 +14,7 @@ import {
 	DhaagaJsUserSearchDTO,
 	SearchRoute,
 } from './search.js';
+import { MeRoute } from './me.js';
 
 export interface RouterInterface {
 	instances: InstanceRoute;
@@ -25,6 +26,7 @@ export interface RouterInterface {
 	timelines: TimelinesRoute;
 	tags: TagRoute;
 	search: SearchRoute;
+	me: MeRoute;
 }
 
 export type { InstanceRoute, AccountRoute, StatusesRoute };

@@ -1,8 +1,6 @@
-import {
-	TimelineFetchMode,
-	useTimelineController,
-} from '../../../states/useTimelineController';
+import { useTimelineController } from './useTimelineController';
 import { useMemo } from 'react';
+import { TimelineFetchMode } from '../utils/timeline.types';
 
 function useTimelineLabel() {
 	const { timelineType, query } = useTimelineController();

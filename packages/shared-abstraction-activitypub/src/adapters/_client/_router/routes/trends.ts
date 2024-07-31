@@ -1,17 +1,18 @@
-import { LibraryResponse } from '../_types.js';
 import {
-	GetTrendingPostsQueryDTO,
+	GetTrendingDTO,
 	MastoStatus,
 	MastoTag,
 	MastoTrendLink,
 } from '../../_interface.js';
+import { Endpoints } from 'misskey-js';
+import { LibraryPromise } from './_types.js';
 
 export interface TrendsRoute {
-	tags(): Promise<LibraryResponse<MastoTag[]>>;
+	tags(
+		opts: GetTrendingDTO,
+	): LibraryPromise<MastoTag[] | Endpoints['hashtags/trend']['res']>;
 
-	posts(
-		opts: GetTrendingPostsQueryDTO,
-	): Promise<LibraryResponse<MastoStatus[]>>;
+	posts(opts: GetTrendingDTO): LibraryPromise<MastoStatus[]>;
 
-	links(): Promise<LibraryResponse<MastoTrendLink[]>>;
+	links(opts: GetTrendingDTO): LibraryPromise<MastoTrendLink[]>;
 }

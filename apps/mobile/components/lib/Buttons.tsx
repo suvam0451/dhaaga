@@ -1,5 +1,5 @@
-import { Button, Text } from '@rneui/themed';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { Button } from '@rneui/themed';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
 import { memo, useMemo } from 'react';
@@ -31,7 +31,7 @@ function AppButtonFollowIndicator({
 						size={'sm'}
 						onPress={onButtonClick}
 						buttonStyle={styles.passiveButtonStyle}
-						containerStyle={{ borderRadius: 4 }}
+						containerStyle={{ borderRadius: 8 }}
 					>
 						{loading ? (
 							<ActivityIndicator
@@ -46,13 +46,14 @@ function AppButtonFollowIndicator({
 					</Button>
 				);
 			}
-			case AppRelationship.FOLLOWING: {
+			case AppRelationship.FOLLOWING:
+			case AppRelationship.FRIENDS: {
 				return (
 					<Button
 						size={'sm'}
 						onPress={onButtonClick}
 						buttonStyle={styles.activeButtonStyle}
-						containerStyle={{ borderRadius: 4 }}
+						containerStyle={{ borderRadius: 8 }}
 					>
 						{loading ? (
 							<ActivityIndicator
@@ -60,14 +61,13 @@ function AppButtonFollowIndicator({
 								color={APP_THEME.COLOR_SCHEME_D_NORMAL}
 							/>
 						) : (
-							<Text style={styles.activeTextStyle}>
-								{AppRelationship.FOLLOWING}
-							</Text>
+							<Text style={styles.activeTextStyle}>{label}</Text>
 						)}
 					</Button>
 				);
 			}
 			default: {
+				console.log(label);
 				return (
 					<Button
 						size={'sm'}
@@ -216,10 +216,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#2e6945', // '#cb6483',
 		maxWidth: 128,
 	},
-
 	passiveTextStyle: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		color: APP_FONT.MONTSERRAT_HEADER,
+		fontFamily: APP_FONTS.INTER_700_BOLD,
+		color: APP_FONT.MONTSERRAT_BODY,
 	},
 	activeButtonStyle: {
 		borderColor: '#cb6483',
@@ -229,10 +228,8 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
 	},
 	activeTextStyle: {
-		fontFamily: 'Montserrat-Bold',
-		// color: '#cb6483',
+		fontFamily: APP_FONTS.INTER_700_BOLD,
 		color: APP_FONT.MONTSERRAT_BODY,
-		opacity: 0.87,
 	},
 });
 

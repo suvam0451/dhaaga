@@ -10,13 +10,13 @@ import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
 } from '../../states/useStatus';
 import { Animated, RefreshControl, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 import WithAutoHideTopNavBar from '../../components/containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
 import PostReply from '../../components/common/status/PostReply';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../styles/AppTheme';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
+import useStatusContext from '../../components/common/status-details/api/useStatusContext';
 
 type StatusContextReplyItemProps = {
 	lookupId: string;
@@ -70,28 +70,8 @@ function StatusContextComponent() {
 }
 
 function StatusContextApiWrapper() {
-	const route = useRoute<any>();
-	const q = route?.params?.id;
-	const { client } = useActivityPubRestClientContext();
-	const { setStatusContextData } = useActivitypubStatusContext();
-
-	async function api() {
-		if (!client) throw new Error('_client not initialized');
-		return await client.getStatusContext(q);
-	}
-
-	const { status, data, fetchStatus } = useQuery<ActivityPubStatus>({
-		queryKey: ['mastodon/context', q],
-		queryFn: api,
-		enabled: client && q !== undefined,
-	});
-
-	useEffect(() => {
-		if (status === 'success') {
-			setStatusContextData(data);
-		}
-	}, [status, fetchStatus]);
-
+	const { id } = useLocalSearchParams<{ id: string }>();
+	const {} = useStatusContext(id);
 	return <StatusContextComponent />;
 }
 
@@ -108,7 +88,7 @@ function Post() {
 	const { status, data, fetchStatus, refetch } = useQuery<
 		LibraryResponse<ActivityPubStatus>
 	>({
-		queryKey: [id],
+		queryKey: ['status', id],
 		queryFn,
 		enabled: client && id !== undefined,
 	});

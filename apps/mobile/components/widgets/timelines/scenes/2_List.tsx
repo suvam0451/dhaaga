@@ -5,10 +5,8 @@ import { TouchableOpacity, View } from 'react-native';
 import TimelineLoading from '../../../loading-screens/TimelineLoading';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import {
-	TimelineFetchMode,
-	useTimelineController,
-} from '../../../../states/useTimelineController';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 
 function ListTimelineOptions() {
 	const { client, primaryAcct } = useActivityPubRestClientContext();
@@ -24,7 +22,7 @@ function ListTimelineOptions() {
 	}
 
 	// Queries
-	const { status, data, refetch, fetchStatus } = useQuery<mastodon.v1.List[]>({
+	const { data, fetchStatus } = useQuery<mastodon.v1.List[]>({
 		queryKey: [username, subdomain],
 		queryFn: api,
 		enabled: client !== null,

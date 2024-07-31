@@ -47,6 +47,10 @@ export type MissUserDetailed = UserDetailed;
 export type MissNote = Note;
 export type MissUser = User;
 export type MissUserDetailedNotMe = UserDetailedNotMe;
+export type MissContext = {
+	ancestors: any[];
+	descendants: any[];
+};
 
 export type HashtagTimelineQuery = {
 	limit: number;
@@ -82,7 +86,7 @@ export type GetTimelineQueryDTO = {
 	onlyMedia?: boolean;
 };
 
-export type GetTrendingPostsQueryDTO = {
+export type GetTrendingDTO = {
 	limit: number;
 	offset?: number;
 };
@@ -117,6 +121,8 @@ export type FollowPostDto = {
 	notify: boolean;
 	// (ISO 639-1 language two-letter code)
 	languages?: string[];
+	// misskey, default false
+	withReplies?: boolean;
 };
 
 /**
@@ -190,8 +196,6 @@ interface ActivityPubClient extends RouterInterface {
 	 * Status
 	 * */
 	getStatus(id: string): Promise<Status>;
-
-	getStatusContext(id: string): Promise<mastodon.v1.Context | any>;
 
 	bookmark(id: string): Promise<Status>;
 

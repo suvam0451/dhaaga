@@ -19,6 +19,7 @@ import { MisskeyNotificationsRouter } from './notifications.js';
 import { MisskeyTimelinesRouter } from './timelines.js';
 import { MisskeyTagsRouter } from './tags.js';
 import { MisskeySearchRouter } from './search.js';
+import { MisskeyMeRouter } from './me.js';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -32,6 +33,7 @@ class MisskeyRestClient implements ActivityPubClient {
 	timelines: MisskeyTimelinesRouter;
 	tags: MisskeyTagsRouter;
 	search: MisskeySearchRouter;
+	me: MisskeyMeRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -50,6 +52,7 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.timelines = new MisskeyTimelinesRouter(this.client);
 		this.tags = new MisskeyTagsRouter(this.client);
 		this.search = new MisskeySearchRouter(this.client);
+		this.me = new MisskeyMeRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<Status> {
@@ -98,10 +101,6 @@ class MisskeyRestClient implements ActivityPubClient {
 
 	async getMyConversations() {
 		return [];
-	}
-
-	getStatusContext(id: string): Promise<any> {
-		throw new Error('Method not implemented.');
 	}
 
 	async getRelationshipWith(ids: string[]) {
