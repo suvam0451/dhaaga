@@ -1,4 +1,4 @@
 Dhaaga (Lite) v0.4.0
 
-✨ Gallery View for User Profiles
-✨ Filter Options for Timeline
+* ✨ Gallery View for User Profiles
+* ✨ Filter Options for Timeline
