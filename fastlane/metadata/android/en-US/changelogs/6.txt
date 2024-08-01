@@ -1,0 +1,4 @@
+Dhaaga (Lite) v0.5.1
+
+* ✨ Excess emojis reactions (>10) are collapsed
+* 🛠 Fixed various Misskey compatibility issues

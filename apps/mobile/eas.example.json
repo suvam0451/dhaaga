@@ -1,25 +1,10 @@
 {
   "build": {
-    "aab": {
-      "android": {
-        "buildType": "app-bundle"
-      },
+    "base": {
+      "node": "20.15.0",
       "env": {
-        "APP_VARIANT": "prod",
         "EXPO_PUBLIC_MASTODON_CLIENT_ID": "",
-        "EXPO_PUBLIC_MASTODON_CLIENT_SECRET": "",
-        "EXPO_PUBLIC_OPENAI_API_KEY": ""
-      }
-    },
-    "apk": {
-      "android": {
-        "buildType": "apk"
-      },
-      "env": {
-        "APP_VARIANT": "prod",
-        "EXPO_PUBLIC_MASTODON_CLIENT_ID": "",
-        "EXPO_PUBLIC_MASTODON_CLIENT_SECRET": "",
-        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+        "EXPO_PUBLIC_MASTODON_CLIENT_SECRET": ""
       }
     },
     "dev": {
@@ -27,7 +12,38 @@
       "distribution": "internal",
       "env": {
         "APP_VARIANT": "dev"
-      }
+      },
+      "extends": "base"
+    },
+    "apk": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "APP_VARIANT": "prod",
+        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+      },
+      "extends": "base"
+    },
+    "aab": {
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "APP_VARIANT": "prod",
+        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+      },
+      "extends": "base"
+    },
+    "lite": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "APP_VARIANT": "lite",
+        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+      },
+      "extends": "base"
     }
   }
 }
