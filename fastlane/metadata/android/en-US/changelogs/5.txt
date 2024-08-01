@@ -1,4 +1,5 @@
-Dhaaga (Lite) v0.4.0
+Dhaaga (Lite) v0.5.0
 
-✨ Gallery View for User Profiles
-✨ Filter Options for Timeline
+✨ Logins supported for Misskey and it's forks
+✨ Bubble/Social timeline support
+✨ Custom emojis !!!

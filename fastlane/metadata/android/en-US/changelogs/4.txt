@@ -1,3 +1,4 @@
-Dhaaga (Lite) v0.3.1
+Dhaaga (Lite) v0.4.0
 
-Fixed some bugs and performance issues I noticed in v0.3.0
+✨ Gallery View for User Profiles
+✨ Filter Options for Timeline
