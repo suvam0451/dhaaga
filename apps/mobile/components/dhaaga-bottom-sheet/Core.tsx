@@ -7,7 +7,6 @@ import {
 	TouchableOpacity,
 	Pressable,
 	Platform,
-	ScrollView,
 } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import { useAppBottomSheet } from '../../hooks/app/useAppBottomSheet';
@@ -24,18 +23,21 @@ import { Image } from 'expo-image';
 import { APP_FONTS } from '../../styles/AppFonts';
 import VisibilityPicker from './modules/post-composer/fragments/VisibilityPicker';
 import ComposerTextInput from './modules/post-composer/fragments/ComposerText';
-import WithComposerContext from './modules/post-composer/api/useComposerContext';
+import WithComposerContext, {
+	useComposerContext,
+} from './modules/post-composer/api/useComposerContext';
 import ComposerAutoCompletion from './modules/post-composer/fragments/ComposerAutoCompletion';
-import { FONT_TYPES } from 'expo-asset/plugin/build/utils';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useImagePicker from './modules/post-composer/api/useImagePicker';
 import ComposeMediaTargets from './modules/post-composer/fragments/MediaTargets';
+import PostButton from './modules/post-composer/fragments/PostButton';
 
 const POST_COMPOSE_HEIGHT_MAX = 320;
 
 const AppBottomSheetCore = memo(() => {
 	const { me } = useActivityPubRestClientContext();
 	const { visible, setVisible } = useAppBottomSheet();
+	const {} = useComposerContext();
 
 	const height = useSharedValue(0);
 
@@ -62,8 +64,6 @@ const AppBottomSheetCore = memo(() => {
 	function close() {
 		setVisible(false);
 	}
-
-	async function handleExpoFilePicker() {}
 
 	function onCustomEmojiClicked() {}
 
@@ -138,31 +138,7 @@ const AppBottomSheetCore = memo(() => {
 									/>
 								</TouchableOpacity>
 
-								<View
-									style={{
-										backgroundColor: APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
-										flexDirection: 'row',
-										alignItems: 'center',
-										paddingHorizontal: 12,
-										borderRadius: 8,
-										paddingVertical: 6,
-									}}
-								>
-									<Text
-										style={{
-											color: APP_FONT.MONTSERRAT_BODY,
-											fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-										}}
-									>
-										Post
-									</Text>
-									<FontAwesome
-										name="send"
-										size={20}
-										style={{ marginLeft: 8 }}
-										color={APP_FONT.MONTSERRAT_BODY}
-									/>
-								</View>
+								<PostButton />
 							</View>
 						</View>
 
@@ -209,6 +185,7 @@ const AppBottomSheetCore = memo(() => {
 										borderRadius: 8,
 										// borderWidth: 1,
 										borderColor: APP_FONT.DISABLED,
+										maxWidth: 128,
 									}}
 								>
 									<Text
@@ -269,7 +246,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 13,
 	},
 	rootContainer: {
-		position: 'absolute',
+		// position: 'absolute',
 		bottom: 0,
 		width: '100%',
 		borderTopRightRadius: 8,

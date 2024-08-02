@@ -31,7 +31,12 @@ export class MastodonStatusesRouter implements StatusesRoute {
 		dto: DhaagaJsPostCreateDto,
 	): LibraryPromise<MastoScheduledStatus> {
 		const fn = this.lib.client.v1.statuses.create;
-		const { data, error } = await MastoErrorHandler(fn, [dto]);
+		const { data, error } = await MastoErrorHandler(fn, [
+			{
+				...dto,
+				visibility: dto.mastoVisibility,
+			},
+		]);
 		if (error || !data) return errorBuilder(error);
 		const retData = await data;
 		return { data: retData };

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import useHookLoadingState from '../../states/useHookLoadingState';
-import AppBottomSheet from '../../components/dhaaga-bottom-sheet/Core';
+import PostComposerRootContainer from '../../components/dhaaga-bottom-sheet/modules/post-composer/scenes/RootContainer';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -48,7 +48,8 @@ function WithAppBottomSheetContext({ children }: Props) {
 			}}
 		>
 			{children}
-			<AppBottomSheet />
+			{/*<AppBottomSheet />*/}
+			<PostComposerRootContainer />
 		</AppBottomSheetContext.Provider>
 	);
 }
