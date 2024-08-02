@@ -20,6 +20,7 @@ import { MisskeyTimelinesRouter } from './timelines.js';
 import { MisskeyTagsRouter } from './tags.js';
 import { MisskeySearchRouter } from './search.js';
 import { MisskeyMeRouter } from './me.js';
+import { MisskeyMediaRouter } from './media.js';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -34,6 +35,7 @@ class MisskeyRestClient implements ActivityPubClient {
 	tags: MisskeyTagsRouter;
 	search: MisskeySearchRouter;
 	me: MisskeyMeRouter;
+	media: MisskeyMediaRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -53,6 +55,7 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.tags = new MisskeyTagsRouter(this.client);
 		this.search = new MisskeySearchRouter(this.client);
 		this.me = new MisskeyMeRouter(this.client);
+		this.media = new MisskeyMediaRouter(this.client);
 	}
 
 	async reblog(id: string): Promise<Status> {

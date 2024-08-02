@@ -2,7 +2,13 @@ import {
 	TagInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import { useDebounce } from 'use-debounce';
 import { Text } from 'react-native';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
@@ -19,6 +25,15 @@ type ComposerAutoCompletionPrompt = {
 	type: 'acct' | 'tag' | 'emoji' | 'none';
 };
 
+type ComposeMediaTargetItem = {
+	previewUrl?: string;
+	remoteId?: number;
+	url?: string;
+	uploaded: boolean;
+	localUri: string;
+	status?: string;
+};
+
 type KeyboardSelection = { start: number; end: number };
 type Type = {
 	rawText: string;
@@ -33,6 +48,16 @@ type Type = {
 	setAutoCompletionPrompt: (dto: ComposerAutoCompletionPrompt) => void;
 	selection: KeyboardSelection;
 	setSelection: (dto: KeyboardSelection) => void;
+
+	// media items to track upload for
+	mediaTargets: ComposeMediaTargetItem[];
+	addMediaTarget: ({}: {
+		localUri: string;
+		uploaded: boolean;
+		remoteId: number;
+		previewUrl?: string;
+	}) => void;
+	removeMediaTarget: (index: number) => void;
 };
 
 const defaultValue: Type = {
@@ -58,6 +83,11 @@ const defaultValue: Type = {
 		end: 0,
 	},
 	setSelection: () => {},
+
+	// media items to track upload for
+	mediaTargets: [],
+	addMediaTarget: () => {},
+	removeMediaTarget: () => {},
 };
 
 const ComposerContext = createContext<Type>(defaultValue);
@@ -82,6 +112,42 @@ function WithComposerContext({ children }: Props) {
 		start: 0,
 		end: 0,
 	});
+
+	/**
+	 * Media Targets
+	 */
+	const [MediaTargets, setMediaTargets] = useState<ComposeMediaTargetItem[]>(
+		[],
+	);
+	const addMediaTarget = useCallback(
+		({
+			localUri,
+			uploaded,
+			remoteId,
+			previewUrl,
+		}: {
+			localUri: string;
+			uploaded: boolean;
+			remoteId: number;
+			previewUrl?: string;
+		}) => {
+			setMediaTargets((o) =>
+				o.concat([
+					{
+						localUri,
+						uploaded: uploaded || false,
+						remoteId,
+						previewUrl,
+					},
+				]),
+			);
+		},
+		[],
+	);
+
+	const removeMediaTarget = useCallback((index: number) => {
+		setMediaTargets((o) => [...o.slice(0, index), ...o.slice(index + 1)]);
+	}, []);
 
 	const [AutoCompletionPrompt, setAutoCompletionPrompt] =
 		useState<ComposerAutoCompletionPrompt>({
@@ -122,6 +188,9 @@ function WithComposerContext({ children }: Props) {
 				setAutoCompletionPrompt: setAutoCompletionPrompt,
 				selection: Selection,
 				setSelection,
+				mediaTargets: MediaTargets,
+				addMediaTarget,
+				removeMediaTarget,
 			}}
 		>
 			{children}

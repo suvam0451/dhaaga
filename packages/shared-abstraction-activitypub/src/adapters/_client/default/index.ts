@@ -16,6 +16,7 @@ import { DefaultTimelinesRouter } from './timelines.js';
 import { DefaultTagRouter } from './tags.js';
 import { DefaultSearchRouter } from './search.js';
 import { DefaultMeRouter } from './me.js';
+import { DefaultMediaRoute } from './media.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
@@ -28,6 +29,7 @@ class UnknownRestClient implements ActivityPubClient {
 	tags: DefaultTagRouter;
 	search: DefaultSearchRouter;
 	me: DefaultMeRouter;
+	media: DefaultMediaRoute;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
@@ -40,6 +42,7 @@ class UnknownRestClient implements ActivityPubClient {
 		this.tags = new DefaultTagRouter();
 		this.search = new DefaultSearchRouter();
 		this.me = new DefaultMeRouter();
+		this.media = new DefaultMediaRoute();
 	}
 
 	reblog(id: string): Promise<Status> {

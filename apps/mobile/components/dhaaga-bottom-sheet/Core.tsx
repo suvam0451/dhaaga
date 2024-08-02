@@ -28,6 +28,8 @@ import WithComposerContext from './modules/post-composer/api/useComposerContext'
 import ComposerAutoCompletion from './modules/post-composer/fragments/ComposerAutoCompletion';
 import { FONT_TYPES } from 'expo-asset/plugin/build/utils';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import useImagePicker from './modules/post-composer/api/useImagePicker';
+import ComposeMediaTargets from './modules/post-composer/fragments/MediaTargets';
 
 const POST_COMPOSE_HEIGHT_MAX = 320;
 
@@ -50,6 +52,7 @@ const AppBottomSheetCore = memo(() => {
 		}
 	}, [visible]);
 
+	const { trigger } = useImagePicker();
 	const containerStyle = useAnimatedStyle(() => {
 		return {
 			height: height.value,
@@ -125,13 +128,15 @@ const AppBottomSheetCore = memo(() => {
 									flex: 1,
 								}}
 							>
-								<View style={{ padding: 8, marginRight: 6 }}>
+								<TouchableOpacity
+									style={{ padding: 8, marginRight: 4, width: 42 }}
+								>
 									<FontAwesome6
 										name="binoculars"
 										size={22}
 										color={APP_FONT.MONTSERRAT_BODY}
 									/>
-								</View>
+								</TouchableOpacity>
 
 								<View
 									style={{
@@ -164,6 +169,7 @@ const AppBottomSheetCore = memo(() => {
 						<ComposerTextInput />
 
 						<View style={{ flexGrow: 1, flex: 1 }} />
+						<ComposeMediaTargets />
 						<View
 							style={{
 								display: 'flex',
@@ -171,10 +177,7 @@ const AppBottomSheetCore = memo(() => {
 								alignItems: 'center',
 							}}
 						>
-							<TouchableOpacity
-								onPress={handleExpoFilePicker}
-								style={{ width: 32 }}
-							>
+							<TouchableOpacity onPress={trigger} style={{ width: 32 }}>
 								<FontAwesome
 									name="image"
 									size={24}
