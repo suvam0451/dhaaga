@@ -21,6 +21,7 @@ import { useFonts } from '@expo-google-fonts/montserrat';
 // to get rid of realm warnings
 import AppSettingsService from '../services/app-settings.service';
 import { AppProfileRepository } from '../repositories/app-profile.repo';
+import WithAppBottomSheetContext from '../hooks/app/useAppBottomSheet';
 
 /**
  * Suppress these warnings...
@@ -79,17 +80,19 @@ function WithGorhomBottomSheetWrapper() {
 
 	return (
 		<WithActivityPubRestClient>
-			<View
-				style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
-				onLayout={onLayoutRootView}
-			>
-				<Stack
-					initialRouteName={'(tabs)'}
-					screenOptions={{ headerShown: false }}
+			<WithAppBottomSheetContext>
+				<View
+					style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
+					onLayout={onLayoutRootView}
 				>
-					<Stack.Screen name="(tabs)" />
-				</Stack>
-			</View>
+					<Stack
+						initialRouteName={'(tabs)'}
+						screenOptions={{ headerShown: false }}
+					>
+						<Stack.Screen name="(tabs)" />
+					</Stack>
+				</View>
+			</WithAppBottomSheetContext>
 		</WithActivityPubRestClient>
 	);
 }

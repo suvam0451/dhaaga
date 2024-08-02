@@ -1,7 +1,14 @@
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import { StatusesRoute } from '../_router/routes/statuses.js';
+import { DhaagaErrorCode } from '../_router/_types.js';
+import {
+	DhaagaJsPostCreateDto,
+	StatusesRoute,
+} from '../_router/routes/statuses.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { MastoContext, MastoStatus } from '../_interface.js';
+import {
+	MastoContext,
+	MastoScheduledStatus,
+	MastoStatus,
+} from '../_interface.js';
 import {
 	COMPAT,
 	DhaagaMastoClient,
@@ -20,10 +27,20 @@ export class MastodonStatusesRouter implements StatusesRoute {
 		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
 	}
 
-	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
+	async create(
+		dto: DhaagaJsPostCreateDto,
+	): LibraryPromise<MastoScheduledStatus> {
+		const fn = this.lib.client.v1.statuses.create;
+		const { data, error } = await MastoErrorHandler(fn, [dto]);
+		if (error || !data) return errorBuilder(error);
+		const retData = await data;
+		return { data: retData };
+	}
+
+	async get(id: string): LibraryPromise<MastoStatus> {
 		const fn = this.lib.client.v1.statuses.$select(id).fetch;
 		const { data, error } = await MastoErrorHandler(fn);
-		if (error || !data) return errorBuilder();
+		if (error || !data) return errorBuilder(error);
 		const retData = await data;
 		return { data: retData };
 	}

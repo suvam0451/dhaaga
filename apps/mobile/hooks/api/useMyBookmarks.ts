@@ -8,7 +8,11 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 function useMyBookmarks(maxId: string) {
 	const { client } = useActivityPubRestClientContext();
 
-	async function api() {
+	async function api(): Promise<{
+		data: MastoStatus[] | MegaStatus[];
+		minId?: string;
+		maxId?: string;
+	}> {
 		if (!client) throw new Error('_client not initialized');
 		const { data, error } = await client.bookmarks.get({
 			limit: 5,
@@ -17,7 +21,7 @@ function useMyBookmarks(maxId: string) {
 		if (error) {
 			return { data: [], maxId: null, minId: null };
 		}
-		return data;
+		return data as any;
 	}
 
 	return useQuery<{

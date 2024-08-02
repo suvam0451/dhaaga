@@ -35,6 +35,7 @@ export type MastoAccount = mastodon.v1.Account;
 export type MastoFeaturedTag = mastodon.v1.FeaturedTag;
 export type MastoFamiliarFollowers = mastodon.v1.FamiliarFollowers;
 export type MastoNotification = mastodon.v1.Notification;
+export type MastoScheduledStatus = mastodon.v1.ScheduledStatus;
 
 export type MegaStatus = MLStatus;
 export type MegaReaction = MLReaction;

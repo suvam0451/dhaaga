@@ -100,7 +100,7 @@ function BottomSheetContent({
 			default:
 				return <View></View>;
 		}
-	}, [requestId]);
+	}, [requestId, type]);
 }
 
 function WithGorhomBottomSheetContext({ children }: Props) {

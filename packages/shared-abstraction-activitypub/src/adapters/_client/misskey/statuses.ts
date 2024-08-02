@@ -1,6 +1,14 @@
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import { StatusesRoute } from '../_router/routes/statuses.js';
-import { MastoContext, MissContext, MissNote } from '../_interface.js';
+import {
+	DhaagaJsPostCreateDto,
+	StatusesRoute,
+} from '../_router/routes/statuses.js';
+import {
+	MastoContext,
+	MastoScheduledStatus,
+	MissContext,
+	MissNote,
+} from '../_interface.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
 	COMPAT,
@@ -25,6 +33,34 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	constructor(forwarded: RestClient) {
 		this.client = forwarded;
 		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+	}
+
+	async create(
+		dto: DhaagaJsPostCreateDto,
+	): LibraryPromise<MastoScheduledStatus> {
+		try {
+			const data = await this.lib.client.request<
+				// @ts-ignore-next-line
+				Endpoints['notes/create']['req'],
+				any
+			>(
+				'notes/create',
+				{
+					...dto,
+					lang: dto.language,
+					visibility: dto.misskeyVisibility,
+					replyId: dto.inReplyToId,
+				},
+				{},
+			);
+			return { data: data as any };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(e);
+			}
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+		}
 	}
 
 	async get(id: string): Promise<LibraryResponse<MissNote>> {
