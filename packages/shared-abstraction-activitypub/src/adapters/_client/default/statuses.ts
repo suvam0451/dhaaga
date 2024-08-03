@@ -1,6 +1,14 @@
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import { StatusesRoute } from '../_router/routes/statuses.js';
-import { MastoContext, MastoStatus, MissContext } from '../_interface.js';
+import {
+	DhaagaJsPostCreateDto,
+	StatusesRoute,
+} from '../_router/routes/statuses.js';
+import {
+	MastoContext,
+	MastoScheduledStatus,
+	MastoStatus,
+	MissContext,
+} from '../_interface.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
@@ -12,6 +20,16 @@ export class DefaultStatusesRouter implements StatusesRoute {
 				code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
 			},
 		};
+	}
+
+	async create(
+		dto: DhaagaJsPostCreateDto,
+	): LibraryPromise<MastoScheduledStatus> {
+		return notImplementedErrorBuilder<MastoScheduledStatus>();
+	}
+
+	async delete(id: string): LibraryPromise<any> {
+		return notImplementedErrorBuilder<MastoScheduledStatus>();
 	}
 
 	async bookmark(

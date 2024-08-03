@@ -2,7 +2,12 @@ import { Image } from 'expo-image';
 import { MEDIA_CONTAINER_WIDTH } from './_common';
 import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { Pressable, StyleSheet, View } from 'react-native';
+import {
+	Pressable,
+	StyleSheet,
+	View,
+	Image as NativeImage,
+} from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
@@ -15,32 +20,39 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 type Props = {
 	url?: string;
 	blurhash?: string;
+	height?: number;
 };
 
 const DEFAULT_BLURHASH =
 	'|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
+export const AppImageComponent = memo(function Foo({
+	url,
+	blurhash,
+	height,
+}: Props) {
+	console.log(url, height, MEDIA_CONTAINER_WIDTH);
 	return (
 		// @ts-ignore
-		<Image
+		<NativeImage
 			style={{
 				flex: 1,
 				width: MEDIA_CONTAINER_WIDTH,
 				borderRadius: 16,
 				opacity: 0.87,
+				// height,
 			}}
-			placeholder={{ blurhash: blurhash || DEFAULT_BLURHASH }}
+			// placeholder={{ blurhash: blurhash || DEFAULT_BLURHASH }}
 			source={{
 				uri: url,
-				blurhash: blurhash || DEFAULT_BLURHASH,
-				width: MEDIA_CONTAINER_WIDTH,
+				// blurhash: blurhash || DEFAULT_BLURHASH,
+				// width: MEDIA_CONTAINER_WIDTH,
 			}}
-			transition={{
-				effect: 'flip-from-right',
-				duration: 120,
-				timing: 'ease-in',
-			}}
+			// transition={{
+			// 	effect: 'flip-from-right',
+			// 	duration: 120,
+			// 	timing: 'ease-in',
+			// }}
 			// autoplay={false}
 		/>
 	);

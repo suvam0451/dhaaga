@@ -15,6 +15,7 @@ import {
 	SearchRoute,
 } from './search.js';
 import { MeRoute } from './me.js';
+import { MediaRoute } from './media.js';
 
 export interface RouterInterface {
 	instances: InstanceRoute;
@@ -27,6 +28,7 @@ export interface RouterInterface {
 	tags: TagRoute;
 	search: SearchRoute;
 	me: MeRoute;
+	media: MediaRoute;
 }
 
 export type { InstanceRoute, AccountRoute, StatusesRoute };

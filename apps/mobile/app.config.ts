@@ -48,6 +48,11 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					newArchEnabled: true,
 					enableProguardInReleaseBuilds: false,
 					enableShrinkResourcesInReleaseBuilds: false,
+					blockedPermissions: [
+						'android.permission.SYSTEM_ALERT_WINDOW',
+						'android.permission.READ_EXTERNAL_STORAGE',
+						'android.permission.WRITE_EXTERNAL_STORAGE',
+					],
 				},
 			},
 		],

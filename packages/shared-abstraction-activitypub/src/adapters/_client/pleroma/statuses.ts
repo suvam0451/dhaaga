@@ -1,14 +1,25 @@
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { StatusesRoute } from '../_router/routes/statuses.js';
-import { LibraryResponse } from '../_router/_types.js';
-import { MastoStatus, MegaReaction } from '../_interface.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import {
+	DhaagaJsPostCreateDto,
+	StatusesRoute,
+} from '../_router/routes/statuses.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
+import {
+	MastoScheduledStatus,
+	MastoStatus,
+	MegaReaction,
+} from '../_interface.js';
+import {
+	errorBuilder,
+	notImplementedErrorBuilder,
+} from '../_router/dto/api-responses.dto.js';
 import {
 	COMPAT,
 	DhaagaMegalodonClient,
 	DhaagaRestClient,
 } from '../_router/_runner.js';
 import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	client: RestClient;
@@ -25,6 +36,20 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
 		return notImplementedErrorBuilder();
+	}
+
+	async create(
+		dto: DhaagaJsPostCreateDto,
+	): LibraryPromise<MastoScheduledStatus> {
+		return notImplementedErrorBuilder<MastoScheduledStatus>();
+	}
+
+	async delete(id: string): LibraryPromise<{ success: true }> {
+		const data = await this.lib.client.deleteStatus(id);
+		if (data.status === 200 || data.status === 204) {
+			return { data: { success: true } };
+		}
+		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 	}
 
 	/**

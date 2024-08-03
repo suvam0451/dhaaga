@@ -6,6 +6,9 @@ function useAppNavigator() {
 
 	const toPost = useCallback(
 		(id: string) => {
+			// probably in bottom sheet
+			if (!navigator || !navigator.getId) return;
+
 			const _id = navigator.getId();
 			if (!_id || _id === '/(tabs)/index') {
 				router.navigate(`/post/${id}`);
@@ -18,6 +21,9 @@ function useAppNavigator() {
 
 	const toProfile = useCallback(
 		(id: string) => {
+			// probably in bottom sheet
+			if (!navigator || !navigator.getId) return;
+
 			const _id = navigator.getId();
 			if (!_id || _id === '/(tabs)/index') {
 				router.navigate(`/profile/${id}`);

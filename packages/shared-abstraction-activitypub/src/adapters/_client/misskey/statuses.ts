@@ -1,6 +1,9 @@
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import { StatusesRoute } from '../_router/routes/statuses.js';
-import { MastoContext, MissContext, MissNote } from '../_interface.js';
+import {
+	DhaagaJsPostCreateDto,
+	StatusesRoute,
+} from '../_router/routes/statuses.js';
+import { MastoScheduledStatus, MissContext, MissNote } from '../_interface.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
 	COMPAT,
@@ -25,6 +28,52 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	constructor(forwarded: RestClient) {
 		this.client = forwarded;
 		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+	}
+
+	async create(
+		dto: DhaagaJsPostCreateDto,
+	): LibraryPromise<MastoScheduledStatus> {
+		try {
+			const data = await this.lib.client.request<
+				// @ts-ignore-next-line
+				Endpoints['notes/create']['req'],
+				any
+			>('notes/create', {
+				// ...dto,
+				lang: dto.language,
+				visibility: dto.misskeyVisibility,
+				replyId: dto.inReplyToId,
+				text: dto.status,
+				visibleUserIds: dto.visibleUserIds || [],
+				fileIds: dto.mediaIds || [],
+				// reactionAcceptance: null,
+				// poll: dto.poll || null,
+				// cw: dto.spoilerText || null,
+			});
+			return { data: data as any };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(e);
+			}
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+		}
+	}
+
+	async delete(id: string): LibraryPromise<{ success: true }> {
+		try {
+			// @ts-ignore-next-line
+			await this.lib.client.request('notes/delete', {
+				noteId: id,
+			});
+			return { data: { success: true } };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(e);
+			}
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+		}
 	}
 
 	async get(id: string): Promise<LibraryResponse<MissNote>> {
