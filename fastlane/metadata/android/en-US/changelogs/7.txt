@@ -1,0 +1,5 @@
+Dhaaga (Lite) v0.6.0 (3 Aug 2024)
+
+* ✨ You can now create posts (replies not yet, though)
+* ✨ Auto-completion while typing accounts/emojis
+* ✨ Adding attachments/cws/alt-text is also supported
