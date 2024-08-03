@@ -27,18 +27,30 @@ const PostButton = memo(() => {
 		if (visibility === APP_POST_VISIBILITY.UNLISTED) {
 			_visibility = domain === KNOWN_SOFTWARE.MASTODON ? 'unlisted' : 'home';
 		}
+		if (visibility === APP_POST_VISIBILITY.DIRECT) {
+			_visibility = domain === KNOWN_SOFTWARE.MASTODON ? 'direct' : 'specified';
+		}
 		const { data, error } = await client.statuses.create({
 			status: rawText,
 			visibleUserIds: [],
 			mastoVisibility: _visibility,
+			misskeyVisibility: _visibility,
 			language: 'en',
 			sensitive: false,
 			inReplyToId: null,
 			mediaIds: mediaTargets.map((o) => o.remoteId.toString()),
 			localOnly: false,
 		});
+		// if(error) return
 
-		PostRef.current = ActivityPubAdapterService.adaptStatus(data, domain);
+		if (domain === KNOWN_SOFTWARE.MASTODON) {
+			PostRef.current = ActivityPubAdapterService.adaptStatus(data, domain);
+		} else {
+			PostRef.current = ActivityPubAdapterService.adaptStatus(
+				(data as any).createdNote,
+				domain,
+			);
+		}
 		setType(BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
 	}
 

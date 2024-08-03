@@ -38,16 +38,17 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				// @ts-ignore-next-line
 				Endpoints['notes/create']['req'],
 				any
-			>(
-				'notes/create',
-				{
-					...dto,
-					lang: dto.language,
-					visibility: dto.misskeyVisibility,
-					replyId: dto.inReplyToId,
-				},
-				{},
-			);
+			>('notes/create', {
+				// ...dto,
+				lang: dto.language,
+				visibility: dto.misskeyVisibility,
+				replyId: dto.inReplyToId,
+				text: dto.status,
+				visibleUserIds: dto.visibleUserIds || [],
+				// reactionAcceptance: null,
+				// poll: dto.poll || null,
+				// cw: dto.spoilerText || null,
+			});
 			return { data: data as any };
 		} catch (e: any) {
 			if (e.code) {
@@ -62,7 +63,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		try {
 			// @ts-ignore-next-line
 			await this.lib.client.request('notes/delete', {
-				nodeId: id,
+				noteId: id,
 			});
 			return { data: { success: true } };
 		} catch (e: any) {
