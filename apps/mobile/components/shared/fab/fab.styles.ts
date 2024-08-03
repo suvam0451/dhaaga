@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
 	widgetContainerCollapsed: {
 		marginBottom: 16,
-		backgroundColor: 'rgba(54,54,54,0.85)',
+		backgroundColor: 'rgba(54,54,54,1)',
 		display: 'flex',
 		position: 'absolute',
 		bottom: 0,
