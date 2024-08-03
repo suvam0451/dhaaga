@@ -8,7 +8,7 @@ import {
 import { useEffect } from 'react';
 import { Dimensions } from 'react-native';
 
-const POST_COMPOSE_HEIGHT_MAX = 320;
+const POST_COMPOSE_HEIGHT_MAX = 360;
 
 function useAnimatedHeight() {
 	const { visible, type } = useAppBottomSheet();

@@ -36,6 +36,10 @@ type ComposeMediaTargetItem = {
 
 type KeyboardSelection = { start: number; end: number };
 type Type = {
+	cw: string;
+	setCw: React.Dispatch<React.SetStateAction<string>>;
+	cwShown: boolean;
+	setCwShown: React.Dispatch<React.SetStateAction<boolean>>;
 	rawText: string;
 	setRawText: (rawText: string) => void;
 	editorText: React.JSX.Element;
@@ -88,6 +92,10 @@ const defaultValue: Type = {
 	mediaTargets: [],
 	addMediaTarget: () => {},
 	removeMediaTarget: () => {},
+	cw: '',
+	cwShown: false,
+	setCwShown: () => {},
+	setCw: () => {},
 };
 
 const ComposerContext = createContext<Type>(defaultValue);
@@ -103,6 +111,8 @@ type Props = {
 function WithComposerContext({ children }: Props) {
 	const [RawText, setRawText] = useState('');
 	const [EditorText, setEditorText] = useState(<Text></Text>);
+	const [Cw, setCw] = useState('');
+	const [CwSectionShown, setCwSectionShown] = useState(false);
 	const [AutoCompletion, setAutoCompletion] = useState<ComposerAutocompletion>({
 		accounts: [],
 		emojis: [],
@@ -176,6 +186,10 @@ function WithComposerContext({ children }: Props) {
 	return (
 		<ComposerContext.Provider
 			value={{
+				cw: Cw,
+				setCw: setCw,
+				cwShown: CwSectionShown,
+				setCwShown: setCwSectionShown,
 				rawText: RawText,
 				setRawText,
 				editorText: EditorText,

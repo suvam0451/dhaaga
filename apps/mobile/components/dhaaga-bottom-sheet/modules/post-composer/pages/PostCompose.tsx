@@ -1,6 +1,12 @@
 import { memo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import ComposerAutoCompletion from '../fragments/ComposerAutoCompletion';
 import { Image } from 'expo-image';
@@ -12,6 +18,7 @@ import ComposerTextInput from '../fragments/ComposerText';
 import ComposeMediaTargets from '../fragments/MediaTargets';
 import ActionButtons from '../fragments/ActionButtons';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
+import ComposerSpoiler from '../fragments/ComposerSpoiler';
 
 const PostCompose = memo(() => {
 	const { visible } = useAppBottomSheet();
@@ -31,7 +38,9 @@ const PostCompose = memo(() => {
 					alignItems: 'center',
 				}}
 			>
-				<View style={{ width: 48, height: 48 }}>
+				<View
+					style={{ borderWidth: 0.7, borderColor: '#666', borderRadius: 8 }}
+				>
 					{/*@ts-ignore-next-line*/}
 					<Image source={me?.getAvatarUrl()} style={styles.avatarContainer} />
 				</View>
@@ -75,10 +84,15 @@ const PostCompose = memo(() => {
 					<PostButton />
 				</View>
 			</View>
-			<ComposerTextInput />
+			<ScrollView>
+				<ComposerSpoiler />
+				<ComposerTextInput />
+				<View style={{ flexGrow: 1, flex: 1 }} />
+				<ComposeMediaTargets />
+			</ScrollView>
 			{/*spacer*/}
 			<View style={{ flexGrow: 1, flex: 1 }} />
-			<ComposeMediaTargets />
+			{/*<ComposeMediaTargets />*/}
 			<ActionButtons />
 		</View>
 	);
