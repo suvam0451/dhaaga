@@ -1,4 +1,4 @@
-import { useAppBottomSheet } from '../../../../hooks/app/useAppBottomSheet';
+import { useAppBottomSheet } from './useAppBottomSheet';
 import {
 	useAnimatedStyle,
 	useSharedValue,

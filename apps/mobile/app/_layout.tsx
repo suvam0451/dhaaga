@@ -21,7 +21,7 @@ import { useFonts } from '@expo-google-fonts/montserrat';
 // to get rid of realm warnings
 import AppSettingsService from '../services/app-settings.service';
 import { AppProfileRepository } from '../repositories/app-profile.repo';
-import WithAppBottomSheetContext from '../hooks/app/useAppBottomSheet';
+import WithAppBottomSheetContext from '../components/dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
 /**
  * Suppress these warnings...

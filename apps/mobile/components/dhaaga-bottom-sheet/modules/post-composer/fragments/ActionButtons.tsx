@@ -6,7 +6,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useImagePicker from '../api/useImagePicker';
-import { useAppBottomSheet } from '../../../../../hooks/app/useAppBottomSheet';
+import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 
 /**
  * The buttons at bottom row of

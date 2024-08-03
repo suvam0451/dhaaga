@@ -4,7 +4,7 @@ import Animated from 'react-native-reanimated';
 import WithComposerContext from './modules/post-composer/api/useComposerContext';
 import PostCompose from './modules/post-composer/pages/PostCompose';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
-import { useAppBottomSheet } from '../../hooks/app/useAppBottomSheet';
+import { useAppBottomSheet } from './modules/_api/useAppBottomSheet';
 
 const AppBottomSheet = memo(() => {
 	const { animStyle } = useAnimatedHeight();

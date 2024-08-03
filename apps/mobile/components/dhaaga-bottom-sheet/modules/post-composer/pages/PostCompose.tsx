@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useAppBottomSheet } from '../../../../../hooks/app/useAppBottomSheet';
+import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import ComposerAutoCompletion from '../fragments/ComposerAutoCompletion';

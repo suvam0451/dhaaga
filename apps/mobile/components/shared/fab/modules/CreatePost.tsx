@@ -7,7 +7,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import {
 	BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
-} from '../../../../hooks/app/useAppBottomSheet';
+} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
 const MENU_ITEM_LABEL = 'Create Post';
 

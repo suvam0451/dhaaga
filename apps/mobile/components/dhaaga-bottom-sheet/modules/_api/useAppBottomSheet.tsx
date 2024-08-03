@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
-import useHookLoadingState from '../../states/useHookLoadingState';
-import AppBottomSheet from '../../components/dhaaga-bottom-sheet/Core';
+import useHookLoadingState from '../../../../states/useHookLoadingState';
+import AppBottomSheet from '../../Core';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
