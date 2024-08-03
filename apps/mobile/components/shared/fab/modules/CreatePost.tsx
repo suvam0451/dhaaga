@@ -15,10 +15,7 @@ const CreatePostModule = memo(({ index }: FabModuleProps) => {
 	const { setVisible, setType } = useAppBottomSheet();
 	const onClick = useCallback(() => {
 		setType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
-		// setBottomSheetType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 		setVisible(true);
-		// updateRequestId();
-		console.log('create post clicked...');
 	}, []);
 
 	return (

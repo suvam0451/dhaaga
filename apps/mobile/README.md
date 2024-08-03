@@ -1,14 +1,76 @@
 ### About
 
-This is the mobile app for this project. It uses React Native and Expo.
+This is the mobile app for this project.
 
-It has no native code components. So, you don't need Android Studio and/or
-XCode installed to get started with the project.
+It is built using React Native.
+
+## How to Develop
+
+### Pre-Requisites
+
+#### Expo Account
+
+Dhaaga is a pure expo project.
+
+So, you don't need Android Studio and/or
+XCode installed to get started.
+
+#### App Secrets
+
+You would need a mastodon app client id and secret.
+
+Nothing extra is needed to develop for misskey and it's forks.
 
 ### Configuring
 
-To ensure that the app build by you does not conflict with
-the app distributed by the developer, you would need to change the following,
+To ensure that the app built by you does not overwrite
+the app published by the developer,
+you would need to change the following,
+in `app.config.ts`:
+
+- `config.android.package`
+- `config.ios.bundleIdentifier`
+- `config.name`
+- `config.slug` (this is what you want to name the project in Expo/EAS)
+- `config.extra.easprojectId` (this is the uuid of the project in Expo/EAS)
+    - If you have your own uuid, replace here
+    - Otherwise, ignore
+
+### Running the Development Server
+
+- Simply grab the `DevClient` apk from the most recent releases and install it
+  in your phone.
+- From your computer, run `yarn` to install dependencies (root folder).
+- Then, jump into this directory *(apps/mobile)* and run `yarn dev`
+- Open the DevClient, and scan the QR code generated in your terminal.
+
+That's it!
+
+Your JS changes will now be reflected in the DevClient.
+
+### How to Compile
+
+A compilation is necessary when
+
+1. You need to build the app (or, bump version and make a new release)
+2. There are changes in native libraries used by the project
+    1. The same DevClient only works until there are no changes to the native
+       library dependencies.
+
+When it comes to compiling, you have two choices:
+
+1. Use Expo EAS to produce your build
+    1. (No Android SDK/ XCode needed on your
+       local PC)
+    2. Expo account required
+2. Compile the build on your local machine
+    1. Android SDK, JDK, XCode etc. needed
+
+### Configuring
+
+To ensure that the app built by you does not overwrite
+the app published by the developer,
+you would need to change the following,
 in `app.config.ts`:
 
 - `config.android.package`
@@ -20,7 +82,7 @@ in `app.config.ts`:
       generate an `app.json` file
     - Just copy over the projectId from within it and **delete the file**.
 
-### Dependencies
+### Other FYI
 
 Please only use [yarn classic (i.e. v1)](https://classic.yarnpkg.com) as your
 package manager while installing/upgrading dependencies. This is the only

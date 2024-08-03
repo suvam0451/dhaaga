@@ -25,17 +25,25 @@ type ComposerAutoCompletionPrompt = {
 	type: 'acct' | 'tag' | 'emoji' | 'none';
 };
 
-type ComposeMediaTargetItem = {
+export type ComposeMediaTargetItem = {
 	previewUrl?: string;
 	remoteId?: string;
 	url?: string;
 	uploaded: boolean;
 	localUri: string;
 	status?: string;
+	cw?: string;
 };
 
 type KeyboardSelection = { start: number; end: number };
 type Type = {
+	editMode: 'txt' | 'alt' | 'misc';
+	setEditMode: React.Dispatch<React.SetStateAction<'txt' | 'alt' | 'misc'>>;
+	cw: string;
+	setCw: React.Dispatch<React.SetStateAction<string>>;
+	cwShown: boolean;
+	setAltText: (index: number, o: string) => void;
+	setCwShown: React.Dispatch<React.SetStateAction<boolean>>;
 	rawText: string;
 	setRawText: (rawText: string) => void;
 	editorText: React.JSX.Element;
@@ -61,6 +69,8 @@ type Type = {
 };
 
 const defaultValue: Type = {
+	editMode: 'txt',
+	setEditMode: () => {},
 	autoCompletion: {
 		accounts: [],
 		hashtags: [],
@@ -76,7 +86,7 @@ const defaultValue: Type = {
 	setAutoCompletionPrompt: () => {},
 	rawText: '',
 	setRawText: () => {},
-	editorText: undefined,
+	editorText: <Text />,
 	setEditorText: () => {},
 	selection: {
 		start: 0,
@@ -88,6 +98,11 @@ const defaultValue: Type = {
 	mediaTargets: [],
 	addMediaTarget: () => {},
 	removeMediaTarget: () => {},
+	cw: '',
+	cwShown: false,
+	setCwShown: () => {},
+	setCw: () => {},
+	setAltText: () => {},
 };
 
 const ComposerContext = createContext<Type>(defaultValue);
@@ -103,6 +118,9 @@ type Props = {
 function WithComposerContext({ children }: Props) {
 	const [RawText, setRawText] = useState('');
 	const [EditorText, setEditorText] = useState(<Text></Text>);
+	const [Cw, setCw] = useState('');
+	const [CwSectionShown, setCwSectionShown] = useState(false);
+	const [EditMode, setEditMode] = useState<'txt' | 'alt' | 'misc'>('txt');
 	const [AutoCompletion, setAutoCompletion] = useState<ComposerAutocompletion>({
 		accounts: [],
 		emojis: [],
@@ -173,9 +191,23 @@ function WithComposerContext({ children }: Props) {
 		APP_POST_VISIBILITY.PUBLIC,
 	);
 
+	function setAltText(index: number, text: string) {
+		if (index >= MediaTargets.length) return;
+
+		MediaTargets[index].cw = text;
+		setMediaTargets(MediaTargets);
+	}
+
 	return (
 		<ComposerContext.Provider
 			value={{
+				editMode: EditMode,
+				setEditMode,
+				cw: Cw,
+				setCw,
+				setAltText,
+				cwShown: CwSectionShown,
+				setCwShown: setCwSectionShown,
 				rawText: RawText,
 				setRawText,
 				editorText: EditorText,

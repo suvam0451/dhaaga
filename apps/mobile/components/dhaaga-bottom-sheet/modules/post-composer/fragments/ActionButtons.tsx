@@ -7,6 +7,7 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useImagePicker from '../api/useImagePicker';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
+import { useComposerContext } from '../api/useComposerContext';
 
 /**
  * The buttons at bottom row of
@@ -15,11 +16,23 @@ import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 const ActionButtons = memo(() => {
 	const { trigger } = useImagePicker();
 	const { setVisible, visible } = useAppBottomSheet();
+	const { cw, setCwShown, setEditMode, editMode } = useComposerContext();
 
 	function onCustomEmojiClicked() {}
 
 	const close = useCallback(() => {
 		setVisible(false);
+	}, []);
+
+	const toggleCwShown = useCallback(() => {
+		setCwShown((o) => !o);
+	}, []);
+
+	const toggleEditMode = useCallback(() => {
+		setEditMode((o) => {
+			if (o === 'txt') return 'alt';
+			return 'txt';
+		});
 	}, []);
 
 	if (!visible) return <View />;
@@ -34,8 +47,17 @@ const ActionButtons = memo(() => {
 			<TouchableOpacity onPress={trigger} style={{ width: 32 }}>
 				<FontAwesome name="image" size={24} color={APP_FONT.MONTSERRAT_BODY} />
 			</TouchableOpacity>
-			<TouchableOpacity style={{ marginLeft: 12, width: 32 }}>
-				<FontAwesome name="warning" size={24} color={APP_FONT.DISABLED} />
+			<TouchableOpacity
+				style={{ marginLeft: 12, width: 32 }}
+				onPress={toggleCwShown}
+			>
+				<FontAwesome
+					name="warning"
+					size={24}
+					color={
+						cw === '' ? APP_FONT.MONTSERRAT_BODY : APP_THEME.COLOR_SCHEME_C
+					}
+				/>
 			</TouchableOpacity>
 			<TouchableOpacity
 				onPress={onCustomEmojiClicked}
@@ -43,7 +65,10 @@ const ActionButtons = memo(() => {
 			>
 				<FontAwesome6 name="smile" size={24} color={APP_FONT.DISABLED} />
 			</TouchableOpacity>
-			<TouchableOpacity style={{ marginLeft: 4, width: 64 }}>
+			<TouchableOpacity
+				style={{ marginLeft: 4, width: 64 }}
+				onPress={toggleEditMode}
+			>
 				<View
 					style={{
 						padding: 8,
@@ -56,12 +81,12 @@ const ActionButtons = memo(() => {
 				>
 					<Text
 						style={{
-							color: APP_FONT.DISABLED,
+							color: APP_FONT.MONTSERRAT_BODY,
 							fontFamily: APP_FONTS.INTER_700_BOLD,
 							fontSize: 18,
 						}}
 					>
-						ALT
+						{editMode === 'alt' ? 'TXT' : 'ALT'}
 					</Text>
 				</View>
 			</TouchableOpacity>

@@ -14,7 +14,7 @@ import {
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 
 const PostButton = memo(() => {
-	const { rawText, mediaTargets, visibility } = useComposerContext();
+	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
 	const { client, domain } = useActivityPubRestClientContext();
 	const { setType, PostRef } = useAppBottomSheet();
 
@@ -40,8 +40,8 @@ const PostButton = memo(() => {
 			inReplyToId: null,
 			mediaIds: mediaTargets.map((o) => o.remoteId.toString()),
 			localOnly: false,
+			spoilerText: cw === '' ? undefined : cw,
 		});
-		// if(error) return
 
 		if (domain === KNOWN_SOFTWARE.MASTODON) {
 			PostRef.current = ActivityPubAdapterService.adaptStatus(data, domain);

@@ -31,7 +31,7 @@ export class MisskeyMediaRouter implements MediaRoute {
 
 		const formData = new FormData();
 		formData.append('file', dto.file);
-		
+
 		try {
 			const data: any = await this.lib.client.request<
 				// @ts-ignore-next-line
@@ -40,6 +40,22 @@ export class MisskeyMediaRouter implements MediaRoute {
 			>('drive/files/create', formData);
 			return { data };
 		} catch (e) {
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async updateDescription(id: string, text: string) {
+		try {
+			const data = await this.lib.client.request('drive/files/update', {
+				fileId: id,
+				comment: text,
+			});
+			return { data };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(e.code);
+			}
 			console.log(e);
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}

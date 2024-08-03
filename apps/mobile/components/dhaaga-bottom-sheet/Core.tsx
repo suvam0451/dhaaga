@@ -10,6 +10,13 @@ import {
 } from './modules/_api/useAppBottomSheet';
 import PostPreview from './modules/post-preview/PostPreview';
 
+/**
+ * Switches what module will be shown
+ * in the bottom sheet
+ *
+ * @param animStyle will animate the height
+ * based on active module
+ */
 const AppBottomSheet = memo(() => {
 	const { animStyle } = useAnimatedHeight();
 	const { type } = useAppBottomSheet();
@@ -18,6 +25,13 @@ const AppBottomSheet = memo(() => {
 		switch (type) {
 			case BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
 				return <PostPreview />;
+			}
+			case BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
+				return (
+					<WithComposerContext>
+						<PostCompose />
+					</WithComposerContext>
+				);
 			}
 			default: {
 				return (

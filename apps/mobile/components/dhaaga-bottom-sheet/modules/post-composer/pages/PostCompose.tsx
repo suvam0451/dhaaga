@@ -1,6 +1,12 @@
-import { memo } from 'react';
+import { Fragment, memo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import ComposerAutoCompletion from '../fragments/ComposerAutoCompletion';
 import { Image } from 'expo-image';
@@ -12,10 +18,14 @@ import ComposerTextInput from '../fragments/ComposerText';
 import ComposeMediaTargets from '../fragments/MediaTargets';
 import ActionButtons from '../fragments/ActionButtons';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
+import ComposerSpoiler from '../fragments/ComposerSpoiler';
+import { useComposerContext } from '../api/useComposerContext';
+import ComposerAlt from '../fragments/ComposerAlt';
 
 const PostCompose = memo(() => {
 	const { visible } = useAppBottomSheet();
 	const { me } = useActivityPubRestClientContext();
+	const { editMode } = useComposerContext();
 
 	return (
 		<View
@@ -28,10 +38,12 @@ const PostCompose = memo(() => {
 			<View
 				style={{
 					flexDirection: 'row',
-					alignItems: 'center',
+					alignItems: 'flex-start',
 				}}
 			>
-				<View style={{ width: 48, height: 48 }}>
+				<View
+					style={{ borderWidth: 0.7, borderColor: '#666', borderRadius: 8 }}
+				>
 					{/*@ts-ignore-next-line*/}
 					<Image source={me?.getAvatarUrl()} style={styles.avatarContainer} />
 				</View>
@@ -75,10 +87,30 @@ const PostCompose = memo(() => {
 					<PostButton />
 				</View>
 			</View>
-			<ComposerTextInput />
-			{/*spacer*/}
-			<View style={{ flexGrow: 1, flex: 1 }} />
-			<ComposeMediaTargets />
+			{/*This section changes based on edit mode*/}
+			<ScrollView
+				style={{
+					flexGrow: 1,
+					display: 'flex',
+					flexDirection: 'column',
+				}}
+				contentContainerStyle={{
+					flexGrow: 1,
+				}}
+			>
+				{editMode === 'txt' ? (
+					<Fragment>
+						<ComposerSpoiler />
+						<ComposerTextInput />
+						<View style={{ flexGrow: 1, flex: 1 }} />
+						<ComposeMediaTargets />
+					</Fragment>
+				) : (
+					<Fragment>
+						<ComposerAlt />
+					</Fragment>
+				)}
+			</ScrollView>
 			<ActionButtons />
 		</View>
 	);

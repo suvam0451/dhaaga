@@ -33,7 +33,7 @@ function useInputGeneratePrompt() {
 				});
 			}
 			if (ACCT_REGEX.test(_regexTarget)) {
-				console.log(_regexTarget, 'matches acct regex');
+				// console.log(_regexTarget, 'matches acct regex');
 				const res = ACCT_REGEX.exec(_regexTarget);
 				setAutoCompletionPrompt({
 					type: 'acct',
