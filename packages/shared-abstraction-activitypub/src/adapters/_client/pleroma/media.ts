@@ -8,6 +8,7 @@ import {
 import { KNOWN_SOFTWARE } from '../_router/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { MastoMediaAttachment } from '../_interface.js';
+import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 
 export class PleromaMediaRoute implements MediaRoute {
 	client: RestClient;
@@ -27,5 +28,9 @@ export class PleromaMediaRoute implements MediaRoute {
 	): LibraryPromise<MastoMediaAttachment> {
 		const data = await this.lib.client.uploadMedia(dto.file);
 		return { data: data as any };
+	}
+
+	async updateDescription() {
+		return notImplementedErrorBuilder();
 	}
 }
