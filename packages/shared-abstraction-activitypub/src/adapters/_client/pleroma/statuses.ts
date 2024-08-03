@@ -3,13 +3,16 @@ import {
 	DhaagaJsPostCreateDto,
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
-import { LibraryResponse } from '../_router/_types.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	MastoScheduledStatus,
 	MastoStatus,
 	MegaReaction,
 } from '../_interface.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import {
+	errorBuilder,
+	notImplementedErrorBuilder,
+} from '../_router/dto/api-responses.dto.js';
 import {
 	COMPAT,
 	DhaagaMegalodonClient,
@@ -39,6 +42,14 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		dto: DhaagaJsPostCreateDto,
 	): LibraryPromise<MastoScheduledStatus> {
 		return notImplementedErrorBuilder<MastoScheduledStatus>();
+	}
+
+	async delete(id: string): LibraryPromise<{ success: true }> {
+		const data = await this.lib.client.deleteStatus(id);
+		if (data.status === 200 || data.status === 204) {
+			return { data: { success: true } };
+		}
+		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 	}
 
 	/**

@@ -59,4 +59,6 @@ export interface StatusesRoute {
 	): LibraryPromise<MastoContext | MissContext>;
 
 	create(dto: DhaagaJsPostCreateDto): LibraryPromise<MastoScheduledStatus>;
+
+	delete(id: string): LibraryPromise<MastoStatus | { success: true }>;
 }

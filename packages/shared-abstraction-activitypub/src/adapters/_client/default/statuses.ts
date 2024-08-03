@@ -28,6 +28,10 @@ export class DefaultStatusesRouter implements StatusesRoute {
 		return notImplementedErrorBuilder<MastoScheduledStatus>();
 	}
 
+	async delete(id: string): LibraryPromise<any> {
+		return notImplementedErrorBuilder<MastoScheduledStatus>();
+	}
+
 	async bookmark(
 		id: string,
 	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/create']['res']> {

@@ -1,4 +1,4 @@
-import { useAppBottomSheet } from './useAppBottomSheet';
+import { BOTTOM_SHEET_ENUM, useAppBottomSheet } from './useAppBottomSheet';
 import {
 	useAnimatedStyle,
 	useSharedValue,
@@ -6,25 +6,42 @@ import {
 	withTiming,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
+import { Dimensions } from 'react-native';
 
 const POST_COMPOSE_HEIGHT_MAX = 320;
 
 function useAnimatedHeight() {
-	const { visible } = useAppBottomSheet();
+	const { visible, type } = useAppBottomSheet();
 	const height = useSharedValue(0);
 
 	useEffect(() => {
 		if (!visible) {
 			height.value = withTiming(0, { duration: 100 });
 		} else {
-			height.value = withSpring(POST_COMPOSE_HEIGHT_MAX, {
+			let _target;
+			switch (type) {
+				case BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
+					_target = Dimensions.get('window').height * 0.6;
+					break;
+				}
+				case BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
+					_target = POST_COMPOSE_HEIGHT_MAX;
+					break;
+				}
+				default: {
+					_target = POST_COMPOSE_HEIGHT_MAX;
+					break;
+				}
+			}
+
+			height.value = withSpring(_target, {
 				duration: 2000,
 				dampingRatio: 0.55,
 				stiffness: 500,
 				overshootClamping: false,
 			});
 		}
-	}, [visible]);
+	}, [visible, type]);
 
 	const animStyle = useAnimatedStyle(() => {
 		return {

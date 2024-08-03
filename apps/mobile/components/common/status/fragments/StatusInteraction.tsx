@@ -92,13 +92,17 @@ function StatusInteractionBase({
 	} = useBoost();
 
 	function onShowAdvancedMenuPressed() {
-		GlobalMmkvCacheService.setBottomSheetProp_Status(
-			globalDb,
-			_status.getRaw(),
-		);
-		setBottomSheetType(BOTTOM_SHEET_ENUM.STATUS_MENU);
-		updateRequestId();
-		setVisible(true);
+		try {
+			GlobalMmkvCacheService.setBottomSheetProp_Status(
+				globalDb,
+				_status.getRaw(),
+			);
+			setBottomSheetType(BOTTOM_SHEET_ENUM.STATUS_MENU);
+			updateRequestId();
+			setVisible(true);
+		} catch (e) {
+			console.log('[WARN]: gorhom bottom sheet context not available');
+		}
 	}
 
 	return (

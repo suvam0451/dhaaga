@@ -3,12 +3,7 @@ import {
 	DhaagaJsPostCreateDto,
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
-import {
-	MastoContext,
-	MastoScheduledStatus,
-	MissContext,
-	MissNote,
-} from '../_interface.js';
+import { MastoScheduledStatus, MissContext, MissNote } from '../_interface.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
 	COMPAT,
@@ -54,6 +49,22 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				{},
 			);
 			return { data: data as any };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(e);
+			}
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+		}
+	}
+
+	async delete(id: string): LibraryPromise<{ success: true }> {
+		try {
+			// @ts-ignore-next-line
+			await this.lib.client.request('notes/delete', {
+				nodeId: id,
+			});
+			return { data: { success: true } };
 		} catch (e: any) {
 			if (e.code) {
 				return errorBuilder(e);

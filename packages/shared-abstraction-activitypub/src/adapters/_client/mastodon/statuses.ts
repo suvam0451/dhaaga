@@ -42,6 +42,14 @@ export class MastodonStatusesRouter implements StatusesRoute {
 		return { data: retData };
 	}
 
+	async delete(id: string): LibraryPromise<MastoStatus> {
+		const fn = this.lib.client.v1.statuses.$select(id).remove;
+		const { data, error } = await MastoErrorHandler(fn);
+		if (error || !data) return errorBuilder(error);
+		const retData = await data;
+		return { data: retData };
+	}
+
 	async get(id: string): LibraryPromise<MastoStatus> {
 		const fn = this.lib.client.v1.statuses.$select(id).fetch;
 		const { data, error } = await MastoErrorHandler(fn);

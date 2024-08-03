@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useRef, useState } from 'react';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import AppBottomSheet from '../../Core';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -17,6 +18,7 @@ type Type = {
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
+	PostRef: React.MutableRefObject<StatusInterface>;
 };
 
 const defaultValue: Type = {
@@ -25,6 +27,7 @@ const defaultValue: Type = {
 	visible: false,
 	setVisible: () => {},
 	updateRequestId: () => {},
+	PostRef: undefined,
 };
 
 const AppBottomSheetContext = createContext<Type>(defaultValue);
@@ -41,6 +44,10 @@ function WithAppBottomSheetContext({ children }: Props) {
 	const [Visible, setVisible] = useState(false);
 	const [Type, setType] = useState(BOTTOM_SHEET_ENUM.NA);
 	const { forceUpdate } = useHookLoadingState();
+
+	// pointers
+	const PostRef = useRef<StatusInterface>(null);
+
 	return (
 		<AppBottomSheetContext.Provider
 			value={{
@@ -49,6 +56,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 				visible: Visible,
 				setVisible,
 				updateRequestId: forceUpdate,
+				PostRef,
 			}}
 		>
 			{children}
