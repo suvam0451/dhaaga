@@ -11,7 +11,7 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { useComposerContext } from '../api/useComposerContext';
 
 const ComposerSpoiler = memo(() => {
-	const { cwShown, setCw } = useComposerContext();
+	const { cwShown, setCw, cw } = useComposerContext();
 
 	function onChange(e: NativeSyntheticEvent<TextInputChangeEventData>) {
 		setCw(e.nativeEvent.text);
@@ -26,7 +26,7 @@ const ComposerSpoiler = memo(() => {
 				placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
 				style={styles.textInput}
 				onChange={onChange}
-				// onSelectionChange={onSelectionChange}
+				value={cw}
 			/>
 		</View>
 	);

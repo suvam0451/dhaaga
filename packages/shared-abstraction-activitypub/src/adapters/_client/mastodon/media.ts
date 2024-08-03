@@ -5,6 +5,7 @@ import {
 	COMPAT,
 	DhaagaMastoClient,
 	DhaagaRestClient,
+	MastoErrorHandler,
 } from '../_router/_runner.js';
 import { MastoMediaAttachment } from '../_interface.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
@@ -58,5 +59,17 @@ export class MastodonMediaRoute implements MediaRoute {
 		// if (error || !data) return errorBuilder(error);
 		// const retData = await data;
 		// return { data: retData };
+	}
+
+	async updateDescription(id: string, text: string) {
+		const fn = this.lib.client.v1.media.$select(id).update;
+		const { data, error } = await MastoErrorHandler(fn, [
+			{
+				description: text,
+			},
+		]);
+		if (error || !data) return errorBuilder(error);
+		const resData = await data;
+		return { data: resData };
 	}
 }

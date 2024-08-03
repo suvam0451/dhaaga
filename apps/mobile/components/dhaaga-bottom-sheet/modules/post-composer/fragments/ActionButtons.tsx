@@ -16,7 +16,7 @@ import { useComposerContext } from '../api/useComposerContext';
 const ActionButtons = memo(() => {
 	const { trigger } = useImagePicker();
 	const { setVisible, visible } = useAppBottomSheet();
-	const { cw, setCwShown } = useComposerContext();
+	const { cw, setCwShown, setEditMode, editMode } = useComposerContext();
 
 	function onCustomEmojiClicked() {}
 
@@ -26,6 +26,13 @@ const ActionButtons = memo(() => {
 
 	const toggleCwShown = useCallback(() => {
 		setCwShown((o) => !o);
+	}, []);
+
+	const toggleEditMode = useCallback(() => {
+		setEditMode((o) => {
+			if (o === 'txt') return 'alt';
+			return 'txt';
+		});
 	}, []);
 
 	if (!visible) return <View />;
@@ -58,7 +65,10 @@ const ActionButtons = memo(() => {
 			>
 				<FontAwesome6 name="smile" size={24} color={APP_FONT.DISABLED} />
 			</TouchableOpacity>
-			<TouchableOpacity style={{ marginLeft: 4, width: 64 }}>
+			<TouchableOpacity
+				style={{ marginLeft: 4, width: 64 }}
+				onPress={toggleEditMode}
+			>
 				<View
 					style={{
 						padding: 8,
@@ -71,12 +81,12 @@ const ActionButtons = memo(() => {
 				>
 					<Text
 						style={{
-							color: APP_FONT.DISABLED,
+							color: APP_FONT.MONTSERRAT_BODY,
 							fontFamily: APP_FONTS.INTER_700_BOLD,
 							fontSize: 18,
 						}}
 					>
-						ALT
+						{editMode === 'alt' ? 'TXT' : 'ALT'}
 					</Text>
 				</View>
 			</TouchableOpacity>

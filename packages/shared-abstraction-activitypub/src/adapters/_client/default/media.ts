@@ -9,4 +9,8 @@ export class DefaultMediaRoute implements MediaRoute {
 	): LibraryPromise<MastoMediaAttachment> {
 		return notImplementedErrorBuilder();
 	}
+
+	async updateDescription(id: string, text: string) {
+		return notImplementedErrorBuilder();
+	}
 }

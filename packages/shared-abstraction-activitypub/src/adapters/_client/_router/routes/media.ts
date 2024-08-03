@@ -15,4 +15,6 @@ export interface MediaRoute {
 	create(
 		dto: DhaagaJsMediaCreateDTO,
 	): LibraryPromise<MastoMediaAttachment | DriveFile>;
+
+	updateDescription(id: string, text: string): LibraryPromise<any>;
 }

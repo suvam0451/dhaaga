@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { Fragment, memo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import {
 	ScrollView,
@@ -19,10 +19,13 @@ import ComposeMediaTargets from '../fragments/MediaTargets';
 import ActionButtons from '../fragments/ActionButtons';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import ComposerSpoiler from '../fragments/ComposerSpoiler';
+import { useComposerContext } from '../api/useComposerContext';
+import ComposerAlt from '../fragments/ComposerAlt';
 
 const PostCompose = memo(() => {
 	const { visible } = useAppBottomSheet();
 	const { me } = useActivityPubRestClientContext();
+	const { editMode } = useComposerContext();
 
 	return (
 		<View
@@ -35,7 +38,7 @@ const PostCompose = memo(() => {
 			<View
 				style={{
 					flexDirection: 'row',
-					alignItems: 'center',
+					alignItems: 'flex-start',
 				}}
 			>
 				<View
@@ -84,15 +87,30 @@ const PostCompose = memo(() => {
 					<PostButton />
 				</View>
 			</View>
-			<ScrollView>
-				<ComposerSpoiler />
-				<ComposerTextInput />
-				<View style={{ flexGrow: 1, flex: 1 }} />
-				<ComposeMediaTargets />
+			{/*This section changes based on edit mode*/}
+			<ScrollView
+				style={{
+					flexGrow: 1,
+					display: 'flex',
+					flexDirection: 'column',
+				}}
+				contentContainerStyle={{
+					flexGrow: 1,
+				}}
+			>
+				{editMode === 'txt' ? (
+					<Fragment>
+						<ComposerSpoiler />
+						<ComposerTextInput />
+						<View style={{ flexGrow: 1, flex: 1 }} />
+						<ComposeMediaTargets />
+					</Fragment>
+				) : (
+					<Fragment>
+						<ComposerAlt />
+					</Fragment>
+				)}
 			</ScrollView>
-			{/*spacer*/}
-			<View style={{ flexGrow: 1, flex: 1 }} />
-			{/*<ComposeMediaTargets />*/}
 			<ActionButtons />
 		</View>
 	);
