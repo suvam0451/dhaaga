@@ -4,12 +4,18 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { FabMenuItemText } from '../fragments/FabMenuItemIcon';
 import { FabMenuItemFactory } from '../fragments/FabMenuItemFactory';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import {
+	BOTTOM_SHEET_ENUM,
+	useAppBottomSheet,
+} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
 const MENU_ITEM_LABEL = 'Create Post';
 
 const CreatePostModule = memo(({ index }: FabModuleProps) => {
+	const { setVisible, setType } = useAppBottomSheet();
 	const onClick = useCallback(() => {
-		console.log('create post clicked...');
+		setType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
+		setVisible(true);
 	}, []);
 
 	return (

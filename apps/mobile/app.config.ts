@@ -14,7 +14,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: appName,
 	slug: 'dhaaga',
-	version: '0.5.1',
+	version: '0.6.0',
 	orientation: 'portrait',
 	icon: './assets/placeholder_icon.png',
 	userInterfaceStyle: 'dark',
@@ -29,7 +29,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
-		versionCode: 6,
+		versionCode: 7,
 	},
 	splash: {
 		image: './assets/splash.png',
@@ -56,6 +56,11 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					newArchEnabled: true,
 					enableProguardInReleaseBuilds: false,
 					enableShrinkResourcesInReleaseBuilds: false,
+					blockedPermissions: [
+						'android.permission.SYSTEM_ALERT_WINDOW',
+						'android.permission.READ_EXTERNAL_STORAGE',
+						'android.permission.WRITE_EXTERNAL_STORAGE',
+					],
 				},
 			},
 		],

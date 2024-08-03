@@ -27,6 +27,7 @@ import { MastodonTimelinesRouter } from './timelines.js';
 import { MastodonTagRouter } from './tags.js';
 import { MastodonSearchRouter } from './search.js';
 import { MastodonMeRouter } from './me.js';
+import { MastodonMediaRoute } from './media.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -40,6 +41,7 @@ class MastodonRestClient implements ActivityPubClient {
 	tags: MastodonTagRouter;
 	search: MastodonSearchRouter;
 	me: MastodonMeRouter;
+	media: MastodonMediaRoute;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -56,6 +58,7 @@ class MastodonRestClient implements ActivityPubClient {
 		this.tags = new MastodonTagRouter(this.client);
 		this.search = new MastodonSearchRouter(this.client);
 		this.me = new MastodonMeRouter(this.client);
+		this.media = new MastodonMediaRoute(this.client);
 	}
 
 	async reblog(id: string): Promise<MastoStatus | null> {

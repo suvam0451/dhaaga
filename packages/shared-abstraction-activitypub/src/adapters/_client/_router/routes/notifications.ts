@@ -1,5 +1,6 @@
 import { LibraryResponse } from '../_types.js';
 import { MastoNotification, MegaNotification } from '../../_interface.js';
+import { LibraryPromise } from './_types.js';
 
 export enum DhaagaJsNotificationType {
 	/**
@@ -78,11 +79,9 @@ export type NotificationGetQueryDto = {
 export type Pleroma_Notification_Type = '';
 
 export interface NotificationsRoute {
-	get(query: NotificationGetQueryDto): Promise<
-		LibraryResponse<{
-			data: MastoNotification[] | MegaNotification[];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	>;
+	get(query: NotificationGetQueryDto): LibraryPromise<{
+		data: MastoNotification[] | MegaNotification[];
+		minId?: string | null;
+		maxId?: string | null;
+	}>;
 }

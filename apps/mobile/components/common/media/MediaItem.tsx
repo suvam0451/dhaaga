@@ -49,6 +49,7 @@ const TimelineMediaRendered = memo(function Foo({
 					<AppImageComponent
 						url={attachment.getUrl()}
 						blurhash={attachment.getBlurHash()}
+						height={_height}
 					/>
 				);
 			}
@@ -109,7 +110,7 @@ const MediaItem = memo(function Foo({ attachments }: ImageCarousalProps) {
 			<TimelineMediaRendered
 				attachment={attachments[0]}
 				CalculatedHeight={CalculatedHeight}
-				altText={attachments[0].getAltText()}
+				altText={attachments[0]?.getAltText()}
 			/>
 		);
 	}
