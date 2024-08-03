@@ -12,6 +12,7 @@
       }
     },
     "apk": {
+      "node": "22.5.1",
       "android": {
         "buildType": "apk"
       },

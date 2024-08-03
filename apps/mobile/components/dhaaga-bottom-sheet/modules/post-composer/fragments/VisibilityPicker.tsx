@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
 		marginLeft: 6,
 	},
 	choiceContainer: {
-		backgroundColor: '#363636',
+		backgroundColor: '#424242',
 		padding: 6,
 		paddingHorizontal: 8,
 		borderRadius: 8,

@@ -5,19 +5,26 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
+import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility } = useComposerContext();
-	const { client } = useActivityPubRestClientContext();
+	const { client, domain } = useActivityPubRestClientContext();
 
 	async function onClick() {
-		console.log('lets see what we have here...');
-		console.log(rawText, mediaTargets, visibility);
-
+		let _visibility: any = visibility.toLowerCase();
+		if (visibility === APP_POST_VISIBILITY.PRIVATE) {
+			_visibility =
+				domain === KNOWN_SOFTWARE.MASTODON ? 'private' : 'followers';
+		}
+		if (visibility === APP_POST_VISIBILITY.UNLISTED) {
+			_visibility = domain === KNOWN_SOFTWARE.MASTODON ? 'unlisted' : 'home';
+		}
 		const { data, error } = await client.statuses.create({
 			status: rawText,
 			visibleUserIds: [],
-			mastoVisibility: visibility.toLowerCase() as any,
+			mastoVisibility: _visibility,
 			language: 'en',
 			sensitive: false,
 			inReplyToId: null,

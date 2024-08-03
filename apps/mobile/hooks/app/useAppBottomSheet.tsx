@@ -1,16 +1,18 @@
 import { createContext, useContext, useState } from 'react';
 import useHookLoadingState from '../../states/useHookLoadingState';
-import PostComposerRootContainer from '../../components/dhaaga-bottom-sheet/modules/post-composer/scenes/RootContainer';
+import AppBottomSheet from '../../components/dhaaga-bottom-sheet/Core';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
 	LINK = 'Link',
 	STATUS_COMPOSER = 'StatusComposer',
 	STATUS_MENU = 'StatusMenu',
+	STATUS_PREVIEW = 'StatusPreview',
 	NA = 'N/A',
 }
 
 type Type = {
+	type: BOTTOM_SHEET_ENUM;
 	setType: (type: BOTTOM_SHEET_ENUM) => void;
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
@@ -18,6 +20,7 @@ type Type = {
 };
 
 const defaultValue: Type = {
+	type: BOTTOM_SHEET_ENUM.NA,
 	setType: () => {},
 	visible: false,
 	setVisible: () => {},
@@ -41,15 +44,15 @@ function WithAppBottomSheetContext({ children }: Props) {
 	return (
 		<AppBottomSheetContext.Provider
 			value={{
+				type: Type,
+				setType,
 				visible: Visible,
 				setVisible,
-				setType,
 				updateRequestId: forceUpdate,
 			}}
 		>
 			{children}
-			{/*<AppBottomSheet />*/}
-			<PostComposerRootContainer />
+			<AppBottomSheet />
 		</AppBottomSheetContext.Provider>
 	);
 }
