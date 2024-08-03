@@ -27,7 +27,7 @@ type ComposerAutoCompletionPrompt = {
 
 type ComposeMediaTargetItem = {
 	previewUrl?: string;
-	remoteId?: number;
+	remoteId?: string;
 	url?: string;
 	uploaded: boolean;
 	localUri: string;
@@ -54,7 +54,7 @@ type Type = {
 	addMediaTarget: ({}: {
 		localUri: string;
 		uploaded: boolean;
-		remoteId: number;
+		remoteId: string;
 		previewUrl?: string;
 	}) => void;
 	removeMediaTarget: (index: number) => void;
@@ -128,7 +128,7 @@ function WithComposerContext({ children }: Props) {
 		}: {
 			localUri: string;
 			uploaded: boolean;
-			remoteId: number;
+			remoteId: string;
 			previewUrl?: string;
 		}) => {
 			setMediaTargets((o) =>

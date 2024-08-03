@@ -7,7 +7,7 @@ import { useRealm } from '@realm/react';
 import { useCallback } from 'react';
 
 function useImagePicker() {
-	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
+	const { primaryAcct, subdomain, domain } = useActivityPubRestClientContext();
 	const { addMediaTarget } = useComposerContext();
 	const db = useRealm();
 
@@ -33,14 +33,15 @@ function useImagePicker() {
 					{
 						token: token,
 						mimeType: result.assets[0].mimeType,
+						domain,
 					},
 				);
 
 				addMediaTarget({
 					localUri: _url,
 					uploaded: true,
-					remoteId: uploadResult['id'],
-					previewUrl: uploadResult['preview_url'],
+					remoteId: uploadResult.id,
+					previewUrl: uploadResult.previewUrl,
 				});
 			} catch (E) {
 				console.log(E);

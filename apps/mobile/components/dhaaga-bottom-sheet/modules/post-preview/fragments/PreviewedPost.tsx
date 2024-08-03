@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import WithActivitypubStatusContext from '../../../../../states/useStatus';
 import StatusItem from '../../../../common/status/StatusItem';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 
@@ -28,11 +28,11 @@ const PreviewPostAvailable = memo(() => {
 	const { PostRef } = useAppBottomSheet();
 
 	return (
-		<View style={{ marginTop: 12, marginHorizontal: -8 }}>
+		<ScrollView style={{ marginTop: 12, marginHorizontal: -8 }}>
 			<WithActivitypubStatusContext statusInterface={PostRef.current}>
 				<StatusItem />
 			</WithActivitypubStatusContext>
-		</View>
+		</ScrollView>
 	);
 });
 

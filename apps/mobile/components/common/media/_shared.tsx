@@ -20,12 +20,18 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 type Props = {
 	url?: string;
 	blurhash?: string;
+	height?: number;
 };
 
 const DEFAULT_BLURHASH =
 	'|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
+export const AppImageComponent = memo(function Foo({
+	url,
+	blurhash,
+	height,
+}: Props) {
+	console.log(url, height, MEDIA_CONTAINER_WIDTH);
 	return (
 		// @ts-ignore
 		<NativeImage
@@ -34,12 +40,13 @@ export const AppImageComponent = memo(function Foo({ url, blurhash }: Props) {
 				width: MEDIA_CONTAINER_WIDTH,
 				borderRadius: 16,
 				opacity: 0.87,
+				// height,
 			}}
 			// placeholder={{ blurhash: blurhash || DEFAULT_BLURHASH }}
 			source={{
 				uri: url,
 				// blurhash: blurhash || DEFAULT_BLURHASH,
-				width: MEDIA_CONTAINER_WIDTH,
+				// width: MEDIA_CONTAINER_WIDTH,
 			}}
 			// transition={{
 			// 	effect: 'flip-from-right',

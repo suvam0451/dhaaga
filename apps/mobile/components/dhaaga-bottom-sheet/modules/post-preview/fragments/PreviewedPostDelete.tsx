@@ -18,6 +18,7 @@ const PreviewedPostDelete = memo(
 			);
 
 			if (error) {
+				// handle --> NO_SUCH_NOTE
 				console.log(
 					'[WARN]: failed to delete post',
 					PostRef.current?.getId(),

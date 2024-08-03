@@ -45,6 +45,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				replyId: dto.inReplyToId,
 				text: dto.status,
 				visibleUserIds: dto.visibleUserIds || [],
+				fileIds: dto.mediaIds || [],
 				// reactionAcceptance: null,
 				// poll: dto.poll || null,
 				// cw: dto.spoilerText || null,
