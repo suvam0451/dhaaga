@@ -1,0 +1,5 @@
+Dhaaga (Lite) v0.5.0
+
+* ✨ Logins supported for Misskey and it's forks
+* ✨ Bubble/Social timeline support
+* ✨ Custom emojis !!!

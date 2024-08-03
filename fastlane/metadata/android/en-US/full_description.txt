@@ -1,0 +1,22 @@
+An Opinionated SNS Client | Put the Fun Back in Fediverse 🥳
+
+Dhaaga is a companion client for your fediverse adventures.
+It has a heavy focus on social features, modern UI
+and better offline capabilities.
+
+It supports all your favourite platforms (Mastodon, Misskey, Pleroma),
+and their forks (Firefish, Sharkey, Akkoma).
+
+Innovative features added in Dhaaga:
+
+* [v0.1.0] "Timeline Widget" | Instantly jump to ANY timeline
+* [v0.2.0] "Bookmark Gallery" | Store and view your bookmarks offline
+* [v0.3.0] "Known Servers" | A social graph of every instance you visit
+* [v0.4.0] "Profile Gallery" | Browse a profile as an art gallery
+* ...and more in the way ✌️
+
+To get involved with the project, join:
+
+* Discord - https://discord.gg/kMp5JA9jwD
+* Matrix (Bridged) - https://app.element.io/#/room/#server0451:matrix.org
+* Website - https://dhaaga.app/
