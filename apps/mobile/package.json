@@ -2,7 +2,7 @@
   "name": "@dhaaga/mobile",
   "version": "0.5.1",
   "private": true,
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "dev": "expo start --dev-client",
     "apk": "eas build -p android --profile apk",
