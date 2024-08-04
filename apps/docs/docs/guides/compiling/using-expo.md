@@ -26,7 +26,7 @@ Please see steps to build it locally
 ### Pre-Requisites
 
 Please link your own expo account and modify your project settings
-[as shown here](/guides/development/using-custom-expo-devclient#linking-your-expo-project)
+[as shown here](/docs/guides/development/using-custom-expo-devclient#linking-your-expo-project)
 
 ### Send Compilation request
 
