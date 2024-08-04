@@ -17,7 +17,7 @@
   "license": "AGPLv3",
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/!(docs)/**"
   ],
   "overrides": {
     "styled-components": {

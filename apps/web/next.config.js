@@ -6,6 +6,14 @@ const nextConfig = {
 	// 	formats: ['image/webp'],
 	// 	disableStaticImages: true,
 	// },
+	async rewrites() {
+		return [
+			{
+				source: '/docs/:path*',
+				destination: '/docs/:path*/index.html',
+			},
+		];
+	},
 };
 
 module.exports = nextConfig;
