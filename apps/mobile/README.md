@@ -169,6 +169,19 @@ dependenciesInfo {
 }
 ```
 
+### Stripping Perms
+
+```shell
+<uses-permission tools:node="remove"
+                 android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+<uses-permission tools:node="remove"
+                 android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission tools:node="remove"
+                 android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission tools:node="remove"
+                 android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+```
+
 ### Building
 
 ```shell
