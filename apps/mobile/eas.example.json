@@ -6,8 +6,6 @@
       },
       "env": {
         "APP_VARIANT": "prod",
-        "EXPO_PUBLIC_MASTODON_CLIENT_ID": "",
-        "EXPO_PUBLIC_MASTODON_CLIENT_SECRET": "",
         "EXPO_PUBLIC_OPENAI_API_KEY": ""
       }
     },
@@ -18,8 +16,6 @@
       },
       "env": {
         "APP_VARIANT": "prod",
-        "EXPO_PUBLIC_MASTODON_CLIENT_ID": "",
-        "EXPO_PUBLIC_MASTODON_CLIENT_SECRET": "",
         "EXPO_PUBLIC_OPENAI_API_KEY": ""
       }
     },

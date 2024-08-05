@@ -15,12 +15,17 @@ import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHid
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router } from 'expo-router';
 import ActivityPubService from '../../../../services/activitypub.service';
+import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 
 function MisskeyServerSelection() {
 	const [InputText, setInputText] = useState('misskey.io');
+	const { globalDb } = useGlobalMmkvContext();
 
 	async function onPressNext() {
-		const signInStrategy = await ActivityPubService.signInUrl(InputText);
+		const signInStrategy = await ActivityPubService.signInUrl(
+			InputText,
+			globalDb,
+		);
 		const subdomain = InputText;
 		router.push({
 			pathname: 'accounts/signin-mk',

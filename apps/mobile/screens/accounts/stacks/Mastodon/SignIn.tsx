@@ -24,6 +24,8 @@ function MastodonSignInStack() {
 	const _signInUrl: string = params['signInUrl'] as string;
 	const _subdomain: string = params['subdomain'] as string;
 	const _domain: string = params['domain'] as string;
+	const _clientId: string = params['clientId'] as string;
+	const _clientSecret: string = params['clientSecret'] as string;
 
 	function callback(state) {
 		const regex = /^https:\/\/(.*?)\/oauth\/authorize\/native\?code=(.*?)$/;
@@ -38,8 +40,8 @@ function MastodonSignInStack() {
 		const token = await MastodonService.getAccessToken(
 			instance,
 			Code,
-			process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID,
-			process.env.EXPO_PUBLIC_MASTODON_CLIENT_SECRET,
+			_clientId,
+			_clientSecret,
 		);
 
 		const client = new RestClient(instance, {

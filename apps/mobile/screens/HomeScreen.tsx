@@ -1,10 +1,10 @@
-import ApiWrapper from '../components/common/tag/TagBrowseLocal';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import PostWithClientContext from './shared/Post';
 import TimelineRenderer from '../components/common/timeline/core/Timeline';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 import WithLocalAppMenuControllerContext from '../components/shared/fab/hooks/useFabController';
 import WithAppDrawerContext from '../states/useAppDrawer';
+import { StatusBar } from 'react-native';
+import { APP_THEME } from '../styles/AppTheme';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +13,7 @@ function HomeScreen() {
 		<WithGorhomBottomSheetContext>
 			<WithLocalAppMenuControllerContext>
 				<WithAppDrawerContext>
+					<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 					<Stack.Navigator
 						initialRouteName={'Mastodon timeline'}
 						screenOptions={{ headerShown: false }}
@@ -21,8 +22,6 @@ function HomeScreen() {
 							name="Mastodon timeline"
 							component={TimelineRenderer}
 						/>
-						<Stack.Screen name="Browse Hashtag" component={ApiWrapper} />
-						<Stack.Screen name="Post" component={PostWithClientContext} />
 					</Stack.Navigator>
 				</WithAppDrawerContext>
 			</WithLocalAppMenuControllerContext>

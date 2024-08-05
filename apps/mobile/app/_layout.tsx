@@ -11,7 +11,7 @@ import {
 	useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import WithActivityPubRestClient from '../states/useActivityPubRestClient';
-import { View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import appFonts from '../styles/AppFonts';
 import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
@@ -22,6 +22,7 @@ import { useFonts } from '@expo-google-fonts/montserrat';
 import AppSettingsService from '../services/app-settings.service';
 import { AppProfileRepository } from '../repositories/app-profile.repo';
 import WithAppBottomSheetContext from '../components/dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { APP_THEME } from '../styles/AppTheme';
 
 /**
  * Suppress these warnings...
@@ -81,6 +82,7 @@ function WithGorhomBottomSheetWrapper() {
 	return (
 		<WithActivityPubRestClient>
 			<WithAppBottomSheetContext>
+				<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 				<View
 					style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
 					onLayout={onLayoutRootView}

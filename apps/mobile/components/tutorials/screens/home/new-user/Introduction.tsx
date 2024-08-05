@@ -1,11 +1,12 @@
-import { Animated, StatusBar, StyleSheet, View } from 'react-native';
+import { Animated, StatusBar, StyleSheet, View, Text } from 'react-native';
 import TimelinesHeader from '../../../../TimelineHeader';
 import { memo, useState } from 'react';
-import { Button, Dialog, Text } from '@rneui/themed';
+import { Button, Dialog } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import { router } from 'expo-router';
 import FabMenuCore from '../../../../shared/fab/Core';
 import { FAB_MENU_MODULES } from '../../../../../types/app.types';
+import { APP_FONTS } from '../../../../../styles/AppFonts';
 
 function IntroductionBase() {
 	const [DialogVisible, setDialogVisible] = useState(false);
@@ -141,12 +142,11 @@ function IntroductionBase() {
 							<Text
 								style={{
 									color: APP_THEME.LINK,
-									fontFamily: 'Montserrat-Bold',
-									opacity: 0.6,
+									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 								}}
-								onPress={() => {
-									setDialogVisible(true);
-								}}
+								// onPress={() => {
+								// 	setDialogVisible(true);
+								// }}
 							>
 								Social Networking client
 							</Text>
@@ -155,7 +155,7 @@ function IntroductionBase() {
 						</Text>
 						<Text
 							style={{
-								fontFamily: 'Montserrat-Bold',
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 								color: APP_FONT.MONTSERRAT_HEADER,
 								marginTop: 16,
 								textAlign: 'center',
@@ -166,7 +166,7 @@ function IntroductionBase() {
 						</Text>
 						<Text
 							style={{
-								fontFamily: 'Montserrat-Bold',
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 								color: APP_FONT.MONTSERRAT_HEADER,
 								marginTop: 16,
 								textAlign: 'center',
@@ -182,9 +182,7 @@ function IntroductionBase() {
 								color={APP_THEME.INVALID_ITEM}
 								titleStyle={{
 									color: APP_THEME.INVALID_ITEM,
-									fontFamily: 'Inter-Bold',
-									opacity: 0.87,
-									width: 256,
+									fontFamily: APP_FONTS.INTER_700_BOLD,
 								}}
 								type={'clear'}
 								onPress={() => {
@@ -201,9 +199,7 @@ function IntroductionBase() {
 								}}
 								titleStyle={{
 									color: APP_THEME.INVALID_ITEM,
-									fontFamily: 'Inter-Bold',
-									opacity: 0.87,
-									width: 256,
+									fontFamily: APP_FONTS.INTER_700_BOLD,
 								}}
 								onPress={() => {
 									router.navigate('/new-to-app');
@@ -215,17 +211,15 @@ function IntroductionBase() {
 								type={'solid'}
 								color={APP_THEME.INVALID_ITEM}
 								style={{ marginBottom: 16 }}
-								size={'lg'}
+								size={'md'}
 								onPress={takeUserToAccountsPage}
+								titleStyle={{
+									fontFamily: APP_FONTS.INTER_700_BOLD,
+									color: APP_FONT.MONTSERRAT_HEADER,
+									fontSize: 15,
+								}}
 							>
-								<Text
-									style={{
-										fontFamily: 'Inter-Bold',
-										color: APP_FONT.MONTSERRAT_HEADER,
-									}}
-								>
-									Just take me to Login
-								</Text>
+								Just take me to Login
 							</Button>
 						</View>
 					</View>

@@ -15,18 +15,34 @@ import { router } from 'expo-router';
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
+import MmkvService from '../../../../services/mmkv.service';
 
 function AccountsScreen() {
 	const [Subdomain, setSubdomain] = useState('mastodon.social');
+	const { globalDb } = useGlobalMmkvContext();
 
 	async function onPressNext() {
-		const signInStrategy = await ActivityPubService.signInUrl(Subdomain);
+		const signInStrategy = await ActivityPubService.signInUrl(
+			Subdomain,
+			globalDb,
+		);
+		if (signInStrategy?.clientId && signInStrategy?.clientSecret) {
+			MmkvService.saveMastodonClientTokens(
+				globalDb,
+				Subdomain,
+				signInStrategy?.clientId,
+				signInStrategy?.clientSecret,
+			);
+		}
 		router.push({
 			pathname: 'accounts/signin-md',
 			params: {
 				signInUrl: signInStrategy?.loginUrl,
 				subdomain: Subdomain,
 				domain: signInStrategy?.software,
+				clientId: signInStrategy?.clientId,
+				clientSecret: signInStrategy?.clientSecret,
 			},
 		});
 	}
