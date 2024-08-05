@@ -29,6 +29,25 @@ class MmkvService {
 		return JSON.parse(item);
 	}
 
+	static saveMastodonClientTokens(
+		db: MMKV,
+		domain: string,
+		clientId: string,
+		clientSecret: string,
+	) {
+		this.set(
+			db,
+			`/mastodonClientTokens/${domain}`,
+			JSON.stringify({ clientId, clientSecret }),
+		);
+	}
+
+	static getMastodonClientTokens(db: MMKV, domain: string) {
+		const item = this.get(db, `/mastodonClientTokens/${domain}`);
+		if (!item) return null;
+		return JSON.parse(item);
+	}
+
 	static getStatusInterface(
 		db: MMKV,
 		id: string,

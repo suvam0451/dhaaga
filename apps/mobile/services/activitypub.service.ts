@@ -4,6 +4,8 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import * as Crypto from 'expo-crypto';
+import { MMKV } from 'react-native-mmkv';
+import MmkvService from './mmkv.service';
 
 class ActivityPubService {
 	/**
@@ -71,13 +73,18 @@ class ActivityPubService {
 	 * - code
 	 * - miauth
 	 * @param urlLike
+	 * @param db
 	 */
-	static async signInUrl(urlLike: string) {
+	static async signInUrl(urlLike: string, db: MMKV) {
+		const tokens = MmkvService.getMastodonClientTokens(db, urlLike);
+		console.log('[INFO]: tokens', tokens);
+
 		const client = new UnknownRestClient();
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {
 			appCallback: 'https://example.com/',
 			appName: 'Dhaaga',
-			appClientId: '',
+			appClientId: tokens?.clientId,
+			appClientSecret: tokens?.clientSecret,
 			uuid: Crypto.randomUUID(),
 		});
 		if (error) return null;

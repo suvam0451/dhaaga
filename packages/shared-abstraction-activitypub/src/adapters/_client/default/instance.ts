@@ -52,6 +52,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	 * @param appName
 	 * @param appCallback
 	 * @param appClientId
+	 * @param appClientSecret
 	 */
 	async getLoginUrl(
 		urlLike: string,
@@ -60,11 +61,13 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			appName,
 			appCallback,
 			appClientId,
+			appClientSecret,
 		}: {
 			appName: string;
 			appCallback: string;
 			appClientId: string;
 			uuid: string;
+			appClientSecret: string;
 		},
 	): LibraryPromise<{
 		software: string;
@@ -74,6 +77,9 @@ export class DefaultInstanceRouter implements InstanceRoute {
 		clientId?: string;
 		clientSecret?: string;
 	}> {
+		let _appClientId = appClientId;
+		let _appClientSecret = appClientSecret;
+
 		const { data, error } = await this.getSoftwareInfo(urlLike);
 		if (error) return { error };
 
@@ -177,34 +183,38 @@ export class DefaultInstanceRouter implements InstanceRoute {
 				};
 			}
 			case KNOWN_SOFTWARE.MASTODON: {
-				const clientIdFormData: Record<string, string> = {
-					client_name: 'Dhaaga',
-					redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
-					scopes: 'read write follow push',
-					website: 'https://dhaaga.app',
-				};
+				if (!_appClientId || !_appClientSecret) {
+					const clientIdFormData: Record<string, string> = {
+						client_name: 'Dhaaga',
+						redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
+						scopes: 'read write follow push',
+						website: 'https://dhaaga.app',
+					};
 
-				// Generate the query string
-				const clientIdQueryString = Object.keys(clientIdFormData)
-					.map((key) => `${key}=${encodeURIComponent(clientIdFormData[key])}`)
-					.join('&');
+					// Generate the query string
+					const clientIdQueryString = Object.keys(clientIdFormData)
+						.map((key) => `${key}=${encodeURIComponent(clientIdFormData[key])}`)
+						.join('&');
 
-				const clientId = await fetch(`https://${urlLike}/api/v1/apps`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-					},
-					body: clientIdQueryString,
-				});
-				if (!clientId.ok) {
-					console.log('no ok');
+					const clientId = await fetch(`https://${urlLike}/api/v1/apps`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+						},
+						body: clientIdQueryString,
+					});
+					if (!clientId.ok) {
+						console.log('no ok');
+					}
+					const _body = await clientId.json();
+					_appClientId = _body?.['client_id'];
+					_appClientSecret = _body?.['client_secret'];
 				}
-				const _body = await clientId.json();
 				const authEndpoint = `https://${urlLike}/oauth/authorize`;
 
 				// Set up parameters for the query string
 				const options: Record<string, string> = {
-					client_id: _body?.['client_id'],
+					client_id: _appClientId,
 					redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
 					response_type: 'code',
 					scope: 'read write follow push',
@@ -220,8 +230,8 @@ export class DefaultInstanceRouter implements InstanceRoute {
 						loginStrategy: 'code',
 						version: data.version,
 						software: data.software,
-						clientId: _body?.['client_id'],
-						clientSecret: _body?.['client_secret'],
+						clientId: _appClientId,
+						clientSecret: _appClientSecret,
 					},
 				};
 			}
