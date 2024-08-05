@@ -1,16 +1,7 @@
-import { Linking, StyleSheet, View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Linking, ScrollView, StatusBar, StyleSheet, Text } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import SimpleTutorialContainer from '../../../components/containers/SimpleTutorialContainer';
 import { APP_FONTS } from '../../../styles/AppFonts';
-
-const styles = StyleSheet.create({
-	para: {
-		fontFamily: APP_FONTS.MONTSERRAT_400_REGULAR,
-		color: APP_FONT.MONTSERRAT_HEADER,
-		marginBottom: 6,
-	},
-});
 
 // const styles = StyleSheet
 function WhatIsFediverse() {
@@ -40,15 +31,15 @@ function WhatIsFediverse() {
 
 	return (
 		<SimpleTutorialContainer title={'What is Mastodon?'}>
-			<View style={{ paddingHorizontal: 8, paddingTop: 16 }}>
-				<Text
-					style={{
-						fontSize: 20,
-						fontFamily: 'Montserrat-Bold',
-						color: APP_FONT.MONTSERRAT_HEADER,
-						marginBottom: 8,
-					}}
-				>
+			<ScrollView
+				style={{
+					paddingHorizontal: 8,
+					paddingTop: 16,
+					marginBottom: 54,
+					paddingBottom: 16,
+				}}
+			>
+				<Text style={[styles.sectionHeaderText, { marginTop: 0 }]}>
 					Overview
 				</Text>
 				<Text style={styles.para}>
@@ -69,17 +60,7 @@ function WhatIsFediverse() {
 					icloud, for example, yeah?
 				</Text>
 
-				<Text
-					style={{
-						fontSize: 20,
-						fontFamily: 'Montserrat-Bold',
-						color: APP_FONT.MONTSERRAT_HEADER,
-						marginTop: 16,
-						marginBottom: 8,
-					}}
-				>
-					Interested In?
-				</Text>
+				<Text style={styles.sectionHeaderText}>Interested In?</Text>
 
 				<Text style={styles.para}>
 					Go check out the{' '}
@@ -107,24 +88,14 @@ function WhatIsFediverse() {
 					way, and not about which platform you are on, after all.
 				</Text>
 
-				<Text
-					style={{
-						fontSize: 20,
-						fontFamily: 'Montserrat-Bold',
-						color: APP_FONT.MONTSERRAT_HEADER,
-						marginTop: 16,
-						marginBottom: 8,
-					}}
-				>
-					One more thing
-				</Text>
+				<Text style={styles.sectionHeaderText}>One more thing</Text>
 				<Text style={styles.para}>
 					Mastodon is not the only type of user-facing service that communicates
 					using ActivityPub. There are numerous other forks you can
 					<Text
 						onPress={openMastodonForksWithDefaultBrowser}
 						style={{
-							fontFamily: 'Montserrat-Bold',
+							fontFamily: APP_FONTS.INTER_700_BOLD,
 							color: APP_THEME.LINK,
 						}}
 					>
@@ -133,9 +104,24 @@ function WhatIsFediverse() {
 					</Text>
 					.
 				</Text>
-			</View>
+			</ScrollView>
 		</SimpleTutorialContainer>
 	);
 }
+
+const styles = StyleSheet.create({
+	para: {
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		color: APP_FONT.MONTSERRAT_HEADER,
+		marginBottom: 6,
+	},
+	sectionHeaderText: {
+		fontSize: 20,
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		color: APP_FONT.MONTSERRAT_HEADER,
+		marginTop: 16,
+		marginBottom: 8,
+	},
+});
 
 export default WhatIsFediverse;

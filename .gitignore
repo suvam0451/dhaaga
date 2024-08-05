@@ -24,3 +24,4 @@ apps/mobile/.env
 
 packages/**/dist/**
 packages/**/tsconfig.tsbuildinfo
+apps/web/public/docs/**

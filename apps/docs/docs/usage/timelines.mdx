@@ -1,0 +1,112 @@
+---
+sidebar_position: 2
+displayed_sidebar: discoverSidebar
+title: Using Timelines
+---
+
+With some exceptions, you want to be in the first (Home) tab to view all
+your timelines.
+
+Dhaaga is a single column client, with nifty tools to switch between them
+effortlessly.
+
+### The "Social Hub"
+
+This is your entrypoint and AFK lobby in the home tab.
+
+Whenever you switch your account, your home page is reset to this.
+
+It is pretty barebones for a home page at the moment 😔
+
+<img
+	src={"https://raw.githubusercontent.com/suvam0451/dhaaga-assets/main/assets/usage-guide/timelines/social_hub.jpg?raw=true"}
+	alt={"Social Hub"}
+	width={240}
+	align={"center"}
+/>
+
+:::info
+
+In the future, this page will contain all your pinned timeline destinations,
+notification summary and
+and let you "continue where you left off"
+
+:::
+
+### Accessing Timelines
+
+You either select a destination from your Social Hub or switch between
+timelines using the Timeline Switcher.
+
+The timeline switcher can be accessed from the marked locations.
+
+<img
+	src={"https://github.com/suvam0451/dhaaga-assets/blob/main/assets/usage-guide/timelines/switcher_access.jpg?raw=true"}
+	alt={"Timeline Switcher Access Locations"}
+	width={240}
+	align={"center"}
+/>
+
+To see the destinations available and planned for you from the Timeline
+Switcher, see the corresponding section.
+
+### Setting Timeline Options
+
+Most filters available via your web dashboard is also available at the top
+of every timeline.
+
+I even added a little description for the confused folks new to fediverse. 😉
+
+<img
+	src={"https://github.com/suvam0451/dhaaga-assets/blob/main/assets/usage-guide/timelines/timeline_ontrols.jpg?raw=true"}
+	alt={"Timeline Switcher Access Locations"}
+	width={240}
+	align={"center"}
+/>
+
+
+
+
+### Navigating
+
+That's it. You just scroll down. More posts load automatically.
+
+I don't have anything else exciting to share at the moment (but maybe, maybe
+soonish~).
+
+
+
+:::warning
+
+Depending on your phone, Loading more than 100 or so posts might actually
+cause performance issues and hangs.
+
+While I have creative solutions planned for this, I haven't gotten around to
+implementing them yet.
+
+:::
+
+## FAQ
+
+**Q. What's with loading only 5 posts? Every other client loads like 20 at a
+time.**
+
+A. React Native is the slowest of the app dev trinity (Native/Flutter/RN).
+So, I have to evaluate performance/time impact before I change the limits.
+Also, most other clients are just timeline readers, which I am not a
+fan of.
+
+Here is what Dhaaga has to do for every set of items loaded:
+
+- Parse and render the markdown
+- Make each component (hashtag/mentions/links) interactable via bottom sheets
+- Resolve the custom emojis for those instances
+- Load the replies/parent of a post, if missing
+- Highlight hashtags you are following
+- Establish your relationship with the users and
+- Unify the experience between software
+- e.g. - bookmark status has to be loaded via an extra API call in Misskey
+forks, whereas, in Dhaaga it's all just one UI
+
+td;dr - Dhaaga focuses on the quality of your SNS interaction than volume of
+posts.
