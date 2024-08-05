@@ -27,6 +27,8 @@ function AccountsScreen() {
 				signInUrl: signInStrategy?.loginUrl,
 				subdomain: Subdomain,
 				domain: signInStrategy?.software,
+				clientId: signInStrategy?.clientId,
+				clientSecret: signInStrategy?.clientSecret,
 			},
 		});
 	}

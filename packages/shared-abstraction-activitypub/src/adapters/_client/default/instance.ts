@@ -71,6 +71,8 @@ export class DefaultInstanceRouter implements InstanceRoute {
 		version?: string | null;
 		loginUrl: string;
 		loginStrategy: 'code' | 'miauth';
+		clientId?: string;
+		clientSecret?: string;
 	}> {
 		const { data, error } = await this.getSoftwareInfo(urlLike);
 		if (error) return { error };
@@ -175,11 +177,34 @@ export class DefaultInstanceRouter implements InstanceRoute {
 				};
 			}
 			case KNOWN_SOFTWARE.MASTODON: {
+				const clientIdFormData: Record<string, string> = {
+					client_name: 'Dhaaga',
+					redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
+					scopes: 'read write follow push',
+					website: 'https://dhaaga.app',
+				};
+
+				// Generate the query string
+				const clientIdQueryString = Object.keys(clientIdFormData)
+					.map((key) => `${key}=${encodeURIComponent(clientIdFormData[key])}`)
+					.join('&');
+
+				const clientId = await fetch(`https://${urlLike}/api/v1/apps`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: clientIdQueryString,
+				});
+				if (!clientId.ok) {
+					console.log('no ok');
+				}
+				const _body = await clientId.json();
 				const authEndpoint = `https://${urlLike}/oauth/authorize`;
 
 				// Set up parameters for the query string
 				const options: Record<string, string> = {
-					client_id: appClientId,
+					client_id: _body?.['client_id'],
 					redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
 					response_type: 'code',
 					scope: 'read write follow push',
@@ -195,6 +220,8 @@ export class DefaultInstanceRouter implements InstanceRoute {
 						loginStrategy: 'code',
 						version: data.version,
 						software: data.software,
+						clientId: _body?.['client_id'],
+						clientSecret: _body?.['client_secret'],
 					},
 				};
 			}

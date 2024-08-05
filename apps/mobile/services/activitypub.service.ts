@@ -77,7 +77,7 @@ class ActivityPubService {
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {
 			appCallback: 'https://example.com/',
 			appName: 'Dhaaga',
-			appClientId: process.env.EXPO_PUBLIC_MASTODON_CLIENT_ID,
+			appClientId: '',
 			uuid: Crypto.randomUUID(),
 		});
 		if (error) return null;
