@@ -82,9 +82,13 @@ class GlobalMmkvCacheService {
 		data: InstanceApi_CustomEmojiDTO[];
 		lastFetchedAt: Date;
 	} | null {
-		const res = this.get(db, `emojis/${instance}`);
-		if (!res) return null;
-		return JSON.parse(res);
+		try {
+			const res = this.get(db, `emojis/${instance}`);
+			if (!res) return null;
+			return JSON.parse(res);
+		} catch (e) {
+			return null;
+		}
 	}
 }
 

@@ -1,18 +1,18 @@
 import { memo, useMemo } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { Text } from '@rneui/themed';
-import { Image } from 'expo-image';
 import Octicons from '@expo/vector-icons/Octicons';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import useMfm from '../../../../hooks/useMfm';
-import { Props } from './_common';
+import { Props, styles, ICON_SIZE } from './_common';
+import { APP_FONTS } from '../../../../../styles/AppFonts';
 
 const MentionNotificationFragment = memo(function Foo({ item }: Props) {
 	const { subdomain } = useActivityPubRestClientContext();
-	const acct = item.items[0].account;
-	const post = item.items[0].post;
+	const acct = item.acct;
+	const post = item.post;
 
 	const { content } = useMfm({
 		content: post.getContent(),
@@ -20,40 +20,38 @@ const MentionNotificationFragment = memo(function Foo({ item }: Props) {
 		emojiMap: acct.getEmojiMap(),
 		deps: [post.getContent()],
 		expectedHeight: 20,
-		fontFamily: 'Montserrat-Bold',
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});
 
 	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(acct?.getAccountUrl(), subdomain);
+		return ActivitypubHelper.getHandle(
+			acct?.getAccountUrl(subdomain),
+			subdomain,
+		);
 	}, [acct?.getAccountUrl()]);
 
-	// console.log(item.items);
 	return (
-		<View style={{ marginLeft: 0, marginVertical: 8 }}>
+		<View style={styles.container}>
 			<View style={{ flexDirection: 'row' }}>
-				<View style={{ width: 42, height: 42, position: 'relative' }}>
+				<View
+					style={{ width: ICON_SIZE, height: ICON_SIZE, position: 'relative' }}
+				>
 					{/*@ts-ignore-next-line*/}
 					<Image
 						source={{
 							uri: acct.getAvatarUrl(),
-							blurhash: acct.getAvatarBlurHash(),
 						}}
-						style={{ width: 42, height: 42, borderRadius: 8 }}
+						style={{ width: ICON_SIZE, height: ICON_SIZE, borderRadius: 8 }}
 					/>
 					<View
-						style={{
-							position: 'absolute',
-							zIndex: 99,
-							backgroundColor: 'purple',
-							bottom: -8,
-							right: -8,
-							padding: 3,
-							borderRadius: 8,
-						}}
+						style={[
+							styles.notificationCategoryIconContainer,
+							{ backgroundColor: 'purple' },
+						]}
 					>
 						<Octicons
 							name="mention"
-							size={20}
+							size={16}
 							color={APP_FONT.MONTSERRAT_BODY}
 						/>
 					</View>
@@ -69,8 +67,9 @@ const MentionNotificationFragment = memo(function Foo({ item }: Props) {
 					</Text>
 					<Text
 						style={{
-							fontFamily: 'Inter-Bold',
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							color: APP_FONT.MONTSERRAT_BODY,
+							fontSize: 12,
 						}}
 					>
 						{handle}

@@ -20,6 +20,8 @@ type Props = {
 	deps: DependencyList;
 	expectedHeight?: number;
 	fontFamily?: string;
+
+	numberOfLines?: number;
 };
 
 /**
@@ -30,6 +32,7 @@ type Props = {
  * @param deps
  * @param expectedHeight
  * @param fontFamily
+ * @param numberOfLines
  */
 function useMfm({
 	content,
@@ -38,6 +41,7 @@ function useMfm({
 	deps,
 	expectedHeight,
 	fontFamily,
+	numberOfLines,
 }: Props) {
 	const { domain, subdomain } = useActivityPubRestClientContext();
 	const db = useRealm();

@@ -1,11 +1,8 @@
-import { useRealm } from '@realm/react';
-import { Account } from '../../../../entities/account.entity';
-import { View } from 'react-native';
+import { Button, View } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import ControlSegment from '../../../widgets/feed-controller/components/ControlSegment';
 import { Text } from '@rneui/themed';
-import useLandingPageStackApi, { AppNotificationGroup } from './api';
 import { useRef } from 'react';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
@@ -14,21 +11,41 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import MentionNotificationFragment from './segments/MentionNotificationFragment';
 import FavouriteNotificationFragment from './segments/FavouriteNotificationFragment';
 import { Link } from 'expo-router';
+import FollowNotificationFragment from './segments/FollowNotificationFragment';
+import BoostNotificationFragment from './segments/BoostNotificationFragment';
+import useApiGetNotifications, {
+	Notification_FlatList_Entry,
+} from '../../../../api/notifications/useApiGetNotifications';
+import AchiEarnedNotificationFragment from './segments/AchiEarnedNotificationFragment';
+import AppNotificationFragment from './segments/AppNotificationFragment';
+import FollowReqAccepNotificationFragment from './segments/FollowReqAccepNotificationFragment';
+import ReactionNotificationFragment from './segments/ReactionNotificationFragment';
 
-interface MentionItem {
-	props: AppNotificationGroup;
-	type: DhaagaJsNotificationType;
-}
-
-type ListItem = MentionItem;
-
-function FlashListRenderer({ item }: { item: ListItem }) {
+function FlashListRenderer({ item }: { item: Notification_FlatList_Entry }) {
 	switch (item.type) {
 		case DhaagaJsNotificationType.MENTION: {
 			return <MentionNotificationFragment item={item.props} />;
 		}
 		case DhaagaJsNotificationType.FAVOURITE: {
 			return <FavouriteNotificationFragment item={item.props} />;
+		}
+		case DhaagaJsNotificationType.FOLLOW: {
+			return <FollowNotificationFragment item={item.props} />;
+		}
+		case DhaagaJsNotificationType.REBLOG: {
+			return <BoostNotificationFragment item={item.props} />;
+		}
+		case DhaagaJsNotificationType.ACHIEVEMENT_EARNED: {
+			return <AchiEarnedNotificationFragment />;
+		}
+		case DhaagaJsNotificationType.APP: {
+			return <AppNotificationFragment />;
+		}
+		case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
+			return <FollowReqAccepNotificationFragment item={item.props} />;
+		}
+		case DhaagaJsNotificationType.REACTION: {
+			return <ReactionNotificationFragment item={item.props} />;
 		}
 		default: {
 			console.log('notification type not handled', item.type);
@@ -44,17 +61,17 @@ function FlashListRenderer({ item }: { item: ListItem }) {
 }
 
 function LandingPageStack() {
-	const realm = useRealm();
-	const db = useRealm();
-	const accts = db.objects(Account);
-
 	const { translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
 
-	const { State, forceUpdate } = useHookLoadingState();
-	const { Notifications } = useLandingPageStackApi();
+	const { State } = useHookLoadingState();
+	const { Results, maxId, minId, refetch } = useApiGetNotifications();
+
+	function onRefetch() {
+		refetch();
+	}
 
 	const NotificationFilters = useRef(new Set(['all']));
 	return (
@@ -63,9 +80,15 @@ function LandingPageStack() {
 			translateY={translateY}
 		>
 			<AnimatedFlashList
-				contentContainerStyle={{ paddingTop: 54, paddingHorizontal: 8 }}
+				estimatedItemSize={45}
+				contentContainerStyle={{
+					paddingTop: 54,
+					paddingHorizontal: 8,
+					paddingBottom: 54,
+				}}
 				ListHeaderComponent={
-					<View>
+					<View style={{ marginBottom: 16 }}>
+						<Button onPress={onRefetch} title={'Porforr'} />
 						<Link href={'/notifications/conversations'}>
 							<View>
 								<Text>Conversations</Text>
@@ -133,7 +156,7 @@ function LandingPageStack() {
 						/>
 					</View>
 				}
-				data={Notifications}
+				data={Results}
 				renderItem={FlashListRenderer}
 				getItemType={(o) => o.type}
 			/>

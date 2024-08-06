@@ -49,15 +49,6 @@ function SelectAccountStack() {
 	const MisskeyAccounts = accounts.filter((o) => o?.domain === 'misskey');
 	const FirefishAccounts = accounts.filter((o) => o?.domain === 'firefish');
 	const SharkeyAccounts = accounts.filter((o) => o?.domain === 'sharkey');
-
-	// useEffect(() => {
-	// 	const all = new Set([
-	// 		KNOWN_SOFTWARE.MASTODON,
-	// 		KNOWN_SOFTWARE.MISSKEY,
-	// 		KNOWN_SOFTWARE.FIREFISH,
-	// 	]);
-	// }, [accounts]);
-
 	const [DialogVisible, setDialogVisible] = useState(false);
 	const [DeleteDialogVisible, setDeleteDialogVisible] = useState(false);
 	const DialogTarget = useRef<Account>(null);

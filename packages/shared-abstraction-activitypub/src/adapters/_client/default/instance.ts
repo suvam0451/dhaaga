@@ -265,9 +265,9 @@ export class DefaultInstanceRouter implements InstanceRoute {
 		}
 
 		switch (software) {
-			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.FIREFISH:
 			case KNOWN_SOFTWARE.ICESHRIMP:
+			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.KMYBLUE:
 			case KNOWN_SOFTWARE.SHARKEY: {
 				const emojiFn = DhaagaMastoClient(urlLike).client.v1.customEmojis.list;

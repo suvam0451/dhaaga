@@ -1,6 +1,7 @@
 {
   "build": {
     "aab": {
+      "node": "22.5.1",
       "android": {
         "buildType": "app-bundle"
       },
@@ -20,10 +21,12 @@
       }
     },
     "dev": {
+      "node": "22.5.1",
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "APP_VARIANT": "dev"
+        "APP_VARIANT": "dev",
+        "EXPO_PUBLIC_OPENAI_API_KEY": ""
       }
     }
   }

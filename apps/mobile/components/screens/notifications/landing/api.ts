@@ -65,7 +65,6 @@ function useLandingPageStackApi() {
 		if (!client) return;
 
 		const { data, status } = queryResults;
-		console.log('data resp', data);
 		if (!data || status !== 'success') return;
 		const results: NotificationRenderType[] = [];
 
@@ -130,7 +129,7 @@ function useLandingPageStackApi() {
 		setNotifications(appNotifs);
 	}, [queryResults.fetchStatus]);
 
-	return { Notifications };
+	return { Notifications, refetch: queryResults.refetch };
 }
 
 export default useLandingPageStackApi;

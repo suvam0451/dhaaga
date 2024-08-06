@@ -1,12 +1,12 @@
 import { memo } from 'react';
 import { Props, styles } from './_common';
-import { View } from 'react-native';
 import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { View } from 'react-native';
 import { NotificationSenderInterface } from '../fragments/NotificationSender';
-import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
+import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
 
-const FavouriteNotificationFragment = memo(function Foo({ item }: Props) {
+const BoostNotificationFragment = memo(function Foo({ item }: Props) {
 	const acct = item.acct;
 	const post = item.post;
 
@@ -14,12 +14,12 @@ const FavouriteNotificationFragment = memo(function Foo({ item }: Props) {
 		<View style={styles.container}>
 			<NotificationSenderInterface
 				acct={acct}
-				type={DhaagaJsNotificationType.FAVOURITE}
+				type={DhaagaJsNotificationType.REBLOG}
 			/>
-			<NotificationDescriptionText type={DhaagaJsNotificationType.FAVOURITE} />
+			<NotificationDescriptionText type={DhaagaJsNotificationType.REBLOG} />
 			<NotificationPostPeek acct={acct} post={post} />
 		</View>
 	);
 });
 
-export default FavouriteNotificationFragment;
+export default BoostNotificationFragment;
