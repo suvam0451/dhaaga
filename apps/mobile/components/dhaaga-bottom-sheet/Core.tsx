@@ -1,15 +1,9 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
-import WithComposerContext from './modules/post-composer/api/useComposerContext';
-import PostCompose from './modules/post-composer/pages/PostCompose';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
-import {
-	BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from './modules/_api/useAppBottomSheet';
-import PostPreview from './modules/post-preview/PostPreview';
-import ProfilePeekBottomSheet from './modules/profile-peek/pages/ProfilePeekBottomSheet';
+import AppBottomSheetCloseButton from './fragments/AppBottomSheetCloseButton';
+import AppBottomSheetComponent from './fragments/AppBottomSheetComponent';
 
 /**
  * Switches what module will be shown
@@ -20,35 +14,11 @@ import ProfilePeekBottomSheet from './modules/profile-peek/pages/ProfilePeekBott
  */
 const AppBottomSheet = memo(() => {
 	const { animStyle } = useAnimatedHeight();
-	const { type } = useAppBottomSheet();
-
-	const Component = useMemo(() => {
-		switch (type) {
-			case BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
-				return <PostPreview />;
-			}
-			case BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
-				return (
-					<WithComposerContext>
-						<PostCompose />
-					</WithComposerContext>
-				);
-			}
-			case BOTTOM_SHEET_ENUM.PROFILE_PEEK:
-				return <ProfilePeekBottomSheet />;
-			default: {
-				return (
-					<WithComposerContext>
-						<PostCompose />
-					</WithComposerContext>
-				);
-			}
-		}
-	}, [type]);
 
 	return (
 		<Animated.View style={[styles.rootContainer, animStyle]}>
-			{Component}
+			<AppBottomSheetCloseButton />
+			<AppBottomSheetComponent />
 		</Animated.View>
 	);
 });

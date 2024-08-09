@@ -220,6 +220,7 @@ export const NotificationSenderInterface = memo(
 				UserRef.current = null;
 				UserIdRef.current = acct.getId();
 			}
+			console.log(acct.getDisplayName(), acct.getId());
 			setType(BOTTOM_SHEET_ENUM.PROFILE_PEEK);
 			setVisible(true);
 			updateRequestId();

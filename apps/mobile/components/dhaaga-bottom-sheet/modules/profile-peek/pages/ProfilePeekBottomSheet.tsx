@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import {
 	View,
-	Button,
 	Image as NativeImage,
 	Dimensions,
 	StyleSheet,
@@ -22,10 +21,11 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 const ProfilePeekBottomSheet = memo(() => {
-	const { setVisible, UserRef, UserIdRef } = useAppBottomSheet();
+	const { UserRef, UserIdRef, requestId } = useAppBottomSheet();
 	const { Data } = useGetProfile({
 		user: UserRef.current,
 		userId: UserIdRef.current,
+		requestId,
 	});
 
 	const banner = Data?.getBannerUrl();
@@ -106,13 +106,6 @@ const ProfilePeekBottomSheet = memo(() => {
 					style={localStyles.parsedDescriptionContainer}
 					rawContext={Data?.getDescription()}
 					remoteSubdomain={Data?.getInstanceUrl()}
-				/>
-
-				<Button
-					title={'Close'}
-					onPress={() => {
-						setVisible(false);
-					}}
 				/>
 			</ScrollView>
 		</WithActivitypubUserContext>

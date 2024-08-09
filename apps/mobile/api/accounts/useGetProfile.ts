@@ -10,14 +10,16 @@ import ActivitypubAdapterService from '../../services/activitypub-adapter.servic
 type GetProfile_Type = {
 	user?: UserInterface;
 	userId?: string;
+	requestId: string;
 };
 
 /**
  * GET user profile
  * @param user an existing user interface
  * @param userId userId to query against
+ * @param requestId to ensure recalculation on prop change
  */
-function useGetProfile({ user, userId }: GetProfile_Type) {
+function useGetProfile({ user, userId, requestId }: GetProfile_Type) {
 	const { client, domain } = useActivityPubRestClientContext();
 	const [Data, setData] = useState<UserInterface>(null);
 	const [Error, setError] = useState(null);
@@ -28,6 +30,7 @@ function useGetProfile({ user, userId }: GetProfile_Type) {
 		}
 		const { data, error } = await client.accounts.get(userId);
 		if (error) {
+			setData(null);
 			setError('');
 			return null;
 		}
@@ -51,7 +54,7 @@ function useGetProfile({ user, userId }: GetProfile_Type) {
 		}
 		if (status !== 'success' || !data) return;
 		setData(ActivitypubAdapterService.adaptUser(data, domain));
-	}, [status, user]);
+	}, [status, data, user]);
 
 	return { Data, Error };
 }

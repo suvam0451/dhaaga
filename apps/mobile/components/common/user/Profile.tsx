@@ -179,7 +179,7 @@ function ProfileContextWrapped() {
 
 function Profile() {
 	const { user } = useLocalSearchParams<{ user: string }>();
-	const { Data, Error } = useGetProfile({ userId: user });
+	const { Data, Error } = useGetProfile({ userId: user, requestId: 'N/A' });
 
 	if (Error !== null) {
 		return <ErrorGoBack msg={Error} />;

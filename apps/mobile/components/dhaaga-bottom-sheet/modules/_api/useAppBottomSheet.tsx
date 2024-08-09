@@ -22,6 +22,7 @@ type Type = {
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
+	requestId: string;
 
 	// references
 	PostRef: React.MutableRefObject<StatusInterface>;
@@ -36,6 +37,7 @@ const defaultValue: Type = {
 	visible: false,
 	setVisible: () => {},
 	updateRequestId: () => {},
+	requestId: '',
 	PostRef: undefined,
 	PostIdRef: undefined,
 	UserRef: undefined,
@@ -55,7 +57,7 @@ type Props = {
 function WithAppBottomSheetContext({ children }: Props) {
 	const [Visible, setVisible] = useState(false);
 	const [Type, setType] = useState(BOTTOM_SHEET_ENUM.NA);
-	const { forceUpdate } = useHookLoadingState();
+	const { forceUpdate, State } = useHookLoadingState();
 
 	// pointers
 	const PostRef = useRef<StatusInterface>(null);
@@ -71,6 +73,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 				visible: Visible,
 				setVisible,
 				updateRequestId: forceUpdate,
+				requestId: State,
 				PostRef,
 				PostIdRef,
 				UserRef,
