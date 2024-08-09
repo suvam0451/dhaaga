@@ -6,20 +6,20 @@ import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
 
-const ReactionNotificationFragment = memo(({ item }: Props) => {
+const ReplyNotificationFragment = memo(({ item }: Props) => {
 	const acct = item.acct;
 	const post = item.post;
+
 	return (
 		<View style={styles.container}>
 			<NotificationSenderInterface
 				acct={acct}
-				type={DhaagaJsNotificationType.REACTION}
-				extraData={item?.extraData}
+				type={DhaagaJsNotificationType.REPLY}
 			/>
-			<NotificationDescriptionText type={DhaagaJsNotificationType.REACTION} />
+			<NotificationDescriptionText type={DhaagaJsNotificationType.REPLY} />
 			<NotificationPostPeek acct={acct} post={post} />
 		</View>
 	);
 });
 
-export default ReactionNotificationFragment;
+export default ReplyNotificationFragment;

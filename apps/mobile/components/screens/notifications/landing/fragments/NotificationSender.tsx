@@ -121,10 +121,17 @@ export const NotificationSender = memo(
 						bg: '#34aed2',
 					};
 				}
+				case DhaagaJsNotificationType.REPLY:
 				case DhaagaJsNotificationType.MENTION: {
 					return {
-						Icon: <Octicons name="mention" size={24} color="black" />,
-						bg: '#1f1f1f',
+						Icon: (
+							<Octicons
+								name="mention"
+								size={16}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+						),
+						bg: 'purple',
 					};
 				}
 				default: {

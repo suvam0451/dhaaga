@@ -1,7 +1,6 @@
 import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
 import { memo, useMemo } from 'react';
 import { Text, View } from 'react-native';
-import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -25,6 +24,15 @@ export const NotificationDescriptionText = memo(({ type }: Props) => {
 			case DhaagaJsNotificationType.RENOTE: {
 				return 'Boosted your post';
 			}
+			case DhaagaJsNotificationType.REACTION: {
+				return 'Reacted to your post';
+			}
+			case DhaagaJsNotificationType.REPLY: {
+				return 'Replied to your post';
+			}
+			case DhaagaJsNotificationType.MENTION: {
+				return 'Mentioned you in a post';
+			}
 		}
 	}, [type]);
 
@@ -34,14 +42,16 @@ export const NotificationDescriptionText = memo(({ type }: Props) => {
 				<MaterialIcons
 					name="subdirectory-arrow-right"
 					size={24}
-					color={APP_FONT.MONTSERRAT_BODY}
+					// color={APP_FONT.MONTSERRAT_BODY}
+					color={'green'}
 				/>
 			</View>
 			<Text
 				style={{
-					color: APP_FONT.MONTSERRAT_BODY,
+					// color: APP_FONT.MONTSERRAT_BODY,
 					fontFamily: APP_FONTS.INTER_500_MEDIUM,
 					paddingTop: 4,
+					color: 'green',
 					// marginTop: 8,
 				}}
 			>

@@ -20,9 +20,12 @@ import AchiEarnedNotificationFragment from './segments/AchiEarnedNotificationFra
 import AppNotificationFragment from './segments/AppNotificationFragment';
 import FollowReqAccepNotificationFragment from './segments/FollowReqAccepNotificationFragment';
 import ReactionNotificationFragment from './segments/ReactionNotificationFragment';
+import ReplyNotificationFragment from './segments/ReplyNotificationFragment';
 
 function FlashListRenderer({ item }: { item: Notification_FlatList_Entry }) {
 	switch (item.type) {
+		case DhaagaJsNotificationType.REPLY:
+			return <ReplyNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.MENTION: {
 			return <MentionNotificationFragment item={item.props} />;
 		}
