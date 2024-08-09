@@ -2,11 +2,17 @@ import { useActivityPubRestClientContext } from '../../../states/useActivityPubR
 import { useLocalSearchParams } from 'expo-router';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { useMemo, useRef } from 'react';
-import { Animated, Dimensions, View, StyleSheet, Text } from 'react-native';
+import {
+	Animated,
+	Dimensions,
+	View,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+} from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import { Image } from 'expo-image';
-import { AvatarContainerWithInset } from '../../../styles/Containers';
 import UserProfileExtraInformation from './fragments/ExtraInformation';
 import WithActivitypubUserContext, {
 	useActivitypubUserContext,
@@ -17,8 +23,15 @@ import PinnedPosts from './fragments/PinnedPosts';
 import ProfileImageGallery from './fragments/ProfileImageGallery';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import useProfile from './api/useProfile';
+import useGetProfile from '../../../api/accounts/useGetProfile';
+import styles from './utils/styles';
+import { ProfileStatsInterface } from './fragments/ProfileStats';
+import ProfileAvatar from './fragments/ProfileAvatar';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FollowIndicator from './fragments/FollowIndicator';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import ProfileDesc from './fragments/ProfileDesc';
 
 function ProfileContextWrapped() {
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -54,145 +67,181 @@ function ProfileContextWrapped() {
 		updateQueryCache: () => {},
 	});
 
-	const ScrollRef = useRef(null);
-
 	return (
 		<WithAutoHideTopNavBar title={'Profile'} translateY={translateY}>
-			<View
-				style={{
-					backgroundColor: '#121212',
-					minHeight: '100%',
-				}}
+			<Animated.ScrollView
+				onScroll={onScroll}
+				contentContainerStyle={localStyles.rootScrollView}
 			>
-				<Animated.ScrollView
-					ref={ScrollRef}
-					onScroll={onScroll}
-					contentContainerStyle={{
-						paddingTop: 54,
-						backgroundColor: '#121212',
-						minHeight: '100%',
-					}}
-				>
-					{/*@ts-ignore-next-line*/}
-					<Image
-						source={{ uri: bannerUrl }}
-						style={{ height: 128, width: Dimensions.get('window').width }}
+				{/*@ts-ignore-next-line*/}
+				<Image
+					source={{ uri: bannerUrl }}
+					style={{ height: 128, width: Dimensions.get('window').width }}
+				/>
+				<View style={{ flexDirection: 'row' }}>
+					<ProfileAvatar
+						containerStyle={localStyles.avatarContainer}
+						imageStyle={localStyles.avatarImageContainer}
+						uri={avatarUrl}
 					/>
-					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<AvatarContainerWithInset>
-							{/*@ts-ignore-next-line*/}
-							<Image
-								source={{ uri: avatarUrl }}
-								style={styles.avatarContainer}
-							/>
-						</AvatarContainerWithInset>
-						<View
+					<View
+						style={{
+							flexGrow: 1,
+							alignItems: 'center',
+							justifyContent: 'space-evenly',
+							flexDirection: 'row',
+						}}
+					>
+						<TouchableOpacity
 							style={{
-								flexGrow: 1,
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
+								padding: 8,
+								backgroundColor: '#242424',
+								borderRadius: 8,
 							}}
 						>
-							<View
-								style={{
-									paddingHorizontal: 8,
-									marginLeft: 8,
-									width: '100%',
-								}}
-							>
-								<FollowIndicator userId={user?.getId()} />
-							</View>
-						</View>
-						<View style={{ display: 'flex', flexDirection: 'row' }}>
-							<View
-								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
-							>
-								<Text style={styles.primaryText}>{user.getPostCount()}</Text>
-								<Text style={styles.secondaryText}>Posts</Text>
-							</View>
-							<View
-								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
-							>
-								<Text style={styles.primaryText}>
-									{user.getFollowingCount()}
-								</Text>
-								<Text style={styles.secondaryText}>Following</Text>
-							</View>
-							<View
-								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
-							>
-								<Text style={styles.primaryText}>
-									{user.getFollowersCount()}
-								</Text>
-								<Text style={styles.secondaryText}>Followers</Text>
-							</View>
-						</View>
+							<AntDesign
+								name="message1"
+								size={20}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={{
+								padding: 8,
+								backgroundColor: '#242424',
+								borderRadius: 8,
+							}}
+						>
+							<FontAwesome6
+								name="contact-book"
+								size={20}
+								color={APP_FONT.DISABLED}
+							/>
+						</TouchableOpacity>
 					</View>
-					<View style={{ marginLeft: 8 }}>
+					<ProfileStatsInterface style={localStyles.statSectionContainer} />
+				</View>
+				<View style={localStyles.secondSectionContainer}>
+					<View style={{ flexShrink: 1 }}>
 						<Text
 							style={{
 								fontFamily: APP_FONTS.MONTSERRAT_900_BLACK,
 								color: APP_FONT.MONTSERRAT_HEADER,
 							}}
+							numberOfLines={1}
 						>
 							{ParsedDisplayName}
 						</Text>
-						<Text style={styles.secondaryText}>{handle}</Text>
+						<Text style={styles.secondaryText} numberOfLines={1}>
+							{handle}
+						</Text>
 					</View>
-					<View style={styles.parsedDescriptionContainer}>
-						{DescriptionContent}
-					</View>
+					<View style={localStyles.relationManagerSection}>
+						<View style={{ marginRight: 8 }}>
+							<Ionicons
+								name="notifications"
+								size={22}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+						</View>
 
-					{/*Separator*/}
-					<View style={{ flexGrow: 1 }} />
-
-					{/* Collapsible Sections */}
-					<View style={{ paddingBottom: 16 }}>
-						<UserProfileExtraInformation fields={fields} />
-						<ProfileImageGallery userId={user.getId()} />
-						<PinnedPosts userId={user.getId()} />
+						<FollowIndicator
+							userId={user?.getId()}
+							style={{
+								maxWidth: 96,
+							}}
+						/>
 					</View>
-				</Animated.ScrollView>
-			</View>
+				</View>
+
+				<ProfileDesc
+					style={localStyles.parsedDescriptionContainer}
+					rawContext={user?.getDescription()}
+					remoteSubdomain={user?.getInstanceUrl()}
+				/>
+				<View style={localStyles.parsedDescriptionContainer}>
+					{DescriptionContent}
+				</View>
+
+				{/*Separator*/}
+				<View style={{ flexGrow: 1 }} />
+
+				{/* Collapsible Sections */}
+				<View style={{ paddingBottom: 16 }}>
+					<UserProfileExtraInformation fields={fields} />
+					<ProfileImageGallery userId={user.getId()} />
+					<PinnedPosts userId={user.getId()} />
+				</View>
+			</Animated.ScrollView>
 		</WithAutoHideTopNavBar>
 	);
 }
 
 function Profile() {
 	const { user } = useLocalSearchParams<{ user: string }>();
-	const { Data, Error } = useProfile(user);
+	const { Data, Error } = useGetProfile({ userId: user });
 
 	if (Error !== null) {
 		return <ErrorGoBack msg={Error} />;
 	}
 
 	return (
-		<WithActivitypubUserContext user={Data}>
+		<WithActivitypubUserContext userI={Data}>
 			<ProfileContextWrapped />
 		</WithActivitypubUserContext>
 	);
 }
 
-const styles = StyleSheet.create({
-	primaryText: {
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-	},
-	secondaryText: {
-		color: '#888',
-		fontSize: 12,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+const localStyles = StyleSheet.create({
+	rootScrollView: {
+		paddingTop: 50,
+		backgroundColor: '#121212',
+		minHeight: '100%',
 	},
 	parsedDescriptionContainer: {
 		marginTop: 12,
 		padding: 8,
 	},
-	avatarContainer: {
+	avatarImageContainer: {
 		flex: 1,
 		width: '100%',
 		backgroundColor: '#0553',
 		padding: 2,
+		borderRadius: 8,
+	},
+	avatarContainer: {
+		width: 72,
+		height: 72,
+		borderColor: 'gray',
+		borderWidth: 0.75,
+		borderRadius: 8,
+		marginTop: -24,
+		marginLeft: 6,
+	},
+	relationManagerSection: {
+		flexDirection: 'row',
+		flexGrow: 1,
+		alignItems: 'center',
+		justifyContent: 'flex-end',
+		paddingHorizontal: 8,
+		marginLeft: 4,
+		marginRight: 8,
+	},
+	statSectionContainer: {
+		backgroundColor: '#242424',
+		marginRight: 4,
+		borderRadius: 6,
+		marginTop: 4,
+		padding: 4,
+		paddingLeft: 0,
+	},
+	secondSectionContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginTop: 8,
+		marginLeft: 8,
+		width: '100%',
 	},
 });
 

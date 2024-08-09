@@ -6,13 +6,20 @@ import ConfirmRelationshipChangeDialog from '../../../screens/shared/fragments/C
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { MastoRelationship } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import { StyleProp, View, ViewStyle } from 'react-native';
 
 /**
  * A label to indicate your current
  * relationship with a user and options
  * to change it
  */
-const FollowIndicator = memo(function Foo({ userId }: { userId: string }) {
+const FollowIndicator = memo(function Foo({
+	userId,
+	style,
+}: {
+	userId: string;
+	style?: StyleProp<ViewStyle>;
+}) {
 	const { client, domain } = useActivityPubRestClientContext();
 
 	const [
@@ -81,7 +88,7 @@ const FollowIndicator = memo(function Foo({ userId }: { userId: string }) {
 	}
 
 	return (
-		<Fragment>
+		<View style={style}>
 			<AppButtonFollowIndicator
 				label={FollowLabel}
 				onClick={onFollowButtonClick}
@@ -92,7 +99,7 @@ const FollowIndicator = memo(function Foo({ userId }: { userId: string }) {
 				setVisible={setIsUnfollowConfirmationDialogVisible}
 				onUnfollow={onUnfollow}
 			/>
-		</Fragment>
+		</View>
 	);
 });
 

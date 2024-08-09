@@ -1,21 +1,26 @@
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import {
 	ActivitypubHelper,
 	DhaagaJsNotificationType,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import {
+	BOTTOM_SHEET_ENUM,
+	useAppBottomSheet,
+} from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -47,7 +52,14 @@ export const NotificationSender = memo(
 			switch (type) {
 				case DhaagaJsNotificationType.FAVOURITE: {
 					return {
-						Icon: <FontAwesome name="star" size={16} color={'#feac33'} />,
+						// Icon: <FontAwesome name="star" size={16} color={'#feac33'} />,
+						Icon: (
+							<AntDesign
+								name="like1"
+								size={NOTIFICATION_TYPE_ICON_SIZE}
+								color="#feac33"
+							/>
+						),
 						bg: '#1f1f1f',
 					};
 				}
@@ -126,9 +138,7 @@ export const NotificationSender = memo(
 
 		return (
 			<View style={{ flexDirection: 'row' }}>
-				<View
-					style={{ width: ICON_SIZE, height: ICON_SIZE, position: 'relative' }}
-				>
+				<View style={styles.senderAvatarContainer}>
 					{/*@ts-ignore-next-line*/}
 					<Image
 						source={{
@@ -181,7 +191,7 @@ type InterfaceProps = {
  */
 export const NotificationSenderInterface = memo(
 	({ acct, type, extraData }: InterfaceProps) => {
-		const { subdomain } = useActivityPubRestClientContext();
+		const { domain, subdomain } = useActivityPubRestClientContext();
 
 		const id = acct?.getId();
 		const acctUrl = acct?.getAccountUrl(subdomain);
@@ -192,15 +202,40 @@ export const NotificationSenderInterface = memo(
 			return ActivitypubHelper.getHandle(acctUrl, subdomain);
 		}, [acctUrl]);
 
+		const { setType, updateRequestId, setVisible, UserRef, UserIdRef } =
+			useAppBottomSheet();
+
+		/**
+		 * NOTE: misskey acct objects do not
+		 * contain enough information to populate
+		 * the entire modal
+		 */
+		const onPress = useCallback(() => {
+			if (domain === KNOWN_SOFTWARE.MASTODON) {
+				// forward existing ref
+				UserRef.current = acct;
+				UserIdRef.current = acct.getId();
+			} else {
+				// request info be fetched
+				UserRef.current = null;
+				UserIdRef.current = acct.getId();
+			}
+			setType(BOTTOM_SHEET_ENUM.PROFILE_PEEK);
+			setVisible(true);
+			updateRequestId();
+		}, [acct, domain, UserRef, UserIdRef, updateRequestId, setType]);
+
 		return (
-			<NotificationSender
-				id={id}
-				type={type}
-				handle={handle}
-				displayName={displayName}
-				avatarUrl={avatarUrl}
-				extraData={extraData}
-			/>
+			<TouchableOpacity onPress={onPress}>
+				<NotificationSender
+					id={id}
+					type={type}
+					handle={handle}
+					displayName={displayName}
+					avatarUrl={avatarUrl}
+					extraData={extraData}
+				/>
+			</TouchableOpacity>
 		);
 	},
 );

@@ -31,4 +31,12 @@ export const styles = StyleSheet.create({
 		overflow: 'hidden',
 		marginBottom: 8,
 	},
+	senderAvatarContainer: {
+		width: ICON_SIZE + 2,
+		height: ICON_SIZE + 2,
+		position: 'relative',
+		borderWidth: 1,
+		borderColor: 'grey',
+		borderRadius: 8,
+	},
 });

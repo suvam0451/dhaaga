@@ -1,4 +1,4 @@
-import { Button, View } from 'react-native';
+import { View } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import ControlSegment from '../../../widgets/feed-controller/components/ControlSegment';
@@ -61,17 +61,13 @@ function FlashListRenderer({ item }: { item: Notification_FlatList_Entry }) {
 }
 
 function LandingPageStack() {
-	const { translateY } = useScrollMoreOnPageEnd({
+	const { translateY, onScroll } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
 
 	const { State } = useHookLoadingState();
-	const { Results, maxId, minId, refetch } = useApiGetNotifications();
-
-	function onRefetch() {
-		refetch();
-	}
+	const { Results } = useApiGetNotifications();
 
 	const NotificationFilters = useRef(new Set(['all']));
 	return (
@@ -80,6 +76,7 @@ function LandingPageStack() {
 			translateY={translateY}
 		>
 			<AnimatedFlashList
+				onScroll={onScroll}
 				estimatedItemSize={45}
 				contentContainerStyle={{
 					paddingTop: 54,
@@ -88,7 +85,6 @@ function LandingPageStack() {
 				}}
 				ListHeaderComponent={
 					<View style={{ marginBottom: 16 }}>
-						<Button onPress={onRefetch} title={'Porforr'} />
 						<Link href={'/notifications/conversations'}>
 							<View>
 								<Text>Conversations</Text>

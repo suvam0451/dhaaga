@@ -1,7 +1,10 @@
 import { createContext, useContext, useRef, useState } from 'react';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import AppBottomSheet from '../../Core';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	StatusInterface,
+	UserInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -9,6 +12,7 @@ export enum BOTTOM_SHEET_ENUM {
 	STATUS_COMPOSER = 'StatusComposer',
 	STATUS_MENU = 'StatusMenu',
 	STATUS_PREVIEW = 'StatusPreview',
+	PROFILE_PEEK = 'ProfilePeek',
 	NA = 'N/A',
 }
 
@@ -18,7 +22,12 @@ type Type = {
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
+
+	// references
 	PostRef: React.MutableRefObject<StatusInterface>;
+	PostIdRef: React.MutableRefObject<string>;
+	UserRef: React.MutableRefObject<UserInterface>;
+	UserIdRef: React.MutableRefObject<string>;
 };
 
 const defaultValue: Type = {
@@ -28,6 +37,9 @@ const defaultValue: Type = {
 	setVisible: () => {},
 	updateRequestId: () => {},
 	PostRef: undefined,
+	PostIdRef: undefined,
+	UserRef: undefined,
+	UserIdRef: undefined,
 };
 
 const AppBottomSheetContext = createContext<Type>(defaultValue);
@@ -47,6 +59,9 @@ function WithAppBottomSheetContext({ children }: Props) {
 
 	// pointers
 	const PostRef = useRef<StatusInterface>(null);
+	const PostIdRef = useRef<string>(null);
+	const UserRef = useRef<UserInterface>(null);
+	const UserIdRef = useRef<string>(null);
 
 	return (
 		<AppBottomSheetContext.Provider
@@ -57,6 +72,9 @@ function WithAppBottomSheetContext({ children }: Props) {
 				setVisible,
 				updateRequestId: forceUpdate,
 				PostRef,
+				PostIdRef,
+				UserRef,
+				UserIdRef,
 			}}
 		>
 			{children}

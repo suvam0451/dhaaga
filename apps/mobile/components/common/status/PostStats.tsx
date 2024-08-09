@@ -1,16 +1,62 @@
 import { Fragment, memo, useEffect, useState } from 'react';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Text } from '@rneui/themed';
-import { FontAwesome } from '@expo/vector-icons';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import * as Haptics from 'expo-haptics';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type Props = {
 	isRepost: boolean;
 };
 
+type PostStatLikesProps = {
+	onPress: () => void;
+	isLiked: boolean;
+	likeCount: number;
+};
+
+/**
+ * Show and allow likes
+ */
+const PostStatLikes = memo(
+	({ onPress, isLiked, likeCount }: PostStatLikesProps) => {
+		if (likeCount === 0) return <View />;
+		return (
+			<TouchableOpacity
+				onPress={onPress}
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}
+			>
+				<AntDesign
+					name="like2"
+					size={16}
+					color={isLiked ? APP_THEME.LINK : '#ffffff87'}
+				/>
+				{/*<FontAwesome*/}
+				{/*	name="star"*/}
+				{/*	size={18}*/}
+				{/*	color={isLiked ? APP_THEME.LINK : '#ffffff87'}*/}
+				{/*/>*/}
+				<Text
+					style={{
+						color: isLiked ? APP_THEME.LINK : '#888',
+						fontSize: 13,
+						marginLeft: 4,
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					}}
+				>
+					{likeCount}
+				</Text>
+			</TouchableOpacity>
+		);
+	},
+);
 /**
  * Show metrics for a post
  *
@@ -66,77 +112,54 @@ const PostStats = memo(function Foo({ isRepost }: Props) {
 		return <View></View>;
 
 	return (
-		<View
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'flex-end',
-				marginTop: 12,
-			}}
-		>
-			<View
-				style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-			>
-				{FavouritesCount > 0 && (
-					<TouchableOpacity
-						onPress={onFavouriteClick}
+		<View style={styles.container}>
+			<PostStatLikes
+				isLiked={IsFavourited}
+				likeCount={FavouritesCount}
+				onPress={onFavouriteClick}
+			/>
+			<View style={{ flexGrow: 1 }}></View>
+			{RepliesCount > 0 && (
+				<Fragment>
+					<Text
 						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
+							color: '#888',
+							marginLeft: 4,
+							fontSize: 12,
+							textAlign: 'right',
 						}}
 					>
-						<FontAwesome
-							name="star"
-							size={18}
-							color={IsFavourited ? APP_THEME.LINK : '#ffffff87'}
-						/>
-						<Text
-							style={{
-								color: IsFavourited ? APP_THEME.LINK : '#888',
-								fontSize: 12,
-								marginLeft: 2,
-							}}
-						>
-							{FavouritesCount}
-						</Text>
-					</TouchableOpacity>
-				)}
-				<View style={{ flexGrow: 1 }}></View>
-				{RepliesCount > 0 && (
-					<Fragment>
-						<Text
-							style={{
-								color: '#888',
-								marginLeft: 4,
-								fontSize: 12,
-								textAlign: 'right',
-							}}
-						>
-							{RepliesCount} Replies
-						</Text>
-						<Text style={{ color: '#888', marginLeft: 2, opacity: 0.3 }}>
-							&bull;
-						</Text>
-					</Fragment>
-				)}
-				{RepostCount > 0 && (
-					<Fragment>
-						<Text
-							style={{
-								color: '#888',
-								fontSize: 12,
-								marginLeft: 2,
-								textAlign: 'right',
-							}}
-						>
-							{RepostCount} Boosts
-						</Text>
-					</Fragment>
-				)}
-			</View>
+						{RepliesCount} Replies
+					</Text>
+					<Text style={{ color: '#888', marginLeft: 2, opacity: 0.3 }}>
+						&bull;
+					</Text>
+				</Fragment>
+			)}
+			{RepostCount > 0 && (
+				<Fragment>
+					<Text
+						style={{
+							color: '#888',
+							fontSize: 12,
+							marginLeft: 2,
+							textAlign: 'right',
+						}}
+					>
+						{RepostCount} Boosts
+					</Text>
+				</Fragment>
+			)}
 		</View>
 	);
 });
 
+const styles = StyleSheet.create({
+	container: {
+		display: 'flex',
+		marginTop: 12,
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+});
 export default PostStats;

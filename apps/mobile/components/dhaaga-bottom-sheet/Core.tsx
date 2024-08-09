@@ -9,6 +9,7 @@ import {
 	useAppBottomSheet,
 } from './modules/_api/useAppBottomSheet';
 import PostPreview from './modules/post-preview/PostPreview';
+import ProfilePeekBottomSheet from './modules/profile-peek/pages/ProfilePeekBottomSheet';
 
 /**
  * Switches what module will be shown
@@ -33,6 +34,8 @@ const AppBottomSheet = memo(() => {
 					</WithComposerContext>
 				);
 			}
+			case BOTTOM_SHEET_ENUM.PROFILE_PEEK:
+				return <ProfilePeekBottomSheet />;
 			default: {
 				return (
 					<WithComposerContext>

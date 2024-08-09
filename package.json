@@ -16,8 +16,8 @@
   "author": "Debashish Patra",
   "license": "AGPLv3",
   "workspaces": [
-    "packages/*",
-    "apps/!(docs)/**"
+    "packages/**",
+    "apps/**"
   ],
   "overrides": {
     "styled-components": {
