@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import {
 	View,
 	Image as NativeImage,
@@ -17,10 +17,13 @@ import ProfileNameAndHandle from '../../../../common/user/fragments/ProfileNameA
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import ProfilePeekMessage from '../fragments/ProfilePeekMessage';
+import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 
 const ProfilePeekBottomSheet = memo(() => {
+	const { subdomain } = useActivityPubRestClientContext();
 	const { UserRef, UserIdRef, requestId } = useAppBottomSheet();
 	const { Data } = useGetProfile({
 		user: UserRef.current,
@@ -30,6 +33,11 @@ const ProfilePeekBottomSheet = memo(() => {
 
 	const banner = Data?.getBannerUrl();
 	const avatar = Data?.getAvatarUrl();
+	const acctUrl = Data?.getAccountUrl(subdomain);
+
+	const handle = useMemo(() => {
+		return ActivitypubHelper.getHandle(acctUrl, subdomain);
+	}, [acctUrl]);
 
 	return (
 		<WithActivitypubUserContext userI={Data}>
@@ -59,19 +67,7 @@ const ProfilePeekBottomSheet = memo(() => {
 							flexDirection: 'row',
 						}}
 					>
-						<TouchableOpacity
-							style={{
-								padding: 8,
-								backgroundColor: '#202020',
-								borderRadius: 8,
-							}}
-						>
-							<AntDesign
-								name="message1"
-								size={20}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
-						</TouchableOpacity>
+						<ProfilePeekMessage handle={handle} />
 						<TouchableOpacity
 							style={{
 								padding: 8,
@@ -106,6 +102,7 @@ const ProfilePeekBottomSheet = memo(() => {
 					style={localStyles.parsedDescriptionContainer}
 					rawContext={Data?.getDescription()}
 					remoteSubdomain={Data?.getInstanceUrl()}
+					acceptTouch={false}
 				/>
 			</ScrollView>
 		</WithActivitypubUserContext>

@@ -15,6 +15,8 @@ const FollowReqAcceptNotificationFragment = memo(({ item }: Props) => {
 			/>
 			<NotificationDescriptionText
 				type={DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED}
+				createdAt={item.createdAt}
+				id={item.id}
 			/>
 		</View>
 	);

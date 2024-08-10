@@ -11,11 +11,13 @@ import { Text } from 'react-native';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { randomUUID } from 'expo-crypto';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 
 type Props = {
 	value: string;
 };
 const HashtagSegment = memo(function Foo({ value }: Props) {
+	const { acceptTouch } = useAppMfmContext();
 	const _value = decodeURI(value);
 
 	const { setVisible, setBottomSheetType, updateRequestId } =
@@ -33,6 +35,8 @@ const HashtagSegment = memo(function Foo({ value }: Props) {
 	}, [item?.following, item?.privatelyFollowing]);
 
 	const onPress = () => {
+		if (!acceptTouch) return;
+
 		GlobalMmkvCacheService.setBottomSheetProp_Hashtag(globalDb, {
 			name: _value,
 			remoteInstance: 'N/A',

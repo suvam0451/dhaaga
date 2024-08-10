@@ -14,7 +14,11 @@ const FollowNotificationFragment = memo(function Foo({ item }: Props) {
 				acct={acct}
 				type={DhaagaJsNotificationType.FOLLOW}
 			/>
-			<NotificationDescriptionText type={DhaagaJsNotificationType.FOLLOW} />
+			<NotificationDescriptionText
+				type={DhaagaJsNotificationType.FOLLOW}
+				createdAt={item.createdAt}
+				id={item.id}
+			/>
 		</View>
 	);
 });

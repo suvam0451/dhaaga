@@ -29,6 +29,8 @@ type Type = {
 	PostIdRef: React.MutableRefObject<string>;
 	UserRef: React.MutableRefObject<UserInterface>;
 	UserIdRef: React.MutableRefObject<string>;
+	// pre-populate the post-composer to this content
+	PostComposerTextSeedRef: React.MutableRefObject<string>;
 };
 
 const defaultValue: Type = {
@@ -42,6 +44,7 @@ const defaultValue: Type = {
 	PostIdRef: undefined,
 	UserRef: undefined,
 	UserIdRef: undefined,
+	PostComposerTextSeedRef: undefined,
 };
 
 const AppBottomSheetContext = createContext<Type>(defaultValue);
@@ -64,6 +67,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 	const PostIdRef = useRef<string>(null);
 	const UserRef = useRef<UserInterface>(null);
 	const UserIdRef = useRef<string>(null);
+	const PostComposerTextSeedRef = useRef<string>(null);
 
 	return (
 		<AppBottomSheetContext.Provider
@@ -78,6 +82,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 				PostIdRef,
 				UserRef,
 				UserIdRef,
+				PostComposerTextSeedRef,
 			}}
 		>
 			{children}

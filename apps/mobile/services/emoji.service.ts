@@ -32,10 +32,8 @@ export class EmojiService {
 	 * @param subdomain
 	 */
 	static find({
-		db,
 		globalDb,
 		id,
-		domain,
 		subdomain,
 	}: {
 		db: Realm;
@@ -49,10 +47,7 @@ export class EmojiService {
 			console.log('[WARN]: cached emojis not found for', subdomain);
 			return null;
 		}
-		console.log('[INFO]: cached emojis found for', subdomain, id);
-		console.log(found.map((o) => o.shortCode));
 		const match = found.find((o) => o.shortCode === id);
-		console.log(match);
 		return match || null;
 	}
 

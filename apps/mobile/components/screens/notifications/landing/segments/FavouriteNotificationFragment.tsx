@@ -16,7 +16,11 @@ const FavouriteNotificationFragment = memo(function Foo({ item }: Props) {
 				acct={acct}
 				type={DhaagaJsNotificationType.FAVOURITE}
 			/>
-			<NotificationDescriptionText type={DhaagaJsNotificationType.FAVOURITE} />
+			<NotificationDescriptionText
+				type={DhaagaJsNotificationType.FAVOURITE}
+				createdAt={item.createdAt}
+				id={item.id}
+			/>
 			<NotificationPostPeek acct={acct} post={post} />
 		</View>
 	);

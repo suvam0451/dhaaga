@@ -3,14 +3,14 @@ import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import ControlSegment from '../../../widgets/feed-controller/components/ControlSegment';
 import { Text } from '@rneui/themed';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import MentionNotificationFragment from './segments/MentionNotificationFragment';
 import FavouriteNotificationFragment from './segments/FavouriteNotificationFragment';
-import { Link } from 'expo-router';
+import { Link, useNavigation } from 'expo-router';
 import FollowNotificationFragment from './segments/FollowNotificationFragment';
 import BoostNotificationFragment from './segments/BoostNotificationFragment';
 import useApiGetNotifications, {
@@ -21,35 +21,35 @@ import AppNotificationFragment from './segments/AppNotificationFragment';
 import FollowReqAccepNotificationFragment from './segments/FollowReqAccepNotificationFragment';
 import ReactionNotificationFragment from './segments/ReactionNotificationFragment';
 import ReplyNotificationFragment from './segments/ReplyNotificationFragment';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { useAppNotifSeenContext } from './state/useNotifSeen';
+import StatusAlertNotificationFragment from './segments/StatusAlertNotificationFragment';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MarkAllAsRead from './fragments/MarkAllAsRead';
+import NotificationControlSegment from './fragments/NotificationControlSegment';
 
 function FlashListRenderer({ item }: { item: Notification_FlatList_Entry }) {
 	switch (item.type) {
 		case DhaagaJsNotificationType.REPLY:
 			return <ReplyNotificationFragment item={item.props} />;
-		case DhaagaJsNotificationType.MENTION: {
+		case DhaagaJsNotificationType.MENTION:
 			return <MentionNotificationFragment item={item.props} />;
-		}
-		case DhaagaJsNotificationType.FAVOURITE: {
+		case DhaagaJsNotificationType.FAVOURITE:
 			return <FavouriteNotificationFragment item={item.props} />;
-		}
-		case DhaagaJsNotificationType.FOLLOW: {
+		case DhaagaJsNotificationType.FOLLOW:
 			return <FollowNotificationFragment item={item.props} />;
-		}
-		case DhaagaJsNotificationType.REBLOG: {
+		case DhaagaJsNotificationType.STATUS:
+			return <StatusAlertNotificationFragment item={item.props} />;
+		case DhaagaJsNotificationType.REBLOG:
 			return <BoostNotificationFragment item={item.props} />;
-		}
-		case DhaagaJsNotificationType.ACHIEVEMENT_EARNED: {
+		case DhaagaJsNotificationType.ACHIEVEMENT_EARNED:
 			return <AchiEarnedNotificationFragment />;
-		}
-		case DhaagaJsNotificationType.APP: {
+		case DhaagaJsNotificationType.APP:
 			return <AppNotificationFragment />;
-		}
-		case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
+		case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED:
 			return <FollowReqAccepNotificationFragment item={item.props} />;
-		}
-		case DhaagaJsNotificationType.REACTION: {
+		case DhaagaJsNotificationType.REACTION:
 			return <ReactionNotificationFragment item={item.props} />;
-		}
 		default: {
 			console.log('notification type not handled', item.type);
 			return (
@@ -68,11 +68,24 @@ function LandingPageStack() {
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
-
+	const { Seen, All, UnseenCount, appendNotifs } = useAppNotifSeenContext();
 	const { State } = useHookLoadingState();
-	const { Results } = useApiGetNotifications();
+	const { Results, refetch } = useApiGetNotifications();
 
-	const NotificationFilters = useRef(new Set(['all']));
+	useEffect(() => {
+		appendNotifs(Results.map((o) => o.props.id));
+	}, [Results]);
+
+	useEffect(() => {
+		const intervalFunction = () => {
+			refetch();
+		};
+		const intervalId = setInterval(intervalFunction, 15000);
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, []);
+
 	return (
 		<WithAutoHideTopNavBar
 			title={'Notification Center'}
@@ -88,71 +101,15 @@ function LandingPageStack() {
 				}}
 				ListHeaderComponent={
 					<View style={{ marginBottom: 16 }}>
-						<Link href={'/notifications/conversations'}>
-							<View>
-								<Text>Conversations</Text>
-							</View>
-						</Link>
-						<ControlSegment
-							hash={State}
-							selection={NotificationFilters.current}
-							label={'User Interactions'}
-							buttons={[
-								{
-									label: 'All',
-									lookupId: 'all',
-									onClick: () => {},
-								},
-								{
-									label: 'Mentions',
-									lookupId: DhaagaJsNotificationType.MENTION,
-									onClick: () => {},
-								},
-								{
-									label: 'Boosts',
-									lookupId: DhaagaJsNotificationType.REBLOG,
-									onClick: () => {},
-								},
-								{
-									label: 'Favourites',
-									lookupId: DhaagaJsNotificationType.FAVOURITE,
-									onClick: () => {},
-								},
-								{
-									lookupId: 'none',
-									label: 'None',
-									onClick: () => {},
-								},
-							]}
-						/>
-
-						<ControlSegment
-							hash={State}
-							selection={NotificationFilters.current}
-							label={'Social Links'}
-							buttons={[
-								{
-									lookupId: 'all',
-									label: 'All',
-									onClick: () => {},
-								},
-								{
-									lookupId: DhaagaJsNotificationType.FOLLOW,
-									label: 'Follow',
-									onClick: () => {},
-								},
-								{
-									lookupId: DhaagaJsNotificationType.FOLLOW_REQUEST,
-									label: 'Requests',
-									onClick: () => {},
-								},
-								{
-									lookupId: 'none',
-									label: 'None',
-									onClick: () => {},
-								},
-							]}
-						/>
+						<View
+							style={{
+								justifyContent: 'flex-end',
+								marginVertical: 8,
+							}}
+						>
+							<MarkAllAsRead />
+						</View>
+						<NotificationControlSegment />
 					</View>
 				}
 				data={Results}

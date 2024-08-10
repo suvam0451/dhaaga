@@ -1,6 +1,6 @@
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useRealm } from '@realm/react';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { EmojiService } from '../../services/emoji.service';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 

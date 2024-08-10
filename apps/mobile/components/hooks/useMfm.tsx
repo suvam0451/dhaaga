@@ -10,6 +10,7 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 import { APP_FONT } from '../../styles/AppTheme';
 import * as Crypto from 'expo-crypto';
 import { APP_FONTS } from '../../styles/AppFonts';
+import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 
 type Props = {
 	content: string;
@@ -22,6 +23,7 @@ type Props = {
 	fontFamily?: string;
 
 	numberOfLines?: number;
+	acceptTouch?: boolean;
 };
 
 /**
@@ -33,6 +35,7 @@ type Props = {
  * @param expectedHeight
  * @param fontFamily
  * @param numberOfLines
+ * @param acceptTouch
  */
 function useMfm({
 	content,
@@ -42,6 +45,7 @@ function useMfm({
 	expectedHeight,
 	fontFamily,
 	numberOfLines,
+	acceptTouch,
 }: Props) {
 	const { domain, subdomain } = useActivityPubRestClientContext();
 	const db = useRealm();
@@ -62,6 +66,8 @@ function useMfm({
 	});
 
 	const [Data, setData] = useState(defaultValue.current);
+
+	const _acceptTouch = acceptTouch === undefined ? true : acceptTouch;
 
 	/**
 	 * don't set this to null
@@ -100,18 +106,22 @@ function useMfm({
 		});
 		setData({
 			isLoaded: true,
-			content: reactNodes?.map((para, i) => {
-				const uuid = randomUUID();
-				return (
-					<Text key={uuid} style={fontStyle.current}>
-						{para.map((o, j) => (
-							<Text key={j} style={fontStyle.current}>
-								{o}
+			content: (
+				<WithAppMfmContext acceptTouch={_acceptTouch}>
+					{reactNodes?.map((para) => {
+						const uuid = randomUUID();
+						return (
+							<Text key={uuid} style={fontStyle.current}>
+								{para.map((o, j) => (
+									<Text key={j} style={fontStyle.current}>
+										{o}
+									</Text>
+								))}
 							</Text>
-						))}
-					</Text>
-				);
-			}),
+						);
+					})}
+				</WithAppMfmContext>
+			),
 			aiContext: openAiContext,
 		});
 		IsSolved.current = content;

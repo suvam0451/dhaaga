@@ -3,10 +3,10 @@ import { Props, styles } from './_common';
 import { View } from 'react-native';
 import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
-import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
+import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 
-const ReplyNotificationFragment = memo(({ item }: Props) => {
+const StatusAlertNotificationFragment = memo(({ item }: Props) => {
 	const acct = item.acct;
 	const post = item.post;
 
@@ -14,10 +14,11 @@ const ReplyNotificationFragment = memo(({ item }: Props) => {
 		<View style={styles.container}>
 			<NotificationSenderInterface
 				acct={acct}
-				type={DhaagaJsNotificationType.REPLY}
+				type={DhaagaJsNotificationType.STATUS}
+				extraData={item?.extraData}
 			/>
 			<NotificationDescriptionText
-				type={DhaagaJsNotificationType.REPLY}
+				type={DhaagaJsNotificationType.STATUS}
 				createdAt={item.createdAt}
 				id={item.id}
 			/>
@@ -26,4 +27,4 @@ const ReplyNotificationFragment = memo(({ item }: Props) => {
 	);
 });
 
-export default ReplyNotificationFragment;
+export default StatusAlertNotificationFragment;

@@ -16,7 +16,11 @@ const ReactionNotificationFragment = memo(({ item }: Props) => {
 				type={DhaagaJsNotificationType.REACTION}
 				extraData={item?.extraData}
 			/>
-			<NotificationDescriptionText type={DhaagaJsNotificationType.REACTION} />
+			<NotificationDescriptionText
+				type={DhaagaJsNotificationType.REACTION}
+				createdAt={item.createdAt}
+				id={item.id}
+			/>
 			<NotificationPostPeek acct={acct} post={post} />
 		</View>
 	);

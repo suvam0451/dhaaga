@@ -19,7 +19,7 @@ type GetProfile_Type = {
  * @param userId userId to query against
  * @param requestId to ensure recalculation on prop change
  */
-function useGetProfile({ user, userId, requestId }: GetProfile_Type) {
+function useGetProfile({ user, userId }: GetProfile_Type) {
 	const { client, domain } = useActivityPubRestClientContext();
 	const [Data, setData] = useState<UserInterface>(null);
 	const [Error, setError] = useState(null);

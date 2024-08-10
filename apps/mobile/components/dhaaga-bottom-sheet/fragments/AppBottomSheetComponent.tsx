@@ -9,7 +9,7 @@ import PostCompose from '../modules/post-composer/pages/PostCompose';
 import ProfilePeekBottomSheet from '../modules/profile-peek/pages/ProfilePeekBottomSheet';
 
 const AppBottomSheetComponent = memo(() => {
-	const { type, requestId } = useAppBottomSheet();
+	const { type, requestId, PostComposerTextSeedRef } = useAppBottomSheet();
 	return useMemo(() => {
 		switch (type) {
 			case BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
@@ -17,7 +17,7 @@ const AppBottomSheetComponent = memo(() => {
 			}
 			case BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
 				return (
-					<WithComposerContext>
+					<WithComposerContext textSeed={PostComposerTextSeedRef.current}>
 						<PostCompose />
 					</WithComposerContext>
 				);

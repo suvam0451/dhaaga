@@ -20,7 +20,10 @@ const ProfileNameAndHandle = memo(({ style }: ProfileNameAndHandleProps) => {
 	const { user } = useActivitypubUserContext();
 
 	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(user?.getAccountUrl(), subdomain);
+		return ActivitypubHelper.getHandle(
+			user?.getAccountUrl(subdomain),
+			subdomain,
+		);
 	}, [user?.getAccountUrl()]);
 
 	const { content: ParsedDisplayName } = useMfm({

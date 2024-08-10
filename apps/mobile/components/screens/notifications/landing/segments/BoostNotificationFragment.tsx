@@ -16,7 +16,11 @@ const BoostNotificationFragment = memo(function Foo({ item }: Props) {
 				acct={acct}
 				type={DhaagaJsNotificationType.REBLOG}
 			/>
-			<NotificationDescriptionText type={DhaagaJsNotificationType.REBLOG} />
+			<NotificationDescriptionText
+				type={DhaagaJsNotificationType.REBLOG}
+				createdAt={item.createdAt}
+				id={item.id}
+			/>
 			<NotificationPostPeek acct={acct} post={post} />
 		</View>
 	);

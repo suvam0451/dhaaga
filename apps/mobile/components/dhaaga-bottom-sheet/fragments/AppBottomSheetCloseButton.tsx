@@ -19,7 +19,11 @@ const AppBottomSheetCloseButton = memo(() => {
 			<View style={styles.internalContainer}>
 				<Text style={styles.text}>Close</Text>
 				<View style={{ marginLeft: 8 }}>
-					<AntDesign name="close" size={20} color={APP_FONT.MONTSERRAT_BODY} />
+					<AntDesign
+						name="close"
+						size={20}
+						color={APP_FONT.MONTSERRAT_HEADER}
+					/>
 				</View>
 			</View>
 		</TouchableOpacity>
@@ -35,7 +39,8 @@ const styles = StyleSheet.create({
 		width: '100%',
 	},
 	internalContainer: {
-		backgroundColor: '#363636',
+		// backgroundColor: '#363636',
+		backgroundColor: '#ea6f93',
 		padding: 8,
 		paddingHorizontal: 16,
 		borderRadius: 8,
@@ -45,8 +50,9 @@ const styles = StyleSheet.create({
 
 	text: {
 		textAlign: 'center',
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD, // 400 previously
+		// color: APP_FONT.MONTSERRAT_BODY,
+		color: APP_FONT.MONTSERRAT_HEADER,
 	},
 });
 export default AppBottomSheetCloseButton;

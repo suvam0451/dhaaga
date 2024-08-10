@@ -21,6 +21,7 @@ import {
 	useAppBottomSheet,
 } from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -39,7 +40,6 @@ const NOTIFICATION_TYPE_ICON_SIZE = 15;
  */
 export const NotificationSender = memo(
 	({
-		id,
 		type,
 		handle,
 		displayName,
@@ -101,25 +101,51 @@ export const NotificationSender = memo(
 					};
 				}
 				case DhaagaJsNotificationType.REACTION: {
-					const ex = /:(.*?):/;
+					// example input --> :example@misskey.io:
+					const localEmojiRegex = /:(.*?):/;
+					const remoteEmojiRegex = /:(.*?)@(.*?):/;
+
 					let data = extraData;
-					if (ex.test(extraData)) {
-						const match = find(extraData, remoteSubdomain);
-						console.log(match);
-						data = find(extraData, remoteSubdomain)?.url || extraData;
+					if (remoteEmojiRegex.test(extraData)) {
+						const match = remoteEmojiRegex.exec(extraData);
+						data = find(match[1], remoteSubdomain)?.url;
+					} else if (localEmojiRegex.test(extraData)) {
+						const match = localEmojiRegex.exec(extraData);
+						data = find(match[1], match[2])?.url;
 					}
 
-					console.log('[INFO]: found emoji', data);
-					return {
-						Icon: (
-							<Feather
-								name="check-square"
-								size={NOTIFICATION_TYPE_ICON_SIZE}
-								color="white"
-							/>
-						),
-						bg: '#34aed2',
-					};
+					if (!data) {
+						return {
+							Icon: (
+								<FontAwesome6
+									name="question-circle"
+									size={16}
+									color={APP_FONT.MONTSERRAT_BODY}
+								/>
+							),
+							bg: '#242424',
+						};
+						// console.log('[WARN]: failed to resolve emoji', extraData);
+						// data = extraData;
+					}
+
+					if (data?.length < 5) {
+						return {
+							Icon: <Text>{data}</Text>,
+							bg: '#242424',
+						};
+					} else {
+						return {
+							Icon: (
+								// @ts-ignore-next-line
+								<Image
+									source={{ uri: data }}
+									style={{ height: 18, width: 18 }}
+								/>
+							),
+							bg: '#242424',
+						};
+					}
 				}
 				case DhaagaJsNotificationType.REPLY:
 				case DhaagaJsNotificationType.MENTION: {
@@ -134,6 +160,18 @@ export const NotificationSender = memo(
 						bg: 'purple',
 					};
 				}
+				case DhaagaJsNotificationType.STATUS: {
+					return {
+						Icon: (
+							<FontAwesome6
+								name="rss"
+								size={14}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+						),
+						bg: 'purple',
+					};
+				}
 				default: {
 					return {
 						Icon: <Octicons name="mention" size={24} color="black" />,
@@ -141,7 +179,7 @@ export const NotificationSender = memo(
 					};
 				}
 			}
-		}, [type]);
+		}, [type, extraData]);
 
 		return (
 			<View style={{ flexDirection: 'row' }}>
@@ -168,6 +206,7 @@ export const NotificationSender = memo(
 							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 							color: APP_FONT.MONTSERRAT_HEADER,
 						}}
+						numberOfLines={1}
 					>
 						{displayName}
 					</Text>
@@ -177,6 +216,7 @@ export const NotificationSender = memo(
 							color: APP_FONT.MONTSERRAT_BODY,
 							fontSize: 12,
 						}}
+						numberOfLines={1}
 					>
 						{handle}
 					</Text>
@@ -201,6 +241,7 @@ export const NotificationSenderInterface = memo(
 		const { domain, subdomain } = useActivityPubRestClientContext();
 
 		const id = acct?.getId();
+
 		const acctUrl = acct?.getAccountUrl(subdomain);
 		const displayName = acct?.getDisplayName();
 		const avatarUrl = acct?.getAvatarUrl();
@@ -227,7 +268,6 @@ export const NotificationSenderInterface = memo(
 				UserRef.current = null;
 				UserIdRef.current = acct.getId();
 			}
-			console.log(acct.getDisplayName(), acct.getId());
 			setType(BOTTOM_SHEET_ENUM.PROFILE_PEEK);
 			setVisible(true);
 			updateRequestId();

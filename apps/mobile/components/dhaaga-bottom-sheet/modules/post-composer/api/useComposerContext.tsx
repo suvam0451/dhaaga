@@ -113,11 +113,12 @@ export function useComposerContext() {
 
 type Props = {
 	children: any;
+	textSeed?: string;
 };
 
-function WithComposerContext({ children }: Props) {
-	const [RawText, setRawText] = useState('');
-	const [EditorText, setEditorText] = useState(<Text></Text>);
+function WithComposerContext({ children, textSeed }: Props) {
+	const [RawText, setRawText] = useState(textSeed || '');
+	const [EditorText, setEditorText] = useState(<Text>{textSeed || ''}</Text>);
 	const [Cw, setCw] = useState('');
 	const [CwSectionShown, setCwSectionShown] = useState(false);
 	const [EditMode, setEditMode] = useState<'txt' | 'alt' | 'misc'>('txt');

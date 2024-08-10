@@ -25,6 +25,7 @@ export type Notification_Entry = {
 	acct?: UserInterface;
 	post?: StatusInterface;
 	extraData?: string;
+	read?: boolean;
 };
 
 export type Notification_FlatList_Entry = {
@@ -33,7 +34,7 @@ export type Notification_FlatList_Entry = {
 };
 
 const NOTIFICATION_GET_DEFAULT_PAYLOAD = {
-	limit: 80,
+	limit: 40,
 	excludeTypes: [],
 	types: [
 		// Mastodon
@@ -57,7 +58,6 @@ function useApiGetNotifications() {
 
 	async function api() {
 		if (!client) return [];
-
 		if (domain === KNOWN_SOFTWARE.FIREFISH) {
 			/**
 			 * Firefish does not support grouped-notifications
@@ -66,7 +66,7 @@ function useApiGetNotifications() {
 			const { data, error } = await (
 				client as MisskeyRestClient
 			).notifications.getUngrouped(NOTIFICATION_GET_DEFAULT_PAYLOAD);
-			console.log(data);
+
 			if (error) return [];
 			return data as any;
 		} else {
@@ -107,6 +107,7 @@ function useApiGetNotifications() {
 								)
 							: undefined,
 					extraData: o.reaction,
+					read: o.isRead,
 				},
 			})),
 		);
