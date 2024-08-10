@@ -15,8 +15,8 @@
     "rn:android:apk": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
-    "@dhaaga/shared-abstraction-activitypub": "workspace:*",
-    "@dhaaga/shared-provider-mastodon": "workspace:*",
+    "@dhaaga/shared-abstraction-activitypub": "*",
+    "@dhaaga/shared-provider-mastodon": "*",
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
     "@expo/metro-config": "~0.18.11",
@@ -75,11 +75,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/helper-module-imports": "^7.24.3",
-    "@babel/runtime": "^7.25.0",
-    "@expo/metro-runtime": "^3.2.1",
-    "@react-native/babel-preset": "^0.74.87",
     "@types/react": "~18.2.79",
     "typescript": "~5.3.3"
   },

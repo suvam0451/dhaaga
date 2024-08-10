@@ -16,7 +16,7 @@
   },
   "version": "0.3.0",
   "dependencies": {
-    "@dhaaga/shared-provider-mastodon": "workspace:*",
+    "@dhaaga/shared-provider-mastodon": "*",
     "axios": "^1.4.0",
     "camelcase-keys": "^9.1.3",
     "change-case": "^5.4.4",
