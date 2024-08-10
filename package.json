@@ -26,5 +26,13 @@
   },
   "dependencies": {
     "prettier": "^3.3.2"
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "useTabs": true
   }
 }
