@@ -26,14 +26,5 @@
   },
   "dependencies": {
     "prettier": "^3.3.2"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "@babel/*",
-        "expo-modules-*",
-        "typescript"
-      ]
-    }
   }
 }
