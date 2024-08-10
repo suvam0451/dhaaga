@@ -18,7 +18,6 @@
     "@babel/helper-module-imports": "^7.24.3",
     "@dhaaga/shared-abstraction-activitypub": "*",
     "@dhaaga/shared-provider-mastodon": "*",
-    "@dhaaga/shared-provider-misskey": "*",
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
     "@expo/metro-config": "~0.18.11",

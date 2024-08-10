@@ -1,7 +1,4 @@
 import axios from 'axios';
-import { StatusQuery } from './bookmarks.js';
-
-// import applyCaseMiddleware from 'axios-case-converter';
 
 /**
  * Mastodon sometimes embeds the
@@ -35,7 +32,7 @@ export function extractPaginationFromLinkHeader(headers: any) {
  * @param baseUrl
  * @param query
  */
-export function buildQueryUrl(baseUrl: string, query?: StatusQuery) {
+export function buildQueryUrl(baseUrl: string, query?: any) {
 	baseUrl = baseUrl.concat(`?limit=${query.limit}`);
 	if (query?.maxId) {
 		baseUrl = baseUrl.concat(`&max_id=${query?.maxId}`);

@@ -12,6 +12,8 @@ import {
 	MastoErrorHandler,
 } from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import { MastoAccountCredentials } from '../_interface.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 
 export class DefaultInstanceRouter implements InstanceRoute {
 	private misskeyAuthUrl({
@@ -372,8 +374,6 @@ export class DefaultInstanceRouter implements InstanceRoute {
 						},
 					};
 				}
-
-				return { data: [] };
 			}
 			default: {
 				return {
@@ -398,5 +398,68 @@ export class DefaultInstanceRouter implements InstanceRoute {
 				code: DhaagaErrorCode.DEFAULT_CLIENT,
 			},
 		};
+	}
+
+	/**
+	 * Exchange temp code token
+	 * with permanent token
+	 * @param instanceUrl
+	 * @param code
+	 * @param clientId
+	 * @param clientSecret
+	 */
+	async getMastodonAccessToken(
+		instanceUrl: string,
+		code: string,
+		clientId: string,
+		clientSecret: string,
+	) {
+		try {
+			const res = await fetch(`https://${instanceUrl}/oauth/token`, {
+				method: 'POST',
+				body: JSON.stringify({
+					client_id: clientId,
+					client_secret: clientSecret,
+					redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+					grant_type: 'authorization_code',
+					code,
+					scope: 'read write push follow',
+				}),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+			if (!res.ok) {
+				return null;
+			}
+			const data = await res.json();
+			return data?.access_token;
+		} catch (e) {
+			console.log('[ERROR]: obtaining mastodon token', e);
+			return null;
+		}
+	}
+
+	/**
+	 * Verify a Mastodon API token
+	 * @param urlLike
+	 * @param token
+	 */
+	async verifyCredentials(
+		urlLike: string,
+		token: string,
+	): LibraryPromise<MastoAccountCredentials> {
+		const res = await fetch(
+			`https://${urlLike}/api/v1/accounts/verify_credentials`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			},
+		);
+		if (!res.ok) return errorBuilder(res.statusText);
+		return { data: await res.json() };
 	}
 }

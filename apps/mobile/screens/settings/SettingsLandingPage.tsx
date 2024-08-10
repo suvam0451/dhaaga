@@ -3,16 +3,16 @@ import { StyleSheet, View } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import Animated from 'react-native-reanimated';
 import { Link } from 'expo-router';
-import useScrollMoreOnPageEnd from '../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../components/containers/WithAutoHideTopNavBar';
-import { APP_FONT } from '../styles/AppTheme';
+import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '../../components/containers/WithAutoHideTopNavBar';
+import { APP_FONT } from '../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FontAwesome } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import VersionCode from '../components/static/sponsorship/VersionCode';
+import VersionCode from '../../components/static/sponsorship/VersionCode';
 
 function SettingPageFooter() {
 	return <VersionCode />;
@@ -50,10 +50,6 @@ function AppFeatureSmallGridItem({
 			<View style={{ width: iconSize, height: iconSize }}>{Icon}</View>
 		</View>
 	);
-}
-
-function AppFeatureMediumGridItem() {
-	return <View></View>;
 }
 
 type AppFeatureExtraLargeGridItemProps = {
@@ -368,29 +364,27 @@ function SettingsScreenBottomSection() {
 	);
 }
 
-function SettingsScreen() {
+function SettingsLandingPage() {
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
 
 	return (
-		<View style={{ backgroundColor: '#121212', height: '100%' }}>
-			<WithAutoHideTopNavBar title={'App Settings'} translateY={translateY}>
-				<Animated.ScrollView
-					contentContainerStyle={{ paddingTop: 54, height: '100%' }}
-				>
-					<View style={{ flexGrow: 1 }}>
-						<SettingsScreenTopSection />
-					</View>
+		<WithAutoHideTopNavBar title={'App Settings'} translateY={translateY}>
+			<Animated.ScrollView
+				contentContainerStyle={{ paddingTop: 54, height: '100%' }}
+			>
+				<View style={{ flexGrow: 1 }}>
+					<SettingsScreenTopSection />
+				</View>
 
-					<View style={{ marginBottom: 8 }}>
-						<SettingsScreenBottomSection />
-						<SettingPageFooter />
-					</View>
-				</Animated.ScrollView>
-			</WithAutoHideTopNavBar>
-		</View>
+				<View style={{ marginBottom: 8 }}>
+					<SettingsScreenBottomSection />
+					<SettingPageFooter />
+				</View>
+			</Animated.ScrollView>
+		</WithAutoHideTopNavBar>
 	);
 }
 
@@ -416,4 +410,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default SettingsScreen;
+export default SettingsLandingPage;

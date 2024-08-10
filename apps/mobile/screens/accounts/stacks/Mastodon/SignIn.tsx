@@ -4,17 +4,12 @@ import { useState } from 'react';
 import WebView from 'react-native-webview';
 import { MainText } from '../../../../styles/Typography';
 import { Button } from '@rneui/base';
-import {
-	MastodonService,
-	RestClient,
-	RestServices,
-} from '@dhaaga/shared-provider-mastodon';
 import { useRealm } from '@realm/react';
 import TitleOnlyNoScrollContainer from '../../../../components/containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
 import AccountService from '../../../../services/account.service';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { UnknownRestClient } from '@dhaaga/shared-abstraction-activitypub';
 
 function MastodonSignInStack() {
 	const [Code, setCode] = useState<string | null>(null);
@@ -37,19 +32,19 @@ function MastodonSignInStack() {
 
 	async function onPressConfirm() {
 		const instance = _subdomain;
-		const token = await MastodonService.getAccessToken(
-			instance,
-			Code,
-			_clientId,
-			_clientSecret,
-		);
+		const token =
+			await new UnknownRestClient().instances.getMastodonAccessToken(
+				instance,
+				Code,
+				_clientId,
+				_clientSecret,
+			);
 
-		const client = new RestClient(instance, {
-			accessToken: token,
-			domain: KNOWN_SOFTWARE.MASTODON,
-		});
-
-		const verified = await RestServices.v1.accounts.verifyCredentials(client);
+		const { data: verified, error } =
+			await new UnknownRestClient().instances.verifyCredentials(
+				instance,
+				token,
+			);
 
 		try {
 			AccountService.upsert(db, {

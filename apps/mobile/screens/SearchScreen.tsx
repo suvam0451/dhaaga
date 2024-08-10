@@ -122,7 +122,6 @@ function SearchScreen() {
 		>
 			<Stack.Screen name={'Search'} component={HomeContainer} />
 			<Stack.Screen name="Browse Hashtag" component={ApiWrapper} />
-			<Stack.Screen name="Post" component={PostWithClientContext} />
 		</Stack.Navigator>
 	);
 }

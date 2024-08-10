@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { Text } from '@rneui/themed';
+import { APP_FONTS } from '../styles/AppFonts';
 
+/**
+ * Prefer not to use this
+ */
 class AstService {
 	static applyTextStylingToChildren(node: JSX.Element | JSX.Element[]) {
 		if (Array.isArray(node)) {
@@ -14,8 +18,7 @@ class AstService {
 								// @ts-ignore
 								child.props.style,
 								{
-									fontFamily: 'Montserrat-ExtraBold',
-									// fontSize: 48,
+									fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
 								},
 							],
 							// children: child.props.children.toUpperCase()
@@ -34,8 +37,7 @@ class AstService {
 						// @ts-ignore
 						child.props.style,
 						{
-							fontFamily: 'Montserrat-ExtraBold',
-							// fontSize: 48,
+							fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
 						},
 					],
 					// children: child.props.children.toUpperCase()

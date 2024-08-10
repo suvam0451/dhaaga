@@ -124,15 +124,7 @@ class UnknownRestClient implements ActivityPubClient {
 	async getFavourites(opts: GetPostsQueryDTO) {
 		return [];
 	}
-
-	async getBookmarks(opts: GetPostsQueryDTO) {
-		return { data: [] };
-	}
-
-	async getFollowedTags() {
-		return [];
-	}
-
+	
 	async favourite(id: string) {
 		return null;
 	}

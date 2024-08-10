@@ -6,7 +6,7 @@ import { MainText } from '../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import * as Crypto from 'expo-crypto';
 
-import { verifyToken } from '@dhaaga/shared-provider-misskey/src';
+import { verifyMisskeyToken } from '@dhaaga/shared-abstraction-activitypub';
 import AccountCreationPreview, {
 	AccountCreationPreviewProps,
 } from '../../../../components/app/AccountDisplay';
@@ -16,7 +16,6 @@ import { useRealm } from '@realm/react';
 import { router, useLocalSearchParams } from 'expo-router';
 import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import AccountService from '../../../../services/account.service';
 
 function MisskeySignInStack() {
@@ -55,7 +54,7 @@ function MisskeySignInStack() {
 	}
 
 	async function autoVerifyFromSession() {
-		const res = await verifyToken(`https://${_subdomain}`, Session);
+		const res = await verifyMisskeyToken(`https://${_subdomain}`, Session);
 		if (res.ok) {
 			setPreviewCard({
 				displayName: res?.user?.name,
