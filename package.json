@@ -8,16 +8,16 @@
     "dev:app:turbo": "turbo dev --filter=\"...{./apps/mobile}\"",
     "dev:web": "yarn workspace @dhaaga/web dev",
     "app:preview": "npm run preview -w @dhaaga/mobile",
-    "build:misskey": "yarn --cwd ./packages/shared-provider-misskey build",
-    "build:mastodon": "yarn --cwd ./packages/shared-provider-mastodon build",
-    "build:dhaagajs": "yarn --cwd ./packages/shared-abstraction-activitypub build",
-    "build": "yarn build:misskey && yarn build:mastodon && yarn build:dhaagajs"
+    "build:mastodon": "pnpm --cwd ./packages/shared-provider-mastodon build",
+    "build:dhaagajs": "pnpm --cwd ./packages/shared-abstraction-activitypub build",
+    "build": "echo"
   },
   "author": "Debashish Patra",
   "license": "AGPLv3",
   "workspaces": [
     "packages/**",
-    "apps/**"
+    "apps/mobile",
+    "apps/web"
   ],
   "overrides": {
     "styled-components": {
@@ -27,5 +27,13 @@
   "dependencies": {
     "prettier": "^3.3.2"
   },
-  "packageManager": "yarn@1.22.22"
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@babel/*",
+        "expo-modules-*",
+        "typescript"
+      ]
+    }
+  }
 }
