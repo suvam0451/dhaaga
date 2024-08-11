@@ -6,6 +6,7 @@ import {
 	StatusInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsPostSearchDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/search';
 
 export enum APP_SEARCH_TYPE {
 	ALL,
@@ -21,8 +22,8 @@ type AppSearchResults = {
 	hashtags: any[];
 };
 
-function useSearch(q: string, type: APP_SEARCH_TYPE) {
-	const { client, domain } = useActivityPubRestClientContext();
+function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
+	const { client, domain, subdomain } = useActivityPubRestClientContext();
 	const [Data, setData] = useState<AppSearchResults>({
 		accounts: [],
 		hashtags: [],
@@ -31,27 +32,36 @@ function useSearch(q: string, type: APP_SEARCH_TYPE) {
 	const [IsLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		setIsLoading(true);
-	}, [q, type]);
+		if (dto.q !== '') {
+			setIsLoading(true);
+		}
+	}, [dto.q]);
 
 	async function api() {
 		const { data, error } = await client.search.findPosts({
 			limit: 5,
-			q,
-			query: q,
+			q: dto.q,
+			query: dto.q,
+			untilId: dto.maxId,
+			...dto,
 		});
 		return data;
 	}
 
 	// Queries
 	const { fetchStatus, data, status } = useQuery({
-		queryKey: ['search', q, type],
+		queryKey: ['search', subdomain, dto, type],
 		queryFn: api,
-		enabled: client !== null && q !== '',
+		enabled: client !== null && dto.q !== '',
 	});
 
 	useEffect(() => {
-		if (status !== 'success') return;
+		if (fetchStatus !== 'fetching') setIsLoading(false);
+
+		if (status !== 'success') {
+			setIsLoading(false);
+			return;
+		}
 		switch (type) {
 			case APP_SEARCH_TYPE.POSTS: {
 				setData({
@@ -64,7 +74,7 @@ function useSearch(q: string, type: APP_SEARCH_TYPE) {
 		setIsLoading(false);
 	}, [fetchStatus]);
 
-	return { Data, IsLoading };
+	return { Data, IsLoading, fetchStatus };
 }
 
 export default useSearch;

@@ -33,6 +33,8 @@ export type DhaagaJsPostSearchDTO = {
 	host?: string; // "." for local
 	query: string;
 	userId?: null;
+	sinceId?: string;
+	untilId?: string;
 } & MastoUnifiedSearchType;
 
 export interface SearchRoute {

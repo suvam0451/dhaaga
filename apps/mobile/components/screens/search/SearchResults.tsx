@@ -150,8 +150,8 @@ function SearchResults(props: SearchResultsProps) {
 				estimatedItemSize={200}
 				data={PageData}
 				renderItem={(o) => (
-					<WithActivitypubStatusContext status={o.item} key={o.index}>
-						<StatusItem key={o.index} />
+					<WithActivitypubStatusContext status={o.item}>
+						<StatusItem />
 					</WithActivitypubStatusContext>
 				)}
 				onScroll={props.onScroll}

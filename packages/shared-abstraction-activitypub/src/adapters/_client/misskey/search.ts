@@ -1,4 +1,5 @@
 import {
+	DhaagaJsPostSearchDTO,
 	DhaagaJsUserSearchDTO,
 	SearchRoute,
 } from '../_router/routes/search.js';
@@ -34,7 +35,7 @@ export class MisskeySearchRouter implements SearchRoute {
 	}
 
 	async findPosts(
-		query: DhaagaJsUserSearchDTO,
+		query: DhaagaJsPostSearchDTO,
 	): LibraryPromise<Endpoints['notes/search']['res']> {
 		try {
 			const data = await this.lib.client.request('notes/search', query);
