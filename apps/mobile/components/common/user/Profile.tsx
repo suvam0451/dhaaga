@@ -23,7 +23,7 @@ import PinnedPosts from './fragments/PinnedPosts';
 import ProfileImageGallery from './fragments/ProfileImageGallery';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import useGetProfile from '../../../api/accounts/useGetProfile';
+import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
 import styles from './utils/styles';
 import { ProfileStatsInterface } from './fragments/ProfileStats';
 import ProfileAvatar from './fragments/ProfileAvatar';
@@ -32,6 +32,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FollowIndicator from './fragments/FollowIndicator';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ProfileDesc from './fragments/ProfileDesc';
+import ProfilePeekMessage from '../../dhaaga-bottom-sheet/modules/profile-peek/fragments/ProfilePeekMessage';
 
 function ProfileContextWrapped() {
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -92,19 +93,7 @@ function ProfileContextWrapped() {
 							flexDirection: 'row',
 						}}
 					>
-						<TouchableOpacity
-							style={{
-								padding: 8,
-								backgroundColor: '#242424',
-								borderRadius: 8,
-							}}
-						>
-							<AntDesign
-								name="message1"
-								size={20}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
-						</TouchableOpacity>
+						<ProfilePeekMessage handle={handle} />
 						<TouchableOpacity
 							style={{
 								padding: 8,

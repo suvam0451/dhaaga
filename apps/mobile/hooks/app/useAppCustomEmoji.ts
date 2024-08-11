@@ -27,7 +27,9 @@ function useAppCustomEmoji() {
 	const refresh = useCallback((subdomain: string, software?: string) => {
 		EmojiService.downloadCustomEmojis(globalDb, subdomain, software).then(
 			(res) => {
-				console.log('[INFO]: custom emoji refresh status', res);
+				if (!res.success) {
+					console.log('[INFO]: custom emoji refresh status', res);
+				}
 			},
 		);
 	}, []);

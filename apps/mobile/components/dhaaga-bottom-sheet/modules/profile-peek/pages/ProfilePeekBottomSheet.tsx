@@ -7,7 +7,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 } from 'react-native';
-import useGetProfile from '../../../../../api/accounts/useGetProfile';
+import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import FollowIndicator from '../../../../common/user/fragments/FollowIndicator';
 import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';

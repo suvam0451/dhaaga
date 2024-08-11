@@ -3,12 +3,16 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useAppNotifSeenContext } from '../state/useNotifSeen';
+import { useAppNotificationBadge } from '../../../../../hooks/app/useAppNotificationBadge';
+import NotificationVibrationToggle from './NotificationVibrationToggle';
 
 const MarkAllAsRead = memo(() => {
+	const { setNotificationCount } = useAppNotificationBadge();
 	const { setAllNotifsSeen, All, Seen } = useAppNotifSeenContext();
 
 	function onPress() {
 		setAllNotifsSeen();
+		setNotificationCount(0);
 	}
 
 	const unseen = All.current.size - Seen.size > 0;
@@ -22,13 +26,7 @@ const MarkAllAsRead = memo(() => {
 				marginTop: 16,
 			}}
 		>
-			<TouchableOpacity style={styles.buttonContainer}>
-				<MaterialCommunityIcons
-					name="vibrate"
-					size={20}
-					color={APP_FONT.MONTSERRAT_BODY}
-				/>
-			</TouchableOpacity>
+			<NotificationVibrationToggle style={styles.buttonContainer} />
 			<TouchableOpacity style={styles.markAllAsReadContainer} onPress={onPress}>
 				<View>
 					<MaterialCommunityIcons

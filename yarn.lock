@@ -2764,11 +2764,6 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
-"@react-native-picker/picker@2.7.5":
-  version "2.7.5"
-  resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-2.7.5.tgz#e43fcd65f260fa4f23e974ccb9fb7c1f7a9ff94a"
-  integrity sha512-vhMaOLkXSUb+YKVbukMJToU4g+89VMhBG2U9+cLYF8X8HtFRidrHjohGqT8/OyesDuKIXeLIP+UFYI9Q9CRA9Q==
-
 "@react-native/assets-registry@0.74.87":
   version "0.74.87"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.74.87.tgz#7dda64e48db14597e19e15f679e31abbb1c1fb4d"
@@ -8625,7 +8620,7 @@ minizlib@^2.1.1, minizlib@^2.1.2:
     minipass "^3.0.0"
     yallist "^4.0.0"
 
-misskey-js@^2024.5.0, misskey-js@^2024.7.0-beta.2:
+misskey-js@^2024.5.0, misskey-js@^2024.7.0:
   version "2024.7.0"
   resolved "https://registry.yarnpkg.com/misskey-js/-/misskey-js-2024.7.0.tgz#79e8c050f4c5eb6d2e3555611e16c049412afb98"
   integrity sha512-VtsDTJHt0l4ATT8rRF7Ufzi/r3FrTYa4mOzuC1K5L2PWh2/dlhjLiMqlKWwNDGViD1iSfJDGpZxmExX+7R3Jww==
@@ -9229,7 +9224,7 @@ open@^8.0.4, open@^8.3.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openai@^4.47.3:
+openai@^4.55.4:
   version "4.55.4"
   resolved "https://registry.yarnpkg.com/openai/-/openai-4.55.4.tgz#2f188e718e668f478f40c03012d92394e0c3d1b1"
   integrity sha512-TEC75Y6U/OKIJp9fHao3zkTYfKLYGqXdD2TI+xN2Zd5W8KNKvv6E4/OBTOW7jg7fySfrBrhy5fYzBbyBcdHEtQ==
@@ -9938,7 +9933,7 @@ react-native-helmet-async@2.0.4:
     react-fast-compare "^3.2.2"
     shallowequal "^1.1.0"
 
-react-native-mmkv@^3.0.0-beta.5:
+react-native-mmkv@^3.0.0-beta.7:
   version "3.0.0-beta.7"
   resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-3.0.0-beta.7.tgz#2ef43fdf825b1d2c7cc83a57e4c3715998bbc08e"
   integrity sha512-GqDF1OhUlWjNb4urHsSmRD8uprMv3ChsAKylJFOYgS5+Gc42l9/fui/fsLrReiof1wloQ5DB8Yo2/x2kAXgPaQ==
@@ -11907,7 +11902,7 @@ use-composed-ref@^1.3.0:
   resolved "https://registry.yarnpkg.com/use-composed-ref/-/use-composed-ref-1.3.0.tgz#3d8104db34b7b264030a9d916c5e94fbe280dbda"
   integrity sha512-GLMG0Jc/jiKov/3Ulid1wbv3r54K9HlMW29IWcDFPEqFkSO2nS0MuefWgMJpeHQ9YJeXDL3ZUF+P3jdXlZX/cQ==
 
-use-debounce@^10.0.1:
+use-debounce@^10.0.2:
   version "10.0.2"
   resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-10.0.2.tgz#a2e903d5d7f9f5111dd0cba5bfa67e103f6e96a6"
   integrity sha512-MwBiJK2dk+2qhMDVDCPRPeLuIekKfH2t1UYMnrW9pwcJJGFDbTLliSMBz2UKGmE1PJs8l3XoMqbIU1MemMAJ8g==

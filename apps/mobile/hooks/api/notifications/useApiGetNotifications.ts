@@ -4,11 +4,11 @@ import {
 	StatusInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
+import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import ActivityPubAdapterService from '../../services/activitypub-adapter.service';
-import ActivitypubAdapterService from '../../services/activitypub-adapter.service';
+import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
+import ActivitypubAdapterService from '../../../services/activitypub-adapter.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 type Api_Response_Type = {

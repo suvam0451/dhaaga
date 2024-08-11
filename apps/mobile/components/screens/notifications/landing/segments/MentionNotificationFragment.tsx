@@ -26,33 +26,33 @@ const MentionNotificationFragment = memo(({ item }: Props) => {
 					acct={acct}
 					type={DhaagaJsNotificationType.MENTION}
 				/>
-				<View style={{ flexDirection: 'row' }}>
-					<TouchableOpacity
-						style={{
-							backgroundColor: '#121212',
-							paddingHorizontal: 12,
-							paddingVertical: 8,
-							borderRadius: 8,
-						}}
-					>
-						<Entypo name="reply" size={20} color={APP_FONT.DISABLED} />
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={{
-							backgroundColor: '#121212',
-							paddingHorizontal: 12,
-							paddingVertical: 8,
-							borderRadius: 8,
-							marginLeft: 8,
-						}}
-					>
-						<MaterialIcons
-							name="add-reaction"
-							size={20}
-							color={APP_FONT.DISABLED}
-						/>
-					</TouchableOpacity>
-				</View>
+				{/*<View style={{ flexDirection: 'row' }}>*/}
+				{/*	<TouchableOpacity*/}
+				{/*		style={{*/}
+				{/*			backgroundColor: '#121212',*/}
+				{/*			paddingHorizontal: 12,*/}
+				{/*			paddingVertical: 8,*/}
+				{/*			borderRadius: 8,*/}
+				{/*		}}*/}
+				{/*	>*/}
+				{/*		<Entypo name="reply" size={20} color={APP_FONT.DISABLED} />*/}
+				{/*	</TouchableOpacity>*/}
+				{/*	<TouchableOpacity*/}
+				{/*		style={{*/}
+				{/*			backgroundColor: '#121212',*/}
+				{/*			paddingHorizontal: 12,*/}
+				{/*			paddingVertical: 8,*/}
+				{/*			borderRadius: 8,*/}
+				{/*			marginLeft: 8,*/}
+				{/*		}}*/}
+				{/*	>*/}
+				{/*		<MaterialIcons*/}
+				{/*			name="add-reaction"*/}
+				{/*			size={20}*/}
+				{/*			color={APP_FONT.DISABLED}*/}
+				{/*		/>*/}
+				{/*	</TouchableOpacity>*/}
+				{/*</View>*/}
 			</View>
 
 			<NotificationDescriptionText

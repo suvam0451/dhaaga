@@ -44,7 +44,8 @@ const TimelineMediaRendered = memo(function Foo({
 			case 'image/png':
 			case 'image/webp':
 			case 'gifv':
-			case 'image/gif': {
+			case 'image/gif':
+			case 'image/avif': {
 				return (
 					<AppImageComponent
 						url={attachment.getUrl()}

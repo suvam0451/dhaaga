@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
 import diffClamp = Animated.diffClamp;
-import ProfilePageHeader from '../headers/ProfilePageHeader';
 import NavigationService from '../../services/navigation.service';
 import { APP_THEME } from '../../styles/AppTheme';
+import ProfilePageHeader from '../headers/ProfilePageHeader';
 
 type TitleOnlyStackHeaderContainerProps = {
 	route: any;

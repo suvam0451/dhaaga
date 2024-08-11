@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useAppNotificationBadge } from '../../../../../hooks/app/useAppNotificationBadge';
+import * as Haptics from 'expo-haptics';
 
 type Type = {
 	Seen: Set<string>;
@@ -35,7 +36,7 @@ type Props = {
 };
 
 function WithAppNotifSeenContext({ children }: Props) {
-	const { setNotificationCount } = useAppNotificationBadge();
+	const { setNotificationCount, vibrationOn } = useAppNotificationBadge();
 	const [UnseenCount, setUnseenCount] = useState(0);
 	const { client } = useActivityPubRestClientContext();
 
@@ -69,6 +70,7 @@ function WithAppNotifSeenContext({ children }: Props) {
 		for (const value of All.current) {
 			if (!Seen.has(value)) unseenCount++;
 		}
+
 		setUnseenCount(unseenCount);
 	}, [Seen]);
 
@@ -100,14 +102,25 @@ function WithAppNotifSeenContext({ children }: Props) {
 			 */
 			for (const item of items) All.current.add(item);
 
+			let lastUnseenCount = UnseenCount;
 			let unseenCount = 0;
 			// @ts-ignore-next-line
 			for (const value of All.current) {
 				if (!Seen.has(value)) unseenCount++;
 			}
+
+			/**
+			 * Vibration alert for new notifications
+			 */
+			if (lastUnseenCount !== unseenCount && vibrationOn) {
+				Haptics.notificationAsync(
+					Haptics.NotificationFeedbackType.Success,
+				).then(() => {});
+			}
+
 			setUnseenCount(unseenCount);
 		},
-		[Seen],
+		[Seen, UnseenCount],
 	);
 
 	return (

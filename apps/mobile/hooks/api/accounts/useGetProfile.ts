@@ -4,8 +4,8 @@ import {
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useState } from 'react';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import ActivitypubAdapterService from '../../services/activitypub-adapter.service';
+import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
+import ActivitypubAdapterService from '../../../services/activitypub-adapter.service';
 
 type GetProfile_Type = {
 	user?: UserInterface;

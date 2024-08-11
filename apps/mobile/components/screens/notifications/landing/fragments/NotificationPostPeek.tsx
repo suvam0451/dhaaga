@@ -7,6 +7,8 @@ import { styles } from '../segments/_common';
 import { LinearGradient } from 'expo-linear-gradient';
 import useMfm from '../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { Pressable } from 'react-native';
+import useAppNavigator from '../../../../../states/useAppNavigator';
 
 type Props = {
 	acct: UserInterface;
@@ -28,12 +30,20 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});
 
+	const { toPost } = useAppNavigator();
+
+	function onPress() {
+		toPost(post.getId());
+	}
+
 	return (
-		<LinearGradient
-			colors={['rgba(0,0,0,0.8)', 'transparent']}
-			style={styles.gradientContainerTextOnlyPost}
-		>
-			{content}
-		</LinearGradient>
+		<Pressable onPress={onPress}>
+			<LinearGradient
+				colors={['rgba(0,0,0,0.8)', 'transparent']}
+				style={styles.gradientContainerTextOnlyPost}
+			>
+				{content}
+			</LinearGradient>
+		</Pressable>
 	);
 });

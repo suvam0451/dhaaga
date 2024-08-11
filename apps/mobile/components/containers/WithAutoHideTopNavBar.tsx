@@ -1,8 +1,8 @@
-import ProfilePageHeader from '../headers/ProfilePageHeader';
 import { APP_THEME } from '../../styles/AppTheme';
 import { Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TopNavBarStyles } from '../../styles/NavaigationItems';
+import ProfilePageHeader from '../headers/ProfilePageHeader';
 
 // constants
 const HIDDEN_SECTION_HEIGHT = 50;

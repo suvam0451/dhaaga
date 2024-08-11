@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Notification_Entry } from '../../../../../api/notifications/useApiGetNotifications';
+import { Notification_Entry } from '../../../../../hooks/api/notifications/useApiGetNotifications';
 
 export const ICON_SIZE = 36;
 

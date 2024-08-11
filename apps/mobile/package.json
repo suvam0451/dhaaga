@@ -4,15 +4,12 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "expo start --dev-client -c",
     "apk": "eas build -p android --profile apk",
     "aab": "eas build -p android --profile aab",
     "client": "eas build -p android --profile dev",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "postinstall": "cd ../.. && pnpm build",
-    "rn:android:bundle": "react-native build-android --mode=release",
-    "rn:android:apk": "cd android && ./gradlew assembleRelease"
+    "dev": "expo start --dev-client",
+    "lite": "react-native build-android --mode=release && cd android && ./gradlew assembleRelease",
+    "postinstall": "cd ../.. && yarn build"
   },
   "dependencies": {
     "@dhaaga/shared-abstraction-activitypub": "*",
@@ -21,7 +18,6 @@
     "@expo-google-fonts/montserrat": "^0.2.3",
     "@expo/metro-config": "~0.18.11",
     "@gorhom/bottom-sheet": "^5.0.0-alpha.11",
-    "@react-native-picker/picker": "2.7.5",
     "@react-native/virtualized-lists": "^0.74.84",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/drawer": "^6.7.0",
@@ -54,14 +50,14 @@
     "expo-video": "^1.1.10",
     "i18n-js": "^4.4.3",
     "link-preview-js": "^3.0.5",
-    "misskey-js": "^2024.7.0-beta.2",
-    "openai": "^4.47.3",
+    "misskey-js": "^2024.7.0",
+    "openai": "^4.55.4",
     "react": "18.2.0",
     "react-error-boundary": "^4.0.13",
     "react-native": "0.74.5",
     "react-native-drawer-layout": "^3.3.0",
     "react-native-gesture-handler": "~2.16.1",
-    "react-native-mmkv": "^3.0.0-beta.5",
+    "react-native-mmkv": "^3.0.0-beta.7",
     "react-native-pager-view": "6.3.0",
     "react-native-reanimated": "~3.10.1",
     "react-native-safe-area-context": "4.10.5",
@@ -71,7 +67,7 @@
     "react-native-webview": "13.8.6",
     "realm": "^12.12.1",
     "styled-components": "6.0.5",
-    "use-debounce": "^10.0.1",
+    "use-debounce": "^10.0.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

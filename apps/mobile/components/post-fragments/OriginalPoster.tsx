@@ -1,7 +1,5 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { visibilityIcon } from '../../utils/instances';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { Fragment, memo, useCallback, useEffect, useMemo } from 'react';
 import { useActivitypubStatusContext } from '../../states/useStatus';
 import { useActivitypubUserContext } from '../../states/useProfile';
@@ -10,6 +8,9 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 import useMfm from '../hooks/useMfm';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import useAppNavigator from '../../states/useAppNavigator';
+import StatusCreatedAt from '../common/status/fragments/StatusCreatedAt';
+import { APP_FONTS } from '../../styles/AppFonts';
+import StatusVisibility from '../common/status/fragments/StatusVisibility';
 
 type OriginalPosterProps = {
 	id: string;
@@ -138,18 +139,15 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 				</Text>
 			</View>
 			<View style={{ display: 'flex', flexDirection: 'row' }}>
-				<Text
-					style={{
+				<StatusCreatedAt
+					from={postedAt}
+					textStyle={{
 						color: 'gray',
 						fontSize: 12,
-						fontFamily: 'Inter-Bold',
+						fontFamily: APP_FONTS.INTER_700_BOLD,
 						opacity: 0.87,
 					}}
-				>
-					{formatDistanceToNowStrict(postedAt, {
-						addSuffix: false,
-					})}
-				</Text>
+				/>
 				<Text
 					style={{
 						color: 'gray',
@@ -160,7 +158,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 				>
 					•
 				</Text>
-				{visibilityIcon(visibility)}
+				<StatusVisibility visibility={visibility} />
 			</View>
 		</View>
 	);
