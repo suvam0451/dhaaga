@@ -7,7 +7,7 @@ const appStyling = StyleSheet.create({
 		width: '100%',
 		bottom: 0,
 		// marginHorizontal: 4,
-		marginBottom: 48, // 24,
+		marginBottom: 20, // 24,
 		paddingHorizontal: 12,
 		// borderRadius: 8
 		zIndex: 99,

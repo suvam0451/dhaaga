@@ -7,7 +7,7 @@ import DiscoverTabFactory from './fragments/DiscoverTabFactory';
  * The landing page for the
  * discover module
  */
-const DiscoverTabLanding = memo(() => {
+const DiscoverLandingStack = memo(() => {
 	return (
 		<WithScrollOnRevealContext maxDisplacement={150}>
 			<WithAppPaginationContext>
@@ -17,4 +17,4 @@ const DiscoverTabLanding = memo(() => {
 	);
 });
 
-export default DiscoverTabLanding;
+export default DiscoverLandingStack;

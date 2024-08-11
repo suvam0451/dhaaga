@@ -9,6 +9,8 @@ import DiscoverTabListHeader from './DiscoverTabListHeader';
 import useSearch, { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import LoadingMore from '../../../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
+import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
+import { useDebounce } from 'use-debounce';
 
 /**
  * Renders the results of a
@@ -16,7 +18,11 @@ import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMor
  * tab
  */
 const DiscoverTabFactory = memo(() => {
+	const { client } = useActivityPubRestClientContext();
 	const [SearchTerm, setSearchTerm] = useState('');
+	const [SearchCategory, setSearchCategory] = useState<APP_SEARCH_TYPE>(
+		APP_SEARCH_TYPE.POSTS,
+	);
 
 	const { data, updateQueryCache, append, setMaxId, queryCacheMaxId, clear } =
 		useAppPaginationContext();
@@ -26,22 +32,38 @@ const DiscoverTabFactory = memo(() => {
 		updateQueryCache,
 	});
 
-	const { Data, fetchStatus, IsLoading } = useSearch(APP_SEARCH_TYPE.POSTS, {
+	const { Data, fetchStatus, IsLoading, status } = useSearch(SearchCategory, {
 		maxId: queryCacheMaxId,
 		q: SearchTerm,
-		type: 'statuses',
 		limit: 10,
 		query: SearchTerm,
 	});
 
 	useEffect(() => {
+		// reset the results on account/searchTerm change
 		clear();
-	}, [SearchTerm]);
+	}, [SearchTerm, client, SearchCategory]);
 
 	useEffect(() => {
-		if (Data.statuses.length === 0) return;
-		setMaxId(Data.statuses[Data.statuses.length - 1].getId());
-		append(Data.statuses);
+		switch (SearchCategory) {
+			case APP_SEARCH_TYPE.POSTS: {
+				if (Data?.statuses?.length === 0) return;
+				setMaxId(Data.statuses[Data.statuses.length - 1].getId());
+				append(Data.statuses);
+				break;
+			}
+			case APP_SEARCH_TYPE.USERS: {
+				if (Data?.accounts?.length === 0) return;
+				setMaxId(Data.accounts[Data.accounts.length - 1].getId());
+				append(Data.accounts);
+				break;
+			}
+			default: {
+				if (Data?.statuses?.length === 0) return;
+				setMaxId(Data.statuses[Data.statuses.length - 1].getId());
+				append(Data.statuses);
+			}
+		}
 	}, [Data]);
 
 	const { visible, loading } = useLoadingMoreIndicatorState({
@@ -49,17 +71,41 @@ const DiscoverTabFactory = memo(() => {
 		additionalLoadingStates: IsLoading,
 	});
 
+	const [debouncedFetchStatus] = useDebounce(fetchStatus, 200);
+
 	return (
 		<WithAutoHideTopNavBar title={'Explore'} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={200}
 				data={data}
-				renderItem={DiscoverListRenderer}
+				renderItem={({ item }) => {
+					return <DiscoverListRenderer item={item} category={SearchCategory} />;
+				}}
 				onScroll={onScroll}
-				ListHeaderComponent={DiscoverTabListHeader}
+				contentContainerStyle={{
+					paddingTop: 54,
+				}}
+				ListHeaderComponent={() => {
+					return (
+						<DiscoverTabListHeader
+							query={SearchTerm}
+							fetchStatus={debouncedFetchStatus}
+							numItems={data.length}
+							status={status}
+							category={SearchCategory}
+						/>
+					);
+				}}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
-			<DiscoverSearchHelper setSearchTerm={setSearchTerm} />
+			<LoadingMore
+				visible={visible}
+				loading={loading}
+				style={{ bottom: 108 }}
+			/>
+			<DiscoverSearchHelper
+				setSearchTerm={setSearchTerm}
+				setSearchCategory={setSearchCategory}
+			/>
 		</WithAutoHideTopNavBar>
 	);
 });

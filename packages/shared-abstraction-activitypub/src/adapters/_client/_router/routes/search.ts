@@ -23,6 +23,7 @@ export type DhaagaJsUserSearchDTO = {
 	allowPartial?: boolean;
 	limit: number;
 	query: string;
+	untilId?: string;
 } & MastoUnifiedSearchType;
 
 export type DhaagaJsPostSearchDTO = {

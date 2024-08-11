@@ -108,7 +108,6 @@ function SearchScreenManual() {
 const styles = StyleSheet.create({
 	manualContainer: {
 		alignItems: 'center',
-		marginTop: 54,
 		padding: 16,
 	},
 	borderContainer: {

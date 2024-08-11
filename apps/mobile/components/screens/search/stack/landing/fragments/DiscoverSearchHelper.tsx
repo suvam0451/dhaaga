@@ -1,17 +1,47 @@
 import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
-import appStyling from '../../../../../../styles/AppStyles';
 import { SearchBar } from '@rneui/themed';
-import { Animated, StyleSheet, TextInput, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import { NativeCheckbox } from '../../../../../lib/Checkboxes';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
+import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 
-function Multiselect() {
+type MultiSelectProps = {
+	setSearchCategory: Dispatch<SetStateAction<APP_SEARCH_TYPE>>;
+};
+
+/**
+ * Control section to set the
+ * search category
+ */
+const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
 	const [selectedIndex, setSelectedIndex] = useState(0);
 
 	const onCheckboxPress = useCallback(
 		(idx: number) => {
 			setSelectedIndex(idx);
+			switch (idx) {
+				case 0: {
+					setSearchCategory(APP_SEARCH_TYPE.POSTS);
+					break;
+				}
+				case 1: {
+					setSearchCategory(APP_SEARCH_TYPE.USERS);
+					break;
+				}
+				case 2: {
+					setSearchCategory(APP_SEARCH_TYPE.HASHTAGS);
+					break;
+				}
+				case 3: {
+					// setSearchCategory(APP_SEARCH_TYPE.LINKS);
+					break;
+				}
+				default: {
+					setSearchCategory(APP_SEARCH_TYPE.POSTS);
+					break;
+				}
+			}
 		},
 		[setSelectedIndex],
 	);
@@ -45,10 +75,11 @@ function Multiselect() {
 			))}
 		</View>
 	);
-}
+});
 
 type DiscoverSearchHelperProps = {
 	setSearchTerm: Dispatch<SetStateAction<string>>;
+	setSearchCategory: Dispatch<SetStateAction<APP_SEARCH_TYPE>>;
 };
 
 /**
@@ -57,7 +88,7 @@ type DiscoverSearchHelperProps = {
  * page
  */
 const DiscoverSearchHelper = memo(
-	({ setSearchTerm }: DiscoverSearchHelperProps) => {
+	({ setSearchTerm, setSearchCategory }: DiscoverSearchHelperProps) => {
 		const [searchBoxText, setSearchBoxText] = useState('');
 
 		const updateSearch = (search: string) => {
@@ -71,7 +102,7 @@ const DiscoverSearchHelper = memo(
 		};
 
 		return (
-			<Animated.View style={[appStyling.inputAssistant]}>
+			<Animated.View style={[styles.helperWidget]}>
 				<SearchBar
 					// @ts-ignore
 					onChangeText={updateSearch}
@@ -89,7 +120,7 @@ const DiscoverSearchHelper = memo(
 					inputContainerStyle={{ height: 36 }}
 					inputStyle={{ fontSize: 16 }}
 				/>
-				<Multiselect />
+				<Multiselect setSearchCategory={setSearchCategory} />
 			</Animated.View>
 		);
 	},
@@ -108,6 +139,14 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 8,
 		borderBottomRightRadius: 8,
 		borderBottomLeftRadius: 8,
+	},
+	helperWidget: {
+		position: 'absolute',
+		width: '100%',
+		bottom: 0,
+		marginBottom: 16,
+		paddingHorizontal: 12,
+		zIndex: 99,
 	},
 });
 

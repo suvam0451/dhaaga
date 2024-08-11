@@ -4,12 +4,14 @@ import SearchScreenManual from '../../../../../error-screen/SearchScreenManual';
 import AppLoadingIndicator from '../../../../../error-screen/AppLoadingIndicator';
 import NoResults from '../../../../../error-screen/NoResults';
 import { View } from 'react-native';
+import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 
 type DiscoverTabIndicatorProps = {
 	query: string;
 	status: 'error' | 'success' | 'pending';
 	fetchStatus: FetchStatus;
 	numItems: number;
+	category: APP_SEARCH_TYPE;
 };
 
 /**
@@ -17,7 +19,13 @@ type DiscoverTabIndicatorProps = {
  * states for the Discovery module
  */
 const DiscoverTabListHeader = memo(
-	({ query, status, fetchStatus, numItems }: DiscoverTabIndicatorProps) => {
+	({
+		query,
+		status,
+		fetchStatus,
+		numItems,
+		category,
+	}: DiscoverTabIndicatorProps) => {
 		// Idle
 		if (!query) return <SearchScreenManual />;
 
@@ -28,10 +36,7 @@ const DiscoverTabListHeader = memo(
 		// No Results
 		if (status === 'success' && numItems === 0) {
 			return (
-				<NoResults
-					text={'No results 🤔'}
-					subtext={'Try change categories' + ' or' + ' a different keyword'}
-				/>
+				<NoResults text={'No results 🤔'} subtext={'Try a different keyword'} />
 			);
 		}
 
