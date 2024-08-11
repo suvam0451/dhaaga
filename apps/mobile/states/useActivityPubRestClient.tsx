@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import {
+	createContext,
+	MutableRefObject,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import {
 	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
@@ -19,6 +26,8 @@ type Type = {
 	me: UserInterface | null;
 	meRaw: mastodon.v1.Account | null;
 	primaryAcct: Account;
+	PrimaryAcctPtr: MutableRefObject<Account>;
+
 	/**
 	 * Call this function after change in
 	 * primary account selection/active status
@@ -36,6 +45,7 @@ const defaultValue: Type = {
 	meRaw: null,
 	primaryAcct: null,
 	regenerate: () => {},
+	PrimaryAcctPtr: undefined,
 };
 
 const ActivityPubRestClientContext = createContext<Type>(defaultValue);
@@ -118,6 +128,7 @@ function WithActivityPubRestClient({ children }: any) {
 				regenerate: regenerateFn,
 				domain: PrimaryAcct?.domain,
 				subdomain: PrimaryAcct?.subdomain,
+				PrimaryAcctPtr,
 			}}
 		>
 			{children}

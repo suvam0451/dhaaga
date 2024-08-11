@@ -6,6 +6,15 @@ import AccountRepository from '../repositories/account.repo';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 class BookmarkBrowserService {
+	/**
+	 * Sync the account's bookmarks,
+	 * updating the progress for every
+	 * batch processed
+	 * @param primaryAcct
+	 * @param client
+	 * @param db
+	 * @param callback to update the numerator
+	 */
 	static async updateBookmarkCache(
 		primaryAcct: Account,
 		client: ActivityPubClient,
@@ -16,12 +25,7 @@ class BookmarkBrowserService {
 		const done = false;
 		let syncedCount = 0;
 		do {
-			const { data, error } = await client.bookmarks.get({ limit: 20, maxId });
-			console.log(data.data.length, data.minId, data.maxId, error);
-			let _data = data.data;
-			if (primaryAcct.domain !== KNOWN_SOFTWARE.MASTODON) {
-				_data = _data.map((o: any) => o.note);
-			}
+			const { data, error } = await client.bookmarks.get({ limit: 40, maxId });
 
 			/**
 			 * data format is different
@@ -31,6 +35,11 @@ class BookmarkBrowserService {
 			 * note --> the actual post object
 			 * noteId --> post id
 			 */
+			let _data = data.data;
+			if (primaryAcct.domain !== KNOWN_SOFTWARE.MASTODON) {
+				_data = _data.map((o: any) => o.note);
+			}
+
 			const statusIs = ActivityPubAdapterService.adaptManyStatuses(
 				_data,
 				primaryAcct.domain,
@@ -38,16 +47,15 @@ class BookmarkBrowserService {
 
 			db.write(() => {
 				for (const statusI of statusIs) {
-					AccountRepository.upsertBookmark(
-						db,
-						primaryAcct,
-						primaryAcct.bookmarks,
-						{
+					try {
+						AccountRepository.upsertBookmark(db, primaryAcct, {
 							status: statusI,
 							subdomain: primaryAcct.subdomain,
 							domain: primaryAcct.domain,
-						},
-					);
+						});
+					} catch (e) {
+						console.log('[ERROR]: upserting bookmark', e, statusI.getId());
+					}
 				}
 			});
 
@@ -55,6 +63,12 @@ class BookmarkBrowserService {
 			if (callback) {
 				callback(syncedCount);
 			}
+			/**
+			 * Abort (to avoid rate limits)
+			 *
+			 * After ~8000 bookmarks
+			 */
+			if (syncedCount > 8000) break;
 
 			if (maxId === data.maxId || data.maxId === null) break;
 			maxId = data.maxId;

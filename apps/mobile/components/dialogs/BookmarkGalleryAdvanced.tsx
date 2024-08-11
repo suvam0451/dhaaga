@@ -2,13 +2,12 @@ import { AppButtonVariantA, AppButtonVariantDestructive } from '../lib/Buttons';
 import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
 } from '../hooks/tasks/useSyncWithProgress';
-import { Text } from '@rneui/themed';
 import { RneuiDialogProps } from './_types';
 import AppDialogContainer from '../containers/AppDialogContainer';
 import LastSyncedStatus, {
 	LAST_SYNCED_STATUS_KEY,
 } from '../dataviz/LastSyncedStatus';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Text } from 'react-native';
 import { APP_FONT } from '../../styles/AppTheme';
 
 function BookmarkGalleryAdvanced({
@@ -46,7 +45,7 @@ function BookmarkGalleryAdvanced({
 				opts={{ useHaptics: true }}
 				customLoadingState={
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
+						<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
 							{Numerator}/?
 						</Text>
 						<ActivityIndicator
@@ -58,7 +57,7 @@ function BookmarkGalleryAdvanced({
 				}
 			/>
 			<LastSyncedStatus id={LAST_SYNCED_STATUS_KEY.BOOKMARK_SYNC} />
-			<View style={{ height: 16 }}></View>
+			<View style={{ height: 16 }} />
 			<AppButtonVariantDestructive
 				label={'Clear Cache'}
 				loading={IsTaskRunningB}

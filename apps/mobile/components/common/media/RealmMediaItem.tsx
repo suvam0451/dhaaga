@@ -1,5 +1,5 @@
 import { ActivityPubMediaAttachment } from '../../../entities/activitypub-media-attachment.entity';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import MediaService from '../../../services/media.service';
 import { Dimensions, View } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT, MEDIA_CONTAINER_WIDTH } from './_common';
@@ -16,24 +16,23 @@ function RealmMediaComponentSingleItem({
 	const MediaItem = useMemo(() => {
 		const type = data.type;
 		switch (type) {
-			case 'image': {
+			case 'image':
+			case 'image/jpeg':
+			case 'image/png':
+			case 'image/webp':
+			case 'gifv':
+			case 'image/gif':
+			case 'image/avif': {
 				return (
 					<AppImageComponent url={data.previewUrl} blurhash={data.blurhash} />
 				);
 			}
-			case 'video': {
+			case 'video':
+			case 'video/mp4':
+			case 'video/webm':
+			case 'video/quicktime': {
 				return (
 					<AppVideoComponent url={data.url} height={height} type={'video'} />
-				);
-			}
-			case 'gifv': {
-				return (
-					<AppVideoComponent
-						url={data.url}
-						height={height}
-						loop
-						type={'gifv'}
-					/>
 				);
 			}
 			default: {
@@ -64,18 +63,6 @@ type Props = {
  * @constructor
  */
 function RealmMediaItem({ data }: Props) {
-	const [CarousalData, setCarousalData] = useState({
-		index: 0,
-		total: data.length,
-	});
-
-	function onCarousalItemChanged(e: any) {
-		setCarousalData({
-			index: e,
-			total: data.length,
-		});
-	}
-
 	const CalculatedHeight = useMemo(() => {
 		return MediaService.calculateHeightRealmAttachments(data, {
 			deviceWidth: Dimensions.get('window').width,
