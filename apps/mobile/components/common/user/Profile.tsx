@@ -42,14 +42,6 @@ function ProfileContextWrapped() {
 	const avatarUrl = user.getAvatarUrl();
 	const bannerUrl = user.getBannerUrl();
 
-	const { content: DescriptionContent } = useMfm({
-		content: user?.getDescription(),
-		remoteSubdomain: user?.getInstanceUrl(),
-		emojiMap: user?.getEmojiMap(),
-		deps: [user?.getDescription()],
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	});
-
 	const { content: ParsedDisplayName } = useMfm({
 		content: user?.getDisplayName(),
 		remoteSubdomain: user?.getInstanceUrl(),
@@ -147,9 +139,6 @@ function ProfileContextWrapped() {
 					rawContext={user?.getDescription()}
 					remoteSubdomain={user?.getInstanceUrl()}
 				/>
-				<View style={localStyles.parsedDescriptionContainer}>
-					{DescriptionContent}
-				</View>
 
 				{/*Separator*/}
 				<View style={{ flexGrow: 1 }} />
