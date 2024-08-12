@@ -1,6 +1,5 @@
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Text } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import RealmStatus from '../../../common/status/RealmStatus';
 import WithBookmarkGalleryControllerContext, {

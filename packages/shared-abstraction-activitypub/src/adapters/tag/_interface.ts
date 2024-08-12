@@ -47,6 +47,7 @@ export function ActivityPubTagAdapter(tag: any, domain: string): TagInterface {
 		case KNOWN_SOFTWARE.MISSKEY:
 		case KNOWN_SOFTWARE.FIREFISH:
 		case KNOWN_SOFTWARE.MEISSKEY:
+		case KNOWN_SOFTWARE.SHARKEY:
 		case KNOWN_SOFTWARE.KMYBLUE:
 		case KNOWN_SOFTWARE.CHERRYPICK: {
 			return new MisskeyTag(new MisskeyTagInstance(tag as Hashtag));

@@ -142,35 +142,13 @@ interface ActivityPubClient extends RouterInterface {
 
 	getMyLists(): Promise<mastodon.v1.List[]>;
 
-	// getMyFollowedTags(opts ): Promise<mastodon.v1.Tag[]>
-
 	// a.k.a. - verifyCredentials
 	getMe(): Promise<
 		mastodon.v1.AccountCredentials | UserDetailed | null | undefined
 	>;
 
 	/** User */
-	getUserProfile(username: string): Promise<mastodon.v1.Account | UserDetailed>;
-
-	followUser(
-		id: string,
-		opts: FollowPostDto,
-	): Promise<mastodon.v1.Relationship | any>;
-
-	unfollowUser(id: string): Promise<mastodon.v1.Relationship | any>;
-
 	getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray>;
-
-	getUserPosts(
-		userId: string,
-		opts: GetUserPostsQueryDTO,
-	): Promise<StatusArray>;
-
-	getBookmarks(opts: GetPostsQueryDTO): Promise<{
-		data: StatusArray;
-		minId?: string;
-		maxId?: string;
-	}>;
 
 	getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>;
 
@@ -181,43 +159,11 @@ interface ActivityPubClient extends RouterInterface {
 	uploadMedia(params: MediaUploadDTO): Promise<any>;
 
 	/**
-	 * Tags
-	 */
-	getFollowedTags(opts: GetPostsQueryDTO): Promise<
-		| {
-				data: mastodon.v1.Tag[];
-				minId?: string;
-				maxId?: string;
-		  }
-		| any[]
-	>;
-
-	muteUser(id: string): Promise<void>;
-
-	/**
 	 * Status
 	 * */
-	getStatus(id: string): Promise<Status>;
-
-	bookmark(id: string): Promise<Status>;
-
-	unBookmark(id: string): Promise<Status>;
-
 	favourite(id: string): Promise<Status>;
 
 	unFavourite(id: string): Promise<Status>;
-
-	reblog(id: string): Promise<Status | null>;
-
-	undoReblog(id: string): Promise<Status | null>;
-
-	// search(
-	// 	q: string,
-	// 	dto: GetSearchResultQueryDTO,
-	// ): Promise<{
-	// 	accounts: [];
-	// 	hashtags: [];
-	// }>;
 }
 
 export default ActivityPubClient;

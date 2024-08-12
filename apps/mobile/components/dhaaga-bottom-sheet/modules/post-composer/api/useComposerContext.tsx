@@ -13,6 +13,7 @@ import { useDebounce } from 'use-debounce';
 import { Text } from 'react-native';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
+import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 
 type ComposerAutocompletion = {
 	accounts: UserInterface[];
@@ -113,11 +114,13 @@ export function useComposerContext() {
 
 type Props = {
 	children: any;
+	textSeed?: string;
 };
 
-function WithComposerContext({ children }: Props) {
-	const [RawText, setRawText] = useState('');
-	const [EditorText, setEditorText] = useState(<Text></Text>);
+function WithComposerContext({ children, textSeed }: Props) {
+	const { requestId } = useAppBottomSheet();
+	const [RawText, setRawText] = useState(textSeed || '');
+	const [EditorText, setEditorText] = useState(<Text>{textSeed || ''}</Text>);
 	const [Cw, setCw] = useState('');
 	const [CwSectionShown, setCwSectionShown] = useState(false);
 	const [EditMode, setEditMode] = useState<'txt' | 'alt' | 'misc'>('txt');
@@ -130,6 +133,12 @@ function WithComposerContext({ children }: Props) {
 		start: 0,
 		end: 0,
 	});
+
+	// reset content on request
+	useEffect(() => {
+		setRawText(textSeed);
+		setEditorText(<Text>{textSeed}</Text>);
+	}, [textSeed, requestId]);
 
 	/**
 	 * Media Targets

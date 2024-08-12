@@ -1,7 +1,6 @@
-import { BSON, List, Realm, UpdateMode } from 'realm';
+import { BSON, Realm, UpdateMode } from 'realm';
 import { Account, KeyValuePair } from '../entities/account.entity';
 import UUID = BSON.UUID;
-import { ActivityPubStatus } from '../entities/activitypub-status.entity';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubStatusRepository } from './activitypub-status.repo';
 
@@ -68,12 +67,11 @@ class AccountRepository {
 	}
 
 	static find(db: Realm, dto: AccountCreateDTO): Account {
-		return db.objects(Account).find(
-			(o) =>
-				o.username === dto.username &&
-				// o.domain === dto.domain &&
-				o.subdomain === dto.subdomain,
-		);
+		return db
+			.objects(Account)
+			.find(
+				(o) => o.username === dto.username && o.subdomain === dto.subdomain,
+			);
 	}
 
 	static findSecret(
@@ -128,7 +126,6 @@ class AccountRepository {
 	static upsertBookmark(
 		db: Realm,
 		acct: Account,
-		existing: List<ActivityPubStatus>,
 		{
 			status,
 			subdomain,
@@ -140,18 +137,26 @@ class AccountRepository {
 		},
 	) {
 		// FIXME: this should check for postedBy
-		const match = existing.find((o) => o.statusId === status.getId());
-		if (match)
+		const match = acct.bookmarks.find((o) => o.statusId === status.getId());
+		if (match) {
+			// console.log('[INFO]: duplicate cached bookmark', match.statusId);
 			return {
 				success: true,
 				data: match,
 				message: 'Duplicate',
 			};
+		}
 		const savedStatus = ActivityPubStatusRepository.upsert(db, {
 			status,
 			subdomain,
 			domain,
 		});
+
+		if (savedStatus === null) {
+			return {
+				success: false,
+			};
+		}
 
 		const savedBookmark = acct.bookmarks.push(savedStatus);
 		return {

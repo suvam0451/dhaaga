@@ -18,24 +18,6 @@ import { APP_FONT } from '../../styles/AppTheme';
 import { useLocalSearchParams } from 'expo-router';
 import useStatusContext from '../../components/common/status-details/api/useStatusContext';
 
-type StatusContextReplyItemProps = {
-	lookupId: string;
-};
-
-function StatusContextReplyItem({ lookupId }: StatusContextReplyItemProps) {
-	const { contextItemLookup } = useActivitypubStatusContext();
-
-	const root = useMemo(() => {
-		return contextItemLookup.current.get(lookupId);
-	}, [lookupId]);
-
-	return (
-		<WithActivitypubStatusContext statusInterface={root}>
-			<StatusItem />
-		</WithActivitypubStatusContext>
-	);
-}
-
 function StatusContextComponent() {
 	const { contextChildrenLookup, contextRootLookup, stateKey } =
 		useActivitypubStatusContext();

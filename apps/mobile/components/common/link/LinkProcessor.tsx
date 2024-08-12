@@ -9,6 +9,7 @@ import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 
 type LinkProcessorProps = {
 	url: string;
@@ -16,6 +17,7 @@ type LinkProcessorProps = {
 };
 
 function LinkProcessor({ url, displayName }: LinkProcessorProps) {
+	const { acceptTouch } = useAppMfmContext();
 	const httpsRemoved = url.replace(/(https:\/\/)(.+)/, '$2');
 	const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, '$2');
 
@@ -33,6 +35,8 @@ function LinkProcessor({ url, displayName }: LinkProcessorProps) {
 		useGorhomActionSheetContext();
 
 	const onTextPress = useCallback(() => {
+		if (!acceptTouch) return;
+
 		GlobalMmkvCacheServices.setBottomSheetProp_Link(globalDb, {
 			url: url,
 			displayName: displayName || wwwRemoved,

@@ -23,6 +23,7 @@ export type DhaagaJsUserSearchDTO = {
 	allowPartial?: boolean;
 	limit: number;
 	query: string;
+	untilId?: string;
 } & MastoUnifiedSearchType;
 
 export type DhaagaJsPostSearchDTO = {
@@ -33,6 +34,8 @@ export type DhaagaJsPostSearchDTO = {
 	host?: string; // "." for local
 	query: string;
 	userId?: null;
+	sinceId?: string;
+	untilId?: string;
 } & MastoUnifiedSearchType;
 
 export interface SearchRoute {

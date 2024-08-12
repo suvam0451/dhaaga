@@ -67,7 +67,6 @@ function AppButtonFollowIndicator({
 				);
 			}
 			default: {
-				console.log(label);
 				return (
 					<Button
 						size={'sm'}
@@ -214,7 +213,8 @@ const styles = StyleSheet.create({
 	passiveButtonStyle: {
 		borderColor: 'red',
 		backgroundColor: '#2e6945', // '#cb6483',
-		maxWidth: 128,
+		paddingVertical: 8,
+		paddingHorizontal: 12,
 	},
 	passiveTextStyle: {
 		fontFamily: APP_FONTS.INTER_700_BOLD,
@@ -224,8 +224,9 @@ const styles = StyleSheet.create({
 		borderColor: '#cb6483',
 		// backgroundColor: 'rgba(39, 39, 39, 1)',
 		backgroundColor: '#363636',
-		maxWidth: 128,
 		borderRadius: 4,
+		paddingVertical: 8,
+		paddingHorizontal: 12,
 	},
 	activeTextStyle: {
 		fontFamily: APP_FONTS.INTER_700_BOLD,

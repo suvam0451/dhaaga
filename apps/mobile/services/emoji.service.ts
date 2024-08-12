@@ -7,7 +7,9 @@ import { ActivityPubServerRepository } from '../repositories/activitypub-server.
 import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-emoji.repo';
 import activitypubAdapterService from './activitypub-adapter.service';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
-import { Status } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import GlobalMmkvCacheService from './globalMmkvCache.services';
 
 export type EmojiAdapter = {
 	// common
@@ -21,19 +23,32 @@ export type EmojiAdapter = {
 };
 
 export class EmojiService {
-	static async find(
-		db: Realm,
-		{
-			id,
-			domain,
-			subdomain,
-		}: {
-			id: string;
-			domain: string;
-			subdomain: string;
-		},
-	) {
-		return null;
+	/**
+	 * Find a custom emoji in local databases
+	 * @param db
+	 * @param globalDb
+	 * @param id
+	 * @param domain
+	 * @param subdomain
+	 */
+	static find({
+		globalDb,
+		id,
+		subdomain,
+	}: {
+		db: Realm;
+		globalDb: MMKV;
+		id: string;
+		domain: string;
+		subdomain: string;
+	}): InstanceApi_CustomEmojiDTO | null {
+		const found = this.getEmojiCache(globalDb, subdomain);
+		if (!found) {
+			console.log('[WARN]: cached emojis not found for', subdomain);
+			return null;
+		}
+		const match = found.find((o) => o.shortCode === id);
+		return match || null;
 	}
 
 	/**
@@ -125,25 +140,20 @@ export class EmojiService {
 	 * of statuses provided
 	 * @param db
 	 * @param globalDb
-	 * @param statusesRaw
+	 * @param statuses
 	 * @param domain
 	 */
 	static async preloadInstanceEmojisForStatuses(
 		db: Realm,
 		globalDb: MMKV,
-		statusesRaw: Status[] | any[],
+		statuses: StatusInterface[],
 		domain: string,
 	) {
-		const statusIs = activitypubAdapterService.adaptManyStatuses(
-			statusesRaw,
-			domain,
-		);
-
 		// dedup
 		const instanceSet = new Set<string>();
-		for (let i = 0; i < statusIs.length; i++) {
+		for (let i = 0; i < statuses.length; i++) {
 			const _user = activitypubAdapterService.adaptUser(
-				statusIs[i].getUser(),
+				statuses[i].getUser(),
 				domain,
 			);
 			/**
@@ -323,5 +333,59 @@ export class EmojiService {
 			);
 			ActivityPubCustomEmojiRepository.upsertMany(db, data, server);
 		});
+	}
+
+	/**
+	 * asynchronously download and save emojis
+	 *
+	 * cache-expiry: 7 days
+	 * @param globalDb
+	 * @param subdomain
+	 * @param software
+	 */
+	static async downloadCustomEmojis(
+		globalDb: MMKV,
+		subdomain: string,
+		software?: string,
+	) {
+		// Cache-Policy
+		const data = GlobalMmkvCacheService.getEmojiCacheForInstance(
+			globalDb,
+			subdomain,
+		);
+
+		const now = new Date();
+		const oneWeekAgo = new Date(now);
+		oneWeekAgo.setDate(now.getDate() - 7);
+
+		// all good
+		if (
+			data &&
+			data?.data?.length > 0 &&
+			new Date(data?.lastFetchedAt) >= oneWeekAgo
+		)
+			return {
+				success: true,
+				message: 'Skipped',
+				target: subdomain,
+				amount: data.data.length,
+			};
+
+		// TODO: make software resolve from realm table
+		const res = await ActivityPubService.fetchEmojisAndInstanceSoftware(
+			subdomain,
+			software,
+		);
+		GlobalMmkvCacheService.saveEmojiCacheForInstance(
+			globalDb,
+			subdomain,
+			res.emojis,
+		);
+		return {
+			success: true,
+			message: 'Updated Emoji Store',
+			target: subdomain,
+			amount: res.emojis.length,
+		};
 	}
 }

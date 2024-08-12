@@ -4,7 +4,7 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 
 type Props = {
-	label: string;
+	label?: string;
 	buttons: {
 		lookupId: string;
 		label: string;
@@ -17,15 +17,17 @@ type Props = {
 function ControlSegment({ label, buttons, selection }: Props) {
 	return (
 		<View style={{ marginTop: 16, overflow: 'scroll' }}>
-			<Text
-				style={{
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					color: APP_FONT.MONTSERRAT_BODY,
-					marginBottom: 4,
-				}}
-			>
-				{label}
-			</Text>
+			{label && (
+				<Text
+					style={{
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+						color: APP_FONT.MONTSERRAT_BODY,
+						marginBottom: 4,
+					}}
+				>
+					{label}
+				</Text>
+			)}
 			<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
 				<View style={{ display: 'flex', flexDirection: 'row' }}>
 					{buttons.map((o, i) => (

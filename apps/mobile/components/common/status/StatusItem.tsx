@@ -39,6 +39,7 @@ const RootStatusFragment = memo(function Foo() {
 
 	const IS_REPOST = status?.isReposted();
 	const _status = IS_REPOST ? sharedStatus : status;
+	const _statusId = _status?.getId();
 	const statusContent = _status?.getContent();
 
 	const [PosterContent, setPosterContent] = useState(null);
@@ -81,7 +82,6 @@ const RootStatusFragment = memo(function Foo() {
 		remoteSubdomain: userI?.getInstanceUrl(),
 		emojiMap: userI?.getEmojiMap(),
 		deps: [statusContent, userI?.getInstanceUrl()],
-		// fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	});
 
 	const isSensitive = _status?.getIsSensitive();
@@ -273,6 +273,7 @@ const RootStatusFragment = memo(function Foo() {
 		ShowSensitiveContent,
 		ExplanationObject,
 		PosterContent,
+		_statusId,
 	]);
 });
 

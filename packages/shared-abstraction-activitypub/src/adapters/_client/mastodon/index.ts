@@ -1,9 +1,6 @@
 import ActivityPubClient, {
-	FollowPostDto,
 	GetPostsQueryDTO,
-	GetUserPostsQueryDTO,
 	MastoAccountCredentials,
-	MastoContext,
 	MastoConversation,
 	MastoList,
 	MastoRelationship,
@@ -15,7 +12,6 @@ import type { mastodon } from 'masto';
 import { RestClient, RestServices } from '@dhaaga/shared-provider-mastodon';
 import { StatusArray } from '../../status/_interface.js';
 import { createRestAPIClient } from 'masto';
-import { Note } from 'misskey-js/autogen/models.js';
 import { MastodonInstanceRouter } from './instance.js';
 import { MastodonAccountsRouter } from './accounts.js';
 import { KNOWN_SOFTWARE } from '../_router/instance.js';
@@ -61,50 +57,10 @@ class MastodonRestClient implements ActivityPubClient {
 		this.media = new MastodonMediaRoute(this.client);
 	}
 
-	async reblog(id: string): Promise<MastoStatus | null> {
-		const _client = this.createMastoClient();
-		try {
-			return _client.v1.statuses.$select(id).reblog();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
-	async undoReblog(id: string): Promise<MastoStatus | null> {
-		const _client = this.createMastoClient();
-		try {
-			return _client.v1.statuses.$select(id).unreblog();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
 	async getMyLists(): Promise<MastoList[]> {
 		const _client = this.createMastoClient();
 		try {
 			return await _client.v1.lists.list();
-		} catch (e) {
-			console.log(e);
-			return [];
-		}
-	}
-
-	async followUser(id: string, opts: FollowPostDto): Promise<any> {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.accounts.$select(id).follow(opts);
-		} catch (e) {
-			console.log(e);
-			return [];
-		}
-	}
-
-	async unfollowUser(id: string): Promise<any> {
-		const _client = this.createMastoClient();
-		try {
-			return await _client.v1.accounts.$select(id).unfollow();
 		} catch (e) {
 			console.log(e);
 			return [];
@@ -171,17 +127,6 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async muteUser(id: string) {
-		const _client = this.createMastoClient();
-		try {
-			await _client.v1.accounts.$select(id).mute();
-			return;
-		} catch (e) {
-			console.log(e);
-			return;
-		}
-	}
-
 	createClient() {
 		return createRestAPIClient({
 			url: `https://${this.client.url}`,
@@ -205,18 +150,6 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getBookmarks(opts: GetPostsQueryDTO): Promise<{
-		data: MastoStatus[];
-		minId?: string | undefined;
-		maxId?: string | undefined;
-	}> {
-		return await RestServices.v1.bookmarks.getBookmarks(this.client, opts);
-	}
-
-	async getFollowedTags(opts: GetPostsQueryDTO) {
-		return await RestServices.v1.accounts.getFollowedTags(this.client, opts);
-	}
-
 	async favourite(id: string): Promise<MastoStatus | null> {
 		const _client = this.createMastoClient();
 		try {
@@ -237,51 +170,11 @@ class MastodonRestClient implements ActivityPubClient {
 		}
 	}
 
-	async getUserPosts(
-		userId: string,
-		opts: GetUserPostsQueryDTO,
-	): Promise<Note[] | mastodon.v1.Status[]> {
-		return await RestServices.v1.accounts.getStatuses(
-			this.client,
-			userId,
-			opts,
-		);
-	}
-
 	private createMastoClient() {
 		return createRestAPIClient({
 			url: `https://${this.client.url}`,
 			accessToken: this.client.accessToken,
 		});
-	}
-
-	async bookmark(id: string): Promise<MastoStatus | null> {
-		try {
-			const _client = this.createMastoClient();
-
-			return await _client.v1.statuses.$select(id.toString()).bookmark();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
-	async unBookmark(id: string): Promise<MastoStatus | null> {
-		try {
-			const _client = this.createMastoClient();
-			return await _client.v1.statuses.$select(id.toString()).unbookmark();
-		} catch (e) {
-			console.log(e);
-			return null;
-		}
-	}
-
-	async getUserProfile(userId: string): Promise<mastodon.v1.Account> {
-		return RestServices.v1.accounts.getByUserId(this.client, userId);
-	}
-
-	async getStatus(id: string): Promise<mastodon.v1.Status> {
-		return RestServices.v1.statuses.getStatus(this.client, id);
 	}
 }
 

@@ -2,7 +2,7 @@ import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { AppButtonVariantA } from '../../../lib/Buttons';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { formatRelative } from 'date-fns';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -13,6 +13,8 @@ import useSyncWithProgress, {
 } from '../../../hooks/tasks/useSyncWithProgress';
 import BookmarkGalleryAdvanced from '../../../dialogs/BookmarkGalleryAdvanced';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useObject } from '@realm/react';
+import { Account } from '../../../../entities/account.entity';
 
 function BookmarkNeverSyncedPrompt() {
 	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(
@@ -47,7 +49,9 @@ function BookmarkNeverSyncedPrompt() {
 					opts={{ useHaptics: true }}
 					customLoadingState={
 						<View style={{ display: 'flex', flexDirection: 'row' }}>
-							<Text>{Numerator}/?</Text>
+							<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+								{Numerator}/?
+							</Text>
 							<ActivityIndicator
 								size={20}
 								color={'white'}
@@ -165,14 +169,14 @@ function BookmarkSyncedPrompt() {
 				IsVisible={BookmarkGallerySettingDialogVisible}
 				setIsVisible={setBookmarkGallerySettingDialogVisible}
 			/>
-			{/*<View style={{ marginTop: 16 }}></View>*/}
 		</View>
 	);
 }
 
-function BookmarkPortalStack() {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	console.log(primaryAcct.bookmarksLastSyncedAt);
+const BookmarkPortalStack = memo(() => {
+	const { PrimaryAcctPtr } = useActivityPubRestClientContext();
+	const acct = useObject(Account, PrimaryAcctPtr.current?._id);
+
 	return (
 		<WithAutoHideTopNavBar title={'Bookmark Viewer'}>
 			<View style={style.sectionContainer}>
@@ -185,7 +189,7 @@ function BookmarkPortalStack() {
 					/>
 				</Text>
 
-				{!primaryAcct?.bookmarksLastSyncedAt ? (
+				{!acct?.bookmarksLastSyncedAt ? (
 					<BookmarkNeverSyncedPrompt />
 				) : (
 					<BookmarkSyncedPrompt />
@@ -204,7 +208,7 @@ function BookmarkPortalStack() {
 			</View>
 		</WithAutoHideTopNavBar>
 	);
-}
+});
 
 const style = StyleSheet.create({
 	sectionContainer: {

@@ -6,8 +6,10 @@ import { View } from 'react-native';
 import { APP_THEME } from '../../styles/AppTheme';
 import { StatusBar } from 'expo-status-bar';
 import WithAppAssetsContext from '../../hooks/app/useAssets';
+import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
 
 export default function TabLayout() {
+	const { notificationCount } = useAppNotificationBadge();
 	return (
 		<View style={{ backgroundColor: 'red', height: '100%' }}>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
@@ -15,57 +17,71 @@ export default function TabLayout() {
 				<Tabs
 					initialRouteName={'index'}
 					detachInactiveScreens={false}
-					screenOptions={({ route }) => ({
-						tabBarIcon: ({ focused, color, size }) => {
-							let iconName;
-							let renderer = 'ionicons';
-							switch (route.name) {
-								case 'Home': {
-									iconName = focused ? 'index' : 'index';
-									break;
+					screenOptions={({ route }) => {
+						let badgeCount = undefined;
+						if (route.name === 'notifications') {
+							badgeCount =
+								notificationCount === 0 ? undefined : notificationCount;
+						}
+						return {
+							tabBarIcon: ({ focused, color, size }) => {
+								let iconName;
+								let renderer = 'ionicons';
+								switch (route.name) {
+									case 'Home': {
+										iconName = focused ? 'index' : 'index';
+										break;
+									}
+									case 'Settings': {
+										iconName = focused ? 'menu-outline' : 'menu-outline';
+										break;
+									}
+									case 'SearchTab': {
+										iconName = focused ? 'compass' : 'compass';
+										renderer = 'fa6';
+										break;
+									}
+									case 'Favourites': {
+										iconName = focused ? 'bookmark' : 'bookmark';
+										break;
+									}
+									case 'Notifications': {
+										iconName = focused ? 'notifications' : 'notifications';
+										break;
+									}
+									case 'Accounts': {
+										iconName = focused ? 'person' : 'person';
+									}
 								}
-								case 'Settings': {
-									iconName = focused ? 'menu-outline' : 'menu-outline';
-									break;
+								switch (renderer) {
+									case 'fa6':
+										return (
+											<FontAwesome6 name={iconName} size={size} color={color} />
+										);
+									default:
+										return (
+											<Ionicons name={iconName} size={size} color={color} />
+										);
 								}
-								case 'SearchTab': {
-									iconName = focused ? 'compass' : 'compass';
-									renderer = 'fa6';
-									break;
-								}
-								case 'Favourites': {
-									iconName = focused ? 'bookmark' : 'bookmark';
-									break;
-								}
-								case 'Notifications': {
-									iconName = focused ? 'notifications' : 'notifications';
-									break;
-								}
-								case 'Accounts': {
-									iconName = focused ? 'person' : 'person';
-								}
-							}
-							switch (renderer) {
-								case 'fa6':
-									return (
-										<FontAwesome6 name={iconName} size={size} color={color} />
-									);
-								default:
-									return <Ionicons name={iconName} size={size} color={color} />;
-							}
-						},
-						tabBarStyle: {
-							backgroundColor: '#252525',
-							borderTopWidth: 0,
-						},
-						tabBarIconStyle: {
-							opacity: 0.6,
-						},
-						tabBarActiveTintColor: 'white',
-						tabBarInactiveTintColor: 'gray',
-						tabBarShowLabel: false,
-						headerShown: false,
-					})}
+							},
+							tabBarBadge: badgeCount,
+							tabBarBadgeStyle: {
+								// backgroundColor: 'black',
+								color: 'yellow',
+							},
+							tabBarStyle: {
+								backgroundColor: '#252525',
+								borderTopWidth: 0,
+							},
+							tabBarIconStyle: {
+								opacity: 0.6,
+							},
+							tabBarActiveTintColor: 'white',
+							tabBarInactiveTintColor: 'gray',
+							tabBarShowLabel: false,
+							headerShown: false,
+						};
+					}}
 				>
 					<Tabs.Screen
 						name="index"
@@ -92,6 +108,15 @@ export default function TabLayout() {
 							),
 						}}
 					/>
+
+					<Tabs.Screen
+						name={'accounts'}
+						options={{
+							tabBarIcon: ({ color, size }) => (
+								<Ionicons size={size} name="person-outline" color={color} />
+							),
+						}}
+					/>
 					<Tabs.Screen
 						name={'notifications'}
 						options={{
@@ -101,14 +126,6 @@ export default function TabLayout() {
 									name="notifications-outline"
 									color={color}
 								/>
-							),
-						}}
-					/>
-					<Tabs.Screen
-						name={'accounts'}
-						options={{
-							tabBarIcon: ({ color, size }) => (
-								<Ionicons size={size} name="person-outline" color={color} />
 							),
 						}}
 					/>

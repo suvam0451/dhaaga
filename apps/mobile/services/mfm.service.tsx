@@ -100,7 +100,6 @@ class MfmComponentBuilder {
 					continue;
 				}
 				if (['bold', 'italic'].includes(node.type)) {
-					// console.log('detected bold/italic', node.children);
 					for (let i = 0; i < node.children.length; i++) {
 						const child = node.children[i];
 						if (child.type === 'emojiCode') {
@@ -202,13 +201,21 @@ class MfmComponentBuilder {
 		switch (node.type) {
 			case 'link':
 			case 'url': {
+				/**
+				 * The link/url might be a mention
+				 * */
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
-
-				// NOTE: mention.url is also an option
-				if (mention)
+				if (mention) {
 					return (
 						<MentionSegment key={k} value={mention.text} link={mention.url} />
 					);
+				}
+
+				/**
+				 * The link/url might be a hashtag
+				 */
+				const hashtag = TextParserService.isHashtag(node.props.url);
+				if (hashtag) return <HashtagSegment key={k} value={hashtag} />;
 
 				let displayName = null;
 				if (this.links) {
@@ -268,11 +275,7 @@ class MfmComponentBuilder {
 			case 'mention': {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 				return (
-					<MentionSegment
-						key={k}
-						value={node.props.username}
-						link={mention?.url}
-					/>
+					<MentionSegment key={k} value={node.props.acct} link={mention?.url} />
 				);
 			}
 			case 'inlineCode':

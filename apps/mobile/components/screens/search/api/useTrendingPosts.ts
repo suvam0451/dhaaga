@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { EmojiService } from '../../../../services/emoji.service';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
+import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 
 function useTrendingPosts() {
 	const { client, domain } = useActivityPubRestClientContext();
@@ -45,12 +46,16 @@ function useTrendingPosts() {
 		if (data?.length > 0) {
 			setMaxId((PageData.length + data.length).toString());
 			setIsLoading(true);
-			EmojiService.preloadInstanceEmojisForStatuses(db, globalDb, data, domain)
-				.then((res) => {})
-				.finally(() => {
-					append(data);
-					setIsLoading(false);
-				});
+			const dataI = ActivityPubAdapterService.adaptManyStatuses(data, domain);
+			EmojiService.preloadInstanceEmojisForStatuses(
+				db,
+				globalDb,
+				dataI,
+				domain,
+			).finally(() => {
+				append(data);
+				setIsLoading(false);
+			});
 		}
 	}, [fetchStatus]);
 

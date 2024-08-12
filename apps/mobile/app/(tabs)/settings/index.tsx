@@ -1,7 +1,7 @@
-import SettingsScreen from '../../../screens/SettingsScreen';
+import SettingsLandingPage from '../../../screens/settings/SettingsLandingPage';
 
 function Stack() {
-	return <SettingsScreen />;
+	return <SettingsLandingPage />;
 }
 
 export default Stack;

@@ -36,7 +36,10 @@ function ConversationListItem({
 		for (let i = 0; i < accounts.length; i++) {
 			const acct = accounts[i];
 			if (acct.getUsername() === '') continue;
-			ActivityPubUserRepository.upsert(db, { user: acct });
+			ActivityPubUserRepository.upsert(db, {
+				user: acct,
+				userSubdomain: acct.getInstanceUrl(),
+			});
 		}
 	}, [accounts]);
 

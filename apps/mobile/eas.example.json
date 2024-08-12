@@ -1,49 +1,33 @@
 {
   "build": {
-    "base": {
-      "node": "20.15.0",
-      "env": {
-        "EXPO_PUBLIC_MASTODON_CLIENT_ID": "",
-        "EXPO_PUBLIC_MASTODON_CLIENT_SECRET": ""
-      }
-    },
-    "dev": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "env": {
-        "APP_VARIANT": "dev"
-      },
-      "extends": "base"
-    },
-    "apk": {
-      "android": {
-        "buildType": "apk"
-      },
-      "env": {
-        "APP_VARIANT": "prod",
-        "EXPO_PUBLIC_OPENAI_API_KEY": ""
-      },
-      "extends": "base"
-    },
     "aab": {
+      "node": "22.6.0",
       "android": {
         "buildType": "app-bundle"
       },
       "env": {
         "APP_VARIANT": "prod",
         "EXPO_PUBLIC_OPENAI_API_KEY": ""
-      },
-      "extends": "base"
+      }
     },
-    "lite": {
+    "apk": {
+      "node": "22.6.0",
       "android": {
         "buildType": "apk"
       },
       "env": {
-        "APP_VARIANT": "lite",
+        "APP_VARIANT": "prod",
         "EXPO_PUBLIC_OPENAI_API_KEY": ""
-      },
-      "extends": "base"
+      }
+    },
+    "dev": {
+      "node": "22.6.0",
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "dev",
+        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+      }
     }
   }
 }

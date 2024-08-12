@@ -1,4 +1,3 @@
-import { DhaagaJsTimelineQueryOptions } from '../_router/routes/timelines.js';
 import { TagRoute } from '../_router/routes/tags.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
@@ -10,7 +9,7 @@ import {
 	PaginatedLibraryPromise,
 	LibraryPromise,
 } from '../_router/routes/_types.js';
-import { MastoTag, MegaTag } from '../_interface.js';
+import { MastoTag } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { DhaagaErrorCode } from '../_router/_types.js';
@@ -44,6 +43,13 @@ export class MisskeyTagsRouter implements TagRoute {
 			'hashtags/show',
 			Endpoints['hashtags/show']['req']
 		>('hashtags/show', { tag: id });
+		return { data };
+	}
+
+	async getTrend(
+		id: string,
+	): LibraryPromise<Endpoints['hashtags/trend']['res']> {
+		const data = await this.lib.client.request('hashtags/trend', { tag: id });
 		return { data };
 	}
 }

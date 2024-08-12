@@ -19,6 +19,18 @@ function useAppNavigator() {
 		[navigator],
 	);
 
+	const toTag = useCallback(
+		(id: string) => {
+			const _id = navigator.getId();
+			if (!_id || _id === '/(tabs)/index' || _id === '/(tabs)') {
+				router.navigate(`/tag/${id}`);
+			} else {
+				router.navigate(`${navigator.getId()}/tag/${id}`);
+			}
+		},
+		[navigator],
+	);
+
 	const toProfile = useCallback(
 		(id: string) => {
 			// probably in bottom sheet
@@ -34,7 +46,7 @@ function useAppNavigator() {
 		[navigator],
 	);
 
-	return { toPost, toProfile };
+	return { toPost, toProfile, toTag };
 }
 
 export default useAppNavigator;

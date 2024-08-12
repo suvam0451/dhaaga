@@ -32,7 +32,7 @@ export class ActivityPubUser
 			userId: 'string?',
 			username: 'string',
 			avatarUrl: 'string',
-			displayName: 'string',
+			displayName: 'string?',
 			accountId: 'string?',
 			// relations
 			server: 'ActivityPubServer?',
