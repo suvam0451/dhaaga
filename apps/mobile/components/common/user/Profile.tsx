@@ -1,7 +1,7 @@
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useLocalSearchParams } from 'expo-router';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import {
 	Animated,
 	Dimensions,
@@ -27,7 +27,6 @@ import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
 import styles from './utils/styles';
 import { ProfileStatsInterface } from './fragments/ProfileStats';
 import ProfileAvatar from './fragments/ProfileAvatar';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FollowIndicator from './fragments/FollowIndicator';
 import Ionicons from '@expo/vector-icons/Ionicons';
