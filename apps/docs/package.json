@@ -1,6 +1,6 @@
 {
   "name": "@dhaaga/docs",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "private": false,
   "scripts": {
     "docusaurus": "./node_modules/.bin/docusaurus",

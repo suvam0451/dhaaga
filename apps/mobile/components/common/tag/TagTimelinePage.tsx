@@ -2,10 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import StatusItem from '../status/StatusItem';
 import { Skeleton } from '@rneui/base';
-import { ActivityPubStatuses } from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import WithActivitypubStatusContext from '../../../states/useStatus';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { useRoute } from '@react-navigation/native';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../states/usePagination';
@@ -19,11 +18,13 @@ import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';
 import { AnimatedFlashList } from '@shopify/flash-list';
+import { useLocalSearchParams } from 'expo-router';
+import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 
 function ApiWrapper() {
-	const route = useRoute<any>();
-	const q = route?.params?.q;
-	const { client } = useActivityPubRestClientContext();
+	const { id } = useLocalSearchParams<{ id: string }>();
+
+	const { client, domain } = useActivityPubRestClientContext();
 	const {
 		data: PageData,
 		queryCacheMaxId,
@@ -35,26 +36,26 @@ function ApiWrapper() {
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
-		const { data, error } = await client.timelines.hashtag(q, {
+		const { data, error } = await client.timelines.hashtag(id, {
 			maxId: queryCacheMaxId,
 			limit: 5,
 		});
 		if (error) return [];
-		return data;
+		return ActivityPubAdapterService.adaptManyStatuses(data, domain);
 	}
 
 	// Queries
-	const { status, data, fetchStatus, refetch } = useQuery<ActivityPubStatuses>({
-		queryKey: [q],
+	const { status, data, fetchStatus, refetch } = useQuery<StatusInterface[]>({
+		queryKey: ['tag-timeline', id],
 		queryFn: api,
-		enabled: client && q !== undefined,
+		enabled: client && id !== undefined,
 	});
 
 	useEffect(() => {
 		if (status !== 'success' || !data) return;
 		if (data.length > 0) {
 			append(data);
-			setMaxId(data[data.length - 1]?.id);
+			setMaxId(data[data.length - 1]?.getId());
 			resetEndOfPageFlag();
 		}
 	}, [status, fetchStatus]);
@@ -71,12 +72,12 @@ function ApiWrapper() {
 
 	if (!data) return <Skeleton />;
 	return (
-		<WithAutoHideTopNavBar title={`#${q}`} translateY={translateY}>
+		<WithAutoHideTopNavBar title={`#${id}`} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={72}
 				data={PageData}
 				renderItem={(o) => (
-					<WithActivitypubStatusContext status={o.item} key={o.index}>
+					<WithActivitypubStatusContext statusInterface={o.item}>
 						<StatusItem />
 					</WithActivitypubStatusContext>
 				)}
@@ -94,7 +95,7 @@ function ApiWrapper() {
 	);
 }
 
-function TagBrowseLocal() {
+function TagTimelinePage() {
 	return (
 		<WithScrollOnRevealContext maxDisplacement={150}>
 			<WithAppPaginationContext>
@@ -104,4 +105,4 @@ function TagBrowseLocal() {
 	);
 }
 
-export default TagBrowseLocal;
+export default TagTimelinePage;
