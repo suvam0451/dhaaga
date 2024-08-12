@@ -1,9 +1,8 @@
-import ProfilePageHeader from '../headers/ProfilePageHeader';
 import { APP_THEME } from '../../styles/AppTheme';
 import { Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TopNavBarStyles } from '../../styles/NavaigationItems';
-import { useAppDrawerContext } from '../../states/useAppDrawer';
+import ProfilePageHeader from '../headers/ProfilePageHeader';
 
 // constants
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -16,9 +15,9 @@ type AutoHideNavBarProps = {
 };
 
 /**
- * This container has an auto-hide Navbar.
- * The left side icon option is to always go back to previous page.
- * The right side icons may be customized
+ * The header of this container will auto-hide.
+ *
+ * NOTE: This variant does not have a ScrollView
  * @param title
  * @param children
  * @param translateY

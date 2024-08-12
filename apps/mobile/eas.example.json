@@ -1,6 +1,7 @@
 {
   "build": {
     "aab": {
+      "node": "22.6.0",
       "android": {
         "buildType": "app-bundle"
       },
@@ -10,7 +11,7 @@
       }
     },
     "apk": {
-      "node": "22.5.1",
+      "node": "22.6.0",
       "android": {
         "buildType": "apk"
       },
@@ -20,10 +21,12 @@
       }
     },
     "dev": {
+      "node": "22.6.0",
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "APP_VARIANT": "dev"
+        "APP_VARIANT": "dev",
+        "EXPO_PUBLIC_OPENAI_API_KEY": ""
       }
     }
   }

@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { Text } from '@rneui/themed';
 import { StyleSheet } from 'react-native';
@@ -16,7 +16,7 @@ const MentionSegment = memo(function Foo({ value, link }: Props) {
 
 	const displayText = useMemo(() => {
 		let retval = value;
-		const ex = new RegExp(`(.*?)@${subdomain}`, 'g');
+		const ex = new RegExp(`@?(.*?)@${subdomain}`, 'g');
 		const res = Array.from(value.matchAll(ex));
 		if (res.length > 0) {
 			retval = `${res[0][1]}`;
@@ -24,18 +24,20 @@ const MentionSegment = memo(function Foo({ value, link }: Props) {
 			retval = `${value}`;
 		}
 
-		console.log(value, retval, link);
-
 		const removeSpanEx = /<span>(.*?)<\/span>/g;
 		const removeSpanRes = Array.from(value.matchAll(removeSpanEx));
 		if (removeSpanRes.length > 0) {
 			retval = `${removeSpanRes[0][1]}`;
 		}
-		return '@' + retval;
+		return retval[0] === '@' ? retval : '@' + retval;
 	}, [value]);
 
+	const onPress = useCallback(() => {
+		// console.log(value, link);
+	}, []);
+
 	return (
-		<Text key={k} style={styles.text}>
+		<Text key={k} style={styles.text} onPress={onPress}>
 			{displayText}
 		</Text>
 	);

@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { useEffect, useState } from 'react';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import {
 	StatusInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsPostSearchDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/search';
+import { useEffect, useState } from 'react';
 
 export enum APP_SEARCH_TYPE {
-	ALL,
 	POSTS,
 	USERS,
 	LINKS,
@@ -19,52 +19,99 @@ type AppSearchResults = {
 	accounts: UserInterface[];
 	statuses: StatusInterface[];
 	hashtags: any[];
+	links: any[];
 };
 
-function useSearch(q: string, type: APP_SEARCH_TYPE) {
-	const { client, domain } = useActivityPubRestClientContext();
-	const [Data, setData] = useState<AppSearchResults>({
-		accounts: [],
-		hashtags: [],
-		statuses: [],
-	});
-	const [IsLoading, setIsLoading] = useState(false);
+const DEFAULT_RESPONSE: AppSearchResults = {
+	accounts: [],
+	statuses: [],
+	hashtags: [],
+	links: [],
+};
 
-	useEffect(() => {
-		setIsLoading(true);
-	}, [q, type]);
+/**
+ * Search for anything
+ * @param type
+ * @param dto
+ */
+function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
+	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const [Data, setData] = useState<AppSearchResults>(DEFAULT_RESPONSE);
 
 	async function api() {
-		const { data, error } = await client.search.findPosts({
-			limit: 5,
-			q,
-			query: q,
-		});
-		return data;
+		try {
+			switch (type) {
+				case APP_SEARCH_TYPE.POSTS: {
+					const { data, error } = await client.search.findPosts({
+						...dto,
+						q: dto.q,
+						query: dto.q,
+						untilId: dto.maxId,
+						type: 'statuses',
+					});
+					if (error) {
+						console.log(error);
+						return DEFAULT_RESPONSE;
+					}
+
+					return {
+						...DEFAULT_RESPONSE,
+						statuses: ActivityPubAdapterService.adaptManyStatuses(data, domain),
+					};
+				}
+				case APP_SEARCH_TYPE.USERS: {
+					const { data, error } = await client.search.findUsers({
+						...dto,
+						origin: 'combined',
+						q: dto.q,
+						query: dto.q,
+						untilId: dto.maxId,
+					});
+					if (error) {
+						console.log(error);
+						return DEFAULT_RESPONSE;
+					}
+					return {
+						...DEFAULT_RESPONSE,
+						accounts: data.map((o) =>
+							ActivityPubAdapterService.adaptUser(o, domain),
+						),
+					};
+				}
+				default: {
+					return DEFAULT_RESPONSE;
+				}
+			}
+		} catch (e) {
+			console.log(e);
+			return DEFAULT_RESPONSE;
+		}
 	}
 
 	// Queries
-	const { fetchStatus, data, status } = useQuery({
-		queryKey: ['search', q, type],
+	const { fetchStatus, data, status } = useQuery<AppSearchResults>({
+		queryKey: ['search', subdomain, dto, type],
 		queryFn: api,
-		enabled: client !== null && q !== '',
+		enabled: client !== null && dto.q !== '',
 	});
 
+	/**
+	 * Update forwarded state
+	 */
 	useEffect(() => {
-		if (status !== 'success') return;
-		switch (type) {
-			case APP_SEARCH_TYPE.POSTS: {
-				setData({
-					accounts: [],
-					statuses: ActivityPubAdapterService.adaptManyStatuses(data, domain),
-					hashtags: [],
-				});
-			}
+		if (status !== 'success') {
+			setData(DEFAULT_RESPONSE);
+			return;
 		}
-		setIsLoading(false);
+		setData(data);
 	}, [fetchStatus]);
 
-	return { Data, IsLoading };
+	return {
+		Data,
+		IsLoading: fetchStatus === 'fetching',
+		fetchStatus,
+		status,
+	};
 }
 
 export default useSearch;

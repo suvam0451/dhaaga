@@ -1,4 +1,11 @@
-import { createContext, useContext, useMemo, useRef, useState } from 'react';
+import {
+	createContext,
+	MutableRefObject,
+	useContext,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import BottomSheet, {
 	BottomSheetBackdrop,
 	BottomSheetView,
@@ -14,6 +21,7 @@ import PostComposerBottomSheet from '../components/bottom-sheets/PostComposer';
 import { APP_FONT } from '../styles/AppTheme';
 import WithActivitypubStatusContext from './useStatus';
 import Status from '../components/bottom-sheets/Status';
+import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -24,6 +32,7 @@ export enum BOTTOM_SHEET_ENUM {
 }
 
 type Type = {
+	ref: MutableRefObject<BottomSheetMethods>;
 	visible: boolean;
 	type: BOTTOM_SHEET_ENUM | null;
 	setVisible: (state: boolean) => void;
@@ -45,6 +54,7 @@ const defaultValue: Type = {
 		throw new Error('Function not implemented.');
 	},
 	updateRequestId: undefined,
+	ref: undefined,
 };
 
 const GorhomBottomSheetContext = createContext<Type>(defaultValue);
@@ -149,6 +159,7 @@ function WithGorhomBottomSheetContext({ children }: Props) {
 				setBottomSheetContent: setter,
 				setBottomSheetType: setBottomSheetTypeFn,
 				updateRequestId: updateRequestIdFn,
+				ref,
 			}}
 		>
 			{children}

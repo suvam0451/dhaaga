@@ -97,6 +97,23 @@ export { AccountInstance } from './adapters/profile/_interface.js';
 export { ActivitypubStatusAdapter } from './adapters/status/_adapters.js';
 import ActivitypubHelper from './services/activitypub.js';
 import { KNOWN_SOFTWARE } from './adapters/_client/_router/instance.js';
+import axios from 'axios';
+import { UserDetailed } from 'misskey-js/autogen/models.js';
 
 export { ActivitypubHelper };
 export { parseStatusContent, preprocessPostContent } from './services/index.js';
+
+type MiauthSessionCheckResponse =
+	| { ok: false }
+	| {
+			ok: true;
+			token: string;
+			user: UserDetailed;
+	  };
+
+export const verifyMisskeyToken = async (host: string, session: string) => {
+	const res = await axios.post<MiauthSessionCheckResponse>(
+		`${host}/api/miauth/${session}/check`,
+	);
+	return res.data;
+};

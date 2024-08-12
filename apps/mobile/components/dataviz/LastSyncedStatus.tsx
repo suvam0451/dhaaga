@@ -1,9 +1,11 @@
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import { formatRelative } from 'date-fns';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import { Fragment, useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { Fragment, memo, useEffect, useState } from 'react';
+import { Text } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
+import { useObject } from '@realm/react';
+import { Account } from '../../entities/account.entity';
 
 export enum LAST_SYNCED_STATUS_KEY {
 	BOOKMARK_SYNC = 'BOOKMARK_SYNC',
@@ -15,42 +17,40 @@ type Props = {
 	id: LAST_SYNCED_STATUS_KEY;
 };
 
-function LastSyncedStatus({ id }: Props) {
-	const { primaryAcct } = useActivityPubRestClientContext();
+const LastSyncedStatus = memo(({ id }: Props) => {
+	const { PrimaryAcctPtr } = useActivityPubRestClientContext();
 	const [LastSyncedDate, setLastSyncedDate] = useState(null);
 	const [TotalItemCount, setTotalItemCount] = useState(null);
+
+	const acct = useObject(Account, PrimaryAcctPtr.current?._id);
 
 	useEffect(() => {
 		switch (id) {
 			case LAST_SYNCED_STATUS_KEY.BOOKMARK_SYNC: {
-				setLastSyncedDate(primaryAcct?.bookmarksLastSyncedAt);
-				setTotalItemCount(primaryAcct.bookmarks.length);
+				setLastSyncedDate(acct?.bookmarksLastSyncedAt);
+				setTotalItemCount(acct.bookmarks.length);
 				break;
 			}
 			case LAST_SYNCED_STATUS_KEY.FAVOURITE_SYNC: {
-				setLastSyncedDate(primaryAcct?.favouritesLastSyncedAt);
+				setLastSyncedDate(acct?.favouritesLastSyncedAt);
 				break;
 			}
 			case LAST_SYNCED_STATUS_KEY.HASHTAG_SYNC: {
-				setLastSyncedDate(primaryAcct.hashtagsLastSyncedAt);
+				setLastSyncedDate(acct.hashtagsLastSyncedAt);
 				break;
 			}
 			default: {
 				setLastSyncedDate(null);
 			}
 		}
-	}, [id, primaryAcct]);
+	}, [id, acct]);
 
-	return (
-		<Fragment>
-			{LastSyncedDate ? (
+	if (LastSyncedDate) {
+		return (
+			<Fragment>
 				<Text style={styles.text}>
 					Last Synced: {formatRelative(new Date(), LastSyncedDate)}
 				</Text>
-			) : (
-				<Text style={styles.text}>Last Synced: Never</Text>
-			)}
-			{TotalItemCount ? (
 				<Text style={styles.subsequentText}>
 					Cached:{' '}
 					<Text
@@ -62,12 +62,11 @@ function LastSyncedStatus({ id }: Props) {
 						{TotalItemCount}
 					</Text>
 				</Text>
-			) : (
-				<View></View>
-			)}
-		</Fragment>
-	);
-}
+			</Fragment>
+		);
+	}
+	return <Text style={styles.text}>Last Synced: Never</Text>;
+});
 
 const styles = {
 	text: {
@@ -78,7 +77,8 @@ const styles = {
 		marginTop: 4,
 	},
 	subsequentText: {
-		color: APP_FONT.MONTSERRAT_HEADER,
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
 		fontSize: 12,
 		marginLeft: 4,
 	},

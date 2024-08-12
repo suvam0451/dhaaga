@@ -4,6 +4,20 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 
 class TextParserService {
+	/**
+	 * Is the input url a hashtag?
+	 * @param url
+	 * @returns the hashtag text or null
+	 */
+	static isHashtag(url: string): string | null {
+		if (!url) return null;
+		const tagRegex = /^https?:\/\/(.*?)\/tag\/(.*?)\/?$/;
+		if (!tagRegex.test(url)) return null;
+
+		const match = tagRegex.exec(url);
+		return match[2];
+	}
+
 	static findHashtags(input: string) {
 		if (!input) return [];
 		input = preprocessPostContent(input);
@@ -30,6 +44,7 @@ class TextParserService {
 
 	static findHyperlinks(input: string) {
 		const mp = new Map<string, string>();
+		// @ts-ignore-next-line
 		const ex = /<a.*?href="(.*?)".*?>(.*?)<\/a>/gu;
 
 		const aRefContentCleanupRegex = /(<([^>]+)>)/gi;
@@ -53,12 +68,6 @@ class TextParserService {
 	static preprocessPostContent(input: string, log?: boolean) {
 		return parseStatusContent(input, log);
 	}
-
-	// static findHashtagsFromRaw(input: string) {
-	//  return TextParserService.findHashtags(
-	// 	 TextParserService.preprocessPostContent(input)
-	//  )
-	// }
 }
 
 export default TextParserService;

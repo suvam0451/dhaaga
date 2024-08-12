@@ -9,7 +9,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
-const EmojiReactions = memo(function Foo() {
+const EmojiReactions = memo(() => {
 	const { domain } = useActivityPubRestClientContext();
 	const { status, sharedStatus } = useActivitypubStatusContext();
 
@@ -68,8 +68,8 @@ const EmojiReactions = memo(function Foo() {
 			}
 
 			retval = retval.sort((a, b) => b.count - a.count);
-			setEmojis(retval);
 		}
+		setEmojis(retval);
 	}, [status, sharedStatus]);
 
 	if (domain === 'mastodon') return <Fragment />;

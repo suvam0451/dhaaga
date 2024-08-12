@@ -16,7 +16,7 @@ class MisskeyTag implements TagInterface {
 	}
 
 	getName(): string | null | undefined {
-		return this.ref.instance.tag;
+		return this.ref.instance?.tag;
 	}
 
 	getUrl(): string | null | undefined {
@@ -25,6 +25,10 @@ class MisskeyTag implements TagInterface {
 
 	print(): void {
 		console.log('[INFO]:', this.ref.instance);
+	}
+
+	getMentionedUsersCount(): number {
+		return this.ref.instance?.mentionedUsersCount;
 	}
 }
 

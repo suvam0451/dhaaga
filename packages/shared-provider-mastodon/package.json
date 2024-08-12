@@ -31,7 +31,8 @@
     "snakecase-keys": "^8.0.1"
   },
   "devDependencies": {
-    "tsup": "^8.1.0"
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

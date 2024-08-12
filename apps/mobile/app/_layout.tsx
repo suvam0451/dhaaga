@@ -23,6 +23,7 @@ import AppSettingsService from '../services/app-settings.service';
 import { AppProfileRepository } from '../repositories/app-profile.repo';
 import WithAppBottomSheetContext from '../components/dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { APP_THEME } from '../styles/AppTheme';
+import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
 
 /**
  * Suppress these warnings...
@@ -108,13 +109,15 @@ export default function Page() {
 				{/* In-Memory Store -- MMKV */}
 				<WithGlobalMmkvContext>
 					{/* Main Database -- Realm */}
-					<RealmProvider schema={schemas} schemaVersion={17}>
+					<RealmProvider schema={schemas} schemaVersion={18}>
 						{/* API Caching -- Tanstack */}
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}
 							<ThemeProvider theme={RneuiTheme}>
 								<SafeAreaProvider>
-									<WithGorhomBottomSheetWrapper />
+									<WithAppNotificationBadge>
+										<WithGorhomBottomSheetWrapper />
+									</WithAppNotificationBadge>
 								</SafeAreaProvider>
 							</ThemeProvider>
 						</QueryClientProvider>

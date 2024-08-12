@@ -21,7 +21,7 @@ export class ActivityPubUserRepository {
 	}
 
 	/**
-	 *
+	 * Upsert a user
 	 * @param db
 	 * @param user
 	 * @param userSubdomain used by misskey, when host = null
@@ -36,28 +36,23 @@ export class ActivityPubUserRepository {
 			userSubdomain: string;
 		},
 	) {
+		/**
+		 * For Firefish, null = my own subdomain
+		 */
+		const _subdomain = user.getInstanceUrl() || userSubdomain;
+
 		if (!user) {
 			console.log('[WARN]: object null while saving user');
 			return null;
 		}
 
-		const _server = ActivityPubServerRepository.upsert(
-			db,
-			user.getInstanceUrl() || userSubdomain,
-		);
+		const _server = ActivityPubServerRepository.upsert(db, _subdomain);
 		if (!_server) {
-			console.log(
-				'[WARN]: server null while saving user',
-				user.getInstanceUrl() || userSubdomain,
-			);
-			return;
+			console.log('[WARN]: server null while saving user', _subdomain);
+			return null;
 		}
 
-		const _user = this.getByUsername(
-			db,
-			user.getUsername(),
-			user.getInstanceUrl(),
-		);
+		const _user = this.getByUsername(db, user.getUsername(), _subdomain);
 
 		try {
 			return db.create(
@@ -68,7 +63,6 @@ export class ActivityPubUserRepository {
 					userId: user.getId(),
 					avatarUrl: user.getAvatarUrl(),
 					displayName: user.getDisplayName(),
-					// accountId: ,
 					server: _server,
 				},
 				UpdateMode.Modified,
@@ -104,6 +98,6 @@ export class ActivityPubUserRepository {
 	static getByUsername(db: Realm, username: string, instance: string) {
 		return db
 			.objects(ActivityPubUser)
-			.find((o) => o.username === username && o.server.url === instance);
+			.find((o) => o.username === username && o.server?.url === instance);
 	}
 }

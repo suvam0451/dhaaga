@@ -1,7 +1,7 @@
-import HomeScreen from '../../../screens/HomeScreen';
+import TimelineRenderer from '../../../components/common/timeline/core/Timeline';
 
 function Screen() {
-	return <HomeScreen />;
+	return <TimelineRenderer />;
 }
 
 export default Screen;

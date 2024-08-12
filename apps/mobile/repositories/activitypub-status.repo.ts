@@ -45,15 +45,13 @@ export class ActivityPubStatusRepository {
 			spoilerText: '',
 			visibility: status.getVisibility() || 'unknown',
 		};
+
 		const match = this.find(db, status.getId(), subdomain);
 		const savedServer = ActivityPubServerRepository.upsert(db, subdomain);
 		const savedPostedBy = ActivityPubUserRepository.upsert(db, {
 			user: postedBy,
 			userSubdomain: subdomain,
 		});
-		if (!savedPostedBy) {
-			console.log('[WARN]: postedBy not saved in db', status.getRaw());
-		}
 
 		const retval = db.create(
 			ActivityPubStatus,
@@ -110,6 +108,11 @@ export class ActivityPubStatusRepository {
 	static find(db: Realm, statusId: string, subdomain: string) {
 		return db
 			.objects(ActivityPubStatus)
-			.find((o) => o.statusId === statusId && o?.server?.url === subdomain);
+			.find(
+				(o) =>
+					o.statusId === statusId &&
+					o?.server !== null &&
+					o?.server?.url === subdomain,
+			);
 	}
 }

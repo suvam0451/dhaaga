@@ -40,15 +40,16 @@ function WithContextWrapped() {
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
-		return await client.getStatusContext(q);
+		const { data, error } = await client.statuses.getContext(q);
+		return data;
 	}
 
 	// Queries
 	const { status, data, refetch, fetchStatus } = useQuery<
 		mastodon.v1.Conversation[] | any[]
 	>({
-		queryKey: ['conversation/context'],
-		queryFn: api,
+		queryKey: ['conversation/context', q],
+		queryFn: api as any,
 		enabled: client !== null,
 	});
 

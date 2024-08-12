@@ -11,6 +11,7 @@ import {
 import { LibraryResponse } from '../_router/_types.js';
 import { MastoNotification } from '../_interface.js';
 import type { Endpoints } from 'misskey-js/autogen/endpoint.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class MisskeyNotificationsRouter implements NotificationsRoute {
 	client: RestClient;
@@ -32,6 +33,18 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 			'i/notifications-grouped',
 			Endpoints['i/notifications-grouped']['req']
 		>('i/notifications-grouped', query as any);
+		return { data: { data: data as any } };
+	}
+
+	async getUngrouped(query: NotificationGetQueryDto): LibraryPromise<{
+		data: MastoNotification[];
+		minId?: string | null;
+		maxId?: string | null;
+	}> {
+		const data = await this.lib.client.request<
+			'i/notifications',
+			Endpoints['i/notifications']['req']
+		>('i/notifications', query as any);
 		return { data: { data: data as any } };
 	}
 }

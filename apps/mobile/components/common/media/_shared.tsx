@@ -31,16 +31,15 @@ export const AppImageComponent = memo(function Foo({
 	blurhash,
 	height,
 }: Props) {
-	console.log(url, height, MEDIA_CONTAINER_WIDTH);
 	return (
 		// @ts-ignore
-		<NativeImage
+		<Image
 			style={{
 				flex: 1,
 				width: MEDIA_CONTAINER_WIDTH,
 				borderRadius: 16,
 				opacity: 0.87,
-				// height,
+				height,
 			}}
 			// placeholder={{ blurhash: blurhash || DEFAULT_BLURHASH }}
 			source={{
@@ -48,11 +47,11 @@ export const AppImageComponent = memo(function Foo({
 				// blurhash: blurhash || DEFAULT_BLURHASH,
 				// width: MEDIA_CONTAINER_WIDTH,
 			}}
-			// transition={{
-			// 	effect: 'flip-from-right',
-			// 	duration: 120,
-			// 	timing: 'ease-in',
-			// }}
+			transition={{
+				effect: 'flip-from-right',
+				duration: 120,
+				timing: 'ease-in',
+			}}
 			// autoplay={false}
 		/>
 	);

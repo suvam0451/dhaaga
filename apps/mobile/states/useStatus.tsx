@@ -78,9 +78,7 @@ const defaultValue: Type = {
 	contextChildrenLookup: undefined,
 	contextRootLookup: undefined,
 	stateKey: '',
-	setSharedDataRaw: function (o: any): void {
-		throw new Error('Function not implemented.');
-	},
+	setSharedDataRaw: () => {},
 };
 
 const ActivitypubStatusContext = createContext<Type>(defaultValue);
@@ -209,19 +207,28 @@ function WithActivitypubStatusContext({
 
 	const toggleBookmark = useCallback(async () => {
 		if (!client) return;
-		try {
-			if (Status.current?.getIsBookmarked()) {
-				const res = await client.unBookmark(Status.current.getId());
-				setDataRaw(res);
-			} else {
-				const res = await client.bookmark(Status.current.getId());
-				setDataRaw(res);
+
+		if (Status.current?.getIsBookmarked()) {
+			const { data, error } = await client.statuses.bookmark(
+				Status.current.getId(),
+			);
+			if (error) {
+				console.log('[WARN]: unable to bookmark');
+				return;
 			}
-		} catch (e) {
-			console.log('[ERROR] : toggling bookmark');
-		} finally {
-			forceUpdate();
+			setDataRaw(data);
+		} else {
+			const { data, error } = await client.statuses.unBookmark(
+				Status.current.getId(),
+			);
+			if (error) {
+				console.log('[WARN]: unable to bookmark');
+				return;
+			}
+			setDataRaw(data);
 		}
+
+		forceUpdate();
 	}, []);
 
 	return (

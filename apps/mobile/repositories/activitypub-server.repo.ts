@@ -19,16 +19,21 @@ export class ActivityPubServerRepository {
 		const removeHttps = url.replace(/^https?:\/\//, '');
 
 		const match = this.get(db, removeHttps);
-		return db.create(
-			ActivityPubServer,
-			{
-				_id: match?._id || new Realm.BSON.UUID(),
-				url: match?.url || removeHttps,
-				description: match?.description || 'N/A',
-				type: software ? software : match?.type || 'unknown',
-			},
-			UpdateMode.Modified,
-		);
+		try {
+			return db.create(
+				ActivityPubServer,
+				{
+					_id: match?._id || new Realm.BSON.UUID(),
+					url: match?.url || removeHttps,
+					description: match?.description || 'N/A',
+					type: software ? software : match?.type || 'unknown',
+				},
+				UpdateMode.Modified,
+			);
+		} catch (e) {
+			console.log('[ERROR]: server upsert failed', e);
+			return null;
+		}
 	}
 
 	/**
@@ -53,6 +58,6 @@ export class ActivityPubServerRepository {
 
 	static get(db: Realm, url: string) {
 		url = url.replace(/^https?:\/\//, '');
-		return db.objects(ActivityPubServer).find((o) => o.url === url);
+		return db.objects(ActivityPubServer).find((o) => o?.url === url);
 	}
 }

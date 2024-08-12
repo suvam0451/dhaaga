@@ -6,6 +6,7 @@ import { ActivityPubTagRepository } from '../repositories/activitypub-tag.repo';
 import { Account } from '../entities/account.entity';
 import AccountRepo from '../repositories/account.repo';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { MastoTag } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 
 class AccountService {
 	static selectAccount(db: Realm, _id: UUID) {
@@ -21,10 +22,14 @@ class AccountService {
 	}
 
 	static loadFollowedTags(db: Realm, client: ActivityPubClient) {
-		client.getFollowedTags({ limit: 200 }).then((res: any) => {
+		client.tags.followedTags({ limit: 200 }).then(({ data, error }) => {
+			if (error) {
+				console.log('[ERROR]: failed to fetch followed tags', error);
+				return;
+			}
 			db.write(() => {
 				ActivityPubTagRepository.clearFollowing(db);
-				ActivityPubTagRepository.applyFollowing(db, res.data);
+				ActivityPubTagRepository.applyFollowing(db, data.data as MastoTag[]);
 			});
 		});
 	}

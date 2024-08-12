@@ -1,7 +1,10 @@
 import { createContext, useContext, useRef, useState } from 'react';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import AppBottomSheet from '../../Core';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	StatusInterface,
+	UserInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -9,6 +12,7 @@ export enum BOTTOM_SHEET_ENUM {
 	STATUS_COMPOSER = 'StatusComposer',
 	STATUS_MENU = 'StatusMenu',
 	STATUS_PREVIEW = 'StatusPreview',
+	PROFILE_PEEK = 'ProfilePeek',
 	NA = 'N/A',
 }
 
@@ -18,7 +22,15 @@ type Type = {
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
+	requestId: string;
+
+	// references
 	PostRef: React.MutableRefObject<StatusInterface>;
+	PostIdRef: React.MutableRefObject<string>;
+	UserRef: React.MutableRefObject<UserInterface>;
+	UserIdRef: React.MutableRefObject<string>;
+	// pre-populate the post-composer to this content
+	PostComposerTextSeedRef: React.MutableRefObject<string>;
 };
 
 const defaultValue: Type = {
@@ -27,7 +39,12 @@ const defaultValue: Type = {
 	visible: false,
 	setVisible: () => {},
 	updateRequestId: () => {},
+	requestId: '',
 	PostRef: undefined,
+	PostIdRef: undefined,
+	UserRef: undefined,
+	UserIdRef: undefined,
+	PostComposerTextSeedRef: undefined,
 };
 
 const AppBottomSheetContext = createContext<Type>(defaultValue);
@@ -43,10 +60,14 @@ type Props = {
 function WithAppBottomSheetContext({ children }: Props) {
 	const [Visible, setVisible] = useState(false);
 	const [Type, setType] = useState(BOTTOM_SHEET_ENUM.NA);
-	const { forceUpdate } = useHookLoadingState();
+	const { forceUpdate, State } = useHookLoadingState();
 
 	// pointers
 	const PostRef = useRef<StatusInterface>(null);
+	const PostIdRef = useRef<string>(null);
+	const UserRef = useRef<UserInterface>(null);
+	const UserIdRef = useRef<string>(null);
+	const PostComposerTextSeedRef = useRef<string>(null);
 
 	return (
 		<AppBottomSheetContext.Provider
@@ -56,7 +77,12 @@ function WithAppBottomSheetContext({ children }: Props) {
 				visible: Visible,
 				setVisible,
 				updateRequestId: forceUpdate,
+				requestId: State,
 				PostRef,
+				PostIdRef,
+				UserRef,
+				UserIdRef,
+				PostComposerTextSeedRef,
 			}}
 		>
 			{children}

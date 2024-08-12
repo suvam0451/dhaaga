@@ -15,6 +15,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { SoftwareBadgeUpdateAccountOnClick } from '../../../components/common/software/SimpleBadge';
 import { FontAwesome } from '@expo/vector-icons';
+import useAppCustomEmoji from '../../../hooks/app/useAppCustomEmoji';
 
 type Props = {
 	id: UUID;
@@ -223,6 +224,7 @@ function AccountListingFragment({
 	const { regenerate } = useActivityPubRestClientContext();
 	const [IsExpanded, setIsExpanded] = useState(false);
 
+	const { refresh } = useAppCustomEmoji();
 	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
 	const displayName = AccountRepository.findSecret(
 		db,
@@ -240,6 +242,7 @@ function AccountListingFragment({
 			AccountService.deselectAccount(db, account._id);
 		} else {
 			AccountService.selectAccount(db, account._id);
+			refresh(account.subdomain, account.domain);
 		}
 		regenerate();
 	}

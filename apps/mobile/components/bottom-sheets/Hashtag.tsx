@@ -1,8 +1,14 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import { Button, ListItem, Skeleton, Text } from '@rneui/themed';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Button, ListItem, Skeleton } from '@rneui/themed';
+import {
+	ScrollView,
+	TouchableOpacity,
+	View,
+	Text,
+	StyleSheet,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetActionButtonContainer } from '../../styles/Containers';
 import WithActivitypubTagContext, {
@@ -13,6 +19,13 @@ import { useNavigation } from '@react-navigation/native';
 import InstanceService from '../../services/instance.service';
 import useSkeletonSmoothTransition from '../../states/useSkeletonTransition';
 import { APP_FONT } from '../../styles/AppTheme';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { APP_FONTS } from '../../styles/AppFonts';
+import MisskeyTag from '@dhaaga/shared-abstraction-activitypub/dist/adapters/tag/misskey';
+import useAppNavigator from '../../states/useAppNavigator';
+import { useGorhomActionSheetContext } from '../../states/useGorhomBottomSheet';
+import TagButtonFollow from './hashtag/fragments/TagButtonFollow';
+import TagButtonBrowseLocal from './hashtag/fragments/TagButtonBrowseLocal';
 
 type HashtagActionsProps = {
 	visible: boolean;
@@ -26,11 +39,10 @@ type HashtagBottomSheetContentProps = {
 export function HashtagBottomSheetContent({
 	parentApiPending,
 }: HashtagBottomSheetContentProps) {
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { setVisible } = useGorhomActionSheetContext();
+	const { primaryAcct, domain } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
-	const { client } = useActivityPubRestClientContext();
-	const { tag, setDataRaw } = useActivitypubTagContext();
-	const navigation = useNavigation<any>();
+	const { tag } = useActivitypubTagContext();
 	const [IsLoading, setIsLoading] = useState(false);
 
 	const [AggregatedData, setAggregatedData] = useState({
@@ -57,17 +69,6 @@ export function HashtagBottomSheetContent({
 			});
 	}, [tag]);
 
-	async function onClickFollowTag() {
-		if (!tag) return;
-		if (tag?.isFollowing()) {
-			const { data, error } = await client.tags.unfollow(tag.getName());
-			setDataRaw(data);
-		} else {
-			const { data, error } = await client.tags.follow(tag.getName());
-			setDataRaw(data);
-		}
-	}
-
 	const loaded = useSkeletonSmoothTransition(
 		!tag || tag.getName() === '' || IsLoading || parentApiPending,
 		{
@@ -76,6 +77,25 @@ export function HashtagBottomSheetContent({
 		},
 	);
 	if (!loaded) return <HashtagSkeleton />;
+
+	const summaryText = useMemo(() => {
+		if (domain === KNOWN_SOFTWARE.MASTODON) {
+			return `${AggregatedData.posts} posts , ${AggregatedData.users} users`;
+		} else {
+			return `${(tag as MisskeyTag).getMentionedUsersCount()} users`;
+		}
+	}, [AggregatedData, domain]);
+
+	const TAG_SUBSCRIBE_POSSIBLE = useMemo(() => {
+		return domain === KNOWN_SOFTWARE.MASTODON;
+	}, [domain]);
+
+	const { toTag } = useAppNavigator();
+
+	function onNavigate() {
+		setVisible(false);
+		toTag(tag.getName());
+	}
 
 	return (
 		<Fragment>
@@ -102,15 +122,20 @@ export function HashtagBottomSheetContent({
 									style={{
 										color: '#fff',
 										fontSize: 18,
-										fontFamily: 'Montserrat-Bold',
+										fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 										opacity: 0.6,
 									}}
 								>
 									#{tag.getName()}
 								</ListItem.Title>
 							</ScrollView>
-							<Text style={{ color: '#fff', opacity: 0.6 }}>
-								{AggregatedData.posts} posts , {AggregatedData.users} users
+							<Text
+								style={{
+									color: APP_FONT.MONTSERRAT_BODY,
+									fontFamily: APP_FONTS.INTER_400_REGULAR,
+								}}
+							>
+								{summaryText}
 							</Text>
 						</View>
 						<View
@@ -121,63 +146,8 @@ export function HashtagBottomSheetContent({
 								marginLeft: 8,
 							}}
 						>
-							{tag?.isFollowing() ? (
-								<Button
-									onPress={onClickFollowTag}
-									type="outline"
-									buttonStyle={{
-										borderColor: '#cb6483',
-										backgroundColor: 'rgba(39, 39, 39, 1)',
-									}}
-									titleStyle={{
-										color: 'white',
-										opacity: 0.87,
-									}}
-								>
-									<Text
-										style={{
-											fontFamily: 'Montserrat-Bold',
-											color: '#cb6483',
-											opacity: 0.87,
-										}}
-									>
-										Followed
-									</Text>
-								</Button>
-							) : (
-								<Button
-									buttonStyle={{
-										borderColor: 'red',
-										backgroundColor: '#cb6483',
-									}}
-									onPress={onClickFollowTag}
-								>
-									<Text
-										style={{
-											fontFamily: 'Montserrat-ExtraBold',
-											opacity: 0.6,
-										}}
-									>
-										Follow
-									</Text>
-								</Button>
-							)}
-							<BottomSheetActionButtonContainer style={{ marginLeft: 8 }}>
-								<TouchableOpacity
-									onPress={() => {
-										navigation.navigate('Browse Hashtag', {
-											q: tag.getName(),
-										});
-									}}
-								>
-									<Ionicons
-										color={'white'}
-										size={18}
-										name={'globe-outline'}
-										style={{ opacity: 0.6 }}
-									/>
-								</TouchableOpacity>
-							</BottomSheetActionButtonContainer>
+							<TagButtonFollow />
+							<TagButtonBrowseLocal name={tag?.getName()} />
 						</View>
 					</View>
 				</ListItem.Content>
@@ -196,13 +166,7 @@ export function HashtagBottomSheetContent({
 						}}
 					>
 						<View style={{ flex: 1 }}>
-							<TouchableOpacity
-								onPress={() => {
-									navigation.navigate('Browse Hashtag', {
-										q: tag.getName(),
-									});
-								}}
-							>
+							<TouchableOpacity onPress={onNavigate}>
 								<Button
 									type={'clear'}
 									style={{ opacity: 0.6, marginRight: 2 }}
@@ -224,34 +188,13 @@ export function HashtagBottomSheetContent({
 											}}
 										>
 											<View>
-												<Text
-													style={{
-														fontSize: 16,
-														color: 'orange',
-														fontFamily: 'Montserrat-Bold',
-														opacity: 0.6,
-													}}
-												>
+												<Text style={styles.instanceTargetDesc}>
 													Your Instance
-													{/*<Ionicons*/}
-													{/*    color={"orange"}*/}
-													{/*    style={{opacity: 0.6}} size={16}*/}
-													{/*    name={"globe-outline"}/>*/}
 												</Text>
-												<Text
-													style={{
-														fontSize: 12,
-														opacity: 0.6,
-														color: 'orange',
-														fontFamily: 'Inter-Bold',
-													}}
-													numberOfLines={1}
-												>
+												<Text style={styles.instanceTarget} numberOfLines={1}>
 													{subdomain}
 												</Text>
-												<Text
-													style={{ color: '#fff', opacity: 0.6, fontSize: 12 }}
-												>
+												<Text style={styles.instanceMetrics}>
 													{AggregatedData.posts} posts by {AggregatedData.users}{' '}
 													users
 												</Text>
@@ -277,33 +220,11 @@ export function HashtagBottomSheetContent({
 										}}
 									>
 										<View>
-											<Text
-												style={{
-													fontSize: 16,
-													marginRight: 4,
-													fontFamily: 'Montserrat-Bold',
-													color: 'orange',
-													opacity: 0.6,
-												}}
-											>
+											<Text style={styles.instanceTargetDesc}>
 												Their Instance
-												{/*<FontAwesome*/}
-												{/*    name={"external-link"} style={{opacity: 0.6}}*/}
-												{/*    color={"orange"} size={16}/>*/}
 											</Text>
-											<Text
-												style={{
-													fontSize: 12,
-													opacity: 0.6,
-													fontFamily: 'Inter-Bold',
-													color: 'orange',
-												}}
-											>
-												https://misskey.io
-											</Text>
-											<Text
-												style={{ color: '#fff', opacity: 0.6, fontSize: 12 }}
-											>
+											<Text style={styles.instanceTarget}>misskey.io</Text>
+											<Text style={styles.instanceMetrics}>
 												{AggregatedData.posts} posts by {AggregatedData.users}{' '}
 												users
 											</Text>
@@ -340,13 +261,10 @@ export function HashtagBottomSheetContent({
 								justifyContent: 'center',
 							}}
 						>
-							<View>
-								{/*<Ionicons name={"add-outline"} color={APP_FONT.MONTSERRAT_HEADER} size={24}/>*/}
-							</View>
 							<Text
 								style={{
 									fontSize: 16,
-									fontFamily: 'Montserrat-Bold',
+									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 									color: APP_FONT.MONTSERRAT_BODY,
 								}}
 							>
@@ -449,13 +367,12 @@ function HashtagBottomSheet({ id }: HashtagActionsProps) {
 			console.log(error);
 			return null;
 		}
-		console.log(id, data);
 		return data;
 	}
 
 	// Queries
 	const { status, data } = useQuery<TagType | null>({
-		queryKey: [id],
+		queryKey: ['tag', id],
 		queryFn: api,
 		enabled: client !== null && id !== null,
 	});
@@ -474,4 +391,24 @@ function HashtagBottomSheet({ id }: HashtagActionsProps) {
 	);
 }
 
+const styles = StyleSheet.create({
+	instanceTargetDesc: {
+		fontSize: 16,
+		marginRight: 4,
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		color: 'orange',
+		opacity: 0.6,
+	},
+	instanceTarget: {
+		fontSize: 12,
+		opacity: 0.6,
+		color: 'orange',
+		fontFamily: APP_FONTS.INTER_700_BOLD,
+	},
+	instanceMetrics: {
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 12,
+	},
+});
 export default HashtagBottomSheet;

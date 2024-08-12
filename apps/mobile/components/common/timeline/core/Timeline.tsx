@@ -13,9 +13,6 @@ import WithAppPaginationContext, {
 } from '../../../../states/usePagination';
 import LoadingMore from '../../../screens/home/LoadingMore';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import { useRealm } from '@realm/react';
-import { EmojiService } from '../../../../services/emoji.service';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
@@ -35,22 +32,20 @@ import { ListItemEnum } from '../utils/itemType.types';
 import FlashListRenderer from '../fragments/FlashListRenderer';
 import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
+import useAppCustomEmoji from '../../../../hooks/app/useAppCustomEmoji';
+import activitypubAdapterService from '../../../../services/activitypub-adapter.service';
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
 
-/**
- *
- * @returns Timeline rendered for Mastodon
+/*
+ * Render a Timeline
  */
 const Timeline = memo(() => {
 	const { timelineType, query, opts, setTimelineType } =
 		useTimelineController();
 	const { client, primaryAcct } = useActivityPubRestClientContext();
 	const domain = primaryAcct?.domain;
-
-	const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
 	const {
 		data: PageData,
 		setMaxId,
@@ -59,6 +54,7 @@ const Timeline = memo(() => {
 		queryCacheMaxId,
 		clear,
 	} = useAppPaginationContext();
+	const { refresh } = useAppCustomEmoji();
 
 	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
@@ -86,17 +82,32 @@ const Timeline = memo(() => {
 
 		if (data?.length > 0) {
 			setMaxId(data[data.length - 1]?.id);
-			setEmojisLoading(true);
-			EmojiService.preloadInstanceEmojisForStatuses(
-				db,
-				globalDb,
-				data,
-				domain,
-			).finally(() => {
-				append(data);
-				setEmojisLoading(false);
-				setPageLoadedAtLeastOnce(true);
-			});
+
+			const _data = ActivityPubAdapterService.adaptManyStatuses(data, domain);
+			append(_data);
+			setPageLoadedAtLeastOnce(true);
+
+			/**
+			 * Resolve Custom Emojis
+			 */
+			for (const datum of _data) {
+				const _user = activitypubAdapterService.adaptUser(
+					datum.getUser(),
+					domain,
+				);
+				const _subdomain = _user.getInstanceUrl();
+				if (_subdomain) refresh(_subdomain);
+
+				// handle boosted content
+				if (datum.isReposted()) {
+					const _userR = activitypubAdapterService.adaptUser(
+						datum.getRepostedStatus()?.getUser(),
+						domain,
+					);
+					const _subdomain = _userR.getInstanceUrl();
+					if (_subdomain) refresh(_subdomain);
+				}
+			}
 		}
 	}, [fetchStatus]);
 
@@ -120,26 +131,25 @@ const Timeline = memo(() => {
 
 	const ListItems = useMemo(() => {
 		return PageData.map((o) => {
-			const adapted = ActivityPubAdapterService.adaptStatus(o, domain);
-			if (adapted.getMediaAttachments().length > 0) {
+			if (o.getMediaAttachments().length > 0) {
 				return {
 					type: ListItemEnum.ListItemWithImage,
 					props: {
-						post: adapted,
+						post: o,
 					},
 				};
-			} else if (adapted.getIsSensitive()) {
+			} else if (o.getIsSensitive()) {
 				return {
 					type: ListItemEnum.ListItemWithSpoiler,
 					props: {
-						post: adapted,
+						post: o,
 					},
 				};
 			} else {
 				return {
 					type: ListItemEnum.ListItemWithText,
 					props: {
-						post: adapted,
+						post: o,
 					},
 				};
 			}
