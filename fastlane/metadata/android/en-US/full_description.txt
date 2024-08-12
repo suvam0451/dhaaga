@@ -13,6 +13,9 @@ Innovative features added in Dhaaga:
 * [v0.2.0] "Bookmark Gallery" | Store and view your bookmarks offline
 * [v0.3.0] "Known Servers" | A social graph of every instance you visit
 * [v0.4.0] "Profile Gallery" | Browse a profile as an art gallery
+* [v0.5.0] Misskey/Firefish/Sharkey support added
+* [v0.6.0] Micro-blogging style post composer
+* [v0.7.0] Polled Notifications
 * ...and more in the way ✌️
 
 To get involved with the project, join:
