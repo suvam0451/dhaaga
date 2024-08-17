@@ -5,8 +5,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
 import { APP_THEME } from '../../styles/AppTheme';
 import { StatusBar } from 'expo-status-bar';
-import WithAppAssetsContext from '../../hooks/app/useAssets';
 import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
+import WithAppAssetsContext from '../../hooks/app/useAssets';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
@@ -56,7 +56,11 @@ export default function TabLayout() {
 								switch (renderer) {
 									case 'fa6':
 										return (
-											<FontAwesome6 name={iconName} size={size} color={color} />
+											<FontAwesome6.default
+												name={iconName}
+												size={size}
+												color={color}
+											/>
 										);
 									default:
 										return (
@@ -90,7 +94,6 @@ export default function TabLayout() {
 								<Ionicons size={size} name="home" color={color} />
 							),
 						}}
-						initialRouteName={'home-home'}
 					/>
 					<Tabs.Screen
 						name={'discover'}

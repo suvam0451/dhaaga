@@ -14,7 +14,7 @@ import { StatusArray } from '../../status/_interface.js';
 import { createRestAPIClient } from 'masto';
 import { MastodonInstanceRouter } from './instance.js';
 import { MastodonAccountsRouter } from './accounts.js';
-import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { MastodonStatusesRouter } from './statuses.js';
 import { MastodonBookmarksRouter } from './bookmarks.js';
 import { MastodonTrendsRouter } from './trends.js';
@@ -24,6 +24,7 @@ import { MastodonTagRouter } from './tags.js';
 import { MastodonSearchRouter } from './search.js';
 import { MastodonMeRouter } from './me.js';
 import { MastodonMediaRoute } from './media.js';
+import { MastodonListRoute } from './lists.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -38,6 +39,7 @@ class MastodonRestClient implements ActivityPubClient {
 	search: MastodonSearchRouter;
 	me: MastodonMeRouter;
 	media: MastodonMediaRoute;
+	lists: MastodonListRoute;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -55,6 +57,7 @@ class MastodonRestClient implements ActivityPubClient {
 		this.search = new MastodonSearchRouter(this.client);
 		this.me = new MastodonMeRouter(this.client);
 		this.media = new MastodonMediaRoute(this.client);
+		this.lists = new MastodonListRoute(this.client);
 	}
 
 	async getMyLists(): Promise<MastoList[]> {

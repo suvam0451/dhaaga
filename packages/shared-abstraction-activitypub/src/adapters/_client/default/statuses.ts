@@ -44,6 +44,14 @@ export class DefaultStatusesRouter implements StatusesRoute {
 		return notImplementedErrorBuilder<any>();
 	}
 
+	async like(id: string) {
+		return notImplementedErrorBuilder<any>();
+	}
+
+	async removeLike(id: string) {
+		return notImplementedErrorBuilder<any>();
+	}
+
 	async getContext(id: string): LibraryPromise<MastoContext | MissContext> {
 		return notImplementedErrorBuilder<any>();
 	}

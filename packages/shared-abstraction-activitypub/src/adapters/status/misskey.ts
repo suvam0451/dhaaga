@@ -211,6 +211,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
+	getQuote(): StatusInterface | null | undefined {
+		return null;
+	}
+
 	getMediaAttachments() {
 		if (!this.ref?.instance?.files) {
 			return [];

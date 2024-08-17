@@ -24,6 +24,7 @@ import { PleromaTagsRouter } from './tags.js';
 import { PleromaSearchRouter } from './search.js';
 import { PleromaMeRouter } from './me.js';
 import { PleromaMediaRoute } from './media.js';
+import { PleromaListsRoute } from './lists.js';
 
 class PleromaRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -38,6 +39,7 @@ class PleromaRestClient implements ActivityPubClient {
 	search: PleromaSearchRouter;
 	me: PleromaMeRouter;
 	media: PleromaMediaRoute;
+	lists: PleromaListsRoute;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -55,6 +57,7 @@ class PleromaRestClient implements ActivityPubClient {
 		this.search = new PleromaSearchRouter(this.client);
 		this.me = new PleromaMeRouter(this.client);
 		this.media = new PleromaMediaRoute(this.client);
+		this.lists = new PleromaListsRoute(this.client);
 	}
 
 	getHomeTimeline(opts?: GetPostsQueryDTO | undefined): Promise<StatusArray> {
@@ -191,27 +194,11 @@ class PleromaRestClient implements ActivityPubClient {
 		throw new Error('Method not implemented.');
 	}
 
-	bookmark(id: string): Promise<Status> {
-		throw new Error('Method not implemented.');
-	}
-
-	unBookmark(id: string): Promise<Status> {
-		throw new Error('Method not implemented.');
-	}
-
 	favourite(id: string): Promise<Status> {
 		throw new Error('Method not implemented.');
 	}
 
 	unFavourite(id: string): Promise<Status> {
-		throw new Error('Method not implemented.');
-	}
-
-	reblog(id: string): Promise<Status> {
-		throw new Error('Method not implemented.');
-	}
-
-	undoReblog(id: string): Promise<Status> {
 		throw new Error('Method not implemented.');
 	}
 }

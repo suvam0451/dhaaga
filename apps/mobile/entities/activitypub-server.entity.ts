@@ -1,4 +1,4 @@
-import { BSON, ObjectSchema, Object } from 'realm';
+import { ObjectSchema, Object } from 'realm';
 import { ActivityPubUser } from './activitypub-user.entity';
 import { ActivityPubStatus } from './activitypub-status.entity';
 import { ActivityPubCustomEmojiItem } from './activitypub-emoji.entity';
@@ -14,8 +14,13 @@ export class ActivityPubServer extends Object {
 	description!: string;
 	url: string;
 	type: string;
-	customEmojisLastFetchedAt: Date;
+	nodeinfo?: string;
+	// cache policy
+	customEmojisLastFetchedAt?: Date;
+	instanceSoftwareLastFetchedAt?: Date;
+	// metadata
 	createdAt: Date;
+
 	// relations
 	users: Realm.List<ActivityPubUser>;
 	statuses: Realm.List<ActivityPubStatus>;
@@ -29,7 +34,11 @@ export class ActivityPubServer extends Object {
 			description: 'string',
 			url: 'string',
 			type: 'string',
+			nodeinfo: 'string?',
+
 			customEmojisLastFetchedAt: { type: 'date', optional: true },
+			instanceSoftwareLastFetchedAt: { type: 'date', optional: true },
+
 			createdAt: {
 				type: 'date',
 				default: new Date(),

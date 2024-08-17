@@ -7,9 +7,7 @@ import {
 	Text,
 	StyleSheet,
 } from 'react-native';
-import { OpenAiService } from '../../../../services/openai.service';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { useActivitypubStatusContext } from '../../../../states/useStatus';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Divider } from '@rneui/themed';
 import PostStats from '../PostStats';
@@ -23,55 +21,55 @@ import {
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.services';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useBookmark from '../api/useBookmark';
 import useBoost from '../api/useBoost';
+import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
 
 type StatusInteractionProps = {
-	setExplanationObject: React.Dispatch<React.SetStateAction<string | null>>;
-	ExplanationObject: string | null;
 	openAiContext?: string[];
-	isRepost: boolean;
 };
 
 const ICON_SIZE = 18;
 
-function StatusInteractionBase({
-	openAiContext,
-	setExplanationObject,
-	ExplanationObject,
-	isRepost,
-}: StatusInteractionProps) {
+const StatusInteraction = memo(({ openAiContext }: StatusInteractionProps) => {
 	const { client } = useActivityPubRestClientContext();
-	const { status: post, sharedStatus } = useActivitypubStatusContext();
-	const _status = isRepost ? sharedStatus : post;
 	const { setVisible, setBottomSheetType, updateRequestId } =
 		useGorhomActionSheetContext();
 	const { globalDb } = useGlobalMmkvContext();
+	const { dto } = useAppStatusItem();
+	const { toggleBookmark, explain } = useAppTimelineDataContext();
 
-	// Loading States
-	const [TranslationLoading, setTranslationLoading] = useState(false);
+	const STATUS_DTO = dto.meta.isBoost
+		? dto.content.raw
+			? dto
+			: dto.boostedFrom
+		: dto;
 
-	//
+	// local state
+	const IS_BOOKMARKED = STATUS_DTO.interaction.bookmarked;
+	const IS_TRANSLATED =
+		STATUS_DTO.calculated.translationOutput !== undefined &&
+		STATUS_DTO.calculated.translationOutput !== null;
+
+	// loading state
+	const [IsBookmarkStatePending, setIsBookmarkStatePending] = useState(false);
+	const [IsTranslateStateLoading, setIsTranslateStateLoading] = useState(false);
 	const [BoostOptionsVisible, setBoostOptionsVisible] = useState(false);
 
+	// helper functions
+	function _toggleBookmark() {
+		toggleBookmark(STATUS_DTO.id, setIsBookmarkStatePending);
+	}
+
 	function onTranslationLongPress() {
-		if (TranslationLoading || ExplanationObject) return;
-		setTranslationLoading(true);
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-		OpenAiService.explain(openAiContext.join(','))
-			.then((res) => {
-				setExplanationObject(res);
-			})
-			.finally(() => {
-				setTranslationLoading(false);
-			});
+		explain(STATUS_DTO.id, openAiContext, setIsTranslateStateLoading);
 	}
 
 	function OnTranslationClicked() {
-		if (TranslationLoading) return;
+		if (IsTranslateStateLoading) return;
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 		client.instances
-			.getTranslation(_status.getId(), 'en')
+			.getTranslation(dto.id, 'en')
 			.then((res) => {
 				console.log(res);
 			})
@@ -81,11 +79,6 @@ function StatusInteractionBase({
 	}
 
 	const {
-		onPress: onBookmarkPress,
-		IsLoading: IsBookmarkLoading,
-		IsBookmarked,
-	} = useBookmark();
-	const {
 		IsBoosted,
 		IsLoading: IsBoostLoading,
 		onPress: onBoostPress,
@@ -93,10 +86,7 @@ function StatusInteractionBase({
 
 	function onShowAdvancedMenuPressed() {
 		try {
-			GlobalMmkvCacheService.setBottomSheetProp_Status(
-				globalDb,
-				_status.getRaw(),
-			);
+			GlobalMmkvCacheService.setBottomSheetProp_Status(globalDb, dto);
 			setBottomSheetType(BOTTOM_SHEET_ENUM.STATUS_MENU);
 			updateRequestId();
 			setVisible(true);
@@ -111,7 +101,7 @@ function StatusInteractionBase({
 				paddingHorizontal: 4,
 			}}
 		>
-			<PostStats isRepost={isRepost} />
+			<PostStats />
 			<Divider
 				color={'#cccccc'}
 				style={{
@@ -202,14 +192,13 @@ function StatusInteractionBase({
 							paddingTop: 8,
 							paddingBottom: 8,
 						}}
-						onPress={onBookmarkPress}
-						// onLongPress={onSaveLongPress}
+						onPress={_toggleBookmark}
 					>
-						{IsBookmarkLoading ? (
+						{IsBookmarkStatePending ? (
 							<ActivityIndicator size={'small'} />
 						) : (
 							<Ionicons
-								color={IsBookmarked ? APP_THEME.INVALID_ITEM : '#888'}
+								color={IS_BOOKMARKED ? APP_THEME.INVALID_ITEM : '#888'}
 								name={'bookmark-outline'}
 								size={ICON_SIZE}
 							/>
@@ -218,11 +207,11 @@ function StatusInteractionBase({
 							style={[
 								styles.buttonText,
 								{
-									color: IsBookmarked ? APP_THEME.INVALID_ITEM : '#888',
+									color: IS_BOOKMARKED ? APP_THEME.INVALID_ITEM : '#888',
 								},
 							]}
 						>
-							{_status?.getIsBookmarked() ? 'Saved' : 'Save'}
+							{IS_BOOKMARKED ? 'Saved' : 'Save'}
 						</Text>
 					</TouchableOpacity>
 				</View>
@@ -242,12 +231,12 @@ function StatusInteractionBase({
 						onPress={OnTranslationClicked}
 						onLongPress={onTranslationLongPress}
 					>
-						{TranslationLoading ? (
+						{IsTranslateStateLoading ? (
 							<ActivityIndicator size={'small'} color="#988b3b" />
 						) : (
 							<Ionicons
-								color={ExplanationObject !== null ? '#db9a6b' : '#888'}
-								style={{ opacity: ExplanationObject !== null ? 0.8 : 1 }}
+								color={IS_TRANSLATED ? '#db9a6b' : '#888'}
+								style={{ opacity: IS_TRANSLATED ? 0.8 : 1 }}
 								name={'language-outline'}
 								size={ICON_SIZE + 8}
 							/>
@@ -270,7 +259,7 @@ function StatusInteractionBase({
 			</View>
 		</View>
 	);
-}
+});
 
 const styles = StyleSheet.create({
 	buttonText: {
@@ -279,5 +268,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-const StatusInteraction = memo(StatusInteractionBase);
 export default StatusInteraction;

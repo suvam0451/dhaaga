@@ -143,6 +143,10 @@ class MastodonToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
+	getQuote() {
+		return (this.ref.instance as any).quote;
+	}
+
 	getRepostedStatusRaw() {
 		return this.ref?.instance?.reblog as any;
 	}

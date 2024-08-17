@@ -95,7 +95,7 @@ const AppImageCarouselItem = memo(function Foo({
 	);
 });
 
-const AppImageCarousel = memo(function Foo({
+const AppImageCarousel = memo(function AppImageCarouselFoo({
 	calculatedHeight,
 	items,
 	timelineCacheId,

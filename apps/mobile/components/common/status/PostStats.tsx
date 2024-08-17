@@ -7,10 +7,7 @@ import { useActivityPubRestClientContext } from '../../../states/useActivityPubR
 import * as Haptics from 'expo-haptics';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../styles/AppFonts';
-
-type Props = {
-	isRepost: boolean;
-};
+import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 
 type PostStatLikesProps = {
 	onPress: () => void;
@@ -38,11 +35,6 @@ const PostStatLikes = memo(
 					size={16}
 					color={isLiked ? APP_THEME.LINK : '#ffffff87'}
 				/>
-				{/*<FontAwesome*/}
-				{/*	name="star"*/}
-				{/*	size={18}*/}
-				{/*	color={isLiked ? APP_THEME.LINK : '#ffffff87'}*/}
-				{/*/>*/}
 				<Text
 					style={{
 						color: isLiked ? APP_THEME.LINK : '#888',
@@ -64,44 +56,44 @@ const PostStatLikes = memo(
  * vertical screen estate
  * @constructor
  */
-const PostStats = memo(function Foo({ isRepost }: Props) {
-	const {
-		status: post,
-		setDataRaw,
-		sharedStatus,
-	} = useActivitypubStatusContext();
+const PostStats = memo(function Foo() {
+	const { setDataRaw } = useActivitypubStatusContext();
 	const { client } = useActivityPubRestClientContext();
 	const [RepliesCount, setRepliesCount] = useState(0);
 	const [FavouritesCount, setFavouritesCount] = useState(0);
 	const [RepostCount, setRepostCount] = useState(0);
 	const [IsFavourited, setIsFavourited] = useState(false);
 	const [SeparatorDotCount, setSeparatorDotCount] = useState(0);
-	const _status = isRepost ? sharedStatus : post;
+	const { dto } = useAppStatusItem();
+	const STATUS_DTO = dto.meta.isBoost
+		? dto.content.raw
+			? dto
+			: dto.boostedFrom
+		: dto;
 
 	useEffect(() => {
-		if (!_status) return;
-		setRepliesCount(_status?.getRepliesCount());
-		setFavouritesCount(_status?.getFavouritesCount());
-		setRepostCount(_status?.getRepostsCount());
-		setIsFavourited(_status?.getIsFavourited());
+		setRepliesCount(STATUS_DTO.stats.replyCount);
+		setFavouritesCount(STATUS_DTO.stats.likeCount);
+		setRepostCount(STATUS_DTO.stats.boostCount);
+		setIsFavourited(STATUS_DTO.interaction.liked);
 
 		let count = 0;
-		if (_status?.getIsFavourited()) count++;
-		if (_status?.getRepliesCount() > 0) count++;
-		if (_status?.getFavouritesCount() > 0) count++;
-		if (_status?.getRepostsCount()) count++;
+		if (STATUS_DTO.interaction.liked) count++;
+		if (STATUS_DTO.stats.replyCount > 0) count++;
+		if (STATUS_DTO.stats.likeCount > 0) count++;
+		if (STATUS_DTO.stats.boostCount > 0) count++;
 
 		setSeparatorDotCount(count);
-	}, [_status]);
+	}, [dto]);
 
 	function onFavouriteClick() {
 		if (IsFavourited) {
-			client.unFavourite(_status?.getId()).then((res) => {
+			client.unFavourite(STATUS_DTO.id).then((res) => {
 				setDataRaw(res);
 				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 			});
 		} else {
-			client.favourite(_status?.getId()).then((res) => {
+			client.favourite(STATUS_DTO.id).then((res) => {
 				setDataRaw(res);
 				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 			});

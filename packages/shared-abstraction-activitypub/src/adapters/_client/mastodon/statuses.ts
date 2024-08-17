@@ -68,6 +68,16 @@ export class MastodonStatusesRouter implements StatusesRoute {
 		return { data };
 	}
 
+	async like(id: string): LibraryPromise<MastoStatus> {
+		const data = await this.lib.client.v1.statuses.$select(id).favourite();
+		return { data };
+	}
+
+	async removeLike(id: string): LibraryPromise<MastoStatus> {
+		const data = await this.lib.client.v1.statuses.$select(id).unfavourite();
+		return { data };
+	}
+
 	async getContext(id: string): LibraryPromise<MastoContext> {
 		try {
 			const ctx = await this.lib.client.v1.statuses.$select(id).context.fetch();

@@ -69,6 +69,10 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
+	getQuote(): StatusInterface | null | undefined {
+		return undefined;
+	}
+
 	getIsBookmarked() {
 		return false;
 	}
@@ -90,11 +94,11 @@ class UnknownToStatusAdapter implements StatusInterface {
 	}
 
 	getRepostsCount(): number {
-		return -1;
+		return 0;
 	}
 
 	getFavouritesCount(): number {
-		return -1;
+		return 0;
 	}
 
 	getUsername() {

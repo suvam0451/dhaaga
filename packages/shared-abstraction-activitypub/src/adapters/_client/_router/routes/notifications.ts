@@ -1,4 +1,3 @@
-import { LibraryResponse } from '../_types.js';
 import { MastoNotification, MegaNotification } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 
@@ -84,4 +83,7 @@ export interface NotificationsRoute {
 		minId?: string | null;
 		maxId?: string | null;
 	}>;
+
+	// e,g. of how to get new notifs
+	// https://blob.cat/api/v1/notifications?since_id=2455610&with_muted=true&limit=20
 }

@@ -47,6 +47,8 @@ export interface StatusInterface {
 
 	getRepostedStatusRaw(): Status;
 
+	getQuote(): StatusInterface | null | undefined;
+
 	getContent(): string | null;
 
 	getUser(): UserType | null;

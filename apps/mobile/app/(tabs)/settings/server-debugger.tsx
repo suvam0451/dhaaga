@@ -73,23 +73,6 @@ const InstanceSoftwareCountIndicator = memo(function Foo(
 				/>
 			</View>
 
-			{/*<Animated.View*/}
-			{/*	entering={FadeInLeft}*/}
-			{/*	exiting={FadeOut}*/}
-			{/*	style={{*/}
-			{/*		display: IsTextExpanded ? 'flex' : 'none',*/}
-			{/*	}}*/}
-			{/*>*/}
-			{/*	<Text*/}
-			{/*		style={{*/}
-			{/*			fontFamily: 'Montserrat-Bold',*/}
-			{/*			color: APP_FONT.MONTSERRAT_HEADER,*/}
-			{/*		}}*/}
-			{/*	>*/}
-			{/*		{o.label}*/}
-			{/*	</Text>*/}
-			{/*</Animated.View>*/}
-
 			<Text
 				style={{
 					marginLeft: 8,
@@ -220,6 +203,8 @@ const SortControllerItem = memo(function Foo({
 		setData(items);
 	}, [softwareServerCount, IsAssetsLoaded]);
 
+	const { searchText } = useSearchTermContext();
+
 	if (!IsAssetsLoaded) {
 		return (
 			<View>
@@ -227,7 +212,6 @@ const SortControllerItem = memo(function Foo({
 			</View>
 		);
 	}
-	const { searchText } = useSearchTermContext();
 
 	return (
 		<View>
@@ -410,7 +394,7 @@ const ServerItem = memo(function Foo({
 							style={{
 								width: renderData.width,
 								height: renderData.height,
-								opacity: 0.75,
+								opacity: 0.87,
 							}}
 						/>
 					</View>
