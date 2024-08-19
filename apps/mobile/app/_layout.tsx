@@ -17,6 +17,9 @@ import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
 import { useFonts } from '@expo-google-fonts/montserrat';
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 // to get rid of realm warnings
 import AppSettingsService from '../services/app-settings.service';

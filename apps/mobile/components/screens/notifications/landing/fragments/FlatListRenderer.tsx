@@ -29,8 +29,10 @@ function FlatListRenderer({ item }: { item: Notification_FlatList_Entry }) {
 		case DhaagaJsNotificationType.FOLLOW:
 			return <FollowNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.STATUS:
+		case DhaagaJsNotificationType.NOTE:
 			return <StatusAlertNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.REBLOG:
+		case DhaagaJsNotificationType.RENOTE:
 			return <BoostNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.ACHIEVEMENT_EARNED:
 			return <AchiEarnedNotificationFragment />;

@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { MEDIA_CONTAINER_WIDTH } from './_common';
 import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
@@ -16,19 +16,21 @@ type Props = {
 	url?: string;
 	blurhash?: string;
 	height?: number;
+	leftMarginAdjustment?: number;
 };
 
 export const AppImageComponent = memo(function Foo({
 	url,
 	blurhash,
 	height,
+	leftMarginAdjustment,
 }: Props) {
 	return (
 		// @ts-ignore-next-line
 		<Image
 			style={{
 				flex: 1,
-				width: MEDIA_CONTAINER_WIDTH,
+				width: Dimensions.get('window').width - (leftMarginAdjustment || 0),
 				borderRadius: 16,
 				opacity: 0.87,
 				height,

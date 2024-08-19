@@ -1,57 +1,41 @@
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import ExplainOutput from '../explanation/ExplainOutput';
 import MediaItem from '../media/MediaItem';
-import { useActivitypubStatusContext } from '../../../states/useStatus';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import useMfm from '../../hooks/useMfm';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { Text } from '@rneui/themed';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
-import WithActivitypubUserContext from '../../../states/useProfile';
 import ReplyOwner from '../user/ReplyOwner';
 import PostReplyToReply from './PostReplyToReply';
+import { useAppStatusContextDataContext } from '../../../hooks/api/statuses/WithAppStatusContextData';
 
 type PostReplyProps = {
 	lookupId: string;
 };
 
 function PostReplyContent({ lookupId }: PostReplyProps) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-	const { contextChildrenLookup, contextItemLookup } =
-		useActivitypubStatusContext();
-
-	const status = useMemo(() => {
-		return contextItemLookup.current.get(lookupId);
-	}, [lookupId]);
-
-	const userI = useMemo(() => {
-		return ActivityPubUserAdapter(status?.getUser() || null, domain);
-	}, [status]);
+	const { data, getChildren } = useAppStatusContextDataContext();
 
 	const [ExplanationObject, setExplanationObject] = useState<string | null>(
 		null,
 	);
 
-	const children = useMemo(() => {
-		if (!contextChildrenLookup.current) return [];
-		return contextChildrenLookup.current?.get(status?.getId()) || [];
-	}, [status?.getId()]);
+	const dto = data.lookup.get(lookupId);
+	const children = getChildren(lookupId);
 
 	const { content } = useMfm({
-		content: status?.getContent(),
-		remoteSubdomain: userI?.getInstanceUrl(),
-		emojiMap: userI?.getEmojiMap(),
-		deps: [status?.getContent(), !userI?.getInstanceUrl()],
+		content: dto.content.raw,
+		remoteSubdomain: dto.postedBy.instance,
+		emojiMap: dto.calculated.emojis as any,
+		deps: [dto.content.raw, dto.postedBy.instance],
 	});
 
 	const [IsMediaShown, setIsMediaShown] = useState(false);
 	const [IsReplyThreadVisible, setIsReplyThreadVisible] = useState(false);
 
-	const replyCount = status?.getRepliesCount();
-	const mediaCount = status?.getMediaAttachments()?.length;
+	const replyCount = dto.stats.replyCount;
+	const mediaCount = dto.content.media.length;
 
 	function toggleMediaVisibility() {
 		setIsMediaShown(!IsMediaShown);
@@ -64,9 +48,7 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 	const color = useRef(APP_THEME.COLOR_SCHEME_C);
 	return (
 		<View style={{ marginTop: 8, backgroundColor: '#1e1e1e', padding: 8 }}>
-			<WithActivitypubUserContext userI={userI}>
-				<ReplyOwner />
-			</WithActivitypubUserContext>
+			<ReplyOwner dto={dto} />
 			{content}
 			{ExplanationObject !== null && (
 				<ExplainOutput
@@ -77,7 +59,10 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 				/>
 			)}
 			{IsMediaShown && (
-				<MediaItem attachments={status?.getMediaAttachments()} />
+				<MediaItem
+					attachments={dto.content.media}
+					calculatedHeight={dto.calculated.mediaContainerHeight}
+				/>
 			)}
 			<View
 				style={{
@@ -167,7 +152,7 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 						<PostReplyToReply
 							key={i}
 							colors={[color.current]}
-							lookupId={o.getId()}
+							lookupId={o.id}
 						/>
 					))}
 				</View>

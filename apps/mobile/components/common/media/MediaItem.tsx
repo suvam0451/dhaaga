@@ -1,6 +1,6 @@
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { memo, useMemo } from 'react';
-import { MARGIN_TOP, MEDIA_CONTAINER_WIDTH } from './_common';
+import { MARGIN_TOP } from './_common';
 import {
 	AltTextOverlay,
 	AppAudioComponent,
@@ -14,6 +14,7 @@ import { AppActivityPubMediaType } from '../../../services/ap-proto/activitypub-
 type ImageCarousalProps = {
 	attachments: AppActivityPubMediaType[];
 	calculatedHeight: number;
+	leftMarginAdjustment?: number;
 };
 
 const TimelineMediaRendered = memo(function Foo({
@@ -22,12 +23,14 @@ const TimelineMediaRendered = memo(function Foo({
 	altText,
 	index,
 	totalCount,
+	leftMarginAdjustment,
 }: {
 	attachment: AppActivityPubMediaType;
 	CalculatedHeight: number;
 	altText?: string;
 	index?: number;
 	totalCount?: number;
+	leftMarginAdjustment?: number;
 }) {
 	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
 
@@ -47,6 +50,7 @@ const TimelineMediaRendered = memo(function Foo({
 						url={attachment.url}
 						blurhash={attachment.blurhash}
 						height={_height}
+						leftMarginAdjustment={leftMarginAdjustment}
 					/>
 				);
 			}
@@ -76,13 +80,13 @@ const TimelineMediaRendered = memo(function Foo({
 	return (
 		<View
 			style={{
-				flex: 1,
 				justifyContent: 'center',
 				alignItems: 'center',
-				width: MEDIA_CONTAINER_WIDTH,
+				width: Dimensions.get('window').width - (leftMarginAdjustment || 0),
 				height: attachment.type === 'audio' ? 48 : _height,
 				position: 'relative',
 				marginTop: MARGIN_TOP,
+				// backgroundColor: 'blue',
 			}}
 		>
 			{MediaItem}
@@ -95,6 +99,7 @@ const TimelineMediaRendered = memo(function Foo({
 const MediaItem = memo(function Foo({
 	attachments,
 	calculatedHeight,
+	leftMarginAdjustment,
 }: ImageCarousalProps) {
 	if (attachments === undefined || attachments === null) {
 		console.log('[WARN]: no attachments');
@@ -109,6 +114,7 @@ const MediaItem = memo(function Foo({
 				attachment={attachments[0]}
 				CalculatedHeight={calculatedHeight}
 				altText={attachments[0]?.alt}
+				leftMarginAdjustment={leftMarginAdjustment}
 			/>
 		);
 	}
@@ -117,6 +123,7 @@ const MediaItem = memo(function Foo({
 			<AppImageCarousel
 				timelineCacheId={'1'}
 				calculatedHeight={calculatedHeight}
+				leftMarginAdjustment={leftMarginAdjustment}
 				items={attachments.map((o) => ({
 					altText: o.alt,
 					src: o.url,

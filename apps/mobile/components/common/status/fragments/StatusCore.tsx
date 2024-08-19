@@ -5,8 +5,8 @@ import WithAppStatusItemContext, {
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { TouchableOpacity, View } from 'react-native';
+import { APP_THEME } from '../../../../styles/AppTheme';
 import StatusPostedBy from './StatusPostedBy';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
@@ -20,15 +20,16 @@ const StatusCore = memo(() => {
 	const { toPost } = useAppNavigator();
 	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
-	const IS_REPLY_OR_BOOST =
-		dto.meta.isReply || (dto.meta.isBoost && !dto.content.raw);
-	const IS_QUOTE_BOOST = dto.meta.isBoost && dto.content.raw;
-
 	const STATUS_DTO = dto.meta.isBoost
 		? dto.content.raw
 			? dto
 			: dto.boostedFrom
 		: dto;
+
+	const IS_REPLY_OR_BOOST =
+		STATUS_DTO.meta.isReply ||
+		(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
+	const IS_QUOTE_BOOST = STATUS_DTO.meta.isBoost && STATUS_DTO.content.raw;
 
 	const {
 		content: PostContent,
@@ -63,11 +64,11 @@ const StatusCore = memo(() => {
 				<TouchableOpacity
 					delayPressIn={100}
 					onPress={() => {
-						toPost(dto.id);
+						toPost(STATUS_DTO.id);
 					}}
 				>
 					<View>
-						<StatusPostedBy />
+						<StatusPostedBy dto={dto} />
 						{isSensitive && (
 							<StatusCw
 								cw={spoilerText}
@@ -99,45 +100,19 @@ const StatusCore = memo(() => {
 					<MediaItem
 						attachments={STATUS_DTO.content.media}
 						calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
+						leftMarginAdjustment={20}
 					/>
 				)}
 				{IS_QUOTE_BOOST && (
-					<WithAppStatusItemContext dto={dto.boostedFrom}>
+					<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
 						<StatusQuoted />
 					</WithAppStatusItemContext>
 				)}
-				<EmojiReactions />
-				<StatusInteraction openAiContext={aiContext} />
+				<EmojiReactions dto={STATUS_DTO} />
+				<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />
 			</View>
 		);
 	}, [isLoaded, ShowSensitiveContent, PostContent, dto]);
-});
-
-const styles = StyleSheet.create({
-	toggleHideContainer: {
-		marginHorizontal: 'auto',
-		alignItems: 'center',
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		width: '100%',
-		marginBottom: 8,
-	},
-	toggleHideText: {
-		color: APP_FONT.MONTSERRAT_BODY,
-		flexShrink: 1,
-		textAlign: 'center',
-		fontSize: 16,
-		fontFamily: 'Montserrat-Bold',
-	},
-	toggleHidePressableAreaContainer: {
-		flexShrink: 1,
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 8,
-		paddingVertical: 8,
-	},
 });
 
 export default StatusCore;

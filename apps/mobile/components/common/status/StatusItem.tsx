@@ -48,7 +48,7 @@ const StatusItem = memo(function Foo() {
 		} else if (dto.meta.isReply) {
 			return (
 				<Fragment>
-					<SharedStatusFragment />
+					<RepliedStatusFragment />
 					<StatusCore />
 				</Fragment>
 			);

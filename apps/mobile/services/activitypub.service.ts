@@ -129,6 +129,9 @@ class ActivityPubService {
 				const { error } = await client.statuses.unBookmark(id);
 				if (error?.code === 'NOT_FAVOURITED') return false;
 				if (error) {
+					if (error.code === 'NOT_FAVORITED') {
+						return false;
+					}
 					console.log('[WARN]: could not remove bookmark', error);
 					return localState;
 				}
@@ -137,6 +140,9 @@ class ActivityPubService {
 				const { error } = await client.statuses.bookmark(id);
 				if (error?.code === 'ALREADY_FAVOURITED') return true;
 				if (error) {
+					if (error.code === 'ALREADY_FAVORITED') {
+						return true;
+					}
 					console.log('[WARN]: could not add bookmark', error);
 					return localState;
 				}
@@ -151,6 +157,12 @@ class ActivityPubService {
 			return localState;
 		}
 	}
+
+	static async boost(
+		client: ActivityPubClient,
+		id: string,
+		localState: boolean,
+	) {}
 
 	/**
 	 * detect software for a subdomain

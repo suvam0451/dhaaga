@@ -12,6 +12,10 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return [];
 	}
 
+	getRepliedStatusRaw(): Status {
+		return null;
+	}
+
 	getReactions(): { id: string; count: number }[] {
 		return [];
 	}

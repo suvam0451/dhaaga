@@ -11,12 +11,13 @@ import GlobalMmkvCacheService from '../globalMmkvCache.services';
 import { ActivityPubServerRepository } from '../../repositories/activitypub-server.repo';
 import {
 	ActivityPubStatusAppDtoType,
-	ActivityPubStatusDto,
 	ActivitypubStatusDtoService,
 	ActivityPubStatusItemDto,
+	ActivityPubStatusLevelThree,
 } from './activitypub-status-dto.service';
 import ActivitypubAdapterService from '../activitypub-adapter.service';
 import { z } from 'zod';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 /**
  * Supports various operations
@@ -139,33 +140,72 @@ export class ActivitypubStatusService {
 	}
 
 	export(): ActivityPubStatusAppDtoType {
+		if (!this.statusI) return null;
+
 		const IS_REPOSTED = this.statusI.isReposted();
+		const IS_REPLY = this.statusI.isReply();
 
 		let boostedFrom: z.infer<typeof ActivityPubStatusItemDto> = IS_REPOSTED
-			? ActivitypubStatusDtoService.export(
+			? new ActivitypubStatusService(
 					ActivitypubAdapterService.adaptStatus(
 						this.statusI.getRepostedStatusRaw(),
 						this.domain,
 					),
 					this.domain,
 					this.subdomain,
-				)
+				).export()
 			: null;
 
-		const dto: ActivityPubStatusAppDtoType = {
-			...ActivitypubStatusDtoService.export(
-				this.statusI,
-				this.domain,
-				this.subdomain,
-			),
-			boostedFrom,
-		};
+		/**
+		 * Misskey Compat
+		 */
+		let replyTo: z.infer<typeof ActivityPubStatusItemDto> = IS_REPLY
+			? new ActivitypubStatusService(
+					ActivitypubAdapterService.adaptStatus(
+						this.statusI.getRepliedStatusRaw(),
+						this.domain,
+					),
+					this.domain,
+					this.subdomain,
+				).export()
+			: null;
 
-		const { data, error, success } = ActivityPubStatusDto.safeParse(dto);
+		const dto: ActivityPubStatusAppDtoType =
+			IS_REPLY &&
+			[
+				KNOWN_SOFTWARE.MISSKEY,
+				KNOWN_SOFTWARE.FIREFISH,
+				KNOWN_SOFTWARE.SHARKEY,
+			].includes(this.domain as any)
+				? /**
+					 * 	Replies in Misskey is actually present in the
+					 * 	"reply" object, instead of root. へんですね?
+					 */
+					{
+						...ActivitypubStatusDtoService.export(
+							this.statusI,
+							this.domain,
+							this.subdomain,
+						),
+						boostedFrom,
+						replyTo,
+					}
+				: {
+						...ActivitypubStatusDtoService.export(
+							this.statusI,
+							this.domain,
+							this.subdomain,
+						),
+						boostedFrom,
+					};
+
+		// console.log('repost input', dto);
+		const { data, error, success } = ActivityPubStatusLevelThree.safeParse(dto);
 		if (!success) {
 			console.log('[ERROR]: status item dto validation failed', error);
 			return;
 		}
+		// console.log('repost input', data);
 
 		return data;
 	}

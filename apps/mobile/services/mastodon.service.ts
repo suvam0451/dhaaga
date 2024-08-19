@@ -1,18 +1,14 @@
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
-import ActivityPubAdapterService from './activitypub-adapter.service';
 
 class MastodonService {
 	/**
 	 * Flattens a context object to its reply chain
-	 * @param current the current status in focus
-	 * @param data
-	 * @param domain
+	 * @param target the selected post
+	 * @param contextChain
 	 */
 	static solveContext(
-		current: StatusInterface,
-		data: mastodon.v1.Context,
-		domain: string,
+		target: StatusInterface,
+		contextChain: StatusInterface[],
 	) {
 		let deque: string[] = [];
 		let lookup = new Map<string, StatusInterface>();
@@ -24,9 +20,9 @@ class MastodonService {
 		 *  NOTE: In the future (and also for public timelines),
 		 *  this may not be performant nad/or complete
 		 */
-		let flat = ActivityPubAdapterService.adaptContextChain(data, domain);
+		let flat = contextChain;
 
-		flat.push(current);
+		flat.push(target);
 
 		// store all lookups
 		flat.forEach((o) => {
@@ -35,7 +31,7 @@ class MastodonService {
 
 		// try to fix the root
 		let root = flat.find((o) => o?.getParentStatusId() === null);
-		if (!root) root = current;
+		if (!root) root = target;
 		deque.push(root.getId());
 
 		while (deque.length > 0 && flat.length > 0) {

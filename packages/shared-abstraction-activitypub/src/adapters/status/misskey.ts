@@ -65,6 +65,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		return retval;
 	}
 
+	getRepliedStatusRaw(): Status {
+		return this.ref.instance?.reply;
+	}
+
 	// reactionAcceptance
 	// :
 	// "likeOnlyForRemote"

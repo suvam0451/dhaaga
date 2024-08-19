@@ -7,7 +7,7 @@ import useAppNavigator from '../../states/useAppNavigator';
 import StatusCreatedAt from '../common/status/fragments/StatusCreatedAt';
 import { APP_FONTS } from '../../styles/AppFonts';
 import StatusVisibility from '../common/status/fragments/StatusVisibility';
-import { useAppStatusItem } from '../../hooks/ap-proto/useAppStatusItem';
+import { ActivityPubStatusAppDtoType } from '../../services/ap-proto/activitypub-status-dto.service';
 
 /**
  * Renders the user (poster)'s avatar
@@ -151,9 +151,12 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	);
 });
 
-const OriginalPoster = memo(() => {
+type OriginalPosterProps = {
+	dto: ActivityPubStatusAppDtoType;
+};
+
+const OriginalPoster = memo(({ dto }: OriginalPosterProps) => {
 	const { toProfile } = useAppNavigator();
-	const { dto } = useAppStatusItem();
 
 	const STATUS_DTO = dto.meta.isBoost
 		? dto.content.raw

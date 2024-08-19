@@ -49,7 +49,7 @@ const Timeline = memo(() => {
 		useTimelineController();
 	const { client, primaryAcct, domain, subdomain } =
 		useActivityPubRestClientContext();
-	const { setMaxId, updateQueryCache, queryCacheMaxId } =
+	const { setMaxId, updateQueryCache, queryCacheMaxId, clear } =
 		useAppPaginationContext();
 	const {
 		append: appendTimelineData,
@@ -68,7 +68,7 @@ const Timeline = memo(() => {
 
 	useEffect(() => {
 		setPageLoadedAtLeastOnce(false);
-		// clear();
+		clear();
 		timelineDataStoreClear();
 	}, [timelineType, query, opts]);
 

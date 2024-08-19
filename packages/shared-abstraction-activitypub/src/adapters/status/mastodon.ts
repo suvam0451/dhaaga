@@ -37,23 +37,27 @@ class MastodonToStatusAdapter implements StatusInterface {
 	}
 
 	getIsRebloggedByMe(): boolean | null | undefined {
-		return this.ref.instance.reblogged;
+		return this.ref.instance?.reblogged;
 	}
 
 	getIsSensitive(): boolean {
-		return this.ref.instance.sensitive;
+		return this.ref.instance?.sensitive;
 	}
 
 	getSpoilerText(): string | null | undefined {
-		return this.ref.instance.spoilerText;
+		return this.ref.instance?.spoilerText;
 	}
 
 	getRaw(): Status {
 		return this?.ref?.instance;
 	}
 
+	getRepliedStatusRaw(): Status {
+		return null;
+	}
+
 	getIsFavourited(): boolean | null | undefined {
-		return this.ref.instance.favourited;
+		return this.ref.instance?.favourited;
 	}
 
 	setDescendents(items: StatusInterface[]): void {

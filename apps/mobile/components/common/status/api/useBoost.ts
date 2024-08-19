@@ -1,21 +1,12 @@
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { useActivitypubStatusContext } from '../../../../states/useStatus';
 import { useEffect, useRef, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { MisskeyRestClient } from '@dhaaga/shared-abstraction-activitypub';
 import * as Haptics from 'expo-haptics';
-import StatusService from '../../../../services/status.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 
-function useBoost() {
+function useBoost(dto: ActivityPubStatusAppDtoType) {
 	const { client, domain, me } = useActivityPubRestClientContext();
-	const {
-		status: post,
-		setDataRaw,
-		sharedStatus,
-		setSharedDataRaw,
-	} = useActivitypubStatusContext();
-	const IS_REPOST = post?.isReposted();
-	const _status = IS_REPOST ? sharedStatus : post;
 
 	const Renotes = useRef([]);
 
@@ -46,21 +37,21 @@ function useBoost() {
 		Renotes.current = [];
 		switch (domain) {
 			case KNOWN_SOFTWARE.MASTODON: {
-				setIsBoosted(_status?.getIsRebloggedByMe());
+				setIsBoosted(dto.interaction.boosted);
 				break;
 			}
 			case KNOWN_SOFTWARE.MISSKEY:
 			case KNOWN_SOFTWARE.FIREFISH:
 			case KNOWN_SOFTWARE.SHARKEY: {
 				(client as MisskeyRestClient).statuses
-					.renotes(_status?.getId())
+					.renotes(dto.id)
 					.then(updateState);
 				break;
 			}
 			default: {
 			}
 		}
-	}, [_status]);
+	}, [dto]);
 
 	function onPress() {
 		if (IsLoading) return;
@@ -73,7 +64,7 @@ function useBoost() {
 			case KNOWN_SOFTWARE.SHARKEY: {
 				if (IsBoosted) {
 					(client as MisskeyRestClient).statuses
-						.unrenote(_status.getId())
+						.unrenote(dto.id)
 						.then(updateAfterClick)
 						.finally(() => {
 							setIsLoading(false);
@@ -81,7 +72,7 @@ function useBoost() {
 				} else {
 					(client as MisskeyRestClient).statuses
 						.renote({
-							renoteId: _status.getId(),
+							renoteId: dto.id,
 							visibility: 'followers',
 							localOnly: true,
 						})
@@ -93,10 +84,6 @@ function useBoost() {
 				break;
 			}
 			case KNOWN_SOFTWARE.MASTODON: {
-				StatusService.toggleBoost(client, _status, {
-					setIsLoading: setIsLoading,
-					setDataRaw: post?.isReposted() ? setSharedDataRaw : setDataRaw,
-				});
 				break;
 			}
 			default: {

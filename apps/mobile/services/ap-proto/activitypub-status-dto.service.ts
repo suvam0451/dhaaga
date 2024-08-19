@@ -58,6 +58,12 @@ export const ActivityPubStatusItemDto = z.object({
 		replyCount: z.number().nonnegative(),
 		boostCount: z.number().nonnegative(),
 		likeCount: z.number().nonnegative(),
+		reactions: z.array(
+			z.object({
+				id: z.string(),
+				count: z.number().positive(),
+			}),
+		),
 	}),
 	calculated: z.object({
 		mediaContainerHeight: z.number(),
@@ -69,6 +75,14 @@ export const ActivityPubStatusItemDto = z.object({
 		),
 		translationOutput: z.string().optional(),
 		translationType: z.string().optional(),
+		reactionEmojis: z.array(
+			z.object({
+				height: z.number().nullable().optional(),
+				width: z.number().nullable().optional(),
+				name: z.string(),
+				url: z.string().url(),
+			}),
+		),
 	}),
 	meta: z.object({
 		sensitive: z.boolean(),
@@ -78,7 +92,7 @@ export const ActivityPubStatusItemDto = z.object({
 	}),
 });
 
-export const ActivityPubStatusDto = ActivityPubStatusItemDto.extend({
+export const ActivityPubStatusLevelTwo = ActivityPubStatusItemDto.extend({
 	replyTo: ActivityPubStatusItemDto.nullable().optional(),
 	// Misskey/Firefish natively supports quote boosting
 	boostedFrom: ActivityPubStatusItemDto.nullable().optional(),
@@ -86,7 +100,17 @@ export const ActivityPubStatusDto = ActivityPubStatusItemDto.extend({
 	quotedFrom: ActivityPubStatusItemDto.nullable().optional(),
 });
 
-export type ActivityPubStatusAppDtoType = z.infer<typeof ActivityPubStatusDto>;
+export const ActivityPubStatusLevelThree = ActivityPubStatusLevelTwo.extend({
+	replyTo: ActivityPubStatusLevelTwo.nullable().optional(),
+	// Misskey/Firefish natively supports quote boosting
+	boostedFrom: ActivityPubStatusLevelTwo.nullable().optional(),
+	// Pleroma feature
+	quotedFrom: ActivityPubStatusLevelTwo.nullable().optional(),
+});
+
+export type ActivityPubStatusAppDtoType = z.infer<
+	typeof ActivityPubStatusLevelThree
+>;
 
 /**
  * Supports various operations on the
@@ -127,6 +151,8 @@ export class ActivitypubStatusDtoService {
 		domain: string,
 		subdomain: string,
 	): z.infer<typeof ActivityPubStatusItemDto> {
+		if (!input) return null;
+
 		const mediaAttachments = input?.getMediaAttachments();
 		const height = MediaService.calculateHeightForMediaContentCarousal(
 			mediaAttachments,
@@ -155,29 +181,32 @@ export class ActivitypubStatusDtoService {
 			},
 			content: {
 				raw: input.getContent(),
-				media: mediaAttachments.map((o) => ({
-					height: o.getHeight(),
-					width: o.getWidth(),
-					alt: o.getAltText(),
-					blurhash: o.getBlurHash(),
-					type: o.getType(),
-					url: o.getUrl(),
-					previewUrl: o.getPreviewUrl(),
-				})),
+				media:
+					mediaAttachments?.map((o) => ({
+						height: o.getHeight(),
+						width: o.getWidth(),
+						alt: o.getAltText(),
+						blurhash: o.getBlurHash(),
+						type: o.getType(),
+						url: o.getUrl(),
+						previewUrl: o.getPreviewUrl(),
+					})) || [],
 			},
 			stats: {
 				replyCount: input.getRepliesCount(),
 				boostCount: input.getRepostsCount(),
 				likeCount: input.getFavouritesCount(),
+				reactions: input.getReactions(),
 			},
 			interaction: {
 				bookmarked: input.getIsBookmarked(),
-				boosted: input.isReposted(),
-				liked: input.isReposted(),
+				boosted: false,
+				liked: false,
 			},
 			calculated: {
 				emojis: user.getEmojiMap(),
 				mediaContainerHeight: height,
+				reactionEmojis: input.getReactionEmojis(),
 			},
 			meta: {
 				sensitive: input.getIsSensitive(),

@@ -83,7 +83,7 @@ function useActivityPubLists() {
 
 	// Queries
 	const { data, status, fetchStatus } = useQuery<ActivityPubListsListingDto>({
-		queryKey: ['lists', primaryAcct],
+		queryKey: ['lists', primaryAcct.username, primaryAcct.subdomain],
 		queryFn: api,
 		enabled: client !== null,
 	});

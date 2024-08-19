@@ -25,6 +25,9 @@ function AppButtonFollowIndicator({
 
 	return useMemo(() => {
 		switch (label) {
+			case AppRelationship.FOLLOW_REQUEST_PENDING: {
+				return <Button size={'sm'}></Button>;
+			}
 			case AppRelationship.UNRELATED: {
 				return (
 					<Button

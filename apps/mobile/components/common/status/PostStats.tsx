@@ -7,7 +7,7 @@ import { useActivityPubRestClientContext } from '../../../states/useActivityPubR
 import * as Haptics from 'expo-haptics';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
+import { ActivityPubStatusAppDtoType } from '../../../services/ap-proto/activitypub-status-dto.service';
 
 type PostStatLikesProps = {
 	onPress: () => void;
@@ -56,7 +56,11 @@ const PostStatLikes = memo(
  * vertical screen estate
  * @constructor
  */
-const PostStats = memo(function Foo() {
+const PostStats = memo(function Foo({
+	dto,
+}: {
+	dto: ActivityPubStatusAppDtoType;
+}) {
 	const { setDataRaw } = useActivitypubStatusContext();
 	const { client } = useActivityPubRestClientContext();
 	const [RepliesCount, setRepliesCount] = useState(0);
@@ -64,7 +68,6 @@ const PostStats = memo(function Foo() {
 	const [RepostCount, setRepostCount] = useState(0);
 	const [IsFavourited, setIsFavourited] = useState(false);
 	const [SeparatorDotCount, setSeparatorDotCount] = useState(0);
-	const { dto } = useAppStatusItem();
 	const STATUS_DTO = dto.meta.isBoost
 		? dto.content.raw
 			? dto

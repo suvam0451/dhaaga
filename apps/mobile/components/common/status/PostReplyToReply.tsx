@@ -1,15 +1,12 @@
-import { useActivitypubStatusContext } from '../../../states/useStatus';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
+import { MutableRefObject, useRef, useState } from 'react';
 import useMfm from '../../hooks/useMfm';
-import WithActivitypubUserContext from '../../../states/useProfile';
 import ReplyOwner from '../user/ReplyOwner';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { Text } from '@rneui/themed';
 import StyleService from '../../../services/style.service';
+import { useAppStatusContextDataContext } from '../../../hooks/api/statuses/WithAppStatusContextData';
 
 type PostReplyToReplyProps = {
 	colors: string[];
@@ -18,7 +15,7 @@ type PostReplyToReplyProps = {
 
 type PostReplyToReplyContentProps = {
 	lookupId: string;
-	color: React.MutableRefObject<string>;
+	color: MutableRefObject<string>;
 	IsReplyThreadVisible: boolean;
 	setIsReplyThreadVisible: any;
 };
@@ -29,35 +26,21 @@ function PostReplyToReplyContent({
 	IsReplyThreadVisible,
 	setIsReplyThreadVisible,
 }: PostReplyToReplyContentProps) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-	const { contextItemLookup, stateKey } = useActivitypubStatusContext();
+	const { data } = useAppStatusContextDataContext();
 
-	const status = useMemo(() => {
-		return contextItemLookup.current?.get(lookupId);
-	}, [lookupId, stateKey]);
+	const dto = data.lookup.get(lookupId);
 
-	const userI = useMemo(() => {
-		return ActivityPubUserAdapter(status?.getUser() || null, domain);
-	}, [status]);
-
-	const replyCount = status?.getRepliesCount();
-
-	const [IsMediaShown, setIsMediaShown] = useState(false);
-
-	function toggleMediaVisibility() {
-		setIsMediaShown(!IsMediaShown);
-	}
+	const replyCount = dto.stats.replyCount;
 
 	function toggleReplyVisibility() {
 		setIsReplyThreadVisible(!IsReplyThreadVisible);
 	}
 
-	const { content, aiContext, isLoaded } = useMfm({
-		content: status?.getContent(),
-		remoteSubdomain: userI?.getInstanceUrl(),
-		emojiMap: userI?.getEmojiMap(),
-		deps: [status?.getContent(), !userI?.getInstanceUrl()],
+	const { content } = useMfm({
+		content: dto.content.raw,
+		remoteSubdomain: dto.postedBy.instance,
+		emojiMap: dto.calculated.emojis as any,
+		deps: [dto.content.raw, dto.postedBy.instance],
 	});
 
 	return (
@@ -69,79 +52,63 @@ function PostReplyToReplyContent({
 				paddingBottom: 0,
 			}}
 		>
-			<WithActivitypubUserContext userI={userI}>
-				<ReplyOwner />
-				{content}
+			<ReplyOwner dto={dto} />
+			{content}
 
-				{replyCount > 0 && (
-					<TouchableOpacity
-						style={styles.actionButton}
-						onPress={toggleReplyVisibility}
-					>
-						<View style={{ width: 24 }}>
-							{IsReplyThreadVisible ? (
-								<FontAwesome6
-									name="square-minus"
-									size={20}
-									color={
-										IsReplyThreadVisible
-											? color.current
-											: APP_FONT.MONTSERRAT_BODY
-									}
-								/>
-							) : (
-								<FontAwesome6
-									name="plus-square"
-									size={20}
-									color={
-										IsReplyThreadVisible
-											? color.current
-											: APP_FONT.MONTSERRAT_BODY
-									}
-								/>
-							)}
-						</View>
-						<View>
-							<Text
-								style={{
-									color: IsReplyThreadVisible
+			{replyCount > 0 && (
+				<TouchableOpacity
+					style={styles.actionButton}
+					onPress={toggleReplyVisibility}
+				>
+					<View style={{ width: 24 }}>
+						{IsReplyThreadVisible ? (
+							<FontAwesome6
+								name="square-minus"
+								size={20}
+								color={
+									IsReplyThreadVisible
 										? color.current
-										: APP_FONT.MONTSERRAT_BODY,
-								}}
-							>
-								{replyCount} replies
-							</Text>
-						</View>
-					</TouchableOpacity>
-				)}
-			</WithActivitypubUserContext>
+										: APP_FONT.MONTSERRAT_BODY
+								}
+							/>
+						) : (
+							<FontAwesome6
+								name="plus-square"
+								size={20}
+								color={
+									IsReplyThreadVisible
+										? color.current
+										: APP_FONT.MONTSERRAT_BODY
+								}
+							/>
+						)}
+					</View>
+					<View>
+						<Text
+							style={{
+								color: IsReplyThreadVisible
+									? color.current
+									: APP_FONT.MONTSERRAT_BODY,
+							}}
+						>
+							{replyCount} replies
+						</Text>
+					</View>
+				</TouchableOpacity>
+			)}
 		</View>
 	);
 }
 
 function PostReplyToReply({ colors, lookupId }: PostReplyToReplyProps) {
-	const { contextChildrenLookup, contextItemLookup } =
-		useActivitypubStatusContext();
+	const { data, getChildren } = useAppStatusContextDataContext();
 
-	const status = useMemo(() => {
-		return contextItemLookup.current.get(lookupId);
-	}, [lookupId]);
-
-	const children = useMemo(() => {
-		if (!contextChildrenLookup.current) return [];
-		return contextChildrenLookup.current?.get(status?.getId()) || [];
-	}, [status?.getId()]);
+	const dto = data.lookup.get(lookupId);
+	const children = getChildren(lookupId);
 
 	const [IsReplyThreadVisible, setIsReplyThreadVisible] = useState(false);
 
 	const color = useRef(StyleService.generateRandomColorHex());
-	// console.log(color.current);
-
-	useEffect(() => {
-		if (IsReplyThreadVisible) {
-			console.log('flipped', color.current);
-		}
-	}, [IsReplyThreadVisible]);
 
 	return (
 		<View>
@@ -174,7 +141,7 @@ function PostReplyToReply({ colors, lookupId }: PostReplyToReplyProps) {
 						<PostReplyToReply
 							key={i}
 							colors={[color.current]}
-							lookupId={o.getId()}
+							lookupId={dto.id}
 						/>
 					))}
 				</View>
@@ -188,7 +155,6 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		// backgroundColor: 'red',
 		paddingHorizontal: 8,
 		marginLeft: -8,
 		paddingVertical: 6,
