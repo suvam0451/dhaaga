@@ -23,7 +23,7 @@ const StatusItem = memo(function Foo() {
 			) {
 				return (
 					<Fragment>
-						<StatusCore />
+						<StatusCore hasBoost={true} />
 					</Fragment>
 				);
 			} else {
@@ -33,14 +33,14 @@ const StatusItem = memo(function Foo() {
 						<Fragment>
 							<SharedStatusFragment />
 							<RepliedStatusFragment />
-							<StatusCore />
+							<StatusCore hasBoost={true} hasReply={true} />
 						</Fragment>
 					);
 				} else {
 					return (
 						<Fragment>
 							<SharedStatusFragment />
-							<StatusCore />
+							<StatusCore hasBoost={true} />
 						</Fragment>
 					);
 				}
@@ -49,7 +49,7 @@ const StatusItem = memo(function Foo() {
 			return (
 				<Fragment>
 					<RepliedStatusFragment />
-					<StatusCore />
+					<StatusCore hasReply={true} />
 				</Fragment>
 			);
 		} else {

@@ -1,6 +1,12 @@
 import { Fragment, memo, useEffect, useState } from 'react';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import {
+	TouchableOpacity,
+	View,
+	StyleSheet,
+	ViewStyle,
+	StyleProp,
+} from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
@@ -58,8 +64,10 @@ const PostStatLikes = memo(
  */
 const PostStats = memo(function Foo({
 	dto,
+	style,
 }: {
 	dto: ActivityPubStatusAppDtoType;
+	style?: StyleProp<ViewStyle>;
 }) {
 	const { setDataRaw } = useActivitypubStatusContext();
 	const { client } = useActivityPubRestClientContext();
@@ -107,7 +115,7 @@ const PostStats = memo(function Foo({
 		return <View></View>;
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, style]}>
 			<PostStatLikes
 				isLiked={IsFavourited}
 				likeCount={FavouritesCount}

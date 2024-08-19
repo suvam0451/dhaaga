@@ -15,7 +15,16 @@ import StatusInteraction from './StatusInteraction';
 import StatusQuoted from './StatusQuoted';
 import StatusCw from './StatusCw';
 
-const StatusCore = memo(() => {
+/**
+ * Mostly used to remove the border
+ * radius and zero in marginTop
+ */
+type StatusCoreProps = {
+	hasReply?: boolean;
+	hasBoost?: boolean;
+};
+
+const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 	const { dto } = useAppStatusItem();
 	const { toPost } = useAppNavigator();
 	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
@@ -45,6 +54,10 @@ const StatusCore = memo(() => {
 	const isSensitive = STATUS_DTO.meta.sensitive;
 	const spoilerText = STATUS_DTO.meta.cw;
 
+	let paddingTop = IS_REPLY_OR_BOOST ? 4 : 10;
+	if (hasReply || hasBoost) paddingTop = 0;
+	if (!hasReply && hasBoost) paddingTop = 6;
+
 	return useMemo(() => {
 		if (!isLoaded) return <StatusItemSkeleton />;
 
@@ -52,13 +65,14 @@ const StatusCore = memo(() => {
 			<View
 				style={{
 					padding: 10,
-					paddingTop: IS_REPLY_OR_BOOST ? 4 : 10,
+					paddingTop: paddingTop,
 					paddingBottom: 4,
 					backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
 					marginBottom: 4,
 					borderRadius: 8,
 					borderTopLeftRadius: IS_REPLY_OR_BOOST ? 0 : 8,
 					borderTopRightRadius: IS_REPLY_OR_BOOST ? 0 : 8,
+					// backgroundColor: 'red',
 				}}
 			>
 				<TouchableOpacity
@@ -112,7 +126,7 @@ const StatusCore = memo(() => {
 				<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />
 			</View>
 		);
-	}, [isLoaded, ShowSensitiveContent, PostContent, dto]);
+	}, [isLoaded, ShowSensitiveContent, PostContent, dto, paddingTop]);
 });
 
 export default StatusCore;

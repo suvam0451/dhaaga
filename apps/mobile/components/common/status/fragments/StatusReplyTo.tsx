@@ -27,13 +27,14 @@ const StatusReplyTo = memo(({ dto }: StatusReplyToProps) => {
 
 	return (
 		<View style={styles.rootContainer}>
-			<StatusPostedBy dto={dto} />
+			<StatusPostedBy dto={dto} style={{ marginBottom: 0 }} />
 			<View style={{ marginLeft: 48, position: 'relative' }}>
 				<TouchableOpacity
 					delayPressIn={100}
 					onPress={() => {
 						toPost(dto.id);
 					}}
+					style={{ marginTop: 8 }}
 				>
 					{content}
 				</TouchableOpacity>
@@ -47,15 +48,15 @@ const StatusReplyTo = memo(({ dto }: StatusReplyToProps) => {
 					</WithAppStatusItemContext>
 				)}
 
-				<PostStats dto={dto} />
+				<PostStats dto={dto} style={{ paddingBottom: 8 }} />
 				<View
 					style={{
 						position: 'absolute',
 						minHeight: '100%',
 						left: -24,
-						marginBottom: -32,
+						marginBottom: 0,
 						overflow: 'visible',
-						marginTop: -8,
+						marginTop: 0,
 					}}
 				>
 					<View
@@ -64,7 +65,7 @@ const StatusReplyTo = memo(({ dto }: StatusReplyToProps) => {
 							width: 1.5,
 							backgroundColor: APP_FONT.DISABLED,
 						}}
-					></View>
+					/>
 				</View>
 			</View>
 		</View>
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
 	rootContainer: {
 		backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
 		padding: 10,
+		paddingBottom: 0,
 		position: 'relative',
 	},
 });
