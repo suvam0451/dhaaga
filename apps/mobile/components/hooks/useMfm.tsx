@@ -1,9 +1,8 @@
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { DependencyList, useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
-import { Skeleton, Text } from '@rneui/themed';
+import { Skeleton } from '@rneui/themed';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
@@ -15,7 +14,12 @@ import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 type Props = {
 	content: string;
 	// Mastodon sup-plied emoji list
-	emojiMap: Map<string, EmojiMapValue>;
+	emojiMap: Map<
+		string,
+		{
+			url: string;
+		}
+	>;
 	// instance of the target user (will resolve emojis from there)
 	remoteSubdomain: string;
 	deps: DependencyList;
@@ -56,7 +60,7 @@ function useMfm({
 		content: (
 			<Skeleton
 				style={{
-					height: expectedHeight || 54,
+					height: expectedHeight || 108,
 					borderRadius: 8,
 					width: '100%',
 				}}
@@ -108,24 +112,42 @@ function useMfm({
 			isLoaded: true,
 			content: (
 				<WithAppMfmContext acceptTouch={_acceptTouch}>
-					{reactNodes?.map((para) => {
-						const uuid = randomUUID();
-						return (
-							<Text key={uuid} style={fontStyle.current}>
-								{para.map((o, j) => (
-									<Text key={j} style={fontStyle.current}>
-										{o}
+					<View style={{ height: 'auto' }}>
+						{reactNodes?.map((para) => {
+							const uuid = randomUUID();
+							if (numberOfLines) {
+								return (
+									<Text
+										key={uuid}
+										style={fontStyle.current}
+										numberOfLines={numberOfLines}
+									>
+										{para.map((o, j) => (
+											<Text key={j} style={fontStyle.current}>
+												{o}
+											</Text>
+										))}
 									</Text>
-								))}
-							</Text>
-						);
-					})}
+								);
+							} else {
+								return (
+									<Text key={uuid} style={fontStyle.current}>
+										{para.map((o, j) => (
+											<Text key={j} style={fontStyle.current}>
+												{o}
+											</Text>
+										))}
+									</Text>
+								);
+							}
+						})}
+					</View>
 				</WithAppMfmContext>
 			),
 			aiContext: openAiContext,
 		});
 		IsSolved.current = content;
-	}, [deps]);
+	}, [...deps]);
 
 	return {
 		content: Data.content,

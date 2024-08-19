@@ -1,5 +1,5 @@
 import { LibraryResponse } from './_types.js';
-import { InstanceApi_SoftwareInfoDTO } from './instance.js';
+import { InstanceApi_SoftwareInfoDTO } from './routes/instance.js';
 import { ActivitypubHelper } from '../../../index.js';
 
 export async function getSoftwareInfoShared(

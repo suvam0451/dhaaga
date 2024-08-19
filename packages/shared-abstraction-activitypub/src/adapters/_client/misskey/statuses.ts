@@ -3,7 +3,12 @@ import {
 	DhaagaJsPostCreateDto,
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
-import { MastoScheduledStatus, MissContext, MissNote } from '../_interface.js';
+import {
+	MastoScheduledStatus,
+	MastoStatus,
+	MissContext,
+	MissNote,
+} from '../_interface.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
 	COMPAT,
@@ -174,6 +179,10 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		return { data: { success: true, isFavourited: true } };
 	}
 
+	/**
+	 * a.k.a. like -- applicable for Sharkey only
+	 * @param id
+	 */
 	async like(
 		id: string,
 	): LibraryPromise<{ success: boolean; hasReacted: true }> {
@@ -183,6 +192,10 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		).post('/api/notes/like', { noteId: id }, {});
 		if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		return { data: { success: true, hasReacted: true } };
+	}
+
+	async removeLike(id: string): LibraryPromise<MastoStatus> {
+		return errorBuilder<MastoStatus>(DhaagaErrorCode.UNKNOWN_ERROR);
 	}
 
 	/**

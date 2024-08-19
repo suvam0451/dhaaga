@@ -4,7 +4,8 @@ import MisskeyUser from './misskey.js';
 import MastodonUser from './mastodon.js';
 import DefaultUser from './default.js';
 import { Note } from 'misskey-js/autogen/models.d.ts';
-import { KNOWN_SOFTWARE } from '../_client/_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
+import camelcaseKeys from 'camelcase-keys';
 
 export type EmojiMapValue = {
 	url: string;
@@ -129,6 +130,15 @@ export function ActivityPubUserAdapter(
 				});
 			}
 			return new MastodonUser(instance, mp);
+		}
+		case KNOWN_SOFTWARE.PLEROMA:
+		case KNOWN_SOFTWARE.AKKOMA: {
+			const mp = new Map<string, EmojiMapValue>();
+			const _camel = camelcaseKeys(profile, { deep: true });
+			return new MastodonUser(
+				new AccountInstance(_camel as mastodon.v1.Account),
+				mp,
+			);
 		}
 		default: {
 			return new DefaultUser();

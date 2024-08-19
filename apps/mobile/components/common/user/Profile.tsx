@@ -28,10 +28,11 @@ import styles from './utils/styles';
 import { ProfileStatsInterface } from './fragments/ProfileStats';
 import ProfileAvatar from './fragments/ProfileAvatar';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import FollowIndicator from './fragments/FollowIndicator';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ProfileDesc from './fragments/ProfileDesc';
 import ProfilePeekMessage from '../../dhaaga-bottom-sheet/modules/profile-peek/fragments/ProfilePeekMessage';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import RelationshipButtonCore from '../relationship/RelationshipButtonCore';
 
 function ProfileContextWrapped() {
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -49,10 +50,14 @@ function ProfileContextWrapped() {
 		deps: [user?.getDisplayName()],
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	});
+	const IS_LOCKED = user.getIsLockedProfile();
 
 	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(user?.getAccountUrl(), subdomain);
-	}, [user?.getAccountUrl()]);
+		return ActivitypubHelper.getHandle(
+			user?.getAccountUrl(subdomain),
+			subdomain,
+		);
+	}, [user?.getAccountUrl(subdomain)]);
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
@@ -112,9 +117,20 @@ function ProfileContextWrapped() {
 						>
 							{ParsedDisplayName}
 						</Text>
-						<Text style={styles.secondaryText} numberOfLines={1}>
-							{handle}
-						</Text>
+						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+							<Text style={styles.secondaryText} numberOfLines={1}>
+								{handle}
+							</Text>
+							{IS_LOCKED && (
+								<View style={{ marginLeft: 4 }}>
+									<AntDesign
+										name="lock1"
+										size={14}
+										color={APP_FONT.MONTSERRAT_BODY}
+									/>
+								</View>
+							)}
+						</View>
 					</View>
 					<View style={localStyles.relationManagerSection}>
 						<View style={{ marginRight: 8 }}>
@@ -125,12 +141,7 @@ function ProfileContextWrapped() {
 							/>
 						</View>
 
-						<FollowIndicator
-							userId={user?.getId()}
-							style={{
-								maxWidth: 96,
-							}}
-						/>
+						<RelationshipButtonCore userId={user?.getId()} />
 					</View>
 				</View>
 

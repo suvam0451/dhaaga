@@ -16,7 +16,8 @@ import {
 	StatusInstance,
 	StatusInterface,
 } from './_interface.js';
-import { KNOWN_SOFTWARE } from '../_client/_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
+import camelcaseKeys from 'camelcase-keys';
 
 /**
  * @param status any status object
@@ -36,9 +37,18 @@ export function ActivitypubStatusAdapter(
 		case KNOWN_SOFTWARE.CHERRYPICK: {
 			return new MisskeyToStatusAdapter(new NoteInstance(status as Note));
 		}
+
 		case KNOWN_SOFTWARE.MASTODON: {
 			return new MastodonToStatusAdapter(
 				new StatusInstance(status as mastodon.v1.Status),
+			);
+		}
+
+		case KNOWN_SOFTWARE.PLEROMA:
+		case KNOWN_SOFTWARE.AKKOMA: {
+			const _camel = camelcaseKeys(status, { deep: true });
+			return new MastodonToStatusAdapter(
+				new StatusInstance(_camel as mastodon.v1.Status),
 			);
 		}
 		default: {

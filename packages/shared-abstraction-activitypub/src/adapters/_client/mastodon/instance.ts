@@ -2,7 +2,7 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	InstanceRoute,
 	MastoTranslation,
-} from '../_router/instance.js';
+} from '../_router/routes/instance.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { createRestAPIClient } from 'masto';
 import { getSoftwareInfoShared } from '../_router/shared.js';

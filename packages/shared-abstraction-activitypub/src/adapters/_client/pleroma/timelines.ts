@@ -10,7 +10,7 @@ import {
 	DhaagaMegalodonClient,
 	DhaagaRestClient,
 } from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { toSnakeCase } from '../_router/utils/casing.utils.js';
 import AppApi from '../../_api/AppApi.js';
 

@@ -2,7 +2,7 @@ import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	InstanceApi_CustomEmojiDTO,
 	InstanceRoute,
-} from '../_router/instance.js';
+} from '../_router/routes/instance.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import {

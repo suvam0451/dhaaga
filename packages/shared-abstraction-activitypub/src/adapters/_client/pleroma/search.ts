@@ -8,7 +8,7 @@ import {
 	DhaagaMegalodonClient,
 	DhaagaRestClient,
 } from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { DhaagaErrorCode } from '../_router/_types.js';
 import { LibraryPromise } from '../_router/routes/_types.js';

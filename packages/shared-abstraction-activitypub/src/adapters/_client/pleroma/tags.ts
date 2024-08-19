@@ -9,7 +9,7 @@ import {
 	DhaagaMegalodonClient,
 	DhaagaRestClient,
 } from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { MegaTag } from '../_interface.js';
 
 export class PleromaTagsRouter implements TagRoute {

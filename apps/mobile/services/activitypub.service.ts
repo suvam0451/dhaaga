@@ -2,20 +2,89 @@ import {
 	ActivityPubClient,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import * as Crypto from 'expo-crypto';
 import { MMKV } from 'react-native-mmkv';
 import MmkvService from './mmkv.service';
+import { Realm } from 'realm';
+import { ActivityPubServerRepository } from '../repositories/activitypub-server.repo';
+import { ActivityPubServer } from '../entities/activitypub-server.entity';
+import {
+	KNOWN_SOFTWARE,
+	InstanceApi_CustomEmojiDTO,
+} from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/instance';
 
 class ActivityPubService {
+	/**
+	 * Syncs the nodeinfo and software
+	 * for a subdomain
+	 * @param db
+	 * @param urlLike
+	 */
+	static async syncSoftware(
+		db: Realm,
+		urlLike: string,
+	): Promise<ActivityPubServer> {
+		let match = ActivityPubServerRepository.get(db, urlLike);
+		const x = new UnknownRestClient();
+
+		/**
+		 * either instance info is not cached
+		 * or, neither nodeinfo nor software
+		 * info is available
+		 * */
+		if (
+			!match ||
+			(match && (!match.nodeinfo || !match.instanceSoftwareLastFetchedAt))
+		) {
+			const { data: nodeinfoData, error: nodeinfoError } =
+				await x.instances.getNodeInfo(urlLike);
+
+			if (nodeinfoError) {
+				console.log('[WARN]: error fetching nodeinfo for', urlLike);
+				return;
+			}
+			match = db.write(() => {
+				return ActivityPubServerRepository.updateNodeInfo(
+					db,
+					urlLike,
+					nodeinfoData,
+				);
+			});
+		}
+
+		/**
+		 * either the software type is not resolved
+		 * or it is of type unknown
+		 */
+		if ((match && !match.type) || match.type === KNOWN_SOFTWARE.UNKNOWN) {
+			const { data: softwareData, error: softwareError } =
+				await x.instances.getSoftware(match.nodeinfo);
+			if (softwareError) {
+				console.log('[WARN]: error fetching software for', urlLike);
+				return;
+			}
+
+			match = db.write(() => {
+				return ActivityPubServerRepository.updateSoftwareType(db, {
+					type: softwareData.software,
+					url: urlLike,
+					description: 'N/A',
+				});
+			});
+		}
+		return match;
+	}
+
 	/**
 	 * Try fetching custom emojis
 	 *
 	 * Supported: Mastodon/Misskey API Spec
+	 * @param db
 	 * @param instance
 	 * @param software if, already known
 	 */
 	static async fetchEmojisAndInstanceSoftware(
+		db: Realm,
 		instance: string,
 		software?: string,
 	): Promise<{
@@ -44,7 +113,56 @@ class ActivityPubService {
 		return { emojis, software };
 	}
 
-	static async toggleBookmark(client: ActivityPubClient, localState: boolean) {}
+	/**
+	 * toggle the bookmark status and return next state
+	 * @param client
+	 * @param id
+	 * @param localState
+	 */
+	static async toggleBookmark(
+		client: ActivityPubClient,
+		id: string,
+		localState: boolean,
+	): Promise<boolean> {
+		try {
+			if (localState) {
+				const { error } = await client.statuses.unBookmark(id);
+				if (error?.code === 'NOT_FAVOURITED') return false;
+				if (error) {
+					if (error.code === 'NOT_FAVORITED') {
+						return false;
+					}
+					console.log('[WARN]: could not remove bookmark', error);
+					return localState;
+				}
+				return false;
+			} else {
+				const { error } = await client.statuses.bookmark(id);
+				if (error?.code === 'ALREADY_FAVOURITED') return true;
+				if (error) {
+					if (error.code === 'ALREADY_FAVORITED') {
+						return true;
+					}
+					console.log('[WARN]: could not add bookmark', error);
+					return localState;
+				}
+				return true;
+			}
+		} catch (e) {
+			// incorrect local state
+			if (e.code === 'ERR_BAD_REQUEST' || e.code === 'ERR_BAD_RESPONSE') {
+				return !localState;
+			}
+			console.log(e.code);
+			return localState;
+		}
+	}
+
+	static async boost(
+		client: ActivityPubClient,
+		id: string,
+		localState: boolean,
+	) {}
 
 	/**
 	 * detect software for a subdomain

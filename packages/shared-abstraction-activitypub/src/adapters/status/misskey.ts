@@ -65,6 +65,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		return retval;
 	}
 
+	getRepliedStatusRaw(): Status {
+		return this.ref.instance?.reply;
+	}
+
 	// reactionAcceptance
 	// :
 	// "likeOnlyForRemote"
@@ -208,6 +212,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 				new NoteInstance(this.ref?.instance?.renote),
 			) as unknown as StatusInterface;
 		}
+		return null;
+	}
+
+	getQuote(): StatusInterface | null | undefined {
 		return null;
 	}
 

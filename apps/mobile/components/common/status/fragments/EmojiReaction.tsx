@@ -9,7 +9,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 	if (dto.type === 'text') {
 		return (
-			<View style={styles.emojiContainer}>
+			<View style={[styles.emojiContainer]}>
 				<Text
 					style={{
 						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
@@ -37,7 +37,12 @@ const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 
 	if (dto.type === 'image') {
 		return (
-			<View style={styles.emojiContainer}>
+			<View
+				style={[
+					styles.emojiContainer,
+					{ backgroundColor: dto.interactable ? '#303030' : '#161616' },
+				]}
+			>
 				<View
 					style={{
 						flexDirection: 'row',

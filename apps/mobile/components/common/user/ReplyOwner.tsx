@@ -1,36 +1,25 @@
-import { useActivitypubUserContext } from '../../../states/useProfile';
 import { View, Text } from 'react-native';
 import { Image } from 'expo-image';
 import useMfm from '../../hooks/useMfm';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { useMemo } from 'react';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { ActivityPubStatusAppDtoType } from '../../../services/ap-proto/activitypub-status-dto.service';
 
+type Props = {
+	dto: ActivityPubStatusAppDtoType;
+};
 /**
  *
  * @constructor
  */
-function ReplyOwner() {
-	const { user } = useActivitypubUserContext();
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
-
+function ReplyOwner({ dto }: Props) {
 	const { content: UsernameWithEmojis } = useMfm({
-		content: user?.getDisplayName(),
-		remoteSubdomain: user?.getInstanceUrl(),
-		emojiMap: user?.getEmojiMap(),
-		deps: [user?.getDisplayName()],
+		content: dto.postedBy.displayName,
+		remoteSubdomain: dto.postedBy.instance,
+		emojiMap: dto.calculated.emojis as any,
+		deps: [dto.postedBy.displayName],
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	});
-
-	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(
-			user.getAccountUrl(subdomain),
-			subdomain,
-		);
-	}, [user]);
 
 	return (
 		<View style={{ display: 'flex', flexDirection: 'row', marginBottom: 8 }}>
@@ -51,8 +40,8 @@ function ReplyOwner() {
 						opacity: 0.87,
 						borderRadius: 8,
 					}}
-					source={{ uri: user?.getAvatarUrl() }}
-					placeholder={{ blurhash: user?.getAvatarBlurHash() }}
+					source={{ uri: dto.postedBy.avatarUrl }}
+					// placeholder={{ blurhash: dto.postedBy. }}
 				/>
 			</View>
 			<View style={{ marginLeft: 8 }}>
@@ -64,7 +53,7 @@ function ReplyOwner() {
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,
 					}}
 				>
-					{handle}
+					{dto.postedBy.handle}
 				</Text>
 			</View>
 		</View>

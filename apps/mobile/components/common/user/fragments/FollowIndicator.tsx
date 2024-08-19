@@ -1,11 +1,9 @@
-import { memo, useMemo, Fragment, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import AppButtonFollowIndicator from '../../../lib/Buttons';
 import useRelationshipWith from '../../../../states/useRelationshipWith';
 import { AppRelationship } from '../../../../types/ap.types';
 import ConfirmRelationshipChangeDialog from '../../../screens/shared/fragments/ConfirmRelationshipChange';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
-import { MastoRelationship } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 /**
@@ -34,9 +32,14 @@ const FollowIndicator = memo(function Foo({
 		setRelation,
 		relationLoading,
 		setRelationLoading,
+		follow,
+		unfollow,
 	} = useRelationshipWith(userId);
 
 	const FollowLabel = useMemo(() => {
+		if (relation.requested) {
+			return AppRelationship.FOLLOW_REQUEST_PENDING;
+		}
 		if (!relation.following && !relation.followedBy) {
 			return AppRelationship.UNRELATED;
 		}
@@ -58,46 +61,17 @@ const FollowIndicator = memo(function Foo({
 		return AppRelationship.UNKNOWN;
 	}, [relation, relationState]);
 
-	function onFollowButtonClick() {
-		if (!relation.following) {
-			setRelationLoading(true);
-			client.accounts
-				.follow(userId, { reblogs: true, notify: false })
-				.then(({ data, error }) => {
-					if (domain === KNOWN_SOFTWARE.MASTODON) {
-						setRelation(data as MastoRelationship);
-					} else {
-						refetchRelation();
-					}
-				});
-		} else {
-			setIsUnfollowConfirmationDialogVisible(true);
-		}
-	}
-
-	function onUnfollow() {
-		setRelationLoading(true);
-		setIsUnfollowConfirmationDialogVisible(false);
-		client.accounts.unfollow(userId).then(({ data, error }) => {
-			if (domain === KNOWN_SOFTWARE.MASTODON) {
-				setRelation(data as MastoRelationship);
-			} else {
-				refetchRelation();
-			}
-		});
-	}
-
 	return (
 		<View style={style}>
 			<AppButtonFollowIndicator
 				label={FollowLabel}
-				onClick={onFollowButtonClick}
+				onClick={follow}
 				loading={relationLoading}
 			/>
 			<ConfirmRelationshipChangeDialog
 				visible={IsUnfollowConfirmationDialogVisible}
 				setVisible={setIsUnfollowConfirmationDialogVisible}
-				onUnfollow={onUnfollow}
+				onUnfollow={unfollow}
 			/>
 		</View>
 	);

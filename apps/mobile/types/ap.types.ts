@@ -6,4 +6,5 @@ export enum AppRelationship {
 	BLOCKED_BY = 'Blocks You',
 	BLOCKED = 'Blocking',
 	UNKNOWN = 'Unknown',
+	FOLLOW_REQUEST_PENDING = 'Pending',
 }

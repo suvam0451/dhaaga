@@ -1,4 +1,4 @@
-import { KNOWN_SOFTWARE } from './instance.js';
+import { KNOWN_SOFTWARE } from './routes/instance.js';
 import { mastodon } from 'masto';
 import { createRestAPIClient } from 'masto';
 import { DhaagaErrorCode, LibraryResponse } from './_types.js';

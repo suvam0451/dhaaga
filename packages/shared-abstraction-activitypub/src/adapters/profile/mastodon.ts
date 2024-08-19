@@ -15,7 +15,7 @@ class MastodonUser implements UserInterface {
 	getInstanceUrl(): string {
 		const ex = /^https?:\/\/(.*?)\/(.*?)/;
 		const subdomainExtractUrl = /^https?:\/\/(.*?)\/@?/;
-		const fullUrl = this.ref.instance.url;
+		const fullUrl = this.ref.instance?.url;
 		if (ex.test(fullUrl)) {
 			// @ts-ignore
 			return fullUrl.match(subdomainExtractUrl)[1];
@@ -24,7 +24,7 @@ class MastodonUser implements UserInterface {
 	}
 
 	getAccountUrl(mySubdomain?: string): string {
-		return this.ref.instance.url;
+		return this.ref.instance?.url;
 	}
 
 	private extractInstanceUrl(

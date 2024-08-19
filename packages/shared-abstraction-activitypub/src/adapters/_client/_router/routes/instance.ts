@@ -1,6 +1,6 @@
-import { LibraryResponse } from './_types.js';
+import { LibraryResponse } from '../_types.js';
 import { mastodon } from 'masto';
-import { LibraryPromise } from './routes/_types.js';
+import { LibraryPromise } from './_types.js';
 
 export enum KNOWN_SOFTWARE {
 	AKKOMA = 'akkoma',

@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -28,12 +28,15 @@ import { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
 import { FAB_MENU_MODULES } from '../../../../types/app.types';
 import WithAppMenu from '../../../containers/WithAppMenu';
 import { APP_THEME } from '../../../../styles/AppTheme';
-import { ListItemEnum } from '../utils/itemType.types';
 import FlashListRenderer from '../fragments/FlashListRenderer';
 import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
-import useAppCustomEmoji from '../../../../hooks/app/useAppCustomEmoji';
-import activitypubAdapterService from '../../../../services/activitypub-adapter.service';
+import { useRealm } from '@realm/react';
+import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
+import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
+import WithAppTimelineDataContext, {
+	useAppTimelineDataContext,
+} from '../api/useTimelineData';
 
 const HIDDEN_SECTION_HEIGHT = 50;
 const SHOWN_SECTION_HEIGHT = 50;
@@ -44,17 +47,17 @@ const SHOWN_SECTION_HEIGHT = 50;
 const Timeline = memo(() => {
 	const { timelineType, query, opts, setTimelineType } =
 		useTimelineController();
-	const { client, primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
+	const { client, primaryAcct, domain, subdomain } =
+		useActivityPubRestClientContext();
+	const { setMaxId, updateQueryCache, queryCacheMaxId, clear } =
+		useAppPaginationContext();
 	const {
-		data: PageData,
-		setMaxId,
-		append,
-		updateQueryCache,
-		queryCacheMaxId,
-		clear,
-	} = useAppPaginationContext();
-	const { refresh } = useAppCustomEmoji();
+		append: appendTimelineData,
+		flashListItems,
+		clear: timelineDataStoreClear,
+	} = useAppTimelineDataContext();
+	const db = useRealm();
+	const { globalDb } = useGlobalMmkvContext();
 
 	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
@@ -66,6 +69,7 @@ const Timeline = memo(() => {
 	useEffect(() => {
 		setPageLoadedAtLeastOnce(false);
 		clear();
+		timelineDataStoreClear();
 	}, [timelineType, query, opts]);
 
 	const { fetchStatus, data, status, refetch } = useTimeline({
@@ -75,41 +79,28 @@ const Timeline = memo(() => {
 		maxId: queryCacheMaxId,
 	});
 
-	const [EmojisLoading, setEmojisLoading] = useState(false);
-
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
 		if (data?.length > 0) {
 			setMaxId(data[data.length - 1]?.id);
-
 			const _data = ActivityPubAdapterService.adaptManyStatuses(data, domain);
-			append(_data);
+			appendTimelineData(_data);
 			setPageLoadedAtLeastOnce(true);
 
 			/**
 			 * Resolve Custom Emojis
 			 */
 			for (const datum of _data) {
-				const _user = activitypubAdapterService.adaptUser(
-					datum.getUser(),
-					domain,
-				);
-				const _subdomain = _user.getInstanceUrl();
-				if (_subdomain) refresh(_subdomain);
-
-				// handle boosted content
-				if (datum.isReposted()) {
-					const _userR = activitypubAdapterService.adaptUser(
-						datum.getRepostedStatus()?.getUser(),
-						domain,
-					);
-					const _subdomain = _userR.getInstanceUrl();
-					if (_subdomain) refresh(_subdomain);
-				}
+				ActivitypubStatusService.factory(datum, domain, subdomain)
+					.resolveInstances()
+					.syncSoftware(db)
+					.then((res) => {
+						res.syncCustomEmojis(db, globalDb).then(() => {});
+					});
 			}
 		}
-	}, [fetchStatus]);
+	}, [fetchStatus, db]);
 
 	const label = useTimelineLabel();
 
@@ -118,43 +109,15 @@ const Timeline = memo(() => {
 	 */
 	const { visible, loading } = useLoadingMoreIndicatorState({
 		fetchStatus,
-		additionalLoadingStates: EmojisLoading,
 	});
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: PageData.length,
+		itemCount: appendTimelineData.length,
 		updateQueryCache,
 	});
 	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
 		fetchStatus,
 		refetch,
 	});
-
-	const ListItems = useMemo(() => {
-		return PageData.map((o) => {
-			if (o.getMediaAttachments().length > 0) {
-				return {
-					type: ListItemEnum.ListItemWithImage,
-					props: {
-						post: o,
-					},
-				};
-			} else if (o.getIsSensitive()) {
-				return {
-					type: ListItemEnum.ListItemWithSpoiler,
-					props: {
-						post: o,
-					},
-				};
-			} else {
-				return {
-					type: ListItemEnum.ListItemWithText,
-					props: {
-						post: o,
-					},
-				};
-			}
-		});
-	}, [PageData]);
 
 	if (!client) return <Introduction />;
 
@@ -181,12 +144,12 @@ const Timeline = memo(() => {
 				<AnimatedFlashList
 					ListHeaderComponent={
 						<ListHeaderComponent
-							itemCount={ListItems.length}
+							itemCount={flashListItems.length}
 							loadedOnce={PageLoadedAtLeastOnce}
 						/>
 					}
 					estimatedItemSize={120}
-					data={ListItems}
+					data={flashListItems}
 					renderItem={FlashListRenderer}
 					getItemType={(o) => o.type}
 					onScroll={onScroll}
@@ -208,7 +171,9 @@ function TimelineWrapper() {
 	return (
 		<WithTimelineControllerContext>
 			<WithAppPaginationContext>
-				<Timeline />
+				<WithAppTimelineDataContext>
+					<Timeline />
+				</WithAppTimelineDataContext>
 			</WithAppPaginationContext>
 		</WithTimelineControllerContext>
 	);

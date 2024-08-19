@@ -95,9 +95,10 @@ export class EmojiService {
 		if (!forcedUpdate) return;
 
 		// GlobalMmkvCacheService
-		const result =
-			await ActivityPubService.fetchEmojisAndInstanceSoftware(subdomain);
-		console.log(subdomain, result?.software, result?.emojis?.length);
+		const result = await ActivityPubService.fetchEmojisAndInstanceSoftware(
+			db,
+			subdomain,
+		);
 
 		db.write(() => {
 			ActivityPubServerRepository.updateSoftwareType(db, {
@@ -339,11 +340,13 @@ export class EmojiService {
 	 * asynchronously download and save emojis
 	 *
 	 * cache-expiry: 7 days
+	 * @param db
 	 * @param globalDb
 	 * @param subdomain
 	 * @param software
 	 */
 	static async downloadCustomEmojis(
+		db: Realm,
 		globalDb: MMKV,
 		subdomain: string,
 		software?: string,
@@ -373,6 +376,7 @@ export class EmojiService {
 
 		// TODO: make software resolve from realm table
 		const res = await ActivityPubService.fetchEmojisAndInstanceSoftware(
+			db,
 			subdomain,
 			software,
 		);

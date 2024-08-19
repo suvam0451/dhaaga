@@ -53,6 +53,14 @@ export interface StatusesRoute {
 		id: string,
 	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']>;
 
+	like(
+		id: string,
+	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/create']['res']>;
+
+	removeLike(
+		id: string,
+	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']>;
+
 	getContext(
 		id: string,
 		limit?: number,

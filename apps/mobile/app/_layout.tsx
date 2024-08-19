@@ -17,6 +17,9 @@ import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
 import { useFonts } from '@expo-google-fonts/montserrat';
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 // to get rid of realm warnings
 import AppSettingsService from '../services/app-settings.service';
@@ -109,7 +112,7 @@ export default function Page() {
 				{/* In-Memory Store -- MMKV */}
 				<WithGlobalMmkvContext>
 					{/* Main Database -- Realm */}
-					<RealmProvider schema={schemas} schemaVersion={18}>
+					<RealmProvider schema={schemas} schemaVersion={20}>
 						{/* API Caching -- Tanstack */}
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}

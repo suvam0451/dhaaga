@@ -53,6 +53,26 @@ function useKnownSoftware(software: string) {
 				height: 20,
 			};
 		}
+		case KNOWN_SOFTWARE.PLEROMA: {
+			return {
+				bg: '#df8958',
+				fg: '#e9e7e4',
+				label: 'Pleroma',
+				logo: branding[4],
+				width: 12,
+				height: 20,
+			};
+		}
+		case KNOWN_SOFTWARE.AKKOMA: {
+			return {
+				bg: '#df8958',
+				fg: '#e9e7e4',
+				label: 'Akkoma',
+				logo: branding[0],
+				width: 20,
+				height: 20,
+			};
+		}
 		case KNOWN_SOFTWARE.GOTOSOCIAL: {
 			return {
 				bg: '#df8958',

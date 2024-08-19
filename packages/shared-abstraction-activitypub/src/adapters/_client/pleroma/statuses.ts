@@ -18,7 +18,7 @@ import {
 	DhaagaMegalodonClient,
 	DhaagaRestClient,
 } from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
@@ -68,6 +68,16 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async unBookmark(id: string) {
 		const data = await this.lib.client.unbookmarkStatus(id);
+		return { data: data.data };
+	}
+
+	async like(id: string) {
+		const data = await this.lib.client.favouriteStatus(id);
+		return { data: data.data };
+	}
+
+	async removeLike(id: string) {
+		const data = await this.lib.client.unfavouriteStatus(id);
 		return { data: data.data };
 	}
 

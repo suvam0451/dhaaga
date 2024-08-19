@@ -1,19 +1,21 @@
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { Fragment, memo, useCallback, useEffect, useState } from 'react';
-import { useActivitypubStatusContext } from '../../../../states/useStatus';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { EmojiDto } from './_shared.types';
 import EmojiReaction from './EmojiReaction';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
+import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
-const EmojiReactions = memo(() => {
+type EmojiReactionsProps = {
+	dto: ActivityPubStatusAppDtoType;
+};
+const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
+	const { emojiCache } = useAppTimelineDataContext();
 	const { domain } = useActivityPubRestClientContext();
-	const { status, sharedStatus } = useActivitypubStatusContext();
-
-	const _status = status?.isReposted() ? sharedStatus : status;
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);
 
@@ -22,27 +24,27 @@ const EmojiReactions = memo(() => {
 	}, []);
 
 	useEffect(() => {
-		if (domain === 'mastodon') return;
-
-		const emojis = _status.getReactionEmojis();
-		const reactions = _status.getReactions();
+		const emojis = dto.calculated.reactionEmojis;
 		let retval: EmojiDto[] = [];
 
 		const localEx = /:(.*?)@.:/;
 		const ex = /:(.*?):/;
-		for (const reaction of reactions) {
+		for (const reaction of dto.stats.reactions) {
 			if (localEx.test(reaction.id)) {
 				const _name = localEx.exec(reaction.id)[1];
-				const match = emojis.find((o) => o.name === _name);
+				const match = emojiCache.find(
+					(o) => o.shortCode === _name || o.aliases.includes(_name),
+				);
 				if (match) {
 					retval.push({
 						name: reaction.id,
 						count: reaction.count,
 						type: 'image',
 						url: match.url,
-						width: match.width,
-						height: match.height,
+						interactable: true,
 					});
+				} else {
+					console.log('[WARN]: local emoji not found for', _name);
 				}
 			} else if (ex.test(reaction.id)) {
 				const _name = ex.exec(reaction.id)[1];
@@ -55,22 +57,29 @@ const EmojiReactions = memo(() => {
 						url: match.url,
 						width: match.width,
 						height: match.height,
+						interactable: false,
 					});
 				} else {
 					retval.push({
 						name: reaction.id,
 						count: reaction.count,
 						type: 'text',
+						interactable: false,
 					});
 				}
 			} else {
-				retval.push({ name: reaction.id, count: reaction.count, type: 'text' });
+				retval.push({
+					name: reaction.id,
+					count: reaction.count,
+					type: 'text',
+					interactable: true,
+				});
 			}
 
 			retval = retval.sort((a, b) => b.count - a.count);
 		}
 		setEmojis(retval);
-	}, [status, sharedStatus]);
+	}, [dto]);
 
 	if (domain === 'mastodon') return <Fragment />;
 

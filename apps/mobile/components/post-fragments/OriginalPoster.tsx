@@ -1,27 +1,13 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { Fragment, memo, useCallback, useEffect, useMemo } from 'react';
-import { useActivitypubStatusContext } from '../../states/useStatus';
-import { useActivitypubUserContext } from '../../states/useProfile';
+import { Fragment, memo, useCallback, useMemo } from 'react';
 import { Skeleton } from '@rneui/themed';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import useMfm from '../hooks/useMfm';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import useAppNavigator from '../../states/useAppNavigator';
 import StatusCreatedAt from '../common/status/fragments/StatusCreatedAt';
 import { APP_FONTS } from '../../styles/AppFonts';
 import StatusVisibility from '../common/status/fragments/StatusVisibility';
-
-type OriginalPosterProps = {
-	id: string;
-	createdAt: string;
-	avatarUrl: string;
-	displayName: string;
-	accountUrl: string;
-	username: string;
-	subdomain?: string;
-	visibility: string;
-};
+import { ActivityPubStatusAppDtoType } from '../../services/ap-proto/activitypub-status-dto.service';
 
 /**
  * Renders the user (poster)'s avatar
@@ -106,7 +92,8 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		emojiMap: emojiMap,
 		deps: [displayNameRaw],
 		expectedHeight: 20,
-		fontFamily: 'Montserrat-Bold',
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		numberOfLines: 1,
 	});
 
 	return (
@@ -164,49 +151,42 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	);
 });
 
-const OriginalPoster = memo(function Foo({
-	id,
-	avatarUrl,
-	accountUrl,
-}: OriginalPosterProps) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
+type OriginalPosterProps = {
+	dto: ActivityPubStatusAppDtoType;
+};
 
-	const { status, sharedStatus } = useActivitypubStatusContext();
-	const { user, setDataRaw } = useActivitypubUserContext();
-
-	const op = status?.isReposted() ? sharedStatus : status;
+const OriginalPoster = memo(({ dto }: OriginalPosterProps) => {
 	const { toProfile } = useAppNavigator();
 
-	useEffect(() => {
-		if (status?.getUser()) return;
-		setDataRaw(status?.getUser());
-	}, [status]);
+	const STATUS_DTO = dto.meta.isBoost
+		? dto.content.raw
+			? dto
+			: dto.boostedFrom
+		: dto;
 
 	const onProfileClicked = useCallback(() => {
-		toProfile(id);
-	}, [id]);
-
-	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(accountUrl, subdomain);
-	}, [accountUrl]);
+		toProfile(STATUS_DTO.postedBy.userId);
+	}, [STATUS_DTO.postedBy.userId]);
 
 	return useMemo(() => {
-		if (!user) return <OriginalPosterSkeleton />;
+		if (!STATUS_DTO.postedBy) return <OriginalPosterSkeleton />;
 		return (
 			<Fragment>
-				<OriginalPostedPfpFragment url={avatarUrl} onClick={onProfileClicked} />
+				<OriginalPostedPfpFragment
+					url={STATUS_DTO.postedBy.avatarUrl}
+					onClick={onProfileClicked}
+				/>
 				<OriginalPosterPostedByFragment
 					onClick={onProfileClicked}
-					theirSubdomain={user?.getInstanceUrl()}
-					displayNameRaw={user?.getDisplayName()}
-					instanceUrl={handle}
-					postedAt={new Date(op?.getCreatedAt())}
-					visibility={status?.getVisibility()}
+					theirSubdomain={STATUS_DTO.postedBy.instance}
+					displayNameRaw={STATUS_DTO.postedBy.displayName}
+					instanceUrl={STATUS_DTO.postedBy.handle}
+					postedAt={new Date(STATUS_DTO.createdAt)}
+					visibility={STATUS_DTO.visibility}
 				/>
 			</Fragment>
 		);
-	}, [user]);
+	}, [STATUS_DTO.postedBy]);
 });
 
 export default OriginalPoster;

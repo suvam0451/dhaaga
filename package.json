@@ -34,5 +34,9 @@
     "singleQuote": true,
     "tabWidth": 2,
     "useTabs": true
+  },
+  "type": "module",
+  "resolutions": {
+    "@types/react": "~18.2.79"
   }
 }

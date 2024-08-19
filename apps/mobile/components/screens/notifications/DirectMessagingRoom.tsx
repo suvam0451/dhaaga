@@ -240,7 +240,7 @@ function DirectMessagingRoom() {
 								backgroundColor: 'red',
 							}}
 						>
-							<FontAwesome5
+							<FontAwesome5.default
 								name="plus"
 								size={24}
 								color={APP_FONT.MONTSERRAT_BODY}

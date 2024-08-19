@@ -8,10 +8,9 @@ import StatusAlertNotificationFragment from '../segments/StatusAlertNotification
 import BoostNotificationFragment from '../segments/BoostNotificationFragment';
 import AchiEarnedNotificationFragment from '../segments/AchiEarnedNotificationFragment';
 import AppNotificationFragment from '../segments/AppNotificationFragment';
-import FollowReqAccepNotificationFragment from '../segments/FollowReqAccepNotificationFragment';
+import FollowReqAcceptNotificationFragment from '../segments/FollowReqAccepNotificationFragment';
 import ReactionNotificationFragment from '../segments/ReactionNotificationFragment';
-import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { View, Text } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 
 /**
@@ -29,15 +28,17 @@ function FlatListRenderer({ item }: { item: Notification_FlatList_Entry }) {
 		case DhaagaJsNotificationType.FOLLOW:
 			return <FollowNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.STATUS:
+		case DhaagaJsNotificationType.NOTE:
 			return <StatusAlertNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.REBLOG:
+		case DhaagaJsNotificationType.RENOTE:
 			return <BoostNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.ACHIEVEMENT_EARNED:
 			return <AchiEarnedNotificationFragment />;
 		case DhaagaJsNotificationType.APP:
 			return <AppNotificationFragment />;
 		case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED:
-			return <FollowReqAccepNotificationFragment item={item.props} />;
+			return <FollowReqAcceptNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.REACTION:
 			return <ReactionNotificationFragment item={item.props} />;
 		default: {

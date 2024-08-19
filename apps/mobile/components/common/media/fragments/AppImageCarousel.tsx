@@ -28,6 +28,7 @@ export type AppImageCarouselData = {
 	items: AppImageCarouselItem[];
 	calculatedHeight: number;
 	timelineCacheId: string;
+	leftMarginAdjustment?: number;
 };
 
 const AppImageCarouselItem = memo(function Foo({
@@ -35,14 +36,24 @@ const AppImageCarouselItem = memo(function Foo({
 	type,
 	blurhash,
 	calculatedHeight,
-}: AppImageCarouselItem & { calculatedHeight: number }) {
+	leftMarginAdjustment,
+}: AppImageCarouselItem & {
+	calculatedHeight: number;
+	leftMarginAdjustment?: number;
+}) {
 	const MediaItem = useMemo(() => {
 		switch (type) {
 			case 'image':
 			case 'image/jpeg':
 			case 'image/png':
 			case 'image/webp': {
-				return <AppImageComponent url={src} blurhash={blurhash} />;
+				return (
+					<AppImageComponent
+						url={src}
+						blurhash={blurhash}
+						leftMarginAdjustment={leftMarginAdjustment}
+					/>
+				);
 			}
 			case 'video':
 			case 'video/mp4':
@@ -95,10 +106,11 @@ const AppImageCarouselItem = memo(function Foo({
 	);
 });
 
-const AppImageCarousel = memo(function Foo({
+const AppImageCarousel = memo(function AppImageCarouselFoo({
 	calculatedHeight,
 	items,
 	timelineCacheId,
+	leftMarginAdjustment,
 }: AppImageCarouselData) {
 	const start =
 		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
@@ -134,8 +146,11 @@ const AppImageCarousel = memo(function Foo({
 		<GestureDetector gesture={fling}>
 			<View
 				style={{
-					width: Dimensions.get('window').width,
+					width: Dimensions.get('window').width - leftMarginAdjustment,
 					height: calculatedHeight,
+					alignItems: 'center',
+					justifyContent: 'center',
+					position: 'relative',
 				}}
 			>
 				<AppImageCarouselItem
@@ -143,6 +158,7 @@ const AppImageCarousel = memo(function Foo({
 					type={item.type}
 					blurhash={item.blurhash}
 					calculatedHeight={calculatedHeight}
+					leftMarginAdjustment={leftMarginAdjustment}
 				/>
 				<CarousalIndicatorOverlay
 					index={Pointer}
