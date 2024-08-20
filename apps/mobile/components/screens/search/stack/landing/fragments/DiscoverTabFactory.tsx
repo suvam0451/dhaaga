@@ -11,6 +11,7 @@ import LoadingMore from '../../../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useDebounce } from 'use-debounce';
+import { useAppTimelineDataContext } from '../../../../../common/timeline/api/useTimelineData';
 
 /**
  * Renders the results of a
@@ -23,6 +24,12 @@ const DiscoverTabFactory = memo(() => {
 	const [SearchCategory, setSearchCategory] = useState<APP_SEARCH_TYPE>(
 		APP_SEARCH_TYPE.POSTS,
 	);
+
+	const {
+		listItems,
+		addPosts: appendTimelineData,
+		clear: timelineDataStoreClear,
+	} = useAppTimelineDataContext();
 
 	const { data, updateQueryCache, append, setMaxId, queryCacheMaxId, clear } =
 		useAppPaginationContext();
@@ -42,6 +49,7 @@ const DiscoverTabFactory = memo(() => {
 	useEffect(() => {
 		// reset the results on account/searchTerm change
 		clear();
+		timelineDataStoreClear();
 	}, [SearchTerm, client, SearchCategory]);
 
 	useEffect(() => {
@@ -49,7 +57,7 @@ const DiscoverTabFactory = memo(() => {
 			case APP_SEARCH_TYPE.POSTS: {
 				if (Data?.statuses?.length === 0) return;
 				setMaxId(Data.statuses[Data.statuses.length - 1].getId());
-				append(Data.statuses);
+				appendTimelineData(Data.statuses);
 				break;
 			}
 			case APP_SEARCH_TYPE.USERS: {
@@ -64,7 +72,7 @@ const DiscoverTabFactory = memo(() => {
 				append(Data.statuses);
 			}
 		}
-	}, [Data]);
+	}, [Data, SearchCategory]);
 
 	const { visible, loading } = useLoadingMoreIndicatorState({
 		fetchStatus,
@@ -73,11 +81,16 @@ const DiscoverTabFactory = memo(() => {
 
 	const [debouncedFetchStatus] = useDebounce(fetchStatus, 200);
 
+	const flashListData =
+		SearchCategory === APP_SEARCH_TYPE.POSTS ? listItems : data;
+
+	const NUM_ITEMS = Math.max(data.length, listItems.length);
+
 	return (
 		<WithAutoHideTopNavBar title={'Explore'} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={200}
-				data={data}
+				data={flashListData}
 				renderItem={({ item }) => {
 					return <DiscoverListRenderer item={item} category={SearchCategory} />;
 				}}
@@ -90,7 +103,7 @@ const DiscoverTabFactory = memo(() => {
 						<DiscoverTabListHeader
 							query={SearchTerm}
 							fetchStatus={debouncedFetchStatus}
-							numItems={data.length}
+							numItems={NUM_ITEMS}
 							status={status}
 							category={SearchCategory}
 						/>

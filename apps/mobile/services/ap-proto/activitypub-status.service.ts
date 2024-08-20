@@ -140,7 +140,8 @@ export class ActivitypubStatusService {
 	}
 
 	export(): ActivityPubStatusAppDtoType {
-		if (!this.statusI) return null;
+		// to prevent infinite recursion
+		if (!this.statusI || !this.statusI.getId()) return null;
 
 		const IS_REPOSTED = this.statusI.isReposted();
 		const IS_REPLY = this.statusI.isReply();
@@ -199,14 +200,12 @@ export class ActivitypubStatusService {
 						boostedFrom,
 					};
 
-		// console.log('repost input', dto);
 		const { data, error, success } = ActivityPubStatusLevelThree.safeParse(dto);
 		if (!success) {
 			console.log('[ERROR]: status item dto validation failed', error);
 			return;
 		}
-		// console.log('repost input', data);
 
-		return data;
+		return data as ActivityPubStatusAppDtoType;
 	}
 }

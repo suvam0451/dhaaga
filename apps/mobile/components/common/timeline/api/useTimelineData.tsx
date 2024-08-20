@@ -1,6 +1,7 @@
 import {
 	MisskeyRestClient,
 	StatusInterface,
+	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 import {
@@ -16,8 +17,6 @@ import {
 	useState,
 } from 'react';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
-import { ListItemEnum, ListItemType } from '../utils/itemType.types';
 import ActivityPubService from '../../../../services/activitypub.service';
 import * as Haptics from 'expo-haptics';
 import { OpenAiService } from '../../../../services/openai.service';
@@ -27,20 +26,33 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
-import timelineDataReducer, {
-	TIMELINE_DATA_REDUCER_TYPE,
-} from './timelineDataReducer';
+import postArrayReducer, {
+	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
+} from './postArrayReducer';
+import { ActivityPubAppUserDtoType } from '../../../../services/ap-proto/activitypub-user-dto.service';
+import userArrayReducer, {
+	TIMELINE_USER_LIST_DATA_REDUCER_TYPE,
+} from './userArrayReducer';
+import FlashListService, {
+	FlashListType_Post,
+} from '../../../../services/flashlist.service';
+
+enum TIMELINE_DATA_TYPE {
+	POSTS = 'POSTS',
+	USERS = 'USERS',
+	TAGS = 'TAGS',
+	NOTIFICATIONS = 'NOTIFICATIONS',
+	NONE = 'NONE',
+}
 
 type Type = {
-	data: ActivityPubStatusAppDtoType[];
+	data: ActivityPubStatusAppDtoType[] | ActivityPubAppUserDtoType[];
+	dataFormat: TIMELINE_DATA_TYPE;
+	setDataFormat: (to: TIMELINE_DATA_TYPE) => void;
 	emojiCache: InstanceApi_CustomEmojiDTO[];
-	flashListItems: {
-		type: ListItemEnum;
-		props: {
-			dto: ActivityPubStatusAppDtoType;
-		};
-	}[];
-	append: (items: StatusInterface[]) => void;
+	listItems: FlashListType_Post[];
+	addPosts: (items: StatusInterface[]) => void;
+	addUsers: (items: UserInterface[]) => void;
 	clear: () => void;
 	/**
 	 *
@@ -60,8 +72,11 @@ type Type = {
 
 const defaultValue: Type = {
 	data: [],
-	flashListItems: [],
-	append: () => {},
+	dataFormat: TIMELINE_DATA_TYPE.NONE,
+	setDataFormat: () => {},
+	listItems: [],
+	addPosts: () => {},
+	addUsers: () => {},
 	clear: () => {},
 	toggleBookmark: () => {},
 	explain: () => {},
@@ -80,10 +95,22 @@ type Props = {
 	children: any;
 };
 
+/**
+ * Assumptions
+ * ---
+ * - at any time, only one timeline can be active
+ */
 function WithAppTimelineDataContext({ children }: Props) {
 	const { client, domain, subdomain } = useActivityPubRestClientContext();
-	const [Data, dispatch] = useReducer(timelineDataReducer, []);
-	const [LegacyData, setLegacyData] = useState<StatusInterface[]>([]);
+
+	// template
+	const [DataFormat, setDataFormat] = useState<TIMELINE_DATA_TYPE>(
+		TIMELINE_DATA_TYPE.POSTS,
+	);
+	// lists
+	const [Posts, postListReducer] = useReducer(postArrayReducer, []);
+	const [Users, userListReducer] = useReducer(userArrayReducer, []);
+
 	const EmojiCache = useRef<InstanceApi_CustomEmojiDTO[]>([]);
 	const { globalDb } = useGlobalMmkvContext();
 
@@ -95,72 +122,57 @@ function WithAppTimelineDataContext({ children }: Props) {
 		EmojiCache.current = res ? res.data : [];
 	}, [subdomain]);
 
-	const FlashListItems: ListItemType[] = useMemo(() => {
-		return Data.map((o, i) => {
-			const HAS_MEDIA = o.content.media.length > 0;
-			if (HAS_MEDIA) {
-				return {
-					type: ListItemEnum.ListItemWithImage,
-					props: {
-						post: LegacyData[i],
-						dto: Data[i],
-					},
-				};
-			} else if (o.meta.sensitive) {
-				return {
-					type: ListItemEnum.ListItemWithSpoiler,
-					props: {
-						post: LegacyData[i],
-						dto: Data[i],
-					},
-				};
-			} else {
-				return {
-					type: ListItemEnum.ListItemWithText,
-					props: {
-						post: LegacyData[i],
-						dto: Data[i],
-					},
-				};
-			}
-		});
-	}, [Data]);
+	const FlashListItems = useMemo(() => {
+		switch (DataFormat) {
+			case TIMELINE_DATA_TYPE.POSTS:
+				return FlashListService.posts(Posts);
+			case TIMELINE_DATA_TYPE.USERS:
+				return FlashListService.users(Users);
+		}
+		return [];
+	}, [DataFormat, Users, Posts]);
 
 	const Seen = useRef(new Set<string>());
 
 	const clear = useCallback(() => {
-		dispatch({ type: TIMELINE_DATA_REDUCER_TYPE.CLEAR });
+		postListReducer({ type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.CLEAR });
+		userListReducer({ type: TIMELINE_USER_LIST_DATA_REDUCER_TYPE.CLEAR });
 		Seen.current.clear();
-	}, [Seen, Data, dispatch]);
+	}, []);
 
-	const append = useCallback(
+	const addPosts = useCallback(
 		(items: StatusInterface[]) => {
-			const toAdd: ActivityPubStatusAppDtoType[] = [];
-			const toAdd2: StatusInterface[] = [];
-			for (const item of items) {
-				const k = item.getId();
-				if (Seen.current.has(k)) continue;
-
-				Seen.current.add(k);
-				toAdd.push(
-					ActivitypubStatusService.factory(item, domain, subdomain).export(),
-				);
-				toAdd2.push(item);
-			}
-			dispatch({
-				type: TIMELINE_DATA_REDUCER_TYPE.APPEND,
+			postListReducer({
+				type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.ADD,
 				payload: {
-					data: toAdd,
+					more: items,
+					seen: Seen,
+					domain,
+					subdomain,
 				},
 			});
-			setLegacyData(LegacyData.concat(toAdd2));
 		},
-		[Seen, Data, domain, subdomain, dispatch],
+		[domain, subdomain, Posts],
+	);
+
+	const addUsers = useCallback(
+		(items: UserInterface[]) => {
+			userListReducer({
+				type: TIMELINE_USER_LIST_DATA_REDUCER_TYPE.ADD,
+				payload: {
+					more: items,
+					seen: Seen,
+					domain,
+					subdomain,
+				},
+			});
+		},
+		[domain, subdomain, Users],
 	);
 
 	function findById(id: string) {
-		let match = Data.find((o) => o.id === id);
-		if (!match) match = Data.find((o) => o.boostedFrom?.id === id);
+		let match = Posts.find((o) => o.id === id);
+		if (!match) match = Posts.find((o) => o.boostedFrom?.id === id);
 		return match;
 	}
 
@@ -184,8 +196,8 @@ function WithAppTimelineDataContext({ children }: Props) {
 							client as MisskeyRestClient
 						).statuses.unrenote(key);
 						if (!error && data.success) {
-							dispatch({
-								type: TIMELINE_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS,
+							postListReducer({
+								type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS,
 								payload: {
 									id: key,
 									value: data.renoted,
@@ -196,8 +208,20 @@ function WithAppTimelineDataContext({ children }: Props) {
 				}
 			}
 		},
-		[Data, dispatch],
+		[Posts],
 	);
+
+	/**
+	 * Called when the post is rendered on screen
+	 *
+	 * Does the following:
+	 *
+	 * - Obtain the current bookmark status (Misskey forks)
+	 *
+	 * Once obtained, all info is cached for
+	 * next re-render
+	 * */
+	// const initialize = useCallback(() => {}, []);
 
 	const toggleBookmark = useCallback(
 		(key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
@@ -215,9 +239,8 @@ function WithAppTimelineDataContext({ children }: Props) {
 				match.interaction.bookmarked,
 			)
 				.then((res) => {
-					console.log('toggle response', res);
-					dispatch({
-						type: TIMELINE_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
+					postListReducer({
+						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
 						payload: {
 							id: key,
 							value: res,
@@ -230,7 +253,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 					});
 				});
 		},
-		[Data, dispatch],
+		[Posts],
 	);
 
 	const explain = useCallback(
@@ -243,8 +266,8 @@ function WithAppTimelineDataContext({ children }: Props) {
 			setLoading(true);
 			try {
 				const response = await OpenAiService.explain(ctx.join(','));
-				dispatch({
-					type: TIMELINE_DATA_REDUCER_TYPE.UPDATE_TRANSLATION_OUTPUT,
+				postListReducer({
+					type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_TRANSLATION_OUTPUT,
 					payload: {
 						id: key,
 						outputText: response,
@@ -257,16 +280,19 @@ function WithAppTimelineDataContext({ children }: Props) {
 				setLoading(false);
 			}
 		},
-		[Data, dispatch],
+		[Posts],
 	);
 
 	return (
 		<AppTimelineDataContext.Provider
 			value={{
-				data: Data,
-				flashListItems: FlashListItems,
-				count: Data.length,
-				append,
+				data: Posts,
+				dataFormat: DataFormat,
+				setDataFormat,
+				listItems: FlashListItems as any[],
+				count: Posts.length,
+				addPosts,
+				addUsers,
 				clear,
 				toggleBookmark,
 				explain,

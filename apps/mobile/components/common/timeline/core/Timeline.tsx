@@ -52,8 +52,8 @@ const Timeline = memo(() => {
 	const { setMaxId, updateQueryCache, queryCacheMaxId, clear } =
 		useAppPaginationContext();
 	const {
-		append: appendTimelineData,
-		flashListItems,
+		addPosts: appendTimelineData,
+		listItems,
 		clear: timelineDataStoreClear,
 	} = useAppTimelineDataContext();
 	const db = useRealm();
@@ -144,12 +144,12 @@ const Timeline = memo(() => {
 				<AnimatedFlashList
 					ListHeaderComponent={
 						<ListHeaderComponent
-							itemCount={flashListItems.length}
+							itemCount={listItems.length}
 							loadedOnce={PageLoadedAtLeastOnce}
 						/>
 					}
 					estimatedItemSize={120}
-					data={flashListItems}
+					data={listItems}
 					renderItem={FlashListRenderer}
 					getItemType={(o) => o.type}
 					onScroll={onScroll}
