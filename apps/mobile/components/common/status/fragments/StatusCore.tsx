@@ -126,7 +126,14 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 				<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />
 			</View>
 		);
-	}, [isLoaded, ShowSensitiveContent, PostContent, dto, paddingTop]);
+	}, [
+		isLoaded,
+		ShowSensitiveContent,
+		PostContent,
+		dto,
+		STATUS_DTO,
+		paddingTop,
+	]);
 });
 
 export default StatusCore;
