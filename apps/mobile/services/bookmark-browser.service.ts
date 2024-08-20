@@ -36,7 +36,13 @@ class BookmarkBrowserService {
 			 * noteId --> post id
 			 */
 			let _data = data.data;
-			if (primaryAcct.domain !== KNOWN_SOFTWARE.MASTODON) {
+			if (
+				![
+					KNOWN_SOFTWARE.MASTODON,
+					KNOWN_SOFTWARE.PLEROMA,
+					KNOWN_SOFTWARE.AKKOMA,
+				].includes(primaryAcct.domain as any)
+			) {
 				_data = _data.map((o: any) => o.note);
 			}
 
@@ -55,6 +61,7 @@ class BookmarkBrowserService {
 						});
 					} catch (e) {
 						console.log('[ERROR]: upserting bookmark', e, statusI.getId());
+						// console.log('[ERROR]: upserting bookmark', e, statusI);
 					}
 				}
 			});

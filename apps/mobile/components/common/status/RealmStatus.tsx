@@ -9,8 +9,7 @@ import {
 	OriginalPosterPostedByFragment,
 } from '../../post-fragments/OriginalPoster';
 import RealmMediaItem from '../media/RealmMediaItem';
-import { memo, useMemo } from 'react';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { memo } from 'react';
 
 function getAccountDisplayName(
 	username: string,

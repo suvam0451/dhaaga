@@ -9,6 +9,7 @@ import {
 import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
 import { UserType } from '../profile/_interface.js';
+import camelcaseKeys from 'camelcase-keys';
 
 class MastodonToStatusAdapter implements StatusInterface {
 	ref: StatusInstance;
@@ -162,7 +163,7 @@ class MastodonToStatusAdapter implements StatusInterface {
 	getMediaAttachments() {
 		return this.ref?.instance?.mediaAttachments?.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
-				new MediaAttachmentInstance(o),
+				new MediaAttachmentInstance(camelcaseKeys(o as any, { deep: true })),
 			);
 		});
 	}
