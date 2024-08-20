@@ -43,9 +43,14 @@ const PostButton = memo(() => {
 			localOnly: false,
 			spoilerText: cw === '' ? undefined : cw,
 		});
-		console.log(error, replyToRef.current.id);
 
-		if (domain === KNOWN_SOFTWARE.MASTODON) {
+		if (
+			[
+				KNOWN_SOFTWARE.MASTODON,
+				KNOWN_SOFTWARE.PLEROMA,
+				KNOWN_SOFTWARE.AKKOMA,
+			].includes(domain as any)
+		) {
 			PostRef.current = new ActivitypubStatusService(
 				ActivityPubAdapterService.adaptStatus(data, domain),
 				domain,

@@ -20,6 +20,7 @@ import {
 } from '../_router/_runner.js';
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import camelcaseKeys from 'camelcase-keys';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	client: RestClient;
@@ -41,7 +42,18 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	async create(
 		dto: DhaagaJsPostCreateDto,
 	): LibraryPromise<MastoScheduledStatus> {
-		return notImplementedErrorBuilder<MastoScheduledStatus>();
+		const response = await this.lib.client.postStatus(dto.status, {
+			language: dto.language,
+			visibility: dto.mastoVisibility,
+			in_reply_to_id: dto.inReplyToId as any,
+			sensitive: dto.sensitive,
+			spoiler_text: dto.spoilerText,
+		});
+		if (response.status !== 200) {
+			console.log('[ERROR]: failed to create status', response.statusText);
+		}
+
+		return { data: camelcaseKeys(response.data, { deep: true }) as any };
 	}
 
 	async delete(id: string): LibraryPromise<{ success: true }> {

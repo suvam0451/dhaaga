@@ -256,6 +256,8 @@ function WithAppTimelineDataContext({ children }: Props) {
 		[Posts],
 	);
 
+	const toggleLike = useCallback(() => {}, [Posts]);
+
 	const explain = useCallback(
 		async (
 			key: string,
