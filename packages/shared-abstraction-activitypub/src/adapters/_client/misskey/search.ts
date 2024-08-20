@@ -41,6 +41,7 @@ export class MisskeySearchRouter implements SearchRoute {
 			const data = await this.lib.client.request('notes/search', query);
 			return { data };
 		} catch (e) {
+			console.log('[ERROR]: performing search', e);
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
 	}

@@ -148,7 +148,7 @@ const Timeline = memo(() => {
 							loadedOnce={PageLoadedAtLeastOnce}
 						/>
 					}
-					estimatedItemSize={120}
+					estimatedItemSize={200}
 					data={listItems}
 					renderItem={FlashListRenderer}
 					getItemType={(o) => o.type}

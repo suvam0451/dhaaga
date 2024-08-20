@@ -12,6 +12,7 @@ import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMor
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useDebounce } from 'use-debounce';
 import { useAppTimelineDataContext } from '../../../../../common/timeline/api/useTimelineData';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 /**
  * Renders the results of a
@@ -19,7 +20,7 @@ import { useAppTimelineDataContext } from '../../../../../common/timeline/api/us
  * tab
  */
 const DiscoverTabFactory = memo(() => {
-	const { client } = useActivityPubRestClientContext();
+	const { client, domain } = useActivityPubRestClientContext();
 	const [SearchTerm, setSearchTerm] = useState('');
 	const [SearchCategory, setSearchCategory] = useState<APP_SEARCH_TYPE>(
 		APP_SEARCH_TYPE.POSTS,
@@ -34,10 +35,7 @@ const DiscoverTabFactory = memo(() => {
 	const { data, updateQueryCache, append, setMaxId, queryCacheMaxId, clear } =
 		useAppPaginationContext();
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: data.length,
-		updateQueryCache,
-	});
+	const NUM_ITEMS = Math.max(data.length, listItems.length);
 
 	const { Data, fetchStatus, IsLoading, status } = useSearch(SearchCategory, {
 		maxId: queryCacheMaxId,
@@ -56,7 +54,17 @@ const DiscoverTabFactory = memo(() => {
 		switch (SearchCategory) {
 			case APP_SEARCH_TYPE.POSTS: {
 				if (Data?.statuses?.length === 0) return;
-				setMaxId(Data.statuses[Data.statuses.length - 1].getId());
+				const FALLBACK_TO_OFFSET = [
+					KNOWN_SOFTWARE.AKKOMA,
+					// KNOWN_SOFTWARE.SHARKEY,
+				].includes(domain as any);
+
+				if (FALLBACK_TO_OFFSET) {
+					setMaxId((listItems.length + Data.statuses.length).toString());
+				} else {
+					setMaxId(Data.statuses[Data.statuses.length - 1].getId());
+				}
+
 				appendTimelineData(Data.statuses);
 				break;
 			}
@@ -84,7 +92,10 @@ const DiscoverTabFactory = memo(() => {
 	const flashListData =
 		SearchCategory === APP_SEARCH_TYPE.POSTS ? listItems : data;
 
-	const NUM_ITEMS = Math.max(data.length, listItems.length);
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: NUM_ITEMS,
+		updateQueryCache,
+	});
 
 	return (
 		<WithAutoHideTopNavBar title={'Explore'} translateY={translateY}>

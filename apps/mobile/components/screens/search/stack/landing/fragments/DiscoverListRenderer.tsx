@@ -10,22 +10,20 @@ import UserSearchResultListing from '../../../../../common/user/UserSearchResult
 import WithAppStatusItemContext from '../../../../../../hooks/ap-proto/useAppStatusItem';
 import { ActivityPubStatusAppDtoType } from '../../../../../../services/ap-proto/activitypub-status-dto.service';
 import { View } from 'react-native';
+import { ActivityPubAppUserDtoType } from '../../../../../../services/ap-proto/activitypub-user-dto.service';
+import { FlashListType_Post } from '../../../../../../services/flashlist.service';
 
 function DiscoverListRenderer({
 	item,
 	category,
 }: {
-	item:
-		| UserInterface
-		| StatusInterface
-		| TagInterface
-		| ActivityPubStatusAppDtoType;
+	item: ActivityPubAppUserDtoType | FlashListType_Post | TagInterface;
 	category: APP_SEARCH_TYPE;
 }) {
 	switch (category) {
 		case APP_SEARCH_TYPE.POSTS:
 			return (
-				<WithAppStatusItemContext dto={item as ActivityPubStatusAppDtoType}>
+				<WithAppStatusItemContext dto={(item as FlashListType_Post).props.dto}>
 					<StatusItem />
 				</WithAppStatusItemContext>
 			);
