@@ -39,6 +39,25 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		dto: DhaagaJsPostCreateDto,
 	): LibraryPromise<MastoScheduledStatus> {
 		try {
+			console.log('dto', {
+				// ...dto,
+				lang: dto.language,
+				visibility: dto.misskeyVisibility,
+				replyId: dto.inReplyToId,
+				text: dto.status,
+				visibleUserIds:
+					dto.misskeyVisibility === 'specified'
+						? dto.visibleUserIds || []
+						: undefined,
+				fileIds: dto.mediaIds || [],
+				cw: dto.spoilerText || null,
+				localOnly: false,
+				// reactionAcceptance: null,
+				poll: dto.poll || null,
+				scheduledAt: null,
+				// cw: dto.spoilerText || null,
+			});
+
 			const data = await this.lib.client.request<
 				// @ts-ignore-next-line
 				Endpoints['notes/create']['req'],
@@ -49,11 +68,16 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				visibility: dto.misskeyVisibility,
 				replyId: dto.inReplyToId,
 				text: dto.status,
-				visibleUserIds: dto.visibleUserIds || [],
-				fileIds: dto.mediaIds || [],
-				cw: dto.spoilerText,
+				visibleUserIds:
+					dto.misskeyVisibility === 'specified'
+						? dto.visibleUserIds || []
+						: undefined,
+				fileIds: dto.mediaIds.length > 0 ? dto.mediaIds || [] : undefined,
+				cw: dto.spoilerText || undefined,
+				localOnly: false,
 				// reactionAcceptance: null,
-				// poll: dto.poll || null,
+				poll: dto.poll || null,
+				scheduledAt: null,
 				// cw: dto.spoilerText || null,
 			});
 			return { data: data as any };

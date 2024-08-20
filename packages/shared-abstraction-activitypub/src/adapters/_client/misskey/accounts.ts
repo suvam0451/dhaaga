@@ -53,6 +53,20 @@ export class MisskeyAccountsRouter
 		return { data };
 	}
 
+	async getMany(ids: string[]): LibraryPromise<MissUserDetailed[]> {
+		try {
+			const data = await this.lib.client.request('users/show', {
+				userIds: ids,
+			});
+			return { data };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(e.code);
+			}
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
 	/**
 	 *
 	 * @param id

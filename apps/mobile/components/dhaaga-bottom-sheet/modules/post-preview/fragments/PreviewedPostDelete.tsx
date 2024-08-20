@@ -13,15 +13,13 @@ const PreviewedPostDelete = memo(
 
 		async function onDeletePress() {
 			if (PostRef.current === null) return;
-			const { data, error } = await client.statuses.delete(
-				PostRef.current.getId(),
-			);
+			const { data, error } = await client.statuses.delete(PostRef.current.id);
 
 			if (error) {
 				// handle --> NO_SUCH_NOTE
 				console.log(
 					'[WARN]: failed to delete post',
-					PostRef.current?.getId(),
+					PostRef.current?.id,
 					error,
 				);
 				// console.log(PostRef.current.getId(), data, error);

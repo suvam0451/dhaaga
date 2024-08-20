@@ -89,6 +89,14 @@ export const ActivityPubStatusItemDto = z.object({
 		cw: z.string().nullable(),
 		isBoost: z.boolean(),
 		isReply: z.boolean(),
+		mentions: z.array(
+			z.object({
+				id: z.string(),
+				// lazy loaded for misskey forks
+				handle: z.string().optional(),
+				url: z.string().optional(),
+			}),
+		),
 	}),
 });
 
@@ -213,6 +221,11 @@ export class ActivitypubStatusDtoService {
 				cw: input.getSpoilerText(),
 				isBoost: input.isReposted(),
 				isReply: input.isReply(),
+				mentions: input.getMentions().map((o) => ({
+					id: o.id,
+					handle: o.acct,
+					url: o.url,
+				})),
 			},
 		};
 	}

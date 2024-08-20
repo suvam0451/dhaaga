@@ -23,6 +23,7 @@ import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.service
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
+import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
 type StatusInteractionProps = {
 	openAiContext?: string[];
@@ -33,6 +34,13 @@ const ICON_SIZE = 18;
 
 const StatusInteraction = memo(
 	({ openAiContext, dto }: StatusInteractionProps) => {
+		const {
+			setVisible: setBottomSheetVisible,
+			setType,
+			PostComposerTextSeedRef,
+			replyToRef,
+			updateRequestId: updateBottomSheetRequestId,
+		} = useAppBottomSheet();
 		const { client } = useActivityPubRestClientContext();
 		const { setVisible, setBottomSheetType, updateRequestId } =
 			useGorhomActionSheetContext();
@@ -67,6 +75,15 @@ const StatusInteraction = memo(
 
 		function _boost() {
 			boost(STATUS_DTO.id, setIsBoostStatePending);
+		}
+
+		function onClickReply() {
+			PostComposerTextSeedRef.current = null;
+			replyToRef.current = dto;
+
+			setType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
+			updateBottomSheetRequestId();
+			setBottomSheetVisible(true);
 		}
 
 		function OnTranslationClicked() {
@@ -123,7 +140,7 @@ const StatusInteraction = memo(
 					}}
 				>
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<View
+						<TouchableOpacity
 							style={{
 								display: 'flex',
 								flexDirection: 'row',
@@ -132,6 +149,7 @@ const StatusInteraction = memo(
 								paddingTop: 8,
 								paddingBottom: 8,
 							}}
+							onPress={onClickReply}
 						>
 							<FontAwesome5 name="comment" size={ICON_SIZE} color="#888" />
 							<Text
@@ -144,7 +162,7 @@ const StatusInteraction = memo(
 							>
 								Reply
 							</Text>
-						</View>
+						</TouchableOpacity>
 
 						<BoostAdvanced
 							IsVisible={BoostOptionsVisible}

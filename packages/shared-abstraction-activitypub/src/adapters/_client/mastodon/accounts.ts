@@ -25,6 +25,8 @@ import {
 	MastoRelationship,
 	MastoStatus,
 } from '../_interface.js';
+import AppApi from '../../_api/AppApi.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class MastodonAccountsRouter implements AccountRoute {
 	client: RestClient;
@@ -127,6 +129,13 @@ export class MastodonAccountsRouter implements AccountRoute {
 			return errorBuilder(error);
 		}
 		return successWithData(data);
+	}
+
+	async getMany(ids: string[]): LibraryPromise<MastoAccount[]> {
+		return await new AppApi(
+			this.client.url,
+			this.client.accessToken,
+		).getCamelCase('/api/v1/accounts', { id: ids });
 	}
 
 	async relationships(

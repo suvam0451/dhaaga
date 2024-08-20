@@ -36,7 +36,6 @@ const StatusQuoted = memo(() => {
 					<Text
 						style={{
 							color: 'rgba(136,136,136,0.87)',
-							// fontWeight: '500',
 							marginLeft: 4,
 							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							fontSize: 13,

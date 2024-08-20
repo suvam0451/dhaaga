@@ -101,6 +101,8 @@ export interface AccountRoute {
 
 	get(id: string): LibraryPromise<MastoAccount | MissUserDetailed>;
 
+	getMany(ids: string[]): LibraryPromise<MastoAccount[] | MissUserDetailed[]>;
+
 	relationships(ids: string[]): Promise<LibraryResponse<MastoRelationship[]>>;
 
 	featuredTags(id: string): Promise<LibraryResponse<MastoFeaturedTag[]>>;

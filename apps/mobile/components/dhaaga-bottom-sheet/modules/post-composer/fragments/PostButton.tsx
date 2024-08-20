@@ -12,11 +12,12 @@ import {
 	useAppBottomSheet,
 } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
+import { ActivitypubStatusService } from '../../../../../services/ap-proto/activitypub-status.service';
 
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
-	const { client, domain } = useActivityPubRestClientContext();
-	const { setType, PostRef } = useAppBottomSheet();
+	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { setType, PostRef, replyToRef } = useAppBottomSheet();
 
 	async function onClick() {
 		let _visibility: any = visibility.toLowerCase();
@@ -37,19 +38,28 @@ const PostButton = memo(() => {
 			misskeyVisibility: _visibility,
 			language: 'en',
 			sensitive: false,
-			inReplyToId: null,
+			inReplyToId: replyToRef.current ? replyToRef.current.id : null,
 			mediaIds: mediaTargets.map((o) => o.remoteId.toString()),
 			localOnly: false,
 			spoilerText: cw === '' ? undefined : cw,
 		});
+		console.log(error, replyToRef.current.id);
 
 		if (domain === KNOWN_SOFTWARE.MASTODON) {
-			PostRef.current = ActivityPubAdapterService.adaptStatus(data, domain);
-		} else {
-			PostRef.current = ActivityPubAdapterService.adaptStatus(
-				(data as any).createdNote,
+			PostRef.current = new ActivitypubStatusService(
+				ActivityPubAdapterService.adaptStatus(data, domain),
 				domain,
-			);
+				subdomain,
+			).export();
+		} else {
+			PostRef.current = new ActivitypubStatusService(
+				ActivityPubAdapterService.adaptStatus(
+					(data as any).createdNote,
+					domain,
+				),
+				domain,
+				subdomain,
+			).export();
 		}
 		setType(BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
 	}

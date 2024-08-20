@@ -91,6 +91,12 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 		} as LibraryResponse<MastoAccount | UserDetailed>;
 	}
 
+	async getMany(
+		ids: string[],
+	): LibraryPromise<MastoAccount[] | MissUserDetailed[]> {
+		return notImplementedErrorBuilder<MastoAccount[]>();
+	}
+
 	async statuses(
 		id: string,
 		query: AccountRouteStatusQueryDto,
