@@ -209,7 +209,7 @@ export class ActivitypubStatusDtoService {
 			interaction: {
 				bookmarked: input.getIsBookmarked(),
 				boosted: false,
-				liked: false,
+				liked: input.getIsFavourited(),
 			},
 			calculated: {
 				emojis: user.getEmojiMap(),

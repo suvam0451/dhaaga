@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import { Button } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
-import MyBookmarks from '../components/screens/favourites/stack/MyBookmarks';
+import MyBookmarkPage from '../components/screens/favourites/stack/MyBookmarkPage';
 import WithScrollOnRevealContext from '../states/useScrollOnReveal';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Divider } from '@rneui/base';
@@ -9,8 +9,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import PostWithClientContext from './shared/Post';
-import MyFavourites from '../components/screens/favourites/stack/MyFavourites';
+import MyFavourites from '../components/screens/favourites/stack/MyFavouritesPage';
 import FavouritesScreenHomePageDefaultTutorial from '../components/tutorials/screens/favourites/HomePage';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import MyFollowings from '../components/screens/favourites/stack/MyFollowings';
@@ -136,7 +135,7 @@ function ActionableSection() {
 				<View style={{ display: 'flex', flexDirection: 'row' }}>
 					<FavouritesScreenNavigationItemIconOnly
 						onPress={() => {
-							navigation.push('MyFavourites');
+							router.navigate('/favourites/likes-classic');
 						}}
 						icon={<Ionicons name="star-outline" size={24} color={'#888'} />}
 					/>
@@ -406,9 +405,6 @@ function WithStackNavigation() {
 					name="FavouritesModuleLandingPage"
 					component={FavouritesScreenTabSetup}
 				/>
-				<Stack.Screen name="Post" component={PostWithClientContext} />
-				<Stack.Screen name={'MyFavourites'} component={MyFavourites} />
-				<Stack.Screen name={'MyBookmarks'} component={MyBookmarks} />
 				<Stack.Screen name={'MyFollowings'} component={MyFollowings} />
 				<Stack.Screen name={'MyFollowers'} component={MyFollowers} />
 			</Stack.Navigator>

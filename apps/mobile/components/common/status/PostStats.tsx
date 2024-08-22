@@ -26,7 +26,7 @@ type PostStatLikesProps = {
  */
 const PostStatLikes = memo(
 	({ onPress, isLiked, likeCount }: PostStatLikesProps) => {
-		if (likeCount === 0) return <View />;
+		if (!isLiked && likeCount === 0) return <View />;
 		return (
 			<TouchableOpacity
 				onPress={onPress}

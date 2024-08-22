@@ -1,7 +1,7 @@
-import MyBookmarks from '../../../components/screens/favourites/stack/MyBookmarks';
+import MyBookmarkPage from '../../../components/screens/favourites/stack/MyBookmarkPage';
 
 function BookmarkClassic() {
-	return <MyBookmarks />;
+	return <MyBookmarkPage />;
 }
 
 export default BookmarkClassic;

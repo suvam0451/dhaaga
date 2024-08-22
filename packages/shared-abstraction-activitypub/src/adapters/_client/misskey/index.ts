@@ -13,7 +13,6 @@ import { MisskeyAccountsRouter } from './accounts.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { MisskeyStatusesRouter } from './statuses.js';
-import { MisskeyBookmarksRouter } from './bookmarks.js';
 import { MisskeyTrendsRouter } from './trends.js';
 import { MisskeyNotificationsRouter } from './notifications.js';
 import { MisskeyTimelinesRouter } from './timelines.js';
@@ -29,7 +28,6 @@ class MisskeyRestClient implements ActivityPubClient {
 	instances: MisskeyInstanceRouter;
 	accounts: MisskeyAccountsRouter;
 	statuses: MisskeyStatusesRouter;
-	bookmarks: MisskeyBookmarksRouter;
 	trends: MisskeyTrendsRouter;
 	notifications: MisskeyNotificationsRouter;
 	timelines: MisskeyTimelinesRouter;
@@ -50,7 +48,6 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.instances = new MisskeyInstanceRouter();
 		this.accounts = new MisskeyAccountsRouter(this.client);
 		this.statuses = new MisskeyStatusesRouter(this.client);
-		this.bookmarks = new MisskeyBookmarksRouter(this.client);
 		this.trends = new MisskeyTrendsRouter(this.client);
 		this.notifications = new MisskeyNotificationsRouter(this.client);
 		this.timelines = new MisskeyTimelinesRouter(this.client);
@@ -129,14 +126,6 @@ class MisskeyRestClient implements ActivityPubClient {
 		// throw new Error("Method not implemented.");
 	}
 
-	async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
-		return [];
-	}
-
-	async getBookmarks(opts: GetPostsQueryDTO) {
-		return { data: [] };
-	}
-
 	async getFollowedTags() {
 		return [];
 	}
@@ -147,14 +136,6 @@ class MisskeyRestClient implements ActivityPubClient {
 
 	async unFavourite(id: string) {
 		return null;
-	}
-
-	async bookmark(id: string): Promise<Note> {
-		throw new Error('Method not implemented.');
-	}
-
-	async unBookmark(id: string): Promise<Note> {
-		throw new Error('Method not implemented.');
 	}
 
 	async getUserPosts(userId: string, opts: GetUserPostsQueryDTO) {
