@@ -182,7 +182,7 @@ class ActivityPubService {
 					console.log('[WARN]: failed to remove boost', error);
 					return null;
 				}
-				return false;
+				return -1;
 			} else {
 				const { data, error } = await (
 					client as MisskeyRestClient
@@ -195,7 +195,7 @@ class ActivityPubService {
 					console.log('[WARN]: failed to boost', error);
 					return null;
 				}
-				return true;
+				return +1;
 			}
 		} else if (domain === KNOWN_SOFTWARE.MASTODON) {
 			if (localState) {
@@ -206,7 +206,7 @@ class ActivityPubService {
 					console.log('[WARN]: failed to remove boost', error);
 					return null;
 				}
-				return false;
+				return -1;
 			} else {
 				const { data, error } = await (
 					client as MastodonRestClient
@@ -215,7 +215,7 @@ class ActivityPubService {
 					console.log('[WARN]: failed to boost', error);
 					return null;
 				}
-				return true;
+				return 1;
 			}
 		} else {
 			if (localState) {
@@ -226,7 +226,7 @@ class ActivityPubService {
 					console.log('[WARN]: failed to remove boost', error);
 					return null;
 				}
-				return false;
+				return -1;
 			} else {
 				const { data, error } = await (
 					client as PleromaRestClient
@@ -235,7 +235,7 @@ class ActivityPubService {
 					console.log('[WARN]: failed to boost', error);
 					return null;
 				}
-				return true;
+				return 1;
 			}
 		}
 		return null;

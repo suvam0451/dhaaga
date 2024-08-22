@@ -61,16 +61,18 @@ function postArrayReducer(
 		}
 		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS: {
 			const _id: string = action.payload.id;
-			const _value: boolean = action.payload.value;
+			const _value = action.payload.value;
 			if (!_id || !_value) return state;
 			return produce(state, (posts) => {
 				for (const post of posts) {
 					if (post.id === _id) {
-						post.interaction.boosted = _value;
+						post.interaction.boosted = _value != -1;
+						post.stats.boostCount += parseInt(_value);
 					}
 
 					if (post.boostedFrom?.id === _id) {
-						post.boostedFrom.interaction.boosted = _value;
+						post.boostedFrom.interaction.boosted = _value != -1;
+						post.stats.boostCount += parseInt(_value);
 					}
 				}
 			});
