@@ -13,6 +13,9 @@ import {
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { toSnakeCase } from '../_router/utils/casing.utils.js';
 import AppApi from '../../_api/AppApi.js';
+import snakecaseKeys from 'snakecase-keys';
+import camelcaseKeys from 'camelcase-keys';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 
 export class PleromaTimelinesRouter
 	extends DefaultTimelinesRouter
@@ -41,8 +44,13 @@ export class PleromaTimelinesRouter
 	async public(
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
-		const data = await this.lib.client.getPublicTimeline(toSnakeCase(query));
-		return { data: data.data };
+		if (query.local === true) {
+			const data = await this.lib.client.getLocalTimeline(toSnakeCase(query));
+			return { data: data.data };
+		} else {
+			const data = await this.lib.client.getPublicTimeline(toSnakeCase(query));
+			return { data: data.data };
+		}
 	}
 
 	async bubble(
@@ -51,11 +59,10 @@ export class PleromaTimelinesRouter
 		const { data: _data, error } = await new AppApi(
 			this.client.url,
 			this.client.accessToken,
-		).get('/api/v1/timelines/bubble', query);
+		).get<any[]>('/api/v1/timelines/bubble', snakecaseKeys(query));
 
-		console.log(_data);
-		return {} as any;
-		// const data = await this.client;
+		if (error) return errorBuilder(error.code);
+		return { data: camelcaseKeys(_data as any, { deep: true }) };
 	}
 
 	async list(

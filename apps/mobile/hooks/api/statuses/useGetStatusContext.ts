@@ -54,7 +54,6 @@ function useGetStatusContext(postId: string) {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		if (!PostData) return;
 
-		// console.log(data);
 		dispatch({
 			type: STATUS_CONTEXT_REDUCER_ACTION.INIT,
 			payload: {

@@ -11,6 +11,8 @@ import LoadingMore from '../../../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useDebounce } from 'use-debounce';
+import { useAppTimelineDataContext } from '../../../../../common/timeline/api/useTimelineData';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 /**
  * Renders the results of a
@@ -18,19 +20,22 @@ import { useDebounce } from 'use-debounce';
  * tab
  */
 const DiscoverTabFactory = memo(() => {
-	const { client } = useActivityPubRestClientContext();
+	const { client, domain } = useActivityPubRestClientContext();
 	const [SearchTerm, setSearchTerm] = useState('');
 	const [SearchCategory, setSearchCategory] = useState<APP_SEARCH_TYPE>(
 		APP_SEARCH_TYPE.POSTS,
 	);
 
+	const {
+		listItems,
+		addPosts: appendTimelineData,
+		clear: timelineDataStoreClear,
+	} = useAppTimelineDataContext();
+
 	const { data, updateQueryCache, append, setMaxId, queryCacheMaxId, clear } =
 		useAppPaginationContext();
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: data.length,
-		updateQueryCache,
-	});
+	const NUM_ITEMS = Math.max(data.length, listItems.length);
 
 	const { Data, fetchStatus, IsLoading, status } = useSearch(SearchCategory, {
 		maxId: queryCacheMaxId,
@@ -42,14 +47,25 @@ const DiscoverTabFactory = memo(() => {
 	useEffect(() => {
 		// reset the results on account/searchTerm change
 		clear();
+		timelineDataStoreClear();
 	}, [SearchTerm, client, SearchCategory]);
 
 	useEffect(() => {
 		switch (SearchCategory) {
 			case APP_SEARCH_TYPE.POSTS: {
 				if (Data?.statuses?.length === 0) return;
-				setMaxId(Data.statuses[Data.statuses.length - 1].getId());
-				append(Data.statuses);
+				const FALLBACK_TO_OFFSET = [
+					KNOWN_SOFTWARE.AKKOMA,
+					// KNOWN_SOFTWARE.SHARKEY,
+				].includes(domain as any);
+
+				if (FALLBACK_TO_OFFSET) {
+					setMaxId((listItems.length + Data.statuses.length).toString());
+				} else {
+					setMaxId(Data.statuses[Data.statuses.length - 1].getId());
+				}
+
+				appendTimelineData(Data.statuses);
 				break;
 			}
 			case APP_SEARCH_TYPE.USERS: {
@@ -64,7 +80,7 @@ const DiscoverTabFactory = memo(() => {
 				append(Data.statuses);
 			}
 		}
-	}, [Data]);
+	}, [Data, SearchCategory]);
 
 	const { visible, loading } = useLoadingMoreIndicatorState({
 		fetchStatus,
@@ -73,11 +89,19 @@ const DiscoverTabFactory = memo(() => {
 
 	const [debouncedFetchStatus] = useDebounce(fetchStatus, 200);
 
+	const flashListData =
+		SearchCategory === APP_SEARCH_TYPE.POSTS ? listItems : data;
+
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: NUM_ITEMS,
+		updateQueryCache,
+	});
+
 	return (
 		<WithAutoHideTopNavBar title={'Explore'} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={200}
-				data={data}
+				data={flashListData}
 				renderItem={({ item }) => {
 					return <DiscoverListRenderer item={item} category={SearchCategory} />;
 				}}
@@ -90,7 +114,7 @@ const DiscoverTabFactory = memo(() => {
 						<DiscoverTabListHeader
 							query={SearchTerm}
 							fetchStatus={debouncedFetchStatus}
-							numItems={data.length}
+							numItems={NUM_ITEMS}
 							status={status}
 							category={SearchCategory}
 						/>

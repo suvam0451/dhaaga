@@ -2,6 +2,7 @@ import { memo } from 'react';
 import WithScrollOnRevealContext from '../../../../../states/useScrollOnReveal';
 import WithAppPaginationContext from '../../../../../states/usePagination';
 import DiscoverTabFactory from './fragments/DiscoverTabFactory';
+import WithAppTimelineDataContext from '../../../../common/timeline/api/useTimelineData';
 
 /**
  * The landing page for the
@@ -11,7 +12,9 @@ const DiscoverLandingStack = memo(() => {
 	return (
 		<WithScrollOnRevealContext maxDisplacement={150}>
 			<WithAppPaginationContext>
-				<DiscoverTabFactory />
+				<WithAppTimelineDataContext>
+					<DiscoverTabFactory />
+				</WithAppTimelineDataContext>
 			</WithAppPaginationContext>
 		</WithScrollOnRevealContext>
 	);

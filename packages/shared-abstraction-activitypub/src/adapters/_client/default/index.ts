@@ -3,7 +3,6 @@ import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { DefaultInstanceRouter } from './instance.js';
 import { DefaultAccountRouter } from './accounts.js';
 import { DefaultStatusesRouter } from './statuses.js';
-import { DefaultBookmarksRouter } from './bookmarks.js';
 import { DefaultTrendsRouter } from './trends.js';
 import { DefaultNotificationsRouter } from './notifications.js';
 import { DefaultTimelinesRouter } from './timelines.js';
@@ -17,7 +16,6 @@ class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
 	accounts: DefaultAccountRouter;
 	statuses: DefaultStatusesRouter;
-	bookmarks: DefaultBookmarksRouter;
 	trends: DefaultTrendsRouter;
 	notifications: DefaultNotificationsRouter;
 	timelines: DefaultTimelinesRouter;
@@ -31,7 +29,6 @@ class UnknownRestClient implements ActivityPubClient {
 		this.instances = new DefaultInstanceRouter();
 		this.accounts = new DefaultAccountRouter();
 		this.statuses = new DefaultStatusesRouter();
-		this.bookmarks = new DefaultBookmarksRouter();
 		this.trends = new DefaultTrendsRouter();
 		this.notifications = new DefaultNotificationsRouter();
 		this.timelines = new DefaultTimelinesRouter();

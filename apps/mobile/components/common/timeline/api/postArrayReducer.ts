@@ -1,27 +1,46 @@
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 import { produce } from 'immer';
+import { MutableRefObject } from 'react';
+import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
 
-export enum TIMELINE_DATA_REDUCER_TYPE {
+export enum TIMELINE_POST_LIST_DATA_REDUCER_TYPE {
 	CLEAR = 'clear',
-	APPEND = 'append',
+	ADD = 'add',
 	UPDATE_BOOKMARK_STATUS = 'updateBookmarkStatus',
 	UPDATE_BOOST_STATUS = 'updateBoostStatus',
 	UPDATE_TRANSLATION_OUTPUT = 'updateTranslationOutput',
 }
 
-function timelineDataReducer(
+/**
+ * Perform mutable operations on a
+ * list of posts in a timeline
+ */
+function postArrayReducer(
 	state: ActivityPubStatusAppDtoType[],
-	action: { type: TIMELINE_DATA_REDUCER_TYPE; payload?: any },
+	action: { type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE; payload?: any },
 ): ActivityPubStatusAppDtoType[] {
-	switch (action.type as TIMELINE_DATA_REDUCER_TYPE) {
-		case TIMELINE_DATA_REDUCER_TYPE.CLEAR: {
+	switch (action.type as TIMELINE_POST_LIST_DATA_REDUCER_TYPE) {
+		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.CLEAR: {
 			return [];
 		}
-		case TIMELINE_DATA_REDUCER_TYPE.APPEND: {
-			const _more = action.payload.data;
-			return state.concat(_more);
+		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.ADD: {
+			const _more: StatusInterface[] = action.payload.more;
+			const _seen: MutableRefObject<Set<string>> = action.payload.seen;
+			const _domain: string = action.payload.domain;
+			const _subdomain: string = action.payload.subdomain;
+			return produce(state, (draft) => {
+				for (const item of _more) {
+					const k = item.getId();
+					if (_seen.current.has(k)) continue;
+					_seen.current.add(k);
+					draft.push(
+						new ActivitypubStatusService(item, _domain, _subdomain).export(),
+					);
+				}
+			});
 		}
-		case TIMELINE_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS: {
+		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS: {
 			const _id: string = action.payload.id;
 			const _value: boolean = action.payload.value;
 
@@ -38,7 +57,7 @@ function timelineDataReducer(
 				}
 			});
 		}
-		case TIMELINE_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS: {
+		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS: {
 			const _id: string = action.payload.id;
 			const _value: boolean = action.payload.value;
 			if (!_id || !_value) return state;
@@ -54,7 +73,7 @@ function timelineDataReducer(
 				}
 			});
 		}
-		case TIMELINE_DATA_REDUCER_TYPE.UPDATE_TRANSLATION_OUTPUT: {
+		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_TRANSLATION_OUTPUT: {
 			const _id = action.payload.id;
 			const _outputText = action.payload.outputText;
 			const _outputType = action.payload.outputType;
@@ -81,4 +100,4 @@ function timelineDataReducer(
 	}
 }
 
-export default timelineDataReducer;
+export default postArrayReducer;

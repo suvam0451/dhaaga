@@ -4,15 +4,24 @@ import { Note } from 'misskey-js/autogen/models.js';
 import { Endpoints } from 'misskey-js';
 import {
 	FollowPostDto,
+	GetPostsQueryDTO,
 	MastoAccount,
 	MastoFamiliarFollowers,
 	MastoFeaturedTag,
 	MastoList,
 	MastoRelationship,
+	MastoStatus,
 	MegaAccount,
+	MegaStatus,
 	MissUserDetailed,
 } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
+
+export type BookmarkGetQueryDTO = {
+	limit: number;
+	maxId?: string;
+	minId?: string;
+};
 
 type DefaultPaginationParams = {
 	// masto.js
@@ -101,6 +110,8 @@ export interface AccountRoute {
 
 	get(id: string): LibraryPromise<MastoAccount | MissUserDetailed>;
 
+	getMany(ids: string[]): LibraryPromise<MastoAccount[] | MissUserDetailed[]>;
+
 	relationships(ids: string[]): Promise<LibraryResponse<MastoRelationship[]>>;
 
 	featuredTags(id: string): Promise<LibraryResponse<MastoFeaturedTag[]>>;
@@ -114,4 +125,14 @@ export interface AccountRoute {
 	 * @param id
 	 */
 	lists(id: string): Promise<LibraryResponse<MastoList[]>>;
+
+	likes(opts: GetPostsQueryDTO): LibraryPromise<MastoStatus[] | MegaStatus[]>;
+
+	bookmarks(query: BookmarkGetQueryDTO): Promise<
+		LibraryResponse<{
+			data: MastoStatus[] | MegaStatus[] | Endpoints['i/favorites']['res'];
+			minId?: string | null;
+			maxId?: string | null;
+		}>
+	>;
 }

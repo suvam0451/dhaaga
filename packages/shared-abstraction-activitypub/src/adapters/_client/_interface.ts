@@ -149,9 +149,6 @@ interface ActivityPubClient extends RouterInterface {
 		mastodon.v1.AccountCredentials | UserDetailed | null | undefined
 	>;
 
-	/** User */
-	getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray>;
-
 	getRelationshipWith(ids: string[]): Promise<mastodon.v1.Relationship[]>;
 
 	getFollowing(id: string): Promise<mastodon.v1.Account[] | null>;

@@ -2,10 +2,12 @@ import {
 	AccountMutePostDto,
 	AccountRoute,
 	AccountRouteStatusQueryDto,
+	BookmarkGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	FollowPostDto,
+	GetPostsQueryDTO,
 	MastoAccount,
 	MastoFamiliarFollowers,
 	MastoFeaturedTag,
@@ -13,6 +15,7 @@ import {
 	MastoRelationship,
 	MastoStatus,
 	MegaAccount,
+	MegaStatus,
 	MissUserDetailed,
 } from '../_interface.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
@@ -91,6 +94,12 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 		} as LibraryResponse<MastoAccount | UserDetailed>;
 	}
 
+	async getMany(
+		ids: string[],
+	): LibraryPromise<MastoAccount[] | MissUserDetailed[]> {
+		return notImplementedErrorBuilder<MastoAccount[]>();
+	}
+
 	async statuses(
 		id: string,
 		query: AccountRouteStatusQueryDto,
@@ -101,6 +110,20 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	async relationships(
 		ids: string[],
 	): Promise<LibraryResponse<MastoRelationship[]>> {
+		return notImplementedErrorBuilder();
+	}
+
+	async likes(
+		opts: GetPostsQueryDTO,
+	): LibraryPromise<MastoStatus[] | MegaStatus[]> {
+		return notImplementedErrorBuilder();
+	}
+
+	async bookmarks(query: BookmarkGetQueryDTO): LibraryPromise<{
+		data: MastoStatus[] | Endpoints['i/favorites']['res'] | MegaStatus[];
+		minId?: string | null;
+		maxId?: string | null;
+	}> {
 		return notImplementedErrorBuilder();
 	}
 }

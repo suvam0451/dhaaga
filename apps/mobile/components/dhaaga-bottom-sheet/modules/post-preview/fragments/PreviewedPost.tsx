@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import WithActivitypubStatusContext from '../../../../../states/useStatus';
 import StatusItem from '../../../../common/status/StatusItem';
 import { ScrollView, Text, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
+import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
 
 const PreviewPostUnavailable = memo(() => {
 	return (
@@ -29,9 +29,9 @@ const PreviewPostAvailable = memo(() => {
 
 	return (
 		<ScrollView style={{ marginTop: 12, marginHorizontal: -8 }}>
-			<WithActivitypubStatusContext statusInterface={PostRef.current}>
+			<WithAppStatusItemContext dto={PostRef.current}>
 				<StatusItem />
-			</WithActivitypubStatusContext>
+			</WithAppStatusItemContext>
 		</ScrollView>
 	);
 });

@@ -30,7 +30,11 @@ class MastodonService {
 		});
 
 		// try to fix the root
-		let root = flat.find((o) => o?.getParentStatusId() === null);
+		let root = flat.find((o) => o?.getId() === target?.getId());
+		// fixes #126
+		if (!root) {
+			flat.find((o) => o?.getParentStatusId() === null);
+		}
 		if (!root) root = target;
 		deque.push(root.getId());
 

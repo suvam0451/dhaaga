@@ -1,5 +1,4 @@
 import ActivityPubClient, {
-	FollowPostDto,
 	GetPostsQueryDTO,
 	GetTimelineQueryDTO,
 	GetTrendingDTO,
@@ -16,7 +15,6 @@ import { StatusArray, Status } from '../../status/_interface.js';
 import type { mastodon } from 'masto';
 import { PleromaAccountsRouter } from './accounts.js';
 import { PleromaStatusesRouter } from './statuses.js';
-import { PleromaBookmarksRouter } from './bookmarks.js';
 import { PleromaTrendsRouter } from './trends.js';
 import { PleromaNotificationsRouter } from './notifications.js';
 import { PleromaTimelinesRouter } from './timelines.js';
@@ -31,7 +29,6 @@ class PleromaRestClient implements ActivityPubClient {
 	instances: PleromaInstanceRouter;
 	accounts: PleromaAccountsRouter;
 	statuses: PleromaStatusesRouter;
-	bookmarks: PleromaBookmarksRouter;
 	trends: PleromaTrendsRouter;
 	notifications: PleromaNotificationsRouter;
 	timelines: PleromaTimelinesRouter;
@@ -49,7 +46,6 @@ class PleromaRestClient implements ActivityPubClient {
 		this.instances = new PleromaInstanceRouter(this.client);
 		this.accounts = new PleromaAccountsRouter(this.client);
 		this.statuses = new PleromaStatusesRouter(this.client);
-		this.bookmarks = new PleromaBookmarksRouter(this.client);
 		this.trends = new PleromaTrendsRouter(this.client);
 		this.notifications = new PleromaNotificationsRouter(this.client);
 		this.timelines = new PleromaTimelinesRouter(this.client);
@@ -105,22 +101,6 @@ class PleromaRestClient implements ActivityPubClient {
 	}
 
 	getMe(): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
-	getUserProfile(username: string): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
-	followUser(id: string, opts: FollowPostDto): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
-	unfollowUser(id: string): Promise<any> {
-		throw new Error('Method not implemented.');
-	}
-
-	getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
 		throw new Error('Method not implemented.');
 	}
 
