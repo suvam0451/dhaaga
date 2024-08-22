@@ -87,4 +87,17 @@ export class MastodonStatusesRouter implements StatusesRoute {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
 	}
+
+	// TODO: other visibilities
+	async boost(id: string): LibraryPromise<MastoStatus> {
+		const data = await this.lib.client.v1.statuses
+			.$select(id)
+			.reblog({ visibility: 'public' });
+		return { data };
+	}
+
+	async removeBoost(id: string): LibraryPromise<MastoStatus> {
+		const data = await this.lib.client.v1.statuses.$select(id).unreblog();
+		return { data };
+	}
 }

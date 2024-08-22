@@ -6,7 +6,7 @@ import WithAppStatusItemContext, {
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
 import { TouchableOpacity, View } from 'react-native';
-import { APP_THEME } from '../../../../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import StatusPostedBy from './StatusPostedBy';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
@@ -14,6 +14,8 @@ import EmojiReactions from './EmojiReactions';
 import StatusInteraction from './StatusInteraction';
 import StatusQuoted from './StatusQuoted';
 import StatusCw from './StatusCw';
+import { Text } from 'react-native';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 /**
  * Mostly used to remove the border
@@ -75,6 +77,7 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 					// backgroundColor: 'red',
 				}}
 			>
+				{/*<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>{dto.id}</Text>*/}
 				<TouchableOpacity
 					delayPressIn={100}
 					onPress={() => {

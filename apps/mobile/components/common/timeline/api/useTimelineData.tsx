@@ -1,5 +1,4 @@
 import {
-	MisskeyRestClient,
 	StatusInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -193,28 +192,27 @@ function WithAppTimelineDataContext({ children }: Props) {
 			}
 
 			const localState = match.interaction.boosted;
-			switch (domain) {
-				case KNOWN_SOFTWARE.MISSKEY:
-				case KNOWN_SOFTWARE.FIREFISH:
-				case KNOWN_SOFTWARE.SHARKEY: {
-					if (localState) {
-						const { data, error } = await (
-							client as MisskeyRestClient
-						).statuses.unrenote(key);
-						if (!error && data.success) {
-							postListReducer({
-								type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS,
-								payload: {
-									id: key,
-									value: data.renoted,
-								},
-							});
-						}
-					}
+			try {
+				const state = await ActivityPubService.toggleBoost(
+					client,
+					key,
+					localState,
+					domain as any,
+				);
+				if (state !== null) {
+					postListReducer({
+						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS,
+						payload: {
+							id: key,
+							value: state,
+						},
+					});
 				}
+			} finally {
+				setLoading(false);
 			}
 		},
-		[Posts],
+		[Posts, domain],
 	);
 
 	/**

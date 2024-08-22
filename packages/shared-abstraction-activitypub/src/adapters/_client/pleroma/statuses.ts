@@ -8,6 +8,7 @@ import {
 	MastoScheduledStatus,
 	MastoStatus,
 	MegaReaction,
+	MegaStatus,
 } from '../_interface.js';
 import {
 	errorBuilder,
@@ -95,6 +96,16 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async getContext(id: string) {
 		const data = await this.lib.client.getStatusContext(id);
+		return { data: data.data };
+	}
+
+	async boost(id: string): LibraryPromise<MegaStatus> {
+		const data = await this.lib.client.reblogStatus(id);
+		return { data: data.data };
+	}
+
+	async removeBoost(id: string): LibraryPromise<MegaStatus> {
+		const data = await this.lib.client.unreblogStatus(id);
 		return { data: data.data };
 	}
 }
