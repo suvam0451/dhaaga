@@ -38,7 +38,7 @@
     "expo-build-properties": "~0.12.5",
     "expo-constants": "~16.0.2",
     "expo-crypto": "~13.0.2",
-    "expo-dev-client": "~4.0.23",
+    "expo-dev-client": "~4.0.24",
     "expo-font": "~12.0.9",
     "expo-haptics": "~13.0.1",
     "expo-image": "~1.12.14",

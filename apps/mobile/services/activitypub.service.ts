@@ -1,5 +1,6 @@
 import {
 	ActivityPubClient,
+	MisskeyRestClient,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 import * as Crypto from 'expo-crypto';
@@ -200,6 +201,20 @@ class ActivityPubService {
 		});
 		if (error) return null;
 		return data;
+	}
+
+	static async getBookmarkState(
+		client: ActivityPubClient,
+		id: string,
+	): Promise<boolean> {
+		const { data, error } = await (
+			client as MisskeyRestClient
+		).statuses.getState(id);
+		if (error) {
+			console.log('[WARN]: error fetching bookmarked state');
+			return null;
+		}
+		return data.isFavorited;
 	}
 }
 

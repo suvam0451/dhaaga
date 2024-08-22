@@ -2,6 +2,8 @@ import MyFavouritesPage from '../../../components/screens/favourites/stack/MyFav
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import FeatureUnsupported from '../../../components/error-screen/FeatureUnsupported';
+import { View } from 'react-native';
+import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 
 function Foo() {
 	const { domain } = useActivityPubRestClientContext();
@@ -12,7 +14,13 @@ function Foo() {
 			KNOWN_SOFTWARE.ICESHRIMP,
 		].includes(domain as any)
 	) {
-		return <FeatureUnsupported />;
+		return (
+			<WithAutoHideTopNavBar title={'My Liked Posts'}>
+				<View style={{ height: '100%', backgroundColor: '#121212' }}>
+					<FeatureUnsupported />
+				</View>
+			</WithAutoHideTopNavBar>
+		);
 	}
 
 	return <MyFavouritesPage />;

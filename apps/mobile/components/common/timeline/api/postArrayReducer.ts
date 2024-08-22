@@ -49,10 +49,12 @@ function postArrayReducer(
 				for (const post of posts) {
 					if (post.id === _id) {
 						post.interaction.bookmarked = _value;
+						post.state.isBookmarkStateFinal = true;
 					}
 
 					if (post.boostedFrom?.id === _id) {
 						post.boostedFrom.interaction.bookmarked = _value;
+						post.boostedFrom.state.isBookmarkStateFinal = true;
 					}
 				}
 			});

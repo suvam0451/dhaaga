@@ -55,7 +55,7 @@ type Type = {
 	addUsers: (items: UserInterface[]) => void;
 	clear: () => void;
 	/**
-	 *
+	 * Interaction Actions
 	 */
 	toggleBookmark: (
 		key: string,
@@ -67,6 +67,10 @@ type Type = {
 		dispatch: Dispatch<SetStateAction<boolean>>,
 	) => void;
 	boost: (key: string, dispatch: Dispatch<SetStateAction<boolean>>) => void;
+	getBookmarkState: (
+		key: string,
+		dispatch: Dispatch<SetStateAction<boolean>>,
+	) => void;
 	count: number;
 };
 
@@ -78,6 +82,8 @@ const defaultValue: Type = {
 	addPosts: () => {},
 	addUsers: () => {},
 	clear: () => {},
+
+	getBookmarkState: () => {},
 	toggleBookmark: () => {},
 	explain: () => {},
 	boost: () => {},
@@ -223,6 +229,45 @@ function WithAppTimelineDataContext({ children }: Props) {
 	 * */
 	// const initialize = useCallback(() => {}, []);
 
+	const getBookmarkState = useCallback(
+		async (key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
+			if (
+				!client ||
+				[
+					KNOWN_SOFTWARE.MASTODON,
+					KNOWN_SOFTWARE.PLEROMA,
+					KNOWN_SOFTWARE.AKKOMA,
+				].includes(domain as any)
+			) {
+				return;
+			}
+			setLoading(true);
+			const match = findById(key);
+			if (!match) {
+				setLoading(false);
+				return;
+			}
+
+			try {
+				const res = await ActivityPubService.getBookmarkState(client, key);
+				if (res === null) {
+					setLoading(false);
+					return;
+				}
+				postListReducer({
+					type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
+					payload: {
+						id: key,
+						value: res,
+					},
+				});
+			} finally {
+				setLoading(false);
+			}
+		},
+		[Posts, domain],
+	);
+
 	const toggleBookmark = useCallback(
 		(key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
 			if (!client) return;
@@ -297,6 +342,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 				addUsers,
 				clear,
 				toggleBookmark,
+				getBookmarkState,
 				explain,
 				emojiCache: EmojiCache.current,
 				boost,

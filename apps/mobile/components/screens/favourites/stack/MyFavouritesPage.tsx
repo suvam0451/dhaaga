@@ -64,7 +64,7 @@ function Core() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'My Favourites'} translateY={translateY}>
+		<WithAutoHideTopNavBar title={'My Liked Posts'} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={72}
 				data={listItems}
