@@ -16,16 +16,17 @@ import {
 	successWithData,
 } from '../_router/dto/api-responses.dto.js';
 import { DefaultAccountRouter } from '../default/accounts.js';
-import { LibraryResponse } from '../_router/_types.js';
 import {
 	GetPostsQueryDTO,
 	MastoRelationship,
 	MastoStatus,
 	MegaAccount,
+	MegaRelationship,
 	MegaStatus,
 } from '../_interface.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import AppApi from '../../_api/AppApi.js';
+import camelcaseKeys from 'camelcase-keys';
 
 export class PleromaAccountsRouter
 	extends DefaultAccountRouter
@@ -44,6 +45,12 @@ export class PleromaAccountsRouter
 		);
 	}
 
+	async get(id: string): LibraryPromise<MegaAccount> {
+		const data = await this.lib.client.getAccount(id);
+		if (data.status !== 200) return errorBuilder(data.statusText);
+		return { data: camelcaseKeys(data.data) as any };
+	}
+
 	async lookup(webfingerUrl: string): LibraryPromise<MegaAccount> {
 		const data = await this.lib.client.lookupAccount(webfingerUrl);
 		if (data.status !== 200) {
@@ -57,10 +64,12 @@ export class PleromaAccountsRouter
 		return successWithData([]);
 	}
 
-	async relationships(
-		ids: string[],
-	): Promise<LibraryResponse<MastoRelationship[]>> {
-		return notImplementedErrorBuilder();
+	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {
+		const data = await this.lib.client.getRelationships(ids);
+		if (data.status !== 200) {
+			return errorBuilder<MastoRelationship[]>(data.statusText);
+		}
+		return { data: camelcaseKeys(data.data) as any };
 	}
 
 	async likes(opts: GetPostsQueryDTO): LibraryPromise<MegaStatus[]> {
@@ -101,5 +110,23 @@ export class PleromaAccountsRouter
 		return {
 			data: _data,
 		};
+	}
+
+	async follow(id: string): LibraryPromise<MegaRelationship> {
+		// Akkoma 400s on /follow with body
+		const data = await this.lib.client.followAccount(id);
+		if (data.status !== 200) {
+			return errorBuilder(data.statusText);
+		}
+		// console.log(data, error);
+		return { data: camelcaseKeys(data.data as any) as any };
+	}
+
+	async unfollow(id: string): LibraryPromise<MegaRelationship> {
+		const data = await this.lib.client.unfollowAccount(id);
+		if (data.status !== 200) {
+			return errorBuilder(data.statusText);
+		}
+		return { data: camelcaseKeys(data.data) as any };
 	}
 }

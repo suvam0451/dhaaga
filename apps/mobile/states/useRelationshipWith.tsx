@@ -129,7 +129,9 @@ function useRelationshipWith(id: string) {
 		setIsLoading(true);
 
 		switch (domain) {
-			case KNOWN_SOFTWARE.MASTODON: {
+			case KNOWN_SOFTWARE.MASTODON:
+			case KNOWN_SOFTWARE.PLEROMA:
+			case KNOWN_SOFTWARE.AKKOMA: {
 				(client as MastodonRestClient).accounts
 					.relationships([id])
 					.then(setMastoRelation)

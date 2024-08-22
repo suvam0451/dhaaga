@@ -12,6 +12,7 @@ import {
 	MastoRelationship,
 	MastoStatus,
 	MegaAccount,
+	MegaRelationship,
 	MegaStatus,
 	MissUserDetailed,
 } from '../../_interface.js';
@@ -56,11 +57,15 @@ export interface AccountRoute {
 	follow(
 		id: string,
 		opts: FollowPostDto,
-	): LibraryPromise<MastoRelationship | Endpoints['following/create']['res']>;
+	): LibraryPromise<
+		MastoRelationship | Endpoints['following/create']['res'] | MegaRelationship
+	>;
 
 	unfollow(
 		id: string,
-	): LibraryPromise<MastoRelationship | Endpoints['following/delete']['res']>;
+	): LibraryPromise<
+		MastoRelationship | Endpoints['following/delete']['res'] | MegaRelationship
+	>;
 
 	/**
 	 * Moderation
@@ -69,21 +74,27 @@ export interface AccountRoute {
 	block(
 		id: string,
 	): Promise<
-		LibraryResponse<MastoRelationship | Endpoints['blocking/create']['res']>
+		LibraryResponse<
+			MastoRelationship | Endpoints['blocking/create']['res'] | MegaRelationship
+		>
 	>;
 
 	unblock(
 		id: string,
 	): Promise<
-		LibraryResponse<MastoRelationship | Endpoints['blocking/delete']['res']>
+		LibraryResponse<
+			MastoRelationship | Endpoints['blocking/delete']['res'] | MegaRelationship
+		>
 	>;
 
 	mute(
 		id: string,
 		opts: AccountMutePostDto,
-	): Promise<LibraryResponse<MastoRelationship>>;
+	): Promise<LibraryResponse<MastoRelationship | MegaRelationship>>;
 
-	unmute(id: string): Promise<LibraryResponse<MastoRelationship>>;
+	unmute(
+		id: string,
+	): Promise<LibraryResponse<MastoRelationship | MegaRelationship>>;
 
 	removeFollower(id: string): Promise<LibraryResponse<void>>;
 
@@ -108,23 +119,25 @@ export interface AccountRoute {
 		params: AccountRouteStatusQueryDto,
 	): Promise<LibraryResponse<mastodon.v1.Status[] | Note[] | any[]>>;
 
-	get(id: string): LibraryPromise<MastoAccount | MissUserDetailed>;
+	get(
+		id: string,
+	): LibraryPromise<MastoAccount | MissUserDetailed | MegaAccount>;
 
 	getMany(ids: string[]): LibraryPromise<MastoAccount[] | MissUserDetailed[]>;
 
-	relationships(ids: string[]): Promise<LibraryResponse<MastoRelationship[]>>;
-
-	featuredTags(id: string): Promise<LibraryResponse<MastoFeaturedTag[]>>;
-
-	familiarFollowers(
+	relationships(
 		ids: string[],
-	): Promise<LibraryResponse<MastoFamiliarFollowers[]>>;
+	): LibraryPromise<MastoRelationship[] | MegaRelationship[]>;
+
+	featuredTags(id: string): LibraryPromise<MastoFeaturedTag[]>;
+
+	familiarFollowers(ids: string[]): LibraryPromise<MastoFamiliarFollowers[]>;
 
 	/**
 	 * Lists this user is part of
 	 * @param id
 	 */
-	lists(id: string): Promise<LibraryResponse<MastoList[]>>;
+	lists(id: string): LibraryPromise<MastoList[]>;
 
 	likes(opts: GetPostsQueryDTO): LibraryPromise<MastoStatus[] | MegaStatus[]>;
 
