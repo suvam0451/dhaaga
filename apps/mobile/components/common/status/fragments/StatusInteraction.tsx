@@ -56,7 +56,6 @@ const StatusInteraction = memo(
 			STATUS_DTO.calculated.translationOutput !== undefined &&
 			STATUS_DTO.calculated.translationOutput !== null;
 		const IS_BOOSTED = dto.interaction.boosted;
-		console.log(IS_BOOSTED);
 
 		// loading state
 		const [IsBookmarkStatePending, setIsBookmarkStatePending] = useState(false);

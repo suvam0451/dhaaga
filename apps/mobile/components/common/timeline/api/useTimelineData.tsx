@@ -60,6 +60,10 @@ type Type = {
 		key: string,
 		dispatch: Dispatch<SetStateAction<boolean>>,
 	) => void;
+	toggleLike: (
+		key: string,
+		dispatch: Dispatch<SetStateAction<boolean>>,
+	) => void;
 	explain: (
 		key: string,
 		ctx: string[],
@@ -84,6 +88,7 @@ const defaultValue: Type = {
 
 	getBookmarkState: () => {},
 	toggleBookmark: () => {},
+	toggleLike: () => {},
 	explain: () => {},
 	boost: () => {},
 	count: 0,
@@ -299,7 +304,33 @@ function WithAppTimelineDataContext({ children }: Props) {
 		[Posts],
 	);
 
-	const toggleLike = useCallback(() => {}, [Posts]);
+	const toggleLike = useCallback(
+		async (key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
+			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).then(() => {});
+			setLoading(true);
+			const match = findById(key);
+			try {
+				const response = await ActivityPubService.toggleLike(
+					client,
+					key,
+					match.interaction.liked,
+					domain as any,
+				);
+				if (response !== null) {
+					postListReducer({
+						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_LIKE_STATUS,
+						payload: {
+							id: key,
+							delta: response,
+						},
+					});
+				}
+			} catch (e) {
+				console.log('error', e);
+			}
+		},
+		[Posts, domain],
+	);
 
 	const explain = useCallback(
 		async (
@@ -342,6 +373,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 				toggleBookmark,
 				getBookmarkState,
 				explain,
+				toggleLike,
 				emojiCache: EmojiCache.current,
 				boost,
 			}}

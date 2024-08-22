@@ -25,12 +25,13 @@ export const AppImageComponent = memo(function Foo({
 	height,
 	leftMarginAdjustment,
 }: Props) {
+	const width = Dimensions.get('window').width - (leftMarginAdjustment || 0);
 	return (
 		// @ts-ignore-next-line
 		<Image
 			style={{
 				flex: 1,
-				width: Dimensions.get('window').width - (leftMarginAdjustment || 0),
+				width,
 				borderRadius: 16,
 				opacity: 0.87,
 				height,

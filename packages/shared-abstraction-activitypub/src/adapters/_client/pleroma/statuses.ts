@@ -22,6 +22,7 @@ import {
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import camelcaseKeys from 'camelcase-keys';
+import AppApi from '../../_api/AppApi.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	client: RestClient;
@@ -85,8 +86,12 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	}
 
 	async like(id: string) {
+		// const { data, error } = await new AppApi(
+		// 	this.client.url,
+		// 	this.client.accessToken,
+		// ).post(`/api/v1/statuses/${id}/favourite`, {}, {});
 		const data = await this.lib.client.favouriteStatus(id);
-		return { data: data.data };
+		return { data: data as any };
 	}
 
 	async removeLike(id: string) {

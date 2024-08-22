@@ -161,6 +161,38 @@ class ActivityPubService {
 		}
 	}
 
+	static async toggleLike(
+		client: ActivityPubClient,
+		id: string,
+		localState: boolean,
+		domain: KNOWN_SOFTWARE,
+	) {
+		if (
+			[
+				KNOWN_SOFTWARE.MISSKEY,
+				KNOWN_SOFTWARE.SHARKEY,
+				KNOWN_SOFTWARE.FIREFISH,
+			].includes(domain as any)
+		) {
+			return null;
+		}
+		if (localState) {
+			const { data, error } = await client.statuses.removeLike(id);
+			if (error) {
+				console.log('[WARN]: failed to like status', error);
+				return null;
+			}
+			return -1;
+		} else {
+			const { data, error } = await client.statuses.like(id);
+			if (error) {
+				console.log('[WARN]: failed to remove like for status', error);
+				return null;
+			}
+			return +1;
+		}
+	}
+
 	static async toggleBoost(
 		client: ActivityPubClient,
 		id: string,
@@ -238,7 +270,6 @@ class ActivityPubService {
 				return 1;
 			}
 		}
-		return null;
 	}
 
 	/**
