@@ -2,7 +2,7 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	InstanceRoute,
 	KNOWN_SOFTWARE,
-} from '../_router/instance.js';
+} from '../_router/routes/instance.js';
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import {
@@ -14,6 +14,17 @@ import {
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { MastoAccountCredentials } from '../_interface.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+
+type WelKnownNodeinfo = {
+	links: {
+		href: string;
+		rel: string;
+	}[];
+};
+
+const NODEINFO_10 = 'http://nodeinfo.diaspora.software/ns/schema/1.0';
+const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
+const NODEINFO_21 = 'http://nodeinfo.diaspora.software/ns/schema/2.1';
 
 export class DefaultInstanceRouter implements InstanceRoute {
 	private misskeyAuthUrl({
@@ -184,6 +195,9 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					},
 				};
 			}
+
+			case KNOWN_SOFTWARE.PLEROMA:
+			case KNOWN_SOFTWARE.AKKOMA:
 			case KNOWN_SOFTWARE.MASTODON: {
 				if (!_appClientId || !_appClientSecret) {
 					const clientIdFormData: Record<string, string> = {
@@ -383,6 +397,77 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					},
 				};
 			}
+		}
+	}
+
+	async getNodeInfo(urlLike: string): LibraryPromise<string> {
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+		try {
+			if (urlLike.startsWith('http://') || urlLike.startsWith('https://')) {
+			} else {
+				urlLike = 'https://' + urlLike;
+			}
+
+			const response = await fetch(urlLike + '/.well-known/nodeinfo', {
+				signal: controller.signal,
+			});
+			if (!response.ok) return errorBuilder(response.statusText);
+
+			const res = await response.json();
+
+			const nodeType = (res as WelKnownNodeinfo).links.find((l) =>
+				[NODEINFO_21, NODEINFO_20, NODEINFO_10].includes(l.rel),
+			);
+
+			if (!nodeType) return errorBuilder<string>(DhaagaErrorCode.UNKNOWN_ERROR);
+			return { data: nodeType.href };
+		} catch (e) {
+			return errorBuilder<string>(DhaagaErrorCode.UNKNOWN_ERROR);
+		} finally {
+			clearTimeout(timeoutId); // Clear the timeout
+		}
+	}
+
+	private static getVersion(text: string) {
+		const ex = /^([0-9]+.[0-9]+.[0-9]+)/;
+		if (ex.test(text)) {
+			return ex.exec(text)![1];
+		}
+		return null;
+	}
+
+	/**
+	 * Get the software and version this instance runs on
+	 * @param nodeinfoUrl the diaspora nodeinfo url
+	 */
+	async getSoftware(nodeinfoUrl: string): LibraryPromise<{
+		software: string;
+		version: string | null;
+	}> {
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+		try {
+			const response = await fetch(nodeinfoUrl, {
+				signal: controller.signal,
+			});
+			if (!response.ok) return errorBuilder(response.statusText);
+			const res = await response.json();
+			return {
+				data: {
+					software: res?.software?.name,
+					version: DefaultInstanceRouter.getVersion(res.version),
+				},
+			};
+		} catch (e) {
+			return errorBuilder<{
+				software: string;
+				version: string | null;
+			}>(DhaagaErrorCode.UNKNOWN_ERROR);
+		} finally {
+			clearTimeout(timeoutId); // Clear the timeout
 		}
 	}
 

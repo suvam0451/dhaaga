@@ -51,17 +51,29 @@ export {
 	TagType,
 } from './adapters/tag/_interface.js';
 
-export { MastodonRestClient, MisskeyRestClient, UnknownRestClient };
+export {
+	MastodonRestClient,
+	MisskeyRestClient,
+	UnknownRestClient,
+	PleromaRestClient,
+};
 export {
 	DhaagaJsTimelineQueryOptions,
 	DhaagaJsNotificationType,
 } from './adapters/_client/_router/routes/_index.js';
 
 const userMap = {
-	[KNOWN_SOFTWARE.MASTODON]: MastodonRestClient,
-	[KNOWN_SOFTWARE.MISSKEY]: MisskeyRestClient,
+	// Pleroma Compat
+	[KNOWN_SOFTWARE.AKKOMA]: PleromaRestClient,
+	[KNOWN_SOFTWARE.PLEROMA]: PleromaRestClient,
+
+	// Misskey Compat
 	[KNOWN_SOFTWARE.FIREFISH]: MisskeyRestClient,
+	[KNOWN_SOFTWARE.MISSKEY]: MisskeyRestClient,
 	[KNOWN_SOFTWARE.SHARKEY]: MisskeyRestClient,
+
+	// Mastodon Compat
+	[KNOWN_SOFTWARE.MASTODON]: MastodonRestClient,
 };
 
 type UserMap = typeof userMap;
@@ -96,9 +108,13 @@ export { UserDetailedInstance } from './adapters/profile/_interface.js';
 export { AccountInstance } from './adapters/profile/_interface.js';
 export { ActivitypubStatusAdapter } from './adapters/status/_adapters.js';
 import ActivitypubHelper from './services/activitypub.js';
-import { KNOWN_SOFTWARE } from './adapters/_client/_router/instance.js';
+import {
+	InstanceApi_CustomEmojiDTO,
+	KNOWN_SOFTWARE,
+} from './adapters/_client/_router/routes/instance.js';
 import axios from 'axios';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
+import PleromaRestClient from './adapters/_client/pleroma/index.js';
 
 export { ActivitypubHelper };
 export { parseStatusContent, preprocessPostContent } from './services/index.js';
@@ -117,3 +133,5 @@ export const verifyMisskeyToken = async (host: string, session: string) => {
 	);
 	return res.data;
 };
+
+export { KNOWN_SOFTWARE, InstanceApi_CustomEmojiDTO };

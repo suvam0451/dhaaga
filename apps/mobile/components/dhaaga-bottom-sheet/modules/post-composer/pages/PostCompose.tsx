@@ -21,9 +21,10 @@ import { useActivityPubRestClientContext } from '../../../../../states/useActivi
 import ComposerSpoiler from '../fragments/ComposerSpoiler';
 import { useComposerContext } from '../api/useComposerContext';
 import ComposerAlt from '../fragments/ComposerAlt';
+import ReplyContextIndicator from '../fragments/ReplyContextIndicator';
 
 const PostCompose = memo(() => {
-	const { visible } = useAppBottomSheet();
+	const { visible, replyToRef } = useAppBottomSheet();
 	const { me } = useActivityPubRestClientContext();
 	const { editMode } = useComposerContext();
 
@@ -35,6 +36,7 @@ const PostCompose = memo(() => {
 			]}
 		>
 			<ComposerAutoCompletion />
+
 			<View
 				style={{
 					flexDirection: 'row',
@@ -87,6 +89,7 @@ const PostCompose = memo(() => {
 					<PostButton />
 				</View>
 			</View>
+			<ReplyContextIndicator />
 			{/*This section changes based on edit mode*/}
 			<ScrollView
 				style={{

@@ -5,6 +5,8 @@ import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapter
 import {
 	DhaagaJsTimelineQueryOptions,
 	MisskeyRestClient,
+	KNOWN_SOFTWARE,
+	PleromaRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../utils/timeline.types';
 
@@ -21,7 +23,7 @@ type TimelineQueryParams = {
  * component
  */
 function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
-	const { client } = useActivityPubRestClientContext();
+	const { client, domain } = useActivityPubRestClientContext();
 	// to be adjusted based on performance
 	const TIMELINE_STATUS_LIMIT = 5;
 
@@ -54,6 +56,12 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				const { data, error } = await client.timelines.public({
 					..._query,
 					local: true,
+					// Pleroma/Akkoma thing
+					withMuted: [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
+						domain as any,
+					)
+						? true
+						: undefined,
 				});
 				if (error) return [];
 				return data;
@@ -85,10 +93,19 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				return data;
 			}
 			case TimelineFetchMode.BUBBLE: {
-				const { data } = await (client as MisskeyRestClient).timelines.bubble(
-					_query,
-				);
-				return data;
+				if (domain === KNOWN_SOFTWARE.AKKOMA) {
+					const { data } = await (client as PleromaRestClient).timelines.bubble(
+						_query,
+					);
+					return data;
+				} else if (domain === KNOWN_SOFTWARE.SHARKEY) {
+					const { data } = await (client as MisskeyRestClient).timelines.bubble(
+						_query,
+					);
+					return data;
+				} else {
+					return [];
+				}
 			}
 			case TimelineFetchMode.FEDERATED: {
 				const { data, error } = await client.timelines.public(_query);

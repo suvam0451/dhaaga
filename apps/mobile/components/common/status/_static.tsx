@@ -4,6 +4,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
+import StatusReplyTo from './fragments/StatusReplyTo';
 
 /**
  * Adds a reply indicator to the post
@@ -13,37 +15,40 @@ import { APP_FONTS } from '../../../styles/AppFonts';
  * is also a reply
  */
 export const RepliedStatusFragment = memo(function Foo() {
-	return (
-		<View
-			style={{
-				backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
-				borderRadius: 8,
-				borderBottomLeftRadius: 0,
-				borderBottomRightRadius: 0,
-			}}
-		>
+	const { dto } = useAppStatusItem();
+	if (!dto.replyTo)
+		return (
 			<View
 				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					paddingTop: 6,
-					paddingHorizontal: 12,
+					backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
+					borderRadius: 8,
+					borderBottomLeftRadius: 0,
+					borderBottomRightRadius: 0,
 				}}
 			>
-				<Ionicons color={'#888'} name={'arrow-redo-outline'} size={14} />
-				<Text
+				<View
 					style={{
-						color: 'rgba(136,136,136,0.87)',
-						fontWeight: '500',
-						marginLeft: 4,
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-						fontSize: 13,
+						display: 'flex',
+						flexDirection: 'row',
+						alignItems: 'center',
+						paddingTop: 6,
+						paddingHorizontal: 12,
 					}}
 				>
-					Replied to a thread
-				</Text>
+					<Ionicons color={'#888'} name={'arrow-redo-outline'} size={14} />
+					<Text
+						style={{
+							color: 'rgba(136,136,136,0.87)',
+							fontWeight: '500',
+							marginLeft: 4,
+							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+							fontSize: 13,
+						}}
+					>
+						Replied to a thread
+					</Text>
+				</View>
 			</View>
-		</View>
-	);
+		);
+	return <StatusReplyTo dto={dto.replyTo} />;
 });

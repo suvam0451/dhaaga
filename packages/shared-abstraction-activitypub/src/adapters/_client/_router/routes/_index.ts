@@ -1,7 +1,6 @@
-import { InstanceRoute } from '../instance.js';
+import { InstanceRoute } from './instance.js';
 import { AccountRoute } from './accounts.js';
 import { StatusesRoute } from './statuses.js';
-import { BookmarksRoute } from './bookmarks.js';
 import { TrendsRoute } from './trends.js';
 import {
 	DhaagaJsNotificationType,
@@ -16,12 +15,12 @@ import {
 } from './search.js';
 import { MeRoute } from './me.js';
 import { MediaRoute } from './media.js';
+import { ListsRoute } from './lists.js';
 
 export interface RouterInterface {
 	instances: InstanceRoute;
 	accounts: AccountRoute;
 	statuses: StatusesRoute;
-	bookmarks: BookmarksRoute;
 	trends: TrendsRoute;
 	notifications: NotificationsRoute;
 	timelines: TimelinesRoute;
@@ -29,6 +28,7 @@ export interface RouterInterface {
 	search: SearchRoute;
 	me: MeRoute;
 	media: MediaRoute;
+	lists: ListsRoute;
 }
 
 export type { InstanceRoute, AccountRoute, StatusesRoute };

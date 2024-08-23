@@ -171,7 +171,6 @@ function WithActivitypubStatusContext({
 		const { root, itemLookup, childrenLookup } = MastodonService.solveContext(
 			Status.current,
 			data,
-			_domain,
 		);
 		contextRootLookup.current = root;
 		contextItemLookup.current = itemLookup;

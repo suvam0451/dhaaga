@@ -2,41 +2,36 @@ import { Image } from 'expo-image';
 import { MEDIA_CONTAINER_WIDTH } from './_common';
 import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import {
-	Pressable,
-	StyleSheet,
-	View,
-	Image as NativeImage,
-} from 'react-native';
+import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Text } from '@rneui/themed';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { ErrorBoundary } from 'react-error-boundary';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 type Props = {
 	url?: string;
 	blurhash?: string;
 	height?: number;
+	leftMarginAdjustment?: number;
 };
-
-const DEFAULT_BLURHASH =
-	'|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export const AppImageComponent = memo(function Foo({
 	url,
 	blurhash,
 	height,
+	leftMarginAdjustment,
 }: Props) {
+	const width = Dimensions.get('window').width - (leftMarginAdjustment || 0);
 	return (
-		// @ts-ignore
+		// @ts-ignore-next-line
 		<Image
 			style={{
 				flex: 1,
-				width: MEDIA_CONTAINER_WIDTH,
+				width,
 				borderRadius: 16,
 				opacity: 0.87,
 				height,

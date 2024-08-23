@@ -1,9 +1,12 @@
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	ActivityPubClient,
+	KNOWN_SOFTWARE,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { Realm } from 'realm';
 import { Account } from '../entities/account.entity';
 import ActivityPubAdapterService from './activitypub-adapter.service';
 import AccountRepository from '../repositories/account.repo';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { Dispatch, SetStateAction } from 'react';
 
 class BookmarkBrowserService {
 	/**
@@ -19,13 +22,16 @@ class BookmarkBrowserService {
 		primaryAcct: Account,
 		client: ActivityPubClient,
 		db: Realm,
-		callback?: React.Dispatch<React.SetStateAction<number>>,
+		callback?: Dispatch<SetStateAction<number>>,
 	) {
-		let maxId = null;
+		let maxId = undefined;
 		const done = false;
 		let syncedCount = 0;
 		do {
-			const { data, error } = await client.bookmarks.get({ limit: 40, maxId });
+			const { data } = await client.accounts.bookmarks({
+				limit: 40,
+				maxId,
+			});
 
 			/**
 			 * data format is different
@@ -36,7 +42,13 @@ class BookmarkBrowserService {
 			 * noteId --> post id
 			 */
 			let _data = data.data;
-			if (primaryAcct.domain !== KNOWN_SOFTWARE.MASTODON) {
+			if (
+				![
+					KNOWN_SOFTWARE.MASTODON,
+					KNOWN_SOFTWARE.PLEROMA,
+					KNOWN_SOFTWARE.AKKOMA,
+				].includes(primaryAcct.domain as any)
+			) {
 				_data = _data.map((o: any) => o.note);
 			}
 

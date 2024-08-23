@@ -1,38 +1,29 @@
-import { ListItem, Text } from '@rneui/themed';
-import { View } from 'react-native';
+import { ListItem } from '@rneui/themed';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useMemo } from 'react';
-import { useActivitypubStatusContext } from '../../states/useStatus';
 import { Image } from 'expo-image';
-import { BottomSheetActionButtonContainer } from '../../styles/Containers';
-import activitypubAdapterService from '../../services/activitypub-adapter.service';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import useMfm from '../hooks/useMfm';
 import { AppTimelineAction } from '../lib/Buttons';
 import Octicons from '@expo/vector-icons/Octicons';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { APP_FONT } from '../../styles/AppTheme';
+import { ActivityPubStatusAppDtoType } from '../../services/ap-proto/activitypub-status-dto.service';
+import { APP_FONTS } from '../../styles/AppFonts';
+import Feather from '@expo/vector-icons/Feather';
+import { memo } from 'react';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-function Status() {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
-	const domain = primaryAcct?.domain;
-	const { status } = useActivitypubStatusContext();
+type Props = {
+	dto: ActivityPubStatusAppDtoType;
+};
 
-	const userI = useMemo(() => {
-		return activitypubAdapterService.adaptUser(status.getUser(), domain);
-	}, [status]);
-
+const Status = memo(({ dto }: Props) => {
 	const { content: ParsedDisplayName } = useMfm({
-		content: userI?.getDisplayName(),
-		remoteSubdomain: userI?.getInstanceUrl(),
-		emojiMap: userI?.getEmojiMap(),
-		deps: [userI?.getDisplayName()],
-		fontFamily: 'Montserrat-Bold',
+		content: dto.postedBy.displayName,
+		remoteSubdomain: dto.postedBy.instance,
+		emojiMap: dto.calculated.emojis as any,
+		deps: [dto.postedBy.displayName],
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	});
-
-	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(userI?.getAccountUrl(), subdomain);
-	}, [userI?.getAccountUrl()]);
 
 	return (
 		<View>
@@ -40,59 +31,94 @@ function Status() {
 				<ListItem.Content style={{ width: '100%' }}>
 					<View
 						style={{
-							display: 'flex',
 							flexDirection: 'row',
 							alignItems: 'center',
-							marginBottom: 24,
+							marginBottom: 20,
 						}}
 					>
 						<View style={{ flexShrink: 1 }}>
 							<Text
 								style={{
-									color: '#fff',
-									opacity: 0.87,
+									color: APP_FONT.MONTSERRAT_BODY,
 									fontSize: 18,
+									fontFamily: APP_FONTS.INTER_500_MEDIUM,
 								}}
 							>
-								Post Actions
+								More Actions
 							</Text>
 						</View>
 						<View
 							style={{
 								height: 1,
-								backgroundColor: '#fff',
+								backgroundColor: APP_FONT.DISABLED,
 								marginLeft: 8,
 								flexGrow: 1,
-								opacity: 0.3,
 							}}
 						/>
 					</View>
 
-					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<BottomSheetActionButtonContainer style={{}}>
+					<View
+						style={{
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							width: '100%',
+						}}
+					>
+						<View style={styles.postActionButtonContainer}>
 							<Ionicons name={'link-outline'} color={'#ffffff87'} size={24} />
-						</BottomSheetActionButtonContainer>
-						<BottomSheetActionButtonContainer>
-							<Ionicons
-								name={'bookmark-outline'}
-								color={'#ffffff87'}
+							<Text style={styles.buttonText}>Copy Link</Text>
+						</View>
+						<View style={styles.postActionButtonContainer}>
+							<Feather
+								name="arrow-up-right"
 								size={24}
+								color={APP_FONT.MONTSERRAT_BODY}
 							/>
-						</BottomSheetActionButtonContainer>
-						<BottomSheetActionButtonContainer>
-							<Ionicons name={'star-outline'} color={'#ffffff87'} size={24} />
-						</BottomSheetActionButtonContainer>
-						<BottomSheetActionButtonContainer>
-							<Ionicons name={'rocket-outline'} color={'#ffffff87'} size={24} />
-						</BottomSheetActionButtonContainer>
-						<BottomSheetActionButtonContainer>
-							<Ionicons
-								name={'arrow-undo-outline'}
-								color={'#ffffff87'}
-								size={24}
-							/>
-						</BottomSheetActionButtonContainer>
+							<Text style={styles.buttonText}>Open Original</Text>
+						</View>
 					</View>
+					<View
+						style={{
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							width: '100%',
+						}}
+					>
+						<View style={styles.postActionButtonContainer}>
+							<AntDesign
+								name="like2"
+								size={24}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+							<Text style={styles.buttonText}>Like</Text>
+						</View>
+						<View style={styles.postActionButtonContainer}>
+							<Feather
+								name="share"
+								size={24}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+							<Text style={styles.buttonText}>Share</Text>
+						</View>
+						<View style={styles.postActionButtonContainer}>
+							<Feather
+								name="refresh-ccw"
+								size={21}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+							<Text style={styles.buttonText}>Refresh</Text>
+						</View>
+					</View>
+					<Text
+						style={{
+							fontSize: 13,
+							color: APP_FONT.MONTSERRAT_BODY,
+							fontFamily: APP_FONTS.INTER_400_REGULAR,
+							marginLeft: 4,
+						}}
+					>
+						TIP: Press and hold Boost to Quote the Post
+					</Text>
 				</ListItem.Content>
 			</ListItem>
 			<ListItem containerStyle={{ backgroundColor: '#2C2C2C' }}>
@@ -132,19 +158,19 @@ function Status() {
 									padding: 2,
 									opacity: 0.87,
 								}}
-								source={userI.getAvatarUrl()}
+								source={dto.postedBy.avatarUrl}
 							/>
 						</View>
-						<View style={{ marginLeft: 4 }}>
-							<Text>{ParsedDisplayName}</Text>
+						<View style={{ marginLeft: 8 }}>
+							{ParsedDisplayName}
 							<Text
 								style={{
 									color: '#888',
 									fontSize: 12,
-									fontFamily: 'Montserrat-Bold',
+									fontFamily: APP_FONTS.INTER_700_BOLD,
 								}}
 							>
-								{handle}
+								{dto.postedBy.handle}
 							</Text>
 						</View>
 					</View>
@@ -189,27 +215,6 @@ function Status() {
 								/>
 							}
 						/>
-						{/*<BottomSheetActionButtonContainer>*/}
-						{/*	<Ionicons*/}
-						{/*		name={'chatbox-ellipses-outline'}*/}
-						{/*		color={'#ffffff87'}*/}
-						{/*		size={24}*/}
-						{/*	/>*/}
-						{/*</BottomSheetActionButtonContainer>*/}
-						{/*<BottomSheetActionButtonContainer>*/}
-						{/*	<Ionicons*/}
-						{/*		name={'volume-mute-outline'}*/}
-						{/*		color={'#ffffff87'}*/}
-						{/*		size={24}*/}
-						{/*	/>*/}
-						{/*</BottomSheetActionButtonContainer>*/}
-						{/*<BottomSheetActionButtonContainer>*/}
-						{/*	<Ionicons*/}
-						{/*		name={'stop-circle-outline'}*/}
-						{/*		color={'#ffffff87'}*/}
-						{/*		size={24}*/}
-						{/*	/>*/}
-						{/*</BottomSheetActionButtonContainer>*/}
 					</View>
 					<View
 						style={{
@@ -222,6 +227,26 @@ function Status() {
 			</ListItem>
 		</View>
 	);
-}
+});
+
+const styles = StyleSheet.create({
+	postActionButtonContainer: {
+		flex: 1,
+		borderColor: '#ffffff30',
+		// backgroundColor: '#282828',
+		borderWidth: 1,
+		borderRadius: 6,
+		padding: 8,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginHorizontal: 4,
+		marginBottom: 10,
+	},
+	buttonText: {
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		marginLeft: 6,
+	},
+});
 
 export default Status;

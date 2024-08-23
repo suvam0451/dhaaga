@@ -2,7 +2,7 @@ import {
 	ActivityPubServer,
 	ActivityPubServerCreateDTO,
 } from '../entities/activitypub-server.entity';
-import { Realm } from '@realm/react';
+import { Realm } from 'realm';
 import { ActivityPubCustomEmojiItem } from '../entities/activitypub-emoji.entity';
 import { UpdateMode } from 'realm';
 
@@ -42,7 +42,13 @@ export class ActivityPubServerRepository {
 	 * Skips if detected software is "unknown"
 	 */
 	static updateSoftwareType(db: Realm, dto: ActivityPubServerCreateDTO) {
-		this.upsert(db, dto.url, dto.type);
+		return this.upsert(db, dto.url, dto.type);
+	}
+
+	static updateNodeInfo(db: Realm, urlLike: string, nodeinfo: string) {
+		const _server = this.upsert(db, urlLike);
+		_server.nodeinfo = nodeinfo;
+		return _server;
 	}
 
 	static addEmoji(
@@ -56,8 +62,10 @@ export class ActivityPubServerRepository {
 		}
 	}
 
-	static get(db: Realm, url: string) {
+	static get(db: Realm, url: string): ActivityPubServer {
 		url = url.replace(/^https?:\/\//, '');
-		return db.objects(ActivityPubServer).find((o) => o?.url === url);
+		return db
+			.objects(ActivityPubServer)
+			.find((o: ActivityPubServer) => o?.url === url);
 	}
 }

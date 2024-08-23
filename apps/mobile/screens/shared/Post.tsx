@@ -1,47 +1,40 @@
 import StatusItem from '../../components/common/status/StatusItem';
-import { useEffect, useMemo, useState } from 'react';
-import {
-	ActivityPubStatus,
-	LibraryResponse,
-} from '@dhaaga/shared-abstraction-activitypub';
-import { useQuery } from '@tanstack/react-query';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import WithActivitypubStatusContext, {
-	useActivitypubStatusContext,
-} from '../../states/useStatus';
-import { Animated, RefreshControl, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Animated, RefreshControl, View, Text } from 'react-native';
 import WithAutoHideTopNavBar from '../../components/containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
-import PostReply from '../../components/common/status/PostReply';
-import { Text } from '@rneui/themed';
-import { APP_FONT } from '../../styles/AppTheme';
 import { useLocalSearchParams } from 'expo-router';
-import useStatusContext from '../../components/common/status-details/api/useStatusContext';
+import WithAppStatusItemContext from '../../hooks/ap-proto/useAppStatusItem';
+import useGetStatusContext from '../../hooks/api/statuses/useGetStatusContext';
+import WithAppStatusContextDataContext, {
+	useAppStatusContextDataContext,
+} from '../../hooks/api/statuses/WithAppStatusContextData';
+import PostReply from '../../components/common/status/PostReply';
+import { APP_FONT } from '../../styles/AppTheme';
+import WithAppTimelineDataContext from '../../components/common/timeline/api/useTimelineData';
 
 function StatusContextComponent() {
-	const { contextChildrenLookup, contextRootLookup, stateKey } =
-		useActivitypubStatusContext();
-
-	const root = useMemo(() => {
-		return contextRootLookup.current;
-	}, [stateKey]);
-
+	const { data } = useAppStatusContextDataContext();
 	const children = useMemo(() => {
-		const root = contextRootLookup.current;
-		if (!root || !contextChildrenLookup.current) return [];
-		return contextChildrenLookup.current?.get(root.getId()) || [];
-	}, [stateKey]);
+		const childrenIds = data.children.get(data.root);
+		if (!childrenIds) return [];
+		return childrenIds
+			.map((o) => data.lookup.get(o))
+			.filter((o) => o !== undefined && o !== null);
+	}, [data]);
 
-	if (!root) return <View></View>;
+	if (!data.root) return <View></View>;
 
 	return (
 		<View>
-			{root && (
-				<WithActivitypubStatusContext statusInterface={root}>
+			{data.root && (
+				<WithAppStatusItemContext dto={data.lookup.get(data.root)}>
 					<StatusItem />
-				</WithActivitypubStatusContext>
+				</WithAppStatusItemContext>
 			)}
-			{children?.map((o, i) => <PostReply key={i} lookupId={o.getId()} />)}
+			{children.map((o) => (
+				<PostReply lookupId={o.id} />
+			))}
 			<View style={{ marginVertical: 16 }}>
 				<Text style={{ textAlign: 'center', color: APP_FONT.MONTSERRAT_BODY }}>
 					No more replies
@@ -51,39 +44,11 @@ function StatusContextComponent() {
 	);
 }
 
-function StatusContextApiWrapper() {
-	const { id } = useLocalSearchParams<{ id: string }>();
-	const {} = useStatusContext(id);
-	return <StatusContextComponent />;
-}
-
 function Post() {
-	const { id } = useLocalSearchParams<{ id: string }>();
 	const [refreshing, setRefreshing] = useState(false);
-	const { client } = useActivityPubRestClientContext();
 
-	async function queryFn() {
-		if (!client) throw new Error('_client not initialized');
-		return await client.statuses.get(id);
-	}
-
-	const { status, data, fetchStatus, refetch } = useQuery<
-		LibraryResponse<ActivityPubStatus>
-	>({
-		queryKey: ['status', id],
-		queryFn,
-		enabled: client && id !== undefined,
-	});
-
-	useEffect(() => {
-		if (status === 'success') {
-			setRefreshing(false);
-		}
-	}, [status, fetchStatus]);
-
-	function onRefresh() {
-		refetch();
-	}
+	const { id } = useLocalSearchParams<{ id: string }>();
+	const { Data, dispatch, refetch } = useGetStatusContext(id);
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
@@ -91,20 +56,20 @@ function Post() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Post Details'} translateY={translateY}>
-			{data && (
-				<WithActivitypubStatusContext status={data.data} key={0}>
+		<WithAutoHideTopNavBar title={'' + 'Post Details'} translateY={translateY}>
+			<WithAppStatusContextDataContext data={Data} dispatch={dispatch}>
+				<WithAppTimelineDataContext>
 					<Animated.ScrollView
 						refreshControl={
-							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+							<RefreshControl refreshing={refreshing} onRefresh={refetch} />
 						}
 						contentContainerStyle={{ paddingTop: 54 }}
 						onScroll={onScroll}
 					>
-						<StatusContextApiWrapper />
+						<StatusContextComponent />
 					</Animated.ScrollView>
-				</WithActivitypubStatusContext>
-			)}
+				</WithAppTimelineDataContext>
+			</WithAppStatusContextDataContext>
 		</WithAutoHideTopNavBar>
 	);
 }

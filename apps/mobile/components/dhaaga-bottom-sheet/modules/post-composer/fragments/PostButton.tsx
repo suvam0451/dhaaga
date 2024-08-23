@@ -6,17 +6,18 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import {
 	BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
+import { ActivitypubStatusService } from '../../../../../services/ap-proto/activitypub-status.service';
 
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
-	const { client, domain } = useActivityPubRestClientContext();
-	const { setType, PostRef } = useAppBottomSheet();
+	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { setType, PostRef, replyToRef } = useAppBottomSheet();
 
 	async function onClick() {
 		let _visibility: any = visibility.toLowerCase();
@@ -37,19 +38,33 @@ const PostButton = memo(() => {
 			misskeyVisibility: _visibility,
 			language: 'en',
 			sensitive: false,
-			inReplyToId: null,
+			inReplyToId: replyToRef.current ? replyToRef.current.id : null,
 			mediaIds: mediaTargets.map((o) => o.remoteId.toString()),
 			localOnly: false,
 			spoilerText: cw === '' ? undefined : cw,
 		});
 
-		if (domain === KNOWN_SOFTWARE.MASTODON) {
-			PostRef.current = ActivityPubAdapterService.adaptStatus(data, domain);
-		} else {
-			PostRef.current = ActivityPubAdapterService.adaptStatus(
-				(data as any).createdNote,
+		if (
+			[
+				KNOWN_SOFTWARE.MASTODON,
+				KNOWN_SOFTWARE.PLEROMA,
+				KNOWN_SOFTWARE.AKKOMA,
+			].includes(domain as any)
+		) {
+			PostRef.current = new ActivitypubStatusService(
+				ActivityPubAdapterService.adaptStatus(data, domain),
 				domain,
-			);
+				subdomain,
+			).export();
+		} else {
+			PostRef.current = new ActivitypubStatusService(
+				ActivityPubAdapterService.adaptStatus(
+					(data as any).createdNote,
+					domain,
+				),
+				domain,
+				subdomain,
+			).export();
 		}
 		setType(BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
 	}

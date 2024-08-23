@@ -10,6 +10,7 @@ export enum TimelineFetchMode {
 	HASHTAG = 'Hashtag',
 	USER = 'User',
 	LIST = 'List',
+	ANTENNA = 'Antenna',
 
 	REMOTE_TIMELINE = 'Remote Timeline',
 

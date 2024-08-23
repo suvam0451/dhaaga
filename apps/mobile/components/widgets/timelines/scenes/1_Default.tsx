@@ -7,8 +7,9 @@ import { Button, Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 const ICON_SIZE = 20;
 
@@ -46,9 +47,11 @@ function DefaultTimelineOptions() {
 		setShowTimelineSelection(false);
 	}
 
-	const BUBBLE_AVAILABLE = [KNOWN_SOFTWARE.SHARKEY].includes(
-		domain as KNOWN_SOFTWARE,
-	);
+	const BUBBLE_AVAILABLE = [
+		KNOWN_SOFTWARE.SHARKEY,
+		KNOWN_SOFTWARE.AKKOMA,
+	].includes(domain as KNOWN_SOFTWARE);
+
 	const SOCIAL_AVAILABLE = [
 		KNOWN_SOFTWARE.SHARKEY,
 		KNOWN_SOFTWARE.MISSKEY,
@@ -110,7 +113,13 @@ function DefaultTimelineOptions() {
 				)}
 
 				<DefaultPinnedItem
-					label={'Federated'}
+					label={
+						[KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
+							domain as any,
+						)
+							? 'Known Network'
+							: 'Federated'
+					}
 					Icon={
 						<FontAwesome6
 							name="globe"
@@ -148,7 +157,11 @@ function DefaultTimelineOptions() {
 						color={APP_FONT.MONTSERRAT_HEADER}
 					/>
 					<Text
-						style={{ fontFamily: 'Inter-Bold', marginLeft: 4, fontSize: 16 }}
+						style={{
+							fontFamily: APP_FONTS.INTER_700_BOLD,
+							marginLeft: 4,
+							fontSize: 16,
+						}}
 					>
 						Go to Your Social Hub
 					</Text>

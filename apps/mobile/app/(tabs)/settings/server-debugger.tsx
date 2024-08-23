@@ -5,7 +5,7 @@ import { ActivityPubServer } from '../../../entities/activitypub-server.entity';
 import { memo, useEffect, useRef, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { FontAwesome } from '@expo/vector-icons';
@@ -72,23 +72,6 @@ const InstanceSoftwareCountIndicator = memo(function Foo(
 					style={{ width: o.width, height: o.height, opacity: 0.75 }}
 				/>
 			</View>
-
-			{/*<Animated.View*/}
-			{/*	entering={FadeInLeft}*/}
-			{/*	exiting={FadeOut}*/}
-			{/*	style={{*/}
-			{/*		display: IsTextExpanded ? 'flex' : 'none',*/}
-			{/*	}}*/}
-			{/*>*/}
-			{/*	<Text*/}
-			{/*		style={{*/}
-			{/*			fontFamily: 'Montserrat-Bold',*/}
-			{/*			color: APP_FONT.MONTSERRAT_HEADER,*/}
-			{/*		}}*/}
-			{/*	>*/}
-			{/*		{o.label}*/}
-			{/*	</Text>*/}
-			{/*</Animated.View>*/}
 
 			<Text
 				style={{
@@ -220,6 +203,8 @@ const SortControllerItem = memo(function Foo({
 		setData(items);
 	}, [softwareServerCount, IsAssetsLoaded]);
 
+	const { searchText } = useSearchTermContext();
+
 	if (!IsAssetsLoaded) {
 		return (
 			<View>
@@ -227,7 +212,6 @@ const SortControllerItem = memo(function Foo({
 			</View>
 		);
 	}
-	const { searchText } = useSearchTermContext();
 
 	return (
 		<View>
@@ -410,7 +394,7 @@ const ServerItem = memo(function Foo({
 							style={{
 								width: renderData.width,
 								height: renderData.height,
-								opacity: 0.75,
+								opacity: 0.87,
 							}}
 						/>
 					</View>

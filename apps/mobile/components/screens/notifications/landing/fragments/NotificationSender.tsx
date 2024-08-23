@@ -20,7 +20,7 @@ import {
 	BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 type Props = {

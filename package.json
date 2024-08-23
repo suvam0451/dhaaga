@@ -34,5 +34,6 @@
     "singleQuote": true,
     "tabWidth": 2,
     "useTabs": true
-  }
+  },
+  "type": "module"
 }

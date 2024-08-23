@@ -1,5 +1,6 @@
 import type { MMKV } from 'react-native-mmkv';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { ActivityPubStatusAppDtoType } from './ap-proto/activitypub-status-dto.service';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 
 export type BottomSheetProp_HashtagType = {
 	name: string;
@@ -49,11 +50,11 @@ class GlobalMmkvCacheService {
 		return JSON.parse(res);
 	}
 
-	static setBottomSheetProp_Status(db: MMKV, dto: any) {
+	static setBottomSheetProp_Status(db: MMKV, dto: ActivityPubStatusAppDtoType) {
 		this.set(db, CACHE_KEY_BOTTOM_SHEET_PROP_STATUS, JSON.stringify(dto));
 	}
 
-	static getBottomSheetProp_Status(db: MMKV) {
+	static getBottomSheetProp_Status(db: MMKV): ActivityPubStatusAppDtoType {
 		const res = this.get(db, CACHE_KEY_BOTTOM_SHEET_PROP_STATUS);
 		if (!res) return null;
 		return JSON.parse(res);

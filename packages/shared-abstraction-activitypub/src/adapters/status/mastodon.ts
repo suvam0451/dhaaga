@@ -9,6 +9,7 @@ import {
 import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
 import { UserType } from '../profile/_interface.js';
+import camelcaseKeys from 'camelcase-keys';
 
 class MastodonToStatusAdapter implements StatusInterface {
 	ref: StatusInstance;
@@ -37,23 +38,27 @@ class MastodonToStatusAdapter implements StatusInterface {
 	}
 
 	getIsRebloggedByMe(): boolean | null | undefined {
-		return this.ref.instance.reblogged;
+		return this.ref.instance?.reblogged;
 	}
 
 	getIsSensitive(): boolean {
-		return this.ref.instance.sensitive;
+		return this.ref.instance?.sensitive;
 	}
 
 	getSpoilerText(): string | null | undefined {
-		return this.ref.instance.spoilerText;
+		return this.ref.instance?.spoilerText;
 	}
 
 	getRaw(): Status {
 		return this?.ref?.instance;
 	}
 
+	getRepliedStatusRaw(): Status {
+		return null;
+	}
+
 	getIsFavourited(): boolean | null | undefined {
-		return this.ref.instance.favourited;
+		return this.ref.instance?.favourited;
 	}
 
 	setDescendents(items: StatusInterface[]): void {
@@ -143,6 +148,10 @@ class MastodonToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
+	getQuote() {
+		return (this.ref.instance as any).quote;
+	}
+
 	getRepostedStatusRaw() {
 		return this.ref?.instance?.reblog as any;
 	}
@@ -154,7 +163,7 @@ class MastodonToStatusAdapter implements StatusInterface {
 	getMediaAttachments() {
 		return this.ref?.instance?.mediaAttachments?.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
-				new MediaAttachmentInstance(o),
+				new MediaAttachmentInstance(camelcaseKeys(o as any, { deep: true })),
 			);
 		});
 	}

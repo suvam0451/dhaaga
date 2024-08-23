@@ -1,7 +1,6 @@
-import { Box, BoxProps, PolymorphicComponentProps } from '@mantine/core';
+import { Box, PolymorphicComponentProps } from '@mantine/core';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { FaChevronDown } from 'react-icons/fa';
 
 const ModuleABox = styled(Box)<
 	PolymorphicComponentProps<any> & {

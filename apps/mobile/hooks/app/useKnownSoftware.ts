@@ -1,4 +1,4 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { useAppAssetsContext } from './useAssets';
 
 function useKnownSoftware(software: string) {
@@ -50,6 +50,26 @@ function useKnownSoftware(software: string) {
 				label: 'Sharkey',
 				logo: branding[7],
 				width: 24,
+				height: 20,
+			};
+		}
+		case KNOWN_SOFTWARE.PLEROMA: {
+			return {
+				bg: '#df8958',
+				fg: '#e9e7e4',
+				label: 'Pleroma',
+				logo: branding[4],
+				width: 12,
+				height: 20,
+			};
+		}
+		case KNOWN_SOFTWARE.AKKOMA: {
+			return {
+				bg: '#df8958',
+				fg: '#e9e7e4',
+				label: 'Akkoma',
+				logo: branding[0],
+				width: 20,
 				height: 20,
 			};
 		}

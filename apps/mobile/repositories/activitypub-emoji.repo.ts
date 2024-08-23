@@ -4,7 +4,7 @@ import { ActivityPubServer } from '../entities/activitypub-server.entity';
 import { ActivityPubCustomEmojiCategoryRepository } from './activitypub-emoji-category.repo';
 import { UpdateMode } from 'realm';
 import { ActivityPubServerRepository } from './activitypub-server.repo';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 
 export class ActivityPubCustomEmojiRepository {
 	static clearAll(db: Realm) {

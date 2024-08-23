@@ -7,6 +7,7 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { DhaagaJsPostSearchDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/search';
 import { useEffect, useState } from 'react';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 export enum APP_SEARCH_TYPE {
 	POSTS,
@@ -42,12 +43,39 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 		try {
 			switch (type) {
 				case APP_SEARCH_TYPE.POSTS: {
+					// Akko-gang, nani da fukk? Y your maxId no work? 😭
+					// et tu, sharks 🤨?
+					const FALLBACK_TO_OFFSET = [
+						KNOWN_SOFTWARE.AKKOMA,
+						// KNOWN_SOFTWARE.SHARKEY,
+					].includes(domain as any);
+					const offset = FALLBACK_TO_OFFSET
+						? dto.maxId
+							? parseInt(dto.maxId)
+							: undefined
+						: undefined;
+					const maxId = FALLBACK_TO_OFFSET ? undefined : dto.maxId;
+					const untilId = FALLBACK_TO_OFFSET ? undefined : dto.maxId;
+
+					// All good - 21 Aug
+					// console.log({
+					// 	...dto,
+					// 	q: dto.q,
+					// 	query: dto.q,
+					// 	type: 'statuses',
+					// 	maxId,
+					// 	untilId,
+					// 	offset,
+					// });
+
 					const { data, error } = await client.search.findPosts({
 						...dto,
 						q: dto.q,
 						query: dto.q,
-						untilId: dto.maxId,
 						type: 'statuses',
+						maxId,
+						untilId,
+						offset,
 					});
 					if (error) {
 						console.log(error);

@@ -40,7 +40,7 @@ class AppApi {
 
 	private cleanObject(obj: any) {
 		Object.keys(obj).forEach((key) => {
-			if (obj[key] === null) {
+			if (obj[key] === null || obj[key] === undefined) {
 				delete obj[key];
 			}
 		});
@@ -181,6 +181,7 @@ class AppApi {
 				new URLSearchParams(this.cleanObject(query))
 			: `${this.baseUrl}${endpoint}?`;
 
+		console.log(endpoint, query);
 		return await fetch(endpoint, {
 			method: 'GET',
 			headers: this.token

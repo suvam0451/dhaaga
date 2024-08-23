@@ -1,16 +1,17 @@
-import { Fragment, memo, useEffect, useState } from 'react';
-import { useActivitypubStatusContext } from '../../../states/useStatus';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Fragment, memo, useState } from 'react';
+import {
+	TouchableOpacity,
+	View,
+	StyleSheet,
+	ViewStyle,
+	StyleProp,
+} from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import * as Haptics from 'expo-haptics';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../styles/AppFonts';
-
-type Props = {
-	isRepost: boolean;
-};
+import { ActivityPubStatusAppDtoType } from '../../../services/ap-proto/activitypub-status-dto.service';
+import { useAppTimelineDataContext } from '../timeline/api/useTimelineData';
 
 type PostStatLikesProps = {
 	onPress: () => void;
@@ -23,7 +24,7 @@ type PostStatLikesProps = {
  */
 const PostStatLikes = memo(
 	({ onPress, isLiked, likeCount }: PostStatLikesProps) => {
-		if (likeCount === 0) return <View />;
+		if (!isLiked && likeCount === 0) return <View />;
 		return (
 			<TouchableOpacity
 				onPress={onPress}
@@ -38,11 +39,6 @@ const PostStatLikes = memo(
 					size={16}
 					color={isLiked ? APP_THEME.LINK : '#ffffff87'}
 				/>
-				{/*<FontAwesome*/}
-				{/*	name="star"*/}
-				{/*	size={18}*/}
-				{/*	color={isLiked ? APP_THEME.LINK : '#ffffff87'}*/}
-				{/*/>*/}
 				<Text
 					style={{
 						color: isLiked ? APP_THEME.LINK : '#888',
@@ -64,62 +60,43 @@ const PostStatLikes = memo(
  * vertical screen estate
  * @constructor
  */
-const PostStats = memo(function Foo({ isRepost }: Props) {
-	const {
-		status: post,
-		setDataRaw,
-		sharedStatus,
-	} = useActivitypubStatusContext();
-	const { client } = useActivityPubRestClientContext();
-	const [RepliesCount, setRepliesCount] = useState(0);
-	const [FavouritesCount, setFavouritesCount] = useState(0);
-	const [RepostCount, setRepostCount] = useState(0);
-	const [IsFavourited, setIsFavourited] = useState(false);
-	const [SeparatorDotCount, setSeparatorDotCount] = useState(0);
-	const _status = isRepost ? sharedStatus : post;
+const PostStats = memo(function Foo({
+	dto,
+	style,
+}: {
+	dto: ActivityPubStatusAppDtoType;
+	style?: StyleProp<ViewStyle>;
+}) {
+	const STATUS_DTO = dto.meta.isBoost
+		? dto.content.raw
+			? dto
+			: dto.boostedFrom
+		: dto;
 
-	useEffect(() => {
-		if (!_status) return;
-		setRepliesCount(_status?.getRepliesCount());
-		setFavouritesCount(_status?.getFavouritesCount());
-		setRepostCount(_status?.getRepostsCount());
-		setIsFavourited(_status?.getIsFavourited());
+	const [IsLikeLoading, setIsLikeLoading] = useState(false);
 
-		let count = 0;
-		if (_status?.getIsFavourited()) count++;
-		if (_status?.getRepliesCount() > 0) count++;
-		if (_status?.getFavouritesCount() > 0) count++;
-		if (_status?.getRepostsCount()) count++;
+	const { toggleLike } = useAppTimelineDataContext();
 
-		setSeparatorDotCount(count);
-	}, [_status]);
-
-	function onFavouriteClick() {
-		if (IsFavourited) {
-			client.unFavourite(_status?.getId()).then((res) => {
-				setDataRaw(res);
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-			});
-		} else {
-			client.favourite(_status?.getId()).then((res) => {
-				setDataRaw(res);
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-			});
-		}
+	function _toggleLike() {
+		toggleLike(STATUS_DTO.id, setIsLikeLoading);
 	}
 
-	if (RepliesCount < 1 && FavouritesCount < 1 && RepostCount < 1)
+	if (
+		STATUS_DTO.stats.replyCount < 1 &&
+		STATUS_DTO.stats.likeCount < 1 &&
+		STATUS_DTO.stats.boostCount < 1
+	)
 		return <View></View>;
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, style]}>
 			<PostStatLikes
-				isLiked={IsFavourited}
-				likeCount={FavouritesCount}
-				onPress={onFavouriteClick}
+				isLiked={STATUS_DTO.interaction.liked}
+				likeCount={STATUS_DTO.stats.likeCount}
+				onPress={_toggleLike}
 			/>
 			<View style={{ flexGrow: 1 }}></View>
-			{RepliesCount > 0 && (
+			{STATUS_DTO.stats.replyCount > 0 && (
 				<Fragment>
 					<Text
 						style={{
@@ -129,14 +106,14 @@ const PostStats = memo(function Foo({ isRepost }: Props) {
 							textAlign: 'right',
 						}}
 					>
-						{RepliesCount} Replies
+						{STATUS_DTO.stats.replyCount} Replies
 					</Text>
 					<Text style={{ color: '#888', marginLeft: 2, opacity: 0.3 }}>
 						&bull;
 					</Text>
 				</Fragment>
 			)}
-			{RepostCount > 0 && (
+			{STATUS_DTO.stats.boostCount > 0 && (
 				<Fragment>
 					<Text
 						style={{
@@ -146,7 +123,7 @@ const PostStats = memo(function Foo({ isRepost }: Props) {
 							textAlign: 'right',
 						}}
 					>
-						{RepostCount} Boosts
+						{STATUS_DTO.stats.boostCount} Boosts
 					</Text>
 				</Fragment>
 			)}

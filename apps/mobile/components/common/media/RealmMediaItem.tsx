@@ -63,12 +63,17 @@ type Props = {
  * @constructor
  */
 function RealmMediaItem({ data }: Props) {
-	const CalculatedHeight = useMemo(() => {
+	let CalculatedHeight = useMemo(() => {
 		return MediaService.calculateHeightRealmAttachments(data, {
 			deviceWidth: Dimensions.get('window').width,
 			maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
 		});
 	}, [data]);
+	if (CalculatedHeight === 0) {
+		CalculatedHeight = 520;
+	}
+
+	// console.log(CalculatedHeight, MEDIA_CONTAINER_MAX_HEIGHT);
 
 	if (data.length === 0) return <View></View>;
 	if (data.length === 1)

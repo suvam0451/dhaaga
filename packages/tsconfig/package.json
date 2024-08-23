@@ -1,0 +1,8 @@
+{
+  "name": "@dhaaga/tsconfig",
+  "private": true,
+  "version": "0.7.0",
+  "files": [
+    "*.json"
+  ]
+}

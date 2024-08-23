@@ -8,7 +8,7 @@ import {
 	DhaagaRestClient,
 } from '../_router/_runner.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryResponse } from '../_router/_types.js';
 import { MegaNotification } from '../_interface.js';
 import { toSnakeCase } from '../_router/utils/casing.utils.js';

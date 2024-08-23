@@ -6,7 +6,6 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import useApiGetNotifications from '../../../../hooks/api/notifications/useApiGetNotifications';
 import { useAppNotifSeenContext } from './state/useNotifSeen';
 import MarkAllAsRead from './fragments/MarkAllAsRead';
-import NotificationControlSegment from './fragments/NotificationControlSegment';
 import FlatListRenderer from './fragments/FlatListRenderer';
 
 function LandingPageStack() {

@@ -68,6 +68,16 @@ export class MastodonStatusesRouter implements StatusesRoute {
 		return { data };
 	}
 
+	async like(id: string): LibraryPromise<MastoStatus> {
+		const data = await this.lib.client.v1.statuses.$select(id).favourite();
+		return { data };
+	}
+
+	async removeLike(id: string): LibraryPromise<MastoStatus> {
+		const data = await this.lib.client.v1.statuses.$select(id).unfavourite();
+		return { data };
+	}
+
 	async getContext(id: string): LibraryPromise<MastoContext> {
 		try {
 			const ctx = await this.lib.client.v1.statuses.$select(id).context.fetch();
@@ -76,5 +86,18 @@ export class MastodonStatusesRouter implements StatusesRoute {
 			console.log(e);
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
+	}
+
+	// TODO: other visibilities
+	async boost(id: string): LibraryPromise<MastoStatus> {
+		const data = await this.lib.client.v1.statuses
+			.$select(id)
+			.reblog({ visibility: 'public' });
+		return { data };
+	}
+
+	async removeBoost(id: string): LibraryPromise<MastoStatus> {
+		const data = await this.lib.client.v1.statuses.$select(id).unreblog();
+		return { data };
 	}
 }

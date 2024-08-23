@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { useComposerContext } from '../api/useComposerContext';
 import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { APP_THEME } from '../../../../../styles/AppTheme';
 
 const ComposeMediaTargets = memo(function Foo() {
 	const { mediaTargets, removeMediaTarget } = useComposerContext();
@@ -37,13 +38,21 @@ const ComposeMediaTargets = memo(function Foo() {
 						>
 							<View
 								style={{
-									width: 24,
-									height: 24,
+									// width: 24,
+									// height: 24,
 									backgroundColor: '#363636',
-									borderRadius: 2,
+									// borderRadius: '100%',
+									justifyContent: 'center',
+									alignItems: 'center',
 								}}
 							>
-								<AntDesign name="closesquare" size={24} color={'red'} />
+								<View style={{ height: 20, width: 20 }}>
+									<AntDesign
+										name="closecircle"
+										size={20}
+										color={APP_THEME.INVALID_ITEM}
+									/>
+								</View>
 							</View>
 						</TouchableOpacity>
 					</View>

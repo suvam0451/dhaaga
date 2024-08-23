@@ -103,7 +103,7 @@ function BottomSheetContent({
 				if (!x) return <View></View>;
 				return (
 					<WithActivitypubStatusContext status={x}>
-						<Status />
+						<Status dto={x} />
 					</WithActivitypubStatusContext>
 				);
 			}

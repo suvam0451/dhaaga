@@ -47,6 +47,15 @@ export interface StatusInterface {
 
 	getRepostedStatusRaw(): Status;
 
+	/**
+	 * Misskey: This is the reply.
+	 *
+	 * The status object is actually thr parent
+	 */
+	getRepliedStatusRaw(): Status;
+
+	getQuote(): StatusInterface | null | undefined;
+
 	getContent(): string | null;
 
 	getUser(): UserType | null;

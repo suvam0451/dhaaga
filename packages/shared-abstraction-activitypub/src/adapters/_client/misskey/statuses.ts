@@ -3,7 +3,12 @@ import {
 	DhaagaJsPostCreateDto,
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
-import { MastoScheduledStatus, MissContext, MissNote } from '../_interface.js';
+import {
+	MastoScheduledStatus,
+	MastoStatus,
+	MissContext,
+	MissNote,
+} from '../_interface.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
 	COMPAT,
@@ -34,6 +39,25 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		dto: DhaagaJsPostCreateDto,
 	): LibraryPromise<MastoScheduledStatus> {
 		try {
+			console.log('dto', {
+				// ...dto,
+				lang: dto.language,
+				visibility: dto.misskeyVisibility,
+				replyId: dto.inReplyToId,
+				text: dto.status,
+				visibleUserIds:
+					dto.misskeyVisibility === 'specified'
+						? dto.visibleUserIds || []
+						: undefined,
+				fileIds: dto.mediaIds || [],
+				cw: dto.spoilerText || null,
+				localOnly: false,
+				// reactionAcceptance: null,
+				poll: dto.poll || null,
+				scheduledAt: null,
+				// cw: dto.spoilerText || null,
+			});
+
 			const data = await this.lib.client.request<
 				// @ts-ignore-next-line
 				Endpoints['notes/create']['req'],
@@ -44,11 +68,16 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				visibility: dto.misskeyVisibility,
 				replyId: dto.inReplyToId,
 				text: dto.status,
-				visibleUserIds: dto.visibleUserIds || [],
-				fileIds: dto.mediaIds || [],
-				cw: dto.spoilerText,
+				visibleUserIds:
+					dto.misskeyVisibility === 'specified'
+						? dto.visibleUserIds || []
+						: undefined,
+				fileIds: dto.mediaIds.length > 0 ? dto.mediaIds || [] : undefined,
+				cw: dto.spoilerText || undefined,
+				localOnly: false,
 				// reactionAcceptance: null,
-				// poll: dto.poll || null,
+				poll: dto.poll || null,
+				scheduledAt: null,
 				// cw: dto.spoilerText || null,
 			});
 			return { data: data as any };
@@ -174,6 +203,10 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		return { data: { success: true, isFavourited: true } };
 	}
 
+	/**
+	 * a.k.a. like -- applicable for Sharkey only
+	 * @param id
+	 */
 	async like(
 		id: string,
 	): LibraryPromise<{ success: boolean; hasReacted: true }> {
@@ -183,6 +216,10 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		).post('/api/notes/like', { noteId: id }, {});
 		if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		return { data: { success: true, hasReacted: true } };
+	}
+
+	async removeLike(id: string): LibraryPromise<MastoStatus> {
+		return errorBuilder<MastoStatus>(DhaagaErrorCode.UNKNOWN_ERROR);
 	}
 
 	/**

@@ -12,11 +12,22 @@ import {
 const MENU_ITEM_LABEL = 'Create Post';
 
 const CreatePostModule = memo(({ index }: FabModuleProps) => {
-	const { setVisible, setType } = useAppBottomSheet();
+	const {
+		setVisible,
+		setType,
+		PostComposerTextSeedRef,
+		replyToRef,
+		updateRequestId,
+	} = useAppBottomSheet();
+
 	const onClick = useCallback(() => {
+		PostComposerTextSeedRef.current = null;
+		replyToRef.current = null;
+
 		setType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
+		updateRequestId();
 		setVisible(true);
-	}, []);
+	}, [PostComposerTextSeedRef, replyToRef]);
 
 	return (
 		<FabMenuItemFactory

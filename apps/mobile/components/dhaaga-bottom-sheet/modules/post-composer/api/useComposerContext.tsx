@@ -1,4 +1,5 @@
 import {
+	InstanceApi_CustomEmojiDTO,
 	TagInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -11,7 +12,6 @@ import {
 } from 'react';
 import { useDebounce } from 'use-debounce';
 import { Text } from 'react-native';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 

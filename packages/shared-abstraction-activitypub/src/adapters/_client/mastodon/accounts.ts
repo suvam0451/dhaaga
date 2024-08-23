@@ -2,6 +2,7 @@ import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { AccountRoute } from '../_router/routes/_index.js';
 import {
 	errorBuilder,
+	notImplementedErrorBuilder,
 	successWithData,
 } from '../_router/dto/api-responses.dto.js';
 import {
@@ -14,10 +15,12 @@ import {
 import {
 	AccountMutePostDto,
 	AccountRouteStatusQueryDto,
+	BookmarkGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	FollowPostDto,
+	GetPostsQueryDTO,
 	MastoAccount,
 	MastoFamiliarFollowers,
 	MastoFeaturedTag,
@@ -25,6 +28,8 @@ import {
 	MastoRelationship,
 	MastoStatus,
 } from '../_interface.js';
+import AppApi from '../../_api/AppApi.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class MastodonAccountsRouter implements AccountRoute {
 	client: RestClient;
@@ -129,6 +134,13 @@ export class MastodonAccountsRouter implements AccountRoute {
 		return successWithData(data);
 	}
 
+	async getMany(ids: string[]): LibraryPromise<MastoAccount[]> {
+		return await new AppApi(
+			this.client.url,
+			this.client.accessToken,
+		).getCamelCase('/api/v1/accounts', { id: ids });
+	}
+
 	async relationships(
 		ids: string[],
 	): Promise<LibraryResponse<MastoRelationship[]>> {
@@ -139,5 +151,39 @@ export class MastodonAccountsRouter implements AccountRoute {
 			return errorBuilder(error);
 		}
 		return successWithData(data);
+	}
+
+	async likes(opts: GetPostsQueryDTO) {
+		const fn = this.lib.client.v1.favourites.list;
+		const { data, error } = await MastoErrorHandler(fn, [opts]);
+		const resData = await data;
+		if (error || resData === undefined) {
+			return errorBuilder(error);
+		}
+		return successWithData(data);
+	}
+
+	async bookmarks(query: BookmarkGetQueryDTO): Promise<
+		LibraryResponse<{
+			data: MastoStatus[];
+			minId?: string | null;
+			maxId?: string | null;
+		}>
+	> {
+		const { data: _data, error } = await new AppApi(
+			this.client.url,
+			this.client.accessToken,
+		).getCamelCaseWithLinkPagination<MastoStatus[]>('/api/v1/bookmarks', query);
+
+		if (!_data || error) {
+			return notImplementedErrorBuilder<{
+				data: MastoStatus[];
+				minId: string | null;
+				maxId: string | null;
+			}>();
+		}
+		return {
+			data: _data,
+		};
 	}
 }

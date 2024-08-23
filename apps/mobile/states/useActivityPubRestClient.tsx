@@ -9,9 +9,7 @@ import {
 import {
 	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
-	MastodonRestClient,
-	MisskeyRestClient,
-	UnknownRestClient,
+	ActivityPubClient,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
@@ -22,7 +20,7 @@ import { EmojiService } from '../services/emoji.service';
 import { useGlobalMmkvContext } from './useGlobalMMkvCache';
 
 type Type = {
-	client: MastodonRestClient | MisskeyRestClient | UnknownRestClient | null;
+	client: ActivityPubClient;
 	me: UserInterface | null;
 	meRaw: mastodon.v1.Account | null;
 	primaryAcct: Account;
@@ -61,9 +59,7 @@ export function useActivityPubRestClientContext() {
  * @constructor
  */
 function WithActivityPubRestClient({ children }: any) {
-	const [restClient, setRestClient] = useState<
-		MastodonRestClient | MisskeyRestClient | UnknownRestClient | null
-	>(null);
+	const [restClient, setRestClient] = useState<ActivityPubClient>(null);
 	const [Me, setMe] = useState(null);
 	const [MeRaw, setMeRaw] = useState(null);
 	const db = useRealm();

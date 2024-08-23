@@ -7,9 +7,11 @@ import { ActivityPubServerRepository } from '../repositories/activitypub-server.
 import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-emoji.repo';
 import activitypubAdapterService from './activitypub-adapter.service';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import GlobalMmkvCacheService from './globalMmkvCache.services';
+import {
+	InstanceApi_CustomEmojiDTO,
+	StatusInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
 
 export type EmojiAdapter = {
 	// common
@@ -95,9 +97,10 @@ export class EmojiService {
 		if (!forcedUpdate) return;
 
 		// GlobalMmkvCacheService
-		const result =
-			await ActivityPubService.fetchEmojisAndInstanceSoftware(subdomain);
-		console.log(subdomain, result?.software, result?.emojis?.length);
+		const result = await ActivityPubService.fetchEmojisAndInstanceSoftware(
+			db,
+			subdomain,
+		);
 
 		db.write(() => {
 			ActivityPubServerRepository.updateSoftwareType(db, {
@@ -339,11 +342,13 @@ export class EmojiService {
 	 * asynchronously download and save emojis
 	 *
 	 * cache-expiry: 7 days
+	 * @param db
 	 * @param globalDb
 	 * @param subdomain
 	 * @param software
 	 */
 	static async downloadCustomEmojis(
+		db: Realm,
 		globalDb: MMKV,
 		subdomain: string,
 		software?: string,
@@ -373,6 +378,7 @@ export class EmojiService {
 
 		// TODO: make software resolve from realm table
 		const res = await ActivityPubService.fetchEmojisAndInstanceSoftware(
+			db,
 			subdomain,
 			software,
 		);

@@ -9,7 +9,11 @@ import TitleOnlyNoScrollContainer from '../../../../components/containers/TitleO
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
 import AccountService from '../../../../services/account.service';
-import { UnknownRestClient } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	UnknownRestClient,
+	KNOWN_SOFTWARE,
+} from '@dhaaga/shared-abstraction-activitypub';
+import PleromaPasteToken from './PleromaPasteToken';
 
 function MastodonSignInStack() {
 	const [Code, setCode] = useState<string | null>(null);
@@ -89,30 +93,65 @@ function MastodonSignInStack() {
 						onNavigationStateChange={callback}
 					/>
 				</ScrollView>
-				<HideOnKeyboardVisibleContainer style={{ marginHorizontal: 12 }}>
-					<View style={{ height: 240 }}>
-						<MainText style={{ marginBottom: 12, marginTop: 16 }}>
-							Step 3: Confirm your account
-						</MainText>
-						{Code ? (
-							<View>
-								<Text style={{ marginBottom: 12 }}>
-									A valid token was detected. Proceed with adding the account
-									shown above?
-								</Text>
-							</View>
-						) : (
-							<View></View>
-						)}
-						<Button
-							disabled={!Code}
-							color={'rgb(99, 100, 255)'}
-							onPress={onPressConfirm}
-						>
-							Proceed
-						</Button>
+				{_domain === KNOWN_SOFTWARE.MASTODON ? (
+					<HideOnKeyboardVisibleContainer style={{ marginHorizontal: 12 }}>
+						<View style={{ height: 240 }}>
+							<MainText style={{ marginBottom: 12, marginTop: 16 }}>
+								Step 3: Confirm your account
+							</MainText>
+							<PleromaPasteToken domain={_domain} setCode={setCode} />
+							{Code ? (
+								<View>
+									<Text style={{ marginBottom: 12 }}>
+										A valid token was detected. Proceed with adding the account
+										shown above?
+									</Text>
+								</View>
+							) : (
+								<View></View>
+							)}
+
+							<Button
+								disabled={!Code}
+								color={'rgb(99, 100, 255)'}
+								onPress={onPressConfirm}
+							>
+								Proceed
+							</Button>
+						</View>
+					</HideOnKeyboardVisibleContainer>
+				) : (
+					<View style={{ marginHorizontal: 12 }}>
+						<View style={{ marginBottom: 54, paddingBottom: 16 }}>
+							<HideOnKeyboardVisibleContainer
+								style={{ marginBottom: 12, marginTop: 16 }}
+							>
+								<MainText>Step 3: Confirm your account</MainText>
+							</HideOnKeyboardVisibleContainer>
+							<PleromaPasteToken domain={_domain} setCode={setCode} />
+							{Code ? (
+								<View>
+									<Text style={{ marginBottom: 12 }}>
+										A valid token was detected. Proceed with adding the account
+										shown above?
+									</Text>
+								</View>
+							) : (
+								<View></View>
+							)}
+
+							<HideOnKeyboardVisibleContainer style={{ marginTop: 24 }}>
+								<Button
+									disabled={!Code}
+									color={'rgb(99, 100, 255)'}
+									onPress={onPressConfirm}
+								>
+									Proceed
+								</Button>
+							</HideOnKeyboardVisibleContainer>
+						</View>
 					</View>
-				</HideOnKeyboardVisibleContainer>
+				)}
 			</View>
 		</TitleOnlyNoScrollContainer>
 	);

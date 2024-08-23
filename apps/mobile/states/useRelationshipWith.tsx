@@ -2,13 +2,14 @@ import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MastoRelationship } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 import useHookLoadingState from './useHookLoadingState';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import {
 	LibraryResponse,
 	MastodonRestClient,
 	MisskeyRestClient,
+	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
+import ActivitypubRelationService from '../services/ap-proto/activitypub-relation.service';
 
 const defaultValue = {
 	blockedBy: false,
@@ -43,12 +44,30 @@ function useRelationshipWith(id: string) {
 
 	const [IsLoading, setIsLoading] = useState(false);
 	const Data = useRef(defaultValue);
+	const manager = useRef(
+		new ActivitypubRelationService(client, '', setIsLoading),
+	);
 
 	useEffect(() => {
 		Data.current = defaultValue;
 		forceUpdate();
+		manager.current = new ActivitypubRelationService(client, id, setIsLoading);
 		refetch();
-	}, [id]);
+	}, [id, client, setIsLoading]);
+
+	async function follow() {
+		const res = await manager.current.follow();
+		if (res) {
+			refetch();
+		}
+	}
+
+	async function unfollow() {
+		const res = await manager.current.unFollow();
+		if (res) {
+			refetch();
+		}
+	}
 
 	const setMastoRelation = useCallback(
 		({ data, error }: LibraryResponse<MastoRelationship[]>) => {
@@ -87,6 +106,9 @@ function useRelationshipWith(id: string) {
 
 			Data.current.blocking = data.isBlocking;
 			Data.current.blockedBy = data.isBlocked;
+
+			Data.current.requested = data.hasPendingFollowRequestFromYou;
+			Data.current.requestedBy = data.hasPendingFollowRequestToYou;
 		},
 		[Data, IsLoading],
 	);
@@ -107,7 +129,9 @@ function useRelationshipWith(id: string) {
 		setIsLoading(true);
 
 		switch (domain) {
-			case KNOWN_SOFTWARE.MASTODON: {
+			case KNOWN_SOFTWARE.MASTODON:
+			case KNOWN_SOFTWARE.PLEROMA:
+			case KNOWN_SOFTWARE.AKKOMA: {
 				(client as MastodonRestClient).accounts
 					.relationships([id])
 					.then(setMastoRelation)
@@ -143,6 +167,8 @@ function useRelationshipWith(id: string) {
 		setRelation,
 		relationLoading: IsLoading,
 		setRelationLoading: setIsLoading,
+		follow,
+		unfollow,
 	};
 }
 

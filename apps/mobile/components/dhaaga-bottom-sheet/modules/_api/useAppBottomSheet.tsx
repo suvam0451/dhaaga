@@ -1,10 +1,14 @@
-import { createContext, useContext, useRef, useState } from 'react';
+import {
+	createContext,
+	MutableRefObject,
+	useContext,
+	useRef,
+	useState,
+} from 'react';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import AppBottomSheet from '../../Core';
-import {
-	StatusInterface,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -23,18 +27,20 @@ type Type = {
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
 	requestId: string;
+	replyToRef?: MutableRefObject<ActivityPubStatusAppDtoType>;
 
 	// references
-	PostRef: React.MutableRefObject<StatusInterface>;
-	PostIdRef: React.MutableRefObject<string>;
-	UserRef: React.MutableRefObject<UserInterface>;
-	UserIdRef: React.MutableRefObject<string>;
+	PostRef: MutableRefObject<ActivityPubStatusAppDtoType>;
+	PostIdRef: MutableRefObject<string>;
+	UserRef: MutableRefObject<UserInterface>;
+	UserIdRef: MutableRefObject<string>;
 	// pre-populate the post-composer to this content
-	PostComposerTextSeedRef: React.MutableRefObject<string>;
+	PostComposerTextSeedRef: MutableRefObject<string>;
 };
 
 const defaultValue: Type = {
 	type: BOTTOM_SHEET_ENUM.NA,
+	replyToRef: undefined,
 	setType: () => {},
 	visible: false,
 	setVisible: () => {},
@@ -63,11 +69,12 @@ function WithAppBottomSheetContext({ children }: Props) {
 	const { forceUpdate, State } = useHookLoadingState();
 
 	// pointers
-	const PostRef = useRef<StatusInterface>(null);
+	const PostRef = useRef<ActivityPubStatusAppDtoType>(null);
 	const PostIdRef = useRef<string>(null);
 	const UserRef = useRef<UserInterface>(null);
 	const UserIdRef = useRef<string>(null);
 	const PostComposerTextSeedRef = useRef<string>(null);
+	const replyToRef = useRef<ActivityPubStatusAppDtoType>(null);
 
 	return (
 		<AppBottomSheetContext.Provider
@@ -83,6 +90,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 				UserRef,
 				UserIdRef,
 				PostComposerTextSeedRef,
+				replyToRef,
 			}}
 		>
 			{children}

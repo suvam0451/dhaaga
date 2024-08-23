@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import FollowIndicator from '../../../../common/user/fragments/FollowIndicator';
 import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
 import { ProfileStatsInterface } from '../../../../common/user/fragments/ProfileStats';
 import WithActivitypubUserContext from '../../../../../states/useProfile';
@@ -21,6 +20,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import ProfilePeekMessage from '../fragments/ProfilePeekMessage';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
+import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
 
 const ProfilePeekBottomSheet = memo(() => {
 	const { subdomain } = useActivityPubRestClientContext();
@@ -95,7 +95,7 @@ const ProfilePeekBottomSheet = memo(() => {
 								color={APP_FONT.MONTSERRAT_BODY}
 							/>
 						</View>
-						<FollowIndicator userId={Data?.getId()} />
+						<RelationshipButtonCore userId={Data?.getId()} />
 					</View>
 				</View>
 				<ProfileDesc

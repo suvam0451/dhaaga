@@ -18,7 +18,7 @@ export class MisskeyUser implements UserInterface {
 	}
 
 	getIsLockedProfile(): boolean | null | undefined {
-		return false;
+		return this.ref.instance?.isLocked;
 	}
 
 	private extractInstanceUrl(

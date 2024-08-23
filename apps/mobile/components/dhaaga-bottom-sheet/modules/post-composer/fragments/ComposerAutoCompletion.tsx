@@ -11,13 +11,15 @@ import { useComposerContext } from '../api/useComposerContext';
 import usePostComposeAutoCompletion from '../api/usePostComposeAutoCompletion';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	InstanceApi_CustomEmojiDTO,
+	UserInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
 } from 'react-native-reanimated';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 const AVATAR_ICON_SIZE = 32;
 

@@ -1,80 +1,163 @@
-import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
 import TimelineLoading from '../../../loading-screens/TimelineLoading';
-import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
+import useActivityPubLists, {
+	AppAntennaDto,
+	AppListDto,
+} from '../../../../hooks/api/lists/useActivityPubLists';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import { Fragment, memo } from 'react';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Entypo from '@expo/vector-icons/Entypo';
 
-function ListTimelineOptions() {
-	const { client, primaryAcct } = useActivityPubRestClientContext();
-	const username = primaryAcct.username;
-	const subdomain = primaryAcct.subdomain;
+type ListItemProps = {
+	label: string;
+	onPress: () => void;
+};
+
+const ListItem = memo(({ label, onPress }: ListItemProps) => {
+	return (
+		<TouchableOpacity style={styles.listItemContainer} onPress={onPress}>
+			<Text
+				style={{
+					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					color: APP_FONT.MONTSERRAT_BODY,
+				}}
+			>
+				{label}
+			</Text>
+		</TouchableOpacity>
+	);
+});
+
+type ListProps = {
+	items: AppListDto[];
+};
+
+const Lists = memo(({ items }: ListProps) => {
 	const { setTimelineType, setQuery, setShowTimelineSelection } =
 		useTimelineController();
 
-	async function api() {
-		if (!client) throw new Error('_client not initialized');
-
-		return client.getMyLists();
-	}
-
-	// Queries
-	const { data, fetchStatus } = useQuery<mastodon.v1.List[]>({
-		queryKey: [username, subdomain],
-		queryFn: api,
-		enabled: client !== null,
-	});
-
-	if (fetchStatus === 'fetching') {
-		return <TimelineLoading label={'Loading Your Lists'} />;
-	}
-
 	function onListSelected(idx: number) {
-		setQuery({ id: data[idx].id, label: data[idx].title });
+		const { id, label } = items[idx];
+		setQuery({ id, label });
 		setTimelineType(TimelineFetchMode.LIST);
 		setShowTimelineSelection(false);
 	}
 
 	return (
-		<View style={{ padding: 8, paddingTop: 8 }}>
-			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					color: APP_FONT.MONTSERRAT_BODY,
-					marginVertical: 8,
-				}}
-			>
-				Your lists:
-			</Text>
-			{data.map((o, i) => (
-				<TouchableOpacity
+		<Fragment>
+			<View style={styles.sectionLabelContainer}>
+				<View style={{ width: 32 }}>
+					<Entypo name="list" size={24} color={APP_FONT.MONTSERRAT_BODY} />
+				</View>
+				<Text style={styles.sectionLabel}>Your lists:</Text>
+			</View>
+			{items.map((o, i) => (
+				<ListItem
 					key={i}
-					style={{
-						marginHorizontal: 0,
-						backgroundColor: '#383838',
-						padding: 10,
-						borderRadius: 8,
-						marginVertical: 4,
-					}}
+					label={o.label}
 					onPress={() => {
 						onListSelected(i);
 					}}
-				>
-					<Text
-						style={{
-							fontFamily: 'Montserrat-Bold',
-							color: APP_FONT.MONTSERRAT_BODY,
-						}}
-					>
-						{o.title}
-					</Text>
-				</TouchableOpacity>
+				/>
 			))}
+		</Fragment>
+	);
+});
+
+type AntennaListProps = {
+	items: AppAntennaDto[];
+};
+
+const ANTENNA_COMPATIBLE_SOFTWARE = [
+	KNOWN_SOFTWARE.FIREFISH,
+	KNOWN_SOFTWARE.SHARKEY,
+	KNOWN_SOFTWARE.MISSKEY,
+];
+
+const AntennaList = memo(({ items }: AntennaListProps) => {
+	const { domain } = useActivityPubRestClientContext();
+	const { setTimelineType, setQuery, setShowTimelineSelection } =
+		useTimelineController();
+
+	function onAntennaSelected(idx: number) {
+		const { id, label } = items[idx];
+		setQuery({ id, label });
+		setTimelineType(TimelineFetchMode.ANTENNA);
+		setShowTimelineSelection(false);
+	}
+
+	if (!ANTENNA_COMPATIBLE_SOFTWARE.includes(domain as any)) return <View />;
+
+	return (
+		<Fragment>
+			<View style={styles.sectionLabelContainer}>
+				<View style={{ width: 32 }}>
+					<MaterialCommunityIcons
+						name="antenna"
+						size={24}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+				</View>
+				<Text style={styles.sectionLabel}>Your antennas:</Text>
+			</View>
+
+			{items.map((o, i) => (
+				<ListItem
+					key={i}
+					label={o.label}
+					onPress={() => {
+						onAntennaSelected(i);
+					}}
+				/>
+			))}
+		</Fragment>
+	);
+});
+
+const ListTimelineOptions = memo(() => {
+	const { data: listsData, fetchStatus } = useActivityPubLists();
+
+	if (fetchStatus === 'fetching') {
+		return <TimelineLoading label={'Loading Your Lists'} />;
+	}
+
+	return (
+		<View style={styles.rootContainer}>
+			<Lists items={listsData.lists} />
+			<AntennaList items={listsData.antennas} />
 		</View>
 	);
-}
+});
+
+const styles = StyleSheet.create({
+	rootContainer: {
+		padding: 8,
+		paddingTop: 8,
+	},
+	sectionLabelContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 8,
+		marginBottom: 4,
+	},
+	sectionLabel: {
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		color: APP_FONT.MONTSERRAT_BODY,
+		marginVertical: 8,
+	},
+	listItemContainer: {
+		marginHorizontal: 0,
+		backgroundColor: '#383838',
+		padding: 10,
+		borderRadius: 8,
+		marginVertical: 4,
+	},
+});
 
 export default ListTimelineOptions;

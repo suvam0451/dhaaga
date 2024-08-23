@@ -11,9 +11,8 @@ import { Status, StatusArray } from '../../status/_interface.js';
 import { MisskeyInstanceRouter } from './instance.js';
 import { MisskeyAccountsRouter } from './accounts.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { KNOWN_SOFTWARE } from '../_router/instance.js';
+import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { MisskeyStatusesRouter } from './statuses.js';
-import { MisskeyBookmarksRouter } from './bookmarks.js';
 import { MisskeyTrendsRouter } from './trends.js';
 import { MisskeyNotificationsRouter } from './notifications.js';
 import { MisskeyTimelinesRouter } from './timelines.js';
@@ -21,6 +20,7 @@ import { MisskeyTagsRouter } from './tags.js';
 import { MisskeySearchRouter } from './search.js';
 import { MisskeyMeRouter } from './me.js';
 import { MisskeyMediaRouter } from './media.js';
+import { MisskeyListsRoute } from './lists.js';
 
 class MisskeyRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -28,7 +28,6 @@ class MisskeyRestClient implements ActivityPubClient {
 	instances: MisskeyInstanceRouter;
 	accounts: MisskeyAccountsRouter;
 	statuses: MisskeyStatusesRouter;
-	bookmarks: MisskeyBookmarksRouter;
 	trends: MisskeyTrendsRouter;
 	notifications: MisskeyNotificationsRouter;
 	timelines: MisskeyTimelinesRouter;
@@ -36,6 +35,7 @@ class MisskeyRestClient implements ActivityPubClient {
 	search: MisskeySearchRouter;
 	me: MisskeyMeRouter;
 	media: MisskeyMediaRouter;
+	lists: MisskeyListsRoute;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -48,7 +48,6 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.instances = new MisskeyInstanceRouter();
 		this.accounts = new MisskeyAccountsRouter(this.client);
 		this.statuses = new MisskeyStatusesRouter(this.client);
-		this.bookmarks = new MisskeyBookmarksRouter(this.client);
 		this.trends = new MisskeyTrendsRouter(this.client);
 		this.notifications = new MisskeyNotificationsRouter(this.client);
 		this.timelines = new MisskeyTimelinesRouter(this.client);
@@ -56,6 +55,7 @@ class MisskeyRestClient implements ActivityPubClient {
 		this.search = new MisskeySearchRouter(this.client);
 		this.me = new MisskeyMeRouter(this.client);
 		this.media = new MisskeyMediaRouter(this.client);
+		this.lists = new MisskeyListsRoute(this.client);
 	}
 
 	async reblog(id: string): Promise<Status> {
@@ -126,14 +126,6 @@ class MisskeyRestClient implements ActivityPubClient {
 		// throw new Error("Method not implemented.");
 	}
 
-	async getFavourites(opts: GetPostsQueryDTO): Promise<StatusArray> {
-		return [];
-	}
-
-	async getBookmarks(opts: GetPostsQueryDTO) {
-		return { data: [] };
-	}
-
 	async getFollowedTags() {
 		return [];
 	}
@@ -144,14 +136,6 @@ class MisskeyRestClient implements ActivityPubClient {
 
 	async unFavourite(id: string) {
 		return null;
-	}
-
-	async bookmark(id: string): Promise<Note> {
-		throw new Error('Method not implemented.');
-	}
-
-	async unBookmark(id: string): Promise<Note> {
-		throw new Error('Method not implemented.');
 	}
 
 	async getUserPosts(userId: string, opts: GetUserPostsQueryDTO) {
