@@ -1,5 +1,4 @@
 import {
-	MisskeyRestClient,
 	StatusInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -55,9 +54,13 @@ type Type = {
 	addUsers: (items: UserInterface[]) => void;
 	clear: () => void;
 	/**
-	 *
+	 * Interaction Actions
 	 */
 	toggleBookmark: (
+		key: string,
+		dispatch: Dispatch<SetStateAction<boolean>>,
+	) => void;
+	toggleLike: (
 		key: string,
 		dispatch: Dispatch<SetStateAction<boolean>>,
 	) => void;
@@ -67,6 +70,10 @@ type Type = {
 		dispatch: Dispatch<SetStateAction<boolean>>,
 	) => void;
 	boost: (key: string, dispatch: Dispatch<SetStateAction<boolean>>) => void;
+	getBookmarkState: (
+		key: string,
+		dispatch: Dispatch<SetStateAction<boolean>>,
+	) => void;
 	count: number;
 };
 
@@ -78,7 +85,10 @@ const defaultValue: Type = {
 	addPosts: () => {},
 	addUsers: () => {},
 	clear: () => {},
+
+	getBookmarkState: () => {},
 	toggleBookmark: () => {},
+	toggleLike: () => {},
 	explain: () => {},
 	boost: () => {},
 	count: 0,
@@ -187,28 +197,27 @@ function WithAppTimelineDataContext({ children }: Props) {
 			}
 
 			const localState = match.interaction.boosted;
-			switch (domain) {
-				case KNOWN_SOFTWARE.MISSKEY:
-				case KNOWN_SOFTWARE.FIREFISH:
-				case KNOWN_SOFTWARE.SHARKEY: {
-					if (localState) {
-						const { data, error } = await (
-							client as MisskeyRestClient
-						).statuses.unrenote(key);
-						if (!error && data.success) {
-							postListReducer({
-								type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS,
-								payload: {
-									id: key,
-									value: data.renoted,
-								},
-							});
-						}
-					}
+			try {
+				const state = await ActivityPubService.toggleBoost(
+					client,
+					key,
+					localState,
+					domain as any,
+				);
+				if (state !== null) {
+					postListReducer({
+						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS,
+						payload: {
+							id: key,
+							value: state,
+						},
+					});
 				}
+			} finally {
+				setLoading(false);
 			}
 		},
-		[Posts],
+		[Posts, domain],
 	);
 
 	/**
@@ -222,6 +231,45 @@ function WithAppTimelineDataContext({ children }: Props) {
 	 * next re-render
 	 * */
 	// const initialize = useCallback(() => {}, []);
+
+	const getBookmarkState = useCallback(
+		async (key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
+			if (
+				!client ||
+				[
+					KNOWN_SOFTWARE.MASTODON,
+					KNOWN_SOFTWARE.PLEROMA,
+					KNOWN_SOFTWARE.AKKOMA,
+				].includes(domain as any)
+			) {
+				return;
+			}
+			setLoading(true);
+			const match = findById(key);
+			if (!match) {
+				setLoading(false);
+				return;
+			}
+
+			try {
+				const res = await ActivityPubService.getBookmarkState(client, key);
+				if (res === null) {
+					setLoading(false);
+					return;
+				}
+				postListReducer({
+					type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
+					payload: {
+						id: key,
+						value: res,
+					},
+				});
+			} finally {
+				setLoading(false);
+			}
+		},
+		[Posts, domain],
+	);
 
 	const toggleBookmark = useCallback(
 		(key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
@@ -256,7 +304,33 @@ function WithAppTimelineDataContext({ children }: Props) {
 		[Posts],
 	);
 
-	const toggleLike = useCallback(() => {}, [Posts]);
+	const toggleLike = useCallback(
+		async (key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
+			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).then(() => {});
+			setLoading(true);
+			const match = findById(key);
+			try {
+				const response = await ActivityPubService.toggleLike(
+					client,
+					key,
+					match.interaction.liked,
+					domain as any,
+				);
+				if (response !== null) {
+					postListReducer({
+						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_LIKE_STATUS,
+						payload: {
+							id: key,
+							delta: response,
+						},
+					});
+				}
+			} catch (e) {
+				console.log('error', e);
+			}
+		},
+		[Posts, domain],
+	);
 
 	const explain = useCallback(
 		async (
@@ -297,7 +371,9 @@ function WithAppTimelineDataContext({ children }: Props) {
 				addUsers,
 				clear,
 				toggleBookmark,
+				getBookmarkState,
 				explain,
+				toggleLike,
 				emojiCache: EmojiCache.current,
 				boost,
 			}}

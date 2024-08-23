@@ -8,6 +8,7 @@ import {
 	MastoScheduledStatus,
 	MastoStatus,
 	MegaReaction,
+	MegaStatus,
 } from '../_interface.js';
 import {
 	errorBuilder,
@@ -21,6 +22,7 @@ import {
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import camelcaseKeys from 'camelcase-keys';
+import AppApi from '../../_api/AppApi.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	client: RestClient;
@@ -36,7 +38,13 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	}
 
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
-		return notImplementedErrorBuilder();
+		const response = await this.lib.client.getStatus(id);
+		if (response.status !== 200) {
+			console.log('[ERROR]: failed to get status', response.statusText);
+		}
+		return {
+			data: camelcaseKeys(response.data) as any,
+		};
 	}
 
 	async create(
@@ -84,8 +92,12 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	}
 
 	async like(id: string) {
+		// const { data, error } = await new AppApi(
+		// 	this.client.url,
+		// 	this.client.accessToken,
+		// ).post(`/api/v1/statuses/${id}/favourite`, {}, {});
 		const data = await this.lib.client.favouriteStatus(id);
-		return { data: data.data };
+		return { data: data as any };
 	}
 
 	async removeLike(id: string) {
@@ -95,6 +107,16 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async getContext(id: string) {
 		const data = await this.lib.client.getStatusContext(id);
+		return { data: camelcaseKeys(data.data) };
+	}
+
+	async boost(id: string): LibraryPromise<MegaStatus> {
+		const data = await this.lib.client.reblogStatus(id);
+		return { data: data.data };
+	}
+
+	async removeBoost(id: string): LibraryPromise<MegaStatus> {
+		const data = await this.lib.client.unreblogStatus(id);
 		return { data: data.data };
 	}
 }

@@ -8,6 +8,7 @@ import ActivitypubAdapterService from '../activitypub-adapter.service';
 import MediaService from '../media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -98,6 +99,9 @@ export const ActivityPubStatusItemDto = z.object({
 			}),
 		),
 	}),
+	state: z.object({
+		isBookmarkStateFinal: z.boolean(),
+	}),
 });
 
 export const ActivityPubStatusLevelTwo = ActivityPubStatusItemDto.extend({
@@ -176,6 +180,12 @@ export class ActivitypubStatusDtoService {
 			subdomain,
 		);
 
+		const IS_BOOKMARK_RESOLVED = [
+			KNOWN_SOFTWARE.MASTODON,
+			KNOWN_SOFTWARE.PLEROMA,
+			KNOWN_SOFTWARE.AKKOMA,
+		].includes(domain as any);
+
 		return {
 			id: input.getId(),
 			visibility: input.getVisibility(),
@@ -226,6 +236,9 @@ export class ActivitypubStatusDtoService {
 					handle: o.acct,
 					url: o.url,
 				})),
+			},
+			state: {
+				isBookmarkStateFinal: IS_BOOKMARK_RESOLVED,
 			},
 		};
 	}

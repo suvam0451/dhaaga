@@ -141,7 +141,7 @@ function PostReplyToReply({ colors, lookupId }: PostReplyToReplyProps) {
 						<PostReplyToReply
 							key={i}
 							colors={[color.current]}
-							lookupId={dto.id}
+							lookupId={o.id}
 						/>
 					))}
 				</View>

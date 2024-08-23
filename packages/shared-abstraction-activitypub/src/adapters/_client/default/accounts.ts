@@ -15,6 +15,7 @@ import {
 	MastoRelationship,
 	MastoStatus,
 	MegaAccount,
+	MegaRelationship,
 	MegaStatus,
 	MissUserDetailed,
 } from '../_interface.js';
@@ -33,25 +34,33 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	follow(
 		id: string,
 		opts: FollowPostDto,
-	): LibraryPromise<MastoRelationship | Endpoints['following/create']['res']> {
+	): LibraryPromise<
+		MastoRelationship | Endpoints['following/create']['res'] | MegaRelationship
+	> {
 		throw new Error('Method not implemented.');
 	}
 
 	unfollow(
 		id: string,
-	): LibraryPromise<MastoRelationship | Endpoints['following/delete']['res']> {
+	): LibraryPromise<
+		MastoRelationship | Endpoints['following/delete']['res'] | MegaRelationship
+	> {
 		throw new Error('Method not implemented.');
 	}
 
 	block(
 		id: string,
-	): LibraryPromise<MastoRelationship | Endpoints['blocking/create']['res']> {
+	): LibraryPromise<
+		MastoRelationship | Endpoints['blocking/create']['res'] | MegaRelationship
+	> {
 		throw new Error('Method not implemented.');
 	}
 
 	unblock(
 		id: string,
-	): LibraryPromise<MastoRelationship | Endpoints['blocking/delete']['res']> {
+	): LibraryPromise<
+		MastoRelationship | Endpoints['blocking/delete']['res'] | MegaRelationship
+	> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -62,7 +71,9 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 		throw new Error('Method not implemented.');
 	}
 
-	unmute(id: string): Promise<LibraryResponse<MastoRelationship>> {
+	unmute(
+		id: string,
+	): Promise<LibraryResponse<MastoRelationship | MegaRelationship>> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -86,7 +97,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 
 	async get(
 		id: string,
-	): Promise<LibraryResponse<MastoAccount | MissUserDetailed>> {
+	): Promise<LibraryResponse<MastoAccount | MissUserDetailed | MegaAccount>> {
 		return {
 			error: {
 				code: DhaagaErrorCode.FEATURE_UNSUPPORTED,

@@ -1,5 +1,7 @@
 import {
 	ActivityPubClient,
+	MastodonRestClient,
+	MisskeyRestClient,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 import * as Crypto from 'expo-crypto';
@@ -9,9 +11,10 @@ import { Realm } from 'realm';
 import { ActivityPubServerRepository } from '../repositories/activitypub-server.repo';
 import { ActivityPubServer } from '../entities/activitypub-server.entity';
 import {
-	KNOWN_SOFTWARE,
 	InstanceApi_CustomEmojiDTO,
+	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/instance';
+import PleromaRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/pleroma';
 
 class ActivityPubService {
 	/**
@@ -158,11 +161,116 @@ class ActivityPubService {
 		}
 	}
 
-	static async boost(
+	static async toggleLike(
 		client: ActivityPubClient,
 		id: string,
 		localState: boolean,
-	) {}
+		domain: KNOWN_SOFTWARE,
+	) {
+		if (
+			[
+				KNOWN_SOFTWARE.MISSKEY,
+				KNOWN_SOFTWARE.SHARKEY,
+				KNOWN_SOFTWARE.FIREFISH,
+			].includes(domain as any)
+		) {
+			return null;
+		}
+		if (localState) {
+			const { data, error } = await client.statuses.removeLike(id);
+			if (error) {
+				console.log('[WARN]: failed to like status', error);
+				return null;
+			}
+			return -1;
+		} else {
+			const { data, error } = await client.statuses.like(id);
+			if (error) {
+				console.log('[WARN]: failed to remove like for status', error);
+				return null;
+			}
+			return +1;
+		}
+	}
+
+	static async toggleBoost(
+		client: ActivityPubClient,
+		id: string,
+		localState: boolean,
+		domain: KNOWN_SOFTWARE,
+	) {
+		if (
+			[
+				KNOWN_SOFTWARE.MISSKEY,
+				KNOWN_SOFTWARE.SHARKEY,
+				KNOWN_SOFTWARE.FIREFISH,
+			].includes(domain)
+		) {
+			if (localState) {
+				const { data, error } = await (
+					client as MisskeyRestClient
+				).statuses.unrenote(id);
+				if (error) {
+					console.log('[WARN]: failed to remove boost', error);
+					return null;
+				}
+				return -1;
+			} else {
+				const { data, error } = await (
+					client as MisskeyRestClient
+				).statuses.renote({
+					renoteId: id,
+					visibility: 'followers',
+					localOnly: true,
+				});
+				if (error) {
+					console.log('[WARN]: failed to boost', error);
+					return null;
+				}
+				return +1;
+			}
+		} else if (domain === KNOWN_SOFTWARE.MASTODON) {
+			if (localState) {
+				const { data, error } = await (
+					client as MastodonRestClient
+				).statuses.removeBoost(id);
+				if (error) {
+					console.log('[WARN]: failed to remove boost', error);
+					return null;
+				}
+				return -1;
+			} else {
+				const { data, error } = await (
+					client as MastodonRestClient
+				).statuses.boost(id);
+				if (error) {
+					console.log('[WARN]: failed to boost', error);
+					return null;
+				}
+				return 1;
+			}
+		} else {
+			if (localState) {
+				const { data, error } = await (
+					client as PleromaRestClient
+				).statuses.removeBoost(id);
+				if (error) {
+					console.log('[WARN]: failed to remove boost', error);
+					return null;
+				}
+				return -1;
+			} else {
+				const { data, error } = await (
+					client as PleromaRestClient
+				).statuses.boost(id);
+				if (error) {
+					console.log('[WARN]: failed to boost', error);
+					return null;
+				}
+				return 1;
+			}
+		}
+	}
 
 	/**
 	 * detect software for a subdomain
@@ -200,6 +308,20 @@ class ActivityPubService {
 		});
 		if (error) return null;
 		return data;
+	}
+
+	static async getBookmarkState(
+		client: ActivityPubClient,
+		id: string,
+	): Promise<boolean> {
+		const { data, error } = await (
+			client as MisskeyRestClient
+		).statuses.getState(id);
+		if (error) {
+			console.log('[WARN]: error fetching bookmarked state');
+			return null;
+		}
+		return data.isFavorited;
 	}
 }
 

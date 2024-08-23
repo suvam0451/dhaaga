@@ -10,6 +10,7 @@ export enum TIMELINE_POST_LIST_DATA_REDUCER_TYPE {
 	UPDATE_BOOKMARK_STATUS = 'updateBookmarkStatus',
 	UPDATE_BOOST_STATUS = 'updateBoostStatus',
 	UPDATE_TRANSLATION_OUTPUT = 'updateTranslationOutput',
+	UPDATE_LIKE_STATUS = 'updateLikeStatus',
 }
 
 /**
@@ -49,26 +50,30 @@ function postArrayReducer(
 				for (const post of posts) {
 					if (post.id === _id) {
 						post.interaction.bookmarked = _value;
+						post.state.isBookmarkStateFinal = true;
 					}
 
 					if (post.boostedFrom?.id === _id) {
 						post.boostedFrom.interaction.bookmarked = _value;
+						post.boostedFrom.state.isBookmarkStateFinal = true;
 					}
 				}
 			});
 		}
 		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOST_STATUS: {
 			const _id: string = action.payload.id;
-			const _value: boolean = action.payload.value;
+			const _value = action.payload.value;
 			if (!_id || !_value) return state;
 			return produce(state, (posts) => {
 				for (const post of posts) {
 					if (post.id === _id) {
-						post.interaction.boosted = _value;
+						post.interaction.boosted = _value != -1;
+						post.stats.boostCount += parseInt(_value);
 					}
 
 					if (post.boostedFrom?.id === _id) {
-						post.boostedFrom.interaction.boosted = _value;
+						post.boostedFrom.interaction.boosted = _value != -1;
+						post.stats.boostCount += parseInt(_value);
 					}
 				}
 			});
@@ -93,6 +98,24 @@ function postArrayReducer(
 					if (post.boostedFrom?.id === _id) {
 						post.boostedFrom.calculated.translationOutput = _outputText;
 						post.boostedFrom.calculated.translationType = _outputType;
+					}
+				}
+			});
+		}
+		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_LIKE_STATUS: {
+			const _id = action.payload.id;
+			const _delta = action.payload.delta;
+
+			if (_id === undefined || _delta === undefined) return state;
+			return produce(state, (posts) => {
+				for (const post of posts) {
+					if (post.id === _id) {
+						post.interaction.liked = _delta != -1;
+						post.stats.likeCount += parseInt(_delta);
+					}
+					if (post.boostedFrom?.id === _id) {
+						post.boostedFrom.interaction.liked = _delta != -1;
+						post.boostedFrom.stats.likeCount += parseInt(_delta);
 					}
 				}
 			});

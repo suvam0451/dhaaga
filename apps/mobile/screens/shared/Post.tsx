@@ -11,6 +11,7 @@ import WithAppStatusContextDataContext, {
 } from '../../hooks/api/statuses/WithAppStatusContextData';
 import PostReply from '../../components/common/status/PostReply';
 import { APP_FONT } from '../../styles/AppTheme';
+import WithAppTimelineDataContext from '../../components/common/timeline/api/useTimelineData';
 
 function StatusContextComponent() {
 	const { data } = useAppStatusContextDataContext();
@@ -55,17 +56,19 @@ function Post() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Post Details'} translateY={translateY}>
+		<WithAutoHideTopNavBar title={'' + 'Post Details'} translateY={translateY}>
 			<WithAppStatusContextDataContext data={Data} dispatch={dispatch}>
-				<Animated.ScrollView
-					refreshControl={
-						<RefreshControl refreshing={refreshing} onRefresh={refetch} />
-					}
-					contentContainerStyle={{ paddingTop: 54 }}
-					onScroll={onScroll}
-				>
-					<StatusContextComponent />
-				</Animated.ScrollView>
+				<WithAppTimelineDataContext>
+					<Animated.ScrollView
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={refetch} />
+						}
+						contentContainerStyle={{ paddingTop: 54 }}
+						onScroll={onScroll}
+					>
+						<StatusContextComponent />
+					</Animated.ScrollView>
+				</WithAppTimelineDataContext>
 			</WithAppStatusContextDataContext>
 		</WithAutoHideTopNavBar>
 	);

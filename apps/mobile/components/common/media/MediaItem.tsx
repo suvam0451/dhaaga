@@ -1,4 +1,4 @@
-import { Dimensions, View } from 'react-native';
+import { View } from 'react-native';
 import { memo, useMemo } from 'react';
 import { MARGIN_TOP } from './_common';
 import {
@@ -80,13 +80,7 @@ const TimelineMediaRendered = memo(function Foo({
 	return (
 		<View
 			style={{
-				justifyContent: 'center',
-				alignItems: 'center',
-				width: Dimensions.get('window').width - (leftMarginAdjustment || 0),
-				height: attachment.type === 'audio' ? 48 : _height,
-				position: 'relative',
 				marginTop: MARGIN_TOP,
-				// backgroundColor: 'blue',
 			}}
 		>
 			{MediaItem}

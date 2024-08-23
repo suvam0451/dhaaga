@@ -5,7 +5,7 @@ import type {
 	User,
 	UserDetailedNotMe,
 } from 'misskey-js/autogen/models.js';
-import type { Status, StatusArray } from '../status/_interface.js';
+import type { Status } from '../status/_interface.js';
 import { RouterInterface } from './_router/routes/_index.js';
 import { InstanceRoute } from './_router/routes/instance.js';
 
@@ -17,6 +17,7 @@ import type { Tag as MLTag } from 'megalodon/lib/esm/src/entities/tag.js';
 import type { FeaturedTag as MLFeaturedTag } from 'megalodon/lib/esm/src/entities/featured_tag.js';
 import type { Account as MLAccount } from 'megalodon/lib/esm/src/entities/account.js';
 import type { List as MLList } from 'megalodon/lib/esm/src/entities/list.js';
+import type { Relationship as MLRelationship } from 'megalodon/lib/esm/src/entities/relationship.js';
 
 /**
  * TS4053: Return type of public method
@@ -46,6 +47,7 @@ export type MegaTag = MLTag;
 export type MegaFeaturedTag = MLFeaturedTag;
 export type MegaAccount = MLAccount;
 export type MegaList = MLList;
+export type MegaRelationship = MLRelationship;
 
 export type MissUserDetailed = UserDetailed;
 export type MissNote = Note;

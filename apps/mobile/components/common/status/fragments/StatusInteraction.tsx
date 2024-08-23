@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import {
 	View,
 	TouchableOpacity,
@@ -45,7 +45,8 @@ const StatusInteraction = memo(
 		const { setVisible, setBottomSheetType, updateRequestId } =
 			useGorhomActionSheetContext();
 		const { globalDb } = useGlobalMmkvContext();
-		const { toggleBookmark, explain, boost } = useAppTimelineDataContext();
+		const { toggleBookmark, explain, boost, getBookmarkState } =
+			useAppTimelineDataContext();
 
 		const STATUS_DTO = dto;
 
@@ -86,6 +87,12 @@ const StatusInteraction = memo(
 			setBottomSheetVisible(true);
 		}
 
+		useEffect(() => {
+			if (!STATUS_DTO.state.isBookmarkStateFinal) {
+				getBookmarkState(STATUS_DTO.id, setIsBookmarkStatePending);
+			}
+		}, [STATUS_DTO]);
+
 		function OnTranslationClicked() {
 			if (IsTranslateStateLoading) return;
 			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -98,12 +105,6 @@ const StatusInteraction = memo(
 					console.log(e);
 				});
 		}
-
-		// const {
-		// 	IsBoosted,
-		// 	IsLoading: IsBoostLoading,
-		// 	onPress: onBoostPress,
-		// } = useBoost();
 
 		function onShowAdvancedMenuPressed() {
 			try {

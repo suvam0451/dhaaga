@@ -29,11 +29,14 @@ class MastodonService {
 			lookup.set(o.getId(), o);
 		});
 
-		// try to fix the root
-		let root = flat.find((o) => o?.getId() === target?.getId());
+		// try to fix the root (only if source itself was a root node)
+		let root = flat.find(
+			(o) => o?.getId() === target?.getId() && o.getParentStatusId() === null,
+		);
+
 		// fixes #126
 		if (!root) {
-			flat.find((o) => o?.getParentStatusId() === null);
+			root = flat.find((o) => o?.getParentStatusId() === null);
 		}
 		if (!root) root = target;
 		deque.push(root.getId());
