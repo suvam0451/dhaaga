@@ -14,7 +14,7 @@ import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { Fragment, useState } from 'react';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 /**
  * Search Module -- Trending Posts

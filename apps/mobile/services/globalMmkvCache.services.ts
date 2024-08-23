@@ -1,6 +1,6 @@
 import type { MMKV } from 'react-native-mmkv';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { ActivityPubStatusAppDtoType } from './ap-proto/activitypub-status-dto.service';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 
 export type BottomSheetProp_HashtagType = {
 	name: string;

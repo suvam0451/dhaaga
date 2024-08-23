@@ -7,7 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { router } from 'expo-router';
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 function SelectProviderStack() {
 	const route = useRoute();

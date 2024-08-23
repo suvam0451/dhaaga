@@ -17,7 +17,7 @@ import {
 } from './activitypub-status-dto.service';
 import ActivitypubAdapterService from '../activitypub-adapter.service';
 import { z } from 'zod';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 /**
  * Supports various operations

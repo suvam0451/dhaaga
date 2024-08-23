@@ -1,6 +1,6 @@
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useEffect, useRef, useState } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { MisskeyRestClient } from '@dhaaga/shared-abstraction-activitypub';
 import * as Haptics from 'expo-haptics';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';

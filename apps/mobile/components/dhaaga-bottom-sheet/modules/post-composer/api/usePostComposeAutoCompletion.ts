@@ -1,6 +1,7 @@
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import {
 	ActivityPubStatus,
+	InstanceApi_CustomEmojiDTO,
 	TagInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -10,7 +11,6 @@ import { useEffect } from 'react';
 import { useComposerContext } from './useComposerContext';
 import { EmojiService } from '../../../../../services/emoji.service';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 type PostComposeAutoCompletionResults = {
 	accounts: UserInterface[];

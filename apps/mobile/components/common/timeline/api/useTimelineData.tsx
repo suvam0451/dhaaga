@@ -1,6 +1,8 @@
 import {
 	StatusInterface,
 	UserInterface,
+	InstanceApi_CustomEmojiDTO,
+	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 import {
@@ -21,10 +23,6 @@ import * as Haptics from 'expo-haptics';
 import { OpenAiService } from '../../../../services/openai.service';
 import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.services';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import {
-	InstanceApi_CustomEmojiDTO,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import postArrayReducer, {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 } from './postArrayReducer';

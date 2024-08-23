@@ -1,6 +1,6 @@
 import MyFavouritesPage from '../../../components/screens/favourites/stack/MyFavouritesPage';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FeatureUnsupported from '../../../components/error-screen/FeatureUnsupported';
 import { View } from 'react-native';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';

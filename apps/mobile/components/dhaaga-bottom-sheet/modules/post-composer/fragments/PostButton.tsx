@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import {
 	BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,

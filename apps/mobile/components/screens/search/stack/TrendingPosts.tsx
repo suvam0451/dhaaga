@@ -12,7 +12,7 @@ import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import useTrendingPosts from '../api/useTrendingPosts';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
 

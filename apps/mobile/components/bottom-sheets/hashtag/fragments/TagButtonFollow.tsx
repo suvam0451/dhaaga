@@ -4,7 +4,7 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useActivitypubTagContext } from '../../../../states/useTag';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 
 const TagButtonFollow = memo(() => {

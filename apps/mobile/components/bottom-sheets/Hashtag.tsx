@@ -15,11 +15,10 @@ import WithActivitypubTagContext, {
 	useActivitypubTagContext,
 } from '../../states/useTag';
 import { TagType } from '@dhaaga/shared-abstraction-activitypub';
-import { useNavigation } from '@react-navigation/native';
 import InstanceService from '../../services/instance.service';
 import useSkeletonSmoothTransition from '../../states/useSkeletonTransition';
 import { APP_FONT } from '../../styles/AppTheme';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { APP_FONTS } from '../../styles/AppFonts';
 import MisskeyTag from '@dhaaga/shared-abstraction-activitypub/dist/adapters/tag/misskey';
 import useAppNavigator from '../../states/useAppNavigator';

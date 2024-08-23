@@ -8,7 +8,7 @@ import ActivitypubAdapterService from '../activitypub-adapter.service';
 import MediaService from '../media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),

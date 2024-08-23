@@ -2,11 +2,11 @@ import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MastoRelationship } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 import useHookLoadingState from './useHookLoadingState';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import {
 	LibraryResponse,
 	MastodonRestClient,
 	MisskeyRestClient,
+	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
 import ActivitypubRelationService from '../services/ap-proto/activitypub-relation.service';

@@ -7,9 +7,11 @@ import { ActivityPubServerRepository } from '../repositories/activitypub-server.
 import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-emoji.repo';
 import activitypubAdapterService from './activitypub-adapter.service';
 import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import GlobalMmkvCacheService from './globalMmkvCache.services';
+import {
+	InstanceApi_CustomEmojiDTO,
+	StatusInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
 
 export type EmojiAdapter = {
 	// common

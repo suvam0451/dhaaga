@@ -8,7 +8,7 @@ import { APP_FONT } from '../../../styles/AppTheme';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import AccountInfoSyncDialog from '../../../components/dialogs/AccountInfoSync';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ConfirmAccountDelete from '../../../components/dialogs/accounts/ConfirmAccountDelete';
 import AccountListForSoftware from '../../../components/screens/accounts/stack/landing/fragments/AccountListForSoftware';
 

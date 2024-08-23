@@ -1,9 +1,11 @@
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	ActivityPubClient,
+	KNOWN_SOFTWARE,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { Realm } from 'realm';
 import { Account } from '../entities/account.entity';
 import ActivityPubAdapterService from './activitypub-adapter.service';
 import AccountRepository from '../repositories/account.repo';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { Dispatch, SetStateAction } from 'react';
 
 class BookmarkBrowserService {
