@@ -12,7 +12,7 @@ import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMor
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useDebounce } from 'use-debounce';
 import { useAppTimelineDataContext } from '../../../../../common/timeline/api/useTimelineData';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 /**
  * Renders the results of a

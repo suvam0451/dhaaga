@@ -2,7 +2,7 @@ import { useTimelineController } from './useTimelineController';
 import { useMemo } from 'react';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 function useTimelineLabel() {
 	const { domain } = useActivityPubRestClientContext();

@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { View, Text } from 'react-native';
 import { styles } from './_shared';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 const FederatedTimelineController = memo(function Foo() {
 	const { domain, subdomain } = useActivityPubRestClientContext();

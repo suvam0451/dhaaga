@@ -1,8 +1,10 @@
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
-import { MisskeyRestClient } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	KNOWN_SOFTWARE,
+	MisskeyRestClient,
+} from '@dhaaga/shared-abstraction-activitypub';
 
 export type AppListDto = {
 	id: string;

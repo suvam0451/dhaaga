@@ -1,5 +1,5 @@
 import { memo, MutableRefObject } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import SoftwareHeader from '../../../../../../screens/accounts/fragments/SoftwareHeader';
 import AccountListingFragment from '../../../../../../screens/accounts/fragments/AccountListingFragment';
 import { Account } from '../../../../../../entities/account.entity';

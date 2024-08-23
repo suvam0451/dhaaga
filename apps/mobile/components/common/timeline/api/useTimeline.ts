@@ -7,7 +7,7 @@ import {
 	MisskeyRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../utils/timeline.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import PleromaRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/pleroma';
 
 type TimelineQueryParams = {

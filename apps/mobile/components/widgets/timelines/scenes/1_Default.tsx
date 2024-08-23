@@ -7,7 +7,7 @@ import { Button, Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 

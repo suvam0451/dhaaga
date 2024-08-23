@@ -7,7 +7,7 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { DhaagaJsPostSearchDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/search';
 import { useEffect, useState } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 export enum APP_SEARCH_TYPE {
 	POSTS,

@@ -2,9 +2,11 @@ import { BookmarkGetQueryDTO } from '@dhaaga/shared-abstraction-activitypub/dist
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	StatusInterface,
+	KNOWN_SOFTWARE,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useState } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 function useGetBookmarks(query: BookmarkGetQueryDTO) {
 	const { client, primaryAcct, domain, subdomain } =

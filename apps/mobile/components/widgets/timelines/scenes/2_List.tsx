@@ -10,7 +10,7 @@ import useActivityPubLists, {
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { Fragment, memo } from 'react';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 
