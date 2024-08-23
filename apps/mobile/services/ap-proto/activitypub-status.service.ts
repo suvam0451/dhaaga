@@ -52,7 +52,7 @@ export class ActivitypubStatusService {
 			this.statusI.getUser(),
 			this.domain,
 		);
-		const _subdomain = _user.getInstanceUrl();
+		const _subdomain = _user.getInstanceUrl(this.subdomain);
 		this.foundInstances.add(_subdomain);
 
 		// handle boosted content
