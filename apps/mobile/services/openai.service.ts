@@ -9,7 +9,7 @@ export class OpenAiService {
 			return (
 				'The lite edition of Dhaaga does not support AI features.' +
 				" Single tap the translation button to use your instance's" +
-				' translation, instead.'
+				' translation, instead (WIP).'
 			);
 		}
 		try {
