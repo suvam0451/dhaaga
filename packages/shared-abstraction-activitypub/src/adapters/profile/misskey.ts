@@ -13,8 +13,8 @@ export class MisskeyUser implements UserInterface {
 
 	getPinnedNotes = () => this.ref.instance?.pinnedNotes || [];
 
-	getInstanceUrl() {
-		return this.ref.instance?.host;
+	getInstanceUrl(subdomain: string) {
+		return this.ref.instance?.host || subdomain;
 	}
 
 	getIsLockedProfile(): boolean | null | undefined {
