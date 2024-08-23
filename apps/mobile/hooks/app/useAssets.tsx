@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { Asset, useAssets } from 'expo-asset';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { undefined } from 'zod';
 
 /**

@@ -5,9 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import {
 	ActivityPubStatuses,
 	MisskeyRestClient,
+	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
 
 /**

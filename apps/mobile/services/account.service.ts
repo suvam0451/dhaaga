@@ -5,7 +5,6 @@ import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubTagRepository } from '../repositories/activitypub-tag.repo';
 import { Account } from '../entities/account.entity';
 import AccountRepo from '../repositories/account.repo';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 import { MastoTag } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 
 class AccountService {

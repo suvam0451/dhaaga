@@ -9,9 +9,11 @@ import TitleOnlyNoScrollContainer from '../../../../components/containers/TitleO
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
 import AccountService from '../../../../services/account.service';
-import { UnknownRestClient } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	UnknownRestClient,
+	KNOWN_SOFTWARE,
+} from '@dhaaga/shared-abstraction-activitypub';
 import PleromaPasteToken from './PleromaPasteToken';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
 
 function MastodonSignInStack() {
 	const [Code, setCode] = useState<string | null>(null);

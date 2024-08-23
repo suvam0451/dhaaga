@@ -125,3 +125,5 @@ export const verifyMisskeyToken = async (host: string, session: string) => {
 	);
 	return res.data;
 };
+
+export { KNOWN_SOFTWARE };

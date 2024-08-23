@@ -1,6 +1,6 @@
 import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import * as FileSystem from 'expo-file-system';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/instance';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 /**
  * Wrapper service to invoke provider functions
@@ -11,11 +11,11 @@ class ActivityPubProviderService {
 	}
 
 	static async getStatus(client: ActivityPubClient, id: string) {
-		return client.getStatus(id);
+		return client.statuses.get(id);
 	}
 
 	static async getStatusAsArray(client: ActivityPubClient, id: string) {
-		const status = await client.getStatus(id);
+		const status = await client.statuses.get(id);
 		return [status];
 	}
 
