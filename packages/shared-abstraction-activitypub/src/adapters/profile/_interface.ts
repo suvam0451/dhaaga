@@ -59,7 +59,7 @@ export interface UserInterface {
 	/**
 	 * e.g. - mastodon.social from "https://mastodon.social/@suvam"
 	 */
-	getInstanceUrl(): string | null;
+	getInstanceUrl(subdomain?: string): string | null;
 
 	getOnlineStatus(): 'online' | 'active' | 'offline' | 'unknown';
 
