@@ -14,7 +14,7 @@ function useMyBookmarks(maxId: string) {
 		maxId?: string;
 	}> {
 		if (!client) throw new Error('_client not initialized');
-		const { data, error } = await client.bookmarks.get({
+		const { data, error } = await client.accounts.bookmarks({
 			limit: 5,
 			maxId: maxId,
 		});

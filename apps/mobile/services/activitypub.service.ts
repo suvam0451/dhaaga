@@ -11,10 +11,10 @@ import { Realm } from 'realm';
 import { ActivityPubServerRepository } from '../repositories/activitypub-server.repo';
 import { ActivityPubServer } from '../entities/activitypub-server.entity';
 import {
-	InstanceApi_CustomEmojiDTO,
+	PleromaRestClient,
 	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/instance';
-import PleromaRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/pleroma';
+	InstanceApi_CustomEmojiDTO,
+} from '@dhaaga/shared-abstraction-activitypub';
 
 class ActivityPubService {
 	/**

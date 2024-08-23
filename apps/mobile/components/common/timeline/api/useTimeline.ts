@@ -5,10 +5,10 @@ import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapter
 import {
 	DhaagaJsTimelineQueryOptions,
 	MisskeyRestClient,
+	KNOWN_SOFTWARE,
+	PleromaRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../utils/timeline.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import PleromaRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/pleroma';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
