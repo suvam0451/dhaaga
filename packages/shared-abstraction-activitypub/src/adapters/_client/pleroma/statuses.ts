@@ -38,7 +38,13 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	}
 
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
-		return notImplementedErrorBuilder();
+		const response = await this.lib.client.getStatus(id);
+		if (response.status !== 200) {
+			console.log('[ERROR]: failed to get status', response.statusText);
+		}
+		return {
+			data: camelcaseKeys(response.data) as any,
+		};
 	}
 
 	async create(
@@ -101,7 +107,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async getContext(id: string) {
 		const data = await this.lib.client.getStatusContext(id);
-		return { data: data.data };
+		return { data: camelcaseKeys(data.data) };
 	}
 
 	async boost(id: string): LibraryPromise<MegaStatus> {
