@@ -1,6 +1,7 @@
 <!-- SOCIALS -->
 [![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat)](https://discord.gg/kMp5JA9jwD)
 [![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat)](https://matrix.to/#/#server0451:matrix.org)
+[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Private%20DM)](https://matrix.to/#/#suvam:matrix.org)
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/112440258358145826?label=Add%20Me)](https://mastodon.social/@suvam)
 [![GitHub](https://img.shields.io/github/followers/suvam0451?label=Add%20Me)](https://github.com/suvam0451?tab=followers)
 <!-- SOCIALS -->
@@ -19,7 +20,8 @@
 
 <p align="center">
   <a href="https://dhaaga.app/docs/about">About</a> •
-      <a href="https://github.com/suvam0451/dhaaga/issues/new">Report a Bug</a> •
+  <a href="https://dhaaga.app/docs">Documentation</a> •
+  <a href="https://github.com/suvam0451/dhaaga/issues/new">Report a Bug</a> •
   <a href="https://github.com/suvam0451/dhaaga/issues/new">Request a Feature</a> •
   <a href="https://dhaaga.app/docs/license">License</a>
 </p>
@@ -64,8 +66,11 @@ Here are some design directions which may make you consider Dhaaga:
 
 ### 💅 Designed for Viewing Content
 
-No image cropping. No wasted space below avatars. **Dhaaga uses full horizontal space.**<br/>
-No humongous bottom menu. No unnecessary top bar *(auto hidden)*. **Dhaaga uses full vertical space.**<br/>
+No image cropping. No wasted space below avatars. 
+> Dhaaga uses full horizontal efficiently.
+
+No humongous bottom menu. No unnecessary top bar *(auto hidden)*.
+> Dhaaga uses full vertical space efficiently
 
 > Dhaaga only supports smartphones.<br/>
 > And it aims to be the best in it's category. 😎
@@ -73,8 +78,9 @@ No humongous bottom menu. No unnecessary top bar *(auto hidden)*. **Dhaaga uses 
 ### 💅 Intuitive Menus. No Clutter.
 
 The menu systems in Dhaaga do not look like long lists.<br/> 
-Every action is contextually available when you need them,
-and meekly hidden away when you don't.
+
+> Every action is contextually available when you need them<br/>
+> And meekly hidden away when you don't.
 
 ### 💅 Designed for Smartphones
 
@@ -86,7 +92,8 @@ Most of the interactions are also one-handed friendly.<br/>
 
 ## Guides
 
-- [Help With Development](https://dhaaga.app/docs/guides/development/using-expo)
+- [User Guide](https://dhaaga.app/docs/usage/intro) <-- Optional, but useful for new users!
+- [How to Develop](https://dhaaga.app/docs/guides/development/using-expo) <-- Read before contributing code. No AndroidStudio/XCode needed!
 - [Compile from Source](https://dhaaga.app/docs/guides/compiling/using-expo)
 
 --- 
