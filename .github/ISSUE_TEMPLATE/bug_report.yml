@@ -4,20 +4,19 @@ labels: [ "bug" ]
 body:
   - type: markdown
     attributes:
-      value: "## Reporting a bug to the Dhaaga project"
+      value: "## Reporting a Bug"
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to report an issue in the Dhaaga project.
+        Thank you for taking the time to report a bug.
         
         No need to search for duplicate issues. Just ask away.
         
         Some heads up:
-        * Support is only offered for latest version of software.
+        * Support is currently only offered for latest version of software.
         * The only supported backends are [Mastodon, Misskey, Firefish, 
         Sharkey, Pleroma, Akkoma]
-        * ^ Anything beyond that is not tested. You may request 
-        support for additional backends via "Feature Request"
+        * ^ You may request support for additional backends via "Feature Request"
 
   - type: textarea
     id: description
@@ -40,7 +39,7 @@ body:
     attributes:
       label: Install Source
       description: From where did you install the app?
-      multiple: true
+      multiple: false
       options:
         - Play Store
         - GitHub Releases
