@@ -1,0 +1,33 @@
+name: ✨ Feature Request
+description: Suggest a Feature
+labels: [ "enhancement" ]
+body:
+  - type: markdown
+    attributes:
+      value: "## Request a new feature"
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to propose improvements to the app.
+        
+        No need to search for duplicate issues. Just ask away.
+        
+        #### Considerations
+        
+        * For instance features, see if it is already implemented.
+        * For existing features, the user guide may contain info you may have overlooked
+        * We have a priority list for upcoming features in our wiki. See if your feature is already listed there.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What would you like to be added to Dhaaga? How can it benefit all users?
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots and Videos
+      description: |
+        If you are referencing existing features from any other website/app, 
+        direct screenshots would save a lot of time!
