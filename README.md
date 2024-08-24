@@ -11,13 +11,7 @@
     style="margin-right:8px"/>
 
 
-**Dhaaga** is a free, open source SNS client for smartphones (Android & iOS). It has native support for most fediverse software. The app has a heavy emphasis on social features, making friends, superior offline capabilities, one-handed use and making all interactions intuitive and easy for new and old users alike.
-
-
-
-
-
-
+**Dhaaga** is an open source fediverse social app for smartphones (Android & iOS). It adds a lot of cool **client-side features**, which helps to improve communication and social interactions, makes it easy to chat and make friends, adding better offline support and making the friendiverse intuitive and fun to use for all users, new and old. It natively supports most fediverse software.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -25,6 +19,7 @@
 
 <p align="center">
   <a href="https://dhaaga.app/docs/about">About</a> •
+      <a href="https://github.com/suvam0451/dhaaga/issues/new">Report a Bug</a> •
   <a href="https://github.com/suvam0451/dhaaga/issues/new">Request a Feature</a> •
   <a href="https://dhaaga.app/docs/license">License</a>    
 </p>
@@ -45,111 +40,52 @@
 
 ## ✨ Features
 
-#### 🌟 Timeline Widget
+Every major update adds **unique features** that `changes how you can interact with the fediverse`.<br/>
+These features **work with every supported fedi software**.
 
-An intuitive way to switch between timelines/hashtags/lists.
+- [v0.1.0] **Timeline Widget** | easily jump to ANY timeline | [Read More]()
+- [v0.2.0] **Bookmark Gallery** | Store and view your bookmarks offline | [Read More]()
+- [v0.3.0] **Known Servers** |  A social graph of every instance you ever visited | [Read More]()
+- [v0.4.0] **Profile Gallery** | Browse profiles as an art gallery | [Read More]()
+- [v0.6.0] **Quick Composer** | Microblogging friendly Post/Reply | [Read More]()
 
-<details>
-<summary>Screenshots</summary>
-<img 
-    width = "384px" 
-    height="auto" 
-    src="https://github.com/suvam0451/dhaaga/assets/44526763/af8310f9-9701-4765-b212-6b3092c86af5" 
-/>
-<img 
-    width = "384px" 
-    height="auto" 
-    src="https://github.com/suvam0451/dhaaga/assets/44526763/aa9c4101-2106-41c1-a85c-2de4272f1e03" 
-/>
-<img 
-    width = "384px" 
-    height="auto" 
-    src="https://github.com/suvam0451/dhaaga/assets/44526763/a22abeb0-105f-47cb-b9af-380789038a44" 
-/>
-<img 
-    width = "384px" 
-    height="auto" 
-    src="https://github.com/suvam0451/dhaaga/assets/44526763/8b2cee3d-79d6-4938-a993-71302d3ac7cc" 
-/>
+> The project does not want to be just another api client<br/>
+> Nor does it try to replace your existing favourite client app.<br/>
+> Dhaaga is more like a companion app 😁
 
+> 👆 But I try my best to make Dhaaga the only social fedi app you will ever need 😉
 
+> **The normal features are weaved in in-between major releases**. If you miss any specific instance feature, just hit me up!
 
-</details>
+## ✨ Design Goals
 
-<details>
-<summary>Highlights</summary>
+Features are cool. But, bountiful features are no good if the *presentation* or *experience* sucks.<br/>
+Here are some design directions which may make you consider Dhaaga:
 
-- ✅ Search and browse hashtags
-    - 🚧 Guest browsing a hashtag from remote instance will be supported in the
-      future.
-- ✅ Search and browse a user's timeline directly
-- ✅ Browse your list timelines
-- 🚧 Remote instance browsing will be added in the future
+### 💅 Designed for Viewing Content
 
-</details>
+No image cropping. No wasted space below avatars. **Dhaaga uses full horizontal space.**<br/>
+No humongous bottom menu. No unnecessary top bar *(auto hidden)*. **Dhaaga uses full vertical space.**<br/>
 
-#### 🌟 Better Translation Support
-
-Ethical use of AI tools to break language barrier and improve communication.
-
-<details>
-<summary>Screenshots</summary>
-<img 
-    width = "384px" 
-    height="auto" 
-    src="https://github.com/suvam0451/dhaaga/assets/44526763/ac99610f-3479-4f7a-a890-3cc9547fbbe3" 
-/>
-</details>
-
-<details>
-
-<summary>Highlights:</summary>
-
-- ✅ Long-Press translate button to generate explanation with openAI
-    - 🚧 Only english is supported for demonstration.
-- 🚧 This feature will be added for alt-texts
-
-</details>
-
-#### 🌟 Better Comment Threads
-
-A cleaner comment browsing experience, taking references from lemmy clients.
-
-<details>
-<summary>Screenshots</summary>
-<img 
-    width = "384px" 
-    height="auto" 
-    src="https://github.com/suvam0451/dhaaga/assets/44526763/6d96bbf5-0a33-40e6-8155-6258951ff303" 
-/>
-</details>
-
-<details>
-<summary>Highlights:</summary>
-
-- ✅ Nested comments of any depth is supported
-- ✅ Replies are color-coded to make it easy to track origin
-- 🚧 Use a dedicated color palette, instead of random colors
-- 🚧 More interaction options
-- 🚧 Global actions like "Collapse/Expand All"
-
-</details>
-
-## ✨ Planned Features
-
-Some distinctive features I am considering adding to the app:
-
-- 🖼️ A **bookmark gallery**, that lets us browse bookmarks by
-  hashtag/user.
-- 🖼️ A dedicated **gallery mode** for user profile browsing, to better
-  appreciate Artist profiles.
-- 🔒 Ability to **privately follow hashtags/users** client-side.
-- 🔒 **A client-side block-list, that can be hosted online and shared
-  between users using a QR code** (similar to DNS filters). The user can
-  configure the rules in-app.
+> Dhaaga only supports smartphones.<br/>
+> And it aims to be the best at it. 😎
 
 
-### Guides
+### 💅 Intuitive Menus. No Clutter.
+
+The menus in Dhaaga do not look like long lists.<br/> 
+Every action is contextually available when you need them,
+and meekly hidden away when you don't.
+
+### 💅 Designed for Smartphones
+
+Most of the interaction happens on-screen *(using bottom sheets and dialogs)*.<br/>
+> Say goodbye to bouncing between screens to get things done!
+
+Most of the interactions are also one-handed friendly.<br/>
+> This is why most of Dhaaga's widgets and searchbars are bottom aligned!
+
+## Guides
 
 - [Help With Development](https://dhaaga.app/docs/guides/development/using-expo)
 - [Compile from Source](https://dhaaga.app/docs/guides/compiling/using-expo)
