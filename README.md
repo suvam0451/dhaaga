@@ -11,7 +11,7 @@
     style="margin-right:8px"/>
 
 
-**Dhaaga** is an open source fediverse social app for smartphones (Android & iOS). It adds a lot of cool **client-side features**, which helps to improve communication and social interactions, makes it easy to chat and make friends, adding better offline support and making the friendiverse intuitive and fun to use for all users, new and old. It natively supports most fediverse software.
+**Dhaaga** is a fediverse social app for smartphones (Android & iOS), which adds a lot of cool and unique **client-side functionalities**. It focuses on making it easy to chat and make friends, adds superior offline support and makes the friendiverse intuitive and fun to use for all users, new and old.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -21,7 +21,7 @@
   <a href="https://dhaaga.app/docs/about">About</a> •
       <a href="https://github.com/suvam0451/dhaaga/issues/new">Report a Bug</a> •
   <a href="https://github.com/suvam0451/dhaaga/issues/new">Request a Feature</a> •
-  <a href="https://dhaaga.app/docs/license">License</a>    
+  <a href="https://dhaaga.app/docs/license">License</a>
 </p>
 
 
@@ -55,11 +55,11 @@ These features **work with every supported fedi software**.
 
 > 👆 But I try my best to make Dhaaga the only social fedi app you will ever need 😉
 
-> **The normal features are weaved in in-between major releases**. If you miss any specific instance feature, just hit me up!
+> **The normal features are weaved in in-between major releases**. If you miss any specific feature from your instance, just hit me up!
 
 ## ✨ Design Goals
 
-Features are cool. But, bountiful features are no good if the *presentation* or *experience* sucks.<br/>
+Features are cool. But, they are no good if the *presentation* or *user experience* sucks.<br/>
 Here are some design directions which may make you consider Dhaaga:
 
 ### 💅 Designed for Viewing Content
@@ -68,18 +68,17 @@ No image cropping. No wasted space below avatars. **Dhaaga uses full horizontal 
 No humongous bottom menu. No unnecessary top bar *(auto hidden)*. **Dhaaga uses full vertical space.**<br/>
 
 > Dhaaga only supports smartphones.<br/>
-> And it aims to be the best at it. 😎
-
+> And it aims to be the best in it's category. 😎
 
 ### 💅 Intuitive Menus. No Clutter.
 
-The menus in Dhaaga do not look like long lists.<br/> 
+The menu systems in Dhaaga do not look like long lists.<br/> 
 Every action is contextually available when you need them,
 and meekly hidden away when you don't.
 
 ### 💅 Designed for Smartphones
 
-Most of the interaction happens on-screen *(using bottom sheets and dialogs)*.<br/>
+Most of the interaction happens on the screen *(using bottom sheets and dialogs)*.<br/>
 > Say goodbye to bouncing between screens to get things done!
 
 Most of the interactions are also one-handed friendly.<br/>
