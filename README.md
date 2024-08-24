@@ -1,18 +1,47 @@
-<h1 align="center">Dhaaga</h1>
+<!-- SOCIALS -->
+[![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat)](https://discord.gg/kMp5JA9jwD)
+[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat)](https://matrix.to/#/#server0451:matrix.org)
+[![Mastodon Follow](https://img.shields.io/mastodon/follow/112440258358145826?label=Add%20Me)](https://mastodon.social/@suvam)
+[![GitHub](https://img.shields.io/github/followers/suvam0451?label=Add%20Me)](https://github.com/suvam0451?tab=followers)
+<!-- SOCIALS -->
 
-<p align="center" style="max-width: 390px; margin: auto">
-    An opinionated, cross-platform (Android & iOS) mobile client for 
-Mastodon and Misskey
+<img width="64" 
+    src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d56143" 
+    align="left" 
+    style="margin-right:8px"/>
+
+
+**Dhaaga** is a free, open source SNS client for smartphones (Android & iOS). It has native support for most fediverse software. The app has a heavy emphasis on social features, making friends, superior offline capabilities, one-handed use and making all interactions intuitive and easy for new and old users alike.
+
+
+
+
+
+
+
+<div align="center">
+  <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
+</div>
+
+<p align="center">
+  <a href="https://dhaaga.app/docs/about">About</a> •
+  <a href="https://github.com/suvam0451/dhaaga/issues/new">Request a Feature</a> •
+  <a href="https://dhaaga.app/docs/license">License</a>    
 </p>
 
-## About
 
-This mobile client is my contribution to the fediverse.
+<div align="center" style="margin-top:32px">
+  <a href="https://github.com/suvam0451/dhaaga/releases/latest" target="_blank">
+    <img src="./.github/badges/github.png" height="48px"/>
+  </a>
+  <a href="https://play.google.com/apps/testing/io.suvam.dhaaga" target="_blank">    
+    <img src="./.github/badges/google_play.svg" height="48px"/>
+  </a>
+  <a href="https://apt.izzysoft.de/fdroid/index/apk/io.suvam.dhaaga.lite" target="_blank">
+    <img src="./.github/badges/izzy_on_droid.png" height="48px"/>
+  </a>
+</div>
 
-I started this project to build creative solutions to the little nuances and
-inconveniences in ActivityPub ecosystem.
-
-The project is in **very early MVP stage**.
 
 ## ✨ Features
 
@@ -119,64 +148,11 @@ Some distinctive features I am considering adding to the app:
   between users using a QR code** (similar to DNS filters). The user can
   configure the rules in-app.
 
-### Building From Source
 
-This project is a monorepo. You can find individual README files in
-`/packages` and
-`/apps/*` folders with specific instructions.
+### Guides
 
-### Meaning and Legacy
-
-Dhaaga (धागा) is the Hindi word for a type of thin, twisted strand of fiber (
-generally used for sewing).
-
-In many cultures, it also symbolizes connections, ties, or threads that bind
-people or things together.
-
-<details>
-<summary>The Desktop App</summary>
-This project started in 2023 to be a desktop app supporting Mastodon
-and Meta's Threads platform. Development was halted because of Meta's
-legal notice to various reverse-engineering APIs to cease development.
-
-The project was rebooted in May 2024 as a mobile Fediverse client.
-
-You can read the legacy README [here]()
-</details>
-
-<div>
-  <a align="center" href="https://github.com/suvam0451?tab=followers">
-    <img src="https://img.shields.io/github/followers/suvam0451?
-label=Follow%20%40suvam0451&style=social"  alt="gh follow button"/>
-  </a>
-</div>
-<div>
-
-  <a align="center" href="https://discord.gg/kMp5JA9jwD">
-    <img alt="discord join btn" src="https://discordapp.
-com/api/guilds/1131212086446391430/widget.
-png?style=shield"/>
-  </a>
-</div>
-
-[![Discord Server](https://discordapp.com/api/guilds/1131212086446391430/widget.png?style=shield)](https://discord.gg/kMp5JA9jwD)
-
-### License
-
-The source code is licensed to you under [AGPL-3.0](./LICENSE) only.
-
-You agree to make your contributions be
-licensed under [MIT](./.github/ALT_LICENSE.md).
-
-The author reserves the right to dual-license
-any package from this project
-under either of the above licenses.
-
-If you are distributing a fork of this project via any app store
-or package manager, please
-consider using distinctive logo and name.
-
-For any other enquiries, please [mail the author](mailto:hi@suvam.io).
+- [Help With Development](https://dhaaga.app/docs/guides/development/using-expo)
+- [Compile from Source](https://dhaaga.app/docs/guides/compiling/using-expo)
 
 --- 
 
