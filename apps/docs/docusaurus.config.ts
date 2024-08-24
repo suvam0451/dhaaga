@@ -80,6 +80,12 @@ const config: Config = {
 				},
 				{ to: '/blog', label: 'Blog', position: 'left' },
 				{
+					type: 'docSidebar',
+					sidebarId: 'aboutSidebar',
+					label: 'About',
+					position: 'left',
+				},
+				{
 					href: 'https://github.com/suvam0451/dhaaga',
 					label: 'GitHub',
 					position: 'right',

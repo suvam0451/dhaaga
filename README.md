@@ -144,12 +144,29 @@ The project was rebooted in May 2024 as a mobile Fediverse client.
 You can read the legacy README [here]()
 </details>
 
+<div>
+  <a align="center" href="https://github.com/suvam0451?tab=followers">
+    <img src="https://img.shields.io/github/followers/suvam0451?
+label=Follow%20%40suvam0451&style=social"  alt="gh follow button"/>
+  </a>
+</div>
+<div>
+
+  <a align="center" href="https://discord.gg/kMp5JA9jwD">
+    <img alt="discord join btn" src="https://discordapp.
+com/api/guilds/1131212086446391430/widget.
+png?style=shield"/>
+  </a>
+</div>
+
+[![Discord Server](https://discordapp.com/api/guilds/1131212086446391430/widget.png?style=shield)](https://discord.gg/kMp5JA9jwD)
+
 ### License
 
 The source code is licensed to you under [AGPL-3.0](./LICENSE) only.
 
 You agree to make your contributions be
-licensed under [MIT]().
+licensed under [MIT](./.github/ALT_LICENSE.md).
 
 The author reserves the right to dual-license
 any package from this project
