@@ -1,7 +1,8 @@
 {
   "name": "@dhaaga/docs",
-  "version": "0.7.0",
-  "private": false,
+  "version": "0.8.0",
+  "private": true,
+  "license": "AGPL-v3.0",
   "scripts": {
     "docusaurus": "./node_modules/.bin/docusaurus",
     "start": "./node_modules/.bin/docusaurus start",

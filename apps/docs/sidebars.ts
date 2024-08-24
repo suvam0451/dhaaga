@@ -52,7 +52,6 @@ const sidebars: SidebarsConfig = {
 			],
 		},
 	],
-
 	discoverSidebar: [
 		'discover',
 		{
@@ -92,6 +91,7 @@ const sidebars: SidebarsConfig = {
 			],
 		},
 	],
+	aboutSidebar: ['about', 'license'],
 };
 
 export default sidebars;
