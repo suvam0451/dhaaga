@@ -20,9 +20,10 @@
 
 <p align="center">
   <a href="https://dhaaga.app/docs/about">About</a> •
-  <a href="https://dhaaga.app/docs">Documentation</a> •
-  <a href="https://github.com/suvam0451/dhaaga/issues/new">Report a Bug</a> •
-  <a href="https://github.com/suvam0451/dhaaga/issues/new">Request a Feature</a> •
+  <a href="https://dhaaga.app/docs">Docs</a> •
+  <a href="https://dhaaga.app/docs/roadmap">Roadmap</a> •
+  <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml">Report a Bug</a> •
+  <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml">Request a Feature</a> •
   <a href="https://dhaaga.app/docs/license">License</a>
 </p>
 

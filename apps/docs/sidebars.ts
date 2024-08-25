@@ -91,7 +91,22 @@ const sidebars: SidebarsConfig = {
 			],
 		},
 	],
-	aboutSidebar: ['about', 'license'],
+	aboutSidebar: [
+		'about',
+		'license',
+		{
+			type: 'category',
+			label: 'Progress',
+			items: [
+				'compatibility/akkoma',
+				'compatibility/firefish',
+				'compatibility/pleroma',
+				'compatibility/mastodon',
+				'compatibility/misskey',
+				'compatibility/sharkey',
+			],
+		},
+	],
 };
 
 export default sidebars;
