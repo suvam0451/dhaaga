@@ -18,7 +18,11 @@ const ActionButtons = memo(() => {
 	const { setVisible, visible } = useAppBottomSheet();
 	const { cw, setCwShown, setEditMode, editMode } = useComposerContext();
 
-	function onCustomEmojiClicked() {}
+	function onCustomEmojiClicked() {
+		setEditMode((o) => {
+			if (o === 'txt') return 'emoji';
+		});
+	}
 
 	const close = useCallback(() => {
 		setVisible(false);
@@ -35,7 +39,7 @@ const ActionButtons = memo(() => {
 		});
 	}, []);
 
-	if (!visible) return <View />;
+	if (!visible || editMode === 'emoji') return <View />;
 	return (
 		<View
 			style={{
@@ -63,7 +67,7 @@ const ActionButtons = memo(() => {
 				onPress={onCustomEmojiClicked}
 				style={{ marginLeft: 8, width: 32 }}
 			>
-				<FontAwesome6 name="smile" size={24} color={APP_FONT.DISABLED} />
+				<FontAwesome6 name="smile" size={24} color={APP_FONT.MONTSERRAT_BODY} />
 			</TouchableOpacity>
 			<TouchableOpacity
 				style={{ marginLeft: 4, width: 64 }}

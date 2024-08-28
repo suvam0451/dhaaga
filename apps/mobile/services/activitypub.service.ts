@@ -18,6 +18,18 @@ import {
 
 class ActivityPubService {
 	/**
+	 * Check MastoAPI compatibility
+	 * @param domain
+	 */
+	static mastodonLike(domain: string) {
+		return [
+			KNOWN_SOFTWARE.MASTODON,
+			KNOWN_SOFTWARE.PLEROMA,
+			KNOWN_SOFTWARE.AKKOMA,
+		].includes(domain as KNOWN_SOFTWARE);
+	}
+
+	/**
 	 * Syncs the nodeinfo and software
 	 * for a subdomain
 	 * @param db

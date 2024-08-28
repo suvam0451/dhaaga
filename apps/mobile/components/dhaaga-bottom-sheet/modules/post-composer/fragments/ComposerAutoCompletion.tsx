@@ -20,11 +20,9 @@ import Animated, {
 	useSharedValue,
 	withSpring,
 } from 'react-native-reanimated';
+import TextEditorService from '../../../../../services/text-editor.service';
 
 const AVATAR_ICON_SIZE = 32;
-
-const EMOJI_REGEX = /:[a-zA-Z_@]+?$/;
-const ACCT_REGEX = /(@[a-zA-Z_0-9.]+(@[a-zA-Z_0-9.]*)?)$/;
 
 const ComposerAutoCompletion = memo(() => {
 	const {
@@ -58,25 +56,13 @@ const ComposerAutoCompletion = memo(() => {
 	});
 
 	function onAcctAccepted(item: UserInterface) {
-		const firstHalf = rawText.slice(0, selection.start);
-		const secondHalf = rawText.slice(selection.start, rawText.length);
-
-		if (!ACCT_REGEX.test(firstHalf)) return;
-		const match = ACCT_REGEX.exec(firstHalf);
-		// @ts-ignore-next-line
-		const updatedFirstHalf = firstHalf.replaceAll(
-			match[0],
-			`@${item.getUsername()}@${item.getInstanceUrl()}`,
+		setRawText(
+			TextEditorService.autoCompleteHandler(
+				rawText,
+				`@${item.getUsername()}@${item.getInstanceUrl()}`,
+				selection,
+			),
 		);
-
-		let combined = '';
-		if (secondHalf[0] !== ' ') {
-			combined = updatedFirstHalf + ' ' + secondHalf;
-		} else {
-			combined = updatedFirstHalf + secondHalf;
-		}
-
-		setRawText(combined);
 		setAutoCompletionPrompt({
 			type: 'none',
 			q: '',
@@ -84,11 +70,13 @@ const ComposerAutoCompletion = memo(() => {
 	}
 
 	function onEmojiAccepted(item: InstanceApi_CustomEmojiDTO) {
-		if (!EMOJI_REGEX.test(rawText)) return;
-		const match = EMOJI_REGEX.exec(rawText);
-		// @ts-ignore-next-line
-		const _text = rawText.replaceAll(match[0], `:${item.shortCode}: `);
-		setRawText(_text);
+		setRawText(
+			TextEditorService.autoCompleteReaction(
+				rawText,
+				item.shortCode,
+				selection,
+			),
+		);
 		setAutoCompletionPrompt({
 			type: 'none',
 			q: '',

@@ -14,6 +14,7 @@ import {
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { MastoAccountCredentials } from '../_interface.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import AppApi from '../../_api/AppApi.js';
 
 type WelKnownNodeinfo = {
 	links: {
@@ -297,6 +298,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					visibleInPicker: o.visibleInPicker,
 					category: o.category,
 					aliases: [],
+					tags: [],
 				}));
 				return {
 					data: mapped,
@@ -315,24 +317,30 @@ export class DefaultInstanceRouter implements InstanceRoute {
 						visibleInPicker: true,
 						category: o.category,
 						aliases: o.aliases,
+						tags: [],
 					})),
 				};
 			}
 			case KNOWN_SOFTWARE.PLEROMA:
 			case KNOWN_SOFTWARE.AKKOMA: {
 				try {
-					const dt = await DhaagaMegalodonClient(
-						KNOWN_SOFTWARE.PLEROMA,
-						urlLike,
-					).client.getInstanceCustomEmojis();
+					// NOTE: Megalodon payload seems deprecated
+					const { data, error } = await new AppApi(urlLike).get<any[]>(
+						'/api/v1/custom_emojis',
+					);
+					if (error) {
+						console.log('[WARN]: error fetching emojis', error);
+						return { data: [] };
+					}
 					return {
-						data: dt.data.map((o) => ({
+						data: data.map((o) => ({
 							shortCode: o.shortcode,
 							url: o.url,
 							staticUrl: o.static_url,
 							visibleInPicker: o.visible_in_picker,
 							aliases: [],
 							category: o.category,
+							tags: (o as any).tags || [],
 						})),
 					};
 				} catch (e: any) {
@@ -368,6 +376,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 							visibleInPicker: o.visible_in_picker,
 							aliases: [],
 							category: o.category,
+							tags: [],
 						})),
 					};
 				} catch (e: any) {

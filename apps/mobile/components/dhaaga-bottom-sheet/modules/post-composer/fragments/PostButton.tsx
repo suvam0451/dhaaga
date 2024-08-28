@@ -13,6 +13,7 @@ import {
 } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import { ActivitypubStatusService } from '../../../../../services/ap-proto/activitypub-status.service';
+import ActivityPubService from '../../../../../services/activitypub.service';
 
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
@@ -22,14 +23,19 @@ const PostButton = memo(() => {
 	async function onClick() {
 		let _visibility: any = visibility.toLowerCase();
 		if (visibility === APP_POST_VISIBILITY.PRIVATE) {
-			_visibility =
-				domain === KNOWN_SOFTWARE.MASTODON ? 'private' : 'followers';
+			_visibility = ActivityPubService.mastodonLike(domain)
+				? 'private'
+				: 'followers';
 		}
 		if (visibility === APP_POST_VISIBILITY.UNLISTED) {
-			_visibility = domain === KNOWN_SOFTWARE.MASTODON ? 'unlisted' : 'home';
+			_visibility = ActivityPubService.mastodonLike(domain)
+				? 'unlisted'
+				: 'home';
 		}
 		if (visibility === APP_POST_VISIBILITY.DIRECT) {
-			_visibility = domain === KNOWN_SOFTWARE.MASTODON ? 'direct' : 'specified';
+			_visibility = ActivityPubService.mastodonLike(domain)
+				? 'direct'
+				: 'specified';
 		}
 		const { data, error } = await client.statuses.create({
 			status: rawText,
