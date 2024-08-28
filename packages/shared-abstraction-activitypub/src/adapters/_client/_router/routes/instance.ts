@@ -39,6 +39,7 @@ export type InstanceApi_CustomEmojiDTO = {
 	visibleInPicker: boolean;
 	category?: string | null;
 	aliases: string[];
+	tags: string[]; // Akkoma
 };
 
 export type MastoTranslation = mastodon.v1.Translation;

@@ -3,7 +3,6 @@ import { useRealm } from '@realm/react';
 import { useCallback } from 'react';
 import { EmojiService } from '../../services/emoji.service';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import ActivityPubService from '../../services/activitypub.service';
 
 /**
  * Try to resolve (and cache)
@@ -25,32 +24,7 @@ function useAppCustomEmoji() {
 		});
 	}, []);
 
-	const refresh = useCallback(
-		(subdomain: string, software?: string) => {
-			ActivityPubService.syncSoftware(db, subdomain)
-				.then((r) => {
-					console.log(r);
-					EmojiService.downloadCustomEmojis(
-						db,
-						globalDb,
-						subdomain,
-						software,
-					).then((res) => {
-						if (!res.success) {
-							console.log('[INFO]: custom emoji refresh status', res);
-						} else {
-							// console.log('[INFO]: custom emojis found', res);
-						}
-					});
-				})
-				.catch((e) => {
-					console.log(e);
-				});
-		},
-		[db, globalDb],
-	);
-
-	return { find, refresh };
+	return { find };
 }
 
 export default useAppCustomEmoji;

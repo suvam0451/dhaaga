@@ -11,6 +11,7 @@ import GlobalMmkvCacheService from './globalMmkvCache.services';
 import {
 	InstanceApi_CustomEmojiDTO,
 	StatusInterface,
+	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 
 export type EmojiAdapter = {
@@ -274,7 +275,6 @@ export class EmojiService {
 	}
 
 	/**
-	 *
 	 * NOTE: forcedUpdate should be seldom called to not repeat calls
 	 * @param db
 	 * @param globalDb
@@ -339,20 +339,27 @@ export class EmojiService {
 	}
 
 	/**
-	 * asynchronously download and save emojis
+	 * download and save emojis
+	 * for an instance
 	 *
 	 * cache-expiry: 7 days
 	 * @param db
 	 * @param globalDb
 	 * @param subdomain
-	 * @param software
+	 * @param forceUpdate
 	 */
-	static async downloadCustomEmojis(
+	static async sync(
 		db: Realm,
 		globalDb: MMKV,
 		subdomain: string,
-		software?: string,
+		forceUpdate?: boolean,
 	) {
+		const server = ActivityPubServerRepository.get(db, subdomain);
+		if (!server) {
+			console.log('[WARN]: unable to sync emojis. server not found.');
+			return null;
+		}
+
 		// Cache-Policy
 		const data = GlobalMmkvCacheService.getEmojiCacheForInstance(
 			globalDb,
@@ -363,35 +370,38 @@ export class EmojiService {
 		const oneWeekAgo = new Date(now);
 		oneWeekAgo.setDate(now.getDate() - 7);
 
-		// all good
-		if (
+		const IS_FRESH =
 			data &&
 			data?.data?.length > 0 &&
-			new Date(data?.lastFetchedAt) >= oneWeekAgo
-		)
-			return {
-				success: true,
-				message: 'Skipped',
-				target: subdomain,
-				amount: data.data.length,
-			};
+			new Date(data?.lastFetchedAt) >= oneWeekAgo;
 
-		// TODO: make software resolve from realm table
-		const res = await ActivityPubService.fetchEmojisAndInstanceSoftware(
-			db,
-			subdomain,
-			software,
-		);
-		GlobalMmkvCacheService.saveEmojiCacheForInstance(
-			globalDb,
-			subdomain,
-			res.emojis,
-		);
-		return {
-			success: true,
-			message: 'Updated Emoji Store',
-			target: subdomain,
-			amount: res.emojis.length,
-		};
+		/**
+		 * Update only if stale of
+		 * requested forced update
+		 */
+		if (!IS_FRESH || forceUpdate) {
+			const x = new UnknownRestClient();
+			const { data: emojiData, error: emojiError } =
+				await x.instances.getCustomEmojis(subdomain, server.type);
+			if (emojiError) {
+				console.log('[WARN]: failed to get emojis');
+				return null;
+			}
+			GlobalMmkvCacheService.saveEmojiCacheForInstance(
+				globalDb,
+				subdomain,
+				emojiData,
+			);
+
+			db.write(() => {
+				ActivityPubServerRepository.updateEmojisLastFetchedAt(
+					db,
+					subdomain,
+					now,
+				);
+			});
+			return now;
+		}
+		return data.lastFetchedAt;
 	}
 }

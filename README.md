@@ -1,7 +1,7 @@
 <!-- SOCIALS -->
 [![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat)](https://discord.gg/kMp5JA9jwD)
 [![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat)](https://matrix.to/#/#server0451:matrix.org)
-[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Private%20DM)](https://matrix.to/#/#suvam:matrix.org)
+[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Private%20DM)](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org)
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/112440258358145826?label=Add%20Me)](https://mastodon.social/@suvam)
 [![GitHub](https://img.shields.io/github/followers/suvam0451?label=Add%20Me)](https://github.com/suvam0451?tab=followers)
 <!-- SOCIALS -->
@@ -20,9 +20,10 @@
 
 <p align="center">
   <a href="https://dhaaga.app/docs/about">About</a> •
-  <a href="https://dhaaga.app/docs">Documentation</a> •
-  <a href="https://github.com/suvam0451/dhaaga/issues/new">Report a Bug</a> •
-  <a href="https://github.com/suvam0451/dhaaga/issues/new">Request a Feature</a> •
+  <a href="https://dhaaga.app/docs">Docs</a> •
+  <a href="https://dhaaga.app/docs/roadmap">Roadmap</a> •
+  <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml">Report a Bug</a> •
+  <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml">Request a Feature</a> •
   <a href="https://dhaaga.app/docs/license">License</a>
 </p>
 

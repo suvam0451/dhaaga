@@ -38,15 +38,17 @@ export type ComposeMediaTargetItem = {
 
 type KeyboardSelection = { start: number; end: number };
 type Type = {
-	editMode: 'txt' | 'alt' | 'misc';
-	setEditMode: React.Dispatch<React.SetStateAction<'txt' | 'alt' | 'misc'>>;
+	editMode: 'txt' | 'alt' | 'emoji' | 'misc';
+	setEditMode: React.Dispatch<
+		React.SetStateAction<'txt' | 'alt' | 'emoji' | 'misc'>
+	>;
 	cw: string;
 	setCw: React.Dispatch<React.SetStateAction<string>>;
 	cwShown: boolean;
 	setAltText: (index: number, o: string) => void;
 	setCwShown: React.Dispatch<React.SetStateAction<boolean>>;
 	rawText: string;
-	setRawText: (rawText: string) => void;
+	setRawText: React.Dispatch<React.SetStateAction<string>>;
 	editorText: React.JSX.Element;
 	setEditorText: (content: React.JSX.Element) => void;
 	autoCompletion: ComposerAutocompletion;
@@ -123,7 +125,9 @@ function WithComposerContext({ children, textSeed }: Props) {
 	const [EditorText, setEditorText] = useState(<Text>{textSeed || ''}</Text>);
 	const [Cw, setCw] = useState('');
 	const [CwSectionShown, setCwSectionShown] = useState(false);
-	const [EditMode, setEditMode] = useState<'txt' | 'alt' | 'misc'>('txt');
+	const [EditMode, setEditMode] = useState<'txt' | 'alt' | 'emoji' | 'misc'>(
+		'txt',
+	);
 	const [AutoCompletion, setAutoCompletion] = useState<ComposerAutocompletion>({
 		accounts: [],
 		emojis: [],
