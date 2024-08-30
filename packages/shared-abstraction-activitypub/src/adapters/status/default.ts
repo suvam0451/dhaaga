@@ -16,7 +16,13 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
-	getReactions(): { id: string; count: number }[] {
+	getReactions(): {
+		id: string;
+		count: number;
+		me: boolean;
+		accounts: string[];
+		url: string | null;
+	}[] {
 		return [];
 	}
 

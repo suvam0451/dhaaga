@@ -10,10 +10,7 @@ import {
 	MegaReaction,
 	MegaStatus,
 } from '../_interface.js';
-import {
-	errorBuilder,
-	notImplementedErrorBuilder,
-} from '../_router/dto/api-responses.dto.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import {
 	COMPAT,
 	DhaagaMegalodonClient,
@@ -22,7 +19,6 @@ import {
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import camelcaseKeys from 'camelcase-keys';
-import AppApi from '../../_api/AppApi.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	client: RestClient;
@@ -78,6 +74,24 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async getReactions(id: string): Promise<LibraryResponse<MegaReaction[]>> {
 		const data = await this.lib.client.getEmojiReactions(id);
+		return { data: camelcaseKeys(data.data, { deep: true }) as any };
+	}
+
+	async addReaction(id: string, shortCode: string) {
+		const data = await this.lib.client.createEmojiReaction(id, shortCode);
+		if (data.status !== 200) {
+			console.log('[ERROR]: failed to add reaction', data.statusText);
+			return errorBuilder(data.statusText);
+		}
+		return { data: data.data };
+	}
+
+	async removeReaction(id: string, shortCode: string) {
+		const data = await this.lib.client.deleteEmojiReaction(id, shortCode);
+		if (data.status !== 200) {
+			console.log('[ERROR]: failed to remove reaction', data.statusText);
+			return errorBuilder(data.statusText);
+		}
 		return { data: data.data };
 	}
 

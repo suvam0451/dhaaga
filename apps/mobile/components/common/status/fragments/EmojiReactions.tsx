@@ -7,6 +7,7 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
+import ActivityPubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
@@ -15,7 +16,7 @@ type EmojiReactionsProps = {
 };
 const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	const { emojiCache } = useAppTimelineDataContext();
-	const { domain } = useActivityPubRestClientContext();
+	const { domain, me } = useActivityPubRestClientContext();
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);
 
@@ -24,61 +25,13 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	}, []);
 
 	useEffect(() => {
-		const emojis = dto.calculated.reactionEmojis;
-		let retval: EmojiDto[] = [];
-
-		const localEx = /:(.*?)@.:/;
-		const ex = /:(.*?):/;
-		for (const reaction of dto.stats.reactions) {
-			if (localEx.test(reaction.id)) {
-				const _name = localEx.exec(reaction.id)[1];
-				const match = emojiCache.find(
-					(o) => o.shortCode === _name || o.aliases.includes(_name),
-				);
-				if (match) {
-					retval.push({
-						name: reaction.id,
-						count: reaction.count,
-						type: 'image',
-						url: match.url,
-						interactable: true,
-					});
-				} else {
-					console.log('[WARN]: local emoji not found for', _name);
-				}
-			} else if (ex.test(reaction.id)) {
-				const _name = ex.exec(reaction.id)[1];
-				const match = emojis.find((o) => o.name === _name);
-				if (match) {
-					retval.push({
-						name: reaction.id,
-						count: reaction.count,
-						type: 'image',
-						url: match.url,
-						width: match.width,
-						height: match.height,
-						interactable: false,
-					});
-				} else {
-					retval.push({
-						name: reaction.id,
-						count: reaction.count,
-						type: 'text',
-						interactable: false,
-					});
-				}
-			} else {
-				retval.push({
-					name: reaction.id,
-					count: reaction.count,
-					type: 'text',
-					interactable: true,
-				});
-			}
-
-			retval = retval.sort((a, b) => b.count - a.count);
-		}
-		setEmojis(retval);
+		setEmojis(
+			ActivityPubReactionsService.renderData(dto.stats.reactions, {
+				calculated: dto.calculated.reactionEmojis,
+				cache: emojiCache,
+				me: me.getId(),
+			}),
+		);
 	}, [dto]);
 
 	if (domain === 'mastodon') return <Fragment />;

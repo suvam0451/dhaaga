@@ -7,22 +7,20 @@ import WithLocalAppMenuControllerContext from '../../../components/shared/fab/ho
 
 function Layout() {
 	return (
-		<WithGorhomBottomSheetContext>
-			<WithLocalAppMenuControllerContext>
-				<WithAppDrawerContext>
-					<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
-					<Stack
-						initialRouteName={'home-home'}
-						screenOptions={{ headerShown: false }}
-					>
-						<Stack.Screen name={'index'} />
-						<Stack.Screen name={'home-home'} />
-						<Stack.Screen name={'new-to-app'} />
-						<Stack.Screen name={'new-to-fedi'} />
-					</Stack>
-				</WithAppDrawerContext>
-			</WithLocalAppMenuControllerContext>
-		</WithGorhomBottomSheetContext>
+		<WithLocalAppMenuControllerContext>
+			<WithAppDrawerContext>
+				<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+				<Stack
+					initialRouteName={'home-home'}
+					screenOptions={{ headerShown: false }}
+				>
+					<Stack.Screen name={'index'} />
+					<Stack.Screen name={'home-home'} />
+					<Stack.Screen name={'new-to-app'} />
+					<Stack.Screen name={'new-to-fedi'} />
+				</Stack>
+			</WithAppDrawerContext>
+		</WithLocalAppMenuControllerContext>
 	);
 }
 

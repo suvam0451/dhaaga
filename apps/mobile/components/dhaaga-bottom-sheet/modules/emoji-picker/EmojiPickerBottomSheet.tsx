@@ -15,163 +15,141 @@ import emojiPickerReducer, {
 	defaultValue,
 	EMOJI_PICKER_REDUCER_ACTION,
 } from './emojiPickerReducer';
-import { Image } from 'expo-image';
-import { useComposerContext } from '../post-composer/api/useComposerContext';
 import SelectedEmojiPreview from './fragments/SelectedEmojiPreview';
 import SelectedEmojiActionButtons from './fragments/SelectedEmojiActionButtons';
+import EmojiPickerSearchResults from './fragments/EmojiPickerSearchResults';
 
-const EmojiPickerBottomSheet = memo(() => {
-	const { domain, subdomain } = useActivityPubRestClientContext();
-	const { globalDb } = useGlobalMmkvContext();
-	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
+type EmojiPickerBottomSheetProps = {
+	onSelect: (shortCode: string) => void;
+	onCancel: () => void;
+};
 
-	const { setEditMode } = useComposerContext();
+/**
+ * @param onSelect what happens when emoji selection is confirmed
+ * @param onCancel what happens when workflow is cancelled
+ */
+const EmojiPickerBottomSheet = memo(
+	({ onSelect, onCancel }: EmojiPickerBottomSheetProps) => {
+		const { domain, subdomain } = useActivityPubRestClientContext();
+		const { globalDb } = useGlobalMmkvContext();
+		const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 
-	const lastSubdomain = useRef(null);
-	useEffect(() => {
-		if (lastSubdomain.current === subdomain) return;
-		dispatch({
-			type: EMOJI_PICKER_REDUCER_ACTION.INIT,
-			payload: {
-				subdomain,
-				globalDb,
-				domain,
-			},
-		});
-		lastSubdomain.current = subdomain;
-	}, [subdomain]);
+		const lastSubdomain = useRef(null);
+		useEffect(() => {
+			if (lastSubdomain.current === subdomain) return;
+			dispatch({
+				type: EMOJI_PICKER_REDUCER_ACTION.INIT,
+				payload: {
+					subdomain,
+					globalDb,
+					domain,
+				},
+			});
+			lastSubdomain.current = subdomain;
+		}, [subdomain]);
 
-	if (!State.tagEmojiMap) return <View />;
+		if (!State.tagEmojiMap) return <View />;
 
-	function onSelect(o: any) {
-		dispatch({
-			type: EMOJI_PICKER_REDUCER_ACTION.SELECT,
-			payload: {
-				shortCode: o.shortCode,
-			},
-		});
-	}
+		function onEmojiSelected(o: any) {
+			dispatch({
+				type: EMOJI_PICKER_REDUCER_ACTION.SELECT,
+				payload: {
+					shortCode: o.shortCode,
+				},
+			});
+		}
 
-	function onSearchTermChanged(o: any) {
-		dispatch({
-			type: EMOJI_PICKER_REDUCER_ACTION.APPLY_SEARCH,
-			payload: {
-				searchTerm: o,
-			},
-		});
-	}
+		function onSearchTermChanged(o: any) {
+			dispatch({
+				type: EMOJI_PICKER_REDUCER_ACTION.APPLY_SEARCH,
+				payload: {
+					searchTerm: o,
+				},
+			});
+		}
 
-	function onTagSelectionChanged(o: any) {
-		dispatch({
-			type: EMOJI_PICKER_REDUCER_ACTION.APPLY_TAG,
-			payload: {
-				tag: o,
-			},
-		});
-	}
+		function onTagSelectionChanged(o: any) {
+			dispatch({
+				type: EMOJI_PICKER_REDUCER_ACTION.APPLY_TAG,
+				payload: {
+					tag: o,
+				},
+			});
+		}
 
-	return (
-		<View style={{ marginTop: 12, position: 'relative' }}>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					maxWidth: '100%',
-				}}
-			>
-				<SelectedEmojiPreview selection={State.selectedReaction} />
-				<SelectedEmojiActionButtons selection={State.selectedReaction} />
-			</View>
-
-			<TextInput
-				placeholder={'Search by alias'}
-				autoCapitalize={'none'}
-				multiline={false}
-				placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
-				style={styles.textInput}
-				onChangeText={onSearchTermChanged}
-			/>
-
-			<ScrollView
-				style={{
-					flexGrow: 1,
-					display: 'flex',
-					flexWrap: 'wrap',
-					flexShrink: 1,
-					height: 200,
-				}}
-				keyboardShouldPersistTaps={'always'}
-			>
-				<View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-					{State.visibleReactions.map((o) => (
-						<TouchableOpacity
-							onPress={() => {
-								onSelect(o);
-							}}
-						>
-							{/*@ts-ignore-next-line*/}
-							<Image source={{ uri: o.url }} style={styles.emojiContainer} />
-						</TouchableOpacity>
-					))}
-				</View>
-				<Text
+		return (
+			<View style={{ marginTop: 12, position: 'relative' }}>
+				<View
 					style={{
-						fontSize: 13,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-						color: APP_FONT.MONTSERRAT_BODY,
-						marginVertical: 8,
-						textAlign: 'center',
+						flexDirection: 'row',
+						alignItems: 'center',
+						maxWidth: '100%',
 					}}
 				>
-					Showing {State.resultSize}/{State.totalSize} results for category
-				</Text>
-			</ScrollView>
+					<SelectedEmojiPreview selection={State.selectedReaction} />
+					<SelectedEmojiActionButtons
+						selection={State.selectedReaction}
+						onSelect={onSelect}
+						onCancel={onCancel}
+					/>
+				</View>
 
-			<ScrollView
-				horizontal={true}
-				style={{
-					flexDirection: 'row',
-					paddingBottom: 8,
-					paddingTop: 10,
-				}}
-				keyboardShouldPersistTaps={'always'}
-			>
-				{/*@ts-ignore-next-line*/}
-				{State.allTags.map((o) => (
-					<TouchableOpacity
-						style={{
-							marginHorizontal: 4,
-							backgroundColor: '#444',
-							padding: 6,
-							borderRadius: 6,
-						}}
-						onPress={() => {
-							onTagSelectionChanged(o);
-						}}
-					>
-						<Text
-							style={[
-								styles.categoryLabel,
-								{
-									fontFamily:
-										o === State.selectedTag
-											? APP_FONTS.INTER_700_BOLD
-											: APP_FONTS.INTER_500_MEDIUM,
-									color:
-										o === State.selectedTag
-											? 'green'
-											: APP_FONT.MONTSERRAT_BODY,
-								},
-							]}
+				<TextInput
+					placeholder={'Search by alias'}
+					autoCapitalize={'none'}
+					multiline={false}
+					placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
+					style={styles.textInput}
+					onChangeText={onSearchTermChanged}
+				/>
+
+				<EmojiPickerSearchResults State={State} onSelect={onEmojiSelected} />
+				<ScrollView
+					horizontal={true}
+					style={{
+						flexDirection: 'row',
+						paddingBottom: 8,
+						paddingTop: 10,
+					}}
+					keyboardShouldPersistTaps={'always'}
+				>
+					{/*@ts-ignore-next-line*/}
+					{State.allTags.map((o) => (
+						<TouchableOpacity
+							style={{
+								marginHorizontal: 4,
+								backgroundColor: '#444',
+								padding: 6,
+								borderRadius: 6,
+							}}
+							onPress={() => {
+								onTagSelectionChanged(o);
+							}}
 						>
-							{o ? o : '<Untagged>'}
-						</Text>
-					</TouchableOpacity>
-				))}
-			</ScrollView>
-		</View>
-	);
-});
+							<Text
+								style={[
+									styles.categoryLabel,
+									{
+										fontFamily:
+											o === State.selectedTag
+												? APP_FONTS.INTER_700_BOLD
+												: APP_FONTS.INTER_500_MEDIUM,
+										color:
+											o === State.selectedTag
+												? 'green'
+												: APP_FONT.MONTSERRAT_BODY,
+									},
+								]}
+							>
+								{o ? o : '<Untagged>'}
+							</Text>
+						</TouchableOpacity>
+					))}
+				</ScrollView>
+			</View>
+		);
+	},
+);
 
 const EMOJI_SIZE = 38;
 const styles = StyleSheet.create({

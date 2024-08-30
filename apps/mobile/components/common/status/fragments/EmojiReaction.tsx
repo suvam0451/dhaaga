@@ -1,5 +1,5 @@
 import { EmojiDto, styles } from './_shared.types';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -7,9 +7,27 @@ import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 
 const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
+	const CONTAINER_STYLE = useMemo(() => {
+		if (dto.interactable) {
+			if (dto.me) {
+				return [
+					styles.emojiContainer,
+					{
+						backgroundColor: '#41332e',
+						borderWidth: 2,
+						borderColor: '#d3ac6c',
+					},
+				];
+			} else {
+				return [styles.emojiContainer, { backgroundColor: '#303030' }];
+			}
+		}
+		return [styles.emojiContainer, { backgroundColor: '#161616' }];
+	}, [dto.interactable, dto.me]);
+
 	if (dto.type === 'text') {
 		return (
-			<View style={[styles.emojiContainer]}>
+			<View style={CONTAINER_STYLE}>
 				<Text
 					style={{
 						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
@@ -37,12 +55,7 @@ const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 
 	if (dto.type === 'image') {
 		return (
-			<View
-				style={[
-					styles.emojiContainer,
-					{ backgroundColor: dto.interactable ? '#303030' : '#161616' },
-				]}
-			>
+			<View style={CONTAINER_STYLE}>
 				<View
 					style={{
 						flexDirection: 'row',

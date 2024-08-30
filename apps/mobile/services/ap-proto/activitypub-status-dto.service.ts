@@ -30,6 +30,20 @@ export const AppActivityPubMediaDto = z.object({
 
 export type AppActivityPubMediaType = z.infer<typeof AppActivityPubMediaDto>;
 
+export const ActivityPubReactionStateDto = z.array(
+	z.object({
+		id: z.string(),
+		count: z.number().positive(),
+		me: z.boolean(),
+		accounts: z.array(z.string()),
+		url: z.string().nullable().optional(),
+	}),
+);
+
+export type ActivityPubReactionStateDtoType = z.infer<
+	typeof ActivityPubReactionStateDto
+>;
+
 /**
  * This payload is used to consume
  * the Status Interface inside
@@ -59,12 +73,7 @@ export const ActivityPubStatusItemDto = z.object({
 		replyCount: z.number().nonnegative(),
 		boostCount: z.number().nonnegative(),
 		likeCount: z.number().nonnegative(),
-		reactions: z.array(
-			z.object({
-				id: z.string(),
-				count: z.number().positive(),
-			}),
-		),
+		reactions: ActivityPubReactionStateDto,
 	}),
 	calculated: z.object({
 		mediaContainerHeight: z.number(),

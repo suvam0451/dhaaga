@@ -9,7 +9,7 @@ type Props = {
 
 /**
  * Manages the state for the bottom indicator
- * that pops up for pages with infinite
+ * that pops up for modules with infinite
  * scrolling support
  *
  * NOTE: only compatible with Tanstack useQuery

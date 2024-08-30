@@ -31,7 +31,6 @@ export class EmojiService {
 	 * @param db
 	 * @param globalDb
 	 * @param id
-	 * @param domain
 	 * @param subdomain
 	 */
 	static find({

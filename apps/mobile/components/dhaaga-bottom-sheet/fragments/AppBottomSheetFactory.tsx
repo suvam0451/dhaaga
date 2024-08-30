@@ -1,29 +1,35 @@
 import { memo, useMemo } from 'react';
 import {
-	BOTTOM_SHEET_ENUM,
+	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../modules/_api/useAppBottomSheet';
 import PostPreview from '../modules/post-preview/PostPreview';
 import WithComposerContext from '../modules/post-composer/api/useComposerContext';
 import PostCompose from '../modules/post-composer/pages/PostCompose';
 import ProfilePeekBottomSheet from '../modules/profile-peek/pages/ProfilePeekBottomSheet';
+import PostMoreActions from '../modules/post-actions/pages/PostMoreActions';
 
-const AppBottomSheetComponent = memo(() => {
+/**
+ * Responsible for generating content
+ */
+const AppBottomSheetFactory = memo(() => {
 	const { type, requestId, PostComposerTextSeedRef } = useAppBottomSheet();
 	return useMemo(() => {
 		switch (type) {
-			case BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
+			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
 				return <PostPreview />;
 			}
-			case BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
+			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
 				return (
 					<WithComposerContext textSeed={PostComposerTextSeedRef.current}>
 						<PostCompose />
 					</WithComposerContext>
 				);
 			}
-			case BOTTOM_SHEET_ENUM.PROFILE_PEEK:
+			case APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK:
 				return <ProfilePeekBottomSheet />;
+			case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
+				return <PostMoreActions />;
 			default: {
 				return (
 					<WithComposerContext>
@@ -35,4 +41,4 @@ const AppBottomSheetComponent = memo(() => {
 	}, [type, requestId]);
 });
 
-export default AppBottomSheetComponent;
+export default AppBottomSheetFactory;

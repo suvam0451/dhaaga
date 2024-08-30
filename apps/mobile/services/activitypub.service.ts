@@ -29,6 +29,12 @@ class ActivityPubService {
 		].includes(domain as KNOWN_SOFTWARE);
 	}
 
+	static pleromaLike(domain: string) {
+		return [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
+			domain as KNOWN_SOFTWARE,
+		);
+	}
+
 	/**
 	 * Syncs the nodeinfo and software
 	 * for a subdomain

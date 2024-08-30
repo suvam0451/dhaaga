@@ -4,7 +4,7 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { memo } from 'react';
 import {
-	BOTTOM_SHEET_ENUM,
+	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../_api/useAppBottomSheet';
 
@@ -12,7 +12,7 @@ const PreviewedPostDone = memo(() => {
 	const { setType, setVisible } = useAppBottomSheet();
 
 	function onDonePress() {
-		setType(BOTTOM_SHEET_ENUM.NA);
+		setType(APP_BOTTOM_SHEET_ENUM.NA);
 		setVisible(false);
 	}
 

@@ -1,6 +1,9 @@
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
+import {
+	ActivityPubReactionStateDto,
+	ActivityPubStatusAppDtoType,
+} from '../../../../services/ap-proto/activitypub-status-dto.service';
 import { produce } from 'immer';
-import { MutableRefObject } from 'react';
+import { Dispatch, MutableRefObject } from 'react';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
 
@@ -11,7 +14,13 @@ export enum TIMELINE_POST_LIST_DATA_REDUCER_TYPE {
 	UPDATE_BOOST_STATUS = 'updateBoostStatus',
 	UPDATE_TRANSLATION_OUTPUT = 'updateTranslationOutput',
 	UPDATE_LIKE_STATUS = 'updateLikeStatus',
+	UPDATE_REACTION_STATE = 'updateReactionState',
 }
+
+export type TimelineDataReducerFunction = Dispatch<{
+	type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE;
+	payload?: any;
+}>;
 
 /**
  * Perform mutable operations on a
@@ -117,6 +126,23 @@ function postArrayReducer(
 						post.boostedFrom.interaction.liked = _delta != -1;
 						post.boostedFrom.stats.likeCount += parseInt(_delta);
 					}
+				}
+			});
+		}
+		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE: {
+			const _id = action.payload.id;
+			const _state = action.payload.state;
+			const { data, error } = ActivityPubReactionStateDto.safeParse(_state);
+			if (error) {
+				console.log('[WARN]: reaction state incorrect', error);
+				return state;
+			}
+
+			return produce(state, (posts) => {
+				for (const post of posts) {
+					if (post.id === _id) post.stats.reactions = data;
+					if (post.boostedFrom?.id === _id)
+						post.boostedFrom.stats.reactions = data;
 				}
 			});
 		}

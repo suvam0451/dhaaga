@@ -56,11 +56,17 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		);
 	}
 
-	getReactions(): { id: string; count: number }[] {
+	getReactions(): {
+		id: string;
+		count: number;
+		me: boolean;
+		accounts: string[];
+		url: string | null;
+	}[] {
 		const retval = [];
 		const src = this.ref.instance?.reactions || {};
 		for (const k in src) {
-			retval.push({ id: k, count: src[k] });
+			retval.push({ id: k, count: src[k], me: false, accounts: [], url: null });
 		}
 		return retval;
 	}

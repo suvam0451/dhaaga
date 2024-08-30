@@ -1,5 +1,6 @@
 import {
 	createContext,
+	Dispatch,
 	MutableRefObject,
 	useContext,
 	useRef,
@@ -9,48 +10,57 @@ import useHookLoadingState from '../../../../states/useHookLoadingState';
 import AppBottomSheet from '../../Core';
 import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
+import {
+	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
+	TimelineDataReducerFunction,
+} from '../../../common/timeline/api/postArrayReducer';
 
-export enum BOTTOM_SHEET_ENUM {
+export enum APP_BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
 	LINK = 'Link',
 	STATUS_COMPOSER = 'StatusComposer',
 	STATUS_MENU = 'StatusMenu',
 	STATUS_PREVIEW = 'StatusPreview',
 	PROFILE_PEEK = 'ProfilePeek',
+	MORE_POST_ACTIONS = 'MorePostActions',
 	NA = 'N/A',
 }
 
 type Type = {
-	type: BOTTOM_SHEET_ENUM;
-	setType: (type: BOTTOM_SHEET_ENUM) => void;
+	type: APP_BOTTOM_SHEET_ENUM;
+	setType: (type: APP_BOTTOM_SHEET_ENUM) => void;
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
 	requestId: string;
-	replyToRef?: MutableRefObject<ActivityPubStatusAppDtoType>;
 
 	// references
+	replyToRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	PostRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	PostIdRef: MutableRefObject<string>;
 	UserRef: MutableRefObject<UserInterface>;
 	UserIdRef: MutableRefObject<string>;
 	// pre-populate the post-composer to this content
 	PostComposerTextSeedRef: MutableRefObject<string>;
+
+	// reducers
+	timelineDataPostListReducer: MutableRefObject<TimelineDataReducerFunction>;
 };
 
 const defaultValue: Type = {
-	type: BOTTOM_SHEET_ENUM.NA,
-	replyToRef: undefined,
+	type: APP_BOTTOM_SHEET_ENUM.NA,
 	setType: () => {},
 	visible: false,
 	setVisible: () => {},
 	updateRequestId: () => {},
 	requestId: '',
+	replyToRef: undefined,
 	PostRef: undefined,
 	PostIdRef: undefined,
 	UserRef: undefined,
 	UserIdRef: undefined,
 	PostComposerTextSeedRef: undefined,
+	timelineDataPostListReducer: undefined,
 };
 
 const AppBottomSheetContext = createContext<Type>(defaultValue);
@@ -65,7 +75,7 @@ type Props = {
 
 function WithAppBottomSheetContext({ children }: Props) {
 	const [Visible, setVisible] = useState(false);
-	const [Type, setType] = useState(BOTTOM_SHEET_ENUM.NA);
+	const [Type, setType] = useState(APP_BOTTOM_SHEET_ENUM.NA);
 	const { forceUpdate, State } = useHookLoadingState();
 
 	// pointers
@@ -75,6 +85,14 @@ function WithAppBottomSheetContext({ children }: Props) {
 	const UserIdRef = useRef<string>(null);
 	const PostComposerTextSeedRef = useRef<string>(null);
 	const replyToRef = useRef<ActivityPubStatusAppDtoType>(null);
+
+	// reducers
+	const timelineDataPostListReducer = useRef<
+		Dispatch<{
+			type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE;
+			payload?: any;
+		}>
+	>(null);
 
 	return (
 		<AppBottomSheetContext.Provider
@@ -91,6 +109,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 				UserIdRef,
 				PostComposerTextSeedRef,
 				replyToRef,
+				timelineDataPostListReducer,
 			}}
 		>
 			{children}

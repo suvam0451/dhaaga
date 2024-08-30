@@ -1,4 +1,4 @@
-import { Fragment, memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
@@ -10,10 +10,11 @@ import { useComposerContext } from '../api/useComposerContext';
 import ComposerAlt from '../fragments/ComposerAlt';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../fragments/ComposerTopMenu';
+import TextEditorService from '../../../../../services/text-editor.service';
 
 const PostCompose = memo(() => {
 	const { visible } = useAppBottomSheet();
-	const { editMode } = useComposerContext();
+	const { editMode, setEditMode, setRawText } = useComposerContext();
 
 	const EditorContent = useMemo(() => {
 		switch (editMode) {
@@ -37,7 +38,19 @@ const PostCompose = memo(() => {
 				);
 			}
 			case 'emoji': {
-				return <EmojiPickerBottomSheet />;
+				return (
+					<EmojiPickerBottomSheet
+						onCancel={() => {
+							setEditMode('txt');
+						}}
+						onSelect={(shortCode: string) => {
+							setRawText((o) =>
+								TextEditorService.addReactionText(o, shortCode),
+							);
+							setEditMode('txt');
+						}}
+					/>
+				);
 			}
 			case 'alt': {
 				return (

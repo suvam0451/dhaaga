@@ -4,28 +4,19 @@ import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
-import { useComposerContext } from '../../post-composer/api/useComposerContext';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
-import TextEditorService from '../../../../../services/text-editor.service';
 
 type SelectedEmojiActionButtonsProps = {
 	selection: InstanceApi_CustomEmojiDTO | null;
+	onSelect: (shortCode: string) => void;
+	onCancel: () => void;
 };
 
 const SelectedEmojiActionButtons = memo(
-	({ selection }: SelectedEmojiActionButtonsProps) => {
-		const { setEditMode, setRawText } = useComposerContext();
-
-		function onPressBack() {
-			setEditMode('txt');
-		}
-
+	({ selection, onSelect, onCancel }: SelectedEmojiActionButtonsProps) => {
 		function onConfirmPick() {
 			if (!selection) return;
-			setRawText((o) =>
-				TextEditorService.addReactionText(o, selection.shortCode),
-			);
-			setEditMode('txt');
+			onSelect(selection.shortCode);
 		}
 
 		return (
@@ -39,7 +30,7 @@ const SelectedEmojiActionButtons = memo(
 						borderRadius: 8,
 						paddingVertical: 6,
 					}}
-					onPress={onPressBack}
+					onPress={onCancel}
 				>
 					<AntDesign name="back" size={20} color={APP_FONT.MONTSERRAT_BODY} />
 				</TouchableOpacity>

@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import {
-	BOTTOM_SHEET_ENUM,
+	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../_api/useAppBottomSheet';
 
@@ -17,7 +17,7 @@ const ProfilePeekMessage = memo(({ handle }: ProfilePeekMessageProps) => {
 
 	function onPress() {
 		PostComposerTextSeedRef.current = `${handle} `;
-		setType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
+		setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 		setVisible(true);
 		updateRequestId();
 	}

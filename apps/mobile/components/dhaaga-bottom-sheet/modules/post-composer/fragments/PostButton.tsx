@@ -8,7 +8,7 @@ import { useActivityPubRestClientContext } from '../../../../../states/useActivi
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import {
-	BOTTOM_SHEET_ENUM,
+	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
@@ -18,7 +18,7 @@ import ActivityPubService from '../../../../../services/activitypub.service';
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
 	const { client, domain, subdomain } = useActivityPubRestClientContext();
-	const { setType, PostRef, replyToRef } = useAppBottomSheet();
+	const { setType, replyToRef, PostRef } = useAppBottomSheet();
 
 	async function onClick() {
 		let _visibility: any = visibility.toLowerCase();
@@ -72,7 +72,7 @@ const PostButton = memo(() => {
 				subdomain,
 			).export();
 		}
-		setType(BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
+		setType(APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
 	}
 
 	return (
