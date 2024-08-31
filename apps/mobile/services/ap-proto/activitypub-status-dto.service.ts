@@ -9,6 +9,7 @@ import MediaService from '../media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubReactionStateDto } from './activitypub-reactions.service';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -59,12 +60,7 @@ export const ActivityPubStatusItemDto = z.object({
 		replyCount: z.number().nonnegative(),
 		boostCount: z.number().nonnegative(),
 		likeCount: z.number().nonnegative(),
-		reactions: z.array(
-			z.object({
-				id: z.string(),
-				count: z.number().positive(),
-			}),
-		),
+		reactions: ActivityPubReactionStateDto,
 	}),
 	calculated: z.object({
 		mediaContainerHeight: z.number(),
@@ -186,6 +182,11 @@ export class ActivitypubStatusDtoService {
 			KNOWN_SOFTWARE.AKKOMA,
 		].includes(domain as any);
 
+		// NOTE: debugger for reactions
+		// console.log(
+		// 	input.getMyReaction(),
+		// 	input.getReactions(input.getMyReaction()),
+		// );
 		return {
 			id: input.getId(),
 			visibility: input.getVisibility(),
@@ -214,7 +215,7 @@ export class ActivitypubStatusDtoService {
 				replyCount: input.getRepliesCount(),
 				boostCount: input.getRepostsCount(),
 				likeCount: input.getFavouritesCount(),
-				reactions: input.getReactions(),
+				reactions: input.getReactions(input.getMyReaction()),
 			},
 			interaction: {
 				bookmarked: input.getIsBookmarked(),

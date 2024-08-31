@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetCloseButton from './fragments/AppBottomSheetCloseButton';
-import AppBottomSheetComponent from './fragments/AppBottomSheetComponent';
+import AppBottomSheetFactory from './fragments/AppBottomSheetFactory';
 
 /**
  * Switches what module will be shown
@@ -18,7 +18,7 @@ const AppBottomSheet = memo(() => {
 	return (
 		<Animated.View style={[styles.rootContainer, animStyle]}>
 			<AppBottomSheetCloseButton />
-			<AppBottomSheetComponent />
+			<AppBottomSheetFactory />
 		</Animated.View>
 	);
 });

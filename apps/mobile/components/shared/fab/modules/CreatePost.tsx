@@ -5,7 +5,7 @@ import { FabMenuItemText } from '../fragments/FabMenuItemIcon';
 import { FabMenuItemFactory } from '../fragments/FabMenuItemFactory';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import {
-	BOTTOM_SHEET_ENUM,
+	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
@@ -16,18 +16,18 @@ const CreatePostModule = memo(({ index }: FabModuleProps) => {
 		setVisible,
 		setType,
 		PostComposerTextSeedRef,
-		replyToRef,
+		PostRef,
 		updateRequestId,
 	} = useAppBottomSheet();
 
 	const onClick = useCallback(() => {
 		PostComposerTextSeedRef.current = null;
-		replyToRef.current = null;
+		PostRef.current = null;
 
-		setType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
+		setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 		updateRequestId();
 		setVisible(true);
-	}, [PostComposerTextSeedRef, replyToRef]);
+	}, [PostComposerTextSeedRef, PostRef]);
 
 	return (
 		<FabMenuItemFactory

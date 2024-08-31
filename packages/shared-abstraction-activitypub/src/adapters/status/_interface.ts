@@ -82,6 +82,8 @@ export interface StatusInterface {
 
 	getAccountId_Poster(): string;
 
+	getMyReaction(): string | null | undefined;
+
 	isValid(): boolean;
 
 	isReply(): boolean;
@@ -103,7 +105,13 @@ export interface StatusInterface {
 
 	getDescendants(): StatusInterface[];
 
-	getReactions(): { id: string; count: number }[];
+	getReactions(myReaction?: string): {
+		id: string;
+		count: number;
+		me: boolean;
+		accounts: string[];
+		url: string | null;
+	}[];
 
 	getReactionEmojis(): {
 		height?: number;

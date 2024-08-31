@@ -1,6 +1,6 @@
-import { View } from 'react-native';
-import { memo, useMemo } from 'react';
-import { MARGIN_TOP } from './_common';
+import { Dimensions, LayoutChangeEvent, View } from 'react-native';
+import { memo, useEffect, useMemo, useState } from 'react';
+import { MARGIN_TOP, MEDIA_CONTAINER_MAX_HEIGHT } from './_common';
 import {
 	AltTextOverlay,
 	AppAudioComponent,
@@ -10,6 +10,8 @@ import {
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
 import { AppActivityPubMediaType } from '../../../services/ap-proto/activitypub-status-dto.service';
+import { Image as RNImage } from 'react-native';
+import MediaService from '../../../services/media.service';
 
 type ImageCarousalProps = {
 	attachments: AppActivityPubMediaType[];
@@ -17,6 +19,9 @@ type ImageCarousalProps = {
 	leftMarginAdjustment?: number;
 };
 
+/**
+ * Media Renderer for a single item
+ */
 const TimelineMediaRendered = memo(function Foo({
 	attachment,
 	CalculatedHeight,
@@ -32,6 +37,47 @@ const TimelineMediaRendered = memo(function Foo({
 	totalCount?: number;
 	leftMarginAdjustment?: number;
 }) {
+	// set width
+	const [Width, setWidth] = useState(Dimensions.get('window').width);
+	function onLayoutChanged(event: LayoutChangeEvent) {
+		const { width } = event.nativeEvent.layout;
+		setWidth(width);
+	}
+
+	// set height
+	const [Height, setHeight] = useState(MEDIA_CONTAINER_MAX_HEIGHT);
+	useEffect(() => {
+		// available in payload
+		if (attachment.height && attachment.width) {
+			const { height } = MediaService.calculateDimensions({
+				maxW: Width,
+				maxH: MEDIA_CONTAINER_MAX_HEIGHT,
+				H: attachment.height,
+				W: attachment.width,
+			});
+			setHeight(height);
+			return;
+		}
+
+		// calculate ourselves
+		RNImage.getSize(
+			attachment.url,
+			(W, H) => {
+				const { height } = MediaService.calculateDimensions({
+					maxW: Width,
+					maxH: MEDIA_CONTAINER_MAX_HEIGHT,
+					H,
+					W,
+				});
+				setHeight(height);
+			},
+			(error) => {
+				console.log('[WARN]: failed to get image', error);
+				setHeight(MEDIA_CONTAINER_MAX_HEIGHT);
+			},
+		);
+	}, [attachment, Width]);
+
 	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
 
 	const MediaItem = useMemo(() => {
@@ -49,7 +95,8 @@ const TimelineMediaRendered = memo(function Foo({
 					<AppImageComponent
 						url={attachment.url}
 						blurhash={attachment.blurhash}
-						height={_height}
+						height={Height}
+						width={Width}
 						leftMarginAdjustment={leftMarginAdjustment}
 					/>
 				);
@@ -75,13 +122,14 @@ const TimelineMediaRendered = memo(function Foo({
 				return <View></View>;
 			}
 		}
-	}, [attachment, CalculatedHeight]);
+	}, [attachment, Height, Width]);
 
 	return (
 		<View
 			style={{
 				marginTop: MARGIN_TOP,
 			}}
+			onLayout={onLayoutChanged}
 		>
 			{MediaItem}
 			<CarousalIndicatorOverlay index={index} totalCount={totalCount} />

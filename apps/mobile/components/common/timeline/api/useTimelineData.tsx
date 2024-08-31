@@ -25,6 +25,7 @@ import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.service
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import postArrayReducer, {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
+	TimelineDataReducerFunction,
 } from './postArrayReducer';
 import { ActivityPubAppUserDtoType } from '../../../../services/ap-proto/activitypub-user-dto.service';
 import userArrayReducer, {
@@ -73,6 +74,7 @@ type Type = {
 		dispatch: Dispatch<SetStateAction<boolean>>,
 	) => void;
 	count: number;
+	getPostListReducer: () => TimelineDataReducerFunction;
 };
 
 const defaultValue: Type = {
@@ -91,6 +93,9 @@ const defaultValue: Type = {
 	boost: () => {},
 	count: 0,
 	emojiCache: [],
+	getPostListReducer: function (): TimelineDataReducerFunction {
+		throw new Error('Function not implemented.');
+	},
 };
 
 const AppTimelineDataContext = createContext<Type>(defaultValue);
@@ -357,6 +362,8 @@ function WithAppTimelineDataContext({ children }: Props) {
 		[Posts],
 	);
 
+	const getPostListReducer = () => postListReducer;
+
 	return (
 		<AppTimelineDataContext.Provider
 			value={{
@@ -374,6 +381,9 @@ function WithAppTimelineDataContext({ children }: Props) {
 				toggleLike,
 				emojiCache: EmojiCache.current,
 				boost,
+
+				// function getters
+				getPostListReducer,
 			}}
 		>
 			{children}

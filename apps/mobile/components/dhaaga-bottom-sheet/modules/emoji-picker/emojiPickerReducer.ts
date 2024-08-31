@@ -5,7 +5,7 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 
-type Emoji = {
+export type Emoji = {
 	shortCode: string;
 	url: string;
 	tags: string[];

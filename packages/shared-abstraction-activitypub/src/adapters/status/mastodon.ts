@@ -20,12 +20,31 @@ class MastodonToStatusAdapter implements StatusInterface {
 		this.descendants = [];
 	}
 
+	getMyReaction(): string | null | undefined {
+		return null;
+	}
+
 	getMentions(): DhaagaJsMentionObject[] {
 		return this.ref.instance?.mentions || [];
 	}
 
-	getReactions(): { id: string; count: number }[] {
-		return [];
+	getReactions(): {
+		id: string;
+		count: number;
+		me: boolean;
+		accounts: string[];
+		url: string | null;
+	}[] {
+		// Pleroma/Akkoma
+		const reactions = (this.ref.instance as any).emojiReactions;
+		if (!reactions) return [];
+		return reactions.map((o: any) => ({
+			id: o.name,
+			count: o.count,
+			me: o.me || false,
+			accounts: o.accountIds || [],
+			url: o.url, // Pleroma: null for local reactions
+		}));
 	}
 
 	getReactionEmojis(): {
