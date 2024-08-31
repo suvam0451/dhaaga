@@ -56,7 +56,7 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		);
 	}
 
-	getReactions(): {
+	getReactions(myReaction?: string): {
 		id: string;
 		count: number;
 		me: boolean;
@@ -66,7 +66,13 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		const retval = [];
 		const src = this.ref.instance?.reactions || {};
 		for (const k in src) {
-			retval.push({ id: k, count: src[k], me: false, accounts: [], url: null });
+			retval.push({
+				id: k,
+				count: src[k],
+				me: k === myReaction,
+				accounts: [],
+				url: null,
+			});
 		}
 		return retval;
 	}
@@ -253,6 +259,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 
 	getAccountId_Poster(): string {
 		return this?.ref?.instance?.user?.id;
+	}
+
+	getMyReaction(): string | null | undefined {
+		return this.ref.instance?.myReaction;
 	}
 }
 

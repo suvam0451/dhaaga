@@ -29,10 +29,10 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 			ActivityPubReactionsService.renderData(dto.stats.reactions, {
 				calculated: dto.calculated.reactionEmojis,
 				cache: emojiCache,
-				me: me.getId(),
+				me: me?.getId(),
 			}),
 		);
-	}, [dto]);
+	}, [dto, me]);
 
 	if (domain === 'mastodon') return <Fragment />;
 

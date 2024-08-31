@@ -14,18 +14,68 @@ import {
 	AppButtonBottomSheetAction,
 } from '../../../../lib/Buttons';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
+import { ActivityPubAppUserDtoType } from '../../../../../services/ap-proto/activitypub-user-dto.service';
+import useMfm from '../../../../hooks/useMfm';
+import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
+import { AnimatedFlashList } from '@shopify/flash-list';
+
+const ReactingUser = memo(({ dto }: { dto: ActivityPubAppUserDtoType }) => {
+	const { content } = useMfm({
+		content: dto.displayName,
+		remoteSubdomain: dto.instance,
+		emojiMap: new Map<string, EmojiMapValue>(),
+		deps: [dto.displayName],
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		acceptTouch: false,
+	});
+
+	return (
+		<View style={{ flexDirection: 'row', marginVertical: 4 }}>
+			<View style={{ borderWidth: 1.5, borderColor: '#888', borderRadius: 8 }}>
+				{/*@ts-ignore-next-line*/}
+				<Image
+					source={{ uri: dto.avatarUrl }}
+					style={{ width: 48, height: 48, borderRadius: 6 }}
+				/>
+			</View>
+			<View style={{ marginLeft: 6 }}>
+				<Text
+					style={{
+						color: APP_FONT.MONTSERRAT_HEADER,
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					}}
+				>
+					{content}
+				</Text>
+				<Text
+					style={{
+						color: APP_FONT.MONTSERRAT_BODY,
+						fontFamily: APP_FONTS.INTER_400_REGULAR,
+						fontSize: 13,
+					}}
+				>
+					{dto.handle}
+				</Text>
+			</View>
+		</View>
+	);
+});
 
 const ReactionDetailsBottomSheet = memo(() => {
 	const { client, domain, subdomain } = useActivityPubRestClientContext();
-	const { TextRef, PostRef, timelineDataPostListReducer, setVisible } =
+	const { TextRef, PostRef, timelineDataPostListReducer, setVisible, visible } =
 		useAppBottomSheet();
-	const { Data } = useGetReactionDetails(PostRef.current?.id, TextRef.current);
+	const { Data, fetchStatus } = useGetReactionDetails(
+		PostRef.current?.id,
+		TextRef.current,
+	);
 
 	const [Loading, setLoading] = useState(false);
 	async function onActionPress() {
 		setLoading(true);
 		const { id } = ActivitypubReactionsService.extractReactionCode(
 			TextRef.current,
+			domain,
 			subdomain,
 		);
 
@@ -56,18 +106,47 @@ const ReactionDetailsBottomSheet = memo(() => {
 		setVisible(false);
 	}
 
-	if (!Data) return <View />;
+	/**
+	 * Since animations with the flash list
+	 * open are slow af
+	 */
+	if (!Data || !visible) return <View />;
+	if (fetchStatus === 'fetching')
+		return (
+			<View style={{ alignItems: 'center', marginTop: 32 }}>
+				<Text
+					style={{
+						fontSize: 24,
+						color: APP_FONT.MONTSERRAT_BODY,
+						textAlign: 'center',
+					}}
+				>
+					Loading...
+				</Text>
+			</View>
+		);
+
 	return (
-		<View style={{ padding: 8, paddingTop: 16 }}>
+		<View style={{ padding: 8, paddingTop: 16, flex: 1 }}>
 			<View style={{ flexDirection: 'row' }}>
 				{/*@ts-ignore-next-line*/}
 				<Image source={{ uri: Data.url }} style={{ width: 32, height: 32 }} />
-				<View style={{ flexGrow: 1, justifyContent: 'center', marginLeft: 8 }}>
+				<View
+					style={{
+						flexGrow: 1,
+						justifyContent: 'center',
+						marginLeft: 8,
+						flex: 1,
+					}}
+				>
 					<Text
 						style={{
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							color: APP_FONT.MONTSERRAT_BODY,
+
+							flexShrink: 1,
 						}}
+						numberOfLines={1}
 					>
 						{Data.id}
 					</Text>
@@ -93,51 +172,37 @@ const ReactionDetailsBottomSheet = memo(() => {
 					label={Data.reacted ? 'Remove' : 'Add'}
 				/>
 			</View>
-
-			<Text
+			<View
 				style={{
-					fontSize: 16,
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					color: APP_FONT.MONTSERRAT_BODY,
-					marginVertical: 16,
+					flex: 1,
+					flexGrow: 1,
+					// backgroundColor: 'red',
 				}}
 			>
-				Reacted By {Data.count} users:
-			</Text>
-			<FlatList
-				data={Data.accounts}
-				renderItem={({ item }) => (
-					<View style={{ flexDirection: 'row' }}>
-						<View
-							style={{ borderWidth: 1.5, borderColor: '#888', borderRadius: 8 }}
+				<AnimatedFlashList
+					renderItem={({ item }) => <ReactingUser dto={item} />}
+					estimatedItemSize={32}
+					data={Data.accounts}
+					ListHeaderComponent={
+						<Text
+							style={{
+								fontSize: 16,
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+								color: APP_FONT.MONTSERRAT_BODY,
+								marginVertical: 16,
+							}}
 						>
-							{/*@ts-ignore-next-line*/}
-							<Image
-								source={{ uri: item.avatarUrl }}
-								style={{ width: 48, height: 48 }}
-							/>
-						</View>
-						<View style={{ marginLeft: 6 }}>
-							<Text
-								style={{
-									color: APP_FONT.MONTSERRAT_HEADER,
-									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								}}
-							>
-								{item.displayName}
-							</Text>
-							<Text
-								style={{
-									color: APP_FONT.MONTSERRAT_BODY,
-									fontFamily: APP_FONTS.INTER_500_MEDIUM,
-								}}
-							>
-								{item.handle}
-							</Text>
-						</View>
-					</View>
-				)}
-			/>
+							Reacted By {Data.count} users:
+						</Text>
+					}
+					contentContainerStyle={
+						{
+							// paddingBottom: 50,
+						}
+					}
+					// ListFooterComponent={<View style={{ height: 200 }} />}
+				/>
+			</View>
 		</View>
 	);
 });

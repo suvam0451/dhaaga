@@ -111,8 +111,71 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		return { data };
 	}
 
-	async getReactions(id: string) {
-		// return await client.request('notes/reactions', { noteId });
+	async getReactions(
+		postId: string,
+	): LibraryPromise<Endpoints['notes/reactions']['res']> {
+		const data = await this.lib.client.request('notes/reactions', {
+			noteId: postId,
+		});
+		return { data };
+	}
+
+	async getReactionDetails(
+		postId: string,
+		reactionId: string,
+	): LibraryPromise<any> {
+		try {
+			const data = await this.lib.client.request('notes/reactions', {
+				noteId: postId,
+				type: reactionId,
+				// limit: 20,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	/**
+	 * @param postId
+	 * @param reactionId in full format --> e.g. :ultraigyo@.:
+	 */
+	async addReaction(
+		postId: string,
+		reactionId: string,
+	): LibraryPromise<{ success: true; reacted: true; id: string }> {
+		try {
+			await this.lib.client.request('notes/reactions/create', {
+				noteId: postId,
+				reaction: reactionId,
+			});
+			return { data: { success: true, reacted: true, id: reactionId } };
+		} catch (e: any) {
+			if (e.code) return errorBuilder(e);
+			console.log('[ERROR]: failed to add reaction', reactionId, e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async removeReaction(
+		postId: string,
+		reactionId: string,
+	): LibraryPromise<{
+		success: false;
+		reacted: false;
+		id: string;
+	}> {
+		try {
+			await this.lib.client.request('notes/reactions/delete', {
+				noteId: postId,
+				reaction: reactionId,
+			});
+			return { data: { success: false, reacted: false, id: reactionId } };
+		} catch (e: any) {
+			if (e.code) return errorBuilder(e);
+			console.log('[ERROR]: failed to remove reaction', reactionId, e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async getState(id: string): LibraryPromise<Endpoints['notes/state']['res']> {

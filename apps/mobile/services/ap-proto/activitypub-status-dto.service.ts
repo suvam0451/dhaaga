@@ -182,6 +182,11 @@ export class ActivitypubStatusDtoService {
 			KNOWN_SOFTWARE.AKKOMA,
 		].includes(domain as any);
 
+		// NOTE: debugger for reactions
+		// console.log(
+		// 	input.getMyReaction(),
+		// 	input.getReactions(input.getMyReaction()),
+		// );
 		return {
 			id: input.getId(),
 			visibility: input.getVisibility(),
@@ -210,7 +215,7 @@ export class ActivitypubStatusDtoService {
 				replyCount: input.getRepliesCount(),
 				boostCount: input.getRepostsCount(),
 				likeCount: input.getFavouritesCount(),
-				reactions: input.getReactions(),
+				reactions: input.getReactions(input.getMyReaction()),
 			},
 			interaction: {
 				bookmarked: input.getIsBookmarked(),

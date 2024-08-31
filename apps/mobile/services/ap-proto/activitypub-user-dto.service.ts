@@ -25,6 +25,16 @@ const ActivityPubUserDTO = z.object({
 export type ActivityPubAppUserDtoType = z.infer<typeof ActivityPubUserDTO>;
 
 class ActivityPubUserDtoService {
+	/**
+	 * A lot of things are defaulted,
+	 * because Misskey returns partial
+	 * result for some endpoints
+	 *
+	 * ^ e.g. - reaction list
+	 * @param input
+	 * @param domain
+	 * @param subdomain
+	 */
 	static export(
 		input: UserInterface,
 		domain: string,
@@ -32,7 +42,7 @@ class ActivityPubUserDtoService {
 	): ActivityPubAppUserDtoType | null {
 		const dto: ActivityPubAppUserDtoType = {
 			id: input.getId(),
-			description: input.getDescription(),
+			description: input.getDescription() || '',
 			avatarUrl: input.getAvatarUrl(),
 			displayName: input.getDisplayName(),
 			handle: ActivitypubHelper.getHandle(
@@ -41,13 +51,14 @@ class ActivityPubUserDtoService {
 			),
 			instance: input.getInstanceUrl() || subdomain,
 			stats: {
-				posts: input.getPostCount(),
-				followers: input.getFollowersCount(),
-				following: input.getFollowersCount(),
+				posts: input.getPostCount() || 0,
+				followers: input.getFollowersCount() || 0,
+				following: input.getFollowersCount() || 0,
 			},
 			meta: {
+				// NOTE: be careful using these in misskey
 				isBot: input.getIsBot(),
-				isProfileLocked: input.getIsLockedProfile(),
+				isProfileLocked: input.getIsLockedProfile() || false,
 			},
 		};
 

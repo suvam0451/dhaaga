@@ -47,6 +47,19 @@ const TimelineMediaRendered = memo(function Foo({
 	// set height
 	const [Height, setHeight] = useState(MEDIA_CONTAINER_MAX_HEIGHT);
 	useEffect(() => {
+		// available in payload
+		if (attachment.height && attachment.width) {
+			const { height } = MediaService.calculateDimensions({
+				maxW: Width,
+				maxH: MEDIA_CONTAINER_MAX_HEIGHT,
+				H: attachment.height,
+				W: attachment.width,
+			});
+			setHeight(height);
+			return;
+		}
+
+		// calculate ourselves
 		RNImage.getSize(
 			attachment.url,
 			(W, H) => {
@@ -109,7 +122,7 @@ const TimelineMediaRendered = memo(function Foo({
 				return <View></View>;
 			}
 		}
-	}, [attachment, CalculatedHeight]);
+	}, [attachment, Height, Width]);
 
 	return (
 		<View

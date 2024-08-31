@@ -32,7 +32,6 @@ export const AppImageComponent = memo(function Foo({
 		<Image
 			style={{
 				flex: 1,
-
 				borderRadius: 16,
 				opacity: 0.87,
 				width,

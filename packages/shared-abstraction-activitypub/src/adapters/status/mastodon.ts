@@ -20,6 +20,10 @@ class MastodonToStatusAdapter implements StatusInterface {
 		this.descendants = [];
 	}
 
+	getMyReaction(): string | null | undefined {
+		return null;
+	}
+
 	getMentions(): DhaagaJsMentionObject[] {
 		return this.ref.instance?.mentions || [];
 	}

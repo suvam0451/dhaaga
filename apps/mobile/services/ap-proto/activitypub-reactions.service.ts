@@ -1,12 +1,15 @@
 import {
 	ActivityPubClient,
 	InstanceApi_CustomEmojiDTO,
+	MisskeyRestClient,
 	PleromaRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
 import ActivityPubService from '../activitypub.service';
 import { Dispatch, SetStateAction } from 'react';
 import { z } from 'zod';
+import activitypubService from '../activitypub.service';
+import ActivityPubAdapterService from '../activitypub-adapter.service';
 
 const MISSKEY_LOCAL_EX = /:(.*?):/;
 const MISSKEY_LOCAL_ALT_EX = /:(.*?)@.:/;
@@ -32,9 +35,17 @@ class ActivityPubReactionsService {
 	 * :blob: --> { id: blob }
 	 * :blob@misskey.io: --> { id: blob, subdomain: misskey.io }
 	 * @param input
+	 * @param domain
 	 * @param subdomain
 	 */
-	static extractReactionCode(input: string, subdomain: string) {
+	static extractReactionCode(input: string, domain: string, subdomain: string) {
+		if (activitypubService.misskeyLike(domain)) {
+			return { id: input };
+		}
+		if (MISSKEY_LOCAL_ALT_EX.test(input)) {
+			const _name = MISSKEY_LOCAL_ALT_EX.exec(input)[1];
+			return { id: _name };
+		}
 		if (MISSKEY_LOCAL_EX.test(input)) {
 			const _name = MISSKEY_LOCAL_EX.exec(input)[1];
 			return { id: _name };
@@ -67,15 +78,18 @@ class ActivityPubReactionsService {
 		let retval: EmojiDto[] = [];
 
 		for (const reaction of input) {
-			console.log(reaction);
-			let IS_ME = false;
+			let IS_ME = reaction.me;
 			if (reaction.accounts && reaction.accounts.includes(me)) {
 				IS_ME = true;
 			}
 
+			/**
+			 *
+			 */
 			const IS_REMOTE =
-				MISSKEY_REMOTE_EX.test(reaction.id) ||
-				PLEROMA_REMOTE_EX.test(reaction.id);
+				(MISSKEY_REMOTE_EX.test(reaction.id) ||
+					PLEROMA_REMOTE_EX.test(reaction.id)) &&
+				!MISSKEY_LOCAL_ALT_EX.test(reaction.id);
 
 			const BASE = {
 				name: reaction.id,
@@ -94,11 +108,6 @@ class ActivityPubReactionsService {
 					console.log('[WARN]: local emoji not found for', _name);
 					continue;
 				}
-				console.log({
-					...BASE,
-					type: 'image',
-					url: match.url,
-				});
 
 				retval.push({
 					...BASE,
@@ -107,9 +116,15 @@ class ActivityPubReactionsService {
 				});
 			} else if (MISSKEY_REMOTE_EX.test(reaction.id)) {
 				// [Misskey] [Remote] reaction (search in payload)
-				const match = calculated.find((o) => o.name === reaction.id);
+				const _name = MISSKEY_LOCAL_EX.exec(reaction.id)[1];
+				const match = calculated.find((o) => o.name === _name);
+
 				if (!match) {
-					console.log('[WARN]: failed to resolve remote misskey reaction');
+					console.log(
+						'[WARN]: failed to resolve remote misskey reaction',
+						reaction,
+						calculated,
+					);
 					continue;
 				}
 				retval.push({
@@ -203,8 +218,52 @@ class ActivityPubReactionsService {
 				count: o.count,
 				accounts: o.accounts || [],
 			}));
+		} else if (ActivityPubService.misskeyLike(domain)) {
+			const { error } = await (
+				client as MisskeyRestClient
+			).statuses.removeReaction(postId, reactionId);
+			if (error && error.code) {
+				console.log('[WARN]: failed to remove reaction', error);
+				return null;
+			}
+
+			return ActivityPubReactionsService.syncMisskeyReactionState(
+				client,
+				postId,
+				domain,
+				setLoading,
+			);
 		}
 		return null;
+	}
+
+	/**
+	 * Refetch the Misskey status details
+	 * and sync the users reaction
+	 * status
+	 * @param client
+	 * @param postId
+	 * @param domain
+	 * @param setLoading
+	 */
+	private static async syncMisskeyReactionState(
+		client: ActivityPubClient,
+		postId: string,
+		domain: string,
+		setLoading: Dispatch<SetStateAction<boolean>>,
+	): Promise<ActivityPubReactionStateDtoType> {
+		const { data: newStateData, error: newStateError } = await (
+			client as MisskeyRestClient
+		).statuses.get(postId);
+
+		if (newStateError) {
+			setLoading(false);
+			return;
+		}
+
+		const status = ActivityPubAdapterService.adaptStatus(newStateData, domain);
+		setLoading(false);
+		return status.getReactions(status.getMyReaction());
 	}
 
 	static async addReaction(
@@ -232,6 +291,25 @@ class ActivityPubReactionsService {
 				count: o.count,
 				accounts: o.accounts || [],
 			}));
+		} else if (ActivityPubService.misskeyLike(domain)) {
+			if (!MISSKEY_LOCAL_EX.test(reactionId)) {
+				reactionId = `:${reactionId}:`;
+			}
+			const { error } = await (
+				client as MisskeyRestClient
+			).statuses.addReaction(postId, reactionId);
+
+			if (error) {
+				console.log('[WARN]: failed to add reaction', error);
+				return null;
+			}
+
+			return ActivityPubReactionsService.syncMisskeyReactionState(
+				client,
+				postId,
+				domain,
+				setLoading,
+			);
 		}
 		return null;
 	}

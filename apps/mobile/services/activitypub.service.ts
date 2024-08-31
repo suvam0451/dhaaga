@@ -35,6 +35,15 @@ class ActivityPubService {
 		);
 	}
 
+	static misskeyLike(domain: string) {
+		return [
+			KNOWN_SOFTWARE.MISSKEY,
+			KNOWN_SOFTWARE.SHARKEY,
+			KNOWN_SOFTWARE.FIREFISH,
+			KNOWN_SOFTWARE.ICESHRIMP,
+		].includes(domain as KNOWN_SOFTWARE);
+	}
+
 	/**
 	 * Syncs the nodeinfo and software
 	 * for a subdomain
