@@ -20,7 +20,7 @@ import SelectedEmojiActionButtons from './fragments/SelectedEmojiActionButtons';
 import EmojiPickerSearchResults from './fragments/EmojiPickerSearchResults';
 
 type EmojiPickerBottomSheetProps = {
-	onSelect: (shortCode: string) => void;
+	onSelect: (shortCode: string) => Promise<void>;
 	onCancel: () => void;
 };
 

@@ -39,10 +39,15 @@ class ActivityPubUserDtoService {
 				input?.getAccountUrl(subdomain),
 				subdomain,
 			),
+			instance: input.getInstanceUrl() || subdomain,
 			stats: {
 				posts: input.getPostCount(),
 				followers: input.getFollowersCount(),
 				following: input.getFollowersCount(),
+			},
+			meta: {
+				isBot: input.getIsBot(),
+				isProfileLocked: input.getIsLockedProfile(),
 			},
 		};
 

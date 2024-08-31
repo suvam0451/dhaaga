@@ -91,7 +91,7 @@ const PostMoreActionsPostTarget = memo(
 						/>
 					}
 					label={IS_BOOKMARKED ? 'Remove Bookmark' : 'Bookmark'}
-					desc={'Save the post to read later.'}
+					desc={'Save this post to view/read later.'}
 					onClick={() => {}}
 				/>
 				<ActionButton
@@ -103,7 +103,7 @@ const PostMoreActionsPostTarget = memo(
 						/>
 					}
 					label={'Add Like'}
-					desc={'The user will be notified you liked their post.'}
+					desc={'The user and others will know you liked their post.'}
 					onClick={() => {}}
 				/>
 				<ActionButton

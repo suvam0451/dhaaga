@@ -24,6 +24,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	PROFILE_PEEK = 'ProfilePeek',
 	MORE_POST_ACTIONS = 'MorePostActions',
 	NA = 'N/A',
+	REACTION_DETAILS = 'ReactionDetails',
 }
 
 type Type = {
@@ -36,6 +37,7 @@ type Type = {
 
 	// references
 	replyToRef: MutableRefObject<ActivityPubStatusAppDtoType>;
+	TextRef: MutableRefObject<string>;
 	PostRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	PostIdRef: MutableRefObject<string>;
 	UserRef: MutableRefObject<UserInterface>;
@@ -55,6 +57,7 @@ const defaultValue: Type = {
 	updateRequestId: () => {},
 	requestId: '',
 	replyToRef: undefined,
+	TextRef: undefined,
 	PostRef: undefined,
 	PostIdRef: undefined,
 	UserRef: undefined,
@@ -79,6 +82,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 	const { forceUpdate, State } = useHookLoadingState();
 
 	// pointers
+	const TextRef = useRef<string>(null);
 	const PostRef = useRef<ActivityPubStatusAppDtoType>(null);
 	const PostIdRef = useRef<string>(null);
 	const UserRef = useRef<UserInterface>(null);
@@ -103,6 +107,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 				setVisible,
 				updateRequestId: forceUpdate,
 				requestId: State,
+				TextRef,
 				PostRef,
 				PostIdRef,
 				UserRef,

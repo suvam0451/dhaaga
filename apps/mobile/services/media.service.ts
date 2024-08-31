@@ -23,11 +23,10 @@ class MediaService {
 			_W = (_H / H) * W;
 
 			if (_W > maxW) {
-				_W = maxW;
 				_H = (maxW / W) * H;
 			}
 			return {
-				width: _W,
+				width: maxW,
 				height: _H,
 			};
 		} else {
@@ -36,10 +35,9 @@ class MediaService {
 
 			if (_H > maxH) {
 				_H = maxH;
-				_W = (maxH / H) * W;
 			}
 			return {
-				width: _W,
+				width: maxW,
 				height: _H,
 			};
 		}
@@ -58,8 +56,22 @@ class MediaService {
 		if (!items) return;
 		let MIN_HEIGHT = 0;
 		for (const item of items) {
-			const seedWidth = item.getWidth();
-			const seedHeight = item.getHeight();
+			let seedWidth = item.getWidth();
+			let seedHeight = item.getHeight();
+
+			// console.log('[INFO]: image dims', seedHeight, seedHeight);
+			// if (!seedWidth || !seedHeight) {
+			// 	await RNImage.getSize(item.getUrl(), (width, height) => {
+			// 		console.log(item.getUrl(), width, height);
+			// 		seedWidth = width;
+			// 		seedHeight = height;
+			// 	});
+			// 	console.log(
+			// 		'[INFO]: manually resolved image dims',
+			// 		seedHeight,
+			// 		seedHeight,
+			// 	);
+			// }
 
 			const { height } = this.calculateDimensions({
 				maxW: deviceWidth,

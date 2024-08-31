@@ -8,6 +8,7 @@ import WithComposerContext from '../modules/post-composer/api/useComposerContext
 import PostCompose from '../modules/post-composer/pages/PostCompose';
 import ProfilePeekBottomSheet from '../modules/profile-peek/pages/ProfilePeekBottomSheet';
 import PostMoreActions from '../modules/post-actions/pages/PostMoreActions';
+import ReactionDetailsBottomSheet from '../modules/reaction-details/pages/ReactionDetailsBottomSheet';
 
 /**
  * Responsible for generating content
@@ -30,6 +31,9 @@ const AppBottomSheetFactory = memo(() => {
 				return <ProfilePeekBottomSheet />;
 			case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
 				return <PostMoreActions />;
+			case APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS: {
+				return <ReactionDetailsBottomSheet />;
+			}
 			default: {
 				return (
 					<WithComposerContext>

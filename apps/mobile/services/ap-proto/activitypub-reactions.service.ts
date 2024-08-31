@@ -1,13 +1,46 @@
-import { ActivityPubReactionStateDtoType } from './activitypub-status-dto.service';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	ActivityPubClient,
+	InstanceApi_CustomEmojiDTO,
+	PleromaRestClient,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
+import ActivityPubService from '../activitypub.service';
+import { Dispatch, SetStateAction } from 'react';
+import { z } from 'zod';
 
 const MISSKEY_LOCAL_EX = /:(.*?):/;
 const MISSKEY_LOCAL_ALT_EX = /:(.*?)@.:/;
 const MISSKEY_REMOTE_EX = /:(.*?)@(.*?):/;
 const PLEROMA_REMOTE_EX = /(.*?)@(.*?)/;
 
+export const ActivityPubReactionStateDto = z.array(
+	z.object({
+		id: z.string(),
+		count: z.number().positive(),
+		me: z.boolean(),
+		accounts: z.array(z.string()),
+		url: z.string().nullable().optional(),
+	}),
+);
+
+export type ActivityPubReactionStateDtoType = z.infer<
+	typeof ActivityPubReactionStateDto
+>;
+
 class ActivityPubReactionsService {
+	/**
+	 * :blob: --> { id: blob }
+	 * :blob@misskey.io: --> { id: blob, subdomain: misskey.io }
+	 * @param input
+	 * @param subdomain
+	 */
+	static extractReactionCode(input: string, subdomain: string) {
+		if (MISSKEY_LOCAL_EX.test(input)) {
+			const _name = MISSKEY_LOCAL_EX.exec(input)[1];
+			return { id: _name };
+		}
+		return { id: input };
+	}
 	/**
 	 * Local, Misskey --> :emoji@.:
 	 * Remote, Misskey --> :emoji@subdomain:
@@ -144,6 +177,63 @@ class ActivityPubReactionsService {
 		}
 
 		return retval;
+	}
+
+	static async removeReaction(
+		client: ActivityPubClient,
+		postId: string,
+		reactionId: string,
+		domain: string,
+		setLoading: Dispatch<SetStateAction<boolean>>,
+	) {
+		setLoading(true);
+		if (ActivityPubService.pleromaLike(domain)) {
+			const { data, error } = await (
+				client as PleromaRestClient
+			).statuses.removeReaction(postId, reactionId);
+			if (error) {
+				console.log('[WARN]: failed to add reaction', error);
+				return null;
+			}
+
+			setLoading(false);
+			return data.emojiReactions.map((o) => ({
+				id: o.name.length > 2 ? `:${o.name}:` : o.name,
+				me: o.me,
+				count: o.count,
+				accounts: o.accounts || [],
+			}));
+		}
+		return null;
+	}
+
+	static async addReaction(
+		client: ActivityPubClient,
+		postId: string,
+		reactionId: string,
+		domain: string,
+		setLoading: Dispatch<SetStateAction<boolean>>,
+	): Promise<ActivityPubReactionStateDtoType> {
+		setLoading(true);
+		if (ActivityPubService.pleromaLike(domain)) {
+			const { data, error } = await (
+				client as PleromaRestClient
+			).statuses.addReaction(postId, reactionId);
+
+			if (error) {
+				console.log('[WARN]: failed to add reaction', error);
+				return null;
+			}
+
+			setLoading(false);
+			return data.emojiReactions.map((o) => ({
+				id: o.name.length > 2 ? `:${o.name}:` : o.name,
+				me: o.me,
+				count: o.count,
+				accounts: o.accounts || [],
+			}));
+		}
+		return null;
 	}
 }
 

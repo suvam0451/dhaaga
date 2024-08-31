@@ -9,6 +9,7 @@ import MediaService from '../media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubReactionStateDto } from './activitypub-reactions.service';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -29,20 +30,6 @@ export const AppActivityPubMediaDto = z.object({
 });
 
 export type AppActivityPubMediaType = z.infer<typeof AppActivityPubMediaDto>;
-
-export const ActivityPubReactionStateDto = z.array(
-	z.object({
-		id: z.string(),
-		count: z.number().positive(),
-		me: z.boolean(),
-		accounts: z.array(z.string()),
-		url: z.string().nullable().optional(),
-	}),
-);
-
-export type ActivityPubReactionStateDtoType = z.infer<
-	typeof ActivityPubReactionStateDto
->;
 
 /**
  * This payload is used to consume

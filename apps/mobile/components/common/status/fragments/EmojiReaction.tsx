@@ -1,12 +1,25 @@
 import { EmojiDto, styles } from './_shared.types';
 import { memo, useMemo } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import {
+	APP_BOTTOM_SHEET_ENUM,
+	useAppBottomSheet,
+} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 
-const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
+const EmojiReaction = memo(function Foo({
+	dto,
+	postDto,
+}: {
+	dto: EmojiDto;
+	postDto: ActivityPubStatusAppDtoType;
+}) {
+	const { TextRef, PostRef, setType, setVisible } = useAppBottomSheet();
+
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
 			if (dto.me) {
@@ -25,9 +38,16 @@ const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 		return [styles.emojiContainer, { backgroundColor: '#161616' }];
 	}, [dto.interactable, dto.me]);
 
+	function onReactionPress() {
+		TextRef.current = dto.name;
+		PostRef.current = postDto;
+		setType(APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS);
+		setVisible(true);
+	}
+
 	if (dto.type === 'text') {
 		return (
-			<View style={CONTAINER_STYLE}>
+			<TouchableOpacity style={CONTAINER_STYLE} onPress={onReactionPress}>
 				<Text
 					style={{
 						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
@@ -49,13 +69,13 @@ const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 				>
 					{dto.count}
 				</Text>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 
 	if (dto.type === 'image') {
 		return (
-			<View style={CONTAINER_STYLE}>
+			<TouchableOpacity style={CONTAINER_STYLE} onPress={onReactionPress}>
 				<View
 					style={{
 						flexDirection: 'row',
@@ -80,7 +100,7 @@ const EmojiReaction = memo(function Foo({ dto }: { dto: EmojiDto }) {
 						</Text>
 					</View>
 				</View>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 

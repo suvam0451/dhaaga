@@ -77,22 +77,34 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		return { data: camelcaseKeys(data.data, { deep: true }) as any };
 	}
 
-	async addReaction(id: string, shortCode: string) {
+	async getReactionDetails(
+		postId: string,
+		reactionId: string,
+	): LibraryPromise<MegaReaction[]> {
+		const data = await this.lib.client.getEmojiReaction(postId, reactionId);
+		if (data.status !== 200) {
+			console.log('[ERROR]: failed to get reaction details', data.statusText);
+			return errorBuilder<MegaReaction[]>(data.statusText);
+		}
+		return { data: camelcaseKeys(data.data) as any };
+	}
+
+	async addReaction(id: string, shortCode: string): LibraryPromise<any> {
 		const data = await this.lib.client.createEmojiReaction(id, shortCode);
 		if (data.status !== 200) {
 			console.log('[ERROR]: failed to add reaction', data.statusText);
 			return errorBuilder(data.statusText);
 		}
-		return { data: data.data };
+		return { data: camelcaseKeys(data.data, { deep: true }) as any };
 	}
 
-	async removeReaction(id: string, shortCode: string) {
+	async removeReaction(id: string, shortCode: string): LibraryPromise<any> {
 		const data = await this.lib.client.deleteEmojiReaction(id, shortCode);
 		if (data.status !== 200) {
 			console.log('[ERROR]: failed to remove reaction', data.statusText);
 			return errorBuilder(data.statusText);
 		}
-		return { data: data.data };
+		return { data: camelcaseKeys(data.data, { deep: true }) };
 	}
 
 	async bookmark(id: string) {

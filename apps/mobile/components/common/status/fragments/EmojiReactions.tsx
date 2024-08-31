@@ -48,7 +48,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 			}}
 		>
 			{ShownEmojis.map((o, i) => (
-				<EmojiReaction key={i} dto={o} />
+				<EmojiReaction key={i} dto={o} postDto={dto} />
 			))}
 			{Emojis.length > EMOJI_COLLAPSED_COUNT_LIMIT && (
 				<TouchableOpacity onPress={onShowMoreToggle}>
