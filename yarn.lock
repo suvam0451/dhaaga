@@ -9960,10 +9960,10 @@ react-native-helmet-async@2.0.4:
     react-fast-compare "^3.2.2"
     shallowequal "^1.1.0"
 
-react-native-mmkv@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-3.0.2.tgz#c6376678d33d51a5ace3285c8bbcb5cb613c2741"
-  integrity sha512-zd+n5qLDy8Ptcj+ZIVa/pkGgL13X/8xFId3o4Ec9TpQVjM3BJaIszNc8jo6UF7dtndtVcvLDoBWBkkYmkpdTYA==
+react-native-mmkv@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-3.0.0.tgz#be1398e86128bd6b71286c2ae9645c45c000ad2a"
+  integrity sha512-VAMbn0zyWsZlc5r5Muc+ZPc3QwMFpGObSiaRgOI4T96a33CsgJt6oXxIZixkWeYnwx97JzxC62hTnm87BVdR6w==
 
 react-native-pager-view@6.3.0:
   version "6.3.0"
