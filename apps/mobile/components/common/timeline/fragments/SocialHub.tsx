@@ -439,7 +439,7 @@ function SocialHub() {
 			</View>
 			<FabMenuCore
 				menuItems={[
-					FAB_MENU_MODULES.NAVIGATOR,
+					// FAB_MENU_MODULES.NAVIGATOR,
 					FAB_MENU_MODULES.CREATE_POST,
 					FAB_MENU_MODULES.TIMELINE_SWITCHER,
 				]}

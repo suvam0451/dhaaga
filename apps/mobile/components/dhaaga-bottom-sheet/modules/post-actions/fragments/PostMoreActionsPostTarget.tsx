@@ -6,6 +6,10 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
+import ActivityPubService from '../../../../../services/activitypub.service';
+import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
+import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 const ActionButton = memo(
 	({
@@ -69,12 +73,74 @@ const PostMoreActionsPostTarget = memo(
 	}: {
 		setEditMode: React.Dispatch<React.SetStateAction<'root' | 'emoji'>>;
 	}) => {
-		const { PostRef } = useAppBottomSheet();
+		const { client, domain } = useActivityPubRestClientContext();
+		const { PostRef, timelineDataPostListReducer, setVisible } =
+			useAppBottomSheet();
+
 		const IS_BOOKMARKED = PostRef.current.interaction.bookmarked;
+		const IS_LIKED = PostRef.current.interaction.liked;
+
+		const IS_REACTED = !PostRef.current?.stats?.reactions?.every(
+			(o) => o.me === false,
+		);
+
+		let ReactionCta = 'Add Reaction';
+		if (IS_REACTED) {
+			if (ActivityPubService.pleromaLike(domain)) {
+				ReactionCta = 'Add More Reactions';
+			} else {
+				ReactionCta = 'Change Reaction';
+			}
+		}
+
+		const IS_MASTODON = domain === KNOWN_SOFTWARE.MASTODON;
 
 		function onClickAddReaction() {
 			setEditMode('emoji');
 		}
+
+		function onClickToggleLike() {
+			ActivityPubService.toggleLike(
+				client,
+				PostRef.current.id,
+				PostRef.current.interaction.liked,
+				domain as any,
+			)
+				.then((res) => {
+					timelineDataPostListReducer.current({
+						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_LIKE_STATUS,
+						payload: {
+							id: PostRef.current.id,
+							delta: res,
+						},
+					});
+				})
+				.finally(() => {
+					setVisible(false);
+				});
+		}
+
+		function onClickToggleBookmark() {
+			ActivityPubService.toggleBookmark(
+				client,
+				PostRef.current.id,
+				PostRef.current.interaction.bookmarked,
+			)
+				.then((res) => {
+					timelineDataPostListReducer.current({
+						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
+						payload: {
+							id: PostRef.current.id,
+							value: res,
+						},
+					});
+				})
+				.finally(() => {
+					setVisible(false);
+				});
+		}
+
+		const IS_MASTODON_LIKE = ActivityPubService.mastodonLike(domain);
 
 		return (
 			<Fragment>
@@ -92,31 +158,35 @@ const PostMoreActionsPostTarget = memo(
 					}
 					label={IS_BOOKMARKED ? 'Remove Bookmark' : 'Bookmark'}
 					desc={'Save this post to view/read later.'}
-					onClick={() => {}}
+					onClick={onClickToggleBookmark}
 				/>
-				<ActionButton
-					Icon={
-						<AntDesign
-							name="like2"
-							size={24}
-							color={APP_FONT.MONTSERRAT_HEADER}
-						/>
-					}
-					label={'Add Like'}
-					desc={'The user and others will know you liked their post.'}
-					onClick={() => {}}
-				/>
-				<ActionButton
-					Icon={
-						<MaterialIcons
-							name="add-reaction"
-							size={24}
-							color={APP_FONT.MONTSERRAT_BODY}
-						/>
-					}
-					label={'Add Reaction'}
-					onClick={onClickAddReaction}
-				/>
+				{IS_MASTODON_LIKE && (
+					<ActionButton
+						Icon={
+							<AntDesign
+								name={IS_LIKED ? 'like1' : 'like2'}
+								size={24}
+								color={IS_LIKED ? APP_THEME.LINK : APP_FONT.MONTSERRAT_HEADER}
+							/>
+						}
+						label={IS_LIKED ? 'Remove Like' : 'Add Like'}
+						desc={'Your likes can be seen by other users.'}
+						onClick={onClickToggleLike}
+					/>
+				)}
+				{!IS_MASTODON && (
+					<ActionButton
+						Icon={
+							<MaterialIcons
+								name="add-reaction"
+								size={24}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+						}
+						label={ReactionCta}
+						onClick={onClickAddReaction}
+					/>
+				)}
 			</Fragment>
 		);
 	},

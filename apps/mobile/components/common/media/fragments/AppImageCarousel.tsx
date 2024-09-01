@@ -180,7 +180,8 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 					src={item.src}
 					type={item.type}
 					blurhash={item.blurhash}
-					width={Width}
+					// FIXME: make this value be calculated properly
+					width={Width - 20}
 					calculatedHeight={calculatedHeight}
 					leftMarginAdjustment={leftMarginAdjustment}
 				/>

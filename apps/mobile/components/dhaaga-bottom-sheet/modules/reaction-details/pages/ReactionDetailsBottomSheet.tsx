@@ -74,6 +74,8 @@ const ReactionDetailsBottomSheet = memo(() => {
 
 	const [Loading, setLoading] = useState(false);
 	async function onActionPress() {
+		if (IS_REMOTE) return;
+
 		setLoading(true);
 		const { id } = ActivitypubReactionsService.extractReactionCode(
 			TextRef.current,
@@ -162,7 +164,7 @@ const ReactionDetailsBottomSheet = memo(() => {
 							name="send"
 							size={20}
 							style={{ marginLeft: 8 }}
-							color={APP_FONT.MONTSERRAT_BODY}
+							color={IS_REMOTE ? APP_FONT.DISABLED : APP_FONT.MONTSERRAT_BODY}
 						/>
 					}
 					loading={Loading}

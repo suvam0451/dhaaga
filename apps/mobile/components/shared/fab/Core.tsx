@@ -16,6 +16,9 @@ import SidebarToggleModule from './modules/SidebarToggle';
 import CreatePostModule from './modules/CreatePost';
 import TimelineSwitcherModule from './modules/TimelineSwitcher';
 import { styles } from './fab.styles';
+import Feather from '@expo/vector-icons/Feather';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const Y_OFFSET_MENU_ITEM = 72;
 
@@ -104,11 +107,21 @@ const FabMenuCore = memo(function Foo({ menuItems }: Props) {
 					]}
 				>
 					<View style={[{ width: 24 }]}>
-						<FontAwesome5
-							name="filter"
+						<MaterialIcons
+							name="more-vert"
 							size={24}
 							color={APP_FONT.MONTSERRAT_BODY}
 						/>
+						{/*<MaterialCommunityIcons*/}
+						{/*	name="unfold-more-vertical"*/}
+						{/*	size={24}*/}
+						{/*	color={APP_FONT.MONTSERRAT_BODY}*/}
+						{/*/>*/}
+						{/*<FontAwesome5*/}
+						{/*	name="filter"*/}
+						{/*	size={24}*/}
+						{/*	color={APP_FONT.MONTSERRAT_BODY}*/}
+						{/*/>*/}
 					</View>
 				</View>
 			</Animated.View>
