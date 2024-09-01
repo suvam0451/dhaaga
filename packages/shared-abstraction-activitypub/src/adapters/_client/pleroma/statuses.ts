@@ -52,6 +52,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			in_reply_to_id: dto.inReplyToId as any,
 			sensitive: dto.sensitive,
 			spoiler_text: dto.spoilerText,
+			media_ids: dto.mediaIds || [],
 		});
 		if (response.status !== 200) {
 			console.log('[ERROR]: failed to create status', response.statusText);

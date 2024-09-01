@@ -13,7 +13,6 @@ import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import {
 	errorBuilder,
 	notImplementedErrorBuilder,
-	successWithData,
 } from '../_router/dto/api-responses.dto.js';
 import { DefaultAccountRouter } from '../default/accounts.js';
 import {

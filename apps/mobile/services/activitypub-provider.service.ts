@@ -55,6 +55,30 @@ class ActivityPubProviderService {
 					return null;
 				}
 			}
+			case KNOWN_SOFTWARE.PLEROMA:
+			case KNOWN_SOFTWARE.AKKOMA: {
+				try {
+					const data = await FileSystem.uploadAsync(
+						`https://${subdomain}/api/v1/media`,
+						fileUri,
+						{
+							headers: {
+								'Content-Type': 'multipart/form-data',
+								Authorization: `Bearer ${token}`,
+							},
+							fieldName: 'file',
+							uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+							mimeType: mimeType,
+						},
+					);
+					const _dt = JSON.parse(data.body);
+					console.log(_dt);
+					return { id: _dt['id'], previewUrl: _dt['preview_url'] };
+				} catch (e) {
+					console.log(e);
+					return null;
+				}
+			}
 			default: {
 				try {
 					const data = await FileSystem.uploadAsync(
