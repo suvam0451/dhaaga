@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'none',
 		textDecorationStyle: undefined,
 		width: '100%',
-		maxHeight: 200,
 		paddingVertical: 16,
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 16,

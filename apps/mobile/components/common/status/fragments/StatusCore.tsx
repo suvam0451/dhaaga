@@ -6,7 +6,7 @@ import WithAppStatusItemContext, {
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
 import { TouchableOpacity, View } from 'react-native';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { APP_THEME } from '../../../../styles/AppTheme';
 import StatusPostedBy from './StatusPostedBy';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
@@ -14,8 +14,6 @@ import EmojiReactions from './EmojiReactions';
 import StatusInteraction from './StatusInteraction';
 import StatusQuoted from './StatusQuoted';
 import StatusCw from './StatusCw';
-import { Text } from 'react-native';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 
 /**
  * Mostly used to remove the border
@@ -72,8 +70,8 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 					backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
 					marginBottom: 4,
 					borderRadius: 8,
-					borderTopLeftRadius: IS_REPLY_OR_BOOST ? 0 : 8,
-					borderTopRightRadius: IS_REPLY_OR_BOOST ? 0 : 8,
+					borderTopLeftRadius: hasReply || hasBoost ? 0 : 8,
+					borderTopRightRadius: hasReply || hasBoost ? 0 : 8,
 					// backgroundColor: 'red',
 				}}
 			>

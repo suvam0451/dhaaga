@@ -1,5 +1,10 @@
-import { memo, useMemo, useRef } from 'react';
-import { Dimensions, View } from 'react-native';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import {
+	Dimensions,
+	Image as RNImage,
+	LayoutChangeEvent,
+	View,
+} from 'react-native';
 import {
 	AltTextOverlay,
 	AppAudioComponent,
@@ -7,7 +12,11 @@ import {
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
 } from '../_shared';
-import { MARGIN_TOP, MEDIA_CONTAINER_WIDTH } from '../_common';
+import {
+	MARGIN_TOP,
+	MEDIA_CONTAINER_MAX_HEIGHT,
+	MEDIA_CONTAINER_WIDTH,
+} from '../_common';
 import {
 	Directions,
 	FlingGestureHandlerEventPayload,
@@ -16,6 +25,7 @@ import {
 	GestureStateChangeEvent,
 } from 'react-native-gesture-handler';
 import useCircularList from '../state/useCircularList';
+import MediaService from '../../../../services/media.service';
 
 export type AppImageCarouselItem = {
 	src: string;
@@ -36,10 +46,12 @@ const AppImageCarouselItem = memo(function Foo({
 	type,
 	blurhash,
 	calculatedHeight,
+	width,
 	leftMarginAdjustment,
 }: AppImageCarouselItem & {
 	calculatedHeight: number;
 	leftMarginAdjustment?: number;
+	width: number;
 }) {
 	const MediaItem = useMemo(() => {
 		switch (type) {
@@ -51,6 +63,8 @@ const AppImageCarouselItem = memo(function Foo({
 					<AppImageComponent
 						url={src}
 						blurhash={blurhash}
+						height={calculatedHeight}
+						width={width}
 						leftMarginAdjustment={leftMarginAdjustment}
 					/>
 				);
@@ -112,6 +126,13 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 	timelineCacheId,
 	leftMarginAdjustment,
 }: AppImageCarouselData) {
+	// set width
+	const [Width, setWidth] = useState(Dimensions.get('window').width);
+	function onLayoutChanged(event: LayoutChangeEvent) {
+		const { width } = event.nativeEvent.layout;
+		setWidth(width);
+	}
+
 	const start =
 		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
 	const end =
@@ -142,21 +163,25 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 		})
 		.runOnJS(true);
 
+	// console.log('carousal height', calculatedHeight);
 	return (
 		<GestureDetector gesture={fling}>
 			<View
 				style={{
-					width: Dimensions.get('window').width - leftMarginAdjustment,
+					width: Width,
 					height: calculatedHeight,
 					alignItems: 'center',
 					justifyContent: 'center',
 					position: 'relative',
 				}}
+				onLayout={onLayoutChanged}
 			>
 				<AppImageCarouselItem
 					src={item.src}
 					type={item.type}
 					blurhash={item.blurhash}
+					// FIXME: make this value be calculated properly
+					width={Width - 20}
 					calculatedHeight={calculatedHeight}
 					leftMarginAdjustment={leftMarginAdjustment}
 				/>
@@ -164,7 +189,7 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 					index={Pointer}
 					totalCount={items.length}
 					top={8}
-					right={16}
+					right={0}
 				/>
 				<AltTextOverlay altText={item.altText} />
 			</View>

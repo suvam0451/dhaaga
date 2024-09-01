@@ -27,6 +27,7 @@ import {
 import { LibraryPromise } from '../_router/routes/_types.js';
 import AppApi from '../../_api/AppApi.js';
 import camelcaseKeys from 'camelcase-keys';
+import snakecaseKeys from 'snakecase-keys';
 
 export class PleromaAccountsRouter
 	extends DefaultAccountRouter
@@ -59,9 +60,20 @@ export class PleromaAccountsRouter
 		return { data: data.data };
 	}
 
-	async statuses(id: string, query: AccountRouteStatusQueryDto) {
-		// this.lib.client.
-		return successWithData([]);
+	async statuses(
+		id: string,
+		query: AccountRouteStatusQueryDto,
+	): LibraryPromise<any> {
+		try {
+			const data = await this.lib.client.getAccountStatuses(
+				id,
+				snakecaseKeys(query) as any,
+			);
+			return { data: camelcaseKeys(data.data, { deep: true }) };
+		} catch (e) {
+			console.log('[ERROR]: getting pleroma user timeline', e);
+			return { data: [] };
+		}
 	}
 
 	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {
