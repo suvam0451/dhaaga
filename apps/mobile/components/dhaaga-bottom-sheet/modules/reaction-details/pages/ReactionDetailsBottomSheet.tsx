@@ -1,5 +1,5 @@
-import { memo, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { Fragment, memo, useState } from 'react';
+import { Text, View } from 'react-native';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import useGetReactionDetails from '../../../../../hooks/api/useGetReactionDetails';
 import { Image } from 'expo-image';
@@ -70,6 +70,8 @@ const ReactionDetailsBottomSheet = memo(() => {
 		TextRef.current,
 	);
 
+	const IS_REMOTE = ActivitypubReactionsService.canReact(Data?.id);
+
 	const [Loading, setLoading] = useState(false);
 	async function onActionPress() {
 		setLoading(true);
@@ -110,8 +112,8 @@ const ReactionDetailsBottomSheet = memo(() => {
 	 * Since animations with the flash list
 	 * open are slow af
 	 */
-	if (!Data || !visible) return <View />;
-	if (fetchStatus === 'fetching')
+
+	if (fetchStatus !== 'idle')
 		return (
 			<View style={{ alignItems: 'center', marginTop: 32 }}>
 				<Text
@@ -125,6 +127,7 @@ const ReactionDetailsBottomSheet = memo(() => {
 				</Text>
 			</View>
 		);
+	if (!Data || !visible) return <View />;
 
 	return (
 		<View style={{ padding: 8, paddingTop: 16, flex: 1 }}>
@@ -168,7 +171,7 @@ const ReactionDetailsBottomSheet = memo(() => {
 							? APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL
 							: APP_BOTTOM_SHEET_ACTION_CATEGORY.PROGRESS
 					}
-					disabled={false}
+					disabled={IS_REMOTE}
 					label={Data.reacted ? 'Remove' : 'Add'}
 				/>
 			</View>
@@ -184,16 +187,33 @@ const ReactionDetailsBottomSheet = memo(() => {
 					estimatedItemSize={32}
 					data={Data.accounts}
 					ListHeaderComponent={
-						<Text
-							style={{
-								fontSize: 16,
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: APP_FONT.MONTSERRAT_BODY,
-								marginVertical: 16,
-							}}
-						>
-							Reacted By {Data.count} users:
-						</Text>
+						<Fragment>
+							{IS_REMOTE && (
+								<View>
+									<Text
+										style={{
+											color: APP_FONT.MONTSERRAT_BODY,
+											fontFamily: APP_FONTS.INTER_500_MEDIUM,
+											marginTop: 8,
+										}}
+									>
+										You cannot add this reaction,{'\n'}since it is not from your
+										instance.
+									</Text>
+								</View>
+							)}
+
+							<Text
+								style={{
+									fontSize: 16,
+									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+									color: APP_FONT.MONTSERRAT_BODY,
+									marginVertical: 16,
+								}}
+							>
+								Reacted By {Data.count} users:
+							</Text>
+						</Fragment>
 					}
 					contentContainerStyle={
 						{

@@ -219,7 +219,7 @@ const StatusInteraction = memo(
 							) : (
 								<Ionicons
 									color={IS_BOOKMARKED ? APP_THEME.INVALID_ITEM : '#888'}
-									name={'bookmark-outline'}
+									name={IS_BOOKMARKED ? 'bookmark' : 'bookmark-outline'}
 									size={ICON_SIZE}
 								/>
 							)}

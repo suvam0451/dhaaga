@@ -43,7 +43,7 @@ const PostCompose = memo(() => {
 						onCancel={() => {
 							setEditMode('txt');
 						}}
-						onSelect={(shortCode: string) => {
+						onSelect={async (shortCode: string) => {
 							setRawText((o) =>
 								TextEditorService.addReactionText(o, shortCode),
 							);

@@ -52,6 +52,19 @@ class ActivityPubReactionsService {
 		}
 		return { id: input };
 	}
+
+	/**
+	 * It is only possible to view remote reactions
+	 *
+	 *
+	 */
+	static canReact(id: string) {
+		if (!id) return false;
+		return (
+			(MISSKEY_REMOTE_EX.test(id) || PLEROMA_REMOTE_EX.test(id)) &&
+			!MISSKEY_LOCAL_ALT_EX.test(id)
+		);
+	}
 	/**
 	 * Local, Misskey --> :emoji@.:
 	 * Remote, Misskey --> :emoji@subdomain:

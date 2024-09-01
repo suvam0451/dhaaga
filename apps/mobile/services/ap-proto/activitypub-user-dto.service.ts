@@ -57,7 +57,7 @@ class ActivityPubUserDtoService {
 			},
 			meta: {
 				// NOTE: be careful using these in misskey
-				isBot: input.getIsBot(),
+				isBot: input.getIsBot() || false,
 				isProfileLocked: input.getIsLockedProfile() || false,
 			},
 		};
