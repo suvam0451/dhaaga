@@ -68,4 +68,13 @@ export class ActivityPubServerRepository {
 			.objects(ActivityPubServer)
 			.find((o: ActivityPubServer) => o?.url === url);
 	}
+
+	static updateEmojisLastFetchedAt(
+		db: Realm,
+		subdomain: string,
+		lastSyncedAt: Date,
+	) {
+		const match = this.get(db, subdomain);
+		match.customEmojisLastFetchedAt = lastSyncedAt;
+	}
 }

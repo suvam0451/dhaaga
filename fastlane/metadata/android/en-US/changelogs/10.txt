@@ -1,0 +1,8 @@
+Dhaaga (Lite) v0.8.0 (23 Aug 2024)
+
+* ✨ Akkoma and Pleroma support
+* ✨ Support Viewing Replies and Quotes
+* ✨ Ability to Compose Replies
+
+^ Viewing Quotes/Parent-Post is a native Mastodon/Pleroma feature
+As such, it will be added in another releases.

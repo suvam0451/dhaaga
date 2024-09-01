@@ -1,5 +1,13 @@
 import { Button } from '@rneui/themed';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import {
+	ActivityIndicator,
+	StyleProp,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+	ViewStyle,
+} from 'react-native';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
 import { memo, useMemo } from 'react';
@@ -304,5 +312,77 @@ export const AppTimelineAction = memo(function Foo({
 		</View>
 	);
 });
+
+type AppButtonBottomSheetActionProps = {
+	label?: string;
+	onPress: () => void;
+	Icon: any;
+	loading: boolean;
+	style?: StyleProp<ViewStyle>;
+	type: APP_BOTTOM_SHEET_ACTION_CATEGORY;
+	disabled: boolean;
+};
+
+export enum APP_BOTTOM_SHEET_ACTION_CATEGORY {
+	PROGRESS,
+	CANCEL,
+}
+
+/**
+ * The buttons used in Dhaaga bottom sheets
+ */
+export const AppButtonBottomSheetAction = memo(
+	({
+		label,
+		onPress,
+		Icon,
+		loading,
+		type,
+		style,
+		disabled,
+	}: AppButtonBottomSheetActionProps) => {
+		const bgColor: Record<APP_BOTTOM_SHEET_ACTION_CATEGORY, string> = {
+			[APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL]: APP_THEME.INVALID_ITEM_BODY,
+			[APP_BOTTOM_SHEET_ACTION_CATEGORY.PROGRESS]:
+				APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
+		};
+
+		return (
+			<TouchableOpacity
+				style={[
+					{
+						backgroundColor: bgColor[type],
+						flexDirection: 'row',
+						alignItems: 'center',
+						paddingHorizontal: 12,
+						borderRadius: 8,
+						paddingVertical: 6,
+					},
+					style,
+				]}
+				onPress={onPress}
+			>
+				{label && (
+					<Text
+						style={{
+							color: disabled ? APP_FONT.DISABLED : APP_FONT.MONTSERRAT_BODY,
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+						}}
+					>
+						{label}
+					</Text>
+				)}
+				{loading ? (
+					<ActivityIndicator
+						color={APP_FONT.MONTSERRAT_BODY}
+						style={{ marginLeft: 6 }}
+					/>
+				) : (
+					Icon
+				)}
+			</TouchableOpacity>
+		);
+	},
+);
 
 export default AppButtonFollowIndicator;

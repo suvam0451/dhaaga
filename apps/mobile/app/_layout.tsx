@@ -27,6 +27,7 @@ import { AppProfileRepository } from '../repositories/app-profile.repo';
 import WithAppBottomSheetContext from '../components/dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { APP_THEME } from '../styles/AppTheme';
 import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
+import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 
 /**
  * Suppress these warnings...
@@ -85,20 +86,22 @@ function WithGorhomBottomSheetWrapper() {
 
 	return (
 		<WithActivityPubRestClient>
-			<WithAppBottomSheetContext>
-				<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
-				<View
-					style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
-					onLayout={onLayoutRootView}
-				>
-					<Stack
-						initialRouteName={'(tabs)'}
-						screenOptions={{ headerShown: false }}
+			<WithGorhomBottomSheetContext>
+				<WithAppBottomSheetContext>
+					<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+					<View
+						style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
+						onLayout={onLayoutRootView}
 					>
-						<Stack.Screen name="(tabs)" />
-					</Stack>
-				</View>
-			</WithAppBottomSheetContext>
+						<Stack
+							initialRouteName={'(tabs)'}
+							screenOptions={{ headerShown: false }}
+						>
+							<Stack.Screen name="(tabs)" />
+						</Stack>
+					</View>
+				</WithAppBottomSheetContext>
+			</WithGorhomBottomSheetContext>
 		</WithActivityPubRestClient>
 	);
 }

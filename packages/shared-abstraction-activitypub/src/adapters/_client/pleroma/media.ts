@@ -8,7 +8,11 @@ import {
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { MastoMediaAttachment } from '../_interface.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import {
+	errorBuilder,
+	notImplementedErrorBuilder,
+} from '../_router/dto/api-responses.dto.js';
+import camelcaseKeys from 'camelcase-keys';
 
 export class PleromaMediaRoute implements MediaRoute {
 	client: RestClient;
@@ -30,7 +34,14 @@ export class PleromaMediaRoute implements MediaRoute {
 		return { data: data as any };
 	}
 
-	async updateDescription() {
-		return notImplementedErrorBuilder();
+	async updateDescription(id: string, text: string) {
+		const data = await this.lib.client.updateMedia(id, {
+			description: text,
+		});
+		if (data.status !== 200) {
+			console.log(data.statusText);
+			return errorBuilder(data.statusText);
+		}
+		return { data: camelcaseKeys(data.data) };
 	}
 }

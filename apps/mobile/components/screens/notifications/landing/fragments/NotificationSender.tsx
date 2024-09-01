@@ -17,7 +17,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import {
-	BOTTOM_SHEET_ENUM,
+	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
@@ -268,7 +268,7 @@ export const NotificationSenderInterface = memo(
 				UserRef.current = null;
 				UserIdRef.current = acct.getId();
 			}
-			setType(BOTTOM_SHEET_ENUM.PROFILE_PEEK);
+			setType(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK);
 			setVisible(true);
 			updateRequestId();
 		}, [acct, domain, UserRef, UserIdRef, updateRequestId, setType]);

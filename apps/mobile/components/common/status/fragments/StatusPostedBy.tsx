@@ -26,7 +26,7 @@ const StatusPostedBy = memo(({ dto, style }: StatusPostedByProps) => {
 			]}
 		>
 			<OriginalPoster dto={dto} />
-			<Entypo name="cross" size={28} color={APP_FONT.MONTSERRAT_BODY} />
+			{/*<Entypo name="cross" size={28} color={APP_FONT.MONTSERRAT_BODY} />*/}
 		</View>
 	);
 });

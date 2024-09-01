@@ -22,6 +22,8 @@ import { APP_FONT } from '../styles/AppTheme';
 import WithActivitypubStatusContext from './useStatus';
 import Status from '../components/bottom-sheets/Status';
 import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
+import { ActivityPubStatusAppDtoType } from '../services/ap-proto/activitypub-status-dto.service';
+import BottomSheetFactory from '../components/bottom-sheets/BottomSheetFactory';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -29,6 +31,7 @@ export enum BOTTOM_SHEET_ENUM {
 	STATUS_COMPOSER = 'StatusComposer',
 	STATUS_MENU = 'StatusMenu',
 	NA = 'N/A',
+	ADD_REACTION = 'AddReaction',
 }
 
 type Type = {
@@ -39,11 +42,15 @@ type Type = {
 	setBottomSheetContent: (content: any) => void;
 	setBottomSheetType: (input: BOTTOM_SHEET_ENUM) => void;
 	updateRequestId: () => void;
+
+	// static refs
+	PostRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 };
 
 const defaultValue: Type = {
 	visible: false,
 	type: null,
+	PostRef: undefined,
 	setVisible: function (state: boolean): void {
 		throw new Error('Function not implemented.');
 	},
@@ -67,52 +74,6 @@ type Props = {
 	children: any;
 };
 
-/**
- * @param type of bottom sheet to show
- * @param requestId updates the component state/data
- * @constructor
- */
-function BottomSheetContent({
-	type,
-	requestId,
-}: {
-	type: string;
-	requestId: string;
-}) {
-	const { globalDb } = useGlobalMmkvContext();
-
-	return useMemo(() => {
-		switch (type) {
-			case BOTTOM_SHEET_ENUM.HASHTAG: {
-				const x = globalMmkvCacheServices.getBottomSheetProp_Hashtag(globalDb);
-				if (!x) return <View></View>;
-				return <HashtagBottomSheet visible={true} id={x.name} />;
-			}
-			case BOTTOM_SHEET_ENUM.LINK: {
-				const x = globalMmkvCacheServices.getBottomSheetProp_Link(globalDb);
-				if (!x) return <View></View>;
-				return (
-					<ExternalLinkActionSheet url={x.url} displayName={x.displayName} />
-				);
-			}
-			case BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
-				return <PostComposerBottomSheet />;
-			}
-			case BOTTOM_SHEET_ENUM.STATUS_MENU: {
-				const x = globalMmkvCacheServices.getBottomSheetProp_Status(globalDb);
-				if (!x) return <View></View>;
-				return (
-					<WithActivitypubStatusContext status={x}>
-						<Status dto={x} />
-					</WithActivitypubStatusContext>
-				);
-			}
-			default:
-				return <View></View>;
-		}
-	}, [requestId, type]);
-}
-
 function WithGorhomBottomSheetContext({ children }: Props) {
 	const [BottomSheetType, setBottomSheetType] = useState('N/A');
 	const [RequestId, setRequestId] = useState(null);
@@ -120,10 +81,6 @@ function WithGorhomBottomSheetContext({ children }: Props) {
 
 	function setVisible(state: boolean) {
 		ref?.current?.expand();
-	}
-
-	function close() {
-		setVisible(false);
 	}
 
 	function setter(input: any) {}
@@ -146,9 +103,7 @@ function WithGorhomBottomSheetContext({ children }: Props) {
 		setRequestId(Crypto.randomUUID());
 	}
 
-	const Content = useMemo(() => {
-		return <BottomSheetContent type={BottomSheetType} requestId={RequestId} />;
-	}, [RequestId]);
+	const PostRef = useRef<ActivityPubStatusAppDtoType>(null);
 
 	return (
 		<GorhomBottomSheetContext.Provider
@@ -160,6 +115,7 @@ function WithGorhomBottomSheetContext({ children }: Props) {
 				setBottomSheetType: setBottomSheetTypeFn,
 				updateRequestId: updateRequestIdFn,
 				ref,
+				PostRef,
 			}}
 		>
 			{children}
@@ -185,7 +141,9 @@ function WithGorhomBottomSheetContext({ children }: Props) {
 				)}
 				handleIndicatorStyle={{ backgroundColor: APP_FONT.MONTSERRAT_BODY }}
 			>
-				<BottomSheetView>{Content}</BottomSheetView>
+				<BottomSheetView>
+					<BottomSheetFactory type={BottomSheetType} requestId={RequestId} />;
+				</BottomSheetView>
 			</BottomSheet>
 		</GorhomBottomSheetContext.Provider>
 	);

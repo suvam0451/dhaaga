@@ -8,6 +8,7 @@ export type EmojiDto = {
 	height?: number;
 	width?: number;
 	interactable: boolean;
+	me: boolean;
 };
 
 export const styles = StyleSheet.create({

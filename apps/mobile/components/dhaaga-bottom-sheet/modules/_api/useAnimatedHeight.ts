@@ -1,4 +1,4 @@
-import { BOTTOM_SHEET_ENUM, useAppBottomSheet } from './useAppBottomSheet';
+import { APP_BOTTOM_SHEET_ENUM, useAppBottomSheet } from './useAppBottomSheet';
 import {
 	useAnimatedStyle,
 	useSharedValue,
@@ -20,11 +20,11 @@ function useAnimatedHeight() {
 		} else {
 			let _target;
 			switch (type) {
-				case BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
+				case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
 					_target = Dimensions.get('window').height * 0.6;
 					break;
 				}
-				case BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
+				case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
 					_target = POST_COMPOSE_HEIGHT_MAX;
 					break;
 				}

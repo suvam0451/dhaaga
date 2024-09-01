@@ -16,6 +16,8 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { SoftwareBadgeUpdateAccountOnClick } from '../../../components/common/software/SimpleBadge';
 import { FontAwesome } from '@expo/vector-icons';
 import useAppCustomEmoji from '../../../hooks/app/useAppCustomEmoji';
+import { EmojiService } from '../../../services/emoji.service';
+import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 
 type Props = {
 	id: UUID;
@@ -221,10 +223,10 @@ function AccountListingFragment({
 }: Props) {
 	const account = useObject(Account, id);
 	const db = useRealm();
+	const { globalDb } = useGlobalMmkvContext();
 	const { regenerate } = useActivityPubRestClientContext();
 	const [IsExpanded, setIsExpanded] = useState(false);
 
-	const { refresh } = useAppCustomEmoji();
 	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
 	const displayName = AccountRepository.findSecret(
 		db,
@@ -242,7 +244,9 @@ function AccountListingFragment({
 			AccountService.deselectAccount(db, account._id);
 		} else {
 			AccountService.selectAccount(db, account._id);
-			refresh(account.subdomain, account.domain);
+			EmojiService.sync(db, globalDb, account.subdomain, true).then((res) => {
+				console.log('[INFO]: refreshed account emojis', res);
+			});
 		}
 		regenerate();
 	}

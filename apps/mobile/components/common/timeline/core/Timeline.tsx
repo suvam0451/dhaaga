@@ -127,7 +127,7 @@ const Timeline = memo(() => {
 		<WithAppMenu
 			sidebarVariant={SIDEBAR_VARIANT.TIMELINE}
 			fabMenuItems={[
-				FAB_MENU_MODULES.NAVIGATOR,
+				// FAB_MENU_MODULES.NAVIGATOR,
 				FAB_MENU_MODULES.CREATE_POST,
 				FAB_MENU_MODULES.TIMELINE_SWITCHER,
 			]}

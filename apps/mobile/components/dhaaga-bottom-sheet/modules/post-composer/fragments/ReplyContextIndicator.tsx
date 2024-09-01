@@ -1,4 +1,4 @@
-import { forwardRef, memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { Text, View } from 'react-native';
 import appTextStyling from '../../../../../styles/AppTextStyling';
@@ -46,7 +46,7 @@ const ReplyContextIndicator = memo(() => {
 		}
 
 		return <View />;
-	}, [replyToRef, replyToRef.current]);
+	}, [replyToRef]);
 	return <View>{component}</View>;
 });
 

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 function useAppQueryPaginator() {
-	// are there no more pages to load?
+	// are there no more modules to load?
 	const EOL = useRef(false);
 	// id of the oldest known post (i.e. - most recent)
 	const oldest = useRef(null);

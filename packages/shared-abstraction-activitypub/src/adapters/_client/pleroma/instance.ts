@@ -58,6 +58,7 @@ export class PleromaInstanceRouter implements InstanceRoute {
 					visibleInPicker: o.visible_in_picker,
 					category: o.category,
 					aliases: [],
+					tags: [],
 				})),
 			};
 		} catch (e: any) {

@@ -11,12 +11,15 @@ import { APP_FONTS } from '../../styles/AppFonts';
 import Feather from '@expo/vector-icons/Feather';
 import { memo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import PostMoreActionsPostTarget from '../dhaaga-bottom-sheet/modules/post-actions/fragments/PostMoreActionsPostTarget';
+import { useGorhomActionSheetContext } from '../../states/useGorhomBottomSheet';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;
 };
 
 const Status = memo(({ dto }: Props) => {
+	const { PostRef } = useGorhomActionSheetContext();
 	const { content: ParsedDisplayName } = useMfm({
 		content: dto.postedBy.displayName,
 		remoteSubdomain: dto.postedBy.instance,
@@ -33,7 +36,6 @@ const Status = memo(({ dto }: Props) => {
 						style={{
 							flexDirection: 'row',
 							alignItems: 'center',
-							marginBottom: 20,
 						}}
 					>
 						<View style={{ flexShrink: 1 }}>
@@ -55,6 +57,27 @@ const Status = memo(({ dto }: Props) => {
 								flexGrow: 1,
 							}}
 						/>
+					</View>
+
+					<PostMoreActionsPostTarget setEditMode={() => {}} />
+
+					<View style={{ flexDirection: 'row', paddingVertical: 8 }}>
+						<Ionicons
+							name={'link-outline'}
+							color={'#ffffff87'}
+							size={24}
+							style={{ paddingHorizontal: 8 }}
+						/>
+						<Text
+							style={{
+								color: APP_FONT.MONTSERRAT_BODY,
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+								marginLeft: 6,
+								fontSize: 18,
+							}}
+						>
+							Copy Link
+						</Text>
 					</View>
 
 					<View
@@ -90,7 +113,9 @@ const Status = memo(({ dto }: Props) => {
 								size={24}
 								color={APP_FONT.MONTSERRAT_BODY}
 							/>
-							<Text style={styles.buttonText}>Like</Text>
+							<Text style={styles.buttonText}>
+								{PostRef.current.interaction.liked ? 'Remove Like' : 'Like'}
+							</Text>
 						</View>
 						<View style={styles.postActionButtonContainer}>
 							<Feather

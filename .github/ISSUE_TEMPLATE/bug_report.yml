@@ -1,0 +1,68 @@
+name: 🛠️ Bug Report
+description: Report a bug in the application
+labels: [ "bug" ]
+body:
+  - type: markdown
+    attributes:
+      value: "## Reporting a Bug"
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug.
+        
+        No need to search for duplicate issues. Just ask away.
+        
+        #### Considerations
+        
+        * Support is currently only offered for latest version. So, update your app! 
+        * The only supported backends are [Mastodon, Misskey, Firefish, Sharkey, Pleroma, Akkoma]
+        * ^ You may request support for additional backends via "Feature Request"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: App Version
+      description: The app version this issue occurs on.
+      placeholder: "v0.8.0 or v0.8.0-lite"
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Install Source
+      description: From where did you install the app?
+      multiple: false
+      options:
+        - Play Store
+        - GitHub Releases
+        - IzzyOnDroid (Lite)
+        - Self-Compiled
+        - Self-Compiled (Lite)
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction Steps
+      description: Is the issue reproducible by following certain steps?
+      placeholder: |
+        1. Go to home tab. And open a profile
+        2. Try clicking the follow button.
+        3. Notice the crash
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots and Videos
+      description: |
+        Adding screenshots and videos helps a lot!

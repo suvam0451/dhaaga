@@ -3,10 +3,10 @@ import {
 	View,
 	Text,
 	FlatList,
-	Image,
 	TextInput,
 	StyleSheet,
 	Pressable,
+	TouchableOpacity,
 } from 'react-native';
 import {
 	ComposeMediaTargetItem,
@@ -16,6 +16,7 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
+import { Image } from 'expo-image';
 
 const ComposerAltListItem = memo(
 	({ item, index }: { item: ComposeMediaTargetItem; index: number }) => {
@@ -26,13 +27,18 @@ const ComposerAltListItem = memo(
 
 		async function onSaveAltText() {
 			if (TextContent === '') return;
-			const { error } = await client.media.updateDescription(
-				item.remoteId,
-				TextContent,
-			);
-			if (!error) {
-				setAltText(index, TextContent);
-				forceUpdate();
+			try {
+				const { data, error } = await client.media.updateDescription(
+					item.remoteId,
+					TextContent,
+				);
+				// console.log('[INFO]: alt-text update result', data, error);
+				if (!error) {
+					setAltText(index, TextContent);
+					forceUpdate();
+				}
+			} catch (e) {
+				console.log('[ERROR]: updating alt-text', e);
 			}
 		}
 
@@ -40,6 +46,7 @@ const ComposerAltListItem = memo(
 			setTextContent(text);
 		}
 
+		// console.log(item.previewUrl || item.localUri);
 		return (
 			<View>
 				<View
@@ -50,17 +57,19 @@ const ComposerAltListItem = memo(
 					}}
 				>
 					<View>
+						{/*@ts-ignore-next-line*/}
 						<Image
-							source={{ uri: item.previewUrl }}
+							source={{ uri: item.previewUrl || item.localUri }}
 							style={{ width: 64, height: 96, borderRadius: 8 }}
 						/>
 					</View>
 					<View
 						style={{
-							width: '100%',
-							height: '100%',
+							// width: '100%',
+							// height: '100%',
 							marginLeft: 10,
 							marginTop: 4,
+							flex: 1,
 						}}
 					>
 						<TextInput
@@ -73,7 +82,7 @@ const ComposerAltListItem = memo(
 							onChangeText={onChange}
 						/>
 						<View style={{ flexGrow: 1 }} />
-						<Pressable
+						<TouchableOpacity
 							style={{
 								padding: 8,
 								backgroundColor: '#404040',
@@ -85,6 +94,7 @@ const ComposerAltListItem = memo(
 									TextContent === '' || item.cw === TextContent
 										? 'none'
 										: 'flex',
+								// flex: 1,
 							}}
 							onPress={onSaveAltText}
 						>
@@ -97,7 +107,7 @@ const ComposerAltListItem = memo(
 							>
 								Apply
 							</Text>
-						</Pressable>
+						</TouchableOpacity>
 					</View>
 				</View>
 			</View>
@@ -145,6 +155,8 @@ const styles = StyleSheet.create({
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 16,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		// backgroundColor: 'red',
+		width: '100%',
 	},
 });
 

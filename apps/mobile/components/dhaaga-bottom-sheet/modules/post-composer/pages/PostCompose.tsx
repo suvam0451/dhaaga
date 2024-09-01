@@ -1,33 +1,75 @@
-import { Fragment, memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import {
-	ScrollView,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
-import ComposerAutoCompletion from '../fragments/ComposerAutoCompletion';
-import { Image } from 'expo-image';
-import VisibilityPicker from '../fragments/VisibilityPicker';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import PostButton from '../fragments/PostButton';
 import ComposerTextInput from '../fragments/ComposerText';
 import ComposeMediaTargets from '../fragments/MediaTargets';
 import ActionButtons from '../fragments/ActionButtons';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import ComposerSpoiler from '../fragments/ComposerSpoiler';
 import { useComposerContext } from '../api/useComposerContext';
 import ComposerAlt from '../fragments/ComposerAlt';
-import ReplyContextIndicator from '../fragments/ReplyContextIndicator';
+import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
+import ComposerTopMenu from '../fragments/ComposerTopMenu';
+import TextEditorService from '../../../../../services/text-editor.service';
 
 const PostCompose = memo(() => {
-	const { visible, replyToRef } = useAppBottomSheet();
-	const { me } = useActivityPubRestClientContext();
-	const { editMode } = useComposerContext();
+	const { visible } = useAppBottomSheet();
+	const { editMode, setEditMode, setRawText } = useComposerContext();
 
+	const EditorContent = useMemo(() => {
+		switch (editMode) {
+			case 'txt': {
+				return (
+					<ScrollView
+						style={{
+							flexGrow: 1,
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+						contentContainerStyle={{
+							flexGrow: 1,
+						}}
+					>
+						<ComposerSpoiler />
+						<ComposerTextInput />
+						<View style={{ flexGrow: 1, flex: 1 }} />
+						<ComposeMediaTargets />
+					</ScrollView>
+				);
+			}
+			case 'emoji': {
+				return (
+					<EmojiPickerBottomSheet
+						onCancel={() => {
+							setEditMode('txt');
+						}}
+						onSelect={async (shortCode: string) => {
+							setRawText((o) =>
+								TextEditorService.addReactionText(o, shortCode),
+							);
+							setEditMode('txt');
+						}}
+					/>
+				);
+			}
+			case 'alt': {
+				return (
+					<ScrollView
+						style={{
+							flexGrow: 1,
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+						contentContainerStyle={{
+							flexGrow: 1,
+						}}
+					>
+						<ComposerAlt />
+					</ScrollView>
+				);
+			}
+		}
+	}, [editMode]);
 	return (
 		<View
 			style={[
@@ -35,85 +77,9 @@ const PostCompose = memo(() => {
 				{ display: visible ? 'flex' : 'none' },
 			]}
 		>
-			<ComposerAutoCompletion />
-
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'flex-start',
-				}}
-			>
-				<View
-					style={{ borderWidth: 0.7, borderColor: '#666', borderRadius: 8 }}
-				>
-					{/*@ts-ignore-next-line*/}
-					<Image source={me?.getAvatarUrl()} style={styles.avatarContainer} />
-				</View>
-				<View
-					style={{
-						paddingHorizontal: 4,
-						maxWidth: 256,
-						marginLeft: 4,
-						flex: 1,
-					}}
-				>
-					<VisibilityPicker />
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontSize: 11.5,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							opacity: 0.8,
-							marginLeft: 4,
-						}}
-					>
-						@{me?.getUsername()}
-					</Text>
-				</View>
-				<View style={{ flexGrow: 1 }} />
-				<View
-					style={{
-						flexDirection: 'row',
-						justifyContent: 'flex-end',
-						alignItems: 'center',
-						flex: 1,
-					}}
-				>
-					<TouchableOpacity style={{ padding: 8, marginRight: 4, width: 42 }}>
-						<FontAwesome6
-							name="binoculars"
-							size={22}
-							color={APP_FONT.DISABLED}
-						/>
-					</TouchableOpacity>
-					<PostButton />
-				</View>
-			</View>
-			<ReplyContextIndicator />
+			<ComposerTopMenu />
 			{/*This section changes based on edit mode*/}
-			<ScrollView
-				style={{
-					flexGrow: 1,
-					display: 'flex',
-					flexDirection: 'column',
-				}}
-				contentContainerStyle={{
-					flexGrow: 1,
-				}}
-			>
-				{editMode === 'txt' ? (
-					<Fragment>
-						<ComposerSpoiler />
-						<ComposerTextInput />
-						<View style={{ flexGrow: 1, flex: 1 }} />
-						<ComposeMediaTargets />
-					</Fragment>
-				) : (
-					<Fragment>
-						<ComposerAlt />
-					</Fragment>
-				)}
-			</ScrollView>
+			{EditorContent}
 			<ActionButtons />
 		</View>
 	);

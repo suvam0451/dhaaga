@@ -36,7 +36,7 @@ function SelectProviderStack() {
 							/>
 						</View>
 						<Text style={styles.platformDescription}>
-							Social networking that's not for sale.
+							Use this for Pleroma, Akkoma and Mastodon
 						</Text>
 						<View style={{ marginTop: 4 }}>
 							<Button
@@ -55,15 +55,7 @@ function SelectProviderStack() {
 						<View style={styles.selectSignInPlatformCenter}>
 							<SoftwareHeader software={KNOWN_SOFTWARE.MISSKEY} mb={0} mt={0} />
 							<Text style={styles.platformDescription}>
-								🌎 An Interplanetary microblogging platform 🚀
-							</Text>
-							<SoftwareHeader
-								software={KNOWN_SOFTWARE.FIREFISH}
-								mb={0}
-								mt={16}
-							/>
-							<Text style={styles.platformDescription}>
-								A fun, new, open way to experience social media
+								Use this for Misskey, Firefish, Sharkey, Iceshrimp (Untested)
 							</Text>
 						</View>
 
@@ -81,41 +73,41 @@ function SelectProviderStack() {
 							</Button>
 						</View>
 					</View>
-					<View
-						style={{
-							justifyContent: 'center',
-							alignItems: 'center',
-							width: '100%',
-							marginVertical: 16,
-						}}
-					>
-						<View
-							style={{
-								padding: 12,
-								backgroundColor: '#323232',
-								borderRadius: 8,
-							}}
-						>
-							<Text
-								style={{
-									color: APP_FONT.MONTSERRAT_HEADER,
-									fontSize: 14,
-									fontFamily: APP_FONTS.INTER_700_BOLD,
-								}}
-							>
-								I am Not Sure
-							</Text>
-						</View>
-						<Text
-							style={{
-								textAlign: 'center',
-								fontFamily: APP_FONTS.INTER_400_REGULAR,
-								color: APP_FONT.MONTSERRAT_BODY,
-							}}
-						>
-							I will try my best to auto-detect your instance software
-						</Text>
-					</View>
+					{/*<View*/}
+					{/*	style={{*/}
+					{/*		justifyContent: 'center',*/}
+					{/*		alignItems: 'center',*/}
+					{/*		width: '100%',*/}
+					{/*		marginVertical: 16,*/}
+					{/*	}}*/}
+					{/*>*/}
+					{/*	<View*/}
+					{/*		style={{*/}
+					{/*			padding: 12,*/}
+					{/*			backgroundColor: '#323232',*/}
+					{/*			borderRadius: 8,*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		<Text*/}
+					{/*			style={{*/}
+					{/*				color: APP_FONT.MONTSERRAT_HEADER,*/}
+					{/*				fontSize: 14,*/}
+					{/*				fontFamily: APP_FONTS.INTER_700_BOLD,*/}
+					{/*			}}*/}
+					{/*		>*/}
+					{/*			I am Not Sure*/}
+					{/*		</Text>*/}
+					{/*	</View>*/}
+					{/*	<Text*/}
+					{/*		style={{*/}
+					{/*			textAlign: 'center',*/}
+					{/*			fontFamily: APP_FONTS.INTER_400_REGULAR,*/}
+					{/*			color: APP_FONT.MONTSERRAT_BODY,*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		I will try my best to auto-detect your instance software*/}
+					{/*	</Text>*/}
+					{/*</View>*/}
 				</View>
 			</View>
 		</TitleOnlyStackHeaderContainer>

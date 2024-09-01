@@ -52,7 +52,6 @@ const sidebars: SidebarsConfig = {
 			],
 		},
 	],
-
 	discoverSidebar: [
 		'discover',
 		{
@@ -89,6 +88,22 @@ const sidebars: SidebarsConfig = {
 					type: 'doc',
 					id: 'discover/better-timelines',
 				},
+			],
+		},
+	],
+	aboutSidebar: [
+		'about',
+		'license',
+		{
+			type: 'category',
+			label: 'Progress',
+			items: [
+				'compatibility/akkoma',
+				'compatibility/firefish',
+				'compatibility/pleroma',
+				'compatibility/mastodon',
+				'compatibility/misskey',
+				'compatibility/sharkey',
 			],
 		},
 	],

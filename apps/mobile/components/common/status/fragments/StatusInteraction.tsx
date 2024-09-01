@@ -14,16 +14,13 @@ import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
 import { APP_THEME } from '../../../../styles/AppTheme';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
-import {
-	BOTTOM_SHEET_ENUM,
-	useGorhomActionSheetContext,
-} from '../../../../states/useGorhomBottomSheet';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.services';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
-import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import {
+	APP_BOTTOM_SHEET_ENUM,
+	useAppBottomSheet,
+} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
 type StatusInteractionProps = {
 	openAiContext?: string[];
@@ -38,15 +35,19 @@ const StatusInteraction = memo(
 			setVisible: setBottomSheetVisible,
 			setType,
 			PostComposerTextSeedRef,
+			PostRef,
 			replyToRef,
 			updateRequestId: updateBottomSheetRequestId,
+			timelineDataPostListReducer,
 		} = useAppBottomSheet();
 		const { client } = useActivityPubRestClientContext();
-		const { setVisible, setBottomSheetType, updateRequestId } =
-			useGorhomActionSheetContext();
-		const { globalDb } = useGlobalMmkvContext();
-		const { toggleBookmark, explain, boost, getBookmarkState } =
-			useAppTimelineDataContext();
+		const {
+			toggleBookmark,
+			explain,
+			boost,
+			getBookmarkState,
+			getPostListReducer,
+		} = useAppTimelineDataContext();
 
 		const STATUS_DTO = dto;
 
@@ -82,7 +83,7 @@ const StatusInteraction = memo(
 			PostComposerTextSeedRef.current = null;
 			replyToRef.current = dto;
 
-			setType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
+			setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 			updateBottomSheetRequestId();
 			setBottomSheetVisible(true);
 		}
@@ -106,15 +107,12 @@ const StatusInteraction = memo(
 				});
 		}
 
-		function onShowAdvancedMenuPressed() {
-			try {
-				GlobalMmkvCacheService.setBottomSheetProp_Status(globalDb, dto);
-				setBottomSheetType(BOTTOM_SHEET_ENUM.STATUS_MENU);
-				updateRequestId();
-				setVisible(true);
-			} catch (e) {
-				console.log('[WARN]: gorhom bottom sheet context not available');
-			}
+		function onMoreActionsPressed() {
+			PostRef.current = dto;
+			timelineDataPostListReducer.current = getPostListReducer();
+
+			setType(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
+			setBottomSheetVisible(true);
 		}
 
 		return (
@@ -221,7 +219,7 @@ const StatusInteraction = memo(
 							) : (
 								<Ionicons
 									color={IS_BOOKMARKED ? APP_THEME.INVALID_ITEM : '#888'}
-									name={'bookmark-outline'}
+									name={IS_BOOKMARKED ? 'bookmark' : 'bookmark-outline'}
 									size={ICON_SIZE}
 								/>
 							)}
@@ -269,7 +267,7 @@ const StatusInteraction = memo(
 								paddingTop: 8,
 								paddingBottom: 8,
 							}}
-							onPress={onShowAdvancedMenuPressed}
+							onPress={onMoreActionsPressed}
 						>
 							<Ionicons
 								name="ellipsis-horizontal"

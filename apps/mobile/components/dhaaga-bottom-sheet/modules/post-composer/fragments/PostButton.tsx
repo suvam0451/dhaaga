@@ -8,28 +8,34 @@ import { useActivityPubRestClientContext } from '../../../../../states/useActivi
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import {
-	BOTTOM_SHEET_ENUM,
+	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import { ActivitypubStatusService } from '../../../../../services/ap-proto/activitypub-status.service';
+import ActivityPubService from '../../../../../services/activitypub.service';
 
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
 	const { client, domain, subdomain } = useActivityPubRestClientContext();
-	const { setType, PostRef, replyToRef } = useAppBottomSheet();
+	const { setType, replyToRef, PostRef } = useAppBottomSheet();
 
 	async function onClick() {
 		let _visibility: any = visibility.toLowerCase();
 		if (visibility === APP_POST_VISIBILITY.PRIVATE) {
-			_visibility =
-				domain === KNOWN_SOFTWARE.MASTODON ? 'private' : 'followers';
+			_visibility = ActivityPubService.mastodonLike(domain)
+				? 'private'
+				: 'followers';
 		}
 		if (visibility === APP_POST_VISIBILITY.UNLISTED) {
-			_visibility = domain === KNOWN_SOFTWARE.MASTODON ? 'unlisted' : 'home';
+			_visibility = ActivityPubService.mastodonLike(domain)
+				? 'unlisted'
+				: 'home';
 		}
 		if (visibility === APP_POST_VISIBILITY.DIRECT) {
-			_visibility = domain === KNOWN_SOFTWARE.MASTODON ? 'direct' : 'specified';
+			_visibility = ActivityPubService.mastodonLike(domain)
+				? 'direct'
+				: 'specified';
 		}
 		const { data, error } = await client.statuses.create({
 			status: rawText,
@@ -66,7 +72,7 @@ const PostButton = memo(() => {
 				subdomain,
 			).export();
 		}
-		setType(BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
+		setType(APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
 	}
 
 	return (
