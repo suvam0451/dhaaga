@@ -35,8 +35,14 @@ class MastodonToStatusAdapter implements StatusInterface {
 		accounts: string[];
 		url: string | null;
 	}[] {
-		// Pleroma/Akkoma
-		const reactions = (this.ref.instance as any).emojiReactions;
+		// Akkoma
+		let reactions = (this.ref.instance as any).emojiReactions;
+
+		// Pleroma
+		if (!reactions) {
+			reactions = (this.ref.instance as any).pleroma.emojiReactions;
+		}
+
 		if (!reactions) return [];
 		return reactions.map((o: any) => ({
 			id: o.name,

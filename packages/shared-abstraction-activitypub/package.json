@@ -16,6 +16,7 @@
   },
   "version": "0.3.0",
   "dependencies": {
+    "@atproto/api": "^0.13.5",
     "@dhaaga/shared-provider-mastodon": "*",
     "axios": "^1.4.0",
     "camelcase-keys": "^9.1.3",

@@ -175,7 +175,11 @@ function BookmarkSyncedPrompt() {
 
 const BookmarkPortalStack = memo(() => {
 	const { PrimaryAcctPtr } = useActivityPubRestClientContext();
-	const acct = useObject(Account, PrimaryAcctPtr.current?._id);
+	const acct = useObject(Account, PrimaryAcctPtr.current);
+
+	const BOOKMARK_LAST_SYNCED_AT = acct?.isValid()
+		? acct?.bookmarksLastSyncedAt
+		: null;
 
 	return (
 		<WithAutoHideTopNavBar title={'Bookmark Viewer'}>
@@ -189,7 +193,7 @@ const BookmarkPortalStack = memo(() => {
 					/>
 				</Text>
 
-				{!acct?.bookmarksLastSyncedAt ? (
+				{!BOOKMARK_LAST_SYNCED_AT ? (
 					<BookmarkNeverSyncedPrompt />
 				) : (
 					<BookmarkSyncedPrompt />

@@ -2,7 +2,7 @@ import { ActivityPubMediaAttachment } from '../../../entities/activitypub-media-
 import { useMemo } from 'react';
 import MediaService from '../../../services/media.service';
 import { Dimensions, View } from 'react-native';
-import { MEDIA_CONTAINER_MAX_HEIGHT, MEDIA_CONTAINER_WIDTH } from './_common';
+import { MEDIA_CONTAINER_MAX_HEIGHT } from './_common';
 import { AppImageComponent, AppVideoComponent } from './_shared';
 import MediaContainerWithAltText from '../../containers/MediaContainerWithAltText';
 import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';

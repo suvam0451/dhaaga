@@ -5,6 +5,7 @@ import { DhaagaErrorCode, LibraryResponse } from './_types.js';
 import { api as misskeyApi } from 'misskey-js';
 import generator, { MegalodonInterface } from 'megalodon';
 import { errorBuilder, successWithData } from './dto/api-responses.dto.js';
+import { Agent, CredentialSession } from '@atproto/api';
 
 export enum COMPAT {
 	MASTOJS = 'mastodon',
@@ -85,6 +86,19 @@ export class DhaagaRestClient<T extends COMPAT> {
 		}) as any;
 	}
 
+	private _BlueskyClient(): Agent {
+		// fix url
+		if (
+			this.baseUrl.startsWith('http://') ||
+			this.baseUrl.startsWith('https://')
+		) {
+		} else {
+			this.baseUrl = 'https://' + this.baseUrl;
+		}
+
+		const session = new CredentialSession(new URL(this.baseUrl));
+		return new Agent(session);
+	}
 	private _MegalodonClient() {
 		// fix url
 		if (
