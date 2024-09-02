@@ -1,9 +1,10 @@
 import styled from 'styled-components/native';
+import { APP_FONTS } from './AppFonts';
 
 export const MainText = styled.Text`
 	color: rgba(255, 255, 255, 0.87);
 	font-size: 20px;
-	font-family: Montserrat-ExtraBold;
+	font-family: ${APP_FONTS.MONTSERRAT_800_EXTRABOLD};
 `;
 
 export const PrimaryText = styled.Text`

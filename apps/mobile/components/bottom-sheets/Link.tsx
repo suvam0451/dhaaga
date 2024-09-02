@@ -8,6 +8,7 @@ import { Image } from 'expo-image';
 import ReadMoreText from '../utils/ReadMoreText';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../styles/AppTheme';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 type ExternalLinkActionSheetProps = {
 	url: string;
@@ -115,7 +116,7 @@ function ExternalLinkActionSheet({
 					/>
 					<Text
 						style={{
-							fontFamily: 'Montserrat-ExtraBold',
+							fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
 							color: APP_FONT.MONTSERRAT_BODY,
 							marginLeft: 8,
 						}}
@@ -138,7 +139,7 @@ function ExternalLinkActionSheet({
 					/>
 					<Text
 						style={{
-							fontFamily: 'Montserrat-ExtraBold',
+							fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
 							color: APP_FONT.MONTSERRAT_BODY,
 							marginLeft: 8,
 						}}
@@ -161,13 +162,14 @@ function ExternalLinkActionSheet({
 					/>
 					<Text
 						style={{
-							fontFamily: 'Montserrat-ExtraBold',
+							fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
 							color: APP_FONT.MONTSERRAT_BODY,
 							marginLeft: 8,
 						}}
 					>
 						Open
 					</Text>
+					s
 				</View>
 			</View>
 		</View>

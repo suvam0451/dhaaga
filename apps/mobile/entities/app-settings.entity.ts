@@ -4,7 +4,10 @@ import { z } from 'zod';
 export const AppSettingCreateDTO = z.object({
 	key: z.string(),
 	value: z.string(),
+	type: z.enum(['boolean', 'string', 'json'] as const),
 });
+
+export type AppSettingCreateDTOType = z.infer<typeof AppSettingCreateDTO>;
 
 export const AppSettingDTO = AppSettingCreateDTO.extend({
 	_id: z.any(),
@@ -19,6 +22,7 @@ export class AppSetting
 	_id: BSON.UUID;
 	key: string;
 	value: string;
+	type: 'string' | 'boolean' | 'json';
 	createdAt: Date;
 	updatedAt: Date;
 
@@ -29,6 +33,7 @@ export class AppSetting
 			_id: 'uuid',
 			key: 'string',
 			value: 'string',
+			type: 'string',
 			createdAt: {
 				type: 'date',
 				default: new Date(),

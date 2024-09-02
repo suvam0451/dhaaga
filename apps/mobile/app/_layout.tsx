@@ -28,6 +28,7 @@ import WithAppBottomSheetContext from '../components/dhaaga-bottom-sheet/modules
 import { APP_THEME } from '../styles/AppTheme';
 import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
+import AppInit from '../services/init/app-init';
 
 /**
  * Suppress these warnings...
@@ -74,6 +75,7 @@ function WithGorhomBottomSheetWrapper() {
 		AppProfileRepository(db).upsert({ name: 'Default' });
 		AppProfileRepository(db).ensureDefaultProfileIsActive();
 		AppProfileRepository(db).seedAppSettings({ name: 'Default' });
+		AppInit.create(db).applyDefaultSettings();
 	}, [db]);
 
 	const [fontsLoaded, fontError] = useFonts(appFonts);
@@ -115,7 +117,7 @@ export default function Page() {
 				{/* In-Memory Store -- MMKV */}
 				<WithGlobalMmkvContext>
 					{/* Main Database -- Realm */}
-					<RealmProvider schema={schemas} schemaVersion={20}>
+					<RealmProvider schema={schemas} schemaVersion={21}>
 						{/* API Caching -- Tanstack */}
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}

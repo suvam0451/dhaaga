@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import Animated from 'react-native-reanimated';
 import { Link } from 'expo-router';
@@ -13,6 +13,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import VersionCode from '../../components/static/sponsorship/VersionCode';
+import { router } from 'expo-router';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 function SettingPageFooter() {
 	return <VersionCode />;
@@ -333,7 +335,12 @@ function SettingsScreenBottomSection() {
 					width: '100%',
 				}}
 			/>
-			<View style={styles.collapsibleSettingsSection}>
+			<TouchableOpacity
+				style={styles.collapsibleSettingsSection}
+				onPress={() => {
+					router.navigate('/settings/privacy');
+				}}
+			>
 				<View style={{ width: 24, height: 24 }}>
 					<FontAwesome6
 						name="user-secret"
@@ -343,7 +350,7 @@ function SettingsScreenBottomSection() {
 				</View>
 
 				<Text style={styles.collapsibleSettingsLabel}>Privacy Tools</Text>
-			</View>
+			</TouchableOpacity>
 			<Divider
 				style={{
 					backgroundColor: 'rgba(18,18,18,0.87)',
@@ -397,7 +404,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 8,
 	},
 	collapsibleSettingsLabel: {
-		fontFamily: 'Montserrat-Bold',
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		fontSize: 20,
 		marginLeft: 8,
 		color: APP_FONT.MONTSERRAT_BODY,
