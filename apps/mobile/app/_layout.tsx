@@ -30,6 +30,9 @@ import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 import AppInit from '../services/init/app-init';
 
+// polyfills
+import '@expo/browser-polyfill';
+
 /**
  * Suppress these warnings...
  */
