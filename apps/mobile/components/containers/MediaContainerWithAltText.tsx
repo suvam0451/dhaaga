@@ -1,23 +1,22 @@
 import { useState } from 'react';
-import { MARGIN_TOP, MEDIA_CONTAINER_WIDTH } from '../common/media/_common';
-import { Pressable, View } from 'react-native';
+import { MARGIN_TOP } from '../common/media/_common';
+import { LayoutChangeEvent, Pressable, View } from 'react-native';
 import AltText from '../dialogs/AltText';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../styles/AppTheme';
-import { Text } from '@rneui/themed';
 
 type Props = {
 	width: number;
 	height: number;
 	altText?: string;
 	children: any;
+	onLayoutChanged?: (event: LayoutChangeEvent) => void;
 };
 
 function MediaContainerWithAltText({
-	width,
-	height,
 	altText,
 	children,
+	onLayoutChanged,
 }: Props) {
 	const [IsWidgetVisible, setIsWidgetVisible] = useState(false);
 
@@ -31,13 +30,18 @@ function MediaContainerWithAltText({
 				flex: 1,
 				justifyContent: 'center',
 				alignItems: 'center',
-				width,
-				height,
 				position: 'relative',
 				marginTop: MARGIN_TOP,
 			}}
 		>
-			{children}
+			<View
+				style={{
+					width: '100%',
+				}}
+				onLayout={onLayoutChanged}
+			>
+				{children}
+			</View>
 			<AltText
 				text={altText}
 				IsVisible={IsWidgetVisible}

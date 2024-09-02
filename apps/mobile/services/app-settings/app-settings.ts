@@ -1,5 +1,6 @@
-import { Realm } from 'realm';
+import { Realm } from '@realm/react';
 import AppSettingsRepository from '../../repositories/app-settings.repo';
+import { AppSetting } from '../../entities/app-settings.entity';
 
 export enum REMOTE_INSTANCE_CALL_SETTINGS {
 	PRIVACY_ADVANCED_REMOTE_INSTANCE_CALLS_ALL = 'privacy.advanced.remoteInstanceCalls.all',
@@ -32,6 +33,14 @@ export const appSettingsKeys = {
 		composer: {
 			visibility: {},
 		},
+		post: {
+			interaction: {
+				quickReaction: 'privacy.preferences.post.interaction.quickReaction',
+				quickBoost: 'privacy.preferences.post.interaction.quickBoost',
+				quickBoostVisibility:
+					'privacy.preferences.post.interaction.quickBoostVisibility',
+			},
+		},
 	},
 };
 
@@ -40,6 +49,24 @@ class AppSettingService {
 		db.write(() => {
 			AppSettingsRepository.update(db, key, value);
 		});
+	}
+}
+
+export class AppSettingsBase {
+	db: Realm;
+	settings: AppSetting[];
+	constructor(db: Realm) {
+		this.db = db;
+	}
+
+	protected getBool(key: string): boolean {
+		const match = AppSettingsRepository.find(this.db, key);
+		if (!match) return false;
+		return match.value === '1';
+	}
+
+	refresh() {
+		this.settings = this.db.objects(AppSetting);
 	}
 }
 

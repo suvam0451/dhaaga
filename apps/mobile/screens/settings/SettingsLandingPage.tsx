@@ -15,6 +15,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import VersionCode from '../../components/static/sponsorship/VersionCode';
 import { router } from 'expo-router';
 import { APP_FONTS } from '../../styles/AppFonts';
+import Octicons from '@expo/vector-icons/Octicons';
 
 function SettingPageFooter() {
 	return <VersionCode />;
@@ -349,8 +350,25 @@ function SettingsScreenBottomSection() {
 					/>
 				</View>
 
-				<Text style={styles.collapsibleSettingsLabel}>Privacy Tools</Text>
+				<Text style={styles.collapsibleSettingsLabel}>Privacy</Text>
 			</TouchableOpacity>
+			<TouchableOpacity
+				style={styles.collapsibleSettingsSection}
+				onPress={() => {
+					router.navigate('/settings/user-preferences');
+				}}
+			>
+				<View style={{ width: 24, height: 24 }}>
+					<Octicons
+						name="checklist"
+						size={24}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+				</View>
+
+				<Text style={styles.collapsibleSettingsLabel}>User Preferences</Text>
+			</TouchableOpacity>
+
 			<Divider
 				style={{
 					backgroundColor: 'rgba(18,18,18,0.87)',
@@ -406,7 +424,7 @@ const styles = StyleSheet.create({
 	collapsibleSettingsLabel: {
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		fontSize: 20,
-		marginLeft: 8,
+		marginLeft: 12,
 		color: APP_FONT.MONTSERRAT_BODY,
 	},
 	appFeaturesGridRow: {

@@ -17,15 +17,19 @@ class AppInitSettings {
 		/**
 		 * Privacy -- Advanced -- Remote Instance Calls
 		 */
-		let namespace = appSettingsKeys.privacy.advanced.disableRemoteInstanceCalls;
+		let disableRemoteInstanceCalls =
+			appSettingsKeys.privacy.advanced.disableRemoteInstanceCalls;
+
+		let postInteractionPrefs = appSettingsKeys.preferences.post.interaction;
 		let items = [
-			namespace.ALL,
-			namespace.PROFILE_CACHING,
-			namespace.REACTION_CACHING,
-			namespace.SOFTWARE_CACHING,
-			namespace.INSTANCE_DETAILS,
-			namespace.REMOTE_DATA_SYNC,
-			namespace.REMOTE_TIMELINES,
+			disableRemoteInstanceCalls.ALL,
+			disableRemoteInstanceCalls.PROFILE_CACHING,
+			disableRemoteInstanceCalls.REACTION_CACHING,
+			disableRemoteInstanceCalls.SOFTWARE_CACHING,
+			disableRemoteInstanceCalls.INSTANCE_DETAILS,
+			disableRemoteInstanceCalls.REMOTE_DATA_SYNC,
+			disableRemoteInstanceCalls.REMOTE_TIMELINES,
+			postInteractionPrefs.quickReaction,
 		];
 
 		db.write(() => {

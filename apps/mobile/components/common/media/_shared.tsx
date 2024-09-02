@@ -22,13 +22,11 @@ type Props = {
 
 export const AppImageComponent = memo(function Foo({
 	url,
-	blurhash,
 	height,
 	width,
-	leftMarginAdjustment,
 }: Props) {
 	return (
-		// @ts-ignore-next-line
+		//	@ts-ignore-next-line
 		<Image
 			style={{
 				flex: 1,
@@ -37,18 +35,14 @@ export const AppImageComponent = memo(function Foo({
 				width,
 				height,
 			}}
-			// placeholder={{ blurhash: blurhash || DEFAULT_BLURHASH }}
 			source={{
 				uri: url,
-				// blurhash: blurhash || DEFAULT_BLURHASH,
-				// width: MEDIA_CONTAINER_WIDTH,
 			}}
 			transition={{
 				effect: 'flip-from-right',
 				duration: 120,
 				timing: 'ease-in',
 			}}
-			// autoplay={false}
 		/>
 	);
 });

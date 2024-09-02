@@ -1,36 +1,17 @@
 import { Realm } from '@realm/react';
-import { AppSetting } from '../../entities/app-settings.entity';
-import { appSettingsKeys } from './app-settings';
-import AppSettingsRepository from '../../repositories/app-settings.repo';
+import { AppSettingsBase, appSettingsKeys } from './app-settings';
 
 const NAMESPACE = appSettingsKeys.privacy;
-class AppPrivacySettings {
-	db: Realm;
-	settings: AppSetting[];
+class AppPrivacySettings extends AppSettingsBase {
 	constructor(db: Realm) {
-		this.db = db;
-	}
-
-	refresh() {
-		this.settings = this.db.objects(AppSetting);
+		super(db);
 	}
 
 	/**
 	 * Cross-Instance Requests -- All
 	 */
 	disableCrossInstanceAllRequests(): boolean {
-		const match = AppSettingsRepository.find(
-			this.db,
-			NAMESPACE.advanced.disableRemoteInstanceCalls.ALL,
-		);
-		if (!match) return false;
-		return match.value === '1';
-	}
-
-	private getBool(key: string): boolean {
-		const match = AppSettingsRepository.find(this.db, key);
-		if (!match) return false;
-		return match.value === '1';
+		return this.getBool(NAMESPACE.advanced.disableRemoteInstanceCalls.ALL);
 	}
 
 	/**
