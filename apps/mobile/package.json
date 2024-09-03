@@ -4,14 +4,12 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "dev": "expo start --dev-client",
     "apk": "eas build -p android --profile apk",
     "aab": "eas build -p android --profile aab",
     "client": "eas build -p android --profile dev",
-    "dev": "expo start --dev-client",
     "lite": "react-native build-android --mode=release && cd android && ./gradlew assembleRelease",
-    "postinstall": "cd ../.. && yarn build",
-    "android": "expo run:android",
-    "ios": "expo run:ios"
+    "postinstall": "cd ../.. && yarn build"
   },
   "dependencies": {
     "@dhaaga/shared-abstraction-activitypub": "*",

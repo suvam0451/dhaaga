@@ -97,7 +97,7 @@ function useImageAspectRatio(
 						setHeight(height);
 					},
 					(error) => {
-						console.log('[WARN]: failed to get image', error);
+						console.log('[WARN]: failed to get image', item, error);
 						setHeight(MEDIA_CONTAINER_MAX_HEIGHT);
 					},
 				);
@@ -105,7 +105,7 @@ function useImageAspectRatio(
 		}
 	}, [items, Width, Height, seed]);
 
-	return { Width, Height, onLayoutChanged };
+	return { Width, Height, onLayoutChanged, setHeight };
 }
 
 export default useImageAspectRatio;

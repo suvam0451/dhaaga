@@ -80,6 +80,16 @@ const UserPreferences = memo(() => {
 							settingKey={
 								appSettingsKeys.preferences.post.interaction.quickReaction
 							}
+							style={{ marginBottom: 16 }}
+						/>
+						<AppSettingBooleanToggle
+							label={'Quick Boost'}
+							subtext={
+								'Pressing boost add/removes them. Holding shows advanced menu.'
+							}
+							settingKey={
+								appSettingsKeys.preferences.post.interaction.quickReaction
+							}
 						/>
 					</Fragment>
 				}

@@ -8,6 +8,7 @@ type ProfileDescProps = {
 	remoteSubdomain: string;
 	style: StyleProp<ViewStyle>;
 	acceptTouch?: boolean;
+	emojiMap?: Map<string, string>;
 };
 
 /**
@@ -15,11 +16,17 @@ type ProfileDescProps = {
  * the profile's description
  */
 const ProfileDesc = memo(
-	({ rawContext, remoteSubdomain, style, acceptTouch }: ProfileDescProps) => {
+	({
+		rawContext,
+		remoteSubdomain,
+		style,
+		acceptTouch,
+		emojiMap,
+	}: ProfileDescProps) => {
 		const { content } = useMfm({
 			content: rawContext,
 			remoteSubdomain,
-			emojiMap: new Map(),
+			emojiMap: emojiMap || new Map(),
 			deps: [rawContext],
 			fontFamily: APP_FONTS.INTER_500_MEDIUM,
 			acceptTouch,

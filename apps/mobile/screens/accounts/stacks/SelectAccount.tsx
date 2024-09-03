@@ -1,6 +1,5 @@
 import { FlatList, View } from 'react-native';
 import { Button } from '@rneui/base';
-import { Account } from '../../../entities/account.entity';
 import { Text } from '@rneui/themed';
 import TitleOnlyStackHeaderContainer from '../../../components/containers/TitleOnlyStackHeaderContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -11,6 +10,8 @@ import AccountInfoSyncDialog from '../../../components/dialogs/AccountInfoSync';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ConfirmAccountDelete from '../../../components/dialogs/accounts/ConfirmAccountDelete';
 import AccountListForSoftware from '../../../components/screens/accounts/stack/landing/fragments/AccountListForSoftware';
+import { UUID } from 'bson';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 function SelectAccountStack() {
 	const route = useRoute<any>();
@@ -18,7 +19,7 @@ function SelectAccountStack() {
 
 	const [DialogVisible, setDialogVisible] = useState(false);
 	const [DeleteDialogVisible, setDeleteDialogVisible] = useState(false);
-	const DialogTarget = useRef<Account>(null);
+	const DialogTarget = useRef<UUID>(null);
 
 	const SOFTWARE_ARRAY = [
 		KNOWN_SOFTWARE.AKKOMA,
@@ -37,12 +38,12 @@ function SelectAccountStack() {
 			<AccountInfoSyncDialog
 				IsVisible={DialogVisible}
 				setIsVisible={setDialogVisible}
-				acct={DialogTarget.current}
+				acctId={DialogTarget.current}
 			/>
 			<ConfirmAccountDelete
 				IsVisible={DeleteDialogVisible}
 				setIsVisible={setDeleteDialogVisible}
-				acct={DialogTarget.current}
+				acctId={DialogTarget.current}
 			/>
 
 			<FlatList
@@ -55,6 +56,7 @@ function SelectAccountStack() {
 						setIsExpanded={setDialogVisible}
 					/>
 				)}
+				contentContainerStyle={{ paddingHorizontal: 4 }}
 			/>
 
 			<View style={{ marginHorizontal: 16, marginBottom: 32, marginTop: 28 }}>
@@ -66,13 +68,24 @@ function SelectAccountStack() {
 					<Text
 						style={{
 							color: APP_FONT.MONTSERRAT_HEADER,
-							fontFamily: 'Inter-Bold',
+							fontFamily: APP_FONTS.INTER_700_BOLD,
 							fontSize: 16,
 						}}
 					>
-						Add an Account
+						Add Account
 					</Text>
 				</Button>
+				<Text
+					style={{
+						color: APP_FONT.MONTSERRAT_BODY,
+						fontFamily: APP_FONTS.INTER_700_BOLD,
+						textAlign: 'center',
+						marginTop: 8,
+						paddingHorizontal: 16,
+					}}
+				>
+					Mastodon, Pleroma, Akkoma, Misskey, Firefish, Sharkey
+				</Text>
 			</View>
 		</TitleOnlyStackHeaderContainer>
 	);

@@ -149,6 +149,7 @@ function ProfileContextWrapped() {
 					style={localStyles.parsedDescriptionContainer}
 					rawContext={user?.getDescription()}
 					remoteSubdomain={user?.getInstanceUrl()}
+					emojiMap={user?.getEmojiMap()}
 				/>
 
 				{/*Separator*/}

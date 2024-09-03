@@ -4,41 +4,50 @@ import { Image } from 'expo-image';
 import { useObject, useRealm } from '@realm/react';
 import { Account } from '../../../entities/account.entity';
 import AccountRepository from '../../../repositories/account.repo';
-import { Types } from 'realm';
-import UUID = Types.UUID;
 import AccountService from '../../../services/account.service';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { Fragment, memo, useState } from 'react';
-import Entypo from '@expo/vector-icons/Entypo';
+import { memo, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { SoftwareBadgeUpdateAccountOnClick } from '../../../components/common/software/SimpleBadge';
 import { FontAwesome } from '@expo/vector-icons';
 import { EmojiService } from '../../../services/emoji.service';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Octicons from '@expo/vector-icons/Octicons';
+import { UUID } from 'bson';
+import Feather from '@expo/vector-icons/Feather';
+import { router } from 'expo-router';
 
 type Props = {
 	id: UUID;
 	setIsExpanded: (isExpanded: boolean) => void;
 	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: React.MutableRefObject<Account>;
+	dialogTarget: React.MutableRefObject<UUID>;
 	acct: Account;
 };
 
 type AccountOptionsProps = {
 	IsExpanded: boolean;
 	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: React.MutableRefObject<Account>;
-	acct: Account;
+	dialogTarget: React.MutableRefObject<UUID>;
+	acctId: UUID;
 };
+
+const ICON_SIZE = 22;
 
 export const AccountOptions = memo(function Foo({
 	IsExpanded,
 	dialogTarget,
 	setDeleteDialogExpanded,
-	acct,
+	acctId,
 }: AccountOptionsProps) {
+	const acct = useObject(Account, acctId);
+
+	function onFixClicked() {
+		dialogTarget.current = acct._id;
+		// setIsDialogExpanded(true);
+	}
 	return (
 		<Animated.View
 			entering={FadeIn}
@@ -54,68 +63,81 @@ export const AccountOptions = memo(function Foo({
 				style={{
 					flexDirection: 'row',
 					justifyContent: 'flex-start',
-					marginTop: 16,
 					alignItems: 'center',
 					marginVertical: 8,
+					paddingVertical: 4,
 				}}
 			>
-				<View
-					style={{
-						flexDirection: 'column',
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<View style={styles.actionButton}>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.INTER_400_REGULAR,
-								color: APP_FONT.MONTSERRAT_HEADER,
-								fontSize: 13,
-							}}
-						>
-							Sync Hashtags
-						</Text>
-					</View>
-					<Text style={styles.syncStatusText}>Not Synced</Text>
-				</View>
-				<View
-					style={{
-						flexDirection: 'column',
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<View style={styles.actionButton}>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.INTER_400_REGULAR,
-								color: APP_FONT.MONTSERRAT_HEADER,
-								fontSize: 13,
-							}}
-						>
-							Sync Followers
-						</Text>
-					</View>
-					<Text style={styles.syncStatusText}>Not Synced</Text>
-				</View>
-				<View
-					style={{
-						flexGrow: 1,
-						flexDirection: 'row',
-						justifyContent: 'flex-end',
-					}}
-				>
-					<View
-						style={{ paddingRight: 8, padding: 8 }}
-						onTouchEnd={() => {
-							dialogTarget.current = acct;
-							setDeleteDialogExpanded(true);
+				<TouchableOpacity style={styles.actionButton}>
+					<Octicons
+						name="browser"
+						size={ICON_SIZE}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+					<Text
+						style={{
+							color: APP_FONT.MONTSERRAT_BODY,
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+							fontSize: 12,
+							marginTop: 4,
 						}}
 					>
-						<FontAwesome name="trash-o" size={24} color={'rgba(255,0,0,0.8)'} />
-					</View>
-				</View>
+						Account
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.actionButton} onPress={onFixClicked}>
+					<MaterialIcons
+						name="auto-fix-high"
+						size={ICON_SIZE}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+					<Text
+						style={{
+							color: APP_FONT.MONTSERRAT_BODY,
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+							fontSize: 12,
+							marginTop: 4,
+						}}
+					>
+						Fix
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.actionButton}>
+					<Octicons
+						name="sync"
+						size={ICON_SIZE}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+					<Text
+						style={{
+							color: APP_FONT.MONTSERRAT_BODY,
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+							fontSize: 12,
+							marginTop: 4,
+						}}
+					>
+						Sync
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={styles.actionButton}
+					onPress={() => {
+						dialogTarget.current = acctId;
+						setDeleteDialogExpanded(true);
+					}}
+				>
+					<FontAwesome name="trash-o" size={ICON_SIZE} color={'#ce6779'} />
+					<Text
+						style={{
+							color: APP_FONT.MONTSERRAT_BODY,
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+							fontSize: 12,
+							marginTop: 4,
+						}}
+					>
+						Remove
+					</Text>
+				</TouchableOpacity>
 			</View>
 		</Animated.View>
 	);
@@ -182,7 +204,7 @@ export const AccountDetails = memo(function Foo({
 		>
 			<Text
 				style={{
-					fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					color: selected ? '#9dced7' : APP_FONT.MONTSERRAT_HEADER,
 				}}
 				numberOfLines={1}
@@ -233,9 +255,15 @@ function AccountListingFragment({
 		'display_name',
 	)?.value;
 
-	function onSoftwareClicked() {
-		dialogTarget.current = account;
-		setIsDialogExpanded(true);
+	async function onProfileClicked() {
+		if (account.selected) {
+			AccountService.deselectAccount(db, account._id);
+		} else {
+			AccountService.selectAccount(db, account._id);
+			await EmojiService.refresh(db, globalDb, account.subdomain, true);
+		}
+		regenerate();
+		router.navigate('/accounts/dashboard');
 	}
 
 	async function onAccountSelection() {
@@ -243,13 +271,7 @@ function AccountListingFragment({
 			AccountService.deselectAccount(db, account._id);
 		} else {
 			AccountService.selectAccount(db, account._id);
-			const res = await EmojiService.refresh(
-				db,
-				globalDb,
-				account.subdomain,
-				true,
-			);
-			if (res) console.log('[INFO]: refreshed account emojis', res);
+			await EmojiService.refresh(db, globalDb, account.subdomain, true);
 		}
 		regenerate();
 	}
@@ -258,11 +280,11 @@ function AccountListingFragment({
 	return (
 		<View
 			style={{
-				backgroundColor: '#282828',
+				backgroundColor: '#202020',
 				padding: 8,
+				paddingVertical: 6,
 				marginBottom: 8,
 				borderRadius: 8,
-				maxWidth: '100%',
 			}}
 		>
 			<View
@@ -271,85 +293,83 @@ function AccountListingFragment({
 					alignItems: 'center',
 				}}
 			>
-				<AccountPfp
-					selected={account.selected}
-					url={avatar}
-					onClicked={onAccountSelection}
-				/>
-				<AccountDetails
-					onClicked={onAccountSelection}
-					selected={account.selected}
-					displayName={displayName}
-					username={account.username}
-					subdomain={account.subdomain}
-				/>
+				<TouchableOpacity
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						flex: 1,
+					}}
+				>
+					<AccountPfp
+						selected={account.selected}
+						url={avatar}
+						onClicked={onProfileClicked}
+					/>
+					<AccountDetails
+						onClicked={onProfileClicked}
+						selected={account.selected}
+						displayName={displayName}
+						username={account.username}
+						subdomain={account.subdomain}
+					/>
+				</TouchableOpacity>
 
-				<View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
-					<TouchableOpacity onPress={onSoftwareClicked}>
-						<SoftwareBadgeUpdateAccountOnClick acct={account} />
-					</TouchableOpacity>
-
-					<View
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<TouchableOpacity
 						style={{
-							display: 'flex',
-							justifyContent: 'flex-end',
+							alignItems: 'center',
+							paddingHorizontal: 12,
+							paddingVertical: 12,
+						}}
+						onPress={onAccountSelection}
+					>
+						{account.selected ? (
+							<Text
+								style={{
+									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+									color: '#9dced7',
+								}}
+							>
+								Active
+							</Text>
+						) : (
+							<Text
+								style={{
+									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+									color: APP_FONT.MONTSERRAT_HEADER,
+								}}
+							>
+								Select
+							</Text>
+						)}
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={{
+							paddingHorizontal: 4,
+							paddingVertical: 12,
+							paddingLeft: 8,
+							paddingRight: 8,
 							flexDirection: 'row',
 							alignItems: 'center',
+							// backgroundColor: 'yellow',
+						}}
+						onPress={() => {
+							setIsExpanded((o) => !o);
 						}}
 					>
-						<TouchableOpacity
-							style={{
-								paddingHorizontal: 4,
-								paddingLeft: 8,
-								flexDirection: 'row',
-								alignItems: 'center',
-							}}
-							onPress={() => {
-								setIsExpanded((o) => !o);
-							}}
-						>
-							{IsExpanded ? (
-								<Fragment>
-									<Text
-										style={{
-											fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
-											color: APP_FONT.MONTSERRAT_HEADER,
-										}}
-									>
-										Less
-									</Text>
-									<Entypo
-										name="chevron-up"
-										size={32}
-										color={APP_FONT.MONTSERRAT_BODY}
-									/>
-								</Fragment>
-							) : (
-								<Fragment>
-									<Text
-										style={{
-											fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
-											color: APP_FONT.MONTSERRAT_HEADER,
-										}}
-									>
-										More
-									</Text>
-									<Entypo
-										name="chevron-down"
-										size={32}
-										color={APP_FONT.MONTSERRAT_BODY}
-									/>
-								</Fragment>
-							)}
-						</TouchableOpacity>
-					</View>
+						<Feather
+							name="more-horizontal"
+							size={24}
+							color={APP_FONT.MONTSERRAT_HEADER}
+						/>
+					</TouchableOpacity>
 				</View>
 			</View>
 			<AccountOptions
 				IsExpanded={IsExpanded}
 				dialogTarget={dialogTarget}
 				setDeleteDialogExpanded={setDeleteDialogExpanded}
-				acct={acct}
+				acctId={acct._id}
 			/>
 		</View>
 	);
@@ -368,12 +388,11 @@ const styles = StyleSheet.create({
 		borderRadius: 6,
 	},
 	actionButton: {
+		flex: 1,
 		elevation: 1,
 		backgroundColor: '#333333',
 		borderRadius: 8,
-		padding: 8,
-		paddingHorizontal: 12,
-		flexDirection: 'row',
+		paddingVertical: 6,
 		alignItems: 'center',
 		shadowRadius: 8,
 		shadowOffset: {

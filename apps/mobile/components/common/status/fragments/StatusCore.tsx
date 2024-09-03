@@ -47,7 +47,7 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 	} = useMfm({
 		content: STATUS_DTO.content.raw,
 		remoteSubdomain: STATUS_DTO.postedBy.instance,
-		emojiMap: STATUS_DTO.calculated.emojis as any,
+		emojiMap: STATUS_DTO.calculated.emojis,
 		deps: [dto],
 	});
 

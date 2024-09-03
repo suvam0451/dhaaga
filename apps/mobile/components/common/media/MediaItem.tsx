@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import { memo, useMemo } from 'react';
-import { MARGIN_TOP } from './_common';
+import { memo, useEffect, useMemo } from 'react';
+import { MARGIN_TOP, MEDIA_CONTAINER_MAX_HEIGHT } from './_common';
 import {
 	AltTextOverlay,
 	AppAudioComponent,
@@ -34,9 +34,14 @@ const TimelineMediaRendered = memo(function Foo({
 	totalCount?: number;
 	leftMarginAdjustment?: number;
 }) {
-	const { Width, Height, onLayoutChanged } = useImageAspectRatio([
+	const { Width, Height, onLayoutChanged, setHeight } = useImageAspectRatio([
 		{ url: attachment.url, width: attachment.width, height: attachment.height },
 	]);
+
+	// i cant do this anymore :(
+	useEffect(() => {
+		setHeight(CalculatedHeight || MEDIA_CONTAINER_MAX_HEIGHT);
+	}, [attachment]);
 
 	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
 
@@ -48,7 +53,6 @@ const TimelineMediaRendered = memo(function Foo({
 			case 'image/jpeg':
 			case 'image/png':
 			case 'image/webp':
-			case 'gifv':
 			case 'image/gif':
 			case 'image/avif': {
 				return (
@@ -63,6 +67,7 @@ const TimelineMediaRendered = memo(function Foo({
 			case 'video':
 			case 'video/mp4':
 			case 'video/webm':
+			case 'gifv':
 			case 'video/quicktime': {
 				return (
 					<AppVideoComponent
