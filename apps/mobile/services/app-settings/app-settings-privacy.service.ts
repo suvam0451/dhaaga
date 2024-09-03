@@ -2,9 +2,13 @@ import { Realm } from '@realm/react';
 import { AppSettingsBase, appSettingsKeys } from './app-settings';
 
 const NAMESPACE = appSettingsKeys.privacy;
-class AppPrivacySettings extends AppSettingsBase {
+class AppPrivacySettingsService extends AppSettingsBase {
 	constructor(db: Realm) {
 		super(db);
+	}
+
+	static override create(db: Realm) {
+		return new AppPrivacySettingsService(db);
 	}
 
 	/**
@@ -17,14 +21,14 @@ class AppPrivacySettings extends AppSettingsBase {
 	/**
 	 * Cross-Instance Requests -- System Triggered
 	 */
-	disableCrossInstanceReactionCaching(): boolean {
+	isDisabledCrossInstanceReactionCaching(): boolean {
 		if (this.disableCrossInstanceAllRequests()) return true;
 		return this.getBool(
 			NAMESPACE.advanced.disableRemoteInstanceCalls.REACTION_CACHING,
 		);
 	}
 
-	disableCrossInstanceSoftwareCaching(): boolean {
+	isDisabledCrossInstanceSoftwareCaching(): boolean {
 		if (this.disableCrossInstanceAllRequests()) return true;
 		return this.getBool(
 			NAMESPACE.advanced.disableRemoteInstanceCalls.SOFTWARE_CACHING,
@@ -63,4 +67,4 @@ class AppPrivacySettings extends AppSettingsBase {
 	}
 }
 
-export default AppPrivacySettings;
+export default AppPrivacySettingsService;

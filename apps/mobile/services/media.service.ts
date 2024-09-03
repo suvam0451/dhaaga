@@ -15,32 +15,20 @@ class MediaService {
 	}) {
 		if (!W || !H) return { height: maxH, width: maxW };
 
-		let _H = H;
-		let _W = W;
+		// fix width, get height
+		let _H = (maxW / W) * H;
+		let _W = maxW;
 
-		if (H > W) {
+		if (_H > maxH) {
+			// fix height, get width
 			_H = maxH;
-			_W = (_H / H) * W;
-
-			if (_W > maxW) {
-				_H = (maxW / W) * H;
-			}
-			return {
-				width: maxW,
-				height: _H,
-			};
-		} else {
-			_W = maxW;
-			_H = (_W / W) * H;
-
-			if (_H > maxH) {
-				_H = maxH;
-			}
-			return {
-				width: maxW,
-				height: _H,
-			};
+			_W = (maxH / H) * W;
 		}
+
+		return {
+			width: _W,
+			height: _H,
+		};
 	}
 
 	static calculateHeightForMediaContentCarousal(

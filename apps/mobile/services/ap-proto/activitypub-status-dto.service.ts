@@ -64,12 +64,7 @@ export const ActivityPubStatusItemDto = z.object({
 	}),
 	calculated: z.object({
 		mediaContainerHeight: z.number(),
-		emojis: z.map(
-			z.string(),
-			z.object({
-				url: z.string(),
-			}),
-		),
+		emojis: z.map(z.string(), z.string()),
 		translationOutput: z.string().optional(),
 		translationType: z.string().optional(),
 		reactionEmojis: z.array(
@@ -182,11 +177,6 @@ export class ActivitypubStatusDtoService {
 			KNOWN_SOFTWARE.AKKOMA,
 		].includes(domain as any);
 
-		// NOTE: debugger for reactions
-		// console.log(
-		// 	input.getMyReaction(),
-		// 	input.getReactions(input.getMyReaction()),
-		// );
 		return {
 			id: input.getId(),
 			visibility: input.getVisibility(),
@@ -223,7 +213,12 @@ export class ActivitypubStatusDtoService {
 				liked: input.getIsFavourited(),
 			},
 			calculated: {
-				emojis: user.getEmojiMap(),
+				emojis: new Map([
+					// @ts-ignore-next-line
+					...user.getEmojiMap(),
+					// @ts-ignore-next-line
+					...input.getCachedEmojis(),
+				]),
 				mediaContainerHeight: height,
 				reactionEmojis: input.getReactionEmojis(),
 			},

@@ -1,17 +1,17 @@
-import StatusItem from '../../components/common/status/StatusItem';
+import StatusItem from '../../../../common/status/StatusItem';
 import { useMemo, useState } from 'react';
 import { Animated, RefreshControl, View, Text } from 'react-native';
-import WithAutoHideTopNavBar from '../../components/containers/WithAutoHideTopNavBar';
-import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '../../../../containers/WithAutoHideTopNavBar';
+import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 import { useLocalSearchParams } from 'expo-router';
-import WithAppStatusItemContext from '../../hooks/ap-proto/useAppStatusItem';
-import useGetStatusContext from '../../hooks/api/statuses/useGetStatusContext';
+import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
+import useGetStatusContext from '../../../../../hooks/api/statuses/useGetStatusContext';
 import WithAppStatusContextDataContext, {
 	useAppStatusContextDataContext,
-} from '../../hooks/api/statuses/WithAppStatusContextData';
-import PostReply from '../../components/common/status/PostReply';
-import { APP_FONT } from '../../styles/AppTheme';
-import WithAppTimelineDataContext from '../../components/common/timeline/api/useTimelineData';
+} from '../../../../../hooks/api/statuses/WithAppStatusContextData';
+import PostReply from '../../../../common/status/PostReply';
+import { APP_FONT } from '../../../../../styles/AppTheme';
+import WithAppTimelineDataContext from '../../../../common/timeline/api/useTimelineData';
 
 function StatusContextComponent() {
 	const { data } = useAppStatusContextDataContext();
@@ -44,7 +44,7 @@ function StatusContextComponent() {
 	);
 }
 
-function Post() {
+function PostDetails() {
 	const [refreshing, setRefreshing] = useState(false);
 
 	const { id } = useLocalSearchParams<{ id: string }>();
@@ -56,7 +56,7 @@ function Post() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'' + 'Post Details'} translateY={translateY}>
+		<WithAutoHideTopNavBar title={'Post Details'} translateY={translateY}>
 			<WithAppStatusContextDataContext data={Data} dispatch={dispatch}>
 				<WithAppTimelineDataContext>
 					<Animated.ScrollView
@@ -74,4 +74,4 @@ function Post() {
 	);
 }
 
-export default Post;
+export default PostDetails;

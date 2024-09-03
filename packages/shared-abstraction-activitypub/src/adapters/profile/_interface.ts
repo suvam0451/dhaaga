@@ -7,11 +7,6 @@ import { Note } from 'misskey-js/autogen/models.d.ts';
 import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
 import camelcaseKeys from 'camelcase-keys';
 
-export type EmojiMapValue = {
-	url: string;
-	visibleInPicker: boolean;
-};
-
 export type UserType =
 	| mastodon.v1.Account
 	| UserDetailed
@@ -70,33 +65,24 @@ export interface UserInterface {
 	 */
 	getAppDisplayAccountUrl(myDomain: string): string;
 
-	/**
-	 * Custom -- Emojis
-	 */
-	findEmoji(q: string): EmojiMapValue | undefined;
-
-	getEmojiMap(): Map<string, EmojiMapValue>;
+	getEmojiMap(): Map<string, string>;
 
 	getPinnedNotes(): Note[];
 }
 
 export class UserDetailedInstance {
 	instance: UserDetailed;
-	emojiMap: Map<string, EmojiMapValue>;
 
 	constructor(instance: UserDetailed) {
 		this.instance = instance;
-		this.emojiMap = new Map();
 	}
 }
 
 export class AccountInstance {
 	instance: mastodon.v1.Account;
-	emojiMap: Map<string, EmojiMapValue>;
 
 	constructor(instance: mastodon.v1.Account) {
 		this.instance = instance;
-		this.emojiMap = new Map();
 	}
 }
 
@@ -117,27 +103,13 @@ export function ActivityPubUserAdapter(
 		}
 		case KNOWN_SOFTWARE.MASTODON: {
 			const instance = new AccountInstance(profile as mastodon.v1.Account);
-			const emojis = (profile as mastodon.v1.Account)?.emojis;
-			const mp = new Map<string, EmojiMapValue>();
-			if (!emojis) return new MastodonUser(instance, mp);
-
-			for (let i = 0; i < emojis?.length; i++) {
-				let { shortcode, ...rest } = emojis[i];
-
-				mp.set(shortcode, {
-					url: rest.url,
-					visibleInPicker: rest.visibleInPicker,
-				});
-			}
-			return new MastodonUser(instance, mp);
+			return new MastodonUser(instance);
 		}
 		case KNOWN_SOFTWARE.PLEROMA:
 		case KNOWN_SOFTWARE.AKKOMA: {
-			const mp = new Map<string, EmojiMapValue>();
 			const _camel = camelcaseKeys(profile, { deep: true });
 			return new MastodonUser(
 				new AccountInstance(_camel as mastodon.v1.Account),
-				mp,
 			);
 		}
 		default: {

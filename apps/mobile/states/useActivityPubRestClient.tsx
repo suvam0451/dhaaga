@@ -90,8 +90,12 @@ function WithActivityPubRestClient({ children }: any) {
 		setRestClient(client);
 		setPrimaryAcct(acct);
 		PrimaryAcctPtr.current = acct._id;
-		EmojiService.resolveEmojis(db, globalDb, acct.subdomain, {
-			forcedUpdate: false,
+		EmojiService.refresh(db, globalDb, acct.subdomain, true).then((res) => {
+			// console.log(
+			// 	'[INFO]: emoji cache refreshed for account',
+			// 	acct.subdomain,
+			// 	res?.length,
+			// );
 		});
 	}
 

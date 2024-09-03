@@ -36,8 +36,8 @@ function RealmMediaComponentSingleItem({
 					<AppImageComponent
 						url={data.previewUrl}
 						blurhash={data.blurhash}
-						height={Height}
-						width={Width}
+						parentContainerHeight={Height}
+						parentContainerWidth={Width}
 					/>
 				);
 			}

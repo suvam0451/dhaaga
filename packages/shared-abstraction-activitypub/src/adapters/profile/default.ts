@@ -20,7 +20,7 @@ export class DefaultUser implements UserInterface {
 	}
 
 	getEmojiMap() {
-		return new Map();
+		return new Map<string, string>();
 	}
 
 	findEmoji(q: string) {

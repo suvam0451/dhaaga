@@ -1,15 +1,13 @@
 import { View, Text } from 'react-native';
 import { Button } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
-import MyBookmarkPage from '../components/screens/favourites/stack/MyBookmarkPage';
 import WithScrollOnRevealContext from '../states/useScrollOnReveal';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Divider } from '@rneui/base';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MyFavourites from '../components/screens/favourites/stack/MyFavouritesPage';
 import FavouritesScreenHomePageDefaultTutorial from '../components/tutorials/screens/favourites/HomePage';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import MyFollowings from '../components/screens/favourites/stack/MyFollowings';
@@ -35,7 +33,6 @@ type FavouritesScreenNavigationItemProps = {
 
 function FavouritesScreenNavigationItemIconOnly({
 	icon,
-	disabled,
 	onPress,
 	borderColor,
 }: FavouritesScreenNavigationItemIconOnlyProps) {
@@ -93,7 +90,6 @@ function FavouritesScreenNavigationItem({
 
 function ActionableSection() {
 	const navigation = useNavigation<any>();
-	const route = useRoute();
 
 	return (
 		<View>

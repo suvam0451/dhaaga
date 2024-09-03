@@ -89,7 +89,7 @@ const Timeline = memo(() => {
 			setPageLoadedAtLeastOnce(true);
 
 			/**
-			 * Resolve Custom Emojis
+			 * Resolve Software + Custom Emojis
 			 */
 			for (const datum of _data) {
 				ActivitypubStatusService.factory(datum, domain, subdomain)

@@ -16,14 +16,13 @@ import {
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
 import { ActivityPubAppUserDtoType } from '../../../../../services/ap-proto/activitypub-user-dto.service';
 import useMfm from '../../../../hooks/useMfm';
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { AnimatedFlashList } from '@shopify/flash-list';
 
 const ReactingUser = memo(({ dto }: { dto: ActivityPubAppUserDtoType }) => {
 	const { content } = useMfm({
 		content: dto.displayName,
 		remoteSubdomain: dto.instance,
-		emojiMap: new Map<string, EmojiMapValue>(),
+		emojiMap: new Map<string, string>(),
 		deps: [dto.displayName],
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 		acceptTouch: false,

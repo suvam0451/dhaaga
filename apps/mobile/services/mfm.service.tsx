@@ -1,5 +1,4 @@
 import { Text } from 'react-native';
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { randomUUID } from 'expo-crypto';
 import LinkProcessor from '../components/common/link/LinkProcessor';
 import { APP_FONT } from '../styles/AppTheme';
@@ -21,7 +20,7 @@ class MfmComponentBuilder {
 	protected readonly globalDb: MMKV;
 	protected readonly myDomain: string;
 	protected readonly mySubdomain: string;
-	protected readonly emojiMap?: Map<string, EmojiMapValue>;
+	protected readonly emojiMap?: Map<string, string>;
 
 	// settings
 	protected parseMentions: boolean = true;
@@ -55,7 +54,7 @@ class MfmComponentBuilder {
 		myDomain: string;
 		mySubdomain: string;
 		targetSubdomain?: string;
-		emojiMap?: Map<string, EmojiMapValue>;
+		emojiMap?: Map<string, string>;
 		opts?: {
 			parseMentions?: boolean;
 			parseLinks?: boolean;
@@ -263,7 +262,7 @@ class MfmComponentBuilder {
 					<Text
 						key={k}
 						style={{
-							fontFamily: 'Inter-Bold',
+							fontFamily: APP_FONTS.INTER_700_BOLD,
 							color: APP_FONT.MONTSERRAT_HEADER,
 						}}
 					>
@@ -342,7 +341,7 @@ class MfmService {
 		}: {
 			domain: string;
 			subdomain: string;
-			emojiMap: Map<string, EmojiMapValue>;
+			emojiMap: Map<string, string>;
 			globalDb: MMKV;
 			db: Realm;
 			remoteSubdomain?: string;

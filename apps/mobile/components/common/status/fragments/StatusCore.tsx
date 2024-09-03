@@ -72,10 +72,8 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 					borderRadius: 8,
 					borderTopLeftRadius: hasReply || hasBoost ? 0 : 8,
 					borderTopRightRadius: hasReply || hasBoost ? 0 : 8,
-					// backgroundColor: 'red',
 				}}
 			>
-				{/*<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>{dto.id}</Text>*/}
 				<TouchableOpacity
 					delayPressIn={100}
 					onPress={() => {
@@ -115,7 +113,6 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 					<MediaItem
 						attachments={STATUS_DTO.content.media}
 						calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
-						leftMarginAdjustment={20}
 					/>
 				)}
 				{IS_QUOTE_BOOST && (

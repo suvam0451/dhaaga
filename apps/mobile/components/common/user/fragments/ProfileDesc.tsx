@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import useMfm from '../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 
 type ProfileDescProps = {
 	rawContext: string;
@@ -20,7 +19,7 @@ const ProfileDesc = memo(
 		const { content } = useMfm({
 			content: rawContext,
 			remoteSubdomain,
-			emojiMap: new Map<string, EmojiMapValue>(),
+			emojiMap: new Map(),
 			deps: [rawContext],
 			fontFamily: APP_FONTS.INTER_500_MEDIUM,
 			acceptTouch,

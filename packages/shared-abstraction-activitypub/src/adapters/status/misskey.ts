@@ -48,6 +48,10 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		this.ref = ref;
 	}
 
+	getCachedEmojis(): Map<string, string> {
+		return new Map<string, string>();
+	}
+
 	getMentions(): DhaagaJsMentionObject[] {
 		return (
 			this.ref.instance?.mentions?.map((o) => ({

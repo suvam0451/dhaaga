@@ -14,12 +14,7 @@ import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 type Props = {
 	content: string;
 	// Mastodon sup-plied emoji list
-	emojiMap: Map<
-		string,
-		{
-			url: string;
-		}
-	>;
+	emojiMap: Map<string, string>;
 	// instance of the target user (will resolve emojis from there)
 	remoteSubdomain: string;
 	deps: DependencyList;

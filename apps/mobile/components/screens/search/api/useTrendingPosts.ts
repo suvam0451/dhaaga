@@ -2,17 +2,16 @@ import { useActivityPubRestClientContext } from '../../../../states/useActivityP
 import { useAppPaginationContext } from '../../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { EmojiService } from '../../../../services/emoji.service';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
+import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
 
 function useTrendingPosts() {
-	const { client, domain } = useActivityPubRestClientContext();
+	const { client, domain, subdomain } = useActivityPubRestClientContext();
 	const {
 		data: PageData,
 		setMaxId,
-		append,
 		queryCacheMaxId,
 	} = useAppPaginationContext();
 	const [IsLoading, setIsLoading] = useState(false);
@@ -47,15 +46,18 @@ function useTrendingPosts() {
 			setMaxId((PageData.length + data.length).toString());
 			setIsLoading(true);
 			const dataI = ActivityPubAdapterService.adaptManyStatuses(data, domain);
-			EmojiService.preloadInstanceEmojisForStatuses(
-				db,
-				globalDb,
-				dataI,
-				domain,
-			).finally(() => {
-				append(data);
-				setIsLoading(false);
-			});
+
+			/**
+			 * Resolve Software + Custom Emojis
+			 */
+			for (const datum of dataI) {
+				ActivitypubStatusService.factory(datum, domain, subdomain)
+					.resolveInstances()
+					.syncSoftware(db)
+					.then((res) => {
+						res.syncCustomEmojis(db, globalDb).then(() => {});
+					});
+			}
 		}
 	}, [fetchStatus]);
 

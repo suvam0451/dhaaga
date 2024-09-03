@@ -59,6 +59,9 @@ export class AppSettingsBase {
 		this.db = db;
 	}
 
+	static create(db: Realm) {
+		return new AppSettingsBase(db);
+	}
 	protected getBool(key: string): boolean {
 		const match = AppSettingsRepository.find(this.db, key);
 		if (!match) return false;

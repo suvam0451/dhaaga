@@ -17,62 +17,80 @@ const MEDIA_CONTAINER_MAX_HEIGHT = 540;
  *
  * NOTE: Only works for react-native
  */
-function useImageAspectRatio(items: ImageAspectRatioProps) {
+function useImageAspectRatio(
+	items: ImageAspectRatioProps,
+	seed?: { width?: number; height?: number },
+) {
 	// set width
-	const [Width, setWidth] = useState(Dimensions.get('window').width);
+	const [Width, setWidth] = useState(
+		seed?.width || Dimensions.get('window').width,
+	);
 	// set height
-	const [Height, setHeight] = useState(MEDIA_CONTAINER_MAX_HEIGHT);
+	const [Height, setHeight] = useState(
+		seed?.height || MEDIA_CONTAINER_MAX_HEIGHT,
+	);
+
+	// useEffect(() => {
+	// 	if (seed?.width) setWidth(seed?.width);
+	// 	if (seed?.height) setHeight(seed?.height);
+	// }, [seed]);
+
+	// console.log('setting height', Height);
 
 	function onLayoutChanged(event: LayoutChangeEvent) {
+		// console.log('layout event fired');
 		const { height, width } = event.nativeEvent.layout;
-		setWidth(width);
-		setHeight(Math.min(height, Height));
+		// do not update values if seeded
+		if (!seed?.width) setWidth(width);
+		if (!seed?.height) setHeight(Math.min(height, Height));
 	}
 
+	/**
+	 * Helper function to get dimensions
+	 * for individual items
+	 * @param url
+	 */
+	const getImageSize = async (
+		url: string,
+	): Promise<{ width: number; height: number }> =>
+		new Promise((resolve, reject) => {
+			RNImage.getSize(
+				url,
+				(width, height) => {
+					resolve({ width, height });
+				},
+				(error) => reject(error),
+			);
+		});
+
 	useEffect(() => {
+		// console.log('invoked...', Width);
 		if (items.length === 0) {
 			setHeight(0);
 			return;
 		}
 
-		setHeight(0);
-
-		/**
-		 * Helper function to get dimensions
-		 * for individual items
-		 * @param url
-		 */
-		const getImageSize = async (
-			url: string,
-		): Promise<{ width: number; height: number }> =>
-			new Promise((resolve, reject) => {
-				RNImage.getSize(
-					url,
-					(width, height) => {
-						resolve({ width, height });
-					},
-					(error) => reject(error),
-				);
-			});
+		const _width = seed?.width || Width;
+		const _height = seed?.height || Height;
 
 		for (const item of items) {
 			if (item.width && item.height) {
 				const { width, height } = MediaService.calculateDimensions({
-					maxW: Width,
-					maxH: MEDIA_CONTAINER_MAX_HEIGHT,
+					maxW: _width,
+					maxH: _height,
 					H: item.height,
 					W: item.width,
 				});
-				setHeight((o) => Math.max(o, height));
-				// setWidth(width);
+				setHeight((o) => Math.min(o, height));
 			} else {
+				// console.log('getting size manually');
 				// calculate ourselves
 				RNImage.getSize(
 					item.url,
 					(W, H) => {
 						const { height } = MediaService.calculateDimensions({
-							maxW: Width,
-							maxH: MEDIA_CONTAINER_MAX_HEIGHT,
+							maxW: _width,
+							maxH: _height,
 							H,
 							W,
 						});
@@ -85,7 +103,7 @@ function useImageAspectRatio(items: ImageAspectRatioProps) {
 				);
 			}
 		}
-	}, [items, Width]);
+	}, [items, Width, Height, seed]);
 
 	return { Width, Height, onLayoutChanged };
 }

@@ -15,7 +15,6 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { SoftwareBadgeUpdateAccountOnClick } from '../../../components/common/software/SimpleBadge';
 import { FontAwesome } from '@expo/vector-icons';
-import useAppCustomEmoji from '../../../hooks/app/useAppCustomEmoji';
 import { EmojiService } from '../../../services/emoji.service';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 
@@ -239,14 +238,18 @@ function AccountListingFragment({
 		setIsDialogExpanded(true);
 	}
 
-	function onAccountSelection() {
+	async function onAccountSelection() {
 		if (account.selected) {
 			AccountService.deselectAccount(db, account._id);
 		} else {
 			AccountService.selectAccount(db, account._id);
-			EmojiService.sync(db, globalDb, account.subdomain, true).then((res) => {
-				console.log('[INFO]: refreshed account emojis', res);
-			});
+			const res = await EmojiService.refresh(
+				db,
+				globalDb,
+				account.subdomain,
+				true,
+			);
+			if (res) console.log('[INFO]: refreshed account emojis', res);
 		}
 		regenerate();
 	}
