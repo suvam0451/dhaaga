@@ -98,8 +98,16 @@ const ReactionDetailsBottomSheet = memo(() => {
 					domain,
 					setLoading,
 				);
+
+		console.log(
+			id,
+			Data.reacted,
+			PostRef.current.id,
+			state,
+			timelineDataPostListReducer.current,
+		);
 		// request reducer to update reaction state
-		if (!state) return;
+		if (state === null) return;
 		timelineDataPostListReducer.current({
 			type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE,
 			payload: {

@@ -10,6 +10,7 @@ import {
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
+import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -18,7 +19,15 @@ const EmojiReaction = memo(function Foo({
 	dto: EmojiDto;
 	postDto: ActivityPubStatusAppDtoType;
 }) {
-	const { TextRef, PostRef, setType, setVisible } = useAppBottomSheet();
+	const {
+		TextRef,
+		PostRef,
+		setType,
+		setVisible,
+		timelineDataPostListReducer,
+		updateRequestId: updateBottomSheetRequestId,
+	} = useAppBottomSheet();
+	const { getPostListReducer } = useAppTimelineDataContext();
 
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
@@ -41,7 +50,9 @@ const EmojiReaction = memo(function Foo({
 	function onReactionPress() {
 		TextRef.current = dto.name;
 		PostRef.current = postDto;
+		timelineDataPostListReducer.current = getPostListReducer();
 		setType(APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS);
+		updateBottomSheetRequestId();
 		setVisible(true);
 	}
 

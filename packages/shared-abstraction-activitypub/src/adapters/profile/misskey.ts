@@ -97,7 +97,6 @@ export class MisskeyUser implements UserInterface {
 	}
 
 	getDescription() {
-		console.log(this?.ref?.instance);
 		return this.ref?.instance?.description;
 	}
 

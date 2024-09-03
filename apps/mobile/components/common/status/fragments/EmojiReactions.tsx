@@ -32,7 +32,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 				me: me?.getId(),
 			}),
 		);
-	}, [dto, me]);
+	}, [dto.stats.reactions, me]);
 
 	if (domain === 'mastodon') return <Fragment />;
 
