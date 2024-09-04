@@ -15,7 +15,7 @@ type HeadersProps = {
 	title: string;
 	onLeftIconPress: (event: GestureResponderEvent) => void;
 };
-const TimelinesHeader = ({
+const ProfilePageHeader = ({
 	title,
 	HIDDEN_SECTION_HEIGHT,
 	onLeftIconPress,
@@ -114,4 +114,4 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 });
-export default TimelinesHeader;
+export default ProfilePageHeader;

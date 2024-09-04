@@ -167,7 +167,7 @@ export class MisskeyAccountsRouter
 	}
 
 	/**
-	 * /i/favourites seems bugged when
+	 * /i/apps seems bugged when
 	 * using misskey-js
 	 * @param query
 	 */
