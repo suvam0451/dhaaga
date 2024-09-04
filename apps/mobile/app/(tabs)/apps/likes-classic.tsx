@@ -1,4 +1,4 @@
-import MyFavouritesPage from '../../../components/screens/favourites/stack/MyFavouritesPage';
+import MyFavouritesPage from '../../../components/screens/apps/stack/MyFavouritesPage';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FeatureUnsupported from '../../../components/error-screen/FeatureUnsupported';

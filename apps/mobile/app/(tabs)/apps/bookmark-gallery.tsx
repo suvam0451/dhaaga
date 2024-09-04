@@ -1,4 +1,4 @@
-import BookmarkGalleryStack from '../../../components/screens/favourites/stack/BookmarkGalleryStack';
+import BookmarkGalleryStack from '../../../components/screens/apps/stack/BookmarkGalleryStack';
 
 function BookmarkGallery() {
 	return <BookmarkGalleryStack />;

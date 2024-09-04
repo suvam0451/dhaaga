@@ -16,7 +16,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useObject } from '@realm/react';
 import { Account } from '../../../../entities/account.entity';
 
-function BookmarkNeverSyncedPrompt() {
+export function BookmarkNeverSyncedPrompt() {
 	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(
 		ACTIVITYPUB_SYNC_TASK.BOOKMARK_SYNC,
 		{},
@@ -93,7 +93,7 @@ function RegularTimeline() {
 	);
 }
 
-function BookmarkSyncedPrompt() {
+export function BookmarkSyncedPrompt() {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const [
 		BookmarkGallerySettingDialogVisible,

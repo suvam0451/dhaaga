@@ -1,4 +1,4 @@
-import BookmarkPortalStack from '../../../components/screens/favourites/stack/BookmarkPortalStack';
+import BookmarkPortalStack from '../../../components/screens/apps/stack/BookmarkPortalStack';
 
 function BookmarkPortalScreen() {
 	return <BookmarkPortalStack />;

@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Button } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
 import WithScrollOnRevealContext from '../states/useScrollOnReveal';
@@ -10,12 +10,20 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FavouritesScreenHomePageDefaultTutorial from '../components/tutorials/screens/favourites/HomePage';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
-import MyFollowings from '../components/screens/favourites/stack/MyFollowings';
-import MyFollowers from '../components/screens/favourites/stack/MyFollowers';
+import MyFollowings from '../components/screens/apps/stack/MyFollowings';
+import MyFollowers from '../components/screens/apps/stack/MyFollowers';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
-import { APP_FONT } from '../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '../styles/AppTheme';
 import { APP_FONTS } from '../styles/AppFonts';
 import { router } from 'expo-router';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useActivityPubRestClientContext } from '../states/useActivityPubRestClient';
+import { useObject } from '@realm/react';
+import { Account } from '../entities/account.entity';
+import {
+	BookmarkNeverSyncedPrompt,
+	BookmarkSyncedPrompt,
+} from '../components/screens/apps/stack/BookmarkPortalStack';
 
 type FavouritesScreenNavigationItemIconOnlyProps = {
 	icon: any;
@@ -258,110 +266,6 @@ function ActionableSection() {
 					/>
 				</View>
 			</View>
-
-			<View
-				style={{
-					borderWidth: 1,
-					borderColor: '#ffffff30',
-					borderRadius: 8,
-					padding: 8,
-					marginVertical: 8,
-					marginHorizontal: 8,
-				}}
-			>
-				<Text
-					style={{
-						fontSize: 20,
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-						color: APP_FONT.MONTSERRAT_BODY,
-						opacity: 0.6,
-						marginLeft: 8,
-					}}
-				>
-					Coming Soon™
-				</Text>
-				<Divider style={{ opacity: 0.3, marginVertical: 8 }} />
-				<View
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						width: '100%',
-						paddingHorizontal: 8,
-						marginTop: 8,
-					}}
-				>
-					<FavouritesScreenNavigationItem
-						text={'Lists'}
-						onPress={() => {
-							console.log('[INFO]: user wants to see their mute list');
-						}}
-						icon={
-							<Ionicons
-								color={'#888'}
-								name={'star-outline'}
-								size={24}
-								style={{ opacity: 0.3 }}
-							/>
-						}
-						disabled
-					/>
-					<FavouritesScreenNavigationItem
-						text={'Filters'}
-						onPress={() => {
-							console.log('[INFO]: user wants to see their mute list');
-						}}
-						icon={
-							<Ionicons
-								color={'#888'}
-								name={'star-outline'}
-								size={24}
-								style={{ opacity: 0.3 }}
-							/>
-						}
-						disabled
-					/>
-				</View>
-				<View
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						width: '100%',
-						paddingHorizontal: 8,
-						marginVertical: 8,
-					}}
-				>
-					<FavouritesScreenNavigationItem
-						text={'Scheduled'}
-						onPress={() => {
-							console.log('[INFO]: user wants to see their mute list');
-						}}
-						icon={
-							<Ionicons
-								color={'#888'}
-								name={'star-outline'}
-								size={24}
-								style={{ opacity: 0.3 }}
-							/>
-						}
-						disabled
-					/>
-					<FavouritesScreenNavigationItem
-						text={'Antennas'}
-						onPress={() => {
-							console.log('[INFO]: user wants to see their mute list');
-						}}
-						icon={
-							<Ionicons
-								color={'#888'}
-								name={'star-outline'}
-								size={24}
-								style={{ opacity: 0.3 }}
-							/>
-						}
-						disabled
-					/>
-				</View>
-			</View>
 		</View>
 	);
 }
@@ -369,6 +273,13 @@ function ActionableSection() {
 const Stack = createNativeStackNavigator();
 
 function FavouritesScreenTabSetup() {
+	const { PrimaryAcctPtr } = useActivityPubRestClientContext();
+	const acct = useObject(Account, PrimaryAcctPtr.current);
+
+	const BOOKMARK_LAST_SYNCED_AT = acct?.isValid()
+		? acct?.bookmarksLastSyncedAt
+		: null;
+
 	return (
 		<View
 			style={{
@@ -382,6 +293,22 @@ function FavouritesScreenTabSetup() {
 		>
 			<View style={{ flexGrow: 1 }}>
 				<FavouritesScreenHomePageDefaultTutorial />
+			</View>
+			<View style={style.sectionContainer}>
+				<Text style={style.texStyle}>
+					Bookmark Gallery
+					<MaterialCommunityIcons
+						name="beta"
+						size={24}
+						color={APP_THEME.COLOR_SCHEME_D_NORMAL}
+					/>
+				</Text>
+
+				{!BOOKMARK_LAST_SYNCED_AT ? (
+					<BookmarkNeverSyncedPrompt />
+				) : (
+					<BookmarkSyncedPrompt />
+				)}
 			</View>
 			<View>
 				<ActionableSection />
@@ -417,5 +344,21 @@ function FavouritesScreen() {
 		</View>
 	);
 }
+
+const style = StyleSheet.create({
+	sectionContainer: {
+		borderWidth: 2,
+		borderColor: '#383838',
+		borderRadius: 8,
+		padding: 8,
+		margin: 8,
+	},
+	texStyle: {
+		textAlign: 'center',
+		fontFamily: 'Montserrat-Bold',
+		fontSize: 20,
+		color: APP_FONT.MONTSERRAT_BODY,
+	},
+});
 
 export default FavouritesScreen;
