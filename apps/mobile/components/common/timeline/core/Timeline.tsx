@@ -127,7 +127,6 @@ const Timeline = memo(() => {
 		<WithAppMenu
 			sidebarVariant={SIDEBAR_VARIANT.TIMELINE}
 			fabMenuItems={[
-				// FAB_MENU_MODULES.NAVIGATOR,
 				FAB_MENU_MODULES.CREATE_POST,
 				FAB_MENU_MODULES.TIMELINE_SWITCHER,
 			]}
@@ -135,11 +134,7 @@ const Timeline = memo(() => {
 			<View style={[styles.container, { position: 'relative' }]}>
 				<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 				<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-					<TimelinesHeader
-						SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-						HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-						label={label}
-					/>
+					<TimelinesHeader label={label} />
 				</Animated.View>
 				<AnimatedFlashList
 					ListHeaderComponent={

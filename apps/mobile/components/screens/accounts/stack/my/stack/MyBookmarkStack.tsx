@@ -1,24 +1,24 @@
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useEffect } from 'react';
-import StatusItem from '../../../common/status/StatusItem';
+import StatusItem from '../../../../../common/status/StatusItem';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
-} from '../../../../states/usePagination';
-import LoadingMore from '../../home/LoadingMore';
-import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
+} from '../../../../../../states/usePagination';
+import LoadingMore from '../../../../home/LoadingMore';
+import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavBar';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { RefreshControl } from 'react-native';
 import { useRealm } from '@realm/react';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
-import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
-import useGetBookmarks from '../../../../hooks/api/accounts/useGetBookmarks';
-import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
+import { useGlobalMmkvContext } from '../../../../../../states/useGlobalMMkvCache';
+import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
+import usePageRefreshIndicatorState from '../../../../../../states/usePageRefreshIndicatorState';
+import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
+import useGetBookmarks from '../../../../../../hooks/api/accounts/useGetBookmarks';
+import WithAppStatusItemContext from '../../../../../../hooks/ap-proto/useAppStatusItem';
 import WithAppTimelineDataContext, {
 	useAppTimelineDataContext,
-} from '../../../common/timeline/api/useTimelineData';
-import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
+} from '../../../../../common/timeline/api/useTimelineData';
+import { ActivitypubStatusService } from '../../../../../../services/ap-proto/activitypub-status.service';
 
 function Core() {
 	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
@@ -94,7 +94,7 @@ function Core() {
 	);
 }
 
-function MyBookmarkPage() {
+function MyBookmarkStack() {
 	return (
 		<WithAppPaginationContext>
 			<WithAppTimelineDataContext>
@@ -104,4 +104,4 @@ function MyBookmarkPage() {
 	);
 }
 
-export default MyBookmarkPage;
+export default MyBookmarkStack;

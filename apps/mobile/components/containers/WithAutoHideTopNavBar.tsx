@@ -1,12 +1,6 @@
 import { APP_THEME } from '../../styles/AppTheme';
-import { Animated } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { TopNavBarStyles } from '../../styles/NavaigationItems';
-import ProfilePageHeader from '../headers/ProfilePageHeader';
-
-// constants
-const HIDDEN_SECTION_HEIGHT = 50;
-const SHOWN_SECTION_HEIGHT = 50;
+import { Animated, StyleSheet } from 'react-native';
+import AppHeaderStackPage from '../headers/AppHeaderStackPage';
 
 type AutoHideNavBarProps = {
 	title: string;
@@ -15,9 +9,9 @@ type AutoHideNavBarProps = {
 };
 
 /**
- * The header of this container will auto-hide.
+ * The header will auto-hide.
  *
- * NOTE: This variant does not have a ScrollView
+ * NOTE: Does not come with ScrollView
  * @param title
  * @param children
  * @param translateY
@@ -28,49 +22,38 @@ function WithAutoHideTopNavBar({
 	children,
 	translateY,
 }: AutoHideNavBarProps) {
-	const navigation = useNavigation();
-
 	return (
-		<Animated.View
-			style={[
-				{
-					height: '100%',
-					backgroundColor: APP_THEME.BACKGROUND,
-					// paddingTop: translateY
-				},
-			]}
-		>
-			{translateY !== undefined ? (
-				<Animated.View
-					style={[
-						TopNavBarStyles.navbar,
-						{
-							transform: [
-								{
-									translateY,
-								},
-							],
-						},
-					]}
-				>
-					<ProfilePageHeader
-						title={title}
-						SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-						HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-						onLeftIconPress={() => navigation.goBack()}
-					/>
-				</Animated.View>
-			) : (
-				<ProfilePageHeader
-					title={title}
-					SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-					HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-					onLeftIconPress={() => navigation.goBack()}
-				/>
-			)}
+		<Animated.View style={styles.root}>
+			<Animated.View
+				style={[
+					styles.nav,
+					{
+						transform: [
+							{
+								translateY,
+							},
+						],
+					},
+				]}
+			>
+				<AppHeaderStackPage title={title} />
+			</Animated.View>
 			{children}
 		</Animated.View>
 	);
 }
+
+const styles = StyleSheet.create({
+	root: {
+		height: '100%',
+		backgroundColor: APP_THEME.BACKGROUND,
+		// paddingTop: 54,
+	},
+	nav: {
+		position: 'absolute',
+		width: '100%',
+		zIndex: 1,
+	},
+});
 
 export default WithAutoHideTopNavBar;

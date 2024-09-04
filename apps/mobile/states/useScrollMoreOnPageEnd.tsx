@@ -2,15 +2,20 @@ import useTopbarSmoothTranslate from './useTopbarSmoothTranslate';
 import NavigationService from '../services/navigation.service';
 
 type Props = {
-	itemCount: number;
-	updateQueryCache(): void;
+	itemCount?: number;
+	updateQueryCache?: () => void;
 };
 
 /**
  * A more convenient hook, wrapping
  * other utility hooks in it
  */
-function useScrollMoreOnPageEnd({ itemCount, updateQueryCache }: Props) {
+function useScrollMoreOnPageEnd(
+	{ itemCount = 1, updateQueryCache = () => {} }: Props = {
+		itemCount: 1,
+		updateQueryCache: () => {},
+	},
+) {
 	function onPageEndReached() {
 		if (itemCount > 0) {
 			updateQueryCache();

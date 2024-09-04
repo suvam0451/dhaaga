@@ -56,6 +56,10 @@ function useApiGetNotifications() {
 	const { client, primaryAcct, domain } = useActivityPubRestClientContext();
 	const [Results, setResults] = useState<Notification_FlatList_Entry[]>([]);
 
+	useEffect(() => {
+		setResults([]);
+	}, [primaryAcct]);
+
 	async function api() {
 		if (!client) return [];
 		if (domain === KNOWN_SOFTWARE.FIREFISH) {

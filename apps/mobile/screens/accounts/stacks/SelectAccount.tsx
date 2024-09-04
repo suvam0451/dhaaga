@@ -1,8 +1,6 @@
 import { FlatList, View } from 'react-native';
 import { Button } from '@rneui/base';
 import { Text } from '@rneui/themed';
-import TitleOnlyStackHeaderContainer from '../../../components/containers/TitleOnlyStackHeaderContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
@@ -12,11 +10,10 @@ import ConfirmAccountDelete from '../../../components/dialogs/accounts/ConfirmAc
 import AccountListForSoftware from '../../../components/screens/accounts/stack/landing/fragments/AccountListForSoftware';
 import { UUID } from 'bson';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 
 function SelectAccountStack() {
-	const route = useRoute<any>();
-	const navigation = useNavigation<any>();
-
 	const [DialogVisible, setDialogVisible] = useState(false);
 	const [DeleteDialogVisible, setDeleteDialogVisible] = useState(false);
 	const DialogTarget = useRef<UUID>(null);
@@ -29,12 +26,14 @@ function SelectAccountStack() {
 		KNOWN_SOFTWARE.PLEROMA,
 		KNOWN_SOFTWARE.SHARKEY,
 	];
+
+	const { translateY } = useScrollMoreOnPageEnd({
+		itemCount: 1,
+		updateQueryCache: () => {},
+	});
+
 	return (
-		<TitleOnlyStackHeaderContainer
-			route={route}
-			navigation={navigation}
-			headerTitle={`Select Account`}
-		>
+		<WithAutoHideTopNavBar title={'Select Account'} translateY={translateY}>
 			<AccountInfoSyncDialog
 				IsVisible={DialogVisible}
 				setIsVisible={setDialogVisible}
@@ -56,7 +55,7 @@ function SelectAccountStack() {
 						setIsExpanded={setDialogVisible}
 					/>
 				)}
-				contentContainerStyle={{ paddingHorizontal: 4 }}
+				contentContainerStyle={{ paddingHorizontal: 4, paddingTop: 54 }}
 			/>
 
 			<View style={{ marginHorizontal: 16, marginBottom: 32, marginTop: 28 }}>
@@ -87,7 +86,7 @@ function SelectAccountStack() {
 					Mastodon, Pleroma, Akkoma, Misskey, Firefish, Sharkey
 				</Text>
 			</View>
-		</TitleOnlyStackHeaderContainer>
+		</WithAutoHideTopNavBar>
 	);
 }
 

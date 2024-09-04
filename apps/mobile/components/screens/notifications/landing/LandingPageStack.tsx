@@ -31,10 +31,7 @@ function LandingPageStack() {
 	}, []);
 
 	return (
-		<WithAutoHideTopNavBar
-			title={'Notification Center'}
-			translateY={translateY}
-		>
+		<WithAutoHideTopNavBar title={'Notifications'} translateY={translateY}>
 			<AnimatedFlashList
 				onScroll={onScroll}
 				estimatedItemSize={45}

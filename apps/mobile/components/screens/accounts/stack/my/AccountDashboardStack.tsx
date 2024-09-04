@@ -9,16 +9,29 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-const ICON_SIZE = 24;
-const AccountDashboardStack = memo(() => {
-	const {} = useActivityPubRestClientContext();
+const SelectedAccount = memo(() => {
+	const { primaryAcct } = useActivityPubRestClientContext();
 
 	return (
+		<View>
+			<Text>Logged in as</Text>
+
+			<View>
+				<Text>Change</Text>
+			</View>
+		</View>
+	);
+});
+
+const ICON_SIZE = 24;
+const AccountDashboardStack = memo(() => {
+	return (
 		<TitleOnlyScrollContainer
-			title={'Account Dashboard'}
+			title={'My Account'}
 			contentContainerStyle={{ paddingHorizontal: 8 }}
 		>
 			<View style={{ height: 32 }} />
+			<SelectedAccount />
 			<View style={styles.moduleRow}>
 				<View style={styles.moduleButton}>
 					<AntDesign
@@ -135,47 +148,6 @@ const AccountDashboardStack = memo(() => {
 					/>
 
 					<Text style={styles.moduleButtonText}>Antennas</Text>
-				</View>
-			</View>
-			<View style={{ marginHorizontal: 16, alignItems: 'center' }}>
-				<Text
-					style={{
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-						color: APP_FONT.MONTSERRAT_BODY,
-						textAlign: 'center',
-						marginBottom: 8,
-					}}
-				>
-					These are your instance features.
-				</Text>
-				<Text
-					style={{
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-						color: APP_FONT.MONTSERRAT_BODY,
-						textAlign: 'center',
-						marginBottom: 16,
-					}}
-				>
-					Looking to unleash the full potential of Dhaaga? Visit the Apps
-					section!
-				</Text>
-
-				<View
-					style={{
-						backgroundColor: '#242424',
-						alignItems: 'center',
-						padding: 12,
-						borderRadius: 8,
-					}}
-				>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-						}}
-					>
-						To the Apps page
-					</Text>
 				</View>
 			</View>
 		</TitleOnlyScrollContainer>

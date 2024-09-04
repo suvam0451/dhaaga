@@ -1,21 +1,21 @@
 import { Fragment, memo, useState } from 'react';
 import { Text, View } from 'react-native';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import useGetReactionDetails from '../../../../../hooks/api/useGetReactionDetails';
+import { useAppBottomSheet } from '../_api/useAppBottomSheet';
+import useGetReactionDetails from '../../../../hooks/api/useGetReactionDetails';
 import { Image } from 'expo-image';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
-import { APP_FONT } from '../../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
-import ActivitypubReactionsService from '../../../../../services/ap-proto/activitypub-reactions.service';
-import ActivityPubReactionsService from '../../../../../services/ap-proto/activitypub-reactions.service';
+import ActivitypubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
+import ActivityPubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
 import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
 	AppButtonBottomSheetAction,
-} from '../../../../lib/Buttons';
-import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
-import { ActivityPubAppUserDtoType } from '../../../../../services/ap-proto/activitypub-user-dto.service';
-import useMfm from '../../../../hooks/useMfm';
+} from '../../../lib/Buttons';
+import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../common/timeline/api/postArrayReducer';
+import { ActivityPubAppUserDtoType } from '../../../../services/ap-proto/activitypub-user-dto.service';
+import useMfm from '../../../hooks/useMfm';
 import { AnimatedFlashList } from '@shopify/flash-list';
 
 const ReactingUser = memo(({ dto }: { dto: ActivityPubAppUserDtoType }) => {
@@ -60,7 +60,7 @@ const ReactingUser = memo(({ dto }: { dto: ActivityPubAppUserDtoType }) => {
 	);
 });
 
-const ReactionDetailsBottomSheet = memo(() => {
+const AppBottomSheetReactionDetails = memo(() => {
 	const { client, domain, subdomain } = useActivityPubRestClientContext();
 	const { TextRef, PostRef, timelineDataPostListReducer, setVisible, visible } =
 		useAppBottomSheet();
@@ -98,13 +98,6 @@ const ReactionDetailsBottomSheet = memo(() => {
 					setLoading,
 				);
 
-		console.log(
-			id,
-			Data.reacted,
-			PostRef.current.id,
-			state,
-			timelineDataPostListReducer.current,
-		);
 		// request reducer to update reaction state
 		if (state === null) return;
 		timelineDataPostListReducer.current({
@@ -236,4 +229,4 @@ const ReactionDetailsBottomSheet = memo(() => {
 	);
 });
 
-export default ReactionDetailsBottomSheet;
+export default AppBottomSheetReactionDetails;

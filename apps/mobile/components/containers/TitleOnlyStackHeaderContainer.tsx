@@ -3,7 +3,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 import diffClamp = Animated.diffClamp;
 import NavigationService from '../../services/navigation.service';
 import { APP_THEME } from '../../styles/AppTheme';
-import ProfilePageHeader from '../headers/ProfilePageHeader';
+import AppHeaderStackPage from '../headers/AppHeaderStackPage';
 
 type TitleOnlyStackHeaderContainerProps = {
 	route: any;
@@ -19,13 +19,11 @@ type TitleOnlyStackHeaderContainerProps = {
 
 function TitleOnlyStackHeaderContainer({
 	headerTitle,
-	navigation,
 	HIDDEN_SECTION_HEIGHT = 50,
 	SHOWN_SECTION_HEIGHT = 50,
 	children,
 	onScrollViewEndReachedCallback,
 	onRefresh,
-	canRefresh,
 }: TitleOnlyStackHeaderContainerProps) {
 	/**
 	 * Header bar auto-hide handler
@@ -83,12 +81,7 @@ function TitleOnlyStackHeaderContainer({
 	return (
 		<View style={{ backgroundColor: APP_THEME.BACKGROUND, height: '100%' }}>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-				<ProfilePageHeader
-					title={headerTitle}
-					SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-					HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-					onLeftIconPress={() => navigation.goBack()}
-				/>
+				<AppHeaderStackPage title={headerTitle} />
 			</Animated.View>
 			<Animated.ScrollView
 				style={{

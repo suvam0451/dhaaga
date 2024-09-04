@@ -1,17 +1,17 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
-import { APP_THEME } from '../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '../styles/AppTheme';
 import { useTimelineController } from './common/timeline/api/useTimelineController';
 import TimelineWidgetModal from './widgets/timelines/core/Modal';
 import { useActivityPubRestClientContext } from '../states/useActivityPubRestClient';
+import { APP_FONTS } from '../styles/AppFonts';
+import { AppSelectedAccountIndicator } from './headers/AppHeaderStackPage';
 
 type HeadersProps = {
-	HIDDEN_SECTION_HEIGHT: number;
-	SHOWN_SECTION_HEIGHT: number;
-	label?: string;
+	label: string;
 };
-const TimelinesHeader = ({ HIDDEN_SECTION_HEIGHT, label }: HeadersProps) => {
+const TimelinesHeader = ({ label }: HeadersProps) => {
 	const { client } = useActivityPubRestClientContext();
 	const { setShowTimelineSelection } = useTimelineController();
 
@@ -24,18 +24,10 @@ const TimelinesHeader = ({ HIDDEN_SECTION_HEIGHT, label }: HeadersProps) => {
 	}
 
 	return (
-		<View
-			style={[
-				styles.subHeader,
-				{
-					height: HIDDEN_SECTION_HEIGHT,
-				},
-			]}
-		>
-			<Ionicons name="menu" size={24} color="white" style={{ opacity: 0.6 }} />
-			<Pressable
+		<View style={styles.root}>
+			<Ionicons name="menu" size={24} color={APP_FONT.MONTSERRAT_BODY} />
+			<TouchableOpacity
 				style={{
-					display: 'flex',
 					flexDirection: 'row',
 					alignItems: 'center',
 					paddingVertical: 12,
@@ -43,46 +35,35 @@ const TimelinesHeader = ({ HIDDEN_SECTION_HEIGHT, label }: HeadersProps) => {
 				}}
 				onPress={onIconPress}
 			>
-				<Text
-					style={[
-						styles.conversation,
-						{
-							opacity: 0.6,
-						},
-					]}
-				>
-					{label || 'Home'}
-				</Text>
+				<Text style={[styles.label]}>{label || 'Home'}</Text>
 				<Ionicons
 					name="chevron-down"
-					color={'white'}
+					color={APP_FONT.MONTSERRAT_BODY}
 					size={20}
-					style={{ opacity: 0.6, marginLeft: 4, marginTop: 2 }}
+					style={{ marginLeft: 4, marginTop: 2 }}
 				/>
-			</Pressable>
-
-			<Ionicons
-				name="settings-outline"
-				size={24}
-				color="white"
-				style={{ opacity: 0.6 }}
-			/>
-
+			</TouchableOpacity>
+			<AppSelectedAccountIndicator />
 			<TimelineWidgetModal />
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
-	subHeader: {
+	root: {
 		width: '100%',
-		paddingHorizontal: 10,
+		paddingLeft: 10,
 		backgroundColor: APP_THEME.DARK_THEME_MENUBAR,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
+		height: 50,
 	},
-	conversation: { color: 'white', fontSize: 16, fontWeight: 'bold' },
+	label: {
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_700_BOLD,
+		fontSize: 16,
+	},
 	searchText: {
 		color: '#8B8B8B',
 		fontSize: 17,

@@ -41,7 +41,6 @@ const StatusReplyTo = memo(({ dto }: StatusReplyToProps) => {
 				<MediaItem
 					attachments={dto.content.media}
 					calculatedHeight={dto.calculated.mediaContainerHeight}
-					leftMarginAdjustment={64}
 				/>
 				{IS_QUOTE_BOOST && (
 					<WithAppStatusItemContext dto={dto.boostedFrom}>

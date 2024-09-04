@@ -101,7 +101,7 @@ export function BookmarkSyncedPrompt() {
 	] = useState(false);
 
 	function onBookmarkGalleryBrowseClick() {
-		router.navigate('/favourites/bookmark-gallery');
+		router.navigate('/apps/bookmark-gallery');
 	}
 
 	return (
@@ -109,22 +109,21 @@ export function BookmarkSyncedPrompt() {
 			<View style={{ marginVertical: 8 }}>
 				<Text
 					style={{
-						textAlign: 'left',
+						textAlign: 'center',
 						paddingHorizontal: 8,
 						color: APP_FONT.MONTSERRAT_BODY,
+						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						marginVertical: 6,
 					}}
 				>
-					A better interface to browse your bookmarks.
+					Browse your bookmarks with style.
 				</Text>
 				<View style={{ marginTop: 8, paddingHorizontal: 16 }}>
 					<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-						- ✨ Offline Support
+						✨ Offline Support
 					</Text>
 					<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-						- ✨ Full-text search
-					</Text>
-					<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-						- Private bookmarks
+						✨ Filter by Account
 					</Text>
 				</View>
 			</View>

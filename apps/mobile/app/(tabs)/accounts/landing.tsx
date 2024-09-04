@@ -1,7 +1,7 @@
-import SelectAccountStack from '../../../screens/accounts/stacks/SelectAccount';
+import AccountDashboardStack from '../../../components/screens/accounts/stack/my/AccountDashboardStack';
 
-function AccountSelectionStack() {
-	return <SelectAccountStack />;
+function MyAccountDashboardStack() {
+	return <AccountDashboardStack />;
 }
 
-export default AccountSelectionStack;
+export default MyAccountDashboardStack;

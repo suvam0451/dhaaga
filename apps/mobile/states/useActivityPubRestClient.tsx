@@ -74,6 +74,8 @@ function WithActivityPubRestClient({ children }: any) {
 		const acct = db.objects(Account).find((o: Account) => o.selected === true);
 		if (!acct) {
 			setRestClient(null);
+			setPrimaryAcct(null);
+			PrimaryAcctPtr.current = null;
 			return;
 		}
 

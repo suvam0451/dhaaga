@@ -40,7 +40,7 @@ const TimelineMediaRendered = memo(function Foo({
 
 	// i cant do this anymore :(
 	useEffect(() => {
-		setHeight(CalculatedHeight || MEDIA_CONTAINER_MAX_HEIGHT);
+		setHeight(MEDIA_CONTAINER_MAX_HEIGHT);
 	}, [attachment]);
 
 	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;

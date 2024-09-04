@@ -3,6 +3,7 @@ import {
 	Dispatch,
 	MutableRefObject,
 	useContext,
+	useEffect,
 	useRef,
 	useState,
 } from 'react';
@@ -25,6 +26,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	MORE_POST_ACTIONS = 'MorePostActions',
 	NA = 'N/A',
 	REACTION_DETAILS = 'ReactionDetails',
+	SELECT_ACCOUNT = 'SelectAccount',
 }
 
 type Type = {
@@ -34,6 +36,13 @@ type Type = {
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
 	requestId: string;
+
+	/**
+	 * to prevent lists from being
+	 * rendered while the bottom
+	 * sheet animation is playing out
+	 * */
+	isAnimating: boolean;
 
 	// references
 	replyToRef: MutableRefObject<ActivityPubStatusAppDtoType>;
@@ -52,6 +61,8 @@ type Type = {
 const defaultValue: Type = {
 	type: APP_BOTTOM_SHEET_ENUM.NA,
 	setType: () => {},
+
+	isAnimating: false,
 	visible: false,
 	setVisible: () => {},
 	updateRequestId: () => {},
@@ -80,6 +91,18 @@ function WithAppBottomSheetContext({ children }: Props) {
 	const [Visible, setVisible] = useState(false);
 	const [Type, setType] = useState(APP_BOTTOM_SHEET_ENUM.NA);
 	const { forceUpdate, State } = useHookLoadingState();
+	const [IsAnimating, setIsAnimating] = useState(false);
+
+	useEffect(() => {
+		if (!Visible) {
+			setIsAnimating(true);
+		} else {
+			setIsAnimating(true);
+			setTimeout(() => {
+				setIsAnimating(false);
+			}, 480);
+		}
+	}, [Visible]);
 
 	// pointers
 	const TextRef = useRef<string>(null);
@@ -115,6 +138,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 				PostComposerTextSeedRef,
 				replyToRef,
 				timelineDataPostListReducer,
+				isAnimating: IsAnimating,
 			}}
 		>
 			{children}

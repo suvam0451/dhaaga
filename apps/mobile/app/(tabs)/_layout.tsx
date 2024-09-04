@@ -123,7 +123,7 @@ export default function TabLayout() {
 						}}
 					/>
 					<Tabs.Screen
-						name={'favourites'}
+						name={'apps'}
 						options={{
 							tabBarIcon: ({ color, size, focused }) =>
 								focused ? (

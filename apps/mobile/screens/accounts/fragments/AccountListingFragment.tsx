@@ -17,7 +17,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import { UUID } from 'bson';
 import Feather from '@expo/vector-icons/Feather';
-import { router } from 'expo-router';
 
 type Props = {
 	id: UUID;
@@ -237,7 +236,6 @@ export const AccountDetails = memo(function Foo({
 
 function AccountListingFragment({
 	id,
-	setIsExpanded: setIsDialogExpanded,
 	dialogTarget,
 	setDeleteDialogExpanded,
 	acct,
@@ -254,17 +252,6 @@ function AccountListingFragment({
 		account,
 		'display_name',
 	)?.value;
-
-	async function onProfileClicked() {
-		if (account.selected) {
-			AccountService.deselectAccount(db, account._id);
-		} else {
-			AccountService.selectAccount(db, account._id);
-			await EmojiService.refresh(db, globalDb, account.subdomain, true);
-		}
-		regenerate();
-		router.navigate('/accounts/dashboard');
-	}
 
 	async function onAccountSelection() {
 		if (account.selected) {
@@ -298,60 +285,40 @@ function AccountListingFragment({
 						flexDirection: 'row',
 						alignItems: 'center',
 						flex: 1,
+						flexGrow: 1,
 					}}
 				>
 					<AccountPfp
 						selected={account.selected}
 						url={avatar}
-						onClicked={onProfileClicked}
+						onClicked={onAccountSelection}
 					/>
 					<AccountDetails
-						onClicked={onProfileClicked}
+						onClicked={onAccountSelection}
 						selected={account.selected}
 						displayName={displayName}
 						username={account.username}
 						subdomain={account.subdomain}
 					/>
+					{account.selected && (
+						<Text
+							style={{
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+								color: '#9dced7',
+							}}
+						>
+							Active
+						</Text>
+					)}
 				</TouchableOpacity>
 
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<TouchableOpacity
 						style={{
-							alignItems: 'center',
 							paddingHorizontal: 12,
 							paddingVertical: 12,
-						}}
-						onPress={onAccountSelection}
-					>
-						{account.selected ? (
-							<Text
-								style={{
-									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-									color: '#9dced7',
-								}}
-							>
-								Active
-							</Text>
-						) : (
-							<Text
-								style={{
-									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-									color: APP_FONT.MONTSERRAT_HEADER,
-								}}
-							>
-								Select
-							</Text>
-						)}
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={{
-							paddingHorizontal: 4,
-							paddingVertical: 12,
-							paddingLeft: 8,
-							paddingRight: 8,
 							flexDirection: 'row',
 							alignItems: 'center',
-							// backgroundColor: 'yellow',
 						}}
 						onPress={() => {
 							setIsExpanded((o) => !o);
