@@ -1,6 +1,6 @@
 import { APP_THEME } from '../../styles/AppTheme';
 import { Animated, StyleSheet } from 'react-native';
-import AppHeaderStackPage from '../headers/AppHeaderStackPage';
+import TopNavbarGeneric from '../shared/topnavbar/fragments/TopNavbarGeneric';
 
 type AutoHideNavBarProps = {
 	title: string;
@@ -36,7 +36,7 @@ function WithAutoHideTopNavBar({
 					},
 				]}
 			>
-				<AppHeaderStackPage title={title} />
+				<TopNavbarGeneric title={title} />
 			</Animated.View>
 			{children}
 		</Animated.View>
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
 	root: {
 		height: '100%',
 		backgroundColor: APP_THEME.BACKGROUND,
-		// paddingTop: 54,
 	},
 	nav: {
 		position: 'absolute',

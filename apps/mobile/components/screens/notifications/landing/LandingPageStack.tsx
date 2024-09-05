@@ -1,5 +1,4 @@
 import { View } from 'react-native';
-import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { useEffect } from 'react';
 import { AnimatedFlashList } from '@shopify/flash-list';
@@ -7,6 +6,9 @@ import useApiGetNotifications from '../../../../hooks/api/notifications/useApiGe
 import { useAppNotifSeenContext } from './state/useNotifSeen';
 import MarkAllAsRead from './fragments/MarkAllAsRead';
 import FlatListRenderer from './fragments/FlatListRenderer';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../shared/topnavbar/AppTopNavbar';
 
 function LandingPageStack() {
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
@@ -31,7 +33,11 @@ function LandingPageStack() {
 	}, []);
 
 	return (
-		<WithAutoHideTopNavBar title={'Notifications'} translateY={translateY}>
+		<AppTopNavbar
+			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
+			title={'Notifications'}
+			translateY={translateY}
+		>
 			<AnimatedFlashList
 				onScroll={onScroll}
 				estimatedItemSize={45}
@@ -57,7 +63,7 @@ function LandingPageStack() {
 				renderItem={FlatListRenderer}
 				getItemType={(o) => o.type}
 			/>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 }
 

@@ -1,5 +1,5 @@
 import { Animated, StatusBar, StyleSheet, View, Text } from 'react-native';
-import TimelinesHeader from '../../../../TimelineHeader';
+import TimelinesHeader from '../../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import { memo, useState } from 'react';
 import { Button, Dialog } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
@@ -19,7 +19,7 @@ function IntroductionBase() {
 		<View style={{ height: '100%', flex: 1, backgroundColor: '#121212' }}>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<Animated.View style={styles.header}>
-				<TimelinesHeader SHOWN_SECTION_HEIGHT={50} HIDDEN_SECTION_HEIGHT={50} />
+				<TimelinesHeader title={'Introduction'} />
 			</Animated.View>
 			<Dialog
 				isVisible={DialogVisible}

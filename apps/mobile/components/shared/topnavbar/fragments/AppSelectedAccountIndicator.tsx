@@ -1,20 +1,18 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { APP_FONT } from '../../styles/AppTheme';
-import { APP_FONTS } from '../../styles/AppFonts';
-import { router } from 'expo-router';
 import { memo } from 'react';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import AccountRepository from '../../repositories/account.repo';
-import { useObject, useRealm } from '@realm/react';
-import { Account } from '../../entities/account.entity';
-import { Image } from 'expo-image';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
-} from '../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { useObject, useRealm } from '@realm/react';
+import { Account } from '../../../../entities/account.entity';
 import { BSON } from 'realm';
+import AccountRepository from '../../../../repositories/account.repo';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import { Image } from 'expo-image';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
@@ -22,9 +20,10 @@ const ACCOUNT_INDICATOR_ICON_SIZE = 36;
  * An indicator for the currently active
  * account.
  *
+ * width = 36 + 2 + 4 = 42
  * Clicking on it will bring up the account switcher
  */
-export const AppSelectedAccountIndicator = memo(() => {
+const AppSelectedAccountIndicator = memo(() => {
 	const { primaryAcct, PrimaryAcctPtr } = useActivityPubRestClientContext();
 	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
 
@@ -73,47 +72,7 @@ export const AppSelectedAccountIndicator = memo(() => {
 	);
 });
 
-type HeadersProps = {
-	title: string;
-};
-const AppHeaderStackPage = ({ title }: HeadersProps) => {
-	return (
-		<>
-			<View
-				style={[
-					styles.subHeader,
-					{
-						backgroundColor: '#1c1c1c',
-						height: 50,
-					},
-				]}
-			>
-				<TouchableOpacity
-					onPress={() => {
-						router.back();
-					}}
-					style={{
-						height: '100%',
-						display: 'flex',
-						alignItems: 'center',
-						flexDirection: 'row',
-						paddingHorizontal: 8,
-					}}
-				>
-					<Ionicons
-						name="chevron-back"
-						size={24}
-						color="rgba(255, 255, 255, 0.6)"
-					/>
-				</TouchableOpacity>
-				<View style={styles.navbarTitleContainer}>
-					<Text style={styles.navbarTitle}>{title}</Text>
-				</View>
-				<AppSelectedAccountIndicator />
-			</View>
-		</>
-	);
-};
+export default AppSelectedAccountIndicator;
 
 const styles = StyleSheet.create({
 	subHeader: {
@@ -151,4 +110,3 @@ const styles = StyleSheet.create({
 		borderColor: 'gray',
 	},
 });
-export default AppHeaderStackPage;

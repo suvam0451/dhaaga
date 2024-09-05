@@ -3,7 +3,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 import diffClamp = Animated.diffClamp;
 import NavigationService from '../../services/navigation.service';
 import { APP_THEME } from '../../styles/AppTheme';
-import AppHeaderStackPage from '../headers/AppHeaderStackPage';
+import TopNavbarGeneric from '../shared/topnavbar/fragments/TopNavbarGeneric';
 
 type TitleOnlyStackHeaderContainerProps = {
 	route: any;
@@ -81,7 +81,7 @@ function TitleOnlyStackHeaderContainer({
 	return (
 		<View style={{ backgroundColor: APP_THEME.BACKGROUND, height: '100%' }}>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-				<AppHeaderStackPage title={headerTitle} />
+				<TopNavbarGeneric title={headerTitle} />
 			</Animated.View>
 			<Animated.ScrollView
 				style={{

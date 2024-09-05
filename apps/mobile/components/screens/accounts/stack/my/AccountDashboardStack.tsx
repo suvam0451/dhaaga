@@ -1,13 +1,16 @@
 import { memo } from 'react';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { View, Text, StyleSheet } from 'react-native';
-import TitleOnlyScrollContainer from '../../../../containers/TitleOnlyScrollContainer';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { Ionicons } from '@expo/vector-icons';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../../shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 
 const SelectedAccount = memo(() => {
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -25,10 +28,13 @@ const SelectedAccount = memo(() => {
 
 const ICON_SIZE = 24;
 const AccountDashboardStack = memo(() => {
+	const { translateY } = useScrollMoreOnPageEnd();
+
 	return (
-		<TitleOnlyScrollContainer
-			title={'My Account'}
-			contentContainerStyle={{ paddingHorizontal: 8 }}
+		<AppTopNavbar
+			title={'Account'}
+			translateY={translateY}
+			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
 		>
 			<View style={{ height: 32 }} />
 			<SelectedAccount />
@@ -150,7 +156,7 @@ const AccountDashboardStack = memo(() => {
 					<Text style={styles.moduleButtonText}>Antennas</Text>
 				</View>
 			</View>
-		</TitleOnlyScrollContainer>
+		</AppTopNavbar>
 	);
 });
 

@@ -1,6 +1,6 @@
 import { Animated, StyleSheet, View } from 'react-native';
 import { APP_THEME } from '../../styles/AppTheme';
-import AppHeaderStackPage from '../headers/AppHeaderStackPage';
+import TopNavbarGeneric from '../shared/topnavbar/fragments/TopNavbarGeneric';
 
 type TitleOnlyStackHeaderContainerProps = {
 	HIDDEN_SECTION_HEIGHT?: number;
@@ -16,7 +16,7 @@ function TitleOnlyNoScrollContainer({
 	return (
 		<View style={{ height: '100%', backgroundColor: APP_THEME.BACKGROUND }}>
 			<Animated.View style={[styles.header]}>
-				<AppHeaderStackPage title={headerTitle} />
+				<TopNavbarGeneric title={headerTitle} />
 			</Animated.View>
 			{children}
 		</View>

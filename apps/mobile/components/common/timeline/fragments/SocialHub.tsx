@@ -1,5 +1,5 @@
 import { Pressable, StatusBar, StyleSheet, View, Text } from 'react-native';
-import TimelinesHeader from '../../../TimelineHeader';
+import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import { useEffect, useMemo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -309,11 +309,7 @@ function SocialHub() {
 	return (
 		<AppSidebarCore variant={SIDEBAR_VARIANT.TIMELINE}>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
-			<TimelinesHeader
-				label={'Your Social Hub'}
-				SHOWN_SECTION_HEIGHT={50}
-				HIDDEN_SECTION_HEIGHT={50}
-			/>
+			<TimelinesHeader title={'Your Social Hub'} />
 			<View
 				style={{
 					height: '100%',

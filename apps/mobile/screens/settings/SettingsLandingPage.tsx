@@ -1,13 +1,11 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import Animated from 'react-native-reanimated';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../../components/containers/WithAutoHideTopNavBar';
 import { APP_FONT } from '../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import VersionCode from '../../components/static/sponsorship/VersionCode';
-import { router } from 'expo-router';
 import { APP_FONTS } from '../../styles/AppFonts';
 import Octicons from '@expo/vector-icons/Octicons';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -16,6 +14,9 @@ import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
 import { Fragment } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../components/shared/topnavbar/AppTopNavbar';
 
 function SettingPageFooter() {
 	return (
@@ -259,7 +260,11 @@ function SettingsLandingPage() {
 	const { translateY } = useScrollMoreOnPageEnd();
 
 	return (
-		<WithAutoHideTopNavBar title={'App Settings'} translateY={translateY}>
+		<AppTopNavbar
+			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
+			title={'Settings'}
+			translateY={translateY}
+		>
 			<Animated.ScrollView
 				contentContainerStyle={{
 					paddingTop: 54,
@@ -270,7 +275,7 @@ function SettingsLandingPage() {
 				<SettingCategoryList />
 				<SettingPageFooter />
 			</Animated.ScrollView>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 }
 

@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
@@ -8,15 +8,21 @@ import {
 } from '../../../../screens/settings/SettingsLandingPage';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import AppListingBookmarkGallery from './bookmark-gallery/AppListingBookmarkGallery';
 import AppsTabCta from './fragments/AppsTabCta';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../shared/topnavbar/AppTopNavbar';
 
 function AppTabLanding() {
 	const { translateY } = useScrollMoreOnPageEnd();
 
 	return (
-		<WithAutoHideTopNavBar title={'Apps'} translateY={translateY}>
+		<AppTopNavbar
+			title={'Apps'}
+			translateY={translateY}
+			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
+		>
 			<View style={style.rootContainer}>
 				<AppsTabCta />
 				<AppListingBookmarkGallery />
@@ -73,7 +79,7 @@ function AppTabLanding() {
 					</View>
 				</View>
 			</View>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 }
 

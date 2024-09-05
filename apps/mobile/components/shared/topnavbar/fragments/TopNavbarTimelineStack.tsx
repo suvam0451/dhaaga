@@ -1,17 +1,25 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../styles/AppTheme';
-import { useTimelineController } from './common/timeline/api/useTimelineController';
-import TimelineWidgetModal from './widgets/timelines/core/Modal';
-import { useActivityPubRestClientContext } from '../states/useActivityPubRestClient';
-import { APP_FONTS } from '../styles/AppFonts';
-import { AppSelectedAccountIndicator } from './headers/AppHeaderStackPage';
+import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import TimelineWidgetModal from '../../../widgets/timelines/core/Modal';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import AppSelectedAccountIndicator from './AppSelectedAccountIndicator';
 
 type HeadersProps = {
-	label: string;
+	title: string;
 };
-const TimelinesHeader = ({ label }: HeadersProps) => {
+
+/**
+ * A custom navbar that invokes
+ * the timeline switcher, when
+ * the label is clicked
+ *
+ * NOTE: ScrollView not included
+ */
+const TimelinesHeader = ({ title }: HeadersProps) => {
 	const { client } = useActivityPubRestClientContext();
 	const { setShowTimelineSelection } = useTimelineController();
 
@@ -25,7 +33,10 @@ const TimelinesHeader = ({ label }: HeadersProps) => {
 
 	return (
 		<View style={styles.root}>
-			<Ionicons name="menu" size={24} color={APP_FONT.MONTSERRAT_BODY} />
+			<View style={{ width: 42 }}>
+				<Ionicons name="menu" size={24} color={APP_FONT.DISABLED} />
+			</View>
+
 			<TouchableOpacity
 				style={{
 					flexDirection: 'row',
@@ -35,7 +46,7 @@ const TimelinesHeader = ({ label }: HeadersProps) => {
 				}}
 				onPress={onIconPress}
 			>
-				<Text style={[styles.label]}>{label || 'Home'}</Text>
+				<Text style={[styles.label]}>{title || 'Home'}</Text>
 				<Ionicons
 					name="chevron-down"
 					color={APP_FONT.MONTSERRAT_BODY}
@@ -63,22 +74,6 @@ const styles = StyleSheet.create({
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontFamily: APP_FONTS.INTER_700_BOLD,
 		fontSize: 16,
-	},
-	searchText: {
-		color: '#8B8B8B',
-		fontSize: 17,
-		lineHeight: 22,
-		marginLeft: 8,
-	},
-	searchBox: {
-		paddingVertical: 8,
-		paddingHorizontal: 10,
-		backgroundColor: '#0F0F0F',
-		borderRadius: 10,
-		width: '100%',
-		alignItems: 'center',
-		justifyContent: 'center',
-		flexDirection: 'row',
 	},
 });
 export default TimelinesHeader;
