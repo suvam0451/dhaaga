@@ -15,25 +15,32 @@ const MEDIA_CONTAINER_MAX_HEIGHT = 540;
  * Estimate the height for the
  * image or carousal
  *
- * NOTE: Only works for react-native
  */
 function useImageAspectRatio(
 	items: ImageAspectRatioProps,
 	seed?: { width?: number; height?: number },
 ) {
 	// set width
-	const [Width, setWidth] = useState(
-		seed?.width || Dimensions.get('window').width,
-	);
+	const [ImageWidth, setImageWidth] = useState(Dimensions.get('window').width);
 	// set height
-	const [Height, setHeight] = useState(
-		seed?.height || MEDIA_CONTAINER_MAX_HEIGHT,
+	const [ImageHeight, setImageHeight] = useState(MEDIA_CONTAINER_MAX_HEIGHT);
+	// set container
+	const [ContainerWidth, setContainerWidth] = useState(
+		Dimensions.get('window').width,
+	);
+	const [ContainerHeight, setContainerHeight] = useState(
+		MEDIA_CONTAINER_MAX_HEIGHT,
 	);
 
-	// useEffect(() => {
-	// 	if (seed?.width) setWidth(seed?.width);
-	// 	if (seed?.height) setHeight(seed?.height);
-	// }, [seed]);
+	/**
+	 * reset to max width/height
+	 * for parent container
+	 */
+	useEffect(() => {
+		setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
+		setImageWidth(Dimensions.get('window').width);
+		setImageHeight(0);
+	}, [items]);
 
 	// console.log('setting height', Height);
 
@@ -41,8 +48,8 @@ function useImageAspectRatio(
 		// console.log('layout event fired');
 		const { height, width } = event.nativeEvent.layout;
 		// do not update values if seeded
-		if (!seed?.width) setWidth(width);
-		if (!seed?.height) setHeight(Math.min(height, Height));
+		setContainerWidth(width);
+		if (!seed?.height) setContainerHeight(Math.min(height, ImageHeight));
 	}
 
 	/**
@@ -63,15 +70,44 @@ function useImageAspectRatio(
 			);
 		});
 
-	useEffect(() => {
-		// console.log('invoked...', Width);
+	async function CalculateSize(
+		url: string,
+		seedW: number,
+		seedH: number,
+	): Promise<{ width: number; height: number }> {
+		return new Promise((resolve, reject) => {
+			RNImage.getSize(
+				url,
+				(W, H) => {
+					const { width, height } = MediaService.calculateDimensions({
+						maxW: seedW,
+						maxH: seedH,
+						H,
+						W,
+					});
+					resolve({ width, height });
+				},
+				(error) => {
+					console.log('[WARN]: failed to get image', url, error);
+					resolve({ width: seedW, height: seedH });
+				},
+			);
+		});
+	}
+
+	async function recalculateSizes() {
 		if (items.length === 0) {
-			setHeight(0);
+			setImageHeight(0);
+			setContainerHeight(0);
 			return;
 		}
 
-		const _width = seed?.width || Width;
-		const _height = seed?.height || Height;
+		// Maximum allowable dimensions height for containers
+		const _width = ContainerWidth;
+		const _height = MEDIA_CONTAINER_MAX_HEIGHT;
+
+		let _resultHeight = 0;
+		let _resultWidth = ContainerWidth;
 
 		for (const item of items) {
 			if (item.width && item.height) {
@@ -81,31 +117,39 @@ function useImageAspectRatio(
 					H: item.height,
 					W: item.width,
 				});
-				setHeight((o) => Math.min(o, height));
+				_resultHeight = Math.max(_resultHeight, height);
+				_resultWidth = Math.min(_resultWidth, width);
 			} else {
-				// console.log('getting size manually');
-				// calculate ourselves
-				RNImage.getSize(
+				const { width, height } = await CalculateSize(
 					item.url,
-					(W, H) => {
-						const { height } = MediaService.calculateDimensions({
-							maxW: _width,
-							maxH: _height,
-							H,
-							W,
-						});
-						setHeight(height);
-					},
-					(error) => {
-						console.log('[WARN]: failed to get image', item, error);
-						setHeight(MEDIA_CONTAINER_MAX_HEIGHT);
-					},
+					_width,
+					_height,
 				);
+				console.log('dims', width, height);
+				_resultHeight = Math.max(_resultHeight, height);
+				_resultWidth = Math.min(_resultWidth, width);
 			}
 		}
-	}, [items, Width, Height, seed]);
 
-	return { Width, Height, onLayoutChanged, setHeight };
+		// container dims
+		setContainerHeight(_resultHeight);
+		// image dims
+		setImageHeight(_resultHeight);
+		setImageWidth(_resultWidth);
+	}
+
+	useEffect(() => {
+		recalculateSizes().then(() => {});
+	}, [items, ContainerWidth]);
+
+	return {
+		ContainerWidth,
+		ContainerHeight,
+		ImageWidth,
+		ImageHeight,
+		onLayoutChanged,
+		setHeight: setImageHeight,
+	};
 }
 
 export default useImageAspectRatio;

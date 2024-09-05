@@ -26,10 +26,9 @@ export const AppImageComponent = memo(function Foo({
 	parentContainerHeight,
 	parentContainerWidth,
 }: Props) {
-	const { Height, Width } = useImageAspectRatio([{ url }], {
-		width: parentContainerWidth,
-		height: parentContainerHeight,
-	});
+	const { ImageHeight, ImageWidth, onLayoutChanged } = useImageAspectRatio([
+		{ url },
+	]);
 
 	return (
 		<View
@@ -39,6 +38,7 @@ export const AppImageComponent = memo(function Foo({
 				alignItems: 'center',
 				justifyContent: 'center',
 			}}
+			onLayout={onLayoutChanged}
 		>
 			{/*@ts-ignore-next-line*/}
 			<Image
@@ -47,8 +47,8 @@ export const AppImageComponent = memo(function Foo({
 					// flex: 1,
 					borderRadius: 16,
 					opacity: 0.87,
-					width: parentContainerWidth,
-					height: Height,
+					width: ImageWidth,
+					height: ImageHeight,
 					alignItems: 'center',
 					justifyContent: 'center',
 				}}

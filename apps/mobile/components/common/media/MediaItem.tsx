@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import { memo, useEffect, useMemo } from 'react';
-import { MARGIN_TOP, MEDIA_CONTAINER_MAX_HEIGHT } from './_common';
+import { memo, useMemo } from 'react';
+import { MARGIN_TOP } from './_common';
 import {
 	AltTextOverlay,
 	AppAudioComponent,
@@ -34,14 +34,14 @@ const TimelineMediaRendered = memo(function Foo({
 	totalCount?: number;
 	leftMarginAdjustment?: number;
 }) {
-	const { Width, Height, onLayoutChanged, setHeight } = useImageAspectRatio([
-		{ url: attachment.url, width: attachment.width, height: attachment.height },
-	]);
-
-	// i cant do this anymore :(
-	useEffect(() => {
-		setHeight(MEDIA_CONTAINER_MAX_HEIGHT);
-	}, [attachment]);
+	const { ContainerWidth, ContainerHeight, onLayoutChanged } =
+		useImageAspectRatio([
+			{
+				url: attachment.url,
+				width: attachment.width,
+				height: attachment.height,
+			},
+		]);
 
 	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
 
@@ -59,8 +59,8 @@ const TimelineMediaRendered = memo(function Foo({
 					<AppImageComponent
 						url={attachment.url}
 						blurhash={attachment.blurhash}
-						parentContainerHeight={Height}
-						parentContainerWidth={Width}
+						parentContainerHeight={ContainerHeight}
+						parentContainerWidth={ContainerWidth}
 					/>
 				);
 			}
@@ -86,7 +86,7 @@ const TimelineMediaRendered = memo(function Foo({
 				return <View></View>;
 			}
 		}
-	}, [attachment, Height, Width]);
+	}, [attachment, ContainerHeight, ContainerWidth]);
 
 	return (
 		<View
