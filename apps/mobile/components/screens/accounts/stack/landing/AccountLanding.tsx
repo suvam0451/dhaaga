@@ -23,20 +23,41 @@ type MyAccountModuleProps = {
 	label: string;
 	Icon: any;
 	to: string;
+	disabled?: boolean;
 };
-const MyAccountModule = memo(({ to, Icon, label }: MyAccountModuleProps) => {
-	return (
-		<TouchableOpacity
-			style={styles.moduleButton}
-			onPress={() => {
-				router.navigate(to);
-			}}
-		>
-			{Icon}
-			<Text style={styles.moduleButtonText}>{label}</Text>
-		</TouchableOpacity>
-	);
-});
+const MyAccountModule = memo(
+	({ to, Icon, label, disabled }: MyAccountModuleProps) => {
+		if (disabled) {
+			return (
+				<TouchableOpacity style={[styles.moduleButton]}>
+					{Icon}
+					<Text
+						style={[
+							styles.moduleButtonText,
+							{
+								color: APP_FONT.DISABLED,
+							},
+						]}
+					>
+						{label}
+					</Text>
+				</TouchableOpacity>
+			);
+		}
+
+		return (
+			<TouchableOpacity
+				style={styles.moduleButton}
+				onPress={() => {
+					router.navigate(to);
+				}}
+			>
+				{Icon}
+				<Text style={styles.moduleButtonText}>{label}</Text>
+			</TouchableOpacity>
+		);
+	},
+);
 
 const SelectedAccount = memo(() => {
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -154,20 +175,24 @@ const AccountLanding = memo(() => {
 						}
 						to={'/accounts/my-likes'}
 					/>
-
-					<TouchableOpacity
-						style={styles.moduleButton}
-						onPress={() => {
-							router.navigate('accounts/my-bookmarks');
-						}}
-					>
-						<Ionicons
-							color={APP_THEME.INVALID_ITEM}
-							name={'bookmark'}
-							size={ICON_SIZE}
-						/>
-						<Text style={styles.moduleButtonText}>Bookmarks</Text>
-					</TouchableOpacity>
+					{/*<MyAccountModule*/}
+					{/*	label={'Lists'}*/}
+					{/*	Icon={*/}
+					{/*		<AntDesign name="like1" size={ICON_SIZE} color={APP_THEME.LINK} />*/}
+					{/*	}*/}
+					{/*	to={'/accounts/my-likes'}*/}
+					{/*/>*/}
+					<MyAccountModule
+						label={'Bookmarks'}
+						Icon={
+							<Ionicons
+								color={APP_THEME.INVALID_ITEM}
+								name={'bookmark'}
+								size={ICON_SIZE}
+							/>
+						}
+						to={'/accounts/my-bookmarks'}
+					/>
 				</View>
 
 				<View style={{ marginLeft: 8, marginBottom: 8, marginTop: 8 }}>
@@ -207,17 +232,14 @@ const AccountLanding = memo(() => {
 					<MyAccountModule
 						label={'Requests'}
 						Icon={
-							<Feather
-								name="user-plus"
-								size={24}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
+							<Feather name="user-plus" size={24} color={APP_FONT.DISABLED} />
 						}
 						to={'/accounts/my-follow-requests'}
+						disabled
 					/>
 				</View>
 
-				<MyMisskeyAccountFeatures />
+				{/*<MyMisskeyAccountFeatures />*/}
 
 				<View style={{ marginTop: 16, marginHorizontal: 16 }}>
 					<Text style={styles.text}>This entire page was recently added.</Text>

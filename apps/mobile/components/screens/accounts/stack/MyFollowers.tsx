@@ -1,8 +1,5 @@
-import { View, Text } from 'react-native';
-import { useRef } from 'react';
-import WithAppPaginationContext, {
-	useAppPaginationContext,
-} from '../../../../states/usePagination';
+import { View, Text, TouchableOpacity } from 'react-native';
+import WithAppPaginationContext from '../../../../states/usePagination';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import WithActivitypubUserContext, {
@@ -15,23 +12,43 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import useMyFollowers from '../../apps/api/useMyFollowers';
+import useFollowers from '../api/useFollowers';
+import useMfm from '../../../hooks/useMfm';
+import useAppNavigator from '../../../../states/useAppNavigator';
+import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 
-function UserItem() {
-	const { primaryAcct } = useActivityPubRestClientContext();
+export function UserItem() {
+	const { primaryAcct, domain } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();
+	const { toProfile } = useAppNavigator();
 
+	const { content } = useMfm({
+		content: user.getDisplayName(),
+		remoteSubdomain: user?.getInstanceUrl(subdomain),
+		emojiMap: user?.getEmojiMap(),
+		deps: [user.getDisplayName()],
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+	});
+
+	const handle = ActivitypubHelper.getHandle(
+		user?.getAccountUrl(subdomain),
+		subdomain,
+	);
 	return (
-		<View
+		<TouchableOpacity
 			style={{
 				display: 'flex',
 				flexDirection: 'row',
 				alignItems: 'center',
 				backgroundColor: '#161616',
 				marginVertical: 4,
-				padding: 8,
+				padding: 2,
 				borderRadius: 8,
+				marginHorizontal: 4,
+			}}
+			onPress={() => {
+				toProfile(user.getId());
 			}}
 		>
 			<View
@@ -48,29 +65,27 @@ function UserItem() {
 					transition={1000}
 					alt={'user avatar'}
 					style={{
-						width: 48,
-						height: 48,
+						width: 44,
+						height: 44,
 						borderRadius: 4,
 					}}
 				/>
 			</View>
 			<View style={{ marginLeft: 8 }}>
-				<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
-					{user.getDisplayName()}
-				</Text>
+				{content}
 				<Text
 					style={{
-						color: '#fff',
-						opacity: 0.6,
+						color: APP_FONT.MONTSERRAT_BODY,
+						fontFamily: APP_FONTS.INTER_400_REGULAR,
+						fontSize: 13,
 					}}
 				>
-					{user.getAppDisplayAccountUrl(subdomain)}
+					{handle}
 				</Text>
 				<View
 					style={{
 						opacity: 0.6,
 						marginTop: 4,
-						display: 'flex',
 						flexDirection: 'row',
 					}}
 				>
@@ -82,7 +97,7 @@ function UserItem() {
 								opacity: 0.6,
 								marginHorizontal: 4,
 							}}
-							color="#fff"
+							color={APP_FONT.MONTSERRAT_BODY}
 						/>
 					)}
 					{user.getIsLockedProfile() && (
@@ -90,60 +105,38 @@ function UserItem() {
 							name="user-lock"
 							size={12}
 							style={{
-								opacity: 0.6,
 								marginHorizontal: 4,
 							}}
-							color="#fff"
+							color={APP_FONT.MONTSERRAT_BODY}
 						/>
 					)}
 				</View>
 			</View>
-		</View>
-	);
-}
-
-function WithItemList() {
-	const { data } = useAppPaginationContext();
-	const ref = useRef(null);
-
-	return (
-		<AnimatedFlashList
-			estimatedItemSize={100}
-			data={data}
-			ref={ref}
-			renderItem={(o) => (
-				<WithActivitypubUserContext user={o.item} key={o.index}>
-					<UserItem />
-				</WithActivitypubUserContext>
-			)}
-		/>
+		</TouchableOpacity>
 	);
 }
 
 function WithApi() {
-	const { data, updateQueryCache } = useMyFollowers();
-
-	const { translateY } = useScrollMoreOnPageEnd({
+	const { me } = useActivityPubRestClientContext();
+	const { data, updateQueryCache } = useFollowers(me?.getId());
+	const { translateY, onScroll } = useScrollMoreOnPageEnd({
 		itemCount: data?.length,
 		updateQueryCache,
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Your Followers'} translateY={translateY}>
-			<View style={{ height: 200 }}></View>
-			<Text
-				style={{
-					textAlign: 'center',
-					marginVertical: 16,
-					fontSize: 20,
-					fontWeight: 700,
-					color: APP_FONT.MONTSERRAT_BODY,
-					fontFamily: APP_FONTS.INTER_700_BOLD,
-				}}
-			>
-				All / People / Bots / Mutuals
-			</Text>
-			<WithItemList />
+		<WithAutoHideTopNavBar title={'My Followers'} translateY={translateY}>
+			<AnimatedFlashList
+				estimatedItemSize={48}
+				data={data}
+				contentContainerStyle={{ paddingTop: 54 }}
+				renderItem={(o) => (
+					<WithActivitypubUserContext user={o.item}>
+						<UserItem />
+					</WithActivitypubUserContext>
+				)}
+				onScroll={onScroll}
+			/>
 		</WithAutoHideTopNavBar>
 	);
 }

@@ -2,6 +2,7 @@ import {
 	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
+	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import {
 	COMPAT,
@@ -19,6 +20,7 @@ import { BaseAccountsRouter } from '../default/accounts.js';
 import {
 	FollowPostDto,
 	GetPostsQueryDTO,
+	MastoAccount,
 	MastoRelationship,
 	MastoStatus,
 	MissUserDetailed,
@@ -217,6 +219,51 @@ export class MisskeyAccountsRouter
 		} catch (e: any) {
 			if (e.code) {
 				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			}
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async followers(query: FollowerGetQueryDTO): LibraryPromise<
+		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
+		| {
+				data: Endpoints['users/followers']['res'];
+				minId?: string | null;
+				maxId?: string | null;
+		  }
+	> {
+		try {
+			const data = await this.lib.client.request('users/followers', {
+				allowPartial: true,
+				limit: query.limit,
+				userId: query.id,
+				untilId: !!query.maxId ? query.maxId : undefined,
+			});
+			return { data: { data } };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(e.code);
+			}
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async followings(query: FollowerGetQueryDTO): LibraryPromise<{
+		data: Endpoints['users/following']['res'];
+		minId?: string | null;
+		maxId?: string | null;
+	}> {
+		try {
+			const data = await this.lib.client.request('users/following', {
+				allowPartial: true,
+				limit: query.limit,
+				userId: query.id,
+				untilId: !!query.maxId ? query.maxId : undefined,
+			});
+			return { data: { data } };
+		} catch (e: any) {
+			if (e.code) {
+				return errorBuilder(e.code);
 			}
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}

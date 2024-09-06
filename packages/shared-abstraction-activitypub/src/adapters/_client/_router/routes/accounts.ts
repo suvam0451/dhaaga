@@ -24,6 +24,13 @@ export type BookmarkGetQueryDTO = {
 	minId?: string;
 };
 
+export type FollowerGetQueryDTO = {
+	allowPartial: boolean;
+	limit: number;
+	id: string;
+	maxId: string | null;
+};
+
 type DefaultPaginationParams = {
 	// masto.js
 	readonly maxId?: string | null;
@@ -147,5 +154,23 @@ export interface AccountRoute {
 			minId?: string | null;
 			maxId?: string | null;
 		}>
+	>;
+
+	followers(query: FollowerGetQueryDTO): LibraryPromise<
+		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
+		| {
+				data: Endpoints['users/followers']['res'];
+				minId?: string | null;
+				maxId?: string | null;
+		  }
+	>;
+
+	followings(query: FollowerGetQueryDTO): LibraryPromise<
+		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
+		| {
+				data: Endpoints['users/followers']['res'];
+				minId?: string | null;
+				maxId?: string | null;
+		  }
 	>;
 }

@@ -3,6 +3,7 @@ import {
 	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
+	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
@@ -136,6 +137,28 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 		maxId?: string | null;
 	}> {
 		return notImplementedErrorBuilder();
+	}
+
+	async followers(query: FollowerGetQueryDTO): LibraryPromise<
+		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
+		| {
+				data: Endpoints['users/followers']['res'];
+				minId?: string | null;
+				maxId?: string | null;
+		  }
+	> {
+		throw new Error('Method not implemented.');
+	}
+
+	async followings(query: FollowerGetQueryDTO): LibraryPromise<
+		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
+		| {
+				data: Endpoints['users/followers']['res'];
+				minId?: string | null;
+				maxId?: string | null;
+		  }
+	> {
+		throw new Error('Method not implemented.');
 	}
 }
 

@@ -16,6 +16,7 @@ import {
 	AccountMutePostDto,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
+	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
@@ -185,5 +186,55 @@ export class MastodonAccountsRouter implements AccountRoute {
 		return {
 			data: _data,
 		};
+	}
+
+	async followers(query: FollowerGetQueryDTO): LibraryPromise<{
+		data: MastoAccount[];
+		minId?: string | null;
+		maxId?: string | null;
+	}> {
+		try {
+			const { id, ...rest } = query;
+			const { data: _data, error } = await new AppApi(
+				this.client.url,
+				this.client.accessToken,
+			).getCamelCaseWithLinkPagination<MastoAccount[]>(
+				`/api/v1/accounts/${id}/followers`,
+				rest,
+			);
+
+			if (error) {
+				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			}
+			return { data: _data };
+		} catch (e) {
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async followings(query: FollowerGetQueryDTO): LibraryPromise<{
+		data: MastoAccount[];
+		minId?: string | null;
+		maxId?: string | null;
+	}> {
+		try {
+			const { id, ...rest } = query;
+			const { data: _data, error } = await new AppApi(
+				this.client.url,
+				this.client.accessToken,
+			).getCamelCaseWithLinkPagination<MastoAccount[]>(
+				`/api/v1/accounts/${id}/followings`,
+				rest,
+			);
+
+			if (error) {
+				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			}
+			return { data: _data };
+		} catch (e) {
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 }
