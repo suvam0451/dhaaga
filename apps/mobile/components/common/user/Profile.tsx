@@ -34,7 +34,7 @@ import ProfilePeekMessage from '../../dhaaga-bottom-sheet/modules/profile-peek/f
 import AntDesign from '@expo/vector-icons/AntDesign';
 import RelationshipButtonCore from '../relationship/RelationshipButtonCore';
 
-function ProfileContextWrapped() {
+export function ProfileContextWrapped() {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();

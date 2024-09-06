@@ -125,7 +125,6 @@ function useImageAspectRatio(
 					_width,
 					_height,
 				);
-				console.log('dims', width, height);
 				_resultHeight = Math.max(_resultHeight, height);
 				_resultWidth = Math.min(_resultWidth, width);
 			}

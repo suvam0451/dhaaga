@@ -17,6 +17,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import AccountService from '../../../../services/account.service';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 
 function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');
@@ -87,8 +88,13 @@ function MisskeySignInStack() {
 		}
 	}
 
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: 0,
+		updateQueryCache: () => {},
+	});
+
 	return (
-		<WithAutoHideTopNavBar title={`Misskey Sign-In`}>
+		<WithAutoHideTopNavBar translateY={translateY} title={`Misskey Sign-In`}>
 			<View style={{ height: '100%' }}>
 				{!SessionConfirmed && (
 					<WebView

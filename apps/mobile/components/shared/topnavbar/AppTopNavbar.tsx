@@ -14,7 +14,7 @@ export enum APP_TOPBAR_TYPE_ENUM {
 type AutoHideNavBarProps = {
 	title: string;
 	children: any;
-	translateY?: Animated.AnimatedInterpolation<string | number>;
+	translateY: Animated.AnimatedInterpolation<string | number>;
 	type: APP_TOPBAR_TYPE_ENUM;
 };
 

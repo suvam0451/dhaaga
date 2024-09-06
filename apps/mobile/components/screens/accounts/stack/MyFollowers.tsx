@@ -15,7 +15,7 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import useMyFollowers from '../api/useMyFollowers';
+import useMyFollowers from '../../apps/api/useMyFollowers';
 
 function UserItem() {
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -123,7 +123,7 @@ function WithItemList() {
 function WithApi() {
 	const { data, updateQueryCache } = useMyFollowers();
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+	const { translateY } = useScrollMoreOnPageEnd({
 		itemCount: data?.length,
 		updateQueryCache,
 	});
@@ -137,8 +137,8 @@ function WithApi() {
 					marginVertical: 16,
 					fontSize: 20,
 					fontWeight: 700,
-					color: APP_FONT.MONTSERRAT_HEADER,
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					color: APP_FONT.MONTSERRAT_BODY,
+					fontFamily: APP_FONTS.INTER_700_BOLD,
 				}}
 			>
 				All / People / Bots / Mutuals

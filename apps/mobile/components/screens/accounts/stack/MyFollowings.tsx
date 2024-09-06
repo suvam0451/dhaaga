@@ -199,7 +199,8 @@ function WithApi() {
 					marginVertical: 16,
 					fontSize: 20,
 					fontWeight: 700,
-					color: APP_FONT.MONTSERRAT_HEADER,
+					color: APP_FONT.MONTSERRAT_BODY,
+					fontFamily: APP_FONTS.INTER_700_BOLD,
 				}}
 			>
 				All / People / Bots / Mutuals

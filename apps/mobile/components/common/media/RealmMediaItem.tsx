@@ -14,13 +14,14 @@ function RealmMediaComponentSingleItem({
 	data: ActivityPubMediaAttachment;
 	height: number;
 }) {
-	const { Width, Height, onLayoutChanged } = useImageAspectRatio([
-		{
-			url: data.url,
-			height: data.height,
-			width: data.width,
-		},
-	]);
+	const { ContainerWidth, ContainerHeight, onLayoutChanged } =
+		useImageAspectRatio([
+			{
+				url: data.url,
+				height: data.height,
+				width: data.width,
+			},
+		]);
 
 	const MediaItem = useMemo(() => {
 		const type = data.type;
@@ -36,8 +37,8 @@ function RealmMediaComponentSingleItem({
 					<AppImageComponent
 						url={data.previewUrl}
 						blurhash={data.blurhash}
-						parentContainerHeight={Height}
-						parentContainerWidth={Width}
+						parentContainerHeight={ContainerHeight}
+						parentContainerWidth={ContainerWidth}
 					/>
 				);
 			}
@@ -54,17 +55,14 @@ function RealmMediaComponentSingleItem({
 				return <View></View>;
 			}
 		}
-	}, [data, Width, Height]);
+	}, [data, ContainerWidth, ContainerHeight]);
 
 	return (
-		<MediaContainerWithAltText
-			altText={data.altText}
-			width={Width}
-			height={Height}
-			onLayoutChanged={onLayoutChanged}
-		>
-			{MediaItem}
-		</MediaContainerWithAltText>
+		<View onLayout={onLayoutChanged}>
+			<MediaContainerWithAltText altText={data.altText}>
+				{MediaItem}
+			</MediaContainerWithAltText>
+		</View>
 	);
 }
 

@@ -1,49 +1,51 @@
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { useEffect } from 'react';
+import StatusItem from '../../../common/status/StatusItem';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../../states/usePagination';
-import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import LoadingMore from '../../home/LoadingMore';
-import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
+import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import WithActivitypubStatusContext from '../../../../states/useStatus';
-import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
 import { RefreshControl } from 'react-native';
-import StatusItem from '../../../common/status/StatusItem';
+import { useRealm } from '@realm/react';
+import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import useGetLikes from '../../../../hooks/api/accounts/useGetLikes';
+import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
+import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
+import useGetBookmarks from '../../../../hooks/api/accounts/useGetBookmarks';
+import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import WithAppTimelineDataContext, {
 	useAppTimelineDataContext,
 } from '../../../common/timeline/api/useTimelineData';
-import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
-import { useEffect } from 'react';
 import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
-import { useRealm } from '@realm/react';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 
 function Core() {
+	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
+	const domain = primaryAcct?.domain;
+	const { updateQueryCache, queryCacheMaxId, setMaxId } =
+		useAppPaginationContext();
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
-	const { domain, subdomain } = useActivityPubRestClientContext();
-	const {
-		data: PageData,
-		updateQueryCache,
-		queryCacheMaxId,
-		setMaxId,
-	} = useAppPaginationContext();
 
-	const { data, fetchStatus, refetch } = useGetLikes({
-		limit: 10,
-		maxId: queryCacheMaxId,
-	});
 	const { addPosts, listItems, clear } = useAppTimelineDataContext();
 
 	useEffect(() => {
-		if (data.length <= 0) return;
+		clear();
+	}, [primaryAcct.subdomain, primaryAcct.username]);
 
-		setMaxId(data[data.length - 1].getId());
-		addPosts(data);
-		for (const status of data) {
+	const { data, refetch, fetchStatus } = useGetBookmarks({
+		limit: 10,
+		maxId: queryCacheMaxId,
+	});
+
+	useEffect(() => {
+		const statuses = data.data;
+		if (statuses.length <= 0) return;
+
+		setMaxId(data.maxId);
+		addPosts(statuses);
+		for (const status of statuses) {
 			ActivitypubStatusService.factory(status, domain, subdomain)
 				.resolveInstances()
 				.syncSoftware(db)
@@ -53,9 +55,14 @@ function Core() {
 		}
 	}, [data, db, globalDb, domain, subdomain]);
 
-	const { visible, loading } = useLoadingMoreIndicatorState({ fetchStatus });
+	/**
+	 * Composite Hook Collection
+	 */
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus,
+	});
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: data.length,
+		itemCount: listItems.length,
 		updateQueryCache,
 	});
 	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
@@ -64,9 +71,9 @@ function Core() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'My Liked Posts'} translateY={translateY}>
+		<WithAutoHideTopNavBar title={'My Bookmarks'} translateY={translateY}>
 			<AnimatedFlashList
-				estimatedItemSize={72}
+				estimatedItemSize={100}
 				data={listItems}
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item.props.dto}>
@@ -87,7 +94,7 @@ function Core() {
 	);
 }
 
-function MyFavouritesPage() {
+function MyBookmark() {
 	return (
 		<WithAppPaginationContext>
 			<WithAppTimelineDataContext>
@@ -97,4 +104,4 @@ function MyFavouritesPage() {
 	);
 }
 
-export default MyFavouritesPage;
+export default MyBookmark;

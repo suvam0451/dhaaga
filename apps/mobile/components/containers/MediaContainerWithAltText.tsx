@@ -1,23 +1,16 @@
 import { useState } from 'react';
 import { MARGIN_TOP } from '../common/media/_common';
-import { LayoutChangeEvent, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import AltText from '../dialogs/AltText';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../styles/AppTheme';
 
 type Props = {
-	width: number;
-	height: number;
 	altText?: string;
 	children: any;
-	onLayoutChanged?: (event: LayoutChangeEvent) => void;
 };
 
-function MediaContainerWithAltText({
-	altText,
-	children,
-	onLayoutChanged,
-}: Props) {
+function MediaContainerWithAltText({ altText, children }: Props) {
 	const [IsWidgetVisible, setIsWidgetVisible] = useState(false);
 
 	function onAltTextClicked() {
@@ -38,7 +31,6 @@ function MediaContainerWithAltText({
 				style={{
 					width: '100%',
 				}}
-				onLayout={onLayoutChanged}
 			>
 				{children}
 			</View>

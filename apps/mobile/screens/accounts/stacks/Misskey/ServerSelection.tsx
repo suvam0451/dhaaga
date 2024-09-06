@@ -16,6 +16,7 @@ import HideOnKeyboardVisibleContainer from '../../../../components/containers/Hi
 import { router } from 'expo-router';
 import ActivityPubService from '../../../../services/activitypub.service';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 
 function MisskeyServerSelection() {
 	const [InputText, setInputText] = useState('misskey.io');
@@ -44,8 +45,13 @@ function MisskeyServerSelection() {
 		{ value: 'hallsofamenti.io', label: 'hallsofamenti.io' },
 	];
 
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: 0,
+		updateQueryCache: () => {},
+	});
+
 	return (
-		<WithAutoHideTopNavBar title={`Select Instance`}>
+		<WithAutoHideTopNavBar translateY={translateY} title={`Select Instance`}>
 			<KeyboardAvoidingView
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				style={{

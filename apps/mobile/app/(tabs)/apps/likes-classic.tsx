@@ -1,4 +1,4 @@
-import MyFavouritesPage from '../../../components/screens/apps/stack/MyFavouritesPage';
+import MyLikes from '../../../components/screens/accounts/stack/MyLikes';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FeatureUnsupported from '../../../components/error-screen/FeatureUnsupported';
@@ -23,7 +23,7 @@ function Foo() {
 		);
 	}
 
-	return <MyFavouritesPage />;
+	return <MyLikes />;
 }
 
 export default Foo;
