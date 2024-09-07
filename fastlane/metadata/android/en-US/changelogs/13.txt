@@ -1,0 +1,3 @@
+Dhaaga (Lite) v0.10.1 (8 Sep 2024)
+
+* 🛠️Fixes an issue that causes crash on fresh installs
