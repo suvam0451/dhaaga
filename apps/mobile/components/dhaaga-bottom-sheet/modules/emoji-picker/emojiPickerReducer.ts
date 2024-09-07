@@ -54,14 +54,18 @@ function emojiPickerReducer(
 			const _domain = action.payload.domain;
 			const _subdomain = action.payload.subdomain;
 			const _globalDb = action.payload.globalDb;
+			const emojis = GlobalMmkvCacheService.getEmojiCacheForInstance(
+				_globalDb,
+				_subdomain,
+			);
+
+			if (!emojis) {
+				console.log('[INFO]: no emojis available for', _subdomain);
+				return state;
+			}
+
 			return produce(state, (draft) => {
-				const emojis = GlobalMmkvCacheService.getEmojiCacheForInstance(
-					_globalDb,
-					_subdomain,
-				);
-
 				draft.tagEmojiMap = new Map<string, InstanceApi_CustomEmojiDTO[]>();
-
 				switch (_domain) {
 					case KNOWN_SOFTWARE.PLEROMA:
 					case KNOWN_SOFTWARE.AKKOMA: {
@@ -106,11 +110,13 @@ function emojiPickerReducer(
 				draft.allTags = allTags;
 				draft.selectedTag = allTags[0];
 				draft.searchTerm = '';
+
+				// NOTE: it is possible for the emoji map to be empty
 				const results = draft.tagEmojiMap.get(draft.selectedTag);
 
-				draft.visibleReactions = results.slice(0, 50);
+				draft.visibleReactions = results?.slice(0, 50) || [];
 				draft.resultSize = draft.visibleReactions.length;
-				draft.totalSize = results.length;
+				draft.totalSize = results?.length || 0;
 			});
 		}
 		case EMOJI_PICKER_REDUCER_ACTION.SELECT: {

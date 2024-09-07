@@ -52,7 +52,6 @@ const StatusQuoted = memo(() => {
 			<MediaItem
 				attachments={dto.content.media}
 				calculatedHeight={dto.calculated.mediaContainerHeight}
-				leftMarginAdjustment={36}
 			/>
 		</View>
 	);
@@ -68,7 +67,6 @@ const styles = StyleSheet.create({
 		borderStyle: 'dashed',
 		borderWidth: 1,
 		borderColor: 'orange',
-		alignItems: 'center',
 	},
 });
 export default StatusQuoted;

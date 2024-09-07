@@ -71,12 +71,12 @@ const UserTimelineController = memo(function Foo() {
 				}}
 			>
 				<AppInlineCheckbox
-					label={'Hide Reply'}
+					label={'Hide Replies'}
 					checked={HideReply.current}
 					onClick={onClickHideReply}
 				/>
 				<AppInlineCheckbox
-					label={'Hide Reblog'}
+					label={'Hide Reblogs'}
 					checked={HideReblog.current}
 					onClick={onClickHideReblog}
 				/>

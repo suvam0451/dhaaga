@@ -5,13 +5,12 @@ import { useMemo } from 'react';
 import {
 	Animated,
 	Dimensions,
-	View,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
+	View,
 } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import { Image } from 'expo-image';
 import UserProfileExtraInformation from './fragments/ExtraInformation';
 import WithActivitypubUserContext, {
@@ -33,8 +32,11 @@ import ProfileDesc from './fragments/ProfileDesc';
 import ProfilePeekMessage from '../../dhaaga-bottom-sheet/modules/profile-peek/fragments/ProfilePeekMessage';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import RelationshipButtonCore from '../relationship/RelationshipButtonCore';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../shared/topnavbar/AppTopNavbar';
 
-function ProfileContextWrapped() {
+export function ProfileContextWrapped() {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();
@@ -65,7 +67,11 @@ function ProfileContextWrapped() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Profile'} translateY={translateY}>
+		<AppTopNavbar
+			title={'Profile'}
+			translateY={translateY}
+			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+		>
 			<Animated.ScrollView
 				onScroll={onScroll}
 				contentContainerStyle={localStyles.rootScrollView}
@@ -140,7 +146,6 @@ function ProfileContextWrapped() {
 								color={APP_FONT.MONTSERRAT_BODY}
 							/>
 						</View>
-
 						<RelationshipButtonCore userId={user?.getId()} />
 					</View>
 				</View>
@@ -149,6 +154,7 @@ function ProfileContextWrapped() {
 					style={localStyles.parsedDescriptionContainer}
 					rawContext={user?.getDescription()}
 					remoteSubdomain={user?.getInstanceUrl()}
+					emojiMap={user?.getEmojiMap()}
 				/>
 
 				{/*Separator*/}
@@ -161,7 +167,7 @@ function ProfileContextWrapped() {
 					<PinnedPosts userId={user.getId()} />
 				</View>
 			</Animated.ScrollView>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 }
 

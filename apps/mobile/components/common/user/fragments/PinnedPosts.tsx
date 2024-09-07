@@ -1,20 +1,30 @@
-import { useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import WithActivitypubStatusContext from '../../../../states/useStatus';
-import StatusItem from '../../status/StatusItem';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import usePinnedPosts from '../api/usePinnedPosts';
+import WithAppTimelineDataContext, {
+	useAppTimelineDataContext,
+} from '../../timeline/api/useTimelineData';
+import FlashListPosts from '../../../shared/flash-lists/FlashListPosts';
 
 type Props = {
 	userId: string;
 };
 
-function PinnedPosts({ userId }: Props) {
+function Core({ userId }: Props) {
 	const [IsVisible, setIsVisible] = useState(false);
 	const { Data } = usePinnedPosts(userId);
+	const { addPosts, listItems, clear } = useAppTimelineDataContext();
+
+	useEffect(() => {
+		clear();
+	}, [userId]);
+
+	useEffect(() => {
+		addPosts(Data);
+	}, [Data]);
 
 	return (
 		<View style={{ paddingHorizontal: 8 }}>
@@ -38,15 +48,7 @@ function PinnedPosts({ userId }: Props) {
 				</View>
 			</TouchableOpacity>
 			<View style={{ display: IsVisible ? 'flex' : 'none' }}>
-				<AnimatedFlashList
-					estimatedItemSize={200}
-					data={Data}
-					renderItem={({ item }) => (
-						<WithActivitypubStatusContext statusInterface={item}>
-							<StatusItem />
-						</WithActivitypubStatusContext>
-					)}
-				/>
+				<FlashListPosts data={listItems} paddingTop={0} />
 			</View>
 		</View>
 	);
@@ -78,6 +80,14 @@ const styles = StyleSheet.create({
 		fontFamily: 'Montserrat-Bold',
 		flexGrow: 1,
 	},
+});
+
+const PinnedPosts = memo(({ userId }: Props) => {
+	return (
+		<WithAppTimelineDataContext>
+			<Core userId={userId} />
+		</WithAppTimelineDataContext>
+	);
 });
 
 export default PinnedPosts;

@@ -1,10 +1,10 @@
 import {
-	View,
-	TextInput,
-	TouchableOpacity,
 	KeyboardAvoidingView,
 	Platform,
 	StyleSheet,
+	TextInput,
+	TouchableOpacity,
+	View,
 } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useState } from 'react';
@@ -13,10 +13,13 @@ import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import ActivityPubService from '../../../../services/activitypub.service';
 import { router } from 'expo-router';
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
-import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import MmkvService from '../../../../services/mmkv.service';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../../components/shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 
 function AccountsScreen() {
 	const [Subdomain, setSubdomain] = useState('mastodon.social');
@@ -36,7 +39,7 @@ function AccountsScreen() {
 			);
 		}
 		router.push({
-			pathname: 'accounts/signin-md',
+			pathname: 'settings/onboard/signin-md',
 			params: {
 				signInUrl: signInStrategy?.loginUrl,
 				subdomain: Subdomain,
@@ -60,14 +63,21 @@ function AccountsScreen() {
 		{ value: 'mastodon.online', label: 'mastodon.online' },
 	];
 
+	const { translateY } = useScrollMoreOnPageEnd();
+
 	return (
-		<WithAutoHideTopNavBar title={`Select Instance`}>
+		<AppTopNavbar
+			title={`Select Instance`}
+			translateY={translateY}
+			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+		>
 			<KeyboardAvoidingView
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				style={{
 					display: 'flex',
 					paddingHorizontal: 12,
 					marginBottom: 54,
+					marginTop: 54,
 				}}
 			>
 				<View
@@ -147,7 +157,7 @@ function AccountsScreen() {
 					</View>
 				</View>
 			</KeyboardAvoidingView>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 }
 

@@ -1,7 +1,7 @@
 import { Drawer } from 'react-native-drawer-layout';
-import { Button, Divider, Text } from '@rneui/themed';
+import { Divider, Text } from '@rneui/themed';
 import { useAppDrawerContext } from '../../states/useAppDrawer';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import { useAssets } from 'expo-asset';
 import { useEffect, useMemo, useState } from 'react';
 import { Image } from 'expo-image';
@@ -34,7 +34,7 @@ function KnownServersDrawer({ children }: Props) {
 	}, [open]);
 
 	const [assets, error] = useAssets([require('../../assets/bmc-button.png')]);
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
 
 	const [IsAssetsLoaded, setIsAssetsLoaded] = useState(false);
 	useEffect(() => {
@@ -59,14 +59,14 @@ function KnownServersDrawer({ children }: Props) {
 						<View style={{ width: 48, height: 48 }}>
 							{/*@ts-ignore-next-line*/}
 							<Image
-								source={primaryAcct.avatarUrl}
+								source={primaryAcct?.avatarUrl}
 								style={{ width: 48, height: 48 }}
 							/>
 						</View>
 						<View style={{}}>
 							{/*<Text>{primaryAcct.secrets}</Text>*/}
-							<Text>@{primaryAcct.username}</Text>
-							<Text>{primaryAcct.subdomain}</Text>
+							<Text>@{primaryAcct?.username}</Text>
+							<Text>{subdomain}</Text>
 						</View>
 					</View>
 				</View>

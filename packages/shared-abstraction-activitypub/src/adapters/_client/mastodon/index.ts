@@ -22,6 +22,7 @@ import { MastodonSearchRouter } from './search.js';
 import { MastodonMeRouter } from './me.js';
 import { MastodonMediaRoute } from './media.js';
 import { MastodonListRoute } from './lists.js';
+import { MastodonProfileRouter } from './profile.js';
 
 class MastodonRestClient implements ActivityPubClient {
 	client: RestClient;
@@ -36,6 +37,7 @@ class MastodonRestClient implements ActivityPubClient {
 	me: MastodonMeRouter;
 	media: MastodonMediaRoute;
 	lists: MastodonListRoute;
+	profile: MastodonProfileRouter;
 
 	constructor(dto: RestClientCreateDTO) {
 		this.client = new RestClient(dto.instance, {
@@ -53,6 +55,7 @@ class MastodonRestClient implements ActivityPubClient {
 		this.me = new MastodonMeRouter(this.client);
 		this.media = new MastodonMediaRoute(this.client);
 		this.lists = new MastodonListRoute(this.client);
+		this.profile = new MastodonProfileRouter(this.client);
 	}
 
 	async getMyLists(): Promise<MastoList[]> {

@@ -25,8 +25,8 @@ function useGetLikes(query: GetPostsQueryDTO) {
 	const { status, data, fetchStatus, refetch } = useQuery<StatusInterface[]>({
 		queryKey: [
 			'favourites',
-			primaryAcct.subdomain,
-			primaryAcct.username,
+			primaryAcct?.subdomain,
+			primaryAcct?.username,
 			query,
 		],
 		queryFn: api,

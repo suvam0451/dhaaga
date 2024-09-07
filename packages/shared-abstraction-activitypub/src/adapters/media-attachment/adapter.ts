@@ -105,13 +105,6 @@ export class MediaAttachmentToMediaAttachmentAdapter
 		return this.ref?.instance?.url;
 	}
 
-	/**
-	 * Masto-dono stores the dimensions for various
-	 * sizes, as follows:
-	 *
-	 * {"original": {"aspect": 0.7615101289134438, "height": 1086, "size": "827x1086", "width": 827},
-	 * "small": {"aspect": 0.7618181818181818, "height": 550, "size": "419x550", "width": 419}}
-	 */
 	getHeight(): number | null | undefined {
 		return this.getMeta()?.original?.height;
 	}

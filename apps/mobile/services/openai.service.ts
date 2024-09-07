@@ -15,6 +15,7 @@ export class OpenAiService {
 		try {
 			const client = new OpenAI({
 				apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY,
+				dangerouslyAllowBrowser: true,
 			});
 
 			const response = await client.chat.completions.create({

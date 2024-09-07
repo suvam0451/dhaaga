@@ -13,7 +13,6 @@ import { ActivityPubServer } from '../entities/activitypub-server.entity';
 import {
 	PleromaRestClient,
 	KNOWN_SOFTWARE,
-	InstanceApi_CustomEmojiDTO,
 } from '@dhaaga/shared-abstraction-activitypub';
 
 class ActivityPubService {
@@ -106,44 +105,6 @@ class ActivityPubService {
 	}
 
 	/**
-	 * Try fetching custom emojis
-	 *
-	 * Supported: Mastodon/Misskey API Spec
-	 * @param db
-	 * @param instance
-	 * @param software if, already known
-	 */
-	static async fetchEmojisAndInstanceSoftware(
-		db: Realm,
-		instance: string,
-		software?: string,
-	): Promise<{
-		emojis: InstanceApi_CustomEmojiDTO[];
-		software: string;
-	} | null> {
-		const x = new UnknownRestClient();
-
-		if (!software) {
-			const { data, error } = await x.instances.getSoftwareInfo(instance);
-			if (error) {
-				console.log('[WARN]: software query failed', instance, error.code);
-				return null;
-			}
-			software = data.software;
-		}
-
-		const { data: emojis, error: emojiError } =
-			await x.instances.getCustomEmojis(instance, software);
-
-		if (emojiError) {
-			console.log('[WARN]: emoji query failed', emojiError);
-			return null;
-		}
-
-		return { emojis, software };
-	}
-
-	/**
 	 * toggle the bookmark status and return next state
 	 * @param client
 	 * @param id
@@ -204,14 +165,14 @@ class ActivityPubService {
 			return null;
 		}
 		if (localState) {
-			const { data, error } = await client.statuses.removeLike(id);
+			const { error } = await client.statuses.removeLike(id);
 			if (error) {
 				console.log('[WARN]: failed to like status', error);
 				return null;
 			}
 			return -1;
 		} else {
-			const { data, error } = await client.statuses.like(id);
+			const { error } = await client.statuses.like(id);
 			if (error) {
 				console.log('[WARN]: failed to remove like for status', error);
 				return null;
@@ -234,18 +195,16 @@ class ActivityPubService {
 			].includes(domain)
 		) {
 			if (localState) {
-				const { data, error } = await (
-					client as MisskeyRestClient
-				).statuses.unrenote(id);
+				const { error } = await (client as MisskeyRestClient).statuses.unrenote(
+					id,
+				);
 				if (error) {
 					console.log('[WARN]: failed to remove boost', error);
 					return null;
 				}
 				return -1;
 			} else {
-				const { data, error } = await (
-					client as MisskeyRestClient
-				).statuses.renote({
+				const { error } = await (client as MisskeyRestClient).statuses.renote({
 					renoteId: id,
 					visibility: 'followers',
 					localOnly: true,
@@ -258,7 +217,7 @@ class ActivityPubService {
 			}
 		} else if (domain === KNOWN_SOFTWARE.MASTODON) {
 			if (localState) {
-				const { data, error } = await (
+				const { error } = await (
 					client as MastodonRestClient
 				).statuses.removeBoost(id);
 				if (error) {
@@ -267,9 +226,9 @@ class ActivityPubService {
 				}
 				return -1;
 			} else {
-				const { data, error } = await (
-					client as MastodonRestClient
-				).statuses.boost(id);
+				const { error } = await (client as MastodonRestClient).statuses.boost(
+					id,
+				);
 				if (error) {
 					console.log('[WARN]: failed to boost', error);
 					return null;
@@ -278,7 +237,7 @@ class ActivityPubService {
 			}
 		} else {
 			if (localState) {
-				const { data, error } = await (
+				const { error } = await (
 					client as PleromaRestClient
 				).statuses.removeBoost(id);
 				if (error) {
@@ -287,9 +246,9 @@ class ActivityPubService {
 				}
 				return -1;
 			} else {
-				const { data, error } = await (
-					client as PleromaRestClient
-				).statuses.boost(id);
+				const { error } = await (client as PleromaRestClient).statuses.boost(
+					id,
+				);
 				if (error) {
 					console.log('[WARN]: failed to boost', error);
 					return null;

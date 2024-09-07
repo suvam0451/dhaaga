@@ -112,6 +112,7 @@ const StatusInteraction = memo(
 			timelineDataPostListReducer.current = getPostListReducer();
 
 			setType(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
+			updateBottomSheetRequestId();
 			setBottomSheetVisible(true);
 		}
 

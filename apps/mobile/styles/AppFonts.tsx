@@ -1,6 +1,5 @@
 const appFonts = {
 	'Montserrat-Bold': require('../../../packages/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-	'Montserrat-ExtraBold': require('../../../packages/fonts/Montserrat/static/Montserrat-ExtraBold.ttf'),
 	'Inter-Bold': require('../../../packages/fonts/Inter/static/Inter-Bold.ttf'),
 };
 

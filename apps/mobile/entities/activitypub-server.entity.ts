@@ -15,6 +15,9 @@ export class ActivityPubServer extends Object {
 	url: string;
 	type: string;
 	nodeinfo?: string;
+	// rate limit policies
+	customEmojisRetryCount: number;
+
 	// cache policy
 	customEmojisLastFetchedAt?: Date;
 	instanceSoftwareLastFetchedAt?: Date;
@@ -36,6 +39,7 @@ export class ActivityPubServer extends Object {
 			type: 'string',
 			nodeinfo: 'string?',
 
+			customEmojisRetryCount: { type: 'int', default: 0 },
 			customEmojisLastFetchedAt: { type: 'date', optional: true },
 			instanceSoftwareLastFetchedAt: { type: 'date', optional: true },
 

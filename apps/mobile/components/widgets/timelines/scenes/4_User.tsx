@@ -18,8 +18,7 @@ function TimelineWidgetUserScene() {
 	const { setTimelineType, setQuery, setShowTimelineSelection } =
 		useTimelineController();
 
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct.subdomain;
+	const { subdomain } = useActivityPubRestClientContext();
 
 	const { transformedData } = TimelineWidgetUserApi(debouncedSearchTerm);
 

@@ -11,7 +11,7 @@ const VersionCode = memo(() => {
 	return (
 		<View style={{ marginTop: 16, marginBottom: 0 }}>
 			<Text style={styles.text}>{'Built with' + ' 💛 by Debashish Patra'}</Text>
-			<Text style={styles.text}>v0.5.0</Text>
+			<Text style={styles.text}>v0.9.0</Text>
 		</View>
 	);
 });

@@ -6,6 +6,7 @@ import {
 	ActivityPubStatuses,
 	MisskeyRestClient,
 	KNOWN_SOFTWARE,
+	StatusInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
@@ -18,9 +19,9 @@ import { UserDetailed } from 'misskey-js/built/autogen/models';
  * Pleroma - ???
  */
 function usePinnedPosts(userId: string) {
-	const [Data, setData] = useState([]);
+	const [Data, setData] = useState<StatusInterface[]>([]);
 	const { user } = useActivitypubUserContext();
-	const { client, domain } = useActivityPubRestClientContext();
+	const { client, domain, subdomain } = useActivityPubRestClientContext();
 
 	useEffect(() => {
 		setData([]);
@@ -52,7 +53,7 @@ function usePinnedPosts(userId: string) {
 
 	// Post Queries
 	const { status, data, fetchStatus } = useQuery<ActivityPubStatuses>({
-		queryKey: [userId],
+		queryKey: ['acct', subdomain, userId],
 		queryFn: fn,
 		enabled: userId !== undefined || domain === 'misskey',
 	});

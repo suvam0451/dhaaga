@@ -53,9 +53,10 @@ function WithActivitypubUserContext({ user, userI, children }: Props) {
 			setValue(userI);
 			return;
 		}
+
 		setRawValue(user);
 		setValue(ActivityPubUserAdapter(user, domain));
-	}, [user, userI]);
+	}, [user, userI, domain]);
 
 	const set = (o: UserInterface) => setValue(o);
 	const setRaw = (o: UserType) => {

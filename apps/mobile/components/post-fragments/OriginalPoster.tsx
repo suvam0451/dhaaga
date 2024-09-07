@@ -81,7 +81,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	displayNameRaw: string;
 	theirSubdomain: string;
 	onClick: () => void;
-	emojiMap?: any;
+	emojiMap?: Map<string, string>;
 	instanceUrl: string;
 	visibility: string;
 	postedAt: Date;
@@ -183,6 +183,7 @@ const OriginalPoster = memo(({ dto }: OriginalPosterProps) => {
 					instanceUrl={STATUS_DTO.postedBy.handle}
 					postedAt={new Date(STATUS_DTO.createdAt)}
 					visibility={STATUS_DTO.visibility}
+					emojiMap={STATUS_DTO.calculated.emojis}
 				/>
 			</Fragment>
 		);

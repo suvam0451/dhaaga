@@ -4,6 +4,12 @@ import { router, useNavigation } from 'expo-router';
 function useAppNavigator() {
 	const navigator = useNavigation();
 
+	const toHome = useCallback(() => {
+		// probably in bottom sheet
+		if (!navigator || !navigator.getId) return;
+		router.navigate(navigator.getId());
+	}, [navigator]);
+
 	const toPost = useCallback(
 		(id: string) => {
 			// probably in bottom sheet
@@ -46,7 +52,7 @@ function useAppNavigator() {
 		[navigator],
 	);
 
-	return { toPost, toProfile, toTag };
+	return { toPost, toHome, toProfile, toTag };
 }
 
 export default useAppNavigator;

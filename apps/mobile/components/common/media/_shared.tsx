@@ -11,45 +11,57 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
 
 type Props = {
 	url?: string;
 	blurhash?: string;
-	height?: number;
-	width?: number;
+	parentContainerHeight?: number;
+	parentContainerWidth?: number;
 	leftMarginAdjustment?: number;
 };
 
 export const AppImageComponent = memo(function Foo({
 	url,
-	blurhash,
-	height,
-	width,
-	leftMarginAdjustment,
+	parentContainerHeight,
+	parentContainerWidth,
 }: Props) {
+	const { ImageHeight, ImageWidth, onLayoutChanged } = useImageAspectRatio([
+		{ url },
+	]);
+
 	return (
-		// @ts-ignore-next-line
-		<Image
+		<View
 			style={{
-				flex: 1,
-				borderRadius: 16,
-				opacity: 0.87,
-				width,
-				height,
+				height: parentContainerHeight,
+				width: parentContainerWidth,
+				alignItems: 'center',
+				justifyContent: 'center',
 			}}
-			// placeholder={{ blurhash: blurhash || DEFAULT_BLURHASH }}
-			source={{
-				uri: url,
-				// blurhash: blurhash || DEFAULT_BLURHASH,
-				// width: MEDIA_CONTAINER_WIDTH,
-			}}
-			transition={{
-				effect: 'flip-from-right',
-				duration: 120,
-				timing: 'ease-in',
-			}}
-			// autoplay={false}
-		/>
+			onLayout={onLayoutChanged}
+		>
+			{/*@ts-ignore-next-line*/}
+			<Image
+				contentFit="fill"
+				style={{
+					// flex: 1,
+					borderRadius: 16,
+					opacity: 0.87,
+					width: ImageWidth,
+					height: ImageHeight,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}
+				source={{
+					uri: url,
+				}}
+				transition={{
+					effect: 'flip-from-right',
+					duration: 120,
+					timing: 'ease-in',
+				}}
+			/>
+		</View>
 	);
 });
 

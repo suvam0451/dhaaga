@@ -1,18 +1,15 @@
-import ActivityPubService from './activitypub.service';
 import { Realm } from 'realm';
 import { MMKV } from 'react-native-mmkv';
 import globalMmkvCacheServices from './globalMmkvCache.services';
 import { ActivityPubCustomEmojiCategoryRepository } from '../repositories/activitypub-emoji-category.repo';
 import { ActivityPubServerRepository } from '../repositories/activitypub-server.repo';
 import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-emoji.repo';
-import activitypubAdapterService from './activitypub-adapter.service';
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import GlobalMmkvCacheService from './globalMmkvCache.services';
 import {
 	InstanceApi_CustomEmojiDTO,
-	StatusInterface,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
+import AppPrivacySettingsService from './app-settings/app-settings-privacy.service';
 
 export type EmojiAdapter = {
 	// common
@@ -71,124 +68,79 @@ export class EmojiService {
 	}
 
 	/**
-	 * Update the emoji raw cache everyday
-	 * @param db
-	 * @param globalDb
-	 * @param subdomain
-	 * @param forcedUpdate
-	 * @returns
+	 * Updates the custom emoji
+	 * for an instance
+	 *
+	 * ^ Subjected to Cache-Policy
+	 * and Retry-Policy
+	 *
+	 * @forcedUpdate bypasses user prefs (e.g.- for acct instance)
 	 */
-	static async resolveEmojis(
+	static async refresh(
 		db: Realm,
 		globalDb: MMKV,
 		subdomain: string,
-		{ forcedUpdate }: { forcedUpdate: boolean } = { forcedUpdate: true },
-	) {
+		forceUpdate: boolean = false,
+	): Promise<InstanceApi_CustomEmojiDTO[] | null> {
+		// Cache-Policy
 		const found = globalMmkvCacheServices.getEmojiCacheForInstance(
 			globalDb,
 			subdomain,
 		);
-		// TODO: this needs to be brought back
-		if (found) {
-			return found.data;
+
+		const now = new Date();
+		const oneWeekAgo = new Date(now);
+		oneWeekAgo.setDate(now.getDate() - 7);
+
+		const LIST_NOT_EMPTY = found && found?.data?.length > 0;
+		const LIST_NOT_EXPIRED = new Date(found?.lastFetchedAt) >= oneWeekAgo;
+
+		if (LIST_NOT_EMPTY && LIST_NOT_EXPIRED) return found.data;
+
+		// Retry-Policy
+		const repo = ActivityPubServerRepository.create(db);
+		const server = repo.get(subdomain);
+		if (!server) {
+			console.log('[INFO]: reaction caching skipped (No-Info)', subdomain);
+			return null;
+		}
+		if (!server || repo.isReactionFetchRateLimited(server)) {
+			console.log('[INFO]: reaction caching skipped (Retry-Policy)', subdomain);
+			return null;
 		}
 
-		// do not refetch, if cache miss
-		if (!forcedUpdate) return;
+		// Force-Update-Policy
+		// Privacy --> Advanced --> Remote Instance Calls --> Reaction Caching
+		if (
+			!forceUpdate &&
+			AppPrivacySettingsService.create(
+				db,
+			).isDisabledCrossInstanceReactionCaching()
+		)
+			return null;
 
-		// GlobalMmkvCacheService
-		const result = await ActivityPubService.fetchEmojisAndInstanceSoftware(
-			db,
+		// All good
+		const x = new UnknownRestClient();
+		const { data, error } = await x.instances.getCustomEmojis(
 			subdomain,
+			server.type,
 		);
+
+		if (error) {
+			console.log('[WARN]: failed to get emojis');
+			return null;
+		}
 
 		db.write(() => {
-			ActivityPubServerRepository.updateSoftwareType(db, {
-				type: result.software,
-				url: subdomain,
-				description: 'N/A',
-			});
+			ActivityPubServerRepository.updateEmojisLastFetchedAt(db, subdomain, now);
 		});
+		console.log('[INFO]: cached emojis for', subdomain, data.length);
 
-		if (!result) return;
-		globalMmkvCacheServices.saveEmojiCacheForInstance(
+		return GlobalMmkvCacheService.saveEmojiCacheForInstance(
 			globalDb,
 			subdomain,
-			result.emojis,
+			data,
 		);
-		return result.emojis;
-	}
-
-	/**
-	 * Fetches list of remote emojis and
-	 * saves the ones current encountered in the db (to save space)
-	 *
-	 * The fetched cache is stored in MMKV and cleared on reload
-	 */
-	static async loadEmojiSelectionForRemoteInstance(
-		db: Realm,
-		globalDb: MMKV,
-		subdomain: string,
-		detectedList: string[],
-	) {
-		await this.loadEmojisForInstance(db, globalDb, subdomain, {
-			selection: new Set(detectedList),
-			forcedUpdate: false,
-		});
-	}
-
-	/**
-	 * Use it to preload emoji api responses,
-	 * for each detected instance in the list
-	 * of statuses provided
-	 * @param db
-	 * @param globalDb
-	 * @param statuses
-	 * @param domain
-	 */
-	static async preloadInstanceEmojisForStatuses(
-		db: Realm,
-		globalDb: MMKV,
-		statuses: StatusInterface[],
-		domain: string,
-	) {
-		// dedup
-		const instanceSet = new Set<string>();
-		for (let i = 0; i < statuses.length; i++) {
-			const _user = activitypubAdapterService.adaptUser(
-				statuses[i].getUser(),
-				domain,
-			);
-			/**
-			 * when host == null, this means user
-			 * belongs to same instance.
-			 *
-			 * We can probably skip emoji lookup for
-			 * such occurrences
-			 */
-			if (!_user.getInstanceUrl()) {
-				continue;
-			}
-			if (!instanceSet.has(_user.getInstanceUrl()))
-				instanceSet.add(_user.getInstanceUrl());
-		}
-
-		// @ts-ignore-next-line
-		const calls = [...instanceSet].map((o) =>
-			this.resolveEmojis(db, globalDb, o).catch((e) => ({
-				error: e,
-				errorData: o,
-			})),
-		);
-		await Promise.all(calls).then((results) => {
-			results.forEach((res) => {
-				if (res?.['error']) {
-					// console.log("[WARN]: emoji fetch failed for", res["errorData"])
-				} else {
-					// console.log("[INFO]: emoji not loaded for", res["errorData"])
-				}
-			});
-		});
 	}
 
 	/**
@@ -204,14 +156,14 @@ export class EmojiService {
 		id,
 		remoteInstance,
 	}: {
-		emojiMap: Map<string, EmojiMapValue>;
+		emojiMap: Map<string, string>;
 		db: Realm;
 		globalDb: MMKV;
 		id: string;
 		remoteInstance: string;
 	}) {
 		if (emojiMap?.get(id)) {
-			return emojiMap?.get(id).url;
+			return emojiMap?.get(id);
 		} else {
 			return ActivityPubCustomEmojiRepository.search(db, id, remoteInstance)
 				?.url;
@@ -279,7 +231,6 @@ export class EmojiService {
 	 * @param globalDb
 	 * @param subdomain
 	 * @param selection if provided, will skip any emoji not in this list
-	 * @param forcedUpdate if true, will cause cache miss to call the emoji api
 	 */
 	static async loadEmojisForInstance(
 		db: Realm,
@@ -287,15 +238,11 @@ export class EmojiService {
 		subdomain: string,
 		{
 			selection,
-			forcedUpdate,
 		}: {
 			selection?: Set<string>;
-			forcedUpdate: boolean;
-		} = { selection: new Set(), forcedUpdate: false },
+		} = { selection: new Set() },
 	) {
-		let data = await this.resolveEmojis(db, globalDb, subdomain, {
-			forcedUpdate,
-		});
+		let data = await this.refresh(db, globalDb, subdomain);
 		console.log(
 			'[DEBUG]: emojis obtained for',
 			subdomain,
@@ -335,72 +282,5 @@ export class EmojiService {
 			);
 			ActivityPubCustomEmojiRepository.upsertMany(db, data, server);
 		});
-	}
-
-	/**
-	 * download and save emojis
-	 * for an instance
-	 *
-	 * cache-expiry: 7 days
-	 * @param db
-	 * @param globalDb
-	 * @param subdomain
-	 * @param forceUpdate
-	 */
-	static async sync(
-		db: Realm,
-		globalDb: MMKV,
-		subdomain: string,
-		forceUpdate?: boolean,
-	) {
-		const server = ActivityPubServerRepository.get(db, subdomain);
-		if (!server) {
-			console.log('[WARN]: unable to sync emojis. server not found.');
-			return null;
-		}
-
-		// Cache-Policy
-		const data = GlobalMmkvCacheService.getEmojiCacheForInstance(
-			globalDb,
-			subdomain,
-		);
-
-		const now = new Date();
-		const oneWeekAgo = new Date(now);
-		oneWeekAgo.setDate(now.getDate() - 7);
-
-		const IS_FRESH =
-			data &&
-			data?.data?.length > 0 &&
-			new Date(data?.lastFetchedAt) >= oneWeekAgo;
-
-		/**
-		 * Update only if stale of
-		 * requested forced update
-		 */
-		if (!IS_FRESH || forceUpdate) {
-			const x = new UnknownRestClient();
-			const { data: emojiData, error: emojiError } =
-				await x.instances.getCustomEmojis(subdomain, server.type);
-			if (emojiError) {
-				console.log('[WARN]: failed to get emojis');
-				return null;
-			}
-			GlobalMmkvCacheService.saveEmojiCacheForInstance(
-				globalDb,
-				subdomain,
-				emojiData,
-			);
-
-			db.write(() => {
-				ActivityPubServerRepository.updateEmojisLastFetchedAt(
-					db,
-					subdomain,
-					now,
-				);
-			});
-			return now;
-		}
-		return data.lastFetchedAt;
 	}
 }

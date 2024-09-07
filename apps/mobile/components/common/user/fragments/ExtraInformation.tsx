@@ -6,6 +6,8 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { useActivitypubUserContext } from '../../../../states/useProfile';
 import useMfm from '../../../hooks/useMfm';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 type ExtraInformationFieldProps = {
 	label: string;
@@ -21,12 +23,19 @@ const ExtraInformationField = memo(function Foo({
 	last,
 }: ExtraInformationFieldProps) {
 	const { user } = useActivitypubUserContext();
+	const { subdomain } = useActivityPubRestClientContext();
 
 	const { content: ParsedValue } = useMfm({
 		content: value,
-		remoteSubdomain: user?.getInstanceUrl(),
+		remoteSubdomain: user?.getInstanceUrl(subdomain),
 		emojiMap: user?.getEmojiMap(),
 		deps: [value],
+	});
+	const { content: ParsedLabel } = useMfm({
+		content: label,
+		remoteSubdomain: user?.getInstanceUrl(subdomain),
+		emojiMap: user?.getEmojiMap(),
+		deps: [label],
 	});
 
 	return (
@@ -41,16 +50,7 @@ const ExtraInformationField = memo(function Foo({
 			}}
 		>
 			<View style={{ width: ADDITIONAL_INFO_MAX_LABEL_WIDTH }}>
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-						maxWidth: ADDITIONAL_INFO_MAX_LABEL_WIDTH,
-						fontFamily: 'Inter-Bold',
-					}}
-					numberOfLines={2}
-				>
-					{label}
-				</Text>
+				{ParsedLabel}
 			</View>
 			<View style={{ flexGrow: 1, flex: 1, marginLeft: 4 }}>
 				<Text numberOfLines={1}>{ParsedValue}</Text>
@@ -85,7 +85,7 @@ function UserProfileExtraInformation({
 				<View style={styles.expandableSectionMarkerContainer}>
 					<Text
 						style={{
-							fontFamily: 'Montserrat-Bold',
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 							color: APP_FONT.MONTSERRAT_BODY,
 							flexGrow: 1,
 						}}

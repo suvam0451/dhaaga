@@ -3,7 +3,6 @@ import { useAppPaginationContext } from '../../../../../../states/usePagination'
 import DiscoverListRenderer from './DiscoverListRenderer';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavBar';
 import DiscoverSearchHelper from './DiscoverSearchHelper';
 import DiscoverTabListHeader from './DiscoverTabListHeader';
 import useSearch, { APP_SEARCH_TYPE } from '../../../api/useSearch';
@@ -13,6 +12,9 @@ import { useActivityPubRestClientContext } from '../../../../../../states/useAct
 import { useDebounce } from 'use-debounce';
 import { useAppTimelineDataContext } from '../../../../../common/timeline/api/useTimelineData';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../../../shared/topnavbar/AppTopNavbar';
 
 /**
  * Renders the results of a
@@ -98,7 +100,11 @@ const DiscoverTabFactory = memo(() => {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Explore'} translateY={translateY}>
+		<AppTopNavbar
+			title={'Explore'}
+			translateY={translateY}
+			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
+		>
 			<AnimatedFlashList
 				estimatedItemSize={200}
 				data={flashListData}
@@ -130,7 +136,7 @@ const DiscoverTabFactory = memo(() => {
 				setSearchTerm={setSearchTerm}
 				setSearchCategory={setSearchCategory}
 			/>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 });
 

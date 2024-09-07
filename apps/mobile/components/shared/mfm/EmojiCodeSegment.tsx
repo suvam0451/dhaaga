@@ -1,6 +1,5 @@
 import { memo, useEffect, useState } from 'react';
 import { EmojiService } from '../../../services/emoji.service';
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { Text, Image as RNImage } from 'react-native';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { Image } from 'expo-image';
@@ -11,7 +10,7 @@ import { randomUUID } from 'expo-crypto';
 type Props = {
 	value: string;
 	remoteInstance: string;
-	emojiMap: Map<string, EmojiMapValue>;
+	emojiMap: Map<string, string>;
 };
 
 const EMOJI_HEIGHT = 16;
@@ -47,14 +46,14 @@ const EmojiCodeSegment = memo(function Foo({
 			(width, height) => {
 				setWidth(width * (EMOJI_HEIGHT / height));
 			},
-			(error) => {
+			() => {
 				setWidth(EMOJI_HEIGHT);
 			},
 		);
 	}, [match]);
 
 	return (
-		<Text key={k} style={{}}>
+		<Text>
 			{/*@ts-ignore-next-line*/}
 			<Image
 				style={{

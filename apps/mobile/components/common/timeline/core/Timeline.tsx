@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	View,
 } from 'react-native';
-import TimelinesHeader from '../../../TimelineHeader';
+import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
@@ -37,9 +37,6 @@ import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAppTimelineDataContext, {
 	useAppTimelineDataContext,
 } from '../api/useTimelineData';
-
-const HIDDEN_SECTION_HEIGHT = 50;
-const SHOWN_SECTION_HEIGHT = 50;
 
 /*
  * Render a Timeline
@@ -89,7 +86,7 @@ const Timeline = memo(() => {
 			setPageLoadedAtLeastOnce(true);
 
 			/**
-			 * Resolve Custom Emojis
+			 * Resolve Software + Custom Emojis
 			 */
 			for (const datum of _data) {
 				ActivitypubStatusService.factory(datum, domain, subdomain)
@@ -127,7 +124,6 @@ const Timeline = memo(() => {
 		<WithAppMenu
 			sidebarVariant={SIDEBAR_VARIANT.TIMELINE}
 			fabMenuItems={[
-				// FAB_MENU_MODULES.NAVIGATOR,
 				FAB_MENU_MODULES.CREATE_POST,
 				FAB_MENU_MODULES.TIMELINE_SWITCHER,
 			]}
@@ -135,11 +131,7 @@ const Timeline = memo(() => {
 			<View style={[styles.container, { position: 'relative' }]}>
 				<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 				<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-					<TimelinesHeader
-						SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-						HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-						label={label}
-					/>
+					<TimelinesHeader title={label} />
 				</Animated.View>
 				<AnimatedFlashList
 					ListHeaderComponent={
@@ -154,7 +146,7 @@ const Timeline = memo(() => {
 					getItemType={(o) => o.type}
 					onScroll={onScroll}
 					contentContainerStyle={{
-						paddingTop: SHOWN_SECTION_HEIGHT + 4,
+						paddingTop: 54,
 					}}
 					scrollEventThrottle={16}
 					refreshControl={
@@ -189,11 +181,6 @@ const styles = StyleSheet.create({
 		right: 0,
 		width: '100%',
 		zIndex: 1,
-	},
-	subHeader: {
-		height: SHOWN_SECTION_HEIGHT,
-		width: '100%',
-		paddingHorizontal: 10,
 	},
 	container: {
 		flex: 1,

@@ -11,6 +11,7 @@ import { DefaultSearchRouter } from './search.js';
 import { DefaultMeRouter } from './me.js';
 import { DefaultMediaRoute } from './media.js';
 import { DefaultListRoute } from './lists.js';
+import { DefaultProfileRouter } from './profile.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
@@ -24,6 +25,7 @@ class UnknownRestClient implements ActivityPubClient {
 	me: DefaultMeRouter;
 	media: DefaultMediaRoute;
 	lists: DefaultListRoute;
+	profile: DefaultProfileRouter;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
@@ -37,6 +39,7 @@ class UnknownRestClient implements ActivityPubClient {
 		this.me = new DefaultMeRouter();
 		this.media = new DefaultMediaRoute();
 		this.lists = new DefaultListRoute();
+		this.profile = new DefaultProfileRouter();
 	}
 
 	async getMyLists() {
