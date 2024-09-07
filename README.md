@@ -32,7 +32,7 @@
   <a href="https://github.com/suvam0451/dhaaga/releases/latest" target="_blank">
     <img src="./.github/badges/github.png" height="48px"/>
   </a>
-  <a href="https://play.google.com/apps/testing/io.suvam.dhaaga" target="_blank">    
+  <a href="https://play.google.com/store/apps/details?id=io.suvam.dhaaga" target="_blank">    
     <img src="./.github/badges/google_play.svg" height="48px"/>
   </a>
   <a href="https://apt.izzysoft.de/fdroid/index/apk/io.suvam.dhaaga.lite" target="_blank">

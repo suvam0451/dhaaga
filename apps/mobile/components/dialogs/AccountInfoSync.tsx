@@ -11,22 +11,25 @@ import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { APP_FONT } from '../../styles/AppTheme';
 import { FontAwesome } from '@expo/vector-icons';
-import { useRealm } from '@realm/react';
+import { useObject, useRealm } from '@realm/react';
 import { SoftwareBadgeUpdateAccountOnClick } from '../common/software/SimpleBadge';
 import ActivityPubService from '../../services/activitypub.service';
 import AccountService from '../../services/account.service';
 import AccountOverviewFragment from './accounts/_AccountOverview';
+import { UUID } from 'bson';
+import { BSON } from 'realm';
 
 type Props = {
-	acct: Account;
+	acctId: UUID;
 } & RneuiDialogProps;
 
 const AccountInfoSyncDialog = memo(function Foo({
 	setIsVisible,
-	acct,
+	acctId,
 	IsVisible,
 }: Props) {
 	const db = useRealm();
+	const acct = useObject(Account, acctId || new BSON.UUID());
 
 	const [SoftwareAutoDetectLoading, setSoftwareAutoDetectLoading] =
 		useState(false);

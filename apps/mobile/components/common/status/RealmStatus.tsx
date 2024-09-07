@@ -2,7 +2,6 @@ import { useObject } from '@realm/react';
 import { ActivityPubStatus } from '../../../entities/activitypub-status.entity';
 import { View, StyleSheet } from 'react-native';
 import useMfm from '../../hooks/useMfm';
-import { EmojiMapValue } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/profile/_interface';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import {
 	OriginalPostedPfpFragment,
@@ -40,7 +39,7 @@ const RealmStatus = memo(function Foo({ _id }: { _id: Realm.BSON.UUID }) {
 	const { content } = useMfm({
 		content: post.content,
 		remoteSubdomain: post.postedBy.server.url,
-		emojiMap: new Map<string, EmojiMapValue>(),
+		emojiMap: new Map(),
 		deps: [post._id],
 	});
 

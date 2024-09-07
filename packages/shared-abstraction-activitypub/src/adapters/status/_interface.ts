@@ -113,6 +113,15 @@ export interface StatusInterface {
 		url: string | null;
 	}[];
 
+	/**
+	 * Remote emojis are usually
+	 * cached by the instance db
+	 *
+	 * These are generally not supposed
+	 * to be interacted with
+	 */
+	getCachedEmojis(): Map<string, string>;
+
 	getReactionEmojis(): {
 		height?: number;
 		width?: number;
@@ -146,20 +155,16 @@ export class StatusContextInstance {
 
 export class StatusInstance {
 	instance: mastodon.v1.Status;
-	emojiMap: Map<string, URL>;
 
 	constructor(instance: mastodon.v1.Status) {
 		this.instance = instance;
-		this.emojiMap = new Map();
 	}
 }
 
 export class NoteInstance {
 	instance: Note;
-	emojiMap: Map<string, URL>;
 
 	constructor(instance: Note) {
 		this.instance = instance;
-		this.emojiMap = new Map();
 	}
 }

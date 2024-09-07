@@ -1,5 +1,4 @@
 import { Tabs } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
@@ -7,6 +6,7 @@ import { APP_THEME } from '../../styles/AppTheme';
 import { StatusBar } from 'expo-status-bar';
 import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
 import WithAppAssetsContext from '../../hooks/app/useAssets';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
@@ -42,7 +42,8 @@ export default function TabLayout() {
 										break;
 									}
 									case 'Favourites': {
-										iconName = focused ? 'bookmark' : 'bookmark';
+										iconName = focused ? 'appstore1' : 'appstore1';
+										renderer = 'antdesign';
 										break;
 									}
 									case 'Notifications': {
@@ -54,6 +55,10 @@ export default function TabLayout() {
 									}
 								}
 								switch (renderer) {
+									case 'antdesign':
+										return (
+											<AntDesign name={iconName} size={size} color={color} />
+										);
 									case 'fa6':
 										return (
 											<FontAwesome6.default
@@ -90,54 +95,84 @@ export default function TabLayout() {
 					<Tabs.Screen
 						name="index"
 						options={{
-							tabBarIcon: ({ color, size }) => (
-								<Ionicons size={size} name="home" color={color} />
-							),
+							tabBarIcon: ({ color, size, focused }) =>
+								focused ? (
+									<Ionicons size={size} name="home" color={color} />
+								) : (
+									<Ionicons size={size} name="home-outline" color={color} />
+								),
 						}}
 					/>
 					<Tabs.Screen
 						name={'discover'}
 						options={{
-							tabBarIcon: ({ color, size }) => (
-								<FontAwesome6 size={size} name="compass" color={color} />
-							),
+							tabBarIcon: ({ color, size, focused }) =>
+								focused ? (
+									<Ionicons
+										name="compass-sharp"
+										size={size + 4}
+										color={color}
+									/>
+								) : (
+									<Ionicons
+										name="compass-outline"
+										size={size + 4}
+										color={color}
+									/>
+								),
 						}}
 					/>
 					<Tabs.Screen
-						name={'favourites'}
+						name={'apps'}
 						options={{
-							tabBarIcon: ({ color, size }) => (
-								<Ionicons size={size} name="bookmark-outline" color={color} />
-							),
+							tabBarIcon: ({ color, size, focused }) =>
+								focused ? (
+									<AntDesign name={'appstore1'} size={size} color={color} />
+								) : (
+									<AntDesign name="appstore-o" size={size} color={color} />
+								),
 						}}
 					/>
 
 					<Tabs.Screen
 						name={'accounts'}
 						options={{
-							tabBarIcon: ({ color, size }) => (
-								<Ionicons size={size} name="person-outline" color={color} />
-							),
+							tabBarIcon: ({ color, size, focused }) =>
+								focused ? (
+									<Ionicons size={size} name="person" color={color} />
+								) : (
+									<Ionicons size={size} name="person-outline" color={color} />
+								),
 						}}
 					/>
 					<Tabs.Screen
 						name={'notifications'}
 						options={{
-							tabBarIcon: ({ color, size }) => (
-								<Ionicons
-									size={size}
-									name="notifications-outline"
-									color={color}
-								/>
-							),
+							tabBarIcon: ({ color, size, focused }) =>
+								focused ? (
+									<Ionicons
+										name="notifications-sharp"
+										size={size}
+										color={color}
+									/>
+								) : (
+									<Ionicons
+										size={size}
+										name="notifications-outline"
+										color={color}
+									/>
+								),
 						}}
 					/>
 					<Tabs.Screen
 						name="settings"
 						options={{
-							tabBarIcon: ({ color, size }) => (
-								<FontAwesome size={size} name="cog" color={color} />
-							),
+							tabBarIcon: ({ color, size, focused }) =>
+								focused ? (
+									<Ionicons name="settings-sharp" size={size} color={color} />
+								) : (
+									<Ionicons name="settings-outline" size={24} color={color} />
+								),
 						}}
 					/>
 				</Tabs>

@@ -34,7 +34,8 @@ const DEFAULT = {
  */
 function useActivityPubLists() {
 	const [Data, setData] = useState<ActivityPubListsListingDto>(DEFAULT);
-	const { client, primaryAcct, domain } = useActivityPubRestClientContext();
+	const { client, primaryAcct, domain, subdomain } =
+		useActivityPubRestClientContext();
 
 	useEffect(() => {
 		setData(DEFAULT);
@@ -85,7 +86,7 @@ function useActivityPubLists() {
 
 	// Queries
 	const { data, status, fetchStatus } = useQuery<ActivityPubListsListingDto>({
-		queryKey: ['lists', primaryAcct.username, primaryAcct.subdomain],
+		queryKey: ['lists', primaryAcct?.username, subdomain],
 		queryFn: api,
 		enabled: client !== null,
 	});

@@ -39,7 +39,7 @@ function useGetProfile({ user, userId }: GetProfile_Type) {
 
 	// Queries
 	const { status, data } = useQuery<ActivityPubAccount>({
-		queryKey: ['profile', user, userId],
+		queryKey: ['profile', user?.getId(), userId],
 		queryFn: api,
 		enabled:
 			client !== undefined &&

@@ -22,7 +22,7 @@ const LastSyncedStatus = memo(({ id }: Props) => {
 	const [LastSyncedDate, setLastSyncedDate] = useState(null);
 	const [TotalItemCount, setTotalItemCount] = useState(null);
 
-	const acct = useObject(Account, PrimaryAcctPtr.current?._id);
+	const acct = useObject(Account, PrimaryAcctPtr.current);
 
 	useEffect(() => {
 		switch (id) {

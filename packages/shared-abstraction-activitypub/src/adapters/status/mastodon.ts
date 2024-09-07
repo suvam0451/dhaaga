@@ -24,6 +24,14 @@ class MastodonToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
+	getCachedEmojis(): Map<string, string> {
+		const retval = new Map<string, string>();
+		this.ref.instance?.emojis?.forEach((o) => {
+			retval.set(o.shortcode, o.url);
+		});
+		return retval;
+	}
+
 	getMentions(): DhaagaJsMentionObject[] {
 		return this.ref.instance?.mentions || [];
 	}
@@ -35,8 +43,14 @@ class MastodonToStatusAdapter implements StatusInterface {
 		accounts: string[];
 		url: string | null;
 	}[] {
-		// Pleroma/Akkoma
-		const reactions = (this.ref.instance as any).emojiReactions;
+		// Akkoma
+		let reactions = (this.ref.instance as any).emojiReactions;
+
+		// Pleroma
+		if (!reactions) {
+			reactions = (this.ref.instance as any)?.pleroma?.emojiReactions;
+		}
+
 		if (!reactions) return [];
 		return reactions.map((o: any) => ({
 			id: o.name,

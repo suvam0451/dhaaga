@@ -2,6 +2,7 @@ import {
 	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
+	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
@@ -14,9 +15,10 @@ import {
 	errorBuilder,
 	notImplementedErrorBuilder,
 } from '../_router/dto/api-responses.dto.js';
-import { DefaultAccountRouter } from '../default/accounts.js';
+import { BaseAccountsRouter } from '../default/accounts.js';
 import {
 	GetPostsQueryDTO,
+	MastoAccount,
 	MastoRelationship,
 	MastoStatus,
 	MegaAccount,
@@ -27,9 +29,10 @@ import { LibraryPromise } from '../_router/routes/_types.js';
 import AppApi from '../../_api/AppApi.js';
 import camelcaseKeys from 'camelcase-keys';
 import snakecaseKeys from 'snakecase-keys';
+import { DhaagaErrorCode } from '../_router/_types.js';
 
 export class PleromaAccountsRouter
-	extends DefaultAccountRouter
+	extends BaseAccountsRouter
 	implements AccountRoute
 {
 	client: RestClient;
@@ -139,5 +142,55 @@ export class PleromaAccountsRouter
 			return errorBuilder(data.statusText);
 		}
 		return { data: camelcaseKeys(data.data) as any };
+	}
+
+	async followers(query: FollowerGetQueryDTO): LibraryPromise<{
+		data: MastoAccount[];
+		minId?: string | null;
+		maxId?: string | null;
+	}> {
+		try {
+			const { id, ...rest } = query;
+			const { data: _data, error } = await new AppApi(
+				this.client.url,
+				this.client.accessToken,
+			).getCamelCaseWithLinkPagination<MastoAccount[]>(
+				`/api/v1/accounts/${id}/followers`,
+				rest,
+			);
+
+			if (error) {
+				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			}
+			return { data: _data };
+		} catch (e) {
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async followings(query: FollowerGetQueryDTO): LibraryPromise<{
+		data: MastoAccount[];
+		minId?: string | null;
+		maxId?: string | null;
+	}> {
+		try {
+			const { id, ...rest } = query;
+			const { data: _data, error } = await new AppApi(
+				this.client.url,
+				this.client.accessToken,
+			).getCamelCaseWithLinkPagination<MastoAccount[]>(
+				`/api/v1/accounts/${id}/following`,
+				rest,
+			);
+
+			if (error) {
+				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			}
+			return { data: _data };
+		} catch (e) {
+			console.log(e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 }

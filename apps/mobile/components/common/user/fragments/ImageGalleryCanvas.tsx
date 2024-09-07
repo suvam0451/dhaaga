@@ -1,4 +1,4 @@
-import { Dimensions, Animated } from 'react-native';
+import { Animated, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import {
 	Directions,
@@ -95,14 +95,12 @@ function ImageGalleryCanvas({
 
 	const maxW = useRef(Dimensions.get('window').width - 16);
 	const { height: _height, width: _width } = useMemo(() => {
-		const data = MediaService.calculateDimensions({
+		return MediaService.calculateDimensions({
 			maxW: maxW.current,
 			maxH: 400,
 			H: height,
 			W: width,
 		});
-		console.log(data);
-		return data;
 	}, [height, width]);
 
 	return (

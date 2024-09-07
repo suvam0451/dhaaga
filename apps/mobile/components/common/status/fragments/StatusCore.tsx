@@ -47,7 +47,7 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 	} = useMfm({
 		content: STATUS_DTO.content.raw,
 		remoteSubdomain: STATUS_DTO.postedBy.instance,
-		emojiMap: STATUS_DTO.calculated.emojis as any,
+		emojiMap: STATUS_DTO.calculated.emojis,
 		deps: [dto],
 	});
 
@@ -72,10 +72,8 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 					borderRadius: 8,
 					borderTopLeftRadius: hasReply || hasBoost ? 0 : 8,
 					borderTopRightRadius: hasReply || hasBoost ? 0 : 8,
-					// backgroundColor: 'red',
 				}}
 			>
-				{/*<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>{dto.id}</Text>*/}
 				<TouchableOpacity
 					delayPressIn={100}
 					onPress={() => {
@@ -115,7 +113,6 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 					<MediaItem
 						attachments={STATUS_DTO.content.media}
 						calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
-						leftMarginAdjustment={20}
 					/>
 				)}
 				{IS_QUOTE_BOOST && (

@@ -1,7 +1,6 @@
 import { createContext, useContext } from 'react';
 import { Asset, useAssets } from 'expo-asset';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { undefined } from 'zod';
 
 /**
  *
@@ -18,15 +17,15 @@ type Type = {
 };
 
 const defaultValue: Type = {
-	getBrandLogo(input: string): {
+	branding: [],
+	isAssetsLoaded: false,
+	getBrandLogo: function (input: string): {
 		imgUrl: string;
 		width: number;
 		height: number;
 	} {
-		return undefined as any;
+		throw new Error('Function not implemented.');
 	},
-	branding: [],
-	isAssetsLoaded: false,
 };
 
 const AppAssetsContext = createContext<Type>(defaultValue);

@@ -1,21 +1,29 @@
-import { Fragment } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import Animated from 'react-native-reanimated';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../../components/containers/WithAutoHideTopNavBar';
 import { APP_FONT } from '../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { FontAwesome } from '@expo/vector-icons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import VersionCode from '../../components/static/sponsorship/VersionCode';
+import { APP_FONTS } from '../../styles/AppFonts';
+import Octicons from '@expo/vector-icons/Octicons';
+import Entypo from '@expo/vector-icons/Entypo';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Ionicons } from '@expo/vector-icons';
+import * as React from 'react';
+import { Fragment } from 'react';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../components/shared/topnavbar/AppTopNavbar';
 
 function SettingPageFooter() {
-	return <VersionCode />;
+	return (
+		<Fragment>
+			<VersionCode />
+		</Fragment>
+	);
 }
 
 type AppFeatureSmallGridItemProps = {
@@ -25,7 +33,7 @@ type AppFeatureSmallGridItemProps = {
 	iconSize: number;
 };
 
-function AppFeatureSmallGridItem({
+export function AppFeatureSmallGridItem({
 	Icon,
 	disabled,
 	alignment,
@@ -109,7 +117,7 @@ type AppFeatureLargeGridItemProps = {
 	alignment: 'left' | 'right';
 };
 
-function AppFeatureLargeGridItem({
+export function AppFeatureLargeGridItem({
 	label,
 	link,
 	Icon,
@@ -147,244 +155,127 @@ function AppFeatureLargeGridItem({
 	);
 }
 
-function SettingsScreenTopSection() {
+type SettingCategoryListItemProps = {
+	label: string;
+	Icon: any;
+	to: string;
+};
+function SettingCategoryListItem({
+	Icon,
+	to,
+	label,
+}: SettingCategoryListItemProps) {
 	return (
-		<Fragment>
-			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					fontSize: 24,
-					color: APP_FONT.MONTSERRAT_BODY,
-					marginHorizontal: 8,
-					marginVertical: 16,
-				}}
-			>
-				Dhaaga Features
-			</Text>
-			<View style={styles.appFeaturesGridRow}>
-				<View style={{ flex: 1, marginRight: 8 }}>
-					<AppFeatureLargeGridItem
-						label={'Known Servers'}
-						link={'/settings/server-debugger'}
-						Icon={
-							<FontAwesome6
-								name="server"
-								size={24}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
-						}
-						alignment={'left'}
-					/>
-				</View>
-				<View style={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
-					<AppFeatureSmallGridItem
-						Icon={
-							<FontAwesome5
-								name="download"
-								size={24}
-								color={APP_FONT.MONTSERRAT_BODY}
-								disabled
-								style={{
-									opacity: 0.36,
-								}}
-							/>
-						}
-						alignment={'left'}
-						iconSize={24}
-						disabled={true}
-					/>
-					<AppFeatureSmallGridItem
-						Icon={
-							<FontAwesome5
-								name="download"
-								size={24}
-								color={APP_FONT.MONTSERRAT_HEADER}
-								disabled
-								style={{
-									opacity: 0.36,
-								}}
-							/>
-						}
-						alignment={'right'}
-						iconSize={24}
-						disabled={true}
-					/>
-				</View>
-			</View>
-			<View style={styles.appFeaturesGridRow}>
-				<View style={{ flex: 1, flexDirection: 'column' }}>
-					<View
-						style={{ display: 'flex', flexDirection: 'row', marginBottom: 8 }}
-					>
-						<AppFeatureSmallGridItem
-							Icon={
-								<MaterialCommunityIcons
-									name="progress-question"
-									size={36}
-									color={APP_FONT.MONTSERRAT_BODY}
-									disabled
-									style={{
-										opacity: 0.36,
-									}}
-								/>
-							}
-							alignment={'left'}
-							iconSize={36}
-							disabled={true}
-						/>
-						<AppFeatureSmallGridItem
-							Icon={
-								<MaterialCommunityIcons
-									name="progress-question"
-									size={36}
-									color={APP_FONT.MONTSERRAT_BODY}
-									disabled
-									style={{
-										opacity: 0.36,
-									}}
-								/>
-							}
-							alignment={'right'}
-							iconSize={36}
-							disabled={true}
-						/>
-					</View>
-					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<AppFeatureSmallGridItem
-							Icon={
-								<MaterialCommunityIcons
-									name="progress-question"
-									size={36}
-									color={APP_FONT.MONTSERRAT_BODY}
-									disabled
-									style={{
-										opacity: 0.36,
-									}}
-								/>
-							}
-							alignment={'left'}
-							iconSize={36}
-							disabled={true}
-						/>
-						<AppFeatureSmallGridItem
-							Icon={
-								<MaterialCommunityIcons
-									name="progress-question"
-									size={36}
-									color={APP_FONT.MONTSERRAT_BODY}
-									disabled
-									style={{
-										opacity: 0.36,
-									}}
-								/>
-							}
-							alignment={'right'}
-							iconSize={36}
-							disabled={true}
-						/>
-					</View>
-				</View>
+		<TouchableOpacity
+			style={styles.collapsibleSettingsSection}
+			onPress={() => {
+				router.navigate(to);
+			}}
+		>
+			<View style={{ width: 24, height: 24 }}>{Icon}</View>
 
-				<View style={{ flex: 1, marginLeft: 8 }}>
-					<AppFeatureExtraLargeGridItem
-						label={'Block Lists'}
-						link={'/settings/server-debugger'}
-						Icon={
-							<MaterialIcons
-								name="block-flipped"
-								size={24}
-								color={APP_FONT.MONTSERRAT_HEADER}
-							/>
-						}
-						disabled
-						alignment={'right'}
-					/>
-				</View>
-			</View>
-		</Fragment>
+			<Text style={styles.collapsibleSettingsLabel}>{label}</Text>
+		</TouchableOpacity>
 	);
 }
 
-function SettingsScreenBottomSection() {
+function SettingCategoryList() {
 	return (
-		<Fragment>
-			<View style={styles.collapsibleSettingsSection}>
-				<View style={{ width: 24, height: 24 }}>
-					<FontAwesome6
-						name="palette"
-						size={24}
+		<View style={{ width: '100%', flexGrow: 1, paddingHorizontal: 8 }}>
+			<SettingCategoryListItem
+				label={'Accounts'}
+				to={'/settings/accounts'}
+				Icon={
+					<MaterialIcons
+						name="manage-accounts"
+						size={26}
 						color={APP_FONT.MONTSERRAT_BODY}
 					/>
-				</View>
-				<View style={{ flexGrow: 1 }}>
-					<Text style={styles.collapsibleSettingsLabel}>Appearance</Text>
-				</View>
-				<View>
-					<FontAwesome
-						name="chevron-down"
-						size={24}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
-				</View>
-			</View>
-			<Divider
-				style={{
-					backgroundColor: 'rgba(18,18,18,0.87)',
-					width: '100%',
-				}}
+				}
 			/>
-			<View style={styles.collapsibleSettingsSection}>
-				<View style={{ width: 24, height: 24 }}>
+			<SettingCategoryListItem
+				label={'Preferences'}
+				to={'/settings/user-preferences'}
+				Icon={
+					<Octicons
+						name="checklist"
+						size={24}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+				}
+			/>
+			<SettingCategoryListItem
+				label={'Privacy'}
+				to={'/settings/privacy'}
+				Icon={
 					<FontAwesome6
 						name="user-secret"
 						size={24}
 						color={APP_FONT.MONTSERRAT_BODY}
 					/>
-				</View>
-
-				<Text style={styles.collapsibleSettingsLabel}>Privacy Tools</Text>
-			</View>
+				}
+			/>
 			<Divider
 				style={{
 					backgroundColor: 'rgba(18,18,18,0.87)',
 					width: '100%',
+					marginVertical: 12,
 				}}
 			/>
-			<View style={styles.collapsibleSettingsSection}>
-				<View style={{ width: 24, height: 24 }}>
+			<SettingCategoryListItem
+				label={'Support'}
+				to={'/settings/support'}
+				Icon={
+					<AntDesign name="hearto" size={24} color={APP_FONT.MONTSERRAT_BODY} />
+				}
+			/>
+			<SettingCategoryListItem
+				label={'Help'}
+				to={'/settings/help'}
+				Icon={
 					<Ionicons
-						name="cloud-offline"
+						name="help-buoy"
 						size={24}
 						color={APP_FONT.MONTSERRAT_BODY}
 					/>
-				</View>
-				<Text style={styles.collapsibleSettingsLabel}>Offline Features</Text>
-			</View>
-		</Fragment>
+				}
+			/>
+
+			<SettingCategoryListItem
+				label={'Info'}
+				to={'/settings/info'}
+				Icon={
+					<Entypo
+						name="info-with-circle"
+						size={24}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+				}
+			/>
+		</View>
 	);
 }
 
 function SettingsLandingPage() {
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: 0,
-		updateQueryCache: () => {},
-	});
+	const { translateY } = useScrollMoreOnPageEnd();
 
 	return (
-		<WithAutoHideTopNavBar title={'App Settings'} translateY={translateY}>
+		<AppTopNavbar
+			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
+			title={'Settings'}
+			translateY={translateY}
+		>
 			<Animated.ScrollView
-				contentContainerStyle={{ paddingTop: 54, height: '100%' }}
+				contentContainerStyle={{
+					paddingTop: 54,
+					height: '100%',
+					paddingBottom: 16,
+				}}
 			>
-				<View style={{ flexGrow: 1 }}>
-					<SettingsScreenTopSection />
-				</View>
-
-				<View style={{ marginBottom: 8 }}>
-					<SettingsScreenBottomSection />
-					<SettingPageFooter />
-				</View>
+				<SettingCategoryList />
+				<SettingPageFooter />
 			</Animated.ScrollView>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 }
 
@@ -397,9 +288,9 @@ const styles = StyleSheet.create({
 		marginHorizontal: 8,
 	},
 	collapsibleSettingsLabel: {
-		fontFamily: 'Montserrat-Bold',
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		fontSize: 20,
-		marginLeft: 8,
+		marginLeft: 12,
 		color: APP_FONT.MONTSERRAT_BODY,
 	},
 	appFeaturesGridRow: {

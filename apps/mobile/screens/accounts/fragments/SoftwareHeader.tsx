@@ -12,7 +12,7 @@ type Props = {
 	mb?: number;
 };
 
-const ICON_SIZE_MULTIPLIER = 1.4;
+const ICON_SIZE_MULTIPLIER = 1.2;
 
 const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
 	const Theming = useKnownSoftware(software);
@@ -20,13 +20,13 @@ const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
 	const _mb = mb === undefined ? 12 : mb;
 
 	return (
-		<View style={{ marginTop: _mt, marginBottom: _mb }}>
+		<View style={{ marginTop: _mt, marginBottom: _mb, marginLeft: 4 }}>
 			<View
 				style={{
 					display: 'flex',
 					flexDirection: 'row',
-					alignItems: 'flex-start',
 					marginBottom: 4,
+					alignItems: 'center',
 				}}
 			>
 				{/*@ts-ignore-next-line*/}
@@ -35,7 +35,7 @@ const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
 					style={{
 						width: Theming?.width * ICON_SIZE_MULTIPLIER,
 						height: Theming?.height * ICON_SIZE_MULTIPLIER,
-						opacity: 0.87,
+						opacity: 0.8,
 					}}
 				/>
 				<Text style={styles.accountCategoryText}>{Theming?.label}</Text>
@@ -46,10 +46,10 @@ const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
 
 const styles = StyleSheet.create({
 	accountCategoryText: {
-		fontSize: 20,
-		marginLeft: 8,
+		fontSize: 16,
+		marginLeft: 6,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		color: APP_FONT.MONTSERRAT_HEADER,
+		color: APP_FONT.MONTSERRAT_BODY,
 	},
 });
 

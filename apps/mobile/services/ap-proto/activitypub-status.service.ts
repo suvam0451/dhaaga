@@ -1,14 +1,11 @@
 import { Realm } from 'realm';
 import {
 	StatusInterface,
-	UnknownRestClient,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import activitypubAdapterService from '../activitypub-adapter.service';
 import ActivityPubService from '../activitypub.service';
 import { MMKV } from 'react-native-mmkv';
-import GlobalMmkvCacheService from '../globalMmkvCache.services';
-import { ActivityPubServerRepository } from '../../repositories/activitypub-server.repo';
 import {
 	ActivityPubStatusAppDtoType,
 	ActivitypubStatusDtoService,
@@ -18,6 +15,8 @@ import {
 import ActivitypubAdapterService from '../activitypub-adapter.service';
 import { z } from 'zod';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import AppPrivacySettingsService from '../app-settings/app-settings-privacy.service';
+import { EmojiService } from '../emoji.service';
 
 /**
  * Supports various operations
@@ -68,6 +67,16 @@ export class ActivitypubStatusService {
 	}
 
 	async syncSoftware(db: Realm) {
+		// Privacy --> Advanced --> Remote Instance Calls --> Reaction Caching
+		if (
+			AppPrivacySettingsService.create(
+				db,
+			).isDisabledCrossInstanceSoftwareCaching()
+		) {
+			// console.log('[INFO]: prevented cross instance api call for software');
+			return this;
+		}
+
 		const promises = Array.from(this.foundInstances).map((o) => {
 			return ActivityPubService.syncSoftware(db, o);
 		});
@@ -83,54 +92,9 @@ export class ActivitypubStatusService {
 	 * @param globalDb
 	 */
 	async syncCustomEmojis(db: Realm, globalDb: MMKV) {
-		const x = new UnknownRestClient();
-
 		// @ts-ignore-next-line
 		for (const target of this.foundInstances) {
-			// Cache-Policy
-			const data = GlobalMmkvCacheService.getEmojiCacheForInstance(
-				globalDb,
-				target,
-			);
-
-			const now = new Date();
-			const oneWeekAgo = new Date(now);
-			oneWeekAgo.setDate(now.getDate() - 7);
-
-			// all good
-			if (
-				data &&
-				data?.data?.length > 0 &&
-				new Date(data?.lastFetchedAt) >= oneWeekAgo
-			) {
-				return {
-					success: true,
-					message: 'Skipped',
-					target: target,
-					amount: data.data.length,
-				};
-			}
-
-			const match = ActivityPubServerRepository.get(db, target);
-			if (!match) {
-				console.log(
-					'[WARN]: trying to collect emojis for an' + ' unregistered instance',
-				);
-				continue;
-			}
-
-			const { data: emojiData, error: emojiError } =
-				await x.instances.getCustomEmojis(target, match.type);
-
-			if (emojiError) {
-				console.log('[WARN]: failed to get emojis');
-				continue;
-			}
-			GlobalMmkvCacheService.saveEmojiCacheForInstance(
-				globalDb,
-				target,
-				emojiData,
-			);
+			await EmojiService.refresh(db, globalDb, target);
 		}
 	}
 

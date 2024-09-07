@@ -9,10 +9,9 @@ import {
 import { Endpoints } from 'misskey-js';
 
 function TimelineWidgetUserApi(q: string) {
-	const { client, primaryAcct } = useActivityPubRestClientContext();
-	const username = primaryAcct.username;
-	const domain = primaryAcct.domain;
-	const subdomain = primaryAcct.subdomain;
+	const { client, primaryAcct, domain, subdomain } =
+		useActivityPubRestClientContext();
+	const username = primaryAcct?.username;
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');

@@ -8,7 +8,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Fragment, memo, useCallback, useMemo } from 'react';
 import { View } from 'react-native';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { FAB_MENU_MODULES } from '../../../types/app.types';
 import NavigatorModule from './modules/Navigator';
@@ -16,9 +15,8 @@ import SidebarToggleModule from './modules/SidebarToggle';
 import CreatePostModule from './modules/CreatePost';
 import TimelineSwitcherModule from './modules/TimelineSwitcher';
 import { styles } from './fab.styles';
-import Feather from '@expo/vector-icons/Feather';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 
 const Y_OFFSET_MENU_ITEM = 72;
 
@@ -107,21 +105,16 @@ const FabMenuCore = memo(function Foo({ menuItems }: Props) {
 					]}
 				>
 					<View style={[{ width: 24 }]}>
-						<MaterialIcons
-							name="more-vert"
+						{/*<MaterialIcons*/}
+						{/*	name="more-vert"*/}
+						{/*	size={24}*/}
+						{/*	color={APP_FONT.MONTSERRAT_BODY}*/}
+						{/*/>*/}
+						<SimpleLineIcons
+							name="options-vertical"
 							size={24}
 							color={APP_FONT.MONTSERRAT_BODY}
 						/>
-						{/*<MaterialCommunityIcons*/}
-						{/*	name="unfold-more-vertical"*/}
-						{/*	size={24}*/}
-						{/*	color={APP_FONT.MONTSERRAT_BODY}*/}
-						{/*/>*/}
-						{/*<FontAwesome5*/}
-						{/*	name="filter"*/}
-						{/*	size={24}*/}
-						{/*	color={APP_FONT.MONTSERRAT_BODY}*/}
-						{/*/>*/}
 					</View>
 				</View>
 			</Animated.View>

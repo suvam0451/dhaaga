@@ -18,13 +18,14 @@ import { useRealm } from '@realm/react';
 import { Account } from '../entities/account.entity';
 import { EmojiService } from '../services/emoji.service';
 import { useGlobalMmkvContext } from './useGlobalMMkvCache';
+import { UUID } from 'bson';
 
 type Type = {
 	client: ActivityPubClient;
 	me: UserInterface | null;
 	meRaw: mastodon.v1.Account | null;
 	primaryAcct: Account;
-	PrimaryAcctPtr: MutableRefObject<Account>;
+	PrimaryAcctPtr: MutableRefObject<UUID>;
 
 	/**
 	 * Call this function after change in
@@ -65,7 +66,7 @@ function WithActivityPubRestClient({ children }: any) {
 	const db = useRealm();
 	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
 
-	const PrimaryAcctPtr = useRef<Account>(null);
+	const PrimaryAcctPtr = useRef<UUID>(null);
 
 	const { globalDb } = useGlobalMmkvContext();
 
@@ -73,6 +74,8 @@ function WithActivityPubRestClient({ children }: any) {
 		const acct = db.objects(Account).find((o: Account) => o.selected === true);
 		if (!acct) {
 			setRestClient(null);
+			setPrimaryAcct(null);
+			PrimaryAcctPtr.current = null;
 			return;
 		}
 
@@ -88,9 +91,13 @@ function WithActivityPubRestClient({ children }: any) {
 		});
 		setRestClient(client);
 		setPrimaryAcct(acct);
-		PrimaryAcctPtr.current = acct;
-		EmojiService.resolveEmojis(db, globalDb, acct.subdomain, {
-			forcedUpdate: false,
+		PrimaryAcctPtr.current = acct._id;
+		EmojiService.refresh(db, globalDb, acct.subdomain, true).then((res) => {
+			// console.log(
+			// 	'[INFO]: emoji cache refreshed for account',
+			// 	acct.subdomain,
+			// 	res?.length,
+			// );
 		});
 	}
 

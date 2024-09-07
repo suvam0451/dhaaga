@@ -35,7 +35,7 @@ function useGetBookmarks(query: BookmarkGetQueryDTO) {
 				KNOWN_SOFTWARE.MASTODON,
 				KNOWN_SOFTWARE.PLEROMA,
 				KNOWN_SOFTWARE.AKKOMA,
-			].includes(primaryAcct.domain as any)
+			].includes(domain as any)
 		) {
 			return {
 				data: ActivityPubAdapterService.adaptManyStatuses(data.data, domain),
@@ -60,7 +60,7 @@ function useGetBookmarks(query: BookmarkGetQueryDTO) {
 		minId?: string;
 		maxId?: string;
 	}>({
-		queryKey: ['bookmarks', query.maxId, primaryAcct.username, subdomain],
+		queryKey: ['bookmarks', query.maxId, primaryAcct?.username, subdomain],
 		queryFn: api,
 		enabled: client !== null,
 	});

@@ -2,9 +2,10 @@ import { ActivityPubMediaAttachment } from '../../../entities/activitypub-media-
 import { useMemo } from 'react';
 import MediaService from '../../../services/media.service';
 import { Dimensions, View } from 'react-native';
-import { MEDIA_CONTAINER_MAX_HEIGHT, MEDIA_CONTAINER_WIDTH } from './_common';
+import { MEDIA_CONTAINER_MAX_HEIGHT } from './_common';
 import { AppImageComponent, AppVideoComponent } from './_shared';
 import MediaContainerWithAltText from '../../containers/MediaContainerWithAltText';
+import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
 
 function RealmMediaComponentSingleItem({
 	data,
@@ -13,6 +14,15 @@ function RealmMediaComponentSingleItem({
 	data: ActivityPubMediaAttachment;
 	height: number;
 }) {
+	const { ContainerWidth, ContainerHeight, onLayoutChanged } =
+		useImageAspectRatio([
+			{
+				url: data.url,
+				height: data.height,
+				width: data.width,
+			},
+		]);
+
 	const MediaItem = useMemo(() => {
 		const type = data.type;
 		switch (type) {
@@ -24,7 +34,12 @@ function RealmMediaComponentSingleItem({
 			case 'image/gif':
 			case 'image/avif': {
 				return (
-					<AppImageComponent url={data.previewUrl} blurhash={data.blurhash} />
+					<AppImageComponent
+						url={data.previewUrl}
+						blurhash={data.blurhash}
+						parentContainerHeight={ContainerHeight}
+						parentContainerWidth={ContainerWidth}
+					/>
 				);
 			}
 			case 'video':
@@ -40,16 +55,14 @@ function RealmMediaComponentSingleItem({
 				return <View></View>;
 			}
 		}
-	}, [data, height]);
+	}, [data, ContainerWidth, ContainerHeight]);
 
 	return (
-		<MediaContainerWithAltText
-			altText={data.altText}
-			width={MEDIA_CONTAINER_WIDTH}
-			height={height}
-		>
-			{MediaItem}
-		</MediaContainerWithAltText>
+		<View onLayout={onLayoutChanged}>
+			<MediaContainerWithAltText altText={data.altText}>
+				{MediaItem}
+			</MediaContainerWithAltText>
+		</View>
 	);
 }
 
@@ -72,8 +85,6 @@ function RealmMediaItem({ data }: Props) {
 	if (CalculatedHeight === 0) {
 		CalculatedHeight = 520;
 	}
-
-	// console.log(CalculatedHeight, MEDIA_CONTAINER_MAX_HEIGHT);
 
 	if (data.length === 0) return <View></View>;
 	if (data.length === 1)

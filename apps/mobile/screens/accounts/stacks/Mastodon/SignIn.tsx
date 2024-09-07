@@ -47,7 +47,15 @@ function MastodonSignInStack() {
 		const { data: verified, error } =
 			await new UnknownRestClient().instances.verifyCredentials(
 				instance,
-				token,
+				/**
+				 * It seems Pleroma/Akkoma give
+				 * us another token, while one
+				 * exists already (above request will fail)
+				 *
+				 * ^ In such cases, the pasted code is
+				 * itself the token
+				 */
+				token || Code, // fucking yolo it, xDD
 			);
 
 		try {
@@ -73,11 +81,11 @@ function MastodonSignInStack() {
 					},
 					{
 						key: 'access_token',
-						value: token,
+						value: token || Code, // See above
 					},
 				],
 			});
-			router.replace('/accounts/landing');
+			router.replace('/settings/accounts');
 		} catch (e) {
 			console.log(e);
 		}

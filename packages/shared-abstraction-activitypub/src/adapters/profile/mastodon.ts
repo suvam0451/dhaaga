@@ -1,12 +1,10 @@
-import { AccountInstance, EmojiMapValue, UserInterface } from './_interface.js';
+import { AccountInstance, UserInterface } from './_interface.js';
 
 class MastodonUser implements UserInterface {
 	ref: AccountInstance;
-	mp: Map<string, EmojiMapValue>;
 
-	constructor(ref: AccountInstance, mp: Map<string, EmojiMapValue>) {
+	constructor(ref: AccountInstance) {
 		this.ref = ref;
-		this.mp = mp;
 	}
 
 	// not implemented
@@ -63,12 +61,12 @@ class MastodonUser implements UserInterface {
 		return this.extractInstanceUrl(url, username, myDomain);
 	}
 
-	getEmojiMap(): Map<string, EmojiMapValue> {
-		return this.mp;
-	}
-
-	findEmoji(q: string) {
-		return this.mp.get(q);
+	getEmojiMap(): Map<string, string> {
+		const map = new Map<string, string>();
+		this.ref.instance?.emojis?.forEach((o) => {
+			map.set(o.shortcode, o.url);
+		});
+		return map;
 	}
 
 	getAvatarBlurHash(): string {

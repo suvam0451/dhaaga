@@ -1,8 +1,4 @@
-import {
-	EmojiMapValue,
-	UserDetailedInstance,
-	UserInterface,
-} from './_interface.js';
+import { UserDetailedInstance, UserInterface } from './_interface.js';
 
 export class MisskeyUser implements UserInterface {
 	ref: UserDetailedInstance;
@@ -64,8 +60,8 @@ export class MisskeyUser implements UserInterface {
 		return this.extractInstanceUrl(url, username, myDomain);
 	}
 
-	getEmojiMap(): Map<string, EmojiMapValue> {
-		return new Map();
+	getEmojiMap(): Map<string, string> {
+		return new Map<string, string>();
 	}
 
 	findEmoji(q: string) {
@@ -97,7 +93,6 @@ export class MisskeyUser implements UserInterface {
 	}
 
 	getDescription() {
-		console.log(this?.ref?.instance);
 		return this.ref?.instance?.description;
 	}
 

@@ -7,6 +7,53 @@ import { ActivityPubCustomEmojiItem } from '../entities/activitypub-emoji.entity
 import { UpdateMode } from 'realm';
 
 export class ActivityPubServerRepository {
+	db: Realm;
+	constructor(db: Realm) {
+		this.db = db;
+	}
+
+	static create(db: Realm) {
+		return new ActivityPubServerRepository(db);
+	}
+
+	get(subdomain: string) {
+		return ActivityPubServerRepository.get(this.db, subdomain);
+	}
+
+	/**
+	 * Make at most five attempts at
+	 * fetching custom emojis from a
+	 * remote server per week.
+	 * @param target
+	 */
+	isReactionFetchRateLimited(target: ActivityPubServer) {
+		return this.db.write(() => {
+			const lastFetched = target.customEmojisLastFetchedAt;
+			if (!lastFetched) {
+				target.customEmojisLastFetchedAt = new Date();
+				target.customEmojisRetryCount = 1;
+				return false;
+			}
+
+			if (target.customEmojisRetryCount >= 5) {
+				const now = new Date();
+				const oneWeekAgo = new Date(now);
+				oneWeekAgo.setDate(now.getDate() - 7);
+
+				if (new Date(lastFetched) >= oneWeekAgo) {
+					return true;
+				}
+
+				target.customEmojisRetryCount = 1;
+				target.customEmojisLastFetchedAt = new Date();
+				return false;
+			}
+
+			target.customEmojisRetryCount++;
+			return false;
+		});
+	}
+
 	/**
 	 * add an ActivityPub server to list of known servers
 	 */
@@ -36,6 +83,7 @@ export class ActivityPubServerRepository {
 		}
 	}
 
+	static checkEmojiReactionRetryPolicy(db: Realm) {}
 	/**
 	 * Updates the detected software for this server
 	 * (Always) Inserts new record, if not exists
@@ -75,6 +123,8 @@ export class ActivityPubServerRepository {
 		lastSyncedAt: Date,
 	) {
 		const match = this.get(db, subdomain);
-		match.customEmojisLastFetchedAt = lastSyncedAt;
+		db.write(() => {
+			match.customEmojisLastFetchedAt = lastSyncedAt;
+		});
 	}
 }

@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
-import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import diffClamp = Animated.diffClamp;
 import NavigationService from '../../services/navigation.service';
 import { APP_THEME } from '../../styles/AppTheme';
-import ProfilePageHeader from '../headers/ProfilePageHeader';
+import TopNavbarGeneric from '../shared/topnavbar/fragments/TopNavbarGeneric';
 
 type TitleOnlyStackHeaderContainerProps = {
 	route: any;
@@ -19,13 +19,11 @@ type TitleOnlyStackHeaderContainerProps = {
 
 function TitleOnlyStackHeaderContainer({
 	headerTitle,
-	navigation,
 	HIDDEN_SECTION_HEIGHT = 50,
 	SHOWN_SECTION_HEIGHT = 50,
 	children,
 	onScrollViewEndReachedCallback,
 	onRefresh,
-	canRefresh,
 }: TitleOnlyStackHeaderContainerProps) {
 	/**
 	 * Header bar auto-hide handler
@@ -81,67 +79,22 @@ function TitleOnlyStackHeaderContainer({
 	}
 
 	return (
-		<View style={{ backgroundColor: APP_THEME.BACKGROUND }}>
+		<View style={{ backgroundColor: APP_THEME.BACKGROUND, height: '100%' }}>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-				<ProfilePageHeader
-					title={headerTitle}
-					SHOWN_SECTION_HEIGHT={SHOWN_SECTION_HEIGHT}
-					HIDDEN_SECTION_HEIGHT={HIDDEN_SECTION_HEIGHT}
-					onLeftIconPress={() => navigation.goBack()}
-				/>
+				<TopNavbarGeneric title={headerTitle} />
 			</Animated.View>
-			{canRefresh && (
-				<Animated.ScrollView
-					style={{
-						backgroundColor: 'black',
-						marginTop: SHOWN_SECTION_HEIGHT,
-					}}
-					contentContainerStyle={{
-						display: 'flex',
-						// minHeight: '100%',
-						paddingBottom: SHOWN_SECTION_HEIGHT,
-						// marginTop: 200,
-					}}
-					onScroll={(e) => {
-						NavigationService.invokeWhenPageEndReached(
-							e,
-							onScrollViewEndReached,
-						);
-						return handleScroll;
-					}}
-					refreshControl={
-						<RefreshControl
-							refreshing={IsRefreshing}
-							onRefresh={onPerformRefresh}
-						/>
-					}
-				>
-					{children}
-				</Animated.ScrollView>
-			)}
-			{!canRefresh && (
-				<Animated.ScrollView
-					style={{
-						backgroundColor: 'black',
-						marginTop: SHOWN_SECTION_HEIGHT,
-					}}
-					contentContainerStyle={{
-						display: 'flex',
-						minHeight: '100%',
-						paddingBottom: SHOWN_SECTION_HEIGHT,
-						marginTop: 4,
-					}}
-					onScroll={(e) => {
-						NavigationService.invokeWhenPageEndReached(
-							e,
-							onScrollViewEndReached,
-						);
-						return handleScroll;
-					}}
-				>
-					{children}
-				</Animated.ScrollView>
-			)}
+			<Animated.ScrollView
+				style={{
+					backgroundColor: '#121212',
+					marginTop: SHOWN_SECTION_HEIGHT,
+				}}
+				onScroll={(e) => {
+					NavigationService.invokeWhenPageEndReached(e, onScrollViewEndReached);
+					return handleScroll;
+				}}
+			>
+				{children}
+			</Animated.ScrollView>
 		</View>
 	);
 }

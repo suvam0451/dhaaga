@@ -27,8 +27,7 @@ type Props = {
 };
 
 function TimelineWidgetHashtagOptions(props: Props) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct.subdomain;
+	const { subdomain } = useActivityPubRestClientContext();
 
 	const [SelectedIndexA, setSelectedIndexA] = useState(0);
 	const [SelectedIndexB, setSelectedIndexB] = useState(0);

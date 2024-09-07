@@ -89,9 +89,8 @@ export const NativeCheckbox = memo(function Foo({
 		<CheckBox
 			checked={checked}
 			onPress={onClick}
-			iconType="material-community"
-			checkedIcon="checkbox-outline"
-			uncheckedIcon={'checkbox-blank-outline'}
+			checkedIcon="dot-circle-o"
+			uncheckedIcon="circle-o"
 			containerStyle={{
 				backgroundColor: '#252525',
 				flex: 1,

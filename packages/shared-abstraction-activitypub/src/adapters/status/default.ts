@@ -20,6 +20,10 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
+	getCachedEmojis(): Map<string, string> {
+		return new Map<string, string>();
+	}
+
 	getReactions(): {
 		id: string;
 		count: number;
