@@ -9,7 +9,9 @@
     "aab": "eas build -p android --profile aab",
     "client": "eas build -p android --profile dev",
     "lite": "react-native build-android --mode=release && cd android && ./gradlew assembleRelease",
-    "postinstall": "cd ../.. && yarn build"
+    "postinstall": "cd ../.. && yarn build",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@dhaaga/shared-abstraction-activitypub": "*",

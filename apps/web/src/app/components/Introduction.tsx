@@ -99,7 +99,7 @@ function Introduction() {
 							marginTop: 8,
 						}}
 					>
-						v0.8.0 • Play store build is available as closed beta.
+						v0.10.0 • Play store build is available as closed beta.
 					</p>
 				</Box>
 
