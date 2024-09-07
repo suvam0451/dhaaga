@@ -37,6 +37,7 @@ class AppProfileRepositoryImpl extends BaseRepository<
 						_id: new Realm.BSON.UUID(),
 						key: setting[0],
 						value: setting[1],
+						type: 'boolean',
 					});
 					match.settings.push(savedSetting);
 				}
