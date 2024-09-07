@@ -1,5 +1,4 @@
-import { memo, useMemo } from 'react';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
+import { memo } from 'react';
 import {
 	View,
 	Text,
@@ -59,19 +58,7 @@ const MyAccountModule = memo(
 );
 
 const SelectedAccount = memo(() => {
-	const { me } = useActivityPubRestClientContext();
-
-	return (
-		<View>
-			<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>Logged in as</Text>
-			<View>
-				<Text>Change</Text>
-				<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-					{me.getDisplayName()}
-				</Text>
-			</View>
-		</View>
-	);
+	return <View style={{ height: 16 }} />;
 });
 
 const ICON_SIZE = 24;

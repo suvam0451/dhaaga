@@ -1,5 +1,4 @@
-import { Animated, StatusBar, StyleSheet, View, Text } from 'react-native';
-import TimelinesHeader from '../../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
+import { StatusBar, Text, View } from 'react-native';
 import { memo, useState } from 'react';
 import { Button, Dialog } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
@@ -7,20 +6,27 @@ import { router } from 'expo-router';
 import FabMenuCore from '../../../../shared/fab/Core';
 import { FAB_MENU_MODULES } from '../../../../../types/app.types';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../../shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 
 function IntroductionBase() {
 	const [DialogVisible, setDialogVisible] = useState(false);
 
 	function takeUserToAccountsPage() {
-		router.navigate('accounts');
+		router.navigate('/settings/accounts');
 	}
 
+	const { translateY } = useScrollMoreOnPageEnd();
+
 	return (
-		<View style={{ height: '100%', flex: 1, backgroundColor: '#121212' }}>
+		<AppTopNavbar
+			title={'Welcome!'}
+			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
+			translateY={translateY}
+		>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
-			<Animated.View style={styles.header}>
-				<TimelinesHeader title={'Introduction'} />
-			</Animated.View>
 			<Dialog
 				isVisible={DialogVisible}
 				onBackdropPress={() => {
@@ -123,19 +129,11 @@ function IntroductionBase() {
 					<View style={{ flexGrow: 1, maxWidth: 256, marginTop: 32 }}>
 						<Text
 							style={{
-								fontSize: 20,
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								textAlign: 'center',
-							}}
-						>
-							Welcome!
-						</Text>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: APP_FONT.MONTSERRAT_HEADER,
+								fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+								color: APP_FONT.MONTSERRAT_BODY,
 								marginTop: 16,
 								textAlign: 'center',
+								fontSize: 16,
 							}}
 						>
 							Dhaaga is a{' '}
@@ -144,35 +142,26 @@ function IntroductionBase() {
 									color: APP_THEME.LINK,
 									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 								}}
-								// onPress={() => {
-								// 	setDialogVisible(true);
-								// }}
+								onPress={() => {
+									setDialogVisible(true);
+								}}
 							>
-								Social Networking client
+								fediverse social app
 							</Text>
-							, offering a modern UI, Innovative features, and comes packed with
-							privacy and digital well-being tools.
+							, which works with your favourite SNS platform, adds a cool
+							interface and packs tons of cool features to make your fedi
+							experience better.
 						</Text>
 						<Text
 							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: APP_FONT.MONTSERRAT_HEADER,
+								fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+								color: APP_FONT.MONTSERRAT_BODY,
 								marginTop: 16,
 								textAlign: 'center',
+								fontSize: 16,
 							}}
 						>
-							Currently available for Mastodon and being developed for Misskey
-							eventually.
-						</Text>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: APP_FONT.MONTSERRAT_HEADER,
-								marginTop: 16,
-								textAlign: 'center',
-							}}
-						>
-							To use this app, you will need a Mastodon account.
+							Put the fun back in fediverse!
 						</Text>
 						<View style={{ marginTop: 32 }}>
 							<Button
@@ -189,7 +178,7 @@ function IntroductionBase() {
 									router.navigate('/new-to-fedi');
 								}}
 							>
-								I am new to Mastodon
+								I am new to Fediverse
 							</Button>
 							<Button
 								type={'clear'}
@@ -205,7 +194,7 @@ function IntroductionBase() {
 									router.navigate('/new-to-app');
 								}}
 							>
-								I am new to this app
+								I am new to the app
 							</Button>
 							<Button
 								type={'solid'}
@@ -219,44 +208,27 @@ function IntroductionBase() {
 									fontSize: 15,
 								}}
 							>
-								Just take me to Login
+								Login
 							</Button>
+							<Text
+								style={{
+									fontFamily: APP_FONTS.INTER_500_MEDIUM,
+									color: APP_FONT.MONTSERRAT_BODY,
+									marginTop: 16,
+									textAlign: 'center',
+								}}
+							>
+								Mastodon, Misskey, Sharkey, Firefish, Pleroma and Akkoma
+							</Text>
 						</View>
-					</View>
-					<View style={{ flexShrink: 1 }}>
-						<Text
-							style={{
-								color: APP_FONT.MONTSERRAT_BODY,
-								fontSize: 12,
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								opacity: 0.87,
-							}}
-						>
-							{'Built with' + ' 💛 by Debashish Patra'}
-						</Text>
 					</View>
 				</View>
 			</View>
 			<FabMenuCore menuItems={[FAB_MENU_MODULES.NAVIGATOR]} />
-		</View>
+		</AppTopNavbar>
 	);
 }
 
 const Introduction = memo(IntroductionBase);
 
 export default Introduction;
-
-const styles = StyleSheet.create({
-	header: {
-		position: 'absolute',
-		backgroundColor: '#1c1c1c',
-		left: 0,
-		right: 0,
-		width: '100%',
-		zIndex: 1,
-	},
-	container: {
-		flex: 1,
-		backgroundColor: '#000',
-	},
-});

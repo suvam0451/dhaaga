@@ -41,7 +41,7 @@ function SelectProviderStack() {
 						<View style={{ marginTop: 4 }}>
 							<Button
 								onPress={() => {
-									router.navigate('/accounts/add-mastodon');
+									router.navigate('/settings/onboard/add-mastodon');
 								}}
 								color={'rgb(99, 100, 255)'}
 								size={'md'}
@@ -66,7 +66,7 @@ function SelectProviderStack() {
 									'linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))'
 								}
 								onPress={() => {
-									router.navigate('/accounts/add-misskey');
+									router.navigate('/settings/onboard/add-misskey');
 								}}
 							>
 								<Text style={styles.buttonText}>Login</Text>

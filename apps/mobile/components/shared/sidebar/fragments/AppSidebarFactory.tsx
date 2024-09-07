@@ -21,7 +21,7 @@ const AppSidebarFactory = memo(function Foo({
 	PageActions,
 	children,
 }: AppSidebarFactoryProps) {
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
 
 	const { open, setOpen } = useAppDrawerContext();
 	const ProfileInfo = useMemo(() => {
@@ -39,19 +39,18 @@ const AppSidebarFactory = memo(function Foo({
 						<View style={{ width: 48, height: 48 }}>
 							{/*@ts-ignore-next-line*/}
 							<Image
-								source={primaryAcct.avatarUrl}
+								source={primaryAcct?.avatarUrl}
 								style={{ width: 48, height: 48 }}
 							/>
 						</View>
 						<View style={{ flexGrow: 1 }}>
-							{/*<Text>{primaryAcct.secrets}</Text>*/}
 							<Text
 								style={{
 									fontFamily: 'Montserrat-Bold',
 									color: APP_FONT.MONTSERRAT_HEADER,
 								}}
 							>
-								@{primaryAcct.username}
+								@{primaryAcct?.username}
 							</Text>
 							<Text
 								style={{
@@ -60,7 +59,7 @@ const AppSidebarFactory = memo(function Foo({
 									fontSize: 14,
 								}}
 							>
-								{primaryAcct.subdomain}
+								{subdomain}
 							</Text>
 						</View>
 						<View

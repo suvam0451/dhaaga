@@ -7,8 +7,16 @@ class AppSettingsPreferencesService extends AppSettingsBase {
 		super(db);
 	}
 
+	static override create(db: Realm) {
+		return new AppSettingsPreferencesService(db);
+	}
+
 	isQuickReactionEnabled(): boolean {
 		return this.getBool(NAMESPACE.post.interaction.quickReaction);
+	}
+
+	isQuickBoostEnabled(): boolean {
+		return this.getBool(NAMESPACE.post.interaction.quickBoost);
 	}
 }
 

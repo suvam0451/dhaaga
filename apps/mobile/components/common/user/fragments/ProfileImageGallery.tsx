@@ -144,7 +144,11 @@ function ProfileImageGallery({ userId }: Props) {
 			if (count > 0) {
 				images.push(
 					...i.getMediaAttachments().filter((o) => {
-						if (['image/jpeg', 'image', 'image/webp'].includes(o.getType()))
+						if (
+							['image/jpeg', 'image', 'image/webp', 'gifv'].includes(
+								o.getType(),
+							)
+						)
 							return true;
 						console.log(
 							'[WARN]: unknown image type in profile gallery',

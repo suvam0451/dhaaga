@@ -56,36 +56,39 @@ function SelectAccountStack() {
 					/>
 				)}
 				contentContainerStyle={{ paddingHorizontal: 4, paddingTop: 54 }}
-			/>
-
-			<View style={{ marginHorizontal: 16, marginBottom: 32, marginTop: 28 }}>
-				<Button
-					onPress={() => {
-						router.navigate('/accounts/select-software');
-					}}
-				>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_HEADER,
-							fontFamily: APP_FONTS.INTER_700_BOLD,
-							fontSize: 16,
-						}}
+				ListFooterComponent={
+					<View
+						style={{ marginHorizontal: 16, marginBottom: 32, marginTop: 28 }}
 					>
-						Add Account
-					</Text>
-				</Button>
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-						fontFamily: APP_FONTS.INTER_700_BOLD,
-						textAlign: 'center',
-						marginTop: 8,
-						paddingHorizontal: 16,
-					}}
-				>
-					Mastodon, Pleroma, Akkoma, Misskey, Firefish, Sharkey
-				</Text>
-			</View>
+						<Button
+							onPress={() => {
+								router.navigate('/settings/onboard/select-software');
+							}}
+						>
+							<Text
+								style={{
+									color: APP_FONT.MONTSERRAT_HEADER,
+									fontFamily: APP_FONTS.INTER_700_BOLD,
+									fontSize: 16,
+								}}
+							>
+								Add Account
+							</Text>
+						</Button>
+						<Text
+							style={{
+								color: APP_FONT.MONTSERRAT_BODY,
+								fontFamily: APP_FONTS.INTER_700_BOLD,
+								textAlign: 'center',
+								marginTop: 8,
+								paddingHorizontal: 16,
+							}}
+						>
+							Mastodon, Pleroma, Akkoma, Misskey, Firefish, Sharkey
+						</Text>
+					</View>
+				}
+			/>
 		</WithAutoHideTopNavBar>
 	);
 }

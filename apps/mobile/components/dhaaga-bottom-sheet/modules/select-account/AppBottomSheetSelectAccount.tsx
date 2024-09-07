@@ -17,7 +17,8 @@ import {
 	AccountPfp,
 } from '../../../../screens/accounts/fragments/AccountListingFragment';
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { router } from 'expo-router';
 
 type FlashListItemProps = {
 	id: UUID;
@@ -116,7 +117,7 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 	);
 });
 const AppBottomSheetSelectAccount = memo(() => {
-	const { isAnimating } = useAppBottomSheet();
+	const { isAnimating, setVisible } = useAppBottomSheet();
 	const accounts: Account[] = useQuery(Account);
 
 	if (isAnimating) return <View />;
@@ -144,10 +145,22 @@ const AppBottomSheetSelectAccount = memo(() => {
 							marginVertical: 16,
 							borderRadius: 8,
 							alignItems: 'center',
+							marginBottom: 32,
 						}}
 					>
-						<View
-							style={{ flex: 1, alignItems: 'center', backgroundColor: 'blue' }}
+						<TouchableOpacity
+							style={{
+								flex: 1,
+								alignItems: 'center',
+								backgroundColor: APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
+								padding: 6,
+								paddingHorizontal: 12,
+								borderRadius: 6,
+							}}
+							onPress={() => {
+								setVisible(false);
+								router.navigate('/settings/accounts');
+							}}
 						>
 							<Text
 								style={{
@@ -159,7 +172,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 							>
 								Manage Accounts
 							</Text>
-						</View>
+						</TouchableOpacity>
 					</View>
 				)}
 				data={accounts}

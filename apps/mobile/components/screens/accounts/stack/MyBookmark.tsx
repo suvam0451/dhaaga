@@ -32,7 +32,7 @@ function Core() {
 
 	useEffect(() => {
 		clear();
-	}, [primaryAcct.subdomain, primaryAcct.username]);
+	}, [subdomain, primaryAcct?.username]);
 
 	const { data, refetch, fetchStatus } = useGetBookmarks({
 		limit: 10,

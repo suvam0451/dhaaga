@@ -1,5 +1,5 @@
 import { EmojiDto, styles } from './_shared.types';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -11,6 +11,13 @@ import {
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
+import * as Haptics from 'expo-haptics';
+import AppSettingsPreferencesService from '../../../../services/app-settings/app-settings-preferences.service';
+import { useRealm } from '@realm/react';
+import ActivitypubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
+import ActivityPubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
+import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -19,6 +26,8 @@ const EmojiReaction = memo(function Foo({
 	dto: EmojiDto;
 	postDto: ActivityPubStatusAppDtoType;
 }) {
+	const { domain, subdomain, client } = useActivityPubRestClientContext();
+	const db = useRealm();
 	const {
 		TextRef,
 		PostRef,
@@ -28,6 +37,7 @@ const EmojiReaction = memo(function Foo({
 		updateRequestId: updateBottomSheetRequestId,
 	} = useAppBottomSheet();
 	const { getPostListReducer } = useAppTimelineDataContext();
+	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
 
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
@@ -47,7 +57,55 @@ const EmojiReaction = memo(function Foo({
 		return [styles.emojiContainer, { backgroundColor: '#161616' }];
 	}, [dto.interactable, dto.me]);
 
-	function onReactionPress() {
+	async function onReactionPress() {
+		const isQuickReactionEnabled =
+			AppSettingsPreferencesService.create(db).isQuickReactionEnabled();
+		if (isQuickReactionEnabled) {
+			const IS_REMOTE = ActivitypubReactionsService.canReact(dto?.name);
+			if (!IS_REMOTE) {
+				const { id } = ActivitypubReactionsService.extractReactionCode(
+					TextRef.current,
+					domain,
+					subdomain,
+				);
+
+				const state = dto.me
+					? await ActivityPubReactionsService.removeReaction(
+							client,
+							postDto.id,
+							id,
+							domain,
+							setEmojiStateLoading,
+						)
+					: await ActivityPubReactionsService.addReaction(
+							client,
+							postDto.id,
+							dto.name,
+							domain,
+							setEmojiStateLoading,
+						);
+				if (state !== null) {
+					getPostListReducer()({
+						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE,
+						payload: {
+							id: postDto.id,
+							state,
+						},
+					});
+				}
+			}
+		} else {
+			TextRef.current = dto.name;
+			PostRef.current = postDto;
+			timelineDataPostListReducer.current = getPostListReducer();
+			setType(APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS);
+			updateBottomSheetRequestId();
+			setVisible(true);
+		}
+	}
+
+	function onReactionLongPress() {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 		TextRef.current = dto.name;
 		PostRef.current = postDto;
 		timelineDataPostListReducer.current = getPostListReducer();
@@ -86,7 +144,11 @@ const EmojiReaction = memo(function Foo({
 
 	if (dto.type === 'image') {
 		return (
-			<TouchableOpacity style={CONTAINER_STYLE} onPress={onReactionPress}>
+			<TouchableOpacity
+				style={CONTAINER_STYLE}
+				onPress={onReactionPress}
+				onLongPress={onReactionLongPress}
+			>
 				<View
 					style={{
 						flexDirection: 'row',
