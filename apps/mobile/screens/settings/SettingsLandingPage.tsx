@@ -195,7 +195,7 @@ function SettingCategoryList() {
 			/>
 			<SettingCategoryListItem
 				label={'Preferences'}
-				to={'/settings/preferences'}
+				to={'/settings/user-preferences'}
 				Icon={
 					<Octicons
 						name="checklist"
@@ -224,7 +224,7 @@ function SettingCategoryList() {
 			/>
 			<SettingCategoryListItem
 				label={'Support'}
-				to={'/settings/tip'}
+				to={'/settings/support'}
 				Icon={
 					<AntDesign name="hearto" size={24} color={APP_FONT.MONTSERRAT_BODY} />
 				}

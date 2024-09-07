@@ -6,15 +6,20 @@ import { useScrollOnReveal } from '../../../../states/useScrollOnReveal';
 import ActivityPubService from '../../../../services/activitypub.service';
 
 function useFollowers(id: string) {
-	const { client, domain } = useActivityPubRestClientContext();
+	const { client, domain, primaryAcct } = useActivityPubRestClientContext();
 	const {
 		queryCacheMaxId,
 		append,
 		setMaxId,
 		data: PageData,
 		updateQueryCache,
+		clear,
 	} = useAppPaginationContext();
 	const { resetEndOfPageFlag } = useScrollOnReveal();
+
+	useEffect(() => {
+		clear();
+	}, [primaryAcct]);
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');

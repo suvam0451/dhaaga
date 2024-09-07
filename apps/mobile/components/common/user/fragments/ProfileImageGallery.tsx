@@ -143,7 +143,15 @@ function ProfileImageGallery({ userId }: Props) {
 			const count = i.getMediaAttachments().length;
 			if (count > 0) {
 				images.push(
-					...i.getMediaAttachments().filter((o) => o.getType() === 'image'),
+					...i.getMediaAttachments().filter((o) => {
+						if (['image/jpeg', 'image', 'image/webp'].includes(o.getType()))
+							return true;
+						console.log(
+							'[WARN]: unknown image type in profile gallery',
+							o.getType(),
+						);
+						return false;
+					}),
 				);
 			}
 		}

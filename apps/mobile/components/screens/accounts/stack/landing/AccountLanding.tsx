@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import {
 	View,
@@ -17,7 +17,6 @@ import AppTopNavbar, {
 } from '../../../../shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 import { router } from 'expo-router';
-import MyMisskeyAccountFeatures from './fragments/MyMisskeyAccountFeatures';
 
 type MyAccountModuleProps = {
 	label: string;
@@ -60,14 +59,16 @@ const MyAccountModule = memo(
 );
 
 const SelectedAccount = memo(() => {
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { me } = useActivityPubRestClientContext();
 
 	return (
 		<View>
-			<Text>Logged in as</Text>
-
+			<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>Logged in as</Text>
 			<View>
 				<Text>Change</Text>
+				<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+					{me.getDisplayName()}
+				</Text>
 			</View>
 		</View>
 	);
@@ -84,7 +85,7 @@ const AccountLanding = memo(() => {
 			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
 		>
 			<Animated.ScrollView onScroll={onScroll} style={{ paddingHorizontal: 6 }}>
-				<View style={{ height: 32 }} />
+				<View style={{ height: 54 }} />
 				<SelectedAccount />
 				<View style={styles.moduleRow}>
 					<MyAccountModule
@@ -115,7 +116,7 @@ const AccountLanding = memo(() => {
 					<Text
 						style={{
 							fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
-							color: APP_FONT.MONTSERRAT_BODY,
+							color: APP_FONT.DISABLED,
 						}}
 					>
 						My Post History
@@ -128,32 +129,31 @@ const AccountLanding = memo(() => {
 							<Ionicons
 								name="create"
 								size={ICON_SIZE}
-								color={APP_FONT.MONTSERRAT_BODY}
+								color={APP_FONT.DISABLED}
 							/>
 						}
-						to={'/accounts/my-profile'}
+						to={''}
+						disabled
 					/>
 					<MyAccountModule
 						label={'Replies'}
 						Icon={
-							<FontAwesome
-								name="comment"
-								size={24}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
+							<FontAwesome name="comment" size={24} color={APP_FONT.DISABLED} />
 						}
-						to={'/accounts/my-profile'}
+						to={''}
+						disabled
 					/>
 					<MyAccountModule
 						label={'Boosts'}
 						Icon={
 							<Ionicons
-								color={APP_FONT.MONTSERRAT_BODY}
+								color={APP_FONT.DISABLED}
 								name={'rocket'}
 								size={ICON_SIZE}
 							/>
 						}
-						to={'/accounts/my-profile'}
+						to={''}
+						disabled
 					/>
 				</View>
 				<View style={{ marginLeft: 8, marginBottom: 8, marginTop: 8 }}>
@@ -244,8 +244,8 @@ const AccountLanding = memo(() => {
 				<View style={{ marginTop: 16, marginHorizontal: 16 }}>
 					<Text style={styles.text}>This entire page was recently added.</Text>
 					<Text style={styles.text}>
-						Some features (such as interacting with your own profile or
-						editing/deleting posts) may not work as expected.{' '}
+						Many expected features (such as interacting with your own profile or
+						editing/deleting posts) are not implemented.
 					</Text>
 					<Text style={styles.text}>Feedbacks are welcome 🙏</Text>
 				</View>

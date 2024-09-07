@@ -21,7 +21,12 @@ function MediaThumbnail({
 }: MediaThumbnailProps) {
 	const Component = useMemo(() => {
 		switch (type) {
-			case 'image': {
+			case 'image':
+			case 'image/jpeg':
+			case 'image/png':
+			case 'image/webp':
+			case 'image/gif':
+			case 'image/avif': {
 				const { width: _width, height: _height } =
 					MediaService.calculateDimensions({
 						maxW: size,

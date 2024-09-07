@@ -63,7 +63,7 @@ class MastodonUser implements UserInterface {
 
 	getEmojiMap(): Map<string, string> {
 		const map = new Map<string, string>();
-		this.ref.instance?.emojis.forEach((o) => {
+		this.ref.instance?.emojis?.forEach((o) => {
 			map.set(o.shortcode, o.url);
 		});
 		return map;

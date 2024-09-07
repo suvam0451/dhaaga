@@ -88,7 +88,7 @@ const UserPreferences = memo(() => {
 								'Pressing boost add/removes them. Holding shows advanced menu.'
 							}
 							settingKey={
-								appSettingsKeys.preferences.post.interaction.quickReaction
+								appSettingsKeys.preferences.post.interaction.quickBoost
 							}
 						/>
 					</Fragment>

@@ -224,7 +224,7 @@ export class MastodonAccountsRouter implements AccountRoute {
 				this.client.url,
 				this.client.accessToken,
 			).getCamelCaseWithLinkPagination<MastoAccount[]>(
-				`/api/v1/accounts/${id}/followings`,
+				`/api/v1/accounts/${id}/following`,
 				rest,
 			);
 

@@ -46,7 +46,10 @@ export class MisskeyAccountsRouter
 		const data = await this.lib.client.request<
 			'users/notes',
 			Endpoints['users/notes']['req']
-		>('users/notes', query);
+		>('users/notes', {
+			...query,
+			withFiles: !!query.onlyMedia ? query.onlyMedia : undefined,
+		});
 		return successWithData(data);
 	}
 

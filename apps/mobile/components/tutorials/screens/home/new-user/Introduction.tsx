@@ -37,7 +37,7 @@ function IntroductionBase() {
 				</Dialog.Title>
 				<Text
 					style={{
-						fontFamily: 'Inter-Bold',
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 						color: APP_FONT.MONTSERRAT_BODY,
 						marginBottom: 4,
 					}}
@@ -45,7 +45,7 @@ function IntroductionBase() {
 					A{' '}
 					<Text
 						style={{
-							fontFamily: 'Inter-Bold',
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 							color: APP_THEME.LINK,
 							marginBottom: 16,
 						}}
@@ -56,7 +56,7 @@ function IntroductionBase() {
 				</Text>
 				<Text
 					style={{
-						fontFamily: 'Inter-Bold',
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 						color: APP_FONT.MONTSERRAT_BODY,
 						marginBottom: 24,
 					}}
@@ -65,7 +65,7 @@ function IntroductionBase() {
 				</Text>
 				<Text
 					style={{
-						fontFamily: 'Inter-Bold',
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 						color: APP_FONT.MONTSERRAT_BODY,
 						marginBottom: 4,
 					}}
@@ -73,7 +73,7 @@ function IntroductionBase() {
 					A{' '}
 					<Text
 						style={{
-							fontFamily: 'Inter-Bold',
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 							color: APP_THEME.LINK,
 						}}
 					>
@@ -84,7 +84,7 @@ function IntroductionBase() {
 				</Text>
 				<Text
 					style={{
-						fontFamily: 'Inter-Bold',
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 						color: APP_FONT.MONTSERRAT_BODY,
 						marginBottom: 24,
 					}}
@@ -93,7 +93,7 @@ function IntroductionBase() {
 				</Text>
 				<Text
 					style={{
-						fontFamily: 'Inter-Bold',
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 						color: APP_FONT.MONTSERRAT_BODY,
 						marginBottom: 24,
 					}}
@@ -102,7 +102,7 @@ function IntroductionBase() {
 				</Text>
 				<Text
 					style={{
-						fontFamily: 'Inter-Bold',
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 						color: APP_THEME.LINK,
 					}}
 				>
@@ -124,7 +124,7 @@ function IntroductionBase() {
 						<Text
 							style={{
 								fontSize: 20,
-								fontFamily: 'Montserrat-Bold',
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 								textAlign: 'center',
 							}}
 						>
@@ -132,7 +132,7 @@ function IntroductionBase() {
 						</Text>
 						<Text
 							style={{
-								fontFamily: 'Montserrat-Bold',
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 								color: APP_FONT.MONTSERRAT_HEADER,
 								marginTop: 16,
 								textAlign: 'center',
@@ -228,7 +228,7 @@ function IntroductionBase() {
 							style={{
 								color: APP_FONT.MONTSERRAT_BODY,
 								fontSize: 12,
-								fontFamily: 'Inter-Bold',
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 								opacity: 0.87,
 							}}
 						>
