@@ -1,6 +1,7 @@
 <!-- SOCIALS -->
 [![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat&label=Chat)](https://discord.gg/kMp5JA9jwD)
-[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Private%20DM)](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org)
+[![Private](https://img.shields.io/badge/Signal-3A76F0?logo=signal&logoColor=fff&label=suvam.451)](https://signal.me/#eu/UiddwbjrYcUg1qojr5MowSwCEYK_kVW9HyK07tgmGy1hYTh4rr5L7IZ7wb0xqChV)
+[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Alt%20DM)](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org)
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/112440258358145826?label=Add%20Me)](https://mastodon.social/@suvam)
 [![GitHub](https://img.shields.io/github/followers/suvam0451?label=Add%20Me)](https://github.com/suvam0451?tab=followers)
 <!-- SOCIALS -->
@@ -9,7 +10,6 @@
     src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d56143" 
     align="left" 
     style="margin-right:8px"/>
-
 
 **Dhaaga** is a fediverse social app for smartphones (Android & iOS), which adds a lot of cool and unique **client-side functionalities**. It focuses on making it easy to chat and make friends, adds superior offline support and makes the friendiverse intuitive and fun to use for all users, new and old.
 
