@@ -11,7 +11,7 @@
     align="left" 
     style="margin-right:8px"/>
 
-**Dhaaga** is a fediverse social app for smartphones (Android & iOS), which adds a lot of cool and unique **client-side functionalities**. It focuses on making it easy to chat and make friends, adds superior offline support and makes the friendiverse intuitive and fun to use for all users, new and old.
+**Dhaaga** is an SNS client app for smartphones (Android & iOS). It attempts to solve for decentralized social platforms, what email clients solved for the mailing protocols. It focuses on unique client-side functionalities, superior offline support, helping new users ease into the ecosystem and adding more fun to the social interactions.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -42,43 +42,46 @@
 
 ## ✨ Features
 
-- ☂️ Supports your favourite SNS software. *No favourites!*
+- ☂️ Supports your favourite SNS software.¹
 - ☕  Nice, almost like warm and cozy feel to it <-- *(What the users say,
   not me)* 😙
-- 🧐  Super Smart! Knows your friend network and hashtags.
-- 🦉  Dark mode by default. *Hoot? Hoot?*
-- 🏕️ Offline Support. *Download and view posts offline.* ¹
+- 🧐  Super Smart! Syncs your friend network and hashtags offline.
+- 🦉  Dark mode by default.
+- 👌  Fully Operable with One-Hand.
+- 🏕️  Offline Support. *Download and view posts offline.* ²
 - ☄️  Many unique client-side extra features.
-- 🥳  Fun, Free (💰)² and FOSS.
+- 🥳  Fun, Free (💰)³ and FOSS.
 
 
-> ¹ WIP. Dhaaga uses Realm for superior offline support.<br/>
-> ² A little bit of self-promo sometimes 😉
+> ¹ No bridging involved<br/>
+> ² Work in progress.<br/>
+> ³ A little bit of self-promo sometimes 😉
 
 > [!TIP]
-> Dhaaga won't be able to offer 100% feature parity *(like your 
-> instance website or a dedicated client app)*.<br/>
+> Dhaaga does not offer 100% feature parity *(unlike your 
+> instance website or a dedicated client app)* with your instance software.<br/>
 >
-> Weigh the pros and cons, or use it as a companion app ☃️. If you miss any 
-> specific feature, just hit me up!
+> Weigh the pros and cons, or use it as a companion app ☃️.<br/>
+>
+> If you miss any specific feature, just hit me up!
 
-## Guides
+## 📜 Guides
 
 - [Development Guide](https://dhaaga.app/docs/guides/development/using-expo)
 - [Compile from Source](https://dhaaga.app/docs/guides/compiling/using-expo)
 - Help With Translation *(Will be available around end of Oct 2024)*
 
-## About
+## 💁 About
 
 Dhaaga is a solo indie project that I work on during my leisure time.
 
 I built it for casual users like me, 
-who might value having all their accounts in one app, or 
-prefer the SNS-friendly mobile interface offered by Dhaaga *(instead of 
+who like having all their accounts in one app,<br/>
+or prefer the SNS-friendly mobile interface offered by Dhaaga *(instead of 
 separate websites/apps/PWAs)*.
 
-If you liked the app, feel free to drop by and say hi. I like meeting new 
-people and would love to hear how Dhaaga has benefited your online experience. 🤗
+If you liked the app, feel free to drop by and say hi.<br/> I like meeting new 
+people and would love to hear how Dhaaga has added fun to your online experience. 🤗
 
 [Mastodon](https://mastodon.social/@suvam) | [Bluesky](https://bsky.app/profile/suvam.io)
 
