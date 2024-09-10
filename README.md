@@ -11,7 +11,7 @@
     align="left" 
     style="margin-right:8px"/>
 
-**Dhaaga** is an SNS client app for smartphones (Android & iOS). It attempts to solve for decentralized social platforms, what email clients solved for the mailing protocols. It focuses on unique client-side functionalities, superior offline support, helping new users ease into the ecosystem and adding more fun to the social interactions.
+**Dhaaga** is an SNS client app for smartphones (Android & iOS), which supports numerous decentralized social networking platforms. It focuses on unique client-side functionalities, superior offline support, helping new users ease into the ecosystem and generally adding more fun to your online social experience.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -58,27 +58,19 @@
 > ³ A little bit of self-promo sometimes 😉
 
 > [!TIP]
-> Dhaaga does not offer 100% feature parity *(unlike your 
-> instance website or a dedicated client app)* with your instance software.<br/>
+> Dhaaga cannot offer 100% feature parity for every supported SNS platform.<br/>
+> If you only use a single platform or prefer having every single feature,<br/>
+> a dedicated app for that platform might be better fit for you.
 >
-> Weigh the pros and cons, or use it as a companion app ☃️.<br/>
->
-> If you miss any specific feature, just hit me up!
-
-## 📜 Guides
-
-- [Development Guide](https://dhaaga.app/docs/guides/development/using-expo)
-- [Compile from Source](https://dhaaga.app/docs/guides/compiling/using-expo)
-- Help With Translation *(Will be available around end of Oct 2024)*
+> If you miss having any specific feature, feel free to hit me up!
 
 ## 💁 About
 
 Dhaaga is a solo indie project that I work on during my leisure time.
 
-I built it for casual users like me, 
+I built it for casual users like me,
 who like having all their accounts in one app,<br/>
-or prefer the SNS-friendly mobile interface offered by Dhaaga *(instead of 
-separate websites/apps/PWAs)*.
+or prefer the SNS-friendly mobile interface offered by Dhaaga.
 
 If you liked the app, feel free to drop by and say hi.<br/> I like meeting new 
 people and would love to hear how Dhaaga has added fun to your online experience. 🤗
