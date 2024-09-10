@@ -42,60 +42,46 @@
 
 ## ✨ Features
 
-Every major update adds **unique features** that `changes how you can interact with the fediverse`.<br/>
-These features **work with every supported fedi software**.
+- ☂️ Supports your favourite SNS software. *No favourites!*
+- ☕  Nice, almost like warm and cozy feel to it <-- *(What the users say,
+  not me)* 😙
+- 🧐  Super Smart! Knows your friend network and hashtags.
+- 🦉  Dark mode by default. *Hoot? Hoot?*
+- 🏕️ Offline Support. *Download and view posts offline.* ¹
+- ☄️  Many unique client-side extra features.
+- 🥳  Fun, Free (💰)² and FOSS.
 
-- [v0.1.0] **Timeline Widget** | easily jump to ANY timeline | [Read More]()
-- [v0.2.0] **Bookmark Gallery** | Store and view your bookmarks offline | [Read More]()
-- [v0.3.0] **Known Servers** |  A social graph of every instance you ever visited | [Read More]()
-- [v0.4.0] **Profile Gallery** | Browse profiles as an art gallery | [Read More]()
-- [v0.6.0] **Quick Composer** | Microblogging friendly Post/Reply | [Read More]()
 
-> The project does not want to be just another api client<br/>
-> Nor does it try to replace your existing favourite client app.<br/>
-> Dhaaga is more like a companion app 😁
+> ¹ WIP. Dhaaga uses Realm for superior offline support.<br/>
+> ² A little bit of self-promo sometimes 😉
 
-> 👆 But I try my best to make Dhaaga the only social fedi app you will ever need 😉
-
-> **The normal features are weaved in in-between major releases**. If you miss any specific feature from your instance, just hit me up!
-
-## ✨ Design Goals
-
-Features are cool. But, they are no good if the *presentation* or *user experience* sucks.<br/>
-Here are some design directions which may make you consider Dhaaga:
-
-### 💅 Designed for Viewing Content
-
-No image cropping. No wasted space below avatars. 
-> Dhaaga uses full horizontal efficiently.
-
-No humongous bottom menu. No unnecessary top bar *(auto hidden)*.
-> Dhaaga uses full vertical space efficiently
-
-> Dhaaga only supports smartphones.<br/>
-> And it aims to be the best in it's category. 😎
-
-### 💅 Intuitive Menus. No Clutter.
-
-The menu systems in Dhaaga do not look like long lists.<br/> 
-
-> Every action is contextually available when you need them<br/>
-> And meekly hidden away when you don't.
-
-### 💅 Designed for Smartphones
-
-Most of the interaction happens on the screen *(using bottom sheets and dialogs)*.<br/>
-> Say goodbye to bouncing between screens to get things done!
-
-Most of the interactions are also one-handed friendly.<br/>
-> This is why most of Dhaaga's widgets and searchbars are bottom aligned!
+> [!TIP]
+> Dhaaga won't be able to offer 100% feature parity *(like your 
+> instance website or a dedicated client app)*.<br/>
+>
+> Weigh the pros and cons, or use it as a companion app ☃️. If you miss any 
+> specific feature, just hit me up!
 
 ## Guides
 
-- [User Guide](https://dhaaga.app/docs/usage/intro) <-- Optional, but useful for new users!
-- [How to Develop](https://dhaaga.app/docs/guides/development/using-expo) <-- Read before contributing code. No AndroidStudio/XCode needed!
+- [Development Guide](https://dhaaga.app/docs/guides/development/using-expo)
 - [Compile from Source](https://dhaaga.app/docs/guides/compiling/using-expo)
+- Help With Translation *(Will be available around end of Oct 2024)*
 
---- 
+## About
+
+Dhaaga is a solo indie project that I work on during my leisure time.
+
+I built it for casual users like me, 
+who might value having all their accounts in one app, or 
+prefer the SNS-friendly mobile interface offered by Dhaaga *(instead of 
+separate websites/apps/PWAs)*.
+
+If you liked the app, feel free to drop by and say hi. I like meeting new 
+people and would love to hear how Dhaaga has benefited your online experience. 🤗
+
+[Mastodon](https://mastodon.social/@suvam) | [Bluesky](https://bsky.app/profile/suvam.io)
+
+---
 
 © 2023-Present Debashish Patra 
