@@ -139,7 +139,7 @@ const Timeline = memo(() => {
 			sidebarVariant={SIDEBAR_VARIANT.TIMELINE}
 			fabMenuItems={[
 				FAB_MENU_MODULES.CREATE_POST,
-				FAB_MENU_MODULES.TIMELINE_SWITCHER,
+				// FAB_MENU_MODULES.TIMELINE_SWITCHER,
 			]}
 		>
 			<View style={[styles.container, { position: 'relative' }]}>

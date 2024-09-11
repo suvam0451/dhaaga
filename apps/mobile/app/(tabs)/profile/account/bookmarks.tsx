@@ -1,4 +1,4 @@
-import MyBookmark from '../../../components/screens/accounts/stack/MyBookmark';
+import MyBookmark from '../../../../components/screens/profile/stack/MyBookmark';
 
 function BookmarkClassic() {
 	return <MyBookmark />;

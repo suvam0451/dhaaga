@@ -1,12 +1,12 @@
 import { Fragment, memo } from 'react';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
 import { Animated, Text, StyleSheet } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { APP_FONT } from '../../../styles/AppTheme';
-import AppSettingListItem from '../../../components/screens/settings/fragments/AppSettingListItem';
-import AppSettingBooleanToggle from '../../../components/screens/settings/fragments/AppSettingBooleanToggle';
-import { appSettingsKeys } from '../../../services/app-settings/app-settings';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import AppSettingListItem from '../../../../components/screens/settings/fragments/AppSettingListItem';
+import AppSettingBooleanToggle from '../../../../components/screens/settings/fragments/AppSettingBooleanToggle';
+import { appSettingsKeys } from '../../../../services/app-settings/app-settings';
 
 const PrivacySettingsPage = memo(() => {
 	const { translateY } = useScrollMoreOnPageEnd({

@@ -5,7 +5,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import {
 	AppFeatureLargeGridItem,
 	AppFeatureSmallGridItem,
-} from '../../../../screens/settings/SettingsLandingPage';
+} from '../../settings/stack/SettingsLandingPage';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AppListingBookmarkGallery from './bookmark-gallery/AppListingBookmarkGallery';

@@ -159,7 +159,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 							}}
 							onPress={() => {
 								setVisible(false);
-								router.navigate('/settings/accounts');
+								router.navigate('/profile/settings/accounts');
 							}}
 						>
 							<Text

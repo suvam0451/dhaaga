@@ -35,7 +35,7 @@ function LandingPageStack() {
 	return (
 		<AppTopNavbar
 			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
-			title={'Notifications'}
+			title={'Chat & Notifications'}
 			translateY={translateY}
 		>
 			<AnimatedFlashList

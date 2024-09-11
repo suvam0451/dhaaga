@@ -1,4 +1,4 @@
-import AccountLanding from '../../../components/screens/accounts/stack/landing/AccountLanding';
+import AccountLanding from '../../../components/screens/profile/stack/landing/AccountLanding';
 
 function MyAccountDashboardStack() {
 	return <AccountLanding />;

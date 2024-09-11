@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../components/shared/topnavbar/AppTopNavbar';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+} from '../../../../components/shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { ScrollView, Text } from 'react-native';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 const SettingsStackInfo = memo(() => {
 	const { translateY } = useScrollMoreOnPageEnd();

@@ -1,4 +1,4 @@
-import MyProfile from '../../../components/screens/accounts/stack/MyProfile';
+import MyProfile from '../../../components/screens/profile/stack/MyProfile';
 
 function MyAccountDashboardStack() {
 	return <MyProfile />;

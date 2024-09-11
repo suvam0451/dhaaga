@@ -1,4 +1,4 @@
-import MyFollowings from '../../../components/screens/accounts/stack/MyFollowings';
+import MyFollowings from '../../../components/screens/profile/stack/MyFollowings';
 
 function BookmarkClassic() {
 	return <MyFollowings />;

@@ -2,11 +2,11 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Divider, Text } from '@rneui/themed';
 import Animated from 'react-native-reanimated';
 import { Link, router } from 'expo-router';
-import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
-import { APP_FONT } from '../../styles/AppTheme';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import { APP_FONT } from '../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import VersionCode from '../../components/static/sponsorship/VersionCode';
-import { APP_FONTS } from '../../styles/AppFonts';
+import VersionCode from '../../../static/sponsorship/VersionCode';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 import Octicons from '@expo/vector-icons/Octicons';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -16,7 +16,7 @@ import { Fragment } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../components/shared/topnavbar/AppTopNavbar';
+} from '../../../shared/topnavbar/AppTopNavbar';
 
 function SettingPageFooter() {
 	return (
@@ -57,55 +57,6 @@ export function AppFeatureSmallGridItem({
 		>
 			<View style={{ width: iconSize, height: iconSize }}>{Icon}</View>
 		</View>
-	);
-}
-
-type AppFeatureExtraLargeGridItemProps = {
-	label: string;
-	link: string;
-	Icon: JSX.Element;
-	disabled?: boolean;
-	alignment: 'left' | 'right';
-};
-
-function AppFeatureExtraLargeGridItem({
-	label,
-	link,
-	Icon,
-	disabled,
-	alignment,
-}: AppFeatureExtraLargeGridItemProps) {
-	return (
-		<Link disabled={disabled} href={link}>
-			<View
-				style={{
-					backgroundColor: '#1e1e1e',
-					padding: 8,
-					borderRadius: 8,
-					width: '100%',
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginLeft: alignment === 'right' ? 8 : 0,
-					marginRight: alignment === 'left' ? 8 : 0,
-					height: (36 + 8 * 2) * 2 + 8,
-					opacity: disabled ? 0.25 : 1,
-				}}
-			>
-				<View style={{ width: 24 }}>{Icon}</View>
-				<Text
-					style={{
-						fontFamily: 'Montserrat-Bold',
-						marginLeft: 8,
-						color: disabled
-							? APP_FONT.MONTSERRAT_BODY
-							: APP_FONT.MONTSERRAT_HEADER,
-					}}
-				>
-					{label}
-				</Text>
-			</View>
-		</Link>
 	);
 }
 
@@ -184,7 +135,7 @@ function SettingCategoryList() {
 		<View style={{ width: '100%', flexGrow: 1, paddingHorizontal: 8 }}>
 			<SettingCategoryListItem
 				label={'Accounts'}
-				to={'/settings/accounts'}
+				to={'/profile/settings/accounts'}
 				Icon={
 					<MaterialIcons
 						name="manage-accounts"
@@ -195,7 +146,7 @@ function SettingCategoryList() {
 			/>
 			<SettingCategoryListItem
 				label={'Preferences'}
-				to={'/settings/user-preferences'}
+				to={'/profile/settings/user-preferences'}
 				Icon={
 					<Octicons
 						name="checklist"
@@ -206,10 +157,21 @@ function SettingCategoryList() {
 			/>
 			<SettingCategoryListItem
 				label={'Privacy'}
-				to={'/settings/privacy'}
+				to={'/profile/settings/privacy'}
 				Icon={
 					<FontAwesome6
 						name="user-secret"
+						size={24}
+						color={APP_FONT.MONTSERRAT_BODY}
+					/>
+				}
+			/>
+			<SettingCategoryListItem
+				label={'Digital Wellbeing'}
+				to={'/profile/settings/wellbeing'}
+				Icon={
+					<FontAwesome6
+						name="hand-holding-heart"
 						size={24}
 						color={APP_FONT.MONTSERRAT_BODY}
 					/>
@@ -261,8 +223,8 @@ function SettingsLandingPage() {
 
 	return (
 		<AppTopNavbar
-			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
-			title={'Settings'}
+			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+			title={'App Settings'}
 			translateY={translateY}
 		>
 			<Animated.ScrollView

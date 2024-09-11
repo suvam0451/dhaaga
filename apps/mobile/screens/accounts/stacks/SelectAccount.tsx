@@ -7,11 +7,11 @@ import { useRef, useState } from 'react';
 import AccountInfoSyncDialog from '../../../components/dialogs/AccountInfoSync';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ConfirmAccountDelete from '../../../components/dialogs/accounts/ConfirmAccountDelete';
-import AccountListForSoftware from '../../../components/screens/accounts/stack/landing/fragments/AccountListForSoftware';
 import { UUID } from 'bson';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
+import AccountListForSoftware from '../../../components/screens/profile/stack/landing/fragments/AccountListForSoftware';
 
 function SelectAccountStack() {
 	const [DialogVisible, setDialogVisible] = useState(false);

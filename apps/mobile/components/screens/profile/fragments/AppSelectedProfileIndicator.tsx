@@ -11,42 +11,42 @@ import AccountRepository from '../../../../repositories/account.repo';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { Image } from 'expo-image';
+import Feather from '@expo/vector-icons/Feather';
+import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
 
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
-/**
- * An indicator for the currently active
- * account.
- *
- * width = 36 + 2 + 4 = 42
- * Clicking on it will bring up the account switcher
- *
- * @deprecated in favor of 5th tab since v0.11.0
- */
-const AppSelectedAccountIndicator = memo(() => {
+const AppSelectedProfileIndicator = memo(() => {
+	const db = useRealm();
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
-
 	const account = useObject(
 		Account,
 		primaryAcct?.isValid() ? primaryAcct?._id : new BSON.UUID(),
 	);
-	const db = useRealm();
 	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
 
-	function onAccountSelectRequest() {
+	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
+
+	function onLongPress() {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 		setType(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT);
 		updateRequestId();
 		setVisible(true);
+	}
+
+	function onPress() {
+		router.navigate('/profile');
 	}
 
 	if (!primaryAcct)
 		return (
 			<TouchableOpacity
 				style={styles.accountIconTouchableContainerRight}
-				onPress={onAccountSelectRequest}
+				onPress={onPress}
+				onLongPress={onLongPress}
 			>
 				<MaterialIcons
 					name="no-accounts"
@@ -55,11 +55,13 @@ const AppSelectedAccountIndicator = memo(() => {
 				/>
 			</TouchableOpacity>
 		);
+
 	return (
 		<View style={{ flexDirection: 'row' }}>
 			<TouchableOpacity
 				style={styles.accountIconTouchableContainer}
-				onPress={onAccountSelectRequest}
+				onPress={onPress}
+				onLongPress={onLongPress}
 			>
 				<View style={styles.accountIconInternalContainer}>
 					{/*@ts-ignore-next-line*/}
@@ -74,12 +76,15 @@ const AppSelectedAccountIndicator = memo(() => {
 						contentFit="fill"
 					/>
 				</View>
+				<View style={{ width: 14 }}>
+					<Feather name="more-vertical" size={24} color={APP_FONT.DISABLED} />
+				</View>
 			</TouchableOpacity>
 		</View>
 	);
 });
 
-export default AppSelectedAccountIndicator;
+export default AppSelectedProfileIndicator;
 
 const styles = StyleSheet.create({
 	subHeader: {
@@ -108,8 +113,6 @@ const styles = StyleSheet.create({
 		height: '100%',
 		alignItems: 'center',
 		flexDirection: 'row',
-		padding: 2,
-		paddingRight: 8,
 	},
 	accountIconTouchableContainerRight: {
 		height: '100%',
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
 	},
 	accountIconInternalContainer: {
 		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: 'gray',
+		borderWidth: 0.5,
+		borderColor: 'rgba(255, 255, 255, 0.25)',
 	},
 });

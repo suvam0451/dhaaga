@@ -1,4 +1,4 @@
-import MyPosts from '../../../components/screens/accounts/stack/MyPosts';
+import MyPosts from '../../../components/screens/profile/stack/MyPosts';
 
 function MyPostsPage() {
 	return <MyPosts />;

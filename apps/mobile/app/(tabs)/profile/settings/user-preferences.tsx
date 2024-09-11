@@ -1,11 +1,11 @@
 import { Fragment, memo } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import TitleOnlyScrollContainer from '../../../components/containers/TitleOnlyScrollContainer';
-import AppSettingListItem from '../../../components/screens/settings/fragments/AppSettingListItem';
-import AppSettingBooleanToggle from '../../../components/screens/settings/fragments/AppSettingBooleanToggle';
-import { appSettingsKeys } from '../../../services/app-settings/app-settings';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { APP_FONT } from '../../../styles/AppTheme';
+import TitleOnlyScrollContainer from '../../../../components/containers/TitleOnlyScrollContainer';
+import AppSettingListItem from '../../../../components/screens/settings/fragments/AppSettingListItem';
+import AppSettingBooleanToggle from '../../../../components/screens/settings/fragments/AppSettingBooleanToggle';
+import { appSettingsKeys } from '../../../../services/app-settings/app-settings';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import { APP_FONT } from '../../../../styles/AppTheme';
 
 const UserPreferences = memo(() => {
 	return (

@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../components/shared/topnavbar/AppTopNavbar';
+} from '../../../../components/shared/topnavbar/AppTopNavbar';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 import * as Linking from 'expo-linking';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Ionicons } from '@expo/vector-icons';

@@ -1,4 +1,4 @@
-import MyLikes from '../../../components/screens/accounts/stack/MyLikes';
+import MyLikes from '../../../../components/screens/profile/stack/MyLikes';
 
 function BookmarkClassic() {
 	return <MyLikes />;
