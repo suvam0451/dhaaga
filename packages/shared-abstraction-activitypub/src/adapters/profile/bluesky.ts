@@ -2,9 +2,10 @@ import { UserInterface } from './_interface.js';
 import { AppBskyActorDefs } from '@atproto/api';
 
 export class BlueskyUserInterface implements UserInterface {
-	ref: AppBskyActorDefs.ProfileViewBasic;
+	// + AppBskyActorDefs.ProfileViewBasic;
+	ref: AppBskyActorDefs.ProfileViewDetailed;
 
-	constructor(ref: AppBskyActorDefs.ProfileViewBasic) {
+	constructor(ref: AppBskyActorDefs.ProfileViewDetailed) {
 		this.ref = ref;
 	}
 
@@ -40,10 +41,10 @@ export class BlueskyUserInterface implements UserInterface {
 
 	getAvatarBlurHash = () => null;
 
-	getBannerUrl = () => null;
+	getBannerUrl = () => this.ref.banner;
 
 	getBannerBlurHash = () => null;
-	getDescription = () => null;
+	getDescription = () => this.ref.description;
 
 	getBirthday = () => new Date(this.ref.createdAt || new Date());
 
@@ -52,18 +53,25 @@ export class BlueskyUserInterface implements UserInterface {
 		return this.ref?.labels || [];
 	}
 
-	getFollowersCount = () => 0;
+	getFollowersCount = () => this.ref.followersCount || 0;
 
-	getFollowingCount = () => 0;
+	getFollowingCount = () => this.ref.followsCount || 0;
 
 	hasPendingFollowRequestFromYou = () => false;
 
 	hasPendingFollowRequestToYou = () => false;
 	getIsBot = () => false;
 
-	getPostCount = () => 0;
+	getPostCount = () => this.ref.postsCount || 0;
 
 	getOnlineStatus = () => 'unknown' as any;
+
+	/**
+	 * Bluesky Specials
+	 */
+	getKnownFollowers() {
+		return this.ref.viewer?.knownFollowers || [];
+	}
 }
 
 export default BlueskyUserInterface;

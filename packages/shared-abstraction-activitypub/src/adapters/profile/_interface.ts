@@ -20,11 +20,11 @@ export interface UserInterface {
 
 	getAvatarUrl(): string | null | undefined;
 
-	getBannerUrl(): string | null;
+	getBannerUrl(): string | null | undefined;
 
 	getBannerBlurHash(): string | null;
 
-	getDescription(): string | null;
+	getDescription(): string | null | undefined;
 
 	getCreatedAt(): Date;
 

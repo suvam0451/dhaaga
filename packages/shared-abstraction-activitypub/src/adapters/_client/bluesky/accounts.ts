@@ -22,8 +22,16 @@ import {
 } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import { AppBskyActorGetProfile, AtpSessionData } from '@atproto/api';
+import { getBskyAgent } from '../_router/_api.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
+	dto: AtpSessionData;
+	constructor(dto: AtpSessionData) {
+		this.dto = dto;
+	}
+
 	block(
 		id: string,
 	): Promise<
@@ -91,10 +99,14 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	get(
-		id: string,
-	): LibraryPromise<MastoAccount | MissUserDetailed | MegaAccount> {
-		return Promise.resolve(undefined) as any;
+	async get(id: string): LibraryPromise<AppBskyActorGetProfile.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.getProfile({ actor: id });
+			return { data };
+		} catch (e) {
+			return errorBuilder(e);
+		}
 	}
 
 	getMany(ids: string[]): LibraryPromise<MastoAccount[] | MissUserDetailed[]> {

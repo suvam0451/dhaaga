@@ -2,39 +2,30 @@ import { useActivityPubRestClientContext } from '../../../states/useActivityPubR
 import { useLocalSearchParams } from 'expo-router';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { useMemo } from 'react';
-import {
-	Animated,
-	Dimensions,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
-import UserProfileExtraInformation from './fragments/ExtraInformation';
 import WithActivitypubUserContext, {
 	useActivitypubUserContext,
 } from '../../../states/useProfile';
 import useMfm from '../../hooks/useMfm';
 import ErrorGoBack from '../../error-screen/ErrorGoBack';
-import PinnedPosts from './fragments/PinnedPosts';
-import ProfileImageGallery from './fragments/ProfileImageGallery';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
-import styles from './utils/styles';
+import styles from '../user/utils/styles';
 import { ProfileStatsInterface } from './fragments/ProfileStats';
-import ProfileAvatar from './fragments/ProfileAvatar';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import ProfileAvatar from '../user/fragments/ProfileAvatar';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import ProfileDesc from './fragments/ProfileDesc';
-import ProfilePeekMessage from '../../dhaaga-bottom-sheet/modules/profile-peek/fragments/ProfilePeekMessage';
+import ProfileDesc from '../user/fragments/ProfileDesc';
+import ProfileButtonMessage from './fragments/ProfileButtonMessage';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import RelationshipButtonCore from '../relationship/RelationshipButtonCore';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../shared/topnavbar/AppTopNavbar';
+import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
+import ProfileModules from './modules/ProfileModules';
 
 export function ProfileContextWrapped() {
 	const { primaryAcct } = useActivityPubRestClientContext();
@@ -87,28 +78,9 @@ export function ProfileContextWrapped() {
 						imageStyle={localStyles.avatarImageContainer}
 						uri={avatarUrl}
 					/>
-					<View
-						style={{
-							flexGrow: 1,
-							alignItems: 'center',
-							justifyContent: 'space-evenly',
-							flexDirection: 'row',
-						}}
-					>
-						<ProfilePeekMessage handle={handle} />
-						<TouchableOpacity
-							style={{
-								padding: 8,
-								backgroundColor: '#242424',
-								borderRadius: 8,
-							}}
-						>
-							<FontAwesome6
-								name="contact-book"
-								size={20}
-								color={APP_FONT.DISABLED}
-							/>
-						</TouchableOpacity>
+					<View style={localStyles.buttonSection}>
+						<ProfileButtonMessage handle={handle} />
+						<ProfileButtonPhonebook />
 					</View>
 					<ProfileStatsInterface style={localStyles.statSectionContainer} />
 				</View>
@@ -161,17 +133,17 @@ export function ProfileContextWrapped() {
 				<View style={{ flexGrow: 1 }} />
 
 				{/* Collapsible Sections */}
-				<View style={{ paddingBottom: 16 }}>
-					<UserProfileExtraInformation fields={fields} />
-					<ProfileImageGallery userId={user.getId()} />
-					<PinnedPosts userId={user.getId()} />
-				</View>
+				<ProfileModules
+					fields={fields}
+					profileId={user.getId()}
+					style={{ paddingBottom: 16 }}
+				/>
 			</Animated.ScrollView>
 		</AppTopNavbar>
 	);
 }
 
-function Profile() {
+function AppProfile() {
 	const { user } = useLocalSearchParams<{ user: string }>();
 	const { Data, Error } = useGetProfile({ userId: user, requestId: 'N/A' });
 
@@ -195,6 +167,12 @@ const localStyles = StyleSheet.create({
 	parsedDescriptionContainer: {
 		marginTop: 12,
 		padding: 8,
+	},
+	buttonSection: {
+		flexGrow: 1,
+		alignItems: 'center',
+		justifyContent: 'space-evenly',
+		flexDirection: 'row',
 	},
 	avatarImageContainer: {
 		flex: 1,
@@ -239,4 +217,4 @@ const localStyles = StyleSheet.create({
 	},
 });
 
-export default Profile;
+export default AppProfile;

@@ -43,6 +43,11 @@ class BlueskyRestClient implements ActivityPubClient {
 		return urlLike.replace(/\/+$/, '');
 	}
 
+	/**
+	 * @deprecated the session checks
+	 * should be done right before
+	 * calling the endpoints
+	 */
 	async init() {
 		let sessionSaved = null;
 		// Fill the session
@@ -71,9 +76,12 @@ class BlueskyRestClient implements ActivityPubClient {
 			// Works until accessToken expires
 			console.log('[INFO]: resumed atproto session', currentSession); // ✅
 		}
+	}
 
-		// Re-Initialize with client loaded
-		this.accounts = new BlueskyAccountsRouter();
+	constructor(dto: AtprotoClientCreateDTO) {
+		this.client = null;
+		this.dto = dto;
+		this.accounts = new BlueskyAccountsRouter(this.dto as any);
 		this.instances = new BlueskyInstanceRouter();
 		this.lists = new BlueskyListRoute();
 		this.me = new BlueskyMeRouter();
@@ -84,23 +92,6 @@ class BlueskyRestClient implements ActivityPubClient {
 		this.statuses = new BlueskyStatusesRouter();
 		this.tags = new BlueskyTagsRouter();
 		this.timelines = new BlueskyTimelinesRouter(this.dto);
-		this.trends = new BlueskyTrendsRouter();
-	}
-
-	constructor(dto: AtprotoClientCreateDTO) {
-		this.client = null;
-		this.dto = dto;
-		this.accounts = new BlueskyAccountsRouter();
-		this.instances = new BlueskyInstanceRouter();
-		this.lists = new BlueskyListRoute();
-		this.me = new BlueskyMeRouter();
-		this.media = new BlueskyMediaRouter();
-		this.notifications = new BlueskyNotificationsRouter();
-		this.profile = new BlueskyProfileRouter();
-		this.search = new BlueskySearchRouter();
-		this.statuses = new BlueskyStatusesRouter();
-		this.tags = new BlueskyTagsRouter();
-		this.timelines = new BlueskyTimelinesRouter(this.client as any);
 		this.trends = new BlueskyTrendsRouter();
 	}
 

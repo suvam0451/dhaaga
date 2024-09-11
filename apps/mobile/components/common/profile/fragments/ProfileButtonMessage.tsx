@@ -1,17 +1,17 @@
 import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { APP_FONT } from '../../../../../styles/AppTheme';
+import { APP_FONT } from '../../../../styles/AppTheme';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
-} from '../../_api/useAppBottomSheet';
+} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
 type ProfilePeekMessageProps = {
 	handle: string;
 };
 
-const ProfilePeekMessage = memo(({ handle }: ProfilePeekMessageProps) => {
+const ProfileButtonMessage = memo(({ handle }: ProfilePeekMessageProps) => {
 	const { setType, PostComposerTextSeedRef, setVisible, updateRequestId } =
 		useAppBottomSheet();
 
@@ -36,4 +36,4 @@ const ProfilePeekMessage = memo(({ handle }: ProfilePeekMessageProps) => {
 	);
 });
 
-export default ProfilePeekMessage;
+export default ProfileButtonMessage;

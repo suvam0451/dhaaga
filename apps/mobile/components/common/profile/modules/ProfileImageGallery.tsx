@@ -6,12 +6,12 @@ import {
 	MediaAttachmentInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import MediaThumbnail from '../../media/Thumb';
-import ImageGalleryCanvas from './ImageGalleryCanvas';
+import ImageGalleryCanvas from '../../user/fragments/ImageGalleryCanvas';
+import ProfileModuleFactory from './ProfileModuleFactory';
 
 type FlashListItemProps = {
 	selected: boolean;
@@ -100,7 +100,6 @@ function SeeMore() {
 }
 
 function ProfileImageGallery({ userId }: Props) {
-	const [IsVisible, setIsVisible] = useState(false);
 	const { client, domain } = useActivityPubRestClientContext();
 	const [Data, setData] = useState([]);
 	const [MediaItems, setMediaItems] = useState<MediaAttachmentInterface[]>([]);
@@ -219,92 +218,43 @@ function ProfileImageGallery({ userId }: Props) {
 	}, []);
 
 	return (
-		<View style={{ paddingHorizontal: 8 }}>
-			<TouchableOpacity
-				onPress={() => {
-					if (MediaItems.length === 0) return;
-					setIsVisible((o) => !o);
-				}}
-			>
-				<View style={styles.expandableSectionMarkerContainer}>
-					<Text style={styles.collapsibleProfileSectionText}>
-						Gallery{' '}
-						<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-							({MediaItems.length})
-						</Text>
-					</Text>
-					<Ionicons
-						name={IsVisible ? 'chevron-down' : 'chevron-forward'}
-						size={24}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
-				</View>
-			</TouchableOpacity>
-			<View
-				style={{
-					display: IsVisible ? 'flex' : 'none',
-					marginTop: 6,
-				}}
-			>
-				<ImageGalleryCanvas
-					src={MediaItems[CurrentIndex]?.getUrl()}
-					width={MediaItems[CurrentIndex]?.getWidth()}
-					height={MediaItems[CurrentIndex]?.getHeight()}
-					onNext={onNext}
-					onPrev={onPrev}
+		<ProfileModuleFactory
+			style={{
+				paddingHorizontal: 8,
+			}}
+			label={'Gallery'}
+			subtext={`${MediaItems.length}`}
+		>
+			<ImageGalleryCanvas
+				src={MediaItems[CurrentIndex]?.getUrl()}
+				width={MediaItems[CurrentIndex]?.getWidth()}
+				height={MediaItems[CurrentIndex]?.getHeight()}
+				onNext={onNext}
+				onPrev={onPrev}
+			/>
+			<View>
+				<FlatList
+					ref={ListRef}
+					contentContainerStyle={{ paddingTop: 12, paddingBottom: 12 }}
+					ListFooterComponent={<SeeMore />}
+					horizontal={true}
+					data={MediaItems}
+					renderItem={({ item, index }) => (
+						<FlashListItem
+							myIndex={index}
+							activeIndex={CurrentIndex}
+							onClick={onThumbClick}
+							selected={false}
+							type={item.getType()}
+							url={item.getUrl()}
+							width={item.getWidth()}
+							height={item.getHeight()}
+						/>
+					)}
 				/>
-				<View>
-					<FlatList
-						ref={ListRef}
-						contentContainerStyle={{ paddingTop: 12, paddingBottom: 12 }}
-						ListFooterComponent={<SeeMore />}
-						horizontal={true}
-						data={MediaItems}
-						renderItem={({ item, index }) => (
-							<FlashListItem
-								myIndex={index}
-								activeIndex={CurrentIndex}
-								onClick={onThumbClick}
-								selected={false}
-								type={item.getType()}
-								url={item.getUrl()}
-								width={item.getWidth()}
-								height={item.getHeight()}
-							/>
-						)}
-					/>
-				</View>
 			</View>
-		</View>
+		</ProfileModuleFactory>
 	);
 }
-
-const styles = StyleSheet.create({
-	header: {
-		position: 'absolute',
-		backgroundColor: '#1c1c1c',
-		left: 0,
-		right: 0,
-		width: '100%',
-		zIndex: 1,
-	},
-	expandableSectionMarkerContainer: {
-		marginVertical: 6,
-		paddingTop: 8,
-		paddingBottom: 8,
-		paddingLeft: 16,
-		paddingRight: 16,
-		backgroundColor: '#272727',
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		borderRadius: 8,
-	},
-	collapsibleProfileSectionText: {
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontFamily: 'Montserrat-Bold',
-		flexGrow: 1,
-	},
-});
 
 export default ProfileImageGallery;

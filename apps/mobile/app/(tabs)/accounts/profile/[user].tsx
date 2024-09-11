@@ -1,5 +1,5 @@
-import Profile from '../../../../components/common/user/Profile';
+import AppProfile from '../../../../components/common/profile/AppProfile';
 
 export default function Route() {
-	return <Profile />;
+	return <AppProfile />;
 }

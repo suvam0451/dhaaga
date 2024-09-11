@@ -17,6 +17,7 @@ import {
 	MissUserDetailed,
 } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
+import { AppBskyActorGetProfile } from '@atproto/api';
 
 export type BookmarkGetQueryDTO = {
 	limit: number;
@@ -128,7 +129,12 @@ export interface AccountRoute {
 
 	get(
 		id: string,
-	): LibraryPromise<MastoAccount | MissUserDetailed | MegaAccount>;
+	): LibraryPromise<
+		| MastoAccount
+		| MissUserDetailed
+		| MegaAccount
+		| AppBskyActorGetProfile.Response
+	>;
 
 	getMany(ids: string[]): LibraryPromise<MastoAccount[] | MissUserDetailed[]>;
 
