@@ -18,6 +18,7 @@ import {
 } from './_interface.js';
 import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
 import camelcaseKeys from 'camelcase-keys';
+import BlueskyStatusAdapter from './bluesky.js';
 
 /**
  * @param status any status object
@@ -50,6 +51,14 @@ export function ActivitypubStatusAdapter(
 			return new MastodonToStatusAdapter(
 				new StatusInstance(_camel as mastodon.v1.Status),
 			);
+		}
+		case KNOWN_SOFTWARE.BLUESKY: {
+			// console.log(status);
+			return new BlueskyStatusAdapter({
+				post: status,
+				reply: status.reply,
+				reason: status.reason,
+			});
 		}
 		default: {
 			return new UnknownToStatusAdapter();

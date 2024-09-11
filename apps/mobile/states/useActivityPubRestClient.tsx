@@ -11,6 +11,7 @@ import {
 	ActivityPubUserAdapter,
 	ActivityPubClient,
 	UserInterface,
+	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import AccountRepository from '../repositories/account.repo';
@@ -19,6 +20,7 @@ import { Account } from '../entities/account.entity';
 import { EmojiService } from '../services/emoji.service';
 import { useGlobalMmkvContext } from './useGlobalMMkvCache';
 import { UUID } from 'bson';
+import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
 
 type Type = {
 	client: ActivityPubClient;
@@ -70,7 +72,7 @@ function WithActivityPubRestClient({ children }: any) {
 
 	const { globalDb } = useGlobalMmkvContext();
 
-	function regenerateFn() {
+	async function regenerateFn() {
 		const acct = db.objects(Account).find((o: Account) => o.selected === true);
 		if (!acct) {
 			setRestClient(null);
@@ -85,10 +87,30 @@ function WithActivityPubRestClient({ children }: any) {
 			return;
 		}
 
-		const client = ActivityPubClientFactory.get(acct.domain as any, {
+		let payload: any = {
 			instance: acct?.subdomain,
 			token,
-		});
+		};
+
+		// Built Different
+		if (acct.domain === KNOWN_SOFTWARE.BLUESKY) {
+			payload = {
+				...AccountRepository.getAtpSessionData(db, acct),
+				subdomain: acct.subdomain,
+			};
+		}
+
+		const client = ActivityPubClientFactory.get(acct.domain, payload);
+		if (acct.domain === KNOWN_SOFTWARE.BLUESKY) {
+			try {
+				await (client as BlueskyRestClient).init();
+			} catch (e) {
+				console.log('[ERROR]: failed resuming session', e, acct?.subdomain);
+			}
+			const _client = client as BlueskyRestClient;
+			console.log('[INFO]: previous access token', _client.dto.accessJwt);
+			console.log('[INFO]: previous refresh token', _client.dto.refreshJwt);
+		}
 		setRestClient(client);
 		setPrimaryAcct(acct);
 		PrimaryAcctPtr.current = acct._id;

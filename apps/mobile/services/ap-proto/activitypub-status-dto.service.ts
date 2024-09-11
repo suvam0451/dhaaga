@@ -166,10 +166,13 @@ export class ActivitypubStatusDtoService {
 		);
 
 		const user = ActivitypubAdapterService.adaptUser(input.getUser(), domain);
-		const handle = ActivitypubHelper.getHandle(
-			input?.getAccountUrl(subdomain),
-			subdomain,
-		);
+		let handle =
+			domain === KNOWN_SOFTWARE.BLUESKY
+				? `@${user.getUsername()}`
+				: ActivitypubHelper.getHandle(
+						input?.getAccountUrl(subdomain),
+						subdomain,
+					);
 
 		const IS_BOOKMARK_RESOLVED = [
 			KNOWN_SOFTWARE.MASTODON,

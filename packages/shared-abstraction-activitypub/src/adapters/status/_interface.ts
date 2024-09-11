@@ -2,6 +2,8 @@ import { MediaAttachmentInterface } from '../media-attachment/interface.js';
 import { Note } from 'misskey-js/autogen/models.d.ts';
 import { UserType } from '../profile/_interface.js';
 import type { mastodon } from 'masto';
+import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
+import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 
 export type Status = mastodon.v1.Status | Note | null | undefined;
 export type StatusArray = Status[];
@@ -26,16 +28,27 @@ export interface StatusContextInterface {
 	addChildren(items: StatusInterface[]): void;
 }
 
+export type AppBlueskyAuthor = {
+	associated: { chat: { allowIncoming: 'all' } };
+	avatar: string;
+	createdAt: Date;
+	did: string;
+	displayName: string;
+	handle: string;
+	labels: [];
+	viewer: { muted: boolean; blockedBy: boolean };
+};
+
 export interface StatusInterface {
-	getRaw(): Status;
+	getRaw(): Status | PostView;
 
 	getId(): string;
 
 	getUsername(): string;
 
-	getDisplayName(): string | null;
+	getDisplayName(): string | null | undefined;
 
-	getAvatarUrl(): string | null;
+	getAvatarUrl(): string | null | undefined;
 
 	getCreatedAt(): string;
 
@@ -58,7 +71,7 @@ export interface StatusInterface {
 
 	getContent(): string | null;
 
-	getUser(): UserType | null;
+	getUser(): UserType | ProfileViewBasic | null;
 
 	isReposted(): boolean;
 

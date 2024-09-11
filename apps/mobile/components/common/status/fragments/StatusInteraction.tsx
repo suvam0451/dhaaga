@@ -201,7 +201,7 @@ const StatusInteraction = memo(
 									},
 								]}
 							>
-								Boost
+								Share
 							</Text>
 						</TouchableOpacity>
 						<TouchableOpacity

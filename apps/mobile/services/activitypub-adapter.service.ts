@@ -13,7 +13,7 @@ class ActivityPubAdapterService {
 	}
 
 	static adaptManyStatuses(items: any[], domain: string): StatusInterface[] {
-		return items.map((o) => ActivitypubStatusAdapter(o, domain));
+		return items.map((o) => ActivitypubStatusAdapter(o.post || o, domain));
 	}
 
 	static adaptContextChain(

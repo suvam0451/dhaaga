@@ -25,6 +25,7 @@ function SelectAccountStack() {
 		KNOWN_SOFTWARE.MISSKEY,
 		KNOWN_SOFTWARE.PLEROMA,
 		KNOWN_SOFTWARE.SHARKEY,
+		KNOWN_SOFTWARE.BLUESKY,
 	];
 
 	const { translateY } = useScrollMoreOnPageEnd({

@@ -6,6 +6,7 @@ import DefaultUser from './default.js';
 import { Note } from 'misskey-js/autogen/models.d.ts';
 import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
 import camelcaseKeys from 'camelcase-keys';
+import BlueskyUserInterface from './bluesky.js';
 
 export type UserType =
 	| mastodon.v1.Account
@@ -45,7 +46,7 @@ export interface UserInterface {
 
 	getIsLockedProfile(): boolean | undefined | null;
 
-	getDisplayName(): string | null;
+	getDisplayName(): string | null | undefined;
 
 	getPostCount(): number;
 
@@ -112,6 +113,8 @@ export function ActivityPubUserAdapter(
 				new AccountInstance(_camel as mastodon.v1.Account),
 			);
 		}
+		case KNOWN_SOFTWARE.BLUESKY:
+			return new BlueskyUserInterface(profile);
 		default: {
 			return new DefaultUser();
 		}

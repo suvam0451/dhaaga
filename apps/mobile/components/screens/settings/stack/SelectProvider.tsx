@@ -45,6 +45,8 @@ function SelectProviderStack() {
 								}}
 								color={'rgb(99, 100, 255)'}
 								size={'md'}
+								containerStyle={{ borderRadius: 8 }}
+								buttonStyle={{ borderRadius: 8 }}
 							>
 								<Text style={styles.buttonText}>Login</Text>
 							</Button>
@@ -68,46 +70,36 @@ function SelectProviderStack() {
 								onPress={() => {
 									router.navigate('/settings/onboard/add-misskey');
 								}}
+								containerStyle={{ borderRadius: 8 }}
+								buttonStyle={{ borderRadius: 8 }}
 							>
 								<Text style={styles.buttonText}>Login</Text>
 							</Button>
 						</View>
 					</View>
-					{/*<View*/}
-					{/*	style={{*/}
-					{/*		justifyContent: 'center',*/}
-					{/*		alignItems: 'center',*/}
-					{/*		width: '100%',*/}
-					{/*		marginVertical: 16,*/}
-					{/*	}}*/}
-					{/*>*/}
-					{/*	<View*/}
-					{/*		style={{*/}
-					{/*			padding: 12,*/}
-					{/*			backgroundColor: '#323232',*/}
-					{/*			borderRadius: 8,*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		<Text*/}
-					{/*			style={{*/}
-					{/*				color: APP_FONT.MONTSERRAT_HEADER,*/}
-					{/*				fontSize: 14,*/}
-					{/*				fontFamily: APP_FONTS.INTER_700_BOLD,*/}
-					{/*			}}*/}
-					{/*		>*/}
-					{/*			I am Not Sure*/}
-					{/*		</Text>*/}
-					{/*	</View>*/}
-					{/*	<Text*/}
-					{/*		style={{*/}
-					{/*			textAlign: 'center',*/}
-					{/*			fontFamily: APP_FONTS.INTER_400_REGULAR,*/}
-					{/*			color: APP_FONT.MONTSERRAT_BODY,*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		I will try my best to auto-detect your instance software*/}
-					{/*	</Text>*/}
-					{/*</View>*/}
+
+					<View style={styles.selectSignInPlatformSection}>
+						<View style={styles.selectSignInPlatformCenter}>
+							<SoftwareHeader software={KNOWN_SOFTWARE.BLUESKY} mb={0} mt={0} />
+							<Text style={styles.platformDescription}>
+								Use this for Bluesky
+							</Text>
+						</View>
+
+						<View style={{ paddingTop: 16 }}>
+							<Button
+								size={'md'}
+								color={'#0285ff'}
+								onPress={() => {
+									router.navigate('/settings/onboard/signin-bsky');
+								}}
+								containerStyle={{ borderRadius: 8 }}
+								buttonStyle={{ borderRadius: 8 }}
+							>
+								<Text style={styles.buttonText}>Login</Text>
+							</Button>
+						</View>
+					</View>
 				</View>
 			</View>
 		</TitleOnlyStackHeaderContainer>

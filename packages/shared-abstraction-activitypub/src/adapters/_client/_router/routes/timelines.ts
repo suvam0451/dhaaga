@@ -1,6 +1,7 @@
 import { MastoStatus, MegaStatus } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 import { Endpoints } from 'misskey-js';
+import { AppBskyFeedGetTimeline } from '@atproto/api';
 
 type __MisskeyTimelineOptions = {
 	// common
@@ -64,6 +65,7 @@ export type DhaagaJsTimelineArrayPromise = LibraryPromise<
 	| Endpoints['notes/timeline']['res']
 	| Endpoints['notes/search-by-tag']['res']
 	| Endpoints['notes/user-list-timeline']['res']
+	| AppBskyFeedGetTimeline.Response
 >;
 
 export interface TimelinesRoute {

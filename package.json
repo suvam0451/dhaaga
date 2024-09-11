@@ -1,29 +1,22 @@
 {
   "name": "dhaaga",
-  "version": "0.10.0",
-  "description": "An opinionated mobile client for Mastodon and Misskey",
+  "version": "0.11.0",
+  "description": "A fun microblogging app for the decentralized social web",
+  "author": "Debashish Patra <suvam.io>",
+  "license": "AGPLv3",
   "private": true,
   "scripts": {
     "dev:app": "yarn workspace @dhaaga/mobile dev",
-    "dev:app:turbo": "turbo dev --filter=\"...{./apps/mobile}\"",
     "dev:web": "yarn workspace @dhaaga/web dev",
-    "app:preview": "npm run preview -w @dhaaga/mobile",
     "build:mastodon": "yarn --cwd ./packages/shared-provider-mastodon build",
     "build:dhaagajs": "yarn --cwd ./packages/shared-abstraction-activitypub build",
     "build": "yarn build:mastodon && yarn build:dhaagajs"
   },
-  "author": "Debashish Patra",
-  "license": "AGPLv3",
   "workspaces": [
     "packages/**",
     "apps/mobile",
     "apps/web"
   ],
-  "overrides": {
-    "styled-components": {
-      "react-dom": "18.2.0"
-    }
-  },
   "dependencies": {
     "prettier": "^3.3.2"
   },

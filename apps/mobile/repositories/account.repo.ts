@@ -3,6 +3,7 @@ import { Account, KeyValuePair } from '../entities/account.entity';
 import UUID = BSON.UUID;
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubStatusRepository } from './activitypub-status.repo';
+import { AtpSessionData } from '@atproto/api';
 
 export type AccountCreateDTO = {
 	domain: string;
@@ -80,7 +81,7 @@ class AccountRepository {
 		key: string,
 	): KeyValuePair | null {
 		try {
-			if (!account) return null;
+			if (!account || !account.isValid()) return null;
 			const acct = db
 				.objects(Account)
 				.find((o) => o._id?.toString() === account._id?.toString());
@@ -89,6 +90,39 @@ class AccountRepository {
 		} catch (e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Load the stored atproto
+	 * session and return as object
+	 * @param db
+	 * @param acct
+	 */
+	static getAtpSessionData(db: Realm, acct: Account): AtpSessionData {
+		const accessJwt = AccountRepository.findSecret(
+			db,
+			acct,
+			'access_token',
+		)?.value;
+		const refreshJwt = AccountRepository.findSecret(
+			db,
+			acct,
+			'refresh_token',
+		)?.value;
+		const did = AccountRepository.findSecret(db, acct, 'did')?.value;
+
+		if (!accessJwt || !refreshJwt || !did) {
+			console.log('[ERROR]: atproto session data unavailable in db');
+			return null;
+		}
+
+		return {
+			accessJwt,
+			refreshJwt,
+			handle: acct.username,
+			active: true,
+			did,
+		};
 	}
 
 	static setSecret(

@@ -37,6 +37,8 @@ import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAppTimelineDataContext, {
 	useAppTimelineDataContext,
 } from '../api/useTimelineData';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { AppBskyFeedGetTimeline } from '@atproto/api';
 
 /*
  * Render a Timeline
@@ -78,6 +80,18 @@ const Timeline = memo(() => {
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
+
+		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
+			const cursor = _payload.data.cursor;
+			const posts = _payload.data.feed;
+
+			setMaxId(cursor);
+			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, domain);
+			appendTimelineData(_data);
+			setPageLoadedAtLeastOnce(true);
+			return;
+		}
 
 		if (data?.length > 0) {
 			setMaxId(data[data.length - 1]?.id);

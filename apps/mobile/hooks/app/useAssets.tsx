@@ -46,21 +46,22 @@ type Props = {
 
 function WithAppAssetsContext({ children }: Props) {
 	const [assets, error] = useAssets([
-		require('../../assets/branding/akomma/logo.png'),
-		require('../../assets/branding/firefish/logo.png'),
-		require('../../assets/branding/mastodon/logo.png'),
-		require('../../assets/branding/misskey/logo.png'),
-		require('../../assets/branding/pleroma/logo.png'),
-		require('../../assets/branding/iceshrimp/logo.png'),
-		require('../../assets/branding/gotosocial/logo.png'),
-		require('../../assets/branding/sharkey/logo.png'),
-		require('../../assets/branding/peertube/logo.png'),
-		require('../../assets/branding/pixelfed/logo.png'),
-		require('../../assets/branding/cherrypick/logo.png'),
-		require('../../assets/branding/friendica/logo.png'),
-		require('../../assets/branding/lemmy/logo.png'),
-		require('../../assets/branding/kmyblue/logo.png'),
-		require('../../assets/branding/fedi/logo.png'),
+		require('../../assets/branding/akomma/logo.png'), // 0
+		require('../../assets/branding/firefish/logo.png'), // 1
+		require('../../assets/branding/mastodon/logo.png'), // 2
+		require('../../assets/branding/misskey/logo.png'), // 3
+		require('../../assets/branding/pleroma/logo.png'), // 4
+		require('../../assets/branding/iceshrimp/logo.png'), // 5
+		require('../../assets/branding/gotosocial/logo.png'), // 6
+		require('../../assets/branding/sharkey/logo.png'), // 7
+		require('../../assets/branding/peertube/logo.png'), // 8
+		require('../../assets/branding/pixelfed/logo.png'), // 9
+		require('../../assets/branding/cherrypick/logo.png'), // 10
+		require('../../assets/branding/friendica/logo.png'), // 11
+		require('../../assets/branding/lemmy/logo.png'), // 12
+		require('../../assets/branding/kmyblue/logo.png'), // 13
+		require('../../assets/branding/fedi/logo.png'), // 14
+		require('../../assets/branding/bluesky/logo.png'), // 15
 	]);
 
 	const IsAssetsLoaded = !error && assets?.every((o) => o?.downloaded);
