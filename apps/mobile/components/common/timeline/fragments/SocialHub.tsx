@@ -9,8 +9,6 @@ import { useTimelineController } from '../api/useTimelineController';
 import { useQuery } from '@realm/react';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import FabMenuCore from '../../../shared/fab/Core';
-import { FAB_MENU_MODULES } from '../../../../types/app.types';
 import AppSidebarCore, { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
 import { router } from 'expo-router';
 import { TimelineFetchMode } from '../utils/timeline.types';
@@ -433,13 +431,6 @@ function SocialHub() {
 					{PinnedItems}
 				</View>
 			</View>
-			<FabMenuCore
-				menuItems={[
-					// FAB_MENU_MODULES.NAVIGATOR,
-					FAB_MENU_MODULES.CREATE_POST,
-					// FAB_MENU_MODULES.TIMELINE_SWITCHER,
-				]}
-			/>
 		</AppSidebarCore>
 	);
 }

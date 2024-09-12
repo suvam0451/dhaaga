@@ -56,7 +56,7 @@ function PostDetails() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Post Details'} translateY={translateY}>
+		<WithAutoHideTopNavBar title={'Post'} translateY={translateY}>
 			<WithAppStatusContextDataContext data={Data} dispatch={dispatch}>
 				<WithAppTimelineDataContext>
 					<Animated.ScrollView

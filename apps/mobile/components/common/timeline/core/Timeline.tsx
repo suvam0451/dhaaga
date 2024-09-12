@@ -24,9 +24,6 @@ import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndic
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import useTimeline from '../api/useTimeline';
 import useTimelineLabel from '../api/useTimelineLabel';
-import { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
-import { FAB_MENU_MODULES } from '../../../../types/app.types';
-import WithAppMenu from '../../../containers/WithAppMenu';
 import { APP_THEME } from '../../../../styles/AppTheme';
 import FlashListRenderer from '../fragments/FlashListRenderer';
 import ListHeaderComponent from '../fragments/FlashListHeader';
@@ -135,41 +132,33 @@ const Timeline = memo(() => {
 	if (timelineType === TimelineFetchMode.IDLE) return <SocialHub />;
 
 	return (
-		<WithAppMenu
-			sidebarVariant={SIDEBAR_VARIANT.TIMELINE}
-			fabMenuItems={[
-				FAB_MENU_MODULES.CREATE_POST,
-				// FAB_MENU_MODULES.TIMELINE_SWITCHER,
-			]}
-		>
-			<View style={[styles.container, { position: 'relative' }]}>
-				<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
-				<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-					<TimelinesHeader title={label} />
-				</Animated.View>
-				<AnimatedFlashList
-					ListHeaderComponent={
-						<ListHeaderComponent
-							itemCount={listItems.length}
-							loadedOnce={PageLoadedAtLeastOnce}
-						/>
-					}
-					estimatedItemSize={200}
-					data={listItems}
-					renderItem={FlashListRenderer}
-					getItemType={(o) => o.type}
-					onScroll={onScroll}
-					contentContainerStyle={{
-						paddingTop: 54,
-					}}
-					scrollEventThrottle={16}
-					refreshControl={
-						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-					}
-				/>
-				<LoadingMore visible={visible} loading={loading} />
-			</View>
-		</WithAppMenu>
+		<View style={[styles.container, { position: 'relative' }]}>
+			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
+				<TimelinesHeader title={label} />
+			</Animated.View>
+			<AnimatedFlashList
+				ListHeaderComponent={
+					<ListHeaderComponent
+						itemCount={listItems.length}
+						loadedOnce={PageLoadedAtLeastOnce}
+					/>
+				}
+				estimatedItemSize={200}
+				data={listItems}
+				renderItem={FlashListRenderer}
+				getItemType={(o) => o.type}
+				onScroll={onScroll}
+				contentContainerStyle={{
+					paddingTop: 54,
+				}}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
+			/>
+			<LoadingMore visible={visible} loading={loading} />
+		</View>
 	);
 });
 

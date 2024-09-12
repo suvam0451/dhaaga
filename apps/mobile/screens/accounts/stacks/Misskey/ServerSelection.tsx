@@ -29,7 +29,7 @@ function MisskeyServerSelection() {
 		);
 		const subdomain = InputText;
 		router.push({
-			pathname: 'settings/onboard/signin-mk',
+			pathname: 'profile/onboard/signin-mk',
 			params: {
 				signInUrl: signInStrategy?.loginUrl,
 				subdomain,

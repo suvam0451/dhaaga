@@ -41,7 +41,7 @@ function SelectProviderStack() {
 						<View style={{ marginTop: 4 }}>
 							<Button
 								onPress={() => {
-									router.navigate('/settings/onboard/add-mastodon');
+									router.navigate('/profile/onboard/add-mastodon');
 								}}
 								color={'rgb(99, 100, 255)'}
 								size={'md'}
@@ -68,7 +68,7 @@ function SelectProviderStack() {
 									'linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))'
 								}
 								onPress={() => {
-									router.navigate('/settings/onboard/add-misskey');
+									router.navigate('/profile/onboard/add-misskey');
 								}}
 								containerStyle={{ borderRadius: 8 }}
 								buttonStyle={{ borderRadius: 8 }}
@@ -91,7 +91,7 @@ function SelectProviderStack() {
 								size={'md'}
 								color={'#0285ff'}
 								onPress={() => {
-									router.navigate('/settings/onboard/signin-bsky');
+									router.navigate('/profile/onboard/signin-bsky');
 								}}
 								containerStyle={{ borderRadius: 8 }}
 								buttonStyle={{ borderRadius: 8 }}

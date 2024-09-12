@@ -85,7 +85,7 @@ function MastodonSignInStack() {
 					},
 				],
 			});
-			router.replace('/settings/accounts');
+			router.replace('/profile/settings/accounts');
 		} catch (e) {
 			console.log(e);
 		}

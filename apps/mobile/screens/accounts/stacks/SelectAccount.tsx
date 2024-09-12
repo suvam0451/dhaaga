@@ -63,7 +63,7 @@ function SelectAccountStack() {
 					>
 						<Button
 							onPress={() => {
-								router.navigate('/settings/onboard/select-software');
+								router.navigate('/profile/onboard/select-software');
 							}}
 						>
 							<Text

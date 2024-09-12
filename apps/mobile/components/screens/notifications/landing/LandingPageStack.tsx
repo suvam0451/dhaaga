@@ -1,30 +1,23 @@
-import { View } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { useEffect } from 'react';
-import { AnimatedFlashList } from '@shopify/flash-list';
-import useApiGetNotifications from '../../../../hooks/api/notifications/useApiGetNotifications';
-import { useAppNotifSeenContext } from './state/useNotifSeen';
-import MarkAllAsRead from './fragments/MarkAllAsRead';
-import FlatListRenderer from './fragments/FlatListRenderer';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
+import PagerView from 'react-native-pager-view';
+import NotificationViewSocial from './views/NotificationViewSocial';
+import NotificationViewChat from './views/NotificationViewChat';
+import NotificationViewUpdates from './views/NotificationViewUpdates';
 
 function LandingPageStack() {
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
-	const { appendNotifs } = useAppNotifSeenContext();
-	const { Results, refetch } = useApiGetNotifications();
-
-	useEffect(() => {
-		appendNotifs(Results.map((o) => o.props.id));
-	}, [Results]);
 
 	useEffect(() => {
 		const intervalFunction = () => {
-			refetch();
+			// refetch();
 		};
 		const intervalId = setInterval(intervalFunction, 15000);
 		return () => {
@@ -34,37 +27,37 @@ function LandingPageStack() {
 
 	return (
 		<AppTopNavbar
-			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
-			title={'Chat & Notifications'}
+			type={APP_TOPBAR_TYPE_ENUM.NOTIFICATION_CENTER}
+			title={'N/A'}
 			translateY={translateY}
 		>
-			<AnimatedFlashList
+			<ScrollView
 				onScroll={onScroll}
-				estimatedItemSize={45}
-				contentContainerStyle={{
-					paddingTop: 54,
-					paddingHorizontal: 8,
-					paddingBottom: 54,
-				}}
-				ListHeaderComponent={
-					<View style={{ marginBottom: 16 }}>
-						<View
-							style={{
-								justifyContent: 'flex-end',
-								marginVertical: 8,
-							}}
-						>
-							<MarkAllAsRead />
-						</View>
-						{/*<NotificationControlSegment />*/}
+				contentContainerStyle={{ paddingTop: 54, height: '100%' }}
+			>
+				{/*@ts-ignore-next-line*/}
+				<PagerView style={styles.pagerView} initialPage={0}>
+					<View key="1">
+						<NotificationViewSocial />
 					</View>
-				}
-				data={Results}
-				renderItem={FlatListRenderer}
-				getItemType={(o) => o.type}
-			/>
+					<View key="2">
+						<NotificationViewChat />
+					</View>
+					<View key="3">
+						<NotificationViewUpdates />
+					</View>
+				</PagerView>
+			</ScrollView>
 		</AppTopNavbar>
 	);
 }
+
+const styles = StyleSheet.create({
+	pagerView: {
+		paddingTop: 54,
+		height: '100%',
+		flex: 1,
+	},
+});
 
 export default LandingPageStack;

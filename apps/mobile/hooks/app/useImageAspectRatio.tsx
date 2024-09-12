@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Dimensions, LayoutChangeEvent } from 'react-native';
 import MediaService from '../../services/media.service';
 import { Image as RNImage } from 'react-native';
@@ -31,6 +31,9 @@ function useImageAspectRatio(
 	const [ContainerHeight, setContainerHeight] = useState(
 		MEDIA_CONTAINER_MAX_HEIGHT,
 	);
+
+	// avoid rate limits due to infinite loops
+	const cache = useRef(new Map<string, { width: number; height: number }>());
 
 	/**
 	 * reset to max width/height
@@ -75,6 +78,9 @@ function useImageAspectRatio(
 		seedW: number,
 		seedH: number,
 	): Promise<{ width: number; height: number }> {
+		if (cache.current.has(url)) {
+			return cache.current.get(url);
+		}
 		return new Promise((resolve, reject) => {
 			RNImage.getSize(
 				url,
@@ -85,10 +91,12 @@ function useImageAspectRatio(
 						H,
 						W,
 					});
+					cache.current.set(url, { width, height });
 					resolve({ width, height });
 				},
 				(error) => {
 					console.log('[WARN]: failed to get image', url, error);
+					cache.current.set(url, { width: seedW, height: seedH });
 					resolve({ width: seedW, height: seedH });
 				},
 			);

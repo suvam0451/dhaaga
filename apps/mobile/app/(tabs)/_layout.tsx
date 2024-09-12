@@ -71,7 +71,7 @@ export default function TabLayout() {
 										return <View />;
 								}
 							},
-							tabBarBadge: badgeCount,
+							// tabBarBadge: badgeCount,
 							tabBarBadgeStyle: {
 								// backgroundColor: 'black',
 								color: 'yellow',

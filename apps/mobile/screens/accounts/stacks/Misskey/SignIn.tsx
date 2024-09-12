@@ -82,7 +82,7 @@ function MisskeySignInStack() {
 					{ key: 'access_token', value: Token },
 				],
 			});
-			router.replace('/settings/accounts');
+			router.replace('/profile/settings/accounts');
 		} catch (e) {
 			console.log(e);
 		}

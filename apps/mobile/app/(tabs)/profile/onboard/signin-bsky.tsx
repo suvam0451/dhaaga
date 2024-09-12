@@ -84,7 +84,7 @@ function SigninBsky() {
 						},
 					],
 				});
-				router.replace('/settings/accounts');
+				router.replace('/profile/settings/accounts');
 			} catch (e) {
 				console.log('[WARN]: error');
 			}

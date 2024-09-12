@@ -39,7 +39,7 @@ function AccountsScreen() {
 			);
 		}
 		router.push({
-			pathname: 'settings/onboard/signin-md',
+			pathname: 'profile/onboard/signin-md',
 			params: {
 				signInUrl: signInStrategy?.loginUrl,
 				subdomain: Subdomain,

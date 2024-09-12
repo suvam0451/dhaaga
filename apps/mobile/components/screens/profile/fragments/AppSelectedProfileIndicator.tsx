@@ -26,6 +26,7 @@ const AppSelectedProfileIndicator = memo(() => {
 		Account,
 		primaryAcct?.isValid() ? primaryAcct?._id : new BSON.UUID(),
 	);
+	const { isAnimating, visible } = useAppBottomSheet();
 	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
 
 	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
@@ -41,6 +42,7 @@ const AppSelectedProfileIndicator = memo(() => {
 		router.navigate('/profile');
 	}
 
+	if (visible && isAnimating) return <View />;
 	if (!primaryAcct)
 		return (
 			<TouchableOpacity
