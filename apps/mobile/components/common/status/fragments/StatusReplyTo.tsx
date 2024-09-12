@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import StatusPostedBy from './StatusPostedBy';
 import useMfm from '../../../hooks/useMfm';
@@ -9,6 +8,7 @@ import PostStats from '../PostStats';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import StatusQuoted from './StatusQuoted';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
 
 type StatusReplyToProps = {
 	dto: ActivityPubStatusAppDtoType;

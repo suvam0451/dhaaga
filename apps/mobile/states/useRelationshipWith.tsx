@@ -9,7 +9,7 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
-import ActivitypubRelationService from '../services/ap-proto/activitypub-relation.service';
+import ActivitypubRelationService from '../services/approto/activitypub-relation.service';
 
 const defaultValue = {
 	blockedBy: false,

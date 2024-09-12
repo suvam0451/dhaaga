@@ -131,21 +131,25 @@ class AccountRepository {
 		key: string,
 		value: string,
 	): KeyValuePair | null {
-		const match = this.findSecret(db, account, key);
-		if (match) {
-			match.value = value;
-			match.updatedAt = new Date();
-			return match;
-		} else {
-			const savedKvPair = db.create(KeyValuePair, {
-				_id: new Realm.BSON.UUID(),
-				key,
-				value,
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			});
-			account.secrets.push(savedKvPair);
-			return savedKvPair;
+		try {
+			const match = this.findSecret(db, account, key);
+			if (match) {
+				match.value = value;
+				match.updatedAt = new Date();
+				return match;
+			} else {
+				const savedKvPair = db.create(KeyValuePair, {
+					_id: new Realm.BSON.UUID(),
+					key,
+					value,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				});
+				account.secrets.push(savedKvPair);
+				return savedKvPair;
+			}
+		} catch (e) {
+			console.log(e);
 		}
 	}
 

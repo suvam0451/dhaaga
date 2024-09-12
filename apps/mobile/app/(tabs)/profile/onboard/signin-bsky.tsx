@@ -8,12 +8,10 @@ import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import { Button } from '@rneui/base';
-import { Agent, CredentialSession } from '@atproto/api';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import AccountService from '../../../../services/account.service';
 import { useRealm } from '@realm/react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { router } from 'expo-router';
+import AtprotoSessionService from '../../../../services/atproto/atproto-session.service';
 
 function SigninBsky() {
 	const db = useRealm();
@@ -27,70 +25,16 @@ function SigninBsky() {
 			return;
 		}
 
-		try {
-			let sess = null;
-			const session = new CredentialSession(
-				new URL('https://bsky.social'),
-				fetch,
-				(evt, session1) => {
-					console.log(evt, session1);
-					sess = session1;
-				},
-			);
-			const loginResp = await session.login({
-				identifier: Username.includes('.')
-					? Username
-					: `${Username}.bsky.social`,
-				password: Password,
-			});
-			const agent = new Agent(session);
-			const res = await agent.getProfile({ actor: agent.did });
+		const { success, reason } = await AtprotoSessionService.login(
+			db,
+			Username,
+			Password,
+		);
 
-			const accessToken = loginResp.data.accessJwt;
-			const refreshToken = loginResp.data.refreshJwt;
-			const instance = 'bsky.social';
-			const avatarUrl = res.data.avatar;
-			const displayName = res.data.displayName;
-			const username = res.data.handle;
-			const did = res.data.did;
-
-			try {
-				AccountService.upsert(db, {
-					subdomain: instance,
-					domain: KNOWN_SOFTWARE.BLUESKY,
-					username: username,
-					avatarUrl,
-					displayName,
-					credentials: [
-						{
-							key: 'display_name',
-							value: displayName,
-						},
-						{
-							key: 'avatar',
-							value: avatarUrl,
-						},
-						{
-							key: 'access_token',
-							value: accessToken,
-						},
-						{
-							key: 'refresh_token',
-							value: refreshToken,
-						},
-						{
-							key: 'did',
-							value: did,
-						},
-					],
-				});
-				router.replace('/profile/settings/accounts');
-			} catch (e) {
-				console.log('[WARN]: error');
-			}
-		} catch (e) {
-			// [Error: Invalid identifier or password]
-			console.log('error', e);
+		if (success) {
+			router.replace('/profile/settings/accounts');
+		} else {
+			console.log(reason);
 		}
 	}
 

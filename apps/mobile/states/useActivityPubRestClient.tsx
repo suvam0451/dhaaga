@@ -20,7 +20,7 @@ import { Account } from '../entities/account.entity';
 import { EmojiService } from '../services/emoji.service';
 import { useGlobalMmkvContext } from './useGlobalMMkvCache';
 import { UUID } from 'bson';
-import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
+import AtprotoSessionService from '../services/atproto/atproto-session.service';
 
 type Type = {
 	client: ActivityPubClient;
@@ -94,33 +94,22 @@ function WithActivityPubRestClient({ children }: any) {
 
 		// Built Different
 		if (acct.domain === KNOWN_SOFTWARE.BLUESKY) {
+			const session = AtprotoSessionService.create(db, acct);
+			await session.resume();
+			const { success, data, reason } = session.saveSession();
+			if (!success)
+				console.log('[INFO]: session restore status', success, reason);
 			payload = {
-				...AccountRepository.getAtpSessionData(db, acct),
+				...data,
 				subdomain: acct.subdomain,
 			};
 		}
 
 		const client = ActivityPubClientFactory.get(acct.domain, payload);
-		if (acct.domain === KNOWN_SOFTWARE.BLUESKY) {
-			try {
-				await (client as BlueskyRestClient).init();
-			} catch (e) {
-				console.log('[ERROR]: failed resuming session', e, acct?.subdomain);
-			}
-			const _client = client as BlueskyRestClient;
-			console.log('[INFO]: previous access token', _client.dto.accessJwt);
-			console.log('[INFO]: previous refresh token', _client.dto.refreshJwt);
-		}
 		setRestClient(client);
 		setPrimaryAcct(acct);
 		PrimaryAcctPtr.current = acct._id;
-		EmojiService.refresh(db, globalDb, acct.subdomain, true).then((res) => {
-			// console.log(
-			// 	'[INFO]: emoji cache refreshed for account',
-			// 	acct.subdomain,
-			// 	res?.length,
-			// );
-		});
+		EmojiService.refresh(db, globalDb, acct.subdomain, true);
 	}
 
 	useEffect(() => {

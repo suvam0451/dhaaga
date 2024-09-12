@@ -1,9 +1,9 @@
 import { produce } from 'immer';
 import { Dispatch, MutableRefObject } from 'react';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
-import { ActivityPubReactionStateDto } from '../../../../services/ap-proto/activitypub-reactions.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
+import { ActivityPubReactionStateDto } from '../../../../services/approto/activitypub-reactions.service';
 
 export enum TIMELINE_POST_LIST_DATA_REDUCER_TYPE {
 	CLEAR = 'clear',

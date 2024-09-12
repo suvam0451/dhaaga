@@ -3,8 +3,6 @@ import { memo, useState } from 'react';
 import { Button, Dialog } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import { router } from 'expo-router';
-import FabMenuCore from '../../../../shared/fab/Core';
-import { FAB_MENU_MODULES } from '../../../../../types/app.types';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
@@ -224,7 +222,6 @@ function IntroductionBase() {
 					</View>
 				</View>
 			</View>
-			<FabMenuCore menuItems={[FAB_MENU_MODULES.NAVIGATOR]} />
 		</AppTopNavbar>
 	);
 }

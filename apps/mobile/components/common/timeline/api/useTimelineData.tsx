@@ -4,7 +4,6 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 import {
 	createContext,
 	Dispatch,
@@ -27,13 +26,14 @@ import postArrayReducer, {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
 } from './postArrayReducer';
-import { ActivityPubAppUserDtoType } from '../../../../services/ap-proto/activitypub-user-dto.service';
 import userArrayReducer, {
 	TIMELINE_USER_LIST_DATA_REDUCER_TYPE,
 } from './userArrayReducer';
 import FlashListService, {
 	FlashListType_Post,
 } from '../../../../services/flashlist.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubAppUserDtoType } from '../../../../services/approto/activitypub-user-dto.service';
 
 enum TIMELINE_DATA_TYPE {
 	POSTS = 'POSTS',

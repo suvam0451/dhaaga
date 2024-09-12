@@ -6,13 +6,13 @@ import useMfm from '../hooks/useMfm';
 import { AppTimelineAction } from '../lib/Buttons';
 import Octicons from '@expo/vector-icons/Octicons';
 import { APP_FONT } from '../../styles/AppTheme';
-import { ActivityPubStatusAppDtoType } from '../../services/ap-proto/activitypub-status-dto.service';
 import { APP_FONTS } from '../../styles/AppFonts';
 import Feather from '@expo/vector-icons/Feather';
 import { memo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import PostMoreActionsPostTarget from '../dhaaga-bottom-sheet/modules/post-actions/fragments/PostMoreActionsPostTarget';
 import { useGorhomActionSheetContext } from '../../states/useGorhomBottomSheet';
+import { ActivityPubStatusAppDtoType } from '../../services/approto/activitypub-status-dto.service';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;

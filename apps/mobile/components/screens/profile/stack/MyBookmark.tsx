@@ -18,7 +18,7 @@ import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusIte
 import WithAppTimelineDataContext, {
 	useAppTimelineDataContext,
 } from '../../../common/timeline/api/useTimelineData';
-import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
+import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function Core() {
 	const { primaryAcct, subdomain } = useActivityPubRestClientContext();

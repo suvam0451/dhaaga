@@ -29,13 +29,13 @@ import FlashListRenderer from '../fragments/FlashListRenderer';
 import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import { useRealm } from '@realm/react';
-import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAppTimelineDataContext, {
 	useAppTimelineDataContext,
 } from '../api/useTimelineData';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
+import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 /*
  * Render a Timeline

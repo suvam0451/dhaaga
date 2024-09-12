@@ -1,8 +1,8 @@
-import { ActivityPubStatusAppDtoType } from '../../../services/ap-proto/activitypub-status-dto.service';
 import MastodonService from '../../../services/mastodon.service';
 import { produce } from 'immer';
-import { ActivitypubStatusService } from '../../../services/ap-proto/activitypub-status.service';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubStatusService } from '../../../services/approto/activitypub-status.service';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
 
 export enum STATUS_CONTEXT_REDUCER_ACTION {
 	INIT = 'init',

@@ -40,7 +40,8 @@ type useApiGetNotificationsProps = {
  * API Query for the notifications endpoint
  */
 function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
-	const { client, primaryAcct, domain } = useActivityPubRestClientContext();
+	const { client, primaryAcct, domain, subdomain } =
+		useActivityPubRestClientContext();
 	const [Results, setResults] = useState<Notification_FlatList_Entry[]>([]);
 
 	useEffect(() => {
@@ -77,12 +78,7 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 
 	// Queries
 	const { fetchStatus, data, status, refetch } = useQuery<Api_Response_Type>({
-		queryKey: [
-			'notifications',
-			primaryAcct?.domain,
-			primaryAcct?.subdomain,
-			include,
-		],
+		queryKey: ['notifications', domain, subdomain, include],
 		queryFn: api,
 		enabled: client !== null,
 	});

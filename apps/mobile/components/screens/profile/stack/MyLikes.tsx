@@ -15,12 +15,12 @@ import WithAppTimelineDataContext, {
 } from '../../../common/timeline/api/useTimelineData';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import { useEffect } from 'react';
-import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import ActivityPubService from '../../../../services/activitypub.service';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
+import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function Core() {
 	const db = useRealm();

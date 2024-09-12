@@ -7,16 +7,16 @@ import { useActivityPubRestClientContext } from '../../../../states/useActivityP
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
-import ActivitypubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
-import ActivityPubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
 import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
 	AppButtonBottomSheetAction,
 } from '../../../lib/Buttons';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../common/timeline/api/postArrayReducer';
-import { ActivityPubAppUserDtoType } from '../../../../services/ap-proto/activitypub-user-dto.service';
 import useMfm from '../../../hooks/useMfm';
 import { AnimatedFlashList } from '@shopify/flash-list';
+import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
+import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
+import { ActivityPubAppUserDtoType } from '../../../../services/approto/activitypub-user-dto.service';
 
 const ReactingUser = memo(({ dto }: { dto: ActivityPubAppUserDtoType }) => {
 	const { content } = useMfm({

@@ -7,7 +7,7 @@ import useAppNavigator from '../../states/useAppNavigator';
 import StatusCreatedAt from '../common/status/fragments/StatusCreatedAt';
 import { APP_FONTS } from '../../styles/AppFonts';
 import StatusVisibility from '../common/status/fragments/StatusVisibility';
-import { ActivityPubStatusAppDtoType } from '../../services/ap-proto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../services/approto/activitypub-status-dto.service';
 
 /**
  * Renders the user (poster)'s avatar

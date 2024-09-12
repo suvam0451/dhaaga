@@ -14,7 +14,6 @@ import useTimeline from '../../../common/timeline/api/useTimeline';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import { useEffect, useState } from 'react';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
-import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
@@ -25,6 +24,7 @@ import ListHeaderComponent from '../../../common/timeline/fragments/FlashListHea
 import WithTimelineControllerContext, {
 	useTimelineController,
 } from '../../../common/timeline/api/useTimelineController';
+import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function Core() {
 	const db = useRealm();

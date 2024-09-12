@@ -12,8 +12,8 @@ import {
 	useAppBottomSheet,
 } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
-import { ActivitypubStatusService } from '../../../../../services/ap-proto/activitypub-status.service';
 import ActivityPubService from '../../../../../services/activitypub.service';
+import { ActivitypubStatusService } from '../../../../../services/approto/activitypub-status.service';
 
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility, cw } = useComposerContext();

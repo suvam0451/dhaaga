@@ -10,8 +10,8 @@ import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { ActivityPubStatusAppDtoType } from '../../../services/ap-proto/activitypub-status-dto.service';
 import { useAppTimelineDataContext } from '../timeline/api/useTimelineData';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
 
 type PostStatLikesProps = {
 	onPress: () => void;

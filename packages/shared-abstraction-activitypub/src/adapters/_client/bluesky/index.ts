@@ -11,8 +11,7 @@ import BlueskyStatusesRouter from './statuses.js';
 import BlueskyTagsRouter from './tags.js';
 import BlueskyTimelinesRouter from './timelines.js';
 import BlueskyTrendsRouter from './trends.js';
-import { Agent, AtpSessionData, CredentialSession } from '@atproto/api';
-import { jwtDecode } from 'jwt-decode';
+import { Agent, AtpSessionData } from '@atproto/api';
 
 export type AtprotoClientCreateDTO = {
 	subdomain: string;
@@ -41,41 +40,6 @@ class BlueskyRestClient implements ActivityPubClient {
 			urlLike = 'https://' + urlLike;
 		}
 		return urlLike.replace(/\/+$/, '');
-	}
-
-	/**
-	 * @deprecated the session checks
-	 * should be done right before
-	 * calling the endpoints
-	 */
-	async init() {
-		let sessionSaved = null;
-		// Fill the session
-		const session = new CredentialSession(
-			new URL(this.cleanLink(this.dto.subdomain)),
-			fetch,
-			(evt, session1) => {
-				console.log('[INFO]: session obtained', evt, session1);
-				sessionSaved = session1;
-			},
-		);
-		session.session = this.dto;
-
-		const _jwt: any = jwtDecode(this.dto.accessJwt);
-		const IS_EXPIRED = _jwt.exp < Math.floor(new Date().getTime() / 1000);
-
-		if (IS_EXPIRED) {
-			console.log('[INFO]: has session', session.hasSession);
-			// monitor this very carefully
-			const refreshedSession = await session.refreshSession();
-			// FIXME: prints undefined
-			console.log('[INFO]: refreshed atproto session', refreshedSession); // ❌
-			console.log(sessionSaved);
-		} else {
-			const currentSession = await session.resumeSession(this.dto);
-			// Works until accessToken expires
-			console.log('[INFO]: resumed atproto session', currentSession); // ✅
-		}
 	}
 
 	constructor(dto: AtprotoClientCreateDTO) {

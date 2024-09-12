@@ -1,4 +1,4 @@
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
 
 export enum ListItemEnum {
 	ListItemWithText,

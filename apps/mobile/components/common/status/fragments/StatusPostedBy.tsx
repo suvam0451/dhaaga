@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import OriginalPoster from '../../../post-fragments/OriginalPoster';
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
 
 type StatusPostedByProps = {
 	dto: ActivityPubStatusAppDtoType;
