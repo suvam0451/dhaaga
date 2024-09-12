@@ -329,48 +329,48 @@ function SocialHub() {
 					<Text style={styles.timeOfDayText}>Good Night 🌙</Text>
 				)}
 				<View>
-					<Section>
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-							}}
-						>
-							<View style={{ width: 24 }}>
-								<FontAwesome6
-									name="clock-rotate-left"
-									size={20}
-									color={APP_THEME.COLOR_SCHEME_B}
-								/>
-							</View>
-							<View>
-								<Text
-									style={{
-										fontFamily: 'Montserrat-Bold',
-										fontSize: 20,
-										marginLeft: 4,
-										flexGrow: 1,
-										color: APP_FONT.MONTSERRAT_BODY,
-									}}
-								>
-									Continue browsing
-								</Text>
-							</View>
-						</View>
-					</Section>
-					<View style={styles.featureNotAvailableNoteContainer}>
-						<View style={{ width: 28 }}>
-							<FontAwesome6
-								name="toolbox"
-								size={24}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
-						</View>
-						<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
-							This feature is not available yet
-						</Text>
-					</View>
+					{/*<Section>*/}
+					{/*	<View*/}
+					{/*		style={{*/}
+					{/*			display: 'flex',*/}
+					{/*			flexDirection: 'row',*/}
+					{/*			alignItems: 'center',*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		<View style={{ width: 24 }}>*/}
+					{/*			<FontAwesome6*/}
+					{/*				name="clock-rotate-left"*/}
+					{/*				size={20}*/}
+					{/*				color={APP_THEME.COLOR_SCHEME_B}*/}
+					{/*			/>*/}
+					{/*		</View>*/}
+					{/*		<View>*/}
+					{/*			<Text*/}
+					{/*				style={{*/}
+					{/*					fontFamily: 'Montserrat-Bold',*/}
+					{/*					fontSize: 20,*/}
+					{/*					marginLeft: 4,*/}
+					{/*					flexGrow: 1,*/}
+					{/*					color: APP_FONT.MONTSERRAT_BODY,*/}
+					{/*				}}*/}
+					{/*			>*/}
+					{/*				Continue browsing*/}
+					{/*			</Text>*/}
+					{/*		</View>*/}
+					{/*	</View>*/}
+					{/*</Section>*/}
+					{/*<View style={styles.featureNotAvailableNoteContainer}>*/}
+					{/*	<View style={{ width: 28 }}>*/}
+					{/*		<FontAwesome6*/}
+					{/*			name="toolbox"*/}
+					{/*			size={24}*/}
+					{/*			color={APP_FONT.MONTSERRAT_BODY}*/}
+					{/*		/>*/}
+					{/*	</View>*/}
+					{/*	<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>*/}
+					{/*		This feature is not available yet*/}
+					{/*	</Text>*/}
+					{/*</View>*/}
 					<Section>
 						<View
 							style={{
