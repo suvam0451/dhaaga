@@ -114,8 +114,6 @@ export {
 	DhaagaErrorCode,
 } from './adapters/_client/_router/_types.js';
 
-export { StatusInstance } from './adapters/status/_interface.js';
-export { NoteInstance } from './adapters/status/_interface.js';
 export { UserDetailedInstance } from './adapters/profile/_interface.js';
 export { AccountInstance } from './adapters/profile/_interface.js';
 export { ActivitypubStatusAdapter } from './adapters/status/_adapters.js';

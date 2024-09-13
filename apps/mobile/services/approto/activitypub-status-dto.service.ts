@@ -109,6 +109,8 @@ export const ActivityPubStatusLevelThree = ActivityPubStatusLevelTwo.extend({
 	boostedFrom: ActivityPubStatusLevelTwo.nullable().optional(),
 	// Pleroma feature
 	quotedFrom: ActivityPubStatusLevelTwo.nullable().optional(),
+	// Bluesky feature
+	rootPost: ActivityPubStatusItemDto.nullable().optional(),
 });
 
 export type ActivityPubStatusAppDtoType = z.infer<

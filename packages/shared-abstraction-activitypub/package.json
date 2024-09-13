@@ -31,6 +31,7 @@
     "megalodon": "^10.0.2",
     "mfm-js": "^0.24.0",
     "misskey-js": "^2024.8.0",
+    "multiformats": "^13.2.3",
     "snakecase-keys": "^8.0.1"
   },
   "devDependencies": {

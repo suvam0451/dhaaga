@@ -127,7 +127,18 @@ export class ActivitypubStatusService {
 		let replyTo: z.infer<typeof ActivityPubStatusItemDto> = IS_REPLY
 			? new ActivitypubStatusService(
 					ActivitypubAdapterService.adaptStatus(
-						this.statusI.getRepliedStatusRaw(),
+						this.statusI.getParentRaw(),
+						this.domain,
+					),
+					this.domain,
+					this.subdomain,
+				).export()
+			: null;
+
+		let rootI: z.infer<typeof ActivityPubStatusItemDto> = IS_REPLY
+			? new ActivitypubStatusService(
+					ActivitypubAdapterService.adaptStatus(
+						this.statusI.getRootRaw(),
 						this.domain,
 					),
 					this.domain,
@@ -141,6 +152,7 @@ export class ActivitypubStatusService {
 				KNOWN_SOFTWARE.MISSKEY,
 				KNOWN_SOFTWARE.FIREFISH,
 				KNOWN_SOFTWARE.SHARKEY,
+				KNOWN_SOFTWARE.BLUESKY,
 			].includes(this.domain as any)
 				? /**
 					 * 	Replies in Misskey is actually present in the

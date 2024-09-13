@@ -1,39 +1,38 @@
 import {
 	DhaagaJsMentionObject,
 	Status,
-	StatusContextInstance,
-	StatusContextInterface,
-	StatusInstance,
 	StatusInterface,
 } from './_interface.js';
 import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
 import { UserType } from '../profile/_interface.js';
 import camelcaseKeys from 'camelcase-keys';
+import UnknownToStatusAdapter from './default.js';
+import { mastodon } from '@dhaaga/shared-provider-mastodon';
 
-class MastodonToStatusAdapter implements StatusInterface {
-	ref: StatusInstance;
+class MastodonToStatusAdapter
+	extends UnknownToStatusAdapter
+	implements StatusInterface
+{
+	ref: mastodon.v1.Status;
 	descendants: StatusInterface[];
 
-	constructor(ref: StatusInstance) {
+	constructor(ref: mastodon.v1.Status) {
+		super();
 		this.ref = ref;
 		this.descendants = [];
 	}
 
-	getMyReaction(): string | null | undefined {
-		return null;
-	}
-
 	getCachedEmojis(): Map<string, string> {
 		const retval = new Map<string, string>();
-		this.ref.instance?.emojis?.forEach((o) => {
+		this.ref.emojis?.forEach((o) => {
 			retval.set(o.shortcode, o.url);
 		});
 		return retval;
 	}
 
 	getMentions(): DhaagaJsMentionObject[] {
-		return this.ref.instance?.mentions || [];
+		return this.ref.mentions || [];
 	}
 
 	getReactions(): {
@@ -44,11 +43,11 @@ class MastodonToStatusAdapter implements StatusInterface {
 		url: string | null;
 	}[] {
 		// Akkoma
-		let reactions = (this.ref.instance as any).emojiReactions;
+		let reactions = (this.ref as any).emojiReactions;
 
 		// Pleroma
 		if (!reactions) {
-			reactions = (this.ref.instance as any)?.pleroma?.emojiReactions;
+			reactions = (this.ref as any)?.pleroma?.emojiReactions;
 		}
 
 		if (!reactions) return [];
@@ -71,176 +70,126 @@ class MastodonToStatusAdapter implements StatusInterface {
 	}
 
 	getIsRebloggedByMe(): boolean | null | undefined {
-		return this.ref.instance?.reblogged;
+		return this.ref.reblogged;
 	}
 
 	getIsSensitive(): boolean {
-		return this.ref.instance?.sensitive;
+		return this.ref.sensitive;
 	}
 
 	getSpoilerText(): string | null | undefined {
-		return this.ref.instance?.spoilerText;
+		return this.ref.spoilerText;
 	}
 
 	getRaw(): Status {
-		return this?.ref?.instance;
+		return this?.ref;
 	}
 
-	getRepliedStatusRaw(): Status {
-		return null;
-	}
-
-	getIsFavourited(): boolean | null | undefined {
-		return this.ref.instance?.favourited;
-	}
-
-	setDescendents(items: StatusInterface[]): void {
-		throw new Error('Method not implemented.');
-	}
-
-	getDescendants(): StatusInterface[] {
-		throw new Error('Method not implemented.');
+	getIsFavourited() {
+		return this.ref.favourited;
 	}
 
 	getUser(): UserType {
-		return this?.ref?.instance?.account;
+		return this?.ref?.account;
 	}
 
 	isReply() {
 		return (
-			this?.ref?.instance?.inReplyToId !== '' &&
-			this?.ref?.instance?.inReplyToId !== null &&
-			this?.ref?.instance?.inReplyToId !== undefined
+			this?.ref?.inReplyToId !== '' &&
+			this?.ref?.inReplyToId !== null &&
+			this?.ref?.inReplyToId !== undefined
 		);
 	}
 
 	getParentStatusId() {
-		return this?.ref?.instance?.inReplyToId;
+		return this?.ref?.inReplyToId;
 	}
 
 	getUserIdParentStatusUserId() {
-		return this?.ref?.instance?.inReplyToAccountId;
+		return this?.ref?.inReplyToAccountId;
 	}
 
 	getIsBookmarked() {
-		return this?.ref?.instance?.bookmarked;
+		return this?.ref?.bookmarked;
 	}
 
-	isValid() {
-		return this.ref?.instance !== undefined && this.ref?.instance !== null;
+	getId() {
+		return this.ref?.id;
 	}
-
-	getId(): string {
-		return this.ref?.instance?.id;
-	}
-
-	getAccountId() {}
 
 	getRepliesCount(): number {
-		return this.ref?.instance?.repliesCount;
+		return this.ref?.repliesCount;
 	}
 
 	getRepostsCount(): number {
-		return this.ref?.instance?.reblogsCount;
+		return this.ref?.reblogsCount;
 	}
 
 	getFavouritesCount(): number {
-		return this.ref?.instance?.favouritesCount;
+		return this.ref?.favouritesCount;
 	}
 
 	getUsername() {
-		return this.ref?.instance?.account.username || '';
+		return this.ref?.account.username || '';
 	}
 
 	getDisplayName() {
-		return this.ref?.instance?.account.displayName || '';
+		return this.ref?.account.displayName || '';
 	}
 
 	getAvatarUrl() {
-		return this.ref?.instance?.account.avatarStatic || '';
+		return this.ref?.account.avatarStatic || '';
 	}
 
 	getCreatedAt() {
-		return this.ref.instance?.createdAt || new Date().toString();
+		return this.ref.createdAt || new Date().toString();
 	}
 
 	getVisibility() {
-		return this.ref?.instance?.visibility;
+		return this.ref?.visibility;
 	}
 
 	getAccountUrl() {
-		return this.ref?.instance?.account.url;
+		return this.ref?.account.url;
 	}
 
 	getRepostedStatus() {
-		if (this.ref?.instance?.reblog) {
-			return new MastodonToStatusAdapter(
-				new StatusInstance(this.ref?.instance?.reblog),
-			) as unknown as StatusInterface;
+		if (this.ref?.reblog) {
+			return new MastodonToStatusAdapter(this.ref?.reblog);
 		}
 		return null;
 	}
 
 	getQuote() {
-		return (this.ref.instance as any).quote;
+		return (this.ref as any).quote;
 	}
 
 	getRepostedStatusRaw() {
-		return this.ref?.instance?.reblog as any;
+		return this.ref?.reblog as any;
 	}
 
 	isReposted(): boolean {
-		return this.ref?.instance?.reblog !== null;
+		return this.ref?.reblog !== null;
 	}
 
 	getMediaAttachments() {
-		return this.ref?.instance?.mediaAttachments?.map((o) => {
+		return this.ref?.mediaAttachments?.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
 				new MediaAttachmentInstance(camelcaseKeys(o as any, { deep: true })),
 			);
 		});
 	}
 
-	getContent(): string | null {
-		return this.ref?.instance?.content;
+	getContent() {
+		return this.ref?.content;
 	}
 
 	print(): void {
-		console.log(this.ref.instance);
+		console.log(this.ref);
 	}
 
 	getAccountId_Poster(): string {
-		return this?.ref?.instance?.account?.id;
-	}
-}
-
-export class MastodonToStatusContextAdapter implements StatusContextInterface {
-	ref: StatusInterface;
-	ctx: StatusContextInstance;
-
-	constructor(ref: StatusInterface, ctx: StatusContextInstance) {
-		this.ref = ref;
-		this.ctx = ctx;
-	}
-
-	addChildren(items: StatusInterface[]): void {
-		this.ctx.addChildren(items);
-	}
-
-	getId(): string {
-		return this.ref.getId();
-	}
-
-	getChildren() {
-		return this.ctx.children;
-	}
-
-	getParent() {
-		return this.ctx.parent;
-	}
-
-	getRoot() {
-		return null;
+		return this?.ref?.account?.id;
 	}
 }
 

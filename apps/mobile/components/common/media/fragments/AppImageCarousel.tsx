@@ -114,7 +114,7 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 	items,
 	timelineCacheId,
 }: AppImageCarouselData) {
-	const { Width, Height, onLayoutChanged } = useImageAspectRatio(
+	const { ContainerWidth, ImageHeight, onLayoutChanged } = useImageAspectRatio(
 		items.map((o) => ({
 			url: o.src,
 			width: o.width,
@@ -164,8 +164,8 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 					src={item.src}
 					type={item.type}
 					blurhash={item.blurhash}
-					parentWidth={Width}
-					calculatedHeight={Height}
+					parentWidth={ContainerWidth}
+					calculatedHeight={ImageHeight}
 				/>
 				<CarousalIndicatorOverlay
 					index={Pointer}

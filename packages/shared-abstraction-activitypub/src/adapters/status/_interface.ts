@@ -16,18 +16,6 @@ export type DhaagaJsMentionObject = {
 	acct?: string; // "suvam@mastodon.social"
 };
 
-export interface StatusContextInterface {
-	getId(): string;
-
-	getChildren(): StatusInterface[];
-
-	getParent(): StatusInterface | null | undefined;
-
-	getRoot(): StatusInterface | null | undefined;
-
-	addChildren(items: StatusInterface[]): void;
-}
-
 export type AppBlueskyAuthor = {
 	associated: { chat: { allowIncoming: 'all' } };
 	avatar: string;
@@ -61,21 +49,29 @@ export interface StatusInterface {
 	getRepostedStatusRaw(): Status;
 
 	/**
-	 * Misskey: This is the reply.
-	 *
-	 * The status object is actually thr parent
+	 * --- Post Hierarchy | BEGIN ---
 	 */
-	getRepliedStatusRaw(): Status;
+	hasParentAvailable(): boolean;
+
+	getParentRaw(): Status | PostView;
+
+	hasRootAvailable(): boolean;
+
+	getRootRaw(): PostView | undefined | null;
+
+	/**
+	 * --- Post Hierarchy | END ---
+	 */
 
 	getQuote(): StatusInterface | null | undefined;
 
-	getContent(): string | null;
+	getContent(): string | null | undefined;
 
 	getUser(): UserType | ProfileViewBasic | null;
 
 	isReposted(): boolean;
 
-	getMediaAttachments(): MediaAttachmentInterface[] | null | undefined;
+	getMediaAttachments(): MediaAttachmentInterface[];
 
 	getMentions(): DhaagaJsMentionObject[];
 
@@ -97,8 +93,6 @@ export interface StatusInterface {
 
 	getMyReaction(): string | null | undefined;
 
-	isValid(): boolean;
-
 	isReply(): boolean;
 
 	getParentStatusId(): string | null | undefined;
@@ -110,13 +104,6 @@ export interface StatusInterface {
 	getIsSensitive(): boolean;
 
 	getSpoilerText(): string | null | undefined;
-
-	/**
-	 * Reply Thread
-	 */
-	setDescendents(items: StatusInterface[]): void;
-
-	getDescendants(): StatusInterface[];
 
 	getReactions(myReaction?: string): {
 		id: string;
@@ -141,43 +128,4 @@ export interface StatusInterface {
 		name: string;
 		url: string;
 	}[];
-}
-
-export class StatusContextInstance {
-	instance: StatusInterface;
-	children: StatusInterface[];
-	parent: StatusInterface | null | undefined;
-
-	constructor(instance: StatusInterface) {
-		this.instance = instance;
-		this.children = [];
-	}
-
-	setParent(parent: StatusInterface | null | undefined): void {
-		this.parent = parent;
-	}
-
-	addChild(item: StatusInterface) {
-		this.children.push(item);
-	}
-
-	addChildren(items: StatusInterface[]) {
-		this.children = this.children.concat(items);
-	}
-}
-
-export class StatusInstance {
-	instance: mastodon.v1.Status;
-
-	constructor(instance: mastodon.v1.Status) {
-		this.instance = instance;
-	}
-}
-
-export class NoteInstance {
-	instance: Note;
-
-	constructor(instance: Note) {
-		this.instance = instance;
-	}
 }

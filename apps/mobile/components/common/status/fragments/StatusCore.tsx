@@ -115,11 +115,12 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 						calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
 					/>
 				)}
-				{IS_QUOTE_BOOST && (
-					<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
-						<StatusQuoted />
-					</WithAppStatusItemContext>
-				)}
+				{/*FIXME: enable for bluesky*/}
+				{/*{IS_QUOTE_BOOST && (*/}
+				{/*	<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>*/}
+				{/*		<StatusQuoted />*/}
+				{/*	</WithAppStatusItemContext>*/}
+				{/*)}*/}
 				<EmojiReactions dto={STATUS_DTO} />
 				<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />
 			</View>

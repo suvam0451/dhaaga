@@ -5,25 +5,12 @@ import {
 	StatusInterface,
 } from './_interface.js';
 import {
-	BlockedPost,
-	NotFoundPost,
 	PostView,
 	ReasonRepost,
 } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import BlueskyMediaAttachmentAdapter from '../media-attachment/bluesky.js';
-
-type BlueskyPostReply =
-	| PostView
-	| NotFoundPost
-	| BlockedPost
-	| { [k: string]: unknown; $type: string }
-	| undefined;
-
-type BlueskyPostReason =
-	| ReasonRepost
-	| { [p: string]: unknown; $type: string }
-	| undefined;
+import { ReplyRef } from '@atproto/api/src/client/types/app/bsky/feed/defs.js';
 
 type BlueskyRichTextFacet = {
 	$type?: 'app.bsky.richtext.facet';
@@ -43,8 +30,8 @@ type BlueskyRichTextFacet = {
 
 class BlueskyStatusAdapter implements StatusInterface {
 	post: PostView;
-	parent: BlueskyPostReply;
-	reason: BlueskyPostReason;
+	reply: ReplyRef;
+	reason: ReasonRepost;
 
 	constructor({
 		post,
@@ -52,16 +39,16 @@ class BlueskyStatusAdapter implements StatusInterface {
 		reason,
 	}: {
 		post: PostView;
-		reply: BlueskyPostReply;
-		reason: BlueskyPostReason;
+		reply: ReplyRef;
+		reason: ReasonRepost;
 	}) {
 		this.post = post;
-		this.parent = reply;
+		this.reply = reply;
 		this.reason = reason;
 	}
 
 	getRaw = () => this.post;
-	getId = () => this.post.cid;
+	getId = () => this.post?.cid;
 	getUsername = () => this.post?.author?.handle;
 	getDisplayName = () => this.post?.author?.displayName;
 	getAvatarUrl = () => this.post?.author?.avatar;
@@ -92,9 +79,10 @@ class BlueskyStatusAdapter implements StatusInterface {
 		return null;
 	}
 
-	getRepliedStatusRaw(): Status {
-		return null;
-	}
+	hasParentAvailable = () => !!this.reply?.parent;
+	getParentRaw = () => this.reply?.parent as PostView;
+	hasRootAvailable = () => !!this.reply?.root;
+	getRootRaw = () => this.reply?.root as PostView;
 
 	getContent = () => (this.post?.record as any)?.text;
 
@@ -105,8 +93,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 
 	isReposted = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
 
-	getMediaAttachments(): MediaAttachmentInterface[] | null | undefined {
-		this.post.auth;
+	getMediaAttachments(): MediaAttachmentInterface[] {
 		const target: any[] = this.post?.embed?.images as any[];
 		if (target)
 			return target.map((o) => BlueskyMediaAttachmentAdapter.create(o));
@@ -150,7 +137,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 
 	isValid = () => true;
 
-	isReply = () => !!this.parent;
+	isReply = () => !!this.reply;
 
 	getParentStatusId(): string | null | undefined {
 		return null;

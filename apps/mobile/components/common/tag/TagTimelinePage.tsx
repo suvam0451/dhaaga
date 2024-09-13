@@ -41,7 +41,7 @@ function ApiWrapper() {
 			limit: 5,
 		});
 		if (error) return [];
-		return ActivityPubAdapterService.adaptManyStatuses(data, domain);
+		return ActivityPubAdapterService.adaptManyStatuses(data as any, domain);
 	}
 
 	// Queries
