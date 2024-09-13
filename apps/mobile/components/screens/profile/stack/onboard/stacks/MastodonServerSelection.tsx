@@ -9,17 +9,17 @@ import {
 import { Text } from '@rneui/themed';
 import { useState } from 'react';
 import { Button } from '@rneui/base';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import ActivityPubService from '../../../../services/activitypub.service';
+import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
+import ActivityPubService from '../../../../../../services/activitypub.service';
 import { router } from 'expo-router';
-import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import MmkvService from '../../../../services/mmkv.service';
+import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { useGlobalMmkvContext } from '../../../../../../states/useGlobalMMkvCache';
+import MmkvService from '../../../../../../services/mmkv.service';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../components/shared/topnavbar/AppTopNavbar';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+} from '../../../../../shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
 
 function AccountsScreen() {
 	const [Subdomain, setSubdomain] = useState('mastodon.social');

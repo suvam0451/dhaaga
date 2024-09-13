@@ -44,7 +44,7 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 			style={[
 				styles.rootContainer,
 				{
-					paddingTop: hasParent === undefined ? 10 : 0,
+					paddingTop: hasParent ? 0 : 10,
 					position: 'relative',
 				},
 			]}

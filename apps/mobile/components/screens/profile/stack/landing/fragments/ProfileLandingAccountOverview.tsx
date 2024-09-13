@@ -15,9 +15,6 @@ import ProfileButtonPhonebook from '../../../../../common/profile/fragments/Prof
 import { ProfileStatsInterface } from '../../../../../common/profile/fragments/ProfileStats';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import styles from '../../../../../common/user/utils/styles';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import RelationshipButtonCore from '../../../../../common/relationship/RelationshipButtonCore';
 
 const WithoutAccountSelected = memo(() => {
 	return <View />;
@@ -35,7 +32,10 @@ const WithAccountSelectedCore = memo(() => {
 	});
 
 	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(user?.getAccountUrl(), subdomain);
+		return ActivitypubHelper.getHandle(
+			user?.getAccountUrl(subdomain),
+			subdomain,
+		);
 	}, [user?.getAccountUrl(subdomain)]);
 
 	const avatarUrl = user.getAvatarUrl();

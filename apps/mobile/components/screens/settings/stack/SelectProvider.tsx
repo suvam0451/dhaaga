@@ -17,7 +17,7 @@ function SelectProviderStack() {
 		<TitleOnlyStackHeaderContainer
 			route={route}
 			navigation={navigation}
-			headerTitle={`Select Platform`}
+			headerTitle={`Select Your SNS`}
 		>
 			<View
 				style={{
@@ -27,6 +27,31 @@ function SelectProviderStack() {
 				}}
 			>
 				<View style={{ marginHorizontal: 12 }}>
+					{/* --- Bluesky --- */}
+					<View style={styles.selectSignInPlatformSection}>
+						<View style={styles.selectSignInPlatformCenter}>
+							<SoftwareHeader software={KNOWN_SOFTWARE.BLUESKY} mb={0} mt={0} />
+							<Text style={styles.platformDescription}>
+								Use this for Bluesky
+							</Text>
+						</View>
+
+						<View style={{ paddingTop: 16 }}>
+							<Button
+								size={'md'}
+								color={'#0285ff'}
+								onPress={() => {
+									router.navigate('/profile/onboard/signin-bsky');
+								}}
+								containerStyle={{ borderRadius: 8 }}
+								buttonStyle={{ borderRadius: 8 }}
+							>
+								<Text style={styles.buttonText}>Login</Text>
+							</Button>
+						</View>
+					</View>
+
+					{/* --- Mastodon --- */}
 					<View style={styles.selectSignInPlatformSection}>
 						<View style={styles.selectSignInPlatformCenter}>
 							<SoftwareHeader
@@ -53,6 +78,7 @@ function SelectProviderStack() {
 						</View>
 					</View>
 
+					{/* --- Misskey --- */}
 					<View style={styles.selectSignInPlatformSection}>
 						<View style={styles.selectSignInPlatformCenter}>
 							<SoftwareHeader software={KNOWN_SOFTWARE.MISSKEY} mb={0} mt={0} />
@@ -69,29 +95,6 @@ function SelectProviderStack() {
 								}
 								onPress={() => {
 									router.navigate('/profile/onboard/add-misskey');
-								}}
-								containerStyle={{ borderRadius: 8 }}
-								buttonStyle={{ borderRadius: 8 }}
-							>
-								<Text style={styles.buttonText}>Login</Text>
-							</Button>
-						</View>
-					</View>
-
-					<View style={styles.selectSignInPlatformSection}>
-						<View style={styles.selectSignInPlatformCenter}>
-							<SoftwareHeader software={KNOWN_SOFTWARE.BLUESKY} mb={0} mt={0} />
-							<Text style={styles.platformDescription}>
-								Use this for Bluesky
-							</Text>
-						</View>
-
-						<View style={{ paddingTop: 16 }}>
-							<Button
-								size={'md'}
-								color={'#0285ff'}
-								onPress={() => {
-									router.navigate('/profile/onboard/signin-bsky');
 								}}
 								containerStyle={{ borderRadius: 8 }}
 								buttonStyle={{ borderRadius: 8 }}

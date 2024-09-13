@@ -1,8 +1,8 @@
 import { Dispatch, memo, SetStateAction } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { APP_FONT } from '../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../styles/AppFonts';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
 
 type PleromaPasteTokenProps = {
 	domain: string;

@@ -123,8 +123,6 @@ export class ActivityPubServerRepository {
 		lastSyncedAt: Date,
 	) {
 		const match = this.get(db, subdomain);
-		db.write(() => {
-			match.customEmojisLastFetchedAt = lastSyncedAt;
-		});
+		match.customEmojisLastFetchedAt = lastSyncedAt;
 	}
 }

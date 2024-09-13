@@ -41,18 +41,23 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 	async function onSelect() {
 		if (account.selected) {
 			AccountService.deselectAccount(db, account._id);
+			regenerate();
 		} else {
 			AccountService.selectAccount(db, account._id);
-			await EmojiService.refresh(db, globalDb, account.subdomain, true);
+			regenerate();
+			try {
+				await EmojiService.refresh(db, globalDb, account.subdomain, true);
+			} catch (e) {
+				console.log('[WARN]: failed hard refreshing emojis', e);
+			}
 		}
-		regenerate();
 		setVisible(false);
 	}
 
 	if (!account) return <View />;
 
 	return (
-		<View
+		<TouchableOpacity
 			style={{
 				backgroundColor: '#202020',
 				padding: 8,
@@ -61,6 +66,7 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 				borderRadius: 8,
 				marginHorizontal: 8,
 			}}
+			onPress={onSelect}
 		>
 			<View
 				style={{
@@ -68,13 +74,12 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 					alignItems: 'center',
 				}}
 			>
-				<TouchableOpacity
+				<View
 					style={{
 						flexDirection: 'row',
 						alignItems: 'center',
 						flex: 1,
 					}}
-					onPress={onSelect}
 				>
 					<AccountPfp
 						selected={account.selected}
@@ -88,16 +93,15 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 						username={account.username}
 						subdomain={account.subdomain}
 					/>
-				</TouchableOpacity>
+				</View>
 
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-					<TouchableOpacity
+					<View
 						style={{
 							alignItems: 'center',
 							paddingHorizontal: 12,
 							paddingVertical: 12,
 						}}
-						onPress={onSelect}
 					>
 						{account.selected && (
 							<Text
@@ -109,11 +113,11 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 								Active
 							</Text>
 						)}
-					</TouchableOpacity>
+					</View>
 					<SoftwareHeader software={account.domain} mb={4} mt={8} />
 				</View>
 			</View>
-		</View>
+		</TouchableOpacity>
 	);
 });
 const AppBottomSheetSelectAccount = memo(() => {

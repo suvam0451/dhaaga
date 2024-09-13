@@ -2,18 +2,18 @@ import { Dimensions, View, ScrollView } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useState } from 'react';
 import WebView from 'react-native-webview';
-import { MainText } from '../../../../styles/Typography';
+import { MainText } from '../../../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import { useRealm } from '@realm/react';
-import TitleOnlyNoScrollContainer from '../../../../components/containers/TitleOnlyNoScrollContainer';
-import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
+import TitleOnlyNoScrollContainer from '../../../../../containers/TitleOnlyNoScrollContainer';
+import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
-import AccountService from '../../../../services/account.service';
+import AccountService from '../../../../../../services/account.service';
 import {
 	UnknownRestClient,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
-import PleromaPasteToken from './PleromaPasteToken';
+import PleromaPasteToken from '../fragments/PleromaPasteToken';
 
 function MastodonSignInStack() {
 	const [Code, setCode] = useState<string | null>(null);

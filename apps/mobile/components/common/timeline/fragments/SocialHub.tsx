@@ -1,4 +1,11 @@
-import { Pressable, StatusBar, StyleSheet, View, Text } from 'react-native';
+import {
+	Pressable,
+	ScrollView,
+	StatusBar,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import { useEffect, useMemo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
@@ -9,11 +16,9 @@ import { useTimelineController } from '../api/useTimelineController';
 import { useQuery } from '@realm/react';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import AppSidebarCore, { SIDEBAR_VARIANT } from '../../../shared/sidebar/Core';
 import { router } from 'expo-router';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
 	MORNING = 'Morning',
@@ -305,99 +310,32 @@ function SocialHub() {
 	}, [userDataTimelines]);
 
 	return (
-		<AppSidebarCore variant={SIDEBAR_VARIANT.TIMELINE}>
+		<View style={{ height: '100%', backgroundColor: '#121212' }}>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<TimelinesHeader title={'Your Social Hub'} />
-			<View
-				style={{
-					height: '100%',
-					paddingTop: 54,
-					backgroundColor: '#121212',
-					paddingHorizontal: 8,
-				}}
-			>
-				{TimeOfDay === TIME_OF_DAY.MORNING && (
-					<Text style={styles.timeOfDayText}>Good Morning 🌄</Text>
-				)}
-				{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
-					<Text style={styles.timeOfDayText}>Good Afternoon</Text>
-				)}
-				{TimeOfDay === TIME_OF_DAY.EVENING && (
-					<Text style={styles.timeOfDayText}>Good Evening</Text>
-				)}
-				{TimeOfDay === TIME_OF_DAY.NIGHT && (
-					<Text style={styles.timeOfDayText}>Good Night 🌙</Text>
-				)}
-				<View>
-					{/*<Section>*/}
-					{/*	<View*/}
-					{/*		style={{*/}
-					{/*			display: 'flex',*/}
-					{/*			flexDirection: 'row',*/}
-					{/*			alignItems: 'center',*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		<View style={{ width: 24 }}>*/}
-					{/*			<FontAwesome6*/}
-					{/*				name="clock-rotate-left"*/}
-					{/*				size={20}*/}
-					{/*				color={APP_THEME.COLOR_SCHEME_B}*/}
-					{/*			/>*/}
-					{/*		</View>*/}
-					{/*		<View>*/}
-					{/*			<Text*/}
-					{/*				style={{*/}
-					{/*					fontFamily: 'Montserrat-Bold',*/}
-					{/*					fontSize: 20,*/}
-					{/*					marginLeft: 4,*/}
-					{/*					flexGrow: 1,*/}
-					{/*					color: APP_FONT.MONTSERRAT_BODY,*/}
-					{/*				}}*/}
-					{/*			>*/}
-					{/*				Continue browsing*/}
-					{/*			</Text>*/}
-					{/*		</View>*/}
-					{/*	</View>*/}
-					{/*</Section>*/}
-					{/*<View style={styles.featureNotAvailableNoteContainer}>*/}
-					{/*	<View style={{ width: 28 }}>*/}
-					{/*		<FontAwesome6*/}
-					{/*			name="toolbox"*/}
-					{/*			size={24}*/}
-					{/*			color={APP_FONT.MONTSERRAT_BODY}*/}
-					{/*		/>*/}
-					{/*	</View>*/}
-					{/*	<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>*/}
-					{/*		This feature is not available yet*/}
-					{/*	</Text>*/}
-					{/*</View>*/}
-					<Section>
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-							}}
-						>
-							<View style={{ width: 28 }}>
-								<AntDesign
-									name="pushpin"
-									size={24}
-									color={APP_THEME.COLOR_SCHEME_B}
-									style={{ marginRight: 4 }}
-								/>
-							</View>
-							<Text
-								style={{
-									fontFamily: 'Montserrat-Bold',
-									fontSize: 20,
-									marginLeft: 4,
-									flexGrow: 1,
-									color: APP_FONT.MONTSERRAT_BODY,
-								}}
-							>
-								Pinned
-							</Text>
+			<ScrollView>
+				<View
+					style={{
+						height: '100%',
+						paddingTop: 16,
+						backgroundColor: '#121212',
+						paddingHorizontal: 8,
+					}}
+				>
+					{TimeOfDay === TIME_OF_DAY.MORNING && (
+						<Text style={styles.timeOfDayText}>Good Morning 🌄</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
+						<Text style={styles.timeOfDayText}>Good Afternoon</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.EVENING && (
+						<Text style={styles.timeOfDayText}>Good Evening</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.NIGHT && (
+						<Text style={styles.timeOfDayText}>Good Night 🌙</Text>
+					)}
+					<View>
+						<Section>
 							<View
 								style={{
 									display: 'flex',
@@ -405,33 +343,60 @@ function SocialHub() {
 									alignItems: 'center',
 								}}
 							>
-								<View style={{ marginRight: 8 }}>
-									<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-										Show All
-									</Text>
-								</View>
-								<View
-									style={{
-										paddingHorizontal: 8,
-										paddingVertical: 4,
-									}}
-									onTouchEnd={() => {
-										router.push('/pinned');
-									}}
-								>
-									<FontAwesome6
-										name="chevron-right"
-										size={20}
-										color={APP_FONT.MONTSERRAT_BODY}
+								<View style={{ width: 28 }}>
+									<AntDesign
+										name="pushpin"
+										size={24}
+										color={APP_THEME.COLOR_SCHEME_B}
+										style={{ marginRight: 4 }}
 									/>
 								</View>
+								<Text
+									style={{
+										fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+										fontSize: 20,
+										marginLeft: 4,
+										flexGrow: 1,
+										color: APP_FONT.MONTSERRAT_BODY,
+									}}
+								>
+									Pinned
+								</Text>
+								<View
+									style={{
+										display: 'flex',
+										flexDirection: 'row',
+										alignItems: 'center',
+									}}
+								>
+									<View style={{ marginRight: 8 }}>
+										<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+											Show All
+										</Text>
+									</View>
+									<View
+										style={{
+											paddingHorizontal: 8,
+											paddingVertical: 4,
+										}}
+										onTouchEnd={() => {
+											router.push('/pinned');
+										}}
+									>
+										<FontAwesome6
+											name="chevron-right"
+											size={20}
+											color={APP_FONT.MONTSERRAT_BODY}
+										/>
+									</View>
+								</View>
 							</View>
-						</View>
-					</Section>
-					{PinnedItems}
+						</Section>
+						{PinnedItems}
+					</View>
 				</View>
-			</View>
-		</AppSidebarCore>
+			</ScrollView>
+		</View>
 	);
 }
 
@@ -466,8 +431,9 @@ const styles = StyleSheet.create({
 	},
 	timeOfDayText: {
 		fontSize: 28,
-		fontFamily: 'Montserrat-Bold',
+		fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
 		color: APP_FONT.MONTSERRAT_BODY,
+		textAlign: 'center',
 	},
 });
 

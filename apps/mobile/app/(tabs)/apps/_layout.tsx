@@ -6,9 +6,6 @@ function FavouritesScreen() {
 		<WithGorhomBottomSheetContext>
 			<Stack initialRouteName={'index'} screenOptions={{ headerShown: false }}>
 				<Stack.Screen name={'index'} />
-				<Stack.Screen name={'bookmark-portal'} />
-				<Stack.Screen name={'bookmark-gallery'} />
-				<Stack.Screen name={'bookmark-classic'} />
 			</Stack>
 		</WithGorhomBottomSheetContext>
 	);

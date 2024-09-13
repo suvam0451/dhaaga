@@ -101,11 +101,11 @@ export class EmojiService {
 		const repo = ActivityPubServerRepository.create(db);
 		const server = repo.get(subdomain);
 		if (!server) {
-			console.log('[INFO]: reaction caching skipped (No-Info)', subdomain);
+			// console.log('[INFO]: reaction caching skipped (No-Info)', subdomain);
 			return null;
 		}
-		if (!server || repo.isReactionFetchRateLimited(server)) {
-			console.log('[INFO]: reaction caching skipped (Retry-Policy)', subdomain);
+		if (!forceUpdate && repo.isReactionFetchRateLimited(server)) {
+			// console.log('[INFO]: reaction caching skipped (Retry-Policy)', subdomain);
 			return null;
 		}
 
@@ -127,14 +127,14 @@ export class EmojiService {
 		);
 
 		if (error) {
-			console.log('[WARN]: failed to get emojis');
+			// console.log('[WARN]: failed to get emojis');
 			return null;
 		}
 
 		db.write(() => {
 			ActivityPubServerRepository.updateEmojisLastFetchedAt(db, subdomain, now);
 		});
-		console.log('[INFO]: cached emojis for', subdomain, data.length);
+		// console.log('[INFO]: cached emojis for', subdomain, data.length);
 
 		return GlobalMmkvCacheService.saveEmojiCacheForInstance(
 			globalDb,

@@ -2,22 +2,22 @@ import { Dimensions, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
-import { MainText } from '../../../../styles/Typography';
+import { MainText } from '../../../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import * as Crypto from 'expo-crypto';
 
 import { verifyMisskeyToken } from '@dhaaga/shared-abstraction-activitypub';
 import AccountCreationPreview, {
 	AccountCreationPreviewProps,
-} from '../../../../components/app/AccountDisplay';
+} from '../../../../../app/AccountDisplay';
 import { FontAwesome } from '@expo/vector-icons';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { useRealm } from '@realm/react';
 import { router, useLocalSearchParams } from 'expo-router';
-import WithAutoHideTopNavBar from '../../../../components/containers/WithAutoHideTopNavBar';
-import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
-import AccountService from '../../../../services/account.service';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavBar';
+import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
+import AccountService from '../../../../../../services/account.service';
+import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
 
 function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');

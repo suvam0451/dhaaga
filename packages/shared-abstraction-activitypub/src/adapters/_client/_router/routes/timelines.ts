@@ -57,6 +57,9 @@ export type DhaagaJsTimelineQueryOptions = {
 
 	// Akkoma specific thing?
 	withMuted?: boolean;
+
+	// (Only usable on local timeline + Sharkey)
+	// withReplies?: boolean | null;
 } & __MisskeyTimelineOptions;
 
 export type DhaagaJsTimelineArrayPromise = LibraryPromise<
@@ -71,7 +74,11 @@ export type DhaagaJsTimelineArrayPromise = LibraryPromise<
 export interface TimelinesRoute {
 	home(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise;
 
-	public(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise;
+	public(
+		query: DhaagaJsTimelineQueryOptions & {
+			withReplies?: boolean | null;
+		},
+	): DhaagaJsTimelineArrayPromise;
 
 	publicAsGuest(
 		urlLike: string,

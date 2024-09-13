@@ -6,7 +6,6 @@ import { ScrollView, TextInput, View, StyleSheet } from 'react-native';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import { Button } from '@rneui/base';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useRealm } from '@realm/react';
@@ -40,7 +39,7 @@ function SigninBsky() {
 
 	return (
 		<AppTopNavbar
-			title={'Bluesky Log in'}
+			title={'Bluesky Sign In'}
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
@@ -86,18 +85,17 @@ function SigninBsky() {
 						value={Password}
 					/>
 				</View>
-				<HideOnKeyboardVisibleContainer style={{ marginTop: 24 }}>
-					<View style={{ alignItems: 'center' }}>
-						<Button
-							disabled={false}
-							color={'rgb(99, 100, 255)'}
-							onPress={onSubmit}
-							buttonStyle={{ width: 128 }}
-						>
-							Log In
-						</Button>
-					</View>
-				</HideOnKeyboardVisibleContainer>
+
+				<View style={{ alignItems: 'center', marginTop: 16 }}>
+					<Button
+						disabled={false}
+						color={'rgb(99, 100, 255)'}
+						onPress={onSubmit}
+						buttonStyle={{ width: 128, borderRadius: 8 }}
+					>
+						Log In
+					</Button>
+				</View>
 			</ScrollView>
 		</AppTopNavbar>
 	);
