@@ -1,11 +1,12 @@
-import { memo } from 'react';
+import { Fragment, memo } from 'react';
 import { View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
-import StatusReplyTo from './fragments/StatusReplyTo';
+import StatusHierarchyParent from './fragments/StatusHierarchyParent';
+import StatusHierarchyRoot from './fragments/StatusHierarchyRoot';
 
 /**
  * Adds a reply indicator to the post
@@ -50,5 +51,10 @@ export const RepliedStatusFragment = memo(function Foo() {
 				</View>
 			</View>
 		);
-	return <StatusReplyTo dto={dto.replyTo} />;
+	return (
+		<Fragment>
+			{dto.rootPost && <StatusHierarchyRoot dto={dto.rootPost} />}
+			<StatusHierarchyParent dto={dto.replyTo} hasParent={!!dto.rootPost} />;
+		</Fragment>
+	);
 });

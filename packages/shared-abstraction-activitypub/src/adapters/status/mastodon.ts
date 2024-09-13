@@ -1,11 +1,6 @@
-import {
-	DhaagaJsMentionObject,
-	Status,
-	StatusInterface,
-} from './_interface.js';
+import { DhaagaJsMentionObject, StatusInterface } from './_interface.js';
 import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
-import { UserType } from '../profile/_interface.js';
 import camelcaseKeys from 'camelcase-keys';
 import UnknownToStatusAdapter from './default.js';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
@@ -15,12 +10,10 @@ class MastodonToStatusAdapter
 	implements StatusInterface
 {
 	ref: mastodon.v1.Status;
-	descendants: StatusInterface[];
 
 	constructor(ref: mastodon.v1.Status) {
 		super();
 		this.ref = ref;
-		this.descendants = [];
 	}
 
 	getCachedEmojis(): Map<string, string> {
@@ -60,15 +53,6 @@ class MastodonToStatusAdapter
 		}));
 	}
 
-	getReactionEmojis(): {
-		height?: number | undefined;
-		width?: number | undefined;
-		name: string;
-		url: string;
-	}[] {
-		return [];
-	}
-
 	getIsRebloggedByMe(): boolean | null | undefined {
 		return this.ref.reblogged;
 	}
@@ -81,116 +65,74 @@ class MastodonToStatusAdapter
 		return this.ref.spoilerText;
 	}
 
-	getRaw(): Status {
-		return this?.ref;
-	}
+	getRaw = () => this.ref as any;
 
-	getIsFavourited() {
-		return this.ref.favourited;
-	}
+	getIsFavourited = () => this.ref.favourited;
 
-	getUser(): UserType {
-		return this?.ref?.account;
-	}
+	getUser = () => this.ref.account;
 
 	isReply() {
 		return (
-			this?.ref?.inReplyToId !== '' &&
-			this?.ref?.inReplyToId !== null &&
-			this?.ref?.inReplyToId !== undefined
+			this.ref.inReplyToId !== '' &&
+			this.ref.inReplyToId !== null &&
+			this.ref.inReplyToId !== undefined
 		);
 	}
 
-	getParentStatusId() {
-		return this?.ref?.inReplyToId;
-	}
+	getParentStatusId = () => this.ref.inReplyToId;
 
-	getUserIdParentStatusUserId() {
-		return this?.ref?.inReplyToAccountId;
-	}
+	getUserIdParentStatusUserId = () => this.ref.inReplyToAccountId;
 
-	getIsBookmarked() {
-		return this?.ref?.bookmarked;
-	}
+	getIsBookmarked = () => this.ref.bookmarked;
 
-	getId() {
-		return this.ref?.id;
-	}
+	getId = () => this.ref.id;
 
-	getRepliesCount(): number {
-		return this.ref?.repliesCount;
-	}
+	getRepliesCount = (): number => this.ref.repliesCount;
 
-	getRepostsCount(): number {
-		return this.ref?.reblogsCount;
-	}
+	getRepostsCount = (): number => this.ref.reblogsCount;
 
-	getFavouritesCount(): number {
-		return this.ref?.favouritesCount;
-	}
+	getFavouritesCount = (): number => this.ref.favouritesCount;
 
-	getUsername() {
-		return this.ref?.account.username || '';
-	}
+	getUsername = () => this.ref.account.username || '';
 
-	getDisplayName() {
-		return this.ref?.account.displayName || '';
-	}
+	getDisplayName = () => this.ref.account.displayName || '';
 
-	getAvatarUrl() {
-		return this.ref?.account.avatarStatic || '';
-	}
+	getAvatarUrl = () => this.ref.account.avatarStatic || '';
 
-	getCreatedAt() {
-		return this.ref.createdAt || new Date().toString();
-	}
+	getCreatedAt = () => this.ref.createdAt || new Date().toString();
 
-	getVisibility() {
-		return this.ref?.visibility;
-	}
+	getVisibility = () => this.ref.visibility;
 
-	getAccountUrl() {
-		return this.ref?.account.url;
-	}
+	getAccountUrl = () => this.ref.account.url;
 
 	getRepostedStatus() {
-		if (this.ref?.reblog) {
-			return new MastodonToStatusAdapter(this.ref?.reblog);
+		if (this.ref.reblog) {
+			return new MastodonToStatusAdapter(this.ref.reblog);
 		}
 		return null;
 	}
 
-	getQuote() {
-		return (this.ref as any).quote;
-	}
+	getQuote = () => (this.ref as any).quote;
 
-	getRepostedStatusRaw() {
-		return this.ref?.reblog as any;
-	}
+	getRepostedStatusRaw = () => this.ref.reblog as any;
 
-	isReposted(): boolean {
-		return this.ref?.reblog !== null;
-	}
+	isReposted = (): boolean => !!this.ref.reblog;
 
 	getMediaAttachments() {
-		return this.ref?.mediaAttachments?.map((o) => {
+		return this.ref.mediaAttachments?.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
 				new MediaAttachmentInstance(camelcaseKeys(o as any, { deep: true })),
 			);
 		});
 	}
 
-	getContent() {
-		return this.ref?.content;
-	}
+	getContent = () => this.ref.content;
 
 	print(): void {
 		console.log(this.ref);
 	}
 
-	getAccountId_Poster(): string {
-		return this?.ref?.account?.id;
-	}
+	getAccountId_Poster = () => this.ref.account?.id;
 }
 
 export default MastodonToStatusAdapter;

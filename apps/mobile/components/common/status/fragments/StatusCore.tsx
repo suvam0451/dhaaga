@@ -1,30 +1,29 @@
 import { memo, useMemo, useState } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import WithAppStatusItemContext, {
-	useAppStatusItem,
-} from '../../../../hooks/ap-proto/useAppStatusItem';
+import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
 import { TouchableOpacity, View } from 'react-native';
 import { APP_THEME } from '../../../../styles/AppTheme';
-import StatusPostedBy from './StatusPostedBy';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
 import StatusInteraction from './StatusInteraction';
-import StatusQuoted from './StatusQuoted';
 import StatusCw from './StatusCw';
+import PostCreatedBy from './PostCreatedBy';
 
 /**
  * Mostly used to remove the border
  * radius and zero in marginTop
  */
 type StatusCoreProps = {
-	hasReply?: boolean;
+	hasParent?: boolean;
 	hasBoost?: boolean;
 };
 
-const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
+const APP_SETTING_VERTICAL_MARGIN = 8;
+
+const StatusCore = memo(({ hasParent, hasBoost }: StatusCoreProps) => {
 	const { dto } = useAppStatusItem();
 	const { toPost } = useAppNavigator();
 	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
@@ -55,8 +54,8 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 	const spoilerText = STATUS_DTO.meta.cw;
 
 	let paddingTop = IS_REPLY_OR_BOOST ? 4 : 10;
-	if (hasReply || hasBoost) paddingTop = 0;
-	if (!hasReply && hasBoost) paddingTop = 6;
+	if (hasParent || hasBoost) paddingTop = 0;
+	if (!hasParent && hasBoost) paddingTop = 6;
 
 	return useMemo(() => {
 		if (!isLoaded) return <StatusItemSkeleton />;
@@ -65,13 +64,14 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 			<View
 				style={{
 					padding: 10,
+					paddingHorizontal: APP_SETTING_VERTICAL_MARGIN,
 					paddingTop: paddingTop,
 					paddingBottom: 4,
 					backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
 					marginBottom: 4,
 					borderRadius: 8,
-					borderTopLeftRadius: hasReply || hasBoost ? 0 : 8,
-					borderTopRightRadius: hasReply || hasBoost ? 0 : 8,
+					borderTopLeftRadius: hasParent || hasBoost ? 0 : 8,
+					borderTopRightRadius: hasParent || hasBoost ? 0 : 8,
 				}}
 			>
 				<TouchableOpacity
@@ -81,7 +81,7 @@ const StatusCore = memo(({ hasReply, hasBoost }: StatusCoreProps) => {
 					}}
 				>
 					<View>
-						<StatusPostedBy dto={dto} />
+						<PostCreatedBy dto={dto} style={{ paddingBottom: 6 }} />
 						{isSensitive && (
 							<StatusCw
 								cw={spoilerText}

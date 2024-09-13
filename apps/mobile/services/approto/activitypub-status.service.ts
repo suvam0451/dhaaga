@@ -135,16 +135,17 @@ export class ActivitypubStatusService {
 				).export()
 			: null;
 
-		let rootI: z.infer<typeof ActivityPubStatusItemDto> = IS_REPLY
-			? new ActivitypubStatusService(
-					ActivitypubAdapterService.adaptStatus(
-						this.statusI.getRootRaw(),
+		let rootI: z.infer<typeof ActivityPubStatusItemDto> =
+			this.statusI.hasRootAvailable()
+				? new ActivitypubStatusService(
+						ActivitypubAdapterService.adaptStatus(
+							this.statusI.getRootRaw(),
+							this.domain,
+						),
 						this.domain,
-					),
-					this.domain,
-					this.subdomain,
-				).export()
-			: null;
+						this.subdomain,
+					).export()
+				: null;
 
 		const dto: ActivityPubStatusAppDtoType =
 			IS_REPLY &&
@@ -166,6 +167,7 @@ export class ActivitypubStatusService {
 						),
 						boostedFrom,
 						replyTo,
+						rootPost: rootI,
 					}
 				: {
 						...ActivitypubStatusDtoService.export(

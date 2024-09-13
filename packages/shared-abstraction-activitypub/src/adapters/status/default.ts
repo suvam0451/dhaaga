@@ -8,13 +8,26 @@ import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { MediaAttachmentInterface } from '../media-attachment/interface.js';
 
 class UnknownToStatusAdapter implements StatusInterface {
-	hasParentAvailable = () => false;
+	/**
+	 * Post Hierarchy
+	 */
+	hasParentAvailable() {
+		return false;
+	}
 	getParentRaw(): Status | PostView | null {
 		return null;
 	}
-	hasRootAvailable = () => false;
+	hasRootAvailable() {
+		return false;
+	}
 	getRootRaw() {
 		return undefined;
+	}
+	hasQuoteAvailable(): boolean {
+		return false;
+	}
+	getQuoteRaw(): PostView | undefined | null {
+		return null;
 	}
 
 	getMentions(): DhaagaJsMentionObject[] {
@@ -49,15 +62,15 @@ class UnknownToStatusAdapter implements StatusInterface {
 	}
 
 	getIsRebloggedByMe(): boolean | null | undefined {
-		throw new Error('Method not implemented.');
+		return false;
 	}
 
 	getIsSensitive(): boolean {
-		throw new Error('Method not implemented.');
+		return false;
 	}
 
 	getSpoilerText(): string | null | undefined {
-		throw new Error('Method not implemented.');
+		return '';
 	}
 
 	getRaw(): Status {

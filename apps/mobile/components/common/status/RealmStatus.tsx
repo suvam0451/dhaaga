@@ -6,7 +6,7 @@ import { useActivityPubRestClientContext } from '../../../states/useActivityPubR
 import {
 	OriginalPostedPfpFragment,
 	OriginalPosterPostedByFragment,
-} from '../../post-fragments/OriginalPoster';
+} from './fragments/PostCreatedBy';
 import RealmMediaItem from '../media/RealmMediaItem';
 import { memo } from 'react';
 

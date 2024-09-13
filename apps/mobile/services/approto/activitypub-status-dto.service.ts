@@ -48,7 +48,7 @@ export const ActivityPubStatusItemDto = z.object({
 	createdAt: z.string(),
 	postedBy: ActivityPubBoostedByDto,
 	content: z.object({
-		raw: z.string().nullable(),
+		raw: z.string().nullable().optional(),
 		media: z.array(AppActivityPubMediaDto),
 	}),
 	interaction: z.object({

@@ -1,13 +1,21 @@
-import { Text, TouchableOpacity, View } from 'react-native';
+import {
+	StyleProp,
+	Text,
+	TouchableOpacity,
+	View,
+	ViewStyle,
+} from 'react-native';
 import { Image } from 'expo-image';
-import { Fragment, memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { Skeleton } from '@rneui/themed';
-import useMfm from '../hooks/useMfm';
-import useAppNavigator from '../../states/useAppNavigator';
-import StatusCreatedAt from '../common/status/fragments/StatusCreatedAt';
-import { APP_FONTS } from '../../styles/AppFonts';
-import StatusVisibility from '../common/status/fragments/StatusVisibility';
-import { ActivityPubStatusAppDtoType } from '../../services/approto/activitypub-status-dto.service';
+import useMfm from '../../../hooks/useMfm';
+import useAppNavigator from '../../../../states/useAppNavigator';
+import StatusCreatedAt from './StatusCreatedAt';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import StatusVisibility from './StatusVisibility';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+
+const TIMELINE_PFP_SIZE = 46;
 
 /**
  * Renders the user (poster)'s avatar
@@ -20,30 +28,29 @@ export const OriginalPostedPfpFragment = memo(function Foo({
 	onClick: () => void;
 }) {
 	return (
-		<TouchableOpacity onPress={onClick}>
-			<View
+		<TouchableOpacity
+			onPress={onClick}
+			style={{
+				width: TIMELINE_PFP_SIZE,
+				height: TIMELINE_PFP_SIZE,
+				borderColor: 'rgba(200, 200, 200, 0.75)',
+				borderWidth: 1,
+				borderRadius: TIMELINE_PFP_SIZE / 2,
+				marginTop: 2,
+				flexShrink: 1,
+			}}
+		>
+			{/* @ts-ignore */}
+			<Image
 				style={{
-					width: 52,
-					height: 52,
-					borderColor: 'gray',
-					borderWidth: 2,
-					borderRadius: 6,
-					marginTop: 2,
+					flex: 1,
+					backgroundColor: '#0553',
+					padding: 2,
+					borderRadius: TIMELINE_PFP_SIZE / 2,
+					overflow: 'hidden',
 				}}
-			>
-				{/* @ts-ignore */}
-				<Image
-					style={{
-						flex: 1,
-						width: '100%',
-						backgroundColor: '#0553',
-						padding: 2,
-						opacity: 0.87,
-						borderRadius: 4,
-					}}
-					source={{ uri: url }}
-				/>
-			</View>
+				source={{ uri: url }}
+			/>
 		</TouchableOpacity>
 	);
 });
@@ -99,42 +106,46 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	return (
 		<View
 			style={{
-				display: 'flex',
-				marginLeft: 8,
-				flexGrow: 1,
-				maxWidth: '100%',
+				flexDirection: 'row',
+				flex: 1,
+				alignItems: 'flex-start',
 			}}
 		>
-			<TouchableOpacity onPress={onClick}>
-				<View style={{ minHeight: 16 }}>
-					{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
-				</View>
-			</TouchableOpacity>
-			<View>
-				<Text
-					style={{
-						color: '#888',
-						fontWeight: '500',
-						fontSize: 12,
-						opacity: 0.6,
-						fontFamily: 'Inter-Bold',
-						maxWidth: 196,
-					}}
-					numberOfLines={1}
-				>
-					{instanceUrl}
-				</Text>
+			<View
+				style={{
+					marginLeft: 8,
+					flex: 1,
+				}}
+			>
+				<TouchableOpacity onPress={onClick}>
+					<View>
+						{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
+					</View>
+
+					<Text
+						style={{
+							color: '#888',
+							fontWeight: '500',
+							fontSize: 12,
+							opacity: 0.6,
+							fontFamily: 'Inter-Bold',
+							maxWidth: 196,
+						}}
+						numberOfLines={1}
+					>
+						{instanceUrl}
+					</Text>
+				</TouchableOpacity>
 			</View>
-			<View style={{ display: 'flex', flexDirection: 'row' }}>
-				<StatusCreatedAt
-					from={postedAt}
-					textStyle={{
-						color: 'gray',
-						fontSize: 12,
-						fontFamily: APP_FONTS.INTER_700_BOLD,
-						opacity: 0.87,
-					}}
-				/>
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'flex-end',
+					// flex: 1,
+					justifyContent: 'flex-end',
+				}}
+			>
+				<StatusVisibility visibility={visibility} />
 				<Text
 					style={{
 						color: 'gray',
@@ -145,7 +156,17 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 				>
 					•
 				</Text>
-				<StatusVisibility visibility={visibility} />
+				<View style={{ flexDirection: 'row' }}>
+					<StatusCreatedAt
+						from={postedAt}
+						textStyle={{
+							color: 'gray',
+							fontSize: 12,
+							fontFamily: APP_FONTS.INTER_700_BOLD,
+							opacity: 0.87,
+						}}
+					/>
+				</View>
 			</View>
 		</View>
 	);
@@ -153,9 +174,14 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 
 type OriginalPosterProps = {
 	dto: ActivityPubStatusAppDtoType;
+	style?: StyleProp<ViewStyle>;
 };
 
-const OriginalPoster = memo(({ dto }: OriginalPosterProps) => {
+/**
+ * This is the author indicator for
+ * the bottom-most post item
+ */
+const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
 	const { toProfile } = useAppNavigator();
 
 	const STATUS_DTO = dto.meta.isBoost
@@ -171,7 +197,9 @@ const OriginalPoster = memo(({ dto }: OriginalPosterProps) => {
 	return useMemo(() => {
 		if (!STATUS_DTO.postedBy) return <OriginalPosterSkeleton />;
 		return (
-			<Fragment>
+			<View
+				style={[{ alignItems: 'center', flexDirection: 'row', flex: 1 }, style]}
+			>
 				<OriginalPostedPfpFragment
 					url={STATUS_DTO.postedBy.avatarUrl}
 					onClick={onProfileClicked}
@@ -185,9 +213,9 @@ const OriginalPoster = memo(({ dto }: OriginalPosterProps) => {
 					visibility={STATUS_DTO.visibility}
 					emojiMap={STATUS_DTO.calculated.emojis}
 				/>
-			</Fragment>
+			</View>
 		);
-	}, [STATUS_DTO.postedBy]);
+	}, [STATUS_DTO.postedBy, style]);
 });
 
-export default OriginalPoster;
+export default PostCreatedBy;

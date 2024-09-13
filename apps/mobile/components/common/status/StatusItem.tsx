@@ -33,7 +33,7 @@ const StatusItem = memo(function Foo() {
 						<Fragment>
 							<SharedStatusFragment />
 							<RepliedStatusFragment />
-							<StatusCore hasBoost={true} hasReply={true} />
+							<StatusCore hasBoost={true} hasParent={true} />
 						</Fragment>
 					);
 				} else {
@@ -49,7 +49,7 @@ const StatusItem = memo(function Foo() {
 			return (
 				<Fragment>
 					<RepliedStatusFragment />
-					<StatusCore hasReply={true} />
+					<StatusCore hasParent={true} />
 				</Fragment>
 			);
 		} else {

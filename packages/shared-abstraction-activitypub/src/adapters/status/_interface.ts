@@ -59,6 +59,10 @@ export interface StatusInterface {
 
 	getRootRaw(): PostView | undefined | null;
 
+	hasQuoteAvailable(): boolean;
+
+	getQuoteRaw(): PostView | undefined | null;
+
 	/**
 	 * --- Post Hierarchy | END ---
 	 */

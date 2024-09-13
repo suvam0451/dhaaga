@@ -1,12 +1,7 @@
-import {
-	DhaagaJsMentionObject,
-	Status,
-	StatusInterface,
-} from './_interface.js';
+import { StatusInterface } from './_interface.js';
 import { DriveFile } from 'misskey-js/autogen/models.js';
 import { DriveFileToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { DriveFileInstance } from '../media-attachment/unique.js';
-import { UserType } from '../profile/_interface.js';
 import UnknownToStatusAdapter from './default.js';
 import { Note } from 'misskey-js/autogen/models.d.ts';
 
@@ -21,17 +16,14 @@ class MisskeyToStatusAdapter
 		this.ref = ref;
 	}
 
-	getCachedEmojis(): Map<string, string> {
-		return new Map<string, string>();
-	}
+	// getCachedEmojis(): Map<string, string> {
+	// 	return new Map<string, string>();
+	// }
 
-	getMentions(): DhaagaJsMentionObject[] {
-		return (
-			this.ref.mentions?.map((o) => ({
-				id: o,
-			})) || []
-		);
-	}
+	getMentions = () =>
+		this.ref.mentions?.map((o) => ({
+			id: o,
+		})) || [];
 
 	getReactions(myReaction?: string): {
 		id: string;
@@ -54,9 +46,11 @@ class MisskeyToStatusAdapter
 		return retval;
 	}
 
-	getParentRaw(): Status {
-		return this.ref.reply;
-	}
+	isReply = () => !!this.ref.reply;
+	hasParentAvailable = () => !!this.ref.reply;
+	getParentRaw = () => this.ref.reply;
+
+	isReposted = () => !!this.ref.renote;
 
 	getReactionEmojis(): {
 		height?: number | undefined;
@@ -83,91 +77,45 @@ class MisskeyToStatusAdapter
 		return retval;
 	}
 
-	getIsRebloggedByMe(): boolean | null | undefined {
-		return false;
-	}
+	getIsSensitive = () => !!this.ref.cw;
+	getSpoilerText = () => this.ref.cw;
 
-	getIsSensitive(): boolean {
-		return this.ref.cw !== undefined && this.ref.cw !== null;
-	}
+	getRaw = () => this?.ref;
 
-	getSpoilerText(): string | null | undefined {
-		return this.ref.cw;
-	}
-
-	getRaw(): Status {
-		return this?.ref;
-	}
-
+	// needs custom steps for sharkey
 	getIsFavourited(): boolean | null | undefined {
 		return false;
 	}
 
-	setDescendents(items: StatusInterface[]): void {
-		return;
-	}
+	getUser = () => this?.ref?.user;
 
-	getDescendants(): StatusInterface[] {
-		return [];
-	}
-
-	getUser(): UserType {
-		return this?.ref?.user;
-	}
-
-	isReply(): boolean {
-		return this.ref.reply !== undefined && this.ref.reply !== null;
-	}
-
-	getParentStatusId(): string | null | undefined {
-		return this.ref.replyId;
-	}
+	getParentStatusId = () => this.ref.replyId;
 
 	getUserIdParentStatusUserId(): string | null | undefined {
 		return null;
 	}
 
-	getRepostedStatusRaw = () => this.ref?.renote;
+	getRepostedStatusRaw = () => this.ref.renote;
 
-	getIsBookmarked(): boolean {
-		return false;
-	}
+	getId = () => this.ref.id;
 
-	getId() {
-		return this.ref?.id;
-	}
+	getRepliesCount = () => this.ref.repliesCount;
 
-	getRepliesCount() {
-		return this.ref?.repliesCount;
-	}
+	getRepostsCount = () => this.ref.renoteCount;
 
-	getRepostsCount() {
-		return this.ref?.renoteCount;
-	}
+	// getFavouritesCount() {
+	// 	return 0;
+	// }
 
-	getFavouritesCount() {
-		return 0;
-	}
+	getUsername = () => this.ref.user?.username;
 
-	getUsername() {
-		return this.ref?.user?.username;
-	}
+	getDisplayName = () => this.ref?.user?.name;
 
-	getDisplayName() {
-		return this.ref?.user?.name;
-	}
+	getAvatarUrl = () => this.ref?.user?.avatarUrl;
 
-	getAvatarUrl() {
-		return this.ref?.user?.avatarUrl;
-	}
+	getCreatedAt = () => this.ref?.createdAt || new Date().toString();
 
-	getCreatedAt() {
-		return this.ref?.createdAt || new Date().toString();
-	}
-
-	getVisibility() {
-		return this.ref?.visibility;
-	}
+	getVisibility = () => this.ref?.visibility;
 
 	getAccountUrl(mySubdomain?: string) {
 		if (this.ref.user?.host === undefined || this.ref.user?.host === null) {
@@ -198,25 +146,15 @@ class MisskeyToStatusAdapter
 		});
 	}
 
-	isReposted() {
-		return this.ref?.renote !== undefined && this.ref?.renote !== null;
-	}
+	getContent = () => this.ref?.text;
 
-	getContent() {
-		return this.ref?.text;
-	}
-
-	print(): void {
+	print() {
 		console.log(this.ref);
 	}
 
-	getAccountId_Poster(): string {
-		return this?.ref?.user?.id;
-	}
+	getAccountId_Poster = (): string => this?.ref?.user?.id;
 
-	getMyReaction(): string | null | undefined {
-		return this.ref.myReaction;
-	}
+	getMyReaction = (): string | null | undefined => this.ref.myReaction;
 }
 
 export default MisskeyToStatusAdapter;

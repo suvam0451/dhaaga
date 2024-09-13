@@ -16,10 +16,7 @@ const MEDIA_CONTAINER_MAX_HEIGHT = 540;
  * image or carousal
  *
  */
-function useImageAspectRatio(
-	items: ImageAspectRatioProps,
-	seed?: { width?: number; height?: number },
-) {
+function useImageAspectRatio(items: ImageAspectRatioProps) {
 	// set width
 	const [ImageWidth, setImageWidth] = useState(Dimensions.get('window').width);
 	// set height
@@ -52,7 +49,7 @@ function useImageAspectRatio(
 		const { height, width } = event.nativeEvent.layout;
 		// do not update values if seeded
 		setContainerWidth(width);
-		if (!seed?.height) setContainerHeight(Math.min(height, ImageHeight));
+		setContainerHeight(Math.min(height, ImageHeight));
 	}
 
 	/**

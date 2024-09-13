@@ -47,6 +47,17 @@ class BlueskyStatusAdapter implements StatusInterface {
 		this.reason = reason;
 	}
 
+	hasQuoteAvailable(): boolean {
+		return !!(
+			this.post.embed &&
+			this.post.embed['type'] === 'app.bsky.embed.record#view'
+		);
+	}
+
+	getQuoteRaw(): PostView | null | undefined {
+		return this.post.embed!.record as PostView;
+	}
+
 	getRaw = () => this.post;
 	getId = () => this.post?.cid;
 	getUsername = () => this.post?.author?.handle;
@@ -84,7 +95,14 @@ class BlueskyStatusAdapter implements StatusInterface {
 	hasRootAvailable = () => !!this.reply?.root;
 	getRootRaw = () => this.reply?.root as PostView;
 
-	getContent = () => (this.post?.record as any)?.text;
+	/**
+	 * record is used for app.bsky.feed.defs#postView
+	 * value is used for app.bsky.embed.record#viewRecord
+	 *
+	 * ^ a.k.a. quoted posts
+	 */
+	getContent = () =>
+		(this.post?.record as any)?.text || (this.post?.value as any)?.text;
 
 	getUser() {
 		if (this.isReposted()) return this.reason!.by as ProfileViewBasic;
