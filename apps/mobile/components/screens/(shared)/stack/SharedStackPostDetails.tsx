@@ -47,8 +47,11 @@ function StatusContextComponent() {
 function SharedStackPostDetails() {
 	const [refreshing, setRefreshing] = useState(false);
 
-	const { id } = useLocalSearchParams<{ id: string }>();
-	const { Data, dispatch, refetch } = useGetStatusContext(id);
+	const { id, uri } = useLocalSearchParams<{ id: string; uri: string }>();
+
+	const { Data, dispatch, refetch } = useGetStatusContext(
+		id === 'uri' ? uri : id,
+	);
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,

@@ -9,11 +9,10 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import WithActivitypubUserContext, {
 	useActivitypubUserContext,
 } from '../../../../states/useProfile';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { UserItem } from '../../profile/stack/MyFollowers';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { Button } from '@rneui/themed';
 
 const ListItem = memo(() => {
 	const { user } = useActivitypubUserContext();
@@ -71,8 +70,28 @@ const SharedStackFollows = memo(() => {
 					</View>
 				}
 				ListFooterComponent={
-					<View>
-						<Button onPress={loadNext}>Load More</Button>
+					<View
+						style={{ marginVertical: 16, flexShrink: 1, alignItems: 'center' }}
+					>
+						<TouchableOpacity onPress={loadNext}>
+							<View
+								style={{
+									backgroundColor: '#242424',
+									paddingVertical: 8,
+									flexShrink: 1,
+									maxWidth: 128,
+								}}
+							>
+								<Text
+									style={{
+										color: APP_FONT.MONTSERRAT_BODY,
+										textAlign: 'center',
+									}}
+								>
+									Load More
+								</Text>
+							</View>
+						</TouchableOpacity>
 					</View>
 				}
 			/>

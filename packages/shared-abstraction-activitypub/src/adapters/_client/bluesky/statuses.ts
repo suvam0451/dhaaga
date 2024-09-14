@@ -3,16 +3,18 @@ import {
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import {
-	MastoContext,
-	MastoScheduledStatus,
-	MastoStatus,
-	MissContext,
-	MissNote,
-} from '../_interface.js';
+import { MastoScheduledStatus, MastoStatus, MissNote } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
+import { getBskyAgent } from '../_router/_api.js';
+import { AppBskyFeedGetPostThread, AtpSessionData } from '@atproto/api';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
+	dto: AtpSessionData;
+	constructor(dto: AtpSessionData) {
+		this.dto = dto;
+	}
+
 	bookmark(
 		id: string,
 	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/create']['res']> {
@@ -31,11 +33,21 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	getContext(
+	async getContext(
 		id: string,
 		limit?: number,
-	): LibraryPromise<MastoContext | MissContext> {
-		return Promise.resolve(undefined) as any;
+	): LibraryPromise<AppBskyFeedGetPostThread.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.getPostThread({
+				uri: id,
+				depth: limit || 10,
+			});
+			return { data };
+		} catch (e) {
+			console.log('[ERROR]: bluesky', e);
+			return errorBuilder();
+		}
 	}
 
 	like(

@@ -1,11 +1,14 @@
 import { useCallback } from 'react';
 import { router, useNavigation } from 'expo-router';
+import { useActivityPubRestClientContext } from './useActivityPubRestClient';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 /**
  * Hook to correctly navigate
  * to shared app routes
  */
 function useAppNavigator() {
+	const { domain } = useActivityPubRestClientContext();
 	const navigator = useNavigation();
 
 	const toHome = useCallback(() => {
@@ -15,15 +18,29 @@ function useAppNavigator() {
 	}, [navigator]);
 
 	const toPost = useCallback(
-		(id: string) => {
+		(id: string, params?: any) => {
 			// probably in bottom sheet
 			if (!navigator || !navigator.getId) return;
 
+			let __id = id;
+			if (domain === KNOWN_SOFTWARE.BLUESKY) {
+				__id = 'uri';
+			}
 			const _id = navigator.getId();
 			if (!_id || _id === '/(tabs)/index') {
-				router.navigate(`/post/${id}`);
+				router.navigate({
+					pathname: `/post/${__id}`,
+					params: {
+						uri: id,
+					},
+				});
 			} else {
-				router.navigate(`${navigator.getId()}/post/${id}`);
+				router.navigate({
+					pathname: `${navigator.getId()}/post/${__id}`,
+					params: {
+						uri: id,
+					},
+				});
 			}
 		},
 		[navigator],

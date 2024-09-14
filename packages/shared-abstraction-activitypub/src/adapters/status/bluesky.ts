@@ -59,7 +59,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	getRaw = () => this.post;
-	getId = () => this.post?.cid;
+	getId = () => this.post?.uri;
 	getUsername = () => this.post?.author?.handle;
 	getDisplayName = () => this.post?.author?.displayName;
 	getAvatarUrl = () => this.post?.author?.avatar;

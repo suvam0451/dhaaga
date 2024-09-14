@@ -7,6 +7,7 @@ import {
 } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 import { Endpoints } from 'misskey-js';
+import { AppBskyFeedGetPostThread } from '@atproto/api';
 
 export type DhaagaJsPostCreateDto = {
 	inReplyToId: null | string;
@@ -64,7 +65,9 @@ export interface StatusesRoute {
 	getContext(
 		id: string,
 		limit?: number,
-	): LibraryPromise<MastoContext | MissContext>;
+	): LibraryPromise<
+		MastoContext | MissContext | AppBskyFeedGetPostThread.Response
+	>;
 
 	create(dto: DhaagaJsPostCreateDto): LibraryPromise<MastoScheduledStatus>;
 

@@ -50,6 +50,8 @@ function WithAppStatusContextDataContext({ children, data, dispatch }: Props) {
 		(id: string) => {
 			if (!id) return [];
 			const list = data.children.get(id);
+			if (!list) return [];
+
 			return list
 				.map((o) => data.lookup.get(o))
 				.filter((o) => o !== null && o !== undefined);
