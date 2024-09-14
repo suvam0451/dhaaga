@@ -6,12 +6,15 @@
 [![GitHub](https://img.shields.io/github/followers/suvam0451?label=Add%20Me)](https://github.com/suvam0451?tab=followers)
 <!-- SOCIALS -->
 
-<img width="64" 
-    src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d56143" 
-    align="left" 
-    style="margin-right:8px"/>
+<img width="64"
+src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d56143"
+align="left"
+style="margin-right:8px"/>
 
-**Dhaaga** is an SNS client app for smartphones (Android & iOS), which supports numerous decentralized social networking platforms. It focuses on unique client-side functionalities, superior offline support, helping new users ease into the ecosystem and generally adding more fun to your online social experience.
+**Dhaaga** is a fun 🥳 and cozy ☕ microblogging app for the decentralized 
+social web. 
+It has multi-account support for all your favourite SNS platforms,
+and comes with extra features that add fun to your social experience.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -39,44 +42,41 @@
   </a>
 </div>
 
-
 ## ✨ Features
 
-- ☂️ Supports your favourite SNS software.¹
-- ☕  Nice, almost like warm and cozy feel to it <-- *(What the users say,
+- ☂️ Supports your favourite SNS software.
+- ☕ Nice, almost like warm and cozy feel to it <-- *(What the users say,
   not me)* 😙
-- 🧐  Super Smart! Syncs your friend network and hashtags offline.
-- 🦉  Dark mode by default.
-- 👌  Fully Operable with One-Hand.
-- 🏕️  Offline Support. *Download and view posts offline.* ²
-- ☄️  Many unique client-side extra features.
-- 🥳  Fun, Free (💰)³ and FOSS.
+- 🦉 Dark mode by default.
+- 👌 Fully Operable with One-Hand.
+- 🏕️ Offline Support. *Download and view posts offline.* ²
+- ☄️ Many unique client-side extra features.
+- 🙂‍↕️ Makes it easy to make frens online.²
+- 🥳 Fun, Free (💰)³ and FOSS.
 
-
-> ¹ No bridging involved<br/>
-> ² Work in progress.<br/>
+> ¹ Coming soon™<br/>
+> ² At least one *(me)* guaranteed 😇<br/>
 > ³ A little bit of self-promo sometimes 😉
 
 > [!TIP]
-> Dhaaga cannot offer 100% feature parity for every supported SNS platform.<br/>
-> If you only use a single platform or prefer having every single feature,<br/>
-> a dedicated app for that platform might be better fit for you.
->
-> If you miss having any specific feature, feel free to hit me up!
+> Dhaaga does not aim for 100% feature parity.<br/>
+> Features are picked and/or added on a fun-first basis 🥳.<br/>
+> Power users may want to use a client built specifically for their platform.
 
 ## 💁 About
 
 Dhaaga is a solo indie project that I work on during my leisure time.
 
-I built it for casual users like me,
-who like having all their accounts in one app,<br/>
-or prefer the SNS-friendly mobile interface offered by Dhaaga.
+It offers a simple and cozy mobile interface,
+together with a robust app backend
+that helps you overcome barriers related to accounts, protocols, and
+server federation, allowing you to focus on what
+truly matters: **your friends, your time, and your digital wellbeing.**
 
-If you liked the app, feel free to drop by and say hi.<br/> I like meeting new 
-people and would love to hear how Dhaaga has added fun to your online experience. 🤗
+If you liked the app, please drop by and say hi sometimes. 🤗
 
 [Mastodon](https://mastodon.social/@suvam) | [Bluesky](https://bsky.app/profile/suvam.io)
 
 ---
 
-© 2023-Present Debashish Patra 
+© 2024-Present Debashish Patra 
