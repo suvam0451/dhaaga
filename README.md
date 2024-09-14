@@ -11,10 +11,11 @@ src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d5
 align="left"
 style="margin-right:8px"/>
 
-**Dhaaga** is a fun 🥳 and cozy ☕ microblogging app for the decentralized 
-social web. 
+**Dhaaga** is a fun 🥳 and cozy ☕ microblogging app for 
+browsing the decentralized social web. 
 It has multi-account support for all your favourite SNS platforms,
-and comes with extra features that add fun to your social experience.
+and comes with extra features that add extra value and joy to your social 
+experience.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -65,8 +66,8 @@ and comes with extra features that add fun to your social experience.
 Dhaaga is a solo indie project that I work on during my leisure time.
 
 It offers a simple and cozy mobile interface, 
-helps you overcome common barriers like accounts, protocols, and federation, 
-allowing you to focus on what truly matters: 
+helps you easily navigate platform barriers like accounts, 
+protocols, and federation, allowing you to focus on what truly matters: 
 
 > **Your friends, your time, and your digital wellbeing.**
 
