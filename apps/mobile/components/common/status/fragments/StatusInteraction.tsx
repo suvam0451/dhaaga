@@ -15,7 +15,7 @@ import * as Haptics from 'expo-haptics';
 import { APP_THEME } from '../../../../styles/AppTheme';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
+import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
@@ -47,7 +47,7 @@ const StatusInteraction = memo(
 			boost,
 			getBookmarkState,
 			getPostListReducer,
-		} = useAppTimelineDataContext();
+		} = useAppTimelinePosts();
 
 		const STATUS_DTO = dto;
 

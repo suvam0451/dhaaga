@@ -2,8 +2,8 @@ import { memo, useEffect } from 'react';
 import { View } from 'react-native';
 import usePinnedPosts from '../../../../../common/user/api/usePinnedPosts';
 import WithAppTimelineDataContext, {
-	useAppTimelineDataContext,
-} from '../../../../../common/timeline/api/useTimelineData';
+	useAppTimelinePosts,
+} from '../../../../../../hooks/app/timelines/useAppTimelinePosts';
 import FlashListPosts from '../../../../../shared/flash-lists/FlashListPosts';
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
@@ -15,7 +15,7 @@ type Props = {
 
 function Core({ userId }: Props) {
 	const { Data } = usePinnedPosts(userId);
-	const { addPosts, listItems, clear } = useAppTimelineDataContext();
+	const { addPosts, listItems, clear } = useAppTimelinePosts();
 
 	useEffect(() => {
 		clear();

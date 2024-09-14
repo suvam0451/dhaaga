@@ -9,7 +9,7 @@ import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
+import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
 import AppSettingsPreferencesService from '../../../../services/app-settings/app-settings-preferences.service';
 import { useRealm } from '@realm/react';
@@ -36,7 +36,8 @@ const EmojiReaction = memo(function Foo({
 		timelineDataPostListReducer,
 		updateRequestId: updateBottomSheetRequestId,
 	} = useAppBottomSheet();
-	const { getPostListReducer } = useAppTimelineDataContext();
+	const { getPostListReducer } = useAppTimelinePosts();
+	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
 
 	const CONTAINER_STYLE = useMemo(() => {

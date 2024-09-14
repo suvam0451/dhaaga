@@ -12,13 +12,13 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import useFollowers from '../api/useFollowers';
 import useMfm from '../../../hooks/useMfm';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import useGetFollowers from '../../../../hooks/api/accounts/useGetFollowers';
 
 export function UserItem() {
-	const { primaryAcct, domain } = useActivityPubRestClientContext();
+	const { primaryAcct } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();
 	const { toProfile } = useAppNavigator();
@@ -118,17 +118,17 @@ export function UserItem() {
 
 function WithApi() {
 	const { me } = useActivityPubRestClientContext();
-	const { data, updateQueryCache } = useFollowers(me?.getId());
+	const { Data, loadNext } = useGetFollowers(me?.getId());
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
-		itemCount: data?.length,
-		updateQueryCache,
+		itemCount: Data.length,
+		updateQueryCache: loadNext,
 	});
 
 	return (
 		<WithAutoHideTopNavBar title={'My Followers'} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={48}
-				data={data}
+				data={Data}
 				contentContainerStyle={{ paddingTop: 54 }}
 				renderItem={(o) => (
 					<WithActivitypubUserContext user={o.item}>

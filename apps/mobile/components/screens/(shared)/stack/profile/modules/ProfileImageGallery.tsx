@@ -154,9 +154,13 @@ function ProfileImageGallery({ userId }: Props) {
 				images.push(
 					...i.getMediaAttachments().filter((o) => {
 						if (
-							['image/jpeg', 'image', 'image/webp', 'gifv'].includes(
-								o.getType(),
-							)
+							[
+								'image/jpeg',
+								'image/png',
+								'image',
+								'image/webp',
+								'gifv',
+							].includes(o.getType())
 						)
 							return true;
 						console.log(

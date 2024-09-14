@@ -5,7 +5,7 @@ import { EmojiDto } from './_shared.types';
 import EmojiReaction from './EmojiReaction';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
+import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 
@@ -15,7 +15,7 @@ type EmojiReactionsProps = {
 	dto: ActivityPubStatusAppDtoType;
 };
 const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
-	const { emojiCache } = useAppTimelineDataContext();
+	const { emojiCache } = useAppTimelinePosts();
 	const { domain, me } = useActivityPubRestClientContext();
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);

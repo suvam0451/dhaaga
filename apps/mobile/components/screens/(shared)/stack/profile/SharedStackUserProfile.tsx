@@ -24,9 +24,7 @@ import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
 import ProfileButtonMessage from './fragments/ProfileButtonMessage';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../shared/topnavbar/AppTopNavbar';
+import AppTopNavbar from '../../../../shared/topnavbar/AppTopNavbar';
 import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
 import ProfileModules from './modules/ProfileModules';
 
@@ -60,11 +58,7 @@ export function ProfileContextWrapped() {
 	});
 
 	return (
-		<AppTopNavbar
-			title={'Profile'}
-			translateY={translateY}
-			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-		>
+		<AppTopNavbar title={'Profile'} translateY={translateY}>
 			<Animated.ScrollView
 				onScroll={onScroll}
 				contentContainerStyle={localStyles.rootScrollView}
@@ -82,6 +76,7 @@ export function ProfileContextWrapped() {
 					/>
 					<View style={localStyles.buttonSection}>
 						<ProfileButtonMessage handle={handle} />
+						<View style={{ width: 8 }} />
 						<ProfileButtonPhonebook />
 					</View>
 					<ProfileStatsInterface style={localStyles.statSectionContainer} />
@@ -146,8 +141,8 @@ export function ProfileContextWrapped() {
 }
 
 function SharedStackUserProfile() {
-	const { user } = useLocalSearchParams<{ user: string }>();
-	const { Data, Error } = useGetProfile({ userId: user, requestId: 'N/A' });
+	const { id } = useLocalSearchParams<{ id: string }>();
+	const { Data, Error } = useGetProfile({ userId: id, requestId: 'N/A' });
 
 	if (Error !== null) {
 		return <ErrorGoBack msg={Error} />;
@@ -171,10 +166,10 @@ const localStyles = StyleSheet.create({
 		padding: 8,
 	},
 	buttonSection: {
-		flexGrow: 1,
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
 		flexDirection: 'row',
+		marginHorizontal: 8,
 	},
 	avatarImageContainer: {
 		flex: 1,
@@ -204,10 +199,9 @@ const localStyles = StyleSheet.create({
 	statSectionContainer: {
 		backgroundColor: '#242424',
 		marginRight: 4,
-		borderRadius: 6,
+		borderRadius: 8,
 		marginTop: 4,
 		padding: 4,
-		paddingLeft: 0,
 	},
 	secondSectionContainer: {
 		flexDirection: 'row',

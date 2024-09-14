@@ -16,8 +16,8 @@ import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndic
 import useGetBookmarks from '../../../../hooks/api/accounts/useGetBookmarks';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import WithAppTimelineDataContext, {
-	useAppTimelineDataContext,
-} from '../../../common/timeline/api/useTimelineData';
+	useAppTimelinePosts,
+} from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function Core() {
@@ -28,7 +28,7 @@ function Core() {
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
-	const { addPosts, listItems, clear } = useAppTimelineDataContext();
+	const { addPosts, listItems, clear } = useAppTimelinePosts();
 
 	useEffect(() => {
 		clear();

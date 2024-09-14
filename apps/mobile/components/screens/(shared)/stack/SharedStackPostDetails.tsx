@@ -11,7 +11,7 @@ import WithAppStatusContextDataContext, {
 } from '../../../../hooks/api/statuses/WithAppStatusContextData';
 import PostReply from '../../../common/status/PostReply';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import WithAppTimelineDataContext from '../../../common/timeline/api/useTimelineData';
+import WithAppTimelineDataContext from '../../../../hooks/app/timelines/useAppTimelinePosts';
 
 function StatusContextComponent() {
 	const { data } = useAppStatusContextDataContext();

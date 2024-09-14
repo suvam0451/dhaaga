@@ -17,11 +17,16 @@ type AutoHideNavBarProps = {
 	title: string;
 	children: any;
 	translateY: Animated.AnimatedInterpolation<string | number>;
-	type: APP_TOPBAR_TYPE_ENUM;
+	type?: APP_TOPBAR_TYPE_ENUM;
 };
 
 const AppTopNavbar = memo(
-	({ title, children, translateY, type }: AutoHideNavBarProps) => {
+	({
+		title,
+		children,
+		translateY,
+		type = APP_TOPBAR_TYPE_ENUM.GENERIC,
+	}: AutoHideNavBarProps) => {
 		const Header = useMemo(() => {
 			switch (type) {
 				case APP_TOPBAR_TYPE_ENUM.GENERIC:

@@ -7,21 +7,21 @@ import WithActivitypubUserContext from '../../../../states/useProfile';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import useFollowings from '../api/useFollowings';
+import useGetFollows from '../../../../hooks/api/accounts/useGetFollows';
 
 function WithApi() {
 	const { me } = useActivityPubRestClientContext();
-	const { data, updateQueryCache } = useFollowings(me?.getId());
+	const { Data, loadNext } = useGetFollows(me?.getId());
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
-		itemCount: data?.length,
-		updateQueryCache,
+		itemCount: Data?.length,
+		updateQueryCache: loadNext,
 	});
 
 	return (
 		<WithAutoHideTopNavBar title={'My Followings'} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={48}
-				data={data}
+				data={Data}
 				contentContainerStyle={{ paddingTop: 54 }}
 				renderItem={(o) => (
 					<WithActivitypubUserContext user={o.item} key={o.index}>

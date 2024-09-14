@@ -56,6 +56,7 @@ const WithAccountSelectedCore = memo(() => {
 				/>
 				<View style={localStyles.buttonSection}>
 					<ProfileButtonMessage handle={handle} />
+					<View style={{ width: 8 }} />
 					<ProfileButtonPhonebook />
 				</View>
 				<ProfileStatsInterface style={localStyles.statSectionContainer} />
@@ -113,10 +114,10 @@ const localStyles = StyleSheet.create({
 		padding: 8,
 	},
 	buttonSection: {
-		flexGrow: 1,
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
 		flexDirection: 'row',
+		marginHorizontal: 8,
 	},
 	avatarImageContainer: {
 		flex: 1,

@@ -2,8 +2,8 @@ import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../../states/usePagination';
 import WithAppTimelineDataContext, {
-	useAppTimelineDataContext,
-} from '../../../common/timeline/api/useTimelineData';
+	useAppTimelinePosts,
+} from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
@@ -36,7 +36,7 @@ function Core() {
 		setMaxId,
 		clear: paginationClear,
 	} = useAppPaginationContext();
-	const { addPosts, listItems, clear } = useAppTimelineDataContext();
+	const { addPosts, listItems, clear } = useAppTimelinePosts();
 
 	const { timelineType, query, opts, setTimelineType, setQuery } =
 		useTimelineController();

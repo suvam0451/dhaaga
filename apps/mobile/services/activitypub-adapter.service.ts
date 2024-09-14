@@ -14,6 +14,8 @@ class ActivityPubAdapterService {
 	}
 
 	static adaptManyStatuses(items: any[], domain: string): StatusInterface[] {
+		if (items === undefined || items === null || !Array.isArray(items))
+			return [];
 		return items
 			.filter((o) => !!o)
 			.map((o) => ActivitypubStatusAdapter(o, domain));
@@ -24,6 +26,8 @@ class ActivityPubAdapterService {
 	}
 
 	static adaptManyUsers(items: any[], domain: string): UserInterface[] {
+		if (items === undefined || items === null || !Array.isArray(items))
+			return [];
 		return items
 			.filter((o) => !!o)
 			.map((o) => ActivityPubUserAdapter(o, domain));

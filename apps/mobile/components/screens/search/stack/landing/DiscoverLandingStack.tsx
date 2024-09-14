@@ -2,7 +2,7 @@ import { memo } from 'react';
 import WithScrollOnRevealContext from '../../../../../states/useScrollOnReveal';
 import WithAppPaginationContext from '../../../../../states/usePagination';
 import DiscoverTabFactory from './fragments/DiscoverTabFactory';
-import WithAppTimelineDataContext from '../../../../common/timeline/api/useTimelineData';
+import WithAppTimelineDataContext from '../../../../../hooks/app/timelines/useAppTimelinePosts';
 
 /**
  * The landing page for the

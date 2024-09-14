@@ -1,9 +1,17 @@
 import { memo } from 'react';
-import { StyleProp, Text, View, ViewStyle } from 'react-native';
+import {
+	StyleProp,
+	Text,
+	TouchableOpacity,
+	View,
+	ViewStyle,
+} from 'react-native';
 import styles from '../../../../../common/user/utils/styles';
 import { useActivitypubUserContext } from '../../../../../../states/useProfile';
+import useAppNavigator from '../../../../../../states/useAppNavigator';
 
 type ProfileStatsProps = {
+	userId: string;
 	postCount?: number;
 	followingCount?: number;
 	followerCount?: number;
@@ -23,21 +31,53 @@ function util(o: number): string {
  * count stats for a profile
  */
 const ProfileStats = memo(
-	({ postCount, followingCount, followerCount, style }: ProfileStatsProps) => {
+	({
+		postCount,
+		followingCount,
+		followerCount,
+		style,
+		userId,
+	}: ProfileStatsProps) => {
+		const { toFollows, toFollowers } = useAppNavigator();
+
+		function onFollowsPress() {
+			toFollows(userId);
+		}
+
+		function onPostsPress() {}
+
+		function onFollowersPress() {
+			toFollowers(userId);
+		}
 		return (
-			<View style={[{ display: 'flex', flexDirection: 'row' }, style]}>
-				<View style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}>
+			<View style={[{ flexDirection: 'row', flex: 1 }, style]}>
+				<TouchableOpacity
+					style={{
+						alignItems: 'center',
+						paddingHorizontal: 6,
+					}}
+					onPress={onPostsPress}
+				>
 					<Text style={styles.primaryText}>{util(postCount)}</Text>
 					<Text style={styles.secondaryText}>Posts</Text>
-				</View>
-				<View style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={{ alignItems: 'center', flex: 1 }}
+					onPress={onFollowsPress}
+				>
 					<Text style={styles.primaryText}>{util(followingCount)}</Text>
-					<Text style={styles.secondaryText}>Following</Text>
-				</View>
-				<View style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}>
+					<Text style={styles.secondaryText}>Follows</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={{
+						alignItems: 'center',
+						paddingHorizontal: 6,
+					}}
+					onPress={onFollowersPress}
+				>
 					<Text style={styles.primaryText}>{util(followerCount)}</Text>
 					<Text style={styles.secondaryText}>Followers</Text>
-				</View>
+				</TouchableOpacity>
 			</View>
 		);
 	},
@@ -55,6 +95,7 @@ export const ProfileStatsInterface = memo(
 				followingCount={user?.getFollowingCount()}
 				postCount={user?.getPostCount()}
 				style={style}
+				userId={user?.getId()}
 			/>
 		);
 	},

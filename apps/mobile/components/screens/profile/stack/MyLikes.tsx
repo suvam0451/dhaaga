@@ -11,8 +11,8 @@ import StatusItem from '../../../common/status/StatusItem';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import useGetLikes from '../../../../hooks/api/accounts/useGetLikes';
 import WithAppTimelineDataContext, {
-	useAppTimelineDataContext,
-} from '../../../common/timeline/api/useTimelineData';
+	useAppTimelinePosts,
+} from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import { useEffect } from 'react';
 import { useRealm } from '@realm/react';
@@ -33,7 +33,7 @@ function Core() {
 		limit: 10,
 		maxId: queryCacheMaxId,
 	});
-	const { addPosts, listItems, clear } = useAppTimelineDataContext();
+	const { addPosts, listItems, clear } = useAppTimelinePosts();
 
 	useEffect(() => {
 		if (data.length <= 0) return;

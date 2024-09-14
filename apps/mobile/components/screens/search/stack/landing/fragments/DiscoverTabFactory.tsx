@@ -10,7 +10,7 @@ import LoadingMore from '../../../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useDebounce } from 'use-debounce';
-import { useAppTimelineDataContext } from '../../../../../common/timeline/api/useTimelineData';
+import { useAppTimelinePosts } from '../../../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
@@ -32,7 +32,7 @@ const DiscoverTabFactory = memo(() => {
 		listItems,
 		addPosts: appendTimelineData,
 		clear: timelineDataStoreClear,
-	} = useAppTimelineDataContext();
+	} = useAppTimelinePosts();
 
 	const { data, updateQueryCache, append, setMaxId, queryCacheMaxId, clear } =
 		useAppPaginationContext();

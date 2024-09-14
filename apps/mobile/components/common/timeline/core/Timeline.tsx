@@ -31,8 +31,8 @@ import { TimelineFetchMode } from '../utils/timeline.types';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAppTimelineDataContext, {
-	useAppTimelineDataContext,
-} from '../api/useTimelineData';
+	useAppTimelinePosts,
+} from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
@@ -51,7 +51,7 @@ const Timeline = memo(() => {
 		addPosts: appendTimelineData,
 		listItems,
 		clear: timelineDataStoreClear,
-	} = useAppTimelineDataContext();
+	} = useAppTimelinePosts();
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 

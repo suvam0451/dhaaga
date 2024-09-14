@@ -1,6 +1,5 @@
 import {
 	StatusInterface,
-	UserInterface,
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -14,43 +13,27 @@ import {
 	useMemo,
 	useReducer,
 	useRef,
-	useState,
 } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import ActivityPubService from '../../../../services/activitypub.service';
+import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
+import ActivityPubService from '../../../services/activitypub.service';
 import * as Haptics from 'expo-haptics';
-import { OpenAiService } from '../../../../services/openai.service';
-import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.services';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
+import { OpenAiService } from '../../../services/openai.service';
+import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
+import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import postArrayReducer, {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
-} from './postArrayReducer';
-import userArrayReducer, {
-	TIMELINE_USER_LIST_DATA_REDUCER_TYPE,
-} from './userArrayReducer';
+} from '../../../components/common/timeline/api/postArrayReducer';
 import FlashListService, {
 	FlashListType_Post,
-} from '../../../../services/flashlist.service';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
-import { ActivityPubAppUserDtoType } from '../../../../services/approto/activitypub-user-dto.service';
-
-enum TIMELINE_DATA_TYPE {
-	POSTS = 'POSTS',
-	USERS = 'USERS',
-	TAGS = 'TAGS',
-	NOTIFICATIONS = 'NOTIFICATIONS',
-	NONE = 'NONE',
-}
+} from '../../../services/flashlist.service';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
 
 type Type = {
-	data: ActivityPubStatusAppDtoType[] | ActivityPubAppUserDtoType[];
-	dataFormat: TIMELINE_DATA_TYPE;
-	setDataFormat: (to: TIMELINE_DATA_TYPE) => void;
+	data: ActivityPubStatusAppDtoType[];
 	emojiCache: InstanceApi_CustomEmojiDTO[];
 	listItems: FlashListType_Post[];
 	addPosts: (items: StatusInterface[]) => void;
-	addUsers: (items: UserInterface[]) => void;
 	clear: () => void;
 	/**
 	 * Interaction Actions
@@ -79,13 +62,9 @@ type Type = {
 
 const defaultValue: Type = {
 	data: [],
-	dataFormat: TIMELINE_DATA_TYPE.NONE,
-	setDataFormat: () => {},
 	listItems: [],
 	addPosts: () => {},
-	addUsers: () => {},
 	clear: () => {},
-
 	getBookmarkState: () => {},
 	toggleBookmark: () => {},
 	toggleLike: () => {},
@@ -100,7 +79,13 @@ const defaultValue: Type = {
 
 const AppTimelineDataContext = createContext<Type>(defaultValue);
 
-export function useAppTimelineDataContext() {
+/**
+ * Perform operations on a list
+ * of status objects
+ *
+ * e.g. - like, share, translate
+ */
+export function useAppTimelinePosts() {
 	return useContext(AppTimelineDataContext);
 }
 
@@ -109,20 +94,13 @@ type Props = {
 };
 
 /**
- * Assumptions
- * ---
- * - at any time, only one timeline can be active
+ *
  */
 function WithAppTimelineDataContext({ children }: Props) {
 	const { client, domain, subdomain } = useActivityPubRestClientContext();
 
-	// template
-	const [DataFormat, setDataFormat] = useState<TIMELINE_DATA_TYPE>(
-		TIMELINE_DATA_TYPE.POSTS,
-	);
 	// lists
 	const [Posts, postListReducer] = useReducer(postArrayReducer, []);
-	const [Users, userListReducer] = useReducer(userArrayReducer, []);
 
 	const EmojiCache = useRef<InstanceApi_CustomEmojiDTO[]>([]);
 	const { globalDb } = useGlobalMmkvContext();
@@ -136,20 +114,13 @@ function WithAppTimelineDataContext({ children }: Props) {
 	}, [subdomain]);
 
 	const FlashListItems = useMemo(() => {
-		switch (DataFormat) {
-			case TIMELINE_DATA_TYPE.POSTS:
-				return FlashListService.posts(Posts);
-			case TIMELINE_DATA_TYPE.USERS:
-				return FlashListService.users(Users);
-		}
-		return [];
-	}, [DataFormat, Users, Posts]);
+		return FlashListService.posts(Posts);
+	}, [Posts]);
 
 	const Seen = useRef(new Set<string>());
 
 	const clear = useCallback(() => {
 		postListReducer({ type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.CLEAR });
-		userListReducer({ type: TIMELINE_USER_LIST_DATA_REDUCER_TYPE.CLEAR });
 		Seen.current.clear();
 	}, []);
 
@@ -166,21 +137,6 @@ function WithAppTimelineDataContext({ children }: Props) {
 			});
 		},
 		[domain, subdomain, Posts],
-	);
-
-	const addUsers = useCallback(
-		(items: UserInterface[]) => {
-			userListReducer({
-				type: TIMELINE_USER_LIST_DATA_REDUCER_TYPE.ADD,
-				payload: {
-					more: items,
-					seen: Seen,
-					domain,
-					subdomain,
-				},
-			});
-		},
-		[domain, subdomain, Users],
 	);
 
 	function findById(id: string) {
@@ -368,12 +324,9 @@ function WithAppTimelineDataContext({ children }: Props) {
 		<AppTimelineDataContext.Provider
 			value={{
 				data: Posts,
-				dataFormat: DataFormat,
-				setDataFormat,
 				listItems: FlashListItems as any[],
 				count: Posts.length,
 				addPosts,
-				addUsers,
 				clear,
 				toggleBookmark,
 				getBookmarkState,
