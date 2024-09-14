@@ -17,7 +17,12 @@ import {
 	MissUserDetailed,
 } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
-import { AppBskyActorGetProfile } from '@atproto/api';
+import {
+	AppBskyActorGetProfile,
+	AppBskyFeedGetAuthorFeed,
+	AppBskyGraphGetFollowers,
+	AppBskyGraphGetFollows,
+} from '@atproto/api';
 
 export type BookmarkGetQueryDTO = {
 	limit: number;
@@ -50,7 +55,9 @@ type ListAccountStatusesParams = DefaultPaginationParams & {
 };
 
 export type AccountRouteStatusQueryDto = ListAccountStatusesParams &
-	Endpoints['users/notes']['req'];
+	Endpoints['users/notes']['req'] & {
+		bskyFilter?: 'posts_with_media';
+	};
 
 export type AccountMutePostDto = {
 	notifications: boolean;
@@ -125,7 +132,11 @@ export interface AccountRoute {
 	statuses(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): Promise<LibraryResponse<mastodon.v1.Status[] | Note[] | any[]>>;
+	): Promise<
+		LibraryResponse<
+			mastodon.v1.Status[] | Note[] | AppBskyFeedGetAuthorFeed.Response | any[]
+		>
+	>;
 
 	get(
 		id: string,
@@ -169,6 +180,7 @@ export interface AccountRoute {
 				minId?: string | null;
 				maxId?: string | null;
 		  }
+		| AppBskyGraphGetFollowers.Response
 	>;
 
 	followings(query: FollowerGetQueryDTO): LibraryPromise<
@@ -178,5 +190,6 @@ export interface AccountRoute {
 				minId?: string | null;
 				maxId?: string | null;
 		  }
+		| AppBskyGraphGetFollows.Response
 	>;
 }

@@ -1,17 +1,17 @@
-import StatusItem from '../../../../common/status/StatusItem';
+import StatusItem from '../../../common/status/StatusItem';
 import { useMemo, useState } from 'react';
 import { Animated, RefreshControl, View, Text } from 'react-native';
-import WithAutoHideTopNavBar from '../../../../containers/WithAutoHideTopNavBar';
-import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { useLocalSearchParams } from 'expo-router';
-import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
-import useGetStatusContext from '../../../../../hooks/api/statuses/useGetStatusContext';
+import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
+import useGetStatusContext from '../../../../hooks/api/statuses/useGetStatusContext';
 import WithAppStatusContextDataContext, {
 	useAppStatusContextDataContext,
-} from '../../../../../hooks/api/statuses/WithAppStatusContextData';
-import PostReply from '../../../../common/status/PostReply';
-import { APP_FONT } from '../../../../../styles/AppTheme';
-import WithAppTimelineDataContext from '../../../../common/timeline/api/useTimelineData';
+} from '../../../../hooks/api/statuses/WithAppStatusContextData';
+import PostReply from '../../../common/status/PostReply';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import WithAppTimelineDataContext from '../../../common/timeline/api/useTimelineData';
 
 function StatusContextComponent() {
 	const { data } = useAppStatusContextDataContext();
@@ -44,7 +44,7 @@ function StatusContextComponent() {
 	);
 }
 
-function PostDetails() {
+function SharedStackPostDetails() {
 	const [refreshing, setRefreshing] = useState(false);
 
 	const { id } = useLocalSearchParams<{ id: string }>();
@@ -74,4 +74,4 @@ function PostDetails() {
 	);
 }
 
-export default PostDetails;
+export default SharedStackPostDetails;

@@ -1,5 +1,3 @@
-import AppProfile from '../../../../components/common/profile/AppProfile';
+import SharedStackUserProfile from '../../../../components/screens/(shared)/stack/profile/SharedStackUserProfile';
 
-export default function Route() {
-	return <AppProfile />;
-}
+export default SharedStackUserProfile;

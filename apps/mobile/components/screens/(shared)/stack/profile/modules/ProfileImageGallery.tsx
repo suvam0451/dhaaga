@@ -1,17 +1,18 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import {
-	ActivityPubStatuses,
+	KNOWN_SOFTWARE,
 	MediaAttachmentInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
+import ActivityPubAdapterService from '../../../../../../services/activitypub-adapter.service';
 import { FlatList, View } from 'react-native';
 import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import MediaThumbnail from '../../media/Thumb';
-import ImageGalleryCanvas from '../../user/fragments/ImageGalleryCanvas';
+import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
+import MediaThumbnail from '../../../../../common/media/Thumb';
+import ImageGalleryCanvas from '../../../../../common/user/fragments/ImageGalleryCanvas';
 import ProfileModuleFactory from './ProfileModuleFactory';
+import { AppBskyFeedGetAuthorFeed } from '@atproto/api';
 
 type FlashListItemProps = {
 	selected: boolean;
@@ -121,12 +122,14 @@ function ProfileImageGallery({ userId }: Props) {
 			userId,
 			onlyMedia: true,
 			excludeReblogs: true,
+			bskyFilter:
+				domain === KNOWN_SOFTWARE.BLUESKY ? 'posts_with_media' : undefined,
 		});
 		return data;
 	}
 
 	// Post Queries
-	const { status, data, fetchStatus } = useQuery<ActivityPubStatuses>({
+	const { status, data, fetchStatus } = useQuery({
 		queryKey: [client, userId],
 		queryFn: fn,
 		enabled: userId !== undefined,
@@ -134,7 +137,14 @@ function ProfileImageGallery({ userId }: Props) {
 
 	useEffect(() => {
 		if (status !== 'success' || !data) return;
-		const is = ActivityPubAdapterService.adaptManyStatuses(data, domain);
+
+		const is =
+			domain === KNOWN_SOFTWARE.BLUESKY
+				? ActivityPubAdapterService.adaptManyStatuses(
+						(data as AppBskyFeedGetAuthorFeed.Response).data.feed,
+						domain,
+					)
+				: ActivityPubAdapterService.adaptManyStatuses(data as any[], domain);
 		setData(is);
 
 		let images = [];

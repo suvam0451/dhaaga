@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import useMyProfile from '../api/useMyProfile';
 import WithActivitypubUserContext from '../../../../states/useProfile';
-import { ProfileContextWrapped } from '../../../common/profile/AppProfile';
+import { ProfileContextWrapped } from '../../(shared)/stack/profile/SharedStackUserProfile';
 
 const MyProfile = memo(() => {
 	const { Data } = useMyProfile();

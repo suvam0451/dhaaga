@@ -1,6 +1,10 @@
 import { useCallback } from 'react';
 import { router, useNavigation } from 'expo-router';
 
+/**
+ * Hook to correctly navigate
+ * to shared app routes
+ */
 function useAppNavigator() {
 	const navigator = useNavigation();
 
@@ -52,7 +56,37 @@ function useAppNavigator() {
 		[navigator],
 	);
 
-	return { toPost, toHome, toProfile, toTag };
+	const toFollowers = useCallback(
+		(id: string) => {
+			// probably in bottom sheet
+			if (!navigator || !navigator.getId) return;
+
+			const _id = navigator.getId();
+			if (!_id || _id === '/(tabs)/index') {
+				router.navigate(`/followers/${id}`);
+			} else {
+				router.navigate(`${navigator.getId()}/followers/${id}`);
+			}
+		},
+		[navigator],
+	);
+
+	const toFollows = useCallback(
+		(id: string) => {
+			// probably in bottom sheet
+			if (!navigator || !navigator.getId) return;
+
+			const _id = navigator.getId();
+			if (!_id || _id === '/(tabs)/index') {
+				router.navigate(`/follows/${id}`);
+			} else {
+				router.navigate(`${navigator.getId()}/follows/${id}`);
+			}
+		},
+		[navigator],
+	);
+
+	return { toPost, toHome, toProfile, toTag, toFollowers, toFollows };
 }
 
 export default useAppNavigator;

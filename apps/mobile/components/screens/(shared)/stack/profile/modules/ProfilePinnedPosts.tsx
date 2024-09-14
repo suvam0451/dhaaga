@@ -1,11 +1,11 @@
 import { memo, useEffect } from 'react';
 import { View } from 'react-native';
-import usePinnedPosts from '../../user/api/usePinnedPosts';
+import usePinnedPosts from '../../../../../common/user/api/usePinnedPosts';
 import WithAppTimelineDataContext, {
 	useAppTimelineDataContext,
-} from '../../timeline/api/useTimelineData';
-import FlashListPosts from '../../../shared/flash-lists/FlashListPosts';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+} from '../../../../../common/timeline/api/useTimelineData';
+import FlashListPosts from '../../../../../shared/flash-lists/FlashListPosts';
+import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ProfileModuleFactory from './ProfileModuleFactory';
 

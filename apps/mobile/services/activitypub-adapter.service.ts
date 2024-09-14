@@ -2,6 +2,7 @@ import {
 	ActivitypubStatusAdapter,
 	ActivityPubUserAdapter,
 	StatusInterface,
+	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 
 /**
@@ -18,6 +19,16 @@ class ActivityPubAdapterService {
 			.map((o) => ActivitypubStatusAdapter(o, domain));
 	}
 
+	static adaptUser(o: any, domain: string): UserInterface {
+		return ActivityPubUserAdapter(o, domain);
+	}
+
+	static adaptManyUsers(items: any[], domain: string): UserInterface[] {
+		return items
+			.filter((o) => !!o)
+			.map((o) => ActivityPubUserAdapter(o, domain));
+	}
+
 	static adaptContextChain(
 		apiResponse: any,
 		domain: string,
@@ -25,10 +36,6 @@ class ActivityPubAdapterService {
 		const ancestors = this.adaptManyStatuses(apiResponse.ancestors, domain);
 		const descendants = this.adaptManyStatuses(apiResponse.descendants, domain);
 		return [...ancestors, ...descendants];
-	}
-
-	static adaptUser(o: any, domain: string) {
-		return ActivityPubUserAdapter(o, domain);
 	}
 }
 

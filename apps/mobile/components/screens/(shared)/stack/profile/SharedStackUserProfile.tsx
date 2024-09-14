@@ -1,4 +1,4 @@
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
+import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useLocalSearchParams } from 'expo-router';
 import {
 	ActivitypubHelper,
@@ -6,27 +6,27 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useMemo } from 'react';
 import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
 import WithActivitypubUserContext, {
 	useActivitypubUserContext,
-} from '../../../states/useProfile';
-import useMfm from '../../hooks/useMfm';
-import ErrorGoBack from '../../error-screen/ErrorGoBack';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
-import styles from '../user/utils/styles';
+} from '../../../../../states/useProfile';
+import useMfm from '../../../../hooks/useMfm';
+import ErrorGoBack from '../../../../error-screen/ErrorGoBack';
+import { APP_FONT } from '../../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../../styles/AppFonts';
+import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
+import styles from '../../../../common/user/utils/styles';
 import { ProfileStatsInterface } from './fragments/ProfileStats';
-import ProfileAvatar from '../user/fragments/ProfileAvatar';
+import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import ProfileDesc from '../user/fragments/ProfileDesc';
+import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
 import ProfileButtonMessage from './fragments/ProfileButtonMessage';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import RelationshipButtonCore from '../relationship/RelationshipButtonCore';
+import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../shared/topnavbar/AppTopNavbar';
+} from '../../../../shared/topnavbar/AppTopNavbar';
 import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
 import ProfileModules from './modules/ProfileModules';
 
@@ -145,7 +145,7 @@ export function ProfileContextWrapped() {
 	);
 }
 
-function AppProfile() {
+function SharedStackUserProfile() {
 	const { user } = useLocalSearchParams<{ user: string }>();
 	const { Data, Error } = useGetProfile({ userId: user, requestId: 'N/A' });
 
@@ -219,4 +219,4 @@ const localStyles = StyleSheet.create({
 	},
 });
 
-export default AppProfile;
+export default SharedStackUserProfile;

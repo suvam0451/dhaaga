@@ -92,7 +92,7 @@ function useImageAspectRatio(items: ImageAspectRatioProps) {
 					resolve({ width, height });
 				},
 				(error) => {
-					console.log('[WARN]: failed to get image', url, error);
+					// console.log('[WARN]: failed to get image', url, error);
 					cache.current.set(url, { width: seedW, height: seedH });
 					resolve({ width: seedW, height: seedH });
 				},

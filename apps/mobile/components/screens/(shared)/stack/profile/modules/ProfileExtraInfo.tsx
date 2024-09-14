@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { View } from 'react-native';
 import { Text } from '@rneui/themed';
-import { useActivitypubUserContext } from '../../../../states/useProfile';
-import useMfm from '../../../hooks/useMfm';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { useActivitypubUserContext } from '../../../../../../states/useProfile';
+import useMfm from '../../../../../hooks/useMfm';
+import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ProfileModuleFactory from './ProfileModuleFactory';
 

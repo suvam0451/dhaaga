@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { View, Text } from 'react-native';

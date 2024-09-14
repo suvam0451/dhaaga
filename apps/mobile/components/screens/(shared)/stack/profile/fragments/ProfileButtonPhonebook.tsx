@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 /**

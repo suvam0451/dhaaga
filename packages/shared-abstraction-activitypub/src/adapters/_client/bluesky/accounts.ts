@@ -5,7 +5,7 @@ import {
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
-import { LibraryResponse } from '../_router/_types.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	FollowPostDto,
 	GetPostsQueryDTO,
@@ -22,7 +22,13 @@ import {
 } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { AppBskyActorGetProfile, AtpSessionData } from '@atproto/api';
+import {
+	AppBskyActorGetProfile,
+	AppBskyFeedGetAuthorFeed,
+	AppBskyGraphGetFollowers,
+	AppBskyGraphGetFollows,
+	AtpSessionData,
+} from '@atproto/api';
 import { getBskyAgent } from '../_router/_api.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 
@@ -69,34 +75,28 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	followers(query: FollowerGetQueryDTO): LibraryPromise<
-		| {
-				data: MastoAccount[];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-		| {
-				data: Endpoints['users/followers']['res'];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-	> {
-		return Promise.resolve(undefined) as any;
+	async followers(
+		query: FollowerGetQueryDTO,
+	): LibraryPromise<AppBskyGraphGetFollowers.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.getFollowers({ actor: query.id });
+			return { data };
+		} catch (e) {
+			return errorBuilder(e);
+		}
 	}
 
-	followings(query: FollowerGetQueryDTO): LibraryPromise<
-		| {
-				data: MastoAccount[];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-		| {
-				data: Endpoints['users/followers']['res'];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-	> {
-		return Promise.resolve(undefined) as any;
+	async followings(
+		query: FollowerGetQueryDTO,
+	): LibraryPromise<AppBskyGraphGetFollows.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.getFollows({ actor: query.id });
+			return { data };
+		} catch (e) {
+			return errorBuilder(e);
+		}
 	}
 
 	async get(id: string): LibraryPromise<AppBskyActorGetProfile.Response> {
@@ -142,11 +142,21 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	statuses(
+	async statuses(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): Promise<LibraryResponse<[] | any[]>> {
-		return Promise.resolve(undefined) as any;
+	): LibraryPromise<AppBskyFeedGetAuthorFeed.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.getAuthorFeed({
+				actor: id,
+				filter: params.bskyFilter,
+				limit: params.limit,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	unblock(

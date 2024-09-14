@@ -10,9 +10,9 @@ import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { Image } from 'expo-image';
 import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
-import ProfileButtonMessage from '../../../../../common/profile/fragments/ProfileButtonMessage';
-import ProfileButtonPhonebook from '../../../../../common/profile/fragments/ProfileButtonPhonebook';
-import { ProfileStatsInterface } from '../../../../../common/profile/fragments/ProfileStats';
+import ProfileButtonMessage from '../../../../(shared)/stack/profile/fragments/ProfileButtonMessage';
+import ProfileButtonPhonebook from '../../../../(shared)/stack/profile/fragments/ProfileButtonPhonebook';
+import { ProfileStatsInterface } from '../../../../(shared)/stack/profile/fragments/ProfileStats';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import styles from '../../../../../common/user/utils/styles';
 

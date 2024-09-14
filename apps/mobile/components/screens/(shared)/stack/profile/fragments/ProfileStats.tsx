@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
-import styles from '../../user/utils/styles';
-import { useActivitypubUserContext } from '../../../../states/useProfile';
+import styles from '../../../../../common/user/utils/styles';
+import { useActivitypubUserContext } from '../../../../../../states/useProfile';
 
 type ProfileStatsProps = {
 	postCount?: number;

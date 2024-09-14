@@ -7,8 +7,8 @@ import {
 	ViewStyle,
 } from 'react-native';
 import { Text } from '@rneui/themed';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
