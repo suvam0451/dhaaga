@@ -49,6 +49,7 @@ const PostButton = memo(() => {
 			localOnly: false,
 			spoilerText: cw === '' ? undefined : cw,
 		});
+		if (!error) console.log('resounding success...');
 
 		if (
 			[
@@ -57,21 +58,32 @@ const PostButton = memo(() => {
 				KNOWN_SOFTWARE.AKKOMA,
 			].includes(domain as any)
 		) {
-			PostRef.current = new ActivitypubStatusService(
-				ActivityPubAdapterService.adaptStatus(data, domain),
-				domain,
-				subdomain,
-			).export();
-		} else {
-			PostRef.current = new ActivitypubStatusService(
-				ActivityPubAdapterService.adaptStatus(
-					(data as any).createdNote,
+			const _data = ActivityPubAdapterService.adaptStatus(data, domain);
+
+			try {
+				PostRef.current = new ActivitypubStatusService(
+					_data,
 					domain,
-				),
-				domain,
-				subdomain,
-			).export();
+					subdomain,
+				).export();
+			} catch (e) {
+				console.log(e);
+			}
+		} else {
+			try {
+				PostRef.current = new ActivitypubStatusService(
+					ActivityPubAdapterService.adaptStatus(
+						(data as any).createdNote,
+						domain,
+					),
+					domain,
+					subdomain,
+				).export();
+			} catch (e) {
+				console.log(e);
+			}
 		}
+		// console.log('all good now');
 		setType(APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
 	}
 

@@ -19,120 +19,125 @@ import PostCreatedBy from './PostCreatedBy';
 type StatusCoreProps = {
 	hasParent?: boolean;
 	hasBoost?: boolean;
+	isPreview?: boolean;
 };
 
 const APP_SETTING_VERTICAL_MARGIN = 8;
 
-const StatusCore = memo(({ hasParent, hasBoost }: StatusCoreProps) => {
-	const { dto } = useAppStatusItem();
-	const { toPost } = useAppNavigator();
-	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
+const StatusCore = memo(
+	({ hasParent, hasBoost, isPreview }: StatusCoreProps) => {
+		const { dto } = useAppStatusItem();
+		const { toPost } = useAppNavigator();
+		const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
-	const STATUS_DTO = dto.meta.isBoost
-		? dto.content.raw
-			? dto
-			: dto.boostedFrom
-		: dto;
+		const STATUS_DTO = dto.meta.isBoost
+			? dto.content.raw
+				? dto
+				: dto.boostedFrom
+			: dto;
 
-	const IS_REPLY_OR_BOOST =
-		STATUS_DTO.meta.isReply ||
-		(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
-	const IS_QUOTE_BOOST = STATUS_DTO.meta.isBoost && STATUS_DTO.content.raw;
+		const IS_REPLY_OR_BOOST =
+			STATUS_DTO.meta.isReply ||
+			(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
 
-	const {
-		content: PostContent,
-		aiContext,
-		isLoaded,
-	} = useMfm({
-		content: STATUS_DTO.content.raw,
-		remoteSubdomain: STATUS_DTO.postedBy.instance,
-		emojiMap: STATUS_DTO.calculated.emojis,
-		deps: [dto],
-	});
+		const {
+			content: PostContent,
+			aiContext,
+			isLoaded,
+		} = useMfm({
+			content: STATUS_DTO.content.raw,
+			remoteSubdomain: STATUS_DTO.postedBy.instance,
+			emojiMap: STATUS_DTO.calculated.emojis,
+			deps: [dto],
+		});
 
-	const isSensitive = STATUS_DTO.meta.sensitive;
-	const spoilerText = STATUS_DTO.meta.cw;
+		const isSensitive = STATUS_DTO.meta.sensitive;
+		const spoilerText = STATUS_DTO.meta.cw;
 
-	let paddingTop = IS_REPLY_OR_BOOST ? 4 : 10;
-	if (hasParent || hasBoost) paddingTop = 0;
-	if (!hasParent && hasBoost) paddingTop = 6;
+		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 10;
+		if (hasParent || hasBoost) paddingTop = 0;
+		if (!hasParent && hasBoost) paddingTop = 6;
 
-	return useMemo(() => {
-		if (!isLoaded) return <StatusItemSkeleton />;
+		return useMemo(() => {
+			if (!isLoaded) return <StatusItemSkeleton />;
 
-		return (
-			<View
-				style={{
-					padding: 10,
-					paddingHorizontal: APP_SETTING_VERTICAL_MARGIN,
-					paddingTop: paddingTop,
-					paddingBottom: 4,
-					backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
-					marginBottom: 4,
-					borderRadius: 8,
-					borderTopLeftRadius: hasParent || hasBoost ? 0 : 8,
-					borderTopRightRadius: hasParent || hasBoost ? 0 : 8,
-				}}
-			>
-				<TouchableOpacity
-					delayPressIn={100}
-					onPress={() => {
-						toPost(STATUS_DTO.id);
+			return (
+				<View
+					style={{
+						padding: 10,
+						paddingHorizontal: APP_SETTING_VERTICAL_MARGIN,
+						paddingTop: paddingTop,
+						paddingBottom: 4,
+						backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
+						marginBottom: 4,
+						borderRadius: 8,
+						borderTopLeftRadius: hasParent || hasBoost ? 0 : 8,
+						borderTopRightRadius: hasParent || hasBoost ? 0 : 8,
 					}}
 				>
-					<View>
-						<PostCreatedBy dto={dto} style={{ paddingBottom: 6 }} />
-						{isSensitive && (
-							<StatusCw
-								cw={spoilerText}
-								show={ShowSensitiveContent}
-								setShow={setShowSensitiveContent}
-							/>
-						)}
+					<TouchableOpacity
+						delayPressIn={100}
+						onPress={() => {
+							toPost(STATUS_DTO.id);
+						}}
+					>
+						<View>
+							<PostCreatedBy dto={dto} style={{ paddingBottom: 6 }} />
+							{isSensitive && (
+								<StatusCw
+									cw={spoilerText}
+									show={ShowSensitiveContent}
+									setShow={setShowSensitiveContent}
+								/>
+							)}
 
-						{isSensitive && !ShowSensitiveContent ? (
-							<View></View>
-						) : (
-							<View style={{ height: 'auto' }}>
-								{PostContent}
-								{dto.calculated.translationOutput && (
-									<ExplainOutput
-										additionalInfo={'Translated using OpenAI'}
-										fromLang={'jp'}
-										toLang={'en'}
-										text={dto.calculated.translationOutput}
-									/>
-								)}
-							</View>
-						)}
-					</View>
-				</TouchableOpacity>
-				{isSensitive && !ShowSensitiveContent ? (
-					<View></View>
-				) : (
-					<MediaItem
-						attachments={STATUS_DTO.content.media}
-						calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
-					/>
-				)}
-				{/*FIXME: enable for bluesky*/}
-				{/*{IS_QUOTE_BOOST && (*/}
-				{/*	<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>*/}
-				{/*		<StatusQuoted />*/}
-				{/*	</WithAppStatusItemContext>*/}
-				{/*)}*/}
-				<EmojiReactions dto={STATUS_DTO} />
-				<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />
-			</View>
-		);
-	}, [
-		isLoaded,
-		ShowSensitiveContent,
-		PostContent,
-		dto,
-		STATUS_DTO,
-		paddingTop,
-	]);
-});
+							{isSensitive && !ShowSensitiveContent ? (
+								<View></View>
+							) : (
+								<View style={{ height: 'auto' }}>
+									{PostContent}
+									{dto.calculated.translationOutput && (
+										<ExplainOutput
+											additionalInfo={'Translated using OpenAI'}
+											fromLang={'jp'}
+											toLang={'en'}
+											text={dto.calculated.translationOutput}
+										/>
+									)}
+								</View>
+							)}
+						</View>
+					</TouchableOpacity>
+					{isSensitive && !ShowSensitiveContent ? (
+						<View></View>
+					) : (
+						<MediaItem
+							attachments={STATUS_DTO.content.media}
+							calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
+						/>
+					)}
+					{/*FIXME: enable for bluesky*/}
+					{/*{IS_QUOTE_BOOST && (*/}
+					{/*	<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>*/}
+					{/*		<StatusQuoted />*/}
+					{/*	</WithAppStatusItemContext>*/}
+					{/*)}*/}
+
+					{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
+					{!isPreview && (
+						<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />
+					)}
+				</View>
+			);
+		}, [
+			isLoaded,
+			ShowSensitiveContent,
+			PostContent,
+			dto,
+			STATUS_DTO,
+			paddingTop,
+		]);
+	},
+);
 
 export default StatusCore;

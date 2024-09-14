@@ -21,6 +21,9 @@ const ComposerTopMenu = memo(() => {
 	const { editMode } = useComposerContext();
 
 	if (editMode === 'emoji') return <View />;
+	if (editMode === 'alt') {
+		return <View style={{ height: 16 }} />;
+	}
 	return (
 		<Fragment>
 			<ComposerAutoCompletion />

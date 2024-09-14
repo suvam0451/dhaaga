@@ -1,35 +1,55 @@
-import { memo, useCallback } from 'react';
+import { Fragment, memo, useCallback } from 'react';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import useImagePicker from '../api/useImagePicker';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { useComposerContext } from '../api/useComposerContext';
+
+const TextModeActionButtons = memo(() => {
+	const { cw, setCwShown, setEditMode } = useComposerContext();
+	function onCustomEmojiClicked() {
+		setEditMode((o) => {
+			if (o === 'txt') return 'emoji';
+		});
+	}
+	const toggleCwShown = useCallback(() => {
+		setCwShown((o) => !o);
+	}, []);
+
+	return (
+		<Fragment>
+			<TouchableOpacity onPress={onCustomEmojiClicked} style={{ width: 32 }}>
+				<FontAwesome6 name="smile" size={24} color={APP_FONT.MONTSERRAT_BODY} />
+			</TouchableOpacity>
+			<TouchableOpacity
+				style={{ marginLeft: 12, width: 32 }}
+				onPress={toggleCwShown}
+			>
+				<FontAwesome
+					name="warning"
+					size={24}
+					color={
+						cw === '' ? APP_FONT.MONTSERRAT_BODY : APP_THEME.COLOR_SCHEME_C
+					}
+				/>
+			</TouchableOpacity>
+		</Fragment>
+	);
+});
 
 /**
  * The buttons at bottom row of
  * the composer sheet
  */
 const ActionButtons = memo(() => {
-	const { trigger } = useImagePicker();
 	const { setVisible, visible } = useAppBottomSheet();
-	const { cw, setCwShown, setEditMode, editMode } = useComposerContext();
-
-	function onCustomEmojiClicked() {
-		setEditMode((o) => {
-			if (o === 'txt') return 'emoji';
-		});
-	}
+	const { setEditMode, editMode } = useComposerContext();
 
 	const close = useCallback(() => {
 		setVisible(false);
-	}, []);
-
-	const toggleCwShown = useCallback(() => {
-		setCwShown((o) => !o);
 	}, []);
 
 	const toggleEditMode = useCallback(() => {
@@ -48,31 +68,7 @@ const ActionButtons = memo(() => {
 				alignItems: 'center',
 			}}
 		>
-			<TouchableOpacity onPress={trigger} style={{ width: 32 }}>
-				<FontAwesome name="image" size={24} color={APP_FONT.MONTSERRAT_BODY} />
-			</TouchableOpacity>
-			<TouchableOpacity
-				style={{ marginLeft: 12, width: 32 }}
-				onPress={toggleCwShown}
-			>
-				<FontAwesome
-					name="warning"
-					size={24}
-					color={
-						cw === '' ? APP_FONT.MONTSERRAT_BODY : APP_THEME.COLOR_SCHEME_C
-					}
-				/>
-			</TouchableOpacity>
-			<TouchableOpacity
-				onPress={onCustomEmojiClicked}
-				style={{ marginLeft: 8, width: 32 }}
-			>
-				<FontAwesome6 name="smile" size={24} color={APP_FONT.MONTSERRAT_BODY} />
-			</TouchableOpacity>
-			<TouchableOpacity
-				style={{ marginLeft: 4, width: 64 }}
-				onPress={toggleEditMode}
-			>
+			<TouchableOpacity style={{ width: 64 }} onPress={toggleEditMode}>
 				<View
 					style={{
 						padding: 8,
@@ -90,10 +86,12 @@ const ActionButtons = memo(() => {
 							fontSize: 18,
 						}}
 					>
-						{editMode === 'alt' ? 'TXT' : 'ALT'}
+						{editMode === 'alt' ? 'TXT' : 'IMG'}
 					</Text>
 				</View>
 			</TouchableOpacity>
+
+			{editMode === 'txt' && <TextModeActionButtons />}
 
 			<View style={{ flexGrow: 1, flex: 1 }} />
 			<Pressable

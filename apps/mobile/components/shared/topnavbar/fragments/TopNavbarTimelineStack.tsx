@@ -31,6 +31,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 		PostComposerTextSeedRef,
 		PostRef,
 		updateRequestId,
+		replyToRef,
 	} = useAppBottomSheet();
 
 	function onIconPress() {
@@ -44,6 +45,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 	function onCreatePost() {
 		PostComposerTextSeedRef.current = null;
 		PostRef.current = null;
+		replyToRef.current = null;
 
 		setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 		updateRequestId();
@@ -62,10 +64,14 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 					alignItems: 'center',
 					paddingVertical: 12,
 					paddingHorizontal: 16,
+					flex: 1,
+					justifyContent: 'center',
 				}}
 				onPress={onIconPress}
 			>
-				<Text style={[styles.label]}>{title || 'Home'}</Text>
+				<Text style={[styles.label]} numberOfLines={1}>
+					{title || 'Home'}
+				</Text>
 				<Ionicons
 					name="chevron-down"
 					color={APP_FONT.MONTSERRAT_BODY}

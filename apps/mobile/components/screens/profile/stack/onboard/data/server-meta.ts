@@ -34,3 +34,36 @@ export const POPULAR_FIREFISH_SERVERS = [
 	{ value: 'miruku.cafe', label: '💛 miruku.cafe' },
 	{ value: 'dvd.chat', label: '🇨🇳 dvd.chat' },
 ];
+
+export const POPULAR_MASTODON_SERVERS = [
+	{ value: 'mastodon.social', label: '👑 mastodon.social' },
+	{ value: 'fosstodon.org', label: '👨‍💻 fosstodon.org' },
+	{ value: 'mastodon.art', label: '🎨 mastodon.art' },
+	{ value: 'mstdn.social', label: 'mstdn.social' },
+	{ value: 'mastodon.world', label: 'mastodon.world' },
+	{ value: 'mstdn.jp', label: '🇯🇵 mstdn.jp' },
+	{ value: 'mastodon.cloud', label: 'mastodon.cloud' },
+	{ value: 'mastodon.online', label: 'mastodon.online' },
+	{ value: 'mas.to', label: 'mas.to' },
+];
+
+export const POPULAR_PLEROMA_SERVERS = [
+	{ value: 'poa.st', label: 'poa.st' },
+	{ value: 'nicecrew.digital', label: 'nicecrew.digital' },
+];
+
+export const POPULAR_AKKOMA_SERVERS = [
+	{ value: 'akko.wtf', label: 'akko.wtf' },
+	{
+		value: 'fe.disroot.org',
+		label: 'fe.disroot.org',
+	},
+	{
+		value: 'outerheaven.club',
+		label: 'outerheaven.club',
+	},
+	{
+		value: 'fedi.absturztau.be',
+		label: 'fedi.absturztau.be',
+	},
+];

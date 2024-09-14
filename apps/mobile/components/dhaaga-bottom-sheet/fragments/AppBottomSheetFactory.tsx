@@ -24,7 +24,7 @@ const AppBottomSheetFactory = memo(() => {
 			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
 				return (
 					<WithComposerContext textSeed={PostComposerTextSeedRef.current}>
-						<PostCompose />
+						<PostCompose requestId={requestId} />
 					</WithComposerContext>
 				);
 			}
@@ -39,7 +39,7 @@ const AppBottomSheetFactory = memo(() => {
 			default: {
 				return (
 					<WithComposerContext>
-						<PostCompose />
+						<PostCompose requestId={requestId} />
 					</WithComposerContext>
 				);
 			}

@@ -30,7 +30,7 @@ const PreviewPostAvailable = memo(() => {
 	return (
 		<ScrollView style={{ marginTop: 12, marginHorizontal: -8 }}>
 			<WithAppStatusItemContext dto={PostRef.current}>
-				<StatusItem />
+				<StatusItem isPreview />
 			</WithAppStatusItemContext>
 		</ScrollView>
 	);

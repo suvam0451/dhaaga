@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-	TouchableOpacity,
 	View,
 	Text,
 	TextInput,
@@ -10,15 +9,13 @@ import {
 	ScrollView,
 } from 'react-native';
 import { Button } from '@rneui/base';
-import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavBar';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import { router } from 'expo-router';
 import ActivityPubService from '../../../../../../services/activitypub.service';
 import { useGlobalMmkvContext } from '../../../../../../states/useGlobalMMkvCache';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import PopularServers from '../fragments/PopularServers';
 import {
@@ -26,6 +23,9 @@ import {
 	POPULAR_MISSKEY_SERVERS,
 	POPULAR_SHARKEY_SERVERS,
 } from '../data/server-meta';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../../../shared/topnavbar/AppTopNavbar';
 
 function MisskeyServerSelection() {
 	const [InputText, setInputText] = useState('misskey.io');
@@ -53,7 +53,11 @@ function MisskeyServerSelection() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar translateY={translateY} title={`Select Instance`}>
+		<AppTopNavbar
+			title={`Select Instance`}
+			translateY={translateY}
+			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+		>
 			<ScrollView
 				contentContainerStyle={{
 					marginTop: 54,
@@ -68,7 +72,18 @@ function MisskeyServerSelection() {
 						paddingHorizontal: 12,
 					}}
 				>
-					<View style={{}}>
+					<View>
+						<Text
+							style={{
+								textAlign: 'center',
+								color: APP_FONT.MONTSERRAT_BODY,
+								marginBottom: 24,
+								fontSize: 24,
+								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+							}}
+						>
+							Enter your server
+						</Text>
 						<View style={styles.inputContainerRoot}>
 							<View style={styles.inputContainer}>
 								<Feather
@@ -88,7 +103,7 @@ function MisskeyServerSelection() {
 								}}
 								autoCapitalize={'none'}
 								placeholderTextColor={APP_FONT.MONTSERRAT_BODY}
-								placeholder="Username or email address"
+								placeholder="Your server url"
 								onChangeText={setInputText}
 								value={InputText}
 							/>
@@ -108,6 +123,7 @@ function MisskeyServerSelection() {
 						</View>
 					</View>
 
+					<View style={{ height: 32 }} />
 					<HideOnKeyboardVisibleContainer>
 						<PopularServers
 							label={'Popular Misskey Servers'}
@@ -126,8 +142,9 @@ function MisskeyServerSelection() {
 						/>
 					</HideOnKeyboardVisibleContainer>
 				</KeyboardAvoidingView>
+				<View style={{ height: 16 }} />
 			</ScrollView>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 }
 

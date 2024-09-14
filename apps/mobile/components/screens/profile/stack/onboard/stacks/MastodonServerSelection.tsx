@@ -1,15 +1,12 @@
 import {
 	KeyboardAvoidingView,
 	Platform,
+	ScrollView,
 	StyleSheet,
-	TextInput,
-	TouchableOpacity,
 	View,
 } from 'react-native';
-import { Text } from '@rneui/themed';
 import { useState } from 'react';
-import { Button } from '@rneui/base';
-import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
 import ActivityPubService from '../../../../../../services/activitypub.service';
 import { router } from 'expo-router';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
@@ -20,6 +17,13 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../../shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
+import PopularServers from '../fragments/PopularServers';
+import {
+	POPULAR_AKKOMA_SERVERS,
+	POPULAR_MASTODON_SERVERS,
+	POPULAR_PLEROMA_SERVERS,
+} from '../data/server-meta';
+import EnterYourServer from '../fragments/EnterYourServer';
 
 function AccountsScreen() {
 	const [Subdomain, setSubdomain] = useState('mastodon.social');
@@ -50,19 +54,6 @@ function AccountsScreen() {
 		});
 	}
 
-	const popularServers = [
-		{ value: 'mastodon.social', label: 'mastodon.social' },
-		{ value: 'fosstodon.org', label: 'fosstodon.org' },
-		{ value: 'pawoo.net', label: '🇯🇵 pawoo.net' },
-		{ value: 'mastodon.art', label: 'mastodon.art' },
-		{ value: 'mstdn.social', label: 'mstdn.social' },
-		{ value: 'mastodon.world', label: 'mastodon.world' },
-		{ value: 'pixelfed.social', label: 'pixelfed.social' },
-		{ value: 'mstdn.jp', label: '🇯🇵 mstdn.jp' },
-		{ value: 'mastodon.cloud', label: 'mastodon.cloud' },
-		{ value: 'mastodon.online', label: 'mastodon.online' },
-	];
-
 	const { translateY } = useScrollMoreOnPageEnd();
 
 	return (
@@ -71,92 +62,47 @@ function AccountsScreen() {
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				style={{
-					display: 'flex',
-					paddingHorizontal: 12,
-					marginBottom: 54,
+			<ScrollView
+				contentContainerStyle={{
 					marginTop: 54,
 				}}
 			>
-				<View
+				<KeyboardAvoidingView
+					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 					style={{
 						display: 'flex',
-						flexGrow: 1,
-						height: '100%',
+						paddingHorizontal: 12,
+						marginBottom: 54,
+						marginTop: 16,
 					}}
 				>
-					<View style={{ flexGrow: 1 }}>
-						<HideOnKeyboardVisibleContainer>
-							<Text style={styles.sectionHeaderText}>
-								Step 1: Select your server
-							</Text>
-							<View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-								{popularServers.map((server, i) => (
-									<TouchableOpacity
-										key={i}
-										onPress={() => {
-											setSubdomain(server.value);
-										}}
-									>
-										<View
-											style={{
-												padding: 8,
-												margin: 4,
-												backgroundColor: APP_THEME.CARD_BACKGROUND_DARKEST,
-												borderRadius: 4,
-											}}
-										>
-											<Text
-												style={{
-													color: APP_FONT.MONTSERRAT_BODY,
-													fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-												}}
-											>
-												{server.label}
-											</Text>
-										</View>
-									</TouchableOpacity>
-								))}
-							</View>
-						</HideOnKeyboardVisibleContainer>
-						<Text style={styles.sectionHeaderText}>Or, enter it manually</Text>
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-							}}
-						>
-							<Text style={{ fontSize: 16, color: 'gray' }}>https://</Text>
-							<TextInput
-								style={{
-									fontSize: 16,
-									color: APP_THEME.LINK,
-									textDecorationLine: 'underline',
-								}}
-								placeholder="mastodon.social"
-								defaultValue="mastodon.social"
-								onChangeText={setSubdomain}
-								value={Subdomain}
-							/>
-							<Text style={{ fontSize: 16, color: 'gray' }}>
-								/oauth/authorize
-							</Text>
-						</View>
-					</View>
-					<View style={{ marginBottom: 32 }}>
-						<Button
-							style={{ width: 100, marginBottom: 32 }}
-							onPress={onPressNext}
-							color={'rgb(99, 100, 255)'}
-						>
-							Next
-						</Button>
-					</View>
-				</View>
-			</KeyboardAvoidingView>
+					<EnterYourServer
+						ServerText={Subdomain}
+						setServerText={setSubdomain}
+						buttonColor={'rgb(99, 100, 255)'}
+						onPressLogin={onPressNext}
+					/>
+
+					<HideOnKeyboardVisibleContainer>
+						<PopularServers
+							label={'Popular Mastodon Servers'}
+							items={POPULAR_MASTODON_SERVERS}
+							onSelect={setSubdomain}
+						/>
+						<PopularServers
+							label={'Popular Pleroma Servers'}
+							items={POPULAR_PLEROMA_SERVERS}
+							onSelect={setSubdomain}
+						/>
+						<PopularServers
+							label={'Popular Akkoma Servers'}
+							items={POPULAR_AKKOMA_SERVERS}
+							onSelect={setSubdomain}
+						/>
+					</HideOnKeyboardVisibleContainer>
+				</KeyboardAvoidingView>
+				<View style={{ height: 16 }} />
+			</ScrollView>
 		</AppTopNavbar>
 	);
 }
@@ -166,9 +112,18 @@ const styles = StyleSheet.create({
 		marginTop: 32,
 		marginBottom: 12,
 		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 20,
-		fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
+		fontSize: 16,
+		textAlign: 'center',
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
+	inputContainerRoot: {
+		flexDirection: 'row',
+		borderWidth: 2,
+		borderColor: 'rgba(136,136,136,0.4)',
+		borderRadius: 8,
+		marginBottom: 12,
+	},
+	inputContainer: { width: 24 + 8 * 2, padding: 8 },
 });
 
 export default AccountsScreen;

@@ -104,6 +104,7 @@ export class ActivitypubStatusService {
 	}
 
 	export(): ActivityPubStatusAppDtoType {
+		// console.log('step 1/4');
 		// to prevent infinite recursion
 		if (!this.statusI || !this.statusI.getId()) return null;
 
@@ -120,20 +121,26 @@ export class ActivitypubStatusService {
 					this.subdomain,
 				).export()
 			: null;
+		// console.log('step 2/4');
 
 		/**
 		 * Misskey Compat
+		 *
+		 * NOTE: For mastodon, we need to show reply
+		 * but not render the status
 		 */
-		let replyTo: z.infer<typeof ActivityPubStatusItemDto> = IS_REPLY
-			? new ActivitypubStatusService(
-					ActivitypubAdapterService.adaptStatus(
-						this.statusI.getParentRaw(),
+		let replyTo: z.infer<typeof ActivityPubStatusItemDto> =
+			IS_REPLY && this.statusI.getParentRaw()
+				? new ActivitypubStatusService(
+						ActivitypubAdapterService.adaptStatus(
+							this.statusI.getParentRaw(),
+							this.domain,
+						),
 						this.domain,
-					),
-					this.domain,
-					this.subdomain,
-				).export()
-			: null;
+						this.subdomain,
+					).export()
+				: null;
+		// console.log('step 3/4');
 
 		let rootI: z.infer<typeof ActivityPubStatusItemDto> =
 			this.statusI.hasRootAvailable()
@@ -146,6 +153,7 @@ export class ActivitypubStatusService {
 						this.subdomain,
 					).export()
 				: null;
+		// console.log('step 4/4');
 
 		const dto: ActivityPubStatusAppDtoType =
 			IS_REPLY &&
@@ -177,6 +185,7 @@ export class ActivitypubStatusService {
 						),
 						boostedFrom,
 					};
+		// console.log('step END');
 
 		const { data, error, success } = ActivityPubStatusLevelThree.safeParse(dto);
 		if (!success) {

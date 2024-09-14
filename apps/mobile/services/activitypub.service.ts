@@ -69,7 +69,7 @@ class ActivityPubService {
 				await x.instances.getNodeInfo(urlLike);
 
 			if (nodeinfoError) {
-				console.log('[WARN]: error fetching nodeinfo for', urlLike);
+				// console.log('[WARN]: error fetching nodeinfo for', urlLike);
 				return;
 			}
 			match = db.write(() => {
