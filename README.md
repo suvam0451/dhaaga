@@ -51,27 +51,24 @@ and comes with extra features that add fun to your social experience.
 - 👌 Fully Operable with One-Hand.
 - 🏕️ Offline Support. *Download and view posts offline.* ²
 - ☄️ Many unique client-side extra features.
-- 🙂‍↕️ Makes it easy to make frens online.²
-- 🥳 Fun, Free (💰)³ and FOSS.
+- 🥳 Fun, Free (💰)² and FOSS.
 
 > ¹ Coming soon™<br/>
-> ² At least one *(me)* guaranteed 😇<br/>
-> ³ A little bit of self-promo sometimes 😉
+> ² A little bit of self-promo sometimes 😉
 
 > [!TIP]
 > Dhaaga does not aim for 100% feature parity.<br/>
-> Features are picked and/or added on a fun-first basis 🥳.<br/>
-> Power users may want to use a client built specifically for their platform.
+> Power users may prefer a dedicated client for their platform.
 
 ## 💁 About
 
 Dhaaga is a solo indie project that I work on during my leisure time.
 
-It offers a simple and cozy mobile interface,
-together with a robust app backend
-that helps you overcome barriers related to accounts, protocols, and
-server federation, allowing you to focus on what
-truly matters: **your friends, your time, and your digital wellbeing.**
+It offers a simple and cozy mobile interface, 
+helps you overcome common barriers like accounts, protocols, and federation, 
+allowing you to focus on what truly matters: 
+
+> **Your friends, your time, and your digital wellbeing.**
 
 If you liked the app, please drop by and say hi sometimes. 🤗
 
