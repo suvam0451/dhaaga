@@ -45,10 +45,10 @@ class BlueskyRestClient implements ActivityPubClient {
 	constructor(dto: AtprotoClientCreateDTO) {
 		this.client = null;
 		this.dto = dto;
-		this.accounts = new BlueskyAccountsRouter(this.dto as any);
+		this.accounts = new BlueskyAccountsRouter(this.dto);
 		this.instances = new BlueskyInstanceRouter();
 		this.lists = new BlueskyListRoute();
-		this.me = new BlueskyMeRouter();
+		this.me = new BlueskyMeRouter(this.dto);
 		this.media = new BlueskyMediaRouter();
 		this.notifications = new BlueskyNotificationsRouter();
 		this.profile = new BlueskyProfileRouter();

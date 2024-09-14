@@ -1,6 +1,9 @@
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useLocalSearchParams } from 'expo-router';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	ActivitypubHelper,
+	KNOWN_SOFTWARE,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { useMemo } from 'react';
 import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
@@ -28,7 +31,7 @@ import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
 import ProfileModules from './modules/ProfileModules';
 
 export function ProfileContextWrapped() {
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { primaryAcct, domain } = useActivityPubRestClientContext();
 	const subdomain = primaryAcct?.subdomain;
 	const { user } = useActivitypubUserContext();
 
@@ -46,10 +49,9 @@ export function ProfileContextWrapped() {
 	const IS_LOCKED = user.getIsLockedProfile();
 
 	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(
-			user?.getAccountUrl(subdomain),
-			subdomain,
-		);
+		return domain === KNOWN_SOFTWARE.BLUESKY
+			? `@${user.getUsername()}`
+			: ActivitypubHelper.getHandle(user?.getAccountUrl(subdomain), subdomain);
 	}, [user?.getAccountUrl(subdomain)]);
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({

@@ -23,7 +23,7 @@ export const OriginalPostedPfpFragment = memo(function Foo({
 			style={{
 				width: TIMELINE_PFP_SIZE,
 				height: TIMELINE_PFP_SIZE,
-				borderColor: 'rgba(200, 200, 200, 0.75)',
+				borderColor: 'rgba(200, 200, 200, 0.3)',
 				borderWidth: 1,
 				borderRadius: TIMELINE_PFP_SIZE / 2,
 				marginTop: 2,

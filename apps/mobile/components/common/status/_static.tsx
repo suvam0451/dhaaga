@@ -51,10 +51,17 @@ export const RepliedStatusFragment = memo(function Foo() {
 				</View>
 			</View>
 		);
+
+	const IS_PARENT_ALSO_ROOT = dto.rootPost?.id === dto.replyTo?.id;
 	return (
 		<Fragment>
-			{dto.rootPost && <StatusHierarchyRoot dto={dto.rootPost} />}
-			<StatusHierarchyParent dto={dto.replyTo} hasParent={!!dto.rootPost} />;
+			{dto.rootPost && !IS_PARENT_ALSO_ROOT && (
+				<StatusHierarchyRoot dto={dto.rootPost} />
+			)}
+			<StatusHierarchyParent
+				dto={dto.replyTo}
+				hasParent={!!(dto.rootPost && !IS_PARENT_ALSO_ROOT)}
+			/>
 		</Fragment>
 	);
 });
