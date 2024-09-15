@@ -21,6 +21,7 @@ import ProfileButtonMessage from '../../../../screens/(shared)/stack/profile/fra
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
+import ProfileButtonPhonebook from '../../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
 
 const ProfilePeekBottomSheet = memo(() => {
 	const { subdomain } = useActivityPubRestClientContext();
@@ -61,26 +62,15 @@ const ProfilePeekBottomSheet = memo(() => {
 					/>
 					<View
 						style={{
-							flexGrow: 1,
 							alignItems: 'center',
 							justifyContent: 'space-evenly',
 							flexDirection: 'row',
+							marginHorizontal: 8,
 						}}
 					>
 						<ProfileButtonMessage handle={handle} />
-						<TouchableOpacity
-							style={{
-								padding: 8,
-								backgroundColor: '#202020',
-								borderRadius: 8,
-							}}
-						>
-							<FontAwesome6
-								name="contact-book"
-								size={20}
-								color={APP_FONT.DISABLED}
-							/>
-						</TouchableOpacity>
+						<View style={{ width: 8 }} />
+						<ProfileButtonPhonebook />
 					</View>
 					<ProfileStatsInterface style={localStyles.statSectionContainer} />
 				</View>
