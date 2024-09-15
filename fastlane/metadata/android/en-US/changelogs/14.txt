@@ -1,0 +1,9 @@
+Dhaaga (Lite) v0.10.2 (15 Sep 2024)
+
+* ✨Merged profile and settings page
+* ✨(Experimental, Early Phase) Bluesky support
+* ✨Better Sign In page
+* 🛠️Small UI tweaks to composer and timeline
+
+p.s. - The notification page might look a bit weird,
+but plz bear with me on that 🙏
