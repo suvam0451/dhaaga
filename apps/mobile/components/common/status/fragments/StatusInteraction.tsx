@@ -72,6 +72,14 @@ const StatusInteraction = memo(
 		}
 
 		function onTranslationLongPress() {
+			// TODO: implement instance translation
+			//  + fedilab libre translate endpoint.
+			if (
+				!process.env.EXPO_PUBLIC_OPENAI_API_KEY ||
+				process.env.EXPO_PUBLIC_OPENAI_API_KEY === ''
+			)
+				return;
+
 			explain(STATUS_DTO.id, openAiContext, setIsTranslateStateLoading);
 		}
 
