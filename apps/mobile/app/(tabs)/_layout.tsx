@@ -7,11 +7,12 @@ import { StatusBar } from 'expo-status-bar';
 import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
 import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
 	return (
-		<View style={{ backgroundColor: 'red', height: '100%' }}>
+		<View style={{ height: '100%' }}>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<WithAppAssetsContext>
 				<Tabs
@@ -24,16 +25,15 @@ export default function TabLayout() {
 								notificationCount === 0 ? undefined : notificationCount;
 						}
 						return {
+							tabBarItemStyle: { flex: 1 },
+							tabBarHideOnKeyboard: true,
 							tabBarIcon: ({ focused, color, size }) => {
 								let iconName;
 								let renderer = 'ionicons';
+								console.log(route.name);
 								switch (route.name) {
 									case 'Home': {
 										iconName = focused ? 'index' : 'index';
-										break;
-									}
-									case 'Settings': {
-										iconName = focused ? 'menu-outline' : 'menu-outline';
 										break;
 									}
 									case 'SearchTab': {
@@ -68,12 +68,10 @@ export default function TabLayout() {
 											/>
 										);
 									default:
-										return (
-											<Ionicons name={iconName} size={size} color={color} />
-										);
+										return <View />;
 								}
 							},
-							tabBarBadge: badgeCount,
+							// tabBarBadge: badgeCount,
 							tabBarBadgeStyle: {
 								// backgroundColor: 'black',
 								color: 'yellow',
@@ -135,17 +133,6 @@ export default function TabLayout() {
 					/>
 
 					<Tabs.Screen
-						name={'accounts'}
-						options={{
-							tabBarIcon: ({ color, size, focused }) =>
-								focused ? (
-									<Ionicons size={size} name="person" color={color} />
-								) : (
-									<Ionicons size={size} name="person-outline" color={color} />
-								),
-						}}
-					/>
-					<Tabs.Screen
 						name={'notifications'}
 						options={{
 							tabBarIcon: ({ color, size, focused }) =>
@@ -165,14 +152,14 @@ export default function TabLayout() {
 						}}
 					/>
 					<Tabs.Screen
-						name="settings"
+						name={'profile'}
 						options={{
-							tabBarIcon: ({ color, size, focused }) =>
-								focused ? (
-									<Ionicons name="settings-sharp" size={size} color={color} />
-								) : (
-									<Ionicons name="settings-outline" size={24} color={color} />
-								),
+							tabBarIcon: ({ color, size, focused }) => (
+								<AppSelectedProfileIndicator />
+							),
+							tabBarIconStyle: {
+								opacity: 1,
+							},
 						}}
 					/>
 				</Tabs>

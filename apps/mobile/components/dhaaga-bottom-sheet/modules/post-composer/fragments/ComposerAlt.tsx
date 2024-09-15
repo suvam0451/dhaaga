@@ -5,7 +5,6 @@ import {
 	FlatList,
 	TextInput,
 	StyleSheet,
-	Pressable,
 	TouchableOpacity,
 } from 'react-native';
 import {
@@ -17,6 +16,7 @@ import { APP_FONT } from '../../../../../styles/AppTheme';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
 import { Image } from 'expo-image';
+import ComposeMediaTargets from './MediaTargets';
 
 const ComposerAltListItem = memo(
 	({ item, index }: { item: ComposeMediaTargetItem; index: number }) => {
@@ -80,6 +80,7 @@ const ComposerAltListItem = memo(
 							placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
 							style={styles.textInput}
 							onChangeText={onChange}
+							textAlignVertical={'top'}
 						/>
 						<View style={{ flexGrow: 1 }} />
 						<TouchableOpacity
@@ -94,7 +95,6 @@ const ComposerAltListItem = memo(
 									TextContent === '' || item.cw === TextContent
 										? 'none'
 										: 'flex',
-								// flex: 1,
 							}}
 							onPress={onSaveAltText}
 						>
@@ -118,23 +118,23 @@ const ComposerAltListItem = memo(
 const ComposerAlt = memo(() => {
 	const { mediaTargets } = useComposerContext();
 
-	if (mediaTargets.length === 0)
-		return (
-			<View style={{ padding: 16 }}>
-				<Text
-					style={{
-						fontFamily: APP_FONTS.INTER_700_BOLD,
-						color: APP_FONT.MONTSERRAT_BODY,
-						textAlign: 'center',
-						marginTop: 32,
-					}}
-				>
-					You have not added any media attachments{' '}
-				</Text>
-			</View>
-		);
 	return (
 		<View>
+			<ComposeMediaTargets />
+			{mediaTargets.length === 0 && (
+				<View style={{ padding: 16 }}>
+					<Text
+						style={{
+							fontFamily: APP_FONTS.INTER_700_BOLD,
+							color: APP_FONT.MONTSERRAT_BODY,
+							textAlign: 'center',
+							marginTop: 32,
+						}}
+					>
+						You have not added any media attachments
+					</Text>
+				</View>
+			)}
 			<FlatList
 				data={mediaTargets}
 				renderItem={({ item, index }) => (
@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
 		// backgroundColor: 'red',
+		flex: 1,
 		width: '100%',
 	},
 });

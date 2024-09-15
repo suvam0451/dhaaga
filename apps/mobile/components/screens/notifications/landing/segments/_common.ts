@@ -24,7 +24,8 @@ export const styles = StyleSheet.create({
 		borderRadius: 8,
 	},
 	gradientContainerTextOnlyPost: {
-		maxHeight: 64,
+		// maxHeight: 128,
+		// flex: 1,
 		marginTop: 8,
 		borderRadius: 8,
 		padding: 6,

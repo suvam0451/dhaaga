@@ -25,6 +25,7 @@ const SharedStatusFragment = memo(function Foo() {
 		deps: [dto],
 		expectedHeight: 24,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		numberOfLines: 1,
 	});
 
 	return useMemo(() => {
@@ -59,7 +60,7 @@ const SharedStatusFragment = memo(function Foo() {
 								width: 20,
 								height: 20,
 								opacity: 0.75,
-								borderRadius: 4,
+								borderRadius: 20 / 2,
 								marginLeft: 4,
 							}}
 						/>
@@ -86,7 +87,6 @@ const SharedStatusFragment = memo(function Foo() {
 								opacity: 0.6,
 							}}
 						>
-							{' • '}
 							{LocalizationService.formatDistanceToNowStrict(
 								new Date(dto.createdAt),
 							)}

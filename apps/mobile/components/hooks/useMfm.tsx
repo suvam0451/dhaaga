@@ -107,7 +107,7 @@ function useMfm({
 			isLoaded: true,
 			content: (
 				<WithAppMfmContext acceptTouch={_acceptTouch}>
-					<View style={{ height: 'auto' }}>
+					<View style={{ height: 'auto', flex: 1 }}>
 						{reactNodes?.map((para) => {
 							const uuid = randomUUID();
 							if (numberOfLines) {

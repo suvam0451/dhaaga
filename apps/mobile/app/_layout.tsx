@@ -40,7 +40,9 @@ const IGNORED_LOGS = [
 	'BSON: For React Native please polyfill crypto.getRandomValues',
 	// this would need to be fixed later
 	'Found screens with the same name nested inside one another',
-	'Require cycle',
+	'Require cycle:',
+	'VirtualizedLists',
+	'Warning: Text strings must be rendered within a',
 ];
 LogBox.ignoreLogs(IGNORED_LOGS);
 LogBox.ignoreAllLogs(true);

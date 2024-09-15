@@ -1,4 +1,4 @@
-import { Fragment, memo } from 'react';
+import { memo } from 'react';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import {
 	APP_BOTTOM_SHEET_ENUM,
@@ -13,7 +13,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import Octicons from '@expo/vector-icons/Octicons';
 
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
@@ -23,12 +22,17 @@ const ACCOUNT_INDICATOR_ICON_SIZE = 36;
  *
  * width = 36 + 2 + 4 = 42
  * Clicking on it will bring up the account switcher
+ *
+ * @deprecated in favor of 5th tab since v0.11.0
  */
 const AppSelectedAccountIndicator = memo(() => {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
 
-	const account = useObject(Account, primaryAcct?._id || new BSON.UUID());
+	const account = useObject(
+		Account,
+		primaryAcct?.isValid() ? primaryAcct?._id : new BSON.UUID(),
+	);
 	const db = useRealm();
 	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
 

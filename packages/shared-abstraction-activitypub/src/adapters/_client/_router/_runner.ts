@@ -13,6 +13,7 @@ export enum COMPAT {
 	MEGALODON = 'megalodon',
 	DHAAGAJS = 'dhaaga',
 	BASIC = 'basic',
+	ATPROTO = 'atproto',
 }
 
 type ClientReturnType = {
@@ -21,6 +22,7 @@ type ClientReturnType = {
 	[COMPAT.MEGALODON]: MegalodonInterface;
 	[COMPAT.DHAAGAJS]: null;
 	[COMPAT.BASIC]: null;
+	[COMPAT.ATPROTO]: Agent;
 };
 
 /**

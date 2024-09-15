@@ -10,14 +10,14 @@ import {
 import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
-import { ProfileStatsInterface } from '../../../../common/user/fragments/ProfileStats';
+import { ProfileStatsInterface } from '../../../../screens/(shared)/stack/profile/fragments/ProfileStats';
 import WithActivitypubUserContext from '../../../../../states/useProfile';
 import ProfileNameAndHandle from '../../../../common/user/fragments/ProfileNameAndHandle';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import ProfilePeekMessage from '../fragments/ProfilePeekMessage';
+import ProfileButtonMessage from '../../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
@@ -67,7 +67,7 @@ const ProfilePeekBottomSheet = memo(() => {
 							flexDirection: 'row',
 						}}
 					>
-						<ProfilePeekMessage handle={handle} />
+						<ProfileButtonMessage handle={handle} />
 						<TouchableOpacity
 							style={{
 								padding: 8,

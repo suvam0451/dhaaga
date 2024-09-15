@@ -1,5 +1,6 @@
-import { RestClientCreateDTO } from './adapters/_client/_interface.js';
-import ActivityPubClient from './adapters/_client/_interface.js';
+import ActivityPubClient, {
+	RestClientCreateDTO,
+} from './adapters/_client/_interface.js';
 import UnknownRestClient from './adapters/_client/default/index.js';
 import MastodonRestClient from './adapters/_client/mastodon/index.js';
 import MisskeyRestClient from './adapters/_client/misskey/index.js';
@@ -8,6 +9,15 @@ import MisskeyRestClient from './adapters/_client/misskey/index.js';
 import UnknownToStatusAdapter from './adapters/status/default.js';
 import MastodonToStatusAdapter from './adapters/status/mastodon.js';
 import MisskeyToStatusAdapter from './adapters/status/misskey.js';
+import ActivitypubHelper from './services/activitypub.js';
+import {
+	InstanceApi_CustomEmojiDTO,
+	KNOWN_SOFTWARE,
+} from './adapters/_client/_router/routes/instance.js';
+import axios from 'axios';
+import { UserDetailed } from 'misskey-js/autogen/models.js';
+import PleromaRestClient from './adapters/_client/pleroma/index.js';
+import BlueskyRestClient from './adapters/_client/bluesky/index.js';
 
 export {
 	UnknownToStatusAdapter,
@@ -63,6 +73,7 @@ export {
 } from './adapters/_client/_router/routes/_index.js';
 
 const userMap = {
+	[KNOWN_SOFTWARE.BLUESKY]: BlueskyRestClient,
 	// Pleroma Compat
 	[KNOWN_SOFTWARE.AKKOMA]: PleromaRestClient,
 	[KNOWN_SOFTWARE.PLEROMA]: PleromaRestClient,
@@ -88,7 +99,8 @@ export class ActivityPubClientFactory {
 		payload: RestClientCreateDTO,
 	): ClassType<K> {
 		try {
-			return new userMap[domain](payload);
+			// FIXME: remove any
+			return new userMap[domain](payload as any);
 		} catch (e) {
 			return new userMap[KNOWN_SOFTWARE.MASTODON](payload);
 		}
@@ -102,19 +114,9 @@ export {
 	DhaagaErrorCode,
 } from './adapters/_client/_router/_types.js';
 
-export { StatusInstance } from './adapters/status/_interface.js';
-export { NoteInstance } from './adapters/status/_interface.js';
 export { UserDetailedInstance } from './adapters/profile/_interface.js';
 export { AccountInstance } from './adapters/profile/_interface.js';
 export { ActivitypubStatusAdapter } from './adapters/status/_adapters.js';
-import ActivitypubHelper from './services/activitypub.js';
-import {
-	InstanceApi_CustomEmojiDTO,
-	KNOWN_SOFTWARE,
-} from './adapters/_client/_router/routes/instance.js';
-import axios from 'axios';
-import { UserDetailed } from 'misskey-js/autogen/models.js';
-import PleromaRestClient from './adapters/_client/pleroma/index.js';
 
 export { ActivitypubHelper };
 export { parseStatusContent, preprocessPostContent } from './services/index.js';

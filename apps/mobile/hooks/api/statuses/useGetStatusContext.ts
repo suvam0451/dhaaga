@@ -2,7 +2,7 @@ import { useActivityPubRestClientContext } from '../../../states/useActivityPubR
 import useGetStatus from './useGetStatus';
 import { useEffect, useReducer } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import statusContextReducer, {
 	defaultAppStatusContext,
@@ -27,24 +27,26 @@ function useGetStatusContext(postId: string) {
 		if (!client) throw new Error('_client not initialized');
 		const { data, error } = await client.statuses.getContext(postId);
 		if (error) {
-			return { ancestors: [], descendants: [] };
+			return null;
 		}
+
+		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+			return data;
+		}
+
 		return {
 			ancestors: ActivityPubAdapterService.adaptManyStatuses(
-				data.ancestors,
+				(data as any).ancestors,
 				domain,
 			),
 			descendants: ActivityPubAdapterService.adaptManyStatuses(
-				data.descendants,
+				(data as any).descendants,
 				domain,
 			),
 		};
 	}
 
-	const { data, status, fetchStatus, refetch } = useQuery<{
-		ancestors: StatusInterface[];
-		descendants: StatusInterface[];
-	}>({
+	const { data, status, fetchStatus, refetch } = useQuery({
 		queryKey: ['status/details', postId],
 		queryFn: api,
 		enabled: client && postId !== undefined,
@@ -52,18 +54,31 @@ function useGetStatusContext(postId: string) {
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
-		if (!PostData) return;
 
-		dispatch({
-			type: STATUS_CONTEXT_REDUCER_ACTION.INIT,
-			payload: {
-				source: PostData,
-				ancestors: data.ancestors,
-				descendants: data.descendants,
-				domain,
-				subdomain,
-			},
-		});
+		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+			dispatch({
+				type: STATUS_CONTEXT_REDUCER_ACTION.INIT_ATPROTO,
+				payload: {
+					resp: data,
+					domain,
+					subdomain,
+				},
+			});
+		} else {
+			// Required by Mastodon specifically
+			if (!PostData) return;
+
+			dispatch({
+				type: STATUS_CONTEXT_REDUCER_ACTION.INIT,
+				payload: {
+					source: PostData,
+					ancestors: (data as any).ancestors,
+					descendants: (data as any).descendants,
+					domain,
+					subdomain,
+				},
+			});
+		}
 	}, [PostData, fetchStatus, dispatch]);
 
 	return { Data, dispatch, refetch };

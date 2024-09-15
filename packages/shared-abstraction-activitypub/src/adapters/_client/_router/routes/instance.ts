@@ -3,6 +3,9 @@ import { mastodon } from 'masto';
 import { LibraryPromise } from './_types.js';
 
 export enum KNOWN_SOFTWARE {
+	// Bluesky
+	BLUESKY = 'bluesky',
+	// Fediverse Parent Software
 	AKKOMA = 'akkoma',
 	CHERRYPICK = 'cherrypick',
 	FIREFISH = 'firefish',

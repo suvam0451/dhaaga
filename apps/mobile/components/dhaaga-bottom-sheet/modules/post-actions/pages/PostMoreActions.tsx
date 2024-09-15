@@ -10,7 +10,7 @@ import PostMoreActionsPostTarget from '../fragments/PostMoreActionsPostTarget';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
-import ActivitypubReactionsService from '../../../../../services/ap-proto/activitypub-reactions.service';
+import ActivitypubReactionsService from '../../../../../services/approto/activitypub-reactions.service';
 
 const PostMoreActions = memo(() => {
 	const { PostRef, timelineDataPostListReducer, setVisible } =

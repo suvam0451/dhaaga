@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
-import { ActivitypubStatusService } from '../../../../services/ap-proto/activitypub-status.service';
+import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function useTrendingPosts() {
 	const { client, domain, subdomain } = useActivityPubRestClientContext();

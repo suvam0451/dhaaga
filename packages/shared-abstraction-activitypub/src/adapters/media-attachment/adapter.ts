@@ -76,7 +76,7 @@ export class MediaAttachmentToMediaAttachmentAdapter
 		return this.ref?.instance?.blurhash;
 	}
 
-	// no dates available for masto-dono
+	// no dates available for mastodon
 	getCreatedAt() {
 		return new Date().toString();
 	}

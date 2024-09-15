@@ -2,7 +2,6 @@ import {
 	createContext,
 	MutableRefObject,
 	useContext,
-	useMemo,
 	useRef,
 	useState,
 } from 'react';
@@ -11,19 +10,11 @@ import BottomSheet, {
 	BottomSheetView,
 	SNAP_POINT_TYPE,
 } from '@gorhom/bottom-sheet';
-import { View } from 'react-native';
-import HashtagBottomSheet from '../components/bottom-sheets/Hashtag';
-import { useGlobalMmkvContext } from './useGlobalMMkvCache';
-import globalMmkvCacheServices from '../services/globalMmkvCache.services';
 import * as Crypto from 'expo-crypto';
-import ExternalLinkActionSheet from '../components/bottom-sheets/Link';
-import PostComposerBottomSheet from '../components/bottom-sheets/PostComposer';
 import { APP_FONT } from '../styles/AppTheme';
-import WithActivitypubStatusContext from './useStatus';
-import Status from '../components/bottom-sheets/Status';
 import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { ActivityPubStatusAppDtoType } from '../services/ap-proto/activitypub-status-dto.service';
 import BottomSheetFactory from '../components/bottom-sheets/BottomSheetFactory';
+import { ActivityPubStatusAppDtoType } from '../services/approto/activitypub-status-dto.service';
 
 export enum BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',

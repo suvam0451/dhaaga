@@ -1,9 +1,9 @@
-import ActivityPubUserDtoService, {
-	ActivityPubAppUserDtoType,
-} from '../../../../services/ap-proto/activitypub-user-dto.service';
 import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { MutableRefObject } from 'react';
 import { produce } from 'immer';
+import ActivityPubUserDtoService, {
+	ActivityPubAppUserDtoType,
+} from '../../../../services/approto/activitypub-user-dto.service';
 
 export enum TIMELINE_USER_LIST_DATA_REDUCER_TYPE {
 	CLEAR = 'clear',

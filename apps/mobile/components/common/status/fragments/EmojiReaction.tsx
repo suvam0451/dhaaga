@@ -9,15 +9,15 @@ import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
-import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
+import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
 import AppSettingsPreferencesService from '../../../../services/app-settings/app-settings-preferences.service';
 import { useRealm } from '@realm/react';
-import ActivitypubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
-import ActivityPubReactionsService from '../../../../services/ap-proto/activitypub-reactions.service';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
+import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -36,7 +36,8 @@ const EmojiReaction = memo(function Foo({
 		timelineDataPostListReducer,
 		updateRequestId: updateBottomSheetRequestId,
 	} = useAppBottomSheet();
-	const { getPostListReducer } = useAppTimelineDataContext();
+	const { getPostListReducer } = useAppTimelinePosts();
+	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
 
 	const CONTAINER_STYLE = useMemo(() => {

@@ -26,6 +26,12 @@ export const AppImageComponent = memo(function Foo({
 	parentContainerHeight,
 	parentContainerWidth,
 }: Props) {
+	/**
+	 * FIXME:
+	 *
+	 * #1: The ImageHeight should be capped to the height of container
+	 * #2: overflow: "hidden" should not be needed
+	 */
 	const { ImageHeight, ImageWidth, onLayoutChanged } = useImageAspectRatio([
 		{ url },
 	]);
@@ -37,6 +43,8 @@ export const AppImageComponent = memo(function Foo({
 				width: parentContainerWidth,
 				alignItems: 'center',
 				justifyContent: 'center',
+				overflow: 'hidden',
+				borderRadius: 8,
 			}}
 			onLayout={onLayoutChanged}
 		>

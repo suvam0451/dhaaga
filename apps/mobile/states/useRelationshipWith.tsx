@@ -9,7 +9,9 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
-import ActivitypubRelationService from '../services/ap-proto/activitypub-relation.service';
+import ActivitypubRelationService from '../services/approto/activitypub-relation.service';
+import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
+import { AppBskyActorGetProfile } from '@atproto/api';
 
 const defaultValue = {
 	blockedBy: false,
@@ -94,6 +96,22 @@ function useRelationshipWith(id: string) {
 		[Data, IsLoading],
 	);
 
+	const setBlueskyRelation = useCallback(
+		({ data, error }: LibraryResponse<AppBskyActorGetProfile.Response>) => {
+			if (error) {
+				Data.current.error = true;
+				return;
+			}
+			const viewer = data.data.viewer;
+			Data.current.following = !!viewer.following;
+			Data.current.followedBy = !!viewer.followedBy;
+			Data.current.muting = !!viewer.muted;
+			Data.current.blocking = !!viewer.blocking;
+			Data.current.blockedBy = !!viewer.blockedBy;
+		},
+		[Data, IsLoading],
+	);
+
 	const setMisskeyRelation = useCallback(
 		({ data, error }: LibraryResponse<UserDetailed>) => {
 			if (error) {
@@ -148,6 +166,16 @@ function useRelationshipWith(id: string) {
 					.get(id)
 					.then(setMisskeyRelation)
 					.finally(() => {
+						setIsLoading(false);
+						forceUpdate();
+					});
+				break;
+			}
+			case KNOWN_SOFTWARE.BLUESKY: {
+				(client as BlueskyRestClient).accounts
+					.get(id)
+					.then(setBlueskyRelation)
+					.then(() => {
 						setIsLoading(false);
 						forceUpdate();
 					});

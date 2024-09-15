@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import {
 	ActivityPubAccount,
+	KNOWN_SOFTWARE,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useState } from 'react';
@@ -53,7 +54,11 @@ function useGetProfile({ user, userId }: GetProfile_Type) {
 			return;
 		}
 		if (status !== 'success' || !data) return;
-		setData(ActivitypubAdapterService.adaptUser(data, domain));
+		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+			setData(ActivitypubAdapterService.adaptUser(data.data, domain));
+		} else {
+			setData(ActivitypubAdapterService.adaptUser(data, domain));
+		}
 	}, [status, data, user]);
 
 	return { Data, Error };

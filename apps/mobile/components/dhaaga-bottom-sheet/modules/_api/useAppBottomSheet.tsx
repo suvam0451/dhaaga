@@ -10,11 +10,11 @@ import {
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import AppBottomSheet from '../../Core';
 import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
 import {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
 } from '../../../common/timeline/api/postArrayReducer';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',

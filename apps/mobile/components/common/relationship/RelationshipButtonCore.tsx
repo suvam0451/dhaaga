@@ -14,12 +14,16 @@ type RelationshipButtonCoreProps = {
 	userId: string;
 };
 
+/**
+ * Indicates the current relationship
+ * with a user and allows and
+ * shows prompts when changing them
+ */
 const RelationshipButtonCore = memo(
 	({ userId }: RelationshipButtonCoreProps) => {
 		const [DVFollow, setDVFollow] = useState(false);
 		const [DVPending, setDVPending] = useState(false);
 		const [DVFollowing, setDVFollowing] = useState(false);
-		const [DVFollowBack, setDVFollowBack] = useState(false);
 
 		const {
 			relationState,

@@ -68,6 +68,12 @@ class TextParserService {
 	static preprocessPostContent(input: string, log?: boolean) {
 		return parseStatusContent(input, log);
 	}
+
+	static removeHttps(url: string) {
+		let result = url.replace(/^https?:\/\//, '');
+		result = result.replace(/\//g, '');
+		console.log(result);
+	}
 }
 
 export default TextParserService;

@@ -6,12 +6,12 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import ActivitypubReactionsService from '../../services/ap-proto/activitypub-reactions.service';
 import ActivityPubAdapterService from '../../services/activitypub-adapter.service';
+import ActivityPubService from '../../services/activitypub.service';
 import ActivityPubUserDtoService, {
 	ActivityPubAppUserDtoType,
-} from '../../services/ap-proto/activitypub-user-dto.service';
-import ActivityPubService from '../../services/activitypub.service';
+} from '../../services/approto/activitypub-user-dto.service';
+import ActivitypubReactionsService from '../../services/approto/activitypub-reactions.service';
 
 type ReactionDetails = {
 	id: string;

@@ -9,8 +9,8 @@ import {
 	CarousalIndicatorOverlay,
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
-import { AppActivityPubMediaType } from '../../../services/ap-proto/activitypub-status-dto.service';
 import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
+import { AppActivityPubMediaType } from '../../../services/approto/activitypub-status-dto.service';
 
 type ImageCarousalProps = {
 	attachments: AppActivityPubMediaType[];

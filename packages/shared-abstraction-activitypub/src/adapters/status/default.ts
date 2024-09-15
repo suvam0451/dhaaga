@@ -2,21 +2,39 @@ import { UserType } from '../profile/_interface.js';
 import {
 	DhaagaJsMentionObject,
 	Status,
-	StatusContextInstance,
-	StatusContextInterface,
 	StatusInterface,
 } from './_interface.js';
+import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
+import { MediaAttachmentInterface } from '../media-attachment/interface.js';
 
 class UnknownToStatusAdapter implements StatusInterface {
+	/**
+	 * Post Hierarchy
+	 */
+	hasParentAvailable() {
+		return false;
+	}
+	getParentRaw(): Status | PostView | null {
+		return null;
+	}
+	hasRootAvailable() {
+		return false;
+	}
+	getRootRaw() {
+		return undefined;
+	}
+	hasQuoteAvailable(): boolean {
+		return false;
+	}
+	getQuoteRaw(): PostView | undefined | null {
+		return null;
+	}
+
 	getMentions(): DhaagaJsMentionObject[] {
 		return [];
 	}
 
 	getMyReaction(): string | null | undefined {
-		return null;
-	}
-
-	getRepliedStatusRaw(): Status {
 		return null;
 	}
 
@@ -44,27 +62,19 @@ class UnknownToStatusAdapter implements StatusInterface {
 	}
 
 	getIsRebloggedByMe(): boolean | null | undefined {
-		throw new Error('Method not implemented.');
+		return false;
 	}
 
 	getIsSensitive(): boolean {
-		throw new Error('Method not implemented.');
+		return false;
 	}
 
 	getSpoilerText(): string | null | undefined {
-		throw new Error('Method not implemented.');
+		return '';
 	}
 
 	getRaw(): Status {
 		return null;
-	}
-
-	setDescendents(items: StatusInterface[]): void {
-		throw new Error('Method not implemented.');
-	}
-
-	getDescendants(): StatusInterface[] {
-		return [];
 	}
 
 	getUser(): UserType {
@@ -75,12 +85,12 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return false;
 	}
 
-	getParentStatusId(): string {
-		throw new Error('Method not implemented.');
+	getParentStatusId(): string | null | undefined {
+		return null;
 	}
 
-	getUserIdParentStatusUserId(): string {
-		throw new Error('Method not implemented.');
+	getUserIdParentStatusUserId(): string | null | undefined {
+		return null;
 	}
 
 	getRepostedStatusRaw(): Status {
@@ -91,20 +101,16 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return undefined;
 	}
 
-	getIsBookmarked() {
+	getIsBookmarked(): boolean | null | undefined {
 		return false;
 	}
 
-	getIsFavourited() {
+	getIsFavourited(): boolean | null | undefined {
 		return false;
 	}
 
 	getRepliesCount(): number {
 		return -1;
-	}
-
-	isValid() {
-		return false;
 	}
 
 	getId(): string {
@@ -123,11 +129,11 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return '';
 	}
 
-	getDisplayName() {
+	getDisplayName(): string | null | undefined {
 		return '';
 	}
 
-	getAvatarUrl() {
+	getAvatarUrl(): string | null | undefined {
 		return '';
 	}
 
@@ -151,11 +157,11 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return false;
 	}
 
-	getContent() {
+	getContent(): string | null | undefined {
 		return '';
 	}
 
-	getMediaAttachments() {
+	getMediaAttachments(): MediaAttachmentInterface[] {
 		return [];
 	}
 
@@ -165,36 +171,6 @@ class UnknownToStatusAdapter implements StatusInterface {
 
 	getAccountId_Poster(): string {
 		return '';
-	}
-}
-
-export class UnknownToStatusContextAdapter implements StatusContextInterface {
-	ref: StatusInterface;
-	ctx: StatusContextInstance;
-
-	constructor(ref: StatusInterface, ctx: StatusContextInstance) {
-		this.ref = ref;
-		this.ctx = ctx;
-	}
-
-	addChildren(items: StatusInterface[]): void {
-		throw new Error('Method not implemented.');
-	}
-
-	getId(): string {
-		throw new Error('Method not implemented.');
-	}
-
-	getChildren() {
-		return [];
-	}
-
-	getParent() {
-		return null;
-	}
-
-	getRoot() {
-		return null;
 	}
 }
 
