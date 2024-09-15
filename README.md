@@ -1,18 +1,21 @@
 <!-- SOCIALS -->
-[![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat)](https://discord.gg/kMp5JA9jwD)
-[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat)](https://matrix.to/#/#server0451:matrix.org)
-[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Private%20DM)](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org)
+[![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat&label=Chat)](https://discord.gg/kMp5JA9jwD)
+[![Private](https://img.shields.io/badge/Signal-3A76F0?logo=signal&logoColor=fff&label=suvam.451)](https://signal.me/#eu/UiddwbjrYcUg1qojr5MowSwCEYK_kVW9HyK07tgmGy1hYTh4rr5L7IZ7wb0xqChV)
+[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Alt%20DM)](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org)
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/112440258358145826?label=Add%20Me)](https://mastodon.social/@suvam)
 [![GitHub](https://img.shields.io/github/followers/suvam0451?label=Add%20Me)](https://github.com/suvam0451?tab=followers)
 <!-- SOCIALS -->
 
-<img width="64" 
-    src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d56143" 
-    align="left" 
-    style="margin-right:8px"/>
+<img width="64"
+src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d56143"
+align="left"
+style="margin-right:8px"/>
 
-
-**Dhaaga** is a fediverse social app for smartphones (Android & iOS), which adds a lot of cool and unique **client-side functionalities**. It focuses on making it easy to chat and make friends, adds superior offline support and makes the friendiverse intuitive and fun to use for all users, new and old.
+**Dhaaga** is a fun 🥳 and cozy ☕ microblogging app for 
+browsing the decentralized social web. 
+It has multi-account support for all your favourite SNS platforms,
+and comes with extra features that add extra value and joy to your social 
+experience.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -40,63 +43,38 @@
   </a>
 </div>
 
-
 ## ✨ Features
 
-Every major update adds **unique features** that `changes how you can interact with the fediverse`.<br/>
-These features **work with every supported fedi software**.
+- ☂️ Supports your favourite SNS software.
+- ☕ Nice, almost like warm and cozy feel to it <-- *(What the users say,
+  not me)* 😙
+- 🦉 Dark mode by default.
+- 👌 Fully Operable with One-Hand.
+- 🏕️ Offline Support. *Download and view posts offline.* ²
+- ☄️ Many unique client-side extra features.
+- 🥳 Fun, Free (💰)² and FOSS.
 
-- [v0.1.0] **Timeline Widget** | easily jump to ANY timeline | [Read More]()
-- [v0.2.0] **Bookmark Gallery** | Store and view your bookmarks offline | [Read More]()
-- [v0.3.0] **Known Servers** |  A social graph of every instance you ever visited | [Read More]()
-- [v0.4.0] **Profile Gallery** | Browse profiles as an art gallery | [Read More]()
-- [v0.6.0] **Quick Composer** | Microblogging friendly Post/Reply | [Read More]()
+> ¹ Coming soon™<br/>
+> ² A little bit of self-promo sometimes 😉
 
-> The project does not want to be just another api client<br/>
-> Nor does it try to replace your existing favourite client app.<br/>
-> Dhaaga is more like a companion app 😁
+> [!TIP]
+> Dhaaga does not aim for 100% feature parity.<br/>
+> Power users may prefer a dedicated client for their platform.
 
-> 👆 But I try my best to make Dhaaga the only social fedi app you will ever need 😉
+## 💁 About
 
-> **The normal features are weaved in in-between major releases**. If you miss any specific feature from your instance, just hit me up!
+Dhaaga is a solo indie project that I work on during my leisure time.
 
-## ✨ Design Goals
+It offers a simple and cozy mobile interface, 
+helps you easily navigate platform barriers like accounts, 
+protocols, and federation, allowing you to focus on what truly matters: 
 
-Features are cool. But, they are no good if the *presentation* or *user experience* sucks.<br/>
-Here are some design directions which may make you consider Dhaaga:
+> **Your friends, your time, and your digital wellbeing.**
 
-### 💅 Designed for Viewing Content
+If you liked the app, please drop by and say hi sometimes. 🤗
 
-No image cropping. No wasted space below avatars. 
-> Dhaaga uses full horizontal efficiently.
+[Mastodon](https://mastodon.social/@suvam) | [Bluesky](https://bsky.app/profile/suvam.io)
 
-No humongous bottom menu. No unnecessary top bar *(auto hidden)*.
-> Dhaaga uses full vertical space efficiently
+---
 
-> Dhaaga only supports smartphones.<br/>
-> And it aims to be the best in it's category. 😎
-
-### 💅 Intuitive Menus. No Clutter.
-
-The menu systems in Dhaaga do not look like long lists.<br/> 
-
-> Every action is contextually available when you need them<br/>
-> And meekly hidden away when you don't.
-
-### 💅 Designed for Smartphones
-
-Most of the interaction happens on the screen *(using bottom sheets and dialogs)*.<br/>
-> Say goodbye to bouncing between screens to get things done!
-
-Most of the interactions are also one-handed friendly.<br/>
-> This is why most of Dhaaga's widgets and searchbars are bottom aligned!
-
-## Guides
-
-- [User Guide](https://dhaaga.app/docs/usage/intro) <-- Optional, but useful for new users!
-- [How to Develop](https://dhaaga.app/docs/guides/development/using-expo) <-- Read before contributing code. No AndroidStudio/XCode needed!
-- [Compile from Source](https://dhaaga.app/docs/guides/compiling/using-expo)
-
---- 
-
-© 2023-Present Debashish Patra 
+© 2024-Present Debashish Patra 

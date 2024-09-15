@@ -1,5 +1,3 @@
-import PostWithClientContext from '../../../../components/screens/shared/stack/post/PostDetails';
+import SharedStackPostDetails from '../../../../components/screens/(shared)/stack/SharedStackPostDetails';
 
-export default function Route() {
-	return <PostWithClientContext />;
-}
+export default SharedStackPostDetails;

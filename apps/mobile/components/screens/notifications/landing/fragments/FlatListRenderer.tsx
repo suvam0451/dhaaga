@@ -3,21 +3,26 @@ import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub
 import ReplyNotificationFragment from '../segments/ReplyNotificationFragment';
 import MentionNotificationFragment from '../segments/MentionNotificationFragment';
 import FavouriteNotificationFragment from '../segments/FavouriteNotificationFragment';
-import FollowNotificationFragment from '../segments/FollowNotificationFragment';
 import StatusAlertNotificationFragment from '../segments/StatusAlertNotificationFragment';
 import BoostNotificationFragment from '../segments/BoostNotificationFragment';
 import AchiEarnedNotificationFragment from '../segments/AchiEarnedNotificationFragment';
 import AppNotificationFragment from '../segments/AppNotificationFragment';
 import FollowReqAcceptNotificationFragment from '../segments/FollowReqAccepNotificationFragment';
 import ReactionNotificationFragment from '../segments/ReactionNotificationFragment';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
+import { Fragment } from 'react';
+import NotificationUpdateItem from './NotificationUpdateItem';
 
 /**
  * List renderer for the notification
  * screen landing page
  */
-function FlatListRenderer({ item }: { item: Notification_FlatList_Entry }) {
+export function FlatListRenderer({
+	item,
+}: {
+	item: Notification_FlatList_Entry;
+}) {
 	switch (item.type) {
 		case DhaagaJsNotificationType.REPLY:
 			return <ReplyNotificationFragment item={item.props} />;
@@ -26,7 +31,15 @@ function FlatListRenderer({ item }: { item: Notification_FlatList_Entry }) {
 		case DhaagaJsNotificationType.FAVOURITE:
 			return <FavouriteNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.FOLLOW:
-			return <FollowNotificationFragment item={item.props} />;
+			return (
+				<Fragment>
+					<NotificationUpdateItem
+						acct={item.props.acct}
+						type={DhaagaJsNotificationType.FOLLOW}
+						createdAt={item.props.createdAt}
+					/>
+				</Fragment>
+			);
 		case DhaagaJsNotificationType.STATUS:
 		case DhaagaJsNotificationType.NOTE:
 			return <StatusAlertNotificationFragment item={item.props} />;

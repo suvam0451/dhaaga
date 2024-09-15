@@ -1,9 +1,9 @@
-import MyLikes from '../../../components/screens/accounts/stack/MyLikes';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FeatureUnsupported from '../../../components/error-screen/FeatureUnsupported';
 import { View } from 'react-native';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
+import MyLikes from '../../../components/screens/profile/stack/MyLikes';
 
 function Foo() {
 	const { domain } = useActivityPubRestClientContext();

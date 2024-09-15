@@ -1,5 +1,4 @@
 import {
-	StatusInterface,
 	TagInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -8,10 +7,9 @@ import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import WithActivitypubUserContext from '../../../../../../states/useProfile';
 import UserSearchResultListing from '../../../../../common/user/UserSearchResultListing';
 import WithAppStatusItemContext from '../../../../../../hooks/ap-proto/useAppStatusItem';
-import { ActivityPubStatusAppDtoType } from '../../../../../../services/ap-proto/activitypub-status-dto.service';
 import { View } from 'react-native';
-import { ActivityPubAppUserDtoType } from '../../../../../../services/ap-proto/activitypub-user-dto.service';
 import { FlashListType_Post } from '../../../../../../services/flashlist.service';
+import { ActivityPubAppUserDtoType } from '../../../../../../services/approto/activitypub-user-dto.service';
 
 function DiscoverListRenderer({
 	item,

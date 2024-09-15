@@ -1,6 +1,6 @@
 {
   "name": "@dhaaga/mobile",
-  "version": "0.10.0",
+  "version": "0.10.2",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,10 @@
     "ios": "expo run:ios"
   },
   "dependencies": {
+    "@atproto/api": "^0.13.6",
+    "@atproto/lexicon": "^0.4.1",
+    "@atproto/syntax": "^0.3.0",
+    "@atproto/xrpc": "^0.6.1",
     "@dhaaga/shared-abstraction-activitypub": "*",
     "@dhaaga/shared-provider-mastodon": "*",
     "@expo-google-fonts/inter": "^0.2.3",

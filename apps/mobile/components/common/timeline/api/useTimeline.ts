@@ -62,6 +62,8 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 					)
 						? true
 						: undefined,
+					withRenotes: !opts?.excludeReblogs,
+					withReplies: !opts?.excludeReplies,
 				});
 				if (error) return [];
 				return data;

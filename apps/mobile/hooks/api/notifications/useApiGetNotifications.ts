@@ -33,27 +33,15 @@ export type Notification_FlatList_Entry = {
 	props: Notification_Entry;
 };
 
-const NOTIFICATION_GET_DEFAULT_PAYLOAD = {
-	limit: 40,
-	excludeTypes: [],
-	types: [
-		// Mastodon
-		DhaagaJsNotificationType.MENTION,
-		DhaagaJsNotificationType.STATUS,
-		DhaagaJsNotificationType.REBLOG,
-		DhaagaJsNotificationType.FOLLOW,
-		DhaagaJsNotificationType.FOLLOW_REQUEST,
-		DhaagaJsNotificationType.FAVOURITE,
-		DhaagaJsNotificationType.POLL_NOTIFICATION,
-		DhaagaJsNotificationType.STATUS_EDITED,
-	],
+type useApiGetNotificationsProps = {
+	include: DhaagaJsNotificationType[];
 };
-
 /**
  * API Query for the notifications endpoint
  */
-function useApiGetNotifications() {
-	const { client, primaryAcct, domain } = useActivityPubRestClientContext();
+function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
+	const { client, primaryAcct, domain, subdomain } =
+		useActivityPubRestClientContext();
 	const [Results, setResults] = useState<Notification_FlatList_Entry[]>([]);
 
 	useEffect(() => {
@@ -69,14 +57,20 @@ function useApiGetNotifications() {
 			 * */
 			const { data, error } = await (
 				client as MisskeyRestClient
-			).notifications.getUngrouped(NOTIFICATION_GET_DEFAULT_PAYLOAD);
+			).notifications.getUngrouped({
+				limit: 40,
+				excludeTypes: [],
+				types: include,
+			});
 
 			if (error) return [];
 			return data as any;
 		} else {
-			const { data, error } = await client.notifications.get(
-				NOTIFICATION_GET_DEFAULT_PAYLOAD,
-			);
+			const { data, error } = await client.notifications.get({
+				limit: 40,
+				excludeTypes: [],
+				types: include,
+			});
 			if (error) return [];
 			return data as any;
 		}
@@ -84,7 +78,7 @@ function useApiGetNotifications() {
 
 	// Queries
 	const { fetchStatus, data, status, refetch } = useQuery<Api_Response_Type>({
-		queryKey: ['notifications', primaryAcct?.domain, primaryAcct?.subdomain],
+		queryKey: ['notifications', domain, subdomain, include],
 		queryFn: api,
 		enabled: client !== null,
 	});

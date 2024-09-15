@@ -8,7 +8,7 @@ import { Image } from 'expo-image';
  * Indicates in which context this reply is being composed
  */
 const ReplyContextIndicator = memo(() => {
-	const { replyToRef } = useAppBottomSheet();
+	const { replyToRef, requestId } = useAppBottomSheet();
 
 	const component = useMemo(() => {
 		if (replyToRef.current) {
@@ -46,7 +46,7 @@ const ReplyContextIndicator = memo(() => {
 		}
 
 		return <View />;
-	}, [replyToRef]);
+	}, [replyToRef, requestId]);
 	return <View>{component}</View>;
 });
 

@@ -7,11 +7,11 @@ import { useRef, useState } from 'react';
 import AccountInfoSyncDialog from '../../../components/dialogs/AccountInfoSync';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ConfirmAccountDelete from '../../../components/dialogs/accounts/ConfirmAccountDelete';
-import AccountListForSoftware from '../../../components/screens/accounts/stack/landing/fragments/AccountListForSoftware';
 import { UUID } from 'bson';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
+import AccountListForSoftware from '../../../components/screens/profile/stack/landing/fragments/AccountListForSoftware';
 
 function SelectAccountStack() {
 	const [DialogVisible, setDialogVisible] = useState(false);
@@ -25,6 +25,7 @@ function SelectAccountStack() {
 		KNOWN_SOFTWARE.MISSKEY,
 		KNOWN_SOFTWARE.PLEROMA,
 		KNOWN_SOFTWARE.SHARKEY,
+		KNOWN_SOFTWARE.BLUESKY,
 	];
 
 	const { translateY } = useScrollMoreOnPageEnd({
@@ -62,7 +63,7 @@ function SelectAccountStack() {
 					>
 						<Button
 							onPress={() => {
-								router.navigate('/settings/onboard/select-software');
+								router.navigate('/profile/onboard/select-software');
 							}}
 						>
 							<Text

@@ -11,6 +11,7 @@ import {
 	ActivityPubUserAdapter,
 	ActivityPubClient,
 	UserInterface,
+	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import AccountRepository from '../repositories/account.repo';
@@ -19,6 +20,7 @@ import { Account } from '../entities/account.entity';
 import { EmojiService } from '../services/emoji.service';
 import { useGlobalMmkvContext } from './useGlobalMMkvCache';
 import { UUID } from 'bson';
+import AtprotoSessionService from '../services/atproto/atproto-session.service';
 
 type Type = {
 	client: ActivityPubClient;
@@ -70,7 +72,7 @@ function WithActivityPubRestClient({ children }: any) {
 
 	const { globalDb } = useGlobalMmkvContext();
 
-	function regenerateFn() {
+	async function regenerateFn() {
 		const acct = db.objects(Account).find((o: Account) => o.selected === true);
 		if (!acct) {
 			setRestClient(null);
@@ -85,20 +87,29 @@ function WithActivityPubRestClient({ children }: any) {
 			return;
 		}
 
-		const client = ActivityPubClientFactory.get(acct.domain as any, {
+		let payload: any = {
 			instance: acct?.subdomain,
 			token,
-		});
+		};
+
+		// Built Different
+		if (acct.domain === KNOWN_SOFTWARE.BLUESKY) {
+			const session = AtprotoSessionService.create(db, acct);
+			await session.resume();
+			const { success, data, reason } = session.saveSession();
+			if (!success)
+				console.log('[INFO]: session restore status', success, reason);
+			payload = {
+				...data,
+				subdomain: acct.subdomain,
+			};
+		}
+
+		const client = ActivityPubClientFactory.get(acct.domain, payload);
 		setRestClient(client);
 		setPrimaryAcct(acct);
 		PrimaryAcctPtr.current = acct._id;
-		EmojiService.refresh(db, globalDb, acct.subdomain, true).then((res) => {
-			// console.log(
-			// 	'[INFO]: emoji cache refreshed for account',
-			// 	acct.subdomain,
-			// 	res?.length,
-			// );
-		});
+		EmojiService.refresh(db, globalDb, acct.subdomain, true);
 	}
 
 	useEffect(() => {

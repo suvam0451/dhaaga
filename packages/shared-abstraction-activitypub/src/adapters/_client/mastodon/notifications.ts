@@ -29,12 +29,18 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 			maxId?: string | null;
 		}>
 	> {
+		const { excludeTypes, types, ...rest } = query;
+
+		if (types.length > 0) {
+			(rest as any)['types[]'] = types.join(';');
+		}
+
 		const { data: _data, error } = await new AppApi(
 			this.client.url,
 			this.client.accessToken,
 		).getCamelCaseWithLinkPagination<MastoNotification[]>(
 			'/api/v1/notifications',
-			query,
+			rest,
 		);
 
 		if (error || !_data) {

@@ -43,6 +43,13 @@ const PLEROMA_TEMPLATE: Documentation = {
 };
 
 export const SoftwareDocs: Record<KNOWN_SOFTWARE, Documentation> = {
+	[KNOWN_SOFTWARE.BLUESKY]: {
+		url: 'https://bsky.app',
+		name: 'Bluesky',
+		desc: {
+			en: 'Not added yet',
+		},
+	},
 	[KNOWN_SOFTWARE.AKKOMA]: {
 		url: 'https://akkoma.social/',
 		name: 'Akkoma',

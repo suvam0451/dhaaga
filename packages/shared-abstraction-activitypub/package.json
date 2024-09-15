@@ -26,10 +26,12 @@
     "domhandler": "^5.0.3",
     "html-entities": "^2.5.2",
     "htmlparser2": "^9.1.0",
+    "jwt-decode": "^4.0.0",
     "masto": "^6.8.0",
     "megalodon": "^10.0.2",
     "mfm-js": "^0.24.0",
     "misskey-js": "^2024.8.0",
+    "multiformats": "^13.2.3",
     "snakecase-keys": "^8.0.1"
   },
   "devDependencies": {

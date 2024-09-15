@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import StatusPostedBy from './StatusPostedBy';
 import useMfm from '../../../hooks/useMfm';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import MediaItem from '../../media/MediaItem';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
+import PostCreatedBy from './PostCreatedBy';
 
 const StatusQuoted = memo(() => {
 	const { dto } = useAppStatusItem();
@@ -45,7 +45,7 @@ const StatusQuoted = memo(() => {
 					</Text>
 				</View>
 
-				<StatusPostedBy dto={dto} />
+				<PostCreatedBy dto={dto} />
 				{PostContent}
 			</View>
 

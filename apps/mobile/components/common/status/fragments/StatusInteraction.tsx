@@ -15,12 +15,12 @@ import * as Haptics from 'expo-haptics';
 import { APP_THEME } from '../../../../styles/AppTheme';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppTimelineDataContext } from '../../timeline/api/useTimelineData';
-import { ActivityPubStatusAppDtoType } from '../../../../services/ap-proto/activitypub-status-dto.service';
+import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
 
 type StatusInteractionProps = {
 	openAiContext?: string[];
@@ -47,7 +47,7 @@ const StatusInteraction = memo(
 			boost,
 			getBookmarkState,
 			getPostListReducer,
-		} = useAppTimelineDataContext();
+		} = useAppTimelinePosts();
 
 		const STATUS_DTO = dto;
 
@@ -201,7 +201,7 @@ const StatusInteraction = memo(
 									},
 								]}
 							>
-								Boost
+								Share
 							</Text>
 						</TouchableOpacity>
 						<TouchableOpacity

@@ -1,11 +1,20 @@
 import { memo } from 'react';
 import { useComposerContext } from '../api/useComposerContext';
-import { FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, TouchableOpacity, View, Text } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { APP_THEME } from '../../../../../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
+import Feather from '@expo/vector-icons/Feather';
+import { APP_FONTS } from '../../../../../styles/AppFonts';
+import useImagePicker from '../api/useImagePicker';
 
+/**
+ * Shows a list of uploaded
+ * media files and options to
+ * select/remove
+ */
 const ComposeMediaTargets = memo(function Foo() {
 	const { mediaTargets, removeMediaTarget } = useComposerContext();
+	const { trigger } = useImagePicker();
 
 	return (
 		<View
@@ -16,6 +25,61 @@ const ComposeMediaTargets = memo(function Foo() {
 			<FlatList
 				horizontal={true}
 				data={mediaTargets}
+				ListHeaderComponent={
+					<View style={{ justifyContent: 'space-between', flex: 1 }}>
+						<TouchableOpacity
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								padding: 8,
+								borderWidth: 2,
+								borderColor: 'rgba(200, 200, 200, 0.3)',
+								borderRadius: 8,
+								flex: 1,
+								marginVertical: 4,
+							}}
+							onPress={trigger}
+						>
+							<Feather
+								name="image"
+								size={24}
+								color={APP_FONT.MONTSERRAT_BODY}
+							/>
+							<Text
+								style={{
+									color: APP_FONT.MONTSERRAT_BODY,
+									marginLeft: 4,
+									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+								}}
+							>
+								Add Media
+							</Text>
+						</TouchableOpacity>
+						<View
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								padding: 8,
+								borderWidth: 2,
+								borderColor: 'rgba(200, 200, 200, 0.3)',
+								borderRadius: 8,
+								flex: 1,
+								marginVertical: 4,
+							}}
+						>
+							<Feather name="camera" size={24} color={APP_FONT.DISABLED} />
+							<Text
+								style={{
+									color: APP_FONT.DISABLED,
+									marginLeft: 4,
+									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+								}}
+							>
+								Camera
+							</Text>
+						</View>
+					</View>
+				}
 				renderItem={({ item, index }) => (
 					<View
 						style={{

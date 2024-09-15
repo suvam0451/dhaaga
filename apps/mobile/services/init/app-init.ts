@@ -12,7 +12,6 @@ class AppInit {
 	 */
 	applyDefaultSettings() {
 		AppInitSettings.run(this.db);
-		console.log('setup defaults across the app');
 		return this;
 	}
 

@@ -44,14 +44,40 @@ class AppApi {
 				delete obj[key];
 			}
 		});
-		return snakecaseKeys.default(obj) as Record<string, any>;
+
+		// You do me dirty, ruby gang :)
+		let typesOverride = obj['types[]'];
+		const retval = snakecaseKeys.default(obj) as Record<string, any>;
+		if (typesOverride) {
+			delete retval['types'];
+			retval['types[]'] = typesOverride;
+		}
+
+		return retval;
 	}
 
 	private withQuery(endpoint: string, query?: any) {
-		return query
-			? `${this.baseUrl}${endpoint}?` +
-					new URLSearchParams(this.cleanObject(query))
-			: `${this.baseUrl}${endpoint}?`;
+		if (!query) return `${this.baseUrl}${endpoint}`;
+
+		console.log(query);
+		// smh... ruby backend can't even deal with arrays...
+		if (query['types[]'] !== undefined) {
+			const sample = this.cleanObject(query);
+			const items = sample['types[]'].split(';');
+			delete sample['query[]'];
+
+			const params = new URLSearchParams(this.cleanObject(sample));
+			for (const item of items) {
+				params.append('types[]', item);
+			}
+			console.log(`${this.baseUrl}${endpoint}?` + params.toString());
+			return `${this.baseUrl}${endpoint}?` + params.toString();
+		}
+
+		return (
+			`${this.baseUrl}${endpoint}?` +
+			new URLSearchParams(this.cleanObject(query))
+		);
 	}
 
 	async getCamelCaseWithLinkPagination<T>(

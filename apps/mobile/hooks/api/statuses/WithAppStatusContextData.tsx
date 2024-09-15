@@ -3,7 +3,7 @@ import {
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
 import { createContext, Dispatch, useCallback, useContext } from 'react';
-import { ActivityPubStatusAppDtoType } from '../../../services/ap-proto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
 
 type Type = {
 	data: AppStatusContext;
@@ -50,6 +50,8 @@ function WithAppStatusContextDataContext({ children, data, dispatch }: Props) {
 		(id: string) => {
 			if (!id) return [];
 			const list = data.children.get(id);
+			if (!list) return [];
+
 			return list
 				.map((o) => data.lookup.get(o))
 				.filter((o) => o !== null && o !== undefined);

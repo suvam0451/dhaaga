@@ -5,11 +5,16 @@ import SharedStatusFragment from './fragments/SharedStatusFragment';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
 
+type StatusItemProps = {
+	// disables all interactions
+	isPreview?: boolean;
+};
+
 /**
  * Renders a status/note
  * @constructor
  */
-const StatusItem = memo(function Foo() {
+const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	const { dto } = useAppStatusItem();
 
@@ -23,7 +28,7 @@ const StatusItem = memo(function Foo() {
 			) {
 				return (
 					<Fragment>
-						<StatusCore hasBoost={true} />
+						<StatusCore hasBoost={true} isPreview={isPreview} />
 					</Fragment>
 				);
 			} else {
@@ -33,14 +38,18 @@ const StatusItem = memo(function Foo() {
 						<Fragment>
 							<SharedStatusFragment />
 							<RepliedStatusFragment />
-							<StatusCore hasBoost={true} hasReply={true} />
+							<StatusCore
+								hasBoost={true}
+								hasParent={true}
+								isPreview={isPreview}
+							/>
 						</Fragment>
 					);
 				} else {
 					return (
 						<Fragment>
 							<SharedStatusFragment />
-							<StatusCore hasBoost={true} />
+							<StatusCore hasBoost={true} isPreview={isPreview} />
 						</Fragment>
 					);
 				}
@@ -49,13 +58,13 @@ const StatusItem = memo(function Foo() {
 			return (
 				<Fragment>
 					<RepliedStatusFragment />
-					<StatusCore hasReply={true} />
+					<StatusCore hasParent={true} isPreview={isPreview} />
 				</Fragment>
 			);
 		} else {
 			return (
 				<Fragment>
-					<StatusCore />
+					<StatusCore isPreview={isPreview} />
 				</Fragment>
 			);
 		}

@@ -1,20 +1,12 @@
 import { ExpoConfig, ConfigContext } from 'expo/config.js';
 
 const IS_DEV = process.env.APP_VARIANT === 'dev';
-const IS_LITE = process.env.APP_VARIANT === 'lite';
-
-const appId = IS_DEV
-	? 'io.suvam.dhaaga.dev'
-	: IS_LITE
-		? 'io.suvam.dhaaga.lite'
-		: 'io.suvam.dhaaga';
-const appName = IS_DEV ? 'Dhaaga (Dev)' : IS_LITE ? 'Dhaaga (Lite)' : 'Dhaaga';
 
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
-	name: appName,
+	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
 	slug: 'dhaaga',
-	version: '0.10.1',
+	version: '0.10.2',
 	orientation: 'portrait',
 	icon: './assets/placeholder_icon.png',
 	userInterfaceStyle: 'dark',
@@ -24,12 +16,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		silentLaunch: true,
 	},
 	ios: {
-		bundleIdentifier: appId,
+		bundleIdentifier: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
 		supportsTablet: false,
 	},
 	android: {
 		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
-		versionCode: 13,
+		versionCode: 14,
 	},
 	androidStatusBar: {
 		barStyle: 'dark-content',
@@ -38,7 +30,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	splash: {
 		image: './assets/splash.png',
 		resizeMode: 'contain',
-		backgroundColor: '#121212',
+		backgroundColor: '#242424',
 	},
 	assetBundlePatterns: ['**/*'],
 	web: {

@@ -24,7 +24,7 @@ export const NotificationDescriptionText = memo(
 					return 'Accepted your follow request';
 				}
 				case DhaagaJsNotificationType.FOLLOW: {
-					return 'Now Follows You';
+					return 'Followed You';
 				}
 				case DhaagaJsNotificationType.REBLOG:
 				case DhaagaJsNotificationType.RENOTE: {

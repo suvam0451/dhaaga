@@ -55,17 +55,26 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 		}
 	}
 
+	/**
+	 * TODO test that adding withReplies for
+	 * sharkey does not break misskey/firefish
+	 */
 	async public(
-		query: DhaagaJsTimelineQueryOptions,
+		query: DhaagaJsTimelineQueryOptions & {
+			withReplies?: boolean | null;
+		},
 	): LibraryPromise<Endpoints['notes/global-timeline']['res']> {
 		if (query?.local) {
-			const data = await this.lib.client.request('notes/local-timeline', query);
+			const data = await this.lib.client.request(
+				'notes/local-timeline',
+				query as any,
+			);
 			return { data };
 		}
 		if (query?.social) {
 			const data = await this.lib.client.request(
 				'notes/hybrid-timeline',
-				query,
+				query as any,
 			);
 			return { data };
 		} else {

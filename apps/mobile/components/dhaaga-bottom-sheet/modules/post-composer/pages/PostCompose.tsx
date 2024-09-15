@@ -3,7 +3,6 @@ import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import ComposerTextInput from '../fragments/ComposerText';
-import ComposeMediaTargets from '../fragments/MediaTargets';
 import ActionButtons from '../fragments/ActionButtons';
 import ComposerSpoiler from '../fragments/ComposerSpoiler';
 import { useComposerContext } from '../api/useComposerContext';
@@ -12,7 +11,10 @@ import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../fragments/ComposerTopMenu';
 import TextEditorService from '../../../../../services/text-editor.service';
 
-const PostCompose = memo(() => {
+type PostComposeProps = {
+	requestId: string;
+};
+const PostCompose = memo(({}: PostComposeProps) => {
 	const { visible } = useAppBottomSheet();
 	const { editMode, setEditMode, setRawText } = useComposerContext();
 
@@ -32,8 +34,6 @@ const PostCompose = memo(() => {
 					>
 						<ComposerSpoiler />
 						<ComposerTextInput />
-						<View style={{ flexGrow: 1, flex: 1 }} />
-						<ComposeMediaTargets />
 					</ScrollView>
 				);
 			}

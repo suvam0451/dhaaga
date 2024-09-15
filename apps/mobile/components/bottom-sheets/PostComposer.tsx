@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import {
 	Keyboard,
@@ -71,10 +71,6 @@ function PostComposerBottomSheet() {
 			setImage(result.assets[0].uri);
 			console.log(result.assets[0].uri);
 		}
-	}
-
-	function backdropPress() {
-		console.log('backdrop pressed !!!');
 	}
 
 	function onCustomEmojiClicked() {
@@ -160,12 +156,6 @@ function PostComposerBottomSheet() {
 						<BottomSheetTextInput
 							multiline={true}
 							placeholder={"What's on your mind?"}
-							// containerStyle={{
-							// 	borderBottomWidth: 0,
-							// }}
-							// inputContainerStyle={{
-							// 	borderBottomWidth: 0,
-							// }}
 							placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
 							style={{
 								textDecorationLine: 'none',

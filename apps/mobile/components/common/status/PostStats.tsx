@@ -10,8 +10,8 @@ import { Text } from '@rneui/themed';
 import { APP_THEME } from '../../../styles/AppTheme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { ActivityPubStatusAppDtoType } from '../../../services/ap-proto/activitypub-status-dto.service';
-import { useAppTimelineDataContext } from '../timeline/api/useTimelineData';
+import { useAppTimelinePosts } from '../../../hooks/app/timelines/useAppTimelinePosts';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
 
 type PostStatLikesProps = {
 	onPress: () => void;
@@ -75,7 +75,7 @@ const PostStats = memo(function Foo({
 
 	const [IsLikeLoading, setIsLikeLoading] = useState(false);
 
-	const { toggleLike } = useAppTimelineDataContext();
+	const { toggleLike } = useAppTimelinePosts();
 
 	function _toggleLike() {
 		toggleLike(STATUS_DTO.id, setIsLikeLoading);

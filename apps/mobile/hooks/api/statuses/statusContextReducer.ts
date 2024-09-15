@@ -1,11 +1,14 @@
-import { ActivityPubStatusAppDtoType } from '../../../services/ap-proto/activitypub-status-dto.service';
 import MastodonService from '../../../services/mastodon.service';
 import { produce } from 'immer';
-import { ActivitypubStatusService } from '../../../services/ap-proto/activitypub-status.service';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubStatusService } from '../../../services/approto/activitypub-status.service';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
+import { AppBskyFeedGetPostThread } from '@atproto/api';
+import AtprotoContextService from '../../../services/atproto/atproto-context-service';
 
 export enum STATUS_CONTEXT_REDUCER_ACTION {
 	INIT = 'init',
+	INIT_ATPROTO = 'initAtproto',
 }
 
 export type AppStatusContext = {
@@ -29,7 +32,6 @@ function statusContextReducer(
 		payload: any;
 	},
 ): AppStatusContext {
-	console.log(action);
 	switch (action.type as STATUS_CONTEXT_REDUCER_ACTION) {
 		case STATUS_CONTEXT_REDUCER_ACTION.INIT: {
 			const _source = action.payload.source;
@@ -57,6 +59,38 @@ function statusContextReducer(
 				draft.children.clear();
 
 				draft.entrypoint = _source.getId();
+				draft.root = root.getId();
+
+				// @ts-ignore-next-line
+				for (let [key, value] of itemLookup) {
+					draft.lookup.set(
+						key,
+						new ActivitypubStatusService(value, _domain, _subdomain).export(),
+					);
+				}
+
+				// @ts-ignore-next-line
+				for (let [key, value] of childrenLookup) {
+					draft.children.set(
+						key,
+						value.map((o: StatusInterface) => o.getId()),
+					);
+				}
+			});
+		}
+		case STATUS_CONTEXT_REDUCER_ACTION.INIT_ATPROTO: {
+			const resp: AppBskyFeedGetPostThread.Response = action.payload.resp;
+			const _domain = action.payload.domain;
+			const _subdomain = action.payload.subdomain;
+
+			const { root, target, itemLookup, childrenLookup } =
+				AtprotoContextService.solve(resp);
+
+			return produce(state, (draft) => {
+				draft.lookup.clear();
+				draft.children.clear();
+
+				draft.entrypoint = target.getId();
 				draft.root = root.getId();
 
 				// @ts-ignore-next-line

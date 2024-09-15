@@ -14,6 +14,16 @@ function useKnownSoftware(software: string) {
 		};
 
 	switch (software as KNOWN_SOFTWARE) {
+		case KNOWN_SOFTWARE.BLUESKY: {
+			return {
+				bg: '#8ae805',
+				fg: 'white',
+				label: 'Bluesky',
+				logo: branding[15],
+				width: 28,
+				height: 28,
+			};
+		}
 		case KNOWN_SOFTWARE.MISSKEY:
 			return {
 				bg: '#8ae805',

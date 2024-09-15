@@ -1,6 +1,7 @@
 import { MastoStatus, MegaStatus } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 import { Endpoints } from 'misskey-js';
+import { AppBskyFeedGetTimeline } from '@atproto/api';
 
 type __MisskeyTimelineOptions = {
 	// common
@@ -56,6 +57,9 @@ export type DhaagaJsTimelineQueryOptions = {
 
 	// Akkoma specific thing?
 	withMuted?: boolean;
+
+	// (Only usable on local timeline + Sharkey)
+	// withReplies?: boolean | null;
 } & __MisskeyTimelineOptions;
 
 export type DhaagaJsTimelineArrayPromise = LibraryPromise<
@@ -64,12 +68,17 @@ export type DhaagaJsTimelineArrayPromise = LibraryPromise<
 	| Endpoints['notes/timeline']['res']
 	| Endpoints['notes/search-by-tag']['res']
 	| Endpoints['notes/user-list-timeline']['res']
+	| AppBskyFeedGetTimeline.Response
 >;
 
 export interface TimelinesRoute {
 	home(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise;
 
-	public(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise;
+	public(
+		query: DhaagaJsTimelineQueryOptions & {
+			withReplies?: boolean | null;
+		},
+	): DhaagaJsTimelineArrayPromise;
 
 	publicAsGuest(
 		urlLike: string,

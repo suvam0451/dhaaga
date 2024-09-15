@@ -17,7 +17,7 @@ function SelectProviderStack() {
 		<TitleOnlyStackHeaderContainer
 			route={route}
 			navigation={navigation}
-			headerTitle={`Select Platform`}
+			headerTitle={`Select Your SNS`}
 		>
 			<View
 				style={{
@@ -27,6 +27,31 @@ function SelectProviderStack() {
 				}}
 			>
 				<View style={{ marginHorizontal: 12 }}>
+					{/* --- Bluesky --- */}
+					<View style={styles.selectSignInPlatformSection}>
+						<View style={styles.selectSignInPlatformCenter}>
+							<SoftwareHeader software={KNOWN_SOFTWARE.BLUESKY} mb={0} mt={0} />
+							<Text style={styles.platformDescription}>
+								Use this for Bluesky
+							</Text>
+						</View>
+
+						<View style={{ paddingTop: 16 }}>
+							<Button
+								size={'md'}
+								color={'#0285ff'}
+								onPress={() => {
+									router.navigate('/profile/onboard/signin-bsky');
+								}}
+								containerStyle={{ borderRadius: 8 }}
+								buttonStyle={{ borderRadius: 8 }}
+							>
+								<Text style={styles.buttonText}>Login</Text>
+							</Button>
+						</View>
+					</View>
+
+					{/* --- Mastodon --- */}
 					<View style={styles.selectSignInPlatformSection}>
 						<View style={styles.selectSignInPlatformCenter}>
 							<SoftwareHeader
@@ -41,16 +66,19 @@ function SelectProviderStack() {
 						<View style={{ marginTop: 4 }}>
 							<Button
 								onPress={() => {
-									router.navigate('/settings/onboard/add-mastodon');
+									router.navigate('/profile/onboard/add-mastodon');
 								}}
 								color={'rgb(99, 100, 255)'}
 								size={'md'}
+								containerStyle={{ borderRadius: 8 }}
+								buttonStyle={{ borderRadius: 8 }}
 							>
 								<Text style={styles.buttonText}>Login</Text>
 							</Button>
 						</View>
 					</View>
 
+					{/* --- Misskey --- */}
 					<View style={styles.selectSignInPlatformSection}>
 						<View style={styles.selectSignInPlatformCenter}>
 							<SoftwareHeader software={KNOWN_SOFTWARE.MISSKEY} mb={0} mt={0} />
@@ -66,48 +94,15 @@ function SelectProviderStack() {
 									'linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))'
 								}
 								onPress={() => {
-									router.navigate('/settings/onboard/add-misskey');
+									router.navigate('/profile/onboard/add-misskey');
 								}}
+								containerStyle={{ borderRadius: 8 }}
+								buttonStyle={{ borderRadius: 8 }}
 							>
 								<Text style={styles.buttonText}>Login</Text>
 							</Button>
 						</View>
 					</View>
-					{/*<View*/}
-					{/*	style={{*/}
-					{/*		justifyContent: 'center',*/}
-					{/*		alignItems: 'center',*/}
-					{/*		width: '100%',*/}
-					{/*		marginVertical: 16,*/}
-					{/*	}}*/}
-					{/*>*/}
-					{/*	<View*/}
-					{/*		style={{*/}
-					{/*			padding: 12,*/}
-					{/*			backgroundColor: '#323232',*/}
-					{/*			borderRadius: 8,*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		<Text*/}
-					{/*			style={{*/}
-					{/*				color: APP_FONT.MONTSERRAT_HEADER,*/}
-					{/*				fontSize: 14,*/}
-					{/*				fontFamily: APP_FONTS.INTER_700_BOLD,*/}
-					{/*			}}*/}
-					{/*		>*/}
-					{/*			I am Not Sure*/}
-					{/*		</Text>*/}
-					{/*	</View>*/}
-					{/*	<Text*/}
-					{/*		style={{*/}
-					{/*			textAlign: 'center',*/}
-					{/*			fontFamily: APP_FONTS.INTER_400_REGULAR,*/}
-					{/*			color: APP_FONT.MONTSERRAT_BODY,*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		I will try my best to auto-detect your instance software*/}
-					{/*	</Text>*/}
-					{/*</View>*/}
 				</View>
 			</View>
 		</TitleOnlyStackHeaderContainer>

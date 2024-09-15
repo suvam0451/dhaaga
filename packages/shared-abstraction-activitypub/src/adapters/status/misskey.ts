@@ -1,64 +1,29 @@
-import {
-	DhaagaJsMentionObject,
-	NoteInstance,
-	Status,
-	StatusContextInstance,
-	StatusContextInterface,
-	StatusInterface,
-} from './_interface.js';
+import { StatusInterface } from './_interface.js';
 import { DriveFile } from 'misskey-js/autogen/models.js';
 import { DriveFileToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { DriveFileInstance } from '../media-attachment/unique.js';
-import { UserType } from '../profile/_interface.js';
+import UnknownToStatusAdapter from './default.js';
+import { Note } from 'misskey-js/autogen/models.d.ts';
 
-export class MisskeyToStatusContextAdapter implements StatusContextInterface {
-	ref: StatusInterface;
-	ctx: StatusContextInstance;
+class MisskeyToStatusAdapter
+	extends UnknownToStatusAdapter
+	implements StatusInterface
+{
+	ref: Note;
 
-	constructor(ref: StatusInterface, ctx: StatusContextInstance) {
-		this.ref = ref;
-		this.ctx = ctx;
-	}
-
-	addChildren(items: StatusInterface[]): void {
-		throw new Error('Method not implemented.');
-	}
-
-	getId(): string {
-		throw new Error('Method not implemented.');
-	}
-
-	getChildren() {
-		return [];
-	}
-
-	getParent() {
-		return null;
-	}
-
-	getRoot() {
-		return null;
-	}
-}
-
-class MisskeyToStatusAdapter implements StatusInterface {
-	ref: NoteInstance;
-
-	constructor(ref: NoteInstance) {
+	constructor(ref: Note) {
+		super();
 		this.ref = ref;
 	}
 
-	getCachedEmojis(): Map<string, string> {
-		return new Map<string, string>();
-	}
+	// getCachedEmojis(): Map<string, string> {
+	// 	return new Map<string, string>();
+	// }
 
-	getMentions(): DhaagaJsMentionObject[] {
-		return (
-			this.ref.instance?.mentions?.map((o) => ({
-				id: o,
-			})) || []
-		);
-	}
+	getMentions = () =>
+		this.ref.mentions?.map((o) => ({
+			id: o,
+		})) || [];
 
 	getReactions(myReaction?: string): {
 		id: string;
@@ -68,7 +33,7 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		url: string | null;
 	}[] {
 		const retval = [];
-		const src = this.ref.instance?.reactions || {};
+		const src = this.ref.reactions || {};
 		for (const k in src) {
 			retval.push({
 				id: k,
@@ -81,13 +46,11 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		return retval;
 	}
 
-	getRepliedStatusRaw(): Status {
-		return this.ref.instance?.reply;
-	}
+	isReply = () => !!this.ref.reply;
+	hasParentAvailable = () => !!this.ref.reply;
+	getParentRaw = () => this.ref.reply;
 
-	// reactionAcceptance
-	// :
-	// "likeOnlyForRemote"
+	isReposted = () => !!this.ref.renote;
 
 	getReactionEmojis(): {
 		height?: number | undefined;
@@ -96,7 +59,7 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		url: string;
 	}[] {
 		const retval = [];
-		const src = this.ref.instance?.reactionEmojis || {};
+		const src = this.ref.reactionEmojis || {};
 		for (const k in src) {
 			if (typeof src[k] === 'string') {
 				// misskey
@@ -114,119 +77,56 @@ class MisskeyToStatusAdapter implements StatusInterface {
 		return retval;
 	}
 
-	getIsRebloggedByMe(): boolean | null | undefined {
-		return false;
-	}
+	getIsSensitive = () => !!this.ref.cw;
+	getSpoilerText = () => this.ref.cw;
 
-	getIsSensitive(): boolean {
-		return (
-			this.ref.instance?.cw !== undefined && this.ref.instance?.cw !== null
-		);
-	}
+	getRaw = () => this?.ref;
 
-	getSpoilerText(): string | null | undefined {
-		return this.ref.instance?.cw;
-	}
-
-	getRaw(): Status {
-		return this?.ref?.instance;
-	}
-
+	// needs custom steps for sharkey
 	getIsFavourited(): boolean | null | undefined {
 		return false;
 	}
 
-	setDescendents(items: StatusInterface[]): void {
-		return;
-	}
+	getUser = () => this?.ref?.user;
 
-	getDescendants(): StatusInterface[] {
-		return [];
-	}
-
-	getUser(): UserType {
-		return this?.ref?.instance?.user;
-	}
-
-	isReply(): boolean {
-		return (
-			this.ref.instance?.reply !== undefined &&
-			this.ref.instance?.reply !== null
-		);
-	}
-
-	getParentStatusId(): string | null | undefined {
-		return this.ref.instance?.replyId;
-	}
+	getParentStatusId = () => this.ref.replyId;
 
 	getUserIdParentStatusUserId(): string | null | undefined {
 		return null;
 	}
 
-	getRepostedStatusRaw = () => this.ref?.instance?.renote;
+	getRepostedStatusRaw = () => this.ref.renote;
 
-	getIsBookmarked(): boolean {
-		return false;
-	}
+	getId = () => this.ref.id;
 
-	isValid() {
-		return this.ref?.instance !== undefined && this.ref?.instance !== null;
-	}
+	getRepliesCount = () => this.ref.repliesCount;
 
-	getId() {
-		return this.ref?.instance?.id;
-	}
+	getRepostsCount = () => this.ref.renoteCount;
 
-	getRepliesCount() {
-		return this.ref?.instance?.repliesCount;
-	}
+	// getFavouritesCount() {
+	// 	return 0;
+	// }
 
-	getRepostsCount() {
-		return this.ref?.instance?.renoteCount;
-	}
+	getUsername = () => this.ref.user?.username;
 
-	getFavouritesCount() {
-		return 0;
-	}
+	getDisplayName = () => this.ref?.user?.name;
 
-	getUsername() {
-		return this.ref?.instance?.user?.username;
-	}
+	getAvatarUrl = () => this.ref?.user?.avatarUrl;
 
-	getDisplayName() {
-		return this.ref?.instance?.user?.name;
-	}
+	getCreatedAt = () => this.ref?.createdAt || new Date().toString();
 
-	getAvatarUrl() {
-		return this.ref?.instance?.user?.avatarUrl;
-	}
-
-	getCreatedAt() {
-		return this.ref?.instance?.createdAt || new Date().toString();
-	}
-
-	getVisibility() {
-		return this.ref?.instance?.visibility;
-	}
+	getVisibility = () => this.ref?.visibility;
 
 	getAccountUrl(mySubdomain?: string) {
-		if (
-			this.ref.instance?.user?.host === undefined ||
-			this.ref.instance?.user?.host === null
-		) {
-			return `https://${mySubdomain}/@${this.ref.instance?.user?.username}`;
+		if (this.ref.user?.host === undefined || this.ref.user?.host === null) {
+			return `https://${mySubdomain}/@${this.ref.user?.username}`;
 		}
-		return `https://${this.ref.instance?.user?.host}/@${this.ref.instance?.user?.username}`;
+		return `https://${this.ref.user?.host}/@${this.ref.user?.username}`;
 	}
 
 	getRepostedStatus(): StatusInterface | null | undefined {
-		if (
-			this.ref?.instance?.renote !== undefined &&
-			this.ref.instance?.renote !== null
-		) {
-			return new MisskeyToStatusAdapter(
-				new NoteInstance(this.ref?.instance?.renote),
-			) as unknown as StatusInterface;
+		if (this.ref?.renote !== undefined && this.ref.renote !== null) {
+			return new MisskeyToStatusAdapter(this.ref?.renote);
 		}
 		return null;
 	}
@@ -236,38 +136,25 @@ class MisskeyToStatusAdapter implements StatusInterface {
 	}
 
 	getMediaAttachments() {
-		if (!this.ref?.instance?.files) {
+		if (!this.ref?.files) {
 			return [];
 		}
-		return this.ref?.instance?.files.map((o: DriveFile) => {
+		return this.ref?.files.map((o: DriveFile) => {
 			return new DriveFileToMediaAttachmentAdapter(
 				new DriveFileInstance(o),
 			) as any;
 		});
 	}
 
-	isReposted() {
-		return (
-			this.ref?.instance?.renote !== undefined &&
-			this.ref?.instance?.renote !== null
-		);
+	getContent = () => this.ref?.text;
+
+	print() {
+		console.log(this.ref);
 	}
 
-	getContent() {
-		return this.ref?.instance?.text;
-	}
+	getAccountId_Poster = (): string => this?.ref?.user?.id;
 
-	print(): void {
-		console.log(this.ref.instance);
-	}
-
-	getAccountId_Poster(): string {
-		return this?.ref?.instance?.user?.id;
-	}
-
-	getMyReaction(): string | null | undefined {
-		return this.ref.instance?.myReaction;
-	}
+	getMyReaction = (): string | null | undefined => this.ref.myReaction;
 }
 
 export default MisskeyToStatusAdapter;
