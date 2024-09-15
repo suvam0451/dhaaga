@@ -1,18 +1,18 @@
 import { memo } from 'react';
-import useApiGetSocialNotifs from '../api/useApiGetSocialNotifs';
-import useApiGetUpdateNotifs from '../api/useApiGetUpdateNotifs';
-import { View, Text, FlatList } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import FlatListRenderer from '../fragments/FlatListRenderer';
+import useApiGetUpdateNotifs from '../api/useApiGetUpdateNotifs';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 
-const NotificationViewChat = memo(() => {
-	const { items: SocialNotifs } = useApiGetSocialNotifs();
+const NotificationViewOthers = memo(() => {
+	const { items: SocialNotifs } = useApiGetUpdateNotifs();
+
 	return (
 		<FlatList
-			data={[]}
+			data={SocialNotifs}
 			renderItem={({ item }) => {
-				return <View />;
+				return <FlatListRenderer item={item} />;
 			}}
 			ListHeaderComponent={
 				<View style={{ marginHorizontal: 8, marginVertical: 16 }}>
@@ -22,10 +22,9 @@ const NotificationViewChat = memo(() => {
 							fontSize: 14,
 							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							textAlign: 'center',
-							marginHorizontal: 16,
 						}}
 					>
-						Chat has not been implemented in Dhaaga as of v0.10.2
+						Miscellaneous updates from other users.
 					</Text>
 				</View>
 			}
@@ -33,4 +32,4 @@ const NotificationViewChat = memo(() => {
 	);
 });
 
-export default NotificationViewChat;
+export default NotificationViewOthers;

@@ -21,7 +21,6 @@ const NotificationUpdateItem = memo(
 					type={type}
 					createdAt={createdAt}
 				/>
-				;
 			</View>
 		);
 	},

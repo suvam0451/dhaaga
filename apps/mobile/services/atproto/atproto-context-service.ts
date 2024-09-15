@@ -4,6 +4,7 @@ import {
 	StatusInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../activitypub-adapter.service';
+import ActivitypubAdapterService from '../activitypub-adapter.service';
 
 class AtprotoContextService {
 	/**
@@ -31,7 +32,7 @@ class AtprotoContextService {
 		let child: StatusInterface = curr;
 		while (!!parent) {
 			const data = ActivityPubAdapterService.adaptStatus(
-				parent.post,
+				parent,
 				KNOWN_SOFTWARE.BLUESKY,
 			);
 			lookup.set(data.getId(), data);
@@ -42,11 +43,30 @@ class AtprotoContextService {
 				childrenMapper.set(data.getId(), [child]);
 			}
 
-			parent = data.getParentRaw();
+			parent = parent?.parent;
 			child = data;
 		}
 		// the topmost child is the root
 		let root: StatusInterface = child;
+
+		function processList(replies: any[], parentId: string) {
+			replies.forEach((o) => {
+				const _o = ActivitypubAdapterService.adaptStatus(
+					o,
+					KNOWN_SOFTWARE.BLUESKY,
+				);
+				lookup.set(_o.getId(), _o);
+
+				if (childrenMapper.has(parentId)) {
+					childrenMapper.get(parentId).push(_o);
+				} else {
+					childrenMapper.set(parentId, [_o]);
+				}
+				processList(o?.replies || [], _o.getId());
+			});
+		}
+
+		processList(_thread.replies as any[], curr.getId());
 
 		return {
 			root,

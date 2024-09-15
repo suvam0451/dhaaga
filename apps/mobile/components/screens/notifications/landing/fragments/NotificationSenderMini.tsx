@@ -242,7 +242,7 @@ export const NotificationSenderMini = memo(
 					<Text
 						style={{
 							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							color: APP_FONT.MONTSERRAT_HEADER,
+							color: APP_FONT.MONTSERRAT_BODY,
 						}}
 						numberOfLines={1}
 					>
