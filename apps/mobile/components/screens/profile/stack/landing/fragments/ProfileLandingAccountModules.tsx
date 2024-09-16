@@ -84,18 +84,14 @@ const ProfileLandingAccountModules = memo(() => {
 
 			<ActionButton
 				Icon={
-					<FontAwesome
-						name="magic"
-						size={24}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
+					<FontAwesome name="magic" size={24} color={APP_FONT.HIGH_EMPHASIS} />
 				}
 				label={'Quick Fix'}
 				to={'/profile/account/lists'}
 			/>
 			<ActionButton
 				Icon={
-					<FontAwesome5 name="cog" size={24} color={APP_FONT.MONTSERRAT_BODY} />
+					<FontAwesome5 name="cog" size={24} color={APP_FONT.HIGH_EMPHASIS} />
 				}
 				label={'All Settings'}
 				to={'/profile/settings/landing'}
@@ -107,7 +103,7 @@ const ProfileLandingAccountModules = memo(() => {
 					{
 						marginTop: 16,
 						fontSize: 14,
-						color: APP_FONT.DISABLED,
+						color: APP_FONT.MEDIUM_EMPHASIS,
 						textAlign: 'center',
 						paddingHorizontal: 32,
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,
@@ -131,7 +127,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 12,
 	},
 	moduleLabel: {
-		color: APP_FONT.MONTSERRAT_BODY,
+		color: APP_FONT.HIGH_EMPHASIS,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		fontSize: 18,
 		marginLeft: 8,

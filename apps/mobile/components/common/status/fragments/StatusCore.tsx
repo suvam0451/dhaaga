@@ -11,6 +11,7 @@ import EmojiReactions from './EmojiReactions';
 import StatusInteraction from './StatusInteraction';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 /**
  * Mostly used to remove the border
@@ -49,6 +50,8 @@ const StatusCore = memo(
 			remoteSubdomain: STATUS_DTO.postedBy.instance,
 			emojiMap: STATUS_DTO.calculated.emojis,
 			deps: [dto],
+			emphasis: 'high',
+			fontFamily: APP_FONTS.INTER_400_REGULAR,
 		});
 
 		const isSensitive = STATUS_DTO.meta.sensitive;

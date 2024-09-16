@@ -18,6 +18,7 @@ import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavB
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import AccountService from '../../../../../../services/account.service';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
+import AccountDbService from '../../../../../../database/services/account.service';
 
 function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');
@@ -81,6 +82,16 @@ function MisskeySignInStack() {
 					{ key: 'misskey_id', value: MisskeyId },
 					{ key: 'access_token', value: Token },
 				],
+			});
+
+			AccountDbService.upsert({
+				subdomain: _subdomain,
+				domain: _domain,
+				username: PreviewCard.username,
+				avatarUrl: PreviewCard.avatar,
+				displayName: PreviewCard.displayName,
+			}).then((e) => {
+				console.log(e);
 			});
 			router.replace('/profile/settings/accounts');
 		} catch (e) {

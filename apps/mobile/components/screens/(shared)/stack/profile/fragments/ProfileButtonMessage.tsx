@@ -26,12 +26,12 @@ const ProfileButtonMessage = memo(({ handle }: ProfilePeekMessageProps) => {
 		<TouchableOpacity
 			style={{
 				padding: 8,
-				backgroundColor: '#202020',
+				backgroundColor: '#282828',
 				borderRadius: 8,
 			}}
 			onPress={onPress}
 		>
-			<AntDesign name="message1" size={20} color={APP_FONT.MONTSERRAT_BODY} />
+			<AntDesign name="message1" size={20} color={APP_FONT.HIGH_EMPHASIS} />
 		</TouchableOpacity>
 	);
 });

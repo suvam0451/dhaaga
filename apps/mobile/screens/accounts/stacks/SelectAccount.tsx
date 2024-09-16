@@ -3,7 +3,7 @@ import { Button } from '@rneui/base';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { router } from 'expo-router';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AccountInfoSyncDialog from '../../../components/dialogs/AccountInfoSync';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ConfirmAccountDelete from '../../../components/dialogs/accounts/ConfirmAccountDelete';
@@ -12,11 +12,20 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 import AccountListForSoftware from '../../../components/screens/profile/stack/landing/fragments/AccountListForSoftware';
+import { getLiveClient, schema } from '../../../database/client';
+import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
+
+const client = getLiveClient();
 
 function SelectAccountStack() {
+	const { data } = useLiveQuery(client.select().from(schema.account));
 	const [DialogVisible, setDialogVisible] = useState(false);
 	const [DeleteDialogVisible, setDeleteDialogVisible] = useState(false);
 	const DialogTarget = useRef<UUID>(null);
+
+	useEffect(() => {
+		console.log('accounts', data);
+	}, [data]);
 
 	const SOFTWARE_ARRAY = [
 		KNOWN_SOFTWARE.AKKOMA,

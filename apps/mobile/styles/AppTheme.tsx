@@ -1,7 +1,7 @@
 export const APP_THEME = {
 	BACKGROUND: '#121212',
 	DARK_THEME_MENUBAR: '#1c1c1c',
-	DARK_THEME_STATUS_BG: '#161616',
+	DARK_THEME_STATUS_BG: '#121212', // #161616
 	CARD_BACKGROUND_DARKEST: '#1e1e1e',
 	LINK: 'rgba(239,195,207, 0.87)',
 	LINK_SECONDARY: '#45a0be',
@@ -38,6 +38,11 @@ export const APP_THIRD_PARTY_BRANDING = {
 };
 
 export const APP_FONT = {
+	// Base on text emphasis, no transparency
+	HIGH_EMPHASIS: '#f5f5f5',
+	MEDIUM_EMPHASIS: '#999999',
+	LOW_EMPHASIS: '#606060',
+	//  with transparency
 	MONTSERRAT_HEADER: 'rgba(255, 255, 255, 0.87)',
 	MONTSERRAT_BODY: 'rgba(255, 255, 255, 0.6)',
 	DISABLED: 'rgba(255, 255, 255, 0.3)',

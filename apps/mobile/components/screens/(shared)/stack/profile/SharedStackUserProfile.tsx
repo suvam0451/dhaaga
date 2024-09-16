@@ -86,7 +86,7 @@ export function ProfileContextWrapped() {
 						<Text
 							style={{
 								fontFamily: APP_FONTS.MONTSERRAT_900_BLACK,
-								color: APP_FONT.MONTSERRAT_HEADER,
+								color: APP_FONT.HIGH_EMPHASIS,
 							}}
 							numberOfLines={1}
 						>
@@ -174,14 +174,13 @@ const localStyles = StyleSheet.create({
 	avatarImageContainer: {
 		flex: 1,
 		width: '100%',
-		backgroundColor: '#0553',
 		padding: 2,
 		borderRadius: 72 / 2,
 	},
 	avatarContainer: {
 		width: 72,
 		height: 72,
-		borderColor: 'rgba(200, 200, 200, 0.2)',
+		borderColor: 'rgba(200, 200, 200, 0.12)',
 		borderWidth: 1,
 		borderRadius: 72 / 2,
 		marginTop: -24,

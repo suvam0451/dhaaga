@@ -24,8 +24,9 @@ const SharedStatusFragment = memo(function Foo() {
 		emojiMap: dto.calculated.emojis as any,
 		deps: [dto],
 		expectedHeight: 24,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
 		numberOfLines: 1,
+		emphasis: 'medium',
 	});
 
 	return useMemo(() => {
@@ -65,19 +66,7 @@ const SharedStatusFragment = memo(function Foo() {
 							}}
 						/>
 					</View>
-					<View style={{ flex: 1 }}>
-						<Text
-							style={{
-								color: '#888',
-								marginLeft: 4,
-								fontSize: 14,
-								opacity: 0.6,
-							}}
-							numberOfLines={1}
-						>
-							{ParsedDisplayName}
-						</Text>
-					</View>
+					<View style={{ flex: 1, marginLeft: 6 }}>{ParsedDisplayName}</View>
 					<View>
 						<Text
 							style={{

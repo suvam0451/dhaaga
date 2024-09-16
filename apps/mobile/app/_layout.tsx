@@ -19,6 +19,12 @@ import { LogBox } from 'react-native';
 import { useFonts } from '@expo-google-fonts/montserrat';
 import { enableMapSet } from 'immer';
 
+// database migration
+import { openDatabaseSync } from 'expo-sqlite/next';
+import { drizzle } from 'drizzle-orm/expo-sqlite';
+import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
+import migrations from '../database/migrations/migrations';
+
 enableMapSet();
 
 // to get rid of realm warnings
@@ -32,6 +38,9 @@ import AppInit from '../services/init/app-init';
 
 // polyfills
 import '@expo/browser-polyfill';
+import { deleteDatabase } from '../database/client';
+import MigrationFailed from '../components/error-screen/MigrationFailed';
+// import MigrationFailed from '../components/error-screen/MigrationFailed';
 
 /**
  * Suppress these warnings...
@@ -65,6 +74,9 @@ if (__DEV__) {
 	console.error = withoutIgnored(console.error);
 }
 
+let expoDb = openDatabaseSync('app.db');
+const drizzleDb = drizzle(expoDb);
+
 function WithGorhomBottomSheetWrapper() {
 	const { top, bottom } = useSafeAreaInsets();
 
@@ -90,6 +102,19 @@ function WithGorhomBottomSheetWrapper() {
 			await SplashScreen.hideAsync();
 		}
 	}, [fontsLoaded, fontError]);
+
+	// NOTE: comment out to allow force reset of db
+	const { error } = useMigrations(drizzleDb, migrations);
+
+	useEffect(() => {
+		// Uncomment to hard reset the db
+		if (!!error) {
+			// expoDb.closeSync();
+			// deleteDatabase();
+		}
+	}, [error]);
+
+	if (error) return <MigrationFailed />;
 
 	return (
 		<WithActivityPubRestClient>

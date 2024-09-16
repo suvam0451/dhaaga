@@ -14,6 +14,7 @@ import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusVisibility from './StatusVisibility';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { APP_FONT } from '../../../../styles/AppTheme';
 
 const TIMELINE_PFP_SIZE = 46;
 
@@ -101,6 +102,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		numberOfLines: 1,
+		emphasis: 'high',
 	});
 
 	return (
@@ -124,11 +126,9 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 
 					<Text
 						style={{
-							color: '#888',
-							fontWeight: '500',
+							color: APP_FONT.MEDIUM_EMPHASIS,
 							fontSize: 12,
-							opacity: 0.6,
-							fontFamily: 'Inter-Bold',
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							maxWidth: 196,
 						}}
 						numberOfLines={1}

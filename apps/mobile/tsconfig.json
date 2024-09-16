@@ -11,7 +11,8 @@
     "allowJs": true,
     "lib": [
       "ESNext"
-    ]
+    ],
+    "strictNullChecks": true
   },
   "include": [
     "*.ts",

@@ -1,4 +1,4 @@
-import { DependencyList, useEffect, useRef, useState } from 'react';
+import { DependencyList, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
@@ -8,7 +8,6 @@ import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import { APP_FONT } from '../../styles/AppTheme';
 import * as Crypto from 'expo-crypto';
-import { APP_FONTS } from '../../styles/AppFonts';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 
 type Props = {
@@ -23,6 +22,7 @@ type Props = {
 
 	numberOfLines?: number;
 	acceptTouch?: boolean;
+	emphasis?: 'high' | 'medium' | 'low';
 };
 
 /**
@@ -35,6 +35,7 @@ type Props = {
  * @param fontFamily
  * @param numberOfLines
  * @param acceptTouch
+ * @param emphasis
  */
 function useMfm({
 	content,
@@ -45,6 +46,7 @@ function useMfm({
 	fontFamily,
 	numberOfLines,
 	acceptTouch,
+	emphasis,
 }: Props) {
 	const { domain, subdomain } = useActivityPubRestClientContext();
 	const db = useRealm();
@@ -74,10 +76,24 @@ function useMfm({
 	 * */
 	const IsSolved = useRef(Crypto.randomUUID());
 
+	let color = useMemo(() => {
+		switch (emphasis) {
+			case 'high':
+				return APP_FONT.HIGH_EMPHASIS;
+			case 'medium':
+				return APP_FONT.MEDIUM_EMPHASIS;
+			case 'low':
+				return APP_FONT.LOW_EMPHASIS;
+			default:
+				return APP_FONT.MEDIUM_EMPHASIS;
+		}
+	}, [emphasis]);
+	console.log(emphasis, color);
+
 	// since font remains same for each reusable component
 	const fontStyle = useRef({
-		color: APP_FONT.MONTSERRAT_HEADER,
-		fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
+		color: color,
+		fontFamily: fontFamily,
 	});
 
 	useEffect(() => {
@@ -102,6 +118,8 @@ function useMfm({
 			db,
 			globalDb,
 			remoteSubdomain,
+			fontFamily,
+			emphasis,
 		});
 		setData({
 			isLoaded: true,
@@ -114,11 +132,11 @@ function useMfm({
 								return (
 									<Text
 										key={uuid}
-										style={fontStyle.current}
+										style={fontStyle.current as any}
 										numberOfLines={numberOfLines}
 									>
 										{para.map((o, j) => (
-											<Text key={j} style={fontStyle.current}>
+											<Text key={j} style={fontStyle.current as any}>
 												{o}
 											</Text>
 										))}
@@ -126,9 +144,9 @@ function useMfm({
 								);
 							} else {
 								return (
-									<Text key={uuid} style={fontStyle.current}>
+									<Text key={uuid} style={fontStyle.current as any}>
 										{para.map((o, j) => (
-											<Text key={j} style={fontStyle.current}>
+											<Text key={j} style={fontStyle.current as any}>
 												{o}
 											</Text>
 										))}

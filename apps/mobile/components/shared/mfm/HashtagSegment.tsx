@@ -15,8 +15,9 @@ import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 
 type Props = {
 	value: string;
+	fontFamily: string;
 };
-const HashtagSegment = memo(function Foo({ value }: Props) {
+const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 	const { acceptTouch } = useAppMfmContext();
 	const _value = decodeURI(value);
 
@@ -60,9 +61,10 @@ const HashtagSegment = memo(function Foo({ value }: Props) {
 					? APP_THEME.COLOR_SCHEME_D_EMPHASIS
 					: APP_THEME.COLOR_SCHEME_D_NORMAL,
 				opacity: 1,
-				fontFamily: isFollowed
-					? APP_FONTS.MONTSERRAT_700_BOLD
-					: APP_FONTS.MONTSERRAT_400_REGULAR,
+				fontFamily: fontFamily,
+				// fontFamily: isFollowed
+				// 	? APP_FONTS.MONTSERRAT_700_BOLD
+				// 	: APP_FONTS.MONTSERRAT_400_REGULAR,
 				backgroundColor: isPrivatelyFollowed
 					? 'rgba(240,185,56,0.16)'
 					: undefined,

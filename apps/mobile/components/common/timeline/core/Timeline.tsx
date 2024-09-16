@@ -187,6 +187,6 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		flex: 1,
-		backgroundColor: '#000',
+		backgroundColor: APP_THEME.BACKGROUND,
 	},
 });

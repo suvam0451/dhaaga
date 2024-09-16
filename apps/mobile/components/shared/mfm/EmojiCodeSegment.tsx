@@ -53,13 +53,12 @@ const EmojiCodeSegment = memo(function Foo({
 	}, [match]);
 
 	return (
-		<Text>
+		<Text style={{ alignItems: 'center' }}>
 			{/*@ts-ignore-next-line*/}
 			<Image
 				style={{
 					width: Width,
 					height: EMOJI_HEIGHT,
-					opacity: 0.87,
 				}}
 				source={{ uri: match }}
 			/>

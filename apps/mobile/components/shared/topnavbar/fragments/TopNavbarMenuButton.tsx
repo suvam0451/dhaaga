@@ -16,7 +16,7 @@ const TopNavbarMenuButton = memo(() => {
 			}}
 		>
 			<View style={{ width: 42 }}>
-				<Ionicons name="menu" size={24} color={APP_FONT.DISABLED} />
+				<Ionicons name="menu" size={24} color={APP_FONT.HIGH_EMPHASIS} />
 			</View>
 		</TouchableOpacity>
 	);

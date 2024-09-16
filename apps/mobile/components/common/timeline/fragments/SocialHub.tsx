@@ -310,7 +310,13 @@ function SocialHub() {
 	}, [userDataTimelines]);
 
 	return (
-		<View style={{ height: '100%', backgroundColor: '#121212' }}>
+		<View
+			style={{
+				height: '100%',
+				// backgroundColor: '#121212',
+				backgroundColor: 'rgb(12,12,12)',
+			}}
+		>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<TimelinesHeader title={'Your Social Hub'} />
 			<ScrollView>
@@ -318,7 +324,7 @@ function SocialHub() {
 					style={{
 						height: '100%',
 						paddingTop: 16,
-						backgroundColor: '#121212',
+						// backgroundColor: '#121212',
 						paddingHorizontal: 8,
 					}}
 				>
@@ -432,7 +438,7 @@ const styles = StyleSheet.create({
 	timeOfDayText: {
 		fontSize: 28,
 		fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
+		color: APP_FONT.MONTSERRAT_HEADER,
 		textAlign: 'center',
 	},
 });
