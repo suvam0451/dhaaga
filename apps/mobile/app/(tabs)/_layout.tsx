@@ -9,6 +9,8 @@ import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
 
+const APP_TAB_BAR_COLOR = '#121212';
+
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
 	return (
@@ -77,7 +79,7 @@ export default function TabLayout() {
 								color: 'yellow',
 							},
 							tabBarStyle: {
-								backgroundColor: '#252525',
+								backgroundColor: APP_TAB_BAR_COLOR,
 								borderTopWidth: 0,
 							},
 							tabBarIconStyle: {

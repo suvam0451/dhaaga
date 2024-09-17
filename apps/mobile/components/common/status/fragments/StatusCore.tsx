@@ -1,6 +1,8 @@
 import { memo, useMemo, useState } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext, {
+	useAppStatusItem,
+} from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
 import { TouchableOpacity, View } from 'react-native';
@@ -12,6 +14,7 @@ import StatusInteraction from './StatusInteraction';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import StatusQuoted from './StatusQuoted';
 
 /**
  * Mostly used to remove the border
@@ -37,6 +40,8 @@ const StatusCore = memo(
 				: dto.boostedFrom
 			: dto;
 
+		const IS_QUOTE_BOOST = dto?.meta?.isBoost && dto?.content?.raw;
+
 		const IS_REPLY_OR_BOOST =
 			STATUS_DTO.meta.isReply ||
 			(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
@@ -57,7 +62,7 @@ const StatusCore = memo(
 		const isSensitive = STATUS_DTO.meta.sensitive;
 		const spoilerText = STATUS_DTO.meta.cw;
 
-		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 10;
+		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 4;
 		if (hasParent || hasBoost) paddingTop = 0;
 		if (!hasParent && hasBoost) paddingTop = 6;
 
@@ -120,11 +125,11 @@ const StatusCore = memo(
 						/>
 					)}
 					{/*FIXME: enable for bluesky*/}
-					{/*{IS_QUOTE_BOOST && (*/}
-					{/*	<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>*/}
-					{/*		<StatusQuoted />*/}
-					{/*	</WithAppStatusItemContext>*/}
-					{/*)}*/}
+					{IS_QUOTE_BOOST && (
+						<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
+							<StatusQuoted />
+						</WithAppStatusItemContext>
+					)}
 
 					{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
 					{!isPreview && (

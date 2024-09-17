@@ -254,6 +254,9 @@ function WithAppTimelineDataContext({ children }: Props) {
 						},
 					});
 				})
+				.catch((e) => {
+					console.log('[WARN]: could not toggle bookmark', e);
+				})
 				.finally(() => {
 					Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).finally(() => {
 						setLoading(false);
@@ -286,6 +289,8 @@ function WithAppTimelineDataContext({ children }: Props) {
 				}
 			} catch (e) {
 				console.log('error', e);
+			} finally {
+				setLoading(false);
 			}
 		},
 		[Posts, domain],

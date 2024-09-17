@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		borderTopRightRadius: 8,
 		borderTopLeftRadius: 8,
-		backgroundColor: '#2C2C2C',
+		backgroundColor: '#1f1f1f',
 	},
 });
 

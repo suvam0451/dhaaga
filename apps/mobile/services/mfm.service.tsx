@@ -265,6 +265,8 @@ class MfmComponentBuilder {
 						key={k}
 						url={node.props.url}
 						displayName={displayName}
+						fontFamily={this.fontFamily}
+						emphasis={this.emphasis}
 					/>
 				);
 			}

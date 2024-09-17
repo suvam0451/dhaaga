@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import {
 	BOTTOM_SHEET_ENUM,
@@ -14,12 +14,33 @@ import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 type LinkProcessorProps = {
 	url: string;
 	displayName: string;
+	fontFamily: string;
+	emphasis: 'high' | 'medium' | 'low';
 };
 
-function LinkProcessor({ url, displayName }: LinkProcessorProps) {
+function LinkProcessor({
+	url,
+	displayName,
+	fontFamily,
+	emphasis,
+}: LinkProcessorProps) {
 	const { acceptTouch } = useAppMfmContext();
 	const httpsRemoved = url.replace(/(https:\/\/)(.+)/, '$2');
 	const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, '$2');
+
+	const linkTextFontFamily = useMemo(() => {
+		switch (emphasis) {
+			case 'high': {
+				return APP_FONTS.INTER_600_SEMIBOLD;
+			}
+			case 'medium': {
+				return APP_FONTS.INTER_600_SEMIBOLD;
+			}
+			case 'low': {
+				return APP_FONTS.INTER_600_SEMIBOLD;
+			}
+		}
+	}, [fontFamily, emphasis]);
 
 	const displayNameHttpsRemoved = displayName?.replace(
 		/(https:\/\/)(.+)/,
@@ -53,7 +74,7 @@ function LinkProcessor({ url, displayName }: LinkProcessorProps) {
 		<Text
 			style={{
 				color: APP_THEME.LINK_SECONDARY,
-				fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+				fontFamily: linkTextFontFamily,
 				maxWidth: 128,
 				display: 'flex',
 				flexDirection: 'row',

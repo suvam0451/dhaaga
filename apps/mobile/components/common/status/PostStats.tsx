@@ -7,8 +7,7 @@ import {
 	StyleProp,
 } from 'react-native';
 import { Text } from '@rneui/themed';
-import { APP_THEME } from '../../../styles/AppTheme';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppTimelinePosts } from '../../../hooks/app/timelines/useAppTimelinePosts';
 import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
@@ -34,11 +33,6 @@ const PostStatLikes = memo(
 					alignItems: 'center',
 				}}
 			>
-				<AntDesign
-					name="like2"
-					size={16}
-					color={isLiked ? APP_THEME.LINK : '#ffffff87'}
-				/>
 				<Text
 					style={{
 						color: isLiked ? APP_THEME.LINK : '#888',
@@ -47,7 +41,7 @@ const PostStatLikes = memo(
 						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>
-					{likeCount}
+					{likeCount} Likes
 				</Text>
 			</TouchableOpacity>
 		);
@@ -90,42 +84,34 @@ const PostStats = memo(function Foo({
 
 	return (
 		<View style={[styles.container, style]}>
-			<PostStatLikes
-				isLiked={STATUS_DTO.interaction.liked}
-				likeCount={STATUS_DTO.stats.likeCount}
-				onPress={_toggleLike}
-			/>
-			<View style={{ flexGrow: 1 }}></View>
-			{STATUS_DTO.stats.replyCount > 0 && (
+			<View style={{ flexGrow: 1 }} />
+			{/* Likes */}
+			{STATUS_DTO.stats.likeCount > 0 && (
 				<Fragment>
 					<Text
 						style={{
-							color: '#888',
+							color: APP_FONT.MEDIUM_EMPHASIS,
 							marginLeft: 4,
 							fontSize: 12,
 							textAlign: 'right',
 						}}
 					>
-						{STATUS_DTO.stats.replyCount} Replies
+						{STATUS_DTO.stats.likeCount} Likes
 					</Text>
-					<Text style={{ color: '#888', marginLeft: 2, opacity: 0.3 }}>
-						&bull;
-					</Text>
+					<Text style={styles.bull}>&bull;</Text>
 				</Fragment>
 			)}
+			{/* Shares */}
 			{STATUS_DTO.stats.boostCount > 0 && (
 				<Fragment>
-					<Text
-						style={{
-							color: '#888',
-							fontSize: 12,
-							marginLeft: 2,
-							textAlign: 'right',
-						}}
-					>
-						{STATUS_DTO.stats.boostCount} Boosts
-					</Text>
+					<Text style={styles.text}>{STATUS_DTO.stats.boostCount} Shares</Text>
+					<Text style={styles.bull}>&bull;</Text>
 				</Fragment>
+			)}
+
+			{/* Replies */}
+			{STATUS_DTO.stats.replyCount > 0 && (
+				<Text style={styles.text}>{STATUS_DTO.stats.replyCount} Replies</Text>
 			)}
 		</View>
 	);
@@ -137,6 +123,16 @@ const styles = StyleSheet.create({
 		marginTop: 12,
 		flexDirection: 'row',
 		alignItems: 'center',
+	},
+	text: {
+		color: APP_FONT.MEDIUM_EMPHASIS,
+		fontSize: 12,
+		textAlign: 'right',
+	},
+	bull: {
+		color: APP_FONT.MEDIUM_EMPHASIS,
+		marginHorizontal: 2,
+		opacity: 0.3,
 	},
 });
 export default PostStats;
