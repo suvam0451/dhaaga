@@ -10,6 +10,7 @@ frontend/.env
 frontend/.env.**
 .yarn/*
 apps/mobile/.env
+apps/mobile/assets/nonfree/*
 
 .turbo/
 
