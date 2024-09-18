@@ -36,6 +36,7 @@ import WithAppTimelineDataContext, {
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 /*
  * Render a Timeline
@@ -111,6 +112,7 @@ const Timeline = memo(() => {
 	}, [fetchStatus, db]);
 
 	const label = useTimelineLabel();
+	const { colorScheme } = useAppTheme();
 
 	/**
 	 * Composite Hook Collection
@@ -132,7 +134,12 @@ const Timeline = memo(() => {
 	if (timelineType === TimelineFetchMode.IDLE) return <SocialHub />;
 
 	return (
-		<View style={[styles.container, { position: 'relative' }]}>
+		<View
+			style={[
+				styles.container,
+				{ position: 'relative', backgroundColor: colorScheme.palette.bg },
+			]}
+		>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader title={label} />
@@ -187,6 +194,5 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		flex: 1,
-		backgroundColor: APP_THEME.BACKGROUND,
 	},
 });

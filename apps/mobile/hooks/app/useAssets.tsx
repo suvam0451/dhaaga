@@ -2,10 +2,6 @@ import { createContext, useContext } from 'react';
 import { Asset, useAssets } from 'expo-asset';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
-/**
- *
- */
-
 type Type = {
 	branding: Asset[];
 	isAssetsLoaded: boolean;

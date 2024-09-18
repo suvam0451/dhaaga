@@ -9,10 +9,12 @@ import ComposerAlt from '../fragments/ComposerAlt';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../fragments/ComposerTopMenu';
 import TextEditorService from '../../../../../services/text-editor.service';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
 const PostCompose = memo(() => {
 	const { visible } = useAppBottomSheet();
 	const { editMode, setEditMode, setRawText } = useComposerContext();
+	const { colorScheme } = useAppTheme();
 
 	const EditorContent = useMemo(() => {
 		switch (editMode) {
@@ -65,12 +67,17 @@ const PostCompose = memo(() => {
 				);
 			}
 		}
-	}, [editMode]);
+	}, [editMode, colorScheme]);
+
 	return (
 		<View
 			style={[
 				styles.bottomSheetContentContainer,
-				{ display: visible ? 'flex' : 'none' },
+				{
+					display: visible ? 'flex' : 'none',
+					backgroundColor: colorScheme.palette.menubar,
+					position: 'relative',
+				},
 			]}
 		>
 			<ComposerTopMenu />

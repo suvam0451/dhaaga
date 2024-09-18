@@ -8,16 +8,16 @@ import { useQuery } from '@realm/react';
 import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
 import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { Text } from 'react-native';
-import { APP_THEME } from '../../../styles/AppTheme';
 import { randomUUID } from 'expo-crypto';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type Props = {
 	value: string;
 	fontFamily: string;
 };
 const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
+	const { colorScheme } = useAppTheme();
 	const { acceptTouch } = useAppMfmContext();
 	const _value = decodeURI(value);
 
@@ -58,9 +58,8 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 			key={k}
 			style={{
 				color: isFollowed
-					? APP_THEME.COLOR_SCHEME_D_EMPHASIS
-					: APP_THEME.COLOR_SCHEME_D_NORMAL,
-				opacity: 1,
+					? colorScheme.palette.hashtagHigh
+					: colorScheme.palette.hashtagLow,
 				fontFamily: fontFamily,
 				// fontFamily: isFollowed
 				// 	? APP_FONTS.MONTSERRAT_700_BOLD

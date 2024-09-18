@@ -24,7 +24,9 @@ import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
 import ProfileButtonMessage from './fragments/ProfileButtonMessage';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
-import AppTopNavbar from '../../../../shared/topnavbar/AppTopNavbar';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../../shared/topnavbar/AppTopNavbar';
 import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
 import ProfileModules from './modules/ProfileModules';
 
@@ -43,6 +45,7 @@ export function ProfileContextWrapped() {
 		emojiMap: user?.getEmojiMap(),
 		deps: [user?.getDisplayName()],
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		emphasis: 'high',
 	});
 	const IS_LOCKED = user.getIsLockedProfile();
 
@@ -58,7 +61,11 @@ export function ProfileContextWrapped() {
 	});
 
 	return (
-		<AppTopNavbar title={'Profile'} translateY={translateY}>
+		<AppTopNavbar
+			title={'Profile'}
+			translateY={translateY}
+			type={APP_TOPBAR_TYPE_ENUM.PROFILE}
+		>
 			<Animated.ScrollView
 				onScroll={onScroll}
 				contentContainerStyle={localStyles.rootScrollView}

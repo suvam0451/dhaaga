@@ -1,5 +1,4 @@
 import { Text, View } from 'react-native';
-import AppSelectedAccountIndicator from './AppSelectedAccountIndicator';
 import styles from './styles';
 import TopNavbarBackButton from './TopNavbarBackButton';
 

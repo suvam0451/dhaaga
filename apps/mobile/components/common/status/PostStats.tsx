@@ -1,4 +1,4 @@
-import { Fragment, memo, useState } from 'react';
+import { Fragment, memo } from 'react';
 import {
 	TouchableOpacity,
 	View,
@@ -9,8 +9,8 @@ import {
 import { Text } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { useAppTimelinePosts } from '../../../hooks/app/timelines/useAppTimelinePosts';
 import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type PostStatLikesProps = {
 	onPress: () => void;
@@ -61,19 +61,12 @@ const PostStats = memo(function Foo({
 	dto: ActivityPubStatusAppDtoType;
 	style?: StyleProp<ViewStyle>;
 }) {
+	const { colorScheme } = useAppTheme();
 	const STATUS_DTO = dto.meta.isBoost
 		? dto.content.raw
 			? dto
 			: dto.boostedFrom
 		: dto;
-
-	const [IsLikeLoading, setIsLikeLoading] = useState(false);
-
-	const { toggleLike } = useAppTimelinePosts();
-
-	function _toggleLike() {
-		toggleLike(STATUS_DTO.id, setIsLikeLoading);
-	}
 
 	if (
 		STATUS_DTO.stats.replyCount < 1 &&
@@ -88,30 +81,31 @@ const PostStats = memo(function Foo({
 			{/* Likes */}
 			{STATUS_DTO.stats.likeCount > 0 && (
 				<Fragment>
-					<Text
-						style={{
-							color: APP_FONT.MEDIUM_EMPHASIS,
-							marginLeft: 4,
-							fontSize: 12,
-							textAlign: 'right',
-						}}
-					>
+					<Text style={[styles.text, { color: colorScheme.textColor.low }]}>
 						{STATUS_DTO.stats.likeCount} Likes
 					</Text>
-					<Text style={styles.bull}>&bull;</Text>
+					<Text style={[styles.bull, { color: colorScheme.textColor.low }]}>
+						&bull;
+					</Text>
 				</Fragment>
 			)}
 			{/* Shares */}
 			{STATUS_DTO.stats.boostCount > 0 && (
 				<Fragment>
-					<Text style={styles.text}>{STATUS_DTO.stats.boostCount} Shares</Text>
-					<Text style={styles.bull}>&bull;</Text>
+					<Text style={[styles.text, { color: colorScheme.textColor.low }]}>
+						{STATUS_DTO.stats.boostCount} Shares
+					</Text>
+					<Text style={[styles.bull, { color: colorScheme.textColor.low }]}>
+						&bull;
+					</Text>
 				</Fragment>
 			)}
 
 			{/* Replies */}
 			{STATUS_DTO.stats.replyCount > 0 && (
-				<Text style={styles.text}>{STATUS_DTO.stats.replyCount} Replies</Text>
+				<Text style={[styles.text, { color: colorScheme.textColor.low }]}>
+					{STATUS_DTO.stats.replyCount} Replies
+				</Text>
 			)}
 		</View>
 	);

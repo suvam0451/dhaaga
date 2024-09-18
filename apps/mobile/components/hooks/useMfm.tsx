@@ -6,9 +6,9 @@ import { Skeleton } from '@rneui/themed';
 import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import { APP_FONT } from '../../styles/AppTheme';
 import * as Crypto from 'expo-crypto';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
 
 type Props = {
 	content: string;
@@ -51,6 +51,7 @@ function useMfm({
 	const { domain, subdomain } = useActivityPubRestClientContext();
 	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
+	const { colorScheme } = useAppTheme();
 
 	const defaultValue = useRef<any>({
 		isLoaded: false,
@@ -79,22 +80,21 @@ function useMfm({
 	let color = useMemo(() => {
 		switch (emphasis) {
 			case 'high':
-				return APP_FONT.HIGH_EMPHASIS;
+				return colorScheme.textColor.high;
 			case 'medium':
-				return APP_FONT.MEDIUM_EMPHASIS;
+				return colorScheme.textColor.medium;
 			case 'low':
-				return APP_FONT.LOW_EMPHASIS;
+				return colorScheme.textColor.low;
 			default:
-				return APP_FONT.MEDIUM_EMPHASIS;
+				return colorScheme.textColor.medium;
 		}
-	}, [emphasis]);
-	console.log(emphasis, color);
+	}, [emphasis, colorScheme]);
 
 	// since font remains same for each reusable component
-	const fontStyle = useRef({
+	const fontStyle = {
 		color: color,
 		fontFamily: fontFamily,
-	});
+	};
 
 	useEffect(() => {
 		if (IsSolved.current === content) return;
@@ -120,6 +120,7 @@ function useMfm({
 			remoteSubdomain,
 			fontFamily,
 			emphasis,
+			colorScheme,
 		});
 		setData({
 			isLoaded: true,
@@ -132,11 +133,11 @@ function useMfm({
 								return (
 									<Text
 										key={uuid}
-										style={fontStyle.current as any}
+										style={fontStyle as any}
 										numberOfLines={numberOfLines}
 									>
 										{para.map((o, j) => (
-											<Text key={j} style={fontStyle.current as any}>
+											<Text key={j} style={fontStyle as any}>
 												{o}
 											</Text>
 										))}
@@ -144,9 +145,9 @@ function useMfm({
 								);
 							} else {
 								return (
-									<Text key={uuid} style={fontStyle.current as any}>
+									<Text key={uuid} style={fontStyle as any}>
 										{para.map((o, j) => (
-											<Text key={j} style={fontStyle.current as any}>
+											<Text key={j} style={fontStyle as any}>
 												{o}
 											</Text>
 										))}

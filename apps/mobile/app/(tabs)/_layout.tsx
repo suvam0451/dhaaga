@@ -8,11 +8,11 @@ import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge
 import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
-
-const APP_TAB_BAR_COLOR = '#121212';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
+	const { colorScheme } = useAppTheme();
 	return (
 		<View style={{ height: '100%' }}>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
@@ -79,14 +79,15 @@ export default function TabLayout() {
 								color: 'yellow',
 							},
 							tabBarStyle: {
-								backgroundColor: APP_TAB_BAR_COLOR,
+								backgroundColor: colorScheme.palette.menubar,
 								borderTopWidth: 0,
+								height: 46,
 							},
 							tabBarIconStyle: {
-								opacity: 0.6,
+								color: colorScheme.textColor.high,
 							},
-							tabBarActiveTintColor: 'white',
-							tabBarInactiveTintColor: 'gray',
+							tabBarActiveTintColor: colorScheme.textColor.high,
+							tabBarInactiveTintColor: colorScheme.textColor.low,
 							tabBarShowLabel: false,
 							headerShown: false,
 						};

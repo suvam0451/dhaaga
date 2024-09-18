@@ -11,7 +11,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import styled from 'styled-components/native';
 import { useTimelineController } from '../api/useTimelineController';
 import { useQuery } from '@realm/react';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
@@ -19,6 +18,9 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from 'expo-router';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import SocialHubLantern from '../../../screens/home/stack/landing/fragments/SocialHubLantern';
+import SocialHubAssistant from '../../../screens/home/stack/landing/fragments/SocialHubAssistant';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
 	MORNING = 'Morning',
@@ -26,13 +28,6 @@ enum TIME_OF_DAY {
 	EVENING = 'Evening',
 	NIGHT = 'Night',
 }
-
-const Section = styled.View`
-	margin-top: 32px;
-	background-color: #222222;
-	padding: 8px;
-	border-radius: 8px;
-`;
 
 type PinnedItemProps = {
 	timelineType: TimelineFetchMode;
@@ -150,34 +145,26 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 				return <View></View>;
 			case TimelineFetchMode.HOME:
 				return (
-					<FontAwesome5
-						name="home"
-						size={20}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
+					<FontAwesome5 name="home" size={20} color={APP_FONT.HIGH_EMPHASIS} />
 				);
 			case TimelineFetchMode.LOCAL:
 				return (
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_BODY}
+						color={APP_FONT.HIGH_EMPHASIS}
 					/>
 				);
 			case TimelineFetchMode.FEDERATED:
 				return (
-					<FontAwesome6
-						name="globe"
-						size={20}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
+					<FontAwesome6 name="globe" size={20} color={APP_FONT.HIGH_EMPHASIS} />
 				);
 			case TimelineFetchMode.HASHTAG:
 				return (
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_BODY}
+						color={APP_FONT.HIGH_EMPHASIS}
 					/>
 				);
 			case TimelineFetchMode.REMOTE_TIMELINE:
@@ -185,7 +172,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_BODY}
+						color={APP_FONT.HIGH_EMPHASIS}
 					/>
 				);
 			case TimelineFetchMode.LIST:
@@ -193,7 +180,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_BODY}
+						color={APP_FONT.HIGH_EMPHASIS}
 					/>
 				);
 			case TimelineFetchMode.USER:
@@ -201,7 +188,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 					<FontAwesome5
 						name="user-friends"
 						size={20}
-						color={APP_FONT.MONTSERRAT_BODY}
+						color={APP_FONT.HIGH_EMPHASIS}
 					/>
 				);
 			default:
@@ -251,7 +238,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 			<View style={{ marginLeft: 8 }}>
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
+						color: APP_FONT.HIGH_EMPHASIS,
 						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>
@@ -265,6 +252,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 function SocialHub() {
 	const [TimeOfDay, setTimeOfDay] = useState<TIME_OF_DAY>(TIME_OF_DAY.UNKNOWN);
 	const userDataTimelines = useQuery(UserDataTimeline).filter((o) => o.pinned);
+	const { colorScheme } = useAppTheme();
 
 	useEffect(() => {
 		const currentHours = new Date().getHours();
@@ -313,21 +301,24 @@ function SocialHub() {
 		<View
 			style={{
 				height: '100%',
-				// backgroundColor: '#121212',
-				backgroundColor: 'rgb(12,12,12)',
+				position: 'relative',
+				backgroundColor: colorScheme.palette.bg,
 			}}
 		>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
 			<TimelinesHeader title={'Your Social Hub'} />
+
 			<ScrollView>
 				<View
 					style={{
 						height: '100%',
 						paddingTop: 16,
-						// backgroundColor: '#121212',
+						backgroundColor: colorScheme.palette.bg,
+						position: 'relative',
 						paddingHorizontal: 8,
 					}}
 				>
+					<SocialHubLantern />
 					{TimeOfDay === TIME_OF_DAY.MORNING && (
 						<Text style={styles.timeOfDayText}>Good Morning 🌄</Text>
 					)}
@@ -341,7 +332,14 @@ function SocialHub() {
 						<Text style={styles.timeOfDayText}>Good Night 🌙</Text>
 					)}
 					<View>
-						<Section>
+						<View
+							style={{
+								marginTop: 64,
+								backgroundColor: colorScheme.palette.menubar,
+								padding: 8,
+								borderRadius: 8,
+							}}
+						>
 							<View
 								style={{
 									display: 'flex',
@@ -397,11 +395,12 @@ function SocialHub() {
 									</View>
 								</View>
 							</View>
-						</Section>
+						</View>
 						{PinnedItems}
 					</View>
 				</View>
 			</ScrollView>
+			<SocialHubAssistant />
 		</View>
 	);
 }
@@ -439,7 +438,8 @@ const styles = StyleSheet.create({
 		fontSize: 28,
 		fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
 		color: APP_FONT.MONTSERRAT_HEADER,
-		textAlign: 'center',
+		// textAlign: 'center',
+		marginLeft: 8,
 	},
 });
 

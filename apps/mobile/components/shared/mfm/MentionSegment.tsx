@@ -1,8 +1,8 @@
 import { memo, useCallback, useMemo } from 'react';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { Text } from '@rneui/themed';
-import { APP_THEME } from '../../../styles/AppTheme';
 import { randomUUID } from 'expo-crypto';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type Props = {
 	value: string;
@@ -11,6 +11,7 @@ type Props = {
 };
 
 const MentionSegment = memo(function Foo({ value, link, fontFamily }: Props) {
+	const { colorScheme } = useAppTheme();
 	const { subdomain } = useActivityPubRestClientContext();
 	const k = randomUUID();
 
@@ -37,7 +38,7 @@ const MentionSegment = memo(function Foo({ value, link, fontFamily }: Props) {
 	return (
 		<Text
 			key={k}
-			style={{ fontFamily, color: APP_THEME.MENTION }}
+			style={{ fontFamily, color: colorScheme.palette.link }}
 			onPress={onPress}
 		>
 			{displayText}

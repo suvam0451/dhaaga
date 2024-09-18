@@ -17,38 +17,29 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { ActivityPubAppUserDtoType } from '../../../../services/approto/activitypub-user-dto.service';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import { AppAvatar } from '../../../lib/Avatar';
 
 const ReactingUser = memo(({ dto }: { dto: ActivityPubAppUserDtoType }) => {
+	const { colorScheme } = useAppTheme();
 	const { content } = useMfm({
 		content: dto.displayName,
 		remoteSubdomain: dto.instance,
 		emojiMap: new Map<string, string>(),
 		deps: [dto.displayName],
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		acceptTouch: false,
+		emphasis: 'high',
 	});
 
 	return (
 		<View style={{ flexDirection: 'row', marginVertical: 4 }}>
-			<View style={{ borderWidth: 1.5, borderColor: '#888', borderRadius: 8 }}>
-				{/*@ts-ignore-next-line*/}
-				<Image
-					source={{ uri: dto.avatarUrl }}
-					style={{ width: 48, height: 48, borderRadius: 6 }}
-				/>
-			</View>
-			<View style={{ marginLeft: 6 }}>
+			<AppAvatar uri={dto.avatarUrl} />
+			<View style={{ marginLeft: 6, justifyContent: 'center' }}>
+				<View>{content}</View>
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_HEADER,
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					}}
-				>
-					{content}
-				</Text>
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
+						color: colorScheme.textColor.medium,
 						fontFamily: APP_FONTS.INTER_400_REGULAR,
 						fontSize: 13,
 					}}
@@ -61,6 +52,7 @@ const ReactingUser = memo(({ dto }: { dto: ActivityPubAppUserDtoType }) => {
 });
 
 const AppBottomSheetReactionDetails = memo(() => {
+	const { colorScheme } = useAppTheme();
 	const { client, domain, subdomain } = useActivityPubRestClientContext();
 	const { TextRef, PostRef, timelineDataPostListReducer, setVisible, visible } =
 		useAppBottomSheet();
@@ -181,7 +173,6 @@ const AppBottomSheetReactionDetails = memo(() => {
 				style={{
 					flex: 1,
 					flexGrow: 1,
-					// backgroundColor: 'red',
 				}}
 			>
 				<AnimatedFlashList
@@ -194,7 +185,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 								<View>
 									<Text
 										style={{
-											color: APP_FONT.MONTSERRAT_BODY,
+											color: colorScheme.textColor.medium,
 											fontFamily: APP_FONTS.INTER_500_MEDIUM,
 											marginTop: 8,
 										}}
@@ -209,7 +200,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 								style={{
 									fontSize: 16,
 									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-									color: APP_FONT.MONTSERRAT_BODY,
+									color: colorScheme.textColor.medium,
 									marginVertical: 16,
 								}}
 							>
@@ -217,12 +208,6 @@ const AppBottomSheetReactionDetails = memo(() => {
 							</Text>
 						</Fragment>
 					}
-					contentContainerStyle={
-						{
-							// paddingBottom: 50,
-						}
-					}
-					// ListFooterComponent={<View style={{ height: 200 }} />}
 				/>
 			</View>
 		</View>

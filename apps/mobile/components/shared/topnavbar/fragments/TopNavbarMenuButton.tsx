@@ -1,12 +1,25 @@
 import { memo } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TouchableOpacity, View } from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import {
+	APP_BOTTOM_SHEET_ENUM,
+	useAppBottomSheet,
+} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
 const TopNavbarMenuButton = memo(() => {
+	const { colorScheme } = useAppTheme();
+	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
+
+	function onPress() {
+		setType(APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK);
+		updateRequestId();
+		setVisible(true);
+	}
+
 	return (
 		<TouchableOpacity
-			onPress={() => {}}
+			onPress={onPress}
 			style={{
 				height: '100%',
 				display: 'flex',
@@ -16,7 +29,11 @@ const TopNavbarMenuButton = memo(() => {
 			}}
 		>
 			<View style={{ width: 42 }}>
-				<Ionicons name="menu" size={24} color={APP_FONT.HIGH_EMPHASIS} />
+				<Ionicons
+					name="color-palette-outline"
+					size={24}
+					color={colorScheme.textColor.high}
+				/>
 			</View>
 		</TouchableOpacity>
 	);

@@ -1,8 +1,7 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { Text } from 'react-native';
-import { APP_FONT } from '../../../styles/AppTheme';
 import { randomUUID } from 'expo-crypto';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type Props = {
 	value: string;
@@ -14,17 +13,18 @@ const RawTextSegment = memo(({ value, fontFamily, emphasis }: Props) => {
 	// @ts-ignore-next-line
 	const _value = value?.replaceAll(/<br>/g, '\n');
 	const k = randomUUID();
+	const { colorScheme } = useAppTheme();
 
-	let color = () => {
+	let color = useMemo(() => {
 		switch (emphasis) {
 			case 'high':
-				return APP_FONT.HIGH_EMPHASIS;
+				return colorScheme.textColor.high;
 			case 'medium':
-				return APP_FONT.MEDIUM_EMPHASIS;
+				return colorScheme.textColor.medium;
 			case 'low':
-				return APP_FONT.LOW_EMPHASIS;
+				return colorScheme.textColor.low;
 		}
-	};
+	}, [emphasis]);
 
 	if (!_value) {
 		return <Text key={k}></Text>;

@@ -12,6 +12,7 @@ import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusVisibility from './StatusVisibility';
 import StatusCreatedAt from './StatusCreatedAt';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;
@@ -19,6 +20,7 @@ type Props = {
 };
 
 const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
+	const { colorScheme } = useAppTheme();
 	const { toPost } = useAppNavigator();
 	const { content } = useMfm({
 		content: dto.content.raw,
@@ -37,6 +39,7 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		numberOfLines: 1,
+		emphasis: 'high',
 	});
 
 	return (
@@ -46,6 +49,7 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 				{
 					paddingTop: hasParent ? 0 : 10,
 					position: 'relative',
+					backgroundColor: colorScheme.palette.bg,
 				},
 			]}
 		>
@@ -84,10 +88,9 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 								<StatusCreatedAt
 									from={new Date(dto.createdAt)}
 									textStyle={{
-										color: 'gray',
+										color: colorScheme.textColor.low,
 										fontSize: 12,
 										fontFamily: APP_FONTS.INTER_700_BOLD,
-										opacity: 0.87,
 									}}
 								/>
 							</View>

@@ -6,7 +6,6 @@ import WithAppStatusItemContext, {
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
 import { TouchableOpacity, View } from 'react-native';
-import { APP_THEME } from '../../../../styles/AppTheme';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
@@ -15,6 +14,7 @@ import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusQuoted from './StatusQuoted';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 /**
  * Mostly used to remove the border
@@ -65,6 +65,7 @@ const StatusCore = memo(
 		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 4;
 		if (hasParent || hasBoost) paddingTop = 0;
 		if (!hasParent && hasBoost) paddingTop = 6;
+		const { colorScheme } = useAppTheme();
 
 		return useMemo(() => {
 			if (!isLoaded) return <StatusItemSkeleton />;
@@ -76,7 +77,7 @@ const StatusCore = memo(
 						paddingHorizontal: APP_SETTING_VERTICAL_MARGIN,
 						paddingTop: paddingTop,
 						paddingBottom: 4,
-						backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
+						backgroundColor: colorScheme.palette.bg,
 						marginBottom: 4,
 						borderRadius: 8,
 						borderTopLeftRadius: hasParent || hasBoost ? 0 : 8,
@@ -144,6 +145,7 @@ const StatusCore = memo(
 			dto,
 			STATUS_DTO,
 			paddingTop,
+			colorScheme,
 		]);
 	},
 );

@@ -18,6 +18,7 @@ import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArr
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -39,6 +40,7 @@ const EmojiReaction = memo(function Foo({
 	const { getPostListReducer } = useAppTimelinePosts();
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
+	const { colorScheme } = useAppTheme();
 
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
@@ -46,17 +48,23 @@ const EmojiReaction = memo(function Foo({
 				return [
 					styles.emojiContainer,
 					{
-						backgroundColor: '#41332e',
+						backgroundColor: colorScheme.reactions.active,
 						borderWidth: 2,
-						borderColor: '#d3ac6c',
+						borderColor: colorScheme.reactions.highlight,
 					},
 				];
 			} else {
-				return [styles.emojiContainer, { backgroundColor: '#303030' }];
+				return [
+					styles.emojiContainer,
+					{ backgroundColor: colorScheme.reactions.active },
+				];
 			}
 		}
-		return [styles.emojiContainer, { backgroundColor: '#161616' }];
-	}, [dto.interactable, dto.me]);
+		return [
+			styles.emojiContainer,
+			{ backgroundColor: colorScheme.reactions.inactive },
+		];
+	}, [dto.interactable, dto.me, colorScheme]);
 
 	async function onReactionPress() {
 		const isQuickReactionEnabled =

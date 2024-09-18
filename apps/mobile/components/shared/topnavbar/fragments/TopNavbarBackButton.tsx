@@ -25,7 +25,7 @@ const TopNavbarBackButton = memo(() => {
 				<Ionicons
 					name="chevron-back"
 					size={24}
-					color={APP_FONT.MONTSERRAT_BODY}
+					color={APP_FONT.HIGH_EMPHASIS}
 				/>
 			</TouchableOpacity>
 			{/*<TouchableOpacity*/}

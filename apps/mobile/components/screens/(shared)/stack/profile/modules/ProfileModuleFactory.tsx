@@ -38,19 +38,19 @@ const ProfileModuleFactory = memo(
 						<Text
 							style={{
 								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: APP_FONT.MONTSERRAT_BODY,
+								color: APP_FONT.HIGH_EMPHASIS,
 								flexGrow: 1,
 							}}
 						>
 							{label}{' '}
-							<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
+							<Text style={{ color: APP_FONT.MEDIUM_EMPHASIS }}>
 								({subtext})
 							</Text>
 						</Text>
 						<Ionicons
 							name={IsExpanded ? 'chevron-down' : 'chevron-forward'}
 							size={24}
-							color={APP_FONT.MONTSERRAT_BODY}
+							color={APP_FONT.MEDIUM_EMPHASIS}
 						/>
 					</View>
 				</TouchableOpacity>

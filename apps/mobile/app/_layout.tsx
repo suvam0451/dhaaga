@@ -38,8 +38,8 @@ import AppInit from '../services/init/app-init';
 
 // polyfills
 import '@expo/browser-polyfill';
-import { deleteDatabase } from '../database/client';
 import MigrationFailed from '../components/error-screen/MigrationFailed';
+import WithAppThemePackContext from '../hooks/app/useAppThemePack';
 // import MigrationFailed from '../components/error-screen/MigrationFailed';
 
 /**
@@ -152,11 +152,13 @@ export default function Page() {
 						<QueryClientProvider client={queryClient}>
 							{/* Rneui Custom Themes */}
 							<ThemeProvider theme={RneuiTheme}>
-								<SafeAreaProvider>
-									<WithAppNotificationBadge>
-										<WithGorhomBottomSheetWrapper />
-									</WithAppNotificationBadge>
-								</SafeAreaProvider>
+								<WithAppThemePackContext>
+									<SafeAreaProvider>
+										<WithAppNotificationBadge>
+											<WithGorhomBottomSheetWrapper />
+										</WithAppNotificationBadge>
+									</SafeAreaProvider>
+								</WithAppThemePackContext>
 							</ThemeProvider>
 						</QueryClientProvider>
 					</RealmProvider>

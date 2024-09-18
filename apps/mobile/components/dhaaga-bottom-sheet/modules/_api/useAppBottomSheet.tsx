@@ -27,6 +27,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	NA = 'N/A',
 	REACTION_DETAILS = 'ReactionDetails',
 	SELECT_ACCOUNT = 'SelectAccount',
+	SWITCH_THEME_PACK = 'SwitchThemePack',
 }
 
 type Type = {

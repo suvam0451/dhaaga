@@ -7,6 +7,7 @@ import useAppVisibility, {
 	APP_POST_VISIBILITY,
 } from '../../../../../hooks/app/useVisibility';
 import { useComposerContext } from '../api/useComposerContext';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
 const VisibilityPickerChoice = memo(function Foo({
 	visibility,
@@ -15,6 +16,7 @@ const VisibilityPickerChoice = memo(function Foo({
 	visibility: APP_POST_VISIBILITY;
 	setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+	const { colorScheme } = useAppTheme();
 	const { icon, text, desc } = useAppVisibility(visibility);
 	const { setVisibility: ComposerVisibility } = useComposerContext();
 
@@ -24,11 +26,27 @@ const VisibilityPickerChoice = memo(function Foo({
 	}
 
 	return (
-		<TouchableOpacity style={styles.choiceContainerWithDesc} onPress={onPress}>
+		<TouchableOpacity
+			style={[styles.choiceContainerWithDesc]}
+			onPress={onPress}
+		>
 			{icon}
 			<View style={{ flexDirection: 'column' }}>
-				<Text style={styles.choiceText}>{text}</Text>
-				<Text style={styles.choiceTextDescription}>{desc}</Text>
+				<Text
+					style={[styles.choiceText, { color: colorScheme.textColor.high }]}
+				>
+					{text}
+				</Text>
+				<Text
+					style={[
+						styles.choiceTextDescription,
+						{
+							color: colorScheme.textColor.medium,
+						},
+					]}
+				>
+					{desc}
+				</Text>
 			</View>
 		</TouchableOpacity>
 	);
@@ -37,6 +55,7 @@ const VisibilityPickerChoice = memo(function Foo({
 const VisibilityPicker = memo(function Foo() {
 	const [IsExpanded, setIsExpanded] = useState(false);
 	const { visibility: ComposerVisibility } = useComposerContext();
+	const { colorScheme } = useAppTheme();
 
 	function toggleExpanded() {
 		setIsExpanded((o) => !o);
@@ -48,9 +67,23 @@ const VisibilityPicker = memo(function Foo() {
 			onPress={toggleExpanded}
 			style={{ position: 'relative', maxWidth: 360 }}
 		>
-			<View style={styles.choiceContainer}>
+			<View
+				style={[
+					styles.choiceContainer,
+					{ backgroundColor: colorScheme.palette.buttonUnstyled },
+				]}
+			>
 				{icon}
-				<Text style={styles.choiceText}>{text}</Text>
+				<Text
+					style={[
+						styles.choiceText,
+						{
+							color: colorScheme.textColor.high,
+						},
+					]}
+				>
+					{text}
+				</Text>
 			</View>
 
 			<Animated.View
@@ -59,7 +92,7 @@ const VisibilityPicker = memo(function Foo() {
 					display: IsExpanded ? 'flex' : 'none',
 					bottom: '100%',
 					zIndex: 99,
-					backgroundColor: '#363636',
+					backgroundColor: colorScheme.palette.menubar,
 					paddingBottom: 12,
 					marginBottom: 6,
 					padding: 8,
@@ -90,7 +123,6 @@ const VisibilityPicker = memo(function Foo() {
 
 const styles = StyleSheet.create({
 	choiceText: {
-		color: APP_FONT.MONTSERRAT_HEADER,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		fontSize: 14,
 		marginLeft: 6,

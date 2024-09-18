@@ -11,6 +11,7 @@ import { router } from 'expo-router';
 import { APP_FONTS } from '../../styles/AppFonts';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { memo } from 'react';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
 
 type InternalLinkProps = {
 	label: string;
@@ -19,24 +20,38 @@ type InternalLinkProps = {
 };
 
 const InternalLink = memo(({ label, to, style }: InternalLinkProps) => {
+	const { colorScheme } = useAppTheme();
 	return (
 		<TouchableOpacity
 			onPress={() => {
 				router.navigate(to);
 			}}
+			style={{ marginBottom: 2 }}
 		>
-			<View style={style}>
+			<View
+				style={[
+					{
+						paddingVertical: 12,
+
+						backgroundColor: colorScheme.palette.menubar,
+					},
+					styles.linkSectionContainer,
+					style,
+				]}
+			>
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
+						color: colorScheme.textColor.high,
 						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+						fontSize: 16,
+						paddingLeft: 8,
 					}}
 				>
 					{label}
 				</Text>
 				<Ionicons
 					size={24}
-					color={APP_FONT.MONTSERRAT_BODY}
+					color={colorScheme.textColor.medium}
 					name={'chevron-forward'}
 				/>
 			</View>
@@ -47,59 +62,36 @@ const InternalLink = memo(({ label, to, style }: InternalLinkProps) => {
 function SearchScreenManual() {
 	return (
 		<View style={styles.manualContainer}>
-			<View style={styles.borderContainer}>
-				<Text
-					style={{
-						opacity: 0.87,
-						fontSize: 20,
-						color: APP_FONT.MONTSERRAT_BODY,
-					}}
-				>
-					⌨️ to get started
-				</Text>
-				<View style={{ width: '100%', display: 'flex', marginVertical: 16 }}>
-					<Text
-						style={{
-							textAlign: 'center',
-							color: APP_FONT.MONTSERRAT_BODY,
-						}}
-					>
-						{' '}
-						--- OR ---{' '}
-					</Text>
-				</View>
-
-				<View style={{ minWidth: '100%' }}>
-					<InternalLink
-						to={'/discover/trending-posts'}
-						label={'Trending Posts'}
-						style={[
-							styles.linkSectionContainer,
-							{
-								borderTopLeftRadius: 8,
-								borderTopRightRadius: 8,
-								borderBottomWidth: 1.5,
-							},
-						]}
-					/>
-					<InternalLink
-						to={'/discover/trending-tags'}
-						label={'Trending Tags'}
-						style={[styles.linkSectionContainer]}
-					/>
-					<InternalLink
-						to={'/discover/trending-links'}
-						label={'Trending Links'}
-						style={[
-							styles.linkSectionContainer,
-							{
-								borderBottomStartRadius: 8,
-								borderBottomEndRadius: 8,
-								borderTopWidth: 1.5,
-							},
-						]}
-					/>
-				</View>
+			<View style={{ width: '100%' }}>
+				<InternalLink
+					to={'/discover/trending-posts'}
+					label={'Trending Posts'}
+					style={[
+						styles.linkSectionContainer,
+						{
+							borderTopLeftRadius: 8,
+							borderTopRightRadius: 8,
+							borderBottomWidth: 1.5,
+						},
+					]}
+				/>
+				<InternalLink
+					to={'/discover/trending-tags'}
+					label={'Trending Tags'}
+					style={[styles.linkSectionContainer]}
+				/>
+				<InternalLink
+					to={'/discover/trending-links'}
+					label={'Trending Links'}
+					style={[
+						styles.linkSectionContainer,
+						{
+							borderBottomStartRadius: 8,
+							borderBottomEndRadius: 8,
+							borderTopWidth: 1.5,
+						},
+					]}
+				/>
 			</View>
 		</View>
 	);
@@ -109,6 +101,7 @@ const styles = StyleSheet.create({
 	manualContainer: {
 		alignItems: 'center',
 		padding: 16,
+		width: '100%',
 	},
 	borderContainer: {
 		borderWidth: 1,
@@ -119,12 +112,13 @@ const styles = StyleSheet.create({
 		width: '100%',
 	},
 	linkSectionContainer: {
-		backgroundColor: '#232323',
+		// backgroundColor: '#232323',
 		paddingHorizontal: 8,
-		paddingVertical: 6,
+		// paddingVertical: 6,
 		alignItems: 'center',
 		flexDirection: 'row',
-		borderColor: '#ffffff30',
+		borderRadius: 8,
+		// borderColor: '#ffffff30',
 		justifyContent: 'space-between',
 	},
 });

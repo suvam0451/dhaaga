@@ -14,7 +14,7 @@ import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusVisibility from './StatusVisibility';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const TIMELINE_PFP_SIZE = 46;
 
@@ -104,6 +104,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		numberOfLines: 1,
 		emphasis: 'high',
 	});
+	const { colorScheme } = useAppTheme();
 
 	return (
 		<View
@@ -126,7 +127,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 
 					<Text
 						style={{
-							color: APP_FONT.MEDIUM_EMPHASIS,
+							color: colorScheme.textColor.medium,
 							fontSize: 12,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							maxWidth: 196,
@@ -148,7 +149,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 				<StatusVisibility visibility={visibility} />
 				<Text
 					style={{
-						color: 'gray',
+						color: colorScheme.textColor.low,
 						marginLeft: 2,
 						marginRight: 2,
 						opacity: 0.6,
@@ -160,7 +161,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 					<StatusCreatedAt
 						from={postedAt}
 						textStyle={{
-							color: 'gray',
+							color: colorScheme.textColor.low,
 							fontSize: 12,
 							fontFamily: APP_FONTS.INTER_700_BOLD,
 							opacity: 0.87,

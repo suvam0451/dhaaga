@@ -13,6 +13,7 @@ import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 import { APP_FONTS } from '../styles/AppFonts';
+import { AppColorSchemeType } from '../styles/BuiltinThemes';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
@@ -36,6 +37,7 @@ class MfmComponentBuilder {
 	aiContext: any[];
 
 	fontFamily: string;
+	colorScheme: AppColorSchemeType;
 
 	constructor({
 		input,
@@ -48,6 +50,7 @@ class MfmComponentBuilder {
 		opts,
 		fontFamily,
 		emphasis,
+		colorScheme,
 	}: {
 		input: string;
 		db: Realm;
@@ -62,6 +65,7 @@ class MfmComponentBuilder {
 		};
 		fontFamily?: string;
 		emphasis: 'high' | 'medium' | 'low';
+		colorScheme: AppColorSchemeType;
 	}) {
 		this.input = input;
 		this.db = db;
@@ -75,6 +79,7 @@ class MfmComponentBuilder {
 		this.emojiMap = emojiMap;
 		this.fontFamily = fontFamily || APP_FONTS.INTER_400_REGULAR;
 		this.emphasis = emphasis;
+		this.colorScheme = colorScheme;
 
 		// options
 		if (opts?.parseMentions !== undefined)
@@ -147,19 +152,19 @@ class MfmComponentBuilder {
 		let color = null;
 		switch (this.emphasis) {
 			case 'high': {
-				color = APP_FONT.HIGH_EMPHASIS;
+				color = this.colorScheme.textColor.high;
 				break;
 			}
 			case 'medium': {
-				color = APP_FONT.MEDIUM_EMPHASIS;
+				color = this.colorScheme.textColor.medium;
 				break;
 			}
 			case 'low': {
-				color = APP_FONT.LOW_EMPHASIS;
+				color = this.colorScheme.textColor.low;
 				break;
 			}
 			default: {
-				color = APP_FONT.MEDIUM_EMPHASIS;
+				color = this.colorScheme.textColor.medium;
 				break;
 			}
 		}
@@ -221,6 +226,26 @@ class MfmComponentBuilder {
 	}
 
 	private parser(node: any) {
+		let color = null;
+		switch (this.emphasis) {
+			case 'high': {
+				color = this.colorScheme.textColor.high;
+				break;
+			}
+			case 'medium': {
+				color = this.colorScheme.textColor.medium;
+				break;
+			}
+			case 'low': {
+				color = this.colorScheme.textColor.low;
+				break;
+			}
+			default: {
+				color = this.colorScheme.textColor.medium;
+				break;
+			}
+		}
+
 		const k = randomUUID();
 		switch (node.type) {
 			case 'link':
@@ -276,7 +301,8 @@ class MfmComponentBuilder {
 					<Text
 						key={k}
 						style={{
-							color: APP_FONT.HIGH_EMPHASIS,
+							color: color as any,
+							fontFamily: this.fontFamily,
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
@@ -289,7 +315,7 @@ class MfmComponentBuilder {
 						key={k}
 						style={{
 							fontStyle: 'italic',
-							color: APP_FONT.HIGH_EMPHASIS,
+							color: color as any,
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
@@ -301,8 +327,8 @@ class MfmComponentBuilder {
 					<Text
 						key={k}
 						style={{
-							fontFamily: APP_FONTS.INTER_700_BOLD,
-							color: APP_FONT.HIGH_EMPHASIS,
+							fontFamily: this.fontFamily,
+							color: color as any,
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
@@ -384,6 +410,7 @@ class MfmService {
 	 * @param emphasis
 	 * @param opts
 	 * @param fontFamily
+	 * @param AppColorSchemeType
 	 */
 	static renderMfm(
 		input: string,
@@ -397,6 +424,7 @@ class MfmService {
 			fontFamily,
 			emphasis,
 			opts,
+			colorScheme,
 		}: {
 			domain: string;
 			subdomain: string;
@@ -410,6 +438,7 @@ class MfmService {
 				mentionsClickable?: boolean;
 				fontFamily?: string;
 			};
+			colorScheme: AppColorSchemeType;
 		},
 	) {
 		/**
@@ -436,6 +465,7 @@ class MfmService {
 			targetSubdomain: remoteSubdomain,
 			fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
 			emphasis: emphasis || 'medium',
+			colorScheme,
 		});
 		solver.solve(true);
 		return {

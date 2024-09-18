@@ -3,12 +3,14 @@ import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { Text, View } from 'react-native';
 import appTextStyling from '../../../../../styles/AppTextStyling';
 import { Image } from 'expo-image';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
 /**
  * Indicates in which context this reply is being composed
  */
 const ReplyContextIndicator = memo(() => {
 	const { replyToRef, requestId } = useAppBottomSheet();
+	const { colorScheme } = useAppTheme();
 
 	const component = useMemo(() => {
 		if (replyToRef.current) {
@@ -16,14 +18,19 @@ const ReplyContextIndicator = memo(() => {
 				<View
 					style={{ marginTop: 6, flexDirection: 'row', alignItems: 'center' }}
 				>
-					<Text style={[appTextStyling.postContext, { flexShrink: 1 }]}>
+					<Text
+						style={[
+							appTextStyling.postContext,
+							{ flexShrink: 1, color: colorScheme.textColor.medium },
+						]}
+					>
 						Replying to{' '}
 					</Text>
 					<View
 						style={{
 							flexDirection: 'row',
 							alignItems: 'center',
-							backgroundColor: '#161616',
+							backgroundColor: colorScheme.palette.buttonUnstyled,
 							borderRadius: 8,
 							padding: 4,
 							paddingHorizontal: 6,
@@ -35,7 +42,10 @@ const ReplyContextIndicator = memo(() => {
 							style={{ width: 24, height: 24, borderRadius: 8 }}
 						/>
 						<Text
-							style={[appTextStyling.postContext, { maxWidth: 208 }]}
+							style={[
+								appTextStyling.postContext,
+								{ maxWidth: 208, color: colorScheme.textColor.medium },
+							]}
 							numberOfLines={1}
 						>
 							{replyToRef.current.postedBy.handle}
@@ -46,7 +56,7 @@ const ReplyContextIndicator = memo(() => {
 		}
 
 		return <View />;
-	}, [replyToRef, requestId]);
+	}, [replyToRef, requestId, colorScheme]);
 	return <View>{component}</View>;
 });
 

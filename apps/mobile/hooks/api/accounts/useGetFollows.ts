@@ -57,8 +57,10 @@ function useGetFollows(id: string) {
 		} else {
 			const LEN = (data as any).length;
 			if (LEN === 0) return;
-			lastId.current = (data as any)[LEN - 1].id;
-			setData(ActivityPubAdapterService.adaptManyUsers(data as any, domain));
+			lastId.current = (data as any)?.data?.maxId;
+			setData(
+				ActivityPubAdapterService.adaptManyUsers((data as any)?.data, domain),
+			);
 		}
 	}, [fetchStatus]);
 

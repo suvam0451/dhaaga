@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 type StatusVisibilityProps = {
 	visibility: string;
@@ -12,6 +13,7 @@ type StatusVisibilityProps = {
  */
 const StatusVisibility = memo(
 	({ color, size, visibility }: StatusVisibilityProps) => {
+		const { colorScheme } = useAppTheme();
 		return useMemo(() => {
 			switch (visibility) {
 				case 'public':
@@ -19,7 +21,7 @@ const StatusVisibility = memo(
 						<Ionicons
 							name="earth-outline"
 							size={size || 16}
-							color={color || 'rgba(136,136,136,0.6)'}
+							color={colorScheme.textColor.low || 'rgba(136,136,136,0.6)'}
 						/>
 					);
 				case 'specified':
@@ -28,7 +30,7 @@ const StatusVisibility = memo(
 						<Ionicons
 							name={'lock-closed-outline'}
 							size={size || 16}
-							color={color || 'rgba(136,136,136,0.6)'}
+							color={colorScheme.textColor.low || 'rgba(136,136,136,0.6)'}
 						/>
 					);
 				case 'unlisted':
@@ -36,7 +38,7 @@ const StatusVisibility = memo(
 						<Ionicons
 							name={'lock-open-outline'}
 							size={size || 16}
-							color={color || 'rgba(136,136,136,0.6)'}
+							color={colorScheme.textColor.low || 'rgba(136,136,136,0.6)'}
 						/>
 					);
 				default:
@@ -44,11 +46,11 @@ const StatusVisibility = memo(
 						<Ionicons
 							name="earth-outline"
 							size={size || 16}
-							color={color || 'rgba(136,136,136,0.6)'}
+							color={colorScheme.textColor.low || 'rgba(136,136,136,0.6)'}
 						/>
 					);
 			}
-		}, [visibility]);
+		}, [visibility, colorScheme]);
 	},
 );
 

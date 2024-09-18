@@ -10,6 +10,7 @@ import ProfilePeekBottomSheet from '../modules/profile-peek/pages/ProfilePeekBot
 import PostMoreActions from '../modules/post-actions/pages/PostMoreActions';
 import AppBottomSheetReactionDetails from '../modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from '../modules/select-account/AppBottomSheetSelectAccount';
+import AppBottomSheetPickThemePack from '../modules/theme-pack/AppBottomSheetPickThemePack';
 
 /**
  * Responsible for generating content
@@ -24,7 +25,7 @@ const AppBottomSheetFactory = memo(() => {
 			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
 				return (
 					<WithComposerContext textSeed={PostComposerTextSeedRef.current}>
-						<PostCompose requestId={requestId} />
+						<PostCompose />
 					</WithComposerContext>
 				);
 			}
@@ -36,10 +37,12 @@ const AppBottomSheetFactory = memo(() => {
 				return <AppBottomSheetReactionDetails />;
 			case APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT:
 				return <AppBottomSheetSelectAccount />;
+			case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
+				return <AppBottomSheetPickThemePack />;
 			default: {
 				return (
 					<WithComposerContext>
-						<PostCompose requestId={requestId} />
+						<PostCompose />
 					</WithComposerContext>
 				);
 			}

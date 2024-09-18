@@ -10,6 +10,8 @@ import PostButton from './PostButton';
 import ReplyContextIndicator from './ReplyContextIndicator';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useComposerContext } from '../api/useComposerContext';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import ComposerDecorator from './ComposerDecorator';
 
 /**
  * The top section of the post composer.
@@ -19,6 +21,7 @@ import { useComposerContext } from '../api/useComposerContext';
 const ComposerTopMenu = memo(() => {
 	const { me } = useActivityPubRestClientContext();
 	const { editMode } = useComposerContext();
+	const { colorScheme } = useAppTheme();
 
 	if (editMode === 'emoji') return <View />;
 	if (editMode === 'alt') {
@@ -31,8 +34,10 @@ const ComposerTopMenu = memo(() => {
 				style={{
 					flexDirection: 'row',
 					alignItems: 'flex-start',
+					position: 'relative',
 				}}
 			>
+				<ComposerDecorator />
 				<View
 					style={{ borderWidth: 0.7, borderColor: '#666', borderRadius: 8 }}
 				>
@@ -50,7 +55,7 @@ const ComposerTopMenu = memo(() => {
 					<VisibilityPicker />
 					<Text
 						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
+							color: colorScheme.textColor.medium,
 							fontSize: 11.5,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							opacity: 0.8,

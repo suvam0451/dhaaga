@@ -6,10 +6,10 @@ import {
 } from '../../../states/useGorhomBottomSheet';
 import GlobalMmkvCacheServices from '../../../services/globalMmkvCache.services';
 import { Text } from '@rneui/themed';
-import { APP_THEME } from '../../../styles/AppTheme';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type LinkProcessorProps = {
 	url: string;
@@ -24,6 +24,7 @@ function LinkProcessor({
 	fontFamily,
 	emphasis,
 }: LinkProcessorProps) {
+	const { colorScheme } = useAppTheme();
 	const { acceptTouch } = useAppMfmContext();
 	const httpsRemoved = url.replace(/(https:\/\/)(.+)/, '$2');
 	const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, '$2');
@@ -73,7 +74,7 @@ function LinkProcessor({
 	return (
 		<Text
 			style={{
-				color: APP_THEME.LINK_SECONDARY,
+				color: colorScheme.palette.link,
 				fontFamily: linkTextFontFamily,
 				maxWidth: 128,
 				display: 'flex',

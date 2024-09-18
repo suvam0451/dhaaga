@@ -1,9 +1,10 @@
-import { memo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Fragment, memo } from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
-import AppBottomSheetCloseButton from './fragments/AppBottomSheetCloseButton';
 import AppBottomSheetFactory from './fragments/AppBottomSheetFactory';
+import { useAppBottomSheet } from './modules/_api/useAppBottomSheet';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
 
 /**
  * Switches what module will be shown
@@ -13,13 +14,37 @@ import AppBottomSheetFactory from './fragments/AppBottomSheetFactory';
  * based on active module
  */
 const AppBottomSheet = memo(() => {
+	const { colorScheme } = useAppTheme();
 	const { animStyle } = useAnimatedHeight();
+	const { visible, setVisible } = useAppBottomSheet();
+
+	function onBackgroundPress() {
+		setVisible(false);
+	}
 
 	return (
-		<Animated.View style={[styles.rootContainer, animStyle]}>
-			<AppBottomSheetCloseButton />
-			<AppBottomSheetFactory />
-		</Animated.View>
+		<Fragment>
+			<Pressable
+				style={{
+					position: 'absolute',
+					height: visible ? '100%' : 'auto',
+					width: '100%',
+					backgroundColor: colorScheme.palette.bg,
+					opacity: 0.3,
+					zIndex: 1,
+				}}
+				onPress={onBackgroundPress}
+			/>
+			<Animated.View
+				style={[
+					styles.rootContainer,
+					{ backgroundColor: colorScheme.palette.menubar },
+					animStyle,
+				]}
+			>
+				<AppBottomSheetFactory />
+			</Animated.View>
+		</Fragment>
 	);
 });
 
@@ -30,7 +55,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		borderTopRightRadius: 8,
 		borderTopLeftRadius: 8,
-		backgroundColor: '#1f1f1f',
+		zIndex: 2,
 	},
 });
 

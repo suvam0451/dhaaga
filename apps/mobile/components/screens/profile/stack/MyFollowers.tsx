@@ -29,6 +29,7 @@ export function UserItem() {
 		emojiMap: user?.getEmojiMap(),
 		deps: [user.getDisplayName()],
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		emphasis: 'high',
 	});
 
 	const handle = ActivitypubHelper.getHandle(
@@ -41,11 +42,12 @@ export function UserItem() {
 				display: 'flex',
 				flexDirection: 'row',
 				alignItems: 'center',
-				backgroundColor: '#161616',
 				marginVertical: 4,
 				padding: 2,
 				borderRadius: 8,
 				marginHorizontal: 4,
+				borderBottomWidth: 2,
+				borderColor: '#181818',
 			}}
 			onPress={() => {
 				toProfile(user.getId());
@@ -55,7 +57,7 @@ export function UserItem() {
 				style={{
 					borderWidth: 2,
 					borderColor: 'rgb(100,100,100)',
-					borderRadius: 8,
+					borderRadius: 48 / 2,
 				}}
 			>
 				{/*@ts-ignore-next-line*/}
@@ -67,7 +69,7 @@ export function UserItem() {
 					style={{
 						width: 44,
 						height: 44,
-						borderRadius: 4,
+						borderRadius: 44 / 2,
 					}}
 				/>
 			</View>
@@ -75,7 +77,7 @@ export function UserItem() {
 				{content}
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
+						color: APP_FONT.MEDIUM_EMPHASIS,
 						fontFamily: APP_FONTS.INTER_400_REGULAR,
 						fontSize: 13,
 					}}
@@ -128,14 +130,14 @@ function WithApi() {
 		<WithAutoHideTopNavBar title={'My Followers'} translateY={translateY}>
 			<AnimatedFlashList
 				estimatedItemSize={48}
-				data={Data}
 				contentContainerStyle={{ paddingTop: 54 }}
+				onScroll={onScroll}
+				data={Data}
 				renderItem={(o) => (
 					<WithActivitypubUserContext user={o.item}>
 						<UserItem />
 					</WithActivitypubUserContext>
 				)}
-				onScroll={onScroll}
 			/>
 		</WithAutoHideTopNavBar>
 	);

@@ -1,13 +1,13 @@
 import { memo, useMemo } from 'react';
 import useMfm from '../../../hooks/useMfm';
 import { View } from 'react-native';
-import { APP_THEME } from '../../../../styles/AppTheme';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Text } from '@rneui/themed';
 import LocalizationService from '../../../../services/localization.services';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 /**
  * Adds booster's information on top
@@ -28,12 +28,13 @@ const SharedStatusFragment = memo(function Foo() {
 		numberOfLines: 1,
 		emphasis: 'medium',
 	});
+	const { colorScheme } = useAppTheme();
 
 	return useMemo(() => {
 		return (
 			<View
 				style={{
-					backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
+					backgroundColor: colorScheme.palette.bg,
 					borderTopRightRadius: 8,
 					borderTopLeftRadius: 8,
 					paddingHorizontal: 12,
@@ -70,10 +71,9 @@ const SharedStatusFragment = memo(function Foo() {
 					<View>
 						<Text
 							style={{
-								color: '#888',
+								color: colorScheme.textColor.low,
 								fontSize: 12,
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
-								opacity: 0.6,
 							}}
 						>
 							{LocalizationService.formatDistanceToNowStrict(

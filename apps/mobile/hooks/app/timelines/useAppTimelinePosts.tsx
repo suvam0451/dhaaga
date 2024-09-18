@@ -155,12 +155,17 @@ function WithAppTimelineDataContext({ children }: Props) {
 				return;
 			}
 
-			const localState = match.interaction.boosted;
+			// apply operation to current post
+			// exclude boost (not quotes)
+			let target = !!match.boostedFrom
+				? match.boostedFrom.interaction.boosted
+				: match.interaction.boosted;
+
 			try {
 				const state = await ActivityPubService.toggleBoost(
 					client,
 					key,
-					localState,
+					target,
 					domain as any,
 				);
 				if (state !== null) {
@@ -240,11 +245,13 @@ function WithAppTimelineDataContext({ children }: Props) {
 				return;
 			}
 
-			ActivityPubService.toggleBookmark(
-				client,
-				key,
-				match.interaction.bookmarked,
-			)
+			// apply operation to current post
+			// exclude boost (not quotes)
+			let target = !!match.boostedFrom
+				? match.boostedFrom.interaction.bookmarked
+				: match.interaction.bookmarked;
+
+			ActivityPubService.toggleBookmark(client, key, target)
 				.then((res) => {
 					postListReducer({
 						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
@@ -271,11 +278,18 @@ function WithAppTimelineDataContext({ children }: Props) {
 			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).then(() => {});
 			setLoading(true);
 			const match = findById(key);
+
+			// apply operation to current post
+			// exclude boost (not quotes)
+			let target = !!match.boostedFrom
+				? match.boostedFrom.interaction.liked
+				: match.interaction.liked;
+
 			try {
 				const response = await ActivityPubService.toggleLike(
 					client,
 					key,
-					match.interaction.liked,
+					target,
 					domain as any,
 				);
 				if (response !== null) {

@@ -6,27 +6,12 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import WithActivitypubUserContext, {
-	useActivitypubUserContext,
-} from '../../../../states/useProfile';
-import { Text, View } from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
-
-const ListItem = memo(() => {
-	const { user } = useActivitypubUserContext();
-
-	return (
-		<View>
-			<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-				{user.getUsername()}
-			</Text>
-		</View>
-	);
-});
+import WithActivitypubUserContext from '../../../../states/useProfile';
+import { UserItem } from '../../profile/stack/MyFollowers';
 
 const SharedStackFollowers = memo(() => {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { Data, refetch } = useGetFollowers(id);
+	const { Data } = useGetFollowers(id);
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
@@ -40,13 +25,15 @@ const SharedStackFollowers = memo(() => {
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
 			<AnimatedFlashList
+				estimatedItemSize={48}
+				contentContainerStyle={{ paddingTop: 54 }}
+				onScroll={onScroll}
+				data={Data}
 				renderItem={({ item }) => (
 					<WithActivitypubUserContext userI={item}>
-						<ListItem />
+						<UserItem />
 					</WithActivitypubUserContext>
 				)}
-				data={Data}
-				onScroll={onScroll}
 			/>
 		</AppTopNavbar>
 	);

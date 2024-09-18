@@ -6,7 +6,6 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Divider } from '@rneui/themed';
 import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
-import { APP_FONT } from '../../../../styles/AppTheme';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import {
@@ -17,6 +16,7 @@ import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activi
 import AntDesign from '@expo/vector-icons/AntDesign';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 type StatusInteractionProps = {
 	openAiContext?: string[];
@@ -55,6 +55,7 @@ const StatusInteraction = memo(
 		const [IsBoostStatePending, setIsBoostStatePending] = useState(false);
 
 		const [BoostOptionsVisible, setBoostOptionsVisible] = useState(false);
+		const { colorScheme } = useAppTheme();
 
 		function onTranslationLongPress() {
 			// TODO: implement instance translation
@@ -144,7 +145,7 @@ const StatusInteraction = memo(
 								<AntDesign
 									name="retweet"
 									size={ICON_SIZE}
-									color={IS_BOOSTED ? '#8eb834' : APP_FONT.MEDIUM_EMPHASIS}
+									color={IS_BOOSTED ? '#8eb834' : colorScheme.textColor.medium}
 								/>
 							)}
 						</TouchableOpacity>
@@ -162,7 +163,7 @@ const StatusInteraction = memo(
 							<FontAwesome5
 								name="comment"
 								size={ICON_SIZE}
-								color={APP_FONT.MEDIUM_EMPHASIS}
+								color={colorScheme.textColor.medium}
 							/>
 						</TouchableOpacity>
 
@@ -214,7 +215,7 @@ const StatusInteraction = memo(
 							<Ionicons
 								name="ellipsis-horizontal"
 								size={ICON_SIZE + 2}
-								color={APP_FONT.MEDIUM_EMPHASIS}
+								color={colorScheme.textColor.medium}
 							/>
 						</TouchableOpacity>
 					</View>

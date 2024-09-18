@@ -99,7 +99,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		[
 			'expo-asset',
 			{
-				assets: ['./assets/icons'],
+				assets: ['./assets/icons', './assets/licensed'],
 			},
 		],
 		['expo-router'],

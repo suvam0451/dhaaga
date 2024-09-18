@@ -1,10 +1,12 @@
 import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
-import { SearchBar } from '@rneui/themed';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View, TextInput } from 'react-native';
 import { NativeCheckbox } from '../../../../../lib/Checkboxes';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 import { APP_SEARCH_TYPE } from '../../../api/useSearch';
+import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
+import { AppIcon } from '../../../../../lib/Icon';
 
 type MultiSelectProps = {
 	setSearchCategory: Dispatch<SetStateAction<APP_SEARCH_TYPE>>;
@@ -15,6 +17,7 @@ type MultiSelectProps = {
  * search category
  */
 const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
+	const { colorScheme } = useAppTheme();
 	const [selectedIndex, setSelectedIndex] = useState(0);
 
 	const onCheckboxPress = useCallback(
@@ -62,7 +65,12 @@ const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
 	];
 
 	return (
-		<View style={styles.checkboxContainer}>
+		<View
+			style={[
+				styles.checkboxContainer,
+				{ backgroundColor: colorScheme.palette.menubar },
+			]}
+		>
 			{Checkboxes.map((o, i) => (
 				<NativeCheckbox
 					key={i}
@@ -89,6 +97,7 @@ type DiscoverSearchHelperProps = {
  */
 const DiscoverSearchHelper = memo(
 	({ setSearchTerm, setSearchCategory }: DiscoverSearchHelperProps) => {
+		const { colorScheme } = useAppTheme();
 		const [searchBoxText, setSearchBoxText] = useState('');
 
 		const updateSearch = (search: string) => {
@@ -102,24 +111,52 @@ const DiscoverSearchHelper = memo(
 		};
 
 		return (
-			<Animated.View style={[styles.helperWidget]}>
-				<SearchBar
-					// @ts-ignore
-					onChangeText={updateSearch}
-					onSubmitEditing={submitSearch}
-					value={searchBoxText}
-					containerStyle={{
-						width: '100%',
-						height: 54,
-						backgroundColor: '#252525',
-						margin: 0,
-						borderTopRightRadius: 8,
+			<Animated.View
+				style={[styles.helperWidget, { backgroundColor: 'transparent' }]}
+			>
+				<View
+					style={{
+						padding: 8,
+						backgroundColor: colorScheme.palette.menubar,
+						flexDirection: 'row',
 						borderTopLeftRadius: 8,
+						borderTopRightRadius: 8,
 					}}
-					style={{ width: '100%' }}
-					inputContainerStyle={{ height: 36 }}
-					inputStyle={{ fontSize: 16 }}
-				/>
+				>
+					<View
+						style={{
+							backgroundColor: colorScheme.palette.buttonUnstyled,
+							flexDirection: 'row',
+							width: '100%',
+							paddingLeft: 8,
+							borderRadius: 8,
+						}}
+					>
+						<AppIcon id={'search'} />
+						<TextInput
+							multiline={false}
+							onChangeText={updateSearch}
+							onSubmitEditing={submitSearch}
+							value={searchBoxText}
+							placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
+							style={[
+								styles.textInput,
+								{
+									padding: 8,
+									flex: 1,
+								},
+							]}
+							numberOfLines={1}
+						/>
+						<AppIcon
+							id={'clear'}
+							containerStyle={{ marginRight: 12 }}
+							onPress={() => {
+								setSearchBoxText('');
+							}}
+						/>
+					</View>
+				</View>
 				<Multiselect setSearchCategory={setSearchCategory} />
 			</Animated.View>
 		);
@@ -132,10 +169,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		width: '100%',
-		backgroundColor: '#252525',
-		paddingBottom: 10,
-		paddingTop: 8,
+		paddingTop: 4,
+		paddingVertical: 8,
 		paddingHorizontal: 8,
 		borderBottomRightRadius: 8,
 		borderBottomLeftRadius: 8,
@@ -147,6 +182,13 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 		paddingHorizontal: 12,
 		zIndex: 99,
+	},
+	textInput: {
+		textDecorationLine: 'none',
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 16,
+		flex: 1,
+		textAlignVertical: 'top',
 	},
 });
 

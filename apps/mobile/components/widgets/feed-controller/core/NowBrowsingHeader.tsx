@@ -12,9 +12,12 @@ import FederatedTimelineController from '../controllers/FederatedTimelineControl
 import SocialTimelineController from '../controllers/SocialTimelineController';
 import BubbleTimelineController from '../controllers/BubbleTimelineController';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const NowBrowsingHeader = memo(function Foo() {
 	const { timelineType } = useTimelineController();
+	const { colorScheme } = useAppTheme();
 
 	const Comp = useMemo(() => {
 		switch (timelineType) {
@@ -63,8 +66,8 @@ const NowBrowsingHeader = memo(function Foo() {
 					<Text
 						style={{
 							fontSize: 24,
-							fontFamily: 'Inter-Bold',
-							color: APP_FONT.MONTSERRAT_BODY,
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+							color: colorScheme.textColor.high,
 							textAlign: 'center',
 						}}
 					>

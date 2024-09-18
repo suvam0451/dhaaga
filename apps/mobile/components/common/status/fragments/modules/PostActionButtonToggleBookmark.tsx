@@ -1,8 +1,10 @@
 import { memo, useEffect, useState } from 'react';
-import { ActivityIndicator, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import { Image } from 'expo-image';
 
 const ICON_SIZE = 24;
 
@@ -19,6 +21,7 @@ const PostActionButtonToggleBookmark = memo(
 	({ id, flag, isFinal }: PostActionButtonToggleBookmarkProps) => {
 		const [IsBookmarkStatePending, setIsBookmarkStatePending] = useState(false);
 		const { toggleBookmark, getBookmarkState } = useAppTimelinePosts();
+		const { activePack } = useAppTheme();
 
 		// helper functions
 		function _toggleBookmark() {
@@ -31,18 +34,29 @@ const PostActionButtonToggleBookmark = memo(
 			}
 		}, [id]);
 
+		if (activePack.valid) {
+			return (
+				<TouchableOpacity style={styles.root} onPress={_toggleBookmark}>
+					{IsBookmarkStatePending ? (
+						<ActivityIndicator size={'small'} />
+					) : flag ? (
+						// @ts-ignore-next-line
+						<Image
+							source={{ uri: activePack.bookmarkActive1.localUri }}
+							style={{ height: ICON_SIZE, width: ICON_SIZE }}
+						/>
+					) : (
+						// @ts-ignore-next-line
+						<Image
+							source={{ uri: activePack.bookmarkInactive.localUri }}
+							style={{ height: ICON_SIZE, width: ICON_SIZE }}
+						/>
+					)}
+				</TouchableOpacity>
+			);
+		}
 		return (
-			<TouchableOpacity
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginRight: 12,
-					paddingTop: 8,
-					paddingBottom: 8,
-				}}
-				onPress={_toggleBookmark}
-			>
+			<TouchableOpacity style={styles.root} onPress={_toggleBookmark}>
 				{IsBookmarkStatePending ? (
 					<ActivityIndicator size={'small'} />
 				) : (
@@ -58,3 +72,14 @@ const PostActionButtonToggleBookmark = memo(
 );
 
 export default PostActionButtonToggleBookmark;
+
+const styles = StyleSheet.create({
+	root: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginRight: 12,
+		paddingTop: 8,
+		paddingBottom: 8,
+	},
+});
