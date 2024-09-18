@@ -14,7 +14,7 @@ import {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
 } from '../../../common/timeline/api/postArrayReducer';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -46,7 +46,8 @@ type Type = {
 	isAnimating: boolean;
 
 	// references
-	replyToRef: MutableRefObject<ActivityPubStatusAppDtoType>;
+	ParentRef: MutableRefObject<ActivityPubStatusAppDtoType>;
+	RootRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	TextRef: MutableRefObject<string>;
 	PostRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	PostIdRef: MutableRefObject<string>;
@@ -68,7 +69,8 @@ const defaultValue: Type = {
 	setVisible: () => {},
 	updateRequestId: () => {},
 	requestId: '',
-	replyToRef: undefined,
+	ParentRef: undefined,
+	RootRef: undefined,
 	TextRef: undefined,
 	PostRef: undefined,
 	PostIdRef: undefined,
@@ -112,7 +114,8 @@ function WithAppBottomSheetContext({ children }: Props) {
 	const UserRef = useRef<UserInterface>(null);
 	const UserIdRef = useRef<string>(null);
 	const PostComposerTextSeedRef = useRef<string>(null);
-	const replyToRef = useRef<ActivityPubStatusAppDtoType>(null);
+	const ParentRef = useRef<ActivityPubStatusAppDtoType>(null);
+	const RootRef = useRef<ActivityPubStatusAppDtoType>(null);
 
 	// reducers
 	const timelineDataPostListReducer = useRef<
@@ -137,7 +140,8 @@ function WithAppBottomSheetContext({ children }: Props) {
 				UserRef,
 				UserIdRef,
 				PostComposerTextSeedRef,
-				replyToRef,
+				ParentRef,
+				RootRef,
 				timelineDataPostListReducer,
 				isAnimating: IsAnimating,
 			}}

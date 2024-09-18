@@ -27,7 +27,7 @@ import postArrayReducer, {
 import FlashListService, {
 	FlashListType_Post,
 } from '../../../services/flashlist.service';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
 
 type Type = {
 	data: ActivityPubStatusAppDtoType[];

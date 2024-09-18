@@ -161,7 +161,7 @@ function useMfm({
 			aiContext: openAiContext,
 		});
 		IsSolved.current = content;
-	}, [...deps]);
+	}, [...deps, colorScheme]);
 
 	return {
 		content: Data.content,

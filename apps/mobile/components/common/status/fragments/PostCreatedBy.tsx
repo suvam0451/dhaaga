@@ -13,7 +13,7 @@ import useAppNavigator from '../../../../states/useAppNavigator';
 import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusVisibility from './StatusVisibility';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const TIMELINE_PFP_SIZE = 46;

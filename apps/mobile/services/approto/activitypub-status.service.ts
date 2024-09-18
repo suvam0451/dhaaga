@@ -8,10 +8,10 @@ import ActivityPubService from '../activitypub.service';
 import { MMKV } from 'react-native-mmkv';
 import {
 	ActivityPubStatusAppDtoType,
-	ActivitypubStatusDtoService,
+	AppStatusDtoService,
 	ActivityPubStatusItemDto,
 	ActivityPubStatusLevelThree,
-} from './activitypub-status-dto.service';
+} from './app-status-dto.service';
 import ActivitypubAdapterService from '../activitypub-adapter.service';
 import { z } from 'zod';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
@@ -168,7 +168,7 @@ export class ActivitypubStatusService {
 					 * 	"reply" object, instead of root. へんですね?
 					 */
 					{
-						...ActivitypubStatusDtoService.export(
+						...AppStatusDtoService.export(
 							this.statusI,
 							this.domain,
 							this.subdomain,
@@ -178,7 +178,7 @@ export class ActivitypubStatusService {
 						rootPost: rootI,
 					}
 				: {
-						...ActivitypubStatusDtoService.export(
+						...AppStatusDtoService.export(
 							this.statusI,
 							this.domain,
 							this.subdomain,

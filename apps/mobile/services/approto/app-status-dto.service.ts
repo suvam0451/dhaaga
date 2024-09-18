@@ -89,6 +89,10 @@ export const ActivityPubStatusItemDto = z.object({
 				url: z.string().optional(),
 			}),
 		),
+
+		// Atproto
+		cid: z.string().nullable().optional(),
+		uri: z.string().nullable().optional(),
 	}),
 	state: z.object({
 		isBookmarkStateFinal: z.boolean(),
@@ -121,7 +125,7 @@ export type ActivityPubStatusAppDtoType = z.infer<
  * Supports various operations on the
  * Status Interface
  */
-export class ActivitypubStatusDtoService {
+export class AppStatusDtoService {
 	/**
 	 * list of instances found
 	 * can belong to current/parent/boosted status
@@ -237,6 +241,8 @@ export class ActivitypubStatusDtoService {
 					handle: o.acct,
 					url: o.url,
 				})),
+				cid: input.getCid(),
+				uri: input.getUri(),
 			},
 			state: {
 				isBookmarkStateFinal: IS_BOOKMARK_RESOLVED,

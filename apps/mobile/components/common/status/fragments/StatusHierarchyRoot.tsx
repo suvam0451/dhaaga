@@ -1,4 +1,4 @@
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import { memo } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import useMfm from '../../../hooks/useMfm';
@@ -12,6 +12,7 @@ import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import StatusVisibility from './StatusVisibility';
 import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;
@@ -19,12 +20,15 @@ type Props = {
 };
 
 const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
+	const { colorScheme } = useAppTheme();
 	const { toPost } = useAppNavigator();
 	const { content } = useMfm({
 		content: dto.content.raw,
 		remoteSubdomain: dto.postedBy.instance,
-		emojiMap: dto.calculated.emojis as any,
+		emojiMap: dto.calculated.emojis,
 		deps: [dto],
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		emphasis: 'high',
 	});
 
 	const IS_QUOTE_BOOST = dto.meta.isBoost && dto.content.raw;
@@ -37,13 +41,21 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		numberOfLines: 1,
+		emphasis: 'high',
 	});
+
+	const VALID_DISPLAY_NAME =
+		dto.postedBy.displayName !== null && dto.postedBy.displayName !== '';
 
 	return (
 		<View
 			style={[
 				styles.rootContainer,
-				{ paddingTop: hasParent === undefined ? 10 : 0, position: 'relative' },
+				{
+					paddingTop: hasParent === undefined ? 10 : 0,
+					position: 'relative',
+					backgroundColor: colorScheme.palette.bg,
+				},
 			]}
 		>
 			<View
@@ -57,7 +69,19 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 				<PostCreatedByIconOnly dto={dto} />
 				<View style={{ marginLeft: 8, position: 'relative', flex: 1 }}>
 					<View style={{ flexDirection: 'row', flex: 1 }}>
-						{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
+						{VALID_DISPLAY_NAME && UsernameWithEmojis ? (
+							UsernameWithEmojis
+						) : (
+							<Text
+								style={{
+									flex: 1,
+									color: colorScheme.textColor.medium,
+									fontSize: 13,
+								}}
+							>
+								{dto.postedBy.handle}
+							</Text>
+						)}
 						<View
 							style={{
 								flexDirection: 'row',
@@ -81,10 +105,9 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 								<StatusCreatedAt
 									from={new Date(dto.createdAt)}
 									textStyle={{
-										color: 'gray',
+										color: colorScheme.textColor.low,
 										fontSize: 12,
 										fontFamily: APP_FONTS.INTER_700_BOLD,
-										opacity: 0.87,
 									}}
 								/>
 							</View>

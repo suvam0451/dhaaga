@@ -33,7 +33,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 		PostComposerTextSeedRef,
 		PostRef,
 		updateRequestId,
-		replyToRef,
+		ParentRef,
 	} = useAppBottomSheet();
 
 	function onIconPress() {
@@ -47,7 +47,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 	function onCreatePost() {
 		PostComposerTextSeedRef.current = null;
 		PostRef.current = null;
-		replyToRef.current = null;
+		ParentRef.current = null;
 
 		setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 		updateRequestId();

@@ -47,6 +47,9 @@ class BlueskyStatusAdapter implements StatusInterface {
 		this.reason = reason;
 	}
 
+	getCid = () => this.post.cid;
+	getUri = () => this.post.uri;
+
 	hasQuoteAvailable(): boolean {
 		return !!(
 			this.post.embed &&

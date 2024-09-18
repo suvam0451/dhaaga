@@ -2,7 +2,7 @@ import MastodonService from '../../../services/mastodon.service';
 import { produce } from 'immer';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivitypubStatusService } from '../../../services/approto/activitypub-status.service';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import AtprotoContextService from '../../../services/atproto/atproto-context-service';
 

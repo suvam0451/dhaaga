@@ -1,12 +1,13 @@
 import { memo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import Feather from '@expo/vector-icons/Feather';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../../lib/Icon';
 
 const PreviewedPostEdit = memo(({}: { State: string }) => {
 	const { PostRef } = useAppBottomSheet();
+	const { colorScheme } = useAppTheme();
 
 	function onEditPress() {}
 
@@ -20,22 +21,26 @@ const PreviewedPostEdit = memo(({}: { State: string }) => {
 				paddingHorizontal: 12,
 				borderRadius: 8,
 				paddingVertical: 6,
+				flex: 1,
+				marginHorizontal: 16,
+				justifyContent: 'center',
 			}}
 			onPress={onEditPress}
 		>
 			<Text
 				style={{
-					color: APP_FONT.MONTSERRAT_BODY,
+					color: colorScheme.textColor.high,
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					fontSize: 14,
 				}}
 			>
 				Edit
 			</Text>
-			<Feather
-				name="edit"
-				size={20}
-				style={{ marginLeft: 8 }}
-				color={APP_FONT.MONTSERRAT_BODY}
+			<AppIcon
+				id={'edit'}
+				emphasis={'high'}
+				size={18}
+				containerStyle={{ marginLeft: 8 }}
 			/>
 		</TouchableOpacity>
 	);

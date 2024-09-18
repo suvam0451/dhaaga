@@ -12,7 +12,7 @@ import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
@@ -32,9 +32,10 @@ const StatusInteraction = memo(
 			setType,
 			PostComposerTextSeedRef,
 			PostRef,
-			replyToRef,
+			ParentRef,
 			updateRequestId: updateBottomSheetRequestId,
 			timelineDataPostListReducer,
+			RootRef,
 		} = useAppBottomSheet();
 		const { client } = useActivityPubRestClientContext();
 		const { explain, boost, getPostListReducer } = useAppTimelinePosts();
@@ -73,9 +74,10 @@ const StatusInteraction = memo(
 			boost(STATUS_DTO.id, setIsBoostStatePending);
 		}
 
-		function onClickReply() {
+		function reply() {
 			PostComposerTextSeedRef.current = null;
-			replyToRef.current = dto;
+			ParentRef.current = dto;
+			RootRef.current = dto.rootPost;
 
 			setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 			updateBottomSheetRequestId();
@@ -158,7 +160,7 @@ const StatusInteraction = memo(
 								paddingTop: 8,
 								paddingBottom: 8,
 							}}
-							onPress={onClickReply}
+							onPress={reply}
 						>
 							<FontAwesome5
 								name="comment"

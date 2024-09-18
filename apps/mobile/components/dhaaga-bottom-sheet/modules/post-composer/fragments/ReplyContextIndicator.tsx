@@ -9,11 +9,11 @@ import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
  * Indicates in which context this reply is being composed
  */
 const ReplyContextIndicator = memo(() => {
-	const { replyToRef, requestId } = useAppBottomSheet();
+	const { ParentRef, requestId } = useAppBottomSheet();
 	const { colorScheme } = useAppTheme();
 
 	const component = useMemo(() => {
-		if (replyToRef.current) {
+		if (ParentRef.current) {
 			return (
 				<View
 					style={{ marginTop: 6, flexDirection: 'row', alignItems: 'center' }}
@@ -38,7 +38,7 @@ const ReplyContextIndicator = memo(() => {
 					>
 						{/*@ts-ignore-next-line*/}
 						<Image
-							source={{ uri: replyToRef.current.postedBy.avatarUrl }}
+							source={{ uri: ParentRef.current.postedBy.avatarUrl }}
 							style={{ width: 24, height: 24, borderRadius: 8 }}
 						/>
 						<Text
@@ -48,7 +48,7 @@ const ReplyContextIndicator = memo(() => {
 							]}
 							numberOfLines={1}
 						>
-							{replyToRef.current.postedBy.handle}
+							{ParentRef.current.postedBy.handle}
 						</Text>
 					</View>
 				</View>
@@ -56,7 +56,7 @@ const ReplyContextIndicator = memo(() => {
 		}
 
 		return <View />;
-	}, [replyToRef, requestId, colorScheme]);
+	}, [ParentRef, requestId, colorScheme]);
 	return <View>{component}</View>;
 });
 

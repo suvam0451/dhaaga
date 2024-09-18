@@ -1,15 +1,17 @@
 import { Text, TouchableOpacity } from 'react-native';
-import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
+import { APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { memo } from 'react';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../_api/useAppBottomSheet';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../../lib/Icon';
 
 const PreviewedPostDone = memo(() => {
 	const { setType, setVisible } = useAppBottomSheet();
+	const { colorScheme } = useAppTheme();
 
 	function onDonePress() {
 		setType(APP_BOTTOM_SHEET_ENUM.NA);
@@ -25,23 +27,26 @@ const PreviewedPostDone = memo(() => {
 				paddingHorizontal: 12,
 				borderRadius: 8,
 				paddingVertical: 6,
-				marginLeft: 8,
+				flex: 1,
 			}}
 			onPress={onDonePress}
 		>
 			<Text
 				style={{
-					color: APP_FONT.MONTSERRAT_BODY,
+					color: colorScheme.textColor.high,
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 				}}
 			>
 				Done
 			</Text>
-			<Ionicons
-				name="checkmark-done"
+
+			<AppIcon
+				id={'done'}
 				size={20}
-				style={{ marginLeft: 8 }}
-				color={APP_FONT.MONTSERRAT_BODY}
+				emphasis={'high'}
+				containerStyle={{
+					marginLeft: 8,
+				}}
 			/>
 		</TouchableOpacity>
 	);

@@ -4,14 +4,19 @@ import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import { StyleProp, TextStyle, View } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Feather from '@expo/vector-icons/Feather';
+import { FontAwesome } from '@expo/vector-icons';
 
 export type APP_ICON_ENUM =
 	| 'create'
 	| 'clear'
+	| 'done'
+	| 'edit'
 	| 'menu'
 	| 'palette'
 	| 'search'
-	| 'feelings';
+	| 'feelings'
+	| 'trash';
 
 type AppIconType = {
 	id: APP_ICON_ENUM;
@@ -68,6 +73,27 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'done':
+					return (
+						<Ionicons
+							name="checkmark-done"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'edit':
+					return (
+						<Feather
+							name="edit"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+
 				case 'feelings':
 					return (
 						<FontAwesome6
@@ -102,6 +128,16 @@ export const AppIcon = memo(
 					return (
 						<AntDesign
 							name="search1"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'trash':
+					return (
+						<FontAwesome
+							name="trash-o"
 							size={_size}
 							color={_color}
 							onPress={onPress}

@@ -12,7 +12,7 @@ import { memo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import PostMoreActionsPostTarget from '../dhaaga-bottom-sheet/modules/post-actions/fragments/PostMoreActionsPostTarget';
 import { useGorhomActionSheetContext } from '../../states/useGorhomBottomSheet';
-import { ActivityPubStatusAppDtoType } from '../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../services/approto/app-status-dto.service';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;

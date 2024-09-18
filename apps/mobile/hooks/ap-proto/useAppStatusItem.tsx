@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { ActivityPubStatusAppDtoType } from '../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../services/approto/app-status-dto.service';
 
 type Type = {
 	dto: ActivityPubStatusAppDtoType;

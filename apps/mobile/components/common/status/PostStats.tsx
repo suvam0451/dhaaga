@@ -1,52 +1,48 @@
 import { Fragment, memo } from 'react';
-import {
-	TouchableOpacity,
-	View,
-	StyleSheet,
-	ViewStyle,
-	StyleProp,
-} from 'react-native';
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
+import { APP_FONT } from '../../../styles/AppTheme';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
-type PostStatLikesProps = {
+type StatItemProps = {
+	count: number;
+	label: string;
+	nextCounts: number[];
 	onPress: () => void;
-	isLiked: boolean;
-	likeCount: number;
 };
 
+function util(o: number): string {
+	const formatter = new Intl.NumberFormat('en-US', {
+		notation: 'compact',
+		compactDisplay: 'short',
+	});
+	return formatter.format(o);
+}
+
 /**
- * Show and allow likes
+ * Shows a post stat
  */
-const PostStatLikes = memo(
-	({ onPress, isLiked, likeCount }: PostStatLikesProps) => {
-		if (!isLiked && likeCount === 0) return <View />;
-		return (
-			<TouchableOpacity
-				onPress={onPress}
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-				}}
-			>
-				<Text
-					style={{
-						color: isLiked ? APP_THEME.LINK : '#888',
-						fontSize: 13,
-						marginLeft: 4,
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					}}
-				>
-					{likeCount} Likes
+const StatItem = memo(({ count, label, nextCounts }: StatItemProps) => {
+	const { colorScheme } = useAppTheme();
+	const formatted = util(count);
+
+	const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
+	if (count === 0) return <View />;
+	return (
+		<Fragment>
+			<Text style={[styles.text, { color: colorScheme.textColor.low }]}>
+				{formatted} {label}
+			</Text>
+			{SHOW_TRAILING_BULLET && (
+				<Text style={[styles.bull, { color: colorScheme.textColor.low }]}>
+					&bull;
 				</Text>
-			</TouchableOpacity>
-		);
-	},
-);
+			)}
+		</Fragment>
+	);
+});
+
 /**
  * Show metrics for a post
  *
@@ -61,52 +57,40 @@ const PostStats = memo(function Foo({
 	dto: ActivityPubStatusAppDtoType;
 	style?: StyleProp<ViewStyle>;
 }) {
-	const { colorScheme } = useAppTheme();
 	const STATUS_DTO = dto.meta.isBoost
 		? dto.content.raw
 			? dto
 			: dto.boostedFrom
 		: dto;
 
-	if (
-		STATUS_DTO.stats.replyCount < 1 &&
-		STATUS_DTO.stats.likeCount < 1 &&
-		STATUS_DTO.stats.boostCount < 1
-	)
+	const LIKE_COUNT = STATUS_DTO.stats.likeCount;
+	const REPLY_COUNT = STATUS_DTO.stats.replyCount;
+	const SHARE_COUNT = STATUS_DTO.stats.boostCount;
+
+	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1)
 		return <View></View>;
 
 	return (
 		<View style={[styles.container, style]}>
 			<View style={{ flexGrow: 1 }} />
-			{/* Likes */}
-			{STATUS_DTO.stats.likeCount > 0 && (
-				<Fragment>
-					<Text style={[styles.text, { color: colorScheme.textColor.low }]}>
-						{STATUS_DTO.stats.likeCount} Likes
-					</Text>
-					<Text style={[styles.bull, { color: colorScheme.textColor.low }]}>
-						&bull;
-					</Text>
-				</Fragment>
-			)}
-			{/* Shares */}
-			{STATUS_DTO.stats.boostCount > 0 && (
-				<Fragment>
-					<Text style={[styles.text, { color: colorScheme.textColor.low }]}>
-						{STATUS_DTO.stats.boostCount} Shares
-					</Text>
-					<Text style={[styles.bull, { color: colorScheme.textColor.low }]}>
-						&bull;
-					</Text>
-				</Fragment>
-			)}
-
-			{/* Replies */}
-			{STATUS_DTO.stats.replyCount > 0 && (
-				<Text style={[styles.text, { color: colorScheme.textColor.low }]}>
-					{STATUS_DTO.stats.replyCount} Replies
-				</Text>
-			)}
+			<StatItem
+				count={LIKE_COUNT}
+				label={'Likes'}
+				nextCounts={[REPLY_COUNT, SHARE_COUNT]}
+				onPress={() => {}}
+			/>
+			<StatItem
+				count={SHARE_COUNT}
+				label={'Shared'}
+				nextCounts={[REPLY_COUNT]}
+				onPress={() => {}}
+			/>
+			<StatItem
+				count={REPLY_COUNT}
+				label={'Replies'}
+				nextCounts={[]}
+				onPress={() => {}}
+			/>
 		</View>
 	);
 });

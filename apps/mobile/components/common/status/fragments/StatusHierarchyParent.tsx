@@ -7,7 +7,7 @@ import PostStats from '../PostStats';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import StatusQuoted from './StatusQuoted';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusVisibility from './StatusVisibility';
@@ -25,13 +25,15 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 	const { content } = useMfm({
 		content: dto.content.raw,
 		remoteSubdomain: dto.postedBy.instance,
-		emojiMap: dto.calculated.emojis as any,
+		emojiMap: dto.calculated.emojis,
 		deps: [dto],
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		emphasis: 'high',
 	});
 
 	const IS_QUOTE_BOOST = dto.meta.isBoost && dto.content.raw;
 
-	const { content: UsernameWithEmojis } = useMfm({
+	const { content: UsernameWithEmojis, isLoaded } = useMfm({
 		content: dto.postedBy.displayName,
 		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis,
@@ -41,6 +43,9 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 		numberOfLines: 1,
 		emphasis: 'high',
 	});
+
+	const VALID_DISPLAY_NAME =
+		dto.postedBy.displayName !== null && dto.postedBy.displayName !== '';
 
 	return (
 		<View
@@ -64,12 +69,23 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 				<PostCreatedByIconOnly dto={dto} />
 				<View style={{ marginLeft: 8, position: 'relative', flex: 1 }}>
 					<View style={{ flexDirection: 'row', flex: 1 }}>
-						{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
+						{VALID_DISPLAY_NAME && UsernameWithEmojis ? (
+							UsernameWithEmojis
+						) : (
+							<Text
+								style={{
+									flex: 1,
+									color: colorScheme.textColor.medium,
+									fontSize: 13,
+								}}
+							>
+								{dto.postedBy.handle}
+							</Text>
+						)}
 						<View
 							style={{
 								flexDirection: 'row',
 								alignItems: 'flex-end',
-								// flex: 1,
 								justifyContent: 'flex-end',
 							}}
 						>

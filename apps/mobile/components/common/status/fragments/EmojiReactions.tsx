@@ -6,7 +6,7 @@ import EmojiReaction from './EmojiReaction';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 

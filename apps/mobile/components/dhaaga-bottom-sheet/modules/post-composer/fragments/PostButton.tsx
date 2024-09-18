@@ -14,14 +14,70 @@ import {
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import ActivityPubService from '../../../../../services/activitypub.service';
 import { ActivitypubStatusService } from '../../../../../services/approto/activitypub-status.service';
+import AtprotoComposerService, {
+	AtprotoReplyEmbed,
+} from '../../../../../services/atproto/atproto-compose';
 
+/**
+ * Click to Post!
+ */
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
 	const { client, domain, subdomain } = useActivityPubRestClientContext();
-	const { setType, replyToRef, PostRef } = useAppBottomSheet();
+	const { setType, ParentRef, PostRef } = useAppBottomSheet();
 
 	async function onClick() {
 		let _visibility: any = visibility.toLowerCase();
+
+		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+			let reply: AtprotoReplyEmbed = null;
+			if (ParentRef.current) {
+				if (ParentRef.current.rootPost) {
+					// both parent and root available
+					reply = {
+						root: {
+							uri: ParentRef.current.rootPost.meta.uri,
+							cid: ParentRef.current.rootPost.meta.cid,
+						},
+						parent: {
+							uri: ParentRef.current.meta.uri,
+							cid: ParentRef.current.meta.cid,
+						},
+					};
+				} else {
+					// parent must be root
+					reply = {
+						root: {
+							uri: ParentRef.current.meta.uri,
+							cid: ParentRef.current.meta.cid,
+						},
+						parent: {
+							uri: ParentRef.current.meta.uri,
+							cid: ParentRef.current.meta.cid,
+						},
+					};
+				}
+			}
+			const data = await AtprotoComposerService.post(client as any, rawText, {
+				reply,
+			});
+			if (data) {
+				/**
+				 * 	FIXME: Currently only shows the latest record
+				 * 		We can use the logic from context builder
+				 * 		to render the parent and root, as well
+				 */
+				const res = ActivityPubAdapterService.adaptStatus(data, domain);
+				PostRef.current = new ActivitypubStatusService(
+					res,
+					domain,
+					subdomain,
+				).export();
+				setType(APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
+				return;
+			}
+		}
+
 		if (visibility === APP_POST_VISIBILITY.PRIVATE) {
 			_visibility = ActivityPubService.mastodonLike(domain)
 				? 'private'
@@ -44,7 +100,7 @@ const PostButton = memo(() => {
 			misskeyVisibility: _visibility,
 			language: 'en',
 			sensitive: false,
-			inReplyToId: replyToRef.current ? replyToRef.current.id : null,
+			inReplyToId: ParentRef.current ? ParentRef.current.id : null,
 			mediaIds: mediaTargets.map((o) => o.remoteId.toString()),
 			localOnly: false,
 			spoilerText: cw === '' ? undefined : cw,
@@ -83,7 +139,6 @@ const PostButton = memo(() => {
 				console.log(e);
 			}
 		}
-		// console.log('all good now');
 		setType(APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
 	}
 

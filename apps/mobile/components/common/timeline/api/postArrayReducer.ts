@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { Dispatch, MutableRefObject } from 'react';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 import { ActivityPubReactionStateDto } from '../../../../services/approto/activitypub-reactions.service';
 
