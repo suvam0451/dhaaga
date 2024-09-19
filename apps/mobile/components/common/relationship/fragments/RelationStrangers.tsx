@@ -4,17 +4,24 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { Button } from '@rneui/themed';
 import { RelationshipButtonProps } from './_common';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const LABEL = 'Follow';
 
 const RelationStrangers = memo(
 	({ loading, onPress }: RelationshipButtonProps) => {
+		const { colorScheme } = useAppTheme();
 		return (
 			<Button
 				size={'sm'}
 				onPress={onPress}
-				buttonStyle={styles.button}
-				containerStyle={styles.buttonContainer}
+				buttonStyle={[
+					styles.button,
+					{
+						backgroundColor: colorScheme.palette.buttonUnstyled,
+					},
+				]}
+				containerStyle={[styles.buttonContainer, {}]}
 			>
 				{loading ? (
 					<ActivityIndicator
@@ -22,7 +29,9 @@ const RelationStrangers = memo(
 						color={APP_THEME.COLOR_SCHEME_D_NORMAL}
 					/>
 				) : (
-					<Text style={styles.text}>{LABEL}</Text>
+					<Text style={[styles.text, { color: colorScheme.textColor.high }]}>
+						{LABEL}
+					</Text>
 				)}
 			</Button>
 		);

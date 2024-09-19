@@ -1,17 +1,18 @@
 import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../../../lib/Icon';
 
 type ProfilePeekMessageProps = {
 	handle: string;
 };
 
 const ProfileButtonMessage = memo(({ handle }: ProfilePeekMessageProps) => {
+	const { colorScheme } = useAppTheme();
 	const { setType, PostComposerTextSeedRef, setVisible, updateRequestId } =
 		useAppBottomSheet();
 
@@ -26,12 +27,12 @@ const ProfileButtonMessage = memo(({ handle }: ProfilePeekMessageProps) => {
 		<TouchableOpacity
 			style={{
 				padding: 8,
-				backgroundColor: '#282828',
+				backgroundColor: colorScheme.palette.menubar, // 282828
 				borderRadius: 8,
 			}}
 			onPress={onPress}
 		>
-			<AntDesign name="message1" size={20} color={APP_FONT.HIGH_EMPHASIS} />
+			<AppIcon id={'message'} size={20} emphasis={'high'} />
 		</TouchableOpacity>
 	);
 });

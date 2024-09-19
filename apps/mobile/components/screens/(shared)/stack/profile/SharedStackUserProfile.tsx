@@ -1,25 +1,15 @@
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useLocalSearchParams } from 'expo-router';
-import {
-	ActivitypubHelper,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
-import { useMemo } from 'react';
 import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
-import WithActivitypubUserContext, {
-	useActivitypubUserContext,
-} from '../../../../../states/useProfile';
 import useMfm from '../../../../hooks/useMfm';
 import ErrorGoBack from '../../../../error-screen/ErrorGoBack';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
 import styles from '../../../../common/user/utils/styles';
-import { ProfileStatsInterface } from './fragments/ProfileStats';
+import ProfileStats from './fragments/ProfileStats';
 import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
 import ProfileButtonMessage from './fragments/ProfileButtonMessage';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -29,36 +19,36 @@ import AppTopNavbar, {
 } from '../../../../shared/topnavbar/AppTopNavbar';
 import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
 import ProfileModules from './modules/ProfileModules';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../../lib/Icon';
 
 export function ProfileContextWrapped() {
-	const { primaryAcct, domain } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
-	const { user } = useActivitypubUserContext();
+	const { colorScheme } = useAppTheme();
+	const { id } = useLocalSearchParams<{ id: string }>();
+	const { Data: acct, Error } = useGetProfile({ userId: id, requestId: 'N/A' });
 
-	const fields = user.getFields();
-	const avatarUrl = user.getAvatarUrl();
-	const bannerUrl = user.getBannerUrl();
+	const fields = acct?.meta?.fields;
+	const avatarUrl = acct?.avatarUrl;
+	const bannerUrl = acct?.banner;
 
 	const { content: ParsedDisplayName } = useMfm({
-		content: user?.getDisplayName(),
-		remoteSubdomain: user?.getInstanceUrl(),
-		emojiMap: user?.getEmojiMap(),
-		deps: [user?.getDisplayName()],
+		content: acct?.displayName,
+		remoteSubdomain: acct?.instance,
+		emojiMap: acct?.calculated?.emojis,
+		deps: [acct?.displayName],
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		emphasis: 'high',
 	});
-	const IS_LOCKED = user.getIsLockedProfile();
-
-	const handle = useMemo(() => {
-		return domain === KNOWN_SOFTWARE.BLUESKY
-			? `@${user.getUsername()}`
-			: ActivitypubHelper.getHandle(user?.getAccountUrl(subdomain), subdomain);
-	}, [user?.getAccountUrl(subdomain)]);
+	const IS_LOCKED = acct?.meta?.isProfileLocked;
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
+
+	if (Error !== null) {
+		return <ErrorGoBack msg={Error} />;
+	}
 
 	return (
 		<AppTopNavbar
@@ -68,7 +58,10 @@ export function ProfileContextWrapped() {
 		>
 			<Animated.ScrollView
 				onScroll={onScroll}
-				contentContainerStyle={localStyles.rootScrollView}
+				contentContainerStyle={[
+					localStyles.rootScrollView,
+					{ backgroundColor: colorScheme.palette.bg },
+				]}
 			>
 				{/*@ts-ignore-next-line*/}
 				<Image
@@ -82,11 +75,17 @@ export function ProfileContextWrapped() {
 						uri={avatarUrl}
 					/>
 					<View style={localStyles.buttonSection}>
-						<ProfileButtonMessage handle={handle} />
+						<ProfileButtonMessage handle={acct?.handle} />
 						<View style={{ width: 8 }} />
 						<ProfileButtonPhonebook />
 					</View>
-					<ProfileStatsInterface style={localStyles.statSectionContainer} />
+					<ProfileStats
+						userId={acct?.id}
+						postCount={acct?.stats?.posts}
+						followingCount={acct?.stats?.following}
+						followerCount={acct?.stats?.followers}
+						style={localStyles.statSectionContainer}
+					/>
 				</View>
 				<View style={localStyles.secondSectionContainer}>
 					<View style={{ flexShrink: 1 }}>
@@ -100,8 +99,14 @@ export function ProfileContextWrapped() {
 							{ParsedDisplayName}
 						</Text>
 						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<Text style={styles.secondaryText} numberOfLines={1}>
-								{handle}
+							<Text
+								style={[
+									styles.secondaryText,
+									{ color: colorScheme.textColor.medium },
+								]}
+								numberOfLines={1}
+							>
+								{acct?.handle}
 							</Text>
 							{IS_LOCKED && (
 								<View style={{ marginLeft: 4 }}>
@@ -115,22 +120,20 @@ export function ProfileContextWrapped() {
 						</View>
 					</View>
 					<View style={localStyles.relationManagerSection}>
-						<View style={{ marginRight: 8 }}>
-							<Ionicons
-								name="notifications"
-								size={22}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
-						</View>
-						<RelationshipButtonCore userId={user?.getId()} />
+						<AppIcon
+							id={'bell'}
+							size={22}
+							containerStyle={{ marginRight: 8 }}
+						/>
+						<RelationshipButtonCore userId={acct?.id} />
 					</View>
 				</View>
 
 				<ProfileDesc
 					style={localStyles.parsedDescriptionContainer}
-					rawContext={user?.getDescription()}
-					remoteSubdomain={user?.getInstanceUrl()}
-					emojiMap={user?.getEmojiMap()}
+					rawContext={acct?.description}
+					remoteSubdomain={acct?.instance}
+					emojiMap={acct?.calculated?.emojis}
 				/>
 
 				{/*Separator*/}
@@ -138,8 +141,9 @@ export function ProfileContextWrapped() {
 
 				{/* Collapsible Sections */}
 				<ProfileModules
+					acct={acct}
 					fields={fields}
-					profileId={user.getId()}
+					profileId={acct?.id}
 					style={{ paddingBottom: 16 }}
 				/>
 			</Animated.ScrollView>
@@ -147,20 +151,7 @@ export function ProfileContextWrapped() {
 	);
 }
 
-function SharedStackUserProfile() {
-	const { id } = useLocalSearchParams<{ id: string }>();
-	const { Data, Error } = useGetProfile({ userId: id, requestId: 'N/A' });
-
-	if (Error !== null) {
-		return <ErrorGoBack msg={Error} />;
-	}
-
-	return (
-		<WithActivitypubUserContext userI={Data}>
-			<ProfileContextWrapped />
-		</WithActivitypubUserContext>
-	);
-}
+export default ProfileContextWrapped;
 
 const localStyles = StyleSheet.create({
 	rootScrollView: {
@@ -218,5 +209,3 @@ const localStyles = StyleSheet.create({
 		width: '100%',
 	},
 });
-
-export default SharedStackUserProfile;

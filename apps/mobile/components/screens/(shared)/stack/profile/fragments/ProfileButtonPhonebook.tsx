@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { AppIcon } from '../../../../../lib/Icon';
+import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 
 /**
  * Will bring up the
@@ -9,15 +9,16 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
  * in the future.
  */
 const ProfileButtonMessage = memo(() => {
+	const { colorScheme } = useAppTheme();
 	return (
 		<TouchableOpacity
 			style={{
 				padding: 8,
-				backgroundColor: '#242424',
+				backgroundColor: colorScheme.palette.menubar, // 242424
 				borderRadius: 8,
 			}}
 		>
-			<FontAwesome6 name="contact-book" size={20} color={APP_FONT.DISABLED} />
+			<AppIcon id={'phonebook'} size={20} emphasis={'low'} />
 		</TouchableOpacity>
 	);
 });

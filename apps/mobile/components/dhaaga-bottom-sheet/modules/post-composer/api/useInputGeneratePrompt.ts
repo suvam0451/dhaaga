@@ -6,13 +6,8 @@ const EMOJI_REGEX = /:[a-zA-Z_@]+?$/;
 const ACCT_REGEX = /(@[a-zA-Z_0-9.]+(@[a-zA-Z_0-9.]*)?)$/;
 
 function useInputGeneratePrompt() {
-	const {
-		setAutoCompletionPrompt,
-		rawText,
-		setRawText,
-		setSelection,
-		selection,
-	} = useComposerContext();
+	const { setAutoCompletionPrompt, setRawText, setSelection, selection } =
+		useComposerContext();
 
 	const onSelectionChange = useCallback((e: any) => {
 		setSelection(e.nativeEvent.selection);

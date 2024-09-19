@@ -9,13 +9,13 @@ import UserSearchResultListing from '../../../../../common/user/UserSearchResult
 import WithAppStatusItemContext from '../../../../../../hooks/ap-proto/useAppStatusItem';
 import { View } from 'react-native';
 import { FlashListType_Post } from '../../../../../../services/flashlist.service';
-import { ActivityPubAppUserDtoType } from '../../../../../../services/approto/activitypub-user-dto.service';
+import { AppUser } from '../../../../../../services/approto/app-user-service';
 
 function DiscoverListRenderer({
 	item,
 	category,
 }: {
-	item: ActivityPubAppUserDtoType | FlashListType_Post | TagInterface;
+	item: AppUser | FlashListType_Post | TagInterface;
 	category: APP_SEARCH_TYPE;
 }) {
 	switch (category) {

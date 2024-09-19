@@ -6,7 +6,8 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useState } from 'react';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import ActivitypubAdapterService from '../../../services/activitypub-adapter.service';
+import { AppUser } from '../../../types/app-user.types';
+import AppUserService from '../../../services/approto/app-user-service';
 
 type GetProfile_Type = {
 	user?: UserInterface;
@@ -21,8 +22,8 @@ type GetProfile_Type = {
  * @param requestId to ensure recalculation on prop change
  */
 function useGetProfile({ user, userId }: GetProfile_Type) {
-	const { client, domain } = useActivityPubRestClientContext();
-	const [Data, setData] = useState<UserInterface>(null);
+	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const [Data, setData] = useState<AppUser>(null);
 	const [Error, setError] = useState(null);
 
 	async function api() {
@@ -50,14 +51,14 @@ function useGetProfile({ user, userId }: GetProfile_Type) {
 
 	useEffect(() => {
 		if (user !== undefined && user !== null) {
-			setData(user);
+			setData(AppUserService.export(user, domain, subdomain));
 			return;
 		}
 		if (status !== 'success' || !data) return;
 		if (domain === KNOWN_SOFTWARE.BLUESKY) {
-			setData(ActivitypubAdapterService.adaptUser(data.data, domain));
+			setData(AppUserService.exportRaw(data.data, domain, subdomain));
 		} else {
-			setData(ActivitypubAdapterService.adaptUser(data, domain));
+			setData(AppUserService.exportRaw(data, domain, subdomain));
 		}
 	}, [status, data, user]);
 

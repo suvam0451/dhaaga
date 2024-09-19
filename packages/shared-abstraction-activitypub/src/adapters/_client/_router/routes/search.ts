@@ -6,6 +6,7 @@ import {
 	MegaStatus,
 } from '../../_interface.js';
 import { Endpoints } from 'misskey-js';
+import { AppBskyActorSearchActorsTypeahead } from '@atproto/api';
 
 export type MastoUnifiedSearchType = {
 	q: string;
@@ -42,7 +43,10 @@ export interface SearchRoute {
 	findUsers(
 		q: DhaagaJsUserSearchDTO,
 	): LibraryPromise<
-		MastoAccount[] | Endpoints['users/search']['res'] | MegaAccount[]
+		| MastoAccount[]
+		| Endpoints['users/search']['res']
+		| MegaAccount[]
+		| AppBskyActorSearchActorsTypeahead.Response
 	>;
 
 	findPosts(

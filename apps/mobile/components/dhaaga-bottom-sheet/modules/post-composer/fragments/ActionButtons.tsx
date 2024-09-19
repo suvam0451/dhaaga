@@ -1,7 +1,7 @@
 import { Fragment, memo, useCallback } from 'react';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
+import { APP_THEME } from '../../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
@@ -102,7 +102,6 @@ const ActionButtons = memo(() => {
 			<View style={{ flexGrow: 1, flex: 1 }} />
 			<Pressable
 				style={{
-					// flex: 1,
 					backgroundColor: APP_THEME.INVALID_ITEM_BODY,
 					flexDirection: 'row',
 					alignItems: 'center',
@@ -114,13 +113,18 @@ const ActionButtons = memo(() => {
 			>
 				<Text
 					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
+						color: colorScheme.textColor.high,
 						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>
 					Cancel
 				</Text>
-				<AppIcon id={'clear'} size={20} iconStyle={{ marginLeft: 4 }} />
+				<AppIcon
+					id={'clear'}
+					size={20}
+					iconStyle={{ marginLeft: 4 }}
+					emphasis={'high'}
+				/>
 			</Pressable>
 		</View>
 	);

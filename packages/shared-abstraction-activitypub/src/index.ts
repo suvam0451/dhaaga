@@ -1,4 +1,16 @@
 import ActivityPubClient, {
+	FollowPostDto,
+	GetPostsQueryDTO,
+	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
+	MastoList,
+	MastoRelationship,
+	MastoStatus,
+	MegaAccount,
+	MegaRelationship,
+	MegaStatus,
+	MissUserDetailed,
 	RestClientCreateDTO,
 } from './adapters/_client/_interface.js';
 import UnknownRestClient from './adapters/_client/default/index.js';
@@ -12,12 +24,36 @@ import MisskeyToStatusAdapter from './adapters/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
 import {
 	InstanceApi_CustomEmojiDTO,
+	InstanceRoute,
 	KNOWN_SOFTWARE,
 } from './adapters/_client/_router/routes/instance.js';
 import axios from 'axios';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
 import PleromaRestClient from './adapters/_client/pleroma/index.js';
 import BlueskyRestClient from './adapters/_client/bluesky/index.js';
+import { errorBuilder } from './adapters/_client/_router/dto/api-responses.dto.js';
+import { LibraryPromise } from './adapters/_client/_router/routes/_types.js';
+import {
+	AccountMutePostDto,
+	AccountRoute,
+	AccountRouteStatusQueryDto,
+	BookmarkGetQueryDTO,
+	FollowerGetQueryDTO,
+} from './adapters/_client/_router/routes/accounts.js';
+import { BaseAccountsRouter } from './adapters/_client/default/accounts.js';
+import {
+	ListsRoute,
+	MeRoute,
+	MediaRoute,
+	NotificationsRoute,
+	ParserRoute,
+	ProfileRoute,
+	SearchRoute,
+	StatusesRoute,
+	TagRoute,
+	TimelinesRoute,
+	TrendsRoute,
+} from './adapters/_client/_router/routes/_index.js';
 
 export {
 	UnknownToStatusAdapter,
@@ -135,5 +171,51 @@ export const verifyMisskeyToken = async (host: string, session: string) => {
 	);
 	return res.data;
 };
+
+export { LibraryPromise, errorBuilder };
+
+// Routes
+export {
+	AccountRoute,
+	InstanceRoute,
+	ListsRoute,
+	MeRoute,
+	MediaRoute,
+	NotificationsRoute,
+	ParserRoute,
+	ProfileRoute,
+	SearchRoute,
+	StatusesRoute,
+	TagRoute,
+	TimelinesRoute,
+	TrendsRoute,
+};
+
+// Library Typings
+export {
+	FollowPostDto,
+	GetPostsQueryDTO,
+	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
+	MastoList,
+	MastoRelationship,
+	MastoStatus,
+	MegaAccount,
+	MegaRelationship,
+	MegaStatus,
+	MissUserDetailed,
+};
+
+// DTOs
+export {
+	AccountMutePostDto,
+	AccountRouteStatusQueryDto,
+	BookmarkGetQueryDTO,
+	FollowerGetQueryDTO,
+};
+
+// Template Routers
+export { BaseAccountsRouter };
 
 export { KNOWN_SOFTWARE, InstanceApi_CustomEmojiDTO };

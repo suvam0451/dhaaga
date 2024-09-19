@@ -3,28 +3,12 @@ import {
 	ActivitypubHelper,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
+import ActivityPubAdapterService from '../activitypub-adapter.service';
+import { ActivityPubUserDTO } from '../../types/app-user.types';
 
-const ActivityPubUserDTO = z.object({
-	id: z.string(),
-	avatarUrl: z.string(),
-	displayName: z.string().nullable(),
-	handle: z.string().regex(/^@.*?@?.*?$/),
-	instance: z.string(),
-	meta: z.object({
-		isProfileLocked: z.boolean(),
-		isBot: z.boolean(),
-	}),
-	description: z.string(),
-	stats: z.object({
-		posts: z.number().nullable(),
-		followers: z.number().nullable(),
-		following: z.number().nullable(),
-	}),
-});
+export type AppUser = z.infer<typeof ActivityPubUserDTO>;
 
-export type ActivityPubAppUserDtoType = z.infer<typeof ActivityPubUserDTO>;
-
-class ActivityPubUserDtoService {
+class AppUserService {
 	/**
 	 * A lot of things are defaulted,
 	 * because Misskey returns partial
@@ -39,12 +23,13 @@ class ActivityPubUserDtoService {
 		input: UserInterface,
 		domain: string,
 		subdomain: string,
-	): ActivityPubAppUserDtoType | null {
-		const dto: ActivityPubAppUserDtoType = {
+	): AppUserService | null {
+		const dto: AppUserService = {
 			id: input.getId(),
+			displayName: input.getDisplayName(),
 			description: input.getDescription() || '',
 			avatarUrl: input.getAvatarUrl(),
-			displayName: input.getDisplayName(),
+			banner: input.getBannerUrl(),
 			handle: ActivitypubHelper.getHandle(
 				input?.getAccountUrl(subdomain),
 				subdomain,
@@ -59,6 +44,10 @@ class ActivityPubUserDtoService {
 				// NOTE: be careful using these in misskey
 				isBot: input.getIsBot() || false,
 				isProfileLocked: input.getIsLockedProfile() || false,
+				fields: input.getFields() || [],
+			},
+			calculated: {
+				emojis: input.getEmojiMap(),
 			},
 		};
 
@@ -68,8 +57,37 @@ class ActivityPubUserDtoService {
 			return null;
 		}
 
-		return data as ActivityPubAppUserDtoType;
+		return data as AppUserService;
+	}
+
+	/**
+	 *
+	 */
+	static exportRaw(
+		input: any,
+		domain: string,
+		subdomain: string,
+	): AppUserService {
+		const _interface = ActivityPubAdapterService.adaptUser(input, domain);
+		return AppUserService.export(_interface, domain, subdomain);
+	}
+
+	/**
+	 *
+	 * @param input
+	 * @param domain
+	 * @param subdomain
+	 */
+	static exportRawMultiple(
+		input: any[],
+		domain: string,
+		subdomain: string,
+	): AppUserService[] {
+		return input
+			.map((o) => ActivityPubAdapterService.adaptUser(o, domain))
+			.filter((o) => !!o)
+			.map((o) => AppUserService.export(o, domain, subdomain));
 	}
 }
 
-export default ActivityPubUserDtoService;
+export default AppUserService;

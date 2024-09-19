@@ -16,6 +16,8 @@ import {
 import { MeRoute } from './me.js';
 import { MediaRoute } from './media.js';
 import { ListsRoute } from './lists.js';
+import { ParserRoute } from './parser.js';
+import { ProfileRoute } from './profile.js';
 
 export interface RouterInterface {
 	instances: InstanceRoute;
@@ -32,15 +34,28 @@ export interface RouterInterface {
 	// profile: ProfileRoute;
 }
 
-export type { InstanceRoute, AccountRoute, StatusesRoute };
+export type {
+	AccountRoute,
+	InstanceRoute,
+	ListsRoute,
+	MeRoute,
+	MediaRoute,
+	NotificationsRoute,
+	ParserRoute,
+	ProfileRoute,
+	SearchRoute,
+	StatusesRoute,
+	TagRoute,
+	TimelinesRoute,
+	TrendsRoute,
+};
 
 /**
  * export typings and DTOs
  */
 export {
 	DhaagaJsTimelineQueryOptions,
-	DhaagaJsNotificationType,
-	// search
+	DhaagaJsNotificationType, // search
 	DhaagaJsUserSearchDTO,
 	DhaagaJsPostSearchDTO,
 };

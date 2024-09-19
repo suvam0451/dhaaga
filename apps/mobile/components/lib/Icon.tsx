@@ -8,12 +8,15 @@ import Feather from '@expo/vector-icons/Feather';
 import { FontAwesome } from '@expo/vector-icons';
 
 export type APP_ICON_ENUM =
+	| 'bell'
 	| 'create'
 	| 'clear'
 	| 'done'
 	| 'edit'
 	| 'menu'
+	| 'message'
 	| 'palette'
+	| 'phonebook'
 	| 'search'
 	| 'feelings'
 	| 'trash';
@@ -53,6 +56,16 @@ export const AppIcon = memo(
 
 		const Icon = useMemo(() => {
 			switch (id) {
+				case 'bell':
+					return (
+						<Ionicons
+							name="notifications"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'clear':
 					return (
 						<AntDesign
@@ -114,10 +127,30 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'message':
+					return (
+						<AntDesign
+							name="message1"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'palette':
 					return (
 						<Ionicons
 							name="color-palette-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'phonebook':
+					return (
+						<FontAwesome6
+							name="contact-book"
 							size={_size}
 							color={_color}
 							onPress={onPress}

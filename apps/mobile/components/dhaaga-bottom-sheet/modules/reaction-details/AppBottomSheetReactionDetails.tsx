@@ -16,11 +16,11 @@ import useMfm from '../../../hooks/useMfm';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import { ActivityPubAppUserDtoType } from '../../../../services/approto/activitypub-user-dto.service';
+import { AppUser } from '../../../../services/approto/app-user-service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { AppAvatar } from '../../../lib/Avatar';
 
-const ReactingUser = memo(({ dto }: { dto: ActivityPubAppUserDtoType }) => {
+const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
 	const { colorScheme } = useAppTheme();
 	const { content } = useMfm({
 		content: dto.displayName,

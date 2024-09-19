@@ -11,12 +11,14 @@ import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 
 type ProfileModuleFactoryProps = {
 	label: string;
 	subtext?: string;
 	children: any;
 	style?: StyleProp<ViewStyle>;
+	disabled?: boolean;
 };
 
 /**
@@ -24,26 +26,40 @@ type ProfileModuleFactoryProps = {
  * for profile module blocks
  */
 const ProfileModuleFactory = memo(
-	({ label, subtext, children, style }: ProfileModuleFactoryProps) => {
+	({
+		label,
+		subtext,
+		children,
+		style,
+		disabled,
+	}: ProfileModuleFactoryProps) => {
 		const [IsExpanded, setIsExpanded] = useState(false);
+		const { colorScheme } = useAppTheme();
 
 		return (
 			<View style={style}>
 				<TouchableOpacity
 					onPress={() => {
-						setIsExpanded(!IsExpanded);
+						if (!disabled) {
+							setIsExpanded(!IsExpanded);
+						}
 					}}
 				>
-					<View style={styles.root}>
+					<View
+						style={[
+							styles.root,
+							{ backgroundColor: colorScheme.palette.menubar },
+						]}
+					>
 						<Text
 							style={{
 								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: APP_FONT.HIGH_EMPHASIS,
+								color: colorScheme.textColor.high,
 								flexGrow: 1,
 							}}
 						>
 							{label}{' '}
-							<Text style={{ color: APP_FONT.MEDIUM_EMPHASIS }}>
+							<Text style={{ color: colorScheme.textColor.medium }}>
 								({subtext})
 							</Text>
 						</Text>
@@ -79,7 +95,6 @@ const styles = StyleSheet.create({
 		paddingBottom: 8,
 		paddingLeft: 16,
 		paddingRight: 16,
-		backgroundColor: '#272727',
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -89,7 +104,6 @@ const styles = StyleSheet.create({
 		paddingLeft: 8,
 		paddingRight: 8,
 		paddingVertical: 8,
-		backgroundColor: '#1E1E1E',
 		borderRadius: 8,
 		marginBottom: 8,
 	},

@@ -53,7 +53,7 @@ class BlueskyRestClient implements ActivityPubClient {
 		this.media = new BlueskyMediaRouter();
 		this.notifications = new BlueskyNotificationsRouter();
 		this.profile = new BlueskyProfileRouter();
-		this.search = new BlueskySearchRouter();
+		this.search = new BlueskySearchRouter(this.dto);
 		this.statuses = new BlueskyStatusesRouter(this.dto);
 		this.tags = new BlueskyTagsRouter();
 		this.timelines = new BlueskyTimelinesRouter(this.dto);

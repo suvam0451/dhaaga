@@ -3,13 +3,13 @@ import {
 	ActivitypubHelper,
 	StatusInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivitypubStatusService } from './activitypub-status.service';
-import ActivitypubAdapterService from '../activitypub-adapter.service';
-import MediaService from '../media.service';
+import { ActivitypubStatusService } from '../services/approto/activitypub-status.service';
+import ActivitypubAdapterService from '../services/activitypub-adapter.service';
+import MediaService from '../services/media.service';
 import { Dimensions } from 'react-native';
-import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
+import { MEDIA_CONTAINER_MAX_HEIGHT } from '../components/common/media/_common';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivityPubReactionStateDto } from './activitypub-reactions.service';
+import { ActivityPubReactionStateDto } from '../services/approto/activitypub-reactions.service';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),

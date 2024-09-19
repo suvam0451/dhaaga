@@ -13,7 +13,6 @@ const TopNavbarGeneric = ({ title }: HeadersProps) => {
 				<Text style={styles.navbarTitle}>{title}</Text>
 			</View>
 			<View style={{ width: 36 }}></View>
-			{/*<AppSelectedAccountIndicator />*/}
 		</View>
 	);
 };
