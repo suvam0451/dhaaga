@@ -39,7 +39,10 @@ import AppInit from '../services/init/app-init';
 // polyfills
 import '@expo/browser-polyfill';
 import MigrationFailed from '../components/error-screen/MigrationFailed';
-import WithAppThemePackContext from '../hooks/app/useAppThemePack';
+import WithAppThemePackContext, {
+	useAppTheme,
+} from '../hooks/app/useAppThemePack';
+import { usePathname } from 'expo-router';
 // import MigrationFailed from '../components/error-screen/MigrationFailed';
 
 /**
@@ -113,6 +116,16 @@ function WithGorhomBottomSheetWrapper() {
 			// deleteDatabase();
 		}
 	}, [error]);
+	const { colorScheme } = useAppTheme();
+
+	const pathname = usePathname();
+
+	useEffect(() => {
+		setTimeout(() => {
+			StatusBar.setBarStyle('light-content');
+			StatusBar.setBackgroundColor(colorScheme.palette.menubar);
+		}, 100);
+	}, [pathname, colorScheme]);
 
 	if (error) return <MigrationFailed />;
 
@@ -120,11 +133,11 @@ function WithGorhomBottomSheetWrapper() {
 		<WithActivityPubRestClient>
 			<WithGorhomBottomSheetContext>
 				<WithAppBottomSheetContext>
-					{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 					<View
 						style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
 						onLayout={onLayoutRootView}
 					>
+						<StatusBar backgroundColor={colorScheme.palette.menubar} />
 						<Stack
 							initialRouteName={'(tabs)'}
 							screenOptions={{ headerShown: false }}

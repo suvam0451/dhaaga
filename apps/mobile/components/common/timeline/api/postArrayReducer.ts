@@ -39,6 +39,7 @@ function postArrayReducer(
 			const _subdomain: string = action.payload.subdomain;
 			return produce(state, (draft) => {
 				for (const item of _more) {
+					if (!item) continue;
 					const k = item.getId();
 					if (_seen.current.has(k)) continue;
 					_seen.current.add(k);

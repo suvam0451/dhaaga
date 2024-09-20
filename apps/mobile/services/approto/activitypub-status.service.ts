@@ -190,7 +190,8 @@ export class ActivitypubStatusService {
 		const { data, error, success } = ActivityPubStatusLevelThree.safeParse(dto);
 		if (!success) {
 			console.log('[ERROR]: status item dto validation failed', error);
-			return;
+			this.statusI.print();
+			return null;
 		}
 
 		return data as ActivityPubStatusAppDtoType;

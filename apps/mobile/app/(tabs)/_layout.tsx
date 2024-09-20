@@ -1,9 +1,7 @@
 import { Tabs } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { View } from 'react-native';
-import { APP_THEME } from '../../styles/AppTheme';
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar, View } from 'react-native';
 import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
 import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -15,7 +13,7 @@ export default function TabLayout() {
 	const { colorScheme } = useAppTheme();
 	return (
 		<View style={{ height: '100%' }}>
-			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
+			{/*<StatusBar hidden={false} backgroundColor={colorScheme.palette.menubar} />*/}
 			<WithAppAssetsContext>
 				<Tabs
 					initialRouteName={'index'}

@@ -54,6 +54,7 @@ class AppUserService {
 		const { data, error, success } = ActivityPubUserDTO.safeParse(dto);
 		if (!success) {
 			console.log('[ERROR]: user dto validation failed', error);
+			console.log(input);
 			return null;
 		}
 
