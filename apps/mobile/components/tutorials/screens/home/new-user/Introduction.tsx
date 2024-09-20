@@ -24,7 +24,7 @@ function IntroductionBase() {
 			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
 			translateY={translateY}
 		>
-			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 			<Dialog
 				isVisible={DialogVisible}
 				onBackdropPress={() => {

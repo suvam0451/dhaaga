@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: 44,
+		height: 42,
 	},
 	label: {
 		color: APP_FONT.MONTSERRAT_BODY,

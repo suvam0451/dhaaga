@@ -120,7 +120,7 @@ function WithGorhomBottomSheetWrapper() {
 		<WithActivityPubRestClient>
 			<WithGorhomBottomSheetContext>
 				<WithAppBottomSheetContext>
-					<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+					{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 					<View
 						style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
 						onLayout={onLayoutRootView}

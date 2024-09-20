@@ -140,7 +140,7 @@ const Timeline = memo(() => {
 				{ position: 'relative', backgroundColor: colorScheme.palette.bg },
 			]}
 		>
-			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader title={label} />
 			</Animated.View>

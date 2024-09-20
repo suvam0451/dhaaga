@@ -15,7 +15,7 @@ export default function TabLayout() {
 	const { colorScheme } = useAppTheme();
 	return (
 		<View style={{ height: '100%' }}>
-			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 			<WithAppAssetsContext>
 				<Tabs
 					initialRouteName={'index'}

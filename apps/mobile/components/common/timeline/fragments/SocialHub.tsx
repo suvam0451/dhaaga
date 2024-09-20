@@ -305,7 +305,7 @@ function SocialHub() {
 				backgroundColor: colorScheme.palette.bg,
 			}}
 		>
-			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 			<TimelinesHeader title={'Social Hub'} />
 
 			<ScrollView>
