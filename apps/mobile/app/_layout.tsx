@@ -11,7 +11,7 @@ import {
 	useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import WithActivityPubRestClient from '../states/useActivityPubRestClient';
-import { StatusBar, View } from 'react-native';
+import { StatusBar, View, Appearance } from 'react-native';
 import appFonts from '../styles/AppFonts';
 import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
@@ -31,7 +31,6 @@ enableMapSet();
 import AppSettingsService from '../services/app-settings.service';
 import { AppProfileRepository } from '../repositories/app-profile.repo';
 import WithAppBottomSheetContext from '../components/dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { APP_THEME } from '../styles/AppTheme';
 import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
 import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 import AppInit from '../services/init/app-init';
@@ -122,6 +121,7 @@ function WithGorhomBottomSheetWrapper() {
 
 	useEffect(() => {
 		setTimeout(() => {
+			Appearance.setColorScheme('dark');
 			StatusBar.setBarStyle('light-content');
 			StatusBar.setBackgroundColor(colorScheme.palette.menubar);
 		}, 100);

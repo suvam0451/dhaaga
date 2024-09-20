@@ -11,7 +11,9 @@ export const accountMetadata = sqliteTable('account_metadata', {
 		.notNull(),
 	key: text('key').notNull(),
 	value: text('value').notNull(),
-	accountId: integer('account_id').notNull(),
+	accountId: integer('account_id')
+		.notNull()
+		.references(() => account.id),
 });
 
 export const accountMetadata_Relations = relations(

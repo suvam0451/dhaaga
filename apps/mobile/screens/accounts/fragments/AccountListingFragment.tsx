@@ -1,36 +1,28 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from '@rneui/themed';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { useObject, useRealm } from '@realm/react';
-import { Account } from '../../../entities/account.entity';
-import AccountRepository from '../../../repositories/account.repo';
-import AccountService from '../../../services/account.service';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { memo, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
-import { EmojiService } from '../../../services/emoji.service';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
-import { UUID } from 'bson';
 import Feather from '@expo/vector-icons/Feather';
+import { Accounts } from '../../../database/entities/account';
+import { useAccountDbContext } from '../../../components/screens/profile/stack/settings/hooks/useAccountDb';
 
 type Props = {
-	id: UUID;
 	setIsExpanded: (isExpanded: boolean) => void;
 	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: React.MutableRefObject<UUID>;
-	acct: Account;
+	dialogTarget: React.MutableRefObject<Accounts>;
+	acct: Accounts;
 };
 
 type AccountOptionsProps = {
 	IsExpanded: boolean;
 	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: React.MutableRefObject<UUID>;
-	acctId: UUID;
+	dialogTarget: React.MutableRefObject<Accounts>;
+	acct: Accounts;
 };
 
 const ICON_SIZE = 22;
@@ -39,13 +31,11 @@ export const AccountOptions = memo(function Foo({
 	IsExpanded,
 	dialogTarget,
 	setDeleteDialogExpanded,
-	acctId,
+	acct,
 }: AccountOptionsProps) {
-	const acct = useObject(Account, acctId);
-
 	function onFixClicked() {
-		dialogTarget.current = acct._id;
-		// setIsDialogExpanded(true);
+		// FIXME: point this to the sql account
+		dialogTarget.current = acct;
 	}
 	return (
 		<Animated.View
@@ -121,7 +111,7 @@ export const AccountOptions = memo(function Foo({
 				<TouchableOpacity
 					style={styles.actionButton}
 					onPress={() => {
-						dialogTarget.current = acctId;
+						dialogTarget.current = acct;
 						setDeleteDialogExpanded(true);
 					}}
 				>
@@ -235,35 +225,17 @@ export const AccountDetails = memo(function Foo({
 });
 
 function AccountListingFragment({
-	id,
 	dialogTarget,
 	setDeleteDialogExpanded,
 	acct,
 }: Props) {
-	const account = useObject(Account, id);
-	const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
-	const { regenerate } = useActivityPubRestClientContext();
+	const { toggleSelect } = useAccountDbContext();
 	const [IsExpanded, setIsExpanded] = useState(false);
 
-	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
-	const displayName = AccountRepository.findSecret(
-		db,
-		account,
-		'display_name',
-	)?.value;
+	const avatar = acct.meta.find((o) => o.key === 'avatar')?.value;
+	const displayName = acct.meta.find((o) => o.key === 'display_name')?.value;
 
-	async function onAccountSelection() {
-		if (account.selected) {
-			AccountService.deselectAccount(db, account._id);
-		} else {
-			AccountService.selectAccount(db, account._id);
-			await EmojiService.refresh(db, globalDb, account.subdomain, true);
-		}
-		regenerate();
-	}
-
-	if (!account) return <View />;
+	if (!acct) return <View />;
 	return (
 		<View
 			style={{
@@ -289,18 +261,22 @@ function AccountListingFragment({
 					}}
 				>
 					<AccountPfp
-						selected={account.selected}
+						selected={acct.selected as boolean}
 						url={avatar}
-						onClicked={onAccountSelection}
+						onClicked={() => {
+							toggleSelect(acct.id as unknown as number);
+						}}
 					/>
 					<AccountDetails
-						onClicked={onAccountSelection}
-						selected={account.selected}
+						onClicked={() => {
+							toggleSelect(acct.id as unknown as number);
+						}}
+						selected={acct.selected as boolean}
 						displayName={displayName}
-						username={account.username}
-						subdomain={account.subdomain}
+						username={acct.username}
+						subdomain={acct.server}
 					/>
-					{account.selected && (
+					{acct.selected && (
 						<Text
 							style={{
 								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
@@ -336,7 +312,7 @@ function AccountListingFragment({
 				IsExpanded={IsExpanded}
 				dialogTarget={dialogTarget}
 				setDeleteDialogExpanded={setDeleteDialogExpanded}
-				acctId={acct._id}
+				acct={acct}
 			/>
 		</View>
 	);

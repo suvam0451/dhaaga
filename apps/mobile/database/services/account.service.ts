@@ -1,5 +1,7 @@
 import { getStaticClient, schema } from '../client';
 import { and, eq, ne } from 'drizzle-orm';
+import AccountMetaService from './account-secret.service';
+import { Accounts } from '../entities/account';
 
 const db = getStaticClient();
 const { account: Account } = schema;
@@ -16,22 +18,17 @@ export type AccountCreateDTO = {
 };
 
 class AccountDbService {
-	static remove(id: string) {
-		db.delete(Account).where(eq(Account.identifier, id));
+	static async remove(id: number) {
+		await db.delete(Account).where(eq(Account.id, id));
 	}
 
-	static async select(id: string) {
-		const match = db.select().from(Account).where(eq(Account.identifier, id));
-		if (match) {
-			await db
-				.update(Account)
-				.set({ selected: true } as any)
-				.where(eq(Account.identifier, id));
-			await db
-				.update(Account)
-				.set({ selected: true } as any)
-				.where(ne(Account.identifier, id));
-		}
+	static async select(id: number) {
+		await db.update(Account).set({ selected: true }).where(eq(Account.id, id));
+		await db.update(Account).set({ selected: false }).where(ne(Account.id, id));
+	}
+
+	static async deselect(id: number) {
+		await db.update(Account).set({ selected: false }).where(eq(Account.id, id));
 	}
 
 	// subdomain: dto.subdomain,
@@ -42,10 +39,15 @@ class AccountDbService {
 		});
 	}
 
-	static async upsert(acct: AccountCreateDTO) {
+	static async upsert(
+		acct: AccountCreateDTO,
+		credentials: {
+			key: string;
+			value?: string;
+		}[],
+	) {
 		const removeHttps = acct.subdomain?.replace(/^https?:\/\//, '');
-		const match = await this.find(acct);
-		console.log(acct, match);
+		let match = await this.find(acct);
 		if (match) {
 			db.update(Account)
 				.set({
@@ -61,12 +63,37 @@ class AccountDbService {
 					server: removeHttps,
 					username: acct.username,
 					identifier: 'N/A',
+					selected: false,
 				});
 				console.log(uploaded);
 			} catch (e) {
 				console.log(e);
 			}
 		}
+		match = await this.find(acct);
+		if (!match) return null;
+		for await (const credential of credentials) {
+			await AccountMetaService.upsertMeta(
+				match,
+				credential.key,
+				credential.value,
+			);
+		}
+	}
+
+	static async setSoftware(acct: Accounts, software: string) {
+		await db
+			.update(Account)
+			.set({
+				software,
+			})
+			.where(eq(Account.id, acct.id as unknown as number));
+	}
+
+	static async delete(acct: Accounts) {
+		await db
+			.delete(Account)
+			.where(eq(Account.id, acct.id as unknown as number));
 	}
 }
 

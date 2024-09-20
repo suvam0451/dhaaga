@@ -1,31 +1,23 @@
 import { FlatList, View } from 'react-native';
 import { Button } from '@rneui/base';
 import { Text } from '@rneui/themed';
-import { APP_FONT } from '../../../styles/AppTheme';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { router } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
-import AccountInfoSyncDialog from '../../../components/dialogs/AccountInfoSync';
+import { useRef, useState } from 'react';
+import AccountInfoSyncDialog from '../../../../../dialogs/AccountInfoSync';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import ConfirmAccountDelete from '../../../components/dialogs/accounts/ConfirmAccountDelete';
-import { UUID } from 'bson';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
-import AccountListForSoftware from '../../../components/screens/profile/stack/landing/fragments/AccountListForSoftware';
-import { getLiveClient, schema } from '../../../database/client';
-import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
+import ConfirmAccountDelete from '../../../../../dialogs/accounts/ConfirmAccountDelete';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavBar';
+import AccountListForSoftware from '../../landing/fragments/AccountListForSoftware';
+import { Accounts } from '../../../../../../database/entities/account';
+import WithAccountDbContext from '../hooks/useAccountDb';
 
-const client = getLiveClient();
-
-function SelectAccountStack() {
-	const { data } = useLiveQuery(client.select().from(schema.account));
+function SelectAccountStackCore() {
 	const [DialogVisible, setDialogVisible] = useState(false);
 	const [DeleteDialogVisible, setDeleteDialogVisible] = useState(false);
-	const DialogTarget = useRef<UUID>(null);
-
-	useEffect(() => {
-		console.log('accounts', data);
-	}, [data]);
+	const DialogTarget = useRef<Accounts>(null);
 
 	const SOFTWARE_ARRAY = [
 		KNOWN_SOFTWARE.AKKOMA,
@@ -47,12 +39,12 @@ function SelectAccountStack() {
 			<AccountInfoSyncDialog
 				IsVisible={DialogVisible}
 				setIsVisible={setDialogVisible}
-				acctId={DialogTarget.current}
+				acct={DialogTarget.current}
 			/>
 			<ConfirmAccountDelete
 				IsVisible={DeleteDialogVisible}
 				setIsVisible={setDeleteDialogVisible}
-				acctId={DialogTarget.current}
+				acct={DialogTarget.current}
 			/>
 
 			<FlatList
@@ -100,6 +92,14 @@ function SelectAccountStack() {
 				}
 			/>
 		</WithAutoHideTopNavBar>
+	);
+}
+
+function SelectAccountStack() {
+	return (
+		<WithAccountDbContext>
+			<SelectAccountStackCore />;
+		</WithAccountDbContext>
 	);
 }
 

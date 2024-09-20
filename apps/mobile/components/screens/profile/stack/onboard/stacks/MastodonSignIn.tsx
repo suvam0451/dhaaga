@@ -4,20 +4,18 @@ import { useState } from 'react';
 import WebView from 'react-native-webview';
 import { MainText } from '../../../../../../styles/Typography';
 import { Button } from '@rneui/base';
-import { useRealm } from '@realm/react';
 import TitleOnlyNoScrollContainer from '../../../../../containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
-import AccountService from '../../../../../../services/account.service';
 import {
 	UnknownRestClient,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import PleromaPasteToken from '../fragments/PleromaPasteToken';
+import AccountDbService from '../../../../../../database/services/account.service';
 
 function MastodonSignInStack() {
 	const [Code, setCode] = useState<string | null>(null);
-	const db = useRealm();
 
 	const params = useLocalSearchParams();
 	const _signInUrl: string = params['signInUrl'] as string;
@@ -59,14 +57,16 @@ function MastodonSignInStack() {
 			);
 
 		try {
-			AccountService.upsert(db, {
-				subdomain: _subdomain,
-				domain: _domain,
-				username: verified.username,
-				avatarUrl: verified.avatar,
-				// TODO: this needs to be replaced with camelCase
-				displayName: verified['display_name'],
-				credentials: [
+			AccountDbService.upsert(
+				{
+					subdomain: _subdomain,
+					domain: _domain,
+					username: verified.username,
+					avatarUrl: verified.avatar,
+					// TODO: this needs to be replaced with camelCase
+					displayName: verified['display_name'],
+				},
+				[
 					{
 						key: 'display_name',
 						value: verified['display_name'],
@@ -84,8 +84,9 @@ function MastodonSignInStack() {
 						value: token || Code, // See above
 					},
 				],
+			).finally(() => {
+				router.replace('/profile/settings/accounts');
 			});
-			router.replace('/profile/settings/accounts');
 		} catch (e) {
 			console.log(e);
 		}

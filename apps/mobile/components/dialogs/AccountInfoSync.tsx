@@ -1,4 +1,3 @@
-import { Account } from '../../entities/account.entity';
 import { RneuiDialogProps } from './_types';
 import { memo, useCallback, useState } from 'react';
 import {
@@ -11,26 +10,21 @@ import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { APP_FONT } from '../../styles/AppTheme';
 import { FontAwesome } from '@expo/vector-icons';
-import { useObject, useRealm } from '@realm/react';
 import { SoftwareBadgeUpdateAccountOnClick } from '../common/software/SimpleBadge';
 import ActivityPubService from '../../services/activitypub.service';
-import AccountService from '../../services/account.service';
 import AccountOverviewFragment from './accounts/_AccountOverview';
-import { UUID } from 'bson';
-import { BSON } from 'realm';
+import { Accounts } from '../../database/entities/account';
+import AccountDbService from '../../database/services/account.service';
 
 type Props = {
-	acctId: UUID;
+	acct: Accounts;
 } & RneuiDialogProps;
 
 const AccountInfoSyncDialog = memo(function Foo({
 	setIsVisible,
-	acctId,
+	acct,
 	IsVisible,
 }: Props) {
-	const db = useRealm();
-	const acct = useObject(Account, acctId || new BSON.UUID());
-
 	const [SoftwareAutoDetectLoading, setSoftwareAutoDetectLoading] =
 		useState(false);
 
@@ -38,8 +32,8 @@ const AccountInfoSyncDialog = memo(function Foo({
 		if (SoftwareAutoDetectLoading) return;
 		setSoftwareAutoDetectLoading(true);
 		try {
-			const software = await ActivityPubService.detectSoftware(acct.subdomain);
-			AccountService.updateSoftwareType(db, acct, software);
+			const software = await ActivityPubService.detectSoftware(acct.server);
+			AccountDbService.setSoftware(acct, software).then();
 		} catch (e) {
 			console.log(e);
 		}
