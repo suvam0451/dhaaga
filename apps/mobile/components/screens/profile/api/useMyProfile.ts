@@ -2,12 +2,12 @@ import { useActivityPubRestClientContext } from '../../../../states/useActivityP
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
+import { AppUser } from '../../../../types/app-user.types';
+import AppUserService from '../../../../services/approto/app-user-service';
 
 function useMyProfile() {
-	const { client, me, domain } = useActivityPubRestClientContext();
-	const [Data, setData] = useState(
-		ActivityPubAdapterService.adaptUser(null, null),
-	);
+	const { client, me, domain, subdomain } = useActivityPubRestClientContext();
+	const [Data, setData] = useState<AppUser>(null);
 	const userId = me?.getId();
 
 	async function api() {
@@ -28,7 +28,7 @@ function useMyProfile() {
 
 	useEffect(() => {
 		if (status !== 'success' || fetchStatus === 'fetching' || !data) return;
-		setData(data);
+		setData(AppUserService.export(data, domain, subdomain));
 	}, [fetchStatus]);
 
 	return { Data, fetchStatus };

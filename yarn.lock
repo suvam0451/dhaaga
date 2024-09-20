@@ -12168,7 +12168,7 @@ tinyspy@^3.0.0:
   resolved "https://registry.yarnpkg.com/tinyspy/-/tinyspy-3.0.0.tgz#cb61644f2713cd84dee184863f4642e06ddf0585"
   integrity sha512-q5nmENpTHgiPVd1cJDDc9cVoYN5x4vCvwT3FMilvKPKneCBZAxn2YWQjDF0UMcE9k0Cay1gBiDfTMU0g+mPMQA==
 
-tlds@^1.234.0:
+tlds@^1.234.0, tlds@^1.254.0:
   version "1.254.0"
   resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.254.0.tgz#7131955376f7c195d5edc0a94b4a203bc36668d0"
   integrity sha512-YY4ei7K7gPGifqNSrfMaPdqTqiHcwYKUJ7zhLqQOK2ildlGgti5TSwJiXXN1YqG17I2GYZh5cZqv2r5fwBUM+w==

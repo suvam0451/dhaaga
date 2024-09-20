@@ -19,7 +19,7 @@ const AccountLanding = memo(() => {
 			<Animated.ScrollView
 				onScroll={onScroll}
 				style={{ paddingHorizontal: 0 }}
-				contentContainerStyle={{ paddingTop: 50 }}
+				contentContainerStyle={{ marginTop: 54 }}
 			>
 				<ProfileLandingAccountOverview />
 				<ProfileLandingAccountModules />

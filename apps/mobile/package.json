@@ -85,6 +85,7 @@
     "react-native-webview": "13.8.6",
     "realm": "^12.13.1",
     "styled-components": "^6.1.13",
+    "tlds": "^1.254.0",
     "use-debounce": "^10.0.3",
     "zod": "^3.23.8"
   },

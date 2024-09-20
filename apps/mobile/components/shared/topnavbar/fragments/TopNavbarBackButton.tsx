@@ -28,20 +28,6 @@ const TopNavbarBackButton = memo(() => {
 					color={APP_FONT.HIGH_EMPHASIS}
 				/>
 			</TouchableOpacity>
-			{/*<TouchableOpacity*/}
-			{/*	onPress={() => {*/}
-			{/*		router.back();*/}
-			{/*	}}*/}
-			{/*	style={{*/}
-			{/*		height: '100%',*/}
-			{/*		display: 'flex',*/}
-			{/*		alignItems: 'center',*/}
-			{/*		flexDirection: 'row',*/}
-			{/*		paddingHorizontal: 8,*/}
-			{/*	}}*/}
-			{/*>*/}
-			{/*	<Octicons name="home" size={24} color={APP_FONT.MONTSERRAT_BODY} />*/}
-			{/*</TouchableOpacity>*/}
 		</View>
 	);
 });

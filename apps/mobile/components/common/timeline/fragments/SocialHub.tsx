@@ -306,7 +306,7 @@ function SocialHub() {
 			}}
 		>
 			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
-			<TimelinesHeader title={'Your Social Hub'} />
+			<TimelinesHeader title={'Social Hub'} />
 
 			<ScrollView>
 				<View
@@ -320,16 +320,44 @@ function SocialHub() {
 				>
 					<SocialHubLantern />
 					{TimeOfDay === TIME_OF_DAY.MORNING && (
-						<Text style={styles.timeOfDayText}>Good Morning 🌄</Text>
+						<Text
+							style={[
+								styles.timeOfDayText,
+								{ color: colorScheme.textColor.high },
+							]}
+						>
+							Good Morning 🌄
+						</Text>
 					)}
 					{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
-						<Text style={styles.timeOfDayText}>Good Afternoon</Text>
+						<Text
+							style={[
+								styles.timeOfDayText,
+								{ color: colorScheme.textColor.high },
+							]}
+						>
+							Good Afternoon
+						</Text>
 					)}
 					{TimeOfDay === TIME_OF_DAY.EVENING && (
-						<Text style={styles.timeOfDayText}>Good Evening</Text>
+						<Text
+							style={[
+								styles.timeOfDayText,
+								{ color: colorScheme.textColor.high },
+							]}
+						>
+							Good Evening
+						</Text>
 					)}
 					{TimeOfDay === TIME_OF_DAY.NIGHT && (
-						<Text style={styles.timeOfDayText}>Good Night 🌙</Text>
+						<Text
+							style={[
+								styles.timeOfDayText,
+								{ color: colorScheme.textColor.high },
+							]}
+						>
+							Good Night 🌙
+						</Text>
 					)}
 					<View>
 						<View
@@ -435,10 +463,9 @@ const styles = StyleSheet.create({
 		borderColor: APP_THEME.COLOR_SCHEME_C,
 	},
 	timeOfDayText: {
-		fontSize: 28,
+		fontSize: 24,
 		fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
 		color: APP_FONT.MONTSERRAT_HEADER,
-		// textAlign: 'center',
 		marginLeft: 8,
 	},
 });

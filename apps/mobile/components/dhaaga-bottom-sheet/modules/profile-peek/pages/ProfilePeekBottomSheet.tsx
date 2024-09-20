@@ -1,101 +1,91 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import {
 	View,
 	Image as NativeImage,
 	Dimensions,
 	StyleSheet,
 	ScrollView,
-	TouchableOpacity,
 } from 'react-native';
 import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
-import { ProfileStatsInterface } from '../../../../screens/(shared)/stack/profile/fragments/ProfileStats';
-import WithActivitypubUserContext from '../../../../../states/useProfile';
 import ProfileNameAndHandle from '../../../../common/user/fragments/ProfileNameAndHandle';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import ProfileButtonMessage from '../../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
 import ProfileButtonPhonebook from '../../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
+import ProfileStats from '../../../../screens/(shared)/stack/profile/fragments/ProfileStats';
 
 const ProfilePeekBottomSheet = memo(() => {
-	const { subdomain } = useActivityPubRestClientContext();
 	const { UserRef, UserIdRef, requestId } = useAppBottomSheet();
-	const { Data } = useGetProfile({
+	const { Data: acct } = useGetProfile({
 		user: UserRef.current,
 		userId: UserIdRef.current,
 		requestId,
 	});
 
-	const banner = Data?.getBannerUrl();
-	const avatar = Data?.getAvatarUrl();
-	const acctUrl = Data?.getAccountUrl(subdomain);
-
-	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(acctUrl, subdomain);
-	}, [acctUrl]);
-
 	return (
-		<WithActivitypubUserContext userI={Data}>
-			<ScrollView style={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}>
-				{/*@ts-ignore-next-line*/}
-				<NativeImage
-					source={{ uri: banner }}
+		<ScrollView style={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}>
+			{/*@ts-ignore-next-line*/}
+			<NativeImage
+				source={{ uri: acct?.banner }}
+				style={{
+					height: 128,
+					width: Dimensions.get('window').width,
+					borderTopLeftRadius: 8,
+					borderTopRightRadius: 8,
+				}}
+			/>
+			<View style={{ display: 'flex', flexDirection: 'row' }}></View>
+			<View style={{ flexDirection: 'row' }}>
+				<ProfileAvatar
+					containerStyle={localStyles.avatarContainer}
+					imageStyle={localStyles.avatarImageContainer}
+					uri={acct?.avatarUrl}
+				/>
+				<View
 					style={{
-						height: 128,
-						width: Dimensions.get('window').width,
-						borderTopLeftRadius: 8,
-						borderTopRightRadius: 8,
+						alignItems: 'center',
+						justifyContent: 'space-evenly',
+						flexDirection: 'row',
+						marginHorizontal: 8,
 					}}
-				/>
-				<View style={{ display: 'flex', flexDirection: 'row' }}></View>
-				<View style={{ flexDirection: 'row' }}>
-					<ProfileAvatar
-						containerStyle={localStyles.avatarContainer}
-						imageStyle={localStyles.avatarImageContainer}
-						uri={avatar}
-					/>
-					<View
-						style={{
-							alignItems: 'center',
-							justifyContent: 'space-evenly',
-							flexDirection: 'row',
-							marginHorizontal: 8,
-						}}
-					>
-						<ProfileButtonMessage handle={handle} />
-						<View style={{ width: 8 }} />
-						<ProfileButtonPhonebook />
-					</View>
-					<ProfileStatsInterface style={localStyles.statSectionContainer} />
+				>
+					<ProfileButtonMessage handle={acct?.handle} />
+					<View style={{ width: 8 }} />
+					<ProfileButtonPhonebook />
 				</View>
+				<ProfileStats
+					userId={acct?.id}
+					followerCount={acct?.stats?.followers}
+					followingCount={acct?.stats?.following}
+					postCount={acct?.stats?.posts}
+					style={localStyles.statSectionContainer}
+				/>
+			</View>
 
-				<View style={localStyles.secondSectionContainer}>
-					<ProfileNameAndHandle style={{ flexShrink: 1 }} />
-					<View style={localStyles.relationManagerSection}>
-						<View style={{ marginRight: 8 }}>
-							<Ionicons
-								name="notifications"
-								size={22}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
-						</View>
-						<RelationshipButtonCore userId={Data?.getId()} />
+			<View style={localStyles.secondSectionContainer}>
+				<ProfileNameAndHandle style={{ flexShrink: 1 }} />
+				<View style={localStyles.relationManagerSection}>
+					<View style={{ marginRight: 8 }}>
+						<Ionicons
+							name="notifications"
+							size={22}
+							color={APP_FONT.MONTSERRAT_BODY}
+						/>
 					</View>
+					<RelationshipButtonCore userId={acct?.id} />
 				</View>
-				<ProfileDesc
-					style={localStyles.parsedDescriptionContainer}
-					rawContext={Data?.getDescription()}
-					remoteSubdomain={Data?.getInstanceUrl()}
-					acceptTouch={false}
-				/>
-			</ScrollView>
-		</WithActivitypubUserContext>
+			</View>
+			<ProfileDesc
+				style={localStyles.parsedDescriptionContainer}
+				rawContext={acct?.description}
+				remoteSubdomain={acct?.instance}
+				acceptTouch={false}
+			/>
+		</ScrollView>
 	);
 });
 

@@ -47,7 +47,6 @@ const SharedStackFollows = memo(() => {
 		>
 			<AnimatedFlashList
 				estimatedItemSize={100}
-				contentContainerStyle={{ paddingTop: 54 }}
 				renderItem={({ item }) => (
 					<WithActivitypubUserContext userI={item}>
 						<UserItem />
@@ -55,6 +54,7 @@ const SharedStackFollows = memo(() => {
 				)}
 				data={Data}
 				onScroll={onScroll}
+				contentContainerStyle={{ paddingTop: 54 }}
 				ListHeaderComponent={
 					<View>
 						<Text

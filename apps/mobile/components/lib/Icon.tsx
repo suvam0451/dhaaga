@@ -1,25 +1,33 @@
 import { memo, useMemo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
-import { StyleProp, TextStyle, View } from 'react-native';
+import { StyleProp, TextStyle, View, Platform } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { FontAwesome } from '@expo/vector-icons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import * as React from 'react';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { APP_FONT } from '../../styles/AppTheme';
 
 export type APP_ICON_ENUM =
 	| 'bell'
+	| 'cog'
 	| 'create'
 	| 'clear'
 	| 'done'
 	| 'edit'
+	| 'home'
 	| 'menu'
 	| 'message'
+	| 'no-account'
 	| 'palette'
 	| 'phonebook'
 	| 'search'
 	| 'feelings'
-	| 'trash';
+	| 'trash'
+	| 'wand';
 
 type AppIconType = {
 	id: APP_ICON_ENUM;
@@ -60,6 +68,24 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="notifications"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'cog':
+					return Platform.OS === 'ios' ? (
+						<Ionicons
+							name="cog"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					) : (
+						<FontAwesome5
+							name="cog"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -107,6 +133,16 @@ export const AppIcon = memo(
 						/>
 					);
 
+				case 'home':
+					return (
+						<Ionicons
+							name="home"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'feelings':
 					return (
 						<FontAwesome6
@@ -131,6 +167,16 @@ export const AppIcon = memo(
 					return (
 						<AntDesign
 							name="message1"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'no-account':
+					return (
+						<MaterialIcons
+							name="no-accounts"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -171,6 +217,16 @@ export const AppIcon = memo(
 					return (
 						<FontAwesome
 							name="trash-o"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'wand':
+					return (
+						<FontAwesome
+							name="magic"
 							size={_size}
 							color={_color}
 							onPress={onPress}

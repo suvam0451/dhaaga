@@ -1,6 +1,5 @@
-import { memo, useMemo } from 'react';
+import { Fragment, memo, useMemo } from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import { APP_THEME } from '../../../styles/AppTheme';
 import TopNavbarGeneric from './fragments/TopNavbarGeneric';
 import TopNavbarLandingGeneric from './fragments/TopNavbarLandingGeneric';
 import TimelinesHeader from './fragments/TopNavbarTimelineStack';
@@ -49,12 +48,16 @@ const AppTopNavbar = memo(
 		}, [type]);
 		return (
 			<Animated.View
-				style={[styles.root, { backgroundColor: colorScheme.palette.bg }]}
+				style={{
+					backgroundColor: colorScheme.palette.bg,
+					height: '100%',
+				}}
 			>
 				<Animated.View
 					style={[
-						styles.nav,
 						{
+							position: 'absolute',
+							zIndex: 1,
 							transform: [
 								{
 									translateY,
@@ -70,17 +73,5 @@ const AppTopNavbar = memo(
 		);
 	},
 );
-
-const styles = StyleSheet.create({
-	root: {
-		height: '100%',
-		backgroundColor: APP_THEME.BACKGROUND,
-	},
-	nav: {
-		position: 'absolute',
-		width: '100%',
-		zIndex: 1,
-	},
-});
 
 export default AppTopNavbar;

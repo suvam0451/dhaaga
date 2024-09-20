@@ -13,6 +13,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { AppIcon } from '../../../lib/Icon';
 
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
@@ -48,11 +49,7 @@ const AppSelectedAccountIndicator = memo(() => {
 				style={styles.accountIconTouchableContainerRight}
 				onPress={onAccountSelectRequest}
 			>
-				<MaterialIcons
-					name="no-accounts"
-					size={28}
-					color={APP_FONT.MONTSERRAT_BODY}
-				/>
+				<AppIcon id={'no-account'} size={28} />
 			</TouchableOpacity>
 		);
 	return (
