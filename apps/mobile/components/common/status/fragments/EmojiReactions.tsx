@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		backgroundColor: '#303030',
 		padding: 8,
+		paddingVertical: 6,
 		borderRadius: 8,
 	},
 	showAllEmojiButtonText: {

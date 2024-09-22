@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import { useState } from 'react';
 import { useRealm } from '@realm/react';
 import BookmarkBrowserService from '../../../services/bookmark-browser.service';

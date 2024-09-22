@@ -1,6 +1,6 @@
 import { Fragment, memo, useMemo } from 'react';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { RepliedStatusFragment } from './_static';
+import { ParentPostFragment } from './_static';
 import SharedStatusFragment from './fragments/SharedStatusFragment';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
@@ -37,7 +37,7 @@ const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 					return (
 						<Fragment>
 							<SharedStatusFragment />
-							<RepliedStatusFragment />
+							<ParentPostFragment />
 							<StatusCore
 								hasBoost={true}
 								hasParent={true}
@@ -57,7 +57,7 @@ const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 		} else if (dto.meta.isReply) {
 			return (
 				<Fragment>
-					<RepliedStatusFragment />
+					<ParentPostFragment />
 					<StatusCore hasParent={true} isPreview={isPreview} />
 				</Fragment>
 			);

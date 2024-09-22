@@ -1,7 +1,6 @@
 import { Text } from 'react-native';
 import { randomUUID } from 'expo-crypto';
 import LinkProcessor from '../components/common/link/LinkProcessor';
-import { APP_FONT } from '../styles/AppTheme';
 import { EmojiService } from './emoji.service';
 import { MMKV } from 'react-native-mmkv';
 import { Realm } from 'realm';

@@ -6,7 +6,7 @@ import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTi
 import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import { Image } from 'expo-image';
 
-const ICON_SIZE = 24;
+const ICON_SIZE = 21;
 
 type PostActionButtonToggleBookmarkProps = {
 	id: string;
@@ -21,7 +21,7 @@ const PostActionButtonToggleBookmark = memo(
 	({ id, flag, isFinal }: PostActionButtonToggleBookmarkProps) => {
 		const [IsBookmarkStatePending, setIsBookmarkStatePending] = useState(false);
 		const { toggleBookmark, getBookmarkState } = useAppTimelinePosts();
-		const { activePack } = useAppTheme();
+		const { activePack, colorScheme } = useAppTheme();
 
 		// helper functions
 		function _toggleBookmark() {
@@ -34,34 +34,37 @@ const PostActionButtonToggleBookmark = memo(
 			}
 		}, [id]);
 
-		if (activePack.valid) {
-			return (
-				<TouchableOpacity style={styles.root} onPress={_toggleBookmark}>
-					{IsBookmarkStatePending ? (
-						<ActivityIndicator size={'small'} />
-					) : flag ? (
-						// @ts-ignore-next-line
-						<Image
-							source={{ uri: activePack.bookmarkActive1.localUri }}
-							style={{ height: ICON_SIZE, width: ICON_SIZE }}
-						/>
-					) : (
-						// @ts-ignore-next-line
-						<Image
-							source={{ uri: activePack.bookmarkInactive.localUri }}
-							style={{ height: ICON_SIZE, width: ICON_SIZE }}
-						/>
-					)}
-				</TouchableOpacity>
-			);
-		}
+		// NOTE: looks inconsistent
+		// if (activePack.valid) {
+		// 	return (
+		// 		<TouchableOpacity style={styles.root} onPress={_toggleBookmark}>
+		// 			{IsBookmarkStatePending ? (
+		// 				<ActivityIndicator size={'small'} />
+		// 			) : flag ? (
+		// 				// @ts-ignore-next-line
+		// 				<Image
+		// 					source={{ uri: activePack.bookmarkActive1.localUri }}
+		// 					style={{ height: ICON_SIZE, width: ICON_SIZE }}
+		// 				/>
+		// 			) : (
+		// 				// @ts-ignore-next-line
+		// 				<Image
+		// 					source={{ uri: activePack.bookmarkInactive.localUri }}
+		// 					style={{ height: ICON_SIZE, width: ICON_SIZE }}
+		// 				/>
+		// 			)}
+		// 		</TouchableOpacity>
+		// 	);
+		// }
 		return (
 			<TouchableOpacity style={styles.root} onPress={_toggleBookmark}>
 				{IsBookmarkStatePending ? (
 					<ActivityIndicator size={'small'} />
 				) : (
 					<Ionicons
-						color={flag ? APP_THEME.INVALID_ITEM : APP_FONT.MEDIUM_EMPHASIS}
+						color={
+							flag ? APP_THEME.INVALID_ITEM : colorScheme.textColor.emphasisC
+						}
 						name={flag ? 'bookmark' : 'bookmark-outline'}
 						size={ICON_SIZE}
 					/>
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginRight: 12,
+		marginRight: 16,
 		paddingTop: 8,
 		paddingBottom: 8,
 	},

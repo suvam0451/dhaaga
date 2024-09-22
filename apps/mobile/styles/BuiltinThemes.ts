@@ -10,9 +10,11 @@ export type AppColorSchemeType = {
 		link: string;
 	};
 	textColor: {
-		high: string;
-		medium: string;
-		low: string;
+		high: string; // 96%
+		medium: string; // 74%
+		emphasisC: string; // 48%
+		low: string; // 36%
+		misc: string; // 12%
 	};
 	reactions: {
 		active: string;
@@ -26,7 +28,7 @@ export const APP_DEFAULT_COLOR_SCHEME: AppColorSchemeType = {
 	name: 'default',
 	palette: {
 		bg: '#121212',
-		menubar: '#1c1c1c',
+		menubar: '#292929', // #262626 Threads (15%)
 		buttonUnstyled: '#424242',
 		hashtagHigh: 'rgba(248,199,124,0.87)',
 		hashtagLow: 'rgba(248,199,124,0.87)',
@@ -35,7 +37,9 @@ export const APP_DEFAULT_COLOR_SCHEME: AppColorSchemeType = {
 	textColor: {
 		high: '#f5f5f5',
 		medium: '#999999',
-		low: '#606060',
+		emphasisC: '#7a7a7a',
+		low: '#5c5c5c',
+		misc: '#212121',
 	},
 	reactions: {
 		active: '#303030',
@@ -59,8 +63,10 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 		},
 		textColor: {
 			high: '#f5f5f5',
-			medium: '#999999',
-			low: '#606060',
+			medium: '#bdbdbd', // Threads --> #bdbdbd (74%), #999999 Previous (60%)
+			emphasisC: '#7a7a7a',
+			low: '#5c5c5c',
+			misc: '#3d3d3d',
 		},
 		reactions: {
 			active: '#303030',
@@ -73,7 +79,7 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 		id: 'sakura',
 		name: 'Sakura',
 		palette: {
-			bg: '#301515',
+			bg: '#301515', // 7 --> 14%, 301515
 			menubar: '#492322',
 			buttonUnstyled: '#922740',
 			hashtagHigh: '#fea7a6',
@@ -81,9 +87,11 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			link: '#9c6e5c',
 		},
 		textColor: {
-			high: '#ffdcdc',
-			medium: '#e6a3b0',
-			low: '#db7b8e',
+			high: '#ffd6d6', // 96 --> 92%
+			medium: '#e7a7b4', // 74 --> 78%
+			emphasisC: '#aa874b', // 48
+			low: '#aa874b', // 36 --> 48%, 936762
+			misc: '#554425',
 		},
 		reactions: {
 			active: '#492916',

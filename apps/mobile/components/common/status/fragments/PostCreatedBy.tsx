@@ -1,22 +1,16 @@
-import {
-	StyleProp,
-	Text,
-	TouchableOpacity,
-	View,
-	ViewStyle,
-} from 'react-native';
+import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { memo, useCallback, useMemo } from 'react';
 import { Skeleton } from '@rneui/themed';
 import useMfm from '../../../hooks/useMfm';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import StatusVisibility from './StatusVisibility';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
-const TIMELINE_PFP_SIZE = 46;
+const TIMELINE_PFP_SIZE = 42;
 
 /**
  * Renders the user (poster)'s avatar
@@ -112,22 +106,45 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 				flexDirection: 'row',
 				flex: 1,
 				alignItems: 'flex-start',
+				marginLeft: 8,
 			}}
 		>
 			<View
 				style={{
-					marginLeft: 8,
 					flex: 1,
 				}}
 			>
 				<TouchableOpacity onPress={onClick}>
-					<View>
-						{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+						}}
+					>
+						<View>
+							{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
+						</View>
+						<Text
+							style={{
+								color: colorScheme.textColor.emphasisC,
+								marginHorizontal: 4,
+							}}
+						>
+							•
+						</Text>
+						<StatusCreatedAt
+							from={postedAt}
+							textStyle={{
+								color: colorScheme.textColor.emphasisC,
+								fontSize: 13,
+								fontFamily: APP_FONTS.INTER_400_REGULAR,
+							}}
+						/>
 					</View>
 
 					<Text
 						style={{
-							color: colorScheme.textColor.medium,
+							color: colorScheme.textColor.emphasisC,
 							fontSize: 12,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							maxWidth: 196,
@@ -137,37 +154,6 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 						{instanceUrl}
 					</Text>
 				</TouchableOpacity>
-			</View>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'flex-end',
-					// flex: 1,
-					justifyContent: 'flex-end',
-				}}
-			>
-				<StatusVisibility visibility={visibility} />
-				<Text
-					style={{
-						color: colorScheme.textColor.low,
-						marginLeft: 2,
-						marginRight: 2,
-						opacity: 0.6,
-					}}
-				>
-					•
-				</Text>
-				<View style={{ flexDirection: 'row' }}>
-					<StatusCreatedAt
-						from={postedAt}
-						textStyle={{
-							color: colorScheme.textColor.low,
-							fontSize: 12,
-							fontFamily: APP_FONTS.INTER_700_BOLD,
-							opacity: 0.87,
-						}}
-					/>
-				</View>
 			</View>
 		</View>
 	);

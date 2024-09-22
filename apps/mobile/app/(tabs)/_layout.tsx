@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StatusBar, View } from 'react-native';
+import { View } from 'react-native';
 import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
 import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -77,14 +77,14 @@ export default function TabLayout() {
 								color: 'yellow',
 							},
 							tabBarStyle: {
-								backgroundColor: colorScheme.palette.menubar,
+								backgroundColor: colorScheme.palette.bg,
 								borderTopWidth: 0,
 								height: 46,
 							},
-							tabBarIconStyle: {
-								color: colorScheme.textColor.high,
-							},
-							tabBarActiveTintColor: colorScheme.textColor.high,
+							// tabBarIconStyle: {
+							// 	color: colorScheme.textColor.medium,
+							// },
+							tabBarActiveTintColor: colorScheme.textColor.medium,
 							tabBarInactiveTintColor: colorScheme.textColor.low,
 							tabBarShowLabel: false,
 							headerShown: false,

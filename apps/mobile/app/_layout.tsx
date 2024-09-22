@@ -123,8 +123,8 @@ function WithGorhomBottomSheetWrapper() {
 		setTimeout(() => {
 			Appearance.setColorScheme('dark');
 			StatusBar.setBarStyle('light-content');
-			StatusBar.setBackgroundColor(colorScheme.palette.menubar);
-		}, 100);
+			StatusBar.setBackgroundColor(colorScheme.palette.bg);
+		}, 0);
 	}, [pathname, colorScheme]);
 
 	if (error) return <MigrationFailed />;
@@ -137,7 +137,7 @@ function WithGorhomBottomSheetWrapper() {
 						style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
 						onLayout={onLayoutRootView}
 					>
-						<StatusBar backgroundColor={colorScheme.palette.menubar} />
+						<StatusBar backgroundColor={colorScheme.palette.bg} />
 						<Stack
 							initialRouteName={'(tabs)'}
 							screenOptions={{ headerShown: false }}

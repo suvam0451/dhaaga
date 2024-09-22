@@ -20,7 +20,15 @@ const StatusCreatedAt = memo(
 				<Text style={textStyle}>
 					{formatDistanceToNowStrict(from, {
 						addSuffix: false,
-					})}
+					})
+						.replace('about ', '')
+						.replace(/ years?/, 'y')
+						.replace(/ months?/, 'm')
+						.replace(/ weeks?/, 'w')
+						.replace(/ days?/, 'd')
+						.replace(/ hours?/, 'h')
+						.replace(/ minutes?/, 'm')
+						.replace(/ seconds?/, 's')}
 				</Text>
 			</View>
 		);

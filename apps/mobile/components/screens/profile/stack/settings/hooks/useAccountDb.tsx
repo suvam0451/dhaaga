@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Accounts } from '../../../../../../database/entities/account';
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
-import { getStaticClient } from '../../../../../../database/client';
+import { getLiveClient } from '../../../../../../database/client';
 import AccountDbService from '../../../../../../database/services/account.service';
+import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 
 type Type = {
 	accounts: Accounts[];
@@ -26,9 +27,10 @@ type Props = {
 	children: any;
 };
 
-const client = getStaticClient();
+const client = getLiveClient();
 
 function WithAccountDbContext({ children }: Props) {
+	const { regenerate } = useActivityPubRestClientContext();
 	const [Data, setData] = useState<Accounts[]>([]);
 	const { data } = useLiveQuery(
 		client.query.account.findMany({
@@ -50,12 +52,14 @@ function WithAccountDbContext({ children }: Props) {
 				},
 			})
 			.then((res) => {
-				console.log('next batch', res);
 				setData(res);
 			})
 			.catch((e) => {
 				console.log(e);
 				setData([]);
+			})
+			.finally(() => {
+				regenerate();
 			});
 	}
 

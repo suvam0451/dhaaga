@@ -5,7 +5,8 @@ import WithAppStatusItemContext, {
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
-import { TouchableOpacity, View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
@@ -85,7 +86,7 @@ const StatusCore = memo(
 					}}
 				>
 					<TouchableOpacity
-						delayPressIn={100}
+						delayPressIn={150}
 						onPress={() => {
 							toPost(STATUS_DTO.id);
 						}}

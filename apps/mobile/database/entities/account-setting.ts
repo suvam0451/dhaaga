@@ -1,18 +1,19 @@
 import { text, sqliteTable } from 'drizzle-orm/sqlite-core';
-import { createId } from '@paralleldrive/cuid2';
 import { relations, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { createSelectSchema } from 'drizzle-zod';
+import { createInsertSchema } from 'drizzle-zod';
 import { account } from './account';
 import { integer } from 'drizzle-orm/sqlite-core';
 
 export const accountSettings = sqliteTable('account_setting', {
-	id: text('id')
-		.$defaultFn(() => createId())
-		.notNull(),
+	id: integer('id').primaryKey({ autoIncrement: true }),
 	key: text('key').notNull(),
 	value: text('value').notNull(),
-	accountId: integer('account_id').notNull(),
+	// FKs
+	accountId: integer('account_id')
+		.notNull()
+		.references(() => account.id),
+	// Meta
 	updatedAt: text('updated_at')
 		.notNull()
 		.default(sql`(CURRENT_TIMESTAMP)`)
@@ -29,5 +30,5 @@ export const accountSettings_Relations = relations(
 	}),
 );
 
-export const AccountSettingSchema = createSelectSchema(accountSettings);
+export const AccountSettingSchema = createInsertSchema(accountSettings);
 export type AccountSettings = z.infer<typeof AccountSettingSchema>;

@@ -8,6 +8,8 @@ import LocalizationService from '../../../../services/localization.services';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../lib/Icon';
+import StatusCreatedAt from './StatusCreatedAt';
 
 /**
  * Adds booster's information on top
@@ -24,7 +26,7 @@ const SharedStatusFragment = memo(function Foo() {
 		emojiMap: dto.calculated.emojis as any,
 		deps: [dto],
 		expectedHeight: 24,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		numberOfLines: 1,
 		emphasis: 'medium',
 	});
@@ -34,7 +36,6 @@ const SharedStatusFragment = memo(function Foo() {
 		return (
 			<View
 				style={{
-					backgroundColor: colorScheme.palette.bg,
 					borderTopRightRadius: 8,
 					borderTopLeftRadius: 8,
 					paddingHorizontal: 12,
@@ -51,9 +52,7 @@ const SharedStatusFragment = memo(function Foo() {
 						maxWidth: '100%',
 					}}
 				>
-					<View>
-						<Ionicons color={'#888'} name={'rocket-outline'} size={14} />
-					</View>
+					<AppIcon id={'retweet'} size={18} emphasis={'c'} />
 					<View>
 						{/*@ts-ignore-next-line*/}
 						<Image
@@ -67,20 +66,25 @@ const SharedStatusFragment = memo(function Foo() {
 							}}
 						/>
 					</View>
-					<View style={{ flex: 1, marginLeft: 6 }}>{ParsedDisplayName}</View>
-					<View>
-						<Text
-							style={{
-								color: colorScheme.textColor.low,
-								fontSize: 12,
-								fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							}}
-						>
-							{LocalizationService.formatDistanceToNowStrict(
-								new Date(dto.createdAt),
-							)}
-						</Text>
-					</View>
+					<View style={{ marginLeft: 6 }}>{ParsedDisplayName}</View>
+					<Text
+						style={{
+							color: colorScheme.textColor.emphasisC,
+							marginLeft: 2,
+							marginRight: 2,
+							opacity: 0.6,
+						}}
+					>
+						•
+					</Text>
+					<StatusCreatedAt
+						from={new Date(dto.createdAt)}
+						textStyle={{
+							color: colorScheme.textColor.emphasisC,
+							fontSize: 12,
+							fontFamily: APP_FONTS.INTER_400_REGULAR,
+						}}
+					/>
 				</View>
 			</View>
 		);

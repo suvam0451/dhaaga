@@ -33,7 +33,7 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 
 	const IS_QUOTE_BOOST = dto.meta.isBoost && dto.content.raw;
 
-	const { content: UsernameWithEmojis, isLoaded } = useMfm({
+	const { content: UsernameWithEmojis } = useMfm({
 		content: dto.postedBy.displayName,
 		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis,
@@ -89,13 +89,12 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 								justifyContent: 'flex-end',
 							}}
 						>
-							<StatusVisibility visibility={dto.visibility} />
+							{/*<StatusVisibility visibility={dto.visibility} />*/}
 							<Text
 								style={{
-									color: 'gray',
+									color: colorScheme.textColor.low,
 									marginLeft: 2,
 									marginRight: 2,
-									opacity: 0.6,
 								}}
 							>
 								•
@@ -146,7 +145,7 @@ const StatusHierarchyParent = memo(({ dto, hasParent }: Props) => {
 							flex: 1,
 							marginTop: 54,
 							width: 1.5,
-							backgroundColor: APP_FONT.DISABLED,
+							backgroundColor: colorScheme.textColor.misc,
 						}}
 					/>
 				</View>

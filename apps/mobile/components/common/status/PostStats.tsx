@@ -31,11 +31,11 @@ const StatItem = memo(({ count, label, nextCounts }: StatItemProps) => {
 	if (count === 0) return <View />;
 	return (
 		<Fragment>
-			<Text style={[styles.text, { color: colorScheme.textColor.low }]}>
+			<Text style={[styles.text, { color: colorScheme.textColor.emphasisC }]}>
 				{formatted} {label}
 			</Text>
 			{SHOW_TRAILING_BULLET && (
-				<Text style={[styles.bull, { color: colorScheme.textColor.low }]}>
+				<Text style={[styles.bull, { color: colorScheme.textColor.emphasisC }]}>
 					&bull;
 				</Text>
 			)}
@@ -98,7 +98,7 @@ const PostStats = memo(function Foo({
 const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
-		marginTop: 12,
+		marginTop: 8,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},

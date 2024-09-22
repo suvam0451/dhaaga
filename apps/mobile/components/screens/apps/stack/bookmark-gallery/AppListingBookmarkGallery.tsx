@@ -14,7 +14,7 @@ import { BSON } from 'realm';
 
 const AppListingBookmarkGallery = memo(() => {
 	const { PrimaryAcctPtr } = useActivityPubRestClientContext();
-	const acct = useObject(Account, PrimaryAcctPtr.current || new BSON.UUID());
+	const acct = null; // useObject(Account, PrimaryAcctPtr.current || new BSON.UUID());
 
 	const BOOKMARK_LAST_SYNCED_AT = acct?.isValid()
 		? acct?.bookmarksLastSyncedAt

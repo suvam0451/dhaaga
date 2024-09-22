@@ -62,7 +62,7 @@ function usePinnedPosts(userId: string) {
 		if (domain === 'misskey') {
 			setData(
 				ActivityPubAdapterService.adaptManyStatuses(
-					user.getPinnedNotes(),
+					user?.getPinnedNotes() || [],
 					domain,
 				).slice(0, 10),
 			);

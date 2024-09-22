@@ -1,41 +1,38 @@
-import { Realm } from 'realm';
-import { Account } from '../../entities/account.entity';
 import { jwtDecode } from 'jwt-decode';
 import { Agent, AtpSessionData, CredentialSession } from '@atproto/api';
-import AccountService from '../account.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import AccountRepository from '../../repositories/account.repo';
+import { Accounts } from '../../database/entities/account';
+import AccountMetaService from '../../database/services/account-secret.service';
+import AccountDbService from '../../database/services/account.service';
 
 /**
  * Helps manage session
  * for an atproto based account
  */
 class AtprotoSessionService {
-	private readonly db: Realm;
-	private readonly acct: Account;
+	private readonly acct: Accounts;
 	private readonly sessionManager: CredentialSession;
 	private nextSession: AtpSessionData;
 	private oldSession: AtpSessionData;
 	private nextStatusCode: string;
 
-	constructor(db: Realm, acct: Account) {
-		this.db = db;
+	constructor(acct: Accounts) {
 		this.acct = acct;
 		this.sessionManager = new CredentialSession(
-			new URL(AtprotoSessionService.cleanLink(this.acct.subdomain)),
+			new URL(AtprotoSessionService.cleanLink(this.acct.server)),
 			fetch,
 			(evt, session) => {
 				this.nextStatusCode = evt;
 				if (session) this.nextSession = session;
 			},
 		);
-		this.oldSession = JSON.parse(
-			AccountRepository.findSecret(this.db, this.acct, 'session')?.value,
-		);
+
+		const secret = this.acct.meta.find((o) => o.key === 'session')?.value;
+		this.oldSession = JSON.parse(secret);
 	}
 
-	static create(db: Realm, acct: Account) {
-		return new AtprotoSessionService(db, acct);
+	static create(acct: Accounts) {
+		return new AtprotoSessionService(acct);
 	}
 
 	private static cleanLink(urlLike: string) {
@@ -81,18 +78,15 @@ class AtprotoSessionService {
 	 * Checks the updates tokens
 	 * and stores them in the db
 	 */
-	saveSession() {
+	async saveSession() {
 		const statusCode = this.nextStatusCode;
 		switch (statusCode) {
 			case 'update': {
-				this.db.write(() => {
-					AccountRepository.setSecret(
-						this.db,
-						this.acct,
-						'session',
-						JSON.stringify(this.nextSession),
-					);
-				});
+				await AccountMetaService.upsertMeta(
+					this.acct,
+					'session',
+					JSON.stringify(this.nextSession),
+				);
 				// console.log('BEFORE', this.oldSession.accessJwt);
 				// console.log('AFTER', this.nextSession.accessJwt);
 				// cycle forward
@@ -123,13 +117,11 @@ class AtprotoSessionService {
 	/**
 	 * Attempt to log in using
 	 * submitted credentials
-	 * @param db
 	 * @param username
 	 * @param appPassword
 	 * @param service
 	 */
 	static async login(
-		db: Realm,
 		username: string,
 		appPassword: string,
 		service: string = 'https://bsky.social',
@@ -166,13 +158,15 @@ class AtprotoSessionService {
 			const _username = res.data.handle;
 			const did = res.data.did;
 
-			AccountService.upsert(db, {
-				subdomain: instance,
-				domain: KNOWN_SOFTWARE.BLUESKY,
-				username: _username,
-				avatarUrl,
-				displayName,
-				credentials: [
+			await AccountDbService.upsert(
+				{
+					subdomain: instance,
+					domain: KNOWN_SOFTWARE.BLUESKY,
+					username: _username,
+					avatarUrl,
+					displayName,
+				},
+				[
 					{
 						key: 'display_name',
 						value: displayName,
@@ -202,7 +196,7 @@ class AtprotoSessionService {
 						value: JSON.stringify(storedSession),
 					},
 				],
-			});
+			);
 
 			return { success: true };
 		} catch (e) {

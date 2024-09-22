@@ -9,7 +9,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import * as React from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { APP_FONT } from '../../styles/AppTheme';
 
 export type APP_ICON_ENUM =
 	| 'bell'
@@ -24,6 +23,7 @@ export type APP_ICON_ENUM =
 	| 'no-account'
 	| 'palette'
 	| 'phonebook'
+	| 'retweet'
 	| 'search'
 	| 'feelings'
 	| 'trash'
@@ -31,7 +31,7 @@ export type APP_ICON_ENUM =
 
 type AppIconType = {
 	id: APP_ICON_ENUM;
-	emphasis?: 'high' | 'low' | 'medium';
+	emphasis?: 'high' | 'low' | 'medium' | 'c';
 	iconStyle?: StyleProp<TextStyle>;
 	containerStyle?: StyleProp<TextStyle>;
 	size?: number;
@@ -54,6 +54,10 @@ export const AppIcon = memo(
 			}
 			case 'low': {
 				_color = colorScheme.textColor.low;
+				break;
+			}
+			case 'c': {
+				_color = colorScheme.textColor.emphasisC;
 				break;
 			}
 			default: {
@@ -197,6 +201,16 @@ export const AppIcon = memo(
 					return (
 						<FontAwesome6
 							name="contact-book"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'retweet':
+					return (
+						<AntDesign
+							name="retweet"
 							size={_size}
 							color={_color}
 							onPress={onPress}

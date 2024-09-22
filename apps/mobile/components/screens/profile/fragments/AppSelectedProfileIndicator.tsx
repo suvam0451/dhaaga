@@ -4,10 +4,6 @@ import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { useObject, useRealm } from '@realm/react';
-import { Account } from '../../../../entities/account.entity';
-import { BSON } from 'realm';
-import AccountRepository from '../../../../repositories/account.repo';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -22,14 +18,9 @@ const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
 const AppSelectedProfileIndicator = memo(() => {
 	const { colorScheme } = useAppTheme();
-	const db = useRealm();
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const account = useObject(
-		Account,
-		primaryAcct?.isValid() ? primaryAcct?._id : new BSON.UUID(),
-	);
 	const { isAnimating, visible } = useAppBottomSheet();
-	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
+	const avatar = primaryAcct?.meta?.find((o) => o.key === 'avatar')?.value;
 
 	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
 

@@ -2,7 +2,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { useComposerContext } from './useComposerContext';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import ActivityPubProviderService from '../../../../../services/activitypub-provider.service';
-import AccountRepository from '../../../../../repositories/account.repo';
 import { useRealm } from '@realm/react';
 import { useCallback } from 'react';
 
@@ -20,10 +19,8 @@ function useImagePicker() {
 		if (!result.canceled) {
 			let _url = result.assets[0].uri;
 
-			const token = AccountRepository.findSecret(
-				db,
-				primaryAcct,
-				'access_token',
+			const token = primaryAcct?.meta?.find(
+				(o) => o.key === 'access_token',
 			)?.value;
 
 			try {

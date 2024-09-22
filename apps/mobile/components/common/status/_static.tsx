@@ -15,7 +15,7 @@ import { useAppTheme } from '../../../hooks/app/useAppThemePack';
  * then the post is boosted and
  * is also a reply
  */
-export const RepliedStatusFragment = memo(function Foo() {
+export const ParentPostFragment = memo(function Foo() {
 	const { dto } = useAppStatusItem();
 	const { colorScheme } = useAppTheme();
 

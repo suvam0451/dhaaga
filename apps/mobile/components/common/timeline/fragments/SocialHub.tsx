@@ -21,6 +21,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import SocialHubLantern from '../../../screens/home/stack/landing/fragments/SocialHubLantern';
 import SocialHubAssistant from '../../../screens/home/stack/landing/fragments/SocialHubAssistant';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import SocialHubQuickDestinations from '../../../screens/home/stack/landing/fragments/SocialHubQuickDestinations';
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
 	MORNING = 'Morning',
@@ -323,17 +324,17 @@ function SocialHub() {
 						<Text
 							style={[
 								styles.timeOfDayText,
-								{ color: colorScheme.textColor.high },
+								{ color: colorScheme.textColor.medium },
 							]}
 						>
-							Good Morning 🌄
+							Good Morning
 						</Text>
 					)}
 					{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
 						<Text
 							style={[
 								styles.timeOfDayText,
-								{ color: colorScheme.textColor.high },
+								{ color: colorScheme.textColor.medium },
 							]}
 						>
 							Good Afternoon
@@ -343,7 +344,7 @@ function SocialHub() {
 						<Text
 							style={[
 								styles.timeOfDayText,
-								{ color: colorScheme.textColor.high },
+								{ color: colorScheme.textColor.medium },
 							]}
 						>
 							Good Evening
@@ -353,12 +354,15 @@ function SocialHub() {
 						<Text
 							style={[
 								styles.timeOfDayText,
-								{ color: colorScheme.textColor.high },
+								{ color: colorScheme.textColor.medium },
 							]}
 						>
 							Good Night 🌙
 						</Text>
 					)}
+
+					<SocialHubQuickDestinations />
+
 					<View>
 						<View
 							style={{
@@ -424,6 +428,7 @@ function SocialHub() {
 								</View>
 							</View>
 						</View>
+
 						{PinnedItems}
 					</View>
 				</View>
@@ -463,9 +468,8 @@ const styles = StyleSheet.create({
 		borderColor: APP_THEME.COLOR_SCHEME_C,
 	},
 	timeOfDayText: {
-		fontSize: 24,
-		fontFamily: APP_FONTS.MONTSERRAT_800_EXTRABOLD,
-		color: APP_FONT.MONTSERRAT_HEADER,
+		fontSize: 32,
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		marginLeft: 8,
 	},
 });

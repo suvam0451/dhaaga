@@ -13,7 +13,8 @@ type Props = {
 	emojiMap: Map<string, string>;
 };
 
-const EMOJI_HEIGHT = 16;
+const EMOJI_HEIGHT = 20;
+
 const EmojiCodeSegment = memo(function Foo({
 	emojiMap,
 	value,
@@ -53,12 +54,13 @@ const EmojiCodeSegment = memo(function Foo({
 	}, [match]);
 
 	return (
-		<Text style={{ alignItems: 'center' }}>
-			{/*@ts-ignore-next-line*/}
-			<Image
+		<Text style={{ alignItems: 'flex-end', flex: 1, position: 'relative' }}>
+			<RNImage
 				style={{
 					width: Width,
 					height: EMOJI_HEIGHT,
+					top: 16,
+					position: 'absolute',
 				}}
 				source={{ uri: match }}
 			/>

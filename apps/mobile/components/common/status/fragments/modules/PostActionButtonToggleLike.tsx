@@ -4,7 +4,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
 import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
-const ICON_SIZE = 24;
+const ICON_SIZE = 21;
 const ACTIVE_COLOR = '#deba7a'; // APP_THEME.LINK
 
 type PostActionButtonToggleLikeProps = {
@@ -32,7 +32,7 @@ const PostActionButtonToggleLike = memo(
 					display: 'flex',
 					flexDirection: 'row',
 					alignItems: 'center',
-					marginRight: 14,
+					marginRight: 16,
 					paddingTop: 8,
 					paddingBottom: 8,
 				}}
@@ -44,7 +44,7 @@ const PostActionButtonToggleLike = memo(
 					<AntDesign
 						name={flag ? 'like1' : 'like2'}
 						size={ICON_SIZE}
-						color={flag ? ACTIVE_COLOR : colorScheme.textColor.medium}
+						color={flag ? ACTIVE_COLOR : colorScheme.textColor.emphasisC}
 					/>
 				)}
 			</TouchableOpacity>

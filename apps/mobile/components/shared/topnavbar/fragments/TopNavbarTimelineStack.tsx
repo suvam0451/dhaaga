@@ -71,15 +71,13 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 	const { colorScheme } = useAppTheme();
 
 	return (
-		<View
-			style={[styles.root, { backgroundColor: colorScheme.palette.menubar }]}
-		>
+		<View style={[styles.root, { backgroundColor: colorScheme.palette.bg }]}>
 			<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>
 				<TouchableOpacity
 					style={styles.menuActionButtonContainer}
 					onPress={onChangeTheme}
 				>
-					<AppIcon id={'palette'} emphasis={'high'} />
+					<AppIcon id={'palette'} emphasis={'medium'} />
 				</TouchableOpacity>
 			</View>
 
@@ -94,14 +92,14 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 				onPress={onIconPress}
 			>
 				<Text
-					style={[styles.label, { color: colorScheme.textColor.high }]}
+					style={[styles.label, { color: colorScheme.textColor.medium }]}
 					numberOfLines={1}
 				>
 					{title || 'Home'}
 				</Text>
 				<Ionicons
 					name="chevron-down"
-					color={colorScheme.textColor.high}
+					color={colorScheme.textColor.medium}
 					size={20}
 					style={{ marginLeft: 4, marginTop: 2 }}
 				/>
@@ -117,7 +115,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 					style={styles.menuActionButtonContainer}
 					onPress={post}
 				>
-					<AppIcon id={'create'} emphasis={'high'} />
+					<AppIcon id={'create'} emphasis={'medium'} />
 				</TouchableOpacity>
 
 				{timelineType !== TimelineFetchMode.IDLE && (
@@ -125,7 +123,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 						style={styles.menuActionButtonContainer}
 						onPress={goHome}
 					>
-						<AppIcon id={'home'} emphasis={'high'} size={20} />
+						<AppIcon id={'home'} emphasis={'medium'} size={20} />
 					</TouchableOpacity>
 				)}
 			</View>
@@ -152,7 +150,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: 42,
+		height: 48,
 	},
 	label: {
 		color: APP_FONT.MONTSERRAT_BODY,

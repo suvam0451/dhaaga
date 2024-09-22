@@ -14,20 +14,18 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
-import AccountRepository from '../repositories/account.repo';
-import { useRealm } from '@realm/react';
-import { Account } from '../entities/account.entity';
-import { EmojiService } from '../services/emoji.service';
 import { useGlobalMmkvContext } from './useGlobalMMkvCache';
-import { UUID } from 'bson';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
+import { Accounts } from '../database/entities/account';
+import { getLiveClient, schema } from '../database/client';
+import { eq } from 'drizzle-orm';
 
 type Type = {
 	client: ActivityPubClient;
 	me: UserInterface | null;
 	meRaw: mastodon.v1.Account | null;
-	primaryAcct: Account;
-	PrimaryAcctPtr: MutableRefObject<UUID>;
+	primaryAcct: Accounts;
+	PrimaryAcctPtr: MutableRefObject<Accounts>;
 
 	/**
 	 * Call this function after change in
@@ -51,6 +49,8 @@ const defaultValue: Type = {
 
 const ActivityPubRestClientContext = createContext<Type>(defaultValue);
 
+const client = getLiveClient();
+
 export function useActivityPubRestClientContext() {
 	return useContext(ActivityPubRestClientContext);
 }
@@ -65,15 +65,20 @@ function WithActivityPubRestClient({ children }: any) {
 	const [restClient, setRestClient] = useState<ActivityPubClient>(null);
 	const [Me, setMe] = useState(null);
 	const [MeRaw, setMeRaw] = useState(null);
-	const db = useRealm();
-	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
+	// const db = useRealm();
+	const [PrimaryAcct, setPrimaryAcct] = useState<Accounts>(null);
 
-	const PrimaryAcctPtr = useRef<UUID>(null);
+	const PrimaryAcctPtr = useRef<Accounts>(null);
 
 	const { globalDb } = useGlobalMmkvContext();
 
 	async function regenerateFn() {
-		const acct = db.objects(Account).find((o: Account) => o.selected === true);
+		const acct = await client.query.account.findFirst({
+			where: eq(schema.account.selected, true),
+			with: {
+				meta: true,
+			},
+		});
 		if (!acct) {
 			setRestClient(null);
 			setPrimaryAcct(null);
@@ -81,35 +86,36 @@ function WithActivityPubRestClient({ children }: any) {
 			return;
 		}
 
-		const token = AccountRepository.findSecret(db, acct, 'access_token')?.value;
+		const token = acct.meta.find((o) => o.key === 'access_token')?.value;
 		if (!token) {
 			setRestClient(null);
 			return;
 		}
 
 		let payload: any = {
-			instance: acct?.subdomain,
+			instance: acct?.server,
 			token,
 		};
 
 		// Built Different
-		if (acct.domain === KNOWN_SOFTWARE.BLUESKY) {
-			const session = AtprotoSessionService.create(db, acct);
+		if (acct.software === KNOWN_SOFTWARE.BLUESKY) {
+			const session = AtprotoSessionService.create(acct);
 			await session.resume();
-			const { success, data, reason } = session.saveSession();
+			const { success, data, reason } = await session.saveSession();
 			if (!success)
 				console.log('[INFO]: session restore status', success, reason);
 			payload = {
 				...data,
-				subdomain: acct.subdomain,
+				subdomain: acct.server,
 			};
 		}
 
-		const client = ActivityPubClientFactory.get(acct.domain, payload);
-		setRestClient(client);
+		const _client = ActivityPubClientFactory.get(acct.software as any, payload);
+		setRestClient(_client);
 		setPrimaryAcct(acct);
-		PrimaryAcctPtr.current = acct._id;
-		EmojiService.refresh(db, globalDb, acct.subdomain, true);
+		PrimaryAcctPtr.current = acct;
+		// FIXME: fix this
+		// EmojiService.refresh(db, globalDb, acct.server, true);
 	}
 
 	useEffect(() => {
@@ -128,7 +134,7 @@ function WithActivityPubRestClient({ children }: any) {
 				return;
 			}
 			setMeRaw(data);
-			setMe(ActivityPubUserAdapter(data, PrimaryAcct?.domain));
+			setMe(ActivityPubUserAdapter(data, PrimaryAcct?.software));
 		});
 	}, [restClient]);
 
@@ -140,8 +146,8 @@ function WithActivityPubRestClient({ children }: any) {
 				meRaw: MeRaw,
 				primaryAcct: PrimaryAcct,
 				regenerate: regenerateFn,
-				domain: PrimaryAcct?.domain,
-				subdomain: PrimaryAcct?.subdomain,
+				domain: PrimaryAcct?.software,
+				subdomain: PrimaryAcct?.server,
 				PrimaryAcctPtr,
 			}}
 		>

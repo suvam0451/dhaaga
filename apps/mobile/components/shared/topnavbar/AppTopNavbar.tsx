@@ -1,12 +1,11 @@
-import { Fragment, memo, useMemo } from 'react';
-import { Animated, StatusBar, StyleSheet } from 'react-native';
+import { memo, useMemo } from 'react';
+import { Animated } from 'react-native';
 import TopNavbarGeneric from './fragments/TopNavbarGeneric';
 import TopNavbarLandingGeneric from './fragments/TopNavbarLandingGeneric';
 import TimelinesHeader from './fragments/TopNavbarTimelineStack';
 import NotificationsHeader from './fragments/TopNavbarNotificationStack';
 import TopNavbarProfilePage from './fragments/TopNavbarProfilePage';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
-import { APP_THEME } from '../../../styles/AppTheme';
 
 export enum APP_TOPBAR_TYPE_ENUM {
 	GENERIC,

@@ -76,7 +76,7 @@ const WithAccount = memo(() => {
 
 const ProfileAndSettings = memo(() => {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	if (!primaryAcct || !primaryAcct.isValid()) {
+	if (!primaryAcct) {
 		return <WithoutAccount />;
 	}
 	return <WithAccount />;

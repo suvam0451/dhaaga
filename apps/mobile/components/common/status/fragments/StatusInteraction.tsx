@@ -23,7 +23,7 @@ type StatusInteractionProps = {
 	dto: ActivityPubStatusAppDtoType;
 };
 
-const ICON_SIZE = 24;
+const ICON_SIZE = 21;
 
 const StatusInteraction = memo(
 	({ openAiContext, dto }: StatusInteractionProps) => {
@@ -134,7 +134,7 @@ const StatusInteraction = memo(
 								display: 'flex',
 								flexDirection: 'row',
 								alignItems: 'center',
-								marginRight: 14,
+								marginRight: 16,
 								paddingTop: 8,
 								paddingBottom: 8,
 								position: 'relative',
@@ -147,7 +147,9 @@ const StatusInteraction = memo(
 								<AntDesign
 									name="retweet"
 									size={ICON_SIZE}
-									color={IS_BOOSTED ? '#8eb834' : colorScheme.textColor.medium}
+									color={
+										IS_BOOSTED ? '#8eb834' : colorScheme.textColor.emphasisC
+									}
 								/>
 							)}
 						</TouchableOpacity>
@@ -165,7 +167,7 @@ const StatusInteraction = memo(
 							<FontAwesome5
 								name="comment"
 								size={ICON_SIZE}
-								color={colorScheme.textColor.medium}
+								color={colorScheme.textColor.emphasisC}
 							/>
 						</TouchableOpacity>
 
@@ -216,16 +218,15 @@ const StatusInteraction = memo(
 						>
 							<Ionicons
 								name="ellipsis-horizontal"
-								size={ICON_SIZE + 2}
-								color={colorScheme.textColor.medium}
+								size={ICON_SIZE}
+								color={colorScheme.textColor.emphasisC}
 							/>
 						</TouchableOpacity>
 					</View>
 				</View>
 				<Divider
-					color={'#cccccc'}
+					color={colorScheme.textColor.misc}
 					style={{
-						opacity: 0.3,
 						marginTop: 8,
 					}}
 				/>
