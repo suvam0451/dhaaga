@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 /**
  * This object from profile
  * can be used to estimate user relations
@@ -32,3 +34,31 @@ type AtprotoProfileViewerDto = {
 		};
 	};
 };
+
+const FACET_TYPE = ['app.bsky.richtext.facet'] as const;
+const FACET_ENUM = z.enum(FACET_TYPE);
+
+export const FACET_ITEM_TYPE = [
+	'app.bsky.richtext.facet#mention',
+	'app.bsky.richtext.facet#link',
+	'app.bsky.richtext.facet#tag',
+] as const;
+const FACET_ITEM_ENUM = z.enum(FACET_ITEM_TYPE);
+
+const AtprotoFacetDto = z.object({
+	$type: FACET_ENUM.optional(),
+	index: z.object({
+		byteStart: z.number().int(),
+		byteEnd: z.number().int(),
+	}),
+	features: z.array(
+		z.object({
+			$type: FACET_ITEM_ENUM,
+			did: z.string().optional(),
+			uri: z.string().optional(),
+			tag: z.string().optional(),
+		}),
+	),
+});
+
+export type AtprotoFacetType = z.infer<typeof AtprotoFacetDto>;

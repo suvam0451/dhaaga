@@ -3,6 +3,7 @@ import {
 	DhaagaErrorCode,
 	LibraryResponse,
 } from '../adapters/_client/_router/_types.js';
+import { KNOWN_SOFTWARE } from '../adapters/_client/_router/routes/instance.js';
 
 const NODEINFO_10 = 'http://nodeinfo.diaspora.software/ns/schema/1.0';
 const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
@@ -46,8 +47,11 @@ class ActivitypubHelper {
 	 *
 	 * @param url preferably using instanceUrl
 	 * @param myDomain
+	 * @param domain
 	 */
-	static getHandle(url: string, myDomain: string) {
+	static getHandle(url: string, myDomain: string, domain?: string) {
+		if (domain === KNOWN_SOFTWARE.BLUESKY) return url;
+
 		const ex = /^https?:\/\/(.*?)\/(.*?)/;
 		const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
 		/**

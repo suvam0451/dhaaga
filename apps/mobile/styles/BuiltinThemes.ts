@@ -54,17 +54,17 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 		id: 'default',
 		name: 'Default',
 		palette: {
-			bg: '#121212',
-			menubar: '#1c1c1c',
-			buttonUnstyled: '#424242',
+			bg: '#191919', // 10%
+			menubar: '#212121', // 13%
+			buttonUnstyled: '#2d2c2d', // 424242
 			hashtagHigh: 'rgba(248,199,124,0.87)',
 			hashtagLow: 'rgba(248,199,124,0.87)',
 			link: '#45a0be',
 		},
 		textColor: {
-			high: '#f5f5f5',
-			medium: '#bdbdbd', // Threads --> #bdbdbd (74%), #999999 Previous (60%)
-			emphasisC: '#7a7a7a',
+			high: '#dadada', // 85%
+			medium: '#bdbdbd', // #9f9e9f  Threads --> #bdbdbd (74%), #999999 Previous (60%)
+			emphasisC: '#9f9e9f', // 62%
 			low: '#5c5c5c',
 			misc: '#3d3d3d',
 		},
@@ -87,7 +87,7 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			link: '#9c6e5c',
 		},
 		textColor: {
-			high: '#ffd6d6', // 96 --> 92%
+			high: '#fcc', // 96 --> 92%, ffd6d6
 			medium: '#e7a7b4', // 74 --> 78%
 			emphasisC: '#aa874b', // 48
 			low: '#aa874b', // 36 --> 48%, 936762

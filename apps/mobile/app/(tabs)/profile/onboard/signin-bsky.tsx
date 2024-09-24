@@ -24,16 +24,19 @@ function SigninBsky() {
 			return;
 		}
 
-		const { success, reason } = await AtprotoSessionService.login(
-			db,
-			Username,
-			Password,
-		);
+		try {
+			const { success, reason } = await AtprotoSessionService.login(
+				Username,
+				Password,
+			);
 
-		if (success) {
-			router.replace('/profile/settings/accounts');
-		} else {
-			console.log(reason);
+			if (success) {
+				router.replace('/profile/settings/accounts');
+			} else {
+				console.log(reason);
+			}
+		} catch (e) {
+			console.log('[ERROR]: bsky login failed', e);
 		}
 	}
 

@@ -9,6 +9,8 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 import * as Crypto from 'expo-crypto';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import FacetService from '../../services/facets.service';
 
 type Props = {
 	content: string;
@@ -108,6 +110,22 @@ function useMfm({
 				aiContext: [],
 			});
 			IsSolved.current = content;
+			return;
+		}
+
+		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+			const nodes = FacetService.render(content, { fontFamily, emphasis });
+			setData({
+				isLoaded: true,
+				content: (
+					<WithAppMfmContext acceptTouch={_acceptTouch}>
+						<View style={{ height: 'auto' }}>
+							<Text>{nodes.map((node, i) => node)}</Text>
+						</View>
+					</WithAppMfmContext>
+				),
+				aiContext: [],
+			});
 			return;
 		}
 

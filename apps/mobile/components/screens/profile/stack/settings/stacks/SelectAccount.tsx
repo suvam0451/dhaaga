@@ -9,12 +9,16 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ConfirmAccountDelete from '../../../../../dialogs/accounts/ConfirmAccountDelete';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
-import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavBar';
 import AccountListForSoftware from '../../landing/fragments/AccountListForSoftware';
 import { Accounts } from '../../../../../../database/entities/account';
 import WithAccountDbContext from '../hooks/useAccountDb';
+import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../../../shared/topnavbar/AppTopNavbar';
 
 function SelectAccountStackCore() {
+	const { colorScheme } = useAppTheme();
 	const [DialogVisible, setDialogVisible] = useState(false);
 	const [DeleteDialogVisible, setDeleteDialogVisible] = useState(false);
 	const DialogTarget = useRef<Accounts>(null);
@@ -35,7 +39,11 @@ function SelectAccountStackCore() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Select Account'} translateY={translateY}>
+		<AppTopNavbar
+			title={'Select Account'}
+			translateY={translateY}
+			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+		>
 			<AccountInfoSyncDialog
 				IsVisible={DialogVisible}
 				setIsVisible={setDialogVisible}
@@ -57,7 +65,11 @@ function SelectAccountStackCore() {
 						setIsExpanded={setDialogVisible}
 					/>
 				)}
-				contentContainerStyle={{ paddingHorizontal: 4, paddingTop: 54 }}
+				contentContainerStyle={{
+					paddingHorizontal: 4,
+					paddingTop: 54,
+					backgroundColor: colorScheme.palette.bg,
+				}}
 				ListFooterComponent={
 					<View
 						style={{ marginHorizontal: 16, marginBottom: 32, marginTop: 28 }}
@@ -91,7 +103,7 @@ function SelectAccountStackCore() {
 					</View>
 				}
 			/>
-		</WithAutoHideTopNavBar>
+		</AppTopNavbar>
 	);
 }
 

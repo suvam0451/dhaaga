@@ -1,4 +1,5 @@
-import * as TLDs from 'tlds';
+// @ts-ignore-next-line
+import TLDs from 'tlds';
 import { AppBskyRichtextFacet } from '@atproto/api';
 
 type Facet = AppBskyRichtextFacet.Main;
@@ -6,7 +7,7 @@ type Facet = AppBskyRichtextFacet.Main;
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-class UnicodeString {
+export class UnicodeString {
 	utf16: string;
 	utf8: Uint8Array;
 
@@ -24,7 +25,8 @@ class UnicodeString {
 /**
  * Notably, @suvam@mastodon.social would not be supported
  */
-export function detectFacets(text: UnicodeString): Facet[] | undefined {
+export function detectFacets(_text: string): Facet[] | undefined {
+	const text = new UnicodeString(_text);
 	let match;
 	const facets: Facet[] = [];
 	{
@@ -116,7 +118,7 @@ export function detectFacets(text: UnicodeString): Facet[] | undefined {
 			});
 		}
 	}
-	return facets.length > 0 ? facets : undefined;
+	return facets.length > 0 ? facets : [];
 }
 
 function isValidDomain(str: string): boolean {

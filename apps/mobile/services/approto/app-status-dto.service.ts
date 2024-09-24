@@ -15,7 +15,8 @@ export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
 	avatarUrl: z.string(),
 	displayName: z.string().nullable().optional(),
-	handle: z.string().regex(/^@.*?@?.*?$/),
+	// NOTE: removed regex  --> ,regex(/^@.*?@?.*?$/)
+	handle: z.string(),
 	instance: z.string(),
 });
 

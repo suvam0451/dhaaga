@@ -46,6 +46,7 @@ type Type = {
 	isAnimating: boolean;
 
 	// references
+	HandleRef: MutableRefObject<string>;
 	ParentRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	RootRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	TextRef: MutableRefObject<string>;
@@ -69,6 +70,7 @@ const defaultValue: Type = {
 	setVisible: () => {},
 	updateRequestId: () => {},
 	requestId: '',
+	HandleRef: undefined,
 	ParentRef: undefined,
 	RootRef: undefined,
 	TextRef: undefined,
@@ -108,6 +110,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 	}, [Visible]);
 
 	// pointers
+	const HandleRef = useRef<string>(null);
 	const TextRef = useRef<string>(null);
 	const PostRef = useRef<ActivityPubStatusAppDtoType>(null);
 	const PostIdRef = useRef<string>(null);
@@ -134,6 +137,7 @@ function WithAppBottomSheetContext({ children }: Props) {
 				setVisible,
 				updateRequestId: forceUpdate,
 				requestId: State,
+				HandleRef,
 				TextRef,
 				PostRef,
 				PostIdRef,

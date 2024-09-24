@@ -33,6 +33,7 @@ class AppUserService {
 			handle: ActivitypubHelper.getHandle(
 				input?.getAccountUrl(subdomain),
 				subdomain,
+				domain,
 			),
 			instance: input.getInstanceUrl() || subdomain,
 			stats: {

@@ -28,6 +28,7 @@ import {
 	AppBskyGraphGetFollowers,
 	AppBskyGraphGetFollows,
 	AtpSessionData,
+	ComAtprotoIdentityResolveHandle,
 } from '@atproto/api';
 import { getBskyAgent } from '../_router/_api.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
@@ -99,13 +100,29 @@ class BlueskyAccountsRouter implements AccountRoute {
 		}
 	}
 
-	async get(id: string): LibraryPromise<AppBskyActorGetProfile.Response> {
+	async get(did: string): LibraryPromise<AppBskyActorGetProfile.Response> {
 		const agent = getBskyAgent(this.dto);
 		try {
-			const data = await agent.getProfile({ actor: id });
+			const data = await agent.getProfile({ actor: did });
 			return { data };
 		} catch (e) {
 			return errorBuilder(e);
+		}
+	}
+
+	/**
+	 * Exchange handle for a did
+	 */
+	async getDid(
+		handle: string,
+	): LibraryPromise<ComAtprotoIdentityResolveHandle.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.resolveHandle({ handle });
+			return { data };
+		} catch (e) {
+			console.log('[WARN]: failed to resolve handle', e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

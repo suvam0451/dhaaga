@@ -1,34 +1,37 @@
 import { View, StyleSheet } from 'react-native';
 import { Text } from '@rneui/themed';
 import { Button } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import TitleOnlyStackHeaderContainer from '../../../containers/TitleOnlyStackHeaderContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { router } from 'expo-router';
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import AppTopNavbar from '../../../shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 function SelectProviderStack() {
-	const route = useRoute();
-	const navigation = useNavigation<any>();
+	const { colorScheme } = useAppTheme();
+	const { translateY } = useScrollMoreOnPageEnd();
 
 	return (
-		<TitleOnlyStackHeaderContainer
-			route={route}
-			navigation={navigation}
-			headerTitle={`Select Your SNS`}
-		>
+		<AppTopNavbar title={`Select Your SNS`} translateY={translateY}>
 			<View
 				style={{
 					flex: 1,
-					backgroundColor: APP_THEME.BACKGROUND,
+					backgroundColor: colorScheme.palette.bg,
 					height: '100%',
+					marginTop: 54,
 				}}
 			>
 				<View style={{ marginHorizontal: 12 }}>
 					{/* --- Bluesky --- */}
-					<View style={styles.selectSignInPlatformSection}>
+					<View
+						style={[
+							styles.selectSignInPlatformSection,
+							{ backgroundColor: colorScheme.palette.menubar },
+						]}
+					>
 						<View style={styles.selectSignInPlatformCenter}>
 							<SoftwareHeader software={KNOWN_SOFTWARE.BLUESKY} mb={0} mt={0} />
 							<Text style={styles.platformDescription}>
@@ -52,7 +55,12 @@ function SelectProviderStack() {
 					</View>
 
 					{/* --- Mastodon --- */}
-					<View style={styles.selectSignInPlatformSection}>
+					<View
+						style={[
+							styles.selectSignInPlatformSection,
+							{ backgroundColor: colorScheme.palette.menubar },
+						]}
+					>
 						<View style={styles.selectSignInPlatformCenter}>
 							<SoftwareHeader
 								software={KNOWN_SOFTWARE.MASTODON}
@@ -79,7 +87,12 @@ function SelectProviderStack() {
 					</View>
 
 					{/* --- Misskey --- */}
-					<View style={styles.selectSignInPlatformSection}>
+					<View
+						style={[
+							styles.selectSignInPlatformSection,
+							{ backgroundColor: colorScheme.palette.menubar },
+						]}
+					>
 						<View style={styles.selectSignInPlatformCenter}>
 							<SoftwareHeader software={KNOWN_SOFTWARE.MISSKEY} mb={0} mt={0} />
 							<Text style={styles.platformDescription}>
@@ -105,7 +118,7 @@ function SelectProviderStack() {
 					</View>
 				</View>
 			</View>
-		</TitleOnlyStackHeaderContainer>
+		</AppTopNavbar>
 	);
 }
 

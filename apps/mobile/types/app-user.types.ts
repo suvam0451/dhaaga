@@ -4,7 +4,8 @@ export const ActivityPubUserDTO = z.object({
 	id: z.string(),
 	avatarUrl: z.string(),
 	displayName: z.string().nullable(),
-	handle: z.string().regex(/^@.*?@?.*?$/),
+	// regex(/^@.*?@?.*?$/),
+	handle: z.string(),
 	instance: z.string(),
 	banner: z.string().nullable().optional(),
 	meta: z.object({

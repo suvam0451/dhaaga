@@ -10,15 +10,15 @@ const TopNavbarGeneric = ({ title }: HeadersProps) => {
 	const { colorScheme } = useAppTheme();
 	return (
 		<View
-			style={[
-				styles.subHeader,
-				{ backgroundColor: colorScheme.palette.menubar },
-			]}
+			style={[styles.subHeader, { backgroundColor: colorScheme.palette.bg }]}
 		>
 			<TopNavbarBackButton />
 			<View style={styles.navbarTitleContainer}>
 				<Text
-					style={[styles.navbarTitle, { color: colorScheme.textColor.high }]}
+					style={[
+						styles.navbarTitle,
+						{ color: colorScheme.textColor.emphasisC },
+					]}
 				>
 					{title}
 				</Text>

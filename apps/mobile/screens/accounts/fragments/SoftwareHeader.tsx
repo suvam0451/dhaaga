@@ -5,6 +5,7 @@ import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_FONT } from '../../../styles/AppTheme';
 import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type Props = {
 	software: string;
@@ -15,6 +16,7 @@ type Props = {
 const ICON_SIZE_MULTIPLIER = 1.2;
 
 const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
+	const { colorScheme } = useAppTheme();
 	const Theming = useKnownSoftware(software);
 	const _mt = mt === undefined ? 8 : mt;
 	const _mb = mb === undefined ? 12 : mb;
@@ -38,7 +40,14 @@ const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
 						opacity: 0.8,
 					}}
 				/>
-				<Text style={styles.accountCategoryText}>{Theming?.label}</Text>
+				<Text
+					style={[
+						styles.accountCategoryText,
+						{ color: colorScheme.textColor.medium },
+					]}
+				>
+					{Theming?.label}
+				</Text>
 			</View>
 		</View>
 	);

@@ -10,6 +10,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
 import { Accounts } from '../../../database/entities/account';
 import { useAccountDbContext } from '../../../components/screens/profile/stack/settings/hooks/useAccountDb';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type Props = {
 	setIsExpanded: (isExpanded: boolean) => void;
@@ -186,6 +187,7 @@ export const AccountDetails = memo(function Foo({
 	subdomain,
 	onClicked,
 }: selectedIndicatorProps) {
+	const { colorScheme } = useAppTheme();
 	return (
 		<TouchableOpacity
 			style={{ marginLeft: 8, flexGrow: 1 }}
@@ -194,7 +196,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					color: selected ? '#9dced7' : APP_FONT.MONTSERRAT_HEADER,
+					color: selected ? '#9dced7' : colorScheme.textColor.high,
 				}}
 				numberOfLines={1}
 			>
@@ -203,7 +205,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : APP_FONT.MONTSERRAT_BODY,
+					color: selected ? '#9dced7' : colorScheme.textColor.low,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -213,7 +215,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : APP_FONT.MONTSERRAT_HEADER,
+					color: selected ? '#9dced7' : colorScheme.textColor.medium,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -229,6 +231,7 @@ function AccountListingFragment({
 	setDeleteDialogExpanded,
 	acct,
 }: Props) {
+	const { colorScheme } = useAppTheme();
 	const { toggleSelect } = useAccountDbContext();
 	const [IsExpanded, setIsExpanded] = useState(false);
 
@@ -239,7 +242,7 @@ function AccountListingFragment({
 	return (
 		<View
 			style={{
-				backgroundColor: '#202020',
+				backgroundColor: colorScheme.palette.menubar,
 				padding: 8,
 				paddingVertical: 6,
 				marginBottom: 8,

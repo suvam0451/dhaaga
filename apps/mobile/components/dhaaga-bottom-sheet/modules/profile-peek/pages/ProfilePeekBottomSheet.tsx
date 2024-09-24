@@ -18,12 +18,16 @@ import RelationshipButtonCore from '../../../../common/relationship/Relationship
 import ProfileButtonPhonebook from '../../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
 import ProfileStats from '../../../../screens/(shared)/stack/profile/fragments/ProfileStats';
 
+/**
+ * This bottom sheet will show a preview
+ * of the selected user's profile.
+ */
 const ProfilePeekBottomSheet = memo(() => {
-	const { UserRef, UserIdRef, requestId } = useAppBottomSheet();
+	const { UserIdRef, requestId, HandleRef } = useAppBottomSheet();
 	const { Data: acct } = useGetProfile({
-		user: UserRef.current,
 		userId: UserIdRef.current,
 		requestId,
+		handle: HandleRef.current,
 	});
 
 	return (
@@ -67,7 +71,7 @@ const ProfilePeekBottomSheet = memo(() => {
 			</View>
 
 			<View style={localStyles.secondSectionContainer}>
-				<ProfileNameAndHandle style={{ flexShrink: 1 }} />
+				<ProfileNameAndHandle dto={acct} style={{ flexShrink: 1 }} />
 				<View style={localStyles.relationManagerSection}>
 					<View style={{ marginRight: 8 }}>
 						<Ionicons
