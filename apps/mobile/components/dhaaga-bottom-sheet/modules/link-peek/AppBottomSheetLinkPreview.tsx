@@ -1,33 +1,42 @@
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { getLinkPreview } from 'link-preview-js';
+import { useAppBottomSheet } from '../_api/useAppBottomSheet';
 import { View } from 'react-native';
-import { Divider, Text } from '@rneui/themed';
-import AppLoadingIndicator from '../error-screen/AppLoadingIndicator';
-import NoOpengraph from '../error-screen/NoOpengraph';
+import AppLoadingIndicator from '../../../error-screen/AppLoadingIndicator';
+import NoOpengraph from '../../../error-screen/NoOpengraph';
 import { Image } from 'expo-image';
-import ReadMoreText from '../utils/ReadMoreText';
+import { Divider, Text } from '@rneui/themed';
+import ReadMoreText from '../../../utils/ReadMoreText';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { APP_FONT } from '../../styles/AppTheme';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
-type ExternalLinkActionSheetProps = {
-	url: string;
-	displayName: string;
-};
-
-function ExternalLinkActionSheet({
-	url,
-	displayName,
-}: ExternalLinkActionSheetProps) {
-	const [Loading, setLoading] = useState(false);
+/**
+ * This bottom sheet will show a preview
+ * of the selected link url.
+ */
+const AppBottomSheetProfilePeek = memo(() => {
+	const { requestId, TextRef } = useAppBottomSheet();
 	// avoid duplicate resolution
+	const [Loading, setLoading] = useState(false);
 	const [IsParsed, setIsParsed] = useState(false);
 	const [OpenGraphData, setOpenGraphData] = useState(null);
 
+	const domain = useMemo(() => {
+		if (!OpenGraphData) return '';
+		try {
+			let domain = new URL(OpenGraphData.url);
+			return domain.hostname;
+		} catch (e) {
+			return OpenGraphData.url;
+		}
+	}, [OpenGraphData]);
+
 	async function resolveOpenGraph() {
+		if (!TextRef.current) return;
 		setOpenGraphData(null);
 		setLoading(true);
-		getLinkPreview(url)
+		getLinkPreview(TextRef.current)
 			.then((res) => {
 				setOpenGraphData(res as any);
 			})
@@ -42,17 +51,7 @@ function ExternalLinkActionSheet({
 
 	useEffect(() => {
 		resolveOpenGraph();
-	}, [url]);
-
-	const domain = useMemo(() => {
-		if (!OpenGraphData) return '';
-		try {
-			let domain = new URL(OpenGraphData.url);
-			return domain.hostname;
-		} catch (e) {
-			return OpenGraphData.url;
-		}
-	}, [OpenGraphData]);
+	}, [requestId]);
 
 	return (
 		<View
@@ -169,6 +168,6 @@ function ExternalLinkActionSheet({
 			</View>
 		</View>
 	);
-}
+});
 
-export default ExternalLinkActionSheet;
+export default AppBottomSheetProfilePeek;

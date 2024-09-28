@@ -6,23 +6,23 @@ import {
 	StyleSheet,
 	ScrollView,
 } from 'react-native';
-import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
-import ProfileNameAndHandle from '../../../../common/user/fragments/ProfileNameAndHandle';
+import useGetProfile from '../../../../hooks/api/accounts/useGetProfile';
+import { useAppBottomSheet } from '../_api/useAppBottomSheet';
+import ProfileAvatar from '../../../common/user/fragments/ProfileAvatar';
+import ProfileNameAndHandle from '../../../common/user/fragments/ProfileNameAndHandle';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { APP_FONT } from '../../../../../styles/AppTheme';
-import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
-import ProfileButtonMessage from '../../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
-import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
-import ProfileButtonPhonebook from '../../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
-import ProfileStats from '../../../../screens/(shared)/stack/profile/fragments/ProfileStats';
+import { APP_FONT } from '../../../../styles/AppTheme';
+import ProfileDesc from '../../../common/user/fragments/ProfileDesc';
+import ProfileButtonMessage from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
+import RelationshipButtonCore from '../../../common/relationship/RelationshipButtonCore';
+import ProfileButtonPhonebook from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
+import ProfileStats from '../../../screens/(shared)/stack/profile/fragments/ProfileStats';
 
 /**
  * This bottom sheet will show a preview
  * of the selected user's profile.
  */
-const ProfilePeekBottomSheet = memo(() => {
+const AppBottomSheetProfilePeek = memo(() => {
 	const { UserIdRef, requestId, HandleRef } = useAppBottomSheet();
 	const { Data: acct } = useGetProfile({
 		userId: UserIdRef.current,
@@ -94,11 +94,6 @@ const ProfilePeekBottomSheet = memo(() => {
 });
 
 const localStyles = StyleSheet.create({
-	rootScrollView: {
-		paddingTop: 50,
-		backgroundColor: '#121212',
-		minHeight: '100%',
-	},
 	parsedDescriptionContainer: {
 		marginTop: 12,
 		padding: 8,
@@ -147,4 +142,4 @@ const localStyles = StyleSheet.create({
 	},
 });
 
-export default ProfilePeekBottomSheet;
+export default AppBottomSheetProfilePeek;
