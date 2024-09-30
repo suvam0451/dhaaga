@@ -26,7 +26,6 @@
     "@expo/browser-polyfill": "^1.0.1",
     "@expo/metro-config": "~0.18.11",
     "@gorhom/bottom-sheet": "^5.0.0-alpha.11",
-    "@paralleldrive/cuid2": "^2.2.2",
     "@react-native/virtualized-lists": "^0.74.84",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/drawer": "^6.7.0",

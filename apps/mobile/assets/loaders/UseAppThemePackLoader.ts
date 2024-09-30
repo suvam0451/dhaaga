@@ -1,4 +1,4 @@
-import { Asset, useAssets } from 'expo-asset';
+import { Asset } from 'expo-asset';
 import { useEffect, useState } from 'react';
 import {
 	APP_BUILT_IN_THEMES,
@@ -30,6 +30,10 @@ export const DEFAULT_THEME_PACK_OBJECT: ThemePackType = {
 	composerDecoratorOutside: null,
 };
 
+/**
+ *	NOTE: not shipping icon theming due
+ *	to cost and app size implications
+ */
 function useAppThemePackLoader(packId: string) {
 	const [ActivePack, setActivePack] = useState<ThemePackType>(
 		DEFAULT_THEME_PACK_OBJECT,
@@ -37,15 +41,15 @@ function useAppThemePackLoader(packId: string) {
 	const [ActiveColorScheme, setActiveColorScheme] =
 		useState<AppColorSchemeType>(APP_DEFAULT_COLOR_SCHEME);
 
-	const [SakuraAssetPack, SakuraAssetPackError] = useAssets([
-		require('../licensed/packs/sakura/bookmark/active1.png'),
-		require('../licensed/packs/sakura/bookmark/active2.png'),
-		require('../licensed/packs/sakura/bookmark/inactive.png'),
-		require('../licensed/packs/sakura/home/banner.png'),
-		require('../licensed/packs/sakura/home/lantern2.png'),
-		require('../licensed/packs/sakura/home/assistant.png'),
-		require('../licensed/packs/sakura/composer/decorator_inset.png'),
-	]);
+	// const [SakuraAssetPack, SakuraAssetPackError] = useAssets([
+	// 	require('../licensed/packs/sakura/bookmark/active1.png'),
+	// 	require('../licensed/packs/sakura/bookmark/active2.png'),
+	// 	require('../licensed/packs/sakura/bookmark/inactive.png'),
+	// 	require('../licensed/packs/sakura/home/banner.png'),
+	// 	require('../licensed/packs/sakura/home/lantern2.png'),
+	// 	require('../licensed/packs/sakura/home/assistant.png'),
+	// 	require('../licensed/packs/sakura/composer/decorator_inset.png'),
+	// ]);
 
 	// const [UsagiThemePackAssets, UsagiThemePackError] = useAssets([
 	// 	require('../licensed/packs/usagi/bookmark/active1.png'),
@@ -65,24 +69,28 @@ function useAppThemePackLoader(packId: string) {
 	}, [packId]);
 
 	useEffect(() => {
-		if (SakuraAssetPack === undefined) return;
-		if (SakuraAssetPackError) {
-			setActivePack(DEFAULT_THEME_PACK_OBJECT);
-			return;
-		}
+		setActivePack(DEFAULT_THEME_PACK_OBJECT);
+	}, []);
 
-		setActivePack({
-			valid: true,
-			bookmarkInactive: SakuraAssetPack[2],
-			bookmarkActive1: SakuraAssetPack[0],
-			bookmarkActive2: SakuraAssetPack[1],
-			homeBanner: SakuraAssetPack[3],
-			homeLantern: SakuraAssetPack[4],
-			homeAssistant: SakuraAssetPack[5],
-			composerDecoratorInside: SakuraAssetPack[6],
-			composerDecoratorOutside: null,
-		});
-	}, [SakuraAssetPack, SakuraAssetPack]);
+	// useEffect(() => {
+	// 	if (SakuraAssetPack === undefined) return;
+	// 	if (SakuraAssetPackError) {
+	// 		setActivePack(DEFAULT_THEME_PACK_OBJECT);
+	// 		return;
+	// 	}
+	//
+	// 	setActivePack({
+	// 		valid: true,
+	// 		bookmarkInactive: SakuraAssetPack[2],
+	// 		bookmarkActive1: SakuraAssetPack[0],
+	// 		bookmarkActive2: SakuraAssetPack[1],
+	// 		homeBanner: SakuraAssetPack[3],
+	// 		homeLantern: SakuraAssetPack[4],
+	// 		homeAssistant: SakuraAssetPack[5],
+	// 		composerDecoratorInside: SakuraAssetPack[6],
+	// 		composerDecoratorOutside: null,
+	// 	});
+	// }, [SakuraAssetPack, SakuraAssetPack]);
 
 	return { ActivePack, ActiveColorScheme };
 }

@@ -2378,11 +2378,6 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.6.tgz#6b63a7b4ff3b7b410a038e3ee839c951a3136dc9"
   integrity sha512-NANtw+ead1rSDK1jxmzq3TYkl03UNK2KHqUYf1nIhNci6NkeqBD4s1njSzYGIlSHxCK+wSaL8RXZm4v+NF/pMw==
 
-"@noble/hashes@^1.1.5":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.5.0.tgz#abadc5ca20332db2b1b2aa3e496e9af1213570b0"
-  integrity sha512-1j6kQFb7QRru7eKN3ZDvRcP13rugwdxZqCjbiAVZfIJwgj2A65UmT4TgARXGlXgnRkORLTDTrO19ZErt7+QXgA==
-
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -2574,13 +2569,6 @@
     node-gyp "^10.0.0"
     proc-log "^4.0.0"
     which "^4.0.0"
-
-"@paralleldrive/cuid2@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/@paralleldrive/cuid2/-/cuid2-2.2.2.tgz#7f91364d53b89e2c9cb9e02e8dd0f129e834455f"
-  integrity sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==
-  dependencies:
-    "@noble/hashes" "^1.1.5"
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"

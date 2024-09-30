@@ -1,13 +1,11 @@
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { createId } from '@paralleldrive/cuid2';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { createSelectSchema } from 'drizzle-zod';
+import { integer } from 'drizzle-orm/sqlite-core/index';
 
 export const appSettings = sqliteTable('app_setting', {
-	id: text('id')
-		.$defaultFn(() => createId())
-		.notNull(),
+	id: integer('id').primaryKey({ autoIncrement: true }),
 	software: text('software').notNull(),
 	server: text('server').notNull(),
 	username: text('username').notNull(),
