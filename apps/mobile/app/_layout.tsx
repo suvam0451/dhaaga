@@ -20,7 +20,7 @@ import { useFonts } from '@expo-google-fonts/montserrat';
 import { enableMapSet } from 'immer';
 
 // database migration
-import { openDatabaseSync } from 'expo-sqlite/next';
+import { openDatabaseSync } from 'expo-sqlite';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 import migrations from '../database/migrations/migrations';

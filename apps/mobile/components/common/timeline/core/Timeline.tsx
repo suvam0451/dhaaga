@@ -1,16 +1,8 @@
 import { memo, useEffect, useState } from 'react';
-import {
-	Animated,
-	RefreshControl,
-	StatusBar,
-	StyleSheet,
-	View,
-} from 'react-native';
+import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import WithAppPaginationContext, {
-	useAppPaginationContext,
-} from '../../../../states/usePagination';
+import WithAppPaginationContext from '../../../../states/usePagination';
 import LoadingMore from '../../../screens/home/LoadingMore';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
@@ -24,7 +16,6 @@ import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndic
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import useTimeline from '../api/useTimeline';
 import useTimelineLabel from '../api/useTimelineLabel';
-import { APP_THEME } from '../../../../styles/AppTheme';
 import FlashListRenderer from '../fragments/FlashListRenderer';
 import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
@@ -37,17 +28,23 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import {
+	AppPaginationContext,
+	usePagination,
+	usePaginationActions,
+} from '../../../../states/local/pagination';
 
 /*
  * Render a Timeline
  */
 const Timeline = memo(() => {
+	const { maxId } = usePagination();
+	const { setNextMaxId, clear, next } = usePaginationActions();
+
 	const { timelineType, query, opts, setTimelineType } =
 		useTimelineController();
 	const { client, primaryAcct, domain, subdomain } =
 		useActivityPubRestClientContext();
-	const { setMaxId, updateQueryCache, queryCacheMaxId, clear } =
-		useAppPaginationContext();
 	const {
 		addPosts: appendTimelineData,
 		listItems,
@@ -69,11 +66,12 @@ const Timeline = memo(() => {
 		timelineDataStoreClear();
 	}, [timelineType, query, opts]);
 
+	console.log(maxId);
 	const { fetchStatus, data, status, refetch } = useTimeline({
 		type: timelineType,
 		query,
 		opts,
-		maxId: queryCacheMaxId,
+		maxId,
 	});
 
 	useEffect(() => {
@@ -84,7 +82,7 @@ const Timeline = memo(() => {
 			const cursor = _payload.data.cursor;
 			const posts = _payload.data.feed;
 
-			setMaxId(cursor);
+			setNextMaxId(cursor);
 			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, domain);
 			appendTimelineData(_data);
 			setPageLoadedAtLeastOnce(true);
@@ -92,7 +90,7 @@ const Timeline = memo(() => {
 		}
 
 		if (data?.length > 0) {
-			setMaxId(data[data.length - 1]?.id);
+			setNextMaxId(data[data.length - 1]?.id);
 			const _data = ActivityPubAdapterService.adaptManyStatuses(data, domain);
 			appendTimelineData(_data);
 			setPageLoadedAtLeastOnce(true);
@@ -122,7 +120,7 @@ const Timeline = memo(() => {
 	});
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: appendTimelineData.length,
-		updateQueryCache,
+		updateQueryCache: next,
 	});
 	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
 		fetchStatus,
@@ -172,11 +170,13 @@ const Timeline = memo(() => {
 function TimelineWrapper() {
 	return (
 		<WithTimelineControllerContext>
-			<WithAppPaginationContext>
-				<WithAppTimelineDataContext>
-					<Timeline />
-				</WithAppTimelineDataContext>
-			</WithAppPaginationContext>
+			<AppPaginationContext>
+				<WithAppPaginationContext>
+					<WithAppTimelineDataContext>
+						<Timeline />
+					</WithAppTimelineDataContext>
+				</WithAppPaginationContext>
+			</AppPaginationContext>
 		</WithTimelineControllerContext>
 	);
 }

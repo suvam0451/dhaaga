@@ -18,7 +18,6 @@
     "apps/web"
   ],
   "dependencies": {
-    "drizzle-orm": "^0.33.0",
     "prettier": "^3.3.2"
   },
   "prettier": {

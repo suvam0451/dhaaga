@@ -7,8 +7,6 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
 import { Text } from '@rneui/themed';
-import { ErrorBoundary } from 'react-error-boundary';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
@@ -156,25 +154,15 @@ export const AppVideoComponent = memo(function Foo({
 
 	return (
 		<View style={[styles.contentContainer, { height }]}>
-			<ErrorBoundary
-				fallback={
-					<View>
-						<Text style={{ fontFamily: APP_FONTS.INTER_600_SEMIBOLD }}>
-							Failed to render video. Url: ${modifiedUrl}
-						</Text>
-					</View>
-				}
-			>
-				<VideoView
-					ref={ref}
-					style={{
-						width: MEDIA_CONTAINER_WIDTH,
-						height,
-						borderRadius: 8,
-					}}
-					player={player}
-				/>
-			</ErrorBoundary>
+			<VideoView
+				ref={ref}
+				style={{
+					width: MEDIA_CONTAINER_WIDTH,
+					height,
+					borderRadius: 8,
+				}}
+				player={player}
+			/>
 		</View>
 	);
 });
@@ -303,8 +291,7 @@ export const CarousalIndicatorOverlay = memo(function Foo({
 				style={{
 					display: 'flex',
 					flexDirection: 'row',
-					justifyContent: 'center',
-					// backgroundColor: 'red',
+					justifyContent: 'center', // backgroundColor: 'red',
 					width: '100%',
 					alignItems: 'center',
 				}}

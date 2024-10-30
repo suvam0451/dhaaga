@@ -1,4 +1,4 @@
-import { deleteDatabaseSync, openDatabaseSync } from 'expo-sqlite/next';
+import { deleteDatabaseSync, openDatabaseSync } from 'expo-sqlite';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 import {
 	account,

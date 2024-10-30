@@ -1,15 +1,11 @@
 import { Stack } from 'expo-router/stack';
 import WithAppDrawerContext from '../../../states/useAppDrawer';
 import WithLocalAppMenuControllerContext from '../../../components/shared/fab/hooks/useFabController';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
-import { StatusBar } from 'expo-status-bar';
 
 function Layout() {
-	const { colorScheme } = useAppTheme();
 	return (
 		<WithLocalAppMenuControllerContext>
 			<WithAppDrawerContext>
-				{/*<StatusBar backgroundColor={colorScheme.palette.menubar} />*/}
 				<Stack
 					initialRouteName={'home-home'}
 					screenOptions={{ headerShown: false }}
