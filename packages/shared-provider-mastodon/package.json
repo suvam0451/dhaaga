@@ -25,17 +25,13 @@
   "dependencies": {
     "axios": "^1.6.8",
     "axios-case-converter": "^1.1.1",
-    "install": "^0.13.0",
     "masto": "^6.7.7",
-    "npm": "^10.8.1",
     "snakecase-keys": "^8.0.1"
   },
   "devDependencies": {
-    "tsup": "^8.1.0",
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p ./tsconfig.json"
   }
 }
