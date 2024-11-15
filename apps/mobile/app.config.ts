@@ -41,15 +41,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			projectId: '6a318c01-ca78-440f-840f-64c54ddc94fe',
 		},
 	},
+	newArchEnabled: true,
 	plugins: [
 		[
 			'expo-build-properties',
 			{
-				ios: {
-					newArchEnabled: true,
-				},
 				android: {
-					newArchEnabled: true,
 					enableProguardInReleaseBuilds: false,
 					enableShrinkResourcesInReleaseBuilds: false,
 					blockedPermissions: [

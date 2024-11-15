@@ -1,6 +1,7 @@
 import { ObjectSchema, Object } from 'realm';
 import { ActivityPubStatus } from './activitypub-status.entity';
 import { ActivityPubTag } from './activitypub-tag.entity';
+import * as SQLite from 'expo-sqlite';
 
 export class KeyValuePair extends Object {
 	_id: Realm.BSON.UUID;

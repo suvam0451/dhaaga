@@ -56,6 +56,7 @@ export function detectFacets(_text: string): Facet[] | undefined {
 	{
 		// links
 		const re =
+			// @ts-ignore-next-line
 			/(^|\s|\()((https?:\/\/[\S]+)|((?<domain>[a-z][a-z0-9]*(\.[a-z0-9]+)+)[\S]*))/gim;
 		while ((match = re.exec(text.utf16))) {
 			let uri = match[2];

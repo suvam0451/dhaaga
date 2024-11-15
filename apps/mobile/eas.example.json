@@ -1,7 +1,7 @@
 {
   "build": {
     "aab": {
-      "node": "22.6.0",
+      "node": "22.11.0",
       "android": {
         "buildType": "app-bundle"
       },
@@ -11,7 +11,7 @@
       }
     },
     "apk": {
-      "node": "22.6.0",
+      "node": "22.11.0",
       "android": {
         "buildType": "apk"
       },
@@ -21,7 +21,7 @@
       }
     },
     "dev": {
-      "node": "22.6.0",
+      "node": "22.11.0",
       "developmentClient": true,
       "distribution": "internal",
       "env": {
