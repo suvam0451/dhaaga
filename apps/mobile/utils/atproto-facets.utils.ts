@@ -98,6 +98,7 @@ export function detectFacets(_text: string): Facet[] | undefined {
 			let [tag] = match;
 			const hasLeadingSpace = /^\s/.test(tag);
 
+			// @ts-ignore-next-line
 			tag = tag.trim().replace(/\p{P}+$/gu, ''); // strip ending punctuation
 
 			// inclusive of #, max of 64 chars

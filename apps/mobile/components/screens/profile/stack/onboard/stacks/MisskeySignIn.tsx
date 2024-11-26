@@ -5,7 +5,6 @@ import WebView from 'react-native-webview';
 import { MainText } from '../../../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import * as Crypto from 'expo-crypto';
-
 import { verifyMisskeyToken } from '@dhaaga/shared-abstraction-activitypub';
 import AccountCreationPreview, {
 	AccountCreationPreviewProps,
@@ -16,7 +15,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavBar';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
-import AccountDbService from '../../../../../../database/services/account.service';
+import { AccountService } from '../../../../../../database/entities/account';
+import { useSQLiteContext } from 'expo-sqlite';
 
 function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');
@@ -29,6 +29,8 @@ function MisskeySignInStack() {
 	const _signInUrl: string = params['signInUrl'] as string;
 	const _subdomain: string = params['subdomain'] as string;
 	const _domain: string = params['domain'] as string;
+
+	const db = useSQLiteContext();
 
 	useEffect(() => {
 		try {
@@ -66,30 +68,26 @@ function MisskeySignInStack() {
 	}
 
 	async function onPressConfirm() {
-		try {
-			AccountDbService.upsert(
-				{
-					subdomain: _subdomain,
-					domain: _domain,
-					username: PreviewCard.username,
-					avatarUrl: PreviewCard.avatar,
-					displayName: PreviewCard.displayName,
-				},
-				[
-					{ key: 'display_name', value: PreviewCard.displayName },
-					{ key: 'avatar', value: PreviewCard.avatar },
-					{ key: 'user_id', value: MisskeyId },
-					{ key: 'access_token', value: Token },
-				],
-			)
-				.then(() => {
-					Alert.alert('Account Added');
-				})
-				.finally(() => {
-					router.replace('/profile/settings/accounts');
-				});
-		} catch (e) {
-			console.log(e);
+		const upsertResult = await AccountService.upsert(
+			db,
+			{
+				identifier: MisskeyId,
+				server: _subdomain,
+				driver: _domain,
+				username: PreviewCard.username,
+				avatarUrl: PreviewCard.avatar,
+				displayName: PreviewCard.displayName,
+			},
+			[
+				{ key: 'display_name', value: PreviewCard.displayName, type: 'string' },
+				{ key: 'avatar', value: PreviewCard.avatar, type: 'string' },
+				{ key: 'user_id', value: MisskeyId, type: 'string' },
+				{ key: 'access_token', value: Token, type: 'string' },
+			],
+		);
+		if (upsertResult.type === 'success') {
+			Alert.alert('Account Added');
+			router.replace('/profile/settings/accounts');
 		}
 	}
 

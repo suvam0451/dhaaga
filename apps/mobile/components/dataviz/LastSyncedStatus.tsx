@@ -4,7 +4,7 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 import { Fragment, memo, useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
-import { useObject } from '@realm/react';
+// import { useObject } from '@realm/react';
 import { Account } from '../../entities/account.entity';
 
 export enum LAST_SYNCED_STATUS_KEY {
@@ -22,28 +22,28 @@ const LastSyncedStatus = memo(({ id }: Props) => {
 	const [LastSyncedDate, setLastSyncedDate] = useState(null);
 	const [TotalItemCount, setTotalItemCount] = useState(null);
 
-	const acct = useObject(Account, PrimaryAcctPtr.current);
+	// const acct = useObject(Account, PrimaryAcctPtr.current);
 
 	useEffect(() => {
 		switch (id) {
 			case LAST_SYNCED_STATUS_KEY.BOOKMARK_SYNC: {
-				setLastSyncedDate(acct?.bookmarksLastSyncedAt);
-				setTotalItemCount(acct.bookmarks.length);
+				// setLastSyncedDate(acct?.bookmarksLastSyncedAt);
+				// setTotalItemCount(acct.bookmarks.length);
 				break;
 			}
 			case LAST_SYNCED_STATUS_KEY.FAVOURITE_SYNC: {
-				setLastSyncedDate(acct?.favouritesLastSyncedAt);
+				// setLastSyncedDate(acct?.favouritesLastSyncedAt);
 				break;
 			}
 			case LAST_SYNCED_STATUS_KEY.HASHTAG_SYNC: {
-				setLastSyncedDate(acct.hashtagsLastSyncedAt);
+				// setLastSyncedDate(acct.hashtagsLastSyncedAt);
 				break;
 			}
 			default: {
 				setLastSyncedDate(null);
 			}
 		}
-	}, [id, acct]);
+	}, [id]);
 
 	if (LastSyncedDate) {
 		return (

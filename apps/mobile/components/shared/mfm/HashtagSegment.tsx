@@ -4,8 +4,8 @@ import {
 	useGorhomActionSheetContext,
 } from '../../../states/useGorhomBottomSheet';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import { useQuery } from '@realm/react';
-import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
+// import { useQuery } from '@realm/react';
+// import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
 import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { Text } from 'react-native';
 import { randomUUID } from 'expo-crypto';
@@ -24,9 +24,10 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 	const { setVisible, setBottomSheetType, updateRequestId } =
 		useGorhomActionSheetContext();
 	const { globalDb } = useGlobalMmkvContext();
-	const item = useQuery(ActivityPubTag).find(
-		(o: ActivityPubTag) => o.name.toLowerCase() === _value.toLowerCase(),
-	);
+	const item = null;
+	// useQuery(ActivityPubTag).find(
+	// 	(o: ActivityPubTag) => o.name.toLowerCase() === _value.toLowerCase(),
+	// );
 
 	const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
 		return {

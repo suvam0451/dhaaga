@@ -2,22 +2,22 @@ import {
 	ActivityPubServer,
 	ActivityPubServerCreateDTO,
 } from '../entities/activitypub-server.entity';
-import { Realm } from 'realm';
+// import { Realm } from 'realm';
 import { ActivityPubCustomEmojiItem } from '../entities/activitypub-emoji.entity';
 import { UpdateMode } from 'realm';
 
 export class ActivityPubServerRepository {
-	db: Realm;
-	constructor(db: Realm) {
-		this.db = db;
-	}
+	// db: Realm;
+	// constructor(db: Realm) {
+	// 	this.db = db;
+	// }
 
-	static create(db: Realm) {
-		return new ActivityPubServerRepository(db);
+	static create(db) {
+		// return new ActivityPubServerRepository(db);
 	}
 
 	get(subdomain: string) {
-		return ActivityPubServerRepository.get(this.db, subdomain);
+		// return ActivityPubServerRepository.get(this.db, subdomain);
 	}
 
 	/**
@@ -27,31 +27,31 @@ export class ActivityPubServerRepository {
 	 * @param target
 	 */
 	isReactionFetchRateLimited(target: ActivityPubServer) {
-		return this.db.write(() => {
-			const lastFetched = target.customEmojisLastFetchedAt;
-			if (!lastFetched) {
-				target.customEmojisLastFetchedAt = new Date();
-				target.customEmojisRetryCount = 1;
-				return false;
-			}
-
-			if (target.customEmojisRetryCount >= 5) {
-				const now = new Date();
-				const oneWeekAgo = new Date(now);
-				oneWeekAgo.setDate(now.getDate() - 7);
-
-				if (new Date(lastFetched) >= oneWeekAgo) {
-					return true;
-				}
-
-				target.customEmojisRetryCount = 1;
-				target.customEmojisLastFetchedAt = new Date();
-				return false;
-			}
-
-			target.customEmojisRetryCount++;
-			return false;
-		});
+		// return this.db.write(() => {
+		// 	const lastFetched = target.customEmojisLastFetchedAt;
+		// 	if (!lastFetched) {
+		// 		target.customEmojisLastFetchedAt = new Date();
+		// 		target.customEmojisRetryCount = 1;
+		// 		return false;
+		// 	}
+		//
+		// 	if (target.customEmojisRetryCount >= 5) {
+		// 		const now = new Date();
+		// 		const oneWeekAgo = new Date(now);
+		// 		oneWeekAgo.setDate(now.getDate() - 7);
+		//
+		// 		if (new Date(lastFetched) >= oneWeekAgo) {
+		// 			return true;
+		// 		}
+		//
+		// 		target.customEmojisRetryCount = 1;
+		// 		target.customEmojisLastFetchedAt = new Date();
+		// 		return false;
+		// 	}
+		//
+		// 	target.customEmojisRetryCount++;
+		// 	return false;
+		// });
 	}
 
 	/**
@@ -67,16 +67,16 @@ export class ActivityPubServerRepository {
 
 		const match = this.get(db, removeHttps);
 		try {
-			return db.create(
-				ActivityPubServer,
-				{
-					_id: match?._id || new Realm.BSON.UUID(),
-					url: match?.url || removeHttps,
-					description: match?.description || 'N/A',
-					type: software ? software : match?.type || 'unknown',
-				},
-				UpdateMode.Modified,
-			);
+			// return db.create(
+			// 	ActivityPubServer,
+			// 	{
+			// 		_id: match?._id || new Realm.BSON.UUID(),
+			// 		url: match?.url || removeHttps,
+			// 		description: match?.description || 'N/A',
+			// 		type: software ? software : match?.type || 'unknown',
+			// 	},
+			// 	UpdateMode.Modified,
+			// );
 		} catch (e) {
 			console.log('[ERROR]: server upsert failed', e);
 			return null;
@@ -110,19 +110,15 @@ export class ActivityPubServerRepository {
 		}
 	}
 
-	static get(db: Realm, url: string): ActivityPubServer {
+	static get(db: Realm, url: string) {
 		url = url.replace(/^https?:\/\//, '');
-		return db
-			.objects(ActivityPubServer)
-			.find((o: ActivityPubServer) => o?.url === url);
+		// return db
+		// 	.objects(ActivityPubServer)
+		// 	.find((o: ActivityPubServer) => o?.url === url);
 	}
 
-	static updateEmojisLastFetchedAt(
-		db: Realm,
-		subdomain: string,
-		lastSyncedAt: Date,
-	) {
-		const match = this.get(db, subdomain);
-		match.customEmojisLastFetchedAt = lastSyncedAt;
+	static updateEmojisLastFetchedAt(db, subdomain: string, lastSyncedAt: Date) {
+		// const match = this.get(db, subdomain);
+		// match.customEmojisLastFetchedAt = lastSyncedAt;
 	}
 }

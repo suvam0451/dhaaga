@@ -1,4 +1,4 @@
-import { List, ObjectSchema, Object } from 'realm';
+// import { List, ObjectSchema, Object } from 'realm';
 import { AppSetting } from './app-settings.entity';
 import { z } from 'zod';
 
@@ -12,22 +12,21 @@ export const AppProfileDTO = AppProfileCreateDTO.extend({
 });
 
 export class AppProfile extends Object {
-	_id: Realm.BSON.UUID;
-	name: string;
-	selected: boolean;
-	settings: List<AppSetting>;
-
-	static schema: ObjectSchema = {
-		name: 'AppProfile',
-		primaryKey: '_id',
-		properties: {
-			_id: 'uuid',
-			name: 'string',
-			selected: {
-				type: 'bool',
-				default: false,
-			},
-			settings: `AppSetting[]`,
-		},
-	};
+	// _id: Realm.BSON.UUID;
+	// name: string;
+	// selected: boolean;
+	// settings: List<AppSetting>;
+	// static schema: ObjectSchema = {
+	// 	name: 'AppProfile',
+	// 	primaryKey: '_id',
+	// 	properties: {
+	// 		_id: 'uuid',
+	// 		name: 'string',
+	// 		selected: {
+	// 			type: 'bool',
+	// 			default: false,
+	// 		},
+	// 		settings: `AppSetting[]`,
+	// 	},
+	// };
 }

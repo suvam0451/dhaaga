@@ -13,11 +13,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import { SoftwareBadgeUpdateAccountOnClick } from '../common/software/SimpleBadge';
 import ActivityPubService from '../../services/activitypub.service';
 import AccountOverviewFragment from './accounts/_AccountOverview';
-import { Accounts } from '../../database/entities/account';
-import AccountDbService from '../../database/services/account.service';
+import { Account } from '../../database/_schema';
+import { AccountService } from '../../database/entities/account';
+import { useSQLiteContext } from 'expo-sqlite';
 
 type Props = {
-	acct: Accounts;
+	acct: Account;
 } & RneuiDialogProps;
 
 const AccountInfoSyncDialog = memo(function Foo({
@@ -27,13 +28,13 @@ const AccountInfoSyncDialog = memo(function Foo({
 }: Props) {
 	const [SoftwareAutoDetectLoading, setSoftwareAutoDetectLoading] =
 		useState(false);
-
+	const db = useSQLiteContext();
 	const autoDetectSoftware = useCallback(async () => {
 		if (SoftwareAutoDetectLoading) return;
 		setSoftwareAutoDetectLoading(true);
 		try {
 			const software = await ActivityPubService.detectSoftware(acct.server);
-			AccountDbService.setSoftware(acct, software).then();
+			AccountService.updateDriver(db, acct, software);
 		} catch (e) {
 			console.log(e);
 		}

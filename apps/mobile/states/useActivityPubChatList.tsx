@@ -4,8 +4,6 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { createContext, useContext, useMemo, useState } from 'react';
 import CryptoService from '../services/crypto.service';
-import { useRealm } from '@realm/react';
-import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 
 type AppConversationDTO = {
 	id: string;
@@ -64,8 +62,6 @@ type Props = {
 function WithActivitypubChatRoomContext({ children }: Props) {
 	const [Conversations, setConversations] = useState([]);
 	const [Rooms, setRooms] = useState([]);
-	const realm = useRealm();
-	const { me } = useActivityPubRestClientContext();
 
 	const SeenRooms = useMemo(() => {
 		return new Map<string, ActivityPubChatRoomDTO>();

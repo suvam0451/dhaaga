@@ -1,4 +1,4 @@
-import { ObjectSchema, Object } from 'realm';
+// import { ObjectSchema, Object } from 'realm';
 import { ActivityPubStatus } from './activitypub-status.entity';
 import { ActivityPubUser } from './activitypub-user.entity';
 import { ActivityPubServer } from './activitypub-server.entity';
@@ -17,23 +17,23 @@ export class ActivityPubConversation extends Object {
 	chatroom!: ActivityPubChatRoom;
 
 	static primaryKey = '_id';
-	static schema: ObjectSchema = {
-		name: 'ActivityPubConversation',
-		primaryKey: '_id',
-		properties: {
-			_id: 'uuid',
-			conversationId: 'string',
-			latestStatus: `${ENTITY.ACTIVITYPUB_STATUS}?`,
-			participants: `${ENTITY.ACTIVITYPUB_USER}[]`,
-			me: `${ENTITY.ACTIVITYPUB_USER}?`,
-			server: `${ENTITY.ACTIVITYPUB_SERVER}?`,
-			chatroom: {
-				type: 'linkingObjects',
-				objectType: ENTITY.ACTIVITYPUB_CHATROOM,
-				property: 'conversations',
-			},
-			hash: 'string',
-			unread: 'bool',
-		},
-	};
+	// static schema: ObjectSchema = {
+	// 	name: 'ActivityPubConversation',
+	// 	primaryKey: '_id',
+	// 	properties: {
+	// 		_id: 'uuid',
+	// 		conversationId: 'string',
+	// 		latestStatus: `${ENTITY.ACTIVITYPUB_STATUS}?`,
+	// 		participants: `${ENTITY.ACTIVITYPUB_USER}[]`,
+	// 		me: `${ENTITY.ACTIVITYPUB_USER}?`,
+	// 		server: `${ENTITY.ACTIVITYPUB_SERVER}?`,
+	// 		chatroom: {
+	// 			type: 'linkingObjects',
+	// 			objectType: ENTITY.ACTIVITYPUB_CHATROOM,
+	// 			property: 'conversations',
+	// 		},
+	// 		hash: 'string',
+	// 		unread: 'bool',
+	// 	},
+	// };
 }

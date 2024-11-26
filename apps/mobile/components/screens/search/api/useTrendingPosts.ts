@@ -2,7 +2,7 @@ import { useActivityPubRestClientContext } from '../../../../states/useActivityP
 import { useAppPaginationContext } from '../../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useRealm } from '@realm/react';
+// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
@@ -15,7 +15,7 @@ function useTrendingPosts() {
 		queryCacheMaxId,
 	} = useAppPaginationContext();
 	const [IsLoading, setIsLoading] = useState(false);
-	const db = useRealm();
+	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
 	async function api() {
@@ -51,12 +51,12 @@ function useTrendingPosts() {
 			 * Resolve Software + Custom Emojis
 			 */
 			for (const datum of dataI) {
-				ActivitypubStatusService.factory(datum, domain, subdomain)
-					.resolveInstances()
-					.syncSoftware(db)
-					.then((res) => {
-						res.syncCustomEmojis(db, globalDb).then(() => {});
-					});
+				// ActivitypubStatusService.factory(datum, domain, subdomain)
+				// 	.resolveInstances()
+				// 	.syncSoftware(db)
+				// 	.then((res) => {
+				// 		res.syncCustomEmojis(db, globalDb).then(() => {});
+				// 	});
 			}
 		}
 	}, [fetchStatus]);

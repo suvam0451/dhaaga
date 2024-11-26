@@ -19,14 +19,12 @@ import useTimelineLabel from '../api/useTimelineLabel';
 import FlashListRenderer from '../fragments/FlashListRenderer';
 import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
-import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import {
 	AppPaginationContext,
@@ -50,7 +48,7 @@ const Timeline = memo(() => {
 		listItems,
 		clear: timelineDataStoreClear,
 	} = useAppTimelinePosts();
-	const db = useRealm();
+	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
 	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
@@ -99,15 +97,15 @@ const Timeline = memo(() => {
 			 * Resolve Software + Custom Emojis
 			 */
 			for (const datum of _data) {
-				ActivitypubStatusService.factory(datum, domain, subdomain)
-					.resolveInstances()
-					.syncSoftware(db)
-					.then((res) => {
-						res.syncCustomEmojis(db, globalDb).then(() => {});
-					});
+				// ActivitypubStatusService.factory(datum, domain, subdomain)
+				// 	.resolveInstances()
+				// 	.syncSoftware(db)
+				// 	.then((res) => {
+				// 		res.syncCustomEmojis(db, globalDb).then(() => {});
+				// 	});
 			}
 		}
-	}, [fetchStatus, db]);
+	}, [fetchStatus]);
 
 	const label = useTimelineLabel();
 	const { colorScheme } = useAppTheme();

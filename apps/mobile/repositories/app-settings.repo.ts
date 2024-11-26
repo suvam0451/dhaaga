@@ -1,4 +1,4 @@
-import { Realm } from 'realm';
+// import { Realm } from 'realm';
 import {
 	AppSetting,
 	AppSettingCreateDTO,
@@ -10,7 +10,7 @@ class AppSettingsRepository {
 	 * Ensure that the setting
 	 * is populated with defaults
 	 */
-	static init(db: Realm, dto: z.infer<typeof AppSettingCreateDTO>) {
+	static init(db, dto: z.infer<typeof AppSettingCreateDTO>) {
 		const match = this.find(db, dto.key);
 		if (!match) return this.create(db, dto);
 	}
@@ -21,12 +21,12 @@ class AppSettingsRepository {
 	 * @param db
 	 * @param dto
 	 */
-	static upsert(db: Realm, dto: z.infer<typeof AppSettingCreateDTO>) {
+	static upsert(db, dto: z.infer<typeof AppSettingCreateDTO>) {
 		const match = this.find(db, dto.key);
 		if (!match) return this.create(db, dto);
 	}
 
-	static update(db: Realm, key: string, value: string) {
+	static update(db, key: string, value: string) {
 		const match = this.find(db, key);
 		if (!match) {
 			console.log('[WARN]: setting key not found', key);
@@ -35,16 +35,16 @@ class AppSettingsRepository {
 		match.value = value;
 	}
 
-	static create(db: Realm, dto: z.infer<typeof AppSettingCreateDTO>) {
+	static create(db, dto: z.infer<typeof AppSettingCreateDTO>) {
 		const { data, error } = AppSettingCreateDTO.safeParse(dto);
 		if (error) {
 			console.log('[WARN]: invalid setting create payload');
 			return null;
 		}
-		db.create(AppSetting, {
-			_id: new Realm.BSON.UUID(),
-			...data,
-		});
+		// db.create(AppSetting, {
+		// 	_id: new Realm.BSON.UUID(),
+		// 	...data,
+		// });
 	}
 
 	static find(db: Realm, key: string) {

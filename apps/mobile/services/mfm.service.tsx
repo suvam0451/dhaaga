@@ -3,7 +3,6 @@ import { randomUUID } from 'expo-crypto';
 import LinkProcessor from '../components/common/link/LinkProcessor';
 import { EmojiService } from './emoji.service';
 import { MMKV } from 'react-native-mmkv';
-import { Realm } from 'realm';
 import TextParserService from './text-parser';
 import type { MfmNode } from '@dhaaga/shared-abstraction-activitypub';
 import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
@@ -16,7 +15,6 @@ import { AppColorSchemeType } from '../styles/BuiltinThemes';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
-	protected readonly db: Realm;
 	protected readonly globalDb: MMKV;
 	protected readonly myDomain: string;
 	protected readonly mySubdomain: string;
@@ -40,7 +38,6 @@ class MfmComponentBuilder {
 
 	constructor({
 		input,
-		db,
 		globalDb,
 		targetSubdomain,
 		mySubdomain,
@@ -52,7 +49,6 @@ class MfmComponentBuilder {
 		colorScheme,
 	}: {
 		input: string;
-		db: Realm;
 		globalDb: MMKV;
 		myDomain: string;
 		mySubdomain: string;
@@ -67,7 +63,6 @@ class MfmComponentBuilder {
 		colorScheme: AppColorSchemeType;
 	}) {
 		this.input = input;
-		this.db = db;
 		this.globalDb = globalDb;
 		this.emojis = new Set<string>();
 		this.targetSubdomain = targetSubdomain;
@@ -122,14 +117,14 @@ class MfmComponentBuilder {
 
 	loadEmojis() {
 		if (this.emojis.size === 0) return;
-		EmojiService.loadEmojisForInstanceSync(
-			this.db,
-			this.globalDb,
-			this.targetSubdomain || this.mySubdomain,
-			{
-				selection: this.emojis,
-			},
-		);
+		// EmojiService.loadEmojisForInstanceSync(
+		// 	this.db,
+		// 	this.globalDb,
+		// 	this.targetSubdomain || this.mySubdomain,
+		// 	{
+		// 		selection: this.emojis,
+		// 	},
+		// );
 	}
 
 	preprocess() {
@@ -417,7 +412,6 @@ class MfmService {
 			emojiMap,
 			domain,
 			subdomain,
-			db,
 			globalDb,
 			remoteSubdomain,
 			fontFamily,
@@ -429,7 +423,6 @@ class MfmService {
 			subdomain: string;
 			emojiMap: Map<string, string>;
 			globalDb: MMKV;
-			db: Realm;
 			remoteSubdomain?: string;
 			fontFamily?: string;
 			emphasis?: 'high' | 'medium' | 'low';
@@ -456,7 +449,6 @@ class MfmService {
 
 		const solver = new MfmComponentBuilder({
 			input,
-			db,
 			globalDb,
 			myDomain: domain,
 			mySubdomain: subdomain,

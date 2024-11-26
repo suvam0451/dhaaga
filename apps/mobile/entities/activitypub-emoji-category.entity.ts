@@ -1,4 +1,4 @@
-import { ObjectSchema, Object } from 'realm';
+// import { ObjectSchema, Object } from 'realm';
 import { ActivityPubCustomEmojiItem } from './activitypub-emoji.entity';
 import { ENTITY } from './_entities';
 
@@ -7,16 +7,16 @@ export class ActivityPubCustomEmojiCategory extends Object {
 	name: string;
 	emojis: Realm.List<ActivityPubCustomEmojiItem>;
 
-	static schema: ObjectSchema = {
-		name: 'ActivityPubCustomEmojiCategory',
-		primaryKey: '_id',
-
-		properties: {
-			_id: 'uuid',
-			name: 'string',
-
-			// relations
-			emojis: `${ENTITY.ACTIVITYPUB_CUSTOM_EMOJI_ITEM}[]`,
-		},
-	};
+	// static schema: ObjectSchema = {
+	// 	name: 'ActivityPubCustomEmojiCategory',
+	// 	primaryKey: '_id',
+	//
+	// 	properties: {
+	// 		_id: 'uuid',
+	// 		name: 'string',
+	//
+	// 		// relations
+	// 		emojis: `${ENTITY.ACTIVITYPUB_CUSTOM_EMOJI_ITEM}[]`,
+	// 	},
+	// };
 }

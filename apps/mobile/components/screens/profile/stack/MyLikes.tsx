@@ -15,7 +15,7 @@ import WithAppTimelineDataContext, {
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import { useEffect } from 'react';
-import { useRealm } from '@realm/react';
+// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import ActivityPubService from '../../../../services/activitypub.service';
@@ -23,7 +23,7 @@ import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function Core() {
-	const db = useRealm();
+	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 	const { domain, subdomain } = useActivityPubRestClientContext();
 	const { updateQueryCache, queryCacheMaxId, setMaxId } =
@@ -41,14 +41,14 @@ function Core() {
 		setMaxId(data[data.length - 1].getId());
 		addPosts(data);
 		for (const status of data) {
-			ActivitypubStatusService.factory(status, domain, subdomain)
-				.resolveInstances()
-				.syncSoftware(db)
-				.then((res) => {
-					res.syncCustomEmojis(db, globalDb).then(() => {});
-				});
+			// ActivitypubStatusService.factory(status, domain, subdomain)
+			// 	.resolveInstances()
+			// 	.syncSoftware(db)
+			// 	.then((res) => {
+			// 		res.syncCustomEmojis(db, globalDb).then(() => {});
+			// 	});
 		}
-	}, [data, db, globalDb, domain, subdomain]);
+	}, [data, globalDb, domain, subdomain]);
 
 	const { visible, loading } = useLoadingMoreIndicatorState({ fetchStatus });
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({

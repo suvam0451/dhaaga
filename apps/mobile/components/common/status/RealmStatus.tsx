@@ -1,4 +1,4 @@
-import { useObject } from '@realm/react';
+// import { useObject } from '@realm/react';
 import { ActivityPubStatus } from '../../../entities/activitypub-status.entity';
 import { View, StyleSheet } from 'react-native';
 import useMfm from '../../hooks/useMfm';
@@ -34,41 +34,42 @@ function getAccountDisplayName(
  */
 const RealmStatus = memo(function Foo({ _id }: { _id: Realm.BSON.UUID }) {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	const post = useObject(ActivityPubStatus, _id);
+	// const post = useObject(ActivityPubStatus, _id);
 
-	const { content } = useMfm({
-		content: post.content,
-		remoteSubdomain: post.postedBy.server.url,
-		emojiMap: new Map(),
-		deps: [post._id],
-	});
+	// const { content } = useMfm({
+	// 	content: post.content,
+	// 	remoteSubdomain: post.postedBy.server.url,
+	// 	emojiMap: new Map(),
+	// 	deps: [post._id],
+	// });
 
-	return (
-		<View style={styles.container}>
-			<View style={{ display: 'flex', flexDirection: 'row', marginBottom: 16 }}>
-				<View style={{ width: 48, height: 48 }}>
-					<OriginalPostedPfpFragment
-						url={post.postedBy.avatarUrl}
-						onClick={() => {}}
-					/>
-				</View>
-				<OriginalPosterPostedByFragment
-					onClick={() => {}}
-					theirSubdomain={post.postedBy.server.url}
-					displayNameRaw={post.postedBy.displayName}
-					instanceUrl={getAccountDisplayName(
-						post.postedBy.username,
-						post.postedBy.server.url,
-						primaryAcct.subdomain,
-					)}
-					postedAt={post.createdAt}
-					visibility={post.visibility}
-				/>
-			</View>
-			{content}
-			<RealmMediaItem data={post.mediaAttachments} />
-		</View>
-	);
+	return <View />;
+	// return (
+	// 	<View style={styles.container}>
+	// 		<View style={{ display: 'flex', flexDirection: 'row', marginBottom: 16 }}>
+	// 			<View style={{ width: 48, height: 48 }}>
+	// 				<OriginalPostedPfpFragment
+	// 					url={post.postedBy.avatarUrl}
+	// 					onClick={() => {}}
+	// 				/>
+	// 			</View>
+	// 			<OriginalPosterPostedByFragment
+	// 				onClick={() => {}}
+	// 				theirSubdomain={post.postedBy.server.url}
+	// 				displayNameRaw={post.postedBy.displayName}
+	// 				instanceUrl={getAccountDisplayName(
+	// 					post.postedBy.username,
+	// 					post.postedBy.server.url,
+	// 					primaryAcct.subdomain,
+	// 				)}
+	// 				postedAt={post.createdAt}
+	// 				visibility={post.visibility}
+	// 			/>
+	// 		</View>
+	// 		{content}
+	// 		<RealmMediaItem data={post.mediaAttachments} />
+	// 	</View>
+	// );
 });
 
 const styles = StyleSheet.create({

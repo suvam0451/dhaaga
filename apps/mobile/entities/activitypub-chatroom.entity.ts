@@ -1,4 +1,4 @@
-import { ObjectSchema, Object } from 'realm';
+// import { ObjectSchema, Object } from 'realm';
 import { ActivityPubConversation } from './activitypub-conversation.entity';
 import { ActivityPubUser } from './activitypub-user.entity';
 import { ENTITY } from './_entities';
@@ -14,23 +14,23 @@ export class ActivityPubChatRoom extends Object {
 	createdAt: Date = new Date();
 
 	static primaryKey = '_id';
-	static schema: ObjectSchema = {
-		name: 'ActivityPubChatRoom',
-		primaryKey: '_id',
-		properties: {
-			_id: 'uuid',
-			hash: 'string',
-
-			// relations
-			participants: 'ActivityPubUser[]',
-			me: `${ENTITY.ACTIVITYPUB_USER}?`,
-			conversations: `${ENTITY.ACTIVITYPUB_CONVERSATION}[]`,
-
-			// meta
-			createdAt: {
-				type: 'date',
-				default: new Date(),
-			},
-		},
-	};
+	// static schema: ObjectSchema = {
+	// 	name: 'ActivityPubChatRoom',
+	// 	primaryKey: '_id',
+	// 	properties: {
+	// 		_id: 'uuid',
+	// 		hash: 'string',
+	//
+	// 		// relations
+	// 		participants: 'ActivityPubUser[]',
+	// 		me: `${ENTITY.ACTIVITYPUB_USER}?`,
+	// 		conversations: `${ENTITY.ACTIVITYPUB_CONVERSATION}[]`,
+	//
+	// 		// meta
+	// 		createdAt: {
+	// 			type: 'date',
+	// 			default: new Date(),
+	// 		},
+	// 	},
+	// };
 }

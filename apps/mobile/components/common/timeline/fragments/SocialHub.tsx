@@ -1,7 +1,7 @@
 import {
+	Button,
 	Pressable,
 	ScrollView,
-	StatusBar,
 	StyleSheet,
 	Text,
 	View,
@@ -12,7 +12,6 @@ import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useTimelineController } from '../api/useTimelineController';
-import { useQuery } from '@realm/react';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from 'expo-router';
@@ -22,6 +21,7 @@ import SocialHubLantern from '../../../screens/home/stack/landing/fragments/Soci
 import SocialHubAssistant from '../../../screens/home/stack/landing/fragments/SocialHubAssistant';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import SocialHubQuickDestinations from '../../../screens/home/stack/landing/fragments/SocialHubQuickDestinations';
+import { DbMetaRepo } from '../../../../database/repositories/_meta.repo';
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
 	MORNING = 'Morning',
@@ -252,7 +252,7 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 
 function SocialHub() {
 	const [TimeOfDay, setTimeOfDay] = useState<TIME_OF_DAY>(TIME_OF_DAY.UNKNOWN);
-	const userDataTimelines = useQuery(UserDataTimeline).filter((o) => o.pinned);
+	const userDataTimelines = []; // useQuery(UserDataTimeline).filter((o) => o.pinned);
 	const { colorScheme } = useAppTheme();
 
 	useEffect(() => {
@@ -298,6 +298,9 @@ function SocialHub() {
 		);
 	}, [userDataTimelines]);
 
+	function onDemoFunctionPress() {
+		DbMetaRepo.listTables();
+	}
 	return (
 		<View
 			style={{
@@ -319,6 +322,7 @@ function SocialHub() {
 						paddingHorizontal: 8,
 					}}
 				>
+					<Button title={'Sample Press'} onPress={onDemoFunctionPress} />
 					<SocialHubLantern />
 					{TimeOfDay === TIME_OF_DAY.MORNING && (
 						<Text

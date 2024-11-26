@@ -1,5 +1,5 @@
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
-import { useRealm } from '@realm/react';
+// import { useRealm } from '@realm/react';
 import { useCallback } from 'react';
 import { EmojiService } from '../../services/emoji.service';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
@@ -11,17 +11,17 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
  */
 function useAppCustomEmoji() {
 	const { domain, subdomain } = useActivityPubRestClientContext();
-	const { db } = useRealm();
+	// const { db } = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
 	const find = useCallback((id: string, remoteSubdomain?: string) => {
-		return EmojiService.find({
-			db,
-			globalDb,
-			subdomain: remoteSubdomain || subdomain,
-			domain,
-			id,
-		});
+		// return EmojiService.find({
+		// 	db,
+		// 	globalDb,
+		// 	subdomain: remoteSubdomain || subdomain,
+		// 	domain,
+		// 	id,
+		// });
 	}, []);
 
 	return { find };

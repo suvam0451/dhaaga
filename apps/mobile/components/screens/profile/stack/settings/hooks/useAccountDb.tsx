@@ -1,12 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Accounts } from '../../../../../../database/entities/account';
-import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
-import { getLiveClient } from '../../../../../../database/client';
-import AccountDbService from '../../../../../../database/services/account.service';
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
+import { useSQLiteContext } from 'expo-sqlite';
+import { Account } from '../../../../../../database/_schema';
+import { AccountService } from '../../../../../../database/entities/account';
 
 type Type = {
-	accounts: Accounts[];
+	accounts: Account[];
 	toggleSelect: (id: number) => void;
 	remove: (id: number) => void;
 };
@@ -27,76 +26,49 @@ type Props = {
 	children: any;
 };
 
-const client = getLiveClient();
-
 function WithAccountDbContext({ children }: Props) {
 	const { regenerate } = useActivityPubRestClientContext();
-	const [Data, setData] = useState<Accounts[]>([]);
-	const { data } = useLiveQuery(
-		client.query.account.findMany({
-			with: {
-				meta: true,
-			},
-		}),
-	);
+	const db = useSQLiteContext();
+	const [Data, setData] = useState<Account[]>([]);
 
-	useEffect(() => {
-		setData(data);
-	}, [data]);
-
-	async function _refresh() {
-		client.query.account
-			.findMany({
-				with: {
-					meta: true,
-				},
-			})
-			.then((res) => {
-				setData(res);
-			})
-			.catch((e) => {
-				console.log(e);
-				setData([]);
-			})
-			.finally(() => {
-				regenerate();
-			});
+	function refresh() {
+		AccountService.getAll(db).then((res) => {
+			if (res.type === 'success') setData(res.value);
+			setData([]);
+		});
 	}
 
 	useEffect(() => {
-		_refresh();
-	}, []);
+		refresh();
+	}, [db]);
 
-	function toggleSelect(id: number) {
+	function toggleSelection(id: number) {
 		const match = Data.find((o) => o.id === id);
 		if (!match) return;
 
 		if (match.selected) {
-			AccountDbService.deselect(match.id as unknown as number).finally(() => {
-				_refresh();
+			AccountService.deselect(db, match).finally(() => {
+				refresh();
 			});
 		} else {
-			AccountDbService.select(match.id as unknown as number).then(() => {
-				_refresh();
+			AccountService.select(db, match).finally(() => {
+				refresh();
 			});
 			// FIXME: fix this
 			// await EmojiService.refresh(db, globalDb, acct.server, true);
 		}
 	}
 
-	/**
-	 * Clear all known keys used for exchanging raw objects
-	 * between components
-	 */
 	function remove(id: number) {
-		AccountDbService.remove(id).finally(() => {
-			console.log('[INFO]: deleted acct');
-			_refresh();
+		AccountService.removeById(db, id).finally(() => {
+			refresh();
 		});
 	}
 
 	return (
-		<AccountDbContext.Provider value={{ accounts: Data, toggleSelect, remove }}>
+		<AccountDbContext.Provider
+			value={{ accounts: Data, toggleSelect: toggleSelection, remove }}
+		>
 			{children}
 		</AccountDbContext.Provider>
 	);

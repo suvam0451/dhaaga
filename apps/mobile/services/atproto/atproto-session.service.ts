@@ -1,22 +1,26 @@
-import { jwtDecode } from 'jwt-decode';
 import { Agent, AtpSessionData, CredentialSession } from '@atproto/api';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { Accounts } from '../../database/entities/account';
+import { AccountService } from '../../database/entities/account';
 import AccountMetaService from '../../database/services/account-secret.service';
-import AccountDbService from '../../database/services/account.service';
+import { Account } from '../../database/_schema';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { AccountMetadataService } from '../../database/entities/account-metadata';
+import { jwtDecode } from '../../utils/jwt-decode.utils';
 
 /**
  * Helps manage session
  * for an atproto based account
  */
 class AtprotoSessionService {
-	private readonly acct: Accounts;
+	private readonly db: SQLiteDatabase;
+	private readonly acct: Account;
 	private readonly sessionManager: CredentialSession;
 	private nextSession: AtpSessionData;
 	private oldSession: AtpSessionData;
 	private nextStatusCode: string;
 
-	constructor(acct: Accounts) {
+	constructor(db: SQLiteDatabase, acct: Account) {
+		this.db = db;
 		this.acct = acct;
 		this.sessionManager = new CredentialSession(
 			new URL(AtprotoSessionService.cleanLink(this.acct.server)),
@@ -27,12 +31,16 @@ class AtprotoSessionService {
 			},
 		);
 
-		const secret = this.acct.meta.find((o) => o.key === 'session')?.value;
+		const secret = AccountMetadataService.getKeyValueForAccountSync(
+			db,
+			this.acct,
+			'session',
+		);
 		this.oldSession = JSON.parse(secret);
 	}
 
-	static create(acct: Accounts) {
-		return new AtprotoSessionService(acct);
+	static create(db: SQLiteDatabase, acct: Account) {
+		return new AtprotoSessionService(db, acct);
 	}
 
 	private static cleanLink(urlLike: string) {
@@ -58,7 +66,13 @@ class AtprotoSessionService {
 		 * to work around network errors (in which case, old token
 		 * would be attempted to be used)
 		 */
-		const _jwt: any = jwtDecode(this.sessionManager.session.accessJwt);
+		const jwtDecodeResult = jwtDecode(this.sessionManager.session.accessJwt);
+		if (jwtDecodeResult.type !== 'success') {
+			console.log('[WARN]: failed to parse jwt token');
+			return this;
+		}
+		const _jwt: any = jwtDecodeResult.value;
+
 		const IS_EXPIRED = _jwt.exp < Math.floor(new Date().getTime() / 1000);
 
 		try {
@@ -117,11 +131,13 @@ class AtprotoSessionService {
 	/**
 	 * Attempt to log in using
 	 * submitted credentials
+	 * @param db
 	 * @param username
 	 * @param appPassword
 	 * @param service
 	 */
 	static async login(
+		db: SQLiteDatabase,
 		username: string,
 		appPassword: string,
 		service: string = 'https://bsky.social',
@@ -158,10 +174,11 @@ class AtprotoSessionService {
 			const _username = res.data.handle;
 			const did = res.data.did;
 
-			await AccountDbService.upsert(
+			await AccountService.upsert(
+				db,
 				{
-					subdomain: instance,
-					domain: KNOWN_SOFTWARE.BLUESKY,
+					server: instance,
+					driver: KNOWN_SOFTWARE.BLUESKY,
 					username: _username,
 					avatarUrl,
 					displayName,
@@ -170,30 +187,37 @@ class AtprotoSessionService {
 					{
 						key: 'display_name',
 						value: displayName,
+						type: 'string',
 					},
 					{
 						key: 'avatar',
 						value: avatarUrl,
+						type: 'string',
 					},
 					{
 						key: 'access_token',
 						value: accessToken,
+						type: 'string',
 					},
 					{
 						key: 'refresh_token',
 						value: refreshToken,
+						type: 'string',
 					},
 					{
 						key: 'did',
 						value: did,
+						type: 'string',
 					},
 					{
 						key: 'app_password',
 						value: appPassword,
+						type: 'string',
 					},
 					{
 						key: 'session',
 						value: JSON.stringify(storedSession),
+						type: 'json',
 					},
 				],
 			);

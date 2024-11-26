@@ -5,7 +5,6 @@ import {
 import { Realm } from 'realm';
 import { Account } from '../entities/account.entity';
 import ActivityPubAdapterService from './activitypub-adapter.service';
-import AccountRepository from '../repositories/account.repo';
 import { Dispatch, SetStateAction } from 'react';
 
 class BookmarkBrowserService {
@@ -60,11 +59,12 @@ class BookmarkBrowserService {
 			db.write(() => {
 				for (const statusI of statusIs) {
 					try {
-						AccountRepository.upsertBookmark(db, primaryAcct, {
-							status: statusI,
-							subdomain: primaryAcct.subdomain,
-							domain: primaryAcct.domain,
-						});
+						// TODO: re-implement this in sqlite
+						// AccountRepository.upsertBookmark(db, primaryAcct, {
+						// 	status: statusI,
+						// 	subdomain: primaryAcct.subdomain,
+						// 	domain: primaryAcct.domain,
+						// });
 					} catch (e) {
 						console.log('[ERROR]: upserting bookmark', e, statusI.getId());
 					}

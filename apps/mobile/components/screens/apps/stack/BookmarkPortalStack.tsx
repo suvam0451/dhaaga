@@ -13,7 +13,7 @@ import useSyncWithProgress, {
 } from '../../../hooks/tasks/useSyncWithProgress';
 import BookmarkGalleryAdvanced from '../../../dialogs/BookmarkGalleryAdvanced';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useObject } from '@realm/react';
+// import { useObject } from '@realm/react';
 import { Account } from '../../../../entities/account.entity';
 
 export function BookmarkNeverSyncedPrompt() {
@@ -159,10 +159,9 @@ export function BookmarkSyncedPrompt() {
 					marginTop: 4,
 				}}
 			>
-				Last Synced:{' '}
-				{primaryAcct?.bookmarksLastSyncedAt
-					? formatRelative(new Date(), primaryAcct?.bookmarksLastSyncedAt)
-					: ''}
+				Last Synced: {/*{primaryAcct?.bookmarksLastSyncedAt*/}
+				{/*	? formatRelative(new Date(), primaryAcct?.bookmarksLastSyncedAt)*/}
+				{/*	: ''}*/}
 			</Text>
 			<BookmarkGalleryAdvanced
 				IsVisible={BookmarkGallerySettingDialogVisible}
@@ -174,11 +173,12 @@ export function BookmarkSyncedPrompt() {
 
 const BookmarkPortalStack = memo(() => {
 	const { PrimaryAcctPtr } = useActivityPubRestClientContext();
-	const acct = useObject(Account, PrimaryAcctPtr.current);
+	// const acct = useObject(Account, PrimaryAcctPtr.current);
 
-	const BOOKMARK_LAST_SYNCED_AT = acct?.isValid()
-		? acct?.bookmarksLastSyncedAt
-		: null;
+	const BOOKMARK_LAST_SYNCED_AT = null;
+	// acct?.isValid()
+	// 	? acct?.bookmarksLastSyncedAt
+	// 	: null;
 
 	return (
 		<WithAutoHideTopNavBar title={'Bookmark Viewer'}>

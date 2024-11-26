@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { Skeleton, Text } from '@rneui/themed';
-import { useQuery } from '@realm/react';
+// import { useQuery } from '@realm/react';
 import { ActivityPubServer } from '../../../entities/activitypub-server.entity';
 import { memo, useEffect, useRef, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
@@ -222,8 +222,7 @@ const SortControllerItem = memo(function Foo({
 				) : (
 					<Text
 						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							// marginBottom: 8,
+							color: APP_FONT.MONTSERRAT_BODY, // marginBottom: 8,
 							textAlign: 'center',
 							fontSize: 16,
 							fontFamily: 'Montserrat-Bold',
@@ -382,8 +381,7 @@ const ServerItem = memo(function Foo({
 						justifyContent: 'flex-end',
 						alignItems: 'center',
 						display: 'flex',
-						flexDirection: 'row',
-						// opacity: 0.87,
+						flexDirection: 'row', // opacity: 0.87,
 					}}
 				>
 					{/*< */}
@@ -447,7 +445,7 @@ const FlashListRenderer = ({ item }: { item: ListItem }) => {
 };
 
 function ServerDebuggerStackBase() {
-	const servers = useQuery(ActivityPubServer);
+	const servers: any[] = []; // useQuery(ActivityPubServer);
 	const [SearchResults, setSearchResults] = useState<ActivityPubServer[]>([]);
 	const [FlashListProps, setFlashListProps] = useState<ListItem[]>([]);
 	const { searchText } = useSearchTermContext();
@@ -476,15 +474,14 @@ function ServerDebuggerStackBase() {
 				props: {
 					softwareServerCount: mapper,
 				},
-			},
-			...serversFiltered.slice(0, 10).map((o) => ({
-				type: ListItemType.ListItem,
-				props: {
-					url: o.url,
-					software: o.type,
-					emojiCount: o.emojis.length,
-				},
-			})),
+			}, // ...serversFiltered.slice(0, 10).map((o) => ({
+			// 	type: ListItemType.ListItem,
+			// 	props: {
+			// 		url: o.url,
+			// 		software: o.type,
+			// 		emojiCount: o.emojis.length,
+			// 	},
+			// })),
 		]);
 	}, [servers, searchText]);
 

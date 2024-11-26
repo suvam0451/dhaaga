@@ -2,13 +2,13 @@ import * as ImagePicker from 'expo-image-picker';
 import { useComposerContext } from './useComposerContext';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import ActivityPubProviderService from '../../../../../services/activitypub-provider.service';
-import { useRealm } from '@realm/react';
+// import { useRealm } from '@realm/react';
 import { useCallback } from 'react';
 
 function useImagePicker() {
 	const { primaryAcct, subdomain, domain } = useActivityPubRestClientContext();
 	const { addMediaTarget } = useComposerContext();
-	const db = useRealm();
+	// const db = useRealm();
 
 	const trigger = useCallback(async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -44,7 +44,7 @@ function useImagePicker() {
 				console.log(E);
 			}
 		}
-	}, [addMediaTarget, db, primaryAcct]);
+	}, [addMediaTarget, primaryAcct]);
 
 	return { trigger };
 }

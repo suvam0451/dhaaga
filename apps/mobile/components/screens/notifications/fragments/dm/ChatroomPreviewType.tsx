@@ -1,10 +1,10 @@
-import { useObject, useRealm } from '@realm/react';
+// import { useObject, useRealm } from '@realm/react';
 import { ActivityPubChatRoom } from '../../../../../entities/activitypub-chatroom.entity';
 import { useEffect, useMemo, useState } from 'react';
 import { Text } from '@rneui/themed';
 import { TouchableOpacity, View } from 'react-native';
-import { BSON } from 'realm';
-import UUID = BSON.UUID;
+// import { BSON } from 'realm';
+// import UUID = BSON.UUID;
 import { Image } from 'expo-image';
 import { ActivityPubUser } from '../../../../../entities/activitypub-user.entity';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -18,15 +18,13 @@ import { APP_FONT } from '../../../../../styles/AppTheme';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 
 type ChatroomPreviewType = {
-	roomId: UUID;
+	roomId: any;
 	modeFilter: 'me' | 'dm' | 'group';
 };
 
 function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
-	const { client, primaryAcct } = useActivityPubRestClientContext();
-	const chatroom = useObject(ActivityPubChatRoom, roomId);
-	const domain = primaryAcct?.domain;
-	const subdomain = primaryAcct?.subdomain;
+	const { domain, subdomain } = useActivityPubRestClientContext();
+	// const chatroom = useObject(ActivityPubChatRoom, roomId);
 
 	const navigation = useNavigation<any>();
 
@@ -37,66 +35,67 @@ function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
 	const [Status, setStatus] = useState<ActivityPubStatus>(null);
 	const [LastMessageBefore, setLastMessageBefore] = useState(null);
 
-	const me = chatroom?.me;
-	const db = useRealm();
+	// const me = chatroom?.me;
+	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
 	const ParsedValue = useMemo(() => {
 		const target = Status?.content;
 		if (!target) return <View></View>;
 
-		const { reactNodes } = MfmService.renderMfm(target, {
-			emojiMap: new Map(),
-			domain,
-			subdomain,
-			db,
-			globalDb,
-		});
-		return reactNodes?.map((para, i) => {
-			const uuid = randomUUID();
-			return (
-				<Text key={uuid} style={{ color: '#fff', opacity: 0.87 }}>
-					{para.map((o, j) => (
-						<Text key={j}>{o}</Text>
-					))}
-				</Text>
-			);
-		});
+		return <View></View>;
+		// const { reactNodes } = MfmService.renderMfm(target, {
+		// 	emojiMap: new Map(),
+		// 	domain,
+		// 	subdomain,
+		// 	db,
+		// 	globalDb,
+		// });
+		// return reactNodes?.map((para, i) => {
+		// 	const uuid = randomUUID();
+		// 	return (
+		// 		<Text key={uuid} style={{ color: '#fff', opacity: 0.87 }}>
+		// 			{para.map((o, j) => (
+		// 				<Text key={j}>{o}</Text>
+		// 			))}
+		// 		</Text>
+		// 	);
+		// });
 	}, [Status?.content]);
 
-	useEffect(() => {
-		if (
-			chatroom.participants.length === 1 &&
-			chatroom.participants[0].userId === chatroom.me.userId
-		) {
-			setIsSoloChat(true);
-		} else if (chatroom.participants.length === 2) {
-			setIsPairChat(true);
-			setParticipants(
-				chatroom.participants.filter((o) => o.userId !== chatroom.me.userId),
-			);
-		} else {
-			setIsGroupChat(true);
-			setParticipants(
-				chatroom.participants.filter((o) => o.userId !== chatroom.me.userId),
-			);
-		}
-
-		const statuses = chatroom.conversations.map((o) => o.latestStatus);
-		if (statuses.length === 0) return;
-
-		const sorted = statuses.sort((a, b) =>
-			a.createdAt > b.createdAt ? 1 : -1,
-		);
-		setStatus(sorted[0]);
-		setLastMessageBefore(sorted[0].createdAt);
-	}, [chatroom]);
+	// useEffect(() => {
+	// 	if (
+	// 		chatroom.participants.length === 1 &&
+	// 		chatroom.participants[0].userId === chatroom.me.userId
+	// 	) {
+	// 		setIsSoloChat(true);
+	// 	} else if (chatroom.participants.length === 2) {
+	// 		setIsPairChat(true);
+	// 		setParticipants(
+	// 			chatroom.participants.filter((o) => o.userId !== chatroom.me.userId),
+	// 		);
+	// 	} else {
+	// 		setIsGroupChat(true);
+	// 		setParticipants(
+	// 			chatroom.participants.filter((o) => o.userId !== chatroom.me.userId),
+	// 		);
+	// 	}
+	//
+	// 	const statuses = chatroom.conversations.map((o) => o.latestStatus);
+	// 	if (statuses.length === 0) return;
+	//
+	// 	const sorted = statuses.sort((a, b) =>
+	// 		a.createdAt > b.createdAt ? 1 : -1,
+	// 	);
+	// 	setStatus(sorted[0]);
+	// 	setLastMessageBefore(sorted[0].createdAt);
+	// }, [chatroom]);
 
 	function onClickChatroomItem() {
-		navigation.push('DirectMessagingRoom', { roomId: chatroom._id });
+		// navigation.push('DirectMessagingRoom', { roomId: chatroom._id });
 	}
 
-	const activeUserIsSender = Status?.postedBy?.userId === me?.userId;
+	const activeUserIsSender = false; // Status?.postedBy?.userId === me?.userId;
 
 	return (
 		<View
@@ -141,14 +140,14 @@ function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
 										/>
 									</View>
 
-									<Image
-										style={{
-											flex: 1,
-											backgroundColor: '#0553',
-											padding: 2,
-										}}
-										source={me?.avatarUrl}
-									/>
+									{/*<Image*/}
+									{/*	style={{*/}
+									{/*		flex: 1,*/}
+									{/*		backgroundColor: '#0553',*/}
+									{/*		padding: 2,*/}
+									{/*	}}*/}
+									{/*	source={me?.avatarUrl}*/}
+									{/*/>*/}
 								</View>
 							</View>
 							<View style={{ marginLeft: 8 }}>
@@ -159,7 +158,7 @@ function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
 										fontFamily: 'Montserrat-Bold',
 									}}
 								>
-									{me?.displayName}
+									{/*{me?.displayName}*/}
 								</Text>
 								<Text
 									style={{
@@ -168,7 +167,7 @@ function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
 										fontFamily: 'Montserrat-Bold',
 									}}
 								>
-									@{me?.username}@{me.server.url}
+									{/*@{me?.username}@{me.server.url}*/}
 								</Text>
 								<View>
 									{activeUserIsSender ? (
@@ -221,14 +220,14 @@ function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
 										borderRadius: 4,
 									}}
 								>
-									<Image
-										style={{
-											flex: 1,
-											backgroundColor: '#0553',
-											padding: 2,
-										}}
-										source={Participants[0]?.avatarUrl}
-									/>
+									{/*<Image*/}
+									{/*	style={{*/}
+									{/*		flex: 1,*/}
+									{/*		backgroundColor: '#0553',*/}
+									{/*		padding: 2,*/}
+									{/*	}}*/}
+									{/*	source={Participants[0]?.avatarUrl}*/}
+									{/*/>*/}
 								</View>
 							</View>
 							<View style={{ marginLeft: 8, flex: 1 }}>

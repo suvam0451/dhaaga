@@ -12,7 +12,7 @@ import {
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
 import AppSettingsPreferencesService from '../../../../services/app-settings/app-settings-preferences.service';
-import { useRealm } from '@realm/react';
+// import { useRealm } from '@realm/react';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
@@ -28,7 +28,7 @@ const EmojiReaction = memo(function Foo({
 	postDto: ActivityPubStatusAppDtoType;
 }) {
 	const { domain, subdomain, client } = useActivityPubRestClientContext();
-	const db = useRealm();
+	// const db = useRealm();
 	const {
 		TextRef,
 		PostRef,
@@ -67,9 +67,10 @@ const EmojiReaction = memo(function Foo({
 	}, [dto.interactable, dto.me, colorScheme]);
 
 	async function onReactionPress() {
-		const isQuickReactionEnabled =
-			AppSettingsPreferencesService.create(db).isQuickReactionEnabled();
-		if (isQuickReactionEnabled) {
+		// const isQuickReactionEnabled =
+		// 	AppSettingsPreferencesService.create(db).isQuickReactionEnabled();
+		// FIXME: make this dynamic
+		if (true) {
 			const IS_REMOTE = ActivitypubReactionsService.canReact(dto?.name);
 			if (!IS_REMOTE) {
 				const { id } = ActivitypubReactionsService.extractReactionCode(

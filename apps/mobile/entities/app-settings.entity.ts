@@ -1,4 +1,4 @@
-import { ObjectSchema, Object, BSON } from 'realm';
+// import { ObjectSchema, Object, BSON } from 'realm';
 import { z } from 'zod';
 
 export const AppSettingCreateDTO = z.object({
@@ -19,29 +19,29 @@ export class AppSetting
 	extends Object
 	implements z.infer<typeof AppSettingCreateDTO>
 {
-	_id: BSON.UUID;
+	// _id: BSON.UUID;
 	key: string;
 	value: string;
 	type: 'string' | 'boolean' | 'json';
 	createdAt: Date;
 	updatedAt: Date;
 
-	static schema: ObjectSchema = {
-		name: 'AppSetting',
-		primaryKey: '_id',
-		properties: {
-			_id: 'uuid',
-			key: 'string',
-			value: 'string',
-			type: 'string',
-			createdAt: {
-				type: 'date',
-				default: new Date(),
-			},
-			updatedAt: {
-				type: 'date',
-				default: new Date(),
-			},
-		},
-	};
+	// static schema: ObjectSchema = {
+	// 	name: 'AppSetting',
+	// 	primaryKey: '_id',
+	// 	properties: {
+	// 		_id: 'uuid',
+	// 		key: 'string',
+	// 		value: 'string',
+	// 		type: 'string',
+	// 		createdAt: {
+	// 			type: 'date',
+	// 			default: new Date(),
+	// 		},
+	// 		updatedAt: {
+	// 			type: 'date',
+	// 			default: new Date(),
+	// 		},
+	// 	},
+	// };
 }

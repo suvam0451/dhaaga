@@ -14,18 +14,18 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
-import { useGlobalMmkvContext } from './useGlobalMMkvCache';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
-import { Accounts } from '../database/entities/account';
-import { getLiveClient, schema } from '../database/client';
-import { eq } from 'drizzle-orm';
+import { useSQLiteContext } from 'expo-sqlite';
+import { Account } from '../database/_schema';
+import { AccountService } from '../database/entities/account';
+import { AccountMetadataService } from '../database/entities/account-metadata';
 
 type Type = {
 	client: ActivityPubClient;
 	me: UserInterface | null;
 	meRaw: mastodon.v1.Account | null;
-	primaryAcct: Accounts;
-	PrimaryAcctPtr: MutableRefObject<Accounts>;
+	primaryAcct: Account;
+	PrimaryAcctPtr: MutableRefObject<Account>;
 
 	/**
 	 * Call this function after change in
@@ -49,8 +49,6 @@ const defaultValue: Type = {
 
 const ActivityPubRestClientContext = createContext<Type>(defaultValue);
 
-const client = getLiveClient();
-
 export function useActivityPubRestClientContext() {
 	return useContext(ActivityPubRestClientContext);
 }
@@ -62,23 +60,16 @@ export function useActivityPubRestClientContext() {
  * @constructor
  */
 function WithActivityPubRestClient({ children }: any) {
+	const db = useSQLiteContext();
 	const [restClient, setRestClient] = useState<ActivityPubClient>(null);
 	const [Me, setMe] = useState(null);
 	const [MeRaw, setMeRaw] = useState(null);
-	// const db = useRealm();
-	const [PrimaryAcct, setPrimaryAcct] = useState<Accounts>(null);
+	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
 
-	const PrimaryAcctPtr = useRef<Accounts>(null);
-
-	const { globalDb } = useGlobalMmkvContext();
+	const PrimaryAcctPtr = useRef<Account>(null);
 
 	async function regenerateFn() {
-		const acct = await client.query.account.findFirst({
-			where: eq(schema.account.selected, true),
-			with: {
-				meta: true,
-			},
-		});
+		const acct = await AccountService.getSelected(db);
 		if (!acct) {
 			setRestClient(null);
 			setPrimaryAcct(null);
@@ -86,7 +77,11 @@ function WithActivityPubRestClient({ children }: any) {
 			return;
 		}
 
-		const token = acct.meta.find((o) => o.key === 'access_token')?.value;
+		const token = await AccountMetadataService.getKeyValueForAccountSync(
+			db,
+			acct,
+			'access_token',
+		);
 		if (!token) {
 			setRestClient(null);
 			return;
@@ -98,8 +93,8 @@ function WithActivityPubRestClient({ children }: any) {
 		};
 
 		// Built Different
-		if (acct.software === KNOWN_SOFTWARE.BLUESKY) {
-			const session = AtprotoSessionService.create(acct);
+		if (acct.driver === KNOWN_SOFTWARE.BLUESKY) {
+			const session = AtprotoSessionService.create(db, acct);
 			await session.resume();
 			const { success, data, reason } = await session.saveSession();
 			if (!success)
@@ -110,7 +105,7 @@ function WithActivityPubRestClient({ children }: any) {
 			};
 		}
 
-		const _client = ActivityPubClientFactory.get(acct.software as any, payload);
+		const _client = ActivityPubClientFactory.get(acct.driver as any, payload);
 		setRestClient(_client);
 		setPrimaryAcct(acct);
 		PrimaryAcctPtr.current = acct;
@@ -134,7 +129,7 @@ function WithActivityPubRestClient({ children }: any) {
 				return;
 			}
 			setMeRaw(data);
-			setMe(ActivityPubUserAdapter(data, PrimaryAcct?.software));
+			setMe(ActivityPubUserAdapter(data, PrimaryAcct?.driver));
 		});
 	}, [restClient]);
 
@@ -146,7 +141,7 @@ function WithActivityPubRestClient({ children }: any) {
 				meRaw: MeRaw,
 				primaryAcct: PrimaryAcct,
 				regenerate: regenerateFn,
-				domain: PrimaryAcct?.software,
+				domain: PrimaryAcct?.driver,
 				subdomain: PrimaryAcct?.server,
 				PrimaryAcctPtr,
 			}}

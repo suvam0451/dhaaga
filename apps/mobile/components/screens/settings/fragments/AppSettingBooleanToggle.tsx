@@ -11,7 +11,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
-import { useQuery, useRealm } from '@realm/react';
+// import { useQuery, useRealm } from '@realm/react';
 import { AppSetting } from '../../../../entities/app-settings.entity';
 import AppSettingService from '../../../../services/app-settings/app-settings';
 
@@ -26,18 +26,19 @@ const UNCHECKED_BG_COLOR = '#282828';
 
 const AppSettingBooleanToggle = memo(
 	({ label, subtext, style, settingKey }: AppSettingBooleanToggleProps) => {
-		const db = useRealm();
-		const setting: AppSetting = useQuery(AppSetting).find(
-			(o) => o.key === settingKey,
-		);
+		// const db = useRealm();
+		const setting: AppSetting = null;
+		// useQuery(AppSetting).find(
+		// 	(o) => o.key === settingKey,
+		// );
 
 		const IS_CHECKED = setting?.value === '1';
 		function toggle() {
-			AppSettingService.update(
-				db,
-				settingKey,
-				setting?.value === '1' ? '0' : '1',
-			);
+			// AppSettingService.update(
+			// 	db,
+			// 	settingKey,
+			// 	setting?.value === '1' ? '0' : '1',
+			// );
 		}
 
 		return (

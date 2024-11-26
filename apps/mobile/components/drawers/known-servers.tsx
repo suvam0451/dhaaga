@@ -58,10 +58,10 @@ function KnownServersDrawer({ children }: Props) {
 					<View style={{ display: 'flex', flexDirection: 'row', marginTop: 8 }}>
 						<View style={{ width: 48, height: 48 }}>
 							{/*@ts-ignore-next-line*/}
-							<Image
-								source={primaryAcct?.avatarUrl}
-								style={{ width: 48, height: 48 }}
-							/>
+							{/*<Image*/}
+							{/*	source={primaryAcct?.avatarUrl}*/}
+							{/*	style={{ width: 48, height: 48 }}*/}
+							{/*/>*/}
 						</View>
 						<View style={{}}>
 							{/*<Text>{primaryAcct.secrets}</Text>*/}

@@ -20,38 +20,38 @@ const EmojiCodeSegment = memo(function Foo({
 	value,
 	remoteInstance,
 }: Props) {
-	const db = useRealm();
+	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
 	const k = randomUUID();
-	const match = EmojiService.findCachedEmoji({
-		emojiMap,
-		db,
-		globalDb,
-		id: value,
-		remoteInstance,
-	});
-
-	if (!match)
-		return (
-			<Text key={k} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
-				{`:${value}:`}
-			</Text>
-		);
-
 	const [Width, setWidth] = useState(EMOJI_HEIGHT);
 
+	// const match = EmojiService.findCachedEmoji({
+	// 	emojiMap,
+	// 	db,
+	// 	globalDb,
+	// 	id: value,
+	// 	remoteInstance,
+	// });
+
+	// if (!match)
+	return (
+		<Text key={k} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
+			{`:${value}:`}
+		</Text>
+	);
+
 	useEffect(() => {
-		RNImage.getSize(
-			match,
-			(width, height) => {
-				setWidth(width * (EMOJI_HEIGHT / height));
-			},
-			() => {
-				setWidth(EMOJI_HEIGHT);
-			},
-		);
-	}, [match]);
+		// RNImage.getSize(
+		// 	match,
+		// 	(width, height) => {
+		// 		setWidth(width * (EMOJI_HEIGHT / height));
+		// 	},
+		// 	() => {
+		// 		setWidth(EMOJI_HEIGHT);
+		// 	},
+		// );
+	}, []);
 
 	return (
 		<Text style={{ alignItems: 'flex-end', flex: 1, position: 'relative' }}>
@@ -62,7 +62,7 @@ const EmojiCodeSegment = memo(function Foo({
 					top: 16,
 					position: 'absolute',
 				}}
-				source={{ uri: match }}
+				// source={{ uri: match }}
 			/>
 		</Text>
 	);

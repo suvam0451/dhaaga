@@ -1,7 +1,5 @@
-import { ObjectSchema, Object } from 'realm';
 import { ActivityPubStatus } from './activitypub-status.entity';
 import { ActivityPubTag } from './activitypub-tag.entity';
-import * as SQLite from 'expo-sqlite';
 
 export class KeyValuePair extends Object {
 	_id: Realm.BSON.UUID;
@@ -9,19 +7,6 @@ export class KeyValuePair extends Object {
 	value: string;
 	createdAt?: Date;
 	updatedAt?: Date;
-
-	static schema: ObjectSchema = {
-		name: 'KeyValuePair',
-		primaryKey: '_id',
-
-		properties: {
-			_id: 'uuid',
-			key: 'string',
-			value: 'string',
-			createdAt: 'date?',
-			updatedAt: 'date?',
-		},
-	};
 }
 
 export class Account extends Object {
@@ -47,30 +32,4 @@ export class Account extends Object {
 	hashtagsLastSyncedAt?: Date;
 
 	selected: boolean;
-
-	static schema: ObjectSchema = {
-		name: 'Account',
-		primaryKey: '_id',
-
-		properties: {
-			_id: 'uuid',
-			domain: 'string',
-			subdomain: 'string',
-			username: 'string',
-			password: 'string?',
-			displayName: 'string?',
-			createdAt: 'date',
-			updatedAt: 'date',
-			verified: 'bool?',
-			settings: 'KeyValuePair[]',
-			secrets: 'KeyValuePair[]',
-			bookmarks: 'ActivityPubStatus[]',
-			favourites: 'ActivityPubStatus[]',
-			hashtags: 'ActivityPubTag[]',
-			bookmarksLastSyncedAt: 'date?',
-			favouritesLastSyncedAt: 'date?',
-			hashtagsLastSyncedAt: 'date?',
-			selected: { type: 'bool', default: false },
-		},
-	};
 }

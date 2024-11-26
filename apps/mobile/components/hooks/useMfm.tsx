@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { Skeleton } from '@rneui/themed';
-import { useRealm } from '@realm/react';
+// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import * as Crypto from 'expo-crypto';
@@ -51,7 +51,7 @@ function useMfm({
 	emphasis,
 }: Props) {
 	const { domain, subdomain } = useActivityPubRestClientContext();
-	const db = useRealm();
+	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 	const { colorScheme } = useAppTheme();
 
@@ -133,7 +133,6 @@ function useMfm({
 			emojiMap: emojiMap || new Map(),
 			domain,
 			subdomain,
-			db,
 			globalDb,
 			remoteSubdomain,
 			fontFamily,

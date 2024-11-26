@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRealm } from '@realm/react';
+// import { useRealm } from '@realm/react';
 import BookmarkBrowserService from '../../../services/bookmark-browser.service';
 import AccountService from '../../../services/account.service';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
@@ -24,7 +24,7 @@ function useSyncWithProgress(
 	},
 ) {
 	const { client, primaryAcct } = useActivityPubRestClientContext();
-	const db = useRealm();
+	// const db = useRealm();
 
 	const [Numerator, setNumerator] = useState(0);
 	const [IsTaskRunning, setIsTaskRunning] = useState(false);
@@ -33,17 +33,17 @@ function useSyncWithProgress(
 		setIsTaskRunning(true);
 		switch (task) {
 			case ACTIVITYPUB_SYNC_TASK.BOOKMARK_SYNC: {
-				await BookmarkBrowserService.updateBookmarkCache(
-					primaryAcct,
-					client,
-					db,
-					setNumerator,
-				);
-				AccountService.updateBookmarkSyncStatus(db, primaryAcct);
+				// await BookmarkBrowserService.updateBookmarkCache(
+				// 	primaryAcct,
+				// 	client,
+				// 	db,
+				// 	setNumerator,
+				// );
+				// AccountService.updateBookmarkSyncStatus(db, primaryAcct);
 				break;
 			}
 			case ACTIVITYPUB_SYNC_TASK.CLEAR_BOOKMARK_CACHE: {
-				BookmarkBrowserService.clearBookmarkCache(db, primaryAcct);
+				// BookmarkBrowserService.clearBookmarkCache(db, primaryAcct);
 				break;
 			}
 			default: {

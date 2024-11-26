@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
-import { useQuery } from '@realm/react';
+// import { useQuery } from '@realm/react';
 import { ActivityPubTag } from '../../../../entities/activitypub-tag.entity';
 import { Button, Text } from '@rneui/themed';
 import { useEffect, useRef, useState } from 'react';
@@ -179,7 +179,8 @@ function TimelineWidgetHashtagScene() {
 
 	const [debouncedSearchTerm] = useDebounce(SearchTerm, 100);
 
-	const tags = useQuery(ActivityPubTag);
+	const tags = [];
+	// const tags = useQuery(ActivityPubTag);
 	const [SearchResults, setSearchResults] = useState<SearchResults[]>([]);
 
 	useEffect(() => {
