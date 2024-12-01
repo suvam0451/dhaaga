@@ -15,15 +15,14 @@ import WithAppTimelineDataContext, {
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import { useEffect } from 'react';
-// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import ActivityPubService from '../../../../services/activitypub.service';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
-import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
+import { useSQLiteContext } from 'expo-sqlite';
 
 function Core() {
-	// const db = useRealm();
+	const db = useSQLiteContext();
 	const { globalDb } = useGlobalMmkvContext();
 	const { domain, subdomain } = useActivityPubRestClientContext();
 	const { updateQueryCache, queryCacheMaxId, setMaxId } =

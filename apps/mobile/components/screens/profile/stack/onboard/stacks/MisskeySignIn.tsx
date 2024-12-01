@@ -68,6 +68,7 @@ function MisskeySignInStack() {
 	}
 
 	async function onPressConfirm() {
+		console.log('submitting...');
 		const upsertResult = await AccountService.upsert(
 			db,
 			{
@@ -88,6 +89,8 @@ function MisskeySignInStack() {
 		if (upsertResult.type === 'success') {
 			Alert.alert('Account Added');
 			router.replace('/profile/settings/accounts');
+		} else {
+			console.log(upsertResult);
 		}
 	}
 
@@ -98,7 +101,7 @@ function MisskeySignInStack() {
 
 	return (
 		<WithAutoHideTopNavBar translateY={translateY} title={`Misskey Sign-In`}>
-			<View style={{ height: '100%' }}>
+			<View style={{ height: '100%', marginTop: 52 }}>
 				{!SessionConfirmed && (
 					<WebView
 						style={{

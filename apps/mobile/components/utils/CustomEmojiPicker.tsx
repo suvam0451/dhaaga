@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import {
 	ScrollView,
 	View,
@@ -7,8 +6,6 @@ import {
 	Pressable,
 	TouchableWithoutFeedback,
 } from 'react-native';
-// import { useQuery } from '@realm/react';
-import { ActivityPubServer } from '../../entities/activitypub-server.entity';
 import { useEffect, useMemo, useState } from 'react';
 import { Input, Text } from '@rneui/themed';
 import { ActivityPubCustomEmojiItem } from '../../entities/activitypub-emoji.entity';

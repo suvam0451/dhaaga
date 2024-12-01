@@ -10,18 +10,17 @@ import ConfirmAccountDelete from '../../../../../dialogs/accounts/ConfirmAccount
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
 import AccountListForSoftware from '../../landing/fragments/AccountListForSoftware';
-import { Accounts } from '../../../../../../database/entities/account';
-import WithAccountDbContext from '../hooks/useAccountDb';
 import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../../shared/topnavbar/AppTopNavbar';
+import { Account } from '../../../../../../database/_schema';
 
-function SelectAccountStackCore() {
+function SelectAccountStack() {
 	const { colorScheme } = useAppTheme();
 	const [DialogVisible, setDialogVisible] = useState(false);
 	const [DeleteDialogVisible, setDeleteDialogVisible] = useState(false);
-	const DialogTarget = useRef<Accounts>(null);
+	const DialogTarget = useRef<Account>(null);
 
 	const SOFTWARE_ARRAY = [
 		KNOWN_SOFTWARE.AKKOMA,
@@ -104,14 +103,6 @@ function SelectAccountStackCore() {
 				}
 			/>
 		</AppTopNavbar>
-	);
-}
-
-function SelectAccountStack() {
-	return (
-		<WithAccountDbContext>
-			<SelectAccountStackCore />;
-		</WithAccountDbContext>
 	);
 }
 

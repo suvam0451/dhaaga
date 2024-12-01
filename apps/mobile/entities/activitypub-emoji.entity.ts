@@ -1,6 +1,4 @@
-// import { ObjectSchema, Object } from 'realm';
 import { ActivityPubCustomEmojiCategory } from './activitypub-emoji-category.entity';
-import { ENTITY } from './_entities';
 import { ActivityPubServer } from './activitypub-server.entity';
 
 export type ActivityPubCustomEmojiItemDTO = {
@@ -13,14 +11,14 @@ export type ActivityPubCustomEmojiItemDTO = {
 };
 
 export class ActivityPubCustomEmojiItem extends Object {
-	_id: Realm.BSON.UUID;
+	// _id: Realm.BSON.UUID;
 
 	shortcode: string;
 	url: string;
 	staticUrl: string;
 	visibleInPicker: boolean;
 
-	aliases: Realm.List<string>;
+	// aliases: Realm.List<string>;
 	timesUsed: number;
 	category?: ActivityPubCustomEmojiCategory;
 	server?: ActivityPubServer;

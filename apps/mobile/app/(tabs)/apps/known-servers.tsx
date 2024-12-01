@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 import { Skeleton, Text } from '@rneui/themed';
-// import { useQuery } from '@realm/react';
 import { ActivityPubServer } from '../../../entities/activitypub-server.entity';
 import { memo, useEffect, useRef, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';

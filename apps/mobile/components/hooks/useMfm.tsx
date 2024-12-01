@@ -3,7 +3,6 @@ import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { Skeleton } from '@rneui/themed';
-// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import * as Crypto from 'expo-crypto';

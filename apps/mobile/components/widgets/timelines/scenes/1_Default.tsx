@@ -6,56 +6,62 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Button, Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const ICON_SIZE = 20;
 
 function DefaultTimelineOptions() {
-	const { domain } = useActivityPubRestClientContext();
-	const { setTimelineType, setShowTimelineSelection } = useTimelineController();
+	const { driver, setHomepageType } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			setHomepageType: o.setHomepageType,
+		})),
+	);
+	const { setShowTimelineSelection } = useTimelineController();
 
 	function onClickHome() {
-		setTimelineType(TimelineFetchMode.HOME);
+		setHomepageType(TimelineFetchMode.HOME);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickLocal() {
-		setTimelineType(TimelineFetchMode.LOCAL);
+		setHomepageType(TimelineFetchMode.LOCAL);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickFederated() {
-		setTimelineType(TimelineFetchMode.FEDERATED);
+		setHomepageType(TimelineFetchMode.FEDERATED);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickGoToSocialHub() {
-		setTimelineType(TimelineFetchMode.IDLE);
+		setHomepageType(TimelineFetchMode.IDLE);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickBubble() {
-		setTimelineType(TimelineFetchMode.BUBBLE);
+		setHomepageType(TimelineFetchMode.BUBBLE);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickSocial() {
-		setTimelineType(TimelineFetchMode.SOCIAL);
+		setHomepageType(TimelineFetchMode.SOCIAL);
 		setShowTimelineSelection(false);
 	}
 
 	const BUBBLE_AVAILABLE = [
 		KNOWN_SOFTWARE.SHARKEY,
 		KNOWN_SOFTWARE.AKKOMA,
-	].includes(domain as KNOWN_SOFTWARE);
+	].includes(driver);
 
 	const SOCIAL_AVAILABLE = [
 		KNOWN_SOFTWARE.SHARKEY,
 		KNOWN_SOFTWARE.MISSKEY,
-	].includes(domain as KNOWN_SOFTWARE);
+	].includes(driver);
 
 	return (
 		<View style={{ display: 'flex', height: '100%' }}>
@@ -114,9 +120,7 @@ function DefaultTimelineOptions() {
 
 				<DefaultPinnedItem
 					label={
-						[KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
-							domain as any,
-						)
+						[KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(driver)
 							? 'Known Network'
 							: 'Federated'
 					}

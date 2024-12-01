@@ -4,14 +4,14 @@ import SoftwareHeader from '../../../../../../screens/accounts/fragments/Softwar
 import AccountListingFragment from '../../../../../../screens/accounts/fragments/AccountListingFragment';
 import NoAccounts from './NoAccounts';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { Accounts } from '../../../../../../database/entities/account';
 import { useAccountDbContext } from '../../settings/hooks/useAccountDb';
+import { Account } from '../../../../../../database/_schema';
 
 type AccountListForSoftwareProps = {
 	software: KNOWN_SOFTWARE;
 	setIsExpanded: (isExpanded: boolean) => void;
 	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: MutableRefObject<Accounts>;
+	dialogTarget: MutableRefObject<Account>;
 	style?: StyleProp<ViewStyle>;
 };
 
@@ -23,7 +23,7 @@ function AccountListForSoftware({
 	style,
 }: AccountListForSoftwareProps) {
 	const { accounts } = useAccountDbContext();
-	const data = accounts.filter((o) => o.software === software);
+	const data = accounts.filter((o) => o.driver === software);
 
 	return (
 		<View style={style}>

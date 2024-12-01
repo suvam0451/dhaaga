@@ -6,7 +6,6 @@ import MfmService from '../../../../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { Image } from 'expo-image';
 import { format } from 'date-fns';
-// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { Text } from '@rneui/themed';
@@ -15,8 +14,6 @@ import { APP_FONT } from '../../../../../styles/AppTheme';
 function ChatItem() {
 	const { status } = useActivitypubStatusContext();
 	const { me, domain, subdomain } = useActivityPubRestClientContext();
-
-	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 	const [UserInterface, setUserInterface] = useState(
 		ActivityPubUserAdapter(null, domain),

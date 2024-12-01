@@ -1,8 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
-// import { useQuery } from '@realm/react';
-import { ActivityPubTag } from '../../../../entities/activitypub-tag.entity';
 import { Button, Text } from '@rneui/themed';
 import { useEffect, useRef, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';

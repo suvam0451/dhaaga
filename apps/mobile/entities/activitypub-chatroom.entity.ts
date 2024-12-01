@@ -1,15 +1,12 @@
-// import { ObjectSchema, Object } from 'realm';
-import { ActivityPubConversation } from './activitypub-conversation.entity';
 import { ActivityPubUser } from './activitypub-user.entity';
-import { ENTITY } from './_entities';
 
 export class ActivityPubChatRoom extends Object {
-	_id: Realm.BSON.UUID;
+	// _id: Realm.BSON.UUID;
 	hash: string;
 	// relations
-	participants!: Realm.List<ActivityPubUser>;
+	// participants!: Realm.List<ActivityPubUser>;
 	me?: ActivityPubUser;
-	conversations: Realm.List<ActivityPubConversation>;
+	// conversations: Realm.List<ActivityPubConversation>;
 	// meta
 	createdAt: Date = new Date();
 

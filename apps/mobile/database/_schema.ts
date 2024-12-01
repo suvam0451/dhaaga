@@ -27,6 +27,12 @@ export type AccountMetadata = {
 	account?: Account;
 } & BaseEntity;
 
+// appProfile
+export type AppProfile = {
+	name: string;
+	selected: boolean;
+} & BaseEntity;
+
 // server
 export type Server = {
 	description: string;
@@ -42,6 +48,7 @@ export type ServerEmoji = {
 	visibleInPicker?: boolean;
 	timesUsed: number;
 	serverId: number; //fk
+	category?: string; // default=N/A
 } & BaseEntity;
 
 // serverEmojiAlias
@@ -50,10 +57,19 @@ export type ServerEmojiAlias = {
 	alias: string; // (composite key)
 } & BaseEntity;
 
+// hashtag
+export type Hashtag = {
+	name: string; // unique
+} & BaseEntity;
+
 // accountHashtag
 export type AccountHashtag = {
-	tag: string;
-	followed: number;
+	followed: boolean;
+	private: boolean;
+	hashtagId: number | null;
+	accountId: number | null;
+	account?: Account;
+	hashtag?: Hashtag;
 } & BaseEntity;
 
 export type PostMediaAttachment = {

@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
-import { StyleProp, TextStyle, View, Platform } from 'react-native';
+import { StyleProp, TextStyle, View, Platform, ViewStyle } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
@@ -33,7 +33,7 @@ type AppIconType = {
 	id: APP_ICON_ENUM;
 	emphasis?: 'high' | 'low' | 'medium' | 'c';
 	iconStyle?: StyleProp<TextStyle>;
-	containerStyle?: StyleProp<TextStyle>;
+	containerStyle?: StyleProp<ViewStyle>;
 	size?: number;
 	onPress?: () => void;
 };

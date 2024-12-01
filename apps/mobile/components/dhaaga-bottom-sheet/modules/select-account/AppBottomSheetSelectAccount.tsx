@@ -11,24 +11,42 @@ import {
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { router } from 'expo-router';
-import WithAccountDbContext, {
-	useAccountDbContext,
-} from '../../../screens/profile/stack/settings/hooks/useAccountDb';
-import { Accounts } from '../../../../database/entities/account';
+import { useAccountDbContext } from '../../../screens/profile/stack/settings/hooks/useAccountDb';
+import { Account } from '../../../../database/_schema';
+import { AccountMetadataService } from '../../../../database/entities/account-metadata';
+import { useSQLiteContext } from 'expo-sqlite';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type FlashListItemProps = {
-	acct: Accounts;
+	acct: Account;
 };
 
 const FlashListItem = memo(({ acct }: FlashListItemProps) => {
-	const { toggleSelect } = useAccountDbContext();
+	const { selectAccount, restoreSession } = useGlobalState(
+		useShallow((state) => ({
+			selectAccount: state.selectAccount,
+			restoreSession: state.restoreSession,
+		})),
+	);
+	const db = useSQLiteContext();
+
 	const { setVisible } = useAppBottomSheet();
 
-	const avatar = acct.meta.find((o) => o.key === 'avatar')?.value;
-	const displayName = acct.meta.find((o) => o.key === 'display_name')?.value;
+	const avatar = AccountMetadataService.getKeyValueForAccountSync(
+		db,
+		acct,
+		'avatar',
+	);
+	const displayName = AccountMetadataService.getKeyValueForAccountSync(
+		db,
+		acct,
+		'display_name',
+	);
 
 	async function onSelect() {
-		toggleSelect(acct.id as unknown as number);
+		await selectAccount(acct);
+		await restoreSession();
 		setVisible(false);
 	}
 
@@ -92,13 +110,14 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 							</Text>
 						)}
 					</View>
-					<SoftwareHeader software={acct.software} mb={4} mt={8} />
+					<SoftwareHeader software={acct.driver} mb={4} mt={8} />
 				</View>
 			</View>
 		</TouchableOpacity>
 	);
 });
-const AppBottomSheetSelectAccountCore = memo(() => {
+
+const AppBottomSheetSelectAccount = memo(() => {
 	const { isAnimating, setVisible } = useAppBottomSheet();
 	const { accounts } = useAccountDbContext();
 
@@ -163,13 +182,5 @@ const AppBottomSheetSelectAccountCore = memo(() => {
 		</View>
 	);
 });
-
-function AppBottomSheetSelectAccount() {
-	return (
-		<WithAccountDbContext>
-			<AppBottomSheetSelectAccountCore />
-		</WithAccountDbContext>
-	);
-}
 
 export default AppBottomSheetSelectAccount;

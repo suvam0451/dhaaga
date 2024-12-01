@@ -1,11 +1,5 @@
-// import { ObjectSchema, Object, BSON } from 'realm';
 import { z } from 'zod';
-
-export const AppSettingCreateDTO = z.object({
-	key: z.string(),
-	value: z.string(),
-	type: z.enum(['boolean', 'string', 'json'] as const),
-});
+import { AppSettingCreateDTO } from '../database/entities/app-setting';
 
 export type AppSettingCreateDTOType = z.infer<typeof AppSettingCreateDTO>;
 

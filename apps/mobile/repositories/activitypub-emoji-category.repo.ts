@@ -1,24 +1,19 @@
-// import {Realm} from "@realm/react";
 import { ActivityPubCustomEmojiCategory } from '../entities/activitypub-emoji-category.entity';
-import { UpdateMode } from 'realm';
 import { ActivityPubCustomEmojiItem } from '../entities/activitypub-emoji.entity';
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export class ActivityPubCustomEmojiCategoryRepository {
-	static clearAll(db) {
-		db.delete(db.objects(ActivityPubCustomEmojiCategory));
-	}
-
 	static pushEmoji(
-		db,
+		db: SQLiteDatabase,
 		target: ActivityPubCustomEmojiCategory,
 		emoji: ActivityPubCustomEmojiItem,
 	) {
-		const conflict = target.emojis.find(
-			(o) => o._id.toString() === emoji._id.toString(),
-		);
-		if (!conflict) {
-			target.emojis.push(emoji);
-		}
+		// const conflict = target.emojis.find(
+		// 	// (o) => o._id.toString() === emoji._id.toString(),
+		// );
+		// if (!conflict) {
+		// 	target.emojis.push(emoji);
+		// }
 	}
 
 	static pushEmojis(
@@ -55,9 +50,9 @@ export class ActivityPubCustomEmojiCategoryRepository {
 		// );
 	}
 
-	static search(db, category: string) {
-		return db
-			.objects(ActivityPubCustomEmojiCategory)
-			.find((o) => o.name === category);
+	static search(db: SQLiteDatabase, category: string) {
+		// return db
+		// 	.objects(ActivityPubCustomEmojiCategory)
+		// 	.find((o) => o.name === category);
 	}
 }

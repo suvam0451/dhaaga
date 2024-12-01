@@ -16,7 +16,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
 import { useFonts } from '@expo-google-fonts/montserrat';
 import { enableMapSet } from 'immer';
-import { SQLiteProvider } from 'expo-sqlite';
+import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
 
 enableMapSet();
 
@@ -30,6 +30,8 @@ import WithAppThemePackContext, {
 } from '../hooks/app/useAppThemePack';
 import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '../database/migrations';
+import useGlobalState from '../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Suppress these warnings...
@@ -63,22 +65,14 @@ if (__DEV__) {
 }
 
 function WithGorhomBottomSheetWrapper() {
+	const db = useSQLiteContext();
+	const { appInitialize, restoreSession } = useGlobalState(
+		useShallow((o) => ({
+			appInitialize: o.appInitialize,
+			restoreSession: o.restoreSession,
+		})),
+	);
 	const { top, bottom } = useSafeAreaInsets();
-
-	// const db = useRealm();
-	/**
-	 * DB Seed
-	 */
-	// useEffect(() => {
-	// 	AppSettingsService.populateSeedData(db);
-	// }, [db]);
-
-	// useEffect(() => {
-	// 	AppProfileRepository(db).upsert({ name: 'Default' });
-	// 	AppProfileRepository(db).ensureDefaultProfileIsActive();
-	// 	AppProfileRepository(db).seedAppSettings({ name: 'Default' });
-	// 	AppInit.create(db).applyDefaultSettings();
-	// }, [db]);
 
 	const [fontsLoaded, fontError] = useFonts(appFonts);
 
@@ -93,6 +87,11 @@ function WithGorhomBottomSheetWrapper() {
 	const pathname = usePathname();
 
 	useEffect(() => {
+		appInitialize(db);
+		restoreSession();
+	}, [db]);
+
+	useEffect(() => {
 		setTimeout(() => {
 			Appearance.setColorScheme('dark');
 			StatusBar.setBarStyle('light-content');
@@ -101,26 +100,24 @@ function WithGorhomBottomSheetWrapper() {
 	}, [pathname, colorScheme]);
 
 	return (
-		<SQLiteProvider databaseName="app.db" onInit={migrateDbIfNeeded}>
-			<WithActivityPubRestClient>
-				<WithGorhomBottomSheetContext>
-					<WithAppBottomSheetContext>
-						<View
-							style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
-							onLayout={onLayoutRootView}
+		<WithActivityPubRestClient>
+			<WithGorhomBottomSheetContext>
+				<WithAppBottomSheetContext>
+					<View
+						style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
+						onLayout={onLayoutRootView}
+					>
+						<StatusBar backgroundColor={colorScheme.palette.bg} />
+						<Stack
+							initialRouteName={'(tabs)'}
+							screenOptions={{ headerShown: false }}
 						>
-							<StatusBar backgroundColor={colorScheme.palette.bg} />
-							<Stack
-								initialRouteName={'(tabs)'}
-								screenOptions={{ headerShown: false }}
-							>
-								<Stack.Screen name="(tabs)" />
-							</Stack>
-						</View>
-					</WithAppBottomSheetContext>
-				</WithGorhomBottomSheetContext>
-			</WithActivityPubRestClient>
-		</SQLiteProvider>
+							<Stack.Screen name="(tabs)" />
+						</Stack>
+					</View>
+				</WithAppBottomSheetContext>
+			</WithGorhomBottomSheetContext>
+		</WithActivityPubRestClient>
 	);
 }
 
@@ -131,19 +128,21 @@ export default function Page() {
 			{/* In-Memory Store -- MMKV */}
 			<WithGlobalMmkvContext>
 				{/* Main Database -- Realm */}
-				{/* API Caching -- Tanstack */}
-				<QueryClientProvider client={queryClient}>
-					{/* Rneui Custom Themes */}
-					<ThemeProvider theme={RneuiTheme}>
-						<WithAppThemePackContext>
-							<SafeAreaProvider>
-								<WithAppNotificationBadge>
-									<WithGorhomBottomSheetWrapper />
-								</WithAppNotificationBadge>
-							</SafeAreaProvider>
-						</WithAppThemePackContext>
-					</ThemeProvider>
-				</QueryClientProvider>
+				<SQLiteProvider databaseName="app.db" onInit={migrateDbIfNeeded}>
+					{/* API Caching -- Tanstack */}
+					<QueryClientProvider client={queryClient}>
+						{/* Rneui Custom Themes */}
+						<ThemeProvider theme={RneuiTheme}>
+							<WithAppThemePackContext>
+								<SafeAreaProvider>
+									<WithAppNotificationBadge>
+										<WithGorhomBottomSheetWrapper />
+									</WithAppNotificationBadge>
+								</SafeAreaProvider>
+							</WithAppThemePackContext>
+						</ThemeProvider>
+					</QueryClientProvider>
+				</SQLiteProvider>
 			</WithGlobalMmkvContext>
 		</GestureHandlerRootView>
 	);

@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { memo, useState } from 'react';
+import { memo, MutableRefObject, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../styles/AppFonts';
@@ -8,22 +8,24 @@ import { FontAwesome } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
-import { Accounts } from '../../../database/entities/account';
 import { useAccountDbContext } from '../../../components/screens/profile/stack/settings/hooks/useAccountDb';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import { Account } from '../../../database/_schema';
+import { useSQLiteContext } from 'expo-sqlite';
+import { AccountMetadataService } from '../../../database/entities/account-metadata';
 
 type Props = {
 	setIsExpanded: (isExpanded: boolean) => void;
 	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: React.MutableRefObject<Accounts>;
-	acct: Accounts;
+	dialogTarget: MutableRefObject<Account>;
+	acct: Account;
 };
 
 type AccountOptionsProps = {
 	IsExpanded: boolean;
 	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: React.MutableRefObject<Accounts>;
-	acct: Accounts;
+	dialogTarget: MutableRefObject<Account>;
+	acct: Account;
 };
 
 const ICON_SIZE = 22;
@@ -231,12 +233,21 @@ function AccountListingFragment({
 	setDeleteDialogExpanded,
 	acct,
 }: Props) {
+	const db = useSQLiteContext();
 	const { colorScheme } = useAppTheme();
 	const { toggleSelect } = useAccountDbContext();
 	const [IsExpanded, setIsExpanded] = useState(false);
 
-	const avatar = acct.meta.find((o) => o.key === 'avatar')?.value;
-	const displayName = acct.meta.find((o) => o.key === 'display_name')?.value;
+	const avatar = AccountMetadataService.getKeyValueForAccountSync(
+		db,
+		acct,
+		'avatar',
+	);
+	const displayName = AccountMetadataService.getKeyValueForAccountSync(
+		db,
+		acct,
+		'display_name',
+	);
 
 	if (!acct) return <View />;
 	return (

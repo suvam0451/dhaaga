@@ -7,13 +7,12 @@ import {
 import * as Crypto from 'expo-crypto';
 import { MMKV } from 'react-native-mmkv';
 import MmkvService from './mmkv.service';
-import { Realm } from 'realm';
-import { ActivityPubServerRepository } from '../repositories/activitypub-server.repo';
 import { ActivityPubServer } from '../entities/activitypub-server.entity';
 import {
 	PleromaRestClient,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
+import { SQLiteDatabase } from 'expo-sqlite';
 
 class ActivityPubService {
 	/**
@@ -50,58 +49,55 @@ class ActivityPubService {
 	 * @param urlLike
 	 */
 	static async syncSoftware(
-		db: Realm,
+		db: SQLiteDatabase,
 		urlLike: string,
 	): Promise<ActivityPubServer> {
-		let match = ActivityPubServerRepository.get(db, urlLike);
-		const x = new UnknownRestClient();
-
+		return null;
 		/**
 		 * either instance info is not cached
 		 * or, neither nodeinfo nor software
 		 * info is available
 		 * */
-		if (
-			!match ||
-			(match && (!match.nodeinfo || !match.instanceSoftwareLastFetchedAt))
-		) {
-			const { data: nodeinfoData, error: nodeinfoError } =
-				await x.instances.getNodeInfo(urlLike);
-
-			if (nodeinfoError) {
-				// console.log('[WARN]: error fetching nodeinfo for', urlLike);
-				return;
-			}
-			match = db.write(() => {
-				return ActivityPubServerRepository.updateNodeInfo(
-					db,
-					urlLike,
-					nodeinfoData,
-				);
-			});
-		}
-
+		// if (
+		// 	!match ||
+		// 	(match && (!match.nodeinfo || !match.instanceSoftwareLastFetchedAt))
+		// ) {
+		// 	const { data: nodeinfoData, error: nodeinfoError } =
+		// 		await x.instances.getNodeInfo(urlLike);
+		//
+		// 	if (nodeinfoError) {
+		// 		// console.log('[WARN]: error fetching nodeinfo for', urlLike);
+		// 		return;
+		// 	}
+		// 	match = db.write(() => {
+		// 		return ActivityPubServerRepository.updateNodeInfo(
+		// 			db,
+		// 			urlLike,
+		// 			nodeinfoData,
+		// 		);
+		// 	});
+		// }
 		/**
 		 * either the software type is not resolved
 		 * or it is of type unknown
 		 */
-		if ((match && !match.type) || match.type === KNOWN_SOFTWARE.UNKNOWN) {
-			const { data: softwareData, error: softwareError } =
-				await x.instances.getSoftware(match.nodeinfo);
-			if (softwareError) {
-				console.log('[WARN]: error fetching software for', urlLike);
-				return;
-			}
-
-			match = db.write(() => {
-				return ActivityPubServerRepository.updateSoftwareType(db, {
-					type: softwareData.software,
-					url: urlLike,
-					description: 'N/A',
-				});
-			});
-		}
-		return match;
+		// if ((match && !match.type) || match.type === KNOWN_SOFTWARE.UNKNOWN) {
+		// 	const { data: softwareData, error: softwareError } =
+		// 		await x.instances.getSoftware(match.nodeinfo);
+		// 	if (softwareError) {
+		// 		console.log('[WARN]: error fetching software for', urlLike);
+		// 		return;
+		// 	}
+		//
+		// 	match = db.write(() => {
+		// 		return ActivityPubServerRepository.updateSoftwareType(db, {
+		// 			type: softwareData.software,
+		// 			url: urlLike,
+		// 			description: 'N/A',
+		// 		});
+		// 	});
+		// }
+		// return match;
 	}
 
 	/**

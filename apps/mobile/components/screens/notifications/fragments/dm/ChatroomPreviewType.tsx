@@ -1,17 +1,10 @@
-// import { useObject, useRealm } from '@realm/react';
-import { ActivityPubChatRoom } from '../../../../../entities/activitypub-chatroom.entity';
 import { useEffect, useMemo, useState } from 'react';
 import { Text } from '@rneui/themed';
 import { TouchableOpacity, View } from 'react-native';
-// import { BSON } from 'realm';
-// import UUID = BSON.UUID;
-import { Image } from 'expo-image';
 import { ActivityPubUser } from '../../../../../entities/activitypub-user.entity';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { ActivityPubStatus } from '../../../../../entities/activitypub-status.entity';
-import MfmService from '../../../../../services/mfm.service';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
-import { randomUUID } from 'expo-crypto';
 import { ParsedDescriptionContainerForChatroomPreview } from '../../../../../styles/Containers';
 import { useNavigation } from '@react-navigation/native';
 import { APP_FONT } from '../../../../../styles/AppTheme';

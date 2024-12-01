@@ -8,7 +8,6 @@ import LoadingMore from '../../home/LoadingMore';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { RefreshControl } from 'react-native';
-// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
@@ -18,13 +17,11 @@ import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusIte
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function Core() {
 	const { primaryAcct, subdomain, domain } = useActivityPubRestClientContext();
 	const { updateQueryCache, queryCacheMaxId, setMaxId } =
 		useAppPaginationContext();
-	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
 	const { addPosts, listItems, clear } = useAppTimelinePosts();

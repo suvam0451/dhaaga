@@ -38,6 +38,7 @@ export class MigrationRepo {
 				opts.limit || 10,
 				opts.offset || 0,
 			);
+			console.log(result);
 			return { type: 'success', value: result };
 		} catch (e) {
 			console.log(e, e.message);

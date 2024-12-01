@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type ConversationItem = {
 	displayName: string;
@@ -20,32 +20,27 @@ type ConversationItem = {
  * A StatusItem, with the content only
  * @constructor
  */
-function ConversationItem({
-	accountUrl,
-	displayName,
-	unread,
-}: ConversationItem) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-	const subdomain = primaryAcct?.subdomain;
+function ConversationItem({ accountUrl, displayName }: ConversationItem) {
+	const { domain, subdomain } = useActivityPubRestClientContext();
 
 	const [DescriptionContent, setDescriptionContent] = useState(<></>);
 	const [UserInterface, setUserInterface] = useState(
 		ActivityPubUserAdapter(null, domain),
 	);
 
-	const { status, statusRaw, sharedStatus } = useActivitypubStatusContext();
-	const db = useRealm();
+	const { status } = useActivitypubStatusContext();
 	const { globalDb } = useGlobalMmkvContext();
+	const { colorScheme } = useAppTheme();
 	let content = status.getContent();
+
 	useEffect(() => {
 		const emojiMap = UserInterface.getEmojiMap();
 		const { reactNodes } = MfmService.renderMfm(content, {
 			emojiMap,
 			domain,
 			subdomain,
-			db,
 			globalDb,
+			colorScheme,
 		});
 		setDescriptionContent(
 			<>

@@ -25,26 +25,6 @@ type MigrationEntry = {
  * NOTE: uses 1 based indexing
  */
 const migrations: MigrationEntry[] = [
-	// {
-	// 	version: 0,
-	// 	name: 'store db version in settings table',
-	// 	up: `
-	// 	create table if not exists setting (
-	// 		${DB_COLUMN_ID},
-	// 		key text not null,
-	// 		value text not null,
-	// 		type text not null,
-	// 		${DB_COLUMN_CREATED_AT},
-	// 		${DB_COLUMN_UPDATED_AT}
-	// 	) strict;
-	// 	INSERT INTO setting (key, value, type)
-	// 		VALUES ('dbVersion', "0", "integer")
-	// 		ON CONFLICT(key) DO NOTHING;
-	// `,
-	// 	down: `
-	// 	drop table if exists setting;
-	// 	`,
-	// },
 	{
 		version: 1,
 		versionCode: 'v0.11.0',
@@ -84,7 +64,7 @@ const migrations: MigrationEntry[] = [
 				key text not null,
 				value text not null,
 				type text not null,
-				accountId integer not null,
+				accountId integer,
 				${DB_COLUMN_CREATED_AT},
 				${DB_COLUMN_UPDATED_AT},
 				FOREIGN KEY (accountId) REFERENCES accounts (id) ON DELETE cascade,
@@ -93,6 +73,32 @@ const migrations: MigrationEntry[] = [
 		`,
 		down: `
 			drop table if exists accountMetadata;
+		`,
+	},
+	{
+		version: 3,
+		versionCode: 'v0.11.0',
+		name: 'add account hashtags',
+		up: `
+			create table if not exists hashtag (
+				${DB_COLUMN_ID},	
+				name text not null unique
+			) strict;
+			create table if not exists accountHashtag (
+				${DB_COLUMN_ID},	
+				followed text not null,
+				private integer not null,
+				accountId integer,
+				hashtagId integer,
+				${DB_COLUMN_CREATED_AT},
+				${DB_COLUMN_UPDATED_AT},
+				FOREIGN KEY (accountId) REFERENCES accounts (id) ON DELETE cascade,
+				FOREIGN KEY (hashtagId) REFERENCES hashtag (id) ON DELETE cascade
+			) strict;
+		`,
+		down: `
+			drop table if exists accountHashtag;
+			drop table if exists hashtag;
 		`,
 	},
 ];

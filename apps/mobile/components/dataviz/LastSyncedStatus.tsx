@@ -4,8 +4,6 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
 import { Fragment, memo, useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
-// import { useObject } from '@realm/react';
-import { Account } from '../../entities/account.entity';
 
 export enum LAST_SYNCED_STATUS_KEY {
 	BOOKMARK_SYNC = 'BOOKMARK_SYNC',

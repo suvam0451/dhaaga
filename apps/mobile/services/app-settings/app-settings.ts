@@ -1,6 +1,6 @@
-import { Realm } from '@realm/react';
-import AppSettingsRepository from '../../repositories/app-settings.repo';
 import { AppSetting } from '../../entities/app-settings.entity';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { AppSettingService } from '../../database/entities/app-setting';
 
 export enum REMOTE_INSTANCE_CALL_SETTINGS {
 	PRIVACY_ADVANCED_REMOTE_INSTANCE_CALLS_ALL = 'privacy.advanced.remoteInstanceCalls.all',
@@ -44,33 +44,20 @@ export const appSettingsKeys = {
 	},
 };
 
-class AppSettingService {
-	static update(db: Realm, key: string, value: string) {
-		db.write(() => {
-			AppSettingsRepository.update(db, key, value);
-		});
-	}
-}
-
 export class AppSettingsBase {
-	db: Realm;
+	db: SQLiteDatabase;
 	settings: AppSetting[];
-	constructor(db: Realm) {
+	constructor(db: SQLiteDatabase) {
 		this.db = db;
 	}
 
-	static create(db: Realm) {
+	static create(db: SQLiteDatabase) {
 		return new AppSettingsBase(db);
 	}
-	protected getBool(key: string): boolean {
-		const match = AppSettingsRepository.find(this.db, key);
-		if (!match) return false;
-		return match.value === '1';
-	}
 
-	refresh() {
-		this.settings = this.db.objects(AppSetting);
+	protected getBool(key: string): boolean {
+		const match = AppSettingService.get(this.db, key);
+		if (!match) return false;
+		return Boolean(match.value) == true;
 	}
 }
-
-export default AppSettingService;

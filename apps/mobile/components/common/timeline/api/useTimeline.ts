@@ -1,5 +1,4 @@
 import { AppTimelineQuery } from './useTimelineController';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 import {
@@ -9,6 +8,8 @@ import {
 	PleromaRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../utils/timeline.types';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -23,7 +24,12 @@ type TimelineQueryParams = {
  * component
  */
 function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
-	const { client, domain } = useActivityPubRestClientContext();
+	const { router, driver } = useGlobalState(
+		useShallow((o) => ({
+			router: o.router,
+			driver: o.driver,
+		})),
+	);
 	// to be adjusted based on performance
 	const TIMELINE_STATUS_LIMIT = 5;
 
@@ -43,22 +49,23 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 	};
 
 	async function api() {
-		if (client === null) return [];
+		if (router === null) return [];
 		switch (type) {
 			case TimelineFetchMode.IDLE:
 				return [];
 			case TimelineFetchMode.HOME: {
-				const { data, error } = await client.timelines.home(_query);
+				const { data, error } = await router.timelines.home(_query);
+				console.log('results', data, error);
 				if (error) return [];
 				return data;
 			}
 			case TimelineFetchMode.LOCAL: {
-				const { data, error } = await client.timelines.public({
+				const { data, error } = await router.timelines.public({
 					..._query,
 					local: true,
 					// Pleroma/Akkoma thing
 					withMuted: [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
-						domain as any,
+						driver,
 					)
 						? true
 						: undefined,
@@ -69,17 +76,17 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				return data;
 			}
 			case TimelineFetchMode.HASHTAG: {
-				const { data, error } = await client.timelines.hashtag(_id, _query);
+				const { data, error } = await router.timelines.hashtag(_id, _query);
 				if (error) return [];
 				return data;
 			}
 			case TimelineFetchMode.LIST: {
-				const { data, error } = await client.timelines.list(_id, _query);
+				const { data, error } = await router.timelines.list(_id, _query);
 				if (error) return [];
 				return data;
 			}
 			case TimelineFetchMode.USER: {
-				const { data, error } = (await client.accounts.statuses(
+				const { data, error } = (await router.accounts.statuses(
 					_id,
 					_query,
 				)) as any;
@@ -87,7 +94,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				return data;
 			}
 			case TimelineFetchMode.SOCIAL: {
-				const { data, error } = await client.timelines.public({
+				const { data, error } = await router.timelines.public({
 					..._query,
 					social: true,
 				});
@@ -95,13 +102,13 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				return data;
 			}
 			case TimelineFetchMode.BUBBLE: {
-				if (domain === KNOWN_SOFTWARE.AKKOMA) {
-					const { data } = await (client as PleromaRestClient).timelines.bubble(
+				if (driver === KNOWN_SOFTWARE.AKKOMA) {
+					const { data } = await (router as PleromaRestClient).timelines.bubble(
 						_query,
 					);
 					return data;
-				} else if (domain === KNOWN_SOFTWARE.SHARKEY) {
-					const { data } = await (client as MisskeyRestClient).timelines.bubble(
+				} else if (driver === KNOWN_SOFTWARE.SHARKEY) {
+					const { data } = await (router as MisskeyRestClient).timelines.bubble(
 						_query,
 					);
 					return data;
@@ -110,7 +117,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				}
 			}
 			case TimelineFetchMode.FEDERATED: {
-				const { data, error } = await client.timelines.public(_query);
+				const { data, error } = await router.timelines.public(_query);
 				if (error) return [];
 				return data;
 			}
@@ -123,7 +130,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 	return useQuery<StatusArray>({
 		queryKey: [type, _id, _query],
 		queryFn: api,
-		enabled: client !== null && type !== TimelineFetchMode.IDLE,
+		enabled: router !== null && type !== TimelineFetchMode.IDLE,
 	});
 }
 

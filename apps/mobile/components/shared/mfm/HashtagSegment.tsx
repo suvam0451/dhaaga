@@ -4,8 +4,6 @@ import {
 	useGorhomActionSheetContext,
 } from '../../../states/useGorhomBottomSheet';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-// import { useQuery } from '@realm/react';
-// import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
 import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { Text } from 'react-native';
 import { randomUUID } from 'expo-crypto';

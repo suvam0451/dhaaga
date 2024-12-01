@@ -40,22 +40,25 @@ export class Repo {
 		db: SQLiteDatabase,
 		server: string,
 		username: string,
-	): Promise<Result<Account>> {
-		const match = await db.getFirstAsync<Account>(
-			`select * from account where server = ? and username = ?`,
-			server,
-			username,
-		);
-		return withSuccess(match);
+	): Promise<Account | null> {
+		try {
+			return await db.getFirstAsync<Account>(
+				`select * from account where server = ? and username = ?`,
+				server,
+				username,
+			);
+		} catch (e) {
+			return null;
+		}
 	}
 
 	static async upsert(
 		db: SQLiteDatabase,
 		dto: z.infer<typeof accountInsertDto>,
-	) {
+	): Promise<Result<Account>> {
 		const match = await Repo.getByHandleFragments(db, dto.server, dto.username);
 		if (match) {
-			// update operation
+			return withSuccess(match);
 		} else {
 			db.runSync(
 				`
@@ -69,8 +72,13 @@ export class Repo {
 				dto.displayName,
 				dto.avatarUrl,
 			);
+			const upserted = await Repo.getByHandleFragments(
+				db,
+				dto.server,
+				dto.username,
+			);
+			return withSuccess(upserted);
 		}
-		return await Repo.getByHandleFragments(db, dto.server, dto.username);
 	}
 
 	static async updateSelectionFlag(
@@ -130,6 +138,7 @@ class Service {
 		}
 	}
 
+	static async selectSync(db: SQLiteDatabase, acct: Account) {}
 	static async select(db: SQLiteDatabase, acct: Account) {
 		await Repo.deselectAll(db);
 		await Repo.updateSelectionFlag(db, acct.id, true);

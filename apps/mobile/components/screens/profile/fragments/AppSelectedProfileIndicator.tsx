@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
@@ -13,14 +12,20 @@ import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
 const AppSelectedProfileIndicator = memo(() => {
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
+	console.log('selected acct is', acct);
 	const { colorScheme } = useAppTheme();
-	const { primaryAcct } = useActivityPubRestClientContext();
 	const { isAnimating, visible } = useAppBottomSheet();
-	const avatar = primaryAcct?.meta?.find((o) => o.key === 'avatar')?.value;
 
 	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
 
@@ -36,7 +41,7 @@ const AppSelectedProfileIndicator = memo(() => {
 	}
 
 	if (visible && isAnimating) return <View />;
-	if (!primaryAcct)
+	if (!acct)
 		return (
 			<TouchableOpacity
 				style={styles.accountIconTouchableContainerRight}
@@ -67,7 +72,7 @@ const AppSelectedProfileIndicator = memo(() => {
 							opacity: 0.87,
 							borderRadius: 8,
 						}}
-						source={{ uri: avatar }}
+						source={{ uri: acct?.avatarUrl }}
 						contentFit="fill"
 					/>
 				</View>

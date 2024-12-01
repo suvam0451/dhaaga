@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-// import { useObject } from '@realm/react';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
@@ -9,8 +8,6 @@ import { useRoute } from '@react-navigation/native';
 import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MMKV } from 'react-native-mmkv';
-
-import { ActivityPubChatRoom } from '../../../entities/activitypub-chatroom.entity';
 import ActivitypubProviderService from '../../../services/activitypub-provider.service';
 import ActivityPubProviderService from '../../../services/activitypub-provider.service';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';

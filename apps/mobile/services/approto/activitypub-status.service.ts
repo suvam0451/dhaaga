@@ -1,10 +1,8 @@
-import { Realm } from 'realm';
 import {
 	StatusInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import activitypubAdapterService from '../activitypub-adapter.service';
-import ActivityPubService from '../activitypub.service';
 import { MMKV } from 'react-native-mmkv';
 import {
 	ActivityPubStatusAppDtoType,
@@ -17,6 +15,8 @@ import { z } from 'zod';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import AppPrivacySettingsService from '../app-settings/app-settings-privacy.service';
 import { EmojiService } from '../emoji.service';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { ServerService } from '../../database/entities/server';
 
 /**
  * Supports various operations
@@ -66,19 +66,17 @@ export class ActivitypubStatusService {
 		return this;
 	}
 
-	async syncSoftware(db: Realm) {
-		// Privacy --> Advanced --> Remote Instance Calls --> Reaction Caching
+	async syncSoftware(db: SQLiteDatabase) {
 		if (
 			AppPrivacySettingsService.create(
 				db,
 			).isDisabledCrossInstanceSoftwareCaching()
 		) {
-			// console.log('[INFO]: prevented cross instance api call for software');
 			return this;
 		}
 
 		const promises = Array.from(this.foundInstances).map((o) => {
-			return ActivityPubService.syncSoftware(db, o);
+			return ServerService.syncDriver(db, o);
 		});
 		await Promise.all(promises);
 		return this;
@@ -91,7 +89,7 @@ export class ActivitypubStatusService {
 	 * @param db
 	 * @param globalDb
 	 */
-	async syncCustomEmojis(db: Realm, globalDb: MMKV) {
+	async syncCustomEmojis(db: SQLiteDatabase, globalDb: MMKV) {
 		// @ts-ignore-next-line
 		for (const target of this.foundInstances) {
 			await EmojiService.refresh(db, globalDb, target);

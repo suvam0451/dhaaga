@@ -1,9 +1,11 @@
 import * as SQLite from 'expo-sqlite';
 import { APP_DB } from '../repositories/_var';
-import { Server, ServerEmoji, ServerEmojiAlias } from '../_schema';
+import { Server, ServerEmoji } from '../_schema';
 import { Result } from '../../utils/result';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 
-export class ServerEmojiRepo {
+export class Repo {
 	/**
 	 * @param serverId fk
 	 * @param identifier shortCode/alias of the reaction
@@ -25,8 +27,19 @@ export class ServerEmojiRepo {
 	}
 }
 
-export class ServerEmojiService {
+class Service {
 	static find(server: Server, identifier: string): Result<ServerEmoji> {
-		return ServerEmojiRepo.find(server.id, identifier);
+		return Repo.find(server.id, identifier);
+	}
+
+	static async upsertMany(
+		db: SQLiteDatabase,
+		server: Server,
+		items: InstanceApi_CustomEmojiDTO[],
+	) {
+		for await (const item of items) {
+		}
 	}
 }
+
+export { Repo as ServerEmojiRepo, Service as ServerEmojiService };

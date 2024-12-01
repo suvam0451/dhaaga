@@ -1,4 +1,3 @@
-// import { ObjectSchema, Object } from 'realm';
 import { ActivityPubStatus } from './activitypub-status.entity';
 import { ActivityPubUser } from './activitypub-user.entity';
 import { ActivityPubServer } from './activitypub-server.entity';
@@ -6,10 +5,10 @@ import { ActivityPubChatRoom } from './activitypub-chatroom.entity';
 import { ENTITY } from './_entities';
 
 export class ActivityPubConversation extends Object {
-	_id: Realm.BSON.UUID;
+	// _id: Realm.BSON.UUID;
 	conversationId: string;
 	latestStatus: ActivityPubStatus;
-	participants!: Realm.List<ActivityPubUser>;
+	// participants!: Realm.List<ActivityPubUser>;
 	hash: string;
 	unread: boolean;
 	me?: ActivityPubUser;

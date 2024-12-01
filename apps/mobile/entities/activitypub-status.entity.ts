@@ -27,7 +27,7 @@ export type ActivityPubStatusUpsertDTOType = z.infer<
 >;
 
 export class ActivityPubStatus extends Object {
-	_id: Realm.BSON.UUID;
+	// _id: Realm.BSON.UUID;
 	statusId: string;
 	content: string;
 	createdAt: Date;
@@ -48,5 +48,4 @@ export class ActivityPubStatus extends Object {
 	postedBy?: ActivityPubUser;
 	server?: ActivityPubServer;
 	mediaAttachments: ActivityPubMediaAttachment[];
-	hashtags: ActivityPubTag[];
 }

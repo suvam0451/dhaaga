@@ -1,11 +1,4 @@
-import {
-	createContext,
-	MutableRefObject,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import {
 	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
@@ -13,7 +6,6 @@ import {
 	UserInterface,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
 import { useSQLiteContext } from 'expo-sqlite';
 import { Account } from '../database/_schema';
@@ -23,9 +15,7 @@ import { AccountMetadataService } from '../database/entities/account-metadata';
 type Type = {
 	client: ActivityPubClient;
 	me: UserInterface | null;
-	meRaw: mastodon.v1.Account | null;
 	primaryAcct: Account;
-	PrimaryAcctPtr: MutableRefObject<Account>;
 
 	/**
 	 * Call this function after change in
@@ -41,14 +31,16 @@ type Type = {
 const defaultValue: Type = {
 	client: null,
 	me: null,
-	meRaw: null,
+	// meRaw: null,
 	primaryAcct: null,
 	regenerate: () => {},
-	PrimaryAcctPtr: undefined,
 };
 
 const ActivityPubRestClientContext = createContext<Type>(defaultValue);
 
+/**
+ * @deprecated will be replaced with zustand global store
+ */
 export function useActivityPubRestClientContext() {
 	return useContext(ActivityPubRestClientContext);
 }
@@ -63,7 +55,7 @@ function WithActivityPubRestClient({ children }: any) {
 	const db = useSQLiteContext();
 	const [restClient, setRestClient] = useState<ActivityPubClient>(null);
 	const [Me, setMe] = useState(null);
-	const [MeRaw, setMeRaw] = useState(null);
+	// const [MeRaw, setMeRaw] = useState(null);
 	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
 
 	const PrimaryAcctPtr = useRef<Account>(null);
@@ -128,7 +120,7 @@ function WithActivityPubRestClient({ children }: any) {
 				console.log('[WARN]: error loading account data (i.e. - me)');
 				return;
 			}
-			setMeRaw(data);
+			// setMeRaw(data);
 			setMe(ActivityPubUserAdapter(data, PrimaryAcct?.driver));
 		});
 	}, [restClient]);
@@ -138,12 +130,10 @@ function WithActivityPubRestClient({ children }: any) {
 			value={{
 				client: restClient,
 				me: Me,
-				meRaw: MeRaw,
 				primaryAcct: PrimaryAcct,
 				regenerate: regenerateFn,
 				domain: PrimaryAcct?.driver,
 				subdomain: PrimaryAcct?.server,
-				PrimaryAcctPtr,
 			}}
 		>
 			{children}

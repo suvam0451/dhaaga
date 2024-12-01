@@ -21,8 +21,9 @@ function IntroductionBase() {
 	const { translateY } = useScrollMoreOnPageEnd();
 
 	function onDbCheck() {
-		MigrationRepo.list();
+		DbMetaRepo.listTables();
 	}
+
 	return (
 		<AppTopNavbar
 			title={'Welcome!'}

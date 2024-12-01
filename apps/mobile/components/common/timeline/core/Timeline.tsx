@@ -31,6 +31,8 @@ import {
 	usePagination,
 	usePaginationActions,
 } from '../../../../states/local/pagination';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /*
  * Render a Timeline
@@ -39,34 +41,37 @@ const Timeline = memo(() => {
 	const { maxId } = usePagination();
 	const { setNextMaxId, clear, next } = usePaginationActions();
 
-	const { timelineType, query, opts, setTimelineType } =
-		useTimelineController();
-	const { client, primaryAcct, domain, subdomain } =
-		useActivityPubRestClientContext();
+	const { query, opts, setTimelineType } = useTimelineController();
+	const { acct, homepageType, router, driver } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			homepageType: o.homepageType,
+			router: o.router,
+			driver: o.driver,
+		})),
+	);
+
 	const {
 		addPosts: appendTimelineData,
 		listItems,
 		clear: timelineDataStoreClear,
 	} = useAppTimelinePosts();
-	// const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
 
 	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
 	// reset to home
 	useEffect(() => {
 		setTimelineType(TimelineFetchMode.IDLE);
-	}, [primaryAcct]);
+	}, [acct]);
 
 	useEffect(() => {
 		setPageLoadedAtLeastOnce(false);
 		clear();
 		timelineDataStoreClear();
-	}, [timelineType, query, opts]);
+	}, [homepageType, query, opts]);
 
-	console.log(maxId);
 	const { fetchStatus, data, status, refetch } = useTimeline({
-		type: timelineType,
+		type: homepageType,
 		query,
 		opts,
 		maxId,
@@ -75,13 +80,13 @@ const Timeline = memo(() => {
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
-		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
 			const cursor = _payload.data.cursor;
 			const posts = _payload.data.feed;
 
 			setNextMaxId(cursor);
-			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, domain);
+			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, driver);
 			appendTimelineData(_data);
 			setPageLoadedAtLeastOnce(true);
 			return;
@@ -89,7 +94,7 @@ const Timeline = memo(() => {
 
 		if (data?.length > 0) {
 			setNextMaxId(data[data.length - 1]?.id);
-			const _data = ActivityPubAdapterService.adaptManyStatuses(data, domain);
+			const _data = ActivityPubAdapterService.adaptManyStatuses(data, driver);
 			appendTimelineData(_data);
 			setPageLoadedAtLeastOnce(true);
 
@@ -125,9 +130,8 @@ const Timeline = memo(() => {
 		refetch,
 	});
 
-	if (!client) return <Introduction />;
-
-	if (timelineType === TimelineFetchMode.IDLE) return <SocialHub />;
+	if (router === null) return <Introduction />;
+	if (homepageType === TimelineFetchMode.IDLE) return <SocialHub />;
 
 	return (
 		<View

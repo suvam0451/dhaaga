@@ -2,7 +2,6 @@ import { useActivityPubRestClientContext } from '../../../../states/useActivityP
 import { useAppPaginationContext } from '../../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
@@ -15,8 +14,6 @@ function useTrendingPosts() {
 		queryCacheMaxId,
 	} = useAppPaginationContext();
 	const [IsLoading, setIsLoading] = useState(false);
-	// const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
 
 	async function api() {
 		if (!client) return null;

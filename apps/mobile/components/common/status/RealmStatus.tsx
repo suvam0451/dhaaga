@@ -1,13 +1,5 @@
-// import { useObject } from '@realm/react';
-import { ActivityPubStatus } from '../../../entities/activitypub-status.entity';
 import { View, StyleSheet } from 'react-native';
-import useMfm from '../../hooks/useMfm';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import {
-	OriginalPostedPfpFragment,
-	OriginalPosterPostedByFragment,
-} from './fragments/PostCreatedBy';
-import RealmMediaItem from '../media/RealmMediaItem';
 import { memo } from 'react';
 
 function getAccountDisplayName(
@@ -32,7 +24,7 @@ function getAccountDisplayName(
  * - may not have boosted by info
  * @constructor
  */
-const RealmStatus = memo(function Foo({ _id }: { _id: Realm.BSON.UUID }) {
+const RealmStatus = memo(function Foo({ _id }: { _id }) {
 	const { primaryAcct } = useActivityPubRestClientContext();
 	// const post = useObject(ActivityPubStatus, _id);
 

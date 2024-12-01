@@ -1,7 +1,5 @@
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Account } from '../../entities/account.entity';
-// import { useQuery } from '@realm/react';
 import { ActivityPubUser } from '../../entities/activitypub-user.entity';
 import { ActivityPubStatus } from '../../entities/activitypub-status.entity';
 import { ActivityPubTag } from '../../entities/activitypub-tag.entity';
@@ -26,9 +24,6 @@ type Props = {
 
 function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	// const acct: Account = useQuery(Account).find(
-	// 	(o) => o._id.toString() === primaryAcct._id.toString(),
-	// );
 
 	const LoadedUserData = useRef<GalleryUserAggregationItem[] | null>(null);
 	const LoadedTagData = useRef<GalleryTagAggregationItem[] | null>(null);
@@ -105,7 +100,7 @@ function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
 	}, [LoadedUserData, offset, limit]);
 
 	return {
-		// acct,
+		acct: null,
 		postsToShow,
 		LoadedData: LoadedUserData,
 		LoadedTagData,

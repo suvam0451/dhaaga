@@ -12,7 +12,6 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import * as Crypto from 'expo-crypto';
 import { APP_FONT } from '../styles/AppTheme';
-import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import BottomSheetFactory from '../components/bottom-sheets/BottomSheetFactory';
 import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.service';
 
@@ -26,7 +25,7 @@ export enum BOTTOM_SHEET_ENUM {
 }
 
 type Type = {
-	ref: MutableRefObject<BottomSheetMethods>;
+	ref: MutableRefObject<any>;
 	visible: boolean;
 	type: BOTTOM_SHEET_ENUM | null;
 	setVisible: (state: boolean) => void;

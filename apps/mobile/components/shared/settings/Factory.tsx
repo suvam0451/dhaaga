@@ -2,8 +2,6 @@ import { memo, useEffect, useRef, useState } from 'react';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { View } from 'react-native';
-import { useQuery } from '@realm/react';
-import { AppProfile } from '../../../entities/app-profile.entity';
 import { AppSetting } from '../../../entities/app-settings.entity';
 
 type SingleChoiceSettingProps = {
@@ -17,19 +15,16 @@ export const SingleChoiceSetting = memo(function Foo({
 	settingKey,
 	items,
 }: SingleChoiceSettingProps) {
-	const profile: AppProfile[] = useQuery<AppProfile>(AppProfile).filter(
-		(o: AppProfile) => o.selected == true,
-	);
 	const [Setting, setSetting] = useState<AppSetting | null>(null);
 
 	const targetProfile = useRef(null);
 
 	useEffect(() => {
-		if (profile.length > 0) {
-			if (targetProfile.current === profile[0]._id.toString()) return;
-			targetProfile.current = profile[0]._id.toString();
-			setSetting(profile[0].settings.find((o) => o.key === settingKey));
-		}
+		// if (profile.length > 0) {
+		// 	if (targetProfile.current === profile[0]._id.toString()) return;
+		// 	targetProfile.current = profile[0]._id.toString();
+		// 	setSetting(profile[0].settings.find((o) => o.key === settingKey));
+		// }
 	}, []);
 
 	return (

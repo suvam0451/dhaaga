@@ -1,7 +1,4 @@
 import { useState } from 'react';
-// import { useRealm } from '@realm/react';
-import BookmarkBrowserService from '../../../services/bookmark-browser.service';
-import AccountService from '../../../services/account.service';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 
 export enum ACTIVITYPUB_SYNC_TASK {

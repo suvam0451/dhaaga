@@ -322,7 +322,6 @@ function SocialHub() {
 						paddingHorizontal: 8,
 					}}
 				>
-					<Button title={'Sample Press'} onPress={onDemoFunctionPress} />
 					<SocialHubLantern />
 					{TimeOfDay === TIME_OF_DAY.MORNING && (
 						<Text

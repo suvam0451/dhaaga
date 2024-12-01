@@ -7,12 +7,8 @@ import { useActivityPubRestClientContext } from '../../../states/useActivityPubR
 import { useEffect } from 'react';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { ScrollView, View } from 'react-native';
-// import { useQuery as useRealmQuery } from '@realm/react';
-// import { useRealm } from '@realm/react';
 import CryptoService from '../../../services/crypto.service';
-import { ActivityPubChatRoom } from '../../../entities/activitypub-chatroom.entity';
 import ChatroomPreview from './fragments/dm/ChatroomPreviewType';
-import ChatroomService from '../../../services/chatroom.service';
 import { Text } from '@rneui/themed';
 import { Divider } from '@rneui/base';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';

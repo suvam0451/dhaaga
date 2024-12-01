@@ -4,7 +4,6 @@ import { useActivityPubRestClientContext } from '../../../../states/useActivityP
 import { AppButtonVariantA } from '../../../lib/Buttons';
 import { memo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import { formatRelative } from 'date-fns';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from 'expo-router';
@@ -13,8 +12,6 @@ import useSyncWithProgress, {
 } from '../../../hooks/tasks/useSyncWithProgress';
 import BookmarkGalleryAdvanced from '../../../dialogs/BookmarkGalleryAdvanced';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-// import { useObject } from '@realm/react';
-import { Account } from '../../../../entities/account.entity';
 
 export function BookmarkNeverSyncedPrompt() {
 	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(
@@ -172,7 +169,6 @@ export function BookmarkSyncedPrompt() {
 }
 
 const BookmarkPortalStack = memo(() => {
-	const { PrimaryAcctPtr } = useActivityPubRestClientContext();
 	// const acct = useObject(Account, PrimaryAcctPtr.current);
 
 	const BOOKMARK_LAST_SYNCED_AT = null;

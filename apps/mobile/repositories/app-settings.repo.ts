@@ -1,18 +1,15 @@
-// import { Realm } from 'realm';
-import {
-	AppSetting,
-	AppSettingCreateDTO,
-} from '../entities/app-settings.entity';
 import { z } from 'zod';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { AppSettingCreateDTO } from '../database/entities/app-setting';
 
 class AppSettingsRepository {
 	/**
 	 * Ensure that the setting
 	 * is populated with defaults
 	 */
-	static init(db, dto: z.infer<typeof AppSettingCreateDTO>) {
-		const match = this.find(db, dto.key);
-		if (!match) return this.create(db, dto);
+	static init(db: SQLiteDatabase, dto: z.infer<typeof AppSettingCreateDTO>) {
+		// const match = this.find(db, dto.key);
+		// if (!match) return this.create(db, dto);
 	}
 
 	/**
@@ -21,21 +18,18 @@ class AppSettingsRepository {
 	 * @param db
 	 * @param dto
 	 */
-	static upsert(db, dto: z.infer<typeof AppSettingCreateDTO>) {
-		const match = this.find(db, dto.key);
-		if (!match) return this.create(db, dto);
+	static upsert(db: SQLiteDatabase, dto: z.infer<typeof AppSettingCreateDTO>) {
+		// const match = this.find(db, dto.key);
+		// if (!match) return this.create(db, dto);
 	}
 
-	static update(db, key: string, value: string) {
-		const match = this.find(db, key);
-		if (!match) {
-			console.log('[WARN]: setting key not found', key);
-			return;
-		}
-		match.value = value;
+	static update(db: SQLiteDatabase, key: string, value: string) {
+		const match = null; //  this.find(db, key);
+		console.log('[WARN]: setting key not found', key);
+		return;
 	}
 
-	static create(db, dto: z.infer<typeof AppSettingCreateDTO>) {
+	static create(db: SQLiteDatabase, dto: z.infer<typeof AppSettingCreateDTO>) {
 		const { data, error } = AppSettingCreateDTO.safeParse(dto);
 		if (error) {
 			console.log('[WARN]: invalid setting create payload');
@@ -45,10 +39,6 @@ class AppSettingsRepository {
 		// 	_id: new Realm.BSON.UUID(),
 		// 	...data,
 		// });
-	}
-
-	static find(db: Realm, key: string) {
-		return db.objects(AppSetting).find((o) => o.key === key);
 	}
 }
 

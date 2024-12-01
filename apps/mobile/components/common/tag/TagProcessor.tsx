@@ -5,9 +5,7 @@ import {
 } from '../../../states/useGorhomBottomSheet';
 import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import { useQuery } from '@realm/react';
-import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 
@@ -21,16 +19,13 @@ const HashtagProcessor = memo(function Foo({
 	const { setVisible, setBottomSheetType, updateRequestId } =
 		useGorhomActionSheetContext();
 	const { globalDb } = useGlobalMmkvContext();
-	const item = useQuery(ActivityPubTag).find(
-		(o: ActivityPubTag) => o.name.toLowerCase() === content.toLowerCase(),
-	);
 
-	const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
-		return {
-			isFollowed: item && item.following,
-			isPrivatelyFollowed: item && item.privatelyFollowing,
-		};
-	}, [item?.following, item?.privatelyFollowing]);
+	// const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
+	// 	return {
+	// 		isFollowed: item && item.following,
+	// 		isPrivatelyFollowed: item && item.privatelyFollowing,
+	// 	};
+	// }, [item?.following, item?.privatelyFollowing]);
 
 	const onPress = () => {
 		GlobalMmkvCacheService.setBottomSheetProp_Hashtag(globalDb, {
@@ -44,6 +39,9 @@ const HashtagProcessor = memo(function Foo({
 			setVisible(true);
 		}, 200);
 	};
+
+	let isFollowed = false;
+	let isPrivatelyFollowed = false;
 
 	return (
 		<Text

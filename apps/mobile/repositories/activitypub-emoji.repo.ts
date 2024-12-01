@@ -1,20 +1,12 @@
-// import { Realm } from '@realm/react';
-import { ActivityPubCustomEmojiItem } from '../entities/activitypub-emoji.entity';
-import { ActivityPubServer } from '../entities/activitypub-server.entity';
-import { ActivityPubCustomEmojiCategoryRepository } from './activitypub-emoji-category.repo';
-// import { UpdateMode } from 'realm';
-import { ActivityPubServerRepository } from './activitypub-server.repo';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { Server } from '../database/_schema';
 
 export class ActivityPubCustomEmojiRepository {
-	static clearAll(db) {
-		db.delete(db.objects(ActivityPubCustomEmojiItem));
-	}
-
 	static upsertMany(
-		db,
+		db: SQLiteDatabase,
 		items: InstanceApi_CustomEmojiDTO[],
-		server: ActivityPubServer,
+		server: Server,
 	) {
 		for (let i = 0; i < items.length; i++) {
 			this.upsert(db, items[i], server);
@@ -28,9 +20,9 @@ export class ActivityPubCustomEmojiRepository {
 	 * @param server
 	 */
 	static upsert(
-		db,
+		db: SQLiteDatabase,
 		item: InstanceApi_CustomEmojiDTO,
-		server: ActivityPubServer,
+		server: Server,
 	) {
 		const conflict = this.search(db, item.shortCode, server.url);
 		// const savedEmojiItem = db.create(
@@ -48,25 +40,7 @@ export class ActivityPubCustomEmojiRepository {
 		// );
 
 		if (item.category) {
-			// const category = ActivityPubCustomEmojiCategoryRepository.upsert(
-			// 	db,
-			// 	item.category,
-			// );
-			// ActivityPubCustomEmojiCategoryRepository.pushEmoji(
-			// 	db,
-			// 	category,
-			// 	savedEmojiItem,
-			// );
 		} else {
-			// const categoryNotFound = ActivityPubCustomEmojiCategoryRepository.upsert(
-			// 	db,
-			// 	'Category:404',
-			// );
-			// ActivityPubCustomEmojiCategoryRepository.pushEmoji(
-			// 	db,
-			// 	categoryNotFound,
-			// 	savedEmojiItem,
-			// );
 		}
 		// ActivityPubServerRepository.addEmoji(db, savedEmojiItem, server);
 	}

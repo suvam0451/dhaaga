@@ -1,14 +1,16 @@
-import { Realm } from 'realm';
 import { MMKV } from 'react-native-mmkv';
 import globalMmkvCacheServices from './globalMmkvCache.services';
 import { ActivityPubCustomEmojiCategoryRepository } from '../repositories/activitypub-emoji-category.repo';
-import { ActivityPubServerRepository } from '../repositories/activitypub-server.repo';
 import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-emoji.repo';
 import {
 	InstanceApi_CustomEmojiDTO,
+	KNOWN_SOFTWARE,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
 import AppPrivacySettingsService from './app-settings/app-settings-privacy.service';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { ServerService } from '../database/entities/server';
+import { ServerEmojiService } from '../database/entities/server-emoji';
 
 export type EmojiAdapter = {
 	// common
@@ -34,7 +36,7 @@ export class EmojiService {
 		id,
 		subdomain,
 	}: {
-		db: Realm;
+		db: SQLiteDatabase;
 		globalDb: MMKV;
 		id: string;
 		domain: string;
@@ -76,7 +78,7 @@ export class EmojiService {
 	 * @forcedUpdate bypasses user prefs (e.g.- for acct instance)
 	 */
 	static async refresh(
-		db: Realm,
+		db: SQLiteDatabase,
 		globalDb: MMKV,
 		subdomain: string,
 		forceUpdate: boolean = false,
@@ -130,9 +132,9 @@ export class EmojiService {
 		// 	return null;
 		// }
 
-		db.write(() => {
-			ActivityPubServerRepository.updateEmojisLastFetchedAt(db, subdomain, now);
-		});
+		// db.write(() => {
+		// 	ActivityPubServerRepository.updateEmojisLastFetchedAt(db, subdomain, now);
+		// });
 		// console.log('[INFO]: cached emojis for', subdomain, data.length);
 
 		// return GlobalMmkvCacheService.saveEmojiCacheForInstance(
@@ -156,7 +158,7 @@ export class EmojiService {
 		remoteInstance,
 	}: {
 		emojiMap: Map<string, string>;
-		db: Realm;
+		db: SQLiteDatabase;
 		globalDb: MMKV;
 		id: string;
 		remoteInstance: string;
@@ -179,7 +181,7 @@ export class EmojiService {
 	 * @param selection
 	 */
 	static loadEmojisForInstanceSync(
-		db: Realm,
+		db: SQLiteDatabase,
 		globalDb: MMKV,
 		subdomain: string,
 		{
@@ -203,25 +205,6 @@ export class EmojiService {
 				categories.add(emoji.category);
 			}
 		}
-
-		// console.log("[INFO]: loading emojis in db", subdomain, data.length, categories.size)
-
-		// db.write(() => {
-		// 	const server = ActivityPubServerRepository.upsert(db, subdomain);
-		// 	ActivityPubCustomEmojiCategoryRepository.addCategories(
-		// 		db,
-		// 		Array.from(categories),
-		// 	);
-		// 	for (let i = 0; i < data.length; i++) {
-		// 		// FIXME: it seems this operation is performed outside a write
-		// 		//  transaction
-		// 		try {
-		// 			ActivityPubCustomEmojiRepository.upsert(db, data[i], server);
-		// 		} catch (e) {
-		// 			console.log('[ERROR]: emoji insert failed. Look for FIXME');
-		// 		}
-		// 	}
-		// });
 	}
 
 	/**
@@ -232,7 +215,7 @@ export class EmojiService {
 	 * @param selection if provided, will skip any emoji not in this list
 	 */
 	static async loadEmojisForInstance(
-		db: Realm,
+		db: SQLiteDatabase,
 		globalDb: MMKV,
 		subdomain: string,
 		{
@@ -265,21 +248,16 @@ export class EmojiService {
 			}
 		}
 
-		console.log(
-			'[INFO]: loading emojis in db',
-			subdomain,
-			data.length,
-			categories.size,
-		);
-
-		db.write(() => {
-			// ActivityPubCustomEmojiRepository.clearAll(db)
-			const server = ActivityPubServerRepository.upsert(db, subdomain);
-			ActivityPubCustomEmojiCategoryRepository.addCategories(
-				db,
-				Array.from(categories),
-			);
-			ActivityPubCustomEmojiRepository.upsertMany(db, data, server);
+		const server = await ServerService.upsert(db, {
+			driver: KNOWN_SOFTWARE.UNKNOWN,
+			description: 'N/A',
+			url: subdomain,
 		});
+
+		ActivityPubCustomEmojiCategoryRepository.addCategories(
+			db,
+			Array.from(categories),
+		);
+		await ServerEmojiService.upsertMany(db, server, data);
 	}
 }

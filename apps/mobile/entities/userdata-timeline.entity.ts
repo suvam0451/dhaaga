@@ -1,5 +1,3 @@
-// import { ObjectSchema, Object } from 'realm';
-
 export class UserDataTimeline extends Object {
 	// _id: Realm.BSON.UUID;
 	/**

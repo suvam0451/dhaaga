@@ -2,17 +2,16 @@ import {
 	ActivityPubServer,
 	ActivityPubServerCreateDTO,
 } from '../entities/activitypub-server.entity';
-// import { Realm } from 'realm';
 import { ActivityPubCustomEmojiItem } from '../entities/activitypub-emoji.entity';
-import { UpdateMode } from 'realm';
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export class ActivityPubServerRepository {
-	// db: Realm;
+	db: SQLiteDatabase;
 	// constructor(db: Realm) {
 	// 	this.db = db;
 	// }
 
-	static create(db) {
+	static create(db: SQLiteDatabase) {
 		// return new ActivityPubServerRepository(db);
 	}
 
@@ -58,7 +57,7 @@ export class ActivityPubServerRepository {
 	 * add an ActivityPub server to list of known servers
 	 */
 	static upsert(
-		db: Realm,
+		db: SQLiteDatabase,
 		url: string,
 		software?: string,
 	): ActivityPubServer | null {
@@ -83,24 +82,27 @@ export class ActivityPubServerRepository {
 		}
 	}
 
-	static checkEmojiReactionRetryPolicy(db: Realm) {}
+	static checkEmojiReactionRetryPolicy(db: SQLiteDatabase) {}
 	/**
 	 * Updates the detected software for this server
 	 * (Always) Inserts new record, if not exists
 	 * Skips if detected software is "unknown"
 	 */
-	static updateSoftwareType(db: Realm, dto: ActivityPubServerCreateDTO) {
+	static updateSoftwareType(
+		db: SQLiteDatabase,
+		dto: ActivityPubServerCreateDTO,
+	) {
 		return this.upsert(db, dto.url, dto.type);
 	}
 
-	static updateNodeInfo(db: Realm, urlLike: string, nodeinfo: string) {
+	static updateNodeInfo(db: SQLiteDatabase, urlLike: string, nodeinfo: string) {
 		const _server = this.upsert(db, urlLike);
 		_server.nodeinfo = nodeinfo;
 		return _server;
 	}
 
 	static addEmoji(
-		db: Realm,
+		db: SQLiteDatabase,
 		emoji: ActivityPubCustomEmojiItem,
 		server: ActivityPubServer,
 	) {
@@ -110,7 +112,7 @@ export class ActivityPubServerRepository {
 		}
 	}
 
-	static get(db: Realm, url: string) {
+	static get(db: SQLiteDatabase, url: string) {
 		url = url.replace(/^https?:\/\//, '');
 		// return db
 		// 	.objects(ActivityPubServer)

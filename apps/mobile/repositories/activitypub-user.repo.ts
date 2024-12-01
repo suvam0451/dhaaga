@@ -1,23 +1,22 @@
-import { Realm } from '@realm/react';
 import { ActivityPubUser } from '../entities/activitypub-user.entity';
 import { ActivityPubServerRepository } from './activitypub-server.repo';
 import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
-import { UpdateMode } from 'realm';
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export class ActivityPubUserRepository {
-	static clearAll(db: Realm) {
-		db.delete(db.objects(ActivityPubUser));
+	static clearAll(db: SQLiteDatabase) {
+		// db.delete(db.objects(ActivityPubUser));
 	}
 
 	static addMeToUserList(list: ActivityPubUser[], me: ActivityPubUser) {
-		const existingIds = list.map((o) => o._id);
-		const myId = me._id;
-		const exists = existingIds.find((o) => o.toString() == myId.toString());
-
-		if (!exists) {
-			list.push(me);
-		}
-		return list;
+		// const existingIds = list.map((o) => o._id);
+		// const myId = me._id;
+		// const exists = existingIds.find((o) => o.toString() == myId.toString());
+		//
+		// if (!exists) {
+		// 	list.push(me);
+		// }
+		// return list;
 	}
 
 	/**
@@ -27,7 +26,7 @@ export class ActivityPubUserRepository {
 	 * @param userSubdomain used by misskey, when host = null
 	 */
 	static upsert(
-		db: Realm,
+		db: SQLiteDatabase,
 		{
 			user,
 			userSubdomain,
@@ -55,18 +54,18 @@ export class ActivityPubUserRepository {
 		const _user = this.getByUsername(db, user.getUsername(), _subdomain);
 
 		try {
-			return db.create(
-				ActivityPubUser,
-				{
-					_id: _user?._id || new Realm.BSON.UUID(),
-					username: user.getUsername(),
-					userId: user.getId(),
-					avatarUrl: user.getAvatarUrl(),
-					displayName: user.getDisplayName(),
-					server: _server,
-				},
-				UpdateMode.Modified,
-			);
+			// return db.create(
+			// 	ActivityPubUser,
+			// 	{
+			// 		_id: _user?._id || new Realm.BSON.UUID(),
+			// 		username: user.getUsername(),
+			// 		userId: user.getId(),
+			// 		avatarUrl: user.getAvatarUrl(),
+			// 		displayName: user.getDisplayName(),
+			// 		server: _server,
+			// 	},
+			// 	UpdateMode.Modified,
+			// );
 		} catch (e) {
 			console.log('[ERROR]: user db', e);
 			return null;
@@ -74,7 +73,7 @@ export class ActivityPubUserRepository {
 	}
 
 	static upsertMultiple(
-		db: Realm,
+		db: SQLiteDatabase,
 		{
 			users,
 			userSubdomain,
@@ -91,13 +90,13 @@ export class ActivityPubUserRepository {
 		return results;
 	}
 
-	static getByAcctId(db: Realm, acctId: string) {
-		return db.objects(ActivityPubUser).find((o) => o.accountId === acctId);
+	static getByAcctId(db: SQLiteDatabase, acctId: string) {
+		// return db.objects(ActivityPubUser).find((o) => o.accountId === acctId);
 	}
 
-	static getByUsername(db: Realm, username: string, instance: string) {
-		return db
-			.objects(ActivityPubUser)
-			.find((o) => o.username === username && o.server?.url === instance);
+	static getByUsername(db: SQLiteDatabase, username: string, instance: string) {
+		// return db
+		// 	.objects(ActivityPubUser)
+		// 	.find((o) => o.username === username && o.server?.url === instance);
 	}
 }

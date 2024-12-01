@@ -1,9 +1,6 @@
 import { memo, useEffect, useState } from 'react';
-import { EmojiService } from '../../../services/emoji.service';
 import { Text, Image as RNImage } from 'react-native';
 import { APP_THEME } from '../../../styles/AppTheme';
-import { Image } from 'expo-image';
-import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import { randomUUID } from 'expo-crypto';
 

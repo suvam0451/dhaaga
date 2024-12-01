@@ -1,7 +1,3 @@
-// import { ObjectSchema, Object } from 'realm';
-
-// CheapBotsTootSweet
-
 export class ActivityPubContentFilterRule extends Object {
 	// _id: Realm.BSON.UUID;
 

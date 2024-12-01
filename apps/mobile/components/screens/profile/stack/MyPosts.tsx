@@ -4,7 +4,6 @@ import WithAppPaginationContext, {
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-// import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
