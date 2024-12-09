@@ -112,7 +112,26 @@ function WithGorhomBottomSheetWrapper() {
 							initialRouteName={'(tabs)'}
 							screenOptions={{ headerShown: false }}
 						>
-							<Stack.Screen name="(tabs)" />
+							<Stack.Screen
+								name="(tabs)"
+								options={{
+									presentation: 'modal',
+								}}
+							/>
+							<Stack.Screen
+								name="modal"
+								options={{
+									presentation: 'modal',
+								}}
+							/>
+							<Stack.Screen
+								name="formSheet"
+								options={{
+									presentation: 'formSheet',
+									headerShown: false,
+									animation: 'flip',
+								}}
+							/>
 						</Stack>
 					</View>
 				</WithAppBottomSheetContext>

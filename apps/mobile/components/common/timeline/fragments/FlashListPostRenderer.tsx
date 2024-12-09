@@ -2,7 +2,12 @@ import { ListItemEnum, ListItemType } from '../utils/itemType.types';
 import StatusItem from '../../status/StatusItem';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 
-const FlashListRenderer = ({ item }: { item: ListItemType }) => {
+/**
+ * Renders a list of posts into a FlashList
+ * @param item post object
+ * @constructor
+ */
+const FlashListPostRenderer = ({ item }: { item: ListItemType }) => {
 	switch (item.type) {
 		case ListItemEnum.ListItemWithImage: {
 			return (
@@ -31,4 +36,4 @@ const FlashListRenderer = ({ item }: { item: ListItemType }) => {
 	}
 };
 
-export default FlashListRenderer;
+export default FlashListPostRenderer;

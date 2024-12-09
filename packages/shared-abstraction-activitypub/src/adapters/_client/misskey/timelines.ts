@@ -51,7 +51,6 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 			if (e.code) {
 				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
 			}
-			console.log(e);
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
 	}

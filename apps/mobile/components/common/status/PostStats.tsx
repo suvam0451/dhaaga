@@ -72,7 +72,6 @@ const PostStats = memo(function Foo({
 
 	return (
 		<View style={[styles.container, style]}>
-			<View style={{ flexGrow: 1 }} />
 			<StatItem
 				count={LIKE_COUNT}
 				label={'Likes'}

@@ -1,21 +1,44 @@
-import { Fragment, memo, useMemo } from 'react';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
+import { memo, useMemo } from 'react';
 import { ParentPostFragment } from './_static';
 import SharedStatusFragment from './fragments/SharedStatusFragment';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { View } from 'react-native';
 
 type StatusItemProps = {
 	// disables all interactions
 	isPreview?: boolean;
 };
 
+function PostContainer({ children }: any) {
+	return (
+		<View
+			style={{
+				paddingHorizontal: 8,
+				paddingVertical: 6,
+				backgroundColor: '#242424',
+				margin: 6,
+				marginVertical: 6,
+				borderRadius: 16,
+			}}
+		>
+			{children}
+		</View>
+	);
+}
+
 /**
  * Renders a status/note
  * @constructor
  */
 const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 	const { dto } = useAppStatusItem();
 
 	return useMemo(() => {
@@ -27,15 +50,15 @@ const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 				dto.content.raw !== ''
 			) {
 				return (
-					<Fragment>
+					<PostContainer>
 						<StatusCore hasBoost={true} isPreview={isPreview} />
-					</Fragment>
+					</PostContainer>
 				);
 			} else {
 				// Normal Boost + Has Reply
 				if (dto.meta.isReply) {
 					return (
-						<Fragment>
+						<PostContainer>
 							<SharedStatusFragment />
 							<ParentPostFragment />
 							<StatusCore
@@ -43,32 +66,32 @@ const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 								hasParent={true}
 								isPreview={isPreview}
 							/>
-						</Fragment>
+						</PostContainer>
 					);
 				} else {
 					return (
-						<Fragment>
+						<PostContainer>
 							<SharedStatusFragment />
 							<StatusCore hasBoost={true} isPreview={isPreview} />
-						</Fragment>
+						</PostContainer>
 					);
 				}
 			}
 		} else if (dto.meta.isReply) {
 			return (
-				<Fragment>
+				<PostContainer>
 					<ParentPostFragment />
 					<StatusCore hasParent={true} isPreview={isPreview} />
-				</Fragment>
+				</PostContainer>
 			);
 		} else {
 			return (
-				<Fragment>
+				<PostContainer>
 					<StatusCore isPreview={isPreview} />
-				</Fragment>
+				</PostContainer>
 			);
 		}
-	}, [dto, primaryAcct]);
+	}, [dto, acct]);
 });
 
 export default StatusItem;

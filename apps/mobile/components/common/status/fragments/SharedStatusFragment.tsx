@@ -1,10 +1,8 @@
 import { memo, useMemo } from 'react';
 import useMfm from '../../../hooks/useMfm';
 import { View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { Text } from '@rneui/themed';
-import LocalizationService from '../../../../services/localization.services';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
@@ -36,11 +34,7 @@ const SharedStatusFragment = memo(function Foo() {
 		return (
 			<View
 				style={{
-					borderTopRightRadius: 8,
-					borderTopLeftRadius: 8,
-					paddingHorizontal: 12,
 					paddingTop: 4,
-					maxWidth: '100%',
 				}}
 			>
 				<View

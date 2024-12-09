@@ -41,7 +41,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 		// injected
 		limit: TIMELINE_STATUS_LIMIT,
 		sinceId: minId,
-		untilId: maxId,
+		untilId: maxId === null ? undefined : maxId,
 		maxId,
 		minId,
 		// quirks
@@ -55,7 +55,6 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				return [];
 			case TimelineFetchMode.HOME: {
 				const { data, error } = await router.timelines.home(_query);
-				console.log('results', data, error);
 				if (error) return [];
 				return data;
 			}

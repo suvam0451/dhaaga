@@ -74,15 +74,7 @@ const StatusCore = memo(
 			return (
 				<View
 					style={{
-						padding: 10,
-						paddingHorizontal: APP_SETTING_VERTICAL_MARGIN,
-						paddingTop: paddingTop,
-						paddingBottom: 4,
-						backgroundColor: colorScheme.palette.bg,
-						marginBottom: 4,
-						borderRadius: 8,
-						borderTopLeftRadius: hasParent || hasBoost ? 0 : 8,
-						borderTopRightRadius: hasParent || hasBoost ? 0 : 8,
+						paddingTop: 4,
 					}}
 				>
 					<TouchableOpacity
@@ -134,9 +126,9 @@ const StatusCore = memo(
 					)}
 
 					{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
-					{!isPreview && (
-						<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />
-					)}
+					{/*{!isPreview && (*/}
+					{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
+					{/*)}*/}
 				</View>
 			);
 		}, [

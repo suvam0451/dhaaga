@@ -23,7 +23,6 @@ export const ParentPostFragment = memo(function Foo() {
 		return (
 			<View
 				style={{
-					backgroundColor: colorScheme.palette.bg,
 					borderRadius: 8,
 					borderBottomLeftRadius: 0,
 					borderBottomRightRadius: 0,

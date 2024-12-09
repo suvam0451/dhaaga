@@ -53,28 +53,28 @@ const NowBrowsingHeader = memo(function Foo() {
 
 	return (
 		<View style={{ marginHorizontal: 8, marginBottom: 32 }}>
-			<View
-				style={{
-					marginVertical: 16,
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}
-			>
-				<View style={{ flex: 1, flexShrink: 1 }}>
-					<Text
-						style={{
-							fontSize: 24,
-							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							color: colorScheme.textColor.high,
-							textAlign: 'center',
-						}}
-					>
-						Now Browsing
-					</Text>
-				</View>
-			</View>
+			{/*<View*/}
+			{/*	style={{*/}
+			{/*		marginVertical: 16,*/}
+			{/*		display: 'flex',*/}
+			{/*		flexDirection: 'row',*/}
+			{/*		alignItems: 'center',*/}
+			{/*		justifyContent: 'center',*/}
+			{/*	}}*/}
+			{/*>*/}
+			{/*	<View style={{ flex: 1, flexShrink: 1 }}>*/}
+			{/*		<Text*/}
+			{/*			style={{*/}
+			{/*				fontSize: 24,*/}
+			{/*				fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,*/}
+			{/*				color: colorScheme.textColor.high,*/}
+			{/*				textAlign: 'center',*/}
+			{/*			}}*/}
+			{/*		>*/}
+			{/*			Now Browsing*/}
+			{/*		</Text>*/}
+			{/*	</View>*/}
+			{/*</View>*/}
 			{Comp}
 		</View>
 	);

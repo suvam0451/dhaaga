@@ -22,6 +22,7 @@ import SocialHubAssistant from '../../../screens/home/stack/landing/fragments/So
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import SocialHubQuickDestinations from '../../../screens/home/stack/landing/fragments/SocialHubQuickDestinations';
 import { DbMetaRepo } from '../../../../database/repositories/_meta.repo';
+import { AppSegmentedControl } from '../../../lib/SegmentedControl';
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
 	MORNING = 'Morning',
@@ -298,9 +299,6 @@ function SocialHub() {
 		);
 	}, [userDataTimelines]);
 
-	function onDemoFunctionPress() {
-		DbMetaRepo.listTables();
-	}
 	return (
 		<View
 			style={{
@@ -323,114 +321,122 @@ function SocialHub() {
 					}}
 				>
 					<SocialHubLantern />
-					{TimeOfDay === TIME_OF_DAY.MORNING && (
-						<Text
-							style={[
-								styles.timeOfDayText,
-								{ color: colorScheme.textColor.medium },
-							]}
-						>
-							Good Morning
-						</Text>
-					)}
-					{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
-						<Text
-							style={[
-								styles.timeOfDayText,
-								{ color: colorScheme.textColor.medium },
-							]}
-						>
-							Good Afternoon
-						</Text>
-					)}
-					{TimeOfDay === TIME_OF_DAY.EVENING && (
-						<Text
-							style={[
-								styles.timeOfDayText,
-								{ color: colorScheme.textColor.medium },
-							]}
-						>
-							Good Evening
-						</Text>
-					)}
-					{TimeOfDay === TIME_OF_DAY.NIGHT && (
-						<Text
-							style={[
-								styles.timeOfDayText,
-								{ color: colorScheme.textColor.medium },
-							]}
-						>
-							Good Night 🌙
-						</Text>
-					)}
+					{/*{TimeOfDay === TIME_OF_DAY.MORNING && (*/}
+					{/*	<Text*/}
+					{/*		style={[*/}
+					{/*			styles.timeOfDayText,*/}
+					{/*			{ color: colorScheme.textColor.medium },*/}
+					{/*		]}*/}
+					{/*	>*/}
+					{/*		Good Morning*/}
+					{/*	</Text>*/}
+					{/*)}*/}
+					{/*{TimeOfDay === TIME_OF_DAY.AFTERNOON && (*/}
+					{/*	<Text*/}
+					{/*		style={[*/}
+					{/*			styles.timeOfDayText,*/}
+					{/*			{ color: colorScheme.textColor.medium },*/}
+					{/*		]}*/}
+					{/*	>*/}
+					{/*		Good Afternoon*/}
+					{/*	</Text>*/}
+					{/*)}*/}
+					{/*{TimeOfDay === TIME_OF_DAY.EVENING && (*/}
+					{/*	<Text*/}
+					{/*		style={[*/}
+					{/*			styles.timeOfDayText,*/}
+					{/*			{ color: colorScheme.textColor.medium },*/}
+					{/*		]}*/}
+					{/*	>*/}
+					{/*		Good Evening*/}
+					{/*	</Text>*/}
+					{/*)}*/}
+					{/*{TimeOfDay === TIME_OF_DAY.NIGHT && (*/}
+					{/*	<Text*/}
+					{/*		style={[*/}
+					{/*			styles.timeOfDayText,*/}
+					{/*			{ color: colorScheme.textColor.medium },*/}
+					{/*		]}*/}
+					{/*	>*/}
+					{/*		Good Night 🌙*/}
+					{/*	</Text>*/}
+					{/*)}*/}
+
+					<AppSegmentedControl
+						items={[
+							{ label: 'Favourites' },
+							{ label: 'Pinned' },
+							{ label: 'Saved' },
+						]}
+					/>
 
 					<SocialHubQuickDestinations />
 
 					<View>
-						<View
-							style={{
-								marginTop: 64,
-								backgroundColor: colorScheme.palette.menubar,
-								padding: 8,
-								borderRadius: 8,
-							}}
-						>
-							<View
-								style={{
-									display: 'flex',
-									flexDirection: 'row',
-									alignItems: 'center',
-								}}
-							>
-								<View style={{ width: 28 }}>
-									<AntDesign
-										name="pushpin"
-										size={24}
-										color={APP_THEME.COLOR_SCHEME_B}
-										style={{ marginRight: 4 }}
-									/>
-								</View>
-								<Text
-									style={{
-										fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-										fontSize: 20,
-										marginLeft: 4,
-										flexGrow: 1,
-										color: APP_FONT.MONTSERRAT_BODY,
-									}}
-								>
-									Pinned
-								</Text>
-								<View
-									style={{
-										display: 'flex',
-										flexDirection: 'row',
-										alignItems: 'center',
-									}}
-								>
-									<View style={{ marginRight: 8 }}>
-										<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-											Show All
-										</Text>
-									</View>
-									<View
-										style={{
-											paddingHorizontal: 8,
-											paddingVertical: 4,
-										}}
-										onTouchEnd={() => {
-											router.push('/pinned');
-										}}
-									>
-										<FontAwesome6
-											name="chevron-right"
-											size={20}
-											color={APP_FONT.MONTSERRAT_BODY}
-										/>
-									</View>
-								</View>
-							</View>
-						</View>
+						{/*<View*/}
+						{/*	style={{*/}
+						{/*		marginTop: 64,*/}
+						{/*		backgroundColor: colorScheme.palette.menubar,*/}
+						{/*		padding: 8,*/}
+						{/*		borderRadius: 8,*/}
+						{/*	}}*/}
+						{/*>*/}
+						{/*	<View*/}
+						{/*		style={{*/}
+						{/*			display: 'flex',*/}
+						{/*			flexDirection: 'row',*/}
+						{/*			alignItems: 'center',*/}
+						{/*		}}*/}
+						{/*	>*/}
+						{/*		<View style={{ width: 28 }}>*/}
+						{/*			<AntDesign*/}
+						{/*				name="pushpin"*/}
+						{/*				size={24}*/}
+						{/*				color={APP_THEME.COLOR_SCHEME_B}*/}
+						{/*				style={{ marginRight: 4 }}*/}
+						{/*			/>*/}
+						{/*		</View>*/}
+						{/*		<Text*/}
+						{/*			style={{*/}
+						{/*				fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,*/}
+						{/*				fontSize: 20,*/}
+						{/*				marginLeft: 4,*/}
+						{/*				flexGrow: 1,*/}
+						{/*				color: APP_FONT.MONTSERRAT_BODY,*/}
+						{/*			}}*/}
+						{/*		>*/}
+						{/*			Pinned*/}
+						{/*		</Text>*/}
+						{/*		<View*/}
+						{/*			style={{*/}
+						{/*				display: 'flex',*/}
+						{/*				flexDirection: 'row',*/}
+						{/*				alignItems: 'center',*/}
+						{/*			}}*/}
+						{/*		>*/}
+						{/*			<View style={{ marginRight: 8 }}>*/}
+						{/*				<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>*/}
+						{/*					Show All*/}
+						{/*				</Text>*/}
+						{/*			</View>*/}
+						{/*			<View*/}
+						{/*				style={{*/}
+						{/*					paddingHorizontal: 8,*/}
+						{/*					paddingVertical: 4,*/}
+						{/*				}}*/}
+						{/*				onTouchEnd={() => {*/}
+						{/*					router.push('/pinned');*/}
+						{/*				}}*/}
+						{/*			>*/}
+						{/*				<FontAwesome6*/}
+						{/*					name="chevron-right"*/}
+						{/*					size={20}*/}
+						{/*					color={APP_FONT.MONTSERRAT_BODY}*/}
+						{/*				/>*/}
+						{/*			</View>*/}
+						{/*		</View>*/}
+						{/*	</View>*/}
+						{/*</View>*/}
 
 						{PinnedItems}
 					</View>

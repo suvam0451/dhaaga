@@ -23,7 +23,6 @@ const AppSelectedProfileIndicator = memo(() => {
 			acct: o.acct,
 		})),
 	);
-	console.log('selected acct is', acct);
 	const { colorScheme } = useAppTheme();
 	const { isAnimating, visible } = useAppBottomSheet();
 

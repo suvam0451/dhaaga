@@ -1,5 +1,4 @@
 {
-  "extends": ["@dhaaga/tsconfig/base.json"],
   "compilerOptions": {
     "baseUrl": ".",
     "jsx": "react-native",
@@ -24,5 +23,6 @@
   ],
   "files": [
     "./**/*"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }

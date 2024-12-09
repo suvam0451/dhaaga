@@ -1,7 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import WithAppPaginationContext from '../../../../states/usePagination';
 import LoadingMore from '../../../screens/home/LoadingMore';
 import { AnimatedFlashList } from '@shopify/flash-list';
@@ -16,10 +15,9 @@ import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndic
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import useTimeline from '../api/useTimeline';
 import useTimelineLabel from '../api/useTimelineLabel';
-import FlashListRenderer from '../fragments/FlashListRenderer';
+import FlashListPostRenderer from '../fragments/FlashListPostRenderer';
 import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
@@ -137,10 +135,12 @@ const Timeline = memo(() => {
 		<View
 			style={[
 				styles.container,
-				{ position: 'relative', backgroundColor: colorScheme.palette.bg },
+				{
+					position: 'relative',
+					backgroundColor: colorScheme.palette.bg,
+				},
 			]}
 		>
-			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader title={label} />
 			</Animated.View>
@@ -153,7 +153,7 @@ const Timeline = memo(() => {
 				}
 				estimatedItemSize={200}
 				data={listItems}
-				renderItem={FlashListRenderer}
+				renderItem={FlashListPostRenderer}
 				getItemType={(o) => o.type}
 				onScroll={onScroll}
 				contentContainerStyle={{

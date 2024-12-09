@@ -4,20 +4,15 @@ import {
 	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
-	FollowerGetQueryDTO,
-	DhaagaErrorCode,
 	LibraryResponse,
 	LibraryPromise,
 	errorBuilder,
-	FollowPostDto,
 	GetPostsQueryDTO,
 	MastoAccount,
-	MastoFeaturedTag,
 	MastoList,
 	MastoStatus,
 	MegaStatus,
 	MissUserDetailed,
-	// template routers
 	BaseAccountsRouter,
 } from '@dhaaga/shared-abstraction-activitypub';
 
