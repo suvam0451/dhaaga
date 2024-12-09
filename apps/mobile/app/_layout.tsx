@@ -32,6 +32,7 @@ import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '../database/migrations';
 import useGlobalState from '../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 /**
  * Suppress these warnings...
@@ -102,39 +103,41 @@ function WithGorhomBottomSheetWrapper() {
 	return (
 		<WithActivityPubRestClient>
 			<WithGorhomBottomSheetContext>
-				<WithAppBottomSheetContext>
-					<View
-						style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
-						onLayout={onLayoutRootView}
-					>
-						<StatusBar backgroundColor={colorScheme.palette.bg} />
-						<Stack
-							initialRouteName={'(tabs)'}
-							screenOptions={{ headerShown: false }}
+				<BottomSheetModalProvider>
+					<WithAppBottomSheetContext>
+						<View
+							style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
+							onLayout={onLayoutRootView}
 						>
-							<Stack.Screen
-								name="(tabs)"
-								options={{
-									presentation: 'modal',
-								}}
-							/>
-							<Stack.Screen
-								name="modal"
-								options={{
-									presentation: 'modal',
-								}}
-							/>
-							<Stack.Screen
-								name="formSheet"
-								options={{
-									presentation: 'formSheet',
-									headerShown: false,
-									animation: 'flip',
-								}}
-							/>
-						</Stack>
-					</View>
-				</WithAppBottomSheetContext>
+							<StatusBar backgroundColor={colorScheme.palette.bg} />
+							<Stack
+								initialRouteName={'(tabs)'}
+								screenOptions={{ headerShown: false }}
+							>
+								<Stack.Screen
+									name="(tabs)"
+									options={{
+										presentation: 'modal',
+									}}
+								/>
+								<Stack.Screen
+									name="modal"
+									options={{
+										presentation: 'modal',
+									}}
+								/>
+								<Stack.Screen
+									name="formSheet"
+									options={{
+										presentation: 'formSheet',
+										headerShown: false,
+										animation: 'flip',
+									}}
+								/>
+							</Stack>
+						</View>
+					</WithAppBottomSheetContext>
+				</BottomSheetModalProvider>
 			</WithGorhomBottomSheetContext>
 		</WithActivityPubRestClient>
 	);

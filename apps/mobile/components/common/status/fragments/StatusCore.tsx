@@ -1,12 +1,11 @@
-import { memo, useMemo, useState } from 'react';
+import { Fragment, memo, useMemo, useState } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import WithAppStatusItemContext, {
 	useAppStatusItem,
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
-import { View, TouchableOpacity } from 'react-native';
-// import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, TouchableOpacity, Text } from 'react-native';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
@@ -16,6 +15,9 @@ import PostCreatedBy from './PostCreatedBy';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusQuoted from './StatusQuoted';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../lib/Icon';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Mostly used to remove the border
@@ -28,6 +30,38 @@ type StatusCoreProps = {
 };
 
 const APP_SETTING_VERTICAL_MARGIN = 8;
+
+function StatusController() {
+	const { dto } = useAppStatusItem();
+	const { present } = useGlobalState(
+		useShallow((o) => ({
+			present: o.rnBottomSheet.present,
+		})),
+	);
+	const STATUS_DTO = dto.meta.isBoost
+		? dto.content.raw
+			? dto
+			: dto.boostedFrom
+		: dto;
+
+	function onMoreOptionsPress() {
+		present();
+	}
+
+	return (
+		<View
+			style={{
+				flexShrink: 1,
+				maxWidth: 256,
+				justifyContent: 'flex-start',
+			}}
+		>
+			<TouchableOpacity onPress={onMoreOptionsPress} style={{ paddingTop: 4 }}>
+				<AppIcon id={'ellipsis-v'} emphasis={'medium'} />
+			</TouchableOpacity>
+		</View>
+	);
+}
 
 const StatusCore = memo(
 	({ hasParent, hasBoost, isPreview }: StatusCoreProps) => {
@@ -47,11 +81,7 @@ const StatusCore = memo(
 			STATUS_DTO.meta.isReply ||
 			(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
 
-		const {
-			content: PostContent,
-			aiContext,
-			isLoaded,
-		} = useMfm({
+		const { content: PostContent, isLoaded } = useMfm({
 			content: STATUS_DTO.content.raw,
 			remoteSubdomain: STATUS_DTO.postedBy.instance,
 			emojiMap: STATUS_DTO.calculated.emojis,
@@ -72,11 +102,7 @@ const StatusCore = memo(
 			if (!isLoaded) return <StatusItemSkeleton />;
 
 			return (
-				<View
-					style={{
-						paddingTop: 4,
-					}}
-				>
+				<Fragment>
 					<TouchableOpacity
 						delayPressIn={150}
 						onPress={() => {
@@ -84,7 +110,14 @@ const StatusCore = memo(
 						}}
 					>
 						<View>
-							<PostCreatedBy dto={dto} style={{ paddingBottom: 6 }} />
+							<View style={{ flexDirection: 'row' }}>
+								<PostCreatedBy
+									dto={dto}
+									style={{ paddingBottom: 6, flex: 1, overflowX: 'hidden' }}
+								/>
+								<StatusController />
+							</View>
+
 							{isSensitive && (
 								<StatusCw
 									cw={spoilerText}
@@ -129,7 +162,7 @@ const StatusCore = memo(
 					{/*{!isPreview && (*/}
 					{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
 					{/*)}*/}
-				</View>
+				</Fragment>
 			);
 		}, [
 			isLoaded,

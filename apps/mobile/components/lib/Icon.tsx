@@ -17,6 +17,7 @@ export type APP_ICON_ENUM =
 	| 'clear'
 	| 'done'
 	| 'edit'
+	| 'ellipsis-v'
 	| 'home'
 	| 'menu'
 	| 'message'
@@ -137,6 +138,16 @@ export const AppIcon = memo(
 						/>
 					);
 
+				case 'ellipsis-v':
+					return (
+						<Ionicons
+							name="ellipsis-horizontal"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'home':
 					return (
 						<Ionicons

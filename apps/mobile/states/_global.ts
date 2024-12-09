@@ -19,21 +19,37 @@ import AtprotoSessionService from '../services/atproto/atproto-session.service';
 import { AccountMetadataService } from '../database/entities/account-metadata';
 import { TimelineFetchMode } from '../components/common/timeline/utils/timeline.types';
 import { Result } from '../utils/result';
+import { RandomUtil } from '../utils/random.utils';
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
+import { MutableRefObject } from 'react';
 
 type AppThemePack = {
 	id: string;
 	name: string;
 };
 
+export enum REACT_NATIVE_BOTTOM_SHEET_ENUM {
+	POST_MENU = 'PostMenu',
+	NA = 'N/A',
+}
+
+type ReactNativeBottomSheetState = {
+	type: REACT_NATIVE_BOTTOM_SHEET_ENUM;
+	visible: boolean;
+	requestId: string;
+	refresh: () => void;
+	present: () => void;
+	dismiss: () => void;
+};
+
 type State = {
 	db: SQLiteDatabase | null;
 	mmkv: MMKV | null; // currently active account
-	acct: Account | null;
-	/**
+	acct: Account | null /**
 	 * fetched account credentials
 	 * converted into application
 	 * compatible interface
-	 * */
+	 * */;
 	driver: KNOWN_SOFTWARE;
 	me: UserInterface | null;
 
@@ -54,13 +70,14 @@ type State = {
 	colorScheme: AppColorSchemeType;
 	packList: AppThemePack[];
 	activePack: ThemePackType;
+
+	rnBottomSheet: ReactNativeBottomSheetState;
 };
 
 type Actions = {
 	selectAccount(acct: Account): void;
 	getPacks: () => AppThemePack[];
 	setPack: (packId: string) => void;
-
 	setHomepageType: (selection: TimelineFetchMode) => void;
 	appInitialize: (db: SQLiteDatabase) => void;
 	restoreSession: () => void;
@@ -84,6 +101,14 @@ const defaultValue: State & Actions = {
 	selectAccount: undefined,
 	setHomepageType: undefined,
 	activePack: DEFAULT_THEME_PACK_OBJECT,
+	rnBottomSheet: {
+		type: REACT_NATIVE_BOTTOM_SHEET_ENUM.NA,
+		refresh: undefined,
+		requestId: RandomUtil.nanoId(),
+		visible: false,
+		present: undefined,
+		dismiss: undefined,
+	},
 };
 
 class GlobalStateService {
@@ -166,6 +191,22 @@ const useGlobalState = create<State & Actions>()(
 				...state,
 				homepageType: selection,
 			}));
+		},
+		rnBottomSheet: {
+			requestId: RandomUtil.nanoId(),
+			refresh: () => {},
+			type: REACT_NATIVE_BOTTOM_SHEET_ENUM.NA,
+			visible: false,
+			present: () => {
+				set((state) => {
+					state.rnBottomSheet.visible = true;
+				});
+			},
+			dismiss: () => {
+				set((state) => {
+					state.rnBottomSheet.visible = false;
+				});
+			},
 		},
 	})),
 );

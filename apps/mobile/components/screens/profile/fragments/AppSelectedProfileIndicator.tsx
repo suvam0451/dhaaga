@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
 		height: '100%',
 		alignItems: 'center',
 		flexDirection: 'row',
+		paddingTop: 12,
 	},
 	accountIconTouchableContainerRight: {
 		height: '100%',
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		padding: 2,
 		paddingRight: 8,
+		marginTop: 10,
 	},
 	accountIconInternalContainer: {
 		borderRadius: 8,

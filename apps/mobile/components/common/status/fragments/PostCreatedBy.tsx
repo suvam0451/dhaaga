@@ -185,7 +185,16 @@ const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
 		if (!STATUS_DTO.postedBy) return <OriginalPosterSkeleton />;
 		return (
 			<View
-				style={[{ alignItems: 'center', flexDirection: 'row', flex: 1 }, style]}
+				style={[
+					{
+						alignItems: 'center',
+						flexDirection: 'row',
+						flexGrow: 1,
+						overflowX: 'hidden',
+						width: 'auto',
+					},
+					style,
+				]}
 			>
 				<OriginalPostedPfpFragment
 					url={STATUS_DTO.postedBy.avatarUrl}

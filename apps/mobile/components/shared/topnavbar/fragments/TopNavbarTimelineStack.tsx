@@ -14,6 +14,7 @@ import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../lib/Icon';
 import { router } from 'expo-router';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
+import TopNavbarBackButton from './TopNavbarBackButton';
 
 type HeadersProps = {
 	title: string;
@@ -73,12 +74,12 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 	return (
 		<View style={[styles.root, { backgroundColor: colorScheme.palette.bg }]}>
 			<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>
-				<TouchableOpacity
-					style={styles.menuActionButtonContainer}
-					onPress={onChangeTheme}
-				>
-					<AppIcon id={'palette'} emphasis={'medium'} />
-				</TouchableOpacity>
+				{/*<TouchableOpacity*/}
+				{/*	style={styles.menuActionButtonContainer}*/}
+				{/*	onPress={onChangeTheme}*/}
+				{/*>*/}
+				{/*	<AppIcon id={'palette'} emphasis={'medium'} />*/}
+				{/*</TouchableOpacity>*/}
 			</View>
 
 			<TouchableOpacity
@@ -92,7 +93,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 				onPress={onIconPress}
 			>
 				<Text
-					style={[styles.label, { color: colorScheme.textColor.medium }]}
+					style={[styles.label, { color: colorScheme.textColor.high }]}
 					numberOfLines={1}
 				>
 					{title || 'Home'}

@@ -7,6 +7,7 @@ import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import AppReactNativeBottomSheet from '../../components/shared/rn-bottom-sheet';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
@@ -79,7 +80,11 @@ export default function TabLayout() {
 							tabBarStyle: {
 								backgroundColor: colorScheme.palette.bg,
 								borderTopWidth: 0,
-								height: 46,
+								height: 52,
+							},
+							tabBarIconStyle: {
+								height: 42,
+								width: 64,
 							},
 							// tabBarIconStyle: {
 							// 	color: colorScheme.textColor.medium,
@@ -96,9 +101,9 @@ export default function TabLayout() {
 						options={{
 							tabBarIcon: ({ color, size, focused }) =>
 								focused ? (
-									<Ionicons size={size} name="home" color={color} />
+									<Ionicons size={size + 2} name="home" color={color} />
 								) : (
-									<Ionicons size={size} name="home-outline" color={color} />
+									<Ionicons size={size + 2} name="home-outline" color={color} />
 								),
 						}}
 					/>
@@ -109,13 +114,13 @@ export default function TabLayout() {
 								focused ? (
 									<Ionicons
 										name="compass-sharp"
-										size={size + 4}
+										size={size + 8}
 										color={color}
 									/>
 								) : (
 									<Ionicons
 										name="compass-outline"
-										size={size + 4}
+										size={size + 8}
 										color={color}
 									/>
 								),
@@ -126,9 +131,9 @@ export default function TabLayout() {
 						options={{
 							tabBarIcon: ({ color, size, focused }) =>
 								focused ? (
-									<AntDesign name={'appstore1'} size={size} color={color} />
+									<AntDesign name={'appstore1'} size={size + 4} color={color} />
 								) : (
-									<AntDesign name="appstore-o" size={size} color={color} />
+									<AntDesign name="appstore-o" size={size + 4} color={color} />
 								),
 						}}
 					/>
@@ -140,12 +145,12 @@ export default function TabLayout() {
 								focused ? (
 									<Ionicons
 										name="notifications-sharp"
-										size={size}
+										size={size + 4}
 										color={color}
 									/>
 								) : (
 									<Ionicons
-										size={size}
+										size={size + 4}
 										name="notifications-outline"
 										color={color}
 									/>
@@ -164,6 +169,7 @@ export default function TabLayout() {
 						}}
 					/>
 				</Tabs>
+				<AppReactNativeBottomSheet />
 			</WithAppAssetsContext>
 		</View>
 	);
