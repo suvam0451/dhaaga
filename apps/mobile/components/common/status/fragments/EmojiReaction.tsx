@@ -11,13 +11,12 @@ import {
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
-import AppSettingsPreferencesService from '../../../../services/app-settings/app-settings-preferences.service';
-import { useRealm } from '@realm/react';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -27,7 +26,6 @@ const EmojiReaction = memo(function Foo({
 	postDto: ActivityPubStatusAppDtoType;
 }) {
 	const { domain, subdomain, client } = useActivityPubRestClientContext();
-	const db = useRealm();
 	const {
 		TextRef,
 		PostRef,
@@ -39,6 +37,7 @@ const EmojiReaction = memo(function Foo({
 	const { getPostListReducer } = useAppTimelinePosts();
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
+	const { colorScheme } = useAppTheme();
 
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
@@ -46,22 +45,29 @@ const EmojiReaction = memo(function Foo({
 				return [
 					styles.emojiContainer,
 					{
-						backgroundColor: '#41332e',
+						backgroundColor: colorScheme.reactions.active,
 						borderWidth: 2,
-						borderColor: '#d3ac6c',
+						borderColor: colorScheme.reactions.highlight,
 					},
 				];
 			} else {
-				return [styles.emojiContainer, { backgroundColor: '#303030' }];
+				return [
+					styles.emojiContainer,
+					{ backgroundColor: colorScheme.reactions.active },
+				];
 			}
 		}
-		return [styles.emojiContainer, { backgroundColor: '#161616' }];
-	}, [dto.interactable, dto.me]);
+		return [
+			styles.emojiContainer,
+			{ backgroundColor: colorScheme.reactions.inactive },
+		];
+	}, [dto.interactable, dto.me, colorScheme]);
 
 	async function onReactionPress() {
-		const isQuickReactionEnabled =
-			AppSettingsPreferencesService.create(db).isQuickReactionEnabled();
-		if (isQuickReactionEnabled) {
+		// const isQuickReactionEnabled =
+		// 	AppSettingsPreferencesService.create(db).isQuickReactionEnabled();
+		// FIXME: make this dynamic
+		if (true) {
 			const IS_REMOTE = ActivitypubReactionsService.canReact(dto?.name);
 			if (!IS_REMOTE) {
 				const { id } = ActivitypubReactionsService.extractReactionCode(

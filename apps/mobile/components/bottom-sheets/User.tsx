@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
 import { useActivitypubUserContext } from '../../states/useProfile';
 import { BottomSheet, Text, ListItem, Button } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
@@ -10,24 +10,23 @@ import {
 	AvatarContainerWithInset,
 	AvatarExpoImage,
 } from '../../styles/Containers';
-import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
 
 type StatusActionsProps = {
 	visible: boolean;
-	setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+	setVisible: Dispatch<SetStateAction<boolean>>;
 };
 
 function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-	const subdomain = primaryAcct?.subdomain;
-	const db = useRealm();
+	const { domain, subdomain } = useActivityPubRestClientContext();
+
 	const { globalDb } = useGlobalMmkvContext();
 
 	const { user } = useActivitypubUserContext();
 	const desc = user.getDescription();
+	const { colorScheme } = useAppTheme();
 
 	const DescriptionContent = useMemo(() => {
 		const target = user.getDescription();
@@ -37,8 +36,8 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 			emojiMap: user.getEmojiMap(),
 			domain,
 			subdomain,
-			db,
 			globalDb,
+			colorScheme,
 		});
 		return reactNodes?.map((para) => {
 			const uuid = randomUUID();

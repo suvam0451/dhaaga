@@ -5,16 +5,16 @@ import { Image } from 'expo-image';
 import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { Account } from '../../../entities/account.entity';
+import { Accounts } from '../../../database/entities/account';
 
 type SoftwareBadgeUpdateAccountOnClickProps = {
-	acct: Account;
+	acct: Accounts;
 };
 
 export const SoftwareBadgeUpdateAccountOnClick = memo(function Foo({
 	acct,
 }: SoftwareBadgeUpdateAccountOnClickProps) {
-	const Theming = useKnownSoftware(acct.domain);
+	const Theming = useKnownSoftware(acct.server);
 
 	return (
 		<View style={styles.badgeContainer}>

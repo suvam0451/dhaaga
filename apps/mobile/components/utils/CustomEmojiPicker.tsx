@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import {
 	ScrollView,
 	View,
@@ -7,8 +6,6 @@ import {
 	Pressable,
 	TouchableWithoutFeedback,
 } from 'react-native';
-import { useQuery } from '@realm/react';
-import { ActivityPubServer } from '../../entities/activitypub-server.entity';
 import { useEffect, useMemo, useState } from 'react';
 import { Input, Text } from '@rneui/themed';
 import { ActivityPubCustomEmojiItem } from '../../entities/activitypub-emoji.entity';
@@ -22,24 +19,24 @@ type Props = {
 function CustomEmojiPicker({ onBackdropPressed }: Props) {
 	const [KeyboardVisible, setKeyboardVisible] = useState(false);
 
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
+	// const { primaryAcct } = useActivityPubRestClientContext();
+	// const subdomain = primaryAcct?.subdomain;
 
-	const server = useQuery(ActivityPubServer).find((o) => o.url === subdomain);
-	const emojis = server?.emojis;
+	// const server = useQuery(ActivityPubServer).find((o) => o.url === subdomain);
+	// const emojis = server?.emojis;
 
 	const { categories, mapper } = useMemo(() => {
 		const set = new Set<string>();
 		const mapper = new Map<string, ActivityPubCustomEmojiItem[]>();
-		server.emojis.forEach((o) => {
-			if (!set.has(o.category[0]?.name)) {
-				set.add(o.category[0]?.name);
-				mapper.set(o.category[0]?.name, []);
-			}
-			mapper.get(o.category[0]?.name).push(o);
-		});
+		// server.emojis.forEach((o) => {
+		// 	if (!set.has(o.category[0]?.name)) {
+		// 		set.add(o.category[0]?.name);
+		// 		mapper.set(o.category[0]?.name, []);
+		// 	}
+		// 	mapper.get(o.category[0]?.name).push(o);
+		// });
 		return { categories: Array.from(set), mapper };
-	}, [server]);
+	}, []);
 
 	/**
 	 * Handle keyboard

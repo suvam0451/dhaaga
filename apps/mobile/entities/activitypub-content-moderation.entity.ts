@@ -1,9 +1,5 @@
-import { ObjectSchema, Object } from 'realm';
-
-// CheapBotsTootSweet
-
 export class ActivityPubContentFilterRule extends Object {
-	_id: Realm.BSON.UUID;
+	// _id: Realm.BSON.UUID;
 
 	target: string; // displayName, username, account, application, instance,
 	// accountDescription
@@ -11,15 +7,15 @@ export class ActivityPubContentFilterRule extends Object {
 	value: string; // string to use
 	caseSensitive: boolean;
 
-	static schema: ObjectSchema = {
-		name: 'ActivityPubContentFilterRule',
-		primaryKey: '_id',
-		properties: {
-			_id: 'uuid',
-			target: 'string',
-			strategy: 'string',
-			value: 'string',
-			caseSensitive: 'bool',
-		},
-	};
+	// static schema: ObjectSchema = {
+	// 	name: 'ActivityPubContentFilterRule',
+	// 	primaryKey: '_id',
+	// 	properties: {
+	// 		_id: 'uuid',
+	// 		target: 'string',
+	// 		strategy: 'string',
+	// 		value: 'string',
+	// 		caseSensitive: 'bool',
+	// 	},
+	// };
 }

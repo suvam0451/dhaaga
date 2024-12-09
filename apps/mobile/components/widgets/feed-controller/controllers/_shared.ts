@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
 	},
 	timelineTypeText: {
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
+		color: '#f5f5f5',
 		fontSize: 16,
 	},
 	timelineTargetText: {

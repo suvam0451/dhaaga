@@ -1,15 +1,15 @@
-import { DependencyList, useEffect, useRef, useState } from 'react';
+import { DependencyList, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { Skeleton } from '@rneui/themed';
-import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import { APP_FONT } from '../../styles/AppTheme';
 import * as Crypto from 'expo-crypto';
-import { APP_FONTS } from '../../styles/AppFonts';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import FacetService from '../../services/facets.service';
 
 type Props = {
 	content: string;
@@ -23,6 +23,7 @@ type Props = {
 
 	numberOfLines?: number;
 	acceptTouch?: boolean;
+	emphasis?: 'high' | 'medium' | 'low';
 };
 
 /**
@@ -35,6 +36,7 @@ type Props = {
  * @param fontFamily
  * @param numberOfLines
  * @param acceptTouch
+ * @param emphasis
  */
 function useMfm({
 	content,
@@ -45,10 +47,12 @@ function useMfm({
 	fontFamily,
 	numberOfLines,
 	acceptTouch,
+	emphasis,
 }: Props) {
 	const { domain, subdomain } = useActivityPubRestClientContext();
-	const db = useRealm();
+	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
+	const { colorScheme } = useAppTheme();
 
 	const defaultValue = useRef<any>({
 		isLoaded: false,
@@ -74,11 +78,24 @@ function useMfm({
 	 * */
 	const IsSolved = useRef(Crypto.randomUUID());
 
+	let color = useMemo(() => {
+		switch (emphasis) {
+			case 'high':
+				return colorScheme.textColor.high;
+			case 'medium':
+				return colorScheme.textColor.medium;
+			case 'low':
+				return colorScheme.textColor.low;
+			default:
+				return colorScheme.textColor.medium;
+		}
+	}, [emphasis, colorScheme]);
+
 	// since font remains same for each reusable component
-	const fontStyle = useRef({
-		color: APP_FONT.MONTSERRAT_HEADER,
-		fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
-	});
+	const fontStyle = {
+		color: color,
+		fontFamily: fontFamily,
+	};
 
 	useEffect(() => {
 		if (IsSolved.current === content) return;
@@ -95,30 +112,48 @@ function useMfm({
 			return;
 		}
 
+		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+			const nodes = FacetService.render(content, { fontFamily, emphasis });
+			setData({
+				isLoaded: true,
+				content: (
+					<WithAppMfmContext acceptTouch={_acceptTouch}>
+						<View style={{ height: 'auto' }}>
+							<Text>{nodes.map((node, i) => node)}</Text>
+						</View>
+					</WithAppMfmContext>
+				),
+				aiContext: [],
+			});
+			return;
+		}
+
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
 			domain,
 			subdomain,
-			db,
 			globalDb,
 			remoteSubdomain,
+			fontFamily,
+			emphasis,
+			colorScheme,
 		});
 		setData({
 			isLoaded: true,
 			content: (
 				<WithAppMfmContext acceptTouch={_acceptTouch}>
-					<View style={{ height: 'auto', flex: 1 }}>
+					<View style={{ height: 'auto' }}>
 						{reactNodes?.map((para) => {
 							const uuid = randomUUID();
 							if (numberOfLines) {
 								return (
 									<Text
 										key={uuid}
-										style={fontStyle.current}
+										style={fontStyle as any}
 										numberOfLines={numberOfLines}
 									>
 										{para.map((o, j) => (
-											<Text key={j} style={fontStyle.current}>
+											<Text key={j} style={fontStyle as any}>
 												{o}
 											</Text>
 										))}
@@ -126,9 +161,9 @@ function useMfm({
 								);
 							} else {
 								return (
-									<Text key={uuid} style={fontStyle.current}>
+									<Text key={uuid} style={fontStyle as any}>
 										{para.map((o, j) => (
-											<Text key={j} style={fontStyle.current}>
+											<Text key={j} style={fontStyle as any}>
 												{o}
 											</Text>
 										))}
@@ -142,7 +177,7 @@ function useMfm({
 			aiContext: openAiContext,
 		});
 		IsSolved.current = content;
-	}, [...deps]);
+	}, [...deps, colorScheme]);
 
 	return {
 		content: Data.content,

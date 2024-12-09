@@ -1,16 +1,7 @@
 import { memo, useEffect, useState } from 'react';
-import {
-	Animated,
-	RefreshControl,
-	StatusBar,
-	StyleSheet,
-	View,
-} from 'react-native';
+import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
-import WithAppPaginationContext, {
-	useAppPaginationContext,
-} from '../../../../states/usePagination';
+import WithAppPaginationContext from '../../../../states/usePagination';
 import LoadingMore from '../../../screens/home/LoadingMore';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
@@ -24,75 +15,84 @@ import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndic
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import useTimeline from '../api/useTimeline';
 import useTimelineLabel from '../api/useTimelineLabel';
-import { APP_THEME } from '../../../../styles/AppTheme';
-import FlashListRenderer from '../fragments/FlashListRenderer';
+import FlashListPostRenderer from '../fragments/FlashListPostRenderer';
 import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
-import { useRealm } from '@realm/react';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import {
+	AppPaginationContext,
+	usePagination,
+	usePaginationActions,
+} from '../../../../states/local/pagination';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /*
  * Render a Timeline
  */
 const Timeline = memo(() => {
-	const { timelineType, query, opts, setTimelineType } =
-		useTimelineController();
-	const { client, primaryAcct, domain, subdomain } =
-		useActivityPubRestClientContext();
-	const { setMaxId, updateQueryCache, queryCacheMaxId, clear } =
-		useAppPaginationContext();
+	const { maxId } = usePagination();
+	const { setNextMaxId, clear, next } = usePaginationActions();
+
+	const { query, opts, setTimelineType } = useTimelineController();
+	const { acct, homepageType, router, driver } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			homepageType: o.homepageType,
+			router: o.router,
+			driver: o.driver,
+		})),
+	);
+
 	const {
 		addPosts: appendTimelineData,
 		listItems,
 		clear: timelineDataStoreClear,
 	} = useAppTimelinePosts();
-	const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
 
 	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
 	// reset to home
 	useEffect(() => {
 		setTimelineType(TimelineFetchMode.IDLE);
-	}, [primaryAcct]);
+	}, [acct]);
 
 	useEffect(() => {
 		setPageLoadedAtLeastOnce(false);
 		clear();
 		timelineDataStoreClear();
-	}, [timelineType, query, opts]);
+	}, [homepageType, query, opts]);
 
 	const { fetchStatus, data, status, refetch } = useTimeline({
-		type: timelineType,
+		type: homepageType,
 		query,
 		opts,
-		maxId: queryCacheMaxId,
+		maxId,
 	});
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
-		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
 			const cursor = _payload.data.cursor;
 			const posts = _payload.data.feed;
 
-			setMaxId(cursor);
-			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, domain);
+			setNextMaxId(cursor);
+			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, driver);
 			appendTimelineData(_data);
 			setPageLoadedAtLeastOnce(true);
 			return;
 		}
 
 		if (data?.length > 0) {
-			setMaxId(data[data.length - 1]?.id);
-			const _data = ActivityPubAdapterService.adaptManyStatuses(data, domain);
+			setNextMaxId(data[data.length - 1]?.id);
+			const _data = ActivityPubAdapterService.adaptManyStatuses(data, driver);
 			appendTimelineData(_data);
 			setPageLoadedAtLeastOnce(true);
 
@@ -100,17 +100,18 @@ const Timeline = memo(() => {
 			 * Resolve Software + Custom Emojis
 			 */
 			for (const datum of _data) {
-				ActivitypubStatusService.factory(datum, domain, subdomain)
-					.resolveInstances()
-					.syncSoftware(db)
-					.then((res) => {
-						res.syncCustomEmojis(db, globalDb).then(() => {});
-					});
+				// ActivitypubStatusService.factory(datum, domain, subdomain)
+				// 	.resolveInstances()
+				// 	.syncSoftware(db)
+				// 	.then((res) => {
+				// 		res.syncCustomEmojis(db, globalDb).then(() => {});
+				// 	});
 			}
 		}
-	}, [fetchStatus, db]);
+	}, [fetchStatus]);
 
 	const label = useTimelineLabel();
+	const { colorScheme } = useAppTheme();
 
 	/**
 	 * Composite Hook Collection
@@ -120,20 +121,26 @@ const Timeline = memo(() => {
 	});
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: appendTimelineData.length,
-		updateQueryCache,
+		updateQueryCache: next,
 	});
 	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
 		fetchStatus,
 		refetch,
 	});
 
-	if (!client) return <Introduction />;
-
-	if (timelineType === TimelineFetchMode.IDLE) return <SocialHub />;
+	if (router === null) return <Introduction />;
+	if (homepageType === TimelineFetchMode.IDLE) return <SocialHub />;
 
 	return (
-		<View style={[styles.container, { position: 'relative' }]}>
-			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+		<View
+			style={[
+				styles.container,
+				{
+					position: 'relative',
+					backgroundColor: colorScheme.palette.bg,
+				},
+			]}
+		>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader title={label} />
 			</Animated.View>
@@ -146,7 +153,7 @@ const Timeline = memo(() => {
 				}
 				estimatedItemSize={200}
 				data={listItems}
-				renderItem={FlashListRenderer}
+				renderItem={FlashListPostRenderer}
 				getItemType={(o) => o.type}
 				onScroll={onScroll}
 				contentContainerStyle={{
@@ -165,11 +172,13 @@ const Timeline = memo(() => {
 function TimelineWrapper() {
 	return (
 		<WithTimelineControllerContext>
-			<WithAppPaginationContext>
-				<WithAppTimelineDataContext>
-					<Timeline />
-				</WithAppTimelineDataContext>
-			</WithAppPaginationContext>
+			<AppPaginationContext>
+				<WithAppPaginationContext>
+					<WithAppTimelineDataContext>
+						<Timeline />
+					</WithAppTimelineDataContext>
+				</WithAppPaginationContext>
+			</AppPaginationContext>
 		</WithTimelineControllerContext>
 	);
 }
@@ -187,6 +196,5 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		flex: 1,
-		backgroundColor: '#000',
 	},
 });

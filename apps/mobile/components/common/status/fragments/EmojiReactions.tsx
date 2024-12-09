@@ -6,8 +6,9 @@ import EmojiReaction from './EmojiReaction';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
@@ -19,6 +20,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	const { domain, me } = useActivityPubRestClientContext();
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);
+	const { colorScheme } = useAppTheme();
 
 	const onShowMoreToggle = useCallback(() => {
 		setAllEmojisExpanded((o) => !o);
@@ -52,9 +54,21 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 			))}
 			{Emojis.length > EMOJI_COLLAPSED_COUNT_LIMIT && (
 				<TouchableOpacity onPress={onShowMoreToggle}>
-					<View style={styles.showAllEmojiButtonContainer}>
+					<View
+						style={[
+							styles.showAllEmojiButtonContainer,
+							{
+								backgroundColor: colorScheme.reactions.active,
+							},
+						]}
+					>
 						<View>
-							<Text style={styles.showAllEmojiButtonText}>
+							<Text
+								style={[
+									styles.showAllEmojiButtonText,
+									{ color: colorScheme.textColor.medium },
+								]}
+							>
 								{AllEmojisExpanded
 									? 'Less'
 									: `More (${Emojis.length - ShownEmojis.length})`}
@@ -73,6 +87,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		backgroundColor: '#303030',
 		padding: 8,
+		paddingVertical: 6,
 		borderRadius: 8,
 	},
 	showAllEmojiButtonText: {

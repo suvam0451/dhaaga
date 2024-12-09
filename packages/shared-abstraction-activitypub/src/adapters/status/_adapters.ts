@@ -36,6 +36,12 @@ export function ActivitypubStatusAdapter(
 			return new MastodonToStatusAdapter(_camel as mastodon.v1.Status);
 		}
 		case KNOWN_SOFTWARE.BLUESKY: {
+			/**
+			 * What even makes a post be blocked/notfound?
+			 */
+			if (status?.['$type'] === 'app.bsky.feed.defs#blockedPost')
+				return null as any;
+
 			return new BlueskyStatusAdapter(
 				status?.post
 					? {

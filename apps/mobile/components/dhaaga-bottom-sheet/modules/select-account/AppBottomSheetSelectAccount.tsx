@@ -1,14 +1,6 @@
 import { memo } from 'react';
-import { Account } from '../../../../entities/account.entity';
-import { useObject, useQuery, useRealm } from '@realm/react';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { TouchableOpacity, View } from 'react-native';
-import { UUID } from 'bson';
-import AccountRepository from '../../../../repositories/account.repo';
-import AccountService from '../../../../services/account.service';
-import { EmojiService } from '../../../../services/emoji.service';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useAppBottomSheet } from '../_api/useAppBottomSheet';
 import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../../styles/AppFonts';
@@ -19,42 +11,46 @@ import {
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { router } from 'expo-router';
+import { useAccountDbContext } from '../../../screens/profile/stack/settings/hooks/useAccountDb';
+import { Account } from '../../../../database/_schema';
+import { AccountMetadataService } from '../../../../database/entities/account-metadata';
+import { useSQLiteContext } from 'expo-sqlite';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type FlashListItemProps = {
-	id: UUID;
+	acct: Account;
 };
 
-const FlashListItem = memo(({ id }: FlashListItemProps) => {
-	const { regenerate } = useActivityPubRestClientContext();
-	const { setVisible } = useAppBottomSheet();
-	const account = useObject(Account, id);
-	const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
+const FlashListItem = memo(({ acct }: FlashListItemProps) => {
+	const { selectAccount, restoreSession } = useGlobalState(
+		useShallow((state) => ({
+			selectAccount: state.selectAccount,
+			restoreSession: state.restoreSession,
+		})),
+	);
+	const db = useSQLiteContext();
 
-	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
-	const displayName = AccountRepository.findSecret(
+	const { setVisible } = useAppBottomSheet();
+
+	const avatar = AccountMetadataService.getKeyValueForAccountSync(
 		db,
-		account,
+		acct,
+		'avatar',
+	);
+	const displayName = AccountMetadataService.getKeyValueForAccountSync(
+		db,
+		acct,
 		'display_name',
-	)?.value;
+	);
 
 	async function onSelect() {
-		if (account.selected) {
-			AccountService.deselectAccount(db, account._id);
-			regenerate();
-		} else {
-			AccountService.selectAccount(db, account._id);
-			regenerate();
-			try {
-				await EmojiService.refresh(db, globalDb, account.subdomain, true);
-			} catch (e) {
-				console.log('[WARN]: failed hard refreshing emojis', e);
-			}
-		}
+		await selectAccount(acct);
+		await restoreSession();
 		setVisible(false);
 	}
 
-	if (!account) return <View />;
+	if (!acct) return <View />;
 
 	return (
 		<TouchableOpacity
@@ -82,16 +78,16 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 					}}
 				>
 					<AccountPfp
-						selected={account.selected}
+						selected={acct.selected as unknown as boolean}
 						url={avatar}
 						onClicked={onSelect}
 					/>
 					<AccountDetails
 						onClicked={onSelect}
-						selected={account.selected}
+						selected={acct.selected as unknown as boolean}
 						displayName={displayName}
-						username={account.username}
-						subdomain={account.subdomain}
+						username={acct.username}
+						subdomain={acct.server}
 					/>
 				</View>
 
@@ -103,7 +99,7 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 							paddingVertical: 12,
 						}}
 					>
-						{account.selected && (
+						{acct.selected && (
 							<Text
 								style={{
 									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
@@ -114,15 +110,16 @@ const FlashListItem = memo(({ id }: FlashListItemProps) => {
 							</Text>
 						)}
 					</View>
-					<SoftwareHeader software={account.domain} mb={4} mt={8} />
+					<SoftwareHeader software={acct.driver} mb={4} mt={8} />
 				</View>
 			</View>
 		</TouchableOpacity>
 	);
 });
+
 const AppBottomSheetSelectAccount = memo(() => {
 	const { isAnimating, setVisible } = useAppBottomSheet();
-	const accounts: Account[] = useQuery(Account);
+	const { accounts } = useAccountDbContext();
 
 	if (isAnimating) return <View />;
 	return (
@@ -180,7 +177,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 					</View>
 				)}
 				data={accounts}
-				renderItem={({ item }) => <FlashListItem id={item._id} />}
+				renderItem={({ item }) => <FlashListItem acct={item} />}
 			/>
 		</View>
 	);

@@ -1,7 +1,5 @@
-import { ObjectSchema, Object } from 'realm';
-
 export class UserDataTimeline extends Object {
-	_id: Realm.BSON.UUID;
+	// _id: Realm.BSON.UUID;
 	/**
 	 * Full list of types of timelines supported are:
 	 *
@@ -31,19 +29,19 @@ export class UserDataTimeline extends Object {
 	createdAt: Date;
 	updatedAt: Date;
 
-	static schema: ObjectSchema = {
-		name: 'UserDataTimeline',
-		primaryKey: '_id',
-		properties: {
-			_id: 'uuid',
-			type: 'string',
-			pinned: { type: 'bool', default: false },
-			saveData: 'string',
-			createdAt: {
-				type: 'date',
-				default: new Date(),
-			},
-			updatedAt: 'date',
-		},
-	};
+	// static schema: ObjectSchema = {
+	// 	name: 'UserDataTimeline',
+	// 	primaryKey: '_id',
+	// 	properties: {
+	// 		_id: 'uuid',
+	// 		type: 'string',
+	// 		pinned: { type: 'bool', default: false },
+	// 		saveData: 'string',
+	// 		createdAt: {
+	// 			type: 'date',
+	// 			default: new Date(),
+	// 		},
+	// 		updatedAt: 'date',
+	// 	},
+	// };
 }

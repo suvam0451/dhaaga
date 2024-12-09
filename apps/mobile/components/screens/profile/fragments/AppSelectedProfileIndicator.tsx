@@ -1,13 +1,8 @@
 import { memo } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { useObject, useRealm } from '@realm/react';
-import { Account } from '../../../../entities/account.entity';
-import { BSON } from 'realm';
-import AccountRepository from '../../../../repositories/account.repo';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -16,18 +11,20 @@ import { Image } from 'expo-image';
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
 const AppSelectedProfileIndicator = memo(() => {
-	const db = useRealm();
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const account = useObject(
-		Account,
-		primaryAcct?.isValid() ? primaryAcct?._id : new BSON.UUID(),
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
 	);
+	const { colorScheme } = useAppTheme();
 	const { isAnimating, visible } = useAppBottomSheet();
-	const avatar = AccountRepository.findSecret(db, account, 'avatar')?.value;
 
 	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
 
@@ -43,7 +40,7 @@ const AppSelectedProfileIndicator = memo(() => {
 	}
 
 	if (visible && isAnimating) return <View />;
-	if (!primaryAcct)
+	if (!acct)
 		return (
 			<TouchableOpacity
 				style={styles.accountIconTouchableContainerRight}
@@ -71,15 +68,19 @@ const AppSelectedProfileIndicator = memo(() => {
 						style={{
 							width: ACCOUNT_INDICATOR_ICON_SIZE,
 							height: ACCOUNT_INDICATOR_ICON_SIZE,
-							opacity: 0.8,
+							opacity: 0.87,
 							borderRadius: 8,
 						}}
-						source={{ uri: avatar }}
+						source={{ uri: acct?.avatarUrl }}
 						contentFit="fill"
 					/>
 				</View>
 				<View style={{ width: 14 }}>
-					<Feather name="more-vertical" size={24} color={APP_FONT.DISABLED} />
+					<Feather
+						name="more-vertical"
+						size={24}
+						color={colorScheme.textColor.low}
+					/>
 				</View>
 			</TouchableOpacity>
 		</View>

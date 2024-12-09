@@ -1,40 +1,45 @@
-import { Realm } from 'realm';
-import { Account } from '../../entities/account.entity';
-import { jwtDecode } from 'jwt-decode';
 import { Agent, AtpSessionData, CredentialSession } from '@atproto/api';
-import AccountService from '../account.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import AccountRepository from '../../repositories/account.repo';
+import { AccountService } from '../../database/entities/account';
+import AccountMetaService from '../../database/services/account-secret.service';
+import { Account } from '../../database/_schema';
+import { SQLiteDatabase } from 'expo-sqlite';
+import { AccountMetadataService } from '../../database/entities/account-metadata';
+import { jwtDecode } from '../../utils/jwt-decode.utils';
 
 /**
  * Helps manage session
  * for an atproto based account
  */
 class AtprotoSessionService {
-	private readonly db: Realm;
+	private readonly db: SQLiteDatabase;
 	private readonly acct: Account;
 	private readonly sessionManager: CredentialSession;
 	private nextSession: AtpSessionData;
 	private oldSession: AtpSessionData;
 	private nextStatusCode: string;
 
-	constructor(db: Realm, acct: Account) {
+	constructor(db: SQLiteDatabase, acct: Account) {
 		this.db = db;
 		this.acct = acct;
 		this.sessionManager = new CredentialSession(
-			new URL(AtprotoSessionService.cleanLink(this.acct.subdomain)),
+			new URL(AtprotoSessionService.cleanLink(this.acct.server)),
 			fetch,
 			(evt, session) => {
 				this.nextStatusCode = evt;
 				if (session) this.nextSession = session;
 			},
 		);
-		this.oldSession = JSON.parse(
-			AccountRepository.findSecret(this.db, this.acct, 'session')?.value,
+
+		const secret = AccountMetadataService.getKeyValueForAccountSync(
+			db,
+			this.acct,
+			'session',
 		);
+		this.oldSession = JSON.parse(secret);
 	}
 
-	static create(db: Realm, acct: Account) {
+	static create(db: SQLiteDatabase, acct: Account) {
 		return new AtprotoSessionService(db, acct);
 	}
 
@@ -61,7 +66,13 @@ class AtprotoSessionService {
 		 * to work around network errors (in which case, old token
 		 * would be attempted to be used)
 		 */
-		const _jwt: any = jwtDecode(this.sessionManager.session.accessJwt);
+		const jwtDecodeResult = jwtDecode(this.sessionManager.session.accessJwt);
+		if (jwtDecodeResult.type !== 'success') {
+			console.log('[WARN]: failed to parse jwt token');
+			return this;
+		}
+		const _jwt: any = jwtDecodeResult.value;
+
 		const IS_EXPIRED = _jwt.exp < Math.floor(new Date().getTime() / 1000);
 
 		try {
@@ -81,18 +92,15 @@ class AtprotoSessionService {
 	 * Checks the updates tokens
 	 * and stores them in the db
 	 */
-	saveSession() {
+	async saveSession() {
 		const statusCode = this.nextStatusCode;
 		switch (statusCode) {
 			case 'update': {
-				this.db.write(() => {
-					AccountRepository.setSecret(
-						this.db,
-						this.acct,
-						'session',
-						JSON.stringify(this.nextSession),
-					);
-				});
+				await AccountMetaService.upsertMeta(
+					this.acct,
+					'session',
+					JSON.stringify(this.nextSession),
+				);
 				// console.log('BEFORE', this.oldSession.accessJwt);
 				// console.log('AFTER', this.nextSession.accessJwt);
 				// cycle forward
@@ -129,7 +137,7 @@ class AtprotoSessionService {
 	 * @param service
 	 */
 	static async login(
-		db: Realm,
+		db: SQLiteDatabase,
 		username: string,
 		appPassword: string,
 		service: string = 'https://bsky.social',
@@ -166,43 +174,53 @@ class AtprotoSessionService {
 			const _username = res.data.handle;
 			const did = res.data.did;
 
-			AccountService.upsert(db, {
-				subdomain: instance,
-				domain: KNOWN_SOFTWARE.BLUESKY,
-				username: _username,
-				avatarUrl,
-				displayName,
-				credentials: [
+			await AccountService.upsert(
+				db,
+				{
+					server: instance,
+					driver: KNOWN_SOFTWARE.BLUESKY,
+					username: _username,
+					avatarUrl,
+					displayName,
+				},
+				[
 					{
 						key: 'display_name',
 						value: displayName,
+						type: 'string',
 					},
 					{
 						key: 'avatar',
 						value: avatarUrl,
+						type: 'string',
 					},
 					{
 						key: 'access_token',
 						value: accessToken,
+						type: 'string',
 					},
 					{
 						key: 'refresh_token',
 						value: refreshToken,
+						type: 'string',
 					},
 					{
 						key: 'did',
 						value: did,
+						type: 'string',
 					},
 					{
 						key: 'app_password',
 						value: appPassword,
+						type: 'string',
 					},
 					{
 						key: 'session',
 						value: JSON.stringify(storedSession),
+						type: 'json',
 					},
 				],
-			});
+			);
 
 			return { success: true };
 		} catch (e) {

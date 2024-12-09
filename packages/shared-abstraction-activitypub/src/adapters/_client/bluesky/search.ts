@@ -4,15 +4,20 @@ import {
 	SearchRoute,
 } from '../_router/routes/search.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import {
-	MastoAccount,
-	MastoStatus,
-	MegaAccount,
-	MegaStatus,
-} from '../_interface.js';
+import { MastoStatus, MegaStatus } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
+import {
+	AppBskyActorSearchActorsTypeahead,
+	AtpSessionData,
+} from '@atproto/api';
+import { getBskyAgent } from '../_router/_api.js';
 
 class BlueskySearchRouter implements SearchRoute {
+	dto: AtpSessionData;
+	constructor(dto: AtpSessionData) {
+		this.dto = dto;
+	}
+
 	findPosts(
 		q: DhaagaJsPostSearchDTO,
 	): LibraryPromise<
@@ -21,12 +26,15 @@ class BlueskySearchRouter implements SearchRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	findUsers(
+	async findUsers(
 		q: DhaagaJsUserSearchDTO,
-	): LibraryPromise<
-		MastoAccount[] | Endpoints['users/search']['res'] | MegaAccount[]
-	> {
-		return Promise.resolve(undefined) as any;
+	): LibraryPromise<AppBskyActorSearchActorsTypeahead.Response> {
+		const agent = getBskyAgent(this.dto);
+		const data = await agent.app.bsky.actor.searchActorsTypeahead({
+			q: q.q,
+			limit: q.limit || 8,
+		});
+		return { data };
 	}
 }
 

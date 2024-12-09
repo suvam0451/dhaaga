@@ -10,7 +10,7 @@ import {
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
 import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
-import { AppActivityPubMediaType } from '../../../services/approto/activitypub-status-dto.service';
+import { AppActivityPubMediaType } from '../../../services/approto/app-status-dto.service';
 
 type ImageCarousalProps = {
 	attachments: AppActivityPubMediaType[];
@@ -37,7 +37,7 @@ const TimelineMediaRendered = memo(function Foo({
 	const { ContainerWidth, ContainerHeight, onLayoutChanged } =
 		useImageAspectRatio([
 			{
-				url: attachment.url,
+				url: attachment.previewUrl,
 				width: attachment.width,
 				height: attachment.height,
 			},
@@ -57,7 +57,7 @@ const TimelineMediaRendered = memo(function Foo({
 			case 'image/avif': {
 				return (
 					<AppImageComponent
-						url={attachment.url}
+						url={attachment.previewUrl}
 						blurhash={attachment.blurhash}
 						parentContainerHeight={ContainerHeight}
 						parentContainerWidth={ContainerWidth}
@@ -72,7 +72,7 @@ const TimelineMediaRendered = memo(function Foo({
 				return (
 					<AppVideoComponent
 						type={'video'}
-						url={attachment.url}
+						url={attachment.previewUrl}
 						height={_height}
 					/>
 				);
@@ -129,7 +129,7 @@ const MediaItem = memo(function Foo({
 				calculatedHeight={calculatedHeight}
 				items={attachments.map((o) => ({
 					altText: o.alt,
-					src: o.url,
+					src: o.previewUrl,
 					type: o.type,
 					blurhash: o.blurhash,
 				}))}

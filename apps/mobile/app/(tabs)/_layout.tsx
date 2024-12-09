@@ -2,18 +2,18 @@ import { Tabs } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
-import { APP_THEME } from '../../styles/AppTheme';
-import { StatusBar } from 'expo-status-bar';
 import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
 import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
+	const { colorScheme } = useAppTheme();
 	return (
 		<View style={{ height: '100%' }}>
-			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+			{/*<StatusBar hidden={false} backgroundColor={colorScheme.palette.menubar} />*/}
 			<WithAppAssetsContext>
 				<Tabs
 					initialRouteName={'index'}
@@ -77,14 +77,15 @@ export default function TabLayout() {
 								color: 'yellow',
 							},
 							tabBarStyle: {
-								backgroundColor: '#252525',
+								backgroundColor: colorScheme.palette.bg,
 								borderTopWidth: 0,
+								height: 46,
 							},
-							tabBarIconStyle: {
-								opacity: 0.6,
-							},
-							tabBarActiveTintColor: 'white',
-							tabBarInactiveTintColor: 'gray',
+							// tabBarIconStyle: {
+							// 	color: colorScheme.textColor.medium,
+							// },
+							tabBarActiveTintColor: colorScheme.textColor.medium,
+							tabBarInactiveTintColor: colorScheme.textColor.low,
 							tabBarShowLabel: false,
 							headerShown: false,
 						};

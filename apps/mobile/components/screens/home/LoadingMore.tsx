@@ -9,6 +9,7 @@ import {
 import { memo } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type LoadingMoreProps = {
 	visible: boolean;
@@ -17,11 +18,17 @@ type LoadingMoreProps = {
 };
 
 const LoadingMore = memo(({ visible, loading, style }: LoadingMoreProps) => {
+	const { colorScheme } = useAppTheme();
 	if (!visible) return <View />;
 	if (visible && loading)
 		return (
-			<View style={[styles.widgetRootContainer, style]}>
-				<View style={styles.widgetContainer}>
+			<View style={[styles.widgetRootContainer, , style]}>
+				<View
+					style={[
+						styles.widgetContainer,
+						{ backgroundColor: colorScheme.palette.menubar },
+					]}
+				>
 					<ActivityIndicator size="small" color="#ffffff87" />
 					<Text style={styles.text}>{'Loading More...'}</Text>
 				</View>
@@ -45,7 +52,6 @@ const styles = StyleSheet.create({
 		position: 'relative',
 		display: 'flex',
 		flexDirection: 'row',
-		backgroundColor: 'rgba(64,64,64,0.75)',
 		padding: 8,
 		borderRadius: 8,
 	},

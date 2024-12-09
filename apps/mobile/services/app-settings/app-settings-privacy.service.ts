@@ -1,13 +1,13 @@
-import { Realm } from '@realm/react';
 import { AppSettingsBase, appSettingsKeys } from './app-settings';
+import { SQLiteDatabase } from 'expo-sqlite';
 
 const NAMESPACE = appSettingsKeys.privacy;
 class AppPrivacySettingsService extends AppSettingsBase {
-	constructor(db: Realm) {
+	constructor(db: SQLiteDatabase) {
 		super(db);
 	}
 
-	static override create(db: Realm) {
+	static override create(db: SQLiteDatabase) {
 		return new AppPrivacySettingsService(db);
 	}
 

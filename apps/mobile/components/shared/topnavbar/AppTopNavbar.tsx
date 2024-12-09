@@ -1,16 +1,18 @@
 import { memo, useMemo } from 'react';
-import { Animated, StyleSheet } from 'react-native';
-import { APP_THEME } from '../../../styles/AppTheme';
+import { Animated } from 'react-native';
 import TopNavbarGeneric from './fragments/TopNavbarGeneric';
 import TopNavbarLandingGeneric from './fragments/TopNavbarLandingGeneric';
 import TimelinesHeader from './fragments/TopNavbarTimelineStack';
 import NotificationsHeader from './fragments/TopNavbarNotificationStack';
+import TopNavbarProfilePage from './fragments/TopNavbarProfilePage';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 export enum APP_TOPBAR_TYPE_ENUM {
 	GENERIC,
 	TIMELINE,
 	LANDING_GENERIC,
 	NOTIFICATION_CENTER,
+	PROFILE,
 }
 
 type AutoHideNavBarProps = {
@@ -27,6 +29,7 @@ const AppTopNavbar = memo(
 		translateY,
 		type = APP_TOPBAR_TYPE_ENUM.GENERIC,
 	}: AutoHideNavBarProps) => {
+		const { colorScheme } = useAppTheme();
 		const Header = useMemo(() => {
 			switch (type) {
 				case APP_TOPBAR_TYPE_ENUM.GENERIC:
@@ -37,16 +40,25 @@ const AppTopNavbar = memo(
 					return <TimelinesHeader title={title} />;
 				case APP_TOPBAR_TYPE_ENUM.NOTIFICATION_CENTER:
 					return <NotificationsHeader />;
+				case APP_TOPBAR_TYPE_ENUM.PROFILE:
+					return <TopNavbarProfilePage title={title} />;
 				default:
 					return <TopNavbarGeneric title={title} />;
 			}
 		}, [type]);
 		return (
-			<Animated.View style={styles.root}>
+			<Animated.View
+				style={{
+					backgroundColor: colorScheme.palette.bg,
+					height: '100%',
+				}}
+			>
+				{/*<StatusBar backgroundColor={colorScheme.palette.menubar} />*/}
 				<Animated.View
 					style={[
-						styles.nav,
 						{
+							position: 'absolute',
+							zIndex: 1,
 							transform: [
 								{
 									translateY,
@@ -62,17 +74,5 @@ const AppTopNavbar = memo(
 		);
 	},
 );
-
-const styles = StyleSheet.create({
-	root: {
-		height: '100%',
-		backgroundColor: APP_THEME.BACKGROUND,
-	},
-	nav: {
-		position: 'absolute',
-		width: '100%',
-		zIndex: 1,
-	},
-});
 
 export default AppTopNavbar;

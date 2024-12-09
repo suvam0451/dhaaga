@@ -1,23 +1,23 @@
-import { Dimensions, View, ScrollView } from 'react-native';
+import { Dimensions, View, ScrollView, Alert } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useState } from 'react';
 import WebView from 'react-native-webview';
 import { MainText } from '../../../../../../styles/Typography';
 import { Button } from '@rneui/base';
-import { useRealm } from '@realm/react';
 import TitleOnlyNoScrollContainer from '../../../../../containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
-import AccountService from '../../../../../../services/account.service';
 import {
 	UnknownRestClient,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import PleromaPasteToken from '../fragments/PleromaPasteToken';
+import { useSQLiteContext } from 'expo-sqlite';
+import { AccountService } from '../../../../../../database/entities/account';
 
 function MastodonSignInStack() {
+	const db = useSQLiteContext();
 	const [Code, setCode] = useState<string | null>(null);
-	const db = useRealm();
 
 	const params = useLocalSearchParams();
 	const _signInUrl: string = params['signInUrl'] as string;
@@ -58,36 +58,32 @@ function MastodonSignInStack() {
 				token || Code, // fucking yolo it, xDD
 			);
 
-		try {
-			AccountService.upsert(db, {
-				subdomain: _subdomain,
-				domain: _domain,
+		const upsertResult = await AccountService.upsert(
+			db,
+			{
+				identifier: verified.id,
+				server: _subdomain,
+				driver: _domain,
 				username: verified.username,
 				avatarUrl: verified.avatar,
 				// TODO: this needs to be replaced with camelCase
 				displayName: verified['display_name'],
-				credentials: [
-					{
-						key: 'display_name',
-						value: verified['display_name'],
-					},
-					{
-						key: 'avatar',
-						value: verified['avatar'],
-					},
-					{
-						key: 'url',
-						value: verified.url,
-					},
-					{
-						key: 'access_token',
-						value: token || Code, // See above
-					},
-				],
-			});
+			},
+			[
+				{
+					key: 'display_name',
+					value: verified['display_name'],
+					type: 'string',
+				},
+				{ key: 'avatar', value: verified['avatar'], type: 'string' },
+				{ key: 'user_id', value: verified.id, type: 'string' },
+				{ key: 'access_token', value: token || Code, type: 'string' },
+				{ key: 'url', value: verified.url, type: 'string' },
+			],
+		);
+		if (upsertResult.type === 'success') {
+			Alert.alert('Account Added');
 			router.replace('/profile/settings/accounts');
-		} catch (e) {
-			console.log(e);
 		}
 	}
 

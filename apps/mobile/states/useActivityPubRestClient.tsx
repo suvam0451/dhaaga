@@ -1,11 +1,4 @@
-import {
-	createContext,
-	MutableRefObject,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import {
 	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
@@ -13,21 +6,16 @@ import {
 	UserInterface,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
-import AccountRepository from '../repositories/account.repo';
-import { useRealm } from '@realm/react';
-import { Account } from '../entities/account.entity';
-import { EmojiService } from '../services/emoji.service';
-import { useGlobalMmkvContext } from './useGlobalMMkvCache';
-import { UUID } from 'bson';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
+import { useSQLiteContext } from 'expo-sqlite';
+import { Account } from '../database/_schema';
+import { AccountService } from '../database/entities/account';
+import { AccountMetadataService } from '../database/entities/account-metadata';
 
 type Type = {
 	client: ActivityPubClient;
 	me: UserInterface | null;
-	meRaw: mastodon.v1.Account | null;
 	primaryAcct: Account;
-	PrimaryAcctPtr: MutableRefObject<UUID>;
 
 	/**
 	 * Call this function after change in
@@ -43,14 +31,16 @@ type Type = {
 const defaultValue: Type = {
 	client: null,
 	me: null,
-	meRaw: null,
+	// meRaw: null,
 	primaryAcct: null,
 	regenerate: () => {},
-	PrimaryAcctPtr: undefined,
 };
 
 const ActivityPubRestClientContext = createContext<Type>(defaultValue);
 
+/**
+ * @deprecated will be replaced with zustand global store
+ */
 export function useActivityPubRestClientContext() {
 	return useContext(ActivityPubRestClientContext);
 }
@@ -62,18 +52,16 @@ export function useActivityPubRestClientContext() {
  * @constructor
  */
 function WithActivityPubRestClient({ children }: any) {
+	const db = useSQLiteContext();
 	const [restClient, setRestClient] = useState<ActivityPubClient>(null);
 	const [Me, setMe] = useState(null);
-	const [MeRaw, setMeRaw] = useState(null);
-	const db = useRealm();
+	// const [MeRaw, setMeRaw] = useState(null);
 	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
 
-	const PrimaryAcctPtr = useRef<UUID>(null);
-
-	const { globalDb } = useGlobalMmkvContext();
+	const PrimaryAcctPtr = useRef<Account>(null);
 
 	async function regenerateFn() {
-		const acct = db.objects(Account).find((o: Account) => o.selected === true);
+		const acct = await AccountService.getSelected(db);
 		if (!acct) {
 			setRestClient(null);
 			setPrimaryAcct(null);
@@ -81,35 +69,40 @@ function WithActivityPubRestClient({ children }: any) {
 			return;
 		}
 
-		const token = AccountRepository.findSecret(db, acct, 'access_token')?.value;
+		const token = await AccountMetadataService.getKeyValueForAccountSync(
+			db,
+			acct,
+			'access_token',
+		);
 		if (!token) {
 			setRestClient(null);
 			return;
 		}
 
 		let payload: any = {
-			instance: acct?.subdomain,
+			instance: acct?.server,
 			token,
 		};
 
 		// Built Different
-		if (acct.domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (acct.driver === KNOWN_SOFTWARE.BLUESKY) {
 			const session = AtprotoSessionService.create(db, acct);
 			await session.resume();
-			const { success, data, reason } = session.saveSession();
+			const { success, data, reason } = await session.saveSession();
 			if (!success)
 				console.log('[INFO]: session restore status', success, reason);
 			payload = {
 				...data,
-				subdomain: acct.subdomain,
+				subdomain: acct.server,
 			};
 		}
 
-		const client = ActivityPubClientFactory.get(acct.domain, payload);
-		setRestClient(client);
+		const _client = ActivityPubClientFactory.get(acct.driver as any, payload);
+		setRestClient(_client);
 		setPrimaryAcct(acct);
-		PrimaryAcctPtr.current = acct._id;
-		EmojiService.refresh(db, globalDb, acct.subdomain, true);
+		PrimaryAcctPtr.current = acct;
+		// FIXME: fix this
+		// EmojiService.refresh(db, globalDb, acct.server, true);
 	}
 
 	useEffect(() => {
@@ -127,8 +120,8 @@ function WithActivityPubRestClient({ children }: any) {
 				console.log('[WARN]: error loading account data (i.e. - me)');
 				return;
 			}
-			setMeRaw(data);
-			setMe(ActivityPubUserAdapter(data, PrimaryAcct?.domain));
+			// setMeRaw(data);
+			setMe(ActivityPubUserAdapter(data, PrimaryAcct?.driver));
 		});
 	}, [restClient]);
 
@@ -137,12 +130,10 @@ function WithActivityPubRestClient({ children }: any) {
 			value={{
 				client: restClient,
 				me: Me,
-				meRaw: MeRaw,
 				primaryAcct: PrimaryAcct,
 				regenerate: regenerateFn,
-				domain: PrimaryAcct?.domain,
-				subdomain: PrimaryAcct?.subdomain,
-				PrimaryAcctPtr,
+				domain: PrimaryAcct?.driver,
+				subdomain: PrimaryAcct?.server,
 			}}
 		>
 			{children}

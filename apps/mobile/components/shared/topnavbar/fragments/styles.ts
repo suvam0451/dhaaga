@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	navbarTitle: {
-		color: APP_FONT.MONTSERRAT_BODY,
+		color: APP_FONT.HIGH_EMPHASIS,
 		fontSize: 16,
 		fontFamily: APP_FONTS.INTER_700_BOLD,
 	},

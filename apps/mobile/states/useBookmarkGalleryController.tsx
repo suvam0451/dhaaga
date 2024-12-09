@@ -12,8 +12,6 @@ import {
 	useState,
 } from 'react';
 import { Account } from '../entities/account.entity';
-import { BSON } from 'realm';
-import { UUID } from 'bson';
 import { ActivityPubStatus } from '../entities/activitypub-status.entity';
 import { randomUUID } from 'expo-crypto';
 
@@ -27,11 +25,11 @@ type Type = {
 	isBuilding: boolean;
 	isRefreshing: boolean;
 
-	isUserSelected: (_id: BSON.UUID) => boolean;
-	isTagSelected: (_id: BSON.UUID) => boolean;
+	isUserSelected: (_id) => boolean;
+	isTagSelected: (_id) => boolean;
 
-	onUserSelected: (_id: BSON.UUID) => void;
-	onTagSelected: (_Id: BSON.UUID) => void;
+	onUserSelected: (_id) => void;
+	onTagSelected: (_Id) => void;
 
 	userStateHash: string;
 	tagStateHash: string;
@@ -57,16 +55,16 @@ const defaultValue: Type = {
 	acct: null,
 	loadedUserData: [],
 	loadedTagData: [],
-	isUserSelected: function (_id: UUID): boolean {
+	isUserSelected: function (_id): boolean {
 		throw new Error('Function not implemented.');
 	},
-	isTagSelected: function (_id: UUID): boolean {
+	isTagSelected: function (_id): boolean {
 		throw new Error('Function not implemented.');
 	},
-	onUserSelected: function (_id: UUID): void {
+	onUserSelected: function (_id): void {
 		throw new Error('Function not implemented.');
 	},
-	onTagSelected: function (_Id: UUID): void {
+	onTagSelected: function (_Id): void {
 		throw new Error('Function not implemented.');
 	},
 	onUserAllSelected: function (): void {
@@ -173,7 +171,7 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 		}, 500);
 	}, [IsPaginationEnabled.current]);
 
-	const isUserSelected = useCallback((_id: BSON.UUID) => {
+	const isUserSelected = useCallback((_id) => {
 		switch (UserSpecialSelection.current) {
 			case 'all':
 				return true;
@@ -185,7 +183,7 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 		}
 	}, []);
 
-	const isTagSelected = useCallback((_id: BSON.UUID) => {
+	const isTagSelected = useCallback((_id) => {
 		switch (TagSpecialSelection.current) {
 			case 'all': {
 				return true;
@@ -223,7 +221,7 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 		setUserStateHash(randomUUID());
 	}, []);
 
-	const onUserSelected = useCallback((_id: UUID) => {
+	const onUserSelected = useCallback((_id) => {
 		if (
 			UserSpecialSelection.current === 'all' ||
 			UserSpecialSelection.current === 'none'
@@ -242,7 +240,7 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 		setUserStateHash(randomUUID());
 	}, []);
 
-	function onTagSelected(_id: UUID) {}
+	function onTagSelected(_id) {}
 
 	const IsUserAllSelected = useMemo(() => {
 		return UserSpecialSelection.current === 'all';

@@ -7,8 +7,8 @@ import {
 	ViewStyle,
 } from 'react-native';
 import styles from '../../../../../common/user/utils/styles';
-import { useActivitypubUserContext } from '../../../../../../states/useProfile';
 import useAppNavigator from '../../../../../../states/useAppNavigator';
+import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 
 type ProfileStatsProps = {
 	userId: string;
@@ -38,6 +38,7 @@ const ProfileStats = memo(
 		style,
 		userId,
 	}: ProfileStatsProps) => {
+		const { colorScheme } = useAppTheme();
 		const { toFollows, toFollowers } = useAppNavigator();
 
 		function onFollowsPress() {
@@ -50,7 +51,13 @@ const ProfileStats = memo(
 			toFollowers(userId);
 		}
 		return (
-			<View style={[{ flexDirection: 'row', flex: 1 }, style]}>
+			<View
+				style={[
+					{ flexDirection: 'row', flex: 1 },
+					style,
+					{ backgroundColor: colorScheme.palette.menubar },
+				]}
+			>
 				<TouchableOpacity
 					style={{
 						alignItems: 'center',
@@ -58,15 +65,37 @@ const ProfileStats = memo(
 					}}
 					onPress={onPostsPress}
 				>
-					<Text style={styles.primaryText}>{util(postCount)}</Text>
-					<Text style={styles.secondaryText}>Posts</Text>
+					<Text
+						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
+					>
+						{util(postCount)}
+					</Text>
+					<Text
+						style={[
+							styles.secondaryText,
+							{ color: colorScheme.textColor.medium },
+						]}
+					>
+						Posts
+					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={{ alignItems: 'center', flex: 1 }}
 					onPress={onFollowsPress}
 				>
-					<Text style={styles.primaryText}>{util(followingCount)}</Text>
-					<Text style={styles.secondaryText}>Follows</Text>
+					<Text
+						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
+					>
+						{util(followingCount)}
+					</Text>
+					<Text
+						style={[
+							styles.secondaryText,
+							{ color: colorScheme.textColor.medium },
+						]}
+					>
+						Follows
+					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={{
@@ -75,28 +104,21 @@ const ProfileStats = memo(
 					}}
 					onPress={onFollowersPress}
 				>
-					<Text style={styles.primaryText}>{util(followerCount)}</Text>
-					<Text style={styles.secondaryText}>Followers</Text>
+					<Text
+						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
+					>
+						{util(followerCount)}
+					</Text>
+					<Text
+						style={[
+							styles.secondaryText,
+							{ color: colorScheme.textColor.medium },
+						]}
+					>
+						Followers
+					</Text>
 				</TouchableOpacity>
 			</View>
-		);
-	},
-);
-
-type ProfileStatsInterfaceProps = {
-	style?: StyleProp<ViewStyle>;
-};
-export const ProfileStatsInterface = memo(
-	({ style }: ProfileStatsInterfaceProps) => {
-		const { user } = useActivitypubUserContext();
-		return (
-			<ProfileStats
-				followerCount={user?.getFollowersCount()}
-				followingCount={user?.getFollowingCount()}
-				postCount={user?.getPostCount()}
-				style={style}
-				userId={user?.getId()}
-			/>
 		);
 	},
 );

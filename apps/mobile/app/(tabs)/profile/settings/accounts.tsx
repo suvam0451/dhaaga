@@ -1,4 +1,4 @@
-import SelectAccountStack from '../../../../screens/accounts/stacks/SelectAccount';
+import SelectAccountStack from '../../../../components/screens/profile/stack/settings/stacks/SelectAccount';
 
 function AccountSelectionStack() {
 	return <SelectAccountStack />;

@@ -37,8 +37,7 @@ type Props = {
  * Wrap ActivityPub tag objects with this
  */
 function WithActivitypubTagContext({ tag, children }: Props) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
+	const { domain } = useActivityPubRestClientContext();
 
 	const [Value, setValue] = useState<TagInterface | null>(
 		ActivityPubTagAdapter(null, domain),

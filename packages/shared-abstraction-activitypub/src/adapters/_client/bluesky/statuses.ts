@@ -3,11 +3,18 @@ import {
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { MastoScheduledStatus, MastoStatus, MissNote } from '../_interface.js';
+import { MastoStatus } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
 import { getBskyAgent } from '../_router/_api.js';
-import { AppBskyFeedGetPostThread, AtpSessionData } from '@atproto/api';
+import {
+	AppBskyFeedGetPostThread,
+	AtpSessionData,
+	ChatBskyConvoGetConvo,
+	ChatBskyConvoGetConvoForMembers,
+	ChatBskyConvoSendMessage,
+} from '@atproto/api';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import { DhaagaErrorCode } from '../_router/_types.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
@@ -21,16 +28,40 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	create(dto: DhaagaJsPostCreateDto): LibraryPromise<MastoScheduledStatus> {
-		return Promise.resolve(undefined) as any;
+	async create(dto: DhaagaJsPostCreateDto): LibraryPromise<{
+		uri: string;
+		cid: string;
+	}> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.post({
+				text: dto.status,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	delete(id: string): LibraryPromise<MastoStatus | { success: true }> {
 		return Promise.resolve(undefined) as any;
 	}
 
-	get(id: string): LibraryPromise<MastoStatus | MissNote> {
-		return Promise.resolve(undefined) as any;
+	async get(id: string): LibraryPromise<AppBskyFeedGetPostThread.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			/**
+			 * could not figure out how to resolve
+			 * repo/rkey for agent.getPost
+			 */
+			const data = await agent.getPostThread({
+				uri: id,
+				depth: 1,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async getContext(
@@ -66,6 +97,51 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		id: string,
 	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']> {
 		return Promise.resolve(undefined) as any;
+	}
+
+	async getConvoForMembers(
+		members: string[],
+	): LibraryPromise<ChatBskyConvoGetConvoForMembers.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.chat.bsky.convo.getConvoForMembers({
+				members,
+			});
+			return { data };
+		} catch (e) {
+			console.log('[ERROR]: bluesky', e);
+			return errorBuilder();
+		}
+	}
+
+	async getConvo(id: string): LibraryPromise<ChatBskyConvoGetConvo.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.chat.bsky.convo.getConvo({
+				convoId: id,
+			});
+			return { data };
+		} catch (e) {
+			console.log('[ERROR]: bluesky', e);
+			return errorBuilder();
+		}
+	}
+
+	async sendMessage(
+		id: string,
+		msg: string,
+	): LibraryPromise<ChatBskyConvoSendMessage.Response> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const data = await agent.chat.bsky.convo.sendMessage({
+				convoId: id,
+				message: { text: msg },
+			});
+			return { data };
+		} catch (e) {
+			console.log('[ERROR]: bluesky', e);
+			return errorBuilder();
+		}
 	}
 }
 

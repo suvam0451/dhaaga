@@ -1,10 +1,8 @@
 import { Text } from 'react-native';
 import { randomUUID } from 'expo-crypto';
 import LinkProcessor from '../components/common/link/LinkProcessor';
-import { APP_FONT } from '../styles/AppTheme';
 import { EmojiService } from './emoji.service';
 import { MMKV } from 'react-native-mmkv';
-import { Realm } from 'realm';
 import TextParserService from './text-parser';
 import type { MfmNode } from '@dhaaga/shared-abstraction-activitypub';
 import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
@@ -13,10 +11,10 @@ import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 import { APP_FONTS } from '../styles/AppFonts';
+import { AppColorSchemeType } from '../styles/BuiltinThemes';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
-	protected readonly db: Realm;
 	protected readonly globalDb: MMKV;
 	protected readonly myDomain: string;
 	protected readonly mySubdomain: string;
@@ -31,15 +29,15 @@ class MfmComponentBuilder {
 	nodes: MfmNode[][];
 	emojis: Set<string>;
 	targetSubdomain?: string;
-
+	emphasis: 'high' | 'medium' | 'low';
 	results: any[];
 	aiContext: any[];
 
 	fontFamily: string;
+	colorScheme: AppColorSchemeType;
 
 	constructor({
 		input,
-		db,
 		globalDb,
 		targetSubdomain,
 		mySubdomain,
@@ -47,9 +45,10 @@ class MfmComponentBuilder {
 		emojiMap,
 		opts,
 		fontFamily,
+		emphasis,
+		colorScheme,
 	}: {
 		input: string;
-		db: Realm;
 		globalDb: MMKV;
 		myDomain: string;
 		mySubdomain: string;
@@ -60,9 +59,10 @@ class MfmComponentBuilder {
 			parseLinks?: boolean;
 		};
 		fontFamily?: string;
+		emphasis: 'high' | 'medium' | 'low';
+		colorScheme: AppColorSchemeType;
 	}) {
 		this.input = input;
-		this.db = db;
 		this.globalDb = globalDb;
 		this.emojis = new Set<string>();
 		this.targetSubdomain = targetSubdomain;
@@ -71,7 +71,9 @@ class MfmComponentBuilder {
 		this.mySubdomain = mySubdomain;
 		this.myDomain = myDomain;
 		this.emojiMap = emojiMap;
-		this.fontFamily = APP_FONTS.INTER_400_REGULAR;
+		this.fontFamily = fontFamily || APP_FONTS.INTER_400_REGULAR;
+		this.emphasis = emphasis;
+		this.colorScheme = colorScheme;
 
 		// options
 		if (opts?.parseMentions !== undefined)
@@ -115,14 +117,14 @@ class MfmComponentBuilder {
 
 	loadEmojis() {
 		if (this.emojis.size === 0) return;
-		EmojiService.loadEmojisForInstanceSync(
-			this.db,
-			this.globalDb,
-			this.targetSubdomain || this.mySubdomain,
-			{
-				selection: this.emojis,
-			},
-		);
+		// EmojiService.loadEmojisForInstanceSync(
+		// 	this.db,
+		// 	this.globalDb,
+		// 	this.targetSubdomain || this.mySubdomain,
+		// 	{
+		// 		selection: this.emojis,
+		// 	},
+		// );
 	}
 
 	preprocess() {
@@ -141,6 +143,26 @@ class MfmComponentBuilder {
 		let count = 0;
 		let paraCount = 0;
 
+		let color = null;
+		switch (this.emphasis) {
+			case 'high': {
+				color = this.colorScheme.textColor.high;
+				break;
+			}
+			case 'medium': {
+				color = this.colorScheme.textColor.medium;
+				break;
+			}
+			case 'low': {
+				color = this.colorScheme.textColor.low;
+				break;
+			}
+			default: {
+				color = this.colorScheme.textColor.medium;
+				break;
+			}
+		}
+
 		for (const para of this.nodes) {
 			this.results.push([]);
 			for (const node of para) {
@@ -154,7 +176,8 @@ class MfmComponentBuilder {
 						<Text
 							key={key}
 							style={{
-								color: APP_FONT.MONTSERRAT_BODY,
+								color: color as any,
+								fontFamily: this.fontFamily || APP_FONTS.INTER_400_REGULAR,
 							}}
 						>
 							{splits[0]}
@@ -172,7 +195,8 @@ class MfmComponentBuilder {
 							<Text
 								key={key}
 								style={{
-									color: 'rgba(255, 255, 255, 0.6)',
+									color: color as any,
+									fontFamily: this.fontFamily,
 								}}
 							>
 								{splits[i]}
@@ -196,6 +220,26 @@ class MfmComponentBuilder {
 	}
 
 	private parser(node: any) {
+		let color = null;
+		switch (this.emphasis) {
+			case 'high': {
+				color = this.colorScheme.textColor.high;
+				break;
+			}
+			case 'medium': {
+				color = this.colorScheme.textColor.medium;
+				break;
+			}
+			case 'low': {
+				color = this.colorScheme.textColor.low;
+				break;
+			}
+			default: {
+				color = this.colorScheme.textColor.medium;
+				break;
+			}
+		}
+
 		const k = randomUUID();
 		switch (node.type) {
 			case 'link':
@@ -206,7 +250,12 @@ class MfmComponentBuilder {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 				if (mention) {
 					return (
-						<MentionSegment key={k} value={mention.text} link={mention.url} />
+						<MentionSegment
+							key={k}
+							value={mention.text}
+							link={mention.url}
+							fontFamily={this.fontFamily}
+						/>
 					);
 				}
 
@@ -214,7 +263,14 @@ class MfmComponentBuilder {
 				 * The link/url might be a hashtag
 				 */
 				const hashtag = TextParserService.isHashtag(node.props.url);
-				if (hashtag) return <HashtagSegment key={k} value={hashtag} />;
+				if (hashtag)
+					return (
+						<HashtagSegment
+							key={k}
+							value={hashtag}
+							fontFamily={this.fontFamily}
+						/>
+					);
 
 				let displayName = null;
 				if (this.links) {
@@ -228,6 +284,8 @@ class MfmComponentBuilder {
 						key={k}
 						url={node.props.url}
 						displayName={displayName}
+						fontFamily={this.fontFamily}
+						emphasis={this.emphasis}
 					/>
 				);
 			}
@@ -237,7 +295,8 @@ class MfmComponentBuilder {
 					<Text
 						key={k}
 						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
+							color: color as any,
+							fontFamily: this.fontFamily,
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
@@ -250,7 +309,7 @@ class MfmComponentBuilder {
 						key={k}
 						style={{
 							fontStyle: 'italic',
-							color: APP_FONT.MONTSERRAT_BODY,
+							color: color as any,
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
@@ -262,8 +321,8 @@ class MfmComponentBuilder {
 					<Text
 						key={k}
 						style={{
-							fontFamily: APP_FONTS.INTER_700_BOLD,
-							color: APP_FONT.MONTSERRAT_HEADER,
+							fontFamily: this.fontFamily,
+							color: color as any,
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
@@ -274,17 +333,35 @@ class MfmComponentBuilder {
 			case 'mention': {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 				return (
-					<MentionSegment key={k} value={node.props.acct} link={mention?.url} />
+					<MentionSegment
+						key={k}
+						value={node.props.acct}
+						link={mention?.url}
+						fontFamily={this.fontFamily}
+					/>
 				);
 			}
 			case 'inlineCode':
 				return <InlineCodeSegment key={k} value={node.props.code} />;
 			case 'hashtag':
-				return <HashtagSegment key={k} value={node.props.hashtag} />;
+				return (
+					<HashtagSegment
+						key={k}
+						value={node.props.hashtag}
+						fontFamily={this.fontFamily}
+					/>
+				);
 			// TODO: quote resolver
 			case 'quote':
 			case 'text':
-				return <RawTextSegment key={k} value={node.props?.text} />;
+				return (
+					<RawTextSegment
+						key={k}
+						value={node.props?.text}
+						fontFamily={this.fontFamily}
+						emphasis={this.emphasis}
+					/>
+				);
 			case 'emojiCode':
 				return (
 					<EmojiCodeSegment
@@ -324,8 +401,10 @@ class MfmService {
 	 * @param db
 	 * @param globalDb
 	 * @param remoteSubdomain is the subdomain of target user
+	 * @param emphasis
 	 * @param opts
 	 * @param fontFamily
+	 * @param AppColorSchemeType
 	 */
 	static renderMfm(
 		input: string,
@@ -333,23 +412,25 @@ class MfmService {
 			emojiMap,
 			domain,
 			subdomain,
-			db,
 			globalDb,
 			remoteSubdomain,
 			fontFamily,
+			emphasis,
 			opts,
+			colorScheme,
 		}: {
 			domain: string;
 			subdomain: string;
 			emojiMap: Map<string, string>;
 			globalDb: MMKV;
-			db: Realm;
 			remoteSubdomain?: string;
 			fontFamily?: string;
+			emphasis?: 'high' | 'medium' | 'low';
 			opts?: {
 				mentionsClickable?: boolean;
 				fontFamily?: string;
 			};
+			colorScheme: AppColorSchemeType;
 		},
 	) {
 		/**
@@ -368,12 +449,14 @@ class MfmService {
 
 		const solver = new MfmComponentBuilder({
 			input,
-			db,
 			globalDb,
 			myDomain: domain,
 			mySubdomain: subdomain,
 			emojiMap,
 			targetSubdomain: remoteSubdomain,
+			fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
+			emphasis: emphasis || 'medium',
+			colorScheme,
 		});
 		solver.solve(true);
 		return {

@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { Dispatch, MutableRefObject } from 'react';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 import { ActivityPubReactionStateDto } from '../../../../services/approto/activitypub-reactions.service';
 
@@ -39,6 +39,7 @@ function postArrayReducer(
 			const _subdomain: string = action.payload.subdomain;
 			return produce(state, (draft) => {
 				for (const item of _more) {
+					if (!item) continue;
 					const k = item.getId();
 					if (_seen.current.has(k)) continue;
 					_seen.current.add(k);

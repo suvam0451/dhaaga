@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { APP_FONT } from '../../../../styles/AppTheme';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import TimelineWidgetModal from '../../../widgets/timelines/core/Modal';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
@@ -10,6 +10,10 @@ import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../lib/Icon';
+import { router } from 'expo-router';
+import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 
 type HeadersProps = {
 	title: string;
@@ -24,14 +28,15 @@ type HeadersProps = {
  */
 const TimelinesHeader = ({ title }: HeadersProps) => {
 	const { client } = useActivityPubRestClientContext();
-	const { setShowTimelineSelection } = useTimelineController();
+	const { setShowTimelineSelection, setTimelineType, timelineType } =
+		useTimelineController();
 	const {
 		setVisible,
 		setType,
 		PostComposerTextSeedRef,
 		PostRef,
 		updateRequestId,
-		replyToRef,
+		ParentRef,
 	} = useAppBottomSheet();
 
 	function onIconPress() {
@@ -42,72 +47,110 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 		}
 	}
 
-	function onCreatePost() {
+	function post() {
 		PostComposerTextSeedRef.current = null;
 		PostRef.current = null;
-		replyToRef.current = null;
+		ParentRef.current = null;
 
 		setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 		updateRequestId();
 		setVisible(true);
 	}
 
+	function onChangeTheme() {
+		setType(APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK);
+		updateRequestId();
+		setVisible(true);
+	}
+
+	function goHome() {
+		setTimelineType(TimelineFetchMode.IDLE);
+		router.navigate('/');
+	}
+
+	const { colorScheme } = useAppTheme();
+
 	return (
-		<View style={styles.root}>
-			<View style={{ width: 42 }}>
-				<Ionicons name="menu" size={24} color={APP_FONT.DISABLED} />
+		<View style={[styles.root, { backgroundColor: colorScheme.palette.bg }]}>
+			<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>
+				<TouchableOpacity
+					style={styles.menuActionButtonContainer}
+					onPress={onChangeTheme}
+				>
+					<AppIcon id={'palette'} emphasis={'medium'} />
+				</TouchableOpacity>
 			</View>
 
 			<TouchableOpacity
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
-					paddingVertical: 12,
-					paddingHorizontal: 16,
+					height: '100%',
 					flex: 1,
 					justifyContent: 'center',
 				}}
 				onPress={onIconPress}
 			>
-				<Text style={[styles.label]} numberOfLines={1}>
+				<Text
+					style={[styles.label, { color: colorScheme.textColor.medium }]}
+					numberOfLines={1}
+				>
 					{title || 'Home'}
 				</Text>
 				<Ionicons
 					name="chevron-down"
-					color={APP_FONT.MONTSERRAT_BODY}
+					color={colorScheme.textColor.medium}
 					size={20}
 					style={{ marginLeft: 4, marginTop: 2 }}
 				/>
 			</TouchableOpacity>
-			<TouchableOpacity
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					paddingVertical: 12,
-					paddingHorizontal: 16,
-				}}
-				onPress={onCreatePost}
+
+			<View
+				style={[
+					styles.menuSection,
+					{ justifyContent: 'flex-end', paddingRight: 8 },
+				]}
 			>
-				<Ionicons
-					name="create-outline"
-					size={24}
-					color={APP_FONT.MONTSERRAT_BODY}
-				/>
-			</TouchableOpacity>
+				<TouchableOpacity
+					style={styles.menuActionButtonContainer}
+					onPress={post}
+				>
+					<AppIcon id={'create'} emphasis={'medium'} />
+				</TouchableOpacity>
+
+				{timelineType !== TimelineFetchMode.IDLE && (
+					<TouchableOpacity
+						style={styles.menuActionButtonContainer}
+						onPress={goHome}
+					>
+						<AppIcon id={'home'} emphasis={'medium'} size={20} />
+					</TouchableOpacity>
+				)}
+			</View>
 			<TimelineWidgetModal />
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	menuSection: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		width: 84,
+		height: '100%',
+	},
+	menuActionButtonContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		height: '100%',
+		paddingHorizontal: 8,
+	},
 	root: {
 		width: '100%',
-		paddingLeft: 10,
-		backgroundColor: APP_THEME.DARK_THEME_MENUBAR,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: 50,
+		height: 48,
 	},
 	label: {
 		color: APP_FONT.MONTSERRAT_BODY,

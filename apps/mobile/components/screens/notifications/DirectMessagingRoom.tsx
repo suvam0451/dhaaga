@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useObject } from '@realm/react';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
@@ -9,8 +8,6 @@ import { useRoute } from '@react-navigation/native';
 import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MMKV } from 'react-native-mmkv';
-
-import { ActivityPubChatRoom } from '../../../entities/activitypub-chatroom.entity';
 import ActivitypubProviderService from '../../../services/activitypub-provider.service';
 import ActivityPubProviderService from '../../../services/activitypub-provider.service';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
@@ -71,13 +68,16 @@ type ChatItemPointer = {
 };
 
 function DirectMessagingRoom() {
-	const { client, primaryAcct } = useActivityPubRestClientContext();
-	const _domain = primaryAcct?.domain;
+	const {
+		client,
+		primaryAcct,
+		domain: _domain,
+	} = useActivityPubRestClientContext();
 
 	const route = useRoute<any>();
 	const roomId = route?.params?.roomId;
 
-	const chatroom = useObject(ActivityPubChatRoom, roomId);
+	// const chatroom = useObject(ActivityPubChatRoom, roomId);
 	const [LatestStatuses, setLatestStatuses] = useState<string[]>([]);
 	const [MessageHistory, setMessageHistory] = useState<StatusInterface[]>([]);
 
@@ -103,23 +103,23 @@ function DirectMessagingRoom() {
 	}, []);
 
 	useEffect(() => {
-		const latestStatuses = chatroom.conversations.map(
-			(o) => o.latestStatus.statusId,
-		);
-		let needsReevaluation = false;
-		for (let i = 0; i < latestStatuses.length; i++) {
-			if (!LatestStatuses.includes(latestStatuses[i])) {
-				needsReevaluation = true;
-				break;
-			}
-		}
-		if (LatestStatuses.length !== latestStatuses.length)
-			needsReevaluation = true;
-
-		if (needsReevaluation) {
-			setLatestStatuses(latestStatuses);
-		}
-	}, [roomId, chatroom]);
+		// const latestStatuses = chatroom.conversations.map(
+		// 	(o) => o.latestStatus.statusId,
+		// );
+		// let needsReevaluation = false;
+		// for (let i = 0; i < latestStatuses.length; i++) {
+		// 	if (!LatestStatuses.includes(latestStatuses[i])) {
+		// 		needsReevaluation = true;
+		// 		break;
+		// 	}
+		// }
+		// if (LatestStatuses.length !== latestStatuses.length)
+		// 	needsReevaluation = true;
+		//
+		// if (needsReevaluation) {
+		// 	setLatestStatuses(latestStatuses);
+		// }
+	}, [roomId]);
 
 	function resolveHistory(input: ChatItemPointer[]) {
 		input = input.sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1));
@@ -153,11 +153,11 @@ function DirectMessagingRoom() {
 							_domain,
 						);
 						statuses = statuses.concat(interfaces);
-						for (let i = 0; i < interfaces.length; i++)
-							conversationMapper.set(
-								interfaces[i].getId(),
-								chatroom.conversations[count % 2].conversationId,
-							);
+						// for (let i = 0; i < interfaces.length; i++)
+						// 	conversationMapper.set(
+						// 		interfaces[i].getId(),
+						// 		chatroom.conversations[count % 2].conversationId,
+						// 	);
 
 						MmkvService.saveRawStatuses(mmkv, interfaces);
 					} else {
@@ -165,11 +165,11 @@ function DirectMessagingRoom() {
 							item,
 							_domain,
 						);
-						for (let i = 0; i < interfaces.length; i++)
-							conversationMapper.set(
-								interfaces[i].getId(),
-								chatroom.conversations[count % 2].conversationId,
-							);
+						// for (let i = 0; i < interfaces.length; i++)
+						// 	conversationMapper.set(
+						// 		interfaces[i].getId(),
+						// 		chatroom.conversations[count % 2].conversationId,
+						// 	);
 
 						statuses = statuses.concat(interfaces);
 						MmkvService.saveRawStatuses(mmkv, interfaces);

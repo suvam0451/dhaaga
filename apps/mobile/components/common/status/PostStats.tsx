@@ -1,58 +1,48 @@
-import { Fragment, memo, useState } from 'react';
-import {
-	TouchableOpacity,
-	View,
-	StyleSheet,
-	ViewStyle,
-	StyleProp,
-} from 'react-native';
+import { Fragment, memo } from 'react';
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { Text } from '@rneui/themed';
-import { APP_THEME } from '../../../styles/AppTheme';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { useAppTimelinePosts } from '../../../hooks/app/timelines/useAppTimelinePosts';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/activitypub-status-dto.service';
+import { APP_FONT } from '../../../styles/AppTheme';
+import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
-type PostStatLikesProps = {
+type StatItemProps = {
+	count: number;
+	label: string;
+	nextCounts: number[];
 	onPress: () => void;
-	isLiked: boolean;
-	likeCount: number;
 };
 
+function util(o: number): string {
+	const formatter = new Intl.NumberFormat('en-US', {
+		notation: 'compact',
+		compactDisplay: 'short',
+	});
+	return formatter.format(o);
+}
+
 /**
- * Show and allow likes
+ * Shows a post stat
  */
-const PostStatLikes = memo(
-	({ onPress, isLiked, likeCount }: PostStatLikesProps) => {
-		if (!isLiked && likeCount === 0) return <View />;
-		return (
-			<TouchableOpacity
-				onPress={onPress}
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-				}}
-			>
-				<AntDesign
-					name="like2"
-					size={16}
-					color={isLiked ? APP_THEME.LINK : '#ffffff87'}
-				/>
-				<Text
-					style={{
-						color: isLiked ? APP_THEME.LINK : '#888',
-						fontSize: 13,
-						marginLeft: 4,
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					}}
-				>
-					{likeCount}
+const StatItem = memo(({ count, label, nextCounts }: StatItemProps) => {
+	const { colorScheme } = useAppTheme();
+	const formatted = util(count);
+
+	const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
+	if (count === 0) return <View />;
+	return (
+		<Fragment>
+			<Text style={[styles.text, { color: colorScheme.textColor.emphasisC }]}>
+				{formatted} {label}
+			</Text>
+			{SHOW_TRAILING_BULLET && (
+				<Text style={[styles.bull, { color: colorScheme.textColor.emphasisC }]}>
+					&bull;
 				</Text>
-			</TouchableOpacity>
-		);
-	},
-);
+			)}
+		</Fragment>
+	);
+});
+
 /**
  * Show metrics for a post
  *
@@ -73,60 +63,33 @@ const PostStats = memo(function Foo({
 			: dto.boostedFrom
 		: dto;
 
-	const [IsLikeLoading, setIsLikeLoading] = useState(false);
+	const LIKE_COUNT = STATUS_DTO.stats.likeCount;
+	const REPLY_COUNT = STATUS_DTO.stats.replyCount;
+	const SHARE_COUNT = STATUS_DTO.stats.boostCount;
 
-	const { toggleLike } = useAppTimelinePosts();
-
-	function _toggleLike() {
-		toggleLike(STATUS_DTO.id, setIsLikeLoading);
-	}
-
-	if (
-		STATUS_DTO.stats.replyCount < 1 &&
-		STATUS_DTO.stats.likeCount < 1 &&
-		STATUS_DTO.stats.boostCount < 1
-	)
+	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1)
 		return <View></View>;
 
 	return (
 		<View style={[styles.container, style]}>
-			<PostStatLikes
-				isLiked={STATUS_DTO.interaction.liked}
-				likeCount={STATUS_DTO.stats.likeCount}
-				onPress={_toggleLike}
+			<StatItem
+				count={LIKE_COUNT}
+				label={'Likes'}
+				nextCounts={[REPLY_COUNT, SHARE_COUNT]}
+				onPress={() => {}}
 			/>
-			<View style={{ flexGrow: 1 }}></View>
-			{STATUS_DTO.stats.replyCount > 0 && (
-				<Fragment>
-					<Text
-						style={{
-							color: '#888',
-							marginLeft: 4,
-							fontSize: 12,
-							textAlign: 'right',
-						}}
-					>
-						{STATUS_DTO.stats.replyCount} Replies
-					</Text>
-					<Text style={{ color: '#888', marginLeft: 2, opacity: 0.3 }}>
-						&bull;
-					</Text>
-				</Fragment>
-			)}
-			{STATUS_DTO.stats.boostCount > 0 && (
-				<Fragment>
-					<Text
-						style={{
-							color: '#888',
-							fontSize: 12,
-							marginLeft: 2,
-							textAlign: 'right',
-						}}
-					>
-						{STATUS_DTO.stats.boostCount} Boosts
-					</Text>
-				</Fragment>
-			)}
+			<StatItem
+				count={SHARE_COUNT}
+				label={'Shared'}
+				nextCounts={[REPLY_COUNT]}
+				onPress={() => {}}
+			/>
+			<StatItem
+				count={REPLY_COUNT}
+				label={'Replies'}
+				nextCounts={[]}
+				onPress={() => {}}
+			/>
 		</View>
 	);
 });
@@ -134,9 +97,19 @@ const PostStats = memo(function Foo({
 const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
-		marginTop: 12,
+		marginTop: 8,
 		flexDirection: 'row',
 		alignItems: 'center',
+	},
+	text: {
+		color: APP_FONT.MEDIUM_EMPHASIS,
+		fontSize: 12,
+		textAlign: 'right',
+	},
+	bull: {
+		color: APP_FONT.MEDIUM_EMPHASIS,
+		marginHorizontal: 2,
+		opacity: 0.3,
 	},
 });
 export default PostStats;

@@ -3,6 +3,7 @@ import { RelationshipDialogProps } from '../fragments/_common';
 import RelationDialogFactory from './_RelationDialogFactory';
 import { Text, View } from 'react-native';
 import { ActionButton, modalStyles } from './_common';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const RDFollowing = memo(
 	({
@@ -11,14 +12,22 @@ const RDFollowing = memo(
 		loading,
 		unfollow,
 	}: RelationshipDialogProps & { unfollow: () => void }) => {
+		const { colorScheme } = useAppTheme();
 		return (
 			<RelationDialogFactory
 				visible={visible}
 				setVisible={setVisible}
 				loading={loading}
+				label={'Following'}
 			>
-				<Text style={modalStyles.modalTitle}>Following</Text>
-				<Text style={modalStyles.modalDescription}>
+				<Text
+					style={[
+						modalStyles.modalDescription,
+						{
+							color: colorScheme.textColor.medium,
+						},
+					]}
+				>
 					You currently follow this user
 				</Text>
 				<View style={modalStyles.actionButtonContainer}>

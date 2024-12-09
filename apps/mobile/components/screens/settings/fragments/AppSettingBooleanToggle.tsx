@@ -11,9 +11,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
-import { useQuery, useRealm } from '@realm/react';
 import { AppSetting } from '../../../../entities/app-settings.entity';
-import AppSettingService from '../../../../services/app-settings/app-settings';
 
 type AppSettingBooleanToggleProps = {
 	label: string;
@@ -26,19 +24,9 @@ const UNCHECKED_BG_COLOR = '#282828';
 
 const AppSettingBooleanToggle = memo(
 	({ label, subtext, style, settingKey }: AppSettingBooleanToggleProps) => {
-		const db = useRealm();
-		const setting: AppSetting = useQuery(AppSetting).find(
-			(o) => o.key === settingKey,
-		);
+		const setting: AppSetting = null;
 
 		const IS_CHECKED = setting?.value === '1';
-		function toggle() {
-			AppSettingService.update(
-				db,
-				settingKey,
-				setting?.value === '1' ? '0' : '1',
-			);
-		}
 
 		return (
 			<View style={[{ flexDirection: 'row', alignItems: 'center' }, style]}>
@@ -52,7 +40,7 @@ const AppSettingBooleanToggle = memo(
 						borderRadius: 8,
 						marginLeft: 8,
 					}}
-					onPress={toggle}
+					onPress={() => {}}
 				>
 					<View
 						style={{

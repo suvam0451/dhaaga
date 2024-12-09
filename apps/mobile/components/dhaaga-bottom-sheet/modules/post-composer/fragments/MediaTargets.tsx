@@ -6,6 +6,7 @@ import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import Feather from '@expo/vector-icons/Feather';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import useImagePicker from '../api/useImagePicker';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
 /**
  * Shows a list of uploaded
@@ -15,6 +16,7 @@ import useImagePicker from '../api/useImagePicker';
 const ComposeMediaTargets = memo(function Foo() {
 	const { mediaTargets, removeMediaTarget } = useComposerContext();
 	const { trigger } = useImagePicker();
+	const { colorScheme } = useAppTheme();
 
 	return (
 		<View
@@ -43,11 +45,11 @@ const ComposeMediaTargets = memo(function Foo() {
 							<Feather
 								name="image"
 								size={24}
-								color={APP_FONT.MONTSERRAT_BODY}
+								color={colorScheme.textColor.medium}
 							/>
 							<Text
 								style={{
-									color: APP_FONT.MONTSERRAT_BODY,
+									color: colorScheme.textColor.medium,
 									marginLeft: 4,
 									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 								}}

@@ -8,9 +8,9 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ActivityPubAdapterService from '../../services/activitypub-adapter.service';
 import ActivityPubService from '../../services/activitypub.service';
-import ActivityPubUserDtoService, {
-	ActivityPubAppUserDtoType,
-} from '../../services/approto/activitypub-user-dto.service';
+import AppUserService, {
+	AppUser,
+} from '../../services/approto/app-user-service';
 import ActivitypubReactionsService from '../../services/approto/activitypub-reactions.service';
 
 type ReactionDetails = {
@@ -18,8 +18,9 @@ type ReactionDetails = {
 	url: string;
 	count: number;
 	reacted: boolean;
-	accounts: ActivityPubAppUserDtoType[];
+	accounts: AppUser[];
 };
+
 function useGetReactionDetails(postId: string, reactionId: string) {
 	const { client, domain, subdomain, me } = useActivityPubRestClientContext();
 	const [Data, setData] = useState<ReactionDetails>(null);
@@ -48,15 +49,11 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 				count: match.count,
 				reacted: match.me,
 				url: match.url,
-				accounts: match.accounts
-					.map((o) =>
-						ActivityPubUserDtoService.export(
-							ActivityPubAdapterService.adaptUser(o, domain),
-							domain,
-							subdomain,
-						),
-					)
-					.filter((o) => !!o),
+				accounts: AppUserService.exportRawMultiple(
+					match.accounts,
+					domain,
+					subdomain,
+				),
 			};
 		} else if (ActivityPubService.misskeyLike(domain)) {
 			const { data, error } = await (
@@ -68,9 +65,9 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 				return null;
 			}
 
-			const accts: ActivityPubAppUserDtoType[] = data
+			const accts: AppUser[] = data
 				.map((o) =>
-					ActivityPubUserDtoService.export(
+					AppUserService.export(
 						ActivityPubAdapterService.adaptUser(o.user, domain),
 						domain,
 						subdomain,

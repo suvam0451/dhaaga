@@ -7,12 +7,8 @@ import { useActivityPubRestClientContext } from '../../../states/useActivityPubR
 import { useEffect } from 'react';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { ScrollView, View } from 'react-native';
-import { useQuery as useRealmQuery } from '@realm/react';
-import { useRealm } from '@realm/react';
 import CryptoService from '../../../services/crypto.service';
-import { ActivityPubChatRoom } from '../../../entities/activitypub-chatroom.entity';
 import ChatroomPreview from './fragments/dm/ChatroomPreviewType';
-import ChatroomService from '../../../services/chatroom.service';
 import { Text } from '@rneui/themed';
 import { Divider } from '@rneui/base';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
@@ -21,9 +17,11 @@ import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 
 function WithApi() {
-	const { client, primaryAcct } = useActivityPubRestClientContext();
-	const _domain = primaryAcct?.domain;
-	const _subdomain = primaryAcct?.subdomain;
+	const {
+		client,
+		domain: _domain,
+		subdomain: _subdomain,
+	} = useActivityPubRestClientContext();
 
 	const { me, meRaw } = useActivityPubRestClientContext();
 	const {
@@ -31,10 +29,11 @@ function WithApi() {
 		updateQueryCache,
 		append,
 	} = useAppPaginationContext();
-	const db = useRealm();
-	const chatrooms = useRealmQuery(ActivityPubChatRoom).filter(
-		(o) => o.me.userId === me?.getId(),
-	);
+	// const db = useRealm();
+	const chatrooms = [];
+	// useRealmQuery(ActivityPubChatRoom).filter(
+	// 	(o) => o.me.userId === me?.getId(),
+	// );
 
 	async function api() {
 		if (!client) {
@@ -77,13 +76,13 @@ function WithApi() {
 				item.accounts.push(meRaw);
 			}
 			const hash = await CryptoService.hashUserList(participantIds);
-			ChatroomService.upsertConversation(db, {
-				me,
-				hash,
-				subdomain: _subdomain,
-				domain: _domain,
-				conversation: item,
-			});
+			// ChatroomService.upsertConversation(db, {
+			// 	me,
+			// 	hash,
+			// 	subdomain: _subdomain,
+			// 	domain: _domain,
+			// 	conversation: item,
+			// });
 		}
 	}
 

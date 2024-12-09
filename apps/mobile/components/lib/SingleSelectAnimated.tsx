@@ -16,8 +16,8 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
-import { APP_FONT } from '../../styles/AppTheme';
 import { APP_FONTS } from '../../styles/AppFonts';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
 
 type ChipProps = {
 	active: boolean;
@@ -27,6 +27,7 @@ type ChipProps = {
 };
 
 const Chip = memo(({ active, label, onLayout, onPress }: ChipProps) => {
+	const { colorScheme } = useAppTheme();
 	const ref = useAnimatedRef<Animated.View>();
 
 	// respond to page changes via swipe gesture
@@ -43,9 +44,12 @@ const Chip = memo(({ active, label, onLayout, onPress }: ChipProps) => {
 	};
 	const animStyle = useAnimatedStyle(() => {
 		return {
-			color: withTiming(active ? APP_FONT.MONTSERRAT_BODY : APP_FONT.DISABLED, {
-				duration: 350,
-			}),
+			color: withTiming(
+				active ? colorScheme.textColor.high : colorScheme.textColor.medium,
+				{
+					duration: 350,
+				},
+			),
 		};
 	});
 	return (
@@ -126,6 +130,7 @@ export const SingleSelectAnimated = memo(
 			};
 		});
 
+		const { colorScheme } = useAppTheme();
 		return (
 			<View style={styles.root}>
 				<View style={[styles.container, { justifyContent: justify }]}>
@@ -138,7 +143,13 @@ export const SingleSelectAnimated = memo(
 							onLayout={(e) => handleLayout(i, e)}
 						/>
 					))}
-					<Animated.View style={[styles.indicator, indicatorAnimatedStyle]} />
+					<Animated.View
+						style={[
+							styles.indicator,
+							{ backgroundColor: colorScheme.palette.buttonUnstyled },
+							indicatorAnimatedStyle,
+						]}
+					/>
 				</View>
 			</View>
 		);

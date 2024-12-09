@@ -1,18 +1,29 @@
 import { memo } from 'react';
 import { View } from 'react-native';
-import SimpleTutorialContainer from '../../../components/containers/SimpleTutorialContainer';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../styles/AppTheme';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../components/shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 
 const PinnedTimelines = memo(function Foo() {
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: 0,
+	});
+
 	return (
-		<SimpleTutorialContainer title={'Pinned Timelines'}>
+		<AppTopNavbar
+			title={'Pinned Timelines'}
+			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+			translateY={translateY}
+		>
 			<View>
 				<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
 					This feature is not implemented yet
 				</Text>
 			</View>
-		</SimpleTutorialContainer>
+		</AppTopNavbar>
 	);
 });
 

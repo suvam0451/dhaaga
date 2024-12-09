@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { APP_FONT } from '../../styles/AppTheme';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { memo } from 'react';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
 
 type NoResultsProps = {
 	text: string;
@@ -9,11 +10,16 @@ type NoResultsProps = {
 };
 
 const NoResults = memo(({ text, subtext }: NoResultsProps) => {
+	const { colorScheme } = useAppTheme();
 	return (
 		<View style={styles.rootContainer}>
 			<View style={styles.container}>
-				<Text style={styles.mainText}>{text}</Text>
-				<Text style={styles.subText}>{subtext}</Text>
+				<Text style={[styles.mainText, { color: colorScheme.textColor.high }]}>
+					{text}
+				</Text>
+				<Text style={[styles.subText, { color: colorScheme.textColor.high }]}>
+					{subtext}
+				</Text>
 			</View>
 		</View>
 	);
@@ -28,7 +34,7 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		borderWidth: 1,
-		borderColor: '#ffffff60',
+		borderColor: '#ffffff30',
 		padding: 16,
 		borderRadius: 16,
 		display: 'flex',

@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Octicons from '@expo/vector-icons/Octicons';
+import { useAppTheme } from './useAppThemePack';
 
 export enum APP_POST_VISIBILITY {
 	PUBLIC = 'Public', // same in misskey
@@ -12,12 +13,19 @@ export enum APP_POST_VISIBILITY {
 }
 
 function useAppVisibility(visibility: APP_POST_VISIBILITY) {
+	const { colorScheme } = useAppTheme();
 	return useMemo(() => {
 		switch (visibility) {
 			case APP_POST_VISIBILITY.PUBLIC: {
 				return {
 					text: APP_POST_VISIBILITY.PUBLIC,
-					icon: <FontAwesome6 name="globe" size={16} color={'#888'} />,
+					icon: (
+						<FontAwesome6
+							name="globe"
+							size={16}
+							color={colorScheme.textColor.high}
+						/>
+					),
 					desc: 'Visible to all users',
 				};
 			}
@@ -25,21 +33,39 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 			case APP_POST_VISIBILITY.UNLISTED: {
 				return {
 					text: APP_POST_VISIBILITY.UNLISTED,
-					icon: <FontAwesome5 name="home" size={16} color={'#888'} />,
+					icon: (
+						<FontAwesome5
+							name="home"
+							size={16}
+							color={colorScheme.textColor.high}
+						/>
+					),
 					desc: 'Home timeline only',
 				};
 			}
 			case APP_POST_VISIBILITY.PRIVATE: {
 				return {
 					text: APP_POST_VISIBILITY.PRIVATE,
-					icon: <FontAwesome5 name="lock" size={16} color={'#888'} />,
+					icon: (
+						<FontAwesome5
+							name="lock"
+							size={16}
+							color={colorScheme.textColor.high}
+						/>
+					),
 					desc: 'Followers only',
 				};
 			}
 			case APP_POST_VISIBILITY.DIRECT: {
 				return {
 					text: APP_POST_VISIBILITY.DIRECT,
-					icon: <Octicons name="mention" size={16} color={'#888'} />,
+					icon: (
+						<Octicons
+							name="mention"
+							size={16}
+							color={colorScheme.textColor.high}
+						/>
+					),
 					desc: 'Mentioned users only',
 				};
 			}
@@ -49,15 +75,12 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 						<Ionicons
 							name="earth-outline"
 							size={16}
-							color={'#888'}
-							style={{
-								opacity: 0.6,
-							}}
+							color={colorScheme.textColor.medium}
 						/>
 					),
 				};
 		}
-	}, [visibility]);
+	}, [visibility, colorScheme]);
 }
 
 export default useAppVisibility;

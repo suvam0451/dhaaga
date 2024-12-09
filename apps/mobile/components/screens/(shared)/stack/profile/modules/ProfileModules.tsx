@@ -5,8 +5,10 @@ import ProfileImageGallery from './ProfileImageGallery';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import ProfileBlueskyFeeds from './ProfileBlueskyFeeds';
 import ProfileBlueskyLists from './ProfileBlueskyLists';
+import { AppUser } from '../../../../../../types/app-user.types';
 
 type ProfileModulesProps = {
+	acct: AppUser;
 	profileId: string;
 	fields: any[];
 	style?: StyleProp<ViewStyle>;
@@ -18,10 +20,10 @@ type ProfileModulesProps = {
  * expanded
  */
 const ProfileModules = memo(
-	({ profileId, fields, style }: ProfileModulesProps) => {
+	({ profileId, style, acct }: ProfileModulesProps) => {
 		return (
 			<View style={style}>
-				<ProfileExtraInfo fields={fields} />
+				<ProfileExtraInfo acct={acct} />
 				<ProfileImageGallery userId={profileId} />
 				<ProfilePinnedPosts userId={profileId} />
 				<ProfileBlueskyFeeds userId={profileId} />

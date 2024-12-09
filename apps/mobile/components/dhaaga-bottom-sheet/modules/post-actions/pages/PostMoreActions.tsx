@@ -11,6 +11,7 @@ import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
 import ActivitypubReactionsService from '../../../../../services/approto/activitypub-reactions.service';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
 const PostMoreActions = memo(() => {
 	const { PostRef, timelineDataPostListReducer, setVisible } =
@@ -19,6 +20,7 @@ const PostMoreActions = memo(() => {
 	const { domain, subdomain } = useActivityPubRestClientContext();
 	const { globalDb } = useGlobalMmkvContext();
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
+	const { colorScheme } = useAppTheme();
 	const lastSubdomain = useRef(null);
 
 	const [Loading, setLoading] = useState(false);
@@ -75,7 +77,11 @@ const PostMoreActions = memo(() => {
 		lastSubdomain.current = subdomain;
 	}, [subdomain]);
 
-	return <View style={{ padding: 8 }}>{MainContent}</View>;
+	return (
+		<View style={{ padding: 8, backgroundColor: colorScheme.palette.menubar }}>
+			{MainContent}
+		</View>
+	);
 });
 
 export default PostMoreActions;

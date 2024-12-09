@@ -8,6 +8,8 @@ import Entypo from '@expo/vector-icons/Entypo';
 import * as React from 'react';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { router } from 'expo-router';
+import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../../../lib/Icon';
 
 const ICON_SIZE = 24;
 
@@ -18,6 +20,7 @@ type ActionButtonProps = {
 };
 
 const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
+	const { colorScheme } = useAppTheme();
 	return (
 		<TouchableOpacity
 			style={styles.moduleContainer}
@@ -26,7 +29,9 @@ const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
 			}}
 		>
 			<View style={{ width: 24 }}>{Icon}</View>
-			<Text style={styles.moduleLabel}>{label}</Text>
+			<Text style={[styles.moduleLabel, { color: colorScheme.textColor.high }]}>
+				{label}
+			</Text>
 			<View style={{ flex: 1 }} />
 			<Entypo
 				name="chevron-small-right"
@@ -83,20 +88,12 @@ const ProfileLandingAccountModules = memo(() => {
 			/>
 
 			<ActionButton
-				Icon={
-					<FontAwesome
-						name="magic"
-						size={24}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
-				}
+				Icon={<AppIcon id={'wand'} size={24} emphasis={'high'} />}
 				label={'Quick Fix'}
 				to={'/profile/account/lists'}
 			/>
 			<ActionButton
-				Icon={
-					<FontAwesome5 name="cog" size={24} color={APP_FONT.MONTSERRAT_BODY} />
-				}
+				Icon={<AppIcon id={'cog'} size={24} emphasis={'high'} />}
 				label={'All Settings'}
 				to={'/profile/settings/landing'}
 			/>
@@ -107,7 +104,7 @@ const ProfileLandingAccountModules = memo(() => {
 					{
 						marginTop: 16,
 						fontSize: 14,
-						color: APP_FONT.DISABLED,
+						color: APP_FONT.MEDIUM_EMPHASIS,
 						textAlign: 'center',
 						paddingHorizontal: 32,
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,
@@ -131,7 +128,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 12,
 	},
 	moduleLabel: {
-		color: APP_FONT.MONTSERRAT_BODY,
+		color: APP_FONT.HIGH_EMPHASIS,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		fontSize: 18,
 		marginLeft: 8,

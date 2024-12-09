@@ -4,17 +4,22 @@ import { RelationshipButtonProps } from './_common';
 import { ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const LABEL = 'Pending';
 
 const FollowRequestPendingState = memo(
 	({ loading, onPress }: RelationshipButtonProps) => {
+		const { colorScheme } = useAppTheme();
 		return (
 			<Button
 				size={'sm'}
 				onPress={onPress}
-				buttonStyle={styles.button}
-				containerStyle={styles.buttonContainer}
+				buttonStyle={[styles.button]}
+				containerStyle={[
+					styles.buttonContainer,
+					{ backgroundColor: colorScheme.palette.menubar },
+				]}
 			>
 				{loading ? (
 					<ActivityIndicator

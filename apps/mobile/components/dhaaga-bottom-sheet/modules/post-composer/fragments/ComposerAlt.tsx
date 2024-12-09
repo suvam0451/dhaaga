@@ -17,6 +17,7 @@ import { useActivityPubRestClientContext } from '../../../../../states/useActivi
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
 import { Image } from 'expo-image';
 import ComposeMediaTargets from './MediaTargets';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
 const ComposerAltListItem = memo(
 	({ item, index }: { item: ComposeMediaTargetItem; index: number }) => {
@@ -117,6 +118,7 @@ const ComposerAltListItem = memo(
 
 const ComposerAlt = memo(() => {
 	const { mediaTargets } = useComposerContext();
+	const { colorScheme } = useAppTheme();
 
 	return (
 		<View>
@@ -126,7 +128,7 @@ const ComposerAlt = memo(() => {
 					<Text
 						style={{
 							fontFamily: APP_FONTS.INTER_700_BOLD,
-							color: APP_FONT.MONTSERRAT_BODY,
+							color: colorScheme.textColor.medium,
 							textAlign: 'center',
 							marginTop: 32,
 						}}

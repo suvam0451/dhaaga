@@ -6,6 +6,8 @@ import useMfm from '../../../../../hooks/useMfm';
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ProfileModuleFactory from './ProfileModuleFactory';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { AppUser } from '../../../../../../types/app-user.types';
 
 type ExtraInformationFieldProps = {
 	label: string;
@@ -28,12 +30,16 @@ const ExtraInformationField = memo(function Foo({
 		remoteSubdomain: user?.getInstanceUrl(subdomain),
 		emojiMap: user?.getEmojiMap(),
 		deps: [value],
+		emphasis: 'medium',
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	});
 	const { content: ParsedLabel } = useMfm({
 		content: label,
 		remoteSubdomain: user?.getInstanceUrl(subdomain),
 		emojiMap: user?.getEmojiMap(),
 		deps: [label],
+		emphasis: 'high',
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	});
 
 	return (
@@ -58,17 +64,18 @@ const ExtraInformationField = memo(function Foo({
 });
 
 type UserProfileExtraInformationProps = {
-	fields: any[];
+	acct: AppUser;
 };
 
 function UserProfileExtraInformation({
-	fields,
+	acct,
 }: UserProfileExtraInformationProps) {
 	const { domain } = useActivityPubRestClientContext();
-
 	if (domain === KNOWN_SOFTWARE.BLUESKY) return <View />;
 
-	const fieldsCount = fields?.length;
+	const FIELDS = acct?.meta?.fields || [];
+
+	const fieldsCount = FIELDS.length;
 	return (
 		<ProfileModuleFactory
 			style={{
@@ -76,13 +83,14 @@ function UserProfileExtraInformation({
 			}}
 			label={'Additional Info'}
 			subtext={`${fieldsCount}`}
+			disabled={FIELDS.length === 0}
 		>
-			{fields?.map((x, i) => (
+			{FIELDS.map((x, i) => (
 				<ExtraInformationField
 					key={i}
 					label={x.name}
 					value={x.value}
-					last={i === fields?.length - 1}
+					last={i === FIELDS.length - 1}
 				/>
 			))}
 		</ProfileModuleFactory>

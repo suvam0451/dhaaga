@@ -9,7 +9,9 @@ frontend/tsconfig.tsbuildinfo
 frontend/.env
 frontend/.env.**
 .yarn/*
-apps/mobile/.env
+apps/mobile/.env.development
+apps/mobile/assets/nonfree/**
+apps/mobile/assets/licensed/**
 
 .turbo/
 

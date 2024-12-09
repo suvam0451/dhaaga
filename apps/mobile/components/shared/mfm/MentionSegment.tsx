@@ -1,16 +1,23 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { Text } from '@rneui/themed';
-import { StyleSheet } from 'react-native';
-import { APP_THEME } from '../../../styles/AppTheme';
 import { randomUUID } from 'expo-crypto';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import {
+	APP_BOTTOM_SHEET_ENUM,
+	useAppBottomSheet,
+} from '../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 
 type Props = {
 	value: string;
 	link: string;
+	fontFamily: string;
 };
 
-const MentionSegment = memo(function Foo({ value, link }: Props) {
+const MentionSegment = memo(function Foo({ value, link, fontFamily }: Props) {
+	const { setVisible, updateRequestId, setType, HandleRef } =
+		useAppBottomSheet();
+	const { colorScheme } = useAppTheme();
 	const { subdomain } = useActivityPubRestClientContext();
 	const k = randomUUID();
 
@@ -32,22 +39,22 @@ const MentionSegment = memo(function Foo({ value, link }: Props) {
 		return retval[0] === '@' ? retval : '@' + retval;
 	}, [value]);
 
-	const onPress = useCallback(() => {
-		// console.log(value, link);
-	}, []);
+	function onPress() {
+		HandleRef.current = value;
+		setType(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK);
+		updateRequestId();
+		setVisible(true);
+	}
 
 	return (
-		<Text key={k} style={styles.text} onPress={onPress}>
+		<Text
+			key={k}
+			style={{ fontFamily, color: colorScheme.palette.link }}
+			onPress={onPress}
+		>
 			{displayText}
 		</Text>
 	);
 });
 
 export default MentionSegment;
-
-const styles = StyleSheet.create({
-	text: {
-		color: APP_THEME.MENTION,
-		fontFamily: 'Montserrat-Bold',
-	},
-});

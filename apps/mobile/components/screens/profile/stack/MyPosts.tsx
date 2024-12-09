@@ -4,7 +4,6 @@ import WithAppPaginationContext, {
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
@@ -27,7 +26,7 @@ import WithTimelineControllerContext, {
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function Core() {
-	const db = useRealm();
+	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 	const { domain, subdomain, me } = useActivityPubRestClientContext();
 	const {
@@ -80,15 +79,15 @@ function Core() {
 			 * Resolve Software + Custom Emojis
 			 */
 			for (const datum of _data) {
-				ActivitypubStatusService.factory(datum, domain, subdomain)
-					.resolveInstances()
-					.syncSoftware(db)
-					.then((res) => {
-						res.syncCustomEmojis(db, globalDb).then(() => {});
-					});
+				// ActivitypubStatusService.factory(datum, domain, subdomain)
+				// 	.resolveInstances()
+				// 	.syncSoftware(db)
+				// 	.then((res) => {
+				// 		res.syncCustomEmojis(db, globalDb).then(() => {});
+				// 	});
 			}
 		}
-	}, [fetchStatus, db]);
+	}, [fetchStatus]);
 
 	if (!MY_ID) {
 		return (

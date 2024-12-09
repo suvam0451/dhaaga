@@ -6,7 +6,6 @@ import MfmService from '../../../../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { Image } from 'expo-image';
 import { format } from 'date-fns';
-import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { Text } from '@rneui/themed';
@@ -14,11 +13,7 @@ import { APP_FONT } from '../../../../../styles/AppTheme';
 
 function ChatItem() {
 	const { status } = useActivitypubStatusContext();
-	const { me, primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
-	const subdomain = primaryAcct?.subdomain;
-
-	const db = useRealm();
+	const { me, domain, subdomain } = useActivityPubRestClientContext();
 	const { globalDb } = useGlobalMmkvContext();
 	const [UserInterface, setUserInterface] = useState(
 		ActivityPubUserAdapter(null, domain),
@@ -36,8 +31,8 @@ function ChatItem() {
 			domain,
 			subdomain,
 			remoteSubdomain: UserInterface?.getInstanceUrl(),
-			db,
 			globalDb,
+			colorScheme: null,
 		});
 		return reactNodes?.map((para) => {
 			const uuid = randomUUID();
@@ -136,11 +131,9 @@ const styles = StyleSheet.create({
 	},
 	displayName: {
 		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 14,
-		// opacity: 0.87,
+		fontSize: 14, // opacity: 0.87,
 		fontFamily: 'Montserrat-Bold',
-	},
-	// @ts-ignore
+	}, // @ts-ignore
 	day: {
 		color: '#fff',
 		marginBottom: 0,

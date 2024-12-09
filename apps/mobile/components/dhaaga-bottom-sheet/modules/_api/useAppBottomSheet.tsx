@@ -14,7 +14,7 @@ import {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
 } from '../../../common/timeline/api/postArrayReducer';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	HASHTAG = 'Hashtag',
@@ -27,6 +27,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	NA = 'N/A',
 	REACTION_DETAILS = 'ReactionDetails',
 	SELECT_ACCOUNT = 'SelectAccount',
+	SWITCH_THEME_PACK = 'SwitchThemePack',
 }
 
 type Type = {
@@ -45,7 +46,9 @@ type Type = {
 	isAnimating: boolean;
 
 	// references
-	replyToRef: MutableRefObject<ActivityPubStatusAppDtoType>;
+	HandleRef: MutableRefObject<string>;
+	ParentRef: MutableRefObject<ActivityPubStatusAppDtoType>;
+	RootRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	TextRef: MutableRefObject<string>;
 	PostRef: MutableRefObject<ActivityPubStatusAppDtoType>;
 	PostIdRef: MutableRefObject<string>;
@@ -67,7 +70,9 @@ const defaultValue: Type = {
 	setVisible: () => {},
 	updateRequestId: () => {},
 	requestId: '',
-	replyToRef: undefined,
+	HandleRef: undefined,
+	ParentRef: undefined,
+	RootRef: undefined,
 	TextRef: undefined,
 	PostRef: undefined,
 	PostIdRef: undefined,
@@ -105,13 +110,15 @@ function WithAppBottomSheetContext({ children }: Props) {
 	}, [Visible]);
 
 	// pointers
+	const HandleRef = useRef<string>(null);
 	const TextRef = useRef<string>(null);
 	const PostRef = useRef<ActivityPubStatusAppDtoType>(null);
 	const PostIdRef = useRef<string>(null);
 	const UserRef = useRef<UserInterface>(null);
 	const UserIdRef = useRef<string>(null);
 	const PostComposerTextSeedRef = useRef<string>(null);
-	const replyToRef = useRef<ActivityPubStatusAppDtoType>(null);
+	const ParentRef = useRef<ActivityPubStatusAppDtoType>(null);
+	const RootRef = useRef<ActivityPubStatusAppDtoType>(null);
 
 	// reducers
 	const timelineDataPostListReducer = useRef<
@@ -130,13 +137,15 @@ function WithAppBottomSheetContext({ children }: Props) {
 				setVisible,
 				updateRequestId: forceUpdate,
 				requestId: State,
+				HandleRef,
 				TextRef,
 				PostRef,
 				PostIdRef,
 				UserRef,
 				UserIdRef,
 				PostComposerTextSeedRef,
-				replyToRef,
+				ParentRef,
+				RootRef,
 				timelineDataPostListReducer,
 				isAnimating: IsAnimating,
 			}}

@@ -2,6 +2,7 @@ import { useActivityPubRestClientContext } from '../../../../../states/useActivi
 import {
 	ActivityPubStatus,
 	InstanceApi_CustomEmojiDTO,
+	KNOWN_SOFTWARE,
 	TagInterface,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -42,8 +43,20 @@ function usePostComposeAutoCompletion() {
 					type: 'accounts',
 				});
 				if (error) return DEFAULT;
+
+				// Custom Logic
+				if (domain === KNOWN_SOFTWARE.BLUESKY) {
+					return {
+						accounts: ((data as any).data.actors as any).map((o) =>
+							ActivityPubAdapterService.adaptUser(o, domain),
+						),
+						hashtags: [],
+						emojis: [],
+					};
+				}
+
 				return {
-					accounts: data.map((o) =>
+					accounts: (data as any).map((o) =>
 						ActivityPubAdapterService.adaptUser(o, domain),
 					),
 					hashtags: [],

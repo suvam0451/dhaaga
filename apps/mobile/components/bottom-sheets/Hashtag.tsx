@@ -10,7 +10,6 @@ import {
 	StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { BottomSheetActionButtonContainer } from '../../styles/Containers';
 import WithActivitypubTagContext, {
 	useActivitypubTagContext,
 } from '../../states/useTag';
@@ -39,8 +38,7 @@ export function HashtagBottomSheetContent({
 	parentApiPending,
 }: HashtagBottomSheetContentProps) {
 	const { setVisible } = useGorhomActionSheetContext();
-	const { primaryAcct, domain } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
+	const { domain, subdomain } = useActivityPubRestClientContext();
 	const { tag } = useActivitypubTagContext();
 	const [IsLoading, setIsLoading] = useState(false);
 

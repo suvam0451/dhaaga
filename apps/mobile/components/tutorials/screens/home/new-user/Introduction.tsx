@@ -8,6 +8,8 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
+import { DbMetaRepo } from '../../../../../database/repositories/_meta.repo';
+import { MigrationRepo } from '../../../../../database/entities/migrations';
 
 function IntroductionBase() {
 	const [DialogVisible, setDialogVisible] = useState(false);
@@ -18,13 +20,17 @@ function IntroductionBase() {
 
 	const { translateY } = useScrollMoreOnPageEnd();
 
+	function onDbCheck() {
+		DbMetaRepo.listTables();
+	}
+
 	return (
 		<AppTopNavbar
 			title={'Welcome!'}
 			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
 			translateY={translateY}
 		>
-			<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />
+			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 			<Dialog
 				isVisible={DialogVisible}
 				onBackdropPress={() => {
@@ -194,6 +200,7 @@ function IntroductionBase() {
 							>
 								I am new to the app
 							</Button>
+							<Button title={'Db check'} onPress={onDbCheck} />
 							<Button
 								type={'solid'}
 								color={APP_THEME.INVALID_ITEM}

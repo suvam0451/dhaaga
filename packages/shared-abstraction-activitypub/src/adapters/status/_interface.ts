@@ -32,6 +32,10 @@ export interface StatusInterface {
 
 	getId(): string;
 
+	getCid(): string | null;
+
+	getUri(): string | null;
+
 	getUsername(): string;
 
 	getDisplayName(): string | null | undefined;

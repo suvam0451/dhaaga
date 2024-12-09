@@ -1,20 +1,29 @@
 import { Text, View } from 'react-native';
-import AppSelectedAccountIndicator from './AppSelectedAccountIndicator';
 import styles from './styles';
 import TopNavbarBackButton from './TopNavbarBackButton';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 type HeadersProps = {
 	title: string;
 };
 const TopNavbarGeneric = ({ title }: HeadersProps) => {
+	const { colorScheme } = useAppTheme();
 	return (
-		<View style={styles.subHeader}>
+		<View
+			style={[styles.subHeader, { backgroundColor: colorScheme.palette.bg }]}
+		>
 			<TopNavbarBackButton />
 			<View style={styles.navbarTitleContainer}>
-				<Text style={styles.navbarTitle}>{title}</Text>
+				<Text
+					style={[
+						styles.navbarTitle,
+						{ color: colorScheme.textColor.emphasisC },
+					]}
+				>
+					{title}
+				</Text>
 			</View>
 			<View style={{ width: 36 }}></View>
-			{/*<AppSelectedAccountIndicator />*/}
 		</View>
 	);
 };

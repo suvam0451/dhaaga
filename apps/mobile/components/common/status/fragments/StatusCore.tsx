@@ -1,16 +1,21 @@
 import { memo, useMemo, useState } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext, {
+	useAppStatusItem,
+} from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
-import { TouchableOpacity, View } from 'react-native';
-import { APP_THEME } from '../../../../styles/AppTheme';
+import { View, TouchableOpacity } from 'react-native';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
 import StatusInteraction from './StatusInteraction';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import StatusQuoted from './StatusQuoted';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 /**
  * Mostly used to remove the border
@@ -36,6 +41,8 @@ const StatusCore = memo(
 				: dto.boostedFrom
 			: dto;
 
+		const IS_QUOTE_BOOST = dto?.meta?.isBoost && dto?.content?.raw;
+
 		const IS_REPLY_OR_BOOST =
 			STATUS_DTO.meta.isReply ||
 			(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
@@ -49,14 +56,17 @@ const StatusCore = memo(
 			remoteSubdomain: STATUS_DTO.postedBy.instance,
 			emojiMap: STATUS_DTO.calculated.emojis,
 			deps: [dto],
+			emphasis: 'high',
+			fontFamily: APP_FONTS.INTER_400_REGULAR,
 		});
 
 		const isSensitive = STATUS_DTO.meta.sensitive;
 		const spoilerText = STATUS_DTO.meta.cw;
 
-		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 10;
+		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 4;
 		if (hasParent || hasBoost) paddingTop = 0;
 		if (!hasParent && hasBoost) paddingTop = 6;
+		const { colorScheme } = useAppTheme();
 
 		return useMemo(() => {
 			if (!isLoaded) return <StatusItemSkeleton />;
@@ -64,19 +74,11 @@ const StatusCore = memo(
 			return (
 				<View
 					style={{
-						padding: 10,
-						paddingHorizontal: APP_SETTING_VERTICAL_MARGIN,
-						paddingTop: paddingTop,
-						paddingBottom: 4,
-						backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
-						marginBottom: 4,
-						borderRadius: 8,
-						borderTopLeftRadius: hasParent || hasBoost ? 0 : 8,
-						borderTopRightRadius: hasParent || hasBoost ? 0 : 8,
+						paddingTop: 4,
 					}}
 				>
 					<TouchableOpacity
-						delayPressIn={100}
+						delayPressIn={150}
 						onPress={() => {
 							toPost(STATUS_DTO.id);
 						}}
@@ -117,16 +119,16 @@ const StatusCore = memo(
 						/>
 					)}
 					{/*FIXME: enable for bluesky*/}
-					{/*{IS_QUOTE_BOOST && (*/}
-					{/*	<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>*/}
-					{/*		<StatusQuoted />*/}
-					{/*	</WithAppStatusItemContext>*/}
-					{/*)}*/}
+					{IS_QUOTE_BOOST && (
+						<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
+							<StatusQuoted />
+						</WithAppStatusItemContext>
+					)}
 
 					{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
-					{!isPreview && (
-						<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />
-					)}
+					{/*{!isPreview && (*/}
+					{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
+					{/*)}*/}
 				</View>
 			);
 		}, [
@@ -136,6 +138,7 @@ const StatusCore = memo(
 			dto,
 			STATUS_DTO,
 			paddingTop,
+			colorScheme,
 		]);
 	},
 );

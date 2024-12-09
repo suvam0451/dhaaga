@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { MisskeyRestClient } from '@dhaaga/shared-abstraction-activitypub';
 import * as Haptics from 'expo-haptics';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 
 function useBoost(dto: ActivityPubStatusAppDtoType) {
 	const { client, domain, me } = useActivityPubRestClientContext();

@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import { memo, useCallback, useMemo } from 'react';
 import { Skeleton } from '@rneui/themed';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/activitypub-status-dto.service';
+import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 
 const TIMELINE_PFP_SIZE = 46;
 

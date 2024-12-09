@@ -3,6 +3,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { Dispatch, memo, SetStateAction } from 'react';
 import { Button } from '@rneui/themed';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 export const modalStyles = StyleSheet.create({
 	modalTitle: {
@@ -25,6 +26,10 @@ export const modalStyles = StyleSheet.create({
 	},
 });
 
+/**
+ * Closes the modal and performs
+ * the requested action (async)
+ */
 export const ActionButton = memo(
 	({
 		label,
@@ -35,11 +40,13 @@ export const ActionButton = memo(
 		setVisible: Dispatch<SetStateAction<boolean>>;
 		onPress: () => void;
 	}) => {
+		const { colorScheme } = useAppTheme();
 		return (
 			<Button
 				size={'md'}
 				buttonStyle={{
-					backgroundColor: '#404040',
+					backgroundColor: colorScheme.palette.buttonUnstyled,
+					borderRadius: 8,
 				}}
 				containerStyle={{
 					borderRadius: 8,
@@ -47,7 +54,7 @@ export const ActionButton = memo(
 				}}
 				title={label}
 				titleStyle={{
-					color: APP_FONT.MONTSERRAT_BODY,
+					color: colorScheme.textColor.high,
 				}}
 				loading={false}
 				onPress={() => {

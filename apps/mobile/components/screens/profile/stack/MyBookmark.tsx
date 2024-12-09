@@ -8,7 +8,6 @@ import LoadingMore from '../../home/LoadingMore';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { RefreshControl } from 'react-native';
-import { useRealm } from '@realm/react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
@@ -18,14 +17,11 @@ import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusIte
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 
 function Core() {
-	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
+	const { primaryAcct, subdomain, domain } = useActivityPubRestClientContext();
 	const { updateQueryCache, queryCacheMaxId, setMaxId } =
 		useAppPaginationContext();
-	const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
 	const { addPosts, listItems, clear } = useAppTimelinePosts();
@@ -46,14 +42,14 @@ function Core() {
 		setMaxId(data.maxId);
 		addPosts(statuses);
 		for (const status of statuses) {
-			ActivitypubStatusService.factory(status, domain, subdomain)
-				.resolveInstances()
-				.syncSoftware(db)
-				.then((res) => {
-					res.syncCustomEmojis(db, globalDb).then(() => {});
-				});
+			// ActivitypubStatusService.factory(status, domain, subdomain)
+			// 	.resolveInstances()
+			// 	.syncSoftware(db)
+			// 	.then((res) => {
+			// 		res.syncCustomEmojis(db, globalDb).then(() => {});
+			// 	});
 		}
-	}, [data, db, globalDb, domain, subdomain]);
+	}, [data, globalDb, domain, subdomain]);
 
 	/**
 	 * Composite Hook Collection

@@ -44,10 +44,6 @@ function ExternalLinkActionSheet({
 		resolveOpenGraph();
 	}, [url]);
 
-	useEffect(() => {
-		console.log(OpenGraphData, Loading, IsParsed);
-	}, [OpenGraphData, Loading, IsParsed]);
-
 	const domain = useMemo(() => {
 		if (!OpenGraphData) return '';
 		try {
@@ -57,8 +53,7 @@ function ExternalLinkActionSheet({
 			return OpenGraphData.url;
 		}
 	}, [OpenGraphData]);
-	// @ts-ignore
-	// @ts-ignore
+
 	return (
 		<View
 			style={{

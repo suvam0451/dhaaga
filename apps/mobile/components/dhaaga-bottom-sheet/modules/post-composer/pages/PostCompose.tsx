@@ -1,7 +1,6 @@
 import { memo, useMemo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { APP_FONT } from '../../../../../styles/AppTheme';
 import ComposerTextInput from '../fragments/ComposerText';
 import ActionButtons from '../fragments/ActionButtons';
 import ComposerSpoiler from '../fragments/ComposerSpoiler';
@@ -10,13 +9,12 @@ import ComposerAlt from '../fragments/ComposerAlt';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../fragments/ComposerTopMenu';
 import TextEditorService from '../../../../../services/text-editor.service';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
-type PostComposeProps = {
-	requestId: string;
-};
-const PostCompose = memo(({}: PostComposeProps) => {
+const PostCompose = memo(() => {
 	const { visible } = useAppBottomSheet();
 	const { editMode, setEditMode, setRawText } = useComposerContext();
+	const { colorScheme } = useAppTheme();
 
 	const EditorContent = useMemo(() => {
 		switch (editMode) {
@@ -69,12 +67,17 @@ const PostCompose = memo(({}: PostComposeProps) => {
 				);
 			}
 		}
-	}, [editMode]);
+	}, [editMode, colorScheme]);
+
 	return (
 		<View
 			style={[
 				styles.bottomSheetContentContainer,
-				{ display: visible ? 'flex' : 'none' },
+				{
+					display: visible ? 'flex' : 'none',
+					backgroundColor: colorScheme.palette.menubar,
+					position: 'relative',
+				},
 			]}
 		>
 			<ComposerTopMenu />
@@ -86,33 +89,11 @@ const PostCompose = memo(({}: PostComposeProps) => {
 });
 
 const styles = StyleSheet.create({
-	textInput: {
-		textDecorationLine: 'none',
-		textDecorationStyle: undefined,
-		width: '100%',
-		paddingVertical: 16,
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 16,
-		paddingBottom: 13,
-	},
-	rootContainer: {
-		position: 'absolute',
-		bottom: 0,
-		width: '100%',
-		borderTopRightRadius: 8,
-		borderTopLeftRadius: 8,
-		backgroundColor: '#2C2C2C',
-	},
 	bottomSheetContentContainer: {
 		padding: 16,
+		paddingHorizontal: 10,
 		paddingTop: 0,
 		height: '100%',
-	},
-	avatarContainer: {
-		height: 48,
-		width: 48,
-		borderRadius: 8,
-		opacity: 0.87,
 	},
 });
 

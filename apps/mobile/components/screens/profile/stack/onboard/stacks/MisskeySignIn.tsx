@@ -1,23 +1,22 @@
-import { Dimensions, View } from 'react-native';
+import { Alert, Dimensions, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
 import { MainText } from '../../../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import * as Crypto from 'expo-crypto';
-
 import { verifyMisskeyToken } from '@dhaaga/shared-abstraction-activitypub';
 import AccountCreationPreview, {
 	AccountCreationPreviewProps,
 } from '../../../../../app/AccountDisplay';
 import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
-import { useRealm } from '@realm/react';
 import { router, useLocalSearchParams } from 'expo-router';
 import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavBar';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
-import AccountService from '../../../../../../services/account.service';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
+import { AccountService } from '../../../../../../database/entities/account';
+import { useSQLiteContext } from 'expo-sqlite';
 
 function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');
@@ -25,12 +24,13 @@ function MisskeySignInStack() {
 		useState<AccountCreationPreviewProps | null>(null);
 	const [Token, setToken] = useState<string | null>(null);
 	const [MisskeyId, setMisskeyId] = useState<string | null>(null);
-	const db = useRealm();
 
 	const params = useLocalSearchParams();
 	const _signInUrl: string = params['signInUrl'] as string;
 	const _subdomain: string = params['subdomain'] as string;
 	const _domain: string = params['domain'] as string;
+
+	const db = useSQLiteContext();
 
 	useEffect(() => {
 		try {
@@ -68,34 +68,40 @@ function MisskeySignInStack() {
 	}
 
 	async function onPressConfirm() {
-		try {
-			AccountService.upsert(db, {
-				subdomain: _subdomain,
-				domain: _domain,
+		console.log('submitting...');
+		const upsertResult = await AccountService.upsert(
+			db,
+			{
+				identifier: MisskeyId,
+				server: _subdomain,
+				driver: _domain,
 				username: PreviewCard.username,
 				avatarUrl: PreviewCard.avatar,
 				displayName: PreviewCard.displayName,
-				credentials: [
-					{ key: 'display_name', value: PreviewCard.displayName },
-					{ key: 'avatar', value: PreviewCard.avatar },
-					{ key: 'misskey_id', value: MisskeyId },
-					{ key: 'access_token', value: Token },
-				],
-			});
+			},
+			[
+				{ key: 'display_name', value: PreviewCard.displayName, type: 'string' },
+				{ key: 'avatar', value: PreviewCard.avatar, type: 'string' },
+				{ key: 'user_id', value: MisskeyId, type: 'string' },
+				{ key: 'access_token', value: Token, type: 'string' },
+			],
+		);
+		if (upsertResult.type === 'success') {
+			Alert.alert('Account Added');
 			router.replace('/profile/settings/accounts');
-		} catch (e) {
-			console.log(e);
+		} else {
+			console.log(upsertResult);
 		}
 	}
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+	const { translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
 
 	return (
 		<WithAutoHideTopNavBar translateY={translateY} title={`Misskey Sign-In`}>
-			<View style={{ height: '100%' }}>
+			<View style={{ height: '100%', marginTop: 52 }}>
 				{!SessionConfirmed && (
 					<WebView
 						style={{

@@ -2,14 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Dimensions, LayoutChangeEvent } from 'react-native';
 import MediaService from '../../services/media.service';
 import { Image as RNImage } from 'react-native';
+import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
 
 type ImageAspectRatioProps = {
 	url: string;
 	width?: number;
 	height?: number;
 }[];
-
-const MEDIA_CONTAINER_MAX_HEIGHT = 540;
 
 /**
  * Estimate the height for the

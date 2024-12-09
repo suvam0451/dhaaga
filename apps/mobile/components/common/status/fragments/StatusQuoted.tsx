@@ -6,18 +6,26 @@ import MediaItem from '../../media/MediaItem';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import PostCreatedBy from './PostCreatedBy';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const StatusQuoted = memo(() => {
+	const { colorScheme } = useAppTheme();
 	const { dto } = useAppStatusItem();
 	const { content: PostContent } = useMfm({
 		content: dto.content.raw,
 		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis as any,
 		deps: [dto],
+		emphasis: 'high',
 	});
 
 	return (
-		<View style={styles.rootContainer}>
+		<View
+			style={[
+				styles.rootContainer,
+				{ backgroundColor: colorScheme.palette.bg },
+			]}
+		>
 			<View>
 				<View
 					style={{
@@ -30,12 +38,12 @@ const StatusQuoted = memo(() => {
 					<FontAwesome
 						name="quote-left"
 						size={14}
-						color="#888"
+						color={colorScheme.textColor.medium}
 						style={{ width: 16 }}
 					/>
 					<Text
 						style={{
-							color: 'rgba(136,136,136,0.87)',
+							color: colorScheme.textColor.medium,
 							marginLeft: 4,
 							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							fontSize: 13,
@@ -62,7 +70,6 @@ const styles = StyleSheet.create({
 		padding: 6,
 		paddingTop: 4,
 		marginTop: 8,
-		backgroundColor: '#040404',
 		borderRadius: 6,
 		borderStyle: 'dashed',
 		borderWidth: 1,

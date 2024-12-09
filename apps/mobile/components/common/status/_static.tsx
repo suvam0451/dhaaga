@@ -2,11 +2,11 @@ import { Fragment, memo } from 'react';
 import { View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
-import { APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusHierarchyParent from './fragments/StatusHierarchyParent';
 import StatusHierarchyRoot from './fragments/StatusHierarchyRoot';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 /**
  * Adds a reply indicator to the post
@@ -15,13 +15,14 @@ import StatusHierarchyRoot from './fragments/StatusHierarchyRoot';
  * then the post is boosted and
  * is also a reply
  */
-export const RepliedStatusFragment = memo(function Foo() {
+export const ParentPostFragment = memo(function Foo() {
 	const { dto } = useAppStatusItem();
+	const { colorScheme } = useAppTheme();
+
 	if (!dto.replyTo)
 		return (
 			<View
 				style={{
-					backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
 					borderRadius: 8,
 					borderBottomLeftRadius: 0,
 					borderBottomRightRadius: 0,
@@ -39,8 +40,7 @@ export const RepliedStatusFragment = memo(function Foo() {
 					<Ionicons color={'#888'} name={'arrow-redo-outline'} size={14} />
 					<Text
 						style={{
-							color: 'rgba(136,136,136,0.87)',
-							fontWeight: '500',
+							color: colorScheme.textColor.medium,
 							marginLeft: 4,
 							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							fontSize: 13,

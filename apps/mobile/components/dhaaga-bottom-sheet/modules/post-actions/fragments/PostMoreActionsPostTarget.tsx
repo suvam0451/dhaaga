@@ -10,6 +10,7 @@ import ActivityPubService from '../../../../../services/activitypub.service';
 import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 
 const ActionButton = memo(
 	({
@@ -23,6 +24,7 @@ const ActionButton = memo(
 		desc?: string;
 		onClick: () => void;
 	}) => {
+		const { colorScheme } = useAppTheme();
 		return (
 			<TouchableOpacity
 				style={{
@@ -43,9 +45,8 @@ const ActionButton = memo(
 				>
 					<Text
 						style={{
-							color: APP_FONT.MONTSERRAT_HEADER,
+							color: colorScheme.textColor.high,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
-
 							fontSize: 18,
 						}}
 					>
@@ -54,7 +55,7 @@ const ActionButton = memo(
 					{desc && (
 						<Text
 							style={{
-								color: APP_FONT.MONTSERRAT_BODY,
+								color: colorScheme.textColor.medium,
 								flexWrap: 'wrap',
 							}}
 						>
@@ -73,6 +74,7 @@ const PostMoreActionsPostTarget = memo(
 	}: {
 		setEditMode: React.Dispatch<React.SetStateAction<'root' | 'emoji'>>;
 	}) => {
+		const { colorScheme } = useAppTheme();
 		const { client, domain } = useActivityPubRestClientContext();
 		const { PostRef, timelineDataPostListReducer, setVisible } =
 			useAppBottomSheet();
@@ -166,7 +168,7 @@ const PostMoreActionsPostTarget = memo(
 							<AntDesign
 								name={IS_LIKED ? 'like1' : 'like2'}
 								size={24}
-								color={IS_LIKED ? APP_THEME.LINK : APP_FONT.MONTSERRAT_HEADER}
+								color={IS_LIKED ? APP_THEME.LINK : colorScheme.textColor.high}
 							/>
 						}
 						label={IS_LIKED ? 'Remove Like' : 'Add Like'}
@@ -180,7 +182,7 @@ const PostMoreActionsPostTarget = memo(
 							<MaterialIcons
 								name="add-reaction"
 								size={24}
-								color={APP_FONT.MONTSERRAT_BODY}
+								color={colorScheme.textColor.high}
 							/>
 						}
 						label={ReactionCta}

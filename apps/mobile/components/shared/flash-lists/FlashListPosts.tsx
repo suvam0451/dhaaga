@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { FlashListType_Post } from '../../../services/flashlist.service';
-import FlashListRenderer from '../../common/timeline/fragments/FlashListRenderer';
+import FlashListPostRenderer from '../../common/timeline/fragments/FlashListPostRenderer';
 
 const ESTIMATED_POST_HEIGHT = 200;
 const SCROLL_EVENT_THROTTLE = 16;
@@ -34,7 +34,7 @@ const FlashListPosts = memo(
 				}}
 				estimatedItemSize={ESTIMATED_POST_HEIGHT}
 				data={data}
-				renderItem={FlashListRenderer}
+				renderItem={FlashListPostRenderer}
 				scrollEventThrottle={SCROLL_EVENT_THROTTLE}
 				getItemType={(o) => o.type}
 				onScroll={onScroll}

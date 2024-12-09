@@ -38,9 +38,7 @@ function MyFollowings() {
 	return (
 		<WithAppPaginationContext>
 			<WithScrollOnRevealContext>
-				<View style={{ backgroundColor: '#121212' }}>
-					<WithApi />
-				</View>
+				<WithApi />
 			</WithScrollOnRevealContext>
 		</WithAppPaginationContext>
 	);

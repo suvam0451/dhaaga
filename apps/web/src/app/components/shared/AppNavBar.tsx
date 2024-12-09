@@ -1,5 +1,5 @@
 import { FaGithub, FaDiscord, FaWrench, FaBook } from 'react-icons/fa';
-import { FaHeart, FaBookmark } from 'react-icons/fa6';
+import { FaHeart } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 

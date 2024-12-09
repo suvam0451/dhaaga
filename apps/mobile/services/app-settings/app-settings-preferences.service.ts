@@ -1,13 +1,13 @@
-import { Realm } from '@realm/react';
 import { AppSettingsBase, appSettingsKeys } from './app-settings';
+import { SQLiteDatabase } from 'expo-sqlite';
 
 const NAMESPACE = appSettingsKeys.preferences;
 class AppSettingsPreferencesService extends AppSettingsBase {
-	constructor(db: Realm) {
+	constructor(db) {
 		super(db);
 	}
 
-	static override create(db: Realm) {
+	static override create(db: SQLiteDatabase) {
 		return new AppSettingsPreferencesService(db);
 	}
 

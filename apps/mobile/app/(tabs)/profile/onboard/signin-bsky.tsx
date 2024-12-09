@@ -8,12 +8,12 @@ import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Button } from '@rneui/base';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useRealm } from '@realm/react';
 import { router } from 'expo-router';
 import AtprotoSessionService from '../../../../services/atproto/atproto-session.service';
+import { useSQLiteContext } from 'expo-sqlite';
 
 function SigninBsky() {
-	const db = useRealm();
+	const db = useSQLiteContext();
 	const { translateY } = useScrollMoreOnPageEnd();
 
 	const [Username, setUsername] = useState(null);
@@ -24,16 +24,20 @@ function SigninBsky() {
 			return;
 		}
 
-		const { success, reason } = await AtprotoSessionService.login(
-			db,
-			Username,
-			Password,
-		);
+		try {
+			const { success, reason } = await AtprotoSessionService.login(
+				db,
+				Username,
+				Password,
+			);
 
-		if (success) {
-			router.replace('/profile/settings/accounts');
-		} else {
-			console.log(reason);
+			if (success) {
+				router.replace('/profile/settings/accounts');
+			} else {
+				console.log(reason);
+			}
+		} catch (e) {
+			console.log('[ERROR]: bsky login failed', e);
 		}
 	}
 

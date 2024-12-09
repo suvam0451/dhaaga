@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { expect, test } from 'bun:test';
 import Target from '../src/services/activitypub';
 
 test('return correct user handle', () => {

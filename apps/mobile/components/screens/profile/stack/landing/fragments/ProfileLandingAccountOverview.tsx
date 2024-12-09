@@ -1,80 +1,71 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import useMyProfile from '../../../api/useMyProfile';
 import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import WithActivitypubUserContext, {
-	useActivitypubUserContext,
-} from '../../../../../../states/useProfile';
 import useMfm from '../../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { Image } from 'expo-image';
 import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
 import ProfileButtonMessage from '../../../../(shared)/stack/profile/fragments/ProfileButtonMessage';
 import ProfileButtonPhonebook from '../../../../(shared)/stack/profile/fragments/ProfileButtonPhonebook';
-import { ProfileStatsInterface } from '../../../../(shared)/stack/profile/fragments/ProfileStats';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
+import ProfileStats from '../../../../(shared)/stack/profile/fragments/ProfileStats';
 import styles from '../../../../../common/user/utils/styles';
+import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 
-const WithoutAccountSelected = memo(() => {
+const WithoutAccount = memo(() => {
 	return <View />;
 });
 
-const WithAccountSelectedCore = memo(() => {
-	const { subdomain } = useActivityPubRestClientContext();
-	const { user } = useActivitypubUserContext();
+const WithAccount = memo(() => {
+	const { colorScheme } = useAppTheme();
+	const { Data: acct } = useMyProfile();
 	const { content: ParsedDisplayName } = useMfm({
-		content: user?.getDisplayName(),
-		remoteSubdomain: user?.getInstanceUrl(),
-		emojiMap: user?.getEmojiMap(),
-		deps: [user?.getDisplayName()],
+		content: acct?.displayName,
+		remoteSubdomain: acct?.instance,
+		emojiMap: acct?.calculated?.emojis,
+		deps: [acct?.displayName],
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		emphasis: 'high',
 	});
-
-	const handle = useMemo(() => {
-		return ActivitypubHelper.getHandle(
-			user?.getAccountUrl(subdomain),
-			subdomain,
-		);
-	}, [user?.getAccountUrl(subdomain)]);
-
-	const avatarUrl = user.getAvatarUrl();
-	const bannerUrl = user.getBannerUrl();
 
 	return (
 		<View>
 			{/*@ts-ignore-next-line*/}
 			<Image
-				source={{ uri: bannerUrl }}
+				source={{ uri: acct?.banner }}
 				style={{ height: 128, width: Dimensions.get('window').width }}
 			/>
 			<View style={{ flexDirection: 'row' }}>
 				<ProfileAvatar
 					containerStyle={localStyles.avatarContainer}
 					imageStyle={localStyles.avatarImageContainer}
-					uri={avatarUrl}
+					uri={acct?.avatarUrl}
 				/>
 				<View style={localStyles.buttonSection}>
-					<ProfileButtonMessage handle={handle} />
+					<ProfileButtonMessage handle={acct?.handle} />
 					<View style={{ width: 8 }} />
 					<ProfileButtonPhonebook />
 				</View>
-				<ProfileStatsInterface style={localStyles.statSectionContainer} />
+				<ProfileStats
+					userId={acct?.id}
+					postCount={acct?.stats?.posts}
+					followingCount={acct?.stats?.following}
+					followerCount={acct?.stats?.followers}
+					style={localStyles.statSectionContainer}
+				/>
 			</View>
 			<View style={localStyles.secondSectionContainer}>
 				<View style={{ flexShrink: 1 }}>
-					<Text
-						style={{
-							fontFamily: APP_FONTS.MONTSERRAT_900_BLACK,
-							color: APP_FONT.MONTSERRAT_HEADER,
-						}}
-						numberOfLines={1}
-					>
-						{ParsedDisplayName}
-					</Text>
+					{ParsedDisplayName}
 					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-						<Text style={styles.secondaryText} numberOfLines={1}>
-							{handle}
+						<Text
+							style={[
+								styles.secondaryText,
+								{ color: colorScheme.textColor.medium },
+							]}
+							numberOfLines={1}
+						>
+							{acct?.handle}
 						</Text>
 					</View>
 				</View>
@@ -83,25 +74,15 @@ const WithAccountSelectedCore = memo(() => {
 	);
 });
 
-const WithAccountSelected = memo(() => {
-	const { Data } = useMyProfile();
-
-	return (
-		<WithActivitypubUserContext userI={Data}>
-			<WithAccountSelectedCore />
-		</WithActivitypubUserContext>
-	);
-});
-
-const ProfileLandingAccountOverview = memo(() => {
+const ProfileAndSettings = memo(() => {
 	const { primaryAcct } = useActivityPubRestClientContext();
-	if (!primaryAcct || !primaryAcct.isValid()) {
-		return <WithoutAccountSelected />;
+	if (!primaryAcct) {
+		return <WithoutAccount />;
 	}
-	return <WithAccountSelected />;
+	return <WithAccount />;
 });
 
-export default ProfileLandingAccountOverview;
+export default ProfileAndSettings;
 
 const localStyles = StyleSheet.create({
 	rootScrollView: {

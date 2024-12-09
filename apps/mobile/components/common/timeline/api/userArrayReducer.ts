@@ -1,16 +1,14 @@
 import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { MutableRefObject } from 'react';
 import { produce } from 'immer';
-import ActivityPubUserDtoService, {
-	ActivityPubAppUserDtoType,
-} from '../../../../services/approto/activitypub-user-dto.service';
+import AppUserService from '../../../../services/approto/app-user-service';
 
 export enum TIMELINE_USER_LIST_DATA_REDUCER_TYPE {
 	CLEAR = 'clear',
 	ADD = 'add',
 }
 
-type Foo = ActivityPubAppUserDtoType[];
+type Foo = AppUserService[];
 
 function userArrayReducer(
 	state: Foo,
@@ -36,11 +34,7 @@ function userArrayReducer(
 					if (_seen.current.has(k)) continue;
 					_seen.current.add(k);
 
-					const res = ActivityPubUserDtoService.export(
-						item,
-						_domain,
-						_subdomain,
-					);
+					const res = AppUserService.export(item, _domain, _subdomain);
 					if (res) draft.push(res);
 				}
 			});

@@ -4,6 +4,8 @@ import { memo } from 'react';
 import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 type Props = {
 	title?: string;
@@ -22,7 +24,7 @@ function AppCheckBox(props: Props) {
 			}}
 			textStyle={{
 				color: APP_FONT.MONTSERRAT_BODY,
-				fontFamily: 'Montserrat-Bold',
+				fontFamily: APP_FONTS.INTER_500_MEDIUM,
 			}}
 			iconRight
 			title={props?.title}
@@ -85,6 +87,7 @@ export const NativeCheckbox = memo(function Foo({
 	checked,
 	onClick,
 }: AppInlineCheckboxProps) {
+	const { colorScheme } = useAppTheme();
 	return (
 		<CheckBox
 			checked={checked}
@@ -92,15 +95,22 @@ export const NativeCheckbox = memo(function Foo({
 			checkedIcon="dot-circle-o"
 			uncheckedIcon="circle-o"
 			containerStyle={{
-				backgroundColor: '#252525',
+				backgroundColor: colorScheme.palette.menubar,
 				flex: 1,
 				margin: 0,
 				padding: 0,
 				marginLeft: 4,
 				marginRight: 0,
-				opacity: 0.87,
 			}}
-			textStyle={{ color: APP_FONT.MONTSERRAT_BODY }}
+			textStyle={{
+				color: checked
+					? colorScheme.textColor.high
+					: colorScheme.textColor.medium,
+				fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+			}}
+			checkedColor={colorScheme.reactions.highlight}
+			uncheckedColor={colorScheme.textColor.medium}
+			wrapperStyle={{ color: 'red' }}
 			title={label}
 		/>
 	);

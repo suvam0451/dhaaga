@@ -1,0 +1,11 @@
+import { View, Text } from 'react-native';
+
+function MyStack() {
+	return (
+		<View>
+			<Text>Sample Obtained</Text>
+		</View>
+	);
+}
+
+export default MyStack;

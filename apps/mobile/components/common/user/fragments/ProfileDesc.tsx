@@ -30,6 +30,7 @@ const ProfileDesc = memo(
 			deps: [rawContext],
 			fontFamily: APP_FONTS.INTER_500_MEDIUM,
 			acceptTouch,
+			emphasis: 'high',
 		});
 
 		return <View style={style}>{content}</View>;

@@ -1,4 +1,3 @@
-import { Realm, UpdateMode } from 'realm';
 import { ActivityPubServerRepository } from './activitypub-server.repo';
 import {
 	ActivityPubUserAdapter,
@@ -12,10 +11,11 @@ import {
 import { ActivityPubMediaAttachmentRepository } from './activitypub-media-attachment.repo';
 import TextParserService from '../services/text-parser';
 import { ActivityPubTagRepository } from './activitypub-tag.repo';
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export class ActivityPubStatusRepository {
 	static upsert(
-		db: Realm,
+		db: SQLiteDatabase,
 		{
 			status,
 			subdomain,
@@ -53,50 +53,50 @@ export class ActivityPubStatusRepository {
 			userSubdomain: subdomain,
 		});
 
-		const retval = db.create(
-			ActivityPubStatus,
-			{
-				_id: match?._id || new Realm.BSON.UUID(),
-				...payload,
-				server: savedServer,
-				postedBy: savedPostedBy,
-			},
-			UpdateMode.Modified,
-		);
+		// const retval = db.create(
+		// 	ActivityPubStatus,
+		// 	{
+		// 		_id: match?._id || new Realm.BSON.UUID(),
+		// 		...payload,
+		// 		server: savedServer,
+		// 		postedBy: savedPostedBy,
+		// 	},
+		// 	UpdateMode.Modified,
+		// );
 
 		/**
 		 * Update Hashtag list
 		 */
-		while (retval.hashtags.length > 0) retval.hashtags.pop();
-		const hashtags = TextParserService.findHashtags(payload.content);
-		for (const hashtag of hashtags) {
-			const savedTag = ActivityPubTagRepository.upsertByName(db, hashtag);
-			retval.hashtags.push(savedTag);
-		}
+		// while (retval.hashtags.length > 0) retval.hashtags.pop();
+		// const hashtags = TextParserService.findHashtags(payload.content);
+		// for (const hashtag of hashtags) {
+		// 	const savedTag = ActivityPubTagRepository.upsertByName(db, hashtag);
+		// 	retval.hashtags.push(savedTag);
+		// }
 
 		/**
 		 * Update Media Attachment list
 		 */
-		while (retval.mediaAttachments.length > 0) {
-			const l = retval.mediaAttachments.pop();
-			db.delete(l);
-		}
+		// while (retval.mediaAttachments.length > 0) {
+		// 	const l = retval.mediaAttachments.pop();
+		// 	// db.delete(l);
+		// }
 		const mediaI = status.getMediaAttachments();
 
 		try {
-			for (const media of mediaI) {
-				const savedMedia = ActivityPubMediaAttachmentRepository.create(
-					db,
-					media,
-				);
-				retval.mediaAttachments.push(savedMedia);
-			}
+			// for (const media of mediaI) {
+			// 	const savedMedia = ActivityPubMediaAttachmentRepository.create(
+			// 		db,
+			// 		media,
+			// 	);
+			// 	retval.mediaAttachments.push(savedMedia);
+			// }
 		} catch (e) {
 			// FIX: media attachment could be null in some cases
 			console.log('[WARN]: failed to cache bookmark', status.getId());
 		}
 
-		return retval;
+		// return retval;
 	}
 
 	/**
@@ -105,14 +105,14 @@ export class ActivityPubStatusRepository {
 	 * @param statusId
 	 * @param subdomain
 	 */
-	static find(db: Realm, statusId: string, subdomain: string) {
-		return db
-			.objects(ActivityPubStatus)
-			.find(
-				(o) =>
-					o.statusId === statusId &&
-					o?.server !== null &&
-					o?.server?.url === subdomain,
-			);
+	static find(db: SQLiteDatabase, statusId: string, subdomain: string) {
+		// return db
+		// 	.objects(ActivityPubStatus)
+		// 	.find(
+		// 		(o) =>
+		// 			o.statusId === statusId &&
+		// 			o?.server !== null &&
+		// 			o?.server?.url === subdomain,
+		// 	);
 	}
 }

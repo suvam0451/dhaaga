@@ -1,9 +1,10 @@
 import { Dispatch, Fragment, memo, SetStateAction } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { Divider, Text } from '@rneui/themed';
+import { Text } from '@rneui/themed';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 type WithCwTextProps = {
 	cw?: string;
@@ -43,7 +44,7 @@ const ControllerWithSpoilerText = memo(
 					</View>
 				</View>
 				<View style={styles.toggleHideContainer}>
-					<Divider style={{ flex: 1, flexGrow: 1, opacity: 0.6 }} />
+					<View style={{ flex: 1 }} />
 					<Pressable
 						style={styles.toggleHidePressableAreaContainer}
 						onPress={() => {
@@ -61,7 +62,7 @@ const ControllerWithSpoilerText = memo(
 							/>
 						</View>
 					</Pressable>
-					<Divider style={{ flex: 1, flexGrow: 1, opacity: 0.6 }} />
+					<View style={{ flex: 1 }} />
 				</View>
 			</Fragment>
 		);
@@ -82,7 +83,7 @@ const ControllerWithoutSpoilerText = memo(
 					marginBottom: 8,
 				}}
 			>
-				<Divider style={{ flex: 1, flexGrow: 1, opacity: 0.6 }} />
+				<View style={{ flex: 1 }} />
 				<Pressable
 					style={{
 						flexShrink: 1,
@@ -105,15 +106,7 @@ const ControllerWithoutSpoilerText = memo(
 						/>
 					</View>
 					<View style={{ marginLeft: 4 }}>
-						<Text
-							style={{
-								color: APP_FONT.MONTSERRAT_BODY,
-								flexShrink: 1,
-								textAlign: 'center',
-								fontSize: 16,
-								fontFamily: 'Montserrat-Bold',
-							}}
-						>
+						<Text style={styles.toggleHideText}>
 							{show ? 'Hide Sensitive' : 'Show' + ' Sensitive'}
 						</Text>
 					</View>
@@ -121,11 +114,11 @@ const ControllerWithoutSpoilerText = memo(
 						<FontAwesome5
 							name="eye-slash"
 							size={18}
-							color={APP_FONT.MONTSERRAT_BODY}
+							color={APP_FONT.MEDIUM_EMPHASIS}
 						/>
 					</View>
 				</Pressable>
-				<Divider style={{ flex: 1, flexGrow: 1, opacity: 0.6 }} />
+				<View style={{ flex: 1 }} />
 			</View>
 		);
 	},
@@ -154,11 +147,11 @@ const styles = StyleSheet.create({
 		marginBottom: 8,
 	},
 	toggleHideText: {
-		color: APP_FONT.MONTSERRAT_BODY,
+		color: APP_FONT.MEDIUM_EMPHASIS,
 		flexShrink: 1,
 		textAlign: 'center',
 		fontSize: 16,
-		fontFamily: 'Montserrat-Bold',
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	},
 	toggleHidePressableAreaContainer: {
 		flexShrink: 1,

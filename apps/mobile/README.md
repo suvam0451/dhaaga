@@ -8,7 +8,7 @@ It is built using React Native.
 
 ### Pre-Requisites
 
-#### Expo Account
+#### Expo Accounts
 
 Dhaaga is a pure expo project.
 

@@ -8,6 +8,12 @@ import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { MediaAttachmentInterface } from '../media-attachment/interface.js';
 
 class UnknownToStatusAdapter implements StatusInterface {
+	getCid(): string | null {
+		return null;
+	}
+	getUri(): string | null {
+		return null;
+	}
 	/**
 	 * Post Hierarchy
 	 */

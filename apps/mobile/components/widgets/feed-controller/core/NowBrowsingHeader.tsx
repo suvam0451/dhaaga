@@ -12,9 +12,12 @@ import FederatedTimelineController from '../controllers/FederatedTimelineControl
 import SocialTimelineController from '../controllers/SocialTimelineController';
 import BubbleTimelineController from '../controllers/BubbleTimelineController';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 const NowBrowsingHeader = memo(function Foo() {
 	const { timelineType } = useTimelineController();
+	const { colorScheme } = useAppTheme();
 
 	const Comp = useMemo(() => {
 		switch (timelineType) {
@@ -50,28 +53,28 @@ const NowBrowsingHeader = memo(function Foo() {
 
 	return (
 		<View style={{ marginHorizontal: 8, marginBottom: 32 }}>
-			<View
-				style={{
-					marginVertical: 16,
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}
-			>
-				<View style={{ flex: 1, flexShrink: 1 }}>
-					<Text
-						style={{
-							fontSize: 24,
-							fontFamily: 'Inter-Bold',
-							color: APP_FONT.MONTSERRAT_BODY,
-							textAlign: 'center',
-						}}
-					>
-						Now Browsing
-					</Text>
-				</View>
-			</View>
+			{/*<View*/}
+			{/*	style={{*/}
+			{/*		marginVertical: 16,*/}
+			{/*		display: 'flex',*/}
+			{/*		flexDirection: 'row',*/}
+			{/*		alignItems: 'center',*/}
+			{/*		justifyContent: 'center',*/}
+			{/*	}}*/}
+			{/*>*/}
+			{/*	<View style={{ flex: 1, flexShrink: 1 }}>*/}
+			{/*		<Text*/}
+			{/*			style={{*/}
+			{/*				fontSize: 24,*/}
+			{/*				fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,*/}
+			{/*				color: colorScheme.textColor.high,*/}
+			{/*				textAlign: 'center',*/}
+			{/*			}}*/}
+			{/*		>*/}
+			{/*			Now Browsing*/}
+			{/*		</Text>*/}
+			{/*	</View>*/}
+			{/*</View>*/}
 			{Comp}
 		</View>
 	);

@@ -4,28 +4,28 @@ import {
 	useGorhomActionSheetContext,
 } from '../../../states/useGorhomBottomSheet';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import { useQuery } from '@realm/react';
-import { ActivityPubTag } from '../../../entities/activitypub-tag.entity';
 import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { Text } from 'react-native';
-import { APP_THEME } from '../../../styles/AppTheme';
 import { randomUUID } from 'expo-crypto';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
+import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 
 type Props = {
 	value: string;
+	fontFamily: string;
 };
-const HashtagSegment = memo(function Foo({ value }: Props) {
+const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
+	const { colorScheme } = useAppTheme();
 	const { acceptTouch } = useAppMfmContext();
 	const _value = decodeURI(value);
 
 	const { setVisible, setBottomSheetType, updateRequestId } =
 		useGorhomActionSheetContext();
 	const { globalDb } = useGlobalMmkvContext();
-	const item = useQuery(ActivityPubTag).find(
-		(o: ActivityPubTag) => o.name.toLowerCase() === _value.toLowerCase(),
-	);
+	const item = null;
+	// useQuery(ActivityPubTag).find(
+	// 	(o: ActivityPubTag) => o.name.toLowerCase() === _value.toLowerCase(),
+	// );
 
 	const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
 		return {
@@ -57,12 +57,12 @@ const HashtagSegment = memo(function Foo({ value }: Props) {
 			key={k}
 			style={{
 				color: isFollowed
-					? APP_THEME.COLOR_SCHEME_D_EMPHASIS
-					: APP_THEME.COLOR_SCHEME_D_NORMAL,
-				opacity: 1,
-				fontFamily: isFollowed
-					? APP_FONTS.MONTSERRAT_700_BOLD
-					: APP_FONTS.MONTSERRAT_400_REGULAR,
+					? colorScheme.palette.hashtagHigh
+					: colorScheme.palette.hashtagLow,
+				fontFamily: fontFamily,
+				// fontFamily: isFollowed
+				// 	? APP_FONTS.MONTSERRAT_700_BOLD
+				// 	: APP_FONTS.MONTSERRAT_400_REGULAR,
 				backgroundColor: isPrivatelyFollowed
 					? 'rgba(240,185,56,0.16)'
 					: undefined,

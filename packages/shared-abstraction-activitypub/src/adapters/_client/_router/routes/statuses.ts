@@ -44,7 +44,9 @@ export type DhaagaJsPostCreateDto = {
 };
 
 export interface StatusesRoute {
-	get(id: string): LibraryPromise<MastoStatus | MissNote>;
+	get(
+		id: string,
+	): LibraryPromise<MastoStatus | MissNote | AppBskyFeedGetPostThread.Response>;
 
 	bookmark(
 		id: string,
@@ -69,7 +71,13 @@ export interface StatusesRoute {
 		MastoContext | MissContext | AppBskyFeedGetPostThread.Response
 	>;
 
-	create(dto: DhaagaJsPostCreateDto): LibraryPromise<MastoScheduledStatus>;
+	create(dto: DhaagaJsPostCreateDto): LibraryPromise<
+		| MastoScheduledStatus
+		| {
+				uri: string;
+				cid: string;
+		  }
+	>;
 
 	delete(id: string): LibraryPromise<MastoStatus | { success: true }>;
 }
