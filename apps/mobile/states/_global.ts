@@ -5,7 +5,10 @@ import {
 	DEFAULT_THEME_PACK_OBJECT,
 	ThemePackType,
 } from '../assets/loaders/UseAppThemePackLoader';
-import { AppColorSchemeType } from '../styles/BuiltinThemes';
+import {
+	APP_BUILT_IN_THEMES,
+	AppColorSchemeType,
+} from '../styles/BuiltinThemes';
 import { Account } from '../database/_schema';
 import {
 	ActivityPubClientFactory,
@@ -233,6 +236,7 @@ class GlobalStateService {
 const useGlobalState = create<State & Actions>()(
 	immer((set, get) => ({
 		...defaultValue,
+		colorScheme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
 				state.db = db;
@@ -264,10 +268,9 @@ const useGlobalState = create<State & Actions>()(
 			});
 		},
 		setHomepageType: (selection: TimelineFetchMode) => {
-			set((state) => ({
-				...state,
-				homepageType: selection,
-			}));
+			set((state) => {
+				state.homepageType = selection;
+			});
 		},
 		rnBottomSheet: {
 			requestId: RandomUtil.nanoId(),

@@ -4,17 +4,16 @@ import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import TimelineWidgetModal from '../../../widgets/timelines/core/Modal';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
-import { AppIcon } from '../../../lib/Icon';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
-import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import TopNavbarBackButton from './TopNavbarBackButton';
+import Feather from '@expo/vector-icons/Feather';
 
 type HeadersProps = {
 	title: string;
@@ -28,9 +27,13 @@ type HeadersProps = {
  * NOTE: ScrollView not included
  */
 const TimelinesHeader = ({ title }: HeadersProps) => {
-	const { client } = useActivityPubRestClientContext();
-	const { setShowTimelineSelection, setTimelineType, timelineType } =
-		useTimelineController();
+	const { client, colorScheme } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			colorScheme: o.colorScheme,
+		})),
+	);
+	const { setShowTimelineSelection } = useTimelineController();
 	const {
 		setVisible,
 		setType,
@@ -41,7 +44,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 	} = useAppBottomSheet();
 
 	function onIconPress() {
-		if (!client) {
+		if (!router) {
 			setShowTimelineSelection(false);
 		} else {
 			setShowTimelineSelection(true);
@@ -58,28 +61,10 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 		setVisible(true);
 	}
 
-	function onChangeTheme() {
-		setType(APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK);
-		updateRequestId();
-		setVisible(true);
-	}
-
-	function goHome() {
-		setTimelineType(TimelineFetchMode.IDLE);
-		router.navigate('/');
-	}
-
-	const { colorScheme } = useAppTheme();
-
 	return (
 		<View style={[styles.root, { backgroundColor: colorScheme.palette.bg }]}>
 			<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>
-				{/*<TouchableOpacity*/}
-				{/*	style={styles.menuActionButtonContainer}*/}
-				{/*	onPress={onChangeTheme}*/}
-				{/*>*/}
-				{/*	<AppIcon id={'palette'} emphasis={'medium'} />*/}
-				{/*</TouchableOpacity>*/}
+				<TopNavbarBackButton />
 			</View>
 
 			<TouchableOpacity
@@ -112,21 +97,27 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 					{ justifyContent: 'flex-end', paddingRight: 8 },
 				]}
 			>
-				<TouchableOpacity
-					style={styles.menuActionButtonContainer}
-					onPress={post}
-				>
-					<AppIcon id={'create'} emphasis={'medium'} />
+				<TouchableOpacity style={{ paddingHorizontal: 6 }}>
+					<Ionicons
+						name="filter"
+						size={24}
+						color={colorScheme.textColor.high}
+					/>
 				</TouchableOpacity>
 
-				{timelineType !== TimelineFetchMode.IDLE && (
-					<TouchableOpacity
-						style={styles.menuActionButtonContainer}
-						onPress={goHome}
-					>
-						<AppIcon id={'home'} emphasis={'medium'} size={20} />
-					</TouchableOpacity>
-				)}
+				{/*<TouchableOpacity*/}
+				{/*	style={styles.menuActionButtonContainer}*/}
+				{/*	onPress={post}*/}
+				{/*>*/}
+				{/*	<AppIcon id={'create'} emphasis={'medium'} />*/}
+				{/*</TouchableOpacity>*/}
+				<TouchableOpacity style={{ paddingLeft: 8 }}>
+					<Feather
+						name="settings"
+						size={24}
+						color={colorScheme.textColor.high}
+					/>
+				</TouchableOpacity>
 			</View>
 			<TimelineWidgetModal />
 		</View>

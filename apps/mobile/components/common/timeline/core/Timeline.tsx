@@ -57,11 +57,6 @@ const Timeline = memo(() => {
 
 	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
-	// reset to home
-	useEffect(() => {
-		setTimelineType(TimelineFetchMode.IDLE);
-	}, [acct]);
-
 	useEffect(() => {
 		setPageLoadedAtLeastOnce(false);
 		clear();

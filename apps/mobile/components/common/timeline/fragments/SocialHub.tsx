@@ -23,6 +23,7 @@ import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import SocialHubQuickDestinations from '../../../screens/home/stack/landing/fragments/SocialHubQuickDestinations';
 import { DbMetaRepo } from '../../../../database/repositories/_meta.repo';
 import { AppSegmentedControl } from '../../../lib/SegmentedControl';
+
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
 	MORNING = 'Morning',
@@ -308,7 +309,7 @@ function SocialHub() {
 			}}
 		>
 			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
-			<TimelinesHeader title={'Social Hub'} />
+			{/*<TimelinesHeader title={'Social Hub'} />*/}
 
 			<ScrollView>
 				<View
@@ -320,54 +321,55 @@ function SocialHub() {
 						paddingHorizontal: 8,
 					}}
 				>
-					<SocialHubLantern />
-					{/*{TimeOfDay === TIME_OF_DAY.MORNING && (*/}
-					{/*	<Text*/}
-					{/*		style={[*/}
-					{/*			styles.timeOfDayText,*/}
-					{/*			{ color: colorScheme.textColor.medium },*/}
-					{/*		]}*/}
-					{/*	>*/}
-					{/*		Good Morning*/}
-					{/*	</Text>*/}
-					{/*)}*/}
-					{/*{TimeOfDay === TIME_OF_DAY.AFTERNOON && (*/}
-					{/*	<Text*/}
-					{/*		style={[*/}
-					{/*			styles.timeOfDayText,*/}
-					{/*			{ color: colorScheme.textColor.medium },*/}
-					{/*		]}*/}
-					{/*	>*/}
-					{/*		Good Afternoon*/}
-					{/*	</Text>*/}
-					{/*)}*/}
-					{/*{TimeOfDay === TIME_OF_DAY.EVENING && (*/}
-					{/*	<Text*/}
-					{/*		style={[*/}
-					{/*			styles.timeOfDayText,*/}
-					{/*			{ color: colorScheme.textColor.medium },*/}
-					{/*		]}*/}
-					{/*	>*/}
-					{/*		Good Evening*/}
-					{/*	</Text>*/}
-					{/*)}*/}
-					{/*{TimeOfDay === TIME_OF_DAY.NIGHT && (*/}
-					{/*	<Text*/}
-					{/*		style={[*/}
-					{/*			styles.timeOfDayText,*/}
-					{/*			{ color: colorScheme.textColor.medium },*/}
-					{/*		]}*/}
-					{/*	>*/}
-					{/*		Good Night 🌙*/}
-					{/*	</Text>*/}
-					{/*)}*/}
+					{/*<SocialHubLantern />*/}
+					{TimeOfDay === TIME_OF_DAY.MORNING && (
+						<Text
+							style={[
+								styles.timeOfDayText,
+								{ color: colorScheme.textColor.medium },
+							]}
+						>
+							Good Morning
+						</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
+						<Text
+							style={[
+								styles.timeOfDayText,
+								{ color: colorScheme.textColor.medium },
+							]}
+						>
+							Good Afternoon
+						</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.EVENING && (
+						<Text
+							style={[
+								styles.timeOfDayText,
+								{ color: colorScheme.textColor.medium },
+							]}
+						>
+							Good Evening
+						</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.NIGHT && (
+						<Text
+							style={[
+								styles.timeOfDayText,
+								{ color: colorScheme.textColor.medium },
+							]}
+						>
+							Good Night 🌙
+						</Text>
+					)}
 
 					<AppSegmentedControl
 						items={[
-							{ label: 'Favourites' },
-							{ label: 'Pinned' },
+							{ label: 'Profile' },
+							{ label: 'Pinned by You' },
 							{ label: 'Saved' },
 						]}
+						style={{ marginTop: 28 }}
 					/>
 
 					<SocialHubQuickDestinations />
@@ -480,6 +482,7 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		marginLeft: 8,
+		marginTop: 16,
 	},
 });
 

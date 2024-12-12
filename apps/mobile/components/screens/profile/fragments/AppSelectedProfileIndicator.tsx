@@ -18,21 +18,19 @@ import { useShallow } from 'zustand/react/shallow';
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
 const AppSelectedProfileIndicator = memo(() => {
-	const { acct } = useGlobalState(
+	const { acct, setType, show } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
+			show: o.bottomSheet.show,
+			setType: o.bottomSheet.setType,
 		})),
 	);
 	const { colorScheme } = useAppTheme();
 	const { isAnimating, visible } = useAppBottomSheet();
 
-	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
-
 	function onLongPress() {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		setType(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT);
-		updateRequestId();
-		setVisible(true);
+		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT);
 	}
 
 	function onPress() {
@@ -56,7 +54,7 @@ const AppSelectedProfileIndicator = memo(() => {
 		);
 
 	return (
-		<View style={{ flexDirection: 'row' }}>
+		<View style={{ flexDirection: 'row', flex: 1 }}>
 			<TouchableOpacity
 				style={styles.accountIconTouchableContainer}
 				onPress={onPress}

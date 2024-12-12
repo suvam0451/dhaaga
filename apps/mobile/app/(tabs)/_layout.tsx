@@ -7,6 +7,7 @@ import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import { HomeNavigationIcon } from '../../components/lib/Icon';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
@@ -69,8 +70,7 @@ export default function TabLayout() {
 									default:
 										return <View />;
 								}
-							},
-							// tabBarBadge: badgeCount,
+							}, // tabBarBadge: badgeCount,
 							tabBarBadgeStyle: {
 								// backgroundColor: 'black',
 								color: 'yellow',
@@ -83,8 +83,7 @@ export default function TabLayout() {
 							tabBarIconStyle: {
 								height: 42,
 								width: 64,
-							},
-							// tabBarIconStyle: {
+							}, // tabBarIconStyle: {
 							// 	color: colorScheme.textColor.medium,
 							// },
 							tabBarActiveTintColor: colorScheme.textColor.medium,
@@ -97,12 +96,7 @@ export default function TabLayout() {
 					<Tabs.Screen
 						name="index"
 						options={{
-							tabBarIcon: ({ color, size, focused }) =>
-								focused ? (
-									<Ionicons size={size + 2} name="home" color={color} />
-								) : (
-									<Ionicons size={size + 2} name="home-outline" color={color} />
-								),
+							tabBarIcon: HomeNavigationIcon,
 						}}
 					/>
 					<Tabs.Screen

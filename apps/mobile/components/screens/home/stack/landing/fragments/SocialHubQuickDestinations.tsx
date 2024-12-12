@@ -7,6 +7,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../../../../../common/timeline/utils/timeline.types';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { router } from 'expo-router';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -71,6 +72,7 @@ const SocialHubQuickDestinations = memo(() => {
 						]}
 						onPress={() => {
 							setHomepageType(TimelineFetchMode.HOME);
+							router.push('/timelines');
 						}}
 					>
 						<AppIcon id={'home'} emphasis={'high'} />
@@ -137,12 +139,13 @@ const SocialHubQuickDestinations = memo(() => {
 			<Text
 				style={{
 					color: colorScheme.textColor.medium,
-					marginBottom: 4,
 					fontSize: 18,
 					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					marginTop: 16,
+					marginBottom: 12,
 				}}
 			>
-				How are you feeling today?
+				How are you feeling ?
 			</Text>
 
 			<View style={{ flexDirection: 'column' }}>
@@ -204,8 +207,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		padding: 8,
-		paddingHorizontal: 12,
-		// marginHorizontal: 8,
+		paddingHorizontal: 12, // marginHorizontal: 8,
 		borderRadius: 8,
 	},
 });

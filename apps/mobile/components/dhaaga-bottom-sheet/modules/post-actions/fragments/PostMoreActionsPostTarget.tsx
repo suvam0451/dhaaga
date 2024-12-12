@@ -12,6 +12,25 @@ import useGlobalState from '../../../../../states/_global';
 import { AppIcon } from '../../../../lib/Icon';
 import { useShallow } from 'zustand/react/shallow';
 
+function SectionDivider() {
+	return (
+		<View
+			style={{
+				paddingHorizontal: 4,
+				paddingVertical: 4,
+			}}
+		>
+			<View
+				style={{
+					height: 1,
+					backgroundColor: '#484848',
+					width: '100%',
+				}}
+			/>
+		</View>
+	);
+}
+
 const ActionButton = memo(
 	({
 		Icon,
@@ -33,6 +52,7 @@ const ActionButton = memo(
 					paddingHorizontal: 8,
 					alignItems: 'center',
 					width: '100%',
+					minHeight: 52,
 				}}
 				onPress={onClick}
 			>
@@ -163,7 +183,7 @@ const PostMoreActionsPostTarget = memo(
 						/>
 					}
 					label={IS_BOOKMARKED ? 'Remove Bookmark' : 'Bookmark'}
-					desc={'Save this post to view/read later.'}
+					desc={'Save this post to view later.'}
 					onClick={onClickToggleBookmark}
 				/>
 				{IS_MASTODON_LIKE && (
@@ -187,6 +207,31 @@ const PostMoreActionsPostTarget = memo(
 						onClick={onClickAddReaction}
 					/>
 				)}
+
+				<ActionButton
+					Icon={<AppIcon id={'smiley'} emphasis={'high'} />}
+					label={'Reply'}
+					onClick={() => {}}
+				/>
+
+				<SectionDivider />
+				<ActionButton
+					Icon={<AppIcon id={'share'} emphasis={'high'} />}
+					label={'Share'}
+					onClick={() => {}}
+				/>
+
+				<SectionDivider />
+				<ActionButton
+					Icon={<AppIcon id={'external-link'} emphasis={'high'} />}
+					label={'Open in Browser'}
+					onClick={() => {}}
+				/>
+				<ActionButton
+					Icon={<AppIcon id={'external-link'} emphasis={'high'} />}
+					label={'Open Original in Browser'}
+					onClick={() => {}}
+				/>
 			</Fragment>
 		);
 	},

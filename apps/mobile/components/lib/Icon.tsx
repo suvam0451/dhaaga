@@ -1,14 +1,25 @@
+import * as React from 'react';
 import { memo, useMemo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
-import { StyleProp, TextStyle, View, Platform, ViewStyle } from 'react-native';
+import {
+	Platform,
+	StyleProp,
+	TextStyle,
+	TouchableOpacity,
+	View,
+	ViewStyle,
+} from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import * as React from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { router } from 'expo-router';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { TimelineFetchMode } from '../common/timeline/utils/timeline.types';
 
 export type APP_ICON_ENUM =
 	| 'bell'
@@ -18,6 +29,7 @@ export type APP_ICON_ENUM =
 	| 'done'
 	| 'edit'
 	| 'ellipsis-v'
+	| 'external-link'
 	| 'home'
 	| 'menu'
 	| 'message'
@@ -26,6 +38,7 @@ export type APP_ICON_ENUM =
 	| 'phonebook'
 	| 'retweet'
 	| 'search'
+	| 'share'
 	| 'feelings'
 	| 'smiley'
 	| 'trash'
@@ -39,6 +52,50 @@ type AppIconType = {
 	size?: number;
 	onPress?: () => void;
 };
+
+/**
+ * === Navigation Icons ===
+ */
+
+type NavigationIconType = {
+	color: string;
+	size: number;
+	focused: boolean;
+};
+
+/**
+ *	The navigation icon for the home tab.
+ *
+ * 	Long presses sends the user back to home
+ * 	and resets the home tab
+ */
+export function HomeNavigationIcon({
+	focused,
+	color,
+	size,
+}: NavigationIconType) {
+	const { setType } = useGlobalState(
+		useShallow((o) => ({
+			setType: o.setHomepageType,
+		})),
+	);
+	function onPress() {
+		setType(TimelineFetchMode.IDLE);
+		router.navigate('/');
+	}
+
+	return (
+		<TouchableOpacity onLongPress={onPress}>
+			{focused ? (
+				<Ionicons size={size + 2} name="home" color={color} />
+			) : (
+				<Ionicons size={size + 2} name="home-outline" color={color} />
+			)}
+		</TouchableOpacity>
+	);
+}
+
+export function DiscoverNavigationIcon(props: NavigationIconType) {}
 
 export const AppIcon = memo(
 	({ id, emphasis, iconStyle, size, onPress, containerStyle }: AppIconType) => {
@@ -149,6 +206,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'external-link':
+					return (
+						<Feather
+							name="external-link"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'home':
 					return (
 						<Ionicons
@@ -233,6 +300,16 @@ export const AppIcon = memo(
 					return (
 						<AntDesign
 							name="search1"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'share':
+					return (
+						<Ionicons
+							name="share-social"
 							size={_size}
 							color={_color}
 							onPress={onPress}
