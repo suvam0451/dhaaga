@@ -5,19 +5,21 @@ import WithAppStatusItemContext, {
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
-import StatusInteraction from './StatusInteraction';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusQuoted from './StatusQuoted';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../lib/Icon';
-import useGlobalState from '../../../../states/_global';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 
 /**
  * Mostly used to remove the border
@@ -29,15 +31,17 @@ type StatusCoreProps = {
 	isPreview?: boolean;
 };
 
-const APP_SETTING_VERTICAL_MARGIN = 8;
-
 function StatusController() {
 	const { dto } = useAppStatusItem();
-	const { present } = useGlobalState(
+	const { show, setPostRef, setReducer } = useGlobalState(
 		useShallow((o) => ({
-			present: o.rnBottomSheet.present,
+			show: o.bottomSheet.show,
+			setPostRef: o.bottomSheet.setPostRef,
+			setReducer: o.bottomSheet.setTimelineDataPostListReducer,
 		})),
 	);
+	const { getPostListReducer } = useAppTimelinePosts();
+
 	const STATUS_DTO = dto.meta.isBoost
 		? dto.content.raw
 			? dto
@@ -45,7 +49,10 @@ function StatusController() {
 		: dto;
 
 	function onMoreOptionsPress() {
-		present();
+		setPostRef(STATUS_DTO);
+		setReducer(getPostListReducer());
+		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
+		console.log('saved state');
 	}
 
 	return (

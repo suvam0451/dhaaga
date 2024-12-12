@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import { Button, ListItem, Skeleton } from '@rneui/themed';
 import {
 	ScrollView,
@@ -24,6 +23,8 @@ import useAppNavigator from '../../states/useAppNavigator';
 import { useGorhomActionSheetContext } from '../../states/useGorhomBottomSheet';
 import TagButtonFollow from './hashtag/fragments/TagButtonFollow';
 import TagButtonBrowseLocal from './hashtag/fragments/TagButtonBrowseLocal';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type HashtagActionsProps = {
 	visible: boolean;
@@ -38,7 +39,12 @@ export function HashtagBottomSheetContent({
 	parentApiPending,
 }: HashtagBottomSheetContentProps) {
 	const { setVisible } = useGorhomActionSheetContext();
-	const { domain, subdomain } = useActivityPubRestClientContext();
+	const { driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 	const { tag } = useActivitypubTagContext();
 	const [IsLoading, setIsLoading] = useState(false);
 
@@ -49,7 +55,7 @@ export function HashtagBottomSheetContent({
 	useEffect(() => {
 		if (!tag) return;
 		setIsLoading(true);
-		InstanceService.getTagInfoCrossDomain(tag, subdomain)
+		InstanceService.getTagInfoCrossDomain(tag, acct?.server)
 			.then((res) => {
 				setAggregatedData({
 					users: res.common.users,
@@ -76,16 +82,16 @@ export function HashtagBottomSheetContent({
 	if (!loaded) return <HashtagSkeleton />;
 
 	const summaryText = useMemo(() => {
-		if (domain === KNOWN_SOFTWARE.MASTODON) {
+		if (driver === KNOWN_SOFTWARE.MASTODON) {
 			return `${AggregatedData.posts} posts , ${AggregatedData.users} users`;
 		} else {
 			return `${(tag as MisskeyTag).getMentionedUsersCount()} users`;
 		}
-	}, [AggregatedData, domain]);
+	}, [AggregatedData, driver]);
 
 	const TAG_SUBSCRIBE_POSSIBLE = useMemo(() => {
-		return domain === KNOWN_SOFTWARE.MASTODON;
-	}, [domain]);
+		return driver === KNOWN_SOFTWARE.MASTODON;
+	}, [driver]);
 
 	const { toTag } = useAppNavigator();
 
@@ -189,7 +195,7 @@ export function HashtagBottomSheetContent({
 													Your Instance
 												</Text>
 												<Text style={styles.instanceTarget} numberOfLines={1}>
-													{subdomain}
+													{acct?.server}
 												</Text>
 												<Text style={styles.instanceMetrics}>
 													{AggregatedData.posts} posts by {AggregatedData.users}{' '}
@@ -355,11 +361,15 @@ function HashtagSkeleton() {
 
 function HashtagBottomSheet({ id }: HashtagActionsProps) {
 	const [Data, setData] = useState(null);
-	const { client } = useActivityPubRestClientContext();
+	const { router } = useGlobalState(
+		useShallow((o) => ({
+			router: o.router,
+		})),
+	);
 
 	async function api() {
-		if (!client) return null;
-		const { data, error } = await client.tags.get(id);
+		if (!router) return null;
+		const { data, error } = await router.tags.get(id);
 		if (error) {
 			console.log(error);
 			return null;
@@ -371,7 +381,7 @@ function HashtagBottomSheet({ id }: HashtagActionsProps) {
 	const { status, data } = useQuery<TagType | null>({
 		queryKey: ['tag', id],
 		queryFn: api,
-		enabled: client !== null && id !== null,
+		enabled: router !== null && id !== null,
 	});
 
 	useEffect(() => {

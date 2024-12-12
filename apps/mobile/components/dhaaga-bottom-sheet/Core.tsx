@@ -3,8 +3,9 @@ import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetFactory from './fragments/AppBottomSheetFactory';
-import { useAppBottomSheet } from './modules/_api/useAppBottomSheet';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Switches what module will be shown
@@ -16,11 +17,13 @@ import { useAppTheme } from '../../hooks/app/useAppThemePack';
 const AppBottomSheet = memo(() => {
 	const { colorScheme } = useAppTheme();
 	const { animStyle } = useAnimatedHeight();
-	const { visible, setVisible } = useAppBottomSheet();
 
-	function onBackgroundPress() {
-		setVisible(false);
-	}
+	const { visible, hide } = useGlobalState(
+		useShallow((o) => ({
+			visible: o.bottomSheet.visible,
+			hide: o.bottomSheet.hide,
+		})),
+	);
 
 	return (
 		<Fragment>
@@ -33,7 +36,7 @@ const AppBottomSheet = memo(() => {
 					opacity: 0.3,
 					zIndex: 1,
 				}}
-				onPress={onBackgroundPress}
+				onPress={hide}
 			/>
 			<Animated.View
 				style={[

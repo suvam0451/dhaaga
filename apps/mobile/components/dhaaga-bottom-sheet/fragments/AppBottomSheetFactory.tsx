@@ -1,8 +1,4 @@
 import { memo, useMemo } from 'react';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../modules/_api/useAppBottomSheet';
 import PostPreview from '../modules/post-preview/PostPreview';
 import WithComposerContext from '../modules/post-composer/api/useComposerContext';
 import PostCompose from '../modules/post-composer/pages/PostCompose';
@@ -11,12 +7,20 @@ import PostMoreActions from '../modules/post-actions/pages/PostMoreActions';
 import AppBottomSheetReactionDetails from '../modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from '../modules/select-account/AppBottomSheetSelectAccount';
 import AppBottomSheetPickThemePack from '../modules/theme-pack/AppBottomSheetPickThemePack';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Responsible for generating content
  */
 const AppBottomSheetFactory = memo(() => {
-	const { type, requestId, PostComposerTextSeedRef } = useAppBottomSheet();
+	const { type, stateId, PostComposerTextSeedRef } = useGlobalState(
+		useShallow((o) => ({
+			type: o.bottomSheet.type,
+			stateId: o.bottomSheet.stateId,
+			PostComposerTextSeedRef: o.bottomSheet.PostComposerTextSeedRef,
+		})),
+	);
 	return useMemo(() => {
 		switch (type) {
 			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
@@ -24,7 +28,7 @@ const AppBottomSheetFactory = memo(() => {
 			}
 			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
 				return (
-					<WithComposerContext textSeed={PostComposerTextSeedRef.current}>
+					<WithComposerContext textSeed={PostComposerTextSeedRef}>
 						<PostCompose />
 					</WithComposerContext>
 				);
@@ -47,7 +51,7 @@ const AppBottomSheetFactory = memo(() => {
 				);
 			}
 		}
-	}, [type, requestId]);
+	}, [type, stateId]);
 });
 
 export default AppBottomSheetFactory;

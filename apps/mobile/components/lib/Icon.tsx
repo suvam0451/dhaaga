@@ -27,6 +27,7 @@ export type APP_ICON_ENUM =
 	| 'retweet'
 	| 'search'
 	| 'feelings'
+	| 'smiley'
 	| 'trash'
 	| 'wand';
 
@@ -232,6 +233,16 @@ export const AppIcon = memo(
 					return (
 						<AntDesign
 							name="search1"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'smiley':
+					return (
+						<MaterialIcons
+							name="add-reaction"
 							size={_size}
 							color={_color}
 							onPress={onPress}

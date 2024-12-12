@@ -20,8 +20,8 @@ import { AccountMetadataService } from '../database/entities/account-metadata';
 import { TimelineFetchMode } from '../components/common/timeline/utils/timeline.types';
 import { Result } from '../utils/result';
 import { RandomUtil } from '../utils/random.utils';
-import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { MutableRefObject } from 'react';
+import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.service';
+import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
 
 type AppThemePack = {
 	id: string;
@@ -40,6 +40,59 @@ type ReactNativeBottomSheetState = {
 	refresh: () => void;
 	present: () => void;
 	dismiss: () => void;
+};
+
+export enum APP_BOTTOM_SHEET_ENUM {
+	HASHTAG = 'Hashtag',
+	LINK = 'Link',
+	STATUS_COMPOSER = 'StatusComposer',
+	STATUS_MENU = 'StatusMenu',
+	STATUS_PREVIEW = 'StatusPreview',
+	PROFILE_PEEK = 'ProfilePeek',
+	MORE_POST_ACTIONS = 'MorePostActions',
+	NA = 'N/A',
+	REACTION_DETAILS = 'ReactionDetails',
+	SELECT_ACCOUNT = 'SelectAccount',
+	SWITCH_THEME_PACK = 'SwitchThemePack',
+}
+
+type AppBottomSheetState = {
+	type: APP_BOTTOM_SHEET_ENUM;
+	stateId: string;
+	refresh: () => void;
+	setType: (type: APP_BOTTOM_SHEET_ENUM) => void;
+	visible: boolean;
+	/**
+	 * present the modal
+	 * @param type set the type of modal to show
+	 * @param refresh also perform a refresh
+	 */
+	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
+	hide: () => void;
+
+	/**
+	 * to prevent lists from being
+	 * rendered while the bottom
+	 * sheet animation is playing out
+	 * */
+	isAnimating: boolean;
+
+	// references
+	HandleRef: string;
+	ParentRef: ActivityPubStatusAppDtoType;
+	RootRef: ActivityPubStatusAppDtoType;
+	TextRef: string;
+	PostRef: ActivityPubStatusAppDtoType;
+	setPostRef: (obj: ActivityPubStatusAppDtoType) => void;
+
+	PostIdRef: string;
+	UserRef: UserInterface;
+	UserIdRef: string; // pre-populate the post-composer to this content
+	PostComposerTextSeedRef: string;
+
+	// reducers
+	timelineDataPostListReducer: TimelineDataReducerFunction;
+	setTimelineDataPostListReducer: (obj: TimelineDataReducerFunction) => void;
 };
 
 type State = {
@@ -72,6 +125,7 @@ type State = {
 	activePack: ThemePackType;
 
 	rnBottomSheet: ReactNativeBottomSheetState;
+	bottomSheet: AppBottomSheetState;
 };
 
 type Actions = {
@@ -108,6 +162,28 @@ const defaultValue: State & Actions = {
 		visible: false,
 		present: undefined,
 		dismiss: undefined,
+	},
+	bottomSheet: {
+		type: APP_BOTTOM_SHEET_ENUM.NA,
+		visible: false,
+		stateId: RandomUtil.nanoId(),
+		refresh: undefined,
+		setType: undefined,
+		show: undefined,
+		hide: undefined,
+		isAnimating: false,
+		HandleRef: undefined,
+		ParentRef: undefined,
+		RootRef: undefined,
+		TextRef: undefined,
+		PostRef: undefined,
+		setPostRef: undefined,
+		PostIdRef: undefined,
+		UserRef: undefined,
+		UserIdRef: undefined,
+		PostComposerTextSeedRef: undefined,
+		timelineDataPostListReducer: undefined,
+		setTimelineDataPostListReducer: undefined,
 	},
 };
 
@@ -148,6 +224,7 @@ class GlobalStateService {
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
 			return { type: 'success', value: { acct, router: _router } };
 		} catch (e) {
+			console.log(e);
 			console.log('[ERROR]: failed to restore previous app session');
 		}
 	}
@@ -194,7 +271,11 @@ const useGlobalState = create<State & Actions>()(
 		},
 		rnBottomSheet: {
 			requestId: RandomUtil.nanoId(),
-			refresh: () => {},
+			refresh: () => {
+				set((state) => {
+					state.bottomSheet.stateId = RandomUtil.nanoId();
+				});
+			},
 			type: REACT_NATIVE_BOTTOM_SHEET_ENUM.NA,
 			visible: false,
 			present: () => {
@@ -205,6 +286,50 @@ const useGlobalState = create<State & Actions>()(
 			dismiss: () => {
 				set((state) => {
 					state.rnBottomSheet.visible = false;
+				});
+			},
+		},
+		bottomSheet: {
+			type: APP_BOTTOM_SHEET_ENUM.NA,
+			visible: false,
+			stateId: RandomUtil.nanoId(),
+			refresh: function (): void {
+				throw new Error('Function not implemented.');
+			},
+			setType: function (type: APP_BOTTOM_SHEET_ENUM): void {
+				throw new Error('Function not implemented.');
+			},
+			show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => {
+				set((state) => {
+					if (type) state.bottomSheet.type = type;
+					if (refresh) state.bottomSheet.stateId = RandomUtil.nanoId();
+					state.bottomSheet.visible = true;
+				});
+			},
+			hide: () => {
+				set((state) => {
+					state.bottomSheet.visible = false;
+				});
+			},
+			isAnimating: false,
+			HandleRef: undefined,
+			ParentRef: undefined,
+			RootRef: undefined,
+			TextRef: undefined,
+			PostRef: null,
+			setPostRef: (obj: ActivityPubStatusAppDtoType) => {
+				set((state) => {
+					state.bottomSheet.PostRef = obj;
+				});
+			},
+			PostIdRef: undefined,
+			UserRef: undefined,
+			UserIdRef: undefined,
+			PostComposerTextSeedRef: undefined,
+			timelineDataPostListReducer: null,
+			setTimelineDataPostListReducer: (obj: TimelineDataReducerFunction) => {
+				set((state) => {
+					state.bottomSheet.timelineDataPostListReducer = obj;
 				});
 			},
 		},

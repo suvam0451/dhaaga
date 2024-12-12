@@ -7,14 +7,12 @@ import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
-import AppReactNativeBottomSheet from '../../components/shared/rn-bottom-sheet';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
 	const { colorScheme } = useAppTheme();
 	return (
 		<View style={{ height: '100%' }}>
-			{/*<StatusBar hidden={false} backgroundColor={colorScheme.palette.menubar} />*/}
 			<WithAppAssetsContext>
 				<Tabs
 					initialRouteName={'index'}
@@ -169,7 +167,6 @@ export default function TabLayout() {
 						}}
 					/>
 				</Tabs>
-				<AppReactNativeBottomSheet />
 			</WithAppAssetsContext>
 		</View>
 	);

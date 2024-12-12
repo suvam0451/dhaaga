@@ -1,16 +1,16 @@
-import { Fragment, memo } from 'react';
+import { Dispatch, Fragment, memo, SetStateAction } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons } from '@expo/vector-icons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import ActivityPubService from '../../../../../services/activitypub.service';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../states/_global';
+import { AppIcon } from '../../../../lib/Icon';
+import { useShallow } from 'zustand/react/shallow';
 
 const ActionButton = memo(
 	({
@@ -72,30 +72,34 @@ const PostMoreActionsPostTarget = memo(
 	({
 		setEditMode,
 	}: {
-		setEditMode: React.Dispatch<React.SetStateAction<'root' | 'emoji'>>;
+		setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
 	}) => {
 		const { colorScheme } = useAppTheme();
-		const { client, domain } = useActivityPubRestClientContext();
-		const { PostRef, timelineDataPostListReducer, setVisible } =
-			useAppBottomSheet();
-
-		const IS_BOOKMARKED = PostRef.current.interaction.bookmarked;
-		const IS_LIKED = PostRef.current.interaction.liked;
-
-		const IS_REACTED = !PostRef.current?.stats?.reactions?.every(
-			(o) => o.me === false,
+		const { PostRef, reducer, hide, router, driver } = useGlobalState(
+			useShallow((o) => ({
+				PostRef: o.bottomSheet.PostRef,
+				reducer: o.bottomSheet.timelineDataPostListReducer,
+				router: o.router,
+				driver: o.driver,
+				hide: o.bottomSheet.hide,
+			})),
 		);
+
+		const IS_BOOKMARKED = PostRef.interaction.bookmarked;
+		const IS_LIKED = PostRef.interaction.liked;
+
+		const IS_REACTED = !PostRef?.stats?.reactions?.every((o) => o.me === false);
 
 		let ReactionCta = 'Add Reaction';
 		if (IS_REACTED) {
-			if (ActivityPubService.pleromaLike(domain)) {
+			if (ActivityPubService.pleromaLike(driver)) {
 				ReactionCta = 'Add More Reactions';
 			} else {
 				ReactionCta = 'Change Reaction';
 			}
 		}
 
-		const IS_MASTODON = domain === KNOWN_SOFTWARE.MASTODON;
+		const IS_MASTODON = driver === KNOWN_SOFTWARE.MASTODON;
 
 		function onClickAddReaction() {
 			setEditMode('emoji');
@@ -103,46 +107,46 @@ const PostMoreActionsPostTarget = memo(
 
 		function onClickToggleLike() {
 			ActivityPubService.toggleLike(
-				client,
-				PostRef.current.id,
-				PostRef.current.interaction.liked,
-				domain as any,
+				router,
+				PostRef.id,
+				PostRef.interaction.liked,
+				driver as any,
 			)
 				.then((res) => {
-					timelineDataPostListReducer.current({
+					reducer({
 						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_LIKE_STATUS,
 						payload: {
-							id: PostRef.current.id,
+							id: PostRef.id,
 							delta: res,
 						},
 					});
 				})
 				.finally(() => {
-					setVisible(false);
+					hide();
 				});
 		}
 
 		function onClickToggleBookmark() {
 			ActivityPubService.toggleBookmark(
-				client,
-				PostRef.current.id,
-				PostRef.current.interaction.bookmarked,
+				router,
+				PostRef.id,
+				PostRef.interaction.bookmarked,
 			)
 				.then((res) => {
-					timelineDataPostListReducer.current({
+					reducer({
 						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
 						payload: {
-							id: PostRef.current.id,
+							id: PostRef.id,
 							value: res,
 						},
 					});
 				})
 				.finally(() => {
-					setVisible(false);
+					hide();
 				});
 		}
 
-		const IS_MASTODON_LIKE = ActivityPubService.mastodonLike(domain);
+		const IS_MASTODON_LIKE = ActivityPubService.mastodonLike(driver);
 
 		return (
 			<Fragment>
@@ -178,13 +182,7 @@ const PostMoreActionsPostTarget = memo(
 				)}
 				{!IS_MASTODON && (
 					<ActionButton
-						Icon={
-							<MaterialIcons
-								name="add-reaction"
-								size={24}
-								color={colorScheme.textColor.high}
-							/>
-						}
+						Icon={<AppIcon id={'smiley'} emphasis={'high'} />}
 						label={ReactionCta}
 						onClick={onClickAddReaction}
 					/>

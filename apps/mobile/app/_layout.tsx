@@ -8,7 +8,6 @@ import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import WithActivityPubRestClient from '../states/useActivityPubRestClient';
 import { StatusBar, View, Appearance } from 'react-native';
 import appFonts from '../styles/AppFonts';
 import { useCallback, useEffect } from 'react';
@@ -20,9 +19,7 @@ import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
 
 enableMapSet();
 
-import WithAppBottomSheetContext from '../components/dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
-import WithGorhomBottomSheetContext from '../states/useGorhomBottomSheet';
 
 // polyfills
 import WithAppThemePackContext, {
@@ -32,7 +29,8 @@ import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '../database/migrations';
 import useGlobalState from '../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
+import WithActivityPubRestClient from '../states/useActivityPubRestClient';
 
 /**
  * Suppress these warnings...
@@ -65,7 +63,7 @@ if (__DEV__) {
 	console.error = withoutIgnored(console.error);
 }
 
-function WithGorhomBottomSheetWrapper() {
+function App() {
 	const db = useSQLiteContext();
 	const { appInitialize, restoreSession } = useGlobalState(
 		useShallow((o) => ({
@@ -102,43 +100,38 @@ function WithGorhomBottomSheetWrapper() {
 
 	return (
 		<WithActivityPubRestClient>
-			<WithGorhomBottomSheetContext>
-				<BottomSheetModalProvider>
-					<WithAppBottomSheetContext>
-						<View
-							style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
-							onLayout={onLayoutRootView}
-						>
-							<StatusBar backgroundColor={colorScheme.palette.bg} />
-							<Stack
-								initialRouteName={'(tabs)'}
-								screenOptions={{ headerShown: false }}
-							>
-								<Stack.Screen
-									name="(tabs)"
-									options={{
-										presentation: 'modal',
-									}}
-								/>
-								<Stack.Screen
-									name="modal"
-									options={{
-										presentation: 'modal',
-									}}
-								/>
-								<Stack.Screen
-									name="formSheet"
-									options={{
-										presentation: 'formSheet',
-										headerShown: false,
-										animation: 'flip',
-									}}
-								/>
-							</Stack>
-						</View>
-					</WithAppBottomSheetContext>
-				</BottomSheetModalProvider>
-			</WithGorhomBottomSheetContext>
+			<View
+				style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
+				onLayout={onLayoutRootView}
+			>
+				<StatusBar backgroundColor={colorScheme.palette.bg} />
+				<Stack
+					initialRouteName={'(tabs)'}
+					screenOptions={{ headerShown: false }}
+				>
+					<Stack.Screen
+						name="(tabs)"
+						options={{
+							presentation: 'modal',
+						}}
+					/>
+					<Stack.Screen
+						name="modal"
+						options={{
+							presentation: 'modal',
+						}}
+					/>
+					<Stack.Screen
+						name="formSheet"
+						options={{
+							presentation: 'formSheet',
+							headerShown: false,
+							animation: 'flip',
+						}}
+					/>
+				</Stack>
+				<AppBottomSheet />
+			</View>
 		</WithActivityPubRestClient>
 	);
 }
@@ -158,7 +151,7 @@ export default function Page() {
 							<WithAppThemePackContext>
 								<SafeAreaProvider>
 									<WithAppNotificationBadge>
-										<WithGorhomBottomSheetWrapper />
+										<App />
 									</WithAppNotificationBadge>
 								</SafeAreaProvider>
 							</WithAppThemePackContext>
