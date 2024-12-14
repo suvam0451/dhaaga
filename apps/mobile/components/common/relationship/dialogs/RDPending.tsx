@@ -1,10 +1,7 @@
 import { memo } from 'react';
-import { Dialog } from '@rneui/themed';
 import { RelationshipDialogProps } from '../fragments/_common';
-import { StyleSheet, Text, View } from 'react-native';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { APP_FONT } from '../../../../styles/AppTheme';
 import { ActionButton } from './_common';
+import RelationDialogFactory from './_RelationDialogFactory';
 
 /**
  * Dialog for Pending state
@@ -21,54 +18,30 @@ const RDPending = memo(
 		refresh: () => void;
 	}) => {
 		return (
-			<Dialog
-				overlayStyle={{ backgroundColor: '#2c2c2c' }}
-				isVisible={visible}
-				onBackdropPress={() => {
-					setVisible(false);
-				}}
+			<RelationDialogFactory
+				visible={visible}
+				setVisible={setVisible}
+				loading={false}
+				label={'Follow Request Pending'}
+				desc={[
+					'You have sent this user a follow request.',
+					'But, it seems to not have been accepted yet.',
+					'You can try to refresh the status or wait.',
+				]}
 			>
-				<Text style={styles.modalTitle}>Follow Request Pending</Text>
-				<Text style={styles.modalDescription}>
-					This user has a closed profile and your follow request has not been
-					approved yet
-				</Text>
-				<View style={styles.actionButtonContainer}>
-					<ActionButton
-						label={'Cancel the Request'}
-						onPress={() => {}}
-						setVisible={setVisible}
-					/>
-					<ActionButton
-						label={'Refresh Status'}
-						onPress={refresh}
-						setVisible={setVisible}
-					/>
-				</View>
-			</Dialog>
+				<ActionButton
+					label={'Cancel the Request'}
+					onPress={() => {}}
+					setVisible={setVisible}
+				/>
+				<ActionButton
+					label={'Refresh Status'}
+					onPress={refresh}
+					setVisible={setVisible}
+				/>
+			</RelationDialogFactory>
 		);
 	},
 );
-
-const styles = StyleSheet.create({
-	modalTitle: {
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		textAlign: 'center',
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 18,
-		marginBottom: 16,
-	},
-	modalDescription: {
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-		textAlign: 'center',
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 14,
-	},
-	actionButtonContainer: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginVertical: 16,
-	},
-});
 
 export default RDPending;

@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { Dispatch, memo, SetStateAction } from 'react';
-import { Button } from '@rneui/themed';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 export const modalStyles = StyleSheet.create({
@@ -20,9 +19,8 @@ export const modalStyles = StyleSheet.create({
 		fontSize: 14,
 	},
 	actionButtonContainer: {
-		justifyContent: 'center',
-		alignItems: 'center',
 		marginVertical: 16,
+		marginTop: 32,
 	},
 });
 
@@ -41,27 +39,27 @@ export const ActionButton = memo(
 		onPress: () => void;
 	}) => {
 		const { colorScheme } = useAppTheme();
+		function onOptionPressed() {
+			onPress();
+			setVisible(false);
+		}
+
 		return (
-			<Button
-				size={'md'}
-				buttonStyle={{
-					backgroundColor: colorScheme.palette.buttonUnstyled,
-					borderRadius: 8,
-				}}
-				containerStyle={{
-					borderRadius: 8,
-					marginBottom: 12,
-				}}
-				title={label}
-				titleStyle={{
-					color: colorScheme.textColor.high,
-				}}
-				loading={false}
-				onPress={() => {
-					setVisible(false);
-					onPress();
-				}}
-			/>
+			<View>
+				<View style={{ height: 1, backgroundColor: '#333' }} />
+				<Pressable style={{ paddingVertical: 10 }} onPress={onOptionPressed}>
+					<Text
+						style={{
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							color: colorScheme.textColor.medium,
+							fontSize: 18,
+							textAlign: 'center',
+						}}
+					>
+						{label}
+					</Text>
+				</Pressable>
+			</View>
 		);
 	},
 );
