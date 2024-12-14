@@ -23,6 +23,7 @@ import { TimelineFetchMode } from '../common/timeline/utils/timeline.types';
 
 export type APP_ICON_ENUM =
 	| 'bell'
+	| 'back'
 	| 'cog'
 	| 'create'
 	| 'clear'
@@ -137,6 +138,17 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'back':
+					return (
+						<Ionicons
+							name="chevron-back"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+
 				case 'cog':
 					return Platform.OS === 'ios' ? (
 						<Ionicons

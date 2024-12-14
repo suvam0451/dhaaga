@@ -9,6 +9,7 @@ import AppBottomSheetSelectAccount from '../modules/select-account/AppBottomShee
 import AppBottomSheetPickThemePack from '../modules/theme-pack/AppBottomSheetPickThemePack';
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import AppBottomSheetTimelineDetails from '../modules/timeline-details/AppBottomSheetTimelineDetails';
 
 /**
  * Responsible for generating content
@@ -43,6 +44,8 @@ const AppBottomSheetFactory = memo(() => {
 				return <AppBottomSheetSelectAccount />;
 			case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
 				return <AppBottomSheetPickThemePack />;
+			case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:
+				return <AppBottomSheetTimelineDetails />;
 			default: {
 				return (
 					<WithComposerContext>

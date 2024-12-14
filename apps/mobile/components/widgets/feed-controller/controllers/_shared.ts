@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
 	timelineDescription: {
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-		maxWidth: '60%',
 		marginTop: 12,
 		fontSize: 14,
 	},

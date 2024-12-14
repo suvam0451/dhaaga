@@ -5,15 +5,15 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import TimelineWidgetModal from '../../../widgets/timelines/core/Modal';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import {
+import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import useGlobalState, {
 	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import useGlobalState from '../../../../states/_global';
+} from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
 import TopNavbarBackButton from './TopNavbarBackButton';
 import Feather from '@expo/vector-icons/Feather';
+import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 
 type HeadersProps = {
 	title: string;
@@ -27,21 +27,16 @@ type HeadersProps = {
  * NOTE: ScrollView not included
  */
 const TimelinesHeader = ({ title }: HeadersProps) => {
-	const { client, colorScheme } = useGlobalState(
+	const { colorScheme, show, setPostRef } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
 			colorScheme: o.colorScheme,
+			show: o.bottomSheet.show,
+			setPostRef: o.bottomSheet.setPostRef,
 		})),
 	);
 	const { setShowTimelineSelection } = useTimelineController();
-	const {
-		setVisible,
-		setType,
-		PostComposerTextSeedRef,
-		PostRef,
-		updateRequestId,
-		ParentRef,
-	} = useAppBottomSheet();
+	const { PostComposerTextSeedRef, PostRef, ParentRef } = useAppBottomSheet();
 
 	function onIconPress() {
 		if (!router) {
@@ -53,16 +48,19 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 
 	function post() {
 		PostComposerTextSeedRef.current = null;
-		PostRef.current = null;
 		ParentRef.current = null;
+		setPostRef(null);
+		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
+	}
 
-		setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
-		updateRequestId();
-		setVisible(true);
+	function onViewTimelineController() {
+		show(APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER);
 	}
 
 	return (
-		<View style={[styles.root, { backgroundColor: colorScheme.palette.bg }]}>
+		<View
+			style={[styles.root, { backgroundColor: colorScheme.palette.menubar }]}
+		>
 			<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>
 				<TopNavbarBackButton />
 			</View>
@@ -97,7 +95,10 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 					{ justifyContent: 'flex-end', paddingRight: 8 },
 				]}
 			>
-				<TouchableOpacity style={{ paddingHorizontal: 6 }}>
+				<TouchableOpacity
+					style={{ paddingHorizontal: 6 }}
+					onPress={onViewTimelineController}
+				>
 					<Ionicons
 						name="filter"
 						size={24}
@@ -105,12 +106,6 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 					/>
 				</TouchableOpacity>
 
-				{/*<TouchableOpacity*/}
-				{/*	style={styles.menuActionButtonContainer}*/}
-				{/*	onPress={post}*/}
-				{/*>*/}
-				{/*	<AppIcon id={'create'} emphasis={'medium'} />*/}
-				{/*</TouchableOpacity>*/}
 				<TouchableOpacity style={{ paddingLeft: 8 }}>
 					<Feather
 						name="settings"

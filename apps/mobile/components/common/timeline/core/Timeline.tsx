@@ -16,7 +16,6 @@ import ActivityPubAdapterService from '../../../../services/activitypub-adapter.
 import useTimeline from '../api/useTimeline';
 import useTimelineLabel from '../api/useTimelineLabel';
 import FlashListPostRenderer from '../fragments/FlashListPostRenderer';
-import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
@@ -140,19 +139,13 @@ const Timeline = memo(() => {
 				<TimelinesHeader title={label} />
 			</Animated.View>
 			<AnimatedFlashList
-				ListHeaderComponent={
-					<ListHeaderComponent
-						itemCount={listItems.length}
-						loadedOnce={PageLoadedAtLeastOnce}
-					/>
-				}
 				estimatedItemSize={200}
 				data={listItems}
 				renderItem={FlashListPostRenderer}
 				getItemType={(o) => o.type}
 				onScroll={onScroll}
 				contentContainerStyle={{
-					paddingTop: 54,
+					paddingTop: 50,
 				}}
 				scrollEventThrottle={16}
 				refreshControl={

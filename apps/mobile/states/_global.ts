@@ -57,6 +57,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	REACTION_DETAILS = 'ReactionDetails',
 	SELECT_ACCOUNT = 'SelectAccount',
 	SWITCH_THEME_PACK = 'SwitchThemePack',
+	TIMELINE_CONTROLLER = 'TimeLineController',
 }
 
 type AppBottomSheetState = {
