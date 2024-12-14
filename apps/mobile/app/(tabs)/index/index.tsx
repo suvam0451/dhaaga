@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
@@ -8,6 +8,7 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { SocialHubAvatarCircle } from '../../../components/lib/Avatar';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -79,7 +80,7 @@ function TimeOfDayGreeting() {
 	}, []);
 
 	const fontStyle = {
-		color: colorScheme.textColor.high,
+		color: colorScheme.textColor.medium,
 		marginTop: 8,
 		fontSize: 18,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
@@ -101,7 +102,22 @@ function TimeOfDayGreeting() {
 				<Text style={fontStyle}>Good Evening</Text>
 			)}
 			{TimeOfDay === TIME_OF_DAY.NIGHT && (
-				<Text style={fontStyle}>Good Night, {acct?.displayName} 🌙</Text>
+				<Fragment>
+					<Text style={fontStyle}>Good Night, {acct?.displayName}</Text>
+					<Text
+						style={{
+							fontSize: 72,
+							position: 'absolute',
+							textAlign: 'right',
+							zIndex: -1,
+							opacity: 0.28,
+							width: '100%',
+							top: -32,
+						}}
+					>
+						🌙
+					</Text>
+				</Fragment>
 			)}
 		</View>
 	);
@@ -109,17 +125,46 @@ function TimeOfDayGreeting() {
 
 function Content() {
 	return (
-		<>
-			<AppSegmentedControl
-				items={[
-					{ label: 'Profile' },
-					{ label: 'Pinned by You' },
-					{ label: 'Saved' },
-				]}
-				style={{ marginTop: 16 }}
-			/>
+		<View style={{ flexGrow: 1, flex: 1 }}>
+			<View style={{ marginHorizontal: 10 }}>
+				<AppSegmentedControl
+					items={[
+						{ label: 'Profile' },
+						{ label: 'Pinned' },
+						{ label: 'Saved' },
+						{ label: 'For You' },
+					]}
+					style={{ marginTop: 16 }}
+					leftDecorator={
+						<SocialHubAvatarCircle size={36} style={{ marginRight: 4 }} />
+					}
+				/>
+			</View>
 			<SocialHubQuickDestinations />
-		</>
+		</View>
+	);
+}
+
+function Tip() {
+	const { acct, theme } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			theme: o.colorScheme,
+		})),
+	);
+
+	const fontStyle = {
+		color: theme.textColor.low,
+		marginTop: 32,
+		marginHorizontal: 10,
+		fontSize: 12,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+	};
+
+	return (
+		<Text style={fontStyle}>
+			[TIP] Return to this page by long pressing your Home tab.
+		</Text>
 	);
 }
 
@@ -135,9 +180,17 @@ function Screen() {
 			}}
 		>
 			<ScrollView>
-				<Header />
-				<TimeOfDayGreeting />
-				<Content />
+				<View style={{ minHeight: '100%' }}>
+					<View style={{ flexGrow: 1 }}>
+						<Header />
+						<TimeOfDayGreeting />
+						<Content />
+					</View>
+
+					<View style={{ marginBottom: 16 }}>
+						<Tip />
+					</View>
+				</View>
 			</ScrollView>
 		</View>
 	);

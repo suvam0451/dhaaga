@@ -1,28 +1,17 @@
-import {
-	Button,
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from 'react-native';
-import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useTimelineController } from '../api/useTimelineController';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { router } from 'expo-router';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import SocialHubLantern from '../../../screens/home/stack/landing/fragments/SocialHubLantern';
 import SocialHubAssistant from '../../../screens/home/stack/landing/fragments/SocialHubAssistant';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import SocialHubQuickDestinations from '../../../screens/home/stack/landing/fragments/SocialHubQuickDestinations';
-import { DbMetaRepo } from '../../../../database/repositories/_meta.repo';
 import { AppSegmentedControl } from '../../../lib/SegmentedControl';
+import { SocialHubAvatarCircle } from '../../../lib/Avatar';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -308,9 +297,6 @@ function SocialHub() {
 				backgroundColor: colorScheme.palette.bg,
 			}}
 		>
-			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
-			{/*<TimelinesHeader title={'Social Hub'} />*/}
-
 			<ScrollView>
 				<View
 					style={{
@@ -321,7 +307,6 @@ function SocialHub() {
 						paddingHorizontal: 8,
 					}}
 				>
-					{/*<SocialHubLantern />*/}
 					{TimeOfDay === TIME_OF_DAY.MORNING && (
 						<Text
 							style={[
@@ -359,10 +344,11 @@ function SocialHub() {
 								{ color: colorScheme.textColor.medium },
 							]}
 						>
-							Good Night 🌙
+							Good Night 🌃
 						</Text>
 					)}
 
+					<SocialHubAvatarCircle />
 					<AppSegmentedControl
 						items={[
 							{ label: 'Profile' },

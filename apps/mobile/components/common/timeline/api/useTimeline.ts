@@ -31,7 +31,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 		})),
 	);
 	// to be adjusted based on performance
-	const TIMELINE_STATUS_LIMIT = 5;
+	const TIMELINE_STATUS_LIMIT = 10;
 
 	const _id = query?.id;
 	const _query = {
