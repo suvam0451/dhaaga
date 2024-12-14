@@ -1,8 +1,6 @@
 import { memo } from 'react';
 import { Text, View } from 'react-native';
 import styles from './styles';
-import AppSelectedAccountIndicator from './AppSelectedAccountIndicator';
-import TopNavbarMenuButton from './TopNavbarMenuButton';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 
 type HeadersProps = {
@@ -18,7 +16,6 @@ const TopNavbarLandingGeneric = memo(({ title }: HeadersProps) => {
 				{ backgroundColor: colorScheme.palette.menubar },
 			]}
 		>
-			<TopNavbarMenuButton />
 			<View style={styles.navbarTitleContainer}>
 				<Text
 					style={[styles.navbarTitle, { color: colorScheme.textColor.high }]}
@@ -26,7 +23,6 @@ const TopNavbarLandingGeneric = memo(({ title }: HeadersProps) => {
 					{title}
 				</Text>
 			</View>
-			<AppSelectedAccountIndicator />
 		</View>
 	);
 });

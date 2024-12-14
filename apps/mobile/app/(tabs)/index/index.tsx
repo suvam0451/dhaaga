@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
 import SocialHubQuickDestinations from '../../../components/screens/home/stack/landing/fragments/SocialHubQuickDestinations';
@@ -9,6 +9,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { SocialHubAvatarCircle } from '../../../components/lib/Avatar';
+import { router } from 'expo-router';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -18,8 +19,16 @@ enum TIME_OF_DAY {
 	NIGHT = 'Night',
 }
 
-function Header() {
+type HeaderProps = {
+	label: string;
+};
+
+function Header({ label }: HeaderProps) {
 	const { colorScheme } = useAppTheme();
+
+	function onUserGuidePress() {
+		router.push('/user-guide');
+	}
 
 	return (
 		<View
@@ -39,17 +48,20 @@ function Header() {
 					<Text
 						style={[styles.headerText, { color: colorScheme.textColor.high }]}
 					>
-						Social Hub
+						{label}
 					</Text>
 				</View>
-				<View style={{ padding: 4, transform: [{ translateX: -1 }] }}>
+				<Pressable
+					style={{ padding: 4, transform: [{ translateX: -1 }] }}
+					onPress={onUserGuidePress}
+				>
 					<MaterialIcons
 						name="notes"
 						size={24}
 						color={colorScheme.textColor.high}
 						style={{ transform: [{ scaleX: -1 }] }}
 					/>
-				</View>
+				</Pressable>
 			</View>
 		</View>
 	);
@@ -129,14 +141,13 @@ function Content() {
 			<View style={{ marginHorizontal: 10 }}>
 				<AppSegmentedControl
 					items={[
-						{ label: 'Profile' },
 						{ label: 'Pinned' },
 						{ label: 'Saved' },
 						{ label: 'For You' },
 					]}
 					style={{ marginTop: 16 }}
 					leftDecorator={
-						<SocialHubAvatarCircle size={36} style={{ marginRight: 4 }} />
+						<SocialHubAvatarCircle size={36} style={{ marginRight: 6 }} />
 					}
 				/>
 			</View>
@@ -163,7 +174,7 @@ function Tip() {
 
 	return (
 		<Text style={fontStyle}>
-			[TIP] Return to this page by long pressing your Home tab.
+			[TIP] Long press the home button to return here anytime.
 		</Text>
 	);
 }
@@ -182,12 +193,12 @@ function Screen() {
 			<ScrollView>
 				<View style={{ minHeight: '100%' }}>
 					<View style={{ flexGrow: 1 }}>
-						<Header />
+						<Header label={'Social Hub'} />
 						<TimeOfDayGreeting />
 						<Content />
 					</View>
 
-					<View style={{ marginBottom: 16 }}>
+					<View style={{ marginBottom: 24 }}>
 						<Tip />
 					</View>
 				</View>

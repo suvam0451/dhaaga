@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -12,8 +12,7 @@ import useGlobalState, {
 import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
 import TopNavbarBackButton from './TopNavbarBackButton';
-import Feather from '@expo/vector-icons/Feather';
-import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 type HeadersProps = {
 	title: string;
@@ -36,7 +35,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 		})),
 	);
 	const { setShowTimelineSelection } = useTimelineController();
-	const { PostComposerTextSeedRef, PostRef, ParentRef } = useAppBottomSheet();
+	const { PostComposerTextSeedRef, ParentRef } = useAppBottomSheet();
 
 	function onIconPress() {
 		if (!router) {
@@ -55,6 +54,10 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 
 	function onViewTimelineController() {
 		show(APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER);
+	}
+
+	function onUserGuidePress() {
+		router.push('/user-guide-timelines');
 	}
 
 	return (
@@ -100,19 +103,23 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 					onPress={onViewTimelineController}
 				>
 					<Ionicons
-						name="filter"
+						name="information-circle-outline"
 						size={24}
 						color={colorScheme.textColor.high}
 					/>
 				</TouchableOpacity>
 
-				<TouchableOpacity style={{ paddingLeft: 8 }}>
-					<Feather
-						name="settings"
+				<Pressable
+					style={{ padding: 4, transform: [{ translateX: -1 }] }}
+					onPress={onUserGuidePress}
+				>
+					<MaterialIcons
+						name="notes"
 						size={24}
 						color={colorScheme.textColor.high}
+						style={{ transform: [{ scaleX: -1 }] }}
 					/>
-				</TouchableOpacity>
+				</Pressable>
 			</View>
 			<TimelineWidgetModal />
 		</View>

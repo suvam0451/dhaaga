@@ -1,15 +1,15 @@
 import { memo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import * as React from 'react';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { router } from 'expo-router';
 import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
-import { AppIcon } from '../../../../../lib/Icon';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const ICON_SIZE = 24;
 
@@ -42,7 +42,7 @@ const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
 	);
 });
 
-const ProfileLandingAccountModules = memo(() => {
+function ProfileLandingAccountModules() {
 	return (
 		<View style={{ paddingTop: 16 }}>
 			<ActionButton
@@ -78,26 +78,6 @@ const ProfileLandingAccountModules = memo(() => {
 			>
 				You have no pending friend requests.
 			</Text>
-			<View
-				style={{
-					backgroundColor: 'rgba(48,48,48,0.87)',
-					marginVertical: 12,
-					marginHorizontal: 8,
-					height: 2,
-				}}
-			/>
-
-			<ActionButton
-				Icon={<AppIcon id={'wand'} size={24} emphasis={'high'} />}
-				label={'Quick Fix'}
-				to={'/profile/account/lists'}
-			/>
-			<ActionButton
-				Icon={<AppIcon id={'cog'} size={24} emphasis={'high'} />}
-				label={'All Settings'}
-				to={'/profile/settings/landing'}
-			/>
-
 			<Text
 				style={[
 					styles.text,
@@ -111,12 +91,12 @@ const ProfileLandingAccountModules = memo(() => {
 					},
 				]}
 			>
-				TIP: Press & hold your pfp (in bottom navbar) to swap accounts from
-				anywhere
+				[TIP] Long press your avatar (in 5th navbar tab) to quickly swap
+				accounts
 			</Text>
 		</View>
 	);
-});
+}
 
 export default ProfileLandingAccountModules;
 
