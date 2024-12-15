@@ -4,7 +4,6 @@ import { TouchableOpacity, View } from 'react-native';
 import { ActivityPubUser } from '../../../../../entities/activitypub-user.entity';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { ActivityPubStatus } from '../../../../../entities/activitypub-status.entity';
-import { ParsedDescriptionContainerForChatroomPreview } from '../../../../../styles/Containers';
 import { useNavigation } from '@react-navigation/native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
@@ -170,14 +169,12 @@ function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
 								</Text>
 								<View>
 									{activeUserIsSender ? (
-										<ParsedDescriptionContainerForChatroomPreview>
-											{ParsedValue}
-										</ParsedDescriptionContainerForChatroomPreview>
+										<View>{ParsedValue}</View>
 									) : (
-										<ParsedDescriptionContainerForChatroomPreview>
+										<View>
 											<Text style={{ color: 'orange' }}>You: </Text>
 											{ParsedValue}
-										</ParsedDescriptionContainerForChatroomPreview>
+										</View>
 									)}
 								</View>
 							</View>

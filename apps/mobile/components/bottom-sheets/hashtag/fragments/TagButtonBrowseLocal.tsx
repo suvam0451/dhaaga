@@ -1,6 +1,5 @@
 import { memo } from 'react';
-import { BottomSheetActionButtonContainer } from '../../../../styles/Containers';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import useAppNavigator from '../../../../states/useAppNavigator';
@@ -31,7 +30,17 @@ const TagButtonBrowseLocal = memo(({ name }: TagButtonBrowseLocalProps) => {
 	}
 
 	return (
-		<BottomSheetActionButtonContainer style={{ marginLeft: 8 }}>
+		<View
+			style={{
+				borderColor: '#ffffff30',
+				borderWidth: 1,
+				borderRadius: 4,
+				padding: 8,
+				flexDirection: 'column',
+				alignItems: 'center',
+				marginLeft: 8,
+			}}
+		>
 			<TouchableOpacity onPress={onNavigate}>
 				<Ionicons
 					color={APP_FONT.MONTSERRAT_BODY}
@@ -39,7 +48,7 @@ const TagButtonBrowseLocal = memo(({ name }: TagButtonBrowseLocalProps) => {
 					name={'globe-outline'}
 				/>
 			</TouchableOpacity>
-		</BottomSheetActionButtonContainer>
+		</View>
 	);
 });
 

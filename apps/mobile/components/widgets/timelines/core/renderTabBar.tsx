@@ -1,5 +1,4 @@
-import { View } from 'react-native';
-import { DialogButtonGroupItem } from '../../../../styles/Containers';
+import { View, StyleSheet } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -31,7 +30,7 @@ function tabBarRenderer(index: number) {
 					switch (i) {
 						case 0:
 							return (
-								<DialogButtonGroupItem key={i}>
+								<View key={i} style={styles.dialogButtonGroupItem}>
 									<View style={{ width: 24 }}>
 										<AntDesign
 											name="pushpin"
@@ -39,11 +38,11 @@ function tabBarRenderer(index: number) {
 											color={index === 0 ? APP_THEME.LINK : '#888'}
 										/>
 									</View>
-								</DialogButtonGroupItem>
+								</View>
 							);
 						case 1:
 							return (
-								<DialogButtonGroupItem key={i} style={{ flex: 1 }}>
+								<View style={styles.dialogButtonGroupItem} key={i}>
 									<View style={{ width: 24 }}>
 										<FontAwesome5
 											name="list"
@@ -51,12 +50,12 @@ function tabBarRenderer(index: number) {
 											color={index === 1 ? APP_THEME.LINK : '#888'}
 										/>
 									</View>
-								</DialogButtonGroupItem>
+								</View>
 							);
 
 						case 2:
 							return (
-								<DialogButtonGroupItem key={i}>
+								<View style={styles.dialogButtonGroupItem} key={i}>
 									<View style={{ width: 24 }}>
 										<FontAwesome6
 											name="hashtag"
@@ -64,12 +63,12 @@ function tabBarRenderer(index: number) {
 											color={index === 2 ? APP_THEME.LINK : '#888'}
 										/>
 									</View>
-								</DialogButtonGroupItem>
+								</View>
 							);
 
 						case 3:
 							return (
-								<DialogButtonGroupItem key={i}>
+								<View style={styles.dialogButtonGroupItem} key={i}>
 									<View style={{ width: 24 }}>
 										<FontAwesome5
 											name="user-alt"
@@ -77,11 +76,11 @@ function tabBarRenderer(index: number) {
 											color={index === 3 ? APP_THEME.LINK : '#888'}
 										/>
 									</View>
-								</DialogButtonGroupItem>
+								</View>
 							);
 						case 4:
 							return (
-								<DialogButtonGroupItem key={i}>
+								<View style={styles.dialogButtonGroupItem} key={i}>
 									<View style={{ width: 24 }}>
 										<MaterialIcons
 											name="dashboard-customize"
@@ -89,7 +88,7 @@ function tabBarRenderer(index: number) {
 											color={index === 4 ? APP_THEME.LINK : '#888'}
 										/>
 									</View>
-								</DialogButtonGroupItem>
+								</View>
 							);
 					}
 				})}
@@ -99,3 +98,14 @@ function tabBarRenderer(index: number) {
 }
 
 export default tabBarRenderer;
+
+const styles = StyleSheet.create({
+	dialogButtonGroupItem: {
+		flex: 1,
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingHorizontal: 8,
+		paddingVertical: 0,
+	},
+});

@@ -2,7 +2,6 @@ import { Dimensions, View, ScrollView, Alert } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useState } from 'react';
 import WebView from 'react-native-webview';
-import { MainText } from '../../../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import TitleOnlyNoScrollContainer from '../../../../../containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
@@ -12,11 +11,16 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import PleromaPasteToken from '../fragments/PleromaPasteToken';
-import { useSQLiteContext } from 'expo-sqlite';
 import { AccountService } from '../../../../../../database/entities/account';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function MastodonSignInStack() {
-	const db = useSQLiteContext();
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
 	const [Code, setCode] = useState<string | null>(null);
 
 	const params = useLocalSearchParams();
@@ -58,7 +62,7 @@ function MastodonSignInStack() {
 				token || Code, // fucking yolo it, xDD
 			);
 
-		const upsertResult = await AccountService.upsert(
+		const upsertResult = AccountService.upsert(
 			db,
 			{
 				identifier: verified.id,
@@ -100,9 +104,9 @@ function MastodonSignInStack() {
 				{_domain === KNOWN_SOFTWARE.MASTODON ? (
 					<HideOnKeyboardVisibleContainer style={{ marginHorizontal: 12 }}>
 						<View style={{ height: 240 }}>
-							<MainText style={{ marginBottom: 12, marginTop: 16 }}>
+							<Text style={{ marginBottom: 12, marginTop: 16 }}>
 								Step 3: Confirm your account
-							</MainText>
+							</Text>
 							<PleromaPasteToken domain={_domain} setCode={setCode} />
 							{Code ? (
 								<View>
@@ -130,7 +134,7 @@ function MastodonSignInStack() {
 							<HideOnKeyboardVisibleContainer
 								style={{ marginBottom: 12, marginTop: 16 }}
 							>
-								<MainText>Step 3: Confirm your account</MainText>
+								<Text>Step 3: Confirm your account</Text>
 							</HideOnKeyboardVisibleContainer>
 							<PleromaPasteToken domain={_domain} setCode={setCode} />
 							{Code ? (

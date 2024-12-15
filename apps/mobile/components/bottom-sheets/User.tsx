@@ -5,11 +5,6 @@ import { ScrollView, View } from 'react-native';
 import { Image } from 'expo-image';
 import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
-import { PrimaryText, SecondaryText } from '../../styles/Typography';
-import {
-	AvatarContainerWithInset,
-	AvatarExpoImage,
-} from '../../styles/Containers';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import useGlobalState from '../../states/_global';
@@ -21,10 +16,11 @@ type StatusActionsProps = {
 };
 
 function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
-	const { driver, acct } = useGlobalState(
+	const { driver, acct, theme } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			driver: o.driver,
+			theme: o.colorScheme,
 		})),
 	);
 
@@ -111,9 +107,27 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 						}}
 					/>
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<AvatarContainerWithInset>
-							<AvatarExpoImage source={{ uri: user.getAvatarUrl() }} />
-						</AvatarContainerWithInset>
+						<View
+							style={{
+								width: 72,
+								height: 72,
+								borderColor: 'gray',
+								borderWidth: 1,
+								borderRadius: 4,
+								marginTop: -36,
+								marginLeft: 13,
+							}}
+						>
+							{/*@ts-ignore-next-line*/}
+							<Image
+								source={{ uri: user.getAvatarUrl() }}
+								style={{
+									width: '100%',
+									backgroundColor: '#0553',
+									padding: 2,
+								}}
+							/>
+						</View>
 						<View style={{ flexGrow: 1 }}></View>
 						<View
 							style={{ display: 'flex', flexDirection: 'row', marginRight: 8 }}
@@ -121,20 +135,26 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getPostCount()}</PrimaryText>
-								<SecondaryText>Posts</SecondaryText>
+								<Text style={{ color: theme.textColor.medium }}>
+									{user.getPostCount()}
+								</Text>
+								<Text style={{ color: theme.textColor.high }}>Posts</Text>
 							</View>
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getFollowingCount()}</PrimaryText>
-								<SecondaryText>Following</SecondaryText>
+								<Text style={{ color: theme.textColor.medium }}>
+									{user.getFollowingCount()}
+								</Text>
+								<Text style={{ color: theme.textColor.high }}>Following</Text>
 							</View>
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getFollowersCount()}</PrimaryText>
-								<SecondaryText>Followers</SecondaryText>
+								<Text style={{ color: theme.textColor.medium }}>
+									{user.getFollowersCount()}
+								</Text>
+								<Text style={{ color: theme.textColor.high }}>Followers</Text>
 							</View>
 						</View>
 					</View>

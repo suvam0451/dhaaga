@@ -1,8 +1,6 @@
-import { Alert, Dimensions, View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Alert, Dimensions, View, Text } from 'react-native';
 import { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
-import { MainText } from '../../../../../../styles/Typography';
 import { Button } from '@rneui/base';
 import * as Crypto from 'expo-crypto';
 import { verifyMisskeyToken } from '@dhaaga/shared-abstraction-activitypub';
@@ -123,9 +121,9 @@ function MisskeySignInStack() {
 
 				<HideOnKeyboardVisibleContainer>
 					<View style={{ height: 160, marginHorizontal: 12 }}>
-						<MainText style={{ marginBottom: 12, marginTop: 16 }}>
+						<Text style={{ marginBottom: 12, marginTop: 16 }}>
 							Step 2: Confirm your account
-						</MainText>
+						</Text>
 						{PreviewCard && <AccountCreationPreview {...PreviewCard} />}
 						{SessionConfirmed ? (
 							<View
