@@ -159,6 +159,7 @@ export const SingleSelectAnimated = memo(
 const styles = StyleSheet.create({
 	root: {
 		alignItems: 'center',
+		backgroundColor: 'transparent',
 	},
 	container: {
 		flexDirection: 'row',

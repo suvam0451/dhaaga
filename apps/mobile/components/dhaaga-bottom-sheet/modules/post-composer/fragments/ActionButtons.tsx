@@ -4,10 +4,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import { APP_THEME } from '../../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { useComposerContext } from '../api/useComposerContext';
 import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../../lib/Icon';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const TextModeActionButtons = memo(() => {
 	const { cw, setCwShown, setEditMode } = useComposerContext();
@@ -52,13 +53,14 @@ const TextModeActionButtons = memo(() => {
  * the composer sheet
  */
 const ActionButtons = memo(() => {
-	const { setVisible, visible } = useAppBottomSheet();
+	const { hide, visible } = useGlobalState(
+		useShallow((o) => ({
+			visible: o.bottomSheet.visible,
+			hide: o.bottomSheet.hide,
+		})),
+	);
 	const { setEditMode, editMode } = useComposerContext();
 	const { colorScheme } = useAppTheme();
-
-	const close = useCallback(() => {
-		setVisible(false);
-	}, []);
 
 	const toggleEditMode = useCallback(() => {
 		setEditMode((o) => {
@@ -109,7 +111,7 @@ const ActionButtons = memo(() => {
 					borderRadius: 8,
 					paddingVertical: 6,
 				}}
-				onTouchStart={close}
+				onTouchStart={hide}
 			>
 				<Text
 					style={{

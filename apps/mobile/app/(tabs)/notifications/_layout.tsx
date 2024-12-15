@@ -5,7 +5,7 @@ function NotificationsScreen() {
 	return (
 		<WithGorhomBottomSheetContext>
 			<Stack
-				initialRouteName={'landing'}
+				initialRouteName={'index'}
 				screenOptions={{ headerShown: false }}
 			/>
 		</WithGorhomBottomSheetContext>

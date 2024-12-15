@@ -43,6 +43,7 @@ export type APP_ICON_ENUM =
 	| 'feelings'
 	| 'smiley'
 	| 'trash'
+	| 'user-guide'
 	| 'wand';
 
 type AppIconType = {
@@ -346,6 +347,16 @@ export const AppIcon = memo(
 							color={_color}
 							onPress={onPress}
 							style={iconStyle}
+						/>
+					);
+				case 'user-guide':
+					return (
+						<MaterialIcons
+							name="notes"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={[iconStyle, { transform: [{ scaleX: -1 }] }]}
 						/>
 					);
 				case 'wand':

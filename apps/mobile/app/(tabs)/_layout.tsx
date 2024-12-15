@@ -123,9 +123,13 @@ export default function TabLayout() {
 						options={{
 							tabBarIcon: ({ color, size, focused }) =>
 								focused ? (
-									<AntDesign name={'appstore1'} size={size + 4} color={color} />
+									<Ionicons name="add-circle" size={size + 6} color={color} />
 								) : (
-									<AntDesign name="appstore-o" size={size + 4} color={color} />
+									<Ionicons
+										name="add-circle-outline"
+										size={size + 6}
+										color={color}
+									/>
 								),
 						}}
 					/>
@@ -135,15 +139,11 @@ export default function TabLayout() {
 						options={{
 							tabBarIcon: ({ color, size, focused }) =>
 								focused ? (
-									<Ionicons
-										name="notifications-sharp"
-										size={size + 4}
-										color={color}
-									/>
+									<Ionicons name="file-tray" size={size + 4} color={color} />
 								) : (
 									<Ionicons
+										name="file-tray-outline"
 										size={size + 4}
-										name="notifications-outline"
 										color={color}
 									/>
 								),

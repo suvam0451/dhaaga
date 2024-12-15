@@ -1,15 +1,16 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
 import SocialHubQuickDestinations from '../../../components/screens/home/stack/landing/fragments/SocialHubQuickDestinations';
-import { APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { SocialHubAvatarCircle } from '../../../components/lib/Avatar';
 import { router } from 'expo-router';
+import AppTabLandingNavbar, {
+	APP_LANDING_PAGE_TYPE,
+} from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -17,54 +18,6 @@ enum TIME_OF_DAY {
 	AFTERNOON = 'Afternoon',
 	EVENING = 'Evening',
 	NIGHT = 'Night',
-}
-
-type HeaderProps = {
-	label: string;
-};
-
-function Header({ label }: HeaderProps) {
-	const { colorScheme } = useAppTheme();
-
-	function onUserGuidePress() {
-		router.push('/user-guide');
-	}
-
-	return (
-		<View
-			style={{
-				paddingHorizontal: 12,
-				paddingVertical: 16,
-			}}
-		>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					width: '100%',
-				}}
-			>
-				<View style={{ flexGrow: 1, flex: 1 }}>
-					<Text
-						style={[styles.headerText, { color: colorScheme.textColor.high }]}
-					>
-						{label}
-					</Text>
-				</View>
-				<Pressable
-					style={{ padding: 4, transform: [{ translateX: -1 }] }}
-					onPress={onUserGuidePress}
-				>
-					<MaterialIcons
-						name="notes"
-						size={24}
-						color={colorScheme.textColor.high}
-						style={{ transform: [{ scaleX: -1 }] }}
-					/>
-				</Pressable>
-			</View>
-		</View>
-	);
 }
 
 function TimeOfDayGreeting() {
@@ -193,7 +146,17 @@ function Screen() {
 			<ScrollView>
 				<View style={{ minHeight: '100%' }}>
 					<View style={{ flexGrow: 1 }}>
-						<Header label={'Social Hub'} />
+						<AppTabLandingNavbar
+							type={APP_LANDING_PAGE_TYPE.HOME}
+							menuItems={[
+								{
+									iconId: 'user-guide',
+									onPress: () => {
+										router.push('/user-guide');
+									},
+								},
+							]}
+						/>
 						<TimeOfDayGreeting />
 						<Content />
 					</View>
@@ -208,38 +171,3 @@ function Screen() {
 }
 
 export default Screen;
-
-const styles = StyleSheet.create({
-	quickActionButtonGroupContainer: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		marginTop: 16,
-	},
-	quickActionButtonContainer: {
-		display: 'flex',
-		flexDirection: 'row',
-		flex: 1,
-		marginHorizontal: 8,
-		alignItems: 'center',
-		borderWidth: 1,
-		borderColor: APP_THEME.MENTION_LIGHT,
-		padding: 8,
-		borderRadius: 4,
-	},
-	featureNotAvailableNoteContainer: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 16,
-		marginTop: 16,
-		borderRadius: 8,
-		borderWidth: 1,
-		opacity: 0.6,
-		borderColor: APP_THEME.COLOR_SCHEME_C,
-	},
-	headerText: {
-		fontSize: 28,
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-	},
-});

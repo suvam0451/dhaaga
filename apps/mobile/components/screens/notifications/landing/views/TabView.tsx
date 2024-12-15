@@ -12,10 +12,12 @@ const renderScene = (index: number) => {
 		case 0:
 			return <NotificationViewSocial />;
 		case 1:
-			return <NotificationViewChat />;
+			return <NotificationViewSocial />;
 		case 2:
-			return <NotificationViewUpdates />;
+			return <NotificationViewChat />;
 		case 3:
+			return <NotificationViewUpdates />;
+		case 4:
 			return <NotificationViewOthers />;
 		default:
 			return null;
@@ -41,7 +43,7 @@ export const TabView = () => {
 	}
 
 	return (
-		<View style={{ flex: 1, marginTop: 54 }}>
+		<View style={{ flex: 1 }}>
 			<View style={{ flex: 1 }}>
 				{/*@ts-ignore-next-line*/}
 				<PagerView
@@ -55,30 +57,34 @@ export const TabView = () => {
 						<View key={index.toString()}>{renderScene(index)}</View>
 					))}
 				</PagerView>
+				<SingleSelectAnimated
+					Index={Index}
+					setIndex={onChipSelect}
+					items={[
+						{
+							label: 'Replies',
+							id: 'reply',
+						},
+						{
+							label: 'Social',
+							id: 'social',
+						},
+						{
+							label: 'Chat',
+							id: 'chat',
+						},
+						{
+							label: 'Updates',
+							id: 'updates',
+						},
+						{
+							label: 'Misc',
+							id: 'misc',
+						},
+					]}
+					justify={'space-between'}
+				/>
 			</View>
-			<SingleSelectAnimated
-				Index={Index}
-				setIndex={onChipSelect}
-				items={[
-					{
-						label: 'Interactions',
-						id: 'interaction',
-					},
-					{
-						label: 'Chats',
-						id: 'chat',
-					},
-					{
-						label: 'Updates',
-						id: 'updates',
-					},
-					{
-						label: 'Others',
-						id: 'other',
-					},
-				]}
-				justify={'space-between'}
-			/>
 		</View>
 	);
 };

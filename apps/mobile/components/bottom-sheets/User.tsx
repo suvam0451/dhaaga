@@ -11,8 +11,9 @@ import {
 	AvatarExpoImage,
 } from '../../styles/Containers';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type StatusActionsProps = {
 	visible: boolean;
@@ -20,7 +21,12 @@ type StatusActionsProps = {
 };
 
 function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
-	const { domain, subdomain } = useActivityPubRestClientContext();
+	const { driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			driver: o.driver,
+		})),
+	);
 
 	const { globalDb } = useGlobalMmkvContext();
 
@@ -34,8 +40,8 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 
 		const { reactNodes } = MfmService.renderMfm(desc, {
 			emojiMap: user.getEmojiMap(),
-			domain,
-			subdomain,
+			domain: driver,
+			subdomain: acct?.server,
 			globalDb,
 			colorScheme,
 		});
@@ -151,7 +157,7 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 									opacity: 0.6,
 								}}
 							>
-								{user.getAppDisplayAccountUrl(subdomain)}
+								{user.getAppDisplayAccountUrl(acct?.server)}
 							</Text>
 						</View>
 						<View style={{ marginRight: 16 }}>
