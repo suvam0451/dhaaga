@@ -5,11 +5,13 @@ import AccountOverviewFragment from './_AccountOverview';
 import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { Accounts } from '../../../database/entities/account';
-import { useAccountDbContext } from '../../screens/profile/stack/settings/hooks/useAccountDb';
+import { AccountService } from '../../../database/entities/account';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { Account } from '../../../database/_schema';
 
 type Props = {
-	acct: Accounts;
+	acct: Account;
 } & RneuiDialogProps;
 
 const ConfirmAccountDelete = memo(function Foo({
@@ -17,9 +19,13 @@ const ConfirmAccountDelete = memo(function Foo({
 	IsVisible,
 	acct,
 }: Props) {
-	const { remove } = useAccountDbContext();
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
 	async function onRemoveConfirmed() {
-		remove(acct.id as unknown as number);
+		AccountService.remove(db, acct);
 		setIsVisible(false);
 	}
 

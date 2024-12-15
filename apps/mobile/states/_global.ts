@@ -25,6 +25,7 @@ import { Result } from '../utils/result';
 import { RandomUtil } from '../utils/random.utils';
 import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.service';
 import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
+import { DataSource } from '../database/dataSource';
 
 type AppThemePack = {
 	id: string;
@@ -100,7 +101,7 @@ type AppBottomSheetState = {
 };
 
 type State = {
-	db: SQLiteDatabase | null;
+	db: DataSource | null;
 	mmkv: MMKV | null; // currently active account
 	acct: Account | null /**
 	 * fetched account credentials
@@ -192,7 +193,7 @@ const defaultValue: State & Actions = {
 };
 
 class GlobalStateService {
-	static async restoreAppSession(db: SQLiteDatabase): Promise<
+	static async restoreAppSession(db: DataSource): Promise<
 		Result<{
 			acct: Account;
 			router: ActivityPubClient;
@@ -240,7 +241,7 @@ const useGlobalState = create<State & Actions>()(
 		colorScheme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
-				state.db = db;
+				state.db = new DataSource(db);
 				state.mmkv = new MMKV({ id: `default` });
 			});
 		},

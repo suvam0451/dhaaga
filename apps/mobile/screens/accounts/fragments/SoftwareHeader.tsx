@@ -1,11 +1,12 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_FONT } from '../../../styles/AppTheme';
 import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	software: string;
@@ -16,7 +17,11 @@ type Props = {
 const ICON_SIZE_MULTIPLIER = 1.2;
 
 const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const Theming = useKnownSoftware(software);
 	const _mt = mt === undefined ? 8 : mt;
 	const _mb = mb === undefined ? 12 : mb;
@@ -43,7 +48,7 @@ const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
 				<Text
 					style={[
 						styles.accountCategoryText,
-						{ color: colorScheme.textColor.medium },
+						{ color: theme.textColor.medium },
 					]}
 				>
 					{Theming?.label}

@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useSQLiteContext } from 'expo-sqlite';
 import { Account } from '../../../../../../database/_schema';
 import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';
@@ -26,22 +25,21 @@ type Props = {
 };
 
 function WithAccountDbContext({ children }: Props) {
-	const { selectAccount } = useGlobalState(
-		useShallow((state) => ({
-			selectAccount: state.selectAccount,
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
 		})),
 	);
-	const db = useSQLiteContext();
 	const [Data, setData] = useState<Account[]>([]);
 
 	function refresh() {
-		AccountService.getAll(db).then((res) => {
-			if (res.type === 'success') {
-				setData(res.value);
-			} else {
-				setData([]);
-			}
-		});
+		console.log('refresh attempt');
+		const getResult = AccountService.getAll(db);
+		if (getResult.type === 'success') {
+			setData(getResult.value);
+		} else {
+			setData([]);
+		}
 	}
 
 	useEffect(() => {

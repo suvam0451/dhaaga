@@ -8,8 +8,9 @@ type BaseEntityMinimalType = {
 	updatedAt: Date;
 };
 
-// account
-export type Account = {
+@Entity('account')
+export class Account extends BaseEntity<Account> {
+	id: number;
 	identifier: string;
 	driver: string;
 	server: string;
@@ -18,7 +19,9 @@ export type Account = {
 	displayName?: string;
 	avatarUrl?: string;
 	metadata: AccountMetadata[];
-} & BaseEntityMinimalType;
+	createdAt: Date;
+	updatedAt: Date;
+}
 
 @Entity('accountMetadata')
 export class AccountMetadata extends BaseEntity<AccountMetadata> {

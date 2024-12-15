@@ -4,7 +4,6 @@ import ProfileLandingAccountOverview from './fragments/ProfileLandingAccountOver
 import ProfileLandingAccountModules from './fragments/ProfileLandingAccountModules';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,7 +15,11 @@ type HeaderProps = {
 };
 
 function Header({ label }: HeaderProps) {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<View
@@ -33,15 +36,13 @@ function Header({ label }: HeaderProps) {
 				}}
 			>
 				<View style={{ flexGrow: 1, flex: 1 }}>
-					<Text
-						style={[styles.headerText, { color: colorScheme.textColor.high }]}
-					>
+					<Text style={[styles.headerText, { color: theme.textColor.high }]}>
 						{label}
 					</Text>
 				</View>
 
 				<Pressable style={{ padding: 4 }} onPress={() => {}}>
-					<AntDesign name="user" size={24} color={colorScheme.textColor.high} />
+					<AntDesign name="user" size={24} color={theme.textColor.high} />
 				</Pressable>
 
 				<Pressable
@@ -53,7 +54,7 @@ function Header({ label }: HeaderProps) {
 					<Ionicons
 						name="settings-outline"
 						size={24}
-						color={colorScheme.textColor.high}
+						color={theme.textColor.high}
 					/>
 				</Pressable>
 
@@ -63,7 +64,7 @@ function Header({ label }: HeaderProps) {
 					<MaterialIcons
 						name="notes"
 						size={24}
-						color={colorScheme.textColor.high}
+						color={theme.textColor.high}
 						style={{ transform: [{ scaleX: -1 }] }}
 					/>
 				</View>

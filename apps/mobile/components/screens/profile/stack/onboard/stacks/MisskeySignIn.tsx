@@ -16,7 +16,8 @@ import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavB
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
 import { AccountService } from '../../../../../../database/entities/account';
-import { useSQLiteContext } from 'expo-sqlite';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');
@@ -30,7 +31,11 @@ function MisskeySignInStack() {
 	const _subdomain: string = params['subdomain'] as string;
 	const _domain: string = params['domain'] as string;
 
-	const db = useSQLiteContext();
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
 
 	useEffect(() => {
 		try {
@@ -68,8 +73,7 @@ function MisskeySignInStack() {
 	}
 
 	async function onPressConfirm() {
-		console.log('submitting...');
-		const upsertResult = await AccountService.upsert(
+		const upsertResult = AccountService.upsert(
 			db,
 			{
 				identifier: MisskeyId,
@@ -81,7 +85,11 @@ function MisskeySignInStack() {
 			},
 			[
 				{ key: 'display_name', value: PreviewCard.displayName, type: 'string' },
-				{ key: 'avatar', value: PreviewCard.avatar, type: 'string' },
+				{
+					key: 'avatar',
+					value: PreviewCard.avatar,
+					type: 'string',
+				},
 				{ key: 'user_id', value: MisskeyId, type: 'string' },
 				{ key: 'access_token', value: Token, type: 'string' },
 			],

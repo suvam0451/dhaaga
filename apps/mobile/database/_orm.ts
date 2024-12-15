@@ -77,6 +77,107 @@ type BaseEntityInternalPropList =
 	| 'whereClauses'
 	| 'selectColumns';
 
+class QueryStringBuilder {
+	private static serialize(value: any) {
+		let val: string;
+		if (typeof value === 'string') {
+			// Escape single quotes in strings for safety
+			val = `'${value.replace("'", "''")}'`;
+		} else if (value === null || value === undefined) {
+			val = 'NULL';
+		} else {
+			val = String(value);
+		}
+		return val;
+	}
+
+	/**
+	 *	resolves eq/ne/gt/gte/le/lte
+	 */
+	private static serializeOperation(key: string, value: any) {
+		if (value['operator']) {
+			return [
+				`${key} ${value['operator']} ?`,
+				this.serialize(value['operand']),
+			];
+		}
+		return [`${key} = ${this.serialize(value)}`];
+	}
+
+	static where(data: any) {
+		const clauses = [];
+		const params = [];
+		if (!data)
+			return {
+				clauses,
+				params,
+			};
+
+		for (const [key, value] of Object.entries(data)) {
+			const [clause, param] = this.serializeOperation(key, value);
+			params.push(param);
+			clauses.push(clause);
+		}
+		return { clauses, params };
+	}
+
+	static findOne(dbName: string, whereQueries: string[]) {
+		const whereSql =
+			whereQueries.length > 0 ? `WHERE (${whereQueries.join(' AND ')})` : '';
+		return `SELECT * FROM ${dbName} ${whereSql} LIMIT 1`;
+	}
+
+	static find(dbName: string, whereQueries: string[]) {
+		const whereSql =
+			whereQueries.length > 0 ? `WHERE (${whereQueries.join(' AND ')})` : '';
+		return `SELECT * FROM ${dbName} ${whereSql}`;
+	}
+
+	static update(
+		dbName: string,
+		whereQueries: string[],
+		updateQueries: string[],
+	) {
+		const whereSql =
+			whereQueries.length > 0 ? `WHERE (${whereQueries.join(' AND ')})` : '';
+		const setSql =
+			updateQueries.length > 0 ? `SET ${updateQueries.join(', ')}` : '';
+		return `UPDATE ${dbName} ${setSql} ${whereSql} `;
+	}
+}
+
+/**
+ * ---- Operator overrides ----
+ */
+
+export function eq(value: any) {
+	return { operator: '=', operand: value };
+}
+
+export function ne(value: any) {
+	return { operator: '<>', operand: value };
+}
+
+export function lt(value: any) {
+	return { operator: '<', operand: value };
+}
+
+export function lte(value: any) {
+	return { operator: '<=', operand: value };
+}
+
+export function gt(value: any) {
+	return { operator: '>', operand: value };
+}
+
+export function gte(value: any) {
+	return { operator: '>=', operand: value };
+}
+
+/**
+ * ----
+ */
+
 export class BaseEntity<T> {
 	name: string;
 	db: SQLiteDatabase;
@@ -102,9 +203,46 @@ export class BaseEntity<T> {
 		return new BaseEntity<T>(db, debug);
 	}
 
-	find() {}
+	/**
+	 * Find multiple records matching query
+	 */
+	find(data?: OnlyClassProps<Partial<T>>): T[] {
+		try {
+			const { params, clauses } = QueryStringBuilder.where(data);
+			this.sql = QueryStringBuilder.find(this.name, clauses);
+			return this.db.getAllSync<T>(this.sql, params) as T[];
+		} catch (e) {
+			console.log('[ERROR]: db find query', this.name, e);
+		}
+	}
 
-	findOne() {}
+	/**
+	 * Find first record matching query
+	 */
+	findOne(data: OnlyClassProps<Partial<T>>): T | null {
+		try {
+			const { params, clauses } = QueryStringBuilder.where(data);
+			this.sql = QueryStringBuilder.findOne(this.name, clauses);
+			return this.db.getFirstSync<T>(this.sql, params) as T;
+		} catch (e) {
+			console.log('[ERROR]: db findOne query', this.name, e);
+		}
+	}
+
+	update(
+		where: OnlyClassProps<Partial<T>>,
+		update: OnlyClassProps<Partial<T>>,
+	) {
+		try {
+			this.params.push();
+			const { clauses: whereClauses, params: whereParams } =
+				QueryStringBuilder.where(where);
+			const { clauses: setClauses, params: setParams } =
+				QueryStringBuilder.where(update);
+			this.sql = QueryStringBuilder.update(this.name, whereClauses, setClauses);
+			return this.db.runSync(this.sql, [...setParams, ...whereParams]);
+		} catch (e) {}
+	}
 
 	getOne() {
 		const generated = [];

@@ -1,13 +1,14 @@
 import { z } from 'zod';
 import { Account } from '../_schema';
 import { DbErrorHandler } from './_base.repo';
-import { SQLiteDatabase } from 'expo-sqlite';
 import { Result, withSuccess } from '../../utils/result';
 import {
 	AccountMetadataRecordType,
 	AccountMetadataService,
 } from './account-metadata';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { DataSource } from '../dataSource';
+import { gt } from '../_orm';
 
 /**
  * --- Validators
@@ -36,139 +37,117 @@ export const accountInsertDto = z.object({
 
 @DbErrorHandler()
 export class Repo {
-	static async getByHandleFragments(
-		db: SQLiteDatabase,
+	static getByHandleFragments(
+		db: DataSource,
 		server: string,
 		username: string,
-	): Promise<Account | null> {
+	): Account | null {
 		try {
-			return await db.getFirstAsync<Account>(
-				`select * from account where server = ? and username = ?`,
+			return db.account.findOne({
 				server,
 				username,
-			);
+			});
 		} catch (e) {
 			return null;
 		}
 	}
 
-	static async upsert(
-		db: SQLiteDatabase,
+	static upsert(
+		db: DataSource,
 		dto: z.infer<typeof accountInsertDto>,
-	): Promise<Result<Account>> {
-		const match = await Repo.getByHandleFragments(db, dto.server, dto.username);
+	): Result<Account> {
+		const match = Repo.getByHandleFragments(db, dto.server, dto.username);
 		if (match) {
 			return withSuccess(match);
 		} else {
-			db.runSync(
-				`
-				insert into account (identifier, driver, server, username, displayName, avatarUrl)
-				values (?, ?, ?, ?, ?, ?)
-			`,
-				dto.identifier,
-				dto.driver,
-				dto.server,
-				dto.username,
-				dto.displayName,
-				dto.avatarUrl,
-			);
-			const upserted = await Repo.getByHandleFragments(
-				db,
-				dto.server,
-				dto.username,
-			);
+			db.account.insert({
+				identifier: dto.identifier,
+				driver: dto.driver,
+				server: dto.server,
+				username: dto.username,
+				displayName: dto.displayName,
+				avatarUrl: dto.avatarUrl,
+			});
+			const upserted = Repo.getByHandleFragments(db, dto.server, dto.username);
 			return withSuccess(upserted);
 		}
 	}
 
-	static async updateSelectionFlag(
-		db: SQLiteDatabase,
-		id: number,
-		flag: boolean,
-	) {
-		await db.runAsync(
-			`update account set selected = ? where id = ?;`,
-			flag,
-			id,
+	static updateSelectionFlag(db: DataSource, id: number, flag: boolean) {
+		db.account.update({ id }, { selected: flag });
+	}
+
+	static deselectAll(db: DataSource) {
+		db.account.update(
+			{ id: gt(0) as any },
+			{
+				selected: false,
+			},
 		);
 	}
 
-	static async deselectAll(db: SQLiteDatabase) {
-		await db.runAsync(`update account set selected = false where id > 0;`);
+	static updateSoftware(db: DataSource, id: number, driver: string) {
+		db.account.update({ id }, { driver });
 	}
 
-	static async updateSoftware(db: SQLiteDatabase, id: number, driver: string) {
-		return await db.runAsync(
-			`update account set driver = ? where id = ?`,
-			driver,
-			id,
-		);
-	}
-
-	static async getAll(db: SQLiteDatabase): Promise<Result<Account[]>> {
-		const rows = await db.getAllAsync<Account>(`select * from account;`);
+	static getAll(db: DataSource): Result<Account[]> {
+		const rows = db.account.find();
 		return withSuccess(rows);
 	}
 
-	static async remove(db: SQLiteDatabase, id: number) {
-		return db.runAsync(`delete from account where id = ?`, id);
+	static removeById(db: DataSource, id: number) {
+		return db.db.runAsync(`delete from account where id = ?`, id);
 	}
 
-	static async getFirstSelected(db: SQLiteDatabase) {
-		return await db.getFirstAsync<Account>(
-			`select * from account where selected = 1;`,
-		);
+	static getFirstSelected(db: DataSource) {
+		return db.account.findOne({ selected: true });
 	}
 }
 
 class Service {
-	static async upsert(
-		db: SQLiteDatabase,
+	static upsert(
+		db: DataSource,
 		acct: z.infer<typeof accountInsertDto>,
 		metadata: AccountMetadataRecordType[],
-	): Promise<Result<Account>> {
-		const upsertResult = await Repo.upsert(db, acct);
+	): Result<Account> {
+		const upsertResult = Repo.upsert(db, acct);
 		if (upsertResult.type === 'success') {
-			await AccountMetadataService.upsertMultiple(
-				db,
-				upsertResult.value,
-				metadata,
-			);
+			AccountMetadataService.upsertMultiple(db, upsertResult.value, metadata);
 			return withSuccess(upsertResult.value);
 		}
 	}
 
-	static async selectSync(db: SQLiteDatabase, acct: Account) {}
-	static async select(db: SQLiteDatabase, acct: Account) {
-		await Repo.deselectAll(db);
-		await Repo.updateSelectionFlag(db, acct.id, true);
+	static async selectSync(db: DataSource, acct: Account) {}
+	static select(db: DataSource, acct: Account) {
+		Repo.deselectAll(db);
+		Repo.updateSelectionFlag(db, acct.id, true);
 	}
 
-	static async deselect(db: SQLiteDatabase, acct: Account) {
-		await Repo.updateSelectionFlag(db, acct.id, false);
+	static deselect(db: DataSource, acct: Account) {
+		Repo.updateSelectionFlag(db, acct.id, false);
 	}
 
-	static async getAll(db: SQLiteDatabase) {
+	static getAll(db: DataSource) {
 		return Repo.getAll(db);
 	}
 
-	static async remove(db: SQLiteDatabase, acct: Account) {
-		return Repo.remove(db, acct.id);
+	static remove(db: DataSource, acct: Account) {
+		return Repo.removeById(db, acct.id);
 	}
 
-	static async removeById(db: SQLiteDatabase, id: number) {
-		return Repo.remove(db, id);
+	static removeById(db: DataSource, id: number) {
+		return Repo.removeById(db, id);
 	}
 
-	static async updateDriver(
-		db: SQLiteDatabase,
+	static updateDriver(
+		db: DataSource,
 		acct: Account,
 		driver: KNOWN_SOFTWARE | string,
 	) {
 		return Repo.updateSoftware(db, acct.id, driver.toString());
 	}
 
-	static async getSelected(db: SQLiteDatabase): Promise<Account | null> {
+	static getSelected(db: DataSource): Account | null {
 		try {
 			return Repo.getFirstSelected(db);
 		} catch (e) {

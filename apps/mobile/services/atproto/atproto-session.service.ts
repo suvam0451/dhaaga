@@ -3,23 +3,23 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AccountService } from '../../database/entities/account';
 import AccountMetaService from '../../database/services/account-secret.service';
 import { Account } from '../../database/_schema';
-import { SQLiteDatabase } from 'expo-sqlite';
 import { AccountMetadataService } from '../../database/entities/account-metadata';
 import { jwtDecode } from '../../utils/jwt-decode.utils';
+import { DataSource } from '../../database/dataSource';
 
 /**
  * Helps manage session
  * for an atproto based account
  */
 class AtprotoSessionService {
-	private readonly db: SQLiteDatabase;
+	private readonly db: DataSource;
 	private readonly acct: Account;
 	private readonly sessionManager: CredentialSession;
 	private nextSession: AtpSessionData;
 	private oldSession: AtpSessionData;
 	private nextStatusCode: string;
 
-	constructor(db: SQLiteDatabase, acct: Account) {
+	constructor(db: DataSource, acct: Account) {
 		this.db = db;
 		this.acct = acct;
 		this.sessionManager = new CredentialSession(
@@ -39,7 +39,7 @@ class AtprotoSessionService {
 		this.oldSession = JSON.parse(secret);
 	}
 
-	static create(db: SQLiteDatabase, acct: Account) {
+	static create(db: DataSource, acct: Account) {
 		return new AtprotoSessionService(db, acct);
 	}
 
@@ -137,7 +137,7 @@ class AtprotoSessionService {
 	 * @param service
 	 */
 	static async login(
-		db: SQLiteDatabase,
+		db: DataSource,
 		username: string,
 		appPassword: string,
 		service: string = 'https://bsky.social',
@@ -174,7 +174,7 @@ class AtprotoSessionService {
 			const _username = res.data.handle;
 			const did = res.data.did;
 
-			await AccountService.upsert(
+			AccountService.upsert(
 				db,
 				{
 					server: instance,

@@ -14,7 +14,6 @@ import { router } from 'expo-router';
 import { useAccountDbContext } from '../../../screens/profile/stack/settings/hooks/useAccountDb';
 import { Account } from '../../../../database/_schema';
 import { AccountMetadataService } from '../../../../database/entities/account-metadata';
-import { useSQLiteContext } from 'expo-sqlite';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -23,13 +22,13 @@ type FlashListItemProps = {
 };
 
 const FlashListItem = memo(({ acct }: FlashListItemProps) => {
-	const { selectAccount, restoreSession } = useGlobalState(
-		useShallow((state) => ({
-			selectAccount: state.selectAccount,
-			restoreSession: state.restoreSession,
+	const { selectAccount, restoreSession, db } = useGlobalState(
+		useShallow((o) => ({
+			selectAccount: o.selectAccount,
+			restoreSession: o.restoreSession,
+			db: o.db,
 		})),
 	);
-	const db = useSQLiteContext();
 
 	const { setVisible } = useAppBottomSheet();
 
@@ -45,8 +44,8 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 	);
 
 	async function onSelect() {
-		await selectAccount(acct);
-		await restoreSession();
+		selectAccount(acct);
+		restoreSession();
 		setVisible(false);
 	}
 

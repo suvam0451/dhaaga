@@ -20,6 +20,7 @@
     "@atproto/xrpc": "^0.6.4",
     "@dhaaga/shared-abstraction-activitypub": "*",
     "@dhaaga/shared-provider-mastodon": "*",
+    "@dhaaga/expo-sqlite-orm": "*",
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
     "@expo/metro-config": "~0.19.0",
