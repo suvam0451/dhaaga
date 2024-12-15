@@ -1,15 +1,20 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useComposerContext } from './useComposerContext';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import ActivityPubProviderService from '../../../../../services/activitypub-provider.service';
 import { useCallback } from 'react';
 import { AccountMetadataService } from '../../../../../database/entities/account-metadata';
-import { useSQLiteContext } from 'expo-sqlite';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function useImagePicker() {
-	const { primaryAcct, subdomain, domain } = useActivityPubRestClientContext();
+	const { acct, driver, db } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			driver: o.driver,
+			db: o.db,
+		})),
+	);
 	const { addMediaTarget } = useComposerContext();
-	const db = useSQLiteContext();
 
 	const trigger = useCallback(async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -22,18 +27,18 @@ function useImagePicker() {
 
 			const token = AccountMetadataService.getKeyValueForAccountSync(
 				db,
-				primaryAcct,
+				acct,
 				'access_token',
 			);
 
 			try {
 				const uploadResult = await ActivityPubProviderService.uploadFile(
-					subdomain,
+					acct?.server,
 					_url,
 					{
 						token: token,
 						mimeType: result.assets[0].mimeType,
-						domain,
+						domain: driver,
 					},
 				);
 
@@ -47,7 +52,7 @@ function useImagePicker() {
 				console.log(E);
 			}
 		}
-	}, [addMediaTarget, primaryAcct]);
+	}, [addMediaTarget, acct]);
 
 	return { trigger };
 }

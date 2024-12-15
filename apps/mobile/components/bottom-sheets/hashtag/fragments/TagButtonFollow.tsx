@@ -5,25 +5,31 @@ import { Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useActivitypubTagContext } from '../../../../states/useTag';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const TagButtonFollow = memo(() => {
-	const { client, domain } = useActivityPubRestClientContext();
+	const { client, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+		})),
+	);
 	const { tag, setDataRaw } = useActivitypubTagContext();
 	const isFollowing = tag?.isFollowing();
 
 	async function onClickFollowTag() {
 		if (!tag) return;
 		if (tag?.isFollowing()) {
-			const { data, error } = await client.tags.unfollow(tag.getName());
-			if (domain === KNOWN_SOFTWARE.MASTODON) {
+			const { data } = await client.tags.unfollow(tag.getName());
+			if (driver === KNOWN_SOFTWARE.MASTODON) {
 				setDataRaw(data);
 			} else {
 				console.log(data);
 			}
 		} else {
-			const { data, error } = await client.tags.follow(tag.getName());
-			if (domain === KNOWN_SOFTWARE.MASTODON) {
+			const { data } = await client.tags.follow(tag.getName());
+			if (driver === KNOWN_SOFTWARE.MASTODON) {
 				setDataRaw(data);
 			} else {
 				console.log(data);
@@ -32,7 +38,7 @@ const TagButtonFollow = memo(() => {
 	}
 
 	/** Not supported */
-	if (domain !== KNOWN_SOFTWARE.MASTODON) return <View />;
+	if (driver !== KNOWN_SOFTWARE.MASTODON) return <View />;
 
 	if (isFollowing) {
 		return (

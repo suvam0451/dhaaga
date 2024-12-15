@@ -14,7 +14,6 @@ import {
 	useReducer,
 	useRef,
 } from 'react';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import ActivityPubService from '../../../services/activitypub.service';
 import * as Haptics from 'expo-haptics';
 import { OpenAiService } from '../../../services/openai.service';
@@ -28,6 +27,8 @@ import FlashListService, {
 	FlashListType_Post,
 } from '../../../services/flashlist.service';
 import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Type = {
 	data: ActivityPubStatusAppDtoType[];
@@ -97,7 +98,13 @@ type Props = {
  *
  */
 function WithAppTimelineDataContext({ children }: Props) {
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { acct, driver, client } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			driver: o.driver,
+			client: o.router,
+		})),
+	);
 
 	// lists
 	const [Posts, postListReducer] = useReducer(postArrayReducer, []);
@@ -108,10 +115,10 @@ function WithAppTimelineDataContext({ children }: Props) {
 	useEffect(() => {
 		const res = GlobalMmkvCacheService.getEmojiCacheForInstance(
 			globalDb,
-			subdomain,
+			acct?.server,
 		);
 		EmojiCache.current = res ? res.data : [];
-	}, [subdomain]);
+	}, [acct?.server]);
 
 	const FlashListItems = useMemo(() => {
 		return FlashListService.posts(Posts);
@@ -131,12 +138,12 @@ function WithAppTimelineDataContext({ children }: Props) {
 				payload: {
 					more: items,
 					seen: Seen,
-					domain,
-					subdomain,
+					domain: driver,
+					subdomain: acct?.server,
 				},
 			});
 		},
-		[domain, subdomain, Posts],
+		[driver, acct?.server, Posts],
 	);
 
 	function findById(id: string) {
@@ -166,7 +173,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 					client,
 					key,
 					target,
-					domain as any,
+					driver,
 				);
 				if (state !== null) {
 					postListReducer({
@@ -181,7 +188,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 				setLoading(false);
 			}
 		},
-		[Posts, domain],
+		[Posts, driver],
 	);
 
 	/**
@@ -204,7 +211,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 					KNOWN_SOFTWARE.MASTODON,
 					KNOWN_SOFTWARE.PLEROMA,
 					KNOWN_SOFTWARE.AKKOMA,
-				].includes(domain as any)
+				].includes(driver)
 			) {
 				return;
 			}
@@ -232,7 +239,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 				setLoading(false);
 			}
 		},
-		[Posts, domain],
+		[Posts, driver],
 	);
 
 	const toggleBookmark = useCallback(
@@ -290,7 +297,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 					client,
 					key,
 					target,
-					domain as any,
+					driver,
 				);
 				if (response !== null) {
 					postListReducer({
@@ -307,7 +314,7 @@ function WithAppTimelineDataContext({ children }: Props) {
 				setLoading(false);
 			}
 		},
-		[Posts, domain],
+		[Posts, driver],
 	);
 
 	const explain = useCallback(

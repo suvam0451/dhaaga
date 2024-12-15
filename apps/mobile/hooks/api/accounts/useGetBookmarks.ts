@@ -1,5 +1,4 @@
 import { BookmarkGetQueryDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/bookmarks';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import {
@@ -7,10 +6,18 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useState } from 'react';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function useGetBookmarks(query: BookmarkGetQueryDTO) {
-	const { client, primaryAcct, domain, subdomain } =
-		useActivityPubRestClientContext();
+	const { client, acct, driver } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			client: o.router,
+			driver: o.driver,
+		})),
+	);
+
 	const [Data, setData] = useState<{
 		data: StatusInterface[];
 		minId?: string;
@@ -35,10 +42,10 @@ function useGetBookmarks(query: BookmarkGetQueryDTO) {
 				KNOWN_SOFTWARE.MASTODON,
 				KNOWN_SOFTWARE.PLEROMA,
 				KNOWN_SOFTWARE.AKKOMA,
-			].includes(domain as any)
+			].includes(driver as any)
 		) {
 			return {
-				data: ActivityPubAdapterService.adaptManyStatuses(data.data, domain),
+				data: ActivityPubAdapterService.adaptManyStatuses(data.data, driver),
 				maxId: data.maxId,
 				minId: data.minId,
 			};
@@ -46,7 +53,7 @@ function useGetBookmarks(query: BookmarkGetQueryDTO) {
 			return {
 				data: ActivityPubAdapterService.adaptManyStatuses(
 					data.data.map((o) => o.note),
-					domain,
+					driver,
 				),
 				maxId: data.maxId,
 				minId: data.minId,
@@ -60,7 +67,7 @@ function useGetBookmarks(query: BookmarkGetQueryDTO) {
 		minId?: string;
 		maxId?: string;
 	}>({
-		queryKey: ['bookmarks', query.maxId, primaryAcct?.username, subdomain],
+		queryKey: ['bookmarks', query.maxId, acct?.id],
 		queryFn: api,
 		enabled: client !== null,
 	});

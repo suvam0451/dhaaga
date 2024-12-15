@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import useMyProfile from '../../../api/useMyProfile';
-import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import useMfm from '../../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
@@ -11,6 +10,8 @@ import ProfileButtonPhonebook from '../../../../(shared)/stack/profile/fragments
 import ProfileStats from '../../../../(shared)/stack/profile/fragments/ProfileStats';
 import styles from '../../../../../common/user/utils/styles';
 import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const WithoutAccount = memo(() => {
 	return <View />;
@@ -75,8 +76,12 @@ const WithAccount = memo(() => {
 });
 
 const ProfileAndSettings = memo(() => {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	if (!primaryAcct) {
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
+	if (!acct) {
 		return <WithoutAccount />;
 	}
 	return <WithAccount />;

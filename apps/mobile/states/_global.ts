@@ -26,6 +26,7 @@ import { RandomUtil } from '../utils/random.utils';
 import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.service';
 import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
 import { DataSource } from '../database/dataSource';
+import { AppMmkvInstance } from '../database/_cache';
 
 type AppThemePack = {
 	id: string;
@@ -37,6 +38,9 @@ export enum REACT_NATIVE_BOTTOM_SHEET_ENUM {
 	NA = 'N/A',
 }
 
+/**
+ * @deprecated
+ */
 type ReactNativeBottomSheetState = {
 	type: REACT_NATIVE_BOTTOM_SHEET_ENUM;
 	visible: boolean;
@@ -60,6 +64,29 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	SWITCH_THEME_PACK = 'SwitchThemePack',
 	TIMELINE_CONTROLLER = 'TimeLineController',
 }
+
+export enum APP_DIALOG_SHEET_ENUM {
+	DEFAULT = 'Default',
+}
+
+type AppDialogInstanceState = {
+	title: string;
+	description: string[];
+	actions: {
+		label: string;
+		onPress: () => void;
+	}[];
+};
+
+type AppDialogState = {
+	type: APP_DIALOG_SHEET_ENUM;
+	stateId: string;
+	refresh: () => void;
+	visible: boolean;
+	state: AppDialogInstanceState | null;
+	showDefault: (data: AppDialogInstanceState) => void;
+	hide: () => void;
+};
 
 type AppBottomSheetState = {
 	type: APP_BOTTOM_SHEET_ENUM;
@@ -86,9 +113,10 @@ type AppBottomSheetState = {
 	HandleRef: string;
 	ParentRef: ActivityPubStatusAppDtoType;
 	RootRef: ActivityPubStatusAppDtoType;
-	TextRef: string;
-	PostRef: ActivityPubStatusAppDtoType;
-	setPostRef: (obj: ActivityPubStatusAppDtoType) => void;
+	textValue: string;
+	setTextValue(textValue: string): void;
+	postValue: ActivityPubStatusAppDtoType;
+	setPostValue: (obj: ActivityPubStatusAppDtoType) => void;
 
 	PostIdRef: string;
 	UserRef: UserInterface;
@@ -102,7 +130,7 @@ type AppBottomSheetState = {
 
 type State = {
 	db: DataSource | null;
-	mmkv: MMKV | null; // currently active account
+	mmkv: AppMmkvInstance; // currently active account
 	acct: Account | null /**
 	 * fetched account credentials
 	 * converted into application
@@ -131,6 +159,7 @@ type State = {
 
 	rnBottomSheet: ReactNativeBottomSheetState;
 	bottomSheet: AppBottomSheetState;
+	dialog: AppDialogState;
 };
 
 type Actions = {
@@ -180,16 +209,18 @@ const defaultValue: State & Actions = {
 		HandleRef: undefined,
 		ParentRef: undefined,
 		RootRef: undefined,
-		TextRef: undefined,
-		PostRef: undefined,
-		setPostRef: undefined,
+		textValue: undefined,
+		postValue: undefined,
+		setPostValue: undefined,
 		PostIdRef: undefined,
 		UserRef: undefined,
 		UserIdRef: undefined,
 		PostComposerTextSeedRef: undefined,
 		timelineDataPostListReducer: undefined,
 		setTimelineDataPostListReducer: undefined,
+		setTextValue: undefined,
 	},
+	dialog: undefined,
 };
 
 class GlobalStateService {
@@ -200,7 +231,7 @@ class GlobalStateService {
 		}>
 	> {
 		try {
-			const acct = await AccountService.getSelected(db);
+			const acct = AccountService.getSelected(db);
 			if (!acct) {
 				return { type: 'invalid' };
 			}
@@ -227,6 +258,7 @@ class GlobalStateService {
 				};
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
+			// EmojiService.refresh(db, globalDb, acct.server, true);
 			return { type: 'success', value: { acct, router: _router } };
 		} catch (e) {
 			console.log(e);
@@ -242,7 +274,7 @@ const useGlobalState = create<State & Actions>()(
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
 				state.db = new DataSource(db);
-				state.mmkv = new MMKV({ id: `default` });
+				state.mmkv = new AppMmkvInstance(new MMKV({ id: `default` }));
 			});
 		},
 		getPacks: () => [],
@@ -320,11 +352,16 @@ const useGlobalState = create<State & Actions>()(
 			HandleRef: undefined,
 			ParentRef: undefined,
 			RootRef: undefined,
-			TextRef: undefined,
-			PostRef: null,
-			setPostRef: (obj: ActivityPubStatusAppDtoType) => {
+			textValue: undefined,
+			setTextValue: (value: string) => {
 				set((state) => {
-					state.bottomSheet.PostRef = obj;
+					state.bottomSheet.textValue = value;
+				});
+			},
+			postValue: null,
+			setPostValue: (obj: ActivityPubStatusAppDtoType) => {
+				set((state) => {
+					state.bottomSheet.postValue = obj;
 				});
 			},
 			PostIdRef: undefined,
@@ -335,6 +372,30 @@ const useGlobalState = create<State & Actions>()(
 			setTimelineDataPostListReducer: (obj: TimelineDataReducerFunction) => {
 				set((state) => {
 					state.bottomSheet.timelineDataPostListReducer = obj;
+				});
+			},
+		},
+		dialog: {
+			type: APP_DIALOG_SHEET_ENUM.DEFAULT,
+			stateId: RandomUtil.nanoId(),
+			visible: false,
+			showDefault: (data: AppDialogInstanceState) => {
+				set((state) => {
+					state.dialog.state = data;
+					state.dialog.stateId = RandomUtil.nanoId();
+					state.dialog.type = APP_DIALOG_SHEET_ENUM.DEFAULT;
+					state.dialog.visible = true;
+				});
+			},
+			state: null,
+			hide: () => {
+				set((state) => {
+					state.dialog.visible = true;
+				});
+			},
+			refresh: () => {
+				set((state) => {
+					state.dialog.stateId = RandomUtil.nanoId();
 				});
 			},
 		},

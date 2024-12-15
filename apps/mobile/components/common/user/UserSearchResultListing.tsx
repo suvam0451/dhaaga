@@ -2,25 +2,30 @@ import { memo, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useActivitypubUserContext } from '../../../states/useProfile';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import styles from './utils/styles';
 import useMfm from '../../hooks/useMfm';
 import ProfileAvatar from './fragments/ProfileAvatar';
 import useAppNavigator from '../../../states/useAppNavigator';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../states/_global';
 
 const PFP_SIZE = 48;
 const UserSearchResultListing = memo(() => {
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 	const { user } = useActivitypubUserContext();
 	const { toProfile } = useAppNavigator();
 
 	const handle = useMemo(() => {
 		return ActivitypubHelper.getHandle(
-			user?.getAccountUrl(subdomain),
-			subdomain,
+			user?.getAccountUrl(acct?.server),
+			acct?.server,
 		);
-	}, [user?.getAccountUrl(subdomain)]);
+	}, [user?.getAccountUrl(acct?.server)]);
 
 	const { content: ParsedDisplayName } = useMfm({
 		content: user?.getDisplayName(),

@@ -3,11 +3,12 @@ import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { useActivitypubUserContext } from '../../../../../../states/useProfile';
 import useMfm from '../../../../../hooks/useMfm';
-import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { AppUser } from '../../../../../../types/app-user.types';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type ExtraInformationFieldProps = {
 	label: string;
@@ -23,11 +24,15 @@ const ExtraInformationField = memo(function Foo({
 	last,
 }: ExtraInformationFieldProps) {
 	const { user } = useActivitypubUserContext();
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 
 	const { content: ParsedValue } = useMfm({
 		content: value,
-		remoteSubdomain: user?.getInstanceUrl(subdomain),
+		remoteSubdomain: user?.getInstanceUrl(acct?.server),
 		emojiMap: user?.getEmojiMap(),
 		deps: [value],
 		emphasis: 'medium',
@@ -35,7 +40,7 @@ const ExtraInformationField = memo(function Foo({
 	});
 	const { content: ParsedLabel } = useMfm({
 		content: label,
-		remoteSubdomain: user?.getInstanceUrl(subdomain),
+		remoteSubdomain: user?.getInstanceUrl(acct?.server),
 		emojiMap: user?.getEmojiMap(),
 		deps: [label],
 		emphasis: 'high',
@@ -70,8 +75,12 @@ type UserProfileExtraInformationProps = {
 function UserProfileExtraInformation({
 	acct,
 }: UserProfileExtraInformationProps) {
-	const { domain } = useActivityPubRestClientContext();
-	if (domain === KNOWN_SOFTWARE.BLUESKY) return <View />;
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
+	if (driver === KNOWN_SOFTWARE.BLUESKY) return <View />;
 
 	const FIELDS = acct?.meta?.fields || [];
 

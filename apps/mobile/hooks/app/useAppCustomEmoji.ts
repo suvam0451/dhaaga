@@ -1,6 +1,6 @@
-import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import { useCallback } from 'react';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Try to resolve (and cache)
@@ -8,8 +8,13 @@ import { useActivityPubRestClientContext } from '../../states/useActivityPubRest
  * various methods
  */
 function useAppCustomEmoji() {
-	const { domain, subdomain } = useActivityPubRestClientContext();
-	const { globalDb } = useGlobalMmkvContext();
+	const { driver, acct, mmkv } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+			mmkv: o.mmkv,
+		})),
+	);
 
 	const find = useCallback((id: string, remoteSubdomain?: string) => {
 		// return EmojiService.find({

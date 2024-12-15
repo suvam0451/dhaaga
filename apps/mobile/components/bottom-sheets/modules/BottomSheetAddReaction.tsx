@@ -10,27 +10,32 @@ import emojiPickerReducer, {
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import EmojiPickerSearchResults from '../../dhaaga-bottom-sheet/modules/emoji-picker/fragments/EmojiPickerSearchResults';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import EmojiPickerCategoryList from '../../dhaaga-bottom-sheet/modules/emoji-picker/fragments/EmojiPickerCategoryList';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const BottomSheetAddReaction = memo(() => {
-	const { domain, subdomain } = useActivityPubRestClientContext();
-	const { globalDb } = useGlobalMmkvContext();
+	const { driver, acct, mmkv } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+			mmkv: o.mmkv,
+		})),
+	);
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 	const lastSubdomain = useRef(null);
 	useEffect(() => {
-		if (lastSubdomain.current === subdomain) return;
+		if (lastSubdomain.current === acct?.server) return;
 		dispatch({
 			type: EMOJI_PICKER_REDUCER_ACTION.INIT,
 			payload: {
-				subdomain,
-				globalDb,
-				domain,
+				subdomain: acct?.server,
+				globalDb: mmkv,
+				driver,
 			},
 		});
-		lastSubdomain.current = subdomain;
-	}, [subdomain]);
+		lastSubdomain.current = acct?.server;
+	}, [acct?.server]);
 
 	function onSearchTermChanged(o: any) {
 		dispatch({
@@ -56,7 +61,7 @@ const BottomSheetAddReaction = memo(() => {
 				<SelectedEmojiPreview selection={State.selectedReaction} />
 				<SelectedEmojiActionButtons
 					selection={State.selectedReaction}
-					onSelect={() => {}}
+					onSelect={async (shortCode: string) => {}}
 					onCancel={() => {}}
 				/>
 			</View>

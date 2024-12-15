@@ -20,7 +20,6 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { APP_FONTS } from '../../styles/AppFonts';
 import MisskeyTag from '@dhaaga/shared-abstraction-activitypub/dist/adapters/tag/misskey';
 import useAppNavigator from '../../states/useAppNavigator';
-import { useGorhomActionSheetContext } from '../../states/useGorhomBottomSheet';
 import TagButtonFollow from './hashtag/fragments/TagButtonFollow';
 import TagButtonBrowseLocal from './hashtag/fragments/TagButtonBrowseLocal';
 import useGlobalState from '../../states/_global';
@@ -38,7 +37,11 @@ type HashtagBottomSheetContentProps = {
 export function HashtagBottomSheetContent({
 	parentApiPending,
 }: HashtagBottomSheetContentProps) {
-	const { setVisible } = useGorhomActionSheetContext();
+	const { hide } = useGlobalState(
+		useShallow((o) => ({
+			hide: o.bottomSheet.hide,
+		})),
+	);
 	const { driver, acct } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
@@ -96,7 +99,7 @@ export function HashtagBottomSheetContent({
 	const { toTag } = useAppNavigator();
 
 	function onNavigate() {
-		setVisible(false);
+		hide();
 		toTag(tag.getName());
 	}
 

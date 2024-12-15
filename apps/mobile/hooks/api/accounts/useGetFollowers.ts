@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
@@ -9,12 +8,20 @@ import { AppBskyGraphGetFollowers } from '@atproto/api';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import useAppPaginator from '../../app/useAppPaginator';
 import ActivityPubService from '../../../services/activitypub.service';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function useGetFollowers(id: string) {
 	const [Data, setData] = useState<UserInterface[]>([]);
 	const { lastId, MaxId, loadNext } = useAppPaginator();
 
-	const { client, primaryAcct, domain } = useActivityPubRestClientContext();
+	const { driver, acct, client } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			driver: o.driver,
+			client: o.router,
+		})),
+	);
 
 	async function api() {
 		const { data, error } = await client.accounts.followers({
@@ -29,7 +36,7 @@ function useGetFollowers(id: string) {
 
 	// Queries
 	const { status, data, refetch, fetchStatus } = useQuery({
-		queryKey: ['followers', id, MaxId, primaryAcct._id],
+		queryKey: ['followers', id, MaxId, acct?.id],
 		queryFn: api,
 		enabled: client !== null,
 	});
@@ -38,20 +45,20 @@ function useGetFollowers(id: string) {
 		if (fetchStatus === 'fetching' || status !== 'success' || data === null)
 			return;
 
-		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const _data = (data as AppBskyGraphGetFollowers.Response).data;
 			lastId.current = _data.cursor;
 			setData(
-				ActivityPubAdapterService.adaptManyUsers(_data.followers, domain),
+				ActivityPubAdapterService.adaptManyUsers(_data.followers, driver),
 			);
-		} else if (ActivityPubService.misskeyLike(domain)) {
+		} else if (ActivityPubService.misskeyLike(driver)) {
 			if ((data as any).data.length === 0) return;
 			lastId.current = (data as any).data[(data as any).data.length - 1].id;
 
 			setData(
 				ActivityPubAdapterService.adaptManyUsers(
 					(data as any).data.map((o: any) => o.follower),
-					domain,
+					driver,
 				),
 			);
 		} else {
@@ -59,7 +66,7 @@ function useGetFollowers(id: string) {
 			if (LEN === 0) return;
 			lastId.current = (data as any)?.data?.maxId;
 			setData(
-				ActivityPubAdapterService.adaptManyUsers((data as any)?.data, domain),
+				ActivityPubAdapterService.adaptManyUsers((data as any)?.data, driver),
 			);
 		}
 	}, [fetchStatus]);

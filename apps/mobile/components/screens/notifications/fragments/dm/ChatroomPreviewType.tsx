@@ -1,14 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Text } from '@rneui/themed';
 import { TouchableOpacity, View } from 'react-native';
 import { ActivityPubUser } from '../../../../../entities/activitypub-user.entity';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { ActivityPubStatus } from '../../../../../entities/activitypub-status.entity';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { ParsedDescriptionContainerForChatroomPreview } from '../../../../../styles/Containers';
 import { useNavigation } from '@react-navigation/native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type ChatroomPreviewType = {
 	roomId: any;
@@ -16,7 +17,12 @@ type ChatroomPreviewType = {
 };
 
 function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
-	const { domain, subdomain } = useActivityPubRestClientContext();
+	const { driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 	// const chatroom = useObject(ActivityPubChatRoom, roomId);
 
 	const navigation = useNavigation<any>();

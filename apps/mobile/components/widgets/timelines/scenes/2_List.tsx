@@ -9,10 +9,11 @@ import useActivityPubLists, {
 } from '../../../../hooks/api/lists/useActivityPubLists';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { Fragment, memo } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type ListItemProps = {
 	label: string;
@@ -81,7 +82,11 @@ const ANTENNA_COMPATIBLE_SOFTWARE = [
 ];
 
 const AntennaList = memo(({ items }: AntennaListProps) => {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
 	const { setTimelineType, setQuery, setShowTimelineSelection } =
 		useTimelineController();
 
@@ -92,7 +97,7 @@ const AntennaList = memo(({ items }: AntennaListProps) => {
 		setShowTimelineSelection(false);
 	}
 
-	if (!ANTENNA_COMPATIBLE_SOFTWARE.includes(domain as any)) return <View />;
+	if (!ANTENNA_COMPATIBLE_SOFTWARE.includes(driver)) return <View />;
 
 	return (
 		<Fragment>

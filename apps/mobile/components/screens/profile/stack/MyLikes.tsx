@@ -16,15 +16,20 @@ import WithAppTimelineDataContext, {
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import { useEffect } from 'react';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import ActivityPubService from '../../../../services/activitypub.service';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
-import { useSQLiteContext } from 'expo-sqlite';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function Core() {
-	const db = useSQLiteContext();
 	const { globalDb } = useGlobalMmkvContext();
-	const { domain, subdomain } = useActivityPubRestClientContext();
+	const { driver, acct, db } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+			db: o.db,
+		})),
+	);
 	const { updateQueryCache, queryCacheMaxId, setMaxId } =
 		useAppPaginationContext();
 
@@ -47,7 +52,7 @@ function Core() {
 			// 		res.syncCustomEmojis(db, globalDb).then(() => {});
 			// 	});
 		}
-	}, [data, globalDb, domain, subdomain]);
+	}, [data, globalDb, driver, acct?.server]);
 
 	const { visible, loading } = useLoadingMoreIndicatorState({ fetchStatus });
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
@@ -59,7 +64,7 @@ function Core() {
 		refetch,
 	});
 
-	if (!ActivityPubService.mastodonLike(domain)) {
+	if (!ActivityPubService.mastodonLike(driver)) {
 		return (
 			<WithAutoHideTopNavBar title={'My Liked Posts'} translateY={translateY}>
 				<FeatureUnsupported />;

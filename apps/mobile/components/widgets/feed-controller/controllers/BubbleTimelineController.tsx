@@ -1,14 +1,19 @@
 import { memo } from 'react';
 import { View, Text } from 'react-native';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { styles } from './_shared';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const BubbleTimelineController = memo(function Foo() {
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 	return (
 		<View>
 			<Text style={styles.timelineTypeText}>Bubble Timeline</Text>
-			<Text style={styles.timelineTargetText}>{subdomain}</Text>
+			<Text style={styles.timelineTargetText}>{acct?.server}</Text>
 			<Text style={styles.timelineDescription}>
 				This timeline displays posts from a list of servers curated by your
 				instance admin

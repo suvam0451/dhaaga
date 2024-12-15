@@ -4,12 +4,13 @@ import MfmService from '../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { Skeleton } from '@rneui/themed';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import * as Crypto from 'expo-crypto';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FacetService from '../../services/facets.service';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	content: string;
@@ -49,8 +50,9 @@ function useMfm({
 	acceptTouch,
 	emphasis,
 }: Props) {
-	const { domain, subdomain } = useActivityPubRestClientContext();
-	// const db = useRealm();
+	const { acct, driver, db } = useGlobalState(
+		useShallow((o) => ({ acct: o.acct, driver: o.driver, db: o.db })),
+	);
 	const { globalDb } = useGlobalMmkvContext();
 	const { colorScheme } = useAppTheme();
 
@@ -112,7 +114,7 @@ function useMfm({
 			return;
 		}
 
-		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const nodes = FacetService.render(content, { fontFamily, emphasis });
 			setData({
 				isLoaded: true,
@@ -130,8 +132,8 @@ function useMfm({
 
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
-			domain,
-			subdomain,
+			domain: driver,
+			subdomain: acct?.server,
 			globalDb,
 			remoteSubdomain,
 			fontFamily,

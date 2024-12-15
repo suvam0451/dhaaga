@@ -7,8 +7,9 @@ import WithActivitypubStatusContext from '../../../../../states/useStatus';
 import ConversationItem from '../../../../common/status/ConversationItem';
 import { ActivityPubUserRepository } from '../../../../../repositories/activitypub-user.repo';
 import { useNavigation } from '@react-navigation/native';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useSQLiteContext } from 'expo-sqlite';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type ConversationListItemProps = {
 	lastStatus: mastodon.v1.Status;
@@ -23,13 +24,17 @@ function ConversationListItem({
 	unread,
 	conversationId,
 }: ConversationListItemProps) {
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 	const navigation = useNavigation<any>();
 
 	const _account = accounts[0];
 	const db = useSQLiteContext();
 
-	const appAccountUrl = _account.getAppDisplayAccountUrl(subdomain);
+	const appAccountUrl = _account.getAppDisplayAccountUrl(acct?.server);
 
 	useEffect(() => {
 		for (let i = 0; i < accounts.length; i++) {

@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { Fragment, memo, useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { EmojiDto } from './_shared.types';
@@ -9,15 +8,24 @@ import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimel
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
 type EmojiReactionsProps = {
 	dto: ActivityPubStatusAppDtoType;
 };
+
 const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	const { emojiCache } = useAppTimelinePosts();
-	const { domain, me } = useActivityPubRestClientContext();
+	const { driver, me } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			me: o.me,
+		})),
+	);
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);
 	const { colorScheme } = useAppTheme();
@@ -36,7 +44,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 		);
 	}, [dto.stats.reactions, me]);
 
-	if (domain === 'mastodon') return <Fragment />;
+	if (driver === KNOWN_SOFTWARE.MASTODON) return <Fragment />;
 
 	const ShownEmojis = AllEmojisExpanded
 		? Emojis

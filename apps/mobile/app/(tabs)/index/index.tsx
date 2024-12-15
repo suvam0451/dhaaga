@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
@@ -29,7 +29,14 @@ function TimeOfDayGreeting() {
 		})),
 	);
 
-	useEffect(() => {
+	const fontStyle = {
+		color: colorScheme.textColor.medium,
+		marginTop: 8,
+		fontSize: 18,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+	};
+
+	const Component = useMemo(() => {
 		const currentHours = new Date().getHours();
 		let timeOfDay: TIME_OF_DAY;
 		if (currentHours >= 21 || (currentHours >= 0 && currentHours < 6)) {
@@ -41,15 +48,48 @@ function TimeOfDayGreeting() {
 		} else {
 			timeOfDay = TIME_OF_DAY.EVENING;
 		}
-		setTimeOfDay(timeOfDay);
-	}, []);
 
-	const fontStyle = {
-		color: colorScheme.textColor.medium,
-		marginTop: 8,
-		fontSize: 18,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	};
+		switch (timeOfDay) {
+			case TIME_OF_DAY.MORNING:
+				return (
+					<Fragment>
+						<Text style={fontStyle}>Good Morning, {acct?.displayName}</Text>
+					</Fragment>
+				);
+			case TIME_OF_DAY.AFTERNOON:
+				return (
+					<Fragment>
+						<Text style={fontStyle}>Good Afternoon, {acct?.displayName}</Text>
+					</Fragment>
+				);
+			case TIME_OF_DAY.EVENING:
+				return (
+					<Fragment>
+						<Text style={fontStyle}>Good Evening, {acct?.displayName}</Text>
+					</Fragment>
+				);
+			case TIME_OF_DAY.NIGHT:
+				return (
+					<Fragment>
+						<Text style={fontStyle}>Good Night, {acct?.displayName}</Text>
+						<Text
+							style={{
+								fontSize: 72,
+								position: 'absolute',
+								textAlign: 'right',
+								zIndex: -1,
+								opacity: 0.28,
+								width: '100%',
+								top: -32,
+							}}
+						>
+							🌙
+						</Text>
+					</Fragment>
+				);
+		}
+	}, [acct?.displayName]);
+
 	return (
 		<View
 			style={{
@@ -57,33 +97,7 @@ function TimeOfDayGreeting() {
 				paddingHorizontal: 8,
 			}}
 		>
-			{TimeOfDay === TIME_OF_DAY.MORNING && (
-				<Text style={fontStyle}>Good Morning</Text>
-			)}
-			{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
-				<Text style={fontStyle}>Good Afternoon</Text>
-			)}
-			{TimeOfDay === TIME_OF_DAY.EVENING && (
-				<Text style={fontStyle}>Good Evening</Text>
-			)}
-			{TimeOfDay === TIME_OF_DAY.NIGHT && (
-				<Fragment>
-					<Text style={fontStyle}>Good Night, {acct?.displayName}</Text>
-					<Text
-						style={{
-							fontSize: 72,
-							position: 'absolute',
-							textAlign: 'right',
-							zIndex: -1,
-							opacity: 0.28,
-							width: '100%',
-							top: -32,
-						}}
-					>
-						🌙
-					</Text>
-				</Fragment>
-			)}
+			{Component}
 		</View>
 	);
 }

@@ -11,15 +11,21 @@ import Feather from '@expo/vector-icons/Feather';
 import { memo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import PostMoreActionsPostTarget from '../dhaaga-bottom-sheet/modules/post-actions/fragments/PostMoreActionsPostTarget';
-import { useGorhomActionSheetContext } from '../../states/useGorhomBottomSheet';
 import { ActivityPubStatusAppDtoType } from '../../services/approto/app-status-dto.service';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;
 };
 
 const Status = memo(({ dto }: Props) => {
-	const { PostRef } = useGorhomActionSheetContext();
+	const { postValue } = useGlobalState(
+		useShallow((o) => ({
+			postValue: o.bottomSheet.postValue,
+		})),
+	);
+
 	const { content: ParsedDisplayName } = useMfm({
 		content: dto.postedBy.displayName,
 		remoteSubdomain: dto.postedBy.instance,
@@ -114,7 +120,7 @@ const Status = memo(({ dto }: Props) => {
 								color={APP_FONT.MONTSERRAT_BODY}
 							/>
 							<Text style={styles.buttonText}>
-								{PostRef.current.interaction.liked ? 'Remove Like' : 'Like'}
+								{postValue?.interaction?.liked ? 'Remove Like' : 'Like'}
 							</Text>
 						</View>
 						<View style={styles.postActionButtonContainer}>

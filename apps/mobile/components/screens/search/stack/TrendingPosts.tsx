@@ -13,8 +13,9 @@ import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndic
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import useTrendingPosts from '../api/useTrendingPosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const SHOWN_SECTION_HEIGHT = 50;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -23,7 +24,11 @@ const HIDDEN_SECTION_HEIGHT = 50;
  * Search Module -- Trending Posts
  */
 function ApiWrapper() {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
 	const { data: PageData, updateQueryCache, clear } = useAppPaginationContext();
 
 	const { IsLoading, fetchStatus, refetch } = useTrendingPosts();
@@ -48,7 +53,7 @@ function ApiWrapper() {
 
 	return (
 		<WithAutoHideTopNavBar title={'Trending Posts'} translateY={translateY}>
-			{domain === KNOWN_SOFTWARE.MASTODON ? (
+			{driver === KNOWN_SOFTWARE.MASTODON ? (
 				<Fragment>
 					<AnimatedFlashList
 						estimatedItemSize={200}

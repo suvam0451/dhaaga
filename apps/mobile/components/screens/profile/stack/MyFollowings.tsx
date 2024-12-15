@@ -1,16 +1,21 @@
 import WithAppPaginationContext from '../../../../states/usePagination';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { View } from 'react-native';
 import { UserItem } from './MyFollowers';
 import WithActivitypubUserContext from '../../../../states/useProfile';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import useGetFollows from '../../../../hooks/api/accounts/useGetFollows';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function WithApi() {
-	const { me } = useActivityPubRestClientContext();
+	const { me } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+		})),
+	);
+
 	const { Data, loadNext } = useGetFollows(me?.getId());
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
 		itemCount: Data?.length,

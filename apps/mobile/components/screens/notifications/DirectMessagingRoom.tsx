@@ -3,7 +3,6 @@ import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
 } from '../../../states/useStatus';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useRoute } from '@react-navigation/native';
 import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -18,19 +17,21 @@ import { Input } from '@rneui/themed';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
-import {
-	BOTTOM_SHEET_ENUM,
-	useGorhomActionSheetContext,
-} from '../../../states/useGorhomBottomSheet';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import useTopbarSmoothTranslate from '../../../states/useTopbarSmoothTranslate';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type DirectMessagingRoomProps = {
 	conversationIds: string[];
 };
 
 function WithContextWrapped() {
-	const { client } = useActivityPubRestClientContext();
+	const { client } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+		})),
+	);
 	const { setStatusContextData } = useActivitypubStatusContext();
 	const route = useRoute<any>();
 	const q = route?.params?.id;
@@ -68,11 +69,12 @@ type ChatItemPointer = {
 };
 
 function DirectMessagingRoom() {
-	const {
-		client,
-		primaryAcct,
-		domain: _domain,
-	} = useActivityPubRestClientContext();
+	const { client, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+		})),
+	);
 
 	const route = useRoute<any>();
 	const roomId = route?.params?.roomId;
@@ -82,19 +84,18 @@ function DirectMessagingRoom() {
 	const [MessageHistory, setMessageHistory] = useState<StatusInterface[]>([]);
 
 	const [ChatHistory, setChatHistory] = useState<ChatItemPointer[]>([]);
-	const { setVisible, setBottomSheetType, updateRequestId } =
-		useGorhomActionSheetContext();
+	const { show } = useGlobalState(
+		useShallow((o) => ({
+			show: o.bottomSheet.show,
+		})),
+	);
 
 	const conversationMapper = useMemo(() => {
 		return new Map<string, string>();
 	}, [roomId]);
 
 	function onComposerRequested() {
-		setBottomSheetType(BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
-		updateRequestId();
-		setTimeout(() => {
-			setVisible(true);
-		}, 200);
+		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 	}
 
 	const mmkv = useMemo(() => {
@@ -150,7 +151,7 @@ function DirectMessagingRoom() {
 					if (item.ancestors !== undefined) {
 						const interfaces = ActivityPubAdapterService.adaptContextChain(
 							item,
-							_domain,
+							driver,
 						);
 						statuses = statuses.concat(interfaces);
 						// for (let i = 0; i < interfaces.length; i++)
@@ -163,7 +164,7 @@ function DirectMessagingRoom() {
 					} else {
 						const interfaces = ActivityPubAdapterService.adaptManyStatuses(
 							item,
-							_domain,
+							driver,
 						);
 						// for (let i = 0; i < interfaces.length; i++)
 						// 	conversationMapper.set(

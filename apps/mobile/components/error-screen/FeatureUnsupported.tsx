@@ -3,10 +3,15 @@ import { memo } from 'react';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { APP_FONT } from '../../styles/AppTheme';
 import SimpleSoftwareBadge from '../common/software/SimpleBadge';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const FeatureUnsupported = memo(() => {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
 
 	return (
 		<View
@@ -35,7 +40,7 @@ const FeatureUnsupported = memo(() => {
 					Your instance software does not support this feature.
 				</Text>
 				<View style={{ marginTop: 16 }}>
-					<SimpleSoftwareBadge software={domain} />
+					<SimpleSoftwareBadge software={driver} />
 				</View>
 			</View>
 		</View>

@@ -3,7 +3,6 @@ import { Text, View } from 'react-native';
 import { useAppBottomSheet } from '../_api/useAppBottomSheet';
 import useGetReactionDetails from '../../../../hooks/api/useGetReactionDetails';
 import { Image } from 'expo-image';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
@@ -19,6 +18,8 @@ import ActivityPubReactionsService from '../../../../services/approto/activitypu
 import { AppUser } from '../../../../services/approto/app-user-service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { AppAvatar } from '../../../lib/Avatar';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
 	const { colorScheme } = useAppTheme();
@@ -53,7 +54,13 @@ const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
 
 const AppBottomSheetReactionDetails = memo(() => {
 	const { colorScheme } = useAppTheme();
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { client, driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+			client: o.router,
+		})),
+	);
 	const { TextRef, PostRef, timelineDataPostListReducer, setVisible, visible } =
 		useAppBottomSheet();
 	const { Data, fetchStatus } = useGetReactionDetails(
@@ -70,8 +77,8 @@ const AppBottomSheetReactionDetails = memo(() => {
 		setLoading(true);
 		const { id } = ActivitypubReactionsService.extractReactionCode(
 			TextRef.current,
-			domain,
-			subdomain,
+			driver,
+			acct?.server,
 		);
 
 		const state = Data.reacted
@@ -79,14 +86,14 @@ const AppBottomSheetReactionDetails = memo(() => {
 					client,
 					PostRef.current.id,
 					id,
-					domain,
+					driver,
 					setLoading,
 				)
 			: await ActivityPubReactionsService.addReaction(
 					client,
 					PostRef.current.id,
 					TextRef.current,
-					domain,
+					driver,
 					setLoading,
 				);
 

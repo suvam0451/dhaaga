@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import {
 	StatusInterface,
@@ -8,6 +7,8 @@ import {
 import { DhaagaJsPostSearchDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/search';
 import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export enum APP_SEARCH_TYPE {
 	POSTS,
@@ -36,7 +37,13 @@ const DEFAULT_RESPONSE: AppSearchResults = {
  * @param dto
  */
 function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { client, acct, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			acct: o.acct,
+			driver: o.driver,
+		})),
+	);
 	const [Data, setData] = useState<AppSearchResults>(DEFAULT_RESPONSE);
 
 	async function api() {
@@ -48,7 +55,7 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 					const FALLBACK_TO_OFFSET = [
 						KNOWN_SOFTWARE.AKKOMA,
 						// KNOWN_SOFTWARE.SHARKEY,
-					].includes(domain as any);
+					].includes(driver);
 					const offset = FALLBACK_TO_OFFSET
 						? dto.maxId
 							? parseInt(dto.maxId)
@@ -84,7 +91,7 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 
 					return {
 						...DEFAULT_RESPONSE,
-						statuses: ActivityPubAdapterService.adaptManyStatuses(data, domain),
+						statuses: ActivityPubAdapterService.adaptManyStatuses(data, driver),
 					};
 				}
 				case APP_SEARCH_TYPE.USERS: {
@@ -102,7 +109,7 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 					return {
 						...DEFAULT_RESPONSE,
 						accounts: data.map((o) =>
-							ActivityPubAdapterService.adaptUser(o, domain),
+							ActivityPubAdapterService.adaptUser(o, driver),
 						),
 					};
 				}
@@ -118,7 +125,7 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 
 	// Queries
 	const { fetchStatus, data, status } = useQuery<AppSearchResults>({
-		queryKey: ['search', subdomain, dto, type],
+		queryKey: ['search', acct?.id, dto, type],
 		queryFn: api,
 		enabled: client !== null && dto.q !== '',
 	});

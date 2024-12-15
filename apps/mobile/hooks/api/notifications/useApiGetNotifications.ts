@@ -5,11 +5,12 @@ import {
 	UserInterface,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import ActivitypubAdapterService from '../../../services/activitypub-adapter.service';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Api_Response_Type = {
 	data: any[];
@@ -36,21 +37,27 @@ export type Notification_FlatList_Entry = {
 type useApiGetNotificationsProps = {
 	include: DhaagaJsNotificationType[];
 };
+
 /**
  * API Query for the notifications endpoint
  */
 function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
-	const { client, primaryAcct, domain, subdomain } =
-		useActivityPubRestClientContext();
+	const { client, acct, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			acct: o.acct,
+			driver: o.driver,
+		})),
+	);
 	const [Results, setResults] = useState<Notification_FlatList_Entry[]>([]);
 
 	useEffect(() => {
 		setResults([]);
-	}, [primaryAcct]);
+	}, [acct]);
 
 	async function api() {
 		if (!client) return [];
-		if (domain === KNOWN_SOFTWARE.FIREFISH) {
+		if (driver === KNOWN_SOFTWARE.FIREFISH) {
 			/**
 			 * Firefish does not support grouped-notifications
 			 * Maybe Iceshrimp too?
@@ -78,7 +85,7 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 
 	// Queries
 	const { fetchStatus, data, status, refetch } = useQuery<Api_Response_Type>({
-		queryKey: ['notifications', domain, subdomain, include],
+		queryKey: ['notifications', driver, acct?.server, include],
 		queryFn: api,
 		enabled: client !== null,
 	});
@@ -95,13 +102,13 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 					groupKey: o.groupKey,
 					acct:
 						o.account || o.user
-							? ActivityPubAdapterService.adaptUser(o.account || o.user, domain)
+							? ActivityPubAdapterService.adaptUser(o.account || o.user, driver)
 							: undefined,
 					post:
 						o.status || o.body || o.note
 							? ActivitypubAdapterService.adaptStatus(
 									o.status || o.data || o.note,
-									domain,
+									driver,
 								)
 							: undefined,
 					extraData: o.reaction,

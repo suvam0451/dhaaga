@@ -1,12 +1,19 @@
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useEffect, useState } from 'react';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { useQuery } from '@tanstack/react-query';
 import { GetPostsQueryDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function useGetLikes(query: GetPostsQueryDTO) {
-	const { client, primaryAcct, domain } = useActivityPubRestClientContext();
+	const { client, acct, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			acct: o.acct,
+			driver: o.driver,
+		})),
+	);
 	const [Data, setData] = useState<StatusInterface[]>([]);
 
 	async function api() {
@@ -19,16 +26,11 @@ function useGetLikes(query: GetPostsQueryDTO) {
 			console.log('[ERROR]: fetching likes', error);
 			return [];
 		}
-		return ActivityPubAdapterService.adaptManyStatuses(data, domain);
+		return ActivityPubAdapterService.adaptManyStatuses(data, driver);
 	}
 
 	const { status, data, fetchStatus, refetch } = useQuery<StatusInterface[]>({
-		queryKey: [
-			'favourites',
-			primaryAcct?.subdomain,
-			primaryAcct?.username,
-			query,
-		],
+		queryKey: ['favourites', acct?.server, acct?.username, query],
 		queryFn: api,
 		enabled: client !== null,
 	});

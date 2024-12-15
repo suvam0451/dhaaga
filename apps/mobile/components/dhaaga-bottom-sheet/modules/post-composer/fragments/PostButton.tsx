@@ -4,7 +4,6 @@ import { Text, TouchableOpacity } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import {
@@ -17,19 +16,27 @@ import { ActivitypubStatusService } from '../../../../../services/approto/activi
 import AtprotoComposerService, {
 	AtprotoReplyEmbed,
 } from '../../../../../services/atproto/atproto-compose';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Click to Post!
  */
 const PostButton = memo(() => {
 	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { client, driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 	const { setType, ParentRef, PostRef } = useAppBottomSheet();
 
 	async function onClick() {
 		let _visibility: any = visibility.toLowerCase();
 
-		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			let reply: AtprotoReplyEmbed = null;
 			if (ParentRef.current) {
 				if (ParentRef.current.rootPost) {
@@ -67,11 +74,11 @@ const PostButton = memo(() => {
 				 * 		We can use the logic from context builder
 				 * 		to render the parent and root, as well
 				 */
-				const res = ActivityPubAdapterService.adaptStatus(data, domain);
+				const res = ActivityPubAdapterService.adaptStatus(data, driver);
 				PostRef.current = new ActivitypubStatusService(
 					res,
-					domain,
-					subdomain,
+					driver,
+					acct?.server,
 				).export();
 				setType(APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
 				return;
@@ -79,17 +86,17 @@ const PostButton = memo(() => {
 		}
 
 		if (visibility === APP_POST_VISIBILITY.PRIVATE) {
-			_visibility = ActivityPubService.mastodonLike(domain)
+			_visibility = ActivityPubService.mastodonLike(driver)
 				? 'private'
 				: 'followers';
 		}
 		if (visibility === APP_POST_VISIBILITY.UNLISTED) {
-			_visibility = ActivityPubService.mastodonLike(domain)
+			_visibility = ActivityPubService.mastodonLike(driver)
 				? 'unlisted'
 				: 'home';
 		}
 		if (visibility === APP_POST_VISIBILITY.DIRECT) {
-			_visibility = ActivityPubService.mastodonLike(domain)
+			_visibility = ActivityPubService.mastodonLike(driver)
 				? 'direct'
 				: 'specified';
 		}
@@ -112,15 +119,15 @@ const PostButton = memo(() => {
 				KNOWN_SOFTWARE.MASTODON,
 				KNOWN_SOFTWARE.PLEROMA,
 				KNOWN_SOFTWARE.AKKOMA,
-			].includes(domain as any)
+			].includes(driver)
 		) {
-			const _data = ActivityPubAdapterService.adaptStatus(data, domain);
+			const _data = ActivityPubAdapterService.adaptStatus(data, driver);
 
 			try {
 				PostRef.current = new ActivitypubStatusService(
 					_data,
-					domain,
-					subdomain,
+					driver,
+					acct?.server,
 				).export();
 			} catch (e) {
 				console.log(e);
@@ -130,10 +137,10 @@ const PostButton = memo(() => {
 				PostRef.current = new ActivitypubStatusService(
 					ActivityPubAdapterService.adaptStatus(
 						(data as any).createdNote,
-						domain,
+						driver,
 					),
-					domain,
-					subdomain,
+					driver,
+					acct?.server,
 				).export();
 			} catch (e) {
 				console.log(e);

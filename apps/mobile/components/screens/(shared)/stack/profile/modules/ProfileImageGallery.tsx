@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import {
 	KNOWN_SOFTWARE,
@@ -13,6 +12,8 @@ import MediaThumbnail from '../../../../../common/media/Thumb';
 import ImageGalleryCanvas from '../../../../../common/user/fragments/ImageGalleryCanvas';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import { AppBskyFeedGetAuthorFeed } from '@atproto/api';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type FlashListItemProps = {
 	selected: boolean;
@@ -101,7 +102,12 @@ function SeeMore() {
 }
 
 function ProfileImageGallery({ userId }: Props) {
-	const { client, domain } = useActivityPubRestClientContext();
+	const { client, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+		})),
+	);
 	const [Data, setData] = useState([]);
 	const [MediaItems, setMediaItems] = useState<MediaAttachmentInterface[]>([]);
 	const [MediaGalleryCtrl, setMediaGalleryCtrl] = useState({
@@ -123,7 +129,7 @@ function ProfileImageGallery({ userId }: Props) {
 			onlyMedia: true,
 			excludeReblogs: true,
 			bskyFilter:
-				domain === KNOWN_SOFTWARE.BLUESKY ? 'posts_with_media' : undefined,
+				driver === KNOWN_SOFTWARE.BLUESKY ? 'posts_with_media' : undefined,
 		});
 		return data;
 	}
@@ -139,12 +145,12 @@ function ProfileImageGallery({ userId }: Props) {
 		if (status !== 'success' || !data) return;
 
 		const is =
-			domain === KNOWN_SOFTWARE.BLUESKY
+			driver === KNOWN_SOFTWARE.BLUESKY
 				? ActivityPubAdapterService.adaptManyStatuses(
 						(data as AppBskyFeedGetAuthorFeed.Response).data.feed,
-						domain,
+						driver,
 					)
-				: ActivityPubAdapterService.adaptManyStatuses(data as any[], domain);
+				: ActivityPubAdapterService.adaptManyStatuses(data as any[], driver);
 		setData(is);
 
 		let images = [];

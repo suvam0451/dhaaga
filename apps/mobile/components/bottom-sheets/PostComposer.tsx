@@ -6,13 +6,13 @@ import {
 	TouchableOpacity,
 	View,
 	Text,
+	TextInput,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import IconBasedFlipper from '../utils/IconBasedFlipper';
-import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import * as ImagePicker from 'expo-image-picker';
 import { APP_FONT } from '../../styles/AppTheme';
 import CustomEmojiPicker from '../utils/CustomEmojiPicker';
@@ -147,7 +147,7 @@ function PostComposerBottomSheet() {
 						</View>
 					</View>
 					<View style={{ marginTop: 8 }}>
-						<BottomSheetTextInput
+						<TextInput
 							multiline={true}
 							placeholder={"What's on your mindsss?"}
 							placeholderTextColor={'rgba(255, 255, 255, 0.33)'}

@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useMemo } from 'react';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import {
@@ -7,11 +6,18 @@ import {
 	MegaAccount,
 } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 import { Endpoints } from 'misskey-js';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function TimelineWidgetUserApi(q: string) {
-	const { client, primaryAcct, domain, subdomain } =
-		useActivityPubRestClientContext();
-	const username = primaryAcct?.username;
+	const { client, acct, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			acct: o.acct,
+			driver: o.driver,
+		})),
+	);
+	const username = acct?.username;
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
@@ -29,7 +35,7 @@ function TimelineWidgetUserApi(q: string) {
 	const { fetchStatus, data, status } = useQuery<
 		MastoAccount[] | Endpoints['users/search']['res'] | MegaAccount[]
 	>({
-		queryKey: [username, subdomain, q],
+		queryKey: [username, acct?.server, q],
 		queryFn: api,
 		enabled: client !== null && q !== '',
 	});
@@ -37,7 +43,7 @@ function TimelineWidgetUserApi(q: string) {
 	const transformedData = useMemo(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return [];
 		return (
-			data?.map((o) => ActivityPubAdapterService.adaptUser(o, domain)) || []
+			data?.map((o) => ActivityPubAdapterService.adaptUser(o, driver)) || []
 		);
 	}, [fetchStatus]);
 

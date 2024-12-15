@@ -4,7 +4,8 @@ import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { useGorhomActionSheetContext } from '../../../../states/useGorhomBottomSheet';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type TagButtonBrowseLocalProps = {
 	name: string;
@@ -16,12 +17,16 @@ type TagButtonBrowseLocalProps = {
  * for selection
  */
 const TagButtonBrowseLocal = memo(({ name }: TagButtonBrowseLocalProps) => {
-	const { ref } = useGorhomActionSheetContext();
+	const { hide } = useGlobalState(
+		useShallow((o) => ({
+			hide: o.bottomSheet.hide,
+		})),
+	);
 
 	const { toTag } = useAppNavigator();
 
 	function onNavigate() {
-		if (ref?.current) ref.current?.close();
+		hide();
 		toTag(name);
 	}
 

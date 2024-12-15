@@ -1,6 +1,7 @@
 import { View, StyleSheet } from 'react-native';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { memo } from 'react';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function getAccountDisplayName(
 	username: string,
@@ -25,7 +26,12 @@ function getAccountDisplayName(
  * @constructor
  */
 const RealmStatus = memo(function Foo({ _id }: { _id }) {
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
+
 	// const post = useObject(ActivityPubStatus, _id);
 
 	// const { content } = useMfm({

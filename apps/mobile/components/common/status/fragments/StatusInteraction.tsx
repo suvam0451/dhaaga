@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { memo, useState } from 'react';
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Divider } from '@rneui/themed';
 import PostStats from '../PostStats';
@@ -17,6 +16,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../states/_global';
 
 type StatusInteractionProps = {
 	openAiContext?: string[];
@@ -37,7 +38,12 @@ const StatusInteraction = memo(
 			timelineDataPostListReducer,
 			RootRef,
 		} = useAppBottomSheet();
-		const { client } = useActivityPubRestClientContext();
+		const { client } = useGlobalState(
+			useShallow((o) => ({
+				client: o.router,
+			})),
+		);
+
 		const { explain, boost, getPostListReducer } = useAppTimelinePosts();
 
 		const STATUS_DTO = dto;

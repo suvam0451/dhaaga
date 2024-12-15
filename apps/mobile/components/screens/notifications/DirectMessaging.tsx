@@ -3,7 +3,6 @@ import WithAppPaginationContext, {
 } from '../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useEffect } from 'react';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { ScrollView, View } from 'react-native';
@@ -15,15 +14,19 @@ import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function WithApi() {
-	const {
-		client,
-		domain: _domain,
-		subdomain: _subdomain,
-	} = useActivityPubRestClientContext();
+	const { client, driver, acct, me } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			acct: o.acct,
+			me: o.me,
+			driver: o.driver,
+		})),
+	);
 
-	const { me, meRaw } = useActivityPubRestClientContext();
 	const {
 		data: PageData,
 		updateQueryCache,
@@ -66,14 +69,14 @@ function WithApi() {
 			const participantIds = [
 				// @ts-ignore
 				...new Set(
-					item.accounts.map((o) => ActivityPubUserAdapter(o, _domain).getId()),
+					item.accounts.map((o) => ActivityPubUserAdapter(o, driver).getId()),
 				),
 			].sort((a, b) => a.localeCompare(b));
 			// User is also a participant
 			const myId = me.getId();
 			if (!participantIds.includes(myId)) {
 				participantIds.push(myId);
-				item.accounts.push(meRaw);
+				item.accounts.push(me);
 			}
 			const hash = await CryptoService.hashUserList(participantIds);
 			// ChatroomService.upsertConversation(db, {

@@ -4,7 +4,8 @@ import {
 	TagType,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useActivityPubRestClientContext } from './useActivityPubRestClient';
+import useGlobalState from './_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Type = {
 	tag: TagInterface;
@@ -37,23 +38,27 @@ type Props = {
  * Wrap ActivityPub tag objects with this
  */
 function WithActivitypubTagContext({ tag, children }: Props) {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
 
 	const [Value, setValue] = useState<TagInterface | null>(
-		ActivityPubTagAdapter(null, domain),
+		ActivityPubTagAdapter(null, driver),
 	);
 	const [RawValue, setRawValue] = useState<TagType | null>(null);
 
 	// init
 	useEffect(() => {
 		setRawValue(tag);
-		setValue(ActivityPubTagAdapter(tag, domain));
+		setValue(ActivityPubTagAdapter(tag, driver));
 	}, [tag]);
 
 	const set = (o: TagInterface) => setValue(o);
 	const setRaw = (o: TagType) => {
 		setRawValue(o);
-		setValue(ActivityPubTagAdapter(o, domain));
+		setValue(ActivityPubTagAdapter(o, driver));
 	};
 
 	return (

@@ -1,4 +1,3 @@
-import { RefreshControl } from 'react-native';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
@@ -11,16 +10,22 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useTrendingTags from '../api/useTrendingTags';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import { Fragment, useState } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import { Fragment } from 'react';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Search Module -- Trending Posts
  */
 function ApiWrapper() {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
+
 	const { data: PageData, updateQueryCache } = useAppPaginationContext();
 	// const [refreshing, setRefreshing] = useState(false);
 	// const onRefresh = () => {
@@ -39,7 +44,7 @@ function ApiWrapper() {
 	const { visible, loading } = useLoadingMoreIndicatorState({ fetchStatus });
 	return (
 		<WithAutoHideTopNavBar title={'Trending Tags'} translateY={translateY}>
-			{domain === KNOWN_SOFTWARE.MASTODON ? (
+			{driver === KNOWN_SOFTWARE.MASTODON ? (
 				<Fragment>
 					<AnimatedFlashList
 						estimatedItemSize={72}

@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import {
 	ActivityPubStatus,
 	InstanceApi_CustomEmojiDTO,
@@ -12,6 +11,8 @@ import { useEffect } from 'react';
 import { useComposerContext } from './useComposerContext';
 import { EmojiService } from '../../../../../services/emoji.service';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type PostComposeAutoCompletionResults = {
 	accounts: UserInterface[];
@@ -26,7 +27,13 @@ const DEFAULT: PostComposeAutoCompletionResults = {
 };
 
 function usePostComposeAutoCompletion() {
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { client, driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 	const { setAutoCompletion, autoCompletionPrompt } = useComposerContext();
 	const { globalDb } = useGlobalMmkvContext();
 
@@ -45,10 +52,10 @@ function usePostComposeAutoCompletion() {
 				if (error) return DEFAULT;
 
 				// Custom Logic
-				if (domain === KNOWN_SOFTWARE.BLUESKY) {
+				if (driver === KNOWN_SOFTWARE.BLUESKY) {
 					return {
 						accounts: ((data as any).data.actors as any).map((o) =>
-							ActivityPubAdapterService.adaptUser(o, domain),
+							ActivityPubAdapterService.adaptUser(o, driver),
 						),
 						hashtags: [],
 						emojis: [],
@@ -57,7 +64,7 @@ function usePostComposeAutoCompletion() {
 
 				return {
 					accounts: (data as any).map((o) =>
-						ActivityPubAdapterService.adaptUser(o, domain),
+						ActivityPubAdapterService.adaptUser(o, driver),
 					),
 					hashtags: [],
 					emojis: [],
@@ -65,7 +72,7 @@ function usePostComposeAutoCompletion() {
 			}
 			case 'emoji': {
 				if (autoCompletionPrompt.q === '') return DEFAULT;
-				const cache = EmojiService.getEmojiCache(globalDb, subdomain);
+				const cache = EmojiService.getEmojiCache(globalDb, acct?.server);
 				const matches = cache.filter((o) =>
 					o.shortCode.includes(autoCompletionPrompt.q),
 				);

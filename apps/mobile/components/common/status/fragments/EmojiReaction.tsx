@@ -11,12 +11,13 @@ import {
 } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -25,7 +26,13 @@ const EmojiReaction = memo(function Foo({
 	dto: EmojiDto;
 	postDto: ActivityPubStatusAppDtoType;
 }) {
-	const { domain, subdomain, client } = useActivityPubRestClientContext();
+	const { driver, acct, client } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			client: o.router,
+			acct: o.acct,
+		})),
+	);
 	const {
 		TextRef,
 		PostRef,
@@ -72,8 +79,8 @@ const EmojiReaction = memo(function Foo({
 			if (!IS_REMOTE) {
 				const { id } = ActivitypubReactionsService.extractReactionCode(
 					TextRef.current,
-					domain,
-					subdomain,
+					driver,
+					acct?.server,
 				);
 
 				const state = dto.me
@@ -81,14 +88,14 @@ const EmojiReaction = memo(function Foo({
 							client,
 							postDto.id,
 							id,
-							domain,
+							driver,
 							setEmojiStateLoading,
 						)
 					: await ActivityPubReactionsService.addReaction(
 							client,
 							postDto.id,
 							dto.name,
-							domain,
+							driver,
 							setEmojiStateLoading,
 						);
 				if (state !== null) {

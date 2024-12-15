@@ -13,15 +13,20 @@ import {
 } from '../api/useComposerContext';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../styles/AppTheme';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
 import { Image } from 'expo-image';
 import ComposeMediaTargets from './MediaTargets';
 import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../../states/_global';
 
 const ComposerAltListItem = memo(
 	({ item, index }: { item: ComposeMediaTargetItem; index: number }) => {
-		const { client } = useActivityPubRestClientContext();
+		const { client } = useGlobalState(
+			useShallow((o) => ({
+				client: o.router,
+			})),
+		);
 		const { setAltText } = useComposerContext();
 		const [TextContent, setTextContent] = useState(item.cw);
 		const { forceUpdate } = useHookLoadingState();

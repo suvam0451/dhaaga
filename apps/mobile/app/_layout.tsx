@@ -30,7 +30,6 @@ import { migrateDbIfNeeded } from '../database/migrations';
 import useGlobalState from '../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
-import WithActivityPubRestClient from '../states/useActivityPubRestClient';
 
 /**
  * Suppress these warnings...
@@ -99,40 +98,35 @@ function App() {
 	}, [pathname, colorScheme]);
 
 	return (
-		<WithActivityPubRestClient>
-			<View
-				style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
-				onLayout={onLayoutRootView}
-			>
-				<StatusBar backgroundColor={colorScheme.palette.bg} />
-				<Stack
-					initialRouteName={'(tabs)'}
-					screenOptions={{ headerShown: false }}
-				>
-					<Stack.Screen
-						name="(tabs)"
-						options={{
-							presentation: 'modal',
-						}}
-					/>
-					<Stack.Screen
-						name="modal"
-						options={{
-							presentation: 'modal',
-						}}
-					/>
-					<Stack.Screen
-						name="formSheet"
-						options={{
-							presentation: 'formSheet',
-							headerShown: false,
-							animation: 'flip',
-						}}
-					/>
-				</Stack>
-				<AppBottomSheet />
-			</View>
-		</WithActivityPubRestClient>
+		<View
+			style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
+			onLayout={onLayoutRootView}
+		>
+			<StatusBar backgroundColor={colorScheme.palette.bg} />
+			<Stack initialRouteName={'(tabs)'} screenOptions={{ headerShown: false }}>
+				<Stack.Screen
+					name="(tabs)"
+					options={{
+						presentation: 'modal',
+					}}
+				/>
+				<Stack.Screen
+					name="modal"
+					options={{
+						presentation: 'modal',
+					}}
+				/>
+				<Stack.Screen
+					name="formSheet"
+					options={{
+						presentation: 'formSheet',
+						headerShown: false,
+						animation: 'flip',
+					}}
+				/>
+			</Stack>
+			<AppBottomSheet />
+		</View>
 	);
 }
 

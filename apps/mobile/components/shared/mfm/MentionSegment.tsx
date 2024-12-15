@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { Text } from '@rneui/themed';
 import { randomUUID } from 'expo-crypto';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
@@ -7,6 +6,8 @@ import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
 } from '../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	value: string;
@@ -18,12 +19,16 @@ const MentionSegment = memo(function Foo({ value, link, fontFamily }: Props) {
 	const { setVisible, updateRequestId, setType, HandleRef } =
 		useAppBottomSheet();
 	const { colorScheme } = useAppTheme();
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 	const k = randomUUID();
 
 	const displayText = useMemo(() => {
 		let retval = value;
-		const ex = new RegExp(`@?(.*?)@${subdomain}`, 'g');
+		const ex = new RegExp(`@?(.*?)@${acct?.server}`, 'g');
 		const res = Array.from(value.matchAll(ex));
 		if (res.length > 0) {
 			retval = `${res[0][1]}`;

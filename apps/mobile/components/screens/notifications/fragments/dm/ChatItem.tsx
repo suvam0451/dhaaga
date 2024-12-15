@@ -1,6 +1,5 @@
 import { useActivitypubStatusContext } from '../../../../../states/useStatus';
 import { StyleSheet, View } from 'react-native';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useMemo, useState } from 'react';
 import MfmService from '../../../../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
@@ -10,13 +9,21 @@ import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../../styles/AppTheme';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function ChatItem() {
 	const { status } = useActivitypubStatusContext();
-	const { me, domain, subdomain } = useActivityPubRestClientContext();
+	const { me, driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 	const { globalDb } = useGlobalMmkvContext();
 	const [UserInterface, setUserInterface] = useState(
-		ActivityPubUserAdapter(null, domain),
+		ActivityPubUserAdapter(null, driver),
 	);
 
 	let content = status.getContent();
@@ -28,8 +35,8 @@ function ChatItem() {
 		const emojiMap = new Map();
 		const { reactNodes } = MfmService.renderMfm(content, {
 			emojiMap,
-			domain,
-			subdomain,
+			domain: driver,
+			subdomain: acct?.server,
 			remoteSubdomain: UserInterface?.getInstanceUrl(),
 			globalDb,
 			colorScheme: null,

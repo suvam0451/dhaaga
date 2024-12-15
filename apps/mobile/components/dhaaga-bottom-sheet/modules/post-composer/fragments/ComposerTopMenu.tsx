@@ -8,10 +8,11 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import PostButton from './PostButton';
 import ReplyContextIndicator from './ReplyContextIndicator';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useComposerContext } from '../api/useComposerContext';
 import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import ComposerDecorator from './ComposerDecorator';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * The top section of the post composer.
@@ -19,7 +20,11 @@ import ComposerDecorator from './ComposerDecorator';
  * For emoji selections, this section is hidden
  */
 const ComposerTopMenu = memo(() => {
-	const { me } = useActivityPubRestClientContext();
+	const { me } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+		})),
+	);
 	const { editMode } = useComposerContext();
 	const { colorScheme } = useAppTheme();
 

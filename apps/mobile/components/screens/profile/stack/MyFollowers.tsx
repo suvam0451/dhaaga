@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import WithAppPaginationContext from '../../../../states/usePagination';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import WithActivitypubUserContext, {
 	useActivitypubUserContext,
 } from '../../../../states/useProfile';
@@ -16,10 +15,16 @@ import useMfm from '../../../hooks/useMfm';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import useGetFollowers from '../../../../hooks/api/accounts/useGetFollowers';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export function UserItem() {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const subdomain = primaryAcct?.subdomain;
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
+	const subdomain = acct?.server;
 	const { user } = useActivitypubUserContext();
 	const { toProfile } = useAppNavigator();
 
@@ -119,7 +124,11 @@ export function UserItem() {
 }
 
 function WithApi() {
-	const { me } = useActivityPubRestClientContext();
+	const { me } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+		})),
+	);
 	const { Data, loadNext } = useGetFollowers(me?.getId());
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
 		itemCount: Data.length,

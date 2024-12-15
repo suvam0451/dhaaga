@@ -2,7 +2,7 @@ import type { MMKV } from 'react-native-mmkv';
 import { Result } from '../utils/result';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 
-export class AppMmkvService {
+export class AppMmkvInstance {
 	db: MMKV;
 
 	constructor(db: MMKV) {

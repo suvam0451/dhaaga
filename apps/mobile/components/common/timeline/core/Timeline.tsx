@@ -38,8 +38,8 @@ const Timeline = memo(() => {
 	const { maxId } = usePagination();
 	const { setNextMaxId, clear, next } = usePaginationActions();
 
-	const { query, opts, setTimelineType } = useTimelineController();
-	const { acct, homepageType, router, driver } = useGlobalState(
+	const { query, opts } = useTimelineController();
+	const { homepageType, router, driver } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			homepageType: o.homepageType,

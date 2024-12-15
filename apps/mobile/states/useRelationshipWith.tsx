@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MastoRelationship } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
 import useHookLoadingState from './useHookLoadingState';
@@ -12,6 +11,8 @@ import { UserDetailed } from 'misskey-js/built/autogen/models';
 import ActivitypubRelationService from '../services/approto/activitypub-relation.service';
 import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
 import { AppBskyActorGetProfile } from '@atproto/api';
+import useGlobalState from './_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const defaultValue = {
 	blockedBy: false,
@@ -40,8 +41,12 @@ const defaultValue = {
  * @constructor
  */
 function useRelationshipWith(id: string) {
-	const { domain } = useActivityPubRestClientContext();
-	const { client } = useActivityPubRestClientContext();
+	const { client, driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			client: o.router,
+		})),
+	);
 	const { State, forceUpdate } = useHookLoadingState();
 
 	const [IsLoading, setIsLoading] = useState(false);
@@ -133,8 +138,8 @@ function useRelationshipWith(id: string) {
 
 	function setRelation(input: MastoRelationship) {
 		setIsLoading(true);
-		switch (domain) {
-			case 'mastodon': {
+		switch (driver) {
+			case KNOWN_SOFTWARE.MASTODON: {
 				// Mock API response, to avoid duplicate api calls
 				setMastoRelation({ data: [input] });
 			}
@@ -146,7 +151,7 @@ function useRelationshipWith(id: string) {
 	async function refetch() {
 		setIsLoading(true);
 
-		switch (domain) {
+		switch (driver) {
 			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.PLEROMA:
 			case KNOWN_SOFTWARE.AKKOMA: {

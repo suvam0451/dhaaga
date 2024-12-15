@@ -19,7 +19,6 @@ type Props = {
 function CustomEmojiPicker({ onBackdropPressed }: Props) {
 	const [KeyboardVisible, setKeyboardVisible] = useState(false);
 
-	// const { primaryAcct } = useActivityPubRestClientContext();
 	// const subdomain = primaryAcct?.subdomain;
 
 	// const server = useQuery(ActivityPubServer).find((o) => o.url === subdomain);

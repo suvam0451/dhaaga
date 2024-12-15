@@ -3,8 +3,9 @@ import AppButtonFollowIndicator from '../../../lib/Buttons';
 import useRelationshipWith from '../../../../states/useRelationshipWith';
 import { AppRelationship } from '../../../../types/ap.types';
 import ConfirmRelationshipChangeDialog from '../../../screens/shared/fragments/ConfirmRelationshipChange';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * A label to indicate your current
@@ -18,7 +19,12 @@ const FollowIndicator = memo(function Foo({
 	userId: string;
 	style?: StyleProp<ViewStyle>;
 }) {
-	const { client, domain } = useActivityPubRestClientContext();
+	const { client, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+		})),
+	);
 
 	const [
 		IsUnfollowConfirmationDialogVisible,

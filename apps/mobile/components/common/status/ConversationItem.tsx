@@ -5,9 +5,10 @@ import MfmService from '../../../services/mfm.service';
 import { randomUUID } from 'expo-crypto';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type ConversationItem = {
 	displayName: string;
@@ -21,11 +22,16 @@ type ConversationItem = {
  * @constructor
  */
 function ConversationItem({ accountUrl, displayName }: ConversationItem) {
-	const { domain, subdomain } = useActivityPubRestClientContext();
+	const { driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 
 	const [DescriptionContent, setDescriptionContent] = useState(<></>);
 	const [UserInterface, setUserInterface] = useState(
-		ActivityPubUserAdapter(null, domain),
+		ActivityPubUserAdapter(null, driver),
 	);
 
 	const { status } = useActivitypubStatusContext();
@@ -37,8 +43,8 @@ function ConversationItem({ accountUrl, displayName }: ConversationItem) {
 		const emojiMap = UserInterface.getEmojiMap();
 		const { reactNodes } = MfmService.renderMfm(content, {
 			emojiMap,
-			domain,
-			subdomain,
+			domain: driver,
+			subdomain: acct?.server,
 			globalDb,
 			colorScheme,
 		});

@@ -1,15 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import {
-	BOTTOM_SHEET_ENUM,
-	useGorhomActionSheetContext,
-} from '../../../states/useGorhomBottomSheet';
 import GlobalMmkvCacheServices from '../../../services/globalMmkvCache.services';
 import { Text } from '@rneui/themed';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type LinkProcessorProps = {
 	url: string;
@@ -52,9 +50,15 @@ function LinkProcessor({
 		'$2',
 	);
 
+	const { mmkv, show, setType } = useGlobalState(
+		useShallow((o) => ({
+			mmkv: o.mmkv,
+			show: o.bottomSheet.show,
+			setType: o.bottomSheet.setType,
+		})),
+	);
+
 	const { globalDb } = useGlobalMmkvContext();
-	const { setVisible, setBottomSheetType, updateRequestId } =
-		useGorhomActionSheetContext();
 
 	const onTextPress = useCallback(() => {
 		if (!acceptTouch) return;
@@ -63,10 +67,9 @@ function LinkProcessor({
 			url: url,
 			displayName: displayName || wwwRemoved,
 		});
-		setBottomSheetType(BOTTOM_SHEET_ENUM.LINK);
-		updateRequestId();
+		setType(APP_BOTTOM_SHEET_ENUM.LINK);
 		setTimeout(() => {
-			setVisible(true);
+			show();
 		}, 200);
 	}, []);
 

@@ -11,13 +11,14 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { StatusContextInterface } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
 import { ActivityPubStatusContextAdapter } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_adapters';
 import MastodonService from '../services/mastodon.service';
 import ActivityPubAdapterService from '../services/activitypub-adapter.service';
 import useHookLoadingState from './useHookLoadingState';
+import useGlobalState from './_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type OgObject = {
 	url: string;
@@ -109,8 +110,13 @@ function WithActivitypubStatusContext({
 	statusInterface,
 	children,
 }: Props) {
-	const { primaryAcct, client } = useActivityPubRestClientContext();
-	const _domain = primaryAcct?.domain;
+	const { acct, client, driver } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			client: o.router,
+			driver: o.driver,
+		})),
+	);
 	const { State, forceUpdate } = useHookLoadingState();
 
 	/**
@@ -118,16 +124,16 @@ function WithActivitypubStatusContext({
 	 * Status and RebloggedStatus
 	 */
 	const Status = useRef<StatusInterface>(
-		ActivitypubStatusAdapter(null, _domain),
+		ActivitypubStatusAdapter(null, driver),
 	);
 	const StatusRaw = useRef<mastodon.v1.Status | any | null>(null);
 	const SharedStatus = useRef<StatusInterface>(
-		ActivitypubStatusAdapter(null, _domain),
+		ActivitypubStatusAdapter(null, driver),
 	);
 	const SharedStatusRaw = useRef<mastodon.v1.Status | any | null>(null);
 
 	const StatusContext = useRef<StatusContextInterface>(
-		ActivityPubStatusContextAdapter(null, _domain),
+		ActivityPubStatusContextAdapter(null, driver),
 	);
 
 	const contextItemLookup = useRef<Map<string, StatusInterface>>();
@@ -144,12 +150,12 @@ function WithActivitypubStatusContext({
 					'please consider passing adapted object, instead',
 			);
 			StatusRaw.current = status;
-			const adapted = ActivitypubStatusAdapter(status, _domain);
+			const adapted = ActivitypubStatusAdapter(status, driver);
 			Status.current = adapted;
 			if (adapted.isReposted()) {
 				SharedStatus.current = ActivitypubStatusAdapter(
 					adapted.getRepostedStatusRaw(),
-					_domain,
+					driver,
 				);
 				SharedStatusRaw.current = adapted.getRepostedStatusRaw();
 			}
@@ -159,7 +165,7 @@ function WithActivitypubStatusContext({
 			if (statusInterface.isReposted()) {
 				SharedStatus.current = ActivitypubStatusAdapter(
 					statusInterface.getRepostedStatusRaw(),
-					_domain,
+					driver,
 				);
 				SharedStatusRaw.current = statusInterface.getRepostedStatusRaw();
 			}
@@ -184,11 +190,11 @@ function WithActivitypubStatusContext({
 	}, []);
 
 	const setDataRaw = useCallback((o: mastodon.v1.Status | any) => {
-		const adapted = ActivitypubStatusAdapter(o, _domain);
+		const adapted = ActivitypubStatusAdapter(o, driver);
 		if (adapted.isReposted()) {
 			SharedStatus.current = ActivitypubStatusAdapter(
 				adapted.getRepostedStatusRaw(),
-				_domain,
+				driver,
 			);
 		}
 		Status.current = adapted;
@@ -196,7 +202,7 @@ function WithActivitypubStatusContext({
 	}, []);
 
 	const setSharedDataRaw = useCallback((o: mastodon.v1.Status | any) => {
-		SharedStatus.current = ActivityPubAdapterService.adaptStatus(o, _domain);
+		SharedStatus.current = ActivityPubAdapterService.adaptStatus(o, driver);
 		forceUpdate();
 	}, []);
 

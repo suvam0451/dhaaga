@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useActivitypubUserContext } from '../../../../states/useProfile';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import {
 	ActivityPubStatuses,
-	MisskeyRestClient,
 	KNOWN_SOFTWARE,
+	MisskeyRestClient,
 	StatusInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * -- Obtain the pinned posts --
@@ -21,14 +22,20 @@ import { UserDetailed } from 'misskey-js/built/autogen/models';
 function usePinnedPosts(userId: string) {
 	const [Data, setData] = useState<StatusInterface[]>([]);
 	const { user } = useActivitypubUserContext();
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { client, acct, driver } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			driver: o.driver,
+			client: o.router,
+		})),
+	);
 
 	useEffect(() => {
 		setData([]);
 	}, [userId]);
 
 	async function fn() {
-		switch (domain) {
+		switch (driver) {
 			case KNOWN_SOFTWARE.MISSKEY:
 			case KNOWN_SOFTWARE.FIREFISH:
 			case KNOWN_SOFTWARE.SHARKEY: {
@@ -53,21 +60,21 @@ function usePinnedPosts(userId: string) {
 
 	// Post Queries
 	const { status, data, fetchStatus } = useQuery<ActivityPubStatuses>({
-		queryKey: ['acct', subdomain, userId],
+		queryKey: ['acct', acct?.server, userId],
 		queryFn: fn,
-		enabled: userId !== undefined || domain === 'misskey',
+		enabled: userId !== undefined || driver === KNOWN_SOFTWARE.MISSKEY,
 	});
 
 	useEffect(() => {
-		if (domain === 'misskey') {
+		if (driver === 'misskey') {
 			setData(
 				ActivityPubAdapterService.adaptManyStatuses(
 					user?.getPinnedNotes() || [],
-					domain,
+					driver,
 				).slice(0, 10),
 			);
 		}
-	}, [domain, user]);
+	}, [driver, user]);
 
 	useEffect(() => {
 		if (status !== 'success' || data === undefined) return;
@@ -78,7 +85,7 @@ function usePinnedPosts(userId: string) {
 		if (!Array.isArray(data)) return;
 
 		setData(
-			ActivityPubAdapterService.adaptManyStatuses(data, domain).slice(0, 10),
+			ActivityPubAdapterService.adaptManyStatuses(data, driver).slice(0, 10),
 		);
 	}, [fetchStatus]);
 

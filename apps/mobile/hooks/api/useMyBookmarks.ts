@@ -3,10 +3,15 @@ import {
 	MastoStatus,
 	MegaStatus,
 } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function useMyBookmarks(maxId: string) {
-	const { client } = useActivityPubRestClientContext();
+	const { client } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+		})),
+	);
 
 	async function api(): Promise<{
 		data: MastoStatus[] | MegaStatus[];
