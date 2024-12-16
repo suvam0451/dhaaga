@@ -1,11 +1,11 @@
 import { CheckBox } from '@rneui/base';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import { memo } from 'react';
-import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { View, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import { APP_FONTS } from '../../styles/AppFonts';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	title?: string;
@@ -67,7 +67,7 @@ export const AppInlineCheckbox = memo(function Foo({
 				<Text
 					style={{
 						color: checked ? 'rgba(0, 0, 0, 1)' : APP_FONT.MONTSERRAT_BODY,
-						fontFamily: 'Montserrat-Bold',
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>
 					{label}
@@ -87,7 +87,12 @@ export const NativeCheckbox = memo(function Foo({
 	checked,
 	onClick,
 }: AppInlineCheckboxProps) {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	return (
 		<CheckBox
 			checked={checked}
@@ -95,7 +100,7 @@ export const NativeCheckbox = memo(function Foo({
 			checkedIcon="dot-circle-o"
 			uncheckedIcon="circle-o"
 			containerStyle={{
-				backgroundColor: colorScheme.palette.menubar,
+				backgroundColor: theme.palette.menubar,
 				flex: 1,
 				margin: 0,
 				padding: 0,
@@ -103,13 +108,11 @@ export const NativeCheckbox = memo(function Foo({
 				marginRight: 0,
 			}}
 			textStyle={{
-				color: checked
-					? colorScheme.textColor.high
-					: colorScheme.textColor.medium,
+				color: checked ? theme.textColor.high : theme.textColor.medium,
 				fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 			}}
-			checkedColor={colorScheme.reactions.highlight}
-			uncheckedColor={colorScheme.textColor.medium}
+			checkedColor={theme.reactions.highlight}
+			uncheckedColor={theme.textColor.medium}
 			wrapperStyle={{ color: 'red' }}
 			title={label}
 		/>

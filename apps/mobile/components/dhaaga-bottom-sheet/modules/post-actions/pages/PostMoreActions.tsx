@@ -9,25 +9,25 @@ import PostMoreActionsPostTarget from '../fragments/PostMoreActionsPostTarget';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
 import ActivitypubReactionsService from '../../../../../services/approto/activitypub-reactions.service';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 const PostMoreActions = memo(() => {
-	const { router, driver, acct, PostRef, reducer, hide } = useGlobalState(
-		useShallow((o) => ({
-			router: o.router,
-			driver: o.driver,
-			acct: o.acct,
-			PostRef: o.bottomSheet.PostRef,
-			reducer: o.bottomSheet.timelineDataPostListReducer,
-			visible: o.bottomSheet.visible,
-			hide: o.bottomSheet.hide,
-		})),
-	);
+	const { router, driver, acct, postValue, reducer, hide, theme } =
+		useGlobalState(
+			useShallow((o) => ({
+				router: o.router,
+				driver: o.driver,
+				acct: o.acct,
+				postValue: o.bottomSheet.postValue,
+				reducer: o.bottomSheet.timelineDataPostListReducer,
+				visible: o.bottomSheet.visible,
+				hide: o.bottomSheet.hide,
+				theme: o.colorScheme,
+			})),
+		);
 	const { globalDb } = useGlobalMmkvContext();
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
-	const { colorScheme } = useAppTheme();
 	const lastSubdomain = useRef(null);
 
 	const [Loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ const PostMoreActions = memo(() => {
 	async function onReactionRequested(shortCode: string) {
 		const state = await ActivitypubReactionsService.addReaction(
 			router,
-			PostRef.id,
+			postValue.id,
 			shortCode,
 			driver,
 			setLoading,
@@ -46,7 +46,7 @@ const PostMoreActions = memo(() => {
 		reducer({
 			type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE,
 			payload: {
-				id: PostRef.id,
+				id: postValue.id,
 				state,
 			},
 		});
@@ -87,7 +87,7 @@ const PostMoreActions = memo(() => {
 	}, [acct?.server]);
 
 	return (
-		<View style={{ padding: 8, backgroundColor: colorScheme.palette.menubar }}>
+		<View style={{ padding: 8, backgroundColor: theme.palette.menubar }}>
 			{MainContent}
 		</View>
 	);

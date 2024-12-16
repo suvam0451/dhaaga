@@ -5,20 +5,24 @@ import { APP_THEME } from '../../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { useComposerContext } from '../api/useComposerContext';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../../lib/Icon';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 const TextModeActionButtons = memo(() => {
 	const { cw, setCwShown, setEditMode } = useComposerContext();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	function onCustomEmojiClicked() {
 		setEditMode((o) => {
 			if (o === 'txt') return 'emoji';
 		});
 	}
+
 	const toggleCwShown = useCallback(() => {
 		setCwShown((o) => !o);
 	}, []);
@@ -26,11 +30,7 @@ const TextModeActionButtons = memo(() => {
 	return (
 		<Fragment>
 			<TouchableOpacity onPress={onCustomEmojiClicked} style={{ width: 32 }}>
-				<FontAwesome6
-					name="smile"
-					size={24}
-					color={colorScheme.textColor.medium}
-				/>
+				<FontAwesome6 name="smile" size={24} color={theme.textColor.medium} />
 			</TouchableOpacity>
 			<TouchableOpacity
 				style={{ marginLeft: 12, width: 32 }}
@@ -39,9 +39,7 @@ const TextModeActionButtons = memo(() => {
 				<FontAwesome
 					name="warning"
 					size={24}
-					color={
-						cw === '' ? colorScheme.textColor.medium : APP_THEME.COLOR_SCHEME_C
-					}
+					color={cw === '' ? theme.textColor.medium : APP_THEME.COLOR_SCHEME_C}
 				/>
 			</TouchableOpacity>
 		</Fragment>
@@ -53,15 +51,14 @@ const TextModeActionButtons = memo(() => {
  * the composer sheet
  */
 const ActionButtons = memo(() => {
-	const { hide, visible } = useGlobalState(
+	const { hide, visible, theme } = useGlobalState(
 		useShallow((o) => ({
 			visible: o.bottomSheet.visible,
 			hide: o.bottomSheet.hide,
+			theme: o.colorScheme,
 		})),
 	);
 	const { setEditMode, editMode } = useComposerContext();
-	const { colorScheme } = useAppTheme();
-
 	const toggleEditMode = useCallback(() => {
 		setEditMode((o) => {
 			if (o === 'txt') return 'alt';
@@ -89,7 +86,7 @@ const ActionButtons = memo(() => {
 				>
 					<Text
 						style={{
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 							fontFamily: APP_FONTS.INTER_700_BOLD,
 							fontSize: 18,
 						}}
@@ -115,7 +112,7 @@ const ActionButtons = memo(() => {
 			>
 				<Text
 					style={{
-						color: colorScheme.textColor.high,
+						color: theme.textColor.high,
 						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>

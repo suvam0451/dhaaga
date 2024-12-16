@@ -5,9 +5,7 @@ import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
-import * as React from 'react';
 import { router } from 'expo-router';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -20,7 +18,11 @@ type ActionButtonProps = {
 };
 
 const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	return (
 		<TouchableOpacity
 			style={styles.moduleContainer}
@@ -29,7 +31,7 @@ const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
 			}}
 		>
 			<View style={{ width: 24 }}>{Icon}</View>
-			<Text style={[styles.moduleLabel, { color: colorScheme.textColor.high }]}>
+			<Text style={[styles.moduleLabel, { color: theme.textColor.high }]}>
 				{label}
 			</Text>
 			<View style={{ flex: 1 }} />

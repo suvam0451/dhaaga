@@ -2,7 +2,6 @@ import { useActivitypubStatusContext } from '../../../../../states/useStatus';
 import { StyleSheet, View } from 'react-native';
 import { useMemo, useState } from 'react';
 import MfmService from '../../../../../services/mfm.service';
-import { randomUUID } from 'expo-crypto';
 import { Image } from 'expo-image';
 import { format } from 'date-fns';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
@@ -11,14 +10,16 @@ import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { RandomUtil } from '../../../../../utils/random.utils';
 
 function ChatItem() {
 	const { status } = useActivitypubStatusContext();
-	const { me, driver, acct } = useGlobalState(
+	const { me, driver, acct, theme } = useGlobalState(
 		useShallow((o) => ({
 			me: o.me,
 			driver: o.driver,
 			acct: o.acct,
+			theme: o.colorScheme,
 		})),
 	);
 	const { globalDb } = useGlobalMmkvContext();
@@ -39,10 +40,10 @@ function ChatItem() {
 			subdomain: acct?.server,
 			remoteSubdomain: UserInterface?.getInstanceUrl(),
 			globalDb,
-			colorScheme: null,
+			colorScheme: theme,
 		});
 		return reactNodes?.map((para) => {
-			const uuid = randomUUID();
+			const uuid = RandomUtil.nanoId();
 			return (
 				<Text key={uuid} style={{ marginBottom: 8, opacity: 0.87 }}>
 					{para.map((o, j) => (

@@ -1,24 +1,23 @@
 import { memo } from 'react';
 import { View, Text } from 'react-native';
 import { styles } from './_shared';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 const HomeTimelineController = memo(function Foo() {
-	const { acct } = useGlobalState(
+	const { acct, theme } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
+			theme: o.colorScheme,
 		})),
 	);
-	const { colorScheme } = useAppTheme();
 	return (
 		<View>
 			<Text
 				style={[
 					styles.timelineTypeText,
 					{
-						color: colorScheme.textColor.high,
+						color: theme.textColor.high,
 					},
 				]}
 			>
@@ -29,7 +28,7 @@ const HomeTimelineController = memo(function Foo() {
 				style={[
 					styles.timelineDescription,
 					{
-						color: colorScheme.textColor.medium,
+						color: theme.textColor.medium,
 					},
 				]}
 			>
@@ -40,7 +39,7 @@ const HomeTimelineController = memo(function Foo() {
 				style={[
 					styles.timelineDescription,
 					{
-						color: colorScheme.textColor.medium,
+						color: theme.textColor.medium,
 					},
 				]}
 			>

@@ -4,11 +4,10 @@ import { BottomSheet, Text, ListItem, Button } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
 import { Image } from 'expo-image';
 import MfmService from '../../services/mfm.service';
-import { randomUUID } from 'expo-crypto';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { RandomUtil } from '../../utils/random.utils';
 
 type StatusActionsProps = {
 	visible: boolean;
@@ -25,10 +24,8 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 	);
 
 	const { globalDb } = useGlobalMmkvContext();
-
 	const { user } = useActivitypubUserContext();
 	const desc = user.getDescription();
-	const { colorScheme } = useAppTheme();
 
 	const DescriptionContent = useMemo(() => {
 		const target = user.getDescription();
@@ -39,10 +36,10 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 			domain: driver,
 			subdomain: acct?.server,
 			globalDb,
-			colorScheme,
+			colorScheme: theme,
 		});
 		return reactNodes?.map((para) => {
-			const uuid = randomUUID();
+			const uuid = RandomUtil.nanoId();
 			return (
 				<Text key={uuid} style={{ marginBottom: 0, opacity: 0.87 }}>
 					{para.map((o, j) => o)}

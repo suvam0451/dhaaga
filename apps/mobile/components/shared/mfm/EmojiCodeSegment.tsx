@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react';
 import { Text, Image as RNImage } from 'react-native';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import { randomUUID } from 'expo-crypto';
+import { RandomUtil } from '../../../utils/random.utils';
 
 type Props = {
 	value: string;
@@ -20,7 +20,7 @@ const EmojiCodeSegment = memo(function Foo({
 	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
-	const k = randomUUID();
+	const k = RandomUtil.nanoId();
 	const [Width, setWidth] = useState(EMOJI_HEIGHT);
 
 	// const match = EmojiService.findCachedEmoji({

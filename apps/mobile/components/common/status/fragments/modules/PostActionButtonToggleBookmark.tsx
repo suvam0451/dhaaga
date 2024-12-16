@@ -1,10 +1,10 @@
 import { memo, useEffect, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
+import { APP_THEME } from '../../../../../styles/AppTheme';
 import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
-import { Image } from 'expo-image';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../../states/_global';
 
 const ICON_SIZE = 21;
 
@@ -21,7 +21,11 @@ const PostActionButtonToggleBookmark = memo(
 	({ id, flag, isFinal }: PostActionButtonToggleBookmarkProps) => {
 		const [IsBookmarkStatePending, setIsBookmarkStatePending] = useState(false);
 		const { toggleBookmark, getBookmarkState } = useAppTimelinePosts();
-		const { activePack, colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 
 		// helper functions
 		function _toggleBookmark() {
@@ -62,9 +66,7 @@ const PostActionButtonToggleBookmark = memo(
 					<ActivityIndicator size={'small'} />
 				) : (
 					<Ionicons
-						color={
-							flag ? APP_THEME.INVALID_ITEM : colorScheme.textColor.emphasisC
-						}
+						color={flag ? APP_THEME.INVALID_ITEM : theme.textColor.emphasisC}
 						name={flag ? 'bookmark' : 'bookmark-outline'}
 						size={ICON_SIZE}
 					/>

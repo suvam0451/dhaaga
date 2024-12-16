@@ -1,33 +1,37 @@
 import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import { useAppBottomSheet } from '../../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { AppIcon } from '../../../../../lib/Icon';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type ProfilePeekMessageProps = {
 	handle: string;
 };
 
 const ProfileButtonMessage = memo(({ handle }: ProfilePeekMessageProps) => {
-	const { colorScheme } = useAppTheme();
-	const { setType, PostComposerTextSeedRef, setVisible, updateRequestId } =
-		useAppBottomSheet();
+	const { theme, show, setType } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+			show: o.bottomSheet.show,
+			setType: o.bottomSheet.setType,
+		})),
+	);
+	const { PostComposerTextSeedRef } = useAppBottomSheet();
 
 	function onPress() {
 		PostComposerTextSeedRef.current = `${handle} `;
 		setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
-		setVisible(true);
-		updateRequestId();
+		show();
 	}
 
 	return (
 		<TouchableOpacity
 			style={{
 				padding: 8,
-				backgroundColor: colorScheme.palette.menubar, // 282828
+				backgroundColor: theme.palette.menubar, // 282828
 				borderRadius: 8,
 			}}
 			onPress={onPress}

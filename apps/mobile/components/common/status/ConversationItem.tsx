@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
-import { randomUUID } from 'expo-crypto';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { RandomUtil } from '../../../utils/random.utils';
 
 type ConversationItem = {
 	displayName: string;
@@ -22,10 +21,11 @@ type ConversationItem = {
  * @constructor
  */
 function ConversationItem({ accountUrl, displayName }: ConversationItem) {
-	const { driver, acct } = useGlobalState(
+	const { driver, acct, theme } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
 			acct: o.acct,
+			theme: o.colorScheme,
 		})),
 	);
 
@@ -36,7 +36,6 @@ function ConversationItem({ accountUrl, displayName }: ConversationItem) {
 
 	const { status } = useActivitypubStatusContext();
 	const { globalDb } = useGlobalMmkvContext();
-	const { colorScheme } = useAppTheme();
 	let content = status.getContent();
 
 	useEffect(() => {
@@ -46,12 +45,12 @@ function ConversationItem({ accountUrl, displayName }: ConversationItem) {
 			domain: driver,
 			subdomain: acct?.server,
 			globalDb,
-			colorScheme,
+			colorScheme: theme,
 		});
 		setDescriptionContent(
 			<>
 				{reactNodes?.map((para, i) => {
-					const uuid = randomUUID();
+					const uuid = RandomUtil.nanoId();
 					return (
 						<Text key={uuid} style={{ marginBottom: 8, opacity: 0.87 }}>
 							{/*<FlatList data={para} renderItem={({ item }) => item} />*/}

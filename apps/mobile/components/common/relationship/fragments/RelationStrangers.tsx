@@ -4,13 +4,18 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { Button } from '@rneui/themed';
 import { RelationshipButtonProps } from './_common';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const LABEL = 'Follow';
 
 const RelationStrangers = memo(
 	({ loading, onPress }: RelationshipButtonProps) => {
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		return (
 			<Button
 				size={'sm'}
@@ -18,7 +23,7 @@ const RelationStrangers = memo(
 				buttonStyle={[
 					styles.button,
 					{
-						backgroundColor: colorScheme.palette.buttonUnstyled,
+						backgroundColor: theme.palette.buttonUnstyled,
 					},
 				]}
 				containerStyle={[styles.buttonContainer, {}]}
@@ -29,7 +34,7 @@ const RelationStrangers = memo(
 						color={APP_THEME.COLOR_SCHEME_D_NORMAL}
 					/>
 				) : (
-					<Text style={[styles.text, { color: colorScheme.textColor.high }]}>
+					<Text style={[styles.text, { color: theme.textColor.high }]}>
 						{LABEL}
 					</Text>
 				)}

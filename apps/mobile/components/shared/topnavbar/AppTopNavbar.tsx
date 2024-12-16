@@ -5,7 +5,8 @@ import TopNavbarLandingGeneric from './fragments/TopNavbarLandingGeneric';
 import TimelinesHeader from './fragments/TopNavbarTimelineStack';
 import NotificationsHeader from './fragments/TopNavbarNotificationStack';
 import TopNavbarProfilePage from './fragments/TopNavbarProfilePage';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../states/_global';
 
 export enum APP_TOPBAR_TYPE_ENUM {
 	GENERIC,
@@ -29,7 +30,12 @@ const AppTopNavbar = memo(
 		translateY,
 		type = APP_TOPBAR_TYPE_ENUM.GENERIC,
 	}: AutoHideNavBarProps) => {
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		const Header = useMemo(() => {
 			switch (type) {
 				case APP_TOPBAR_TYPE_ENUM.GENERIC:
@@ -49,11 +55,10 @@ const AppTopNavbar = memo(
 		return (
 			<Animated.View
 				style={{
-					backgroundColor: colorScheme.palette.bg,
+					backgroundColor: theme.palette.bg,
 					height: '100%',
 				}}
 			>
-				{/*<StatusBar backgroundColor={colorScheme.palette.menubar} />*/}
 				<Animated.View
 					style={[
 						{

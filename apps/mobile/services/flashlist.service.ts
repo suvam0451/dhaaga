@@ -1,5 +1,4 @@
-import { ActivityPubStatusAppDtoType } from './ap-proto/activitypub-status-dto.service';
-import { ActivityPubAppUserDtoType } from './ap-proto/activitypub-user-dto.service';
+import { ActivityPubStatusAppDtoType } from './approto/app-status-dto.service';
 
 /**
  * Convert DTO/Interface arrays

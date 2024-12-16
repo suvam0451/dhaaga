@@ -1,8 +1,4 @@
 import { memo } from 'react';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -11,22 +7,24 @@ import { Image } from 'expo-image';
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
-import useGlobalState from '../../../../states/_global';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
 const AppSelectedProfileIndicator = memo(() => {
-	const { acct, setType, show } = useGlobalState(
+	const { acct, show, theme, isAnimating, visible } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			show: o.bottomSheet.show,
 			setType: o.bottomSheet.setType,
+			theme: o.colorScheme,
+			visible: o.bottomSheet.visible,
+			isAnimating: o.bottomSheet.isAnimating,
 		})),
 	);
-	const { colorScheme } = useAppTheme();
-	const { isAnimating, visible } = useAppBottomSheet();
 
 	function onLongPress() {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -74,11 +72,7 @@ const AppSelectedProfileIndicator = memo(() => {
 					/>
 				</View>
 				<View style={{ width: 14 }}>
-					<Feather
-						name="more-vertical"
-						size={24}
-						color={colorScheme.textColor.low}
-					/>
+					<Feather name="more-vertical" size={24} color={theme.textColor.low} />
 				</View>
 			</TouchableOpacity>
 		</View>

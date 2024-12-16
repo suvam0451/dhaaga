@@ -12,7 +12,8 @@ import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import StatusVisibility from './StatusVisibility';
 import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../states/_global';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;
@@ -20,7 +21,12 @@ type Props = {
 };
 
 const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	const { toPost } = useAppNavigator();
 	const { content } = useMfm({
 		content: dto.content.raw,
@@ -54,7 +60,7 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 				{
 					paddingTop: hasParent === undefined ? 10 : 0,
 					position: 'relative',
-					backgroundColor: colorScheme.palette.bg,
+					backgroundColor: theme.palette.bg,
 				},
 			]}
 		>
@@ -75,7 +81,7 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 							<Text
 								style={{
 									flex: 1,
-									color: colorScheme.textColor.medium,
+									color: theme.textColor.medium,
 									fontSize: 13,
 								}}
 							>
@@ -85,8 +91,7 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 						<View
 							style={{
 								flexDirection: 'row',
-								alignItems: 'flex-end',
-								// flex: 1,
+								alignItems: 'flex-end', // flex: 1,
 								justifyContent: 'flex-end',
 							}}
 						>
@@ -105,7 +110,7 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 								<StatusCreatedAt
 									from={new Date(dto.createdAt)}
 									textStyle={{
-										color: colorScheme.textColor.low,
+										color: theme.textColor.low,
 										fontSize: 12,
 										fontFamily: APP_FONTS.INTER_700_BOLD,
 									}}

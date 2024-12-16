@@ -7,17 +7,15 @@ import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../states/_global';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../states/_global';
 
 type StatusInteractionProps = {
 	openAiContext?: string[];
@@ -38,9 +36,10 @@ const StatusInteraction = memo(
 			timelineDataPostListReducer,
 			RootRef,
 		} = useAppBottomSheet();
-		const { client } = useGlobalState(
+		const { client, theme } = useGlobalState(
 			useShallow((o) => ({
 				client: o.router,
+				theme: o.colorScheme,
 			})),
 		);
 
@@ -62,7 +61,6 @@ const StatusInteraction = memo(
 		const [IsBoostStatePending, setIsBoostStatePending] = useState(false);
 
 		const [BoostOptionsVisible, setBoostOptionsVisible] = useState(false);
-		const { colorScheme } = useAppTheme();
 
 		function onTranslationLongPress() {
 			// TODO: implement instance translation
@@ -153,9 +151,7 @@ const StatusInteraction = memo(
 								<AntDesign
 									name="retweet"
 									size={ICON_SIZE}
-									color={
-										IS_BOOSTED ? '#8eb834' : colorScheme.textColor.emphasisC
-									}
+									color={IS_BOOSTED ? '#8eb834' : theme.textColor.emphasisC}
 								/>
 							)}
 						</TouchableOpacity>
@@ -173,7 +169,7 @@ const StatusInteraction = memo(
 							<FontAwesome5
 								name="comment"
 								size={ICON_SIZE}
-								color={colorScheme.textColor.emphasisC}
+								color={theme.textColor.emphasisC}
 							/>
 						</TouchableOpacity>
 
@@ -225,13 +221,13 @@ const StatusInteraction = memo(
 							<Ionicons
 								name="ellipsis-horizontal"
 								size={ICON_SIZE}
-								color={colorScheme.textColor.emphasisC}
+								color={theme.textColor.emphasisC}
 							/>
 						</TouchableOpacity>
 					</View>
 				</View>
 				<Divider
-					color={colorScheme.textColor.misc}
+					color={theme.textColor.misc}
 					style={{
 						marginTop: 8,
 					}}

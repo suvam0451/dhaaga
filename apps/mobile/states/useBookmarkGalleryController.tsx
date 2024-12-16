@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { Account } from '../entities/account.entity';
 import { ActivityPubStatus } from '../entities/activitypub-status.entity';
-import { randomUUID } from 'expo-crypto';
+import { RandomUtil } from '../utils/random.utils';
 
 type InheritedType = {};
 
@@ -108,13 +108,13 @@ type Props = {
 type SpecialAction = 'all' | 'none' | null;
 
 function WithBookmarkGalleryControllerContext({ children }: Props) {
-	const [UserStateHash, setUserStateHash] = useState(randomUUID());
+	const [UserStateHash, setUserStateHash] = useState(RandomUtil.nanoId());
 	const UserSpecialSelection = useRef<SpecialAction>('all');
 	const TagSpecialSelection = useRef<SpecialAction>('all');
 
 	const [Query, setQuery] = useState('');
 
-	const [TagStateHash, setTagStateHash] = useState(randomUUID());
+	const [TagStateHash, setTagStateHash] = useState(RandomUtil.nanoId());
 
 	const userSet = useRef(new Set<string>());
 	const tagSet = useRef(new Set<string>());
@@ -200,25 +200,25 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 	const onUserAllSelected = useCallback(() => {
 		UserSpecialSelection.current = 'all';
 		userSet.current.clear();
-		setUserStateHash(randomUUID());
+		setUserStateHash(RandomUtil.nanoId());
 	}, []);
 
 	const onUserNoneSelected = useCallback(() => {
 		UserSpecialSelection.current = 'none';
 		userSet.current.clear();
-		setUserStateHash(randomUUID());
+		setUserStateHash(RandomUtil.nanoId());
 	}, []);
 
 	const onTagAllSelected = useCallback(() => {
 		TagSpecialSelection.current = 'all';
 		tagSet.current.clear();
-		setUserStateHash(randomUUID());
+		setUserStateHash(RandomUtil.nanoId());
 	}, []);
 
 	const onTagNoneSelected = useCallback(() => {
 		TagSpecialSelection.current = 'none';
 		tagSet.current.clear();
-		setUserStateHash(randomUUID());
+		setUserStateHash(RandomUtil.nanoId());
 	}, []);
 
 	const onUserSelected = useCallback((_id) => {
@@ -237,7 +237,7 @@ function WithBookmarkGalleryControllerContext({ children }: Props) {
 		}
 		if (UserSpecialSelection.current !== null)
 			UserSpecialSelection.current = null;
-		setUserStateHash(randomUUID());
+		setUserStateHash(RandomUtil.nanoId());
 	}, []);
 
 	function onTagSelected(_id) {}

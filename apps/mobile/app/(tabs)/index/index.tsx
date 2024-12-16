@@ -1,6 +1,5 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useMemo } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
 import SocialHubQuickDestinations from '../../../components/screens/home/stack/landing/fragments/SocialHubQuickDestinations';
 import { APP_FONTS } from '../../../styles/AppFonts';
@@ -21,16 +20,15 @@ enum TIME_OF_DAY {
 }
 
 function TimeOfDayGreeting() {
-	const [TimeOfDay, setTimeOfDay] = useState<TIME_OF_DAY>(TIME_OF_DAY.UNKNOWN);
-	const { colorScheme } = useAppTheme();
-	const { acct } = useGlobalState(
+	const { acct, theme } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
+			theme: o.colorScheme,
 		})),
 	);
 
 	const fontStyle = {
-		color: colorScheme.textColor.medium,
+		color: theme.textColor.medium,
 		marginTop: 8,
 		fontSize: 18,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
@@ -147,14 +145,18 @@ function Tip() {
 }
 
 function Screen() {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<View
 			style={{
 				height: '100%',
 				position: 'relative',
-				backgroundColor: colorScheme.palette.bg,
+				backgroundColor: theme.palette.bg,
 			}}
 		>
 			<ScrollView>

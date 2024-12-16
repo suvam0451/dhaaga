@@ -2,7 +2,6 @@ import { Alert, Dimensions, View, Text } from 'react-native';
 import { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
 import { Button } from '@rneui/base';
-import * as Crypto from 'expo-crypto';
 import { verifyMisskeyToken } from '@dhaaga/shared-abstraction-activitypub';
 import AccountCreationPreview, {
 	AccountCreationPreviewProps,
@@ -16,6 +15,7 @@ import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPage
 import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { RandomUtil } from '../../../../../../utils/random.utils';
 
 function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');
@@ -43,7 +43,7 @@ function MisskeySignInStack() {
 				setSession(session);
 			}
 		} catch (e) {
-			setSession(Crypto.randomUUID() as unknown as string);
+			setSession(RandomUtil.nanoId());
 		}
 	}, []);
 

@@ -8,6 +8,8 @@ import {
 import { Endpoints } from 'misskey-js';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppBskyActorSearchActorsTypeahead } from '@atproto/api';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 function TimelineWidgetUserApi(q: string) {
 	const { client, acct, driver } = useGlobalState(
@@ -33,7 +35,10 @@ function TimelineWidgetUserApi(q: string) {
 
 	// Queries
 	const { fetchStatus, data, status } = useQuery<
-		MastoAccount[] | Endpoints['users/search']['res'] | MegaAccount[]
+		| MastoAccount[]
+		| Endpoints['users/search']['res']
+		| MegaAccount[]
+		| AppBskyActorSearchActorsTypeahead.Response
 	>({
 		queryKey: [username, acct?.server, q],
 		queryFn: api,
@@ -42,8 +47,16 @@ function TimelineWidgetUserApi(q: string) {
 
 	const transformedData = useMemo(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return [];
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+			return ActivityPubAdapterService.adaptManyUsers(
+				(data as AppBskyActorSearchActorsTypeahead.Response).data?.actors,
+				driver,
+			);
+		}
 		return (
-			data?.map((o) => ActivityPubAdapterService.adaptUser(o, driver)) || []
+			(data as any)?.map((o) =>
+				ActivityPubAdapterService.adaptUser(o, driver),
+			) || []
 		);
 	}, [fetchStatus]);
 

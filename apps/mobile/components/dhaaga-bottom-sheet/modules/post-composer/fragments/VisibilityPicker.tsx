@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { Dispatch, memo, SetStateAction, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import Animated, { SlideInUp } from 'react-native-reanimated';
@@ -7,16 +7,22 @@ import useAppVisibility, {
 	APP_POST_VISIBILITY,
 } from '../../../../../hooks/app/useVisibility';
 import { useComposerContext } from '../api/useComposerContext';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const VisibilityPickerChoice = memo(function Foo({
 	visibility,
 	setVisibility,
 }: {
 	visibility: APP_POST_VISIBILITY;
-	setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+	setVisibility: Dispatch<SetStateAction<boolean>>;
 }) {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	const { icon, text, desc } = useAppVisibility(visibility);
 	const { setVisibility: ComposerVisibility } = useComposerContext();
 
@@ -32,16 +38,14 @@ const VisibilityPickerChoice = memo(function Foo({
 		>
 			{icon}
 			<View style={{ flexDirection: 'column' }}>
-				<Text
-					style={[styles.choiceText, { color: colorScheme.textColor.high }]}
-				>
+				<Text style={[styles.choiceText, { color: theme.textColor.high }]}>
 					{text}
 				</Text>
 				<Text
 					style={[
 						styles.choiceTextDescription,
 						{
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 						},
 					]}
 				>
@@ -55,7 +59,11 @@ const VisibilityPickerChoice = memo(function Foo({
 const VisibilityPicker = memo(function Foo() {
 	const [IsExpanded, setIsExpanded] = useState(false);
 	const { visibility: ComposerVisibility } = useComposerContext();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	function toggleExpanded() {
 		setIsExpanded((o) => !o);
@@ -70,7 +78,7 @@ const VisibilityPicker = memo(function Foo() {
 			<View
 				style={[
 					styles.choiceContainer,
-					{ backgroundColor: colorScheme.palette.buttonUnstyled },
+					{ backgroundColor: theme.palette.buttonUnstyled },
 				]}
 			>
 				{icon}
@@ -78,7 +86,7 @@ const VisibilityPicker = memo(function Foo() {
 					style={[
 						styles.choiceText,
 						{
-							color: colorScheme.textColor.high,
+							color: theme.textColor.high,
 						},
 					]}
 				>
@@ -92,7 +100,7 @@ const VisibilityPicker = memo(function Foo() {
 					display: IsExpanded ? 'flex' : 'none',
 					bottom: '100%',
 					zIndex: 99,
-					backgroundColor: colorScheme.palette.menubar,
+					backgroundColor: theme.palette.menubar,
 					paddingBottom: 12,
 					marginBottom: 6,
 					padding: 8,

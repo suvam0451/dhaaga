@@ -13,7 +13,6 @@ import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusQuoted from './StatusQuoted';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../lib/Icon';
 import useGlobalState, {
 	APP_BOTTOM_SHEET_ENUM,
@@ -33,10 +32,10 @@ type StatusCoreProps = {
 
 function StatusController() {
 	const { dto } = useAppStatusItem();
-	const { show, setPostRef, setReducer } = useGlobalState(
+	const { show, setPostValue, setReducer } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,
-			setPostRef: o.bottomSheet.setPostRef,
+			setPostValue: o.bottomSheet.setPostValue,
 			setReducer: o.bottomSheet.setTimelineDataPostListReducer,
 		})),
 	);
@@ -49,7 +48,7 @@ function StatusController() {
 		: dto;
 
 	function onMoreOptionsPress() {
-		setPostRef(STATUS_DTO);
+		setPostValue(STATUS_DTO);
 		setReducer(getPostListReducer());
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
 		console.log('saved state');
@@ -103,7 +102,11 @@ const StatusCore = memo(
 		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 4;
 		if (hasParent || hasBoost) paddingTop = 0;
 		if (!hasParent && hasBoost) paddingTop = 6;
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 
 		return useMemo(() => {
 			if (!isLoaded) return <StatusItemSkeleton />;
@@ -178,7 +181,7 @@ const StatusCore = memo(
 			dto,
 			STATUS_DTO,
 			paddingTop,
-			colorScheme,
+			theme,
 		]);
 	},
 );

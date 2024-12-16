@@ -5,13 +5,14 @@ import {
 	TouchableOpacity,
 	View,
 	ViewStyle,
+	Text,
 } from 'react-native';
-import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../../../states/_global';
 
 type ProfileModuleFactoryProps = {
 	label: string;
@@ -34,7 +35,11 @@ const ProfileModuleFactory = memo(
 		disabled,
 	}: ProfileModuleFactoryProps) => {
 		const [IsExpanded, setIsExpanded] = useState(false);
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 
 		return (
 			<View style={style}>
@@ -46,22 +51,17 @@ const ProfileModuleFactory = memo(
 					}}
 				>
 					<View
-						style={[
-							styles.root,
-							{ backgroundColor: colorScheme.palette.menubar },
-						]}
+						style={[styles.root, { backgroundColor: theme.palette.menubar }]}
 					>
 						<Text
 							style={{
 								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: colorScheme.textColor.high,
+								color: theme.textColor.high,
 								flexGrow: 1,
 							}}
 						>
 							{label}{' '}
-							<Text style={{ color: colorScheme.textColor.medium }}>
-								({subtext})
-							</Text>
+							<Text style={{ color: theme.textColor.medium }}>({subtext})</Text>
 						</Text>
 						<Ionicons
 							name={IsExpanded ? 'chevron-down' : 'chevron-forward'}

@@ -8,7 +8,6 @@ import ComposerAlt from '../fragments/ComposerAlt';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../fragments/ComposerTopMenu';
 import TextEditorService from '../../../../../services/text-editor.service';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -19,7 +18,11 @@ const PostCompose = memo(() => {
 		})),
 	);
 	const { editMode, setEditMode, setRawText } = useComposerContext();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	const EditorContent = useMemo(() => {
 		switch (editMode) {
@@ -72,7 +75,7 @@ const PostCompose = memo(() => {
 				);
 			}
 		}
-	}, [editMode, colorScheme]);
+	}, [editMode, theme]);
 
 	return (
 		<View
@@ -80,7 +83,7 @@ const PostCompose = memo(() => {
 				styles.bottomSheetContentContainer,
 				{
 					display: visible ? 'flex' : 'none',
-					backgroundColor: colorScheme.palette.menubar,
+					backgroundColor: theme.palette.menubar,
 					position: 'relative',
 				},
 			]}

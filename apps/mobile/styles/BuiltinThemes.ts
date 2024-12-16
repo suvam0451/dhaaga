@@ -78,7 +78,7 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 	},
 	{
 		// 🌸 Sakura 🌸
-		id: 'sakura',
+		id: 'RXLexZ2gHT7HMio0mvr0y',
 		name: 'Sakura',
 		palette: {
 			bg: '#301515', // 7 --> 14%, 301515

@@ -3,10 +3,15 @@ import { APP_FONT } from '../../../../../styles/AppTheme';
 import { memo, useRef } from 'react';
 import { useComposerContext } from '../api/useComposerContext';
 import useInputGeneratePrompt from '../api/useInputGeneratePrompt';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const ComposerTextInput = memo(function Foo() {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const { rawText } = useComposerContext();
 
 	const { onSelectionChange, onChange } = useInputGeneratePrompt();
@@ -19,7 +24,7 @@ const ComposerTextInput = memo(function Foo() {
 			multiline={true}
 			placeholder={"What's on your mind?"}
 			placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
-			style={[styles.textInput, { color: colorScheme.textColor.high }]}
+			style={[styles.textInput, { color: theme.textColor.high }]}
 			onChange={onChange}
 			onSelectionChange={onSelectionChange}
 			scrollEnabled={true}

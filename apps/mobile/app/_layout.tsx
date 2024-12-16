@@ -16,20 +16,14 @@ import { LogBox } from 'react-native';
 import { useFonts } from '@expo-google-fonts/montserrat';
 import { enableMapSet } from 'immer';
 import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
-
-enableMapSet();
-
 import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
-
-// polyfills
-import WithAppThemePackContext, {
-	useAppTheme,
-} from '../hooks/app/useAppThemePack';
 import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '../database/migrations';
 import useGlobalState from '../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
+
+enableMapSet();
 
 /**
  * Suppress these warnings...
@@ -64,10 +58,11 @@ if (__DEV__) {
 
 function App() {
 	const db = useSQLiteContext();
-	const { appInitialize, restoreSession } = useGlobalState(
+	const { appInitialize, restoreSession, theme } = useGlobalState(
 		useShallow((o) => ({
 			appInitialize: o.appInitialize,
 			restoreSession: o.restoreSession,
+			theme: o.colorScheme,
 		})),
 	);
 	const { top, bottom } = useSafeAreaInsets();
@@ -80,8 +75,6 @@ function App() {
 		}
 	}, [fontsLoaded, fontError]);
 
-	const { colorScheme } = useAppTheme();
-
 	const pathname = usePathname();
 
 	useEffect(() => {
@@ -93,16 +86,16 @@ function App() {
 		setTimeout(() => {
 			Appearance.setColorScheme('dark');
 			StatusBar.setBarStyle('light-content');
-			StatusBar.setBackgroundColor(colorScheme.palette.bg);
+			StatusBar.setBackgroundColor(theme.palette.bg);
 		}, 0);
-	}, [pathname, colorScheme]);
+	}, [pathname, theme]);
 
 	return (
 		<View
 			style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
 			onLayout={onLayoutRootView}
 		>
-			<StatusBar backgroundColor={colorScheme.palette.bg} />
+			<StatusBar backgroundColor={theme.palette.bg} />
 			<Stack initialRouteName={'(tabs)'} screenOptions={{ headerShown: false }}>
 				<Stack.Screen
 					name="(tabs)"
@@ -142,13 +135,11 @@ export default function Page() {
 					<QueryClientProvider client={queryClient}>
 						{/* Rneui Custom Themes */}
 						<ThemeProvider theme={RneuiTheme}>
-							<WithAppThemePackContext>
-								<SafeAreaProvider>
-									<WithAppNotificationBadge>
-										<App />
-									</WithAppNotificationBadge>
-								</SafeAreaProvider>
-							</WithAppThemePackContext>
+							<SafeAreaProvider>
+								<WithAppNotificationBadge>
+									<App />
+								</WithAppNotificationBadge>
+							</SafeAreaProvider>
 						</ThemeProvider>
 					</QueryClientProvider>
 				</SQLiteProvider>

@@ -2,7 +2,6 @@ import { memo, useMemo } from 'react';
 import { Text, View } from 'react-native';
 import appTextStyling from '../../../../../styles/AppTextStyling';
 import { Image } from 'expo-image';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -10,13 +9,13 @@ import { useShallow } from 'zustand/react/shallow';
  * Indicates in which context this reply is being composed
  */
 const ReplyContextIndicator = memo(() => {
-	const { ParentRef, stateId } = useGlobalState(
+	const { ParentRef, stateId, theme } = useGlobalState(
 		useShallow((o) => ({
 			ParentRef: o.bottomSheet.ParentRef,
 			stateId: o.bottomSheet.stateId,
+			theme: o.colorScheme,
 		})),
 	);
-	const { colorScheme } = useAppTheme();
 
 	const component = useMemo(() => {
 		if (ParentRef) {
@@ -27,7 +26,7 @@ const ReplyContextIndicator = memo(() => {
 					<Text
 						style={[
 							appTextStyling.postContext,
-							{ flexShrink: 1, color: colorScheme.textColor.medium },
+							{ flexShrink: 1, color: theme.textColor.medium },
 						]}
 					>
 						Replying to{' '}
@@ -36,7 +35,7 @@ const ReplyContextIndicator = memo(() => {
 						style={{
 							flexDirection: 'row',
 							alignItems: 'center',
-							backgroundColor: colorScheme.palette.buttonUnstyled,
+							backgroundColor: theme.palette.buttonUnstyled,
 							borderRadius: 8,
 							padding: 4,
 							paddingHorizontal: 6,
@@ -50,7 +49,7 @@ const ReplyContextIndicator = memo(() => {
 						<Text
 							style={[
 								appTextStyling.postContext,
-								{ maxWidth: 208, color: colorScheme.textColor.medium },
+								{ maxWidth: 208, color: theme.textColor.medium },
 							]}
 							numberOfLines={1}
 						>
@@ -62,7 +61,7 @@ const ReplyContextIndicator = memo(() => {
 		}
 
 		return <View />;
-	}, [ParentRef, stateId, colorScheme]);
+	}, [ParentRef, stateId, theme]);
 	return <View>{component}</View>;
 });
 

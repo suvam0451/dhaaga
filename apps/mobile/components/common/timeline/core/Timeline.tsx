@@ -22,7 +22,6 @@ import WithAppTimelineDataContext, {
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import {
 	AppPaginationContext,
 	usePagination,
@@ -105,7 +104,11 @@ const Timeline = memo(() => {
 	}, [fetchStatus]);
 
 	const label = useTimelineLabel();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	/**
 	 * Composite Hook Collection
@@ -131,7 +134,7 @@ const Timeline = memo(() => {
 				styles.container,
 				{
 					position: 'relative',
-					backgroundColor: colorScheme.palette.bg,
+					backgroundColor: theme.palette.bg,
 				},
 			]}
 		>

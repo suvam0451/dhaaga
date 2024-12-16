@@ -1,6 +1,5 @@
-import { View, StyleSheet } from 'react-native';
-import { Text } from '@rneui/themed';
-import { Button } from '@rneui/themed';
+import { View, StyleSheet, Text } from 'react-native';
+import { Button } from '@rneui/base';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { router } from 'expo-router';
@@ -8,10 +7,15 @@ import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeade
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import AppTopNavbar from '../../../shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function SelectProviderStack() {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const { translateY } = useScrollMoreOnPageEnd();
 
 	return (
@@ -19,7 +23,7 @@ function SelectProviderStack() {
 			<View
 				style={{
 					flex: 1,
-					backgroundColor: colorScheme.palette.bg,
+					backgroundColor: theme.palette.bg,
 					height: '100%',
 					marginTop: 54,
 				}}
@@ -29,7 +33,7 @@ function SelectProviderStack() {
 					<View
 						style={[
 							styles.selectSignInPlatformSection,
-							{ backgroundColor: colorScheme.palette.menubar },
+							{ backgroundColor: theme.palette.menubar },
 						]}
 					>
 						<View style={styles.selectSignInPlatformCenter}>
@@ -58,7 +62,7 @@ function SelectProviderStack() {
 					<View
 						style={[
 							styles.selectSignInPlatformSection,
-							{ backgroundColor: colorScheme.palette.menubar },
+							{ backgroundColor: theme.palette.menubar },
 						]}
 					>
 						<View style={styles.selectSignInPlatformCenter}>
@@ -90,7 +94,7 @@ function SelectProviderStack() {
 					<View
 						style={[
 							styles.selectSignInPlatformSection,
-							{ backgroundColor: colorScheme.palette.menubar },
+							{ backgroundColor: theme.palette.menubar },
 						]}
 					>
 						<View style={styles.selectSignInPlatformCenter}>

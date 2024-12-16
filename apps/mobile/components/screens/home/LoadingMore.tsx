@@ -9,7 +9,8 @@ import {
 import { memo } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type LoadingMoreProps = {
 	visible: boolean;
@@ -18,7 +19,11 @@ type LoadingMoreProps = {
 };
 
 const LoadingMore = memo(({ visible, loading, style }: LoadingMoreProps) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	if (!visible) return <View />;
 	if (visible && loading)
 		return (
@@ -26,7 +31,7 @@ const LoadingMore = memo(({ visible, loading, style }: LoadingMoreProps) => {
 				<View
 					style={[
 						styles.widgetContainer,
-						{ backgroundColor: colorScheme.palette.menubar },
+						{ backgroundColor: theme.palette.menubar },
 					]}
 				>
 					<ActivityIndicator size="small" color="#ffffff87" />

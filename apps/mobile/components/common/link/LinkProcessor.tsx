@@ -5,7 +5,6 @@ import { Text } from '@rneui/themed';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -22,7 +21,11 @@ function LinkProcessor({
 	fontFamily,
 	emphasis,
 }: LinkProcessorProps) {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const { acceptTouch } = useAppMfmContext();
 	const httpsRemoved = url.replace(/(https:\/\/)(.+)/, '$2');
 	const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, '$2');
@@ -77,7 +80,7 @@ function LinkProcessor({
 	return (
 		<Text
 			style={{
-				color: colorScheme.palette.link,
+				color: theme.palette.link,
 				fontFamily: linkTextFontFamily,
 				maxWidth: 128,
 				display: 'flex',

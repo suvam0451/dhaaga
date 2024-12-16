@@ -24,16 +24,15 @@ const AppBottomSheetFactory = memo(() => {
 	);
 	return useMemo(() => {
 		switch (type) {
-			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
+			case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
+			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW:
 				return <PostPreview />;
-			}
-			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
+			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
 				return (
 					<WithComposerContext textSeed={PostComposerTextSeedRef}>
 						<PostCompose />
 					</WithComposerContext>
 				);
-			}
 			case APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK:
 				return <AppBottomSheetProfilePeek />;
 			case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:

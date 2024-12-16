@@ -6,12 +6,18 @@ import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge
 import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import { HomeNavigationIcon } from '../../components/lib/Icon';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	return (
 		<View style={{ height: '100%' }}>
 			<WithAppAssetsContext>
@@ -76,7 +82,7 @@ export default function TabLayout() {
 								color: 'yellow',
 							},
 							tabBarStyle: {
-								backgroundColor: colorScheme.palette.bg,
+								backgroundColor: theme.palette.bg,
 								borderTopWidth: 0,
 								height: 52,
 							},
@@ -84,10 +90,10 @@ export default function TabLayout() {
 								height: 42,
 								width: 64,
 							}, // tabBarIconStyle: {
-							// 	color: colorScheme.textColor.medium,
+							// 	color: theme.textColor.medium,
 							// },
-							tabBarActiveTintColor: colorScheme.textColor.medium,
-							tabBarInactiveTintColor: colorScheme.textColor.low,
+							tabBarActiveTintColor: theme.textColor.medium,
+							tabBarInactiveTintColor: theme.textColor.low,
 							tabBarShowLabel: false,
 							headerShown: false,
 						};

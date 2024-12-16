@@ -16,7 +16,6 @@ import { APP_FONT } from '../../../../../styles/AppTheme';
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
 import { Image } from 'expo-image';
 import ComposeMediaTargets from './MediaTargets';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../../states/_global';
 
@@ -123,7 +122,11 @@ const ComposerAltListItem = memo(
 
 const ComposerAlt = memo(() => {
 	const { mediaTargets } = useComposerContext();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<View>
@@ -133,7 +136,7 @@ const ComposerAlt = memo(() => {
 					<Text
 						style={{
 							fontFamily: APP_FONTS.INTER_700_BOLD,
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 							textAlign: 'center',
 							marginTop: 32,
 						}}
@@ -161,8 +164,7 @@ const styles = StyleSheet.create({
 		textDecorationStyle: undefined,
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		// backgroundColor: 'red',
+		fontFamily: APP_FONTS.INTER_400_REGULAR, // backgroundColor: 'red',
 		flex: 1,
 		width: '100%',
 	},

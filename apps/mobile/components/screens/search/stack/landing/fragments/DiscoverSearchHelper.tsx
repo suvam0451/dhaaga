@@ -4,9 +4,10 @@ import { NativeCheckbox } from '../../../../../lib/Checkboxes';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 import { APP_SEARCH_TYPE } from '../../../api/useSearch';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { AppIcon } from '../../../../../lib/Icon';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type MultiSelectProps = {
 	setSearchCategory: Dispatch<SetStateAction<APP_SEARCH_TYPE>>;
@@ -17,7 +18,12 @@ type MultiSelectProps = {
  * search category
  */
 const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	const [selectedIndex, setSelectedIndex] = useState(0);
 
 	const onCheckboxPress = useCallback(
@@ -68,7 +74,7 @@ const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
 		<View
 			style={[
 				styles.checkboxContainer,
-				{ backgroundColor: colorScheme.palette.menubar },
+				{ backgroundColor: theme.palette.menubar },
 			]}
 		>
 			{Checkboxes.map((o, i) => (
@@ -97,7 +103,11 @@ type DiscoverSearchHelperProps = {
  */
 const DiscoverSearchHelper = memo(
 	({ setSearchTerm, setSearchCategory }: DiscoverSearchHelperProps) => {
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		const [searchBoxText, setSearchBoxText] = useState('');
 
 		const updateSearch = (search: string) => {
@@ -117,7 +127,7 @@ const DiscoverSearchHelper = memo(
 				<View
 					style={{
 						padding: 8,
-						backgroundColor: colorScheme.palette.menubar,
+						backgroundColor: theme.palette.menubar,
 						flexDirection: 'row',
 						borderTopLeftRadius: 8,
 						borderTopRightRadius: 8,
@@ -125,7 +135,7 @@ const DiscoverSearchHelper = memo(
 				>
 					<View
 						style={{
-							backgroundColor: colorScheme.palette.buttonUnstyled,
+							backgroundColor: theme.palette.buttonUnstyled,
 							flexDirection: 'row',
 							width: '100%',
 							paddingLeft: 8,

@@ -1,7 +1,8 @@
 import { memo } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { AppIcon } from '../../../../../lib/Icon';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../../../states/_global';
 
 /**
  * Will bring up the
@@ -9,12 +10,16 @@ import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
  * in the future.
  */
 const ProfileButtonMessage = memo(() => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	return (
 		<TouchableOpacity
 			style={{
 				padding: 8,
-				backgroundColor: colorScheme.palette.menubar, // 242424
+				backgroundColor: theme.palette.menubar, // 242424
 				borderRadius: 8,
 			}}
 		>

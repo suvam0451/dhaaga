@@ -2,16 +2,20 @@ import { Text, TouchableOpacity } from 'react-native';
 import { APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { memo } from 'react';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../_api/useAppBottomSheet';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { AppIcon } from '../../../../lib/Icon';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const PreviewedPostDone = memo(() => {
 	const { setType, setVisible } = useAppBottomSheet();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	function onDonePress() {
 		setType(APP_BOTTOM_SHEET_ENUM.NA);
@@ -33,7 +37,7 @@ const PreviewedPostDone = memo(() => {
 		>
 			<Text
 				style={{
-					color: colorScheme.textColor.high,
+					color: theme.textColor.high,
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 				}}
 			>

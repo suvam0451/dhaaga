@@ -9,7 +9,6 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import PostButton from './PostButton';
 import ReplyContextIndicator from './ReplyContextIndicator';
 import { useComposerContext } from '../api/useComposerContext';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import ComposerDecorator from './ComposerDecorator';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -20,13 +19,13 @@ import { useShallow } from 'zustand/react/shallow';
  * For emoji selections, this section is hidden
  */
 const ComposerTopMenu = memo(() => {
-	const { me } = useGlobalState(
+	const { me, theme } = useGlobalState(
 		useShallow((o) => ({
 			me: o.me,
+			theme: o.colorScheme,
 		})),
 	);
 	const { editMode } = useComposerContext();
-	const { colorScheme } = useAppTheme();
 
 	if (editMode === 'emoji') return <View />;
 	if (editMode === 'alt') {
@@ -60,7 +59,7 @@ const ComposerTopMenu = memo(() => {
 					<VisibilityPicker />
 					<Text
 						style={{
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 							fontSize: 11.5,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							opacity: 0.8,

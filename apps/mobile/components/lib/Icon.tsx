@@ -1,7 +1,5 @@
-import * as React from 'react';
 import { memo, useMemo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import {
 	Platform,
 	StyleProp,
@@ -81,13 +79,18 @@ export function HomeNavigationIcon({
 			setType: o.setHomepageType,
 		})),
 	);
+
 	function onPress() {
+		router.navigate('/');
+	}
+
+	function onLongPress() {
 		setType(TimelineFetchMode.IDLE);
 		router.navigate('/');
 	}
 
 	return (
-		<TouchableOpacity onLongPress={onPress}>
+		<TouchableOpacity onPress={onPress} onLongPress={onLongPress}>
 			{focused ? (
 				<Ionicons size={size + 2} name="home" color={color} />
 			) : (
@@ -101,28 +104,33 @@ export function DiscoverNavigationIcon(props: NavigationIconType) {}
 
 export const AppIcon = memo(
 	({ id, emphasis, iconStyle, size, onPress, containerStyle }: AppIconType) => {
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		let _color = null;
 		let _size = size || 24;
 		switch (emphasis) {
 			case 'high': {
-				_color = colorScheme.textColor.high;
+				_color = theme.textColor.high;
 				break;
 			}
 			case 'medium': {
-				_color = colorScheme.textColor.medium;
+				_color = theme.textColor.medium;
 				break;
 			}
 			case 'low': {
-				_color = colorScheme.textColor.low;
+				_color = theme.textColor.low;
 				break;
 			}
 			case 'c': {
-				_color = colorScheme.textColor.emphasisC;
+				_color = theme.textColor.emphasisC;
 				break;
 			}
 			default: {
-				_color = colorScheme.textColor.medium;
+				_color = theme.textColor.medium;
 				break;
 			}
 		}

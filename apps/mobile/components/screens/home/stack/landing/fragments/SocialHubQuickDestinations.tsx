@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppIcon } from '../../../../../lib/Icon';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { TimelineFetchMode } from '../../../../../common/timeline/utils/timeline.types';
@@ -34,10 +33,10 @@ const data = [
 ];
 
 const SocialHubQuickDestinations = memo(() => {
-	const { colorScheme } = useAppTheme();
-	const { setHomepageType } = useGlobalState(
+	const { setHomepageType, theme } = useGlobalState(
 		useShallow((o) => ({
 			setHomepageType: o.setHomepageType,
+			theme: o.colorScheme,
 		})),
 	);
 
@@ -50,7 +49,7 @@ const SocialHubQuickDestinations = memo(() => {
 		>
 			<Text
 				style={{
-					color: colorScheme.textColor.medium,
+					color: theme.textColor.medium,
 					marginBottom: 4,
 					fontSize: 18,
 					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
@@ -80,7 +79,7 @@ const SocialHubQuickDestinations = memo(() => {
 							style={[
 								styles.text,
 								{
-									color: colorScheme.textColor.high,
+									color: theme.textColor.high,
 									fontSize: 16,
 								},
 							]}
@@ -98,7 +97,7 @@ const SocialHubQuickDestinations = memo(() => {
 						<Text
 							style={[
 								styles.text,
-								{ color: colorScheme.textColor.high, fontSize: 16 },
+								{ color: theme.textColor.high, fontSize: 16 },
 							]}
 						>
 							Social
@@ -118,7 +117,7 @@ const SocialHubQuickDestinations = memo(() => {
 						]}
 					>
 						<AppIcon id={'home'} emphasis={'high'} />
-						<Text style={[styles.text, { color: colorScheme.textColor.high }]}>
+						<Text style={[styles.text, { color: theme.textColor.high }]}>
 							Social
 						</Text>
 					</View>
@@ -129,7 +128,7 @@ const SocialHubQuickDestinations = memo(() => {
 						]}
 					>
 						<AppIcon id={'home'} />
-						<Text style={[styles.text, { color: colorScheme.textColor.high }]}>
+						<Text style={[styles.text, { color: theme.textColor.high }]}>
 							Federated
 						</Text>
 					</View>
@@ -138,7 +137,7 @@ const SocialHubQuickDestinations = memo(() => {
 
 			<Text
 				style={{
-					color: colorScheme.textColor.medium,
+					color: theme.textColor.medium,
 					fontSize: 18,
 					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					marginTop: 16,
@@ -162,7 +161,7 @@ const SocialHubQuickDestinations = memo(() => {
 					>
 						<Text
 							style={{
-								color: colorScheme.textColor.medium,
+								color: theme.textColor.medium,
 								marginBottom: 4,
 								fontSize: 18,
 								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
@@ -183,7 +182,7 @@ const SocialHubQuickDestinations = memo(() => {
 					>
 						<Text
 							style={{
-								color: colorScheme.textColor.medium,
+								color: theme.textColor.medium,
 								marginBottom: 4,
 								fontSize: 18,
 								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,

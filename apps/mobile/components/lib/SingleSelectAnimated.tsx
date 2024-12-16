@@ -17,7 +17,8 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated';
 import { APP_FONTS } from '../../styles/AppFonts';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../states/_global';
 
 type ChipProps = {
 	active: boolean;
@@ -27,7 +28,12 @@ type ChipProps = {
 };
 
 const Chip = memo(({ active, label, onLayout, onPress }: ChipProps) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	const ref = useAnimatedRef<Animated.View>();
 
 	// respond to page changes via swipe gesture
@@ -45,7 +51,7 @@ const Chip = memo(({ active, label, onLayout, onPress }: ChipProps) => {
 	const animStyle = useAnimatedStyle(() => {
 		return {
 			color: withTiming(
-				active ? colorScheme.textColor.high : colorScheme.textColor.medium,
+				active ? theme.textColor.high : theme.textColor.medium,
 				{
 					duration: 350,
 				},
@@ -130,7 +136,12 @@ export const SingleSelectAnimated = memo(
 			};
 		});
 
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		return (
 			<View style={styles.root}>
 				<View style={[styles.container, { justifyContent: justify }]}>
@@ -146,7 +157,7 @@ export const SingleSelectAnimated = memo(
 					<Animated.View
 						style={[
 							styles.indicator,
-							{ backgroundColor: colorScheme.palette.buttonUnstyled },
+							{ backgroundColor: theme.palette.buttonUnstyled },
 							indicatorAnimatedStyle,
 						]}
 					/>

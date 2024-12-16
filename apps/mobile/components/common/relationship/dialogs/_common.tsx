@@ -2,7 +2,8 @@ import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { Dispatch, memo, SetStateAction } from 'react';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export const modalStyles = StyleSheet.create({
 	modalTitle: {
@@ -38,7 +39,11 @@ export const ActionButton = memo(
 		setVisible: Dispatch<SetStateAction<boolean>>;
 		onPress: () => void;
 	}) => {
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		function onOptionPressed() {
 			onPress();
 			setVisible(false);
@@ -51,7 +56,7 @@ export const ActionButton = memo(
 					<Text
 						style={{
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 							fontSize: 18,
 							textAlign: 'center',
 						}}

@@ -15,20 +15,7 @@ import {
 	TimelineDataReducerFunction,
 } from '../../../common/timeline/api/postArrayReducer';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
-
-export enum APP_BOTTOM_SHEET_ENUM {
-	HASHTAG = 'Hashtag',
-	LINK = 'Link',
-	STATUS_COMPOSER = 'StatusComposer',
-	STATUS_MENU = 'StatusMenu',
-	STATUS_PREVIEW = 'StatusPreview',
-	PROFILE_PEEK = 'ProfilePeek',
-	MORE_POST_ACTIONS = 'MorePostActions',
-	NA = 'N/A',
-	REACTION_DETAILS = 'ReactionDetails',
-	SELECT_ACCOUNT = 'SelectAccount',
-	SWITCH_THEME_PACK = 'SwitchThemePack',
-}
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 type Type = {
 	type: APP_BOTTOM_SHEET_ENUM;

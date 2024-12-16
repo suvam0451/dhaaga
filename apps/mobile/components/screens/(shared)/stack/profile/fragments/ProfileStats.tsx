@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import styles from '../../../../../common/user/utils/styles';
 import useAppNavigator from '../../../../../../states/useAppNavigator';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type ProfileStatsProps = {
 	userId: string;
@@ -38,7 +39,11 @@ const ProfileStats = memo(
 		style,
 		userId,
 	}: ProfileStatsProps) => {
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		const { toFollows, toFollowers } = useAppNavigator();
 
 		function onFollowsPress() {
@@ -50,12 +55,13 @@ const ProfileStats = memo(
 		function onFollowersPress() {
 			toFollowers(userId);
 		}
+
 		return (
 			<View
 				style={[
 					{ flexDirection: 'row', flex: 1 },
 					style,
-					{ backgroundColor: colorScheme.palette.menubar },
+					{ backgroundColor: theme.palette.menubar },
 				]}
 			>
 				<TouchableOpacity
@@ -65,16 +71,11 @@ const ProfileStats = memo(
 					}}
 					onPress={onPostsPress}
 				>
-					<Text
-						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
-					>
+					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
 						{util(postCount)}
 					</Text>
 					<Text
-						style={[
-							styles.secondaryText,
-							{ color: colorScheme.textColor.medium },
-						]}
+						style={[styles.secondaryText, { color: theme.textColor.medium }]}
 					>
 						Posts
 					</Text>
@@ -83,16 +84,11 @@ const ProfileStats = memo(
 					style={{ alignItems: 'center', flex: 1 }}
 					onPress={onFollowsPress}
 				>
-					<Text
-						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
-					>
+					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
 						{util(followingCount)}
 					</Text>
 					<Text
-						style={[
-							styles.secondaryText,
-							{ color: colorScheme.textColor.medium },
-						]}
+						style={[styles.secondaryText, { color: theme.textColor.medium }]}
 					>
 						Follows
 					</Text>
@@ -104,16 +100,11 @@ const ProfileStats = memo(
 					}}
 					onPress={onFollowersPress}
 				>
-					<Text
-						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
-					>
+					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
 						{util(followerCount)}
 					</Text>
 					<Text
-						style={[
-							styles.secondaryText,
-							{ color: colorScheme.textColor.medium },
-						]}
+						style={[styles.secondaryText, { color: theme.textColor.medium }]}
 					>
 						Followers
 					</Text>

@@ -3,7 +3,8 @@ import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type StatItemProps = {
 	count: number;
@@ -24,18 +25,23 @@ function util(o: number): string {
  * Shows a post stat
  */
 const StatItem = memo(({ count, label, nextCounts }: StatItemProps) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	const formatted = util(count);
 
 	const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
 	if (count === 0) return <View />;
 	return (
 		<Fragment>
-			<Text style={[styles.text, { color: colorScheme.textColor.emphasisC }]}>
+			<Text style={[styles.text, { color: theme.textColor.emphasisC }]}>
 				{formatted} {label}
 			</Text>
 			{SHOW_TRAILING_BULLET && (
-				<Text style={[styles.bull, { color: colorScheme.textColor.emphasisC }]}>
+				<Text style={[styles.bull, { color: theme.textColor.emphasisC }]}>
 					&bull;
 				</Text>
 			)}

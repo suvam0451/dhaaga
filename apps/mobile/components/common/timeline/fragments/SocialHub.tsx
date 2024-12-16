@@ -8,10 +8,11 @@ import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity'
 import { TimelineFetchMode } from '../utils/timeline.types';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import SocialHubAssistant from '../../../screens/home/stack/landing/fragments/SocialHubAssistant';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import SocialHubQuickDestinations from '../../../screens/home/stack/landing/fragments/SocialHubQuickDestinations';
 import { AppSegmentedControl } from '../../../lib/SegmentedControl';
 import { SocialHubAvatarCircle } from '../../../lib/Avatar';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -244,7 +245,11 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 function SocialHub() {
 	const [TimeOfDay, setTimeOfDay] = useState<TIME_OF_DAY>(TIME_OF_DAY.UNKNOWN);
 	const userDataTimelines = []; // useQuery(UserDataTimeline).filter((o) => o.pinned);
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	useEffect(() => {
 		const currentHours = new Date().getHours();
@@ -294,7 +299,7 @@ function SocialHub() {
 			style={{
 				height: '100%',
 				position: 'relative',
-				backgroundColor: colorScheme.palette.bg,
+				backgroundColor: theme.palette.bg,
 			}}
 		>
 			<ScrollView>
@@ -302,47 +307,35 @@ function SocialHub() {
 					style={{
 						height: '100%',
 						paddingTop: 16,
-						backgroundColor: colorScheme.palette.bg,
+						backgroundColor: theme.palette.bg,
 						position: 'relative',
 						paddingHorizontal: 8,
 					}}
 				>
 					{TimeOfDay === TIME_OF_DAY.MORNING && (
 						<Text
-							style={[
-								styles.timeOfDayText,
-								{ color: colorScheme.textColor.medium },
-							]}
+							style={[styles.timeOfDayText, { color: theme.textColor.medium }]}
 						>
 							Good Morning
 						</Text>
 					)}
 					{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
 						<Text
-							style={[
-								styles.timeOfDayText,
-								{ color: colorScheme.textColor.medium },
-							]}
+							style={[styles.timeOfDayText, { color: theme.textColor.medium }]}
 						>
 							Good Afternoon
 						</Text>
 					)}
 					{TimeOfDay === TIME_OF_DAY.EVENING && (
 						<Text
-							style={[
-								styles.timeOfDayText,
-								{ color: colorScheme.textColor.medium },
-							]}
+							style={[styles.timeOfDayText, { color: theme.textColor.medium }]}
 						>
 							Good Evening
 						</Text>
 					)}
 					{TimeOfDay === TIME_OF_DAY.NIGHT && (
 						<Text
-							style={[
-								styles.timeOfDayText,
-								{ color: colorScheme.textColor.medium },
-							]}
+							style={[styles.timeOfDayText, { color: theme.textColor.medium }]}
 						>
 							Good Night 🌃
 						</Text>

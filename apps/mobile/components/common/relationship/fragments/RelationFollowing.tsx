@@ -3,20 +3,25 @@ import { RelationshipButtonProps, styles } from './_common';
 import { Button } from '@rneui/themed';
 import { ActivityIndicator, Text } from 'react-native';
 import { APP_THEME } from '../../../../styles/AppTheme';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const LABEL = 'Following';
 
 const RelationFollowing = memo(
 	({ loading, onPress }: RelationshipButtonProps) => {
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		return (
 			<Button
 				size={'sm'}
 				onPress={onPress}
 				buttonStyle={[
 					styles.button,
-					{ backgroundColor: colorScheme.palette.menubar },
+					{ backgroundColor: theme.palette.menubar },
 				]}
 				containerStyle={[styles.buttonContainer]}
 			>

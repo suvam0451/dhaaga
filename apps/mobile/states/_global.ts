@@ -38,29 +38,18 @@ export enum REACT_NATIVE_BOTTOM_SHEET_ENUM {
 	NA = 'N/A',
 }
 
-/**
- * @deprecated
- */
-type ReactNativeBottomSheetState = {
-	type: REACT_NATIVE_BOTTOM_SHEET_ENUM;
-	visible: boolean;
-	requestId: string;
-	refresh: () => void;
-	present: () => void;
-	dismiss: () => void;
-};
-
 export enum APP_BOTTOM_SHEET_ENUM {
+	APP_PROFILE = 'AppProfile',
 	HASHTAG = 'Hashtag',
 	LINK = 'Link',
+	MORE_POST_ACTIONS = 'MorePostActions',
+	NA = 'N/A',
+	PROFILE_PEEK = 'ProfilePeek',
+	REACTION_DETAILS = 'ReactionDetails',
+	SELECT_ACCOUNT = 'SelectAccount',
 	STATUS_COMPOSER = 'StatusComposer',
 	STATUS_MENU = 'StatusMenu',
 	STATUS_PREVIEW = 'StatusPreview',
-	PROFILE_PEEK = 'ProfilePeek',
-	MORE_POST_ACTIONS = 'MorePostActions',
-	NA = 'N/A',
-	REACTION_DETAILS = 'ReactionDetails',
-	SELECT_ACCOUNT = 'SelectAccount',
 	SWITCH_THEME_PACK = 'SwitchThemePack',
 	TIMELINE_CONTROLLER = 'TimeLineController',
 }
@@ -154,10 +143,10 @@ type State = {
 
 	packId: string;
 	colorScheme: AppColorSchemeType;
+	setColorScheme: (themeKey: string) => void;
 	packList: AppThemePack[];
 	activePack: ThemePackType;
 
-	rnBottomSheet: ReactNativeBottomSheetState;
 	bottomSheet: AppBottomSheetState;
 	dialog: AppDialogState;
 };
@@ -172,31 +161,31 @@ type Actions = {
 };
 
 const defaultValue: State & Actions = {
+	// database drivers
 	db: null,
 	mmkv: null,
 	router: null,
+
+	// account data
 	driver: null,
 	acct: null,
 	me: null,
+
 	homepageType: TimelineFetchMode.IDLE,
+
+	// theme packs
 	packId: 'default',
 	packList: [],
-	colorScheme: undefined,
 	getPacks: () => [],
 	setPack: () => {},
+	colorScheme: null,
+	setColorScheme: undefined,
+
 	appInitialize: undefined,
 	restoreSession: undefined,
 	selectAccount: undefined,
 	setHomepageType: undefined,
 	activePack: DEFAULT_THEME_PACK_OBJECT,
-	rnBottomSheet: {
-		type: REACT_NATIVE_BOTTOM_SHEET_ENUM.NA,
-		refresh: undefined,
-		requestId: RandomUtil.nanoId(),
-		visible: false,
-		present: undefined,
-		dismiss: undefined,
-	},
 	bottomSheet: {
 		type: APP_BOTTOM_SHEET_ENUM.NA,
 		visible: false,
@@ -270,7 +259,7 @@ class GlobalStateService {
 const useGlobalState = create<State & Actions>()(
 	immer((set, get) => ({
 		...defaultValue,
-		colorScheme: APP_BUILT_IN_THEMES[0],
+		theme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
 				state.db = new DataSource(db);
@@ -305,26 +294,6 @@ const useGlobalState = create<State & Actions>()(
 			set((state) => {
 				state.homepageType = selection;
 			});
-		},
-		rnBottomSheet: {
-			requestId: RandomUtil.nanoId(),
-			refresh: () => {
-				set((state) => {
-					state.bottomSheet.stateId = RandomUtil.nanoId();
-				});
-			},
-			type: REACT_NATIVE_BOTTOM_SHEET_ENUM.NA,
-			visible: false,
-			present: () => {
-				set((state) => {
-					state.rnBottomSheet.visible = true;
-				});
-			},
-			dismiss: () => {
-				set((state) => {
-					state.rnBottomSheet.visible = false;
-				});
-			},
 		},
 		bottomSheet: {
 			type: APP_BOTTOM_SHEET_ENUM.NA,
@@ -398,6 +367,15 @@ const useGlobalState = create<State & Actions>()(
 					state.dialog.stateId = RandomUtil.nanoId();
 				});
 			},
+		},
+		colorScheme: APP_BUILT_IN_THEMES[0],
+		setColorScheme: (key: string) => {
+			const match = APP_BUILT_IN_THEMES.find((o) => o.id === key);
+			if (match) {
+				set((state) => {
+					state.colorScheme = match;
+				});
+			}
 		},
 	})),
 );

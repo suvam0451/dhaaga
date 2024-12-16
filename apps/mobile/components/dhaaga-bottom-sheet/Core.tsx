@@ -3,7 +3,6 @@ import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetFactory from './fragments/AppBottomSheetFactory';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -15,13 +14,13 @@ import { useShallow } from 'zustand/react/shallow';
  * based on active module
  */
 const AppBottomSheet = memo(() => {
-	const { colorScheme } = useAppTheme();
 	const { animStyle } = useAnimatedHeight();
 
-	const { visible, hide } = useGlobalState(
+	const { visible, hide, theme } = useGlobalState(
 		useShallow((o) => ({
 			visible: o.bottomSheet.visible,
 			hide: o.bottomSheet.hide,
+			theme: o.colorScheme,
 		})),
 	);
 
@@ -32,7 +31,7 @@ const AppBottomSheet = memo(() => {
 					position: 'absolute',
 					height: visible ? '100%' : 'auto',
 					width: '100%',
-					backgroundColor: colorScheme.palette.bg,
+					backgroundColor: theme.palette.bg,
 					opacity: 0.3,
 					zIndex: 1,
 				}}
@@ -41,7 +40,7 @@ const AppBottomSheet = memo(() => {
 			<Animated.View
 				style={[
 					styles.rootContainer,
-					{ backgroundColor: colorScheme.palette.menubar },
+					{ backgroundColor: theme.palette.menubar },
 					animStyle,
 				]}
 			>

@@ -1,7 +1,5 @@
 import { Text } from 'react-native';
-import { randomUUID } from 'expo-crypto';
 import LinkProcessor from '../components/common/link/LinkProcessor';
-import { EmojiService } from './emoji.service';
 import { MMKV } from 'react-native-mmkv';
 import TextParserService from './text-parser';
 import type { MfmNode } from '@dhaaga/shared-abstraction-activitypub';
@@ -12,6 +10,7 @@ import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 import { APP_FONTS } from '../styles/AppFonts';
 import { AppColorSchemeType } from '../styles/BuiltinThemes';
+import { RandomUtil } from '../utils/random.utils';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
@@ -170,7 +169,7 @@ class MfmComponentBuilder {
 				if (node.type === 'text') {
 					const splits = node.props?.text.split(/<br ?\/?>/);
 
-					const key = randomUUID();
+					const key = RandomUtil.nanoId();
 					// first item is always text
 					this.results[paraCount].push(
 						<Text
@@ -190,7 +189,7 @@ class MfmComponentBuilder {
 						this.results.push([]);
 						paraCount++;
 
-						const key = randomUUID();
+						const key = RandomUtil.nanoId();
 						this.results[paraCount].push(
 							<Text
 								key={key}
@@ -240,7 +239,7 @@ class MfmComponentBuilder {
 			}
 		}
 
-		const k = randomUUID();
+		const k = RandomUtil.nanoId();
 		switch (node.type) {
 			case 'link':
 			case 'url': {

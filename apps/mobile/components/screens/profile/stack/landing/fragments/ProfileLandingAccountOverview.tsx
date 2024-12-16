@@ -9,7 +9,6 @@ import ProfileButtonMessage from '../../../../(shared)/stack/profile/fragments/P
 import ProfileButtonPhonebook from '../../../../(shared)/stack/profile/fragments/ProfileButtonPhonebook';
 import ProfileStats from '../../../../(shared)/stack/profile/fragments/ProfileStats';
 import styles from '../../../../../common/user/utils/styles';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -18,7 +17,11 @@ const WithoutAccount = memo(() => {
 });
 
 const WithAccount = memo(() => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const { Data: acct } = useMyProfile();
 	const { content: ParsedDisplayName } = useMfm({
 		content: acct?.displayName,
@@ -60,10 +63,7 @@ const WithAccount = memo(() => {
 					{ParsedDisplayName}
 					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 						<Text
-							style={[
-								styles.secondaryText,
-								{ color: colorScheme.textColor.medium },
-							]}
+							style={[styles.secondaryText, { color: theme.textColor.medium }]}
 							numberOfLines={1}
 						>
 							{acct?.handle}

@@ -1,13 +1,8 @@
+import { Text } from 'react-native';
 import { memo, useMemo } from 'react';
-import { Text } from '@rneui/themed';
-import { randomUUID } from 'expo-crypto';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import useGlobalState from '../../../states/_global';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { RandomUtil } from '../../../utils/random.utils';
 
 type Props = {
 	value: string;
@@ -16,15 +11,17 @@ type Props = {
 };
 
 const MentionSegment = memo(function Foo({ value, link, fontFamily }: Props) {
-	const { setVisible, updateRequestId, setType, HandleRef } =
-		useAppBottomSheet();
-	const { colorScheme } = useAppTheme();
-	const { acct } = useGlobalState(
+	const { acct, theme, setStringValue, show } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
+			visible: o.bottomSheet.visible,
+			setType: o.bottomSheet.setType,
+			setStringValue: o.bottomSheet.setTextValue,
+			show: o.bottomSheet.show,
+			theme: o.colorScheme,
 		})),
 	);
-	const k = randomUUID();
+	const k = RandomUtil.nanoId();
 
 	const displayText = useMemo(() => {
 		let retval = value;
@@ -45,16 +42,14 @@ const MentionSegment = memo(function Foo({ value, link, fontFamily }: Props) {
 	}, [value]);
 
 	function onPress() {
-		HandleRef.current = value;
-		setType(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK);
-		updateRequestId();
-		setVisible(true);
+		setStringValue(value);
+		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 	}
 
 	return (
 		<Text
 			key={k}
-			style={{ fontFamily, color: colorScheme.palette.link }}
+			style={{ fontFamily, color: theme.palette.link }}
 			onPress={onPress}
 		>
 			{displayText}

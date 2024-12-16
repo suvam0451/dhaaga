@@ -50,7 +50,7 @@ function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
 		// 	globalDb,
 		// });
 		// return reactNodes?.map((para, i) => {
-		// 	const uuid = randomUUID();
+		// 	const uuid = RandomUtil.nanoid();
 		// 	return (
 		// 		<Text key={uuid} style={{ color: '#fff', opacity: 0.87 }}>
 		// 			{para.map((o, j) => (

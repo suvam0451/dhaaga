@@ -7,7 +7,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import { Account } from '../../../database/_schema';
 import { AccountMetadataService } from '../../../database/entities/account-metadata';
 import useGlobalState from '../../../states/_global';
@@ -42,6 +41,7 @@ export const AccountOptions = memo(function Foo({
 		})),
 	);
 	console.log('account options...', IsExpanded);
+
 	function onFixClicked() {
 		// FIXME: point this to the sql account
 		dialogTarget.current = acct;
@@ -165,7 +165,12 @@ export const AccountDetails = memo(function Foo({
 	subdomain,
 	onClicked,
 }: selectedIndicatorProps) {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	return (
 		<TouchableOpacity
 			style={{ marginLeft: 8, flexGrow: 1 }}
@@ -174,7 +179,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					color: selected ? '#9dced7' : colorScheme.textColor.high,
+					color: selected ? '#9dced7' : theme.textColor.high,
 				}}
 				numberOfLines={1}
 			>
@@ -183,7 +188,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : colorScheme.textColor.low,
+					color: selected ? '#9dced7' : theme.textColor.low,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -193,7 +198,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : colorScheme.textColor.medium,
+					color: selected ? '#9dced7' : theme.textColor.medium,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -313,8 +318,7 @@ function AccountListingFragment({
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		// backgroundColor: '#fff',
+		flex: 1, // backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

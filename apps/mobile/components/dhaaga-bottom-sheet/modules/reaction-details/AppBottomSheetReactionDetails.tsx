@@ -16,13 +16,16 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { AppUser } from '../../../../services/approto/app-user-service';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { AppAvatar } from '../../../lib/Avatar';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const { content } = useMfm({
 		content: dto.displayName,
 		remoteSubdomain: dto.instance,
@@ -40,7 +43,7 @@ const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
 				<View>{content}</View>
 				<Text
 					style={{
-						color: colorScheme.textColor.medium,
+						color: theme.textColor.medium,
 						fontFamily: APP_FONTS.INTER_400_REGULAR,
 						fontSize: 13,
 					}}
@@ -53,12 +56,12 @@ const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
 });
 
 const AppBottomSheetReactionDetails = memo(() => {
-	const { colorScheme } = useAppTheme();
-	const { client, driver, acct } = useGlobalState(
+	const { client, driver, acct, theme } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
 			acct: o.acct,
 			client: o.router,
+			theme: o.colorScheme,
 		})),
 	);
 	const { TextRef, PostRef, timelineDataPostListReducer, setVisible, visible } =
@@ -71,6 +74,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 	const IS_REMOTE = ActivitypubReactionsService.canReact(Data?.id);
 
 	const [Loading, setLoading] = useState(false);
+
 	async function onActionPress() {
 		if (IS_REMOTE) return;
 
@@ -192,7 +196,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 								<View>
 									<Text
 										style={{
-											color: colorScheme.textColor.medium,
+											color: theme.textColor.medium,
 											fontFamily: APP_FONTS.INTER_500_MEDIUM,
 											marginTop: 8,
 										}}
@@ -207,7 +211,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 								style={{
 									fontSize: 16,
 									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-									color: colorScheme.textColor.medium,
+									color: theme.textColor.medium,
 									marginVertical: 16,
 								}}
 							>

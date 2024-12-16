@@ -4,7 +4,6 @@ import {
 	MisskeyRestClient,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
-import * as Crypto from 'expo-crypto';
 import { MMKV } from 'react-native-mmkv';
 import MmkvService from './mmkv.service';
 import { ActivityPubServer } from '../entities/activitypub-server.entity';
@@ -13,6 +12,7 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { SQLiteDatabase } from 'expo-sqlite';
+import { RandomUtil } from '../utils/random.utils';
 
 class ActivityPubService {
 	/**
@@ -286,7 +286,7 @@ class ActivityPubService {
 			appName: 'Dhaaga',
 			appClientId: tokens?.clientId,
 			appClientSecret: tokens?.clientSecret,
-			uuid: Crypto.randomUUID(),
+			uuid: RandomUtil.nanoId(),
 		});
 		if (error) return null;
 		return data;

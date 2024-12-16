@@ -7,7 +7,6 @@ import { Ionicons } from '@expo/vector-icons';
 import ActivityPubService from '../../../../../services/activitypub.service';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import useGlobalState from '../../../../../states/_global';
 import { AppIcon } from '../../../../lib/Icon';
 import { useShallow } from 'zustand/react/shallow';
@@ -43,7 +42,7 @@ const ActionButton = memo(
 		desc?: string;
 		onClick: () => void;
 	}) => {
-		const { colorScheme } = useAppTheme();
+		const { colorScheme } = useGlobalState();
 		return (
 			<TouchableOpacity
 				style={{
@@ -94,21 +93,23 @@ const PostMoreActionsPostTarget = memo(
 	}: {
 		setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
 	}) => {
-		const { colorScheme } = useAppTheme();
-		const { PostRef, reducer, hide, router, driver } = useGlobalState(
+		const { postValue, reducer, hide, router, driver, theme } = useGlobalState(
 			useShallow((o) => ({
-				PostRef: o.bottomSheet.PostRef,
+				postValue: o.bottomSheet.postValue,
 				reducer: o.bottomSheet.timelineDataPostListReducer,
 				router: o.router,
 				driver: o.driver,
 				hide: o.bottomSheet.hide,
+				theme: o.colorScheme,
 			})),
 		);
 
-		const IS_BOOKMARKED = PostRef.interaction.bookmarked;
-		const IS_LIKED = PostRef.interaction.liked;
+		const IS_BOOKMARKED = postValue.interaction.bookmarked;
+		const IS_LIKED = postValue.interaction.liked;
 
-		const IS_REACTED = !PostRef?.stats?.reactions?.every((o) => o.me === false);
+		const IS_REACTED = !postValue?.stats?.reactions?.every(
+			(o) => o.me === false,
+		);
 
 		let ReactionCta = 'Add Reaction';
 		if (IS_REACTED) {
@@ -128,15 +129,15 @@ const PostMoreActionsPostTarget = memo(
 		function onClickToggleLike() {
 			ActivityPubService.toggleLike(
 				router,
-				PostRef.id,
-				PostRef.interaction.liked,
+				postValue.id,
+				postValue.interaction.liked,
 				driver as any,
 			)
 				.then((res) => {
 					reducer({
 						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_LIKE_STATUS,
 						payload: {
-							id: PostRef.id,
+							id: postValue.id,
 							delta: res,
 						},
 					});
@@ -149,14 +150,14 @@ const PostMoreActionsPostTarget = memo(
 		function onClickToggleBookmark() {
 			ActivityPubService.toggleBookmark(
 				router,
-				PostRef.id,
-				PostRef.interaction.bookmarked,
+				postValue.id,
+				postValue.interaction.bookmarked,
 			)
 				.then((res) => {
 					reducer({
 						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
 						payload: {
-							id: PostRef.id,
+							id: postValue.id,
 							value: res,
 						},
 					});
@@ -192,7 +193,7 @@ const PostMoreActionsPostTarget = memo(
 							<AntDesign
 								name={IS_LIKED ? 'like1' : 'like2'}
 								size={24}
-								color={IS_LIKED ? APP_THEME.LINK : colorScheme.textColor.high}
+								color={IS_LIKED ? APP_THEME.LINK : theme.textColor.high}
 							/>
 						}
 						label={IS_LIKED ? 'Remove Like' : 'Add Like'}
