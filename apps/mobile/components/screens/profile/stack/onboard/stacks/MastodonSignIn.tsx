@@ -14,6 +14,7 @@ import PleromaPasteToken from '../fragments/PleromaPasteToken';
 import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_ROUTE_ENUM } from '../../../../../../utils/route-list';
 
 function MastodonSignInStack() {
 	const { db } = useGlobalState(
@@ -87,7 +88,7 @@ function MastodonSignInStack() {
 		);
 		if (upsertResult.type === 'success') {
 			Alert.alert('Account Added');
-			router.replace('/profile/settings/accounts');
+			router.replace(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
 		}
 	}
 

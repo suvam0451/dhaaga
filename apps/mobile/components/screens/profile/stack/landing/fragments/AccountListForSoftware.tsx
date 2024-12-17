@@ -30,7 +30,7 @@ function AccountListForSoftware({
 				<NoAccounts service={software} />
 			) : (
 				<Fragment>
-					<SoftwareHeader software={software} mb={4} mt={8} />
+					<SoftwareHeader software={software} mb={4} mt={8} addText={true} />
 					{filteredForSoftware.map((o, i) => (
 						<AccountListingFragment
 							key={i}

@@ -1,5 +1,5 @@
 import { Fragment, memo } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetFactory from './fragments/AppBottomSheetFactory';
@@ -32,11 +32,12 @@ const AppBottomSheet = memo(() => {
 					height: visible ? '100%' : 'auto',
 					width: '100%',
 					backgroundColor: theme.palette.bg,
-					opacity: 0.3,
+					opacity: 0.48,
 					zIndex: 1,
 				}}
 				onPress={hide}
 			/>
+
 			<Animated.View
 				style={[
 					styles.rootContainer,
@@ -44,6 +45,27 @@ const AppBottomSheet = memo(() => {
 					animStyle,
 				]}
 			>
+				<View
+					style={{
+						position: 'absolute',
+						alignItems: 'center',
+						justifyContent: 'center',
+						left: '50%',
+						transform: [{ translateX: '-50%' }],
+						top: 8,
+					}}
+				>
+					<View
+						style={{
+							height: 4,
+							width: 48,
+							backgroundColor: theme.textColor.low,
+							marginBottom: 16,
+							borderRadius: 16,
+						}}
+					/>
+				</View>
+
 				<AppBottomSheetFactory />
 			</Animated.View>
 		</Fragment>

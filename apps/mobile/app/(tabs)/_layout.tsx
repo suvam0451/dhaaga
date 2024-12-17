@@ -160,7 +160,13 @@ export default function TabLayout() {
 					<Tabs.Screen
 						name={'profile'}
 						options={{
-							tabBarIcon: ProfileTabNavbarIcon,
+							tabBarIcon: ({ color, size, focused }) => (
+								<ProfileTabNavbarIcon
+									color={color}
+									size={size}
+									focused={focused}
+								/>
+							),
 							tabBarIconStyle: {
 								opacity: 1,
 							},

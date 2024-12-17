@@ -1,8 +1,4 @@
-import {
-	AccountProfile,
-	ProfileKnownServer,
-	ProfileKnownServerMetadata,
-} from '../_schema';
+import { AccountProfile, ProfileKnownServer } from '../_schema';
 import { DbErrorHandler } from './_base.repo';
 import {
 	KNOWN_SOFTWARE,
@@ -12,9 +8,34 @@ import { DataSource } from '../dataSource';
 import { RandomUtil } from '../../utils/random.utils';
 
 export type ServerRecordType = {
-	description: string;
 	driver: string;
 	url: string;
+};
+
+/**
+ * List of recognised server metadata
+ */
+export enum SERVER_METADATA_KEY {
+	DESCRIPTION = 'description',
+	SERVER_NAME = 'serverName',
+	SERVER_SOFTWARE = 'serverSoftware',
+	SOFTWARE_VERSION = 'softwareVersion',
+	ICON_URL = 'iconUrl',
+	FAVICON_URL = 'faviconUrl',
+	THEME_COLOR = 'themeColor',
+	NODEINFO = 'nodeInfo',
+	NODEINFO_LAST_FETCHED_AT = 'nodeInfoLastFetchedAt',
+	NODEINFO_LAST_ATTEMPT_AT = 'nodeinfoLastAttemptAt',
+	CUSTOM_EMOJIS_LAST_FETCHED_AT = 'customEmojisLastFetchedAt',
+	CUSTOM_EMOJIS_LAST_ATTEMPT_AT = 'customEmojisLastAttemptAt',
+	// five retries, followed by one day cooldown
+	CUSTOM_EMOJIS_FETCH_RETRY_COUNT = 'customEmojisFetchRetryCount',
+}
+
+export type ProfileKnownServerMetadataRecordType = {
+	key: string;
+	value: string;
+	type: 'string';
 };
 
 @DbErrorHandler()
@@ -54,9 +75,34 @@ class Repo {
 			},
 		);
 	}
+	static upsertMeta(
+		db: DataSource,
+		id: number,
+		input: ProfileKnownServerMetadataRecordType,
+	) {
+		const conflict = db.profileKnownServerMetadata.findOne({
+			knownServerId: id,
+			key: input.key,
+		});
+		if (conflict) {
+			db.profileKnownServerMetadata.updateById(conflict.id, {
+				value: input.value,
+				type: 'string',
+			});
+		} else {
+			db.profileKnownServerMetadata.insert(input);
+		}
+	}
 }
 
 export class Service {
+	static upsertMeta(
+		db: DataSource,
+		server: ProfileKnownServer,
+		data: ProfileKnownServerMetadataRecordType,
+	) {
+		return Repo.upsertMeta(db, server.id, data);
+	}
 	static upsert(
 		db: DataSource,
 		profile: AccountProfile,
@@ -101,4 +147,4 @@ export class Service {
 	}
 }
 
-export { Repo as ServerRepo, Service as ServerService };
+export { Repo as ProfileKnownServerRepo, Service as ProfileKnownServerService };

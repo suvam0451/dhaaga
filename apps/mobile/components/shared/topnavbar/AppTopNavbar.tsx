@@ -21,6 +21,7 @@ type AutoHideNavBarProps = {
 	children: any;
 	translateY: Animated.AnimatedInterpolation<string | number>;
 	type?: APP_TOPBAR_TYPE_ENUM;
+	onRefresh?: () => void;
 };
 
 const AppTopNavbar = memo(

@@ -12,7 +12,7 @@ import {
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
-import { FontAwesome } from '@expo/vector-icons';
+import { Entypo, FontAwesome } from '@expo/vector-icons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
@@ -27,6 +27,8 @@ import { APP_FONTS } from '../../styles/AppFonts';
 export type APP_ICON_ENUM =
 	| 'bell'
 	| 'back'
+	| 'chevron-right'
+	| 'checkmark-done-outline'
 	| 'cog'
 	| 'create'
 	| 'clear'
@@ -218,6 +220,26 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="chevron-back"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'chevron-right':
+					return (
+						<Entypo
+							name="chevron-small-right"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'checkmark-done-outline':
+					return (
+						<Ionicons
+							name="checkmark-done-outline"
 							size={_size}
 							color={_color}
 							onPress={onPress}

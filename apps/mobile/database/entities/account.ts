@@ -9,6 +9,8 @@ import {
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { DataSource } from '../dataSource';
 import { gt } from '@dhaaga/orm';
+import { RandomUtil } from '../../utils/random.utils';
+import { AccountProfileService } from './profile';
 
 /**
  * --- Validators
@@ -49,6 +51,7 @@ export class Repo {
 			return withSuccess(match);
 		} else {
 			db.account.insert({
+				uuid: RandomUtil.nanoId(),
 				identifier: dto.identifier,
 				driver: dto.driver,
 				server: dto.server,
@@ -57,6 +60,7 @@ export class Repo {
 				avatarUrl: dto.avatarUrl,
 			});
 			const upserted = Repo.getByHandleFragments(db, dto.server, dto.username);
+			AccountProfileService.setupDefaultProfile(db, upserted);
 			return withSuccess(upserted);
 		}
 	}
@@ -72,6 +76,7 @@ export class Repo {
 				selected: false,
 			},
 		);
+		AccountProfileService.deselectAll(db);
 	}
 
 	static updateSoftware(db: DataSource, id: number, driver: string) {
@@ -110,6 +115,7 @@ class Service {
 	static select(db: DataSource, acct: Account) {
 		Repo.deselectAll(db);
 		Repo.updateSelectionFlag(db, acct.id, true);
+		AccountProfileService.selectDefaultProfile(db, acct);
 	}
 
 	static deselect(db: DataSource, acct: Account) {

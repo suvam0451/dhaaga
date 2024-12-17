@@ -9,7 +9,7 @@ import {
 	APP_BUILT_IN_THEMES,
 	AppColorSchemeType,
 } from '../styles/BuiltinThemes';
-import { Account } from '../database/_schema';
+import { Account, AccountProfile } from '../database/_schema';
 import {
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
@@ -19,14 +19,20 @@ import { AccountService } from '../database/entities/account';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
-import { AccountMetadataService } from '../database/entities/account-metadata';
+import {
+	ACCOUNT_METADATA_KEY,
+	AccountMetadataService,
+} from '../database/entities/account-metadata';
 import { TimelineFetchMode } from '../components/common/timeline/utils/timeline.types';
 import { Result } from '../utils/result';
 import { RandomUtil } from '../utils/random.utils';
 import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.service';
 import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
 import { DataSource } from '../database/dataSource';
-import { AppMmkvInstance } from '../database/_cache';
+import AppUserService from '../services/approto/app-user-service';
+import { AppUser } from '../types/app-user.types';
+import ProfileSessionManager from '../services/profile-session.service';
+import { AccountProfileService } from '../database/entities/profile';
 
 type AppThemePack = {
 	id: string;
@@ -119,14 +125,20 @@ type AppBottomSheetState = {
 
 type State = {
 	db: DataSource | null;
-	mmkv: AppMmkvInstance; // currently active account
-	acct: Account | null /**
+	mmkv: MMKV; // currently active account
+	acct: Account | null;
+	profile: AccountProfile | null;
+
+	// managers
+	profileSessionManager: ProfileSessionManager | null;
+
+	/**
 	 * fetched account credentials
 	 * converted into application
 	 * compatible interface
-	 * */;
+	 * */
 	driver: KNOWN_SOFTWARE;
-	me: UserInterface | null;
+	me: AppUser | null;
 
 	// router used to make api requests
 	router: ActivityPubClient | null;
@@ -157,7 +169,9 @@ type Actions = {
 	setPack: (packId: string) => void;
 	setHomepageType: (selection: TimelineFetchMode) => void;
 	appInitialize: (db: SQLiteDatabase) => void;
-	restoreSession: () => void;
+	loadApp: () => void;
+	// loa/switch a profile
+	loadActiveProfile: (profile?: AccountProfile) => void;
 };
 
 const defaultValue: State & Actions = {
@@ -166,9 +180,12 @@ const defaultValue: State & Actions = {
 	mmkv: null,
 	router: null,
 
+	profileSessionManager: null,
+
 	// account data
 	driver: null,
 	acct: null,
+	profile: null,
 	me: null,
 
 	homepageType: TimelineFetchMode.IDLE,
@@ -182,7 +199,8 @@ const defaultValue: State & Actions = {
 	setColorScheme: undefined,
 
 	appInitialize: undefined,
-	restoreSession: undefined,
+	loadApp: undefined,
+	loadActiveProfile: undefined,
 	selectAccount: undefined,
 	setHomepageType: undefined,
 	activePack: DEFAULT_THEME_PACK_OBJECT,
@@ -217,17 +235,19 @@ class GlobalStateService {
 		Result<{
 			acct: Account;
 			router: ActivityPubClient;
+			me: AppUser;
 		}>
 	> {
 		try {
 			const acct = AccountService.getSelected(db);
-			if (!acct) {
-				return { type: 'invalid' };
-			}
+			if (!acct) return { type: 'invalid' };
+			const profile = AccountProfileService.getActiveProfile(db, acct);
+			if (!profile) return { type: 'invalid' };
+
 			const token = AccountMetadataService.getKeyValueForAccountSync(
 				db,
 				acct,
-				'access_token',
+				ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
 			);
 			let payload: any = {
 				instance: acct?.server,
@@ -247,8 +267,14 @@ class GlobalStateService {
 				};
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
+			const { data, error } = await _router.me.getMe();
+			const obj: AppUser = AppUserService.exportRaw(
+				data,
+				acct.driver,
+				acct.server,
+			);
 			// EmojiService.refresh(db, globalDb, acct.server, true);
-			return { type: 'success', value: { acct, router: _router } };
+			return { type: 'success', value: { acct, router: _router, me: obj } };
 		} catch (e) {
 			console.log(e);
 			console.log('[ERROR]: failed to restore previous app session');
@@ -263,7 +289,7 @@ const useGlobalState = create<State & Actions>()(
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
 				state.db = new DataSource(db);
-				state.mmkv = new AppMmkvInstance(new MMKV({ id: `default` }));
+				state.mmkv = new MMKV({ id: `default` });
 			});
 		},
 		getPacks: () => [],
@@ -273,12 +299,21 @@ const useGlobalState = create<State & Actions>()(
 		selectAccount: async (selection: Account) => {
 			await AccountService.select(get().db, selection);
 		},
-		restoreSession: async () => {
+		loadActiveProfile: async () => {
+			const x = new ProfileSessionManager(get().db, get().mmkv);
+			set((state) => {
+				state.profileSessionManager = x;
+				state.acct = x.acct;
+				state.profile = x.profile;
+			});
+		},
+		loadApp: async () => {
 			const restoreResult = await GlobalStateService.restoreAppSession(
 				get().db,
 			);
 			set((state) => {
 				if (restoreResult.type === 'success') {
+					state.me = restoreResult.value.me;
 					state.acct = restoreResult.value.acct;
 					state.router = restoreResult.value.router;
 					state.driver = restoreResult.value.acct.driver as KNOWN_SOFTWARE;

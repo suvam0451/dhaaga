@@ -7,20 +7,20 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 function useMyProfile() {
-	const { client, me, acct, driver } = useGlobalState(
+	const { client, me, acct, driver, db } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
 			me: o.me,
 			driver: o.driver,
 			acct: o.acct,
+			db: o.db,
 		})),
 	);
 	const [Data, setData] = useState<AppUser>(null);
-	const userId = me?.getId();
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
-		const { data, error } = await client.accounts.get(me.getId());
+		const { data, error } = await client.accounts.get(me?.id);
 		if (error) {
 			return ActivityPubAdapterService.adaptUser(null, null);
 		}
@@ -29,7 +29,7 @@ function useMyProfile() {
 
 	// Queries
 	const { data, status, fetchStatus } = useQuery({
-		queryKey: ['accounts', userId],
+		queryKey: ['accounts', me?.id],
 		queryFn: api,
 		enabled: client !== null,
 	});

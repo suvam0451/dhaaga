@@ -3,7 +3,10 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AccountService } from '../../database/entities/account';
 import AccountMetaService from '../../database/services/account-secret.service';
 import { Account } from '../../database/_schema';
-import { AccountMetadataService } from '../../database/entities/account-metadata';
+import {
+	ACCOUNT_METADATA_KEY,
+	AccountMetadataService,
+} from '../../database/entities/account-metadata';
 import { jwtDecode } from '../../utils/jwt-decode.utils';
 import { DataSource } from '../../database/dataSource';
 
@@ -34,7 +37,7 @@ class AtprotoSessionService {
 		const secret = AccountMetadataService.getKeyValueForAccountSync(
 			db,
 			this.acct,
-			'session',
+			ACCOUNT_METADATA_KEY.ATPROTO_SESSION_OBJECT,
 		);
 		this.oldSession = JSON.parse(secret);
 	}

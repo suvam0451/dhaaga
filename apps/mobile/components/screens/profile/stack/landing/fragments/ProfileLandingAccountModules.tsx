@@ -8,6 +8,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { router } from 'expo-router';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppIcon } from '../../../../../lib/Icon';
 
 const ICON_SIZE = 24;
 
@@ -31,20 +32,25 @@ const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
 			}}
 		>
 			<View style={{ width: 24 }}>{Icon}</View>
-			<Text style={[styles.moduleLabel, { color: theme.textColor.high }]}>
+			<Text style={[styles.moduleLabel, { color: theme.textColor.medium }]}>
 				{label}
 			</Text>
-			<View style={{ flex: 1 }} />
-			<Entypo
-				name="chevron-small-right"
-				size={24}
-				color={APP_FONT.MONTSERRAT_BODY}
-			/>
+			{/*<View style={{ flex: 1 }} />*/}
+			{/*<Entypo*/}
+			{/*	name="chevron-small-right"*/}
+			{/*	size={24}*/}
+			{/*	color={theme.textColor.medium}*/}
+			{/*/>*/}
 		</TouchableOpacity>
 	);
 });
 
 function ProfileLandingAccountModules() {
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	return (
 		<View style={{ paddingTop: 16 }}>
 			<ActionButton
@@ -65,36 +71,44 @@ function ProfileLandingAccountModules() {
 				label={'Bookmarks'}
 				to={'/profile/account/bookmarks'}
 			/>
-
 			<ActionButton
 				Icon={<Entypo name="list" size={24} color={APP_FONT.MONTSERRAT_BODY} />}
 				label={'Lists'}
 				to={'/profile/account/lists'}
 			/>
 
+			<View
+				style={{
+					height: 1,
+					width: '100%',
+					backgroundColor: theme.palette.menubar,
+					marginVertical: 12,
+					marginBottom: 24,
+				}}
+			/>
+			<View style={styles.checkmarkBox}>
+				<AppIcon id={'checkmark-done-outline'} emphasis={'low'} />
+				<Text
+					style={[
+						styles.checkmarkBoxText,
+						{ fontSize: 14, color: theme.textColor.low },
+					]}
+				>
+					No pending friend requests.
+				</Text>
+			</View>
+
 			<Text
-				style={[
-					styles.text,
-					{ marginTop: 16, fontSize: 14, color: APP_FONT.DISABLED },
-				]}
+				style={{
+					marginTop: 32,
+					fontSize: 14,
+					color: theme.textColor.low,
+					textAlign: 'center',
+					paddingHorizontal: 32,
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+				}}
 			>
-				You have no pending friend requests.
-			</Text>
-			<Text
-				style={[
-					styles.text,
-					{
-						marginTop: 16,
-						fontSize: 14,
-						color: APP_FONT.MEDIUM_EMPHASIS,
-						textAlign: 'center',
-						paddingHorizontal: 32,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-					},
-				]}
-			>
-				[TIP] Long press your avatar (in 5th navbar tab) to quickly swap
-				accounts
+				[TIP] Long press your avatar in navbar to quickly swap accounts
 			</Text>
 		</View>
 	);
@@ -108,17 +122,22 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		padding: 10,
 		paddingHorizontal: 12,
+		marginBottom: 6,
 	},
 	moduleLabel: {
-		color: APP_FONT.HIGH_EMPHASIS,
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		fontSize: 18,
-		marginLeft: 8,
+		marginLeft: 14,
 	},
-	text: {
+	checkmarkBox: {
+		marginLeft: 16,
+		marginBottom: 16,
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	checkmarkBoxText: {
 		fontFamily: APP_FONTS.INTER_700_BOLD,
 		color: APP_FONT.MONTSERRAT_BODY,
-		textAlign: 'center',
-		marginBottom: 16,
+		marginLeft: 8,
 	},
 });

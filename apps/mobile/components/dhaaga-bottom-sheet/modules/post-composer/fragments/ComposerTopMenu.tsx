@@ -46,7 +46,7 @@ const ComposerTopMenu = memo(() => {
 					style={{ borderWidth: 0.7, borderColor: '#666', borderRadius: 8 }}
 				>
 					{/*@ts-ignore-next-line*/}
-					<Image source={me?.getAvatarUrl()} style={styles.avatarContainer} />
+					<Image source={me?.avatarUrl} style={styles.avatarContainer} />
 				</View>
 				<View
 					style={{
@@ -66,7 +66,7 @@ const ComposerTopMenu = memo(() => {
 							marginLeft: 4,
 						}}
 					>
-						@{me?.getUsername()}
+						@{me?.handle}
 					</Text>
 				</View>
 				<View style={{ flexGrow: 1 }} />

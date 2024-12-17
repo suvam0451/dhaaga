@@ -29,7 +29,26 @@ export const accountMetadataUpsertDto = accountMetadataRecordDto.extend({
 	accountId: z.onumber(),
 });
 
+/**
+ * List of recognised account metadata
+ *
+ */
+export enum ACCOUNT_METADATA_KEY {
+	USER_IDENTIFIER = 'userIdentifier',
+	AVATAR_URL = 'avatarUrl',
+	DISPLAY_NAME = 'displayName',
+	ACCESS_TOKEN = 'accessToken',
+	REFRESH_TOKEN = 'refreshToken',
+	ATPROTO_SESSION_OBJECT = 'atprotoSessionObject',
+}
+
 class Repo implements RepoTemplate<AccountMetadata> {
+	static getAllKeysForAccount(db: DataSource, accountId: number) {
+		return db.accountMetadata.find({
+			accountId,
+			active: true,
+		});
+	}
 	static getByAccountAndKeySync(
 		db: DataSource,
 		acctId: number,
@@ -68,10 +87,10 @@ class Repo implements RepoTemplate<AccountMetadata> {
 		}
 	}
 
-	static async upsert(
+	static upsert(
 		db: DataSource,
 		dto: z.infer<typeof accountMetadataUpsertDto>,
-	): Promise<Result<undefined>> {
+	): Result<undefined> {
 		const where = {
 			accountId: dto.accountId,
 			key: dto.key,
@@ -99,34 +118,34 @@ class Repo implements RepoTemplate<AccountMetadata> {
 		}
 	}
 
-	static async upsertMultiple(
+	static upsertMultiple(
 		db: DataSource,
 		inputs: z.infer<typeof accountMetadataUpsertDto>[],
 	) {
-		for await (const input of inputs) {
-			await Repo.upsert(db, input);
+		for (const input of inputs) {
+			Repo.upsert(db, input);
 		}
 	}
 }
 
 class Service {
-	static async upsertMultiple(
+	static upsertMultiple(
 		db: DataSource,
 		acct: Account,
 		metadata: AccountMetadataRecordType[],
 	) {
-		await Repo.upsertMultiple(
+		Repo.upsertMultiple(
 			db,
 			metadata.map((o) => ({ ...o, accountId: acct.id })),
 		);
 	}
 
-	static async upsert(
+	static upsert(
 		db: DataSource,
 		acct: Account,
 		input: AccountMetadataRecordType,
 	) {
-		return await Repo.upsert(db, { ...input, accountId: acct.id });
+		return Repo.upsert(db, { ...input, accountId: acct.id });
 	}
 
 	static async getAtpSessionData(db: DataSource, acct: Account) {
@@ -134,12 +153,12 @@ class Service {
 			const accessJwt = Repo.getByAccountAndKeySync(
 				db,
 				acct.id,
-				'access_token',
+				'accessToken',
 			)?.value;
 			const refreshJwt = Repo.getByAccountAndKeySync(
 				db,
 				acct.id,
-				'refresh_token',
+				'refreshToken',
 			)?.value;
 			const did = Repo.getByAccountAndKeySync(db, acct.id, 'did')?.value;
 
@@ -162,6 +181,10 @@ class Service {
 
 	static getKeyValueForAccountSync(db: DataSource, acct: Account, key: string) {
 		return Repo.getByAccountAndKeySync(db, acct.id, key)?.value;
+	}
+
+	static getAllKeysForAccount(db: DataSource, acct: Account) {
+		return Repo.getAllKeysForAccount(db, acct.id);
 	}
 }
 

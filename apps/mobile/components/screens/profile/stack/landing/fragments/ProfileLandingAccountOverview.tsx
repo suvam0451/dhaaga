@@ -5,24 +5,19 @@ import useMfm from '../../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { Image } from 'expo-image';
 import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
-import ProfileButtonMessage from '../../../../(shared)/stack/profile/fragments/ProfileButtonMessage';
-import ProfileButtonPhonebook from '../../../../(shared)/stack/profile/fragments/ProfileButtonPhonebook';
 import ProfileStats from '../../../../(shared)/stack/profile/fragments/ProfileStats';
 import styles from '../../../../../common/user/utils/styles';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
-const WithoutAccount = memo(() => {
-	return <View />;
-});
-
-const WithAccount = memo(() => {
+const ProfileAndSettings = memo(() => {
 	const { theme } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
 		})),
 	);
 	const { Data: acct } = useMyProfile();
+
 	const { content: ParsedDisplayName } = useMfm({
 		content: acct?.displayName,
 		remoteSubdomain: acct?.instance,
@@ -37,54 +32,46 @@ const WithAccount = memo(() => {
 			{/*@ts-ignore-next-line*/}
 			<Image
 				source={{ uri: acct?.banner }}
-				style={{ height: 128, width: Dimensions.get('window').width }}
+				style={{
+					height: 128,
+					width: Dimensions.get('window').width,
+				}}
 			/>
 			<View style={{ flexDirection: 'row' }}>
-				<ProfileAvatar
-					containerStyle={localStyles.avatarContainer}
-					imageStyle={localStyles.avatarImageContainer}
-					uri={acct?.avatarUrl}
-				/>
-				<View style={localStyles.buttonSection}>
-					<ProfileButtonMessage handle={acct?.handle} />
-					<View style={{ width: 8 }} />
-					<ProfileButtonPhonebook />
+				<View>
+					<ProfileAvatar
+						containerStyle={localStyles.avatarContainer}
+						imageStyle={localStyles.avatarImageContainer}
+						uri={acct?.avatarUrl}
+					/>
+					<View style={{ flexShrink: 1, marginTop: 8, marginLeft: 8 }}>
+						{ParsedDisplayName}
+						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+							<Text
+								style={[
+									styles.secondaryText,
+									{ color: theme.textColor.medium },
+								]}
+								numberOfLines={1}
+							>
+								{acct?.handle}
+							</Text>
+						</View>
+					</View>
 				</View>
+				<View style={{ flexGrow: 1 }} />
 				<ProfileStats
 					userId={acct?.id}
 					postCount={acct?.stats?.posts}
 					followingCount={acct?.stats?.following}
 					followerCount={acct?.stats?.followers}
-					style={localStyles.statSectionContainer}
+					style={{ marginTop: 16 }}
 				/>
-			</View>
-			<View style={localStyles.secondSectionContainer}>
-				<View style={{ flexShrink: 1 }}>
-					{ParsedDisplayName}
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-						<Text
-							style={[styles.secondaryText, { color: theme.textColor.medium }]}
-							numberOfLines={1}
-						>
-							{acct?.handle}
-						</Text>
-					</View>
-				</View>
+
+				{/*<View style={localStyles.secondSectionContainer}></View>*/}
 			</View>
 		</View>
 	);
-});
-
-const ProfileAndSettings = memo(() => {
-	const { acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-		})),
-	);
-	if (!acct) {
-		return <WithoutAccount />;
-	}
-	return <WithAccount />;
 });
 
 export default ProfileAndSettings;
@@ -110,33 +97,18 @@ const localStyles = StyleSheet.create({
 		width: '100%',
 		backgroundColor: '#0553',
 		padding: 2,
-		borderRadius: 8,
+		// borderRadius: 8,
+		borderRadius: '100%',
 	},
 	avatarContainer: {
 		width: 72,
 		height: 72,
 		borderColor: 'gray',
 		borderWidth: 0.75,
-		borderRadius: 8,
-		marginTop: -24,
+		marginTop: -36,
 		marginLeft: 6,
-	},
-	relationManagerSection: {
-		flexDirection: 'row',
-		flexGrow: 1,
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-		paddingHorizontal: 8,
-		marginLeft: 4,
-		marginRight: 8,
-	},
-	statSectionContainer: {
-		backgroundColor: '#242424',
-		marginRight: 4,
-		borderRadius: 6,
-		marginTop: 4,
-		padding: 4,
-		paddingLeft: 0,
+		borderRadius: '100%',
+		overflow: 'hidden',
 	},
 	secondSectionContainer: {
 		flexDirection: 'row',

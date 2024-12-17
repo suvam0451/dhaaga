@@ -26,10 +26,17 @@ import {
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../../shared/topnavbar/AppTopNavbar';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function MisskeyServerSelection() {
 	const [InputText, setInputText] = useState('misskey.io');
 	const { globalDb } = useGlobalMmkvContext();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	async function onPressNext() {
 		const signInStrategy = await ActivityPubService.signInUrl(
@@ -76,7 +83,7 @@ function MisskeyServerSelection() {
 						<Text
 							style={{
 								textAlign: 'center',
-								color: APP_FONT.MONTSERRAT_BODY,
+								color: theme.textColor.medium,
 								marginBottom: 24,
 								fontSize: 24,
 								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
@@ -89,7 +96,7 @@ function MisskeyServerSelection() {
 								<Feather
 									name="server"
 									size={24}
-									color={APP_FONT.MONTSERRAT_BODY}
+									color={theme.textColor.medium}
 								/>
 							</View>
 							<TextInput
@@ -102,7 +109,7 @@ function MisskeyServerSelection() {
 									marginLeft: 4,
 								}}
 								autoCapitalize={'none'}
-								placeholderTextColor={APP_FONT.MONTSERRAT_BODY}
+								placeholderTextColor={theme.textColor.medium}
 								placeholder="Your server url"
 								onChangeText={setInputText}
 								value={InputText}
@@ -149,14 +156,6 @@ function MisskeyServerSelection() {
 }
 
 const styles = StyleSheet.create({
-	sectionHeaderText: {
-		marginTop: 32,
-		marginBottom: 12,
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 16,
-		textAlign: 'center',
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	},
 	inputContainerRoot: {
 		flexDirection: 'row',
 		borderWidth: 2,

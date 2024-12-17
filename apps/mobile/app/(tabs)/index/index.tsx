@@ -10,8 +10,6 @@ import { router } from 'expo-router';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
-import { Button } from '@rneui/base';
-import { trySchemaGenerator } from '../../../database/migrations';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
 
 enum TIME_OF_DAY {
@@ -32,7 +30,7 @@ function TimeOfDayGreeting() {
 
 	const fontStyle = {
 		color: theme.textColor.medium,
-		marginTop: 8,
+		marginTop: 16,
 		fontSize: 18,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	};
@@ -99,19 +97,11 @@ function TimeOfDayGreeting() {
 			}}
 		>
 			{Component}
-			<View>
-				<Text style={{ color: theme.textColor.high }}>Default</Text>
-			</View>
 		</View>
 	);
 }
 
 function Content() {
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
 	return (
 		<View style={{ flexGrow: 1, flex: 1 }}>
 			<View style={{ marginHorizontal: 10 }}>
@@ -127,22 +117,14 @@ function Content() {
 					}
 				/>
 			</View>
-			<Button
-				onPress={() => {
-					trySchemaGenerator(db);
-				}}
-			>
-				<Text>Wassup</Text>
-			</Button>
 			<SocialHubQuickDestinations />
 		</View>
 	);
 }
 
 function Tip() {
-	const { acct, theme } = useGlobalState(
+	const { theme } = useGlobalState(
 		useShallow((o) => ({
-			acct: o.acct,
 			theme: o.colorScheme,
 		})),
 	);

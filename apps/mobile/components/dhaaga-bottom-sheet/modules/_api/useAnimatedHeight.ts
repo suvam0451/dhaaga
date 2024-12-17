@@ -11,7 +11,7 @@ import useGlobalState, {
 } from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
-const POST_COMPOSE_HEIGHT_MAX = 360;
+const POST_COMPOSE_HEIGHT_MAX = 420;
 
 function useAnimatedHeight() {
 	const { visible, type } = useGlobalState(
@@ -41,7 +41,7 @@ function useAnimatedHeight() {
 					break;
 				}
 				default: {
-					_target = POST_COMPOSE_HEIGHT_MAX;
+					_target = Dimensions.get('window').height * 0.55;
 					break;
 				}
 			}

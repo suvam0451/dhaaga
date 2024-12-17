@@ -16,6 +16,9 @@ import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../../../../../utils/random.utils';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { APP_ROUTE_ENUM } from '../../../../../../utils/route-list';
+import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
 
 function MisskeySignInStack() {
 	const [Session, setSession] = useState<string>('');
@@ -29,9 +32,10 @@ function MisskeySignInStack() {
 	const _subdomain: string = params['subdomain'] as string;
 	const _domain: string = params['domain'] as string;
 
-	const { db } = useGlobalState(
+	const { db, theme } = useGlobalState(
 		useShallow((o) => ({
 			db: o.db,
+			theme: o.colorScheme,
 		})),
 	);
 
@@ -82,19 +86,31 @@ function MisskeySignInStack() {
 				displayName: PreviewCard.displayName,
 			},
 			[
-				{ key: 'display_name', value: PreviewCard.displayName, type: 'string' },
 				{
-					key: 'avatar',
+					key: ACCOUNT_METADATA_KEY.DISPLAY_NAME,
+					value: PreviewCard.displayName,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.AVATAR_URL,
 					value: PreviewCard.avatar,
 					type: 'string',
 				},
-				{ key: 'user_id', value: MisskeyId, type: 'string' },
-				{ key: 'access_token', value: Token, type: 'string' },
+				{
+					key: ACCOUNT_METADATA_KEY.USER_IDENTIFIER,
+					value: MisskeyId,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
+					value: Token,
+					type: 'string',
+				},
 			],
 		);
 		if (upsertResult.type === 'success') {
-			Alert.alert('Account Added');
-			router.replace('/profile/settings/accounts');
+			Alert.alert('Account Added. Refresh the account list to continue.');
+			router.replace(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
 		} else {
 			console.log(upsertResult);
 		}
@@ -121,7 +137,14 @@ function MisskeySignInStack() {
 
 				<HideOnKeyboardVisibleContainer>
 					<View style={{ height: 160, marginHorizontal: 12 }}>
-						<Text style={{ marginBottom: 12, marginTop: 16 }}>
+						<Text
+							style={{
+								marginBottom: 12,
+								marginTop: 16,
+								color: theme.textColor.high,
+								fontFamily: APP_FONTS.INTER_700_BOLD,
+							}}
+						>
 							Step 2: Confirm your account
 						</Text>
 						{PreviewCard && <AccountCreationPreview {...PreviewCard} />}
@@ -151,7 +174,14 @@ function MisskeySignInStack() {
 											}
 										/>
 									</View>
-									<Text>Your token has been confirmed.</Text>
+									<Text
+										style={{
+											color: theme.textColor.medium,
+											fontFamily: APP_FONTS.INTER_400_REGULAR,
+										}}
+									>
+										Your token has been confirmed.
+									</Text>
 								</View>
 								<View
 									style={{
@@ -170,7 +200,13 @@ function MisskeySignInStack() {
 										/>
 									</View>
 									<View>
-										<Text style={{ textAlign: 'left' }}>
+										<Text
+											style={{
+												textAlign: 'left',
+												color: theme.textColor.medium,
+												fontFamily: APP_FONTS.INTER_400_REGULAR,
+											}}
+										>
 											Confirm that you want to use this account.
 										</Text>
 									</View>
@@ -190,7 +226,8 @@ function MisskeySignInStack() {
 							<Text
 								style={{
 									fontSize: 16,
-									fontFamily: 'Montserrat-Bold',
+									color: theme.textColor.high,
+									fontFamily: APP_FONTS.INTER_700_BOLD,
 								}}
 							>
 								Confirm

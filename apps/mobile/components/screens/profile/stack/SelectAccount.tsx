@@ -1,22 +1,21 @@
-import { FlatList, View } from 'react-native';
-import { Button } from '@rneui/base';
-import { Text } from '@rneui/themed';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
+import { FlatList, RefreshControl, View } from 'react-native';
+import { Text, Button } from '@rneui/base';
+import { APP_FONT } from '../../../../styles/AppTheme';
 import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import AccountInfoSyncDialog from '../../../../../dialogs/AccountInfoSync';
+import AccountInfoSyncDialog from '../../../dialogs/AccountInfoSync';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import ConfirmAccountDelete from '../../../../../dialogs/accounts/ConfirmAccountDelete';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
-import AccountListForSoftware from '../../landing/fragments/AccountListForSoftware';
+import ConfirmAccountDelete from '../../../dialogs/accounts/ConfirmAccountDelete';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import AccountListForSoftware from './landing/fragments/AccountListForSoftware';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../../shared/topnavbar/AppTopNavbar';
-import { Account } from '../../../../../../database/_schema';
-import useGlobalState from '../../../../../../states/_global';
+} from '../../../shared/topnavbar/AppTopNavbar';
+import { Account } from '../../../../database/_schema';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { AccountService } from '../../../../../../database/entities/account';
+import { AccountService } from '../../../../database/entities/account';
 
 function SelectAccountStack() {
 	const { db, theme } = useGlobalState(
@@ -29,6 +28,20 @@ function SelectAccountStack() {
 	const [DeleteDialogVisible, setDeleteDialogVisible] = useState(false);
 	const DialogTarget = useRef<Account>(null);
 	const [Data, setData] = useState<Account[]>([]);
+	const [Refreshing, setRefreshing] = useState(false);
+
+	function refresh() {
+		const getResult = AccountService.getAll(db);
+		if (getResult.type === 'success') {
+			setData(getResult.value);
+		} else {
+			setData([]);
+		}
+	}
+
+	function onRefresh() {
+		refresh();
+	}
 
 	const SOFTWARE_ARRAY = [
 		KNOWN_SOFTWARE.AKKOMA,
@@ -48,6 +61,7 @@ function SelectAccountStack() {
 	// populate account list on load
 	useEffect(() => {
 		const getResult = AccountService.getAll(db);
+		console.log(getResult);
 		if (getResult.type === 'success') {
 			setData(getResult.value);
 		} else {
@@ -99,7 +113,7 @@ function SelectAccountStack() {
 						<Button onPress={onPressAddAccount}>
 							<Text
 								style={{
-									color: APP_FONT.MONTSERRAT_HEADER,
+									color: theme.textColor.high,
 									fontFamily: APP_FONTS.INTER_700_BOLD,
 									fontSize: 16,
 								}}
@@ -119,6 +133,9 @@ function SelectAccountStack() {
 							Mastodon, Pleroma, Akkoma, Misskey, Firefish, Sharkey
 						</Text>
 					</View>
+				}
+				refreshControl={
+					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
 				}
 			/>
 		</AppTopNavbar>

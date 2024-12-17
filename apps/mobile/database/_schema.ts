@@ -57,6 +57,13 @@ export class Migration extends BaseEntity<Migration> {
 	updatedAt: Date;
 }
 
+/**
+ * List of known metadata:
+ * 	- displayName
+ * 	- userIdentifier
+ * 	- accessToken
+ * 	- avatarUrl
+ */
 @Entity('accountMetadata')
 export class AccountMetadata extends BaseEntity<AccountMetadata> {
 	id: number;
@@ -105,7 +112,7 @@ export class ProfileKnownServer extends BaseEntity<ProfileKnownServer> {
 }
 
 /**
- * List of known metadata:
+ * List of known metadata (SERVER_METADATA_KEY)
  * 	- description
  * 	- serverName
  * 	- serverSoftware
@@ -118,6 +125,7 @@ export class ProfileKnownServer extends BaseEntity<ProfileKnownServer> {
  * 	- nodeinfoLastAttemptAt
  * 	- customEmojisLastFetchedAt
  * 	- customEmojisLastAttemptAt
+ *
  */
 @Entity('profileKnownServerMetadata')
 export class ProfileKnownServerMetadata extends BaseEntity<ProfileKnownServerMetadata> {

@@ -162,10 +162,18 @@ export class BaseEntity<T extends BaseType> {
 			'id' | 'createdAt' | 'updatedAt' | BaseEntityInternalPropList
 		>,
 	) {
-		const keys = Object.keys(data);
-		const cols = keys.join(', ');
-		const vals = keys.map(() => '?').join(', ');
-		return `INSERT INTO ${this._name} (${cols}) VALUES (${vals});`;
+		try {
+			const keys = Object.keys(data);
+			const cols = keys.join(', ');
+			const vals = keys.map(() => '?').join(', ');
+			this.sql = `INSERT INTO ${this._name} (${cols}) VALUES (${vals});`;
+
+			this.params = keys.map((o: any) => (data as any)[o]);
+
+			this.db.runSync(this.sql, this.params);
+		} catch (e) {
+			console.log(`[ERROR]: inserting into ${this._name}`, e);
+		}
 	}
 
 	/**

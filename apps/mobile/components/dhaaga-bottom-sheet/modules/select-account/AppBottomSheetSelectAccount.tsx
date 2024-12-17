@@ -1,21 +1,21 @@
 import { memo } from 'react';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { useAppBottomSheet } from '../_api/useAppBottomSheet';
-import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import {
 	AccountDetails,
 	AccountPfp,
 } from '../../../../screens/accounts/fragments/AccountListingFragment';
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { router } from 'expo-router';
-import { useAccountDbContext } from '../../../screens/profile/stack/settings/hooks/useAccountDb';
 import { Account } from '../../../../database/_schema';
 import { AccountMetadataService } from '../../../../database/entities/account-metadata';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { useAppAccounts } from '../../../../hooks/db/useAppAccounts';
+import { AppIcon } from '../../../lib/Icon';
+import { APP_ROUTE_ENUM } from '../../../../utils/route-list';
 
 type FlashListItemProps = {
 	acct: Account;
@@ -25,7 +25,7 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 	const { selectAccount, restoreSession, db } = useGlobalState(
 		useShallow((o) => ({
 			selectAccount: o.selectAccount,
-			restoreSession: o.restoreSession,
+			restoreSession: o.loadApp,
 			db: o.db,
 		})),
 	);
@@ -117,61 +117,56 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 });
 
 const AppBottomSheetSelectAccount = memo(() => {
-	const { isAnimating, setVisible } = useAppBottomSheet();
-	const { accounts } = useAccountDbContext();
+	const { stateId, isAnimating, hide, theme } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			stateId: o.bottomSheet.stateId,
+			isAnimating: o.bottomSheet.isAnimating,
+			hide: o.bottomSheet.hide,
+			theme: o.colorScheme,
+		})),
+	);
+	const { accounts } = useAppAccounts(stateId);
 
 	if (isAnimating) return <View />;
+
+	function onPressMoreAccountOptions() {
+		hide();
+		router.navigate(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
+	}
+
 	return (
 		<View style={{ height: '100%' }}>
 			<AnimatedFlashList
 				estimatedItemSize={72}
 				ListHeaderComponent={() => (
-					<View style={{ marginVertical: 16 }}>
+					<View
+						style={{
+							marginVertical: 16,
+							justifyContent: 'space-between',
+							flexDirection: 'row',
+							marginHorizontal: 16,
+							alignItems: 'center',
+							marginTop: 32,
+						}}
+					>
 						<Text
 							style={{
-								textAlign: 'center',
 								fontFamily: APP_FONTS.INTER_700_BOLD,
-								color: APP_FONT.MONTSERRAT_BODY,
-								fontSize: 16,
+								color: theme.textColor.high,
+								fontSize: 20,
+								flex: 1,
 							}}
 						>
 							Select Account
 						</Text>
-					</View>
-				)}
-				ListFooterComponent={() => (
-					<View
-						style={{
-							marginVertical: 16,
-							borderRadius: 8,
-							alignItems: 'center',
-							marginBottom: 32,
-						}}
-					>
 						<TouchableOpacity
 							style={{
-								flex: 1,
-								alignItems: 'center',
-								backgroundColor: APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
-								padding: 6,
-								paddingHorizontal: 12,
-								borderRadius: 6,
+								paddingHorizontal: 8,
 							}}
-							onPress={() => {
-								setVisible(false);
-								router.navigate('/profile/settings/accounts');
-							}}
+							onPress={onPressMoreAccountOptions}
 						>
-							<Text
-								style={{
-									textAlign: 'center',
-									fontFamily: APP_FONTS.INTER_700_BOLD,
-									color: APP_FONT.MONTSERRAT_BODY,
-									fontSize: 16,
-								}}
-							>
-								Manage Accounts
-							</Text>
+							<AppIcon id={'cog'} emphasis={'medium'} />
 						</TouchableOpacity>
 					</View>
 				)}

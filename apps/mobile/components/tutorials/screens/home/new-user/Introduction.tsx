@@ -9,13 +9,13 @@ import AppTopNavbar, {
 } from '../../../../shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 import { DbMetaRepo } from '../../../../../database/repositories/_meta.repo';
-import { MigrationRepo } from '../../../../../database/entities/migrations';
+import { APP_ROUTE_ENUM } from '../../../../../utils/route-list';
 
 function IntroductionBase() {
 	const [DialogVisible, setDialogVisible] = useState(false);
 
 	function takeUserToAccountsPage() {
-		router.navigate('/profile/settings/accounts');
+		router.navigate(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
 	}
 
 	const { translateY } = useScrollMoreOnPageEnd();

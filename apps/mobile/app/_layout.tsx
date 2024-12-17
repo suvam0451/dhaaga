@@ -9,19 +9,18 @@ import {
 	useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { StatusBar, View, Appearance } from 'react-native';
-import appFonts from '../styles/AppFonts';
 import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
-import { useFonts } from '@expo-google-fonts/montserrat';
 import { enableMapSet } from 'immer';
-import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
+import { SQLiteProvider } from 'expo-sqlite';
 import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
 import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '../database/migrations';
 import useGlobalState from '../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
+import useAppSession from '../states/useAppSession';
 
 enableMapSet();
 
@@ -57,30 +56,26 @@ if (__DEV__) {
 }
 
 function App() {
-	const db = useSQLiteContext();
-	const { appInitialize, restoreSession, theme } = useGlobalState(
+	const { theme } = useGlobalState(
 		useShallow((o) => ({
-			appInitialize: o.appInitialize,
-			restoreSession: o.restoreSession,
 			theme: o.colorScheme,
 		})),
 	);
+
 	const { top, bottom } = useSafeAreaInsets();
-
-	const [fontsLoaded, fontError] = useFonts(appFonts);
-
-	const onLayoutRootView = useCallback(async () => {
-		if (!fontsLoaded || fontError) {
-			await SplashScreen.hideAsync();
-		}
-	}, [fontsLoaded, fontError]);
 
 	const pathname = usePathname();
 
-	useEffect(() => {
-		appInitialize(db);
-		restoreSession();
-	}, [db]);
+	const { appReady } = useAppSession();
+
+	/**
+	 * Wait for fonts and database to load
+	 */
+	const onLayoutRootView = useCallback(async () => {
+		if (!appReady) {
+			await SplashScreen.hideAsync();
+		}
+	}, [appReady]);
 
 	useEffect(() => {
 		setTimeout(() => {

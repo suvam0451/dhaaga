@@ -8,7 +8,10 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
 import { Account } from '../../../database/_schema';
-import { AccountMetadataService } from '../../../database/entities/account-metadata';
+import {
+	ACCOUNT_METADATA_KEY,
+	AccountMetadataService,
+} from '../../../database/entities/account-metadata';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../../database/entities/account';
@@ -225,12 +228,12 @@ function AccountListingFragment({
 	const avatar = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,
-		'avatar',
+		ACCOUNT_METADATA_KEY.AVATAR_URL,
 	);
 	const displayName = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,
-		'display_name',
+		ACCOUNT_METADATA_KEY.DISPLAY_NAME,
 	);
 
 	if (!acct) return <View />;
