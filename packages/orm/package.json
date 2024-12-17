@@ -1,6 +1,6 @@
 {
-  "name": "@dhaaga/expo-sqlite-orm",
-  "description": "A stand-alone ORM written for expo-sqlite",
+  "name": "@dhaaga/orm",
+  "description": "A custom expo-sqlite ORM implementation inspired by TypeORM",
   "version": "0.1.0",
   "license": "MIT",
   "type": "module",

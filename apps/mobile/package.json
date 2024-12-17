@@ -18,7 +18,7 @@
     "@atproto/lexicon": "^0.4.4",
     "@atproto/syntax": "^0.3.1",
     "@atproto/xrpc": "^0.6.5",
-    "@dhaaga/expo-sqlite-orm": "*",
+    "@dhaaga/orm": "*",
     "@dhaaga/shared-abstraction-activitypub": "*",
     "@dhaaga/shared-provider-mastodon": "*",
     "@expo-google-fonts/inter": "^0.2.3",

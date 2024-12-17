@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	Pressable,
+	ScrollView,
+	Button,
+} from 'react-native';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../styles/AppFonts';
@@ -9,6 +16,7 @@ import { router } from 'expo-router';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../shared/topnavbar/AppTabLandingNavbar';
+import { trySchemaGenerator } from '../../database/migrations';
 
 /**
  * A full screen cover when no account is selected
@@ -20,9 +28,10 @@ type AppNoAccountProps = {
 };
 
 function AppNoAccount({ tab }: AppNoAccountProps) {
-	const { theme } = useGlobalState(
+	const { theme, db } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
+			db: o.db,
 		})),
 	);
 
@@ -137,6 +146,12 @@ function AppNoAccount({ tab }: AppNoAccountProps) {
 					>
 						Add an Account
 					</Text>
+					<Button
+						title={'Ok'}
+						onPress={() => {
+							trySchemaGenerator(db);
+						}}
+					></Button>
 					{options.map((option, i) => (
 						<Pressable
 							style={[

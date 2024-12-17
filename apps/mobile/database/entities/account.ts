@@ -8,32 +8,20 @@ import {
 } from './account-metadata';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { DataSource } from '../dataSource';
-import { gt } from '../_orm';
+import { gt } from '@dhaaga/orm';
 
 /**
  * --- Validators
  */
-
 export const accountInsertDto = z.object({
+	uuid: z.string(),
 	identifier: z.string(),
 	driver: z.string(),
 	server: z.string(),
 	username: z.string(),
-	avatarUrl: z.ostring().nullable(),
-	displayName: z.ostring().nullable(),
+	avatarUrl: z.string().nullable(),
+	displayName: z.string().nullable(),
 });
-
-// export type AppProfile = {
-// 	id: number;
-// 	name: string;
-// 	selected: boolean;
-// 	createdAt: Date;
-// 	updatedAt: Date;
-// };
-
-/**
- * ---
- */
 
 @DbErrorHandler()
 export class Repo {
@@ -118,6 +106,7 @@ class Service {
 	}
 
 	static async selectSync(db: DataSource, acct: Account) {}
+
 	static select(db: DataSource, acct: Account) {
 		Repo.deselectAll(db);
 		Repo.updateSelectionFlag(db, acct.id, true);

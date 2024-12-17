@@ -1,46 +1,11 @@
 import { SQLiteBindValue, SQLiteDatabase } from 'expo-sqlite';
+import { QueryResolver } from './resolver.js';
 
-export function insert<T = {}>(
-	entity: string,
-	body: Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>,
-) {
-	const keys = Object.keys(body);
-	const columns = keys.join(', ');
-	const values = keys.map(() => '?').join(', ');
-
-	return `INSERT INTO ${entity} (${columns}) VALUES (${values});`;
-}
-
-export type IQueryOperationSingleValue =
-	| 'eq'
-	| 'ne'
-	| 'lt'
-	| 'lte'
-	| 'gt'
-	| 'gte'
-	| 'contains';
-export type IQueryOperationMultipleValue = 'in' | 'notIn';
-export type IQueryOperation = IQueryOperationSingleValue &
-	IQueryOperationMultipleValue;
-
-export type IQueryWhere<T extends {} = {}> = {
-	[P in keyof T]?:
-		| T[P]
-		| (Partial<Record<IQueryOperationSingleValue, T[P]>> &
-				Partial<Record<IQueryOperationMultipleValue, T[P][]>>);
+type BaseType = {
+	id: number;
+	createdAt: Date;
+	updatedAt: Date;
 };
-
-export type IQueryOrderBy<T = {}> = {
-	[P in keyof T]?: 'asc' | 'desc';
-};
-
-export interface QueryType<T> {
-	columns?: (keyof T | '*')[];
-	page?: number;
-	limit?: number;
-	where?: IQueryWhere<{}>;
-	order?: IQueryOrderBy<T>;
-}
 
 /**
  * ------ Typescript Sorcery ------
@@ -60,6 +25,15 @@ type OnlyClassProps<T> = Pick<T, ClassPropList<T>>;
  * ------ Decorator Sorcery ------
  */
 
+type BaseEntityInternalPropList =
+	| '_name'
+	| 'db'
+	| 'sql'
+	| 'params'
+	| 'debug'
+	| 'whereClauses'
+	| 'selectColumns';
+
 const classNames = new Map<any, string>();
 
 // Class decorator to store alternate name
@@ -69,16 +43,8 @@ export function Entity(name: string) {
 	};
 }
 
-type BaseEntityInternalPropList =
-	| 'db'
-	| 'sql'
-	| 'params'
-	| 'debug'
-	| 'whereClauses'
-	| 'selectColumns';
-
-export class BaseEntity<T> {
-	name: string;
+export class BaseEntity<T extends BaseType> {
+	_name: string;
 	db: SQLiteDatabase;
 	sql: string | null;
 	params: SQLiteBindValue[];
@@ -88,34 +54,76 @@ export class BaseEntity<T> {
 
 	constructor(db: SQLiteDatabase, debug: boolean = false) {
 		this.db = db;
-		this.name = this.getEntityName();
-		this.params = [];
-		this.sql = null;
+		this._name = this.getEntityName()!;
 		this.whereClauses = [];
 		this.selectColumns = [];
+		this.sql = null;
+		this.params = [];
 		this.debug = debug;
 		return this;
 	}
 
 	// Function to get the alternate name of the class (derived class)
-	getEntityName(): string {
-		return classNames.get(this.constructor)!;
+	getEntityName(): string | undefined {
+		return classNames.get(this.constructor);
 	}
 
-	static get<T>(db: SQLiteDatabase, debug: boolean = false): BaseEntity<T> {
+	static get<T extends BaseType>(
+		db: SQLiteDatabase,
+		debug: boolean = false,
+	): BaseEntity<T> {
 		return new BaseEntity<T>(db, debug);
 	}
 
-	find() {}
+	/**
+	 * Find multiple records matching query
+	 */
+	find(data?: OnlyClassProps<Partial<T>>): T[] {
+		try {
+			const { params, clauses } = QueryResolver.where(data);
+			this.sql = QueryResolver.find(this._name, clauses);
+			return this.db.getAllSync<T>(this.sql, params) as T[];
+		} catch (e) {
+			console.log('[ERROR]: db find query', this._name, e);
+			return [];
+		}
+	}
 
-	findOne() {}
+	/**
+	 * Find first record matching query
+	 */
+	findOne(data: OnlyClassProps<Partial<T>>): T | null {
+		try {
+			const { params, clauses } = QueryResolver.where(data);
+			this.sql = QueryResolver.findOne(this._name, clauses);
+			return this.db.getFirstSync<T>(this.sql, params) as T;
+		} catch (e) {
+			console.log('[ERROR]: db findOne query', this._name, e);
+			return null;
+		}
+	}
+
+	update(
+		where: OnlyClassProps<Partial<T>>,
+		update: OnlyClassProps<Partial<T>>,
+	) {
+		try {
+			this.params.push();
+			const { clauses: whereClauses, params: whereParams } =
+				QueryResolver.where(where);
+			const { clauses: setClauses, params: setParams } =
+				QueryResolver.where(update);
+			this.sql = QueryResolver.update(this._name, whereClauses, setClauses);
+			return this.db.runSync(this.sql, [...setParams, ...whereParams]);
+		} catch (e) {}
+	}
 
 	getOne() {
 		const generated = [];
 
 		// Start with SELECT statement
 		generated.push(
-			`SELECT ${this.selectColumns.length ? this.selectColumns.join(', ') : '*'} FROM ${this.name}`,
+			`SELECT ${this.selectColumns.length ? this.selectColumns.join(', ') : '*'} FROM ${this._name}`,
 		);
 
 		// Add WHERE clause if present
@@ -149,12 +157,15 @@ export class BaseEntity<T> {
 	 *	add a new database record
 	 */
 	insert(
-		data: Omit<OnlyClassProps<Partial<T>>, 'id' | 'createdAt' | 'updatedAt'>,
+		data: Omit<
+			OnlyClassProps<Partial<T>>,
+			'id' | 'createdAt' | 'updatedAt' | BaseEntityInternalPropList
+		>,
 	) {
 		const keys = Object.keys(data);
 		const cols = keys.join(', ');
 		const vals = keys.map(() => '?').join(', ');
-		return `INSERT INTO ${this.name} (${cols}) VALUES (${vals});`;
+		return `INSERT INTO ${this._name} (${cols}) VALUES (${vals});`;
 	}
 
 	/**
@@ -170,7 +181,7 @@ export class BaseEntity<T> {
 		>,
 	) {
 		if (id instanceof BaseEntity) {
-			id = (id as any)['id'];
+			id = (id as T).id;
 		}
 
 		this.save({
@@ -193,9 +204,9 @@ export class BaseEntity<T> {
 		const keys = Object.keys(data);
 		const cols = keys.join(', ');
 		const placeholders = keys.map(() => '?').join(', ');
-		const vals = keys.map((o) => (data as any)[o]);
+		const vals = keys.map((o: any) => (data as any)[o]);
 
-		this.sql = `INSERT INTO ${this.name} (${cols}) VALUES (${placeholders});`;
+		this.sql = `INSERT INTO ${this._name} (${cols}) VALUES (${placeholders});`;
 		this.params = vals;
 
 		this.db.runSync(this.sql, this.params);

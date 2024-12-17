@@ -1,13 +1,8 @@
-import {
-	DB_COLUMN_CREATED_AT,
-	DB_COLUMN_ID,
-	DB_COLUMN_UPDATED_AT,
-} from './repositories/_var';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { createTable, dropTable, migrator as orm } from './_migrator';
+import { createTable, dropTable, migrator as orm } from '@dhaaga/orm';
 import { DataSource } from './dataSource';
 
-const APP_DB_TARGET_VERSION = 1;
+const APP_DB_TARGET_VERSION = 2;
 
 type MigrationEntry = {
 	version: number;
@@ -27,16 +22,13 @@ type MigrationEntry = {
  * NOTE: uses 1 based indexing
  */
 
-export function trySchemaGenerator(db: DataSource) {
-	const accts = db.account.find();
-	console.log(accts);
-}
+export function trySchemaGenerator(db: DataSource) {}
 
 const migrations: MigrationEntry[] = [
 	{
 		version: 1,
 		versionCode: 'v0.11.0',
-		name: 'add account support',
+		name: 'account login support',
 		up: [
 			createTable('migrations', {
 				id: orm.int().pk(),
@@ -54,55 +46,57 @@ const migrations: MigrationEntry[] = [
 				avatarUrl: orm.text(),
 				displayName: orm.text(),
 				selected: orm.int().default(0),
+				active: orm.int().default(1),
+			}),
+			createTable('accountMetadata', {
+				id: orm.int().pk(),
+				key: orm.text().notNull(),
+				value: orm.text().notNull(),
+				type: orm.text().notNull(),
+				active: orm.int().default(1),
+				accountId: orm.int().fk('accounts'),
 			}),
 		],
-		down: [dropTable('account'), dropTable('migrations')],
+		down: [
+			dropTable('account'),
+			dropTable('migrations'),
+			dropTable('accountMetadata'),
+		],
 	},
 	{
 		version: 2,
 		versionCode: 'v0.11.0',
-		name: `add account metadata table`,
+		name: 'account profile and server caching support',
 		up: [
-			`
-			create table if not exists accountMetadata (
-				${DB_COLUMN_ID},	
-				key text not null,
-				value text not null,
-				type text not null,
-				accountId integer,
-				${DB_COLUMN_CREATED_AT},
-				${DB_COLUMN_UPDATED_AT},
-				FOREIGN KEY (accountId) REFERENCES accounts (id) ON DELETE cascade,
-				UNIQUE(accountId, key)
-			) strict;
-		`,
+			createTable('accountProfile', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				name: orm.text().notNull(),
+				selected: orm.int().default(0),
+				active: orm.int().default(1),
+				accountId: orm.int().fk('accounts'),
+			}),
+			createTable('profileKnownServer', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				url: orm.text().notNull(),
+				driver: orm.text().notNull(),
+				profileId: orm.int().fk('accountProfile'),
+			}),
+			createTable('profileKnownServerMetadata', {
+				id: orm.int().pk(),
+				key: orm.text().notNull(),
+				value: orm.text().notNull(),
+				type: orm.text().notNull(),
+				active: orm.int().default(1),
+				knownServerId: orm.int().fk('profileKnownServer'),
+			}),
 		],
-		down: [dropTable('accountMetadata')],
-	},
-	{
-		version: 3,
-		versionCode: 'v0.11.0',
-		name: 'add account hashtags',
-		up: [
-			`
-			create table if not exists hashtag (
-				${DB_COLUMN_ID},	
-				name text not null unique
-			) strict;
-			create table if not exists accountHashtag (
-				${DB_COLUMN_ID},	
-				followed text not null,
-				private integer not null,
-				accountId integer,
-				hashtagId integer,
-				${DB_COLUMN_CREATED_AT},
-				${DB_COLUMN_UPDATED_AT},
-				FOREIGN KEY (accountId) REFERENCES accounts (id) ON DELETE cascade,
-				FOREIGN KEY (hashtagId) REFERENCES hashtag (id) ON DELETE cascade
-			) strict;
-		`,
+		down: [
+			dropTable('profileKnownServerMetadata'),
+			dropTable('profileKnownServer'),
+			dropTable('accountProfile'),
 		],
-		down: [dropTable('accountHashtag'), dropTable('hashtag')],
 	},
 ];
 

@@ -10,6 +10,7 @@
  * - there will always be createdAt/updatedAt
  * - FK constraints are always "ON DELETE CASCADE"
  */
+import { BaseEntity } from './entity.js';
 
 type SqliteTypes = 'text' | 'int' | 'float' | 'blob';
 type SchemaValue = {
@@ -24,7 +25,7 @@ type SchemaValue = {
 };
 
 class ColumnInterface {
-	ref: SchemaValue | null;
+	ref: SchemaValue;
 
 	constructor(type: SqliteTypes) {
 		this.ref = {
@@ -68,7 +69,10 @@ export type SchemaType = Record<string, ColumnInterface>;
  * @param name of the table
  * @param schema of the table
  */
-function createTable(name: string, schema: SchemaType): string {
+function createTable(
+	name: string | typeof BaseEntity,
+	schema: SchemaType,
+): string {
 	let sql = `CREATE TABLE IF NOT EXISTS ${name} (`;
 
 	let pkList: { key: string; type: SqliteTypes }[] = [];
@@ -83,7 +87,7 @@ function createTable(name: string, schema: SchemaType): string {
 			});
 		}
 		if (val.ref.fk) {
-			fKList.push({ key: key, to: val.ref.fkTo });
+			fKList.push({ key: key, to: val.ref.fkTo! });
 		}
 	}
 
