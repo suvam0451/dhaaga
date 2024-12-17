@@ -3,7 +3,8 @@ import {
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useActivityPubRestClientContext } from './useActivityPubRestClient';
+import useGlobalState from './_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Type = {
 	participants: UserInterface[];
@@ -65,7 +66,12 @@ function WithActivitypubChatRoomContext({
 	const [Tails, setTails] = useState([]);
 	const [Heads, setHeads] = useState([]);
 
-	const { client, me } = useActivityPubRestClientContext();
+	const { client } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			me: o.me,
+		})),
+	);
 
 	useEffect(() => {
 		if (!client) return;

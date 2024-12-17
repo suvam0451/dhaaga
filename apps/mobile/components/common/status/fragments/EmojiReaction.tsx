@@ -5,18 +5,17 @@ import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -25,7 +24,13 @@ const EmojiReaction = memo(function Foo({
 	dto: EmojiDto;
 	postDto: ActivityPubStatusAppDtoType;
 }) {
-	const { domain, subdomain, client } = useActivityPubRestClientContext();
+	const { driver, acct, client } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			client: o.router,
+			acct: o.acct,
+		})),
+	);
 	const {
 		TextRef,
 		PostRef,
@@ -37,7 +42,11 @@ const EmojiReaction = memo(function Foo({
 	const { getPostListReducer } = useAppTimelinePosts();
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
@@ -45,23 +54,23 @@ const EmojiReaction = memo(function Foo({
 				return [
 					styles.emojiContainer,
 					{
-						backgroundColor: colorScheme.reactions.active,
+						backgroundColor: theme.reactions.active,
 						borderWidth: 2,
-						borderColor: colorScheme.reactions.highlight,
+						borderColor: theme.reactions.highlight,
 					},
 				];
 			} else {
 				return [
 					styles.emojiContainer,
-					{ backgroundColor: colorScheme.reactions.active },
+					{ backgroundColor: theme.reactions.active },
 				];
 			}
 		}
 		return [
 			styles.emojiContainer,
-			{ backgroundColor: colorScheme.reactions.inactive },
+			{ backgroundColor: theme.reactions.inactive },
 		];
-	}, [dto.interactable, dto.me, colorScheme]);
+	}, [dto.interactable, dto.me, theme]);
 
 	async function onReactionPress() {
 		// const isQuickReactionEnabled =
@@ -72,8 +81,8 @@ const EmojiReaction = memo(function Foo({
 			if (!IS_REMOTE) {
 				const { id } = ActivitypubReactionsService.extractReactionCode(
 					TextRef.current,
-					domain,
-					subdomain,
+					driver,
+					acct?.server,
 				);
 
 				const state = dto.me
@@ -81,14 +90,14 @@ const EmojiReaction = memo(function Foo({
 							client,
 							postDto.id,
 							id,
-							domain,
+							driver,
 							setEmojiStateLoading,
 						)
 					: await ActivityPubReactionsService.addReaction(
 							client,
 							postDto.id,
 							dto.name,
-							domain,
+							driver,
 							setEmojiStateLoading,
 						);
 				if (state !== null) {

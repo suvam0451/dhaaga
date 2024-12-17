@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useEffect } from 'react';
 import StatusItem from '../../../common/status/StatusItem';
 import WithAppPaginationContext, {
@@ -17,9 +16,16 @@ import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusIte
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function Core() {
-	const { primaryAcct, subdomain, domain } = useActivityPubRestClientContext();
+	const { driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 	const { updateQueryCache, queryCacheMaxId, setMaxId } =
 		useAppPaginationContext();
 	const { globalDb } = useGlobalMmkvContext();
@@ -28,7 +34,7 @@ function Core() {
 
 	useEffect(() => {
 		clear();
-	}, [subdomain, primaryAcct?.username]);
+	}, [acct?.server, acct?.username]);
 
 	const { data, refetch, fetchStatus } = useGetBookmarks({
 		limit: 10,
@@ -49,7 +55,7 @@ function Core() {
 			// 		res.syncCustomEmojis(db, globalDb).then(() => {});
 			// 	});
 		}
-	}, [data, globalDb, domain, subdomain]);
+	}, [data, globalDb, driver, acct?.server]);
 
 	/**
 	 * Composite Hook Collection

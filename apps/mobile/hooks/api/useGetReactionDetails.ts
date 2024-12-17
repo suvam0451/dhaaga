@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import ActivitypubService from '../../services/activitypub.service';
 import {
 	MisskeyRestClient,
@@ -12,6 +11,8 @@ import AppUserService, {
 	AppUser,
 } from '../../services/approto/app-user-service';
 import ActivitypubReactionsService from '../../services/approto/activitypub-reactions.service';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../states/_global';
 
 type ReactionDetails = {
 	id: string;
@@ -22,16 +23,23 @@ type ReactionDetails = {
 };
 
 function useGetReactionDetails(postId: string, reactionId: string) {
-	const { client, domain, subdomain, me } = useActivityPubRestClientContext();
+	const { client, acct, driver, me } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+			driver: o.driver,
+			acct: o.acct,
+			client: o.router,
+		})),
+	);
 	const [Data, setData] = useState<ReactionDetails>(null);
 
 	async function api(): Promise<ReactionDetails> {
 		const { id } = ActivitypubReactionsService.extractReactionCode(
 			reactionId,
-			domain,
-			subdomain,
+			driver,
+			acct?.server,
 		);
-		if (ActivitypubService.pleromaLike(domain)) {
+		if (ActivitypubService.pleromaLike(driver)) {
 			const { data, error } = await (
 				client as PleromaRestClient
 			).statuses.getReactions(postId);
@@ -51,11 +59,11 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 				url: match.url,
 				accounts: AppUserService.exportRawMultiple(
 					match.accounts,
-					domain,
-					subdomain,
+					driver,
+					acct?.server,
 				),
 			};
-		} else if (ActivityPubService.misskeyLike(domain)) {
+		} else if (ActivityPubService.misskeyLike(driver)) {
 			const { data, error } = await (
 				client as MisskeyRestClient
 			).statuses.getReactionDetails(postId, id);
@@ -68,9 +76,9 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 			const accts: AppUser[] = data
 				.map((o) =>
 					AppUserService.export(
-						ActivityPubAdapterService.adaptUser(o.user, domain),
-						domain,
-						subdomain,
+						ActivityPubAdapterService.adaptUser(o.user, driver),
+						driver,
+						acct?.server,
 					),
 				)
 				.filter((o) => !!o);
@@ -93,7 +101,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 
 	const { data, fetchStatus, error, status, refetch } =
 		useQuery<ReactionDetails>({
-			queryKey: ['reaction', postId, reactionId, domain, subdomain],
+			queryKey: ['reaction', postId, reactionId, driver, acct?.server],
 			queryFn: api,
 		});
 

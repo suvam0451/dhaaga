@@ -19,11 +19,16 @@ import AppTopNavbar, {
 } from '../../../../shared/topnavbar/AppTopNavbar';
 import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
 import ProfileModules from './modules/ProfileModules';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../../lib/Icon';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export function ProfileContextWrapped() {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { Data: acct, Error } = useGetProfile({ userId: id, requestId: 'N/A' });
 
@@ -60,7 +65,7 @@ export function ProfileContextWrapped() {
 				onScroll={onScroll}
 				contentContainerStyle={[
 					localStyles.rootScrollView,
-					{ backgroundColor: colorScheme.palette.bg },
+					{ backgroundColor: theme.palette.bg },
 				]}
 			>
 				{/*@ts-ignore-next-line*/}
@@ -102,7 +107,7 @@ export function ProfileContextWrapped() {
 							<Text
 								style={[
 									styles.secondaryText,
-									{ color: colorScheme.textColor.medium },
+									{ color: theme.textColor.medium },
 								]}
 								numberOfLines={1}
 							>

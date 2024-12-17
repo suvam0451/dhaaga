@@ -1,8 +1,9 @@
 import { memo } from 'react';
-import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { View, Text } from 'react-native';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	userId: string;
@@ -25,9 +26,13 @@ const Core = memo(({ userId }: Props) => {
 });
 
 const ProfileBlueskyFeeds = memo(({ userId }: Props) => {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
 
-	if (domain !== KNOWN_SOFTWARE.BLUESKY) return <View />;
+	if (driver !== KNOWN_SOFTWARE.BLUESKY) return <View />;
 	return <Core userId={userId} />;
 });
 

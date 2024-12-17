@@ -1,7 +1,6 @@
 import { memo } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import { Text } from '@rneui/themed';
-import { APP_FONT } from '../../styles/AppTheme';
 import { APP_FONTS } from '../../styles/AppFonts';
 
 type AppSegmentedControlProps = {
@@ -9,49 +8,59 @@ type AppSegmentedControlProps = {
 		label: string;
 	}[];
 	leftDecorator?: any;
+	style?: StyleProp<ViewStyle>;
 };
 
 export const AppSegmentedControl = memo(
-	({ items, leftDecorator }: AppSegmentedControlProps) => {
+	({ items, leftDecorator, style }: AppSegmentedControlProps) => {
 		return (
-			<ScrollView
+			<View
 				style={{
-					flexDirection: 'row',
-					overflow: 'visible',
-					// flex: 1,
+					width: '100%',
 				}}
 			>
-				<View
-					style={{
-						flexDirection: 'row',
-						overflow: 'visible',
-						flex: 1,
-					}}
+				<ScrollView
+					style={[
+						{
+							flexDirection: 'row',
+							overflow: 'scroll',
+						},
+						style,
+					]}
 				>
-					{items.map((o, i) => (
-						<View
-							key={i}
-							style={{
-								backgroundColor: '#444',
-								borderRadius: 24,
-								padding: 10,
-								paddingHorizontal: 16,
-								flexShrink: 1,
-								marginHorizontal: 4,
-							}}
-						>
-							<Text
+					<View
+						style={{
+							flexDirection: 'row',
+							overflow: 'visible',
+							alignItems: 'center',
+						}}
+					>
+						{leftDecorator}
+						{items.map((o, i) => (
+							<View
+								key={i}
 								style={{
-									color: 'white',
-									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+									backgroundColor: '#444',
+									borderRadius: 24,
+									padding: 8,
+									paddingHorizontal: 14,
+									flexShrink: 1,
+									marginHorizontal: 4,
 								}}
 							>
-								{o.label}
-							</Text>
-						</View>
-					))}
-				</View>
-			</ScrollView>
+								<Text
+									style={{
+										color: 'white',
+										fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+									}}
+								>
+									{o.label}
+								</Text>
+							</View>
+						))}
+					</View>
+				</ScrollView>
+			</View>
 		);
 	},
 );

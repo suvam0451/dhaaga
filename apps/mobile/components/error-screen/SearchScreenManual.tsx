@@ -11,7 +11,8 @@ import { router } from 'expo-router';
 import { APP_FONTS } from '../../styles/AppFonts';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { memo } from 'react';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type InternalLinkProps = {
 	label: string;
@@ -20,7 +21,11 @@ type InternalLinkProps = {
 };
 
 const InternalLink = memo(({ label, to, style }: InternalLinkProps) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	return (
 		<TouchableOpacity
 			onPress={() => {
@@ -33,7 +38,7 @@ const InternalLink = memo(({ label, to, style }: InternalLinkProps) => {
 					{
 						paddingVertical: 12,
 
-						backgroundColor: colorScheme.palette.menubar,
+						backgroundColor: theme.palette.menubar,
 					},
 					styles.linkSectionContainer,
 					style,
@@ -41,7 +46,7 @@ const InternalLink = memo(({ label, to, style }: InternalLinkProps) => {
 			>
 				<Text
 					style={{
-						color: colorScheme.textColor.high,
+						color: theme.textColor.high,
 						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 						fontSize: 16,
 						paddingLeft: 8,
@@ -51,7 +56,7 @@ const InternalLink = memo(({ label, to, style }: InternalLinkProps) => {
 				</Text>
 				<Ionicons
 					size={24}
-					color={colorScheme.textColor.medium}
+					color={theme.textColor.medium}
 					name={'chevron-forward'}
 				/>
 			</View>
@@ -113,12 +118,10 @@ const styles = StyleSheet.create({
 	},
 	linkSectionContainer: {
 		// backgroundColor: '#232323',
-		paddingHorizontal: 8,
-		// paddingVertical: 6,
+		paddingHorizontal: 8, // paddingVertical: 6,
 		alignItems: 'center',
 		flexDirection: 'row',
-		borderRadius: 8,
-		// borderColor: '#ffffff30',
+		borderRadius: 8, // borderColor: '#ffffff30',
 		justifyContent: 'space-between',
 	},
 });

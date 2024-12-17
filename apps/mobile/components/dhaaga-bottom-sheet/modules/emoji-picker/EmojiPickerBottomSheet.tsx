@@ -1,5 +1,4 @@
 import { memo, useEffect, useReducer, useRef } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import {
 	ScrollView,
 	StyleSheet,
@@ -18,6 +17,8 @@ import emojiPickerReducer, {
 import SelectedEmojiPreview from './fragments/SelectedEmojiPreview';
 import SelectedEmojiActionButtons from './fragments/SelectedEmojiActionButtons';
 import EmojiPickerSearchResults from './fragments/EmojiPickerSearchResults';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type EmojiPickerBottomSheetProps = {
 	onSelect: (shortCode: string) => Promise<void>;
@@ -30,23 +31,28 @@ type EmojiPickerBottomSheetProps = {
  */
 const EmojiPickerBottomSheet = memo(
 	({ onSelect, onCancel }: EmojiPickerBottomSheetProps) => {
-		const { domain, subdomain } = useActivityPubRestClientContext();
+		const { driver, acct } = useGlobalState(
+			useShallow((o) => ({
+				driver: o.driver,
+				acct: o.acct,
+			})),
+		);
 		const { globalDb } = useGlobalMmkvContext();
 		const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 
 		const lastSubdomain = useRef(null);
 		useEffect(() => {
-			if (lastSubdomain.current === subdomain) return;
+			if (lastSubdomain.current === acct?.server) return;
 			dispatch({
 				type: EMOJI_PICKER_REDUCER_ACTION.INIT,
 				payload: {
-					subdomain,
+					subdomain: acct?.server,
 					globalDb,
-					domain,
+					domain: driver,
 				},
 			});
-			lastSubdomain.current = subdomain;
-		}, [subdomain]);
+			lastSubdomain.current = acct?.server;
+		}, [acct?.server]);
 
 		if (!State.tagEmojiMap) return <View />;
 

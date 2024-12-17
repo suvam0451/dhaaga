@@ -1,10 +1,11 @@
 import { memo } from 'react';
 import { RelationshipDialogProps } from '../fragments/_common';
 import { Dialog } from '@rneui/themed';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { ActionButton, modalStyles } from './_common';
 
 const RelationDialogFactory = memo(
 	({
@@ -12,22 +13,60 @@ const RelationDialogFactory = memo(
 		setVisible,
 		children,
 		label,
-	}: RelationshipDialogProps & { children: any; label: string }) => {
-		const { colorScheme } = useAppTheme();
+		desc,
+	}: RelationshipDialogProps & {
+		children: any;
+		label: string;
+		desc: string[];
+	}) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
+		function dismiss() {
+			setVisible(false);
+		}
+
 		return (
 			<Dialog
-				overlayStyle={{ backgroundColor: colorScheme.palette.menubar }}
+				overlayStyle={{
+					backgroundColor: theme.palette.menubar,
+					borderRadius: 24,
+					padding: 0,
+				}}
 				isVisible={visible}
 				onBackdropPress={() => {
 					setVisible(false);
 				}}
 			>
-				<Text
-					style={[styles.modalTitle, { color: colorScheme.textColor.high }]}
-				>
-					{label}
-				</Text>
-				{children}
+				<View style={{ paddingHorizontal: 24 }}>
+					<Text style={[styles.modalTitle, { color: theme.textColor.high }]}>
+						{label}
+					</Text>
+					{desc.map((text, i) => (
+						<Text
+							key={i}
+							style={[
+								modalStyles.modalDescription,
+								{
+									color: theme.textColor.medium,
+								},
+							]}
+						>
+							{text}
+						</Text>
+					))}
+				</View>
+				<View style={{ marginTop: 32, marginBottom: 4 }}>
+					{children}
+					<ActionButton
+						label={'Dismiss'}
+						setVisible={setVisible}
+						onPress={dismiss}
+					/>
+				</View>
 			</Dialog>
 		);
 	},
@@ -37,16 +76,15 @@ export default RelationDialogFactory;
 
 const styles = StyleSheet.create({
 	modalTitle: {
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		fontFamily: APP_FONTS.INTER_700_BOLD,
 		textAlign: 'center',
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 18,
+		fontSize: 20,
 		marginBottom: 16,
+		paddingTop: 32,
 	},
 	modalDescription: {
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
 		textAlign: 'center',
-		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 14,
 	},
 	actionButtonContainer: {

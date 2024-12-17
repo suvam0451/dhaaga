@@ -7,14 +7,9 @@ function Layout() {
 		<WithLocalAppMenuControllerContext>
 			<WithAppDrawerContext>
 				<Stack
-					initialRouteName={'home-home'}
+					initialRouteName={'index'}
 					screenOptions={{ headerShown: false }}
-				>
-					<Stack.Screen name={'index'} />
-					<Stack.Screen name={'home-home'} />
-					<Stack.Screen name={'new-to-app'} />
-					<Stack.Screen name={'new-to-fedi'} />
-				</Stack>
+				/>
 			</WithAppDrawerContext>
 		</WithLocalAppMenuControllerContext>
 	);

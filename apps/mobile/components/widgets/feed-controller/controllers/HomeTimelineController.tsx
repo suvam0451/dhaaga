@@ -1,34 +1,49 @@
 import { memo } from 'react';
 import { View, Text } from 'react-native';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { styles } from './_shared';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const HomeTimelineController = memo(function Foo() {
-	const { subdomain } = useActivityPubRestClientContext();
-	const { colorScheme } = useAppTheme();
+	const { acct, theme } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			theme: o.colorScheme,
+		})),
+	);
 	return (
 		<View>
 			<Text
 				style={[
 					styles.timelineTypeText,
 					{
-						color: colorScheme.textColor.high,
+						color: theme.textColor.high,
 					},
 				]}
 			>
-				Your Home Timeline
+				Home Timeline
 			</Text>
-			<Text style={styles.timelineTargetText}>{subdomain}</Text>
+			<Text style={styles.timelineTargetText}>{acct?.server}</Text>
 			<Text
 				style={[
 					styles.timelineDescription,
 					{
-						color: colorScheme.textColor.medium,
+						color: theme.textColor.medium,
 					},
 				]}
 			>
-				This timeline displays post from you and your friends
+				This is your server's home timeline.
+			</Text>
+
+			<Text
+				style={[
+					styles.timelineDescription,
+					{
+						color: theme.textColor.medium,
+					},
+				]}
+			>
+				It usually displays posts from you and everyone you follow.
 			</Text>
 		</View>
 	);

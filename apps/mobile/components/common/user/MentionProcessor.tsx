@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { Text } from '@rneui/themed';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useMemo } from 'react';
 import { APP_THEME } from '../../../styles/AppTheme';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	url: string;
@@ -16,12 +17,17 @@ type Props = {
  * @constructor
  */
 function MentionProcessor(props: Props) {
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
+
 	const { text } = props;
 
 	const displayText = useMemo(() => {
 		let retval = text;
-		const ex = new RegExp(`(.*?)@${subdomain}`, 'g');
+		const ex = new RegExp(`(.*?)@${acct?.server}`, 'g');
 		const res = Array.from(text.matchAll(ex));
 		if (res.length > 0) {
 			retval = `${res[0][1]}`;

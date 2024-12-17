@@ -4,15 +4,10 @@ import { BottomSheet, Text, ListItem, Button } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
 import { Image } from 'expo-image';
 import MfmService from '../../services/mfm.service';
-import { randomUUID } from 'expo-crypto';
-import { PrimaryText, SecondaryText } from '../../styles/Typography';
-import {
-	AvatarContainerWithInset,
-	AvatarExpoImage,
-} from '../../styles/Containers';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { RandomUtil } from '../../utils/random.utils';
 
 type StatusActionsProps = {
 	visible: boolean;
@@ -20,13 +15,17 @@ type StatusActionsProps = {
 };
 
 function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
-	const { domain, subdomain } = useActivityPubRestClientContext();
+	const { driver, acct, theme } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			driver: o.driver,
+			theme: o.colorScheme,
+		})),
+	);
 
 	const { globalDb } = useGlobalMmkvContext();
-
 	const { user } = useActivitypubUserContext();
 	const desc = user.getDescription();
-	const { colorScheme } = useAppTheme();
 
 	const DescriptionContent = useMemo(() => {
 		const target = user.getDescription();
@@ -34,13 +33,13 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 
 		const { reactNodes } = MfmService.renderMfm(desc, {
 			emojiMap: user.getEmojiMap(),
-			domain,
-			subdomain,
+			domain: driver,
+			subdomain: acct?.server,
 			globalDb,
-			colorScheme,
+			colorScheme: theme,
 		});
 		return reactNodes?.map((para) => {
-			const uuid = randomUUID();
+			const uuid = RandomUtil.nanoId();
 			return (
 				<Text key={uuid} style={{ marginBottom: 0, opacity: 0.87 }}>
 					{para.map((o, j) => o)}
@@ -105,9 +104,27 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 						}}
 					/>
 					<View style={{ display: 'flex', flexDirection: 'row' }}>
-						<AvatarContainerWithInset>
-							<AvatarExpoImage source={{ uri: user.getAvatarUrl() }} />
-						</AvatarContainerWithInset>
+						<View
+							style={{
+								width: 72,
+								height: 72,
+								borderColor: 'gray',
+								borderWidth: 1,
+								borderRadius: 4,
+								marginTop: -36,
+								marginLeft: 13,
+							}}
+						>
+							{/*@ts-ignore-next-line*/}
+							<Image
+								source={{ uri: user.getAvatarUrl() }}
+								style={{
+									width: '100%',
+									backgroundColor: '#0553',
+									padding: 2,
+								}}
+							/>
+						</View>
 						<View style={{ flexGrow: 1 }}></View>
 						<View
 							style={{ display: 'flex', flexDirection: 'row', marginRight: 8 }}
@@ -115,20 +132,26 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getPostCount()}</PrimaryText>
-								<SecondaryText>Posts</SecondaryText>
+								<Text style={{ color: theme.textColor.medium }}>
+									{user.getPostCount()}
+								</Text>
+								<Text style={{ color: theme.textColor.high }}>Posts</Text>
 							</View>
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getFollowingCount()}</PrimaryText>
-								<SecondaryText>Following</SecondaryText>
+								<Text style={{ color: theme.textColor.medium }}>
+									{user.getFollowingCount()}
+								</Text>
+								<Text style={{ color: theme.textColor.high }}>Following</Text>
 							</View>
 							<View
 								style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}
 							>
-								<PrimaryText>{user.getFollowersCount()}</PrimaryText>
-								<SecondaryText>Followers</SecondaryText>
+								<Text style={{ color: theme.textColor.medium }}>
+									{user.getFollowersCount()}
+								</Text>
+								<Text style={{ color: theme.textColor.high }}>Followers</Text>
 							</View>
 						</View>
 					</View>
@@ -151,7 +174,7 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 									opacity: 0.6,
 								}}
 							>
-								{user.getAppDisplayAccountUrl(subdomain)}
+								{user.getAppDisplayAccountUrl(acct?.server)}
 							</Text>
 						</View>
 						<View style={{ marginRight: 16 }}>

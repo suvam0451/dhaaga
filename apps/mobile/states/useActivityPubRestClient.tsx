@@ -1,27 +1,15 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import {
-	ActivityPubClientFactory,
 	ActivityPubUserAdapter,
 	ActivityPubClient,
 	UserInterface,
-	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
-import AtprotoSessionService from '../services/atproto/atproto-session.service';
-import { useSQLiteContext } from 'expo-sqlite';
 import { Account } from '../database/_schema';
-import { AccountService } from '../database/entities/account';
-import { AccountMetadataService } from '../database/entities/account-metadata';
 
 type Type = {
 	client: ActivityPubClient;
 	me: UserInterface | null;
 	primaryAcct: Account;
-
-	/**
-	 * Call this function after change in
-	 * primary account selection/active status
-	 */
-	regenerate: () => void;
 
 	domain?: string;
 	subdomain?: string;
@@ -33,7 +21,6 @@ const defaultValue: Type = {
 	me: null,
 	// meRaw: null,
 	primaryAcct: null,
-	regenerate: () => {},
 };
 
 const ActivityPubRestClientContext = createContext<Type>(defaultValue);
@@ -52,62 +39,9 @@ export function useActivityPubRestClientContext() {
  * @constructor
  */
 function WithActivityPubRestClient({ children }: any) {
-	const db = useSQLiteContext();
 	const [restClient, setRestClient] = useState<ActivityPubClient>(null);
 	const [Me, setMe] = useState(null);
-	// const [MeRaw, setMeRaw] = useState(null);
 	const [PrimaryAcct, setPrimaryAcct] = useState<Account>(null);
-
-	const PrimaryAcctPtr = useRef<Account>(null);
-
-	async function regenerateFn() {
-		const acct = await AccountService.getSelected(db);
-		if (!acct) {
-			setRestClient(null);
-			setPrimaryAcct(null);
-			PrimaryAcctPtr.current = null;
-			return;
-		}
-
-		const token = await AccountMetadataService.getKeyValueForAccountSync(
-			db,
-			acct,
-			'access_token',
-		);
-		if (!token) {
-			setRestClient(null);
-			return;
-		}
-
-		let payload: any = {
-			instance: acct?.server,
-			token,
-		};
-
-		// Built Different
-		if (acct.driver === KNOWN_SOFTWARE.BLUESKY) {
-			const session = AtprotoSessionService.create(db, acct);
-			await session.resume();
-			const { success, data, reason } = await session.saveSession();
-			if (!success)
-				console.log('[INFO]: session restore status', success, reason);
-			payload = {
-				...data,
-				subdomain: acct.server,
-			};
-		}
-
-		const _client = ActivityPubClientFactory.get(acct.driver as any, payload);
-		setRestClient(_client);
-		setPrimaryAcct(acct);
-		PrimaryAcctPtr.current = acct;
-		// FIXME: fix this
-		// EmojiService.refresh(db, globalDb, acct.server, true);
-	}
-
-	useEffect(() => {
-		regenerateFn();
-	}, []);
 
 	useEffect(() => {
 		if (!restClient) {
@@ -131,7 +65,6 @@ function WithActivityPubRestClient({ children }: any) {
 				client: restClient,
 				me: Me,
 				primaryAcct: PrimaryAcct,
-				regenerate: regenerateFn,
 				domain: PrimaryAcct?.driver,
 				subdomain: PrimaryAcct?.server,
 			}}

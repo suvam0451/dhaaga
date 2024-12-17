@@ -5,7 +5,6 @@ import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { View } from 'react-native';
@@ -24,11 +23,19 @@ import WithTimelineControllerContext, {
 	useTimelineController,
 } from '../../../common/timeline/api/useTimelineController';
 import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../states/_global';
 
 function Core() {
 	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
-	const { domain, subdomain, me } = useActivityPubRestClientContext();
+	const { driver, acct, me } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 	const {
 		updateQueryCache,
 		queryCacheMaxId,
@@ -71,7 +78,7 @@ function Core() {
 
 		if (data?.length > 0) {
 			setMaxId(data[data.length - 1]?.id);
-			const _data = ActivityPubAdapterService.adaptManyStatuses(data, domain);
+			const _data = ActivityPubAdapterService.adaptManyStatuses(data, driver);
 			addPosts(_data);
 			setPageLoadedAtLeastOnce(true);
 

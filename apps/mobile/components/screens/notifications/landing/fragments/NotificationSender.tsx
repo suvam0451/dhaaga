@@ -4,7 +4,6 @@ import {
 	DhaagaJsNotificationType,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';
@@ -22,6 +21,8 @@ import {
 } from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -238,16 +239,21 @@ type InterfaceProps = {
  */
 export const NotificationSenderInterface = memo(
 	({ acct, type, extraData }: InterfaceProps) => {
-		const { domain, subdomain } = useActivityPubRestClientContext();
+		const { driver, acct: acctItem } = useGlobalState(
+			useShallow((o) => ({
+				driver: o.driver,
+				acct: o.acct,
+			})),
+		);
 
 		const id = acct?.getId();
 
-		const acctUrl = acct?.getAccountUrl(subdomain);
+		const acctUrl = acct?.getAccountUrl(acctItem?.server);
 		const displayName = acct?.getDisplayName();
 		const avatarUrl = acct?.getAvatarUrl();
 
 		const handle = useMemo(() => {
-			return ActivitypubHelper.getHandle(acctUrl, subdomain);
+			return ActivitypubHelper.getHandle(acctUrl, acctItem?.server);
 		}, [acctUrl]);
 
 		const { setType, updateRequestId, setVisible, UserRef, UserIdRef } =
@@ -259,7 +265,7 @@ export const NotificationSenderInterface = memo(
 		 * the entire modal
 		 */
 		const onPress = useCallback(() => {
-			if (domain === KNOWN_SOFTWARE.MASTODON) {
+			if (driver === KNOWN_SOFTWARE.MASTODON) {
 				// forward existing ref
 				UserRef.current = acct;
 				UserIdRef.current = acct.getId();
@@ -271,7 +277,7 @@ export const NotificationSenderInterface = memo(
 			setType(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK);
 			setVisible(true);
 			updateRequestId();
-		}, [acct, domain, UserRef, UserIdRef, updateRequestId, setType]);
+		}, [acct, driver, UserRef, UserIdRef, updateRequestId, setType]);
 
 		return (
 			<TouchableOpacity onPress={onPress}>

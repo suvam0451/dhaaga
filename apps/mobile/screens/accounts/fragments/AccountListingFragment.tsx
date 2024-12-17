@@ -2,17 +2,19 @@ import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { memo, MutableRefObject, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
-import Animated, { FadeIn } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
-import { useAccountDbContext } from '../../../components/screens/profile/stack/settings/hooks/useAccountDb';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
 import { Account } from '../../../database/_schema';
-import { useSQLiteContext } from 'expo-sqlite';
-import { AccountMetadataService } from '../../../database/entities/account-metadata';
+import {
+	ACCOUNT_METADATA_KEY,
+	AccountMetadataService,
+} from '../../../database/entities/account-metadata';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { AccountService } from '../../../database/entities/account';
 
 type Props = {
 	setIsExpanded: (isExpanded: boolean) => void;
@@ -36,17 +38,30 @@ export const AccountOptions = memo(function Foo({
 	setDeleteDialogExpanded,
 	acct,
 }: AccountOptionsProps) {
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+	console.log('account options...', IsExpanded);
+
 	function onFixClicked() {
 		// FIXME: point this to the sql account
 		dialogTarget.current = acct;
 	}
+
+	const textStyle = {
+		color: theme.textColor.medium,
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		fontSize: 16,
+		marginTop: 4,
+	};
+
 	return (
-		<Animated.View
-			entering={FadeIn}
+		<View
 			style={{
 				display: IsExpanded ? 'flex' : 'none',
 				marginTop: 8,
-				backgroundColor: '#121212',
 				paddingHorizontal: 8,
 				borderRadius: 8,
 			}}
@@ -64,18 +79,9 @@ export const AccountOptions = memo(function Foo({
 					<Octicons
 						name="browser"
 						size={ICON_SIZE}
-						color={APP_FONT.MONTSERRAT_BODY}
+						color={theme.textColor.medium}
 					/>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							fontSize: 12,
-							marginTop: 4,
-						}}
-					>
-						Account
-					</Text>
+					<Text style={textStyle}>Edit</Text>
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.actionButton} onPress={onFixClicked}>
 					<MaterialIcons
@@ -83,33 +89,15 @@ export const AccountOptions = memo(function Foo({
 						size={ICON_SIZE}
 						color={APP_FONT.MONTSERRAT_BODY}
 					/>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							fontSize: 12,
-							marginTop: 4,
-						}}
-					>
-						Fix
-					</Text>
+					<Text style={textStyle}>Fix</Text>
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.actionButton}>
 					<Octicons
 						name="sync"
 						size={ICON_SIZE}
-						color={APP_FONT.MONTSERRAT_BODY}
+						color={theme.textColor.medium}
 					/>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							fontSize: 12,
-							marginTop: 4,
-						}}
-					>
-						Sync
-					</Text>
+					<Text style={textStyle}>Sync</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.actionButton}
@@ -119,19 +107,10 @@ export const AccountOptions = memo(function Foo({
 					}}
 				>
 					<FontAwesome name="trash-o" size={ICON_SIZE} color={'#ce6779'} />
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							fontSize: 12,
-							marginTop: 4,
-						}}
-					>
-						Remove
-					</Text>
+					<Text style={textStyle}>Remove</Text>
 				</TouchableOpacity>
 			</View>
-		</Animated.View>
+		</View>
 	);
 });
 
@@ -189,7 +168,12 @@ export const AccountDetails = memo(function Foo({
 	subdomain,
 	onClicked,
 }: selectedIndicatorProps) {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	return (
 		<TouchableOpacity
 			style={{ marginLeft: 8, flexGrow: 1 }}
@@ -198,7 +182,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					color: selected ? '#9dced7' : colorScheme.textColor.high,
+					color: selected ? '#9dced7' : theme.textColor.high,
 				}}
 				numberOfLines={1}
 			>
@@ -207,7 +191,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : colorScheme.textColor.low,
+					color: selected ? '#9dced7' : theme.textColor.low,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -217,7 +201,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : colorScheme.textColor.medium,
+					color: selected ? '#9dced7' : theme.textColor.medium,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -233,27 +217,30 @@ function AccountListingFragment({
 	setDeleteDialogExpanded,
 	acct,
 }: Props) {
-	const db = useSQLiteContext();
-	const { colorScheme } = useAppTheme();
-	const { toggleSelect } = useAccountDbContext();
+	const { db, theme } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+			theme: o.colorScheme,
+		})),
+	);
 	const [IsExpanded, setIsExpanded] = useState(false);
 
 	const avatar = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,
-		'avatar',
+		ACCOUNT_METADATA_KEY.AVATAR_URL,
 	);
 	const displayName = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,
-		'display_name',
+		ACCOUNT_METADATA_KEY.DISPLAY_NAME,
 	);
 
 	if (!acct) return <View />;
 	return (
 		<View
 			style={{
-				backgroundColor: colorScheme.palette.menubar,
+				backgroundColor: theme.palette.menubar,
 				padding: 8,
 				paddingVertical: 6,
 				marginBottom: 8,
@@ -278,12 +265,12 @@ function AccountListingFragment({
 						selected={acct.selected as boolean}
 						url={avatar}
 						onClicked={() => {
-							toggleSelect(acct.id as unknown as number);
+							AccountService.select(db, acct);
 						}}
 					/>
 					<AccountDetails
 						onClicked={() => {
-							toggleSelect(acct.id as unknown as number);
+							AccountService.select(db, acct);
 						}}
 						selected={acct.selected as boolean}
 						displayName={displayName}
@@ -334,8 +321,7 @@ function AccountListingFragment({
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		backgroundColor: '#fff',
+		flex: 1, // backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -346,17 +332,8 @@ const styles = StyleSheet.create({
 	},
 	actionButton: {
 		flex: 1,
-		elevation: 1,
-		backgroundColor: '#333333',
-		borderRadius: 8,
 		paddingVertical: 6,
 		alignItems: 'center',
-		shadowRadius: 8,
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.3,
 		marginRight: 8,
 	},
 	selectedIndicator: {
@@ -369,14 +346,6 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		borderTopLeftRadius: 8,
 		borderBottomEndRadius: 4,
-	},
-	syncStatusText: {
-		fontSize: 11,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		color: APP_FONT.MONTSERRAT_BODY,
-		textAlign: 'center',
-		width: '100%',
-		marginRight: 8,
 	},
 });
 

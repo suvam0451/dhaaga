@@ -7,11 +7,16 @@ import PreviewedPost from './fragments/PreviewedPost';
 import PreviewedPostDelete from './fragments/PreviewedPostDelete';
 import PreviewedPostEdit from './fragments/PreviewedPostEdit';
 import PreviewedPostDone from './fragments/PreviewedPostDone';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const PostPreview = memo(() => {
 	const { forceUpdate, State } = useHookLoadingState();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<View style={[styles.bottomSheetContentContainer]}>
@@ -21,7 +26,7 @@ const PostPreview = memo(() => {
 				<Text
 					style={{
 						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-						color: colorScheme.textColor.high,
+						color: theme.textColor.high,
 					}}
 				>
 					Post Published 🎉. Here is a Preview!

@@ -9,7 +9,7 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import AppPrivacySettingsService from './app-settings/app-settings-privacy.service';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { ServerService } from '../database/entities/server';
+import { ProfileKnownServerService } from '../database/entities/server';
 import { ServerEmojiService } from '../database/entities/server-emoji';
 
 export type EmojiAdapter = {
@@ -68,36 +68,12 @@ export class EmojiService {
 		}
 	}
 
-	/**
-	 * Updates the custom emoji
-	 * for an instance
-	 *
-	 * ^ Subjected to Cache-Policy
-	 * and Retry-Policy
-	 *
-	 * @forcedUpdate bypasses user prefs (e.g.- for acct instance)
-	 */
 	static async refresh(
 		db: SQLiteDatabase,
 		globalDb: MMKV,
 		subdomain: string,
 		forceUpdate: boolean = false,
-	): Promise<InstanceApi_CustomEmojiDTO[] | null> {
-		// Cache-Policy
-		const found = globalMmkvCacheServices.getEmojiCacheForInstance(
-			globalDb,
-			subdomain,
-		);
-
-		const now = new Date();
-		const oneWeekAgo = new Date(now);
-		oneWeekAgo.setDate(now.getDate() - 7);
-
-		const LIST_NOT_EMPTY = found && found?.data?.length > 0;
-		const LIST_NOT_EXPIRED = new Date(found?.lastFetchedAt) >= oneWeekAgo;
-
-		if (LIST_NOT_EMPTY && LIST_NOT_EXPIRED) return found.data;
-
+	) {
 		// Retry-Policy
 		// const repo = ActivityPubServerRepository.create(db);
 		// const server = repo.get(subdomain);
@@ -109,39 +85,6 @@ export class EmojiService {
 		// 	// console.log('[INFO]: reaction caching skipped (Retry-Policy)', subdomain);
 		// 	return null;
 		// }
-
-		// Force-Update-Policy
-		// Privacy --> Advanced --> Remote Instance Calls --> Reaction Caching
-		if (
-			!forceUpdate &&
-			AppPrivacySettingsService.create(
-				db,
-			).isDisabledCrossInstanceReactionCaching()
-		)
-			return null;
-
-		// All good
-		const x = new UnknownRestClient();
-		// const { data, error } = await x.instances.getCustomEmojis(
-		// 	subdomain,
-		// 	server.type,
-		// );
-
-		// if (error) {
-		// 	// console.log('[WARN]: failed to get emojis');
-		// 	return null;
-		// }
-
-		// db.write(() => {
-		// 	ActivityPubServerRepository.updateEmojisLastFetchedAt(db, subdomain, now);
-		// });
-		// console.log('[INFO]: cached emojis for', subdomain, data.length);
-
-		// return GlobalMmkvCacheService.saveEmojiCacheForInstance(
-		// 	globalDb,
-		// 	subdomain,
-		// 	data,
-		// );
 	}
 
 	/**
@@ -248,7 +191,7 @@ export class EmojiService {
 			}
 		}
 
-		const server = await ServerService.upsert(db, {
+		const server = await ProfileKnownServerService.upsert(db, {
 			driver: KNOWN_SOFTWARE.UNKNOWN,
 			description: 'N/A',
 			url: subdomain,

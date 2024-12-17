@@ -1,10 +1,10 @@
 import { Fragment, memo } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetFactory from './fragments/AppBottomSheetFactory';
-import { useAppBottomSheet } from './modules/_api/useAppBottomSheet';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Switches what module will be shown
@@ -14,13 +14,15 @@ import { useAppTheme } from '../../hooks/app/useAppThemePack';
  * based on active module
  */
 const AppBottomSheet = memo(() => {
-	const { colorScheme } = useAppTheme();
 	const { animStyle } = useAnimatedHeight();
-	const { visible, setVisible } = useAppBottomSheet();
 
-	function onBackgroundPress() {
-		setVisible(false);
-	}
+	const { visible, hide, theme } = useGlobalState(
+		useShallow((o) => ({
+			visible: o.bottomSheet.visible,
+			hide: o.bottomSheet.hide,
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<Fragment>
@@ -29,19 +31,41 @@ const AppBottomSheet = memo(() => {
 					position: 'absolute',
 					height: visible ? '100%' : 'auto',
 					width: '100%',
-					backgroundColor: colorScheme.palette.bg,
-					opacity: 0.3,
+					backgroundColor: theme.palette.bg,
+					opacity: 0.48,
 					zIndex: 1,
 				}}
-				onPress={onBackgroundPress}
+				onPress={hide}
 			/>
+
 			<Animated.View
 				style={[
 					styles.rootContainer,
-					{ backgroundColor: colorScheme.palette.menubar },
+					{ backgroundColor: theme.palette.menubar },
 					animStyle,
 				]}
 			>
+				<View
+					style={{
+						position: 'absolute',
+						alignItems: 'center',
+						justifyContent: 'center',
+						left: '50%',
+						transform: [{ translateX: '-50%' }],
+						top: 8,
+					}}
+				>
+					<View
+						style={{
+							height: 4,
+							width: 48,
+							backgroundColor: theme.textColor.low,
+							marginBottom: 16,
+							borderRadius: 16,
+						}}
+					/>
+				</View>
+
 				<AppBottomSheetFactory />
 			</Animated.View>
 		</Fragment>

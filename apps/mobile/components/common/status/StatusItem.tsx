@@ -14,17 +14,23 @@ type StatusItemProps = {
 
 function PostContainer({ children }: any) {
 	return (
-		<View
-			style={{
-				paddingHorizontal: 8,
-				paddingVertical: 6,
-				backgroundColor: '#242424',
-				margin: 6,
-				marginVertical: 6,
-				borderRadius: 16,
-			}}
-		>
-			{children}
+		<View>
+			<View
+				style={{
+					paddingHorizontal: 10,
+					paddingVertical: 16,
+					backgroundColor: '#121212',
+					borderRadius: 16,
+				}}
+			>
+				{children}
+			</View>
+			<View
+				style={{
+					backgroundColor: '#1e1e1e',
+					height: 1,
+				}}
+			/>
 		</View>
 	);
 }

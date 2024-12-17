@@ -1,28 +1,19 @@
-import {
-	Button,
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from 'react-native';
-import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useTimelineController } from '../api/useTimelineController';
 import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { router } from 'expo-router';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import SocialHubLantern from '../../../screens/home/stack/landing/fragments/SocialHubLantern';
 import SocialHubAssistant from '../../../screens/home/stack/landing/fragments/SocialHubAssistant';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import SocialHubQuickDestinations from '../../../screens/home/stack/landing/fragments/SocialHubQuickDestinations';
-import { DbMetaRepo } from '../../../../database/repositories/_meta.repo';
 import { AppSegmentedControl } from '../../../lib/SegmentedControl';
+import { SocialHubAvatarCircle } from '../../../lib/Avatar';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
 	MORNING = 'Morning',
@@ -254,7 +245,11 @@ function TimelineItem({ dto }: UserDataPinnedItemProps) {
 function SocialHub() {
 	const [TimeOfDay, setTimeOfDay] = useState<TIME_OF_DAY>(TIME_OF_DAY.UNKNOWN);
 	const userDataTimelines = []; // useQuery(UserDataTimeline).filter((o) => o.pinned);
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	useEffect(() => {
 		const currentHours = new Date().getHours();
@@ -304,70 +299,56 @@ function SocialHub() {
 			style={{
 				height: '100%',
 				position: 'relative',
-				backgroundColor: colorScheme.palette.bg,
+				backgroundColor: theme.palette.bg,
 			}}
 		>
-			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
-			<TimelinesHeader title={'Social Hub'} />
-
 			<ScrollView>
 				<View
 					style={{
 						height: '100%',
 						paddingTop: 16,
-						backgroundColor: colorScheme.palette.bg,
+						backgroundColor: theme.palette.bg,
 						position: 'relative',
 						paddingHorizontal: 8,
 					}}
 				>
-					<SocialHubLantern />
-					{/*{TimeOfDay === TIME_OF_DAY.MORNING && (*/}
-					{/*	<Text*/}
-					{/*		style={[*/}
-					{/*			styles.timeOfDayText,*/}
-					{/*			{ color: colorScheme.textColor.medium },*/}
-					{/*		]}*/}
-					{/*	>*/}
-					{/*		Good Morning*/}
-					{/*	</Text>*/}
-					{/*)}*/}
-					{/*{TimeOfDay === TIME_OF_DAY.AFTERNOON && (*/}
-					{/*	<Text*/}
-					{/*		style={[*/}
-					{/*			styles.timeOfDayText,*/}
-					{/*			{ color: colorScheme.textColor.medium },*/}
-					{/*		]}*/}
-					{/*	>*/}
-					{/*		Good Afternoon*/}
-					{/*	</Text>*/}
-					{/*)}*/}
-					{/*{TimeOfDay === TIME_OF_DAY.EVENING && (*/}
-					{/*	<Text*/}
-					{/*		style={[*/}
-					{/*			styles.timeOfDayText,*/}
-					{/*			{ color: colorScheme.textColor.medium },*/}
-					{/*		]}*/}
-					{/*	>*/}
-					{/*		Good Evening*/}
-					{/*	</Text>*/}
-					{/*)}*/}
-					{/*{TimeOfDay === TIME_OF_DAY.NIGHT && (*/}
-					{/*	<Text*/}
-					{/*		style={[*/}
-					{/*			styles.timeOfDayText,*/}
-					{/*			{ color: colorScheme.textColor.medium },*/}
-					{/*		]}*/}
-					{/*	>*/}
-					{/*		Good Night 🌙*/}
-					{/*	</Text>*/}
-					{/*)}*/}
+					{TimeOfDay === TIME_OF_DAY.MORNING && (
+						<Text
+							style={[styles.timeOfDayText, { color: theme.textColor.medium }]}
+						>
+							Good Morning
+						</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.AFTERNOON && (
+						<Text
+							style={[styles.timeOfDayText, { color: theme.textColor.medium }]}
+						>
+							Good Afternoon
+						</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.EVENING && (
+						<Text
+							style={[styles.timeOfDayText, { color: theme.textColor.medium }]}
+						>
+							Good Evening
+						</Text>
+					)}
+					{TimeOfDay === TIME_OF_DAY.NIGHT && (
+						<Text
+							style={[styles.timeOfDayText, { color: theme.textColor.medium }]}
+						>
+							Good Night 🌃
+						</Text>
+					)}
 
+					<SocialHubAvatarCircle />
 					<AppSegmentedControl
 						items={[
-							{ label: 'Favourites' },
-							{ label: 'Pinned' },
+							{ label: 'Profile' },
+							{ label: 'Pinned by You' },
 							{ label: 'Saved' },
 						]}
+						style={{ marginTop: 28 }}
 					/>
 
 					<SocialHubQuickDestinations />
@@ -480,6 +461,7 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		marginLeft: 8,
+		marginTop: 16,
 	},
 });
 

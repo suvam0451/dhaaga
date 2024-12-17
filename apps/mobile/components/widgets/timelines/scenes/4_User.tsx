@@ -4,13 +4,14 @@ import { useDebounce } from 'use-debounce';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import AppInput from '../../../lib/Inputs';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { Image } from 'expo-image';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function TimelineWidgetUserScene() {
 	const [SearchTerm, setSearchTerm] = useState('');
@@ -18,14 +19,18 @@ function TimelineWidgetUserScene() {
 	const { setTimelineType, setQuery, setShowTimelineSelection } =
 		useTimelineController();
 
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct: acctItem } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 
 	const { transformedData } = TimelineWidgetUserApi(debouncedSearchTerm);
 
 	function onUserClicked(o: string, acct: string) {
 		setQuery({
 			id: o,
-			label: ActivitypubHelper.getHandle(acct, subdomain),
+			label: ActivitypubHelper.getHandle(acct, acctItem?.server),
 		});
 		setTimelineType(TimelineFetchMode.USER);
 		setShowTimelineSelection(false);
@@ -78,7 +83,7 @@ function TimelineWidgetUserScene() {
 									{o.getDisplayName()}
 								</Text>
 								<Text style={styles.userInstanceInfo} numberOfLines={1}>
-									{o.getAppDisplayAccountUrl(subdomain)}
+									{o.getAppDisplayAccountUrl(acctItem?.server)}
 								</Text>
 							</View>
 						</TouchableOpacity>

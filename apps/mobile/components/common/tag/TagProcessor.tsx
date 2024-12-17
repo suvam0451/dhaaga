@@ -1,13 +1,9 @@
 import { Text } from 'react-native';
-import {
-	BOTTOM_SHEET_ENUM,
-	useGorhomActionSheetContext,
-} from '../../../states/useGorhomBottomSheet';
-import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import { memo } from 'react';
 import { APP_THEME } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const HashtagProcessor = memo(function Foo({
 	content,
@@ -16,9 +12,12 @@ const HashtagProcessor = memo(function Foo({
 	content: string;
 	forwardedKey: string | number;
 }) {
-	const { setVisible, setBottomSheetType, updateRequestId } =
-		useGorhomActionSheetContext();
-	const { globalDb } = useGlobalMmkvContext();
+	const { show, setTextValue } = useGlobalState(
+		useShallow((o) => ({
+			show: o.bottomSheet.show,
+			setTextValue: o.bottomSheet.setTextValue,
+		})),
+	);
 
 	// const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
 	// 	return {
@@ -28,15 +27,9 @@ const HashtagProcessor = memo(function Foo({
 	// }, [item?.following, item?.privatelyFollowing]);
 
 	const onPress = () => {
-		GlobalMmkvCacheService.setBottomSheetProp_Hashtag(globalDb, {
-			name: content,
-			remoteInstance: 'N/A',
-		});
-		setBottomSheetType(BOTTOM_SHEET_ENUM.HASHTAG);
-		updateRequestId();
-
+		setTextValue(content);
 		setTimeout(() => {
-			setVisible(true);
+			show(APP_BOTTOM_SHEET_ENUM.HASHTAG);
 		}, 200);
 	};
 

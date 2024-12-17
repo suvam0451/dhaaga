@@ -4,16 +4,21 @@ import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import ActivityPubService from '../../../../../../services/activitypub.service';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * These will be shown for Misskey accounts
  */
 const MyMisskeyAccountFeatures = memo(() => {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
 
-	if (!ActivityPubService.misskeyLike(domain)) return <View />;
+	if (!ActivityPubService.misskeyLike(driver)) return <View />;
 
 	return (
 		<Fragment>

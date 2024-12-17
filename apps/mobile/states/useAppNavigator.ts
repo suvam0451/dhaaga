@@ -1,14 +1,19 @@
 import { useCallback } from 'react';
 import { router, useNavigation } from 'expo-router';
-import { useActivityPubRestClientContext } from './useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import useGlobalState from './_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Hook to correctly navigate
  * to shared app routes
  */
 function useAppNavigator() {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
 	const navigator = useNavigation();
 
 	const toHome = useCallback(() => {
@@ -23,7 +28,7 @@ function useAppNavigator() {
 			if (!navigator || !navigator.getId) return;
 
 			let __id = id;
-			if (domain === KNOWN_SOFTWARE.BLUESKY) {
+			if (driver === KNOWN_SOFTWARE.BLUESKY) {
 				__id = 'uri';
 			}
 			const _id = navigator.getId();

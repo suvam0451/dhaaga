@@ -1,9 +1,10 @@
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import { formatRelative } from 'date-fns';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export enum LAST_SYNCED_STATUS_KEY {
 	BOOKMARK_SYNC = 'BOOKMARK_SYNC',
@@ -16,7 +17,11 @@ type Props = {
 };
 
 const LastSyncedStatus = memo(({ id }: Props) => {
-	const { PrimaryAcctPtr } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 	const [LastSyncedDate, setLastSyncedDate] = useState(null);
 	const [TotalItemCount, setTotalItemCount] = useState(null);
 

@@ -1,11 +1,11 @@
 import * as SQLite from 'expo-sqlite';
-import { SQLiteDatabase } from 'expo-sqlite';
 import { APP_DB } from '../repositories/_var';
 import { Result } from '../../utils/result';
 import { z } from 'zod';
 import { ExpoSqliteColumnDefinition } from '../utils/db-typings';
 import { RepoTemplate } from './_base.repo';
 import { Account, AccountMetadata } from '../_schema';
+import { DataSource } from '../dataSource';
 
 export type AccountMetadataRecordType = {
 	key: string;
@@ -29,17 +29,39 @@ export const accountMetadataUpsertDto = accountMetadataRecordDto.extend({
 	accountId: z.onumber(),
 });
 
+/**
+ * List of recognised account metadata
+ *
+ */
+export enum ACCOUNT_METADATA_KEY {
+	USER_IDENTIFIER = 'userIdentifier',
+	AVATAR_URL = 'avatarUrl',
+	DISPLAY_NAME = 'displayName',
+	ACCESS_TOKEN = 'accessToken',
+	REFRESH_TOKEN = 'refreshToken',
+	ATPROTO_SESSION_OBJECT = 'atprotoSessionObject',
+}
+
 class Repo implements RepoTemplate<AccountMetadata> {
+	static getAllKeysForAccount(db: DataSource, accountId: number) {
+		return db.accountMetadata.find({
+			accountId,
+			active: true,
+		});
+	}
 	static getByAccountAndKeySync(
-		db: SQLiteDatabase,
+		db: DataSource,
 		acctId: number,
 		key: string,
 	): AccountMetadata {
-		return db.getFirstSync<AccountMetadata>(
-			`select * from accountMetadata where accountId = ? and key = ?`,
-			acctId,
-			key,
-		);
+		try {
+			return db.accountMetadata.findOne({
+				accountId: acctId,
+				key,
+			});
+		} catch (e) {
+			return null;
+		}
 	}
 
 	static describe() {
@@ -65,25 +87,30 @@ class Repo implements RepoTemplate<AccountMetadata> {
 		}
 	}
 
-	static async upsert(
-		db: SQLiteDatabase,
+	static upsert(
+		db: DataSource,
 		dto: z.infer<typeof accountMetadataUpsertDto>,
-	): Promise<Result<undefined>> {
+	): Result<undefined> {
+		const where = {
+			accountId: dto.accountId,
+			key: dto.key,
+		};
+
 		try {
-			db.runSync(
-				`
-				INSERT INTO accountMetadata (key, value, type, accountId)
-				VALUES (?, ?, ?, ?)
-				ON CONFLICT (accountId, key)
-				DO UPDATE SET
-				value = excluded.value,
-				type = excluded.type;
-			`,
-				dto.key,
-				dto.value,
-				dto.type,
-				dto.accountId,
-			);
+			const duplicate = db.accountMetadata.findOne(where);
+			if (duplicate) {
+				db.accountMetadata.update(where, {
+					value: duplicate.value,
+					type: duplicate.type,
+				});
+			} else {
+				db.accountMetadata.insert({
+					key: dto.key,
+					value: dto.value,
+					type: dto.type,
+					accountId: dto.accountId,
+				});
+			}
 			return { type: 'success', value: undefined };
 		} catch (e) {
 			console.log(e, e.message);
@@ -91,47 +118,47 @@ class Repo implements RepoTemplate<AccountMetadata> {
 		}
 	}
 
-	static async upsertMultiple(
-		db: SQLiteDatabase,
+	static upsertMultiple(
+		db: DataSource,
 		inputs: z.infer<typeof accountMetadataUpsertDto>[],
 	) {
-		for await (const input of inputs) {
-			await Repo.upsert(db, input);
+		for (const input of inputs) {
+			Repo.upsert(db, input);
 		}
 	}
 }
 
 class Service {
-	static async upsertMultiple(
-		db: SQLiteDatabase,
+	static upsertMultiple(
+		db: DataSource,
 		acct: Account,
 		metadata: AccountMetadataRecordType[],
 	) {
-		await Repo.upsertMultiple(
+		Repo.upsertMultiple(
 			db,
 			metadata.map((o) => ({ ...o, accountId: acct.id })),
 		);
 	}
 
-	static async upsert(
-		db: SQLiteDatabase,
+	static upsert(
+		db: DataSource,
 		acct: Account,
 		input: AccountMetadataRecordType,
 	) {
-		return await Repo.upsert(db, { ...input, accountId: acct.id });
+		return Repo.upsert(db, { ...input, accountId: acct.id });
 	}
 
-	static async getAtpSessionData(db: SQLiteDatabase, acct: Account) {
+	static async getAtpSessionData(db: DataSource, acct: Account) {
 		try {
 			const accessJwt = Repo.getByAccountAndKeySync(
 				db,
 				acct.id,
-				'access_token',
+				'accessToken',
 			)?.value;
 			const refreshJwt = Repo.getByAccountAndKeySync(
 				db,
 				acct.id,
-				'refresh_token',
+				'refreshToken',
 			)?.value;
 			const did = Repo.getByAccountAndKeySync(db, acct.id, 'did')?.value;
 
@@ -152,12 +179,12 @@ class Service {
 		}
 	}
 
-	static getKeyValueForAccountSync(
-		db: SQLiteDatabase,
-		acct: Account,
-		key: string,
-	) {
+	static getKeyValueForAccountSync(db: DataSource, acct: Account, key: string) {
 		return Repo.getByAccountAndKeySync(db, acct.id, key)?.value;
+	}
+
+	static getAllKeysForAccount(db: DataSource, acct: Account) {
+		return Repo.getAllKeysForAccount(db, acct.id);
 	}
 }
 

@@ -8,13 +8,14 @@ import DiscoverTabListHeader from './DiscoverTabListHeader';
 import useSearch, { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import LoadingMore from '../../../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
-import { useActivityPubRestClientContext } from '../../../../../../states/useActivityPubRestClient';
 import { useDebounce } from 'use-debounce';
 import { useAppTimelinePosts } from '../../../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../../shared/topnavbar/AppTopNavbar';
+import { View } from 'react-native';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { APP_LANDING_PAGE_TYPE } from '../../../../../shared/topnavbar/AppTabLandingNavbar';
+import AppNoAccount from '../../../../../error-screen/AppNoAccount';
 
 /**
  * Renders the results of a
@@ -22,7 +23,14 @@ import AppTopNavbar, {
  * tab
  */
 const DiscoverTabFactory = memo(() => {
-	const { client, domain } = useActivityPubRestClientContext();
+	const { client, driver, theme, acct } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			client: o.router,
+			theme: o.colorScheme,
+			acct: o.acct,
+		})),
+	);
 	const [SearchTerm, setSearchTerm] = useState('');
 	const [SearchCategory, setSearchCategory] = useState<APP_SEARCH_TYPE>(
 		APP_SEARCH_TYPE.POSTS,
@@ -59,7 +67,7 @@ const DiscoverTabFactory = memo(() => {
 				const FALLBACK_TO_OFFSET = [
 					KNOWN_SOFTWARE.AKKOMA,
 					// KNOWN_SOFTWARE.SHARKEY,
-				].includes(domain as any);
+				].includes(driver);
 
 				if (FALLBACK_TO_OFFSET) {
 					setMaxId((listItems.length + Data.statuses.length).toString());
@@ -94,17 +102,15 @@ const DiscoverTabFactory = memo(() => {
 	const flashListData =
 		SearchCategory === APP_SEARCH_TYPE.POSTS ? listItems : data;
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: NUM_ITEMS,
 		updateQueryCache,
 	});
 
+	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.DISCOVER} />;
+
 	return (
-		<AppTopNavbar
-			title={'Explore'}
-			translateY={translateY}
-			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
-		>
+		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
 			<AnimatedFlashList
 				estimatedItemSize={200}
 				data={flashListData}
@@ -112,9 +118,6 @@ const DiscoverTabFactory = memo(() => {
 					return <DiscoverListRenderer item={item} category={SearchCategory} />;
 				}}
 				onScroll={onScroll}
-				contentContainerStyle={{
-					paddingTop: 54,
-				}}
 				ListHeaderComponent={() => {
 					return (
 						<DiscoverTabListHeader
@@ -136,7 +139,7 @@ const DiscoverTabFactory = memo(() => {
 				setSearchTerm={setSearchTerm}
 				setSearchCategory={setSearchCategory}
 			/>
-		</AppTopNavbar>
+		</View>
 	);
 });
 

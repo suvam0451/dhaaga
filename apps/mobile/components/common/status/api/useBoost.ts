@@ -1,12 +1,19 @@
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useEffect, useRef, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { MisskeyRestClient } from '@dhaaga/shared-abstraction-activitypub';
 import * as Haptics from 'expo-haptics';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function useBoost(dto: ActivityPubStatusAppDtoType) {
-	const { client, domain, me } = useActivityPubRestClientContext();
+	const { client, driver, me } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+			client: o.router,
+			driver: o.driver,
+		})),
+	);
 
 	const Renotes = useRef([]);
 
@@ -35,7 +42,7 @@ function useBoost(dto: ActivityPubStatusAppDtoType) {
 
 	useEffect(() => {
 		Renotes.current = [];
-		switch (domain) {
+		switch (driver) {
 			case KNOWN_SOFTWARE.MASTODON: {
 				setIsBoosted(dto.interaction.boosted);
 				break;
@@ -58,7 +65,7 @@ function useBoost(dto: ActivityPubStatusAppDtoType) {
 		setIsLoading(true);
 
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		switch (domain) {
+		switch (driver) {
 			case KNOWN_SOFTWARE.MISSKEY:
 			case KNOWN_SOFTWARE.FIREFISH:
 			case KNOWN_SOFTWARE.SHARKEY: {

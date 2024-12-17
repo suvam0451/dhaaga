@@ -23,8 +23,8 @@ class AppUserService {
 		input: UserInterface,
 		domain: string,
 		subdomain: string,
-	): AppUserService | null {
-		const dto: AppUserService = {
+	): AppUser | null {
+		const dto: AppUser = {
 			id: input.getId(),
 			displayName: input.getDisplayName(),
 			description: input.getDescription() || '',
@@ -62,14 +62,7 @@ class AppUserService {
 		return data as AppUserService;
 	}
 
-	/**
-	 *
-	 */
-	static exportRaw(
-		input: any,
-		domain: string,
-		subdomain: string,
-	): AppUserService {
+	static exportRaw(input: any, domain: string, subdomain: string): AppUser {
 		const _interface = ActivityPubAdapterService.adaptUser(input, domain);
 		return AppUserService.export(_interface, domain, subdomain);
 	}

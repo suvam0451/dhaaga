@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { Fragment, memo, useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { EmojiDto } from './_shared.types';
@@ -8,19 +7,27 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
 type EmojiReactionsProps = {
 	dto: ActivityPubStatusAppDtoType;
 };
+
 const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	const { emojiCache } = useAppTimelinePosts();
-	const { domain, me } = useActivityPubRestClientContext();
+	const { driver, me, theme } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			me: o.me,
+			theme: o.colorScheme,
+		})),
+	);
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);
-	const { colorScheme } = useAppTheme();
 
 	const onShowMoreToggle = useCallback(() => {
 		setAllEmojisExpanded((o) => !o);
@@ -36,7 +43,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 		);
 	}, [dto.stats.reactions, me]);
 
-	if (domain === 'mastodon') return <Fragment />;
+	if (driver === KNOWN_SOFTWARE.MASTODON) return <Fragment />;
 
 	const ShownEmojis = AllEmojisExpanded
 		? Emojis
@@ -58,7 +65,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 						style={[
 							styles.showAllEmojiButtonContainer,
 							{
-								backgroundColor: colorScheme.reactions.active,
+								backgroundColor: theme.reactions.active,
 							},
 						]}
 					>
@@ -66,7 +73,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 							<Text
 								style={[
 									styles.showAllEmojiButtonText,
-									{ color: colorScheme.textColor.medium },
+									{ color: theme.textColor.medium },
 								]}
 							>
 								{AllEmojisExpanded

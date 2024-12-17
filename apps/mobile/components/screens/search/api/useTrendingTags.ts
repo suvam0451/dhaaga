@@ -1,11 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAppPaginationContext } from '../../../../states/usePagination';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useEffect } from 'react';
 import { useScrollOnReveal } from '../../../../states/useScrollOnReveal';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../states/_global';
 
 function useTrendingTags() {
-	const { client } = useActivityPubRestClientContext();
+	const { client } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+		})),
+	);
+
 	const { resetEndOfPageFlag } = useScrollOnReveal();
 
 	const {

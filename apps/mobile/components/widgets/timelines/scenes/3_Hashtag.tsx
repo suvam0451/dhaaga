@@ -1,5 +1,4 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { Button, Text } from '@rneui/themed';
 import { useEffect, useRef, useState } from 'react';
@@ -12,6 +11,8 @@ import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVi
 import AppButtonGroup from '../../../lib/ButtonGroups';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type SearchResults = {
 	following: boolean;
@@ -25,7 +26,11 @@ type Props = {
 };
 
 function TimelineWidgetHashtagOptions(props: Props) {
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 
 	const [SelectedIndexA, setSelectedIndexA] = useState(0);
 	const [SelectedIndexB, setSelectedIndexB] = useState(0);
@@ -101,7 +106,7 @@ function TimelineWidgetHashtagOptions(props: Props) {
 							color: APP_FONT.MONTSERRAT_BODY,
 						}}
 					>
-						{subdomain}
+						{acct?.server}
 					</Text>
 				</View>
 				<View>

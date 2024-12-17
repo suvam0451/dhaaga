@@ -1,10 +1,11 @@
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import {
 	KNOWN_SOFTWARE,
 	MisskeyRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export type AppListDto = {
 	id: string;
@@ -34,12 +35,17 @@ const DEFAULT = {
  */
 function useActivityPubLists() {
 	const [Data, setData] = useState<ActivityPubListsListingDto>(DEFAULT);
-	const { client, primaryAcct, domain, subdomain } =
-		useActivityPubRestClientContext();
+	const { client, acct, driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			client: o.router,
+			acct: o.acct,
+		})),
+	);
 
 	useEffect(() => {
 		setData(DEFAULT);
-	}, [primaryAcct]);
+	}, [acct]);
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
@@ -66,7 +72,7 @@ function useActivityPubLists() {
 				KNOWN_SOFTWARE.MISSKEY,
 				KNOWN_SOFTWARE.FIREFISH,
 				KNOWN_SOFTWARE.SHARKEY,
-			].includes(domain as any)
+			].includes(driver)
 		) {
 			const { data: antennaData, error: antennaError } = await (
 				client as MisskeyRestClient
@@ -86,7 +92,7 @@ function useActivityPubLists() {
 
 	// Queries
 	const { data, status, fetchStatus } = useQuery<ActivityPubListsListingDto>({
-		queryKey: ['lists', primaryAcct?.username, subdomain],
+		queryKey: ['lists', acct?.username, driver],
 		queryFn: api,
 		enabled: client !== null,
 	});

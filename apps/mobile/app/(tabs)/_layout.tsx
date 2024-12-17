@@ -5,15 +5,23 @@ import { View } from 'react-native';
 import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
 import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
+import {
+	HomeNavigationIcon,
+	ProfileTabNavbarIcon,
+} from '../../components/lib/Icon';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export default function TabLayout() {
 	const { notificationCount } = useAppNotificationBadge();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	return (
 		<View style={{ height: '100%' }}>
-			{/*<StatusBar hidden={false} backgroundColor={colorScheme.palette.menubar} />*/}
 			<WithAppAssetsContext>
 				<Tabs
 					initialRouteName={'index'}
@@ -70,22 +78,24 @@ export default function TabLayout() {
 									default:
 										return <View />;
 								}
-							},
-							// tabBarBadge: badgeCount,
+							}, // tabBarBadge: badgeCount,
 							tabBarBadgeStyle: {
 								// backgroundColor: 'black',
 								color: 'yellow',
 							},
 							tabBarStyle: {
-								backgroundColor: colorScheme.palette.bg,
+								backgroundColor: theme.palette.bg,
 								borderTopWidth: 0,
-								height: 46,
+								height: 52,
 							},
-							// tabBarIconStyle: {
-							// 	color: colorScheme.textColor.medium,
+							tabBarIconStyle: {
+								height: 42,
+								width: 64,
+							}, // tabBarIconStyle: {
+							// 	color: theme.textColor.medium,
 							// },
-							tabBarActiveTintColor: colorScheme.textColor.medium,
-							tabBarInactiveTintColor: colorScheme.textColor.low,
+							tabBarActiveTintColor: theme.textColor.medium,
+							tabBarInactiveTintColor: theme.textColor.low,
 							tabBarShowLabel: false,
 							headerShown: false,
 						};
@@ -94,12 +104,7 @@ export default function TabLayout() {
 					<Tabs.Screen
 						name="index"
 						options={{
-							tabBarIcon: ({ color, size, focused }) =>
-								focused ? (
-									<Ionicons size={size} name="home" color={color} />
-								) : (
-									<Ionicons size={size} name="home-outline" color={color} />
-								),
+							tabBarIcon: HomeNavigationIcon,
 						}}
 					/>
 					<Tabs.Screen
@@ -109,13 +114,13 @@ export default function TabLayout() {
 								focused ? (
 									<Ionicons
 										name="compass-sharp"
-										size={size + 4}
+										size={size + 8}
 										color={color}
 									/>
 								) : (
 									<Ionicons
 										name="compass-outline"
-										size={size + 4}
+										size={size + 8}
 										color={color}
 									/>
 								),
@@ -126,9 +131,13 @@ export default function TabLayout() {
 						options={{
 							tabBarIcon: ({ color, size, focused }) =>
 								focused ? (
-									<AntDesign name={'appstore1'} size={size} color={color} />
+									<Ionicons name="add-circle" size={size + 6} color={color} />
 								) : (
-									<AntDesign name="appstore-o" size={size} color={color} />
+									<Ionicons
+										name="add-circle-outline"
+										size={size + 6}
+										color={color}
+									/>
 								),
 						}}
 					/>
@@ -138,15 +147,11 @@ export default function TabLayout() {
 						options={{
 							tabBarIcon: ({ color, size, focused }) =>
 								focused ? (
-									<Ionicons
-										name="notifications-sharp"
-										size={size}
-										color={color}
-									/>
+									<Ionicons name="file-tray" size={size + 4} color={color} />
 								) : (
 									<Ionicons
-										size={size}
-										name="notifications-outline"
+										name="file-tray-outline"
+										size={size + 4}
 										color={color}
 									/>
 								),
@@ -156,7 +161,11 @@ export default function TabLayout() {
 						name={'profile'}
 						options={{
 							tabBarIcon: ({ color, size, focused }) => (
-								<AppSelectedProfileIndicator />
+								<ProfileTabNavbarIcon
+									color={color}
+									size={size}
+									focused={focused}
+								/>
 							),
 							tabBarIconStyle: {
 								opacity: 1,

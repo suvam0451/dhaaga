@@ -2,8 +2,6 @@
 [![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat&label=Chat)](https://discord.gg/kMp5JA9jwD)
 [![Private](https://img.shields.io/badge/Signal-3A76F0?logo=signal&logoColor=fff&label=suvam.451)](https://signal.me/#eu/UiddwbjrYcUg1qojr5MowSwCEYK_kVW9HyK07tgmGy1hYTh4rr5L7IZ7wb0xqChV)
 [![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Alt%20DM)](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org)
-[![Mastodon Follow](https://img.shields.io/mastodon/follow/112440258358145826?label=Add%20Me)](https://mastodon.social/@suvam)
-[![GitHub](https://img.shields.io/github/followers/suvam0451?label=Add%20Me)](https://github.com/suvam0451?tab=followers)
 <!-- SOCIALS -->
 
 <img width="64"

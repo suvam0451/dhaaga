@@ -16,14 +16,12 @@ import ActivityPubAdapterService from '../../../../services/activitypub-adapter.
 import useTimeline from '../api/useTimeline';
 import useTimelineLabel from '../api/useTimelineLabel';
 import FlashListPostRenderer from '../fragments/FlashListPostRenderer';
-import ListHeaderComponent from '../fragments/FlashListHeader';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import {
 	AppPaginationContext,
 	usePagination,
@@ -39,8 +37,8 @@ const Timeline = memo(() => {
 	const { maxId } = usePagination();
 	const { setNextMaxId, clear, next } = usePaginationActions();
 
-	const { query, opts, setTimelineType } = useTimelineController();
-	const { acct, homepageType, router, driver } = useGlobalState(
+	const { query, opts } = useTimelineController();
+	const { homepageType, router, driver } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			homepageType: o.homepageType,
@@ -56,11 +54,6 @@ const Timeline = memo(() => {
 	} = useAppTimelinePosts();
 
 	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
-
-	// reset to home
-	useEffect(() => {
-		setTimelineType(TimelineFetchMode.IDLE);
-	}, [acct]);
 
 	useEffect(() => {
 		setPageLoadedAtLeastOnce(false);
@@ -111,7 +104,11 @@ const Timeline = memo(() => {
 	}, [fetchStatus]);
 
 	const label = useTimelineLabel();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	/**
 	 * Composite Hook Collection
@@ -137,7 +134,7 @@ const Timeline = memo(() => {
 				styles.container,
 				{
 					position: 'relative',
-					backgroundColor: colorScheme.palette.bg,
+					backgroundColor: theme.palette.bg,
 				},
 			]}
 		>
@@ -145,19 +142,13 @@ const Timeline = memo(() => {
 				<TimelinesHeader title={label} />
 			</Animated.View>
 			<AnimatedFlashList
-				ListHeaderComponent={
-					<ListHeaderComponent
-						itemCount={listItems.length}
-						loadedOnce={PageLoadedAtLeastOnce}
-					/>
-				}
 				estimatedItemSize={200}
 				data={listItems}
 				renderItem={FlashListPostRenderer}
 				getItemType={(o) => o.type}
 				onScroll={onScroll}
 				contentContainerStyle={{
-					paddingTop: 54,
+					paddingTop: 50,
 				}}
 				scrollEventThrottle={16}
 				refreshControl={

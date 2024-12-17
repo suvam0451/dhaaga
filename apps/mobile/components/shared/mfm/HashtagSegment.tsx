@@ -1,31 +1,33 @@
 import { memo, useMemo } from 'react';
-import {
-	BOTTOM_SHEET_ENUM,
-	useGorhomActionSheetContext,
-} from '../../../states/useGorhomBottomSheet';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
 import { Text } from 'react-native';
-import { randomUUID } from 'expo-crypto';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { RandomUtil } from '../../../utils/random.utils';
 
 type Props = {
 	value: string;
 	fontFamily: string;
 };
 const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
 	const { acceptTouch } = useAppMfmContext();
 	const _value = decodeURI(value);
 
-	const { setVisible, setBottomSheetType, updateRequestId } =
-		useGorhomActionSheetContext();
-	const { globalDb } = useGlobalMmkvContext();
+	const { show, mmkv, setTextValue, setType } = useGlobalState(
+		useShallow((o) => ({
+			show: o.bottomSheet.show,
+			mmkv: o.mmkv,
+			setTextValue: o.bottomSheet.setTextValue,
+			setType: o.bottomSheet.setType,
+		})),
+	);
 	const item = null;
-	// useQuery(ActivityPubTag).find(
-	// 	(o: ActivityPubTag) => o.name.toLowerCase() === _value.toLowerCase(),
-	// );
 
 	const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
 		return {
@@ -37,19 +39,14 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 	const onPress = () => {
 		if (!acceptTouch) return;
 
-		GlobalMmkvCacheService.setBottomSheetProp_Hashtag(globalDb, {
-			name: _value,
-			remoteInstance: 'N/A',
-		});
-		setBottomSheetType(BOTTOM_SHEET_ENUM.HASHTAG);
-		updateRequestId();
-
+		setTextValue(_value);
+		setType(APP_BOTTOM_SHEET_ENUM.HASHTAG);
 		setTimeout(() => {
-			setVisible(true);
+			show();
 		}, 200);
 	};
 
-	const k = randomUUID();
+	const k = RandomUtil.nanoId();
 
 	return (
 		<Text
@@ -57,8 +54,8 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 			key={k}
 			style={{
 				color: isFollowed
-					? colorScheme.palette.hashtagHigh
-					: colorScheme.palette.hashtagLow,
+					? theme.palette.hashtagHigh
+					: theme.palette.hashtagLow,
 				fontFamily: fontFamily,
 				// fontFamily: isFollowed
 				// 	? APP_FONTS.MONTSERRAT_700_BOLD

@@ -8,7 +8,8 @@ import useAppNavigator from '../../../../states/useAppNavigator';
 import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const TIMELINE_PFP_SIZE = 42;
 
@@ -98,7 +99,11 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		numberOfLines: 1,
 		emphasis: 'high',
 	});
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<View
@@ -126,7 +131,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 						</View>
 						<Text
 							style={{
-								color: colorScheme.textColor.emphasisC,
+								color: theme.textColor.emphasisC,
 								marginHorizontal: 4,
 							}}
 						>
@@ -135,7 +140,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 						<StatusCreatedAt
 							from={postedAt}
 							textStyle={{
-								color: colorScheme.textColor.emphasisC,
+								color: theme.textColor.emphasisC,
 								fontSize: 13,
 								fontFamily: APP_FONTS.INTER_400_REGULAR,
 							}}
@@ -144,7 +149,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 
 					<Text
 						style={{
-							color: colorScheme.textColor.emphasisC,
+							color: theme.textColor.emphasisC,
 							fontSize: 12,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							maxWidth: 196,
@@ -185,7 +190,16 @@ const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
 		if (!STATUS_DTO.postedBy) return <OriginalPosterSkeleton />;
 		return (
 			<View
-				style={[{ alignItems: 'center', flexDirection: 'row', flex: 1 }, style]}
+				style={[
+					{
+						alignItems: 'center',
+						flexDirection: 'row',
+						flexGrow: 1,
+						overflowX: 'hidden',
+						width: 'auto',
+					},
+					style,
+				]}
 			>
 				<OriginalPostedPfpFragment
 					url={STATUS_DTO.postedBy.avatarUrl}

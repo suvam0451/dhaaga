@@ -8,10 +8,10 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import PostButton from './PostButton';
 import ReplyContextIndicator from './ReplyContextIndicator';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useComposerContext } from '../api/useComposerContext';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import ComposerDecorator from './ComposerDecorator';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * The top section of the post composer.
@@ -19,9 +19,13 @@ import ComposerDecorator from './ComposerDecorator';
  * For emoji selections, this section is hidden
  */
 const ComposerTopMenu = memo(() => {
-	const { me } = useActivityPubRestClientContext();
+	const { me, theme } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+			theme: o.colorScheme,
+		})),
+	);
 	const { editMode } = useComposerContext();
-	const { colorScheme } = useAppTheme();
 
 	if (editMode === 'emoji') return <View />;
 	if (editMode === 'alt') {
@@ -42,7 +46,7 @@ const ComposerTopMenu = memo(() => {
 					style={{ borderWidth: 0.7, borderColor: '#666', borderRadius: 8 }}
 				>
 					{/*@ts-ignore-next-line*/}
-					<Image source={me?.getAvatarUrl()} style={styles.avatarContainer} />
+					<Image source={me?.avatarUrl} style={styles.avatarContainer} />
 				</View>
 				<View
 					style={{
@@ -55,14 +59,14 @@ const ComposerTopMenu = memo(() => {
 					<VisibilityPicker />
 					<Text
 						style={{
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 							fontSize: 11.5,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							opacity: 0.8,
 							marginLeft: 4,
 						}}
 					>
-						@{me?.getUsername()}
+						@{me?.handle}
 					</Text>
 				</View>
 				<View style={{ flexGrow: 1 }} />

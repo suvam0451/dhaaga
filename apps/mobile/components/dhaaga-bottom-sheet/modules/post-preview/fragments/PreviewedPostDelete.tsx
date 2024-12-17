@@ -1,15 +1,19 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { memo } from 'react';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../../lib/Icon';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const PreviewedPostDelete = memo(
 	({ forceUpdate }: { forceUpdate: () => void; State: string }) => {
-		const { colorScheme } = useAppTheme();
-		const { client } = useActivityPubRestClientContext();
+		const { client, theme } = useGlobalState(
+			useShallow((o) => ({
+				client: o.router,
+				theme: o.colorScheme,
+			})),
+		);
 		const { PostRef } = useAppBottomSheet();
 
 		async function onDeletePress() {
@@ -47,7 +51,7 @@ const PreviewedPostDelete = memo(
 			>
 				<Text
 					style={{
-						color: colorScheme.textColor.high,
+						color: theme.textColor.high,
 						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>

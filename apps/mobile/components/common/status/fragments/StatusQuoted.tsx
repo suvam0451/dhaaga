@@ -6,10 +6,15 @@ import MediaItem from '../../media/MediaItem';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import PostCreatedBy from './PostCreatedBy';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const StatusQuoted = memo(() => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const { dto } = useAppStatusItem();
 	const { content: PostContent } = useMfm({
 		content: dto.content.raw,
@@ -20,12 +25,7 @@ const StatusQuoted = memo(() => {
 	});
 
 	return (
-		<View
-			style={[
-				styles.rootContainer,
-				{ backgroundColor: colorScheme.palette.bg },
-			]}
-		>
+		<View style={[styles.rootContainer, { backgroundColor: theme.palette.bg }]}>
 			<View>
 				<View
 					style={{
@@ -38,12 +38,12 @@ const StatusQuoted = memo(() => {
 					<FontAwesome
 						name="quote-left"
 						size={14}
-						color={colorScheme.textColor.medium}
+						color={theme.textColor.medium}
 						style={{ width: 16 }}
 					/>
 					<Text
 						style={{
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 							marginLeft: 4,
 							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							fontSize: 13,

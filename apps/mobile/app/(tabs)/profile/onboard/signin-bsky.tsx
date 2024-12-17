@@ -10,10 +10,16 @@ import { Button } from '@rneui/base';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { router } from 'expo-router';
 import AtprotoSessionService from '../../../../services/atproto/atproto-session.service';
-import { useSQLiteContext } from 'expo-sqlite';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { APP_ROUTE_ENUM } from '../../../../utils/route-list';
 
 function SigninBsky() {
-	const db = useSQLiteContext();
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
 	const { translateY } = useScrollMoreOnPageEnd();
 
 	const [Username, setUsername] = useState(null);
@@ -32,7 +38,7 @@ function SigninBsky() {
 			);
 
 			if (success) {
-				router.replace('/profile/settings/accounts');
+				router.replace(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
 			} else {
 				console.log(reason);
 			}

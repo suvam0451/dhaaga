@@ -10,7 +10,7 @@ export class RandomUtil {
 	 * non-secure version using pure js
 	 * @param size
 	 */
-	static nanoid(size = 21): string {
+	static nanoId(size = 21): string {
 		let id = '';
 		// A compact alternative for `for (var i = 0; i < step; i++)`.
 		let i = size | 0;

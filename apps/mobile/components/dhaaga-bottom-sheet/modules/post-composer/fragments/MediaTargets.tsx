@@ -6,7 +6,8 @@ import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import Feather from '@expo/vector-icons/Feather';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import useImagePicker from '../api/useImagePicker';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../../states/_global';
 
 /**
  * Shows a list of uploaded
@@ -16,7 +17,11 @@ import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 const ComposeMediaTargets = memo(function Foo() {
 	const { mediaTargets, removeMediaTarget } = useComposerContext();
 	const { trigger } = useImagePicker();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<View
@@ -42,14 +47,10 @@ const ComposeMediaTargets = memo(function Foo() {
 							}}
 							onPress={trigger}
 						>
-							<Feather
-								name="image"
-								size={24}
-								color={colorScheme.textColor.medium}
-							/>
+							<Feather name="image" size={24} color={theme.textColor.medium} />
 							<Text
 								style={{
-									color: colorScheme.textColor.medium,
+									color: theme.textColor.medium,
 									marginLeft: 4,
 									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 								}}
@@ -106,8 +107,7 @@ const ComposeMediaTargets = memo(function Foo() {
 								style={{
 									// width: 24,
 									// height: 24,
-									backgroundColor: '#363636',
-									// borderRadius: '100%',
+									backgroundColor: '#363636', // borderRadius: '100%',
 									justifyContent: 'center',
 									alignItems: 'center',
 								}}

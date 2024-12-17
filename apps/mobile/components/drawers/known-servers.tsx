@@ -4,14 +4,14 @@ import { useAppDrawerContext } from '../../states/useAppDrawer';
 import { View } from 'react-native';
 import { useAssets } from 'expo-asset';
 import { useEffect, useMemo, useState } from 'react';
-import { Image } from 'expo-image';
 import VersionCode from '../static/sponsorship/VersionCode';
 import { APP_FONT } from '../../styles/AppTheme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useFabController } from '../shared/fab/hooks/useFabController';
 import Coffee from '../static/sponsorship/Coffee';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	children: any;
@@ -34,7 +34,11 @@ function KnownServersDrawer({ children }: Props) {
 	}, [open]);
 
 	const [assets, error] = useAssets([require('../../assets/bmc-button.png')]);
-	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 
 	const [IsAssetsLoaded, setIsAssetsLoaded] = useState(false);
 	useEffect(() => {
@@ -42,7 +46,7 @@ function KnownServersDrawer({ children }: Props) {
 	}, [assets, error]);
 
 	const ProfileInfo = useMemo(() => {
-		if (primaryAcct) {
+		if (acct) {
 			return (
 				<View>
 					<Text
@@ -65,8 +69,8 @@ function KnownServersDrawer({ children }: Props) {
 						</View>
 						<View style={{}}>
 							{/*<Text>{primaryAcct.secrets}</Text>*/}
-							<Text>@{primaryAcct?.username}</Text>
-							<Text>{subdomain}</Text>
+							<Text>@{acct?.username}</Text>
+							<Text>{acct?.server}</Text>
 						</View>
 					</View>
 				</View>
@@ -74,7 +78,7 @@ function KnownServersDrawer({ children }: Props) {
 		} else {
 			return <View></View>;
 		}
-	}, [primaryAcct]);
+	}, [acct]);
 
 	return (
 		<Drawer

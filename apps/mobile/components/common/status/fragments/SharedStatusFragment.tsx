@@ -5,9 +5,10 @@ import { Image } from 'expo-image';
 import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../lib/Icon';
 import StatusCreatedAt from './StatusCreatedAt';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Adds booster's information on top
@@ -28,7 +29,11 @@ const SharedStatusFragment = memo(function Foo() {
 		numberOfLines: 1,
 		emphasis: 'medium',
 	});
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return useMemo(() => {
 		return (
@@ -63,7 +68,7 @@ const SharedStatusFragment = memo(function Foo() {
 					<View style={{ marginLeft: 6 }}>{ParsedDisplayName}</View>
 					<Text
 						style={{
-							color: colorScheme.textColor.emphasisC,
+							color: theme.textColor.emphasisC,
 							marginLeft: 2,
 							marginRight: 2,
 							opacity: 0.6,
@@ -74,7 +79,7 @@ const SharedStatusFragment = memo(function Foo() {
 					<StatusCreatedAt
 						from={new Date(dto.createdAt)}
 						textStyle={{
-							color: colorScheme.textColor.emphasisC,
+							color: theme.textColor.emphasisC,
 							fontSize: 12,
 							fontFamily: APP_FONTS.INTER_400_REGULAR,
 						}}

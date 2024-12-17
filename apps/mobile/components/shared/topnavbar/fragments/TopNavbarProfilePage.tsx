@@ -3,32 +3,28 @@ import styles from './styles';
 import TopNavbarBackButton from './TopNavbarBackButton';
 import Feather from '@expo/vector-icons/Feather';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import { useGorhomActionSheetContext } from '../../../../states/useGorhomBottomSheet';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type HeadersProps = {
 	title: string;
 };
 const TopNavbarProfilePage = ({ title }: HeadersProps) => {
-	const { setVisible } = useGorhomActionSheetContext();
-	const { colorScheme } = useAppTheme();
-
-	function onMoreOptionsClicked() {
-		setVisible(true);
-	}
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<View
-			style={[
-				styles.subHeader,
-				{ backgroundColor: colorScheme.palette.menubar },
-			]}
+			style={[styles.subHeader, { backgroundColor: theme.palette.menubar }]}
 		>
 			<TopNavbarBackButton />
 			<View style={styles.navbarTitleContainer}>
 				<Text style={styles.navbarTitle}>{title}</Text>
 			</View>
-			<TouchableOpacity style={{ width: 36 }} onPress={onMoreOptionsClicked}>
+			<TouchableOpacity style={{ width: 36 }}>
 				<Feather
 					name="more-horizontal"
 					size={24}

@@ -1,8 +1,4 @@
 import { memo, useMemo } from 'react';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../modules/_api/useAppBottomSheet';
 import PostPreview from '../modules/post-preview/PostPreview';
 import WithComposerContext from '../modules/post-composer/api/useComposerContext';
 import PostCompose from '../modules/post-composer/pages/PostCompose';
@@ -11,24 +7,32 @@ import PostMoreActions from '../modules/post-actions/pages/PostMoreActions';
 import AppBottomSheetReactionDetails from '../modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from '../modules/select-account/AppBottomSheetSelectAccount';
 import AppBottomSheetPickThemePack from '../modules/theme-pack/AppBottomSheetPickThemePack';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import AppBottomSheetTimelineDetails from '../modules/timeline-details/AppBottomSheetTimelineDetails';
 
 /**
  * Responsible for generating content
  */
 const AppBottomSheetFactory = memo(() => {
-	const { type, requestId, PostComposerTextSeedRef } = useAppBottomSheet();
+	const { type, stateId, PostComposerTextSeedRef } = useGlobalState(
+		useShallow((o) => ({
+			type: o.bottomSheet.type,
+			stateId: o.bottomSheet.stateId,
+			PostComposerTextSeedRef: o.bottomSheet.PostComposerTextSeedRef,
+		})),
+	);
 	return useMemo(() => {
 		switch (type) {
-			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW: {
+			case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
+			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW:
 				return <PostPreview />;
-			}
-			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
+			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
 				return (
-					<WithComposerContext textSeed={PostComposerTextSeedRef.current}>
+					<WithComposerContext textSeed={PostComposerTextSeedRef}>
 						<PostCompose />
 					</WithComposerContext>
 				);
-			}
 			case APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK:
 				return <AppBottomSheetProfilePeek />;
 			case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
@@ -39,6 +43,8 @@ const AppBottomSheetFactory = memo(() => {
 				return <AppBottomSheetSelectAccount />;
 			case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
 				return <AppBottomSheetPickThemePack />;
+			case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:
+				return <AppBottomSheetTimelineDetails />;
 			default: {
 				return (
 					<WithComposerContext>
@@ -47,7 +53,7 @@ const AppBottomSheetFactory = memo(() => {
 				);
 			}
 		}
-	}, [type, requestId]);
+	}, [type, stateId]);
 });
 
 export default AppBottomSheetFactory;

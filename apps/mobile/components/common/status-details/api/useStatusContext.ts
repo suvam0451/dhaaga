@@ -1,8 +1,9 @@
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useQuery } from '@tanstack/react-query';
 import { ActivityPubStatus } from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useMemo } from 'react';
 import { useActivitypubStatusContext } from '../../../../states/useStatus';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  *
@@ -10,7 +11,12 @@ import { useActivitypubStatusContext } from '../../../../states/useStatus';
  * @returns rootI the root status
  */
 function useStatusContext(postId: string) {
-	const { client } = useActivityPubRestClientContext();
+	const { client } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+		})),
+	);
+
 	const { setStatusContextData, contextRootLookup, stateKey } =
 		useActivitypubStatusContext();
 

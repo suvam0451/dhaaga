@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
+import { useEffect, useState } from 'react';
 import {
 	Keyboard,
 	Modal,
@@ -7,36 +6,32 @@ import {
 	TouchableOpacity,
 	View,
 	Text,
+	TextInput,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import IconBasedFlipper from '../utils/IconBasedFlipper';
-import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import * as ImagePicker from 'expo-image-picker';
 import { APP_FONT } from '../../styles/AppTheme';
 import CustomEmojiPicker from '../utils/CustomEmojiPicker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import VisibilityPicker from '../dhaaga-bottom-sheet/modules/post-composer/fragments/VisibilityPicker';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function PostComposerBottomSheet() {
-	const { me } = useActivityPubRestClientContext();
+	const { me } = useGlobalState(
+		useShallow((o) => ({
+			me: o.me,
+		})),
+	);
 	const [ActionIndex, setActionIndex] = useState(0);
-	const bottomSheetRef = useRef<BottomSheet>(null);
 
 	const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 	const [image, setImage] = useState(null);
 	const [EmojiPickerVisible, setEmojiPickerVisible] = useState(false);
-
-	useEffect(() => {
-		if (!bottomSheetRef.current) return;
-		if (isKeyboardVisible) {
-			bottomSheetRef.current.snapToIndex(2);
-		} else {
-			bottomSheetRef.current.snapToIndex(1);
-		}
-	}, [isKeyboardVisible]);
 
 	useEffect(() => {
 		const keyboardDidShowListener = Keyboard.addListener(
@@ -61,8 +56,7 @@ function PostComposerBottomSheet() {
 	async function handleExpoFilePicker() {
 		// No permissions request is necessary for launching the image library
 		let result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			// allowsEditing: true,
+			mediaTypes: ImagePicker.MediaTypeOptions.All, // allowsEditing: true,
 			// aspect: [4, 3],
 			quality: 1,
 		});
@@ -153,9 +147,9 @@ function PostComposerBottomSheet() {
 						</View>
 					</View>
 					<View style={{ marginTop: 8 }}>
-						<BottomSheetTextInput
+						<TextInput
 							multiline={true}
-							placeholder={"What's on your mind?"}
+							placeholder={"What's on your mindsss?"}
 							placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
 							style={{
 								textDecorationLine: 'none',
@@ -210,8 +204,7 @@ function PostComposerBottomSheet() {
 			>
 				<View style={{ position: 'relative' }}>
 					<View style={{ borderRadius: 8 }}>
-						{image && (
-							// @ts-ignore-next-line
+						{image && ( // @ts-ignore-next-line
 							<Image
 								source={image}
 								style={{

@@ -5,10 +5,12 @@ import {
 	TouchableOpacity,
 	View,
 	ViewStyle,
+	StyleSheet,
 } from 'react-native';
-import styles from '../../../../../common/user/utils/styles';
 import useAppNavigator from '../../../../../../states/useAppNavigator';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
 
 type ProfileStatsProps = {
 	userId: string;
@@ -38,7 +40,11 @@ const ProfileStats = memo(
 		style,
 		userId,
 	}: ProfileStatsProps) => {
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		const { toFollows, toFollowers } = useAppNavigator();
 
 		function onFollowsPress() {
@@ -50,49 +56,40 @@ const ProfileStats = memo(
 		function onFollowersPress() {
 			toFollowers(userId);
 		}
+
 		return (
 			<View
 				style={[
-					{ flexDirection: 'row', flex: 1 },
+					styles.container,
 					style,
-					{ backgroundColor: colorScheme.palette.menubar },
+					{ backgroundColor: theme.palette.menubar },
 				]}
 			>
 				<TouchableOpacity
 					style={{
 						alignItems: 'center',
-						paddingHorizontal: 6,
+						paddingHorizontal: 8,
 					}}
 					onPress={onPostsPress}
 				>
-					<Text
-						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
-					>
+					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
 						{util(postCount)}
 					</Text>
 					<Text
-						style={[
-							styles.secondaryText,
-							{ color: colorScheme.textColor.medium },
-						]}
+						style={[styles.secondaryText, { color: theme.textColor.medium }]}
 					>
 						Posts
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={{ alignItems: 'center', flex: 1 }}
+					style={{ alignItems: 'center', flex: 1, paddingHorizontal: 8 }}
 					onPress={onFollowsPress}
 				>
-					<Text
-						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
-					>
+					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
 						{util(followingCount)}
 					</Text>
 					<Text
-						style={[
-							styles.secondaryText,
-							{ color: colorScheme.textColor.medium },
-						]}
+						style={[styles.secondaryText, { color: theme.textColor.medium }]}
 					>
 						Follows
 					</Text>
@@ -100,20 +97,15 @@ const ProfileStats = memo(
 				<TouchableOpacity
 					style={{
 						alignItems: 'center',
-						paddingHorizontal: 6,
+						paddingHorizontal: 8,
 					}}
 					onPress={onFollowersPress}
 				>
-					<Text
-						style={[styles.primaryText, { color: colorScheme.textColor.high }]}
-					>
+					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
 						{util(followerCount)}
 					</Text>
 					<Text
-						style={[
-							styles.secondaryText,
-							{ color: colorScheme.textColor.medium },
-						]}
+						style={[styles.secondaryText, { color: theme.textColor.medium }]}
 					>
 						Followers
 					</Text>
@@ -124,3 +116,21 @@ const ProfileStats = memo(
 );
 
 export default ProfileStats;
+
+const styles = StyleSheet.create({
+	container: {
+		flexDirection: 'row',
+		flex: 1,
+		minWidth: 196,
+		maxWidth: 1024,
+		paddingHorizontal: 8,
+		marginRight: 8,
+		borderRadius: 10,
+		paddingVertical: 6,
+	},
+	primaryText: {
+		fontSize: 18,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+	},
+	secondaryText: { fontSize: 14, fontFamily: APP_FONTS.INTER_500_MEDIUM },
+});

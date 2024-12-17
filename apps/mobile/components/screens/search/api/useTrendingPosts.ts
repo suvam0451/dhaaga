@@ -1,13 +1,18 @@
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { useAppPaginationContext } from '../../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
-import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function useTrendingPosts() {
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { client, driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+			acct: o.acct,
+		})),
+	);
 	const {
 		data: PageData,
 		setMaxId,
@@ -42,7 +47,7 @@ function useTrendingPosts() {
 		if (data?.length > 0) {
 			setMaxId((PageData.length + data.length).toString());
 			setIsLoading(true);
-			const dataI = ActivityPubAdapterService.adaptManyStatuses(data, domain);
+			const dataI = ActivityPubAdapterService.adaptManyStatuses(data, driver);
 
 			/**
 			 * Resolve Software + Custom Emojis

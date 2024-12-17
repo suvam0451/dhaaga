@@ -5,6 +5,9 @@ import AppLoadingIndicator from '../../../../../error-screen/AppLoadingIndicator
 import NoResults from '../../../../../error-screen/NoResults';
 import { View } from 'react-native';
 import { APP_SEARCH_TYPE } from '../../../api/useSearch';
+import AppTabLandingNavbar, {
+	APP_LANDING_PAGE_TYPE,
+} from '../../../../../shared/topnavbar/AppTabLandingNavbar';
 
 type DiscoverTabIndicatorProps = {
 	query: string;
@@ -19,13 +22,20 @@ type DiscoverTabIndicatorProps = {
  * states for the Discovery module
  */
 const DiscoverTabListHeader = memo(
-	({
-		query,
-		status,
-		fetchStatus,
-		numItems,
-		category,
-	}: DiscoverTabIndicatorProps) => {
+	({ query, status, fetchStatus, numItems }: DiscoverTabIndicatorProps) => {
+		return (
+			<AppTabLandingNavbar
+				type={APP_LANDING_PAGE_TYPE.DISCOVER}
+				menuItems={[
+					{
+						iconId: 'search',
+					},
+					{
+						iconId: 'user-guide',
+					},
+				]}
+			/>
+		);
 		// Idle
 		if (!query) return <SearchScreenManual />;
 

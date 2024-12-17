@@ -14,8 +14,7 @@
   },
   "workspaces": [
     "packages/**",
-    "apps/mobile",
-    "apps/web"
+    "apps/mobile"
   ],
   "dependencies": {
     "prettier": "^3.3.2"

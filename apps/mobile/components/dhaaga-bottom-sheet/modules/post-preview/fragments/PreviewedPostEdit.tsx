@@ -1,17 +1,21 @@
 import { memo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
 import { AppIcon } from '../../../../lib/Icon';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const PreviewedPostEdit = memo(({}: { State: string }) => {
-	const { PostRef } = useAppBottomSheet();
-	const { colorScheme } = useAppTheme();
+	const { postValue, theme } = useGlobalState(
+		useShallow((o) => ({
+			postValue: o.bottomSheet.postValue,
+			theme: o.colorScheme,
+		})),
+	);
 
 	function onEditPress() {}
 
-	if (PostRef.current === null) return <View />;
+	if (postValue === null) return <View />;
 	return (
 		<TouchableOpacity
 			style={{
@@ -29,7 +33,7 @@ const PreviewedPostEdit = memo(({}: { State: string }) => {
 		>
 			<Text
 				style={{
-					color: colorScheme.textColor.high,
+					color: theme.textColor.high,
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					fontSize: 14,
 				}}

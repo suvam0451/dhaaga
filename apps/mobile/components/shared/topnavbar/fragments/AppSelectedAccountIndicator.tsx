@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import {
 	APP_BOTTOM_SHEET_ENUM,
 	useAppBottomSheet,
@@ -9,6 +8,9 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { AppIcon } from '../../../lib/Icon';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { AccountMetadataService } from '../../../../database/entities/account-metadata';
 
 const ACCOUNT_INDICATOR_ICON_SIZE = 36;
 
@@ -22,9 +24,18 @@ const ACCOUNT_INDICATOR_ICON_SIZE = 36;
  * @deprecated in favor of 5th tab since v0.11.0
  */
 const AppSelectedAccountIndicator = memo(() => {
-	const { primaryAcct } = useActivityPubRestClientContext();
+	const { acct, db } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			db: o.db,
+		})),
+	);
 	const { setVisible, setType, updateRequestId } = useAppBottomSheet();
-	const avatar = primaryAcct?.meta?.find((o) => o.key === 'avatar')?.value;
+	const avatar = AccountMetadataService.getKeyValueForAccountSync(
+		db,
+		acct,
+		'avatar',
+	);
 
 	function onAccountSelectRequest() {
 		setType(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT);
@@ -32,7 +43,7 @@ const AppSelectedAccountIndicator = memo(() => {
 		setVisible(true);
 	}
 
-	if (!primaryAcct)
+	if (!acct)
 		return (
 			<TouchableOpacity
 				style={styles.accountIconTouchableContainerRight}

@@ -1,16 +1,18 @@
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { useEffect } from 'react';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../shared/topnavbar/AppTopNavbar';
 import TabView from './views/TabView';
+import { View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../states/_global';
+import AppNoAccount from '../../../error-screen/AppNoAccount';
+import { APP_LANDING_PAGE_TYPE } from '../../../shared/topnavbar/AppTabLandingNavbar';
 
 function LandingPageStack() {
-	const { translateY } = useScrollMoreOnPageEnd({
-		itemCount: 0,
-		updateQueryCache: () => {},
-	});
-
+	const { theme, acct } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+			acct: o.acct,
+		})),
+	);
 	useEffect(() => {
 		const intervalFunction = () => {
 			// refetch();
@@ -21,14 +23,12 @@ function LandingPageStack() {
 		};
 	}, []);
 
+	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.INBOX} />;
+
 	return (
-		<AppTopNavbar
-			type={APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC}
-			title={'Chat & Notifications'}
-			translateY={translateY}
-		>
+		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
 			<TabView />
-		</AppTopNavbar>
+		</View>
 	);
 }
 

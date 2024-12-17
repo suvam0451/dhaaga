@@ -1,14 +1,13 @@
 import { memo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
-import * as React from 'react';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { router } from 'expo-router';
-import { useAppTheme } from '../../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 import { AppIcon } from '../../../../../lib/Icon';
 
 const ICON_SIZE = 24;
@@ -20,7 +19,11 @@ type ActionButtonProps = {
 };
 
 const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	return (
 		<TouchableOpacity
 			style={styles.moduleContainer}
@@ -29,20 +32,25 @@ const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
 			}}
 		>
 			<View style={{ width: 24 }}>{Icon}</View>
-			<Text style={[styles.moduleLabel, { color: colorScheme.textColor.high }]}>
+			<Text style={[styles.moduleLabel, { color: theme.textColor.medium }]}>
 				{label}
 			</Text>
-			<View style={{ flex: 1 }} />
-			<Entypo
-				name="chevron-small-right"
-				size={24}
-				color={APP_FONT.MONTSERRAT_BODY}
-			/>
+			{/*<View style={{ flex: 1 }} />*/}
+			{/*<Entypo*/}
+			{/*	name="chevron-small-right"*/}
+			{/*	size={24}*/}
+			{/*	color={theme.textColor.medium}*/}
+			{/*/>*/}
 		</TouchableOpacity>
 	);
 });
 
-const ProfileLandingAccountModules = memo(() => {
+function ProfileLandingAccountModules() {
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	return (
 		<View style={{ paddingTop: 16 }}>
 			<ActionButton
@@ -63,60 +71,48 @@ const ProfileLandingAccountModules = memo(() => {
 				label={'Bookmarks'}
 				to={'/profile/account/bookmarks'}
 			/>
-
 			<ActionButton
 				Icon={<Entypo name="list" size={24} color={APP_FONT.MONTSERRAT_BODY} />}
 				label={'Lists'}
 				to={'/profile/account/lists'}
 			/>
 
-			<Text
-				style={[
-					styles.text,
-					{ marginTop: 16, fontSize: 14, color: APP_FONT.DISABLED },
-				]}
-			>
-				You have no pending friend requests.
-			</Text>
 			<View
 				style={{
-					backgroundColor: 'rgba(48,48,48,0.87)',
+					height: 1,
+					width: '100%',
+					backgroundColor: theme.palette.menubar,
 					marginVertical: 12,
-					marginHorizontal: 8,
-					height: 2,
+					marginBottom: 24,
 				}}
 			/>
-
-			<ActionButton
-				Icon={<AppIcon id={'wand'} size={24} emphasis={'high'} />}
-				label={'Quick Fix'}
-				to={'/profile/account/lists'}
-			/>
-			<ActionButton
-				Icon={<AppIcon id={'cog'} size={24} emphasis={'high'} />}
-				label={'All Settings'}
-				to={'/profile/settings/landing'}
-			/>
+			<View style={styles.checkmarkBox}>
+				<AppIcon id={'checkmark-done-outline'} emphasis={'low'} />
+				<Text
+					style={[
+						styles.checkmarkBoxText,
+						{ fontSize: 14, color: theme.textColor.low },
+					]}
+				>
+					No pending friend requests.
+				</Text>
+			</View>
 
 			<Text
-				style={[
-					styles.text,
-					{
-						marginTop: 16,
-						fontSize: 14,
-						color: APP_FONT.MEDIUM_EMPHASIS,
-						textAlign: 'center',
-						paddingHorizontal: 32,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-					},
-				]}
+				style={{
+					marginTop: 32,
+					fontSize: 14,
+					color: theme.textColor.low,
+					textAlign: 'center',
+					paddingHorizontal: 32,
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+				}}
 			>
-				TIP: Press & hold your pfp (in bottom navbar) to swap accounts from
-				anywhere
+				[TIP] Long press your avatar in navbar to quickly swap accounts
 			</Text>
 		</View>
 	);
-});
+}
 
 export default ProfileLandingAccountModules;
 
@@ -126,17 +122,22 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		padding: 10,
 		paddingHorizontal: 12,
+		marginBottom: 6,
 	},
 	moduleLabel: {
-		color: APP_FONT.HIGH_EMPHASIS,
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		fontSize: 18,
-		marginLeft: 8,
+		marginLeft: 14,
 	},
-	text: {
+	checkmarkBox: {
+		marginLeft: 16,
+		marginBottom: 16,
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	checkmarkBoxText: {
 		fontFamily: APP_FONTS.INTER_700_BOLD,
 		color: APP_FONT.MONTSERRAT_BODY,
-		textAlign: 'center',
-		marginBottom: 16,
+		marginLeft: 8,
 	},
 });

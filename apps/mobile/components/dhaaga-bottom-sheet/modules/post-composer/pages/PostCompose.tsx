@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import ComposerTextInput from '../fragments/ComposerText';
 import ActionButtons from '../fragments/ActionButtons';
@@ -9,12 +8,21 @@ import ComposerAlt from '../fragments/ComposerAlt';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../fragments/ComposerTopMenu';
 import TextEditorService from '../../../../../services/text-editor.service';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const PostCompose = memo(() => {
-	const { visible } = useAppBottomSheet();
+	const { visible } = useGlobalState(
+		useShallow((o) => ({
+			visible: o.bottomSheet.visible,
+		})),
+	);
 	const { editMode, setEditMode, setRawText } = useComposerContext();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	const EditorContent = useMemo(() => {
 		switch (editMode) {
@@ -67,7 +75,7 @@ const PostCompose = memo(() => {
 				);
 			}
 		}
-	}, [editMode, colorScheme]);
+	}, [editMode, theme]);
 
 	return (
 		<View
@@ -75,7 +83,7 @@ const PostCompose = memo(() => {
 				styles.bottomSheetContentContainer,
 				{
 					display: visible ? 'flex' : 'none',
-					backgroundColor: colorScheme.palette.menubar,
+					backgroundColor: theme.palette.menubar,
 					position: 'relative',
 				},
 			]}

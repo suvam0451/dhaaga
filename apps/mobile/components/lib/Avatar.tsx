@@ -1,5 +1,8 @@
 import { memo } from 'react';
 import { Image } from 'expo-image';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { StyleProp, View, ViewStyle } from 'react-native';
 
 type AppAvatarProps = {
 	uri: string;
@@ -21,3 +24,28 @@ export const AppAvatar = memo(({ uri, size }: AppAvatarProps) => {
 		/>
 	);
 });
+
+type SocialHubAvatarCircleProps = {
+	size?: number;
+	style?: StyleProp<ViewStyle>;
+};
+
+export function SocialHubAvatarCircle({
+	size,
+	style,
+}: SocialHubAvatarCircleProps) {
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
+
+	console.log(acct?.avatarUrl);
+	if (!acct) return <View />;
+
+	return (
+		<View style={style}>
+			<AppAvatar uri={acct?.avatarUrl} size={size} />
+		</View>
+	);
+}

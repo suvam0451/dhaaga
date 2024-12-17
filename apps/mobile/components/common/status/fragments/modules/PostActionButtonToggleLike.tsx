@@ -2,7 +2,8 @@ import { memo, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const ICON_SIZE = 21;
 const ACTIVE_COLOR = '#deba7a'; // APP_THEME.LINK
@@ -20,7 +21,11 @@ const PostActionButtonToggleLike = memo(
 	({ id, flag }: PostActionButtonToggleLikeProps) => {
 		const [IsLoading, setIsLoading] = useState(false);
 		const { toggleLike } = useAppTimelinePosts();
-		const { colorScheme } = useAppTheme();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 
 		function onPress() {
 			toggleLike(id, setIsLoading);
@@ -44,7 +49,7 @@ const PostActionButtonToggleLike = memo(
 					<AntDesign
 						name={flag ? 'like1' : 'like2'}
 						size={ICON_SIZE}
-						color={flag ? ACTIVE_COLOR : colorScheme.textColor.emphasisC}
+						color={flag ? ACTIVE_COLOR : theme.textColor.emphasisC}
 					/>
 				)}
 			</TouchableOpacity>

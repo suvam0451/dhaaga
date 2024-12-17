@@ -1,4 +1,3 @@
-import { APP_BOTTOM_SHEET_ENUM, useAppBottomSheet } from './useAppBottomSheet';
 import {
 	useAnimatedStyle,
 	useSharedValue,
@@ -7,11 +6,20 @@ import {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Dimensions } from 'react-native';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
-const POST_COMPOSE_HEIGHT_MAX = 360;
+const POST_COMPOSE_HEIGHT_MAX = 420;
 
 function useAnimatedHeight() {
-	const { visible, type } = useAppBottomSheet();
+	const { visible, type } = useGlobalState(
+		useShallow((o) => ({
+			visible: o.bottomSheet.visible,
+			type: o.bottomSheet.type,
+		})),
+	);
 	const height = useSharedValue(0);
 
 	useEffect(() => {
@@ -24,12 +32,16 @@ function useAnimatedHeight() {
 					_target = Dimensions.get('window').height * 0.6;
 					break;
 				}
+				case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS: {
+					_target = Dimensions.get('window').height * 0.6;
+					break;
+				}
 				case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
 					_target = POST_COMPOSE_HEIGHT_MAX;
 					break;
 				}
 				default: {
-					_target = POST_COMPOSE_HEIGHT_MAX;
+					_target = Dimensions.get('window').height * 0.55;
 					break;
 				}
 			}

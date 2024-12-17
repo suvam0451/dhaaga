@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityPubUser } from '../../entities/activitypub-user.entity';
 import { ActivityPubStatus } from '../../entities/activitypub-status.entity';
@@ -23,8 +22,6 @@ type Props = {
 };
 
 function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-
 	const LoadedUserData = useRef<GalleryUserAggregationItem[] | null>(null);
 	const LoadedTagData = useRef<GalleryTagAggregationItem[] | null>(null);
 

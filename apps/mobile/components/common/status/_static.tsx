@@ -6,7 +6,8 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusHierarchyParent from './fragments/StatusHierarchyParent';
 import StatusHierarchyRoot from './fragments/StatusHierarchyRoot';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Adds a reply indicator to the post
@@ -17,7 +18,11 @@ import { useAppTheme } from '../../../hooks/app/useAppThemePack';
  */
 export const ParentPostFragment = memo(function Foo() {
 	const { dto } = useAppStatusItem();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	if (!dto.replyTo)
 		return (
@@ -40,7 +45,7 @@ export const ParentPostFragment = memo(function Foo() {
 					<Ionicons color={'#888'} name={'arrow-redo-outline'} size={14} />
 					<Text
 						style={{
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 							marginLeft: 4,
 							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							fontSize: 13,

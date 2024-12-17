@@ -1,11 +1,17 @@
 import { useTimelineController } from './useTimelineController';
 import { useMemo } from 'react';
 import { TimelineFetchMode } from '../utils/timeline.types';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function useTimelineLabel() {
-	const { domain } = useActivityPubRestClientContext();
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
+
 	const { timelineType, query } = useTimelineController();
 	return useMemo(() => {
 		switch (timelineType) {
@@ -28,9 +34,7 @@ function useTimelineLabel() {
 				return `${query?.label}`;
 			}
 			case TimelineFetchMode.FEDERATED: {
-				return [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
-					domain as any,
-				)
+				return [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(driver)
 					? `Known Network`
 					: `Federated`;
 			}
@@ -42,7 +46,7 @@ function useTimelineLabel() {
 				return 'Unassigned';
 			}
 		}
-	}, [timelineType, query, domain]);
+	}, [timelineType, query, driver]);
 }
 
 export default useTimelineLabel;

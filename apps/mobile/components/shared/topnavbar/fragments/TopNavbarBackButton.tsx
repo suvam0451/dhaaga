@@ -1,18 +1,12 @@
 import { memo } from 'react';
 import { router } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { TouchableOpacity, View } from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
-import useAppNavigator from '../../../../states/useAppNavigator';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
+import { AppIcon } from '../../../lib/Icon';
 
 const TopNavbarBackButton = memo(() => {
-	const { colorScheme } = useAppTheme();
-	const { toHome } = useAppNavigator();
 	return (
 		<View style={{ flexDirection: 'row' }}>
 			<TouchableOpacity
-				onLongPress={toHome}
 				onPress={() => {
 					router.back();
 				}}
@@ -24,11 +18,7 @@ const TopNavbarBackButton = memo(() => {
 					paddingHorizontal: 8,
 				}}
 			>
-				<Ionicons
-					name="chevron-back"
-					size={24}
-					color={colorScheme.textColor.emphasisC}
-				/>
+				<AppIcon id={'back'} emphasis={'medium'} />
 			</TouchableOpacity>
 		</View>
 	);

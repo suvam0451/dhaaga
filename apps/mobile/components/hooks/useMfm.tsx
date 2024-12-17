@@ -1,15 +1,14 @@
 import { DependencyList, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
-import { randomUUID } from 'expo-crypto';
 import { Skeleton } from '@rneui/themed';
 import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
-import { useActivityPubRestClientContext } from '../../states/useActivityPubRestClient';
-import * as Crypto from 'expo-crypto';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
-import { useAppTheme } from '../../hooks/app/useAppThemePack';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FacetService from '../../services/facets.service';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { RandomUtil } from '../../utils/random.utils';
 
 type Props = {
 	content: string;
@@ -49,10 +48,15 @@ function useMfm({
 	acceptTouch,
 	emphasis,
 }: Props) {
-	const { domain, subdomain } = useActivityPubRestClientContext();
-	// const db = useRealm();
+	const { acct, driver, db, theme } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			driver: o.driver,
+			db: o.db,
+			theme: o.colorScheme,
+		})),
+	);
 	const { globalDb } = useGlobalMmkvContext();
-	const { colorScheme } = useAppTheme();
 
 	const defaultValue = useRef<any>({
 		isLoaded: false,
@@ -76,20 +80,20 @@ function useMfm({
 	 * don't set this to null
 	 * some software actually use {content: null}
 	 * */
-	const IsSolved = useRef(Crypto.randomUUID());
+	const IsSolved = useRef(RandomUtil.nanoId());
 
 	let color = useMemo(() => {
 		switch (emphasis) {
 			case 'high':
-				return colorScheme.textColor.high;
+				return theme.textColor.high;
 			case 'medium':
-				return colorScheme.textColor.medium;
+				return theme.textColor.medium;
 			case 'low':
-				return colorScheme.textColor.low;
+				return theme.textColor.low;
 			default:
-				return colorScheme.textColor.medium;
+				return theme.textColor.medium;
 		}
-	}, [emphasis, colorScheme]);
+	}, [emphasis, theme]);
 
 	// since font remains same for each reusable component
 	const fontStyle = {
@@ -112,7 +116,7 @@ function useMfm({
 			return;
 		}
 
-		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const nodes = FacetService.render(content, { fontFamily, emphasis });
 			setData({
 				isLoaded: true,
@@ -130,13 +134,13 @@ function useMfm({
 
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
-			domain,
-			subdomain,
+			domain: driver,
+			subdomain: acct?.server,
 			globalDb,
 			remoteSubdomain,
 			fontFamily,
 			emphasis,
-			colorScheme,
+			colorScheme: theme,
 		});
 		setData({
 			isLoaded: true,
@@ -144,7 +148,7 @@ function useMfm({
 				<WithAppMfmContext acceptTouch={_acceptTouch}>
 					<View style={{ height: 'auto' }}>
 						{reactNodes?.map((para) => {
-							const uuid = randomUUID();
+							const uuid = RandomUtil.nanoId();
 							if (numberOfLines) {
 								return (
 									<Text
@@ -177,7 +181,7 @@ function useMfm({
 			aiContext: openAiContext,
 		});
 		IsSolved.current = content;
-	}, [...deps, colorScheme]);
+	}, [...deps, theme]);
 
 	return {
 		content: Data.content,

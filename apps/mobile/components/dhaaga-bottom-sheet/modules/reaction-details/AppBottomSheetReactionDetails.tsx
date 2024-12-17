@@ -3,7 +3,6 @@ import { Text, View } from 'react-native';
 import { useAppBottomSheet } from '../_api/useAppBottomSheet';
 import useGetReactionDetails from '../../../../hooks/api/useGetReactionDetails';
 import { Image } from 'expo-image';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
@@ -17,11 +16,16 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { AppUser } from '../../../../services/approto/app-user-service';
-import { useAppTheme } from '../../../../hooks/app/useAppThemePack';
 import { AppAvatar } from '../../../lib/Avatar';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const { content } = useMfm({
 		content: dto.displayName,
 		remoteSubdomain: dto.instance,
@@ -39,7 +43,7 @@ const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
 				<View>{content}</View>
 				<Text
 					style={{
-						color: colorScheme.textColor.medium,
+						color: theme.textColor.medium,
 						fontFamily: APP_FONTS.INTER_400_REGULAR,
 						fontSize: 13,
 					}}
@@ -52,8 +56,14 @@ const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
 });
 
 const AppBottomSheetReactionDetails = memo(() => {
-	const { colorScheme } = useAppTheme();
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { client, driver, acct, theme } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+			client: o.router,
+			theme: o.colorScheme,
+		})),
+	);
 	const { TextRef, PostRef, timelineDataPostListReducer, setVisible, visible } =
 		useAppBottomSheet();
 	const { Data, fetchStatus } = useGetReactionDetails(
@@ -64,14 +74,15 @@ const AppBottomSheetReactionDetails = memo(() => {
 	const IS_REMOTE = ActivitypubReactionsService.canReact(Data?.id);
 
 	const [Loading, setLoading] = useState(false);
+
 	async function onActionPress() {
 		if (IS_REMOTE) return;
 
 		setLoading(true);
 		const { id } = ActivitypubReactionsService.extractReactionCode(
 			TextRef.current,
-			domain,
-			subdomain,
+			driver,
+			acct?.server,
 		);
 
 		const state = Data.reacted
@@ -79,14 +90,14 @@ const AppBottomSheetReactionDetails = memo(() => {
 					client,
 					PostRef.current.id,
 					id,
-					domain,
+					driver,
 					setLoading,
 				)
 			: await ActivityPubReactionsService.addReaction(
 					client,
 					PostRef.current.id,
 					TextRef.current,
-					domain,
+					driver,
 					setLoading,
 				);
 
@@ -185,7 +196,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 								<View>
 									<Text
 										style={{
-											color: colorScheme.textColor.medium,
+											color: theme.textColor.medium,
 											fontFamily: APP_FONTS.INTER_500_MEDIUM,
 											marginTop: 8,
 										}}
@@ -200,7 +211,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 								style={{
 									fontSize: 16,
 									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-									color: colorScheme.textColor.medium,
+									color: theme.textColor.medium,
 									marginVertical: 16,
 								}}
 							>

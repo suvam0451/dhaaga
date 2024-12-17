@@ -13,15 +13,19 @@ import {
 } from '../api/useComposerContext';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../styles/AppTheme';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
 import { Image } from 'expo-image';
 import ComposeMediaTargets from './MediaTargets';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../../../states/_global';
 
 const ComposerAltListItem = memo(
 	({ item, index }: { item: ComposeMediaTargetItem; index: number }) => {
-		const { client } = useActivityPubRestClientContext();
+		const { client } = useGlobalState(
+			useShallow((o) => ({
+				client: o.router,
+			})),
+		);
 		const { setAltText } = useComposerContext();
 		const [TextContent, setTextContent] = useState(item.cw);
 		const { forceUpdate } = useHookLoadingState();
@@ -118,7 +122,11 @@ const ComposerAltListItem = memo(
 
 const ComposerAlt = memo(() => {
 	const { mediaTargets } = useComposerContext();
-	const { colorScheme } = useAppTheme();
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	return (
 		<View>
@@ -128,7 +136,7 @@ const ComposerAlt = memo(() => {
 					<Text
 						style={{
 							fontFamily: APP_FONTS.INTER_700_BOLD,
-							color: colorScheme.textColor.medium,
+							color: theme.textColor.medium,
 							textAlign: 'center',
 							marginTop: 32,
 						}}
@@ -156,8 +164,7 @@ const styles = StyleSheet.create({
 		textDecorationStyle: undefined,
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		// backgroundColor: 'red',
+		fontFamily: APP_FONTS.INTER_400_REGULAR, // backgroundColor: 'red',
 		flex: 1,
 		width: '100%',
 	},

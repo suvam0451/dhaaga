@@ -16,7 +16,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import AppPrivacySettingsService from '../app-settings/app-settings-privacy.service';
 import { EmojiService } from '../emoji.service';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { ServerService } from '../../database/entities/server';
+import { ProfileKnownServerService } from '../../database/entities/server';
 
 /**
  * Supports various operations
@@ -75,10 +75,10 @@ export class ActivitypubStatusService {
 			return this;
 		}
 
-		const promises = Array.from(this.foundInstances).map((o) => {
-			return ServerService.syncDriver(db, o);
-		});
-		await Promise.all(promises);
+		// const promises = Array.from(this.foundInstances).map((o) => {
+		// 	return ProfileKnownServerService.syncDriver(db, o);
+		// });
+		// await Promise.all(promises);
 		return this;
 	}
 

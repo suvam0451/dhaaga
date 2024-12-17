@@ -1,0 +1,33 @@
+{
+  "name": "@dhaaga/orm",
+  "description": "A custom expo-sqlite ORM implementation inspired by TypeORM",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "keywords": ["expo", "sqlite", "orm"],
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": {
+      "import": "./dist/*",
+      "types": "./dist/*"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "peerDependencies": {
+    "expo-sqlite": "~15.0.3"
+  },
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json"
+  }
+}

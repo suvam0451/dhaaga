@@ -4,7 +4,8 @@ import ControlSegment from '../components/ControlSegment';
 import { View } from 'react-native';
 import useTimelineOptions from '../states/useTimelineOptions';
 import { styles } from './_shared';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const LocalTimelineController = memo(function Foo() {
 	const {
@@ -16,12 +17,16 @@ const LocalTimelineController = memo(function Foo() {
 		onMediaOptAllSelected,
 		State,
 	} = useTimelineOptions();
-	const { subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 
 	return (
 		<View>
 			<Text style={styles.timelineTypeText}>Local Timeline</Text>
-			<Text style={styles.timelineTargetText}>{subdomain}</Text>
+			<Text style={styles.timelineTargetText}>{acct?.server}</Text>
 			<ControlSegment
 				label={'Show feed from:'}
 				buttons={[

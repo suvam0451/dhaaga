@@ -1,4 +1,3 @@
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import useGetStatus from './useGetStatus';
 import { useEffect, useReducer } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -8,13 +7,21 @@ import statusContextReducer, {
 	defaultAppStatusContext,
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../../states/_global';
 
 /**
  * Get the context chain for a given status id
  * @param postId
  */
 function useGetStatusContext(postId: string) {
-	const { client, domain, subdomain } = useActivityPubRestClientContext();
+	const { client, driver, acct } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			client: o.router,
+			acct: o.acct,
+		})),
+	);
 
 	const { data: PostData } = useGetStatus(postId);
 
@@ -30,18 +37,18 @@ function useGetStatusContext(postId: string) {
 			return null;
 		}
 
-		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			return data;
 		}
 
 		return {
 			ancestors: ActivityPubAdapterService.adaptManyStatuses(
 				(data as any).ancestors,
-				domain,
+				driver,
 			),
 			descendants: ActivityPubAdapterService.adaptManyStatuses(
 				(data as any).descendants,
-				domain,
+				driver,
 			),
 		};
 	}
@@ -55,13 +62,13 @@ function useGetStatusContext(postId: string) {
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
-		if (domain === KNOWN_SOFTWARE.BLUESKY) {
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			dispatch({
 				type: STATUS_CONTEXT_REDUCER_ACTION.INIT_ATPROTO,
 				payload: {
 					resp: data,
-					domain,
-					subdomain,
+					driver,
+					subdomain: acct?.server,
 				},
 			});
 		} else {
@@ -74,8 +81,8 @@ function useGetStatusContext(postId: string) {
 					source: PostData,
 					ancestors: (data as any).ancestors,
 					descendants: (data as any).descendants,
-					domain,
-					subdomain,
+					driver,
+					subdomain: acct?.server,
 				},
 			});
 		}

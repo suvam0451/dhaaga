@@ -1,44 +1,146 @@
+import { BaseEntity, Entity } from '@dhaaga/orm';
+
 export const DATABASE_NAME = 'app.db';
 
-type BaseEntity = {
+type BaseEntityMinimalType = {
 	id: number;
 	createdAt: Date;
 	updatedAt: Date;
 };
 
-// account
-export type Account = {
+@Entity('appSetting')
+export class AppSetting extends BaseEntity<AppSetting> {
+	id: number;
+	key: string;
+	value: string;
+	type: string;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+@Entity('profileSetting')
+export class ProfileSetting extends BaseEntity<ProfileSetting> {
+	id: number;
+	key: string;
+	value: string;
+	type: string;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+@Entity('account')
+export class Account extends BaseEntity<Account> {
+	id: number;
+	uuid: string;
 	identifier: string;
 	driver: string;
 	server: string;
 	username: string;
+	avatarUrl: string | null;
+	displayName: string | null;
 	selected: boolean;
-	displayName?: string;
-	avatarUrl?: string;
-	metadata: AccountMetadata[];
-} & BaseEntity;
+	active: boolean;
+	createdAt: Date;
+	updatedAt: Date;
 
-// accountMetadata
-export type AccountMetadata = {
+	// inverse joins
+	metadata: AccountMetadata[];
+}
+
+@Entity('migrations')
+export class Migration extends BaseEntity<Migration> {
+	id: number;
+	userVersion: string;
+	versionCode: string;
+	name: string;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+/**
+ * List of known metadata:
+ * 	- displayName
+ * 	- userIdentifier
+ * 	- accessToken
+ * 	- avatarUrl
+ */
+@Entity('accountMetadata')
+export class AccountMetadata extends BaseEntity<AccountMetadata> {
+	id: number;
 	key: string;
 	value: string;
 	type: string;
-	accountId?: number; // fk
-	account?: Account;
-} & BaseEntity;
+	active: boolean;
+	accountId: number | null;
+	createdAt: Date;
+	updatedAt: Date;
 
-// appProfile
-export type AppProfile = {
+	// joins
+	account?: Account;
+}
+
+@Entity('accountProfile')
+export class AccountProfile extends BaseEntity<AccountProfile> {
+	id: number;
+	uuid: string;
 	name: string;
 	selected: boolean;
-} & BaseEntity;
+	active: boolean;
+	accountId: number | null;
+	createdAt: Date;
+	updatedAt: Date;
 
-// server
-export type Server = {
-	description: string;
+	// joins
+	account?: Account;
+}
+
+/**
+ * For the intent of pinning and search history
+ *
+ */
+@Entity('profileKnownServer')
+export class ProfileKnownServer extends BaseEntity<ProfileKnownServer> {
+	id: number;
+	uuid: string;
 	url: string;
 	driver: string;
-} & BaseEntity;
+	profileId: number | null;
+	createdAt: Date;
+	updatedAt: Date;
+
+	profile?: AccountProfile;
+}
+
+/**
+ * List of known metadata (SERVER_METADATA_KEY)
+ * 	- description
+ * 	- serverName
+ * 	- serverSoftware
+ * 	- softwareVersion
+ * 	- iconUrl
+ * 	- faviconUrl
+ * 	- themeColor
+ * 	- nodeinfo
+ * 	- nodeinfoLastFetchedAt
+ * 	- nodeinfoLastAttemptAt
+ * 	- customEmojisLastFetchedAt
+ * 	- customEmojisLastAttemptAt
+ *
+ */
+@Entity('profileKnownServerMetadata')
+export class ProfileKnownServerMetadata extends BaseEntity<ProfileKnownServerMetadata> {
+	id: number;
+	key: string;
+	value: string;
+	type: string;
+	active: boolean;
+	knownServerId: number | null;
+	createdAt: Date;
+	updatedAt: Date;
+
+	// joins
+	knownServer?: ProfileKnownServer;
+}
 
 // serverEmoji
 export type ServerEmoji = {
@@ -49,18 +151,18 @@ export type ServerEmoji = {
 	timesUsed: number;
 	serverId: number; //fk
 	category?: string; // default=N/A
-} & BaseEntity;
+} & BaseEntityMinimalType;
 
 // serverEmojiAlias
 export type ServerEmojiAlias = {
 	serverEmojiId: number; // fk (composite key)
 	alias: string; // (composite key)
-} & BaseEntity;
+} & BaseEntityMinimalType;
 
 // hashtag
 export type Hashtag = {
 	name: string; // unique
-} & BaseEntity;
+} & BaseEntityMinimalType;
 
 // accountHashtag
 export type AccountHashtag = {
@@ -70,7 +172,7 @@ export type AccountHashtag = {
 	accountId: number | null;
 	account?: Account;
 	hashtag?: Hashtag;
-} & BaseEntity;
+} & BaseEntityMinimalType;
 
 export type PostMediaAttachment = {
 	altText?: string;
@@ -82,7 +184,7 @@ export type PostMediaAttachment = {
 	height?: number;
 	width?: number;
 	postId: number; // fk
-} & BaseEntity;
+} & BaseEntityMinimalType;
 
 // post
 export type Post = {
@@ -107,10 +209,10 @@ export type Post = {
 
 	postCreatedAt: Date;
 	postEditedAt: Date;
-} & BaseEntity;
+} & BaseEntityMinimalType;
 
 export type Setting = {
 	key: string;
 	value: string;
 	type: string;
-} & BaseEntity;
+} & BaseEntityMinimalType;

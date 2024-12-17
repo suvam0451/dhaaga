@@ -4,7 +4,6 @@ import StatusItem from '../status/StatusItem';
 import { Skeleton } from '@rneui/base';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import WithActivitypubStatusContext from '../../../states/useStatus';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../states/usePagination';
@@ -20,11 +19,19 @@ import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicato
 import { AnimatedFlashList } from '@shopify/flash-list';
 import { useLocalSearchParams } from 'expo-router';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function ApiWrapper() {
 	const { id } = useLocalSearchParams<{ id: string }>();
 
-	const { client, domain } = useActivityPubRestClientContext();
+	const { client, driver } = useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+		})),
+	);
+
 	const {
 		data: PageData,
 		queryCacheMaxId,
@@ -41,7 +48,7 @@ function ApiWrapper() {
 			limit: 5,
 		});
 		if (error) return [];
-		return ActivityPubAdapterService.adaptManyStatuses(data as any, domain);
+		return ActivityPubAdapterService.adaptManyStatuses(data as any, driver);
 	}
 
 	// Queries

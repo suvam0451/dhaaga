@@ -4,7 +4,8 @@ import {
 	UserType,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useActivityPubRestClientContext } from './useActivityPubRestClient';
+import useGlobalState from './_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Type = {
 	user: UserInterface | null;
@@ -37,11 +38,15 @@ type Props = {
 };
 
 function WithActivitypubUserContext({ user, userI, children }: Props) {
-	const { primaryAcct } = useActivityPubRestClientContext();
-	const domain = primaryAcct?.domain;
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			driver: o.driver,
+		})),
+	);
 
 	const [Value, setValue] = useState<UserInterface | null>(
-		ActivityPubUserAdapter(null, domain),
+		ActivityPubUserAdapter(null, driver),
 	);
 	const [RawValue, setRawValue] = useState<UserType | null>(null);
 
@@ -55,13 +60,13 @@ function WithActivitypubUserContext({ user, userI, children }: Props) {
 		}
 
 		setRawValue(user);
-		setValue(ActivityPubUserAdapter(user, domain));
-	}, [user, userI, domain]);
+		setValue(ActivityPubUserAdapter(user, driver));
+	}, [user, userI, driver]);
 
 	const set = (o: UserInterface) => setValue(o);
 	const setRaw = (o: UserType) => {
 		setRawValue(o);
-		setValue(ActivityPubUserAdapter(o, domain));
+		setValue(ActivityPubUserAdapter(o, driver));
 	};
 
 	return (

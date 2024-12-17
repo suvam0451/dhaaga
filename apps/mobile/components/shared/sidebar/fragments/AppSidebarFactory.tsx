@@ -9,8 +9,9 @@ import { APP_SIDEBAR_BG_COLOR, APP_SIDEBAR_PADDING } from '../sidebar.settings';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { Text } from '@rneui/themed';
 import { Image } from 'expo-image';
-import { useActivityPubRestClientContext } from '../../../../states/useActivityPubRestClient';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type AppSidebarFactoryProps = {
 	PageActions: React.JSX.Element;
@@ -21,11 +22,15 @@ const AppSidebarFactory = memo(function Foo({
 	PageActions,
 	children,
 }: AppSidebarFactoryProps) {
-	const { primaryAcct, subdomain } = useActivityPubRestClientContext();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
 
 	const { open, setOpen } = useAppDrawerContext();
 	const ProfileInfo = useMemo(() => {
-		if (primaryAcct) {
+		if (acct) {
 			return (
 				<View>
 					<View
@@ -39,7 +44,7 @@ const AppSidebarFactory = memo(function Foo({
 						<View style={{ width: 48, height: 48 }}>
 							{/*@ts-ignore-next-line*/}
 							<Image
-								source={primaryAcct?.avatarUrl}
+								source={acct?.avatarUrl}
 								style={{ width: 48, height: 48 }}
 							/>
 						</View>
@@ -50,7 +55,7 @@ const AppSidebarFactory = memo(function Foo({
 									color: APP_FONT.MONTSERRAT_HEADER,
 								}}
 							>
-								@{primaryAcct?.username}
+								@{acct?.username}
 							</Text>
 							<Text
 								style={{
@@ -59,7 +64,7 @@ const AppSidebarFactory = memo(function Foo({
 									fontSize: 14,
 								}}
 							>
-								{subdomain}
+								{acct?.server}
 							</Text>
 						</View>
 						<View
@@ -82,7 +87,7 @@ const AppSidebarFactory = memo(function Foo({
 		} else {
 			return <View></View>;
 		}
-	}, [primaryAcct]);
+	}, [acct]);
 
 	return (
 		<Drawer

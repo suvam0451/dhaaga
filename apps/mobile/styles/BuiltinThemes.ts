@@ -54,15 +54,17 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 		id: 'default',
 		name: 'Default',
 		palette: {
-			bg: '#191919', // 10%
+			bg: '#121212', // 7%
 			menubar: '#212121', // 13%
 			buttonUnstyled: '#2d2c2d', // 424242
 			hashtagHigh: 'rgba(248,199,124,0.87)',
 			hashtagLow: 'rgba(248,199,124,0.87)',
 			link: '#45a0be',
+
+			// #f5f4f6
 		},
 		textColor: {
-			high: '#dadada', // 85%
+			high: '#f5f5f5', // 96%
 			medium: '#bdbdbd', // #9f9e9f  Threads --> #bdbdbd (74%), #999999 Previous (60%)
 			emphasisC: '#9f9e9f', // 62%
 			low: '#5c5c5c',
@@ -76,7 +78,7 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 	},
 	{
 		// 🌸 Sakura 🌸
-		id: 'sakura',
+		id: 'RXLexZ2gHT7HMio0mvr0y',
 		name: 'Sakura',
 		palette: {
 			bg: '#301515', // 7 --> 14%, 301515

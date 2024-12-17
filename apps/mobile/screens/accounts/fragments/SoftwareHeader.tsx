@@ -1,25 +1,39 @@
-import { memo, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { memo } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_FONT } from '../../../styles/AppTheme';
 import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	software: string;
 	mt?: number;
 	mb?: number;
+	iconSizeMultiplier?: number;
+	addText?: boolean;
 };
 
 const ICON_SIZE_MULTIPLIER = 1.2;
 
-const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
-	const { colorScheme } = useAppTheme();
+const SoftwareHeader = memo(function Foo({
+	software,
+	mt,
+	mb,
+	iconSizeMultiplier,
+	addText,
+}: Props) {
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	const Theming = useKnownSoftware(software);
 	const _mt = mt === undefined ? 8 : mt;
 	const _mb = mb === undefined ? 12 : mb;
+
+	const iconSize = iconSizeMultiplier || ICON_SIZE_MULTIPLIER;
 
 	return (
 		<View style={{ marginTop: _mt, marginBottom: _mb, marginLeft: 4 }}>
@@ -35,19 +49,20 @@ const SoftwareHeader = memo(function Foo({ software, mt, mb }: Props) {
 				<Image
 					source={{ uri: Theming?.logo?.localUri }}
 					style={{
-						width: Theming?.width * ICON_SIZE_MULTIPLIER,
-						height: Theming?.height * ICON_SIZE_MULTIPLIER,
-						opacity: 0.8,
+						width: Theming?.width * iconSize,
+						height: Theming?.height * iconSize,
 					}}
 				/>
-				<Text
-					style={[
-						styles.accountCategoryText,
-						{ color: colorScheme.textColor.medium },
-					]}
-				>
-					{Theming?.label}
-				</Text>
+				{addText && (
+					<Text
+						style={[
+							styles.accountCategoryText,
+							{ color: theme.textColor.medium },
+						]}
+					>
+						{Theming?.label}
+					</Text>
+				)}
 			</View>
 		</View>
 	);

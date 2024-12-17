@@ -4,49 +4,58 @@ import emojiPickerReducer, {
 	defaultValue,
 	EMOJI_PICKER_REDUCER_ACTION,
 } from '../../emoji-picker/emojiPickerReducer';
-import { useActivityPubRestClientContext } from '../../../../../states/useActivityPubRestClient';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import PostMoreActionsPostTarget from '../fragments/PostMoreActionsPostTarget';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
 import ActivitypubReactionsService from '../../../../../services/approto/activitypub-reactions.service';
-import { useAppTheme } from '../../../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 const PostMoreActions = memo(() => {
-	const { PostRef, timelineDataPostListReducer, setVisible } =
-		useAppBottomSheet();
-	const { client } = useActivityPubRestClientContext();
-	const { domain, subdomain } = useActivityPubRestClientContext();
+	const { router, driver, acct, postValue, reducer, hide, theme } =
+		useGlobalState(
+			useShallow((o) => ({
+				router: o.router,
+				driver: o.driver,
+				acct: o.acct,
+				postValue: o.bottomSheet.postValue,
+				reducer: o.bottomSheet.timelineDataPostListReducer,
+				visible: o.bottomSheet.visible,
+				hide: o.bottomSheet.hide,
+				theme: o.colorScheme,
+			})),
+		);
 	const { globalDb } = useGlobalMmkvContext();
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
-	const { colorScheme } = useAppTheme();
 	const lastSubdomain = useRef(null);
 
 	const [Loading, setLoading] = useState(false);
+
 	async function onReactionRequested(shortCode: string) {
 		const state = await ActivitypubReactionsService.addReaction(
-			client,
-			PostRef.current.id,
+			router,
+			postValue.id,
 			shortCode,
-			domain,
+			driver,
 			setLoading,
 		);
 
 		// request reducer to update reaction state
 		if (!state) return;
-		timelineDataPostListReducer.current({
+		reducer({
 			type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE,
 			payload: {
-				id: PostRef.current.id,
+				id: postValue.id,
 				state,
 			},
 		});
-		setVisible(false);
+		hide();
 	}
 
 	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
 	const MainContent = useMemo(() => {
+		console.log(EditMode);
 		switch (EditMode) {
 			case 'root': {
 				return <PostMoreActionsPostTarget setEditMode={setEditMode} />;
@@ -65,20 +74,20 @@ const PostMoreActions = memo(() => {
 	}, [EditMode]);
 
 	useEffect(() => {
-		if (lastSubdomain.current === subdomain) return;
+		if (lastSubdomain.current === acct?.server) return;
 		dispatch({
 			type: EMOJI_PICKER_REDUCER_ACTION.INIT,
 			payload: {
-				subdomain,
+				subdomain: acct?.server,
 				globalDb,
-				domain,
+				driver,
 			},
 		});
-		lastSubdomain.current = subdomain;
-	}, [subdomain]);
+		lastSubdomain.current = acct?.server;
+	}, [acct?.server]);
 
 	return (
-		<View style={{ padding: 8, backgroundColor: colorScheme.palette.menubar }}>
+		<View style={{ padding: 8, backgroundColor: theme.palette.menubar }}>
 			{MainContent}
 		</View>
 	);

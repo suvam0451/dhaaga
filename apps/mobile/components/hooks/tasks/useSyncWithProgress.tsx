@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 export enum ACTIVITYPUB_SYNC_TASK {
 	BOOKMARK_SYNC = 'BOOKMARK_SYNC',
@@ -20,8 +21,13 @@ function useSyncWithProgress(
 		onSuccess?: () => void;
 	},
 ) {
-	const { client, primaryAcct } = useActivityPubRestClientContext();
-	// const db = useRealm();
+	const { client, acct, db } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			client: o.router,
+			db: o.db,
+		})),
+	);
 
 	const [Numerator, setNumerator] = useState(0);
 	const [IsTaskRunning, setIsTaskRunning] = useState(false);

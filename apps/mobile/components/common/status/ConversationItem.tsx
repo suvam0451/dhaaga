@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
-import { randomUUID } from 'expo-crypto';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useActivityPubRestClientContext } from '../../../states/useActivityPubRestClient';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import { useAppTheme } from '../../../hooks/app/useAppThemePack';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { RandomUtil } from '../../../utils/random.utils';
 
 type ConversationItem = {
 	displayName: string;
@@ -21,31 +21,36 @@ type ConversationItem = {
  * @constructor
  */
 function ConversationItem({ accountUrl, displayName }: ConversationItem) {
-	const { domain, subdomain } = useActivityPubRestClientContext();
+	const { driver, acct, theme } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			acct: o.acct,
+			theme: o.colorScheme,
+		})),
+	);
 
 	const [DescriptionContent, setDescriptionContent] = useState(<></>);
 	const [UserInterface, setUserInterface] = useState(
-		ActivityPubUserAdapter(null, domain),
+		ActivityPubUserAdapter(null, driver),
 	);
 
 	const { status } = useActivitypubStatusContext();
 	const { globalDb } = useGlobalMmkvContext();
-	const { colorScheme } = useAppTheme();
 	let content = status.getContent();
 
 	useEffect(() => {
 		const emojiMap = UserInterface.getEmojiMap();
 		const { reactNodes } = MfmService.renderMfm(content, {
 			emojiMap,
-			domain,
-			subdomain,
+			domain: driver,
+			subdomain: acct?.server,
 			globalDb,
-			colorScheme,
+			colorScheme: theme,
 		});
 		setDescriptionContent(
 			<>
 				{reactNodes?.map((para, i) => {
-					const uuid = randomUUID();
+					const uuid = RandomUtil.nanoId();
 					return (
 						<Text key={uuid} style={{ marginBottom: 8, opacity: 0.87 }}>
 							{/*<FlatList data={para} renderItem={({ item }) => item} />*/}
