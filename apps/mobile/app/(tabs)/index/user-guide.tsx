@@ -3,18 +3,20 @@ import UserGuideContainer from '../../../components/containers/UserGuideContaine
 function Page() {
 	const qa: { question: string; answers: string[] }[] = [
 		{
-			question: 'Where am I?',
+			question: 'What does this page do?',
 			answers: [
-				'This "Social Hub" id a unique homepage experience offered by Dhaaga.',
-				'It utilises the superior profile and pinning system implemented (WIP) in Dhaaga',
+				'This "Social Hub" interface is a homepage customization experience unique to Dhaaga.',
+				'You can pin your favourite timelines, servers, hashtags and users here.',
+				'It can be customized for each \"Profile\" separately.',
 			],
 		},
 
 		{
 			question: 'What are profiles?',
 			answers: [
-				'Dhaaga lets you create multiple profiles per "account" (WIP 🚧)',
-				'You can have customise your social hub experience (e.g. - different pins) per profile.',
+				'Dhaaga lets you create multiple profiles for each "account" (WIP 🚧)',
+				'Each profile can have separate social hub layout and certain settings.',
+				'Each account always has a \"Default\" profile.',
 			],
 		},
 		{
@@ -24,15 +26,14 @@ function Page() {
 		{
 			question: 'What is the Bookmark Gallery?',
 			answers: [
-				'It is a Dhaaga feature. Yes, even for Bluesky.',
-				'It lets you download and view your bookmarked posts offline. Also, the UI/UX is pretty neat.',
+				'It is a feature unique to Dhaaga.',
+				'It lets you fetch and view your bookmarks offline (Bluesky, as well 😉).',
 			],
 		},
 		{
-			question: 'What does the "For You" section do?',
+			question: 'What is the "For You" section?',
 			answers: [
-				'No worries. It is not an algorithmic feed. We don\"t do that here.',
-				'It lets you access non-essential features like app theming, release notes and other complementary features.',
+				'It lets you access complementary features like themes, release notes etc.',
 			],
 		},
 	];

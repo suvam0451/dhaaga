@@ -5,8 +5,10 @@ import { View } from 'react-native';
 import { useAppNotificationBadge } from '../../hooks/app/useAppNotificationBadge';
 import WithAppAssetsContext from '../../hooks/app/useAssets';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import AppSelectedProfileIndicator from '../../components/screens/profile/fragments/AppSelectedProfileIndicator';
-import { HomeNavigationIcon } from '../../components/lib/Icon';
+import {
+	HomeNavigationIcon,
+	ProfileTabNavbarIcon,
+} from '../../components/lib/Icon';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -158,9 +160,7 @@ export default function TabLayout() {
 					<Tabs.Screen
 						name={'profile'}
 						options={{
-							tabBarIcon: ({ color, size, focused }) => (
-								<AppSelectedProfileIndicator />
-							),
+							tabBarIcon: ProfileTabNavbarIcon,
 							tabBarIconStyle: {
 								opacity: 1,
 							},

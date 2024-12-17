@@ -4,15 +4,17 @@ import {
 	DB_COLUMN_UPDATED_AT,
 } from './repositories/_var';
 import { SQLiteDatabase } from 'expo-sqlite';
+import { createTable, dropTable, migrator as orm } from './_migrator';
+import { DataSource } from './dataSource';
 
-const APP_DB_TARGET_VERSION = 2;
+const APP_DB_TARGET_VERSION = 1;
 
 type MigrationEntry = {
 	version: number;
 	versionCode: string;
 	name: string;
-	up: string;
-	down: string;
+	up: string[];
+	down: string[];
 };
 
 /**
@@ -24,41 +26,44 @@ type MigrationEntry = {
  *
  * NOTE: uses 1 based indexing
  */
+
+export function trySchemaGenerator(db: DataSource) {
+	const accts = db.account.find();
+	console.log(accts);
+}
+
 const migrations: MigrationEntry[] = [
 	{
 		version: 1,
 		versionCode: 'v0.11.0',
 		name: 'add account support',
-		up: `
-		create table if not exists migrations (
-			${DB_COLUMN_ID},
-			userVersion integer UNIQUE ON CONFLICT REPLACE,
-			versionCode text not null,
-			name text not null
-		) strict;
-		create table if not exists account (
-			${DB_COLUMN_ID},
-			identifier text not null,
-			driver text not null,
-			server text not null,
-			username text not null,
-			avatarUrl text,
-			displayName text,
-			selected INTEGER DEFAULT 0,
-			${DB_COLUMN_CREATED_AT},
-			${DB_COLUMN_UPDATED_AT}
-		) strict;
-		`,
-		down: `
-			drop table if exists account;
-			drop table if exists migrations;
-		`,
+		up: [
+			createTable('migrations', {
+				id: orm.int().pk(),
+				userVersion: orm.int().notNull(),
+				versionCode: orm.text().notNull(),
+				name: orm.text().notNull(),
+			}),
+			createTable('account', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				identifier: orm.text().notNull(),
+				driver: orm.text().notNull(),
+				server: orm.text().notNull(),
+				username: orm.text().notNull(),
+				avatarUrl: orm.text(),
+				displayName: orm.text(),
+				selected: orm.int().default(0),
+			}),
+		],
+		down: [dropTable('account'), dropTable('migrations')],
 	},
 	{
 		version: 2,
 		versionCode: 'v0.11.0',
 		name: `add account metadata table`,
-		up: `
+		up: [
+			`
 			create table if not exists accountMetadata (
 				${DB_COLUMN_ID},	
 				key text not null,
@@ -71,15 +76,15 @@ const migrations: MigrationEntry[] = [
 				UNIQUE(accountId, key)
 			) strict;
 		`,
-		down: `
-			drop table if exists accountMetadata;
-		`,
+		],
+		down: [dropTable('accountMetadata')],
 	},
 	{
 		version: 3,
 		versionCode: 'v0.11.0',
 		name: 'add account hashtags',
-		up: `
+		up: [
+			`
 			create table if not exists hashtag (
 				${DB_COLUMN_ID},	
 				name text not null unique
@@ -96,10 +101,8 @@ const migrations: MigrationEntry[] = [
 				FOREIGN KEY (hashtagId) REFERENCES hashtag (id) ON DELETE cascade
 			) strict;
 		`,
-		down: `
-			drop table if exists accountHashtag;
-			drop table if exists hashtag;
-		`,
+		],
+		down: [dropTable('accountHashtag'), dropTable('hashtag')],
 	},
 ];
 
@@ -139,14 +142,18 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 	if (dbVersion > APP_DB_TARGET_VERSION) {
 		// down migrations
 		while (dbVersion > APP_DB_TARGET_VERSION) {
-			db.execSync(migrations[dbVersion - 1].down);
+			for (const clause of migrations[dbVersion - 1].down) {
+				db.execSync(clause);
+			}
 			dbVersion = bumpDbVersion(db, -1);
 		}
 	} else {
 		// up migrations
 		while (dbVersion < APP_DB_TARGET_VERSION) {
 			if (migrations.length > dbVersion) {
-				db.execSync(migrations[dbVersion].up);
+				for (const clause of migrations[dbVersion].up) {
+					db.execSync(clause);
+				}
 				dbVersion = bumpDbVersion(db, 1);
 			}
 		}

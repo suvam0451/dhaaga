@@ -14,6 +14,8 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { View } from 'react-native';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_LANDING_PAGE_TYPE } from '../../../../../shared/topnavbar/AppTabLandingNavbar';
+import AppNoAccount from '../../../../../error-screen/AppNoAccount';
 
 /**
  * Renders the results of a
@@ -21,11 +23,12 @@ import { useShallow } from 'zustand/react/shallow';
  * tab
  */
 const DiscoverTabFactory = memo(() => {
-	const { client, driver, theme } = useGlobalState(
+	const { client, driver, theme, acct } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
 			client: o.router,
 			theme: o.colorScheme,
+			acct: o.acct,
 		})),
 	);
 	const [SearchTerm, setSearchTerm] = useState('');
@@ -99,10 +102,12 @@ const DiscoverTabFactory = memo(() => {
 	const flashListData =
 		SearchCategory === APP_SEARCH_TYPE.POSTS ? listItems : data;
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: NUM_ITEMS,
 		updateQueryCache,
 	});
+
+	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.DISCOVER} />;
 
 	return (
 		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>

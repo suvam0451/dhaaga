@@ -9,6 +9,8 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import AppNoAccount from '../../../../error-screen/AppNoAccount';
+import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 
 type HeaderProps = {
 	label: string;
@@ -76,11 +78,14 @@ function Header({ label }: HeaderProps) {
 function AccountLanding() {
 	const { onScroll } = useScrollMoreOnPageEnd();
 
-	const { theme } = useGlobalState(
+	const { theme, acct } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
+			acct: o.acct,
 		})),
 	);
+
+	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.PROFILE} />;
 
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>

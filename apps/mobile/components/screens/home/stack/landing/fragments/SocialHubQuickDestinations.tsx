@@ -55,7 +55,7 @@ const SocialHubQuickDestinations = memo(() => {
 					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 				}}
 			>
-				Quick Destinations
+				Pinned Timelines
 			</Text>
 			<View style={{ flexDirection: 'column' }}>
 				<View

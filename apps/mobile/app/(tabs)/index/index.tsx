@@ -10,6 +10,9 @@ import { router } from 'expo-router';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
+import { Button } from '@rneui/base';
+import { trySchemaGenerator } from '../../../database/migrations';
+import AppNoAccount from '../../../components/error-screen/AppNoAccount';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -96,11 +99,19 @@ function TimeOfDayGreeting() {
 			}}
 		>
 			{Component}
+			<View>
+				<Text style={{ color: theme.textColor.high }}>Default</Text>
+			</View>
 		</View>
 	);
 }
 
 function Content() {
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
 	return (
 		<View style={{ flexGrow: 1, flex: 1 }}>
 			<View style={{ marginHorizontal: 10 }}>
@@ -116,6 +127,13 @@ function Content() {
 					}
 				/>
 			</View>
+			<Button
+				onPress={() => {
+					trySchemaGenerator(db);
+				}}
+			>
+				<Text>Wassup</Text>
+			</Button>
 			<SocialHubQuickDestinations />
 		</View>
 	);
@@ -145,44 +163,44 @@ function Tip() {
 }
 
 function Screen() {
-	const { theme } = useGlobalState(
+	const { theme, acct } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
+			acct: o.acct,
 		})),
 	);
 
+	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
+
 	return (
-		<View
+		<ScrollView
 			style={{
 				height: '100%',
-				position: 'relative',
 				backgroundColor: theme.palette.bg,
 			}}
 		>
-			<ScrollView>
-				<View style={{ minHeight: '100%' }}>
-					<View style={{ flexGrow: 1 }}>
-						<AppTabLandingNavbar
-							type={APP_LANDING_PAGE_TYPE.HOME}
-							menuItems={[
-								{
-									iconId: 'user-guide',
-									onPress: () => {
-										router.push('/user-guide');
-									},
+			<View style={{ minHeight: '100%' }}>
+				<View style={{ flexGrow: 1 }}>
+					<AppTabLandingNavbar
+						type={APP_LANDING_PAGE_TYPE.HOME}
+						menuItems={[
+							{
+								iconId: 'user-guide',
+								onPress: () => {
+									router.push('/user-guide');
 								},
-							]}
-						/>
-						<TimeOfDayGreeting />
-						<Content />
-					</View>
-
-					<View style={{ marginBottom: 24 }}>
-						<Tip />
-					</View>
+							},
+						]}
+					/>
+					<TimeOfDayGreeting />
+					<Content />
 				</View>
-			</ScrollView>
-		</View>
+
+				<View style={{ marginBottom: 24 }}>
+					<Tip />
+				</View>
+			</View>
+		</ScrollView>
 	);
 }
 

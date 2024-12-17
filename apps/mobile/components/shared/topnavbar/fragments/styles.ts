@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 
 const styles = StyleSheet.create({
@@ -16,7 +15,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	navbarTitle: {
-		color: APP_FONT.HIGH_EMPHASIS,
 		fontSize: 16,
 		fontFamily: APP_FONTS.INTER_700_BOLD,
 	},

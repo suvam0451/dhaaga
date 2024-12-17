@@ -17,9 +17,7 @@ const TopNavbarGeneric = ({ title }: HeadersProps) => {
 		<View style={[styles.subHeader, { backgroundColor: theme.palette.bg }]}>
 			<TopNavbarBackButton />
 			<View style={styles.navbarTitleContainer}>
-				<Text
-					style={[styles.navbarTitle, { color: theme.textColor.emphasisC }]}
-				>
+				<Text style={[styles.navbarTitle, { color: theme.textColor.medium }]}>
 					{title}
 				</Text>
 			</View>

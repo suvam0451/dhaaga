@@ -3,6 +3,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import {
 	Platform,
 	StyleProp,
+	StyleSheet,
 	TextStyle,
 	TouchableOpacity,
 	View,
@@ -15,9 +16,13 @@ import { FontAwesome } from '@expo/vector-icons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
-import useGlobalState from '../../states/_global';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { TimelineFetchMode } from '../common/timeline/utils/timeline.types';
+import * as Haptics from 'expo-haptics';
+import { APP_FONT } from '../../styles/AppTheme';
+import { Image } from 'expo-image';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 export type APP_ICON_ENUM =
 	| 'bell'
@@ -30,6 +35,7 @@ export type APP_ICON_ENUM =
 	| 'ellipsis-v'
 	| 'external-link'
 	| 'home'
+	| 'info'
 	| 'menu'
 	| 'message'
 	| 'no-account'
@@ -97,6 +103,67 @@ export function HomeNavigationIcon({
 				<Ionicons size={size + 2} name="home-outline" color={color} />
 			)}
 		</TouchableOpacity>
+	);
+}
+
+export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
+	const { acct, show, theme, isAnimating, visible } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			show: o.bottomSheet.show,
+			setType: o.bottomSheet.setType,
+			theme: o.colorScheme,
+			visible: o.bottomSheet.visible,
+			isAnimating: o.bottomSheet.isAnimating,
+		})),
+	);
+
+	function onLongPress() {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT);
+	}
+
+	function onPress() {
+		router.navigate('/profile');
+	}
+
+	if (visible && isAnimating) return <View />;
+	if (!acct)
+		return (
+			<TouchableOpacity
+				style={styles.accountIconTouchableContainerRight}
+				onPress={onPress}
+				onLongPress={onLongPress}
+			>
+				<MaterialIcons name="no-accounts" size={size + 4} color={color} />
+			</TouchableOpacity>
+		);
+
+	return (
+		<View style={{ flexDirection: 'row', flex: 1 }}>
+			<TouchableOpacity
+				style={styles.accountIconTouchableContainer}
+				onPress={onPress}
+				onLongPress={onLongPress}
+			>
+				<View style={styles.accountIconInternalContainer}>
+					{/*@ts-ignore-next-line*/}
+					<Image
+						style={{
+							width: 36,
+							height: 36,
+							opacity: 0.87,
+							borderRadius: 8,
+						}}
+						source={{ uri: acct?.avatarUrl }}
+						contentFit="fill"
+					/>
+				</View>
+				<View style={{ width: 14 }}>
+					<Feather name="more-vertical" size={24} color={theme.textColor.low} />
+				</View>
+			</TouchableOpacity>
+		</View>
 	);
 }
 
@@ -247,6 +314,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'info':
+					return (
+						<Ionicons
+							name="information-circle-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'feelings':
 					return (
 						<FontAwesome6
@@ -389,3 +466,45 @@ export const AppIcon = memo(
 		);
 	},
 );
+
+const styles = StyleSheet.create({
+	subHeader: {
+		width: '100%',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		backgroundColor: 'blue',
+	},
+	navbarTitleContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	navbarTitle: {
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 16,
+		fontFamily: APP_FONTS.INTER_700_BOLD,
+	},
+	buttonContainer: {
+		height: '100%',
+		alignItems: 'center',
+		flexDirection: 'row',
+		paddingHorizontal: 10,
+	},
+	accountIconTouchableContainer: {
+		height: '100%',
+		alignItems: 'center',
+		flexDirection: 'row',
+		paddingTop: 12,
+	},
+	accountIconTouchableContainerRight: {
+		height: '100%',
+		alignItems: 'center',
+		flexDirection: 'row',
+		marginTop: 10,
+	},
+	accountIconInternalContainer: {
+		borderRadius: 8,
+		borderWidth: 0.5,
+		borderColor: 'rgba(255, 255, 255, 0.25)',
+	},
+});

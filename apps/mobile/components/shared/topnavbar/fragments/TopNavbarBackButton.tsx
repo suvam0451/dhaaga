@@ -18,7 +18,7 @@ const TopNavbarBackButton = memo(() => {
 					paddingHorizontal: 8,
 				}}
 			>
-				<AppIcon id={'back'} emphasis={'high'} />
+				<AppIcon id={'back'} emphasis={'medium'} />
 			</TouchableOpacity>
 		</View>
 	);

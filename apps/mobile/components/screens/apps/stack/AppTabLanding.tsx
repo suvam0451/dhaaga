@@ -12,12 +12,14 @@ import { MaterialIcons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
+import AppNoAccount from '../../../error-screen/AppNoAccount';
 
 function AppTabLanding() {
-	const { theme, show } = useGlobalState(
+	const { theme, show, acct } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
 			show: o.bottomSheet.show,
+			acct: o.acct,
 		})),
 	);
 
@@ -48,6 +50,9 @@ function AppTabLanding() {
 			bgIcon: <MaterialIcons name="schedule" size={64} color="white" />,
 		},
 	];
+
+	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.COMPOSE} />;
+
 	return (
 		<ScrollView style={{ height: '100%', backgroundColor: theme.palette.bg }}>
 			<AppTabLandingNavbar
