@@ -1,7 +1,5 @@
-import { useCallback, useMemo } from 'react';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
-import GlobalMmkvCacheServices from '../../../services/globalMmkvCache.services';
-import { Text } from '@rneui/themed';
+import { Text } from 'react-native';
+import { useMemo } from 'react';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
@@ -53,28 +51,19 @@ function LinkProcessor({
 		'$2',
 	);
 
-	const { mmkv, show, setType } = useGlobalState(
+	const { show, appSession } = useGlobalState(
 		useShallow((o) => ({
-			mmkv: o.mmkv,
 			show: o.bottomSheet.show,
-			setType: o.bottomSheet.setType,
+			setTextValue: o.profileSessionManager,
+			appSession: o.appSession,
 		})),
 	);
 
-	const { globalDb } = useGlobalMmkvContext();
-
-	const onTextPress = useCallback(() => {
+	function onTextPress() {
 		if (!acceptTouch) return;
-
-		GlobalMmkvCacheServices.setBottomSheetProp_Link(globalDb, {
-			url: url,
-			displayName: displayName || wwwRemoved,
-		});
-		setType(APP_BOTTOM_SHEET_ENUM.LINK);
-		setTimeout(() => {
-			show();
-		}, 200);
-	}, []);
+		appSession.cache.setLinkTarget(url, displayName || wwwRemoved);
+		show(APP_BOTTOM_SHEET_ENUM.LINK, true);
+	}
 
 	const { onTextLayout, Result } = useLongLinkTextCollapse(wwwRemoved, 32);
 	return (

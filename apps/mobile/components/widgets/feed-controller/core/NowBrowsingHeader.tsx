@@ -52,7 +52,7 @@ const NowBrowsingHeader = memo(function Foo() {
 		}
 	}, [timelineType]);
 
-	return <View style={{ marginHorizontal: 8, marginBottom: 32 }}>{Comp}</View>;
+	return <View style={{ marginHorizontal: 12, marginBottom: 32 }}>{Comp}</View>;
 });
 
 export default NowBrowsingHeader;

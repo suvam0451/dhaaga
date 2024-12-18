@@ -31,8 +31,9 @@ import { TimelineDataReducerFunction } from '../components/common/timeline/api/p
 import { DataSource } from '../database/dataSource';
 import AppUserService from '../services/approto/app-user-service';
 import { AppUser } from '../types/app-user.types';
-import ProfileSessionManager from '../services/profile-session.service';
+import ProfileSessionManager from '../services/session/profile-session.service';
 import { AccountProfileService } from '../database/entities/profile';
+import AppSessionManager from '../services/session/app-session.service';
 
 type AppThemePack = {
 	id: string;
@@ -131,6 +132,7 @@ type State = {
 
 	// managers
 	profileSessionManager: ProfileSessionManager | null;
+	appSession: AppSessionManager | null;
 
 	/**
 	 * fetched account credentials
@@ -181,6 +183,7 @@ const defaultValue: State & Actions = {
 	router: null,
 
 	profileSessionManager: null,
+	appSession: null,
 
 	// account data
 	driver: null,
@@ -288,8 +291,11 @@ const useGlobalState = create<State & Actions>()(
 		theme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
-				state.db = new DataSource(db);
-				state.mmkv = new MMKV({ id: `default` });
+				const _db = new DataSource(db);
+				const _mmkv = new MMKV({ id: `default` });
+				state.db = _db;
+				state.mmkv = _mmkv;
+				state.appSession = new AppSessionManager(_db, _mmkv);
 			});
 		},
 		getPacks: () => [],

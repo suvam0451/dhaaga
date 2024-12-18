@@ -30,14 +30,17 @@ export type APP_ICON_ENUM =
 	| 'chevron-right'
 	| 'checkmark-done-outline'
 	| 'cog'
+	| 'copy'
 	| 'create'
 	| 'clear'
 	| 'done'
 	| 'edit'
 	| 'ellipsis-v'
 	| 'external-link'
+	| 'eye'
 	| 'home'
 	| 'info'
+	| 'language'
 	| 'menu'
 	| 'message'
 	| 'no-account'
@@ -265,6 +268,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'copy':
+					return (
+						<Ionicons
+							name="copy-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'clear':
 					return (
 						<AntDesign
@@ -326,6 +339,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'eye':
+					return (
+						<Ionicons
+							name="eye-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'home':
 					return (
 						<Ionicons
@@ -340,6 +363,16 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="information-circle-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'language':
+					return (
+						<Ionicons
+							name="language"
 							size={_size}
 							color={_color}
 							onPress={onPress}

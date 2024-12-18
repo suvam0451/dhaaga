@@ -38,7 +38,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 			ActivityPubReactionsService.renderData(dto.stats.reactions, {
 				calculated: dto.calculated.reactionEmojis,
 				cache: emojiCache,
-				me: me?.getId(),
+				me: me.id,
 			}),
 		);
 	}, [dto.stats.reactions, me]);

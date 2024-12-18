@@ -1,9 +1,9 @@
-import { DataSource } from '../database/dataSource';
+import { DataSource } from '../../database/dataSource';
 import {
 	Account,
 	AccountProfile,
 	ProfileKnownServer,
-} from '../database/_schema';
+} from '../../database/_schema';
 import { MMKV } from 'react-native-mmkv';
 import {
 	ActivityPubClient,
@@ -11,76 +11,18 @@ import {
 	KNOWN_SOFTWARE,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { ProfileKnownServerService } from '../database/entities/server';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AccountService } from '../database/entities/account';
-import { AccountProfileService } from '../database/entities/profile';
+import { ProfileKnownServerService } from '../../database/entities/server';
+import { AccountService } from '../../database/entities/account';
+import { AccountProfileService } from '../../database/entities/profile';
+import { BaseCacheManager, BaseStorageManager } from './_shared';
 
 /**
  * ---- Storage Interfaces ----
  */
 
-interface AppStorageInterface {}
+class Storage extends BaseStorageManager {}
 
-class StorageManager implements AppStorageInterface {
-	async get(key: string) {
-		try {
-			return await AsyncStorage.getItem(key);
-		} catch (e) {
-			return null;
-		}
-	}
-
-	async set(key: string, value: any) {
-		await AsyncStorage.setItem(key, value);
-	}
-
-	async getJson<T>(key: string): Promise<T | null> {
-		const data = await this.get(key);
-		if (!data) return null;
-		try {
-			return JSON.parse(data) as T;
-		} catch (e) {
-			console.log(`[WARN]: cache read error`, e);
-			return null;
-		}
-	}
-
-	async setJson(key: string, value: any) {
-		await this.set(key, JSON.stringify(value));
-	}
-}
-
-class CacheManager {
-	mmkv: MMKV;
-
-	constructor(mmkv: MMKV) {
-		this.mmkv = mmkv;
-	}
-
-	set(key: string, value: any) {
-		this.mmkv.set(key, value);
-	}
-
-	get(key: string) {
-		return this.mmkv.getString(key);
-	}
-
-	getJson<T>(key: string): T | null {
-		const data = this.get(key);
-		if (!data) return null;
-		try {
-			return JSON.parse(data) as T;
-		} catch (e) {
-			console.log(`[WARN]: cache read error`, e);
-			return null;
-		}
-	}
-
-	setJson(key: string, value: any) {
-		this.set(key, JSON.stringify(value));
-	}
-
+class Cache extends BaseCacheManager {
 	getEmojis(server: string) {
 		return this.getJson<{
 			data: InstanceApi_CustomEmojiDTO[];
@@ -97,10 +39,6 @@ class CacheManager {
 }
 
 /**
- * ----------------------
- */
-
-/**
  *	Class to manage Non-Reactive state
  *
  * e.g. - fetching and storing remote data
@@ -115,15 +53,15 @@ class ProfileSessionManager {
 	// api clients
 	client: ActivityPubClient;
 
-	storageManager: StorageManager;
-	cacheManager: CacheManager;
+	storageManager: Storage;
+	cacheManager: Cache;
 	customEmojis: InstanceApi_CustomEmojiDTO[];
 
 	constructor(db: DataSource, mmkv: MMKV) {
 		this.db = db;
 		this.mmkv = mmkv;
-		this.storageManager = new StorageManager();
-		this.cacheManager = new CacheManager(this.mmkv);
+		this.storageManager = new Storage();
+		this.cacheManager = new Cache(this.mmkv);
 
 		this.acct = AccountService.getSelected(this.db);
 		this.profile = AccountProfileService.getActiveProfile(this.db, this.acct);

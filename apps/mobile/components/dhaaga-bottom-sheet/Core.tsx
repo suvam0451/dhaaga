@@ -65,7 +65,6 @@ const AppBottomSheet = memo(() => {
 						}}
 					/>
 				</View>
-
 				<AppBottomSheetFactory />
 			</Animated.View>
 		</Fragment>

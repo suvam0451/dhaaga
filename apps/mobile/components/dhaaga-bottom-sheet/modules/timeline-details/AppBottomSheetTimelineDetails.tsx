@@ -5,12 +5,9 @@ import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 
 function AppBottomSheetTimelineDetails() {
-	const { colorScheme, show, setPostRef } = useGlobalState(
+	const { colorScheme } = useGlobalState(
 		useShallow((o) => ({
-			client: o.router,
 			colorScheme: o.colorScheme,
-			show: o.bottomSheet.show,
-			setPostRef: o.bottomSheet.setPostRef,
 		})),
 	);
 
@@ -18,7 +15,9 @@ function AppBottomSheetTimelineDetails() {
 		color: colorScheme.textColor.high,
 		fontSize: 20,
 		textAlign: 'center',
-		marginVertical: 16,
+		marginVertical: 24,
+		marginLeft: 10,
+		marginTop: 36,
 		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 	};
 
