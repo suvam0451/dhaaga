@@ -78,7 +78,6 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	theirSubdomain,
 	emojiMap,
 	instanceUrl,
-	visibility,
 	postedAt,
 }: {
 	displayNameRaw: string;
@@ -123,25 +122,18 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 					<View
 						style={{
 							flexDirection: 'row',
-							alignItems: 'center',
+							alignItems: 'flex-end',
 						}}
 					>
 						<View>
 							{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
 						</View>
-						<Text
-							style={{
-								color: theme.textColor.emphasisC,
-								marginHorizontal: 4,
-							}}
-						>
-							•
-						</Text>
 						<StatusCreatedAt
 							from={postedAt}
 							textStyle={{
-								color: theme.textColor.emphasisC,
+								color: theme.textColor.low,
 								fontSize: 13,
+								marginLeft: 4,
 								fontFamily: APP_FONTS.INTER_400_REGULAR,
 							}}
 						/>

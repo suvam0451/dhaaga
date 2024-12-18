@@ -5,7 +5,7 @@ import WithAppStatusItemContext, {
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Pressable } from 'react-native';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
@@ -51,7 +51,6 @@ function StatusController() {
 		setPostValue(STATUS_DTO);
 		setReducer(getPostListReducer());
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
-		console.log('saved state');
 	}
 
 	return (
@@ -113,60 +112,57 @@ const StatusCore = memo(
 
 			return (
 				<Fragment>
-					<TouchableOpacity
-						delayPressIn={150}
+					<View style={{ flexDirection: 'row' }}>
+						<PostCreatedBy
+							dto={dto}
+							style={{ paddingBottom: 6, flex: 1, overflowX: 'hidden' }}
+						/>
+						<StatusController />
+					</View>
+
+					{isSensitive && (
+						<StatusCw
+							cw={spoilerText}
+							show={ShowSensitiveContent}
+							setShow={setShowSensitiveContent}
+						/>
+					)}
+					<Pressable
 						onPress={() => {
 							toPost(STATUS_DTO.id);
 						}}
 					>
-						<View>
-							<View style={{ flexDirection: 'row' }}>
-								<PostCreatedBy
-									dto={dto}
-									style={{ paddingBottom: 6, flex: 1, overflowX: 'hidden' }}
-								/>
-								<StatusController />
+						{isSensitive && !ShowSensitiveContent ? (
+							<View></View>
+						) : (
+							<View style={{ height: 'auto' }}>
+								{PostContent}
+								{dto.calculated.translationOutput && (
+									<ExplainOutput
+										additionalInfo={'Translated using OpenAI'}
+										fromLang={'jp'}
+										toLang={'en'}
+										text={dto.calculated.translationOutput}
+									/>
+								)}
 							</View>
+						)}
 
-							{isSensitive && (
-								<StatusCw
-									cw={spoilerText}
-									show={ShowSensitiveContent}
-									setShow={setShowSensitiveContent}
-								/>
-							)}
-
-							{isSensitive && !ShowSensitiveContent ? (
-								<View></View>
-							) : (
-								<View style={{ height: 'auto' }}>
-									{PostContent}
-									{dto.calculated.translationOutput && (
-										<ExplainOutput
-											additionalInfo={'Translated using OpenAI'}
-											fromLang={'jp'}
-											toLang={'en'}
-											text={dto.calculated.translationOutput}
-										/>
-									)}
-								</View>
-							)}
-						</View>
-					</TouchableOpacity>
-					{isSensitive && !ShowSensitiveContent ? (
-						<View></View>
-					) : (
-						<MediaItem
-							attachments={STATUS_DTO.content.media}
-							calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
-						/>
-					)}
-					{/*FIXME: enable for bluesky*/}
-					{IS_QUOTE_BOOST && (
-						<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
-							<StatusQuoted />
-						</WithAppStatusItemContext>
-					)}
+						{isSensitive && !ShowSensitiveContent ? (
+							<View></View>
+						) : (
+							<MediaItem
+								attachments={STATUS_DTO.content.media}
+								calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
+							/>
+						)}
+						{/*FIXME: enable for bluesky*/}
+						{IS_QUOTE_BOOST && (
+							<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
+								<StatusQuoted />
+							</WithAppStatusItemContext>
+						)}
+					</Pressable>
 
 					{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
 					{/*{!isPreview && (*/}

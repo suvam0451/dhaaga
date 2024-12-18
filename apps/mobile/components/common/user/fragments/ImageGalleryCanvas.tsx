@@ -9,6 +9,8 @@ import {
 } from 'react-native-gesture-handler';
 import { useMemo, useRef } from 'react';
 import MediaService from '../../../../services/media.service';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	src: string;
@@ -19,55 +21,12 @@ type Props = {
 	onNext: () => void;
 };
 
-function ImageGalleryCanvas({
-	src,
-	alt,
-	onNext,
-	onPrev,
-	height,
-	width,
-}: Props) {
-	// function onClose() {
-	// 	console.log('close');
-	// }
-
-	// const renderLeftActions = (progress, dragX) => {
-	// 	const trans = dragX.interpolate({
-	// 		inputRange: [0, 50, 100, 101],
-	// 		outputRange: [-20, 0, 0, 1],
-	// 	});
-	// 	return (
-	// 		<RectButton
-	// 			onPress={onClose}
-	// 			style={{
-	// 				display: 'flex',
-	// 				alignItems: 'center',
-	// 				justifyContent: 'center',
-	// 				marginHorizontal: 8,
-	// 			}}
-	// 		>
-	// 			<Animated.View>
-	// 				<Animated.View style={{ width: 24 }}>
-	// 					<FontAwesome
-	// 						name="chevron-left"
-	// 						size={24}
-	// 						color={APP_FONT.MONTSERRAT_BODY}
-	// 					/>
-	// 				</Animated.View>
-	// 				<Animated.Text
-	// 					style={[
-	// 						{
-	// 							transform: [{ translateX: trans }],
-	// 							color: APP_FONT.MONTSERRAT_BODY,
-	// 						},
-	// 					]}
-	// 				>
-	// 					Last
-	// 				</Animated.Text>
-	// 			</Animated.View>
-	// 		</RectButton>
-	// 	);
-	// };
+function ImageGalleryCanvas({ src, onNext, onPrev, height, width }: Props) {
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
 	const start =
 		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
@@ -107,14 +66,15 @@ function ImageGalleryCanvas({
 		<GestureDetector gesture={fling}>
 			<Animated.View
 				style={{
-					width: maxW.current,
-					height: 400,
+					width: '100%',
+					height: 420,
 					display: 'flex',
 					flexDirection: 'row',
 					alignItems: 'center',
 					justifyContent: 'center',
-					paddingHorizontal: 8,
-					borderRadius: 8,
+					// borderRadius: 8,
+					alignSelf: 'center',
+					backgroundColor: theme.palette.menubar,
 				}}
 			>
 				{/*@ts-ignore-next-line*/}
@@ -124,7 +84,6 @@ function ImageGalleryCanvas({
 						flex: 1,
 						width: _width,
 						height: _height,
-						opacity: 0.87,
 						borderRadius: 8,
 					}}
 				/>

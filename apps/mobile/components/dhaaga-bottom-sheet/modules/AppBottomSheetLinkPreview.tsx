@@ -97,16 +97,24 @@ function AppBottomSheetLinkPreview() {
 		);
 	}
 
+	const obj = OpenGraphUtil.parseOgObject(OpenGraph.og);
+
 	if (!OpenGraph.loading && !OpenGraph.parsed) {
 		return (
 			<View>
+				<ReadMoreText
+					text={obj?.desc}
+					maxLines={2}
+					textStyle={{
+						color: theme.textColor.medium,
+						fontSize: 16,
+						marginTop: 4,
+					}}
+				/>
 				<AppLoadingIndicator text={'Failed to Parse'} />
 			</View>
 		);
 	}
-
-	const obj = OpenGraphUtil.parseOgObject(OpenGraph.og);
-	console.log(obj);
 
 	let _url = ValueRef.current;
 	_url = _url?.replace(/(https:\/\/)(.+)/, '$2');

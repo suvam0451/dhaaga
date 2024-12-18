@@ -5,15 +5,15 @@ import {
 	MediaAttachmentInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../../../../services/activitypub-adapter.service';
-import { FlatList, View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { FlatList, View, Text } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
 import MediaThumbnail from '../../../../../common/media/Thumb';
 import ImageGalleryCanvas from '../../../../../common/user/fragments/ImageGalleryCanvas';
-import ProfileModuleFactory from './ProfileModuleFactory';
 import { AppBskyFeedGetAuthorFeed } from '@atproto/api';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
 
 type FlashListItemProps = {
 	selected: boolean;
@@ -40,9 +40,9 @@ const FlashListItem = memo(
 		return (
 			<View
 				style={{
-					marginHorizontal: 4,
+					marginHorizontal: 2,
 					borderColor: selected ? APP_THEME.COLOR_SCHEME_D_NORMAL : 'gray',
-					borderWidth: 1.5,
+					borderWidth: 0.25,
 					borderRadius: 8,
 				}}
 				onTouchEnd={() => {
@@ -54,7 +54,7 @@ const FlashListItem = memo(
 					url={url}
 					width={width}
 					height={height}
-					size={64}
+					size={72}
 				/>
 			</View>
 		);
@@ -102,10 +102,11 @@ function SeeMore() {
 }
 
 function ProfileImageGallery({ userId }: Props) {
-	const { client, driver } = useGlobalState(
+	const { client, driver, theme } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
 			driver: o.driver,
+			theme: o.colorScheme,
 		})),
 	);
 	const [Data, setData] = useState([]);
@@ -143,7 +144,6 @@ function ProfileImageGallery({ userId }: Props) {
 
 	useEffect(() => {
 		if (status !== 'success' || !data) return;
-
 		const is =
 			driver === KNOWN_SOFTWARE.BLUESKY
 				? ActivityPubAdapterService.adaptManyStatuses(
@@ -238,13 +238,7 @@ function ProfileImageGallery({ userId }: Props) {
 	}, []);
 
 	return (
-		<ProfileModuleFactory
-			style={{
-				paddingHorizontal: 8,
-			}}
-			label={'Gallery'}
-			subtext={`${MediaItems.length}`}
-		>
+		<>
 			<ImageGalleryCanvas
 				src={MediaItems[CurrentIndex]?.getUrl()}
 				width={MediaItems[CurrentIndex]?.getWidth()}
@@ -252,28 +246,131 @@ function ProfileImageGallery({ userId }: Props) {
 				onNext={onNext}
 				onPrev={onPrev}
 			/>
-			<View>
-				<FlatList
-					ref={ListRef}
-					contentContainerStyle={{ paddingTop: 12, paddingBottom: 12 }}
-					ListFooterComponent={<SeeMore />}
-					horizontal={true}
-					data={MediaItems}
-					renderItem={({ item, index }) => (
-						<FlashListItem
-							myIndex={index}
-							activeIndex={CurrentIndex}
-							onClick={onThumbClick}
-							selected={false}
-							type={item.getType()}
-							url={item.getUrl()}
-							width={item.getWidth()}
-							height={item.getHeight()}
-						/>
-					)}
-				/>
+
+			<View
+				style={{
+					height: 48,
+					width: 256,
+					backgroundColor: theme.palette.menubar,
+					zIndex: 99,
+					opacity: 0.75,
+					borderRadius: 16,
+					marginVertical: 16,
+					alignSelf: 'center',
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}
+			>
+				<View
+					style={{
+						flex: 1,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+				>
+					<Ionicons
+						name={'heart-outline'}
+						size={24}
+						color={theme.textColor.medium}
+						style={{ width: 24 }}
+					/>
+					<Text
+						style={{
+							color: theme.textColor.high,
+							marginLeft: 4,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						}}
+					>
+						24
+					</Text>
+				</View>
+				<View
+					style={{
+						flex: 1,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+				>
+					<Ionicons
+						name={'heart-outline'}
+						size={24}
+						color={theme.textColor.medium}
+						style={{ width: 24 }}
+					/>
+					<Text
+						style={{
+							color: theme.textColor.high,
+							marginLeft: 4,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						}}
+					>
+						0
+					</Text>
+				</View>
+				<View
+					style={{
+						flex: 1,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+				>
+					<Ionicons
+						name={'heart-outline'}
+						size={24}
+						color={theme.textColor.medium}
+						style={{ width: 24 }}
+					/>
+					<Text
+						style={{
+							color: theme.textColor.high,
+							marginLeft: 4,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						}}
+					>
+						24
+					</Text>
+				</View>
+				<View
+					style={{
+						flex: 1,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+				>
+					<Ionicons
+						name={'cloud-download-outline'}
+						size={24}
+						color={theme.textColor.medium}
+						style={{ width: 24 }}
+					/>
+				</View>
 			</View>
-		</ProfileModuleFactory>
+
+			<FlatList
+				ref={ListRef}
+				contentContainerStyle={{ paddingBottom: 24 }}
+				ListFooterComponent={<SeeMore />}
+				horizontal={true}
+				data={MediaItems}
+				renderItem={({ item, index }) => (
+					<FlashListItem
+						myIndex={index}
+						activeIndex={CurrentIndex}
+						onClick={onThumbClick}
+						selected={false}
+						type={item.getType()}
+						url={item.getUrl()}
+						width={item.getWidth()}
+						height={item.getHeight()}
+					/>
+				)}
+			/>
+		</>
 	);
 }
 

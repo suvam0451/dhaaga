@@ -22,7 +22,9 @@ const TopNavbarProfilePage = ({ title }: HeadersProps) => {
 		>
 			<TopNavbarBackButton />
 			<View style={styles.navbarTitleContainer}>
-				<Text style={styles.navbarTitle}>{title}</Text>
+				<Text style={[styles.navbarTitle, { color: theme.textColor.high }]}>
+					{title}
+				</Text>
 			</View>
 			<TouchableOpacity style={{ width: 36 }}>
 				<Feather

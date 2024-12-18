@@ -11,13 +11,13 @@ import useAppNavigator from '../../../../../../states/useAppNavigator';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { AppIcon } from '../../../../../lib/Icon';
 
 type ProfileStatsProps = {
 	userId: string;
 	postCount?: number;
 	followingCount?: number;
 	followerCount?: number;
-	style?: StyleProp<ViewStyle>;
 };
 
 function util(o: number): string {
@@ -33,13 +33,7 @@ function util(o: number): string {
  * count stats for a profile
  */
 const ProfileStats = memo(
-	({
-		postCount,
-		followingCount,
-		followerCount,
-		style,
-		userId,
-	}: ProfileStatsProps) => {
+	({ postCount, followingCount, followerCount, userId }: ProfileStatsProps) => {
 		const { theme } = useGlobalState(
 			useShallow((o) => ({
 				theme: o.colorScheme,
@@ -59,19 +53,9 @@ const ProfileStats = memo(
 
 		return (
 			<View
-				style={[
-					styles.container,
-					style,
-					{ backgroundColor: theme.palette.menubar },
-				]}
+				style={[styles.container, { backgroundColor: theme.palette.menubar }]}
 			>
-				<TouchableOpacity
-					style={{
-						alignItems: 'center',
-						paddingHorizontal: 8,
-					}}
-					onPress={onPostsPress}
-				>
+				<TouchableOpacity style={styles.touchContainer} onPress={onPostsPress}>
 					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
 						{util(postCount)}
 					</Text>
@@ -82,7 +66,7 @@ const ProfileStats = memo(
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={{ alignItems: 'center', flex: 1, paddingHorizontal: 8 }}
+					style={styles.touchContainer}
 					onPress={onFollowsPress}
 				>
 					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
@@ -95,10 +79,7 @@ const ProfileStats = memo(
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={{
-						alignItems: 'center',
-						paddingHorizontal: 8,
-					}}
+					style={styles.touchContainer}
 					onPress={onFollowersPress}
 				>
 					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
@@ -110,6 +91,9 @@ const ProfileStats = memo(
 						Followers
 					</Text>
 				</TouchableOpacity>
+				<TouchableOpacity style={styles.touchContainer}>
+					<AppIcon id={'ellipsis-v'} />
+				</TouchableOpacity>
 			</View>
 		);
 	},
@@ -120,17 +104,19 @@ export default ProfileStats;
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
-		flex: 1,
-		minWidth: 196,
-		maxWidth: 1024,
-		paddingHorizontal: 8,
-		marginRight: 8,
 		borderRadius: 10,
-		paddingVertical: 6,
+		marginHorizontal: 8,
+		marginTop: 32,
 	},
 	primaryText: {
 		fontSize: 18,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 	},
-	secondaryText: { fontSize: 14, fontFamily: APP_FONTS.INTER_500_MEDIUM },
+	secondaryText: { fontSize: 13, fontFamily: APP_FONTS.INTER_500_MEDIUM },
+	touchContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingVertical: 8,
+	},
 });

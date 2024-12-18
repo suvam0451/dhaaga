@@ -11,15 +11,12 @@ import styles from '../../../../common/user/utils/styles';
 import ProfileStats from './fragments/ProfileStats';
 import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
 import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
-import ProfileButtonMessage from './fragments/ProfileButtonMessage';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../shared/topnavbar/AppTopNavbar';
-import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
 import ProfileModules from './modules/ProfileModules';
-import { AppIcon } from '../../../../lib/Icon';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -73,63 +70,46 @@ export function ProfileContextWrapped() {
 					source={{ uri: bannerUrl }}
 					style={{ height: 128, width: Dimensions.get('window').width }}
 				/>
-				<View style={{ flexDirection: 'row' }}>
+				<View style={{ flexDirection: 'row', width: '100%' }}>
 					<ProfileAvatar
 						containerStyle={localStyles.avatarContainer}
 						imageStyle={localStyles.avatarImageContainer}
 						uri={avatarUrl}
 					/>
-					<View style={localStyles.buttonSection}>
-						<ProfileButtonMessage handle={acct?.handle} />
-						<View style={{ width: 8 }} />
-						<ProfileButtonPhonebook />
-					</View>
-					<ProfileStats
-						userId={acct?.id}
-						postCount={acct?.stats?.posts}
-						followingCount={acct?.stats?.following}
-						followerCount={acct?.stats?.followers}
-						style={localStyles.statSectionContainer}
-					/>
-				</View>
-				<View style={localStyles.secondSectionContainer}>
-					<View style={{ flexShrink: 1 }}>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_900_BLACK,
-								color: APP_FONT.HIGH_EMPHASIS,
-							}}
-							numberOfLines={1}
-						>
+					<View
+						style={{
+							flexDirection: 'row',
+							flex: 1,
+							flexGrow: 1,
+							marginLeft: 8,
+							marginTop: 6,
+						}}
+					>
+						<View>
 							{ParsedDisplayName}
-						</Text>
-						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<Text
-								style={[
-									styles.secondaryText,
-									{ color: theme.textColor.medium },
-								]}
-								numberOfLines={1}
-							>
-								{acct?.handle}
-							</Text>
-							{IS_LOCKED && (
-								<View style={{ marginLeft: 4 }}>
-									<AntDesign
-										name="lock1"
-										size={14}
-										color={APP_FONT.MONTSERRAT_BODY}
-									/>
-								</View>
-							)}
+							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+								<Text
+									style={[
+										styles.secondaryText,
+										{ color: theme.textColor.medium },
+									]}
+									numberOfLines={1}
+								>
+									{acct?.handle}
+								</Text>
+								{IS_LOCKED && (
+									<View style={{ marginLeft: 4 }}>
+										<AntDesign
+											name="lock1"
+											size={14}
+											color={APP_FONT.MONTSERRAT_BODY}
+										/>
+									</View>
+								)}
+							</View>
 						</View>
 					</View>
 					<View style={localStyles.relationManagerSection}>
-						<AppIcon
-							id={'bell'}
-							size={22}
-							containerStyle={{ marginRight: 8 }}
-						/>
 						<RelationshipButtonCore userId={acct?.id} />
 					</View>
 				</View>
@@ -140,16 +120,19 @@ export function ProfileContextWrapped() {
 					remoteSubdomain={acct?.instance}
 					emojiMap={acct?.calculated?.emojis}
 				/>
-
-				{/*Separator*/}
-				<View style={{ flexGrow: 1 }} />
+				<ProfileStats
+					userId={acct?.id}
+					postCount={acct?.stats?.posts}
+					followingCount={acct?.stats?.following}
+					followerCount={acct?.stats?.followers}
+				/>
 
 				{/* Collapsible Sections */}
 				<ProfileModules
 					acct={acct}
 					fields={fields}
 					profileId={acct?.id}
-					style={{ paddingBottom: 16 }}
+					style={{ paddingBottom: 16, flex: 1 }}
 				/>
 			</Animated.ScrollView>
 		</AppTopNavbar>
@@ -191,19 +174,9 @@ const localStyles = StyleSheet.create({
 	},
 	relationManagerSection: {
 		flexDirection: 'row',
-		flexGrow: 1,
 		alignItems: 'center',
-		justifyContent: 'flex-end',
-		paddingHorizontal: 8,
-		marginLeft: 4,
-		marginRight: 8,
-	},
-	statSectionContainer: {
-		backgroundColor: '#242424',
-		marginRight: 4,
-		borderRadius: 8,
-		marginTop: 4,
-		padding: 4,
+		marginRight: 12,
+		marginTop: 8,
 	},
 	secondSectionContainer: {
 		flexDirection: 'row',
