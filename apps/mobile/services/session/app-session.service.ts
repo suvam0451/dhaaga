@@ -5,6 +5,7 @@ import { MMKV } from 'react-native-mmkv';
 
 enum APP_CACHE_KEY {
 	LINK_TARGET = 'app/_cache/bottomSheet_linkTarget',
+	TAG_TARGET = 'app/_cache/bottomSheet_tagTarget',
 }
 
 /**
@@ -25,6 +26,10 @@ type AppLinkTargetType = z.infer<typeof AppLinkTargetDto>;
 class Storage extends BaseStorageManager {}
 
 class Cache extends BaseCacheManager {
+	getLinkTarget(): AppLinkTargetType {
+		return this.getJson(APP_CACHE_KEY.LINK_TARGET);
+	}
+
 	setLinkTarget(url: string, displayName: string) {
 		this.setJson(APP_CACHE_KEY.LINK_TARGET, {
 			url,
@@ -32,8 +37,12 @@ class Cache extends BaseCacheManager {
 		});
 	}
 
-	getLinkTarget(): AppLinkTargetType {
-		return this.getJson(APP_CACHE_KEY.LINK_TARGET);
+	getTagTarget() {
+		return this.get(APP_CACHE_KEY.TAG_TARGET);
+	}
+
+	setTagTarget(value: string) {
+		return this.set(APP_CACHE_KEY.TAG_TARGET, value);
 	}
 }
 

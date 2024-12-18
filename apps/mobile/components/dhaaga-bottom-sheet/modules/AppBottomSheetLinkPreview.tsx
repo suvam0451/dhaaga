@@ -87,8 +87,6 @@ function AppBottomSheetLinkPreview() {
 		}
 	}, [OpenGraph]);
 
-	console.log(OpenGraph);
-
 	if (INACTIVE) return <View />;
 
 	if (OpenGraph.loading) {
@@ -136,7 +134,6 @@ function AppBottomSheetLinkPreview() {
 							contentFit={'cover'}
 							style={{
 								margin: 'auto',
-								backgroundColor: 'blue',
 								width: '100%',
 								minHeight: 172,
 								borderTopLeftRadius: 16,

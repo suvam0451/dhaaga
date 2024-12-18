@@ -17,29 +17,33 @@ import { RandomUtil } from '../utils/random.utils';
 class ActivityPubService {
 	/**
 	 * Check MastoAPI compatibility
-	 * @param domain
+	 * @param driver
 	 */
-	static mastodonLike(domain: string) {
+	static mastodonLike(driver: string) {
 		return [
 			KNOWN_SOFTWARE.MASTODON,
 			KNOWN_SOFTWARE.PLEROMA,
 			KNOWN_SOFTWARE.AKKOMA,
-		].includes(domain as KNOWN_SOFTWARE);
+		].includes(driver as KNOWN_SOFTWARE);
 	}
 
-	static pleromaLike(domain: string) {
+	static pleromaLike(driver: string) {
 		return [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
-			domain as KNOWN_SOFTWARE,
+			driver as KNOWN_SOFTWARE,
 		);
 	}
 
-	static misskeyLike(domain: string) {
+	static misskeyLike(driver: string) {
 		return [
 			KNOWN_SOFTWARE.MISSKEY,
 			KNOWN_SOFTWARE.SHARKEY,
 			KNOWN_SOFTWARE.FIREFISH,
 			KNOWN_SOFTWARE.ICESHRIMP,
-		].includes(domain as KNOWN_SOFTWARE);
+		].includes(driver as KNOWN_SOFTWARE);
+	}
+
+	static blueskyLike(driver: KNOWN_SOFTWARE) {
+		return [KNOWN_SOFTWARE.BLUESKY].includes(driver);
 	}
 
 	/**

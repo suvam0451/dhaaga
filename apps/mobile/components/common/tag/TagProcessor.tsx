@@ -12,26 +12,17 @@ const HashtagProcessor = memo(function Foo({
 	content: string;
 	forwardedKey: string | number;
 }) {
-	const { show, setTextValue } = useGlobalState(
+	const { show, appSession } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,
-			setTextValue: o.bottomSheet.setTextValue,
+			appSession: o.appSession,
 		})),
 	);
 
-	// const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
-	// 	return {
-	// 		isFollowed: item && item.following,
-	// 		isPrivatelyFollowed: item && item.privatelyFollowing,
-	// 	};
-	// }, [item?.following, item?.privatelyFollowing]);
-
-	const onPress = () => {
-		setTextValue(content);
-		setTimeout(() => {
-			show(APP_BOTTOM_SHEET_ENUM.HASHTAG);
-		}, 200);
-	};
+	function onPress() {
+		appSession.cache.setTagTarget(content);
+		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
+	}
 
 	let isFollowed = false;
 	let isPrivatelyFollowed = false;

@@ -46,6 +46,7 @@ export type APP_ICON_ENUM =
 	| 'no-account'
 	| 'palette'
 	| 'phonebook'
+	| 'pin'
 	| 'retweet'
 	| 'search'
 	| 'share'
@@ -433,6 +434,16 @@ export const AppIcon = memo(
 					return (
 						<FontAwesome6
 							name="contact-book"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'pin':
+					return (
+						<AntDesign
+							name="pushpino"
 							size={_size}
 							color={_color}
 							onPress={onPress}

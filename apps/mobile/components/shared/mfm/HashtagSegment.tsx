@@ -9,24 +9,19 @@ type Props = {
 	value: string;
 	fontFamily: string;
 };
+
 const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
-	const { theme } = useGlobalState(
+	const { theme, show, appSession } = useGlobalState(
 		useShallow((o) => ({
+			show: o.bottomSheet.show,
 			theme: o.colorScheme,
+			appSession: o.appSession,
 		})),
 	);
 
 	const { acceptTouch } = useAppMfmContext();
 	const _value = decodeURI(value);
 
-	const { show, mmkv, setTextValue, setType } = useGlobalState(
-		useShallow((o) => ({
-			show: o.bottomSheet.show,
-			mmkv: o.mmkv,
-			setTextValue: o.bottomSheet.setTextValue,
-			setType: o.bottomSheet.setType,
-		})),
-	);
 	const item = null;
 
 	const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
@@ -38,12 +33,8 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 
 	const onPress = () => {
 		if (!acceptTouch) return;
-
-		setTextValue(_value);
-		setType(APP_BOTTOM_SHEET_ENUM.HASHTAG);
-		setTimeout(() => {
-			show();
-		}, 200);
+		appSession.cache.setTagTarget(_value);
+		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
 	};
 
 	const k = RandomUtil.nanoId();
