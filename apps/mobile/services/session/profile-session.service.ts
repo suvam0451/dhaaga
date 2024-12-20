@@ -8,9 +8,8 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { KnownServerService } from '../../database/entities/server';
 import { AccountService } from '../../database/entities/account';
-import { AccountProfileService } from '../../database/entities/profile';
+import { ProfileService } from '../../database/entities/profile';
 import { BaseStorageManager } from './_shared';
-
 /**
  * ---- Storage Interfaces ----
  */
@@ -53,7 +52,7 @@ class ProfileSessionManager {
 		this.cacheManager = new Storage();
 
 		this.acct = AccountService.getSelected(this.db);
-		this.profile = AccountProfileService.getActiveProfile(this.db, this.acct);
+		this.profile = ProfileService.getActiveProfile(this.db, this.acct);
 		this.customEmojis = [];
 	}
 

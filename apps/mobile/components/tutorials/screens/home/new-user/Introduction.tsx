@@ -8,7 +8,6 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
-import { DbMetaRepo } from '../../../../../database/repositories/_meta.repo';
 import { APP_ROUTE_ENUM } from '../../../../../utils/route-list';
 
 function IntroductionBase() {
@@ -20,9 +19,7 @@ function IntroductionBase() {
 
 	const { translateY } = useScrollMoreOnPageEnd();
 
-	function onDbCheck() {
-		DbMetaRepo.listTables();
-	}
+	function onDbCheck() {}
 
 	return (
 		<AppTopNavbar

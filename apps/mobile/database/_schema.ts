@@ -1,4 +1,5 @@
 import { BaseEntity, Entity } from '@dhaaga/orm';
+import { APP_PINNED_OBJECT_TYPE } from '../services/driver.service';
 
 export const DATABASE_NAME = 'app.db';
 
@@ -85,25 +86,15 @@ export class KnownServer extends BaseEntity<KnownServer> {
 	profile?: Profile;
 }
 
-enum APP_PINNED_TIMELINE_TYPE {
-	/**
-	 * ActivityPub - SNS - Inherited
-	 */
-	AP_PROTO_MICROBLOG_HOME = 'apProto_microBlog_HOME',
-	AP_PROTO_MICROBLOG_LOCAL = 'apProto_microBlog_LOCAL',
-	AP_PROTO_MICROBLOG_SOCIAL = 'apProto_microBlog_SOCIAL',
-	AP_PROTO_MICROBLOG_BUBBLE = 'apProto_microBlog_BUBBLE',
-	AP_PROTO_MICROBLOG_GLOBAL = 'apProto_microBlog_GLOBAL',
-}
-
-class PinnedObject extends BaseEntity<PinnedObject> {
+@Entity('profilePinnedTimeline')
+export class ProfilePinnedTimeline extends BaseEntity<ProfilePinnedTimeline> {
 	uuid: string;
 	server: string;
-	category: APP_PINNED_TIMELINE_TYPE;
+	category: APP_PINNED_OBJECT_TYPE;
 	driver: string;
 
 	// pin meta
-	required: number; // some pins can be hidden, but not removed.
+	required: boolean; // some pins can be hidden, but not removed.
 	show: boolean;
 	itemOrder: number; // determines order
 	page: number; // not used
@@ -140,27 +131,117 @@ class PinnedObject extends BaseEntity<PinnedObject> {
 
 	// joins
 	profile?: Profile;
-}
 
-@Entity('profilePinnedTimeline')
-export class ProfilePinnedTimeline extends PinnedObject {
 	profileId: number | null;
+	active: boolean;
 }
 
 @Entity('profilePinnedUser')
-export class ProfilePinnedUser extends PinnedObject {
+export class ProfilePinnedUser extends BaseEntity<ProfilePinnedUser> {
+	uuid: string;
+	server: string;
+	category: APP_PINNED_OBJECT_TYPE;
+	driver: string;
+
+	// pin meta
+	required: boolean; // some pins can be hidden, but not removed.
+	show: boolean;
+	itemOrder: number; // determines order
+	page: number; // not used
+
+	/**
+	 * alternate name for the pinned item
+	 *
+	 * Conditions = { required: false }
+	 * require
+	 */
+	alias: string | null;
+
+	/**
+	 * The stored previous min/max ids
+	 */
+	minId: string | null;
+	maxId: string | null;
+	/**
+	 * replaces the min/max ids on successful timeline exit
+	 */
+	minIdNext: string | null;
+	maxIdNext: string | null;
+
+	minIdDraft: string | null;
+	maxIdDraft: string | null;
+
+	unseenCount: number;
+	/**
+	 * Fallback, when the draft/next
+	 * set was not written properly
+	 * due to unexpected exists
+	 */
+	lastCommitMaxId: string | null;
+
+	// joins
+	profile?: Profile;
+
 	// these columns are extra on top
 	identifier: string;
 	username: string;
 	avatarUrl: string | null;
 	displayName: string | null;
+	profileId: number | null;
+	active: boolean;
 }
 
 @Entity('profilePinnedTag')
-export class ProfilePinnedTag extends PinnedObject {
+export class ProfilePinnedTag extends BaseEntity<ProfilePinnedTag> {
+	uuid: string;
+	server: string;
+	category: APP_PINNED_OBJECT_TYPE;
+	driver: string;
+
+	// pin meta
+	required: boolean; // some pins can be hidden, but not removed.
+	show: boolean;
+	itemOrder: number; // determines order
+	page: number; // not used
+
+	/**
+	 * alternate name for the pinned item
+	 *
+	 * Conditions = { required: false }
+	 * require
+	 */
+	alias: string | null;
+
+	/**
+	 * The stored previous min/max ids
+	 */
+	minId: string | null;
+	maxId: string | null;
+	/**
+	 * replaces the min/max ids on successful timeline exit
+	 */
+	minIdNext: string | null;
+	maxIdNext: string | null;
+
+	minIdDraft: string | null;
+	maxIdDraft: string | null;
+
+	unseenCount: number;
+	/**
+	 * Fallback, when the draft/next
+	 * set was not written properly
+	 * due to unexpected exists
+	 */
+	lastCommitMaxId: string | null;
+
+	// joins
+	profile?: Profile;
+
 	// these columns are extra on top
 	identifier: string;
 	name: string;
+	profileId: number | null;
+	active: boolean;
 }
 
 /**

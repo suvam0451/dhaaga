@@ -155,35 +155,29 @@ function Screen() {
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
 
 	return (
-		<View style={{ position: 'relative' }}>
-			<ScrollView
-				style={{
-					backgroundColor: theme.palette.bg,
-					height: '100%',
-				}}
-				refreshControl={
-					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
-				}
-			>
-				<View>
-					<View style={{ flexGrow: 1 }}>
-						<AppTabLandingNavbar
-							type={APP_LANDING_PAGE_TYPE.HOME}
-							menuItems={[
-								{
-									iconId: 'user-guide',
-									onPress: () => {
-										router.push('/user-guide');
-									},
-								},
-							]}
-						/>
-						{/*<TimeOfDayGreeting />*/}
-						<Content />
-					</View>
-				</View>
-			</ScrollView>
-		</View>
+		<ScrollView
+			style={{
+				backgroundColor: theme.palette.bg,
+				height: '100%',
+			}}
+			refreshControl={
+				<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
+			}
+		>
+			<AppTabLandingNavbar
+				type={APP_LANDING_PAGE_TYPE.HOME}
+				menuItems={[
+					{
+						iconId: 'user-guide',
+						onPress: () => {
+							router.push('/user-guide');
+						},
+					},
+				]}
+			/>
+			{/*<TimeOfDayGreeting />*/}
+			<Content />
+		</ScrollView>
 	);
 }
 

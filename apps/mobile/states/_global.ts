@@ -31,7 +31,7 @@ import { DataSource } from '../database/dataSource';
 import AppUserService from '../services/approto/app-user-service';
 import { AppUserDto } from '../types/app-user.types';
 import ProfileSessionManager from '../services/session/profile-session.service';
-import { AccountProfileService } from '../database/entities/profile';
+import { ProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
 
 type AppThemePack = {
@@ -244,7 +244,7 @@ class GlobalStateService {
 				console.log('[WARN]: no account was found');
 				return { type: 'invalid' };
 			}
-			const profile = AccountProfileService.getActiveProfile(db, acct);
+			const profile = ProfileService.getActiveProfile(db, acct);
 			if (!profile) {
 				console.log('[WARN]: no profile was found');
 				return { type: 'invalid' };

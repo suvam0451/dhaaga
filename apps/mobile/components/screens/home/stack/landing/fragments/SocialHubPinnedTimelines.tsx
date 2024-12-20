@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
@@ -10,6 +10,7 @@ import { router } from 'expo-router';
 import { SocialHubPinSectionContainer } from './_factory';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../styles/BuiltinThemes';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -104,11 +105,20 @@ function PinnedTimelineItem({ label, icon }: PinnedTimelineItemProps) {
 }
 
 const SocialHubPinnedTimelines = memo(() => {
-	const { theme } = useGlobalState(
+	const { theme, db } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
+			db: o.db,
 		})),
 	);
+
+	useEffect(() => {
+		if (db) {
+			const items = db.profilePinnedTimeline.find({});
+			console.log(items);
+		}
+	}, []);
+
 	return (
 		<SocialHubPinSectionContainer
 			label={'Timelines'}
@@ -130,7 +140,7 @@ const SocialHubPinnedTimelines = memo(() => {
 							<AppIcon
 								id={'home'}
 								size={48}
-								emphasis={'high'}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 								iconStyle={{ color: theme.secondary.a0 }}
 							/>
 						}
@@ -141,7 +151,7 @@ const SocialHubPinnedTimelines = memo(() => {
 							<AppIcon
 								id={'home'}
 								size={48}
-								emphasis={'high'}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 								iconStyle={{ color: theme.secondary.a0 }}
 							/>
 						}

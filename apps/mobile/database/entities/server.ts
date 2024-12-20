@@ -74,17 +74,17 @@ class Repo {
 		id: number,
 		input: ProfileKnownServerMetadataRecordType,
 	) {
-		const conflict = db.profileKnownServerMetadata.findOne({
+		const conflict = db.knownServerMetadata.findOne({
 			knownServerId: id,
 			key: input.key,
 		});
 		if (conflict) {
-			db.profileKnownServerMetadata.updateById(conflict.id, {
+			db.knownServerMetadata.updateById(conflict.id, {
 				value: input.value,
 				type: 'string',
 			});
 		} else {
-			db.profileKnownServerMetadata.insert(input);
+			db.knownServerMetadata.insert(input);
 		}
 	}
 }

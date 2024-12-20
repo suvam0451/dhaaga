@@ -10,7 +10,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { DataSource } from '../dataSource';
 import { gt } from '@dhaaga/orm';
 import { RandomUtil } from '../../utils/random.utils';
-import { AccountProfileService } from './profile';
+import { ProfileService } from './profile';
 
 /**
  * --- Validators
@@ -57,7 +57,7 @@ export class Repo {
 	): Result<Account> {
 		const match = Repo.getByHandleFragments(db, dto.server, dto.username);
 		if (match) {
-			AccountProfileService.setupDefaultProfile(db, match);
+			ProfileService.setupDefaultProfile(db, match);
 			return withSuccess(match);
 		} else {
 			db.account.insert({
@@ -70,7 +70,7 @@ export class Repo {
 				avatarUrl: dto.avatarUrl,
 			});
 			const upserted = Repo.getByHandleFragments(db, dto.server, dto.username);
-			AccountProfileService.setupDefaultProfile(db, upserted);
+			ProfileService.setupDefaultProfile(db, upserted);
 			return withSuccess(upserted);
 		}
 	}
@@ -86,7 +86,7 @@ export class Repo {
 				selected: false,
 			},
 		);
-		AccountProfileService.deselectAll(db);
+		ProfileService.deselectAll(db);
 	}
 
 	static updateSoftware(db: DataSource, id: number, driver: string) {
@@ -116,6 +116,7 @@ class Service {
 		const upsertResult = Repo.upsert(db, acct);
 		if (upsertResult.type === 'success') {
 			AccountMetadataService.upsertMultiple(db, upsertResult.value, metadata);
+			ProfileService.setupDefaultProfile(db, upsertResult.value);
 			return withSuccess(upsertResult.value);
 		}
 	}
@@ -125,7 +126,7 @@ class Service {
 	static select(db: DataSource, acct: Account) {
 		Repo.deselectAll(db);
 		Repo.updateSelectionFlag(db, acct.id, true);
-		AccountProfileService.selectDefaultProfile(db, acct);
+		ProfileService.selectDefaultProfile(db, acct);
 	}
 
 	static deselect(db: DataSource, acct: Account) {

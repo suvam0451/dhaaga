@@ -119,6 +119,7 @@ const migrations: MigrationEntry[] = [
 				unseenCount: orm.int(),
 				lastCommitMaxId: orm.text(),
 				profileId: orm.int().fk('profile'),
+				active: orm.int().default(1),
 			}),
 			createTable('profilePinnedUser', {
 				id: orm.int().pk(),
@@ -151,6 +152,7 @@ const migrations: MigrationEntry[] = [
 				username: orm.text().notNull(),
 				avatarUrl: orm.text(),
 				displayName: orm.text(),
+				active: orm.int().default(1),
 			}),
 			createTable('profilePinnedTag', {
 				id: orm.int().pk(),
@@ -181,6 +183,7 @@ const migrations: MigrationEntry[] = [
 				// extras
 				identifier: orm.text().notNull(),
 				name: orm.text().notNull(),
+				active: orm.int().default(1),
 			}),
 		],
 		down: [
