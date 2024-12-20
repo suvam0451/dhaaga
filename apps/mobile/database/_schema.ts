@@ -96,8 +96,7 @@ enum APP_PINNED_TIMELINE_TYPE {
 	AP_PROTO_MICROBLOG_GLOBAL = 'apProto_microBlog_GLOBAL',
 }
 
-@Entity('profilePinnedTimeline')
-export class ProfilePinnedTimeline extends BaseEntity<ProfilePinnedTimeline> {
+class PinnedObject extends BaseEntity<PinnedObject> {
 	uuid: string;
 	server: string;
 	category: APP_PINNED_TIMELINE_TYPE;
@@ -106,8 +105,9 @@ export class ProfilePinnedTimeline extends BaseEntity<ProfilePinnedTimeline> {
 	// pin meta
 	required: number; // some pins can be hidden, but not removed.
 	show: boolean;
-	order: number; // determines order
+	itemOrder: number; // determines order
 	page: number; // not used
+
 	/**
 	 * alternate name for the pinned item
 	 *
@@ -116,20 +116,51 @@ export class ProfilePinnedTimeline extends BaseEntity<ProfilePinnedTimeline> {
 	 */
 	alias: string | null;
 
-	// pagination
+	/**
+	 * The stored previous min/max ids
+	 */
 	minId: string | null;
 	maxId: string | null;
+	/**
+	 * replaces the min/max ids on successful timeline exit
+	 */
+	minIdNext: string | null;
+	maxIdNext: string | null;
+
+	minIdDraft: string | null;
 	maxIdDraft: string | null;
+
 	unseenCount: number;
-	profileId: number | null;
+	/**
+	 * Fallback, when the draft/next
+	 * set was not written properly
+	 * due to unexpected exists
+	 */
+	lastCommitMaxId: string | null;
 
 	// joins
 	profile?: Profile;
 }
 
-@Entity('profilePinnedTimelineSession')
-export class ProfilePinnedTimelineSession {
-	pin: ProfilePinnedTimeline;
+@Entity('profilePinnedTimeline')
+export class ProfilePinnedTimeline extends PinnedObject {
+	profileId: number | null;
+}
+
+@Entity('profilePinnedUser')
+export class ProfilePinnedUser extends PinnedObject {
+	// these columns are extra on top
+	identifier: string;
+	username: string;
+	avatarUrl: string | null;
+	displayName: string | null;
+}
+
+@Entity('profilePinnedTag')
+export class ProfilePinnedTag extends PinnedObject {
+	// these columns are extra on top
+	identifier: string;
+	name: string;
 }
 
 /**

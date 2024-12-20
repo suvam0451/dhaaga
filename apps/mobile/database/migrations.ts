@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from 'expo-sqlite';
 import { createTable, dropTable, migrator as orm } from '@dhaaga/orm';
 
-const APP_DB_TARGET_VERSION = 2;
+const APP_DB_TARGET_VERSION = 3;
 
 /**
  * Version control for migrations
@@ -92,13 +92,101 @@ const migrations: MigrationEntry[] = [
 	{
 		version: 3,
 		versionCode: 'v0.11.0',
-		name: 'pinning features for profiles',
-		up: [],
-		down: [
+		name: 'homepage pinning for profiles',
+		up: [
 			createTable('profilePinnedTimeline', {
 				id: orm.int().pk(),
 				uuid: orm.text().notNull(),
+				server: orm.text().notNull(),
+				category: orm.text().notNull(),
+				driver: orm.text().notNull(), // pin meta
+				required: orm.int().default(0),
+				show: orm.int().default(1),
+				itemOrder: orm.int().default(1),
+				page: orm.int().default(1),
+
+				alias: orm.text(),
+
+				minId: orm.text(),
+				maxId: orm.text(),
+
+				minIdNext: orm.text(),
+				maxIdNext: orm.text(),
+
+				minIdDraft: orm.text(),
+				maxIdDraft: orm.text(),
+
+				unseenCount: orm.int(),
+				lastCommitMaxId: orm.text(),
+				profileId: orm.int().fk('profile'),
 			}),
+			createTable('profilePinnedUser', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				server: orm.text().notNull(),
+				category: orm.text().notNull(),
+				driver: orm.text().notNull(), // pin meta
+				required: orm.int().default(0),
+				show: orm.int().default(1),
+				itemOrder: orm.int().default(1),
+				page: orm.int().default(1),
+
+				alias: orm.text(),
+
+				minId: orm.text(),
+				maxId: orm.text(),
+
+				minIdNext: orm.text(),
+				maxIdNext: orm.text(),
+
+				minIdDraft: orm.text(),
+				maxIdDraft: orm.text(),
+
+				unseenCount: orm.int(),
+				lastCommitMaxId: orm.text(),
+				profileId: orm.int().fk('profile'),
+
+				// extras
+				identifier: orm.text().notNull(),
+				username: orm.text().notNull(),
+				avatarUrl: orm.text(),
+				displayName: orm.text(),
+			}),
+			createTable('profilePinnedTag', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				server: orm.text().notNull(),
+				category: orm.text().notNull(),
+				driver: orm.text().notNull(), // pin meta
+				required: orm.int().default(0),
+				show: orm.int().default(1),
+				itemOrder: orm.int().default(1),
+				page: orm.int().default(1),
+
+				alias: orm.text(),
+
+				minId: orm.text(),
+				maxId: orm.text(),
+
+				minIdNext: orm.text(),
+				maxIdNext: orm.text(),
+
+				minIdDraft: orm.text(),
+				maxIdDraft: orm.text(),
+
+				unseenCount: orm.int(),
+				lastCommitMaxId: orm.text(),
+				profileId: orm.int().fk('profile'),
+
+				// extras
+				identifier: orm.text().notNull(),
+				name: orm.text().notNull(),
+			}),
+		],
+		down: [
+			dropTable('profilePinnedTag'),
+			dropTable('profilePinnedUser'),
+			dropTable('profilePinnedTimeline'),
 		],
 	},
 ];
