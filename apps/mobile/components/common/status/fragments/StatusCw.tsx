@@ -1,10 +1,13 @@
-import { Dispatch, Fragment, memo, SetStateAction } from 'react';
+import { Dispatch, memo, SetStateAction } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { Text } from '@rneui/themed';
+import { Text } from '@rneui/base';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { AppIcon } from '../../../lib/Icon';
 
 type WithCwTextProps = {
 	cw?: string;
@@ -14,57 +17,68 @@ type WithCwTextProps = {
 
 const ControllerWithSpoilerText = memo(
 	({ cw, show, setShow }: WithCwTextProps) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		return (
-			<Fragment>
+			<Pressable
+				style={[
+					styles.root,
+					{
+						backgroundColor: theme.complementaryA.a50,
+					},
+				]}
+				onPress={() => {
+					setShow((o) => !o);
+				}}
+			>
 				<View
 					style={{
-						display: 'flex',
+						width: 8,
+						height: '100%',
+						backgroundColor: theme.complementary.a0,
+						borderTopStartRadius: 6,
+						borderBottomLeftRadius: 6,
+					}}
+				/>
+				<View
+					style={{
+						paddingVertical: 12,
+						paddingHorizontal: 8,
+						flexGrow: 1,
 						flexDirection: 'row',
 						alignItems: 'center',
 					}}
 				>
-					<View style={{ width: 24 }}>
-						<FontAwesome
-							name="warning"
-							size={18}
-							color="yellow"
-							style={{ opacity: 0.6 }}
-						/>
-					</View>
-					<View style={{ marginLeft: 0, maxWidth: '90%' }}>
-						<Text
-							style={{
-								fontFamily: 'Inter-Bold',
-								color: 'yellow',
-								opacity: 0.6,
-							}}
-						>
-							{cw}
-						</Text>
-					</View>
-				</View>
-				<View style={styles.toggleHideContainer}>
-					<View style={{ flex: 1 }} />
-					<Pressable
-						style={styles.toggleHidePressableAreaContainer}
-						onPress={() => {
-							setShow((o) => !o);
+					{show ? (
+						<AppIcon id="eye-filled" size={24} color={'black'} />
+					) : (
+						<AppIcon id="eye-off-filled" size={24} color={'black'} />
+					)}
+					<Text
+						style={{
+							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+							color: 'black',
+							marginLeft: 4,
 						}}
 					>
-						<Text style={styles.toggleHideText}>
-							{show ? 'Hide Sensitive' : 'Show' + ' Sensitive'}
-						</Text>
-						<View style={{ width: 24, marginLeft: 4 }}>
-							<FontAwesome5
-								name="eye-slash"
-								size={18}
-								color={APP_FONT.MONTSERRAT_BODY}
-							/>
-						</View>
-					</Pressable>
-					<View style={{ flex: 1 }} />
+						{cw}
+					</Text>
 				</View>
-			</Fragment>
+
+				<View
+					style={{
+						width: 8,
+						height: '100%',
+						backgroundColor: theme.complementary.a0,
+						borderTopEndRadius: 6,
+						borderBottomEndRadius: 6,
+					}}
+				/>
+			</Pressable>
 		);
 	},
 );
@@ -72,18 +86,7 @@ const ControllerWithSpoilerText = memo(
 const ControllerWithoutSpoilerText = memo(
 	({ show, setShow }: WithCwTextProps) => {
 		return (
-			<View
-				style={{
-					marginHorizontal: 'auto',
-					alignItems: 'center',
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center',
-					width: '100%',
-					marginBottom: 8,
-				}}
-			>
-				<View style={{ flex: 1 }} />
+			<View style={styles.root}>
 				<Pressable
 					style={{
 						flexShrink: 1,
@@ -137,6 +140,13 @@ const StatusCw = memo(({ show, setShow, cw }: WithCwTextProps) => {
 });
 
 const styles = StyleSheet.create({
+	root: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		borderRadius: 6,
+		marginVertical: 8,
+	},
 	toggleHideContainer: {
 		marginHorizontal: 'auto',
 		alignItems: 'center',

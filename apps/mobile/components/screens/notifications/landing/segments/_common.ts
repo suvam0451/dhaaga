@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
 	container: {
 		marginLeft: 0,
 		marginVertical: 4,
-		backgroundColor: '#242424',
 		padding: 8,
 		borderRadius: 8,
 	},

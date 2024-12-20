@@ -1,62 +1,23 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MMKV } from 'react-native-mmkv';
+import Storage from 'expo-sqlite/kv-store';
 
 /**
  * Provides basic data storage/retrieval
- * functionalities for AsyncStorage
+ * functionalities for kv-store
  *
  * Each session manager inherit from this and
  * implement their necessary functions
  */
 export class BaseStorageManager {
-	async get(key: string) {
+	get(key: string) {
 		try {
-			return await AsyncStorage.getItem(key);
+			return Storage.getItemSync(key);
 		} catch (e) {
 			return null;
 		}
-	}
-
-	async set(key: string, value: any) {
-		await AsyncStorage.setItem(key, value);
-	}
-
-	async getJson<T>(key: string): Promise<T | null> {
-		const data = await this.get(key);
-		if (!data) return null;
-		try {
-			return JSON.parse(data) as T;
-		} catch (e) {
-			console.log(`[WARN]: cache read error`, e);
-			return null;
-		}
-	}
-
-	async setJson(key: string, value: any) {
-		await this.set(key, JSON.stringify(value));
-	}
-}
-
-/**
- * Provides basic data storage/retrieval
- * functionalities for MMKV
- *
- * Each session manager inherit from this and
- * implement their necessary functions
- */
-export class BaseCacheManager {
-	mmkv: MMKV;
-
-	constructor(mmkv: MMKV) {
-		this.mmkv = mmkv;
 	}
 
 	set(key: string, value: any) {
-		this.mmkv.set(key, value);
-	}
-
-	get(key: string) {
-		return this.mmkv.getString(key);
+		Storage.setItemSync(key, value);
 	}
 
 	getJson<T>(key: string): T | null {
@@ -65,7 +26,7 @@ export class BaseCacheManager {
 		try {
 			return JSON.parse(data) as T;
 		} catch (e) {
-			console.log(`[WARN]: cache read error`, e);
+			console.log(`[WARN]: kv storage read error`, e);
 			return null;
 		}
 	}

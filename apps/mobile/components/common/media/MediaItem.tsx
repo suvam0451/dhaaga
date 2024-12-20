@@ -9,7 +9,7 @@ import {
 	CarousalIndicatorOverlay,
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
-import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
+import useGalleryDims from '../../../hooks/app/useGalleryDims';
 import { AppActivityPubMediaType } from '../../../services/approto/app-status-dto.service';
 
 type ImageCarousalProps = {
@@ -34,14 +34,13 @@ const TimelineMediaRendered = memo(function Foo({
 	totalCount?: number;
 	leftMarginAdjustment?: number;
 }) {
-	const { ContainerWidth, ContainerHeight, onLayoutChanged } =
-		useImageAspectRatio([
-			{
-				url: attachment.previewUrl,
-				width: attachment.width,
-				height: attachment.height,
-			},
-		]);
+	const { ContainerWidth, ContainerHeight, onLayoutChanged } = useGalleryDims([
+		{
+			url: attachment.previewUrl,
+			width: attachment.width,
+			height: attachment.height,
+		},
+	]);
 
 	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
 

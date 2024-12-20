@@ -10,10 +10,11 @@ import StatusQuoted from './StatusQuoted';
 import PostStats from '../PostStats';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import StatusVisibility from './StatusVisibility';
-import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
+import { DatetimeUtil } from '../../../../utils/datetime.utils';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;
@@ -34,7 +35,7 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 		emojiMap: dto.calculated.emojis,
 		deps: [dto],
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		emphasis: 'high',
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});
 
 	const IS_QUOTE_BOOST = dto.meta.isBoost && dto.content.raw;
@@ -47,7 +48,7 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		numberOfLines: 1,
-		emphasis: 'high',
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});
 
 	const VALID_DISPLAY_NAME =
@@ -107,14 +108,15 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 								•
 							</Text>
 							<View style={{ flexDirection: 'row' }}>
-								<StatusCreatedAt
-									from={new Date(dto.createdAt)}
-									textStyle={{
+								<Text
+									style={{
 										color: theme.textColor.low,
 										fontSize: 12,
 										fontFamily: APP_FONTS.INTER_700_BOLD,
 									}}
-								/>
+								>
+									{DatetimeUtil.timeAgo(dto.createdAt)}
+								</Text>
 							</View>
 						</View>
 					</View>

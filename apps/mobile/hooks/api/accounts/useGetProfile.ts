@@ -4,7 +4,7 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useState } from 'react';
-import { AppUser } from '../../../types/app-user.types';
+import { AppUserDto } from '../../../types/app-user.types';
 import AppUserService from '../../../services/approto/app-user-service';
 import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
 import useGlobalState from '../../../states/_global';
@@ -30,7 +30,7 @@ function useGetProfile({ userId, handle }: Type) {
 		})),
 	);
 
-	const [Data, setData] = useState<AppUser>(null);
+	const [Data, setData] = useState<AppUserDto>(null);
 	const [Error, setError] = useState(null);
 
 	async function api() {

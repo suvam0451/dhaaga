@@ -1,7 +1,6 @@
 import {
 	DhaagaJsNotificationType,
 	MisskeyRestClient,
-	StatusInterface,
 	UserInterface,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
@@ -11,6 +10,8 @@ import ActivityPubAdapterService from '../../../services/activitypub-adapter.ser
 import ActivitypubAdapterService from '../../../services/activitypub-adapter.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { ActivityPubStatusAppDtoType } from '../../../types/app-post.types';
+import { ActivitypubStatusService } from '../../../services/approto/activitypub-status.service';
 
 type Api_Response_Type = {
 	data: any[];
@@ -24,7 +25,7 @@ export type Notification_Entry = {
 	createdAt: Date;
 	groupKey?: string;
 	acct?: UserInterface;
-	post?: StatusInterface;
+	post?: ActivityPubStatusAppDtoType;
 	extraData?: string;
 	read?: boolean;
 };
@@ -106,10 +107,14 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 							: undefined,
 					post:
 						o.status || o.body || o.note
-							? ActivitypubAdapterService.adaptStatus(
-									o.status || o.data || o.note,
+							? new ActivitypubStatusService(
+									ActivitypubAdapterService.adaptStatus(
+										o.status || o.data || o.note,
+										driver,
+									),
 									driver,
-								)
+									acct?.server,
+								).export()
 							: undefined,
 					extraData: o.reaction,
 					read: o.isRead,

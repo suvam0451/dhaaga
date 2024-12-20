@@ -10,6 +10,12 @@ export enum APP_LANDING_PAGE_TYPE {
 	COMPOSE,
 	INBOX,
 	PROFILE,
+
+	// Modules within "Inbox" tab
+	MENTIONS,
+	CHAT,
+	SOCIAL,
+	UPDATES,
 }
 
 type AppTabLandingNavbarProps = {
@@ -27,6 +33,11 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 	[APP_LANDING_PAGE_TYPE.COMPOSE]: 'Compose',
 	[APP_LANDING_PAGE_TYPE.INBOX]: 'Inbox',
 	[APP_LANDING_PAGE_TYPE.PROFILE]: 'App Profile',
+	// Modules within "Inbox" tab
+	[APP_LANDING_PAGE_TYPE.MENTIONS]: 'Mentions',
+	[APP_LANDING_PAGE_TYPE.CHAT]: 'Chat',
+	[APP_LANDING_PAGE_TYPE.SOCIAL]: 'Social',
+	[APP_LANDING_PAGE_TYPE.UPDATES]: 'Updates',
 };
 
 /**

@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { MMKV } from 'react-native-mmkv';
 import {
 	DEFAULT_THEME_PACK_OBJECT,
 	ThemePackType,
@@ -30,7 +29,7 @@ import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.
 import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
 import { DataSource } from '../database/dataSource';
 import AppUserService from '../services/approto/app-user-service';
-import { AppUser } from '../types/app-user.types';
+import { AppUserDto } from '../types/app-user.types';
 import ProfileSessionManager from '../services/session/profile-session.service';
 import { AccountProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
@@ -126,7 +125,6 @@ type AppBottomSheetState = {
 
 type State = {
 	db: DataSource | null;
-	mmkv: MMKV; // currently active account
 	acct: Account | null;
 	profile: AccountProfile | null;
 
@@ -140,7 +138,7 @@ type State = {
 	 * compatible interface
 	 * */
 	driver: KNOWN_SOFTWARE;
-	me: AppUser | null;
+	me: AppUserDto | null;
 
 	// router used to make api requests
 	router: ActivityPubClient | null;
@@ -179,7 +177,6 @@ type Actions = {
 const defaultValue: State & Actions = {
 	// database drivers
 	db: null,
-	mmkv: null,
 	router: null,
 
 	profileSessionManager: null,
@@ -238,7 +235,7 @@ class GlobalStateService {
 		Result<{
 			acct: Account;
 			router: ActivityPubClient;
-			me: AppUser;
+			me: AppUserDto;
 		}>
 	> {
 		try {
@@ -271,7 +268,7 @@ class GlobalStateService {
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
 			const { data, error } = await _router.me.getMe();
-			const obj: AppUser = AppUserService.exportRaw(
+			const obj: AppUserDto = AppUserService.exportRaw(
 				data,
 				acct.driver,
 				acct.server,
@@ -292,10 +289,8 @@ const useGlobalState = create<State & Actions>()(
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
 				const _db = new DataSource(db);
-				const _mmkv = new MMKV({ id: `default` });
 				state.db = _db;
-				state.mmkv = _mmkv;
-				state.appSession = new AppSessionManager(_db, _mmkv);
+				state.appSession = new AppSessionManager(_db);
 			});
 		},
 		getPacks: () => [],
@@ -303,10 +298,10 @@ const useGlobalState = create<State & Actions>()(
 			set({ packId });
 		},
 		selectAccount: async (selection: Account) => {
-			await AccountService.select(get().db, selection);
+			AccountService.select(get().db, selection);
 		},
 		loadActiveProfile: async () => {
-			const x = new ProfileSessionManager(get().db, get().mmkv);
+			const x = new ProfileSessionManager(get().db);
 			set((state) => {
 				state.profileSessionManager = x;
 				state.acct = x.acct;

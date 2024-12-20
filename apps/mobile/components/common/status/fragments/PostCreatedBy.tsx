@@ -2,15 +2,15 @@ import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { memo, useCallback, useMemo } from 'react';
-import { Skeleton } from '@rneui/themed';
+import { Skeleton } from '@rneui/base';
 import useMfm from '../../../hooks/useMfm';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import StatusCreatedAt from './StatusCreatedAt';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
+import { DatetimeUtil } from '../../../../utils/datetime.utils';
 
 const TIMELINE_PFP_SIZE = 42;
 
@@ -129,15 +129,17 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 						<View style={{ paddingBottom: 2 }}>
 							{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
 						</View>
-						<StatusCreatedAt
-							from={postedAt}
-							textStyle={{
+
+						<Text
+							style={{
 								color: theme.secondary.a30,
 								fontSize: 13,
 								marginLeft: 4,
 								fontFamily: APP_FONTS.INTER_400_REGULAR,
 							}}
-						/>
+						>
+							{DatetimeUtil.timeAgo(postedAt)}
+						</Text>
 					</View>
 
 					<Text

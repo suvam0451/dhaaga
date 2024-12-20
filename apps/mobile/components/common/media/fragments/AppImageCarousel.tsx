@@ -16,7 +16,7 @@ import {
 	GestureStateChangeEvent,
 } from 'react-native-gesture-handler';
 import useCircularList from '../state/useCircularList';
-import useImageAspectRatio from '../../../../hooks/app/useImageAspectRatio';
+import useGalleryDims from '../../../../hooks/app/useGalleryDims';
 
 export type AppImageCarouselItem = {
 	src: string;
@@ -114,7 +114,7 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 	items,
 	timelineCacheId,
 }: AppImageCarouselData) {
-	const { ContainerWidth, ImageHeight, onLayoutChanged } = useImageAspectRatio(
+	const { ContainerWidth, ImageHeight, onLayoutChanged } = useGalleryDims(
 		items.map((o) => ({
 			url: o.src,
 			width: o.width,

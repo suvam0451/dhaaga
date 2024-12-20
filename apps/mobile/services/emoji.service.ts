@@ -1,4 +1,3 @@
-import { MMKV } from 'react-native-mmkv';
 import globalMmkvCacheServices from './globalMmkvCache.services';
 import { ActivityPubCustomEmojiCategoryRepository } from '../repositories/activitypub-emoji-category.repo';
 import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-emoji.repo';
@@ -37,7 +36,7 @@ export class EmojiService {
 		subdomain,
 	}: {
 		db: SQLiteDatabase;
-		globalDb: MMKV;
+		globalDb: any;
 		id: string;
 		domain: string;
 		subdomain: string;
@@ -58,7 +57,7 @@ export class EmojiService {
 	 * @param globalDb
 	 * @param subdomain
 	 */
-	static getEmojiCache(globalDb: MMKV, subdomain: string) {
+	static getEmojiCache(globalDb: any, subdomain: string) {
 		const found = globalMmkvCacheServices.getEmojiCacheForInstance(
 			globalDb,
 			subdomain,
@@ -70,7 +69,7 @@ export class EmojiService {
 
 	static async refresh(
 		db: SQLiteDatabase,
-		globalDb: MMKV,
+		globalDb: any,
 		subdomain: string,
 		forceUpdate: boolean = false,
 	) {
@@ -102,7 +101,7 @@ export class EmojiService {
 	}: {
 		emojiMap: Map<string, string>;
 		db: SQLiteDatabase;
-		globalDb: MMKV;
+		globalDb: any;
 		id: string;
 		remoteInstance: string;
 	}) {
@@ -125,7 +124,7 @@ export class EmojiService {
 	 */
 	static loadEmojisForInstanceSync(
 		db: SQLiteDatabase,
-		globalDb: MMKV,
+		globalDb: any,
 		subdomain: string,
 		{
 			selection,
@@ -159,7 +158,7 @@ export class EmojiService {
 	 */
 	static async loadEmojisForInstance(
 		db: SQLiteDatabase,
-		globalDb: MMKV,
+		globalDb: any,
 		subdomain: string,
 		{
 			selection,

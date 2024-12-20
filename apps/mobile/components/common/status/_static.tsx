@@ -42,7 +42,11 @@ export const ParentPostFragment = memo(function Foo() {
 						paddingHorizontal: 12,
 					}}
 				>
-					<Ionicons color={'#888'} name={'arrow-redo-outline'} size={14} />
+					<Ionicons
+						color={theme.complementaryA.a0}
+						name={'arrow-redo-outline'}
+						size={14}
+					/>
 					<Text
 						style={{
 							color: theme.textColor.medium,

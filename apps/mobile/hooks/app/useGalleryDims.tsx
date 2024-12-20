@@ -11,11 +11,13 @@ type ImageAspectRatioProps = {
 }[];
 
 /**
- * Estimate the height for the
- * image or carousal
+ * Calculates the expected height for
+ * a timeline carousal
  *
+ * NOTE: limited to supporting full-width
+ * carousals, for now.
  */
-function useImageAspectRatio(items: ImageAspectRatioProps) {
+function useGalleryDims(items: ImageAspectRatioProps) {
 	// set width
 	const [ImageWidth, setImageWidth] = useState(Dimensions.get('window').width);
 	// set height
@@ -36,9 +38,15 @@ function useImageAspectRatio(items: ImageAspectRatioProps) {
 	 * for parent container
 	 */
 	useEffect(() => {
-		setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
-		setImageWidth(Dimensions.get('window').width);
-		setImageHeight(0);
+		if (items.length === 1) {
+			setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
+			setImageWidth(items[0].width || Dimensions.get('window').width);
+			setImageHeight(items[0].height || 0);
+		} else {
+			setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
+			setImageWidth(Dimensions.get('window').width);
+			setImageHeight(0);
+		}
 	}, [items]);
 
 	// console.log('setting height', Height);
@@ -155,4 +163,4 @@ function useImageAspectRatio(items: ImageAspectRatioProps) {
 	};
 }
 
-export default useImageAspectRatio;
+export default useGalleryDims;

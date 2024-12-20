@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useMemo, useState } from 'react';
 import MfmService from '../../../../../services/mfm.service';
 import { Image } from 'expo-image';
-import { format } from 'date-fns';
 import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { Text } from '@rneui/themed';
@@ -54,9 +53,9 @@ function ChatItem() {
 		});
 	}, [status?.getContent()]);
 
-	const ownerIsMe = me?.getId() === status.getAccountId_Poster();
-	const day = format(new Date(status.getCreatedAt()), 'MM/dd');
-	const time = format(new Date(status.getCreatedAt()), 'h:mm a');
+	const ownerIsMe = me.id === status.getAccountId_Poster();
+	const day = ''; // format(new Date(status.getCreatedAt()), 'MM/dd');
+	const time = ''; // format(new Date(status.getCreatedAt()), 'h:mm a');
 
 	return (
 		<View>

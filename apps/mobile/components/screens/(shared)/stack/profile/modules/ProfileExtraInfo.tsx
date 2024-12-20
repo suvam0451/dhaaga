@@ -6,7 +6,7 @@ import useMfm from '../../../../../hooks/useMfm';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { AppUser } from '../../../../../../types/app-user.types';
+import { AppUserDto } from '../../../../../../types/app-user.types';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -69,7 +69,7 @@ const ExtraInformationField = memo(function Foo({
 });
 
 type UserProfileExtraInformationProps = {
-	acct: AppUser;
+	acct: AppUserDto;
 };
 
 function UserProfileExtraInformation({

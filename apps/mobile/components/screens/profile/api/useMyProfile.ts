@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
-import { AppUser } from '../../../../types/app-user.types';
+import { AppUserDto } from '../../../../types/app-user.types';
 import AppUserService from '../../../../services/approto/app-user-service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -16,7 +16,7 @@ function useMyProfile() {
 			db: o.db,
 		})),
 	);
-	const [Data, setData] = useState<AppUser>(null);
+	const [Data, setData] = useState<AppUserDto>(null);
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');

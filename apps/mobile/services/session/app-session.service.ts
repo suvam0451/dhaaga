@@ -1,11 +1,14 @@
-import { BaseCacheManager, BaseStorageManager } from './_shared';
+import { BaseStorageManager } from './_shared';
 import { z } from 'zod';
 import { DataSource } from '../../database/dataSource';
-import { MMKV } from 'react-native-mmkv';
+import { AppUserDto } from '../../types/app-user.types';
 
 enum APP_CACHE_KEY {
 	LINK_TARGET = 'app/_cache/bottomSheet_linkTarget',
 	TAG_TARGET = 'app/_cache/bottomSheet_tagTarget',
+	USER_ID_TARGET = 'app/_cache/bottomSheet_userId',
+	USER_OBJECT_TARGET = 'app/_cache/bottomSheet_userObject',
+	SERVER_CLIENT_TOKEN_TARGET = 'app/_cache/apProto/serverClientToken/:server',
 }
 
 /**
@@ -19,13 +22,20 @@ const AppLinkTargetDto = z.object({
 
 type AppLinkTargetType = z.infer<typeof AppLinkTargetDto>;
 
+const AppAtprotoServerClientTokenDto = z.object({
+	clientId: z.string(),
+	clientSecret: z.string(),
+});
+
+type AppAtprotoServerClientTokenType = z.infer<
+	typeof AppAtprotoServerClientTokenDto
+>;
+
 /**
  * ---- Storage Interfaces ----
  */
 
-class Storage extends BaseStorageManager {}
-
-class Cache extends BaseCacheManager {
+class Storage extends BaseStorageManager {
 	getLinkTarget(): AppLinkTargetType {
 		return this.getJson(APP_CACHE_KEY.LINK_TARGET);
 	}
@@ -44,21 +54,59 @@ class Cache extends BaseCacheManager {
 	setTagTarget(value: string) {
 		return this.set(APP_CACHE_KEY.TAG_TARGET, value);
 	}
+
+	getUserId() {
+		return this.get(APP_CACHE_KEY.USER_ID_TARGET);
+	}
+
+	setUserId(value: string) {
+		return this.set(APP_CACHE_KEY.USER_ID_TARGET, value);
+	}
+
+	getUserObject(): AppUserDto {
+		return this.getJson<AppUserDto>(APP_CACHE_KEY.USER_OBJECT_TARGET);
+	}
+
+	setUserObject(obj: AppUserDto) {
+		return this.setJson(APP_CACHE_KEY.USER_OBJECT_TARGET, obj);
+	}
+
+	/**
+	 * Need to store per server, because frequent app
+	 * registration results in hour long rate limits
+	 */
+
+	getAtprotoServerClientTokens(server: string) {
+		return this.getJson<AppAtprotoServerClientTokenType>(
+			APP_CACHE_KEY.SERVER_CLIENT_TOKEN_TARGET.toString().replace(
+				'{:server}',
+				server,
+			),
+		);
+	}
+
+	setAtprotoServerClientTokens(
+		server: string,
+		clientId: string,
+		clientSecret: string,
+	) {
+		this.setJson(
+			APP_CACHE_KEY.SERVER_CLIENT_TOKEN_TARGET.toString().replace(
+				'{:server}',
+				server,
+			),
+			{ clientId, clientSecret },
+		);
+	}
 }
 
 class AppSessionManager {
-	// databases
 	db: DataSource;
-	mmkv: MMKV;
+	cache: Storage;
 
-	storage: Storage;
-	cache: Cache;
-
-	constructor(db: DataSource, mmkv: MMKV) {
+	constructor(db: DataSource) {
 		this.db = db;
-		this.mmkv = mmkv;
-		this.storage = new Storage();
-		this.cache = new Cache(this.mmkv);
+		this.cache = new Storage();
 	}
 }
 

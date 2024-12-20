@@ -1,17 +1,27 @@
-import {
-	StatusInterface,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { memo } from 'react';
 import useMfm from '../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import useAppNavigator from '../../../../../states/useAppNavigator';
+import {
+	ActivityPubStatusAppDtoType,
+	AppActivityPubMediaType,
+} from '../../../../../types/app-post.types';
+import NotificationMediaThumbs from '../../../../common/media/NotificationMediaThumbs';
 
 type Props = {
 	acct: UserInterface;
-	post: StatusInterface;
+	post: ActivityPubStatusAppDtoType;
 };
+
+type MediaGalleryProps = {
+	items: AppActivityPubMediaType[];
+};
+
+function PostMediaGallery({ items }: MediaGalleryProps) {
+	if (items.length === 0) return <View />;
+}
 
 /**
  * Shows a preview of the status being liked/boosted,
@@ -19,11 +29,16 @@ type Props = {
  * - upto 3 lines for text-only posts
  */
 export const NotificationPostPeek = memo(({ acct, post }: Props) => {
+	let _post = post;
+	if (post.boostedFrom) {
+		_post = post.boostedFrom;
+	}
+
 	const { content } = useMfm({
-		content: post.getContent(),
+		content: _post.content.raw,
 		remoteSubdomain: acct.getInstanceUrl(),
 		emojiMap: acct.getEmojiMap(),
-		deps: [post.getContent()],
+		deps: [_post.content.raw],
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});
@@ -31,8 +46,18 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 	const { toPost } = useAppNavigator();
 
 	function onPress() {
-		toPost(post.getId());
+		toPost(post.id);
 	}
 
-	return <Pressable onPress={onPress}>{content}</Pressable>;
+	return (
+		<View>
+			<Pressable onPress={onPress}>{content}</Pressable>
+			<View>
+				<NotificationMediaThumbs
+					items={_post?.content?.media}
+					maxH={_post?.calculated?.mediaContainerHeight}
+				/>
+			</View>
+		</View>
+	);
 });

@@ -4,7 +4,6 @@ import {
 	AccountProfile,
 	ProfileKnownServer,
 } from '../../database/_schema';
-import { MMKV } from 'react-native-mmkv';
 import {
 	ActivityPubClient,
 	InstanceApi_CustomEmojiDTO,
@@ -14,15 +13,13 @@ import {
 import { ProfileKnownServerService } from '../../database/entities/server';
 import { AccountService } from '../../database/entities/account';
 import { AccountProfileService } from '../../database/entities/profile';
-import { BaseCacheManager, BaseStorageManager } from './_shared';
+import { BaseStorageManager } from './_shared';
 
 /**
  * ---- Storage Interfaces ----
  */
 
-class Storage extends BaseStorageManager {}
-
-class Cache extends BaseCacheManager {
+class Storage extends BaseStorageManager {
 	getEmojis(server: string) {
 		return this.getJson<{
 			data: InstanceApi_CustomEmojiDTO[];
@@ -49,19 +46,15 @@ class ProfileSessionManager {
 	profile: AccountProfile;
 	// databases
 	db: DataSource;
-	mmkv: MMKV;
 	// api clients
 	client: ActivityPubClient;
 
-	storageManager: Storage;
-	cacheManager: Cache;
+	cacheManager: Storage;
 	customEmojis: InstanceApi_CustomEmojiDTO[];
 
-	constructor(db: DataSource, mmkv: MMKV) {
+	constructor(db: DataSource) {
 		this.db = db;
-		this.mmkv = mmkv;
-		this.storageManager = new Storage();
-		this.cacheManager = new Cache(this.mmkv);
+		this.cacheManager = new Storage();
 
 		this.acct = AccountService.getSelected(this.db);
 		this.profile = AccountProfileService.getActiveProfile(this.db, this.acct);
@@ -143,7 +136,7 @@ class ProfileSessionManager {
 			return null;
 		}
 
-		await this.storageManager.setJson(`emojis/${_url}`, {
+		this.cacheManager.setJson(`emojis/${_url}`, {
 			data: data,
 			lastFetchedAt: new Date(),
 		});

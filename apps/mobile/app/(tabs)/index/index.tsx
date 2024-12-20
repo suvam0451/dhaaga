@@ -129,28 +129,6 @@ function Content() {
 	);
 }
 
-function Tip() {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
-	const fontStyle = {
-		color: theme.textColor.low,
-		marginTop: 32,
-		marginHorizontal: 10,
-		fontSize: 12,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	};
-
-	return (
-		<Text style={fontStyle}>
-			[TIP] Long press the home button to return here anytime.
-		</Text>
-	);
-}
-
 function Screen() {
 	const { theme, acct } = useGlobalState(
 		useShallow((o) => ({
@@ -162,28 +140,32 @@ function Screen() {
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
 
 	return (
-		<ScrollView
-			style={{
-				backgroundColor: theme.palette.bg,
-			}}
-		>
-			<View>
-				<View style={{ flexGrow: 1 }}>
-					<AppTabLandingNavbar
-						type={APP_LANDING_PAGE_TYPE.HOME}
-						menuItems={[
-							{
-								iconId: 'user-guide',
-								onPress: () => {
-									router.push('/user-guide');
+		<View style={{ position: 'relative' }}>
+			<ScrollView
+				style={{
+					backgroundColor: theme.palette.bg,
+					height: '100%',
+				}}
+			>
+				<View>
+					<View style={{ flexGrow: 1 }}>
+						<AppTabLandingNavbar
+							type={APP_LANDING_PAGE_TYPE.HOME}
+							menuItems={[
+								{
+									iconId: 'user-guide',
+									onPress: () => {
+										router.push('/user-guide');
+									},
 								},
-							},
-						]}
-					/>
-					<Content />
+							]}
+						/>
+						{/*<TimeOfDayGreeting />*/}
+						<Content />
+					</View>
 				</View>
-			</View>
-		</ScrollView>
+			</ScrollView>
+		</View>
 	);
 }
 

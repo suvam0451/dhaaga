@@ -38,11 +38,14 @@ export type APP_ICON_ENUM =
 	| 'ellipsis-v'
 	| 'external-link'
 	| 'eye'
+	| 'eye-filled'
+	| 'eye-off-filled'
 	| 'home'
 	| 'info'
 	| 'language'
 	| 'menu'
 	| 'message'
+	| 'more-options-vertical'
 	| 'no-account'
 	| 'palette'
 	| 'phonebook'
@@ -63,6 +66,8 @@ type AppIconType = {
 	containerStyle?: StyleProp<ViewStyle>;
 	size?: number;
 	onPress?: () => void;
+	icon?: string;
+	color?: string;
 };
 
 /**
@@ -176,7 +181,15 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 export function DiscoverNavigationIcon(props: NavigationIconType) {}
 
 export const AppIcon = memo(
-	({ id, emphasis, iconStyle, size, onPress, containerStyle }: AppIconType) => {
+	({
+		id,
+		emphasis,
+		iconStyle,
+		size,
+		onPress,
+		containerStyle,
+		color,
+	}: AppIconType) => {
 		const { theme } = useGlobalState(
 			useShallow((o) => ({
 				theme: o.colorScheme,
@@ -185,26 +198,30 @@ export const AppIcon = memo(
 
 		let _color = null;
 		let _size = size || 24;
-		switch (emphasis) {
-			case 'high': {
-				_color = theme.textColor.high;
-				break;
-			}
-			case 'medium': {
-				_color = theme.textColor.medium;
-				break;
-			}
-			case 'low': {
-				_color = theme.textColor.low;
-				break;
-			}
-			case 'c': {
-				_color = theme.textColor.emphasisC;
-				break;
-			}
-			default: {
-				_color = theme.textColor.medium;
-				break;
+		if (color) {
+			_color = color;
+		} else {
+			switch (emphasis) {
+				case 'high': {
+					_color = theme.textColor.high;
+					break;
+				}
+				case 'medium': {
+					_color = theme.textColor.medium;
+					break;
+				}
+				case 'low': {
+					_color = theme.textColor.low;
+					break;
+				}
+				case 'c': {
+					_color = theme.textColor.emphasisC;
+					break;
+				}
+				default: {
+					_color = theme.textColor.medium;
+					break;
+				}
 			}
 		}
 
@@ -350,6 +367,26 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'eye-filled':
+					return (
+						<Ionicons
+							name="eye-filled"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'eye-off-filled':
+					return (
+						<Ionicons
+							name="eye-off-filled"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'home':
 					return (
 						<Ionicons
@@ -404,6 +441,16 @@ export const AppIcon = memo(
 					return (
 						<AntDesign
 							name="message1"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'more-options-vertical':
+					return (
+						<Ionicons
+							name={'ellipsis-vertical'}
 							size={_size}
 							color={_color}
 							onPress={onPress}

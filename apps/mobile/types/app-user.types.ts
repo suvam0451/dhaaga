@@ -35,4 +35,4 @@ export const ActivityPubUserDTO = z.object({
  * as is expected to be passed around throughout
  * the app
  */
-export type AppUser = z.infer<typeof ActivityPubUserDTO>;
+export type AppUserDto = z.infer<typeof ActivityPubUserDTO>;

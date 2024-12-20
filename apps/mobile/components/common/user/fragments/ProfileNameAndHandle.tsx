@@ -3,10 +3,10 @@ import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import styles from '../utils/styles';
 import useMfm from '../../../hooks/useMfm';
-import { AppUser } from '../../../../types/app-user.types';
+import { AppUserDto } from '../../../../types/app-user.types';
 
 type ProfileNameAndHandleProps = {
-	dto: AppUser;
+	dto: AppUserDto;
 	style: StyleProp<ViewStyle>;
 };
 /**

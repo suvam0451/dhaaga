@@ -4,8 +4,6 @@ import {
 	MisskeyRestClient,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { MMKV } from 'react-native-mmkv';
-import MmkvService from './mmkv.service';
 import { ActivityPubServer } from '../entities/activitypub-server.entity';
 import {
 	PleromaRestClient,
@@ -13,6 +11,7 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { RandomUtil } from '../utils/random.utils';
+import AppSessionManager from './session/app-session.service';
 
 class ActivityPubService {
 	/**
@@ -279,10 +278,10 @@ class ActivityPubService {
 	 * - code
 	 * - miauth
 	 * @param urlLike
-	 * @param db
+	 * @param mngr
 	 */
-	static async signInUrl(urlLike: string, db: MMKV) {
-		const tokens = MmkvService.getMastodonClientTokens(db, urlLike);
+	static async signInUrl(urlLike: string, mngr: AppSessionManager) {
+		const tokens = mngr.cache.getAtprotoServerClientTokens(urlLike);
 
 		const client = new UnknownRestClient();
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {
