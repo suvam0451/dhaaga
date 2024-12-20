@@ -8,7 +8,7 @@ import {
 	APP_BUILT_IN_THEMES,
 	AppColorSchemeType,
 } from '../styles/BuiltinThemes';
-import { Account, AccountProfile } from '../database/_schema';
+import { Account, Profile } from '../database/_schema';
 import {
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
@@ -126,7 +126,7 @@ type AppBottomSheetState = {
 type State = {
 	db: DataSource | null;
 	acct: Account | null;
-	profile: AccountProfile | null;
+	profile: Profile | null;
 
 	// managers
 	profileSessionManager: ProfileSessionManager | null;
@@ -171,7 +171,7 @@ type Actions = {
 	appInitialize: (db: SQLiteDatabase) => void;
 	loadApp: () => void;
 	// loa/switch a profile
-	loadActiveProfile: (profile?: AccountProfile) => void;
+	loadActiveProfile: (profile?: Profile) => void;
 };
 
 const defaultValue: State & Actions = {
@@ -240,9 +240,15 @@ class GlobalStateService {
 	> {
 		try {
 			const acct = AccountService.getSelected(db);
-			if (!acct) return { type: 'invalid' };
+			if (!acct) {
+				console.log('[WARN]: no account was found');
+				return { type: 'invalid' };
+			}
 			const profile = AccountProfileService.getActiveProfile(db, acct);
-			if (!profile) return { type: 'invalid' };
+			if (!profile) {
+				console.log('[WARN]: no profile was found');
+				return { type: 'invalid' };
+			}
 
 			const token = AccountMetadataService.getKeyValueForAccountSync(
 				db,

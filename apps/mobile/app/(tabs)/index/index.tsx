@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { RefreshControl, ScrollView, Text, View } from 'react-native';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
 import SocialHubPinnedTimelines from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedTimelines';
 import { APP_FONTS } from '../../../styles/AppFonts';
@@ -130,12 +130,27 @@ function Content() {
 }
 
 function Screen() {
-	const { theme, acct } = useGlobalState(
+	const [IsRefreshing, setIsRefreshing] = useState(false);
+	const { theme, acct, loadActiveProfile } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
 			acct: o.acct,
+			loadActiveProfile: o.loadActiveProfile,
 		})),
 	);
+
+	function onRefresh() {
+		setIsRefreshing(true);
+		try {
+			// possibly locked because of added/deleted account
+			if (!acct) {
+				loadActiveProfile();
+				setIsRefreshing(false);
+			}
+		} catch (e) {
+			setIsRefreshing(false);
+		}
+	}
 
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
 
@@ -146,6 +161,9 @@ function Screen() {
 					backgroundColor: theme.palette.bg,
 					height: '100%',
 				}}
+				refreshControl={
+					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
+				}
 			>
 				<View>
 					<View style={{ flexGrow: 1 }}>

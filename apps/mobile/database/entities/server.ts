@@ -1,4 +1,4 @@
-import { AccountProfile, ProfileKnownServer } from '../_schema';
+import { KnownServer } from '../_schema';
 import { DbErrorHandler } from './_base.repo';
 import {
 	KNOWN_SOFTWARE,
@@ -40,35 +40,29 @@ export type ProfileKnownServerMetadataRecordType = {
 
 @DbErrorHandler()
 class Repo {
-	static findByProfileAndUrl(db: DataSource, profileId: number, url: string) {
-		return db.profileKnownServer.findOne({
-			profileId,
-			url,
+	static findByProfileAndUrl(db: DataSource, server: string) {
+		return db.knownServer.findOne({
+			server,
 		});
 	}
 
-	static upsert(
-		db: DataSource,
-		profileId: number,
-		input: ServerRecordType,
-	): ProfileKnownServer {
-		const conflict = Repo.findByProfileAndUrl(db, profileId, input.url);
+	static upsert(db: DataSource, input: ServerRecordType): KnownServer {
+		const conflict = Repo.findByProfileAndUrl(db, input.url);
 
 		if (conflict) {
 			Repo.updateDriver(db, conflict.id, input.driver);
 		} else {
-			db.profileKnownServer.insert({
+			db.knownServer.insert({
 				uuid: RandomUtil.nanoId(),
-				url: input.url,
+				server: input.url,
 				driver: input.driver,
-				profileId,
 			});
 		}
-		return Repo.findByProfileAndUrl(db, profileId, input.url);
+		return Repo.findByProfileAndUrl(db, input.url);
 	}
 
 	static updateDriver(db: DataSource, id: number, driver: string) {
-		db.profileKnownServer.update(
+		db.knownServer.update(
 			{ id },
 			{
 				driver,
@@ -98,39 +92,30 @@ class Repo {
 export class Service {
 	static upsertMeta(
 		db: DataSource,
-		server: ProfileKnownServer,
+		server: KnownServer,
 		data: ProfileKnownServerMetadataRecordType,
 	) {
 		return Repo.upsertMeta(db, server.id, data);
 	}
-	static upsert(
-		db: DataSource,
-		profile: AccountProfile,
-		input: ServerRecordType,
-	) {
-		return Repo.upsert(db, profile.id, input);
+	static upsert(db: DataSource, input: ServerRecordType) {
+		return Repo.upsert(db, input);
 	}
 
-	static getByUrl(db: DataSource, profile: AccountProfile, url: string) {
+	static getByUrl(db: DataSource, url: string) {
 		url = url.replace(/^https?:\/\//, '');
-		return Repo.findByProfileAndUrl(db, profile.id, url);
+		return Repo.findByProfileAndUrl(db, url);
 	}
 
 	static updateDriver(
 		db: DataSource,
-		server: ProfileKnownServer,
+		server: KnownServer,
 		driver: KNOWN_SOFTWARE | string,
 	) {
 		return Repo.updateDriver(db, server.id, driver.toString());
 	}
 
-	static async syncDriver(
-		db: DataSource,
-		profile: AccountProfile,
-		url: string,
-		force = false,
-	) {
-		let match = Service.getByUrl(db, profile, url);
+	static async syncDriver(db: DataSource, url: string, force = false) {
+		let match = Service.getByUrl(db, url);
 		const x = new UnknownRestClient();
 		if (!match || force) {
 			const instanceResult = await x.instances.getNodeInfo(url);
@@ -147,4 +132,4 @@ export class Service {
 	}
 }
 
-export { Repo as ProfileKnownServerRepo, Service as ProfileKnownServerService };
+export { Repo as KnownServerRepo, Service as KnownServerService };

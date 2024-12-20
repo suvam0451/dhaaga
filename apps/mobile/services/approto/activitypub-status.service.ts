@@ -3,7 +3,6 @@ import {
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import activitypubAdapterService from '../activitypub-adapter.service';
-import { MMKV } from 'react-native-mmkv';
 import {
 	ActivityPubStatusAppDtoType,
 	AppStatusDtoService,
@@ -16,7 +15,6 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import AppPrivacySettingsService from '../app-settings/app-settings-privacy.service';
 import { EmojiService } from '../emoji.service';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { ProfileKnownServerService } from '../../database/entities/server';
 
 /**
  * Supports various operations
@@ -89,7 +87,7 @@ export class ActivitypubStatusService {
 	 * @param db
 	 * @param globalDb
 	 */
-	async syncCustomEmojis(db: SQLiteDatabase, globalDb: MMKV) {
+	async syncCustomEmojis(db: SQLiteDatabase, globalDb: any) {
 		// @ts-ignore-next-line
 		for (const target of this.foundInstances) {
 			await EmojiService.refresh(db, globalDb, target);

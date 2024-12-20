@@ -1,16 +1,12 @@
 import { DataSource } from '../../database/dataSource';
-import {
-	Account,
-	AccountProfile,
-	ProfileKnownServer,
-} from '../../database/_schema';
+import { Account, Profile, KnownServer } from '../../database/_schema';
 import {
 	ActivityPubClient,
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { ProfileKnownServerService } from '../../database/entities/server';
+import { KnownServerService } from '../../database/entities/server';
 import { AccountService } from '../../database/entities/account';
 import { AccountProfileService } from '../../database/entities/profile';
 import { BaseStorageManager } from './_shared';
@@ -43,7 +39,7 @@ class Storage extends BaseStorageManager {
  */
 class ProfileSessionManager {
 	acct: Account;
-	profile: AccountProfile;
+	profile: Profile;
 	// databases
 	db: DataSource;
 	// api clients
@@ -83,12 +79,8 @@ class ProfileSessionManager {
 		}
 	}
 
-	async fetchInstanceData(server?: string): Promise<ProfileKnownServer | null> {
-		const serverRecord = ProfileKnownServerService.getByUrl(
-			this.db,
-			this.profile,
-			server,
-		);
+	async fetchInstanceData(server?: string): Promise<KnownServer | null> {
+		const serverRecord = KnownServerService.getByUrl(this.db, server);
 		if (serverRecord && serverRecord.driver !== KNOWN_SOFTWARE.UNKNOWN)
 			return serverRecord;
 		if (!serverRecord || serverRecord.driver === KNOWN_SOFTWARE.UNKNOWN) {
@@ -98,12 +90,12 @@ class ProfileSessionManager {
 				console.log('[WARN]: failed to fetch server info', server);
 				return null;
 			}
-			ProfileKnownServerService.upsert(this.db, this.profile, {
+			KnownServerService.upsert(this.db, {
 				url: server,
 				driver: softwareInfoResult.data.software,
 			});
 		}
-		return ProfileKnownServerService.getByUrl(this.db, this.profile, server);
+		return KnownServerService.getByUrl(this.db, server);
 	}
 
 	/**
@@ -127,7 +119,7 @@ class ProfileSessionManager {
 
 		const serverRecord = await this.fetchInstanceData(_server);
 		if (!serverRecord) return;
-		const _url = serverRecord.url;
+		const _url = serverRecord.server;
 
 		const x = new UnknownRestClient();
 		const { data, error } = await x.instances.getCustomEmojis(_url);

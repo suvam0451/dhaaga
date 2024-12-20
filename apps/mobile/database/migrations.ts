@@ -1,16 +1,7 @@
 import { SQLiteDatabase } from 'expo-sqlite';
 import { createTable, dropTable, migrator as orm } from '@dhaaga/orm';
-import { DataSource } from './dataSource';
 
 const APP_DB_TARGET_VERSION = 2;
-
-type MigrationEntry = {
-	version: number;
-	versionCode: string;
-	name: string;
-	up: string[];
-	down: string[];
-};
 
 /**
  * Version control for migrations
@@ -21,15 +12,15 @@ type MigrationEntry = {
  *
  * NOTE: uses 1 based indexing
  */
-
-export function trySchemaGenerator(db: DataSource) {}
-
 const migrations: MigrationEntry[] = [
 	{
 		version: 1,
 		versionCode: 'v0.11.0',
 		name: 'account login support',
 		up: [
+			// performance for sqlite >3.7.0
+			'PRAGMA journal_mode = WAL',
+			'PRAGMA foreign_keys = ON',
 			createTable('migrations', {
 				id: orm.int().pk(),
 				userVersion: orm.int().notNull(),
@@ -54,13 +45,13 @@ const migrations: MigrationEntry[] = [
 				value: orm.text().notNull(),
 				type: orm.text().notNull(),
 				active: orm.int().default(1),
-				accountId: orm.int().fk('accounts'),
+				accountId: orm.int().fk('account'),
 			}),
 		],
 		down: [
+			dropTable('accountMetadata'),
 			dropTable('account'),
 			dropTable('migrations'),
-			dropTable('accountMetadata'),
 		],
 	},
 	{
@@ -68,34 +59,46 @@ const migrations: MigrationEntry[] = [
 		versionCode: 'v0.11.0',
 		name: 'account profile and server caching support',
 		up: [
-			createTable('accountProfile', {
+			createTable('profile', {
 				id: orm.int().pk(),
 				uuid: orm.text().notNull(),
 				name: orm.text().notNull(),
 				selected: orm.int().default(0),
 				active: orm.int().default(1),
-				accountId: orm.int().fk('accounts'),
+				accountId: orm.int().fk('account'),
 			}),
-			createTable('profileKnownServer', {
+			createTable('knownServer', {
 				id: orm.int().pk(),
 				uuid: orm.text().notNull(),
-				url: orm.text().notNull(),
+				server: orm.text().notNull(),
 				driver: orm.text().notNull(),
-				profileId: orm.int().fk('accountProfile'),
+				profileId: orm.int().fk('profile'),
 			}),
-			createTable('profileKnownServerMetadata', {
+			createTable('knownServerMetadata', {
 				id: orm.int().pk(),
 				key: orm.text().notNull(),
 				value: orm.text().notNull(),
 				type: orm.text().notNull(),
 				active: orm.int().default(1),
-				knownServerId: orm.int().fk('profileKnownServer'),
+				knownServerId: orm.int().fk('knownServer'),
 			}),
 		],
 		down: [
-			dropTable('profileKnownServerMetadata'),
-			dropTable('profileKnownServer'),
-			dropTable('accountProfile'),
+			dropTable('knownServerMetadata'),
+			dropTable('knownServer'),
+			dropTable('profile'),
+		],
+	},
+	{
+		version: 3,
+		versionCode: 'v0.11.0',
+		name: 'pinning features for profiles',
+		up: [],
+		down: [
+			createTable('profilePinnedTimeline', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+			}),
 		],
 	},
 ];
@@ -155,3 +158,11 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
 	console.log('db migrations applied');
 }
+
+type MigrationEntry = {
+	version: number;
+	versionCode: string;
+	name: string;
+	up: string[];
+	down: string[];
+};

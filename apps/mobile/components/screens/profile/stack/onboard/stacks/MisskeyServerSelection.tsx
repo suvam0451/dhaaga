@@ -31,17 +31,17 @@ import { useShallow } from 'zustand/react/shallow';
 
 function MisskeyServerSelection() {
 	const [InputText, setInputText] = useState('misskey.io');
-	const { globalDb } = useGlobalMmkvContext();
-	const { theme } = useGlobalState(
+	const { theme, appManager } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
+			appManager: o.appSession,
 		})),
 	);
 
 	async function onPressNext() {
 		const signInStrategy = await ActivityPubService.signInUrl(
 			InputText,
-			globalDb,
+			appManager,
 		);
 		const subdomain = InputText;
 		router.push({

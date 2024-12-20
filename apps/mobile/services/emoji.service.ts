@@ -4,11 +4,9 @@ import { ActivityPubCustomEmojiRepository } from '../repositories/activitypub-em
 import {
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
-	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
-import AppPrivacySettingsService from './app-settings/app-settings-privacy.service';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { ProfileKnownServerService } from '../database/entities/server';
+import { KnownServerService } from '../database/entities/server';
 import { ServerEmojiService } from '../database/entities/server-emoji';
 
 export type EmojiAdapter = {
@@ -190,7 +188,7 @@ export class EmojiService {
 			}
 		}
 
-		const server = await ProfileKnownServerService.upsert(db, {
+		const server = await KnownServerService.upsert(db, {
 			driver: KNOWN_SOFTWARE.UNKNOWN,
 			description: 'N/A',
 			url: subdomain,

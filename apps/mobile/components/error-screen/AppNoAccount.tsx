@@ -1,10 +1,10 @@
 import {
-	View,
-	Text,
-	StyleSheet,
 	Pressable,
+	RefreshControl,
 	ScrollView,
-	Button,
+	StyleSheet,
+	Text,
+	View,
 } from 'react-native';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -16,7 +16,9 @@ import { router } from 'expo-router';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../shared/topnavbar/AppTabLandingNavbar';
-import { trySchemaGenerator } from '../../database/migrations';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../styles/BuiltinThemes';
+import { useState } from 'react';
+import { AccountService } from '../../database/entities/account';
 
 /**
  * A full screen cover when no account is selected
@@ -28,12 +30,32 @@ type AppNoAccountProps = {
 };
 
 function AppNoAccount({ tab }: AppNoAccountProps) {
-	const { theme, db } = useGlobalState(
+	const [IsRefreshing, setIsRefreshing] = useState(false);
+
+	const { theme, db, acct, loadApp } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
 			db: o.db,
+			acct: o.acct,
+			loadApp: o.loadApp,
 		})),
 	);
+
+	function onRefresh() {
+		setIsRefreshing(true);
+		try {
+			// possibly locked because of added/deleted account
+			if (!acct) {
+				AccountService.ensureAccountSelection(db);
+				loadApp();
+				setIsRefreshing(false);
+			}
+		} catch (e) {
+			setIsRefreshing(false);
+		} finally {
+			setIsRefreshing(false);
+		}
+	}
 
 	const options: {
 		label: string;
@@ -121,7 +143,12 @@ function AppNoAccount({ tab }: AppNoAccountProps) {
 	];
 
 	return (
-		<ScrollView style={{ height: '100%', backgroundColor: theme.palette.bg }}>
+		<ScrollView
+			style={{ height: '100%', backgroundColor: theme.palette.bg }}
+			refreshControl={
+				<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
+			}
+		>
 			<AppTabLandingNavbar
 				type={tab}
 				menuItems={[
@@ -146,12 +173,6 @@ function AppNoAccount({ tab }: AppNoAccountProps) {
 					>
 						Add an Account
 					</Text>
-					<Button
-						title={'Ok'}
-						onPress={() => {
-							trySchemaGenerator(db);
-						}}
-					></Button>
 					{options.map((option, i) => (
 						<Pressable
 							style={[
@@ -197,15 +218,14 @@ function AppNoAccount({ tab }: AppNoAccountProps) {
 							marginRight: 6,
 						}}
 						size={24}
-						iconStyle={{}}
-						emphasis={'low'}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 					/>
 
 					<Text
 						style={[
 							styles.tipText,
 							{
-								color: theme.textColor.low,
+								color: theme.secondary.a30,
 							},
 						]}
 					>

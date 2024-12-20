@@ -27,6 +27,15 @@ export const accountInsertDto = z.object({
 
 @DbErrorHandler()
 export class Repo {
+	static getById(db: DataSource, id: number | string): Account {
+		try {
+			return db.account.findOne({
+				id: Number(id),
+			});
+		} catch (e) {
+			return null;
+		}
+	}
 	static getByHandleFragments(
 		db: DataSource,
 		server: string,
@@ -48,6 +57,7 @@ export class Repo {
 	): Result<Account> {
 		const match = Repo.getByHandleFragments(db, dto.server, dto.username);
 		if (match) {
+			AccountProfileService.setupDefaultProfile(db, match);
 			return withSuccess(match);
 		} else {
 			db.account.insert({
@@ -147,6 +157,31 @@ class Service {
 			return Repo.getFirstSelected(db);
 		} catch (e) {
 			return null;
+		}
+	}
+
+	static getById(db: DataSource, id: number | string): Account {
+		return Repo.getById(db, id);
+	}
+
+	/**
+	 * Make sure at least one account is selected
+	 */
+	static ensureAccountSelection(db: DataSource) {
+		try {
+			const atLeastOne = db.account.find({ selected: true });
+			if (atLeastOne.length === 0) {
+				const match = db.account.findOne({ active: true });
+				if (match) {
+					db.account.updateById(match.id, {
+						selected: true,
+					});
+				} else {
+					console.log('[WARN]: no account to  default select');
+				}
+			}
+		} catch (e) {
+			console.log('[WARN]: failed to select default account', e);
 		}
 	}
 }

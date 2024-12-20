@@ -12,6 +12,7 @@ import {
 import { SQLiteDatabase } from 'expo-sqlite';
 import { RandomUtil } from '../utils/random.utils';
 import AppSessionManager from './session/app-session.service';
+import { Profile, ProfilePinnedTimeline } from '../database/_schema';
 
 class ActivityPubService {
 	/**
@@ -307,6 +308,16 @@ class ActivityPubService {
 			return null;
 		}
 		return data.isFavorited;
+	}
+
+	/**
+	 * Pin the default timelines and hashtags for
+	 * the profile
+	 * @param manager the app level session manager, with db connection
+	 * @param profile
+	 */
+	static createDefaultPins(manager: AppSessionManager, profile: Profile) {
+		ProfilePinnedTimeline;
 	}
 }
 

@@ -23,6 +23,7 @@ import * as Haptics from 'expo-haptics';
 import { APP_FONT } from '../../styles/AppTheme';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../styles/BuiltinThemes';
 
 export type APP_ICON_ENUM =
 	| 'bell'
@@ -61,7 +62,7 @@ export type APP_ICON_ENUM =
 
 type AppIconType = {
 	id: APP_ICON_ENUM;
-	emphasis?: 'high' | 'low' | 'medium' | 'c';
+	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
 	iconStyle?: StyleProp<TextStyle>;
 	containerStyle?: StyleProp<ViewStyle>;
 	size?: number;
@@ -202,24 +203,32 @@ export const AppIcon = memo(
 			_color = color;
 		} else {
 			switch (emphasis) {
-				case 'high': {
-					_color = theme.textColor.high;
+				case APP_COLOR_PALETTE_EMPHASIS.A0: {
+					_color = theme.secondary.a0;
 					break;
 				}
-				case 'medium': {
-					_color = theme.textColor.medium;
+				case APP_COLOR_PALETTE_EMPHASIS.A10: {
+					_color = theme.secondary.a10;
 					break;
 				}
-				case 'low': {
-					_color = theme.textColor.low;
+				case APP_COLOR_PALETTE_EMPHASIS.A20: {
+					_color = theme.secondary.a20;
 					break;
 				}
-				case 'c': {
-					_color = theme.textColor.emphasisC;
+				case APP_COLOR_PALETTE_EMPHASIS.A30: {
+					_color = theme.secondary.a30;
+					break;
+				}
+				case APP_COLOR_PALETTE_EMPHASIS.A40: {
+					_color = theme.secondary.a40;
+					break;
+				}
+				case APP_COLOR_PALETTE_EMPHASIS.A50: {
+					_color = theme.secondary.a50;
 					break;
 				}
 				default: {
-					_color = theme.textColor.medium;
+					_color = theme.secondary.a0;
 					break;
 				}
 			}
