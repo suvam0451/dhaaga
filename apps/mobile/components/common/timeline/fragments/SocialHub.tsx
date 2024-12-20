@@ -349,6 +349,8 @@ function SocialHub() {
 							{ label: 'Saved' },
 						]}
 						style={{ marginTop: 28 }}
+						index={0}
+						setIndex={(index: number) => {}}
 					/>
 
 					<SocialHubPinnedTimelines />

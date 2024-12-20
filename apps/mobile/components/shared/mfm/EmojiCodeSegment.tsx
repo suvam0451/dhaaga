@@ -33,7 +33,7 @@ const EmojiCodeSegment = memo(function Foo({
 
 	// if (!match)
 	return (
-		<Text key={k} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
+		<Text key={k} style={{ color: '#8c94fe' }}>
 			{`:${value}:`}
 		</Text>
 	);

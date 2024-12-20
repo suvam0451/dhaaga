@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import {
 	ActivitypubHelper,
 	DhaagaJsNotificationType,
@@ -15,13 +15,11 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import useGlobalState from '../../../../../states/_global';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
@@ -48,6 +46,12 @@ export const NotificationSender = memo(
 		extraData,
 		remoteSubdomain,
 	}: Props) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		const { find } = useAppCustomEmoji();
 		const { Icon, bg } = useMemo(() => {
 			switch (type) {
@@ -201,25 +205,17 @@ export const NotificationSender = memo(
 						{Icon}
 					</View>
 				</View>
-				<View style={{ marginLeft: 12 }}>
+				<View
+					style={{ marginLeft: 12, flexDirection: 'row', alignItems: 'center' }}
+				>
 					<Text
 						style={{
 							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							color: APP_FONT.MONTSERRAT_HEADER,
+							color: theme.secondary.a10,
 						}}
 						numberOfLines={1}
 					>
 						{displayName}
-					</Text>
-					<Text
-						style={{
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontSize: 12,
-						}}
-						numberOfLines={1}
-					>
-						{handle}
 					</Text>
 				</View>
 			</View>
@@ -239,10 +235,19 @@ type InterfaceProps = {
  */
 export const NotificationSenderInterface = memo(
 	({ acct, type, extraData }: InterfaceProps) => {
-		const { driver, acct: acctItem } = useGlobalState(
+		const {
+			driver,
+			acct: acctItem,
+			show,
+			profileManager,
+			theme,
+		} = useGlobalState(
 			useShallow((o) => ({
 				driver: o.driver,
 				acct: o.acct,
+				show: o.bottomSheet.show,
+				profileManager: o.profileSessionManager,
+				theme: o.colorScheme,
 			})),
 		);
 
@@ -256,28 +261,23 @@ export const NotificationSenderInterface = memo(
 			return ActivitypubHelper.getHandle(acctUrl, acctItem?.server);
 		}, [acctUrl]);
 
-		const { setType, updateRequestId, setVisible, UserRef, UserIdRef } =
-			useAppBottomSheet();
-
 		/**
 		 * NOTE: misskey acct objects do not
 		 * contain enough information to populate
 		 * the entire modal
 		 */
-		const onPress = useCallback(() => {
+		function onPress() {
 			if (driver === KNOWN_SOFTWARE.MASTODON) {
 				// forward existing ref
-				UserRef.current = acct;
-				UserIdRef.current = acct.getId();
+				// UserRef.current = acct;
+				// UserIdRef.current = acct.getId();
 			} else {
 				// request info be fetched
-				UserRef.current = null;
-				UserIdRef.current = acct.getId();
+				// UserRef.current = null;
+				// UserIdRef.current = acct.getId();
 			}
-			setType(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK);
-			setVisible(true);
-			updateRequestId();
-		}, [acct, driver, UserRef, UserIdRef, updateRequestId, setType]);
+			show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
+		}
 
 		return (
 			<TouchableOpacity onPress={onPress}>

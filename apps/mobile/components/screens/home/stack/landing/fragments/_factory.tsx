@@ -26,7 +26,7 @@ export function SocialHubPinSectionContainer({
 					style={[
 						styles.sectionLabel,
 						{
-							color: theme.textColor.medium,
+							color: theme.secondary.a20,
 						},
 					]}
 				>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginBottom: 12,
 		marginLeft: 6,
-		fontSize: 18,
+		fontSize: 16,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 	},
 	row: {

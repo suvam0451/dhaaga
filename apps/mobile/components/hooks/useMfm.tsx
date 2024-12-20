@@ -9,6 +9,7 @@ import FacetService from '../../services/facets.service';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../utils/random.utils';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../styles/BuiltinThemes';
 
 type Props = {
 	content: string;
@@ -22,7 +23,7 @@ type Props = {
 
 	numberOfLines?: number;
 	acceptTouch?: boolean;
-	emphasis?: 'high' | 'medium' | 'low';
+	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
 };
 
 /**
@@ -48,11 +49,10 @@ function useMfm({
 	acceptTouch,
 	emphasis,
 }: Props) {
-	const { acct, driver, db, theme } = useGlobalState(
+	const { acct, driver, theme } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			driver: o.driver,
-			db: o.db,
 			theme: o.colorScheme,
 		})),
 	);
@@ -84,14 +84,27 @@ function useMfm({
 
 	let color = useMemo(() => {
 		switch (emphasis) {
-			case 'high':
-				return theme.textColor.high;
-			case 'medium':
-				return theme.textColor.medium;
-			case 'low':
-				return theme.textColor.low;
-			default:
-				return theme.textColor.medium;
+			case APP_COLOR_PALETTE_EMPHASIS.A0: {
+				return theme.secondary.a0;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A10: {
+				return theme.secondary.a10;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A20: {
+				return theme.secondary.a20;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A30: {
+				return theme.secondary.a30;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A40: {
+				return theme.secondary.a40;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A50: {
+				return theme.secondary.a50;
+			}
+			default: {
+				return theme.secondary.a0;
+			}
 		}
 	}, [emphasis, theme]);
 

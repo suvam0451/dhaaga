@@ -10,6 +10,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
 
 const TIMELINE_PFP_SIZE = 42;
 
@@ -96,7 +97,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		numberOfLines: 1,
-		emphasis: 'high',
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});
 	const { theme } = useGlobalState(
 		useShallow((o) => ({
@@ -125,13 +126,13 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 							alignItems: 'flex-end',
 						}}
 					>
-						<View>
+						<View style={{ paddingBottom: 2 }}>
 							{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
 						</View>
 						<StatusCreatedAt
 							from={postedAt}
 							textStyle={{
-								color: theme.textColor.low,
+								color: theme.secondary.a30,
 								fontSize: 13,
 								marginLeft: 4,
 								fontFamily: APP_FONTS.INTER_400_REGULAR,
@@ -141,7 +142,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 
 					<Text
 						style={{
-							color: theme.textColor.emphasisC,
+							color: theme.secondary.a30,
 							fontSize: 12,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							maxWidth: 196,

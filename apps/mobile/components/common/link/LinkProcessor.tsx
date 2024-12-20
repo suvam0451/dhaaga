@@ -5,12 +5,13 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../styles/BuiltinThemes';
 
 type LinkProcessorProps = {
 	url: string;
 	displayName: string;
 	fontFamily: string;
-	emphasis: 'high' | 'medium' | 'low';
+	emphasis: APP_COLOR_PALETTE_EMPHASIS;
 };
 
 function LinkProcessor({
@@ -30,15 +31,8 @@ function LinkProcessor({
 
 	const linkTextFontFamily = useMemo(() => {
 		switch (emphasis) {
-			case 'high': {
+			default:
 				return APP_FONTS.INTER_600_SEMIBOLD;
-			}
-			case 'medium': {
-				return APP_FONTS.INTER_600_SEMIBOLD;
-			}
-			case 'low': {
-				return APP_FONTS.INTER_600_SEMIBOLD;
-			}
 		}
 	}, [fontFamily, emphasis]);
 
@@ -69,7 +63,7 @@ function LinkProcessor({
 	return (
 		<Text
 			style={{
-				color: theme.palette.link,
+				color: '#ffcca5', // theme.palette.link,
 				fontFamily: linkTextFontFamily,
 				maxWidth: 128,
 				display: 'flex',

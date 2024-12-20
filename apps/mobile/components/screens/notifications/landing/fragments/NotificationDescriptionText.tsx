@@ -6,6 +6,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { useAppNotifSeenContext } from '../state/useNotifSeen';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	id: string;
@@ -15,6 +17,12 @@ type Props = {
 
 export const NotificationDescriptionText = memo(
 	({ type, createdAt, id }: Props) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		const TextContent = useMemo(() => {
 			switch (type) {
 				case DhaagaJsNotificationType.FAVOURITE: {
@@ -55,14 +63,14 @@ export const NotificationDescriptionText = memo(
 						<MaterialIcons
 							name="subdirectory-arrow-right"
 							size={24}
-							color={'green'}
+							color={theme.complementary.a0}
 						/>
 					</View>
 					<Text
 						style={{
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							paddingTop: 4,
-							color: 'green',
+							color: theme.complementary.a0,
 						}}
 					>
 						{TextContent}

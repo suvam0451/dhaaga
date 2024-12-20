@@ -19,7 +19,18 @@ type AppSegmentedControlProps = {
 };
 
 export const AppSegmentedControl = memo(
-	({ items, leftDecorator, style }: AppSegmentedControlProps) => {
+	({
+		items,
+		leftDecorator,
+		style,
+		index,
+		setIndex,
+	}: AppSegmentedControlProps) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		return (
 			<View
 				style={{
@@ -47,7 +58,7 @@ export const AppSegmentedControl = memo(
 							<View
 								key={i}
 								style={{
-									backgroundColor: '#444',
+									backgroundColor: index === i ? theme.primary.a0 : '#444',
 									borderRadius: 24,
 									padding: 8,
 									paddingHorizontal: 14,
@@ -57,7 +68,7 @@ export const AppSegmentedControl = memo(
 							>
 								<Text
 									style={{
-										color: 'white',
+										color: index === i ? '#121212' : 'white',
 										fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 									}}
 								>

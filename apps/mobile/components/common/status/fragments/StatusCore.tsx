@@ -19,6 +19,7 @@ import useGlobalState, {
 } from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
 
 /**
  * Mostly used to remove the border
@@ -91,7 +92,7 @@ const StatusCore = memo(
 			remoteSubdomain: STATUS_DTO.postedBy.instance,
 			emojiMap: STATUS_DTO.calculated.emojis,
 			deps: [dto],
-			emphasis: 'high',
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A20,
 			fontFamily: APP_FONTS.INTER_400_REGULAR,
 		});
 

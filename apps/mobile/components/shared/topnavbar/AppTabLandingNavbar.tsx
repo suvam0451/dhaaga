@@ -44,7 +44,7 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 	return (
 		<View style={styles.container}>
 			<View style={{ flexGrow: 1 }}>
-				<Text style={[styles.headerText, { color: theme.textColor.high }]}>
+				<Text style={[styles.headerText, { color: theme.secondary.a0 }]}>
 					{navbarLabel[type]}
 				</Text>
 			</View>

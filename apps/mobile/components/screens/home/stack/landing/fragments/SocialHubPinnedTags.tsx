@@ -2,6 +2,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { SocialHubPinSectionContainer } from './_factory';
 import { StyleProp, View, ViewStyle, Text, StyleSheet } from 'react-native';
 import useGlobalState from '../../../../../../states/_global';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
 
 type SocialHubPinnedTags = {
 	style: StyleProp<ViewStyle>;
@@ -34,7 +35,12 @@ function SocialHubPinnedTags({ style }: SocialHubPinnedTags) {
 					>
 						<Text
 							numberOfLines={1}
-							style={[styles.tagText, { color: theme.textColor.medium }]}
+							style={[
+								styles.tagText,
+								{
+									color: theme.complementary.a0,
+								},
+							]}
 						>
 							#{tag}
 						</Text>
@@ -49,15 +55,16 @@ export default SocialHubPinnedTags;
 
 const styles = StyleSheet.create({
 	tagContainer: {
-		padding: 8,
+		padding: 6,
 		borderRadius: 12,
 		paddingHorizontal: 12,
 		marginBottom: 8,
-		marginRight: 4,
+		marginRight: 8,
 		flexShrink: 1,
 	},
 	tagText: {
-		fontSize: 18,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontSize: 16,
 		flexShrink: 1,
 	},
 });

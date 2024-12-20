@@ -44,9 +44,10 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 			onPress={onPress}
 			key={k}
 			style={{
-				color: isFollowed
-					? theme.palette.hashtagHigh
-					: theme.palette.hashtagLow,
+				color: '#fedce9',
+				// isFollowed
+				// 	? theme.palette.hashtagHigh
+				// 	: theme.palette.hashtagLow,
 				fontFamily: fontFamily,
 				// fontFamily: isFollowed
 				// 	? APP_FONTS.MONTSERRAT_700_BOLD

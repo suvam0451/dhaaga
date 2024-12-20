@@ -3,8 +3,6 @@ import {
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { memo } from 'react';
-import { styles } from '../segments/_common';
-import { LinearGradient } from 'expo-linear-gradient';
 import useMfm from '../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Pressable } from 'react-native';
@@ -36,14 +34,5 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 		toPost(post.getId());
 	}
 
-	return (
-		<Pressable onPress={onPress}>
-			<LinearGradient
-				colors={['rgba(0,0,0,0.8)', 'transparent']}
-				style={styles.gradientContainerTextOnlyPost}
-			>
-				{content}
-			</LinearGradient>
-		</Pressable>
-	);
+	return <Pressable onPress={onPress}>{content}</Pressable>;
 });

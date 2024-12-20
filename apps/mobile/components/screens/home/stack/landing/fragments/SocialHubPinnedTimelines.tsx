@@ -8,6 +8,8 @@ import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
 import { SocialHubPinSectionContainer } from './_factory';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Feather from '@expo/vector-icons/Feather';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -46,14 +48,14 @@ function PinnedTimelineItem({ label, icon }: PinnedTimelineItemProps) {
 		})),
 	);
 
-	const TEXT_COLOR = theme.textColor.medium;
+	const TEXT_COLOR = theme.secondary.a10; // theme.textColor.medium;
 
 	return (
 		<TouchableOpacity
 			style={[
 				styles.button,
 				{
-					backgroundColor: '#333',
+					backgroundColor: '#282828', // '#282828',
 					flex: 1,
 					overflow: 'hidden',
 					alignItems: 'flex-start',
@@ -66,12 +68,12 @@ function PinnedTimelineItem({ label, icon }: PinnedTimelineItemProps) {
 		>
 			<View
 				style={{
-					transform: [{ rotateZ: '-30deg' }],
+					transform: [{ rotateZ: '-15deg' }],
 					width: 42,
 					position: 'absolute',
-					opacity: 0.24,
+					opacity: 0.48,
 					right: 0,
-					bottom: -4,
+					bottom: -6,
 				}}
 			>
 				{icon}
@@ -87,11 +89,26 @@ function PinnedTimelineItem({ label, icon }: PinnedTimelineItemProps) {
 			>
 				{label}
 			</Text>
+			<Text
+				style={{
+					color: theme.complementary.a0,
+					fontSize: 13,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+				}}
+				numberOfLines={1}
+			>
+				misskey.io
+			</Text>
 		</TouchableOpacity>
 	);
 }
 
 const SocialHubPinnedTimelines = memo(() => {
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 	return (
 		<SocialHubPinSectionContainer
 			label={'Timelines'}
@@ -109,25 +126,41 @@ const SocialHubPinnedTimelines = memo(() => {
 				>
 					<PinnedTimelineItem
 						label={'Home'}
-						icon={<AppIcon id={'home'} size={48} emphasis={'high'} />}
+						icon={
+							<AppIcon
+								id={'home'}
+								size={48}
+								emphasis={'high'}
+								iconStyle={{ color: theme.secondary.a0 }}
+							/>
+						}
 					/>
 					<PinnedTimelineItem
 						label={'Social'}
-						icon={<AppIcon id={'home'} size={48} emphasis={'high'} />}
+						icon={
+							<AppIcon
+								id={'home'}
+								size={48}
+								emphasis={'high'}
+								iconStyle={{ color: theme.secondary.a0 }}
+							/>
+						}
 					/>
 				</View>
 				<View
 					style={{
-						flexDirection: 'row', // marginVertical: 8,
+						flexDirection: 'row',
 					}}
 				>
 					<PinnedTimelineItem
-						label={'Home'}
-						icon={<AppIcon id={'home'} size={48} emphasis={'high'} />}
+						label={'Local'}
+						icon={
+							<Ionicons name="people" size={48} color={theme.secondary.a0} />
+						}
 					/>
 					<PinnedTimelineItem
 						label={'Federated'}
-						icon={<AppIcon id={'home'} size={48} emphasis={'high'} />}
+						icon={<Feather name="globe" size={48} color={theme.secondary.a0} />}
 					/>
 				</View>
 			</View>
@@ -138,12 +171,12 @@ export default SocialHubPinnedTimelines;
 
 const styles = StyleSheet.create({
 	text: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 		fontSize: 18,
 	},
 	button: {
 		marginHorizontal: 5,
-		paddingVertical: 14,
+		paddingVertical: 10,
 		paddingHorizontal: 12, // marginHorizontal: 8,
 		borderRadius: 8,
 	},
