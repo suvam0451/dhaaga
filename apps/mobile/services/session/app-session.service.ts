@@ -1,7 +1,7 @@
 import { BaseStorageManager } from './_shared';
 import { z } from 'zod';
 import { DataSource } from '../../database/dataSource';
-import { AppUserDto } from '../../types/app-user.types';
+import { AppUserObject } from '../../types/app-user.types';
 
 enum APP_CACHE_KEY {
 	LINK_TARGET = 'app/_cache/bottomSheet_linkTarget',
@@ -63,11 +63,11 @@ class Storage extends BaseStorageManager {
 		return this.set(APP_CACHE_KEY.USER_ID_TARGET, value);
 	}
 
-	getUserObject(): AppUserDto {
-		return this.getJson<AppUserDto>(APP_CACHE_KEY.USER_OBJECT_TARGET);
+	getUserObject(): AppUserObject {
+		return this.getJson<AppUserObject>(APP_CACHE_KEY.USER_OBJECT_TARGET);
 	}
 
-	setUserObject(obj: AppUserDto) {
+	setUserObject(obj: AppUserObject) {
 		return this.setJson(APP_CACHE_KEY.USER_OBJECT_TARGET, obj);
 	}
 

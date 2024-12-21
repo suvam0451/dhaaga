@@ -16,14 +16,6 @@ function useAppCustomEmoji() {
 	);
 
 	const find = useCallback((id: string, remoteSubdomain?: string): string => {
-		// FIXME: emoji resolver
-		// return EmojiService.find({
-		// 	db,
-		// 	globalDb,
-		// 	subdomain: remoteSubdomain || subdomain,
-		// 	domain,
-		// 	id,
-		// });
 		return '';
 	}, []);
 

@@ -10,8 +10,8 @@ import ActivityPubAdapterService from '../../../services/activitypub-adapter.ser
 import ActivitypubAdapterService from '../../../services/activitypub-adapter.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { ActivityPubStatusAppDtoType } from '../../../types/app-post.types';
-import { ActivitypubStatusService } from '../../../services/approto/activitypub-status.service';
+import { AppPostObject } from '../../../types/app-post.types';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 
 type Api_Response_Type = {
 	data: any[];
@@ -25,7 +25,7 @@ export type Notification_Entry = {
 	createdAt: Date;
 	groupKey?: string;
 	acct?: UserInterface;
-	post?: ActivityPubStatusAppDtoType;
+	post?: AppPostObject;
 	extraData?: string;
 	read?: boolean;
 };
@@ -107,7 +107,7 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 							: undefined,
 					post:
 						o.status || o.body || o.note
-							? new ActivitypubStatusService(
+							? new PostMiddleware(
 									ActivitypubAdapterService.adaptStatus(
 										o.status || o.data || o.note,
 										driver,

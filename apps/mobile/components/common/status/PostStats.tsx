@@ -1,11 +1,10 @@
 import { Fragment, memo } from 'react';
-import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
-import { Text } from '@rneui/themed';
+import { View, StyleSheet, ViewStyle, StyleProp, Text } from 'react-native';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { AppPostObject } from '../../../types/app-post.types';
 
 type StatItemProps = {
 	count: number;
@@ -61,7 +60,7 @@ const PostStats = memo(function Foo({
 	dto,
 	style,
 }: {
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
 }) {
 	const STATUS_DTO = dto.meta.isBoost

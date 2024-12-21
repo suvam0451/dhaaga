@@ -1,12 +1,9 @@
-import { z } from 'zod';
 import {
 	ActivitypubHelper,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../activitypub-adapter.service';
-import { ActivityPubUserDTO } from '../../types/app-user.types';
-
-export type AppUser = z.infer<typeof ActivityPubUserDTO>;
+import { AppUserObject, appUserObjectSchema } from '../../types/app-user.types';
 
 class AppUserService {
 	/**
@@ -23,8 +20,8 @@ class AppUserService {
 		input: UserInterface,
 		domain: string,
 		subdomain: string,
-	): AppUser | null {
-		const dto: AppUser = {
+	): AppUserObject | null {
+		const dto: AppUserObject = {
 			id: input.getId(),
 			displayName: input.getDisplayName(),
 			description: input.getDescription() || '',
@@ -52,7 +49,7 @@ class AppUserService {
 			},
 		};
 
-		const { data, error, success } = ActivityPubUserDTO.safeParse(dto);
+		const { data, error, success } = appUserObjectSchema.safeParse(dto);
 		if (!success) {
 			console.log('[ERROR]: user dto validation failed', error);
 			console.log(input);
@@ -62,7 +59,11 @@ class AppUserService {
 		return data as AppUserService;
 	}
 
-	static exportRaw(input: any, domain: string, subdomain: string): AppUser {
+	static exportRaw(
+		input: any,
+		domain: string,
+		subdomain: string,
+	): AppUserObject {
 		const _interface = ActivityPubAdapterService.adaptUser(input, domain);
 		return AppUserService.export(_interface, domain, subdomain);
 	}

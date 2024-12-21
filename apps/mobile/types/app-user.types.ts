@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const ActivityPubUserDTO = z.object({
+export const appUserObjectSchema = z.object({
 	id: z.string(),
 	avatarUrl: z.string(),
 	displayName: z.string().nullable(),
@@ -35,4 +35,4 @@ export const ActivityPubUserDTO = z.object({
  * as is expected to be passed around throughout
  * the app
  */
-export type AppUserDto = z.infer<typeof ActivityPubUserDTO>;
+export type AppUserObject = z.infer<typeof appUserObjectSchema>;

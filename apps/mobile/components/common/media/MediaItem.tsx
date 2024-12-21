@@ -9,7 +9,7 @@ import {
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
 import useGalleryDims from '../../../hooks/app/useGalleryDims';
-import { AppActivityPubMediaType } from '../../../services/approto/app-status-dto.service';
+import { AppActivityPubMediaType } from '../../../services/app-status-dto.service';
 
 type ImageCarousalProps = {
 	attachments: AppActivityPubMediaType[];

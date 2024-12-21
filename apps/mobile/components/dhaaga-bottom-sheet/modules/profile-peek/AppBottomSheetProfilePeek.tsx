@@ -18,7 +18,7 @@ import ProfileButtonPhonebook from '../../../screens/(shared)/stack/profile/frag
 import ProfileStats from '../../../screens/(shared)/stack/profile/fragments/ProfileStats';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { AppUserDto } from '../../../../types/app-user.types';
+import { AppUserObject } from '../../../../types/app-user.types';
 
 /**
  * This bottom sheet will show a preview
@@ -26,7 +26,7 @@ import { AppUserDto } from '../../../../types/app-user.types';
  */
 const AppBottomSheetProfilePeek = memo(() => {
 	const [UserId, setUserId] = useState<string>(null);
-	const [UserObject, setUserObject] = useState<AppUserDto>(null);
+	const [UserObject, setUserObject] = useState<AppUserObject>(null);
 	const {
 		stateId,
 		appManager,

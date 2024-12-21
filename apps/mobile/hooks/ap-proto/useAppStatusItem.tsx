@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
-import { ActivityPubStatusAppDtoType } from '../../services/approto/app-status-dto.service';
+import { AppPostObject } from '../../types/app-post.types';
 
 type Type = {
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 };
 
 const defaultValue: Type = {
@@ -19,7 +19,7 @@ export const useAppStatusItem = () => useContext(AppStatusItemContext);
 
 type Props = {
 	children: any;
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 };
 
 function WithAppStatusItemContext({ children, dto }: Props) {

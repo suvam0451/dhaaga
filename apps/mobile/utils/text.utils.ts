@@ -21,6 +21,17 @@ class TextParserUtil {
 		}
 		return retval;
 	}
+
+	/**
+	 * Removes www and http(s) from front
+	 * @param input input url
+	 */
+	static displayNameForLink(input: string) {
+		if (!URL_REGEX.test(input)) return input;
+
+		const stepA = input?.replace(/(https:\/\/)(.+)/, '$2');
+		return stepA?.replace(/(www\.)(.+)/, '$2');
+	}
 }
 
 export default TextParserUtil;

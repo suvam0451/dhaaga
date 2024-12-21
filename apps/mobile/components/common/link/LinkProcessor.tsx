@@ -6,6 +6,7 @@ import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import TextUtils from '../../../utils/text.utils';
 
 type LinkProcessorProps = {
 	url: string;
@@ -37,14 +38,7 @@ function LinkProcessor({
 		}
 	}, [fontFamily, emphasis]);
 
-	const displayNameHttpsRemoved = displayName?.replace(
-		/(https:\/\/)(.+)/,
-		'$2',
-	);
-	const displayNameWwwRemoved = displayNameHttpsRemoved?.replace(
-		/(www\.)(.+)/,
-		'$2',
-	);
+	const linkDisplayName = TextUtils.displayNameForLink(displayName);
 
 	const { show, appSession } = useGlobalState(
 		useShallow((o) => ({
@@ -74,7 +68,7 @@ function LinkProcessor({
 			onPress={onTextPress}
 			onTextLayout={onTextLayout}
 		>
-			{displayName ? displayNameWwwRemoved : Result}
+			{displayName ? linkDisplayName : Result}
 		</Text>
 	);
 }

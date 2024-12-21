@@ -2002,7 +2002,7 @@
   dependencies:
     "@babel/types" "^7.20.7"
 
-"@types/bun@^1.1.13":
+"@types/bun@^1.1.14":
   version "1.1.14"
   resolved "https://registry.yarnpkg.com/@types/bun/-/bun-1.1.14.tgz#587dead368410b281b1bcbfb61d3ce1a07a63234"
   integrity sha512-opVYiFGtO2af0dnWBdZWlioLBoxSdDO5qokaazLhq8XQtGZbY4pY3/JxY8Zdf/hEwGubbp7ErZXoN1+h2yesxA==
@@ -5530,15 +5530,6 @@ misskey-js@^2024.11.1-alpha.0:
     eventemitter3 "5.0.1"
     reconnecting-websocket "4.4.0"
 
-misskey-js@^2024.8.0:
-  version "2024.11.0"
-  resolved "https://registry.yarnpkg.com/misskey-js/-/misskey-js-2024.11.0.tgz#3c3fed7fdca6f567e987c50d5a3315962a3c69ad"
-  integrity sha512-DW94nf5n9Y0B98RFhZivHxBwdMfbB+3FuQ7K44Oe+zeHF5M6hDHCfxFTPcFw03c5sls10AxWOMukHZxt5Jor6g==
-  dependencies:
-    "@simplewebauthn/types" "11.0.0"
-    eventemitter3 "5.0.1"
-    reconnecting-websocket "4.4.0"
-
 mkdirp@^0.5.1:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.6.tgz#7def03d2432dcae4ba1d611445c48396062255f6"
@@ -5565,11 +5556,6 @@ ms@2.1.3, ms@^2.0.0, ms@^2.1.1, ms@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
-
-multiformats@^13.2.3:
-  version "13.3.1"
-  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-13.3.1.tgz#ea30d134b5697dcf2036ac819a17948f8a1775be"
-  integrity sha512-QxowxTNwJ3r5RMctoGA5p13w5RbRT2QDkoM+yFlqfLiioBp78nhDjnRLvmSBI9+KAqN4VdgOVWM9c0CHd86m3g==
 
 multiformats@^9.4.2, multiformats@^9.9.0:
   version "9.9.0"
@@ -7353,11 +7339,6 @@ typescript@^5.5.4, typescript@^5.7.2:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.2.tgz#3169cf8c4c8a828cde53ba9ecb3d2b1d5dd67be6"
   integrity sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==
-
-typescript@~5.3.3:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.3.3.tgz#b3ce6ba258e72e6305ba66f5c9b452aaee3ffe37"
-  integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==
 
 ua-parser-js@^1.0.35:
   version "1.0.39"

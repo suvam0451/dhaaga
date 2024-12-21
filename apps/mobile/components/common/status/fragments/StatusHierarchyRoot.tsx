@@ -1,4 +1,3 @@
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import { memo } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import useMfm from '../../../hooks/useMfm';
@@ -15,9 +14,10 @@ import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { AppPostObject } from '../../../../types/app-post.types';
 
 type Props = {
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 	hasParent?: boolean;
 };
 

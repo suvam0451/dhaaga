@@ -3,9 +3,10 @@ import { Image } from 'expo-image';
 import { memo, useCallback, useMemo } from 'react';
 import { Skeleton } from '@rneui/themed';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
+import { AppPostObject } from '../../../../types/app-post.types';
+import { appDimensions } from '../../../../styles/dimensions';
 
-const TIMELINE_PFP_SIZE = 38;
+const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
 /**
  * Renders the user (poster)'s avatar
@@ -67,7 +68,7 @@ function OriginalPosterSkeleton() {
 }
 
 type OriginalPosterProps = {
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
 };
 

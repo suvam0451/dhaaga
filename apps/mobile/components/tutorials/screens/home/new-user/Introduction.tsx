@@ -1,4 +1,4 @@
-import { StatusBar, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { memo, useState } from 'react';
 import { Button, Dialog } from '@rneui/themed';
 import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
@@ -8,13 +8,13 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
-import { APP_ROUTE_ENUM } from '../../../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '../../../../../utils/route-list';
 
 function IntroductionBase() {
 	const [DialogVisible, setDialogVisible] = useState(false);
 
 	function takeUserToAccountsPage() {
-		router.navigate(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
+		router.navigate(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
 	}
 
 	const { translateY } = useScrollMoreOnPageEnd();

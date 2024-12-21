@@ -5,7 +5,7 @@ import ProfileImageGallery from './ProfileImageGallery';
 import { StyleProp, View, ViewStyle, StyleSheet, Text } from 'react-native';
 import ProfileBlueskyFeeds from './ProfileBlueskyFeeds';
 import ProfileBlueskyLists from './ProfileBlueskyLists';
-import { AppUserDto } from '../../../../../../types/app-user.types';
+import { AppUserObject } from '../../../../../../types/app-user.types';
 import PagerView from 'react-native-pager-view';
 import {
 	AppInstagramTabControl,
@@ -14,7 +14,7 @@ import {
 import { SocialHubAvatarCircle } from '../../../../../lib/Avatar';
 
 type ProfileModulesProps = {
-	acct: AppUserDto;
+	acct: AppUserObject;
 	profileId: string;
 	fields: any[];
 	style?: StyleProp<ViewStyle>;

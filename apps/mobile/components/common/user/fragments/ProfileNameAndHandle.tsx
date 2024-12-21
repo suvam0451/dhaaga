@@ -3,10 +3,11 @@ import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import styles from '../utils/styles';
 import useMfm from '../../../hooks/useMfm';
-import { AppUserDto } from '../../../../types/app-user.types';
+import { AppUserObject } from '../../../../types/app-user.types';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 type ProfileNameAndHandleProps = {
-	dto: AppUserDto;
+	dto: AppUserObject;
 	style: StyleProp<ViewStyle>;
 };
 /**
@@ -20,9 +21,9 @@ const ProfileNameAndHandle = memo(
 			remoteSubdomain: dto?.instance,
 			emojiMap: dto?.calculated?.emojis,
 			deps: [dto?.displayName],
-			fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+			fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 			numberOfLines: 1,
-			emphasis: 'high',
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 		});
 
 		return (

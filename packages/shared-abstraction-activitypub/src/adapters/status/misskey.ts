@@ -3,7 +3,7 @@ import { DriveFile } from 'misskey-js/autogen/models.js';
 import { DriveFileToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { DriveFileInstance } from '../media-attachment/unique.js';
 import UnknownToStatusAdapter from './default.js';
-import { Note } from 'misskey-js/autogen/models.d.ts';
+import { Note } from 'misskey-js/autogen/models.js';
 
 class MisskeyToStatusAdapter
 	extends UnknownToStatusAdapter

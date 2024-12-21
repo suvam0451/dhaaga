@@ -1,4 +1,4 @@
-import { AppActivityPubMediaType } from '../../../services/approto/app-status-dto.service';
+import { AppActivityPubMediaType } from '../../../services/app-status-dto.service';
 import { FlatList, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useImageAutoWidth } from '../../../hooks/app/useImageDims';

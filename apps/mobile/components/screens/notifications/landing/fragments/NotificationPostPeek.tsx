@@ -5,7 +5,7 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Pressable, View } from 'react-native';
 import useAppNavigator from '../../../../../states/useAppNavigator';
 import {
-	ActivityPubStatusAppDtoType,
+	AppPostObject,
 	AppActivityPubMediaType,
 } from '../../../../../types/app-post.types';
 import NotificationMediaThumbs from '../../../../common/media/NotificationMediaThumbs';
@@ -14,7 +14,7 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 
 type Props = {
 	acct: UserInterface;
-	post: ActivityPubStatusAppDtoType;
+	post: AppPostObject;
 };
 
 type MediaGalleryProps = {

@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router/stack';
 import RneuiTheme from '../styles/RneuiTheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import WithGlobalMmkvContext from '../states/useGlobalMMkvCache';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@rneui/themed';
 import {
@@ -121,24 +120,20 @@ function App() {
 export default function Page() {
 	const queryClient = new QueryClient();
 	return (
-		<GestureHandlerRootView>
-			{/* In-Memory Store -- MMKV */}
-			<WithGlobalMmkvContext>
-				{/* Main Database -- Realm */}
-				<SQLiteProvider databaseName="app.db" onInit={migrateDbIfNeeded}>
-					{/* API Caching -- Tanstack */}
-					<QueryClientProvider client={queryClient}>
-						{/* Rneui Custom Themes */}
-						<ThemeProvider theme={RneuiTheme}>
-							<SafeAreaProvider>
-								<WithAppNotificationBadge>
-									<App />
-								</WithAppNotificationBadge>
-							</SafeAreaProvider>
-						</ThemeProvider>
-					</QueryClientProvider>
-				</SQLiteProvider>
-			</WithGlobalMmkvContext>
-		</GestureHandlerRootView>
+		<SQLiteProvider databaseName="app.db" onInit={migrateDbIfNeeded}>
+			{/* API Caching -- Tanstack */}
+			<QueryClientProvider client={queryClient}>
+				{/* Rneui Custom Themes */}
+				<ThemeProvider theme={RneuiTheme}>
+					<GestureHandlerRootView>
+						<SafeAreaProvider>
+							<WithAppNotificationBadge>
+								<App />
+							</WithAppNotificationBadge>
+						</SafeAreaProvider>
+					</GestureHandlerRootView>
+				</ThemeProvider>
+			</QueryClientProvider>
+		</SQLiteProvider>
 	);
 }

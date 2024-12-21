@@ -22,11 +22,11 @@ import {
 import { TimelineFetchMode } from '../components/common/timeline/utils/timeline.types';
 import { Result } from '../utils/result';
 import { RandomUtil } from '../utils/random.utils';
-import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.service';
+import { ActivityPubStatusAppDtoType_DEPRECATED } from '../services/app-status-dto.service';
 import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
 import { DataSource } from '../database/dataSource';
 import AppUserService from '../services/approto/app-user-service';
-import { AppUserDto } from '../types/app-user.types';
+import { AppUserObject } from '../types/app-user.types';
 import ProfileSessionManager from '../services/session/profile-session.service';
 import { ProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
@@ -105,12 +105,12 @@ type AppBottomSheetState = {
 
 	// references
 	HandleRef: string;
-	ParentRef: ActivityPubStatusAppDtoType;
-	RootRef: ActivityPubStatusAppDtoType;
+	ParentRef: ActivityPubStatusAppDtoType_DEPRECATED;
+	RootRef: ActivityPubStatusAppDtoType_DEPRECATED;
 	textValue: string;
 	setTextValue(textValue: string): void;
-	postValue: ActivityPubStatusAppDtoType;
-	setPostValue: (obj: ActivityPubStatusAppDtoType) => void;
+	postValue: ActivityPubStatusAppDtoType_DEPRECATED;
+	setPostValue: (obj: ActivityPubStatusAppDtoType_DEPRECATED) => void;
 
 	PostIdRef: string;
 	UserRef: UserInterface;
@@ -138,7 +138,7 @@ type State = {
 	 * compatible interface
 	 * */
 	driver: KNOWN_SOFTWARE;
-	me: AppUserDto | null;
+	me: AppUserObject | null;
 
 	// router used to make api requests
 	router: ActivityPubClient | null;
@@ -236,7 +236,7 @@ class GlobalStateService {
 		Result<{
 			acct: Account;
 			router: ActivityPubClient;
-			me: AppUserDto;
+			me: AppUserObject;
 		}>
 	> {
 		try {
@@ -275,12 +275,11 @@ class GlobalStateService {
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
 			const { data, error } = await _router.me.getMe();
-			const obj: AppUserDto = AppUserService.exportRaw(
+			const obj: AppUserObject = AppUserService.exportRaw(
 				data,
 				acct.driver,
 				acct.server,
 			);
-			// EmojiService.refresh(db, globalDb, acct.server, true);
 			return { type: 'success', value: { acct, router: _router, me: obj } };
 		} catch (e) {
 			console.log(e);
@@ -381,7 +380,7 @@ const useGlobalState = create<State & Actions>()(
 				});
 			},
 			postValue: null,
-			setPostValue: (obj: ActivityPubStatusAppDtoType) => {
+			setPostValue: (obj: ActivityPubStatusAppDtoType_DEPRECATED) => {
 				set((state) => {
 					state.bottomSheet.postValue = obj;
 				});

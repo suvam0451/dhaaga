@@ -6,16 +6,16 @@ import PostStats from '../PostStats';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import StatusQuoted from './StatusQuoted';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { AppPostObject } from '../../../../types/app-post.types';
 
 type Props = {
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 	hasParent?: boolean;
 };
 

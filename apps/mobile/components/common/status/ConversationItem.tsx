@@ -4,7 +4,6 @@ import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../../utils/random.utils';
@@ -43,7 +42,7 @@ function ConversationItem({ accountUrl, displayName }: ConversationItem) {
 			emojiMap,
 			domain: driver,
 			subdomain: acct?.server,
-			theme: theme,
+			colorScheme: theme,
 		});
 		setDescriptionContent(
 			<>

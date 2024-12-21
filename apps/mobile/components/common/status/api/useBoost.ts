@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { MisskeyRestClient } from '@dhaaga/shared-abstraction-activitypub';
 import * as Haptics from 'expo-haptics';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppPostObject } from '../../../../types/app-post.types';
 
-function useBoost(dto: ActivityPubStatusAppDtoType) {
+function useBoost(dto: AppPostObject) {
 	const { client, driver, me } = useGlobalState(
 		useShallow((o) => ({
 			me: o.me,
@@ -29,7 +29,7 @@ function useBoost(dto: ActivityPubStatusAppDtoType) {
 					// raw: o.user,
 				};
 			});
-			if (Renotes.current.find((o) => o.id === me?.getId())) setIsBoosted(true);
+			if (Renotes.current.find((o) => o.id === me.id)) setIsBoosted(true);
 		}
 	}
 

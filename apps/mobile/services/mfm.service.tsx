@@ -85,7 +85,6 @@ class MfmComponentBuilder {
 		this.preprocess();
 
 		this.findEmojis();
-		this.loadEmojis();
 
 		this.process();
 	}
@@ -110,18 +109,6 @@ class MfmComponentBuilder {
 				}
 			}
 		}
-	}
-
-	loadEmojis() {
-		if (this.emojis.size === 0) return;
-		// EmojiService.loadEmojisForInstanceSync(
-		// 	this.db,
-		// 	this.globalDb,
-		// 	this.targetSubdomain || this.mySubdomain,
-		// 	{
-		// 		selection: this.emojis,
-		// 	},
-		// );
 	}
 
 	preprocess() {

@@ -6,12 +6,12 @@ import { Skeleton } from '@rneui/base';
 import useMfm from '../../../hooks/useMfm';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { AppPostObject } from '../../../../types/app-post.types';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -139,7 +139,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 });
 
 type OriginalPosterProps = {
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
 };
 

@@ -14,7 +14,6 @@ import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import { router } from 'expo-router';
 import ActivityPubService from '../../../../../../services/activitypub.service';
-import { useGlobalMmkvContext } from '../../../../../../states/useGlobalMMkvCache';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
 import Feather from '@expo/vector-icons/Feather';
 import PopularServers from '../fragments/PopularServers';
@@ -28,6 +27,7 @@ import AppTopNavbar, {
 } from '../../../../../shared/topnavbar/AppTopNavbar';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 
 function MisskeyServerSelection() {
 	const [InputText, setInputText] = useState('misskey.io');
@@ -45,7 +45,7 @@ function MisskeyServerSelection() {
 		);
 		const subdomain = InputText;
 		router.push({
-			pathname: 'profile/onboard/signin-mk',
+			pathname: APP_ROUTING_ENUM.MISSKEY_SIGNIN,
 			params: {
 				signInUrl: signInStrategy?.loginUrl,
 				subdomain,

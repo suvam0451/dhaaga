@@ -1,12 +1,11 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { MutableRefObject, useRef, useState } from 'react';
 import useMfm from '../../hooks/useMfm';
 import ReplyOwner from '../user/ReplyOwner';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { Text } from '@rneui/themed';
-import StyleService from '../../../services/style.service';
 import { useAppStatusContextDataContext } from '../../../hooks/api/statuses/WithAppStatusContextData';
+import { AppThemingUtil } from '../../../utils/theming.util';
 
 type PostReplyToReplyProps = {
 	colors: string[];
@@ -108,7 +107,7 @@ function PostReplyToReply({ colors, lookupId }: PostReplyToReplyProps) {
 
 	const [IsReplyThreadVisible, setIsReplyThreadVisible] = useState(false);
 
-	const color = useRef(StyleService.generateRandomColorHex());
+	const color = useRef(AppThemingUtil.generateRandomColorHex());
 
 	return (
 		<View>
