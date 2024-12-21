@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 import { memo, useMemo } from 'react';
-import { MARGIN_TOP } from './_common';
 import {
 	AltTextOverlay,
 	AppAudioComponent,
@@ -88,12 +87,7 @@ const TimelineMediaRendered = memo(function Foo({
 	}, [attachment, ContainerHeight, ContainerWidth]);
 
 	return (
-		<View
-			style={{
-				marginTop: MARGIN_TOP,
-			}}
-			onLayout={onLayoutChanged}
-		>
+		<View onLayout={onLayoutChanged}>
 			{MediaItem}
 			<CarousalIndicatorOverlay index={index} totalCount={totalCount} />
 			<AltTextOverlay altText={altText} />
@@ -122,18 +116,16 @@ const MediaItem = memo(function Foo({
 		);
 	}
 	return (
-		<View style={{ marginTop: MARGIN_TOP, flex: 1 }}>
-			<AppImageCarousel
-				timelineCacheId={'1'}
-				calculatedHeight={calculatedHeight}
-				items={attachments.map((o) => ({
-					altText: o.alt,
-					src: o.previewUrl,
-					type: o.type,
-					blurhash: o.blurhash,
-				}))}
-			/>
-		</View>
+		<AppImageCarousel
+			timelineCacheId={'1'}
+			calculatedHeight={calculatedHeight}
+			items={attachments.map((o) => ({
+				altText: o.alt,
+				src: o.previewUrl,
+				type: o.type,
+				blurhash: o.blurhash,
+			}))}
+		/>
 	);
 });
 

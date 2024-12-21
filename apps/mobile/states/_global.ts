@@ -31,6 +31,7 @@ import ProfileSessionManager from '../services/session/profile-session.service';
 import { ProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
 import { AppColorSchemeType } from '../utils/theming.util';
+import AccountSessionManager from '../services/session/account-session.service';
 
 type AppThemePack = {
 	id: string;
@@ -129,6 +130,7 @@ type State = {
 	// managers
 	profileSessionManager: ProfileSessionManager | null;
 	appSession: AppSessionManager | null;
+	acctManager: AccountSessionManager | null;
 
 	/**
 	 * fetched account credentials
@@ -179,6 +181,7 @@ const defaultValue: State & Actions = {
 
 	profileSessionManager: null,
 	appSession: null,
+	acctManager: null,
 
 	// account data
 	driver: null,
@@ -305,11 +308,17 @@ const useGlobalState = create<State & Actions>()(
 			AccountService.select(get().db, selection);
 		},
 		loadActiveProfile: async () => {
+			// load default profile/account
 			const x = new ProfileSessionManager(get().db);
+			if (!x.acct || !x.profile) return;
+
 			set((state) => {
-				state.profileSessionManager = x;
+				// reset reactive pointers
 				state.acct = x.acct;
 				state.profile = x.profile;
+				// reset session managers
+				state.profileSessionManager = x;
+				state.acctManager = new AccountSessionManager(get().db, x.acct);
 			});
 		},
 		loadApp: async () => {
@@ -320,6 +329,10 @@ const useGlobalState = create<State & Actions>()(
 				if (restoreResult.type === 'success') {
 					state.me = restoreResult.value.me;
 					state.acct = restoreResult.value.acct;
+					state.acctManager = new AccountSessionManager(
+						get().db,
+						restoreResult.value.acct,
+					);
 					state.router = restoreResult.value.router;
 					state.driver = restoreResult.value.acct.driver as KNOWN_SOFTWARE;
 				} else {

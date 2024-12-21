@@ -1,7 +1,6 @@
 import { EmojiDto, styles } from './_shared.types';
 import { memo, useMemo, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
@@ -24,13 +23,15 @@ const EmojiReaction = memo(function Foo({
 	dto: EmojiDto;
 	postDto: ActivityPubStatusAppDtoType;
 }) {
-	const { driver, acct, client } = useGlobalState(
+	const { driver, acct, client, show } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
 			client: o.router,
 			acct: o.acct,
+			show: o.bottomSheet.show,
 		})),
 	);
+
 	const {
 		TextRef,
 		PostRef,

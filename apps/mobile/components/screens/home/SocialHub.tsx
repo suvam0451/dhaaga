@@ -1,6 +1,53 @@
+import { StyleSheet, View } from 'react-native';
+import PagerView from 'react-native-pager-view';
+import { useMemo, useRef } from 'react';
+import useSocialHub from '../../../states/useSocialHub';
+
 type SocialHubProps = {
 	profileId: string;
 };
-function SocialHub({ profileId }: SocialHubProps) {}
+
+/**
+ * The last tab of the Social Hub
+ * is always a UI to add a new profile
+ */
+function SocialHubTabAdd() {}
+
+function SocialHub({ profileId }: SocialHubProps) {
+	const ref = useRef<PagerView>(null);
+
+	const { data, onPageScroll, index } = useSocialHub();
+
+	function onPageSelected(e: any) {
+		const { offset, position } = e.nativeEvent;
+		const newIndex = Math.round(position + offset);
+		// setIndex(newIndex);
+	}
+
+	const Component = useMemo(() => {
+		if (index > data.length) {
+			return <SocialHubTabAdd />;
+		}
+		return <SocialHubTab profile={data[index]} />;
+	}, [index]);
+
+	return (
+		<View>
+			<PagerView
+				ref={ref}
+				scrollEnabled={true}
+				style={styles.pagerView}
+				initialPage={index}
+				onPageScroll={onPageSelected}
+			></PagerView>
+		</View>
+	);
+}
 
 export default SocialHub;
+
+const styles = StyleSheet.create({
+	pagerView: {
+		flex: 1,
+	},
+});

@@ -20,6 +20,10 @@ export class BaseStorageManager {
 		Storage.setItemSync(key, value);
 	}
 
+	printAllKeys() {
+		console.log(Storage.getAllKeysSync());
+	}
+
 	getJson<T>(key: string): T | null {
 		const data = this.get(key);
 		if (!data) return null;

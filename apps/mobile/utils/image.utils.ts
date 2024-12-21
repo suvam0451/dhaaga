@@ -1,5 +1,4 @@
-import { Image } from 'react-native';
-// import { ImageManipulator } from 'expo-image-manipulator';
+import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { type AppBskyEmbedImages } from '@atproto/api';
 
@@ -11,15 +10,13 @@ class ImageUtils {
 		url: string,
 	): Promise<{ width: number; height: number }> {
 		return new Promise((resolve, reject) => {
-			Image.getSize(
-				url,
-				(W, H) => {
-					resolve({ width: W, height: H });
-				},
-				(error) => {
-					reject(error);
-				},
-			);
+			Image.loadAsync(url)
+				.then(({ width, height, scale }) => {
+					resolve({ width: width * scale, height: height * scale });
+				})
+				.catch((e) => {
+					reject(e);
+				});
 		});
 	}
 

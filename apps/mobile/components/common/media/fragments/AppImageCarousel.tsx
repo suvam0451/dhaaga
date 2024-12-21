@@ -7,7 +7,7 @@ import {
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
 } from '../_shared';
-import { MARGIN_TOP, MEDIA_CONTAINER_WIDTH } from '../_common';
+import { MEDIA_CONTAINER_WIDTH } from '../_common';
 import {
 	Directions,
 	FlingGestureHandlerEventPayload,
@@ -102,7 +102,6 @@ const AppImageCarouselItem = memo(function Foo({
 				width: MEDIA_CONTAINER_WIDTH,
 				height: type === 'audio' ? 48 : calculatedHeight,
 				position: 'relative',
-				marginTop: MARGIN_TOP,
 			}}
 		>
 			{MediaItem}
@@ -154,12 +153,7 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 
 	return (
 		<GestureDetector gesture={fling}>
-			<View
-				style={{
-					alignItems: 'center',
-				}}
-				onLayout={onLayoutChanged}
-			>
+			<View onLayout={onLayoutChanged}>
 				<AppImageCarouselItem
 					src={item.src}
 					type={item.type}

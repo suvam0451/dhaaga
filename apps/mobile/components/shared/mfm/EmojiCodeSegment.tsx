@@ -1,11 +1,14 @@
-import { memo, useEffect, useState } from 'react';
-import { Image as RNImage, Text } from 'react-native';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
+import { Fragment, memo, useEffect, useState } from 'react';
+import { Text } from 'react-native';
+import { Image } from 'expo-image';
 import { RandomUtil } from '../../../utils/random.utils';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import {
+	APP_COLOR_PALETTE_EMPHASIS,
+	AppThemingUtil,
+} from '../../../utils/theming.util';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 
 type Props = {
 	value: string;
@@ -15,99 +18,65 @@ type Props = {
 	fontFamily: string;
 };
 
-const EMOJI_HEIGHT = 20;
+const EMOJI_HEIGHT = 22;
 
 const EmojiCodeSegment = memo(function Foo({
 	emojiMap,
 	value,
-	remoteInstance,
 	emphasis,
 	fontFamily,
 }: Props) {
-	const { theme } = useGlobalState(
+	const [ReactionData, setReactionData] =
+		useState<InstanceApi_CustomEmojiDTO>(null);
+	const { theme, acctManager } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
+			acctManager: o.acctManager,
 		})),
 	);
 
-	const colorObj = theme.complementaryB;
-	let color = null;
-	switch (emphasis) {
-		case APP_COLOR_PALETTE_EMPHASIS.A0: {
-			color = colorObj.a0;
-			break;
-		}
-		case APP_COLOR_PALETTE_EMPHASIS.A10: {
-			color = colorObj.a10;
-			break;
-		}
-		case APP_COLOR_PALETTE_EMPHASIS.A20: {
-			color = colorObj.a20;
-			break;
-		}
-		case APP_COLOR_PALETTE_EMPHASIS.A30: {
-			color = colorObj.a30;
-			break;
-		}
-		case APP_COLOR_PALETTE_EMPHASIS.A40: {
-			color = colorObj.a40;
-			break;
-		}
-		case APP_COLOR_PALETTE_EMPHASIS.A50: {
-			color = colorObj.a50;
-			break;
-		}
-		default: {
-			color = colorObj.a0;
-			break;
-		}
-	}
-
-	// const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
+	let color = AppThemingUtil.getColorForEmphasis(
+		theme.complementaryB,
+		emphasis,
+	);
 
 	const k = RandomUtil.nanoId();
 	const [Width, setWidth] = useState(EMOJI_HEIGHT);
 
-	// const match = EmojiService.findCachedEmoji({
-	// 	emojiMap,
-	// 	db,
-	// 	globalDb,
-	// 	id: value,
-	// 	remoteInstance,
-	// });
-
-	// if (!match)
-	return (
-		<Text key={k} style={{ color, fontFamily }}>
-			{`:${value}:`}
-		</Text>
-	);
-
 	useEffect(() => {
-		// RNImage.getSize(
-		// 	match,
-		// 	(width, height) => {
-		// 		setWidth(width * (EMOJI_HEIGHT / height));
-		// 	},
-		// 	() => {
-		// 		setWidth(EMOJI_HEIGHT);
-		// 	},
-		// );
-	}, []);
+		if (!acctManager) return;
+		const match = acctManager.resolveEmoji(value, emojiMap);
+		setReactionData(match);
+
+		Image.loadAsync(match.url)
+			.then(({ width, height }) => {
+				setWidth(width * (EMOJI_HEIGHT / height));
+			})
+			.catch((e) => {
+				setWidth(EMOJI_HEIGHT);
+			});
+	}, [value, acctManager]);
+
+	useEffect(() => {}, []);
+
+	if (!ReactionData)
+		return (
+			<Text key={k} style={{ color, fontFamily }}>
+				{`:${value}:`}
+			</Text>
+		);
 
 	return (
-		<Text style={{ alignItems: 'flex-end', flex: 1, position: 'relative' }}>
-			<RNImage
+		<Fragment>
+			{/*@ts-ignore-next-line*/}
+			<Image
 				style={{
 					width: Width,
 					height: EMOJI_HEIGHT,
-					top: 16,
-					position: 'absolute',
 				}}
-				// source={{ uri: match }}
+				source={{ uri: ReactionData.url }}
 			/>
-		</Text>
+		</Fragment>
 	);
 });
 
