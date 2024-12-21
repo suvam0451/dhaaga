@@ -1,5 +1,5 @@
 import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
-import { memo } from 'react';
+import { Fragment, memo } from 'react';
 import useMfm from '../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Pressable, View } from 'react-native';
@@ -9,6 +9,8 @@ import {
 	AppActivityPubMediaType,
 } from '../../../../../types/app-post.types';
 import NotificationMediaThumbs from '../../../../common/media/NotificationMediaThumbs';
+import { appDimensions } from '../../../../../styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 
 type Props = {
 	acct: UserInterface;
@@ -41,6 +43,7 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 		deps: [_post.content.raw],
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 
 	const { toPost } = useAppNavigator();
@@ -50,14 +53,16 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 	}
 
 	return (
-		<View>
-			<Pressable onPress={onPress}>{content}</Pressable>
-			<View>
-				<NotificationMediaThumbs
-					items={_post?.content?.media}
-					maxH={_post?.calculated?.mediaContainerHeight}
-				/>
+		<Fragment>
+			<NotificationMediaThumbs
+				items={_post?.content?.media}
+				maxH={_post?.calculated?.mediaContainerHeight}
+			/>
+			<View
+				style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
+			>
+				<Pressable onPress={onPress}>{content}</Pressable>
 			</View>
-		</View>
+		</Fragment>
 	);
 });

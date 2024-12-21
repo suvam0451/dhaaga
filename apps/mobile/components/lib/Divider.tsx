@@ -7,12 +7,20 @@ type AppDividerProps = {
 };
 
 export class AppDivider {
+	/**
+	 * Divider. Works well on darkest backgrounds.
+	 */
 	static Soft({ style }: AppDividerProps) {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		return (
 			<View
 				style={[
 					{
-						backgroundColor: '#3d3d3d',
+						backgroundColor: '#1d1d1d',
 						height: 1,
 					},
 					style,

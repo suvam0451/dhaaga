@@ -19,7 +19,7 @@ const StatusAlertNotificationFragment = memo(({ item }: Props) => {
 				createdAt={item.createdAt}
 			/>
 			<NotificationPostPeek acct={acct} post={post} />
-			<AppDivider.Soft style={{ marginTop: 8 }} />
+			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 });

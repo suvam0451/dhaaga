@@ -1,7 +1,8 @@
 import { AppActivityPubMediaType } from '../../../services/approto/app-status-dto.service';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useImageAutoWidth } from '../../../hooks/app/useImageDims';
+import { appDimensions } from '../../../styles/dimensions';
 
 type ThumbItemProps = {
 	item: AppActivityPubMediaType;
@@ -47,11 +48,15 @@ function NotificationMediaThumbs({ items, maxH }: Props) {
 	if (items.length === 0) return <View />;
 
 	return (
-		<View style={{ flexDirection: 'row', overflow: 'scroll', marginTop: 8 }}>
-			{items.map((item, i) => (
-				<ThumbItem key={i} item={item} />
-			))}
-		</View>
+		<FlatList
+			horizontal={true}
+			data={items}
+			renderItem={(item) => <ThumbItem item={item.item} />}
+			style={{
+				marginBottom: appDimensions.timelines.sectionBottomMargin,
+				marginTop: 8,
+			}}
+		/>
 	);
 }
 

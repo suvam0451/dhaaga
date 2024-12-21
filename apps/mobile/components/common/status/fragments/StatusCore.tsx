@@ -20,6 +20,7 @@ import useGlobalState, {
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { appDimensions } from '../../../../styles/dimensions';
 
 /**
  * Mostly used to remove the border
@@ -59,30 +60,12 @@ function StatusController() {
 		<View
 			style={{
 				justifyContent: 'flex-start',
-				// backgroundColor: 'blue',
-
 				flexDirection: 'row',
 				alignItems: 'flex-start',
 				flexShrink: 1,
 				height: '100%',
 			}}
 		>
-			{/*<Pressable*/}
-			{/*	style={{*/}
-			{/*		height: '100%',*/}
-			{/*		// backgroundColor: 'yellow',*/}
-			{/*		paddingTop: 8,*/}
-			{/*		paddingLeft: 16,*/}
-			{/*	}}*/}
-			{/*>*/}
-			{/*	<AppIcon*/}
-			{/*		id={'language'}*/}
-			{/*		emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}*/}
-			{/*		color={theme.primary.a0}*/}
-			{/*		size={20}*/}
-			{/*	/>*/}
-			{/*</Pressable>*/}
-
 			<Pressable
 				style={{
 					height: '100%',
@@ -101,130 +84,132 @@ function StatusController() {
 	);
 }
 
-const StatusCore = memo(
-	({ hasParent, hasBoost, isPreview }: StatusCoreProps) => {
-		const { dto } = useAppStatusItem();
-		const { toPost } = useAppNavigator();
-		const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
+const StatusCore = memo(({ isPreview }: StatusCoreProps) => {
+	const { dto } = useAppStatusItem();
+	const { toPost } = useAppNavigator();
+	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
-		const STATUS_DTO = dto.meta.isBoost
-			? dto.content.raw
-				? dto
-				: dto.boostedFrom
-			: dto;
+	const STATUS_DTO = dto.meta.isBoost
+		? dto.content.raw
+			? dto
+			: dto.boostedFrom
+		: dto;
 
-		const IS_QUOTE_BOOST = dto?.meta?.isBoost && dto?.content?.raw;
+	const IS_QUOTE_BOOST = dto?.meta?.isBoost && dto?.content?.raw;
 
-		const IS_REPLY_OR_BOOST =
-			STATUS_DTO.meta.isReply ||
-			(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
+	const IS_REPLY_OR_BOOST =
+		STATUS_DTO.meta.isReply ||
+		(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
 
-		const { content: PostContent, isLoaded } = useMfm({
-			content: STATUS_DTO.content.raw,
-			remoteSubdomain: STATUS_DTO.postedBy.instance,
-			emojiMap: STATUS_DTO.calculated.emojis,
-			deps: [dto],
-			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-			fontFamily: APP_FONTS.INTER_400_REGULAR,
-		});
+	const { content: PostContent, isLoaded } = useMfm({
+		content: STATUS_DTO.content.raw,
+		remoteSubdomain: STATUS_DTO.postedBy.instance,
+		emojiMap: STATUS_DTO.calculated.emojis,
+		deps: [dto],
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+	});
 
-		const isSensitive = STATUS_DTO.meta.sensitive;
-		const spoilerText = STATUS_DTO.meta.cw;
+	const isSensitive = STATUS_DTO.meta.sensitive;
+	const spoilerText = STATUS_DTO.meta.cw;
 
-		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 4;
-		if (hasParent || hasBoost) paddingTop = 0;
-		if (!hasParent && hasBoost) paddingTop = 6;
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
 
-		return useMemo(() => {
-			if (!isLoaded) return <StatusItemSkeleton />;
+	return useMemo(() => {
+		if (!isLoaded) return <StatusItemSkeleton />;
 
-			return (
-				<Fragment>
-					<View style={{ flexDirection: 'row' }}>
-						<PostCreatedBy
-							dto={dto}
+		return (
+			<Fragment>
+				<View
+					style={{
+						flexDirection: 'row',
+						marginBottom: appDimensions.timelines.sectionBottomMargin,
+					}}
+				>
+					<PostCreatedBy
+						dto={dto}
+						style={{
+							paddingBottom: 4,
+							flex: 1,
+							overflowX: 'hidden',
+						}}
+					/>
+					<StatusController />
+				</View>
+
+				{isSensitive && (
+					<StatusCw
+						cw={spoilerText}
+						show={ShowSensitiveContent}
+						setShow={setShowSensitiveContent}
+					/>
+				)}
+
+				{/* --- Media Items --- */}
+				<Pressable onPress={() => {}}>
+					{isSensitive && !ShowSensitiveContent ? (
+						<View></View>
+					) : STATUS_DTO.content?.media?.length > 0 ? (
+						<View
 							style={{
-								paddingBottom: 4,
-								flex: 1,
-								overflowX: 'hidden',
+								marginBottom: appDimensions.timelines.sectionBottomMargin,
 							}}
-						/>
-						<StatusController />
-					</View>
+						>
+							<MediaItem
+								attachments={STATUS_DTO.content.media}
+								calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
+							/>
+						</View>
+					) : (
+						<View />
+					)}
+				</Pressable>
 
-					{isSensitive && (
-						<StatusCw
-							cw={spoilerText}
-							show={ShowSensitiveContent}
-							setShow={setShowSensitiveContent}
-						/>
+				{/* --- Text Content --- */}
+				<Pressable
+					onPress={() => {
+						toPost(STATUS_DTO.id);
+					}}
+				>
+					{isSensitive && !ShowSensitiveContent ? (
+						<View />
+					) : (
+						<View
+							style={{
+								marginBottom: appDimensions.timelines.sectionBottomMargin,
+							}}
+						>
+							{PostContent}
+							{dto.calculated.translationOutput && (
+								<ExplainOutput
+									additionalInfo={'Translated using OpenAI'}
+									fromLang={'jp'}
+									toLang={'en'}
+									text={dto.calculated.translationOutput}
+								/>
+							)}
+						</View>
 					)}
 
-					{/* --- Media Items --- */}
-					<Pressable onPress={() => {}}>
-						{isSensitive && !ShowSensitiveContent ? (
-							<View></View>
-						) : (
-							<View style={{ marginBottom: 6 }}>
-								<MediaItem
-									attachments={STATUS_DTO.content.media}
-									calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
-								/>
-							</View>
-						)}
-					</Pressable>
+					{/*FIXME: enable for bluesky*/}
+					{IS_QUOTE_BOOST && (
+						<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
+							<StatusQuoted />
+						</WithAppStatusItemContext>
+					)}
+				</Pressable>
 
-					{/* --- Text Content --- */}
-					<Pressable
-						onPress={() => {
-							toPost(STATUS_DTO.id);
-						}}
-					>
-						{isSensitive && !ShowSensitiveContent ? (
-							<View></View>
-						) : (
-							<View style={{ height: 'auto' }}>
-								{PostContent}
-								{dto.calculated.translationOutput && (
-									<ExplainOutput
-										additionalInfo={'Translated using OpenAI'}
-										fromLang={'jp'}
-										toLang={'en'}
-										text={dto.calculated.translationOutput}
-									/>
-								)}
-							</View>
-						)}
-
-						{/*FIXME: enable for bluesky*/}
-						{IS_QUOTE_BOOST && (
-							<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
-								<StatusQuoted />
-							</WithAppStatusItemContext>
-						)}
-					</Pressable>
-
-					{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
-					{/*{!isPreview && (*/}
-					{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
-					{/*)}*/}
-				</Fragment>
-			);
-		}, [
-			isLoaded,
-			ShowSensitiveContent,
-			PostContent,
-			dto,
-			STATUS_DTO,
-			paddingTop,
-			theme,
-		]);
-	},
-);
+				{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
+				{/*{!isPreview && (*/}
+				{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
+				{/*)}*/}
+			</Fragment>
+		);
+	}, [isLoaded, ShowSensitiveContent, PostContent, dto, STATUS_DTO, theme]);
+});
 
 export default StatusCore;

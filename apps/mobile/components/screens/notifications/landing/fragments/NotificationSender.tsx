@@ -4,7 +4,7 @@ import {
 	DhaagaJsNotificationType,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';
 import { APP_FONT } from '../../../../../styles/AppTheme';
@@ -23,6 +23,7 @@ import useGlobalState, {
 import { useShallow } from 'zustand/react/shallow';
 import { AppIcon } from '../../../../lib/Icon';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
+import { appDimensions } from '../../../../../styles/dimensions';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -253,14 +254,32 @@ export const NotificationSender = memo(
 					<View
 						style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}
 					>
+						{/*<Text*/}
+						{/*	style={{*/}
+						{/*		fontFamily: APP_FONTS.INTER_400_REGULAR,*/}
+						{/*		color: theme.secondary.a40,*/}
+						{/*	}}*/}
+						{/*>*/}
+						{/*	{handle}*/}
+						{/*</Text>*/}
 						<Text
 							style={{
-								fontFamily: APP_FONTS.INTER_400_REGULAR,
-
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
 								color: theme.complementary.a0,
+								fontSize: 13,
 							}}
 						>
 							{textContent(type)}
+						</Text>
+						<Text
+							style={{
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+								color: theme.secondary.a40,
+								fontSize: 13,
+							}}
+						>
+							{' • '}
+							{DatetimeUtil.timeAgo(createdAt)}
 						</Text>
 					</View>
 				</View>
@@ -271,16 +290,7 @@ export const NotificationSender = memo(
 						marginBottom: 'auto',
 					}}
 				>
-					<Text
-						style={{
-							fontFamily: APP_FONTS.INTER_400_REGULAR,
-
-							color: theme.secondary.a30,
-						}}
-					>
-						{DatetimeUtil.timeAgo(createdAt)}
-					</Text>
-					<AppIcon id={'more-options-vertical'} size={20} />
+					<AppIcon id={'ellipsis-v'} color={theme.secondary.a40} size={20} />
 				</View>
 			</View>
 		);
@@ -304,14 +314,14 @@ export const NotificationSenderInterface = memo(
 			driver,
 			acct: acctItem,
 			show,
-			profileManager,
+			acctManager,
 			theme,
 		} = useGlobalState(
 			useShallow((o) => ({
 				driver: o.driver,
 				acct: o.acct,
 				show: o.bottomSheet.show,
-				profileManager: o.profileSessionManager,
+				acctManager: o.acctManager,
 				theme: o.colorScheme,
 			})),
 		);
@@ -345,7 +355,10 @@ export const NotificationSenderInterface = memo(
 		}
 
 		return (
-			<TouchableOpacity onPress={onPress}>
+			<Pressable
+				onPress={onPress}
+				style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
+			>
 				<NotificationSender
 					id={id}
 					type={type}
@@ -355,7 +368,7 @@ export const NotificationSenderInterface = memo(
 					extraData={extraData}
 					createdAt={createdAt}
 				/>
-			</TouchableOpacity>
+			</Pressable>
 		);
 	},
 );
