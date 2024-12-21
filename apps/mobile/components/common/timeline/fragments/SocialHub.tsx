@@ -8,7 +8,7 @@ import { UserDataTimeline } from '../../../../entities/userdata-timeline.entity'
 import { TimelineFetchMode } from '../utils/timeline.types';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import SocialHubAssistant from '../../../screens/home/stack/landing/fragments/SocialHubAssistant';
-import SocialHubQuickDestinations from '../../../screens/home/stack/landing/fragments/SocialHubQuickDestinations';
+import SocialHubPinnedTimelines from '../../../screens/home/stack/landing/fragments/SocialHubPinnedTimelines';
 import { AppSegmentedControl } from '../../../lib/SegmentedControl';
 import { SocialHubAvatarCircle } from '../../../lib/Avatar';
 import useGlobalState from '../../../../states/_global';
@@ -349,9 +349,11 @@ function SocialHub() {
 							{ label: 'Saved' },
 						]}
 						style={{ marginTop: 28 }}
+						index={0}
+						setIndex={(index: number) => {}}
 					/>
 
-					<SocialHubQuickDestinations />
+					<SocialHubPinnedTimelines />
 
 					<View>
 						{/*<View*/}

@@ -9,8 +9,6 @@ import ActivityPubAdapterService from '../../../../../services/activitypub-adapt
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useComposerContext } from './useComposerContext';
-import { EmojiService } from '../../../../../services/emoji.service';
-import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -27,15 +25,14 @@ const DEFAULT: PostComposeAutoCompletionResults = {
 };
 
 function usePostComposeAutoCompletion() {
-	const { client, driver, acct } = useGlobalState(
+	const { client, driver, acctManager } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
 			driver: o.driver,
-			acct: o.acct,
+			acctManager: o.acctManager,
 		})),
 	);
 	const { setAutoCompletion, autoCompletionPrompt } = useComposerContext();
-	const { globalDb } = useGlobalMmkvContext();
 
 	async function api(): Promise<PostComposeAutoCompletionResults> {
 		if (!client) throw new Error('_client not initialized');
@@ -72,7 +69,7 @@ function usePostComposeAutoCompletion() {
 			}
 			case 'emoji': {
 				if (autoCompletionPrompt.q === '') return DEFAULT;
-				const cache = EmojiService.getEmojiCache(globalDb, acct?.server);
+				const cache = acctManager.serverReactionCache;
 				const matches = cache.filter((o) =>
 					o.shortCode.includes(autoCompletionPrompt.q),
 				);

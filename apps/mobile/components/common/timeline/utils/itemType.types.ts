@@ -1,4 +1,4 @@
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
+import { AppPostObject } from '../../../../types/app-post.types';
 
 export enum ListItemEnum {
 	ListItemWithText,
@@ -8,21 +8,21 @@ export enum ListItemEnum {
 
 interface ListItemWithTextInterface {
 	props: {
-		dto: ActivityPubStatusAppDtoType;
+		dto: AppPostObject;
 	};
 	type: ListItemEnum.ListItemWithText;
 }
 
 interface ListItemWithImageInterface {
 	props: {
-		dto: ActivityPubStatusAppDtoType;
+		dto: AppPostObject;
 	};
 	type: ListItemEnum.ListItemWithImage;
 }
 
 interface ListItemWithSpoilerInterface {
 	props: {
-		dto: ActivityPubStatusAppDtoType;
+		dto: AppPostObject;
 	};
 	type: ListItemEnum.ListItemWithSpoiler;
 }

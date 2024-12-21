@@ -17,7 +17,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
-import { APP_ROUTE_ENUM } from '../../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 
 function SettingPageFooter() {
 	return (
@@ -136,7 +136,7 @@ function SettingCategoryList() {
 		<View style={{ width: '100%', flexGrow: 1, paddingHorizontal: 8 }}>
 			<SettingCategoryListItem
 				label={'Accounts'}
-				to={APP_ROUTE_ENUM.PROFILE_ACCOUNTS}
+				to={APP_ROUTING_ENUM.PROFILE_ACCOUNTS}
 				Icon={
 					<MaterialIcons
 						name="manage-accounts"

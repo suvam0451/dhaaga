@@ -18,7 +18,6 @@ const RelationStrangers = memo(
 		);
 		return (
 			<Button
-				size={'sm'}
 				onPress={onPress}
 				buttonStyle={[
 					styles.button,
@@ -47,12 +46,12 @@ const styles = StyleSheet.create({
 	button: {
 		borderColor: '#cb6483',
 		backgroundColor: '#363636',
-		borderRadius: 4,
+		borderRadius: 12,
 		paddingVertical: 8,
-		paddingHorizontal: 12,
+		paddingHorizontal: 20,
 	},
 	buttonContainer: {
-		borderRadius: 8,
+		borderRadius: 12,
 	},
 	text: {
 		fontFamily: APP_FONTS.INTER_700_BOLD,

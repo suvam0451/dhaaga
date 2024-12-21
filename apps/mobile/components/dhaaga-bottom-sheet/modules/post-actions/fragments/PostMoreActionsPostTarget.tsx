@@ -42,7 +42,11 @@ const ActionButton = memo(
 		desc?: string;
 		onClick: () => void;
 	}) => {
-		const { colorScheme } = useGlobalState();
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		return (
 			<TouchableOpacity
 				style={{
@@ -64,7 +68,7 @@ const ActionButton = memo(
 				>
 					<Text
 						style={{
-							color: colorScheme.textColor.high,
+							color: theme.textColor.high,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							fontSize: 18,
 						}}
@@ -74,7 +78,7 @@ const ActionButton = memo(
 					{desc && (
 						<Text
 							style={{
-								color: colorScheme.textColor.medium,
+								color: theme.textColor.medium,
 								flexWrap: 'wrap',
 							}}
 						>

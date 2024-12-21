@@ -18,6 +18,7 @@ import type { FeaturedTag as MLFeaturedTag } from 'megalodon/lib/esm/src/entitie
 import type { Account as MLAccount } from 'megalodon/lib/esm/src/entities/account.js';
 import type { List as MLList } from 'megalodon/lib/esm/src/entities/list.js';
 import type { Relationship as MLRelationship } from 'megalodon/lib/esm/src/entities/relationship.js';
+import type { Conversation as MLConversation } from 'megalodon/lib/esm/src/entities/conversation.js';
 
 /**
  * TS4053: Return type of public method
@@ -37,11 +38,14 @@ export type MastoAccount = mastodon.v1.Account;
 export type MastoFeaturedTag = mastodon.v1.FeaturedTag;
 export type MastoFamiliarFollowers = mastodon.v1.FamiliarFollowers;
 export type MastoNotification = mastodon.v1.Notification;
+export type MastoGroupedNotificationsResults =
+	mastodon.v1.GroupedNotificationsResults;
 export type MastoScheduledStatus = mastodon.v1.ScheduledStatus;
 export type MastoMediaAttachment = mastodon.v1.MediaAttachment;
 
 export type MegaStatus = MLStatus;
 export type MegaReaction = MLReaction;
+export type MegaConversation = MLConversation;
 export type MegaNotification = MLNotification;
 export type MegaTag = MLTag;
 export type MegaFeaturedTag = MLFeaturedTag;

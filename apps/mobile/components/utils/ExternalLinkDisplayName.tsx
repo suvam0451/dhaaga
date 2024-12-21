@@ -1,10 +1,7 @@
-import { Text } from '@rneui/themed';
-import { View } from 'react-native';
-import { APP_THEME } from '../../styles/AppTheme';
-import GlobalMmkvCacheServices from '../../services/globalMmkvCache.services';
-import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
+import { View, Text } from 'react-native';
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 type ExternalLinDisplayNameProps = {
 	displayName: string;
@@ -13,21 +10,17 @@ type ExternalLinDisplayNameProps = {
 function ExternalLinkDisplayName({ displayName }: ExternalLinDisplayNameProps) {
 	const httpsRemoved = displayName.replace(/(https:\/\/)(.+)/, '$2');
 	const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, httpsRemoved);
-	const { globalDb } = useGlobalMmkvContext();
-	const { show, db, mmkv } = useGlobalState(
+	const { show, appManager, theme } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,
-			db: o.db,
-			mmkv: o.mmkv,
+			appManager: o.appSession,
+			theme: o.colorScheme,
 		})),
 	);
 
 	function onTextPress() {
-		GlobalMmkvCacheServices.setBottomSheetProp_Link(globalDb, {
-			url: displayName,
-			displayName: wwwRemoved,
-		});
-		show(APP_BOTTOM_SHEET_ENUM.LINK);
+		appManager.cache.setLinkTarget(displayName, wwwRemoved);
+		show(APP_BOTTOM_SHEET_ENUM.LINK, true);
 	}
 
 	return (
@@ -44,20 +37,13 @@ function ExternalLinkDisplayName({ displayName }: ExternalLinDisplayNameProps) {
 			<Text
 				numberOfLines={1}
 				style={{
-					color: APP_THEME.LINK,
-					fontFamily: 'Inter-Bold',
+					color: theme.complementary.a0,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 				}}
 				onPress={onTextPress}
 			>
 				{wwwRemoved}
 			</Text>
-			{/*<View style={{marginLeft: 2}}>*/}
-			{/*  <Ionicons*/}
-			{/*      name="open-outline"*/}
-			{/*      size={16}*/}
-			{/*      color={APP_THEME.LINK}*/}
-			{/*  />*/}
-			{/*</View>*/}
 		</View>
 	);
 }

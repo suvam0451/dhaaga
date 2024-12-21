@@ -18,7 +18,6 @@ function PostContainer({ children }: any) {
 			<View
 				style={{
 					paddingHorizontal: 10,
-					paddingVertical: 16,
 					backgroundColor: '#121212',
 					borderRadius: 16,
 				}}
@@ -27,8 +26,9 @@ function PostContainer({ children }: any) {
 			</View>
 			<View
 				style={{
-					backgroundColor: '#1e1e1e',
+					backgroundColor: '#1c1c1c',
 					height: 1,
+					marginVertical: 16,
 				}}
 			/>
 		</View>

@@ -10,7 +10,7 @@ import {
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../../../states/_global';
 
@@ -41,6 +41,7 @@ const ProfileModuleFactory = memo(
 			})),
 		);
 
+		console.log(IsExpanded);
 		return (
 			<View style={style}>
 				<TouchableOpacity
@@ -77,7 +78,6 @@ const ProfileModuleFactory = memo(
 						},
 						styles.hiddenSection,
 					]}
-					entering={FadeIn}
 				>
 					{children}
 				</Animated.View>
@@ -106,5 +106,8 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 		borderRadius: 8,
 		marginBottom: 8,
+		// width: '100%',
+		// height: 800,
+		// backgroundColor: 'blue',
 	},
 });

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import useMfm from '../../../hooks/useMfm';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import MediaItem from '../../media/MediaItem';
@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import PostCreatedBy from './PostCreatedBy';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 const StatusQuoted = memo(() => {
 	const { theme } = useGlobalState(
@@ -21,11 +22,19 @@ const StatusQuoted = memo(() => {
 		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis as any,
 		deps: [dto],
-		emphasis: 'high',
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 
 	return (
-		<View style={[styles.rootContainer, { backgroundColor: theme.palette.bg }]}>
+		<View
+			style={[
+				styles.rootContainer,
+				{
+					backgroundColor: theme.palette.bg,
+					borderColor: theme.complementaryA.a0,
+				},
+			]}
+		>
 			<View>
 				<View
 					style={{
@@ -38,18 +47,18 @@ const StatusQuoted = memo(() => {
 					<FontAwesome
 						name="quote-left"
 						size={14}
-						color={theme.textColor.medium}
+						color={theme.complementaryB.a0}
 						style={{ width: 16 }}
 					/>
 					<Text
 						style={{
-							color: theme.textColor.medium,
+							color: theme.complementaryB.a0,
 							marginLeft: 4,
 							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							fontSize: 13,
 						}}
 					>
-						Referenced this Post
+						Quoted this Post
 					</Text>
 				</View>
 
@@ -73,7 +82,7 @@ const styles = StyleSheet.create({
 		borderRadius: 6,
 		borderStyle: 'dashed',
 		borderWidth: 1,
-		borderColor: 'orange',
+		// borderColor: 'orange',
 	},
 });
 export default StatusQuoted;

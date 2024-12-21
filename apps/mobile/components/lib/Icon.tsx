@@ -23,42 +23,54 @@ import * as Haptics from 'expo-haptics';
 import { APP_FONT } from '../../styles/AppTheme';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
 export type APP_ICON_ENUM =
 	| 'bell'
 	| 'back'
+	| 'browser'
 	| 'chevron-right'
 	| 'checkmark-done-outline'
 	| 'cog'
+	| 'copy'
 	| 'create'
 	| 'clear'
 	| 'done'
 	| 'edit'
 	| 'ellipsis-v'
 	| 'external-link'
+	| 'eye'
+	| 'eye-filled'
+	| 'eye-off-filled'
 	| 'home'
 	| 'info'
+	| 'language'
 	| 'menu'
 	| 'message'
+	| 'more-options-vertical'
 	| 'no-account'
 	| 'palette'
 	| 'phonebook'
+	| 'pin'
 	| 'retweet'
 	| 'search'
 	| 'share'
 	| 'feelings'
 	| 'smiley'
+	| 'to-top'
 	| 'trash'
 	| 'user-guide'
 	| 'wand';
 
 type AppIconType = {
 	id: APP_ICON_ENUM;
-	emphasis?: 'high' | 'low' | 'medium' | 'c';
+	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
 	iconStyle?: StyleProp<TextStyle>;
 	containerStyle?: StyleProp<ViewStyle>;
 	size?: number;
 	onPress?: () => void;
+	icon?: string;
+	color?: string;
 };
 
 /**
@@ -172,7 +184,15 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 export function DiscoverNavigationIcon(props: NavigationIconType) {}
 
 export const AppIcon = memo(
-	({ id, emphasis, iconStyle, size, onPress, containerStyle }: AppIconType) => {
+	({
+		id,
+		emphasis,
+		iconStyle,
+		size,
+		onPress,
+		containerStyle,
+		color,
+	}: AppIconType) => {
 		const { theme } = useGlobalState(
 			useShallow((o) => ({
 				theme: o.colorScheme,
@@ -181,26 +201,38 @@ export const AppIcon = memo(
 
 		let _color = null;
 		let _size = size || 24;
-		switch (emphasis) {
-			case 'high': {
-				_color = theme.textColor.high;
-				break;
-			}
-			case 'medium': {
-				_color = theme.textColor.medium;
-				break;
-			}
-			case 'low': {
-				_color = theme.textColor.low;
-				break;
-			}
-			case 'c': {
-				_color = theme.textColor.emphasisC;
-				break;
-			}
-			default: {
-				_color = theme.textColor.medium;
-				break;
+		if (color) {
+			_color = color;
+		} else {
+			switch (emphasis) {
+				case APP_COLOR_PALETTE_EMPHASIS.A0: {
+					_color = theme.secondary.a0;
+					break;
+				}
+				case APP_COLOR_PALETTE_EMPHASIS.A10: {
+					_color = theme.secondary.a10;
+					break;
+				}
+				case APP_COLOR_PALETTE_EMPHASIS.A20: {
+					_color = theme.secondary.a20;
+					break;
+				}
+				case APP_COLOR_PALETTE_EMPHASIS.A30: {
+					_color = theme.secondary.a30;
+					break;
+				}
+				case APP_COLOR_PALETTE_EMPHASIS.A40: {
+					_color = theme.secondary.a40;
+					break;
+				}
+				case APP_COLOR_PALETTE_EMPHASIS.A50: {
+					_color = theme.secondary.a50;
+					break;
+				}
+				default: {
+					_color = theme.secondary.a0;
+					break;
+				}
 			}
 		}
 
@@ -220,6 +252,17 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="chevron-back"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+
+				case 'browser':
+					return (
+						<Ionicons
+							name="browsers-outline"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -259,6 +302,16 @@ export const AppIcon = memo(
 					) : (
 						<FontAwesome5
 							name="cog"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'copy':
+					return (
+						<Ionicons
+							name="copy-outline"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -326,6 +379,36 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'eye':
+					return (
+						<Ionicons
+							name="eye-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'eye-filled':
+					return (
+						<Ionicons
+							name="eye-filled"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'eye-off-filled':
+					return (
+						<Ionicons
+							name="eye-off-filled"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'home':
 					return (
 						<Ionicons
@@ -340,6 +423,16 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="information-circle-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'language':
+					return (
+						<Ionicons
+							name="language"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -376,6 +469,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'more-options-vertical':
+					return (
+						<Ionicons
+							name={'ellipsis-vertical'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'no-account':
 					return (
 						<MaterialIcons
@@ -400,6 +503,16 @@ export const AppIcon = memo(
 					return (
 						<FontAwesome6
 							name="contact-book"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'pin':
+					return (
+						<AntDesign
+							name="pushpino"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -456,6 +569,18 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+
+				case 'to-top':
+					return (
+						<AntDesign
+							name="totop"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+
 				case 'user-guide':
 					return (
 						<MaterialIcons

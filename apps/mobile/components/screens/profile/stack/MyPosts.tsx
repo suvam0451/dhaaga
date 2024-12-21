@@ -4,7 +4,6 @@ import WithAppPaginationContext, {
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
 } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { View } from 'react-native';
@@ -15,21 +14,17 @@ import ActivityPubAdapterService from '../../../../services/activitypub-adapter.
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
-import FlashListPosts from '../../../shared/flash-lists/FlashListPosts';
 import LoadingMore from '../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
-import ListHeaderComponent from '../../../common/timeline/fragments/FlashListHeader';
 import WithTimelineControllerContext, {
 	useTimelineController,
 } from '../../../common/timeline/api/useTimelineController';
-import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
+import { AppFlashList } from '../../../lib/AppFlashList';
 
 function Core() {
-	// const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
-	const { driver, acct, me } = useGlobalState(
+	const { driver, me } = useGlobalState(
 		useShallow((o) => ({
 			me: o.me,
 			driver: o.driver,
@@ -42,7 +37,7 @@ function Core() {
 		setMaxId,
 		clear: paginationClear,
 	} = useAppPaginationContext();
-	const { addPosts, listItems, clear } = useAppTimelinePosts();
+	const { addPosts, data: timelineData, clear } = useAppTimelinePosts();
 
 	const { timelineType, query, opts, setTimelineType, setQuery } =
 		useTimelineController();
@@ -53,11 +48,10 @@ function Core() {
 		clear();
 	}, [timelineType, query, opts]);
 
-	const MY_ID = me?.getId();
 	useEffect(() => {
 		setTimelineType(TimelineFetchMode.USER);
-		setQuery({ id: MY_ID, label: 'My Posts' });
-	}, [MY_ID]);
+		setQuery({ id: me.id, label: 'My Posts' });
+	}, [me.id]);
 
 	const { fetchStatus, data, status } = useTimeline({
 		type: TimelineFetchMode.USER,
@@ -67,7 +61,7 @@ function Core() {
 	});
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: listItems.length,
+		itemCount: timelineData.length,
 		updateQueryCache,
 	});
 
@@ -81,22 +75,10 @@ function Core() {
 			const _data = ActivityPubAdapterService.adaptManyStatuses(data, driver);
 			addPosts(_data);
 			setPageLoadedAtLeastOnce(true);
-
-			/**
-			 * Resolve Software + Custom Emojis
-			 */
-			for (const datum of _data) {
-				// ActivitypubStatusService.factory(datum, domain, subdomain)
-				// 	.resolveInstances()
-				// 	.syncSoftware(db)
-				// 	.then((res) => {
-				// 		res.syncCustomEmojis(db, globalDb).then(() => {});
-				// 	});
-			}
 		}
 	}, [fetchStatus]);
 
-	if (!MY_ID) {
+	if (!me.id) {
 		return (
 			<WithAutoHideTopNavBar title={'My Posts'} translateY={translateY}>
 				<View />
@@ -113,15 +95,12 @@ function Core() {
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
-			<FlashListPosts
-				ListHeaderComponent={
-					<ListHeaderComponent
-						itemCount={listItems.length}
-						loadedOnce={PageLoadedAtLeastOnce}
-					/>
-				}
+			<AppFlashList.Post
+				data={timelineData}
 				onScroll={onScroll}
-				data={listItems}
+				paddingTop={50}
+				refreshing={loading}
+				onRefresh={() => {}}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
 		</AppTopNavbar>

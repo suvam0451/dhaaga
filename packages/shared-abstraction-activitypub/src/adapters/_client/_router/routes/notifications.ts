@@ -1,5 +1,6 @@
 import { MastoNotification, MegaNotification } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
+import { KNOWN_SOFTWARE } from './instance.js';
 
 export enum DhaagaJsNotificationType {
 	/**
@@ -83,6 +84,9 @@ export interface NotificationsRoute {
 		minId?: string | null;
 		maxId?: string | null;
 	}>;
+
+	getMentions(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
+	getChats(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
 
 	// e,g. of how to get new notifs
 	// https://blob.cat/api/v1/notifications?since_id=2455610&with_muted=true&limit=20

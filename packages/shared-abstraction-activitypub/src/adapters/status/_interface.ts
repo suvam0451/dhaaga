@@ -1,5 +1,5 @@
 import { MediaAttachmentInterface } from '../media-attachment/interface.js';
-import { Note } from 'misskey-js/autogen/models.d.ts';
+import { Note } from 'misskey-js/autogen/models.js';
 import { UserType } from '../profile/_interface.js';
 import type { mastodon } from 'masto';
 import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';

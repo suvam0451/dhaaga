@@ -1,12 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Text } from '@rneui/themed';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { ActivityPubUser } from '../../../../../entities/activitypub-user.entity';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { ActivityPubStatus } from '../../../../../entities/activitypub-status.entity';
 import { useNavigation } from '@react-navigation/native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
-import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -32,10 +30,6 @@ function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
 	const [IsPairChat, setIsPairChat] = useState(false);
 	const [Status, setStatus] = useState<ActivityPubStatus>(null);
 	const [LastMessageBefore, setLastMessageBefore] = useState(null);
-
-	// const me = chatroom?.me;
-	// const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
 
 	const ParsedValue = useMemo(() => {
 		const target = Status?.content;

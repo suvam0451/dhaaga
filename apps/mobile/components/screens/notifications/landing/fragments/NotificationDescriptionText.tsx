@@ -3,9 +3,11 @@ import { Fragment, memo, useMemo } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { useAppNotifSeenContext } from '../state/useNotifSeen';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 
 type Props = {
 	id: string;
@@ -15,6 +17,12 @@ type Props = {
 
 export const NotificationDescriptionText = memo(
 	({ type, createdAt, id }: Props) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		const TextContent = useMemo(() => {
 			switch (type) {
 				case DhaagaJsNotificationType.FAVOURITE: {
@@ -34,7 +42,7 @@ export const NotificationDescriptionText = memo(
 					return 'Reacted to your post';
 				}
 				case DhaagaJsNotificationType.STATUS: {
-					return 'Posted (Notification: ON)';
+					return 'Posted';
 				}
 				case DhaagaJsNotificationType.REPLY: {
 					return 'Replied to your post';
@@ -55,14 +63,14 @@ export const NotificationDescriptionText = memo(
 						<MaterialIcons
 							name="subdirectory-arrow-right"
 							size={24}
-							color={'green'}
+							color={theme.complementary.a0}
 						/>
 					</View>
 					<Text
 						style={{
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							paddingTop: 4,
-							color: 'green',
+							color: theme.complementary.a0,
 						}}
 					>
 						{TextContent}
@@ -70,9 +78,7 @@ export const NotificationDescriptionText = memo(
 				</View>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ color: 'green' }}>
-						{formatDistanceToNowStrict(createdAt || new Date(), {
-							addSuffix: false,
-						})}
+						{DatetimeUtil.timeAgo(createdAt || new Date())}
 					</Text>
 					{!seen && (
 						<Fragment>

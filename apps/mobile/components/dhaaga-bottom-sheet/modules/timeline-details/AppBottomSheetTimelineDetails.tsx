@@ -1,32 +1,39 @@
 import NowBrowsingHeader from '../../../widgets/feed-controller/core/NowBrowsingHeader';
-import { StyleProp, Text, TextStyle } from 'react-native';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { APP_FONTS } from '../../../../styles/AppFonts';
+import { ScrollView } from 'react-native';
+import { AppDivider } from '../../../lib/Divider';
+import { AppMenu } from '../../../lib/Menu';
+import { AppIcon } from '../../../lib/Icon';
+
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 function AppBottomSheetTimelineDetails() {
-	const { colorScheme, show, setPostRef } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-			colorScheme: o.colorScheme,
-			show: o.bottomSheet.show,
-			setPostRef: o.bottomSheet.setPostRef,
-		})),
-	);
-
-	const headerTextStyle: StyleProp<TextStyle> = {
-		color: colorScheme.textColor.high,
-		fontSize: 20,
-		textAlign: 'center',
-		marginVertical: 16,
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-	};
-
 	return (
-		<>
-			<Text style={headerTextStyle}>Now Browsing</Text>
+		<ScrollView contentContainerStyle={{ paddingBottom: 32, paddingTop: 36 }}>
 			<NowBrowsingHeader />
-		</>
+			<AppDivider.Soft style={{ marginHorizontal: 10 }} />
+			<AppMenu.Option
+				Icon={
+					<AppIcon id={'to-top'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+				}
+				label={'Scroll to Top'}
+				onClick={() => {}}
+			/>
+			<AppMenu.Option
+				Icon={<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />}
+				label={'Add Pin'}
+				onClick={() => {}}
+				desc={'Pins the timeline for this profile in Social Hub'}
+			/>
+
+			<AppMenu.Option
+				Icon={
+					<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+				}
+				label={'Open in Browser'}
+				onClick={() => {}}
+				desc={'Opens the timeline in your device browser'}
+			/>
+		</ScrollView>
 	);
 }
 

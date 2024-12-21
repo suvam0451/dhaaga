@@ -1,10 +1,10 @@
 import MastodonService from '../../../services/mastodon.service';
 import { produce } from 'immer';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivitypubStatusService } from '../../../services/approto/activitypub-status.service';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import AtprotoContextService from '../../../services/atproto/atproto-context-service';
+import { AppPostObject } from '../../../types/app-post.types';
 
 export enum STATUS_CONTEXT_REDUCER_ACTION {
 	INIT = 'init',
@@ -13,7 +13,7 @@ export enum STATUS_CONTEXT_REDUCER_ACTION {
 
 export type AppStatusContext = {
 	entrypoint: string | null;
-	lookup: Map<string, ActivityPubStatusAppDtoType>;
+	lookup: Map<string, AppPostObject>;
 	children: Map<string, string[]>;
 	root: string | null;
 };
@@ -65,7 +65,7 @@ function statusContextReducer(
 				for (let [key, value] of itemLookup) {
 					draft.lookup.set(
 						key,
-						new ActivitypubStatusService(value, _domain, _subdomain).export(),
+						new PostMiddleware(value, _domain, _subdomain).export(),
 					);
 				}
 
@@ -97,7 +97,7 @@ function statusContextReducer(
 				for (let [key, value] of itemLookup) {
 					draft.lookup.set(
 						key,
-						new ActivitypubStatusService(value, _domain, _subdomain).export(),
+						new PostMiddleware(value, _domain, _subdomain).export(),
 					);
 				}
 

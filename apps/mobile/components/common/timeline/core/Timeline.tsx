@@ -1,9 +1,8 @@
-import { memo, useEffect, useState } from 'react';
-import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
+import { memo, useEffect } from 'react';
+import { Animated, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import WithAppPaginationContext from '../../../../states/usePagination';
 import LoadingMore from '../../../screens/home/LoadingMore';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
@@ -15,7 +14,6 @@ import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndic
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import useTimeline from '../api/useTimeline';
 import useTimelineLabel from '../api/useTimelineLabel';
-import FlashListPostRenderer from '../fragments/FlashListPostRenderer';
 import { TimelineFetchMode } from '../utils/timeline.types';
 import WithAppTimelineDataContext, {
 	useAppTimelinePosts,
@@ -29,6 +27,7 @@ import {
 } from '../../../../states/local/pagination';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppFlashList } from '../../../../components/lib/AppFlashList';
 
 /*
  * Render a Timeline
@@ -49,14 +48,14 @@ const Timeline = memo(() => {
 
 	const {
 		addPosts: appendTimelineData,
-		listItems,
 		clear: timelineDataStoreClear,
+		data: timelineData,
 	} = useAppTimelinePosts();
 
-	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
+	// const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
 	useEffect(() => {
-		setPageLoadedAtLeastOnce(false);
+		// setPageLoadedAtLeastOnce(false);
 		clear();
 		timelineDataStoreClear();
 	}, [homepageType, query, opts]);
@@ -79,7 +78,7 @@ const Timeline = memo(() => {
 			setNextMaxId(cursor);
 			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, driver);
 			appendTimelineData(_data);
-			setPageLoadedAtLeastOnce(true);
+			// setPageLoadedAtLeastOnce(true);
 			return;
 		}
 
@@ -87,19 +86,7 @@ const Timeline = memo(() => {
 			setNextMaxId(data[data.length - 1]?.id);
 			const _data = ActivityPubAdapterService.adaptManyStatuses(data, driver);
 			appendTimelineData(_data);
-			setPageLoadedAtLeastOnce(true);
-
-			/**
-			 * Resolve Software + Custom Emojis
-			 */
-			for (const datum of _data) {
-				// ActivitypubStatusService.factory(datum, domain, subdomain)
-				// 	.resolveInstances()
-				// 	.syncSoftware(db)
-				// 	.then((res) => {
-				// 		res.syncCustomEmojis(db, globalDb).then(() => {});
-				// 	});
-			}
+			// setPageLoadedAtLeastOnce(true);
 		}
 	}, [fetchStatus]);
 
@@ -141,19 +128,12 @@ const Timeline = memo(() => {
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader title={label} />
 			</Animated.View>
-			<AnimatedFlashList
-				estimatedItemSize={200}
-				data={listItems}
-				renderItem={FlashListPostRenderer}
-				getItemType={(o) => o.type}
+			<AppFlashList.Post
+				data={timelineData}
 				onScroll={onScroll}
-				contentContainerStyle={{
-					paddingTop: 50,
-				}}
-				scrollEventThrottle={16}
-				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				}
+				refreshing={refreshing}
+				onRefresh={onRefresh}
+				paddingTop={50}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
 		</View>

@@ -1,7 +1,7 @@
-import { Fragment, useMemo } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Fragment, useMemo, useState } from 'react';
+import { RefreshControl, ScrollView, Text, View } from 'react-native';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
-import SocialHubQuickDestinations from '../../../components/screens/home/stack/landing/fragments/SocialHubQuickDestinations';
+import SocialHubPinnedTimelines from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedTimelines';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -11,6 +11,8 @@ import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
+import SocialHubPinnedProfiles from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedProfiles';
+import SocialHubPinnedTags from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedTags';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -102,8 +104,9 @@ function TimeOfDayGreeting() {
 }
 
 function Content() {
+	const [Index, setIndex] = useState(0);
 	return (
-		<View style={{ flexGrow: 1, flex: 1 }}>
+		<View>
 			<View style={{ marginHorizontal: 10 }}>
 				<AppSegmentedControl
 					items={[
@@ -111,77 +114,69 @@ function Content() {
 						{ label: 'Saved' },
 						{ label: 'For You' },
 					]}
-					style={{ marginTop: 16 }}
+					style={{ marginTop: 8 }}
 					leftDecorator={
 						<SocialHubAvatarCircle size={36} style={{ marginRight: 6 }} />
 					}
+					index={Index}
+					setIndex={setIndex}
 				/>
 			</View>
-			<SocialHubQuickDestinations />
+			<SocialHubPinnedTimelines />
+			<SocialHubPinnedProfiles style={{ marginTop: 16 }} />
+			<SocialHubPinnedTags style={{ marginTop: 16 }} />
 		</View>
 	);
 }
 
-function Tip() {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
-	const fontStyle = {
-		color: theme.textColor.low,
-		marginTop: 32,
-		marginHorizontal: 10,
-		fontSize: 12,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	};
-
-	return (
-		<Text style={fontStyle}>
-			[TIP] Long press the home button to return here anytime.
-		</Text>
-	);
-}
-
 function Screen() {
-	const { theme, acct } = useGlobalState(
+	const [IsRefreshing, setIsRefreshing] = useState(false);
+	const { theme, acct, loadActiveProfile } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
 			acct: o.acct,
+			loadActiveProfile: o.loadActiveProfile,
 		})),
 	);
+
+	function onRefresh() {
+		setIsRefreshing(true);
+		try {
+			// possibly locked because of added/deleted account
+			if (!acct) {
+				loadActiveProfile();
+				setIsRefreshing(false);
+			}
+		} catch (e) {
+			setIsRefreshing(false);
+		}
+	}
 
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
 
 	return (
 		<ScrollView
 			style={{
-				height: '100%',
 				backgroundColor: theme.palette.bg,
+				height: '100%',
 			}}
+			refreshControl={
+				<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
+			}
 		>
-			<View style={{ minHeight: '100%' }}>
-				<View style={{ flexGrow: 1 }}>
-					<AppTabLandingNavbar
-						type={APP_LANDING_PAGE_TYPE.HOME}
-						menuItems={[
-							{
-								iconId: 'user-guide',
-								onPress: () => {
-									router.push('/user-guide');
-								},
-							},
-						]}
-					/>
-					<TimeOfDayGreeting />
-					<Content />
-				</View>
-
-				<View style={{ marginBottom: 24 }}>
-					<Tip />
-				</View>
-			</View>
+			<AppTabLandingNavbar
+				type={APP_LANDING_PAGE_TYPE.HOME}
+				menuItems={[
+					{
+						iconId: 'user-guide',
+						onPress: () => {
+							router.push('/user-guide');
+						},
+					},
+				]}
+			/>
+			{/*<TimeOfDayGreeting />*/}
+			<Content />
 		</ScrollView>
 	);
 }

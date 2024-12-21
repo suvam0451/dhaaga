@@ -1,15 +1,11 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { MMKV } from 'react-native-mmkv';
 import {
 	DEFAULT_THEME_PACK_OBJECT,
 	ThemePackType,
 } from '../assets/loaders/UseAppThemePackLoader';
-import {
-	APP_BUILT_IN_THEMES,
-	AppColorSchemeType,
-} from '../styles/BuiltinThemes';
-import { Account, AccountProfile } from '../database/_schema';
+import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
+import { Account, Profile } from '../database/_schema';
 import {
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
@@ -26,13 +22,16 @@ import {
 import { TimelineFetchMode } from '../components/common/timeline/utils/timeline.types';
 import { Result } from '../utils/result';
 import { RandomUtil } from '../utils/random.utils';
-import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.service';
+import { ActivityPubStatusAppDtoType_DEPRECATED } from '../services/app-status-dto.service';
 import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
 import { DataSource } from '../database/dataSource';
 import AppUserService from '../services/approto/app-user-service';
-import { AppUser } from '../types/app-user.types';
-import ProfileSessionManager from '../services/profile-session.service';
-import { AccountProfileService } from '../database/entities/profile';
+import { AppUserObject } from '../types/app-user.types';
+import ProfileSessionManager from '../services/session/profile-session.service';
+import { ProfileService } from '../database/entities/profile';
+import AppSessionManager from '../services/session/app-session.service';
+import { AppColorSchemeType } from '../utils/theming.util';
+import AccountSessionManager from '../services/session/account-session.service';
 
 type AppThemePack = {
 	id: string;
@@ -106,12 +105,12 @@ type AppBottomSheetState = {
 
 	// references
 	HandleRef: string;
-	ParentRef: ActivityPubStatusAppDtoType;
-	RootRef: ActivityPubStatusAppDtoType;
+	ParentRef: ActivityPubStatusAppDtoType_DEPRECATED;
+	RootRef: ActivityPubStatusAppDtoType_DEPRECATED;
 	textValue: string;
 	setTextValue(textValue: string): void;
-	postValue: ActivityPubStatusAppDtoType;
-	setPostValue: (obj: ActivityPubStatusAppDtoType) => void;
+	postValue: ActivityPubStatusAppDtoType_DEPRECATED;
+	setPostValue: (obj: ActivityPubStatusAppDtoType_DEPRECATED) => void;
 
 	PostIdRef: string;
 	UserRef: UserInterface;
@@ -125,12 +124,13 @@ type AppBottomSheetState = {
 
 type State = {
 	db: DataSource | null;
-	mmkv: MMKV; // currently active account
 	acct: Account | null;
-	profile: AccountProfile | null;
+	profile: Profile | null;
 
 	// managers
 	profileSessionManager: ProfileSessionManager | null;
+	appSession: AppSessionManager | null;
+	acctManager: AccountSessionManager | null;
 
 	/**
 	 * fetched account credentials
@@ -138,7 +138,7 @@ type State = {
 	 * compatible interface
 	 * */
 	driver: KNOWN_SOFTWARE;
-	me: AppUser | null;
+	me: AppUserObject | null;
 
 	// router used to make api requests
 	router: ActivityPubClient | null;
@@ -171,16 +171,17 @@ type Actions = {
 	appInitialize: (db: SQLiteDatabase) => void;
 	loadApp: () => void;
 	// loa/switch a profile
-	loadActiveProfile: (profile?: AccountProfile) => void;
+	loadActiveProfile: (profile?: Profile) => void;
 };
 
 const defaultValue: State & Actions = {
 	// database drivers
 	db: null,
-	mmkv: null,
 	router: null,
 
 	profileSessionManager: null,
+	appSession: null,
+	acctManager: null,
 
 	// account data
 	driver: null,
@@ -235,14 +236,20 @@ class GlobalStateService {
 		Result<{
 			acct: Account;
 			router: ActivityPubClient;
-			me: AppUser;
+			me: AppUserObject;
 		}>
 	> {
 		try {
 			const acct = AccountService.getSelected(db);
-			if (!acct) return { type: 'invalid' };
-			const profile = AccountProfileService.getActiveProfile(db, acct);
-			if (!profile) return { type: 'invalid' };
+			if (!acct) {
+				console.log('[WARN]: no account was found');
+				return { type: 'invalid' };
+			}
+			const profile = ProfileService.getActiveProfile(db, acct);
+			if (!profile) {
+				console.log('[WARN]: no profile was found');
+				return { type: 'invalid' };
+			}
 
 			const token = AccountMetadataService.getKeyValueForAccountSync(
 				db,
@@ -268,12 +275,11 @@ class GlobalStateService {
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
 			const { data, error } = await _router.me.getMe();
-			const obj: AppUser = AppUserService.exportRaw(
+			const obj: AppUserObject = AppUserService.exportRaw(
 				data,
 				acct.driver,
 				acct.server,
 			);
-			// EmojiService.refresh(db, globalDb, acct.server, true);
 			return { type: 'success', value: { acct, router: _router, me: obj } };
 		} catch (e) {
 			console.log(e);
@@ -288,8 +294,9 @@ const useGlobalState = create<State & Actions>()(
 		theme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
-				state.db = new DataSource(db);
-				state.mmkv = new MMKV({ id: `default` });
+				const _db = new DataSource(db);
+				state.db = _db;
+				state.appSession = new AppSessionManager(_db);
 			});
 		},
 		getPacks: () => [],
@@ -297,14 +304,20 @@ const useGlobalState = create<State & Actions>()(
 			set({ packId });
 		},
 		selectAccount: async (selection: Account) => {
-			await AccountService.select(get().db, selection);
+			AccountService.select(get().db, selection);
 		},
 		loadActiveProfile: async () => {
-			const x = new ProfileSessionManager(get().db, get().mmkv);
+			// load default profile/account
+			const x = new ProfileSessionManager(get().db);
+			if (!x.acct || !x.profile) return;
+
 			set((state) => {
-				state.profileSessionManager = x;
+				// reset reactive pointers
 				state.acct = x.acct;
 				state.profile = x.profile;
+				// reset session managers
+				state.profileSessionManager = x;
+				state.acctManager = new AccountSessionManager(get().db, x.acct);
 			});
 		},
 		loadApp: async () => {
@@ -315,6 +328,10 @@ const useGlobalState = create<State & Actions>()(
 				if (restoreResult.type === 'success') {
 					state.me = restoreResult.value.me;
 					state.acct = restoreResult.value.acct;
+					state.acctManager = new AccountSessionManager(
+						get().db,
+						restoreResult.value.acct,
+					);
 					state.router = restoreResult.value.router;
 					state.driver = restoreResult.value.acct.driver as KNOWN_SOFTWARE;
 				} else {
@@ -363,7 +380,7 @@ const useGlobalState = create<State & Actions>()(
 				});
 			},
 			postValue: null,
-			setPostValue: (obj: ActivityPubStatusAppDtoType) => {
+			setPostValue: (obj: ActivityPubStatusAppDtoType_DEPRECATED) => {
 				set((state) => {
 					state.bottomSheet.postValue = obj;
 				});

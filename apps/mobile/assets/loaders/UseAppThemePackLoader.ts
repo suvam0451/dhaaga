@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import {
 	APP_BUILT_IN_THEMES,
 	APP_DEFAULT_COLOR_SCHEME,
-	AppColorSchemeType,
 } from '../../styles/BuiltinThemes';
+import { AppColorSchemeType } from '../../utils/theming.util';
 
 export type ThemePackType = {
 	valid: boolean;

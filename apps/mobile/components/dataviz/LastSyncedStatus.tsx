@@ -1,5 +1,4 @@
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
-import { formatRelative } from 'date-fns';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
@@ -52,7 +51,7 @@ const LastSyncedStatus = memo(({ id }: Props) => {
 		return (
 			<Fragment>
 				<Text style={styles.text}>
-					Last Synced: {formatRelative(new Date(), LastSyncedDate)}
+					{/*Last Synced: {formatRelative(new Date(), LastSyncedDate)}*/}
 				</Text>
 				<Text style={styles.subsequentText}>
 					Cached:{' '}

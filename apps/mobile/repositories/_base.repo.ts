@@ -1,5 +1,3 @@
-import { ZodObject } from 'zod';
-
 interface IRepository<T extends Object> {
 	getAll();
 

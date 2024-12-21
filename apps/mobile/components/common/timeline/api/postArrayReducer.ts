@@ -1,8 +1,8 @@
 import { produce } from 'immer';
 import { Dispatch, MutableRefObject } from 'react';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
-import { ActivitypubStatusService } from '../../../../services/approto/activitypub-status.service';
+import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../../services/app-status-dto.service';
+import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { ActivityPubReactionStateDto } from '../../../../services/approto/activitypub-reactions.service';
 
 export enum TIMELINE_POST_LIST_DATA_REDUCER_TYPE {
@@ -25,9 +25,9 @@ export type TimelineDataReducerFunction = Dispatch<{
  * list of posts in a timeline
  */
 function postArrayReducer(
-	state: ActivityPubStatusAppDtoType[],
+	state: ActivityPubStatusAppDtoType_DEPRECATED[],
 	action: { type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE; payload?: any },
-): ActivityPubStatusAppDtoType[] {
+): ActivityPubStatusAppDtoType_DEPRECATED[] {
 	switch (action.type as TIMELINE_POST_LIST_DATA_REDUCER_TYPE) {
 		case TIMELINE_POST_LIST_DATA_REDUCER_TYPE.CLEAR: {
 			return [];
@@ -43,9 +43,7 @@ function postArrayReducer(
 					const k = item.getId();
 					if (_seen.current.has(k)) continue;
 					_seen.current.add(k);
-					draft.push(
-						new ActivitypubStatusService(item, _domain, _subdomain).export(),
-					);
+					draft.push(new PostMiddleware(item, _domain, _subdomain).export());
 				}
 			});
 		}

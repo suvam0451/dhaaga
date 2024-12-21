@@ -1,5 +1,3 @@
-// @ts-ignore-next-line
-import TLDs from 'tlds';
 import { AppBskyRichtextFacet } from '@atproto/api';
 
 type Facet = AppBskyRichtextFacet.Main;
@@ -124,11 +122,13 @@ export function detectFacets(_text: string): Facet[] | undefined {
 }
 
 function isValidDomain(str: string): boolean {
-	return !!TLDs.find((tld) => {
-		const i = str.lastIndexOf(tld);
-		if (i === -1) {
-			return false;
-		}
-		return str.charAt(i - 1) === '.' && i === str.length - tld.length;
-	});
+	return true;
+	// NOTE: atproto should already be doing this from backend
+	// return !!TLDs.find((tld) => {
+	// 	const i = str.lastIndexOf(tld);
+	// 	if (i === -1) {
+	// 		return false;
+	// 	}
+	// 	return str.charAt(i - 1) === '.' && i === str.length - tld.length;
+	// });
 }

@@ -32,6 +32,7 @@ function useAnimatedHeight() {
 					_target = Dimensions.get('window').height * 0.6;
 					break;
 				}
+				case APP_BOTTOM_SHEET_ENUM.LINK:
 				case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS: {
 					_target = Dimensions.get('window').height * 0.6;
 					break;

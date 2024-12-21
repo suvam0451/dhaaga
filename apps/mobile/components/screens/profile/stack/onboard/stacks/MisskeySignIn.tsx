@@ -17,7 +17,7 @@ import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../../../../../utils/random.utils';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { APP_ROUTE_ENUM } from '../../../../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
 
 function MisskeySignInStack() {
@@ -110,7 +110,7 @@ function MisskeySignInStack() {
 		);
 		if (upsertResult.type === 'success') {
 			Alert.alert('Account Added. Refresh the account list to continue.');
-			router.replace(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
+			router.replace(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
 		} else {
 			console.log(upsertResult);
 		}

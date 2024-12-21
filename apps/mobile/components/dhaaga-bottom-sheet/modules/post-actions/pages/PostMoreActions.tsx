@@ -4,7 +4,6 @@ import emojiPickerReducer, {
 	defaultValue,
 	EMOJI_PICKER_REDUCER_ACTION,
 } from '../../emoji-picker/emojiPickerReducer';
-import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import PostMoreActionsPostTarget from '../fragments/PostMoreActionsPostTarget';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
@@ -13,7 +12,7 @@ import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 const PostMoreActions = memo(() => {
-	const { router, driver, acct, postValue, reducer, hide, theme } =
+	const { router, driver, acct, postValue, reducer, hide, theme, acctManager } =
 		useGlobalState(
 			useShallow((o) => ({
 				router: o.router,
@@ -24,9 +23,9 @@ const PostMoreActions = memo(() => {
 				visible: o.bottomSheet.visible,
 				hide: o.bottomSheet.hide,
 				theme: o.colorScheme,
+				acctManager: o.acctManager,
 			})),
 		);
-	const { globalDb } = useGlobalMmkvContext();
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 	const lastSubdomain = useRef(null);
 
@@ -79,7 +78,7 @@ const PostMoreActions = memo(() => {
 			type: EMOJI_PICKER_REDUCER_ACTION.INIT,
 			payload: {
 				subdomain: acct?.server,
-				globalDb,
+				acctManager,
 				driver,
 			},
 		});

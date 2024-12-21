@@ -11,12 +11,12 @@ import Feather from '@expo/vector-icons/Feather';
 import { memo } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import PostMoreActionsPostTarget from '../dhaaga-bottom-sheet/modules/post-actions/fragments/PostMoreActionsPostTarget';
-import { ActivityPubStatusAppDtoType } from '../../services/approto/app-status-dto.service';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppPostObject } from '../../types/app-post.types';
 
 type Props = {
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 };
 
 const Status = memo(({ dto }: Props) => {

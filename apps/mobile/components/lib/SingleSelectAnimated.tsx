@@ -50,12 +50,9 @@ const Chip = memo(({ active, label, onLayout, onPress }: ChipProps) => {
 	};
 	const animStyle = useAnimatedStyle(() => {
 		return {
-			color: withTiming(
-				active ? theme.textColor.high : theme.textColor.medium,
-				{
-					duration: 350,
-				},
-			),
+			color: withTiming(active ? theme.primary.a0 : theme.textColor.medium, {
+				duration: 350,
+			}),
 		};
 	});
 	return (
@@ -99,6 +96,12 @@ type SingleSelectAnimatedProps = {
  */
 export const SingleSelectAnimated = memo(
 	({ items, justify, Index, setIndex }: SingleSelectAnimatedProps) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		const xPos = useSharedValue(0);
 		const xWidth = useSharedValue(0);
 
@@ -136,12 +139,6 @@ export const SingleSelectAnimated = memo(
 			};
 		});
 
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
-
 		return (
 			<View style={styles.root}>
 				<View style={[styles.container, { justifyContent: justify }]}>
@@ -171,6 +168,8 @@ const styles = StyleSheet.create({
 	root: {
 		alignItems: 'center',
 		backgroundColor: 'transparent',
+		borderTopEndRadius: 16,
+		borderTopLeftRadius: 16,
 	},
 	container: {
 		flexDirection: 'row',
@@ -188,8 +187,8 @@ const styles = StyleSheet.create({
 		zIndex: -1,
 	},
 	label: {
-		fontWeight: '500',
-		fontSize: 16,
+		// fontWeight: '500',
+		fontSize: 18,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 });

@@ -3,10 +3,10 @@ import { Image } from 'expo-image';
 import useMfm from '../../hooks/useMfm';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
+import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../services/app-status-dto.service';
 
 type Props = {
-	dto: ActivityPubStatusAppDtoType;
+	dto: ActivityPubStatusAppDtoType_DEPRECATED;
 };
 /**
  *
@@ -41,7 +41,6 @@ function ReplyOwner({ dto }: Props) {
 						borderRadius: 8,
 					}}
 					source={{ uri: dto.postedBy.avatarUrl }}
-					// placeholder={{ blurhash: dto.postedBy. }}
 				/>
 			</View>
 			<View style={{ marginLeft: 8 }}>

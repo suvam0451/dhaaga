@@ -11,8 +11,6 @@ import ActivityPubService from '../../../../../../services/activitypub.service';
 import { router } from 'expo-router';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { useGlobalMmkvContext } from '../../../../../../states/useGlobalMMkvCache';
-import MmkvService from '../../../../../../services/mmkv.service';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../../shared/topnavbar/AppTopNavbar';
@@ -24,19 +22,24 @@ import {
 	POPULAR_PLEROMA_SERVERS,
 } from '../data/server-meta';
 import EnterYourServer from '../fragments/EnterYourServer';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 function AccountsScreen() {
+	const { appManager } = useGlobalState(
+		useShallow((o) => ({
+			appManager: o.appSession,
+		})),
+	);
 	const [Subdomain, setSubdomain] = useState('mastodon.social');
-	const { globalDb } = useGlobalMmkvContext();
 
 	async function onPressNext() {
 		const signInStrategy = await ActivityPubService.signInUrl(
 			Subdomain,
-			globalDb,
+			appManager,
 		);
 		if (signInStrategy?.clientId && signInStrategy?.clientSecret) {
-			MmkvService.saveMastodonClientTokens(
-				globalDb,
+			appManager.cache.setAtprotoServerClientTokens(
 				Subdomain,
 				signInStrategy?.clientId,
 				signInStrategy?.clientSecret,
@@ -106,24 +109,5 @@ function AccountsScreen() {
 		</AppTopNavbar>
 	);
 }
-
-const styles = StyleSheet.create({
-	sectionHeaderText: {
-		marginTop: 32,
-		marginBottom: 12,
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 16,
-		textAlign: 'center',
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	},
-	inputContainerRoot: {
-		flexDirection: 'row',
-		borderWidth: 2,
-		borderColor: 'rgba(136,136,136,0.4)',
-		borderRadius: 8,
-		marginBottom: 12,
-	},
-	inputContainer: { width: 24 + 8 * 2, padding: 8 },
-});
 
 export default AccountsScreen;

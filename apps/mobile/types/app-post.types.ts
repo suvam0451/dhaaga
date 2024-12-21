@@ -3,7 +3,7 @@ import {
 	ActivitypubHelper,
 	StatusInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { ActivitypubStatusService } from '../services/approto/activitypub-status.service';
+import { PostMiddleware } from '../services/middlewares/post.middleware';
 import ActivitypubAdapterService from '../services/activitypub-adapter.service';
 import MediaService from '../services/media.service';
 import { Dimensions } from 'react-native';
@@ -93,6 +93,10 @@ export const ActivityPubStatusItemDto = z.object({
 				url: z.string().optional(),
 			}),
 		),
+
+		// Atproto
+		cid: z.string().nullable().optional(),
+		uri: z.string().nullable().optional(),
 	}),
 	state: z.object({
 		isBookmarkStateFinal: z.boolean(),
@@ -107,7 +111,7 @@ export const ActivityPubStatusLevelTwo = ActivityPubStatusItemDto.extend({
 	quotedFrom: ActivityPubStatusItemDto.nullable().optional(),
 });
 
-export const ActivityPubStatusLevelThree = ActivityPubStatusLevelTwo.extend({
+export const appPostObjectSchema = ActivityPubStatusLevelTwo.extend({
 	replyTo: ActivityPubStatusLevelTwo.nullable().optional(),
 	// Misskey/Firefish natively supports quote boosting
 	boostedFrom: ActivityPubStatusLevelTwo.nullable().optional(),
@@ -117,9 +121,12 @@ export const ActivityPubStatusLevelThree = ActivityPubStatusLevelTwo.extend({
 	rootPost: ActivityPubStatusItemDto.nullable().optional(),
 });
 
-export type ActivityPubStatusAppDtoType = z.infer<
-	typeof ActivityPubStatusLevelThree
->;
+/**
+ * Typings for a post object used throughout the app.
+ *
+ * The object is validated to contain no errors
+ */
+export type AppPostObject = z.infer<typeof appPostObjectSchema>;
 
 /**
  * Supports various operations on the
@@ -131,9 +138,9 @@ export class AppStatusDtoService {
 	 * can belong to current/parent/boosted status
 	 * and associated users
 	 */
-	ref: ActivityPubStatusAppDtoType;
+	ref: AppPostObject;
 
-	constructor(ref: ActivityPubStatusAppDtoType) {
+	constructor(ref: AppPostObject) {
 		this.ref = ref;
 	}
 
@@ -150,7 +157,7 @@ export class AppStatusDtoService {
 		subdomain: string,
 	) {
 		const leanDtoItems = posts.map((o) =>
-			ActivitypubStatusService.factory(o, domain, subdomain).export(),
+			PostMiddleware.factory(o, domain, subdomain).export(),
 		);
 		return leanDtoItems.filter((o) => o !== null && o !== undefined);
 	}
@@ -241,6 +248,8 @@ export class AppStatusDtoService {
 					handle: o.acct,
 					url: o.url,
 				})),
+				cid: input.getCid(),
+				uri: input.getUri(),
 			},
 			state: {
 				isBookmarkStateFinal: IS_BOOKMARK_RESOLVED,

@@ -52,6 +52,10 @@ export class BaseEntity<T extends BaseType> {
 	whereClauses: string[];
 	selectColumns: string[];
 
+	id: number | undefined;
+	createdAt: Date;
+	updatedAt: Date;
+
 	constructor(db: SQLiteDatabase, debug: boolean = false) {
 		this.db = db;
 		this._name = this.getEntityName()!;
@@ -60,6 +64,10 @@ export class BaseEntity<T extends BaseType> {
 		this.sql = null;
 		this.params = [];
 		this.debug = debug;
+
+		this.id = undefined;
+		this.createdAt = new Date();
+		this.updatedAt = new Date();
 		return this;
 	}
 
@@ -177,25 +185,31 @@ export class BaseEntity<T extends BaseType> {
 	}
 
 	/**
-	 *
+	 * Update an entity by id
 	 * @param id numeric id, or entity instance
-	 * @param data
+	 * @param update
 	 */
 	updateById(
 		id: string | number | T,
-		data: Omit<
+		update: Omit<
 			OnlyClassProps<Partial<T>>,
 			'id' | 'createdAt' | 'updatedAt' | BaseEntityInternalPropList
 		>,
 	) {
+		// @ts-ignore-next-line
 		if (id instanceof BaseEntity) {
 			id = (id as T).id;
 		}
 
-		this.save({
-			id: id as number,
-			...data,
-		} as any);
+		try {
+			this.params.push();
+			const { clauses: setClauses, params: setParams } =
+				QueryResolver.where(update);
+			this.sql = QueryResolver.updateById(this._name, setClauses);
+			return this.db.runSync(this.sql, [...setParams, id as number]);
+		} catch (e) {
+			console.log('[WARN]: failed to update by id', e);
+		}
 	}
 
 	/**

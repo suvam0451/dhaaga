@@ -1,6 +1,5 @@
 import { Text } from 'react-native';
 import LinkProcessor from '../components/common/link/LinkProcessor';
-import { MMKV } from 'react-native-mmkv';
 import TextParserService from './text-parser';
 import type { MfmNode } from '@dhaaga/shared-abstraction-activitypub';
 import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
@@ -9,12 +8,14 @@ import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 import { APP_FONTS } from '../styles/AppFonts';
-import { AppColorSchemeType } from '../styles/BuiltinThemes';
 import { RandomUtil } from '../utils/random.utils';
+import {
+	APP_COLOR_PALETTE_EMPHASIS,
+	AppColorSchemeType,
+} from '../utils/theming.util';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
-	protected readonly globalDb: MMKV;
 	protected readonly myDomain: string;
 	protected readonly mySubdomain: string;
 	protected readonly emojiMap?: Map<string, string>;
@@ -28,7 +29,7 @@ class MfmComponentBuilder {
 	nodes: MfmNode[][];
 	emojis: Set<string>;
 	targetSubdomain?: string;
-	emphasis: 'high' | 'medium' | 'low';
+	emphasis: APP_COLOR_PALETTE_EMPHASIS;
 	results: any[];
 	aiContext: any[];
 
@@ -37,7 +38,6 @@ class MfmComponentBuilder {
 
 	constructor({
 		input,
-		globalDb,
 		targetSubdomain,
 		mySubdomain,
 		myDomain,
@@ -48,7 +48,6 @@ class MfmComponentBuilder {
 		colorScheme,
 	}: {
 		input: string;
-		globalDb: MMKV;
 		myDomain: string;
 		mySubdomain: string;
 		targetSubdomain?: string;
@@ -58,11 +57,10 @@ class MfmComponentBuilder {
 			parseLinks?: boolean;
 		};
 		fontFamily?: string;
-		emphasis: 'high' | 'medium' | 'low';
+		emphasis: APP_COLOR_PALETTE_EMPHASIS;
 		colorScheme: AppColorSchemeType;
 	}) {
 		this.input = input;
-		this.globalDb = globalDb;
 		this.emojis = new Set<string>();
 		this.targetSubdomain = targetSubdomain;
 		this.results = [];
@@ -87,7 +85,6 @@ class MfmComponentBuilder {
 		this.preprocess();
 
 		this.findEmojis();
-		this.loadEmojis();
 
 		this.process();
 	}
@@ -114,18 +111,6 @@ class MfmComponentBuilder {
 		}
 	}
 
-	loadEmojis() {
-		if (this.emojis.size === 0) return;
-		// EmojiService.loadEmojisForInstanceSync(
-		// 	this.db,
-		// 	this.globalDb,
-		// 	this.targetSubdomain || this.mySubdomain,
-		// 	{
-		// 		selection: this.emojis,
-		// 	},
-		// );
-	}
-
 	preprocess() {
 		this.nodes = TextParserService.preprocessPostContent(this.input, false);
 	}
@@ -144,20 +129,32 @@ class MfmComponentBuilder {
 
 		let color = null;
 		switch (this.emphasis) {
-			case 'high': {
-				color = this.colorScheme.textColor.high;
+			case APP_COLOR_PALETTE_EMPHASIS.A0: {
+				color = this.colorScheme.secondary.a0;
 				break;
 			}
-			case 'medium': {
-				color = this.colorScheme.textColor.medium;
+			case APP_COLOR_PALETTE_EMPHASIS.A10: {
+				color = this.colorScheme.secondary.a10;
 				break;
 			}
-			case 'low': {
-				color = this.colorScheme.textColor.low;
+			case APP_COLOR_PALETTE_EMPHASIS.A20: {
+				color = this.colorScheme.secondary.a20;
+				break;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A30: {
+				color = this.colorScheme.secondary.a30;
+				break;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A40: {
+				color = this.colorScheme.secondary.a40;
+				break;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A50: {
+				color = this.colorScheme.secondary.a50;
 				break;
 			}
 			default: {
-				color = this.colorScheme.textColor.medium;
+				color = this.colorScheme.secondary.a0;
 				break;
 			}
 		}
@@ -221,20 +218,32 @@ class MfmComponentBuilder {
 	private parser(node: any) {
 		let color = null;
 		switch (this.emphasis) {
-			case 'high': {
-				color = this.colorScheme.textColor.high;
+			case APP_COLOR_PALETTE_EMPHASIS.A0: {
+				color = this.colorScheme.secondary.a0;
 				break;
 			}
-			case 'medium': {
-				color = this.colorScheme.textColor.medium;
+			case APP_COLOR_PALETTE_EMPHASIS.A10: {
+				color = this.colorScheme.secondary.a10;
 				break;
 			}
-			case 'low': {
-				color = this.colorScheme.textColor.low;
+			case APP_COLOR_PALETTE_EMPHASIS.A20: {
+				color = this.colorScheme.secondary.a20;
+				break;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A30: {
+				color = this.colorScheme.secondary.a30;
+				break;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A40: {
+				color = this.colorScheme.secondary.a40;
+				break;
+			}
+			case APP_COLOR_PALETTE_EMPHASIS.A50: {
+				color = this.colorScheme.secondary.a50;
 				break;
 			}
 			default: {
-				color = this.colorScheme.textColor.medium;
+				color = this.colorScheme.secondary.a0;
 				break;
 			}
 		}
@@ -368,6 +377,8 @@ class MfmComponentBuilder {
 						value={node.props.name}
 						remoteInstance={this.targetSubdomain}
 						emojiMap={this.emojiMap}
+						emphasis={this.emphasis}
+						fontFamily={this.fontFamily}
 					/>
 				);
 			case 'unicodeEmoji':
@@ -398,12 +409,9 @@ class MfmService {
 	 * @param domain
 	 * @param subdomain
 	 * @param db
-	 * @param globalDb
 	 * @param remoteSubdomain is the subdomain of target user
 	 * @param emphasis
-	 * @param opts
 	 * @param fontFamily
-	 * @param AppColorSchemeType
 	 */
 	static renderMfm(
 		input: string,
@@ -411,20 +419,17 @@ class MfmService {
 			emojiMap,
 			domain,
 			subdomain,
-			globalDb,
 			remoteSubdomain,
 			fontFamily,
 			emphasis,
-			opts,
 			colorScheme,
 		}: {
 			domain: string;
 			subdomain: string;
 			emojiMap: Map<string, string>;
-			globalDb: MMKV;
 			remoteSubdomain?: string;
 			fontFamily?: string;
-			emphasis?: 'high' | 'medium' | 'low';
+			emphasis?: APP_COLOR_PALETTE_EMPHASIS;
 			opts?: {
 				mentionsClickable?: boolean;
 				fontFamily?: string;
@@ -437,9 +442,8 @@ class MfmService {
 		 *
 		 * When user belongs to same instance, host = null
 		 */
-		if (!remoteSubdomain && subdomain) {
-			remoteSubdomain = subdomain;
-		}
+		if (!remoteSubdomain && subdomain) remoteSubdomain = subdomain;
+
 		if (!input || !domain || !subdomain || !emojiMap)
 			return {
 				reactNodes: [],
@@ -448,13 +452,12 @@ class MfmService {
 
 		const solver = new MfmComponentBuilder({
 			input,
-			globalDb,
 			myDomain: domain,
 			mySubdomain: subdomain,
 			emojiMap,
 			targetSubdomain: remoteSubdomain,
 			fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
-			emphasis: emphasis || 'medium',
+			emphasis: emphasis || APP_COLOR_PALETTE_EMPHASIS.A0,
 			colorScheme,
 		});
 		solver.solve(true);

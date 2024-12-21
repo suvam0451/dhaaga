@@ -9,9 +9,14 @@ import {
 } from '../_router/_runner.js';
 import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
-import { LibraryResponse } from '../_router/_types.js';
-import { MegaNotification } from '../_interface.js';
+import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
+import { MegaConversation, MegaNotification } from '../_interface.js';
 import { toSnakeCase } from '../_router/utils/casing.utils.js';
+import {
+	errorBuilder,
+	notImplementedErrorBuilder,
+} from '../_router/dto/api-responses.dto.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 export class PleromaNotificationsRouter implements NotificationsRoute {
 	client: RestClient;
@@ -41,5 +46,31 @@ export class PleromaNotificationsRouter implements NotificationsRoute {
 				minId: undefined,
 			},
 		};
+	}
+
+	/**
+	 * Pleroma/Akkoma have not implemented grouped notifications
+	 */
+	async getChats(driver: KNOWN_SOFTWARE): LibraryPromise<{
+		data: MegaConversation[];
+		minId?: string | null;
+		maxId?: string | null;
+	}> {
+		try {
+			const data = await this.lib.client.getConversationTimeline();
+			return {
+				data: {
+					data: data.data,
+					maxId: undefined,
+					minId: undefined,
+				},
+			};
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async getMentions() {
+		return notImplementedErrorBuilder();
 	}
 }

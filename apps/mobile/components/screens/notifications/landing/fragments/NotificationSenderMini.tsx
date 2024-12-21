@@ -15,15 +15,14 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { useAppBottomSheet } from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../../states/_global';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../../states/_global';
+import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -50,6 +49,12 @@ export const NotificationSenderMini = memo(
 		remoteSubdomain,
 		createdAt,
 	}: Props) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		const { find } = useAppCustomEmoji();
 		const TextContent = useMemo(() => {
 			switch (type) {
@@ -70,7 +75,7 @@ export const NotificationSenderMini = memo(
 					return 'Reacted to your post';
 				}
 				case DhaagaJsNotificationType.STATUS: {
-					return 'Posted (Notification: ON)';
+					return 'Posted';
 				}
 				case DhaagaJsNotificationType.REPLY: {
 					return 'Replied to your post';
@@ -142,10 +147,10 @@ export const NotificationSenderMini = memo(
 					let data = extraData;
 					if (remoteEmojiRegex.test(extraData)) {
 						const match = remoteEmojiRegex.exec(extraData);
-						data = find(match[1], remoteSubdomain)?.url;
+						data = find(match[1], remoteSubdomain);
 					} else if (localEmojiRegex.test(extraData)) {
 						const match = localEmojiRegex.exec(extraData);
-						data = find(match[1], match[2])?.url;
+						data = find(match[1], match[2]);
 					}
 
 					if (!data) {
@@ -253,7 +258,7 @@ export const NotificationSenderMini = memo(
 						<Text
 							style={{
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
-								color: APP_FONT.MONTSERRAT_BODY,
+								color: theme.complementary.a0,
 								fontSize: 14,
 								opacity: 0.75,
 							}}
@@ -268,10 +273,7 @@ export const NotificationSenderMini = memo(
 								opacity: 0.6,
 							}}
 						>
-							{' • '}
-							{formatDistanceToNowStrict(createdAt || new Date(), {
-								addSuffix: true,
-							})}
+							{DatetimeUtil.timeAgo(createdAt)}
 						</Text>
 					</View>
 				</View>

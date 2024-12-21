@@ -277,8 +277,6 @@ export const AppButtonClassicInverted = memo(function Foo({
 	);
 });
 
-const ICON_SIZE = 18;
-
 type AppTimelineActionProps = {
 	label: string;
 	Icon: JSX.Element;

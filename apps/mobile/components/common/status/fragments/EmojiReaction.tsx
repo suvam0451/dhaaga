@@ -1,7 +1,6 @@
 import { EmojiDto, styles } from './_shared.types';
 import { memo, useMemo, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
@@ -9,7 +8,7 @@ import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/use
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
+import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../../services/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import useGlobalState, {
@@ -22,15 +21,17 @@ const EmojiReaction = memo(function Foo({
 	postDto,
 }: {
 	dto: EmojiDto;
-	postDto: ActivityPubStatusAppDtoType;
+	postDto: ActivityPubStatusAppDtoType_DEPRECATED;
 }) {
-	const { driver, acct, client } = useGlobalState(
+	const { driver, acct, client, show } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
 			client: o.router,
 			acct: o.acct,
+			show: o.bottomSheet.show,
 		})),
 	);
+
 	const {
 		TextRef,
 		PostRef,

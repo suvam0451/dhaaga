@@ -9,11 +9,7 @@ export type Props = {
 
 export const styles = StyleSheet.create({
 	container: {
-		marginLeft: 0,
-		marginVertical: 4,
-		backgroundColor: '#242424',
-		padding: 8,
-		borderRadius: 8,
+		paddingHorizontal: 10,
 	},
 	notificationCategoryIconContainer: {
 		position: 'absolute',
@@ -21,7 +17,7 @@ export const styles = StyleSheet.create({
 		bottom: -6,
 		right: -6,
 		padding: 3,
-		borderRadius: 8,
+		borderRadius: '100%',
 	},
 	gradientContainerTextOnlyPost: {
 		// maxHeight: 128,

@@ -6,12 +6,10 @@ import WithActivitypubStatusContext, {
 import { useRoute } from '@react-navigation/native';
 import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { MMKV } from 'react-native-mmkv';
 import ActivitypubProviderService from '../../../services/activitypub-provider.service';
 import ActivityPubProviderService from '../../../services/activitypub-provider.service';
 import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
-import MmkvService from '../../../services/mmkv.service';
 import ChatItem from './fragments/dm/ChatItem';
 import { Input } from '@rneui/themed';
 import { FontAwesome } from '@expo/vector-icons';
@@ -98,11 +96,6 @@ function DirectMessagingRoom() {
 		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 	}
 
-	const mmkv = useMemo(() => {
-		if (!roomId) return null;
-		return new MMKV({ id: `chatroom/${roomId}` });
-	}, []);
-
 	useEffect(() => {
 		// const latestStatuses = chatroom.conversations.map(
 		// 	(o) => o.latestStatus.statusId,
@@ -159,8 +152,6 @@ function DirectMessagingRoom() {
 						// 		interfaces[i].getId(),
 						// 		chatroom.conversations[count % 2].conversationId,
 						// 	);
-
-						MmkvService.saveRawStatuses(mmkv, interfaces);
 					} else {
 						const interfaces = ActivityPubAdapterService.adaptManyStatuses(
 							item,
@@ -173,7 +164,6 @@ function DirectMessagingRoom() {
 						// 	);
 
 						statuses = statuses.concat(interfaces);
-						MmkvService.saveRawStatuses(mmkv, interfaces);
 					}
 					count++;
 				}
@@ -210,9 +200,7 @@ function DirectMessagingRoom() {
 				<View style={{ flexShrink: 1 }}>
 					{ChatHistory.map((o, i) => (
 						<View key={i} style={{ paddingHorizontal: 4 }}>
-							<WithActivitypubStatusContext
-								status={MmkvService.getStatusRaw(mmkv, o.id)}
-							>
+							<WithActivitypubStatusContext status={[]}>
 								<ChatItem />
 							</WithActivitypubStatusContext>
 						</View>

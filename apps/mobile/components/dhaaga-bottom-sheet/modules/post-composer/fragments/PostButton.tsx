@@ -6,17 +6,16 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../_api/useAppBottomSheet';
+import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import ActivityPubService from '../../../../../services/activitypub.service';
-import { ActivitypubStatusService } from '../../../../../services/approto/activitypub-status.service';
+import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
 import AtprotoComposerService, {
 	AtprotoReplyEmbed,
 } from '../../../../../services/atproto/atproto-compose';
-import useGlobalState from '../../../../../states/_global';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 /**
@@ -75,7 +74,7 @@ const PostButton = memo(() => {
 				 * 		to render the parent and root, as well
 				 */
 				const res = ActivityPubAdapterService.adaptStatus(data, driver);
-				PostRef.current = new ActivitypubStatusService(
+				PostRef.current = new PostMiddleware(
 					res,
 					driver,
 					acct?.server,
@@ -124,7 +123,7 @@ const PostButton = memo(() => {
 			const _data = ActivityPubAdapterService.adaptStatus(data, driver);
 
 			try {
-				PostRef.current = new ActivitypubStatusService(
+				PostRef.current = new PostMiddleware(
 					_data,
 					driver,
 					acct?.server,
@@ -134,7 +133,7 @@ const PostButton = memo(() => {
 			}
 		} else {
 			try {
-				PostRef.current = new ActivitypubStatusService(
+				PostRef.current = new PostMiddleware(
 					ActivityPubAdapterService.adaptStatus(
 						(data as any).createdNote,
 						driver,

@@ -70,6 +70,8 @@ class ActivityPubReactionsService {
 	 * Remote, Misskey --> :emoji@subdomain:
 	 * Local, Pleroma --> emoji
 	 * Remote, Pleroma --> emoji@subdomain
+	 *
+	 * NOTE: Don't touch this. It just works !
 	 */
 	static renderData(
 		input: ActivityPubReactionStateDtoType,

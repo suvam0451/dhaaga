@@ -1,16 +1,13 @@
 import { useAppPaginationContext } from '../../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 function useTrendingPosts() {
-	const { client, driver, acct } = useGlobalState(
+	const { client } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
-			driver: o.driver,
-			acct: o.acct,
 		})),
 	);
 	const {
@@ -47,19 +44,6 @@ function useTrendingPosts() {
 		if (data?.length > 0) {
 			setMaxId((PageData.length + data.length).toString());
 			setIsLoading(true);
-			const dataI = ActivityPubAdapterService.adaptManyStatuses(data, driver);
-
-			/**
-			 * Resolve Software + Custom Emojis
-			 */
-			for (const datum of dataI) {
-				// ActivitypubStatusService.factory(datum, domain, subdomain)
-				// 	.resolveInstances()
-				// 	.syncSoftware(db)
-				// 	.then((res) => {
-				// 		res.syncCustomEmojis(db, globalDb).then(() => {});
-				// 	});
-			}
 		}
 	}, [fetchStatus]);
 

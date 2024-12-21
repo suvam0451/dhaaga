@@ -2,11 +2,11 @@ export class QueryResolver {
 	private static serialize(value: any) {
 		let val: string;
 		if (typeof value === 'string') {
-			// Escape single quotes in strings for safety
-			val = `'${value.replace("'", "''")}'`;
+			val = `${value.replace("'", "''")}`;
 		} else if (value === null || value === undefined) {
 			val = 'NULL';
 		} else {
+			console.log(value, String(value));
 			val = String(value);
 		}
 		return val;
@@ -22,7 +22,15 @@ export class QueryResolver {
 				this.serialize(value['operand']),
 			];
 		}
-		return [`${key} = ${this.serialize(value)}`];
+		// booleans
+		if (typeof value === 'boolean') {
+			if (value) {
+				return [`${key} = ?`, '1'];
+			} else {
+				return [`${key} = ?`, '0'];
+			}
+		}
+		return [`${key} = ?`, this.serialize(value)];
 	}
 
 	static where(data: any) {
@@ -45,6 +53,7 @@ export class QueryResolver {
 	static findOne(dbName: string, whereQueries: string[]) {
 		const whereSql =
 			whereQueries.length > 0 ? `WHERE (${whereQueries.join(' AND ')})` : '';
+		console.log(whereSql);
 		return `SELECT * FROM ${dbName} ${whereSql} LIMIT 1`;
 	}
 
@@ -64,5 +73,11 @@ export class QueryResolver {
 		const setSql =
 			updateQueries.length > 0 ? `SET ${updateQueries.join(', ')}` : '';
 		return `UPDATE ${dbName} ${setSql} ${whereSql} `;
+	}
+
+	static updateById(dbName: string, updateQueries: string[]) {
+		const setSql =
+			updateQueries.length > 0 ? `SET ${updateQueries.join(', ')}` : '';
+		return `UPDATE ${dbName} ${setSql} WHERE id = ? `;
 	}
 }

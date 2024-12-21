@@ -1,14 +1,14 @@
 import { memo } from 'react';
-import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Text, View } from 'react-native';
 import { useActivitypubUserContext } from '../../../../../../states/useProfile';
 import useMfm from '../../../../../hooks/useMfm';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { AppUser } from '../../../../../../types/app-user.types';
+import { AppUserObject } from '../../../../../../types/app-user.types';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
 
 type ExtraInformationFieldProps = {
 	label: string;
@@ -35,16 +35,16 @@ const ExtraInformationField = memo(function Foo({
 		remoteSubdomain: user?.getInstanceUrl(acct?.server),
 		emojiMap: user?.getEmojiMap(),
 		deps: [value],
-		emphasis: 'medium',
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});
 	const { content: ParsedLabel } = useMfm({
 		content: label,
 		remoteSubdomain: user?.getInstanceUrl(acct?.server),
 		emojiMap: user?.getEmojiMap(),
 		deps: [label],
-		emphasis: 'high',
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 	});
 
 	return (
@@ -69,7 +69,7 @@ const ExtraInformationField = memo(function Foo({
 });
 
 type UserProfileExtraInformationProps = {
-	acct: AppUser;
+	acct: AppUserObject;
 };
 
 function UserProfileExtraInformation({

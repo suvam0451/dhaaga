@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useAppBottomSheet } from '../_api/useAppBottomSheet';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import {
@@ -15,7 +15,8 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppAccounts } from '../../../../hooks/db/useAppAccounts';
 import { AppIcon } from '../../../lib/Icon';
-import { APP_ROUTE_ENUM } from '../../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 type FlashListItemProps = {
 	acct: Account;
@@ -132,7 +133,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 
 	function onPressMoreAccountOptions() {
 		hide();
-		router.navigate(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
+		router.navigate(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
 	}
 
 	return (
@@ -166,7 +167,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 							}}
 							onPress={onPressMoreAccountOptions}
 						>
-							<AppIcon id={'cog'} emphasis={'medium'} />
+							<AppIcon id={'cog'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 						</TouchableOpacity>
 					</View>
 				)}

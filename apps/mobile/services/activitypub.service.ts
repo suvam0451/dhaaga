@@ -4,8 +4,6 @@ import {
 	MisskeyRestClient,
 	UnknownRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { MMKV } from 'react-native-mmkv';
-import MmkvService from './mmkv.service';
 import { ActivityPubServer } from '../entities/activitypub-server.entity';
 import {
 	PleromaRestClient,
@@ -13,33 +11,39 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { RandomUtil } from '../utils/random.utils';
+import AppSessionManager from './session/app-session.service';
+import { Profile, ProfilePinnedTimeline } from '../database/_schema';
 
 class ActivityPubService {
 	/**
 	 * Check MastoAPI compatibility
-	 * @param domain
+	 * @param driver
 	 */
-	static mastodonLike(domain: string) {
+	static mastodonLike(driver: string) {
 		return [
 			KNOWN_SOFTWARE.MASTODON,
 			KNOWN_SOFTWARE.PLEROMA,
 			KNOWN_SOFTWARE.AKKOMA,
-		].includes(domain as KNOWN_SOFTWARE);
+		].includes(driver as KNOWN_SOFTWARE);
 	}
 
-	static pleromaLike(domain: string) {
+	static pleromaLike(driver: string) {
 		return [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
-			domain as KNOWN_SOFTWARE,
+			driver as KNOWN_SOFTWARE,
 		);
 	}
 
-	static misskeyLike(domain: string) {
+	static misskeyLike(driver: string) {
 		return [
 			KNOWN_SOFTWARE.MISSKEY,
 			KNOWN_SOFTWARE.SHARKEY,
 			KNOWN_SOFTWARE.FIREFISH,
 			KNOWN_SOFTWARE.ICESHRIMP,
-		].includes(domain as KNOWN_SOFTWARE);
+		].includes(driver as KNOWN_SOFTWARE);
+	}
+
+	static blueskyLike(driver: KNOWN_SOFTWARE) {
+		return [KNOWN_SOFTWARE.BLUESKY].includes(driver);
 	}
 
 	/**
@@ -275,10 +279,10 @@ class ActivityPubService {
 	 * - code
 	 * - miauth
 	 * @param urlLike
-	 * @param db
+	 * @param mngr
 	 */
-	static async signInUrl(urlLike: string, db: MMKV) {
-		const tokens = MmkvService.getMastodonClientTokens(db, urlLike);
+	static async signInUrl(urlLike: string, mngr: AppSessionManager) {
+		const tokens = mngr.cache.getAtprotoServerClientTokens(urlLike);
 
 		const client = new UnknownRestClient();
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {
@@ -304,6 +308,16 @@ class ActivityPubService {
 			return null;
 		}
 		return data.isFavorited;
+	}
+
+	/**
+	 * Pin the default timelines and hashtags for
+	 * the profile
+	 * @param manager the app level session manager, with db connection
+	 * @param profile
+	 */
+	static createDefaultPins(manager: AppSessionManager, profile: Profile) {
+		ProfilePinnedTimeline;
 	}
 }
 

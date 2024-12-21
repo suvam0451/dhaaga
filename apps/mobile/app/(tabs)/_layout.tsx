@@ -91,11 +91,9 @@ export default function TabLayout() {
 							tabBarIconStyle: {
 								height: 42,
 								width: 64,
-							}, // tabBarIconStyle: {
-							// 	color: theme.textColor.medium,
-							// },
-							tabBarActiveTintColor: theme.textColor.medium,
-							tabBarInactiveTintColor: theme.textColor.low,
+							},
+							tabBarActiveTintColor: theme.secondary.a20,
+							tabBarInactiveTintColor: theme.secondary.a50,
 							tabBarShowLabel: false,
 							headerShown: false,
 						};

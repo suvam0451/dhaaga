@@ -8,15 +8,16 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to propose improvements to the app.
+        Welcome, and thank you for taking the time to suggest improvements to 
+        the app. 🙏
         
-        No need to search for duplicate issues. Just ask away.
-        
-        #### Considerations
-        
-        * For instance features, see if it is already implemented.
-        * For existing features, the user guide may contain info you may have overlooked
-        * We have a priority list for upcoming features in our wiki. See if your feature is already listed there.
+        * No need to search for duplicate issues. Just ask away.
+        * Dhaaga stresses on minimizing setting bloat and shipping good 
+        design out of the box.
+          - As such, requests for *(non-critical)* UI toggles and alternate 
+        layouts may get dropped. I hope you understand 🙇‍♂️
+          - I make an exception for app theming, though. Go ham for that. 😉 
+
   - type: textarea
     id: description
     attributes:

@@ -18,7 +18,7 @@ const RDFollow = memo(
 				visible={visible}
 				setVisible={setVisible}
 				loading={loading}
-				label={'Strangers'}
+				label={'Not Following'}
 				desc={['You are not following this user.']}
 			>
 				<ActionButton

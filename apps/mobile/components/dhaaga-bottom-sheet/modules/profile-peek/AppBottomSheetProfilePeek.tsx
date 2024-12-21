@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import {
 	View,
 	Image as NativeImage,
@@ -7,7 +7,6 @@ import {
 	ScrollView,
 } from 'react-native';
 import useGetProfile from '../../../../hooks/api/accounts/useGetProfile';
-import { useAppBottomSheet } from '../_api/useAppBottomSheet';
 import ProfileAvatar from '../../../common/user/fragments/ProfileAvatar';
 import ProfileNameAndHandle from '../../../common/user/fragments/ProfileNameAndHandle';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -17,18 +16,44 @@ import ProfileButtonMessage from '../../../screens/(shared)/stack/profile/fragme
 import RelationshipButtonCore from '../../../common/relationship/RelationshipButtonCore';
 import ProfileButtonPhonebook from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
 import ProfileStats from '../../../screens/(shared)/stack/profile/fragments/ProfileStats';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { AppUserObject } from '../../../../types/app-user.types';
 
 /**
  * This bottom sheet will show a preview
  * of the selected user's profile.
  */
 const AppBottomSheetProfilePeek = memo(() => {
-	const { UserIdRef, requestId, HandleRef } = useAppBottomSheet();
+	const [UserId, setUserId] = useState<string>(null);
+	const [UserObject, setUserObject] = useState<AppUserObject>(null);
+	const {
+		stateId,
+		appManager,
+		acct: acctData,
+	} = useGlobalState(
+		useShallow((o) => ({
+			stateId: o.bottomSheet.stateId,
+			appManager: o.appSession,
+			acct: o.acct,
+		})),
+	);
+
+	useEffect(() => {
+		const userId = appManager?.cache?.getUserId();
+		const userObj = appManager?.cache?.getUserObject();
+
+		setUserId(userId);
+		setUserObject(userObj);
+	}, [stateId]);
+
 	const { Data: acct } = useGetProfile({
-		userId: UserIdRef.current,
-		requestId,
-		handle: HandleRef.current,
+		userId: UserId,
+		requestId: stateId,
+		handle: acctData?.server,
 	});
+
+	if (!UserId) return <View />;
 
 	return (
 		<ScrollView style={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}>
@@ -66,7 +91,6 @@ const AppBottomSheetProfilePeek = memo(() => {
 					followerCount={acct?.stats?.followers}
 					followingCount={acct?.stats?.following}
 					postCount={acct?.stats?.posts}
-					style={localStyles.statSectionContainer}
 				/>
 			</View>
 

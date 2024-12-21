@@ -1,5 +1,4 @@
-import { Dimensions, View, ScrollView, Alert } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Dimensions, View, ScrollView, Alert, Text } from 'react-native';
 import { useState } from 'react';
 import WebView from 'react-native-webview';
 import { Button } from '@rneui/base';
@@ -14,7 +13,7 @@ import PleromaPasteToken from '../fragments/PleromaPasteToken';
 import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_ROUTE_ENUM } from '../../../../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 
 function MastodonSignInStack() {
 	const { db } = useGlobalState(
@@ -88,7 +87,7 @@ function MastodonSignInStack() {
 		);
 		if (upsertResult.type === 'success') {
 			Alert.alert('Account Added');
-			router.replace(APP_ROUTE_ENUM.PROFILE_ACCOUNTS);
+			router.replace(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
 		}
 	}
 

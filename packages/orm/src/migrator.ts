@@ -143,6 +143,7 @@ function createTable(
 	sql = sql.trimEnd().replace(/,$/, ''); // Trim spaces and remove trailing comma
 
 	sql += `) STRICT;`;
+
 	return sql;
 }
 

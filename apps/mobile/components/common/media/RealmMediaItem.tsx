@@ -5,7 +5,7 @@ import { Dimensions, View } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from './_common';
 import { AppImageComponent, AppVideoComponent } from './_shared';
 import MediaContainerWithAltText from '../../containers/MediaContainerWithAltText';
-import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
+import useGalleryDims from '../../../hooks/app/useGalleryDims';
 
 function RealmMediaComponentSingleItem({
 	data,
@@ -14,14 +14,13 @@ function RealmMediaComponentSingleItem({
 	data: ActivityPubMediaAttachment;
 	height: number;
 }) {
-	const { ContainerWidth, ContainerHeight, onLayoutChanged } =
-		useImageAspectRatio([
-			{
-				url: data.url,
-				height: data.height,
-				width: data.width,
-			},
-		]);
+	const { ContainerWidth, ContainerHeight, onLayoutChanged } = useGalleryDims([
+		{
+			url: data.url,
+			height: data.height,
+			width: data.width,
+		},
+	]);
 
 	const MediaItem = useMemo(() => {
 		const type = data.type;

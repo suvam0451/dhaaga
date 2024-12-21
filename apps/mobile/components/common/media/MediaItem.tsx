@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 import { memo, useMemo } from 'react';
-import { MARGIN_TOP } from './_common';
 import {
 	AltTextOverlay,
 	AppAudioComponent,
@@ -9,8 +8,8 @@ import {
 	CarousalIndicatorOverlay,
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
-import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
-import { AppActivityPubMediaType } from '../../../services/approto/app-status-dto.service';
+import useGalleryDims from '../../../hooks/app/useGalleryDims';
+import { AppActivityPubMediaType } from '../../../services/app-status-dto.service';
 
 type ImageCarousalProps = {
 	attachments: AppActivityPubMediaType[];
@@ -34,14 +33,13 @@ const TimelineMediaRendered = memo(function Foo({
 	totalCount?: number;
 	leftMarginAdjustment?: number;
 }) {
-	const { ContainerWidth, ContainerHeight, onLayoutChanged } =
-		useImageAspectRatio([
-			{
-				url: attachment.previewUrl,
-				width: attachment.width,
-				height: attachment.height,
-			},
-		]);
+	const { ContainerWidth, ContainerHeight, onLayoutChanged } = useGalleryDims([
+		{
+			url: attachment.previewUrl,
+			width: attachment.width,
+			height: attachment.height,
+		},
+	]);
 
 	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
 
@@ -89,12 +87,7 @@ const TimelineMediaRendered = memo(function Foo({
 	}, [attachment, ContainerHeight, ContainerWidth]);
 
 	return (
-		<View
-			style={{
-				marginTop: MARGIN_TOP,
-			}}
-			onLayout={onLayoutChanged}
-		>
+		<View onLayout={onLayoutChanged}>
 			{MediaItem}
 			<CarousalIndicatorOverlay index={index} totalCount={totalCount} />
 			<AltTextOverlay altText={altText} />
@@ -123,18 +116,16 @@ const MediaItem = memo(function Foo({
 		);
 	}
 	return (
-		<View style={{ marginTop: MARGIN_TOP, flex: 1 }}>
-			<AppImageCarousel
-				timelineCacheId={'1'}
-				calculatedHeight={calculatedHeight}
-				items={attachments.map((o) => ({
-					altText: o.alt,
-					src: o.previewUrl,
-					type: o.type,
-					blurhash: o.blurhash,
-				}))}
-			/>
-		</View>
+		<AppImageCarousel
+			timelineCacheId={'1'}
+			calculatedHeight={calculatedHeight}
+			items={attachments.map((o) => ({
+				altText: o.alt,
+				src: o.previewUrl,
+				type: o.type,
+				blurhash: o.blurhash,
+			}))}
+		/>
 	);
 });
 

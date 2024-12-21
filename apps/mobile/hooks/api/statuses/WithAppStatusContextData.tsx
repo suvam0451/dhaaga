@@ -3,12 +3,12 @@ import {
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
 import { createContext, Dispatch, useCallback, useContext } from 'react';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
+import { AppPostObject } from '../../../types/app-post.types';
 
 type Type = {
 	data: AppStatusContext;
 	dispatch: Dispatch<{ type: STATUS_CONTEXT_REDUCER_ACTION; payload: any }>;
-	getChildren: (id: string) => ActivityPubStatusAppDtoType[];
+	getChildren: (id: string) => AppPostObject[];
 };
 
 const defaultValue: Type = {
@@ -24,7 +24,7 @@ const defaultValue: Type = {
 	}): void {
 		throw new Error('Function not implemented.');
 	},
-	getChildren: function (id: string): ActivityPubStatusAppDtoType[] {
+	getChildren: function (id: string): AppPostObject[] {
 		throw new Error('Function not implemented.');
 	},
 };
