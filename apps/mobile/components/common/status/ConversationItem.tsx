@@ -35,7 +35,6 @@ function ConversationItem({ accountUrl, displayName }: ConversationItem) {
 	);
 
 	const { status } = useActivitypubStatusContext();
-	const { globalDb } = useGlobalMmkvContext();
 	let content = status.getContent();
 
 	useEffect(() => {
@@ -44,8 +43,7 @@ function ConversationItem({ accountUrl, displayName }: ConversationItem) {
 			emojiMap,
 			domain: driver,
 			subdomain: acct?.server,
-			globalDb,
-			colorScheme: theme,
+			theme: theme,
 		});
 		setDescriptionContent(
 			<>

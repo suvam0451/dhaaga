@@ -1,58 +1,4 @@
-export enum APP_COLOR_PALETTE_EMPHASIS {
-	A0 = 'a0',
-	A10 = 'a10',
-	A20 = 'a20',
-	A30 = 'a30',
-	A40 = 'a40',
-	A50 = 'a50',
-}
-
-type ColorRangeType = {
-	a0: string;
-	a10: string;
-	a20: string;
-	a30: string;
-	a40: string;
-	a50: string;
-};
-
-export type AppColorSchemeType = {
-	id: string;
-	name: string;
-	palette: {
-		bg: string;
-		menubar: string;
-		buttonUnstyled: string;
-		hashtagLow: string;
-		hashtagHigh: string;
-		link: string;
-	};
-	textColor: {
-		high: string; // 96%
-		medium: string; // 74%
-		emphasisC: string; // 48%
-		low: string; // 36%
-		misc: string; // 12%
-	};
-	reactions: {
-		active: string;
-		inactive: string;
-		highlight: string;
-	};
-	primary: ColorRangeType;
-	// hue - 30
-	harmonyL?: ColorRangeType;
-	// hue + 30
-	harmonyR?: ColorRangeType;
-	// hue + 180 (Complementary, Required)
-	complementary: ColorRangeType;
-	// hue - 150 (Split Complementary)
-	complementaryA: ColorRangeType | null;
-	// hue + 150 (Split Complementary)
-	complementaryB?: ColorRangeType;
-
-	secondary: ColorRangeType;
-};
+import { AppColorSchemeType } from '../utils/theming.util';
 
 export const APP_DEFAULT_COLOR_SCHEME: AppColorSchemeType = {
 	id: 'default',
@@ -127,7 +73,7 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 		name: 'Default',
 		palette: {
 			bg: '#121212', // 7%
-			menubar: '#212121', // 13%
+			menubar: '#1a1a1a', // 13%
 			buttonUnstyled: '#2d2c2d', // 424242
 			hashtagHigh: 'rgba(248,199,124,0.87)',
 			hashtagLow: 'rgba(248,199,124,0.87)',

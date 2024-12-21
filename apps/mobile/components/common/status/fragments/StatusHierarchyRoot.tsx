@@ -13,8 +13,8 @@ import StatusVisibility from './StatusVisibility';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;

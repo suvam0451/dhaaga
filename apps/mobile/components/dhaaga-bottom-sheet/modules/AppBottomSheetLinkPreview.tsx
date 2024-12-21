@@ -1,6 +1,6 @@
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getLinkPreview } from 'link-preview-js';
 import AppLoadingIndicator from '../../error-screen/AppLoadingIndicator';
@@ -11,6 +11,8 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppMenu } from '../../lib/Menu';
 import { AppIcon } from '../../lib/Icon';
 import { AppDivider } from '../../lib/Divider';
+
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
 type OpenGraphParsingState = {
 	key: string | null;
@@ -42,18 +44,8 @@ function AppBottomSheetLinkPreview() {
 
 	const INACTIVE = !visible || type !== APP_BOTTOM_SHEET_ENUM.LINK;
 
-	useEffect(() => {
-		if (INACTIVE) return;
-
+	async function parse() {
 		const _url = appSession.cache.getLinkTarget();
-		if (ValueRef.current === _url.url) return;
-
-		setOpenGraph({
-			key: _url.url,
-			parsed: false,
-			loading: true,
-			og: null,
-		});
 
 		getLinkPreview(_url.url)
 			.then((res) => {
@@ -75,6 +67,10 @@ function AppBottomSheetLinkPreview() {
 			.finally(() => {
 				ValueRef.current = _url.url;
 			});
+	}
+	useEffect(() => {
+		if (INACTIVE) return;
+		parse();
 	}, [stateId]);
 
 	const domain = useMemo(() => {
@@ -101,17 +97,46 @@ function AppBottomSheetLinkPreview() {
 
 	if (!OpenGraph.loading && !OpenGraph.parsed) {
 		return (
-			<View>
-				<ReadMoreText
-					text={obj?.desc}
-					maxLines={2}
-					textStyle={{
-						color: theme.textColor.medium,
-						fontSize: 16,
-						marginTop: 4,
+			<View style={{ marginTop: 48 }}>
+				<Text
+					style={{
+						color: theme.complementary.a0,
+						fontSize: 20,
+						marginHorizontal: 10,
+						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+						marginBottom: 16,
 					}}
+				>
+					Failed to parse this URL!
+				</Text>
+				<AppMenu.Option
+					Icon={
+						<AppIcon
+							id={'external-link'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						/>
+					}
+					label={'Retry'}
+					onClick={parse}
 				/>
-				<AppLoadingIndicator text={'Failed to Parse'} />
+				<AppMenu.Option
+					Icon={
+						<AppIcon
+							id={'external-link'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						/>
+					}
+					label={'Copy Link'}
+					onClick={() => {}}
+				/>
+				<AppMenu.Option
+					Icon={
+						<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+					}
+					label={'Open in Browser'}
+					onClick={() => {}}
+					desc={'External browser will be used'}
+				/>
 			</View>
 		);
 	}
@@ -187,23 +212,37 @@ function AppBottomSheetLinkPreview() {
 			/>
 			<View>
 				<AppMenu.Option
-					Icon={<AppIcon id={'eye'} emphasis={'high'} />}
+					Icon={
+						<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+					}
 					label={'Show All Content'}
 					onClick={() => {}}
 					desc={'If title or description text is too long'}
 				/>
 				<AppMenu.Option
-					Icon={<AppIcon id={'external-link'} emphasis={'high'} />}
+					Icon={
+						<AppIcon
+							id={'external-link'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						/>
+					}
 					label={'Copy Link'}
 					onClick={() => {}}
 				/>
 				<AppMenu.Option
-					Icon={<AppIcon id={'language'} emphasis={'high'} />}
+					Icon={
+						<AppIcon
+							id={'language'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						/>
+					}
 					label={'Translate'}
 					onClick={() => {}}
 				/>
 				<AppMenu.Option
-					Icon={<AppIcon id={'external-link'} emphasis={'high'} />}
+					Icon={
+						<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+					}
 					label={'Open in Browser'}
 					onClick={() => {}}
 					desc={'External browser will be used'}

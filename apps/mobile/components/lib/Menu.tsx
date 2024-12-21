@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -19,14 +19,13 @@ export class AppMenu {
 		);
 
 		return (
-			<TouchableOpacity
+			<Pressable
 				style={{
 					flexDirection: 'row',
-					paddingVertical: 8,
-					paddingHorizontal: 8,
+					padding: 8,
 					alignItems: 'center',
 					width: '100%',
-					minHeight: 52,
+					minHeight: 64,
 				}}
 				onPress={onClick}
 			>
@@ -39,9 +38,10 @@ export class AppMenu {
 				>
 					<Text
 						style={{
-							color: theme.textColor.high,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							color: theme.secondary.a10,
+							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							fontSize: 18,
+							marginBottom: 2,
 						}}
 					>
 						{label}
@@ -49,7 +49,7 @@ export class AppMenu {
 					{desc && (
 						<Text
 							style={{
-								color: theme.textColor.medium,
+								color: theme.secondary.a30,
 								flexWrap: 'wrap',
 							}}
 						>
@@ -57,7 +57,7 @@ export class AppMenu {
 						</Text>
 					)}
 				</View>
-			</TouchableOpacity>
+			</Pressable>
 		);
 	}
 }

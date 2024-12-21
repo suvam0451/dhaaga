@@ -16,9 +16,9 @@ import { router } from 'expo-router';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../shared/topnavbar/AppTabLandingNavbar';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../styles/BuiltinThemes';
 import { useState } from 'react';
 import { AccountService } from '../../database/entities/account';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
 /**
  * A full screen cover when no account is selected

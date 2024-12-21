@@ -8,8 +8,8 @@ import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { AppIcon } from '../../../lib/Icon';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 /**
  * Adds booster's information on top
@@ -40,6 +40,7 @@ const SharedStatusFragment = memo(function Foo() {
 		<View
 			style={{
 				paddingTop: 4,
+				marginBottom: 8,
 			}}
 		>
 			<View
@@ -69,9 +70,9 @@ const SharedStatusFragment = memo(function Foo() {
 				<Text
 					style={{
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-						color: theme.secondary.a20,
+						color: theme.secondary.a40,
 						fontSize: 13,
-						marginLeft: 4,
+						marginLeft: 6,
 					}}
 				>
 					{DatetimeUtil.timeAgo(dto.createdAt)}

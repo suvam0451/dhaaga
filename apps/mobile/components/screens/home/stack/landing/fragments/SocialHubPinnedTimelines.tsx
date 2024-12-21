@@ -10,7 +10,7 @@ import { router } from 'expo-router';
 import { SocialHubPinSectionContainer } from './_factory';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../styles/BuiltinThemes';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
 
 /**
  * If whitelist is present, filtered for those drivers only

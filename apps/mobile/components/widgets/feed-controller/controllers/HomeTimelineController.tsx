@@ -1,51 +1,58 @@
 import { memo } from 'react';
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
 import { styles } from './_shared';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 const HomeTimelineController = memo(function Foo() {
+	const desc: string[] = [
+		"This is your server's home timeline.",
+		'It displays posts from you and everyone you follow.',
+	];
+
 	const { acct, theme } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			theme: o.colorScheme,
 		})),
 	);
+
 	return (
-		<View>
+		<>
 			<Text
 				style={[
 					styles.timelineTypeText,
 					{
-						color: theme.textColor.high,
+						color: theme.primary.a10,
 					},
 				]}
 			>
 				Home Timeline
 			</Text>
-			<Text style={styles.timelineTargetText}>{acct?.server}</Text>
 			<Text
 				style={[
-					styles.timelineDescription,
+					styles.timelineTargetText,
 					{
-						color: theme.textColor.medium,
+						color: theme.complementary.a0,
 					},
 				]}
 			>
-				This is your server's home timeline.
+				{acct?.server}
 			</Text>
-
-			<Text
-				style={[
-					styles.timelineDescription,
-					{
-						color: theme.textColor.medium,
-					},
-				]}
-			>
-				It usually displays posts from you and everyone you follow.
-			</Text>
-		</View>
+			{desc.map((item, i) => (
+				<Text
+					key={i}
+					style={[
+						styles.timelineDescription,
+						{
+							color: theme.secondary.a20,
+						},
+					]}
+				>
+					{item}
+				</Text>
+			))}
+		</>
 	);
 });
 

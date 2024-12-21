@@ -8,7 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import PostCreatedBy from './PostCreatedBy';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 const StatusQuoted = memo(() => {
 	const { theme } = useGlobalState(

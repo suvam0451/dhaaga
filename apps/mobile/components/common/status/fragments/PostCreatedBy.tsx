@@ -1,7 +1,7 @@
-import { StyleProp, Text, View, ViewStyle } from 'react-native';
+import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { Skeleton } from '@rneui/base';
 import useMfm from '../../../hooks/useMfm';
 import useAppNavigator from '../../../../states/useAppNavigator';
@@ -9,10 +9,11 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
+import { appDimensions } from '../../../../styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
-const TIMELINE_PFP_SIZE = 42;
+const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
 /**
  * Renders the user (poster)'s avatar
@@ -89,71 +90,49 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	visibility: string;
 	postedAt: Date;
 }) {
-	const { content: UsernameWithEmojis } = useMfm({
-		content: displayNameRaw,
-		remoteSubdomain: theirSubdomain,
-		emojiMap: emojiMap,
-		deps: [displayNameRaw],
-		expectedHeight: 20,
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		numberOfLines: 1,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-	});
 	const { theme } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
 		})),
 	);
 
+	const { content: UsernameWithEmojis } = useMfm({
+		content: displayNameRaw,
+		remoteSubdomain: theirSubdomain,
+		emojiMap: emojiMap,
+		deps: [displayNameRaw],
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		numberOfLines: 1,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+	});
+
 	return (
 		<View
 			style={{
-				flexDirection: 'row',
-				flex: 1,
 				alignItems: 'flex-start',
 				marginLeft: 8,
+				// to leave sufficient space to show indicator icons
+				marginRight: 84,
 			}}
 		>
-			<View
-				style={{
-					flex: 1,
-				}}
-			>
-				<TouchableOpacity onPress={onClick}>
-					<View
-						style={{
-							flexDirection: 'row',
-							alignItems: 'flex-end',
-						}}
-					>
-						<View style={{ paddingBottom: 2 }}>
-							{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
-						</View>
-
-						<Text
-							style={{
-								color: theme.secondary.a30,
-								fontSize: 13,
-								marginLeft: 4,
-								fontFamily: APP_FONTS.INTER_400_REGULAR,
-							}}
-						>
-							{DatetimeUtil.timeAgo(postedAt)}
-						</Text>
+			<View>
+				<Pressable onPress={onClick}>
+					<View>
+						{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
 					</View>
 
 					<Text
 						style={{
-							color: theme.secondary.a30,
-							fontSize: 12,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							color: theme.secondary.a40,
+							fontSize: 13,
+							fontFamily: APP_FONTS.INTER_400_REGULAR,
 							maxWidth: 196,
 						}}
 						numberOfLines={1}
 					>
-						{instanceUrl}
+						{instanceUrl} • {DatetimeUtil.timeAgo(postedAt)}
 					</Text>
-				</TouchableOpacity>
+				</Pressable>
 			</View>
 		</View>
 	);
@@ -177,9 +156,9 @@ const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
 			: dto.boostedFrom
 		: dto;
 
-	const onProfileClicked = useCallback(() => {
+	function onProfileClicked() {
 		toProfile(STATUS_DTO.postedBy.userId);
-	}, [STATUS_DTO.postedBy.userId]);
+	}
 
 	return useMemo(() => {
 		if (!STATUS_DTO.postedBy) return <OriginalPosterSkeleton />;
@@ -196,10 +175,30 @@ const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
 					style,
 				]}
 			>
-				<OriginalPostedPfpFragment
-					url={STATUS_DTO.postedBy.avatarUrl}
-					onClick={onProfileClicked}
-				/>
+				<TouchableOpacity
+					onPress={onProfileClicked}
+					style={{
+						width: TIMELINE_PFP_SIZE,
+						height: TIMELINE_PFP_SIZE,
+						borderColor: 'rgba(200, 200, 200, 0.3)',
+						borderWidth: 1,
+						borderRadius: TIMELINE_PFP_SIZE / 2,
+						flexShrink: 1,
+					}}
+				>
+					{/* @ts-ignore */}
+					<Image
+						style={{
+							flex: 1,
+							backgroundColor: '#0553',
+							padding: 2,
+							borderRadius: TIMELINE_PFP_SIZE / 2,
+							overflow: 'hidden',
+						}}
+						source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
+					/>
+				</TouchableOpacity>
+
 				<OriginalPosterPostedByFragment
 					onClick={onProfileClicked}
 					theirSubdomain={STATUS_DTO.postedBy.instance}

@@ -1,6 +1,5 @@
 import { Text } from 'react-native';
 import LinkProcessor from '../components/common/link/LinkProcessor';
-import { MMKV } from 'react-native-mmkv';
 import TextParserService from './text-parser';
 import type { MfmNode } from '@dhaaga/shared-abstraction-activitypub';
 import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
@@ -9,15 +8,14 @@ import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 import { APP_FONTS } from '../styles/AppFonts';
+import { RandomUtil } from '../utils/random.utils';
 import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppColorSchemeType,
-} from '../styles/BuiltinThemes';
-import { RandomUtil } from '../utils/random.utils';
+} from '../utils/theming.util';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
-	protected readonly globalDb: MMKV;
 	protected readonly myDomain: string;
 	protected readonly mySubdomain: string;
 	protected readonly emojiMap?: Map<string, string>;
@@ -40,7 +38,6 @@ class MfmComponentBuilder {
 
 	constructor({
 		input,
-		globalDb,
 		targetSubdomain,
 		mySubdomain,
 		myDomain,
@@ -51,7 +48,6 @@ class MfmComponentBuilder {
 		colorScheme,
 	}: {
 		input: string;
-		globalDb: MMKV;
 		myDomain: string;
 		mySubdomain: string;
 		targetSubdomain?: string;
@@ -65,7 +61,6 @@ class MfmComponentBuilder {
 		colorScheme: AppColorSchemeType;
 	}) {
 		this.input = input;
-		this.globalDb = globalDb;
 		this.emojis = new Set<string>();
 		this.targetSubdomain = targetSubdomain;
 		this.results = [];
@@ -395,6 +390,8 @@ class MfmComponentBuilder {
 						value={node.props.name}
 						remoteInstance={this.targetSubdomain}
 						emojiMap={this.emojiMap}
+						emphasis={this.emphasis}
+						fontFamily={this.fontFamily}
 					/>
 				);
 			case 'unicodeEmoji':
@@ -425,7 +422,6 @@ class MfmService {
 	 * @param domain
 	 * @param subdomain
 	 * @param db
-	 * @param globalDb
 	 * @param remoteSubdomain is the subdomain of target user
 	 * @param emphasis
 	 * @param fontFamily
@@ -436,7 +432,6 @@ class MfmService {
 			emojiMap,
 			domain,
 			subdomain,
-			globalDb,
 			remoteSubdomain,
 			fontFamily,
 			emphasis,
@@ -445,7 +440,6 @@ class MfmService {
 			domain: string;
 			subdomain: string;
 			emojiMap: Map<string, string>;
-			globalDb: MMKV;
 			remoteSubdomain?: string;
 			fontFamily?: string;
 			emphasis?: APP_COLOR_PALETTE_EMPHASIS;
@@ -471,7 +465,6 @@ class MfmService {
 
 		const solver = new MfmComponentBuilder({
 			input,
-			globalDb,
 			myDomain: domain,
 			mySubdomain: subdomain,
 			emojiMap,

@@ -1,13 +1,18 @@
 import { memo, useEffect, useState } from 'react';
-import { Text, Image as RNImage } from 'react-native';
-import { APP_THEME } from '../../../styles/AppTheme';
+import { Image as RNImage, Text } from 'react-native';
 import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import { RandomUtil } from '../../../utils/random.utils';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
 type Props = {
 	value: string;
 	remoteInstance: string;
 	emojiMap: Map<string, string>;
+	emphasis: APP_COLOR_PALETTE_EMPHASIS;
+	fontFamily: string;
 };
 
 const EMOJI_HEIGHT = 20;
@@ -16,7 +21,48 @@ const EmojiCodeSegment = memo(function Foo({
 	emojiMap,
 	value,
 	remoteInstance,
+	emphasis,
+	fontFamily,
 }: Props) {
+	const { theme } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+		})),
+	);
+
+	const colorObj = theme.complementaryB;
+	let color = null;
+	switch (emphasis) {
+		case APP_COLOR_PALETTE_EMPHASIS.A0: {
+			color = colorObj.a0;
+			break;
+		}
+		case APP_COLOR_PALETTE_EMPHASIS.A10: {
+			color = colorObj.a10;
+			break;
+		}
+		case APP_COLOR_PALETTE_EMPHASIS.A20: {
+			color = colorObj.a20;
+			break;
+		}
+		case APP_COLOR_PALETTE_EMPHASIS.A30: {
+			color = colorObj.a30;
+			break;
+		}
+		case APP_COLOR_PALETTE_EMPHASIS.A40: {
+			color = colorObj.a40;
+			break;
+		}
+		case APP_COLOR_PALETTE_EMPHASIS.A50: {
+			color = colorObj.a50;
+			break;
+		}
+		default: {
+			color = colorObj.a0;
+			break;
+		}
+	}
+
 	// const db = useRealm();
 	const { globalDb } = useGlobalMmkvContext();
 
@@ -33,7 +79,7 @@ const EmojiCodeSegment = memo(function Foo({
 
 	// if (!match)
 	return (
-		<Text key={k} style={{ color: '#8c94fe' }}>
+		<Text key={k} style={{ color, fontFamily }}>
 			{`:${value}:`}
 		</Text>
 	);

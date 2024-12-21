@@ -5,6 +5,7 @@ import { APP_FONT } from '../../../styles/AppTheme';
 import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type StatItemProps = {
 	count: number;
@@ -37,7 +38,7 @@ const StatItem = memo(({ count, label, nextCounts }: StatItemProps) => {
 	if (count === 0) return <View />;
 	return (
 		<Fragment>
-			<Text style={[styles.text, { color: theme.textColor.emphasisC }]}>
+			<Text style={[styles.text, { color: theme.complementary.a0 }]}>
 				{formatted} {label}
 			</Text>
 			{SHOW_TRAILING_BULLET && (
@@ -108,9 +109,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	text: {
-		color: APP_FONT.MEDIUM_EMPHASIS,
 		fontSize: 12,
 		textAlign: 'right',
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 	bull: {
 		color: APP_FONT.MEDIUM_EMPHASIS,

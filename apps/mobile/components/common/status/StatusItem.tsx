@@ -27,7 +27,7 @@ function PostContainer({ children }: any) {
 			</View>
 			<View
 				style={{
-					backgroundColor: '#1e1e1e',
+					backgroundColor: '#1c1c1c',
 					height: 1,
 				}}
 			/>

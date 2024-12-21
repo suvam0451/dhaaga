@@ -5,7 +5,7 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../styles/BuiltinThemes';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
 type LinkProcessorProps = {
 	url: string;
@@ -25,6 +25,7 @@ function LinkProcessor({
 			theme: o.colorScheme,
 		})),
 	);
+
 	const { acceptTouch } = useAppMfmContext();
 	const httpsRemoved = url.replace(/(https:\/\/)(.+)/, '$2');
 	const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, '$2');
@@ -63,7 +64,7 @@ function LinkProcessor({
 	return (
 		<Text
 			style={{
-				color: '#ffcca5', // theme.palette.link,
+				color: theme.complementaryA.a0,
 				fontFamily: linkTextFontFamily,
 				maxWidth: 128,
 				display: 'flex',

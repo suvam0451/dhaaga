@@ -3,7 +3,8 @@ import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 import MentionSegment from '../components/shared/mfm/MentionSegment';
 import LinkProcessor from '../components/common/link/LinkProcessor';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../styles/BuiltinThemes';
+
+import { APP_COLOR_PALETTE_EMPHASIS } from '../utils/theming.util';
 
 function toUtf8(input: string): Uint8Array {
 	const encoder = new TextEncoder();

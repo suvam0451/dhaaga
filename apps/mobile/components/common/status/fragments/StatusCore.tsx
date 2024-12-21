@@ -5,7 +5,7 @@ import WithAppStatusItemContext, {
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
-import { View, TouchableOpacity, Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
@@ -19,7 +19,7 @@ import useGlobalState, {
 } from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 /**
  * Mostly used to remove the border
@@ -33,11 +33,12 @@ type StatusCoreProps = {
 
 function StatusController() {
 	const { dto } = useAppStatusItem();
-	const { show, setPostValue, setReducer } = useGlobalState(
+	const { show, setPostValue, setReducer, theme } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,
 			setPostValue: o.bottomSheet.setPostValue,
 			setReducer: o.bottomSheet.setTimelineDataPostListReducer,
+			theme: o.colorScheme,
 		})),
 	);
 	const { getPostListReducer } = useAppTimelinePosts();
@@ -57,14 +58,45 @@ function StatusController() {
 	return (
 		<View
 			style={{
-				flexShrink: 1,
-				maxWidth: 256,
 				justifyContent: 'flex-start',
+				// backgroundColor: 'blue',
+
+				flexDirection: 'row',
+				alignItems: 'flex-start',
+				flexShrink: 1,
+				height: '100%',
 			}}
 		>
-			<TouchableOpacity onPress={onMoreOptionsPress} style={{ paddingTop: 4 }}>
-				<AppIcon id={'ellipsis-v'} emphasis={'medium'} />
-			</TouchableOpacity>
+			{/*<Pressable*/}
+			{/*	style={{*/}
+			{/*		height: '100%',*/}
+			{/*		// backgroundColor: 'yellow',*/}
+			{/*		paddingTop: 8,*/}
+			{/*		paddingLeft: 16,*/}
+			{/*	}}*/}
+			{/*>*/}
+			{/*	<AppIcon*/}
+			{/*		id={'language'}*/}
+			{/*		emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}*/}
+			{/*		color={theme.primary.a0}*/}
+			{/*		size={20}*/}
+			{/*	/>*/}
+			{/*</Pressable>*/}
+
+			<Pressable
+				style={{
+					height: '100%',
+					paddingTop: 4,
+					paddingLeft: 16,
+				}}
+				onPress={onMoreOptionsPress}
+			>
+				<AppIcon
+					id={'ellipsis-v'}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+					size={20}
+				/>
+			</Pressable>
 		</View>
 	);
 }
@@ -92,7 +124,7 @@ const StatusCore = memo(
 			remoteSubdomain: STATUS_DTO.postedBy.instance,
 			emojiMap: STATUS_DTO.calculated.emojis,
 			deps: [dto],
-			emphasis: APP_COLOR_PALETTE_EMPHASIS.A20,
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 			fontFamily: APP_FONTS.INTER_400_REGULAR,
 		});
 
@@ -116,7 +148,11 @@ const StatusCore = memo(
 					<View style={{ flexDirection: 'row' }}>
 						<PostCreatedBy
 							dto={dto}
-							style={{ paddingBottom: 6, flex: 1, overflowX: 'hidden' }}
+							style={{
+								paddingBottom: 4,
+								flex: 1,
+								overflowX: 'hidden',
+							}}
 						/>
 						<StatusController />
 					</View>
@@ -128,6 +164,22 @@ const StatusCore = memo(
 							setShow={setShowSensitiveContent}
 						/>
 					)}
+
+					{/* --- Media Items --- */}
+					<Pressable onPress={() => {}}>
+						{isSensitive && !ShowSensitiveContent ? (
+							<View></View>
+						) : (
+							<View style={{ marginBottom: 6 }}>
+								<MediaItem
+									attachments={STATUS_DTO.content.media}
+									calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
+								/>
+							</View>
+						)}
+					</Pressable>
+
+					{/* --- Text Content --- */}
 					<Pressable
 						onPress={() => {
 							toPost(STATUS_DTO.id);
@@ -149,14 +201,6 @@ const StatusCore = memo(
 							</View>
 						)}
 
-						{isSensitive && !ShowSensitiveContent ? (
-							<View></View>
-						) : (
-							<MediaItem
-								attachments={STATUS_DTO.content.media}
-								calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
-							/>
-						)}
 						{/*FIXME: enable for bluesky*/}
 						{IS_QUOTE_BOOST && (
 							<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>

@@ -5,7 +5,7 @@ import { Skeleton } from '@rneui/themed';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 
-const TIMELINE_PFP_SIZE = 46;
+const TIMELINE_PFP_SIZE = 38;
 
 /**
  * Renders the user (poster)'s avatar

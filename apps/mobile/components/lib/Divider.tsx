@@ -1,4 +1,6 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
+import useGlobalState from '../../states/_global';
 
 type AppDividerProps = {
 	style?: StyleProp<ViewStyle>;
@@ -10,7 +12,7 @@ export class AppDivider {
 			<View
 				style={[
 					{
-						backgroundColor: '#1e1e1e',
+						backgroundColor: '#3d3d3d',
 						height: 1,
 					},
 					style,
@@ -20,11 +22,16 @@ export class AppDivider {
 	}
 
 	static Hard({ style }: AppDividerProps) {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 		return (
 			<View
 				style={[
 					{
-						backgroundColor: '#444',
+						backgroundColor: theme.secondary.a30,
 						height: 1,
 					},
 					style,

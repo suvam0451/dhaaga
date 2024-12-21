@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import useMfm from '../../../hooks/useMfm';
 import MediaItem from '../../media/MediaItem';
 import PostStats from '../PostStats';
@@ -9,11 +9,10 @@ import StatusQuoted from './StatusQuoted';
 import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import StatusVisibility from './StatusVisibility';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../styles/BuiltinThemes';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 type Props = {
 	dto: ActivityPubStatusAppDtoType;
@@ -31,9 +30,9 @@ const StatusHierarchyParent = memo(({ dto }: Props) => {
 		content: dto.content.raw,
 		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis,
-		deps: [dto],
+		deps: [dto.content.raw],
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 
 	const IS_QUOTE_BOOST = dto.meta.isBoost && dto.content.raw;
@@ -44,7 +43,7 @@ const StatusHierarchyParent = memo(({ dto }: Props) => {
 		emojiMap: dto.calculated.emojis,
 		deps: [dto.postedBy.displayName],
 		expectedHeight: 20,
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		numberOfLines: 1,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});
@@ -62,8 +61,22 @@ const StatusHierarchyParent = memo(({ dto }: Props) => {
 			}}
 		>
 			<PostCreatedByIconOnly dto={dto} />
-			<View style={{ marginLeft: 8, position: 'relative', flex: 1 }}>
-				<View style={{ flexDirection: 'row', flex: 1 }}>
+			<View
+				style={{
+					marginLeft: 8,
+					position: 'relative',
+					flex: 1,
+					marginBottom: 16,
+				}}
+			>
+				<View
+					style={{
+						flexDirection: 'row',
+						flex: 1,
+						alignItems: 'center',
+						marginBottom: 6,
+					}}
+				>
 					{VALID_DISPLAY_NAME && UsernameWithEmojis ? (
 						UsernameWithEmojis
 					) : (
@@ -77,49 +90,30 @@ const StatusHierarchyParent = memo(({ dto }: Props) => {
 							{dto.postedBy.handle}
 						</Text>
 					)}
-					<View
+					<Text
 						style={{
-							flexDirection: 'row',
-							alignItems: 'flex-end',
-							justifyContent: 'flex-end',
+							color: theme.secondary.a50,
+							fontSize: 12,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 						}}
 					>
-						<StatusVisibility visibility={dto.visibility} />
-						<Text
-							style={{
-								color: theme.textColor.low,
-								marginLeft: 2,
-								marginRight: 2,
-							}}
-						>
-							•
-						</Text>
-						<View style={{ flexDirection: 'row' }}>
-							<Text
-								style={{
-									color: theme.textColor.low,
-									fontSize: 12,
-									fontFamily: APP_FONTS.INTER_700_BOLD,
-								}}
-							>
-								{DatetimeUtil.timeAgo(dto.createdAt)}
-							</Text>
-						</View>
-					</View>
+						{' • '}
+						{DatetimeUtil.timeAgo(dto.createdAt)}
+					</Text>
 				</View>
 
-				<TouchableOpacity
-					delayPressIn={100}
+				<MediaItem
+					attachments={dto.content.media}
+					calculatedHeight={dto.calculated.mediaContainerHeight}
+				/>
+				<Pressable
 					onPress={() => {
 						toPost(dto.id);
 					}}
 				>
 					{content}
-				</TouchableOpacity>
-				<MediaItem
-					attachments={dto.content.media}
-					calculatedHeight={dto.calculated.mediaContainerHeight}
-				/>
+				</Pressable>
+
 				{IS_QUOTE_BOOST && (
 					<WithAppStatusItemContext dto={dto.boostedFrom}>
 						<StatusQuoted />
@@ -131,16 +125,17 @@ const StatusHierarchyParent = memo(({ dto }: Props) => {
 				style={{
 					position: 'absolute',
 					height: '100%',
-					left: 22,
-					overflow: 'hidden',
+					left: 16,
+					// overflow: 'hidden',
 				}}
 			>
 				<View
 					style={{
 						flex: 1,
-						marginTop: 54,
+						marginTop: 48,
+						marginBottom: 8,
 						width: 1.5,
-						backgroundColor: theme.textColor.low,
+						backgroundColor: '#323232',
 					}}
 				/>
 			</View>

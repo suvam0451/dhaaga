@@ -51,7 +51,7 @@ export const AppImageComponent = memo(function Foo({
 				contentFit="fill"
 				style={{
 					// flex: 1,
-					borderRadius: 16,
+					borderRadius: 8,
 					opacity: 0.87,
 					width: ImageWidth,
 					height: ImageHeight,

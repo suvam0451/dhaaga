@@ -4,10 +4,7 @@ import {
 	DEFAULT_THEME_PACK_OBJECT,
 	ThemePackType,
 } from '../assets/loaders/UseAppThemePackLoader';
-import {
-	APP_BUILT_IN_THEMES,
-	AppColorSchemeType,
-} from '../styles/BuiltinThemes';
+import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
 import { Account, Profile } from '../database/_schema';
 import {
 	ActivityPubClientFactory,
@@ -33,6 +30,7 @@ import { AppUserDto } from '../types/app-user.types';
 import ProfileSessionManager from '../services/session/profile-session.service';
 import { ProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
+import { AppColorSchemeType } from '../utils/theming.util';
 
 type AppThemePack = {
 	id: string;

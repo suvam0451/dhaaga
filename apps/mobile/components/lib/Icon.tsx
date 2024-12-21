@@ -23,11 +23,12 @@ import * as Haptics from 'expo-haptics';
 import { APP_FONT } from '../../styles/AppTheme';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../styles/AppFonts';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../styles/BuiltinThemes';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
 export type APP_ICON_ENUM =
 	| 'bell'
 	| 'back'
+	| 'browser'
 	| 'chevron-right'
 	| 'checkmark-done-outline'
 	| 'cog'
@@ -56,6 +57,7 @@ export type APP_ICON_ENUM =
 	| 'share'
 	| 'feelings'
 	| 'smiley'
+	| 'to-top'
 	| 'trash'
 	| 'user-guide'
 	| 'wand';
@@ -250,6 +252,17 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="chevron-back"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+
+				case 'browser':
+					return (
+						<Ionicons
+							name="browsers-outline"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -556,6 +569,18 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+
+				case 'to-top':
+					return (
+						<AntDesign
+							name="totop"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+
 				case 'user-guide':
 					return (
 						<MaterialIcons

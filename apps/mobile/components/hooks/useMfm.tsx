@@ -2,14 +2,13 @@ import { DependencyList, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { Skeleton } from '@rneui/themed';
-import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FacetService from '../../services/facets.service';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../utils/random.utils';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../styles/BuiltinThemes';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
 type Props = {
 	content: string;
@@ -56,7 +55,6 @@ function useMfm({
 			theme: o.colorScheme,
 		})),
 	);
-	const { globalDb } = useGlobalMmkvContext();
 
 	const defaultValue = useRef<any>({
 		isLoaded: false,
@@ -149,7 +147,6 @@ function useMfm({
 			emojiMap: emojiMap || new Map(),
 			domain: driver,
 			subdomain: acct?.server,
-			globalDb,
 			remoteSubdomain,
 			fontFamily,
 			emphasis,

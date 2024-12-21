@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useMemo, useState } from 'react';
 import MfmService from '../../../../../services/mfm.service';
 import { Image } from 'expo-image';
-import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../../styles/AppTheme';
@@ -21,7 +20,6 @@ function ChatItem() {
 			theme: o.colorScheme,
 		})),
 	);
-	const { globalDb } = useGlobalMmkvContext();
 	const [UserInterface, setUserInterface] = useState(
 		ActivityPubUserAdapter(null, driver),
 	);
@@ -38,7 +36,6 @@ function ChatItem() {
 			domain: driver,
 			subdomain: acct?.server,
 			remoteSubdomain: UserInterface?.getInstanceUrl(),
-			globalDb,
 			colorScheme: theme,
 		});
 		return reactNodes?.map((para) => {
