@@ -3,8 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useMemo, useState } from 'react';
 import MfmService from '../../../../../services/mfm.service';
 import { Image } from 'expo-image';
-import { format } from 'date-fns';
-import { useGlobalMmkvContext } from '../../../../../states/useGlobalMMkvCache';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../../styles/AppTheme';
@@ -22,7 +20,6 @@ function ChatItem() {
 			theme: o.colorScheme,
 		})),
 	);
-	const { globalDb } = useGlobalMmkvContext();
 	const [UserInterface, setUserInterface] = useState(
 		ActivityPubUserAdapter(null, driver),
 	);
@@ -39,7 +36,6 @@ function ChatItem() {
 			domain: driver,
 			subdomain: acct?.server,
 			remoteSubdomain: UserInterface?.getInstanceUrl(),
-			globalDb,
 			colorScheme: theme,
 		});
 		return reactNodes?.map((para) => {
@@ -54,9 +50,9 @@ function ChatItem() {
 		});
 	}, [status?.getContent()]);
 
-	const ownerIsMe = me?.getId() === status.getAccountId_Poster();
-	const day = format(new Date(status.getCreatedAt()), 'MM/dd');
-	const time = format(new Date(status.getCreatedAt()), 'h:mm a');
+	const ownerIsMe = me.id === status.getAccountId_Poster();
+	const day = ''; // format(new Date(status.getCreatedAt()), 'MM/dd');
+	const time = ''; // format(new Date(status.getCreatedAt()), 'h:mm a');
 
 	return (
 		<View>

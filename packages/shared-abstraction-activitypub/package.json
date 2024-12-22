@@ -29,13 +29,12 @@
     "masto": "^6.8.0",
     "megalodon": "^10.0.2",
     "mfm-js": "^0.24.0",
-    "misskey-js": "^2024.8.0",
-    "multiformats": "^13.2.3",
+    "misskey-js": "^2024.11.1-alpha.0",
     "snakecase-keys": "^8.0.1"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.13",
-    "typescript": "~5.3.3"
+    "typescript": "^5.7.2",
+    "@types/bun": "^1.1.14"
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.json"

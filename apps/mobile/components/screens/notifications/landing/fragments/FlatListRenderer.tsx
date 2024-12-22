@@ -11,7 +11,6 @@ import FollowReqAcceptNotificationFragment from '../segments/FollowReqAccepNotif
 import ReactionNotificationFragment from '../segments/ReactionNotificationFragment';
 import { Text, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
-import { Fragment } from 'react';
 import NotificationUpdateItem from './NotificationUpdateItem';
 
 /**
@@ -32,13 +31,11 @@ export function FlatListRenderer({
 			return <FavouriteNotificationFragment item={item.props} />;
 		case DhaagaJsNotificationType.FOLLOW:
 			return (
-				<Fragment>
-					<NotificationUpdateItem
-						acct={item.props.acct}
-						type={DhaagaJsNotificationType.FOLLOW}
-						createdAt={item.props.createdAt}
-					/>
-				</Fragment>
+				<NotificationUpdateItem
+					acct={item.props.acct}
+					type={DhaagaJsNotificationType.FOLLOW}
+					createdAt={item.props.createdAt}
+				/>
 			);
 		case DhaagaJsNotificationType.STATUS:
 		case DhaagaJsNotificationType.NOTE:

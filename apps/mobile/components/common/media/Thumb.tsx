@@ -48,9 +48,8 @@ function MediaThumbnail({
 								width: _width,
 								height: _height,
 								borderRadius: 4,
-								opacity: 0.75,
+								opacity: 0.87,
 							}}
-							// placeholder={{ blurhash }}
 							source={{ uri: url }}
 						/>
 					</View>
@@ -58,7 +57,7 @@ function MediaThumbnail({
 			}
 			default: {
 				console.log('unknown media type', type, url, 'url');
-				return <View></View>;
+				return <View />;
 			}
 		}
 	}, []);

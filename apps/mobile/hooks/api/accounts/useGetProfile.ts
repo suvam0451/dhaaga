@@ -1,18 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-	ActivityPubAccount,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
-import { useEffect, useState } from 'react';
-import { AppUser } from '../../../types/app-user.types';
-import AppUserService from '../../../services/approto/app-user-service';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { AppUserObject } from '../../../types/app-user.types';
 import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { UserMiddleware } from '../../../services/middlewares/user.middleware';
 
 type Type = {
 	userId?: string;
-	requestId: string;
 	handle?: string;
 };
 
@@ -30,52 +25,37 @@ function useGetProfile({ userId, handle }: Type) {
 		})),
 	);
 
-	const [Data, setData] = useState<AppUser>(null);
-	const [Error, setError] = useState(null);
-
-	async function api() {
+	async function api(): Promise<AppUserObject> {
 		if (!client || (!userId && !handle)) {
 			return null;
 		}
 		if (userId) {
 			const { data, error } = await client.accounts.get(userId);
-			if (error) {
-				setData(null);
-				setError('');
-				return null;
-			}
-			return data;
+			if (error) throw new Error('Failed to fetch user for AtpProto');
+			return UserMiddleware.deserialize(data, driver, acct?.server);
 		} else if (handle) {
 			if (driver === KNOWN_SOFTWARE.BLUESKY) {
+				// fetch did for handle
 				const { data: didData, error: didError } = await (
 					client as BlueskyRestClient
 				).accounts.getDid(handle);
-				// console.log(didData, didError);
-				if (didError) return null;
+				if (didError) throw new Error('Failed to fetch did');
+
+				// fetch account for did
 				const { data, error } = await client.accounts.get(didData.data.did);
-				console.log(data, error);
-				return data;
+				if (error) throw new Error('Failed to fetch user for AtProto');
+				return UserMiddleware.deserialize(data.data, driver, acct?.server);
 			}
 		}
 	}
 
 	// Queries
-	const { status, data } = useQuery<ActivityPubAccount>({
+	return useQuery<AppUserObject>({
 		queryKey: ['profile', userId, handle],
 		queryFn: api,
 		enabled: client !== undefined && client !== null,
+		initialData: null,
 	});
-
-	useEffect(() => {
-		if (status !== 'success' || !data) return;
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			setData(AppUserService.exportRaw(data.data, driver, acct?.server));
-		} else {
-			setData(AppUserService.exportRaw(data, driver, acct?.server));
-		}
-	}, [status, data]);
-
-	return { Data, Error };
 }
 
 export default useGetProfile;

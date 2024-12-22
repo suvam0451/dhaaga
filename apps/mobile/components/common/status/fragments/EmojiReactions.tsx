@@ -1,64 +1,68 @@
-import { Fragment, memo, useCallback, useEffect, useState } from 'react';
+import { Fragment, memo, useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { EmojiDto } from './_shared.types';
 import EmojiReaction from './EmojiReaction';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
-import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { appDimensions } from '../../../../styles/dimensions';
+import { AppPostObject } from '../../../../types/app-post.types';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
 type EmojiReactionsProps = {
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 };
 
 const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
-	const { emojiCache } = useAppTimelinePosts();
-	const { driver, me, theme } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			me: o.me,
-			theme: o.colorScheme,
-		})),
-	);
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);
 
-	const onShowMoreToggle = useCallback(() => {
+	const { driver, theme, acctManager } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			theme: o.colorScheme,
+			acctManager: o.acctManager,
+		})),
+	);
+
+	function onShowMoreToggle() {
 		setAllEmojisExpanded((o) => !o);
-	}, []);
+	}
 
 	useEffect(() => {
 		setEmojis(
-			ActivityPubReactionsService.renderData(dto.stats.reactions, {
-				calculated: dto.calculated.reactionEmojis,
-				cache: emojiCache,
-				me: me?.getId(),
-			}),
+			acctManager.resolveReactions(
+				dto.stats.reactions,
+				dto.calculated.reactionEmojis,
+			),
 		);
-	}, [dto.stats.reactions, me]);
+	}, [dto.stats.reactions, dto.calculated.reactionEmojis, acctManager]);
 
 	if (driver === KNOWN_SOFTWARE.MASTODON) return <Fragment />;
 
 	const ShownEmojis = AllEmojisExpanded
 		? Emojis
 		: Emojis.slice(0, EMOJI_COLLAPSED_COUNT_LIMIT);
+
+	if (ShownEmojis.length === 0) return <View />;
+
 	return (
 		<View
 			style={{
 				flexDirection: 'row',
 				flexWrap: 'wrap',
-				marginTop: ShownEmojis.length > 0 ? 6 : 0,
+				marginBottom: appDimensions.timelines.sectionBottomMargin,
+				// extra spacing, since it needs to accept touch
+				marginTop: 6,
 			}}
 		>
 			{ShownEmojis.map((o, i) => (
 				<EmojiReaction key={i} dto={o} postDto={dto} />
 			))}
+
 			{Emojis.length > EMOJI_COLLAPSED_COUNT_LIMIT && (
 				<TouchableOpacity onPress={onShowMoreToggle}>
 					<View
@@ -102,4 +106,5 @@ const styles = StyleSheet.create({
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 });
+
 export default EmojiReactions;

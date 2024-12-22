@@ -64,17 +64,6 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 					const maxId = FALLBACK_TO_OFFSET ? undefined : dto.maxId;
 					const untilId = FALLBACK_TO_OFFSET ? undefined : dto.maxId;
 
-					// All good - 21 Aug
-					// console.log({
-					// 	...dto,
-					// 	q: dto.q,
-					// 	query: dto.q,
-					// 	type: 'statuses',
-					// 	maxId,
-					// 	untilId,
-					// 	offset,
-					// });
-
 					const { data, error } = await client.search.findPosts({
 						...dto,
 						q: dto.q,
@@ -108,7 +97,7 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 					}
 					return {
 						...DEFAULT_RESPONSE,
-						accounts: data.map((o) =>
+						accounts: (data as any).map((o) =>
 							ActivityPubAdapterService.adaptUser(o, driver),
 						),
 					};

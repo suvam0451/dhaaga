@@ -3,7 +3,6 @@ import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
 import useMfm from '../../../../hooks/useMfm';
-import ErrorGoBack from '../../../../error-screen/ErrorGoBack';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
@@ -11,17 +10,17 @@ import styles from '../../../../common/user/utils/styles';
 import ProfileStats from './fragments/ProfileStats';
 import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
 import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
-import ProfileButtonMessage from './fragments/ProfileButtonMessage';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../shared/topnavbar/AppTopNavbar';
-import ProfileButtonPhonebook from './fragments/ProfileButtonPhonebook';
 import ProfileModules from './modules/ProfileModules';
-import { AppIcon } from '../../../../lib/Icon';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
+import { AppIcon } from '../../../../lib/Icon';
+import { appDimensions } from '../../../../../styles/dimensions';
 
 export function ProfileContextWrapped() {
 	const { theme } = useGlobalState(
@@ -30,7 +29,7 @@ export function ProfileContextWrapped() {
 		})),
 	);
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { Data: acct, Error } = useGetProfile({ userId: id, requestId: 'N/A' });
+	const { data: acct, error } = useGetProfile({ userId: id });
 
 	const fields = acct?.meta?.fields;
 	const avatarUrl = acct?.avatarUrl;
@@ -41,8 +40,8 @@ export function ProfileContextWrapped() {
 		remoteSubdomain: acct?.instance,
 		emojiMap: acct?.calculated?.emojis,
 		deps: [acct?.displayName],
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		emphasis: 'high',
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 	const IS_LOCKED = acct?.meta?.isProfileLocked;
 
@@ -51,9 +50,7 @@ export function ProfileContextWrapped() {
 		updateQueryCache: () => {},
 	});
 
-	if (Error !== null) {
-		return <ErrorGoBack msg={Error} />;
-	}
+	if (error || !acct) return <View />;
 
 	return (
 		<AppTopNavbar
@@ -68,47 +65,42 @@ export function ProfileContextWrapped() {
 					{ backgroundColor: theme.palette.bg },
 				]}
 			>
-				{/*@ts-ignore-next-line*/}
-				<Image
-					source={{ uri: bannerUrl }}
-					style={{ height: 128, width: Dimensions.get('window').width }}
-				/>
-				<View style={{ flexDirection: 'row' }}>
+				{bannerUrl ? (
+					// @ts-ignore-next-line
+					<Image
+						source={{ uri: bannerUrl }}
+						style={{ height: 128, width: Dimensions.get('window').width }}
+					/>
+				) : (
+					<View style={{ height: 48, width: '100%' }} />
+				)}
+				<View style={{ flexDirection: 'row', width: '100%' }}>
 					<ProfileAvatar
-						containerStyle={localStyles.avatarContainer}
+						containerStyle={[localStyles.avatarContainer]}
 						imageStyle={localStyles.avatarImageContainer}
 						uri={avatarUrl}
 					/>
-					<View style={localStyles.buttonSection}>
-						<ProfileButtonMessage handle={acct?.handle} />
-						<View style={{ width: 8 }} />
-						<ProfileButtonPhonebook />
-					</View>
 					<ProfileStats
 						userId={acct?.id}
 						postCount={acct?.stats?.posts}
 						followingCount={acct?.stats?.following}
 						followerCount={acct?.stats?.followers}
-						style={localStyles.statSectionContainer}
 					/>
 				</View>
-				<View style={localStyles.secondSectionContainer}>
-					<View style={{ flexShrink: 1 }}>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_900_BLACK,
-								color: APP_FONT.HIGH_EMPHASIS,
-							}}
-							numberOfLines={1}
-						>
-							{ParsedDisplayName}
-						</Text>
+				<View
+					style={{
+						flexDirection: 'row',
+						flex: 1,
+						flexGrow: 1,
+						marginLeft: 8,
+						marginTop: 6,
+					}}
+				>
+					<View>
+						{ParsedDisplayName}
 						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 							<Text
-								style={[
-									styles.secondaryText,
-									{ color: theme.textColor.medium },
-								]}
+								style={[styles.secondaryText, { color: theme.secondary.a30 }]}
 								numberOfLines={1}
 							>
 								{acct?.handle}
@@ -124,14 +116,6 @@ export function ProfileContextWrapped() {
 							)}
 						</View>
 					</View>
-					<View style={localStyles.relationManagerSection}>
-						<AppIcon
-							id={'bell'}
-							size={22}
-							containerStyle={{ marginRight: 8 }}
-						/>
-						<RelationshipButtonCore userId={acct?.id} />
-					</View>
 				</View>
 
 				<ProfileDesc
@@ -141,8 +125,33 @@ export function ProfileContextWrapped() {
 					emojiMap={acct?.calculated?.emojis}
 				/>
 
-				{/*Separator*/}
-				<View style={{ flexGrow: 1 }} />
+				<View style={localStyles.relationManagerSection}>
+					<RelationshipButtonCore userId={acct?.id} />
+					<View
+						style={{
+							backgroundColor: '#1b1b1b',
+							padding: 8,
+							borderRadius: appDimensions.buttons.borderRadius,
+							marginHorizontal: 12,
+							paddingHorizontal: 16,
+							flex: 1,
+							paddingVertical: 10,
+						}}
+					>
+						<Text
+							style={{
+								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+								color: theme.secondary.a10,
+								textAlign: 'center',
+								fontSize: 16,
+							}}
+						>
+							Message
+						</Text>
+					</View>
+					<View></View>
+					<AppIcon id={'ellipsis-v'} size={28} />
+				</View>
 
 				{/* Collapsible Sections */}
 				<ProfileModules
@@ -178,32 +187,23 @@ const localStyles = StyleSheet.create({
 		flex: 1,
 		width: '100%',
 		padding: 2,
-		borderRadius: 72 / 2,
+		borderRadius: 82 / 2,
+		overflow: 'hidden',
 	},
 	avatarContainer: {
-		width: 72,
-		height: 72,
-		borderColor: 'rgba(200, 200, 200, 0.12)',
-		borderWidth: 1,
-		borderRadius: 72 / 2,
+		width: 84,
+		height: 84,
+		borderColor: 'rgba(200, 200, 200, 0.24)',
+		borderWidth: 3,
+		borderRadius: 84 / 2,
 		marginTop: -24,
 		marginLeft: 6,
 	},
 	relationManagerSection: {
 		flexDirection: 'row',
-		flexGrow: 1,
 		alignItems: 'center',
-		justifyContent: 'flex-end',
-		paddingHorizontal: 8,
-		marginLeft: 4,
-		marginRight: 8,
-	},
-	statSectionContainer: {
-		backgroundColor: '#242424',
-		marginRight: 4,
-		borderRadius: 8,
-		marginTop: 4,
-		padding: 4,
+		marginHorizontal: 10,
+		marginTop: 8,
 	},
 	secondSectionContainer: {
 		flexDirection: 'row',
@@ -212,5 +212,13 @@ const localStyles = StyleSheet.create({
 		marginTop: 8,
 		marginLeft: 8,
 		width: '100%',
+	},
+	ctaButtonContainer: {
+		padding: 8,
+		borderRadius: appDimensions.buttons.borderRadius,
+		marginHorizontal: 12,
+		paddingHorizontal: 16,
+		flex: 1,
+		paddingVertical: 10,
 	},
 });

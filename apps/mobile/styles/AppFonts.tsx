@@ -1,8 +1,3 @@
-const appFonts = {
-	'Montserrat-Bold': require('../../../packages/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-	'Inter-Bold': require('../../../packages/fonts/Inter/static/Inter-Bold.ttf'),
-};
-
 export enum APP_FONTS {
 	MONTSERRAT_100_THIN = 'Montserrat_100Thin',
 	MONTSERRAT_200_EXTRALIGHT = 'Montserrat_200ExtraLight',
@@ -12,7 +7,7 @@ export enum APP_FONTS {
 	MONTSERRAT_600_SEMIBOLD = 'Montserrat_600SemiBold',
 	MONTSERRAT_700_BOLD = 'Montserrat_700Bold',
 	MONTSERRAT_800_EXTRABOLD = 'Montserrat_800ExtraBold',
-	MONTSERRAT_900_BLACK = 'Montserrat_900Black',
+	// MONTSERRAT_900_BLACK = 'Montserrat_900Black',
 
 	// Inter
 	INTER_100_THIN = 'Inter_100Thin',
@@ -22,8 +17,6 @@ export enum APP_FONTS {
 	INTER_500_MEDIUM = 'Inter_500Medium',
 	INTER_600_SEMIBOLD = 'Inter_600SemiBold',
 	INTER_700_BOLD = 'Inter_700Bold',
-	INTER_800_EXTRABOLD = 'Inter_800ExtraBold',
-	INTER_900_BLACK = 'Inter_900Black',
+	// INTER_800_EXTRABOLD = 'Inter_800ExtraBold',
+	// INTER_900_BLACK = 'Inter_900Black',
 }
-
-export default appFonts;

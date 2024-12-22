@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { Button, ListItem, Skeleton } from '@rneui/themed';
 import {
 	ScrollView,
@@ -9,10 +8,7 @@ import {
 	StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import WithActivitypubTagContext, {
-	useActivitypubTagContext,
-} from '../../states/useTag';
-import { TagType } from '@dhaaga/shared-abstraction-activitypub';
+import { useActivitypubTagContext } from '../../states/useTag';
 import InstanceService from '../../services/instance.service';
 import useSkeletonSmoothTransition from '../../states/useSkeletonTransition';
 import { APP_FONT } from '../../styles/AppTheme';
@@ -34,6 +30,9 @@ type HashtagBottomSheetContentProps = {
 	parentApiPending: boolean;
 };
 
+/**
+ * @deprecated
+ */
 export function HashtagBottomSheetContent({
 	parentApiPending,
 }: HashtagBottomSheetContentProps) {
@@ -362,43 +361,11 @@ function HashtagSkeleton() {
 	);
 }
 
+/**
+ * @deprecated
+ */
 function HashtagBottomSheet({ id }: HashtagActionsProps) {
-	const [Data, setData] = useState(null);
-	const { router } = useGlobalState(
-		useShallow((o) => ({
-			router: o.router,
-		})),
-	);
-
-	async function api() {
-		if (!router) return null;
-		const { data, error } = await router.tags.get(id);
-		if (error) {
-			console.log(error);
-			return null;
-		}
-		return data;
-	}
-
-	// Queries
-	const { status, data } = useQuery<TagType | null>({
-		queryKey: ['tag', id],
-		queryFn: api,
-		enabled: router !== null && id !== null,
-	});
-
-	useEffect(() => {
-		if (status !== 'success' || !data) return;
-		setData(data);
-	}, [data, status]);
-
-	return (
-		<WithActivitypubTagContext tag={Data}>
-			<HashtagBottomSheetContent
-				parentApiPending={status !== 'success' || !data}
-			/>
-		</WithActivitypubTagContext>
-	);
+	return <View />;
 }
 
 const styles = StyleSheet.create({
@@ -421,4 +388,5 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 	},
 });
+
 export default HashtagBottomSheet;

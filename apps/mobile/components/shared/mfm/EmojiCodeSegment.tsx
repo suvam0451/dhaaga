@@ -1,67 +1,83 @@
-import { memo, useEffect, useState } from 'react';
-import { Text, Image as RNImage } from 'react-native';
-import { APP_THEME } from '../../../styles/AppTheme';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
+import { Fragment, memo, useEffect, useState } from 'react';
+import { Text } from 'react-native';
+import { Image } from 'expo-image';
 import { RandomUtil } from '../../../utils/random.utils';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import {
+	APP_COLOR_PALETTE_EMPHASIS,
+	AppThemingUtil,
+} from '../../../utils/theming.util';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 
 type Props = {
 	value: string;
 	remoteInstance: string;
 	emojiMap: Map<string, string>;
+	emphasis: APP_COLOR_PALETTE_EMPHASIS;
+	fontFamily: string;
 };
 
-const EMOJI_HEIGHT = 20;
+const EMOJI_HEIGHT = 22;
 
 const EmojiCodeSegment = memo(function Foo({
 	emojiMap,
 	value,
-	remoteInstance,
+	emphasis,
+	fontFamily,
 }: Props) {
-	// const db = useRealm();
-	const { globalDb } = useGlobalMmkvContext();
+	const [ReactionData, setReactionData] =
+		useState<InstanceApi_CustomEmojiDTO>(null);
+	const { theme, acctManager } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+			acctManager: o.acctManager,
+		})),
+	);
+
+	let color = AppThemingUtil.getColorForEmphasis(
+		theme.complementaryB,
+		emphasis,
+	);
 
 	const k = RandomUtil.nanoId();
 	const [Width, setWidth] = useState(EMOJI_HEIGHT);
 
-	// const match = EmojiService.findCachedEmoji({
-	// 	emojiMap,
-	// 	db,
-	// 	globalDb,
-	// 	id: value,
-	// 	remoteInstance,
-	// });
-
-	// if (!match)
-	return (
-		<Text key={k} style={{ color: APP_THEME.INVALID_ITEM_BODY }}>
-			{`:${value}:`}
-		</Text>
-	);
-
 	useEffect(() => {
-		// RNImage.getSize(
-		// 	match,
-		// 	(width, height) => {
-		// 		setWidth(width * (EMOJI_HEIGHT / height));
-		// 	},
-		// 	() => {
-		// 		setWidth(EMOJI_HEIGHT);
-		// 	},
-		// );
-	}, []);
+		if (!acctManager) return;
+		const match = acctManager.resolveEmoji(value, emojiMap);
+		if (!match) return;
+		setReactionData(match);
+
+		Image.loadAsync(match.url)
+			.then(({ width, height }) => {
+				setWidth(width * (EMOJI_HEIGHT / height));
+			})
+			.catch((e) => {
+				setWidth(EMOJI_HEIGHT);
+			});
+	}, [value, acctManager]);
+
+	useEffect(() => {}, []);
+
+	if (!ReactionData)
+		return (
+			<Text key={k} style={{ color, fontFamily }}>
+				{`:${value}:`}
+			</Text>
+		);
 
 	return (
-		<Text style={{ alignItems: 'flex-end', flex: 1, position: 'relative' }}>
-			<RNImage
+		<Fragment>
+			{/*@ts-ignore-next-line*/}
+			<Image
 				style={{
 					width: Width,
 					height: EMOJI_HEIGHT,
-					top: 16,
-					position: 'absolute',
 				}}
-				// source={{ uri: match }}
+				source={{ uri: ReactionData.url }}
 			/>
-		</Text>
+		</Fragment>
 	);
 });
 

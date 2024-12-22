@@ -7,7 +7,7 @@ import {
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
 } from '../_shared';
-import { MARGIN_TOP, MEDIA_CONTAINER_WIDTH } from '../_common';
+import { MEDIA_CONTAINER_WIDTH } from '../_common';
 import {
 	Directions,
 	FlingGestureHandlerEventPayload,
@@ -16,7 +16,7 @@ import {
 	GestureStateChangeEvent,
 } from 'react-native-gesture-handler';
 import useCircularList from '../state/useCircularList';
-import useImageAspectRatio from '../../../../hooks/app/useImageAspectRatio';
+import useGalleryDims from '../../../../hooks/app/useGalleryDims';
 
 export type AppImageCarouselItem = {
 	src: string;
@@ -102,7 +102,6 @@ const AppImageCarouselItem = memo(function Foo({
 				width: MEDIA_CONTAINER_WIDTH,
 				height: type === 'audio' ? 48 : calculatedHeight,
 				position: 'relative',
-				marginTop: MARGIN_TOP,
 			}}
 		>
 			{MediaItem}
@@ -114,7 +113,7 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 	items,
 	timelineCacheId,
 }: AppImageCarouselData) {
-	const { ContainerWidth, ImageHeight, onLayoutChanged } = useImageAspectRatio(
+	const { ContainerWidth, ImageHeight, onLayoutChanged } = useGalleryDims(
 		items.map((o) => ({
 			url: o.src,
 			width: o.width,
@@ -154,12 +153,7 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 
 	return (
 		<GestureDetector gesture={fling}>
-			<View
-				style={{
-					alignItems: 'center',
-				}}
-				onLayout={onLayoutChanged}
-			>
+			<View onLayout={onLayoutChanged}>
 				<AppImageCarouselItem
 					src={item.src}
 					type={item.type}

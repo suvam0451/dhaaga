@@ -3,7 +3,7 @@ import type { mastodon } from '@dhaaga/shared-provider-mastodon';
 import MisskeyUser from './misskey.js';
 import MastodonUser from './mastodon.js';
 import DefaultUser from './default.js';
-import { Note } from 'misskey-js/autogen/models.d.ts';
+import { Note } from 'misskey-js/autogen/models.js';
 import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
 import camelcaseKeys from 'camelcase-keys';
 import BlueskyUserInterface from './bluesky.js';

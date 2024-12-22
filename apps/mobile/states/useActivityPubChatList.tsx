@@ -3,7 +3,6 @@ import {
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { createContext, useContext, useMemo, useState } from 'react';
-import CryptoService from '../services/crypto.service';
 
 type AppConversationDTO = {
 	id: string;
@@ -73,7 +72,7 @@ function WithActivitypubChatRoomContext({ children }: Props) {
 				// @ts-ignore-next-line
 				...new Set(item.participants.map((o) => o.getId())),
 			].sort((a, b) => a.localeCompare(b));
-			const hash = await CryptoService.hashUserList(participantIds);
+			const hash = ''; // await CryptoService.hashUserList(participantIds);
 
 			if (SeenRooms.has(hash)) {
 				if (!SeenRooms.get(hash).conversationIdsSeen.has(item.id)) {

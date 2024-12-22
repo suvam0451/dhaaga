@@ -17,4 +17,12 @@ export class DefaultNotificationsRouter implements NotificationsRoute {
 			maxId?: string | null;
 		}>();
 	}
+
+	async getChats() {
+		return notImplementedErrorBuilder();
+	}
+
+	async getMentions() {
+		return notImplementedErrorBuilder();
+	}
 }

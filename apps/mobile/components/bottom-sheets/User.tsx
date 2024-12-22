@@ -4,7 +4,6 @@ import { BottomSheet, Text, ListItem, Button } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
 import { Image } from 'expo-image';
 import MfmService from '../../services/mfm.service';
-import { useGlobalMmkvContext } from '../../states/useGlobalMMkvCache';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../utils/random.utils';
@@ -23,7 +22,6 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 		})),
 	);
 
-	const { globalDb } = useGlobalMmkvContext();
 	const { user } = useActivitypubUserContext();
 	const desc = user.getDescription();
 
@@ -35,7 +33,6 @@ function UserActionSheet({ visible, setVisible }: StatusActionsProps) {
 			emojiMap: user.getEmojiMap(),
 			domain: driver,
 			subdomain: acct?.server,
-			globalDb,
 			colorScheme: theme,
 		});
 		return reactNodes?.map((para) => {

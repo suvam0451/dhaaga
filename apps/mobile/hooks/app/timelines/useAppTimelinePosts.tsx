@@ -1,6 +1,5 @@
 import {
 	StatusInterface,
-	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import {
@@ -9,31 +8,22 @@ import {
 	SetStateAction,
 	useCallback,
 	useContext,
-	useEffect,
-	useMemo,
 	useReducer,
 	useRef,
 } from 'react';
 import ActivityPubService from '../../../services/activitypub.service';
 import * as Haptics from 'expo-haptics';
 import { OpenAiService } from '../../../services/openai.service';
-import GlobalMmkvCacheService from '../../../services/globalMmkvCache.services';
-import { useGlobalMmkvContext } from '../../../states/useGlobalMMkvCache';
 import postArrayReducer, {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
 } from '../../../components/common/timeline/api/postArrayReducer';
-import FlashListService, {
-	FlashListType_Post,
-} from '../../../services/flashlist.service';
-import { ActivityPubStatusAppDtoType } from '../../../services/approto/app-status-dto.service';
+import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../services/app-status-dto.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 type Type = {
-	data: ActivityPubStatusAppDtoType[];
-	emojiCache: InstanceApi_CustomEmojiDTO[];
-	listItems: FlashListType_Post[];
+	data: ActivityPubStatusAppDtoType_DEPRECATED[];
 	addPosts: (items: StatusInterface[]) => void;
 	clear: () => void;
 	/**
@@ -63,7 +53,6 @@ type Type = {
 
 const defaultValue: Type = {
 	data: [],
-	listItems: [],
 	addPosts: () => {},
 	clear: () => {},
 	getBookmarkState: () => {},
@@ -72,7 +61,6 @@ const defaultValue: Type = {
 	explain: () => {},
 	boost: () => {},
 	count: 0,
-	emojiCache: [],
 	getPostListReducer: function (): TimelineDataReducerFunction {
 		throw new Error('Function not implemented.');
 	},
@@ -108,22 +96,6 @@ function WithAppTimelineDataContext({ children }: Props) {
 
 	// lists
 	const [Posts, postListReducer] = useReducer(postArrayReducer, []);
-
-	const EmojiCache = useRef<InstanceApi_CustomEmojiDTO[]>([]);
-	const { globalDb } = useGlobalMmkvContext();
-
-	useEffect(() => {
-		const res = GlobalMmkvCacheService.getEmojiCacheForInstance(
-			globalDb,
-			acct?.server,
-		);
-		EmojiCache.current = res ? res.data : [];
-	}, [acct?.server]);
-
-	const FlashListItems = useMemo(() => {
-		return FlashListService.posts(Posts);
-	}, [Posts]);
-
 	const Seen = useRef(new Set<string>());
 
 	const clear = useCallback(() => {
@@ -350,7 +322,6 @@ function WithAppTimelineDataContext({ children }: Props) {
 		<AppTimelineDataContext.Provider
 			value={{
 				data: Posts,
-				listItems: FlashListItems as any[],
 				count: Posts.length,
 				addPosts,
 				clear,
@@ -358,7 +329,6 @@ function WithAppTimelineDataContext({ children }: Props) {
 				getBookmarkState,
 				explain,
 				toggleLike,
-				emojiCache: EmojiCache.current,
 				boost,
 
 				// function getters

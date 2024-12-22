@@ -6,7 +6,6 @@ import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { useEffect } from 'react';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { ScrollView, View } from 'react-native';
-import CryptoService from '../../../services/crypto.service';
 import ChatroomPreview from './fragments/dm/ChatroomPreviewType';
 import { Text } from '@rneui/themed';
 import { Divider } from '@rneui/base';
@@ -73,12 +72,12 @@ function WithApi() {
 				),
 			].sort((a, b) => a.localeCompare(b));
 			// User is also a participant
-			const myId = me.getId();
+			const myId = me?.id;
 			if (!participantIds.includes(myId)) {
 				participantIds.push(myId);
 				item.accounts.push(me);
 			}
-			const hash = await CryptoService.hashUserList(participantIds);
+			// const hash = await CryptoService.hashUserList(participantIds);
 			// ChatroomService.upsertConversation(db, {
 			// 	me,
 			// 	hash,

@@ -1,9 +1,9 @@
 import { produce } from 'immer';
-import GlobalMmkvCacheService from '../../../../services/globalMmkvCache.services';
 import {
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
+import AccountSessionManager from '../../../../services/session/account-session.service';
 
 export type Emoji = {
 	shortCode: string;
@@ -53,11 +53,8 @@ function emojiPickerReducer(
 		case EMOJI_PICKER_REDUCER_ACTION.INIT: {
 			const _domain = action.payload.domain;
 			const _subdomain = action.payload.subdomain;
-			const _globalDb = action.payload.globalDb;
-			const emojis = GlobalMmkvCacheService.getEmojiCacheForInstance(
-				_globalDb,
-				_subdomain,
-			);
+			const _acctManager: AccountSessionManager = action.payload.acctManager;
+			const emojis = _acctManager.serverReactionCache;
 
 			if (!emojis) {
 				console.log('[INFO]: no emojis available for', _subdomain);
@@ -69,7 +66,7 @@ function emojiPickerReducer(
 				switch (_domain) {
 					case KNOWN_SOFTWARE.PLEROMA:
 					case KNOWN_SOFTWARE.AKKOMA: {
-						for (const emoji of emojis.data) {
+						for (const emoji of emojis) {
 							if (
 								emoji.tags !== undefined &&
 								emoji.tags !== null &&
@@ -94,7 +91,7 @@ function emojiPickerReducer(
 						break;
 					}
 					default: {
-						for (const emoji of emojis.data) {
+						for (const emoji of emojis) {
 							if (draft.tagEmojiMap.has(emoji.category)) {
 								draft.tagEmojiMap.get(emoji.category).push(emoji);
 							} else {

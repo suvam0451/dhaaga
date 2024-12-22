@@ -8,22 +8,15 @@ import { useShallow } from 'zustand/react/shallow';
  * various methods
  */
 function useAppCustomEmoji() {
-	const { driver, acct, mmkv } = useGlobalState(
+	const { driver, acct } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
 			acct: o.acct,
-			mmkv: o.mmkv,
 		})),
 	);
 
-	const find = useCallback((id: string, remoteSubdomain?: string) => {
-		// return EmojiService.find({
-		// 	db,
-		// 	globalDb,
-		// 	subdomain: remoteSubdomain || subdomain,
-		// 	domain,
-		// 	id,
-		// });
+	const find = useCallback((id: string, remoteSubdomain?: string): string => {
+		return '';
 	}, []);
 
 	return { find };

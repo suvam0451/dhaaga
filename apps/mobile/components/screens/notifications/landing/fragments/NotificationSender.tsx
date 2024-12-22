@@ -1,10 +1,9 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import {
 	ActivitypubHelper,
 	DhaagaJsNotificationType,
-	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';
 import { APP_FONT } from '../../../../../styles/AppTheme';
@@ -15,14 +14,16 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import useGlobalState from '../../../../../states/_global';
+import useGlobalState, {
+	APP_BOTTOM_SHEET_ENUM,
+} from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppIcon } from '../../../../lib/Icon';
+import { DatetimeUtil } from '../../../../../utils/datetime.utils';
+import { appDimensions } from '../../../../../styles/dimensions';
+import { AppUserObject } from '../../../../../types/app-user.types';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -32,9 +33,40 @@ type Props = {
 	id: string;
 	extraData?: string;
 	remoteSubdomain?: string;
+	createdAt: Date | string;
 };
 
 const NOTIFICATION_TYPE_ICON_SIZE = 15;
+
+function textContent(type: DhaagaJsNotificationType) {
+	switch (type) {
+		case DhaagaJsNotificationType.FAVOURITE: {
+			return 'Liked your post';
+		}
+		case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
+			return 'Accepted your follow request';
+		}
+		case DhaagaJsNotificationType.FOLLOW: {
+			return 'Followed You';
+		}
+		case DhaagaJsNotificationType.REBLOG:
+		case DhaagaJsNotificationType.RENOTE: {
+			return 'Boosted your post';
+		}
+		case DhaagaJsNotificationType.REACTION: {
+			return 'Reacted to your post';
+		}
+		case DhaagaJsNotificationType.STATUS: {
+			return 'Posted';
+		}
+		case DhaagaJsNotificationType.REPLY: {
+			return 'Replied to your post';
+		}
+		case DhaagaJsNotificationType.MENTION: {
+			return 'Mentioned you in a post';
+		}
+	}
+}
 
 /**
  * Pure Component
@@ -42,12 +74,18 @@ const NOTIFICATION_TYPE_ICON_SIZE = 15;
 export const NotificationSender = memo(
 	({
 		type,
-		handle,
 		displayName,
 		avatarUrl,
 		extraData,
 		remoteSubdomain,
+		createdAt,
 	}: Props) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
+
 		const { find } = useAppCustomEmoji();
 		const { Icon, bg } = useMemo(() => {
 			switch (type) {
@@ -109,10 +147,10 @@ export const NotificationSender = memo(
 					let data = extraData;
 					if (remoteEmojiRegex.test(extraData)) {
 						const match = remoteEmojiRegex.exec(extraData);
-						data = find(match[1], remoteSubdomain)?.url;
+						data = find(match[1], remoteSubdomain);
 					} else if (localEmojiRegex.test(extraData)) {
 						const match = localEmojiRegex.exec(extraData);
-						data = find(match[1], match[2])?.url;
+						data = find(match[1], match[2]);
 					}
 
 					if (!data) {
@@ -201,26 +239,57 @@ export const NotificationSender = memo(
 						{Icon}
 					</View>
 				</View>
-				<View style={{ marginLeft: 12 }}>
+				<View style={{ marginLeft: 12, flexGrow: 1 }}>
 					<Text
 						style={{
 							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							color: APP_FONT.MONTSERRAT_HEADER,
+							color: theme.secondary.a10,
 						}}
 						numberOfLines={1}
 					>
 						{displayName}
 					</Text>
-					<Text
-						style={{
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontSize: 12,
-						}}
-						numberOfLines={1}
+
+					<View
+						style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}
 					>
-						{handle}
-					</Text>
+						{/*<Text*/}
+						{/*	style={{*/}
+						{/*		fontFamily: APP_FONTS.INTER_400_REGULAR,*/}
+						{/*		color: theme.secondary.a40,*/}
+						{/*	}}*/}
+						{/*>*/}
+						{/*	{handle}*/}
+						{/*</Text>*/}
+						<Text
+							style={{
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+								color: theme.complementary.a0,
+								fontSize: 13,
+							}}
+						>
+							{textContent(type)}
+						</Text>
+						<Text
+							style={{
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+								color: theme.secondary.a40,
+								fontSize: 13,
+							}}
+						>
+							{' • '}
+							{DatetimeUtil.timeAgo(createdAt)}
+						</Text>
+					</View>
+				</View>
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						marginBottom: 'auto',
+					}}
+				>
+					<AppIcon id={'ellipsis-v'} color={theme.secondary.a40} size={20} />
 				</View>
 			</View>
 		);
@@ -228,8 +297,9 @@ export const NotificationSender = memo(
 );
 
 type InterfaceProps = {
-	acct: UserInterface;
+	acct: AppUserObject;
 	type: DhaagaJsNotificationType;
+	createdAt: Date | string;
 	extraData?: string;
 };
 
@@ -238,49 +308,54 @@ type InterfaceProps = {
  * object (online usage)
  */
 export const NotificationSenderInterface = memo(
-	({ acct, type, extraData }: InterfaceProps) => {
-		const { driver, acct: acctItem } = useGlobalState(
+	({ acct, type, extraData, createdAt }: InterfaceProps) => {
+		const {
+			driver,
+			acct: acctItem,
+			show,
+		} = useGlobalState(
 			useShallow((o) => ({
 				driver: o.driver,
 				acct: o.acct,
+				show: o.bottomSheet.show,
+				acctManager: o.acctManager,
+				theme: o.colorScheme,
 			})),
 		);
 
-		const id = acct?.getId();
+		const id = acct.id;
 
-		const acctUrl = acct?.getAccountUrl(acctItem?.server);
-		const displayName = acct?.getDisplayName();
-		const avatarUrl = acct?.getAvatarUrl();
+		const acctUrl = acct.handle;
+		const displayName = acct.displayName;
+		const avatarUrl = acct.avatarUrl;
 
 		const handle = useMemo(() => {
 			return ActivitypubHelper.getHandle(acctUrl, acctItem?.server);
 		}, [acctUrl]);
-
-		const { setType, updateRequestId, setVisible, UserRef, UserIdRef } =
-			useAppBottomSheet();
 
 		/**
 		 * NOTE: misskey acct objects do not
 		 * contain enough information to populate
 		 * the entire modal
 		 */
-		const onPress = useCallback(() => {
+		function onPress() {
 			if (driver === KNOWN_SOFTWARE.MASTODON) {
 				// forward existing ref
-				UserRef.current = acct;
-				UserIdRef.current = acct.getId();
+				// UserRef.current = acct;
+				// UserIdRef.current = acct.getId();
 			} else {
 				// request info be fetched
-				UserRef.current = null;
-				UserIdRef.current = acct.getId();
+				// UserRef.current = null;
+				// UserIdRef.current = acct.getId();
 			}
-			setType(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK);
-			setVisible(true);
-			updateRequestId();
-		}, [acct, driver, UserRef, UserIdRef, updateRequestId, setType]);
+			show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
+		}
 
 		return (
-			<TouchableOpacity onPress={onPress}>
+			<Pressable
+				onPress={onPress}
+				style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
+			>
 				<NotificationSender
 					id={id}
 					type={type}
@@ -288,8 +363,9 @@ export const NotificationSenderInterface = memo(
 					displayName={displayName}
 					avatarUrl={avatarUrl}
 					extraData={extraData}
+					createdAt={createdAt}
 				/>
-			</TouchableOpacity>
+			</Pressable>
 		);
 	},
 );

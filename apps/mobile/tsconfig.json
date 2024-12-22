@@ -9,7 +9,8 @@
     "moduleResolution": "NodeNext",
     "allowJs": true,
     "lib": [
-      "ESNext"
+      "ESNext",
+      "ES2015"
     ],
     "strictNullChecks": true
   },

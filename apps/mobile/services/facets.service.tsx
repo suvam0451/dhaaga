@@ -4,6 +4,8 @@ import MentionSegment from '../components/shared/mfm/MentionSegment';
 import LinkProcessor from '../components/common/link/LinkProcessor';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 
+import { APP_COLOR_PALETTE_EMPHASIS } from '../utils/theming.util';
+
 function toUtf8(input: string): Uint8Array {
 	const encoder = new TextEncoder();
 	return encoder.encode(input);
@@ -21,7 +23,7 @@ class FacetService {
 		{
 			fontFamily,
 			emphasis,
-		}: { fontFamily?: string; emphasis?: 'high' | 'medium' | 'low' },
+		}: { fontFamily?: string; emphasis?: APP_COLOR_PALETTE_EMPHASIS },
 	): JSX.Element[] {
 		if (!input) return [];
 

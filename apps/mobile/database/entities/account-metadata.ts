@@ -3,7 +3,7 @@ import { APP_DB } from '../repositories/_var';
 import { Result } from '../../utils/result';
 import { z } from 'zod';
 import { ExpoSqliteColumnDefinition } from '../utils/db-typings';
-import { RepoTemplate } from './_base.repo';
+import { DbErrorHandler, RepoTemplate } from './_base.repo';
 import { Account, AccountMetadata } from '../_schema';
 import { DataSource } from '../dataSource';
 
@@ -42,6 +42,7 @@ export enum ACCOUNT_METADATA_KEY {
 	ATPROTO_SESSION_OBJECT = 'atprotoSessionObject',
 }
 
+@DbErrorHandler()
 class Repo implements RepoTemplate<AccountMetadata> {
 	static getAllKeysForAccount(db: DataSource, accountId: number) {
 		return db.accountMetadata.find({
@@ -60,6 +61,7 @@ class Repo implements RepoTemplate<AccountMetadata> {
 				key,
 			});
 		} catch (e) {
+			console.log('[WARN]: failed to get account metadata', e);
 			return null;
 		}
 	}

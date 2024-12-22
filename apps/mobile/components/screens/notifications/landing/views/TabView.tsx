@@ -2,23 +2,21 @@ import { StyleSheet, View } from 'react-native';
 import { useRef, useState } from 'react';
 import PagerView from 'react-native-pager-view';
 import { SingleSelectAnimated } from '../../../../lib/SingleSelectAnimated';
-import NotificationViewSocial from './NotificationViewSocial';
-import NotificationViewChat from './NotificationViewChat';
-import NotificationViewUpdates from './NotificationViewUpdates';
-import NotificationViewOthers from './NotificationViewOthers';
+import MentionView from './MentionView';
+import ChatView from './ChatView';
+import UpdatesView from './UpdatesView';
+import SocialView from './SocialView';
 
 const renderScene = (index: number) => {
 	switch (index) {
 		case 0:
-			return <NotificationViewSocial />;
+			return <MentionView />;
 		case 1:
-			return <NotificationViewSocial />;
+			return <ChatView />;
 		case 2:
-			return <NotificationViewChat />;
+			return <SocialView />;
 		case 3:
-			return <NotificationViewUpdates />;
-		case 4:
-			return <NotificationViewOthers />;
+			return <UpdatesView />;
 		default:
 			return null;
 	}
@@ -62,24 +60,20 @@ export const TabView = () => {
 					setIndex={onChipSelect}
 					items={[
 						{
-							label: 'Replies',
-							id: 'reply',
-						},
-						{
-							label: 'Social',
-							id: 'social',
+							label: 'Mentions',
+							id: 'mentions',
 						},
 						{
 							label: 'Chat',
+							id: 'social',
+						},
+						{
+							label: 'Social',
 							id: 'chat',
 						},
 						{
 							label: 'Updates',
 							id: 'updates',
-						},
-						{
-							label: 'Misc',
-							id: 'misc',
 						},
 					]}
 					justify={'space-between'}

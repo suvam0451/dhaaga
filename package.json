@@ -10,7 +10,8 @@
     "dev:web": "yarn workspace @dhaaga/web dev",
     "build:mastodon": "yarn --cwd ./packages/shared-provider-mastodon build",
     "build:dhaagajs": "yarn --cwd ./packages/shared-abstraction-activitypub build",
-    "build": "yarn build:mastodon && yarn build:dhaagajs"
+    "build:orm": "yarn --cwd ./packages/orm build",
+    "build": "yarn build:mastodon && yarn build:dhaagajs && yarn build:orm"
   },
   "workspaces": [
     "packages/**",

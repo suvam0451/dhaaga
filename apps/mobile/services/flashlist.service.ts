@@ -1,4 +1,5 @@
-import { ActivityPubStatusAppDtoType } from './approto/app-status-dto.service';
+import { AppPostObject } from '../types/app-post.types';
+import { AppUserObject } from '../types/app-user.types';
 
 /**
  * Convert DTO/Interface arrays
@@ -6,7 +7,7 @@ import { ActivityPubStatusAppDtoType } from './approto/app-status-dto.service';
  * cell types
  */
 class FlashListService {
-	static posts(input: ActivityPubStatusAppDtoType[]): FlashListType_Post[] {
+	static posts(input: AppPostObject[]): FlashListType_Post[] {
 		return input.map((o) => {
 			const HAS_MEDIA = o.content.media.length > 0;
 			const IS_SENSITIVE = o.meta.sensitive;
@@ -36,7 +37,7 @@ class FlashListService {
 		});
 	}
 
-	static users(input: ActivityPubAppUserDtoType[]) {}
+	static users(input: AppUserObject[]) {}
 }
 
 enum FLC_Post {
@@ -48,21 +49,21 @@ enum FLC_Post {
 interface FLC_Post_TextOnly {
 	type: FLC_Post.TextOnly;
 	props: {
-		dto: ActivityPubStatusAppDtoType;
+		dto: AppPostObject;
 	};
 }
 
 interface FLC_Post_WithMedia {
 	type: FLC_Post.WithMedia;
 	props: {
-		dto: ActivityPubStatusAppDtoType;
+		dto: AppPostObject;
 	};
 }
 
 interface FLC_Post_WithSpoiler {
 	type: FLC_Post.WithSpoiler;
 	props: {
-		dto: ActivityPubStatusAppDtoType;
+		dto: AppPostObject;
 	};
 }
 

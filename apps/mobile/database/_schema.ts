@@ -1,36 +1,10 @@
 import { BaseEntity, Entity } from '@dhaaga/orm';
+import { APP_PINNED_OBJECT_TYPE } from '../services/driver.service';
 
 export const DATABASE_NAME = 'app.db';
 
-type BaseEntityMinimalType = {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-};
-
-@Entity('appSetting')
-export class AppSetting extends BaseEntity<AppSetting> {
-	id: number;
-	key: string;
-	value: string;
-	type: string;
-	createdAt: Date;
-	updatedAt: Date;
-}
-
-@Entity('profileSetting')
-export class ProfileSetting extends BaseEntity<ProfileSetting> {
-	id: number;
-	key: string;
-	value: string;
-	type: string;
-	createdAt: Date;
-	updatedAt: Date;
-}
-
 @Entity('account')
 export class Account extends BaseEntity<Account> {
-	id: number;
 	uuid: string;
 	identifier: string;
 	driver: string;
@@ -40,21 +14,9 @@ export class Account extends BaseEntity<Account> {
 	displayName: string | null;
 	selected: boolean;
 	active: boolean;
-	createdAt: Date;
-	updatedAt: Date;
 
 	// inverse joins
 	metadata: AccountMetadata[];
-}
-
-@Entity('migrations')
-export class Migration extends BaseEntity<Migration> {
-	id: number;
-	userVersion: string;
-	versionCode: string;
-	name: string;
-	createdAt: Date;
-	updatedAt: Date;
 }
 
 /**
@@ -66,49 +28,220 @@ export class Migration extends BaseEntity<Migration> {
  */
 @Entity('accountMetadata')
 export class AccountMetadata extends BaseEntity<AccountMetadata> {
-	id: number;
 	key: string;
 	value: string;
 	type: string;
 	active: boolean;
 	accountId: number | null;
-	createdAt: Date;
-	updatedAt: Date;
 
 	// joins
 	account?: Account;
 }
 
-@Entity('accountProfile')
-export class AccountProfile extends BaseEntity<AccountProfile> {
-	id: number;
+@Entity('profile')
+export class Profile extends BaseEntity<Profile> {
 	uuid: string;
 	name: string;
 	selected: boolean;
 	active: boolean;
 	accountId: number | null;
-	createdAt: Date;
-	updatedAt: Date;
 
 	// joins
 	account?: Account;
+}
+
+@Entity('appSetting')
+export class AppSetting extends BaseEntity<AppSetting> {
+	key: string;
+	value: string;
+	type: string;
+}
+
+@Entity('profileSetting')
+export class ProfileSetting extends BaseEntity<ProfileSetting> {
+	key: string;
+	value: string;
+	type: string;
+}
+
+@Entity('migrations')
+export class Migration extends BaseEntity<Migration> {
+	userVersion: string;
+	versionCode: string;
+	name: string;
 }
 
 /**
  * For the intent of pinning and search history
  *
  */
-@Entity('profileKnownServer')
-export class ProfileKnownServer extends BaseEntity<ProfileKnownServer> {
-	id: number;
+@Entity('knownServer')
+export class KnownServer extends BaseEntity<KnownServer> {
 	uuid: string;
-	url: string;
+	server: string;
 	driver: string;
 	profileId: number | null;
-	createdAt: Date;
-	updatedAt: Date;
 
-	profile?: AccountProfile;
+	// joins
+	profile?: Profile;
+}
+
+@Entity('profilePinnedTimeline')
+export class ProfilePinnedTimeline extends BaseEntity<ProfilePinnedTimeline> {
+	uuid: string;
+	server: string;
+	category: APP_PINNED_OBJECT_TYPE;
+	driver: string;
+
+	// pin meta
+	required: boolean; // some pins can be hidden, but not removed.
+	show: boolean;
+	itemOrder: number; // determines order
+	page: number; // not used
+
+	/**
+	 * alternate name for the pinned item
+	 *
+	 * Conditions = { required: false }
+	 * require
+	 */
+	alias: string | null;
+
+	/**
+	 * The stored previous min/max ids
+	 */
+	minId: string | null;
+	maxId: string | null;
+	/**
+	 * replaces the min/max ids on successful timeline exit
+	 */
+	minIdNext: string | null;
+	maxIdNext: string | null;
+
+	minIdDraft: string | null;
+	maxIdDraft: string | null;
+
+	unseenCount: number;
+	/**
+	 * Fallback, when the draft/next
+	 * set was not written properly
+	 * due to unexpected exists
+	 */
+	lastCommitMaxId: string | null;
+
+	// joins
+	profile?: Profile;
+
+	profileId: number | null;
+	active: boolean;
+}
+
+@Entity('profilePinnedUser')
+export class ProfilePinnedUser extends BaseEntity<ProfilePinnedUser> {
+	uuid: string;
+	server: string;
+	category: APP_PINNED_OBJECT_TYPE;
+	driver: string;
+
+	// pin meta
+	required: boolean; // some pins can be hidden, but not removed.
+	show: boolean;
+	itemOrder: number; // determines order
+	page: number; // not used
+
+	/**
+	 * alternate name for the pinned item
+	 *
+	 * Conditions = { required: false }
+	 * require
+	 */
+	alias: string | null;
+
+	/**
+	 * The stored previous min/max ids
+	 */
+	minId: string | null;
+	maxId: string | null;
+	/**
+	 * replaces the min/max ids on successful timeline exit
+	 */
+	minIdNext: string | null;
+	maxIdNext: string | null;
+
+	minIdDraft: string | null;
+	maxIdDraft: string | null;
+
+	unseenCount: number;
+	/**
+	 * Fallback, when the draft/next
+	 * set was not written properly
+	 * due to unexpected exists
+	 */
+	lastCommitMaxId: string | null;
+
+	// joins
+	profile?: Profile;
+
+	// these columns are extra on top
+	identifier: string;
+	username: string;
+	avatarUrl: string | null;
+	displayName: string | null;
+	profileId: number | null;
+	active: boolean;
+}
+
+@Entity('profilePinnedTag')
+export class ProfilePinnedTag extends BaseEntity<ProfilePinnedTag> {
+	uuid: string;
+	server: string;
+	category: APP_PINNED_OBJECT_TYPE;
+	driver: string;
+
+	// pin meta
+	required: boolean; // some pins can be hidden, but not removed.
+	show: boolean;
+	itemOrder: number; // determines order
+	page: number; // not used
+
+	/**
+	 * alternate name for the pinned item
+	 *
+	 * Conditions = { required: false }
+	 * require
+	 */
+	alias: string | null;
+
+	/**
+	 * The stored previous min/max ids
+	 */
+	minId: string | null;
+	maxId: string | null;
+	/**
+	 * replaces the min/max ids on successful timeline exit
+	 */
+	minIdNext: string | null;
+	maxIdNext: string | null;
+
+	minIdDraft: string | null;
+	maxIdDraft: string | null;
+
+	unseenCount: number;
+	/**
+	 * Fallback, when the draft/next
+	 * set was not written properly
+	 * due to unexpected exists
+	 */
+	lastCommitMaxId: string | null;
+
+	// joins
+	profile?: Profile;
+
+	// these columns are extra on top
+	identifier: string;
+	name: string;
+	profileId: number | null;
+	active: boolean;
 }
 
 /**
@@ -125,21 +258,17 @@ export class ProfileKnownServer extends BaseEntity<ProfileKnownServer> {
  * 	- nodeinfoLastAttemptAt
  * 	- customEmojisLastFetchedAt
  * 	- customEmojisLastAttemptAt
- *
  */
-@Entity('profileKnownServerMetadata')
-export class ProfileKnownServerMetadata extends BaseEntity<ProfileKnownServerMetadata> {
-	id: number;
+@Entity('knownServerMetadata')
+export class KnownServerMetadata extends BaseEntity<KnownServerMetadata> {
 	key: string;
 	value: string;
 	type: string;
 	active: boolean;
 	knownServerId: number | null;
-	createdAt: Date;
-	updatedAt: Date;
 
 	// joins
-	knownServer?: ProfileKnownServer;
+	knownServer?: KnownServer;
 }
 
 // serverEmoji
@@ -151,18 +280,18 @@ export type ServerEmoji = {
 	timesUsed: number;
 	serverId: number; //fk
 	category?: string; // default=N/A
-} & BaseEntityMinimalType;
+};
 
 // serverEmojiAlias
 export type ServerEmojiAlias = {
 	serverEmojiId: number; // fk (composite key)
 	alias: string; // (composite key)
-} & BaseEntityMinimalType;
+};
 
 // hashtag
 export type Hashtag = {
 	name: string; // unique
-} & BaseEntityMinimalType;
+};
 
 // accountHashtag
 export type AccountHashtag = {
@@ -172,7 +301,7 @@ export type AccountHashtag = {
 	accountId: number | null;
 	account?: Account;
 	hashtag?: Hashtag;
-} & BaseEntityMinimalType;
+};
 
 export type PostMediaAttachment = {
 	altText?: string;
@@ -184,7 +313,7 @@ export type PostMediaAttachment = {
 	height?: number;
 	width?: number;
 	postId: number; // fk
-} & BaseEntityMinimalType;
+};
 
 // post
 export type Post = {
@@ -209,10 +338,10 @@ export type Post = {
 
 	postCreatedAt: Date;
 	postEditedAt: Date;
-} & BaseEntityMinimalType;
+};
 
 export type Setting = {
 	key: string;
 	value: string;
 	type: string;
-} & BaseEntityMinimalType;
+};

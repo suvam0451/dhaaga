@@ -13,6 +13,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 type SearchResults = {
 	following: boolean;
@@ -65,7 +66,7 @@ function TimelineWidgetHashtagOptions(props: Props) {
 				<View style={{ flex: 1 }}>
 					<Text
 						style={{
-							fontFamily: 'Montserrat-Bold',
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 							color: APP_FONT.MONTSERRAT_BODY,
 							textAlign: 'center',
 						}}
@@ -102,7 +103,7 @@ function TimelineWidgetHashtagOptions(props: Props) {
 					/>
 					<Text
 						style={{
-							fontFamily: 'Montserrat-Bold',
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 							color: APP_FONT.MONTSERRAT_BODY,
 						}}
 					>

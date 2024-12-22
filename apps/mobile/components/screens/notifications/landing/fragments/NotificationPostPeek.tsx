@@ -1,19 +1,29 @@
-import {
-	StatusInterface,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
-import { memo } from 'react';
-import { styles } from '../segments/_common';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Fragment, memo } from 'react';
 import useMfm from '../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import useAppNavigator from '../../../../../states/useAppNavigator';
+import {
+	AppPostObject,
+	AppActivityPubMediaType,
+} from '../../../../../types/app-post.types';
+import NotificationMediaThumbs from '../../../../common/media/NotificationMediaThumbs';
+import { appDimensions } from '../../../../../styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
+import { AppUserObject } from '../../../../../types/app-user.types';
 
 type Props = {
-	acct: UserInterface;
-	post: StatusInterface;
+	acct: AppUserObject;
+	post: AppPostObject;
 };
+
+type MediaGalleryProps = {
+	items: AppActivityPubMediaType[];
+};
+
+function PostMediaGallery({ items }: MediaGalleryProps) {
+	if (items.length === 0) return <View />;
+}
 
 /**
  * Shows a preview of the status being liked/boosted,
@@ -21,29 +31,38 @@ type Props = {
  * - upto 3 lines for text-only posts
  */
 export const NotificationPostPeek = memo(({ acct, post }: Props) => {
+	let _post = post;
+	if (post.boostedFrom) {
+		_post = post.boostedFrom;
+	}
+
 	const { content } = useMfm({
-		content: post.getContent(),
-		remoteSubdomain: acct.getInstanceUrl(),
-		emojiMap: acct.getEmojiMap(),
-		deps: [post.getContent()],
+		content: _post.content.raw,
+		remoteSubdomain: acct.instance,
+		emojiMap: acct.calculated.emojis,
+		deps: [_post.content.raw],
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 
 	const { toPost } = useAppNavigator();
 
 	function onPress() {
-		toPost(post.getId());
+		toPost(post.id);
 	}
 
 	return (
-		<Pressable onPress={onPress}>
-			<LinearGradient
-				colors={['rgba(0,0,0,0.8)', 'transparent']}
-				style={styles.gradientContainerTextOnlyPost}
+		<Fragment>
+			<NotificationMediaThumbs
+				items={_post?.content?.media}
+				maxH={_post?.calculated?.mediaContainerHeight}
+			/>
+			<View
+				style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
 			>
-				{content}
-			</LinearGradient>
-		</Pressable>
+				<Pressable onPress={onPress}>{content}</Pressable>
+			</View>
+		</Fragment>
 	);
 });

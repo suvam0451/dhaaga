@@ -2,8 +2,6 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
-import { useFonts } from '@expo-google-fonts/montserrat';
-import appFonts from '../styles/AppFonts';
 
 /**
  * Responsible for ensuring all
@@ -22,7 +20,6 @@ function useAppSession() {
 	const [ProfileReady, setProfileReady] = useState(false);
 
 	const db = useSQLiteContext();
-	const [fontsLoaded, fontError] = useFonts(appFonts);
 
 	const {
 		appInitialize,
@@ -73,10 +70,8 @@ function useAppSession() {
 			});
 	}, [profileManager]);
 
-	const _appReady = fontsLoaded && !fontError && AppReady;
-
 	return {
-		appReady: _appReady,
+		appReady: AppReady,
 		accountReady: AccountReady,
 		profileReady: ProfileReady,
 	};

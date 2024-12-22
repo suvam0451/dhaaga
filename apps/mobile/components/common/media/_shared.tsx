@@ -9,7 +9,7 @@ import { Dialog } from '@rneui/themed';
 import { Text } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import useImageAspectRatio from '../../../hooks/app/useImageAspectRatio';
+import useGalleryDims from '../../../hooks/app/useGalleryDims';
 
 type Props = {
 	url?: string;
@@ -30,7 +30,7 @@ export const AppImageComponent = memo(function Foo({
 	 * #1: The ImageHeight should be capped to the height of container
 	 * #2: overflow: "hidden" should not be needed
 	 */
-	const { ImageHeight, ImageWidth, onLayoutChanged } = useImageAspectRatio([
+	const { ImageHeight, ImageWidth, onLayoutChanged } = useGalleryDims([
 		{ url },
 	]);
 
@@ -51,7 +51,7 @@ export const AppImageComponent = memo(function Foo({
 				contentFit="fill"
 				style={{
 					// flex: 1,
-					borderRadius: 16,
+					borderRadius: 8,
 					opacity: 0.87,
 					width: ImageWidth,
 					height: ImageHeight,
@@ -143,12 +143,12 @@ export const AppVideoComponent = memo(function Foo({
 	});
 
 	useEffect(() => {
-		const subscription = player.addListener('playingChange', (isPlaying) => {
-			setIsPlaying(isPlaying);
-		});
+		// const subscription = player.addListener('playingChange', (isPlaying) => {
+		// 	setIsPlaying(isPlaying);
+		// });
 
 		return () => {
-			subscription.remove();
+			// subscription.remove();
 		};
 	}, [player]);
 

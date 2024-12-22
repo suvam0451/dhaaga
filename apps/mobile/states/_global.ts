@@ -1,15 +1,8 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { MMKV } from 'react-native-mmkv';
-import {
-	DEFAULT_THEME_PACK_OBJECT,
-	ThemePackType,
-} from '../assets/loaders/UseAppThemePackLoader';
-import {
-	APP_BUILT_IN_THEMES,
-	AppColorSchemeType,
-} from '../styles/BuiltinThemes';
-import { Account, AccountProfile } from '../database/_schema';
+import { ThemePackType } from '../assets/loaders/UseAppThemePackLoader';
+import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
+import { Account, Profile } from '../database/_schema';
 import {
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
@@ -26,23 +19,30 @@ import {
 import { TimelineFetchMode } from '../components/common/timeline/utils/timeline.types';
 import { Result } from '../utils/result';
 import { RandomUtil } from '../utils/random.utils';
-import { ActivityPubStatusAppDtoType } from '../services/approto/app-status-dto.service';
+import { ActivityPubStatusAppDtoType_DEPRECATED } from '../services/app-status-dto.service';
 import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
 import { DataSource } from '../database/dataSource';
 import AppUserService from '../services/approto/app-user-service';
-import { AppUser } from '../types/app-user.types';
-import ProfileSessionManager from '../services/profile-session.service';
-import { AccountProfileService } from '../database/entities/profile';
+import { AppUserObject } from '../types/app-user.types';
+import ProfileSessionManager from '../services/session/profile-session.service';
+import { ProfileService } from '../database/entities/profile';
+import AppSessionManager from '../services/session/app-session.service';
+import { AppColorSchemeType } from '../utils/theming.util';
+import AccountSessionManager from '../services/session/account-session.service';
+import { WritableDraft } from 'immer';
 
 type AppThemePack = {
 	id: string;
 	name: string;
 };
 
-export enum REACT_NATIVE_BOTTOM_SHEET_ENUM {
-	POST_MENU = 'PostMenu',
-	NA = 'N/A',
-}
+type AppModalStateBase = {
+	stateId: string;
+	visible: boolean;
+	show: (refresh?: boolean) => void;
+	hide: () => void;
+	refresh: () => void;
+};
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	APP_PROFILE = 'AppProfile',
@@ -62,6 +62,14 @@ export enum APP_BOTTOM_SHEET_ENUM {
 
 export enum APP_DIALOG_SHEET_ENUM {
 	DEFAULT = 'Default',
+}
+
+/**
+ * List of known modals
+ */
+export enum APP_KNOWN_MODAL {
+	IMAGE_INSPECT = 'imageInspectModal',
+	USER_PEEK = 'userPeekModal',
 }
 
 type AppDialogInstanceState = {
@@ -106,12 +114,12 @@ type AppBottomSheetState = {
 
 	// references
 	HandleRef: string;
-	ParentRef: ActivityPubStatusAppDtoType;
-	RootRef: ActivityPubStatusAppDtoType;
+	ParentRef: ActivityPubStatusAppDtoType_DEPRECATED;
+	RootRef: ActivityPubStatusAppDtoType_DEPRECATED;
 	textValue: string;
 	setTextValue(textValue: string): void;
-	postValue: ActivityPubStatusAppDtoType;
-	setPostValue: (obj: ActivityPubStatusAppDtoType) => void;
+	postValue: ActivityPubStatusAppDtoType_DEPRECATED;
+	setPostValue: (obj: ActivityPubStatusAppDtoType_DEPRECATED) => void;
 
 	PostIdRef: string;
 	UserRef: UserInterface;
@@ -125,12 +133,13 @@ type AppBottomSheetState = {
 
 type State = {
 	db: DataSource | null;
-	mmkv: MMKV; // currently active account
 	acct: Account | null;
-	profile: AccountProfile | null;
+	profile: Profile | null;
 
 	// managers
 	profileSessionManager: ProfileSessionManager | null;
+	appSession: AppSessionManager | null;
+	acctManager: AccountSessionManager | null;
 
 	/**
 	 * fetched account credentials
@@ -138,7 +147,7 @@ type State = {
 	 * compatible interface
 	 * */
 	driver: KNOWN_SOFTWARE;
-	me: AppUser | null;
+	me: AppUserObject | null;
 
 	// router used to make api requests
 	router: ActivityPubClient | null;
@@ -159,9 +168,48 @@ type State = {
 	packList: AppThemePack[];
 	activePack: ThemePackType;
 
+	// sheets
 	bottomSheet: AppBottomSheetState;
+
+	// modals
+	[APP_KNOWN_MODAL.IMAGE_INSPECT]: AppModalStateBase;
+	[APP_KNOWN_MODAL.USER_PEEK]: AppModalStateBase;
+
+	// dialogs (also a modal)
 	dialog: AppDialogState;
 };
+
+function ModalStateBlockGenerator(
+	set: (
+		nextStateOrUpdater:
+			| (State & Actions)
+			| Partial<State & Actions>
+			| ((state: WritableDraft<State & Actions>) => void),
+		shouldReplace?: false,
+	) => void,
+	modalType: APP_KNOWN_MODAL,
+) {
+	return {
+		stateId: RandomUtil.nanoId(),
+		visible: false,
+		hide: () => {
+			set((state) => {
+				state[modalType].visible = false;
+			});
+		},
+		show: (refresh?: boolean) => {
+			set((state) => {
+				state[modalType].visible = true;
+				if (refresh) state[modalType].stateId = RandomUtil.nanoId();
+			});
+		},
+		refresh: () => {
+			set((state) => {
+				state[modalType].stateId = RandomUtil.nanoId();
+			});
+		},
+	};
+}
 
 type Actions = {
 	selectAccount(acct: Account): void;
@@ -171,63 +219,7 @@ type Actions = {
 	appInitialize: (db: SQLiteDatabase) => void;
 	loadApp: () => void;
 	// loa/switch a profile
-	loadActiveProfile: (profile?: AccountProfile) => void;
-};
-
-const defaultValue: State & Actions = {
-	// database drivers
-	db: null,
-	mmkv: null,
-	router: null,
-
-	profileSessionManager: null,
-
-	// account data
-	driver: null,
-	acct: null,
-	profile: null,
-	me: null,
-
-	homepageType: TimelineFetchMode.IDLE,
-
-	// theme packs
-	packId: 'default',
-	packList: [],
-	getPacks: () => [],
-	setPack: () => {},
-	colorScheme: null,
-	setColorScheme: undefined,
-
-	appInitialize: undefined,
-	loadApp: undefined,
-	loadActiveProfile: undefined,
-	selectAccount: undefined,
-	setHomepageType: undefined,
-	activePack: DEFAULT_THEME_PACK_OBJECT,
-	bottomSheet: {
-		type: APP_BOTTOM_SHEET_ENUM.NA,
-		visible: false,
-		stateId: RandomUtil.nanoId(),
-		refresh: undefined,
-		setType: undefined,
-		show: undefined,
-		hide: undefined,
-		isAnimating: false,
-		HandleRef: undefined,
-		ParentRef: undefined,
-		RootRef: undefined,
-		textValue: undefined,
-		postValue: undefined,
-		setPostValue: undefined,
-		PostIdRef: undefined,
-		UserRef: undefined,
-		UserIdRef: undefined,
-		PostComposerTextSeedRef: undefined,
-		timelineDataPostListReducer: undefined,
-		setTimelineDataPostListReducer: undefined,
-		setTextValue: undefined,
-	},
-	dialog: undefined,
+	loadActiveProfile: (profile?: Profile) => void;
 };
 
 class GlobalStateService {
@@ -235,14 +227,20 @@ class GlobalStateService {
 		Result<{
 			acct: Account;
 			router: ActivityPubClient;
-			me: AppUser;
+			me: AppUserObject;
 		}>
 	> {
 		try {
 			const acct = AccountService.getSelected(db);
-			if (!acct) return { type: 'invalid' };
-			const profile = AccountProfileService.getActiveProfile(db, acct);
-			if (!profile) return { type: 'invalid' };
+			if (!acct) {
+				console.log('[WARN]: no account was found');
+				return { type: 'invalid' };
+			}
+			const profile = ProfileService.getActiveProfile(db, acct);
+			if (!profile) {
+				console.log('[WARN]: no profile was found');
+				return { type: 'invalid' };
+			}
 
 			const token = AccountMetadataService.getKeyValueForAccountSync(
 				db,
@@ -268,12 +266,11 @@ class GlobalStateService {
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
 			const { data, error } = await _router.me.getMe();
-			const obj: AppUser = AppUserService.exportRaw(
+			const obj: AppUserObject = AppUserService.exportRaw(
 				data,
 				acct.driver,
 				acct.server,
 			);
-			// EmojiService.refresh(db, globalDb, acct.server, true);
 			return { type: 'success', value: { acct, router: _router, me: obj } };
 		} catch (e) {
 			console.log(e);
@@ -284,12 +281,30 @@ class GlobalStateService {
 
 const useGlobalState = create<State & Actions>()(
 	immer((set, get) => ({
-		...defaultValue,
+		db: null,
+		acct: null,
+		profile: null,
+		profileSessionManager: null,
+		appSession: null,
+		acctManager: null,
+		driver: KNOWN_SOFTWARE.UNKNOWN,
+		router: null,
+		me: null,
+		activePack: null,
+		homepageType: null,
+		packId: null,
+		imageInspectModal: ModalStateBlockGenerator(
+			set,
+			APP_KNOWN_MODAL.IMAGE_INSPECT,
+		),
+		userPeekModal: ModalStateBlockGenerator(set, APP_KNOWN_MODAL.USER_PEEK),
+		packList: null,
 		theme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
-				state.db = new DataSource(db);
-				state.mmkv = new MMKV({ id: `default` });
+				const _db = new DataSource(db);
+				state.db = _db;
+				state.appSession = new AppSessionManager(_db);
 			});
 		},
 		getPacks: () => [],
@@ -297,14 +312,20 @@ const useGlobalState = create<State & Actions>()(
 			set({ packId });
 		},
 		selectAccount: async (selection: Account) => {
-			await AccountService.select(get().db, selection);
+			AccountService.select(get().db, selection);
 		},
 		loadActiveProfile: async () => {
-			const x = new ProfileSessionManager(get().db, get().mmkv);
+			// load default profile/account
+			const x = new ProfileSessionManager(get().db);
+			if (!x.acct || !x.profile) return;
+
 			set((state) => {
-				state.profileSessionManager = x;
+				// reset reactive pointers
 				state.acct = x.acct;
 				state.profile = x.profile;
+				// reset session managers
+				state.profileSessionManager = x;
+				state.acctManager = new AccountSessionManager(get().db, x.acct);
 			});
 		},
 		loadApp: async () => {
@@ -315,6 +336,10 @@ const useGlobalState = create<State & Actions>()(
 				if (restoreResult.type === 'success') {
 					state.me = restoreResult.value.me;
 					state.acct = restoreResult.value.acct;
+					state.acctManager = new AccountSessionManager(
+						get().db,
+						restoreResult.value.acct,
+					);
 					state.router = restoreResult.value.router;
 					state.driver = restoreResult.value.acct.driver as KNOWN_SOFTWARE;
 				} else {
@@ -363,7 +388,7 @@ const useGlobalState = create<State & Actions>()(
 				});
 			},
 			postValue: null,
-			setPostValue: (obj: ActivityPubStatusAppDtoType) => {
+			setPostValue: (obj: ActivityPubStatusAppDtoType_DEPRECATED) => {
 				set((state) => {
 					state.bottomSheet.postValue = obj;
 				});

@@ -5,7 +5,7 @@ import WithAppStatusItemContext, {
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
-import { View, TouchableOpacity } from 'react-native';
+import { Pressable, View } from 'react-native';
 import ExplainOutput from '../../explanation/ExplainOutput';
 import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
@@ -19,6 +19,9 @@ import useGlobalState, {
 } from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { appDimensions } from '../../../../styles/dimensions';
+import { Text } from 'react-native';
 
 /**
  * Mostly used to remove the border
@@ -28,15 +31,17 @@ type StatusCoreProps = {
 	hasParent?: boolean;
 	hasBoost?: boolean;
 	isPreview?: boolean;
+	isPin?: boolean;
 };
 
 function StatusController() {
 	const { dto } = useAppStatusItem();
-	const { show, setPostValue, setReducer } = useGlobalState(
+	const { show, setPostValue, setReducer, theme } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,
 			setPostValue: o.bottomSheet.setPostValue,
 			setReducer: o.bottomSheet.setTimelineDataPostListReducer,
+			theme: o.colorScheme,
 		})),
 	);
 	const { getPostListReducer } = useAppTimelinePosts();
@@ -51,139 +56,179 @@ function StatusController() {
 		setPostValue(STATUS_DTO);
 		setReducer(getPostListReducer());
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
-		console.log('saved state');
 	}
 
 	return (
 		<View
 			style={{
-				flexShrink: 1,
-				maxWidth: 256,
 				justifyContent: 'flex-start',
+				flexDirection: 'row',
+				alignItems: 'flex-start',
+				flexShrink: 1,
+				height: '100%',
 			}}
 		>
-			<TouchableOpacity onPress={onMoreOptionsPress} style={{ paddingTop: 4 }}>
-				<AppIcon id={'ellipsis-v'} emphasis={'medium'} />
-			</TouchableOpacity>
+			<Pressable
+				style={{
+					height: '100%',
+					paddingTop: 4,
+					paddingLeft: 16,
+				}}
+				onPress={onMoreOptionsPress}
+			>
+				<AppIcon
+					id={'ellipsis-v'}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+					size={20}
+				/>
+			</Pressable>
 		</View>
 	);
 }
 
-const StatusCore = memo(
-	({ hasParent, hasBoost, isPreview }: StatusCoreProps) => {
-		const { dto } = useAppStatusItem();
-		const { toPost } = useAppNavigator();
-		const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
+const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
+	const { dto } = useAppStatusItem();
+	const { toPost } = useAppNavigator();
+	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
-		const STATUS_DTO = dto.meta.isBoost
-			? dto.content.raw
-				? dto
-				: dto.boostedFrom
-			: dto;
+	const STATUS_DTO = dto.meta.isBoost
+		? dto.content.raw
+			? dto
+			: dto.boostedFrom
+		: dto;
 
-		const IS_QUOTE_BOOST = dto?.meta?.isBoost && dto?.content?.raw;
+	const IS_QUOTE_BOOST = dto?.meta?.isBoost && dto?.content?.raw;
 
-		const IS_REPLY_OR_BOOST =
-			STATUS_DTO.meta.isReply ||
-			(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
+	const { content: PostContent, isLoaded } = useMfm({
+		content: STATUS_DTO.content.raw,
+		remoteSubdomain: STATUS_DTO.postedBy.instance,
+		emojiMap: STATUS_DTO.calculated.emojis,
+		deps: [dto],
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+	});
 
-		const { content: PostContent, isLoaded } = useMfm({
-			content: STATUS_DTO.content.raw,
-			remoteSubdomain: STATUS_DTO.postedBy.instance,
-			emojiMap: STATUS_DTO.calculated.emojis,
-			deps: [dto],
-			emphasis: 'high',
-			fontFamily: APP_FONTS.INTER_400_REGULAR,
-		});
+	const isSensitive = STATUS_DTO.meta.sensitive;
+	const spoilerText = STATUS_DTO.meta.cw;
 
-		const isSensitive = STATUS_DTO.meta.sensitive;
-		const spoilerText = STATUS_DTO.meta.cw;
+	const { theme, showInspector, appSession } = useGlobalState(
+		useShallow((o) => ({
+			theme: o.colorScheme,
+			showInspector: o.imageInspectModal.show,
+			appSession: o.appSession,
+		})),
+	);
 
-		let paddingTop = IS_REPLY_OR_BOOST ? 4 : 4;
-		if (hasParent || hasBoost) paddingTop = 0;
-		if (!hasParent && hasBoost) paddingTop = 6;
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+	function onGalleryInspect() {
+		appSession.cache.setPostForMediaInspect(dto as any);
+		showInspector();
+	}
 
-		return useMemo(() => {
-			if (!isLoaded) return <StatusItemSkeleton />;
+	return useMemo(() => {
+		if (!isLoaded) return <StatusItemSkeleton />;
 
-			return (
-				<Fragment>
-					<TouchableOpacity
-						delayPressIn={150}
-						onPress={() => {
-							toPost(STATUS_DTO.id);
+		return (
+			<Fragment>
+				{isPin && (
+					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+						<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
+						<Text
+							style={{
+								color: theme.complementary.a0,
+								marginLeft: 6,
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							}}
+						>
+							Pinned
+						</Text>
+					</View>
+				)}
+				<View
+					style={{
+						flexDirection: 'row',
+						marginBottom: appDimensions.timelines.sectionBottomMargin,
+					}}
+				>
+					<PostCreatedBy
+						dto={dto}
+						style={{
+							paddingBottom: 4,
+							flex: 1,
 						}}
-					>
-						<View>
-							<View style={{ flexDirection: 'row' }}>
-								<PostCreatedBy
-									dto={dto}
-									style={{ paddingBottom: 6, flex: 1, overflowX: 'hidden' }}
-								/>
-								<StatusController />
-							</View>
+					/>
+					<StatusController />
+				</View>
 
-							{isSensitive && (
-								<StatusCw
-									cw={spoilerText}
-									show={ShowSensitiveContent}
-									setShow={setShowSensitiveContent}
-								/>
-							)}
+				{isSensitive && (
+					<StatusCw
+						cw={spoilerText}
+						show={ShowSensitiveContent}
+						setShow={setShowSensitiveContent}
+					/>
+				)}
 
-							{isSensitive && !ShowSensitiveContent ? (
-								<View></View>
-							) : (
-								<View style={{ height: 'auto' }}>
-									{PostContent}
-									{dto.calculated.translationOutput && (
-										<ExplainOutput
-											additionalInfo={'Translated using OpenAI'}
-											fromLang={'jp'}
-											toLang={'en'}
-											text={dto.calculated.translationOutput}
-										/>
-									)}
-								</View>
-							)}
-						</View>
-					</TouchableOpacity>
+				{/* --- Media Items --- */}
+				<Pressable>
 					{isSensitive && !ShowSensitiveContent ? (
 						<View></View>
+					) : STATUS_DTO.content?.media?.length > 0 ? (
+						<Pressable
+							style={{
+								marginBottom: appDimensions.timelines.sectionBottomMargin,
+							}}
+							onPress={onGalleryInspect}
+						>
+							<MediaItem
+								attachments={STATUS_DTO.content.media}
+								calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
+							/>
+						</Pressable>
 					) : (
-						<MediaItem
-							attachments={STATUS_DTO.content.media}
-							calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
-						/>
+						<View />
 					)}
+				</Pressable>
+
+				{/* --- Text Content --- */}
+				<Pressable
+					onPress={() => {
+						toPost(STATUS_DTO.id);
+					}}
+				>
+					{isSensitive && !ShowSensitiveContent ? (
+						<View />
+					) : (
+						<View
+							style={{
+								marginBottom: appDimensions.timelines.sectionBottomMargin,
+							}}
+						>
+							{PostContent}
+							{dto.calculated.translationOutput && (
+								<ExplainOutput
+									additionalInfo={'Translated using OpenAI'}
+									fromLang={'jp'}
+									toLang={'en'}
+									text={dto.calculated.translationOutput}
+								/>
+							)}
+						</View>
+					)}
+
 					{/*FIXME: enable for bluesky*/}
 					{IS_QUOTE_BOOST && (
 						<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
 							<StatusQuoted />
 						</WithAppStatusItemContext>
 					)}
+				</Pressable>
 
-					{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
-					{/*{!isPreview && (*/}
-					{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
-					{/*)}*/}
-				</Fragment>
-			);
-		}, [
-			isLoaded,
-			ShowSensitiveContent,
-			PostContent,
-			dto,
-			STATUS_DTO,
-			paddingTop,
-			theme,
-		]);
-	},
-);
+				{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
+				{/*{!isPreview && (*/}
+				{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
+				{/*)}*/}
+			</Fragment>
+		);
+	}, [isLoaded, ShowSensitiveContent, PostContent, dto, STATUS_DTO, theme]);
+});
 
 export default StatusCore;

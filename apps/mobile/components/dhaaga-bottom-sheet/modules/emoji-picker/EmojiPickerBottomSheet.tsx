@@ -7,7 +7,6 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import { useGlobalMmkvContext } from '../../../../states/useGlobalMMkvCache';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import emojiPickerReducer, {
@@ -31,13 +30,13 @@ type EmojiPickerBottomSheetProps = {
  */
 const EmojiPickerBottomSheet = memo(
 	({ onSelect, onCancel }: EmojiPickerBottomSheetProps) => {
-		const { driver, acct } = useGlobalState(
+		const { driver, acct, acctManager } = useGlobalState(
 			useShallow((o) => ({
 				driver: o.driver,
 				acct: o.acct,
+				acctManager: o.acctManager,
 			})),
 		);
-		const { globalDb } = useGlobalMmkvContext();
 		const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 
 		const lastSubdomain = useRef(null);
@@ -47,7 +46,7 @@ const EmojiPickerBottomSheet = memo(
 				type: EMOJI_PICKER_REDUCER_ACTION.INIT,
 				payload: {
 					subdomain: acct?.server,
-					globalDb,
+					acctManager: acctManager,
 					domain: driver,
 				},
 			});

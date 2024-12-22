@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { router, useNavigation } from 'expo-router';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import useGlobalState from './_global';
@@ -16,97 +15,84 @@ function useAppNavigator() {
 	);
 	const navigator = useNavigation();
 
-	const toHome = useCallback(() => {
+	function toHome() {
 		// probably in bottom sheet
 		if (!navigator || !navigator.getId) return;
 		router.navigate(navigator.getId());
-	}, [navigator]);
+	}
 
-	const toPost = useCallback(
-		(id: string, params?: any) => {
-			// probably in bottom sheet
-			if (!navigator || !navigator.getId) return;
+	function toPost(id: string, params?: any) {
+		// probably in bottom sheet
+		if (!navigator || !navigator.getId) return;
 
-			let __id = id;
-			if (driver === KNOWN_SOFTWARE.BLUESKY) {
-				__id = 'uri';
-			}
-			const _id = navigator.getId();
-			if (!_id || _id === '/(tabs)/index') {
-				router.navigate({
-					pathname: `/post/${__id}`,
-					params: {
-						uri: id,
-					},
-				});
-			} else {
-				router.navigate({
-					pathname: `${navigator.getId()}/post/${__id}`,
-					params: {
-						uri: id,
-					},
-				});
-			}
-		},
-		[navigator],
-	);
+		let __id = id;
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+			__id = 'uri';
+		}
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index') {
+			router.navigate({
+				pathname: `/post/${__id}`,
+				params: {
+					uri: id,
+				},
+			});
+		} else {
+			router.navigate({
+				pathname: `${navigator.getId()}/post/${__id}`,
+				params: {
+					uri: id,
+				},
+			});
+		}
+	}
 
-	const toTag = useCallback(
-		(id: string) => {
-			const _id = navigator.getId();
-			if (!_id || _id === '/(tabs)/index' || _id === '/(tabs)') {
-				router.navigate(`/tag/${id}`);
-			} else {
-				router.navigate(`${navigator.getId()}/tag/${id}`);
-			}
-		},
-		[navigator],
-	);
+	function toTag(id: string) {
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index' || _id === '/(tabs)') {
+			router.navigate(`/tag/${id}`);
+		} else {
+			router.navigate(`${navigator.getId()}/tag/${id}`);
+		}
+	}
 
-	const toProfile = useCallback(
-		(id: string) => {
-			// probably in bottom sheet
-			if (!navigator || !navigator.getId) return;
+	function toProfile(id: string) {
+		// probably in bottom sheet
+		if (!navigator || !navigator.getId) return;
 
-			const _id = navigator.getId();
-			if (!_id || _id === '/(tabs)/index') {
-				router.navigate(`/profile/${id}`);
-			} else {
-				router.navigate(`${navigator.getId()}/profile/${id}`);
-			}
-		},
-		[navigator],
-	);
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index') {
+			router.navigate(`/profile/${id}`);
+		} else {
+			router.navigate(`${navigator.getId()}/profile/${id}`);
+		}
+	}
 
-	const toFollowers = useCallback(
-		(id: string) => {
-			// probably in bottom sheet
-			if (!navigator || !navigator.getId) return;
+	function toFollowers(id: string) {
+		// probably in bottom sheet
+		if (!navigator || !navigator.getId) return;
 
-			const _id = navigator.getId();
-			if (!_id || _id === '/(tabs)/index') {
-				router.navigate(`/followers/${id}`);
-			} else {
-				router.navigate(`${navigator.getId()}/followers/${id}`);
-			}
-		},
-		[navigator],
-	);
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index') {
+			router.navigate(`/followers/${id}`);
+		} else {
+			router.navigate(`${navigator.getId()}/followers/${id}`);
+		}
+	}
 
-	const toFollows = useCallback(
-		(id: string) => {
-			// probably in bottom sheet
-			if (!navigator || !navigator.getId) return;
+	function toFollows(id: string) {
+		// probably in bottom sheet
+		if (!navigator || !navigator.getId) return;
 
-			const _id = navigator.getId();
-			if (!_id || _id === '/(tabs)/index') {
-				router.navigate(`/follows/${id}`);
-			} else {
-				router.navigate(`${navigator.getId()}/follows/${id}`);
-			}
-		},
-		[navigator],
-	);
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index') {
+			router.navigate(`/follows/${id}`);
+		} else {
+			router.navigate(`${navigator.getId()}/follows/${id}`);
+		}
+	}
+
+	function toTimeline() {}
 
 	return { toPost, toHome, toProfile, toTag, toFollowers, toFollows };
 }

@@ -10,6 +10,8 @@ import AppBottomSheetPickThemePack from '../modules/theme-pack/AppBottomSheetPic
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import AppBottomSheetTimelineDetails from '../modules/timeline-details/AppBottomSheetTimelineDetails';
+import AppBottomSheetLinkPreview from '../modules/AppBottomSheetLinkPreview';
+import AppBottomSheetHashtag from '../modules/AppBottomSheetHashtag';
 
 /**
  * Responsible for generating content
@@ -45,6 +47,10 @@ const AppBottomSheetFactory = memo(() => {
 				return <AppBottomSheetPickThemePack />;
 			case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:
 				return <AppBottomSheetTimelineDetails />;
+			case APP_BOTTOM_SHEET_ENUM.LINK:
+				return <AppBottomSheetLinkPreview />;
+			case APP_BOTTOM_SHEET_ENUM.HASHTAG:
+				return <AppBottomSheetHashtag />;
 			default: {
 				return (
 					<WithComposerContext>

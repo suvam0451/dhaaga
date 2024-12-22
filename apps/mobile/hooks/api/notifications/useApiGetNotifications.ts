@@ -1,16 +1,16 @@
 import {
 	DhaagaJsNotificationType,
 	MisskeyRestClient,
-	StatusInterface,
-	UserInterface,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
-import ActivitypubAdapterService from '../../../services/activitypub-adapter.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppPostObject } from '../../../types/app-post.types';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { AppUserObject } from '../../../types/app-user.types';
+import { UserMiddleware } from '../../../services/middlewares/user.middleware';
 
 type Api_Response_Type = {
 	data: any[];
@@ -23,8 +23,8 @@ export type Notification_Entry = {
 	type: DhaagaJsNotificationType;
 	createdAt: Date;
 	groupKey?: string;
-	acct?: UserInterface;
-	post?: StatusInterface;
+	acct?: AppUserObject;
+	post?: AppPostObject;
 	extraData?: string;
 	read?: boolean;
 };
@@ -100,17 +100,16 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 					type: o.type as DhaagaJsNotificationType,
 					createdAt: o.createdAt,
 					groupKey: o.groupKey,
-					acct:
-						o.account || o.user
-							? ActivityPubAdapterService.adaptUser(o.account || o.user, driver)
-							: undefined,
-					post:
-						o.status || o.body || o.note
-							? ActivitypubAdapterService.adaptStatus(
-									o.status || o.data || o.note,
-									driver,
-								)
-							: undefined,
+					acct: UserMiddleware.deserialize<unknown>(
+						o.account || o.user,
+						driver,
+						acct?.server,
+					),
+					post: PostMiddleware.deserialize<unknown>(
+						o.status || o.data || o.note,
+						driver,
+						acct?.server,
+					),
 					extraData: o.reaction,
 					read: o.isRead,
 				},

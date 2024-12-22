@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { memo, useMemo } from 'react';
 import LocalTimelineController from '../controllers/LocalTimelineController';
@@ -12,6 +12,17 @@ import BubbleTimelineController from '../controllers/BubbleTimelineController';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+
+type FeedControllerSheetContainerProps = {
+	title: string;
+	subtitle: string;
+	desc: string[];
+	children: any;
+};
+
+function FeedControllerSheetContainer({}: FeedControllerSheetContainerProps) {
+	return <ScrollView></ScrollView>;
+}
 
 const NowBrowsingHeader = memo(function Foo() {
 	const { timelineType } = useGlobalState(
@@ -52,7 +63,7 @@ const NowBrowsingHeader = memo(function Foo() {
 		}
 	}, [timelineType]);
 
-	return <View style={{ marginHorizontal: 8, marginBottom: 32 }}>{Comp}</View>;
+	return <View style={{ marginHorizontal: 12, marginBottom: 16 }}>{Comp}</View>;
 });
 
 export default NowBrowsingHeader;

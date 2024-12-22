@@ -8,7 +8,6 @@ import * as Haptics from 'expo-haptics';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { ActivityPubStatusAppDtoType } from '../../../../services/approto/app-status-dto.service';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
@@ -16,10 +15,11 @@ import { useShallow } from 'zustand/react/shallow';
 import useGlobalState, {
 	APP_BOTTOM_SHEET_ENUM,
 } from '../../../../states/_global';
+import { AppPostObject } from '../../../../types/app-post.types';
 
 type StatusInteractionProps = {
 	openAiContext?: string[];
-	dto: ActivityPubStatusAppDtoType;
+	dto: AppPostObject;
 };
 
 const ICON_SIZE = 21;

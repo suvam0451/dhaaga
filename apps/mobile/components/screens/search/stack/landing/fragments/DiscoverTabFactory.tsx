@@ -37,7 +37,7 @@ const DiscoverTabFactory = memo(() => {
 	);
 
 	const {
-		listItems,
+		data: timelineData,
 		addPosts: appendTimelineData,
 		clear: timelineDataStoreClear,
 	} = useAppTimelinePosts();
@@ -45,7 +45,7 @@ const DiscoverTabFactory = memo(() => {
 	const { data, updateQueryCache, append, setMaxId, queryCacheMaxId, clear } =
 		useAppPaginationContext();
 
-	const NUM_ITEMS = Math.max(data.length, listItems.length);
+	const NUM_ITEMS = Math.max(data.length, timelineData.length);
 
 	const { Data, fetchStatus, IsLoading, status } = useSearch(SearchCategory, {
 		maxId: queryCacheMaxId,
@@ -70,7 +70,7 @@ const DiscoverTabFactory = memo(() => {
 				].includes(driver);
 
 				if (FALLBACK_TO_OFFSET) {
-					setMaxId((listItems.length + Data.statuses.length).toString());
+					setMaxId((timelineData.length + Data.statuses.length).toString());
 				} else {
 					setMaxId(Data.statuses[Data.statuses.length - 1].getId());
 				}
@@ -100,7 +100,7 @@ const DiscoverTabFactory = memo(() => {
 	const [debouncedFetchStatus] = useDebounce(fetchStatus, 200);
 
 	const flashListData =
-		SearchCategory === APP_SEARCH_TYPE.POSTS ? listItems : data;
+		SearchCategory === APP_SEARCH_TYPE.POSTS ? timelineData : data;
 
 	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: NUM_ITEMS,
