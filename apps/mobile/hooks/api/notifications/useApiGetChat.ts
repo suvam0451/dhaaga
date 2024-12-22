@@ -1,31 +1,16 @@
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useState } from 'react';
-import { Notification_FlatList_Entry } from './useApiGetNotifications';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { useQuery } from '@tanstack/react-query';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-
-type MisskeyNotificationResponseItemType = {
-	id: string;
-	createdAt: Date;
-	cw: string | null;
-	emojis: any[];
-	fileIds: any[];
-	files: any[];
-	localOnly: boolean;
-	mentions: number[];
-};
-
-type MisskeyNotificationResponseType = {
-	data: any[];
-};
+import { AppNotificationObject } from '../../../types/app-notification.types';
 
 /**
  * Fetches direct message data
  */
 function useApiGetChat() {
-	const [Results, setResults] = useState<Notification_FlatList_Entry[]>([]);
+	const [Results, setResults] = useState<AppNotificationObject[]>([]);
 	const { acct, driver, client } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
@@ -39,7 +24,6 @@ function useApiGetChat() {
 	}, [acct]);
 
 	async function api() {
-		console.log(driver);
 		switch (driver) {
 			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.MISSKEY:

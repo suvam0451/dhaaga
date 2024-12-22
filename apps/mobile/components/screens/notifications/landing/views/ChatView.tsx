@@ -8,7 +8,7 @@ const ChatView = memo(() => {
 
 	return (
 		<AppNotificationViewContainer
-			items={[]}
+			data={[]}
 			menuItems={[
 				{
 					iconId: 'cog',

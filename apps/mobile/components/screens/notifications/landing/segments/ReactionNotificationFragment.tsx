@@ -7,21 +7,22 @@ import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
 
 const ReactionNotificationFragment = memo(({ item }: Props) => {
-	const acct = item.acct;
+	const user = item.user;
 	const post = item.post;
 	return (
 		<View style={styles.container}>
 			<NotificationSenderInterface
-				acct={acct}
+				user={user}
 				type={DhaagaJsNotificationType.REACTION}
 				extraData={item?.extraData}
+				createdAt={item.createdAt}
 			/>
 			<NotificationDescriptionText
 				type={DhaagaJsNotificationType.REACTION}
 				createdAt={item.createdAt}
 				id={item.id}
 			/>
-			<NotificationPostPeek acct={acct} post={post} />
+			<NotificationPostPeek acct={user} post={post} />
 		</View>
 	);
 });

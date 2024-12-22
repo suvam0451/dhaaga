@@ -4,11 +4,11 @@ import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandin
 import AppNotificationViewContainer from './_container';
 
 const UpdatesView = memo(() => {
-	const { items } = useApiGetUpdateNotifs();
+	const { data } = useApiGetUpdateNotifs();
 
 	return (
 		<AppNotificationViewContainer
-			items={items}
+			data={[]}
 			tabType={APP_LANDING_PAGE_TYPE.UPDATES}
 			menuItems={[
 				{

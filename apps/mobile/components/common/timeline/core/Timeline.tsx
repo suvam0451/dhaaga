@@ -52,10 +52,7 @@ const Timeline = memo(() => {
 		data: timelineData,
 	} = useAppTimelinePosts();
 
-	// const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
-
 	useEffect(() => {
-		// setPageLoadedAtLeastOnce(false);
 		clear();
 		timelineDataStoreClear();
 	}, [homepageType, query, opts]);
@@ -78,7 +75,6 @@ const Timeline = memo(() => {
 			setNextMaxId(cursor);
 			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, driver);
 			appendTimelineData(_data);
-			// setPageLoadedAtLeastOnce(true);
 			return;
 		}
 
@@ -86,7 +82,6 @@ const Timeline = memo(() => {
 			setNextMaxId(data[data.length - 1]?.id);
 			const _data = ActivityPubAdapterService.adaptManyStatuses(data, driver);
 			appendTimelineData(_data);
-			// setPageLoadedAtLeastOnce(true);
 		}
 	}, [fetchStatus]);
 
@@ -112,7 +107,6 @@ const Timeline = memo(() => {
 		refetch,
 	});
 
-	console.log(homepageType);
 	if (client === null) return <Introduction />;
 	if (homepageType === TimelineFetchMode.IDLE) {
 		router.navigate('/');

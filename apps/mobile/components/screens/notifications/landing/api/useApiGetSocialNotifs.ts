@@ -5,7 +5,7 @@ import { useAppNotifSeenContext } from '../state/useNotifSeen';
 
 function useApiGetSocialNotifs() {
 	const { appendNotifs } = useAppNotifSeenContext();
-	const { Results } = useApiGetNotifications({
+	const { data } = useApiGetNotifications({
 		include: [
 			DhaagaJsNotificationType.MENTION,
 			DhaagaJsNotificationType.REBLOG,
@@ -14,10 +14,10 @@ function useApiGetSocialNotifs() {
 	});
 
 	useEffect(() => {
-		appendNotifs(Results.map((o) => o.props.id));
-	}, [Results]);
+		appendNotifs(data.data.map((o) => o.id));
+	}, [data]);
 
-	return { items: Results };
+	return { data };
 }
 
 export default useApiGetSocialNotifs;

@@ -3,6 +3,7 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -66,7 +67,14 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 						style={{ padding: 4, marginLeft: 4 }}
 						onPress={onPress}
 					>
-						<AppIcon id={iconId} emphasis={disabled ? 'low' : 'high'} />
+						<AppIcon
+							id={iconId}
+							emphasis={
+								disabled
+									? APP_COLOR_PALETTE_EMPHASIS.A40
+									: APP_COLOR_PALETTE_EMPHASIS.A20
+							}
+						/>
 					</Pressable>
 				))}
 			</View>

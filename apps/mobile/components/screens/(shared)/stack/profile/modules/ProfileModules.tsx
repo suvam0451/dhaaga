@@ -49,7 +49,7 @@ function ProfilePinnedPosts({ userId, previewedAcct }: AppPagerViewListProps) {
 				renderItem={({ item }) => (
 					<View>
 						<NotificationSenderInterface
-							acct={previewedAcct}
+							user={previewedAcct}
 							type={DhaagaJsNotificationType.STATUS}
 							createdAt={item.createdAt}
 						/>

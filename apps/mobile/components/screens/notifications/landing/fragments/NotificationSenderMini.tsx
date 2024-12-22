@@ -2,7 +2,6 @@ import { memo, useCallback, useMemo } from 'react';
 import {
 	ActivitypubHelper,
 	DhaagaJsNotificationType,
-	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
@@ -19,10 +18,9 @@ import { useAppBottomSheet } from '../../../../dhaaga-bottom-sheet/modules/_api/
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useShallow } from 'zustand/react/shallow';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../../states/_global';
+import useGlobalState from '../../../../../states/_global';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
+import { AppUserObject } from '../../../../../types/app-user.types';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -260,7 +258,6 @@ export const NotificationSenderMini = memo(
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
 								color: theme.complementary.a0,
 								fontSize: 14,
-								opacity: 0.75,
 							}}
 						>
 							{TextContent}
@@ -270,7 +267,6 @@ export const NotificationSenderMini = memo(
 								color: APP_FONT.MONTSERRAT_BODY,
 								fontSize: 12,
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
-								opacity: 0.6,
 							}}
 						>
 							{DatetimeUtil.timeAgo(createdAt)}
@@ -283,7 +279,7 @@ export const NotificationSenderMini = memo(
 );
 
 type InterfaceProps = {
-	acct: UserInterface;
+	acct: AppUserObject;
 	type: DhaagaJsNotificationType;
 	createdAt: Date;
 	extraData?: string;
@@ -302,37 +298,39 @@ export const NotificationSenderMiniInterface = memo(
 			})),
 		);
 
-		const id = acct?.getId();
+		const id = acct.id;
 
-		const acctUrl = acct?.getAccountUrl(acctItem?.server);
-		const displayName = acct?.getDisplayName();
-		const avatarUrl = acct?.getAvatarUrl();
+		const acctUrl = acct.handle;
+		const displayName = acct.displayName;
+		const avatarUrl = acct.avatarUrl;
 
 		const handle = useMemo(() => {
 			return ActivitypubHelper.getHandle(acctUrl, acctItem?.server);
 		}, [acctUrl]);
 
-		const { setType, updateRequestId, setVisible, UserRef, UserIdRef } =
+		const { setType, updateRequestId, UserRef, UserIdRef } =
 			useAppBottomSheet();
 
 		/**
 		 * NOTE: misskey acct objects do not
 		 * contain enough information to populate
 		 * the entire modal
+		 *
+		 * FIXME: profile peek from notifications
 		 */
 		const onPress = useCallback(() => {
 			if (driver === KNOWN_SOFTWARE.MASTODON) {
 				// forward existing ref
-				UserRef.current = acct;
-				UserIdRef.current = acct.getId();
+				// UserRef.current = acct;
+				// UserIdRef.current = acct.getId();
 			} else {
 				// request info be fetched
-				UserRef.current = null;
-				UserIdRef.current = acct.getId();
+				// UserRef.current = null;
+				// UserIdRef.current = acct.getId();
 			}
-			setType(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK);
-			setVisible(true);
-			updateRequestId();
+			// setType(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK);
+			// setVisible(true);
+			// updateRequestId();
 		}, [acct, driver, UserRef, UserIdRef, updateRequestId, setType]);
 
 		return (

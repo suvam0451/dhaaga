@@ -10,7 +10,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const MentionNotificationFragment = memo(({ item }: Props) => {
-	const acct = item.acct;
+	const user = item.user;
 	const post = item.post;
 
 	return (
@@ -23,8 +23,9 @@ const MentionNotificationFragment = memo(({ item }: Props) => {
 				}}
 			>
 				<NotificationSenderInterface
-					acct={acct}
+					user={user}
 					type={DhaagaJsNotificationType.MENTION}
+					createdAt={item.createdAt}
 				/>
 				{/*<View style={{ flexDirection: 'row' }}>*/}
 				{/*	<TouchableOpacity*/}
@@ -60,7 +61,7 @@ const MentionNotificationFragment = memo(({ item }: Props) => {
 				createdAt={item.createdAt}
 				id={item.id}
 			/>
-			<NotificationPostPeek acct={acct} post={post} />
+			<NotificationPostPeek acct={user} post={post} />
 		</View>
 	);
 });

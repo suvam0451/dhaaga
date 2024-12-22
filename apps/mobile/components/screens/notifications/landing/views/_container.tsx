@@ -1,17 +1,17 @@
-import { Notification_FlatList_Entry } from '../../../../../hooks/api/notifications/useApiGetNotifications';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 import { APP_ICON_ENUM } from '../../../../lib/Icon';
-import FlatListRenderer from '../fragments/FlatListRenderer';
-import { FlatList, RefreshControl, ScrollView, Text, View } from 'react-native';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { RefreshControl, ScrollView, View, Text } from 'react-native';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppNotificationObject } from '../../../../../types/app-notification.types';
+import { AppFlashList } from '../../../../lib/AppFlashList';
+import { APP_FONTS } from '../../../../../styles/AppFonts';
 
 type AppNotificationViewContainer = {
 	tabType: APP_LANDING_PAGE_TYPE;
-	items: Notification_FlatList_Entry[];
+	data: AppNotificationObject[];
 	tip: string;
 	menuItems: {
 		iconId: APP_ICON_ENUM;
@@ -23,7 +23,7 @@ type AppNotificationViewContainer = {
 };
 
 function AppNotificationViewContainer({
-	items,
+	data,
 	tabType,
 	menuItems,
 	tip,
@@ -42,11 +42,8 @@ function AppNotificationViewContainer({
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}
 		>
-			<FlatList
-				data={items}
-				renderItem={({ item }) => {
-					return <FlatListRenderer item={item} />;
-				}}
+			<AppFlashList.Mentions
+				data={data}
 				ListHeaderComponent={
 					<View>
 						<AppTabLandingNavbar type={tabType} menuItems={menuItems} />
