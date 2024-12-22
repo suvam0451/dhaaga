@@ -1,7 +1,0 @@
-import { View } from 'react-native';
-
-function MyStack() {
-	return <View></View>;
-}
-
-export default MyStack;

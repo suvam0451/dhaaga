@@ -283,7 +283,7 @@ export class PostMiddleware {
 						server,
 					}),
 				)
-				.map((o) => !!o) as unknown as T extends unknown[]
+				.filter((o) => !!o) as unknown as T extends unknown[]
 				? AppPostObject[]
 				: never;
 		} else {

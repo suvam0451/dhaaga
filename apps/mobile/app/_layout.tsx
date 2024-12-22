@@ -20,6 +20,8 @@ import useGlobalState from '../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
 import useAppSession from '../states/useAppSession';
+import ImageInspectModal from '../components/modals/ImageInspectModal';
+import UserPeekModal from '../components/modals/UserPeekModal';
 
 enableMapSet();
 
@@ -113,6 +115,8 @@ function App() {
 				/>
 			</Stack>
 			<AppBottomSheet />
+			<ImageInspectModal />
+			<UserPeekModal />
 		</View>
 	);
 }

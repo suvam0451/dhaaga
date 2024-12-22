@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { appPostObjectSchema } from './app-post.types';
 
 export const appUserObjectSchema = z.object({
 	id: z.string(),
@@ -27,6 +28,7 @@ export const appUserObjectSchema = z.object({
 	}),
 	calculated: z.object({
 		emojis: z.map(z.string(), z.string()),
+		pinnedPosts: z.array(appPostObjectSchema),
 	}),
 });
 

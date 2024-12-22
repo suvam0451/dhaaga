@@ -24,11 +24,14 @@ import { APP_FONT } from '../../styles/AppTheme';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import Octicons from '@expo/vector-icons/Octicons';
 
 export type APP_ICON_ENUM =
 	| 'bell'
 	| 'back'
 	| 'browser'
+	| 'chatbox-outline'
+	| 'chat-ellipses-outline'
 	| 'chevron-right'
 	| 'checkmark-done-outline'
 	| 'cog'
@@ -42,17 +45,22 @@ export type APP_ICON_ENUM =
 	| 'eye'
 	| 'eye-filled'
 	| 'eye-off-filled'
+	| 'gallery'
+	| 'heart'
 	| 'home'
 	| 'info'
 	| 'language'
 	| 'menu'
 	| 'message'
 	| 'more-options-vertical'
+	| 'newspaper'
 	| 'no-account'
 	| 'palette'
 	| 'phonebook'
 	| 'pin'
+	| 'pin-octicons'
 	| 'retweet'
+	| 'save'
 	| 'search'
 	| 'share'
 	| 'feelings'
@@ -269,6 +277,26 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'chatbox-outline':
+					return (
+						<Ionicons
+							name={'chatbox-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'chat-ellipses-outline':
+					return (
+						<Ionicons
+							name={'chatbox-ellipses-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'chevron-right':
 					return (
 						<Entypo
@@ -409,6 +437,26 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'gallery':
+					return (
+						<Ionicons
+							name="logo-instagram"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'heart':
+					return (
+						<Ionicons
+							name={'heart-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'home':
 					return (
 						<Ionicons
@@ -479,6 +527,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'newspaper':
+					return (
+						<Ionicons
+							name={'newspaper-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'no-account':
 					return (
 						<MaterialIcons
@@ -519,10 +577,30 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'pin-octicons':
+					return (
+						<Octicons
+							name="pin"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'retweet':
 					return (
 						<AntDesign
 							name="retweet"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'save':
+					return (
+						<Ionicons
+							name={'save-outline'}
 							size={_size}
 							color={_color}
 							onPress={onPress}

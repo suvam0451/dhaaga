@@ -10,6 +10,7 @@ import { View } from 'react-native';
 type StatusItemProps = {
 	// disables all interactions
 	isPreview?: boolean;
+	isPin?: boolean;
 };
 
 function PostContainer({ children }: any) {
@@ -39,7 +40,7 @@ function PostContainer({ children }: any) {
  * Renders a status/note
  * @constructor
  */
-const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
+const StatusItem = memo(function Foo({ isPreview, isPin }: StatusItemProps) {
 	const { acct } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
@@ -57,7 +58,7 @@ const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 			) {
 				return (
 					<PostContainer>
-						<StatusCore hasBoost={true} isPreview={isPreview} />
+						<StatusCore hasBoost={true} isPreview={isPreview} isPin={isPin} />
 					</PostContainer>
 				);
 			} else {
@@ -71,6 +72,7 @@ const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 								hasBoost={true}
 								hasParent={true}
 								isPreview={isPreview}
+								isPin
 							/>
 						</PostContainer>
 					);
@@ -78,7 +80,7 @@ const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 					return (
 						<PostContainer>
 							<SharedStatusFragment />
-							<StatusCore hasBoost={true} isPreview={isPreview} />
+							<StatusCore hasBoost={true} isPreview={isPreview} isPin={isPin} />
 						</PostContainer>
 					);
 				}
@@ -87,13 +89,13 @@ const StatusItem = memo(function Foo({ isPreview }: StatusItemProps) {
 			return (
 				<PostContainer>
 					<ParentPostFragment />
-					<StatusCore hasParent={true} isPreview={isPreview} />
+					<StatusCore hasParent={true} isPreview={isPreview} isPin={isPin} />
 				</PostContainer>
 			);
 		} else {
 			return (
 				<PostContainer>
-					<StatusCore isPreview={isPreview} />
+					<StatusCore isPreview={isPreview} isPin={isPin} />
 				</PostContainer>
 			);
 		}

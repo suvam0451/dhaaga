@@ -22,7 +22,7 @@ const RelationStrangers = memo(
 				buttonStyle={[
 					styles.button,
 					{
-						backgroundColor: theme.palette.buttonUnstyled,
+						backgroundColor: theme.primary.a0,
 					},
 				]}
 				containerStyle={[styles.buttonContainer, {}]}
@@ -33,9 +33,7 @@ const RelationStrangers = memo(
 						color={APP_THEME.COLOR_SCHEME_D_NORMAL}
 					/>
 				) : (
-					<Text style={[styles.text, { color: theme.textColor.high }]}>
-						{LABEL}
-					</Text>
+					<Text style={[styles.text, { color: 'black' }]}>{LABEL}</Text>
 				)}
 			</Button>
 		);
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 	},
 	text: {
-		fontFamily: APP_FONTS.INTER_700_BOLD,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		color: APP_FONT.MONTSERRAT_BODY,
 	},
 });

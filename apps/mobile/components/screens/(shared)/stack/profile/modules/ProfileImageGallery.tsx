@@ -369,6 +369,15 @@ function ProfileImageGallery({ userId }: Props) {
 						height={item.getHeight()}
 					/>
 				)}
+				onScrollToIndexFailed={(info) => {
+					const wait = new Promise((resolve) => setTimeout(resolve, 500));
+					wait.then(() => {
+						ListRef.current?.scrollToIndex({
+							index: info.index,
+							animated: true,
+						});
+					});
+				}}
 			/>
 		</>
 	);

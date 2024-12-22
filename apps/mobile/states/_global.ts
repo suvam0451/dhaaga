@@ -1,9 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import {
-	DEFAULT_THEME_PACK_OBJECT,
-	ThemePackType,
-} from '../assets/loaders/UseAppThemePackLoader';
+import { ThemePackType } from '../assets/loaders/UseAppThemePackLoader';
 import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
 import { Account, Profile } from '../database/_schema';
 import {
@@ -32,16 +29,20 @@ import { ProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
 import { AppColorSchemeType } from '../utils/theming.util';
 import AccountSessionManager from '../services/session/account-session.service';
+import { WritableDraft } from 'immer';
 
 type AppThemePack = {
 	id: string;
 	name: string;
 };
 
-export enum REACT_NATIVE_BOTTOM_SHEET_ENUM {
-	POST_MENU = 'PostMenu',
-	NA = 'N/A',
-}
+type AppModalStateBase = {
+	stateId: string;
+	visible: boolean;
+	show: (refresh?: boolean) => void;
+	hide: () => void;
+	refresh: () => void;
+};
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	APP_PROFILE = 'AppProfile',
@@ -61,6 +62,14 @@ export enum APP_BOTTOM_SHEET_ENUM {
 
 export enum APP_DIALOG_SHEET_ENUM {
 	DEFAULT = 'Default',
+}
+
+/**
+ * List of known modals
+ */
+export enum APP_KNOWN_MODAL {
+	IMAGE_INSPECT = 'imageInspectModal',
+	USER_PEEK = 'userPeekModal',
 }
 
 type AppDialogInstanceState = {
@@ -159,9 +168,48 @@ type State = {
 	packList: AppThemePack[];
 	activePack: ThemePackType;
 
+	// sheets
 	bottomSheet: AppBottomSheetState;
+
+	// modals
+	[APP_KNOWN_MODAL.IMAGE_INSPECT]: AppModalStateBase;
+	[APP_KNOWN_MODAL.USER_PEEK]: AppModalStateBase;
+
+	// dialogs (also a modal)
 	dialog: AppDialogState;
 };
+
+function ModalStateBlockGenerator(
+	set: (
+		nextStateOrUpdater:
+			| (State & Actions)
+			| Partial<State & Actions>
+			| ((state: WritableDraft<State & Actions>) => void),
+		shouldReplace?: false,
+	) => void,
+	modalType: APP_KNOWN_MODAL,
+) {
+	return {
+		stateId: RandomUtil.nanoId(),
+		visible: false,
+		hide: () => {
+			set((state) => {
+				state[modalType].visible = false;
+			});
+		},
+		show: (refresh?: boolean) => {
+			set((state) => {
+				state[modalType].visible = true;
+				if (refresh) state[modalType].stateId = RandomUtil.nanoId();
+			});
+		},
+		refresh: () => {
+			set((state) => {
+				state[modalType].stateId = RandomUtil.nanoId();
+			});
+		},
+	};
+}
 
 type Actions = {
 	selectAccount(acct: Account): void;
@@ -172,63 +220,6 @@ type Actions = {
 	loadApp: () => void;
 	// loa/switch a profile
 	loadActiveProfile: (profile?: Profile) => void;
-};
-
-const defaultValue: State & Actions = {
-	// database drivers
-	db: null,
-	router: null,
-
-	profileSessionManager: null,
-	appSession: null,
-	acctManager: null,
-
-	// account data
-	driver: null,
-	acct: null,
-	profile: null,
-	me: null,
-
-	homepageType: TimelineFetchMode.IDLE,
-
-	// theme packs
-	packId: 'default',
-	packList: [],
-	getPacks: () => [],
-	setPack: () => {},
-	colorScheme: null,
-	setColorScheme: undefined,
-
-	appInitialize: undefined,
-	loadApp: undefined,
-	loadActiveProfile: undefined,
-	selectAccount: undefined,
-	setHomepageType: undefined,
-	activePack: DEFAULT_THEME_PACK_OBJECT,
-	bottomSheet: {
-		type: APP_BOTTOM_SHEET_ENUM.NA,
-		visible: false,
-		stateId: RandomUtil.nanoId(),
-		refresh: undefined,
-		setType: undefined,
-		show: undefined,
-		hide: undefined,
-		isAnimating: false,
-		HandleRef: undefined,
-		ParentRef: undefined,
-		RootRef: undefined,
-		textValue: undefined,
-		postValue: undefined,
-		setPostValue: undefined,
-		PostIdRef: undefined,
-		UserRef: undefined,
-		UserIdRef: undefined,
-		PostComposerTextSeedRef: undefined,
-		timelineDataPostListReducer: undefined,
-		setTimelineDataPostListReducer: undefined,
-		setTextValue: undefined,
-	},
-	dialog: undefined,
 };
 
 class GlobalStateService {
@@ -290,7 +281,24 @@ class GlobalStateService {
 
 const useGlobalState = create<State & Actions>()(
 	immer((set, get) => ({
-		...defaultValue,
+		db: null,
+		acct: null,
+		profile: null,
+		profileSessionManager: null,
+		appSession: null,
+		acctManager: null,
+		driver: KNOWN_SOFTWARE.UNKNOWN,
+		router: null,
+		me: null,
+		activePack: null,
+		homepageType: null,
+		packId: null,
+		imageInspectModal: ModalStateBlockGenerator(
+			set,
+			APP_KNOWN_MODAL.IMAGE_INSPECT,
+		),
+		userPeekModal: ModalStateBlockGenerator(set, APP_KNOWN_MODAL.USER_PEEK),
+		packList: null,
 		theme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {

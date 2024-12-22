@@ -46,6 +46,7 @@ const EmojiCodeSegment = memo(function Foo({
 	useEffect(() => {
 		if (!acctManager) return;
 		const match = acctManager.resolveEmoji(value, emojiMap);
+		if (!match) return;
 		setReactionData(match);
 
 		Image.loadAsync(match.url)

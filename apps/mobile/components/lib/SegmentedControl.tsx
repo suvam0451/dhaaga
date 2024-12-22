@@ -1,11 +1,16 @@
 import { Dispatch, memo, SetStateAction } from 'react';
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
+import {
+	Pressable,
+	ScrollView,
+	StyleProp,
+	View,
+	ViewStyle,
+} from 'react-native';
 import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../styles/AppFonts';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Octicons from '@expo/vector-icons/Octicons';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_ICON_ENUM, AppIcon } from './Icon';
 
 type AppSegmentedControlProps = {
 	items: {
@@ -83,7 +88,17 @@ export const AppSegmentedControl = memo(
 	},
 );
 
-export function AppInstagramTabControl() {
+type AppInstagramTabControlPops = {
+	tabIcons: string[];
+	index: number;
+	onIndexChange: (index: number) => void;
+};
+
+export function AppInstagramTabControl({
+	tabIcons,
+	index,
+	onIndexChange,
+}: AppInstagramTabControlPops) {
 	const { theme } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
@@ -91,68 +106,35 @@ export function AppInstagramTabControl() {
 	);
 	const ICON_SIZE = 32;
 
-	const ACTIVE_TINT = theme.textColor.medium;
+	const ACTIVE_TINT = theme.primary.a20;
 	const INACTIVE_TINT = theme.textColor.low;
 
 	return (
 		<View style={{ flexDirection: 'row', width: '100%' }}>
-			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-				<Ionicons name="logo-instagram" size={ICON_SIZE} color={ACTIVE_TINT} />
-				<View
-					style={{
-						backgroundColor: ACTIVE_TINT,
-						width: 64,
-						height: 3,
-						marginTop: 8,
-						borderRadius: 16,
+			{tabIcons.map((tab, i) => (
+				<Pressable
+					key={i}
+					style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+					onPress={() => {
+						onIndexChange(i);
 					}}
-				/>
-			</View>
-			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-				<Octicons
-					name="pin"
-					size={ICON_SIZE}
-					color={INACTIVE_TINT}
-					style={{ width: 40 }}
-				/>
-				<View
-					style={{
-						backgroundColor: 'transparent',
-						width: 64,
-						height: 3,
-						marginTop: 8,
-						borderRadius: 16,
-					}}
-				/>
-			</View>
-			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-				<Ionicons name={'newspaper-outline'} size={36} color={INACTIVE_TINT} />
-				<View
-					style={{
-						backgroundColor: 'transparent',
-						width: 64,
-						height: 3,
-						marginTop: 8,
-						borderRadius: 16,
-					}}
-				/>
-			</View>
-			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-				<Ionicons
-					name={'chatbox-ellipses-outline'}
-					size={36}
-					color={INACTIVE_TINT}
-				/>
-				<View
-					style={{
-						backgroundColor: 'transparent',
-						width: 64,
-						height: 3,
-						marginTop: 8,
-						borderRadius: 16,
-					}}
-				/>
-			</View>
+				>
+					<AppIcon
+						id={tab as APP_ICON_ENUM}
+						size={ICON_SIZE}
+						color={i === index ? ACTIVE_TINT : INACTIVE_TINT}
+					/>
+					<View
+						style={{
+							backgroundColor: i === index ? ACTIVE_TINT : 'transparent',
+							width: 64,
+							height: 3,
+							marginTop: 8,
+							borderRadius: 16,
+						}}
+					/>
+				</Pressable>
+			))}
 		</View>
 	);
 }

@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 function MyStack() {
 	return (
 		<View>
-			<Text>Sample Obtained</Text>
+			<Text>Sample Obtainedsstts</Text>
 		</View>
 	);
 }

@@ -21,6 +21,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
+import { Text } from 'react-native';
 
 /**
  * Mostly used to remove the border
@@ -30,6 +31,7 @@ type StatusCoreProps = {
 	hasParent?: boolean;
 	hasBoost?: boolean;
 	isPreview?: boolean;
+	isPin?: boolean;
 };
 
 function StatusController() {
@@ -84,7 +86,7 @@ function StatusController() {
 	);
 }
 
-const StatusCore = memo(({ isPreview }: StatusCoreProps) => {
+const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 	const { dto } = useAppStatusItem();
 	const { toPost } = useAppNavigator();
 	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
@@ -96,10 +98,6 @@ const StatusCore = memo(({ isPreview }: StatusCoreProps) => {
 		: dto;
 
 	const IS_QUOTE_BOOST = dto?.meta?.isBoost && dto?.content?.raw;
-
-	const IS_REPLY_OR_BOOST =
-		STATUS_DTO.meta.isReply ||
-		(STATUS_DTO.meta.isBoost && !STATUS_DTO.content.raw);
 
 	const { content: PostContent, isLoaded } = useMfm({
 		content: STATUS_DTO.content.raw,
@@ -113,17 +111,38 @@ const StatusCore = memo(({ isPreview }: StatusCoreProps) => {
 	const isSensitive = STATUS_DTO.meta.sensitive;
 	const spoilerText = STATUS_DTO.meta.cw;
 
-	const { theme } = useGlobalState(
+	const { theme, showInspector, appSession } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
+			showInspector: o.imageInspectModal.show,
+			appSession: o.appSession,
 		})),
 	);
+
+	function onGalleryInspect() {
+		appSession.cache.setPostForMediaInspect(dto as any);
+		showInspector();
+	}
 
 	return useMemo(() => {
 		if (!isLoaded) return <StatusItemSkeleton />;
 
 		return (
 			<Fragment>
+				{isPin && (
+					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+						<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
+						<Text
+							style={{
+								color: theme.complementary.a0,
+								marginLeft: 6,
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							}}
+						>
+							Pinned
+						</Text>
+					</View>
+				)}
 				<View
 					style={{
 						flexDirection: 'row',
@@ -135,7 +154,6 @@ const StatusCore = memo(({ isPreview }: StatusCoreProps) => {
 						style={{
 							paddingBottom: 4,
 							flex: 1,
-							overflowX: 'hidden',
 						}}
 					/>
 					<StatusController />
@@ -150,20 +168,21 @@ const StatusCore = memo(({ isPreview }: StatusCoreProps) => {
 				)}
 
 				{/* --- Media Items --- */}
-				<Pressable onPress={() => {}}>
+				<Pressable>
 					{isSensitive && !ShowSensitiveContent ? (
 						<View></View>
 					) : STATUS_DTO.content?.media?.length > 0 ? (
-						<View
+						<Pressable
 							style={{
 								marginBottom: appDimensions.timelines.sectionBottomMargin,
 							}}
+							onPress={onGalleryInspect}
 						>
 							<MediaItem
 								attachments={STATUS_DTO.content.media}
 								calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
 							/>
-						</View>
+						</Pressable>
 					) : (
 						<View />
 					)}

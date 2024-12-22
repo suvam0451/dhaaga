@@ -1,17 +1,20 @@
 import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import { Skeleton } from '@rneui/base';
 import useMfm from '../../../hooks/useMfm';
-import useAppNavigator from '../../../../states/useAppNavigator';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState from '../../../../states/_global';
+import useGlobalState, { APP_KNOWN_MODAL } from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { AppPostObject } from '../../../../types/app-post.types';
+import {
+	useAppManager,
+	useAppModalState,
+} from '../../../../hooks/utility/global-state-extractors';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -148,7 +151,8 @@ type OriginalPosterProps = {
  * the bottom-most post item
  */
 const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
-	const { toProfile } = useAppNavigator();
+	const { appManager } = useAppManager();
+	const { show, refresh } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 
 	const STATUS_DTO = dto.meta.isBoost
 		? dto.content.raw
@@ -156,8 +160,20 @@ const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
 			: dto.boostedFrom
 		: dto;
 
+	const UserDivRef = useRef(null);
 	function onProfileClicked() {
-		toProfile(STATUS_DTO.postedBy.userId);
+		UserDivRef.current.measureInWindow((x, y, width, height) => {
+			appManager.cache.setUserPeekModalData(STATUS_DTO.postedBy.userId, {
+				x,
+				y,
+				width,
+				height,
+			});
+			refresh();
+			setTimeout(() => {
+				show();
+			}, 100);
+		});
 	}
 
 	return useMemo(() => {
@@ -171,33 +187,36 @@ const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
 						flexGrow: 1,
 						overflowX: 'hidden',
 						width: 'auto',
+						position: 'relative',
 					},
 					style,
 				]}
 			>
-				<TouchableOpacity
-					onPress={onProfileClicked}
-					style={{
-						width: TIMELINE_PFP_SIZE,
-						height: TIMELINE_PFP_SIZE,
-						borderColor: 'rgba(200, 200, 200, 0.3)',
-						borderWidth: 1,
-						borderRadius: TIMELINE_PFP_SIZE / 2,
-						flexShrink: 1,
-					}}
-				>
-					{/* @ts-ignore */}
-					<Image
+				<View ref={UserDivRef}>
+					<TouchableOpacity
+						onPress={onProfileClicked}
 						style={{
-							flex: 1,
-							backgroundColor: '#0553',
-							padding: 2,
+							width: TIMELINE_PFP_SIZE,
+							height: TIMELINE_PFP_SIZE,
+							borderColor: 'rgba(200, 200, 200, 0.3)',
+							borderWidth: 1,
 							borderRadius: TIMELINE_PFP_SIZE / 2,
-							overflow: 'hidden',
+							flexShrink: 1,
 						}}
-						source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
-					/>
-				</TouchableOpacity>
+					>
+						{/* @ts-ignore */}
+						<Image
+							style={{
+								flex: 1,
+								backgroundColor: '#0553',
+								padding: 2,
+								borderRadius: TIMELINE_PFP_SIZE / 2,
+								overflow: 'hidden',
+							}}
+							source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
+						/>
+					</TouchableOpacity>
+				</View>
 
 				<OriginalPosterPostedByFragment
 					onClick={onProfileClicked}

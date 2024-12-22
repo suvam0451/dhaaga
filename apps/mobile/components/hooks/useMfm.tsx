@@ -61,7 +61,7 @@ function useMfm({
 		content: (
 			<Skeleton
 				style={{
-					height: expectedHeight || 108,
+					height: expectedHeight || 32,
 					borderRadius: 8,
 					width: '100%',
 				}}

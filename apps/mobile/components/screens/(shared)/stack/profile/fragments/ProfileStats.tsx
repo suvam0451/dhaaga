@@ -1,17 +1,9 @@
 import { memo } from 'react';
-import {
-	StyleProp,
-	Text,
-	TouchableOpacity,
-	View,
-	ViewStyle,
-	StyleSheet,
-} from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import useAppNavigator from '../../../../../../states/useAppNavigator';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { AppIcon } from '../../../../../lib/Icon';
 
 type ProfileStatsProps = {
 	userId: string;
@@ -52,16 +44,12 @@ const ProfileStats = memo(
 		}
 
 		return (
-			<View
-				style={[styles.container, { backgroundColor: theme.palette.menubar }]}
-			>
+			<View style={[styles.container, {}]}>
 				<TouchableOpacity style={styles.touchContainer} onPress={onPostsPress}>
-					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
+					<Text style={[styles.primaryText, { color: theme.complementary.a0 }]}>
 						{util(postCount)}
 					</Text>
-					<Text
-						style={[styles.secondaryText, { color: theme.textColor.medium }]}
-					>
+					<Text style={[styles.secondaryText, { color: theme.secondary.a20 }]}>
 						Posts
 					</Text>
 				</TouchableOpacity>
@@ -69,7 +57,7 @@ const ProfileStats = memo(
 					style={styles.touchContainer}
 					onPress={onFollowsPress}
 				>
-					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
+					<Text style={[styles.primaryText, { color: theme.complementary.a0 }]}>
 						{util(followingCount)}
 					</Text>
 					<Text
@@ -82,7 +70,7 @@ const ProfileStats = memo(
 					style={styles.touchContainer}
 					onPress={onFollowersPress}
 				>
-					<Text style={[styles.primaryText, { color: theme.textColor.high }]}>
+					<Text style={[styles.primaryText, { color: theme.complementary.a0 }]}>
 						{util(followerCount)}
 					</Text>
 					<Text
@@ -90,9 +78,6 @@ const ProfileStats = memo(
 					>
 						Followers
 					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.touchContainer}>
-					<AppIcon id={'ellipsis-v'} />
 				</TouchableOpacity>
 			</View>
 		);
@@ -103,16 +88,16 @@ export default ProfileStats;
 
 const styles = StyleSheet.create({
 	container: {
+		flexGrow: 1,
 		flexDirection: 'row',
 		borderRadius: 10,
-		marginHorizontal: 8,
-		marginTop: 32,
+		marginHorizontal: 10,
 	},
 	primaryText: {
 		fontSize: 18,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 	},
-	secondaryText: { fontSize: 13, fontFamily: APP_FONTS.INTER_500_MEDIUM },
+	secondaryText: { fontSize: 13, fontFamily: APP_FONTS.INTER_400_REGULAR },
 	touchContainer: {
 		flex: 1,
 		justifyContent: 'center',

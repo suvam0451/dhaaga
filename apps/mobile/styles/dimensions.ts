@@ -4,4 +4,7 @@ export const appDimensions = {
 		mediaPadding: 10,
 		sectionBottomMargin: 4,
 	},
+	buttons: {
+		borderRadius: 8,
+	},
 };

@@ -9,7 +9,6 @@ import Introduction from '../../../tutorials/screens/home/new-user/Introduction'
 import WithTimelineControllerContext, {
 	useTimelineController,
 } from '../api/useTimelineController';
-import SocialHub from '../fragments/SocialHub';
 import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import useTimeline from '../api/useTimeline';
@@ -28,6 +27,7 @@ import {
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppFlashList } from '../../../../components/lib/AppFlashList';
+import { router } from 'expo-router';
 
 /*
  * Render a Timeline
@@ -37,11 +37,11 @@ const Timeline = memo(() => {
 	const { setNextMaxId, clear, next } = usePaginationActions();
 
 	const { query, opts } = useTimelineController();
-	const { homepageType, router, driver } = useGlobalState(
+	const { homepageType, client, driver } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			homepageType: o.homepageType,
-			router: o.router,
+			client: o.router,
 			driver: o.driver,
 		})),
 	);
@@ -112,8 +112,12 @@ const Timeline = memo(() => {
 		refetch,
 	});
 
-	if (router === null) return <Introduction />;
-	if (homepageType === TimelineFetchMode.IDLE) return <SocialHub />;
+	console.log(homepageType);
+	if (client === null) return <Introduction />;
+	if (homepageType === TimelineFetchMode.IDLE) {
+		router.navigate('/');
+		return <View />;
+	}
 
 	return (
 		<View

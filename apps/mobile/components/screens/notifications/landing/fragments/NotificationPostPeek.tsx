@@ -1,4 +1,3 @@
-import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { Fragment, memo } from 'react';
 import useMfm from '../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
@@ -11,9 +10,10 @@ import {
 import NotificationMediaThumbs from '../../../../common/media/NotificationMediaThumbs';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
+import { AppUserObject } from '../../../../../types/app-user.types';
 
 type Props = {
-	acct: UserInterface;
+	acct: AppUserObject;
 	post: AppPostObject;
 };
 
@@ -38,8 +38,8 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 
 	const { content } = useMfm({
 		content: _post.content.raw,
-		remoteSubdomain: acct.getInstanceUrl(),
-		emojiMap: acct.getEmojiMap(),
+		remoteSubdomain: acct.instance,
+		emojiMap: acct.calculated.emojis,
 		deps: [_post.content.raw],
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,

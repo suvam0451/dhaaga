@@ -3,7 +3,6 @@ import {
 	ActivitypubHelper,
 	StatusInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { PostMiddleware } from '../services/middlewares/post.middleware';
 import ActivitypubAdapterService from '../services/activitypub-adapter.service';
 import MediaService from '../services/media.service';
 import { Dimensions } from 'react-native';
@@ -142,24 +141,6 @@ export class AppStatusDtoService {
 
 	constructor(ref: AppPostObject) {
 		this.ref = ref;
-	}
-
-	/**
-	 * Process multiple status interfaces
-	 * into app compatible status DTOs
-	 * @param posts
-	 * @param domain
-	 * @param subdomain
-	 */
-	static exportMultiple(
-		posts: StatusInterface[],
-		domain: string,
-		subdomain: string,
-	) {
-		const leanDtoItems = posts.map((o) =>
-			PostMiddleware.factory(o, domain, subdomain).export(),
-		);
-		return leanDtoItems.filter((o) => o !== null && o !== undefined);
 	}
 
 	static export(

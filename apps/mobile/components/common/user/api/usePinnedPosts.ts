@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useActivitypubUserContext } from '../../../../states/useProfile';
 import { useQuery } from '@tanstack/react-query';
 import {
-	ActivityPubStatuses,
 	KNOWN_SOFTWARE,
 	MisskeyRestClient,
-	StatusInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppPostObject } from '../../../../types/app-post.types';
+import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 
 /**
  * -- Obtain the pinned posts --
@@ -20,8 +17,6 @@ import { useShallow } from 'zustand/react/shallow';
  * Pleroma - ???
  */
 function usePinnedPosts(userId: string) {
-	const [Data, setData] = useState<StatusInterface[]>([]);
-	const { user } = useActivitypubUserContext();
 	const { client, acct, driver } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
@@ -30,12 +25,9 @@ function usePinnedPosts(userId: string) {
 		})),
 	);
 
-	useEffect(() => {
-		setData([]);
-	}, [userId]);
-
 	async function fn() {
 		switch (driver) {
+			// NOTE: may be redundant
 			case KNOWN_SOFTWARE.MISSKEY:
 			case KNOWN_SOFTWARE.FIREFISH:
 			case KNOWN_SOFTWARE.SHARKEY: {
@@ -44,7 +36,11 @@ function usePinnedPosts(userId: string) {
 				).accounts.get(userId);
 				if (error) return [];
 				const _data = data as UserDetailed;
-				return _data.pinnedNotes;
+				return PostMiddleware.deserialize<unknown[]>(
+					_data.pinnedNotes,
+					driver,
+					acct?.server,
+				).slice(0, 10);
 			}
 			default: {
 				const { data, error } = (await client.accounts.statuses(userId, {
@@ -53,43 +49,22 @@ function usePinnedPosts(userId: string) {
 					userId,
 				})) as any;
 				if (error) return [];
-				return data;
+				return PostMiddleware.deserialize<unknown[]>(
+					data,
+					driver,
+					acct?.server,
+				).slice(0, 10);
 			}
 		}
 	}
 
 	// Post Queries
-	const { status, data, fetchStatus } = useQuery<ActivityPubStatuses>({
+	return useQuery<AppPostObject[]>({
 		queryKey: ['acct', acct?.server, userId],
 		queryFn: fn,
-		enabled: userId !== undefined || driver === KNOWN_SOFTWARE.MISSKEY,
+		enabled: !!userId && typeof userId === 'string',
+		initialData: [],
 	});
-
-	useEffect(() => {
-		if (driver === 'misskey') {
-			setData(
-				ActivityPubAdapterService.adaptManyStatuses(
-					user?.getPinnedNotes() || [],
-					driver,
-				).slice(0, 10),
-			);
-		}
-	}, [driver, user]);
-
-	useEffect(() => {
-		if (status !== 'success' || data === undefined) return;
-		/**
-		 * Masto.js returns the account first,
-		 * then the status array. Pretty weird.
-		 */
-		if (!Array.isArray(data)) return;
-
-		setData(
-			ActivityPubAdapterService.adaptManyStatuses(data, driver).slice(0, 10),
-		);
-	}, [fetchStatus]);
-
-	return { Data };
 }
 
 export default usePinnedPosts;

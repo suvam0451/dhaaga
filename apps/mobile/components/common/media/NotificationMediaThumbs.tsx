@@ -1,7 +1,7 @@
 import { AppActivityPubMediaType } from '../../../services/app-status-dto.service';
 import { FlatList, View } from 'react-native';
 import { Image } from 'expo-image';
-import { useImageAutoWidth } from '../../../hooks/app/useImageDims';
+import { useImageAutoHeight } from '../../../hooks/app/useImageDims';
 import { appDimensions } from '../../../styles/dimensions';
 
 type ThumbItemProps = {
@@ -9,7 +9,7 @@ type ThumbItemProps = {
 };
 
 function ThumbItem({ item }: ThumbItemProps) {
-	const Data = useImageAutoWidth(item, 100, 200);
+	const Data = useImageAutoHeight(item, 100, 200);
 
 	if (!Data.resolved) return <View />;
 	return (

@@ -2,7 +2,6 @@ import { memo, useMemo } from 'react';
 import {
 	ActivitypubHelper,
 	DhaagaJsNotificationType,
-	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
@@ -24,6 +23,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { AppIcon } from '../../../../lib/Icon';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
+import { AppUserObject } from '../../../../../types/app-user.types';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -74,7 +74,6 @@ function textContent(type: DhaagaJsNotificationType) {
 export const NotificationSender = memo(
 	({
 		type,
-		handle,
 		displayName,
 		avatarUrl,
 		extraData,
@@ -298,7 +297,7 @@ export const NotificationSender = memo(
 );
 
 type InterfaceProps = {
-	acct: UserInterface;
+	acct: AppUserObject;
 	type: DhaagaJsNotificationType;
 	createdAt: Date | string;
 	extraData?: string;
@@ -314,8 +313,6 @@ export const NotificationSenderInterface = memo(
 			driver,
 			acct: acctItem,
 			show,
-			acctManager,
-			theme,
 		} = useGlobalState(
 			useShallow((o) => ({
 				driver: o.driver,
@@ -326,11 +323,11 @@ export const NotificationSenderInterface = memo(
 			})),
 		);
 
-		const id = acct?.getId();
+		const id = acct.id;
 
-		const acctUrl = acct?.getAccountUrl(acctItem?.server);
-		const displayName = acct?.getDisplayName();
-		const avatarUrl = acct?.getAvatarUrl();
+		const acctUrl = acct.handle;
+		const displayName = acct.displayName;
+		const avatarUrl = acct.avatarUrl;
 
 		const handle = useMemo(() => {
 			return ActivitypubHelper.getHandle(acctUrl, acctItem?.server);
