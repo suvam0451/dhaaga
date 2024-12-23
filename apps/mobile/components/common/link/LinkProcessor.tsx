@@ -50,7 +50,7 @@ function LinkProcessor({
 
 	function onTextPress() {
 		if (!acceptTouch) return;
-		appSession.cache.setLinkTarget(url, displayName || wwwRemoved);
+		appSession.storage.setLinkTarget(url, displayName || wwwRemoved);
 		show(APP_BOTTOM_SHEET_ENUM.LINK, true);
 	}
 

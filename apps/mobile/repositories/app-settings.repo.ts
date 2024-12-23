@@ -22,24 +22,6 @@ class AppSettingsRepository {
 		// const match = this.find(db, dto.key);
 		// if (!match) return this.create(db, dto);
 	}
-
-	static update(db: SQLiteDatabase, key: string, value: string) {
-		const match = null; //  this.find(db, key);
-		console.log('[WARN]: setting key not found', key);
-		return;
-	}
-
-	static create(db: SQLiteDatabase, dto: z.infer<typeof AppSettingCreateDTO>) {
-		const { data, error } = AppSettingCreateDTO.safeParse(dto);
-		if (error) {
-			console.log('[WARN]: invalid setting create payload');
-			return null;
-		}
-		// db.create(AppSetting, {
-		// 	_id: new Realm.BSON.UUID(),
-		// 	...data,
-		// });
-	}
 }
 
 export default AppSettingsRepository;

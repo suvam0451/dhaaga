@@ -45,6 +45,7 @@ type AppModalStateBase = {
 };
 
 export enum APP_BOTTOM_SHEET_ENUM {
+	QUICK_POST = 'QuickPost',
 	APP_PROFILE = 'AppProfile',
 	HASHTAG = 'Hashtag',
 	LINK = 'Link',

@@ -143,11 +143,11 @@ class Storage extends BaseStorageManager {
 
 class AppSessionManager {
 	db: DataSource;
-	cache: Storage;
+	storage: Storage;
 
 	constructor(db: DataSource) {
 		this.db = db;
-		this.cache = new Storage();
+		this.storage = new Storage();
 	}
 }
 

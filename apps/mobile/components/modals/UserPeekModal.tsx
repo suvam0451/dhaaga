@@ -163,7 +163,7 @@ function UserPeekModal() {
 			setUserIdTarget(null);
 			return;
 		}
-		const data = appManager.cache.getUserPeekModalData();
+		const data = appManager.storage.getUserPeekModalData();
 		if (data) {
 			setPosition({
 				x: data.measurement.x,

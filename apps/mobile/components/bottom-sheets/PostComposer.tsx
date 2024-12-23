@@ -84,7 +84,7 @@ function PostComposerBottomSheet() {
 						<View style={{ width: 48, height: 48 }}>
 							{/*@ts-ignore-next-line*/}
 							<Image
-								source={me.getAvatarUrl()}
+								source={me.avatarUrl}
 								style={{
 									height: 48,
 									width: 48,

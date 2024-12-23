@@ -18,6 +18,7 @@ import SelectedEmojiActionButtons from './fragments/SelectedEmojiActionButtons';
 import EmojiPickerSearchResults from './fragments/EmojiPickerSearchResults';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 type EmojiPickerBottomSheetProps = {
 	onSelect: (shortCode: string) => Promise<void>;
@@ -37,6 +38,7 @@ const EmojiPickerBottomSheet = memo(
 				acctManager: o.acctManager,
 			})),
 		);
+		const { theme } = useAppTheme();
 		const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 
 		const lastSubdomain = useRef(null);
@@ -53,7 +55,52 @@ const EmojiPickerBottomSheet = memo(
 			lastSubdomain.current = acct?.server;
 		}, [acct?.server]);
 
-		if (!State.tagEmojiMap) return <View />;
+		function onPressBack() {
+			onCancel();
+		}
+
+		if (!State.tagEmojiMap)
+			return (
+				<View>
+					<View style={{ alignItems: 'center' }}>
+						<Text
+							style={{
+								color: theme.secondary.a10,
+								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+								fontSize: 16,
+								textAlign: 'center',
+								paddingVertical: 32,
+								maxWidth: 256,
+							}}
+						>
+							Could not load custom emojis for your server.
+						</Text>
+					</View>
+					<TouchableOpacity
+						style={{
+							backgroundColor: theme.complementary.a10,
+							padding: 8,
+							borderRadius: 8,
+							alignSelf: 'center',
+							justifyContent: 'center',
+							maxWidth: 128,
+							paddingHorizontal: 16,
+						}}
+						onPress={onPressBack}
+					>
+						<Text
+							style={{
+								color: 'black',
+								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+								fontSize: 16,
+								textAlign: 'center',
+							}}
+						>
+							Back
+						</Text>
+					</TouchableOpacity>
+				</View>
+			);
 
 		function onEmojiSelected(o: any) {
 			dispatch({

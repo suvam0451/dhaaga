@@ -45,7 +45,7 @@ function AppBottomSheetLinkPreview() {
 	const INACTIVE = !visible || type !== APP_BOTTOM_SHEET_ENUM.LINK;
 
 	async function parse() {
-		const _url = appSession.cache.getLinkTarget();
+		const _url = appSession.storage.getLinkTarget();
 
 		getLinkPreview(_url.url)
 			.then((res) => {

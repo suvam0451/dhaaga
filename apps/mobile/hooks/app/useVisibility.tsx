@@ -26,7 +26,11 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				return {
 					text: APP_POST_VISIBILITY.PUBLIC,
 					icon: (
-						<FontAwesome6 name="globe" size={16} color={theme.textColor.high} />
+						<FontAwesome6
+							name="globe"
+							size={16}
+							color={theme.complementary.a0}
+						/>
 					),
 					desc: 'Visible to all users',
 				};
@@ -36,7 +40,11 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				return {
 					text: APP_POST_VISIBILITY.UNLISTED,
 					icon: (
-						<FontAwesome5 name="home" size={16} color={theme.textColor.high} />
+						<FontAwesome5
+							name="home"
+							size={16}
+							color={theme.complementary.a0}
+						/>
 					),
 					desc: 'Home timeline only',
 				};
@@ -45,7 +53,11 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				return {
 					text: APP_POST_VISIBILITY.PRIVATE,
 					icon: (
-						<FontAwesome5 name="lock" size={16} color={theme.textColor.high} />
+						<FontAwesome5
+							name="lock"
+							size={16}
+							color={theme.complementary.a0}
+						/>
 					),
 					desc: 'Followers only',
 				};
@@ -54,7 +66,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				return {
 					text: APP_POST_VISIBILITY.DIRECT,
 					icon: (
-						<Octicons name="mention" size={16} color={theme.textColor.high} />
+						<Octicons name="mention" size={16} color={theme.complementary.a0} />
 					),
 					desc: 'Mentioned users only',
 				};

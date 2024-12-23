@@ -19,7 +19,7 @@ function ExternalLinkDisplayName({ displayName }: ExternalLinDisplayNameProps) {
 	);
 
 	function onTextPress() {
-		appManager.cache.setLinkTarget(displayName, wwwRemoved);
+		appManager.storage.setLinkTarget(displayName, wwwRemoved);
 		show(APP_BOTTOM_SHEET_ENUM.LINK, true);
 	}
 

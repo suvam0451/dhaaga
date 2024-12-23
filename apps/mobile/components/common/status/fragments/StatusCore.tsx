@@ -120,7 +120,7 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 	);
 
 	function onGalleryInspect() {
-		appSession.cache.setPostForMediaInspect(dto as any);
+		appSession.storage.setPostForMediaInspect(dto as any);
 		showInspector();
 	}
 

@@ -28,16 +28,8 @@ const PostCompose = memo(() => {
 		switch (editMode) {
 			case 'txt': {
 				return (
-					<ScrollView
-						style={{
-							flexGrow: 1,
-							display: 'flex',
-							flexDirection: 'column',
-						}}
-						contentContainerStyle={{
-							flexGrow: 1,
-						}}
-					>
+					<ScrollView>
+						<ComposerTopMenu />
 						<ComposerSpoiler />
 						<ComposerTextInput />
 					</ScrollView>
@@ -71,6 +63,7 @@ const PostCompose = memo(() => {
 						}}
 					>
 						<ComposerAlt />
+						<ActionButtons />
 					</ScrollView>
 				);
 			}
@@ -88,7 +81,6 @@ const PostCompose = memo(() => {
 				},
 			]}
 		>
-			<ComposerTopMenu />
 			{/*This section changes based on edit mode*/}
 			{EditorContent}
 			<ActionButtons />

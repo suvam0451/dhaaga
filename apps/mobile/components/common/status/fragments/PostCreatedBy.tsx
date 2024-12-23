@@ -163,7 +163,7 @@ const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
 	const UserDivRef = useRef(null);
 	function onProfileClicked() {
 		UserDivRef.current.measureInWindow((x, y, width, height) => {
-			appManager.cache.setUserPeekModalData(STATUS_DTO.postedBy.userId, {
+			appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.userId, {
 				x,
 				y,
 				width,

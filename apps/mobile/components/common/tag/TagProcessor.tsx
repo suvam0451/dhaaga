@@ -20,7 +20,7 @@ const HashtagProcessor = memo(function Foo({
 	);
 
 	function onPress() {
-		appSession.cache.setTagTarget(content);
+		appSession.storage.setTagTarget(content);
 		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
 	}
 

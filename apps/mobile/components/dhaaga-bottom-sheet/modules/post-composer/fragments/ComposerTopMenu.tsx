@@ -1,15 +1,10 @@
 import { Fragment, memo } from 'react';
-import ComposerAutoCompletion from './ComposerAutoCompletion';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import VisibilityPicker from './VisibilityPicker';
-import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import PostButton from './PostButton';
 import ReplyContextIndicator from './ReplyContextIndicator';
 import { useComposerContext } from '../api/useComposerContext';
-import ComposerDecorator from './ComposerDecorator';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -19,9 +14,9 @@ import { useShallow } from 'zustand/react/shallow';
  * For emoji selections, this section is hidden
  */
 const ComposerTopMenu = memo(() => {
-	const { me, theme } = useGlobalState(
+	const { acct, theme } = useGlobalState(
 		useShallow((o) => ({
-			me: o.me,
+			acct: o.acct,
 			theme: o.colorScheme,
 		})),
 	);
@@ -29,64 +24,51 @@ const ComposerTopMenu = memo(() => {
 
 	if (editMode === 'emoji') return <View />;
 	if (editMode === 'alt') {
-		return <View style={{ height: 16 }} />;
+		return <View style={{ height: 16, backgroundColor: 'pink' }} />;
 	}
 	return (
 		<Fragment>
-			<ComposerAutoCompletion />
 			<View
 				style={{
 					flexDirection: 'row',
-					alignItems: 'flex-start',
-					position: 'relative',
+					alignItems: 'center',
+					marginTop: 16,
 				}}
 			>
-				<ComposerDecorator />
-				<View
-					style={{ borderWidth: 0.7, borderColor: '#666', borderRadius: 8 }}
-				>
-					{/*@ts-ignore-next-line*/}
-					<Image source={me?.avatarUrl} style={styles.avatarContainer} />
-				</View>
 				<View
 					style={{
-						paddingHorizontal: 4,
-						maxWidth: 256,
-						marginLeft: 4,
-						flex: 1,
+						borderWidth: 0.7,
+						borderColor: '#666',
+						borderRadius: '100%',
+						overflow: 'hidden',
 					}}
 				>
-					<VisibilityPicker />
+					{/*@ts-ignore-next-line*/}
+					<Image source={acct?.avatarUrl} style={styles.avatarContainer} />
+				</View>
+				<View style={{ flexGrow: 1, marginLeft: 6 }}>
 					<Text
 						style={{
 							color: theme.textColor.medium,
-							fontSize: 11.5,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							opacity: 0.8,
+							fontSize: 16,
+							fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 							marginLeft: 4,
 						}}
 					>
-						@{me?.handle}
+						{acct?.displayName}
+					</Text>
+					<Text
+						style={{
+							color: theme.secondary.a40,
+							fontSize: 13,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							marginLeft: 4,
+						}}
+					>
+						@{acct?.username}
 					</Text>
 				</View>
-				<View style={{ flexGrow: 1 }} />
-				<View
-					style={{
-						flexDirection: 'row',
-						justifyContent: 'flex-end',
-						alignItems: 'center',
-						flex: 1,
-					}}
-				>
-					<TouchableOpacity style={{ padding: 8, marginRight: 4, width: 42 }}>
-						<FontAwesome6
-							name="binoculars"
-							size={22}
-							color={APP_FONT.DISABLED}
-						/>
-					</TouchableOpacity>
-					<PostButton />
-				</View>
+				<VisibilityPicker />
 			</View>
 			<ReplyContextIndicator />
 		</Fragment>
@@ -94,33 +76,10 @@ const ComposerTopMenu = memo(() => {
 });
 
 const styles = StyleSheet.create({
-	textInput: {
-		textDecorationLine: 'none',
-		textDecorationStyle: undefined,
-		width: '100%',
-		paddingVertical: 16,
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 16,
-		paddingBottom: 13,
-	},
-	rootContainer: {
-		position: 'absolute',
-		bottom: 0,
-		width: '100%',
-		borderTopRightRadius: 8,
-		borderTopLeftRadius: 8,
-		backgroundColor: '#2C2C2C',
-	},
-	bottomSheetContentContainer: {
-		padding: 16,
-		paddingTop: 0,
-		height: '100%',
-	},
 	avatarContainer: {
-		height: 48,
-		width: 48,
-		borderRadius: 8,
-		opacity: 0.87,
+		height: 36,
+		width: 36,
+		borderRadius: '100%',
 	},
 });
 

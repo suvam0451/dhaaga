@@ -12,6 +12,7 @@ import { useShallow } from 'zustand/react/shallow';
 import AppBottomSheetTimelineDetails from '../modules/timeline-details/AppBottomSheetTimelineDetails';
 import AppBottomSheetLinkPreview from '../modules/AppBottomSheetLinkPreview';
 import AppBottomSheetHashtag from '../modules/AppBottomSheetHashtag';
+import AppBottomSheetQuickPost from '../modules/AppBottomSheetQuickPost';
 
 /**
  * Responsible for generating content
@@ -26,6 +27,8 @@ const AppBottomSheetFactory = memo(() => {
 	);
 	return useMemo(() => {
 		switch (type) {
+			case APP_BOTTOM_SHEET_ENUM.QUICK_POST:
+				return <AppBottomSheetQuickPost />;
 			case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
 			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW:
 				return <PostPreview />;

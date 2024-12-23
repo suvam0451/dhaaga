@@ -33,7 +33,7 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 
 	const onPress = () => {
 		if (!acceptTouch) return;
-		appSession.cache.setTagTarget(_value);
+		appSession.storage.setTagTarget(_value);
 		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
 	};
 

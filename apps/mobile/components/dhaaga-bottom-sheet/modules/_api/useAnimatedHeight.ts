@@ -38,7 +38,7 @@ function useAnimatedHeight() {
 					break;
 				}
 				case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
-					_target = POST_COMPOSE_HEIGHT_MAX;
+					_target = Dimensions.get('window').height * 0.4;
 					break;
 				}
 				default: {
