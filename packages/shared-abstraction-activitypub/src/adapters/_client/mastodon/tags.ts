@@ -6,35 +6,26 @@ import {
 	DhaagaJsFollowedTagsQueryOptions,
 	TagRoute,
 } from '../_router/routes/tags.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMastoClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { MastoTag } from '../_interface.js';
-import AppApi from '../../_api/AppApi.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import type { MastoTag } from '../../../types/mastojs.types.js';
+import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MastodonTagRouter implements TagRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MASTOJS>;
+	direct: FetchWrapper;
+	client: MastoJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async followedTags(
 		query: DhaagaJsFollowedTagsQueryOptions,
 	): PaginatedLibraryPromise<MastoTag[]> {
-		const { data, error } = await new AppApi(
-			this.client.url,
-			this.client.accessToken,
-		).getCamelCaseWithLinkPagination<MastoTag[]>(
-			'/api/v1/followed_tags',
-			query,
-		);
+		const { data, error } = await this.direct.getCamelCaseWithLinkPagination<
+			MastoTag[]
+		>('/api/v1/followed_tags', query);
 		if (error || !data) {
 			return errorBuilder();
 		}
@@ -42,17 +33,17 @@ export class MastodonTagRouter implements TagRoute {
 	}
 
 	async follow(id: string): LibraryPromise<MastoTag> {
-		const data = await this.lib.client.v1.tags.$select(id).follow();
+		const data = await this.client.lib.v1.tags.$select(id).follow();
 		return { data };
 	}
 
 	async get(id: string): LibraryPromise<MastoTag> {
-		const data = await this.lib.client.v1.tags.$select(id).fetch();
+		const data = await this.client.lib.v1.tags.$select(id).fetch();
 		return { data };
 	}
 
 	async unfollow(id: string): LibraryPromise<MastoTag> {
-		const data = await this.lib.client.v1.tags.$select(id).unfollow();
+		const data = await this.client.lib.v1.tags.$select(id).unfollow();
 		return { data };
 	}
 }

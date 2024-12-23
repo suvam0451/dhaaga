@@ -1,26 +1,16 @@
 import ActivityPubClient, {
 	FollowPostDto,
 	GetPostsQueryDTO,
-	MastoAccount,
-	MastoFamiliarFollowers,
-	MastoFeaturedTag,
-	MastoList,
-	MastoRelationship,
-	MastoStatus,
-	MegaAccount,
-	MegaRelationship,
-	MegaStatus,
-	MissUserDetailed,
 	RestClientCreateDTO,
 } from './adapters/_client/_interface.js';
 import UnknownRestClient from './adapters/_client/default/index.js';
-import MastodonRestClient from './adapters/_client/mastodon/index.js';
-import MisskeyRestClient from './adapters/_client/misskey/index.js';
+import MastodonRestClient from './adapters/_client/mastodon/_router.js';
+import MisskeyRestClient from './adapters/_client/misskey/_router.js';
 
 //  status adapters
-import UnknownToStatusAdapter from './adapters/status/default.js';
-import MastodonToStatusAdapter from './adapters/status/mastodon.js';
-import MisskeyToStatusAdapter from './adapters/status/misskey.js';
+import UnknownToStatusAdapter from './implementors/status/default.js';
+import MastodonToStatusAdapter from './implementors/status/mastodon.js';
+import MisskeyToStatusAdapter from './implementors/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
 import {
 	InstanceApi_CustomEmojiDTO,
@@ -29,7 +19,7 @@ import {
 } from './adapters/_client/_router/routes/instance.js';
 import axios from 'axios';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
-import PleromaRestClient from './adapters/_client/pleroma/index.js';
+import PleromaRestClient from './adapters/_client/pleroma/_router.js';
 import BlueskyRestClient from './adapters/_client/bluesky/index.js';
 import { errorBuilder } from './adapters/_client/_router/dto/api-responses.dto.js';
 import { LibraryPromise } from './adapters/_client/_router/routes/_types.js';
@@ -54,6 +44,20 @@ import {
 	TimelinesRoute,
 	TrendsRoute,
 } from './adapters/_client/_router/routes/_index.js';
+import {
+	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
+	MastoList,
+	MastoRelationship,
+	MastoStatus,
+} from './types/mastojs.types.js';
+import {
+	MegaAccount,
+	MegaRelationship,
+	MegaStatus,
+} from './types/megalodon.types.js';
+import { MissUserDetailed } from './types/misskey-js.types.js';
 
 export {
 	UnknownToStatusAdapter,
@@ -67,15 +71,15 @@ export {
 	DriveFileToMediaAttachmentAdapter,
 	MediaAttachmentToMediaAttachmentAdapter,
 	UnknownToMediaAttachmentAdapter,
-} from './adapters/media-attachment/adapter.js';
+} from './implementors/media-attachment/adapter.js';
 export {
 	DriveFileInstance,
 	MediaAttachmentInstance,
-} from './adapters/media-attachment/unique.js';
-export { MediaAttachmentInterface } from './adapters/media-attachment/interface.js';
+} from './implementors/media-attachment/unique.js';
+export { MediaAttachmentInterface } from './implementors/media-attachment/interface.js';
 
 // export user profile adapters and interfaces
-export { DefaultUser } from './adapters/profile/default.js';
+export { DefaultUser } from './implementors/profile/default.js';
 
 // stub types
 export {
@@ -89,13 +93,13 @@ export {
 	ActivityPubUserAdapter,
 	UserInterface,
 	UserType,
-} from './adapters/profile/_interface.js';
-export { StatusInterface } from './adapters/status/_interface.js';
+} from './implementors/profile/_interface.js';
+export { StatusInterface } from './implementors/status/_interface.js';
 export {
 	ActivityPubTagAdapter,
 	TagInterface,
 	TagType,
-} from './adapters/tag/_interface.js';
+} from './implementors/tag/_interface.js';
 
 export {
 	MastodonRestClient,
@@ -145,14 +149,9 @@ export class ActivityPubClientFactory {
 
 export type { MfmNode } from './services/index.js';
 
-export {
-	LibraryResponse,
-	DhaagaErrorCode,
-} from './adapters/_client/_router/_types.js';
-
-export { UserDetailedInstance } from './adapters/profile/_interface.js';
-export { AccountInstance } from './adapters/profile/_interface.js';
-export { ActivitypubStatusAdapter } from './adapters/status/_adapters.js';
+export { UserDetailedInstance } from './implementors/profile/_interface.js';
+export { AccountInstance } from './implementors/profile/_interface.js';
+export { ActivitypubStatusAdapter } from './implementors/status/_adapters.js';
 
 export { ActivitypubHelper };
 export { parseStatusContent, preprocessPostContent } from './services/index.js';
@@ -219,3 +218,5 @@ export {
 export { BaseAccountsRouter };
 
 export { KNOWN_SOFTWARE, InstanceApi_CustomEmojiDTO };
+export { LibraryResponse } from './types/result.types.js';
+export { DhaagaErrorCode } from './types/result.types.js';

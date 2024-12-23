@@ -2,29 +2,26 @@ import {
 	DhaagaJsUserSearchDTO,
 	SearchRoute,
 } from '../_router/routes/search.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMegalodonClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../_router/_types.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { MegaAccount, MegaStatus } from '../_interface.js';
 import snakecaseKeys from 'snakecase-keys';
+import type {
+	MegaAccount,
+	MegaStatus,
+} from '../../../types/megalodon.types.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaSearchRouter implements SearchRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MEGALODON>;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMegalodonClient(
-			KNOWN_SOFTWARE.PLEROMA,
-			this.client.url,
-			this.client.accessToken,
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
 		);
 	}
 
@@ -36,7 +33,10 @@ export class PleromaSearchRouter implements SearchRoute {
 	 */
 	async findUsers(query: DhaagaJsUserSearchDTO): LibraryPromise<MegaAccount[]> {
 		try {
-			const data = await this.lib.client.search(query.q || query.query, query);
+			const data = await this.client.client.search(
+				query.q || query.query,
+				query,
+			);
 			if (data.status !== 200) {
 				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
 			}
@@ -49,7 +49,7 @@ export class PleromaSearchRouter implements SearchRoute {
 	async findPosts(query: DhaagaJsUserSearchDTO): LibraryPromise<MegaStatus[]> {
 		try {
 			console.log(snakecaseKeys(query));
-			const data = await this.lib.client.search(
+			const data = await this.client.client.search(
 				query.q || query.query,
 				snakecaseKeys(query),
 			);

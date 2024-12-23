@@ -1,14 +1,14 @@
 import { TrendsRoute } from '../_router/routes/trends.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
-import { LibraryResponse } from '../_router/_types.js';
+import { GetTrendingDTO } from '../_interface.js';
+import { Endpoints } from 'misskey-js';
+import { LibraryPromise } from '../_router/routes/_types.js';
 import {
-	GetTrendingDTO,
 	MastoStatus,
 	MastoTag,
 	MastoTrendLink,
-} from '../_interface.js';
-import { Endpoints } from 'misskey-js';
-import { LibraryPromise } from '../_router/routes/_types.js';
+} from '../../../types/mastojs.types.js';
+import { LibraryResponse } from '../../../types/result.types.js';
 
 export class DefaultTrendsRouter implements TrendsRoute {
 	async tags(

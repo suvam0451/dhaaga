@@ -1,17 +1,20 @@
-import { UserDetailed, User } from 'misskey-js/autogen/models.js';
-import type { mastodon } from '@dhaaga/shared-provider-mastodon';
 import MisskeyUser from './misskey.js';
 import MastodonUser from './mastodon.js';
 import DefaultUser from './default.js';
-import { Note } from 'misskey-js/autogen/models.js';
-import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
+import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
 import camelcaseKeys from 'camelcase-keys';
 import BlueskyUserInterface from './bluesky.js';
+import type {
+	MissNote,
+	MissUser,
+	MissUserDetailed,
+} from '../../types/misskey-js.types.js';
+import type { MastoAccount } from '../../types/mastojs.types.js';
 
 export type UserType =
-	| mastodon.v1.Account
-	| UserDetailed
-	| User
+	| MastoAccount
+	| MissUserDetailed
+	| MissUser
 	| null
 	| undefined;
 
@@ -68,21 +71,21 @@ export interface UserInterface {
 
 	getEmojiMap(): Map<string, string>;
 
-	getPinnedNotes(): Note[];
+	getPinnedNotes(): MissNote[];
 }
 
 export class UserDetailedInstance {
-	instance: UserDetailed;
+	instance: MissUserDetailed;
 
-	constructor(instance: UserDetailed) {
+	constructor(instance: MissUserDetailed) {
 		this.instance = instance;
 	}
 }
 
 export class AccountInstance {
-	instance: mastodon.v1.Account;
+	instance: MastoAccount;
 
-	constructor(instance: mastodon.v1.Account) {
+	constructor(instance: MastoAccount) {
 		this.instance = instance;
 	}
 }
@@ -100,18 +103,18 @@ export function ActivityPubUserAdapter(
 		case KNOWN_SOFTWARE.KMYBLUE:
 		case KNOWN_SOFTWARE.CHERRYPICK:
 		case KNOWN_SOFTWARE.SHARKEY: {
-			return new MisskeyUser(new UserDetailedInstance(profile as UserDetailed));
+			return new MisskeyUser(
+				new UserDetailedInstance(profile as MissUserDetailed),
+			);
 		}
 		case KNOWN_SOFTWARE.MASTODON: {
-			const instance = new AccountInstance(profile as mastodon.v1.Account);
+			const instance = new AccountInstance(profile as MastoAccount);
 			return new MastodonUser(instance);
 		}
 		case KNOWN_SOFTWARE.PLEROMA:
 		case KNOWN_SOFTWARE.AKKOMA: {
 			const _camel = camelcaseKeys(profile, { deep: true });
-			return new MastodonUser(
-				new AccountInstance(_camel as mastodon.v1.Account),
-			);
+			return new MastodonUser(new AccountInstance(_camel as MastoAccount));
 		}
 		case KNOWN_SOFTWARE.BLUESKY:
 			return new BlueskyUserInterface(profile);

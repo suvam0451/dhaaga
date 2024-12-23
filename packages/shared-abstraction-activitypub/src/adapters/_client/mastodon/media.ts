@@ -1,22 +1,18 @@
 import { DhaagaJsMediaCreateDTO, MediaRoute } from '../_router/routes/media.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMastoClient,
-	DhaagaRestClient,
-	MastoErrorHandler,
-} from '../_router/_runner.js';
-import { MastoMediaAttachment } from '../_interface.js';
+import { MastoErrorHandler } from '../_router/_runner.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import { MastoMediaAttachment } from '../../../types/mastojs.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MastodonMediaRoute implements MediaRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MASTOJS>;
+	direct: FetchWrapper;
+	client: MastoJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async create(
@@ -31,7 +27,7 @@ export class MastodonMediaRoute implements MediaRoute {
 				body: fd,
 				headers: {
 					'Content-Type': 'multipart/form-data',
-					Authorization: `Bearer ${this.client.accessToken}`,
+					Authorization: `Bearer ${this.direct.token}`,
 				},
 			}).then((res) => {
 				if (res.ok) {
@@ -46,7 +42,7 @@ export class MastodonMediaRoute implements MediaRoute {
 		}
 
 		try {
-			const data = await this.lib.client.v2.media.create({
+			const data = await this.client.lib.v2.media.create({
 				file: dto.uri,
 				thumbnail: dto.uri,
 			});
@@ -62,7 +58,7 @@ export class MastodonMediaRoute implements MediaRoute {
 	}
 
 	async updateDescription(id: string, text: string) {
-		const fn = this.lib.client.v1.media.$select(id).update;
+		const fn = this.client.lib.v1.media.$select(id).update;
 		const { data, error } = await MastoErrorHandler(fn, [
 			{
 				description: text,

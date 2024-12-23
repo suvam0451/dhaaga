@@ -4,12 +4,6 @@ import {
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
-import {
-	COMPAT,
-	DhaagaMisskeyClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { Endpoints } from 'misskey-js';
 import {
 	errorBuilder,
@@ -17,33 +11,36 @@ import {
 	successWithData,
 } from '../_router/dto/api-responses.dto.js';
 import { BaseAccountsRouter } from '../default/accounts.js';
-import {
-	FollowPostDto,
-	GetPostsQueryDTO,
+import { FollowPostDto, GetPostsQueryDTO } from '../_interface.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import type {
 	MastoAccount,
 	MastoRelationship,
 	MastoStatus,
-	MissUserDetailed,
-} from '../_interface.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import AppApi from '../../_api/AppApi.js';
+} from '../../../types/mastojs.types.js';
+import { MissUserDetailed } from '../../../types/misskey-js.types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MisskeyAccountsRouter
 	extends BaseAccountsRouter
 	implements AccountRoute
 {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MISSKEYJS>;
+	direct: FetchWrapper;
+	client: MisskeyJsWrapper;
 
-	constructor(forwarded: RestClient) {
+	constructor(forwarded: FetchWrapper) {
 		super();
-		this.client = forwarded;
-		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+		this.direct = forwarded;
+		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async statuses(id: string, query: AccountRouteStatusQueryDto) {
-		const data = await this.lib.client.request<
+		const data = await this.client.client.request<
 			'users/notes',
 			Endpoints['users/notes']['req']
 		>('users/notes', {
@@ -58,13 +55,13 @@ export class MisskeyAccountsRouter
 	}
 
 	async get(id: string): LibraryPromise<MissUserDetailed> {
-		const data = await this.lib.client.request('users/show', { userId: id });
+		const data = await this.client.client.request('users/show', { userId: id });
 		return { data };
 	}
 
 	async getMany(ids: string[]): LibraryPromise<MissUserDetailed[]> {
 		try {
-			const data = await this.lib.client.request('users/show', {
+			const data = await this.client.client.request('users/show', {
 				userIds: ids,
 			});
 			return { data };
@@ -88,7 +85,7 @@ export class MisskeyAccountsRouter
 		opts: FollowPostDto,
 	): LibraryPromise<Endpoints['following/create']['res']> {
 		try {
-			const data = await this.lib.client.request('following/create', {
+			const data = await this.client.client.request('following/create', {
 				userId: id,
 				...opts,
 			});
@@ -105,7 +102,7 @@ export class MisskeyAccountsRouter
 		id: string,
 	): LibraryPromise<Endpoints['following/delete']['res']> {
 		try {
-			const data = await this.lib.client.request('following/delete', {
+			const data = await this.client.client.request('following/delete', {
 				userId: id,
 			});
 			return { data };
@@ -119,7 +116,7 @@ export class MisskeyAccountsRouter
 
 	async block(id: string): LibraryPromise<Endpoints['blocking/create']['res']> {
 		try {
-			const data = await this.lib.client.request('blocking/create', {
+			const data = await this.client.client.request('blocking/create', {
 				userId: id,
 			});
 			return { data };
@@ -133,7 +130,7 @@ export class MisskeyAccountsRouter
 		id: string,
 	): LibraryPromise<Endpoints['blocking/delete']['res']> {
 		try {
-			const data = await this.lib.client.request('blocking/delete', {
+			const data = await this.client.client.request('blocking/delete', {
 				userId: id,
 			});
 			return { data };
@@ -145,7 +142,7 @@ export class MisskeyAccountsRouter
 
 	async renoteMute(id: string): LibraryPromise<{ renoteMuted: true }> {
 		try {
-			await this.lib.client.request('renote-mute/create', {
+			await this.client.client.request('renote-mute/create', {
 				userId: id,
 			});
 			return { data: { renoteMuted: true } };
@@ -157,7 +154,7 @@ export class MisskeyAccountsRouter
 
 	async renoteUnmute(id: string): LibraryPromise<{ renoteMuted: false }> {
 		try {
-			await this.lib.client.request('renote-mute/delete', {
+			await this.client.client.request('renote-mute/delete', {
 				userId: id,
 			});
 			return { data: { renoteMuted: false } };
@@ -184,10 +181,9 @@ export class MisskeyAccountsRouter
 		}>
 	> {
 		try {
-			const { data, error } = await new AppApi(
-				this.client.url,
-				this.client.accessToken,
-			).post<Endpoints['i/favorites']['res']>(
+			const { data, error } = await this.direct.post<
+				Endpoints['i/favorites']['res']
+			>(
 				'/api/i/favorites',
 				{
 					...query,
@@ -228,7 +224,11 @@ export class MisskeyAccountsRouter
 	}
 
 	async followers(query: FollowerGetQueryDTO): LibraryPromise<
-		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
+		| {
+				data: MastoAccount[];
+				minId?: string | null;
+				maxId?: string | null;
+		  }
 		| {
 				data: Endpoints['users/followers']['res'];
 				minId?: string | null;
@@ -236,7 +236,7 @@ export class MisskeyAccountsRouter
 		  }
 	> {
 		try {
-			const data = await this.lib.client.request('users/followers', {
+			const data = await this.client.client.request('users/followers', {
 				allowPartial: true,
 				limit: query.limit,
 				userId: query.id,
@@ -257,7 +257,7 @@ export class MisskeyAccountsRouter
 		maxId?: string | null;
 	}> {
 		try {
-			const data = await this.lib.client.request('users/following', {
+			const data = await this.client.client.request('users/following', {
 				allowPartial: true,
 				limit: query.limit,
 				userId: query.id,

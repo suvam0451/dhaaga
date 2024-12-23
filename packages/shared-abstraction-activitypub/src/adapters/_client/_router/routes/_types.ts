@@ -1,4 +1,4 @@
-import { LibraryResponse } from '../_types.js';
+import { LibraryResponse } from '../../../../types/result.types.js';
 
 export type PaginatedLibraryPromise<T> = Promise<
 	LibraryResponse<{

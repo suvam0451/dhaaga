@@ -4,13 +4,14 @@ import {
 	SearchRoute,
 } from '../_router/routes/search.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { MastoStatus, MegaStatus } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
 import {
 	AppBskyActorSearchActorsTypeahead,
 	AtpSessionData,
 } from '@atproto/api';
 import { getBskyAgent } from '../_router/_api.js';
+import { MastoStatus } from '../../../types/mastojs.types.js';
+import { MegaStatus } from '../../../types/megalodon.types.js';
 
 class BlueskySearchRouter implements SearchRoute {
 	dto: AtpSessionData;

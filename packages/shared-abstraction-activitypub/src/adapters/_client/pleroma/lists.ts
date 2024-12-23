@@ -1,37 +1,31 @@
 import { ListsRoute } from '../_router/routes/lists.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMegalodonClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
-import { MegaList } from '../_interface.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../_router/_types.js';
+import type { MegaList } from '../../../types/megalodon.types.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaListsRoute implements ListsRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MEGALODON>;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMegalodonClient(
-			KNOWN_SOFTWARE.PLEROMA,
-			this.client.url,
-			this.client.accessToken,
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
 		);
 	}
 
 	async get(id: string): LibraryPromise<MegaList> {
-		const response = await this.lib.client.getList(id);
+		const response = await this.client.client.getList(id);
 		if (response.status !== 200) return errorBuilder(response.statusText);
 		return { data: response.data };
 	}
 
 	async list(): LibraryPromise<MegaList[]> {
-		const response = await this.lib.client.getLists();
+		const response = await this.client.client.getLists();
 		if (response.status !== 200) return errorBuilder(response.statusText);
 		return { data: response.data };
 	}

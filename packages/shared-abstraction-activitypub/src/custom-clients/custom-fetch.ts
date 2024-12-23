@@ -1,7 +1,6 @@
-import { DhaagaErrorCode, LibraryResponse } from '../_client/_router/_types.js';
 import camelcaseKeys from 'camelcase-keys';
-import { extractPaginationFromLinkHeader } from '../_client/_router/utils/link-header.js';
 import * as snakecaseKeys from 'snakecase-keys';
+import { DhaagaErrorCode, LibraryResponse } from '../types/result.types.js';
 
 /**
  * Use Fetch API to
@@ -11,13 +10,13 @@ import * as snakecaseKeys from 'snakecase-keys';
  * does not support the required
  * functionality
  */
-class AppApi {
+class FetchWrapper {
 	baseUrl: string;
 	token?: string;
 	requestHeader: HeadersInit;
 
 	constructor(urlLike: string, token?: string) {
-		this.baseUrl = this.cleanLink(urlLike);
+		this.baseUrl = DhaagaApiUtils.ensureHttpsAppend(urlLike);
 		this.token = token;
 		this.requestHeader = this.token
 			? {
@@ -30,12 +29,8 @@ class AppApi {
 		return this;
 	}
 
-	private cleanLink(urlLike: string) {
-		if (urlLike.startsWith('http://') || urlLike.startsWith('https://')) {
-		} else {
-			urlLike = 'https://' + urlLike;
-		}
-		return urlLike.replace(/\/+$/, '');
+	static create(urlLike: string, token?: string) {
+		return new FetchWrapper(urlLike, token);
 	}
 
 	private cleanObject(obj: any) {
@@ -59,7 +54,6 @@ class AppApi {
 	private withQuery(endpoint: string, query?: any) {
 		if (!query) return `${this.baseUrl}${endpoint}`;
 
-		console.log(query);
 		// smh... ruby backend can't even deal with arrays...
 		if (query['types[]'] !== undefined) {
 			const sample = this.cleanObject(query);
@@ -104,7 +98,7 @@ class AppApi {
 						}),
 					);
 				}
-				const { minId, maxId } = extractPaginationFromLinkHeader(
+				const { minId, maxId } = DhaagaApiUtils.extractPaginationFromLinkHeader(
 					response.headers,
 				);
 				const _data = camelcaseKeys(await response.json(), { deep: true });
@@ -145,7 +139,7 @@ class AppApi {
 						}),
 					);
 				}
-				extractPaginationFromLinkHeader(response.headers);
+				DhaagaApiUtils.extractPaginationFromLinkHeader(response.headers);
 				const data = camelcaseKeys(await response.json(), { deep: true });
 				return { data };
 			})
@@ -241,4 +235,50 @@ class AppApi {
 	}
 }
 
-export default AppApi;
+class DhaagaApiUtils {
+	/**
+	 * Since http(s) is not appended to server names
+	 * in our dhaaga app databases, we want the flexibility
+	 * of not having to worry about appending it
+	 * everywhere
+	 */
+	static ensureHttpsAppend(urlLike: string) {
+		if (urlLike.startsWith('http://') || urlLike.startsWith('https://')) {
+		} else {
+			urlLike = 'https://' + urlLike;
+		}
+		return urlLike.replace(/\/+$/, '');
+	}
+
+	/**
+	 * Mastodon sometimes embeds the
+	 * pagination tokens in Link header
+	 *
+	 * This function extracts the minId, maxId
+	 * or returns null
+	 * @param headers
+	 */
+	static extractPaginationFromLinkHeader(headers: any): {
+		minId?: string | null;
+		maxId?: string | null;
+	} {
+		const linkHeader = headers?.map?.link;
+		const maxIdRegex = /max_id=([0-9]+)/;
+		const minIdRegex = /min_id=([0-9]+)/;
+
+		let maxId = null;
+		let minId = null;
+		if (minIdRegex.test(linkHeader)) {
+			const minMatch = linkHeader.match(minIdRegex);
+			minId = minMatch[1];
+		}
+		if (maxIdRegex.test(linkHeader)) {
+			const maxMatch = linkHeader.match(maxIdRegex);
+			maxId = maxMatch[1];
+		}
+
+		return { minId, maxId };
+	}
+}
+
+export default FetchWrapper;

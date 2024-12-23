@@ -4,58 +4,53 @@ import {
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMegalodonClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import {
 	errorBuilder,
 	notImplementedErrorBuilder,
 } from '../_router/dto/api-responses.dto.js';
 import { BaseAccountsRouter } from '../default/accounts.js';
-import {
-	GetPostsQueryDTO,
+import { GetPostsQueryDTO } from '../_interface.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import camelcaseKeys from 'camelcase-keys';
+import snakecaseKeys from 'snakecase-keys';
+import type {
 	MastoAccount,
 	MastoRelationship,
 	MastoStatus,
+} from '../../../types/mastojs.types.js';
+import type {
 	MegaAccount,
 	MegaRelationship,
 	MegaStatus,
-} from '../_interface.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import AppApi from '../../_api/AppApi.js';
-import camelcaseKeys from 'camelcase-keys';
-import snakecaseKeys from 'snakecase-keys';
-import { DhaagaErrorCode } from '../_router/_types.js';
+} from '../../../types/megalodon.types.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaAccountsRouter
 	extends BaseAccountsRouter
 	implements AccountRoute
 {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MEGALODON>;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
+	constructor(forwarded: FetchWrapper) {
 		super();
-		this.client = forwarded;
-		this.lib = DhaagaMegalodonClient(
-			KNOWN_SOFTWARE.PLEROMA,
-			this.client.url,
-			this.client.accessToken,
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
 		);
 	}
 
 	async get(id: string): LibraryPromise<MegaAccount> {
-		const data = await this.lib.client.getAccount(id);
+		const data = await this.client.client.getAccount(id);
 		if (data.status !== 200) return errorBuilder(data.statusText);
 		return { data: camelcaseKeys(data.data) as any };
 	}
 
 	async lookup(webfingerUrl: string): LibraryPromise<MegaAccount> {
-		const data = await this.lib.client.lookupAccount(webfingerUrl);
+		const data = await this.client.client.lookupAccount(webfingerUrl);
 		if (data.status !== 200) {
 			return errorBuilder(data.statusText);
 		}
@@ -67,7 +62,7 @@ export class PleromaAccountsRouter
 		query: AccountRouteStatusQueryDto,
 	): LibraryPromise<any> {
 		try {
-			const data = await this.lib.client.getAccountStatuses(
+			const data = await this.client.client.getAccountStatuses(
 				id,
 				snakecaseKeys(query) as any,
 			);
@@ -79,7 +74,7 @@ export class PleromaAccountsRouter
 	}
 
 	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {
-		const data = await this.lib.client.getRelationships(ids);
+		const data = await this.client.client.getRelationships(ids);
 		if (data.status !== 200) {
 			return errorBuilder<MastoRelationship[]>(data.statusText);
 		}
@@ -87,7 +82,7 @@ export class PleromaAccountsRouter
 	}
 
 	async likes(opts: GetPostsQueryDTO): LibraryPromise<MegaStatus[]> {
-		const data = await this.lib.client.getFavourites(opts);
+		const data = await this.client.client.getFavourites(opts);
 		if (data.status !== 200) {
 			return errorBuilder<MegaStatus[]>(data.statusText);
 		}
@@ -109,10 +104,11 @@ export class PleromaAccountsRouter
 		// 	},
 		// };
 
-		const { data: _data, error } = await new AppApi(
-			this.client.url,
-			this.client.accessToken,
-		).getCamelCaseWithLinkPagination<MastoStatus[]>('/api/v1/bookmarks', query);
+		const { data: _data, error } =
+			await this.direct.getCamelCaseWithLinkPagination<MastoStatus[]>(
+				'/api/v1/bookmarks',
+				query,
+			);
 
 		if (!_data || error) {
 			return notImplementedErrorBuilder<{
@@ -128,7 +124,7 @@ export class PleromaAccountsRouter
 
 	async follow(id: string): LibraryPromise<MegaRelationship> {
 		// Akkoma 400s on /follow with body
-		const data = await this.lib.client.followAccount(id);
+		const data = await this.client.client.followAccount(id);
 		if (data.status !== 200) {
 			return errorBuilder(data.statusText);
 		}
@@ -137,7 +133,7 @@ export class PleromaAccountsRouter
 	}
 
 	async unfollow(id: string): LibraryPromise<MegaRelationship> {
-		const data = await this.lib.client.unfollowAccount(id);
+		const data = await this.client.client.unfollowAccount(id);
 		if (data.status !== 200) {
 			return errorBuilder(data.statusText);
 		}
@@ -151,13 +147,11 @@ export class PleromaAccountsRouter
 	}> {
 		try {
 			const { id, ...rest } = query;
-			const { data: _data, error } = await new AppApi(
-				this.client.url,
-				this.client.accessToken,
-			).getCamelCaseWithLinkPagination<MastoAccount[]>(
-				`/api/v1/accounts/${id}/followers`,
-				rest,
-			);
+			const { data: _data, error } =
+				await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
+					`/api/v1/accounts/${id}/followers`,
+					rest,
+				);
 
 			if (error) {
 				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
@@ -176,13 +170,11 @@ export class PleromaAccountsRouter
 	}> {
 		try {
 			const { id, ...rest } = query;
-			const { data: _data, error } = await new AppApi(
-				this.client.url,
-				this.client.accessToken,
-			).getCamelCaseWithLinkPagination<MastoAccount[]>(
-				`/api/v1/accounts/${id}/following`,
-				rest,
-			);
+			const { data: _data, error } =
+				await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
+					`/api/v1/accounts/${id}/following`,
+					rest,
+				);
 
 			if (error) {
 				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);

@@ -1,40 +1,36 @@
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import {
 	DhaagaJsPostCreateDto,
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
+import camelcaseKeys from 'camelcase-keys';
 import {
 	MastoScheduledStatus,
 	MastoStatus,
-	MegaReaction,
-	MegaStatus,
-} from '../_interface.js';
-import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+} from '../../../types/mastojs.types.js';
+import { MegaReaction, MegaStatus } from '../../../types/megalodon.types.js';
 import {
-	COMPAT,
-	DhaagaMegalodonClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import camelcaseKeys from 'camelcase-keys';
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MEGALODON>;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMegalodonClient(
-			KNOWN_SOFTWARE.PLEROMA,
-			this.client.url,
-			this.client.accessToken,
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
 		);
 	}
 
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
-		const response = await this.lib.client.getStatus(id);
+		const response = await this.client.client.getStatus(id);
 		if (response.status !== 200) {
 			console.log('[ERROR]: failed to get status', response.statusText);
 		}
@@ -46,7 +42,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	async create(
 		dto: DhaagaJsPostCreateDto,
 	): LibraryPromise<MastoScheduledStatus> {
-		const response = await this.lib.client.postStatus(dto.status, {
+		const response = await this.client.client.postStatus(dto.status, {
 			language: dto.language,
 			visibility: dto.mastoVisibility,
 			in_reply_to_id: dto.inReplyToId as any,
@@ -62,7 +58,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	}
 
 	async delete(id: string): LibraryPromise<{ success: true }> {
-		const data = await this.lib.client.deleteStatus(id);
+		const data = await this.client.client.deleteStatus(id);
 		if (data.status === 200 || data.status === 204) {
 			return { data: { success: true } };
 		}
@@ -74,7 +70,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	 */
 
 	async getReactions(id: string): Promise<LibraryResponse<MegaReaction[]>> {
-		const data = await this.lib.client.getEmojiReactions(id);
+		const data = await this.client.client.getEmojiReactions(id);
 		return { data: camelcaseKeys(data.data, { deep: true }) as any };
 	}
 
@@ -82,7 +78,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		postId: string,
 		reactionId: string,
 	): LibraryPromise<MegaReaction[]> {
-		const data = await this.lib.client.getEmojiReaction(postId, reactionId);
+		const data = await this.client.client.getEmojiReaction(postId, reactionId);
 		if (data.status !== 200) {
 			console.log('[ERROR]: failed to get reaction details', data.statusText);
 			return errorBuilder<MegaReaction[]>(data.statusText);
@@ -91,7 +87,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	}
 
 	async addReaction(id: string, shortCode: string): LibraryPromise<any> {
-		const data = await this.lib.client.createEmojiReaction(id, shortCode);
+		const data = await this.client.client.createEmojiReaction(id, shortCode);
 		if (data.status !== 200) {
 			console.log('[ERROR]: failed to add reaction', data.statusText);
 			return errorBuilder(data.statusText);
@@ -100,7 +96,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	}
 
 	async removeReaction(id: string, shortCode: string): LibraryPromise<any> {
-		const data = await this.lib.client.deleteEmojiReaction(id, shortCode);
+		const data = await this.client.client.deleteEmojiReaction(id, shortCode);
 		if (data.status !== 200) {
 			console.log('[ERROR]: failed to remove reaction', data.statusText);
 			return errorBuilder(data.statusText);
@@ -109,12 +105,12 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	}
 
 	async bookmark(id: string) {
-		const data = await this.lib.client.bookmarkStatus(id);
+		const data = await this.client.client.bookmarkStatus(id);
 		return { data: data.data };
 	}
 
 	async unBookmark(id: string) {
-		const data = await this.lib.client.unbookmarkStatus(id);
+		const data = await this.client.client.unbookmarkStatus(id);
 		return { data: data.data };
 	}
 
@@ -123,27 +119,27 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		// 	this.client.url,
 		// 	this.client.accessToken,
 		// ).post(`/api/v1/statuses/${id}/favourite`, {}, {});
-		const data = await this.lib.client.favouriteStatus(id);
+		const data = await this.client.client.favouriteStatus(id);
 		return { data: data as any };
 	}
 
 	async removeLike(id: string) {
-		const data = await this.lib.client.unfavouriteStatus(id);
+		const data = await this.client.client.unfavouriteStatus(id);
 		return { data: data.data };
 	}
 
 	async getContext(id: string) {
-		const data = await this.lib.client.getStatusContext(id);
+		const data = await this.client.client.getStatusContext(id);
 		return { data: camelcaseKeys(data.data) };
 	}
 
 	async boost(id: string): LibraryPromise<MegaStatus> {
-		const data = await this.lib.client.reblogStatus(id);
+		const data = await this.client.client.reblogStatus(id);
 		return { data: data.data };
 	}
 
 	async removeBoost(id: string): LibraryPromise<MegaStatus> {
-		const data = await this.lib.client.unreblogStatus(id);
+		const data = await this.client.client.unreblogStatus(id);
 		return { data: data.data };
 	}
 }

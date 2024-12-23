@@ -3,18 +3,21 @@ import {
 	InstanceRoute,
 	KNOWN_SOFTWARE,
 } from '../_router/routes/instance.js';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import { getSoftwareInfoShared } from '../_router/shared.js';
-import {
-	DhaagaMastoClient,
-	DhaagaMegalodonClient,
-	DhaagaMisskeyClient,
-	MastoErrorHandler,
-} from '../_router/_runner.js';
+import { MastoErrorHandler } from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { MastoAccountCredentials } from '../_interface.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import AppApi from '../../_api/AppApi.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MastoAccountCredentials } from '../../../types/mastojs.types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import {
+	MastoJsWrapper,
+	MegalodonGoToSocialWrapper,
+	MisskeyJsWrapper,
+} from '../../../custom-clients/custom-clients.js';
 
 type WelKnownNodeinfo = {
 	links: {
@@ -46,8 +49,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 		// Set up parameters for the query string
 		const options: Record<string, string> = {
 			name: appName,
-			callback: appCallback,
-			// 'write:notes,write:following,read:drive'
+			callback: appCallback, // 'write:notes,write:following,read:drive'
 			permission: perms.join(','),
 		};
 
@@ -287,7 +289,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.KMYBLUE:
 			case KNOWN_SOFTWARE.SHARKEY: {
-				const emojiFn = DhaagaMastoClient(urlLike).client.v1.customEmojis.list;
+				const emojiFn = MastoJsWrapper.create(urlLike).lib.v1.customEmojis.list;
 				const { data, error } = await MastoErrorHandler(emojiFn);
 				if (error) return { error };
 				const rex = await data;
@@ -305,7 +307,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 				};
 			}
 			case KNOWN_SOFTWARE.MISSKEY: {
-				const emojiFn = await DhaagaMisskeyClient(urlLike).client.request(
+				const emojiFn = await MisskeyJsWrapper.create(urlLike).client.request(
 					'emojis',
 					{},
 				);
@@ -325,7 +327,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			case KNOWN_SOFTWARE.AKKOMA: {
 				try {
 					// NOTE: Megalodon payload seems deprecated
-					const { data, error } = await new AppApi(urlLike).get<any[]>(
+					const { data, error } = await new FetchWrapper(urlLike).get<any[]>(
 						'/api/v1/custom_emojis',
 					);
 					if (error) {
@@ -364,10 +366,10 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			}
 			case KNOWN_SOFTWARE.GOTOSOCIAL: {
 				try {
-					const dt = await DhaagaMegalodonClient(
-						KNOWN_SOFTWARE.GOTOSOCIAL,
-						urlLike,
-					).client.getInstanceCustomEmojis();
+					const dt =
+						await MegalodonGoToSocialWrapper.create(
+							urlLike,
+						).client.getInstanceCustomEmojis();
 					return {
 						data: dt.data.map((o) => ({
 							shortCode: o.shortcode,

@@ -3,7 +3,7 @@ import MastodonToStatusAdapter from './mastodon.js';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import UnknownToStatusAdapter from './default.js';
 import { StatusInterface } from './_interface.js';
-import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
+import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
 import camelcaseKeys from 'camelcase-keys';
 import BlueskyStatusAdapter from './bluesky.js';
 

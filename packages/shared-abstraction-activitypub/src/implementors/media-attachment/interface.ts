@@ -1,4 +1,4 @@
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
+import { MastoMediaAttachmentMeta } from '../../types/mastojs.types.js';
 
 /**
  * For reference, see
@@ -17,7 +17,7 @@ export interface MediaAttachmentInterface {
 
 	getId(): string;
 
-	getMeta(): any | mastodon.v1.MediaAttachmentMeta;
+	getMeta(): any | MastoMediaAttachmentMeta;
 
 	getName(): string;
 

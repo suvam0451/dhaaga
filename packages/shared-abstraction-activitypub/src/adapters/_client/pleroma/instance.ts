@@ -1,21 +1,27 @@
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	InstanceApi_CustomEmojiDTO,
 	InstanceRoute,
 } from '../_router/routes/instance.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { getSoftwareInfoShared } from '../_router/shared.js';
-import {
-	DhaagaPleromaClient,
-	PleromaErrorHandler,
-} from '../_router/_runner.js';
+import { PleromaErrorHandler } from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaInstanceRouter implements InstanceRoute {
-	client: RestClient;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
+		);
 	}
 
 	getLoginUrl(
@@ -41,7 +47,7 @@ export class PleromaInstanceRouter implements InstanceRoute {
 	async getCustomEmojis(
 		urlLike: string,
 	): Promise<LibraryResponse<InstanceApi_CustomEmojiDTO[]>> {
-		const x = DhaagaPleromaClient(urlLike).client;
+		const x = MegalodonPleromaWrapper.create(urlLike).client;
 		try {
 			const { data, error } = await PleromaErrorHandler(
 				x,

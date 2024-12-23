@@ -1,12 +1,12 @@
 import { TrendsRoute } from '../_router/routes/trends.js';
+import { GetTrendingDTO } from '../_interface.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
+import { Endpoints } from 'misskey-js';
 import {
-	GetTrendingDTO,
 	MastoStatus,
 	MastoTag,
 	MastoTrendLink,
-} from '../_interface.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { Endpoints } from 'misskey-js';
+} from '../../../types/mastojs.types.js';
 
 class BlueskyTrendsRouter implements TrendsRoute {
 	links(opts: GetTrendingDTO): LibraryPromise<MastoTrendLink[]> {

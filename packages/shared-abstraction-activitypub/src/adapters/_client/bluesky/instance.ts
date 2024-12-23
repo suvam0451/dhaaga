@@ -1,10 +1,10 @@
-import { LibraryResponse } from '../_router/_types.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import {
 	InstanceApi_CustomEmojiDTO,
 	InstanceApi_SoftwareInfoDTO,
 	InstanceRoute,
 } from '../_router/routes/instance.js';
+import { LibraryResponse } from '../../../types/result.types.js';
 
 export class BlueskyInstanceRouter implements InstanceRoute {
 	getTranslation(id: string, lang: string): Promise<LibraryResponse<any>> {

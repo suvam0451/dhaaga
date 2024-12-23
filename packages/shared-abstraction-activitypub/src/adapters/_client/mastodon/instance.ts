@@ -3,18 +3,21 @@ import {
 	InstanceRoute,
 	MastoTranslation,
 } from '../_router/routes/instance.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { createRestAPIClient } from 'masto';
 import { getSoftwareInfoShared } from '../_router/shared.js';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import { DhaagaMastoClient, MastoErrorHandler } from '../_router/_runner.js';
+import { MastoErrorHandler } from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MastodonInstanceRouter implements InstanceRoute {
-	client: RestClient;
+	direct: FetchWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
 	}
 
 	getLoginUrl(
@@ -32,7 +35,7 @@ export class MastodonInstanceRouter implements InstanceRoute {
 	async getCustomEmojis(
 		urlLike: string,
 	): Promise<LibraryResponse<InstanceApi_CustomEmojiDTO[]>> {
-		const fn = DhaagaMastoClient(urlLike).client.v1.customEmojis.list;
+		const fn = MastoJsWrapper.create(urlLike).lib.v1.customEmojis.list;
 		const { data, error } = await MastoErrorHandler(fn);
 		if (error) return { error };
 		const x = await data;
@@ -51,13 +54,6 @@ export class MastodonInstanceRouter implements InstanceRoute {
 		};
 	}
 
-	private createMastoClient() {
-		return createRestAPIClient({
-			url: `https://${this.client.url}`,
-			accessToken: this.client.accessToken,
-		});
-	}
-
 	async getSoftwareInfo(urlLike: string) {
 		return getSoftwareInfoShared(urlLike);
 	}
@@ -66,8 +62,11 @@ export class MastodonInstanceRouter implements InstanceRoute {
 		id: string,
 		lang: string,
 	): Promise<LibraryResponse<MastoTranslation>> {
-		const _client = this.createMastoClient();
-		const data = await _client.v1.statuses
+		const _client = MastoJsWrapper.create(
+			this.direct.baseUrl,
+			this.direct.token,
+		);
+		const data = await _client.lib.v1.statuses
 			.$select(id)
 			.translate({ lang: 'en' });
 		return {

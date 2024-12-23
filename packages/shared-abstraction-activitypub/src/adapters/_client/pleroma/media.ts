@@ -1,41 +1,32 @@
 import { DhaagaJsMediaCreateDTO, MediaRoute } from '../_router/routes/media.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMegalodonClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { MastoMediaAttachment } from '../_interface.js';
-import {
-	errorBuilder,
-	notImplementedErrorBuilder,
-} from '../_router/dto/api-responses.dto.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import camelcaseKeys from 'camelcase-keys';
+import { MastoMediaAttachment } from '../../../types/mastojs.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaMediaRoute implements MediaRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MEGALODON>;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMegalodonClient(
-			KNOWN_SOFTWARE.PLEROMA,
-			this.client.url,
-			this.client.accessToken,
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
 		);
 	}
 
 	async create(
 		dto: DhaagaJsMediaCreateDTO,
 	): LibraryPromise<MastoMediaAttachment> {
-		const data = await this.lib.client.uploadMedia(dto.file);
+		const data = await this.client.client.uploadMedia(dto.file);
 		return { data: data as any };
 	}
 
 	async updateDescription(id: string, text: string) {
-		const data = await this.lib.client.updateMedia(id, {
+		const data = await this.client.client.updateMedia(id, {
 			description: text,
 		});
 		if (data.status !== 200) {

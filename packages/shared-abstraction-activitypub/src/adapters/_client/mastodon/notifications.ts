@@ -2,33 +2,31 @@ import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import {
-	MastoConversation,
-	MastoGroupedNotificationsResults,
-	MastoNotification,
-} from '../_interface.js';
-import {
-	COMPAT,
-	DhaagaMastoClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import AppApi from '../../_api/AppApi.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import {
 	errorBuilder,
 	notImplementedErrorBuilder,
 } from '../_router/dto/api-responses.dto.js';
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import {
+	MastoConversation,
+	MastoGroupedNotificationsResults,
+	MastoNotification,
+} from '../../../types/mastojs.types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MastodonNotificationsRouter implements NotificationsRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MASTOJS>;
+	direct: FetchWrapper;
+	client: MastoJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async get(query: NotificationGetQueryDto): Promise<
@@ -44,13 +42,11 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 			(rest as any)['types[]'] = types.join(';');
 		}
 
-		const { data: _data, error } = await new AppApi(
-			this.client.url,
-			this.client.accessToken,
-		).getCamelCaseWithLinkPagination<MastoNotification[]>(
-			'/api/v1/notifications',
-			rest,
-		);
+		const { data: _data, error } =
+			await this.direct.getCamelCaseWithLinkPagination<MastoNotification[]>(
+				'/api/v1/notifications',
+				rest,
+			);
 
 		if (error || !_data) {
 			return notImplementedErrorBuilder<{
@@ -70,21 +66,19 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 			maxId?: string | null;
 		}>
 	> {
-		const { data: _data, error } = await new AppApi(
-			this.client.url,
-			this.client.accessToken,
-		).getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
-			'/api/v2/notifications' +
-				'?grouped_types[]=favourite&grouped_types[]=reblog' +
-				'&grouped_types[]=follow&exclude_types[]=follow' +
-				'&exclude_types[]=follow_request&exclude_types[]=favourite' +
-				'&exclude_types[]=reblog&exclude_types[]=poll' +
-				'&exclude_types[]=status&exclude_types[]=update' +
-				'&exclude_types[]=admin.sign_up&exclude_types[]=admin.report' +
-				'&exclude_types[]=moderation_warning' +
-				'&exclude_types[]=severed_relationships' +
-				'&exclude_types[]=annual_report',
-		);
+		const { data: _data, error } =
+			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
+				'/api/v2/notifications' +
+					'?grouped_types[]=favourite&grouped_types[]=reblog' +
+					'&grouped_types[]=follow&exclude_types[]=follow' +
+					'&exclude_types[]=follow_request&exclude_types[]=favourite' +
+					'&exclude_types[]=reblog&exclude_types[]=poll' +
+					'&exclude_types[]=status&exclude_types[]=update' +
+					'&exclude_types[]=admin.sign_up&exclude_types[]=admin.report' +
+					'&exclude_types[]=moderation_warning' +
+					'&exclude_types[]=severed_relationships' +
+					'&exclude_types[]=annual_report',
+			);
 		if (error) {
 			return errorBuilder();
 		}
@@ -97,7 +91,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 	 */
 	async getChats(driver: KNOWN_SOFTWARE): LibraryPromise<MastoConversation[]> {
 		try {
-			const data = await this.lib.client.v1.conversations.list();
+			const data = await this.client.lib.v1.conversations.list();
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
@@ -106,7 +100,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 
 	async markChatRead(id: string): LibraryPromise<MastoConversation> {
 		try {
-			const data = await this.lib.client.v1.conversations.$select(id).read();
+			const data = await this.client.lib.v1.conversations.$select(id).read();
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
@@ -115,7 +109,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 
 	async markChatUnread(id: string): LibraryPromise<MastoConversation> {
 		try {
-			const data = await this.lib.client.v1.conversations.$select(id).unread();
+			const data = await this.client.lib.v1.conversations.$select(id).unread();
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
@@ -124,7 +118,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 
 	async markChatRemove(id: string): LibraryPromise<void> {
 		try {
-			const data = await this.lib.client.v1.conversations.$select(id).remove();
+			const data = await this.client.lib.v1.conversations.$select(id).remove();
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);

@@ -3,7 +3,7 @@ import type { Hashtag } from 'misskey-js/autogen/models.js';
 import MisskeyTag from './misskey.js';
 import MastodonTag from './mastodon.js';
 import DefaultTag from './default.js';
-import { KNOWN_SOFTWARE } from '../_client/_router/routes/instance.js';
+import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
 
 export type TagType = mastodon.v1.Tag | Hashtag | null | undefined;
 

@@ -13,17 +13,18 @@ export enum DhaagaErrorCode {
 }
 
 type LibraryResponseBase = {
-	statusCode?: number;
-	/**
+	statusCode?: number /**
 	 * The raw API response received from the server
 	 *
 	 * Useful in cases where Dhaaga transforms and
 	 * standardises data, while you may need additional
 	 * properties
-	 */
+	 */;
 	raw?: any;
 };
-
 export type LibraryResponse<T> =
 	| ({ error: ApiErrorComponent; data?: undefined } & LibraryResponseBase)
-	| ({ error?: undefined; data: T } & LibraryResponseBase);
+	| ({
+			error?: undefined;
+			data: T;
+	  } & LibraryResponseBase);

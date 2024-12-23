@@ -1,6 +1,7 @@
-import { MastoTag, MegaTag } from '../../_interface.js';
 import { LibraryPromise, PaginatedLibraryPromise } from './_types.js';
 import { Endpoints } from 'misskey-js';
+import { MastoTag } from '../../../../types/mastojs.types.js';
+import { MegaTag } from '../../../../types/megalodon.types.js';
 
 export type DhaagaJsFollowedTagsQueryOptions = {
 	limit: number;

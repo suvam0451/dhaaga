@@ -1,6 +1,7 @@
 import { LibraryPromise } from './_types.js';
 import { DriveFile } from 'misskey-js/autogen/models.js';
-import { MastoMediaAttachment } from '../../_interface.js';
+
+import { MastoMediaAttachment } from '../../../../types/mastojs.types.js';
 
 export type DhaagaJsMediaCreateDTO = {
 	file: Blob;

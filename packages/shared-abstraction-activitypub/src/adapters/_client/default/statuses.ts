@@ -1,17 +1,20 @@
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	DhaagaJsPostCreateDto,
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
+import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
+import { Endpoints } from 'misskey-js';
 import {
 	MastoContext,
 	MastoScheduledStatus,
 	MastoStatus,
-	MissContext,
-} from '../_interface.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { Endpoints } from 'misskey-js';
+} from '../../../types/mastojs.types.js';
+import { MissContext } from '../../../types/misskey-js.types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
 
 export class DefaultStatusesRouter implements StatusesRoute {
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {

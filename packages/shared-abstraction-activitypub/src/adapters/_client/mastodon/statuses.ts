@@ -1,36 +1,32 @@
-import { DhaagaErrorCode } from '../_router/_types.js';
 import {
 	DhaagaJsPostCreateDto,
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
+import { MastoErrorHandler } from '../_router/_runner.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import { LibraryPromise } from '../_router/routes/_types.js';
+import type {
 	MastoContext,
 	MastoScheduledStatus,
 	MastoStatus,
-} from '../_interface.js';
-import {
-	COMPAT,
-	DhaagaMastoClient,
-	DhaagaRestClient,
-	MastoErrorHandler,
-} from '../_router/_runner.js';
-import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
+} from '../../../types/mastojs.types.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MastodonStatusesRouter implements StatusesRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MASTOJS>;
+	direct: FetchWrapper;
+	client: MastoJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async create(
 		dto: DhaagaJsPostCreateDto,
 	): LibraryPromise<MastoScheduledStatus> {
-		const fn = this.lib.client.v1.statuses.create;
+		const fn = this.client.lib.v1.statuses.create;
 		const { data, error } = await MastoErrorHandler(fn, [
 			{
 				...dto,
@@ -43,7 +39,7 @@ export class MastodonStatusesRouter implements StatusesRoute {
 	}
 
 	async delete(id: string): LibraryPromise<MastoStatus> {
-		const fn = this.lib.client.v1.statuses.$select(id).remove;
+		const fn = this.client.lib.v1.statuses.$select(id).remove;
 		const { data, error } = await MastoErrorHandler(fn);
 		if (error || !data) return errorBuilder(error);
 		const retData = await data;
@@ -51,7 +47,7 @@ export class MastodonStatusesRouter implements StatusesRoute {
 	}
 
 	async get(id: string): LibraryPromise<MastoStatus> {
-		const fn = this.lib.client.v1.statuses.$select(id).fetch;
+		const fn = this.client.lib.v1.statuses.$select(id).fetch;
 		const { data, error } = await MastoErrorHandler(fn);
 		if (error || !data) return errorBuilder(error);
 		const retData = await data;
@@ -59,28 +55,28 @@ export class MastodonStatusesRouter implements StatusesRoute {
 	}
 
 	async bookmark(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.lib.client.v1.statuses.$select(id).bookmark();
+		const data = await this.client.lib.v1.statuses.$select(id).bookmark();
 		return { data };
 	}
 
 	async unBookmark(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.lib.client.v1.statuses.$select(id).unbookmark();
+		const data = await this.client.lib.v1.statuses.$select(id).unbookmark();
 		return { data };
 	}
 
 	async like(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.lib.client.v1.statuses.$select(id).favourite();
+		const data = await this.client.lib.v1.statuses.$select(id).favourite();
 		return { data };
 	}
 
 	async removeLike(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.lib.client.v1.statuses.$select(id).unfavourite();
+		const data = await this.client.lib.v1.statuses.$select(id).unfavourite();
 		return { data };
 	}
 
 	async getContext(id: string): LibraryPromise<MastoContext> {
 		try {
-			const ctx = await this.lib.client.v1.statuses.$select(id).context.fetch();
+			const ctx = await this.client.lib.v1.statuses.$select(id).context.fetch();
 			return { data: ctx };
 		} catch (e) {
 			console.log(e);
@@ -90,14 +86,14 @@ export class MastodonStatusesRouter implements StatusesRoute {
 
 	// TODO: other visibilities
 	async boost(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.lib.client.v1.statuses
+		const data = await this.client.lib.v1.statuses
 			.$select(id)
 			.reblog({ visibility: 'public' });
 		return { data };
 	}
 
 	async removeBoost(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.lib.client.v1.statuses.$select(id).unreblog();
+		const data = await this.client.lib.v1.statuses.$select(id).unreblog();
 		return { data };
 	}
 }

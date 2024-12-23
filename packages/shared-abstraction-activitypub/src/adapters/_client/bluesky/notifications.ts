@@ -3,8 +3,9 @@ import {
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { MastoNotification, MegaNotification } from '../_interface.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import { MastoNotification } from '../../../types/mastojs.types.js';
+import { MegaNotification } from '../../../types/megalodon.types.js';
 
 class BlueskyNotificationsRouter implements NotificationsRoute {
 	get(query: NotificationGetQueryDto): LibraryPromise<{

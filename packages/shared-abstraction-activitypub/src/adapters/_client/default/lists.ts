@@ -1,7 +1,8 @@
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { ListsRoute } from '../_router/routes/lists.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../_router/_types.js';
+
+import { DhaagaErrorCode } from '../../../types/result.types.js';
 
 export class DefaultListRoute implements ListsRoute {
 	async update(): LibraryPromise<any> {

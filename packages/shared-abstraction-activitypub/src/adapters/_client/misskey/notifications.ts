@@ -2,25 +2,21 @@ import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMisskeyClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { LibraryResponse } from '../_router/_types.js';
-import { MastoNotification } from '../_interface.js';
 import type { Endpoints } from 'misskey-js/autogen/endpoint.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
+import { MastoNotification } from '../../../types/mastojs.types.js';
+import { LibraryResponse } from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MisskeyNotificationsRouter implements NotificationsRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MISSKEYJS>;
+	direct: FetchWrapper;
+	client: MisskeyJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async get(query: NotificationGetQueryDto): Promise<
@@ -30,7 +26,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 			maxId?: string | null;
 		}>
 	> {
-		const data = await this.lib.client.request<
+		const data = await this.client.client.request<
 			'i/notifications-grouped',
 			Endpoints['i/notifications-grouped']['req']
 		>('i/notifications-grouped', query as any);
@@ -42,7 +38,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		minId?: string | null;
 		maxId?: string | null;
 	}> {
-		const data = await this.lib.client.request<
+		const data = await this.client.client.request<
 			'i/notifications',
 			Endpoints['i/notifications']['req']
 		>('i/notifications', query as any);
@@ -50,7 +46,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 	}
 
 	async getMentions(driver: KNOWN_SOFTWARE) {
-		const data = await this.lib.client.request<
+		const data = await this.client.client.request<
 			'notes/mentions',
 			Endpoints['notes/mentions']['req']
 		>('notes/mentions', {
@@ -60,7 +56,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 	}
 
 	async getChats(driver: KNOWN_SOFTWARE) {
-		const data = await this.lib.client.request<
+		const data = await this.client.client.request<
 			'notes/mentions',
 			Endpoints['notes/mentions']['req']
 		>('notes/mentions', {

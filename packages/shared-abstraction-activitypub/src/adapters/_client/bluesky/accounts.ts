@@ -5,21 +5,7 @@ import {
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import {
-	FollowPostDto,
-	GetPostsQueryDTO,
-	MastoAccount,
-	MastoFamiliarFollowers,
-	MastoFeaturedTag,
-	MastoList,
-	MastoRelationship,
-	MastoStatus,
-	MegaAccount,
-	MegaRelationship,
-	MegaStatus,
-	MissUserDetailed,
-} from '../_interface.js';
+import { FollowPostDto, GetPostsQueryDTO } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import {
@@ -32,6 +18,24 @@ import {
 } from '@atproto/api';
 import { getBskyAgent } from '../_router/_api.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import {
+	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
+	MastoList,
+	MastoRelationship,
+	MastoStatus,
+} from '../../../types/mastojs.types.js';
+import {
+	MegaAccount,
+	MegaRelationship,
+	MegaStatus,
+} from '../../../types/megalodon.types.js';
+import { MissUserDetailed } from '../../../types/misskey-js.types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AtpSessionData;

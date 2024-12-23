@@ -3,7 +3,6 @@ import {
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { MastoStatus } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
 import { getBskyAgent } from '../_router/_api.js';
 import {
@@ -14,7 +13,8 @@ import {
 	ChatBskyConvoSendMessage,
 } from '@atproto/api';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../_router/_types.js';
+import { MastoStatus } from '../../../types/mastojs.types.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;

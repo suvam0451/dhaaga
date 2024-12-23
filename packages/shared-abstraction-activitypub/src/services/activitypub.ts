@@ -1,9 +1,6 @@
 import axios from 'axios';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../adapters/_client/_router/_types.js';
 import { KNOWN_SOFTWARE } from '../adapters/_client/_router/routes/instance.js';
+import { DhaagaErrorCode, LibraryResponse } from '../types/result.types.js';
 
 const NODEINFO_10 = 'http://nodeinfo.diaspora.software/ns/schema/1.0';
 const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
