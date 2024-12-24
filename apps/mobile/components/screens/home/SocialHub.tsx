@@ -1,10 +1,10 @@
 import {
+	Pressable,
 	RefreshControl,
 	ScrollView,
 	StyleSheet,
-	View,
 	Text,
-	Pressable,
+	View,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { useEffect, useReducer, useRef, useState } from 'react';
@@ -28,8 +28,8 @@ import { router } from 'expo-router';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
-import SocialHubPinnedProfiles from './stack/landing/fragments/SocialHubPinnedProfiles';
-import SocialHubPinnedTags from './stack/landing/fragments/SocialHubPinnedTags';
+import { SocialHubPinSectionContainer } from './stack/landing/fragments/_factory';
+import { AppFlashList } from '../../lib/AppFlashList';
 
 function Header() {
 	return (
@@ -57,6 +57,7 @@ function SocialHubTabAdd() {
 	function onGuideRequested() {
 		router.navigate(APP_ROUTING_ENUM.GUIDE_NEW_TAB_INTERFACE);
 	}
+
 	return (
 		<ScrollView
 			style={{
@@ -93,24 +94,20 @@ function SocialHubTabAdd() {
 				</View>
 
 				<View
-					style={{
-						backgroundColor: theme.primary.a0,
-						alignItems: 'center',
-						borderRadius: 8,
-						padding: 8,
-						paddingHorizontal: 12,
-						maxWidth: 256,
-						alignSelf: 'center',
-						marginTop: 24,
-					}}
+					style={[
+						styles.addTabCtaContainer,
+						{
+							backgroundColor: theme.primary.a0,
+						},
+					]}
 				>
 					<Text
-						style={{
-							color: 'black',
-							fontSize: 20,
-							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-							textAlign: 'center',
-						}}
+						style={[
+							styles.addTabCtaText,
+							{
+								color: 'black',
+							},
+						]}
 					>
 						Add Profile
 					</Text>
@@ -124,11 +121,12 @@ function SocialHubTabAdd() {
 					onPress={onGuideRequested}
 				>
 					<Text
-						style={{
-							color: theme.secondary.a20,
-							fontSize: 18,
-							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-						}}
+						style={[
+							styles.addTabCtaDesc,
+							{
+								color: theme.secondary.a20,
+							},
+						]}
 					>
 						How does this work?
 					</Text>
@@ -208,7 +206,7 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 				/>
 			</View>
 
-			{/* -- Modules --- */}
+			{/* --- Pinned Timelines --- */}
 			<SocialHubPinnedTimelines
 				items={State.pinned.timelines}
 				refresh={refresh}
@@ -216,26 +214,25 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 				dispatch={dispatch}
 			/>
 
-			{/* -- Modules --- */}
-			<SocialHubPinnedProfiles
-				items={State.pinned.users}
-				refresh={refresh}
-				isRefreshing={IsRefreshing}
-				dispatch={dispatch}
+			{/* --- Pinned Users --- */}
+			<SocialHubPinSectionContainer
+				label={'Profiles'}
 				style={{
 					marginTop: 16,
 				}}
-			/>
+			>
+				<AppFlashList.PinnedProfiles data={State.pinned.users} />
+			</SocialHubPinSectionContainer>
 
-			<SocialHubPinnedTags
-				items={State.pinned.tags}
-				refresh={refresh}
-				isRefreshing={IsRefreshing}
-				dispatch={dispatch}
+			{/* --- Pinned Tags --- */}
+			<SocialHubPinSectionContainer
+				label={'Tags'}
 				style={{
 					marginTop: 16,
 				}}
-			/>
+			>
+				<AppFlashList.PinnedTags data={State.pinned.tags} />
+			</SocialHubPinSectionContainer>
 		</ScrollView>
 	);
 }
@@ -279,5 +276,23 @@ export default SocialHub;
 const styles = StyleSheet.create({
 	pagerView: {
 		flex: 1,
+	},
+	addTabCtaContainer: {
+		alignItems: 'center',
+		borderRadius: 8,
+		padding: 8,
+		paddingHorizontal: 12,
+		maxWidth: 256,
+		alignSelf: 'center',
+		marginTop: 24,
+	},
+	addTabCtaText: {
+		fontSize: 20,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		textAlign: 'center',
+	},
+	addTabCtaDesc: {
+		fontSize: 18,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 	},
 });

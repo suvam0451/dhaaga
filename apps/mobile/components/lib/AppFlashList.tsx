@@ -2,9 +2,18 @@ import { AppUserObject } from '../../types/app-user.types';
 import { AppPostObject } from '../../types/app-post.types';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import FlashListPostRenderer from '../common/timeline/fragments/FlashListPostRenderer';
-import { FlatList, Pressable, RefreshControl, View } from 'react-native';
+import {
+	FlatList,
+	Pressable,
+	RefreshControl,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import { useMemo } from 'react';
-import FlashListService from '../../services/flashlist.service';
+import FlashListService, {
+	FlashListType_PinnedTag,
+} from '../../services/flashlist.service';
 import FlatListRenderer from '../screens/notifications/landing/fragments/FlatListRenderer';
 import { AppNotificationObject } from '../../types/app-notification.types';
 import {
@@ -17,6 +26,7 @@ import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import useAppNavigator from '../../states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -43,7 +53,7 @@ function Pinned_Users_LastItem() {
 						borderRadius: '100%',
 						overflow: 'hidden',
 						padding: 2,
-						borderColor: theme.complementary.a0,
+						borderColor: theme.secondary.a50,
 						borderWidth: 2.75,
 						opacity: 0.78,
 						height: 71.5,
@@ -60,7 +70,7 @@ function Pinned_Users_LastItem() {
 						<Ionicons
 							name={'add-outline'}
 							size={48}
-							color={theme.complementary.a0}
+							color={theme.secondary.a50}
 						/>
 					</View>
 				</View>
@@ -138,6 +148,86 @@ function Pinned_Users_ListItem({ item }: ListItemProps) {
 			</View>
 		</Pressable>
 	);
+}
+
+type PinnedTag_ListItemProps = {
+	item: FlashListType_PinnedTag;
+};
+
+function Pinned_Tags_ListItem({ item }: PinnedTag_ListItemProps) {
+	const { theme } = useAppTheme();
+	function onPressAddedTag() {
+		if (item.type === 'eol') return;
+		switch (item.props.dto.category) {
+			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_TAG_LOCAL: {
+				// toProfile(item.identifier);
+				break;
+			}
+			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_TAG_REMOTE: {
+				/**
+				 * 	NOTE: this would need to resolve the remote server's
+				 * 	drivers and make the necessary network calls to open
+				 * 	and "anonymous" tab
+				 */
+				console.log('[WARN]: pin category not implemented');
+				break;
+			}
+			default: {
+				console.log('[WARN]: pin category not registered');
+			}
+		}
+	}
+
+	function onPressAddTag() {}
+
+	if (item.type === 'entry') {
+		return (
+			<Pressable
+				style={[
+					styles.tagContainer,
+					{ backgroundColor: theme.palette.menubar },
+				]}
+				onPress={onPressAddedTag}
+			>
+				<Text
+					numberOfLines={1}
+					style={[
+						styles.tagText,
+						{
+							color: theme.complementary.a0,
+						},
+					]}
+				>
+					#{item.props.dto.name}
+				</Text>
+			</Pressable>
+		);
+	}
+
+	if (item.type === 'eol')
+		return (
+			<Pressable onPress={onPressAddTag}>
+				<View
+					style={[
+						styles.tagContainer,
+						{
+							backgroundColor: theme.palette.menubar,
+							flexDirection: 'row',
+							alignItems: 'center',
+						},
+					]}
+				>
+					<Ionicons
+						name={'add'}
+						size={22}
+						color={theme.secondary.a40}
+						style={{ marginLeft: 2 }}
+					/>
+				</View>
+			</Pressable>
+		);
+
+	return <View />;
 }
 
 type AppFlashListProps<
@@ -245,4 +335,41 @@ export class AppFlashList {
 			/>
 		);
 	}
+
+	static PinnedTags({ data }: AppFlatListProps<ProfilePinnedTag>) {
+		const listItems = useMemo(() => {
+			return FlashListService.pinnedTags(data);
+		}, [data]);
+
+		return (
+			<View style={styles.pinnedTagListContainer}>
+				{listItems.map((tag, i) => (
+					<Pinned_Tags_ListItem key={i} item={tag} />
+				))}
+			</View>
+		);
+	}
 }
+
+const styles = StyleSheet.create({
+	tagContainer: {
+		padding: 6,
+		borderRadius: 12,
+		paddingHorizontal: 12,
+		marginBottom: 8,
+		marginRight: 8,
+		flexShrink: 1,
+	},
+	tagText: {
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontSize: 16,
+		flexShrink: 1,
+	},
+	pinnedTagListContainer: {
+		flexWrap: 'wrap',
+		display: 'flex',
+		flexDirection: 'row',
+		flexGrow: 1,
+		overflow: 'hidden',
+	},
+});
