@@ -1,17 +1,12 @@
 import { Fragment, useMemo, useState } from 'react';
-import { RefreshControl, ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { SocialHubAvatarCircle } from '../../../components/lib/Avatar';
-import { router } from 'expo-router';
-import AppTabLandingNavbar, {
-	APP_LANDING_PAGE_TYPE,
-} from '../../../components/shared/topnavbar/AppTabLandingNavbar';
+import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
-import SocialHubPinnedProfiles from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedProfiles';
-import SocialHubPinnedTags from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedTags';
 import SocialHub from '../../../components/screens/home/SocialHub';
 
 enum TIME_OF_DAY {
@@ -22,6 +17,10 @@ enum TIME_OF_DAY {
 	NIGHT = 'Night',
 }
 
+/**
+ * @deprecated
+ * @constructor
+ */
 function TimeOfDayGreeting() {
 	const { acct, theme } = useGlobalState(
 		useShallow((o) => ({
@@ -123,63 +122,21 @@ function Content() {
 				/>
 			</View>
 			{/*<SocialHubPinnedTimelines  />*/}
-			<SocialHubPinnedProfiles style={{ marginTop: 16 }} />
-			<SocialHubPinnedTags style={{ marginTop: 16 }} />
+			{/*<SocialHubPinnedProfiles style={{ marginTop: 16 }} />*/}
+			{/*<SocialHubPinnedTags style={{ marginTop: 16 }} />*/}
 		</View>
 	);
 }
 
 function Screen() {
-	const [IsRefreshing, setIsRefreshing] = useState(false);
-	const { theme, acct, loadActiveProfile } = useGlobalState(
+	const { acct } = useGlobalState(
 		useShallow((o) => ({
-			theme: o.colorScheme,
 			acct: o.acct,
-			loadActiveProfile: o.loadActiveProfile,
 		})),
 	);
 
-	function onRefresh() {
-		setIsRefreshing(true);
-		try {
-			// possibly locked because of added/deleted account
-			if (!acct) {
-				loadActiveProfile();
-				setIsRefreshing(false);
-			}
-		} catch (e) {
-			setIsRefreshing(false);
-		}
-	}
-
-	return <SocialHub />;
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
-
-	return (
-		<ScrollView
-			style={{
-				backgroundColor: theme.palette.bg,
-				height: '100%',
-			}}
-			refreshControl={
-				<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
-			}
-		>
-			<AppTabLandingNavbar
-				type={APP_LANDING_PAGE_TYPE.HOME}
-				menuItems={[
-					{
-						iconId: 'user-guide',
-						onPress: () => {
-							router.push('/user-guide');
-						},
-					},
-				]}
-			/>
-			{/*<TimeOfDayGreeting />*/}
-			<Content />
-		</ScrollView>
-	);
+	return <SocialHub />;
 }
 
 export default Screen;

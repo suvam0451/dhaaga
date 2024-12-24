@@ -126,10 +126,9 @@ const SocialHubPinnedTimelines = memo(
 		isRefreshing,
 		dispatch,
 	}: SocialHubPinnedTimelinesProps) => {
-		const { theme, db } = useGlobalState(
+		const { theme } = useGlobalState(
 			useShallow((o) => ({
 				theme: o.colorScheme,
-				db: o.db,
 			})),
 		);
 
@@ -146,7 +145,7 @@ const SocialHubPinnedTimelines = memo(
 					numColumns={2}
 					renderItem={({ item }) => (
 						<View>
-							<Text style={{ color: 'red' }}>Hello</Text>
+							{/*<Text style={{ color: theme.secondary.a20 }}>Hello</Text>*/}
 						</View>
 					)}
 				/>

@@ -3,17 +3,30 @@ import { SocialHubPinSectionContainer } from './_factory';
 import { StyleProp, View, ViewStyle, Text, StyleSheet } from 'react-native';
 import useGlobalState from '../../../../../../states/_global';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { ProfilePinnedTag } from '../../../../../../database/_schema';
+import { Dispatch } from 'react';
+import { socialHubTabReducerAction } from '../../../../../../states/reducers/social-hub-tab.reducer';
 
-type SocialHubPinnedTags = {
+type SocialHubPinnedTagsProps = {
+	items: ProfilePinnedTag[];
+	refresh: () => void;
+	isRefreshing: boolean;
+	dispatch: Dispatch<socialHubTabReducerAction>;
 	style: StyleProp<ViewStyle>;
 };
-function SocialHubPinnedTags({ style }: SocialHubPinnedTags) {
+
+function SocialHubPinnedTags({
+	items,
+	refresh,
+	isRefreshing,
+	dispatch,
+	style,
+}: SocialHubPinnedTagsProps) {
 	const { theme } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
 		})),
 	);
-	const items = ['DhaagaApp', 'DhaagaUpdates', 'DhaagaDev'];
 	return (
 		<SocialHubPinSectionContainer label={'Tags'} style={style}>
 			<View
@@ -42,7 +55,7 @@ function SocialHubPinnedTags({ style }: SocialHubPinnedTags) {
 								},
 							]}
 						>
-							#{tag}
+							#{tag.name}
 						</Text>
 					</View>
 				))}

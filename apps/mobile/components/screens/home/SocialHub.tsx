@@ -28,6 +28,8 @@ import { router } from 'expo-router';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+import SocialHubPinnedProfiles from './stack/landing/fragments/SocialHubPinnedProfiles';
+import SocialHubPinnedTags from './stack/landing/fragments/SocialHubPinnedTags';
 
 function Header() {
 	return (
@@ -166,10 +168,16 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 				profile,
 			},
 		});
+		dispatch({
+			type: socialHubTabReducerActionType.LOAD_PINS,
+		});
 	}, [profile]);
 
 	function refresh() {
 		setIsRefreshing(true);
+		dispatch({
+			type: socialHubTabReducerActionType.LOAD_PINS,
+		});
 		setIsRefreshing(false);
 	}
 
@@ -199,11 +207,34 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 					setIndex={setIndex}
 				/>
 			</View>
+
+			{/* -- Modules --- */}
 			<SocialHubPinnedTimelines
 				items={State.pinned.timelines}
 				refresh={refresh}
 				isRefreshing={IsRefreshing}
 				dispatch={dispatch}
+			/>
+
+			{/* -- Modules --- */}
+			<SocialHubPinnedProfiles
+				items={State.pinned.users}
+				refresh={refresh}
+				isRefreshing={IsRefreshing}
+				dispatch={dispatch}
+				style={{
+					marginTop: 16,
+				}}
+			/>
+
+			<SocialHubPinnedTags
+				items={State.pinned.tags}
+				refresh={refresh}
+				isRefreshing={IsRefreshing}
+				dispatch={dispatch}
+				style={{
+					marginTop: 16,
+				}}
 			/>
 		</ScrollView>
 	);

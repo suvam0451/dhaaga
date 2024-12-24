@@ -117,6 +117,10 @@ export class Service {
 			});
 			return items.sort((a, b) => (a.itemOrder > b.itemOrder ? 1 : -1));
 		} catch (e) {
+			console.log(
+				'[ERROR]: could not load pinned user items for profile',
+				profile,
+			);
 			return [];
 		}
 	}

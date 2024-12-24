@@ -1,84 +1,30 @@
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { StyleProp, ViewStyle } from 'react-native';
 import { SocialHubPinSectionContainer } from './_factory';
+import { ProfilePinnedUser } from '../../../../../../database/_schema';
+import { Dispatch } from 'react';
+import { socialHubTabReducerAction } from '../../../../../../states/reducers/social-hub-tab.reducer';
+import { AppFlashList } from '../../../../../lib/AppFlashList';
 
-type SocialHubPinnedProfilesProps = {
+type SocialHubPinnedTimelinesProps = {
+	items: ProfilePinnedUser[];
+	refresh: () => void;
+	isRefreshing: boolean;
+	dispatch: Dispatch<socialHubTabReducerAction>;
 	style: StyleProp<ViewStyle>;
 };
 
-function SocialHubPinnedProfiles({ style }: SocialHubPinnedProfilesProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+function SocialHubPinnedProfiles({
+	items,
+	refresh,
+	isRefreshing,
+	dispatch,
+	style,
+}: SocialHubPinnedTimelinesProps) {
 	return (
 		<SocialHubPinSectionContainer label={'Profiles'} style={style}>
-			<View
-				style={[
-					styles.row,
-					{
-						marginBottom: 16,
-					},
-				]}
-			>
-				<View
-					style={[styles.item, { backgroundColor: theme.textColor.low }]}
-				></View>
-				<View
-					style={[styles.item, { backgroundColor: theme.textColor.low }]}
-				></View>
-				<View
-					style={[styles.item, { backgroundColor: theme.textColor.low }]}
-				></View>
-				<View
-					style={[styles.item, { backgroundColor: theme.textColor.low }]}
-				></View>
-			</View>
-			<View style={styles.row}>
-				<View
-					style={[styles.item, { backgroundColor: theme.textColor.low }]}
-				></View>
-				<View
-					style={[styles.item, { backgroundColor: theme.textColor.low }]}
-				></View>
-				<View
-					style={[styles.item, { backgroundColor: theme.textColor.low }]}
-				></View>
-				<View
-					style={[styles.item, { backgroundColor: theme.textColor.low }]}
-				></View>
-			</View>
+			<AppFlashList.PinnedProfiles data={items} />
 		</SocialHubPinSectionContainer>
 	);
 }
 
 export default SocialHubPinnedProfiles;
-
-const styles = StyleSheet.create({
-	root: {
-		marginVertical: 24,
-		marginHorizontal: 8,
-	},
-	sectionLabel: {
-		// marginHorizontal: 8,
-		marginBottom: 20,
-		fontSize: 18,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-	},
-	row: {
-		flexDirection: 'row',
-		width: '100%',
-		display: 'flex',
-		justifyContent: 'space-around',
-		alignItems: 'center',
-	},
-	item: {
-		borderRadius: '100%',
-		width: 64,
-		height: 64,
-		backgroundColor: 'red',
-	},
-});
