@@ -1,7 +1,7 @@
-import * as Linking from 'expo-linking';
 import { View } from 'react-native';
 import { Image } from 'expo-image';
 import { useAssets } from 'expo-asset';
+import { LinkingUtils } from '../../../utils/linking.utils';
 
 function Coffee() {
 	const [assets, error] = useAssets([
@@ -11,7 +11,7 @@ function Coffee() {
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
 
 	function onTouch() {
-		Linking.openURL('https://buymeacoffee.com/suvam');
+		LinkingUtils.openCoffeeLink();
 	}
 
 	if (!LOADED) return <View></View>;

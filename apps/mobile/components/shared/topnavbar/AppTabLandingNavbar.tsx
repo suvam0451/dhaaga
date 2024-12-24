@@ -7,6 +7,7 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
+	SOCIAL_HUB_ADD_TAB,
 	DISCOVER,
 	COMPOSE,
 	INBOX,
@@ -32,6 +33,7 @@ type AppTabLandingNavbarProps = {
 };
 
 const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
+	[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Tab',
 	[APP_LANDING_PAGE_TYPE.HOME]: 'Social Hub',
 	[APP_LANDING_PAGE_TYPE.DISCOVER]: 'Discover',
 	[APP_LANDING_PAGE_TYPE.COMPOSE]: 'Compose',

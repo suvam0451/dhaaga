@@ -14,6 +14,7 @@ import { AppDivider } from '../../lib/Divider';
 
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { APP_BOTTOM_SHEET_ENUM } from '../Core';
+import { LinkingUtils } from '../../../utils/linking.utils';
 
 type OpenGraphParsingState = {
 	key: string | null;
@@ -135,7 +136,9 @@ function AppBottomSheetLinkPreview() {
 						<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 					}
 					label={'Open in Browser'}
-					onPress={() => {}}
+					onPress={() => {
+						LinkingUtils.openURL(ValueRef.current);
+					}}
 					desc={'External browser will be used'}
 				/>
 			</View>
@@ -222,10 +225,7 @@ function AppBottomSheetLinkPreview() {
 				/>
 				<AppMenu.Option
 					appIconId={
-						<AppIcon
-							id={'external-link'}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						/>
+						<AppIcon id={'copy'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 					}
 					label={'Copy Link'}
 					onPress={() => {}}
@@ -245,7 +245,10 @@ function AppBottomSheetLinkPreview() {
 						<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 					}
 					label={'Open in Browser'}
-					onPress={() => {}}
+					onPress={() => {
+						console.log('pressed...');
+						LinkingUtils.openURL(ValueRef.current);
+					}}
 					desc={'External browser will be used'}
 				/>
 			</View>

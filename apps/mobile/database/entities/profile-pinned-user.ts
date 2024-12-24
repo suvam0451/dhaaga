@@ -58,23 +58,38 @@ export class Service {
 		return !!Service.find(db, profile, server, userId);
 	}
 
+	/**
+	 *
+	 * @param db
+	 * @param profile
+	 * @param homeServer is not always necessarily user's own server
+	 * @param input
+	 */
 	static addForProfile(
 		db: DataSource,
 		profile: Profile,
+		homeServer: string,
 		input: ProfileUserPinCreateType,
 	) {
-		const { success, data } = profileUserPinCreateSchema.safeParse(input);
-		if (!success) return null;
-		const duplicate = Service.find(db, profile, data.server, data.identifier);
+		const { success, data, error } =
+			profileUserPinCreateSchema.safeParse(input);
+		if (!success) {
+			console.log('[WARN]: invalid input for user pin creation', error);
+			return null;
+		}
+		const duplicate = Service.find(db, profile, homeServer, data.identifier);
+		console.log('duplicate', duplicate);
 		if (duplicate) {
 			if (duplicate.active === false) {
 				Service.setActive(db, duplicate);
 			}
+
 			return duplicate;
 		}
+
 		db.profilePinnedUser.insert({
 			uuid: RandomUtil.nanoId(),
-			server: data.server,
+			server: homeServer,
 			category: data.category,
 			driver: data.driver,
 			required: data.required,
@@ -84,6 +99,8 @@ export class Service {
 			avatarUrl: data.avatarUrl,
 			displayName: data.displayName, // fk
 			profileId: profile.id,
+			identifier: data.identifier,
+			username: data.username,
 		});
 	}
 

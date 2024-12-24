@@ -1,7 +1,6 @@
 import { Fragment, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, Text, View } from 'react-native';
 import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
-import SocialHubPinnedTimelines from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedTimelines';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -13,6 +12,7 @@ import AppTabLandingNavbar, {
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
 import SocialHubPinnedProfiles from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedProfiles';
 import SocialHubPinnedTags from '../../../components/screens/home/stack/landing/fragments/SocialHubPinnedTags';
+import SocialHub from '../../../components/screens/home/SocialHub';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -122,7 +122,7 @@ function Content() {
 					setIndex={setIndex}
 				/>
 			</View>
-			<SocialHubPinnedTimelines />
+			{/*<SocialHubPinnedTimelines  />*/}
 			<SocialHubPinnedProfiles style={{ marginTop: 16 }} />
 			<SocialHubPinnedTags style={{ marginTop: 16 }} />
 		</View>
@@ -152,6 +152,7 @@ function Screen() {
 		}
 	}
 
+	return <SocialHub />;
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
 
 	return (

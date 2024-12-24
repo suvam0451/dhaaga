@@ -8,7 +8,7 @@ import {
 	useState,
 } from 'react';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
-import AppBottomSheet, { APP_BOTTOM_SHEET_ENUM } from '../../Core';
+import AppBottomSheet from '../../Core';
 import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
@@ -17,8 +17,8 @@ import {
 import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../../services/app-status-dto.service';
 
 type Type = {
-	type: APP_BOTTOM_SHEET_ENUM;
-	setType: (type: APP_BOTTOM_SHEET_ENUM) => void;
+	type: any;
+	setType: (type: any) => void;
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
@@ -48,7 +48,7 @@ type Type = {
 };
 
 const defaultValue: Type = {
-	type: APP_BOTTOM_SHEET_ENUM.NA,
+	type: null,
 	setType: () => {},
 
 	isAnimating: false,
@@ -80,7 +80,7 @@ type Props = {
 
 function WithAppBottomSheetContext({ children }: Props) {
 	const [Visible, setVisible] = useState(false);
-	const [Type, setType] = useState(APP_BOTTOM_SHEET_ENUM.NA);
+	const [Type, setType] = useState(null);
 	const { forceUpdate, State } = useHookLoadingState();
 	const [IsAnimating, setIsAnimating] = useState(false);
 

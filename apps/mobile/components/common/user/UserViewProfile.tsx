@@ -1,16 +1,21 @@
 import { useLocalSearchParams } from 'expo-router';
-import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
+import {
+	Animated,
+	Dimensions,
+	Pressable,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
 import useMfm from '../../hooks/useMfm';
-import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
 import styles from './utils/styles';
 import UserViewProfileStats from './fragments/UserViewProfileStats';
 import ProfileAvatar from './fragments/ProfileAvatar';
 import ProfileDesc from './fragments/ProfileDesc';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import RelationshipButtonCore from '../relationship/RelationshipButtonCore';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
@@ -21,6 +26,11 @@ import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppIcon } from '../../lib/Icon';
 import { appDimensions } from '../../../styles/dimensions';
+import {
+	useAppBottomSheet_Improved,
+	useAppManager,
+} from '../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
 export function ProfileContextWrapped() {
 	const { theme } = useGlobalState(
@@ -49,6 +59,15 @@ export function ProfileContextWrapped() {
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
+
+	const { show } = useAppBottomSheet_Improved();
+	const { appManager } = useAppManager();
+	function onMoreOptionsPressed() {
+		if (!acct) return;
+		appManager.storage.setUserId(acct.id);
+		appManager.storage.setUserObject(acct);
+		show(APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS, true);
+	}
 
 	if (error || !acct) return <View />;
 
@@ -107,8 +126,8 @@ export function ProfileContextWrapped() {
 							</Text>
 							{IS_LOCKED && (
 								<View style={{ marginLeft: 4 }}>
-									<AntDesign
-										name="lock1"
+									<AppIcon
+										id="lock-closed-outline"
 										size={14}
 										color={theme.secondary.a10}
 									/>
@@ -135,7 +154,6 @@ export function ProfileContextWrapped() {
 							padding: 8,
 							borderRadius: appDimensions.buttons.borderRadius,
 							marginHorizontal: 12,
-							// paddingHorizontal: 12,
 							flex: 1,
 							paddingVertical: 10,
 						}}
@@ -151,9 +169,12 @@ export function ProfileContextWrapped() {
 							Message
 						</Text>
 					</View>
-					<View style={{ paddingHorizontal: 6 }}>
+					<Pressable
+						style={{ paddingHorizontal: 12 }}
+						onPress={onMoreOptionsPressed}
+					>
 						<AppIcon id={'ellipsis-v'} size={24} color={theme.secondary.a20} />
-					</View>
+					</Pressable>
 				</View>
 
 				{/* Collapsible Sections */}

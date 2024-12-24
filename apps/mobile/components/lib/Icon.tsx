@@ -30,6 +30,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 export type APP_ICON_ENUM =
 	| 'bell'
 	| 'back'
+	| 'block'
 	| 'browser'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
@@ -51,6 +52,7 @@ export type APP_ICON_ENUM =
 	| 'home'
 	| 'info'
 	| 'language'
+	| 'lock-closed-outline'
 	| 'menu'
 	| 'message'
 	| 'more-options-vertical'
@@ -69,7 +71,9 @@ export type APP_ICON_ENUM =
 	| 'to-top'
 	| 'trash'
 	| 'user-guide'
-	| 'wand';
+	| 'wand'
+	| 'mute-outline'
+	| 'unmute-outline';
 
 type AppIconType = {
 	id: APP_ICON_ENUM;
@@ -267,7 +271,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
-
+				case 'block':
+					return (
+						<Ionicons
+							id={'ban-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'browser':
 					return (
 						<Ionicons
@@ -488,6 +501,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'lock-closed-outline':
+					return (
+						<Ionicons
+							name="lock-closed-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'feelings':
 					return (
 						<FontAwesome6
@@ -674,6 +697,26 @@ export const AppIcon = memo(
 					return (
 						<FontAwesome
 							name="magic"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'mute-outline':
+					return (
+						<Ionicons
+							name="volume-mute-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'unmute-outline':
+					return (
+						<Ionicons
+							name="volume-high-outline"
 							size={_size}
 							color={_color}
 							onPress={onPress}

@@ -3671,6 +3671,11 @@ expo-build-properties@~0.13.1:
     ajv "^8.11.0"
     semver "^7.6.0"
 
+expo-clipboard@~7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/expo-clipboard/-/expo-clipboard-7.0.0.tgz#066b1a781fdaf05e30f282522d3a58f2e651e4cf"
+  integrity sha512-4Vuv1zZPTOiKzIeC0BIGUN8nyzkXlE6jKchtLxcoksBjHPdG5W2eH05B+hppTrK9N3+Xh02z4j3h1cFRqPJ1fw==
+
 expo-constants@~17.0.0, expo-constants@~17.0.3:
   version "17.0.3"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-17.0.3.tgz#a05b38e0417d59759ece1642b4d483889e04dbda"

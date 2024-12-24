@@ -4,4 +4,7 @@ export enum APP_ROUTING_ENUM {
 	MISSKEY_SERVER_SELECTION = '/profile/onboard/add-misskey',
 	MASTODON_SIGNIN = '/profile/onboard/signin-md',
 	MASTODON_SERVER_SELECTION = '/profile/onboard/add-mastodon',
+
+	// guides
+	GUIDE_NEW_TAB_INTERFACE = '/user-guide-profiles',
 }
