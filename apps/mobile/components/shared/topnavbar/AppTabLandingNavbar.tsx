@@ -17,6 +17,9 @@ export enum APP_LANDING_PAGE_TYPE {
 	CHAT,
 	SOCIAL,
 	UPDATES,
+	APP_SETTINGS,
+	MY_ACCOUNT,
+	MY_PROFILE,
 }
 
 type AppTabLandingNavbarProps = {
@@ -39,6 +42,9 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 	[APP_LANDING_PAGE_TYPE.CHAT]: 'Chat',
 	[APP_LANDING_PAGE_TYPE.SOCIAL]: 'Social',
 	[APP_LANDING_PAGE_TYPE.UPDATES]: 'Updates',
+	[APP_LANDING_PAGE_TYPE.APP_SETTINGS]: 'App Settings',
+	[APP_LANDING_PAGE_TYPE.MY_ACCOUNT]: 'My Account',
+	[APP_LANDING_PAGE_TYPE.MY_PROFILE]: 'My Profile',
 };
 
 /**

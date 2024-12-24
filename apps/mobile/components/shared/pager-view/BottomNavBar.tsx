@@ -16,9 +16,9 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_FONTS } from '../../../styles/AppFonts';
 import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../states/_global';
+import useGlobalState from '../../../states/_global';
 
 type ChipProps = {
 	active: boolean;
@@ -94,7 +94,7 @@ type SingleSelectAnimatedProps = {
  * @param justify use space-between for
  * full width and flex-start for left aligned
  */
-export const SingleSelectAnimated = memo(
+export const BottomNavBar = memo(
 	({ items, justify, Index, setIndex }: SingleSelectAnimatedProps) => {
 		const { theme } = useGlobalState(
 			useShallow((o) => ({
@@ -104,10 +104,6 @@ export const SingleSelectAnimated = memo(
 
 		const xPos = useSharedValue(0);
 		const xWidth = useSharedValue(0);
-
-		useEffect(() => {
-			onSelect(Index);
-		}, [Index]);
 
 		const onSelect = (index: number, dims?: any) => {
 			setIndex(index);
@@ -123,6 +119,10 @@ export const SingleSelectAnimated = memo(
 				});
 			}
 		};
+
+		useEffect(() => {
+			onSelect(Index);
+		}, [Index]);
 
 		const handleLayout = (index: number, event: any) => {
 			if (index === 0) {

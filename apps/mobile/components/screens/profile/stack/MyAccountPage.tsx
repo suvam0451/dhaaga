@@ -1,16 +1,13 @@
-import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
-import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
-import ProfileLandingAccountOverview from './fragments/ProfileLandingAccountOverview';
-import ProfileLandingAccountModules from './fragments/ProfileLandingAccountModules';
-import useGlobalState from '../../../../../states/_global';
+import { Animated, StyleSheet, Text, View } from 'react-native';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import ProfileLandingAccountOverview from './landing/fragments/ProfileLandingAccountOverview';
+import ProfileLandingAccountModules from './landing/fragments/ProfileLandingAccountModules';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import AppNoAccount from '../../../../error-screen/AppNoAccount';
-import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandingNavbar';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import AppNoAccount from '../../../error-screen/AppNoAccount';
+import { APP_LANDING_PAGE_TYPE } from '../../../shared/topnavbar/AppTabLandingNavbar';
 
 type HeaderProps = {
 	label: string;
@@ -43,23 +40,6 @@ function Header({ label }: HeaderProps) {
 					</Text>
 				</View>
 
-				<Pressable style={{ padding: 4 }} onPress={() => {}}>
-					<AntDesign name="user" size={24} color={theme.textColor.high} />
-				</Pressable>
-
-				<Pressable
-					style={{ padding: 4, marginLeft: 4 }}
-					onPress={() => {
-						router.navigate('/profile/settings/app-settings');
-					}}
-				>
-					<Ionicons
-						name="settings-outline"
-						size={24}
-						color={theme.textColor.high}
-					/>
-				</Pressable>
-
 				<View
 					style={{ padding: 4, marginLeft: 4, transform: [{ translateX: -1 }] }}
 				>
@@ -75,7 +55,7 @@ function Header({ label }: HeaderProps) {
 	);
 }
 
-function AccountLanding() {
+function MyAccountPage() {
 	const { onScroll } = useScrollMoreOnPageEnd();
 
 	const { theme, acct } = useGlobalState(
@@ -90,7 +70,7 @@ function AccountLanding() {
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
 			<Animated.ScrollView onScroll={onScroll}>
-				<Header label={'App Profile'} />
+				<Header label={'My Account'} />
 				<ProfileLandingAccountOverview />
 				<ProfileLandingAccountModules />
 			</Animated.ScrollView>
@@ -98,7 +78,7 @@ function AccountLanding() {
 	);
 }
 
-export default AccountLanding;
+export default MyAccountPage;
 
 const styles = StyleSheet.create({
 	headerText: {

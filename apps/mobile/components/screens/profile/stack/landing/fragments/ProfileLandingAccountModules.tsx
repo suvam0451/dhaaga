@@ -1,14 +1,13 @@
 import { memo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
+import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from 'expo-router';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { AppIcon } from '../../../../../lib/Icon';
 
 const ICON_SIZE = 24;
 
@@ -35,12 +34,12 @@ const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
 			<Text style={[styles.moduleLabel, { color: theme.textColor.medium }]}>
 				{label}
 			</Text>
-			{/*<View style={{ flex: 1 }} />*/}
-			{/*<Entypo*/}
-			{/*	name="chevron-small-right"*/}
-			{/*	size={24}*/}
-			{/*	color={theme.textColor.medium}*/}
-			{/*/>*/}
+			<View style={{ flex: 1 }} />
+			<Entypo
+				name="chevron-small-right"
+				size={24}
+				color={theme.complementary.a0}
+			/>
 		</TouchableOpacity>
 	);
 });
@@ -52,10 +51,14 @@ function ProfileLandingAccountModules() {
 		})),
 	);
 	return (
-		<View style={{ paddingTop: 16 }}>
+		<View style={{ paddingTop: 28 }}>
 			<ActionButton
 				Icon={
-					<AntDesign name="like1" size={ICON_SIZE} color={APP_THEME.LINK} />
+					<AntDesign
+						name="like1"
+						size={ICON_SIZE}
+						color={theme.complementary.a0}
+					/>
 				}
 				label={'Likes'}
 				to={'/profile/account/likes'}
@@ -63,7 +66,7 @@ function ProfileLandingAccountModules() {
 			<ActionButton
 				Icon={
 					<Ionicons
-						color={APP_THEME.INVALID_ITEM}
+						color={theme.complementary.a0}
 						name={'bookmark'}
 						size={ICON_SIZE}
 					/>
@@ -72,7 +75,7 @@ function ProfileLandingAccountModules() {
 				to={'/profile/account/bookmarks'}
 			/>
 			<ActionButton
-				Icon={<Entypo name="list" size={24} color={APP_FONT.MONTSERRAT_BODY} />}
+				Icon={<Entypo name="list" size={24} color={theme.complementary.a0} />}
 				label={'Lists'}
 				to={'/profile/account/lists'}
 			/>
@@ -86,18 +89,6 @@ function ProfileLandingAccountModules() {
 					marginBottom: 24,
 				}}
 			/>
-			<View style={styles.checkmarkBox}>
-				<AppIcon id={'checkmark-done-outline'} emphasis={'low'} />
-				<Text
-					style={[
-						styles.checkmarkBoxText,
-						{ fontSize: 14, color: theme.textColor.low },
-					]}
-				>
-					No pending friend requests.
-				</Text>
-			</View>
-
 			<Text
 				style={{
 					marginTop: 32,

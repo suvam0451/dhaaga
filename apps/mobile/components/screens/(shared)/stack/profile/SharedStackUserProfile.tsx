@@ -198,6 +198,7 @@ const localStyles = StyleSheet.create({
 		borderRadius: 84 / 2,
 		marginTop: -24,
 		marginLeft: 6,
+		overflow: 'hidden',
 	},
 	relationManagerSection: {
 		flexDirection: 'row',

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { useRef, useState } from 'react';
 import PagerView from 'react-native-pager-view';
-import { SingleSelectAnimated } from '../../../../lib/SingleSelectAnimated';
+import { BottomNavBar } from '../../../../shared/pager-view/BottomNavBar';
 import MentionView from './MentionView';
 import ChatView from './ChatView';
 import UpdatesView from './UpdatesView';
@@ -55,7 +55,7 @@ export const TabView = () => {
 						<View key={index.toString()}>{renderScene(index)}</View>
 					))}
 				</PagerView>
-				<SingleSelectAnimated
+				<BottomNavBar
 					Index={Index}
 					setIndex={onChipSelect}
 					items={[

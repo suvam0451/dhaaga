@@ -9,6 +9,7 @@ import ProfileStats from '../../../../(shared)/stack/profile/fragments/ProfileSt
 import styles from '../../../../../common/user/utils/styles';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
 
 const ProfileAndSettings = memo(() => {
 	const { theme } = useGlobalState(
@@ -16,22 +17,24 @@ const ProfileAndSettings = memo(() => {
 			theme: o.colorScheme,
 		})),
 	);
-	const { Data: acct } = useMyProfile();
+	const { data } = useMyProfile();
 
 	const { content: ParsedDisplayName } = useMfm({
-		content: acct?.displayName,
-		remoteSubdomain: acct?.instance,
-		emojiMap: acct?.calculated?.emojis,
-		deps: [acct?.displayName],
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		emphasis: 'high',
+		content: data?.displayName,
+		remoteSubdomain: data?.instance,
+		emojiMap: data?.calculated?.emojis,
+		deps: [data?.displayName],
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});
+
+	if (!data) return <View />;
 
 	return (
 		<View>
 			{/*@ts-ignore-next-line*/}
 			<Image
-				source={{ uri: acct?.banner }}
+				source={{ uri: data?.banner }}
 				style={{
 					height: 128,
 					width: Dimensions.get('window').width,
@@ -42,33 +45,26 @@ const ProfileAndSettings = memo(() => {
 					<ProfileAvatar
 						containerStyle={localStyles.avatarContainer}
 						imageStyle={localStyles.avatarImageContainer}
-						uri={acct?.avatarUrl}
+						uri={data?.avatarUrl}
 					/>
-					<View style={{ flexShrink: 1, marginTop: 8, marginLeft: 8 }}>
-						{ParsedDisplayName}
-						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<Text
-								style={[
-									styles.secondaryText,
-									{ color: theme.textColor.medium },
-								]}
-								numberOfLines={1}
-							>
-								{acct?.handle}
-							</Text>
-						</View>
-					</View>
 				</View>
-				<View style={{ flexGrow: 1 }} />
 				<ProfileStats
-					userId={acct?.id}
-					postCount={acct?.stats?.posts}
-					followingCount={acct?.stats?.following}
-					followerCount={acct?.stats?.followers}
-					style={{ marginTop: 16 }}
+					userId={data?.id}
+					postCount={data?.stats?.posts}
+					followingCount={data?.stats?.following}
+					followerCount={data?.stats?.followers}
 				/>
-
-				{/*<View style={localStyles.secondSectionContainer}></View>*/}
+			</View>
+			<View style={{ flexShrink: 1, marginTop: 8, marginLeft: 8 }}>
+				{ParsedDisplayName}
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<Text
+						style={[styles.secondaryText, { color: theme.textColor.medium }]}
+						numberOfLines={1}
+					>
+						{data?.handle}
+					</Text>
+				</View>
 			</View>
 		</View>
 	);
@@ -101,13 +97,13 @@ const localStyles = StyleSheet.create({
 		borderRadius: '100%',
 	},
 	avatarContainer: {
-		width: 72,
-		height: 72,
-		borderColor: 'gray',
-		borderWidth: 0.75,
-		marginTop: -36,
+		width: 84,
+		height: 84,
+		borderColor: 'rgba(200, 200, 200, 0.24)',
+		borderWidth: 3,
+		borderRadius: 84 / 2,
+		marginTop: -24,
 		marginLeft: 6,
-		borderRadius: '100%',
 		overflow: 'hidden',
 	},
 	secondSectionContainer: {
