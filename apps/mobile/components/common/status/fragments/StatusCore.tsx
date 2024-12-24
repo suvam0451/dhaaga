@@ -14,14 +14,13 @@ import PostCreatedBy from './PostCreatedBy';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusQuoted from './StatusQuoted';
 import { AppIcon } from '../../../lib/Icon';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../states/_global';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
 import { Text } from 'react-native';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 
 /**
  * Mostly used to remove the border

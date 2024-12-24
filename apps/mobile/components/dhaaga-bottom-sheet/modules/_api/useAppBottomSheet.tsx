@@ -8,14 +8,13 @@ import {
 	useState,
 } from 'react';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
-import AppBottomSheet from '../../Core';
+import AppBottomSheet, { APP_BOTTOM_SHEET_ENUM } from '../../Core';
 import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
 } from '../../../common/timeline/api/postArrayReducer';
 import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../../services/app-status-dto.service';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 type Type = {
 	type: APP_BOTTOM_SHEET_ENUM;

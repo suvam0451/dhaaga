@@ -25,10 +25,30 @@ export function useAppManager() {
 	);
 }
 
+export function useProfileManager() {
+	return useGlobalState(
+		useShallow((o) => ({
+			profileManager: o.profileSessionManager,
+		})),
+	);
+}
+
 export function useAppTheme() {
 	return useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
+		})),
+	);
+}
+
+export function useAppBottomSheet_Improved() {
+	return useGlobalState(
+		useShallow((o) => ({
+			hide: o.bottomSheet.hide,
+			show: o.bottomSheet.show,
+			stateId: o.bottomSheet.stateId,
+			refresh: o.bottomSheet.refresh,
+			visible: o.bottomSheet.visible,
 		})),
 	);
 }

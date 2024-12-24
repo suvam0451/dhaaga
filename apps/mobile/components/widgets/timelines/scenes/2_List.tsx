@@ -1,6 +1,4 @@
 import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
-import TimelineLoading from '../../../loading-screens/TimelineLoading';
-import { APP_FONT } from '../../../../styles/AppTheme';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import useActivityPubLists, {
@@ -14,6 +12,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 type ListItemProps = {
 	label: string;
@@ -21,12 +20,13 @@ type ListItemProps = {
 };
 
 const ListItem = memo(({ label, onPress }: ListItemProps) => {
+	const { theme } = useAppTheme();
 	return (
 		<TouchableOpacity style={styles.listItemContainer} onPress={onPress}>
 			<Text
 				style={{
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					color: APP_FONT.MONTSERRAT_BODY,
+					fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+					color: theme.secondary.a20,
 				}}
 			>
 				{label}
@@ -42,6 +42,7 @@ type ListProps = {
 const Lists = memo(({ items }: ListProps) => {
 	const { setTimelineType, setQuery, setShowTimelineSelection } =
 		useTimelineController();
+	const { theme } = useAppTheme();
 
 	function onListSelected(idx: number) {
 		const { id, label } = items[idx];
@@ -54,9 +55,11 @@ const Lists = memo(({ items }: ListProps) => {
 		<Fragment>
 			<View style={styles.sectionLabelContainer}>
 				<View style={{ width: 32 }}>
-					<Entypo name="list" size={24} color={APP_FONT.MONTSERRAT_BODY} />
+					<Entypo name="list" size={24} color={theme.secondary.a20} />
 				</View>
-				<Text style={styles.sectionLabel}>Your lists:</Text>
+				<Text style={[styles.sectionLabel, { color: theme.secondary.a20 }]}>
+					Your lists:
+				</Text>
 			</View>
 			{items.map((o, i) => (
 				<ListItem
@@ -89,6 +92,7 @@ const AntennaList = memo(({ items }: AntennaListProps) => {
 	);
 	const { setTimelineType, setQuery, setShowTimelineSelection } =
 		useTimelineController();
+	const { theme } = useAppTheme();
 
 	function onAntennaSelected(idx: number) {
 		const { id, label } = items[idx];
@@ -106,10 +110,12 @@ const AntennaList = memo(({ items }: AntennaListProps) => {
 					<MaterialCommunityIcons
 						name="antenna"
 						size={24}
-						color={APP_FONT.MONTSERRAT_BODY}
+						color={theme.secondary.a20}
 					/>
 				</View>
-				<Text style={styles.sectionLabel}>Your antennas:</Text>
+				<Text style={[styles.sectionLabel, { color: theme.secondary.a20 }]}>
+					Your antennas:
+				</Text>
 			</View>
 
 			{items.map((o, i) => (
@@ -129,7 +135,7 @@ const ListTimelineOptions = memo(() => {
 	const { data: listsData, fetchStatus } = useActivityPubLists();
 
 	if (fetchStatus === 'fetching') {
-		return <TimelineLoading label={'Loading Your Lists'} />;
+		return <View />;
 	}
 
 	return (
@@ -152,8 +158,7 @@ const styles = StyleSheet.create({
 		marginBottom: 4,
 	},
 	sectionLabel: {
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		marginVertical: 8,
 	},
 	listItemContainer: {

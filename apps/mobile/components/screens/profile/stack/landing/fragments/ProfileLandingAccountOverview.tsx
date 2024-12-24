@@ -5,7 +5,7 @@ import useMfm from '../../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { Image } from 'expo-image';
 import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
-import ProfileStats from '../../../../(shared)/stack/profile/fragments/ProfileStats';
+import UserViewProfileStats from '../../../../../common/user/fragments/UserViewProfileStats';
 import styles from '../../../../../common/user/utils/styles';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -48,7 +48,7 @@ const ProfileAndSettings = memo(() => {
 						uri={data?.avatarUrl}
 					/>
 				</View>
-				<ProfileStats
+				<UserViewProfileStats
 					userId={data?.id}
 					postCount={data?.stats?.posts}
 					followingCount={data?.stats?.following}

@@ -1,10 +1,10 @@
 import {
 	Dimensions,
 	Pressable,
-	View,
+	ScrollView,
 	StyleSheet,
 	Text,
-	ScrollView,
+	View,
 } from 'react-native';
 import { Fragment, useEffect, useState } from 'react';
 import { APP_KNOWN_MODAL } from '../../states/_global';
@@ -18,6 +18,7 @@ import { Image } from 'expo-image';
 import { AppText } from '../lib/Text';
 import { appDimensions } from '../../styles/dimensions';
 import RelationshipButtonCore from '../common/relationship/RelationshipButtonCore';
+import useAppNavigator from '../../states/useAppNavigator';
 
 const DEFAULT_POSITION = { x: 0, y: 0, ready: false };
 
@@ -30,11 +31,17 @@ const TaperedArrow = () => {
 };
 
 function UserPeekModalContent({ userId }: { userId: string }) {
+	const { toProfile } = useAppNavigator();
 	const { data, error, fetchStatus } = useGetProfile({ userId });
+	const { hide } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { theme } = useAppTheme();
 	if (error) return <View />;
 	if (fetchStatus === 'fetching') return <View />;
 
+	function onProfilePressed() {
+		hide();
+		toProfile(userId);
+	}
 	return (
 		<ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 20 }}>
 			<View style={{ flexDirection: 'row', marginBottom: 16 }}>
@@ -113,17 +120,19 @@ function UserPeekModalContent({ userId }: { userId: string }) {
 				style={{
 					flexDirection: 'row',
 					width: '100%',
+					marginTop: 8,
 				}}
 			>
 				<View style={{ flex: 1 }}>
 					<RelationshipButtonCore userId={userId} />
 				</View>
-				<View
+				<Pressable
 					style={{
 						paddingHorizontal: 4,
 						flex: 1,
 						alignItems: 'center',
 					}}
+					onPress={onProfilePressed}
 				>
 					<AppText.SemiBold
 						style={{
@@ -134,7 +143,7 @@ function UserPeekModalContent({ userId }: { userId: string }) {
 					>
 						Show Profile
 					</AppText.SemiBold>
-				</View>
+				</Pressable>
 			</View>
 		</ScrollView>
 	);

@@ -4,13 +4,13 @@ import { ThemePackType } from '../assets/loaders/UseAppThemePackLoader';
 import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
 import { Account, Profile } from '../database/_schema';
 import {
+	ActivityPubClient,
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { AccountService } from '../database/entities/account';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
 import {
 	ACCOUNT_METADATA_KEY,
@@ -30,6 +30,7 @@ import AppSessionManager from '../services/session/app-session.service';
 import { AppColorSchemeType } from '../utils/theming.util';
 import AccountSessionManager from '../services/session/account-session.service';
 import { WritableDraft } from 'immer';
+import { APP_BOTTOM_SHEET_ENUM } from '../components/dhaaga-bottom-sheet/Core';
 
 type AppThemePack = {
 	id: string;
@@ -43,23 +44,6 @@ type AppModalStateBase = {
 	hide: () => void;
 	refresh: () => void;
 };
-
-export enum APP_BOTTOM_SHEET_ENUM {
-	QUICK_POST = 'QuickPost',
-	APP_PROFILE = 'AppProfile',
-	HASHTAG = 'Hashtag',
-	LINK = 'Link',
-	MORE_POST_ACTIONS = 'MorePostActions',
-	NA = 'N/A',
-	PROFILE_PEEK = 'ProfilePeek',
-	REACTION_DETAILS = 'ReactionDetails',
-	SELECT_ACCOUNT = 'SelectAccount',
-	STATUS_COMPOSER = 'StatusComposer',
-	STATUS_MENU = 'StatusMenu',
-	STATUS_PREVIEW = 'StatusPreview',
-	SWITCH_THEME_PACK = 'SwitchThemePack',
-	TIMELINE_CONTROLLER = 'TimeLineController',
-}
 
 export enum APP_DIALOG_SHEET_ENUM {
 	DEFAULT = 'Default',

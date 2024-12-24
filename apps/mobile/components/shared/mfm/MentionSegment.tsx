@@ -1,8 +1,9 @@
 import { Text } from 'react-native';
 import { memo, useMemo } from 'react';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../../utils/random.utils';
+import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
 type Props = {
 	value: string;

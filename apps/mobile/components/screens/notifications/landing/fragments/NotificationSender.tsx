@@ -13,14 +13,13 @@ import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../../states/_global';
+import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppIcon } from '../../../../lib/Icon';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { AppUserObject } from '../../../../../types/app-user.types';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
 
 type Props = {
 	type: DhaagaJsNotificationType;

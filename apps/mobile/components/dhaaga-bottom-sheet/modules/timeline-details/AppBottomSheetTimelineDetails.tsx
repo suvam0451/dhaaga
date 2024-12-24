@@ -12,25 +12,27 @@ function AppBottomSheetTimelineDetails() {
 			<NowBrowsingHeader />
 			<AppDivider.Soft style={{ marginHorizontal: 10 }} />
 			<AppMenu.Option
-				Icon={
+				appIconId={
 					<AppIcon id={'to-top'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 				}
 				label={'Scroll to Top'}
-				onClick={() => {}}
+				onPress={() => {}}
 			/>
 			<AppMenu.Option
-				Icon={<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />}
+				appIconId={
+					<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+				}
 				label={'Add Pin'}
-				onClick={() => {}}
+				onPress={() => {}}
 				desc={'Pins the timeline for this profile in Social Hub'}
 			/>
 
 			<AppMenu.Option
-				Icon={
+				appIconId={
 					<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 				}
 				label={'Open in Browser'}
-				onClick={() => {}}
+				onPress={() => {}}
 				desc={'Opens the timeline in your device browser'}
 			/>
 		</ScrollView>

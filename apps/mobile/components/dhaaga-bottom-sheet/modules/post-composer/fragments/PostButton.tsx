@@ -12,11 +12,10 @@ import { PostMiddleware } from '../../../../../services/middlewares/post.middlew
 import AtprotoComposerService, {
 	AtprotoReplyEmbed,
 } from '../../../../../services/atproto/atproto-compose';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../../states/_global';
+import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../Core';
 
 /**
  * Click to Post!

@@ -1,26 +1,26 @@
 import { useLocalSearchParams } from 'expo-router';
 import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
-import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
+import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
-import useMfm from '../../../../hooks/useMfm';
-import { APP_FONT } from '../../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
-import useGetProfile from '../../../../../hooks/api/accounts/useGetProfile';
-import styles from '../../../../common/user/utils/styles';
-import ProfileStats from './fragments/ProfileStats';
-import ProfileAvatar from '../../../../common/user/fragments/ProfileAvatar';
-import ProfileDesc from '../../../../common/user/fragments/ProfileDesc';
+import useMfm from '../../hooks/useMfm';
+import { APP_FONT } from '../../../styles/AppTheme';
+import { APP_FONTS } from '../../../styles/AppFonts';
+import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
+import styles from './utils/styles';
+import UserViewProfileStats from './fragments/UserViewProfileStats';
+import ProfileAvatar from './fragments/ProfileAvatar';
+import ProfileDesc from './fragments/ProfileDesc';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import RelationshipButtonCore from '../../../../common/relationship/RelationshipButtonCore';
+import RelationshipButtonCore from '../relationship/RelationshipButtonCore';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../shared/topnavbar/AppTopNavbar';
-import ProfileModules from './modules/ProfileModules';
-import useGlobalState from '../../../../../states/_global';
+} from '../../shared/topnavbar/AppTopNavbar';
+import ProfileModules from '../../screens/(shared)/stack/profile/modules/ProfileModules';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
-import { AppIcon } from '../../../../lib/Icon';
-import { appDimensions } from '../../../../../styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { AppIcon } from '../../lib/Icon';
+import { appDimensions } from '../../../styles/dimensions';
 
 export function ProfileContextWrapped() {
 	const { theme } = useGlobalState(
@@ -80,7 +80,7 @@ export function ProfileContextWrapped() {
 						imageStyle={localStyles.avatarImageContainer}
 						uri={avatarUrl}
 					/>
-					<ProfileStats
+					<UserViewProfileStats
 						userId={acct?.id}
 						postCount={acct?.stats?.posts}
 						followingCount={acct?.stats?.following}
@@ -110,7 +110,7 @@ export function ProfileContextWrapped() {
 									<AntDesign
 										name="lock1"
 										size={14}
-										color={APP_FONT.MONTSERRAT_BODY}
+										color={theme.secondary.a10}
 									/>
 								</View>
 							)}
@@ -126,14 +126,16 @@ export function ProfileContextWrapped() {
 				/>
 
 				<View style={localStyles.relationManagerSection}>
-					<RelationshipButtonCore userId={acct?.id} />
+					<View style={{ flex: 1 }}>
+						<RelationshipButtonCore userId={acct?.id} />
+					</View>
 					<View
 						style={{
 							backgroundColor: '#1b1b1b',
 							padding: 8,
 							borderRadius: appDimensions.buttons.borderRadius,
 							marginHorizontal: 12,
-							paddingHorizontal: 16,
+							// paddingHorizontal: 12,
 							flex: 1,
 							paddingVertical: 10,
 						}}
@@ -143,14 +145,15 @@ export function ProfileContextWrapped() {
 								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 								color: theme.secondary.a10,
 								textAlign: 'center',
-								fontSize: 16,
+								fontSize: 14,
 							}}
 						>
 							Message
 						</Text>
 					</View>
-					<View></View>
-					<AppIcon id={'ellipsis-v'} size={28} />
+					<View style={{ paddingHorizontal: 6 }}>
+						<AppIcon id={'ellipsis-v'} size={24} color={theme.secondary.a20} />
+					</View>
 				</View>
 
 				{/* Collapsible Sections */}
@@ -204,7 +207,8 @@ const localStyles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		marginHorizontal: 10,
-		marginTop: 8,
+		marginVertical: 24,
+		marginBottom: 8,
 	},
 	secondSectionContainer: {
 		flexDirection: 'row',

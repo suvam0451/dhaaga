@@ -58,7 +58,10 @@ function useAppNavigator() {
 
 	function toProfile(id: string) {
 		// probably in bottom sheet
-		if (!navigator || !navigator.getId) return;
+		if (!navigator || !navigator.getId) {
+			console.log('[WARN]: cannot redirect to profile. navigator missing.');
+			return;
+		}
 
 		const _id = navigator.getId();
 		if (!_id || _id === '/(tabs)/index') {
@@ -91,8 +94,6 @@ function useAppNavigator() {
 			router.navigate(`${navigator.getId()}/follows/${id}`);
 		}
 	}
-
-	function toTimeline() {}
 
 	return { toPost, toHome, toProfile, toTag, toFollowers, toFollows };
 }

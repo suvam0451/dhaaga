@@ -4,19 +4,34 @@ import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 type AppMenuOptionType = {
-	Icon: any;
+	appIconId: any;
 	label: string;
 	desc?: string;
-	onClick: () => void;
+	onPress: () => void;
+	// active state highlighting
+	active?: boolean;
+	activeLabel?: string;
+	activeDesc?: string;
 };
 
 export class AppMenu {
-	static Option({ Icon, label, desc, onClick }: AppMenuOptionType) {
+	static Option({
+		appIconId,
+		label,
+		desc,
+		onPress,
+		active,
+		activeLabel,
+		activeDesc,
+	}: AppMenuOptionType) {
 		const { theme } = useGlobalState(
 			useShallow((o) => ({
 				theme: o.colorScheme,
 			})),
 		);
+
+		const _label = active ? activeLabel || label : label;
+		const _desc = active ? activeDesc || desc : desc;
 
 		return (
 			<Pressable
@@ -27,9 +42,9 @@ export class AppMenu {
 					width: '100%',
 					minHeight: 64,
 				}}
-				onPress={onClick}
+				onPress={onPress}
 			>
-				{Icon}
+				{appIconId}
 				<View
 					style={{
 						marginLeft: 12,
@@ -44,7 +59,7 @@ export class AppMenu {
 							marginBottom: 2,
 						}}
 					>
-						{label}
+						{_label}
 					</Text>
 					{desc && (
 						<Text
@@ -53,7 +68,7 @@ export class AppMenu {
 								flexWrap: 'wrap',
 							}}
 						>
-							{desc}
+							{_desc}
 						</Text>
 					)}
 				</View>

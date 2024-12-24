@@ -3,11 +3,14 @@ import { TouchableOpacity } from 'react-native';
 import { AppIcon } from '../../../../../lib/Icon';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../../../states/_global';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
 
 /**
  * Will bring up the
  * "Contact Book" feature
  * in the future.
+ *
+ * @deprecated
  */
 const ProfileButtonMessage = memo(() => {
 	const { theme } = useGlobalState(
@@ -23,7 +26,11 @@ const ProfileButtonMessage = memo(() => {
 				borderRadius: 8,
 			}}
 		>
-			<AppIcon id={'phonebook'} size={20} emphasis={'low'} />
+			<AppIcon
+				id={'phonebook'}
+				size={20}
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+			/>
 		</TouchableOpacity>
 	);
 });

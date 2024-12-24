@@ -6,10 +6,9 @@ import {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Dimensions } from 'react-native';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../states/_global';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_BOTTOM_SHEET_ENUM } from '../../Core';
 
 const POST_COMPOSE_HEIGHT_MAX = 420;
 

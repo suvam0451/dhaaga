@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-import useAppNavigator from '../../../../../../states/useAppNavigator';
-import useGlobalState from '../../../../../../states/_global';
+import useAppNavigator from '../../../../states/useAppNavigator';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 
 type ProfileStatsProps = {
 	userId: string;
@@ -24,7 +24,7 @@ function util(o: number): string {
  * Shows the post and follower
  * count stats for a profile
  */
-const ProfileStats = memo(
+const UserViewProfileStats = memo(
 	({ postCount, followingCount, followerCount, userId }: ProfileStatsProps) => {
 		const { theme } = useGlobalState(
 			useShallow((o) => ({
@@ -84,7 +84,7 @@ const ProfileStats = memo(
 	},
 );
 
-export default ProfileStats;
+export default UserViewProfileStats;
 
 const styles = StyleSheet.create({
 	container: {

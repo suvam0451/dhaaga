@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import {
 	Platform,
 	StyleProp,
@@ -9,22 +8,24 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Feather from '@expo/vector-icons/Feather';
-import { Entypo, FontAwesome } from '@expo/vector-icons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
+import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { TimelineFetchMode } from '../common/timeline/utils/timeline.types';
 import * as Haptics from 'expo-haptics';
-import { APP_FONT } from '../../styles/AppTheme';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '../../styles/AppFonts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
+// icons packs
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import Octicons from '@expo/vector-icons/Octicons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Feather from '@expo/vector-icons/Feather';
+import Entypo from '@expo/vector-icons/Entypo';
 
 export type APP_ICON_ENUM =
 	| 'bell'
@@ -693,28 +694,6 @@ export const AppIcon = memo(
 );
 
 const styles = StyleSheet.create({
-	subHeader: {
-		width: '100%',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		backgroundColor: 'blue',
-	},
-	navbarTitleContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	navbarTitle: {
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-	},
-	buttonContainer: {
-		height: '100%',
-		alignItems: 'center',
-		flexDirection: 'row',
-		paddingHorizontal: 10,
-	},
 	accountIconTouchableContainer: {
 		height: '100%',
 		alignItems: 'center',

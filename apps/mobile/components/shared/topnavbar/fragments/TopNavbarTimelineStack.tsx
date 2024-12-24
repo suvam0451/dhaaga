@@ -10,15 +10,14 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import TimelineWidgetModal from '../../../widgets/timelines/core/Modal';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../states/_global';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
 import TopNavbarBackButton from './TopNavbarBackButton';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { AppIcon } from '../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 
 type HeadersProps = {
 	title: string;

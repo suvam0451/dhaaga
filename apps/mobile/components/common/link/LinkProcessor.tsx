@@ -3,10 +3,11 @@ import { useMemo } from 'react';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import TextUtils from '../../../utils/text.utils';
+import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
 type LinkProcessorProps = {
 	url: string;

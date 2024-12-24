@@ -3,15 +3,15 @@ import { View } from 'react-native';
 import emojiPickerReducer, {
 	defaultValue,
 	EMOJI_PICKER_REDUCER_ACTION,
-} from '../../emoji-picker/emojiPickerReducer';
-import PostMoreActionsPostTarget from '../fragments/PostMoreActionsPostTarget';
-import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
-import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
-import ActivitypubReactionsService from '../../../../../services/approto/activitypub-reactions.service';
-import useGlobalState from '../../../../../states/_global';
+} from './emoji-picker/emojiPickerReducer';
+import PostMoreActionsPostTarget from './post-actions/fragments/PostMoreActionsPostTarget';
+import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
+import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../common/timeline/api/postArrayReducer';
+import ActivitypubReactionsService from '../../../services/approto/activitypub-reactions.service';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
-const PostMoreActions = memo(() => {
+const AppBottomSheetPostMoreActions = memo(() => {
 	const { router, driver, acct, postValue, reducer, hide, theme, acctManager } =
 		useGlobalState(
 			useShallow((o) => ({
@@ -92,4 +92,4 @@ const PostMoreActions = memo(() => {
 	);
 });
 
-export default PostMoreActions;
+export default AppBottomSheetPostMoreActions;

@@ -15,7 +15,7 @@ import ProfileDesc from '../../../common/user/fragments/ProfileDesc';
 import ProfileButtonMessage from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
 import RelationshipButtonCore from '../../../common/relationship/RelationshipButtonCore';
 import ProfileButtonPhonebook from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
-import ProfileStats from '../../../screens/(shared)/stack/profile/fragments/ProfileStats';
+import UserViewProfileStats from '../../../common/user/fragments/UserViewProfileStats';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppUserObject } from '../../../../types/app-user.types';
@@ -79,7 +79,7 @@ const AppBottomSheetProfilePeek = memo(() => {
 					<View style={{ width: 8 }} />
 					<ProfileButtonPhonebook />
 				</View>
-				<ProfileStats
+				<UserViewProfileStats
 					userId={acct?.id}
 					followerCount={acct?.stats?.followers}
 					followingCount={acct?.stats?.following}

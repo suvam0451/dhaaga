@@ -28,6 +28,7 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppFlashList } from '../../../../components/lib/AppFlashList';
 import { router } from 'expo-router';
+import UserPeekModal from '../../../modals/UserPeekModal';
 
 /*
  * Render a Timeline
@@ -145,6 +146,7 @@ function TimelineWrapper() {
 				<WithAppPaginationContext>
 					<WithAppTimelineDataContext>
 						<Timeline />
+						<UserPeekModal />
 					</WithAppTimelineDataContext>
 				</WithAppPaginationContext>
 			</AppPaginationContext>

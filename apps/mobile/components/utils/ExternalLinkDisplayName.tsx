@@ -1,7 +1,8 @@
 import { View, Text } from 'react-native';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
+import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
 
 type ExternalLinDisplayNameProps = {
 	displayName: string;

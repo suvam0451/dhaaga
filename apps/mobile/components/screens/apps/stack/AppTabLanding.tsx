@@ -4,15 +4,14 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../shared/topnavbar/AppTabLandingNavbar';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../states/_global';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import AppNoAccount from '../../../error-screen/AppNoAccount';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 
 function QuickPost() {
 	const { show } = useGlobalState(
