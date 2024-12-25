@@ -42,24 +42,23 @@ experience.
 ## ✨ Features
 
 - ☂️ Supports your favourite SNS platform.
-  - 🩵 Bluesky 💙 Mastodon 💚 Misskey 🧡 Pleroma 🩷 Sharkey 💜 Akkoma
-- 🗞️ **Social Hub** | Manage your pins with ease
+- 🗞️ Easily keep up-to-date with the **Social Hub™**
+- 📍 Extensive pin/bookmark management options
 - 📩 Custom layouts for mentions, chats and updates
 - 🖼️ Gallery mode for profiles
 - 📰 Improved timeline experience
 - 💬 Ergonomic Post Composer UI
-- 🏕️ Powerful offline capabilities
+- 🏕️ Powerful offline capabilities²
 - 🦉 Dark mode by default.
 - 👌 Designed for seamless one-handed operation.
-- ✍️ Extensive in-app docs and user guides
 - 🥳 Fun, Free (💰)² and FOSS.
 
 > ¹ Coming soon™<br/>
 > ² A little bit of self-promo sometimes 😉
 
 > [!TIP]
-> Dhaaga does not aim for 100% feature compatibility.<br/>
-> New/Power users may prefer a dedicated client for their platform, instead.
+> This app does not support every platform feature</br> 
+> They are picked and added on a **fun-first** basis.
 
 ## 💁 About
 
