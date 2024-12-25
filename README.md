@@ -41,24 +41,18 @@ experience.
 
 ## ✨ Features
 
-- ☂️ Add accounts from all your favourite SNS platforms.
-- 🗞️ **Social Hub** | Pin, arrange and update your timelines with ease.
-- 📩 **Categorized Inbox** | Separate layouts for mentions, chats and
-  social updates.
-- 🖼️ **Gallery Mode (Profiles)** | ~~Mom, I did not copy instagram. I
-  swear 🫣~~
-- 📰 **Better Timelines** | Deliberate & thoughtful. Extra utilities.
-- 💬 **Ergonomic Post Composer UI** | Designed for microblogging and chat.
-- 🔎 **Contextual Bottom Sheets** | Context matters. No more lengthy menus.
-- 🏕️ **Powerful offline capabilities** | Save posts. categorize bookmarks.
+- ☂️ Supports your favourite SNS platform.
+  - 🩵 Bluesky 💙 Mastodon 💚 Misskey 🧡 Pleroma 🩷 Sharkey 💜 Akkoma
+- 🗞️ **Social Hub** | Manage your pins with ease
+- 📩 Custom layouts for mentions, chats and updates
+- 🖼️ Gallery mode for profiles
+- 📰 Improved timeline experience
+- 💬 Ergonomic Post Composer UI
+- 🏕️ Powerful offline capabilities
 - 🦉 Dark mode by default.
-- 👌 Optimised UX for operation with just one hand.
-- ✍️ Extensive in-app documentation and user guides
-- ☕ Nice, almost like warm and cozy feel to it <-- *(What the users say,
-  not me)* 😙
+- 👌 Designed for seamless one-handed operation.
+- ✍️ Extensive in-app docs and user guides
 - 🥳 Fun, Free (💰)² and FOSS.
-- 💭 ...how else can we improve the modern day SNS experience?. share your
-  thoughts! 🧐
 
 > ¹ Coming soon™<br/>
 > ² A little bit of self-promo sometimes 😉
