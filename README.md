@@ -43,9 +43,9 @@ experience.
 
 - ☂️ Add accounts from all your favourite SNS platforms.
 - 🗞️ **Social Hub** | Pin, arrange and update your timelines with ease.
-- 📩 **Categorized Inbox** | Separate layouts for mentions, chats and 
+- 📩 **Categorized Inbox** | Separate layouts for mentions, chats and
   social updates.
-- 🖼️ **Gallery Mode (Profiles)** | ~~Mom, I did not copy instagram. I 
+- 🖼️ **Gallery Mode (Profiles)** | ~~Mom, I did not copy instagram. I
   swear 🫣~~
 - 📰 **Better Timelines** | Deliberate & thoughtful. Extra utilities.
 - 💬 **Ergonomic Post Composer UI** | Designed for microblogging and chat.
@@ -55,9 +55,10 @@ experience.
 - 👌 Optimised UX for operation with just one hand.
 - ✍️ Extensive in-app documentation and user guides
 - ☕ Nice, almost like warm and cozy feel to it <-- *(What the users say,
-    not me)* 😙
+  not me)* 😙
 - 🥳 Fun, Free (💰)² and FOSS.
-- 💭 ...how else can we improve the modern day SNS experience?. share your thoughts! 🧐
+- 💭 ...how else can we improve the modern day SNS experience?. share your
+  thoughts! 🧐
 
 > ¹ Coming soon™<br/>
 > ² A little bit of self-promo sometimes 😉
@@ -68,17 +69,46 @@ experience.
 
 ## 💁 About
 
-Project Dhaaga is a solo indie project that I develop in my free time.
+Dhaaga is an indie side project I’ve been building in my free time.
 
-It addresses common pain points faced by SNS users through innovative (I think
-🤔)
-and well-engineered (I hope 🥺) solutions.
+Today, there are way too many platforms and servers to choose from.
 
-The commitment is to bring many utility and QoL features to SNS
-users and making the chore of scrolling through timelines a
-informative, hassle-free and fun experience.
+The exploding landscape of the decentralized social web platforms 
+has resulted in userbase fragmentation and diminished
+interest/adoption of smaller *(but definitely more fun!)* projects
+due to [Metcalfe's law](https://en.wikipedia.org/wiki/Metcalfe%27s_law).
 
-If you use the app, do let me know. I would love to hear of your experience 🤗
+**The first set of challenges** I am trying to solve are the **protocol
+fragmentation** and the **lack of a unified frontend**
+for the decentralized social web.
+
+Secondly, with the decline of traditional SNS culture, the social media
+experience today has become too *samey*:
+
+*Timelines. Profiles. Likes. Follows. Shares. *You get the idea~**
+
+The discovery and user connection tools are too limited. 
+Just lists, search and chat.
+
+For example, for art enthusiasts, maybe Pixiv or Instagram would be a 
+better bet. For chatty users, maybe discord would be a better choice.
+
+To better put it, the *presentation model in modern social media does not
+adapt to the intent and interests of the individual/community involved. It 
+is just too standardized!*
+
+But it does not have to be! **The second set of challenges** I want to solve
+are **building better discovery and relationship manager tools**, helping
+users put more **personality into their app experience** and
+**tweaking the UI presentation model to be user-centric** that boring, 
+infinite scrolling timelines.
+
+Welp, that's the plan. Let's see if I deliver on those big words in this
+lifetime 🤷‍♂️
+
+---
+
+I'd love to hear about your experience with the app! Come say hi 🤗
 
 [Bluesky](https://bsky.app/profile/suvam.io) |
 [Mastodon](https://mastodon.social/@suvam) |
@@ -86,9 +116,10 @@ If you use the app, do let me know. I would love to hear of your experience 🤗
 [Misskey](https://misskey.io/@suvam0451) |
 [X](https://x.com/suvam0451)
 
-By the way, the word **"Dhaaga" (धागा)** refers to thread or
-string in Hindi. The word carries deep symbolic meanings,
-represents *connection, unity and bonding*.
+By the way, the word **'Dhaaga (धागा)'** means 'thread' or
+'string' in Hindi.
+It carries deep symbolic significance,
+representing *connection, unity and bonding*.
 
 ---
 
