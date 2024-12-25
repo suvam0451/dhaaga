@@ -6,8 +6,9 @@ import {
 	LibraryPromise,
 	PaginatedLibraryPromise,
 } from '../_router/routes/_types.js';
-import { MastoTag, MegaTag } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
+import { MastoTag } from '../../../types/mastojs.types.js';
+import { MegaTag } from '../../../types/megalodon.types.js';
 
 class BlueskyTagsRouter implements TagRoute {
 	follow(id: string): LibraryPromise<MastoTag | MegaTag> {

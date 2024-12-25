@@ -1,8 +1,9 @@
 import { Text } from 'react-native';
 import { memo } from 'react';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
 const HashtagProcessor = memo(function Foo({
 	content,
@@ -20,7 +21,7 @@ const HashtagProcessor = memo(function Foo({
 	);
 
 	function onPress() {
-		appSession.cache.setTagTarget(content);
+		appSession.storage.setTagTarget(content);
 		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
 	}
 

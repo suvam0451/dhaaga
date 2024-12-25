@@ -1,23 +1,19 @@
 import { ListsRoute } from '../_router/routes/lists.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMisskeyClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../_router/_types.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { MegaList } from '../_interface.js';
 import { Endpoints } from 'misskey-js';
+import { MegaList } from '../../../types/megalodon.types.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MisskeyListsRoute implements ListsRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MISSKEYJS>;
+	direct: FetchWrapper;
+	client: MisskeyJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async get(): LibraryPromise<MegaList> {
@@ -25,7 +21,7 @@ export class MisskeyListsRoute implements ListsRoute {
 	}
 
 	async list(): LibraryPromise<Endpoints['users/lists/list']['res']> {
-		const data = await this.lib.client.request('users/lists/list', {});
+		const data = await this.client.client.request('users/lists/list', {});
 		return { data };
 	}
 
@@ -34,7 +30,7 @@ export class MisskeyListsRoute implements ListsRoute {
 	}
 
 	async listAntennas(): LibraryPromise<Endpoints['antennas/list']['res']> {
-		const data = await this.lib.client.request('antennas/list', {});
+		const data = await this.client.client.request('antennas/list', {});
 		return { data };
 	}
 }

@@ -6,13 +6,14 @@ import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
 
 const FollowNotificationFragment = memo(function Foo({ item }: Props) {
-	const acct = item.acct;
+	const user = item.user;
 
 	return (
 		<View style={styles.container}>
 			<NotificationSenderInterface
-				acct={acct}
+				user={user}
 				type={DhaagaJsNotificationType.FOLLOW}
+				createdAt={item.createdAt}
 			/>
 			<NotificationDescriptionText
 				type={DhaagaJsNotificationType.FOLLOW}

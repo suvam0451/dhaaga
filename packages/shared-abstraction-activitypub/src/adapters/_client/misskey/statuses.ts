@@ -1,24 +1,21 @@
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import {
 	DhaagaJsPostCreateDto,
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
-import {
-	MastoScheduledStatus,
-	MastoStatus,
-	MissContext,
-	MissNote,
-} from '../_interface.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMisskeyClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import AppApi from '../../_api/AppApi.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import type {
+	MastoScheduledStatus,
+	MastoStatus,
+} from '../../../types/mastojs.types.js';
+import type { MissContext, MissNote } from '../../../types/misskey-js.types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 type RenoteCreateDTO = {
 	localOnly: boolean;
@@ -27,12 +24,12 @@ type RenoteCreateDTO = {
 };
 
 export class MisskeyStatusesRouter implements StatusesRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MISSKEYJS>;
+	direct: FetchWrapper;
+	client: MisskeyJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async create(
@@ -51,14 +48,12 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 						: undefined,
 				fileIds: dto.mediaIds || [],
 				cw: dto.spoilerText || null,
-				localOnly: false,
-				// reactionAcceptance: null,
+				localOnly: false, // reactionAcceptance: null,
 				poll: dto.poll || null,
-				scheduledAt: null,
-				// cw: dto.spoilerText || null,
+				scheduledAt: null, // cw: dto.spoilerText || null,
 			});
 
-			const data = await this.lib.client.request<
+			const data = await this.client.client.request<
 				// @ts-ignore-next-line
 				Endpoints['notes/create']['req'],
 				any
@@ -74,11 +69,9 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 						: undefined,
 				fileIds: dto.mediaIds.length > 0 ? dto.mediaIds || [] : undefined,
 				cw: dto.spoilerText || undefined,
-				localOnly: false,
-				// reactionAcceptance: null,
+				localOnly: false, // reactionAcceptance: null,
 				poll: dto.poll || null,
-				scheduledAt: null,
-				// cw: dto.spoilerText || null,
+				scheduledAt: null, // cw: dto.spoilerText || null,
 			});
 			return { data: data as any };
 		} catch (e: any) {
@@ -93,7 +86,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	async delete(id: string): LibraryPromise<{ success: true }> {
 		try {
 			// @ts-ignore-next-line
-			await this.lib.client.request('notes/delete', {
+			await this.client.client.request('notes/delete', {
 				noteId: id,
 			});
 			return { data: { success: true } };
@@ -107,14 +100,14 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	}
 
 	async get(id: string): Promise<LibraryResponse<MissNote>> {
-		const data = await this.lib.client.request('notes/show', { noteId: id });
+		const data = await this.client.client.request('notes/show', { noteId: id });
 		return { data };
 	}
 
 	async getReactions(
 		postId: string,
 	): LibraryPromise<Endpoints['notes/reactions']['res']> {
-		const data = await this.lib.client.request('notes/reactions', {
+		const data = await this.client.client.request('notes/reactions', {
 			noteId: postId,
 		});
 		return { data };
@@ -125,10 +118,9 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		reactionId: string,
 	): LibraryPromise<any> {
 		try {
-			const data = await this.lib.client.request('notes/reactions', {
+			const data = await this.client.client.request('notes/reactions', {
 				noteId: postId,
-				type: reactionId,
-				// limit: 20,
+				type: reactionId, // limit: 20,
 			});
 			return { data };
 		} catch (e) {
@@ -145,7 +137,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		reactionId: string,
 	): LibraryPromise<{ success: true; reacted: true; id: string }> {
 		try {
-			await this.lib.client.request('notes/reactions/create', {
+			await this.client.client.request('notes/reactions/create', {
 				noteId: postId,
 				reaction: reactionId,
 			});
@@ -166,7 +158,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		id: string;
 	}> {
 		try {
-			await this.lib.client.request('notes/reactions/delete', {
+			await this.client.client.request('notes/reactions/delete', {
 				noteId: postId,
 				reaction: reactionId,
 			});
@@ -180,7 +172,9 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 
 	async getState(id: string): LibraryPromise<Endpoints['notes/state']['res']> {
 		try {
-			const data = await this.lib.client.request('notes/state', { noteId: id });
+			const data = await this.client.client.request('notes/state', {
+				noteId: id,
+			});
 			return { data };
 		} catch (e: any) {
 			if (e.code) {
@@ -195,7 +189,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		id: string,
 	): LibraryPromise<Endpoints['notes/favorites/create']['res']> {
 		try {
-			await this.lib.client.request('notes/favorites/create', {
+			await this.client.client.request('notes/favorites/create', {
 				noteId: id,
 			});
 			return {
@@ -217,7 +211,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		id: string,
 	): LibraryPromise<Endpoints['notes/favorites/delete']['res']> {
 		try {
-			await this.lib.client.request('notes/favorites/delete', {
+			await this.client.client.request('notes/favorites/delete', {
 				noteId: id,
 			});
 			return {
@@ -237,7 +231,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 
 	async renotes(id: string): LibraryPromise<Endpoints['notes/renotes']['res']> {
 		try {
-			const data = await this.lib.client.request('notes/renotes', {
+			const data = await this.client.client.request('notes/renotes', {
 				noteId: id,
 			});
 			return { data };
@@ -258,10 +252,11 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		success: boolean;
 		isFavourited: true;
 	}> {
-		const { error } = await new AppApi(
-			this.client.url,
-			this.client.accessToken,
-		).post('/api/notes/like', { noteId: id }, {});
+		const { error } = await this.direct.post(
+			'/api/notes/like',
+			{ noteId: id },
+			{},
+		);
 		if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		return { data: { success: true, isFavourited: true } };
 	}
@@ -273,10 +268,11 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	async like(
 		id: string,
 	): LibraryPromise<{ success: boolean; hasReacted: true }> {
-		const { error } = await new AppApi(
-			this.client.url,
-			this.client.accessToken,
-		).post('/api/notes/like', { noteId: id }, {});
+		const { error } = await this.direct.post(
+			'/api/notes/like',
+			{ noteId: id },
+			{},
+		);
 		if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		return { data: { success: true, hasReacted: true } };
 	}
@@ -295,7 +291,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		post: Endpoints['notes/create']['res'];
 	}> {
 		try {
-			const data = await this.lib.client.request('notes/create', dto);
+			const data = await this.client.client.request('notes/create', dto);
 			return {
 				data: {
 					success: true,
@@ -317,7 +313,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		renoted: false;
 	}> {
 		try {
-			await this.lib.client.request('notes/unrenote', {
+			await this.client.client.request('notes/unrenote', {
 				noteId: id,
 			});
 			return { data: { success: true, renoted: false } };
@@ -332,11 +328,11 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 
 	async getContext(id: string, limit?: number): LibraryPromise<MissContext> {
 		try {
-			const parents = this.lib.client.request('notes/conversation', {
+			const parents = this.client.client.request('notes/conversation', {
 				noteId: id,
 				limit: limit || 40,
 			});
-			const children = this.lib.client.request('notes/children', {
+			const children = this.client.client.request('notes/children', {
 				noteId: id,
 				showQuotes: false,
 				limit: limit || 40,

@@ -1,26 +1,22 @@
-import { LibraryResponse } from '../_router/_types.js';
 import {
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
-import { MastoStatus } from '../_interface.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMastoClient,
-	DhaagaRestClient,
-	MastoErrorHandler,
-} from '../_router/_runner.js';
+import { MastoErrorHandler } from '../_router/_runner.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { createRestAPIClient } from 'masto';
+import { MastoStatus } from '../../../types/mastojs.types.js';
+import { LibraryResponse } from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MastodonTimelinesRouter implements TimelinesRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MASTOJS>;
+	direct: FetchWrapper;
+	client: MastoJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	//
@@ -31,7 +27,7 @@ export class MastodonTimelinesRouter implements TimelinesRoute {
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
 	): Promise<LibraryResponse<MastoStatus[]>> {
-		const fn = this.lib.client.v1.timelines.home.list;
+		const fn = this.client.lib.v1.timelines.home.list;
 		const { data, error } = await MastoErrorHandler(fn, [query]);
 		if (error || !data) return errorBuilder<MastoStatus[]>(error);
 		return { data: await data };
@@ -40,7 +36,7 @@ export class MastodonTimelinesRouter implements TimelinesRoute {
 	async public(
 		query: DhaagaJsTimelineQueryOptions,
 	): Promise<LibraryResponse<MastoStatus[]>> {
-		const fn = this.lib.client.v1.timelines.public.list;
+		const fn = this.client.lib.v1.timelines.public.list;
 		const { data, error } = await MastoErrorHandler(fn, [query]);
 		if (error || !data) return errorBuilder<MastoStatus[]>(error);
 		return { data: await data };
@@ -61,7 +57,7 @@ export class MastodonTimelinesRouter implements TimelinesRoute {
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
 	): Promise<LibraryResponse<MastoStatus[]>> {
-		const fn = this.lib.client.v1.timelines.tag.$select(q).list;
+		const fn = this.client.lib.v1.timelines.tag.$select(q).list;
 		const { data, error } = await MastoErrorHandler(fn, [query]);
 		if (error || !data) return errorBuilder<MastoStatus[]>(error);
 		return { data: await data };
@@ -83,7 +79,7 @@ export class MastodonTimelinesRouter implements TimelinesRoute {
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
 	): Promise<LibraryResponse<MastoStatus[]>> {
-		const fn = this.lib.client.v1.timelines.list.$select(q).list;
+		const fn = this.client.lib.v1.timelines.list.$select(q).list;
 		const { data, error } = await MastoErrorHandler(fn, [query]);
 		if (error || !data) return errorBuilder<MastoStatus[]>(error);
 		return { data: await data };

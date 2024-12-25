@@ -1,16 +1,16 @@
 import { memo } from 'react';
-import { View } from 'react-native';
-import { Text } from '@rneui/themed';
-import { APP_FONT } from '../../../styles/AppTheme';
+import { Text } from 'react-native';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 const PinnedTimelines = memo(function Foo() {
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+	const { translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 	});
+	const { theme } = useAppTheme();
 
 	return (
 		<AppTopNavbar
@@ -18,11 +18,9 @@ const PinnedTimelines = memo(function Foo() {
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 			translateY={translateY}
 		>
-			<View>
-				<Text style={{ color: APP_FONT.MONTSERRAT_BODY }}>
-					This feature is not implemented yet
-				</Text>
-			</View>
+			<Text style={{ color: theme.secondary.a20 }}>
+				This feature is not implemented yet
+			</Text>
 		</AppTopNavbar>
 	);
 });

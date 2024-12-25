@@ -1,6 +1,7 @@
-import { MastoNotification, MegaNotification } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 import { KNOWN_SOFTWARE } from './instance.js';
+import { MastoNotification } from '../../../../types/mastojs.types.js';
+import { MegaNotification } from '../../../../types/megalodon.types.js';
 
 export enum DhaagaJsNotificationType {
 	/**

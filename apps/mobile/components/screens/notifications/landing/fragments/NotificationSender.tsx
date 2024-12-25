@@ -1,8 +1,5 @@
 import { memo, useMemo } from 'react';
-import {
-	ActivitypubHelper,
-	DhaagaJsNotificationType,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
 import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';
@@ -16,14 +13,13 @@ import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../../states/_global';
+import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppIcon } from '../../../../lib/Icon';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { AppUserObject } from '../../../../../types/app-user.types';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -297,7 +293,7 @@ export const NotificationSender = memo(
 );
 
 type InterfaceProps = {
-	acct: AppUserObject;
+	user: AppUserObject;
 	type: DhaagaJsNotificationType;
 	createdAt: Date | string;
 	extraData?: string;
@@ -308,12 +304,8 @@ type InterfaceProps = {
  * object (online usage)
  */
 export const NotificationSenderInterface = memo(
-	({ acct, type, extraData, createdAt }: InterfaceProps) => {
-		const {
-			driver,
-			acct: acctItem,
-			show,
-		} = useGlobalState(
+	({ user, type, extraData, createdAt }: InterfaceProps) => {
+		const { driver, show } = useGlobalState(
 			useShallow((o) => ({
 				driver: o.driver,
 				acct: o.acct,
@@ -323,15 +315,12 @@ export const NotificationSenderInterface = memo(
 			})),
 		);
 
-		const id = acct.id;
+		const id = user.id;
 
-		const acctUrl = acct.handle;
-		const displayName = acct.displayName;
-		const avatarUrl = acct.avatarUrl;
+		const displayName = user.displayName;
+		const avatarUrl = user.avatarUrl;
 
-		const handle = useMemo(() => {
-			return ActivitypubHelper.getHandle(acctUrl, acctItem?.server);
-		}, [acctUrl]);
+		const handle = user.handle;
 
 		/**
 		 * NOTE: misskey acct objects do not

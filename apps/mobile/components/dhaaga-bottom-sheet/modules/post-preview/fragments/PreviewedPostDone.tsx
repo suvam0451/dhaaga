@@ -4,10 +4,10 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { memo } from 'react';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import { AppIcon } from '../../../../lib/Icon';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../../states/_global';
+import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../Core';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 
 const PreviewedPostDone = memo(() => {
 	const { setType, setVisible } = useAppBottomSheet();
@@ -38,7 +38,7 @@ const PreviewedPostDone = memo(() => {
 			<Text
 				style={{
 					color: theme.textColor.high,
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 				}}
 			>
 				Done
@@ -47,7 +47,7 @@ const PreviewedPostDone = memo(() => {
 			<AppIcon
 				id={'done'}
 				size={20}
-				emphasis={'high'}
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				containerStyle={{
 					marginLeft: 8,
 				}}

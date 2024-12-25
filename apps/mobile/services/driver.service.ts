@@ -10,8 +10,11 @@ export enum APP_PINNED_OBJECT_TYPE {
 	AP_PROTO_MICROBLOG_BUBBLE = 'apProto_microBlog_BUBBLE',
 	AP_PROTO_MICROBLOG_GLOBAL = 'apProto_microBlog_GLOBAL',
 
-	AP_PROTO_MICROBLOG_USER = 'apProto_microBlog_USER',
-	AP_PROTO_MICROBLOG_TAG = 'apProto_microBlog_TAG',
+	AP_PROTO_MICROBLOG_USER_LOCAL = 'apProto_microBlog_USER_Local',
+	AP_PROTO_MICROBLOG_USER_REMOTE = 'apProto_microBlog_USER_Remote',
+
+	AP_PROTO_MICROBLOG_TAG_LOCAL = 'apProto_microBlog_TAG_Local',
+	AP_PROTO_MICROBLOG_TAG_REMOTE = 'apProto_microBlog_TAG_Remote',
 }
 
 class DriverService {

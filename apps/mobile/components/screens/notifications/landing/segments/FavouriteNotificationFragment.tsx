@@ -7,21 +7,22 @@ import { NotificationDescriptionText } from '../fragments/NotificationDescriptio
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 
 const FavouriteNotificationFragment = memo(function Foo({ item }: Props) {
-	const acct = item.acct;
+	const user = item.user;
 	const post = item.post;
 
 	return (
 		<View style={styles.container}>
 			<NotificationSenderInterface
-				acct={acct}
+				user={user}
 				type={DhaagaJsNotificationType.FAVOURITE}
+				createdAt={item.createdAt}
 			/>
 			<NotificationDescriptionText
 				type={DhaagaJsNotificationType.FAVOURITE}
 				createdAt={item.createdAt}
 				id={item.id}
 			/>
-			<NotificationPostPeek acct={acct} post={post} />
+			<NotificationPostPeek acct={user} post={post} />
 		</View>
 	);
 });

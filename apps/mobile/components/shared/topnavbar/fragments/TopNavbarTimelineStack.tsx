@@ -5,24 +5,23 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import TimelineWidgetModal from '../../../widgets/timelines/core/Modal';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../states/_global';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
 import TopNavbarBackButton from './TopNavbarBackButton';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { AppIcon } from '../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
-
-type HeadersProps = {
-	title: string;
-};
+import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
+import { LocalizationService } from '../../../../services/localization.service';
+import {
+	useTimelineDispatch,
+	useTimelineState,
+} from '../../../common/timeline/core/Timeline';
+import { ACTION } from '../../../../states/reducers/timeline.reducer';
+import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
 
 /**
  * A custom navbar that invokes
@@ -31,31 +30,46 @@ type HeadersProps = {
  *
  * NOTE: ScrollView not included
  */
-const TimelinesHeader = ({ title }: HeadersProps) => {
-	const { theme, show } = useGlobalState(
+function TimelinesHeader() {
+	const { theme, show, driver } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
 			theme: o.colorScheme,
 			show: o.bottomSheet.show,
+			driver: o.driver,
 		})),
 	);
-	const { setShowTimelineSelection } = useTimelineController();
+	const { attach } = useAppBottomSheet_TimelineReference();
+
+	const State = useTimelineState();
+	const dispatch = useTimelineDispatch();
 
 	function onIconPress() {
 		if (!router) {
-			setShowTimelineSelection(false);
+			dispatch({
+				type: ACTION.HIDE_WIDGET,
+			});
 		} else {
-			setShowTimelineSelection(true);
+			dispatch({
+				type: ACTION.SHOW_WIDGET,
+			});
 		}
 	}
 
 	function onViewTimelineController() {
+		attach(State, dispatch);
 		show(APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER);
 	}
 
 	function onUserGuidePress() {
 		router.push('/user-guide-timelines');
 	}
+
+	const _label = LocalizationService.timelineLabelText(
+		State.feedType,
+		State.query,
+		driver,
+	);
 
 	return (
 		<View style={[styles.root, { backgroundColor: theme.palette.menubar }]}>
@@ -77,14 +91,16 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 					style={[styles.label, { color: theme.primary.a0 }]}
 					numberOfLines={1}
 				>
-					{title || 'Home'}
+					{_label || 'Unknown'}
 				</Text>
-				<Ionicons
-					name="chevron-down"
-					color={theme.primary.a0}
-					size={20}
-					style={{ marginLeft: 4, marginTop: 2 }}
-				/>
+				<View
+					style={{
+						marginLeft: 4,
+						marginTop: 2,
+					}}
+				>
+					<AppIcon id={'chevron-down'} color={theme.primary.a0} size={20} />
+				</View>
 			</TouchableOpacity>
 
 			<View
@@ -93,7 +109,7 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 					{ justifyContent: 'flex-end', paddingRight: 8 },
 				]}
 			>
-				<TouchableOpacity
+				<Pressable
 					style={{ paddingHorizontal: 6 }}
 					onPress={onViewTimelineController}
 				>
@@ -102,24 +118,18 @@ const TimelinesHeader = ({ title }: HeadersProps) => {
 						size={25}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 					/>
-				</TouchableOpacity>
-
-				<Pressable
-					style={{ padding: 4, transform: [{ translateX: -1 }] }}
-					onPress={onUserGuidePress}
-				>
-					<MaterialIcons
-						name="notes"
-						size={25}
-						color={theme.secondary.a20}
-						style={{ transform: [{ scaleX: -1 }] }}
-					/>
 				</Pressable>
+				<AppIcon
+					id={'user-guide'}
+					size={25}
+					color={theme.secondary.a20}
+					onPress={onUserGuidePress}
+				/>
 			</View>
 			<TimelineWidgetModal />
 		</View>
 	);
-};
+}
 
 const styles = StyleSheet.create({
 	menuSection: {

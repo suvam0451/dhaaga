@@ -11,10 +11,9 @@ import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArr
 import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../../services/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../states/_global';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -136,11 +135,9 @@ const EmojiReaction = memo(function Foo({
 			<TouchableOpacity style={CONTAINER_STYLE} onPress={onReactionPress}>
 				<Text
 					style={{
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 						color:
-							dto.name.length < 3
-								? APP_FONT.MONTSERRAT_HEADER
-								: APP_FONT.MONTSERRAT_BODY,
+							dto.name.length < 3 ? theme.secondary.a10 : theme.secondary.a30,
 						fontSize: 14,
 					}}
 				>
@@ -148,8 +145,8 @@ const EmojiReaction = memo(function Foo({
 				</Text>
 				<Text
 					style={{
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-						color: APP_FONT.MONTSERRAT_BODY,
+						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+						color: theme.secondary.a30,
 						marginLeft: 8,
 					}}
 				>

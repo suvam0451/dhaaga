@@ -3,31 +3,24 @@ import {
 	LibraryPromise,
 } from '../_router/routes/_types.js';
 import { TagRoute } from '../_router/routes/tags.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMegalodonClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
-import { MegaTag } from '../_interface.js';
+import { MegaTag } from '../../../types/megalodon.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaTagsRouter implements TagRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MEGALODON>;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMegalodonClient(
-			KNOWN_SOFTWARE.PLEROMA,
-			this.client.url,
-			this.client.accessToken,
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
 		);
 	}
 
 	async followedTags(): PaginatedLibraryPromise<MegaTag[]> {
-		const data = await this.lib.client.getFollowedTags();
-		console.log('[headers]', data.headers);
+		const data = await this.client.client.getFollowedTags();
 
 		return {
 			data: {
@@ -37,17 +30,17 @@ export class PleromaTagsRouter implements TagRoute {
 	}
 
 	async follow(id: string): LibraryPromise<MegaTag> {
-		const data = await this.lib.client.followTag(id);
+		const data = await this.client.client.followTag(id);
 		return { data: data.data };
 	}
 
 	async get(id: string): LibraryPromise<MegaTag> {
-		const data = await this.lib.client.getTag(id);
+		const data = await this.client.client.getTag(id);
 		return { data: data.data };
 	}
 
 	async unfollow(id: string): LibraryPromise<MegaTag> {
-		const data = await this.lib.client.unfollowTag(id);
+		const data = await this.client.client.unfollowTag(id);
 		return { data: data.data };
 	}
 }

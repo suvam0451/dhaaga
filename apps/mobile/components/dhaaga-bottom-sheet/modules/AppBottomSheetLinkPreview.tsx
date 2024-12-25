@@ -1,4 +1,4 @@
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { ScrollView, View, Text } from 'react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -13,6 +13,8 @@ import { AppIcon } from '../../lib/Icon';
 import { AppDivider } from '../../lib/Divider';
 
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { APP_BOTTOM_SHEET_ENUM } from '../Core';
+import { LinkingUtils } from '../../../utils/linking.utils';
 
 type OpenGraphParsingState = {
 	key: string | null;
@@ -45,7 +47,7 @@ function AppBottomSheetLinkPreview() {
 	const INACTIVE = !visible || type !== APP_BOTTOM_SHEET_ENUM.LINK;
 
 	async function parse() {
-		const _url = appSession.cache.getLinkTarget();
+		const _url = appSession.storage.getLinkTarget();
 
 		getLinkPreview(_url.url)
 			.then((res) => {
@@ -110,31 +112,33 @@ function AppBottomSheetLinkPreview() {
 					Failed to parse this URL!
 				</Text>
 				<AppMenu.Option
-					Icon={
+					appIconId={
 						<AppIcon
 							id={'external-link'}
 							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						/>
 					}
 					label={'Retry'}
-					onClick={parse}
+					onPress={parse}
 				/>
 				<AppMenu.Option
-					Icon={
+					appIconId={
 						<AppIcon
 							id={'external-link'}
 							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						/>
 					}
 					label={'Copy Link'}
-					onClick={() => {}}
+					onPress={() => {}}
 				/>
 				<AppMenu.Option
-					Icon={
+					appIconId={
 						<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 					}
 					label={'Open in Browser'}
-					onClick={() => {}}
+					onPress={() => {
+						LinkingUtils.openURL(ValueRef.current);
+					}}
 					desc={'External browser will be used'}
 				/>
 			</View>
@@ -212,39 +216,39 @@ function AppBottomSheetLinkPreview() {
 			/>
 			<View>
 				<AppMenu.Option
-					Icon={
+					appIconId={
 						<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 					}
 					label={'Show All Content'}
-					onClick={() => {}}
+					onPress={() => {}}
 					desc={'If title or description text is too long'}
 				/>
 				<AppMenu.Option
-					Icon={
-						<AppIcon
-							id={'external-link'}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						/>
+					appIconId={
+						<AppIcon id={'copy'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 					}
 					label={'Copy Link'}
-					onClick={() => {}}
+					onPress={() => {}}
 				/>
 				<AppMenu.Option
-					Icon={
+					appIconId={
 						<AppIcon
 							id={'language'}
 							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						/>
 					}
 					label={'Translate'}
-					onClick={() => {}}
+					onPress={() => {}}
 				/>
 				<AppMenu.Option
-					Icon={
+					appIconId={
 						<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 					}
 					label={'Open in Browser'}
-					onClick={() => {}}
+					onPress={() => {
+						console.log('pressed...');
+						LinkingUtils.openURL(ValueRef.current);
+					}}
 					desc={'External browser will be used'}
 				/>
 			</View>

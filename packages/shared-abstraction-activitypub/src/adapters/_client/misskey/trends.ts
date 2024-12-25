@@ -1,27 +1,26 @@
 import { TrendsRoute } from '../_router/routes/trends.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
-import { LibraryResponse } from '../_router/_types.js';
-import { MastoStatus, MastoTrendLink } from '../_interface.js';
-import {
-	COMPAT,
-	DhaagaMisskeyClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
+import type {
+	MastoStatus,
+	MastoTrendLink,
+} from '../../../types/mastojs.types.js';
+import { LibraryResponse } from '../../../types/result.types.js';
+import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 
 export class MisskeyTrendsRouter implements TrendsRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MISSKEYJS>;
+	driver: FetchWrapper;
+	client: MisskeyJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.driver = forwarded;
+		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async tags(): LibraryPromise<Endpoints['hashtags/trend']['res']> {
-		const data = await this.lib.client.request('hashtags/trend', {});
+		const data = await this.client.client.request('hashtags/trend', {});
 		return { data };
 	}
 

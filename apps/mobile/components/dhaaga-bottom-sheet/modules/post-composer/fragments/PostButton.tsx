@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
 import { Text, TouchableOpacity } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
@@ -13,10 +12,10 @@ import { PostMiddleware } from '../../../../../services/middlewares/post.middlew
 import AtprotoComposerService, {
 	AtprotoReplyEmbed,
 } from '../../../../../services/atproto/atproto-compose';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../../states/_global';
+import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../Core';
 
 /**
  * Click to Post!
@@ -30,6 +29,7 @@ const PostButton = memo(() => {
 			acct: o.acct,
 		})),
 	);
+	const { theme } = useAppTheme();
 	const { setType, ParentRef, PostRef } = useAppBottomSheet();
 
 	async function onClick() {
@@ -151,19 +151,19 @@ const PostButton = memo(() => {
 	return (
 		<TouchableOpacity
 			style={{
-				backgroundColor: APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
+				backgroundColor: theme.primary.a0,
 				flexDirection: 'row',
 				alignItems: 'center',
 				paddingHorizontal: 12,
 				borderRadius: 8,
-				paddingVertical: 6,
+				paddingVertical: 8,
 			}}
 			onPress={onClick}
 		>
 			<Text
 				style={{
-					color: APP_FONT.MONTSERRAT_BODY,
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					color: 'black',
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 				}}
 			>
 				Post
@@ -172,7 +172,7 @@ const PostButton = memo(() => {
 				name="send"
 				size={20}
 				style={{ marginLeft: 8 }}
-				color={APP_FONT.MONTSERRAT_BODY}
+				color={'black'}
 			/>
 		</TouchableOpacity>
 	);

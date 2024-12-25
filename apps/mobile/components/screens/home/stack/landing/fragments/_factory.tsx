@@ -21,7 +21,12 @@ export function SocialHubPinSectionContainer({
 
 	return (
 		<View style={[styles.root, style]}>
-			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}
+			>
 				<Text
 					style={[
 						styles.sectionLabel,
@@ -33,8 +38,7 @@ export function SocialHubPinSectionContainer({
 					{label}
 				</Text>
 			</View>
-
-			<View>{children}</View>
+			{children}
 		</View>
 	);
 }
@@ -42,6 +46,7 @@ export function SocialHubPinSectionContainer({
 const styles = StyleSheet.create({
 	root: {
 		marginHorizontal: 8,
+		flexShrink: 1,
 	},
 	sectionLabel: {
 		flex: 1,

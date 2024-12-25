@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import {
 	Platform,
 	StyleProp,
@@ -9,30 +8,34 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
+import { router } from 'expo-router';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import * as Haptics from 'expo-haptics';
+import { Image } from 'expo-image';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
+// icons packs
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Octicons from '@expo/vector-icons/Octicons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
-import { Entypo, FontAwesome } from '@expo/vector-icons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { router } from 'expo-router';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { TimelineFetchMode } from '../common/timeline/utils/timeline.types';
-import * as Haptics from 'expo-haptics';
-import { APP_FONT } from '../../styles/AppTheme';
-import { Image } from 'expo-image';
-import { APP_FONTS } from '../../styles/AppFonts';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
-import Octicons from '@expo/vector-icons/Octicons';
+import Entypo from '@expo/vector-icons/Entypo';
+import { TimelineFetchMode } from '../../states/reducers/timeline.reducer';
 
 export type APP_ICON_ENUM =
 	| 'bell'
 	| 'back'
+	| 'block'
 	| 'browser'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
 	| 'chevron-right'
+	| 'chevron-down'
 	| 'checkmark-done-outline'
 	| 'cog'
 	| 'copy'
@@ -50,6 +53,8 @@ export type APP_ICON_ENUM =
 	| 'home'
 	| 'info'
 	| 'language'
+	| 'layers-outline'
+	| 'lock-closed-outline'
 	| 'menu'
 	| 'message'
 	| 'more-options-vertical'
@@ -68,7 +73,9 @@ export type APP_ICON_ENUM =
 	| 'to-top'
 	| 'trash'
 	| 'user-guide'
-	| 'wand';
+	| 'wand'
+	| 'mute-outline'
+	| 'unmute-outline';
 
 type AppIconType = {
 	id: APP_ICON_ENUM;
@@ -266,7 +273,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
-
+				case 'block':
+					return (
+						<Ionicons
+							id={'ban-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'browser':
 					return (
 						<Ionicons
@@ -302,6 +318,15 @@ export const AppIcon = memo(
 						<Entypo
 							name="chevron-small-right"
 							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'chevron-down':
+					return (
+						<Ionicons
+							name="chevron-down"
 							color={_color}
 							onPress={onPress}
 							style={iconStyle}
@@ -481,6 +506,26 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="language"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'layers-outline':
+					return (
+						<Ionicons
+							name={'layers-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'lock-closed-outline':
+					return (
+						<Ionicons
+							name="lock-closed-outline"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -679,6 +724,26 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'mute-outline':
+					return (
+						<Ionicons
+							name="volume-mute-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'unmute-outline':
+					return (
+						<Ionicons
+							name="volume-high-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 			}
 		}, [id, _size, _color, iconStyle]);
 
@@ -693,28 +758,6 @@ export const AppIcon = memo(
 );
 
 const styles = StyleSheet.create({
-	subHeader: {
-		width: '100%',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		backgroundColor: 'blue',
-	},
-	navbarTitleContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	navbarTitle: {
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-	},
-	buttonContainer: {
-		height: '100%',
-		alignItems: 'center',
-		flexDirection: 'row',
-		paddingHorizontal: 10,
-	},
 	accountIconTouchableContainer: {
 		height: '100%',
 		alignItems: 'center',

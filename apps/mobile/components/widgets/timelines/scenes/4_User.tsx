@@ -9,9 +9,9 @@ import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVi
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
 
 function TimelineWidgetUserScene() {
 	const [SearchTerm, setSearchTerm] = useState('');

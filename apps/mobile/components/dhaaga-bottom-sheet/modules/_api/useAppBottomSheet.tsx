@@ -15,11 +15,10 @@ import {
 	TimelineDataReducerFunction,
 } from '../../../common/timeline/api/postArrayReducer';
 import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../../services/app-status-dto.service';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 type Type = {
-	type: APP_BOTTOM_SHEET_ENUM;
-	setType: (type: APP_BOTTOM_SHEET_ENUM) => void;
+	type: any;
+	setType: (type: any) => void;
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
 	updateRequestId: () => void;
@@ -49,7 +48,7 @@ type Type = {
 };
 
 const defaultValue: Type = {
-	type: APP_BOTTOM_SHEET_ENUM.NA,
+	type: null,
 	setType: () => {},
 
 	isAnimating: false,
@@ -81,7 +80,7 @@ type Props = {
 
 function WithAppBottomSheetContext({ children }: Props) {
 	const [Visible, setVisible] = useState(false);
-	const [Type, setType] = useState(APP_BOTTOM_SHEET_ENUM.NA);
+	const [Type, setType] = useState(null);
 	const { forceUpdate, State } = useHookLoadingState();
 	const [IsAnimating, setIsAnimating] = useState(false);
 

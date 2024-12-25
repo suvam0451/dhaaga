@@ -193,7 +193,7 @@ export class PostMiddleware {
 		},
 	): AppPostObject {
 		// prevent infinite recursion
-		if (!input || !input.getId()) return null;
+		if (!input) return null;
 
 		const IS_SHARE = input.isReposted();
 		const HAS_PARENT = input.isReply();
@@ -274,9 +274,10 @@ export class PostMiddleware {
 		driver: string | KNOWN_SOFTWARE,
 		server: string,
 	): T extends unknown[] ? AppPostObject[] : AppPostObject {
-		if (Array.isArray(input)) {
+		if (input instanceof Array) {
 			return input
 				.map((o) => PostMiddleware.rawToInterface<unknown>(o, driver))
+				.filter((o) => !!o)
 				.map((o) =>
 					PostMiddleware.interfaceToJson(o, {
 						driver,
@@ -287,13 +288,47 @@ export class PostMiddleware {
 				? AppPostObject[]
 				: never;
 		} else {
-			return PostMiddleware.interfaceToJson(
-				PostMiddleware.rawToInterface<unknown>(input, driver),
-				{
-					driver,
-					server,
-				},
-			) as unknown as T extends unknown[] ? never : AppPostObject;
+			try {
+				if (!input) return null;
+				return PostMiddleware.interfaceToJson(
+					PostMiddleware.rawToInterface<unknown>(input, driver),
+					{
+						driver,
+						server,
+					},
+				) as unknown as T extends unknown[] ? never : AppPostObject;
+			} catch (e) {
+				console.log(
+					'[ERROR]: failed to deserialize post object',
+					e,
+					'input:',
+					input,
+				);
+				return null;
+			}
 		}
+	}
+
+	/**
+	 * Since the share item itself
+	 * is a protocol object, the underlying
+	 * post target with the actual content needs to
+	 * be extracted out
+	 * @param input post object, possibly the original
+	 * root level object
+	 *
+	 *  - Shares -> Returns boostedFrom
+	 *  - Quotes -> Returns the object itself
+	 */
+	static getContentTarget(input: AppPostObject): AppPostObject {
+		return input.meta.isBoost
+			? input.content.raw
+				? input
+				: input.boostedFrom
+			: input;
+	}
+
+	static isQuoteObject(input: AppPostObject) {
+		return input?.meta?.isBoost && input?.content?.raw;
 	}
 }

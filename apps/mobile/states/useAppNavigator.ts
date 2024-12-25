@@ -58,7 +58,10 @@ function useAppNavigator() {
 
 	function toProfile(id: string) {
 		// probably in bottom sheet
-		if (!navigator || !navigator.getId) return;
+		if (!navigator || !navigator.getId) {
+			console.log('[WARN]: cannot redirect to profile. navigator missing.');
+			return;
+		}
 
 		const _id = navigator.getId();
 		if (!_id || _id === '/(tabs)/index') {
@@ -92,9 +95,39 @@ function useAppNavigator() {
 		}
 	}
 
-	function toTimeline() {}
+	function toTimelineViaPin(pinId: number, pinType: 'feed' | 'user' | 'tag') {
+		// probably in bottom sheet
+		if (!navigator || !navigator.getId) return;
 
-	return { toPost, toHome, toProfile, toTag, toFollowers, toFollows };
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index') {
+			router.push({
+				pathname: `/timelines`,
+				params: {
+					pinId,
+					pinType,
+				},
+			});
+		} else {
+			router.push({
+				pathname: `${navigator.getId()}/timelines`,
+				params: {
+					pinId,
+					pinType,
+				},
+			});
+		}
+	}
+
+	return {
+		toPost,
+		toHome,
+		toProfile,
+		toTag,
+		toFollowers,
+		toFollows,
+		toTimelineViaPin,
+	};
 }
 
 export default useAppNavigator;

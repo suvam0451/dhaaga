@@ -1,16 +1,8 @@
-import {
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-	StyleSheet,
-	View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useState } from 'react';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
 import ActivityPubService from '../../../../../../services/activitypub.service';
 import { router } from 'expo-router';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../../shared/topnavbar/AppTopNavbar';
@@ -39,7 +31,7 @@ function AccountsScreen() {
 			appManager,
 		);
 		if (signInStrategy?.clientId && signInStrategy?.clientSecret) {
-			appManager.cache.setAtprotoServerClientTokens(
+			appManager.storage.setAtprotoServerClientTokens(
 				Subdomain,
 				signInStrategy?.clientId,
 				signInStrategy?.clientSecret,

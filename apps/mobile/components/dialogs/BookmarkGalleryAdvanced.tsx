@@ -4,9 +4,6 @@ import useSyncWithProgress, {
 } from '../hooks/tasks/useSyncWithProgress';
 import { RneuiDialogProps } from './_types';
 import AppDialogContainer from '../containers/AppDialogContainer';
-import LastSyncedStatus, {
-	LAST_SYNCED_STATUS_KEY,
-} from '../dataviz/LastSyncedStatus';
 import { ActivityIndicator, View, Text } from 'react-native';
 import { APP_FONT } from '../../styles/AppTheme';
 
@@ -56,7 +53,7 @@ function BookmarkGalleryAdvanced({
 					</View>
 				}
 			/>
-			<LastSyncedStatus id={LAST_SYNCED_STATUS_KEY.BOOKMARK_SYNC} />
+			{/*<LastSyncedStatus id={LAST_SYNCED_STATUS_KEY.BOOKMARK_SYNC} />*/}
 			<View style={{ height: 16 }} />
 			<AppButtonVariantDestructive
 				label={'Clear Cache'}

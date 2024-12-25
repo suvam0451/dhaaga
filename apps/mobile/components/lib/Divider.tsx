@@ -39,7 +39,7 @@ export class AppDivider {
 			<View
 				style={[
 					{
-						backgroundColor: theme.secondary.a30,
+						backgroundColor: theme.secondary.a50,
 						height: 1,
 					},
 					style,

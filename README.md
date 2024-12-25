@@ -1,7 +1,6 @@
 <!-- SOCIALS -->
 [![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat&label=Chat)](https://discord.gg/kMp5JA9jwD)
-[![Private](https://img.shields.io/badge/Signal-3A76F0?logo=signal&logoColor=fff&label=suvam.451)](https://signal.me/#eu/UiddwbjrYcUg1qojr5MowSwCEYK_kVW9HyK07tgmGy1hYTh4rr5L7IZ7wb0xqChV)
-[![Join on Matrix](https://img.shields.io/badge/chat-matrix-blue?logo=matrix&style=flat&label=Alt%20DM)](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org)
+![Static Badge](https://img.shields.io/badge/Sponsor-Me-f79a13)
 <!-- SOCIALS -->
 
 <img width="64"
@@ -9,23 +8,21 @@ src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d5
 align="left"
 style="margin-right:8px"/>
 
-**Dhaaga** is a fun 🥳 and cozy ☕ microblogging app for 
-browsing the decentralized social web. 
-It has multi-account support for all your favourite SNS platforms,
-and comes with extra features that add extra value and joy to your social 
-experience.
+**Dhaaga** is a third-party social networking app that supports multiple platforms.
+It features intuitive and powerful tools designed to help you seamlessly follow 
+your interests, discover new topics and connect with others—all 
+without the need to jump between different apps and services.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
 </div>
 
 <p align="center">
-  <a href="https://dhaaga.app/docs/about">About</a> •
-  <a href="https://dhaaga.app/docs">Docs</a> •
-  <a href="https://dhaaga.app/docs/roadmap">Roadmap</a> •
+  <a href="https://suvam.io/dhaaga">Website</a> •
+  <a href="https://suvam.io/dhaaga/guides">Guides</a> •
+  <a href="https://suvam.io/dhaaga/compatibility">Compatibility</a> •
   <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml">Report a Bug</a> •
-  <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml">Request a Feature</a> •
-  <a href="https://dhaaga.app/docs/license">License</a>
+  <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml">Request a Feature</a>
 </p>
 
 
@@ -43,35 +40,45 @@ experience.
 
 ## ✨ Features
 
-- ☂️ Supports your favourite SNS software.
-- ☕ Nice, almost like warm and cozy feel to it <-- *(What the users say,
-  not me)* 😙
-- 🦉 Dark mode by default.
-- 👌 Fully Operable with One-Hand.
-- 🏕️ Offline Support. *Download and view posts offline.* ²
-- ☄️ Many unique client-side extra features.
-- 🥳 Fun, Free (💰)² and FOSS.
+- ☂️ Supports your favourite SNS platform
+- 🗞️ Easily keep up-to-date with the **Social Hub™**
+- 📍 Extensive pin/bookmark management options
+- 📩 Custom layouts for mentions, chats and updates
+- 🖼️ Gallery mode for profiles
+- 📰 Improved timeline experience
+- 💬 Ergonomic UI for creating posts/replies
+- 🏕️ Powerful offline capabilities¹
+- 🦉 Dark mode by default
+- 👌 Designed for seamless one-handed operation
+- 🥳 Fun, Free (💰)² and FOSS
 
 > ¹ Coming soon™<br/>
-> ² A little bit of self-promo sometimes 😉
+> ² Tips welcome 😉
 
 > [!TIP]
-> Dhaaga does not aim for 100% feature parity.<br/>
-> Power users may prefer a dedicated client for their platform.
+> This app might not support certain features from your platform.</br> 
+> They are picked and added on a **fun-first** basis. Feel free to request!
 
 ## 💁 About
 
-Dhaaga is a solo indie project that I work on during my leisure time.
+Dhaaga is an indie side project I’ve been working on.
 
-It offers a simple and cozy mobile interface, 
-helps you easily navigate platform barriers like accounts, 
-protocols, and federation, allowing you to focus on what truly matters: 
+It lets you use and connect with your friends from various platforms using a 
+single app! It also adds many useful features, tweaks and QoL improvements
+to make your SNS experience more fun 🥳 and pleasant ☕
 
-> **Your friends, your time, and your digital wellbeing.**
+I'd love to hear about your experience with the app! Come say hi~ 🤗
 
-If you liked the app, please drop by and say hi sometimes. 🤗
+[Bluesky](https://bsky.app/profile/suvam.io) |
+[Mastodon](https://mastodon.social/@suvam) |
+[Matrix](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org) |
+[Misskey](https://misskey.io/@suvam0451) |
+[X](https://x.com/suvam0451)
 
-[Mastodon](https://mastodon.social/@suvam) | [Bluesky](https://bsky.app/profile/suvam.io)
+By the way, the word **'Dhaaga (धागा)'** means 'thread' or
+'string' in Hindi.
+It carries deep symbolic significance,
+representing *connection, unity and bonding*.
 
 ---
 

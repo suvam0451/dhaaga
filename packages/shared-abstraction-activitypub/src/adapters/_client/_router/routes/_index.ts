@@ -31,7 +31,6 @@ export interface RouterInterface {
 	me: MeRoute;
 	media: MediaRoute;
 	lists: ListsRoute;
-	// profile: ProfileRoute;
 }
 
 export type {

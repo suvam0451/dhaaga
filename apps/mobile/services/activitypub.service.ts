@@ -282,7 +282,7 @@ class ActivityPubService {
 	 * @param mngr
 	 */
 	static async signInUrl(urlLike: string, mngr: AppSessionManager) {
-		const tokens = mngr.cache.getAtprotoServerClientTokens(urlLike);
+		const tokens = mngr.storage.getAtprotoServerClientTokens(urlLike);
 
 		const client = new UnknownRestClient();
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {

@@ -90,10 +90,6 @@ export class ActivityPubUserRepository {
 		return results;
 	}
 
-	static getByAcctId(db: SQLiteDatabase, acctId: string) {
-		// return db.objects(ActivityPubUser).find((o) => o.accountId === acctId);
-	}
-
 	static getByUsername(db: SQLiteDatabase, username: string, instance: string) {
 		// return db
 		// 	.objects(ActivityPubUser)

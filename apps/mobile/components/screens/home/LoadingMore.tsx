@@ -7,7 +7,6 @@ import {
 	ViewStyle,
 } from 'react-native';
 import { memo } from 'react';
-import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -27,7 +26,7 @@ const LoadingMore = memo(({ visible, loading, style }: LoadingMoreProps) => {
 	if (!visible) return <View />;
 	if (visible && loading)
 		return (
-			<View style={[styles.widgetRootContainer, , style]}>
+			<View style={[styles.widgetRootContainer, style]}>
 				<View
 					style={[
 						styles.widgetContainer,
@@ -35,7 +34,16 @@ const LoadingMore = memo(({ visible, loading, style }: LoadingMoreProps) => {
 					]}
 				>
 					<ActivityIndicator size="small" color="#ffffff87" />
-					<Text style={styles.text}>{'Loading More...'}</Text>
+					<Text
+						style={[
+							styles.text,
+							{
+								color: theme.secondary.a20,
+							},
+						]}
+					>
+						{'Loading More...'}
+					</Text>
 				</View>
 			</View>
 		);
@@ -61,7 +69,6 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 	},
 	text: {
-		color: APP_FONT.MONTSERRAT_BODY,
 		textAlign: 'center',
 		marginLeft: 6,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,

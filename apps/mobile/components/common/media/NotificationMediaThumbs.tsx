@@ -3,12 +3,14 @@ import { FlatList, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useImageAutoHeight } from '../../../hooks/app/useImageDims';
 import { appDimensions } from '../../../styles/dimensions';
+import { AppPostObject } from '../../../types/app-post.types';
 
 type ThumbItemProps = {
 	item: AppActivityPubMediaType;
+	post: AppPostObject;
 };
 
-function ThumbItem({ item }: ThumbItemProps) {
+function ThumbItem({ item, post }: ThumbItemProps) {
 	const Data = useImageAutoHeight(item, 100, 200);
 
 	if (!Data.resolved) return <View />;
@@ -27,7 +29,7 @@ function ThumbItem({ item }: ThumbItemProps) {
 					justifyContent: 'center',
 				}}
 				source={{
-					uri: item.url,
+					uri: item.previewUrl,
 				}}
 				transition={{
 					effect: 'flip-from-right',
@@ -41,17 +43,17 @@ function ThumbItem({ item }: ThumbItemProps) {
 
 type Props = {
 	items: AppActivityPubMediaType[];
-	maxH: number; // not used for now
+	post: AppPostObject;
 };
 
-function NotificationMediaThumbs({ items, maxH }: Props) {
+function NotificationMediaThumbs({ items, post }: Props) {
 	if (items.length === 0) return <View />;
 
 	return (
 		<FlatList
 			horizontal={true}
 			data={items}
-			renderItem={(item) => <ThumbItem item={item.item} />}
+			renderItem={(item) => <ThumbItem item={item.item} post={post} />}
 			style={{
 				marginBottom: appDimensions.timelines.sectionBottomMargin,
 				marginTop: 8,

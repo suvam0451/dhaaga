@@ -6,17 +6,17 @@ import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 
 const BoostNotificationFragment = memo(function Foo({ item }: Props) {
-	const acct = item.acct;
+	const user = item.user;
 	const post = item.post;
 
 	return (
 		<View style={styles.container}>
 			<NotificationSenderInterface
-				acct={acct}
+				user={user}
 				type={DhaagaJsNotificationType.REBLOG}
 				createdAt={item.createdAt}
 			/>
-			<NotificationPostPeek acct={acct} post={post} />
+			<NotificationPostPeek acct={user} post={post} />
 		</View>
 	);
 });

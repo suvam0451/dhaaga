@@ -4,11 +4,11 @@ import AppNotificationViewContainer from './_container';
 import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 
 const SocialView = memo(() => {
-	const { items } = useApiGetUpdateNotifs();
+	const { data } = useApiGetUpdateNotifs();
 
 	return (
 		<AppNotificationViewContainer
-			items={items}
+			data={[]}
 			tabType={APP_LANDING_PAGE_TYPE.SOCIAL}
 			menuItems={[
 				{

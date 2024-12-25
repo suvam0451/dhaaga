@@ -11,7 +11,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import AddServerWidget from '../../../components/widgets/add-server/core/floatingWidget';
 import { useAssets } from 'expo-asset';
 import { Image } from 'expo-image';
-import KnownServersDrawer from '../../../components/drawers/known-servers';
 import WithAppDrawerContext from '../../../states/useAppDrawer';
 import KnownServerSearchWidget from '../../../components/widgets/add-server/core/floatingSearch';
 import WithLocalAppMenuControllerContext from '../../../components/shared/fab/hooks/useFabController';
@@ -495,17 +494,15 @@ function ServerDebuggerStackBase() {
 
 	return (
 		<View style={{ backgroundColor: '#121212', height: '100%' }}>
-			<KnownServersDrawer>
-				<WithAutoHideTopNavBar title={'Known Servers'} translateY={translateY}>
-					<AnimatedFlashList
-						estimatedItemSize={48}
-						renderItem={FlashListRenderer}
-						contentContainerStyle={{ paddingTop: 54 }}
-						data={FlashListProps}
-						onScroll={onScroll}
-					/>
-				</WithAutoHideTopNavBar>
-			</KnownServersDrawer>
+			<WithAutoHideTopNavBar title={'Known Servers'} translateY={translateY}>
+				<AnimatedFlashList
+					estimatedItemSize={48}
+					renderItem={FlashListRenderer}
+					contentContainerStyle={{ paddingTop: 54 }}
+					data={FlashListProps}
+					onScroll={onScroll}
+				/>
+			</WithAutoHideTopNavBar>
 			<AddServerWidget
 				onPress={() => {
 					console.log('Widget Clicked!');

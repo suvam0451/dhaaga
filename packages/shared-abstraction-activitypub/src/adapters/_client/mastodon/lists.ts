@@ -1,20 +1,16 @@
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { ListsRoute } from '../_router/routes/lists.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMastoClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { MastoList } from '../_interface.js';
+import type { MastoList } from '../../../types/mastojs.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MastodonListRoute implements ListsRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MASTOJS>;
+	direct: FetchWrapper;
+	client: MastoJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMastoClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async update(): LibraryPromise<any> {
@@ -26,7 +22,7 @@ export class MastodonListRoute implements ListsRoute {
 	}
 
 	async list(): LibraryPromise<MastoList[]> {
-		const data = await this.lib.client.v1.lists.list();
+		const data = await this.client.lib.v1.lists.list();
 		return { data };
 	}
 }

@@ -1,6 +1,7 @@
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import { useEffect, useRef } from 'react';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
+import { AppTimelineReducerActionType } from '../../../../states/reducers/timeline.reducer';
 
 const OPTION_GROUP_A = ['local', 'remote'];
 const OPTION_GROUP_B = ['media-only'];
@@ -9,12 +10,15 @@ function useTimelineOptions() {
 	const { State, forceUpdate } = useHookLoadingState();
 	const FeedSelected = useRef(new Set(['all']));
 	const MediaSelected = useRef(new Set(['all']));
-	const { opts, setOpts } = useTimelineController();
+	const { dispatch, draft } = useAppBottomSheet_TimelineReference();
 
 	const HideReply = useRef(false);
 	const HideReblog = useRef(false);
 
 	useEffect(() => {
+		if (!draft) return;
+
+		const opts = draft.opts;
 		if (opts?.onlyMedia) {
 			MediaSelected.current.clear();
 			MediaSelected.current.add('media-only');
@@ -25,16 +29,22 @@ function useTimelineOptions() {
 		if (opts?.excludeReplies) HideReply.current = true;
 		if (opts?.excludeReblogs) HideReblog.current = true;
 		forceUpdate();
-	}, [opts]);
+	}, [draft.opts]);
 
-	function updateQuery() {
-		setOpts({
-			...opts,
-			local: FeedSelected.current.has('local'),
-			remote: FeedSelected.current.has('remote'),
-			onlyMedia: MediaSelected.current.has('media-only'),
-			excludeReblogs: HideReblog.current,
-			excludeReplies: HideReply.current,
+	/**
+	 * Publishes the changes to the timeline
+	 */
+	function broadcastChanges() {
+		dispatch({
+			type: AppTimelineReducerActionType.SET_QUERY_OPTS,
+			payload: {
+				...draft.opts,
+				local: FeedSelected.current.has('local'),
+				remote: FeedSelected.current.has('remote'),
+				onlyMedia: MediaSelected.current.has('media-only'),
+				excludeReblogs: HideReblog.current,
+				excludeReplies: HideReply.current,
+			},
 		});
 		forceUpdate();
 	}
@@ -42,27 +52,35 @@ function useTimelineOptions() {
 	function onFeedOptAllSelected() {
 		FeedSelected.current.clear();
 		FeedSelected.current.add('all');
-		updateQuery();
+		// broadcastChanges();
+		forceUpdate();
 	}
 
 	function onMediaOptAllSelected() {
 		MediaSelected.current.clear();
 		MediaSelected.current.add('all');
-		updateQuery();
+		// broadcastChanges();
+		forceUpdate();
 	}
 
 	function onFeedOptSelected(index: number) {
 		FeedSelected.current.clear();
 		FeedSelected.current.add(OPTION_GROUP_A[index]);
 		FeedSelected.current.delete('all');
-		updateQuery();
+		// broadcastChanges();
+		forceUpdate();
 	}
 
 	function onMediaOptSelected(index: number) {
 		MediaSelected.current.clear();
 		MediaSelected.current.add(OPTION_GROUP_B[index]);
 		MediaSelected.current.delete('all');
-		updateQuery();
+		// broadcastChanges();
+		forceUpdate();
+	}
+
+	function updateLocalState() {
+		forceUpdate();
 	}
 
 	return {
@@ -73,9 +91,10 @@ function useTimelineOptions() {
 		onMediaOptSelected,
 		onMediaOptAllSelected,
 		State,
-		updateQuery,
+		broadcastChanges,
 		HideReply,
 		HideReblog,
+		updateLocalState,
 	};
 }
 

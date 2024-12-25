@@ -1,45 +1,31 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import { AppUserObject } from '../../../../types/app-user.types';
-import AppUserService from '../../../../services/approto/app-user-service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { UserMiddleware } from '../../../../services/middlewares/user.middleware';
 
 function useMyProfile() {
-	const { client, me, acct, driver, db } = useGlobalState(
+	const { client, acct } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
-			me: o.me,
-			driver: o.driver,
 			acct: o.acct,
-			db: o.db,
 		})),
 	);
-	const [Data, setData] = useState<AppUserObject>(null);
 
-	async function api() {
-		if (!client) throw new Error('_client not initialized');
-		const { data, error } = await client.accounts.get(me?.id);
-		if (error) {
-			return ActivityPubAdapterService.adaptUser(null, null);
-		}
-		return ActivityPubAdapterService.adaptUser(data, driver);
+	async function api(): Promise<AppUserObject> {
+		if (!client) return null;
+		const { data, error } = await client.accounts.get(acct.identifier);
+		if (error) return null;
+		return UserMiddleware.deserialize(data, acct?.driver, acct?.server);
 	}
 
 	// Queries
-	const { data, status, fetchStatus } = useQuery({
-		queryKey: ['accounts', me?.id],
+	return useQuery({
+		queryKey: ['user', acct],
 		queryFn: api,
-		enabled: client !== null,
+		enabled: client !== null && acct !== null,
+		initialData: null,
 	});
-
-	useEffect(() => {
-		if (status !== 'success' || fetchStatus === 'fetching' || !data) return;
-		setData(AppUserService.export(data, driver, acct?.server));
-	}, [fetchStatus]);
-
-	return { Data, fetchStatus };
 }
 
 export default useMyProfile;

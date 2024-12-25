@@ -1,13 +1,17 @@
 import { TrendsRoute } from '../_router/routes/trends.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
-import { LibraryResponse } from '../_router/_types.js';
-import { MastoStatus, MastoTag, MastoTrendLink } from '../_interface.js';
+import {
+	MastoStatus,
+	MastoTag,
+	MastoTrendLink,
+} from '../../../types/mastojs.types.js';
+import { LibraryResponse } from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 
 export class PleromaTrendsRouter implements TrendsRoute {
-	client: RestClient;
+	client: FetchWrapper;
 
-	constructor(forwarded: RestClient) {
+	constructor(forwarded: FetchWrapper) {
 		this.client = forwarded;
 	}
 

@@ -1,7 +1,7 @@
-import SettingsLandingPage from '../../../../components/screens/settings/stack/SettingsLandingPage';
+import AppSettingsPage from '../../../../components/screens/profile/stack/AppSettingsPage';
 
 function SettingsLanding() {
-	return <SettingsLandingPage />;
+	return <AppSettingsPage />;
 }
 
 export default SettingsLanding;

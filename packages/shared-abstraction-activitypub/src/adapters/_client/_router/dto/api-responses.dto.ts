@@ -1,4 +1,7 @@
-import { DhaagaErrorCode, LibraryResponse } from '../_types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../../types/result.types.js';
 
 export function successWithData(data: any) {
 	return {

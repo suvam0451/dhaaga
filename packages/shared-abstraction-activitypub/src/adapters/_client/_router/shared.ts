@@ -1,6 +1,6 @@
-import { LibraryResponse } from './_types.js';
 import { InstanceApi_SoftwareInfoDTO } from './routes/instance.js';
 import { ActivitypubHelper } from '../../../index.js';
+import { LibraryResponse } from '../../../types/result.types.js';
 
 export async function getSoftwareInfoShared(
 	urlLike: string,

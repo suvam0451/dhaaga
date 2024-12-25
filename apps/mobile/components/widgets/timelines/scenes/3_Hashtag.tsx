@@ -10,10 +10,10 @@ import AppInput from '../../../lib/Inputs';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
 import AppButtonGroup from '../../../lib/ButtonGroups';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
 
 type SearchResults = {
 	following: boolean;
@@ -179,8 +179,6 @@ function TimelineWidgetHashtagScene() {
 	const { setTimelineType, setQuery, setShowTimelineSelection } =
 		useTimelineController();
 	const [SearchTerm, setSearchTerm] = useState('');
-	const [Selection, setSelection] = useState<string | null>(null);
-
 	const [debouncedSearchTerm] = useDebounce(SearchTerm, 100);
 
 	const tags = [];

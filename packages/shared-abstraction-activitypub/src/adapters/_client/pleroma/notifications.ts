@@ -2,32 +2,33 @@ import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import {
-	COMPAT,
-	DhaagaMegalodonClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
 import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
-import { MegaConversation, MegaNotification } from '../_interface.js';
 import { toSnakeCase } from '../_router/utils/casing.utils.js';
 import {
 	errorBuilder,
 	notImplementedErrorBuilder,
 } from '../_router/dto/api-responses.dto.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import {
+	MegaConversation,
+	MegaNotification,
+} from '../../../types/megalodon.types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaNotificationsRouter implements NotificationsRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MEGALODON>;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMegalodonClient(
-			KNOWN_SOFTWARE.PLEROMA,
-			this.client.url,
-			this.client.accessToken,
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
 		);
 	}
 
@@ -38,7 +39,7 @@ export class PleromaNotificationsRouter implements NotificationsRoute {
 			maxId?: string | null;
 		}>
 	> {
-		const data = await this.lib.client.getNotifications(toSnakeCase(query));
+		const data = await this.client.client.getNotifications(toSnakeCase(query));
 		return {
 			data: {
 				data: data.data,
@@ -57,7 +58,7 @@ export class PleromaNotificationsRouter implements NotificationsRoute {
 		maxId?: string | null;
 	}> {
 		try {
-			const data = await this.lib.client.getConversationTimeline();
+			const data = await this.client.client.getConversationTimeline();
 			return {
 				data: {
 					data: data.data,

@@ -2,12 +2,25 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	InstanceRoute,
 } from '../_router/routes/instance.js';
-import { DhaagaErrorCode, LibraryResponse } from '../_router/_types.js';
 import type { mastodon } from 'masto';
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import {
+	DhaagaErrorCode,
+	LibraryResponse,
+} from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MisskeyInstanceRouter implements InstanceRoute {
+	direct: FetchWrapper;
+	client: MisskeyJsWrapper;
+
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
+	}
+
 	getLoginUrl(
 		urlLike: string,
 		{}: { appName: string; appCallback: string; uuid: string },

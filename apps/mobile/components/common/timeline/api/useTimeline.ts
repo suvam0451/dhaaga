@@ -7,9 +7,9 @@ import {
 	KNOWN_SOFTWARE,
 	PleromaRestClient,
 } from '@dhaaga/shared-abstraction-activitypub';
-import { TimelineFetchMode } from '../utils/timeline.types';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;

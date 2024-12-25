@@ -3,9 +3,11 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
+	SOCIAL_HUB_ADD_TAB,
 	DISCOVER,
 	COMPOSE,
 	INBOX,
@@ -16,6 +18,9 @@ export enum APP_LANDING_PAGE_TYPE {
 	CHAT,
 	SOCIAL,
 	UPDATES,
+	APP_SETTINGS,
+	MY_ACCOUNT,
+	MY_PROFILE,
 }
 
 type AppTabLandingNavbarProps = {
@@ -28,6 +33,7 @@ type AppTabLandingNavbarProps = {
 };
 
 const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
+	[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Tab',
 	[APP_LANDING_PAGE_TYPE.HOME]: 'Social Hub',
 	[APP_LANDING_PAGE_TYPE.DISCOVER]: 'Discover',
 	[APP_LANDING_PAGE_TYPE.COMPOSE]: 'Compose',
@@ -38,6 +44,9 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 	[APP_LANDING_PAGE_TYPE.CHAT]: 'Chat',
 	[APP_LANDING_PAGE_TYPE.SOCIAL]: 'Social',
 	[APP_LANDING_PAGE_TYPE.UPDATES]: 'Updates',
+	[APP_LANDING_PAGE_TYPE.APP_SETTINGS]: 'App Settings',
+	[APP_LANDING_PAGE_TYPE.MY_ACCOUNT]: 'My Account',
+	[APP_LANDING_PAGE_TYPE.MY_PROFILE]: 'My Profile',
 };
 
 /**
@@ -66,7 +75,14 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 						style={{ padding: 4, marginLeft: 4 }}
 						onPress={onPress}
 					>
-						<AppIcon id={iconId} emphasis={disabled ? 'low' : 'high'} />
+						<AppIcon
+							id={iconId}
+							emphasis={
+								disabled
+									? APP_COLOR_PALETTE_EMPHASIS.A40
+									: APP_COLOR_PALETTE_EMPHASIS.A20
+							}
+						/>
 					</Pressable>
 				))}
 			</View>

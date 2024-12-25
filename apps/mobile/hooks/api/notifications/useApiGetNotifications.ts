@@ -4,38 +4,19 @@ import {
 	KNOWN_SOFTWARE,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { AppPostObject } from '../../../types/app-post.types';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-import { AppUserObject } from '../../../types/app-user.types';
-import { UserMiddleware } from '../../../services/middlewares/user.middleware';
-
-type Api_Response_Type = {
-	data: any[];
-	minId?: string;
-	maxId?: string;
-};
-
-export type Notification_Entry = {
-	id: string;
-	type: DhaagaJsNotificationType;
-	createdAt: Date;
-	groupKey?: string;
-	acct?: AppUserObject;
-	post?: AppPostObject;
-	extraData?: string;
-	read?: boolean;
-};
-
-export type Notification_FlatList_Entry = {
-	type: DhaagaJsNotificationType;
-	props: Notification_Entry;
-};
+import { NotificationMiddleware } from '../../../services/middlewares/notification.middleware';
+import { AppNotificationObject } from '../../../types/app-notification.types';
 
 type useApiGetNotificationsProps = {
 	include: DhaagaJsNotificationType[];
+};
+
+type HookResultType = {
+	data: AppNotificationObject[];
+	minId?: string;
+	maxId?: string;
 };
 
 /**
@@ -49,14 +30,9 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 			driver: o.driver,
 		})),
 	);
-	const [Results, setResults] = useState<Notification_FlatList_Entry[]>([]);
 
-	useEffect(() => {
-		setResults([]);
-	}, [acct]);
-
-	async function api() {
-		if (!client) return [];
+	async function api(): Promise<HookResultType> {
+		if (!client) throw new Error('no client found');
 		if (driver === KNOWN_SOFTWARE.FIREFISH) {
 			/**
 			 * Firefish does not support grouped-notifications
@@ -70,54 +46,42 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 				types: include,
 			});
 
-			if (error) return [];
-			return data as any;
+			if (error) throw new Error(error.message);
+			return {
+				data: NotificationMiddleware.deserialize<unknown[]>(
+					data.data,
+					driver,
+					acct?.server,
+				),
+				maxId: data.maxId,
+				minId: data.minId,
+			};
 		} else {
 			const { data, error } = await client.notifications.get({
 				limit: 40,
 				excludeTypes: [],
 				types: include,
 			});
-			if (error) return [];
-			return data as any;
+			if (error) throw new Error(error.message);
+			return {
+				data: NotificationMiddleware.deserialize<unknown[]>(
+					data.data,
+					driver,
+					acct?.server,
+				),
+				maxId: data.maxId,
+				minId: data.minId,
+			};
 		}
 	}
 
 	// Queries
-	const { fetchStatus, data, status, refetch } = useQuery<Api_Response_Type>({
+	return useQuery<HookResultType>({
 		queryKey: ['notifications', driver, acct?.server, include],
 		queryFn: api,
 		enabled: client !== null,
+		initialData: { data: [] },
 	});
-
-	useEffect(() => {
-		if (fetchStatus === 'fetching' || status !== 'success') return;
-		setResults(
-			data.data.map((o) => ({
-				type: o.type as DhaagaJsNotificationType,
-				props: {
-					id: o.id,
-					type: o.type as DhaagaJsNotificationType,
-					createdAt: o.createdAt,
-					groupKey: o.groupKey,
-					acct: UserMiddleware.deserialize<unknown>(
-						o.account || o.user,
-						driver,
-						acct?.server,
-					),
-					post: PostMiddleware.deserialize<unknown>(
-						o.status || o.data || o.note,
-						driver,
-						acct?.server,
-					),
-					extraData: o.reaction,
-					read: o.isRead,
-				},
-			})),
-		);
-	}, [fetchStatus]);
-
-	return { Results, maxId: data?.maxId, minId: data?.minId, refetch };
 }
 
 export default useApiGetNotifications;

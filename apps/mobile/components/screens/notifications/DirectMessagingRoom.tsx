@@ -17,8 +17,9 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import useTopbarSmoothTranslate from '../../../states/useTopbarSmoothTranslate';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
 type DirectMessagingRoomProps = {
 	conversationIds: string[];

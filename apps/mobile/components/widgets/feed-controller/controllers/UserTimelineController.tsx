@@ -1,40 +1,82 @@
-import { memo } from 'react';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { memo, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import ControlSegment from '../components/ControlSegment';
 import useTimelineOptions from '../states/useTimelineOptions';
 import { AppInlineCheckbox } from '../../../lib/Checkboxes';
 import { styles } from './_shared';
+import {
+	useAppBottomSheet_Improved,
+	useAppBottomSheet_TimelineReference,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 
 const UserTimelineController = memo(function Foo() {
-	const { query } = useTimelineController();
+	const { endSessionSeed, stateId } = useAppBottomSheet_Improved();
+	const { draft } = useAppBottomSheet_TimelineReference();
 	const {
 		MediaOpt,
 		onMediaOptSelected,
 		onMediaOptAllSelected,
 		State,
-		updateQuery,
 		HideReply,
 		HideReblog,
+		updateLocalState,
+		broadcastChanges,
 	} = useTimelineOptions();
 
 	function onClickHideReply() {
 		HideReply.current = !HideReply.current;
-		updateQuery();
+		updateLocalState();
 	}
 
 	function onClickHideReblog() {
 		HideReblog.current = !HideReblog.current;
-		updateQuery();
+		updateLocalState();
 	}
+
+	const endSessionSeedRef = useRef(null);
+	const stateIdRef = useRef(null);
+	useEffect(() => {
+		console.log('reviewing changes to submit', stateId, endSessionSeed);
+		if (stateIdRef.current && stateIdRef.current === stateId) {
+			if (
+				endSessionSeedRef.current &&
+				endSessionSeedRef.current !== endSessionSeed
+			) {
+				broadcastChanges();
+			}
+		} else {
+			stateIdRef.current = stateId;
+			endSessionSeedRef.current = endSessionSeed;
+		}
+	}, [stateId, endSessionSeed]);
+
+	const { theme } = useAppTheme();
 
 	return (
 		<View>
-			<Text style={styles.timelineTypeText}>User Timeline</Text>
-			<Text style={styles.timelineTargetText}>{query?.label}</Text>
+			<Text
+				style={[
+					styles.timelineTypeText,
+					{
+						color: theme.primary.a10,
+					},
+				]}
+			>
+				User Timeline
+			</Text>
+			<Text
+				style={[
+					styles.timelineTargetText,
+					{
+						color: theme.complementary.a0,
+					},
+				]}
+			>
+				{draft?.query?.label}
+			</Text>
 			<ControlSegment
-				label={'More options:'}
+				label={'Timeline Options'}
 				buttons={[
 					{
 						label: 'All',
@@ -54,14 +96,14 @@ const UserTimelineController = memo(function Foo() {
 			/>
 
 			<Text
-				style={{
-					fontFamily: 'Montserrat-Bold',
-					color: APP_FONT.MONTSERRAT_BODY,
-					marginTop: 16,
-					marginBottom: 4,
-				}}
+				style={[
+					styles.controlSectionLabel,
+					{
+						color: theme.secondary.a20,
+					},
+				]}
 			>
-				More Filters
+				Extra Filters
 			</Text>
 			<View
 				style={{

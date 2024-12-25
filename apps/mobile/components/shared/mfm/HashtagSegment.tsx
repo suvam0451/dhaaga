@@ -2,8 +2,9 @@ import { memo, useMemo } from 'react';
 import { Text } from 'react-native';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 import { useShallow } from 'zustand/react/shallow';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { RandomUtil } from '../../../utils/random.utils';
+import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
 type Props = {
 	value: string;
@@ -33,10 +34,9 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 
 	const onPress = () => {
 		if (!acceptTouch) return;
-		appSession.cache.setTagTarget(_value);
+		appSession.storage.setTagTarget(_value);
 		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
 	};
-
 	const k = RandomUtil.nanoId();
 
 	return (
@@ -44,7 +44,7 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 			onPress={onPress}
 			key={k}
 			style={{
-				color: '#fedce9',
+				color: theme.complementaryB.a0,
 				// isFollowed
 				// 	? theme.palette.hashtagHigh
 				// 	: theme.palette.hashtagLow,

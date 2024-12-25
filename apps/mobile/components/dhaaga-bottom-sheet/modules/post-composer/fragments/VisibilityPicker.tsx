@@ -1,7 +1,6 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONT } from '../../../../../styles/AppTheme';
-import Animated, { SlideInUp } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import useAppVisibility, {
 	APP_POST_VISIBILITY,
@@ -36,9 +35,8 @@ const VisibilityPickerChoice = memo(function Foo({
 			style={[styles.choiceContainerWithDesc]}
 			onPress={onPress}
 		>
-			{icon}
-			<View style={{ flexDirection: 'column' }}>
-				<Text style={[styles.choiceText, { color: theme.textColor.high }]}>
+			<View>
+				<Text style={[styles.choiceText, { color: theme.complementary.a0 }]}>
 					{text}
 				</Text>
 				<Text
@@ -52,6 +50,7 @@ const VisibilityPickerChoice = memo(function Foo({
 					{desc}
 				</Text>
 			</View>
+			{icon}
 		</TouchableOpacity>
 	);
 });
@@ -66,6 +65,7 @@ const VisibilityPicker = memo(function Foo() {
 	);
 
 	function toggleExpanded() {
+		console.log('toggle pressed...');
 		setIsExpanded((o) => !o);
 	}
 
@@ -73,40 +73,35 @@ const VisibilityPicker = memo(function Foo() {
 	return (
 		<TouchableOpacity
 			onPress={toggleExpanded}
-			style={{ position: 'relative', maxWidth: 360 }}
+			style={{ position: 'relative', maxWidth: 360, overflow: 'visible' }}
 		>
-			<View
-				style={[
-					styles.choiceContainer,
-					{ backgroundColor: theme.palette.buttonUnstyled },
-				]}
-			>
-				{icon}
+			<View style={[styles.choiceContainer]}>
 				<Text
 					style={[
 						styles.choiceText,
 						{
-							color: theme.textColor.high,
+							color: theme.complementary.a0,
 						},
 					]}
 				>
 					{text}
 				</Text>
+				<View style={{ marginLeft: 6, width: 24 }}>{icon}</View>
 			</View>
 
-			<Animated.View
+			<View
 				style={{
 					position: 'absolute',
 					display: IsExpanded ? 'flex' : 'none',
-					bottom: '100%',
-					zIndex: 99,
+					zIndex: 200,
 					backgroundColor: theme.palette.menubar,
 					paddingBottom: 12,
 					marginBottom: 6,
 					padding: 8,
 					borderRadius: 8,
+					transform: [{ translateY: '-50%' }],
 				}}
-				entering={SlideInUp}
+				// entering={SlideInUp}
 			>
 				<VisibilityPickerChoice
 					visibility={APP_POST_VISIBILITY.PUBLIC}
@@ -124,7 +119,7 @@ const VisibilityPicker = memo(function Foo() {
 					visibility={APP_POST_VISIBILITY.DIRECT}
 					setVisibility={setIsExpanded}
 				/>
-			</Animated.View>
+			</View>
 		</TouchableOpacity>
 	);
 });
@@ -132,27 +127,23 @@ const VisibilityPicker = memo(function Foo() {
 const styles = StyleSheet.create({
 	choiceText: {
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-		fontSize: 14,
-		marginLeft: 6,
-		opacity: 0.87,
+		fontSize: 16,
 	},
 	choiceTextDescription: {
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-		fontSize: 12.5,
+		fontSize: 14,
 		marginLeft: 6,
 	},
 	choiceContainer: {
-		backgroundColor: '#424242',
 		padding: 6,
 		paddingHorizontal: 8,
 		borderRadius: 8,
-		minWidth: 104,
 		alignItems: 'center',
 		flexDirection: 'row',
+		justifyContent: 'flex-end',
 	},
 	choiceContainerWithDesc: {
-		backgroundColor: '#202020',
 		padding: 6,
 		paddingHorizontal: 8,
 		borderRadius: 8,

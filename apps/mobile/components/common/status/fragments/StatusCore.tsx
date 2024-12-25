@@ -14,14 +14,21 @@ import PostCreatedBy from './PostCreatedBy';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import StatusQuoted from './StatusQuoted';
 import { AppIcon } from '../../../lib/Icon';
-import useGlobalState, {
-	APP_BOTTOM_SHEET_ENUM,
-} from '../../../../states/_global';
+import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
 import { Text } from 'react-native';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
+import {
+	useTimelineDispatch,
+	useTimelineState,
+} from '../../timeline/core/Timeline';
+import {
+	useAppBottomSheet_TimelineReference,
+	useAppManager,
+} from '../../../../hooks/utility/global-state-extractors';
+import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 
 /**
  * Mostly used to remove the border
@@ -36,25 +43,19 @@ type StatusCoreProps = {
 
 function StatusController() {
 	const { dto } = useAppStatusItem();
-	const { show, setPostValue, setReducer, theme } = useGlobalState(
+	const State = useTimelineState();
+	const dispatch = useTimelineDispatch();
+	const { show } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,
-			setPostValue: o.bottomSheet.setPostValue,
-			setReducer: o.bottomSheet.setTimelineDataPostListReducer,
-			theme: o.colorScheme,
 		})),
 	);
-	const { getPostListReducer } = useAppTimelinePosts();
-
-	const STATUS_DTO = dto.meta.isBoost
-		? dto.content.raw
-			? dto
-			: dto.boostedFrom
-		: dto;
+	const { attach } = useAppBottomSheet_TimelineReference();
+	const { appManager } = useAppManager();
 
 	function onMoreOptionsPress() {
-		setPostValue(STATUS_DTO);
-		setReducer(getPostListReducer());
+		attach(State, dispatch);
+		appManager.storage.setBottomSheetPostActionsTarget(dto);
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
 	}
 
@@ -91,13 +92,9 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 	const { toPost } = useAppNavigator();
 	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
-	const STATUS_DTO = dto.meta.isBoost
-		? dto.content.raw
-			? dto
-			: dto.boostedFrom
-		: dto;
+	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
 
-	const IS_QUOTE_BOOST = dto?.meta?.isBoost && dto?.content?.raw;
+	const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
 
 	const { content: PostContent, isLoaded } = useMfm({
 		content: STATUS_DTO.content.raw,
@@ -120,8 +117,8 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 	);
 
 	function onGalleryInspect() {
-		appSession.cache.setPostForMediaInspect(dto as any);
-		showInspector();
+		appSession.storage.setPostForMediaInspect(dto as any);
+		showInspector(true);
 	}
 
 	return useMemo(() => {

@@ -1,5 +1,5 @@
-import { ScrollView, View, Text } from 'react-native';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { ScrollView, Text, View } from 'react-native';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useRef, useState } from 'react';
 import { useTag } from '../../../hooks/api/tags/useTag';
@@ -8,6 +8,8 @@ import { AppDivider } from '../../lib/Divider';
 import { AppMenu } from '../../lib/Menu';
 import { AppIcon } from '../../lib/Icon';
 import ActivityPubService from '../../../services/activitypub.service';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { APP_BOTTOM_SHEET_ENUM } from '../Core';
 
 function AppBottomSheetHashtag() {
 	const [TagName, setTagName] = useState(null);
@@ -27,8 +29,7 @@ function AppBottomSheetHashtag() {
 	const ValueRef = useRef<string>(null);
 	useEffect(() => {
 		if (!appSession) return;
-		const _tag = appSession.cache.getTagTarget();
-		console.log(_tag);
+		const _tag = appSession.storage.getTagTarget();
 
 		if (ValueRef.current === _tag) return;
 		setTagName(_tag);
@@ -78,35 +79,48 @@ function AppBottomSheetHashtag() {
 			<View style={{ paddingHorizontal: 12 }}>
 				{FOLLOW_POSSIBLE && (
 					<AppMenu.Option
-						Icon={<AppIcon id={'eye'} emphasis={'high'} />}
+						appIconId={
+							<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+						}
 						label={'Follow Tag'}
-						onClick={() => {}}
+						onPress={() => {}}
 					/>
 				)}
 				<AppMenu.Option
-					Icon={<AppIcon id={'eye'} emphasis={'high'} />}
+					appIconId={
+						<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+					}
 					label={'Preview'}
-					onClick={() => {}}
+					onPress={() => {}}
 					desc={'Quickly view posts using this tag'}
 				/>
 
 				<AppMenu.Option
-					Icon={<AppIcon id={'pin'} emphasis={'high'} />}
+					appIconId={
+						<AppIcon id={'pin'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+					}
 					label={'Pin to Social Hub'}
-					onClick={() => {}}
+					onPress={() => {}}
 					desc={'Pin this to your Social Hub'}
 				/>
 				<AppMenu.Option
-					Icon={<AppIcon id={'language'} emphasis={'high'} />}
+					appIconId={
+						<AppIcon
+							id={'language'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						/>
+					}
 					label={'Explain'}
 					desc={'Explains the meaning of this word'}
-					onClick={() => {}}
+					onPress={() => {}}
 				/>
 
 				<AppMenu.Option
-					Icon={<AppIcon id={'eye'} emphasis={'high'} />}
+					appIconId={
+						<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+					}
 					label={'Open Timeline'}
-					onClick={() => {}}
+					onPress={() => {}}
 					desc={'Navigate and view posts using this tag.'}
 				/>
 			</View>

@@ -1,9 +1,14 @@
-import { memo, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dispatch, memo } from 'react';
+import {
+	FlatList,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { TimelineFetchMode } from '../../../../../common/timeline/utils/timeline.types';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
@@ -11,6 +16,9 @@ import { SocialHubPinSectionContainer } from './_factory';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
+import { ProfilePinnedTimeline } from '../../../../../../database/_schema';
+import { socialHubTabReducerAction } from '../../../../../../states/reducers/social-hub-tab.reducer';
+import { TimelineFetchMode } from '../../../../../../states/reducers/timeline.reducer';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -104,79 +112,96 @@ function PinnedTimelineItem({ label, icon }: PinnedTimelineItemProps) {
 	);
 }
 
-const SocialHubPinnedTimelines = memo(() => {
-	const { theme, db } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-			db: o.db,
-		})),
-	);
+type SocialHubPinnedTimelinesProps = {
+	items: ProfilePinnedTimeline[];
+	refresh: () => void;
+	isRefreshing: boolean;
+	dispatch: Dispatch<socialHubTabReducerAction>;
+};
 
-	useEffect(() => {
-		if (db) {
-			const items = db.profilePinnedTimeline.find({});
-			console.log(items);
-		}
-	}, []);
+const SocialHubPinnedTimelines = memo(
+	({
+		items,
+		refresh,
+		isRefreshing,
+		dispatch,
+	}: SocialHubPinnedTimelinesProps) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 
-	return (
-		<SocialHubPinSectionContainer
-			label={'Timelines'}
-			style={{
-				marginTop: 16,
-				marginHorizontal: 8,
-			}}
-		>
-			<View style={{ flexDirection: 'column' }}>
-				<View
-					style={{
-						flexDirection: 'row',
-						marginBottom: 8,
-					}}
-				>
-					<PinnedTimelineItem
-						label={'Home'}
-						icon={
-							<AppIcon
-								id={'home'}
-								size={48}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-								iconStyle={{ color: theme.secondary.a0 }}
-							/>
-						}
-					/>
-					<PinnedTimelineItem
-						label={'Social'}
-						icon={
-							<AppIcon
-								id={'home'}
-								size={48}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-								iconStyle={{ color: theme.secondary.a0 }}
-							/>
-						}
-					/>
+		return (
+			<SocialHubPinSectionContainer
+				label={'Timelines'}
+				style={{
+					marginTop: 16,
+					marginHorizontal: 8,
+				}}
+			>
+				<FlatList
+					data={items}
+					numColumns={2}
+					renderItem={({ item }) => (
+						<View>
+							{/*<Text style={{ color: theme.secondary.a20 }}>Hello</Text>*/}
+						</View>
+					)}
+				/>
+				<View style={{ flexDirection: 'column' }}>
+					<View
+						style={{
+							flexDirection: 'row',
+							marginBottom: 8,
+						}}
+					>
+						<PinnedTimelineItem
+							label={'Home'}
+							icon={
+								<AppIcon
+									id={'home'}
+									size={48}
+									emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+									iconStyle={{ color: theme.secondary.a0 }}
+								/>
+							}
+						/>
+						<PinnedTimelineItem
+							label={'Social'}
+							icon={
+								<AppIcon
+									id={'home'}
+									size={48}
+									emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+									iconStyle={{ color: theme.secondary.a0 }}
+								/>
+							}
+						/>
+					</View>
+					<View
+						style={{
+							flexDirection: 'row',
+						}}
+					>
+						<PinnedTimelineItem
+							label={'Local'}
+							icon={
+								<Ionicons name="people" size={48} color={theme.secondary.a0} />
+							}
+						/>
+						<PinnedTimelineItem
+							label={'Federated'}
+							icon={
+								<Feather name="globe" size={48} color={theme.secondary.a0} />
+							}
+						/>
+					</View>
 				</View>
-				<View
-					style={{
-						flexDirection: 'row',
-					}}
-				>
-					<PinnedTimelineItem
-						label={'Local'}
-						icon={
-							<Ionicons name="people" size={48} color={theme.secondary.a0} />
-						}
-					/>
-					<PinnedTimelineItem
-						label={'Federated'}
-						icon={<Feather name="globe" size={48} color={theme.secondary.a0} />}
-					/>
-				</View>
-			</View>
-		</SocialHubPinSectionContainer>
-	);
-});
+			</SocialHubPinSectionContainer>
+		);
+	},
+);
 export default SocialHubPinnedTimelines;
 
 const styles = StyleSheet.create({

@@ -1,5 +1,4 @@
-import { ScrollView, View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { View, Text } from 'react-native';
 import { memo, useMemo } from 'react';
 import LocalTimelineController from '../controllers/LocalTimelineController';
 import UserTimelineController from '../controllers/UserTimelineController';
@@ -9,30 +8,14 @@ import ListTimelineController from '../controllers/ListTimelineController';
 import FederatedTimelineController from '../controllers/FederatedTimelineController';
 import SocialTimelineController from '../controllers/SocialTimelineController';
 import BubbleTimelineController from '../controllers/BubbleTimelineController';
-import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-
-type FeedControllerSheetContainerProps = {
-	title: string;
-	subtitle: string;
-	desc: string[];
-	children: any;
-};
-
-function FeedControllerSheetContainer({}: FeedControllerSheetContainerProps) {
-	return <ScrollView></ScrollView>;
-}
+import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
 
 const NowBrowsingHeader = memo(function Foo() {
-	const { timelineType } = useGlobalState(
-		useShallow((o) => ({
-			timelineType: o.homepageType,
-		})),
-	);
+	const { draft } = useAppBottomSheet_TimelineReference();
 
 	const Comp = useMemo(() => {
-		switch (timelineType) {
+		switch (draft.feedType) {
 			case TimelineFetchMode.LOCAL: {
 				return <LocalTimelineController />;
 			}
@@ -61,7 +44,7 @@ const NowBrowsingHeader = memo(function Foo() {
 				);
 			}
 		}
-	}, [timelineType]);
+	}, [draft.feedType]);
 
 	return <View style={{ marginHorizontal: 12, marginBottom: 16 }}>{Comp}</View>;
 });

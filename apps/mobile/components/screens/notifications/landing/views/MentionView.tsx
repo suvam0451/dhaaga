@@ -4,8 +4,7 @@ import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandin
 import AppNotificationViewContainer from './_container';
 
 const MentionView = memo(() => {
-	const { items: SocialNotifs } = useApiGetSocialNotifs();
-
+	const { data } = useApiGetSocialNotifs();
 	return (
 		<AppNotificationViewContainer
 			menuItems={[
@@ -15,7 +14,7 @@ const MentionView = memo(() => {
 			]}
 			tabType={APP_LANDING_PAGE_TYPE.MENTIONS}
 			tip={'These users have mentioned or replied to you.'}
-			items={SocialNotifs}
+			data={data.data}
 		/>
 	);
 });

@@ -8,12 +8,17 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useReducer,
 	useState,
 } from 'react';
 import { useDebounce } from 'use-debounce';
 import { Text } from 'react-native';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
+import {
+	postComposerReducer,
+	postComposerReducerDefault,
+} from '../../../../../states/reducers/post-composer.reducer';
 
 type ComposerAutocompletion = {
 	accounts: UserInterface[];
@@ -69,6 +74,10 @@ type Type = {
 		previewUrl?: string;
 	}) => void;
 	removeMediaTarget: (index: number) => void;
+
+	isMoreOptionsVisible: false;
+	showMoreOptions: () => {};
+	hideMoreOptions: () => {};
 };
 
 const defaultValue: Type = {
@@ -82,6 +91,7 @@ const defaultValue: Type = {
 	setAutoCompletion: () => {},
 	visibility: APP_POST_VISIBILITY.PUBLIC,
 	setVisibility: () => {},
+
 	autoCompletionPrompt: {
 		q: '',
 		type: 'acct',
@@ -120,6 +130,10 @@ type Props = {
 };
 
 function WithComposerContext({ children, textSeed }: Props) {
+	const [Data, dispatch] = useReducer(
+		postComposerReducer,
+		postComposerReducerDefault,
+	);
 	const { requestId } = useAppBottomSheet();
 	const [RawText, setRawText] = useState(textSeed || '');
 	const [EditorText, setEditorText] = useState(<Text>{textSeed || ''}</Text>);

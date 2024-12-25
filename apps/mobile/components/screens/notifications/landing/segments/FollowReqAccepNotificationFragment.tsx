@@ -6,12 +6,13 @@ import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub
 import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
 
 const FollowReqAcceptNotificationFragment = memo(({ item }: Props) => {
-	const acct = item.acct;
+	const user = item.user;
 	return (
 		<View style={styles.container}>
 			<NotificationSenderInterface
-				acct={acct}
+				user={user}
 				type={DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED}
+				createdAt={item.createdAt}
 			/>
 			<NotificationDescriptionText
 				type={DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED}

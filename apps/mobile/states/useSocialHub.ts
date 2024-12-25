@@ -1,12 +1,10 @@
 import { useEffect, useReducer, useState } from 'react';
 import { Profile } from '../database/_schema';
-import { ProfilePinnedTagService } from '../database/entities/profile-pinned-tag';
-import { ProfilePinnedUserService } from '../database/entities/profile-pinned-user';
 import { produce } from 'immer';
-import { SocialHubTabPinData } from './useSocialHubTab';
 import { ProfileService } from '../database/entities/profile';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
+import { DataSource } from '../database/dataSource';
 
 enum REDUCER_ACTION {
 	INIT = 'init',
@@ -14,16 +12,16 @@ enum REDUCER_ACTION {
 }
 
 function reducer(
-	state: Profile[],
+	state: { profiles: Profile[] },
 	action: { type: REDUCER_ACTION; payload: any },
-) {
+): { profiles: Profile[] } {
 	switch (action.type) {
 		case REDUCER_ACTION.INIT: {
-			const _db = action.payload.db;
+			const _db: DataSource = action.payload.db;
 
 			const shownProfiles = ProfileService.getShownProfiles(_db);
 			return produce(state, (draft) => {
-				draft = shownProfiles;
+				draft.profiles = shownProfiles;
 			});
 		}
 		case REDUCER_ACTION.REFRESH: {
@@ -44,16 +42,19 @@ function useSocialHub() {
 
 	const [TabIndex, setTabIndex] = useState(0);
 
-	const [Data, dispatch] = useReducer(reducer, []);
+	const [Data, dispatch] = useReducer(reducer, {
+		profiles: [],
+	});
 
 	useEffect(() => {
+		if (!db) return;
 		dispatch({
 			type: REDUCER_ACTION.INIT,
 			payload: {
 				db,
 			},
 		});
-	}, []);
+	}, [db]);
 
 	function onPageScroll(e: any) {
 		const { offset, position } = e.nativeEvent;

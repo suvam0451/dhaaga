@@ -3,31 +3,27 @@ import {
 	DhaagaJsUserSearchDTO,
 	SearchRoute,
 } from '../_router/routes/search.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMisskeyClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../_router/_types.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MisskeySearchRouter implements SearchRoute {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MISSKEYJS>;
+	direct: FetchWrapper;
+	client: MisskeyJsWrapper;
 
-	constructor(forwarded: RestClient) {
-		this.client = forwarded;
-		this.lib = DhaagaMisskeyClient(this.client.url, this.client.accessToken);
+	constructor(forwarded: FetchWrapper) {
+		this.direct = forwarded;
+		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
 	async findUsers(
 		query: DhaagaJsUserSearchDTO,
 	): LibraryPromise<Endpoints['users/search']['res']> {
 		try {
-			const data = await this.lib.client.request('users/search', query);
+			const data = await this.client.client.request('users/search', query);
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
@@ -38,7 +34,7 @@ export class MisskeySearchRouter implements SearchRoute {
 		query: DhaagaJsPostSearchDTO,
 	): LibraryPromise<Endpoints['notes/search']['res']> {
 		try {
-			const data = await this.lib.client.request('notes/search', query);
+			const data = await this.client.client.request('notes/search', query);
 			return { data };
 		} catch (e) {
 			console.log('[ERROR]: performing search', e);

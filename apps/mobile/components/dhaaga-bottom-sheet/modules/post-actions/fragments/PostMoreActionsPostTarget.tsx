@@ -1,7 +1,7 @@
 import { Dispatch, Fragment, memo, SetStateAction } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
+import { APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons } from '@expo/vector-icons';
 import ActivityPubService from '../../../../../services/activitypub.service';
@@ -10,6 +10,8 @@ import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import useGlobalState from '../../../../../states/_global';
 import { AppIcon } from '../../../../lib/Icon';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 function SectionDivider() {
 	return (
@@ -97,16 +99,16 @@ const PostMoreActionsPostTarget = memo(
 	}: {
 		setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
 	}) => {
-		const { postValue, reducer, hide, router, driver, theme } = useGlobalState(
+		const { postValue, reducer, hide, router, driver } = useGlobalState(
 			useShallow((o) => ({
 				postValue: o.bottomSheet.postValue,
 				reducer: o.bottomSheet.timelineDataPostListReducer,
 				router: o.router,
 				driver: o.driver,
 				hide: o.bottomSheet.hide,
-				theme: o.colorScheme,
 			})),
 		);
+		const { theme } = useAppTheme();
 
 		const IS_BOOKMARKED = postValue.interaction.bookmarked;
 		const IS_LIKED = postValue.interaction.liked;
@@ -179,9 +181,7 @@ const PostMoreActionsPostTarget = memo(
 					Icon={
 						<Ionicons
 							color={
-								IS_BOOKMARKED
-									? APP_THEME.INVALID_ITEM
-									: APP_FONT.MONTSERRAT_HEADER
+								IS_BOOKMARKED ? theme.complementary.a0 : theme.secondary.a10
 							}
 							name={'bookmark'}
 							size={24}
@@ -207,33 +207,52 @@ const PostMoreActionsPostTarget = memo(
 				)}
 				{!IS_MASTODON && (
 					<ActionButton
-						Icon={<AppIcon id={'smiley'} emphasis={'high'} />}
+						Icon={
+							<AppIcon
+								id={'smiley'}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+							/>
+						}
 						label={ReactionCta}
 						onClick={onClickAddReaction}
 					/>
 				)}
 
 				<ActionButton
-					Icon={<AppIcon id={'smiley'} emphasis={'high'} />}
+					Icon={
+						<AppIcon id={'smiley'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+					}
 					label={'Reply'}
 					onClick={() => {}}
 				/>
 
 				<SectionDivider />
 				<ActionButton
-					Icon={<AppIcon id={'share'} emphasis={'high'} />}
+					Icon={
+						<AppIcon id={'share'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+					}
 					label={'Share'}
 					onClick={() => {}}
 				/>
 
 				<SectionDivider />
 				<ActionButton
-					Icon={<AppIcon id={'external-link'} emphasis={'high'} />}
+					Icon={
+						<AppIcon
+							id={'external-link'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						/>
+					}
 					label={'Open in Browser'}
 					onClick={() => {}}
 				/>
 				<ActionButton
-					Icon={<AppIcon id={'external-link'} emphasis={'high'} />}
+					Icon={
+						<AppIcon
+							id={'external-link'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						/>
+					}
 					label={'Open Original in Browser'}
 					onClick={() => {}}
 				/>

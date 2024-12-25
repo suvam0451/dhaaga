@@ -4,23 +4,19 @@ import { ThemePackType } from '../assets/loaders/UseAppThemePackLoader';
 import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
 import { Account, Profile } from '../database/_schema';
 import {
+	ActivityPubClient,
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
-	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
 import { AccountService } from '../database/entities/account';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
 import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '../database/entities/account-metadata';
-import { TimelineFetchMode } from '../components/common/timeline/utils/timeline.types';
 import { Result } from '../utils/result';
 import { RandomUtil } from '../utils/random.utils';
-import { ActivityPubStatusAppDtoType_DEPRECATED } from '../services/app-status-dto.service';
-import { TimelineDataReducerFunction } from '../components/common/timeline/api/postArrayReducer';
 import { DataSource } from '../database/dataSource';
 import AppUserService from '../services/approto/app-user-service';
 import { AppUserObject } from '../types/app-user.types';
@@ -30,6 +26,12 @@ import AppSessionManager from '../services/session/app-session.service';
 import { AppColorSchemeType } from '../utils/theming.util';
 import AccountSessionManager from '../services/session/account-session.service';
 import { WritableDraft } from 'immer';
+import { APP_BOTTOM_SHEET_ENUM } from '../components/dhaaga-bottom-sheet/Core';
+import {
+	AppTimelineReducerDispatchType,
+	AppTimelineReducerStateType,
+	TimelineFetchMode,
+} from './reducers/timeline.reducer';
 
 type AppThemePack = {
 	id: string;
@@ -43,22 +45,6 @@ type AppModalStateBase = {
 	hide: () => void;
 	refresh: () => void;
 };
-
-export enum APP_BOTTOM_SHEET_ENUM {
-	APP_PROFILE = 'AppProfile',
-	HASHTAG = 'Hashtag',
-	LINK = 'Link',
-	MORE_POST_ACTIONS = 'MorePostActions',
-	NA = 'N/A',
-	PROFILE_PEEK = 'ProfilePeek',
-	REACTION_DETAILS = 'ReactionDetails',
-	SELECT_ACCOUNT = 'SelectAccount',
-	STATUS_COMPOSER = 'StatusComposer',
-	STATUS_MENU = 'StatusMenu',
-	STATUS_PREVIEW = 'StatusPreview',
-	SWITCH_THEME_PACK = 'SwitchThemePack',
-	TIMELINE_CONTROLLER = 'TimeLineController',
-}
 
 export enum APP_DIALOG_SHEET_ENUM {
 	DEFAULT = 'Default',
@@ -93,7 +79,11 @@ type AppDialogState = {
 
 type AppBottomSheetState = {
 	type: APP_BOTTOM_SHEET_ENUM;
+
 	stateId: string;
+	// a way to notify sheet closing event
+	endSessionSeed: string;
+
 	refresh: () => void;
 	setType: (type: APP_BOTTOM_SHEET_ENUM) => void;
 	visible: boolean;
@@ -105,6 +95,8 @@ type AppBottomSheetState = {
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
 
+	broadcastEndSession: () => void;
+
 	/**
 	 * to prevent lists from being
 	 * rendered while the bottom
@@ -112,23 +104,15 @@ type AppBottomSheetState = {
 	 * */
 	isAnimating: boolean;
 
-	// references
-	HandleRef: string;
-	ParentRef: ActivityPubStatusAppDtoType_DEPRECATED;
-	RootRef: ActivityPubStatusAppDtoType_DEPRECATED;
-	textValue: string;
-	setTextValue(textValue: string): void;
-	postValue: ActivityPubStatusAppDtoType_DEPRECATED;
-	setPostValue: (obj: ActivityPubStatusAppDtoType_DEPRECATED) => void;
-
-	PostIdRef: string;
-	UserRef: UserInterface;
-	UserIdRef: string; // pre-populate the post-composer to this content
-	PostComposerTextSeedRef: string;
-
-	// reducers
-	timelineDataPostListReducer: TimelineDataReducerFunction;
-	setTimelineDataPostListReducer: (obj: TimelineDataReducerFunction) => void;
+	// timeline invoking the sheet
+	timeline: {
+		draftState: AppTimelineReducerStateType | null;
+		dispatch: AppTimelineReducerDispatchType | null;
+		attach: (
+			state: AppTimelineReducerStateType,
+			dispatch: AppTimelineReducerDispatchType,
+		) => void;
+	};
 };
 
 type State = {
@@ -265,7 +249,7 @@ class GlobalStateService {
 				};
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
-			const { data, error } = await _router.me.getMe();
+			const { data } = await _router.me.getMe();
 			const obj: AppUserObject = AppUserService.exportRaw(
 				data,
 				acct.driver,
@@ -359,6 +343,7 @@ const useGlobalState = create<State & Actions>()(
 			type: APP_BOTTOM_SHEET_ENUM.NA,
 			visible: false,
 			stateId: RandomUtil.nanoId(),
+			endSessionSeed: RandomUtil.nanoId(),
 			refresh: function (): void {
 				throw new Error('Function not implemented.');
 			},
@@ -377,31 +362,24 @@ const useGlobalState = create<State & Actions>()(
 					state.bottomSheet.visible = false;
 				});
 			},
+			broadcastEndSession: () => {
+				set((state) => {
+					state.bottomSheet.endSessionSeed = RandomUtil.nanoId();
+				});
+			},
 			isAnimating: false,
-			HandleRef: undefined,
-			ParentRef: undefined,
-			RootRef: undefined,
-			textValue: undefined,
-			setTextValue: (value: string) => {
-				set((state) => {
-					state.bottomSheet.textValue = value;
-				});
-			},
-			postValue: null,
-			setPostValue: (obj: ActivityPubStatusAppDtoType_DEPRECATED) => {
-				set((state) => {
-					state.bottomSheet.postValue = obj;
-				});
-			},
-			PostIdRef: undefined,
-			UserRef: undefined,
-			UserIdRef: undefined,
-			PostComposerTextSeedRef: undefined,
-			timelineDataPostListReducer: null,
-			setTimelineDataPostListReducer: (obj: TimelineDataReducerFunction) => {
-				set((state) => {
-					state.bottomSheet.timelineDataPostListReducer = obj;
-				});
+			timeline: {
+				draftState: null,
+				dispatch: null,
+				attach: (
+					_state: AppTimelineReducerStateType,
+					_dispatch: AppTimelineReducerDispatchType,
+				) => {
+					set((state) => {
+						state.bottomSheet.timeline.draftState = _state;
+						state.bottomSheet.timeline.dispatch = _dispatch;
+					});
+				},
 			},
 		},
 		dialog: {

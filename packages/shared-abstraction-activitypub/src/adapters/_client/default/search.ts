@@ -4,13 +4,9 @@ import {
 	SearchRoute,
 } from '../_router/routes/search.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import {
-	MastoAccount,
-	MastoStatus,
-	MegaAccount,
-	MegaStatus,
-} from '../_interface.js';
 import { Endpoints } from 'misskey-js';
+import { MastoAccount, MastoStatus } from '../../../types/mastojs.types.js';
+import { MegaAccount, MegaStatus } from '../../../types/megalodon.types.js';
 
 export class DefaultSearchRouter implements SearchRoute {
 	async findUsers(

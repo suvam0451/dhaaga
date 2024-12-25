@@ -1,21 +1,7 @@
-import { LibraryResponse } from '../_types.js';
 import { mastodon } from 'masto';
 import { Note } from 'misskey-js/autogen/models.js';
 import { Endpoints } from 'misskey-js';
-import {
-	FollowPostDto,
-	GetPostsQueryDTO,
-	MastoAccount,
-	MastoFamiliarFollowers,
-	MastoFeaturedTag,
-	MastoList,
-	MastoRelationship,
-	MastoStatus,
-	MegaAccount,
-	MegaRelationship,
-	MegaStatus,
-	MissUserDetailed,
-} from '../../_interface.js';
+import { FollowPostDto, GetPostsQueryDTO } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
 import {
 	AppBskyActorGetProfile,
@@ -23,6 +9,21 @@ import {
 	AppBskyGraphGetFollowers,
 	AppBskyGraphGetFollows,
 } from '@atproto/api';
+import {
+	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
+	MastoList,
+	MastoRelationship,
+	MastoStatus,
+} from '../../../../types/mastojs.types.js';
+import {
+	MegaAccount,
+	MegaRelationship,
+	MegaStatus,
+} from '../../../../types/megalodon.types.js';
+import { MissUserDetailed } from '../../../../types/misskey-js.types.js';
+import { LibraryResponse } from '../../../../types/result.types.js';
 
 export type BookmarkGetQueryDTO = {
 	limit: number;

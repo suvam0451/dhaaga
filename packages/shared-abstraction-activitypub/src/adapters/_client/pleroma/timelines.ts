@@ -4,40 +4,33 @@ import {
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
 import { DefaultTimelinesRouter } from '../default/timelines.js';
-import { RestClient } from '@dhaaga/shared-provider-mastodon';
-import {
-	COMPAT,
-	DhaagaMegalodonClient,
-	DhaagaRestClient,
-} from '../_router/_runner.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { toSnakeCase } from '../_router/utils/casing.utils.js';
-import AppApi from '../../_api/AppApi.js';
+import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import snakecaseKeys from 'snakecase-keys';
 import camelcaseKeys from 'camelcase-keys';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class PleromaTimelinesRouter
 	extends DefaultTimelinesRouter
 	implements TimelinesRoute
 {
-	client: RestClient;
-	lib: DhaagaRestClient<COMPAT.MEGALODON>;
+	direct: FetchWrapper;
+	client: MegalodonPleromaWrapper;
 
-	constructor(forwarded: RestClient) {
+	constructor(forwarded: FetchWrapper) {
 		super();
-		this.client = forwarded;
-		this.lib = DhaagaMegalodonClient(
-			KNOWN_SOFTWARE.PLEROMA,
-			this.client.url,
-			this.client.accessToken,
+		this.direct = forwarded;
+		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
 		);
 	}
 
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
-		const data = await this.lib.client.getHomeTimeline(toSnakeCase(query));
+		const data = await this.client.client.getHomeTimeline(toSnakeCase(query));
 		return { data: data.data };
 	}
 
@@ -45,10 +38,14 @@ export class PleromaTimelinesRouter
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
 		if (query.local === true) {
-			const data = await this.lib.client.getLocalTimeline(toSnakeCase(query));
+			const data = await this.client.client.getLocalTimeline(
+				toSnakeCase(query),
+			);
 			return { data: data.data };
 		} else {
-			const data = await this.lib.client.getPublicTimeline(toSnakeCase(query));
+			const data = await this.client.client.getPublicTimeline(
+				toSnakeCase(query),
+			);
 			return { data: data.data };
 		}
 	}
@@ -56,11 +53,10 @@ export class PleromaTimelinesRouter
 	async bubble(
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
-		const { data: _data, error } = await new AppApi(
-			this.client.url,
-			this.client.accessToken,
-		).get<any[]>('/api/v1/timelines/bubble', snakecaseKeys(query));
-
+		const { data: _data, error } = await this.direct.get<any[]>(
+			'/api/v1/timelines/bubble',
+			snakecaseKeys(query),
+		);
 		if (error) return errorBuilder(error.code);
 		return { data: camelcaseKeys(_data as any, { deep: true }) };
 	}
@@ -69,7 +65,10 @@ export class PleromaTimelinesRouter
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
-		const data = await this.lib.client.getListTimeline(q, toSnakeCase(query));
+		const data = await this.client.client.getListTimeline(
+			q,
+			toSnakeCase(query),
+		);
 		return { data: data.data };
 	}
 
@@ -77,7 +76,7 @@ export class PleromaTimelinesRouter
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
-		const data = await this.lib.client.getTagTimeline(q, toSnakeCase(query));
+		const data = await this.client.client.getTagTimeline(q, toSnakeCase(query));
 		return {
 			data: data.data,
 		};

@@ -15,7 +15,7 @@ import ProfileDesc from '../../../common/user/fragments/ProfileDesc';
 import ProfileButtonMessage from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
 import RelationshipButtonCore from '../../../common/relationship/RelationshipButtonCore';
 import ProfileButtonPhonebook from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
-import ProfileStats from '../../../screens/(shared)/stack/profile/fragments/ProfileStats';
+import UserViewProfileStats from '../../../common/user/fragments/UserViewProfileStats';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppUserObject } from '../../../../types/app-user.types';
@@ -27,30 +27,23 @@ import { AppUserObject } from '../../../../types/app-user.types';
 const AppBottomSheetProfilePeek = memo(() => {
 	const [UserId, setUserId] = useState<string>(null);
 	const [UserObject, setUserObject] = useState<AppUserObject>(null);
-	const {
-		stateId,
-		appManager,
-		acct: acctData,
-	} = useGlobalState(
+	const { stateId, appManager } = useGlobalState(
 		useShallow((o) => ({
 			stateId: o.bottomSheet.stateId,
 			appManager: o.appSession,
-			acct: o.acct,
 		})),
 	);
 
 	useEffect(() => {
-		const userId = appManager?.cache?.getUserId();
-		const userObj = appManager?.cache?.getUserObject();
+		const userId = appManager?.storage?.getUserId();
+		const userObj = appManager?.storage?.getUserObject();
 
 		setUserId(userId);
 		setUserObject(userObj);
 	}, [stateId]);
 
-	const { Data: acct } = useGetProfile({
+	const { data: acct } = useGetProfile({
 		userId: UserId,
-		requestId: stateId,
-		handle: acctData?.server,
 	});
 
 	if (!UserId) return <View />;
@@ -86,7 +79,7 @@ const AppBottomSheetProfilePeek = memo(() => {
 					<View style={{ width: 8 }} />
 					<ProfileButtonPhonebook />
 				</View>
-				<ProfileStats
+				<UserViewProfileStats
 					userId={acct?.id}
 					followerCount={acct?.stats?.followers}
 					followingCount={acct?.stats?.following}

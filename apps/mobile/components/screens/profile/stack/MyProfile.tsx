@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import useMyProfile from '../api/useMyProfile';
 import WithActivitypubUserContext from '../../../../states/useProfile';
-import { ProfileContextWrapped } from '../../(shared)/stack/profile/SharedStackUserProfile';
+import { ProfileContextWrapped } from '../../../common/user/UserViewProfile';
 
 const MyProfile = memo(() => {
-	const { Data } = useMyProfile();
+	const { data } = useMyProfile();
 
 	return (
-		<WithActivitypubUserContext userI={Data}>
+		<WithActivitypubUserContext user={data}>
 			<ProfileContextWrapped />
 		</WithActivitypubUserContext>
 	);

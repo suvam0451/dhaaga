@@ -1,101 +1,140 @@
-import { memo, useEffect } from 'react';
+import { createContext, memo, useContext, useEffect, useReducer } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
-import WithAppPaginationContext from '../../../../states/usePagination';
 import LoadingMore from '../../../screens/home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
-import WithTimelineControllerContext, {
-	useTimelineController,
-} from '../api/useTimelineController';
+import WithTimelineControllerContext from '../api/useTimelineController';
 import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
-import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import useTimeline from '../api/useTimeline';
-import useTimelineLabel from '../api/useTimelineLabel';
-import { TimelineFetchMode } from '../utils/timeline.types';
-import WithAppTimelineDataContext, {
-	useAppTimelinePosts,
-} from '../../../../hooks/app/timelines/useAppTimelinePosts';
+import WithAppTimelineDataContext from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import {
-	AppPaginationContext,
-	usePagination,
-	usePaginationActions,
-} from '../../../../states/local/pagination';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppFlashList } from '../../../../components/lib/AppFlashList';
-import { router } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
+import UserPeekModal from '../../../modals/UserPeekModal';
+import {
+	appTimelineReducer,
+	AppTimelineReducerActionType,
+	appTimelineReducerDefault,
+	AppTimelineReducerDispatchType,
+	AppTimelineReducerStateType,
+	TimelineFetchMode,
+} from '../../../../states/reducers/timeline.reducer';
+import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+
+/**
+ * --- Context Setup ---
+ */
+
+const _StateCtx = createContext<AppTimelineReducerStateType>(null);
+const _DispatchCtx = createContext<AppTimelineReducerDispatchType>(null);
+
+// exports
+export const useTimelineState = () => useContext(_StateCtx);
+export const useTimelineDispatch = () => useContext(_DispatchCtx);
 
 /*
  * Render a Timeline
  */
 const Timeline = memo(() => {
-	const { maxId } = usePagination();
-	const { setNextMaxId, clear, next } = usePaginationActions();
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
 
-	const { query, opts } = useTimelineController();
-	const { homepageType, client, driver } = useGlobalState(
+	const State = useTimelineState();
+	const dispatch = useTimelineDispatch();
+
+	// reset the timeline on param change
+	const params = useLocalSearchParams();
+	const pinId: string = params['pinId'] as string;
+	const pinType: string = params['pinType'] as string;
+
+	useEffect(() => {
+		if (!db) return;
+		dispatch({
+			type: AppTimelineReducerActionType.INIT,
+			payload: {
+				db,
+			},
+		});
+
+		if (!pinType || !pinId) return;
+		if (pinId) {
+			dispatch({
+				type: AppTimelineReducerActionType.RESET_USING_PIN_ID,
+				payload: {
+					id: parseInt(pinId),
+					type: pinType as 'feed' | 'user' | 'tag',
+				},
+			});
+		}
+	}, [pinId, pinType, db]);
+
+	const { client, driver, acct } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
-			homepageType: o.homepageType,
 			client: o.router,
 			driver: o.driver,
 		})),
 	);
 
-	const {
-		addPosts: appendTimelineData,
-		clear: timelineDataStoreClear,
-		data: timelineData,
-	} = useAppTimelinePosts();
-
-	// const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
-
 	useEffect(() => {
-		// setPageLoadedAtLeastOnce(false);
-		clear();
-		timelineDataStoreClear();
-	}, [homepageType, query, opts]);
+		dispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+	}, [State.feedType, State.query, State.opts]);
 
 	const { fetchStatus, data, status, refetch } = useTimeline({
-		type: homepageType,
-		query,
-		opts,
-		maxId,
+		type: State.feedType,
+		query: State.query,
+		opts: State.opts,
+		maxId: State.appliedMaxId,
 	});
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
+		let maxId = null;
+		let nextBatch = [];
+
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
-			const cursor = _payload.data.cursor;
-			const posts = _payload.data.feed;
-
-			setNextMaxId(cursor);
-			const _data = ActivityPubAdapterService.adaptManyStatuses(posts, driver);
-			appendTimelineData(_data);
-			// setPageLoadedAtLeastOnce(true);
-			return;
+			maxId = _payload.data.cursor;
+			nextBatch = _payload.data.feed;
+		} else {
+			maxId = data[data.length - 1]?.id;
+			nextBatch = data;
 		}
-
-		if (data?.length > 0) {
-			setNextMaxId(data[data.length - 1]?.id);
-			const _data = ActivityPubAdapterService.adaptManyStatuses(data, driver);
-			appendTimelineData(_data);
-			// setPageLoadedAtLeastOnce(true);
-		}
+		dispatch({
+			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			payload: {
+				items: PostMiddleware.deserialize<unknown[]>(
+					nextBatch,
+					driver,
+					acct?.server,
+				),
+				maxId,
+			},
+		});
 	}, [fetchStatus]);
 
-	const label = useTimelineLabel();
 	const { theme } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
 		})),
 	);
+
+	function loadMore() {
+		dispatch({
+			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+		});
+	}
 
 	/**
 	 * Composite Hook Collection
@@ -104,18 +143,16 @@ const Timeline = memo(() => {
 		fetchStatus,
 	});
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: appendTimelineData.length,
-		updateQueryCache: next,
+		itemCount: State.items.length,
+		updateQueryCache: loadMore,
 	});
 	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
 		fetchStatus,
 		refetch,
 	});
 
-	console.log(homepageType);
 	if (client === null) return <Introduction />;
-	if (homepageType === TimelineFetchMode.IDLE) {
-		router.navigate('/');
+	if (State.feedType === TimelineFetchMode.IDLE) {
 		return <View />;
 	}
 
@@ -124,36 +161,51 @@ const Timeline = memo(() => {
 			style={[
 				styles.container,
 				{
-					position: 'relative',
 					backgroundColor: theme.palette.bg,
 				},
 			]}
 		>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-				<TimelinesHeader title={label} />
+				<TimelinesHeader />
 			</Animated.View>
 			<AppFlashList.Post
-				data={timelineData}
+				data={State.items}
 				onScroll={onScroll}
 				refreshing={refreshing}
 				onRefresh={onRefresh}
-				paddingTop={50}
+				paddingTop={50 + 16}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
 		</View>
 	);
 });
 
+/**
+ * --- Context Wrapper ---
+ */
+
+function CtxWrapper({ children }) {
+	const [state, dispatch] = useReducer(
+		appTimelineReducer,
+		appTimelineReducerDefault,
+	);
+
+	return (
+		<_StateCtx.Provider value={state}>
+			<_DispatchCtx.Provider value={dispatch}>{children}</_DispatchCtx.Provider>
+		</_StateCtx.Provider>
+	);
+}
+
 function TimelineWrapper() {
 	return (
 		<WithTimelineControllerContext>
-			<AppPaginationContext>
-				<WithAppPaginationContext>
-					<WithAppTimelineDataContext>
-						<Timeline />
-					</WithAppTimelineDataContext>
-				</WithAppPaginationContext>
-			</AppPaginationContext>
+			<CtxWrapper>
+				<WithAppTimelineDataContext>
+					<Timeline />
+					<UserPeekModal />
+				</WithAppTimelineDataContext>
+			</CtxWrapper>
 		</WithTimelineControllerContext>
 	);
 }
@@ -171,5 +223,6 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		flex: 1,
+		position: 'relative',
 	},
 });

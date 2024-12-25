@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { Notification_Entry } from '../../../../../hooks/api/notifications/useApiGetNotifications';
+import { AppNotificationObject } from '../../../../../types/app-notification.types';
 
 export const ICON_SIZE = 36;
 
 export type Props = {
-	item: Notification_Entry;
+	item: AppNotificationObject;
 };
 
 export const styles = StyleSheet.create({

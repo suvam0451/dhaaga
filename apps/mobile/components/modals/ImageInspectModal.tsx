@@ -161,7 +161,7 @@ function ImageInspectModal() {
 	useEffect(() => {
 		if (!visible) return;
 
-		const obj = appSession.cache.getPostForMediaInspect();
+		const obj = appSession.storage.getPostForMediaInspect();
 		if (!obj) {
 			hide();
 			return;

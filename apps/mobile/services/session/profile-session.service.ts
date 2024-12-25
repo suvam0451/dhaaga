@@ -10,6 +10,10 @@ import { KnownServerService } from '../../database/entities/server';
 import { AccountService } from '../../database/entities/account';
 import { ProfileService } from '../../database/entities/profile';
 import { BaseStorageManager } from './_shared';
+import { AppUserObject } from '../../types/app-user.types';
+import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
+import { APP_PINNED_OBJECT_TYPE } from '../driver.service';
+
 /**
  * ---- Storage Interfaces ----
  */
@@ -54,6 +58,30 @@ class ProfileSessionManager {
 		this.acct = AccountService.getSelected(this.db);
 		this.profile = ProfileService.getActiveProfile(this.db, this.acct);
 		this.customEmojis = [];
+	}
+
+	/**
+	 * Pins a user to the social hub
+	 * @param server the server to resolve against. this
+	 * should be the user's home server for the foreseeable future
+	 * @param userObj copy of the deserialized user object
+	 */
+	async pinUser(server: string, userObj: AppUserObject) {
+		ProfilePinnedUserService.addForProfile(
+			this.db,
+			this.profile,
+			server || this.acct.server,
+			{
+				server: userObj.instance,
+				identifier: userObj.id,
+				avatarUrl: userObj.avatarUrl,
+				displayName: userObj.displayName,
+				driver: this.acct.driver, // to be changed later
+				required: false,
+				category: APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL,
+				username: userObj.handle,
+			},
+		);
 	}
 
 	/**

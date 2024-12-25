@@ -1,6 +1,7 @@
 import { LibraryPromise } from './_types.js';
-import { MastoList, MegaList } from '../../_interface.js';
 import { Endpoints } from 'misskey-js';
+import { MastoList } from '../../../../types/mastojs.types.js';
+import { MegaList } from '../../../../types/megalodon.types.js';
 
 export interface ListsRoute {
 	update(): LibraryPromise<any>;

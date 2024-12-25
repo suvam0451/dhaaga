@@ -1,13 +1,12 @@
+import { LibraryPromise } from './_types.js';
+import { Endpoints } from 'misskey-js';
+import { AppBskyFeedGetPostThread } from '@atproto/api';
 import {
 	MastoContext,
 	MastoScheduledStatus,
 	MastoStatus,
-	MissContext,
-	MissNote,
-} from '../../_interface.js';
-import { LibraryPromise } from './_types.js';
-import { Endpoints } from 'misskey-js';
-import { AppBskyFeedGetPostThread } from '@atproto/api';
+} from '../../../../types/mastojs.types.js';
+import { MissContext, MissNote } from '../../../../types/misskey-js.types.js';
 
 export type DhaagaJsPostCreateDto = {
 	inReplyToId: null | string;

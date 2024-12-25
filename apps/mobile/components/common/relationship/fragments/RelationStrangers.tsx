@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import { ActivityIndicator, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
-import { Button } from '@rneui/themed';
+import { APP_THEME } from '../../../../styles/AppTheme';
 import { RelationshipButtonProps } from './_common';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { appDimensions } from '../../../../styles/dimensions';
 
 const LABEL = 'Follow';
 
@@ -17,15 +17,16 @@ const RelationStrangers = memo(
 			})),
 		);
 		return (
-			<Button
+			<Pressable
 				onPress={onPress}
-				buttonStyle={[
+				style={[
 					styles.button,
 					{
 						backgroundColor: theme.primary.a0,
+						borderRadius: appDimensions.buttons.borderRadius,
+						alignItems: 'center',
 					},
 				]}
-				containerStyle={[styles.buttonContainer, {}]}
 			>
 				{loading ? (
 					<ActivityIndicator
@@ -35,7 +36,7 @@ const RelationStrangers = memo(
 				) : (
 					<Text style={[styles.text, { color: 'black' }]}>{LABEL}</Text>
 				)}
-			</Button>
+			</Pressable>
 		);
 	},
 );
@@ -52,8 +53,7 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 	},
 	text: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 	},
 });
 
