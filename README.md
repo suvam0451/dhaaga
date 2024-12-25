@@ -63,8 +63,8 @@ without the need to jump between different apps and services.
 
 Dhaaga is an indie side project I’ve been working on.
 
-It lets you use all your favourite SNS platforms from a single 
-app! It also adds many useful features, tweaks and QoL improvements
+It lets you use and connect with your friends from various platforms using a 
+single app! It also adds many useful features, tweaks and QoL improvements
 to make your SNS experience more fun 🥳 and pleasant ☕
 
 I'd love to hear about your experience with the app! Come say hi~ 🤗
