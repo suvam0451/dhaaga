@@ -10,8 +10,8 @@ style="margin-right:8px"/>
 
 **Dhaaga** is a third-party SNS app, with support for multiple platforms.
 It features powerful and thoughtfully crafted tools to help you easily follow 
-your interests, discover new topics and make friends without dealing with 
-hassle of multiple apps and interfaces.
+your interests, discover new topics and make friends without dealing with the
+hassle of bouncing between apps and services.
 
 
 <div align="center">
