@@ -1,6 +1,6 @@
 import { DbErrorHandler } from './_base.repo';
 import { DataSource } from '../dataSource';
-import { Account, Profile } from '../_schema';
+import { Account, Profile, ProfilePinnedTimeline } from '../_schema';
 import { AccountService } from './account';
 import { ProfileService } from './profile';
 import DriverService from '../../services/driver.service';
@@ -10,6 +10,10 @@ import { RandomUtil } from '../../utils/random.utils';
 export class Repo {}
 
 export class Service {
+	static findById(db: DataSource, id: number): ProfilePinnedTimeline {
+		return db.profilePinnedTimeline.findOne({ id });
+	}
+
 	static getShownForProfile(db: DataSource, profile: Profile) {
 		if (!db || !profile) return [];
 		try {

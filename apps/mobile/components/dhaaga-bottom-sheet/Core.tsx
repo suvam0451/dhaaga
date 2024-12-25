@@ -1,11 +1,5 @@
 import { Fragment, memo, useMemo } from 'react';
-import {
-	Pressable,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import useGlobalState from '../../states/_global';
@@ -19,11 +13,10 @@ import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActio
 import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from './modules/select-account/AppBottomSheetSelectAccount';
 import AppBottomSheetPickThemePack from './modules/theme-pack/AppBottomSheetPickThemePack';
-import AppBottomSheetTimelineDetails from './modules/timeline-details/AppBottomSheetTimelineDetails';
+import AppBottomSheetTimelineDetails from './modules/AppBottomSheetTimelineDetails';
 import AppBottomSheetLinkPreview from './modules/AppBottomSheetLinkPreview';
 import AppBottomSheetHashtag from './modules/AppBottomSheetHashtag';
 import { APP_FONTS } from '../../styles/AppFonts';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import AppBottomSheetUserMoreActions from './modules/AppBottomSheetUserMoreActions';
 import {
 	useAppBottomSheet_Improved,
@@ -52,11 +45,11 @@ export enum APP_BOTTOM_SHEET_ENUM {
  * Responsible for generating content
  */
 const Factory = memo(() => {
-	const { type, stateId, PostComposerTextSeedRef } = useGlobalState(
+	const { type, stateId } = useGlobalState(
 		useShallow((o) => ({
 			type: o.bottomSheet.type,
 			stateId: o.bottomSheet.stateId,
-			PostComposerTextSeedRef: o.bottomSheet.PostComposerTextSeedRef,
+			// PostComposerTextSeedRef: o.bottomSheet.PostComposerTextSeedRef,
 		})),
 	);
 	return useMemo(() => {
@@ -68,7 +61,7 @@ const Factory = memo(() => {
 				return <PostPreview />;
 			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
 				return (
-					<WithComposerContext textSeed={PostComposerTextSeedRef}>
+					<WithComposerContext textSeed={null}>
 						<PostCompose />
 					</WithComposerContext>
 				);
@@ -102,30 +95,6 @@ const Factory = memo(() => {
 });
 
 /**
- * @deprecated
- */
-const CloseButton = memo(() => {
-	const { visible, hide } = useAppBottomSheet_Improved();
-	const { theme } = useAppTheme();
-	function onPress() {
-		hide();
-	}
-
-	if (!visible) return <View />;
-
-	return (
-		<TouchableOpacity style={styles.closeButtonRootContainer} onPress={onPress}>
-			<View style={styles.internalContainer}>
-				<Text style={styles.text}>Close</Text>
-				<View style={{ marginLeft: 8 }}>
-					<AntDesign name="close" size={20} color={theme.complementary.a0} />
-				</View>
-			</View>
-		</TouchableOpacity>
-	);
-});
-
-/**
  * Switches what module will be shown
  * in the bottom sheet
  *
@@ -135,13 +104,13 @@ const CloseButton = memo(() => {
 const AppBottomSheet = memo(() => {
 	const { animStyle } = useAnimatedHeight();
 
-	const { visible, hide, theme } = useGlobalState(
-		useShallow((o) => ({
-			visible: o.bottomSheet.visible,
-			hide: o.bottomSheet.hide,
-			theme: o.colorScheme,
-		})),
-	);
+	const { visible, hide, broadcastEndSession } = useAppBottomSheet_Improved();
+	const { theme } = useAppTheme();
+
+	function onBottomSheetCloseEvent() {
+		broadcastEndSession();
+		hide();
+	}
 
 	return (
 		<Fragment>
@@ -154,9 +123,8 @@ const AppBottomSheet = memo(() => {
 					opacity: 0.48,
 					zIndex: 1,
 				}}
-				onPress={hide}
+				onPress={onBottomSheetCloseEvent}
 			/>
-
 			<Animated.View
 				style={[
 					styles.rootContainer,
@@ -164,6 +132,7 @@ const AppBottomSheet = memo(() => {
 					animStyle,
 				]}
 			>
+				{/* The little handle thingy on top of every bottom sheet */}
 				<View
 					style={{
 						position: 'absolute',
@@ -198,20 +167,6 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 8,
 		borderTopLeftRadius: 8,
 		zIndex: 2,
-	},
-	closeButtonRootContainer: {
-		position: 'absolute',
-		top: -48,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		width: '100%',
-	},
-	internalContainer: {
-		padding: 8,
-		paddingHorizontal: 16,
-		borderRadius: 8,
-		flexDirection: 'row',
-		alignItems: 'center',
 	},
 	text: {
 		textAlign: 'center',

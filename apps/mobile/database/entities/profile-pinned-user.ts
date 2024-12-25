@@ -28,6 +28,10 @@ export type ProfileUserPinCreateType = z.infer<
 export class Repo {}
 
 export class Service {
+	static findById(db: DataSource, id: number): ProfilePinnedUser {
+		return db.profilePinnedUser.findOne({ id });
+	}
+
 	static getOwnerAccount(db: DataSource, profile: Profile): Account {
 		return AccountService.getById(db, profile.accountId);
 	}

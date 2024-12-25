@@ -49,6 +49,18 @@ export function useAppBottomSheet_Improved() {
 			stateId: o.bottomSheet.stateId,
 			refresh: o.bottomSheet.refresh,
 			visible: o.bottomSheet.visible,
+			endSessionSeed: o.bottomSheet.endSessionSeed,
+			broadcastEndSession: o.bottomSheet.broadcastEndSession,
+		})),
+	);
+}
+
+export function useAppBottomSheet_TimelineReference() {
+	return useGlobalState(
+		useShallow((o) => ({
+			draft: o.bottomSheet.timeline.draftState,
+			dispatch: o.bottomSheet.timeline.dispatch,
+			attach: o.bottomSheet.timeline.attach,
 		})),
 	);
 }

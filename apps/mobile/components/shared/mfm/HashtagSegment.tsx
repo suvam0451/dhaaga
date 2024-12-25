@@ -37,7 +37,6 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 		appSession.storage.setTagTarget(_value);
 		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
 	};
-
 	const k = RandomUtil.nanoId();
 
 	return (
@@ -45,7 +44,7 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 			onPress={onPress}
 			key={k}
 			style={{
-				color: '#fedce9',
+				color: theme.complementaryB.a0,
 				// isFollowed
 				// 	? theme.palette.hashtagHigh
 				// 	: theme.palette.hashtagLow,

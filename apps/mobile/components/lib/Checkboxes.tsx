@@ -6,6 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONTS } from '../../styles/AppFonts';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type Props = {
 	title?: string;
@@ -50,36 +51,42 @@ export const AppInlineCheckbox = memo(function Foo({
 	checked,
 	onClick,
 }: AppInlineCheckboxProps) {
-	{
-		return (
-			<View
+	const { theme } = useAppTheme();
+
+	const _activeForeground = 'black';
+	const _activeBackground = theme.complementary.a0;
+	const _inactiveForeground = theme.secondary.a20;
+	const _inactiveBackground = '#2c2c2c';
+
+	return (
+		<View
+			style={{
+				borderRadius: 8,
+				backgroundColor: checked ? _activeBackground : _inactiveBackground,
+				padding: 8,
+				marginRight: 8,
+				flex: 0,
+				flexDirection: 'row',
+				alignItems: 'center',
+			}}
+			onTouchEnd={onClick}
+		>
+			<Text
 				style={{
-					borderRadius: 8,
-					backgroundColor: checked ? 'rgba(170, 170, 170, 0.87)' : '#1e1e1e',
-					padding: 8,
-					marginRight: 8,
-					flex: 0,
-					flexDirection: 'row',
-					alignItems: 'center',
+					color: checked ? _activeForeground : _inactiveForeground,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					paddingHorizontal: 8,
 				}}
-				onTouchEnd={onClick}
 			>
-				<Text
-					style={{
-						color: checked ? 'rgba(0, 0, 0, 1)' : APP_FONT.MONTSERRAT_BODY,
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					}}
-				>
-					{label}
-				</Text>
-				{checked && (
-					<View style={{ marginLeft: 4 }}>
-						<Ionicons name="close" size={18} color={'rgba(0, 0, 0, 1)'} />
-					</View>
-				)}
-			</View>
-		);
-	}
+				{label}
+			</Text>
+			{checked && (
+				<View style={{ marginLeft: 4 }}>
+					<Ionicons name="close" size={18} color={'rgba(0, 0, 0, 1)'} />
+				</View>
+			)}
+		</View>
+	);
 });
 
 export const NativeCheckbox = memo(function Foo({

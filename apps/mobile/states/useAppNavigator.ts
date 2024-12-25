@@ -95,7 +95,39 @@ function useAppNavigator() {
 		}
 	}
 
-	return { toPost, toHome, toProfile, toTag, toFollowers, toFollows };
+	function toTimelineViaPin(pinId: number, pinType: 'feed' | 'user' | 'tag') {
+		// probably in bottom sheet
+		if (!navigator || !navigator.getId) return;
+
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index') {
+			router.push({
+				pathname: `/timelines`,
+				params: {
+					pinId,
+					pinType,
+				},
+			});
+		} else {
+			router.push({
+				pathname: `${navigator.getId()}/timelines`,
+				params: {
+					pinId,
+					pinType,
+				},
+			});
+		}
+	}
+
+	return {
+		toPost,
+		toHome,
+		toProfile,
+		toTag,
+		toFollowers,
+		toFollows,
+		toTimelineViaPin,
+	};
 }
 
 export default useAppNavigator;

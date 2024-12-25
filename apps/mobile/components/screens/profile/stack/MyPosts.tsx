@@ -8,7 +8,6 @@ import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { View } from 'react-native';
 import useTimeline from '../../../common/timeline/api/useTimeline';
-import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import { useEffect, useState } from 'react';
 import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import AppTopNavbar, {
@@ -22,6 +21,7 @@ import WithTimelineControllerContext, {
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
 import { AppFlashList } from '../../../lib/AppFlashList';
+import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
 
 function Core() {
 	const { driver, me } = useGlobalState(

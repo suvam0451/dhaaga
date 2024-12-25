@@ -6,9 +6,9 @@ import {
 	useContext,
 	useState,
 } from 'react';
-import { TimelineFetchMode } from '../utils/timeline.types';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
 
 export type AppTimelineQuery = {
 	id: string;

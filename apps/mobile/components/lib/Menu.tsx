@@ -110,9 +110,10 @@ export class AppMenu {
 				style={{
 					flexDirection: 'row',
 					padding: 8,
+					paddingVertical: _desc ? 10 : 12,
 					alignItems: 'center',
 					width: '100%',
-					minHeight: 64,
+					minHeight: 48,
 				}}
 				onPress={onPress}
 			>
@@ -128,12 +129,12 @@ export class AppMenu {
 							color: theme.secondary.a10,
 							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							fontSize: 18,
-							marginBottom: 2,
+							marginBottom: _desc ? 0 : 2,
 						}}
 					>
 						{_label}
 					</Text>
-					{desc && (
+					{_desc && (
 						<Text
 							style={{
 								color: theme.secondary.a30,

@@ -10,22 +10,42 @@ import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../common/timeline/api/
 import ActivitypubReactionsService from '../../../services/approto/activitypub-reactions.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppPostObject } from '../../../types/app-post.types';
+import {
+	useAppBottomSheet_Improved,
+	useAppBottomSheet_TimelineReference,
+	useAppManager,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
 
 const AppBottomSheetPostMoreActions = memo(() => {
-	const { router, driver, acct, postValue, reducer, hide, theme, acctManager } =
-		useGlobalState(
-			useShallow((o) => ({
-				router: o.router,
-				driver: o.driver,
-				acct: o.acct,
-				postValue: o.bottomSheet.postValue,
-				reducer: o.bottomSheet.timelineDataPostListReducer,
-				visible: o.bottomSheet.visible,
-				hide: o.bottomSheet.hide,
-				theme: o.colorScheme,
-				acctManager: o.acctManager,
-			})),
-		);
+	const [PostTarget, setPostTarget] = useState<AppPostObject>(null);
+	const { router, driver, acct, hide, theme, acctManager } = useGlobalState(
+		useShallow((o) => ({
+			router: o.router,
+			driver: o.driver,
+			acct: o.acct,
+			visible: o.bottomSheet.visible,
+			hide: o.bottomSheet.hide,
+			theme: o.colorScheme,
+			acctManager: o.acctManager,
+		})),
+	);
+
+	const { stateId } = useAppBottomSheet_Improved();
+	const { draft, dispatch: timelineDispatch } =
+		useAppBottomSheet_TimelineReference();
+
+	const { appManager } = useAppManager();
+	useEffect(() => {
+		const _post = appManager.storage.getBottomSheetPostActionsTarget();
+		if (!_post) {
+			setPostTarget(null);
+			return;
+		}
+		setPostTarget(_post);
+	}, [stateId]);
+
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 	const lastSubdomain = useRef(null);
 
@@ -34,7 +54,7 @@ const AppBottomSheetPostMoreActions = memo(() => {
 	async function onReactionRequested(shortCode: string) {
 		const state = await ActivitypubReactionsService.addReaction(
 			router,
-			postValue.id,
+			PostTarget.id,
 			shortCode,
 			driver,
 			setLoading,
@@ -42,13 +62,13 @@ const AppBottomSheetPostMoreActions = memo(() => {
 
 		// request reducer to update reaction state
 		if (!state) return;
-		reducer({
-			type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE,
-			payload: {
-				id: postValue.id,
-				state,
-			},
-		});
+		// reducer({
+		// 	type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE,
+		// 	payload: {
+		// 		id: postValue.id,
+		// 		state,
+		// 	},
+		// });
 		hide();
 	}
 

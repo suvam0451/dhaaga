@@ -1,6 +1,5 @@
 import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
-import { TimelineFetchMode } from '../../../common/timeline/utils/timeline.types';
 import useActivityPubLists, {
 	AppAntennaDto,
 	AppListDto,
@@ -13,6 +12,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
 
 type ListItemProps = {
 	label: string;

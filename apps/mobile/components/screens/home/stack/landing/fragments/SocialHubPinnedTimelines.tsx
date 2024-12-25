@@ -9,7 +9,6 @@ import {
 import { AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { TimelineFetchMode } from '../../../../../common/timeline/utils/timeline.types';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
@@ -19,6 +18,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
 import { ProfilePinnedTimeline } from '../../../../../../database/_schema';
 import { socialHubTabReducerAction } from '../../../../../../states/reducers/social-hub-tab.reducer';
+import { TimelineFetchMode } from '../../../../../../states/reducers/timeline.reducer';
 
 /**
  * If whitelist is present, filtered for those drivers only

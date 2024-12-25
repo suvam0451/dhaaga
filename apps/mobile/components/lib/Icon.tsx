@@ -11,7 +11,6 @@ import {
 import { router } from 'expo-router';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { TimelineFetchMode } from '../common/timeline/utils/timeline.types';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
@@ -26,6 +25,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
+import { TimelineFetchMode } from '../../states/reducers/timeline.reducer';
 
 export type APP_ICON_ENUM =
 	| 'bell'
@@ -35,6 +35,7 @@ export type APP_ICON_ENUM =
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
 	| 'chevron-right'
+	| 'chevron-down'
 	| 'checkmark-done-outline'
 	| 'cog'
 	| 'copy'
@@ -52,6 +53,7 @@ export type APP_ICON_ENUM =
 	| 'home'
 	| 'info'
 	| 'language'
+	| 'layers-outline'
 	| 'lock-closed-outline'
 	| 'menu'
 	| 'message'
@@ -321,6 +323,15 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'chevron-down':
+					return (
+						<Ionicons
+							name="chevron-down"
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'checkmark-done-outline':
 					return (
 						<Ionicons
@@ -495,6 +506,16 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="language"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'layers-outline':
+					return (
+						<Ionicons
+							name={'layers-outline'}
 							size={_size}
 							color={_color}
 							onPress={onPress}

@@ -85,12 +85,13 @@ type ListItemProps = {
 
 function Pinned_Users_ListItem({ item }: ListItemProps) {
 	const { theme } = useAppTheme();
-	const { toProfile } = useAppNavigator();
+	const { toProfile, toTimelineViaPin } = useAppNavigator();
 
 	function onPress() {
 		switch (item.category) {
 			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL: {
-				toProfile(item.identifier);
+				// toProfile(item.identifier);
+				toTimelineViaPin(item.id, 'user');
 				break;
 			}
 			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_REMOTE: {

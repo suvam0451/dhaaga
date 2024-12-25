@@ -1,7 +1,6 @@
-import { ScrollView, View } from 'react-native';
-import { Text } from '@rneui/themed';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { ScrollView, View, Text } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	label?: string;
@@ -12,17 +11,36 @@ type Props = {
 	}[];
 	selection: Set<string>;
 	hash: string;
+	activeForeground?: string;
+	activeBackground?: string;
+	inactiveForeground?: string;
+	inactiveBackground?: string;
 };
 
-function ControlSegment({ label, buttons, selection }: Props) {
+function ControlSegment({
+	label,
+	buttons,
+	selection,
+	activeForeground,
+	activeBackground,
+	inactiveForeground,
+	inactiveBackground,
+}: Props) {
+	const { theme } = useAppTheme();
+
+	const _activeForeground = activeForeground || 'black';
+	const _activeBackground = activeBackground || theme.primary.a0;
+	const _inactiveForeground = inactiveForeground || theme.secondary.a20;
+	const _inactiveBackground = inactiveBackground || '#2c2c2c';
+
 	return (
 		<View style={{ marginTop: 16, overflow: 'scroll' }}>
 			{label && (
 				<Text
 					style={{
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-						color: APP_FONT.MONTSERRAT_BODY,
-						marginBottom: 4,
+						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+						color: theme.secondary.a20,
+						marginBottom: 8,
 					}}
 				>
 					{label}
@@ -36,8 +54,8 @@ function ControlSegment({ label, buttons, selection }: Props) {
 							style={{
 								borderRadius: 8,
 								backgroundColor: selection.has(o.lookupId)
-									? 'rgba(170, 170, 170, 0.87)'
-									: '#1e1e1e',
+									? _activeBackground
+									: _inactiveBackground,
 								padding: 8,
 								marginRight: 8,
 							}}
@@ -46,9 +64,10 @@ function ControlSegment({ label, buttons, selection }: Props) {
 							<Text
 								style={{
 									color: selection.has(o.lookupId)
-										? 'rgba(0, 0, 0, 1)'
-										: APP_FONT.MONTSERRAT_BODY,
-									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+										? _activeForeground
+										: _inactiveForeground,
+									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+									paddingHorizontal: 8,
 								}}
 							>
 								{o.label}
