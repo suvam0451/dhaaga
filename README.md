@@ -71,42 +71,11 @@ experience.
 
 Dhaaga is an indie side project I’ve been building in my free time.
 
-Today, there are way too many platforms and servers to choose from.
+It lets you experience all your favourite social media platforms from a single 
+app!
 
-The exploding landscape of the decentralized social web platforms 
-has resulted in userbase fragmentation and diminished
-interest/adoption of smaller *(but definitely more fun!)* projects
-due to [Metcalfe's law](https://en.wikipedia.org/wiki/Metcalfe%27s_law).
-
-**The first set of challenges** I am trying to solve are the **protocol
-fragmentation** and the **lack of a unified frontend**
-for the decentralized social web.
-
-Secondly, with the decline of traditional SNS culture, the social media
-experience today has become too *samey*:
-
-*Timelines. Profiles. Likes. Follows. Shares. *You get the idea~**
-
-The discovery and user connection tools are too limited. 
-Just lists, search and chat.
-
-For example, for art enthusiasts, maybe Pixiv or Instagram would be a 
-better bet. For chatty users, maybe discord would be a better choice.
-
-To better put it, the *presentation model in modern social media does not
-adapt to the intent and interests of the individual/community involved. It 
-is just too standardized!*
-
-But it does not have to be! **The second set of challenges** I want to solve
-are **building better discovery and relationship manager tools**, helping
-users put more **personality into their app experience** and
-**tweaking the UI presentation model to be user-centric** that boring, 
-infinite scrolling timelines.
-
-Welp, that's the plan. Let's see if I deliver on those big words in this
-lifetime 🤷‍♂️
-
----
+It also has many useful features and quality of life improvements,
+that will definitely make your SNS experience more pleasant. ☕
 
 I'd love to hear about your experience with the app! Come say hi 🤗
 
