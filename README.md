@@ -8,11 +8,10 @@ src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d5
 align="left"
 style="margin-right:8px"/>
 
-**Dhaaga** is a fun 🥳 and cozy ☕ microblogging app for
-browsing the decentralized social web.
-It has multi-account support for all your favourite SNS platforms,
-and comes with extra features that add extra value and joy to your social
-experience.
+**Dhaaga** is a third-party SNS app, with support for multiple platforms.
+It features powerful and thoughtfully crafted tools to help you follow your 
+interests, make friends and make the most of your time spent online.
+
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -41,20 +40,20 @@ experience.
 
 ## ✨ Features
 
-- ☂️ Supports your favourite SNS platform.
+- ☂️ Supports your favourite SNS platform
 - 🗞️ Easily keep up-to-date with the **Social Hub™**
 - 📍 Extensive pin/bookmark management options
 - 📩 Custom layouts for mentions, chats and updates
 - 🖼️ Gallery mode for profiles
 - 📰 Improved timeline experience
-- 💬 Ergonomic Post Composer UI
-- 🏕️ Powerful offline capabilities²
-- 🦉 Dark mode by default.
-- 👌 Designed for seamless one-handed operation.
-- 🥳 Fun, Free (💰)² and FOSS.
+- 💬 Ergonomic UI for creating posts/replies
+- 🏕️ Powerful offline capabilities¹
+- 🦉 Dark mode by default
+- 👌 Designed for seamless one-handed operation
+- 🥳 Fun, Free (💰)² and FOSS
 
 > ¹ Coming soon™<br/>
-> ² A little bit of self-promo sometimes 😉
+> ² Tips welcome 😉
 
 > [!TIP]
 > This app will not aim to implement every feature</br> 
