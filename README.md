@@ -58,19 +58,17 @@ experience.
 
 > [!TIP]
 > This app will not aim to implement every feature</br> 
-> They will be picked and added on a **fun-first** 🥳 basis.
+> They will be picked and added on a **fun-first** basis.
 
 ## 💁 About
 
 Dhaaga is an indie side project I’ve been working on.
 
 It lets you use all your favourite SNS platforms from a single 
-app!
-
-It also adds useful features, tweaks and QoL improvements
+app! It also adds many useful features, tweaks and QoL improvements
 to make your SNS experience more fun 🥳 and pleasant ☕
 
-I'd love to hear about your experience with the app! Come say hi 🤗
+I'd love to hear about your experience with the app! Come say hi~ 🤗
 
 [Bluesky](https://bsky.app/profile/suvam.io) |
 [Mastodon](https://mastodon.social/@suvam) |
