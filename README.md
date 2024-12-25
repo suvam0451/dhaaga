@@ -57,18 +57,18 @@ experience.
 > ² A little bit of self-promo sometimes 😉
 
 > [!TIP]
-> This app does not support every platform feature</br> 
-> They are picked and added on a **fun-first** basis.
+> This app will not aim to implement every feature</br> 
+> They will be picked and added on a **fun-first** 🥳 basis.
 
 ## 💁 About
 
-Dhaaga is an indie side project I’ve been building in my free time.
+Dhaaga is an indie side project I’ve been working on.
 
-It lets you experience all your favourite social media platforms from a single 
+It lets you use all your favourite SNS platforms from a single 
 app!
 
-It also has many useful features and quality of life improvements,
-that will definitely make your SNS experience more pleasant. ☕
+It also adds useful features, tweaks and QoL improvements
+to make your SNS experience more fun 🥳 and pleasant ☕
 
 I'd love to hear about your experience with the app! Come say hi 🤗
 
