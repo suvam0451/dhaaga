@@ -57,8 +57,8 @@ hassle of multiple apps and interfaces.
 > ² Tips welcome 😉
 
 > [!TIP]
-> This app will not aim to implement every feature</br> 
-> They will be picked and added on a **fun-first** basis.
+> This app might not support certain features from your platform.</br> 
+> They are picked and added on a **fun-first** basis. Feel free to request!
 
 ## 💁 About
 
