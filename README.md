@@ -8,11 +8,10 @@ src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d5
 align="left"
 style="margin-right:8px"/>
 
-**Dhaaga** is a third-party SNS app, with support for multiple platforms.
-It features powerful and thoughtfully crafted tools to help you easily follow 
-your interests, discover new topics and make friends without dealing with the
-hassle of bouncing between apps and services.
-
+**Dhaaga** is a third-party social networking app that supports multiple platforms.
+It features intuitive and powerful tools designed to help you seamlessly follow 
+your interests, discover new topics and connect with others—all 
+without the need to jump between different apps and services.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
