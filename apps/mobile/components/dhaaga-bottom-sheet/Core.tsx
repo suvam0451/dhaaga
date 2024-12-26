@@ -22,6 +22,7 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
+import AppBottomSheetAddBookmark from './modules/AppBottomSheetAddBookmark';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	QUICK_POST = 'QuickPost',
@@ -39,6 +40,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	STATUS_PREVIEW = 'StatusPreview',
 	SWITCH_THEME_PACK = 'SwitchThemePack',
 	TIMELINE_CONTROLLER = 'TimeLineController',
+	ADD_BOOKMARK = 'AddBookmark',
 }
 
 /**
@@ -83,6 +85,8 @@ const Factory = memo(() => {
 				return <AppBottomSheetHashtag />;
 			case APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS:
 				return <AppBottomSheetUserMoreActions />;
+			case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
+				return <AppBottomSheetAddBookmark />;
 			default: {
 				return (
 					<WithComposerContext>

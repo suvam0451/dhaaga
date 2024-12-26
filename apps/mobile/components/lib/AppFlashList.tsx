@@ -34,6 +34,7 @@ import { APP_FONTS } from '../../styles/AppFonts';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../database/entities/account';
+import * as Haptics from 'expo-haptics';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -126,6 +127,7 @@ function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 			});
 			return;
 		}
+
 		switch (item.category) {
 			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL: {
 				// toProfile(item.identifier);
@@ -147,6 +149,10 @@ function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 		}
 	}
 
+	function onLongPress() {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+	}
+
 	return (
 		<Pressable
 			style={{
@@ -155,6 +161,7 @@ function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 				maxWidth: '25%',
 			}}
 			onPress={onPress}
+			onLongPress={onLongPress}
 		>
 			<View
 				style={{

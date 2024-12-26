@@ -1,11 +1,11 @@
 import { memo, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-const ICON_SIZE = 21;
+const ICON_SIZE = 28;
 const ACTIVE_COLOR = '#deba7a'; // APP_THEME.LINK
 
 type PostActionButtonToggleLikeProps = {
@@ -46,10 +46,10 @@ const PostActionButtonToggleLike = memo(
 				{IsLoading ? (
 					<ActivityIndicator size={'small'} />
 				) : (
-					<AntDesign
-						name={flag ? 'like1' : 'like2'}
+					<Ionicons
+						name={flag ? 'heart' : 'heart-outline'}
 						size={ICON_SIZE}
-						color={flag ? ACTIVE_COLOR : theme.textColor.emphasisC}
+						color={flag ? ACTIVE_COLOR : theme.secondary.a10}
 					/>
 				)}
 			</TouchableOpacity>

@@ -41,7 +41,7 @@ const StatItem = memo(({ count, label, nextCounts }: StatItemProps) => {
 				{formatted} {label}
 			</Text>
 			{SHOW_TRAILING_BULLET && (
-				<Text style={[styles.bull, { color: theme.textColor.emphasisC }]}>
+				<Text style={[{ color: theme.secondary.a30, marginHorizontal: 6 }]}>
 					&bull;
 				</Text>
 			)}
@@ -63,15 +63,9 @@ const PostStats = memo(function Foo({
 	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
 }) {
-	const STATUS_DTO = dto.meta.isBoost
-		? dto.content.raw
-			? dto
-			: dto.boostedFrom
-		: dto;
-
-	const LIKE_COUNT = STATUS_DTO.stats.likeCount;
-	const REPLY_COUNT = STATUS_DTO.stats.replyCount;
-	const SHARE_COUNT = STATUS_DTO.stats.boostCount;
+	const LIKE_COUNT = dto.stats.likeCount;
+	const REPLY_COUNT = dto.stats.replyCount;
+	const SHARE_COUNT = dto.stats.boostCount;
 
 	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1)
 		return <View></View>;
@@ -86,7 +80,7 @@ const PostStats = memo(function Foo({
 			/>
 			<StatItem
 				count={SHARE_COUNT}
-				label={'Shared'}
+				label={'Shares'}
 				nextCounts={[REPLY_COUNT]}
 				onPress={() => {}}
 			/>
@@ -108,14 +102,14 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	text: {
-		fontSize: 12,
+		fontSize: 14,
 		textAlign: 'right',
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 	bull: {
-		color: APP_FONT.MEDIUM_EMPHASIS,
+		// color: APP_FONT.MEDIUM_EMPHASIS,
 		marginHorizontal: 2,
-		opacity: 0.3,
+		// opacity: 0.3,
 	},
 });
 export default PostStats;

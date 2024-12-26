@@ -25,15 +25,19 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
-import { TimelineFetchMode } from '../../states/reducers/timeline.reducer';
 
 export type APP_ICON_ENUM =
+	| 'add-circle-outline'
+	| 'albums-outline'
 	| 'bell'
 	| 'back'
+	| 'bookmark'
+	| 'bookmark-outline'
 	| 'block'
 	| 'browser'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
+	| 'checkmark-circle'
 	| 'chevron-right'
 	| 'chevron-down'
 	| 'checkmark-done-outline'
@@ -109,18 +113,11 @@ export function HomeNavigationIcon({
 	color,
 	size,
 }: NavigationIconType) {
-	const { setType } = useGlobalState(
-		useShallow((o) => ({
-			setType: o.setHomepageType,
-		})),
-	);
-
 	function onPress() {
 		router.navigate('/');
 	}
 
 	function onLongPress() {
-		setType(TimelineFetchMode.IDLE);
 		router.navigate('/');
 	}
 
@@ -253,6 +250,26 @@ export const AppIcon = memo(
 
 		const Icon = useMemo(() => {
 			switch (id) {
+				case 'add-circle-outline':
+					return (
+						<Ionicons
+							name={'add-circle-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'albums-outline':
+					return (
+						<Ionicons
+							name={'albums-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'bell':
 					return (
 						<Ionicons
@@ -267,6 +284,26 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="chevron-back"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'bookmark':
+					return (
+						<Ionicons
+							name="bookmark"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'bookmark-outline':
+					return (
+						<Ionicons
+							name="bookmark-outline"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -307,6 +344,16 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name={'chatbox-ellipses-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'checkmark-circle':
+					return (
+						<Ionicons
+							name={'checkmark-circle'}
 							size={_size}
 							color={_color}
 							onPress={onPress}

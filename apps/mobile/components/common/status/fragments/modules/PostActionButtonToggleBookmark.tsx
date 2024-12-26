@@ -1,12 +1,16 @@
 import { memo, useEffect, useState } from 'react';
-import { ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { APP_THEME } from '../../../../../styles/AppTheme';
 import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../../states/_global';
+import {
+	useAppBottomSheet_Improved,
+	useAppManager,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
 
-const ICON_SIZE = 21;
+const ICON_SIZE = 24;
 
 type PostActionButtonToggleBookmarkProps = {
 	id: string;
@@ -26,10 +30,15 @@ const PostActionButtonToggleBookmark = memo(
 				theme: o.colorScheme,
 			})),
 		);
+		const { show } = useAppBottomSheet_Improved();
+		const { appManager } = useAppManager();
 
 		// helper functions
 		function _toggleBookmark() {
-			toggleBookmark(id, setIsBookmarkStatePending);
+			// toggleBookmark(id, setIsBookmarkStatePending);
+
+			// appManager.storage.setPostObject();
+			show(APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK, true);
 		}
 
 		useEffect(() => {
@@ -66,7 +75,7 @@ const PostActionButtonToggleBookmark = memo(
 					<ActivityIndicator size={'small'} />
 				) : (
 					<Ionicons
-						color={flag ? APP_THEME.INVALID_ITEM : theme.textColor.emphasisC}
+						color={flag ? theme.complementary.a0 : theme.secondary.a10}
 						name={flag ? 'bookmark' : 'bookmark-outline'}
 						size={ICON_SIZE}
 					/>
@@ -83,7 +92,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginRight: 16,
+		// marginRight: 16,
 		paddingTop: 8,
 		paddingBottom: 8,
 	},

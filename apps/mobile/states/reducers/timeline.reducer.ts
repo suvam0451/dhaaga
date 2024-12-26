@@ -8,6 +8,7 @@ import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
 import { ProfilePinnedTagService } from '../../database/entities/profile-pinned-tag';
 import { Dispatch } from 'react';
+import { ActivityPubReactionStateDto } from '../../services/approto/activitypub-reactions.service';
 
 type AppTimelineQueryOptions = DhaagaJsTimelineQueryOptions;
 
@@ -35,8 +36,7 @@ type State = {
 	sessionIdentifier: string;
 	feedType: TimelineFetchMode;
 
-	opts: AppTimelineQueryOptions;
-	// for users/hashtags
+	opts: AppTimelineQueryOptions; // for users/hashtags
 	query: { id: string; label: string } | null;
 	isWidgetVisible: boolean;
 	isEol: boolean;
@@ -76,8 +76,7 @@ export const DEFAULT: State = {
 export enum ACTION {
 	INIT,
 	RESET_USING_QUERY,
-	RESET_USING_PIN_ID,
-	// also handles empty timeline state (first loading)
+	RESET_USING_PIN_ID, // also handles empty timeline state (first loading)
 	APPEND_RESULTS,
 	SET_QUERY_PARAMS,
 	SET_QUERY_OPTS,
@@ -85,6 +84,13 @@ export enum ACTION {
 	RESET,
 	SHOW_WIDGET,
 	HIDE_WIDGET,
+
+	// Post Action Callbacks
+	UPDATE_BOOKMARK_STATUS,
+	UPDATE_BOOST_STATUS,
+	UPDATE_TRANSLATION_OUTPUT,
+	UPDATE_LIKE_STATUS,
+	UPDATE_REACTION_STATE,
 }
 
 type Actions =
@@ -134,6 +140,45 @@ type Actions =
 	| {
 			type: ACTION.SET_QUERY_OPTS;
 			payload: AppTimelineQueryOptions;
+	  }
+	/**
+	 * Post Action Callbacks
+	 */
+	| {
+			type: ACTION.UPDATE_BOOKMARK_STATUS;
+			payload: {
+				id: string;
+				value: boolean;
+			};
+	  }
+	| {
+			type: ACTION.UPDATE_BOOST_STATUS;
+			payload: {
+				id: string;
+				delta: number; // delta = -1, 1, 0
+			};
+	  }
+	| {
+			type: ACTION.UPDATE_TRANSLATION_OUTPUT;
+			payload: {
+				id: string;
+				outputText: string;
+				outputType: string;
+			};
+	  }
+	| {
+			type: ACTION.UPDATE_LIKE_STATUS;
+			payload: {
+				id: string;
+				delta: number; // delta = -1, 1, 0
+			};
+	  }
+	| {
+			type: ACTION.UPDATE_REACTION_STATE;
+			payload: {
+				id: string;
+				state: any;
+			};
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -298,6 +343,103 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.HIDE_WIDGET: {
 			return produce(state, (draft) => {
 				draft.isWidgetVisible = true;
+			});
+		}
+
+		case ACTION.UPDATE_BOOKMARK_STATUS: {
+			const _id = action.payload.id;
+			const _value = action.payload.value;
+
+			if (_id === undefined || _value === undefined) return state;
+			return produce(state, (draft) => {
+				for (const post of draft.items) {
+					if (post.id === _id) {
+						post.interaction.bookmarked = _value;
+						post.state.isBookmarkStateFinal = true;
+					}
+
+					if (post.boostedFrom?.id === _id) {
+						post.boostedFrom.interaction.bookmarked = _value;
+						post.boostedFrom.state.isBookmarkStateFinal = true;
+					}
+				}
+			});
+		}
+		case ACTION.UPDATE_BOOST_STATUS: {
+			const _id = action.payload.id;
+			const _delta = action.payload.delta;
+			if (!_id) return state;
+			return produce(state, (draft) => {
+				for (const post of draft.items) {
+					if (post.id === _id) {
+						post.interaction.boosted = _delta != -1;
+						post.stats.boostCount += _delta;
+					}
+
+					if (post.boostedFrom?.id === _id) {
+						post.boostedFrom.interaction.boosted = _delta != -1;
+						post.stats.boostCount += _delta;
+					}
+				}
+			});
+		}
+		case ACTION.UPDATE_TRANSLATION_OUTPUT: {
+			const _id = action.payload.id;
+			const _outputText = action.payload.outputText;
+			const _outputType = action.payload.outputType;
+			if (
+				_id === undefined ||
+				_outputText === undefined ||
+				_outputType === undefined
+			)
+				return state;
+
+			return produce(state, (draft) => {
+				for (const post of draft.items) {
+					if (post.id === _id) {
+						post.calculated.translationOutput = _outputText;
+						post.calculated.translationType = _outputType;
+					}
+					if (post.boostedFrom?.id === _id) {
+						post.boostedFrom.calculated.translationOutput = _outputText;
+						post.boostedFrom.calculated.translationType = _outputType;
+					}
+				}
+			});
+		}
+		case ACTION.UPDATE_LIKE_STATUS: {
+			const _id = action.payload.id;
+			const _delta = action.payload.delta;
+
+			if (_id === undefined || _delta === undefined) return state;
+			return produce(state, (draft) => {
+				for (const post of draft.items) {
+					if (post.id === _id) {
+						post.interaction.liked = _delta != -1;
+						post.stats.likeCount += _delta;
+					}
+					if (post.boostedFrom?.id === _id) {
+						post.boostedFrom.interaction.liked = _delta != -1;
+						post.boostedFrom.stats.likeCount += _delta;
+					}
+				}
+			});
+		}
+		case ACTION.UPDATE_REACTION_STATE: {
+			const _id = action.payload.id;
+			const _state = action.payload.state;
+			const { data, error } = ActivityPubReactionStateDto.safeParse(_state);
+			if (error) {
+				console.log('[WARN]: reaction state incorrect', error);
+				return state;
+			}
+
+			return produce(state, (draft) => {
+				for (const post of draft.items) {
+					if (post.id === _id) post.stats.reactions = data;
+					if (post.boostedFrom?.id === _id)
+						post.boostedFrom.stats.reactions = data;
+				}
 			});
 		}
 	}

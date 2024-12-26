@@ -29,6 +29,7 @@ import {
 	useAppManager,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+import StatusInteraction from './StatusInteraction';
 
 /**
  * Mostly used to remove the border
@@ -220,9 +221,9 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 				</Pressable>
 
 				{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
-				{/*{!isPreview && (*/}
-				{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
-				{/*)}*/}
+				{!isPreview && (
+					<StatusInteraction openAiContext={null} dto={STATUS_DTO} />
+				)}
 			</Fragment>
 		);
 	}, [isLoaded, ShowSensitiveContent, PostContent, dto, STATUS_DTO, theme]);

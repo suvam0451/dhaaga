@@ -10,6 +10,7 @@ enum APP_CACHE_KEY {
 	LINK_TARGET = 'app/_cache/bottomSheet_linkTarget',
 	TAG_TARGET = 'app/_cache/bottomSheet_tagTarget',
 	USER_ID_TARGET = 'app/_cache/bottomSheet_userId',
+	POST_OBJECT_TARGET = 'app/_cache/bottomSheet_postObject',
 	USER_OBJECT_TARGET = 'app/_cache/bottomSheet_userObject',
 	SERVER_CLIENT_TOKEN_TARGET = 'app/_cache/apProto/serverClientToken/:server', // modals
 	MEDIA_INSPECT_POST_TARGET = 'app/_cache/modal_mediaInspectPostObject',
@@ -92,6 +93,14 @@ class Storage extends BaseStorageManager {
 			APP_CACHE_KEY.BOTTOM_SHEET_MORE_ACTION_POST_TARGET,
 			input,
 		);
+	}
+
+	getPostObject(): AppPostObject {
+		return this.getJson<AppPostObject>(APP_CACHE_KEY.POST_OBJECT_TARGET);
+	}
+
+	setPostObject(target: AppPostObject) {
+		return this.setJson(APP_CACHE_KEY.POST_OBJECT_TARGET, target);
 	}
 
 	getUserObject(): AppUserObject {

@@ -57,7 +57,7 @@ export enum APP_KNOWN_MODAL {
 	USER_PEEK = 'userPeekModal',
 }
 
-type AppDialogInstanceState = {
+export type AppDialogInstanceState = {
 	title: string;
 	description: string[];
 	actions: {
