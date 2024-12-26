@@ -42,7 +42,6 @@ function useSyncWithProgress(
 				// 	db,
 				// 	setNumerator,
 				// );
-				// AccountService.updateBookmarkSyncStatus(db, primaryAcct);
 				break;
 			}
 			case ACTIVITYPUB_SYNC_TASK.CLEAR_BOOKMARK_CACHE: {

@@ -14,15 +14,10 @@ import {
 	POPULAR_PLEROMA_SERVERS,
 } from '../data/server-meta';
 import EnterYourServer from '../fragments/EnterYourServer';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppManager } from '../../../../../../hooks/utility/global-state-extractors';
 
 function AccountsScreen() {
-	const { appManager } = useGlobalState(
-		useShallow((o) => ({
-			appManager: o.appSession,
-		})),
-	);
+	const { appManager } = useAppManager();
 	const [Subdomain, setSubdomain] = useState('mastodon.social');
 
 	async function onPressNext() {

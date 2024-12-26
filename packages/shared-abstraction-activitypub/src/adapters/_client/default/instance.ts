@@ -207,7 +207,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 						client_name: 'Dhaaga',
 						redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
 						scopes: 'read write follow push',
-						website: 'https://dhaaga.app',
+						website: 'https://suvam.io/dhaaga',
 					};
 
 					// Generate the query string

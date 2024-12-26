@@ -14,6 +14,7 @@ import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
+import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
 
 function MastodonSignInStack() {
 	const { db } = useGlobalState(
@@ -75,13 +76,25 @@ function MastodonSignInStack() {
 			},
 			[
 				{
-					key: 'display_name',
+					key: ACCOUNT_METADATA_KEY.DISPLAY_NAME,
 					value: verified['display_name'],
 					type: 'string',
 				},
-				{ key: 'avatar', value: verified['avatar'], type: 'string' },
-				{ key: 'user_id', value: verified.id, type: 'string' },
-				{ key: 'access_token', value: token || Code, type: 'string' },
+				{
+					key: ACCOUNT_METADATA_KEY.AVATAR_URL,
+					value: verified['avatar'],
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.USER_IDENTIFIER,
+					value: verified.id,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
+					value: token || Code,
+					type: 'string',
+				},
 				{ key: 'url', value: verified.url, type: 'string' },
 			],
 		);

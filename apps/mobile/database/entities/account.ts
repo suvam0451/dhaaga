@@ -93,9 +93,8 @@ export class Repo {
 		db.account.update({ id }, { driver });
 	}
 
-	static getAll(db: DataSource): Result<Account[]> {
-		const rows = db.account.find();
-		return withSuccess(rows);
+	static getAll(db: DataSource): Account[] {
+		return db.account.find();
 	}
 
 	static removeById(db: DataSource, id: number) {

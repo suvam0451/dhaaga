@@ -9,7 +9,7 @@ import {
 import PagerView from 'react-native-pager-view';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import useSocialHub from '../../../states/useSocialHub';
-import { Profile } from '../../../database/_schema';
+import { Account } from '../../../database/_schema';
 import {
 	socialHubTabReducer,
 	socialHubTabReducerActionType,
@@ -30,6 +30,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import { SocialHubPinSectionContainer } from './stack/landing/fragments/_factory';
 import { AppFlashList } from '../../lib/AppFlashList';
+import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
 
 function Header() {
 	return (
@@ -109,7 +110,7 @@ function SocialHubTabAdd() {
 							},
 						]}
 					>
-						Add Profile
+						Add Account
 					</Text>
 				</View>
 				<Pressable
@@ -137,17 +138,18 @@ function SocialHubTabAdd() {
 }
 
 type SocialHubTabProps = {
-	profile: Profile;
+	account: Account;
 };
 
 /**
  * Tabs in the Social Hub interface
  * represent a unique profile each
  */
-function SocialHubTab({ profile }: SocialHubTabProps) {
-	const { db } = useGlobalState(
+function SocialHubTab({ account }: SocialHubTabProps) {
+	const { db, acct } = useGlobalState(
 		useShallow((o) => ({
 			db: o.db,
+			acct: o.acct,
 		})),
 	);
 	const [State, dispatch] = useReducer(
@@ -163,22 +165,23 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 			type: socialHubTabReducerActionType.INIT,
 			payload: {
 				db,
-				profile,
+				acct: account,
 			},
 		});
 		dispatch({
-			type: socialHubTabReducerActionType.LOAD_PINS,
+			type: socialHubTabReducerActionType.RELOAD_PINS,
 		});
-	}, [profile]);
+	}, [account]);
 
 	function refresh() {
 		setIsRefreshing(true);
 		dispatch({
-			type: socialHubTabReducerActionType.LOAD_PINS,
+			type: socialHubTabReducerActionType.RELOAD_PINS,
 		});
 		setIsRefreshing(false);
 	}
 
+	if (State.profiles.length === 0) return <View />;
 	return (
 		<ScrollView
 			style={{
@@ -190,16 +193,18 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 			}
 		>
 			<Header />
+			<View style={{ marginBottom: 16 }}>
+				<TimeOfDayGreeting acct={account} />
+			</View>
+
 			<View style={{ marginHorizontal: 10 }}>
 				<AppSegmentedControl
-					items={[
-						{ label: 'Pinned' },
-						{ label: 'Saved' },
-						{ label: 'For You' },
-					]}
+					items={[{ label: 'Pinned' }, { label: 'Saved' }]}
 					style={{ marginTop: 8 }}
 					leftDecorator={
-						<SocialHubAvatarCircle size={36} style={{ marginRight: 6 }} />
+						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+							<SocialHubAvatarCircle size={36} style={{ marginRight: 6 }} />
+						</View>
 					}
 					index={Index}
 					setIndex={setIndex}
@@ -208,7 +213,7 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 
 			{/* --- Pinned Timelines --- */}
 			<SocialHubPinnedTimelines
-				items={State.pinned.timelines}
+				items={State.profiles[0].pins.timelines}
 				refresh={refresh}
 				isRefreshing={IsRefreshing}
 				dispatch={dispatch}
@@ -216,12 +221,12 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 
 			{/* --- Pinned Users --- */}
 			<SocialHubPinSectionContainer
-				label={'Profiles'}
+				label={'Users'}
 				style={{
 					marginTop: 16,
 				}}
 			>
-				<AppFlashList.PinnedProfiles data={State.pinned.users} />
+				<AppFlashList.PinnedProfiles data={State.profiles[0].pins.users} />
 			</SocialHubPinSectionContainer>
 
 			{/* --- Pinned Tags --- */}
@@ -231,7 +236,7 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 					marginTop: 16,
 				}}
 			>
-				<AppFlashList.PinnedTags data={State.pinned.tags} />
+				<AppFlashList.PinnedTags data={State.profiles[0].pins.tags} />
 			</SocialHubPinSectionContainer>
 		</ScrollView>
 	);
@@ -249,9 +254,9 @@ function SocialHub() {
 	}
 
 	function renderScene(index: number) {
-		if (index >= data.profiles.length) return <SocialHubTabAdd />;
-		if (!data.profiles[index]) return <View />;
-		return <SocialHubTab profile={data.profiles[index]} />;
+		if (index >= data.accounts.length) return <SocialHubTabAdd />;
+		if (!data.accounts[index]) return <View />;
+		return <SocialHubTab account={data.accounts[index]} />;
 	}
 
 	return (
@@ -263,7 +268,7 @@ function SocialHub() {
 				initialPage={index}
 				onPageScroll={onPageSelected}
 			>
-				{Array.from({ length: data.profiles.length + 1 }).map((_, index) => (
+				{Array.from({ length: data.accounts.length + 1 }).map((_, index) => (
 					<View key={index.toString()}>{renderScene(index)}</View>
 				))}
 			</PagerView>

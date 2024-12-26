@@ -4,6 +4,7 @@ import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import Feather from '@expo/vector-icons/Feather';
 import { Button } from '@rneui/base';
+import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
 
 type EnterYourServerProps = {
 	setServerText: Dispatch<SetStateAction<string>>;
@@ -19,12 +20,13 @@ const EnterYourServer = memo(
 		onPressLogin,
 		buttonColor,
 	}: EnterYourServerProps) => {
+		const { theme } = useAppTheme();
 		return (
 			<View>
 				<Text
 					style={{
 						textAlign: 'center',
-						color: APP_FONT.MONTSERRAT_BODY,
+						color: theme.secondary.a20,
 						marginBottom: 24,
 						fontSize: 24,
 						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
@@ -39,14 +41,14 @@ const EnterYourServer = memo(
 					<TextInput
 						style={{
 							fontSize: 16,
-							color: APP_FONT.MONTSERRAT_HEADER,
+							color: theme.secondary.a10,
 							textDecorationLine: 'none',
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							flex: 1,
 							marginLeft: 4,
 						}}
 						autoCapitalize={'none'}
-						placeholderTextColor={APP_FONT.MONTSERRAT_BODY}
+						placeholderTextColor={theme.secondary.a30}
 						placeholder="Your server url"
 						onChangeText={setServerText}
 						value={ServerText}

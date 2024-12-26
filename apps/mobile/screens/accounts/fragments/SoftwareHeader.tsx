@@ -39,7 +39,6 @@ const SoftwareHeader = memo(function Foo({
 		<View style={{ marginTop: _mt, marginBottom: _mb, marginLeft: 4 }}>
 			<View
 				style={{
-					display: 'flex',
 					flexDirection: 'row',
 					marginBottom: 4,
 					alignItems: 'center',

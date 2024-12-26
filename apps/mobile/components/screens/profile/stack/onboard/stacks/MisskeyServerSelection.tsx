@@ -25,18 +25,16 @@ import {
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../../shared/topnavbar/AppTopNavbar';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
+import {
+	useAppManager,
+	useAppTheme,
+} from '../../../../../../hooks/utility/global-state-extractors';
 
 function MisskeyServerSelection() {
 	const [InputText, setInputText] = useState('misskey.io');
-	const { theme, appManager } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-			appManager: o.appSession,
-		})),
-	);
+	const { appManager } = useAppManager();
+	const { theme } = useAppTheme();
 
 	async function onPressNext() {
 		const signInStrategy = await ActivityPubService.signInUrl(

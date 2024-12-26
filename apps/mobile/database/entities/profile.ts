@@ -13,6 +13,9 @@ class Service {
 	static getShownProfiles(db: DataSource) {
 		return db.profile.find({ active: true });
 	}
+	static getForAccount(db: DataSource, acct: Account) {
+		return db.profile.find({ active: true, accountId: acct.id });
+	}
 
 	static deselectAll(db: DataSource) {
 		db.profile.update({ id: gt(0) as any }, { selected: false });

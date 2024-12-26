@@ -2,9 +2,8 @@ import { memo } from 'react';
 import { Image } from 'expo-image';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { StyleProp, View, ViewStyle } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { StyleProp, Text, View, ViewStyle } from 'react-native';
+import { APP_FONTS } from '../../styles/AppFonts';
 
 type AppAvatarProps = {
 	uri: string;
@@ -58,23 +57,29 @@ export function SocialHubAvatarCircle({
 				},
 			]}
 		>
-			{/*<View*/}
-			{/*	style={{*/}
-			{/*		borderWidth: 0.5,*/}
-			{/*		borderColor: 'black',*/}
-			{/*		borderRadius: '100%',*/}
-			{/*	}}*/}
-			{/*>*/}
-			<AppAvatar uri={acct?.avatarUrl} size={size} />
-			{/*</View>*/}
-			{/*<View*/}
-			{/*	style={{*/}
-			{/*		zIndex: 99,*/}
-			{/*		marginLeft: 4,*/}
-			{/*	}}*/}
-			{/*>*/}
-			{/*	<AntDesign name="switcher" size={24} color="black" />*/}
-			{/*</View>*/}
+			<View
+				style={{
+					backgroundColor: theme.palette.bg,
+					borderStyle: 'dashed',
+					borderWidth: 1.5,
+					borderColor: theme.primary.a0,
+					flexDirection: 'row',
+					alignItems: 'center',
+					borderRadius: 20,
+				}}
+			>
+				<AppAvatar uri={acct?.avatarUrl} size={size} />
+				<Text
+					style={{
+						color: theme.primary.a0,
+						marginLeft: 8,
+						marginRight: 12,
+						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					}}
+				>
+					Default
+				</Text>
+			</View>
 		</View>
 	);
 }
