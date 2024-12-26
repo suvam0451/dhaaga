@@ -17,16 +17,23 @@ import FlashListService, {
 import FlatListRenderer from '../screens/notifications/landing/fragments/FlatListRenderer';
 import { AppNotificationObject } from '../../types/app-notification.types';
 import {
+	Account,
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
 	ProfilePinnedUser,
 } from '../../database/_schema';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import {
+	useAppDialog,
+	useAppTheme,
+} from '../../hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import useAppNavigator from '../../states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 import { APP_FONTS } from '../../styles/AppFonts';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import accounts from '../../app/(tabs)/profile/accounts';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -81,13 +88,38 @@ function Pinned_Users_LastItem() {
 
 type ListItemProps = {
 	item: ProfilePinnedUser;
+	account: Account;
 };
 
-function Pinned_Users_ListItem({ item }: ListItemProps) {
+function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 	const { theme } = useAppTheme();
-	const { toProfile, toTimelineViaPin } = useAppNavigator();
+	const { acct } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
+	const { show, hide } = useAppDialog();
+	const { toTimelineViaPin } = useAppNavigator();
 
 	function onPress() {
+		if (account.id !== acct.id) {
+			show({
+				title: 'Account not Active',
+				description: [
+					'This account is not currently active.',
+					'Switch your currently selected account to proceed.',
+				],
+				actions: [
+					{
+						label: 'Switch & Continue',
+						onPress: () => {
+							hide();
+						},
+					},
+				],
+			});
+			return;
+		}
 		switch (item.category) {
 			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL: {
 				// toProfile(item.identifier);
@@ -157,6 +189,7 @@ type PinnedTag_ListItemProps = {
 
 function Pinned_Tags_ListItem({ item }: PinnedTag_ListItemProps) {
 	const { theme } = useAppTheme();
+
 	function onPressAddedTag() {
 		if (item.type === 'eol') return;
 		switch (item.props.dto.category) {
@@ -235,8 +268,7 @@ type AppFlashListProps<
 	T extends AppPostObject | AppUserObject | AppNotificationObject,
 > = {
 	// the data used for render
-	data: T[];
-	// this needs to come from useTopbarSmoothTranslate
+	data: T[]; // this needs to come from useTopbarSmoothTranslate
 	onScroll: (...args: any[]) => void;
 	paddingTop?: number;
 	refreshing?: boolean;
@@ -259,6 +291,18 @@ type AppFlatListProps<
 	refreshing?: boolean;
 	onRefresh?: () => void;
 	ListHeaderComponent?: any;
+};
+
+type AppFlatListPinCategory<
+	T extends
+		| AppPostObject
+		| AppUserObject
+		| AppNotificationObject
+		| ProfilePinnedUser
+		| ProfilePinnedTimeline
+		| ProfilePinnedTag,
+> = AppFlatListProps<T> & {
+	account: Account;
 };
 
 const POST_ESTIMATED_SIZE = 200;
@@ -319,7 +363,10 @@ export class AppFlashList {
 		);
 	}
 
-	static PinnedProfiles({ data }: AppFlatListProps<ProfilePinnedUser>) {
+	static PinnedProfiles({
+		data,
+		account,
+	}: AppFlatListPinCategory<ProfilePinnedUser>) {
 		const listItems = useMemo(() => {
 			return FlashListService.pinnedUsers(data);
 		}, [data]);
@@ -330,7 +377,9 @@ export class AppFlashList {
 				numColumns={4}
 				renderItem={({ item }) => {
 					if (item.type === 'entry')
-						return <Pinned_Users_ListItem item={item.props.dto} />;
+						return (
+							<Pinned_Users_ListItem item={item.props.dto} account={account} />
+						);
 					return <Pinned_Users_LastItem />;
 				}}
 			/>

@@ -15,6 +15,7 @@ import {
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../../database/entities/account';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	setIsExpanded: (isExpanded: boolean) => void;
@@ -124,6 +125,7 @@ export const AccountPfp = memo(function Foo({
 	selected,
 	onClicked,
 }: AccountPfpProps) {
+	const { theme } = useAppTheme();
 	return (
 		<TouchableOpacity
 			style={{
@@ -131,7 +133,7 @@ export const AccountPfp = memo(function Foo({
 				width: 48,
 				borderRadius: 8,
 				borderWidth: 1.5,
-				borderColor: selected ? '#9dced7' : 'gray',
+				borderColor: selected ? theme.primary.a10 : 'gray',
 			}}
 			onPress={onClicked}
 		>
@@ -148,6 +150,9 @@ export const AccountPfp = memo(function Foo({
 						display: selected ? 'flex' : 'none',
 					},
 					styles.selectedIndicator,
+					{
+						backgroundColor: theme.primary.a10,
+					},
 				]}
 			/>
 		</TouchableOpacity>
@@ -168,11 +173,7 @@ export const AccountDetails = memo(function Foo({
 	subdomain,
 	onClicked,
 }: selectedIndicatorProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	return (
 		<TouchableOpacity
@@ -182,7 +183,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					color: selected ? '#9dced7' : theme.textColor.high,
+					color: theme.secondary.a10,
 				}}
 				numberOfLines={1}
 			>
@@ -190,8 +191,8 @@ export const AccountDetails = memo(function Foo({
 			</Text>
 			<Text
 				style={{
-					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : theme.textColor.low,
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					color: theme.secondary.a30,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -200,8 +201,8 @@ export const AccountDetails = memo(function Foo({
 			</Text>
 			<Text
 				style={{
-					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : theme.textColor.medium,
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					color: selected ? theme.primary.a0 : theme.complementary.a0,
 					fontSize: 12,
 				}}
 				numberOfLines={1}

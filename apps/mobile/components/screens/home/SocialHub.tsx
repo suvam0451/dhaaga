@@ -226,7 +226,10 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 					marginTop: 16,
 				}}
 			>
-				<AppFlashList.PinnedProfiles data={State.profiles[0].pins.users} />
+				<AppFlashList.PinnedProfiles
+					account={State.acct}
+					data={State.profiles[0].pins.users}
+				/>
 			</SocialHubPinSectionContainer>
 
 			{/* --- Pinned Tags --- */}

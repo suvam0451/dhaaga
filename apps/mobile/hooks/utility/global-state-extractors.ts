@@ -55,6 +55,20 @@ export function useAppBottomSheet_Improved() {
 	);
 }
 
+export function useAppDialog() {
+	return useGlobalState(
+		useShallow((o) => ({
+			// type: o.dialog.type,
+			visible: o.dialog.visible,
+			refresh: o.dialog.refresh,
+			stateId: o.dialog.stateId,
+			state: o.dialog.state,
+			show: o.dialog.show,
+			hide: o.dialog.hide,
+		})),
+	);
+}
+
 export function useAppBottomSheet_TimelineReference() {
 	return useGlobalState(
 		useShallow((o) => ({

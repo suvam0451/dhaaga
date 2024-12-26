@@ -64,16 +64,17 @@ type AppDialogInstanceState = {
 	actions: {
 		label: string;
 		onPress: () => void;
+		variant?: 'default' | 'important' | 'dismiss' | 'warning';
 	}[];
 };
 
 type AppDialogState = {
-	type: APP_DIALOG_SHEET_ENUM;
+	// type: APP_DIALOG_SHEET_ENUM;
 	stateId: string;
 	refresh: () => void;
 	visible: boolean;
 	state: AppDialogInstanceState | null;
-	showDefault: (data: AppDialogInstanceState) => void;
+	show: (data: AppDialogInstanceState) => void;
 	hide: () => void;
 };
 
@@ -345,7 +346,9 @@ const useGlobalState = create<State & Actions>()(
 			stateId: RandomUtil.nanoId(),
 			endSessionSeed: RandomUtil.nanoId(),
 			refresh: function (): void {
-				throw new Error('Function not implemented.');
+				set((state) => {
+					state.bottomSheet.stateId = RandomUtil.nanoId();
+				});
 			},
 			setType: function (type: APP_BOTTOM_SHEET_ENUM): void {
 				throw new Error('Function not implemented.');
@@ -383,21 +386,21 @@ const useGlobalState = create<State & Actions>()(
 			},
 		},
 		dialog: {
-			type: APP_DIALOG_SHEET_ENUM.DEFAULT,
+			// type: APP_DIALOG_SHEET_ENUM.DEFAULT,
 			stateId: RandomUtil.nanoId(),
 			visible: false,
-			showDefault: (data: AppDialogInstanceState) => {
+			show: (data: AppDialogInstanceState) => {
 				set((state) => {
 					state.dialog.state = data;
 					state.dialog.stateId = RandomUtil.nanoId();
-					state.dialog.type = APP_DIALOG_SHEET_ENUM.DEFAULT;
+					// state.dialog.type = APP_DIALOG_SHEET_ENUM.DEFAULT;
 					state.dialog.visible = true;
 				});
 			},
 			state: null,
 			hide: () => {
 				set((state) => {
-					state.dialog.visible = true;
+					state.dialog.visible = false;
 				});
 			},
 			refresh: () => {

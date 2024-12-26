@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { useAppBottomSheet } from '../_api/useAppBottomSheet';
+import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import {
 	AccountDetails,
@@ -10,13 +9,20 @@ import {
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
 import { router } from 'expo-router';
 import { Account } from '../../../../database/_schema';
-import { AccountMetadataService } from '../../../../database/entities/account-metadata';
+import {
+	ACCOUNT_METADATA_KEY,
+	AccountMetadataService,
+} from '../../../../database/entities/account-metadata';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { useAppAccounts } from '../../../../hooks/db/useAppAccounts';
+import { useAppListAccounts } from '../../../../hooks/db/useAppListAccounts';
 import { AppIcon } from '../../../lib/Icon';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import {
+	useAppBottomSheet_Improved,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 
 type FlashListItemProps = {
 	acct: Account;
@@ -30,30 +36,31 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 			db: o.db,
 		})),
 	);
-
-	const { setVisible } = useAppBottomSheet();
+	const { hide, refresh } = useAppBottomSheet_Improved();
+	const { theme } = useAppTheme();
 
 	const avatar = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,
-		'avatar',
+		ACCOUNT_METADATA_KEY.AVATAR_URL,
 	);
 	const displayName = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,
-		'display_name',
+		ACCOUNT_METADATA_KEY.DISPLAY_NAME,
 	);
 
 	async function onSelect() {
 		selectAccount(acct);
 		restoreSession();
-		setVisible(false);
+		refresh();
+		hide();
 	}
 
 	if (!acct) return <View />;
 
 	return (
-		<TouchableOpacity
+		<Pressable
 			style={{
 				backgroundColor: '#202020',
 				padding: 8,
@@ -102,18 +109,18 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 						{acct.selected && (
 							<Text
 								style={{
-									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-									color: '#9dced7',
+									fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+									color: theme.primary.a0,
 								}}
 							>
 								Active
 							</Text>
 						)}
 					</View>
-					<SoftwareHeader software={acct.driver} mb={4} mt={8} />
+					<SoftwareHeader software={acct.driver} />
 				</View>
 			</View>
-		</TouchableOpacity>
+		</Pressable>
 	);
 });
 
@@ -127,7 +134,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 			theme: o.colorScheme,
 		})),
 	);
-	const { accounts } = useAppAccounts(stateId);
+	const { data } = useAppListAccounts(stateId);
 
 	if (isAnimating) return <View />;
 
@@ -171,7 +178,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 						</TouchableOpacity>
 					</View>
 				)}
-				data={accounts}
+				data={data}
 				renderItem={({ item }) => <FlashListItem acct={item} />}
 			/>
 		</View>

@@ -1,5 +1,5 @@
-import { FlatList, RefreshControl, View } from 'react-native';
-import { Text, Button } from '@rneui/base';
+import { FlatList, RefreshControl, View, Text } from 'react-native';
+import { Button } from '@rneui/base';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
@@ -31,17 +31,24 @@ function SelectAccountStack() {
 	const [Refreshing, setRefreshing] = useState(false);
 
 	function refresh() {
-		const getResult = AccountService.getAll(db);
-		if (getResult.type === 'success') {
-			setData(getResult.value);
-		} else {
+		try {
+			setData(AccountService.getAll(db));
+		} catch (e) {
+			console.log('[ERROR]: failed to load account list', e);
 			setData([]);
 		}
 	}
 
+	// populate account list on load & refresh
 	function onRefresh() {
+		setRefreshing(true);
 		refresh();
+		setRefreshing(false);
 	}
+
+	useEffect(() => {
+		refresh();
+	}, []);
 
 	const SOFTWARE_ARRAY = [
 		KNOWN_SOFTWARE.AKKOMA,
@@ -57,17 +64,6 @@ function SelectAccountStack() {
 		itemCount: 1,
 		updateQueryCache: () => {},
 	});
-
-	// populate account list on load
-	useEffect(() => {
-		const getResult = AccountService.getAll(db);
-		console.log(getResult);
-		if (getResult.type === 'success') {
-			setData(getResult.value);
-		} else {
-			setData([]);
-		}
-	}, []);
 
 	function onPressAddAccount() {
 		router.navigate('/profile/onboard/select-software');

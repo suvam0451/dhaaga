@@ -149,7 +149,7 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 
 	function onLongPress() {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT);
+		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT, true);
 	}
 
 	function onPress() {
