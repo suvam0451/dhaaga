@@ -33,7 +33,7 @@ import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 import { APP_FONTS } from '../../styles/AppFonts';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import accounts from '../../app/(tabs)/profile/accounts';
+import { AccountService } from '../../database/entities/account';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -93,9 +93,11 @@ type ListItemProps = {
 
 function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 	const { theme } = useAppTheme();
-	const { acct } = useGlobalState(
+	const { acct, db, loadApp } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
+			db: o.db,
+			loadApp: o.loadApp,
 		})),
 	);
 	const { show, hide } = useAppDialog();
@@ -113,7 +115,11 @@ function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 					{
 						label: 'Switch & Continue',
 						onPress: () => {
-							hide();
+							AccountService.select(db, account);
+							loadApp().then(() => {
+								hide();
+								toTimelineViaPin(item.id, 'user');
+							});
 						},
 					},
 				],

@@ -71,7 +71,6 @@ function PinnedTimelineItem({ label, icon }: PinnedTimelineItemProps) {
 				},
 			]}
 			onPress={() => {
-				setHomepageType(TimelineFetchMode.HOME);
 				router.push('/timelines');
 			}}
 		>

@@ -30,7 +30,6 @@ import { APP_BOTTOM_SHEET_ENUM } from '../components/dhaaga-bottom-sheet/Core';
 import {
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-	TimelineFetchMode,
 } from './reducers/timeline.reducer';
 
 type AppThemePack = {
@@ -137,16 +136,6 @@ type State = {
 	// router used to make api requests
 	router: ActivityPubClient | null;
 
-	// Screens
-
-	/**
-	 * what is displayed on the homepage
-	 *
-	 * NOTE: reset when different
-	 * account selected
-	 * */
-	homepageType: TimelineFetchMode;
-
 	packId: string;
 	colorScheme: AppColorSchemeType;
 	setColorScheme: (themeKey: string) => void;
@@ -200,9 +189,8 @@ type Actions = {
 	selectAccount(acct: Account): void;
 	getPacks: () => AppThemePack[];
 	setPack: (packId: string) => void;
-	setHomepageType: (selection: TimelineFetchMode) => void;
 	appInitialize: (db: SQLiteDatabase) => void;
-	loadApp: () => void;
+	loadApp: () => Promise<void>;
 	// loa/switch a profile
 	loadActiveProfile: (profile?: Profile) => void;
 };
@@ -276,7 +264,6 @@ const useGlobalState = create<State & Actions>()(
 		router: null,
 		me: null,
 		activePack: null,
-		homepageType: null,
 		packId: null,
 		imageInspectModal: ModalStateBlockGenerator(
 			set,
@@ -332,12 +319,6 @@ const useGlobalState = create<State & Actions>()(
 					state.router = null;
 					state.driver = KNOWN_SOFTWARE.UNKNOWN;
 				}
-				state.homepageType = TimelineFetchMode.IDLE;
-			});
-		},
-		setHomepageType: (selection: TimelineFetchMode) => {
-			set((state) => {
-				state.homepageType = selection;
 			});
 		},
 		bottomSheet: {

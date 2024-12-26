@@ -3,10 +3,9 @@ import {
 	useAppDialog,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
-import { useEffect } from 'react';
-import { Dialog } from '@rneui/base';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { modalStyles } from '../common/relationship/dialogs/_common';
+import { Fragment } from 'react';
 
 type DialogOptionsProps = {
 	label: string;
@@ -45,55 +44,71 @@ function DialogOption({ label, onPress, variant }: DialogOptionsProps) {
  * @constructor
  */
 export function AppDialog() {
-	const { visible, show, hide, state, stateId } = useAppDialog();
+	const { visible, hide, state } = useAppDialog();
 	const { theme } = useAppTheme();
-
-	useEffect(() => {}, [stateId]);
 
 	if (!visible) return <View />;
 	return (
-		<Dialog
-			overlayStyle={{
-				backgroundColor: theme.palette.menubar,
-				borderRadius: 24,
-				padding: 0,
-			}}
-			isVisible={visible}
-			onBackdropPress={() => {
-				hide();
-			}}
-		>
-			<View style={{ paddingHorizontal: 24 }}>
-				<Text style={[styles.modalTitle, { color: theme.textColor.high }]}>
-					{state.title}
-				</Text>
-				{state.description.map((text, i) => (
-					<Text
-						key={i}
-						style={[
-							modalStyles.modalDescription,
-							{
-								color: theme.textColor.medium,
-							},
-						]}
-					>
-						{text}
-					</Text>
-				))}
+		<Fragment>
+			<Pressable
+				style={{
+					position: 'absolute',
+					backgroundColor: 'black',
+					height: '100%',
+					width: '100%',
+					opacity: 0.64,
+				}}
+				onPress={hide}
+			/>
+			<View
+				style={{
+					maxWidth: 256,
+					borderRadius: 8,
+					backgroundColor: theme.palette.menubar,
+					position: 'absolute',
+					left: '50%',
+					top: '50%',
+					transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
+				}}
+			>
+				<View>
+					<View style={{ paddingHorizontal: 24 }}>
+						<Text style={[styles.modalTitle, { color: theme.textColor.high }]}>
+							{state.title}
+						</Text>
+						{state.description.map((text, i) => (
+							<Text
+								key={i}
+								style={[
+									modalStyles.modalDescription,
+									{
+										color: theme.textColor.medium,
+									},
+								]}
+							>
+								{text}
+							</Text>
+						))}
+					</View>
+					<View style={{ marginTop: 32, marginBottom: 4 }}>
+						{state.actions.map((action, i) => (
+							<DialogOption
+								key={i}
+								label={action.label}
+								onPress={action.onPress}
+							/>
+						))}
+						<DialogOption
+							label={'Dismiss'}
+							onPress={() => {
+								hide();
+							}}
+							variant={'dismiss'}
+						/>
+					</View>
+				</View>
 			</View>
-			<View style={{ marginTop: 32, marginBottom: 4 }}>
-				{state.actions.map((action, i) => (
-					<DialogOption label={action.label} onPress={action.onPress} />
-				))}
-				<DialogOption
-					label={'Dismiss'}
-					onPress={() => {
-						hide();
-					}}
-					variant={'dismiss'}
-				/>
-			</View>
-		</Dialog>
+		</Fragment>
 	);
 }
 
