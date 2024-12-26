@@ -6,7 +6,6 @@ export class QueryResolver {
 		} else if (value === null || value === undefined) {
 			val = 'NULL';
 		} else {
-			console.log(value, String(value));
 			val = String(value);
 		}
 		return val;
@@ -53,7 +52,6 @@ export class QueryResolver {
 	static findOne(dbName: string, whereQueries: string[]) {
 		const whereSql =
 			whereQueries.length > 0 ? `WHERE (${whereQueries.join(' AND ')})` : '';
-		console.log(whereSql);
 		return `SELECT * FROM ${dbName} ${whereSql} LIMIT 1`;
 	}
 
