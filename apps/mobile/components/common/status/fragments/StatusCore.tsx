@@ -22,6 +22,7 @@ import { Text } from 'react-native';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import {
 	useTimelineDispatch,
+	useTimelineManager,
 	useTimelineState,
 } from '../../timeline/core/Timeline';
 import {
@@ -46,6 +47,7 @@ function StatusController() {
 	const { dto } = useAppStatusItem();
 	const State = useTimelineState();
 	const dispatch = useTimelineDispatch();
+	const manager = useTimelineManager();
 	const { show } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,
@@ -55,7 +57,7 @@ function StatusController() {
 	const { appManager } = useAppManager();
 
 	function onMoreOptionsPress() {
-		attach(State, dispatch);
+		attach(State, dispatch, manager.current);
 		appManager.storage.setBottomSheetPostActionsTarget(dto);
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
 	}

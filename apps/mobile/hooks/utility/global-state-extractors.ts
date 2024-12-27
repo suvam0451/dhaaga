@@ -75,6 +75,7 @@ export function useAppBottomSheet_TimelineReference() {
 			draft: o.bottomSheet.timeline.draftState,
 			dispatch: o.bottomSheet.timeline.dispatch,
 			attach: o.bottomSheet.timeline.attach,
+			manager: o.bottomSheet.timeline.manager,
 		})),
 	);
 }

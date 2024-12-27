@@ -1,60 +1,43 @@
-import { memo, useState } from 'react';
-import { ActivityIndicator, TouchableOpacity } from 'react-native';
-import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import Ionicons from '@expo/vector-icons/Ionicons';
-
-const ICON_SIZE = 28;
-const ACTIVE_COLOR = '#deba7a'; // APP_THEME.LINK
-
-type PostActionButtonToggleLikeProps = {
-	id: string;
-	flag: boolean;
-	isFinal: boolean;
-};
+import { useState } from 'react';
+import { usePostActionsInterface } from '../../../../../hooks/app/usePostActionsInterface';
+import { AppToggleIcon } from '../../../../lib/Icon';
+import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '../../../../../styles/dimensions';
 
 /**
- * Like toggle indicator button
+ * Like toggle button
  */
-const PostActionButtonToggleLike = memo(
-	({ id, flag }: PostActionButtonToggleLikeProps) => {
-		const [IsLoading, setIsLoading] = useState(false);
-		const { toggleLike } = useAppTimelinePosts();
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+function PostActionButtonToggleLike() {
+	const { dto } = useAppStatusItem();
+	const { theme } = useAppTheme();
+	const { toggleLike } = usePostActionsInterface();
+	const [IsLoading, setIsLoading] = useState(false);
 
-		function onPress() {
-			toggleLike(id, setIsLoading);
-		}
+	function onPress() {
+		toggleLike(dto.id, setIsLoading);
+	}
 
-		return (
-			<TouchableOpacity
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginRight: 16,
-					paddingTop: 8,
-					paddingBottom: 8,
-				}}
-				onPress={onPress}
-			>
-				{IsLoading ? (
-					<ActivityIndicator size={'small'} />
-				) : (
-					<Ionicons
-						name={flag ? 'heart' : 'heart-outline'}
-						size={ICON_SIZE}
-						color={flag ? ACTIVE_COLOR : theme.secondary.a10}
-					/>
-				)}
-			</TouchableOpacity>
-		);
-	},
-);
+	const FLAG = dto.interaction.liked;
+	return (
+		<AppToggleIcon
+			flag={FLAG}
+			activeIconId={'heart'}
+			inactiveIconId={'heart-outline'}
+			activeTint={theme.primary.a0}
+			inactiveTint={theme.secondary.a10}
+			size={appDimensions.timelines.actionButtonSize}
+			onPress={onPress}
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+				alignItems: 'center',
+				marginRight: 16,
+				paddingTop: 8,
+				paddingBottom: 8,
+			}}
+		/>
+	);
+}
 
 export default PostActionButtonToggleLike;

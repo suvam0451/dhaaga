@@ -93,9 +93,10 @@ function WithAppTimelineDataContext({ children }: Props) {
 			client: o.router,
 		})),
 	);
+	const [Posts, postListReducer] = useReducer(postArrayReducer, []);
 
 	// lists
-	const [Posts, postListReducer] = useReducer(postArrayReducer, []);
+
 	const Seen = useRef(new Set<string>());
 
 	const clear = useCallback(() => {

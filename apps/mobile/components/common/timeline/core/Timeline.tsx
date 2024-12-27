@@ -1,4 +1,12 @@
-import { createContext, memo, useContext, useEffect, useReducer } from 'react';
+import {
+	createContext,
+	memo,
+	MutableRefObject,
+	useContext,
+	useEffect,
+	useReducer,
+	useRef,
+} from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import LoadingMore from '../../../screens/home/LoadingMore';
@@ -25,6 +33,7 @@ import {
 	TimelineFetchMode,
 } from '../../../../states/reducers/timeline.reducer';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+import { TimelineSessionService } from '../../../../services/session/timeline-session.service';
 
 /**
  * --- Context Setup ---
@@ -32,10 +41,13 @@ import { PostMiddleware } from '../../../../services/middlewares/post.middleware
 
 const _StateCtx = createContext<AppTimelineReducerStateType>(null);
 const _DispatchCtx = createContext<AppTimelineReducerDispatchType>(null);
+const _ManagerCtx =
+	createContext<MutableRefObject<TimelineSessionService>>(null);
 
 // exports
 export const useTimelineState = () => useContext(_StateCtx);
 export const useTimelineDispatch = () => useContext(_DispatchCtx);
+export const useTimelineManager = () => useContext(_ManagerCtx);
 
 /*
  * Render a Timeline
@@ -185,14 +197,27 @@ const Timeline = memo(() => {
  */
 
 function CtxWrapper({ children }) {
+	const { driver, client } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			client: o.router,
+		})),
+	);
 	const [state, dispatch] = useReducer(
 		appTimelineReducer,
 		appTimelineReducerDefault,
 	);
 
+	const manager = useRef<TimelineSessionService>(null);
+	useEffect(() => {
+		manager.current = new TimelineSessionService(driver, client, dispatch);
+	}, [driver, client, dispatch]);
+
 	return (
 		<_StateCtx.Provider value={state}>
-			<_DispatchCtx.Provider value={dispatch}>{children}</_DispatchCtx.Provider>
+			<_DispatchCtx.Provider value={dispatch}>
+				<_ManagerCtx.Provider value={manager}>{children}</_ManagerCtx.Provider>
+			</_DispatchCtx.Provider>
 		</_StateCtx.Provider>
 	);
 }

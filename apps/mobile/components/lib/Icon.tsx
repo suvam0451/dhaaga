@@ -54,6 +54,7 @@ export type APP_ICON_ENUM =
 	| 'eye-off-filled'
 	| 'gallery'
 	| 'heart'
+	| 'heart-outline'
 	| 'home'
 	| 'info'
 	| 'language'
@@ -522,6 +523,16 @@ export const AppIcon = memo(
 				case 'heart':
 					return (
 						<Ionicons
+							name={'heart'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'heart-outline':
+					return (
+						<Ionicons
 							name={'heart-outline'}
 							size={_size}
 							color={_color}
@@ -803,6 +814,48 @@ export const AppIcon = memo(
 		);
 	},
 );
+
+type ToggleIconProps = {
+	flag: boolean;
+	activeIconId: APP_ICON_ENUM;
+	inactiveIconId: APP_ICON_ENUM;
+	activeTint: string;
+	inactiveTint: string;
+	size?: number;
+	onPress?: () => void;
+	style?: StyleProp<ViewStyle>;
+};
+
+export function AppToggleIcon({
+	flag,
+	activeIconId,
+	inactiveIconId,
+	activeTint,
+	inactiveTint,
+	size,
+	onPress,
+	style,
+}: ToggleIconProps) {
+	return (
+		<View style={style}>
+			{flag ? (
+				<AppIcon
+					id={activeIconId}
+					color={activeTint}
+					size={size}
+					onPress={onPress}
+				/>
+			) : (
+				<AppIcon
+					id={inactiveIconId}
+					color={inactiveTint}
+					size={size}
+					onPress={onPress}
+				/>
+			)}
+		</View>
+	);
+}
 
 const styles = StyleSheet.create({
 	accountIconTouchableContainer: {

@@ -31,6 +31,7 @@ import {
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
 } from './reducers/timeline.reducer';
+import { TimelineSessionService } from '../services/session/timeline-session.service';
 
 type AppThemePack = {
 	id: string;
@@ -111,7 +112,9 @@ type AppBottomSheetState = {
 		attach: (
 			state: AppTimelineReducerStateType,
 			dispatch: AppTimelineReducerDispatchType,
+			manager: TimelineSessionService,
 		) => void;
+		manager: TimelineSessionService;
 	};
 };
 
@@ -355,13 +358,16 @@ const useGlobalState = create<State & Actions>()(
 			timeline: {
 				draftState: null,
 				dispatch: null,
+				manager: null,
 				attach: (
 					_state: AppTimelineReducerStateType,
 					_dispatch: AppTimelineReducerDispatchType,
+					manager: TimelineSessionService,
 				) => {
 					set((state) => {
 						state.bottomSheet.timeline.draftState = _state;
 						state.bottomSheet.timeline.dispatch = _dispatch;
+						state.bottomSheet.timeline.manager = manager;
 					});
 				},
 			},

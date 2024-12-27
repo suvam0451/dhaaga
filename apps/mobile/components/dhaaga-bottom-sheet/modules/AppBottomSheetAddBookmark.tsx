@@ -1,7 +1,15 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+	useAppBottomSheet_Improved,
+	useAppBottomSheet_TimelineReference,
+	useAppManager,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
+import { useEffect, useState } from 'react';
+import { AppPostObject } from '../../../types/app-post.types';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 
 type CollectionItemProps = {
 	active: boolean;
@@ -38,6 +46,7 @@ function CollectionItem({
 	onPress,
 }: CollectionItemProps) {
 	const { theme } = useAppTheme();
+
 	return (
 		<View
 			style={{
@@ -78,23 +87,40 @@ function CollectionItem({
 				</Text>
 			</View>
 			<View style={{ flexGrow: 1 }} />
-			<View>
+			<Pressable onPress={onPress}>
 				{active ? (
 					<AppIcon id={activeIconId} size={32} color={activeTint} />
 				) : (
 					<AppIcon id={inactiveIconId} size={32} color={inactiveTint} />
 				)}
-			</View>
+			</Pressable>
 		</View>
 	);
 }
 
 function AppBottomSheetAddBookmark() {
 	const { theme } = useAppTheme();
+	const { stateId } = useAppBottomSheet_Improved();
+	const { draft, manager } = useAppBottomSheet_TimelineReference();
+	const { appManager } = useAppManager();
+	const [PostObject, setPostObject] = useState<AppPostObject>(null);
+
+	useEffect(() => {
+		setPostObject(appManager.storage.getPostObject());
+	}, [stateId]);
+
+	function onToggleBookmark() {
+		if (!PostObject || !manager || !manager.isValid) {
+			console.log('[ERROR]: invalid state');
+			return;
+		}
+		manager.toggleBookmark(
+			draft,
+			PostMiddleware.getContentTarget(PostObject).id,
+		);
+	}
 
 	const collection = ['Default', 'Default 2', 'Default 3'];
-
-	function refresh() {}
 
 	const TIP_TEXT_COLOR = theme.secondary.a40;
 	return (
@@ -117,7 +143,7 @@ function AppBottomSheetAddBookmark() {
 					active={false}
 					activeTint={TIP_TEXT_COLOR}
 					inactiveTint={TIP_TEXT_COLOR}
-					onPress={() => {}}
+					onPress={onToggleBookmark}
 				/>
 			</View>
 
@@ -144,6 +170,7 @@ function AppBottomSheetAddBookmark() {
 			</View>
 			{collection.map((collection, i) => (
 				<CollectionItem
+					key={i}
 					label={collection}
 					desc={['Local Only', 'Not Synced']}
 					activeIconId={'checkmark-circle'}

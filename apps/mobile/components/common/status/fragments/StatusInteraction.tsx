@@ -1,20 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import { memo, useState } from 'react';
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Divider } from '@rneui/themed';
 import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
 import { AppPostObject } from '../../../../types/app-post.types';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 type StatusInteractionProps = {
@@ -29,7 +24,7 @@ type StatusInteractionButtonsProps = {
 };
 
 function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
-	const { explain, boost, getPostListReducer } = useAppTimelinePosts();
+	const { explain, boost } = useAppTimelinePosts();
 	const { theme } = useAppTheme();
 	const { client } = useGlobalState(
 		useShallow((o) => ({
@@ -64,8 +59,6 @@ function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
 		item.calculated.translationOutput !== undefined &&
 		item.calculated.translationOutput !== null;
 	const IS_BOOSTED = item.interaction.boosted;
-	const IS_LIKED = item.interaction.liked;
-	const IS_BOOKMARKED = item.interaction.bookmarked;
 
 	// loading state
 	const [IsTranslateStateLoading, setIsTranslateStateLoading] = useState(false);
@@ -98,11 +91,7 @@ function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
 			}}
 		>
 			<View style={{ display: 'flex', flexDirection: 'row' }}>
-				<PostActionButtonToggleLike
-					id={item.id}
-					flag={IS_LIKED}
-					isFinal={true}
-				/>
+				<PostActionButtonToggleLike />
 				<TouchableOpacity
 					style={{
 						display: 'flex',
@@ -155,17 +144,11 @@ function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
 					alignItems: 'center',
 				}}
 			>
-				<PostActionButtonToggleBookmark
-					id={item.id}
-					flag={IS_BOOKMARKED}
-					isFinal={item.state.isBookmarkStateFinal}
-				/>
+				<PostActionButtonToggleBookmark />
 			</View>
 		</View>
 	);
 }
-
-function StatusInteractionMetrics() {}
 
 const StatusInteraction = memo(
 	({ openAiContext, dto }: StatusInteractionProps) => {
