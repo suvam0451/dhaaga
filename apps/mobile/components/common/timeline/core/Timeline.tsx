@@ -6,6 +6,7 @@ import {
 	useEffect,
 	useReducer,
 	useRef,
+	useState,
 } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
@@ -14,7 +15,6 @@ import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndic
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
 import WithTimelineControllerContext from '../api/useTimelineController';
-import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
 import useTimeline from '../api/useTimeline';
 import WithAppTimelineDataContext from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
@@ -109,6 +109,17 @@ const Timeline = memo(() => {
 		maxId: State.appliedMaxId,
 	});
 
+	const [Refreshing, setRefreshing] = useState(false);
+	function onRefresh() {
+		setRefreshing(true);
+		dispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
+	}
+
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
@@ -158,10 +169,6 @@ const Timeline = memo(() => {
 		itemCount: State.items.length,
 		updateQueryCache: loadMore,
 	});
-	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
-		fetchStatus,
-		refetch,
-	});
 
 	if (client === null) return <Introduction />;
 	if (State.feedType === TimelineFetchMode.IDLE) {
@@ -183,7 +190,7 @@ const Timeline = memo(() => {
 			<AppFlashList.Post
 				data={State.items}
 				onScroll={onScroll}
-				refreshing={refreshing}
+				refreshing={Refreshing}
 				onRefresh={onRefresh}
 				paddingTop={50 + 16}
 			/>

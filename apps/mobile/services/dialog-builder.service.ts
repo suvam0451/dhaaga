@@ -11,4 +11,14 @@ export class DialogBuilderService {
 	static toSwitchActiveAccount(): AppDialogInstanceState {
 		return null;
 	}
+
+	static remoteTimelinesNotAvailable(): AppDialogInstanceState {
+		return {
+			title: 'Not Supported',
+			description: [
+				'Accessing remote timelines as a guest is not supported yet.',
+			],
+			actions: [],
+		};
+	}
 }

@@ -1,4 +1,4 @@
-import { Dispatch, memo } from 'react';
+import { memo } from 'react';
 import {
 	FlatList,
 	StyleSheet,
@@ -8,14 +8,22 @@ import {
 } from 'react-native';
 import { APP_ICON_ENUM, AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { router } from 'expo-router';
 import { SocialHubPinSectionContainer } from './_factory';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
-import { ProfilePinnedTimeline } from '../../../../../../database/_schema';
-import { socialHubTabReducerAction } from '../../../../../../states/reducers/social-hub-tab.reducer';
-import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import {
+	Account,
+	ProfilePinnedTimeline,
+} from '../../../../../../database/_schema';
+import {
+	useAppDialog,
+	useAppTheme,
+} from '../../../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../../../styles/dimensions';
 import { HubService } from '../../../../../../services/hub.service';
+import { AccountService } from '../../../../../../database/entities/account';
+import useGlobalState from '../../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import useAppNavigator from '../../../../../../states/useAppNavigator';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -42,18 +50,59 @@ import { HubService } from '../../../../../../services/hub.service';
 // ];
 
 type PinnedTimelineItemProps = {
+	pinId: number;
+	account: Account;
 	label: string;
 	iconId: APP_ICON_ENUM;
 	server: string;
 };
 
 function PinnedTimelineItem({
+	pinId,
+	account,
 	label,
 	iconId,
 	server,
 }: PinnedTimelineItemProps) {
 	const { theme } = useAppTheme();
+	const { acct, db, loadApp } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			db: o.db,
+			loadApp: o.loadApp,
+		})),
+	);
+	const { show, hide } = useAppDialog();
+	const { toTimelineViaPin } = useAppNavigator();
+
 	const TEXT_COLOR = theme.secondary.a10; // theme.textColor.medium;
+
+	function onPress() {
+		if (account.id !== acct.id) {
+			show({
+				title: 'Account not Active',
+				description: [
+					'This account is not currently active.',
+					'Switch your currently selected account to proceed.',
+				],
+				actions: [
+					{
+						label: 'Switch & Continue',
+						onPress: () => {
+							AccountService.select(db, account);
+							loadApp().then(() => {
+								hide();
+								toTimelineViaPin(pinId, 'feed');
+							});
+						},
+					},
+				],
+			});
+			return;
+		} else {
+			toTimelineViaPin(pinId, 'feed');
+		}
+	}
 
 	return (
 		<View style={styles.buttonContainer}>
@@ -64,9 +113,7 @@ function PinnedTimelineItem({
 						backgroundColor: '#242424', // '#282828',
 					},
 				]}
-				onPress={() => {
-					router.push('/timelines');
-				}}
+				onPress={onPress}
 			>
 				<View style={styles.tiltedIconContainer}>
 					<AppIcon
@@ -103,14 +150,12 @@ function PinnedTimelineItem({
 }
 
 type SocialHubPinnedTimelinesProps = {
+	account: Account;
 	items: ProfilePinnedTimeline[];
-	refresh: () => void;
-	isRefreshing: boolean;
-	dispatch: Dispatch<socialHubTabReducerAction>;
 };
 
 const SocialHubPinnedTimelines = memo(
-	({ items }: SocialHubPinnedTimelinesProps) => {
+	({ items, account }: SocialHubPinnedTimelinesProps) => {
 		const destinations = HubService.resolveTimelineDestinations(items);
 		return (
 			<SocialHubPinSectionContainer label={'Timelines'} style={styles.root}>
@@ -119,9 +164,11 @@ const SocialHubPinnedTimelines = memo(
 					numColumns={2}
 					renderItem={({ item }) => (
 						<PinnedTimelineItem
+							pinId={item.pinId}
 							label={item.label}
 							iconId={item.iconId}
 							server={item.server}
+							account={account}
 						/>
 					)}
 				/>

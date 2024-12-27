@@ -213,10 +213,8 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 
 			{/* --- Pinned Timelines --- */}
 			<SocialHubPinnedTimelines
+				account={State.acct}
 				items={State.profiles[0].pins.timelines}
-				refresh={refresh}
-				isRefreshing={IsRefreshing}
-				dispatch={dispatch}
 			/>
 
 			{/* --- Pinned Users --- */}
