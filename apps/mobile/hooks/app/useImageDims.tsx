@@ -1,4 +1,4 @@
-import { AppActivityPubMediaType } from '../../types/app-post.types';
+import { AppMediaObject } from '../../types/app-post.types';
 import { useEffect, useRef, useState } from 'react';
 import MediaService from '../../services/media.service';
 import ImageUtils from '../../utils/image.utils';
@@ -8,7 +8,7 @@ import ImageUtils from '../../utils/image.utils';
  * for a fixed height container
  */
 export function useImageAutoHeight(
-	item: AppActivityPubMediaType,
+	item: AppMediaObject,
 	W: number,
 	maxH: number,
 ) {
@@ -77,7 +77,7 @@ export function useImageAutoHeight(
  * for a fixed height container
  */
 export function useImageAutoWidth(
-	item: AppActivityPubMediaType,
+	item: AppMediaObject,
 	H: number,
 	maxW: number,
 ) {

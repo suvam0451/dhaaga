@@ -60,7 +60,11 @@ class AccountSessionManager {
 			if (!allEmojis) return null;
 			store = allEmojis.data;
 		}
-		return store.find((o) => o.shortCode === id);
+		const found = store.find((o) => o.shortCode === id);
+		if (!found) {
+			console.log('emoji not resolved for', id, emojiMap);
+		}
+		return found;
 	}
 
 	/**

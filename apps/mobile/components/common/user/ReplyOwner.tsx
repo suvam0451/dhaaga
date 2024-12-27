@@ -3,10 +3,10 @@ import { Image } from 'expo-image';
 import useMfm from '../../hooks/useMfm';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../services/app-status-dto.service';
+import { AppPostObject } from '../../../types/app-post.types';
 
 type Props = {
-	dto: ActivityPubStatusAppDtoType_DEPRECATED;
+	dto: AppPostObject;
 };
 /**
  *

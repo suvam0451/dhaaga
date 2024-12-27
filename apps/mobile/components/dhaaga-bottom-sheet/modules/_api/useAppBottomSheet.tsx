@@ -14,7 +14,7 @@ import {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
 } from '../../../common/timeline/api/postArrayReducer';
-import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../../services/app-status-dto.service';
+import { AppPostObject } from '../../../../types/app-post.types';
 
 type Type = {
 	type: any;
@@ -33,10 +33,10 @@ type Type = {
 
 	// references
 	HandleRef: MutableRefObject<string>;
-	ParentRef: MutableRefObject<ActivityPubStatusAppDtoType_DEPRECATED>;
-	RootRef: MutableRefObject<ActivityPubStatusAppDtoType_DEPRECATED>;
+	ParentRef: MutableRefObject<AppPostObject>;
+	RootRef: MutableRefObject<AppPostObject>;
 	TextRef: MutableRefObject<string>;
-	PostRef: MutableRefObject<ActivityPubStatusAppDtoType_DEPRECATED>;
+	PostRef: MutableRefObject<AppPostObject>;
 	PostIdRef: MutableRefObject<string>;
 	UserRef: MutableRefObject<UserInterface>;
 	UserIdRef: MutableRefObject<string>;
@@ -98,13 +98,13 @@ function WithAppBottomSheetContext({ children }: Props) {
 	// pointers
 	const HandleRef = useRef<string>(null);
 	const TextRef = useRef<string>(null);
-	const PostRef = useRef<ActivityPubStatusAppDtoType_DEPRECATED>(null);
+	const PostRef = useRef<AppPostObject>(null);
 	const PostIdRef = useRef<string>(null);
 	const UserRef = useRef<UserInterface>(null);
 	const UserIdRef = useRef<string>(null);
 	const PostComposerTextSeedRef = useRef<string>(null);
-	const ParentRef = useRef<ActivityPubStatusAppDtoType_DEPRECATED>(null);
-	const RootRef = useRef<ActivityPubStatusAppDtoType_DEPRECATED>(null);
+	const ParentRef = useRef<AppPostObject>(null);
+	const RootRef = useRef<AppPostObject>(null);
 
 	// reducers
 	const timelineDataPostListReducer = useRef<

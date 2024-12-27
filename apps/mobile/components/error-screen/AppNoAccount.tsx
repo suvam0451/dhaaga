@@ -175,6 +175,7 @@ function AppNoAccount({ tab }: AppNoAccountProps) {
 					</Text>
 					{options.map((option, i) => (
 						<Pressable
+							key={i}
 							style={[
 								styles.selectSnsBox,
 								{
@@ -220,7 +221,6 @@ function AppNoAccount({ tab }: AppNoAccountProps) {
 						size={24}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 					/>
-
 					<Text
 						style={[
 							styles.tipText,

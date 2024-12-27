@@ -91,6 +91,7 @@ export enum ACTION {
 	UPDATE_TRANSLATION_OUTPUT,
 	UPDATE_LIKE_STATUS,
 	UPDATE_REACTION_STATE,
+	POST_OBJECT_CHANGED,
 }
 
 type Actions =
@@ -178,6 +179,12 @@ type Actions =
 			payload: {
 				id: string;
 				state: any;
+			};
+	  }
+	| {
+			type: ACTION.POST_OBJECT_CHANGED;
+			payload: {
+				item: AppPostObject;
 			};
 	  };
 
@@ -440,6 +447,17 @@ function reducer(state: State, action: Actions): State {
 					if (post.boostedFrom?.id === _id)
 						post.boostedFrom.stats.reactions = data;
 				}
+			});
+		}
+
+		case ACTION.POST_OBJECT_CHANGED: {
+			const newItem = action.payload.item;
+			if (!newItem) return state;
+
+			return produce(state, (draft) => {
+				draft.items = draft.items.map((post) =>
+					post.id === newItem.id ? newItem : post,
+				);
 			});
 		}
 	}

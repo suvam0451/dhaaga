@@ -1,12 +1,11 @@
-import { AppActivityPubMediaType } from '../../../services/app-status-dto.service';
 import { FlatList, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useImageAutoHeight } from '../../../hooks/app/useImageDims';
 import { appDimensions } from '../../../styles/dimensions';
-import { AppPostObject } from '../../../types/app-post.types';
+import { AppMediaObject, AppPostObject } from '../../../types/app-post.types';
 
 type ThumbItemProps = {
-	item: AppActivityPubMediaType;
+	item: AppMediaObject;
 	post: AppPostObject;
 };
 
@@ -21,7 +20,7 @@ function ThumbItem({ item, post }: ThumbItemProps) {
 				contentFit="fill"
 				style={{
 					// flex: 1,
-					borderRadius: 16,
+					borderRadius: 8,
 					opacity: 0.87,
 					width: Data.width,
 					height: Data.height,
@@ -29,7 +28,7 @@ function ThumbItem({ item, post }: ThumbItemProps) {
 					justifyContent: 'center',
 				}}
 				source={{
-					uri: item.previewUrl,
+					uri: item.url || item.previewUrl,
 				}}
 				transition={{
 					effect: 'flip-from-right',
@@ -42,7 +41,7 @@ function ThumbItem({ item, post }: ThumbItemProps) {
 }
 
 type Props = {
-	items: AppActivityPubMediaType[];
+	items: AppMediaObject[];
 	post: AppPostObject;
 };
 

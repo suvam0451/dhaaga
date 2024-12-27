@@ -11,7 +11,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -20,6 +19,7 @@ import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { AppUserObject } from '../../../../../types/app-user.types';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -76,11 +76,7 @@ export const NotificationSender = memo(
 		remoteSubdomain,
 		createdAt,
 	}: Props) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 
 		const { find } = useAppCustomEmoji();
 		const { Icon, bg } = useMemo(() => {
@@ -328,15 +324,6 @@ export const NotificationSenderInterface = memo(
 		 * the entire modal
 		 */
 		function onPress() {
-			if (driver === KNOWN_SOFTWARE.MASTODON) {
-				// forward existing ref
-				// UserRef.current = acct;
-				// UserIdRef.current = acct.getId();
-			} else {
-				// request info be fetched
-				// UserRef.current = null;
-				// UserIdRef.current = acct.getId();
-			}
 			show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 		}
 

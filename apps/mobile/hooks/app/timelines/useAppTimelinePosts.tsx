@@ -18,12 +18,12 @@ import postArrayReducer, {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
 } from '../../../components/common/timeline/api/postArrayReducer';
-import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../services/app-status-dto.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppPostObject } from '../../../types/app-post.types';
 
 type Type = {
-	data: ActivityPubStatusAppDtoType_DEPRECATED[];
+	data: AppPostObject[];
 	addPosts: (items: StatusInterface[]) => void;
 	clear: () => void;
 	/**
@@ -201,13 +201,6 @@ function WithAppTimelineDataContext({ children }: Props) {
 					setLoading(false);
 					return;
 				}
-				postListReducer({
-					type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
-					payload: {
-						id: key,
-						value: res,
-					},
-				});
 			} finally {
 				setLoading(false);
 			}
@@ -219,36 +212,6 @@ function WithAppTimelineDataContext({ children }: Props) {
 		(key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
 			if (!client) return;
 			setLoading(true);
-			const match = findById(key);
-			if (!match) {
-				setLoading(false);
-				return;
-			}
-
-			// apply operation to current post
-			// exclude boost (not quotes)
-			let target = !!match.boostedFrom
-				? match.boostedFrom.interaction.bookmarked
-				: match.interaction.bookmarked;
-
-			ActivityPubService.toggleBookmark(client, key, target)
-				.then((res) => {
-					postListReducer({
-						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
-						payload: {
-							id: key,
-							value: res,
-						},
-					});
-				})
-				.catch((e) => {
-					console.log('[WARN]: could not toggle bookmark', e);
-				})
-				.finally(() => {
-					Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).finally(() => {
-						setLoading(false);
-					});
-				});
 		},
 		[Posts],
 	);
@@ -257,35 +220,6 @@ function WithAppTimelineDataContext({ children }: Props) {
 		async (key: string, setLoading: Dispatch<SetStateAction<boolean>>) => {
 			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).then(() => {});
 			setLoading(true);
-			const match = findById(key);
-
-			// apply operation to current post
-			// exclude boost (not quotes)
-			let target = !!match.boostedFrom
-				? match.boostedFrom.interaction.liked
-				: match.interaction.liked;
-
-			try {
-				const response = await ActivityPubService.toggleLike(
-					client,
-					key,
-					target,
-					driver,
-				);
-				if (response !== null) {
-					postListReducer({
-						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_LIKE_STATUS,
-						payload: {
-							id: key,
-							delta: response,
-						},
-					});
-				}
-			} catch (e) {
-				console.log('error', e);
-			} finally {
-				setLoading(false);
-			}
 		},
 		[Posts, driver],
 	);

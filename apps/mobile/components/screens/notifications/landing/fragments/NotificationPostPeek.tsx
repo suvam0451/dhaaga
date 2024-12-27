@@ -1,11 +1,11 @@
-import { Fragment, memo } from 'react';
+import { memo } from 'react';
 import useMfm from '../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Pressable, View } from 'react-native';
 import useAppNavigator from '../../../../../states/useAppNavigator';
 import {
 	AppPostObject,
-	AppActivityPubMediaType,
+	AppMediaObject,
 } from '../../../../../types/app-post.types';
 import NotificationMediaThumbs from '../../../../common/media/NotificationMediaThumbs';
 import { appDimensions } from '../../../../../styles/dimensions';
@@ -18,7 +18,7 @@ type Props = {
 };
 
 type MediaGalleryProps = {
-	items: AppActivityPubMediaType[];
+	items: AppMediaObject[];
 };
 
 function PostMediaGallery({ items }: MediaGalleryProps) {
@@ -39,7 +39,7 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 	const { content } = useMfm({
 		content: _post.content.raw,
 		remoteSubdomain: acct.instance,
-		emojiMap: acct.calculated.emojis,
+		emojiMap: _post.calculated.emojis,
 		deps: [_post.content.raw],
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
@@ -53,16 +53,13 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 	}
 
 	return (
-		<Fragment>
-			<NotificationMediaThumbs
-				items={_post?.content?.media}
-				maxH={_post?.calculated?.mediaContainerHeight}
-			/>
+		<View>
+			<NotificationMediaThumbs post={_post} items={_post?.content?.media} />
 			<View
 				style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
 			>
 				<Pressable onPress={onPress}>{content}</Pressable>
 			</View>
-		</Fragment>
+		</View>
 	);
 });

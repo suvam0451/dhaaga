@@ -9,10 +9,10 @@ import {
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
 import useGalleryDims from '../../../hooks/app/useGalleryDims';
-import { AppActivityPubMediaType } from '../../../services/app-status-dto.service';
+import { AppMediaObject } from '../../../types/app-post.types';
 
 type ImageCarousalProps = {
-	attachments: AppActivityPubMediaType[];
+	attachments: AppMediaObject[];
 	calculatedHeight: number;
 };
 
@@ -26,7 +26,7 @@ const TimelineMediaRendered = memo(function Foo({
 	index,
 	totalCount,
 }: {
-	attachment: AppActivityPubMediaType;
+	attachment: AppMediaObject;
 	CalculatedHeight: number;
 	altText?: string;
 	index?: number;

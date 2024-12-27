@@ -8,19 +8,19 @@ import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/use
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
 import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
-import { ActivityPubStatusAppDtoType_DEPRECATED } from '../../../../services/app-status-dto.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
+import { AppPostObject } from '../../../../types/app-post.types';
 
 const EmojiReaction = memo(function Foo({
 	dto,
 	postDto,
 }: {
 	dto: EmojiDto;
-	postDto: ActivityPubStatusAppDtoType_DEPRECATED;
+	postDto: AppPostObject;
 }) {
 	const { driver, acct, client, show } = useGlobalState(
 		useShallow((o) => ({

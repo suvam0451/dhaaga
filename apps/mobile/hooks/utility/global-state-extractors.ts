@@ -41,6 +41,15 @@ export function useAppTheme() {
 	);
 }
 
+export function useAppPublishers() {
+	return useGlobalState(
+		useShallow((o) => ({
+			postPub: o.publishers.postPub,
+			userPub: o.publishers.userPub,
+		})),
+	);
+}
+
 export function useAppBottomSheet_Improved() {
 	return useGlobalState(
 		useShallow((o) => ({

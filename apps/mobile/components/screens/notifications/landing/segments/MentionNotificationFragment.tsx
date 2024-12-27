@@ -1,67 +1,25 @@
 import { memo } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
 import { Props, styles } from './_common';
 import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
-import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
-import { APP_FONT } from '../../../../../styles/AppTheme';
-import Entypo from '@expo/vector-icons/Entypo';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { AppDivider } from '../../../../lib/Divider';
 
 const MentionNotificationFragment = memo(({ item }: Props) => {
 	const user = item.user;
 	const post = item.post;
 
+	console.log(post.calculated.emojis);
 	return (
-		<View style={styles.container}>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-				}}
-			>
-				<NotificationSenderInterface
-					user={user}
-					type={DhaagaJsNotificationType.MENTION}
-					createdAt={item.createdAt}
-				/>
-				{/*<View style={{ flexDirection: 'row' }}>*/}
-				{/*	<TouchableOpacity*/}
-				{/*		style={{*/}
-				{/*			backgroundColor: '#121212',*/}
-				{/*			paddingHorizontal: 12,*/}
-				{/*			paddingVertical: 8,*/}
-				{/*			borderRadius: 8,*/}
-				{/*		}}*/}
-				{/*	>*/}
-				{/*		<Entypo name="reply" size={20} color={APP_FONT.DISABLED} />*/}
-				{/*	</TouchableOpacity>*/}
-				{/*	<TouchableOpacity*/}
-				{/*		style={{*/}
-				{/*			backgroundColor: '#121212',*/}
-				{/*			paddingHorizontal: 12,*/}
-				{/*			paddingVertical: 8,*/}
-				{/*			borderRadius: 8,*/}
-				{/*			marginLeft: 8,*/}
-				{/*		}}*/}
-				{/*	>*/}
-				{/*		<MaterialIcons*/}
-				{/*			name="add-reaction"*/}
-				{/*			size={20}*/}
-				{/*			color={APP_FONT.DISABLED}*/}
-				{/*		/>*/}
-				{/*	</TouchableOpacity>*/}
-				{/*</View>*/}
-			</View>
-
-			<NotificationDescriptionText
+		<View style={[styles.container]}>
+			<NotificationSenderInterface
+				user={user}
 				type={DhaagaJsNotificationType.MENTION}
 				createdAt={item.createdAt}
-				id={item.id}
 			/>
 			<NotificationPostPeek acct={user} post={post} />
+			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 });

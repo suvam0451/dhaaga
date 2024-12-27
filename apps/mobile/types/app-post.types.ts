@@ -9,6 +9,7 @@ import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../components/common/media/_common';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { ActivityPubReactionStateDto } from '../services/approto/activitypub-reactions.service';
+import { RandomUtil } from '../utils/random.utils';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -28,7 +29,7 @@ export const AppActivityPubMediaDto = z.object({
 	blurhash: z.string().nullable(),
 });
 
-export type AppActivityPubMediaType = z.infer<typeof AppActivityPubMediaDto>;
+export type AppMediaObject = z.infer<typeof AppActivityPubMediaDto>;
 
 export const AppPostStatsDto = z.object({
 	replyCount: z.number().nonnegative(),
@@ -48,6 +49,10 @@ export type AppPostStats = z.infer<typeof AppPostStatsDto>;
  * for efficient list renders
  */
 export const ActivityPubStatusItemDto = z.object({
+	/**
+	 * This is the in-app id
+	 */
+	uuid: z.string(),
 	/**
 	 * This is the original status id
 	 */
@@ -175,6 +180,7 @@ export class AppStatusDtoService {
 		].includes(domain as any);
 
 		return {
+			uuid: RandomUtil.nanoId(),
 			id: input.getId(),
 			visibility: input.getVisibility(),
 			createdAt: input.getCreatedAt(),

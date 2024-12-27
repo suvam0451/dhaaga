@@ -5,11 +5,12 @@ import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
 import AppNoAccount from '../../../error-screen/AppNoAccount';
 import { APP_LANDING_PAGE_TYPE } from '../../../shared/topnavbar/AppTabLandingNavbar';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 function LandingPageStack() {
-	const { theme, acct } = useGlobalState(
+	const { theme } = useAppTheme();
+	const { acct } = useGlobalState(
 		useShallow((o) => ({
-			theme: o.colorScheme,
 			acct: o.acct,
 		})),
 	);

@@ -12,8 +12,6 @@ import {
 	useState,
 } from 'react';
 import { mastodon } from '@dhaaga/shared-provider-mastodon';
-import { StatusContextInterface } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
-import { ActivityPubStatusContextAdapter } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_adapters';
 import MastodonService from '../services/mastodon.service';
 import ActivityPubAdapterService from '../services/activitypub-adapter.service';
 import useHookLoadingState from './useHookLoadingState';

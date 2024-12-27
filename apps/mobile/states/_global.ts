@@ -32,6 +32,7 @@ import {
 	AppTimelineReducerStateType,
 } from './reducers/timeline.reducer';
 import { TimelineSessionService } from '../services/session/timeline-session.service';
+import { PostPublisherService } from '../services/publishers/post.publisher';
 
 type AppThemePack = {
 	id: string;
@@ -78,21 +79,24 @@ type AppDialogState = {
 	hide: () => void;
 };
 
+type AppPubSubState = {
+	postPub: PostPublisherService;
+	userPub: PostPublisherService;
+};
+
 type AppBottomSheetState = {
 	type: APP_BOTTOM_SHEET_ENUM;
 
-	stateId: string;
-	// a way to notify sheet closing event
+	stateId: string; // a way to notify sheet closing event
 	endSessionSeed: string;
 
 	refresh: () => void;
 	setType: (type: APP_BOTTOM_SHEET_ENUM) => void;
-	visible: boolean;
-	/**
+	visible: boolean /**
 	 * present the modal
 	 * @param type set the type of modal to show
 	 * @param refresh also perform a refresh
-	 */
+	 */;
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
 
@@ -127,6 +131,8 @@ type State = {
 	profileSessionManager: ProfileSessionManager | null;
 	appSession: AppSessionManager | null;
 	acctManager: AccountSessionManager | null;
+
+	publishers: AppPubSubState;
 
 	/**
 	 * fetched account credentials
@@ -193,8 +199,7 @@ type Actions = {
 	getPacks: () => AppThemePack[];
 	setPack: (packId: string) => void;
 	appInitialize: (db: SQLiteDatabase) => void;
-	loadApp: () => Promise<void>;
-	// loa/switch a profile
+	loadApp: () => Promise<void>; // loa/switch a profile
 	loadActiveProfile: (profile?: Profile) => void;
 };
 
@@ -289,6 +294,10 @@ const useGlobalState = create<State & Actions>()(
 		selectAccount: async (selection: Account) => {
 			AccountService.select(get().db, selection);
 		},
+		publishers: {
+			postPub: null,
+			userPub: null,
+		},
 		loadActiveProfile: async () => {
 			// load default profile/account
 			const x = new ProfileSessionManager(get().db);
@@ -317,6 +326,10 @@ const useGlobalState = create<State & Actions>()(
 					);
 					state.router = restoreResult.value.router;
 					state.driver = restoreResult.value.acct.driver as KNOWN_SOFTWARE;
+					state.publishers.postPub = new PostPublisherService(
+						restoreResult.value.acct.driver as KNOWN_SOFTWARE,
+						restoreResult.value.router,
+					);
 				} else {
 					state.acct = null;
 					state.router = null;
