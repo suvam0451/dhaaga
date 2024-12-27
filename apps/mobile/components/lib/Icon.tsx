@@ -53,6 +53,7 @@ export type APP_ICON_ENUM =
 	| 'eye-filled'
 	| 'eye-off-filled'
 	| 'gallery'
+	| 'globe'
 	| 'heart'
 	| 'heart-outline'
 	| 'home'
@@ -63,9 +64,11 @@ export type APP_ICON_ENUM =
 	| 'menu'
 	| 'message'
 	| 'more-options-vertical'
+	| 'musical-notes-outline'
 	| 'newspaper'
 	| 'no-account'
 	| 'palette'
+	| 'people'
 	| 'phonebook'
 	| 'pin'
 	| 'pin-octicons'
@@ -520,6 +523,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'globe':
+					return (
+						<Feather
+							name="globe"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'heart':
 					return (
 						<Ionicons
@@ -630,6 +643,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'musical-notes-outline':
+					return (
+						<Ionicons
+							name={'musical-notes-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'newspaper':
 					return (
 						<Ionicons
@@ -654,6 +677,16 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="color-palette-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'people':
+					return (
+						<Ionicons
+							name="people"
 							size={_size}
 							color={_color}
 							onPress={onPress}

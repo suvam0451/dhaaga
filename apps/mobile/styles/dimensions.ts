@@ -9,4 +9,9 @@ export const appDimensions = {
 	buttons: {
 		borderRadius: 8,
 	},
+	socialHub: {
+		feeds: {
+			tiltedIconSize: 48,
+		},
+	},
 };
