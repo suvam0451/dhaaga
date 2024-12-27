@@ -23,6 +23,9 @@ import {
 import AppBottomSheetAddBookmark from './modules/AppBottomSheetAddBookmark';
 import ABS_Add_Hub_Tag from './modules/ABS_Add_Hub_Tag';
 import ABS_Add_Hub_User from './modules/ABS_Add_Hub_User';
+import ABS_Post_Show_Comments from './modules/ABS_Post_Show_Comments';
+import ABS_Post_Show_Likes from './modules/ABS_Post_Show_Likes';
+import ABS_Post_Show_Shares from './modules/ABS_Post_Show_Shares';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	QUICK_POST = 'QuickPost',
@@ -43,6 +46,10 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	ADD_BOOKMARK = 'AddBookmark',
 	ADD_HUB_TAG = 'AddHubTag',
 	ADD_HUB_USER = 'AddHubUser',
+
+	POST_SHOW_REPLIES = 'PostShowReplies',
+	POST_SHOW_LIKES = 'PostShowLikes',
+	POST_SHOW_SHARES = 'PostShowShares',
 }
 
 /**
@@ -87,6 +94,13 @@ function Factory() {
 				return <ABS_Add_Hub_Tag />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
 				return <ABS_Add_Hub_User />;
+			case APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES:
+				return <ABS_Post_Show_Comments />;
+			case APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES:
+				return <ABS_Post_Show_Likes />;
+			case APP_BOTTOM_SHEET_ENUM.POST_SHOW_SHARES:
+				return <ABS_Post_Show_Shares />;
+
 			default: {
 				return (
 					<WithComposerContext>

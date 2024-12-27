@@ -81,10 +81,20 @@ class AccountSessionManager {
 			name?: string;
 		}[],
 	) {
+		let store = this.serverReactionCache;
+		if (!store) {
+			const allEmojis = this.storage.getEmojis(this.acct.server);
+			if (!allEmojis) {
+				store = [];
+			} else {
+				store = allEmojis.data;
+			}
+		}
+
 		return ActivityPubReactionsService.renderData(reactions, {
 			me: this.acct.identifier,
 			calculated: preCalculated,
-			cache: this.serverReactionCache || [],
+			cache: store,
 		});
 	}
 }

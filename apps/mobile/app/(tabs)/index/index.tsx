@@ -31,12 +31,7 @@ type HubGreetingFragmentProps = {
 	driver: string;
 };
 
-function HubGreetingFragment({
-	greeting,
-	desc,
-	driver,
-	acct,
-}: HubGreetingFragmentProps) {
+function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 	const { theme } = useAppTheme();
 	const fontStyle = {
 		color: theme.textColor.medium,
@@ -134,22 +129,12 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 				);
 			case TIME_OF_DAY.NIGHT:
 				return (
-					<Fragment>
-						<Text style={fontStyle}>Good Night, {acct?.displayName}</Text>
-						<Text
-							style={{
-								fontSize: 72,
-								position: 'absolute',
-								textAlign: 'right',
-								zIndex: -1,
-								opacity: 0.28,
-								width: '100%',
-								top: -32,
-							}}
-						>
-							🌙
-						</Text>
-					</Fragment>
+					<HubGreetingFragment
+						acct={acct}
+						driver={acct.driver}
+						greeting={`Good Night`}
+						desc={`@${acct.username}@${acct.server}`}
+					/>
 				);
 		}
 	}, [acct]);

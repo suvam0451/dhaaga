@@ -100,6 +100,9 @@ type AppBottomSheetState = {
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
 
+	ctx: object;
+	setCtx: (ctx: object) => void;
+
 	broadcastEndSession: () => void;
 
 	/**
@@ -342,6 +345,12 @@ const useGlobalState = create<State & Actions>()(
 			visible: false,
 			stateId: RandomUtil.nanoId(),
 			endSessionSeed: RandomUtil.nanoId(),
+			ctx: null,
+			setCtx: function (ctx: object) {
+				set((state) => {
+					state.bottomSheet.ctx = ctx;
+				});
+			},
 			refresh: function (): void {
 				set((state) => {
 					state.bottomSheet.stateId = RandomUtil.nanoId();

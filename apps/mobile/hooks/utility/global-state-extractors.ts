@@ -61,6 +61,8 @@ export function useAppBottomSheet_Improved() {
 			visible: o.bottomSheet.visible,
 			endSessionSeed: o.bottomSheet.endSessionSeed,
 			broadcastEndSession: o.bottomSheet.broadcastEndSession,
+			ctx: o.bottomSheet.ctx,
+			setCtx: o.bottomSheet.setCtx,
 		})),
 	);
 }

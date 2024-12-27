@@ -1,10 +1,19 @@
-import { Fragment, memo } from 'react';
-import { View, StyleSheet, ViewStyle, StyleProp, Text } from 'react-native';
-import { APP_FONT } from '../../../styles/AppTheme';
+import { memo } from 'react';
+import {
+	Pressable,
+	StyleProp,
+	StyleSheet,
+	Text,
+	View,
+	ViewStyle,
+} from 'react-native';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppPostObject } from '../../../types/app-post.types';
+import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
+import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
+import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
 type StatItemProps = {
 	count: number;
@@ -24,30 +33,32 @@ function util(o: number): string {
 /**
  * Shows a post stat
  */
-const StatItem = memo(({ count, label, nextCounts }: StatItemProps) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+const StatItem = memo(
+	({ count, label, nextCounts, onPress }: StatItemProps) => {
+		const { theme } = useGlobalState(
+			useShallow((o) => ({
+				theme: o.colorScheme,
+			})),
+		);
 
-	const formatted = util(count);
+		const formatted = util(count);
 
-	const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
-	if (count === 0) return <View />;
-	return (
-		<Fragment>
-			<Text style={[styles.text, { color: theme.complementary.a0 }]}>
-				{formatted} {label}
-			</Text>
-			{SHOW_TRAILING_BULLET && (
-				<Text style={[{ color: theme.secondary.a30, marginHorizontal: 6 }]}>
-					&bull;
+		const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
+		if (count === 0) return <View />;
+		return (
+			<Pressable onPress={onPress}>
+				<Text style={[styles.text, { color: theme.complementary.a0 }]}>
+					{formatted} {label}
 				</Text>
-			)}
-		</Fragment>
-	);
-});
+				{SHOW_TRAILING_BULLET && (
+					<Text style={[{ color: theme.secondary.a30, marginHorizontal: 6 }]}>
+						&bull;
+					</Text>
+				)}
+			</Pressable>
+		);
+	},
+);
 
 /**
  * Show metrics for a post
@@ -57,12 +68,13 @@ const StatItem = memo(({ count, label, nextCounts }: StatItemProps) => {
  * @constructor
  */
 const PostStats = memo(function Foo({
-	dto,
 	style,
 }: {
 	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
 }) {
+	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { dto } = useAppStatusItem();
 	const LIKE_COUNT = dto.stats.likeCount;
 	const REPLY_COUNT = dto.stats.replyCount;
 	const SHARE_COUNT = dto.stats.boostCount;
@@ -70,25 +82,40 @@ const PostStats = memo(function Foo({
 	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1)
 		return <View></View>;
 
+	function onPressLikeCounter() {
+		setCtx({ uuid: dto.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES, true);
+	}
+
+	function onPressShareCounter() {
+		setCtx({ uuid: dto.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_SHARES, true);
+	}
+
+	function onPressCommentCounter() {
+		setCtx({ uuid: dto.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES, true);
+	}
+
 	return (
 		<View style={[styles.container, style]}>
 			<StatItem
 				count={LIKE_COUNT}
 				label={'Likes'}
 				nextCounts={[REPLY_COUNT, SHARE_COUNT]}
-				onPress={() => {}}
+				onPress={onPressLikeCounter}
 			/>
 			<StatItem
 				count={SHARE_COUNT}
 				label={'Shares'}
 				nextCounts={[REPLY_COUNT]}
-				onPress={() => {}}
+				onPress={onPressShareCounter}
 			/>
 			<StatItem
 				count={REPLY_COUNT}
 				label={'Replies'}
 				nextCounts={[]}
-				onPress={() => {}}
+				onPress={onPressCommentCounter}
 			/>
 		</View>
 	);
@@ -107,9 +134,7 @@ const styles = StyleSheet.create({
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 	bull: {
-		// color: APP_FONT.MEDIUM_EMPHASIS,
 		marginHorizontal: 2,
-		// opacity: 0.3,
 	},
 });
 export default PostStats;
