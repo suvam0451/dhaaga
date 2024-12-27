@@ -23,6 +23,7 @@ import {
 	ProfilePinnedUser,
 } from '../../database/_schema';
 import {
+	useAppBottomSheet_Improved,
 	useAppDialog,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
@@ -35,20 +36,27 @@ import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../database/entities/account';
 import * as Haptics from 'expo-haptics';
+import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
 
 function Pinned_Users_LastItem() {
 	const { theme } = useAppTheme();
+	const { show } = useAppBottomSheet_Improved();
+
+	function onPress() {
+		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
+	}
 	return (
-		<View
+		<Pressable
 			style={{
 				flex: 1,
 				marginBottom: 8,
 				maxWidth: '25%',
 				height: '100%',
 			}}
+			onPress={onPress}
 		>
 			<View
 				style={{
@@ -83,7 +91,7 @@ function Pinned_Users_LastItem() {
 					</View>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	);
 }
 
@@ -115,12 +123,15 @@ function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 				actions: [
 					{
 						label: 'Switch & Continue',
-						onPress: () => {
+						onPress: async () => {
 							AccountService.select(db, account);
-							loadApp().then(() => {
+							try {
+								await loadApp();
 								hide();
 								toTimelineViaPin(item.id, 'user');
-							});
+							} catch (e) {
+								hide();
+							}
 						},
 					},
 				],
@@ -202,6 +213,7 @@ type PinnedTag_ListItemProps = {
 
 function Pinned_Tags_ListItem({ item }: PinnedTag_ListItemProps) {
 	const { theme } = useAppTheme();
+	const { show } = useAppBottomSheet_Improved();
 
 	function onPressAddedTag() {
 		if (item.type === 'eol') return;
@@ -225,7 +237,9 @@ function Pinned_Tags_ListItem({ item }: PinnedTag_ListItemProps) {
 		}
 	}
 
-	function onPressAddTag() {}
+	function onPressAddTag() {
+		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG, true);
+	}
 
 	if (item.type === 'entry') {
 		return (

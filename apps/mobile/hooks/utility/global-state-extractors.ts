@@ -44,6 +44,7 @@ export function useAppTheme() {
 export function useAppBottomSheet_Improved() {
 	return useGlobalState(
 		useShallow((o) => ({
+			type: o.bottomSheet.type,
 			hide: o.bottomSheet.hide,
 			show: o.bottomSheet.show,
 			stateId: o.bottomSheet.stateId,

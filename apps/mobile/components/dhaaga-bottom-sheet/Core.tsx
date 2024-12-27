@@ -2,8 +2,6 @@ import { Fragment, memo, useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import AppBottomSheetQuickPost from './modules/AppBottomSheetQuickPost';
 import PostPreview from './modules/post-preview/PostPreview';
 import WithComposerContext from './modules/post-composer/api/useComposerContext';
@@ -23,6 +21,8 @@ import {
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import AppBottomSheetAddBookmark from './modules/AppBottomSheetAddBookmark';
+import ABS_Add_Hub_Tag from './modules/ABS_Add_Hub_Tag';
+import ABS_Add_Hub_User from './modules/ABS_Add_Hub_User';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	QUICK_POST = 'QuickPost',
@@ -41,19 +41,15 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	SWITCH_THEME_PACK = 'SwitchThemePack',
 	TIMELINE_CONTROLLER = 'TimeLineController',
 	ADD_BOOKMARK = 'AddBookmark',
+	ADD_HUB_TAG = 'AddHubTag',
+	ADD_HUB_USER = 'AddHubUser',
 }
 
 /**
  * Responsible for generating content
  */
-const Factory = memo(() => {
-	const { type, stateId } = useGlobalState(
-		useShallow((o) => ({
-			type: o.bottomSheet.type,
-			stateId: o.bottomSheet.stateId,
-			// PostComposerTextSeedRef: o.bottomSheet.PostComposerTextSeedRef,
-		})),
-	);
+function Factory() {
+	const { type, stateId } = useAppBottomSheet_Improved();
 	return useMemo(() => {
 		switch (type) {
 			case APP_BOTTOM_SHEET_ENUM.QUICK_POST:
@@ -87,6 +83,10 @@ const Factory = memo(() => {
 				return <AppBottomSheetUserMoreActions />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
 				return <AppBottomSheetAddBookmark />;
+			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
+				return <ABS_Add_Hub_Tag />;
+			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
+				return <ABS_Add_Hub_User />;
 			default: {
 				return (
 					<WithComposerContext>
@@ -96,7 +96,7 @@ const Factory = memo(() => {
 			}
 		}
 	}, [type, stateId]);
-});
+}
 
 /**
  * Switches what module will be shown

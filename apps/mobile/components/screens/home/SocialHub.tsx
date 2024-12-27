@@ -146,10 +146,9 @@ type SocialHubTabProps = {
  * represent a unique profile each
  */
 function SocialHubTab({ account }: SocialHubTabProps) {
-	const { db, acct } = useGlobalState(
+	const { db } = useGlobalState(
 		useShallow((o) => ({
 			db: o.db,
-			acct: o.acct,
 		})),
 	);
 	const [State, dispatch] = useReducer(
