@@ -1,10 +1,11 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { Text } from 'react-native';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../states/_global';
 import { RandomUtil } from '../../../utils/random.utils';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type Props = {
 	value: string;
@@ -23,15 +24,6 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 	const { acceptTouch } = useAppMfmContext();
 	const _value = decodeURI(value);
 
-	const item = null;
-
-	const { isFollowed, isPrivatelyFollowed } = useMemo(() => {
-		return {
-			isFollowed: item && item.following,
-			isPrivatelyFollowed: item && item.privatelyFollowing,
-		};
-	}, [item?.following, item?.privatelyFollowing]);
-
 	const onPress = () => {
 		if (!acceptTouch) return;
 		appSession.storage.setTagTarget(_value);
@@ -40,24 +32,25 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 	const k = RandomUtil.nanoId();
 
 	return (
-		<Text
-			onPress={onPress}
-			key={k}
-			style={{
-				color: theme.complementaryB.a0,
-				// isFollowed
-				// 	? theme.palette.hashtagHigh
-				// 	: theme.palette.hashtagLow,
-				fontFamily: fontFamily,
-				// fontFamily: isFollowed
-				// 	? APP_FONTS.MONTSERRAT_700_BOLD
-				// 	: APP_FONTS.MONTSERRAT_400_REGULAR,
-				backgroundColor: isPrivatelyFollowed
-					? 'rgba(240,185,56,0.16)'
-					: undefined,
-			}}
-		>
-			#{_value}
+		<Text key={k}>
+			<Text
+				style={{
+					color: theme.secondary.a40,
+					fontFamily: APP_FONTS.INTER_400_REGULAR,
+					fontSize: 12,
+				}}
+			>
+				#
+			</Text>
+			<Text
+				onPress={onPress}
+				style={{
+					color: theme.complementary.a0,
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+				}}
+			>
+				{_value}
+			</Text>
 		</Text>
 	);
 });

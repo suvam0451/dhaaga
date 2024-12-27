@@ -496,7 +496,7 @@ export const AppIcon = memo(
 				case 'eye-filled':
 					return (
 						<Ionicons
-							name="eye-filled"
+							name="eye"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -506,7 +506,7 @@ export const AppIcon = memo(
 				case 'eye-off-filled':
 					return (
 						<Ionicons
-							name="eye-off-filled"
+							name="eye-off"
 							size={_size}
 							color={_color}
 							onPress={onPress}

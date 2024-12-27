@@ -39,7 +39,10 @@ function LinkProcessor({
 		}
 	}, [fontFamily, emphasis]);
 
-	const linkDisplayName = TextUtils.displayNameForLink(displayName);
+	const linkDisplayName = TextUtils.shorten(
+		TextUtils.displayNameForLink(displayName),
+		28,
+	);
 
 	const { show, appSession } = useGlobalState(
 		useShallow((o) => ({
@@ -68,6 +71,7 @@ function LinkProcessor({
 			}}
 			onPress={onTextPress}
 			onTextLayout={onTextLayout}
+			numberOfLines={1}
 		>
 			{displayName ? linkDisplayName : Result}
 		</Text>
