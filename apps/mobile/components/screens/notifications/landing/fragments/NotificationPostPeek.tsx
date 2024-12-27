@@ -3,27 +3,18 @@ import useMfm from '../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Pressable, View } from 'react-native';
 import useAppNavigator from '../../../../../states/useAppNavigator';
-import {
-	AppPostObject,
-	AppMediaObject,
-} from '../../../../../types/app-post.types';
+import { AppPostObject } from '../../../../../types/app-post.types';
 import NotificationMediaThumbs from '../../../../common/media/NotificationMediaThumbs';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 import { AppUserObject } from '../../../../../types/app-user.types';
+import useGlobalState from '../../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	acct: AppUserObject;
 	post: AppPostObject;
 };
-
-type MediaGalleryProps = {
-	items: AppMediaObject[];
-};
-
-function PostMediaGallery({ items }: MediaGalleryProps) {
-	if (items.length === 0) return <View />;
-}
 
 /**
  * Shows a preview of the status being liked/boosted,
@@ -31,6 +22,11 @@ function PostMediaGallery({ items }: MediaGalleryProps) {
  * - upto 3 lines for text-only posts
  */
 export const NotificationPostPeek = memo(({ acct, post }: Props) => {
+	const { driver } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+		})),
+	);
 	let _post = post;
 	if (post.boostedFrom) {
 		_post = post.boostedFrom;
@@ -54,7 +50,11 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 
 	return (
 		<View>
-			<NotificationMediaThumbs post={_post} items={_post?.content?.media} />
+			<NotificationMediaThumbs
+				post={_post}
+				items={_post?.content?.media}
+				server={driver}
+			/>
 			<View
 				style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
 			>

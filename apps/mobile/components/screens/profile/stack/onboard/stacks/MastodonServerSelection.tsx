@@ -19,29 +19,35 @@ import { useAppManager } from '../../../../../../hooks/utility/global-state-extr
 function AccountsScreen() {
 	const { appManager } = useAppManager();
 	const [Subdomain, setSubdomain] = useState('mastodon.social');
+	const [IsLoading, setIsLoading] = useState(false);
 
 	async function onPressNext() {
-		const signInStrategy = await ActivityPubService.signInUrl(
-			Subdomain,
-			appManager,
-		);
-		if (signInStrategy?.clientId && signInStrategy?.clientSecret) {
-			appManager.storage.setAtprotoServerClientTokens(
+		setIsLoading(true);
+		try {
+			const signInStrategy = await ActivityPubService.signInUrl(
 				Subdomain,
-				signInStrategy?.clientId,
-				signInStrategy?.clientSecret,
+				appManager,
 			);
+			if (signInStrategy?.clientId && signInStrategy?.clientSecret) {
+				appManager.storage.setAtprotoServerClientTokens(
+					Subdomain,
+					signInStrategy?.clientId,
+					signInStrategy?.clientSecret,
+				);
+			}
+			router.push({
+				pathname: 'profile/onboard/signin-md',
+				params: {
+					signInUrl: signInStrategy?.loginUrl,
+					subdomain: Subdomain,
+					domain: signInStrategy?.software,
+					clientId: signInStrategy?.clientId,
+					clientSecret: signInStrategy?.clientSecret,
+				},
+			});
+		} finally {
+			setIsLoading(false);
 		}
-		router.push({
-			pathname: 'profile/onboard/signin-md',
-			params: {
-				signInUrl: signInStrategy?.loginUrl,
-				subdomain: Subdomain,
-				domain: signInStrategy?.software,
-				clientId: signInStrategy?.clientId,
-				clientSecret: signInStrategy?.clientSecret,
-			},
-		});
 	}
 
 	const { translateY } = useScrollMoreOnPageEnd();
@@ -71,6 +77,7 @@ function AccountsScreen() {
 						setServerText={setSubdomain}
 						buttonColor={'rgb(99, 100, 255)'}
 						onPressLogin={onPressNext}
+						isLoading={IsLoading}
 					/>
 
 					<HideOnKeyboardVisibleContainer>

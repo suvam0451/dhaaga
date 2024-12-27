@@ -1,5 +1,10 @@
 import { AppDialogInstanceState } from '../states/_global';
 
+type ActionType = {
+	label: string;
+	onPress: () => void;
+};
+
 /**
  * This service function helps generate
  * dialog options
@@ -28,13 +33,57 @@ export class DialogBuilderService {
 		};
 	}
 
-	static remoteTimelinesNotAvailable(): AppDialogInstanceState {
+	static remoteTimelinesNotAvailable(
+		options: ActionType[],
+	): AppDialogInstanceState {
 		return {
 			title: 'Not Supported',
 			description: [
 				'Accessing remote timelines as a guest is not supported yet.',
 			],
 			actions: [],
+		};
+	}
+
+	static appAccountMoreActions(
+		onSync: () => Promise<void>,
+		onDeleteAttempt: () => Promise<void>,
+	): AppDialogInstanceState {
+		return {
+			title: 'Account Actions',
+			description: [
+				'Sync your profile data (pfp, name etc.) or remove your account.',
+			],
+			actions: [
+				{
+					label: 'Sync (🚧)',
+					onPress: onSync,
+				},
+				{
+					label: 'Remove Account',
+					onPress: onDeleteAttempt,
+					variant: 'destructive',
+				},
+			],
+		};
+	}
+
+	static deleteAccountConfirm(
+		onConfirmDelete: () => Promise<void>,
+	): AppDialogInstanceState {
+		return {
+			title: 'Confirm Deletion',
+			description: [
+				'Deleting your account removes all hub profiles, collections and browsing data',
+				'Confirm and Continue?',
+			],
+			actions: [
+				{
+					label: 'Confirm & Delete',
+					onPress: onConfirmDelete,
+					variant: 'destructive',
+				},
+			],
 		};
 	}
 }

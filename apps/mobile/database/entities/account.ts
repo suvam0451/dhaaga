@@ -98,7 +98,7 @@ export class Repo {
 	}
 
 	static removeById(db: DataSource, id: number) {
-		return db.db.runAsync(`delete from account where id = ?`, id);
+		return db.db.runSync(`delete from account where id = ?`, id);
 	}
 
 	static getFirstSelected(db: DataSource) {

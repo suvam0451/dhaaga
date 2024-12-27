@@ -5,12 +5,14 @@ import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import Feather from '@expo/vector-icons/Feather';
 import { Button } from '@rneui/base';
 import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import { Loader } from '../../../../../lib/Loader';
 
 type EnterYourServerProps = {
 	setServerText: Dispatch<SetStateAction<string>>;
 	ServerText: string;
 	onPressLogin: () => Promise<void>;
 	buttonColor: string;
+	isLoading: boolean;
 };
 
 const EnterYourServer = memo(
@@ -19,8 +21,10 @@ const EnterYourServer = memo(
 		setServerText,
 		onPressLogin,
 		buttonColor,
+		isLoading,
 	}: EnterYourServerProps) => {
 		const { theme } = useAppTheme();
+
 		return (
 			<View>
 				<Text
@@ -56,14 +60,20 @@ const EnterYourServer = memo(
 				</View>
 
 				<View style={{ alignItems: 'center', marginTop: 16 }}>
-					<Button
-						disabled={false}
-						color={buttonColor}
-						onPress={onPressLogin}
-						buttonStyle={{ width: 128, borderRadius: 8 }}
-					>
-						Log In
-					</Button>
+					{isLoading ? (
+						<View style={{ paddingVertical: 16 }}>
+							<Loader />
+						</View>
+					) : (
+						<Button
+							disabled={false}
+							color={buttonColor}
+							onPress={onPressLogin}
+							buttonStyle={{ width: 128, borderRadius: 8 }}
+						>
+							Log In
+						</Button>
+					)}
 				</View>
 			</View>
 		);
