@@ -15,8 +15,11 @@ import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
+import { APP_EVENT_ENUM } from '../../../../../../services/publishers/app.publisher';
+import { useAppPublishers } from '../../../../../../hooks/utility/global-state-extractors';
 
 function MastodonSignInStack() {
+	const { appSub } = useAppPublishers();
 	const { db } = useGlobalState(
 		useShallow((o) => ({
 			db: o.db,
@@ -51,15 +54,14 @@ function MastodonSignInStack() {
 
 		const { data: verified, error } =
 			await new UnknownRestClient().instances.verifyCredentials(
-				instance,
-				/**
+				instance /**
 				 * It seems Pleroma/Akkoma give
 				 * us another token, while one
 				 * exists already (above request will fail)
 				 *
 				 * ^ In such cases, the pasted code is
 				 * itself the token
-				 */
+				 */,
 				token || Code, // fucking yolo it, xDD
 			);
 
@@ -70,8 +72,7 @@ function MastodonSignInStack() {
 				server: _subdomain,
 				driver: _domain,
 				username: verified.username,
-				avatarUrl: verified.avatar,
-				// TODO: this needs to be replaced with camelCase
+				avatarUrl: verified.avatar, // TODO: this needs to be replaced with camelCase
 				displayName: verified['display_name'],
 			},
 			[
@@ -99,7 +100,8 @@ function MastodonSignInStack() {
 			],
 		);
 		if (upsertResult.type === 'success') {
-			Alert.alert('Account Added');
+			Alert.alert('Account Added. Refresh if any screen is outdated.');
+			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			router.replace(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
 		}
 	}

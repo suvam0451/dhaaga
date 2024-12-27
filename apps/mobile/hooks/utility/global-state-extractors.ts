@@ -46,6 +46,7 @@ export function useAppPublishers() {
 		useShallow((o) => ({
 			postPub: o.publishers.postPub,
 			userPub: o.publishers.userPub,
+			appSub: o.publishers.appSub,
 		})),
 	);
 }

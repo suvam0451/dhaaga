@@ -33,6 +33,7 @@ import {
 } from './reducers/timeline.reducer';
 import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
+import { AppPublisherService } from '../services/publishers/app.publisher';
 
 type AppThemePack = {
 	id: string;
@@ -82,6 +83,7 @@ type AppDialogState = {
 type AppPubSubState = {
 	postPub: PostPublisherService;
 	userPub: PostPublisherService;
+	appSub: AppPublisherService;
 };
 
 type AppBottomSheetState = {
@@ -288,6 +290,7 @@ const useGlobalState = create<State & Actions>()(
 				const _db = new DataSource(db);
 				state.db = _db;
 				state.appSession = new AppSessionManager(_db);
+				state.publishers.appSub = new AppPublisherService();
 			});
 		},
 		getPacks: () => [],
@@ -300,6 +303,7 @@ const useGlobalState = create<State & Actions>()(
 		publishers: {
 			postPub: null,
 			userPub: null,
+			appSub: null,
 		},
 		loadActiveProfile: async () => {
 			// load default profile/account
