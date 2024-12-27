@@ -52,13 +52,14 @@ function HubGreetingFragment({
 			}}
 		>
 			<View style={{ flexGrow: 1 }}>
-				<Text numberOfLines={1} style={fontStyle}>
+				<Text numberOfLines={1} style={[fontStyle, { maxWidth: '80%' }]}>
 					{greeting}, {acct.displayName}
 				</Text>
 				<Text
 					style={{
 						color: theme.primary.a0,
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						maxWidth: '80%',
 					}}
 					numberOfLines={1}
 				>
@@ -118,9 +119,12 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 				);
 			case TIME_OF_DAY.AFTERNOON:
 				return (
-					<Fragment>
-						<Text style={fontStyle}>Good Afternoon, {acct?.displayName}</Text>
-					</Fragment>
+					<HubGreetingFragment
+						acct={acct}
+						driver={acct.driver}
+						greeting={`Good Afternoon`}
+						desc={`@${acct.username}@${acct.server}`}
+					/>
 				);
 			case TIME_OF_DAY.EVENING:
 				return (
@@ -148,7 +152,7 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 					</Fragment>
 				);
 		}
-	}, [acct?.displayName]);
+	}, [acct]);
 
 	return (
 		<View

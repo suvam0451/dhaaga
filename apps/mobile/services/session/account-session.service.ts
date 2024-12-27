@@ -34,9 +34,24 @@ class AccountSessionManager {
 		this.acct = acct;
 	}
 
-	resolveEmoji(id: string, emojiMap: any): InstanceApi_CustomEmojiDTO | null {
+	resolveEmoji(
+		id: string,
+		emojiMap: Map<string, string>,
+	): InstanceApi_CustomEmojiDTO | null {
 		// avoid storage reads
 		let store = null;
+
+		if (emojiMap.has(id)) {
+			return {
+				url: emojiMap.get(id),
+				shortCode: id,
+				aliases: [],
+				tags: [],
+				staticUrl: emojiMap.get(id),
+				visibleInPicker: true,
+			};
+		}
+
 		if (this.serverReactionCache) {
 			store = this.serverReactionCache;
 			if (!store) return null;

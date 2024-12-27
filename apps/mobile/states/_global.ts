@@ -63,7 +63,7 @@ export type AppDialogInstanceState = {
 	description: string[];
 	actions: {
 		label: string;
-		onPress: () => void;
+		onPress: () => Promise<void>;
 		variant?: 'default' | 'important' | 'dismiss' | 'warning';
 	}[];
 };

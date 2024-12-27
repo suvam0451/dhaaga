@@ -4,6 +4,7 @@ import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../../utils/random.utils';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type Props = {
 	value: string;
@@ -12,12 +13,11 @@ type Props = {
 };
 
 const MentionSegment = memo(function Foo({ value, link, fontFamily }: Props) {
-	const { acct, theme, setStringValue, show } = useGlobalState(
+	const { acct, theme, show } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			visible: o.bottomSheet.visible,
 			setType: o.bottomSheet.setType,
-			setStringValue: o.bottomSheet.setTextValue,
 			show: o.bottomSheet.show,
 			theme: o.colorScheme,
 		})),
@@ -43,14 +43,16 @@ const MentionSegment = memo(function Foo({ value, link, fontFamily }: Props) {
 	}, [value]);
 
 	function onPress() {
-		setStringValue(value);
 		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 	}
 
 	return (
 		<Text
 			key={k}
-			style={{ fontFamily, color: theme.palette.link }}
+			style={{
+				fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+				color: theme.complementary.a0,
+			}}
 			onPress={onPress}
 		>
 			{displayText}

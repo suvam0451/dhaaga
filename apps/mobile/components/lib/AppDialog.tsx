@@ -1,38 +1,150 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+	Animated,
+	Easing,
+	Pressable,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import {
 	useAppDialog,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { modalStyles } from '../common/relationship/dialogs/_common';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 
 type DialogOptionsProps = {
 	label: string;
-	onPress: () => void;
+	onPress: () => Promise<void>;
 	variant?: 'default' | 'dismiss';
 };
 
-function DialogOption({ label, onPress, variant }: DialogOptionsProps) {
+const CURVE = Easing.bezier(0.41, -0.15, 0.56, 1.21);
+const AMPLITUDE = 4;
+
+function Loader() {
+	const Animations = Array.from({ length: 3 }).map(() => new Animated.Value(0));
+
+	const [Direction, setDirection] = useState(false);
 	const { theme } = useAppTheme();
+	const opacity = useRef(new Animated.Value(0)).current;
+	const colors = [
+		theme.complementaryA.a0,
+		theme.complementary.a0,
+		theme.complementaryB.a0,
+	];
+
+	function wave(idx: number, reverseY: boolean) {
+		return Animated.sequence([
+			Animated.timing(Animations[idx], {
+				toValue: reverseY ? AMPLITUDE : -AMPLITUDE,
+				easing: CURVE,
+				delay: idx * 100,
+				useNativeDriver: true,
+			}),
+			Animated.timing(Animations[idx], {
+				toValue: reverseY ? -AMPLITUDE : AMPLITUDE,
+				easing: CURVE,
+				delay: idx * 100,
+				useNativeDriver: true,
+			}),
+			Animated.timing(Animations[idx], {
+				toValue: 0,
+				delay: idx * 100,
+				useNativeDriver: true,
+			}),
+		]);
+	}
+
+	function appear() {
+		Animated.timing(opacity, {
+			toValue: 1,
+			easing: Easing.ease,
+			useNativeDriver: true,
+		}).start();
+	}
+
+	useEffect(() => {
+		Animated.parallel(
+			Animations.map((_, index) => wave(index, Direction)),
+		).start(() => {
+			setDirection(!Direction);
+		});
+		appear();
+	}, [Direction, Animations]);
+
+	return (
+		<Animated.View
+			style={[
+				{
+					opacity,
+					display: 'flex',
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'center',
+				},
+			]}
+		>
+			{Animations.map((animation, i) => (
+				<Animated.View
+					key={i}
+					style={[
+						styles.animDotItem,
+						{
+							backgroundColor: colors[i],
+							transform: [{ translateY: animation }],
+						},
+					]}
+				/>
+			))}
+		</Animated.View>
+	);
+}
+
+function DialogOption({ label, onPress, variant }: DialogOptionsProps) {
+	const [IsLoading, setIsLoading] = useState(false);
+	const { theme } = useAppTheme();
+
+	function _onPress() {
+		if (IsLoading) return;
+		setIsLoading(true);
+		try {
+			// FIXME: unable to access finally of undefined
+			onPress().finally(() => {
+				setIsLoading(false);
+			});
+		} catch (e) {
+			//
+			// setIsLoading(false);
+		}
+	}
 
 	const color =
 		variant && variant === 'dismiss' ? '#fd413b' : theme.textColor.medium;
+
 	return (
 		<View>
 			<View style={{ height: 1, backgroundColor: '#333' }} />
-			<Pressable style={{ paddingVertical: 10 }} onPress={onPress}>
-				<Text
-					style={{
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-						color: color,
-						fontSize: 18,
-						textAlign: 'center',
-					}}
-				>
-					{label}
-				</Text>
-			</Pressable>
+
+			{IsLoading ? (
+				<View style={{ paddingVertical: 19 }}>
+					<Loader />
+				</View>
+			) : (
+				<Pressable style={{ paddingVertical: 10 }} onPress={_onPress}>
+					<Text
+						style={{
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							color: color,
+							fontSize: 18,
+							textAlign: 'center',
+						}}
+					>
+						{label}
+					</Text>
+				</Pressable>
+			)}
 		</View>
 	);
 }
@@ -100,7 +212,7 @@ export function AppDialog() {
 						))}
 						<DialogOption
 							label={'Dismiss'}
-							onPress={() => {
+							onPress={async () => {
 								hide();
 							}}
 							variant={'dismiss'}
@@ -114,9 +226,9 @@ export function AppDialog() {
 
 const styles = StyleSheet.create({
 	modalTitle: {
-		fontFamily: APP_FONTS.INTER_700_BOLD,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		textAlign: 'center',
-		fontSize: 20,
+		fontSize: 22,
 		marginBottom: 16,
 		paddingTop: 32,
 	},
@@ -129,5 +241,17 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginVertical: 16,
+	},
+	animDotContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	animDotItem: {
+		width: 8,
+		height: 8,
+		marginRight: 4,
+		borderRadius: '100%',
 	},
 });
