@@ -24,6 +24,7 @@ import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../../../../states/useAppNavigator';
+import { DialogBuilderService } from '../../../../../../services/dialog-builder.service';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -79,25 +80,15 @@ function PinnedTimelineItem({
 
 	function onPress() {
 		if (account.id !== acct.id) {
-			show({
-				title: 'Account not Active',
-				description: [
-					'This account is not currently active.',
-					'Switch your currently selected account to proceed.',
-				],
-				actions: [
-					{
-						label: 'Switch & Continue',
-						onPress: () => {
-							AccountService.select(db, account);
-							loadApp().then(() => {
-								hide();
-								toTimelineViaPin(pinId, 'feed');
-							});
-						},
-					},
-				],
-			});
+			show(
+				DialogBuilderService.toSwitchActiveAccount(() => {
+					AccountService.select(db, account);
+					loadApp().then(() => {
+						hide();
+						toTimelineViaPin(pinId, 'feed');
+					});
+				}),
+			);
 			return;
 		} else {
 			toTimelineViaPin(pinId, 'feed');

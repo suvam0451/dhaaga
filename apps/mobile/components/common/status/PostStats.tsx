@@ -20,6 +20,7 @@ type StatItemProps = {
 	label: string;
 	nextCounts: number[];
 	onPress: () => void;
+	me?: boolean;
 };
 
 function util(o: number): string {
@@ -34,7 +35,7 @@ function util(o: number): string {
  * Shows a post stat
  */
 const StatItem = memo(
-	({ count, label, nextCounts, onPress }: StatItemProps) => {
+	({ count, label, nextCounts, onPress, me }: StatItemProps) => {
 		const { theme } = useGlobalState(
 			useShallow((o) => ({
 				theme: o.colorScheme,
@@ -42,19 +43,22 @@ const StatItem = memo(
 		);
 
 		const formatted = util(count);
+		const color = me ? theme.primary.a0 : theme.complementary.a0;
 
 		const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
 		if (count === 0) return <View />;
 		return (
 			<Pressable onPress={onPress}>
-				<Text style={[styles.text, { color: theme.complementary.a0 }]}>
-					{formatted} {label}
-				</Text>
-				{SHOW_TRAILING_BULLET && (
-					<Text style={[{ color: theme.secondary.a30, marginHorizontal: 6 }]}>
-						&bull;
+				<View style={{ flexDirection: 'row' }}>
+					<Text style={[styles.text, { color }]}>
+						{formatted} {label}
 					</Text>
-				)}
+					{SHOW_TRAILING_BULLET && (
+						<Text style={[{ color: theme.secondary.a30, marginHorizontal: 6 }]}>
+							&bull;
+						</Text>
+					)}
+				</View>
 			</Pressable>
 		);
 	},
@@ -78,6 +82,9 @@ const PostStats = memo(function Foo({
 	const LIKE_COUNT = dto.stats.likeCount;
 	const REPLY_COUNT = dto.stats.replyCount;
 	const SHARE_COUNT = dto.stats.boostCount;
+
+	const LIKED = dto.interaction.liked;
+	const SHARED = dto.interaction.boosted;
 
 	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1)
 		return <View></View>;
@@ -104,12 +111,14 @@ const PostStats = memo(function Foo({
 				label={'Likes'}
 				nextCounts={[REPLY_COUNT, SHARE_COUNT]}
 				onPress={onPressLikeCounter}
+				me={LIKED}
 			/>
 			<StatItem
 				count={SHARE_COUNT}
 				label={'Shares'}
 				nextCounts={[REPLY_COUNT]}
 				onPress={onPressShareCounter}
+				me={SHARED}
 			/>
 			<StatItem
 				count={REPLY_COUNT}

@@ -37,6 +37,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../database/entities/account';
 import * as Haptics from 'expo-haptics';
 import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
+import { DialogBuilderService } from '../../services/dialog-builder.service';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -114,28 +115,19 @@ function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 
 	function onPress() {
 		if (account.id !== acct.id) {
-			show({
-				title: 'Account not Active',
-				description: [
-					'This account is not currently active.',
-					'Switch your currently selected account to proceed.',
-				],
-				actions: [
-					{
-						label: 'Switch & Continue',
-						onPress: async () => {
-							AccountService.select(db, account);
-							try {
-								await loadApp();
-								hide();
-								toTimelineViaPin(item.id, 'user');
-							} catch (e) {
-								hide();
-							}
-						},
-					},
-				],
-			});
+			show(
+				DialogBuilderService.toSwitchActiveAccount(() => {
+					AccountService.select(db, account);
+					try {
+						loadApp().then(() => {
+							hide();
+							toTimelineViaPin(item.id, 'user');
+						});
+					} catch (e) {
+						hide();
+					}
+				}),
+			);
 			return;
 		}
 

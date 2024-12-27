@@ -16,8 +16,6 @@ export class PostMutatorService {
 
 	async toggleLike(input: AppPostObject): Promise<AppPostObject> {
 		const target = PostMiddleware.getContentTarget(input);
-
-		console.log('initial value', target.interaction.liked);
 		try {
 			const res = await ActivityPubService.toggleLike(
 				this.client,
@@ -25,7 +23,6 @@ export class PostMutatorService {
 				target.interaction.liked,
 				this.driver,
 			);
-			console.log(res);
 			if (input.id === target.id) {
 				return produce(input, (draft) => {
 					draft.interaction.liked = res !== -1;
@@ -98,11 +95,15 @@ export class PostMutatorService {
 			);
 
 			if (input.id === target.id) {
-				input.interaction.boosted = res != -1;
-				input.stats.boostCount += res;
+				return produce(input, (draft) => {
+					draft.interaction.boosted = res !== -1;
+					draft.stats.boostCount += res;
+				});
 			} else if (input.boostedFrom?.id === target.id) {
-				input.boostedFrom.interaction.boosted = res != -1;
-				input.boostedFrom.stats.boostCount += res;
+				return produce(input, (draft) => {
+					draft.boostedFrom.interaction.boosted = res != -1;
+					draft.boostedFrom.stats.boostCount += res;
+				});
 			}
 		} catch (e) {
 			console.log('[WARN]: failed to toggle share', e);

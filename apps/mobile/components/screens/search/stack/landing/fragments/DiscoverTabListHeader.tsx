@@ -28,9 +28,6 @@ const DiscoverTabListHeader = memo(
 				type={APP_LANDING_PAGE_TYPE.DISCOVER}
 				menuItems={[
 					{
-						iconId: 'search',
-					},
-					{
 						iconId: 'user-guide',
 					},
 				]}

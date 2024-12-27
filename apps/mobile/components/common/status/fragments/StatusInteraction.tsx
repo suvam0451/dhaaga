@@ -10,7 +10,10 @@ import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
 import { AppPostObject } from '../../../../types/app-post.types';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import {
+	useAppPublishers,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 
 type StatusInteractionProps = {
 	openAiContext?: string[];
@@ -24,16 +27,18 @@ type StatusInteractionButtonsProps = {
 };
 
 function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
-	const { explain, boost } = useAppTimelinePosts();
+	const { explain } = useAppTimelinePosts();
 	const { theme } = useAppTheme();
 	const { client } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
 		})),
 	);
+	const { postPub } = useAppPublishers();
+	const [IsLoading, setIsLoading] = useState(false);
 
-	function _boost() {
-		boost(item.id, setIsBoostStatePending);
+	async function _boost() {
+		await postPub.toggleShare(item.uuid, setIsLoading);
 	}
 
 	function reply() {
@@ -106,6 +111,12 @@ function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
 				>
 					{IsBoostStatePending ? (
 						<ActivityIndicator size={'small'} />
+					) : IS_BOOSTED ? (
+						<Ionicons
+							name="sync-outline"
+							size={ICON_SIZE}
+							color={theme.primary.a0}
+						/>
 					) : (
 						<Ionicons
 							name="sync-outline"

@@ -3,13 +3,29 @@ import { AppDialogInstanceState } from '../states/_global';
 /**
  * This service function helps generate
  * dialog options
+ *
+ * NOTE: don't use async when passing callbacks
+ * to any of these functions. it disables the
+ * loader animation
  */
 export class DialogBuilderService {
 	/**
 	 * ----- Social Hub -----
 	 */
-	static toSwitchActiveAccount(): AppDialogInstanceState {
-		return null;
+	static toSwitchActiveAccount(onPress: any): AppDialogInstanceState {
+		return {
+			title: 'Switch to Continue',
+			description: [
+				'This account is not active.',
+				'Switch your currently selected account to proceed?',
+			],
+			actions: [
+				{
+					label: 'Switch & Continue',
+					onPress: onPress,
+				},
+			],
+		};
 	}
 
 	static remoteTimelinesNotAvailable(): AppDialogInstanceState {
