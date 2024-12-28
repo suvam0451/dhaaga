@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import ReplyContextIndicator from './ReplyContextIndicator';
-import { useComposerContext } from '../api/useComposerContext';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import PostButton from './PostButton';
@@ -20,12 +19,7 @@ const ComposerTopMenu = memo(() => {
 			theme: o.colorScheme,
 		})),
 	);
-	const { state } = useComposerContext();
 
-	if (state.mode === 'emoji') return <View />;
-	if (state.mode === 'media') {
-		return <View style={{ height: 16, backgroundColor: 'pink' }} />;
-	}
 	return (
 		<Fragment>
 			<View
@@ -48,22 +42,22 @@ const ComposerTopMenu = memo(() => {
 				</View>
 				<View style={{ flexGrow: 1, marginLeft: 6 }}>
 					<Text
-						style={{
-							color: theme.textColor.medium,
-							fontSize: 16,
-							fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-							marginLeft: 4,
-						}}
+						style={[
+							styles.displayName,
+							{
+								color: theme.textColor.medium,
+							},
+						]}
 					>
 						{acct?.displayName}
 					</Text>
 					<Text
-						style={{
-							color: theme.secondary.a40,
-							fontSize: 13,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							marginLeft: 4,
-						}}
+						style={[
+							styles.username,
+							{
+								color: theme.secondary.a40,
+							},
+						]}
 					>
 						@{acct?.username}
 					</Text>
@@ -80,6 +74,16 @@ const styles = StyleSheet.create({
 		height: 36,
 		width: 36,
 		borderRadius: '100%',
+	},
+	displayName: {
+		fontSize: 16,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		marginLeft: 4,
+	},
+	username: {
+		fontSize: 13,
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		marginLeft: 4,
 	},
 });
 

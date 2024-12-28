@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 import { StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { APP_FONT } from '../../../../../styles/AppTheme';
 import { Image } from 'expo-image';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
@@ -18,11 +17,12 @@ const SelectedEmojiPreview = memo(
 				<Text
 					style={{
 						flexGrow: 1,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-						color: APP_FONT.MONTSERRAT_BODY,
+						fontFamily: APP_FONTS.INTER_400_REGULAR,
+						color: theme.secondary.a40,
+						textAlign: 'center',
 					}}
 				>
-					No Emoji Selected
+					No reaction Selected
 				</Text>
 			);
 		}
@@ -52,7 +52,6 @@ const SelectedEmojiPreview = memo(
 const EMOJI_SIZE = 32;
 const styles = StyleSheet.create({
 	categoryLabel: {
-		color: APP_FONT.MONTSERRAT_BODY,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 	emojiContainer: {
@@ -63,9 +62,6 @@ const styles = StyleSheet.create({
 	},
 	textInput: {
 		textDecorationLine: 'none',
-		// textDecorationStyle: undefined,
-		// width: '100%',
-		// maxHeight: 200,
 		paddingVertical: 16,
 		fontSize: 16,
 		borderRadius: 8,

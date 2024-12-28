@@ -8,10 +8,15 @@ import {
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useComposerContext } from './useComposerContext';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import {
+	PostComposerDispatchType,
+	PostComposerReducerActionType,
+	PostComposerReducerStateType,
+} from '../../../../../states/reducers/post-composer.reducer';
 
+// TODO: convert interfaces to objects
 type PostComposeAutoCompletionResults = {
 	accounts: UserInterface[];
 	hashtags: TagInterface[];
@@ -24,7 +29,10 @@ const DEFAULT: PostComposeAutoCompletionResults = {
 	hashtags: [],
 };
 
-function usePostComposeAutoCompletion() {
+function usePostComposeAutoCompletion(
+	state: PostComposerReducerStateType,
+	dispatch: PostComposerDispatchType,
+) {
 	const { client, driver, acctManager } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
@@ -32,63 +40,56 @@ function usePostComposeAutoCompletion() {
 			acctManager: o.acctManager,
 		})),
 	);
-	const { setAutoCompletion, state } = useComposerContext();
 
 	async function api(): Promise<PostComposeAutoCompletionResults> {
 		if (!client) throw new Error('_client not initialized');
 
+		if (state.prompt.q === '') throw new Error('E_Empty_Prompt');
+
 		switch (state.prompt.type) {
 			case 'acct': {
-				if (state.prompt.q === '') return DEFAULT;
 				const { data, error } = await client.search.findUsers({
 					q: state.prompt.q,
 					query: state.prompt.q,
 					limit: 5,
 					type: 'accounts',
 				});
-				console.log('acct search response', state.prompt, data, error);
-				if (error) {
-					return DEFAULT;
-				}
+				if (error) throw new Error(error.message);
 
 				// Custom Logic
 				if (driver === KNOWN_SOFTWARE.BLUESKY) {
 					return {
+						...DEFAULT,
 						accounts: ((data as any).data.actors as any).map((o) =>
 							ActivityPubAdapterService.adaptUser(o, driver),
 						),
-						hashtags: [],
-						emojis: [],
 					};
 				}
 
 				return {
+					...DEFAULT,
 					accounts: (data as any).map((o) =>
 						ActivityPubAdapterService.adaptUser(o, driver),
 					),
-					hashtags: [],
-					emojis: [],
 				};
 			}
 			case 'emoji': {
-				if (state.prompt.q === '') return DEFAULT;
+				acctManager.loadReactions();
 				const cache = acctManager.serverReactionCache;
 				const matches = cache.filter((o) =>
 					o.shortCode.includes(state.prompt.q),
 				);
 				return {
-					accounts: [],
-					hashtags: [],
+					...DEFAULT,
 					emojis: matches.slice(0, 5),
 				};
 			}
 			default: {
-				return DEFAULT;
+				throw new Error('E_Invalid_Prompt');
 			}
 		}
 	}
 
-	console.log(state.prompt);
 	const { status, data, fetchStatus } = useQuery<ActivityPubStatus>({
 		queryKey: ['composer/autocomplete', state.prompt],
 		queryFn: api,
@@ -98,15 +99,15 @@ function usePostComposeAutoCompletion() {
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching') return;
-		console.log(data);
 		if (status !== 'success') {
-			setAutoCompletion(DEFAULT);
+			dispatch({ type: PostComposerReducerActionType.CLEAR_SUGGESTION });
 			return;
 		}
-		setAutoCompletion(data);
+		dispatch({
+			type: PostComposerReducerActionType.SET_SUGGESTION,
+			payload: data,
+		});
 	}, [fetchStatus, data]);
-
-	return;
 }
 
 export default usePostComposeAutoCompletion;

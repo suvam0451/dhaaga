@@ -2,15 +2,11 @@ import { memo, useState } from 'react';
 import {
 	View,
 	Text,
-	FlatList,
 	TextInput,
 	StyleSheet,
 	TouchableOpacity,
 } from 'react-native';
-import {
-	ComposeMediaTargetItem,
-	useComposerContext,
-} from '../api/useComposerContext';
+import { useComposerContext } from '../api/useComposerContext';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
@@ -18,16 +14,28 @@ import { Image } from 'expo-image';
 import ComposeMediaTargets from './MediaTargets';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../../states/_global';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { AppBottomSheetMenu } from '../../../../lib/Menu';
+import {
+	PostComposer_MediaState,
+	PostComposerReducerActionType,
+} from '../../../../../states/reducers/post-composer.reducer';
+import { AppIcon } from '../../../../lib/Icon';
+import MediaUtils from '../../../../../utils/media.utils';
+import {
+	ACCOUNT_METADATA_KEY,
+	AccountMetadataService,
+} from '../../../../../database/entities/account-metadata';
 
 const ComposerAltListItem = memo(
-	({ item, index }: { item: ComposeMediaTargetItem; index: number }) => {
+	({ item, index }: { item: PostComposer_MediaState; index: number }) => {
 		const { client } = useGlobalState(
 			useShallow((o) => ({
 				client: o.router,
 			})),
 		);
 		const { setAltText } = useComposerContext();
-		const [TextContent, setTextContent] = useState(item.cw);
+		const [TextContent, setTextContent] = useState(item.localCw);
 		const { forceUpdate } = useHookLoadingState();
 
 		async function onSaveAltText() {
@@ -37,7 +45,6 @@ const ComposerAltListItem = memo(
 					item.remoteId,
 					TextContent,
 				);
-				// console.log('[INFO]: alt-text update result', data, error);
 				if (!error) {
 					setAltText(index, TextContent);
 					forceUpdate();
@@ -97,7 +104,7 @@ const ComposerAltListItem = memo(
 								marginTop: 16,
 								marginLeft: 4,
 								display:
-									TextContent === '' || item.cw === TextContent
+									TextContent === '' || item.localCw === TextContent
 										? 'none'
 										: 'flex',
 							}}
@@ -121,39 +128,110 @@ const ComposerAltListItem = memo(
 );
 
 const ComposerAlt = memo(() => {
-	const { mediaTargets } = useComposerContext();
-	const { theme } = useGlobalState(
+	const { acct, driver, db } = useGlobalState(
 		useShallow((o) => ({
-			theme: o.colorScheme,
+			acct: o.acct,
+			driver: o.driver,
+			db: o.db,
 		})),
 	);
+	const { state, dispatch } = useComposerContext();
+	const { theme } = useAppTheme();
+
+	function onBack() {
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+		});
+	}
+
+	async function trigger() {
+		let _asset = await MediaUtils.pickImageFromDevice();
+		if (!_asset) return;
+
+		const token = AccountMetadataService.getKeyValueForAccountSync(
+			db,
+			acct,
+			ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
+		);
+
+		dispatch({
+			type: PostComposerReducerActionType.ADD_MEDIA,
+			payload: {
+				item: _asset,
+			},
+		});
+		// try {
+		// 	const uploadResult = await ActivityPubProviderService.uploadFile(
+		// 		acct?.server,
+		// 		_asset.uri,
+		// 		{
+		// 			token: token,
+		// 			mimeType: _asset.mimeType,
+		// 			domain: driver,
+		// 		},
+		// 	);
+		//
+		// 	addMediaTarget({
+		// 		localUri: _asset.uri,
+		// 		uploaded: true,
+		// 		remoteId: uploadResult.id,
+		// 		previewUrl: uploadResult.previewUrl,
+		// 	});
+		// } catch (E) {
+		// 	console.log(E);
+		// }
+	}
 
 	return (
 		<View>
-			<ComposeMediaTargets />
-			{mediaTargets.length === 0 && (
-				<View style={{ padding: 16 }}>
-					<Text
-						style={{
-							fontFamily: APP_FONTS.INTER_700_BOLD,
-							color: theme.textColor.medium,
-							textAlign: 'center',
-							marginTop: 32,
-						}}
-					>
-						You have not added any media attachments
-					</Text>
-				</View>
-			)}
-			<FlatList
-				data={mediaTargets}
-				renderItem={({ item, index }) => (
-					<ComposerAltListItem item={item} index={index} />
-				)}
-				contentContainerStyle={{
-					marginVertical: 16,
-				}}
+			<AppBottomSheetMenu.WithBackNavigation
+				backLabel={'Back'}
+				nextLabel={'Sync'}
+				onBack={onBack}
+				onNext={() => {}}
+				nextEnabled={false}
+				style={{ marginBottom: 24, marginTop: 24 }}
+				MiddleComponent={
+					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+						<AppIcon
+							id={'images'}
+							color={theme.primary.a0}
+							onPress={trigger}
+							size={28}
+							containerStyle={{ paddingHorizontal: 8 }}
+						/>
+						<AppIcon
+							id={'gallery'}
+							color={theme.secondary.a50}
+							size={28}
+							containerStyle={{ paddingHorizontal: 8 }}
+						/>
+					</View>
+				}
 			/>
+			<ComposeMediaTargets />
+			{state.medias.length === 0 && (
+				<Text
+					style={{
+						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						color: theme.secondary.a30,
+						textAlign: 'center',
+						marginTop: 32,
+						padding: 16,
+					}}
+				>
+					No attachments added.
+				</Text>
+			)}
+			{/*<FlatList*/}
+			{/*	data={state.medias}*/}
+			{/*	renderItem={({ item, index }) => (*/}
+			{/*		<ComposerAltListItem item={item} index={index} />*/}
+			{/*	)}*/}
+			{/*	contentContainerStyle={{*/}
+			{/*		marginVertical: 16,*/}
+			{/*	}}*/}
+			{/*/>*/}
 		</View>
 	);
 });

@@ -12,7 +12,7 @@ import { useComposerContext } from '../api/useComposerContext';
 import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 
 const ComposerSpoiler = memo(() => {
-	const { cwShown, state, dispatch } = useComposerContext();
+	const { state, dispatch } = useComposerContext();
 
 	function onChange(e: NativeSyntheticEvent<TextInputChangeEventData>) {
 		dispatch({
@@ -24,7 +24,7 @@ const ComposerSpoiler = memo(() => {
 	}
 
 	return (
-		<View style={{ display: cwShown ? 'flex' : 'none' }}>
+		<View style={{ display: state.isCwVisible ? 'flex' : 'none' }}>
 			<TextInput
 				autoCapitalize={'none'}
 				multiline={true}

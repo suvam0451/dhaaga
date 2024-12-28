@@ -28,22 +28,21 @@ const AVATAR_ICON_SIZE = 32;
 
 const ComposerAutoCompletion = memo(() => {
 	const { theme } = useAppTheme();
-	const { autoCompletion, state, dispatch } = useComposerContext();
-	usePostComposeAutoCompletion();
+	const { state, dispatch } = useComposerContext();
 
 	const available = useSharedValue(0);
 
 	const HAS_NO_CONTENT =
-		autoCompletion.accounts.length === 0 &&
-		autoCompletion.emojis.length === 0 &&
-		autoCompletion.hashtags.length === 0;
+		state.suggestions.accounts.length === 0 &&
+		state.suggestions.emojis.length === 0 &&
+		state.suggestions.hashtags.length === 0;
 
 	useEffect(() => {
 		if (HAS_NO_CONTENT) {
 			available.value = withSpring(0);
 		}
 		available.value = withSpring(1);
-	}, [autoCompletion]);
+	}, [state.suggestions]);
 
 	const animatedContainerStyle = useAnimatedStyle(() => {
 		return {
@@ -113,7 +112,7 @@ const ComposerAutoCompletion = memo(() => {
 					style={{ display: HAS_NO_CONTENT ? 'none' : 'flex' }}
 					keyboardShouldPersistTaps={'always'}
 					horizontal={true}
-					data={autoCompletion.accounts}
+					data={state.suggestions.accounts}
 					renderItem={({ item }: { item: UserInterface }) => (
 						<Pressable
 							style={{
@@ -175,7 +174,7 @@ const ComposerAutoCompletion = memo(() => {
 					style={{ display: HAS_NO_CONTENT ? 'none' : 'flex' }}
 					keyboardShouldPersistTaps={'always'}
 					horizontal={true}
-					data={autoCompletion.emojis}
+					data={state.suggestions.emojis}
 					renderItem={({ item }: { item: InstanceApi_CustomEmojiDTO }) => (
 						<Pressable
 							style={{

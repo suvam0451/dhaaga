@@ -164,6 +164,7 @@ const AppBottomSheet = memo(() => {
 						left: '50%',
 						transform: [{ translateX: '-50%' }],
 						top: 8,
+						zIndex: 9000,
 					}}
 				>
 					<View

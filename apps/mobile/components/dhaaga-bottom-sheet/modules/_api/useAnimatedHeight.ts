@@ -31,7 +31,7 @@ function useAnimatedHeight() {
 					break;
 				}
 				case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER: {
-					_target = Dimensions.get('window').height * 0.4;
+					_target = Dimensions.get('window').height * 0.5;
 					break;
 				}
 				case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:

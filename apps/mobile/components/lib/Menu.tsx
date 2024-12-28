@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+	Pressable,
+	StyleProp,
+	StyleSheet,
+	Text,
+	View,
+	ViewStyle,
+} from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -154,8 +161,11 @@ export class AppMenu {
 type AppBottomSheetMenuWithBackNavigationProps = {
 	onBack: () => void;
 	onNext: () => void;
+	nextLabel: string;
+	backLabel: string;
 	nextEnabled: boolean;
 	MiddleComponent?: any;
+	style?: StyleProp<ViewStyle>;
 };
 
 /**
@@ -168,13 +178,21 @@ export class AppBottomSheetMenu {
 		onNext,
 		nextEnabled,
 		MiddleComponent,
+		style,
+		nextLabel,
+		backLabel,
 	}: AppBottomSheetMenuWithBackNavigationProps) {
 		const { theme } = useAppTheme();
 		return (
-			<View style={styles.cancelButtonContainer}>
+			<View style={[styles.cancelButtonContainer, style]}>
 				<Pressable
 					onPress={onBack}
-					style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						flex: 1,
+						paddingVertical: 8,
+					}}
 				>
 					<AppIcon id={'chevron-left'} color={theme.complementary.a0} />
 					<Text
@@ -184,7 +202,7 @@ export class AppBottomSheetMenu {
 							fontSize: 16,
 						}}
 					>
-						Go Back
+						{backLabel || 'Go Back'}
 					</Text>
 				</Pressable>
 				<View
@@ -204,6 +222,7 @@ export class AppBottomSheetMenu {
 						alignItems: 'flex-end',
 						paddingRight: 8,
 						flex: 1,
+						paddingVertical: 8,
 					}}
 				>
 					<Text
@@ -215,7 +234,7 @@ export class AppBottomSheetMenu {
 							marginLeft: 'auto',
 						}}
 					>
-						Pick
+						{nextLabel}
 					</Text>
 				</Pressable>
 			</View>
@@ -229,5 +248,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		maxWidth: '100%',
 		marginBottom: 8,
+		marginTop: 12,
 	},
 });

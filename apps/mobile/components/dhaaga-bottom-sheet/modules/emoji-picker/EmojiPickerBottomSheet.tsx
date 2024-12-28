@@ -121,13 +121,13 @@ const EmojiPickerBottomSheet = memo(
 		return (
 			<View
 				style={{
-					marginTop: 4,
-					position: 'relative',
 					flex: 1,
-					marginBottom: 8,
+					marginBottom: 12,
 				}}
 			>
 				<AppBottomSheetMenu.WithBackNavigation
+					nextLabel={'Select'}
+					backLabel={'Go Back'}
 					onBack={onCancel}
 					onNext={_onAccept}
 					nextEnabled={!!State.selectedReaction}

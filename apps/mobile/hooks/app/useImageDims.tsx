@@ -1,7 +1,7 @@
 import { AppMediaObject } from '../../types/app-post.types';
 import { useEffect, useRef, useState } from 'react';
 import MediaService from '../../services/media.service';
-import ImageUtils from '../../utils/image.utils';
+import MediaUtils from '../../utils/media.utils';
 
 /**
  * calculates the image width
@@ -50,7 +50,7 @@ export function useImageAutoHeight(
 		 * Fetch the original image size
 		 * to calculate dimensions
 		 */
-		ImageUtils.fetchImageSize(item.url)
+		MediaUtils.fetchImageSize(item.url)
 			.then(({ width: rnWidth, height: rnHeight }) => {
 				const { height } = MediaService.calculateDimensions({
 					maxW: W,
@@ -111,7 +111,7 @@ export function useImageAutoWidth(
 		 * Fetch the original image size
 		 * to calculate dimensions
 		 */
-		ImageUtils.fetchImageSize(item.url)
+		MediaUtils.fetchImageSize(item.url)
 			.then(({ width: rnWidth, height: rnHeight }) => {
 				const { width } = MediaService.calculateDimensions({
 					maxW,

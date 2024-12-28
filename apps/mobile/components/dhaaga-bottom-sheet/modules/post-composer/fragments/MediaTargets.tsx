@@ -1,13 +1,20 @@
 import { memo } from 'react';
 import { useComposerContext } from '../api/useComposerContext';
-import { FlatList, Image, TouchableOpacity, View, Text } from 'react-native';
+import {
+	FlatList,
+	TouchableOpacity,
+	View,
+	Text,
+	Pressable,
+} from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { APP_FONT, APP_THEME } from '../../../../../styles/AppTheme';
-import Feather from '@expo/vector-icons/Feather';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import useImagePicker from '../api/useImagePicker';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../../states/_global';
+import {
+	useAppDialog,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { Image } from 'expo-image';
+import { APP_DIALOG_SHEET_ENUM } from '../../../../../states/_global';
 
 /**
  * Shows a list of uploaded
@@ -15,74 +22,30 @@ import useGlobalState from '../../../../../states/_global';
  * select/remove
  */
 const ComposeMediaTargets = memo(function Foo() {
-	const { mediaTargets, removeMediaTarget } = useComposerContext();
-	const { trigger } = useImagePicker();
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { removeMediaTarget, state } = useComposerContext();
+	const { theme } = useAppTheme();
+	const { show } = useAppDialog();
+
+	function onAltPress(idx: number) {
+		show(
+			{
+				title: 'Edit Alt Text',
+				actions: [],
+				description: ['Set/Update your alt text for this image.'],
+			},
+			APP_DIALOG_SHEET_ENUM.TEXT_INPUT,
+		);
+	}
 
 	return (
 		<View
 			style={{
-				marginBottom: mediaTargets.length > 0 ? 8 : 0,
+				marginBottom: state.medias.length > 0 ? 8 : 0,
 			}}
 		>
 			<FlatList
 				horizontal={true}
-				data={mediaTargets}
-				ListHeaderComponent={
-					<View style={{ justifyContent: 'space-between', flex: 1 }}>
-						<TouchableOpacity
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								padding: 8,
-								borderWidth: 2,
-								borderColor: 'rgba(200, 200, 200, 0.3)',
-								borderRadius: 8,
-								flex: 1,
-								marginVertical: 4,
-							}}
-							onPress={trigger}
-						>
-							<Feather name="image" size={24} color={theme.textColor.medium} />
-							<Text
-								style={{
-									color: theme.textColor.medium,
-									marginLeft: 4,
-									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-								}}
-							>
-								Add Media
-							</Text>
-						</TouchableOpacity>
-						<View
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								padding: 8,
-								borderWidth: 2,
-								borderColor: 'rgba(200, 200, 200, 0.3)',
-								borderRadius: 8,
-								flex: 1,
-								marginVertical: 4,
-							}}
-						>
-							<Feather name="camera" size={24} color={APP_FONT.DISABLED} />
-							<Text
-								style={{
-									color: APP_FONT.DISABLED,
-									marginLeft: 4,
-									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-								}}
-							>
-								Camera
-							</Text>
-						</View>
-					</View>
-				}
+				data={state.medias}
 				renderItem={({ item, index }) => (
 					<View
 						style={{
@@ -91,36 +54,67 @@ const ComposeMediaTargets = memo(function Foo() {
 							marginHorizontal: 4,
 						}}
 					>
+						{/* @ts-ignore-next-line */}
 						<Image
 							source={{ uri: item.previewUrl || item.localUri }}
-							height={108}
-							width={72}
+							height={196}
+							width={128}
 							style={{ borderRadius: 8 }}
 						/>
 						<TouchableOpacity
-							style={{ position: 'absolute', right: 2, top: 2 }}
+							style={{ position: 'absolute', right: 8, top: 6 }}
 							onPress={() => {
 								removeMediaTarget(index);
 							}}
 						>
 							<View
 								style={{
-									// width: 24,
-									// height: 24,
-									backgroundColor: '#363636', // borderRadius: '100%',
+									backgroundColor: theme.palette.bg,
 									justifyContent: 'center',
 									alignItems: 'center',
 								}}
 							>
-								<View style={{ height: 20, width: 20 }}>
+								<View style={{ height: 28, width: 28 }}>
 									<AntDesign
 										name="closecircle"
-										size={20}
-										color={APP_THEME.INVALID_ITEM}
+										size={28}
+										color={theme.complementary.a0}
 									/>
 								</View>
 							</View>
 						</TouchableOpacity>
+						<View style={{ position: 'absolute', right: 8, bottom: 8 }}>
+							<View
+								style={{
+									backgroundColor: state.medias[index].localCw
+										? theme.complementary.a0
+										: theme.palette.bg,
+									justifyContent: 'center',
+									alignItems: 'center',
+									borderRadius: 8,
+									paddingHorizontal: 8,
+									paddingVertical: 6,
+									opacity: 0.9,
+								}}
+							>
+								<Pressable
+									onPress={() => {
+										onAltPress(index);
+									}}
+								>
+									<Text
+										style={{
+											color: state.medias[index].localCw
+												? 'black'
+												: theme.secondary.a30,
+											fontFamily: APP_FONTS.INTER_500_MEDIUM,
+										}}
+									>
+										ALT
+									</Text>
+								</Pressable>
+							</View>
+						</View>
 					</View>
 				)}
 			/>

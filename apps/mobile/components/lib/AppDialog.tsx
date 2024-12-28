@@ -7,6 +7,7 @@ import { APP_FONTS } from '../../styles/AppFonts';
 import { modalStyles } from '../common/relationship/dialogs/_common';
 import { Fragment, useState } from 'react';
 import { Loader } from './Loader';
+import { AppTextInput } from './TextInput';
 
 type DialogOptionsProps = {
 	label: string;
@@ -70,8 +71,10 @@ function DialogOption({ label, onPress, variant }: DialogOptionsProps) {
  * @constructor
  */
 export function AppDialog() {
-	const { visible, hide, state } = useAppDialog();
+	const { visible, hide, state, type } = useAppDialog();
 	const { theme } = useAppTheme();
+	const [Input, setInput] = useState(null);
+	console.log(Input);
 
 	if (!visible) return <View />;
 	return (
@@ -103,6 +106,7 @@ export function AppDialog() {
 						<Text style={[styles.modalTitle, { color: theme.textColor.high }]}>
 							{state.title}
 						</Text>
+
 						{state.description.map((text, i) => (
 							<Text
 								key={i}
@@ -116,6 +120,17 @@ export function AppDialog() {
 								{text}
 							</Text>
 						))}
+						{type === 'TextInput' && (
+							<AppTextInput.SingleLine
+								placeholder={'Your input here'}
+								onChangeText={setInput}
+								style={{
+									fontSize: 16,
+									textAlign: 'center',
+									marginTop: 20,
+								}}
+							/>
+						)}
 					</View>
 					<View style={{ marginTop: 32, marginBottom: 4 }}>
 						{state.actions.map((action, i) => (
@@ -126,6 +141,15 @@ export function AppDialog() {
 								variant={(action.variant || 'default') as any}
 							/>
 						))}
+						{type === 'TextInput' && (
+							<DialogOption
+								label={'Save'}
+								onPress={async () => {
+									hide();
+								}}
+								variant={'default'}
+							/>
+						)}
 						<DialogOption
 							label={'Dismiss'}
 							onPress={async () => {

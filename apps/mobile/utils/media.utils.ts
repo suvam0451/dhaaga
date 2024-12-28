@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { type AppBskyEmbedImages } from '@atproto/api';
+import { ImagePickerAsset } from 'expo-image-picker';
 
 // const BLUESKY_MAX_SIZE = 976_560;
 // const BLUESKY_MAX_DIMS = 2048;
 
-class ImageUtils {
+class MediaUtils {
 	static async fetchImageSize(
 		url: string,
 	): Promise<{ width: number; height: number }> {
@@ -128,6 +129,15 @@ class ImageUtils {
 			},
 		} satisfies AppBskyEmbedImages.Image;
 	}
+
+	static async pickImageFromDevice(): Promise<ImagePickerAsset | null> {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ['images'],
+			quality: 1,
+		});
+		if (result.canceled || result.assets.length === 0) return null;
+		return result.assets[0];
+	}
 }
 
-export default ImageUtils;
+export default MediaUtils;

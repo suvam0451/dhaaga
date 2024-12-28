@@ -2,15 +2,35 @@ import { produce } from 'immer';
 import { APP_POST_VISIBILITY } from '../../hooks/app/useVisibility';
 import { AppPostObject } from '../../types/app-post.types';
 import { Dispatch } from 'react';
+import {
+	InstanceApi_CustomEmojiDTO,
+	TagInterface,
+	UserInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
+import { ImagePickerAsset } from 'expo-image-picker';
 
-type PostComposer_MediaState = {
-	previewUrl?: string;
-	remoteId?: string;
-	url?: string;
-	uploaded: boolean;
+export type PostComposer_MediaState = {
+	status: 'idle' | 'uploading' | 'uploaded';
+	cwSyncStatus: 'idle' | 'uploading' | 'uploaded';
+	previewUrl: string | null;
+	remoteId: string | null;
+	url: string | null;
 	localUri: string;
-	status?: string;
-	cw?: string;
+	localCw: string | null;
+	remoteCw: string | null;
+	mimeType: string;
+};
+
+type Suggestion = {
+	accounts: UserInterface[];
+	hashtags: TagInterface[];
+	emojis: InstanceApi_CustomEmojiDTO[];
+};
+
+const defaultSuggestions = {
+	accounts: [],
+	hashtags: [],
+	emojis: [],
 };
 
 type SearchPrompt = {
@@ -19,18 +39,19 @@ type SearchPrompt = {
 };
 
 type State = {
-	mode: 'txt' | 'emoji' | 'media';
-	// txt mode
+	mode: 'txt' | 'emoji' | 'media'; // txt mode
 	text: string | null;
 	prompt: SearchPrompt;
 	cw: string | null;
 	isCwVisible: boolean;
-	medias: [];
+	medias: PostComposer_MediaState[];
 
 	keyboardSelection: { start: number; end: number };
 
 	visibility: APP_POST_VISIBILITY;
 	parent: AppPostObject | null;
+
+	suggestions: Suggestion;
 };
 
 enum ACTION {
@@ -57,6 +78,15 @@ enum ACTION {
 	SET_PARENT,
 
 	SET_KEYBOARD_SELECTION,
+
+	// media
+	ADD_MEDIA,
+	UPDATE_UPLOAD_STATUS,
+	UPDATE_CW_STATUS,
+
+	// suggestions
+	SET_SUGGESTION,
+	CLEAR_SUGGESTION,
 }
 
 const DEFAULT: State = {
@@ -75,6 +105,7 @@ const DEFAULT: State = {
 		start: 0,
 		end: 0,
 	},
+	suggestions: defaultSuggestions,
 };
 
 type Actions =
@@ -142,6 +173,25 @@ type Actions =
 			payload: {
 				content: string;
 			};
+	  }
+	| {
+			type: ACTION.SET_SUGGESTION;
+			payload: Suggestion;
+	  }
+	| {
+			type: ACTION.CLEAR_SUGGESTION;
+	  }
+	| {
+			type: ACTION.ADD_MEDIA;
+			payload: {
+				item: ImagePickerAsset;
+			};
+	  }
+	| {
+			type: ACTION.UPDATE_UPLOAD_STATUS;
+	  }
+	| {
+			type: ACTION.UPDATE_CW_STATUS;
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -225,6 +275,31 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.SET_CW: {
 			return produce(state, (draft) => {
 				draft.cw = action.payload.content;
+			});
+		}
+		case ACTION.SET_SUGGESTION: {
+			return produce(state, (draft) => {
+				draft.suggestions = action.payload;
+			});
+		}
+		case ACTION.CLEAR_SUGGESTION: {
+			return produce(state, (draft) => {
+				draft.suggestions = defaultSuggestions;
+			});
+		}
+		case ACTION.ADD_MEDIA: {
+			return produce(state, (draft) => {
+				draft.medias.push({
+					status: 'idle',
+					cwSyncStatus: 'idle',
+					previewUrl: null,
+					remoteId: null,
+					url: null,
+					localUri: action.payload.item.uri,
+					localCw: null,
+					remoteCw: null,
+					mimeType: action.payload.item.mimeType,
+				});
 			});
 		}
 		default: {

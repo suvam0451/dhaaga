@@ -92,6 +92,8 @@ const ActivitypubStatusContext = createContext<Type>(defaultValue);
  *
  * @returns status
  * @returns sharedStatus
+ *
+ * @deprecated remove once chat is implemented
  */
 export function useActivitypubStatusContext() {
 	return useContext(ActivitypubStatusContext);
