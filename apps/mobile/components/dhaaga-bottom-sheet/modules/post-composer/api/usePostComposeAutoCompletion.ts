@@ -32,21 +32,24 @@ function usePostComposeAutoCompletion() {
 			acctManager: o.acctManager,
 		})),
 	);
-	const { setAutoCompletion, autoCompletionPrompt } = useComposerContext();
+	const { setAutoCompletion, state } = useComposerContext();
 
 	async function api(): Promise<PostComposeAutoCompletionResults> {
 		if (!client) throw new Error('_client not initialized');
 
-		switch (autoCompletionPrompt.type) {
+		switch (state.prompt.type) {
 			case 'acct': {
-				if (autoCompletionPrompt.q === '') return DEFAULT;
+				if (state.prompt.q === '') return DEFAULT;
 				const { data, error } = await client.search.findUsers({
-					q: autoCompletionPrompt.q,
-					query: autoCompletionPrompt.q,
+					q: state.prompt.q,
+					query: state.prompt.q,
 					limit: 5,
 					type: 'accounts',
 				});
-				if (error) return DEFAULT;
+				console.log('acct search response', state.prompt, data, error);
+				if (error) {
+					return DEFAULT;
+				}
 
 				// Custom Logic
 				if (driver === KNOWN_SOFTWARE.BLUESKY) {
@@ -68,10 +71,10 @@ function usePostComposeAutoCompletion() {
 				};
 			}
 			case 'emoji': {
-				if (autoCompletionPrompt.q === '') return DEFAULT;
+				if (state.prompt.q === '') return DEFAULT;
 				const cache = acctManager.serverReactionCache;
 				const matches = cache.filter((o) =>
-					o.shortCode.includes(autoCompletionPrompt.q),
+					o.shortCode.includes(state.prompt.q),
 				);
 				return {
 					accounts: [],
@@ -85,23 +88,23 @@ function usePostComposeAutoCompletion() {
 		}
 	}
 
+	console.log(state.prompt);
 	const { status, data, fetchStatus } = useQuery<ActivityPubStatus>({
-		queryKey: ['composer/autocomplete', autoCompletionPrompt],
+		queryKey: ['composer/autocomplete', state.prompt],
 		queryFn: api,
 		enabled:
-			client !== null &&
-			client !== undefined &&
-			autoCompletionPrompt.type !== 'none',
+			client !== null && client !== undefined && state.prompt.type !== 'none',
 	});
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching') return;
+		console.log(data);
 		if (status !== 'success') {
 			setAutoCompletion(DEFAULT);
 			return;
 		}
 		setAutoCompletion(data);
-	}, [fetchStatus]);
+	}, [fetchStatus, data]);
 
 	return;
 }

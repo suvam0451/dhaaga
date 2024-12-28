@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { memo, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
@@ -14,14 +14,20 @@ import AtprotoComposerService, {
 } from '../../../../../services/atproto/atproto-compose';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppBottomSheet_Improved,
+	useAppPublishers,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../Core';
+import { Loader } from '../../../../lib/Loader';
 
 /**
  * Click to Post!
  */
 const PostButton = memo(() => {
-	const { rawText, mediaTargets, visibility, cw } = useComposerContext();
+	const [Loading, setLoading] = useState(false);
+	const { state, mediaTargets } = useComposerContext();
 	const { client, driver, acct } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
@@ -30,43 +36,50 @@ const PostButton = memo(() => {
 		})),
 	);
 	const { theme } = useAppTheme();
-	const { setType, ParentRef, PostRef } = useAppBottomSheet();
+	const { setType, PostRef } = useAppBottomSheet();
+	const { postPub } = useAppPublishers();
+	const { show, setCtx } = useAppBottomSheet_Improved();
 
 	async function onClick() {
-		let _visibility: any = visibility.toLowerCase();
+		setLoading(true);
+		let _visibility: any = state.visibility.toLowerCase();
 
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			let reply: AtprotoReplyEmbed = null;
-			if (ParentRef.current) {
-				if (ParentRef.current.rootPost) {
-					// both parent and root available
-					reply = {
-						root: {
-							uri: ParentRef.current.rootPost.meta.uri,
-							cid: ParentRef.current.rootPost.meta.cid,
-						},
-						parent: {
-							uri: ParentRef.current.meta.uri,
-							cid: ParentRef.current.meta.cid,
-						},
-					};
-				} else {
-					// parent must be root
-					reply = {
-						root: {
-							uri: ParentRef.current.meta.uri,
-							cid: ParentRef.current.meta.cid,
-						},
-						parent: {
-							uri: ParentRef.current.meta.uri,
-							cid: ParentRef.current.meta.cid,
-						},
-					};
-				}
-			}
-			const data = await AtprotoComposerService.post(client as any, rawText, {
-				reply,
-			});
+			// if (ParentRef.current) {
+			// if (ParentRef.current.rootPost) {
+			// 	// both parent and root available
+			// 	reply = {
+			// 		root: {
+			// 			uri: ParentRef.current.rootPost.meta.uri,
+			// 			cid: ParentRef.current.rootPost.meta.cid,
+			// 		},
+			// 		parent: {
+			// 			uri: ParentRef.current.meta.uri,
+			// 			cid: ParentRef.current.meta.cid,
+			// 		},
+			// 	};
+			// } else {
+			// 	// parent must be root
+			// 	reply = {
+			// 		root: {
+			// 			uri: ParentRef.current.meta.uri,
+			// 			cid: ParentRef.current.meta.cid,
+			// 		},
+			// 		parent: {
+			// 			uri: ParentRef.current.meta.uri,
+			// 			cid: ParentRef.current.meta.cid,
+			// 		},
+			// 	};
+			// }
+			// }
+			const data = await AtprotoComposerService.post(
+				client as any,
+				state.text,
+				{
+					reply,
+				},
+			);
 			if (data) {
 				/**
 				 * 	FIXME: Currently only shows the latest record
@@ -84,69 +97,74 @@ const PostButton = memo(() => {
 			}
 		}
 
-		if (visibility === APP_POST_VISIBILITY.PRIVATE) {
-			_visibility = ActivityPubService.mastodonLike(driver)
-				? 'private'
-				: 'followers';
-		}
-		if (visibility === APP_POST_VISIBILITY.UNLISTED) {
-			_visibility = ActivityPubService.mastodonLike(driver)
-				? 'unlisted'
-				: 'home';
-		}
-		if (visibility === APP_POST_VISIBILITY.DIRECT) {
-			_visibility = ActivityPubService.mastodonLike(driver)
-				? 'direct'
-				: 'specified';
-		}
-		const { data, error } = await client.statuses.create({
-			status: rawText,
-			visibleUserIds: [],
-			mastoVisibility: _visibility,
-			misskeyVisibility: _visibility,
-			language: 'en',
-			sensitive: false,
-			inReplyToId: ParentRef.current ? ParentRef.current.id : null,
-			mediaIds: mediaTargets.map((o) => o.remoteId.toString()),
-			localOnly: false,
-			spoilerText: cw === '' ? undefined : cw,
-		});
-		if (!error) console.log('resounding success...');
-
-		if (
-			[
-				KNOWN_SOFTWARE.MASTODON,
-				KNOWN_SOFTWARE.PLEROMA,
-				KNOWN_SOFTWARE.AKKOMA,
-			].includes(driver)
-		) {
-			const _data = ActivityPubAdapterService.adaptStatus(data, driver);
-
-			try {
-				PostRef.current = new PostMiddleware(
-					_data,
-					driver,
-					acct?.server,
-				).export();
-			} catch (e) {
-				console.log(e);
+		switch (_visibility) {
+			case APP_POST_VISIBILITY.PRIVATE: {
+				_visibility = ActivityPubService.mastodonLike(driver)
+					? 'private'
+					: 'followers';
+				break;
 			}
-		} else {
-			try {
-				PostRef.current = new PostMiddleware(
-					ActivityPubAdapterService.adaptStatus(
-						(data as any).createdNote,
-						driver,
-					),
-					driver,
-					acct?.server,
-				).export();
-			} catch (e) {
-				console.log(e);
+			case APP_POST_VISIBILITY.UNLISTED: {
+				_visibility = ActivityPubService.mastodonLike(driver)
+					? 'unlisted'
+					: 'home';
+				break;
+			}
+			case APP_POST_VISIBILITY.DIRECT: {
+				_visibility = ActivityPubService.mastodonLike(driver)
+					? 'direct'
+					: 'specified';
+				break;
 			}
 		}
-		setType(APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
+
+		try {
+			const { data, error } = await client.statuses.create({
+				status: state.text,
+				visibleUserIds: [],
+				mastoVisibility: _visibility,
+				misskeyVisibility: _visibility,
+				language: 'en',
+				sensitive: false,
+				inReplyToId: state.parent ? state.parent.id : null,
+				mediaIds: mediaTargets.map((o) => o.remoteId.toString()),
+				localOnly: false,
+				spoilerText: state.cw === '' ? undefined : state.cw,
+			});
+			if (error) throw new Error(error.message);
+			console.log('resounding success...');
+
+			if (ActivityPubService.mastodonLike(driver)) {
+				const _data = PostMiddleware.deserialize(data, driver, acct?.server);
+				postPub.writeCache(_data.uuid, _data);
+				setCtx({ uuid: _data.uuid });
+				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
+			} else {
+				try {
+					// PostRef.current = new PostMiddleware(
+					// 	ActivityPubAdapterService.adaptStatus(
+					// 		(data as any).createdNote,
+					// 		driver,
+					// 	),
+					// 	driver,
+					// 	acct?.server,
+					// ).export();
+				} catch (e) {
+					console.log(e);
+				}
+			}
+		} catch (e) {
+		} finally {
+			setLoading(false);
+		}
 	}
+
+	if (Loading)
+		return (
+			<View style={{ paddingHorizontal: 24 }}>
+				<Loader />
+			</View>
+		);
 
 	return (
 		<TouchableOpacity

@@ -1,12 +1,12 @@
 import { Fragment, memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
-import VisibilityPicker from './VisibilityPicker';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import ReplyContextIndicator from './ReplyContextIndicator';
 import { useComposerContext } from '../api/useComposerContext';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import PostButton from './PostButton';
 
 /**
  * The top section of the post composer.
@@ -68,7 +68,7 @@ const ComposerTopMenu = memo(() => {
 						@{acct?.username}
 					</Text>
 				</View>
-				<VisibilityPicker />
+				<PostButton />
 			</View>
 			<ReplyContextIndicator />
 		</Fragment>

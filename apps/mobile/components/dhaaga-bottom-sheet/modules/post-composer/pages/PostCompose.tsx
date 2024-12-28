@@ -8,24 +8,19 @@ import ComposerAlt from '../fragments/ComposerAlt';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../fragments/ComposerTopMenu';
 import TextEditorService from '../../../../../services/text-editor.service';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import {
+	useAppBottomSheet_Improved,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 
 const PostCompose = memo(() => {
-	const { visible } = useGlobalState(
-		useShallow((o) => ({
-			visible: o.bottomSheet.visible,
-		})),
-	);
-	const { editMode, setEditMode, setRawText } = useComposerContext();
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { visible } = useAppBottomSheet_Improved();
+	const { setRawText, state, dispatch } = useComposerContext();
+	const { theme } = useAppTheme();
 
 	const EditorContent = useMemo(() => {
-		switch (editMode) {
+		switch (state.mode) {
 			case 'txt': {
 				return (
 					<ScrollView>
@@ -39,18 +34,22 @@ const PostCompose = memo(() => {
 				return (
 					<EmojiPickerBottomSheet
 						onCancel={() => {
-							setEditMode('txt');
+							dispatch({
+								type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+							});
 						}}
 						onSelect={async (shortCode: string) => {
 							setRawText((o) =>
 								TextEditorService.addReactionText(o, shortCode),
 							);
-							setEditMode('txt');
+							dispatch({
+								type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+							});
 						}}
 					/>
 				);
 			}
-			case 'alt': {
+			case 'media': {
 				return (
 					<ScrollView
 						style={{
@@ -68,7 +67,7 @@ const PostCompose = memo(() => {
 				);
 			}
 		}
-	}, [editMode, theme]);
+	}, [state.mode, theme]);
 
 	return (
 		<View

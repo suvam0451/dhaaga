@@ -1,8 +1,7 @@
 import { Dispatch, Fragment, memo, SetStateAction } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 import ActivityPubService from '../../../../../services/activitypub.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import useGlobalState from '../../../../../states/_global';

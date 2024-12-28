@@ -14,11 +14,13 @@ import {
 import { useDebounce } from 'use-debounce';
 import { Text } from 'react-native';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import {
+	PostComposerDispatchType,
 	postComposerReducer,
 	postComposerReducerDefault,
+	PostComposerReducerStateType,
 } from '../../../../../states/reducers/post-composer.reducer';
+import { useAppBottomSheet_Improved } from '../../../../../hooks/utility/global-state-extractors';
 
 type ComposerAutocompletion = {
 	accounts: UserInterface[];
@@ -43,6 +45,8 @@ export type ComposeMediaTargetItem = {
 
 type KeyboardSelection = { start: number; end: number };
 type Type = {
+	state: PostComposerReducerStateType;
+	dispatch: PostComposerDispatchType;
 	editMode: 'txt' | 'alt' | 'emoji' | 'misc';
 	setEditMode: React.Dispatch<
 		React.SetStateAction<'txt' | 'alt' | 'emoji' | 'misc'>
@@ -74,13 +78,11 @@ type Type = {
 		previewUrl?: string;
 	}) => void;
 	removeMediaTarget: (index: number) => void;
-
-	isMoreOptionsVisible: false;
-	showMoreOptions: () => {};
-	hideMoreOptions: () => {};
 };
 
 const defaultValue: Type = {
+	state: null,
+	dispatch: null,
 	editMode: 'txt',
 	setEditMode: () => {},
 	autoCompletion: {
@@ -130,11 +132,11 @@ type Props = {
 };
 
 function WithComposerContext({ children, textSeed }: Props) {
-	const [Data, dispatch] = useReducer(
+	const [state, dispatch] = useReducer(
 		postComposerReducer,
 		postComposerReducerDefault,
 	);
-	const { requestId } = useAppBottomSheet();
+	const { stateId } = useAppBottomSheet_Improved();
 	const [RawText, setRawText] = useState(textSeed || '');
 	const [EditorText, setEditorText] = useState(<Text>{textSeed || ''}</Text>);
 	const [Cw, setCw] = useState('');
@@ -156,7 +158,7 @@ function WithComposerContext({ children, textSeed }: Props) {
 	useEffect(() => {
 		setRawText(textSeed);
 		setEditorText(<Text>{textSeed}</Text>);
-	}, [textSeed, requestId]);
+	}, [textSeed, stateId]);
 
 	/**
 	 * Media Targets
@@ -228,6 +230,8 @@ function WithComposerContext({ children, textSeed }: Props) {
 	return (
 		<ComposerContext.Provider
 			value={{
+				state,
+				dispatch,
 				editMode: EditMode,
 				setEditMode,
 				cw: Cw,

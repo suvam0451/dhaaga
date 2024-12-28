@@ -10,11 +10,12 @@ import { useShallow } from 'zustand/react/shallow';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
-import { AppPostObject } from '../../../../types/app-post.types';
 import {
 	useAppManager,
 	useAppModalState,
 } from '../../../../hooks/utility/global-state-extractors';
+import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -142,7 +143,6 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 });
 
 type OriginalPosterProps = {
-	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
 };
 
@@ -150,15 +150,11 @@ type OriginalPosterProps = {
  * This is the author indicator for
  * the bottom-most post item
  */
-const PostCreatedBy = memo(({ dto, style }: OriginalPosterProps) => {
+const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 	const { appManager } = useAppManager();
 	const { show, refresh } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
-
-	const STATUS_DTO = dto.meta.isBoost
-		? dto.content.raw
-			? dto
-			: dto.boostedFrom
-		: dto;
+	const { dto } = useAppStatusItem();
+	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
 
 	const UserDivRef = useRef(null);
 	function onProfileClicked() {

@@ -4,8 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import PostButton from './PostButton';
 import ComposerAutoCompletion from './ComposerAutoCompletion';
+import VisibilityPicker from './VisibilityPicker';
 
 /**
  * The buttons at bottom row of
@@ -45,8 +45,13 @@ const ActionButtons = memo(() => {
 			}}
 		>
 			<ComposerAutoCompletion />
-			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-				<View style={{ flexDirection: 'row' }}>
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}
+			>
+				<View style={{ flexDirection: 'row', flex: 1 }}>
 					<View style={{ paddingHorizontal: 6 }}>
 						<Ionicons name="images" size={26} color={theme.secondary.a20} />
 					</View>
@@ -66,8 +71,7 @@ const ActionButtons = memo(() => {
 						<Ionicons name={'happy'} size={26} color={theme.secondary.a20} />
 					</Pressable>
 				</View>
-				<View style={{ flexGrow: 1 }} />
-				<PostButton />
+				<VisibilityPicker />
 			</View>
 		</View>
 	);

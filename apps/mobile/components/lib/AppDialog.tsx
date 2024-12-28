@@ -91,6 +91,7 @@ export function AppDialog() {
 					maxWidth: '80%',
 					borderRadius: 8,
 					backgroundColor: theme.palette.menubar,
+					zIndex: 2000,
 					position: 'absolute',
 					left: '50%',
 					top: '50%',

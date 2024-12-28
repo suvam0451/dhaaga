@@ -8,6 +8,12 @@ import useAppVisibility, {
 import { useComposerContext } from '../api/useComposerContext';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import {
+	useAppDialog,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { DialogBuilderService } from '../../../../../services/dialog-builder.service';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 
 const VisibilityPickerChoice = memo(function Foo({
 	visibility,
@@ -57,22 +63,28 @@ const VisibilityPickerChoice = memo(function Foo({
 
 const VisibilityPicker = memo(function Foo() {
 	const [IsExpanded, setIsExpanded] = useState(false);
-	const { visibility: ComposerVisibility } = useComposerContext();
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { state, dispatch } = useComposerContext();
+	const { theme } = useAppTheme();
+	const { show, hide } = useAppDialog();
 
-	function toggleExpanded() {
-		console.log('toggle pressed...');
-		setIsExpanded((o) => !o);
+	async function setVisibility(visibility: APP_POST_VISIBILITY) {
+		dispatch({
+			type: PostComposerReducerActionType.SET_VISIBILITY,
+			payload: {
+				visibility,
+			},
+		});
+		hide();
 	}
 
-	const { icon, text } = useAppVisibility(ComposerVisibility as any);
+	function showVisibilityMenu() {
+		show(DialogBuilderService.changePostVisibility_ActivityPub(setVisibility));
+	}
+
+	const { icon, text } = useAppVisibility(state.visibility);
 	return (
 		<TouchableOpacity
-			onPress={toggleExpanded}
+			onPress={showVisibilityMenu}
 			style={{ position: 'relative', maxWidth: 360, overflow: 'visible' }}
 		>
 			<View style={[styles.choiceContainer]}>

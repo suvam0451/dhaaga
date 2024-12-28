@@ -21,17 +21,14 @@ import Animated, {
 	withSpring,
 } from 'react-native-reanimated';
 import TextEditorService from '../../../../../services/text-editor.service';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 const AVATAR_ICON_SIZE = 32;
 
 const ComposerAutoCompletion = memo(() => {
-	const {
-		autoCompletion,
-		setAutoCompletionPrompt,
-		rawText,
-		selection,
-		setRawText,
-	} = useComposerContext();
+	const { theme } = useAppTheme();
+	const { autoCompletion, state, dispatch } = useComposerContext();
 	usePostComposeAutoCompletion();
 
 	const available = useSharedValue(0);
@@ -56,30 +53,42 @@ const ComposerAutoCompletion = memo(() => {
 	});
 
 	function onAcctAccepted(item: UserInterface) {
-		setRawText(
-			TextEditorService.autoCompleteHandler(
-				rawText,
-				`@${item.getUsername()}@${item.getInstanceUrl()}`,
-				selection,
-			),
-		);
-		setAutoCompletionPrompt({
-			type: 'none',
-			q: '',
+		dispatch({
+			type: PostComposerReducerActionType.SET_TEXT,
+			payload: {
+				content: TextEditorService.autoCompleteHandler(
+					state.text,
+					`@${item.getUsername()}@${item.getInstanceUrl()}`,
+					state.keyboardSelection,
+				),
+			},
+		});
+		dispatch({
+			type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
+			payload: {
+				type: 'none',
+				q: '',
+			},
 		});
 	}
 
 	function onEmojiAccepted(item: InstanceApi_CustomEmojiDTO) {
-		setRawText(
-			TextEditorService.autoCompleteReaction(
-				rawText,
-				item.shortCode,
-				selection,
-			),
-		);
-		setAutoCompletionPrompt({
-			type: 'none',
-			q: '',
+		dispatch({
+			type: PostComposerReducerActionType.SET_TEXT,
+			payload: {
+				content: TextEditorService.autoCompleteReaction(
+					state.text,
+					item.shortCode,
+					state.keyboardSelection,
+				),
+			},
+		});
+		dispatch({
+			type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
+			payload: {
+				type: 'none',
+				q: '',
+			},
 		});
 	}
 
@@ -140,24 +149,23 @@ const ComposerAutoCompletion = memo(() => {
 							<View>
 								<Text
 									style={{
-										color: APP_FONT.MONTSERRAT_BODY,
-										fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+										color: theme.complementary.a10,
+										fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 										marginLeft: 6,
-										fontSize: 14,
+										fontSize: 15,
 									}}
 								>
-									@{item.getUsername()}
+									{item.getUsername()}
 								</Text>
 								<Text
 									style={{
-										color: APP_FONT.MONTSERRAT_BODY,
+										color: theme.secondary.a30,
 										fontFamily: APP_FONTS.INTER_500_MEDIUM,
 										marginLeft: 6,
-										fontSize: 12,
-										opacity: 0.75,
+										fontSize: 13,
 									}}
 								>
-									@{item.getInstanceUrl()}
+									{item.getInstanceUrl()}
 								</Text>
 							</View>
 						</Pressable>

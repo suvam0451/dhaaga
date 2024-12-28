@@ -276,6 +276,7 @@ export const CarousalIndicatorOverlay = memo(function Foo({
 		for (let i = 0; i < totalCount; i++) {
 			retval.push(
 				<View
+					key={i}
 					style={{
 						height: 12,
 						width: 12,

@@ -10,7 +10,6 @@ import {
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { AppPostObject } from '../../../types/app-post.types';
 import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
@@ -74,7 +73,6 @@ const StatItem = memo(
 const PostStats = memo(function Foo({
 	style,
 }: {
-	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
 }) {
 	const { show, setCtx } = useAppBottomSheet_Improved();
