@@ -44,12 +44,12 @@ others—without having to jump between apps and platforms.
 - 🗞️ Easily keep up-to-date with the **Social Hub™**
 - 📍 Browse posts/bookmarks offline as **Collections™**
 - 📩 Custom layouts for mentions, chats and updates
-- 🖼️ Gallery mode for profiles
-- 📰 Improved timeline experience
-- 💬 Ergonomic UI for creating posts/replies
+- 🖼️ Instagram mode for art/photography/blog profiles
+- 📰 Aesthetic™ timelines
+- 💬 Ergonomic post/reply composer
 - 🏕️ Powerful offline capabilities¹
 - 🦉 Dark mode by default
-- 👌 Designed for seamless one-handed operation
+- 👌 Out of the box one-handed mode support
 - 🥳 Fun, Free (💰)² and FOSS
 
 > ¹ Coming soon™<br/>

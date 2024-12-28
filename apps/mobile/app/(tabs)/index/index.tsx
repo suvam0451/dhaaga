@@ -123,9 +123,12 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 				);
 			case TIME_OF_DAY.EVENING:
 				return (
-					<Fragment>
-						<Text style={fontStyle}>Good Evening, {acct?.displayName}</Text>
-					</Fragment>
+					<HubGreetingFragment
+						acct={acct}
+						driver={acct.driver}
+						greeting={`Good Evening`}
+						desc={`@${acct.username}@${acct.server}`}
+					/>
 				);
 			case TIME_OF_DAY.NIGHT:
 				return (

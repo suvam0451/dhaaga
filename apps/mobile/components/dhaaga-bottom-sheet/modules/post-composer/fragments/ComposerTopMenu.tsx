@@ -20,10 +20,10 @@ const ComposerTopMenu = memo(() => {
 			theme: o.colorScheme,
 		})),
 	);
-	const { editMode } = useComposerContext();
+	const { state } = useComposerContext();
 
-	if (editMode === 'emoji') return <View />;
-	if (editMode === 'alt') {
+	if (state.mode === 'emoji') return <View />;
+	if (state.mode === 'media') {
 		return <View style={{ height: 16, backgroundColor: 'pink' }} />;
 	}
 	return (

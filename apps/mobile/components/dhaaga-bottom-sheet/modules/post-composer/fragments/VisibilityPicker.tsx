@@ -17,7 +17,6 @@ import { PostComposerReducerActionType } from '../../../../../states/reducers/po
 
 const VisibilityPickerChoice = memo(function Foo({
 	visibility,
-	setVisibility,
 }: {
 	visibility: APP_POST_VISIBILITY;
 	setVisibility: Dispatch<SetStateAction<boolean>>;
@@ -29,11 +28,15 @@ const VisibilityPickerChoice = memo(function Foo({
 	);
 
 	const { icon, text, desc } = useAppVisibility(visibility);
-	const { setVisibility: ComposerVisibility } = useComposerContext();
+	const { dispatch } = useComposerContext();
 
 	function onPress() {
-		setVisibility(false);
-		ComposerVisibility(visibility);
+		dispatch({
+			type: PostComposerReducerActionType.SET_VISIBILITY,
+			payload: {
+				visibility,
+			},
+		});
 	}
 
 	return (

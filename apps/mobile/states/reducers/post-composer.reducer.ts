@@ -49,6 +49,7 @@ enum ACTION {
 	SWITCH_TO_MEDIA_TAB,
 	SET_VISIBILITY,
 
+	SET_CW,
 	TOGGLE_CW_SECTION_SHOWN,
 	SHOW_CW_SECTION,
 	HIDE_CW_SECTION,
@@ -135,6 +136,12 @@ type Actions =
 				start: number;
 				end: number;
 			};
+	  }
+	| {
+			type: ACTION.SET_CW;
+			payload: {
+				content: string;
+			};
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -213,6 +220,11 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.SET_KEYBOARD_SELECTION: {
 			return produce(state, (draft) => {
 				draft.keyboardSelection = action.payload;
+			});
+		}
+		case ACTION.SET_CW: {
+			return produce(state, (draft) => {
+				draft.cw = action.payload.content;
 			});
 		}
 		default: {

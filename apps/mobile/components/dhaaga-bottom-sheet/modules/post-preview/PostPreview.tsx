@@ -7,16 +7,11 @@ import PreviewedPost from './fragments/PreviewedPost';
 import PreviewedPostDelete from './fragments/PreviewedPostDelete';
 import PreviewedPostEdit from './fragments/PreviewedPostEdit';
 import PreviewedPostDone from './fragments/PreviewedPostDone';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 const PostPreview = memo(() => {
 	const { forceUpdate, State } = useHookLoadingState();
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	return (
 		<View style={[styles.bottomSheetContentContainer]}>

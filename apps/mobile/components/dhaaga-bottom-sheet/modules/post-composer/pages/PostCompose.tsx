@@ -16,7 +16,7 @@ import { PostComposerReducerActionType } from '../../../../../states/reducers/po
 
 const PostCompose = memo(() => {
 	const { visible } = useAppBottomSheet_Improved();
-	const { setRawText, state, dispatch } = useComposerContext();
+	const { state, dispatch } = useComposerContext();
 	const { theme } = useAppTheme();
 
 	const EditorContent = useMemo(() => {
@@ -39,9 +39,15 @@ const PostCompose = memo(() => {
 							});
 						}}
 						onSelect={async (shortCode: string) => {
-							setRawText((o) =>
-								TextEditorService.addReactionText(o, shortCode),
-							);
+							dispatch({
+								type: PostComposerReducerActionType.SET_TEXT,
+								payload: {
+									content: TextEditorService.addReactionText(
+										state.text,
+										shortCode,
+									),
+								},
+							});
 							dispatch({
 								type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
 							});
