@@ -34,9 +34,24 @@ class AccountSessionManager {
 		this.acct = acct;
 	}
 
-	resolveEmoji(id: string, emojiMap: any): InstanceApi_CustomEmojiDTO | null {
+	resolveEmoji(
+		id: string,
+		emojiMap: Map<string, string>,
+	): InstanceApi_CustomEmojiDTO | null {
 		// avoid storage reads
 		let store = null;
+
+		if (emojiMap.has(id)) {
+			return {
+				url: emojiMap.get(id),
+				shortCode: id,
+				aliases: [],
+				tags: [],
+				staticUrl: emojiMap.get(id),
+				visibleInPicker: true,
+			};
+		}
+
 		if (this.serverReactionCache) {
 			store = this.serverReactionCache;
 			if (!store) return null;
@@ -45,7 +60,11 @@ class AccountSessionManager {
 			if (!allEmojis) return null;
 			store = allEmojis.data;
 		}
-		return store.find((o) => o.shortCode === id);
+		const found = store.find((o) => o.shortCode === id);
+		if (!found) {
+			console.log('emoji not resolved for', id, emojiMap);
+		}
+		return found;
 	}
 
 	/**
@@ -62,10 +81,20 @@ class AccountSessionManager {
 			name?: string;
 		}[],
 	) {
+		let store = this.serverReactionCache;
+		if (!store) {
+			const allEmojis = this.storage.getEmojis(this.acct.server);
+			if (!allEmojis) {
+				store = [];
+			} else {
+				store = allEmojis.data;
+			}
+		}
+
 		return ActivityPubReactionsService.renderData(reactions, {
 			me: this.acct.identifier,
 			calculated: preCalculated,
-			cache: this.serverReactionCache || [],
+			cache: store,
 		});
 	}
 }

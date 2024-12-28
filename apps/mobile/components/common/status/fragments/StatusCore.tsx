@@ -22,6 +22,7 @@ import { Text } from 'react-native';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import {
 	useTimelineDispatch,
+	useTimelineManager,
 	useTimelineState,
 } from '../../timeline/core/Timeline';
 import {
@@ -29,6 +30,7 @@ import {
 	useAppManager,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+import StatusInteraction from './StatusInteraction';
 
 /**
  * Mostly used to remove the border
@@ -45,6 +47,7 @@ function StatusController() {
 	const { dto } = useAppStatusItem();
 	const State = useTimelineState();
 	const dispatch = useTimelineDispatch();
+	const manager = useTimelineManager();
 	const { show } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,
@@ -54,7 +57,7 @@ function StatusController() {
 	const { appManager } = useAppManager();
 
 	function onMoreOptionsPress() {
-		attach(State, dispatch);
+		attach(State, dispatch, manager.current);
 		appManager.storage.setBottomSheetPostActionsTarget(dto);
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
 	}
@@ -220,9 +223,9 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 				</Pressable>
 
 				{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
-				{/*{!isPreview && (*/}
-				{/*	<StatusInteraction openAiContext={aiContext} dto={STATUS_DTO} />*/}
-				{/*)}*/}
+				{!isPreview && (
+					<StatusInteraction openAiContext={null} dto={STATUS_DTO} />
+				)}
 			</Fragment>
 		);
 	}, [isLoaded, ShowSensitiveContent, PostContent, dto, STATUS_DTO, theme]);

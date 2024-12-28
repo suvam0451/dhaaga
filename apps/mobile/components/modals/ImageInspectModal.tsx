@@ -8,10 +8,7 @@ import { Dimensions, StyleSheet, View, Text } from 'react-native';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useState } from 'react';
-import {
-	AppActivityPubMediaType,
-	AppPostObject,
-} from '../../types/app-post.types';
+import { AppMediaObject, AppPostObject } from '../../types/app-post.types';
 import { Image } from 'expo-image';
 import { AppIcon } from '../lib/Icon';
 import { useImageAutoHeight } from '../../hooks/app/useImageDims';
@@ -140,7 +137,7 @@ function ImageInspectPostMetrics({ post }: ImageInspectPostMetricsProps) {
  * @constructor
  */
 function ImageInspectModal() {
-	const [Data, setData] = useState<AppActivityPubMediaType[]>([]);
+	const [Data, setData] = useState<AppMediaObject[]>([]);
 	const [PostData, setPostData] = useState(null);
 	const { visible, stateId, appSession, hide, theme } = useGlobalState(
 		useShallow((o) => ({

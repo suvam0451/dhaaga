@@ -1,38 +1,36 @@
-import { memo, useState } from 'react';
-import { ActivityIndicator, TouchableOpacity } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-
-const ICON_SIZE = 21;
-const ACTIVE_COLOR = '#deba7a'; // APP_THEME.LINK
-
-type PostActionButtonToggleLikeProps = {
-	id: string;
-	flag: boolean;
-	isFinal: boolean;
-};
+import { useState } from 'react';
+import { AppToggleIcon } from '../../../../lib/Icon';
+import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
+import {
+	useAppPublishers,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '../../../../../styles/dimensions';
+import { Pressable } from 'react-native';
 
 /**
- * Like toggle indicator button
+ * Like toggle button
  */
-const PostActionButtonToggleLike = memo(
-	({ id, flag }: PostActionButtonToggleLikeProps) => {
-		const [IsLoading, setIsLoading] = useState(false);
-		const { toggleLike } = useAppTimelinePosts();
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+function PostActionButtonToggleLike() {
+	const { dto } = useAppStatusItem();
+	const { theme } = useAppTheme();
+	const { postPub } = useAppPublishers();
+	const [IsLoading, setIsLoading] = useState(false);
 
-		function onPress() {
-			toggleLike(id, setIsLoading);
-		}
+	function onPress() {
+		postPub.toggleLike(dto.uuid, setIsLoading);
+	}
 
-		return (
-			<TouchableOpacity
+	const FLAG = dto.interaction.liked;
+	return (
+		<Pressable onPress={onPress}>
+			<AppToggleIcon
+				flag={FLAG}
+				activeIconId={'heart'}
+				inactiveIconId={'heart-outline'}
+				activeTint={theme.primary.a0}
+				inactiveTint={theme.secondary.a10}
+				size={appDimensions.timelines.actionButtonSize}
 				style={{
 					display: 'flex',
 					flexDirection: 'row',
@@ -41,20 +39,9 @@ const PostActionButtonToggleLike = memo(
 					paddingTop: 8,
 					paddingBottom: 8,
 				}}
-				onPress={onPress}
-			>
-				{IsLoading ? (
-					<ActivityIndicator size={'small'} />
-				) : (
-					<AntDesign
-						name={flag ? 'like1' : 'like2'}
-						size={ICON_SIZE}
-						color={flag ? ACTIVE_COLOR : theme.textColor.emphasisC}
-					/>
-				)}
-			</TouchableOpacity>
-		);
-	},
-);
+			/>
+		</Pressable>
+	);
+}
 
 export default PostActionButtonToggleLike;

@@ -21,6 +21,7 @@ import { useShallow } from 'zustand/react/shallow';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
 import useAppSession from '../states/useAppSession';
 import ImageInspectModal from '../components/modals/ImageInspectModal';
+import { AppDialog } from '../components/lib/AppDialog';
 
 enableMapSet();
 
@@ -115,6 +116,7 @@ function App() {
 			</Stack>
 			<ImageInspectModal />
 			<AppBottomSheet />
+			<AppDialog />
 		</View>
 	);
 }

@@ -3,37 +3,34 @@ import UserGuideContainer from '../../../components/containers/UserGuideContaine
 function Page() {
 	const qa: { question: string; answers: string[] }[] = [
 		{
-			question: 'What does this page do?',
+			question: 'What is this page?',
 			answers: [
-				'This "Social Hub" interface is a homepage customization experience unique to Dhaaga.',
-				'You can pin your favourite timelines, servers, hashtags and users here.',
-				'It can be customized for each \"Profile\" separately.',
+				'The "Social Hub" interface is a homepage customization experience unique to Dhaaga app.',
+				'It lets you organise pins and keep up across your accounts seamlessly.',
 			],
 		},
 
 		{
 			question: 'What are profiles?',
 			answers: [
-				'Dhaaga lets you create multiple profiles for each "account" (WIP 🚧)',
-				'Each profile can have separate social hub layout and certain settings.',
-				'Each account always has a \"Default\" profile.',
+				'You can create multiple profiles for an account. ' +
+					'Profiles only affect the hub layout.',
+				'Think of them like folders to organise your interests!',
 			],
 		},
 		{
-			question: 'Where are my timelines?',
-			answers: ['They are under the "Pinned" section.'],
-		},
-		{
-			question: 'What is the Bookmark Gallery?',
+			question: 'How do I remove a timeline?',
 			answers: [
-				'It is a feature unique to Dhaaga.',
-				'It lets you fetch and view your bookmarks offline (Bluesky, as well 😉).',
+				'Not implemented as of v0.11.0 yet.',
+				'Some timelines can only be hidden, never deleted. (e.g. - Home)',
 			],
 		},
 		{
-			question: 'What is the "For You" section?',
+			question: 'Why am I shown a tiny lock icon?',
 			answers: [
-				'It lets you access complementary features like themes, release notes etc.',
+				'You can refresh and keep up to date with your accounts and profiles anytime.',
+				'However, to jump to timelines and use other features of the app, you must switch to that account',
+				'The app will prompt you to switch when needed, or you can switch yourself by long pressing the 5th tab in the navbar.',
 			],
 		},
 	];
@@ -41,7 +38,7 @@ function Page() {
 	return (
 		<UserGuideContainer
 			questionnaire={qa}
-			label={'User Guide (Home)'}
+			label={'User Guide (Hub)'}
 			language={'en'}
 		/>
 	);

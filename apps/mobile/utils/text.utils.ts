@@ -1,5 +1,8 @@
-const URL_REGEX =
+const URL_REGEX_OLD =
 	/[$|\W](https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&\/=]*[-a-zA-Z0-9@%_+~#\/=])?)/;
+
+const URL_REGEX =
+	/^(https?|ftp):\/\/([A-Za-z0-9-]+\.)+[A-Za-z]{2,6}(:[0-9]+)?(\/[^\s]*)?$/;
 
 type ParseResult = {
 	start: number;
@@ -31,6 +34,14 @@ class TextParserUtil {
 
 		const stepA = input?.replace(/(https:\/\/)(.+)/, '$2');
 		return stepA?.replace(/(www\.)(.+)/, '$2');
+	}
+
+	static shorten(input: string, maxLen: number = 32) {
+		if (!input) return input;
+		if (input.length > maxLen) {
+			return input.substring(0, maxLen) + '...';
+		}
+		return input;
 	}
 }
 

@@ -1,17 +1,30 @@
-import { Dispatch, Fragment, memo, SetStateAction } from 'react';
+import {
+	Dispatch,
+	Fragment,
+	memo,
+	SetStateAction,
+	useEffect,
+	useState,
+} from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons } from '@expo/vector-icons';
 import ActivityPubService from '../../../../../services/activitypub.service';
-import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../../common/timeline/api/postArrayReducer';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import useGlobalState from '../../../../../states/_global';
 import { AppIcon } from '../../../../lib/Icon';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppBottomSheet_Improved,
+	useAppBottomSheet_TimelineReference,
+	useAppManager,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { AppPostObject } from '../../../../../types/app-post.types';
+import { AppTimelineReducerActionType } from '../../../../../states/reducers/timeline.reducer';
 
 function SectionDivider() {
 	return (
@@ -99,21 +112,28 @@ const PostMoreActionsPostTarget = memo(
 	}: {
 		setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
 	}) => {
-		const { postValue, reducer, hide, router, driver } = useGlobalState(
+		const [PostTarget, setPostTarget] = useState<AppPostObject>(null);
+		const { stateId } = useAppBottomSheet_Improved();
+		const { appManager } = useAppManager();
+		const { hide, router, driver } = useGlobalState(
 			useShallow((o) => ({
-				postValue: o.bottomSheet.postValue,
-				reducer: o.bottomSheet.timelineDataPostListReducer,
 				router: o.router,
 				driver: o.driver,
 				hide: o.bottomSheet.hide,
 			})),
 		);
+		const { dispatch } = useAppBottomSheet_TimelineReference();
+
+		useEffect(() => {
+			setPostTarget(appManager.storage.getBottomSheetPostActionsTarget());
+		}, [stateId]);
+
 		const { theme } = useAppTheme();
 
-		const IS_BOOKMARKED = postValue.interaction.bookmarked;
-		const IS_LIKED = postValue.interaction.liked;
+		const IS_BOOKMARKED = PostTarget?.interaction.bookmarked;
+		const IS_LIKED = PostTarget?.interaction.liked;
 
-		const IS_REACTED = !postValue?.stats?.reactions?.every(
+		const IS_REACTED = PostTarget?.stats?.reactions?.every(
 			(o) => o.me === false,
 		);
 
@@ -135,15 +155,15 @@ const PostMoreActionsPostTarget = memo(
 		function onClickToggleLike() {
 			ActivityPubService.toggleLike(
 				router,
-				postValue.id,
-				postValue.interaction.liked,
+				PostTarget.id,
+				PostTarget.interaction.liked,
 				driver as any,
 			)
 				.then((res) => {
-					reducer({
-						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_LIKE_STATUS,
+					dispatch({
+						type: AppTimelineReducerActionType.UPDATE_LIKE_STATUS,
 						payload: {
-							id: postValue.id,
+							id: PostTarget.id,
 							delta: res,
 						},
 					});
@@ -156,19 +176,24 @@ const PostMoreActionsPostTarget = memo(
 		function onClickToggleBookmark() {
 			ActivityPubService.toggleBookmark(
 				router,
-				postValue.id,
-				postValue.interaction.bookmarked,
+				PostTarget.id,
+				PostTarget.interaction.bookmarked,
 			)
 				.then((res) => {
-					reducer({
-						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_BOOKMARK_STATUS,
+					console.log('bookmark success', res);
+					if (!dispatch) {
+						console.log('[WARN]: dispatcher not linked');
+					}
+					dispatch({
+						type: AppTimelineReducerActionType.UPDATE_BOOKMARK_STATUS,
 						payload: {
-							id: postValue.id,
+							id: PostTarget.id,
 							value: res,
 						},
 					});
 				})
 				.finally(() => {
+					console.log('bookmark success fail');
 					hide();
 				});
 		}

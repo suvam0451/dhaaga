@@ -25,33 +25,38 @@ import {
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../../shared/topnavbar/AppTopNavbar';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
+import {
+	useAppManager,
+	useAppTheme,
+} from '../../../../../../hooks/utility/global-state-extractors';
+import { Loader } from '../../../../../lib/Loader';
 
 function MisskeyServerSelection() {
 	const [InputText, setInputText] = useState('misskey.io');
-	const { theme, appManager } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-			appManager: o.appSession,
-		})),
-	);
+	const { appManager } = useAppManager();
+	const { theme } = useAppTheme();
 
+	const [IsLoading, setIsLoading] = useState(false);
 	async function onPressNext() {
-		const signInStrategy = await ActivityPubService.signInUrl(
-			InputText,
-			appManager,
-		);
-		const subdomain = InputText;
-		router.push({
-			pathname: APP_ROUTING_ENUM.MISSKEY_SIGNIN,
-			params: {
-				signInUrl: signInStrategy?.loginUrl,
-				subdomain,
-				domain: signInStrategy?.software,
-			},
-		});
+		setIsLoading(true);
+		try {
+			const signInStrategy = await ActivityPubService.signInUrl(
+				InputText,
+				appManager,
+			);
+			const subdomain = InputText;
+			router.push({
+				pathname: APP_ROUTING_ENUM.MISSKEY_SIGNIN,
+				params: {
+					signInUrl: signInStrategy?.loginUrl,
+					subdomain,
+					domain: signInStrategy?.software,
+				},
+			});
+		} finally {
+			setIsLoading(false);
+		}
 	}
 
 	const { translateY } = useScrollMoreOnPageEnd({
@@ -117,16 +122,22 @@ function MisskeyServerSelection() {
 						</View>
 
 						<View style={{ alignItems: 'center', marginTop: 16 }}>
-							<Button
-								disabled={false}
-								color={
-									'linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))'
-								}
-								onPress={onPressNext}
-								buttonStyle={{ width: 128, borderRadius: 8 }}
-							>
-								Log In
-							</Button>
+							{IsLoading ? (
+								<View style={{ paddingVertical: 16 }}>
+									<Loader />
+								</View>
+							) : (
+								<Button
+									disabled={false}
+									color={
+										'linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))'
+									}
+									onPress={onPressNext}
+									buttonStyle={{ width: 128, borderRadius: 8 }}
+								>
+									Log In
+								</Button>
+							)}
 						</View>
 					</View>
 

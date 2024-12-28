@@ -30,8 +30,10 @@ import { APP_BOTTOM_SHEET_ENUM } from '../components/dhaaga-bottom-sheet/Core';
 import {
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-	TimelineFetchMode,
 } from './reducers/timeline.reducer';
+import { TimelineSessionService } from '../services/session/timeline-session.service';
+import { PostPublisherService } from '../services/publishers/post.publisher';
+import { AppPublisherService } from '../services/publishers/app.publisher';
 
 type AppThemePack = {
 	id: string;
@@ -58,42 +60,50 @@ export enum APP_KNOWN_MODAL {
 	USER_PEEK = 'userPeekModal',
 }
 
-type AppDialogInstanceState = {
+export type AppDialogInstanceState = {
 	title: string;
 	description: string[];
 	actions: {
 		label: string;
-		onPress: () => void;
+		onPress: () => Promise<void>;
+		variant?: 'default' | 'important' | 'dismiss' | 'warning' | 'destructive';
 	}[];
 };
 
 type AppDialogState = {
-	type: APP_DIALOG_SHEET_ENUM;
+	// type: APP_DIALOG_SHEET_ENUM;
 	stateId: string;
 	refresh: () => void;
 	visible: boolean;
 	state: AppDialogInstanceState | null;
-	showDefault: (data: AppDialogInstanceState) => void;
+	show: (data: AppDialogInstanceState) => void;
 	hide: () => void;
+};
+
+type AppPubSubState = {
+	postPub: PostPublisherService;
+	userPub: PostPublisherService;
+	appSub: AppPublisherService;
 };
 
 type AppBottomSheetState = {
 	type: APP_BOTTOM_SHEET_ENUM;
 
-	stateId: string;
-	// a way to notify sheet closing event
+	stateId: string; // a way to notify sheet closing event
 	endSessionSeed: string;
 
 	refresh: () => void;
 	setType: (type: APP_BOTTOM_SHEET_ENUM) => void;
-	visible: boolean;
-	/**
+	visible: boolean /**
 	 * present the modal
 	 * @param type set the type of modal to show
 	 * @param refresh also perform a refresh
-	 */
+	 */;
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
+
+	ctx: object;
+	setCtx: (ctx: object) => void;
 
 	broadcastEndSession: () => void;
 
@@ -111,7 +121,9 @@ type AppBottomSheetState = {
 		attach: (
 			state: AppTimelineReducerStateType,
 			dispatch: AppTimelineReducerDispatchType,
+			manager: TimelineSessionService,
 		) => void;
+		manager: TimelineSessionService;
 	};
 };
 
@@ -125,6 +137,8 @@ type State = {
 	appSession: AppSessionManager | null;
 	acctManager: AccountSessionManager | null;
 
+	publishers: AppPubSubState;
+
 	/**
 	 * fetched account credentials
 	 * converted into application
@@ -135,16 +149,6 @@ type State = {
 
 	// router used to make api requests
 	router: ActivityPubClient | null;
-
-	// Screens
-
-	/**
-	 * what is displayed on the homepage
-	 *
-	 * NOTE: reset when different
-	 * account selected
-	 * */
-	homepageType: TimelineFetchMode;
 
 	packId: string;
 	colorScheme: AppColorSchemeType;
@@ -199,10 +203,8 @@ type Actions = {
 	selectAccount(acct: Account): void;
 	getPacks: () => AppThemePack[];
 	setPack: (packId: string) => void;
-	setHomepageType: (selection: TimelineFetchMode) => void;
 	appInitialize: (db: SQLiteDatabase) => void;
-	loadApp: () => void;
-	// loa/switch a profile
+	loadApp: () => Promise<void>; // loa/switch a profile
 	loadActiveProfile: (profile?: Profile) => void;
 };
 
@@ -275,7 +277,6 @@ const useGlobalState = create<State & Actions>()(
 		router: null,
 		me: null,
 		activePack: null,
-		homepageType: null,
 		packId: null,
 		imageInspectModal: ModalStateBlockGenerator(
 			set,
@@ -289,6 +290,7 @@ const useGlobalState = create<State & Actions>()(
 				const _db = new DataSource(db);
 				state.db = _db;
 				state.appSession = new AppSessionManager(_db);
+				state.publishers.appSub = new AppPublisherService();
 			});
 		},
 		getPacks: () => [],
@@ -297,6 +299,11 @@ const useGlobalState = create<State & Actions>()(
 		},
 		selectAccount: async (selection: Account) => {
 			AccountService.select(get().db, selection);
+		},
+		publishers: {
+			postPub: null,
+			userPub: null,
+			appSub: null,
 		},
 		loadActiveProfile: async () => {
 			// load default profile/account
@@ -326,17 +333,15 @@ const useGlobalState = create<State & Actions>()(
 					);
 					state.router = restoreResult.value.router;
 					state.driver = restoreResult.value.acct.driver as KNOWN_SOFTWARE;
+					state.publishers.postPub = new PostPublisherService(
+						restoreResult.value.acct.driver as KNOWN_SOFTWARE,
+						restoreResult.value.router,
+					);
 				} else {
 					state.acct = null;
 					state.router = null;
 					state.driver = KNOWN_SOFTWARE.UNKNOWN;
 				}
-				state.homepageType = TimelineFetchMode.IDLE;
-			});
-		},
-		setHomepageType: (selection: TimelineFetchMode) => {
-			set((state) => {
-				state.homepageType = selection;
 			});
 		},
 		bottomSheet: {
@@ -344,8 +349,16 @@ const useGlobalState = create<State & Actions>()(
 			visible: false,
 			stateId: RandomUtil.nanoId(),
 			endSessionSeed: RandomUtil.nanoId(),
+			ctx: null,
+			setCtx: function (ctx: object) {
+				set((state) => {
+					state.bottomSheet.ctx = ctx;
+				});
+			},
 			refresh: function (): void {
-				throw new Error('Function not implemented.');
+				set((state) => {
+					state.bottomSheet.stateId = RandomUtil.nanoId();
+				});
 			},
 			setType: function (type: APP_BOTTOM_SHEET_ENUM): void {
 				throw new Error('Function not implemented.');
@@ -371,33 +384,36 @@ const useGlobalState = create<State & Actions>()(
 			timeline: {
 				draftState: null,
 				dispatch: null,
+				manager: null,
 				attach: (
 					_state: AppTimelineReducerStateType,
 					_dispatch: AppTimelineReducerDispatchType,
+					manager: TimelineSessionService,
 				) => {
 					set((state) => {
 						state.bottomSheet.timeline.draftState = _state;
 						state.bottomSheet.timeline.dispatch = _dispatch;
+						state.bottomSheet.timeline.manager = manager;
 					});
 				},
 			},
 		},
 		dialog: {
-			type: APP_DIALOG_SHEET_ENUM.DEFAULT,
+			// type: APP_DIALOG_SHEET_ENUM.DEFAULT,
 			stateId: RandomUtil.nanoId(),
 			visible: false,
-			showDefault: (data: AppDialogInstanceState) => {
+			show: (data: AppDialogInstanceState) => {
 				set((state) => {
 					state.dialog.state = data;
 					state.dialog.stateId = RandomUtil.nanoId();
-					state.dialog.type = APP_DIALOG_SHEET_ENUM.DEFAULT;
+					// state.dialog.type = APP_DIALOG_SHEET_ENUM.DEFAULT;
 					state.dialog.visible = true;
 				});
 			},
 			state: null,
 			hide: () => {
 				set((state) => {
-					state.dialog.visible = true;
+					state.dialog.visible = false;
 				});
 			},
 			refresh: () => {

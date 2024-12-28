@@ -1,18 +1,21 @@
-import { AppActivityPubMediaType } from '../../../services/app-status-dto.service';
 import { FlatList, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useImageAutoHeight } from '../../../hooks/app/useImageDims';
 import { appDimensions } from '../../../styles/dimensions';
-import { AppPostObject } from '../../../types/app-post.types';
+import { AppMediaObject, AppPostObject } from '../../../types/app-post.types';
+import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import ActivityPubService from '../../../services/activitypub.service';
 
 type ThumbItemProps = {
-	item: AppActivityPubMediaType;
+	item: AppMediaObject;
 	post: AppPostObject;
+	server?: KNOWN_SOFTWARE;
 };
 
-function ThumbItem({ item, post }: ThumbItemProps) {
+function ThumbItem({ item, post, server }: ThumbItemProps) {
 	const Data = useImageAutoHeight(item, 100, 200);
 
+	const isMastodonLike = ActivityPubService.mastodonLike(server);
 	if (!Data.resolved) return <View />;
 	return (
 		<View style={{ marginRight: 8 }}>
@@ -21,7 +24,7 @@ function ThumbItem({ item, post }: ThumbItemProps) {
 				contentFit="fill"
 				style={{
 					// flex: 1,
-					borderRadius: 16,
+					borderRadius: 8,
 					opacity: 0.87,
 					width: Data.width,
 					height: Data.height,
@@ -29,7 +32,7 @@ function ThumbItem({ item, post }: ThumbItemProps) {
 					justifyContent: 'center',
 				}}
 				source={{
-					uri: item.previewUrl,
+					uri: isMastodonLike ? item.url : item.previewUrl,
 				}}
 				transition={{
 					effect: 'flip-from-right',
@@ -42,18 +45,21 @@ function ThumbItem({ item, post }: ThumbItemProps) {
 }
 
 type Props = {
-	items: AppActivityPubMediaType[];
+	items: AppMediaObject[];
 	post: AppPostObject;
+	server?: KNOWN_SOFTWARE;
 };
 
-function NotificationMediaThumbs({ items, post }: Props) {
+function NotificationMediaThumbs({ items, post, server }: Props) {
 	if (items.length === 0) return <View />;
 
 	return (
 		<FlatList
 			horizontal={true}
 			data={items}
-			renderItem={(item) => <ThumbItem item={item.item} post={post} />}
+			renderItem={(item) => (
+				<ThumbItem item={item.item} post={post} server={server} />
+			)}
 			style={{
 				marginBottom: appDimensions.timelines.sectionBottomMargin,
 				marginTop: 8,

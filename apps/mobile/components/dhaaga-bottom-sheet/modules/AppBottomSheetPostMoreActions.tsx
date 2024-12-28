@@ -6,16 +6,13 @@ import emojiPickerReducer, {
 } from './emoji-picker/emojiPickerReducer';
 import PostMoreActionsPostTarget from './post-actions/fragments/PostMoreActionsPostTarget';
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
-import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../common/timeline/api/postArrayReducer';
 import ActivitypubReactionsService from '../../../services/approto/activitypub-reactions.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppPostObject } from '../../../types/app-post.types';
 import {
 	useAppBottomSheet_Improved,
-	useAppBottomSheet_TimelineReference,
 	useAppManager,
-	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 
 const AppBottomSheetPostMoreActions = memo(() => {
@@ -33,8 +30,6 @@ const AppBottomSheetPostMoreActions = memo(() => {
 	);
 
 	const { stateId } = useAppBottomSheet_Improved();
-	const { draft, dispatch: timelineDispatch } =
-		useAppBottomSheet_TimelineReference();
 
 	const { appManager } = useAppManager();
 	useEffect(() => {
@@ -74,7 +69,6 @@ const AppBottomSheetPostMoreActions = memo(() => {
 
 	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
 	const MainContent = useMemo(() => {
-		console.log(EditMode);
 		switch (EditMode) {
 			case 'root': {
 				return <PostMoreActionsPostTarget setEditMode={setEditMode} />;
@@ -90,7 +84,7 @@ const AppBottomSheetPostMoreActions = memo(() => {
 				);
 			}
 		}
-	}, [EditMode]);
+	}, [EditMode, stateId]);
 
 	useEffect(() => {
 		if (lastSubdomain.current === acct?.server) return;

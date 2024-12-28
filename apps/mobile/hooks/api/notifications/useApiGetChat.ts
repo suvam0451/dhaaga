@@ -60,7 +60,6 @@ function useApiGetChat() {
 				// (data as MisskeyNotificationResponseType)
 			}
 		}
-		console.log('chat data:', data);
 	}, [fetchStatus]);
 
 	return { data: Results, refetch };

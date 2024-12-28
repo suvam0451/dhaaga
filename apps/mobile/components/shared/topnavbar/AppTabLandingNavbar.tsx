@@ -33,7 +33,7 @@ type AppTabLandingNavbarProps = {
 };
 
 const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
-	[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Tab',
+	[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Account',
 	[APP_LANDING_PAGE_TYPE.HOME]: 'Social Hub',
 	[APP_LANDING_PAGE_TYPE.DISCOVER]: 'Discover',
 	[APP_LANDING_PAGE_TYPE.COMPOSE]: 'Compose',
@@ -62,7 +62,7 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 	);
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container]}>
 			<View style={{ flexGrow: 1 }}>
 				<Text style={[styles.headerText, { color: theme.secondary.a0 }]}>
 					{navbarLabel[type]}

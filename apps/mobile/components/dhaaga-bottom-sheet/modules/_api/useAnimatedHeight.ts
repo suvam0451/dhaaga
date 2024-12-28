@@ -6,19 +6,13 @@ import {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Dimensions } from 'react-native';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_BOTTOM_SHEET_ENUM } from '../../Core';
+import { useAppBottomSheet_Improved } from '../../../../hooks/utility/global-state-extractors';
 
 const POST_COMPOSE_HEIGHT_MAX = 420;
 
 function useAnimatedHeight() {
-	const { visible, type } = useGlobalState(
-		useShallow((o) => ({
-			visible: o.bottomSheet.visible,
-			type: o.bottomSheet.type,
-		})),
-	);
+	const { visible, stateId, type } = useAppBottomSheet_Improved();
 	const height = useSharedValue(0);
 
 	useEffect(() => {
@@ -40,6 +34,10 @@ function useAnimatedHeight() {
 					_target = Dimensions.get('window').height * 0.4;
 					break;
 				}
+				case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
+				case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG: {
+					_target = Dimensions.get('window').height * 0.7;
+				}
 				default: {
 					_target = Dimensions.get('window').height * 0.55;
 					break;
@@ -53,7 +51,7 @@ function useAnimatedHeight() {
 				overshootClamping: false,
 			});
 		}
-	}, [visible, type]);
+	}, [visible, type, stateId]);
 
 	const animStyle = useAnimatedStyle(() => {
 		return {

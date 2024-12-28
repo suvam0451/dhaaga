@@ -93,16 +93,25 @@ export class MediaAttachmentToMediaAttachmentAdapter
 		return this.ref?.instance?.id;
 	}
 
-	getPreviewUrl() {
-		return this.ref?.instance?.previewUrl;
-	}
-
 	getType() {
 		return this.ref?.instance?.type;
 	}
 
+	/**
+	 * NOTE: We would probably need
+	 * to return the remote/local urls
+	 * individually, since either server
+	 * can break
+	 */
+
 	getUrl() {
-		return this.ref?.instance?.url;
+		return this.ref?.instance?.remoteUrl || this.ref?.instance?.url;
+	}
+
+	getPreviewUrl() {
+		return (
+			this.ref?.instance?.previewRemoteUrl || this.ref?.instance?.previewUrl
+		);
 	}
 
 	getHeight(): number | null | undefined {

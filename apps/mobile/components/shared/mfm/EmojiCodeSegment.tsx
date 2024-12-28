@@ -9,6 +9,7 @@ import {
 	AppThemingUtil,
 } from '../../../utils/theming.util';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	value: string;
@@ -28,9 +29,9 @@ const EmojiCodeSegment = memo(function Foo({
 }: Props) {
 	const [ReactionData, setReactionData] =
 		useState<InstanceApi_CustomEmojiDTO>(null);
-	const { theme, acctManager } = useGlobalState(
+	const { theme } = useAppTheme();
+	const { acctManager } = useGlobalState(
 		useShallow((o) => ({
-			theme: o.colorScheme,
 			acctManager: o.acctManager,
 		})),
 	);

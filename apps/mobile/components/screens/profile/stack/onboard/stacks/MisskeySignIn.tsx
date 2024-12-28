@@ -17,6 +17,8 @@ import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
 import { Image } from 'expo-image';
+import { useAppPublishers } from '../../../../../../hooks/utility/global-state-extractors';
+import { APP_EVENT_ENUM } from '../../../../../../services/publishers/app.publisher';
 
 export type AccountCreationPreviewProps = {
 	avatar: string;
@@ -82,6 +84,7 @@ function MisskeySignInStack() {
 		useState<AccountCreationPreviewProps | null>(null);
 	const [Token, setToken] = useState<string | null>(null);
 	const [MisskeyId, setMisskeyId] = useState<string | null>(null);
+	const { appSub } = useAppPublishers();
 
 	const params = useLocalSearchParams();
 	const _signInUrl: string = params['signInUrl'] as string;
@@ -165,7 +168,8 @@ function MisskeySignInStack() {
 			],
 		);
 		if (upsertResult.type === 'success') {
-			Alert.alert('Account Added. Refresh the account list to continue.');
+			Alert.alert('Account Added. Refresh if any screen is outdated.');
+			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			router.replace(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
 		} else {
 			console.log(upsertResult);

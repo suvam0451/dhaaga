@@ -1,5 +1,5 @@
 export type Result<T> =
-	| { type: 'success'; value: T }
+	| { type: 'success'; value?: T }
 	| { type: 'error'; error: Error }
 	| {
 			type: 'duplicate';

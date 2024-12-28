@@ -1,4 +1,13 @@
-import { createContext, memo, useContext, useEffect, useReducer } from 'react';
+import {
+	createContext,
+	memo,
+	MutableRefObject,
+	useContext,
+	useEffect,
+	useReducer,
+	useRef,
+	useState,
+} from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import LoadingMore from '../../../screens/home/LoadingMore';
@@ -6,7 +15,6 @@ import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndic
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
 import WithTimelineControllerContext from '../api/useTimelineController';
-import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
 import useTimeline from '../api/useTimeline';
 import WithAppTimelineDataContext from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
@@ -25,6 +33,7 @@ import {
 	TimelineFetchMode,
 } from '../../../../states/reducers/timeline.reducer';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+import { TimelineSessionService } from '../../../../services/session/timeline-session.service';
 
 /**
  * --- Context Setup ---
@@ -32,10 +41,13 @@ import { PostMiddleware } from '../../../../services/middlewares/post.middleware
 
 const _StateCtx = createContext<AppTimelineReducerStateType>(null);
 const _DispatchCtx = createContext<AppTimelineReducerDispatchType>(null);
+const _ManagerCtx =
+	createContext<MutableRefObject<TimelineSessionService>>(null);
 
 // exports
 export const useTimelineState = () => useContext(_StateCtx);
 export const useTimelineDispatch = () => useContext(_DispatchCtx);
+export const useTimelineManager = () => useContext(_ManagerCtx);
 
 /*
  * Render a Timeline
@@ -97,6 +109,17 @@ const Timeline = memo(() => {
 		maxId: State.appliedMaxId,
 	});
 
+	const [Refreshing, setRefreshing] = useState(false);
+	function onRefresh() {
+		setRefreshing(true);
+		dispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
+	}
+
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
@@ -146,10 +169,6 @@ const Timeline = memo(() => {
 		itemCount: State.items.length,
 		updateQueryCache: loadMore,
 	});
-	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
-		fetchStatus,
-		refetch,
-	});
 
 	if (client === null) return <Introduction />;
 	if (State.feedType === TimelineFetchMode.IDLE) {
@@ -171,7 +190,7 @@ const Timeline = memo(() => {
 			<AppFlashList.Post
 				data={State.items}
 				onScroll={onScroll}
-				refreshing={refreshing}
+				refreshing={Refreshing}
 				onRefresh={onRefresh}
 				paddingTop={50 + 16}
 			/>
@@ -185,14 +204,27 @@ const Timeline = memo(() => {
  */
 
 function CtxWrapper({ children }) {
+	const { driver, client } = useGlobalState(
+		useShallow((o) => ({
+			driver: o.driver,
+			client: o.router,
+		})),
+	);
 	const [state, dispatch] = useReducer(
 		appTimelineReducer,
 		appTimelineReducerDefault,
 	);
 
+	const manager = useRef<TimelineSessionService>(null);
+	useEffect(() => {
+		manager.current = new TimelineSessionService(driver, client, dispatch);
+	}, [driver, client, dispatch]);
+
 	return (
 		<_StateCtx.Provider value={state}>
-			<_DispatchCtx.Provider value={dispatch}>{children}</_DispatchCtx.Provider>
+			<_DispatchCtx.Provider value={dispatch}>
+				<_ManagerCtx.Provider value={manager}>{children}</_ManagerCtx.Provider>
+			</_DispatchCtx.Provider>
 		</_StateCtx.Provider>
 	);
 }

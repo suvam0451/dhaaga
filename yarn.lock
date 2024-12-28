@@ -3833,10 +3833,10 @@ expo-splash-screen@~0.29.18:
   dependencies:
     "@expo/prebuild-config" "^8.0.23"
 
-expo-sqlite@~15.0.3:
-  version "15.0.3"
-  resolved "https://registry.yarnpkg.com/expo-sqlite/-/expo-sqlite-15.0.3.tgz#8a8d835f032b5ec86f93d90cff63afa89a22547f"
-  integrity sha512-Vu4dzkf/TKE+G5m7M0HTz2DP3ef/f5Wh7tpRU9hLonL58LkajFTpQbzKlwEWdb8UEW/c2GqPrV9j8Os6JMbxZg==
+expo-sqlite@~15.0.4:
+  version "15.0.4"
+  resolved "https://registry.yarnpkg.com/expo-sqlite/-/expo-sqlite-15.0.4.tgz#ebf9f788c8ed08969b7177d4012bfce0ddbb7c0f"
+  integrity sha512-RIzkFmVtK71EKdeBEiKts+sVneCrb0X83fpIRsSmuPGbGnHc8tWVibx5jh9erz+m7ZJalmaQfP1jeghiXkLi7g==
 
 expo-updates-interface@~1.0.0:
   version "1.0.0"

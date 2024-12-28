@@ -8,27 +8,24 @@ body:
   - type: markdown
     attributes:
       value: |
-        Welcome, and thank you for taking the time to suggest improvements to 
-        the app. 🙏
+        Welcome, and thank you for your time 🙏
         
-        * No need to search for duplicate issues. Just ask away.
-        * Dhaaga stresses on minimizing setting bloat and shipping good 
-        design out of the box.
-          - As such, requests for *(non-critical)* UI toggles and alternate 
-        layouts may get dropped. I hope you understand 🙇‍♂️
-          - I make an exception for app theming, though. Go ham for that. 😉 
+        * Just ask away. No need to search for duplicate issues.
+        * Please don't mind if I vote against a proposed change.
+          * Crafting a good experience takes a lot of thought and attention.
+          * And, Dhaaga is designed to be an enhancement rather than just a tool.
 
   - type: textarea
     id: description
     attributes:
       label: Description
-      description: What would you like to be added to Dhaaga? How can it benefit all users?
+      description: What would you like to be added in the app? How can it improve the SNS experience for everyone?
     validations:
       required: true
   - type: textarea
     id: extra
     attributes:
-      label: Screenshots and Videos
+      label: Links, Images and Videos
       description: |
-        If you are referencing existing features from any other website/app, 
-        direct screenshots would save a lot of time!
+        Add links/images/videos relevant to the request *(can be from other 
+        apps or websites)*.

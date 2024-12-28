@@ -17,30 +17,47 @@ import FlashListService, {
 import FlatListRenderer from '../screens/notifications/landing/fragments/FlatListRenderer';
 import { AppNotificationObject } from '../../types/app-notification.types';
 import {
+	Account,
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
 	ProfilePinnedUser,
 } from '../../database/_schema';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import {
+	useAppBottomSheet_Improved,
+	useAppDialog,
+	useAppTheme,
+} from '../../hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import useAppNavigator from '../../states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 import { APP_FONTS } from '../../styles/AppFonts';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { AccountService } from '../../database/entities/account';
+import * as Haptics from 'expo-haptics';
+import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
+import { DialogBuilderService } from '../../services/dialog-builder.service';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
 
 function Pinned_Users_LastItem() {
 	const { theme } = useAppTheme();
+	const { show } = useAppBottomSheet_Improved();
+
+	function onPress() {
+		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
+	}
 	return (
-		<View
+		<Pressable
 			style={{
 				flex: 1,
 				marginBottom: 8,
 				maxWidth: '25%',
 				height: '100%',
 			}}
+			onPress={onPress}
 		>
 			<View
 				style={{
@@ -75,19 +92,45 @@ function Pinned_Users_LastItem() {
 					</View>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	);
 }
 
 type ListItemProps = {
 	item: ProfilePinnedUser;
+	account: Account;
 };
 
-function Pinned_Users_ListItem({ item }: ListItemProps) {
+function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 	const { theme } = useAppTheme();
-	const { toProfile, toTimelineViaPin } = useAppNavigator();
+	const { acct, db, loadApp } = useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+			db: o.db,
+			loadApp: o.loadApp,
+		})),
+	);
+	const { show, hide } = useAppDialog();
+	const { toTimelineViaPin } = useAppNavigator();
 
 	function onPress() {
+		if (account.id !== acct.id) {
+			show(
+				DialogBuilderService.toSwitchActiveAccount(() => {
+					AccountService.select(db, account);
+					try {
+						loadApp().then(() => {
+							hide();
+							toTimelineViaPin(item.id, 'user');
+						});
+					} catch (e) {
+						hide();
+					}
+				}),
+			);
+			return;
+		}
+
 		switch (item.category) {
 			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL: {
 				// toProfile(item.identifier);
@@ -109,6 +152,10 @@ function Pinned_Users_ListItem({ item }: ListItemProps) {
 		}
 	}
 
+	function onLongPress() {
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+	}
+
 	return (
 		<Pressable
 			style={{
@@ -117,6 +164,7 @@ function Pinned_Users_ListItem({ item }: ListItemProps) {
 				maxWidth: '25%',
 			}}
 			onPress={onPress}
+			onLongPress={onLongPress}
 		>
 			<View
 				style={{
@@ -157,6 +205,8 @@ type PinnedTag_ListItemProps = {
 
 function Pinned_Tags_ListItem({ item }: PinnedTag_ListItemProps) {
 	const { theme } = useAppTheme();
+	const { show } = useAppBottomSheet_Improved();
+
 	function onPressAddedTag() {
 		if (item.type === 'eol') return;
 		switch (item.props.dto.category) {
@@ -179,7 +229,9 @@ function Pinned_Tags_ListItem({ item }: PinnedTag_ListItemProps) {
 		}
 	}
 
-	function onPressAddTag() {}
+	function onPressAddTag() {
+		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG, true);
+	}
 
 	if (item.type === 'entry') {
 		return (
@@ -235,8 +287,7 @@ type AppFlashListProps<
 	T extends AppPostObject | AppUserObject | AppNotificationObject,
 > = {
 	// the data used for render
-	data: T[];
-	// this needs to come from useTopbarSmoothTranslate
+	data: T[]; // this needs to come from useTopbarSmoothTranslate
 	onScroll: (...args: any[]) => void;
 	paddingTop?: number;
 	refreshing?: boolean;
@@ -259,6 +310,18 @@ type AppFlatListProps<
 	refreshing?: boolean;
 	onRefresh?: () => void;
 	ListHeaderComponent?: any;
+};
+
+type AppFlatListPinCategory<
+	T extends
+		| AppPostObject
+		| AppUserObject
+		| AppNotificationObject
+		| ProfilePinnedUser
+		| ProfilePinnedTimeline
+		| ProfilePinnedTag,
+> = AppFlatListProps<T> & {
+	account: Account;
 };
 
 const POST_ESTIMATED_SIZE = 200;
@@ -319,7 +382,10 @@ export class AppFlashList {
 		);
 	}
 
-	static PinnedProfiles({ data }: AppFlatListProps<ProfilePinnedUser>) {
+	static PinnedProfiles({
+		data,
+		account,
+	}: AppFlatListPinCategory<ProfilePinnedUser>) {
 		const listItems = useMemo(() => {
 			return FlashListService.pinnedUsers(data);
 		}, [data]);
@@ -330,7 +396,9 @@ export class AppFlashList {
 				numColumns={4}
 				renderItem={({ item }) => {
 					if (item.type === 'entry')
-						return <Pinned_Users_ListItem item={item.props.dto} />;
+						return (
+							<Pinned_Users_ListItem item={item.props.dto} account={account} />
+						);
 					return <Pinned_Users_LastItem />;
 				}}
 			/>

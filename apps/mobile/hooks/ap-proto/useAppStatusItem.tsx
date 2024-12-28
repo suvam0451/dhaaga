@@ -1,5 +1,6 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { AppPostObject } from '../../types/app-post.types';
+import { useAppPublishers } from '../utility/global-state-extractors';
 
 type Type = {
 	dto: AppPostObject;
@@ -23,10 +24,25 @@ type Props = {
 };
 
 function WithAppStatusItemContext({ children, dto }: Props) {
+	const { postPub } = useAppPublishers();
+	const [Post, setPost] = useState(postPub.addIfNotExist(dto.uuid, dto));
+
+	function onSubscription({ uuid }) {
+		setPost(postPub.readCache(uuid));
+	}
+
+	useEffect(() => {
+		setPost(postPub.addIfNotExist(dto.uuid, dto));
+		postPub.subscribe(dto.uuid, onSubscription);
+		return () => {
+			postPub.unsubscribe(dto.uuid, onSubscription);
+		};
+	}, [dto.uuid]);
+
 	return (
 		<AppStatusItemContext.Provider
 			value={{
-				dto,
+				dto: Post,
 			}}
 		>
 			{children}

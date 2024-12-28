@@ -4,12 +4,15 @@ import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import Feather from '@expo/vector-icons/Feather';
 import { Button } from '@rneui/base';
+import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import { Loader } from '../../../../../lib/Loader';
 
 type EnterYourServerProps = {
 	setServerText: Dispatch<SetStateAction<string>>;
 	ServerText: string;
 	onPressLogin: () => Promise<void>;
 	buttonColor: string;
+	isLoading: boolean;
 };
 
 const EnterYourServer = memo(
@@ -18,13 +21,16 @@ const EnterYourServer = memo(
 		setServerText,
 		onPressLogin,
 		buttonColor,
+		isLoading,
 	}: EnterYourServerProps) => {
+		const { theme } = useAppTheme();
+
 		return (
 			<View>
 				<Text
 					style={{
 						textAlign: 'center',
-						color: APP_FONT.MONTSERRAT_BODY,
+						color: theme.secondary.a20,
 						marginBottom: 24,
 						fontSize: 24,
 						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
@@ -39,14 +45,14 @@ const EnterYourServer = memo(
 					<TextInput
 						style={{
 							fontSize: 16,
-							color: APP_FONT.MONTSERRAT_HEADER,
+							color: theme.secondary.a10,
 							textDecorationLine: 'none',
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							flex: 1,
 							marginLeft: 4,
 						}}
 						autoCapitalize={'none'}
-						placeholderTextColor={APP_FONT.MONTSERRAT_BODY}
+						placeholderTextColor={theme.secondary.a30}
 						placeholder="Your server url"
 						onChangeText={setServerText}
 						value={ServerText}
@@ -54,14 +60,20 @@ const EnterYourServer = memo(
 				</View>
 
 				<View style={{ alignItems: 'center', marginTop: 16 }}>
-					<Button
-						disabled={false}
-						color={buttonColor}
-						onPress={onPressLogin}
-						buttonStyle={{ width: 128, borderRadius: 8 }}
-					>
-						Log In
-					</Button>
+					{isLoading ? (
+						<View style={{ paddingVertical: 16 }}>
+							<Loader />
+						</View>
+					) : (
+						<Button
+							disabled={false}
+							color={buttonColor}
+							onPress={onPressLogin}
+							buttonStyle={{ width: 128, borderRadius: 8 }}
+						>
+							Log In
+						</Button>
+					)}
 				</View>
 			</View>
 		);

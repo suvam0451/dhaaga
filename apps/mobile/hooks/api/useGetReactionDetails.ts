@@ -5,21 +5,19 @@ import {
 } from '@dhaaga/shared-abstraction-activitypub';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import ActivityPubAdapterService from '../../services/activitypub-adapter.service';
 import ActivityPubService from '../../services/activitypub.service';
-import AppUserService, {
-	AppUser,
-} from '../../services/approto/app-user-service';
 import ActivitypubReactionsService from '../../services/approto/activitypub-reactions.service';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../states/_global';
+import { AppUserObject } from '../../types/app-user.types';
+import { UserMiddleware } from '../../services/middlewares/user.middleware';
 
 type ReactionDetails = {
 	id: string;
 	url: string;
 	count: number;
 	reacted: boolean;
-	accounts: AppUser[];
+	accounts: AppUserObject[];
 };
 
 function useGetReactionDetails(postId: string, reactionId: string) {
@@ -57,7 +55,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 				count: match.count,
 				reacted: match.me,
 				url: match.url,
-				accounts: AppUserService.exportRawMultiple(
+				accounts: UserMiddleware.deserialize<unknown[]>(
 					match.accounts,
 					driver,
 					acct?.server,
@@ -73,19 +71,13 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 				return null;
 			}
 
-			const accts: AppUser[] = data
-				.map((o) =>
-					AppUserService.export(
-						ActivityPubAdapterService.adaptUser(o.user, driver),
-						driver,
-						acct?.server,
-					),
-				)
-				.filter((o) => !!o);
+			const accts: AppUserObject[] = data.map((o) =>
+				UserMiddleware.deserialize<unknown[]>(o.user, driver, acct?.server),
+			);
 
 			let reacted = false;
-			if (me?.getId()) {
-				const match = accts.find((o) => o.id === me?.getId());
+			if (me.id) {
+				const match = accts.find((o) => o.id === me.id);
 				reacted = !!match;
 			}
 

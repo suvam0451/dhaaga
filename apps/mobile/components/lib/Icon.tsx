@@ -25,15 +25,19 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
-import { TimelineFetchMode } from '../../states/reducers/timeline.reducer';
 
 export type APP_ICON_ENUM =
+	| 'add-circle-outline'
+	| 'albums-outline'
 	| 'bell'
 	| 'back'
+	| 'bookmark'
+	| 'bookmark-outline'
 	| 'block'
 	| 'browser'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
+	| 'checkmark-circle'
 	| 'chevron-right'
 	| 'chevron-down'
 	| 'checkmark-done-outline'
@@ -49,7 +53,9 @@ export type APP_ICON_ENUM =
 	| 'eye-filled'
 	| 'eye-off-filled'
 	| 'gallery'
+	| 'globe'
 	| 'heart'
+	| 'heart-outline'
 	| 'home'
 	| 'info'
 	| 'language'
@@ -58,9 +64,11 @@ export type APP_ICON_ENUM =
 	| 'menu'
 	| 'message'
 	| 'more-options-vertical'
+	| 'musical-notes-outline'
 	| 'newspaper'
 	| 'no-account'
 	| 'palette'
+	| 'people'
 	| 'phonebook'
 	| 'pin'
 	| 'pin-octicons'
@@ -109,18 +117,11 @@ export function HomeNavigationIcon({
 	color,
 	size,
 }: NavigationIconType) {
-	const { setType } = useGlobalState(
-		useShallow((o) => ({
-			setType: o.setHomepageType,
-		})),
-	);
-
 	function onPress() {
 		router.navigate('/');
 	}
 
 	function onLongPress() {
-		setType(TimelineFetchMode.IDLE);
 		router.navigate('/');
 	}
 
@@ -149,7 +150,7 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 
 	function onLongPress() {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT);
+		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT, true);
 	}
 
 	function onPress() {
@@ -253,6 +254,26 @@ export const AppIcon = memo(
 
 		const Icon = useMemo(() => {
 			switch (id) {
+				case 'add-circle-outline':
+					return (
+						<Ionicons
+							name={'add-circle-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'albums-outline':
+					return (
+						<Ionicons
+							name={'albums-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'bell':
 					return (
 						<Ionicons
@@ -267,6 +288,26 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="chevron-back"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'bookmark':
+					return (
+						<Ionicons
+							name="bookmark"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'bookmark-outline':
+					return (
+						<Ionicons
+							name="bookmark-outline"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -307,6 +348,16 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name={'chatbox-ellipses-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'checkmark-circle':
+					return (
+						<Ionicons
+							name={'checkmark-circle'}
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -445,7 +496,7 @@ export const AppIcon = memo(
 				case 'eye-filled':
 					return (
 						<Ionicons
-							name="eye-filled"
+							name="eye"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -455,7 +506,7 @@ export const AppIcon = memo(
 				case 'eye-off-filled':
 					return (
 						<Ionicons
-							name="eye-off-filled"
+							name="eye-off"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -472,7 +523,27 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'globe':
+					return (
+						<Feather
+							name="globe"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'heart':
+					return (
+						<Ionicons
+							name={'heart'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'heart-outline':
 					return (
 						<Ionicons
 							name={'heart-outline'}
@@ -572,6 +643,16 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
+				case 'musical-notes-outline':
+					return (
+						<Ionicons
+							name={'musical-notes-outline'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
 				case 'newspaper':
 					return (
 						<Ionicons
@@ -596,6 +677,16 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="color-palette-outline"
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'people':
+					return (
+						<Ionicons
+							name="people"
 							size={_size}
 							color={_color}
 							onPress={onPress}
@@ -756,6 +847,48 @@ export const AppIcon = memo(
 		);
 	},
 );
+
+type ToggleIconProps = {
+	flag: boolean;
+	activeIconId: APP_ICON_ENUM;
+	inactiveIconId: APP_ICON_ENUM;
+	activeTint: string;
+	inactiveTint: string;
+	size?: number;
+	onPress?: () => void;
+	style?: StyleProp<ViewStyle>;
+};
+
+export function AppToggleIcon({
+	flag,
+	activeIconId,
+	inactiveIconId,
+	activeTint,
+	inactiveTint,
+	size,
+	onPress,
+	style,
+}: ToggleIconProps) {
+	return (
+		<View style={style}>
+			{flag ? (
+				<AppIcon
+					id={activeIconId}
+					color={activeTint}
+					size={size}
+					onPress={onPress}
+				/>
+			) : (
+				<AppIcon
+					id={inactiveIconId}
+					color={inactiveTint}
+					size={size}
+					onPress={onPress}
+				/>
+			)}
+		</View>
+	);
+}
 
 const styles = StyleSheet.create({
 	accountIconTouchableContainer: {

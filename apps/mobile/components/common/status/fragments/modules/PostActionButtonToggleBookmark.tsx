@@ -1,90 +1,71 @@
-import { memo, useEffect, useState } from 'react';
-import { ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { APP_THEME } from '../../../../../styles/AppTheme';
-import { useAppTimelinePosts } from '../../../../../hooks/app/timelines/useAppTimelinePosts';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../../states/_global';
-
-const ICON_SIZE = 21;
-
-type PostActionButtonToggleBookmarkProps = {
-	id: string;
-	flag: boolean;
-	isFinal: boolean;
-};
+import {
+	useAppBottomSheet_Improved,
+	useAppBottomSheet_TimelineReference,
+	useAppManager,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
+import {
+	useTimelineDispatch,
+	useTimelineManager,
+	useTimelineState,
+} from '../../../timeline/core/Timeline';
+import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
+import { AppToggleIcon } from '../../../../lib/Icon';
+import { appDimensions } from '../../../../../styles/dimensions';
 
 /**
  * Bookmark toggle indicator button
  */
-const PostActionButtonToggleBookmark = memo(
-	({ id, flag, isFinal }: PostActionButtonToggleBookmarkProps) => {
-		const [IsBookmarkStatePending, setIsBookmarkStatePending] = useState(false);
-		const { toggleBookmark, getBookmarkState } = useAppTimelinePosts();
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+function PostActionButtonToggleBookmark() {
+	const { appManager } = useAppManager();
+	const { dto } = useAppStatusItem();
+	const { theme } = useAppTheme();
+	const { show } = useAppBottomSheet_Improved();
+	const { attach } = useAppBottomSheet_TimelineReference();
 
-		// helper functions
-		function _toggleBookmark() {
-			toggleBookmark(id, setIsBookmarkStatePending);
+	// Timeline Manager
+	const TimelineState = useTimelineState();
+	const TimelineDispatch = useTimelineDispatch();
+	const TimelineManager = useTimelineManager();
+
+	// helper functions
+	function _toggleBookmark() {
+		if (TimelineManager.current) {
+			attach(TimelineState, TimelineDispatch, TimelineManager.current);
+			appManager.storage.setPostObject(dto);
 		}
+		show(APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK, true);
+	}
 
-		useEffect(() => {
-			if (!isFinal) {
-				getBookmarkState(id, setIsBookmarkStatePending);
-			}
-		}, [id]);
+	/**
+	 * TODO: need to understand misskey's take
+	 * on bookmarks and why it is a separate API
+	 *
+	 * NOTE: disabled to not trigger rate limits
+	 */
+	// const { finalizeBookmarkState } = usePostActionsInterface();
+	// const [BookmarkStatePending, setBookmarkStatePending] = useState(false);
+	// useEffect(() => {
+	// 	setBookmarkStatePending(true);
+	// 	finalizeBookmarkState(id).finally(() => {
+	// 		setBookmarkStatePending(false);
+	// 	});
+	// }, [id]);
 
-		// NOTE: looks inconsistent
-		// if (activePack.valid) {
-		// 	return (
-		// 		<TouchableOpacity style={styles.root} onPress={_toggleBookmark}>
-		// 			{IsBookmarkStatePending ? (
-		// 				<ActivityIndicator size={'small'} />
-		// 			) : flag ? (
-		// 				// @ts-ignore-next-line
-		// 				<Image
-		// 					source={{ uri: activePack.bookmarkActive1.localUri }}
-		// 					style={{ height: ICON_SIZE, width: ICON_SIZE }}
-		// 				/>
-		// 			) : (
-		// 				// @ts-ignore-next-line
-		// 				<Image
-		// 					source={{ uri: activePack.bookmarkInactive.localUri }}
-		// 					style={{ height: ICON_SIZE, width: ICON_SIZE }}
-		// 				/>
-		// 			)}
-		// 		</TouchableOpacity>
-		// 	);
-		// }
-		return (
-			<TouchableOpacity style={styles.root} onPress={_toggleBookmark}>
-				{IsBookmarkStatePending ? (
-					<ActivityIndicator size={'small'} />
-				) : (
-					<Ionicons
-						color={flag ? APP_THEME.INVALID_ITEM : theme.textColor.emphasisC}
-						name={flag ? 'bookmark' : 'bookmark-outline'}
-						size={ICON_SIZE}
-					/>
-				)}
-			</TouchableOpacity>
-		);
-	},
-);
+	const FLAG = dto?.interaction?.bookmarked;
+
+	return (
+		<AppToggleIcon
+			size={appDimensions.timelines.actionButtonSize}
+			flag={FLAG}
+			activeIconId={'bookmark'}
+			inactiveIconId={'bookmark-outline'}
+			inactiveTint={theme.secondary.a10}
+			activeTint={theme.complementary.a0}
+			onPress={_toggleBookmark}
+		/>
+	);
+}
 
 export default PostActionButtonToggleBookmark;
-
-const styles = StyleSheet.create({
-	root: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginRight: 16,
-		paddingTop: 8,
-		paddingBottom: 8,
-	},
-});

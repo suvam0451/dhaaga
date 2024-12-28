@@ -41,9 +41,20 @@ export function useAppTheme() {
 	);
 }
 
+export function useAppPublishers() {
+	return useGlobalState(
+		useShallow((o) => ({
+			postPub: o.publishers.postPub,
+			userPub: o.publishers.userPub,
+			appSub: o.publishers.appSub,
+		})),
+	);
+}
+
 export function useAppBottomSheet_Improved() {
 	return useGlobalState(
 		useShallow((o) => ({
+			type: o.bottomSheet.type,
 			hide: o.bottomSheet.hide,
 			show: o.bottomSheet.show,
 			stateId: o.bottomSheet.stateId,
@@ -51,6 +62,22 @@ export function useAppBottomSheet_Improved() {
 			visible: o.bottomSheet.visible,
 			endSessionSeed: o.bottomSheet.endSessionSeed,
 			broadcastEndSession: o.bottomSheet.broadcastEndSession,
+			ctx: o.bottomSheet.ctx,
+			setCtx: o.bottomSheet.setCtx,
+		})),
+	);
+}
+
+export function useAppDialog() {
+	return useGlobalState(
+		useShallow((o) => ({
+			// type: o.dialog.type,
+			visible: o.dialog.visible,
+			refresh: o.dialog.refresh,
+			stateId: o.dialog.stateId,
+			state: o.dialog.state,
+			show: o.dialog.show,
+			hide: o.dialog.hide,
 		})),
 	);
 }
@@ -61,6 +88,7 @@ export function useAppBottomSheet_TimelineReference() {
 			draft: o.bottomSheet.timeline.draftState,
 			dispatch: o.bottomSheet.timeline.dispatch,
 			attach: o.bottomSheet.timeline.attach,
+			manager: o.bottomSheet.timeline.manager,
 		})),
 	);
 }

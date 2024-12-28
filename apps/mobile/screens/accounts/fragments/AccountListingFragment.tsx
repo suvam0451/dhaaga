@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { memo, MutableRefObject, useState } from 'react';
+import { memo, MutableRefObject } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
@@ -15,11 +15,15 @@ import {
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../../database/entities/account';
+import {
+	useAppDialog,
+	useAppPublishers,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
+import { DialogBuilderService } from '../../../services/dialog-builder.service';
+import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
 
 type Props = {
-	setIsExpanded: (isExpanded: boolean) => void;
-	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: MutableRefObject<Account>;
 	acct: Account;
 };
 
@@ -38,12 +42,7 @@ export const AccountOptions = memo(function Foo({
 	setDeleteDialogExpanded,
 	acct,
 }: AccountOptionsProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-	console.log('account options...', IsExpanded);
+	const { theme } = useAppTheme();
 
 	function onFixClicked() {
 		// FIXME: point this to the sql account
@@ -52,7 +51,7 @@ export const AccountOptions = memo(function Foo({
 
 	const textStyle = {
 		color: theme.textColor.medium,
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		fontSize: 16,
 		marginTop: 4,
 	};
@@ -124,6 +123,7 @@ export const AccountPfp = memo(function Foo({
 	selected,
 	onClicked,
 }: AccountPfpProps) {
+	const { theme } = useAppTheme();
 	return (
 		<TouchableOpacity
 			style={{
@@ -131,7 +131,7 @@ export const AccountPfp = memo(function Foo({
 				width: 48,
 				borderRadius: 8,
 				borderWidth: 1.5,
-				borderColor: selected ? '#9dced7' : 'gray',
+				borderColor: selected ? theme.primary.a10 : 'gray',
 			}}
 			onPress={onClicked}
 		>
@@ -148,6 +148,9 @@ export const AccountPfp = memo(function Foo({
 						display: selected ? 'flex' : 'none',
 					},
 					styles.selectedIndicator,
+					{
+						backgroundColor: theme.primary.a10,
+					},
 				]}
 			/>
 		</TouchableOpacity>
@@ -168,11 +171,7 @@ export const AccountDetails = memo(function Foo({
 	subdomain,
 	onClicked,
 }: selectedIndicatorProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	return (
 		<TouchableOpacity
@@ -182,7 +181,7 @@ export const AccountDetails = memo(function Foo({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-					color: selected ? '#9dced7' : theme.textColor.high,
+					color: theme.secondary.a10,
 				}}
 				numberOfLines={1}
 			>
@@ -190,8 +189,8 @@ export const AccountDetails = memo(function Foo({
 			</Text>
 			<Text
 				style={{
-					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : theme.textColor.low,
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					color: theme.secondary.a30,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -200,8 +199,8 @@ export const AccountDetails = memo(function Foo({
 			</Text>
 			<Text
 				style={{
-					fontFamily: APP_FONTS.INTER_400_REGULAR,
-					color: selected ? '#9dced7' : theme.textColor.medium,
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					color: selected ? theme.primary.a0 : theme.complementary.a0,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -212,19 +211,32 @@ export const AccountDetails = memo(function Foo({
 	);
 });
 
-function AccountListingFragment({
-	dialogTarget,
-	setDeleteDialogExpanded,
-	acct,
-}: Props) {
-	const { db, theme } = useGlobalState(
+function AccountListingFragment({ acct }: Props) {
+	const { theme } = useAppTheme();
+	const { appSub } = useAppPublishers();
+	const { show, hide } = useAppDialog();
+	const { db } = useGlobalState(
 		useShallow((o) => ({
 			db: o.db,
-			theme: o.colorScheme,
 		})),
 	);
-	const [IsExpanded, setIsExpanded] = useState(false);
 
+	function onMoreActions() {
+		show(
+			DialogBuilderService.appAccountMoreActions(
+				async () => {},
+				async () => {
+					show(
+						DialogBuilderService.deleteAccountConfirm(async () => {
+							AccountService.removeById(db, acct.id);
+							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							hide();
+						}),
+					);
+				},
+			),
+		);
+	}
 	const avatar = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,
@@ -266,11 +278,13 @@ function AccountListingFragment({
 						url={avatar}
 						onClicked={() => {
 							AccountService.select(db, acct);
+							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 						}}
 					/>
 					<AccountDetails
 						onClicked={() => {
 							AccountService.select(db, acct);
+							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 						}}
 						selected={acct.selected as boolean}
 						displayName={displayName}
@@ -280,8 +294,10 @@ function AccountListingFragment({
 					{acct.selected && (
 						<Text
 							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: '#9dced7',
+								fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+								color: theme.primary.a0,
+								fontSize: 16,
+								paddingRight: 8,
 							}}
 						>
 							Active
@@ -297,31 +313,23 @@ function AccountListingFragment({
 							flexDirection: 'row',
 							alignItems: 'center',
 						}}
-						onPress={() => {
-							setIsExpanded((o) => !o);
-						}}
+						onPress={onMoreActions}
 					>
 						<Feather
 							name="more-horizontal"
 							size={24}
-							color={APP_FONT.MONTSERRAT_HEADER}
+							color={theme.secondary.a20}
 						/>
 					</TouchableOpacity>
 				</View>
 			</View>
-			<AccountOptions
-				IsExpanded={IsExpanded}
-				dialogTarget={dialogTarget}
-				setDeleteDialogExpanded={setDeleteDialogExpanded}
-				acct={acct}
-			/>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1, // backgroundColor: '#fff',
+		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
