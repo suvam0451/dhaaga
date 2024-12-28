@@ -38,6 +38,7 @@ export type APP_ICON_ENUM =
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
 	| 'checkmark-circle'
+	| 'chevron-left'
 	| 'chevron-right'
 	| 'chevron-down'
 	| 'checkmark-done-outline'
@@ -358,6 +359,16 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name={'checkmark-circle'}
+							size={_size}
+							color={_color}
+							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'chevron-left':
+					return (
+						<Entypo
+							name="chevron-small-left"
 							size={_size}
 							color={_color}
 							onPress={onPress}

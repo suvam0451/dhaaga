@@ -195,7 +195,11 @@ const ComposerAutoCompletion = memo(() => {
 								source={{ uri: item.url }}
 								style={{ height: 24, width: 24, opacity: 0.8 }}
 							/>
-							<Text style={styles.emojiText}>{item.shortCode}</Text>
+							<Text
+								style={[styles.emojiText, { color: theme.complementary.a0 }]}
+							>
+								{item.shortCode}
+							</Text>
 						</Pressable>
 					)}
 				/>

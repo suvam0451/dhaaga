@@ -1,12 +1,6 @@
 import { memo } from 'react';
 import { Emoji, EMOJI_PICKER_STATE } from '../emojiPickerReducer';
-import {
-	ScrollView,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../styles/AppTheme';
@@ -21,11 +15,7 @@ const EmojiPickerSearchResults = memo(
 		return (
 			<ScrollView
 				style={{
-					flexGrow: 1,
-					display: 'flex',
 					flexWrap: 'wrap',
-					flexShrink: 1,
-					height: 200,
 				}}
 				keyboardShouldPersistTaps={'always'}
 			>
@@ -41,17 +31,17 @@ const EmojiPickerSearchResults = memo(
 						</TouchableOpacity>
 					))}
 				</View>
-				<Text
-					style={{
-						fontSize: 13,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-						color: APP_FONT.MONTSERRAT_BODY,
-						marginVertical: 8,
-						textAlign: 'center',
-					}}
-				>
-					Showing {State.resultSize}/{State.totalSize} results for category
-				</Text>
+				{/*<Text*/}
+				{/*	style={{*/}
+				{/*		fontSize: 13,*/}
+				{/*		fontFamily: APP_FONTS.INTER_500_MEDIUM,*/}
+				{/*		color: APP_FONT.MONTSERRAT_BODY,*/}
+				{/*		marginVertical: 8,*/}
+				{/*		textAlign: 'center',*/}
+				{/*	}}*/}
+				{/*>*/}
+				{/*	Showing {State.resultSize}/{State.totalSize} results for category*/}
+				{/*</Text>*/}
 			</ScrollView>
 		);
 	},

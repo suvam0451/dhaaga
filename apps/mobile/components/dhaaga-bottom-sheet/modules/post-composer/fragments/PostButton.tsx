@@ -42,7 +42,7 @@ const PostButton = memo(() => {
 
 	async function onClick() {
 		setLoading(true);
-		let _visibility: any = state.visibility.toLowerCase();
+		let _visibility: any = state.visibility;
 
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			let reply: AtprotoReplyEmbed = null;

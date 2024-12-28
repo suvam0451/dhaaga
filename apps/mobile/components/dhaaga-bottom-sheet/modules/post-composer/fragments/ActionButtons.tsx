@@ -1,49 +1,32 @@
-import { memo, useCallback } from 'react';
+import { Fragment, memo } from 'react';
 import { Pressable, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import ComposerAutoCompletion from './ComposerAutoCompletion';
 import VisibilityPicker from './VisibilityPicker';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 
 /**
  * The buttons at bottom row of
  * the composer sheet
  */
 const ActionButtons = memo(() => {
-	const { visible, theme } = useGlobalState(
-		useShallow((o) => ({
-			visible: o.bottomSheet.visible,
-			theme: o.colorScheme,
-		})),
-	);
-	const { setEditMode, editMode, setCwShown, cw } = useComposerContext();
-
-	const toggleEditMode = useCallback(() => {
-		setEditMode((o) => {
-			if (o === 'txt') return 'alt';
-			return 'txt';
-		});
-	}, []);
+	const { theme } = useAppTheme();
+	const { dispatch, setCwShown, cw } = useComposerContext();
 
 	function toggleCwShown() {
 		setCwShown((o) => !o);
 	}
 
 	function onCustomEmojiClicked() {
-		setEditMode((o) => {
-			if (o === 'txt') return 'emoji';
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_EMOJI_TAB,
 		});
 	}
 
-	if (!visible || editMode === 'emoji') return <View />;
 	return (
-		<View
-			style={{
-				display: 'flex',
-			}}
-		>
+		<Fragment>
 			<ComposerAutoCompletion />
 			<View
 				style={{
@@ -73,7 +56,7 @@ const ActionButtons = memo(() => {
 				</View>
 				<VisibilityPicker />
 			</View>
-		</View>
+		</Fragment>
 	);
 });
 export default ActionButtons;

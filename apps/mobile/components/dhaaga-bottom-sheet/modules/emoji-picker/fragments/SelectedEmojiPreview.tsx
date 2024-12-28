@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { Image } from 'expo-image';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 type SelectedEmojiPreviewProps = {
 	selection: InstanceApi_CustomEmojiDTO | null;
@@ -11,6 +12,7 @@ type SelectedEmojiPreviewProps = {
 
 const SelectedEmojiPreview = memo(
 	({ selection }: SelectedEmojiPreviewProps) => {
+		const { theme } = useAppTheme();
 		if (!selection) {
 			return (
 				<Text
@@ -29,14 +31,17 @@ const SelectedEmojiPreview = memo(
 			<View
 				style={{
 					flexDirection: 'row',
-					flex: 1,
-					flexGrow: 1,
 					alignItems: 'center',
+					marginBottom: 8,
+					justifyContent: 'center',
 				}}
 			>
 				{/*@ts-ignore-next-line*/}
 				<Image source={{ uri: selection.url }} style={styles.emojiContainer} />
-				<Text style={styles.emojiDesc} numberOfLines={1}>
+				<Text
+					style={[styles.emojiDesc, { color: theme.complementary.a0 }]}
+					numberOfLines={1}
+				>
 					{selection.shortCode}
 				</Text>
 			</View>
@@ -62,14 +67,13 @@ const styles = StyleSheet.create({
 		// width: '100%',
 		// maxHeight: 200,
 		paddingVertical: 16,
-		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 16,
 		borderRadius: 8,
 	},
 	emojiDesc: {
-		color: APP_FONT.MONTSERRAT_BODY,
 		marginLeft: 4,
 		flexShrink: 1,
+		fontSize: 16,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 });

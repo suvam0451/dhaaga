@@ -23,11 +23,17 @@ const PostCompose = memo(() => {
 		switch (state.mode) {
 			case 'txt': {
 				return (
-					<ScrollView>
-						<ComposerTopMenu />
-						<ComposerSpoiler />
-						<ComposerTextInput />
-					</ScrollView>
+					<View style={{ height: '100%' }}>
+						<ScrollView style={{ flex: 1 }}>
+							<ComposerTopMenu />
+							<ComposerSpoiler />
+							<ComposerTextInput />
+							<View style={{ flexGrow: 1 }} />
+						</ScrollView>
+						<View style={{ paddingBottom: 16 }}>
+							<ActionButtons />
+						</View>
+					</View>
 				);
 			}
 			case 'emoji': {
@@ -82,20 +88,17 @@ const PostCompose = memo(() => {
 				{
 					display: visible ? 'flex' : 'none',
 					backgroundColor: theme.palette.menubar,
-					position: 'relative',
 				},
 			]}
 		>
 			{/*This section changes based on edit mode*/}
 			{EditorContent}
-			<ActionButtons />
 		</View>
 	);
 });
 
 const styles = StyleSheet.create({
 	bottomSheetContentContainer: {
-		padding: 16,
 		paddingHorizontal: 10,
 		paddingTop: 0,
 		height: '100%',
