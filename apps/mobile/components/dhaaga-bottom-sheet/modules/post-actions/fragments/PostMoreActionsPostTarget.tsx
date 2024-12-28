@@ -1,14 +1,6 @@
-import {
-	Dispatch,
-	Fragment,
-	memo,
-	SetStateAction,
-	useEffect,
-	useState,
-} from 'react';
+import { Dispatch, Fragment, memo, SetStateAction } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons } from '@expo/vector-icons';
 import ActivityPubService from '../../../../../services/activitypub.service';
@@ -18,13 +10,11 @@ import { AppIcon } from '../../../../lib/Icon';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 import {
-	useAppBottomSheet_Improved,
-	useAppBottomSheet_TimelineReference,
-	useAppManager,
+	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { AppPostObject } from '../../../../../types/app-post.types';
-import { AppTimelineReducerActionType } from '../../../../../states/reducers/timeline.reducer';
+import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
 
 function SectionDivider() {
 	return (
@@ -109,33 +99,23 @@ const ActionButton = memo(
 const PostMoreActionsPostTarget = memo(
 	({
 		setEditMode,
+		item,
 	}: {
 		setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
+		item: AppPostObject;
 	}) => {
-		const [PostTarget, setPostTarget] = useState<AppPostObject>(null);
-		const { stateId } = useAppBottomSheet_Improved();
-		const { appManager } = useAppManager();
-		const { hide, router, driver } = useGlobalState(
+		const { postPub } = useAppPublishers();
+		const { driver } = useGlobalState(
 			useShallow((o) => ({
-				router: o.router,
 				driver: o.driver,
-				hide: o.bottomSheet.hide,
 			})),
 		);
-		const { dispatch } = useAppBottomSheet_TimelineReference();
-
-		useEffect(() => {
-			setPostTarget(appManager.storage.getBottomSheetPostActionsTarget());
-		}, [stateId]);
-
 		const { theme } = useAppTheme();
+		const _target = PostMiddleware.getContentTarget(item);
 
-		const IS_BOOKMARKED = PostTarget?.interaction.bookmarked;
-		const IS_LIKED = PostTarget?.interaction.liked;
-
-		const IS_REACTED = PostTarget?.stats?.reactions?.every(
-			(o) => o.me === false,
-		);
+		const IS_BOOKMARKED = _target?.interaction.bookmarked;
+		const IS_LIKED = _target?.interaction.liked;
+		const IS_REACTED = _target?.stats?.reactions?.every((o) => o.me === false);
 
 		let ReactionCta = 'Add Reaction';
 		if (IS_REACTED) {
@@ -152,50 +132,12 @@ const PostMoreActionsPostTarget = memo(
 			setEditMode('emoji');
 		}
 
-		function onClickToggleLike() {
-			ActivityPubService.toggleLike(
-				router,
-				PostTarget.id,
-				PostTarget.interaction.liked,
-				driver as any,
-			)
-				.then((res) => {
-					dispatch({
-						type: AppTimelineReducerActionType.UPDATE_LIKE_STATUS,
-						payload: {
-							id: PostTarget.id,
-							delta: res,
-						},
-					});
-				})
-				.finally(() => {
-					hide();
-				});
+		async function onClickToggleLike() {
+			postPub.toggleLike(item.uuid);
 		}
 
-		function onClickToggleBookmark() {
-			ActivityPubService.toggleBookmark(
-				router,
-				PostTarget.id,
-				PostTarget.interaction.bookmarked,
-			)
-				.then((res) => {
-					console.log('bookmark success', res);
-					if (!dispatch) {
-						console.log('[WARN]: dispatcher not linked');
-					}
-					dispatch({
-						type: AppTimelineReducerActionType.UPDATE_BOOKMARK_STATUS,
-						payload: {
-							id: PostTarget.id,
-							value: res,
-						},
-					});
-				})
-				.finally(() => {
-					console.log('bookmark success fail');
-					hide();
-				});
+		async function onClickToggleBookmark() {
+			postPub.toggleBookmark(item.uuid);
 		}
 
 		const IS_MASTODON_LIKE = ActivityPubService.mastodonLike(driver);
@@ -205,9 +147,7 @@ const PostMoreActionsPostTarget = memo(
 				<ActionButton
 					Icon={
 						<Ionicons
-							color={
-								IS_BOOKMARKED ? theme.complementary.a0 : theme.secondary.a10
-							}
+							color={IS_BOOKMARKED ? theme.primary.a0 : theme.secondary.a10}
 							name={'bookmark'}
 							size={24}
 						/>
@@ -222,7 +162,7 @@ const PostMoreActionsPostTarget = memo(
 							<AntDesign
 								name={IS_LIKED ? 'like1' : 'like2'}
 								size={24}
-								color={IS_LIKED ? APP_THEME.LINK : theme.textColor.high}
+								color={IS_LIKED ? theme.primary.a0 : theme.secondary.a10}
 							/>
 						}
 						label={IS_LIKED ? 'Remove Like' : 'Add Like'}

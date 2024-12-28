@@ -161,20 +161,18 @@ function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
 	);
 }
 
-const StatusInteraction = memo(
-	({ openAiContext, dto }: StatusInteractionProps) => {
-		const STATUS_DTO = dto;
-		return (
-			<View
-				style={{
-					paddingHorizontal: 4,
-				}}
-			>
-				<PostStats dto={STATUS_DTO} />
-				<StatusInteractionButtons item={STATUS_DTO} />
-			</View>
-		);
-	},
-);
+const StatusInteraction = memo(({ dto }: StatusInteractionProps) => {
+	const STATUS_DTO = dto;
+	return (
+		<View
+			style={{
+				paddingHorizontal: 4,
+			}}
+		>
+			<PostStats dto={STATUS_DTO} />
+			<StatusInteractionButtons item={STATUS_DTO} />
+		</View>
+	);
+});
 
 export default StatusInteraction;

@@ -20,15 +20,7 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
 import { Text } from 'react-native';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
-import {
-	useTimelineDispatch,
-	useTimelineManager,
-	useTimelineState,
-} from '../../timeline/core/Timeline';
-import {
-	useAppBottomSheet_TimelineReference,
-	useAppManager,
-} from '../../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet_Improved } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
 
@@ -45,21 +37,11 @@ type StatusCoreProps = {
 
 function StatusController() {
 	const { dto } = useAppStatusItem();
-	const State = useTimelineState();
-	const dispatch = useTimelineDispatch();
-	const manager = useTimelineManager();
-	const { show } = useGlobalState(
-		useShallow((o) => ({
-			show: o.bottomSheet.show,
-		})),
-	);
-	const { attach } = useAppBottomSheet_TimelineReference();
-	const { appManager } = useAppManager();
+	const { show, setCtx } = useAppBottomSheet_Improved();
 
 	function onMoreOptionsPress() {
-		attach(State, dispatch, manager.current);
-		appManager.storage.setBottomSheetPostActionsTarget(dto);
-		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
+		setCtx({ uuid: dto.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
 	}
 
 	return (

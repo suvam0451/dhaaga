@@ -4,6 +4,7 @@ import useMfm from '../../hooks/useMfm';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppPostObject } from '../../../types/app-post.types';
+import { appDimensions } from '../../../styles/dimensions';
 
 type Props = {
 	dto: AppPostObject;
@@ -22,14 +23,20 @@ function ReplyOwner({ dto }: Props) {
 	});
 
 	return (
-		<View style={{ display: 'flex', flexDirection: 'row', marginBottom: 8 }}>
+		<View
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+				marginBottom: 8,
+			}}
+		>
 			<View
 				style={{
-					width: 42,
-					height: 42,
+					width: appDimensions.timelines.avatarIconSize,
+					height: appDimensions.timelines.avatarIconSize,
 					borderColor: 'gray',
 					borderWidth: 1,
-					borderRadius: 6,
+					borderRadius: appDimensions.timelines.avatarIconSize / 2,
 				}}
 			>
 				{/*@ts-ignore-next-line*/}
@@ -38,7 +45,7 @@ function ReplyOwner({ dto }: Props) {
 						flex: 1,
 						width: '100%',
 						opacity: 0.87,
-						borderRadius: 8,
+						borderRadius: appDimensions.timelines.avatarIconSize / 2,
 					}}
 					source={{ uri: dto.postedBy.avatarUrl }}
 				/>

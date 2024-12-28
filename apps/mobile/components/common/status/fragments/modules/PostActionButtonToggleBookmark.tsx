@@ -62,7 +62,7 @@ function PostActionButtonToggleBookmark() {
 			activeIconId={'bookmark'}
 			inactiveIconId={'bookmark-outline'}
 			inactiveTint={theme.secondary.a10}
-			activeTint={theme.complementary.a0}
+			activeTint={theme.primary.a0}
 			onPress={_toggleBookmark}
 		/>
 	);

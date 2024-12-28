@@ -103,7 +103,7 @@ class MastodonToStatusAdapter
 
 	getVisibility = () => this.ref.visibility;
 
-	getAccountUrl = () => this.ref.account.url;
+	getAccountUrl = () => (this.ref.account as any).uri || this.ref.account.url;
 
 	getRepostedStatus() {
 		if (this.ref.reblog) {
