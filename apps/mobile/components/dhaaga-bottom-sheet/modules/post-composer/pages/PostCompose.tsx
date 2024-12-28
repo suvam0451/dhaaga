@@ -12,12 +12,31 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
+import { Emoji } from '../../emoji-picker/emojiPickerReducer';
 import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 
 const PostCompose = memo(() => {
 	const { visible } = useAppBottomSheet_Improved();
 	const { state, dispatch } = useComposerContext();
 	const { theme } = useAppTheme();
+
+	function onEmojiApplied(o: Emoji) {
+		dispatch({
+			type: PostComposerReducerActionType.SET_TEXT,
+			payload: {
+				content: TextEditorService.addReactionText(state.text, o.shortCode),
+			},
+		});
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+		});
+	}
+
+	function onCancelFromAuxTab() {
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+		});
+	}
 
 	const EditorContent = useMemo(() => {
 		switch (state.mode) {
@@ -36,31 +55,13 @@ const PostCompose = memo(() => {
 					</View>
 				);
 			}
-			case 'emoji': {
+			case 'emoji':
 				return (
 					<EmojiPickerBottomSheet
-						onCancel={() => {
-							dispatch({
-								type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
-							});
-						}}
-						onSelect={async (shortCode: string) => {
-							dispatch({
-								type: PostComposerReducerActionType.SET_TEXT,
-								payload: {
-									content: TextEditorService.addReactionText(
-										state.text,
-										shortCode,
-									),
-								},
-							});
-							dispatch({
-								type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
-							});
-						}}
+						onAccept={onEmojiApplied}
+						onCancel={onCancelFromAuxTab}
 					/>
 				);
-			}
 			case 'media': {
 				return (
 					<ScrollView

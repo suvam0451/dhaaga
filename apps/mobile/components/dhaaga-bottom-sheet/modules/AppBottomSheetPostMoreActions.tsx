@@ -1,8 +1,8 @@
-import { memo, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { memo, useEffect, useReducer, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import emojiPickerReducer, {
 	defaultValue,
-	EMOJI_PICKER_REDUCER_ACTION,
+	Emoji,
 } from './emoji-picker/emojiPickerReducer';
 import PostMoreActionsPostTarget from './post-actions/fragments/PostMoreActionsPostTarget';
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
@@ -57,11 +57,11 @@ const AppBottomSheetPostMoreActions = memo(() => {
 
 	const [Loading, setLoading] = useState(false);
 
-	async function onReactionRequested(shortCode: string) {
+	async function onReactionRequested(emoji: Emoji) {
 		const state = await ActivitypubReactionsService.addReaction(
 			router,
 			PostTarget.id,
-			shortCode,
+			emoji.shortCode,
 			driver,
 			setLoading,
 		);
@@ -102,7 +102,7 @@ const AppBottomSheetPostMoreActions = memo(() => {
 				/>
 			) : EditMode === 'emoji' ? (
 				<EmojiPickerBottomSheet
-					onSelect={onReactionRequested}
+					onAccept={onReactionRequested}
 					onCancel={() => {
 						setEditMode('root');
 					}}

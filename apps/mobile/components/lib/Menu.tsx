@@ -1,8 +1,9 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_ICON_ENUM, AppIcon } from './Icon';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type AppMenuOptionType = {
 	appIconId: any;
@@ -149,3 +150,84 @@ export class AppMenu {
 		);
 	}
 }
+
+type AppBottomSheetMenuWithBackNavigationProps = {
+	onBack: () => void;
+	onNext: () => void;
+	nextEnabled: boolean;
+	MiddleComponent?: any;
+};
+
+/**
+ *
+ * @constructor
+ */
+export class AppBottomSheetMenu {
+	static WithBackNavigation({
+		onBack,
+		onNext,
+		nextEnabled,
+		MiddleComponent,
+	}: AppBottomSheetMenuWithBackNavigationProps) {
+		const { theme } = useAppTheme();
+		return (
+			<View style={styles.cancelButtonContainer}>
+				<Pressable
+					onPress={onBack}
+					style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}
+				>
+					<AppIcon id={'chevron-left'} color={theme.complementary.a0} />
+					<Text
+						style={{
+							color: theme.complementary.a0,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							fontSize: 16,
+						}}
+					>
+						Go Back
+					</Text>
+				</Pressable>
+				<View
+					style={{
+						flexGrow: 1,
+						flex: 1,
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+				>
+					{MiddleComponent}
+				</View>
+				<Pressable
+					onPress={onNext}
+					style={{
+						flexDirection: 'row',
+						alignItems: 'flex-end',
+						paddingRight: 8,
+						flex: 1,
+					}}
+				>
+					<Text
+						style={{
+							color: nextEnabled ? theme.primary.a0 : theme.secondary.a20,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							fontSize: 16,
+							textAlign: 'right',
+							marginLeft: 'auto',
+						}}
+					>
+						Pick
+					</Text>
+				</Pressable>
+			</View>
+		);
+	}
+}
+
+const styles = StyleSheet.create({
+	cancelButtonContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		maxWidth: '100%',
+		marginBottom: 8,
+	},
+});
