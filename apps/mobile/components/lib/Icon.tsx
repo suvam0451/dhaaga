@@ -26,6 +26,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 export type APP_ICON_ENUM =
 	| 'add-circle-outline'
@@ -39,10 +40,11 @@ export type APP_ICON_ENUM =
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
 	| 'checkmark-circle'
+	| 'checkmark-done-outline'
 	| 'chevron-left'
 	| 'chevron-right'
 	| 'chevron-down'
-	| 'checkmark-done-outline'
+	| 'cloud-upload-outline'
 	| 'cog'
 	| 'copy'
 	| 'create'
@@ -85,6 +87,7 @@ export type APP_ICON_ENUM =
 	| 'trash'
 	| 'user-guide'
 	| 'wand'
+	| 'warning-outline'
 	| 'mute-outline'
 	| 'unmute-outline';
 
@@ -212,11 +215,7 @@ export const AppIcon = memo(
 		containerStyle,
 		color,
 	}: AppIconType) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 
 		let _color = null;
 		let _size = size || 24;
@@ -376,7 +375,21 @@ export const AppIcon = memo(
 					);
 				case 'chevron-down':
 					return (
-						<Ionicons name="chevron-down" color={_color} style={iconStyle} />
+						<Ionicons
+							name="chevron-down"
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
+				case 'cloud-upload-outline':
+					return (
+						<Ionicons
+							name={'cloud-upload-outline'}
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
 					);
 				case 'checkmark-done-outline':
 					return (
@@ -387,7 +400,6 @@ export const AppIcon = memo(
 							style={iconStyle}
 						/>
 					);
-
 				case 'cog':
 					return Platform.OS === 'ios' ? (
 						<Ionicons
@@ -789,6 +801,15 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="volume-high-outline"
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
+				case 'warning-outline':
+					return (
+						<Ionicons
+							name={'warning-outline'}
 							size={_size}
 							color={_color}
 							style={iconStyle}

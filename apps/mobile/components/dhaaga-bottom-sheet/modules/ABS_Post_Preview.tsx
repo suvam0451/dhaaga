@@ -64,30 +64,30 @@ function ABS_Post_Preview() {
 				>
 					Published 🎉
 				</Text>
-				<TouchableOpacity
-					style={[
-						styles.buttonContainer,
-						{
-							backgroundColor: theme.complementary.a0,
-						},
-					]}
-					onPress={onBrowsePress}
-				>
-					<Text
-						style={{
-							color: 'black',
-							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-						}}
-					>
-						Browse
-					</Text>
-					<FontAwesome
-						name="send"
-						size={20}
-						style={{ marginLeft: 8 }}
-						color={'black'}
-					/>
-				</TouchableOpacity>
+				{/*<TouchableOpacity*/}
+				{/*	style={[*/}
+				{/*		styles.buttonContainer,*/}
+				{/*		{*/}
+				{/*			backgroundColor: theme.complementary.a0,*/}
+				{/*		},*/}
+				{/*	]}*/}
+				{/*	onPress={onBrowsePress}*/}
+				{/*>*/}
+				{/*	<Text*/}
+				{/*		style={{*/}
+				{/*			color: 'black',*/}
+				{/*			fontFamily: APP_FONTS.INTER_600_SEMIBOLD,*/}
+				{/*		}}*/}
+				{/*	>*/}
+				{/*		Browse*/}
+				{/*	</Text>*/}
+				{/*	<FontAwesome*/}
+				{/*		name="send"*/}
+				{/*		size={20}*/}
+				{/*		style={{ marginLeft: 8 }}*/}
+				{/*		color={'black'}*/}
+				{/*	/>*/}
+				{/*</TouchableOpacity>*/}
 			</View>
 			<WithAppStatusItemContext dto={Post}>
 				<StatusItem isPreview />

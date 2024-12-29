@@ -27,7 +27,7 @@ import { Loader } from '../../../../lib/Loader';
  */
 const PostButton = memo(() => {
 	const [Loading, setLoading] = useState(false);
-	const { state, mediaTargets } = useComposerContext();
+	const { state } = useComposerContext();
 	const { client, driver, acct } = useGlobalState(
 		useShallow((o) => ({
 			client: o.router,
@@ -98,6 +98,12 @@ const PostButton = memo(() => {
 		}
 
 		switch (_visibility) {
+			case APP_POST_VISIBILITY.PUBLIC: {
+				_visibility = ActivityPubService.mastodonLike(driver)
+					? 'public'
+					: 'public';
+				break;
+			}
 			case APP_POST_VISIBILITY.PRIVATE: {
 				_visibility = ActivityPubService.mastodonLike(driver)
 					? 'private'
@@ -127,7 +133,7 @@ const PostButton = memo(() => {
 				language: 'en',
 				sensitive: false,
 				inReplyToId: state.parent ? state.parent.id : null,
-				mediaIds: mediaTargets.map((o) => o.remoteId.toString()),
+				mediaIds: state.medias.map((o) => o.remoteId),
 				localOnly: false,
 				spoilerText: state.cw === '' ? undefined : state.cw,
 			});

@@ -1,131 +1,21 @@
-import { memo, useState } from 'react';
-import {
-	View,
-	Text,
-	TextInput,
-	StyleSheet,
-	TouchableOpacity,
-} from 'react-native';
+import { memo } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { useComposerContext } from '../api/useComposerContext';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../styles/AppTheme';
-import useHookLoadingState from '../../../../../states/useHookLoadingState';
-import { Image } from 'expo-image';
 import ComposeMediaTargets from './MediaTargets';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../../states/_global';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { AppBottomSheetMenu } from '../../../../lib/Menu';
-import {
-	PostComposer_MediaState,
-	PostComposerReducerActionType,
-} from '../../../../../states/reducers/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 import { AppIcon } from '../../../../lib/Icon';
 import MediaUtils from '../../../../../utils/media.utils';
 import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '../../../../../database/entities/account-metadata';
-
-const ComposerAltListItem = memo(
-	({ item, index }: { item: PostComposer_MediaState; index: number }) => {
-		const { client } = useGlobalState(
-			useShallow((o) => ({
-				client: o.router,
-			})),
-		);
-		const { setAltText } = useComposerContext();
-		const [TextContent, setTextContent] = useState(item.localCw);
-		const { forceUpdate } = useHookLoadingState();
-
-		async function onSaveAltText() {
-			if (TextContent === '') return;
-			try {
-				const { data, error } = await client.media.updateDescription(
-					item.remoteId,
-					TextContent,
-				);
-				if (!error) {
-					setAltText(index, TextContent);
-					forceUpdate();
-				}
-			} catch (e) {
-				console.log('[ERROR]: updating alt-text', e);
-			}
-		}
-
-		function onChange(text: string) {
-			setTextContent(text);
-		}
-
-		// console.log(item.previewUrl || item.localUri);
-		return (
-			<View>
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'flex-start',
-						marginVertical: 4,
-					}}
-				>
-					<View>
-						{/*@ts-ignore-next-line*/}
-						<Image
-							source={{ uri: item.previewUrl || item.localUri }}
-							style={{ width: 64, height: 96, borderRadius: 8 }}
-						/>
-					</View>
-					<View
-						style={{
-							// width: '100%',
-							// height: '100%',
-							marginLeft: 10,
-							marginTop: 4,
-							flex: 1,
-						}}
-					>
-						<TextInput
-							autoCapitalize={'none'}
-							multiline={true}
-							value={TextContent}
-							placeholder={'Alt text for this image.'}
-							placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
-							style={styles.textInput}
-							onChangeText={onChange}
-							textAlignVertical={'top'}
-						/>
-						<View style={{ flexGrow: 1 }} />
-						<TouchableOpacity
-							style={{
-								padding: 8,
-								backgroundColor: '#404040',
-								maxWidth: 72,
-								borderRadius: 8,
-								marginTop: 16,
-								marginLeft: 4,
-								display:
-									TextContent === '' || item.localCw === TextContent
-										? 'none'
-										: 'flex',
-							}}
-							onPress={onSaveAltText}
-						>
-							<Text
-								style={{
-									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-									textAlign: 'center',
-									color: APP_FONT.MONTSERRAT_BODY,
-								}}
-							>
-								Apply
-							</Text>
-						</TouchableOpacity>
-					</View>
-				</View>
-			</View>
-		);
-	},
-);
+import ActivityPubProviderService from '../../../../../services/activitypub-provider.service';
 
 const ComposerAlt = memo(() => {
 	const { acct, driver, db } = useGlobalState(
@@ -144,6 +34,11 @@ const ComposerAlt = memo(() => {
 		});
 	}
 
+	/**
+	 * Lets the user select an image item
+	 * to share and starts and updates about
+	 * upload status
+	 */
 	async function trigger() {
 		let _asset = await MediaUtils.pickImageFromDevice();
 		if (!_asset) return;
@@ -160,33 +55,66 @@ const ComposerAlt = memo(() => {
 				item: _asset,
 			},
 		});
-		// try {
-		// 	const uploadResult = await ActivityPubProviderService.uploadFile(
-		// 		acct?.server,
-		// 		_asset.uri,
-		// 		{
-		// 			token: token,
-		// 			mimeType: _asset.mimeType,
-		// 			domain: driver,
-		// 		},
-		// 	);
-		//
-		// 	addMediaTarget({
-		// 		localUri: _asset.uri,
-		// 		uploaded: true,
-		// 		remoteId: uploadResult.id,
-		// 		previewUrl: uploadResult.previewUrl,
-		// 	});
-		// } catch (E) {
-		// 	console.log(E);
-		// }
+
+		// try upload
+		try {
+			dispatch({
+				type: PostComposerReducerActionType.SET_UPLOAD_STATUS,
+				payload: {
+					status: 'uploading',
+					localUri: _asset.uri,
+				},
+			});
+			const uploadResult = await ActivityPubProviderService.uploadFile(
+				acct?.server,
+				_asset.uri,
+				{
+					token,
+					mimeType: _asset.mimeType,
+					domain: driver,
+				},
+			);
+			if (uploadResult.id && uploadResult.previewUrl) {
+				dispatch({
+					type: PostComposerReducerActionType.SET_UPLOAD_STATUS,
+					payload: {
+						status: 'uploaded',
+						localUri: _asset.uri,
+					},
+				});
+				dispatch({
+					type: PostComposerReducerActionType.SET_REMOTE_CONTENT,
+					payload: {
+						localUri: _asset.uri,
+						remoteId: uploadResult.id,
+						previewUrl: uploadResult.previewUrl,
+					},
+				});
+			} else {
+				dispatch({
+					type: PostComposerReducerActionType.SET_UPLOAD_STATUS,
+					payload: {
+						status: 'failed',
+						localUri: _asset.uri,
+					},
+				});
+			}
+		} catch (E) {
+			dispatch({
+				type: PostComposerReducerActionType.SET_UPLOAD_STATUS,
+				payload: {
+					status: 'failed',
+					localUri: _asset.uri,
+				},
+			});
+		}
 	}
 
 	return (
 		<View>
 			<AppBottomSheetMenu.WithBackNavigation
 				backLabel={'Back'}
-				nextLabel={'Sync'}
+				nextLabel={''}
 				onBack={onBack}
 				onNext={() => {}}
 				nextEnabled={false}

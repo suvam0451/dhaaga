@@ -419,7 +419,7 @@ const useGlobalState = create<State & Actions>()(
 				set((state) => {
 					state.dialog.state = data;
 					state.dialog.stateId = RandomUtil.nanoId();
-					if (textSeed && callback) {
+					if (textSeed !== undefined && textSeed !== null && callback) {
 						state.dialog.type = APP_DIALOG_SHEET_ENUM.TEXT_INPUT;
 						state.dialog.textSeed = textSeed;
 						state.dialog.textSubmitCallback = callback;

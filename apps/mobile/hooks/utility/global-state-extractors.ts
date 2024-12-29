@@ -17,6 +17,16 @@ export function useAppModalState(modalType: APP_KNOWN_MODAL) {
 	);
 }
 
+export function useAppApiClient() {
+	return useGlobalState(
+		useShallow((o) => ({
+			client: o.router,
+			driver: o.driver,
+			server: o.acct?.server,
+		})),
+	);
+}
+
 export function useAppManager() {
 	return useGlobalState(
 		useShallow((o) => ({
@@ -78,6 +88,8 @@ export function useAppDialog() {
 			state: o.dialog.state,
 			show: o.dialog.show,
 			hide: o.dialog.hide,
+			textSubmitCallback: o.dialog.textSubmitCallback,
+			textSeed: o.dialog.textSeed,
 		})),
 	);
 }

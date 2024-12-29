@@ -5,7 +5,7 @@ import {
 } from '../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { modalStyles } from '../common/relationship/dialogs/_common';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
 
@@ -71,10 +71,17 @@ function DialogOption({ label, onPress, variant }: DialogOptionsProps) {
  * @constructor
  */
 export function AppDialog() {
-	const { visible, hide, state, type } = useAppDialog();
+	const { visible, hide, state, textSeed, textSubmitCallback, stateId } =
+		useAppDialog();
 	const { theme } = useAppTheme();
 	const [Input, setInput] = useState(null);
-	console.log(Input);
+
+	useEffect(() => {
+		setInput(textSeed);
+	}, [stateId, textSeed]);
+
+	const IS_TXT_MODE =
+		textSeed !== null && textSeed !== undefined && !!textSubmitCallback;
 
 	if (!visible) return <View />;
 	return (
@@ -120,10 +127,11 @@ export function AppDialog() {
 								{text}
 							</Text>
 						))}
-						{type === 'TextInput' && (
+						{IS_TXT_MODE && (
 							<AppTextInput.SingleLine
 								placeholder={'Your input here'}
 								onChangeText={setInput}
+								value={Input}
 								style={{
 									fontSize: 16,
 									textAlign: 'center',
@@ -141,10 +149,11 @@ export function AppDialog() {
 								variant={(action.variant || 'default') as any}
 							/>
 						))}
-						{type === 'TextInput' && (
+						{IS_TXT_MODE && (
 							<DialogOption
 								label={'Save'}
 								onPress={async () => {
+									textSubmitCallback(Input);
 									hide();
 								}}
 								variant={'default'}

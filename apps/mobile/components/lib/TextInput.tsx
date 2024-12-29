@@ -2,6 +2,7 @@ import { StyleProp, TextInput, TextStyle, StyleSheet } from 'react-native';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type AppTextInput_SingleLineProps = {
+	value: string;
 	placeholder: string;
 	onChangeText: (o: any) => void;
 	style?: StyleProp<TextStyle>;
@@ -14,6 +15,7 @@ export class AppTextInput {
 		placeholder,
 		style,
 		autoCapitalize,
+		value,
 	}: AppTextInput_SingleLineProps) {
 		const { theme } = useAppTheme();
 		return (
@@ -24,6 +26,7 @@ export class AppTextInput {
 				placeholderTextColor={theme.secondary.a40}
 				style={[styles.singleLine, { color: theme.secondary.a20 }, style]}
 				onChangeText={onChangeText}
+				value={value}
 			/>
 		);
 	}

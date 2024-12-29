@@ -1,11 +1,4 @@
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useReducer,
-	useState,
-} from 'react';
+import { createContext, useContext, useEffect, useReducer } from 'react';
 import {
 	PostComposerDispatchType,
 	postComposerReducer as reducer,
@@ -16,39 +9,14 @@ import {
 import { useAppBottomSheet_Improved } from '../../../../../hooks/utility/global-state-extractors';
 import usePostComposeAutoCompletion from './usePostComposeAutoCompletion';
 
-export type ComposeMediaTargetItem = {
-	previewUrl?: string;
-	remoteId?: string;
-	url?: string;
-	uploaded: boolean;
-	localUri: string;
-	status?: string;
-	cw?: string;
-};
-
 type Type = {
 	state: PostComposerReducerStateType;
 	dispatch: PostComposerDispatchType;
-	setAltText: (index: number, o: string) => void;
-	// media items to track upload for
-	mediaTargets: ComposeMediaTargetItem[];
-	addMediaTarget: ({}: {
-		localUri: string;
-		uploaded: boolean;
-		remoteId: string;
-		previewUrl?: string;
-	}) => void;
-	removeMediaTarget: (index: number) => void;
 };
 
 const defaultValue: Type = {
 	state: null,
 	dispatch: null,
-	// media items to track upload for
-	mediaTargets: [],
-	addMediaTarget: () => {},
-	removeMediaTarget: () => {},
-	setAltText: () => {},
 };
 
 const ComposerContext = createContext<Type>(defaultValue);
@@ -77,58 +45,11 @@ function WithComposerContext({ children, textSeed }: Props) {
 		});
 	}, [textSeed, stateId]);
 
-	/**
-	 * Media Targets
-	 */
-	const [MediaTargets, setMediaTargets] = useState<ComposeMediaTargetItem[]>(
-		[],
-	);
-	const addMediaTarget = useCallback(
-		({
-			localUri,
-			uploaded,
-			remoteId,
-			previewUrl,
-		}: {
-			localUri: string;
-			uploaded: boolean;
-			remoteId: string;
-			previewUrl?: string;
-		}) => {
-			setMediaTargets((o) =>
-				o.concat([
-					{
-						localUri,
-						uploaded: uploaded || false,
-						remoteId,
-						previewUrl,
-					},
-				]),
-			);
-		},
-		[],
-	);
-
-	const removeMediaTarget = useCallback((index: number) => {
-		setMediaTargets((o) => [...o.slice(0, index), ...o.slice(index + 1)]);
-	}, []);
-
-	function setAltText(index: number, text: string) {
-		if (index >= MediaTargets.length) return;
-
-		MediaTargets[index].cw = text;
-		setMediaTargets(MediaTargets);
-	}
-
 	return (
 		<ComposerContext.Provider
 			value={{
 				state,
 				dispatch,
-				setAltText,
-				mediaTargets: MediaTargets,
-				addMediaTarget,
-				removeMediaTarget,
 			}}
 		>
 			{children}

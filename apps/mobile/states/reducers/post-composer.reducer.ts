@@ -10,14 +10,14 @@ import {
 import { ImagePickerAsset } from 'expo-image-picker';
 
 export type PostComposer_MediaState = {
-	status: 'idle' | 'uploading' | 'uploaded';
-	cwSyncStatus: 'idle' | 'uploading' | 'uploaded';
+	status: 'idle' | 'uploading' | 'uploaded' | 'failed';
+	altSyncStatus: 'idle' | 'uploading' | 'uploaded' | 'failed';
 	previewUrl: string | null;
 	remoteId: string | null;
 	url: string | null;
 	localUri: string;
-	localCw: string | null;
-	remoteCw: string | null;
+	localAlt: string | null;
+	remoteAlt: string | null;
 	mimeType: string;
 };
 
@@ -59,34 +59,39 @@ enum ACTION {
 	SET_MODE_TEXT,
 	SET_MODE_EMOJI,
 	SET_MODE_MEDIA,
-
-	SET_TEXT,
-	CLEAR_TEXT,
-
-	SET_SEARCH_PROMPT,
-
 	SWITCH_TO_EMOJI_TAB,
 	SWITCH_TO_TEXT_TAB,
 	SWITCH_TO_MEDIA_TAB,
-	SET_VISIBILITY,
-
+	// text content
+	SET_TEXT,
+	CLEAR_TEXT,
+	// cw
 	SET_CW,
 	TOGGLE_CW_SECTION_SHOWN,
 	SHOW_CW_SECTION,
 	HIDE_CW_SECTION,
+	// media
+	ADD_MEDIA,
+	REMOVE_MEDIA,
+	SET_UPLOAD_STATUS,
+	UPDATE_CW_STATUS,
+	SET_REMOTE_CONTENT,
+
+	SET_SEARCH_PROMPT,
+
+	SET_VISIBILITY,
 
 	SET_PARENT,
 
 	SET_KEYBOARD_SELECTION,
 
-	// media
-	ADD_MEDIA,
-	UPDATE_UPLOAD_STATUS,
-	UPDATE_CW_STATUS,
-
 	// suggestions
 	SET_SUGGESTION,
 	CLEAR_SUGGESTION,
+
+	// Alt text
+	SET_ALT_TEXT,
+	SET_ALT_TEXT_SYNC_STATUS,
 }
 
 const DEFAULT: State = {
@@ -188,10 +193,42 @@ type Actions =
 			};
 	  }
 	| {
-			type: ACTION.UPDATE_UPLOAD_STATUS;
+			type: ACTION.SET_UPLOAD_STATUS;
+			payload: {
+				localUri: string;
+				status: 'idle' | 'uploading' | 'uploaded' | 'failed';
+			};
 	  }
 	| {
 			type: ACTION.UPDATE_CW_STATUS;
+	  }
+	| {
+			type: ACTION.SET_ALT_TEXT;
+			payload: {
+				index: number;
+				text: string;
+			};
+	  }
+	| {
+			type: ACTION.SET_ALT_TEXT_SYNC_STATUS;
+			payload: {
+				index: number;
+				status: 'uploading' | 'uploaded' | 'failed';
+			};
+	  }
+	| {
+			type: ACTION.REMOVE_MEDIA;
+			payload: {
+				index: number;
+			};
+	  }
+	| {
+			type: ACTION.SET_REMOTE_CONTENT;
+			payload: {
+				localUri: string; // identifier
+				remoteId: string;
+				previewUrl: string;
+			};
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -291,15 +328,63 @@ function reducer(state: State, action: Actions): State {
 			return produce(state, (draft) => {
 				draft.medias.push({
 					status: 'idle',
-					cwSyncStatus: 'idle',
+					altSyncStatus: 'idle',
 					previewUrl: null,
 					remoteId: null,
 					url: null,
 					localUri: action.payload.item.uri,
-					localCw: null,
-					remoteCw: null,
+					localAlt: null,
+					remoteAlt: null,
 					mimeType: action.payload.item.mimeType,
 				});
+			});
+		}
+		case ACTION.SET_ALT_TEXT: {
+			const _index = action.payload.index;
+			const _text = action.payload.text;
+			if (state.medias.length <= _index) return state;
+			return produce(state, (draft) => {
+				draft.medias[_index].localAlt = _text === '' ? null : _text;
+				draft.medias[_index].altSyncStatus = 'idle';
+			});
+		}
+		case ACTION.SET_ALT_TEXT_SYNC_STATUS: {
+			const _index = action.payload.index;
+			const _status = action.payload.status;
+			if (state.medias.length <= _index) return state;
+			return produce(state, (draft) => {
+				draft.medias[_index].altSyncStatus = _status;
+				if (_status === 'uploaded') {
+					draft.medias[_index].remoteAlt = state.medias[_index].localAlt;
+				}
+			});
+		}
+		case ACTION.REMOVE_MEDIA: {
+			const _index = action.payload.index;
+			return produce(state, (draft) => {
+				draft.medias = [
+					...draft.medias.slice(0, _index),
+					...draft.medias.slice(_index + 1),
+				];
+			});
+		}
+		case ACTION.SET_REMOTE_CONTENT: {
+			const _index = state.medias.findIndex(
+				(o) => o.localUri === action.payload.localUri,
+			);
+			if (_index === -1) return state;
+			return produce(state, (draft) => {
+				draft.medias[_index].remoteId = action.payload.remoteId;
+				draft.medias[_index].previewUrl = action.payload.previewUrl;
+			});
+		}
+		case ACTION.SET_UPLOAD_STATUS: {
+			const _index = state.medias.findIndex(
+				(o) => o.localUri === action.payload.localUri,
+			);
+			if (_index === -1) return state;
+			return produce(state, (draft) => {
+				draft.medias[_index].status = action.payload.status;
 			});
 		}
 		default: {

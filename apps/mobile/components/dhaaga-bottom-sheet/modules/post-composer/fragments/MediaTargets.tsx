@@ -10,11 +10,13 @@ import {
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import {
+	useAppApiClient,
 	useAppDialog,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
-import { APP_DIALOG_SHEET_ENUM } from '../../../../../states/_global';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { AppIcon } from '../../../../lib/Icon';
 
 /**
  * Shows a list of uploaded
@@ -22,9 +24,28 @@ import { APP_DIALOG_SHEET_ENUM } from '../../../../../states/_global';
  * select/remove
  */
 const ComposeMediaTargets = memo(function Foo() {
-	const { removeMediaTarget, state } = useComposerContext();
+	const { client } = useAppApiClient();
+	const { state, dispatch } = useComposerContext();
 	const { theme } = useAppTheme();
 	const { show } = useAppDialog();
+
+	async function altInputCallback(idx: number, input: string) {
+		dispatch({
+			type: PostComposerReducerActionType.SET_ALT_TEXT,
+			payload: {
+				index: idx,
+				text: input,
+			},
+		});
+		dispatch({
+			type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
+			payload: {
+				index: idx,
+				status: 'uploading',
+			},
+		});
+		await onSaveAltText(idx, input);
+	}
 
 	function onAltPress(idx: number) {
 		show(
@@ -33,8 +54,59 @@ const ComposeMediaTargets = memo(function Foo() {
 				actions: [],
 				description: ['Set/Update your alt text for this image.'],
 			},
-			APP_DIALOG_SHEET_ENUM.TEXT_INPUT,
+			state.medias[idx].remoteAlt || '',
+			(text: string) => {
+				altInputCallback(idx, text);
+			},
 		);
+	}
+
+	async function onSaveAltText(idx: number, text: string) {
+		if (text == '') return;
+		if (state.medias.length <= idx) {
+			return;
+		}
+		const _media = state.medias[idx];
+		try {
+			const { data, error } = await client.media.updateDescription(
+				_media.remoteId,
+				text,
+			);
+			if (error) {
+				dispatch({
+					type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
+					payload: {
+						index: idx,
+						status: 'failed',
+					},
+				});
+			} else {
+				dispatch({
+					type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
+					payload: {
+						index: idx,
+						status: 'uploaded',
+					},
+				});
+			}
+		} catch (e) {
+			dispatch({
+				type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
+				payload: {
+					index: idx,
+					status: 'failed',
+				},
+			});
+		}
+	}
+
+	function onRemovePress(idx: number) {
+		dispatch({
+			type: PostComposerReducerActionType.REMOVE_MEDIA,
+			payload: {
+				index: idx,
+			},
+		});
 	}
 
 	return (
@@ -46,77 +118,149 @@ const ComposeMediaTargets = memo(function Foo() {
 			<FlatList
 				horizontal={true}
 				data={state.medias}
-				renderItem={({ item, index }) => (
-					<View
-						style={{
-							position: 'relative',
-							overflow: 'visible',
-							marginHorizontal: 4,
-						}}
-					>
-						{/* @ts-ignore-next-line */}
-						<Image
-							source={{ uri: item.previewUrl || item.localUri }}
-							height={196}
-							width={128}
-							style={{ borderRadius: 8 }}
-						/>
-						<TouchableOpacity
-							style={{ position: 'absolute', right: 8, top: 6 }}
-							onPress={() => {
-								removeMediaTarget(index);
+				renderItem={({ item, index }) => {
+					const ALT_SYNCED =
+						state.medias[index].remoteAlt === state.medias[index].localAlt &&
+						!!state.medias[index].remoteAlt;
+
+					let indicatorIcon = <View />;
+					switch (item.status) {
+						case 'uploaded': {
+							indicatorIcon = (
+								<AppIcon
+									id={'checkmark-done-outline'}
+									size={28}
+									color={theme.primary.a0}
+								/>
+							);
+							break;
+						}
+						case 'uploading': {
+							indicatorIcon = (
+								<AppIcon
+									id={'cloud-upload-outline'}
+									size={28}
+									color={theme.complementary.a0}
+								/>
+							);
+							break;
+						}
+						case 'failed': {
+							indicatorIcon = (
+								<AppIcon id={'warning-outline'} size={28} color={'red'} />
+							);
+							break;
+						}
+					}
+					return (
+						<View
+							style={{
+								position: 'relative',
+								overflow: 'visible',
+								marginHorizontal: 4,
 							}}
 						>
-							<View
-								style={{
-									backgroundColor: theme.palette.bg,
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}
-							>
-								<View style={{ height: 28, width: 28 }}>
-									<AntDesign
-										name="closecircle"
-										size={28}
-										color={theme.complementary.a0}
-									/>
-								</View>
-							</View>
-						</TouchableOpacity>
-						<View style={{ position: 'absolute', right: 8, bottom: 8 }}>
-							<View
-								style={{
-									backgroundColor: state.medias[index].localCw
-										? theme.complementary.a0
-										: theme.palette.bg,
-									justifyContent: 'center',
-									alignItems: 'center',
-									borderRadius: 8,
-									paddingHorizontal: 8,
-									paddingVertical: 6,
-									opacity: 0.9,
-								}}
-							>
-								<Pressable
-									onPress={() => {
-										onAltPress(index);
+							{/* @ts-ignore-next-line */}
+							<Image
+								source={{ uri: item.previewUrl || item.localUri }}
+								height={196}
+								width={128}
+								style={{ borderRadius: 8 }}
+							/>
+							<View style={{ position: 'absolute', left: 8, bottom: 6 }}>
+								<View
+									style={{
+										backgroundColor: theme.palette.bg,
+										justifyContent: 'center',
+										alignItems: 'center',
+										borderRadius: '100%',
 									}}
 								>
-									<Text
-										style={{
-											color: state.medias[index].localCw
-												? 'black'
-												: theme.secondary.a30,
-											fontFamily: APP_FONTS.INTER_500_MEDIUM,
+									{indicatorIcon}
+								</View>
+							</View>
+
+							<TouchableOpacity
+								style={{ position: 'absolute', right: 8, top: 6 }}
+								onPress={() => {
+									onRemovePress(index);
+								}}
+							>
+								<View
+									style={{
+										backgroundColor: theme.palette.bg,
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<View style={{ height: 28, width: 28 }}>
+										<AntDesign
+											name="closecircle"
+											size={28}
+											color={theme.complementary.a0}
+										/>
+									</View>
+								</View>
+							</TouchableOpacity>
+
+							<TouchableOpacity
+								style={{ position: 'absolute', right: 8, top: 6 }}
+								onPress={() => {
+									onRemovePress(index);
+								}}
+							>
+								<View
+									style={{
+										backgroundColor: theme.palette.bg,
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<View style={{ height: 28, width: 28 }}>
+										<AntDesign
+											name="closecircle"
+											size={28}
+											color={theme.complementary.a0}
+										/>
+									</View>
+								</View>
+							</TouchableOpacity>
+							<View style={{ position: 'absolute', right: 8, bottom: 8 }}>
+								<View
+									style={{
+										backgroundColor: theme.palette.bg,
+										justifyContent: 'center',
+										alignItems: 'center',
+										borderRadius: 8,
+										paddingHorizontal: 8,
+										paddingVertical: 6,
+										opacity: 0.9,
+									}}
+								>
+									<Pressable
+										onPress={() => {
+											onAltPress(index);
 										}}
 									>
-										ALT
-									</Text>
-								</Pressable>
+										<Text
+											style={{
+												color:
+													state.medias[index].remoteAlt ===
+														state.medias[index].localAlt &&
+													!!state.medias[index].remoteAlt
+														? theme.primary.a0
+														: theme.complementary.a0,
+												fontFamily: APP_FONTS.INTER_500_MEDIUM,
+											}}
+										>
+											ALT
+										</Text>
+									</Pressable>
+								</View>
 							</View>
 						</View>
-					</View>
-				)}
+					);
+				}}
 			/>
 		</View>
 	);
