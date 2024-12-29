@@ -50,15 +50,16 @@ function StatusMoreOptionsButton() {
 	}
 
 	return (
-		<View style={styles.statusMoreOptionsContainer}>
-			<Pressable style={styles.statusMoreOptionsButton} onPress={onPress}>
+		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
+			<View style={styles.statusMoreOptionsButton}>
 				<AppIcon
 					id={'ellipsis-v'}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
-					size={20}
+					size={24}
+					onPress={onPress}
 				/>
-			</Pressable>
-		</View>
+			</View>
+		</Pressable>
 	);
 }
 
@@ -217,6 +218,8 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		flexShrink: 1,
 		height: '100%',
+		paddingRight: 8,
+		paddingTop: 4,
 	},
 	statusMoreOptionsButton: {
 		height: '100%',

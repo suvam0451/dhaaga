@@ -1,12 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
-import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
 import {
 	useAppApiClient,
 	useAppBottomSheet_Improved,
@@ -15,8 +13,8 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
-
-const ICON_SIZE = 28;
+import { AppToggleIcon } from '../../../lib/Icon';
+import { appDimensions } from '../../../../styles/dimensions';
 
 function StatusInteractionButtons() {
 	const { dto: item } = useAppStatusItem();
@@ -36,6 +34,10 @@ function StatusInteractionButtons() {
 		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
 	}
 
+	async function _toggleLike() {
+		await postPub.toggleLike(item.uuid, setIsLoading);
+	}
+
 	function OnTranslationClicked() {
 		if (IsTranslateStateLoading) return;
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -52,12 +54,9 @@ function StatusInteractionButtons() {
 	const IS_TRANSLATED =
 		item.calculated.translationOutput !== undefined &&
 		item.calculated.translationOutput !== null;
-	const IS_BOOSTED = item.interaction.boosted;
 
 	// loading state
 	const [IsTranslateStateLoading, setIsTranslateStateLoading] = useState(false);
-	const [IsBoostStatePending, setIsBoostStatePending] = useState(false);
-
 	const [BoostOptionsVisible, setBoostOptionsVisible] = useState(false);
 
 	function onTranslationLongPress() {
@@ -72,66 +71,64 @@ function StatusInteractionButtons() {
 		explain(item.id, null, setIsTranslateStateLoading);
 	}
 
-	const INACTIVE_TINT = theme.secondary.a10;
+	const FLAG_LIKE = item.interaction.liked;
+	const FLAG_SHARED = item.interaction.boosted;
 
 	return (
-		<View
-			style={{
-				display: 'flex',
-				justifyContent: 'space-between',
-				flexDirection: 'row',
-				alignItems: 'center',
-				marginTop: 4,
-			}}
-		>
-			<View style={{ display: 'flex', flexDirection: 'row' }}>
-				<PostActionButtonToggleLike />
-				<TouchableOpacity
+		<View style={styles.interactionButtonSection}>
+			<View style={{ flexDirection: 'row' }}>
+				<AppToggleIcon
+					flag={FLAG_LIKE}
+					activeIconId={'heart'}
+					inactiveIconId={'heart-outline'}
+					activeTint={theme.primary.a0}
+					inactiveTint={theme.secondary.a10}
+					size={appDimensions.timelines.actionButtonSize}
 					style={{
 						display: 'flex',
 						flexDirection: 'row',
 						alignItems: 'center',
-						marginRight: 16,
 						paddingTop: 8,
 						paddingBottom: 8,
-						position: 'relative',
+						paddingHorizontal: 6,
+					}}
+					onPress={_toggleLike}
+				/>
+
+				<AppToggleIcon
+					flag={FLAG_SHARED}
+					activeIconId={'sync-outline'}
+					inactiveIconId={'sync-outline'}
+					activeTint={theme.primary.a0}
+					inactiveTint={theme.secondary.a10}
+					size={appDimensions.timelines.actionButtonSize}
+					style={{
+						display: 'flex',
+						flexDirection: 'row',
+						alignItems: 'center',
+						paddingTop: 8,
+						paddingBottom: 8,
+						paddingHorizontal: 6,
 					}}
 					onPress={_boost}
-				>
-					{IsBoostStatePending ? (
-						<ActivityIndicator size={'small'} />
-					) : IS_BOOSTED ? (
-						<Ionicons
-							name="sync-outline"
-							size={ICON_SIZE}
-							color={theme.primary.a0}
-						/>
-					) : (
-						<Ionicons
-							name="sync-outline"
-							size={ICON_SIZE}
-							color={IS_BOOSTED ? '#8eb834' : INACTIVE_TINT}
-						/>
-					)}
-				</TouchableOpacity>
-				<TouchableOpacity
+				/>
+				<AppToggleIcon
+					flag={false}
+					activeIconId={'chatbox-outline'}
+					inactiveIconId={'chatbox-outline'}
+					activeTint={theme.primary.a0}
+					inactiveTint={theme.secondary.a10}
+					size={appDimensions.timelines.actionButtonSize}
 					style={{
 						display: 'flex',
 						flexDirection: 'row',
 						alignItems: 'center',
-						marginRight: 16,
 						paddingTop: 8,
 						paddingBottom: 8,
+						paddingHorizontal: 6,
 					}}
 					onPress={reply}
-				>
-					<Ionicons
-						name="chatbox-outline"
-						size={ICON_SIZE}
-						color={INACTIVE_TINT}
-					/>
-				</TouchableOpacity>
-
+				/>
 				<BoostAdvanced
 					IsVisible={BoostOptionsVisible}
 					setIsVisible={setBoostOptionsVisible}
@@ -164,3 +161,12 @@ function StatusInteraction() {
 }
 
 export default StatusInteraction;
+
+const styles = StyleSheet.create({
+	interactionButtonSection: {
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 4,
+	},
+});

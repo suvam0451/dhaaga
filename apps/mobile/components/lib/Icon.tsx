@@ -83,6 +83,7 @@ export type APP_ICON_ENUM =
 	| 'share'
 	| 'feelings'
 	| 'smiley'
+	| 'sync-outline'
 	| 'to-top'
 	| 'trash'
 	| 'user-guide'
@@ -745,6 +746,15 @@ export const AppIcon = memo(
 					return (
 						<MaterialIcons
 							name="add-reaction"
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
+				case 'sync-outline':
+					return (
+						<Ionicons
+							name={'sync-outline'}
 							size={_size}
 							color={_color}
 							style={iconStyle}

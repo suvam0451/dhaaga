@@ -124,6 +124,8 @@ function AppBottomSheetAddBookmark() {
 		postPub.toggleBookmark(PostObject.uuid);
 	}
 
+	if (!PostObject) return <View />;
+
 	const _target = PostMiddleware.getContentTarget(PostObject);
 	const IS_BOOKMARKED = _target.interaction.bookmarked;
 
