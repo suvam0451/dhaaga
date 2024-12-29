@@ -2,7 +2,6 @@ import WithAppPaginationContext, {
 	useAppPaginationContext,
 } from '../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { useEffect } from 'react';
 import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
 import { ScrollView, View, Text } from 'react-native';
@@ -40,14 +39,12 @@ function WithApi() {
 		if (!client) {
 			return [];
 		}
-		const data: mastodon.v1.Conversation[] = await client.getMyConversations();
+		const data: any[] = null; // await client.getMyConversations();
 		return data;
 	}
 
 	// Queries
-	const { status, data, refetch, fetchStatus } = useQuery<
-		mastodon.v1.Conversation[] | any[]
-	>({
+	const { status, data, refetch, fetchStatus } = useQuery<any[] | any[]>({
 		queryKey: ['conversations'],
 		queryFn: api,
 		enabled: client !== null,
@@ -56,14 +53,14 @@ function WithApi() {
 	useEffect(() => {
 		if (fetchStatus === 'fetching') return;
 		if (status !== 'success') return;
-		append(data, (o: mastodon.v1.Conversation) => o.id);
+		append(data, (o: any) => o.id);
 	}, [fetchStatus]);
 
 	async function populateChatrooms() {
 		if (!me) return;
 
 		for await (const _item of PageData) {
-			const item: mastodon.v1.Conversation = _item;
+			const item: any = _item;
 			const participantIds = [
 				// @ts-ignore
 				...new Set(

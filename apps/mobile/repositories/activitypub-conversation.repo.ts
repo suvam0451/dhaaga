@@ -3,7 +3,6 @@ import {
 	ActivityPubUserAdapter,
 	UserInterface,
 } from '@dhaaga/shared-abstraction-activitypub';
-import type { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { ActivityPubStatusRepository } from './activitypub-status.repo';
 import { ActivityPubUserRepository } from './activitypub-user.repo';
 import { ActivityPubServerRepository } from './activitypub-server.repo';
@@ -25,7 +24,7 @@ export class ActivityPubConversationRepository {
 		}: {
 			hash: string;
 			me: UserInterface;
-			conversation: mastodon.v1.Conversation;
+			conversation: any;
 			domain: string;
 			subdomain: string;
 		},

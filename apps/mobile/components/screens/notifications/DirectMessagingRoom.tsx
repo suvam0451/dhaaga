@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
 } from '../../../states/useStatus';
@@ -20,6 +19,7 @@ import useTopbarSmoothTranslate from '../../../states/useTopbarSmoothTranslate';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
+import { MastoConversation } from '@dhaaga/shared-abstraction-activitypub/dist/types/mastojs.types';
 
 type DirectMessagingRoomProps = {
 	conversationIds: string[];
@@ -43,7 +43,7 @@ function WithContextWrapped() {
 
 	// Queries
 	const { status, data, refetch, fetchStatus } = useQuery<
-		mastodon.v1.Conversation[] | any[]
+		MastoConversation[] | any[]
 	>({
 		queryKey: ['conversation/context', q],
 		queryFn: api as any,

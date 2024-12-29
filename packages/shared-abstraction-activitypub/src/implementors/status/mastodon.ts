@@ -3,15 +3,15 @@ import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/ada
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
 import camelcaseKeys from 'camelcase-keys';
 import UnknownToStatusAdapter from './default.js';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
+import { MastoAccount, MastoStatus } from '../../types/mastojs.types.js';
 
 class MastodonToStatusAdapter
 	extends UnknownToStatusAdapter
 	implements StatusInterface
 {
-	ref: mastodon.v1.Status;
+	ref: MastoStatus;
 
-	constructor(ref: mastodon.v1.Status) {
+	constructor(ref: MastoStatus) {
 		super();
 		this.ref = ref;
 	}
@@ -69,7 +69,7 @@ class MastodonToStatusAdapter
 
 	getIsFavourited = () => this.ref.favourited;
 
-	getUser = () => this.ref.account;
+	getUser = () => this.ref.account as MastoAccount;
 
 	isReply() {
 		return (

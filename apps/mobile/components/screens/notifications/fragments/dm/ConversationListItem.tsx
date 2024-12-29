@@ -1,6 +1,4 @@
 import { TouchableOpacity, View } from 'react-native';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
-import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
 import { Image } from 'expo-image';
 import { useEffect } from 'react';
 import WithActivitypubStatusContext from '../../../../../states/useStatus';
@@ -10,10 +8,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useSQLiteContext } from 'expo-sqlite';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppPostObject } from '../../../../../types/app-post.types';
+import { AppUserObject } from '../../../../../types/app-user.types';
 
 type ConversationListItemProps = {
-	lastStatus: mastodon.v1.Status;
-	accounts: UserInterface[];
+	lastStatus: AppPostObject;
+	accounts: AppUserObject[];
 	unread?: boolean;
 	conversationId: string;
 };

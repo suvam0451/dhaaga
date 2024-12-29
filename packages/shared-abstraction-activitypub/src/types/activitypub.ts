@@ -1,4 +1,4 @@
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
+import { mastodon } from 'masto';
 import type { Note, UserDetailed } from 'misskey-js/autogen/models.js';
 
 export type ActivityPubStatus = mastodon.v1.Status | Note;

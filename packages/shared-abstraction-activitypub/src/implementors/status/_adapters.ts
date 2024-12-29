@@ -1,6 +1,5 @@
 import MisskeyToStatusAdapter from './misskey.js';
 import MastodonToStatusAdapter from './mastodon.js';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import UnknownToStatusAdapter from './default.js';
 import { StatusInterface } from './_interface.js';
 import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
@@ -33,7 +32,7 @@ export function ActivitypubStatusAdapter(
 		case KNOWN_SOFTWARE.PLEROMA:
 		case KNOWN_SOFTWARE.AKKOMA: {
 			const _camel = camelcaseKeys(status, { deep: true });
-			return new MastodonToStatusAdapter(_camel as mastodon.v1.Status);
+			return new MastodonToStatusAdapter(_camel as any);
 		}
 		case KNOWN_SOFTWARE.BLUESKY: {
 			/**

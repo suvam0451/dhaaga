@@ -1,5 +1,5 @@
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { DriveFile } from 'misskey-js/autogen/models.js';
+import { MastoMediaAttachment } from '../../types/mastojs.types.js';
 
 export class DriveFileInstance {
 	instance: DriveFile;
@@ -10,9 +10,9 @@ export class DriveFileInstance {
 }
 
 export class MediaAttachmentInstance {
-	instance: mastodon.v1.MediaAttachment;
+	instance: MastoMediaAttachment;
 
-	constructor(instance: mastodon.v1.MediaAttachment) {
+	constructor(instance: MastoMediaAttachment) {
 		this.instance = instance;
 	}
 }

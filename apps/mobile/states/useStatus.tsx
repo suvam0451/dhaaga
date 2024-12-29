@@ -11,12 +11,12 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import MastodonService from '../services/mastodon.service';
 import ActivityPubAdapterService from '../services/activitypub-adapter.service';
 import useHookLoadingState from './useHookLoadingState';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppPostObject } from '../types/app-post.types';
 
 type OgObject = {
 	url: string;
@@ -39,17 +39,17 @@ type OgObject = {
 type Type = {
 	// the current status. could be report. could be a reply.
 	status: StatusInterface | null;
-	statusContext: StatusContextInterface | null;
+	statusContext: any | null;
 
 	// the original status being reposted
 	sharedStatus: StatusInterface | null;
 	openGraph: OgObject | null;
 
-	statusRaw: mastodon.v1.Status | any | null;
+	statusRaw: AppPostObject | any | null;
 	setData: (o: StatusInterface) => void;
 	setStatusContextData: (data: any) => void;
-	setDataRaw: (o: mastodon.v1.Status | any) => void;
-	setSharedDataRaw: (o: mastodon.v1.Status | any) => void;
+	setDataRaw: (o: AppPostObject | any) => void;
+	setSharedDataRaw: (o: AppPostObject | any) => void;
 	updateOpenGraph: (og: OgObject | null) => void;
 	toggleBookmark: () => void;
 
@@ -65,7 +65,7 @@ type Type = {
 const defaultValue: Type = {
 	openGraph: undefined,
 	updateOpenGraph(og: OgObject | null): void {},
-	setDataRaw(o: mastodon.v1.Status | any): void {},
+	setDataRaw(o: AppPostObject | any): void {},
 	setData(o: StatusInterface): void {},
 	status: null,
 	sharedStatus: null,
@@ -100,7 +100,7 @@ export function useActivitypubStatusContext() {
 }
 
 type Props = {
-	status?: mastodon.v1.Status | any;
+	status?: any;
 	statusInterface?: StatusInterface;
 	children: any;
 };
@@ -126,14 +126,15 @@ function WithActivitypubStatusContext({
 	const Status = useRef<StatusInterface>(
 		ActivitypubStatusAdapter(null, driver),
 	);
-	const StatusRaw = useRef<mastodon.v1.Status | any | null>(null);
+	const StatusRaw = useRef<any | null>(null);
 	const SharedStatus = useRef<StatusInterface>(
 		ActivitypubStatusAdapter(null, driver),
 	);
-	const SharedStatusRaw = useRef<mastodon.v1.Status | any | null>(null);
+	const SharedStatusRaw = useRef<any | null>(null);
 
-	const StatusContext = useRef<StatusContextInterface>(
-		ActivityPubStatusContextAdapter(null, driver),
+	const StatusContext = useRef<any>(
+		null,
+		// ActivityPubStatusContextAdapter(null, driver),
 	);
 
 	const contextItemLookup = useRef<Map<string, StatusInterface>>();
@@ -173,7 +174,7 @@ function WithActivitypubStatusContext({
 		forceUpdate();
 	}, [status, statusInterface]);
 
-	function setStatusContextData(data: mastodon.v1.Context | any) {
+	function setStatusContextData(data: any) {
 		const { root, itemLookup, childrenLookup } = MastodonService.solveContext(
 			Status.current,
 			data,
@@ -189,7 +190,7 @@ function WithActivitypubStatusContext({
 		forceUpdate();
 	}, []);
 
-	const setDataRaw = useCallback((o: mastodon.v1.Status | any) => {
+	const setDataRaw = useCallback((o: any) => {
 		const adapted = ActivitypubStatusAdapter(o, driver);
 		if (adapted.isReposted()) {
 			SharedStatus.current = ActivitypubStatusAdapter(
@@ -201,7 +202,7 @@ function WithActivitypubStatusContext({
 		forceUpdate();
 	}, []);
 
-	const setSharedDataRaw = useCallback((o: mastodon.v1.Status | any) => {
+	const setSharedDataRaw = useCallback((o: any) => {
 		SharedStatus.current = ActivityPubAdapterService.adaptStatus(o, driver);
 		forceUpdate();
 	}, []);

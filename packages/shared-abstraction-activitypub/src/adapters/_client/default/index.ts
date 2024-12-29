@@ -1,5 +1,4 @@
 import ActivityPubClient, { GetPostsQueryDTO } from '../_interface.js';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { DefaultInstanceRouter } from './instance.js';
 import { DefaultAccountRouter } from './accounts.js';
 import { DefaultStatusesRouter } from './statuses.js';
@@ -12,6 +11,7 @@ import { DefaultMeRouter } from './me.js';
 import { DefaultMediaRoute } from './media.js';
 import { DefaultListRoute } from './lists.js';
 import { DefaultProfileRouter } from './profile.js';
+import { MastoAccount } from '../../../types/mastojs.types.js';
 
 class UnknownRestClient implements ActivityPubClient {
 	instances: DefaultInstanceRouter;
@@ -50,11 +50,11 @@ class UnknownRestClient implements ActivityPubClient {
 		throw new Error('Method not implemented.');
 	}
 
-	getFollowing(id: string): Promise<any[] | mastodon.v1.Account[]> {
+	getFollowing(id: string): Promise<any[] | MastoAccount[]> {
 		throw new Error('Method not implemented.');
 	}
 
-	getFollowers(id: string): Promise<any[] | mastodon.v1.Account[]> {
+	getFollowers(id: string): Promise<any[] | MastoAccount[]> {
 		throw new Error('Method not implemented.');
 	}
 
