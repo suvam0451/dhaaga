@@ -1,4 +1,4 @@
-import { DhaagaJsTimelineQueryOptions } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
 import { AppPostObject } from '../../types/app-post.types';
 import { RandomUtil } from '../../utils/random.utils';
 import { produce } from 'immer';

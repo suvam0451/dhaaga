@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppUserObject } from '../../../types/app-user.types';
-import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
+import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { UserMiddleware } from '../../../services/middlewares/user.middleware';

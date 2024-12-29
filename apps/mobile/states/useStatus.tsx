@@ -1,7 +1,4 @@
-import {
-	ActivitypubStatusAdapter,
-	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubStatusAdapter, StatusInterface } from '@dhaaga/bridge';
 import {
 	createContext,
 	MutableRefObject,

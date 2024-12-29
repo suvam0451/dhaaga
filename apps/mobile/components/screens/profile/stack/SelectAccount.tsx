@@ -2,7 +2,7 @@ import { FlatList, RefreshControl, View, Text } from 'react-native';
 import { Button } from '@rneui/base';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AccountListForSoftware from './landing/fragments/AccountListForSoftware';

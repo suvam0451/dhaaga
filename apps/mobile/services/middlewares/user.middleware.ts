@@ -3,7 +3,7 @@ import {
 	ActivityPubUserAdapter,
 	KNOWN_SOFTWARE,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { AppUserObject, appUserObjectSchema } from '../../types/app-user.types';
 import { PostMiddleware } from './post.middleware';
 

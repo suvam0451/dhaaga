@@ -2,7 +2,7 @@ import {
 	ActivitypubStatusAdapter,
 	ActivityPubUserAdapter,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { ActivityPubStatusRepository } from './activitypub-status.repo';
 import { ActivityPubUserRepository } from './activitypub-user.repo';
 import { ActivityPubServerRepository } from './activitypub-server.repo';

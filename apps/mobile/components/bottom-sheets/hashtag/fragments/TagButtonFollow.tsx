@@ -4,7 +4,7 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useActivitypubTagContext } from '../../../../states/useTag';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 

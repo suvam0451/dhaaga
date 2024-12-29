@@ -5,7 +5,7 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 	UnknownRestClient,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { KnownServerService } from '../../database/entities/server';
 import { AccountService } from '../../database/entities/account';
 import { ProfileService } from '../../database/entities/profile';

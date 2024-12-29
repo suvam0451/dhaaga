@@ -1,7 +1,7 @@
 import { BasePubSubService } from './_base.pubisher';
 import { AppPostObject } from '../../types/app-post.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import ActivityPubClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import { PostMutatorService } from '../post-mutator.service';
 
 export enum POST_EVENT_ENUM {

@@ -1,7 +1,4 @@
-import {
-	ActivityPubClient,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import {
 	AppTimelineReducerActionType,
 	AppTimelineReducerDispatchType,

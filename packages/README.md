@@ -6,7 +6,7 @@ build)
 
 ### Their Utility
 
-#### shared-abstraction-activitypub
+#### bridge
 
 This package defines adapters and interfaces for common types of entities
 found in ActivityPub (e.g. - Status, Profile)

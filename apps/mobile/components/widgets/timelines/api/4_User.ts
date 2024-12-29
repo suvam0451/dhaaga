@@ -4,12 +4,12 @@ import ActivityPubAdapterService from '../../../../services/activitypub-adapter.
 import {
 	MastoAccount,
 	MegaAccount,
-} from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+} from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import { Endpoints } from 'misskey-js';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppBskyActorSearchActorsTypeahead } from '@atproto/api';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 function TimelineWidgetUserApi(q: string) {
 	const { client, acct, driver } = useGlobalState(

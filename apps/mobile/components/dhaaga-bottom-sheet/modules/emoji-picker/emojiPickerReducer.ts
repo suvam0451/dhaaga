@@ -1,8 +1,5 @@
 import { produce } from 'immer';
-import {
-	InstanceApi_CustomEmojiDTO,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { InstanceApi_CustomEmojiDTO, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import AccountSessionManager from '../../../../services/session/account-session.service';
 
 export type Emoji = {

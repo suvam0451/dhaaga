@@ -1,9 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import {
-	KNOWN_SOFTWARE,
-	MediaAttachmentInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE, MediaAttachmentInterface } from '@dhaaga/bridge';
 import ActivityPubAdapterService from '../../../../../../services/activitypub-adapter.service';
 import { FlatList, View, Text } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';

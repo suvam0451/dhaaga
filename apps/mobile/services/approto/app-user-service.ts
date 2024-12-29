@@ -1,7 +1,4 @@
-import {
-	ActivitypubHelper,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubHelper, UserInterface } from '@dhaaga/bridge';
 import ActivityPubAdapterService from '../activitypub-adapter.service';
 import { AppUserObject, appUserObjectSchema } from '../../types/app-user.types';
 

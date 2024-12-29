@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
 	MastoStatus,
 	MegaStatus,
-} from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+} from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 

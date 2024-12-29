@@ -4,7 +4,7 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import ActivityPubService from '../../../../../services/activitypub.service';

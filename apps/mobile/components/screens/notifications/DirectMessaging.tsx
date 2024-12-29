@@ -3,7 +3,7 @@ import WithAppPaginationContext, {
 } from '../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubUserAdapter } from '@dhaaga/bridge';
 import { ScrollView, View, Text } from 'react-native';
 import ChatroomPreview from './fragments/dm/ChatroomPreviewType';
 import { Divider } from '@rneui/base';

@@ -1,5 +1,5 @@
 import useApiGetNotifications from '../../../../../hooks/api/notifications/useApiGetNotifications';
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { useEffect } from 'react';
 import { useAppNotifSeenContext } from '../state/useNotifSeen';
 

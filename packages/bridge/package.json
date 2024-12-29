@@ -1,5 +1,5 @@
 {
-  "name": "@dhaaga/shared-abstraction-activitypub",
+  "name": "@dhaaga/bridge",
   "description": "using design patterns to work around the differences between various Mastodon forks",
   "private": true,
   "main": "./dist/index.js",

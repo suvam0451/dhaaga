@@ -6,7 +6,7 @@ import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndic
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
 import useTimeline from '../api/useTimeline';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

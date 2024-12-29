@@ -3,7 +3,7 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	MisskeyRestClient,
 	PleromaRestClient,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
 import ActivityPubService from '../activitypub.service';
 import { Dispatch, SetStateAction } from 'react';

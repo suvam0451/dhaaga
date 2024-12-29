@@ -1,5 +1,5 @@
-import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
-import { DhaagaJsPostCreateDto } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/statuses';
+import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
+import { DhaagaJsPostCreateDto } from '@dhaaga/bridge/dist/adapters/_client/_router/routes/statuses';
 import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs';
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 

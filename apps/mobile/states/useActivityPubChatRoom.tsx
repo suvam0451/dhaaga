@@ -1,7 +1,4 @@
-import {
-	StatusInterface,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface, UserInterface } from '@dhaaga/bridge';
 import { createContext, useContext, useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';

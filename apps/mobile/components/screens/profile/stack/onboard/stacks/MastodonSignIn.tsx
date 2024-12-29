@@ -5,10 +5,7 @@ import { Button } from '@rneui/base';
 import TitleOnlyNoScrollContainer from '../../../../../containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
-import {
-	UnknownRestClient,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { UnknownRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import PleromaPasteToken from '../fragments/PleromaPasteToken';
 import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';

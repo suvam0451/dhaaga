@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { DhaagaJsPostSearchDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/search';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsPostSearchDTO } from '@dhaaga/bridge/dist/adapters/_client/_router/routes/search';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
 import {
 	defaultAppSearchResults,

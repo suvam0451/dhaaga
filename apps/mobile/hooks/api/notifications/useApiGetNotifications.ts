@@ -2,7 +2,7 @@ import {
 	DhaagaJsNotificationType,
 	MisskeyRestClient,
 	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { useQuery } from '@tanstack/react-query';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

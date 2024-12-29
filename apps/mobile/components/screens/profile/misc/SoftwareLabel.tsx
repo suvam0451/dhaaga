@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 

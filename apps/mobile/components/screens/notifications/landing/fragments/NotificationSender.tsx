@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';

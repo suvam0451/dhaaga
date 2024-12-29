@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import { useImageAutoHeight } from '../../../hooks/app/useImageDims';
 import { appDimensions } from '../../../styles/dimensions';
 import { AppMediaObject, AppPostObject } from '../../../types/app-post.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubService from '../../../services/activitypub.service';
 
 type ThumbItemProps = {

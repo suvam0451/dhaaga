@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Text, View } from 'react-native';
 import { useActivitypubUserContext } from '../../../../../../states/useProfile';
 import useMfm from '../../../../../hooks/useMfm';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { AppUserObject } from '../../../../../../types/app-user.types';

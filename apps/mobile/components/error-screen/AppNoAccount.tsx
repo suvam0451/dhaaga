@@ -10,7 +10,7 @@ import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../styles/AppFonts';
 import SoftwareHeader from '../../screens/accounts/fragments/SoftwareHeader';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppIcon } from '../lib/Icon';
 import { router } from 'expo-router';
 import AppTabLandingNavbar, {

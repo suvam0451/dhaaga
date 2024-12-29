@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { View } from 'react-native';
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { Props, styles } from './_common';
 import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';

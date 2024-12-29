@@ -1,8 +1,5 @@
 import ActivitypubService from '../../services/activitypub.service';
-import {
-	MisskeyRestClient,
-	PleromaRestClient,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { MisskeyRestClient, PleromaRestClient } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ActivityPubService from '../../services/activitypub.service';

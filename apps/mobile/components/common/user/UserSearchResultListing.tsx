@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useActivitypubUserContext } from '../../../states/useProfile';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubHelper } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import styles from './utils/styles';
 import useMfm from '../../hooks/useMfm';

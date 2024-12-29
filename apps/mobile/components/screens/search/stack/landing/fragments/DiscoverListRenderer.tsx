@@ -1,7 +1,4 @@
-import {
-	TagInterface,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { TagInterface, UserInterface } from '@dhaaga/bridge';
 import StatusItem from '../../../../../common/status/StatusItem';
 import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import WithActivitypubUserContext from '../../../../../../states/useProfile';

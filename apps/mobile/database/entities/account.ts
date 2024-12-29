@@ -6,7 +6,7 @@ import {
 	AccountMetadataRecordType,
 	AccountMetadataService,
 } from './account-metadata';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { DataSource } from '../dataSource';
 import { gt } from '@dhaaga/orm';
 import { RandomUtil } from '../../utils/random.utils';

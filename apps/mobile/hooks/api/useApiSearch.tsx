@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '../utility/global-state-extractors';
 import { AppPostObject } from '../../types/app-post.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMiddleware } from '../../services/middlewares/post.middleware';
 
 export function useApiSearchPosts(q: string, maxId: string | null) {

@@ -1,5 +1,5 @@
 import { memo, useRef } from 'react';
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import ControlSegment from '../../../../widgets/feed-controller/components/ControlSegment';
 import { View } from 'react-native';
 import useHookLoadingState from '../../../../../states/useHookLoadingState';

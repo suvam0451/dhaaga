@@ -1,6 +1,6 @@
 import { TimelineFetchMode } from '../states/reducers/timeline.reducer';
 import { AppTimelineQuery } from '../components/common/timeline/api/useTimelineController';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 export class LocalizationService {
 	/**

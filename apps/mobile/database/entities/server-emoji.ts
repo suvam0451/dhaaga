@@ -3,7 +3,7 @@ import { APP_DB } from '../repositories/_var';
 import { Server, ServerEmoji } from '../_schema';
 import { Result } from '../../utils/result';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 
 export class Repo {
 	/**

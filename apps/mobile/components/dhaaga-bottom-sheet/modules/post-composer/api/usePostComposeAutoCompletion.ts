@@ -4,7 +4,7 @@ import {
 	KNOWN_SOFTWARE,
 	TagInterface,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';

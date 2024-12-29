@@ -1,6 +1,6 @@
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubClient } from '@dhaaga/bridge';
 import * as FileSystem from 'expo-file-system';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 /**
  * Wrapper service to invoke provider functions

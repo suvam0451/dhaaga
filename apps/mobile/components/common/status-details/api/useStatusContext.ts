@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ActivityPubStatus } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubStatus } from '@dhaaga/bridge';
 import { useEffect, useMemo } from 'react';
 import { useActivitypubStatusContext } from '../../../../states/useStatus';
 import useGlobalState from '../../../../states/_global';

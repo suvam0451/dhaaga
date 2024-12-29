@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface } from '@dhaaga/bridge';
 import { useQuery } from '@tanstack/react-query';
-import { GetPostsQueryDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import { GetPostsQueryDTO } from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

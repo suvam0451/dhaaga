@@ -1,12 +1,12 @@
 import { AppTimelineQuery } from './useTimelineController';
 import { useQuery } from '@tanstack/react-query';
-import { StatusArray } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/status/_interface';
+import { StatusArray } from '@dhaaga/bridge/dist/adapters/status/_interface';
 import {
 	DhaagaJsTimelineQueryOptions,
 	MisskeyRestClient,
 	KNOWN_SOFTWARE,
 	PleromaRestClient,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';

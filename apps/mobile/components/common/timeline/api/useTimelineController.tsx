@@ -1,4 +1,4 @@
-import { DhaagaJsTimelineQueryOptions } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
 import {
 	createContext,
 	Dispatch,

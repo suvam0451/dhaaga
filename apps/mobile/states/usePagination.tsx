@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState } from 'react';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface } from '@dhaaga/bridge';
 
 type Type = {
 	maxId?: string;

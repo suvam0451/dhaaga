@@ -4,7 +4,7 @@ import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { router } from 'expo-router';
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import AppTopNavbar from '../../../shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import useGlobalState from '../../../../states/_global';

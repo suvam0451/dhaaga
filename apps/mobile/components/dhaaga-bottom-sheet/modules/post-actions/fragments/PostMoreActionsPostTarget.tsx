@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import ActivityPubService from '../../../../../services/activitypub.service';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import useGlobalState from '../../../../../states/_global';
 import { AppIcon } from '../../../../lib/Icon';
 import { useShallow } from 'zustand/react/shallow';

@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { MastoRelationship } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import { MastoRelationship } from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import useHookLoadingState from './useHookLoadingState';
 import {
 	LibraryResponse,
 	MastodonRestClient,
 	MisskeyRestClient,
 	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
 import ActivitypubRelationService from '../services/approto/activitypub-relation.service';
-import BlueskyRestClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/bluesky';
+import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 import { AppBskyActorGetProfile } from '@atproto/api';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';

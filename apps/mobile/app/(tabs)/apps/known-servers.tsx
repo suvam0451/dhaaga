@@ -4,7 +4,7 @@ import { ActivityPubServer } from '../../../entities/activitypub-server.entity';
 import { memo, useEffect, useRef, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { FontAwesome } from '@expo/vector-icons';

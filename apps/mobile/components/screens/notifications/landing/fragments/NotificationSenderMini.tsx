@@ -1,8 +1,5 @@
 import { memo, useCallback, useMemo } from 'react';
-import {
-	ActivitypubHelper,
-	DhaagaJsNotificationType,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubHelper, DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';
@@ -15,7 +12,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAppBottomSheet } from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../../states/_global';

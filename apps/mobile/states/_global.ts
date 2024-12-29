@@ -7,7 +7,7 @@ import {
 	ActivityPubClient,
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { AccountService } from '../database/entities/account';
 import { SQLiteDatabase } from 'expo-sqlite';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';

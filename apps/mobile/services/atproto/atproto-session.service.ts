@@ -1,5 +1,5 @@
 import { Agent, AtpSessionData, CredentialSession } from '@atproto/api';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AccountService } from '../../database/entities/account';
 import AccountMetaService from '../../database/services/account-secret.service';
 import { Account } from '../../database/_schema';

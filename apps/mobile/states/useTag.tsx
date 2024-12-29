@@ -1,8 +1,4 @@
-import {
-	ActivityPubTagAdapter,
-	TagInterface,
-	TagType,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubTagAdapter, TagInterface, TagType } from '@dhaaga/bridge';
 import { createContext, useContext, useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';

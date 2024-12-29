@@ -1,4 +1,4 @@
-import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { UserInterface } from '@dhaaga/bridge';
 import { MutableRefObject } from 'react';
 import { produce } from 'immer';
 import AppUserService from '../../../../services/approto/app-user-service';

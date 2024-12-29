@@ -6,7 +6,7 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	TagInterface,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { ImagePickerAsset } from 'expo-image-picker';
 
 export type PostComposer_MediaState = {

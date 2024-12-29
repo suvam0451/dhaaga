@@ -1,5 +1,5 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import ActivityPubClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import { PostMiddleware } from './middlewares/post.middleware';
 import ActivityPubService from './activitypub.service';
 import { AppPostObject } from '../types/app-post.types';

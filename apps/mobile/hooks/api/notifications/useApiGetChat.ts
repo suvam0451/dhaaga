@@ -1,7 +1,7 @@
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useState } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useQuery } from '@tanstack/react-query';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { AppNotificationObject } from '../../../types/app-notification.types';

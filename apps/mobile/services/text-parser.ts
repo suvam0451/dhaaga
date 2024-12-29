@@ -1,7 +1,4 @@
-import {
-	parseStatusContent,
-	preprocessPostContent,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { parseStatusContent, preprocessPostContent } from '@dhaaga/bridge';
 
 class TextParserService {
 	/**

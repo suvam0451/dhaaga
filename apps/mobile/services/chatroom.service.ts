@@ -2,7 +2,7 @@ import {
 	ActivitypubStatusAdapter,
 	ActivityPubUserAdapter,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { ActivityPubConversationRepository } from '../repositories/activitypub-conversation.repo';
 import { SQLiteDatabase } from 'expo-sqlite';
 

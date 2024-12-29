@@ -1,4 +1,4 @@
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { Fragment, memo, useMemo } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';

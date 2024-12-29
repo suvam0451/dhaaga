@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import StatusItem from '../status/StatusItem';
 import { Skeleton } from '@rneui/base';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface } from '@dhaaga/bridge';
 import WithActivitypubStatusContext from '../../../states/useStatus';
 import WithAppPaginationContext, {
 	useAppPaginationContext,

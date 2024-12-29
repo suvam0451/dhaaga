@@ -2,7 +2,7 @@ import { Alert, Dimensions, View, Text, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import WebView from 'react-native-webview';
 import { Button, Card } from '@rneui/base';
-import { verifyMisskeyToken } from '@dhaaga/shared-abstraction-activitypub';
+import { verifyMisskeyToken } from '@dhaaga/bridge';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { router, useLocalSearchParams } from 'expo-router';

@@ -1,7 +1,7 @@
 import { Text } from 'react-native';
 import LinkProcessor from '../components/common/link/LinkProcessor';
 import TextParserService from './text-parser';
-import type { MfmNode } from '@dhaaga/shared-abstraction-activitypub';
+import type { MfmNode } from '@dhaaga/bridge';
 import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
 import MentionSegment from '../components/shared/mfm/MentionSegment';
 import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';

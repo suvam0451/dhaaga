@@ -1,13 +1,10 @@
 import { z } from 'zod';
-import {
-	ActivitypubHelper,
-	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubHelper, StatusInterface } from '@dhaaga/bridge';
 import ActivitypubAdapterService from '../services/activitypub-adapter.service';
 import MediaService from '../services/media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../components/common/media/_common';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { ActivityPubReactionStateDto } from '../services/approto/activitypub-reactions.service';
 import { RandomUtil } from '../utils/random.utils';
 
