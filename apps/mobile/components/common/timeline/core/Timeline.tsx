@@ -15,7 +15,7 @@ import { useLocalSearchParams } from 'expo-router';
 import {
 	AppTimelineReducerActionType,
 	TimelineFetchMode,
-} from '../../../../states/reducers/timeline.reducer';
+} from '../../../../states/reducers/post-timeline.reducer';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import WithPostTimelineCtx, {

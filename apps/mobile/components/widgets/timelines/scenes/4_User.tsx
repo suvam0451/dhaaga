@@ -11,7 +11,7 @@ import { ActivitypubHelper } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
 
 function TimelineWidgetUserScene() {
 	const [SearchTerm, setSearchTerm] = useState('');

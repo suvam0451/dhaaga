@@ -7,40 +7,30 @@ import {
 	useRef,
 } from 'react';
 import {
-	appTimelineReducer,
-	appTimelineReducerDefault,
+	appTimelineReducer as reducer,
+	appTimelineReducerDefault as reducerDefault,
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-} from '../../states/reducers/timeline.reducer';
+} from '../../states/reducers/post-timeline.reducer';
 import { TimelineSessionService } from '../../services/session/timeline-session.service';
 import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
 import WithTimelineControllerContext from '../common/timeline/api/useTimelineController';
 import WithAppTimelineDataContext from '../../hooks/app/timelines/useAppTimelinePosts';
 import UserPeekModal from '../modals/UserPeekModal';
 
-/**
- * --- Context Setup ---
- */
-
+// contexts
 const _StateCtx = createContext<AppTimelineReducerStateType>(null);
 const _DispatchCtx = createContext<AppTimelineReducerDispatchType>(null);
 const _ManagerCtx =
 	createContext<MutableRefObject<TimelineSessionService>>(null);
-// exports
+// hooks
 export const useTimelineState = () => useContext(_StateCtx);
 export const useTimelineDispatch = () => useContext(_DispatchCtx);
 export const useTimelineManager = () => useContext(_ManagerCtx);
-
-/**
- * --- Context Wrapper ---
- */
-
+// wrapper
 export function CtxWrapper({ children }) {
 	const { driver, client } = useAppApiClient();
-	const [state, dispatch] = useReducer(
-		appTimelineReducer,
-		appTimelineReducerDefault,
-	);
+	const [state, dispatch] = useReducer(reducer, reducerDefault);
 
 	const manager = useRef<TimelineSessionService>(null);
 	useEffect(() => {

@@ -16,7 +16,7 @@ import { AppIcon } from '../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { LocalizationService } from '../../../../services/localization.service';
-import { ACTION } from '../../../../states/reducers/timeline.reducer';
+import { ACTION } from '../../../../states/reducers/post-timeline.reducer';
 import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
 import {
 	useTimelineDispatch,

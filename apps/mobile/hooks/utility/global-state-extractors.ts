@@ -17,6 +17,14 @@ export function useAppModalState(modalType: APP_KNOWN_MODAL) {
 	);
 }
 
+export function useAppAcct() {
+	return useGlobalState(
+		useShallow((o) => ({
+			acct: o.acct,
+		})),
+	);
+}
+
 export function useAppApiClient() {
 	return useGlobalState(
 		useShallow((o) => ({

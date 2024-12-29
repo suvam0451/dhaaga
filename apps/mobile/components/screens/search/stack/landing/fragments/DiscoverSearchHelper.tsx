@@ -7,11 +7,11 @@ import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import { AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import { DiscoverTabReducerActionType } from '../../../../../../states/reducers/discover-tab.reducer';
 import {
 	useDiscoverTabDispatch,
 	useDiscoverTabState,
-} from '../../../DiscoverLanding';
-import { DiscoverTabReducerActionType } from '../../../../../../states/reducers/discover-tab.reducer';
+} from '../../../../../context-wrappers/WithDiscoverTabCtx';
 
 type MultiSelectProps = {
 	setSearchCategory: Dispatch<SetStateAction<APP_SEARCH_TYPE>>;
@@ -21,7 +21,7 @@ type MultiSelectProps = {
  * Control section to set the
  * search category
  */
-const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
+export const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
 	const { theme } = useAppTheme();
 
 	const [selectedIndex, setSelectedIndex] = useState(0);
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: '100%',
 		bottom: 0,
-		marginBottom: 16,
+		marginBottom: 120, // 16
 		paddingHorizontal: 12,
 		zIndex: 99,
 	},

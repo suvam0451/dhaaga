@@ -38,6 +38,7 @@ import { AccountService } from '../../database/entities/account';
 import * as Haptics from 'expo-haptics';
 import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
 import { DialogBuilderService } from '../../services/dialog-builder.service';
+import SearchResultUserItem from '../screens/search/SearchResultUserItem';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -352,6 +353,32 @@ export class AppFlashList {
 				data={listItems}
 				renderItem={FlashListPostRenderer}
 				getItemType={(o) => o.type}
+				onScroll={onScroll}
+				contentContainerStyle={{
+					paddingTop,
+				}}
+				ListHeaderComponent={ListHeaderComponent}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
+			/>
+		);
+	}
+
+	static Users({
+		data,
+		onScroll,
+		refreshing,
+		onRefresh,
+		paddingTop,
+		ListHeaderComponent,
+	}: AppFlashListProps<AppUserObject>) {
+		return (
+			<AnimatedFlashList
+				estimatedItemSize={POST_ESTIMATED_SIZE}
+				data={data}
+				renderItem={({ item }) => <SearchResultUserItem item={item} />}
 				onScroll={onScroll}
 				contentContainerStyle={{
 					paddingTop,

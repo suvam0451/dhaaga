@@ -30,7 +30,7 @@ import { APP_BOTTOM_SHEET_ENUM } from '../components/dhaaga-bottom-sheet/Core';
 import {
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-} from './reducers/timeline.reducer';
+} from './reducers/post-timeline.reducer';
 import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';

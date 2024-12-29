@@ -1,4 +1,4 @@
-import { TimelineFetchMode } from '../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../states/reducers/post-timeline.reducer';
 import { AppTimelineQuery } from '../components/common/timeline/api/useTimelineController';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 

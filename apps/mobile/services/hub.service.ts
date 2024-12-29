@@ -1,6 +1,6 @@
 import { ProfilePinnedTimeline } from '../database/_schema';
 import { APP_PINNED_OBJECT_TYPE } from './driver.service';
-import { TimelineFetchMode } from '../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../states/reducers/post-timeline.reducer';
 import { APP_ICON_ENUM } from '../components/lib/Icon';
 
 export class HubService {

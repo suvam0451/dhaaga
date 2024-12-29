@@ -15,10 +15,10 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@atproto/api@^0.13.20", "@atproto/api@^0.13.5":
-  version "0.13.21"
-  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.13.21.tgz#8ee27a07e5a024b5bf32408d9bd623dd598ad1cc"
-  integrity sha512-iOxSj2YS3Fx9IPz1NivKrSsdYPNbBgpnUH7+WhKYAMvDFDUe2PZe7taau8wsUjJAu/H3S0Mk2TDh5e/7tCRwHA==
+"@atproto/api@^0.13.23":
+  version "0.13.23"
+  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.13.23.tgz#f65d0d7946afa4ca467b7763b056f0824432bcf6"
+  integrity sha512-V1Z5kgfSsqlFaC14sjnZL1Psv/9Lq/YKW1w7TIBq948Rtq8l+c6BpGrOH2Ssdcphpqi4OSeSYRsmJJlD6GGJ5w==
   dependencies:
     "@atproto/common-web" "^0.3.1"
     "@atproto/lexicon" "^0.4.4"
@@ -2431,7 +2431,7 @@ axios@1.7.7:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-axios@^1.4.0:
+axios@^1.7.9:
   version "1.7.9"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.9.tgz#d7d071380c132a24accda1b2cfc1535b79ec650a"
   integrity sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==

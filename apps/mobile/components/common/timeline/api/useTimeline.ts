@@ -9,7 +9,7 @@ import {
 } from '@dhaaga/bridge';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;

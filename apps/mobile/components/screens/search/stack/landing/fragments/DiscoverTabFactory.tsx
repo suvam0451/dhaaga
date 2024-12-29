@@ -1,54 +1,118 @@
 import { useEffect, useMemo, useState } from 'react';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
-import DiscoverSearchHelper from './DiscoverSearchHelper';
-import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import LoadingMore from '../../../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { View, Text, StyleSheet } from 'react-native';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import AppTabLandingNavbar, {
-	APP_LANDING_PAGE_TYPE,
-} from '../../../../../shared/topnavbar/AppTabLandingNavbar';
-import AppNoAccount from '../../../../../error-screen/AppNoAccount';
+import { StyleSheet, Text, View } from 'react-native';
 import {
 	useAppApiClient,
 	useAppTheme,
 } from '../../../../../../hooks/utility/global-state-extractors';
 import {
-	useDiscoverTabDispatch,
-	useDiscoverTabState,
-} from '../../../DiscoverLanding';
-import { DiscoverTabReducerActionType } from '../../../../../../states/reducers/discover-tab.reducer';
+	APP_SEARCH_TYPE,
+	DiscoverTabReducerActionType,
+} from '../../../../../../states/reducers/discover-tab.reducer';
 import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
 } from '../../../../../context-wrappers/WithPostTimeline';
 import { AppFlashList } from '../../../../../lib/AppFlashList';
-import { AppTimelineReducerActionType } from '../../../../../../states/reducers/timeline.reducer';
-import { useApiSearchPosts } from '../../../../../../hooks/api/useApiSearch';
-import { router } from 'expo-router';
-import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
+import { AppTimelineReducerActionType } from '../../../../../../states/reducers/post-timeline.reducer';
+import {
+	useApiSearchPosts,
+	useApiSearchUsers,
+} from '../../../../../../hooks/api/useApiSearch';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import {
+	useDiscoverTabDispatch,
+	useDiscoverTabState,
+} from '../../../../../context-wrappers/WithDiscoverTabCtx';
+import WithUserTimelineCtx, {
+	useUserTimelineDispatch,
+	useUserTimelineState,
+} from '../../../../../context-wrappers/WithUserTimeline';
+import { AppUserTimelineReducerActionType } from '../../../../../../states/reducers/user-timeline.reducer';
 
-function TabHeader() {
+type SearchResultTabProps = {
+	Header: any;
+};
+
+function SearchResultsUser({ Header }: SearchResultTabProps) {
+	const [Refreshing, setRefreshing] = useState(false);
+	const State = useDiscoverTabState();
+	const TimelineState = useUserTimelineState();
+	const TimelineDispatch = useUserTimelineDispatch();
+	const { data, fetchStatus, refetch } = useApiSearchUsers(
+		State.q,
+		TimelineState.appliedMaxId,
+	);
+
+	useEffect(() => {
+		TimelineDispatch({
+			type: AppUserTimelineReducerActionType.RESET,
+		});
+	}, [State.q]);
+
+	function onRefresh() {
+		setRefreshing(true);
+		TimelineDispatch({
+			type: AppUserTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
+	}
+
+	useEffect(() => {
+		if (data.length === 0) return;
+
+		let maxId = (TimelineState.items.length + data.length).toString();
+		// let maxId = data[data.length - 1].id;
+		TimelineDispatch({
+			type: AppUserTimelineReducerActionType.APPEND_RESULTS,
+			payload: {
+				items: data,
+				maxId,
+			},
+		});
+	}, [fetchStatus]);
+
+	function loadMore() {
+		TimelineDispatch({
+			type: AppUserTimelineReducerActionType.REQUEST_LOAD_MORE,
+		});
+	}
+
+	/**
+	 * Composite Hook Collection
+	 */
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus,
+	});
+	const { onScroll } = useScrollMoreOnPageEnd({
+		itemCount: TimelineState.items.length,
+		updateQueryCache: loadMore,
+	});
+
 	return (
-		<AppTabLandingNavbar
-			type={APP_LANDING_PAGE_TYPE.DISCOVER}
-			menuItems={[
-				{
-					iconId: 'user-guide',
-					onPress: () => {
-						router.navigate(APP_ROUTING_ENUM.GUIDE_DISCOVER_TAB);
-					},
-				},
-			]}
-		/>
+		<View
+			style={{
+				flex: 1,
+			}}
+		>
+			<AppFlashList.Users
+				data={TimelineState.items}
+				onScroll={onScroll}
+				refreshing={Refreshing}
+				onRefresh={onRefresh}
+				ListHeaderComponent={Header}
+			/>
+			<LoadingMore visible={visible} loading={loading} />
+		</View>
 	);
 }
 
-function SearchResultsPost() {
+function SearchResultsPost({ Header }: SearchResultTabProps) {
 	const { driver } = useAppApiClient();
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverTabState();
@@ -63,7 +127,6 @@ function SearchResultsPost() {
 		TimelineDispatch({
 			type: AppTimelineReducerActionType.RESET,
 		});
-		refetch();
 	}, [State.q]);
 
 	useEffect(() => {
@@ -112,7 +175,7 @@ function SearchResultsPost() {
 	const { visible, loading } = useLoadingMoreIndicatorState({
 		fetchStatus,
 	});
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: TimelineState.items.length,
 		updateQueryCache: loadMore,
 	});
@@ -128,25 +191,24 @@ function SearchResultsPost() {
 				onScroll={onScroll}
 				refreshing={Refreshing}
 				onRefresh={onRefresh}
-				ListHeaderComponent={<TabHeader />}
+				ListHeaderComponent={Header}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
 		</View>
 	);
 }
 
+type DiscoverTabFactoryProps = {
+	Header: any;
+};
+
 /**
  * Renders the results of a
  * search query in discover
  * tab
  */
-function DiscoverTabFactory() {
+function DiscoverTabFactory({ Header }: DiscoverTabFactoryProps) {
 	const { theme } = useAppTheme();
-	const { acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-		})),
-	);
 	const State = useDiscoverTabState();
 	const dispatch = useDiscoverTabDispatch();
 
@@ -175,11 +237,11 @@ function DiscoverTabFactory() {
 		}
 	}, []);
 
-	const SearchResultComponent = useMemo(() => {
+	return useMemo(() => {
 		if (!State.q)
 			return (
 				<View style={{ flex: 1 }}>
-					<TabHeader />
+					{Header}
 					<View
 						style={{
 							alignItems: 'center',
@@ -188,22 +250,28 @@ function DiscoverTabFactory() {
 							paddingBottom: 128,
 						}}
 					>
-						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							More features will be added here.
-						</Text>
 						<Text
 							style={[
 								styles.bodyText,
-								{ color: theme.secondary.a10, marginBottom: 16 },
+								{
+									color: theme.secondary.a10,
+									marginBottom: 32,
+									fontSize: 20,
+									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+								},
 							]}
 						>
-							For now:
+							More stuff coming{' '}
+							<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
 						</Text>
 						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							1) Type and submit to search.
+							1) Click search icon to toggle widget
 						</Text>
 						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							2) Press (x) to come back here
+							2)️ Submit (↵) to search.
+						</Text>
+						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+							3) Clear (x) to come back here
 						</Text>
 					</View>
 				</View>
@@ -213,26 +281,19 @@ function DiscoverTabFactory() {
 			case APP_SEARCH_TYPE.POSTS:
 				return (
 					<WithPostTimelineCtx>
-						<SearchResultsPost />
+						<SearchResultsPost Header={Header} />
 					</WithPostTimelineCtx>
 				);
-			default:
+			case APP_SEARCH_TYPE.USERS:
 				return (
-					<View>
-						<TabHeader />
-					</View>
+					<WithUserTimelineCtx>
+						<SearchResultsUser Header={Header} />
+					</WithUserTimelineCtx>
 				);
+			default:
+				return <View>{Header}</View>;
 		}
-	}, [State.category, State.q, theme]);
-
-	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.DISCOVER} />;
-
-	return (
-		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
-			{SearchResultComponent}
-			<DiscoverSearchHelper />
-		</View>
-	);
+	}, [State.category, State.q, theme, Header]);
 }
 
 export default DiscoverTabFactory;

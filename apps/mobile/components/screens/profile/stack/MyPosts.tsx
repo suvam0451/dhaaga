@@ -21,7 +21,7 @@ import WithTimelineControllerContext, {
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
 import { AppFlashList } from '../../../lib/AppFlashList';
-import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
 
 function Core() {
 	const { driver, me } = useGlobalState(

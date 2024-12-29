@@ -3,6 +3,35 @@ import { useAppApiClient } from '../utility/global-state-extractors';
 import { AppPostObject } from '../../types/app-post.types';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMiddleware } from '../../services/middlewares/post.middleware';
+import { UserMiddleware } from '../../services/middlewares/user.middleware';
+import { AppUserObject } from '../../types/app-user.types';
+
+export function useApiSearchUsers(q: string, maxId: string | null) {
+	const { client, server, driver } = useAppApiClient();
+
+	async function api(): Promise<AppUserObject[]> {
+		const { data, error } = await client.search.findUsers({
+			maxId,
+			q,
+			limit: 10,
+			query: q,
+			type: 'accounts',
+			untilId: maxId,
+		});
+		if (error) {
+			console.log('[WARN]: error searching for posts', error.message);
+			throw new Error(error.message);
+		}
+		return UserMiddleware.deserialize<unknown[]>(data as any[], driver, server);
+	}
+
+	return useQuery<AppUserObject[]>({
+		queryKey: ['search/users', server, q, maxId],
+		queryFn: api,
+		enabled: client !== null && !!q,
+		initialData: [],
+	});
+}
 
 export function useApiSearchPosts(q: string, maxId: string | null) {
 	const { client, server, driver } = useAppApiClient();
@@ -31,18 +60,15 @@ export function useApiSearchPosts(q: string, maxId: string | null) {
 			untilId: _untilId,
 			offset,
 		});
-		console.log(data, error);
 		if (error) {
 			console.log('[WARN]: error searching for posts', error.message);
 			throw new Error(error.message);
 		}
-
-		console.log(data);
 		return PostMiddleware.deserialize<unknown[]>(data, driver, server);
 	}
 
 	return useQuery<AppPostObject[]>({
-		queryKey: ['search/posts', server, q],
+		queryKey: ['search/posts', server, q, maxId],
 		queryFn: api,
 		enabled: client !== null && !!q,
 		initialData: [],

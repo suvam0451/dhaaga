@@ -111,16 +111,15 @@ export const NativeCheckbox = memo(function Foo({
 				flex: 1,
 				margin: 0,
 				padding: 0,
-				marginLeft: 4,
-				marginRight: 0,
+				marginHorizontal: 'auto',
 			}}
 			textStyle={{
 				color: checked ? theme.textColor.high : theme.textColor.medium,
 				fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+				marginLeft: 4,
 			}}
 			checkedColor={theme.reactions.highlight}
 			uncheckedColor={theme.textColor.medium}
-			wrapperStyle={{ color: 'red' }}
 			title={label}
 		/>
 	);

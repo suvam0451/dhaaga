@@ -30,7 +30,38 @@ export const appUserObjectSchema = z.object({
 		emojis: z.map(z.string(), z.string()),
 		pinnedPosts: z.array(appPostObjectSchema),
 	}),
+	/**
+	 * 	this data block does not need to be cached
+	 * 	also, null means not resolved yet
+	 */
+	relationship: z.object({
+		blocking: z.boolean().nullable(),
+		blockedBy: z.boolean().nullable(),
+		domainBlocking: z.boolean().nullable(),
+		followedBy: z.boolean().nullable(),
+		following: z.boolean().nullable(),
+		muting: z.boolean().nullable(),
+		mutingNotifications: z.boolean().nullable(),
+		note: z.string().nullable(),
+		requested: z.boolean().nullable(),
+		requestedBy: z.boolean().nullable(),
+		showingReblogs: z.boolean().nullable(),
+	}),
 });
+
+export const APP_USER_DEFAULT_RELATIONSHIP = {
+	blocking: null,
+	blockedBy: null,
+	domainBlocking: null,
+	followedBy: null,
+	following: null,
+	muting: null,
+	mutingNotifications: null,
+	note: null,
+	requested: null,
+	requestedBy: null,
+	showingReblogs: null,
+};
 
 /**
  * This typing stores the user object,
