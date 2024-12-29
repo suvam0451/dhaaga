@@ -2,16 +2,11 @@ import { StyleSheet, TextInput, View } from 'react-native';
 import { memo, useRef } from 'react';
 import { useComposerContext } from '../api/useComposerContext';
 import useInputGeneratePrompt from '../api/useInputGeneratePrompt';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 const ComposerTextInput = memo(function Foo() {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-	const { rawText } = useComposerContext();
+	const { theme } = useAppTheme();
+	const { state } = useComposerContext();
 
 	const { onSelectionChange, onChange } = useInputGeneratePrompt();
 	const ref = useRef<TextInput>(null);
@@ -34,7 +29,7 @@ const ComposerTextInput = memo(function Foo() {
 				onSelectionChange={onSelectionChange}
 				scrollEnabled={true}
 			>
-				{rawText}
+				{state.text}
 			</TextInput>
 		</View>
 	);

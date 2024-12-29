@@ -175,6 +175,7 @@ export class PostMiddleware {
 		const { data, error, success } = appPostObjectSchema.safeParse(dto);
 		if (!success) {
 			console.log('[ERROR]: status item dto validation failed', error);
+			console.log('[INFO]: generated object', dto);
 			this.statusI.print();
 			return null;
 		}
@@ -237,6 +238,7 @@ export class PostMiddleware {
 		const { data, error, success } = appPostObjectSchema.safeParse(dto);
 		if (!success) {
 			console.log('[ERROR]: status item dto validation failed', error);
+			console.log('[INFO]: generated object', dto);
 			input.print();
 			return null;
 		}
@@ -321,6 +323,7 @@ export class PostMiddleware {
 	 *  - Quotes -> Returns the object itself
 	 */
 	static getContentTarget(input: AppPostObject): AppPostObject {
+		if (!input) return input;
 		return input.meta.isBoost
 			? input.content.raw
 				? input

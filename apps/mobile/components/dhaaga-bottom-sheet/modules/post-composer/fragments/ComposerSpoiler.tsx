@@ -9,16 +9,22 @@ import {
 import { APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { useComposerContext } from '../api/useComposerContext';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 
 const ComposerSpoiler = memo(() => {
-	const { cwShown, setCw, cw } = useComposerContext();
+	const { state, dispatch } = useComposerContext();
 
 	function onChange(e: NativeSyntheticEvent<TextInputChangeEventData>) {
-		setCw(e.nativeEvent.text);
+		dispatch({
+			type: PostComposerReducerActionType.SET_CW,
+			payload: {
+				content: e.nativeEvent.text,
+			},
+		});
 	}
 
 	return (
-		<View style={{ display: cwShown ? 'flex' : 'none' }}>
+		<View style={{ display: state.isCwVisible ? 'flex' : 'none' }}>
 			<TextInput
 				autoCapitalize={'none'}
 				multiline={true}
@@ -26,7 +32,7 @@ const ComposerSpoiler = memo(() => {
 				placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
 				style={styles.textInput}
 				onChange={onChange}
-				value={cw}
+				value={state.cw}
 			/>
 		</View>
 	);

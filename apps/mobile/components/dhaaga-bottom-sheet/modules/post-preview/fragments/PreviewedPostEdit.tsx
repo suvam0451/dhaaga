@@ -1,21 +1,20 @@
 import { memo } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { AppIcon } from '../../../../lib/Icon';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 
 const PreviewedPostEdit = memo(({}: { State: string }) => {
-	const { postValue, theme } = useGlobalState(
+	const { theme } = useGlobalState(
 		useShallow((o) => ({
-			postValue: o.bottomSheet.postValue,
 			theme: o.colorScheme,
 		})),
 	);
 
 	function onEditPress() {}
 
-	if (postValue === null) return <View />;
 	return (
 		<TouchableOpacity
 			style={{
@@ -34,7 +33,7 @@ const PreviewedPostEdit = memo(({}: { State: string }) => {
 			<Text
 				style={{
 					color: theme.textColor.high,
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 					fontSize: 14,
 				}}
 			>
@@ -42,7 +41,7 @@ const PreviewedPostEdit = memo(({}: { State: string }) => {
 			</Text>
 			<AppIcon
 				id={'edit'}
-				emphasis={'high'}
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 				size={18}
 				containerStyle={{ marginLeft: 8 }}
 			/>

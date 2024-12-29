@@ -1,40 +1,61 @@
 import StatusItem from '../../../common/status/StatusItem';
-import { useMemo, useState } from 'react';
-import { Animated, RefreshControl, View, Text } from 'react-native';
+import { Fragment, useMemo, useState } from 'react';
+import { Animated, RefreshControl, View, Text, FlatList } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { useLocalSearchParams } from 'expo-router';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
-import useGetStatusContext from '../../../../hooks/api/statuses/useGetStatusContext';
+import useGetStatusCtxInterface from '../../../../hooks/api/statuses/useGetStatusCtxInterface';
 import WithAppStatusContextDataContext, {
 	useAppStatusContextDataContext,
 } from '../../../../hooks/api/statuses/WithAppStatusContextData';
 import PostReply from '../../../common/status/PostReply';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import WithAppTimelineDataContext from '../../../../hooks/app/timelines/useAppTimelinePosts';
+import { AppDivider } from '../../../lib/Divider';
+import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+
+function ReplySection() {
+	const { theme } = useAppTheme();
+	return (
+		<Fragment>
+			<View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+				<Text
+					style={{
+						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+						color: theme.secondary.a20,
+						fontSize: 18,
+					}}
+				>
+					Replies
+				</Text>
+			</View>
+			<AppDivider.Soft style={{ marginVertical: 16 }} />
+		</Fragment>
+	);
+}
 
 function StatusContextComponent() {
-	const { data } = useAppStatusContextDataContext();
+	const { data, getChildren } = useAppStatusContextDataContext();
 	const children = useMemo(() => {
-		const childrenIds = data.children.get(data.root);
-		if (!childrenIds) return [];
-		return childrenIds
-			.map((o) => data.lookup.get(o))
-			.filter((o) => o !== undefined && o !== null);
+		return getChildren(data.root);
 	}, [data]);
 
 	if (!data.root) return <View></View>;
 
+	const rootObject = data.lookup.get(data.root);
+
 	return (
 		<View>
-			{data.root && (
-				<WithAppStatusItemContext dto={data.lookup.get(data.root)}>
-					<StatusItem />
-				</WithAppStatusItemContext>
-			)}
-			{children.map((o) => (
-				<PostReply lookupId={o.id} />
-			))}
+			<WithAppStatusItemContext dto={rootObject}>
+				<StatusItem />
+			</WithAppStatusItemContext>
+			<ReplySection />
+			<FlatList
+				data={children}
+				renderItem={({ item }) => <PostReply lookupId={item.id} />}
+			/>
 			<View style={{ marginVertical: 16 }}>
 				<Text style={{ textAlign: 'center', color: APP_FONT.MONTSERRAT_BODY }}>
 					No more replies
@@ -48,8 +69,7 @@ function SharedStackPostDetails() {
 	const [refreshing, setRefreshing] = useState(false);
 
 	const { id, uri } = useLocalSearchParams<{ id: string; uri: string }>();
-
-	const { Data, dispatch, refetch } = useGetStatusContext(
+	const { Data, dispatch, refetch } = useGetStatusCtxInterface(
 		id === 'uri' ? uri : id,
 	);
 

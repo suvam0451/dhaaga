@@ -1,4 +1,5 @@
 import { AppDialogInstanceState } from '../states/_global';
+import { APP_POST_VISIBILITY } from '../hooks/app/useVisibility';
 
 type ActionType = {
 	label: string;
@@ -68,6 +69,37 @@ export class DialogBuilderService {
 		};
 	}
 
+	/**
+	 * Relevant to ActivityPub only
+	 */
+	static chooseWhomToPingInReply(numUsers: number) {
+		return {
+			title: 'Ping Controls',
+			description: [
+				'Select who is relevant to this reply. Avoid pinging everyone.',
+				'Choosing \"Nobody\" will remove mention texts, but still' +
+					' ping the user you are replying to.',
+			],
+			actions: [
+				{
+					label: 'This User Only',
+					onPress: () => {},
+					variant: 'default',
+				},
+				{
+					label: 'Nobody',
+					onPress: () => {},
+					variant: 'default',
+				},
+				{
+					label: `Everyone (${numUsers})`,
+					onPress: () => {},
+					variant: 'default',
+				},
+			],
+		};
+	}
+
 	static deleteAccountConfirm(
 		onConfirmDelete: () => Promise<void>,
 	): AppDialogInstanceState {
@@ -82,6 +114,44 @@ export class DialogBuilderService {
 					label: 'Confirm & Delete',
 					onPress: onConfirmDelete,
 					variant: 'destructive',
+				},
+			],
+		};
+	}
+
+	static changePostVisibility_ActivityPub(
+		fn: (visibility: APP_POST_VISIBILITY) => Promise<void>,
+	) {
+		return {
+			title: 'Set Visibility',
+			description: [
+				'Your \"Unlisted\" posts will be hidden from feeds and search.',
+				'Your \"Direct\" messages are not encrypted.',
+			],
+			actions: [
+				{
+					label: 'Public',
+					onPress: async () => {
+						fn.call(null, APP_POST_VISIBILITY.PUBLIC);
+					},
+				},
+				{
+					label: 'Unlisted',
+					onPress: async () => {
+						fn.call(null, APP_POST_VISIBILITY.UNLISTED);
+					},
+				},
+				{
+					label: 'Followers',
+					onPress: async () => {
+						fn.call(null, APP_POST_VISIBILITY.PRIVATE);
+					},
+				},
+				{
+					label: 'Direct',
+					onPress: async () => {
+						fn.call(null, APP_POST_VISIBILITY.DIRECT);
+					},
 				},
 			],
 		};

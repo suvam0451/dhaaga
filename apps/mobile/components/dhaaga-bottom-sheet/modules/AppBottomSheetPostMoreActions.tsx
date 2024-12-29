@@ -1,8 +1,8 @@
-import { memo, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { memo, useEffect, useReducer, useRef, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import emojiPickerReducer, {
 	defaultValue,
-	EMOJI_PICKER_REDUCER_ACTION,
+	Emoji,
 } from './emoji-picker/emojiPickerReducer';
 import PostMoreActionsPostTarget from './post-actions/fragments/PostMoreActionsPostTarget';
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
@@ -12,11 +12,15 @@ import { useShallow } from 'zustand/react/shallow';
 import { AppPostObject } from '../../../types/app-post.types';
 import {
 	useAppBottomSheet_Improved,
-	useAppManager,
+	useAppPublishers,
 } from '../../../hooks/utility/global-state-extractors';
 
 const AppBottomSheetPostMoreActions = memo(() => {
-	const [PostTarget, setPostTarget] = useState<AppPostObject>(null);
+	const { ctx, stateId } = useAppBottomSheet_Improved();
+	const { postPub } = useAppPublishers();
+	const [PostTarget, setPostTarget] = useState<AppPostObject>(
+		postPub.readCache(ctx.uuid),
+	);
 	const { router, driver, acct, hide, theme, acctManager } = useGlobalState(
 		useShallow((o) => ({
 			router: o.router,
@@ -29,28 +33,35 @@ const AppBottomSheetPostMoreActions = memo(() => {
 		})),
 	);
 
-	const { stateId } = useAppBottomSheet_Improved();
+	function postObjectUpdated({ uuid }: { uuid: string }) {
+		setPostTarget(postPub.readCache(uuid));
+	}
 
-	const { appManager } = useAppManager();
 	useEffect(() => {
-		const _post = appManager.storage.getBottomSheetPostActionsTarget();
-		if (!_post) {
+		if (!ctx.uuid) return;
+
+		if (!postPub.readCache(ctx.uuid)) {
 			setPostTarget(null);
 			return;
 		}
-		setPostTarget(_post);
-	}, [stateId]);
+
+		postObjectUpdated({ uuid: ctx.uuid });
+		postPub.subscribe(ctx.uuid, postObjectUpdated);
+		return () => {
+			postPub.unsubscribe(ctx.uuid, postObjectUpdated);
+		};
+	}, [ctx.uuid, stateId]);
 
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 	const lastSubdomain = useRef(null);
 
 	const [Loading, setLoading] = useState(false);
 
-	async function onReactionRequested(shortCode: string) {
+	async function onReactionRequested(emoji: Emoji) {
 		const state = await ActivitypubReactionsService.addReaction(
 			router,
 			PostTarget.id,
-			shortCode,
+			emoji.shortCode,
 			driver,
 			setLoading,
 		);
@@ -68,42 +79,45 @@ const AppBottomSheetPostMoreActions = memo(() => {
 	}
 
 	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
-	const MainContent = useMemo(() => {
-		switch (EditMode) {
-			case 'root': {
-				return <PostMoreActionsPostTarget setEditMode={setEditMode} />;
-			}
-			case 'emoji': {
-				return (
-					<EmojiPickerBottomSheet
-						onSelect={onReactionRequested}
-						onCancel={() => {
-							setEditMode('root');
-						}}
-					/>
-				);
-			}
-		}
-	}, [EditMode, stateId]);
 
 	useEffect(() => {
 		if (lastSubdomain.current === acct?.server) return;
-		dispatch({
-			type: EMOJI_PICKER_REDUCER_ACTION.INIT,
-			payload: {
-				subdomain: acct?.server,
-				acctManager,
-				driver,
-			},
-		});
+		// dispatch({
+		// 	type: EMOJI_PICKER_REDUCER_ACTION.INIT,
+		// 	payload: {
+		// 		subdomain: acct?.server,
+		// 		acctManager,
+		// 		driver,
+		// 	},
+		// });
 		lastSubdomain.current = acct?.server;
 	}, [acct?.server]);
 
 	return (
-		<View style={{ padding: 8, backgroundColor: theme.palette.menubar }}>
-			{MainContent}
+		<View style={[styles.root, { backgroundColor: theme.palette.menubar }]}>
+			{EditMode === 'root' ? (
+				<PostMoreActionsPostTarget
+					item={PostTarget}
+					setEditMode={setEditMode}
+				/>
+			) : EditMode === 'emoji' ? (
+				<EmojiPickerBottomSheet
+					onAccept={onReactionRequested}
+					onCancel={() => {
+						setEditMode('root');
+					}}
+				/>
+			) : (
+				<View />
+			)}
 		</View>
 	);
 });
 
 export default AppBottomSheetPostMoreActions;
+
+const styles = StyleSheet.create({
+	root: {
+		padding: 8,
+	},
+});

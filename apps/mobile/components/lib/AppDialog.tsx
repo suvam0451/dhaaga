@@ -5,8 +5,9 @@ import {
 } from '../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { modalStyles } from '../common/relationship/dialogs/_common';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Loader } from './Loader';
+import { AppTextInput } from './TextInput';
 
 type DialogOptionsProps = {
 	label: string;
@@ -70,8 +71,17 @@ function DialogOption({ label, onPress, variant }: DialogOptionsProps) {
  * @constructor
  */
 export function AppDialog() {
-	const { visible, hide, state } = useAppDialog();
+	const { visible, hide, state, textSeed, textSubmitCallback, stateId } =
+		useAppDialog();
 	const { theme } = useAppTheme();
+	const [Input, setInput] = useState(null);
+
+	useEffect(() => {
+		setInput(textSeed);
+	}, [stateId, textSeed]);
+
+	const IS_TXT_MODE =
+		textSeed !== null && textSeed !== undefined && !!textSubmitCallback;
 
 	if (!visible) return <View />;
 	return (
@@ -91,6 +101,7 @@ export function AppDialog() {
 					maxWidth: '80%',
 					borderRadius: 8,
 					backgroundColor: theme.palette.menubar,
+					zIndex: 2000,
 					position: 'absolute',
 					left: '50%',
 					top: '50%',
@@ -102,6 +113,7 @@ export function AppDialog() {
 						<Text style={[styles.modalTitle, { color: theme.textColor.high }]}>
 							{state.title}
 						</Text>
+
 						{state.description.map((text, i) => (
 							<Text
 								key={i}
@@ -115,6 +127,18 @@ export function AppDialog() {
 								{text}
 							</Text>
 						))}
+						{IS_TXT_MODE && (
+							<AppTextInput.SingleLine
+								placeholder={'Your input here'}
+								onChangeText={setInput}
+								value={Input}
+								style={{
+									fontSize: 16,
+									textAlign: 'center',
+									marginTop: 20,
+								}}
+							/>
+						)}
 					</View>
 					<View style={{ marginTop: 32, marginBottom: 4 }}>
 						{state.actions.map((action, i) => (
@@ -125,6 +149,16 @@ export function AppDialog() {
 								variant={(action.variant || 'default') as any}
 							/>
 						))}
+						{IS_TXT_MODE && (
+							<DialogOption
+								label={'Save'}
+								onPress={async () => {
+									textSubmitCallback(Input);
+									hide();
+								}}
+								variant={'default'}
+							/>
+						)}
 						<DialogOption
 							label={'Dismiss'}
 							onPress={async () => {

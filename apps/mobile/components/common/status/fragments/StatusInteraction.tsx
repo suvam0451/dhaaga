@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { memo, useState } from 'react';
-import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
 import BoostAdvanced from '../../../dialogs/BoostAdvanced';
@@ -9,25 +9,20 @@ import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBook
 import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../states/_global';
-import { AppPostObject } from '../../../../types/app-post.types';
 import {
+	useAppBottomSheet_Improved,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
-
-type StatusInteractionProps = {
-	openAiContext?: string[];
-	dto: AppPostObject;
-};
+import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 
 const ICON_SIZE = 28;
 
-type StatusInteractionButtonsProps = {
-	item: AppPostObject;
-};
-
-function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
+function StatusInteractionButtons() {
+	const { dto: item } = useAppStatusItem();
 	const { explain } = useAppTimelinePosts();
+	const { show, setCtx } = useAppBottomSheet_Improved();
 	const { theme } = useAppTheme();
 	const { client } = useGlobalState(
 		useShallow((o) => ({
@@ -42,6 +37,8 @@ function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
 	}
 
 	function reply() {
+		setCtx({ uuid: item.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
 		// setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
 		// updateBottomSheetRequestId();
 		// setBottomSheetVisible(true);
@@ -161,20 +158,17 @@ function StatusInteractionButtons({ item }: StatusInteractionButtonsProps) {
 	);
 }
 
-const StatusInteraction = memo(
-	({ openAiContext, dto }: StatusInteractionProps) => {
-		const STATUS_DTO = dto;
-		return (
-			<View
-				style={{
-					paddingHorizontal: 4,
-				}}
-			>
-				<PostStats dto={STATUS_DTO} />
-				<StatusInteractionButtons item={STATUS_DTO} />
-			</View>
-		);
-	},
-);
+function StatusInteraction() {
+	return (
+		<View
+			style={{
+				paddingHorizontal: 4,
+			}}
+		>
+			<PostStats />
+			<StatusInteractionButtons />
+		</View>
+	);
+}
 
 export default StatusInteraction;

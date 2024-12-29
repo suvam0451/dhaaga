@@ -54,6 +54,7 @@ function emojiPickerReducer(
 			const _domain = action.payload.domain;
 			const _subdomain = action.payload.subdomain;
 			const _acctManager: AccountSessionManager = action.payload.acctManager;
+			_acctManager.loadReactions();
 			const emojis = _acctManager.serverReactionCache;
 
 			if (!emojis) {

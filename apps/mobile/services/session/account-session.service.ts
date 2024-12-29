@@ -34,6 +34,16 @@ class AccountSessionManager {
 		this.acct = acct;
 	}
 
+	loadReactions() {
+		if (this.serverReactionCache && this.serverReactionCache.length > 0) return;
+		const allEmojis = this.storage.getEmojis(this.acct.server);
+		if (!allEmojis) {
+			this.serverReactionCache = [];
+		} else {
+			this.serverReactionCache = allEmojis.data;
+		}
+	}
+
 	resolveEmoji(
 		id: string,
 		emojiMap: Map<string, string>,

@@ -18,19 +18,16 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import {
-	useTimelineDispatch,
-	useTimelineManager,
-	useTimelineState,
-} from '../../timeline/core/Timeline';
-import {
-	useAppBottomSheet_TimelineReference,
-	useAppManager,
+	useAppBottomSheet_Improved,
+	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
+
+const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 /**
  * Mostly used to remove the border
@@ -43,43 +40,18 @@ type StatusCoreProps = {
 	isPin?: boolean;
 };
 
-function StatusController() {
+function StatusMoreOptionsButton() {
 	const { dto } = useAppStatusItem();
-	const State = useTimelineState();
-	const dispatch = useTimelineDispatch();
-	const manager = useTimelineManager();
-	const { show } = useGlobalState(
-		useShallow((o) => ({
-			show: o.bottomSheet.show,
-		})),
-	);
-	const { attach } = useAppBottomSheet_TimelineReference();
-	const { appManager } = useAppManager();
+	const { show, setCtx } = useAppBottomSheet_Improved();
 
-	function onMoreOptionsPress() {
-		attach(State, dispatch, manager.current);
-		appManager.storage.setBottomSheetPostActionsTarget(dto);
-		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS);
+	function onPress() {
+		setCtx({ uuid: dto.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
 	}
 
 	return (
-		<View
-			style={{
-				justifyContent: 'flex-start',
-				flexDirection: 'row',
-				alignItems: 'flex-start',
-				flexShrink: 1,
-				height: '100%',
-			}}
-		>
-			<Pressable
-				style={{
-					height: '100%',
-					paddingTop: 4,
-					paddingLeft: 16,
-				}}
-				onPress={onMoreOptionsPress}
-			>
+		<View style={styles.statusMoreOptionsContainer}>
+			<Pressable style={styles.statusMoreOptionsButton} onPress={onPress}>
 				<AppIcon
 					id={'ellipsis-v'}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
@@ -90,26 +62,57 @@ function StatusController() {
 	);
 }
 
+function PinIndicator() {
+	const { theme } = useAppTheme();
+	return (
+		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
+			<Text
+				style={{
+					color: theme.complementary.a0,
+					marginLeft: 6,
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+				}}
+			>
+				Pinned
+			</Text>
+		</View>
+	);
+}
+
+function HiddenByCw({
+	children,
+	visible,
+}: {
+	children: any;
+	visible: boolean;
+}) {
+	if (!visible) return <View />;
+	return <Fragment>{children}</Fragment>;
+}
+
 const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 	const { dto } = useAppStatusItem();
 	const { toPost } = useAppNavigator();
 	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
-	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
+	const _target = PostMiddleware.getContentTarget(dto);
+	const HAS_MEDIA = _target.content?.media?.length > 0;
+	const IS_TRANSLATED = _target.calculated.translationOutput;
 
 	const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
 
 	const { content: PostContent, isLoaded } = useMfm({
-		content: STATUS_DTO.content.raw,
-		remoteSubdomain: STATUS_DTO.postedBy.instance,
-		emojiMap: STATUS_DTO.calculated.emojis,
+		content: _target.content.raw,
+		remoteSubdomain: _target.postedBy.instance,
+		emojiMap: _target.calculated.emojis,
 		deps: [dto],
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});
 
-	const isSensitive = STATUS_DTO.meta.sensitive;
-	const spoilerText = STATUS_DTO.meta.cw;
+	const isSensitive = _target.meta.sensitive;
+	const spoilerText = _target.meta.cw;
 
 	const { theme, showInspector, appSession } = useGlobalState(
 		useShallow((o) => ({
@@ -126,37 +129,22 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 
 	return useMemo(() => {
 		if (!isLoaded) return <StatusItemSkeleton />;
-
 		return (
 			<Fragment>
-				{isPin && (
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-						<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
-						<Text
-							style={{
-								color: theme.complementary.a0,
-								marginLeft: 6,
-								fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							}}
-						>
-							Pinned
-						</Text>
-					</View>
-				)}
+				{isPin && <PinIndicator />}
 				<View
 					style={{
 						flexDirection: 'row',
-						marginBottom: appDimensions.timelines.sectionBottomMargin,
+						marginBottom: SECTION_MARGIN_BOTTOM,
 					}}
 				>
 					<PostCreatedBy
-						dto={dto}
 						style={{
 							paddingBottom: 4,
 							flex: 1,
 						}}
 					/>
-					<StatusController />
+					{!isPreview && <StatusMoreOptionsButton />}
 				</View>
 
 				{isSensitive && (
@@ -168,67 +156,72 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 				)}
 
 				{/* --- Media Items --- */}
-				<Pressable>
-					{isSensitive && !ShowSensitiveContent ? (
-						<View></View>
-					) : STATUS_DTO.content?.media?.length > 0 ? (
-						<Pressable
-							style={{
-								marginBottom: appDimensions.timelines.sectionBottomMargin,
-							}}
-							onPress={onGalleryInspect}
-						>
-							<MediaItem
-								attachments={STATUS_DTO.content.media}
-								calculatedHeight={STATUS_DTO.calculated.mediaContainerHeight}
-							/>
-						</Pressable>
-					) : (
-						<View />
-					)}
-				</Pressable>
+				<HiddenByCw
+					visible={isSensitive ? ShowSensitiveContent && HAS_MEDIA : HAS_MEDIA}
+				>
+					<Pressable
+						style={{
+							marginBottom: SECTION_MARGIN_BOTTOM,
+						}}
+						onPress={onGalleryInspect}
+					>
+						<MediaItem
+							attachments={_target.content.media}
+							calculatedHeight={_target.calculated.mediaContainerHeight}
+						/>
+					</Pressable>
+				</HiddenByCw>
 
 				{/* --- Text Content --- */}
-				<Pressable
-					onPress={() => {
-						toPost(STATUS_DTO.id);
-					}}
-				>
-					{isSensitive && !ShowSensitiveContent ? (
-						<View />
-					) : (
-						<View
-							style={{
-								marginBottom: appDimensions.timelines.sectionBottomMargin,
-							}}
-						>
-							{PostContent}
-							{dto.calculated.translationOutput && (
-								<ExplainOutput
-									additionalInfo={'Translated using OpenAI'}
-									fromLang={'jp'}
-									toLang={'en'}
-									text={dto.calculated.translationOutput}
-								/>
-							)}
-						</View>
-					)}
+				<HiddenByCw visible={isSensitive ? ShowSensitiveContent : true}>
+					<Pressable
+						style={{
+							marginBottom: SECTION_MARGIN_BOTTOM,
+						}}
+						onPress={() => {
+							toPost(_target.id);
+						}}
+					>
+						{PostContent}
+						{IS_TRANSLATED && (
+							<ExplainOutput
+								additionalInfo={'Translated using OpenAI'}
+								fromLang={'jp'}
+								toLang={'en'}
+								text={_target.calculated.translationOutput}
+							/>
+						)}
+					</Pressable>
+				</HiddenByCw>
 
-					{/*FIXME: enable for bluesky*/}
-					{IS_QUOTE_BOOST && (
-						<WithAppStatusItemContext dto={STATUS_DTO.boostedFrom}>
-							<StatusQuoted />
-						</WithAppStatusItemContext>
-					)}
-				</Pressable>
-
-				{!isPreview && <EmojiReactions dto={STATUS_DTO} />}
-				{!isPreview && (
-					<StatusInteraction openAiContext={null} dto={STATUS_DTO} />
+				{/*FIXME: enable for bluesky*/}
+				{IS_QUOTE_BOOST && (
+					<WithAppStatusItemContext dto={_target.boostedFrom}>
+						<StatusQuoted />
+					</WithAppStatusItemContext>
 				)}
+
+				{/* Lock reactions for preview (to be refactored) */}
+				{!isPreview && <EmojiReactions dto={_target} />}
+				{!isPreview && <StatusInteraction />}
 			</Fragment>
 		);
-	}, [isLoaded, ShowSensitiveContent, PostContent, dto, STATUS_DTO, theme]);
+	}, [ShowSensitiveContent, PostContent, _target]);
 });
 
 export default StatusCore;
+
+const styles = StyleSheet.create({
+	statusMoreOptionsContainer: {
+		justifyContent: 'flex-start',
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+		flexShrink: 1,
+		height: '100%',
+	},
+	statusMoreOptionsButton: {
+		height: '100%',
+		paddingTop: 4,
+		paddingLeft: 16,
+	},
+});

@@ -1,6 +1,5 @@
 import { Fragment, memo, useState } from 'react';
 import { APP_FONT } from '../../../../../styles/AppTheme';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { FontAwesome } from '@expo/vector-icons';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
 import {
@@ -15,7 +14,7 @@ type SelectedEmojiActionButtonsProps = {
 };
 
 const SelectedEmojiActionButtons = memo(
-	({ selection, onSelect, onCancel }: SelectedEmojiActionButtonsProps) => {
+	({ selection, onSelect }: SelectedEmojiActionButtonsProps) => {
 		const [Loading, setLoading] = useState(false);
 		function onConfirmPick() {
 			if (!selection) return;
@@ -31,15 +30,6 @@ const SelectedEmojiActionButtons = memo(
 
 		return (
 			<Fragment>
-				<AppButtonBottomSheetAction
-					onPress={onCancel}
-					type={APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL}
-					loading={false}
-					Icon={
-						<AntDesign name="back" size={20} color={APP_FONT.MONTSERRAT_BODY} />
-					}
-					disabled={false}
-				/>
 				<AppButtonBottomSheetAction
 					onPress={onConfirmPick}
 					Icon={

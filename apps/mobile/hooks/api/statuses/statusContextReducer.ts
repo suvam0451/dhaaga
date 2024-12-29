@@ -1,6 +1,9 @@
 import MastodonService from '../../../services/mastodon.service';
 import { produce } from 'immer';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import {
+	KNOWN_SOFTWARE,
+	StatusInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import AtprotoContextService from '../../../services/atproto/atproto-context-service';
@@ -25,27 +28,40 @@ export const defaultAppStatusContext: AppStatusContext = {
 	root: null,
 };
 
+type ActionType =
+	| {
+			type: STATUS_CONTEXT_REDUCER_ACTION.INIT;
+			payload: {
+				source: StatusInterface;
+				ancestors: StatusInterface[];
+				descendants: StatusInterface[];
+				driver: KNOWN_SOFTWARE;
+				server: string;
+			};
+	  }
+	| {
+			type: STATUS_CONTEXT_REDUCER_ACTION.INIT_ATPROTO;
+			payload: any;
+	  };
+
 function statusContextReducer(
 	state: AppStatusContext,
-	action: {
-		type: STATUS_CONTEXT_REDUCER_ACTION;
-		payload: any;
-	},
+	action: ActionType,
 ): AppStatusContext {
-	switch (action.type as STATUS_CONTEXT_REDUCER_ACTION) {
+	switch (action.type) {
 		case STATUS_CONTEXT_REDUCER_ACTION.INIT: {
 			const _source = action.payload.source;
 			const _ancestors = action.payload.ancestors;
 			const _descendants = action.payload.descendants;
-			const _domain = action.payload.domain;
-			const _subdomain = action.payload.subdomain;
+			const _driver: KNOWN_SOFTWARE = action.payload.driver;
+			const _server = action.payload.server;
 
 			if (
 				_source === undefined ||
 				_ancestors === undefined ||
 				_descendants === undefined ||
-				!_domain ||
-				!_subdomain
+				!_driver ||
+				!_server
 			) {
 				return state;
 			}
@@ -65,7 +81,7 @@ function statusContextReducer(
 				for (let [key, value] of itemLookup) {
 					draft.lookup.set(
 						key,
-						new PostMiddleware(value, _domain, _subdomain).export(),
+						new PostMiddleware(value, _driver, _server).export(),
 					);
 				}
 

@@ -1,121 +1,22 @@
+import { createContext, useContext, useEffect, useReducer } from 'react';
 import {
-	InstanceApi_CustomEmojiDTO,
-	TagInterface,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useReducer,
-	useState,
-} from 'react';
-import { useDebounce } from 'use-debounce';
-import { Text } from 'react-native';
-import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import {
-	postComposerReducer,
-	postComposerReducerDefault,
+	PostComposerDispatchType,
+	postComposerReducer as reducer,
+	PostComposerReducerActionType,
+	postComposerReducerDefault as reducerDefault,
+	PostComposerReducerStateType,
 } from '../../../../../states/reducers/post-composer.reducer';
+import { useAppBottomSheet_Improved } from '../../../../../hooks/utility/global-state-extractors';
+import usePostComposeAutoCompletion from './usePostComposeAutoCompletion';
 
-type ComposerAutocompletion = {
-	accounts: UserInterface[];
-	hashtags: TagInterface[];
-	emojis: InstanceApi_CustomEmojiDTO[];
-};
-
-type ComposerAutoCompletionPrompt = {
-	q: string;
-	type: 'acct' | 'tag' | 'emoji' | 'none';
-};
-
-export type ComposeMediaTargetItem = {
-	previewUrl?: string;
-	remoteId?: string;
-	url?: string;
-	uploaded: boolean;
-	localUri: string;
-	status?: string;
-	cw?: string;
-};
-
-type KeyboardSelection = { start: number; end: number };
 type Type = {
-	editMode: 'txt' | 'alt' | 'emoji' | 'misc';
-	setEditMode: React.Dispatch<
-		React.SetStateAction<'txt' | 'alt' | 'emoji' | 'misc'>
-	>;
-	cw: string;
-	setCw: React.Dispatch<React.SetStateAction<string>>;
-	cwShown: boolean;
-	setAltText: (index: number, o: string) => void;
-	setCwShown: React.Dispatch<React.SetStateAction<boolean>>;
-	rawText: string;
-	setRawText: React.Dispatch<React.SetStateAction<string>>;
-	editorText: React.JSX.Element;
-	setEditorText: (content: React.JSX.Element) => void;
-	autoCompletion: ComposerAutocompletion;
-	setAutoCompletion: (autoCompletion: ComposerAutocompletion) => void;
-	visibility: APP_POST_VISIBILITY;
-	setVisibility: (o: APP_POST_VISIBILITY) => void;
-	autoCompletionPrompt: ComposerAutoCompletionPrompt;
-	setAutoCompletionPrompt: (dto: ComposerAutoCompletionPrompt) => void;
-	selection: KeyboardSelection;
-	setSelection: (dto: KeyboardSelection) => void;
-
-	// media items to track upload for
-	mediaTargets: ComposeMediaTargetItem[];
-	addMediaTarget: ({}: {
-		localUri: string;
-		uploaded: boolean;
-		remoteId: string;
-		previewUrl?: string;
-	}) => void;
-	removeMediaTarget: (index: number) => void;
-
-	isMoreOptionsVisible: false;
-	showMoreOptions: () => {};
-	hideMoreOptions: () => {};
+	state: PostComposerReducerStateType;
+	dispatch: PostComposerDispatchType;
 };
 
 const defaultValue: Type = {
-	editMode: 'txt',
-	setEditMode: () => {},
-	autoCompletion: {
-		accounts: [],
-		hashtags: [],
-		emojis: [],
-	},
-	setAutoCompletion: () => {},
-	visibility: APP_POST_VISIBILITY.PUBLIC,
-	setVisibility: () => {},
-
-	autoCompletionPrompt: {
-		q: '',
-		type: 'acct',
-	},
-	setAutoCompletionPrompt: () => {},
-	rawText: '',
-	setRawText: () => {},
-	editorText: <Text />,
-	setEditorText: () => {},
-	selection: {
-		start: 0,
-		end: 0,
-	},
-	setSelection: () => {},
-
-	// media items to track upload for
-	mediaTargets: [],
-	addMediaTarget: () => {},
-	removeMediaTarget: () => {},
-	cw: '',
-	cwShown: false,
-	setCwShown: () => {},
-	setCw: () => {},
-	setAltText: () => {},
+	state: null,
+	dispatch: null,
 };
 
 const ComposerContext = createContext<Type>(defaultValue);
@@ -130,126 +31,25 @@ type Props = {
 };
 
 function WithComposerContext({ children, textSeed }: Props) {
-	const [Data, dispatch] = useReducer(
-		postComposerReducer,
-		postComposerReducerDefault,
-	);
-	const { requestId } = useAppBottomSheet();
-	const [RawText, setRawText] = useState(textSeed || '');
-	const [EditorText, setEditorText] = useState(<Text>{textSeed || ''}</Text>);
-	const [Cw, setCw] = useState('');
-	const [CwSectionShown, setCwSectionShown] = useState(false);
-	const [EditMode, setEditMode] = useState<'txt' | 'alt' | 'emoji' | 'misc'>(
-		'txt',
-	);
-	const [AutoCompletion, setAutoCompletion] = useState<ComposerAutocompletion>({
-		accounts: [],
-		emojis: [],
-		hashtags: [],
-	});
-	const [Selection, setSelection] = useState<KeyboardSelection>({
-		start: 0,
-		end: 0,
-	});
+	const { stateId } = useAppBottomSheet_Improved();
+	const [state, dispatch] = useReducer(reducer, reducerDefault);
+	usePostComposeAutoCompletion(state, dispatch);
 
 	// reset content on request
 	useEffect(() => {
-		setRawText(textSeed);
-		setEditorText(<Text>{textSeed}</Text>);
-	}, [textSeed, requestId]);
-
-	/**
-	 * Media Targets
-	 */
-	const [MediaTargets, setMediaTargets] = useState<ComposeMediaTargetItem[]>(
-		[],
-	);
-	const addMediaTarget = useCallback(
-		({
-			localUri,
-			uploaded,
-			remoteId,
-			previewUrl,
-		}: {
-			localUri: string;
-			uploaded: boolean;
-			remoteId: string;
-			previewUrl?: string;
-		}) => {
-			setMediaTargets((o) =>
-				o.concat([
-					{
-						localUri,
-						uploaded: uploaded || false,
-						remoteId,
-						previewUrl,
-					},
-				]),
-			);
-		},
-		[],
-	);
-
-	const removeMediaTarget = useCallback((index: number) => {
-		setMediaTargets((o) => [...o.slice(0, index), ...o.slice(index + 1)]);
-	}, []);
-
-	const [AutoCompletionPrompt, setAutoCompletionPrompt] =
-		useState<ComposerAutoCompletionPrompt>({
-			q: '',
-			type: 'none',
+		dispatch({
+			type: PostComposerReducerActionType.SET_TEXT,
+			payload: {
+				content: textSeed,
+			},
 		});
-
-	useEffect(() => {
-		if (AutoCompletionPrompt.type === 'none') {
-			setAutoCompletion({
-				accounts: [],
-				emojis: [],
-				hashtags: [],
-			});
-		}
-	}, [AutoCompletionPrompt]);
-	const [DebouncedAutoCompletionPrompt] = useDebounce(
-		AutoCompletionPrompt,
-		200,
-	);
-
-	const [Visibility, setVisibility] = useState<APP_POST_VISIBILITY>(
-		APP_POST_VISIBILITY.PUBLIC,
-	);
-
-	function setAltText(index: number, text: string) {
-		if (index >= MediaTargets.length) return;
-
-		MediaTargets[index].cw = text;
-		setMediaTargets(MediaTargets);
-	}
+	}, [textSeed, stateId]);
 
 	return (
 		<ComposerContext.Provider
 			value={{
-				editMode: EditMode,
-				setEditMode,
-				cw: Cw,
-				setCw,
-				setAltText,
-				cwShown: CwSectionShown,
-				setCwShown: setCwSectionShown,
-				rawText: RawText,
-				setRawText,
-				editorText: EditorText,
-				setEditorText,
-				autoCompletion: AutoCompletion,
-				setAutoCompletion,
-				visibility: Visibility,
-				setVisibility,
-				autoCompletionPrompt: DebouncedAutoCompletionPrompt,
-				setAutoCompletionPrompt: setAutoCompletionPrompt,
-				selection: Selection,
-				setSelection,
-				mediaTargets: MediaTargets,
-				addMediaTarget,
-				removeMediaTarget,
+				state,
+				dispatch,
 			}}
 		>
 			{children}

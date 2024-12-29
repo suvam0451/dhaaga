@@ -23,7 +23,10 @@ function useAppNavigator() {
 
 	function toPost(id: string, params?: any) {
 		// probably in bottom sheet
-		if (!navigator || !navigator.getId) return;
+		if (!navigator || !navigator.getId) {
+			console.log('[WARN]: no navigator!');
+			return;
+		}
 
 		let __id = id;
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {

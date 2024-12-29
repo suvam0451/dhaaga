@@ -13,6 +13,7 @@ import * as Haptics from 'expo-haptics';
 import { memo, useMemo } from 'react';
 import { AppRelationship } from '../../types/ap.types';
 import { APP_FONTS } from '../../styles/AppFonts';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type AppButtonFollowIndicatorProps = {
 	onClick: () => void;
@@ -339,8 +340,9 @@ export const AppButtonBottomSheetAction = memo(
 		style,
 		disabled,
 	}: AppButtonBottomSheetActionProps) => {
+		const { theme } = useAppTheme();
 		const bgColor: Record<APP_BOTTOM_SHEET_ACTION_CATEGORY, string> = {
-			[APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL]: APP_THEME.INVALID_ITEM_BODY,
+			[APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL]: theme.complementary.a0,
 			[APP_BOTTOM_SHEET_ACTION_CATEGORY.PROGRESS]:
 				APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
 		};

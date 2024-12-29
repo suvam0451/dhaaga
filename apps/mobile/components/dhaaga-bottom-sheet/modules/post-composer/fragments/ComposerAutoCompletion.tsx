@@ -21,32 +21,28 @@ import Animated, {
 	withSpring,
 } from 'react-native-reanimated';
 import TextEditorService from '../../../../../services/text-editor.service';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 const AVATAR_ICON_SIZE = 32;
 
 const ComposerAutoCompletion = memo(() => {
-	const {
-		autoCompletion,
-		setAutoCompletionPrompt,
-		rawText,
-		selection,
-		setRawText,
-	} = useComposerContext();
-	usePostComposeAutoCompletion();
+	const { theme } = useAppTheme();
+	const { state, dispatch } = useComposerContext();
 
 	const available = useSharedValue(0);
 
 	const HAS_NO_CONTENT =
-		autoCompletion.accounts.length === 0 &&
-		autoCompletion.emojis.length === 0 &&
-		autoCompletion.hashtags.length === 0;
+		state.suggestions.accounts.length === 0 &&
+		state.suggestions.emojis.length === 0 &&
+		state.suggestions.hashtags.length === 0;
 
 	useEffect(() => {
 		if (HAS_NO_CONTENT) {
 			available.value = withSpring(0);
 		}
 		available.value = withSpring(1);
-	}, [autoCompletion]);
+	}, [state.suggestions]);
 
 	const animatedContainerStyle = useAnimatedStyle(() => {
 		return {
@@ -56,30 +52,42 @@ const ComposerAutoCompletion = memo(() => {
 	});
 
 	function onAcctAccepted(item: UserInterface) {
-		setRawText(
-			TextEditorService.autoCompleteHandler(
-				rawText,
-				`@${item.getUsername()}@${item.getInstanceUrl()}`,
-				selection,
-			),
-		);
-		setAutoCompletionPrompt({
-			type: 'none',
-			q: '',
+		dispatch({
+			type: PostComposerReducerActionType.SET_TEXT,
+			payload: {
+				content: TextEditorService.autoCompleteHandler(
+					state.text,
+					`@${item.getUsername()}@${item.getInstanceUrl()}`,
+					state.keyboardSelection,
+				),
+			},
+		});
+		dispatch({
+			type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
+			payload: {
+				type: 'none',
+				q: '',
+			},
 		});
 	}
 
 	function onEmojiAccepted(item: InstanceApi_CustomEmojiDTO) {
-		setRawText(
-			TextEditorService.autoCompleteReaction(
-				rawText,
-				item.shortCode,
-				selection,
-			),
-		);
-		setAutoCompletionPrompt({
-			type: 'none',
-			q: '',
+		dispatch({
+			type: PostComposerReducerActionType.SET_TEXT,
+			payload: {
+				content: TextEditorService.autoCompleteReaction(
+					state.text,
+					item.shortCode,
+					state.keyboardSelection,
+				),
+			},
+		});
+		dispatch({
+			type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
+			payload: {
+				type: 'none',
+				q: '',
+			},
 		});
 	}
 
@@ -104,7 +112,7 @@ const ComposerAutoCompletion = memo(() => {
 					style={{ display: HAS_NO_CONTENT ? 'none' : 'flex' }}
 					keyboardShouldPersistTaps={'always'}
 					horizontal={true}
-					data={autoCompletion.accounts}
+					data={state.suggestions.accounts}
 					renderItem={({ item }: { item: UserInterface }) => (
 						<Pressable
 							style={{
@@ -140,24 +148,23 @@ const ComposerAutoCompletion = memo(() => {
 							<View>
 								<Text
 									style={{
-										color: APP_FONT.MONTSERRAT_BODY,
-										fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+										color: theme.complementary.a10,
+										fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 										marginLeft: 6,
-										fontSize: 14,
+										fontSize: 15,
 									}}
 								>
-									@{item.getUsername()}
+									{item.getUsername()}
 								</Text>
 								<Text
 									style={{
-										color: APP_FONT.MONTSERRAT_BODY,
+										color: theme.secondary.a30,
 										fontFamily: APP_FONTS.INTER_500_MEDIUM,
 										marginLeft: 6,
-										fontSize: 12,
-										opacity: 0.75,
+										fontSize: 13,
 									}}
 								>
-									@{item.getInstanceUrl()}
+									{item.getInstanceUrl()}
 								</Text>
 							</View>
 						</Pressable>
@@ -167,7 +174,7 @@ const ComposerAutoCompletion = memo(() => {
 					style={{ display: HAS_NO_CONTENT ? 'none' : 'flex' }}
 					keyboardShouldPersistTaps={'always'}
 					horizontal={true}
-					data={autoCompletion.emojis}
+					data={state.suggestions.emojis}
 					renderItem={({ item }: { item: InstanceApi_CustomEmojiDTO }) => (
 						<Pressable
 							style={{
@@ -187,7 +194,11 @@ const ComposerAutoCompletion = memo(() => {
 								source={{ uri: item.url }}
 								style={{ height: 24, width: 24, opacity: 0.8 }}
 							/>
-							<Text style={styles.emojiText}>{item.shortCode}</Text>
+							<Text
+								style={[styles.emojiText, { color: theme.complementary.a0 }]}
+							>
+								{item.shortCode}
+							</Text>
 						</Pressable>
 					)}
 				/>

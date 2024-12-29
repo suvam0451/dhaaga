@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import ExplainOutput from '../explanation/ExplainOutput';
 import MediaItem from '../media/MediaItem';
 import useMfm from '../../hooks/useMfm';
-import { Text } from '@rneui/themed';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import ReplyOwner from '../user/ReplyOwner';
@@ -47,7 +46,7 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 
 	const color = useRef(APP_THEME.COLOR_SCHEME_C);
 	return (
-		<View style={{ marginTop: 8, backgroundColor: '#1e1e1e', padding: 8 }}>
+		<View style={{ marginTop: 8, padding: 8 }}>
 			<ReplyOwner dto={dto} />
 			{content}
 			{ExplanationObject !== null && (
@@ -177,7 +176,6 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		// backgroundColor: 'red',
 		paddingHorizontal: 8,
 		marginLeft: -8,
 		paddingVertical: 6,

@@ -1,36 +1,65 @@
 import { memo, useEffect, useReducer, useRef } from 'react';
-import {
-	ScrollView,
-	StyleSheet,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
-} from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import emojiPickerReducer, {
 	defaultValue,
+	Emoji,
 	EMOJI_PICKER_REDUCER_ACTION,
 } from './emojiPickerReducer';
-import SelectedEmojiPreview from './fragments/SelectedEmojiPreview';
-import SelectedEmojiActionButtons from './fragments/SelectedEmojiActionButtons';
 import EmojiPickerSearchResults from './fragments/EmojiPickerSearchResults';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '../../../../styles/dimensions';
+import SelectedEmojiPreview from './fragments/SelectedEmojiPreview';
+import { AppBottomSheetMenu } from '../../../lib/Menu';
+import { AppTextInput } from '../../../lib/TextInput';
 
 type EmojiPickerBottomSheetProps = {
-	onSelect: (shortCode: string) => Promise<void>;
+	onAccept: (o: Emoji) => void;
 	onCancel: () => void;
 };
 
+type NoReactionsAvailableProps = {
+	onBack: () => void;
+};
+
+function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
+	const { theme } = useAppTheme();
+	return (
+		<View>
+			<View style={{ alignItems: 'center' }}>
+				<Text
+					style={[
+						styles.noReactionAvailableSectionA,
+						{
+							color: theme.secondary.a10,
+						},
+					]}
+				>
+					Could not load custom emojis for your server.
+				</Text>
+			</View>
+			<Pressable
+				style={[
+					styles.noReactionAvailableSectionB,
+					{
+						backgroundColor: theme.complementary.a10,
+					},
+				]}
+				onPress={onBack}
+			>
+				<Text style={styles.noReactionAvailableButton}>Back</Text>
+			</Pressable>
+		</View>
+	);
+}
+
 /**
- * @param onSelect what happens when emoji selection is confirmed
- * @param onCancel what happens when workflow is cancelled
+ * @composerState the parent composer state,
  */
 const EmojiPickerBottomSheet = memo(
-	({ onSelect, onCancel }: EmojiPickerBottomSheetProps) => {
+	({ onAccept, onCancel }: EmojiPickerBottomSheetProps) => {
 		const { driver, acct, acctManager } = useGlobalState(
 			useShallow((o) => ({
 				driver: o.driver,
@@ -55,52 +84,12 @@ const EmojiPickerBottomSheet = memo(
 			lastSubdomain.current = acct?.server;
 		}, [acct?.server]);
 
-		function onPressBack() {
-			onCancel();
+		function _onAccept() {
+			if (!State.selectedReaction) return;
+			onAccept(State.selectedReaction);
 		}
 
-		if (!State.tagEmojiMap)
-			return (
-				<View>
-					<View style={{ alignItems: 'center' }}>
-						<Text
-							style={{
-								color: theme.secondary.a10,
-								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-								fontSize: 16,
-								textAlign: 'center',
-								paddingVertical: 32,
-								maxWidth: 256,
-							}}
-						>
-							Could not load custom emojis for your server.
-						</Text>
-					</View>
-					<TouchableOpacity
-						style={{
-							backgroundColor: theme.complementary.a10,
-							padding: 8,
-							borderRadius: 8,
-							alignSelf: 'center',
-							justifyContent: 'center',
-							maxWidth: 128,
-							paddingHorizontal: 16,
-						}}
-						onPress={onPressBack}
-					>
-						<Text
-							style={{
-								color: 'black',
-								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-								fontSize: 16,
-								textAlign: 'center',
-							}}
-						>
-							Back
-						</Text>
-					</TouchableOpacity>
-				</View>
-			);
+		if (!State.tagEmojiMap) return <NoReactionsAvailable onBack={onCancel} />;
 
 		function onEmojiSelected(o: any) {
 			dispatch({
@@ -130,98 +119,101 @@ const EmojiPickerBottomSheet = memo(
 		}
 
 		return (
-			<View style={{ marginTop: 12, position: 'relative' }}>
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						maxWidth: '100%',
-					}}
-				>
-					<SelectedEmojiPreview selection={State.selectedReaction} />
-					<SelectedEmojiActionButtons
-						selection={State.selectedReaction}
-						onSelect={onSelect}
-						onCancel={onCancel}
+			<View
+				style={{
+					flex: 1,
+					marginBottom: 12,
+				}}
+			>
+				<AppBottomSheetMenu.WithBackNavigation
+					nextLabel={'Select'}
+					backLabel={'Go Back'}
+					onBack={onCancel}
+					onNext={_onAccept}
+					nextEnabled={!!State.selectedReaction}
+					MiddleComponent={
+						<AppTextInput.SingleLine
+							placeholder={'Search'}
+							onChangeText={onSearchTermChanged}
+							style={styles.textInput}
+						/>
+					}
+				/>
+				<SelectedEmojiPreview selection={State.selectedReaction} />
+				<EmojiPickerSearchResults State={State} onSelect={onEmojiSelected} />
+				<View style={{ paddingTop: 6 }}>
+					<FlatList
+						horizontal={true}
+						data={State.allTags}
+						renderItem={({ item }) => (
+							<Pressable
+								style={{
+									backgroundColor: '#363636',
+									paddingHorizontal: 10,
+									paddingVertical: 8,
+									marginHorizontal: 4,
+									borderRadius: appDimensions.buttons.borderRadius,
+									maxHeight: 38,
+								}}
+								onPress={() => {
+									onTagSelectionChanged(item);
+								}}
+							>
+								<Text
+									style={{
+										color: theme.complementary.a0,
+										fontSize: 16,
+										fontFamily: APP_FONTS.INTER_500_MEDIUM,
+									}}
+								>
+									{item ? item : 'DEFAULT'}
+								</Text>
+							</Pressable>
+						)}
+						style={{ flexGrow: 1, maxHeight: 48 }}
 					/>
 				</View>
-
-				<TextInput
-					placeholder={'Search by alias'}
-					autoCapitalize={'none'}
-					multiline={false}
-					placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
-					style={styles.textInput}
-					onChangeText={onSearchTermChanged}
-				/>
-
-				<EmojiPickerSearchResults State={State} onSelect={onEmojiSelected} />
-				<ScrollView
-					horizontal={true}
-					style={{
-						flexDirection: 'row',
-						paddingBottom: 8,
-						paddingTop: 10,
-					}}
-					keyboardShouldPersistTaps={'always'}
-				>
-					{/*@ts-ignore-next-line*/}
-					{State.allTags.map((o) => (
-						<TouchableOpacity
-							style={{
-								marginHorizontal: 4,
-								backgroundColor: '#444',
-								padding: 6,
-								borderRadius: 6,
-							}}
-							onPress={() => {
-								onTagSelectionChanged(o);
-							}}
-						>
-							<Text
-								style={[
-									styles.categoryLabel,
-									{
-										fontFamily:
-											o === State.selectedTag
-												? APP_FONTS.INTER_700_BOLD
-												: APP_FONTS.INTER_500_MEDIUM,
-										color:
-											o === State.selectedTag
-												? 'green'
-												: APP_FONT.MONTSERRAT_BODY,
-									},
-								]}
-							>
-								{o ? o : '<Untagged>'}
-							</Text>
-						</TouchableOpacity>
-					))}
-				</ScrollView>
 			</View>
 		);
 	},
 );
 
-const EMOJI_SIZE = 38;
 const styles = StyleSheet.create({
-	categoryLabel: {
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	},
-	emojiContainer: {
-		width: EMOJI_SIZE,
-		height: EMOJI_SIZE,
-		borderRadius: 8,
-		margin: 4,
+	cancelButtonContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		maxWidth: '100%',
+		marginBottom: 8,
 	},
 	textInput: {
-		textDecorationLine: 'none',
 		paddingVertical: 16,
 		paddingBottom: 12,
-		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 16,
 		borderRadius: 8,
+		paddingTop: 16,
+		textAlign: 'center',
+		minWidth: 128,
+	}, // no reaction available prompt
+	noReactionAvailableSectionA: {
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		fontSize: 16,
+		textAlign: 'center',
+		paddingVertical: 32,
+		maxWidth: 256,
+	},
+	noReactionAvailableSectionB: {
+		padding: 8,
+		borderRadius: 8,
+		alignSelf: 'center',
+		justifyContent: 'center',
+		maxWidth: 128,
+		paddingHorizontal: 16,
+	},
+	noReactionAvailableButton: {
+		color: 'black',
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		fontSize: 16,
+		textAlign: 'center',
 	},
 });
 

@@ -1,10 +1,8 @@
-import { Fragment, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Text, View } from 'react-native';
-import { AppSegmentedControl } from '../../../components/lib/SegmentedControl';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { SocialHubAvatarCircle } from '../../../components/lib/Avatar';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
 import SocialHub from '../../../components/screens/home/SocialHub';
@@ -77,18 +75,6 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 }
 
 export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
-	const fontStyle = {
-		color: theme.textColor.medium,
-		fontSize: 18,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	};
-
 	const Component = useMemo(() => {
 		const currentHours = new Date().getHours();
 		let timeOfDay: TIME_OF_DAY;
@@ -123,9 +109,12 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 				);
 			case TIME_OF_DAY.EVENING:
 				return (
-					<Fragment>
-						<Text style={fontStyle}>Good Evening, {acct?.displayName}</Text>
-					</Fragment>
+					<HubGreetingFragment
+						acct={acct}
+						driver={acct.driver}
+						greeting={`Good Evening`}
+						desc={`@${acct.username}@${acct.server}`}
+					/>
 				);
 			case TIME_OF_DAY.NIGHT:
 				return (
@@ -146,32 +135,6 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 			}}
 		>
 			{Component}
-		</View>
-	);
-}
-
-function Content() {
-	const [Index, setIndex] = useState(0);
-	return (
-		<View>
-			<View style={{ marginHorizontal: 10 }}>
-				<AppSegmentedControl
-					items={[
-						{ label: 'Pinned' },
-						{ label: 'Saved' },
-						{ label: 'For You' },
-					]}
-					style={{ marginTop: 8 }}
-					leftDecorator={
-						<SocialHubAvatarCircle size={36} style={{ marginRight: 6 }} />
-					}
-					index={Index}
-					setIndex={setIndex}
-				/>
-			</View>
-			{/*<SocialHubPinnedTimelines  />*/}
-			{/*<SocialHubPinnedProfiles style={{ marginTop: 16 }} />*/}
-			{/*<SocialHubPinnedTags style={{ marginTop: 16 }} />*/}
 		</View>
 	);
 }

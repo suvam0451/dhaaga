@@ -15,11 +15,10 @@ import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 const BottomSheetAddReaction = memo(() => {
-	const { driver, acct, mmkv } = useGlobalState(
+	const { driver, acct } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
 			acct: o.acct,
-			mmkv: o.mmkv,
 		})),
 	);
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
@@ -30,7 +29,7 @@ const BottomSheetAddReaction = memo(() => {
 			type: EMOJI_PICKER_REDUCER_ACTION.INIT,
 			payload: {
 				subdomain: acct?.server,
-				globalDb: mmkv,
+				// globalDb: mmkv,
 				driver,
 			},
 		});

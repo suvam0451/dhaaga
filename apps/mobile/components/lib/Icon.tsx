@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
 import {
 	Platform,
+	Pressable,
 	StyleProp,
 	StyleSheet,
 	TextStyle,
@@ -25,6 +26,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 export type APP_ICON_ENUM =
 	| 'add-circle-outline'
@@ -38,9 +40,11 @@ export type APP_ICON_ENUM =
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
 	| 'checkmark-circle'
+	| 'checkmark-done-outline'
+	| 'chevron-left'
 	| 'chevron-right'
 	| 'chevron-down'
-	| 'checkmark-done-outline'
+	| 'cloud-upload-outline'
 	| 'cog'
 	| 'copy'
 	| 'create'
@@ -57,6 +61,7 @@ export type APP_ICON_ENUM =
 	| 'heart'
 	| 'heart-outline'
 	| 'home'
+	| 'images'
 	| 'info'
 	| 'language'
 	| 'layers-outline'
@@ -82,6 +87,7 @@ export type APP_ICON_ENUM =
 	| 'trash'
 	| 'user-guide'
 	| 'wand'
+	| 'warning-outline'
 	| 'mute-outline'
 	| 'unmute-outline';
 
@@ -209,11 +215,7 @@ export const AppIcon = memo(
 		containerStyle,
 		color,
 	}: AppIconType) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 
 		let _color = null;
 		let _size = size || 24;
@@ -260,7 +262,6 @@ export const AppIcon = memo(
 							name={'add-circle-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -270,7 +271,6 @@ export const AppIcon = memo(
 							name={'albums-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -280,7 +280,6 @@ export const AppIcon = memo(
 							name="notifications"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -290,7 +289,6 @@ export const AppIcon = memo(
 							name="chevron-back"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -300,7 +298,6 @@ export const AppIcon = memo(
 							name="bookmark"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -310,7 +307,6 @@ export const AppIcon = memo(
 							name="bookmark-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -320,7 +316,6 @@ export const AppIcon = memo(
 							id={'ban-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -330,7 +325,6 @@ export const AppIcon = memo(
 							name="browsers-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -340,7 +334,6 @@ export const AppIcon = memo(
 							name={'chatbox-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -350,7 +343,6 @@ export const AppIcon = memo(
 							name={'chatbox-ellipses-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -360,7 +352,15 @@ export const AppIcon = memo(
 							name={'checkmark-circle'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'chevron-left':
+					return (
+						<Entypo
+							name="chevron-small-left"
+							size={_size}
+							color={_color}
 							style={iconStyle}
 						/>
 					);
@@ -370,7 +370,6 @@ export const AppIcon = memo(
 							name="chevron-small-right"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -378,8 +377,17 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="chevron-down"
+							size={_size}
 							color={_color}
-							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'cloud-upload-outline':
+					return (
+						<Ionicons
+							name={'cloud-upload-outline'}
+							size={_size}
+							color={_color}
 							style={iconStyle}
 						/>
 					);
@@ -389,18 +397,15 @@ export const AppIcon = memo(
 							name="checkmark-done-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
-
 				case 'cog':
 					return Platform.OS === 'ios' ? (
 						<Ionicons
 							name="cog"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					) : (
@@ -408,7 +413,6 @@ export const AppIcon = memo(
 							name="cog"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -418,7 +422,6 @@ export const AppIcon = memo(
 							name="copy-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -428,7 +431,6 @@ export const AppIcon = memo(
 							name="close"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -438,7 +440,6 @@ export const AppIcon = memo(
 							name="create-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -448,7 +449,6 @@ export const AppIcon = memo(
 							name="checkmark-done"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -458,7 +458,6 @@ export const AppIcon = memo(
 							name="edit"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -469,7 +468,6 @@ export const AppIcon = memo(
 							name="ellipsis-horizontal"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -479,7 +477,6 @@ export const AppIcon = memo(
 							name="external-link"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -489,7 +486,6 @@ export const AppIcon = memo(
 							name="eye-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -499,7 +495,6 @@ export const AppIcon = memo(
 							name="eye"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -509,7 +504,6 @@ export const AppIcon = memo(
 							name="eye-off"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -519,7 +513,6 @@ export const AppIcon = memo(
 							name="logo-instagram"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -529,7 +522,6 @@ export const AppIcon = memo(
 							name="globe"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -539,7 +531,6 @@ export const AppIcon = memo(
 							name={'heart'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -549,7 +540,6 @@ export const AppIcon = memo(
 							name={'heart-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -559,7 +549,15 @@ export const AppIcon = memo(
 							name="home"
 							size={_size}
 							color={_color}
-							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'images':
+					return (
+						<Ionicons
+							name="images"
+							size={_size}
+							color={_color}
 							style={iconStyle}
 						/>
 					);
@@ -569,7 +567,6 @@ export const AppIcon = memo(
 							name="information-circle-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -579,7 +576,6 @@ export const AppIcon = memo(
 							name="language"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -589,7 +585,6 @@ export const AppIcon = memo(
 							name={'layers-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -599,7 +594,6 @@ export const AppIcon = memo(
 							name="lock-closed-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -609,7 +603,6 @@ export const AppIcon = memo(
 							name="heart-pulse"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -619,7 +612,6 @@ export const AppIcon = memo(
 							name="menu"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -629,7 +621,6 @@ export const AppIcon = memo(
 							name="message1"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -639,7 +630,6 @@ export const AppIcon = memo(
 							name={'ellipsis-vertical'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -649,7 +639,6 @@ export const AppIcon = memo(
 							name={'musical-notes-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -659,7 +648,6 @@ export const AppIcon = memo(
 							name={'newspaper-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -669,7 +657,6 @@ export const AppIcon = memo(
 							name="no-accounts"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -679,7 +666,6 @@ export const AppIcon = memo(
 							name="color-palette-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -689,7 +675,6 @@ export const AppIcon = memo(
 							name="people"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -699,7 +684,6 @@ export const AppIcon = memo(
 							name="contact-book"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -709,7 +693,6 @@ export const AppIcon = memo(
 							name="pushpino"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -719,7 +702,6 @@ export const AppIcon = memo(
 							name="pin"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -729,7 +711,6 @@ export const AppIcon = memo(
 							name="retweet"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -739,7 +720,6 @@ export const AppIcon = memo(
 							name={'save-outline'}
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -749,7 +729,6 @@ export const AppIcon = memo(
 							name="search1"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -759,7 +738,6 @@ export const AppIcon = memo(
 							name="share-social"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -769,7 +747,6 @@ export const AppIcon = memo(
 							name="add-reaction"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -779,7 +756,6 @@ export const AppIcon = memo(
 							name="trash-o"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -790,7 +766,6 @@ export const AppIcon = memo(
 							name="totop"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -801,7 +776,6 @@ export const AppIcon = memo(
 							name="notes"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={[iconStyle, { transform: [{ scaleX: -1 }] }]}
 						/>
 					);
@@ -811,7 +785,6 @@ export const AppIcon = memo(
 							name="magic"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -821,7 +794,6 @@ export const AppIcon = memo(
 							name="volume-mute-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
 							style={iconStyle}
 						/>
 					);
@@ -831,19 +803,34 @@ export const AppIcon = memo(
 							name="volume-high-outline"
 							size={_size}
 							color={_color}
-							onPress={onPress}
+							style={iconStyle}
+						/>
+					);
+				case 'warning-outline':
+					return (
+						<Ionicons
+							name={'warning-outline'}
+							size={_size}
+							color={_color}
 							style={iconStyle}
 						/>
 					);
 			}
 		}, [id, _size, _color, iconStyle]);
 
+		// Implementation did not seem correct
+		// return (
+		// 	<View
+		// 		style={[{ width: _size, justifyContent: 'center' }, containerStyle]}
+		// 	>
+		// 		{Icon}
+		// 	</View>
+		// );
+		//
 		return (
-			<View
-				style={[{ width: _size, justifyContent: 'center' }, containerStyle]}
-			>
+			<Pressable style={[containerStyle]} onPress={onPress}>
 				{Icon}
-			</View>
+			</Pressable>
 		);
 	},
 );

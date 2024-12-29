@@ -1,8 +1,8 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
 	useAppBottomSheet_Improved,
-	useAppBottomSheet_TimelineReference,
 	useAppManager,
+	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../../styles/AppFonts';
@@ -100,25 +100,32 @@ function CollectionItem({
 
 function AppBottomSheetAddBookmark() {
 	const { theme } = useAppTheme();
-	const { stateId } = useAppBottomSheet_Improved();
-	const { draft, manager } = useAppBottomSheet_TimelineReference();
+	const { ctx } = useAppBottomSheet_Improved();
 	const { appManager } = useAppManager();
-	const [PostObject, setPostObject] = useState<AppPostObject>(null);
+	const { postPub } = useAppPublishers();
+	const [PostObject, setPostObject] = useState<AppPostObject>(
+		postPub.readCache(ctx?.uuid),
+	);
+
+	function onUpdate({ uuid }: { uuid: string }) {
+		setPostObject(postPub.readCache(uuid));
+	}
 
 	useEffect(() => {
 		setPostObject(appManager.storage.getPostObject());
-	}, [stateId]);
+
+		postPub.subscribe(ctx?.uuid, onUpdate);
+		return () => {
+			postPub.unsubscribe(ctx?.uuid, onUpdate);
+		};
+	}, [ctx]);
 
 	function onToggleBookmark() {
-		if (!PostObject || !manager || !manager.isValid) {
-			console.log('[ERROR]: invalid state');
-			return;
-		}
-		manager.toggleBookmark(
-			draft,
-			PostMiddleware.getContentTarget(PostObject).id,
-		);
+		postPub.toggleBookmark(PostObject.uuid);
 	}
+
+	const _target = PostMiddleware.getContentTarget(PostObject);
+	const IS_BOOKMARKED = _target.interaction.bookmarked;
 
 	const collection = ['Default', 'Default 2', 'Default 3'];
 
@@ -140,8 +147,8 @@ function AppBottomSheetAddBookmark() {
 					desc={['Server Feature', 'Synced']}
 					activeIconId={'bookmark'}
 					inactiveIconId={'bookmark-outline'}
-					active={false}
-					activeTint={TIP_TEXT_COLOR}
+					active={IS_BOOKMARKED}
+					activeTint={theme.primary.a0}
 					inactiveTint={TIP_TEXT_COLOR}
 					onPress={onToggleBookmark}
 				/>
@@ -177,7 +184,7 @@ function AppBottomSheetAddBookmark() {
 					inactiveIconId={'add-circle-outline'}
 					active={false}
 					activeTint={theme.primary.a0}
-					inactiveTint={theme.primary.a0}
+					inactiveTint={theme.secondary.a30}
 					onPress={() => {}}
 				/>
 			))}

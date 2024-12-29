@@ -1,74 +1,152 @@
-import { memo, useMemo } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Fragment, useMemo } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import ComposerTextInput from '../fragments/ComposerText';
-import ActionButtons from '../fragments/ActionButtons';
 import ComposerSpoiler from '../fragments/ComposerSpoiler';
 import { useComposerContext } from '../api/useComposerContext';
 import ComposerAlt from '../fragments/ComposerAlt';
 import EmojiPickerBottomSheet from '../../emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../fragments/ComposerTopMenu';
 import TextEditorService from '../../../../../services/text-editor.service';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import {
+	useAppBottomSheet_Improved,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { Emoji } from '../../emoji-picker/emojiPickerReducer';
+import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import ComposerAutoCompletion from '../fragments/ComposerAutoCompletion';
+import { Ionicons } from '@expo/vector-icons';
+import VisibilityPicker from '../fragments/VisibilityPicker';
+import { AppIcon } from '../../../../lib/Icon';
 
-const PostCompose = memo(() => {
-	const { visible } = useGlobalState(
-		useShallow((o) => ({
-			visible: o.bottomSheet.visible,
-		})),
+const ICON_SIZE = 26;
+
+/**
+ * Options to add extra stuff to a post
+ *
+ * - TXT mode: cw,
+ */
+function ActionButtons() {
+	const { theme } = useAppTheme();
+	const { state, dispatch } = useComposerContext();
+
+	function toggleCwShown() {
+		dispatch({
+			type: PostComposerReducerActionType.TOGGLE_CW_SECTION_SHOWN,
+		});
+	}
+
+	function onCustomEmojiClicked() {
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_EMOJI_TAB,
+		});
+	}
+
+	function onToggleMediaButton() {
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_MEDIA_TAB,
+		});
+	}
+
+	return (
+		<Fragment>
+			<ComposerAutoCompletion />
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}
+			>
+				<View style={{ flexDirection: 'row', flex: 1 }}>
+					<AppIcon
+						id={'images'}
+						containerStyle={{
+							paddingHorizontal: 6,
+							// paddingVertical: 8,
+						}}
+						size={ICON_SIZE}
+						color={theme.secondary.a20}
+						onPress={onToggleMediaButton}
+					/>
+					<Pressable style={{ paddingHorizontal: 6 }} onPress={toggleCwShown}>
+						<Ionicons
+							name="warning"
+							size={ICON_SIZE}
+							color={
+								state.cw === '' ? theme.secondary.a20 : theme.complementary.a0
+							}
+						/>
+					</Pressable>
+					<Pressable
+						style={{
+							paddingHorizontal: 6,
+						}}
+						onPress={onCustomEmojiClicked}
+					>
+						<Ionicons
+							name={'happy'}
+							size={ICON_SIZE}
+							color={theme.secondary.a20}
+						/>
+					</Pressable>
+				</View>
+				<VisibilityPicker />
+			</View>
+		</Fragment>
 	);
-	const { editMode, setEditMode, setRawText } = useComposerContext();
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+}
+
+function PostCompose() {
+	const { visible } = useAppBottomSheet_Improved();
+	const { state, dispatch } = useComposerContext();
+	const { theme } = useAppTheme();
+
+	function onEmojiApplied(o: Emoji) {
+		dispatch({
+			type: PostComposerReducerActionType.SET_TEXT,
+			payload: {
+				content: TextEditorService.addReactionText(state.text, o.shortCode),
+			},
+		});
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+		});
+	}
+
+	function onCancelFromAuxTab() {
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+		});
+	}
 
 	const EditorContent = useMemo(() => {
-		switch (editMode) {
+		switch (state.mode) {
 			case 'txt': {
 				return (
-					<ScrollView>
-						<ComposerTopMenu />
-						<ComposerSpoiler />
-						<ComposerTextInput />
-					</ScrollView>
+					<View style={{ height: '100%' }}>
+						<ScrollView style={{ flex: 1 }}>
+							<ComposerTopMenu />
+							<ComposerSpoiler />
+							<ComposerTextInput />
+							<View style={{ flexGrow: 1 }} />
+						</ScrollView>
+						<View style={{ paddingBottom: 16 }}>
+							<ActionButtons />
+						</View>
+					</View>
 				);
 			}
-			case 'emoji': {
+			case 'emoji':
 				return (
 					<EmojiPickerBottomSheet
-						onCancel={() => {
-							setEditMode('txt');
-						}}
-						onSelect={async (shortCode: string) => {
-							setRawText((o) =>
-								TextEditorService.addReactionText(o, shortCode),
-							);
-							setEditMode('txt');
-						}}
+						onAccept={onEmojiApplied}
+						onCancel={onCancelFromAuxTab}
 					/>
 				);
-			}
-			case 'alt': {
-				return (
-					<ScrollView
-						style={{
-							flexGrow: 1,
-							display: 'flex',
-							flexDirection: 'column',
-						}}
-						contentContainerStyle={{
-							flexGrow: 1,
-						}}
-					>
-						<ComposerAlt />
-						<ActionButtons />
-					</ScrollView>
-				);
+			case 'media': {
+				return <ComposerAlt />;
 			}
 		}
-	}, [editMode, theme]);
+	}, [state.mode, theme]);
 
 	return (
 		<View
@@ -77,20 +155,17 @@ const PostCompose = memo(() => {
 				{
 					display: visible ? 'flex' : 'none',
 					backgroundColor: theme.palette.menubar,
-					position: 'relative',
 				},
 			]}
 		>
 			{/*This section changes based on edit mode*/}
 			{EditorContent}
-			<ActionButtons />
 		</View>
 	);
-});
+}
 
 const styles = StyleSheet.create({
 	bottomSheetContentContainer: {
-		padding: 16,
 		paddingHorizontal: 10,
 		paddingTop: 0,
 		height: '100%',

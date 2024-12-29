@@ -1,20 +1,23 @@
-import useGetStatus from './useGetStatus';
+import useGetPostInterface from './useGetPostInterface';
 import { useEffect, useReducer } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
+import {
+	KNOWN_SOFTWARE,
+	StatusInterface,
+} from '@dhaaga/shared-abstraction-activitypub';
 import statusContextReducer, {
 	defaultAppStatusContext,
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../states/_global';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 
 /**
  * Get the context chain for a given status id
- * @param postId
+ * @param id
  */
-function useGetStatusContext(postId: string) {
+function useGetStatusCtxInterface(id: string) {
 	const { client, driver, acct } = useGlobalState(
 		useShallow((o) => ({
 			driver: o.driver,
@@ -23,7 +26,7 @@ function useGetStatusContext(postId: string) {
 		})),
 	);
 
-	const { data: PostData } = useGetStatus(postId);
+	const { data: postI } = useGetPostInterface(id);
 
 	const [Data, dispatch] = useReducer(
 		statusContextReducer,
@@ -32,31 +35,38 @@ function useGetStatusContext(postId: string) {
 
 	async function api() {
 		if (!client) throw new Error('_client not initialized');
-		const { data, error } = await client.statuses.getContext(postId);
+		const { data, error } = await client.statuses.getContext(id);
 		if (error) {
+			console.log(error);
 			return null;
 		}
 
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			return data;
-		}
+		if (driver === KNOWN_SOFTWARE.BLUESKY) return data as any;
 
 		return {
-			ancestors: ActivityPubAdapterService.adaptManyStatuses(
+			ancestors: PostMiddleware.rawToInterface<unknown[]>(
 				(data as any).ancestors,
 				driver,
 			),
-			descendants: ActivityPubAdapterService.adaptManyStatuses(
+			descendants: PostMiddleware.rawToInterface<unknown[]>(
 				(data as any).descendants,
 				driver,
 			),
 		};
 	}
 
-	const { data, status, fetchStatus, refetch } = useQuery({
-		queryKey: ['status/details', postId],
+	const {
+		data: ctxData,
+		status,
+		fetchStatus,
+		refetch,
+	} = useQuery<{
+		ancestors: StatusInterface[];
+		descendants: StatusInterface[];
+	}>({
+		queryKey: ['status/details', id],
 		queryFn: api,
-		enabled: client && postId !== undefined,
+		enabled: client && id !== undefined,
 	});
 
 	useEffect(() => {
@@ -66,29 +76,29 @@ function useGetStatusContext(postId: string) {
 			dispatch({
 				type: STATUS_CONTEXT_REDUCER_ACTION.INIT_ATPROTO,
 				payload: {
-					resp: data,
+					resp: ctxData,
 					driver,
 					subdomain: acct?.server,
 				},
 			});
 		} else {
 			// Required by Mastodon specifically
-			if (!PostData) return;
+			if (!postI) return;
 
 			dispatch({
 				type: STATUS_CONTEXT_REDUCER_ACTION.INIT,
 				payload: {
-					source: PostData,
-					ancestors: (data as any).ancestors,
-					descendants: (data as any).descendants,
+					source: postI,
+					ancestors: (ctxData as any).ancestors,
+					descendants: (ctxData as any).descendants,
 					driver,
-					subdomain: acct?.server,
+					server: acct?.server,
 				},
 			});
 		}
-	}, [PostData, fetchStatus, dispatch]);
+	}, [postI, fetchStatus, dispatch]);
 
 	return { Data, dispatch, refetch };
 }
 
-export default useGetStatusContext;
+export default useGetStatusCtxInterface;

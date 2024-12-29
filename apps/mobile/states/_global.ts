@@ -50,6 +50,7 @@ type AppModalStateBase = {
 
 export enum APP_DIALOG_SHEET_ENUM {
 	DEFAULT = 'Default',
+	TEXT_INPUT = 'TextInput',
 }
 
 /**
@@ -71,13 +72,19 @@ export type AppDialogInstanceState = {
 };
 
 type AppDialogState = {
-	// type: APP_DIALOG_SHEET_ENUM;
+	type: APP_DIALOG_SHEET_ENUM;
 	stateId: string;
 	refresh: () => void;
 	visible: boolean;
 	state: AppDialogInstanceState | null;
-	show: (data: AppDialogInstanceState) => void;
+	show: (
+		data: AppDialogInstanceState,
+		textSeed?: string,
+		callback?: (text: string) => void,
+	) => void;
 	hide: () => void;
+	textSeed: string;
+	textSubmitCallback: (text: string) => void;
 };
 
 type AppPubSubState = {
@@ -102,8 +109,8 @@ type AppBottomSheetState = {
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
 
-	ctx: object;
-	setCtx: (ctx: object) => void;
+	ctx: { uuid: string };
+	setCtx: (ctx: { uuid: string }) => void;
 
 	broadcastEndSession: () => void;
 
@@ -350,7 +357,7 @@ const useGlobalState = create<State & Actions>()(
 			stateId: RandomUtil.nanoId(),
 			endSessionSeed: RandomUtil.nanoId(),
 			ctx: null,
-			setCtx: function (ctx: object) {
+			setCtx: function (ctx: { uuid: string }) {
 				set((state) => {
 					state.bottomSheet.ctx = ctx;
 				});
@@ -399,14 +406,24 @@ const useGlobalState = create<State & Actions>()(
 			},
 		},
 		dialog: {
-			// type: APP_DIALOG_SHEET_ENUM.DEFAULT,
+			type: APP_DIALOG_SHEET_ENUM.DEFAULT,
 			stateId: RandomUtil.nanoId(),
 			visible: false,
-			show: (data: AppDialogInstanceState) => {
+			textSeed: null,
+			textSubmitCallback: undefined,
+			show: (
+				data: AppDialogInstanceState,
+				textSeed?: string,
+				callback?: (text: string) => void,
+			) => {
 				set((state) => {
 					state.dialog.state = data;
 					state.dialog.stateId = RandomUtil.nanoId();
-					// state.dialog.type = APP_DIALOG_SHEET_ENUM.DEFAULT;
+					if (textSeed !== undefined && textSeed !== null && callback) {
+						state.dialog.type = APP_DIALOG_SHEET_ENUM.TEXT_INPUT;
+						state.dialog.textSeed = textSeed;
+						state.dialog.textSubmitCallback = callback;
+					}
 					state.dialog.visible = true;
 				});
 			},
