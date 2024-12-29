@@ -5,14 +5,14 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
+import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
+import { AppToggleIcon } from '../../../../lib/Icon';
+import { appDimensions } from '../../../../../styles/dimensions';
 import {
 	useTimelineDispatch,
 	useTimelineManager,
 	useTimelineState,
-} from '../../../timeline/core/Timeline';
-import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
-import { AppToggleIcon } from '../../../../lib/Icon';
-import { appDimensions } from '../../../../../styles/dimensions';
+} from '../../../../context-wrappers/WithPostTimeline';
 
 /**
  * Bookmark toggle indicator button

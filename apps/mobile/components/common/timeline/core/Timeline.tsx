@@ -1,58 +1,32 @@
-import {
-	createContext,
-	memo,
-	MutableRefObject,
-	useContext,
-	useEffect,
-	useReducer,
-	useRef,
-	useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import LoadingMore from '../../../screens/home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
-import WithTimelineControllerContext from '../api/useTimelineController';
 import useTimeline from '../api/useTimeline';
-import WithAppTimelineDataContext from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppFlashList } from '../../../../components/lib/AppFlashList';
 import { useLocalSearchParams } from 'expo-router';
-import UserPeekModal from '../../../modals/UserPeekModal';
 import {
-	appTimelineReducer,
 	AppTimelineReducerActionType,
-	appTimelineReducerDefault,
-	AppTimelineReducerDispatchType,
-	AppTimelineReducerStateType,
 	TimelineFetchMode,
 } from '../../../../states/reducers/timeline.reducer';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
-import { TimelineSessionService } from '../../../../services/session/timeline-session.service';
-
-/**
- * --- Context Setup ---
- */
-
-const _StateCtx = createContext<AppTimelineReducerStateType>(null);
-const _DispatchCtx = createContext<AppTimelineReducerDispatchType>(null);
-const _ManagerCtx =
-	createContext<MutableRefObject<TimelineSessionService>>(null);
-
-// exports
-export const useTimelineState = () => useContext(_StateCtx);
-export const useTimelineDispatch = () => useContext(_DispatchCtx);
-export const useTimelineManager = () => useContext(_ManagerCtx);
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import WithPostTimelineCtx, {
+	useTimelineDispatch,
+	useTimelineState,
+} from '../../../context-wrappers/WithPostTimeline';
 
 /*
  * Render a Timeline
  */
-const Timeline = memo(() => {
+function Base() {
 	const { db } = useGlobalState(
 		useShallow((o) => ({
 			db: o.db,
@@ -110,6 +84,7 @@ const Timeline = memo(() => {
 	});
 
 	const [Refreshing, setRefreshing] = useState(false);
+
 	function onRefresh() {
 		setRefreshing(true);
 		dispatch({
@@ -147,11 +122,7 @@ const Timeline = memo(() => {
 		});
 	}, [fetchStatus]);
 
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	function loadMore() {
 		dispatch({
@@ -197,52 +168,15 @@ const Timeline = memo(() => {
 			<LoadingMore visible={visible} loading={loading} />
 		</View>
 	);
-});
-
-/**
- * --- Context Wrapper ---
- */
-
-function CtxWrapper({ children }) {
-	const { driver, client } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			client: o.router,
-		})),
-	);
-	const [state, dispatch] = useReducer(
-		appTimelineReducer,
-		appTimelineReducerDefault,
-	);
-
-	const manager = useRef<TimelineSessionService>(null);
-	useEffect(() => {
-		manager.current = new TimelineSessionService(driver, client, dispatch);
-	}, [driver, client, dispatch]);
-
-	return (
-		<_StateCtx.Provider value={state}>
-			<_DispatchCtx.Provider value={dispatch}>
-				<_ManagerCtx.Provider value={manager}>{children}</_ManagerCtx.Provider>
-			</_DispatchCtx.Provider>
-		</_StateCtx.Provider>
-	);
 }
 
-function TimelineWrapper() {
+function Timeline() {
 	return (
-		<WithTimelineControllerContext>
-			<CtxWrapper>
-				<WithAppTimelineDataContext>
-					<Timeline />
-					<UserPeekModal />
-				</WithAppTimelineDataContext>
-			</CtxWrapper>
-		</WithTimelineControllerContext>
+		<WithPostTimelineCtx>
+			<Base />
+		</WithPostTimelineCtx>
 	);
 }
-
-export default TimelineWrapper;
 
 const styles = StyleSheet.create({
 	header: {
@@ -258,3 +192,5 @@ const styles = StyleSheet.create({
 		position: 'relative',
 	},
 });
+
+export default Timeline;

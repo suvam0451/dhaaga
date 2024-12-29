@@ -1,5 +1,5 @@
-import DiscoverLandingStack from '../../../components/screens/search/stack/landing/DiscoverLandingStack';
+import DiscoverLanding from '../../../components/screens/search/DiscoverLanding';
 
 export default function Tab() {
-	return <DiscoverLandingStack />;
+	return <DiscoverLanding />;
 }

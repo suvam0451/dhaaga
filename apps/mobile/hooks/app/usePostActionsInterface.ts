@@ -1,8 +1,8 @@
+import { Dispatch, SetStateAction } from 'react';
 import {
 	useTimelineManager,
 	useTimelineState,
-} from '../../components/common/timeline/core/Timeline';
-import { Dispatch, SetStateAction } from 'react';
+} from '../../components/context-wrappers/WithPostTimeline';
 
 /**
  * Allows performing actions against a post

@@ -57,7 +57,7 @@ others—without having to jump between apps and platforms.
 
 > [!TIP]
 > This app might not support certain features from your platform.</br> 
-> They are picked and added on a **fun-first** basis. Feel free to request!
+> They are added on a **fun-first** basis. Feel free to request!
 
 ## 💁 About
 

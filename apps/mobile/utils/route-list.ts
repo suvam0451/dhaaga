@@ -7,4 +7,6 @@ export enum APP_ROUTING_ENUM {
 
 	// guides
 	GUIDE_NEW_TAB_INTERFACE = '/user-guide-profiles',
+
+	GUIDE_DISCOVER_TAB = '/discover/user-guide',
 }

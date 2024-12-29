@@ -16,12 +16,13 @@ import { AppIcon } from '../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { LocalizationService } from '../../../../services/localization.service';
-import {
-	useTimelineDispatch,
-	useTimelineState,
-} from '../../../common/timeline/core/Timeline';
 import { ACTION } from '../../../../states/reducers/timeline.reducer';
 import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
+import {
+	useTimelineDispatch,
+	useTimelineManager,
+	useTimelineState,
+} from '../../../context-wrappers/WithPostTimeline';
 
 /**
  * A custom navbar that invokes
@@ -43,6 +44,7 @@ function TimelinesHeader() {
 
 	const State = useTimelineState();
 	const dispatch = useTimelineDispatch();
+	const manager = useTimelineManager();
 
 	function onIconPress() {
 		if (!router) {
@@ -57,7 +59,7 @@ function TimelinesHeader() {
 	}
 
 	function onViewTimelineController() {
-		attach(State, dispatch);
+		attach(State, dispatch, manager.current);
 		show(APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER);
 	}
 

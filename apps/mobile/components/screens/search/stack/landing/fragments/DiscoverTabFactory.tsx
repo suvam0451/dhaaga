@@ -1,146 +1,247 @@
-import { memo, useEffect, useState } from 'react';
-import { useAppPaginationContext } from '../../../../../../states/usePagination';
-import DiscoverListRenderer from './DiscoverListRenderer';
+import { useEffect, useMemo, useState } from 'react';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import DiscoverSearchHelper from './DiscoverSearchHelper';
-import DiscoverTabListHeader from './DiscoverTabListHeader';
-import useSearch, { APP_SEARCH_TYPE } from '../../../api/useSearch';
+import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import LoadingMore from '../../../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
-import { useDebounce } from 'use-debounce';
-import { useAppTimelinePosts } from '../../../../../../hooks/app/timelines/useAppTimelinePosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import { View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_LANDING_PAGE_TYPE } from '../../../../../shared/topnavbar/AppTabLandingNavbar';
+import AppTabLandingNavbar, {
+	APP_LANDING_PAGE_TYPE,
+} from '../../../../../shared/topnavbar/AppTabLandingNavbar';
 import AppNoAccount from '../../../../../error-screen/AppNoAccount';
+import {
+	useAppApiClient,
+	useAppTheme,
+} from '../../../../../../hooks/utility/global-state-extractors';
+import {
+	useDiscoverTabDispatch,
+	useDiscoverTabState,
+} from '../../../DiscoverLanding';
+import { DiscoverTabReducerActionType } from '../../../../../../states/reducers/discover-tab.reducer';
+import WithPostTimelineCtx, {
+	useTimelineDispatch,
+	useTimelineState,
+} from '../../../../../context-wrappers/WithPostTimeline';
+import { AppFlashList } from '../../../../../lib/AppFlashList';
+import { AppTimelineReducerActionType } from '../../../../../../states/reducers/timeline.reducer';
+import { useApiSearchPosts } from '../../../../../../hooks/api/useApiSearch';
+import { router } from 'expo-router';
+import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
+
+function TabHeader() {
+	return (
+		<AppTabLandingNavbar
+			type={APP_LANDING_PAGE_TYPE.DISCOVER}
+			menuItems={[
+				{
+					iconId: 'user-guide',
+					onPress: () => {
+						router.navigate(APP_ROUTING_ENUM.GUIDE_DISCOVER_TAB);
+					},
+				},
+			]}
+		/>
+	);
+}
+
+function SearchResultsPost() {
+	const { driver } = useAppApiClient();
+	const [Refreshing, setRefreshing] = useState(false);
+	const State = useDiscoverTabState();
+	const TimelineState = useTimelineState();
+	const TimelineDispatch = useTimelineDispatch();
+	const { data, fetchStatus, refetch } = useApiSearchPosts(
+		State.q,
+		TimelineState.appliedMaxId,
+	);
+
+	useEffect(() => {
+		TimelineDispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+		refetch();
+	}, [State.q]);
+
+	useEffect(() => {
+		if (data.length === 0) return;
+		/**
+		 * NOTE: Pagination works in weird ways for these drivers
+		 */
+		const FALLBACK_TO_OFFSET = [
+			KNOWN_SOFTWARE.AKKOMA, // KNOWN_SOFTWARE.SHARKEY,
+		].includes(driver);
+
+		let maxId = null;
+		if (FALLBACK_TO_OFFSET) {
+			maxId = (TimelineState.items.length + data.length).toString();
+		} else {
+			maxId = data[data.length - 1].id;
+		}
+		TimelineDispatch({
+			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			payload: {
+				items: data,
+				maxId,
+			},
+		});
+	}, [fetchStatus]);
+
+	function loadMore() {
+		TimelineDispatch({
+			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+		});
+	}
+
+	function onRefresh() {
+		setRefreshing(true);
+		TimelineDispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
+	}
+
+	/**
+	 * Composite Hook Collection
+	 */
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus,
+	});
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: TimelineState.items.length,
+		updateQueryCache: loadMore,
+	});
+
+	return (
+		<View
+			style={{
+				flex: 1,
+			}}
+		>
+			<AppFlashList.Post
+				data={TimelineState.items}
+				onScroll={onScroll}
+				refreshing={Refreshing}
+				onRefresh={onRefresh}
+				ListHeaderComponent={<TabHeader />}
+			/>
+			<LoadingMore visible={visible} loading={loading} />
+		</View>
+	);
+}
 
 /**
  * Renders the results of a
  * search query in discover
  * tab
  */
-const DiscoverTabFactory = memo(() => {
-	const { client, driver, theme, acct } = useGlobalState(
+function DiscoverTabFactory() {
+	const { theme } = useAppTheme();
+	const { acct } = useGlobalState(
 		useShallow((o) => ({
-			driver: o.driver,
-			client: o.router,
-			theme: o.colorScheme,
 			acct: o.acct,
 		})),
 	);
-	const [SearchTerm, setSearchTerm] = useState('');
-	const [SearchCategory, setSearchCategory] = useState<APP_SEARCH_TYPE>(
-		APP_SEARCH_TYPE.POSTS,
-	);
-
-	const {
-		data: timelineData,
-		addPosts: appendTimelineData,
-		clear: timelineDataStoreClear,
-	} = useAppTimelinePosts();
-
-	const { data, updateQueryCache, append, setMaxId, queryCacheMaxId, clear } =
-		useAppPaginationContext();
-
-	const NUM_ITEMS = Math.max(data.length, timelineData.length);
-
-	const { Data, fetchStatus, IsLoading, status } = useSearch(SearchCategory, {
-		maxId: queryCacheMaxId,
-		q: SearchTerm,
-		limit: 10,
-		query: SearchTerm,
-	});
+	const State = useDiscoverTabState();
+	const dispatch = useDiscoverTabDispatch();
 
 	useEffect(() => {
-		// reset the results on account/searchTerm change
-		clear();
-		timelineDataStoreClear();
-	}, [SearchTerm, client, SearchCategory]);
+		dispatch({
+			type: DiscoverTabReducerActionType.CLEAR_SEARCH,
+		});
+	}, []);
 
 	useEffect(() => {
-		switch (SearchCategory) {
+		switch (State.category) {
 			case APP_SEARCH_TYPE.POSTS: {
-				if (Data?.statuses?.length === 0) return;
-				const FALLBACK_TO_OFFSET = [
-					KNOWN_SOFTWARE.AKKOMA,
-					// KNOWN_SOFTWARE.SHARKEY,
-				].includes(driver);
-
-				if (FALLBACK_TO_OFFSET) {
-					setMaxId((timelineData.length + Data.statuses.length).toString());
-				} else {
-					setMaxId(Data.statuses[Data.statuses.length - 1].getId());
-				}
-
-				appendTimelineData(Data.statuses);
 				break;
 			}
 			case APP_SEARCH_TYPE.USERS: {
-				if (Data?.accounts?.length === 0) return;
-				setMaxId(Data.accounts[Data.accounts.length - 1].getId());
-				append(Data.accounts);
+				// if (SomeData?.accounts?.length === 0) return;
+				// setMaxId(SomeData.accounts[SomeData.accounts.length - 1].getId());
+				// append(SomeData.accounts);
 				break;
 			}
 			default: {
-				if (Data?.statuses?.length === 0) return;
-				setMaxId(Data.statuses[Data.statuses.length - 1].getId());
-				append(Data.statuses);
+				// if (SomeData?.statuses?.length === 0) return;
+				// setMaxId(SomeData.statuses[SomeData.statuses.length - 1].getId());
+				// append(SomeData.statuses);
 			}
 		}
-	}, [Data, SearchCategory]);
+	}, []);
 
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
-		additionalLoadingStates: IsLoading,
-	});
+	const SearchResultComponent = useMemo(() => {
+		if (!State.q)
+			return (
+				<View style={{ flex: 1 }}>
+					<TabHeader />
+					<View
+						style={{
+							alignItems: 'center',
+							justifyContent: 'center',
+							flex: 1,
+							paddingBottom: 128,
+						}}
+					>
+						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+							More features will be added here.
+						</Text>
+						<Text
+							style={[
+								styles.bodyText,
+								{ color: theme.secondary.a10, marginBottom: 16 },
+							]}
+						>
+							For now:
+						</Text>
+						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+							1) Type and submit to search.
+						</Text>
+						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+							2) Press (x) to come back here
+						</Text>
+					</View>
+				</View>
+			);
 
-	const [debouncedFetchStatus] = useDebounce(fetchStatus, 200);
-
-	const flashListData =
-		SearchCategory === APP_SEARCH_TYPE.POSTS ? timelineData : data;
-
-	const { onScroll } = useScrollMoreOnPageEnd({
-		itemCount: NUM_ITEMS,
-		updateQueryCache,
-	});
+		switch (State.category) {
+			case APP_SEARCH_TYPE.POSTS:
+				return (
+					<WithPostTimelineCtx>
+						<SearchResultsPost />
+					</WithPostTimelineCtx>
+				);
+			default:
+				return (
+					<View>
+						<TabHeader />
+					</View>
+				);
+		}
+	}, [State.category, State.q, theme]);
 
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.DISCOVER} />;
 
 	return (
 		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
-			<AnimatedFlashList
-				estimatedItemSize={200}
-				data={flashListData}
-				renderItem={({ item }) => {
-					return <DiscoverListRenderer item={item} category={SearchCategory} />;
-				}}
-				onScroll={onScroll}
-				ListHeaderComponent={() => {
-					return (
-						<DiscoverTabListHeader
-							query={SearchTerm}
-							fetchStatus={debouncedFetchStatus}
-							numItems={NUM_ITEMS}
-							status={status}
-							category={SearchCategory}
-						/>
-					);
-				}}
-			/>
-			<LoadingMore
-				visible={visible}
-				loading={loading}
-				style={{ bottom: 108 }}
-			/>
-			<DiscoverSearchHelper
-				setSearchTerm={setSearchTerm}
-				setSearchCategory={setSearchCategory}
-			/>
+			{SearchResultComponent}
+			<DiscoverSearchHelper />
 		</View>
 	);
-});
+}
 
 export default DiscoverTabFactory;
+
+const styles = StyleSheet.create({
+	bodyText: {
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontSize: 16,
+		textAlign: 'center',
+		marginBottom: 8,
+	},
+});

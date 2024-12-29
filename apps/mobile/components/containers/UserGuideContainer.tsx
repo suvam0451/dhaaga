@@ -33,16 +33,17 @@ function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
 	};
 
 	const qStyle: StyleProp<TextStyle> = {
-		color: theme.textColor.high,
+		color: theme.secondary.a0,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		marginBottom: 8,
 		fontSize: 16,
 	};
 
 	const aStyle: StyleProp<TextStyle> = {
-		color: theme.textColor.medium,
+		color: theme.secondary.a10,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
 		marginBottom: 4,
+		fontSize: 14,
 	};
 
 	return (

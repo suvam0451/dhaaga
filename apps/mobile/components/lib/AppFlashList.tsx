@@ -340,6 +340,7 @@ export class AppFlashList {
 		refreshing,
 		onRefresh,
 		paddingTop,
+		ListHeaderComponent,
 	}: AppFlashListProps<AppPostObject>) {
 		const listItems = useMemo(() => {
 			return FlashListService.posts(data);
@@ -355,6 +356,7 @@ export class AppFlashList {
 				contentContainerStyle={{
 					paddingTop,
 				}}
+				ListHeaderComponent={ListHeaderComponent}
 				scrollEventThrottle={16}
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

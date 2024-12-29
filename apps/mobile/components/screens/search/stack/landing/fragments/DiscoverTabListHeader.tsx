@@ -8,6 +8,8 @@ import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../../../shared/topnavbar/AppTabLandingNavbar';
+import { router } from 'expo-router';
+import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 
 type DiscoverTabIndicatorProps = {
 	query: string;
@@ -29,6 +31,9 @@ const DiscoverTabListHeader = memo(
 				menuItems={[
 					{
 						iconId: 'user-guide',
+						onPress: () => {
+							router.navigate(APP_ROUTING_ENUM.GUIDE_DISCOVER_TAB);
+						},
 					},
 				]}
 			/>

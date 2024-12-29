@@ -91,6 +91,7 @@ function StatusInteractionButtons() {
 						paddingTop: 8,
 						paddingBottom: 8,
 						paddingHorizontal: 6,
+						marginLeft: -6,
 					}}
 					onPress={_toggleLike}
 				/>
