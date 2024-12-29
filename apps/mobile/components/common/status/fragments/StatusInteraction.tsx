@@ -7,9 +7,8 @@ import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import PostActionButtonToggleLike from './modules/PostActionButtonToggleLike';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../states/_global';
 import {
+	useAppApiClient,
 	useAppBottomSheet_Improved,
 	useAppPublishers,
 	useAppTheme,
@@ -24,11 +23,7 @@ function StatusInteractionButtons() {
 	const { explain } = useAppTimelinePosts();
 	const { show, setCtx } = useAppBottomSheet_Improved();
 	const { theme } = useAppTheme();
-	const { client } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-		})),
-	);
+	const { client } = useAppApiClient();
 	const { postPub } = useAppPublishers();
 	const [IsLoading, setIsLoading] = useState(false);
 
@@ -39,9 +34,6 @@ function StatusInteractionButtons() {
 	function reply() {
 		setCtx({ uuid: item.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
-		// setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
-		// updateBottomSheetRequestId();
-		// setBottomSheetVisible(true);
 	}
 
 	function OnTranslationClicked() {

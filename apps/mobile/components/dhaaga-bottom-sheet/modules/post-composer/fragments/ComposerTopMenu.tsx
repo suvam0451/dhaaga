@@ -1,18 +1,70 @@
-import { Fragment, memo } from 'react';
+import { Fragment } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import ReplyContextIndicator from './ReplyContextIndicator';
 import useGlobalState from '../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import PostButton from './PostButton';
+import { useComposerContext } from '../api/useComposerContext';
+import appTextStyling from '../../../../../styles/AppTextStyling';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
+
+/**
+ * Indicates in which context this reply is being composed
+ */
+function ReplyIndicator() {
+	const { state } = useComposerContext();
+	const { theme } = useAppTheme();
+
+	if (!state.parent) return <View />;
+
+	const _target = PostMiddleware.getContentTarget(state.parent);
+	return (
+		<View style={{ marginTop: 6, flexDirection: 'row', alignItems: 'center' }}>
+			<Text
+				style={[
+					appTextStyling.postContext,
+					{ flexShrink: 1, color: theme.secondary.a30 },
+				]}
+			>
+				Replying to{' '}
+			</Text>
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+					backgroundColor: theme.palette.menubar,
+					borderRadius: 8,
+					padding: 4,
+					paddingHorizontal: 6,
+				}}
+			>
+				{/*@ts-ignore-next-line*/}
+				<Image
+					source={{ uri: _target.postedBy.avatarUrl }}
+					style={{ width: 24, height: 24, borderRadius: 8 }}
+				/>
+				<Text
+					style={[
+						appTextStyling.postContext,
+						{ maxWidth: 208, color: theme.complementary.a0 },
+					]}
+					numberOfLines={1}
+				>
+					{_target.postedBy.handle}
+				</Text>
+			</View>
+		</View>
+	);
+}
 
 /**
  * The top section of the post composer.
  *
  * For emoji selections, this section is hidden
  */
-const ComposerTopMenu = memo(() => {
+function ComposerTopMenu() {
 	const { acct, theme } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
@@ -64,10 +116,10 @@ const ComposerTopMenu = memo(() => {
 				</View>
 				<PostButton />
 			</View>
-			<ReplyContextIndicator />
+			<ReplyIndicator />
 		</Fragment>
 	);
-});
+}
 
 const styles = StyleSheet.create({
 	avatarContainer: {

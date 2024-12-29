@@ -1,5 +1,4 @@
 import { StyleSheet, View, Text, ScrollView, Pressable } from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
@@ -10,18 +9,20 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import AppNoAccount from '../../../error-screen/AppNoAccount';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import {
+	useAppBottomSheet_Improved,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 
 function QuickPost() {
-	const { show } = useGlobalState(
-		useShallow((o) => ({
-			show: o.bottomSheet.show,
-		})),
-	);
+	const { show, setCtx } = useAppBottomSheet_Improved();
 	const { theme } = useAppTheme();
 
 	function onPressQuickPost() {
+		setCtx({
+			uuid: null,
+		});
 		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
 	}
 
@@ -132,18 +133,6 @@ function AppTabLanding() {
 	);
 
 	const modules = [
-		// {
-		// 	title: 'Quick Post',
-		// 	desc: ['Smart Auto-Completions'],
-		// 	onPress: onPressQuickPost,
-		// 	bgIcon: (
-		// 		<Ionicons
-		// 			name="chatbox-outline"
-		// 			size={64}
-		// 			color={theme.secondary.a30}
-		// 		/>
-		// 	),
-		// },
 		{
 			title: 'Create a Post',
 			desc: ['Longer Posts', 'More Options'],
@@ -236,7 +225,6 @@ function AppTabLanding() {
 											position: 'absolute',
 											right: 12,
 											bottom: 12,
-											// opacity: 0.8,
 										}}
 									>
 										{module.bgIcon}
@@ -274,25 +262,6 @@ function AppTabLanding() {
 const style = StyleSheet.create({
 	rootContainer: {
 		marginTop: 28,
-	},
-	sectionContainer: {
-		borderWidth: 2,
-		borderColor: '#383838',
-		borderRadius: 8,
-		padding: 8,
-		margin: 8,
-	},
-	texStyle: {
-		textAlign: 'center',
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		fontSize: 20,
-		color: APP_FONT.MONTSERRAT_BODY,
-	},
-	appFeaturesGridRow: {
-		marginHorizontal: 8,
-		marginBottom: 8,
-		display: 'flex',
-		flexDirection: 'row',
 	},
 });
 

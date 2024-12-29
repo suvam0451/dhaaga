@@ -114,9 +114,8 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 	const isSensitive = _target.meta.sensitive;
 	const spoilerText = _target.meta.cw;
 
-	const { theme, showInspector, appSession } = useGlobalState(
+	const { showInspector, appSession } = useGlobalState(
 		useShallow((o) => ({
-			theme: o.colorScheme,
 			showInspector: o.imageInspectModal.show,
 			appSession: o.appSession,
 		})),
