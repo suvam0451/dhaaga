@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Animated, StyleSheet, View, TextInput } from 'react-native';
 import { NativeCheckbox } from '../../../../../lib/Checkboxes';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
@@ -21,39 +21,35 @@ type MultiSelectProps = {
  * Control section to set the
  * search category
  */
-export const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
+export function Multiselect({ setSearchCategory }: MultiSelectProps) {
 	const { theme } = useAppTheme();
-
 	const [selectedIndex, setSelectedIndex] = useState(0);
 
-	const onCheckboxPress = useCallback(
-		(idx: number) => {
-			setSelectedIndex(idx);
-			switch (idx) {
-				case 0: {
-					setSearchCategory(APP_SEARCH_TYPE.POSTS);
-					break;
-				}
-				case 1: {
-					setSearchCategory(APP_SEARCH_TYPE.USERS);
-					break;
-				}
-				case 2: {
-					setSearchCategory(APP_SEARCH_TYPE.HASHTAGS);
-					break;
-				}
-				case 3: {
-					// setSearchCategory(APP_SEARCH_TYPE.LINKS);
-					break;
-				}
-				default: {
-					setSearchCategory(APP_SEARCH_TYPE.POSTS);
-					break;
-				}
+	function onCheckboxPress(idx: number) {
+		setSelectedIndex(idx);
+		switch (idx) {
+			case 0: {
+				setSearchCategory(APP_SEARCH_TYPE.POSTS);
+				break;
 			}
-		},
-		[setSelectedIndex],
-	);
+			case 1: {
+				setSearchCategory(APP_SEARCH_TYPE.USERS);
+				break;
+			}
+			case 2: {
+				setSearchCategory(APP_SEARCH_TYPE.HASHTAGS);
+				break;
+			}
+			case 3: {
+				// setSearchCategory(APP_SEARCH_TYPE.LINKS);
+				break;
+			}
+			default: {
+				setSearchCategory(APP_SEARCH_TYPE.POSTS);
+				break;
+			}
+		}
+	}
 
 	const Checkboxes = [
 		{
@@ -89,7 +85,7 @@ export const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
 			))}
 		</View>
 	);
-});
+}
 
 /**
  * The floaty helper component

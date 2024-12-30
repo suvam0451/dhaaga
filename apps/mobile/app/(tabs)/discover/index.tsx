@@ -25,12 +25,9 @@ import Animated, {
 	Extrapolation,
 } from 'react-native-reanimated';
 import { Feather } from '@expo/vector-icons';
-import DiscoverSearchHelper, {
-	Multiselect,
-} from '../../../components/screens/search/stack/landing/fragments/DiscoverSearchHelper';
+import { Multiselect } from '../../../components/screens/search/stack/landing/fragments/DiscoverSearchHelper';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useState } from 'react';
-import { APP_SEARCH_TYPE } from '../../../states/reducers/discover-tab.reducer';
 
 function Header() {
 	return (

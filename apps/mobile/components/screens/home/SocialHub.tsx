@@ -6,8 +6,7 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import PagerView from 'react-native-pager-view';
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import useSocialHub from '../../../states/useSocialHub';
 import { Account } from '../../../database/_schema';
 import {
@@ -31,6 +30,7 @@ import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import { SocialHubPinSectionContainer } from './stack/landing/fragments/_factory';
 import { AppFlashList } from '../../lib/AppFlashList';
 import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
+import { AppPagerView } from '../../lib/AppPagerView';
 
 function Header() {
 	return (
@@ -63,7 +63,6 @@ function SocialHubTabAdd() {
 		<ScrollView
 			style={{
 				backgroundColor: theme.palette.bg,
-				height: '100%',
 				minHeight: '100%',
 			}}
 		>
@@ -78,8 +77,7 @@ function SocialHubTabAdd() {
 					},
 				]}
 			/>
-			<View style={{ flexGrow: 1, flex: 1 }} />
-			<View style={{ marginTop: 128, flex: 1 }}>
+			<View style={{ marginTop: 128 }}>
 				<View
 					style={{
 						alignSelf: 'center',
@@ -94,13 +92,16 @@ function SocialHubTabAdd() {
 					/>
 				</View>
 
-				<View
+				<Pressable
 					style={[
 						styles.addTabCtaContainer,
 						{
 							backgroundColor: theme.primary.a0,
 						},
 					]}
+					onPress={() => {
+						router.navigate(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
+					}}
 				>
 					<Text
 						style={[
@@ -112,7 +113,7 @@ function SocialHubTabAdd() {
 					>
 						Add Account
 					</Text>
-				</View>
+				</Pressable>
 				<Pressable
 					style={{
 						alignSelf: 'center',
@@ -243,15 +244,7 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 }
 
 function SocialHub() {
-	const ref = useRef<PagerView>(null);
-
-	const { data, index } = useSocialHub();
-
-	function onPageSelected(e: any) {
-		const { offset, position } = e.nativeEvent;
-		const newIndex = Math.round(position + offset);
-		// setIndex(newIndex);
-	}
+	const { data } = useSocialHub();
 
 	function renderScene(index: number) {
 		if (index >= data.accounts.length) return <SocialHubTabAdd />;
@@ -260,19 +253,10 @@ function SocialHub() {
 	}
 
 	return (
-		<View style={{ height: '100%' }}>
-			<PagerView
-				ref={ref}
-				scrollEnabled={true}
-				style={styles.pagerView}
-				initialPage={index}
-				onPageScroll={onPageSelected}
-			>
-				{Array.from({ length: data.accounts.length + 1 }).map((_, index) => (
-					<View key={index.toString()}>{renderScene(index)}</View>
-				))}
-			</PagerView>
-		</View>
+		<AppPagerView
+			renderFunction={renderScene}
+			pageCount={data.accounts.length + 1}
+		/>
 	);
 }
 

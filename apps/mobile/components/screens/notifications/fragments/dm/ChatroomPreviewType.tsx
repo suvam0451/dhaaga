@@ -14,14 +14,6 @@ type ChatroomPreviewType = {
 };
 
 function ChatroomPreview({ roomId, modeFilter }: ChatroomPreviewType) {
-	const { driver, acct } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			acct: o.acct,
-		})),
-	);
-	// const chatroom = useObject(ActivityPubChatRoom, roomId);
-
 	const navigation = useNavigation<any>();
 
 	const [Participants, setParticipants] = useState<ActivityPubUser[]>([]);

@@ -22,7 +22,6 @@ import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import Coffee from '../../../static/sponsorship/Coffee';
 
 function Header() {
-	const { theme } = useAppTheme();
 	return (
 		<View
 			style={{
