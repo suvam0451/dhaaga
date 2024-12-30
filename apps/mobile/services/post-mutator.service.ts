@@ -4,6 +4,10 @@ import { PostMiddleware } from './middlewares/post.middleware';
 import ActivityPubService from './activitypub.service';
 import { AppPostObject } from '../types/app-post.types';
 import { produce } from 'immer';
+import { Emoji } from '../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
+import ActivityPubReactionsService, {
+	ActivityPubReactionStateDto,
+} from './approto/activitypub-reactions.service';
 
 export class PostMutatorService {
 	private readonly driver: KNOWN_SOFTWARE;
@@ -112,6 +116,39 @@ export class PostMutatorService {
 		} catch (e) {
 			console.log('[WARN]: failed to toggle share', e);
 		}
+		return input;
+	}
+
+	async addReaction(
+		input: AppPostObject,
+		reaction: Emoji,
+	): Promise<AppPostObject> {
+		const target = PostMiddleware.getContentTarget(input);
+		try {
+			/**
+			 * Response looks like this
+			 *
+			 * [{"accounts": [], "count": 1, "id": ":ablobbongo_lr@.:", "me": true, "url": null}]
+			 */
+			const nextState = await ActivityPubReactionsService.addReaction(
+				this.client,
+				target.id,
+				reaction.shortCode,
+				this.driver,
+				(ok: boolean) => {},
+			);
+			const { data, error } = ActivityPubReactionStateDto.safeParse(nextState);
+			if (error) {
+				console.log('[WARN]: reaction state incorrect', error);
+				return input;
+			}
+
+			return produce(input, (draft) => {
+				if (draft.id === target.id) draft.stats.reactions = data;
+				if (draft.boostedFrom?.id === target.id)
+					draft.boostedFrom.stats.reactions = data;
+			});
+		} catch (e) {}
 		return input;
 	}
 }

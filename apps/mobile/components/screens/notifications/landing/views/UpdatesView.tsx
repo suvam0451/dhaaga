@@ -1,10 +1,10 @@
 import { memo } from 'react';
-import useApiGetUpdateNotifs from '../api/useApiGetUpdateNotifs';
 import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 import AppNotificationViewContainer from './_container';
+import { useApiGetSocialUpdates } from '../../../../../hooks/api/useNotifications';
 
 const UpdatesView = memo(() => {
-	const { data } = useApiGetUpdateNotifs();
+	const { data } = useApiGetSocialUpdates();
 
 	return (
 		<AppNotificationViewContainer

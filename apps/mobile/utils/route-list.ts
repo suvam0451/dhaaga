@@ -9,4 +9,7 @@ export enum APP_ROUTING_ENUM {
 	GUIDE_NEW_TAB_INTERFACE = '/user-guide-profiles',
 
 	GUIDE_DISCOVER_TAB = '/discover/user-guide',
+	GUIDE_SETTINGS_TAB = '/profile/user-guide-settings',
+
+	SELECT_DRIVER = '/profile/pick-driver',
 }

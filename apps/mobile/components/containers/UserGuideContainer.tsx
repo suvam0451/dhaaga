@@ -42,7 +42,7 @@ function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
 	const aStyle: StyleProp<TextStyle> = {
 		color: theme.secondary.a10,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		marginBottom: 4,
+		marginBottom: 5,
 		fontSize: 14,
 	};
 

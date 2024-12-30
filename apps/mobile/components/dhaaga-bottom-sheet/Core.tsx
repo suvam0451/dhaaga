@@ -27,6 +27,7 @@ import ABS_Post_Show_Comments from './modules/ABS_Post_Show_Comments';
 import ABS_Post_Show_Likes from './modules/ABS_Post_Show_Likes';
 import ABS_Post_Show_Shares from './modules/ABS_Post_Show_Shares';
 import ABS_Post_Preview from './modules/ABS_Post_Preview';
+import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	QUICK_POST = 'QuickPost',
@@ -53,6 +54,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	POST_SHOW_SHARES = 'PostShowShares',
 
 	POST_PREVIEW = 'PostPreview',
+	ADD_REACTION = 'AddReaction',
 }
 
 /**
@@ -105,6 +107,8 @@ function Factory() {
 				return <ABS_Post_Show_Shares />;
 			case APP_BOTTOM_SHEET_ENUM.POST_PREVIEW:
 				return <ABS_Post_Preview />;
+			case APP_BOTTOM_SHEET_ENUM.ADD_REACTION:
+				return <ABS_Add_Reaction />;
 
 			default: {
 				return (

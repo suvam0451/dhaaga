@@ -281,6 +281,14 @@ class ActivityPubReactionsService {
 		return status.getReactions(status.getMyReaction());
 	}
 
+	/**
+	 * Add a reaction
+	 * @param client
+	 * @param postId
+	 * @param reactionId
+	 * @param domain
+	 * @param setLoading
+	 */
 	static async addReaction(
 		client: ActivityPubClient,
 		postId: string,

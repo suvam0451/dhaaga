@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import LinkProcessor from '../components/common/link/LinkProcessor';
-import TextParserService from './text-parser';
+import { TextParserService } from './text-parser.service';
 import type { MfmNode } from '@dhaaga/bridge';
 import InlineCodeSegment from '../components/shared/mfm/InlineCodeSegment';
 import MentionSegment from '../components/shared/mfm/MentionSegment';

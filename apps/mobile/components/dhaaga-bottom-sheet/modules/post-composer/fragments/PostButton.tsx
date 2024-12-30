@@ -146,18 +146,14 @@ const PostButton = memo(() => {
 				setCtx({ uuid: _data.uuid });
 				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 			} else {
-				try {
-					// PostRef.current = new PostMiddleware(
-					// 	ActivityPubAdapterService.adaptStatus(
-					// 		(data as any).createdNote,
-					// 		driver,
-					// 	),
-					// 	driver,
-					// 	acct?.server,
-					// ).export();
-				} catch (e) {
-					console.log(e);
-				}
+				const _data = PostMiddleware.deserialize<unknown>(
+					(data as any).createdNote,
+					driver,
+					acct?.server,
+				);
+				postPub.writeCache(_data.uuid, _data);
+				setCtx({ uuid: _data.uuid });
+				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 			}
 		} catch (e) {
 		} finally {

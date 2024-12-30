@@ -9,6 +9,7 @@ import { AppIcon } from '../../../../lib/Icon';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 import {
+	useAppApiClient,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
@@ -104,11 +105,7 @@ const PostMoreActionsPostTarget = memo(
 		item: AppPostObject;
 	}) => {
 		const { postPub } = useAppPublishers();
-		const { driver } = useGlobalState(
-			useShallow((o) => ({
-				driver: o.driver,
-			})),
-		);
+		const { driver } = useAppApiClient();
 		const { theme } = useAppTheme();
 		const _target = PostMiddleware.getContentTarget(item);
 

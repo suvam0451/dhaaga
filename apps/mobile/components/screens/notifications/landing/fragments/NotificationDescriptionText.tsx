@@ -1,13 +1,13 @@
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
-import { Fragment, memo, useMemo } from 'react';
+import { Fragment, memo } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useAppNotifSeenContext } from '../state/useNotifSeen';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
+import { LocalizationService } from '../../../../../services/localization.service';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	id: string;
@@ -17,42 +17,9 @@ type Props = {
 
 export const NotificationDescriptionText = memo(
 	({ type, createdAt, id }: Props) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 
-		const TextContent = useMemo(() => {
-			switch (type) {
-				case DhaagaJsNotificationType.FAVOURITE: {
-					return 'Liked your post';
-				}
-				case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
-					return 'Accepted your follow request';
-				}
-				case DhaagaJsNotificationType.FOLLOW: {
-					return 'Followed You';
-				}
-				case DhaagaJsNotificationType.REBLOG:
-				case DhaagaJsNotificationType.RENOTE: {
-					return 'Boosted your post';
-				}
-				case DhaagaJsNotificationType.REACTION: {
-					return 'Reacted to your post';
-				}
-				case DhaagaJsNotificationType.STATUS: {
-					return 'Posted';
-				}
-				case DhaagaJsNotificationType.REPLY: {
-					return 'Replied to your post';
-				}
-				case DhaagaJsNotificationType.MENTION: {
-					return 'Mentioned you in a post';
-				}
-			}
-		}, [type]);
-
+		const TextContent = LocalizationService.notificationLabel(type);
 		const { Seen } = useAppNotifSeenContext();
 		const seen = Seen.has(id);
 

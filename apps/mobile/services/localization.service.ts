@@ -1,6 +1,6 @@
 import { TimelineFetchMode } from '../states/reducers/post-timeline.reducer';
 import { AppTimelineQuery } from '../components/common/timeline/api/useTimelineController';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { DhaagaJsNotificationType, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 export class LocalizationService {
 	/**
@@ -44,6 +44,39 @@ export class LocalizationService {
 			}
 			default: {
 				return 'Unknown';
+			}
+		}
+	}
+
+	static notificationLabel(
+		notificationType: DhaagaJsNotificationType,
+		visibility?: string,
+	): string {
+		switch (notificationType) {
+			case DhaagaJsNotificationType.FAVOURITE: {
+				return 'Liked your post';
+			}
+			case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
+				return 'Accepted your follow request';
+			}
+			case DhaagaJsNotificationType.FOLLOW: {
+				return 'Followed You';
+			}
+			case DhaagaJsNotificationType.REBLOG:
+			case DhaagaJsNotificationType.RENOTE: {
+				return 'Shared your post';
+			}
+			case DhaagaJsNotificationType.REACTION: {
+				return 'Reacted to your post';
+			}
+			case DhaagaJsNotificationType.STATUS: {
+				return 'Posted';
+			}
+			case DhaagaJsNotificationType.REPLY: {
+				return 'Replied to you';
+			}
+			case DhaagaJsNotificationType.MENTION: {
+				return 'Mentioned you';
 			}
 		}
 	}

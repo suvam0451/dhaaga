@@ -6,6 +6,7 @@ import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import {
+	useAppAcct,
 	useAppApiClient,
 	useAppBottomSheet_Improved,
 	useAppPublishers,
@@ -15,28 +16,141 @@ import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { AppToggleIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
+import ActivityPubService from '../../../../services/activitypub.service';
 
-function StatusInteractionButtons() {
+function ShareButton() {
 	const { dto: item } = useAppStatusItem();
-	const { explain } = useAppTimelinePosts();
-	const { show, setCtx } = useAppBottomSheet_Improved();
-	const { theme } = useAppTheme();
-	const { client } = useAppApiClient();
-	const { postPub } = useAppPublishers();
 	const [IsLoading, setIsLoading] = useState(false);
+	const { postPub } = useAppPublishers();
+	const { theme } = useAppTheme();
 
-	async function _boost() {
+	async function onPress() {
 		await postPub.toggleShare(item.uuid, setIsLoading);
 	}
 
-	function reply() {
-		setCtx({ uuid: item.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
-	}
+	const FLAG = item.interaction.boosted;
+
+	return (
+		<AppToggleIcon
+			flag={FLAG}
+			activeIconId={'sync-outline'}
+			inactiveIconId={'sync-outline'}
+			activeTint={theme.primary.a0}
+			inactiveTint={theme.secondary.a10}
+			size={appDimensions.timelines.actionButtonSize}
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+				alignItems: 'center',
+				paddingTop: 8,
+				paddingBottom: 8,
+				paddingHorizontal: 6,
+			}}
+			onPress={onPress}
+		/>
+	);
+}
+
+function LikeButton() {
+	const { dto: item } = useAppStatusItem();
+	const [IsLoading, setIsLoading] = useState(false);
+	const { postPub } = useAppPublishers();
+	const { theme } = useAppTheme();
 
 	async function _toggleLike() {
 		await postPub.toggleLike(item.uuid, setIsLoading);
 	}
+	const FLAG = item.interaction.liked;
+
+	return (
+		<AppToggleIcon
+			flag={FLAG}
+			activeIconId={'heart'}
+			inactiveIconId={'heart-outline'}
+			activeTint={theme.primary.a0}
+			inactiveTint={theme.secondary.a10}
+			size={appDimensions.timelines.actionButtonSize}
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+				alignItems: 'center',
+				paddingTop: 8,
+				paddingBottom: 8,
+				paddingHorizontal: 6,
+				marginLeft: -6,
+			}}
+			onPress={_toggleLike}
+		/>
+	);
+}
+
+function CommentButton() {
+	const { dto: item } = useAppStatusItem();
+	const { theme } = useAppTheme();
+	const { show, setCtx } = useAppBottomSheet_Improved();
+
+	function onPress() {
+		setCtx({ uuid: item.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
+	}
+
+	return (
+		<AppToggleIcon
+			flag={false}
+			activeIconId={'chatbox-outline'}
+			inactiveIconId={'chatbox-outline'}
+			activeTint={theme.primary.a0}
+			inactiveTint={theme.secondary.a10}
+			size={appDimensions.timelines.actionButtonSize}
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+				alignItems: 'center',
+				paddingTop: 8,
+				paddingBottom: 8,
+				paddingHorizontal: 6,
+			}}
+			onPress={onPress}
+		/>
+	);
+}
+
+function ReactButton() {
+	const { dto: item } = useAppStatusItem();
+	const { theme } = useAppTheme();
+	const { show, setCtx } = useAppBottomSheet_Improved();
+
+	function onPress() {
+		setCtx({ uuid: item.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.ADD_REACTION, true);
+	}
+
+	return (
+		<AppToggleIcon
+			flag={false}
+			activeIconId={'smiley'}
+			inactiveIconId={'smiley-outline'}
+			activeTint={theme.primary.a0}
+			inactiveTint={theme.secondary.a10}
+			size={appDimensions.timelines.actionButtonSize}
+			style={{
+				display: 'flex',
+				flexDirection: 'row',
+				alignItems: 'center',
+				paddingTop: 8,
+				paddingBottom: 8,
+				paddingHorizontal: 6,
+			}}
+			onPress={onPress}
+		/>
+	);
+}
+
+function StatusInteractionButtons() {
+	const { dto: item } = useAppStatusItem();
+	const { explain } = useAppTimelinePosts();
+	const { client } = useAppApiClient();
+	const { acct } = useAppAcct();
 
 	function OnTranslationClicked() {
 		if (IsTranslateStateLoading) return;
@@ -71,69 +185,19 @@ function StatusInteractionButtons() {
 		explain(item.id, null, setIsTranslateStateLoading);
 	}
 
-	const FLAG_LIKE = item.interaction.liked;
-	const FLAG_SHARED = item.interaction.boosted;
+	const IS_MISSKEY = ActivityPubService.misskeyLike(acct.driver);
 
 	return (
 		<View style={styles.interactionButtonSection}>
 			<View style={{ flexDirection: 'row' }}>
-				<AppToggleIcon
-					flag={FLAG_LIKE}
-					activeIconId={'heart'}
-					inactiveIconId={'heart-outline'}
-					activeTint={theme.primary.a0}
-					inactiveTint={theme.secondary.a10}
-					size={appDimensions.timelines.actionButtonSize}
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'center',
-						paddingTop: 8,
-						paddingBottom: 8,
-						paddingHorizontal: 6,
-						marginLeft: -6,
-					}}
-					onPress={_toggleLike}
-				/>
-
-				<AppToggleIcon
-					flag={FLAG_SHARED}
-					activeIconId={'sync-outline'}
-					inactiveIconId={'sync-outline'}
-					activeTint={theme.primary.a0}
-					inactiveTint={theme.secondary.a10}
-					size={appDimensions.timelines.actionButtonSize}
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'center',
-						paddingTop: 8,
-						paddingBottom: 8,
-						paddingHorizontal: 6,
-					}}
-					onPress={_boost}
-				/>
-				<AppToggleIcon
-					flag={false}
-					activeIconId={'chatbox-outline'}
-					inactiveIconId={'chatbox-outline'}
-					activeTint={theme.primary.a0}
-					inactiveTint={theme.secondary.a10}
-					size={appDimensions.timelines.actionButtonSize}
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'center',
-						paddingTop: 8,
-						paddingBottom: 8,
-						paddingHorizontal: 6,
-					}}
-					onPress={reply}
-				/>
-				<BoostAdvanced
-					IsVisible={BoostOptionsVisible}
-					setIsVisible={setBoostOptionsVisible}
-				/>
+				{!IS_MISSKEY && <LikeButton />}
+				<ShareButton />
+				<CommentButton />
+				{IS_MISSKEY && <ReactButton />}
+				{/*<BoostAdvanced*/}
+				{/*	IsVisible={BoostOptionsVisible}*/}
+				{/*	setIsVisible={setBoostOptionsVisible}*/}
+				{/*/>*/}
 			</View>
 			<View
 				style={{

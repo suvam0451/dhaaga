@@ -168,7 +168,12 @@ export function ProfileContextWrapped() {
 						style={{ paddingHorizontal: 12 }}
 						onPress={onMoreOptionsPressed}
 					>
-						<AppIcon id={'ellipsis-v'} size={24} color={theme.secondary.a20} />
+						<AppIcon
+							id={'ellipsis-v'}
+							size={24}
+							color={theme.secondary.a20}
+							onPress={onMoreOptionsPressed}
+						/>
 					</Pressable>
 				</View>
 

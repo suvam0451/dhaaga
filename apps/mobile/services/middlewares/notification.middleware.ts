@@ -47,7 +47,6 @@ export class NotificationMiddleware {
 			console.log(input);
 			return null;
 		}
-
 		return data as AppNotificationObject;
 	}
 

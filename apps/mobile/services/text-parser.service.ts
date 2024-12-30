@@ -1,6 +1,7 @@
 import { parseStatusContent, preprocessPostContent } from '@dhaaga/bridge';
+import { Account } from '../database/_schema';
 
-class TextParserService {
+export class TextParserService {
 	/**
 	 * Is the input url a hashtag?
 	 * @param url
@@ -71,6 +72,50 @@ class TextParserService {
 		result = result.replace(/\//g, '');
 		console.log(result);
 	}
-}
 
-export default TextParserService;
+	/**
+	 * converts a mention object into an
+	 * ActivityPub handle
+	 * @param input input text
+	 * @param acct logged in account (to indicate DM)
+	 */
+	static mentionTextToHandle(
+		input: string,
+		acct: Account,
+	): { text: string; me: boolean } {
+		try {
+			let retval = input;
+
+			/**
+			 * Try resolving as a remote mention
+			 */
+			const ex = new RegExp(`@?(.*?)@${acct?.server}`, 'g');
+			const res = Array.from(input.matchAll(ex));
+			if (res.length > 0) {
+				retval = `${res[0][1]}`;
+			} else {
+				retval = `${input}`;
+			}
+
+			/**
+			 * Fallback to resolving as local mention
+			 */
+			const removeSpanEx = /<span>(.*?)<\/span>/g;
+			const removeSpanRes = Array.from(input.matchAll(removeSpanEx));
+			if (removeSpanRes.length > 0) {
+				retval = `${removeSpanRes[0][1]}`;
+			}
+			const _text = retval[0] === '@' ? retval : '@' + retval;
+			return {
+				text: retval[0] === '@' ? retval : '@' + retval,
+				me: _text === `@${acct.username}`,
+			};
+		} catch (e) {
+			console.log(
+				'[WARN]: could not resolve mention object to a valid protocol handle',
+				input,
+			);
+			return { text: input, me: false };
+		}
+	}
+}

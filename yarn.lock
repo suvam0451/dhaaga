@@ -3864,6 +3864,11 @@ expo-router@~4.0.15:
     semver "~7.6.3"
     server-only "^0.0.1"
 
+expo-sharing@~13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-13.0.0.tgz#fbc46f4afdaa265a2811fe88c2a589aae2d2de0f"
+  integrity sha512-b23ymicRmYn/Pjj05sl9tFZHN5cH9I1f0yiqY1Yk8Q3oCx0Aznri82DnTYA4T/J6D9vrkraX0wQ4jWVMOffmlg==
+
 expo-splash-screen@~0.29.18:
   version "0.29.18"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.29.18.tgz#96ccce3d5a03389a9061743903b0a77c22a16796"

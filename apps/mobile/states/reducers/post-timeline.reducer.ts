@@ -437,7 +437,8 @@ function reducer(state: State, action: Actions): State {
 			const _state = action.payload.state;
 			const { data, error } = ActivityPubReactionStateDto.safeParse(_state);
 			if (error) {
-				console.log('[WARN]: reaction state incorrect', error);
+				// this is expected, for e.g. {"code": "ALREADY_REACTED"}
+				// console.log('[WARN]: reaction state incorrect', error);
 				return state;
 			}
 

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import useMyProfile from '../../../api/useMyProfile';
+import useApiGetMyAccount from '../../../../../../hooks/api/accounts/useApiGetMyAccount';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import useMfm from '../../../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
@@ -7,17 +7,12 @@ import { Image } from 'expo-image';
 import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
 import UserViewProfileStats from '../../../../../common/user/fragments/UserViewProfileStats';
 import styles from '../../../../../common/user/utils/styles';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
+import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
 
 const ProfileAndSettings = memo(() => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-	const { data } = useMyProfile();
+	const { theme } = useAppTheme();
+	const { data } = useApiGetMyAccount();
 
 	const { content: ParsedDisplayName } = useMfm({
 		content: data?.displayName,

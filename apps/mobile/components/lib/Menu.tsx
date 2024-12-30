@@ -11,6 +11,7 @@ import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_ICON_ENUM, AppIcon } from './Icon';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { Loader } from './Loader';
 
 type AppMenuOptionType = {
 	appIconId: any;
@@ -166,6 +167,7 @@ type AppBottomSheetMenuWithBackNavigationProps = {
 	nextEnabled: boolean;
 	MiddleComponent?: any;
 	style?: StyleProp<ViewStyle>;
+	nextLoading?: boolean;
 };
 
 /**
@@ -181,6 +183,7 @@ export class AppBottomSheetMenu {
 		style,
 		nextLabel,
 		backLabel,
+		nextLoading,
 	}: AppBottomSheetMenuWithBackNavigationProps) {
 		const { theme } = useAppTheme();
 		return (
@@ -215,28 +218,40 @@ export class AppBottomSheetMenu {
 				>
 					{MiddleComponent}
 				</View>
-				<Pressable
-					onPress={onNext}
-					style={{
-						flexDirection: 'row',
-						alignItems: 'flex-end',
-						paddingRight: 8,
-						flex: 1,
-						paddingVertical: 8,
-					}}
-				>
-					<Text
+				{nextLoading ? (
+					<View
 						style={{
-							color: nextEnabled ? theme.primary.a0 : theme.secondary.a20,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
-							fontSize: 16,
-							textAlign: 'right',
-							marginLeft: 'auto',
+							flex: 1,
+							alignItems: 'flex-end',
+							marginRight: 16,
 						}}
 					>
-						{nextLabel}
-					</Text>
-				</Pressable>
+						<Loader />
+					</View>
+				) : (
+					<Pressable
+						onPress={onNext}
+						style={{
+							flexDirection: 'row',
+							alignItems: 'flex-end',
+							paddingRight: 8,
+							flex: 1,
+							paddingVertical: 8,
+						}}
+					>
+						<Text
+							style={{
+								color: nextEnabled ? theme.primary.a0 : theme.secondary.a20,
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+								fontSize: 16,
+								textAlign: 'right',
+								marginLeft: 'auto',
+							}}
+						>
+							{nextLabel}
+						</Text>
+					</Pressable>
+				)}
 			</View>
 		);
 	}

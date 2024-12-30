@@ -50,12 +50,6 @@ const SIZE = 600;
 const BUTTON_SIZE = 50;
 const ANGLE_STEP = 40;
 
-const actionButtons = [
-	{ iconName: 'home', color: '#4CAF50' },
-	{ iconName: 'settings', color: '#FF9800' },
-	{ iconName: 'users', color: '#2196F3' },
-];
-
 const FloatingButtonCircular = () => {
 	const isRotated = useSharedValue(0);
 	const MAX_WIDTH = Dimensions.get('window').width;
@@ -136,6 +130,7 @@ const FloatingButtonCircular = () => {
 						style={[
 							{
 								padding: 8,
+								paddingLeft: 4,
 								flex: 1,
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							},

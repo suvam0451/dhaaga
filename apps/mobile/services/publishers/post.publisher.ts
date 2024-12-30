@@ -3,6 +3,7 @@ import { AppPostObject } from '../../types/app-post.types';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import { PostMutatorService } from '../post-mutator.service';
+import { Emoji } from '../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 
 export enum POST_EVENT_ENUM {
 	UPDATE = 'postObjectChanged',
@@ -97,5 +98,19 @@ export class PostPublisherService extends BasePubSubService {
 
 	async toggleShare(uuid: string, loader?: (flag: boolean) => void) {
 		await this._bind(uuid, this.mutator.toggleShare, loader);
+	}
+
+	async addReaction(
+		uuid: string,
+		reaction: Emoji,
+		loader?: (flag: boolean) => void,
+	) {
+		const data = this.cache.get(uuid);
+		if (!data) return;
+		if (loader) loader(true);
+		const next = await this.mutator.addReaction(data, reaction);
+		this.cache.set(next.uuid, next);
+		this.publish(next.uuid);
+		if (loader) loader(false);
 	}
 }

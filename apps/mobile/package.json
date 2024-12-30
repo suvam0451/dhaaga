@@ -38,6 +38,7 @@
     "expo-localization": "^16.0.0",
     "expo-notifications": "~0.29.11",
     "expo-router": "~4.0.15",
+    "expo-sharing": "~13.0.0",
     "expo-splash-screen": "~0.29.18",
     "expo-sqlite": "~15.0.4",
     "expo-video": "~2.0.3",
