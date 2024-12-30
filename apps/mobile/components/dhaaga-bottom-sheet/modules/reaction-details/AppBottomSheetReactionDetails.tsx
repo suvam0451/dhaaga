@@ -15,12 +15,13 @@ import useMfm from '../../../hooks/useMfm';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import { AppUser } from '../../../../services/approto/app-user-service';
 import { AppAvatar } from '../../../lib/Avatar';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { AppUserObject } from '../../../../types/app-user.types';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
-const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
+const ReactingUser = memo(({ dto }: { dto: AppUserObject }) => {
 	const { theme } = useGlobalState(
 		useShallow((o) => ({
 			theme: o.colorScheme,
@@ -31,9 +32,9 @@ const ReactingUser = memo(({ dto }: { dto: AppUser }) => {
 		remoteSubdomain: dto.instance,
 		emojiMap: new Map<string, string>(),
 		deps: [dto.displayName],
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		acceptTouch: false,
-		emphasis: 'high',
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A20,
 	});
 
 	return (
@@ -71,7 +72,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 		TextRef.current,
 	);
 
-	const IS_REMOTE = ActivitypubReactionsService.canReact(Data?.id);
+	const IS_REMOTE = ActivitypubReactionsService.cannotReact(Data?.id);
 
 	const [Loading, setLoading] = useState(false);
 

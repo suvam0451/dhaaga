@@ -13,7 +13,7 @@ import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useMfm from '../../../hooks/useMfm';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { ActivitypubHelper } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubHelper } from '@dhaaga/bridge';
 import useGetFollowers from '../../../../hooks/api/accounts/useGetFollowers';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

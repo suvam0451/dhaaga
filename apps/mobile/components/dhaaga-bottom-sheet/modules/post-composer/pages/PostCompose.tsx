@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import ComposerTextInput from '../fragments/ComposerText';
 import ComposerSpoiler from '../fragments/ComposerSpoiler';
@@ -9,6 +9,7 @@ import ComposerTopMenu from '../fragments/ComposerTopMenu';
 import TextEditorService from '../../../../../services/text-editor.service';
 import {
 	useAppBottomSheet_Improved,
+	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Emoji } from '../../emoji-picker/emojiPickerReducer';
@@ -96,9 +97,29 @@ function ActionButtons() {
 }
 
 function PostCompose() {
-	const { visible } = useAppBottomSheet_Improved();
+	const { visible, ctx, stateId } = useAppBottomSheet_Improved();
 	const { state, dispatch } = useComposerContext();
 	const { theme } = useAppTheme();
+	const { postPub } = useAppPublishers();
+
+	useEffect(() => {
+		if (!visible) return;
+		if (ctx.uuid && postPub.readCache(ctx.uuid)) {
+			dispatch({
+				type: PostComposerReducerActionType.SET_PARENT,
+				payload: {
+					item: postPub.readCache(ctx.uuid),
+				},
+			});
+		} else {
+			dispatch({
+				type: PostComposerReducerActionType.SET_PARENT,
+				payload: {
+					item: null,
+				},
+			});
+		}
+	}, [stateId, ctx, visible]);
 
 	function onEmojiApplied(o: Emoji) {
 		dispatch({

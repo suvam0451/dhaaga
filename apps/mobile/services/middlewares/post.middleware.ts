@@ -2,7 +2,7 @@ import {
 	ActivitypubStatusAdapter,
 	StatusInterface,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import activitypubAdapterService from '../activitypub-adapter.service';
 import {
 	AppPostObject,
@@ -12,7 +12,7 @@ import {
 } from '../../types/app-post.types';
 import ActivitypubAdapterService from '../activitypub-adapter.service';
 import { z } from 'zod';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import AppPrivacySettingsService from '../app-settings/app-settings-privacy.service';
 import { SQLiteDatabase } from 'expo-sqlite';
 

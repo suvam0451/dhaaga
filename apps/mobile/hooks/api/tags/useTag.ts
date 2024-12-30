@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useQuery } from '@tanstack/react-query';
-import {
-	ActivityPubTagAdapter,
-	TagInterface,
-	TagType,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubTagAdapter, TagInterface, TagType } from '@dhaaga/bridge';
 
 export function useTag(tag: string) {
 	const { router, driver } = useGlobalState(

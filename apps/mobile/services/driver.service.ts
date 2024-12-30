@@ -1,4 +1,4 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 export enum APP_PINNED_OBJECT_TYPE {
 	/**

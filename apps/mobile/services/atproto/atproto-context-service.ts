@@ -1,8 +1,5 @@
 import { AppBskyFeedGetPostThread } from '@atproto/api';
-import {
-	KNOWN_SOFTWARE,
-	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
 import ActivityPubAdapterService from '../activitypub-adapter.service';
 import ActivitypubAdapterService from '../activitypub-adapter.service';
 

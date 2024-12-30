@@ -1,8 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-	KNOWN_SOFTWARE,
-	MisskeyRestClient,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE, MisskeyRestClient } from '@dhaaga/bridge';
 import { UserDetailed } from 'misskey-js/built/autogen/models';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

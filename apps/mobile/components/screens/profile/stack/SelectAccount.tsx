@@ -2,7 +2,7 @@ import { FlatList, RefreshControl, View, Text } from 'react-native';
 import { Button } from '@rneui/base';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AccountListForSoftware from './landing/fragments/AccountListForSoftware';
@@ -18,6 +18,7 @@ import {
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
+import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
@@ -70,7 +71,7 @@ function SelectAccountStack() {
 	});
 
 	function onPressAddAccount() {
-		router.navigate('/profile/onboard/select-software');
+		router.navigate(APP_ROUTING_ENUM.SELECT_DRIVER);
 	}
 
 	return (

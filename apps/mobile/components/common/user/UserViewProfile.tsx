@@ -21,23 +21,18 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../shared/topnavbar/AppTopNavbar';
 import ProfileModules from '../../screens/(shared)/stack/profile/modules/ProfileModules';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppIcon } from '../../lib/Icon';
 import { appDimensions } from '../../../styles/dimensions';
 import {
 	useAppBottomSheet_Improved,
 	useAppManager,
+	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
 export function ProfileContextWrapped() {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { data: acct, error } = useGetProfile({ userId: id });
 
@@ -173,7 +168,12 @@ export function ProfileContextWrapped() {
 						style={{ paddingHorizontal: 12 }}
 						onPress={onMoreOptionsPressed}
 					>
-						<AppIcon id={'ellipsis-v'} size={24} color={theme.secondary.a20} />
+						<AppIcon
+							id={'ellipsis-v'}
+							size={24}
+							color={theme.secondary.a20}
+							onPress={onMoreOptionsPressed}
+						/>
 					</Pressable>
 				</View>
 

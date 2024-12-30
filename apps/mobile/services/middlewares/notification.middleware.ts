@@ -1,7 +1,4 @@
-import {
-	DhaagaJsNotificationType,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import {
 	AppNotificationObject,
 	appNotificationObjectSchema,
@@ -50,7 +47,6 @@ export class NotificationMiddleware {
 			console.log(input);
 			return null;
 		}
-
 		return data as AppNotificationObject;
 	}
 

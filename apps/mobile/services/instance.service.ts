@@ -1,4 +1,4 @@
-import { TagInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { TagInterface } from '@dhaaga/bridge';
 import axios from 'axios';
 
 class InstanceService {

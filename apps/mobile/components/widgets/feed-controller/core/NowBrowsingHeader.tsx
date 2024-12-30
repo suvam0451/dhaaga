@@ -8,7 +8,7 @@ import ListTimelineController from '../controllers/ListTimelineController';
 import FederatedTimelineController from '../controllers/FederatedTimelineController';
 import SocialTimelineController from '../controllers/SocialTimelineController';
 import BubbleTimelineController from '../controllers/BubbleTimelineController';
-import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
 import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
 
 const NowBrowsingHeader = memo(function Foo() {

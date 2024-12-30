@@ -12,7 +12,7 @@ import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import useTrendingPosts from '../api/useTrendingPosts';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

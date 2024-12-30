@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { Pressable, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';
@@ -12,14 +12,16 @@ import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { AppIcon } from '../../../../lib/Icon';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { AppUserObject } from '../../../../../types/app-user.types';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppBottomSheet_Improved,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
+import { LocalizationService } from '../../../../../services/localization.service';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -33,36 +35,6 @@ type Props = {
 };
 
 const NOTIFICATION_TYPE_ICON_SIZE = 15;
-
-function textContent(type: DhaagaJsNotificationType) {
-	switch (type) {
-		case DhaagaJsNotificationType.FAVOURITE: {
-			return 'Liked your post';
-		}
-		case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
-			return 'Accepted your follow request';
-		}
-		case DhaagaJsNotificationType.FOLLOW: {
-			return 'Followed You';
-		}
-		case DhaagaJsNotificationType.REBLOG:
-		case DhaagaJsNotificationType.RENOTE: {
-			return 'Boosted your post';
-		}
-		case DhaagaJsNotificationType.REACTION: {
-			return 'Reacted to your post';
-		}
-		case DhaagaJsNotificationType.STATUS: {
-			return 'Posted';
-		}
-		case DhaagaJsNotificationType.REPLY: {
-			return 'Replied to your post';
-		}
-		case DhaagaJsNotificationType.MENTION: {
-			return 'Mentioned you in a post';
-		}
-	}
-}
 
 /**
  * Pure Component
@@ -151,7 +123,7 @@ export const NotificationSender = memo(
 								<FontAwesome6
 									name="question-circle"
 									size={16}
-									color={APP_FONT.MONTSERRAT_BODY}
+									color={theme.secondary.a40}
 								/>
 							),
 							bg: '#242424',
@@ -245,14 +217,6 @@ export const NotificationSender = memo(
 					<View
 						style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}
 					>
-						{/*<Text*/}
-						{/*	style={{*/}
-						{/*		fontFamily: APP_FONTS.INTER_400_REGULAR,*/}
-						{/*		color: theme.secondary.a40,*/}
-						{/*	}}*/}
-						{/*>*/}
-						{/*	{handle}*/}
-						{/*</Text>*/}
 						<Text
 							style={{
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
@@ -260,7 +224,7 @@ export const NotificationSender = memo(
 								fontSize: 13,
 							}}
 						>
-							{textContent(type)}
+							{LocalizationService.notificationLabel(type)}
 						</Text>
 						<Text
 							style={{
@@ -301,15 +265,7 @@ type InterfaceProps = {
  */
 export const NotificationSenderInterface = memo(
 	({ user, type, extraData, createdAt }: InterfaceProps) => {
-		const { driver, show } = useGlobalState(
-			useShallow((o) => ({
-				driver: o.driver,
-				acct: o.acct,
-				show: o.bottomSheet.show,
-				acctManager: o.acctManager,
-				theme: o.colorScheme,
-			})),
-		);
+		const { show } = useAppBottomSheet_Improved();
 
 		const id = user.id;
 

@@ -9,7 +9,7 @@ import {
 } from 'react';
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import AppBottomSheet from '../../Core';
-import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { UserInterface } from '@dhaaga/bridge';
 import {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,

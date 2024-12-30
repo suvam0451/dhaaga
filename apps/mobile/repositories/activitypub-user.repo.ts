@@ -1,6 +1,6 @@
 import { ActivityPubUser } from '../entities/activitypub-user.entity';
 import { ActivityPubServerRepository } from './activitypub-server.repo';
-import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { UserInterface } from '@dhaaga/bridge';
 import { SQLiteDatabase } from 'expo-sqlite';
 
 export class ActivityPubUserRepository {

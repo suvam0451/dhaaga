@@ -1,7 +1,4 @@
-import {
-	StatusInterface,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import {
 	createContext,
 	Dispatch,

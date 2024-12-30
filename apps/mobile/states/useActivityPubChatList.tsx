@@ -1,7 +1,4 @@
-import {
-	StatusInterface,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface, UserInterface } from '@dhaaga/bridge';
 import { createContext, useContext, useMemo, useState } from 'react';
 
 type AppConversationDTO = {

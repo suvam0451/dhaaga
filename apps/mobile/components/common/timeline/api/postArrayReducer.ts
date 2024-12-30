@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import { Dispatch, MutableRefObject } from 'react';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface } from '@dhaaga/bridge';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { ActivityPubReactionStateDto } from '../../../../services/approto/activitypub-reactions.service';
 import { AppPostObject } from '../../../../types/app-post.types';

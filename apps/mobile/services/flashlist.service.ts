@@ -1,7 +1,7 @@
 import { AppPostObject } from '../types/app-post.types';
 import { AppUserObject } from '../types/app-user.types';
 import { AppNotificationObject } from '../types/app-notification.types';
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,

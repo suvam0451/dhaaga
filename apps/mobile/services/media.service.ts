@@ -1,4 +1,4 @@
-import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { MediaAttachmentInterface } from '@dhaaga/bridge';
 import { ActivityPubMediaAttachment } from '../entities/activitypub-media-attachment.entity';
 
 class MediaService {

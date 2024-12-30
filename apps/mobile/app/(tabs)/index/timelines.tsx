@@ -1,7 +1,7 @@
-import TimelineWrapper from '../../../components/common/timeline/core/Timeline';
+import Timeline from '../../../components/common/timeline/core/Timeline';
 
 function Screen() {
-	return <TimelineWrapper />;
+	return <Timeline />;
 }
 
 export default Screen;

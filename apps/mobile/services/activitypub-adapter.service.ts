@@ -3,7 +3,7 @@ import {
 	ActivityPubUserAdapter,
 	StatusInterface,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 
 /**
  * Wrapper service to invoke provider functions

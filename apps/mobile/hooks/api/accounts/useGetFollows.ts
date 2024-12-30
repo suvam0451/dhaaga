@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import {
-	KNOWN_SOFTWARE,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE, UserInterface } from '@dhaaga/bridge';
 import { AppBskyGraphGetFollows } from '@atproto/api';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import useAppPaginator from '../../app/useAppPaginator';

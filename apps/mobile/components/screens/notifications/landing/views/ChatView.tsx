@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 import AppNotificationViewContainer from './_container';
-import useApiGetChat from '../../../../../hooks/api/notifications/useApiGetChat';
+import { useApiGetChatUpdates } from '../../../../../hooks/api/useNotifications';
 
 const ChatView = memo(() => {
-	const { refetch, data } = useApiGetChat();
+	const { refetch, data } = useApiGetChatUpdates();
 
 	return (
 		<AppNotificationViewContainer

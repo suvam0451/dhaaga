@@ -3,7 +3,7 @@ import {
 	InstanceApi_CustomEmojiDTO,
 	MisskeyRestClient,
 	PleromaRestClient,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
 import ActivityPubService from '../activitypub.service';
 import { Dispatch, SetStateAction } from 'react';
@@ -55,10 +55,8 @@ class ActivityPubReactionsService {
 
 	/**
 	 * It is only possible to view remote reactions
-	 *
-	 *
 	 */
-	static canReact(id: string) {
+	static cannotReact(id: string) {
 		if (!id) return false;
 		return (
 			(MISSKEY_REMOTE_EX.test(id) || PLEROMA_REMOTE_EX.test(id)) &&
@@ -281,6 +279,14 @@ class ActivityPubReactionsService {
 		return status.getReactions(status.getMyReaction());
 	}
 
+	/**
+	 * Add a reaction
+	 * @param client
+	 * @param postId
+	 * @param reactionId
+	 * @param domain
+	 * @param setLoading
+	 */
 	static async addReaction(
 		client: ActivityPubClient,
 		postId: string,

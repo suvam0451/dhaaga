@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { useMemo, useState } from 'react';
 import MfmService from '../../../../../services/mfm.service';
 import { Image } from 'expo-image';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubUserAdapter } from '@dhaaga/bridge';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import useGlobalState from '../../../../../states/_global';

@@ -1,4 +1,4 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FeatureUnsupported from '../../../components/error-screen/FeatureUnsupported';
 import { View } from 'react-native';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';

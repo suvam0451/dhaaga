@@ -1,16 +1,7 @@
 import { ActivityPubServerRepository } from './activitypub-server.repo';
-import {
-	ActivityPubUserAdapter,
-	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubUserAdapter, StatusInterface } from '@dhaaga/bridge';
 import { ActivityPubUserRepository } from './activitypub-user.repo';
-import {
-	ActivityPubStatus,
-	ActivityPubStatusUpsertDTOType,
-} from '../entities/activitypub-status.entity';
-import { ActivityPubMediaAttachmentRepository } from './activitypub-media-attachment.repo';
-import TextParserService from '../services/text-parser';
-import { ActivityPubTagRepository } from './activitypub-tag.repo';
+import { ActivityPubStatusUpsertDTOType } from '../entities/activitypub-status.entity';
 import { SQLiteDatabase } from 'expo-sqlite';
 
 export class ActivityPubStatusRepository {

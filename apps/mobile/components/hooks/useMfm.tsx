@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { Skeleton } from '@rneui/themed';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FacetService from '../../services/facets.service';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

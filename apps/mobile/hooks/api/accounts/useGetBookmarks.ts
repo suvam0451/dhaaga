@@ -1,10 +1,7 @@
-import { BookmarkGetQueryDTO } from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_router/routes/bookmarks';
+import { BookmarkGetQueryDTO } from '@dhaaga/bridge/dist/adapters/_client/_router/routes/bookmarks';
 import { useQuery } from '@tanstack/react-query';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
-import {
-	StatusInterface,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

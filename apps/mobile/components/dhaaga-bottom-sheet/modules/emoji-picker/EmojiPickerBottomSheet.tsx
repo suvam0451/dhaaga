@@ -1,4 +1,4 @@
-import { memo, useEffect, useReducer, useRef } from 'react';
+import { memo, useEffect, useReducer, useRef, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import emojiPickerReducer, {
@@ -18,6 +18,7 @@ import { AppTextInput } from '../../../lib/TextInput';
 type EmojiPickerBottomSheetProps = {
 	onAccept: (o: Emoji) => void;
 	onCancel: () => void;
+	isProcessing?: boolean;
 };
 
 type NoReactionsAvailableProps = {
@@ -59,7 +60,7 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
  * @composerState the parent composer state,
  */
 const EmojiPickerBottomSheet = memo(
-	({ onAccept, onCancel }: EmojiPickerBottomSheetProps) => {
+	({ onAccept, onCancel, isProcessing }: EmojiPickerBottomSheetProps) => {
 		const { driver, acct, acctManager } = useGlobalState(
 			useShallow((o) => ({
 				driver: o.driver,
@@ -69,6 +70,8 @@ const EmojiPickerBottomSheet = memo(
 		);
 		const { theme } = useAppTheme();
 		const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
+
+		const [SearchText, setSearchText] = useState('');
 
 		const lastSubdomain = useRef(null);
 		useEffect(() => {
@@ -101,6 +104,7 @@ const EmojiPickerBottomSheet = memo(
 		}
 
 		function onSearchTermChanged(o: any) {
+			setSearchText(o);
 			dispatch({
 				type: EMOJI_PICKER_REDUCER_ACTION.APPLY_SEARCH,
 				payload: {
@@ -136,8 +140,10 @@ const EmojiPickerBottomSheet = memo(
 							placeholder={'Search'}
 							onChangeText={onSearchTermChanged}
 							style={styles.textInput}
+							value={SearchText}
 						/>
 					}
+					nextLoading={isProcessing}
 				/>
 				<SelectedEmojiPreview selection={State.selectedReaction} />
 				<EmojiPickerSearchResults State={State} onSelect={onEmojiSelected} />

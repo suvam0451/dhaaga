@@ -2,15 +2,17 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
+	StyleProp,
 	StyleSheet,
 	Text,
 	View,
+	ViewStyle,
 } from 'react-native';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../styles/AppFonts';
 import SoftwareHeader from '../../screens/accounts/fragments/SoftwareHeader';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppIcon } from '../lib/Icon';
 import { router } from 'expo-router';
 import AppTabLandingNavbar, {
@@ -19,44 +21,19 @@ import AppTabLandingNavbar, {
 import { useState } from 'react';
 import { AccountService } from '../../database/entities/account';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import {
+	useAppAcct,
+	useAppTheme,
+} from '../../hooks/utility/global-state-extractors';
 
 /**
- * A full screen cover when no account is selected
+ * This UI fragment can be shared with other
+ * screens (that might have a different header,
+ * footer or page decorations)
  * @constructor
  */
-
-type AppNoAccountProps = {
-	tab: APP_LANDING_PAGE_TYPE;
-};
-
-function AppNoAccount({ tab }: AppNoAccountProps) {
-	const [IsRefreshing, setIsRefreshing] = useState(false);
-
-	const { theme, db, acct, loadApp } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-			db: o.db,
-			acct: o.acct,
-			loadApp: o.loadApp,
-		})),
-	);
-
-	function onRefresh() {
-		setIsRefreshing(true);
-		try {
-			// possibly locked because of added/deleted account
-			if (!acct) {
-				AccountService.ensureAccountSelection(db);
-				loadApp();
-				setIsRefreshing(false);
-			}
-		} catch (e) {
-			setIsRefreshing(false);
-		} finally {
-			setIsRefreshing(false);
-		}
-	}
-
+export function DriverSelectionFragment() {
+	const { theme } = useAppTheme();
 	const options: {
 		label: string;
 		padding: number;
@@ -143,6 +120,125 @@ function AppNoAccount({ tab }: AppNoAccountProps) {
 	];
 
 	return (
+		<View>
+			{options.map((option, i) => (
+				<Pressable
+					key={i}
+					style={[
+						styles.selectSnsBox,
+						{
+							backgroundColor: theme.palette.menubar,
+							paddingVertical: option.padding,
+						},
+					]}
+					onPress={() => {
+						router.push(option.to);
+					}}
+				>
+					<Text
+						style={[
+							styles.selectSnsLabel,
+							{
+								color: theme.textColor.high,
+								flex: 1,
+							},
+						]}
+					>
+						{option.label}
+					</Text>
+					{option.rightComponent}
+				</Pressable>
+			))}
+		</View>
+	);
+}
+
+type AddAccountLandingFragmentProps = {
+	containerStyle?: StyleProp<ViewStyle>;
+};
+
+/**
+ * This UI fragment can be shared with other
+ * screens (that might have a different header,
+ * but share footer or page decorations)
+ * @constructor
+ */
+export function AddAccountLandingFragment({
+	containerStyle,
+}: AddAccountLandingFragmentProps) {
+	const { theme } = useAppTheme();
+	return (
+		<View style={containerStyle}>
+			<Text
+				style={[
+					styles.noAccountText,
+					{
+						color: theme.textColor.medium,
+					},
+				]}
+			>
+				Add Account
+			</Text>
+			<DriverSelectionFragment />
+
+			<View style={styles.tipContainer}>
+				<AppIcon
+					id={'info'}
+					size={24}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
+				/>
+				<Text
+					style={[
+						styles.tipText,
+						{
+							color: theme.secondary.a30,
+						},
+					]}
+				>
+					Account creation is not supported.
+				</Text>
+			</View>
+		</View>
+	);
+}
+
+/**
+ * A full screen cover when no account is selected
+ * @constructor
+ */
+
+type AppNoAccountProps = {
+	tab: APP_LANDING_PAGE_TYPE;
+};
+
+function AppNoAccount({ tab }: AppNoAccountProps) {
+	const [IsRefreshing, setIsRefreshing] = useState(false);
+	const { theme } = useAppTheme();
+	const { acct } = useAppAcct();
+	const { db, loadApp } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+			loadApp: o.loadApp,
+		})),
+	);
+
+	function onRefresh() {
+		setIsRefreshing(true);
+		try {
+			// possibly locked because of added/deleted account
+			if (!acct) {
+				AccountService.ensureAccountSelection(db);
+				loadApp();
+				setIsRefreshing(false);
+			}
+		} catch (e) {
+			setIsRefreshing(false);
+		} finally {
+			setIsRefreshing(false);
+		}
+	}
+
+	return (
 		<ScrollView
 			style={{ height: '100%', backgroundColor: theme.palette.bg }}
 			refreshControl={
@@ -160,79 +256,7 @@ function AppNoAccount({ tab }: AppNoAccountProps) {
 					},
 				]}
 			/>
-
-			<View>
-				<View style={{ flexGrow: 1 }}>
-					<Text
-						style={[
-							styles.noAccountText,
-							{
-								color: theme.textColor.medium,
-							},
-						]}
-					>
-						Add an Account
-					</Text>
-					{options.map((option, i) => (
-						<Pressable
-							key={i}
-							style={[
-								styles.selectSnsBox,
-								{
-									backgroundColor: theme.palette.menubar,
-									paddingVertical: option.padding,
-								},
-							]}
-							onPress={() => {
-								router.push(option.to);
-							}}
-						>
-							<Text
-								style={[
-									styles.selectSnsLabel,
-									{
-										color: theme.textColor.high,
-										flex: 1,
-									},
-								]}
-							>
-								{option.label}
-							</Text>
-							{option.rightComponent}
-						</Pressable>
-					))}
-				</View>
-
-				<View
-					style={{
-						alignItems: 'center',
-						flexDirection: 'row',
-						justifyContent: 'center',
-						width: '100%',
-						marginTop: 32,
-					}}
-				>
-					<AppIcon
-						id={'info'}
-						containerStyle={{
-							width: 24,
-							marginRight: 6,
-						}}
-						size={24}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
-					/>
-					<Text
-						style={[
-							styles.tipText,
-							{
-								color: theme.secondary.a30,
-							},
-						]}
-					>
-						Account creation is not supported.
-					</Text>
-				</View>
-			</View>
+			<AddAccountLandingFragment />
 		</ScrollView>
 	);
 }
@@ -260,5 +284,15 @@ const styles = StyleSheet.create({
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		fontSize: 22,
 	},
-	tipText: {},
+	tipContainer: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		width: '100%',
+		marginTop: 32,
+	},
+	tipText: {
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		marginLeft: 6,
+	},
 });

@@ -1,7 +1,4 @@
-import {
-	ActivityPubClient,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubAdapterService from './activitypub-adapter.service';
 import { Dispatch, SetStateAction } from 'react';
 import { SQLiteDatabase } from 'expo-sqlite';

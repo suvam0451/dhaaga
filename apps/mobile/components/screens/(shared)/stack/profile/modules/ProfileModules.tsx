@@ -16,7 +16,7 @@ import usePinnedPosts from '../../../../../common/user/api/usePinnedPosts';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { NotificationPostPeek } from '../../../../notifications/landing/fragments/NotificationPostPeek';
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { NotificationSenderInterface } from '../../../../notifications/landing/fragments/NotificationSender';
 
 type AppPagerViewListProps = {

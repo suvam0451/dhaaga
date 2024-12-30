@@ -7,7 +7,7 @@ import {
 	ActivityPubClient,
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { AccountService } from '../database/entities/account';
 import { SQLiteDatabase } from 'expo-sqlite';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
@@ -30,7 +30,7 @@ import { APP_BOTTOM_SHEET_ENUM } from '../components/dhaaga-bottom-sheet/Core';
 import {
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-} from './reducers/timeline.reducer';
+} from './reducers/post-timeline.reducer';
 import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';

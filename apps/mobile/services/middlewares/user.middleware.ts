@@ -3,8 +3,12 @@ import {
 	ActivityPubUserAdapter,
 	KNOWN_SOFTWARE,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
-import { AppUserObject, appUserObjectSchema } from '../../types/app-user.types';
+} from '@dhaaga/bridge';
+import {
+	APP_USER_DEFAULT_RELATIONSHIP,
+	AppUserObject,
+	appUserObjectSchema,
+} from '../../types/app-user.types';
 import { PostMiddleware } from './post.middleware';
 
 export class UserMiddleware {
@@ -75,6 +79,7 @@ export class UserMiddleware {
 					server,
 				),
 			},
+			relationship: APP_USER_DEFAULT_RELATIONSHIP,
 		};
 
 		const { data, error, success } = appUserObjectSchema.safeParse(dto);

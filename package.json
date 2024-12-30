@@ -8,10 +8,9 @@
   "scripts": {
     "dev:app": "yarn workspace @dhaaga/mobile dev",
     "dev:web": "yarn workspace @dhaaga/web dev",
-    "build:mastodon": "yarn --cwd ./packages/shared-provider-mastodon build",
-    "build:dhaagajs": "yarn --cwd ./packages/shared-abstraction-activitypub build",
+    "build:bridge": "yarn --cwd ./packages/bridge build",
     "build:orm": "yarn --cwd ./packages/orm build",
-    "build": "yarn build:mastodon && yarn build:dhaagajs && yarn build:orm"
+    "build": "yarn build:bridge && yarn build:orm"
   },
   "workspaces": [
     "packages/**",

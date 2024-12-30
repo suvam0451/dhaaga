@@ -1,8 +1,5 @@
 import { memo, useCallback, useMemo } from 'react';
-import {
-	ActivitypubHelper,
-	DhaagaJsNotificationType,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { ActivitypubHelper, DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE, styles } from '../segments/_common';
@@ -15,12 +12,14 @@ import Octicons from '@expo/vector-icons/Octicons';
 import useAppCustomEmoji from '../../../../../hooks/app/useAppCustomEmoji';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useAppBottomSheet } from '../../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../../../states/_global';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { AppUserObject } from '../../../../../types/app-user.types';
+import { LocalizationService } from '../../../../../services/localization.service';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -47,42 +46,10 @@ export const NotificationSenderMini = memo(
 		remoteSubdomain,
 		createdAt,
 	}: Props) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 
 		const { find } = useAppCustomEmoji();
-		const TextContent = useMemo(() => {
-			switch (type) {
-				case DhaagaJsNotificationType.FAVOURITE: {
-					return 'Liked your post';
-				}
-				case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
-					return 'Accepted your follow request';
-				}
-				case DhaagaJsNotificationType.FOLLOW: {
-					return 'Followed You';
-				}
-				case DhaagaJsNotificationType.REBLOG:
-				case DhaagaJsNotificationType.RENOTE: {
-					return 'Boosted your post';
-				}
-				case DhaagaJsNotificationType.REACTION: {
-					return 'Reacted to your post';
-				}
-				case DhaagaJsNotificationType.STATUS: {
-					return 'Posted';
-				}
-				case DhaagaJsNotificationType.REPLY: {
-					return 'Replied to your post';
-				}
-				case DhaagaJsNotificationType.MENTION: {
-					return 'Mentioned you in a post';
-				}
-			}
-		}, [type]);
+		const TextContent = LocalizationService.notificationLabel(type);
 
 		const { Icon, bg } = useMemo(() => {
 			switch (type) {

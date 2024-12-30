@@ -12,7 +12,7 @@ import useTrendingTags from '../api/useTrendingTags';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { Fragment } from 'react';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 

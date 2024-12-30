@@ -2,13 +2,8 @@ import {
 	ActivitypubStatusAdapter,
 	ActivityPubUserAdapter,
 	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
-import type { mastodon } from '@dhaaga/shared-provider-mastodon';
+} from '@dhaaga/bridge';
 import { ActivityPubConversationRepository } from '../repositories/activitypub-conversation.repo';
-import { ActivityPubUserRepository } from '../repositories/activitypub-user.repo';
-import { ActivityPubStatusRepository } from '../repositories/activitypub-status.repo';
-import { ActivityPubServerRepository } from '../repositories/activitypub-server.repo';
-import { ActivityPubChatroomRepository } from '../repositories/activitypub-chatroom.repo';
 import { SQLiteDatabase } from 'expo-sqlite';
 
 class ChatroomService {
@@ -23,7 +18,7 @@ class ChatroomService {
 		}: {
 			hash: string;
 			me: UserInterface;
-			conversation: mastodon.v1.Conversation;
+			conversation: any;
 			domain: string;
 			subdomain: string;
 		},

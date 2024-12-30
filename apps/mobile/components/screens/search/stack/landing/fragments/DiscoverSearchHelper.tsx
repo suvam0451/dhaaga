@@ -1,13 +1,17 @@
-import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Animated, StyleSheet, View, TextInput } from 'react-native';
 import { NativeCheckbox } from '../../../../../lib/Checkboxes';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 import { APP_SEARCH_TYPE } from '../../../api/useSearch';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
 import { AppIcon } from '../../../../../lib/Icon';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import { DiscoverTabReducerActionType } from '../../../../../../states/reducers/discover-tab.reducer';
+import {
+	useDiscoverTabDispatch,
+	useDiscoverTabState,
+} from '../../../../../context-wrappers/WithDiscoverTabCtx';
 
 type MultiSelectProps = {
 	setSearchCategory: Dispatch<SetStateAction<APP_SEARCH_TYPE>>;
@@ -17,43 +21,35 @@ type MultiSelectProps = {
  * Control section to set the
  * search category
  */
-const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
+export function Multiselect({ setSearchCategory }: MultiSelectProps) {
+	const { theme } = useAppTheme();
 	const [selectedIndex, setSelectedIndex] = useState(0);
 
-	const onCheckboxPress = useCallback(
-		(idx: number) => {
-			setSelectedIndex(idx);
-			switch (idx) {
-				case 0: {
-					setSearchCategory(APP_SEARCH_TYPE.POSTS);
-					break;
-				}
-				case 1: {
-					setSearchCategory(APP_SEARCH_TYPE.USERS);
-					break;
-				}
-				case 2: {
-					setSearchCategory(APP_SEARCH_TYPE.HASHTAGS);
-					break;
-				}
-				case 3: {
-					// setSearchCategory(APP_SEARCH_TYPE.LINKS);
-					break;
-				}
-				default: {
-					setSearchCategory(APP_SEARCH_TYPE.POSTS);
-					break;
-				}
+	function onCheckboxPress(idx: number) {
+		setSelectedIndex(idx);
+		switch (idx) {
+			case 0: {
+				setSearchCategory(APP_SEARCH_TYPE.POSTS);
+				break;
 			}
-		},
-		[setSelectedIndex],
-	);
+			case 1: {
+				setSearchCategory(APP_SEARCH_TYPE.USERS);
+				break;
+			}
+			case 2: {
+				setSearchCategory(APP_SEARCH_TYPE.HASHTAGS);
+				break;
+			}
+			case 3: {
+				// setSearchCategory(APP_SEARCH_TYPE.LINKS);
+				break;
+			}
+			default: {
+				setSearchCategory(APP_SEARCH_TYPE.POSTS);
+				break;
+			}
+		}
+	}
 
 	const Checkboxes = [
 		{
@@ -89,89 +85,106 @@ const Multiselect = memo(({ setSearchCategory }: MultiSelectProps) => {
 			))}
 		</View>
 	);
-});
-
-type DiscoverSearchHelperProps = {
-	setSearchTerm: Dispatch<SetStateAction<string>>;
-	setSearchCategory: Dispatch<SetStateAction<APP_SEARCH_TYPE>>;
-};
+}
 
 /**
  * The floaty helper component
  * for the discover tab landing
  * page
  */
-const DiscoverSearchHelper = memo(
-	({ setSearchTerm, setSearchCategory }: DiscoverSearchHelperProps) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
-		const [searchBoxText, setSearchBoxText] = useState('');
+function DiscoverSearchHelper() {
+	const { theme } = useAppTheme();
+	const dispatch = useDiscoverTabDispatch();
+	const state = useDiscoverTabState();
 
-		const updateSearch = (search: string) => {
-			setSearchBoxText(search);
-		};
+	const updateSearch = (search: string) => {
+		dispatch({
+			type: DiscoverTabReducerActionType.SET_SEARCH,
+			payload: {
+				q: search,
+			},
+		});
+	};
 
-		const submitSearch = (
-			search: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
-		) => {
-			setSearchTerm(search.nativeEvent.text);
-		};
+	const submitSearch = (
+		search: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
+	) => {
+		dispatch({
+			type: DiscoverTabReducerActionType.APPLY_SEARCH,
+		});
+	};
 
-		return (
-			<Animated.View
-				style={[styles.helperWidget, { backgroundColor: 'transparent' }]}
+	function setCategory(cat: APP_SEARCH_TYPE) {
+		dispatch({
+			type: DiscoverTabReducerActionType.SET_CATEGORY,
+			payload: {
+				category: cat,
+			},
+		});
+	}
+
+	return (
+		<Animated.View
+			style={[styles.helperWidget, { backgroundColor: 'transparent' }]}
+		>
+			<View
+				style={{
+					padding: 8,
+					backgroundColor: theme.palette.menubar,
+					flexDirection: 'row',
+					borderTopLeftRadius: 8,
+					borderTopRightRadius: 8,
+				}}
 			>
 				<View
 					style={{
-						padding: 8,
-						backgroundColor: theme.palette.menubar,
+						backgroundColor: theme.primary.a0,
 						flexDirection: 'row',
-						borderTopLeftRadius: 8,
-						borderTopRightRadius: 8,
+						width: '100%',
+						paddingLeft: 8,
+						borderRadius: 8,
+						alignItems: 'center',
+						paddingVertical: 6,
 					}}
 				>
-					<View
-						style={{
-							backgroundColor: theme.palette.buttonUnstyled,
-							flexDirection: 'row',
-							width: '100%',
-							paddingLeft: 8,
-							borderRadius: 8,
+					<AppIcon
+						id={'search'}
+						color={theme.palette.bg}
+						containerStyle={{ paddingHorizontal: 4 }}
+					/>
+					<TextInput
+						multiline={false}
+						onChangeText={updateSearch}
+						onSubmitEditing={submitSearch}
+						value={state.text}
+						placeholderTextColor={'rgba(0, 0, 0, 0.64)'}
+						placeholder={'Discover something new!'}
+						style={[
+							styles.textInput,
+							{
+								padding: 8,
+								flex: 1,
+								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							},
+						]}
+						numberOfLines={1}
+					/>
+					<AppIcon
+						id={'clear'}
+						containerStyle={{ marginRight: 12 }}
+						onPress={() => {
+							dispatch({
+								type: DiscoverTabReducerActionType.CLEAR_SEARCH,
+							});
 						}}
-					>
-						<AppIcon id={'search'} />
-						<TextInput
-							multiline={false}
-							onChangeText={updateSearch}
-							onSubmitEditing={submitSearch}
-							value={searchBoxText}
-							placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
-							style={[
-								styles.textInput,
-								{
-									padding: 8,
-									flex: 1,
-								},
-							]}
-							numberOfLines={1}
-						/>
-						<AppIcon
-							id={'clear'}
-							containerStyle={{ marginRight: 12 }}
-							onPress={() => {
-								setSearchBoxText('');
-							}}
-						/>
-					</View>
+						color={'black'}
+					/>
 				</View>
-				<Multiselect setSearchCategory={setSearchCategory} />
-			</Animated.View>
-		);
-	},
-);
+			</View>
+			<Multiselect setSearchCategory={setCategory} />
+		</Animated.View>
+	);
+}
 
 const styles = StyleSheet.create({
 	checkboxContainer: {
@@ -189,16 +202,16 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: '100%',
 		bottom: 0,
-		marginBottom: 16,
+		marginBottom: 120, // 16
 		paddingHorizontal: 12,
 		zIndex: 99,
 	},
 	textInput: {
 		textDecorationLine: 'none',
-		color: APP_FONT.MONTSERRAT_BODY,
+		// color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 16,
 		flex: 1,
-		textAlignVertical: 'top',
+		// textAlignVertical: 'top',
 	},
 });
 

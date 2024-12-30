@@ -6,13 +6,13 @@ import useActivityPubLists, {
 } from '../../../../hooks/api/lists/useActivityPubLists';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { Fragment, memo } from 'react';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
 
 type ListItemProps = {
 	label: string;

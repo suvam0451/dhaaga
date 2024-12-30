@@ -50,15 +50,16 @@ function StatusMoreOptionsButton() {
 	}
 
 	return (
-		<View style={styles.statusMoreOptionsContainer}>
-			<Pressable style={styles.statusMoreOptionsButton} onPress={onPress}>
+		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
+			<View style={styles.statusMoreOptionsButton}>
 				<AppIcon
 					id={'ellipsis-v'}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
-					size={20}
+					size={24}
+					onPress={onPress}
 				/>
-			</Pressable>
-		</View>
+			</View>
+		</Pressable>
 	);
 }
 
@@ -114,9 +115,8 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 	const isSensitive = _target.meta.sensitive;
 	const spoilerText = _target.meta.cw;
 
-	const { theme, showInspector, appSession } = useGlobalState(
+	const { showInspector, appSession } = useGlobalState(
 		useShallow((o) => ({
-			theme: o.colorScheme,
 			showInspector: o.imageInspectModal.show,
 			appSession: o.appSession,
 		})),
@@ -218,6 +218,8 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		flexShrink: 1,
 		height: '100%',
+		paddingRight: 8,
+		paddingTop: 4,
 	},
 	statusMoreOptionsButton: {
 		height: '100%',

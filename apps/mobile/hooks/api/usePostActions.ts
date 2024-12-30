@@ -3,7 +3,7 @@ import {
 	AppTimelineReducerActionType,
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-} from '../../states/reducers/timeline.reducer';
+} from '../../states/reducers/post-timeline.reducer';
 import { AppPostObject } from '../../types/app-post.types';
 import ActivityPubService from '../../services/activitypub.service';
 import { useShallow } from 'zustand/react/shallow';

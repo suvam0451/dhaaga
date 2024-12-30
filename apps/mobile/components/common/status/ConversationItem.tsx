@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { useActivitypubStatusContext } from '../../../states/useStatus';
 import MfmService from '../../../services/mfm.service';
-import { ActivityPubUserAdapter } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubUserAdapter } from '@dhaaga/bridge';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

@@ -1,5 +1,5 @@
 import { ActivityPubMediaAttachment } from '../entities/activitypub-media-attachment.entity';
-import { MediaAttachmentInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { MediaAttachmentInterface } from '@dhaaga/bridge';
 import { SQLiteDatabase } from 'expo-sqlite';
 
 export class ActivityPubMediaAttachmentRepository {

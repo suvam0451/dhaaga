@@ -6,11 +6,11 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Button, Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
 
 const ICON_SIZE = 20;
 

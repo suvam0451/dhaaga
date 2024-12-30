@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface } from '@dhaaga/bridge';
 
 /**
  * Returns the interface for a post

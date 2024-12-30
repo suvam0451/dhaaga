@@ -1,4 +1,4 @@
-import { DhaagaJsTimelineQueryOptions } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
 import {
 	createContext,
 	Dispatch,
@@ -8,7 +8,7 @@ import {
 } from 'react';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
 
 export type AppTimelineQuery = {
 	id: string;

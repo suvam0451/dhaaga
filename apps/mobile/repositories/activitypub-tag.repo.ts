@@ -1,5 +1,4 @@
 import { ActivityPubTagCreateDTO } from '../entities/activitypub-tag.entity';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import { SQLiteDatabase } from 'expo-sqlite';
 
 export class ActivityPubTagRepository {
@@ -16,7 +15,7 @@ export class ActivityPubTagRepository {
 
 	static updateFollowStatus() {}
 
-	static applyFollowing(db: SQLiteDatabase, dto: mastodon.v1.Tag[]) {
+	static applyFollowing(db: SQLiteDatabase, dto: any[]) {
 		// const all = db.objects(ActivityPubTag);
 		// const mapper = new Map<string, ActivityPubTag>();
 		// all.forEach((o) => {

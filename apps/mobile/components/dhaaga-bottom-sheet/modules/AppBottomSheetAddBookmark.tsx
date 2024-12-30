@@ -1,7 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
 	useAppBottomSheet_Improved,
-	useAppManager,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
@@ -89,9 +88,19 @@ function CollectionItem({
 			<View style={{ flexGrow: 1 }} />
 			<Pressable onPress={onPress}>
 				{active ? (
-					<AppIcon id={activeIconId} size={32} color={activeTint} />
+					<AppIcon
+						id={activeIconId}
+						size={32}
+						color={activeTint}
+						onPress={onPress}
+					/>
 				) : (
-					<AppIcon id={inactiveIconId} size={32} color={inactiveTint} />
+					<AppIcon
+						id={inactiveIconId}
+						size={32}
+						color={inactiveTint}
+						onPress={onPress}
+					/>
 				)}
 			</Pressable>
 		</View>
@@ -101,7 +110,6 @@ function CollectionItem({
 function AppBottomSheetAddBookmark() {
 	const { theme } = useAppTheme();
 	const { ctx } = useAppBottomSheet_Improved();
-	const { appManager } = useAppManager();
 	const { postPub } = useAppPublishers();
 	const [PostObject, setPostObject] = useState<AppPostObject>(
 		postPub.readCache(ctx?.uuid),
@@ -112,8 +120,7 @@ function AppBottomSheetAddBookmark() {
 	}
 
 	useEffect(() => {
-		setPostObject(appManager.storage.getPostObject());
-
+		onUpdate({ uuid: ctx?.uuid });
 		postPub.subscribe(ctx?.uuid, onUpdate);
 		return () => {
 			postPub.unsubscribe(ctx?.uuid, onUpdate);
@@ -123,6 +130,8 @@ function AppBottomSheetAddBookmark() {
 	function onToggleBookmark() {
 		postPub.toggleBookmark(PostObject.uuid);
 	}
+
+	if (!PostObject) return <View />;
 
 	const _target = PostMiddleware.getContentTarget(PostObject);
 	const IS_BOOKMARKED = _target.interaction.bookmarked;
@@ -154,12 +163,24 @@ function AppBottomSheetAddBookmark() {
 				/>
 			</View>
 
+			<Text
+				style={{
+					color: theme.primary.a0,
+					marginVertical: 16,
+					textAlign: 'center',
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					marginBottom: 24,
+				}}
+			>
+				🏗️ The following section is just a UI mockup! 🏗️
+			</Text>
+
 			<View
 				style={{
 					flexDirection: 'row',
 					justifyContent: 'space-between',
 					width: '100%',
-					marginBottom: 20,
+					marginBottom: 16,
 				}}
 			>
 				<Text style={[styles.sectionLabel, { color: theme.secondary.a0 }]}>

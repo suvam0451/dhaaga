@@ -1,4 +1,4 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useAppAssetsContext } from './useAssets';
 
 function useKnownSoftware(software: string) {

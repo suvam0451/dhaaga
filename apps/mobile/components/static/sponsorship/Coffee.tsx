@@ -1,9 +1,48 @@
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import { useAssets } from 'expo-asset';
 import { LinkingUtils } from '../../../utils/linking.utils';
 
-function Coffee() {
+type CoffeeProps = {
+	containerStyle?: StyleProp<ViewStyle>;
+};
+
+export function CoffeeIconOnly({ containerStyle }: CoffeeProps) {
+	const [assets, error] = useAssets([require('../../../assets/bmac-icon.png')]);
+	const LOADED = !error && assets?.every((o) => o?.downloaded);
+
+	function onTouch() {
+		LinkingUtils.openCoffeeLink();
+	}
+
+	if (!LOADED) return <View></View>;
+	return (
+		<View
+			style={[
+				{
+					borderRadius: 8,
+					flexDirection: 'row',
+				},
+				containerStyle,
+			]}
+			onTouchEnd={onTouch}
+		>
+			{/*@ts-ignore-next-line*/}
+			<Image
+				source={assets[0].localUri}
+				style={{
+					width: '100%',
+					maxWidth: 40,
+					height: 40,
+					borderRadius: 8,
+					opacity: 0.87,
+				}}
+			/>
+		</View>
+	);
+}
+
+function Coffee({ containerStyle }: CoffeeProps) {
 	const [assets, error] = useAssets([
 		require('../../../assets/bmc-button.png'),
 	]);
@@ -16,29 +55,27 @@ function Coffee() {
 
 	if (!LOADED) return <View></View>;
 	return (
-		<View>
-			<View
-				style={{
+		<View
+			style={[
+				{
 					borderRadius: 8,
-					display: 'flex',
 					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'center',
+				},
+				containerStyle,
+			]}
+			onTouchEnd={onTouch}
+		>
+			{/*@ts-ignore-next-line*/}
+			<Image
+				source={assets[0].localUri}
+				style={{
+					width: '100%',
+					maxWidth: 172,
+					height: 42,
+					borderRadius: 8,
+					opacity: 0.87,
 				}}
-				onTouchEnd={onTouch}
-			>
-				{/*@ts-ignore-next-line*/}
-				<Image
-					source={assets[0].localUri}
-					style={{
-						width: '100%',
-						maxWidth: 172,
-						height: 42,
-						borderRadius: 8,
-						opacity: 0.87,
-					}}
-				/>
-			</View>
+			/>
 		</View>
 	);
 }

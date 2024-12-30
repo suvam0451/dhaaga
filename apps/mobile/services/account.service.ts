@@ -1,4 +1,4 @@
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubClient } from '@dhaaga/bridge';
 
 class AccountService {
 	static loadFollowedTags(db: any, client: ActivityPubClient) {

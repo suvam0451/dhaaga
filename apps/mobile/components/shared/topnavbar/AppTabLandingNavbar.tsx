@@ -1,9 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -55,11 +54,7 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
  * main routes
  */
 function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	return (
 		<View style={[styles.container]}>
@@ -82,6 +77,7 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 									? APP_COLOR_PALETTE_EMPHASIS.A40
 									: APP_COLOR_PALETTE_EMPHASIS.A20
 							}
+							onPress={onPress}
 						/>
 					</Pressable>
 				))}

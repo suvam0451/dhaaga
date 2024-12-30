@@ -13,7 +13,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { TimelineFetchMode } from '../../../../states/reducers/timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
 
 type SearchResults = {
 	following: boolean;

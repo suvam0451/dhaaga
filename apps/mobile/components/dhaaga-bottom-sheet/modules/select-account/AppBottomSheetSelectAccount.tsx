@@ -174,7 +174,11 @@ const AppBottomSheetSelectAccount = memo(() => {
 							}}
 							onPress={onPressMoreAccountOptions}
 						>
-							<AppIcon id={'cog'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+							<AppIcon
+								id={'cog'}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+								onPress={onPressMoreAccountOptions}
+							/>
 						</TouchableOpacity>
 					</View>
 				)}

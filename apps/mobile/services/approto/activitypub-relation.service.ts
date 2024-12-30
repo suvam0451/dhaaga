@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ActivityPubClient } from '@dhaaga/shared-abstraction-activitypub';
+import { ActivityPubClient } from '@dhaaga/bridge';
 
 class ActivitypubRelationService {
 	blockedBy: boolean;

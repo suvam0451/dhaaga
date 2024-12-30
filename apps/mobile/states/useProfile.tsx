@@ -2,7 +2,7 @@ import {
 	ActivityPubUserAdapter,
 	UserInterface,
 	UserType,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { createContext, useContext, useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';

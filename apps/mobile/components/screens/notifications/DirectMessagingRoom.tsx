@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { mastodon } from '@dhaaga/shared-provider-mastodon';
 import WithActivitypubStatusContext, {
 	useActivitypubStatusContext,
 } from '../../../states/useStatus';
@@ -8,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import ActivitypubProviderService from '../../../services/activitypub-provider.service';
 import ActivityPubProviderService from '../../../services/activitypub-provider.service';
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface } from '@dhaaga/bridge';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import ChatItem from './fragments/dm/ChatItem';
 import { Input } from '@rneui/themed';
@@ -20,6 +19,7 @@ import useTopbarSmoothTranslate from '../../../states/useTopbarSmoothTranslate';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
+import { MastoConversation } from '@dhaaga/bridge/dist/types/mastojs.types';
 
 type DirectMessagingRoomProps = {
 	conversationIds: string[];
@@ -43,7 +43,7 @@ function WithContextWrapped() {
 
 	// Queries
 	const { status, data, refetch, fetchStatus } = useQuery<
-		mastodon.v1.Conversation[] | any[]
+		MastoConversation[] | any[]
 	>({
 		queryKey: ['conversation/context', q],
 		queryFn: api as any,

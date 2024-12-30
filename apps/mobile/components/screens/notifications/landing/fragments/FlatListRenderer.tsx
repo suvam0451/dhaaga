@@ -1,4 +1,4 @@
-import { DhaagaJsNotificationType } from '@dhaaga/shared-abstraction-activitypub';
+import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import ReplyNotificationFragment from '../segments/ReplyNotificationFragment';
 import MentionNotificationFragment from '../segments/MentionNotificationFragment';
 import FavouriteNotificationFragment from '../segments/FavouriteNotificationFragment';

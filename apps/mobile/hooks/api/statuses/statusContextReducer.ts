@@ -1,9 +1,6 @@
 import MastodonService from '../../../services/mastodon.service';
 import { produce } from 'immer';
-import {
-	KNOWN_SOFTWARE,
-	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import AtprotoContextService from '../../../services/atproto/atproto-context-service';

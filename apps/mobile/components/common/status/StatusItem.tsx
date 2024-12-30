@@ -3,9 +3,8 @@ import { ParentPostFragment } from './_static';
 import SharedStatusFragment from './fragments/SharedStatusFragment';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { View } from 'react-native';
+import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
 
 type StatusItemProps = {
 	// disables all interactions
@@ -41,11 +40,7 @@ function PostContainer({ children }: any) {
  * @constructor
  */
 const StatusItem = memo(function Foo({ isPreview, isPin }: StatusItemProps) {
-	const { acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-		})),
-	);
+	const { acct } = useAppAcct();
 	const { dto } = useAppStatusItem();
 
 	return useMemo(() => {

@@ -3,12 +3,9 @@ import {
 	MastodonRestClient,
 	MisskeyRestClient,
 	UnknownRestClient,
-} from '@dhaaga/shared-abstraction-activitypub';
+} from '@dhaaga/bridge';
 import { ActivityPubServer } from '../entities/activitypub-server.entity';
-import {
-	PleromaRestClient,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { PleromaRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { RandomUtil } from '../utils/random.utils';
 import AppSessionManager from './session/app-session.service';

@@ -1,9 +1,12 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
-import ActivityPubClient from '@dhaaga/shared-abstraction-activitypub/dist/adapters/_client/_interface';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import { PostMiddleware } from './middlewares/post.middleware';
 import ActivityPubService from './activitypub.service';
 import { AppPostObject } from '../types/app-post.types';
 import { produce } from 'immer';
+import ActivityPubReactionsService, {
+	ActivityPubReactionStateDto,
+} from './approto/activitypub-reactions.service';
 
 export class PostMutatorService {
 	private readonly driver: KNOWN_SOFTWARE;
@@ -113,5 +116,64 @@ export class PostMutatorService {
 			console.log('[WARN]: failed to toggle share', e);
 		}
 		return input;
+	}
+
+	private applyReactionData(input: AppPostObject, _data: any) {
+		const target = PostMiddleware.getContentTarget(input);
+		const { data, error } = ActivityPubReactionStateDto.safeParse(_data);
+		if (error) return input;
+		return produce(input, (draft) => {
+			if (draft.id === target.id) draft.stats.reactions = data;
+			if (draft.boostedFrom?.id === target.id)
+				draft.boostedFrom.stats.reactions = data;
+		});
+	}
+
+	async addReaction(
+		input: AppPostObject,
+		reactionCode: string,
+	): Promise<AppPostObject> {
+		const target = PostMiddleware.getContentTarget(input);
+		try {
+			/**
+			 * Response looks like this
+			 *
+			 * [{"accounts": [], "count": 1, "id": ":ablobbongo_lr@.:", "me": true, "url": null}]
+			 */
+			const nextState = await ActivityPubReactionsService.addReaction(
+				this.client,
+				target.id,
+				reactionCode,
+				this.driver,
+				() => {},
+			);
+			return this.applyReactionData(input, nextState);
+		} catch (e) {
+			return input;
+		}
+	}
+
+	async removeReaction(
+		input: AppPostObject,
+		reactionCode: string,
+	): Promise<AppPostObject> {
+		const target = PostMiddleware.getContentTarget(input);
+		try {
+			/**
+			 * Response looks like this
+			 *
+			 * [{"accounts": [], "count": 1, "id": ":ablobbongo_lr@.:", "me": true, "url": null}]
+			 */
+			const nextState = await ActivityPubReactionsService.removeReaction(
+				this.client,
+				target.id,
+				reactionCode,
+				this.driver,
+				(ok: boolean) => {},
+			);
+			return this.applyReactionData(input, nextState);
+		} catch (e) {
+			return input;
+		}
 	}
 }

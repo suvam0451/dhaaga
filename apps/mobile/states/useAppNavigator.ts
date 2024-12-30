@@ -1,5 +1,5 @@
 import { router, useNavigation } from 'expo-router';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
 

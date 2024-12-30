@@ -8,7 +8,7 @@ import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppThemingUtil,
 } from '../../../utils/theming.util';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/shared-abstraction-activitypub';
+import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 type Props = {

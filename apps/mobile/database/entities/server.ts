@@ -1,9 +1,6 @@
 import { KnownServer } from '../_schema';
 import { DbErrorHandler } from './_base.repo';
-import {
-	KNOWN_SOFTWARE,
-	UnknownRestClient,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE, UnknownRestClient } from '@dhaaga/bridge';
 import { DataSource } from '../dataSource';
 import { RandomUtil } from '../../utils/random.utils';
 

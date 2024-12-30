@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import ProfileModuleFactory from './ProfileModuleFactory';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { View, Text } from 'react-native';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';

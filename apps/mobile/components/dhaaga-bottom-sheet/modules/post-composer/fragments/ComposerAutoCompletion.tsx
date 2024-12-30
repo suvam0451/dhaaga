@@ -11,10 +11,7 @@ import { useComposerContext } from '../api/useComposerContext';
 import usePostComposeAutoCompletion from '../api/usePostComposeAutoCompletion';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import {
-	InstanceApi_CustomEmojiDTO,
-	UserInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { InstanceApi_CustomEmojiDTO, UserInterface } from '@dhaaga/bridge';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,

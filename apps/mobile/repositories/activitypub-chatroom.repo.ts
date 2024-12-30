@@ -1,4 +1,4 @@
-import { UserInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { UserInterface } from '@dhaaga/bridge';
 import { ActivityPubChatRoom } from '../entities/activitypub-chatroom.entity';
 import { ActivityPubUserRepository } from './activitypub-user.repo';
 import { ActivityPubConversation } from '../entities/activitypub-conversation.entity';

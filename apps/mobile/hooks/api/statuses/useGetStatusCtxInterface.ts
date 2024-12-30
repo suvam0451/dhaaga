@@ -1,10 +1,7 @@
 import useGetPostInterface from './useGetPostInterface';
 import { useEffect, useReducer } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import {
-	KNOWN_SOFTWARE,
-	StatusInterface,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
 import statusContextReducer, {
 	defaultAppStatusContext,
 	STATUS_CONTEXT_REDUCER_ACTION,

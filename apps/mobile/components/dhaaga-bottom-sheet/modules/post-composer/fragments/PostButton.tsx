@@ -4,7 +4,7 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
-import { KNOWN_SOFTWARE } from '@dhaaga/shared-abstraction-activitypub';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
 import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import ActivityPubService from '../../../../../services/activitypub.service';
@@ -146,18 +146,14 @@ const PostButton = memo(() => {
 				setCtx({ uuid: _data.uuid });
 				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 			} else {
-				try {
-					// PostRef.current = new PostMiddleware(
-					// 	ActivityPubAdapterService.adaptStatus(
-					// 		(data as any).createdNote,
-					// 		driver,
-					// 	),
-					// 	driver,
-					// 	acct?.server,
-					// ).export();
-				} catch (e) {
-					console.log(e);
-				}
+				const _data = PostMiddleware.deserialize<unknown>(
+					(data as any).createdNote,
+					driver,
+					acct?.server,
+				);
+				postPub.writeCache(_data.uuid, _data);
+				setCtx({ uuid: _data.uuid });
+				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 			}
 		} catch (e) {
 		} finally {

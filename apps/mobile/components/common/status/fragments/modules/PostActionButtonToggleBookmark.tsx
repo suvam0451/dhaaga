@@ -1,15 +1,8 @@
 import {
 	useAppBottomSheet_Improved,
-	useAppBottomSheet_TimelineReference,
-	useAppManager,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
-import {
-	useTimelineDispatch,
-	useTimelineManager,
-	useTimelineState,
-} from '../../../timeline/core/Timeline';
 import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
 import { AppToggleIcon } from '../../../../lib/Icon';
 import { appDimensions } from '../../../../../styles/dimensions';
@@ -18,23 +11,13 @@ import { appDimensions } from '../../../../../styles/dimensions';
  * Bookmark toggle indicator button
  */
 function PostActionButtonToggleBookmark() {
-	const { appManager } = useAppManager();
 	const { dto } = useAppStatusItem();
 	const { theme } = useAppTheme();
-	const { show } = useAppBottomSheet_Improved();
-	const { attach } = useAppBottomSheet_TimelineReference();
-
-	// Timeline Manager
-	const TimelineState = useTimelineState();
-	const TimelineDispatch = useTimelineDispatch();
-	const TimelineManager = useTimelineManager();
+	const { show, setCtx } = useAppBottomSheet_Improved();
 
 	// helper functions
 	function _toggleBookmark() {
-		if (TimelineManager.current) {
-			attach(TimelineState, TimelineDispatch, TimelineManager.current);
-			appManager.storage.setPostObject(dto);
-		}
+		setCtx({ uuid: dto?.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK, true);
 	}
 

@@ -5,10 +5,7 @@ import { Button } from '@rneui/base';
 import TitleOnlyNoScrollContainer from '../../../../../containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
-import {
-	UnknownRestClient,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/shared-abstraction-activitypub';
+import { UnknownRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import PleromaPasteToken from '../fragments/PleromaPasteToken';
 import { AccountService } from '../../../../../../database/entities/account';
 import useGlobalState from '../../../../../../states/_global';
@@ -16,9 +13,14 @@ import { useShallow } from 'zustand/react/shallow';
 import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
 import { APP_EVENT_ENUM } from '../../../../../../services/publishers/app.publisher';
-import { useAppPublishers } from '../../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppPublishers,
+	useAppTheme,
+} from '../../../../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
 
 function MastodonSignInStack() {
+	const { theme } = useAppTheme();
 	const { appSub } = useAppPublishers();
 	const { db } = useGlobalState(
 		useShallow((o) => ({
@@ -117,38 +119,58 @@ function MastodonSignInStack() {
 					/>
 				</ScrollView>
 				{_domain === KNOWN_SOFTWARE.MASTODON ? (
-					<HideOnKeyboardVisibleContainer style={{ marginHorizontal: 12 }}>
+					<HideOnKeyboardVisibleContainer
+						style={{ marginHorizontal: 12, marginTop: 'auto', height: 'auto' }}
+					>
 						<View style={{ height: 240 }}>
-							<Text style={{ marginBottom: 12, marginTop: 16 }}>
-								Step 3: Confirm your account
+							<Text
+								style={{
+									marginVertical: 20,
+									color: theme.secondary.a10,
+									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+									textAlign: 'center',
+									fontSize: 16,
+								}}
+							>
+								Login and Confirm your account
 							</Text>
-							<PleromaPasteToken domain={_domain} setCode={setCode} />
-							{Code ? (
+							{Code && (
 								<View>
-									<Text style={{ marginBottom: 12 }}>
+									<Text
+										style={{
+											marginBottom: 12,
+											color: theme.secondary.a30,
+											fontFamily: APP_FONTS.INTER_500_MEDIUM,
+										}}
+									>
 										A valid token was detected. Proceed with adding the account
 										shown above?
 									</Text>
 								</View>
-							) : (
-								<View></View>
 							)}
 
 							<Button
 								disabled={!Code}
-								color={'rgb(99, 100, 255)'}
+								color={theme.primary.a0}
 								onPress={onPressConfirm}
 							>
-								Proceed
+								<Text
+									style={{
+										color: 'black',
+										fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+										paddingVertical: 4,
+										fontSize: 16,
+									}}
+								>
+									Proceed
+								</Text>
 							</Button>
 						</View>
 					</HideOnKeyboardVisibleContainer>
 				) : (
 					<View style={{ marginHorizontal: 12 }}>
-						<View style={{ marginBottom: 54, paddingBottom: 16 }}>
-							<HideOnKeyboardVisibleContainer
-								style={{ marginBottom: 12, marginTop: 16 }}
-							>
+						<View style={{ marginBottom: 36, paddingBottom: 16 }}>
+							<HideOnKeyboardVisibleContainer style={{ marginVertical: 16 }}>
 								<Text>Step 3: Confirm your account</Text>
 							</HideOnKeyboardVisibleContainer>
 							<PleromaPasteToken domain={_domain} setCode={setCode} />
@@ -163,7 +185,7 @@ function MastodonSignInStack() {
 								<View></View>
 							)}
 
-							<HideOnKeyboardVisibleContainer style={{ marginTop: 24 }}>
+							<HideOnKeyboardVisibleContainer>
 								<Button
 									disabled={!Code}
 									color={'rgb(99, 100, 255)'}

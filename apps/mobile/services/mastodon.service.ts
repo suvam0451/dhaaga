@@ -1,4 +1,4 @@
-import { StatusInterface } from '@dhaaga/shared-abstraction-activitypub';
+import { StatusInterface } from '@dhaaga/bridge';
 
 class MastodonService {
 	/**
