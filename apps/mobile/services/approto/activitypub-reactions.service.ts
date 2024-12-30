@@ -55,10 +55,8 @@ class ActivityPubReactionsService {
 
 	/**
 	 * It is only possible to view remote reactions
-	 *
-	 *
 	 */
-	static canReact(id: string) {
+	static cannotReact(id: string) {
 		if (!id) return false;
 		return (
 			(MISSKEY_REMOTE_EX.test(id) || PLEROMA_REMOTE_EX.test(id)) &&

@@ -3,6 +3,10 @@ import useReactionDimension from '../hooks/useReactionDimension';
 import { Image } from 'expo-image';
 import { View } from 'react-native';
 
+/**
+ * @deprecated use the service function
+ * which is better and uses expo-image
+ */
 const EmojiReactionImage = memo(function Foo({
 	url,
 	height,

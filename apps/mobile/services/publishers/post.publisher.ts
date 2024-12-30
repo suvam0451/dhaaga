@@ -4,6 +4,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import { PostMutatorService } from '../post-mutator.service';
 import { Emoji } from '../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
+import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
 
 export enum POST_EVENT_ENUM {
 	UPDATE = 'postObjectChanged',
@@ -108,7 +109,22 @@ export class PostPublisherService extends BasePubSubService {
 		const data = this.cache.get(uuid);
 		if (!data) return;
 		if (loader) loader(true);
-		const next = await this.mutator.addReaction(data, reaction);
+		const next = await this.mutator.addReaction(data, reaction.shortCode);
+		this.cache.set(next.uuid, next);
+		this.publish(next.uuid);
+		if (loader) loader(false);
+	}
+
+	async toggleReaction(
+		uuid: string,
+		reaction: EmojiDto,
+		loader?: (flag: boolean) => void,
+	) {
+		const data = this.cache.get(uuid);
+		if (!data) return;
+		const next = reaction.me
+			? await this.mutator.removeReaction(data, reaction.name)
+			: await this.mutator.addReaction(data, reaction.name);
 		this.cache.set(next.uuid, next);
 		this.publish(next.uuid);
 		if (loader) loader(false);

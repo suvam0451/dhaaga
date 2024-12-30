@@ -1,19 +1,26 @@
 import { EmojiDto, styles } from './_shared.types';
 import { memo, useMemo, useState } from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import {
+	TouchableOpacity,
+	View,
+	Text,
+	StyleSheet,
+	Pressable,
+} from 'react-native';
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
-import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../timeline/api/postArrayReducer';
-import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { AppPostObject } from '../../../../types/app-post.types';
+import {
+	useAppPublishers,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
+import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import { Loader } from '../../../lib/Loader';
 
 const EmojiReaction = memo(function Foo({
 	dto,
@@ -22,14 +29,7 @@ const EmojiReaction = memo(function Foo({
 	dto: EmojiDto;
 	postDto: AppPostObject;
 }) {
-	const { driver, acct, client, show } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			client: o.router,
-			acct: o.acct,
-			show: o.bottomSheet.show,
-		})),
-	);
+	const { dto: postItem } = useAppStatusItem();
 
 	const {
 		TextRef,
@@ -39,14 +39,12 @@ const EmojiReaction = memo(function Foo({
 		timelineDataPostListReducer,
 		updateRequestId: updateBottomSheetRequestId,
 	} = useAppBottomSheet();
+
 	const { getPostListReducer } = useAppTimelinePosts();
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
+	const { postPub } = useAppPublishers();
 
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
@@ -56,7 +54,7 @@ const EmojiReaction = memo(function Foo({
 					{
 						backgroundColor: theme.reactions.active,
 						borderWidth: 2,
-						borderColor: theme.reactions.highlight,
+						borderColor: theme.primary.a0,
 					},
 				];
 			} else {
@@ -73,54 +71,20 @@ const EmojiReaction = memo(function Foo({
 	}, [dto.interactable, dto.me, theme]);
 
 	async function onReactionPress() {
-		// const isQuickReactionEnabled =
-		// 	AppSettingsPreferencesService.create(db).isQuickReactionEnabled();
-		// FIXME: make this dynamic
-		if (true) {
-			const IS_REMOTE = ActivitypubReactionsService.canReact(dto?.name);
-			if (!IS_REMOTE) {
-				const { id } = ActivitypubReactionsService.extractReactionCode(
-					TextRef.current,
-					driver,
-					acct?.server,
-				);
-
-				const state = dto.me
-					? await ActivityPubReactionsService.removeReaction(
-							client,
-							postDto.id,
-							id,
-							driver,
-							setEmojiStateLoading,
-						)
-					: await ActivityPubReactionsService.addReaction(
-							client,
-							postDto.id,
-							dto.name,
-							driver,
-							setEmojiStateLoading,
-						);
-				if (state !== null) {
-					getPostListReducer()({
-						type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE,
-						payload: {
-							id: postDto.id,
-							state,
-						},
-					});
-				}
-			}
-		} else {
-			TextRef.current = dto.name;
-			PostRef.current = postDto;
-			timelineDataPostListReducer.current = getPostListReducer();
-			setType(APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS);
-			updateBottomSheetRequestId();
-			setVisible(true);
+		// nothing to do on short press for remote emojis
+		if (ActivitypubReactionsService.cannotReact(dto?.name)) {
+			console.log('cannot react???');
+			return;
 		}
+		await postPub.toggleReaction(postItem.uuid, dto, setEmojiStateLoading);
+
+		// FIXME: bring back quick reaction settings
 	}
 
 	function onReactionLongPress() {
+		return;
+
+		// FIXME: bring back reaction preview (users who reacted)
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 		TextRef.current = dto.name;
 		PostRef.current = postDto;
@@ -130,12 +94,14 @@ const EmojiReaction = memo(function Foo({
 		setVisible(true);
 	}
 
+	if (EmojiStateLoading) return <Loader />;
 	if (dto.type === 'text') {
 		return (
 			<TouchableOpacity style={CONTAINER_STYLE} onPress={onReactionPress}>
 				<Text
 					style={{
 						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+						// unicode emojis detected
 						color:
 							dto.name.length < 3 ? theme.secondary.a10 : theme.secondary.a30,
 						fontSize: 14,
@@ -146,7 +112,7 @@ const EmojiReaction = memo(function Foo({
 				<Text
 					style={{
 						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-						color: theme.secondary.a30,
+						color: theme.secondary.a10,
 						marginLeft: 8,
 					}}
 				>
@@ -158,36 +124,26 @@ const EmojiReaction = memo(function Foo({
 
 	if (dto.type === 'image') {
 		return (
-			<TouchableOpacity
-				style={CONTAINER_STYLE}
+			<Pressable
+				style={[localStyles.imageReactionContainer, CONTAINER_STYLE]}
 				onPress={onReactionPress}
 				onLongPress={onReactionLongPress}
 			>
-				<View
+				<EmojiReactionImage
+					url={dto.url}
+					height={dto.height}
+					width={dto.width}
+				/>
+				<Text
 					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						marginRight: 8,
+						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+						color: theme.secondary.a10,
+						marginLeft: 8,
 					}}
 				>
-					<EmojiReactionImage
-						url={dto.url}
-						height={dto.height}
-						width={dto.width}
-					/>
-					<View>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: APP_FONT.MONTSERRAT_BODY,
-								marginLeft: 8,
-							}}
-						>
-							{dto.count}
-						</Text>
-					</View>
-				</View>
-			</TouchableOpacity>
+					{dto.count}
+				</Text>
+			</Pressable>
 		);
 	}
 
@@ -195,3 +151,11 @@ const EmojiReaction = memo(function Foo({
 });
 
 export default EmojiReaction;
+
+const localStyles = StyleSheet.create({
+	imageReactionContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginRight: 8,
+	},
+});

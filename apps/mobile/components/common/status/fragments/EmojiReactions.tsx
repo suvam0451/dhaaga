@@ -9,6 +9,10 @@ import { useShallow } from 'zustand/react/shallow';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { appDimensions } from '../../../../styles/dimensions';
 import { AppPostObject } from '../../../../types/app-post.types';
+import {
+	useAppApiClient,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
@@ -19,11 +23,11 @@ type EmojiReactionsProps = {
 const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);
+	const { theme } = useAppTheme();
+	const { driver } = useAppApiClient();
 
-	const { driver, theme, acctManager } = useGlobalState(
+	const { acctManager } = useGlobalState(
 		useShallow((o) => ({
-			driver: o.driver,
-			theme: o.colorScheme,
 			acctManager: o.acctManager,
 		})),
 	);
@@ -41,6 +45,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 		);
 	}, [dto.stats.reactions, dto.calculated.reactionEmojis, acctManager]);
 
+	// mastodon does not support emojis
 	if (driver === KNOWN_SOFTWARE.MASTODON) return <Fragment />;
 
 	const ShownEmojis = AllEmojisExpanded
@@ -50,15 +55,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	if (ShownEmojis.length === 0) return <View />;
 
 	return (
-		<View
-			style={{
-				flexDirection: 'row',
-				flexWrap: 'wrap',
-				marginBottom: appDimensions.timelines.sectionBottomMargin,
-				// extra spacing, since it needs to accept touch
-				marginTop: 6,
-			}}
-		>
+		<View style={styles.emojiSectionContainer}>
 			{ShownEmojis.map((o, i) => (
 				<EmojiReaction key={i} dto={o} postDto={dto} />
 			))}
@@ -104,6 +101,13 @@ const styles = StyleSheet.create({
 	showAllEmojiButtonText: {
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+	},
+	emojiSectionContainer: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		marginBottom: appDimensions.timelines.sectionBottomMargin,
+		// extra spacing, since it needs to accept touch
+		marginTop: 6,
 	},
 });
 
