@@ -127,23 +127,34 @@ function useApiGetMentionUpdates() {
 			const _data = results.data;
 			const acctList = _data.data.accounts;
 			const postList = _data.data.statuses;
-			const _retval = _data.data.notificationGroups.map(
-				(o: MastoGroupedNotificationType) => {
-					const _acct = acctList.find((x) => x.id === o.sampleAccountIds[0]);
-					const _post = postList.find((x) => x.id === o.statusId);
+			const _retval = _data.data.notificationGroups
+				.map((o: MastoGroupedNotificationType) => {
+					const _acct = UserMiddleware.deserialize<unknown>(
+						acctList.find((x) => x.id === o.sampleAccountIds[0]),
+						driver,
+						server,
+					);
+					const _post = PostMiddleware.deserialize<unknown>(
+						postList.find((x) => x.id === o.statusId),
+						driver,
+						server,
+					);
 
+					// bring this back when chat is implemented
+					// if (o.type === 'mention' && _post.visibility === 'direct')
+					// 	return null;
 					const _obj: AppNotificationObject = {
 						id: o.groupKey,
 						type: o.type,
-						post: PostMiddleware.deserialize<unknown>(_post, driver, server),
-						user: UserMiddleware.deserialize<unknown>(_acct, driver, server),
+						post: _post,
+						user: _acct,
 						read: false,
 						createdAt: new Date(o.mostRecentNotificationId),
 						extraData: {},
 					};
 					return _obj;
-				},
-			);
+				})
+				.filter((o) => !!o);
 
 			return {
 				data: _retval,

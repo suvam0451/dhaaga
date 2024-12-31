@@ -78,6 +78,8 @@ function Page() {
 					pageCount={4}
 					renderFunction={renderScene}
 					onPageChangeCallback={onChipSelect}
+					Index={Index}
+					setIndex={setIndex}
 				/>
 				<BottomNavBar
 					Index={Index}

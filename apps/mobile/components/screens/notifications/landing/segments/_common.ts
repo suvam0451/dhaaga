@@ -10,6 +10,7 @@ export type Props = {
 export const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: 10,
+		width: '100%',
 	},
 	notificationCategoryIconContainer: {
 		position: 'absolute',

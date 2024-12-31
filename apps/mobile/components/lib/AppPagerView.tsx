@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import PagerView from 'react-native-pager-view';
 import { StyleSheet, View } from 'react-native';
 
@@ -6,15 +6,18 @@ type AppPagerViewProps = {
 	onPageChangeCallback?: (index: number) => void;
 	pageCount: number;
 	renderFunction: (index: number) => any;
+	Index: number;
+	setIndex: (index: number) => void;
 };
 
 export function AppPagerView({
 	onPageChangeCallback,
 	pageCount,
 	renderFunction,
+	Index,
+	setIndex,
 }: AppPagerViewProps) {
 	const ref = useRef<PagerView>(null);
-	const [Index, setIndex] = useState(0);
 
 	function onPageScroll(e: any) {
 		const { offset, position } = e.nativeEvent;
