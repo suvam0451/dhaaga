@@ -1,14 +1,22 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import AppNotificationViewContainer from './_container';
 import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetSocialUpdates } from '../../../../../hooks/api/useNotifications';
 
 const SocialView = memo(() => {
-	const { data } = useApiGetSocialUpdates();
+	const [IsRefreshing, setIsRefreshing] = useState(false);
+	const { data, refetch } = useApiGetSocialUpdates();
+
+	function refresh() {
+		setIsRefreshing(true);
+		refetch().finally(() => {
+			setIsRefreshing(false);
+		});
+	}
 
 	return (
 		<AppNotificationViewContainer
-			data={[]}
+			data={data.data}
 			tabType={APP_LANDING_PAGE_TYPE.SOCIAL}
 			menuItems={[
 				{
@@ -18,7 +26,9 @@ const SocialView = memo(() => {
 					iconId: 'user-guide',
 				},
 			]}
-			tip={'These are updates from accounts you follow.'}
+			tip={'These people have liked, shared and reacted to your posts.'}
+			refreshing={IsRefreshing}
+			onRefresh={refresh}
 		/>
 	);
 });

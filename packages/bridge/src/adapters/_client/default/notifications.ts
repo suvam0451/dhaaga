@@ -1,4 +1,7 @@
-import { NotificationsRoute } from '../_router/routes/notifications.js';
+import {
+	NotificationGetQueryDto,
+	NotificationsRoute,
+} from '../_router/routes/notifications.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import { MastoNotification } from '../../../types/mastojs.types.js';
 import { LibraryResponse } from '../../../types/result.types.js';
@@ -23,6 +26,10 @@ export class DefaultNotificationsRouter implements NotificationsRoute {
 	}
 
 	async getMentions() {
+		return notImplementedErrorBuilder();
+	}
+
+	async getSocialUpdates(query: NotificationGetQueryDto) {
 		return notImplementedErrorBuilder();
 	}
 }

@@ -3,8 +3,8 @@ import { Props, styles } from './_common';
 import { View } from 'react-native';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { NotificationSenderInterface } from '../fragments/NotificationSender';
-import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
+import { AppDivider } from '../../../../lib/Divider';
 
 const FavouriteNotificationFragment = memo(function Foo({ item }: Props) {
 	const user = item.user;
@@ -17,12 +17,8 @@ const FavouriteNotificationFragment = memo(function Foo({ item }: Props) {
 				type={DhaagaJsNotificationType.FAVOURITE}
 				createdAt={item.createdAt}
 			/>
-			<NotificationDescriptionText
-				type={DhaagaJsNotificationType.FAVOURITE}
-				createdAt={item.createdAt}
-				id={item.id}
-			/>
 			<NotificationPostPeek acct={user} post={post} />
+			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 });

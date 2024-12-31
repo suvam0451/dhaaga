@@ -38,7 +38,7 @@ function SigninBsky() {
 			);
 
 			if (success) {
-				router.replace(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
+				router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 			} else {
 				console.log(reason);
 			}

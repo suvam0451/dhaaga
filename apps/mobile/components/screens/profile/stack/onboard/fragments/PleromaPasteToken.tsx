@@ -22,7 +22,7 @@ const PleromaPasteToken = memo(
 			return <View />;
 
 		return (
-			<View>
+			<View style={{ paddingVertical: 16 }}>
 				<TextInput
 					multiline={false}
 					placeholder={'Paste Pleroma/Akkoma token here'}

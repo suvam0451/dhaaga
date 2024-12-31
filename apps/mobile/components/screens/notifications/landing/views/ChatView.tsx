@@ -18,7 +18,9 @@ const ChatView = memo(() => {
 				},
 			]}
 			tabType={APP_LANDING_PAGE_TYPE.CHAT}
-			tip={'Chat has not been implemented in Dhaaga yet.'}
+			tip={
+				'Not implemented yet.\n\nNotifications are shared with Mention tab for now!'
+			}
 			onRefresh={refetch}
 		/>
 	);

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import PagerView from 'react-native-pager-view';
 import { StyleSheet, View } from 'react-native';
 
@@ -14,12 +14,9 @@ export function AppPagerView({
 	renderFunction,
 }: AppPagerViewProps) {
 	const ref = useRef<PagerView>(null);
-	const [Index, setIndex] = useState(0);
-
 	function onPageScroll(e: any) {
 		const { offset, position } = e.nativeEvent;
 		const nextIdx = Math.round(position + offset);
-		setIndex(nextIdx);
 		if (onPageChangeCallback) onPageChangeCallback(nextIdx);
 	}
 
@@ -28,7 +25,7 @@ export function AppPagerView({
 			ref={ref}
 			scrollEnabled={true}
 			style={styles.pagerView}
-			initialPage={Index}
+			initialPage={0}
 			onPageScroll={onPageScroll}
 		>
 			{Array.from({ length: pageCount }).map((_, index) => (

@@ -25,6 +25,10 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 	async getMentions() {
 		return notImplementedErrorBuilder();
 	}
+
+	async getSocialUpdates(query: NotificationGetQueryDto) {
+		return notImplementedErrorBuilder();
+	}
 }
 
 export default BlueskyNotificationsRouter;

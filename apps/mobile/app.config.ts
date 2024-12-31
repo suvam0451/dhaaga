@@ -43,6 +43,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	newArchEnabled: true,
 	plugins: [
+		'expo-sqlite',
 		[
 			'expo-build-properties',
 			{

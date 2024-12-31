@@ -125,11 +125,16 @@ class Storage extends BaseStorageManager {
 	 */
 
 	getAtprotoServerClientTokens(server: string) {
-		return this.getJson<AppAtprotoServerClientTokenType>(
+		// Get the current date and time
+		const sixHoursBefore = new Date();
+		sixHoursBefore.setHours(sixHoursBefore.getHours() - 6);
+
+		return this.getJsonWithExpiry<AppAtprotoServerClientTokenType>(
 			APP_CACHE_KEY.SERVER_CLIENT_TOKEN_TARGET.toString().replace(
-				'{:server}',
+				':server',
 				server,
 			),
+			sixHoursBefore,
 		);
 	}
 
@@ -138,9 +143,9 @@ class Storage extends BaseStorageManager {
 		clientId: string,
 		clientSecret: string,
 	) {
-		this.setJson(
+		this.setJsonWithExpiry(
 			APP_CACHE_KEY.SERVER_CLIENT_TOKEN_TARGET.toString().replace(
-				'{:server}',
+				':server',
 				server,
 			),
 			{

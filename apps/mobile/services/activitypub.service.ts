@@ -279,11 +279,12 @@ class ActivityPubService {
 	 * @param mngr
 	 */
 	static async signInUrl(urlLike: string, mngr: AppSessionManager) {
+		console.log(urlLike);
 		const tokens = mngr.storage.getAtprotoServerClientTokens(urlLike);
 
 		const client = new UnknownRestClient();
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {
-			appCallback: 'https://example.com/',
+			appCallback: 'https://suvam.io/dhaaga',
 			appName: 'Dhaaga',
 			appClientId: tokens?.clientId,
 			appClientSecret: tokens?.clientSecret,

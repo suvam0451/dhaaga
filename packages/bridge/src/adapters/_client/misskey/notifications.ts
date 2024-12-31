@@ -65,4 +65,12 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		});
 		return { data: { data: data as any } };
 	}
+
+	async getSocialUpdates(query: NotificationGetQueryDto) {
+		const data = await this.client.client.request<
+			'i/notifications-grouped',
+			Endpoints['i/notifications-grouped']['req']
+		>('i/notifications-grouped', query as any);
+		return { data: { data: data as any } };
+	}
 }

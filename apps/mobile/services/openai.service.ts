@@ -1,25 +1,12 @@
-import OpenAI from 'openai';
+import { HfInference } from '@huggingface/inference';
 
-export class OpenAiService {
-	static async explain(input: string) {
-		if (
-			!process.env.EXPO_PUBLIC_OPENAI_API_KEY ||
-			process.env.EXPO_PUBLIC_OPENAI_API_KEY === ''
-		) {
-			return (
-				'The lite edition of Dhaaga does not support AI features.' +
-				" Single tap the translation button to use your instance's" +
-				' translation, instead (WIP).'
-			);
-		}
+export class HuggingFaceService {
+	private static async _infer(input: string, token: string) {
+		const client = new HfInference(token);
+
 		try {
-			const client = new OpenAI({
-				apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY,
-				dangerouslyAllowBrowser: true,
-			});
-
-			const response = await client.chat.completions.create({
-				model: 'gpt-3.5-turbo',
+			const chatCompletion = await client.chatCompletion({
+				model: 'meta-llama/Llama-2-7b-chat-hf',
 				messages: [
 					{
 						role: 'system',
@@ -31,14 +18,24 @@ export class OpenAiService {
 						role: 'user',
 						content: input,
 					},
+
+					{
+						role: 'user',
+						content: 'What is the capital of France?',
+					},
 				],
+				max_tokens: 500,
 			});
-			for (let i = 0; i < response?.choices.length; i++) {
-				console.log(response?.choices[i].message);
-			}
-			return response?.choices[0].message.content;
+			console.log(chatCompletion.choices[0].message);
 		} catch (e) {
-			console.log('error', e);
+			return null;
 		}
+	}
+	static async inferServerless(input: string): Promise<string | null> {
+		return this._infer(input, 'N/A');
+	}
+
+	static async inferDedicated(input: string): Promise<string | null> {
+		return this._infer(input, 'N/A');
 	}
 }

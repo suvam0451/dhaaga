@@ -4,6 +4,7 @@ import { MastoNotification } from '../../../../types/mastojs.types.js';
 import { MegaNotification } from '../../../../types/megalodon.types.js';
 
 export enum DhaagaJsNotificationType {
+	CHAT = 'chat', // direct
 	/**
 	 * Someone mentioned you in their status
 	 */
@@ -88,6 +89,7 @@ export interface NotificationsRoute {
 
 	getMentions(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
 	getChats(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
+	getSocialUpdates(query: NotificationGetQueryDto): LibraryPromise<any>;
 
 	// e,g. of how to get new notifs
 	// https://blob.cat/api/v1/notifications?since_id=2455610&with_muted=true&limit=20

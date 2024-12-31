@@ -22,6 +22,7 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { LocalizationService } from '../../../../../services/localization.service';
+import useMfm from '../../../../hooks/useMfm';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -49,6 +50,14 @@ export const NotificationSender = memo(
 		createdAt,
 	}: Props) => {
 		const { theme } = useAppTheme();
+
+		// const { content: _displayName } = useMfm({
+		// 	content: displayName,
+		// 	remoteSubdomain,
+		// 	emojiMap: new Map(),
+		// 	deps: [displayName],
+		// 	fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		// });
 
 		const { find } = useAppCustomEmoji();
 		const { Icon, bg } = useMemo(() => {
@@ -185,7 +194,7 @@ export const NotificationSender = memo(
 		}, [type, extraData]);
 
 		return (
-			<View style={{ flexDirection: 'row' }}>
+			<View style={{ flexDirection: 'row', flex: 1 }}>
 				<View style={styles.senderAvatarContainer}>
 					{/*@ts-ignore-next-line*/}
 					<Image
@@ -204,15 +213,23 @@ export const NotificationSender = memo(
 					</View>
 				</View>
 				<View style={{ marginLeft: 12, flexGrow: 1 }}>
-					<Text
+					<View
 						style={{
-							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-							color: theme.secondary.a10,
+							// maxWidth: '75%',
+							overflow: 'hidden',
 						}}
-						numberOfLines={1}
 					>
-						{displayName}
-					</Text>
+						<Text
+							style={{
+								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+								color: theme.secondary.a10,
+								maxWidth: '75%',
+							}}
+							numberOfLines={1}
+						>
+							{displayName}
+						</Text>
+					</View>
 
 					<View
 						style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}
@@ -286,7 +303,10 @@ export const NotificationSenderInterface = memo(
 		return (
 			<Pressable
 				onPress={onPress}
-				style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
+				style={{
+					marginBottom: appDimensions.timelines.sectionBottomMargin,
+					flex: 1,
+				}}
 			>
 				<NotificationSender
 					id={id}

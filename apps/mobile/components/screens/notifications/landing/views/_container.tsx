@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 	tipText: {
 		fontSize: 14,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-		textAlign: 'left',
+		textAlign: 'center',
 		marginHorizontal: 10,
 		marginBottom: 16,
 	},
