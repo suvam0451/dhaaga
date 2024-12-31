@@ -41,7 +41,7 @@ export function DriverSelectionFragment() {
 		to: string;
 	}[] = [
 		{
-			label: 'Bluesky',
+			label: 'Bluesky (⛔, 🚧)',
 			padding: 0,
 			rightComponent: (
 				<SoftwareHeader

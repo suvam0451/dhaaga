@@ -59,7 +59,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		return { data: _data };
 	}
 
-	async getMentions(driver: KNOWN_SOFTWARE): Promise<
+	async getMentions(): Promise<
 		LibraryResponse<{
 			data: MastoGroupedNotificationsResults;
 			minId?: string | null;
@@ -69,8 +69,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		const { data: _data, error } =
 			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
 				'/api/v2/notifications' +
-					'?grouped_types[]=favourite&grouped_types[]=reblog' +
-					'&grouped_types[]=follow&exclude_types[]=follow' +
+					'?exclude_types[]=follow' +
 					'&exclude_types[]=follow_request&exclude_types[]=favourite' +
 					'&exclude_types[]=reblog&exclude_types[]=poll' +
 					'&exclude_types[]=status&exclude_types[]=update' +
@@ -79,9 +78,24 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 					'&exclude_types[]=severed_relationships' +
 					'&exclude_types[]=annual_report',
 			);
-		if (error) {
-			return errorBuilder();
-		}
+		if (error) return errorBuilder();
+		return { data: _data };
+	}
+
+	async getSocialUpdates(query: NotificationGetQueryDto) {
+		const { data: _data, error } =
+			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
+				'/api/v2/notifications' +
+					'?grouped_types[]=favourite&grouped_types[]=reblog' +
+					'&grouped_types[]=follow&exclude_types[]=follow_request' +
+					'&exclude_types[]=poll' +
+					'&exclude_types[]=status&exclude_types[]=update' +
+					'&exclude_types[]=admin.sign_up&exclude_types[]=admin.report' +
+					'&exclude_types[]=moderation_warning' +
+					'&exclude_types[]=severed_relationships' +
+					'&exclude_types[]=annual_report&exclude_types[]=mention',
+			);
+		if (error) return errorBuilder();
 		return { data: _data };
 	}
 

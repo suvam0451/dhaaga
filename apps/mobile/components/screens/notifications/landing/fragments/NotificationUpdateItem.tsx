@@ -4,6 +4,7 @@ import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { View } from 'react-native';
 import { styles } from '../segments/_common';
 import { AppUserObject } from '../../../../../types/app-user.types';
+import { AppDivider } from '../../../../lib/Divider';
 
 type NotificationUpdateItemProps = {
 	acct: AppUserObject;
@@ -19,6 +20,7 @@ const NotificationUpdateItem = memo(
 					type={type}
 					createdAt={createdAt}
 				/>
+				<AppDivider.Soft style={{ marginVertical: 12 }} />
 			</View>
 		);
 	},

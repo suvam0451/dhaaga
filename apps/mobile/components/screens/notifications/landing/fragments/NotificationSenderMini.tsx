@@ -20,6 +20,7 @@ import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { AppUserObject } from '../../../../../types/app-user.types';
 import { LocalizationService } from '../../../../../services/localization.service';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { NotificationSender } from './NotificationSender';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -302,7 +303,7 @@ export const NotificationSenderMiniInterface = memo(
 
 		return (
 			<TouchableOpacity onPress={onPress}>
-				<NotificationSenderMini
+				<NotificationSender
 					id={id}
 					type={type}
 					handle={handle}

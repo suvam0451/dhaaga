@@ -88,10 +88,11 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 				excludeTypes: [],
 				types: include,
 			});
+
 			if (error) throw new Error(error.message);
 			return {
 				data: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
-					data.data.filter((o) => ['login'].includes(o.type)),
+					data.data,
 					driver,
 					acct?.server,
 				),
@@ -221,7 +222,6 @@ function useApiGetChatUpdates() {
 			case KNOWN_SOFTWARE.SHARKEY: {
 				const chatResult = await client.notifications.getChats(driver);
 				if (chatResult.error) {
-					console.log(chatResult);
 					return null;
 				} else {
 					return chatResult.data;
@@ -257,7 +257,112 @@ function useApiGetChatUpdates() {
 }
 
 function useApiGetSocialUpdates() {
-	const { appendNotifs } = useAppNotifSeenContext();
+	const { acct } = useAppAcct();
+	const { driver, client, server } = useAppApiClient();
+
+	async function api(): Promise<HookResultType> {
+		const results = await client.notifications.getSocialUpdates({
+			limit: 40,
+			excludeTypes: [],
+			types: [],
+		});
+		if (results.error) {
+			throw new Error(results.error.message);
+		} else {
+			const _data = results.data;
+			if (ActivityPubService.misskeyLike(driver)) {
+				return {
+					data: _data.data.map((o: any) => {
+						const _acct = UserMiddleware.deserialize<unknown>(
+							o.user,
+							driver,
+							server,
+						);
+						const _post = PostMiddleware.deserialize<unknown>(
+							o,
+							driver,
+							server,
+						);
+						const _obj: AppNotificationObject = {
+							id: RandomUtil.nanoId(),
+							type: _post.visibility === 'specified' ? 'chat' : 'mention',
+							post: _post,
+							user: _acct,
+							read: false,
+							createdAt: new Date(_post.createdAt),
+							extraData: {},
+						};
+						return _obj;
+					}),
+					minId: null,
+					maxId: null,
+				};
+			}
+
+			const acctList = _data.data.accounts;
+			const postList = _data.data.statuses;
+			const _retval = _data.data.notificationGroups
+				.map((o: MastoGroupedNotificationType) => {
+					const _acct = UserMiddleware.deserialize<unknown>(
+						acctList.find((x) => x.id === o.sampleAccountIds[0]),
+						driver,
+						server,
+					);
+					const _post = PostMiddleware.deserialize<unknown>(
+						postList.find((x) => x.id === o.statusId),
+						driver,
+						server,
+					);
+
+					// bring this back when chat is implemented
+					// if (o.type === 'mention' && _post.visibility === 'direct')
+					// 	return null;
+					const _obj: AppNotificationObject = {
+						id: o.groupKey,
+						type: o.type,
+						post: _post,
+						user: _acct,
+						read: false,
+						createdAt: new Date(o.mostRecentNotificationId),
+						extraData: {},
+					};
+					return _obj;
+				})
+				.filter((o) => !!o)
+				.filter((o) => !['mention'].includes(o.type));
+
+			return {
+				data: _retval,
+				maxId: _data.maxId,
+				minId: _data.minId,
+			};
+		}
+	}
+
+	// const { driver } = useAppApiClient();
+	// const { data } = useApiGetNotifications({
+	// 	include: ActivityPubService.mastodonLike(driver)
+	// 		? [
+	// 				// Mastodon
+	// 				DhaagaJsNotificationType.FAVOURITE,
+	// 				DhaagaJsNotificationType.POLL_ENDED,
+	// 				DhaagaJsNotificationType.POLL_NOTIFICATION,
+	// 				DhaagaJsNotificationType.POLL_VOTE,
+	// 				DhaagaJsNotificationType.REBLOG,
+	// 			]
+	// 		: [],
+	// });
+
+	// Queries
+	return useQuery<HookResultType>({
+		queryKey: ['notifications/social', acct],
+		queryFn: api,
+		enabled: client !== null,
+		initialData: defaultHookResult,
+	});
+}
+
+function useApiGetSubscriptionUpdates() {
 	const { data } = useApiGetNotifications({
 		include: [
 			// Mastodon
@@ -267,15 +372,18 @@ function useApiGetSocialUpdates() {
 		],
 	});
 
-	useEffect(() => {
-		appendNotifs(data.data.map((o) => o.id));
-	}, [data]);
-
-	return { data };
+	return {
+		data: {
+			data: data.data.filter((o) => ['note', 'renote'].includes(o.type)),
+			maxId: data.maxId,
+			minId: data.minId,
+		},
+	};
 }
 
 export {
 	useApiGetMentionUpdates,
 	useApiGetSocialUpdates,
 	useApiGetChatUpdates,
+	useApiGetSubscriptionUpdates,
 };

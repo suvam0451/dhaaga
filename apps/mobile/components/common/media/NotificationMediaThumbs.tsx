@@ -15,7 +15,9 @@ type ThumbItemProps = {
 function ThumbItem({ item, post, server }: ThumbItemProps) {
 	const Data = useImageAutoHeight(item, 100, 200);
 
-	const isMastodonLike = ActivityPubService.mastodonLike(server);
+	// too resource expensive
+	// const isMastodonLike = ActivityPubService.mastodonLike(server);
+
 	if (!Data.resolved) return <View />;
 	return (
 		<View style={{ marginRight: 8 }}>
@@ -32,7 +34,7 @@ function ThumbItem({ item, post, server }: ThumbItemProps) {
 					justifyContent: 'center',
 				}}
 				source={{
-					uri: isMastodonLike ? item.url : item.previewUrl,
+					uri: item.previewUrl,
 				}}
 				transition={{
 					effect: 'flip-from-right',
