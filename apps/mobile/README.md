@@ -154,6 +154,4 @@ tokens
 # This is your Mastodon client app token
 EXPO_PUBLIC_MASTODON_CLIENT_ID=
 EXPO_PUBLIC_MASTODON_CLIENT_SECRET=
-# This is used by translation service
-EXPO_PUBLIC_OPENAI_API_KEY=
 ```

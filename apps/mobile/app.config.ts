@@ -6,7 +6,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
 	slug: 'dhaaga',
-	version: '0.10.2',
+	version: '0.11.0',
 	orientation: 'portrait',
 	icon: './assets/placeholder_icon.png',
 	userInterfaceStyle: 'dark',
@@ -21,7 +21,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
-		versionCode: 14,
+		versionCode: 15,
 	},
 	androidStatusBar: {
 		barStyle: 'dark-content',
@@ -74,25 +74,17 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-font',
 			{
 				fonts: [
-					'../../node_modules/@expo-google-fonts/inter/Inter_100Thin.ttf',
-					'../../node_modules/@expo-google-fonts/inter/Inter_200ExtraLight.ttf',
-					'../../node_modules/@expo-google-fonts/inter/Inter_300Light.ttf',
+					// Inter
 					'../../node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_600SemiBold.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_700Bold.ttf',
-					'../../node_modules/@expo-google-fonts/inter/Inter_800ExtraBold.ttf',
-					'../../node_modules/@expo-google-fonts/inter/Inter_900Black.ttf',
 					// Montserrat
-					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_100Thin.ttf',
-					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_200ExtraLight.ttf',
-					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_300Light.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_400Regular.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_500Medium.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_600SemiBold.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_700Bold.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_800ExtraBold.ttf',
-					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_900Black.ttf',
 				],
 			},
 		],

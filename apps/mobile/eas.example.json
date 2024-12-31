@@ -6,8 +6,7 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "APP_VARIANT": "prod",
-        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+        "APP_VARIANT": "prod"
       }
     },
     "apk": {
@@ -16,8 +15,7 @@
         "buildType": "apk"
       },
       "env": {
-        "APP_VARIANT": "prod",
-        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+        "APP_VARIANT": "prod"
       }
     },
     "dev": {
@@ -25,8 +23,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "APP_VARIANT": "dev",
-        "EXPO_PUBLIC_OPENAI_API_KEY": ""
+        "APP_VARIANT": "dev"
       }
     }
   }
