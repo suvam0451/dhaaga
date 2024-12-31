@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import { APP_LANDING_PAGE_TYPE } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 import AppNotificationViewContainer from './_container';
-import { useApiGetSocialUpdates } from '../../../../../hooks/api/useNotifications';
+import { useApiGetMentionUpdates } from '../../../../../hooks/api/useNotifications';
 
 const MentionView = memo(() => {
-	const { data } = useApiGetSocialUpdates();
+	const { data } = useApiGetMentionUpdates();
 	return (
 		<AppNotificationViewContainer
 			menuItems={[

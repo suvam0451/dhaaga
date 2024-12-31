@@ -27,6 +27,7 @@ export function FlatListRenderer({
 		case DhaagaJsNotificationType.REPLY:
 			return <ReplyNotificationFragment item={item.props.dto} />;
 		case DhaagaJsNotificationType.MENTION:
+		case DhaagaJsNotificationType.CHAT:
 			return <MentionNotificationFragment item={item.props.dto} />;
 		case DhaagaJsNotificationType.FAVOURITE:
 			return <FavouriteNotificationFragment item={item.props.dto} />;

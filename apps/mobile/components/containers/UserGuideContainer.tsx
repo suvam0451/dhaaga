@@ -1,6 +1,4 @@
 import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import {
 	ScrollView,
 	StyleProp,
@@ -13,6 +11,7 @@ import { APP_FONTS } from '../../styles/AppFonts';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../shared/topnavbar/AppTopNavbar';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type UserGuideContainerProps = {
 	questionnaire: { question: string; answers: string[] }[];
@@ -22,11 +21,7 @@ type UserGuideContainerProps = {
 
 function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
 	const { translateY } = useScrollMoreOnPageEnd({});
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	const sectionStyle: StyleProp<ViewStyle> = {
 		marginBottom: 16,

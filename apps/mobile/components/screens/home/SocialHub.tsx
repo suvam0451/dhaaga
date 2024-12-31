@@ -100,7 +100,7 @@ function SocialHubTabAdd() {
 						},
 					]}
 					onPress={() => {
-						router.navigate(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
+						router.navigate(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 					}}
 				>
 					<Text

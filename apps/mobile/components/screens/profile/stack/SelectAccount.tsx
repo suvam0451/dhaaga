@@ -1,5 +1,11 @@
-import { FlatList, RefreshControl, View, Text } from 'react-native';
-import { Button } from '@rneui/base';
+import {
+	FlatList,
+	RefreshControl,
+	View,
+	Text,
+	Pressable,
+	StyleSheet,
+} from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
@@ -19,6 +25,7 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+import { appDimensions } from '../../../../styles/dimensions';
 
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
@@ -76,7 +83,7 @@ function SelectAccountStack() {
 
 	return (
 		<AppTopNavbar
-			title={'Select Account'}
+			title={'Manage Accounts'}
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
@@ -91,30 +98,28 @@ function SelectAccountStack() {
 					backgroundColor: theme.palette.bg,
 				}}
 				ListFooterComponent={
-					<View
-						style={{ marginHorizontal: 16, marginBottom: 32, marginTop: 48 }}
-					>
-						<Button onPress={onPressAddAccount}>
-							<Text
-								style={{
-									color: theme.textColor.high,
-									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-									fontSize: 16,
-								}}
-							>
-								Add Account
-							</Text>
-						</Button>
-						<Text
-							style={{
-								color: theme.secondary.a30,
-								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-								textAlign: 'center',
-								marginTop: 16,
-								paddingHorizontal: 16,
-							}}
+					<View style={styles.footerContainer}>
+						<Pressable
+							onPress={onPressAddAccount}
+							style={[
+								styles.ctaButtonContainer,
+								{
+									backgroundColor: theme.primary.a0,
+								},
+							]}
 						>
-							Mastodon, Pleroma, Akkoma, Misskey, Firefish, Sharkey
+							<Text style={styles.ctaButtonText}>Add Account</Text>
+						</Pressable>
+						<Text
+							style={[
+								styles.tipText,
+								{
+									color: theme.secondary.a30,
+								},
+							]}
+						>
+							Bluesky, Mastodon, Misskey, Pleroma, Akkoma, Sharkey, Firefish
+							(Legacy)
 						</Text>
 					</View>
 				}
@@ -127,3 +132,28 @@ function SelectAccountStack() {
 }
 
 export default SelectAccountStack;
+
+const styles = StyleSheet.create({
+	footerContainer: {
+		marginHorizontal: 16,
+		marginBottom: 32,
+		marginTop: 72,
+	},
+	ctaButtonContainer: {
+		borderRadius: appDimensions.buttons.borderRadius,
+		padding: 8,
+	},
+	ctaButtonText: {
+		color: 'black',
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		fontSize: 16,
+		textAlign: 'center',
+	},
+	tipText: {
+		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		textAlign: 'center',
+		marginTop: 16,
+		paddingHorizontal: 16,
+		fontSize: 14,
+	},
+});

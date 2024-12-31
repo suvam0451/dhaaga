@@ -10,7 +10,6 @@ const MentionNotificationFragment = memo(({ item }: Props) => {
 	const user = item.user;
 	const post = item.post;
 
-	console.log(post.calculated.emojis);
 	return (
 		<View style={[styles.container]}>
 			<NotificationSenderInterface

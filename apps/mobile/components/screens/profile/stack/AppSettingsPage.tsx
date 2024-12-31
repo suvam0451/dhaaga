@@ -243,68 +243,76 @@ function SettingCategoryList() {
 	const { theme } = useAppTheme();
 	const SETTING_CATEGORY_ICON_COLOR = theme.primary.a10;
 
+	const items = [
+		{
+			label: 'Accounts',
+			desc: 'Add and Manage Accounts',
+			Icon: (
+				<MaterialIcons
+					name="manage-accounts"
+					size={26}
+					color={SETTING_CATEGORY_ICON_COLOR}
+				/>
+			),
+			to: APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS,
+		},
+		{
+			label: 'General',
+			desc: 'Most usual boring settings are here',
+			Icon: (
+				<Ionicons
+					name="language"
+					size={24}
+					color={SETTING_CATEGORY_ICON_COLOR}
+				/>
+			),
+			to: APP_ROUTING_ENUM.SETTINGS_TAB_GENERAL,
+		},
+		{
+			label: 'Goodie Hut',
+			desc: 'Tweak unique features of Dhaaga',
+			Icon: (
+				<Ionicons name="flash" size={24} color={SETTING_CATEGORY_ICON_COLOR} />
+			),
+			to: APP_ROUTING_ENUM.SETTINGS_TAB_GOODIE_HUT,
+		},
+		{
+			label: 'Digital Wellbeing',
+			desc: 'Disconnect to reconnect with yourself',
+			Icon: (
+				<FontAwesome6
+					name="hand-holding-heart"
+					size={24}
+					color={SETTING_CATEGORY_ICON_COLOR}
+				/>
+			),
+			to: APP_ROUTING_ENUM.SETTINGS_TAB_DIGITAL_WELLBEING,
+		},
+		{
+			label: 'Advanced',
+			desc: 'For power users',
+			Icon: (
+				<Ionicons
+					name="construct"
+					size={24}
+					color={SETTING_CATEGORY_ICON_COLOR}
+				/>
+			),
+			to: APP_ROUTING_ENUM.SETTINGS_TAB_ADVANCED,
+		},
+	];
+
 	return (
 		<View style={{ width: '100%', flexGrow: 1, paddingHorizontal: 8 }}>
-			<SettingCategoryListItem
-				label={'Accounts'}
-				to={APP_ROUTING_ENUM.PROFILE_ACCOUNTS}
-				Icon={
-					<MaterialIcons
-						name="manage-accounts"
-						size={26}
-						color={SETTING_CATEGORY_ICON_COLOR}
-					/>
-				}
-				desc={'Add and Manage Accounts'}
-			/>
-			<SettingCategoryListItem
-				label={'General'}
-				desc={'The usual boring™ settings are here'}
-				to={'/profile/settings/user-preferences'}
-				Icon={
-					<Ionicons
-						name="language"
-						size={24}
-						color={SETTING_CATEGORY_ICON_COLOR}
-					/>
-				}
-			/>
-			<SettingCategoryListItem
-				label={'Goodie Hut'}
-				desc={'Tweak unique features of Dhaaga'}
-				to={'/profile/settings/user-preferences'}
-				Icon={
-					<Ionicons
-						name="flash"
-						size={24}
-						color={SETTING_CATEGORY_ICON_COLOR}
-					/>
-				}
-			/>
-			<SettingCategoryListItem
-				label={'Digital Wellbeing'}
-				desc={'Disconnect to reconnect with yourself'}
-				to={'/profile/settings/wellbeing'}
-				Icon={
-					<FontAwesome6
-						name="hand-holding-heart"
-						size={24}
-						color={SETTING_CATEGORY_ICON_COLOR}
-					/>
-				}
-			/>
-			<SettingCategoryListItem
-				label={'Advanced'}
-				desc={'For power users'}
-				to={'/profile/settings/privacy'}
-				Icon={
-					<Ionicons
-						name="construct"
-						size={24}
-						color={SETTING_CATEGORY_ICON_COLOR}
-					/>
-				}
-			/>
+			{items.map((o, i) => (
+				<SettingCategoryListItem
+					key={i}
+					label={o.label}
+					to={o.to}
+					Icon={o.Icon}
+					desc={o.desc}
+				/>
+			))}
 		</View>
 	);
 }

@@ -170,7 +170,7 @@ function MisskeySignInStack() {
 		if (upsertResult.type === 'success') {
 			Alert.alert('Account Added. Refresh if any screen is outdated.');
 			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
-			router.replace(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
+			router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 		} else {
 			console.log(upsertResult);
 		}

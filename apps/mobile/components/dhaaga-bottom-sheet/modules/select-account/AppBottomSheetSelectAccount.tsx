@@ -140,7 +140,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 
 	function onPressMoreAccountOptions() {
 		hide();
-		router.navigate(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
+		router.navigate(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 	}
 
 	return (
