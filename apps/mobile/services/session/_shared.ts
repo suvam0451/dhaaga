@@ -1,4 +1,10 @@
 import Storage from 'expo-sqlite/kv-store';
+import { z } from 'zod';
+
+const savedObjectWithExpiry = z.object({
+	updatedAt: z.date({ coerce: true }),
+	value: z.any(),
+});
 
 /**
  * Provides basic data storage/retrieval
@@ -37,5 +43,24 @@ export class BaseStorageManager {
 
 	setJson(key: string, value: any) {
 		this.set(key, JSON.stringify(value));
+	}
+
+	setJsonWithExpiry(key: string, value: any) {
+		this.set(key, JSON.stringify({ updatedAt: new Date(), value }));
+	}
+
+	getJsonWithExpiry<T>(key: string, invalidAfter: Date): T | null {
+		const saved = this.get(key);
+		if (!saved) return null;
+
+		try {
+			const parsed = JSON.parse(saved);
+			const { success, error, data } = savedObjectWithExpiry.safeParse(parsed);
+			if (error) return null;
+			if (data.updatedAt < invalidAfter) return null;
+			return data.value;
+		} catch (e) {
+			return null;
+		}
 	}
 }
