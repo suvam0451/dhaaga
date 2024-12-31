@@ -3,7 +3,7 @@ import {
 	useAppAcct,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import { View } from 'react-native';
@@ -11,8 +11,8 @@ import MentionView from '../../../components/screens/notifications/landing/views
 import ChatView from '../../../components/screens/notifications/landing/views/ChatView';
 import SocialView from '../../../components/screens/notifications/landing/views/SocialView';
 import UpdatesView from '../../../components/screens/notifications/landing/views/UpdatesView';
-import { AppPagerView } from '../../../components/lib/AppPagerView';
 import { BottomNavBar } from '../../../components/shared/pager-view/BottomNavBar';
+import PagerView from 'react-native-pager-view';
 
 const renderScene = (index: number) => {
 	switch (index) {
@@ -34,10 +34,17 @@ function Page() {
 	const { acct } = useAppAcct();
 	const [Index, setIndex] = useState<any>(0);
 
-	function onChipSelect(index: number) {
+	const ref = useRef<PagerView>(null);
+	const onChipSelect = (index: number) => {
 		if (Index !== index) {
-			setIndex(index);
+			ref.current.setPage(index);
 		}
+	};
+
+	function onPageScroll(e: any) {
+		const { offset, position } = e.nativeEvent;
+		const nextIdx = Math.round(position + offset);
+		setIndex(nextIdx);
 	}
 
 	useEffect(() => {
@@ -74,13 +81,18 @@ function Page() {
 	return (
 		<WithAppNotifSeenContext>
 			<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
-				<AppPagerView
-					pageCount={4}
-					renderFunction={renderScene}
-					onPageChangeCallback={onChipSelect}
-					Index={Index}
-					setIndex={setIndex}
-				/>
+				<PagerView
+					ref={ref}
+					scrollEnabled={true}
+					style={{ flex: 1 }}
+					initialPage={Index}
+					onPageScroll={onPageScroll}
+				>
+					{Array.from({ length: tabLabels.length }).map((_, index) => (
+						<View key={index}>{renderScene(index)}</View>
+					))}
+				</PagerView>
+
 				<BottomNavBar
 					Index={Index}
 					setIndex={onChipSelect}

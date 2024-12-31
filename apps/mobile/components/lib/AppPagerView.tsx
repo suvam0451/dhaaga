@@ -18,7 +18,6 @@ export function AppPagerView({
 	setIndex,
 }: AppPagerViewProps) {
 	const ref = useRef<PagerView>(null);
-
 	function onPageScroll(e: any) {
 		const { offset, position } = e.nativeEvent;
 		const nextIdx = Math.round(position + offset);
