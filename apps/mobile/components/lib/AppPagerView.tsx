@@ -6,22 +6,17 @@ type AppPagerViewProps = {
 	onPageChangeCallback?: (index: number) => void;
 	pageCount: number;
 	renderFunction: (index: number) => any;
-	Index: number;
-	setIndex: (index: number) => void;
 };
 
 export function AppPagerView({
 	onPageChangeCallback,
 	pageCount,
 	renderFunction,
-	Index,
-	setIndex,
 }: AppPagerViewProps) {
 	const ref = useRef<PagerView>(null);
 	function onPageScroll(e: any) {
 		const { offset, position } = e.nativeEvent;
 		const nextIdx = Math.round(position + offset);
-		setIndex(nextIdx);
 		if (onPageChangeCallback) onPageChangeCallback(nextIdx);
 	}
 
@@ -30,7 +25,7 @@ export function AppPagerView({
 			ref={ref}
 			scrollEnabled={true}
 			style={styles.pagerView}
-			initialPage={Index}
+			initialPage={0}
 			onPageScroll={onPageScroll}
 		>
 			{Array.from({ length: pageCount }).map((_, index) => (

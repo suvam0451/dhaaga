@@ -14,6 +14,8 @@ import {
 	useAppApiClient,
 } from '../utility/global-state-extractors';
 import { UserMiddleware } from '../../services/middlewares/user.middleware';
+import ActivityPubService from '../../services/activitypub.service';
+import { RandomUtil } from '../../utils/random.utils';
 
 type useApiGetNotificationsProps = {
 	include: DhaagaJsNotificationType[];
@@ -72,8 +74,7 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 
 			if (error) throw new Error(error.message);
 			return {
-				data: NotificationMiddleware.deserialize<unknown[]>(
-					// ignore certain notification types
+				data: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
 					data.data.filter((o) => ['login'].includes(o.type)),
 					driver,
 					acct?.server,
@@ -89,8 +90,7 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 			});
 			if (error) throw new Error(error.message);
 			return {
-				data: NotificationMiddleware.deserialize<unknown[]>(
-					// ignore certain notification types
+				data: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
 					data.data.filter((o) => ['login'].includes(o.type)),
 					driver,
 					acct?.server,
@@ -125,6 +125,35 @@ function useApiGetMentionUpdates() {
 			throw new Error(results.error.message);
 		} else {
 			const _data = results.data;
+			if (ActivityPubService.misskeyLike(driver)) {
+				return {
+					data: _data.data.map((o: any) => {
+						const _acct = UserMiddleware.deserialize<unknown>(
+							o.user,
+							driver,
+							server,
+						);
+						const _post = PostMiddleware.deserialize<unknown>(
+							o,
+							driver,
+							server,
+						);
+						const _obj: AppNotificationObject = {
+							id: RandomUtil.nanoId(),
+							type: _post.visibility === 'specified' ? 'chat' : 'mention',
+							post: _post,
+							user: _acct,
+							read: false,
+							createdAt: new Date(_post.createdAt),
+							extraData: {},
+						};
+						return _obj;
+					}),
+					minId: null,
+					maxId: null,
+				};
+			}
+
 			const acctList = _data.data.accounts;
 			const postList = _data.data.statuses;
 			const _retval = _data.data.notificationGroups
@@ -163,6 +192,7 @@ function useApiGetMentionUpdates() {
 			};
 		}
 	}
+
 	// Queries
 	return useQuery<HookResultType>({
 		queryKey: ['notifications/mentions', acct],
