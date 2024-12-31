@@ -6,8 +6,6 @@ import {
 } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import { AppNotificationObject } from '../../types/app-notification.types';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { NotificationMiddleware } from '../../services/middlewares/notification.middleware';
 import { useQuery } from '@tanstack/react-query';
 import { PostMiddleware } from '../../services/middlewares/post.middleware';
@@ -15,6 +13,7 @@ import {
 	useAppAcct,
 	useAppApiClient,
 } from '../utility/global-state-extractors';
+import { UserMiddleware } from '../../services/middlewares/user.middleware';
 
 type useApiGetNotificationsProps = {
 	include: DhaagaJsNotificationType[];
@@ -24,6 +23,22 @@ type HookResultType = {
 	data: AppNotificationObject[];
 	minId?: string;
 	maxId?: string;
+};
+
+type MastoGroupedNotificationType = {
+	groupKey: string;
+	notificationsCount: 1;
+	type: 'mention';
+	mostRecentNotificationId: number;
+	pageMinId: string;
+	pageMaxId: string;
+	latestPageNotificationAt: Date;
+	sampleAccountIds: string[];
+	statusId: string;
+};
+
+const defaultHookResult: HookResultType = {
+	data: [],
 };
 
 /**
@@ -37,13 +52,8 @@ function notificationTypeArrayGenerator(
  * API Query for the notifications endpoint
  */
 function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
-	const { client, acct, driver } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-			acct: o.acct,
-			driver: o.driver,
-		})),
-	);
+	const { acct } = useAppAcct();
+	const { client, driver } = useAppApiClient();
 
 	async function api(): Promise<HookResultType> {
 		if (!client) throw new Error('no client found');
@@ -97,6 +107,57 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 		queryFn: api,
 		enabled: client !== null,
 		initialData: { data: [] },
+	});
+}
+
+/**
+ * Get Mentions
+ *
+ * - Grouped for Mastodon
+ */
+function useApiGetMentionUpdates() {
+	const { acct } = useAppAcct();
+	const { driver, client, server } = useAppApiClient();
+
+	async function api(): Promise<HookResultType> {
+		const results = await client.notifications.getMentions(driver);
+		if (results.error) {
+			throw new Error(results.error.message);
+		} else {
+			const _data = results.data;
+			const acctList = _data.data.accounts;
+			const postList = _data.data.statuses;
+			const _retval = _data.data.notificationGroups.map(
+				(o: MastoGroupedNotificationType) => {
+					const _acct = acctList.find((x) => x.id === o.sampleAccountIds[0]);
+					const _post = postList.find((x) => x.id === o.statusId);
+
+					const _obj: AppNotificationObject = {
+						id: o.groupKey,
+						type: o.type,
+						post: PostMiddleware.deserialize<unknown>(_post, driver, server),
+						user: UserMiddleware.deserialize<unknown>(_acct, driver, server),
+						read: false,
+						createdAt: new Date(o.mostRecentNotificationId),
+						extraData: {},
+					};
+					return _obj;
+				},
+			);
+
+			return {
+				data: _retval,
+				maxId: _data.maxId,
+				minId: _data.minId,
+			};
+		}
+	}
+	// Queries
+	return useQuery<HookResultType>({
+		queryKey: ['notifications/mentions', acct],
+		queryFn: api,
+		enabled: client !== null,
+		initialData: defaultHookResult,
 	});
 }
 
@@ -172,4 +233,8 @@ function useApiGetSocialUpdates() {
 	return { data };
 }
 
-export { useApiGetSocialUpdates, useApiGetChatUpdates };
+export {
+	useApiGetMentionUpdates,
+	useApiGetSocialUpdates,
+	useApiGetChatUpdates,
+};

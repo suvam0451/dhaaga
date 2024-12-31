@@ -14,7 +14,7 @@ function IntroductionBase() {
 	const [DialogVisible, setDialogVisible] = useState(false);
 
 	function takeUserToAccountsPage() {
-		router.navigate(APP_ROUTING_ENUM.PROFILE_ACCOUNTS);
+		router.navigate(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 	}
 
 	const { translateY } = useScrollMoreOnPageEnd();

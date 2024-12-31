@@ -10,7 +10,7 @@ import {
 } from 'react';
 import ActivityPubService from '../../../services/activitypub.service';
 import * as Haptics from 'expo-haptics';
-import { OpenAiService } from '../../../services/openai.service';
+import { HuggingFaceService } from '../../../services/openai.service';
 import postArrayReducer, {
 	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
 	TimelineDataReducerFunction,
@@ -230,7 +230,9 @@ function WithAppTimelineDataContext({ children }: Props) {
 			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).then(() => {});
 			setLoading(true);
 			try {
-				const response = await OpenAiService.explain(ctx.join(','));
+				const response = await HuggingFaceService.inferServerless(
+					ctx.join(','),
+				);
 				postListReducer({
 					type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_TRANSLATION_OUTPUT,
 					payload: {

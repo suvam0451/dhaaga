@@ -4,6 +4,7 @@ import { MastoNotification } from '../../../../types/mastojs.types.js';
 import { MegaNotification } from '../../../../types/megalodon.types.js';
 
 export enum DhaagaJsNotificationType {
+	CHAT = 'chat', // direct
 	/**
 	 * Someone mentioned you in their status
 	 */

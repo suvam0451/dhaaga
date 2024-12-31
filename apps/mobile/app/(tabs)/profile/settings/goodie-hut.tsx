@@ -1,10 +1,10 @@
 import { ScrollView, Text, StyleSheet } from 'react-native';
+import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../../components/shared/topnavbar/AppTopNavbar';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 function Page() {
 	const { translateY } = useScrollMoreOnPageEnd();
@@ -13,7 +13,7 @@ function Page() {
 	return (
 		<AppTopNavbar
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			title={'Wellbeing Settings'}
+			title={'Goodie Hut'}
 			translateY={translateY}
 		>
 			<ScrollView>

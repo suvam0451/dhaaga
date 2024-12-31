@@ -21,6 +21,24 @@ export class NotificationMiddleware {
 		driver: string | KNOWN_SOFTWARE,
 		server: string,
 	): AppNotificationObject {
+		if (driver === KNOWN_SOFTWARE.MASTODON) {
+			return {
+				id: input.id,
+				type:
+					input['visibility'] === 'direct'
+						? DhaagaJsNotificationType.CHAT
+						: DhaagaJsNotificationType.MENTION,
+				createdAt: input.createdAt,
+				user: UserMiddleware.deserialize<unknown>(
+					input.account,
+					driver,
+					server,
+				),
+				post: PostMiddleware.deserialize<unknown>(input, driver, server),
+				extraData: {},
+				read: false,
+			};
+		}
 		const obj = {
 			id: input.id,
 			type: input.type as DhaagaJsNotificationType,
