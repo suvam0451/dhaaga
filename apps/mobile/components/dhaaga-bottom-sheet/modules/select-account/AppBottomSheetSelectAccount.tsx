@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { AnimatedFlashList } from '@shopify/flash-list';
-import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import {
 	AccountDetails,
@@ -16,13 +16,12 @@ import {
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppListAccounts } from '../../../../hooks/db/useAppListAccounts';
-import { AppIcon } from '../../../lib/Icon';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
+import { AppBottomSheetMenu } from '../../../lib/Menu';
 
 type FlashListItemProps = {
 	acct: Account;
@@ -148,39 +147,15 @@ const AppBottomSheetSelectAccount = memo(() => {
 			<AnimatedFlashList
 				estimatedItemSize={72}
 				ListHeaderComponent={() => (
-					<View
-						style={{
-							marginVertical: 16,
-							justifyContent: 'space-between',
-							flexDirection: 'row',
-							marginHorizontal: 16,
-							alignItems: 'center',
-							marginTop: 32,
-						}}
-					>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.INTER_700_BOLD,
-								color: theme.textColor.high,
-								fontSize: 20,
-								flex: 1,
-							}}
-						>
-							Select Account
-						</Text>
-						<TouchableOpacity
-							style={{
-								paddingHorizontal: 8,
-							}}
-							onPress={onPressMoreAccountOptions}
-						>
-							<AppIcon
-								id={'cog'}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-								onPress={onPressMoreAccountOptions}
-							/>
-						</TouchableOpacity>
-					</View>
+					<AppBottomSheetMenu.Header
+						title={'Select Account'}
+						menuItems={[
+							{
+								iconId: 'cog',
+								onPress: onPressMoreAccountOptions,
+							},
+						]}
+					/>
 				)}
 				data={data}
 				renderItem={({ item }) => <FlashListItem acct={item} />}

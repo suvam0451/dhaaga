@@ -12,6 +12,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { APP_ICON_ENUM, AppIcon } from './Icon';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { Loader } from './Loader';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
 type AppMenuOptionType = {
 	appIconId: any;
@@ -170,11 +171,64 @@ type AppBottomSheetMenuWithBackNavigationProps = {
 	nextLoading?: boolean;
 };
 
+type AppBottomSheetMenuHeaderProps = {
+	title: string;
+	desc?: string;
+	menuItems: {
+		iconId: string;
+		onPress: () => void;
+	}[];
+};
+
 /**
  *
  * @constructor
  */
 export class AppBottomSheetMenu {
+	static Header({ title, menuItems }: AppBottomSheetMenuHeaderProps) {
+		const { theme } = useAppTheme();
+		return (
+			<View
+				style={{
+					marginVertical: 16,
+					justifyContent: 'space-between',
+					flexDirection: 'row',
+					marginHorizontal: 16,
+					alignItems: 'center',
+					marginTop: 32,
+				}}
+			>
+				<Text
+					style={{
+						fontFamily: APP_FONTS.INTER_700_BOLD,
+						color: theme.textColor.high,
+						fontSize: 20,
+						flex: 1,
+					}}
+				>
+					{title}
+				</Text>
+				<View>
+					{menuItems.map((o, i) => (
+						<Pressable
+							key={i}
+							style={{
+								paddingHorizontal: 8,
+							}}
+							onPress={o.onPress}
+						>
+							<AppIcon
+								id={o.iconId as APP_ICON_ENUM}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+								onPress={o.onPress}
+							/>
+						</Pressable>
+					))}
+				</View>
+			</View>
+		);
+	}
+
 	static WithBackNavigation({
 		onBack,
 		onNext,

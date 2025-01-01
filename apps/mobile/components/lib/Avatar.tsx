@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { Image } from 'expo-image';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
+import { Account } from '../../database/_schema';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type AppAvatarProps = {
 	uri: string;
@@ -29,18 +29,15 @@ export const AppAvatar = memo(({ uri, size }: AppAvatarProps) => {
 type SocialHubAvatarCircleProps = {
 	size?: number;
 	style?: StyleProp<ViewStyle>;
+	acct: Account;
 };
 
 export function SocialHubAvatarCircle({
 	size,
 	style,
+	acct,
 }: SocialHubAvatarCircleProps) {
-	const { acct, theme } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	if (!acct) return <View />;
 

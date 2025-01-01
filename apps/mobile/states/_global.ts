@@ -338,6 +338,7 @@ const useGlobalState = create<State & Actions>()(
 						get().db,
 						restoreResult.value.acct,
 					);
+					state.profileSessionManager = new ProfileSessionManager(get().db);
 					state.router = restoreResult.value.router;
 					state.driver = restoreResult.value.acct.driver as KNOWN_SOFTWARE;
 					state.publishers.postPub = new PostPublisherService(
