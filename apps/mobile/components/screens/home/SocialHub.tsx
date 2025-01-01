@@ -203,7 +203,11 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 					style={{ marginTop: 8 }}
 					leftDecorator={
 						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<SocialHubAvatarCircle size={36} style={{ marginRight: 6 }} />
+							<SocialHubAvatarCircle
+								size={36}
+								style={{ marginRight: 6 }}
+								acct={account}
+							/>
 						</View>
 					}
 					index={Index}
