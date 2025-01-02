@@ -120,7 +120,8 @@ export function AppDialog() {
 								style={[
 									modalStyles.modalDescription,
 									{
-										color: theme.textColor.medium,
+										color: theme.secondary.a20,
+										fontSize: 14,
 									},
 								]}
 							>
@@ -175,16 +176,16 @@ export function AppDialog() {
 
 const styles = StyleSheet.create({
 	modalTitle: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		textAlign: 'center',
 		fontSize: 22,
 		marginBottom: 16,
 		paddingTop: 32,
 	},
 	modalDescription: {
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		textAlign: 'center',
-		fontSize: 14,
+		fontSize: 16,
 	},
 	actionButtonContainer: {
 		justifyContent: 'center',

@@ -16,6 +16,23 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import {
+	BebasNeue_400Regular,
+	DMSans_500Medium,
+	Figtree_400Regular,
+	FiraSans_400Regular,
+	Lato_400Regular,
+	Lexend_400Regular,
+	Nunito_400Regular,
+	Poppins_400Regular,
+	Poppins_500Medium,
+	PublicSans_400Regular,
+	Roboto_400Regular,
+	SourceSansPro_400Regular,
+	SpaceGrotesk_400Regular,
+	SourceSans3_400Regular,
+	useFonts,
+} from '@expo-google-fonts/dev';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -110,6 +127,22 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});
 
+	const [loaded, error] = useFonts({
+		Poppins_400Regular: Poppins_400Regular,
+		Lato_400Regular: Lato_400Regular,
+		Nunito_400Regular: Nunito_400Regular,
+		Lexend_400Regular: Lexend_400Regular,
+		DMSans_500Medium: DMSans_500Medium,
+		PublicSans_400Regular: PublicSans_400Regular,
+		SpaceGrotesk_400Regular: SpaceGrotesk_400Regular,
+		Figtree_400Regular: Figtree_400Regular,
+		BebasNeue_400Regular: BebasNeue_400Regular,
+		Poppins_500Medium: Poppins_500Medium,
+		FiraSans_400Regular: FiraSans_400Regular,
+		SourceSansPro_400Regular: SourceSansPro_400Regular,
+		Roboto_400Regular: Roboto_400Regular,
+	});
+
 	return (
 		<View
 			style={{
@@ -124,7 +157,6 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 					<View>
 						{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
 					</View>
-
 					<Text
 						style={{
 							color: theme.secondary.a40,

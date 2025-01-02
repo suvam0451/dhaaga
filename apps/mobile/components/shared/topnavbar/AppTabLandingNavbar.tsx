@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../lib/Text';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -32,7 +32,7 @@ type AppTabLandingNavbarProps = {
 };
 
 const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
-	[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Account',
+	[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Profile',
 	[APP_LANDING_PAGE_TYPE.HOME]: 'Social Hub',
 	[APP_LANDING_PAGE_TYPE.DISCOVER]: 'Discover',
 	[APP_LANDING_PAGE_TYPE.COMPOSE]: 'Compose',
@@ -54,14 +54,10 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
  * main routes
  */
 function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
-	const { theme } = useAppTheme();
-
 	return (
 		<View style={[styles.container]}>
 			<View style={{ flexGrow: 1 }}>
-				<Text style={[styles.headerText, { color: theme.secondary.a0 }]}>
-					{navbarLabel[type]}
-				</Text>
+				<AppText.H1>{navbarLabel[type]}</AppText.H1>
 			</View>
 			<View style={{ flexDirection: 'row' }}>
 				{menuItems.map(({ iconId, disabled, onPress }, i) => (
@@ -99,5 +95,6 @@ const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 28,
 		fontFamily: APP_FONTS.INTER_700_BOLD,
+		// fontWeight: '600',
 	},
 });

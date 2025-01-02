@@ -1,7 +1,5 @@
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
 
 type SocialHubPinSectionContainer = {
 	label: string;
@@ -13,11 +11,7 @@ export function SocialHubPinSectionContainer({
 	children,
 	style,
 }: SocialHubPinSectionContainer) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	return (
 		<View style={[styles.root, style]}>
@@ -31,7 +25,9 @@ export function SocialHubPinSectionContainer({
 					style={[
 						styles.sectionLabel,
 						{
-							color: theme.secondary.a20,
+							color: theme.secondary.a10,
+							fontFamily: 'BebasNeue_400Regular',
+							fontSize: 32,
 						},
 					]}
 				>
@@ -53,7 +49,8 @@ const styles = StyleSheet.create({
 		marginBottom: 12,
 		marginLeft: 6,
 		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		// fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		// fontWeight: 'bold',
 	},
 	row: {
 		flexDirection: 'row',

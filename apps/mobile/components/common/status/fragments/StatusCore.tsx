@@ -53,9 +53,9 @@ function StatusMoreOptionsButton() {
 		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
 			<View style={styles.statusMoreOptionsButton}>
 				<AppIcon
-					id={'ellipsis-v'}
+					id={'more-options-vertical'}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
-					size={24}
+					size={16}
 					onPress={onPress}
 				/>
 			</View>
@@ -109,7 +109,7 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 		emojiMap: _target.calculated.emojis,
 		deps: [dto],
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		// fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});
 
 	const isSensitive = _target.meta.sensitive;

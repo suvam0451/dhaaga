@@ -1,10 +1,13 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import {
 	Dimensions,
+	FlatList,
 	LayoutChangeEvent,
 	Pressable,
+	StyleProp,
 	StyleSheet,
 	View,
+	ViewStyle,
 } from 'react-native';
 import Animated, {
 	measure,
@@ -17,8 +20,10 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../states/_global';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { AppIcon } from '../../lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type ChipProps = {
 	active: boolean;
@@ -27,12 +32,58 @@ type ChipProps = {
 	onPress: (measurement: MeasuredDimensions | null) => void;
 };
 
-const Chip = memo(({ active, label, onLayout, onPress }: ChipProps) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
+type ChipInfiniteProps = {
+	active: boolean;
+	label: string;
+	onLayout: (event: LayoutChangeEvent) => void;
+	onPress: (measurement: MeasuredDimensions | null) => void;
+	containerStyle?: StyleProp<ViewStyle>;
+};
+
+function ChipInfinite({
+	active,
+	label,
+	onLayout,
+	onPress,
+	containerStyle,
+}: ChipInfiniteProps) {
+	const { theme } = useAppTheme();
+
+	const ref = useAnimatedRef<Animated.View>();
+
+	// respond to page changes via swipe gesture
+	useEffect(() => {
+		if (!active) return;
+		onSelect();
+	}, [active]);
+
+	const onSelect = () => {
+		runOnUI(() => {
+			const measurement = measure(ref);
+			runOnJS(onPress)(measurement);
+		})();
+	};
+	const animStyle = useAnimatedStyle(() => {
+		return {
+			color: withTiming(active ? theme.primary.a0 : theme.textColor.medium, {
+				duration: 350,
+			}),
+		};
+	});
+	return (
+		<Pressable
+			onLayout={onLayout}
+			ref={ref}
+			onPress={onSelect}
+			style={containerStyle}
+		>
+			<Animated.Text style={[styles.label, animStyle]}>{label}</Animated.Text>
+		</Pressable>
 	);
+}
+
+const Chip = memo(({ active, label, onLayout, onPress }: ChipProps) => {
+	const { theme } = useAppTheme();
 
 	const ref = useAnimatedRef<Animated.View>();
 
@@ -69,14 +120,6 @@ const SIDE_PADDING = (SCREEN_WIDTH - TAB_BAR_WIDTH) / 2;
 const ANIMATION_DURATION = 300;
 
 type SingleSelectAnimatedProps = {
-	justify:
-		| 'flex-start'
-		| 'flex-end'
-		| 'center'
-		| 'space-between'
-		| 'space-around'
-		| 'space-evenly'
-		| undefined;
 	items: {
 		label: string;
 		id: string;
@@ -95,12 +138,8 @@ type SingleSelectAnimatedProps = {
  * full width and flex-start for left aligned
  */
 export const BottomNavBar = memo(
-	({ items, justify, Index, setIndex }: SingleSelectAnimatedProps) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+	({ items, Index, setIndex }: SingleSelectAnimatedProps) => {
+		const { theme } = useAppTheme();
 
 		const xPos = useSharedValue(0);
 		const xWidth = useSharedValue(0);
@@ -141,7 +180,7 @@ export const BottomNavBar = memo(
 
 		return (
 			<View style={styles.root}>
-				<View style={[styles.container, { justifyContent: justify }]}>
+				<View style={[styles.container, { justifyContent: 'space-around' }]}>
 					{items.map((o, i) => (
 						<Chip
 							key={i}
@@ -164,20 +203,122 @@ export const BottomNavBar = memo(
 	},
 );
 
+export function BottomNavBarInfinite({
+	items,
+	Index,
+	setIndex,
+}: SingleSelectAnimatedProps) {
+	const { theme } = useAppTheme();
+	const ref = useRef<FlatList>(null);
+
+	const xPos = useSharedValue(0);
+	const xWidth = useSharedValue(0);
+
+	const animated = (index: number, dims?: any) => {
+		if (dims) {
+			const adjustedXPosition =
+				dims.pageX - INDICATOR_PADDING / 2 - SIDE_PADDING;
+			xPos.value = withTiming(adjustedXPosition, {
+				duration: ANIMATION_DURATION,
+			});
+			xWidth.value = withTiming(dims.width + INDICATOR_PADDING, {
+				duration: ANIMATION_DURATION,
+			});
+		}
+	};
+
+	const onSelect = (index: number, dims?: any) => {
+		setIndex(index);
+		animated(index, dims);
+	};
+
+	/**
+	 * NOTE: Animations might be a
+	 * bit disorienting for the users
+	 */
+	useEffect(() => {
+		// if (Index >= items.length) return;
+		// ref.current.scrollToIndex({ index: Index, animated: false });
+	}, [Index, items]);
+
+	useEffect(() => {
+		animated(Index + 1);
+	}, [Index]);
+
+	const handleLayout = (index: number, event: any) => {
+		if (index === 0) {
+			const layout = event.nativeEvent.layout;
+			xPos.value = layout.x - INDICATOR_PADDING / 2;
+			xWidth.value = layout.width + INDICATOR_PADDING;
+		}
+	};
+
+	return (
+		<LinearGradient
+			colors={['transparent', theme.palette.bg]}
+			style={styles.infiniteContainer}
+		>
+			<View style={{ flex: 1, flexGrow: 1 }}>
+				<FlatList
+					data={items}
+					showsHorizontalScrollIndicator={false}
+					horizontal={true}
+					style={[styles.root]}
+					ref={ref}
+					renderItem={({ item, index }) => (
+						<View style={[styles.infiniteContainerChip]}>
+							<ChipInfinite
+								active={Index === index}
+								label={item.label}
+								onPress={(e) => onSelect(index, e)}
+								onLayout={(e) => handleLayout(index, e)}
+								containerStyle={{ paddingHorizontal: 8 }}
+							/>
+						</View>
+					)}
+					onScrollToIndexFailed={() => {
+						console.log('[WARN]:scroll to index failed...');
+					}}
+				/>
+			</View>
+			<View
+				style={{
+					paddingHorizontal: 16,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}
+			>
+				<AppIcon
+					id="layers-outline"
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+					size={26}
+				/>
+			</View>
+		</LinearGradient>
+	);
+}
+
 const styles = StyleSheet.create({
 	root: {
-		alignItems: 'center',
+		flexShrink: 1,
 		backgroundColor: 'transparent',
-		borderTopEndRadius: 16,
-		borderTopLeftRadius: 16,
+		height: 48,
+	},
+	infiniteContainer: {
+		flexDirection: 'row',
+		position: 'absolute',
+		bottom: 0,
+	},
+	infiniteContainerChip: {
+		paddingHorizontal: 6,
+		paddingVertical: 12,
+		borderRadius: 20, // width: TAB_BAR_WIDTH,
 	},
 	container: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		flexDirection: 'row', // alignItems: 'center',
 		paddingHorizontal: 12,
 		paddingVertical: 12,
-		borderRadius: 20,
-		width: TAB_BAR_WIDTH,
+		borderRadius: 20, // width: TAB_BAR_WIDTH,
 	},
 	indicator: {
 		position: 'absolute',
@@ -189,6 +330,6 @@ const styles = StyleSheet.create({
 	label: {
 		// fontWeight: '500',
 		fontSize: 18,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
 	},
 });

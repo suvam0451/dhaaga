@@ -109,7 +109,7 @@ function useMfm({
 	// since font remains same for each reusable component
 	const fontStyle = {
 		color: color,
-		fontFamily: fontFamily,
+		// fontFamily: fontFamily,
 	};
 
 	useEffect(() => {
@@ -145,12 +145,14 @@ function useMfm({
 
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
-			domain: driver,
 			subdomain: acct?.server,
 			remoteSubdomain,
 			fontFamily,
 			emphasis,
 			colorScheme: theme,
+			style: {
+				fontFamily,
+			},
 		});
 		setData({
 			isLoaded: true,

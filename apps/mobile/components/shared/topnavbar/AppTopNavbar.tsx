@@ -47,7 +47,7 @@ const AppTopNavbar = memo(
 				case APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC:
 					return <TopNavbarLandingGeneric title={title} />;
 				case APP_TOPBAR_TYPE_ENUM.TIMELINE:
-					return <TimelinesHeader title={title} />;
+					return <TimelinesHeader />;
 				case APP_TOPBAR_TYPE_ENUM.NOTIFICATION_CENTER:
 					return <NotificationsHeader />;
 				case APP_TOPBAR_TYPE_ENUM.PROFILE:

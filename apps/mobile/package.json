@@ -17,8 +17,10 @@
     "@atproto/api": "^0.13.23",
     "@dhaaga/bridge": "*",
     "@dhaaga/orm": "*",
+    "@expo-google-fonts/dev": "^0.2.3",
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
+    "@expo/downloader": "^1.0.118",
     "@expo/metro-config": "~0.19.0",
     "@expo/vector-icons": "^14.0.4",
     "@huggingface/inference": "^2.8.1",
@@ -30,19 +32,24 @@
     "@types/react": "~18.3.12",
     "expo": "~52.0.20",
     "expo-asset": "~11.0.1",
+    "expo-auth-session": "~6.0.1",
     "expo-build-properties": "~0.13.1",
     "expo-clipboard": "~7.0.0",
     "expo-constants": "~17.0.3",
+    "expo-crypto": "~14.0.1",
     "expo-dev-client": "~5.0.8",
+    "expo-file-system": "~18.0.6",
     "expo-font": "~13.0.2",
     "expo-haptics": "~14.0.0",
     "expo-image": "~2.0.3",
     "expo-image-picker": "~16.0.3",
+    "expo-linear-gradient": "~14.0.1",
     "expo-linking": "~7.0.3",
     "expo-localization": "^16.0.0",
     "expo-router": "~4.0.15",
     "expo-splash-screen": "~0.29.18",
     "expo-sqlite": "~15.0.5",
+    "expo-status-bar": "^2.0.0",
     "expo-video": "~2.0.3",
     "fast-text-encoding": "^1.0.6",
     "i18n-js": "^4.4.3",
@@ -58,6 +65,7 @@
     "react-native-reanimated": "~3.16.1",
     "react-native-safe-area-context": "4.12.0",
     "react-native-screens": "~4.4.0",
+    "react-native-svg": "15.8.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-webview": "13.12.5",
     "use-debounce": "^10.0.4",
@@ -68,5 +76,12 @@
     "@react-native-community/cli": "^15.1.2",
     "typescript": "^5.7.2"
   },
-  "type": "module"
+  "type": "module",
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    }
+  }
 }

@@ -7,7 +7,6 @@ import {
 	Pressable,
 	RefreshControl,
 	StyleSheet,
-	Text,
 	View,
 } from 'react-native';
 import { useMemo } from 'react';
@@ -31,7 +30,6 @@ import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import useAppNavigator from '../../states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
-import { APP_FONTS } from '../../styles/AppFonts';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../database/entities/account';
@@ -39,6 +37,9 @@ import * as Haptics from 'expo-haptics';
 import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
 import { DialogBuilderService } from '../../services/dialog-builder.service';
 import SearchResultUserItem from '../screens/search/SearchResultUserItem';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { LinearGradient } from 'expo-linear-gradient';
+import { AppText } from './Text';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -50,6 +51,7 @@ function Pinned_Users_LastItem() {
 	function onPress() {
 		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
 	}
+
 	return (
 		<Pressable
 			style={{
@@ -163,23 +165,48 @@ function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 				flex: 1,
 				marginBottom: 8,
 				maxWidth: '25%',
+				width: 72,
+				height: 72,
 			}}
 			onPress={onPress}
 			onLongPress={onLongPress}
 		>
+			<MaskedView
+				maskElement={
+					<View
+						pointerEvents="none"
+						style={[
+							{
+								borderWidth: 1.75,
+								borderRadius: '100%',
+								height: 72,
+								width: 72,
+								margin: 'auto',
+							},
+						]}
+					/>
+				}
+				style={[StyleSheet.absoluteFill]}
+			>
+				<LinearGradient
+					colors={['red', 'orange']}
+					pointerEvents="none"
+					style={{ height: 80, width: 80 }}
+				/>
+			</MaskedView>
 			<View
 				style={{
-					width: 64 + 4.75 * 2,
-					alignSelf: 'center',
+					width: 62,
+					height: 62,
+					margin: 'auto', // alignSelf: 'center',
+					justifyContent: 'center',
 				}}
 			>
 				<View
 					style={{
 						borderRadius: '100%',
 						overflow: 'hidden',
-						padding: 3,
 						borderColor: theme.complementary.a0,
-						borderWidth: 1.75,
 						opacity: 0.78,
 					}}
 				>
@@ -189,9 +216,9 @@ function Pinned_Users_ListItem({ item, account }: ListItemProps) {
 							uri: item.avatarUrl,
 						}}
 						style={{
-							borderRadius: 64 / 2,
-							width: 64,
-							height: 64,
+							borderRadius: 62 / 2,
+							width: 62,
+							height: 62,
 						}}
 					/>
 				</View>
@@ -243,17 +270,18 @@ function Pinned_Tags_ListItem({ item }: PinnedTag_ListItemProps) {
 				]}
 				onPress={onPressAddedTag}
 			>
-				<Text
+				<AppText.Medium
 					numberOfLines={1}
 					style={[
-						styles.tagText,
 						{
+							fontSize: 16,
+							flexShrink: 1,
 							color: theme.complementary.a0,
 						},
 					]}
 				>
 					#{item.props.dto.name}
-				</Text>
+				</AppText.Medium>
 			</Pressable>
 		);
 	}
@@ -459,7 +487,6 @@ const styles = StyleSheet.create({
 		flexShrink: 1,
 	},
 	tagText: {
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 		fontSize: 16,
 		flexShrink: 1,
 	},
@@ -469,5 +496,41 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		flexGrow: 1,
 		overflow: 'hidden',
+	},
+
+	// generated
+	container: {
+		flex: 1,
+	},
+	maskedView: {
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	mask: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	image: {
+		width: 180,
+		height: 180,
+		borderRadius: 100,
+		borderWidth: 10,
+		borderColor: 'transparent',
+	},
+	gradientBorder: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		borderRadius: 100, // Keep the border radius consistent for rounded corners
+		borderWidth: 5, // Set the width of your rainbow border
+		borderColor: 'transparent',
+	},
+	text: {
+		marginTop: 20,
+		fontSize: 18,
+		fontWeight: 'bold',
 	},
 });

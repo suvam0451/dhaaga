@@ -6,9 +6,9 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { useEffect, useReducer, useState } from 'react';
+import { Fragment, useEffect, useReducer, useRef, useState } from 'react';
 import useSocialHub from '../../../states/useSocialHub';
-import { Account } from '../../../database/_schema';
+import { Account, Profile } from '../../../database/_schema';
 import {
 	socialHubTabReducer,
 	socialHubTabReducerActionType,
@@ -31,6 +31,8 @@ import { SocialHubPinSectionContainer } from './stack/landing/fragments/_factory
 import { AppFlashList } from '../../lib/AppFlashList';
 import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
 import { AppPagerView } from '../../lib/AppPagerView';
+import { BottomNavBarInfinite } from '../../shared/pager-view/BottomNavBar';
+import PagerView from 'react-native-pager-view';
 
 function Header() {
 	return (
@@ -111,7 +113,7 @@ function SocialHubTabAdd() {
 							},
 						]}
 					>
-						Add Account
+						Add Profile
 					</Text>
 				</Pressable>
 				<Pressable
@@ -139,14 +141,15 @@ function SocialHubTabAdd() {
 }
 
 type SocialHubTabProps = {
-	account: Account;
+	// account left join guaranteed
+	profile: Profile;
 };
 
 /**
  * Tabs in the Social Hub interface
  * represent a unique profile each
  */
-function SocialHubTab({ account }: SocialHubTabProps) {
+function SocialHubTab({ profile }: SocialHubTabProps) {
 	const { db } = useGlobalState(
 		useShallow((o) => ({
 			db: o.db,
@@ -157,7 +160,6 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 		socialHubTabReducerDefault,
 	);
 	const { theme } = useAppTheme();
-	const [Index, setIndex] = useState(0);
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 
 	useEffect(() => {
@@ -165,13 +167,13 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 			type: socialHubTabReducerActionType.INIT,
 			payload: {
 				db,
-				acct: account,
+				profile: profile,
 			},
 		});
 		dispatch({
 			type: socialHubTabReducerActionType.RELOAD_PINS,
 		});
-	}, [account]);
+	}, [profile]);
 
 	function refresh() {
 		setIsRefreshing(true);
@@ -181,12 +183,15 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 		setIsRefreshing(false);
 	}
 
-	if (State.profiles.length === 0) return <View />;
 	return (
 		<ScrollView
 			style={{
 				backgroundColor: theme.palette.bg,
 				height: '100%',
+			}}
+			contentContainerStyle={{
+				// for the selection bar
+				paddingBottom: 50,
 			}}
 			refreshControl={
 				<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
@@ -194,31 +199,31 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 		>
 			<Header />
 			<View style={{ marginBottom: 16 }}>
-				<TimeOfDayGreeting acct={account} />
+				<TimeOfDayGreeting acct={State.acct} />
 			</View>
 
-			<View style={{ marginHorizontal: 10 }}>
-				<AppSegmentedControl
-					items={[{ label: 'Pinned' }, { label: 'Saved' }]}
-					style={{ marginTop: 8 }}
-					leftDecorator={
-						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<SocialHubAvatarCircle
-								size={36}
-								style={{ marginRight: 6 }}
-								acct={account}
-							/>
-						</View>
-					}
-					index={Index}
-					setIndex={setIndex}
-				/>
-			</View>
+			{/*<View style={{ marginHorizontal: 10 }}>*/}
+			{/*	<AppSegmentedControl*/}
+			{/*		items={[{ label: 'Pinned' }, { label: 'Saved' }]}*/}
+			{/*		style={{ marginTop: 8 }}*/}
+			{/*		leftDecorator={*/}
+			{/*			<View style={{ flexDirection: 'row', alignItems: 'center' }}>*/}
+			{/*				<SocialHubAvatarCircle*/}
+			{/*					size={36}*/}
+			{/*					style={{ marginRight: 6 }}*/}
+			{/*					acct={account}*/}
+			{/*				/>*/}
+			{/*			</View>*/}
+			{/*		}*/}
+			{/*		index={Index}*/}
+			{/*		setIndex={setIndex}*/}
+			{/*	/>*/}
+			{/*</View>*/}
 
 			{/* --- Pinned Timelines --- */}
 			<SocialHubPinnedTimelines
 				account={State.acct}
-				items={State.profiles[0].pins.timelines}
+				items={State.pins.timelines}
 			/>
 
 			{/* --- Pinned Users --- */}
@@ -230,7 +235,7 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 			>
 				<AppFlashList.PinnedProfiles
 					account={State.acct}
-					data={State.profiles[0].pins.users}
+					data={State.pins.users}
 				/>
 			</SocialHubPinSectionContainer>
 
@@ -241,7 +246,7 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 					marginTop: 16,
 				}}
 			>
-				<AppFlashList.PinnedTags data={State.profiles[0].pins.tags} />
+				<AppFlashList.PinnedTags data={State.pins.tags} />
 			</SocialHubPinSectionContainer>
 		</ScrollView>
 	);
@@ -249,18 +254,58 @@ function SocialHubTab({ account }: SocialHubTabProps) {
 
 function SocialHub() {
 	const { data } = useSocialHub();
+	const { theme } = useAppTheme();
 
 	function renderScene(index: number) {
-		if (index >= data.accounts.length) return <SocialHubTabAdd />;
-		if (!data.accounts[index]) return <View />;
-		return <SocialHubTab account={data.accounts[index]} />;
+		if (index >= data.profiles.length) return <SocialHubTabAdd />;
+		if (!data.profiles[index]) return <View />;
+		return <SocialHubTab profile={data.profiles[index]} />;
+	}
+
+	const tabLabels = data.profiles.map((o) => ({
+		label: o.name,
+		id: o.id.toString(),
+	}));
+
+	tabLabels.push({
+		label: 'New +',
+		id: '__add__',
+	});
+
+	const [Index, setIndex] = useState(0);
+
+	const ref = useRef<PagerView>(null);
+	const onChipSelect = (index: number) => {
+		if (Index !== index) {
+			ref.current.setPage(index);
+		}
+	};
+
+	function onPageScroll(e: any) {
+		const { offset, position } = e.nativeEvent;
+		const nextIdx = Math.round(position + offset);
+		setIndex(nextIdx);
 	}
 
 	return (
-		<AppPagerView
-			renderFunction={renderScene}
-			pageCount={data.accounts.length + 1}
-		/>
+		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
+			<PagerView
+				ref={ref}
+				scrollEnabled={true}
+				style={styles.pagerView}
+				initialPage={0}
+				onPageScroll={onPageScroll}
+			>
+				{Array.from({ length: data.profiles.length + 1 }).map((_, index) => (
+					<View key={index}>{renderScene(index)}</View>
+				))}
+			</PagerView>
+			<BottomNavBarInfinite
+				Index={Index}
+				setIndex={onChipSelect}
+				items={tabLabels}
+			/>
+		</View>
 	);
 }
 

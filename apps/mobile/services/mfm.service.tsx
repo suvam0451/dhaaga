@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { StyleProp, Text, TextStyle } from 'react-native';
 import LinkProcessor from '../components/common/link/LinkProcessor';
 import { TextParserService } from './text-parser.service';
 import type { MfmNode } from '@dhaaga/bridge';
@@ -12,7 +12,9 @@ import { RandomUtil } from '../utils/random.utils';
 import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppColorSchemeType,
+	AppThemingUtil,
 } from '../utils/theming.util';
+import { AppText } from '../components/lib/Text';
 
 class MfmComponentBuilder {
 	protected readonly input: string;
@@ -39,17 +41,14 @@ class MfmComponentBuilder {
 	constructor({
 		input,
 		targetSubdomain,
-		mySubdomain,
-		myDomain,
 		emojiMap,
 		opts,
 		fontFamily,
 		emphasis,
 		colorScheme,
+		style,
 	}: {
 		input: string;
-		myDomain: string;
-		mySubdomain: string;
 		targetSubdomain?: string;
 		emojiMap?: Map<string, string>;
 		opts?: {
@@ -59,14 +58,13 @@ class MfmComponentBuilder {
 		fontFamily?: string;
 		emphasis: APP_COLOR_PALETTE_EMPHASIS;
 		colorScheme: AppColorSchemeType;
+		style?: StyleProp<TextStyle>;
 	}) {
 		this.input = input;
 		this.emojis = new Set<string>();
 		this.targetSubdomain = targetSubdomain;
 		this.results = [];
 		this.aiContext = [];
-		this.mySubdomain = mySubdomain;
-		this.myDomain = myDomain;
 		this.emojiMap = emojiMap;
 		this.fontFamily = fontFamily || APP_FONTS.INTER_400_REGULAR;
 		this.emphasis = emphasis;
@@ -78,14 +76,12 @@ class MfmComponentBuilder {
 		if (opts?.parseLinks !== undefined) this.parseLinks = opts?.parseLinks;
 	}
 
-	solve(perf: boolean) {
-		this.findMentions();
-		this.findLinks();
-
-		this.preprocess();
+	solve() {
+		this.mentions = TextParserService.findMentions(this.input);
+		this.links = TextParserService.findHyperlinks(this.input);
+		this.nodes = TextParserService.preprocessPostContent(this.input, false);
 
 		this.findEmojis();
-
 		this.process();
 	}
 
@@ -111,53 +107,9 @@ class MfmComponentBuilder {
 		}
 	}
 
-	preprocess() {
-		this.nodes = TextParserService.preprocessPostContent(this.input, false);
-	}
-
-	findLinks() {
-		this.links = TextParserService.findHyperlinks(this.input);
-	}
-
-	findMentions() {
-		this.mentions = TextParserService.findMentions(this.input);
-	}
-
 	process() {
 		let count = 0;
 		let paraCount = 0;
-
-		let color = null;
-		switch (this.emphasis) {
-			case APP_COLOR_PALETTE_EMPHASIS.A0: {
-				color = this.colorScheme.secondary.a0;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A10: {
-				color = this.colorScheme.secondary.a10;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A20: {
-				color = this.colorScheme.secondary.a20;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A30: {
-				color = this.colorScheme.secondary.a30;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A40: {
-				color = this.colorScheme.secondary.a40;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A50: {
-				color = this.colorScheme.secondary.a50;
-				break;
-			}
-			default: {
-				color = this.colorScheme.secondary.a0;
-				break;
-			}
-		}
 
 		for (const para of this.nodes) {
 			this.results.push([]);
@@ -166,18 +118,9 @@ class MfmComponentBuilder {
 				if (node.type === 'text') {
 					const splits = node.props?.text.split(/<br ?\/?>/);
 
-					const key = RandomUtil.nanoId();
 					// first item is always text
 					this.results[paraCount].push(
-						<Text
-							key={key}
-							style={{
-								color: color as any,
-								fontFamily: this.fontFamily || APP_FONTS.INTER_400_REGULAR,
-							}}
-						>
-							{splits[0]}
-						</Text>,
+						<AppText.BodyNormal keygen>{splits[0]}</AppText.BodyNormal>,
 					);
 					count++;
 
@@ -186,17 +129,8 @@ class MfmComponentBuilder {
 						this.results.push([]);
 						paraCount++;
 
-						const key = RandomUtil.nanoId();
 						this.results[paraCount].push(
-							<Text
-								key={key}
-								style={{
-									color: color as any,
-									fontFamily: this.fontFamily,
-								}}
-							>
-								{splits[i]}
-							</Text>,
+							<AppText.BodyNormal keygen>{splits[1]}</AppText.BodyNormal>,
 						);
 					}
 
@@ -216,37 +150,10 @@ class MfmComponentBuilder {
 	}
 
 	private parser(node: any) {
-		let color = null;
-		switch (this.emphasis) {
-			case APP_COLOR_PALETTE_EMPHASIS.A0: {
-				color = this.colorScheme.secondary.a0;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A10: {
-				color = this.colorScheme.secondary.a10;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A20: {
-				color = this.colorScheme.secondary.a20;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A30: {
-				color = this.colorScheme.secondary.a30;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A40: {
-				color = this.colorScheme.secondary.a40;
-				break;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A50: {
-				color = this.colorScheme.secondary.a50;
-				break;
-			}
-			default: {
-				color = this.colorScheme.secondary.a0;
-				break;
-			}
-		}
+		let color = AppThemingUtil.getColorForEmphasis(
+			this.colorScheme.secondary,
+			this.emphasis,
+		);
 
 		const k = RandomUtil.nanoId();
 		switch (node.type) {
@@ -304,7 +211,7 @@ class MfmComponentBuilder {
 						key={k}
 						style={{
 							color: color as any,
-							fontFamily: this.fontFamily,
+							fontFamily: 'SourceSansPro_400Regular',
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
@@ -417,14 +324,13 @@ class MfmService {
 		input: string,
 		{
 			emojiMap,
-			domain,
 			subdomain,
 			remoteSubdomain,
 			fontFamily,
 			emphasis,
 			colorScheme,
+			style,
 		}: {
-			domain: string;
 			subdomain: string;
 			emojiMap: Map<string, string>;
 			remoteSubdomain?: string;
@@ -435,6 +341,7 @@ class MfmService {
 				fontFamily?: string;
 			};
 			colorScheme: AppColorSchemeType;
+			style?: StyleProp<TextStyle>;
 		},
 	) {
 		/**
@@ -444,7 +351,7 @@ class MfmService {
 		 */
 		if (!remoteSubdomain && subdomain) remoteSubdomain = subdomain;
 
-		if (!input || !domain || !subdomain || !emojiMap)
+		if (!input || !emojiMap)
 			return {
 				reactNodes: [],
 				openAiContext: [],
@@ -452,15 +359,14 @@ class MfmService {
 
 		const solver = new MfmComponentBuilder({
 			input,
-			myDomain: domain,
-			mySubdomain: subdomain,
 			emojiMap,
 			targetSubdomain: remoteSubdomain,
 			fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
 			emphasis: emphasis || APP_COLOR_PALETTE_EMPHASIS.A0,
 			colorScheme,
+			style,
 		});
-		solver.solve(true);
+		solver.solve();
 		return {
 			reactNodes: solver.results,
 			openAiContext: solver.aiContext,

@@ -14,7 +14,7 @@ export const modalStyles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	modalDescription: {
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		textAlign: 'center',
 		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 14,
