@@ -1,14 +1,20 @@
-import { DependencyList, useEffect, useMemo, useRef, useState } from 'react';
+import { DependencyList, useEffect, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import MfmService from '../../services/mfm.service';
 import { Skeleton } from '@rneui/themed';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FacetService from '../../services/facets.service';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../utils/random.utils';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import {
+	APP_COLOR_PALETTE_EMPHASIS,
+	AppThemingUtil,
+} from '../../utils/theming.util';
+import {
+	useAppAcct,
+	useAppApiClient,
+	useAppTheme,
+} from '../../hooks/utility/global-state-extractors';
 
 type Props = {
 	content: string;
@@ -48,13 +54,9 @@ function useMfm({
 	acceptTouch,
 	emphasis,
 }: Props) {
-	const { acct, driver, theme } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			driver: o.driver,
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
+	const { acct } = useAppAcct();
+	const { driver } = useAppApiClient();
 
 	const defaultValue = useRef<any>({
 		isLoaded: false,
@@ -80,35 +82,9 @@ function useMfm({
 	 * */
 	const IsSolved = useRef(RandomUtil.nanoId());
 
-	let color = useMemo(() => {
-		switch (emphasis) {
-			case APP_COLOR_PALETTE_EMPHASIS.A0: {
-				return theme.secondary.a0;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A10: {
-				return theme.secondary.a10;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A20: {
-				return theme.secondary.a20;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A30: {
-				return theme.secondary.a30;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A40: {
-				return theme.secondary.a40;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A50: {
-				return theme.secondary.a50;
-			}
-			default: {
-				return theme.secondary.a0;
-			}
-		}
-	}, [emphasis, theme]);
-
 	// since font remains same for each reusable component
 	const fontStyle = {
-		color: color,
+		color: AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis),
 		// fontFamily: fontFamily,
 	};
 

@@ -5,6 +5,7 @@ import LinkProcessor from '../components/common/link/LinkProcessor';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 
 import { APP_COLOR_PALETTE_EMPHASIS } from '../utils/theming.util';
+import { AppText } from '../components/lib/Text';
 
 function toUtf8(input: string): Uint8Array {
 	const encoder = new TextEncoder();
@@ -18,6 +19,14 @@ function toUtf16(input: Uint8Array): string {
 }
 
 class FacetService {
+	/**
+	 * Takes an AT proto object
+	 * as input and resolves embeds, links,
+	 * mentions etc.
+	 * @param input
+	 * @param fontFamily
+	 * @param emphasis
+	 */
 	static render(
 		input: string,
 		{
@@ -37,12 +46,9 @@ class FacetService {
 		for (const result of results) {
 			const preSegment = byteArray.slice(idx, result.index.byteStart);
 			elements.push(
-				<RawTextSegment
-					key={count}
-					value={toUtf16(preSegment)}
-					fontFamily={fontFamily}
-					emphasis={emphasis}
-				/>,
+				<AppText.Normal keygen emphasis={emphasis}>
+					{toUtf16(preSegment)}
+				</AppText.Normal>,
 			);
 			count++;
 

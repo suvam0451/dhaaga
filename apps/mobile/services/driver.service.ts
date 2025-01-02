@@ -15,6 +15,11 @@ export enum APP_PINNED_OBJECT_TYPE {
 
 	AP_PROTO_MICROBLOG_TAG_LOCAL = 'apProto_microBlog_TAG_Local',
 	AP_PROTO_MICROBLOG_TAG_REMOTE = 'apProto_microBlog_TAG_Remote',
+
+	/**
+	 * AT Protocol
+	 */
+	AT_PROTO_MICROBLOG_HOME = 'atProto_microBlog_HOME',
 }
 
 class DriverService {
@@ -26,7 +31,9 @@ class DriverService {
 	static getTimelinePins(driver: string): APP_PINNED_OBJECT_TYPE[] {
 		const results: APP_PINNED_OBJECT_TYPE[] = [];
 
-		if (driver === KNOWN_SOFTWARE.BLUESKY) return [];
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+			return [APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_HOME];
+		}
 
 		results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_HOME);
 		results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_LOCAL);

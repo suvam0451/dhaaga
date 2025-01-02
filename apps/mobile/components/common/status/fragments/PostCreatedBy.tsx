@@ -5,34 +5,20 @@ import { memo, useMemo, useRef } from 'react';
 import { Skeleton } from '@rneui/base';
 import useMfm from '../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState, { APP_KNOWN_MODAL } from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { APP_KNOWN_MODAL } from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
+	useAppApiClient,
 	useAppManager,
 	useAppModalState,
+	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
-import {
-	BebasNeue_400Regular,
-	DMSans_500Medium,
-	Figtree_400Regular,
-	FiraSans_400Regular,
-	Lato_400Regular,
-	Lexend_400Regular,
-	Nunito_400Regular,
-	Poppins_400Regular,
-	Poppins_500Medium,
-	PublicSans_400Regular,
-	Roboto_400Regular,
-	SourceSansPro_400Regular,
-	SpaceGrotesk_400Regular,
-	SourceSans3_400Regular,
-	useFonts,
-} from '@expo-google-fonts/dev';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { AppText } from '../../../lib/Text';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -111,11 +97,8 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	visibility: string;
 	postedAt: Date;
 }) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
+	const { driver } = useAppApiClient();
 
 	const { content: UsernameWithEmojis } = useMfm({
 		content: displayNameRaw,
@@ -127,35 +110,25 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});
 
-	const [loaded, error] = useFonts({
-		Poppins_400Regular: Poppins_400Regular,
-		Lato_400Regular: Lato_400Regular,
-		Nunito_400Regular: Nunito_400Regular,
-		Lexend_400Regular: Lexend_400Regular,
-		DMSans_500Medium: DMSans_500Medium,
-		PublicSans_400Regular: PublicSans_400Regular,
-		SpaceGrotesk_400Regular: SpaceGrotesk_400Regular,
-		Figtree_400Regular: Figtree_400Regular,
-		BebasNeue_400Regular: BebasNeue_400Regular,
-		Poppins_500Medium: Poppins_500Medium,
-		FiraSans_400Regular: FiraSans_400Regular,
-		SourceSansPro_400Regular: SourceSansPro_400Regular,
-		Roboto_400Regular: Roboto_400Regular,
-	});
-
 	return (
 		<View
 			style={{
 				alignItems: 'flex-start',
-				marginLeft: 8,
-				// to leave sufficient space to show indicator icons
+				marginLeft: 8, // to leave sufficient space to show indicator icons
 				marginRight: 84,
 			}}
 		>
 			<View>
 				<Pressable onPress={onClick}>
 					<View>
-						{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
+						{/* No need to parse for Bluesky */}
+						{driver === KNOWN_SOFTWARE.BLUESKY ? (
+							<AppText.Medium>{displayNameRaw}</AppText.Medium>
+						) : UsernameWithEmojis ? (
+							UsernameWithEmojis
+						) : (
+							<Text> </Text>
+						)}
 					</View>
 					<Text
 						style={{
@@ -189,6 +162,7 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
 
 	const UserDivRef = useRef(null);
+
 	function onProfileClicked() {
 		UserDivRef.current.measureInWindow((x, y, width, height) => {
 			appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.userId, {

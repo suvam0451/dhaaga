@@ -71,6 +71,14 @@ const TaperedArrow = ({ direction }: { direction: 'top' | 'bottom' }) => {
 	);
 };
 
+function util(o: number): string {
+	const formatter = new Intl.NumberFormat('en-US', {
+		notation: 'compact',
+		compactDisplay: 'short',
+	});
+	return formatter.format(o);
+}
+
 function UserPeekModalContent({ userId }: { userId: string }) {
 	const { toProfile } = useAppNavigator();
 	const { data, error, fetchStatus } = useGetProfile({ userId });
@@ -83,6 +91,7 @@ function UserPeekModalContent({ userId }: { userId: string }) {
 		hide();
 		toProfile(userId);
 	}
+
 	return (
 		<ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 20 }}>
 			<View style={{ flexDirection: 'row', marginBottom: 16 }}>
@@ -156,7 +165,7 @@ function UserPeekModalContent({ userId }: { userId: string }) {
 					<AppText.SemiBold
 						style={{ color: theme.complementary.a0, fontSize: 16 }}
 					>
-						{data.stats.followers}
+						{util(data.stats.followers)}
 					</AppText.SemiBold>
 					<AppText.Medium
 						style={{ color: theme.complementary.a0, fontSize: 14 }}

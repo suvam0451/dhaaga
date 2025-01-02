@@ -8,11 +8,15 @@ import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusIte
 import StatusQuoted from './StatusQuoted';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { AppPostObject } from '../../../../types/app-post.types';
+import {
+	useAppApiClient,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { AppText } from '../../../lib/Text';
 
 type Props = {
 	dto: AppPostObject;
@@ -20,11 +24,8 @@ type Props = {
 };
 
 const StatusHierarchyParent = memo(({ dto }: Props) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
+	const { driver } = useAppApiClient();
 	const { toPost } = useAppNavigator();
 	const { content } = useMfm({
 		content: dto.content.raw,
@@ -77,18 +78,12 @@ const StatusHierarchyParent = memo(({ dto }: Props) => {
 						marginBottom: 6,
 					}}
 				>
-					{VALID_DISPLAY_NAME && UsernameWithEmojis ? (
+					{driver === KNOWN_SOFTWARE.BLUESKY ? (
+						<AppText.Medium>{dto.postedBy.displayName}</AppText.Medium>
+					) : VALID_DISPLAY_NAME && UsernameWithEmojis ? (
 						UsernameWithEmojis
 					) : (
-						<Text
-							style={{
-								flex: 1,
-								color: theme.textColor.medium,
-								fontSize: 13,
-							}}
-						>
-							{dto.postedBy.handle}
-						</Text>
+						<AppText.Medium>{dto.postedBy.handle}</AppText.Medium>
 					)}
 					<Text
 						style={{
@@ -119,7 +114,7 @@ const StatusHierarchyParent = memo(({ dto }: Props) => {
 						<StatusQuoted />
 					</WithAppStatusItemContext>
 				)}
-				<PostStats dto={dto} />
+				<PostStats />
 			</View>
 			<View
 				style={{

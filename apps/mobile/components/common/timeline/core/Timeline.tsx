@@ -110,14 +110,15 @@ function Base() {
 			maxId = data[data.length - 1]?.id;
 			nextBatch = data;
 		}
+		const retval = PostMiddleware.deserialize<unknown[]>(
+			nextBatch,
+			driver,
+			acct?.server,
+		);
 		dispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
 			payload: {
-				items: PostMiddleware.deserialize<unknown[]>(
-					nextBatch,
-					driver,
-					acct?.server,
-				),
+				items: retval,
 				maxId,
 			},
 		});

@@ -1,8 +1,6 @@
 import { Fragment, memo, useMemo, useState } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import WithAppStatusItemContext, {
-	useAppStatusItem,
-} from '../../../../hooks/ap-proto/useAppStatusItem';
+import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
 import { Pressable, View } from 'react-native';
@@ -12,7 +10,6 @@ import EmojiReactions from './EmojiReactions';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import StatusQuoted from './StatusQuoted';
 import { AppIcon } from '../../../lib/Icon';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -195,11 +192,11 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 				</HiddenByCw>
 
 				{/*FIXME: enable for bluesky*/}
-				{IS_QUOTE_BOOST && (
-					<WithAppStatusItemContext dto={_target.boostedFrom}>
-						<StatusQuoted />
-					</WithAppStatusItemContext>
-				)}
+				{/*{IS_QUOTE_BOOST && (*/}
+				{/*	<WithAppStatusItemContext dto={_target.boostedFrom}>*/}
+				{/*		<StatusQuoted />*/}
+				{/*	</WithAppStatusItemContext>*/}
+				{/*)}*/}
 
 				{/* Lock reactions for preview (to be refactored) */}
 				{!isPreview && <EmojiReactions dto={_target} />}

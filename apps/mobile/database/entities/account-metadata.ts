@@ -40,6 +40,10 @@ export enum ACCOUNT_METADATA_KEY {
 	ACCESS_TOKEN = 'accessToken',
 	REFRESH_TOKEN = 'refreshToken',
 	ATPROTO_SESSION_OBJECT = 'atprotoSessionObject',
+	ATPROTO_DID = 'atprotoDid',
+	ATPROTO_APP_PASSWORD = 'atprotoAppPassword',
+	// stored as string
+	ATPROTO_SESSION = 'atprotoSession',
 }
 
 @DbErrorHandler()

@@ -1,8 +1,7 @@
 import { memo } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import useMfm from '../../../hooks/useMfm';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { Text, TouchableOpacity, View } from 'react-native';
 import MediaItem from '../../media/MediaItem';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import StatusQuoted from './StatusQuoted';
@@ -10,24 +9,17 @@ import PostStats from '../PostStats';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import StatusVisibility from './StatusVisibility';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { AppPostObject } from '../../../../types/app-post.types';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	dto: AppPostObject;
-	hasParent?: boolean;
 };
 
-const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
+const StatusHierarchyRoot = memo(({ dto }: Props) => {
+	const { theme } = useAppTheme();
 	const { toPost } = useAppNavigator();
 	const { content } = useMfm({
 		content: dto.content.raw,
@@ -56,123 +48,101 @@ const StatusHierarchyRoot = memo(({ dto, hasParent }: Props) => {
 
 	return (
 		<View
-			style={[
-				styles.rootContainer,
-				{
-					paddingTop: hasParent === undefined ? 10 : 0,
-					position: 'relative',
-					backgroundColor: theme.palette.bg,
-				},
-			]}
+			style={{
+				marginTop: 4,
+				position: 'relative',
+				flexDirection: 'row',
+				alignItems: 'flex-start',
+			}}
 		>
-			<View
-				style={{
-					flexDirection: 'row',
-					flex: 1,
-					alignItems: 'flex-start',
-					marginBottom: 4,
-				}}
-			>
-				<PostCreatedByIconOnly dto={dto} />
-				<View style={{ marginLeft: 8, position: 'relative', flex: 1 }}>
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						{VALID_DISPLAY_NAME && UsernameWithEmojis ? (
-							UsernameWithEmojis
-						) : (
-							<Text
-								style={{
-									flex: 1,
-									color: theme.textColor.medium,
-									fontSize: 13,
-								}}
-							>
-								{dto.postedBy.handle}
-							</Text>
-						)}
-						<View
+			<PostCreatedByIconOnly dto={dto} />
+			<View style={{ marginLeft: 8, position: 'relative', flex: 1 }}>
+				<View style={{ flexDirection: 'row', flex: 1 }}>
+					{VALID_DISPLAY_NAME && UsernameWithEmojis ? (
+						UsernameWithEmojis
+					) : (
+						<Text
 							style={{
-								flexDirection: 'row',
-								alignItems: 'flex-end', // flex: 1,
-								justifyContent: 'flex-end',
+								flex: 1,
+								color: theme.textColor.medium,
+								fontSize: 13,
 							}}
 						>
-							<StatusVisibility visibility={dto.visibility} />
-							<Text
-								style={{
-									color: 'gray',
-									marginLeft: 2,
-									marginRight: 2,
-									opacity: 0.6,
-								}}
-							>
-								•
-							</Text>
-							<View style={{ flexDirection: 'row' }}>
-								<Text
-									style={{
-										color: theme.textColor.low,
-										fontSize: 12,
-										fontFamily: APP_FONTS.INTER_700_BOLD,
-									}}
-								>
-									{DatetimeUtil.timeAgo(dto.createdAt)}
-								</Text>
-							</View>
-						</View>
-					</View>
-
-					<TouchableOpacity
-						delayPressIn={100}
-						onPress={() => {
-							toPost(dto.id);
-						}}
-					>
-						{content}
-					</TouchableOpacity>
-					<MediaItem
-						attachments={dto.content.media}
-						calculatedHeight={dto.calculated.mediaContainerHeight}
-					/>
-					{IS_QUOTE_BOOST && (
-						<WithAppStatusItemContext dto={dto.boostedFrom}>
-							<StatusQuoted />
-						</WithAppStatusItemContext>
+							{dto.postedBy.handle}
+						</Text>
 					)}
-					<PostStats dto={dto} style={{ paddingBottom: 8 }} />
-				</View>
-
-				<View
-					style={{
-						position: 'absolute',
-						height: '100%',
-						left: 22,
-						overflow: 'hidden',
-					}}
-				>
 					<View
 						style={{
-							flex: 1,
-							marginTop: 54,
-							width: 1.5,
-							backgroundColor: APP_FONT.DISABLED,
-							borderRadius: 8,
+							flexDirection: 'row',
+							alignItems: 'flex-end', // flex: 1,
+							justifyContent: 'flex-end',
 						}}
-					/>
+					>
+						<StatusVisibility visibility={dto.visibility} />
+						<Text
+							style={{
+								color: 'gray',
+								marginLeft: 2,
+								marginRight: 2,
+								opacity: 0.6,
+							}}
+						>
+							•
+						</Text>
+						<View style={{ flexDirection: 'row' }}>
+							<Text
+								style={{
+									color: theme.textColor.low,
+									fontSize: 12,
+									fontFamily: APP_FONTS.INTER_700_BOLD,
+								}}
+							>
+								{DatetimeUtil.timeAgo(dto.createdAt)}
+							</Text>
+						</View>
+					</View>
 				</View>
+
+				<TouchableOpacity
+					delayPressIn={100}
+					onPress={() => {
+						toPost(dto.id);
+					}}
+				>
+					{content}
+				</TouchableOpacity>
+				<MediaItem
+					attachments={dto.content.media}
+					calculatedHeight={dto.calculated.mediaContainerHeight}
+				/>
+				{IS_QUOTE_BOOST && (
+					<WithAppStatusItemContext dto={dto.boostedFrom}>
+						<StatusQuoted />
+					</WithAppStatusItemContext>
+				)}
+				<PostStats style={{ paddingBottom: 8 }} />
+			</View>
+
+			<View
+				style={{
+					position: 'absolute',
+					height: '100%',
+					left: 16,
+					overflow: 'hidden',
+				}}
+			>
+				<View
+					style={{
+						flex: 1,
+						marginTop: 48,
+						width: 1.5,
+						backgroundColor: '#323232',
+						borderRadius: 8,
+					}}
+				/>
 			</View>
 		</View>
 	);
 });
 
 export default StatusHierarchyRoot;
-
-const APP_SETTING_VERTICAL_MARGIN = 8;
-const styles = StyleSheet.create({
-	rootContainer: {
-		backgroundColor: APP_THEME.DARK_THEME_STATUS_BG,
-		padding: 10,
-		paddingHorizontal: APP_SETTING_VERTICAL_MARGIN,
-		paddingBottom: 0,
-		position: 'relative',
-	},
-});

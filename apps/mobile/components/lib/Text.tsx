@@ -173,21 +173,28 @@ export class AppText {
 	}
 
 	static Normal({
+		key,
+		keygen,
 		style,
+		color,
 		children,
 		numberOfLines,
-	}: {
-		children: any;
-		style?: StyleProp<TextStyle>;
-		numberOfLines?: number;
-	}) {
+		emphasis,
+	}: AppTextProps) {
 		const { theme } = useAppTheme();
+		let _color =
+			color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
+
+		let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
+			AppTextVariant.BODY_NORMAL,
+		);
+
 		return (
 			<Text
 				style={[
+					_baseStyling,
 					{
-						fontFamily: APP_FONTS.INTER_400_REGULAR,
-						color: theme.secondary.a10,
+						color: _color,
 					},
 					style,
 				]}

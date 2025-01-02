@@ -1,14 +1,13 @@
 import { Agent, AtpSessionData, CredentialSession } from '@atproto/api';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AccountService } from '../../database/entities/account';
-import AccountMetaService from '../../database/services/account-secret.service';
-import { Account } from '../../database/_schema';
 import {
-	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
+	ACCOUNT_METADATA_KEY,
 } from '../../database/entities/account-metadata';
-import { jwtDecode } from '../../utils/jwt-decode.utils';
+import { Account } from '../../database/_schema';
 import { DataSource } from '../../database/dataSource';
+import { jwtDecode } from 'jwt-decode';
 
 /**
  * Helps manage session
@@ -37,7 +36,7 @@ class AtprotoSessionService {
 		const secret = AccountMetadataService.getKeyValueForAccountSync(
 			db,
 			this.acct,
-			ACCOUNT_METADATA_KEY.ATPROTO_SESSION_OBJECT,
+			ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
 		);
 		this.oldSession = JSON.parse(secret);
 	}
@@ -68,16 +67,15 @@ class AtprotoSessionService {
 		 * Ideally, we should refresh our tokens a bit ahead of time
 		 * to work around network errors (in which case, old token
 		 * would be attempted to be used)
+		 *
+		 * FIXME: currently unable to refresh token, as the parsing is failing
 		 */
-		const jwtDecodeResult = jwtDecode(this.sessionManager.session.accessJwt);
-		if (jwtDecodeResult.type !== 'success') {
-			console.log('[WARN]: failed to parse jwt token');
+		const _jwt = jwtDecode(this.sessionManager.session.accessJwt);
+		if (!_jwt) {
 			return this;
 		}
-		const _jwt: any = jwtDecodeResult.value;
 
 		const IS_EXPIRED = _jwt.exp < Math.floor(new Date().getTime() / 1000);
-
 		try {
 			if (IS_EXPIRED) {
 				await this.sessionManager.refreshSession();
@@ -99,14 +97,11 @@ class AtprotoSessionService {
 		const statusCode = this.nextStatusCode;
 		switch (statusCode) {
 			case 'update': {
-				await AccountMetaService.upsertMeta(
-					this.acct,
-					'session',
-					JSON.stringify(this.nextSession),
-				);
-				// console.log('BEFORE', this.oldSession.accessJwt);
-				// console.log('AFTER', this.nextSession.accessJwt);
-				// cycle forward
+				AccountMetadataService.upsert(this.db, this.acct, {
+					key: ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
+					value: JSON.stringify(this.nextSession),
+					type: 'json',
+				});
 				this.oldSession = this.nextSession;
 				return { success: true, data: this.nextSession };
 			}
@@ -180,6 +175,7 @@ class AtprotoSessionService {
 			AccountService.upsert(
 				db,
 				{
+					identifier: res.data.did,
 					server: instance,
 					driver: KNOWN_SOFTWARE.BLUESKY,
 					username: _username,
@@ -188,37 +184,37 @@ class AtprotoSessionService {
 				},
 				[
 					{
-						key: 'display_name',
+						key: ACCOUNT_METADATA_KEY.DISPLAY_NAME,
 						value: displayName,
 						type: 'string',
 					},
 					{
-						key: 'avatar',
+						key: ACCOUNT_METADATA_KEY.AVATAR_URL,
 						value: avatarUrl,
 						type: 'string',
 					},
 					{
-						key: 'access_token',
+						key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
 						value: accessToken,
 						type: 'string',
 					},
 					{
-						key: 'refresh_token',
+						key: ACCOUNT_METADATA_KEY.REFRESH_TOKEN,
 						value: refreshToken,
 						type: 'string',
 					},
 					{
-						key: 'did',
+						key: ACCOUNT_METADATA_KEY.ATPROTO_DID,
 						value: did,
 						type: 'string',
 					},
 					{
-						key: 'app_password',
+						key: ACCOUNT_METADATA_KEY.ATPROTO_APP_PASSWORD,
 						value: appPassword,
 						type: 'string',
 					},
 					{
-						key: 'session',
+						key: ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
 						value: JSON.stringify(storedSession),
 						type: 'json',
 					},
