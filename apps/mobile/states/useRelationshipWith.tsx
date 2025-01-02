@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { MastoRelationship } from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import useHookLoadingState from './useHookLoadingState';
 import {
 	LibraryResponse,
@@ -11,8 +10,7 @@ import { UserDetailed } from 'misskey-js/built/autogen/models';
 import ActivitypubRelationService from '../services/approto/activitypub-relation.service';
 import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 import { AppBskyActorGetProfile } from '@atproto/api';
-import useGlobalState from './_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppApiClient } from '../hooks/utility/global-state-extractors';
 
 const defaultValue = {
 	blockedBy: false,
@@ -41,12 +39,7 @@ const defaultValue = {
  * @constructor
  */
 function useRelationshipWith(id: string) {
-	const { client, driver } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			client: o.router,
-		})),
-	);
+	const { client, driver } = useAppApiClient();
 	const { State, forceUpdate } = useHookLoadingState();
 
 	const [IsLoading, setIsLoading] = useState(false);
@@ -77,7 +70,7 @@ function useRelationshipWith(id: string) {
 	}
 
 	const setMastoRelation = useCallback(
-		({ data, error }: LibraryResponse<MastoRelationship[]>) => {
+		({ data, error }: LibraryResponse<any[]>) => {
 			if (error || data.length === 0) {
 				Data.current.error = true;
 				return;
@@ -136,7 +129,7 @@ function useRelationshipWith(id: string) {
 		[Data, IsLoading],
 	);
 
-	function setRelation(input: MastoRelationship) {
+	function setRelation(input: any) {
 		setIsLoading(true);
 		switch (driver) {
 			case KNOWN_SOFTWARE.MASTODON: {

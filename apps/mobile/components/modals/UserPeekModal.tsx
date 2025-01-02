@@ -2,9 +2,11 @@ import {
 	Dimensions,
 	Pressable,
 	ScrollView,
+	StyleProp,
 	StyleSheet,
 	Text,
 	View,
+	ViewStyle,
 } from 'react-native';
 import { Fragment, useEffect, useState } from 'react';
 import { APP_KNOWN_MODAL } from '../../states/_global';
@@ -20,12 +22,51 @@ import { appDimensions } from '../../styles/dimensions';
 import RelationshipButtonCore from '../common/relationship/RelationshipButtonCore';
 import useAppNavigator from '../../states/useAppNavigator';
 
-const DEFAULT_POSITION = { x: 0, y: 0, ready: false };
+const DEFAULT_POSITION = {
+	x: 0,
+	y: 0,
+	width: 0,
+	height: 0,
+	ready: false,
+	popoverDirection: 'top' as 'top' | 'bottom',
+};
 
-const TaperedArrow = () => {
+const TaperedArrow = ({ direction }: { direction: 'top' | 'bottom' }) => {
+	const containerStyle: StyleProp<ViewStyle> = {
+		position: 'absolute',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: 'transparent',
+	};
+	const arrowStyle: StyleProp<ViewStyle> =
+		direction === 'top'
+			? {
+					width: 0,
+					height: 0,
+					left: 8,
+					borderLeftWidth: 12, // Left side of the triangle
+					borderRightWidth: 12, // Right side of the triangle
+					borderTopWidth: 10, // Height of the triangle
+					borderLeftColor: 'transparent', // No color for left side
+					borderRightColor: 'transparent', // No color for right side
+					borderTopColor: '#282828', // Color of the arrow (bottom)
+				}
+			: {
+					width: 0,
+					height: 0,
+					left: 8,
+					borderLeftWidth: 12, // Left side of the triangle
+					borderRightWidth: 12, // Right side of the triangle
+					borderBottomWidth: 10, // Height of the triangle
+					borderLeftColor: 'transparent', // No color for left side
+					borderRightColor: 'transparent', // No color for right side
+					borderBottomColor: '#282828', // Color of the arrow (bottom)
+				};
+
 	return (
-		<View style={styles.arrowContainer}>
-			<View style={[styles.arrow, { borderTopColor: '#282828' }]} />
+		<View style={containerStyle}>
+			<View style={arrowStyle} />
 		</View>
 	);
 };
@@ -112,8 +153,17 @@ function UserPeekModalContent({ userId }: { userId: string }) {
 				}}
 			>
 				<Text>
-					<AppText.SemiBold>{data.stats.followers}</AppText.SemiBold>
-					<AppText.Medium style={{ fontSize: 12 }}> Followers</AppText.Medium>
+					<AppText.SemiBold
+						style={{ color: theme.complementary.a0, fontSize: 16 }}
+					>
+						{data.stats.followers}
+					</AppText.SemiBold>
+					<AppText.Medium
+						style={{ color: theme.complementary.a0, fontSize: 14 }}
+					>
+						{' '}
+						Followers
+					</AppText.Medium>
 				</Text>
 			</View>
 			<View
@@ -139,7 +189,9 @@ function UserPeekModalContent({ userId }: { userId: string }) {
 							textAlign: 'center',
 							alignSelf: 'center',
 							margin: 'auto',
+							fontSize: 16,
 						}}
+						color={theme.primary.a0}
 					>
 						Show Profile
 					</AppText.SemiBold>
@@ -172,18 +224,53 @@ function UserPeekModal() {
 			setUserIdTarget(null);
 			return;
 		}
+
 		const data = appManager.storage.getUserPeekModalData();
-		if (data) {
+		if (data.measurement.y >= height / 2) {
 			setPosition({
 				x: data.measurement.x,
 				y: data.measurement.y,
+				width: data.measurement.width,
+				height: data.measurement.height,
 				ready: true,
+				popoverDirection: 'top',
+			});
+			setUserIdTarget(data.userId);
+		} else {
+			setPosition({
+				x: data.measurement.x,
+				y: data.measurement.y,
+				width: data.measurement.width,
+				height: data.measurement.height,
+				ready: true,
+				popoverDirection: 'bottom',
 			});
 			setUserIdTarget(data.userId);
 		}
 	}, [appManager, stateId]);
 
 	if (!visible || !Position.ready) return <View />;
+
+	const IS_TOP_ORIENTED = Position.popoverDirection === 'top';
+
+	const modalContentStyle: StyleProp<ViewStyle> = {
+		width: width - 48,
+		backgroundColor: '#282828',
+		left: Position.x,
+		top: IS_TOP_ORIENTED
+			? Position.y - 12
+			: Position.y + Position.height + 12 - 2,
+		transform: IS_TOP_ORIENTED
+			? [{ translateY: '-100%' }]
+			: [{ translateY: '0%' }],
+	};
+
+	const arrowStyle: StyleProp<ViewStyle> = {
+		position: 'absolute',
+		left: Position.x,
+		top: IS_TOP_ORIENTED ? Position.y - 12 : Position.y + Position.height,
+	};
+
 	return (
 		<Fragment>
 			<View
@@ -207,28 +294,11 @@ function UserPeekModal() {
 					}}
 				/>
 			</View>
-			<View
-				style={[
-					styles.contentContainer,
-					{
-						width: width - 48,
-						backgroundColor: '#282828',
-						left: Position.x,
-						top: Position.y - 12,
-					},
-				]}
-			>
+			<View style={[styles.contentContainer, modalContentStyle]}>
 				<UserPeekModalContent userId={UserIdTarget} />
 			</View>
-			<View
-				style={{
-					position: 'absolute',
-					left: Position.x,
-					top: Position.y - 12,
-					transform: [{ translateY: '-100%' }],
-				}}
-			>
-				<TaperedArrow />
+			<View style={arrowStyle}>
+				<TaperedArrow direction={Position.popoverDirection} />
 			</View>
 		</Fragment>
 	);

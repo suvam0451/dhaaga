@@ -22,6 +22,7 @@ import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
 } from '../../../context-wrappers/WithPostTimeline';
+import UserPeekModal from '../../../modals/UserPeekModal';
 
 /*
  * Render a Timeline
@@ -166,6 +167,7 @@ function Base() {
 				paddingTop={50 + 16}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
+			<UserPeekModal />
 		</View>
 	);
 }

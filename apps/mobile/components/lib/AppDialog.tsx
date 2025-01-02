@@ -4,10 +4,10 @@ import {
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../styles/AppFonts';
-import { modalStyles } from '../common/relationship/dialogs/_common';
 import { Fragment, useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
+import { APP_FONT } from '../../styles/AppTheme';
 
 type DialogOptionsProps = {
 	label: string;
@@ -197,5 +197,25 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+});
+
+const modalStyles = StyleSheet.create({
+	modalTitle: {
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		textAlign: 'center',
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 18,
+		marginBottom: 16,
+	},
+	modalDescription: {
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		textAlign: 'center',
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 14,
+	},
+	actionButtonContainer: {
+		marginVertical: 16,
+		marginTop: 32,
 	},
 });

@@ -16,6 +16,66 @@ type ActionType = {
  */
 export class DialogBuilderService {
 	/**
+	 * Currently unrelated
+	 */
+	static currentlyUnrelatedMoreActions(follow: any): AppDialogInstanceState {
+		return {
+			title: 'Following',
+			description: ['You are currently unrelated to this user.'],
+			actions: [
+				{
+					label: 'Follow',
+					onPress: follow,
+				},
+			],
+		};
+	}
+
+	static currentlySentRequestMoreActions(
+		refreshStatus: any,
+		cancelRequest: any,
+	): AppDialogInstanceState {
+		return {
+			title: 'Request Pending',
+			description: [
+				'You have sent this user a follow request.',
+				'But, it seems to not have been accepted yet.',
+				'You can try to refresh the status or wait.',
+			],
+			actions: [
+				{
+					label: 'Refresh',
+					onPress: refreshStatus,
+				},
+				{
+					label: 'Cancel',
+					onPress: cancelRequest,
+					variant: 'destructive',
+				},
+			],
+		};
+	}
+
+	/**
+	 * Perform more actions when currently
+	 * following, but not followed by a user
+	 */
+	static currentlyFollowingMoreActions(
+		onUnfollow: any,
+	): AppDialogInstanceState {
+		return {
+			title: 'Following',
+			description: ['You currently follow this user.'],
+			actions: [
+				{
+					label: 'Unfollow',
+					onPress: onUnfollow,
+					variant: 'destructive',
+				},
+			],
+		};
+	}
+	/**
 	 * ----- Social Hub -----
 	 */
 	static toSwitchActiveAccount(onPress: any): AppDialogInstanceState {

@@ -71,10 +71,7 @@ function WithUserTimelineCtx({ children }: any) {
 	return (
 		<WithTimelineControllerContext>
 			<CtxWrapper>
-				<WithAppTimelineDataContext>
-					{children}
-					<UserPeekModal />
-				</WithAppTimelineDataContext>
+				<WithAppTimelineDataContext>{children}</WithAppTimelineDataContext>
 			</CtxWrapper>
 		</WithTimelineControllerContext>
 	);

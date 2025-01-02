@@ -1,14 +1,13 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useMemo } from 'react';
 import useRelationshipWith from '../../../states/useRelationshipWith';
 import FollowRequestPendingState from './fragments/FollowRequestPendingState';
 import { View } from 'react-native';
-import RDPending from './dialogs/RDPending';
 import RelationStrangers from './fragments/RelationStrangers';
-import RDFollow from './dialogs/RDFollow';
 import RelationFollowing from './fragments/RelationFollowing';
-import RDFollowing from './dialogs/RDFollowing';
 import RelationFollowedBy from './fragments/RelationFollowedBy';
 import RelationFriends from './fragments/RelationFriends';
+import { DialogBuilderService } from '../../../services/dialog-builder.service';
+import { useAppDialog } from '../../../hooks/utility/global-state-extractors';
 
 type RelationshipButtonCoreProps = {
 	userId: string;
@@ -21,9 +20,7 @@ type RelationshipButtonCoreProps = {
  */
 const RelationshipButtonCore = memo(
 	({ userId }: RelationshipButtonCoreProps) => {
-		const [DVFollow, setDVFollow] = useState(false);
-		const [DVPending, setDVPending] = useState(false);
-		const [DVFollowing, setDVFollowing] = useState(false);
+		const { show, hide } = useAppDialog();
 
 		const {
 			relationState,
@@ -40,7 +37,18 @@ const RelationshipButtonCore = memo(
 					<FollowRequestPendingState
 						loading={relationLoading}
 						onPress={() => {
-							setDVPending(true);
+							show(
+								DialogBuilderService.currentlySentRequestMoreActions(
+									() => {
+										refetchRelation().finally(() => {
+											hide();
+										});
+									},
+									() => {
+										hide();
+									},
+								),
+							);
 						}}
 					/>
 				);
@@ -50,7 +58,13 @@ const RelationshipButtonCore = memo(
 					<RelationStrangers
 						loading={relationLoading}
 						onPress={() => {
-							setDVFollow(true);
+							show(
+								DialogBuilderService.currentlyUnrelatedMoreActions(() => {
+									follow().finally(() => {
+										hide();
+									});
+								}),
+							);
 						}}
 					/>
 				);
@@ -60,7 +74,13 @@ const RelationshipButtonCore = memo(
 					<RelationFollowing
 						loading={relationLoading}
 						onPress={() => {
-							setDVFollowing(true);
+							show(
+								DialogBuilderService.currentlyFollowingMoreActions(() => {
+									unfollow().finally(() => {
+										hide();
+									});
+								}),
+							);
 						}}
 					/>
 				);
@@ -74,6 +94,7 @@ const RelationshipButtonCore = memo(
 				return <RelationFriends loading={relationLoading} onPress={() => {}} />;
 			}
 			return <View />;
+			// TODO: implement these relationship states
 			// if (!relation.following && !relation.followedBy) {
 			// 	return AppRelationship.UNRELATED;
 			// }
@@ -95,32 +116,7 @@ const RelationshipButtonCore = memo(
 			// return AppRelationship.UNKNOWN;
 		}, [relation, relationState]);
 
-		return (
-			<View>
-				{FollowLabel}
-				{/*Dialog Array*/}
-				<RDFollow
-					visible={DVFollow}
-					setVisible={setDVFollow}
-					loading={relationLoading}
-					follow={follow}
-					profileLocked={false}
-				/>
-				<RDPending
-					visible={DVPending}
-					setVisible={setDVPending}
-					loading={relationLoading}
-					cancelFollowRequest={() => {}}
-					refresh={refetchRelation}
-				/>
-				<RDFollowing
-					visible={DVFollowing}
-					setVisible={setDVFollowing}
-					loading={relationLoading}
-					unfollow={unfollow}
-				/>
-			</View>
-		);
+		return <View>{FollowLabel}</View>;
 	},
 );
 
