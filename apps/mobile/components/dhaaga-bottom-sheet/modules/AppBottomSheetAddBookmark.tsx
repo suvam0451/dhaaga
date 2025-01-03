@@ -69,7 +69,7 @@ function CollectionItem({
 				<Text
 					style={{
 						color: theme.secondary.a0,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 						fontSize: 18,
 					}}
 				>
@@ -79,7 +79,6 @@ function CollectionItem({
 					style={{
 						color: theme.secondary.a20,
 						fontFamily: APP_FONTS.INTER_400_REGULAR,
-						fontSize: 14,
 					}}
 				>
 					{desc.join(' · ')}
@@ -148,7 +147,7 @@ function AppBottomSheetAddBookmark() {
 			}}
 		>
 			<View style={styles.sectionContainer}>
-				<Text style={[styles.sectionLabel, { color: theme.secondary.a0 }]}>
+				<Text style={[styles.sectionLabel, { color: theme.secondary.a10 }]}>
 					Bookmark
 				</Text>
 				<CollectionItem
@@ -225,7 +224,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	sectionLabel: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		fontSize: 18,
 		marginBottom: 16,
 	},

@@ -1,13 +1,10 @@
 import { Fragment, memo } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
-import StatusHierarchyParent from './fragments/StatusHierarchyParent';
-import StatusHierarchyRoot from './fragments/StatusHierarchyRoot';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import ParentPost from './fragments/ParentPost';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 /**
  * Adds a reply indicator to the post
@@ -18,11 +15,7 @@ import { useShallow } from 'zustand/react/shallow';
  */
 export const ParentPostFragment = memo(function Foo() {
 	const { dto } = useAppStatusItem();
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	if (!dto.replyTo)
 		return (
@@ -65,12 +58,9 @@ export const ParentPostFragment = memo(function Foo() {
 	return (
 		<Fragment>
 			{dto.rootPost && !IS_PARENT_ALSO_ROOT && (
-				<StatusHierarchyRoot dto={dto.rootPost} />
+				<ParentPost dto={dto.rootPost} />
 			)}
-			<StatusHierarchyParent
-				dto={dto.replyTo}
-				hasParent={!!(dto.rootPost && !IS_PARENT_ALSO_ROOT)}
-			/>
+			<ParentPost dto={dto.replyTo} />
 		</Fragment>
 	);
 });

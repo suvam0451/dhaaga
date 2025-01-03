@@ -5,17 +5,20 @@ import { memo, useMemo, useRef } from 'react';
 import { Skeleton } from '@rneui/base';
 import useMfm from '../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState, { APP_KNOWN_MODAL } from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { APP_KNOWN_MODAL } from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
+	useAppApiClient,
 	useAppManager,
 	useAppModalState,
+	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { AppText } from '../../../lib/Text';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -81,30 +84,23 @@ function OriginalPosterSkeleton() {
 export const OriginalPosterPostedByFragment = memo(function Foo({
 	displayNameRaw,
 	onClick,
-	theirSubdomain,
 	emojiMap,
 	instanceUrl,
 	postedAt,
 }: {
 	displayNameRaw: string;
-	theirSubdomain: string;
 	onClick: () => void;
 	emojiMap?: Map<string, string>;
 	instanceUrl: string;
 	visibility: string;
 	postedAt: Date;
 }) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
+	const { driver } = useAppApiClient();
 
 	const { content: UsernameWithEmojis } = useMfm({
 		content: displayNameRaw,
-		remoteSubdomain: theirSubdomain,
 		emojiMap: emojiMap,
-		deps: [displayNameRaw],
 		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		numberOfLines: 1,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
@@ -114,17 +110,22 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		<View
 			style={{
 				alignItems: 'flex-start',
-				marginLeft: 8,
-				// to leave sufficient space to show indicator icons
+				marginLeft: 8, // to leave sufficient space to show indicator icons
 				marginRight: 84,
 			}}
 		>
 			<View>
 				<Pressable onPress={onClick}>
 					<View>
-						{UsernameWithEmojis ? UsernameWithEmojis : <Text> </Text>}
+						{/* No need to parse for Bluesky */}
+						{driver === KNOWN_SOFTWARE.BLUESKY ? (
+							<AppText.Medium>{displayNameRaw}</AppText.Medium>
+						) : UsernameWithEmojis ? (
+							UsernameWithEmojis
+						) : (
+							<Text> </Text>
+						)}
 					</View>
-
 					<Text
 						style={{
 							color: theme.secondary.a40,
@@ -157,6 +158,7 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
 
 	const UserDivRef = useRef(null);
+
 	function onProfileClicked() {
 		UserDivRef.current.measureInWindow((x, y, width, height) => {
 			appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.userId, {
@@ -216,7 +218,6 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 
 				<OriginalPosterPostedByFragment
 					onClick={onProfileClicked}
-					theirSubdomain={STATUS_DTO.postedBy.instance}
 					displayNameRaw={STATUS_DTO.postedBy.displayName}
 					instanceUrl={STATUS_DTO.postedBy.handle}
 					postedAt={new Date(STATUS_DTO.createdAt)}

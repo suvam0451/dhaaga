@@ -17,6 +17,10 @@ class Service {
 		return db.profile.find({ active: true, accountId: acct.id });
 	}
 
+	static getAllShown(db: DataSource) {
+		return db.profile.find({ active: true });
+	}
+
 	static deselectAll(db: DataSource) {
 		db.profile.update({ id: gt(0) as any }, { selected: false });
 	}

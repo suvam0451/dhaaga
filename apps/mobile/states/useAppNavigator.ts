@@ -1,18 +1,13 @@
 import { router, useNavigation } from 'expo-router';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import useGlobalState from './_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppApiClient } from '../hooks/utility/global-state-extractors';
 
 /**
  * Hook to correctly navigate
  * to shared app routes
  */
 function useAppNavigator() {
-	const { driver } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-		})),
-	);
+	const { driver } = useAppApiClient();
 	const navigator = useNavigation();
 
 	function toHome() {

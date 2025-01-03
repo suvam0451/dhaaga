@@ -1,6 +1,7 @@
 import { ListItemEnum, ListItemType } from '../utils/itemType.types';
 import StatusItem from '../../status/StatusItem';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
+import { View } from 'react-native';
 
 /**
  * Renders a list of posts into a FlashList
@@ -8,6 +9,11 @@ import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusIte
  * @constructor
  */
 const FlashListPostRenderer = ({ item }: { item: ListItemType }) => {
+	if (item.props.dto === null) {
+		console.log('[WARN]: recieved null object', item);
+		return <View />;
+	}
+
 	switch (item.type) {
 		case ListItemEnum.ListItemWithImage: {
 			return (

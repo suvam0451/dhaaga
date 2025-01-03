@@ -359,8 +359,8 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 	},
 	collapsibleSettingsLabel: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-		fontSize: 20,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		fontSize: 18,
 	},
 	settingCategoryItemTextarea: {
 		marginLeft: 12,

@@ -23,6 +23,8 @@
  * Grab the opposite end of the color wheel and
  * shift the hue by +/- 30 to get this palette
  */
+import { APP_FONTS } from '../styles/AppFonts';
+import { StyleProp, TextStyle } from 'react-native';
 
 export enum APP_COLOR_PALETTE_EMPHASIS {
 	A0 = 'a0',
@@ -76,13 +78,27 @@ export type AppColorSchemeType = {
 	secondary: ColorRangeType;
 };
 
+export enum AppTextVariant {
+	BODY_NORMAL = 'body.normal',
+	BODY_MEDIUM = 'body.medium',
+	BODY_SEMIBOLD = 'body.semibold',
+	BODY_BOLD = 'body.bold',
+
+	H6 = 'h6',
+	H5 = 'h5',
+	H4 = 'h4',
+	H3 = 'h3',
+	H2 = 'h2',
+	H1 = 'h1',
+}
+
 export class AppThemingUtil {
 	static getColorForEmphasis(
 		store: ColorRangeType,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS,
 	) {
 		try {
-			if (!emphasis) return store[0];
+			if (!emphasis) return store[APP_COLOR_PALETTE_EMPHASIS.A0];
 			return store[emphasis];
 		} catch (e) {
 			return store[0];
@@ -92,5 +108,55 @@ export class AppThemingUtil {
 	static generateRandomColorHex() {
 		const randomColor = Math.floor(Math.random() * 16777215).toString(16);
 		return '#' + ('000000' + randomColor).slice(-6);
+	}
+
+	static getFontFamilyForVariant(variant: AppTextVariant) {
+		switch (variant) {
+			case AppTextVariant.BODY_NORMAL:
+			case AppTextVariant.BODY_MEDIUM:
+			case AppTextVariant.BODY_SEMIBOLD:
+			case AppTextVariant.BODY_BOLD:
+				return undefined;
+			case AppTextVariant.H6:
+			case AppTextVariant.H5:
+			case AppTextVariant.H4:
+			case AppTextVariant.H3:
+			case AppTextVariant.H2:
+			case AppTextVariant.H1:
+				return APP_FONTS.INTER_600_SEMIBOLD;
+		}
+	}
+
+	/**
+	 * Use this for testing/applying typography
+	 * @param variant
+	 */
+	static getBaseStylingForVariant(
+		variant: AppTextVariant,
+	): StyleProp<TextStyle> {
+		switch (variant) {
+			case AppTextVariant.BODY_NORMAL:
+				return { fontSize: 14, fontFamily: APP_FONTS.INTER_400_REGULAR };
+			case AppTextVariant.BODY_MEDIUM:
+				return { fontSize: 14, fontFamily: APP_FONTS.ROBOTO_500 };
+			case AppTextVariant.BODY_SEMIBOLD:
+				return { fontSize: 14, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+			case AppTextVariant.BODY_BOLD:
+				return { fontSize: 14, fontFamily: APP_FONTS.INTER_700_BOLD };
+			case AppTextVariant.H6:
+				return { fontSize: 18, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+			case AppTextVariant.H5:
+				return { fontSize: 20, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+			case AppTextVariant.H4:
+				return { fontSize: 22, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+			case AppTextVariant.H3:
+				return { fontSize: 24, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+			case AppTextVariant.H2:
+				return { fontSize: 26, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+			case AppTextVariant.H1:
+				return { fontSize: 28, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+			// return { fontSize: 30, fontFamily: APP_FONTS.SOURCE_SANS_PRO_600 };
+			// return { fontSize: 28, fontFamily: 'PublicSans_600SemiBold' };
+		}
 	}
 }

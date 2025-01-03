@@ -22,6 +22,7 @@ import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
 } from '../../../context-wrappers/WithPostTimeline';
+import UserPeekModal from '../../../modals/UserPeekModal';
 
 /*
  * Render a Timeline
@@ -109,14 +110,15 @@ function Base() {
 			maxId = data[data.length - 1]?.id;
 			nextBatch = data;
 		}
+		const retval = PostMiddleware.deserialize<unknown[]>(
+			nextBatch,
+			driver,
+			acct?.server,
+		);
 		dispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
 			payload: {
-				items: PostMiddleware.deserialize<unknown[]>(
-					nextBatch,
-					driver,
-					acct?.server,
-				),
+				items: retval,
 				maxId,
 			},
 		});
@@ -166,6 +168,7 @@ function Base() {
 				paddingTop={50 + 16}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
+			<UserPeekModal />
 		</View>
 	);
 }

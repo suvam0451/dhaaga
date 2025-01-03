@@ -22,7 +22,6 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { LocalizationService } from '../../../../../services/localization.service';
-import useMfm from '../../../../hooks/useMfm';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -232,13 +231,12 @@ export const NotificationSender = memo(
 					</View>
 
 					<View
-						style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}
+						style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}
 					>
 						<Text
 							style={{
-								fontFamily: APP_FONTS.INTER_500_MEDIUM,
+								fontFamily: APP_FONTS.INTER_400_REGULAR,
 								color: theme.complementary.a0,
-								fontSize: 13,
 							}}
 						>
 							{LocalizationService.notificationLabel(type)}

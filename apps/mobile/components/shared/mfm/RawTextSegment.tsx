@@ -1,8 +1,7 @@
 import { memo, useMemo } from 'react';
 import { Text } from 'react-native';
 import { RandomUtil } from '../../../utils/random.utils';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	value: string;
@@ -14,11 +13,7 @@ const RawTextSegment = memo(({ value, fontFamily, emphasis }: Props) => {
 	// @ts-ignore-next-line
 	const _value = value?.replaceAll(/<br>/g, '\n');
 	const k = RandomUtil.nanoId();
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	let color = useMemo(() => {
 		switch (emphasis) {
@@ -39,7 +34,6 @@ const RawTextSegment = memo(({ value, fontFamily, emphasis }: Props) => {
 			key={k}
 			style={{
 				color: color as any,
-				fontFamily,
 			}}
 		>
 			{_value}

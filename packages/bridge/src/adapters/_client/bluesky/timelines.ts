@@ -36,7 +36,8 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 		try {
 			const data = await agent.getTimeline({
 				limit: query.limit || 10,
-				cursor: query.maxId,
+				// 500 on passing null
+				cursor: query.maxId === null ? undefined : query.maxId,
 				algorithm: 'reverse-chronological',
 			});
 			return { data };

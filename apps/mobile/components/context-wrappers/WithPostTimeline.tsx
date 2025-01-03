@@ -16,7 +16,6 @@ import { TimelineSessionService } from '../../services/session/timeline-session.
 import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
 import WithTimelineControllerContext from '../common/timeline/api/useTimelineController';
 import WithAppTimelineDataContext from '../../hooks/app/timelines/useAppTimelinePosts';
-import UserPeekModal from '../modals/UserPeekModal';
 
 // contexts
 const _StateCtx = createContext<AppTimelineReducerStateType>(null);
@@ -61,10 +60,7 @@ function WithPostTimelineCtx({ children }: any) {
 	return (
 		<WithTimelineControllerContext>
 			<CtxWrapper>
-				<WithAppTimelineDataContext>
-					{children}
-					<UserPeekModal />
-				</WithAppTimelineDataContext>
+				<WithAppTimelineDataContext>{children}</WithAppTimelineDataContext>
 			</CtxWrapper>
 		</WithTimelineControllerContext>
 	);

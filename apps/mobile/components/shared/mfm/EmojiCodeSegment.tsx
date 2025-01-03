@@ -13,7 +13,6 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	value: string;
-	remoteInstance: string;
 	emojiMap: Map<string, string>;
 	emphasis: APP_COLOR_PALETTE_EMPHASIS;
 	fontFamily: string;

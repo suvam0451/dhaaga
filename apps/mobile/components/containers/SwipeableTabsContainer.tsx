@@ -42,12 +42,7 @@ function SwipeableTabsContainer({
 					<View key={index}>{renderScene(index)}</View>
 				))}
 			</PagerView>
-			<BottomNavBar
-				Index={Index}
-				setIndex={onChipSelect}
-				items={pages}
-				justify={'space-around'}
-			/>
+			<BottomNavBar Index={Index} setIndex={onChipSelect} items={pages} />
 		</View>
 	);
 }

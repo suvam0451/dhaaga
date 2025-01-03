@@ -242,7 +242,6 @@ export class PostMiddleware {
 			input.print();
 			return null;
 		}
-
 		return data as AppPostObject;
 	}
 

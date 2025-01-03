@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { Text, View } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
@@ -9,6 +8,8 @@ import SocialHub from '../../../components/screens/home/SocialHub';
 import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
 import { Account } from '../../../database/_schema';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../../components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -31,11 +32,6 @@ type HubGreetingFragmentProps = {
 
 function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 	const { theme } = useAppTheme();
-	const fontStyle = {
-		color: theme.textColor.medium,
-		fontSize: 18,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	};
 
 	return (
 		<View
@@ -45,19 +41,22 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 			}}
 		>
 			<View style={{ flexGrow: 1 }}>
-				<Text numberOfLines={1} style={[fontStyle, { maxWidth: '80%' }]}>
-					{greeting}, {acct.displayName}
-				</Text>
-				<Text
+				<AppText.H6
+					numberOfLines={1}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+					style={[{ maxWidth: '80%' }]}
+				>
+					{greeting}, {acct?.displayName}
+				</AppText.H6>
+				<AppText.Medium
 					style={{
 						color: theme.primary.a0,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
 						maxWidth: '80%',
 					}}
 					numberOfLines={1}
 				>
-					@{acct.username}@{acct.server}
-				</Text>
+					@{acct?.username}@{acct?.server}
+				</AppText.Medium>
 			</View>
 			<View
 				style={{
@@ -68,7 +67,7 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 					marginTop: 'auto',
 				}}
 			>
-				<SoftwareHeader software={acct.driver} iconSizeMultiplier={2.5} />
+				<SoftwareHeader software={acct?.driver} iconSizeMultiplier={2.5} />
 			</View>
 		</View>
 	);
@@ -93,36 +92,36 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 				return (
 					<HubGreetingFragment
 						acct={acct}
-						driver={acct.driver}
+						driver={acct?.driver}
 						greeting={`Good Morning`}
-						desc={`@${acct.username}@${acct.server}`}
+						desc={`@${acct?.username}@${acct?.server}`}
 					/>
 				);
 			case TIME_OF_DAY.AFTERNOON:
 				return (
 					<HubGreetingFragment
 						acct={acct}
-						driver={acct.driver}
+						driver={acct?.driver}
 						greeting={`Good Afternoon`}
-						desc={`@${acct.username}@${acct.server}`}
+						desc={`@${acct?.username}@${acct?.server}`}
 					/>
 				);
 			case TIME_OF_DAY.EVENING:
 				return (
 					<HubGreetingFragment
 						acct={acct}
-						driver={acct.driver}
+						driver={acct?.driver}
 						greeting={`Good Evening`}
-						desc={`@${acct.username}@${acct.server}`}
+						desc={`@${acct?.username}@${acct?.server}`}
 					/>
 				);
 			case TIME_OF_DAY.NIGHT:
 				return (
 					<HubGreetingFragment
 						acct={acct}
-						driver={acct.driver}
+						driver={acct?.driver}
 						greeting={`Good Night`}
-						desc={`@${acct.username}@${acct.server}`}
+						desc={`@${acct?.username}@${acct?.server}`}
 					/>
 				);
 		}

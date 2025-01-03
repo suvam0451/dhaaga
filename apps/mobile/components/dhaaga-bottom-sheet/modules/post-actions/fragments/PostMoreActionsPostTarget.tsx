@@ -73,8 +73,8 @@ const ActionButton = memo(
 				>
 					<Text
 						style={{
-							color: theme.textColor.high,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							color: theme.secondary.a10,
+							fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
 							fontSize: 18,
 						}}
 					>
@@ -85,6 +85,7 @@ const ActionButton = memo(
 							style={{
 								color: theme.textColor.medium,
 								flexWrap: 'wrap',
+								fontFamily: APP_FONTS.INTER_400_REGULAR,
 							}}
 						>
 							{desc}

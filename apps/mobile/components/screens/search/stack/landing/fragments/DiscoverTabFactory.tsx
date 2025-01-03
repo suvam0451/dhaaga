@@ -2,12 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
 import LoadingMore from '../../../../home/LoadingMore';
 import useLoadingMoreIndicatorState from '../../../../../../states/useLoadingMoreIndicatorState';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { StyleSheet, Text, View } from 'react-native';
-import {
-	useAppApiClient,
-	useAppTheme,
-} from '../../../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
 import {
 	APP_SEARCH_TYPE,
 	DiscoverTabReducerActionType,
@@ -113,7 +109,6 @@ function SearchResultsUser({ Header }: SearchResultTabProps) {
 }
 
 function SearchResultsPost({ Header }: SearchResultTabProps) {
-	const { driver } = useAppApiClient();
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverTabState();
 	const TimelineState = useTimelineState();
@@ -130,25 +125,12 @@ function SearchResultsPost({ Header }: SearchResultTabProps) {
 	}, [State.q]);
 
 	useEffect(() => {
-		if (data.length === 0) return;
-		/**
-		 * NOTE: Pagination works in weird ways for these drivers
-		 */
-		const FALLBACK_TO_OFFSET = [
-			KNOWN_SOFTWARE.AKKOMA, // KNOWN_SOFTWARE.SHARKEY,
-		].includes(driver);
-
-		let maxId = null;
-		if (FALLBACK_TO_OFFSET) {
-			maxId = (TimelineState.items.length + data.length).toString();
-		} else {
-			maxId = data[data.length - 1].id;
-		}
+		if (!data.success) return;
 		TimelineDispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
 			payload: {
-				items: data,
-				maxId,
+				items: data.items,
+				maxId: data.maxId,
 			},
 		});
 	}, [fetchStatus]);
@@ -265,13 +247,16 @@ function DiscoverTabFactory({ Header }: DiscoverTabFactoryProps) {
 							<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
 						</Text>
 						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							1) Click search icon to toggle widget
+							1) Press 🔍 to start searching
 						</Text>
 						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
 							2)️ Submit (↵) to search.
 						</Text>
 						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							3) Clear (x) to come back here
+							3)️ Press 🔍 again to hide widget
+						</Text>
+						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+							4) Clear (x) to come back here
 						</Text>
 					</View>
 				</View>
@@ -302,7 +287,7 @@ const styles = StyleSheet.create({
 	bodyText: {
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 		fontSize: 16,
-		textAlign: 'center',
+		textAlign: 'left',
 		marginBottom: 8,
 	},
 });

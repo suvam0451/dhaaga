@@ -69,8 +69,7 @@ export default AppNotificationViewContainer;
 
 const styles = StyleSheet.create({
 	tipText: {
-		fontSize: 14,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		textAlign: 'center',
 		marginHorizontal: 10,
 		marginBottom: 16,

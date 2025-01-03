@@ -1,6 +1,9 @@
 import { LibraryPromise } from './_types.js';
 import { Endpoints } from 'misskey-js';
-import { AppBskyActorSearchActorsTypeahead } from '@atproto/api';
+import {
+	AppBskyActorSearchActorsTypeahead,
+	AppBskyFeedSearchPosts,
+} from '@atproto/api';
 import { MastoAccount, MastoStatus } from '../../../../types/mastojs.types.js';
 import { MegaAccount, MegaStatus } from '../../../../types/megalodon.types.js';
 
@@ -48,6 +51,9 @@ export interface SearchRoute {
 	findPosts(
 		q: DhaagaJsPostSearchDTO,
 	): LibraryPromise<
-		MastoStatus[] | Endpoints['notes/search']['res'] | MegaStatus[]
+		| MastoStatus[]
+		| Endpoints['notes/search']['res']
+		| MegaStatus[]
+		| AppBskyFeedSearchPosts.Response
 	>;
 }

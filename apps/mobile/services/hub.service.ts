@@ -32,6 +32,7 @@ export class HubService {
 							server: item.server,
 						};
 					}
+					case APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_HOME:
 					case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_HOME: {
 						return {
 							pinId: item.id,

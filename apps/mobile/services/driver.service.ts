@@ -15,6 +15,23 @@ export enum APP_PINNED_OBJECT_TYPE {
 
 	AP_PROTO_MICROBLOG_TAG_LOCAL = 'apProto_microBlog_TAG_Local',
 	AP_PROTO_MICROBLOG_TAG_REMOTE = 'apProto_microBlog_TAG_Remote',
+
+	/**
+	 * AT Protocol
+	 */
+	AT_PROTO_MICROBLOG_HOME = 'atProto_microBlog_HOME',
+}
+
+export enum SEARCH_RESULT_TAB {
+	TOP = 'top',
+	LATEST = 'latest',
+	FEEDS = 'feeds',
+	POSTS = 'posts',
+	PEOPLE = 'people',
+	TAGS = 'tags',
+	LINKS = 'links',
+	NEWS = 'news',
+	HOME = 'home',
 }
 
 class DriverService {
@@ -26,7 +43,9 @@ class DriverService {
 	static getTimelinePins(driver: string): APP_PINNED_OBJECT_TYPE[] {
 		const results: APP_PINNED_OBJECT_TYPE[] = [];
 
-		if (driver === KNOWN_SOFTWARE.BLUESKY) return [];
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+			return [APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_HOME];
+		}
 
 		results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_HOME);
 		results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_LOCAL);
@@ -44,6 +63,46 @@ class DriverService {
 
 		results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_GLOBAL);
 		return results;
+	}
+
+	/**
+	 * @param driver protocol driver enum string
+	 * @returns a list of search destinations, that
+	 * should appear above the search widget
+	 */
+	static getSearchTabs(driver: KNOWN_SOFTWARE | string) {
+		switch (driver) {
+			case KNOWN_SOFTWARE.BLUESKY:
+				return [
+					SEARCH_RESULT_TAB.TOP,
+					SEARCH_RESULT_TAB.LATEST,
+					SEARCH_RESULT_TAB.PEOPLE,
+					SEARCH_RESULT_TAB.FEEDS,
+				];
+			case KNOWN_SOFTWARE.MASTODON:
+				return [
+					SEARCH_RESULT_TAB.POSTS,
+					SEARCH_RESULT_TAB.PEOPLE,
+					SEARCH_RESULT_TAB.TAGS,
+					SEARCH_RESULT_TAB.NEWS,
+				];
+			case KNOWN_SOFTWARE.PLEROMA:
+			case KNOWN_SOFTWARE.AKKOMA:
+				return [
+					SEARCH_RESULT_TAB.POSTS,
+					SEARCH_RESULT_TAB.PEOPLE,
+					SEARCH_RESULT_TAB.TAGS,
+				];
+			case KNOWN_SOFTWARE.MISSKEY:
+			case KNOWN_SOFTWARE.SHARKEY:
+				return [SEARCH_RESULT_TAB.POSTS, SEARCH_RESULT_TAB.PEOPLE];
+			default:
+				return [
+					SEARCH_RESULT_TAB.POSTS,
+					SEARCH_RESULT_TAB.TAGS,
+					SEARCH_RESULT_TAB.PEOPLE,
+				];
+		}
 	}
 }
 

@@ -40,6 +40,10 @@ export enum ACCOUNT_METADATA_KEY {
 	ACCESS_TOKEN = 'accessToken',
 	REFRESH_TOKEN = 'refreshToken',
 	ATPROTO_SESSION_OBJECT = 'atprotoSessionObject',
+	ATPROTO_DID = 'atprotoDid',
+	ATPROTO_APP_PASSWORD = 'atprotoAppPassword',
+	// stored as string
+	ATPROTO_SESSION = 'atprotoSession',
 }
 
 @DbErrorHandler()
@@ -102,8 +106,8 @@ class Repo implements RepoTemplate<AccountMetadata> {
 			const duplicate = db.accountMetadata.findOne(where);
 			if (duplicate) {
 				db.accountMetadata.update(where, {
-					value: duplicate.value,
-					type: duplicate.type,
+					value: dto.value,
+					type: dto.type,
 				});
 			} else {
 				db.accountMetadata.insert({

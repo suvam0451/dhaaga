@@ -4,6 +4,7 @@ import MisskeyTag from './misskey.js';
 import MastodonTag from './mastodon.js';
 import DefaultTag from './default.js';
 import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
+import BlueskyTag from './bluesky.js';
 
 export type TagType = mastodon.v1.Tag | Hashtag | null | undefined;
 
@@ -54,6 +55,9 @@ export function ActivityPubTagAdapter(tag: any, domain: string): TagInterface {
 		}
 		case KNOWN_SOFTWARE.MASTODON: {
 			return new MastodonTag(new MastodonTagInstance(tag as mastodon.v1.Tag));
+		}
+		case KNOWN_SOFTWARE.BLUESKY: {
+			return new BlueskyTag(tag, 'N/A');
 		}
 		default: {
 			return new DefaultTag();

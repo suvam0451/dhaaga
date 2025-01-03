@@ -10,6 +10,7 @@ import {
 import AppImageCarousel from './fragments/AppImageCarousel';
 import useGalleryDims from '../../../hooks/app/useGalleryDims';
 import { AppMediaObject } from '../../../types/app-post.types';
+import { appDimensions } from '../../../styles/dimensions';
 
 type ImageCarousalProps = {
 	attachments: AppMediaObject[];
@@ -108,11 +109,17 @@ const MediaItem = memo(function Foo({
 	if (attachments?.length === 0) return <View></View>;
 	if (attachments?.length === 1) {
 		return (
-			<TimelineMediaRendered
-				attachment={attachments[0]}
-				CalculatedHeight={calculatedHeight}
-				altText={attachments[0]?.alt}
-			/>
+			<View
+				style={{
+					marginBottom: appDimensions.timelines.sectionBottomMargin * 1.5,
+				}}
+			>
+				<TimelineMediaRendered
+					attachment={attachments[0]}
+					CalculatedHeight={calculatedHeight}
+					altText={attachments[0]?.alt}
+				/>
+			</View>
 		);
 	}
 	return (

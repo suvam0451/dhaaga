@@ -24,8 +24,14 @@ type SocialHubProfile = {
 
 type State = {
 	db: DataSource;
+	profile: Profile;
 	acct: Account;
-	profiles: SocialHubProfile[];
+	pins: {
+		timelines: ProfilePinnedTimeline[];
+		users: ProfilePinnedUser[];
+		tags: ProfilePinnedTag[];
+	};
+	lastUpdatedAt: Date;
 };
 
 export enum ACTION {
@@ -35,8 +41,14 @@ export enum ACTION {
 
 export const DEFAULT: State = {
 	db: null,
+	profile: null,
 	acct: null,
-	profiles: [],
+	pins: {
+		timelines: [],
+		users: [],
+		tags: [],
+	},
+	lastUpdatedAt: new Date(),
 };
 
 type Actions =
@@ -44,7 +56,7 @@ type Actions =
 			type: ACTION.INIT;
 			payload: {
 				db: DataSource;
-				acct: Account;
+				profile: Profile;
 			};
 	  }
 	| {
@@ -71,25 +83,46 @@ class Service {
 			};
 		});
 	}
+
+	static refreshProfile(db: DataSource, profile: Profile): SocialHubProfile {
+		const _timelines = ProfilePinnedTimelineService.getShownForProfile(
+			db,
+			profile,
+		);
+		const _users = ProfilePinnedUserService.getShownForProfile(db, profile);
+		const _tags = ProfilePinnedTagService.getShownForProfile(db, profile);
+
+		return {
+			item: profile,
+			pins: {
+				timelines: _timelines,
+				users: _users,
+				tags: _tags,
+			},
+			lastUpdatedAt: new Date(),
+		};
+	}
 }
 
 function reducer(state: State, action: Actions): State {
 	switch (action.type) {
 		case ACTION.INIT: {
-			if (!action.payload.db || !action.payload.acct) return state;
+			if (!action.payload.db || !action.payload.profile) return state;
 
 			return produce(state, (draft) => {
 				draft.db = action.payload.db;
-				draft.acct = action.payload.acct;
-				draft.profiles = Service.refreshProfileList(
-					action.payload.db,
-					action.payload.acct,
-				);
+				draft.profile = action.payload.profile;
+				draft.acct = action.payload.profile.account;
 			});
 		}
 		case ACTION.RELOAD_PINS: {
+			const localRefreshedData = Service.refreshProfile(
+				state.db,
+				state.profile,
+			);
 			return produce(state, (draft) => {
-				draft.profiles = Service.refreshProfileList(state.db, state.acct);
+				draft.pins = localRefreshedData.pins;
+				draft.lastUpdatedAt = localRefreshedData.lastUpdatedAt;
 			});
 		}
 	}

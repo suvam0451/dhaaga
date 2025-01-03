@@ -1,17 +1,21 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Animated, StyleSheet, View, TextInput } from 'react-native';
+import { Animated, StyleSheet, TextInput, View } from 'react-native';
 import { NativeCheckbox } from '../../../../../lib/Checkboxes';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 import { APP_SEARCH_TYPE } from '../../../api/useSearch';
 import { AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppApiClient,
+	useAppTheme,
+} from '../../../../../../hooks/utility/global-state-extractors';
 import { DiscoverTabReducerActionType } from '../../../../../../states/reducers/discover-tab.reducer';
 import {
 	useDiscoverTabDispatch,
 	useDiscoverTabState,
 } from '../../../../../context-wrappers/WithDiscoverTabCtx';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 type MultiSelectProps = {
 	setSearchCategory: Dispatch<SetStateAction<APP_SEARCH_TYPE>>;
@@ -24,6 +28,7 @@ type MultiSelectProps = {
 export function Multiselect({ setSearchCategory }: MultiSelectProps) {
 	const { theme } = useAppTheme();
 	const [selectedIndex, setSelectedIndex] = useState(0);
+	const { driver } = useAppApiClient();
 
 	function onCheckboxPress(idx: number) {
 		setSelectedIndex(idx);
@@ -53,16 +58,39 @@ export function Multiselect({ setSearchCategory }: MultiSelectProps) {
 
 	const Checkboxes = [
 		{
-			label: 'Posts',
+			label: 'Top',
+			enabled: driver === KNOWN_SOFTWARE.BLUESKY,
+			visible: driver === KNOWN_SOFTWARE.BLUESKY,
 		},
 		{
-			label: 'Users',
+			label: 'Latest',
+			enabled: driver === KNOWN_SOFTWARE.BLUESKY,
+			visible: driver === KNOWN_SOFTWARE.BLUESKY,
+		},
+		{
+			label: 'Posts',
+			enabled: driver !== KNOWN_SOFTWARE.BLUESKY,
+			visible: driver !== KNOWN_SOFTWARE.BLUESKY,
+		},
+		{
+			label: 'People',
+			visible: true,
+			enabled: true,
 		},
 		{
 			label: 'Tags',
+			visible: true,
+			enabled: true,
 		},
 		{
 			label: 'Links',
+			enabled: driver === KNOWN_SOFTWARE.MASTODON,
+			visible: driver === KNOWN_SOFTWARE.MASTODON,
+		},
+		{
+			label: 'Feeds',
+			enabled: driver === KNOWN_SOFTWARE.BLUESKY,
+			visible: driver === KNOWN_SOFTWARE.BLUESKY,
 		},
 	];
 
@@ -70,14 +98,19 @@ export function Multiselect({ setSearchCategory }: MultiSelectProps) {
 		<View
 			style={[
 				styles.checkboxContainer,
-				{ backgroundColor: theme.palette.menubar },
+				{
+					backgroundColor: theme.palette.menubar,
+					justifyContent: 'space-around',
+				},
 			]}
 		>
-			{Checkboxes.map((o, i) => (
+			{Checkboxes.filter((o) => o.enabled && o.visible).map((o, i) => (
 				<NativeCheckbox
 					key={i}
 					onClick={() => {
-						onCheckboxPress(i);
+						if (Checkboxes[i].enabled) {
+							onCheckboxPress(i);
+						}
 					}}
 					label={o.label}
 					checked={selectedIndex === i}
@@ -118,7 +151,7 @@ function DiscoverSearchHelper() {
 		dispatch({
 			type: DiscoverTabReducerActionType.SET_CATEGORY,
 			payload: {
-				category: cat,
+				tab: cat,
 			},
 		});
 	}

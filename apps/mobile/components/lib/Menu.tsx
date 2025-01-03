@@ -106,11 +106,7 @@ export class AppMenu {
 		activeLabel,
 		activeDesc,
 	}: AppMenuOptionType) {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 
 		const _label = active ? activeLabel || label : label;
 		const _desc = active ? activeDesc || desc : desc;
@@ -137,7 +133,7 @@ export class AppMenu {
 					<Text
 						style={{
 							color: theme.secondary.a10,
-							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+							fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 							fontSize: 18,
 							marginBottom: _desc ? 0 : 2,
 						}}

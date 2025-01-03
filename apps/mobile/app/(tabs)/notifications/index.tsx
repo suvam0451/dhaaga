@@ -93,12 +93,7 @@ function Page() {
 					))}
 				</PagerView>
 
-				<BottomNavBar
-					Index={Index}
-					setIndex={onChipSelect}
-					items={tabLabels}
-					justify={'space-between'}
-				/>
+				<BottomNavBar Index={Index} setIndex={onChipSelect} items={tabLabels} />
 			</View>
 		</WithAppNotifSeenContext>
 	);
