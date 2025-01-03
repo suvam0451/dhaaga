@@ -2,12 +2,14 @@ import { AppUserObject } from '../../types/app-user.types';
 import { AppPostObject } from '../../types/app-post.types';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
+import { SEARCH_RESULT_TAB } from '../../services/driver.service';
 
 export enum APP_SEARCH_TYPE {
 	POSTS,
 	USERS,
 	LINKS,
 	HASHTAGS,
+	HOME,
 }
 
 export type DiscoverTabSearchResultType = {
@@ -21,6 +23,7 @@ type State = {
 	text: string | null;
 	q: string | null;
 	category: APP_SEARCH_TYPE;
+	tab: SEARCH_RESULT_TAB;
 	results: DiscoverTabSearchResultType;
 };
 
@@ -46,6 +49,7 @@ enum ACTION {
 const DEFAULT: State = {
 	text: null,
 	q: null,
+	tab: SEARCH_RESULT_TAB.HOME,
 	category: APP_SEARCH_TYPE.USERS,
 	results: defaultAppSearchResults,
 };
@@ -64,7 +68,7 @@ type Actions =
 	| {
 			type: ACTION.SET_CATEGORY;
 			payload: {
-				category: APP_SEARCH_TYPE;
+				tab: SEARCH_RESULT_TAB;
 			};
 	  }
 	| {
@@ -84,6 +88,35 @@ type Actions =
 			payload: DiscoverTabSearchResultType;
 	  };
 
+/**
+ *
+ * @param tab
+ * @param q
+ */
+function convertTabToResultPageType(tab: SEARCH_RESULT_TAB, q: any) {
+	if (!q) return APP_SEARCH_TYPE.HOME;
+
+	switch (tab) {
+		case SEARCH_RESULT_TAB.HOME: {
+			return APP_SEARCH_TYPE.HOME;
+		}
+		case SEARCH_RESULT_TAB.PEOPLE: {
+			return APP_SEARCH_TYPE.USERS;
+		}
+		case SEARCH_RESULT_TAB.TOP:
+		case SEARCH_RESULT_TAB.LATEST:
+		case SEARCH_RESULT_TAB.POSTS: {
+			return APP_SEARCH_TYPE.POSTS;
+		}
+		case SEARCH_RESULT_TAB.TAGS: {
+			return APP_SEARCH_TYPE.HASHTAGS;
+		}
+		default: {
+			return APP_SEARCH_TYPE.HOME;
+		}
+	}
+}
+
 function reducer(state: State, action: Actions): State {
 	switch (action.type) {
 		case ACTION.SET_SEARCH: {
@@ -95,6 +128,7 @@ function reducer(state: State, action: Actions): State {
 			return produce(state, (draft) => {
 				draft.text = null;
 				draft.q = null;
+				draft.tab = SEARCH_RESULT_TAB.HOME;
 			});
 		}
 		case ACTION.APPLY_SEARCH: {
@@ -104,7 +138,11 @@ function reducer(state: State, action: Actions): State {
 		}
 		case ACTION.SET_CATEGORY: {
 			return produce(state, (draft) => {
-				draft.category = action.payload.category;
+				draft.tab = action.payload.tab;
+				draft.category = convertTabToResultPageType(
+					action.payload.tab,
+					state.q,
+				);
 			});
 		}
 		case ACTION.SET_CATEGORY_USERS: {

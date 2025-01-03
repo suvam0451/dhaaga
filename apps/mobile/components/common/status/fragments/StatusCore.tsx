@@ -102,9 +102,7 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 
 	const { content: PostContent, isLoaded } = useMfm({
 		content: _target.content.raw,
-		remoteSubdomain: _target.postedBy.instance,
 		emojiMap: _target.calculated.emojis,
-		deps: [dto],
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 		// fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});

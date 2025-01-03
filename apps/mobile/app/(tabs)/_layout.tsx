@@ -28,7 +28,7 @@ export default function TabLayout() {
 								height: 42,
 								width: 64,
 							},
-							tabBarActiveTintColor: theme.primary.a0,
+							tabBarActiveTintColor: theme.secondary.a20,
 							tabBarInactiveTintColor: theme.secondary.a50,
 							tabBarShowLabel: false,
 							headerShown: false,

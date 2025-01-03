@@ -6,9 +6,9 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { Fragment, useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import useSocialHub from '../../../states/useSocialHub';
-import { Account, Profile } from '../../../database/_schema';
+import { Profile } from '../../../database/_schema';
 import {
 	socialHubTabReducer,
 	socialHubTabReducerActionType,
@@ -33,12 +33,29 @@ import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
 import { AppPagerView } from '../../lib/AppPagerView';
 import { BottomNavBarInfinite } from '../../shared/pager-view/BottomNavBar';
 import PagerView from 'react-native-pager-view';
+import { ProfileService } from '../../../database/entities/profile';
 
-function Header() {
+function Header({ profile }: { profile: Profile }) {
+	const [Acct, setAcct] = useState(null);
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
+
+	useEffect(() => {
+		setAcct(ProfileService.getOwnerAccount(db, profile));
+	}, [profile]);
+
 	return (
 		<AppTabLandingNavbar
 			type={APP_LANDING_PAGE_TYPE.HOME}
 			menuItems={[
+				{
+					iconId: 'layers-outline',
+					onPress: () => {},
+				},
+
 				{
 					iconId: 'user-guide',
 					onPress: () => {
@@ -197,28 +214,10 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 				<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
 			}
 		>
-			<Header />
+			<Header profile={profile} />
 			<View style={{ marginBottom: 16 }}>
 				<TimeOfDayGreeting acct={State.acct} />
 			</View>
-
-			{/*<View style={{ marginHorizontal: 10 }}>*/}
-			{/*	<AppSegmentedControl*/}
-			{/*		items={[{ label: 'Pinned' }, { label: 'Saved' }]}*/}
-			{/*		style={{ marginTop: 8 }}*/}
-			{/*		leftDecorator={*/}
-			{/*			<View style={{ flexDirection: 'row', alignItems: 'center' }}>*/}
-			{/*				<SocialHubAvatarCircle*/}
-			{/*					size={36}*/}
-			{/*					style={{ marginRight: 6 }}*/}
-			{/*					acct={account}*/}
-			{/*				/>*/}
-			{/*			</View>*/}
-			{/*		}*/}
-			{/*		index={Index}*/}
-			{/*		setIndex={setIndex}*/}
-			{/*	/>*/}
-			{/*</View>*/}
 
 			{/* --- Pinned Timelines --- */}
 			<SocialHubPinnedTimelines

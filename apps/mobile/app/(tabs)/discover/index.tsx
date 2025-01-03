@@ -1,7 +1,11 @@
-import WithDiscoverTabCtx from '../../../components/context-wrappers/WithDiscoverTabCtx';
+import WithDiscoverTabCtx, {
+	useDiscoverTabDispatch,
+	useDiscoverTabState,
+} from '../../../components/context-wrappers/WithDiscoverTabCtx';
 import DiscoverTabFactory from '../../../components/screens/search/stack/landing/fragments/DiscoverTabFactory';
 import {
 	useAppAcct,
+	useAppApiClient,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
@@ -9,31 +13,41 @@ import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import {
+	Dimensions,
 	Pressable,
-	View,
 	StyleSheet,
 	TextInput,
-	Dimensions,
+	View,
 } from 'react-native';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import Animated, {
+	Extrapolation,
+	interpolate,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming,
-	interpolate,
-	Extrapolation,
 } from 'react-native-reanimated';
 import { Feather } from '@expo/vector-icons';
-import { Multiselect } from '../../../components/screens/search/stack/landing/fragments/DiscoverSearchHelper';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { DiscoverTabReducerActionType } from '../../../states/reducers/discover-tab.reducer';
+import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
+import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
+import DriverService, {
+	SEARCH_RESULT_TAB,
+} from '../../../services/driver.service';
+import { AppText } from '../../../components/lib/Text';
 
 function Header() {
 	return (
 		<AppTabLandingNavbar
 			type={APP_LANDING_PAGE_TYPE.DISCOVER}
 			menuItems={[
+				{
+					iconId: 'layers-outline',
+					onPress: () => {},
+				},
 				{
 					iconId: 'user-guide',
 					onPress: () => {
@@ -45,35 +59,147 @@ function Header() {
 	);
 }
 
+function WidgetExpanded() {
+	const { driver } = useAppApiClient();
+	const { theme } = useAppTheme();
+	const dispatch = useDiscoverTabDispatch();
+	const State = useDiscoverTabState();
+	const CONTAINER_PADDING = 24;
+	const [Tabs, setTabs] = useState<SEARCH_RESULT_TAB[]>([]);
+
+	useEffect(() => {
+		const searchTabs = DriverService.getSearchTabs(driver);
+		setTabs(searchTabs);
+
+		dispatch({
+			type: DiscoverTabReducerActionType.SET_CATEGORY,
+			payload: {
+				tab: searchTabs[0],
+			},
+		});
+	}, [driver]);
+
+	function setCategory(tab: SEARCH_RESULT_TAB) {
+		dispatch({
+			type: DiscoverTabReducerActionType.SET_CATEGORY,
+			payload: {
+				tab,
+			},
+		});
+	}
+
+	return (
+		<View
+			style={[
+				widgetStyles.root,
+				{
+					backgroundColor: theme.palette.menubar,
+					marginHorizontal: CONTAINER_PADDING,
+				},
+			]}
+		>
+			{Tabs.map((o) => (
+				<Pressable
+					onPress={() => {
+						setCategory(o);
+					}}
+					style={{ flex: 1, paddingVertical: 10 }}
+				>
+					<AppText.Medium
+						style={{
+							color: State.tab === o ? theme.primary.a0 : theme.secondary.a20,
+							fontSize: 18,
+							textAlign: 'center',
+						}}
+					>
+						{o}
+					</AppText.Medium>
+				</Pressable>
+			))}
+		</View>
+	);
+}
+
+const widgetStyles = StyleSheet.create({
+	root: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		marginBottom: 8,
+		borderRadius: 8,
+	},
+});
+
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-const SIZE = 600;
 const BUTTON_SIZE = 50;
-const ANGLE_STEP = 40;
 
 const FloatingButtonCircular = () => {
+	const { driver } = useAppApiClient();
 	const isRotated = useSharedValue(0);
 	const MAX_WIDTH = Dimensions.get('window').width;
 	const CONTAINER_PADDING = 24;
 	const WIDGET_MAX_WIDTH = MAX_WIDTH - CONTAINER_PADDING * 2;
+	const textInputRef = useRef<TextInput>();
 
 	const [IsWidgetExpanded, setIsWidgetExpanded] = useState(false);
 	const rotation = useSharedValue(0);
 	const containerWidth = useSharedValue(0);
-	const containerHeight = useSharedValue(64);
-	const containerBorderRadius = useSharedValue(16);
+	const borderRadius = useSharedValue(16);
 
-	const toggleVisibility = () => {};
+	/**
+	 * --- State Management ---
+	 */
+	const dispatch = useDiscoverTabDispatch();
+
+	const updateSearch = (search: string) => {
+		dispatch({
+			type: DiscoverTabReducerActionType.SET_SEARCH,
+			payload: {
+				q: search,
+			},
+		});
+	};
+
+	const submitSearch = (
+		search: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
+	) => {
+		dispatch({
+			type: DiscoverTabReducerActionType.APPLY_SEARCH,
+		});
+	};
+
+	/**
+	 * --------
+	 */
 
 	const toggleMenu = () => {
+		console.log('click acquired...');
+		const isExpanding = !IsWidgetExpanded;
+		if (!isExpanding) {
+			textInputRef.current?.blur();
+		}
 		setIsWidgetExpanded(!IsWidgetExpanded);
+
 		if (isRotated.value === 0) {
 			rotation.value = withTiming(45, { duration: 200 });
 			isRotated.value = withTiming(1, { duration: 300 });
 			containerWidth.value = withTiming(WIDGET_MAX_WIDTH, { duration: 200 });
+			borderRadius.value = withTiming(16, { duration: 300 });
 		} else {
-			rotation.value = withTiming(0, { duration: 200 });
-			containerWidth.value = withTiming(64, { duration: 200 });
-			isRotated.value = withTiming(0, { duration: 300 });
+			//To make it less wonky as the input closes
+			setTimeout(() => {
+				rotation.value = withTiming(0, { duration: 200 });
+				containerWidth.value = withTiming(64, { duration: 200 });
+				isRotated.value = withTiming(0, { duration: 300 });
+				borderRadius.value = withTiming(50, { duration: 300 });
+			}, 260);
+		}
+		if (isExpanding) {
+			setTimeout(() => {
+				console.log('acquiring focus...');
+				textInputRef.current?.focus();
+			}, 500);
 		}
 	};
 
@@ -85,37 +211,26 @@ const FloatingButtonCircular = () => {
 				[BUTTON_SIZE, WIDGET_MAX_WIDTH],
 				Extrapolation.CLAMP,
 			),
+			borderRadius: borderRadius.value,
 		};
 	});
+
+	const searchTabs = DriverService.getSearchTabs(driver);
 
 	const { theme } = useAppTheme();
 	return (
 		<View style={styles.root}>
-			{IsWidgetExpanded && (
-				<View
-					style={{
-						marginHorizontal: CONTAINER_PADDING,
-						paddingVertical: 4,
-						paddingTop: 8,
-						// marginTop: 8,
-						marginBottom: 8,
-						borderRadius: 12,
-						backgroundColor: theme.palette.menubar,
-					}}
-				>
-					<Multiselect setSearchCategory={() => {}} />
-				</View>
-			)}
+			{IsWidgetExpanded && <WidgetExpanded />}
 			<Animated.View
 				style={[
 					styles.button,
 					containerStyle,
 					{
 						flexDirection: 'row',
-						paddingLeft: IsWidgetExpanded ? 12 : 0,
+						paddingLeft: IsWidgetExpanded ? 6 : 0,
 						backgroundColor: theme.primary.a0,
-						// equivalent to padding
 						right: CONTAINER_PADDING,
+						borderRadius: 16,
 					},
 				]}
 			>
@@ -124,8 +239,11 @@ const FloatingButtonCircular = () => {
 				</AnimatedPressable>
 				{IsWidgetExpanded && (
 					<TextInput
+						ref={textInputRef}
 						multiline={false}
-						placeholderTextColor={'rgba(0, 0, 0, 0.64)'}
+						placeholderTextColor={'rgba(0, 0, 0, 0.84)'}
+						onChangeText={updateSearch}
+						onSubmitEditing={submitSearch}
 						placeholder={'Discover something new!'}
 						style={[
 							{
@@ -153,7 +271,6 @@ function WithSearchBar({ children }: any) {
 		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
 			{children}
 			<FloatingButtonCircular />
-			{/*<DiscoverSearchHelper />*/}
 		</View>
 	);
 }

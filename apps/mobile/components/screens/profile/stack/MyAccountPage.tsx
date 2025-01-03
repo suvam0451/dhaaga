@@ -2,8 +2,6 @@ import { Animated, StyleSheet, Text, View } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import ProfileLandingAccountOverview from './landing/fragments/ProfileLandingAccountOverview';
 import ProfileLandingAccountModules from './landing/fragments/ProfileLandingAccountModules';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import AppNoAccount from '../../../error-screen/AppNoAccount';
@@ -18,12 +16,7 @@ type HeaderProps = {
 };
 
 function Header({ label }: HeaderProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
+	const { theme } = useAppTheme();
 	return (
 		<View
 			style={{

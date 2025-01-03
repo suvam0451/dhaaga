@@ -63,7 +63,7 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 				{menuItems.map(({ iconId, disabled, onPress }, i) => (
 					<Pressable
 						key={i}
-						style={{ padding: 4, marginLeft: 4 }}
+						style={{ padding: 6, marginLeft: 4 }}
 						onPress={onPress}
 					>
 						<AppIcon
@@ -71,9 +71,10 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 							emphasis={
 								disabled
 									? APP_COLOR_PALETTE_EMPHASIS.A40
-									: APP_COLOR_PALETTE_EMPHASIS.A20
+									: APP_COLOR_PALETTE_EMPHASIS.A10
 							}
 							onPress={onPress}
+							size={26}
 						/>
 					</Pressable>
 				))}

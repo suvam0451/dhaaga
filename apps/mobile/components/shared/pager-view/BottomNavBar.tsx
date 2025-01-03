@@ -21,8 +21,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppIcon } from '../../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { LinearGradient } from 'expo-linear-gradient';
 
 type ChipProps = {
@@ -279,19 +277,6 @@ export function BottomNavBarInfinite({
 					onScrollToIndexFailed={() => {
 						console.log('[WARN]:scroll to index failed...');
 					}}
-				/>
-			</View>
-			<View
-				style={{
-					paddingHorizontal: 16,
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}
-			>
-				<AppIcon
-					id="layers-outline"
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					size={26}
 				/>
 			</View>
 		</LinearGradient>

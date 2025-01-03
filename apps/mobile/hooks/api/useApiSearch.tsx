@@ -5,6 +5,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMiddleware } from '../../services/middlewares/post.middleware';
 import { UserMiddleware } from '../../services/middlewares/user.middleware';
 import { AppUserObject } from '../../types/app-user.types';
+import { AppBskyFeedSearchPosts } from '@atproto/api';
 
 export function useApiSearchUsers(q: string, maxId: string | null) {
 	const { client, server, driver } = useAppApiClient();
@@ -33,10 +34,17 @@ export function useApiSearchUsers(q: string, maxId: string | null) {
 	});
 }
 
+type PostResults = {
+	items: AppPostObject[];
+	maxId: string | null;
+	minId: string | null;
+	success: boolean;
+};
+
 export function useApiSearchPosts(q: string, maxId: string | null) {
 	const { client, server, driver } = useAppApiClient();
 
-	async function api(): Promise<AppPostObject[]> {
+	async function api(): Promise<PostResults> {
 		// Akko-gang, nani da fukk? Y your maxId no work? 😭
 		// et tu, sharks 🤨?
 		const FALLBACK_TO_OFFSET = [
@@ -64,13 +72,52 @@ export function useApiSearchPosts(q: string, maxId: string | null) {
 			console.log('[WARN]: error searching for posts', error.message);
 			throw new Error(error.message);
 		}
-		return PostMiddleware.deserialize<unknown[]>(data, driver, server);
+
+		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+			const _data = data as AppBskyFeedSearchPosts.Response;
+			return {
+				maxId: _data.data.cursor,
+				items: PostMiddleware.deserialize<unknown[]>(
+					_data.data.posts,
+					driver,
+					server,
+				),
+				minId: null,
+				success: true,
+			};
+		}
+
+		const _posts = PostMiddleware.deserialize<unknown[]>(
+			data as any[],
+			driver,
+			server,
+		);
+
+		let __maxId = null;
+		if (FALLBACK_TO_OFFSET) {
+			try {
+				__maxId = (parseInt(__maxId) + _posts.length).toString();
+			} catch (e) {
+				console.log(
+					'[WARN]:could not generate post pagination token for certain drivers',
+				);
+			}
+		} else {
+			__maxId = data[_posts.length - 1].id;
+		}
+
+		return {
+			maxId,
+			items: __maxId,
+			minId: null,
+			success: true,
+		};
 	}
 
-	return useQuery<AppPostObject[]>({
+	return useQuery<PostResults>({
 		queryKey: ['search/posts', server, q, maxId],
 		queryFn: api,
 		enabled: client !== null && !!q,
-		initialData: [],
+		initialData: { maxId: null, minId: null, items: [], success: false },
 	});
 }

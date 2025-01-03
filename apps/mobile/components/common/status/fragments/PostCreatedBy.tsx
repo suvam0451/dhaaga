@@ -84,13 +84,11 @@ function OriginalPosterSkeleton() {
 export const OriginalPosterPostedByFragment = memo(function Foo({
 	displayNameRaw,
 	onClick,
-	theirSubdomain,
 	emojiMap,
 	instanceUrl,
 	postedAt,
 }: {
 	displayNameRaw: string;
-	theirSubdomain: string;
 	onClick: () => void;
 	emojiMap?: Map<string, string>;
 	instanceUrl: string;
@@ -102,9 +100,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 
 	const { content: UsernameWithEmojis } = useMfm({
 		content: displayNameRaw,
-		remoteSubdomain: theirSubdomain,
 		emojiMap: emojiMap,
-		deps: [displayNameRaw],
 		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		numberOfLines: 1,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
@@ -222,7 +218,6 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 
 				<OriginalPosterPostedByFragment
 					onClick={onProfileClicked}
-					theirSubdomain={STATUS_DTO.postedBy.instance}
 					displayNameRaw={STATUS_DTO.postedBy.displayName}
 					instanceUrl={STATUS_DTO.postedBy.handle}
 					postedAt={new Date(STATUS_DTO.createdAt)}

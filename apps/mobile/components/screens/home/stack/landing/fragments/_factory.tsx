@@ -1,5 +1,7 @@
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import { AppIcon } from '../../../../../lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
 
 type SocialHubPinSectionContainer = {
 	label: string;
@@ -19,6 +21,7 @@ export function SocialHubPinSectionContainer({
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
+					marginBottom: 8,
 				}}
 			>
 				<Text
@@ -33,6 +36,14 @@ export function SocialHubPinSectionContainer({
 				>
 					{label}
 				</Text>
+
+				<AppIcon
+					id={'add'}
+					containerStyle={{ padding: 6 }}
+					onPress={() => {}}
+					size={28}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
+				/>
 			</View>
 			{children}
 		</View>
@@ -46,7 +57,7 @@ const styles = StyleSheet.create({
 	},
 	sectionLabel: {
 		flex: 1,
-		marginBottom: 12,
+
 		marginLeft: 6,
 		fontSize: 16,
 		// fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
