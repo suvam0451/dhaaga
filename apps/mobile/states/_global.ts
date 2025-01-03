@@ -247,8 +247,15 @@ class GlobalStateService {
 
 			// Bluesky is built different
 			if (acct.driver === KNOWN_SOFTWARE.BLUESKY) {
-				const session = AtprotoSessionService.create(db, acct);
-				await session.resume();
+				let session = AtprotoSessionService.create(db, acct);
+
+				// re-login login
+				if (session.checkTokenExpiry()) {
+					await AtprotoSessionService.reLogin(db, acct);
+					session = AtprotoSessionService.create(db, acct);
+				}
+
+				await session.resume(db);
 				const { success, data, reason } = await session.saveSession();
 				if (!success)
 					console.log('[INFO]: session restore status', success, reason);

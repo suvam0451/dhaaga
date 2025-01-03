@@ -106,8 +106,8 @@ class Repo implements RepoTemplate<AccountMetadata> {
 			const duplicate = db.accountMetadata.findOne(where);
 			if (duplicate) {
 				db.accountMetadata.update(where, {
-					value: duplicate.value,
-					type: duplicate.type,
+					value: dto.value,
+					type: dto.type,
 				});
 			} else {
 				db.accountMetadata.insert({

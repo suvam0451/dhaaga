@@ -54,11 +54,22 @@ class AtprotoSessionService {
 	}
 
 	/**
+	 * Returns whether the app token
+	 * has expired and needs a re-login
+	 */
+	checkTokenExpiry(): boolean {
+		this.sessionManager.session = this.oldSession;
+		const _jwt = jwtDecode(this.sessionManager.session.accessJwt);
+		if (!_jwt) return true;
+		return _jwt.exp < Math.floor(new Date().getTime() / 1000);
+	}
+
+	/**
 	 * Resumes the client session
 	 *
 	 * Call this before making any requests
 	 */
-	async resume() {
+	async resume(db: DataSource) {
 		this.sessionManager.session = this.oldSession;
 
 		/**
@@ -71,9 +82,7 @@ class AtprotoSessionService {
 		 * FIXME: currently unable to refresh token, as the parsing is failing
 		 */
 		const _jwt = jwtDecode(this.sessionManager.session.accessJwt);
-		if (!_jwt) {
-			return this;
-		}
+		if (!_jwt) return this;
 
 		const IS_EXPIRED = _jwt.exp < Math.floor(new Date().getTime() / 1000);
 		try {
@@ -225,6 +234,119 @@ class AtprotoSessionService {
 		} catch (e) {
 			console.log(e);
 			return { success: false };
+		}
+	}
+
+	/**
+	 * Attempt to log in using
+	 * submitted credentials
+	 * @param db
+	 * @param acct
+	 * @param service
+	 */
+	static async reLogin(
+		db: DataSource,
+		acct: Account,
+		service: string = 'https://bsky.social',
+	) {
+		const username = acct.username;
+		const _appPwd = AccountMetadataService.getKeyValueForAccountSync(
+			db,
+			acct,
+			ACCOUNT_METADATA_KEY.ATPROTO_APP_PASSWORD,
+		);
+
+		if (!username || !_appPwd) {
+			console.log(
+				'[WARN]: unable to restore session with currently available session data',
+			);
+			return false;
+		}
+
+		let storedSession = null;
+		const session = new CredentialSession(
+			new URL(service),
+			fetch,
+			(evt, session1) => {
+				console.log(evt);
+				storedSession = session1;
+			},
+		);
+
+		try {
+			const loginResp = await session.login({
+				identifier: username.includes('.')
+					? username
+					: `${username}.bsky.social`,
+				password: _appPwd,
+			});
+
+			const agent = new Agent(session);
+
+			const res = await agent.getProfile({ actor: agent.did });
+
+			const accessToken = loginResp.data.accessJwt;
+			const refreshToken = loginResp.data.refreshJwt;
+			const instance = 'bsky.social';
+			const avatarUrl = res.data.avatar;
+			const displayName = res.data.displayName;
+			const _username = res.data.handle;
+			const did = res.data.did;
+
+			AccountService.upsert(
+				db,
+				{
+					identifier: res.data.did,
+					server: instance,
+					driver: KNOWN_SOFTWARE.BLUESKY,
+					username: _username,
+					avatarUrl,
+					displayName,
+				},
+				[
+					{
+						key: ACCOUNT_METADATA_KEY.DISPLAY_NAME,
+						value: displayName,
+						type: 'string',
+					},
+					{
+						key: ACCOUNT_METADATA_KEY.AVATAR_URL,
+						value: avatarUrl,
+						type: 'string',
+					},
+					{
+						key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
+						value: accessToken,
+						type: 'string',
+					},
+					{
+						key: ACCOUNT_METADATA_KEY.REFRESH_TOKEN,
+						value: refreshToken,
+						type: 'string',
+					},
+					{
+						key: ACCOUNT_METADATA_KEY.ATPROTO_DID,
+						value: did,
+						type: 'string',
+					},
+					{
+						key: ACCOUNT_METADATA_KEY.ATPROTO_APP_PASSWORD,
+						value: _appPwd,
+						type: 'string',
+					},
+					{
+						key: ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
+						value: JSON.stringify(storedSession),
+						type: 'json',
+					},
+				],
+			);
+			console.log('new session', storedSession);
+			console.log('[INFO]: successfully re-logged');
+			return true;
+		} catch (e) {
+			console.log(e);
+			return false;
 		}
 	}
 }

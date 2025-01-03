@@ -2,7 +2,7 @@ import { ScrollView, Text, View } from 'react-native';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useRef, useState } from 'react';
-import { useTag } from '../../../hooks/api/tags/useTag';
+import { useApiGetTagInterface } from '../../../hooks/api/useTags';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppDivider } from '../../lib/Divider';
 import { AppMenu } from '../../lib/Menu';
@@ -10,6 +10,7 @@ import { AppIcon } from '../../lib/Icon';
 import ActivityPubService from '../../../services/activitypub.service';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { APP_BOTTOM_SHEET_ENUM } from '../Core';
+import { AppText } from '../../lib/Text';
 
 function AppBottomSheetHashtag() {
 	const [TagName, setTagName] = useState(null);
@@ -36,11 +37,9 @@ function AppBottomSheetHashtag() {
 		ValueRef.current = _tag;
 	}, [stateId]);
 
-	const FOLLOW_POSSIBLE =
-		ActivityPubService.mastodonLike(driver) ||
-		ActivityPubService.blueskyLike(driver);
+	const FOLLOW_POSSIBLE = ActivityPubService.mastodonLike(driver);
 
-	const { data } = useTag(TagName);
+	const { data } = useApiGetTagInterface(TagName);
 
 	if (INACTIVE) return <View />;
 	return (
@@ -49,32 +48,30 @@ function AppBottomSheetHashtag() {
 				style={{
 					marginLeft: 12,
 					flexDirection: 'row',
+					alignItems: 'flex-end',
 				}}
 			>
-				<Text
+				<AppText.Normal
 					style={{
-						fontSize: 20,
-						fontFamily: APP_FONTS.INTER_700_BOLD,
-						color: theme.textColor.high,
-						flex: 1,
+						fontSize: 16,
+						fontFamily: APP_FONTS.INTER_400_REGULAR,
+						color: theme.textColor.medium,
+						flexShrink: 1,
 					}}
-					numberOfLines={1}
 				>
-					<Text
-						style={{
-							fontSize: 20,
-							fontFamily: APP_FONTS.INTER_400_REGULAR,
-							color: theme.textColor.medium,
-							flexShrink: 1,
-						}}
-					>
-						#
-					</Text>
+					#
+				</AppText.Normal>
+				<AppText.Medium style={{ fontSize: 22, marginLeft: 2 }}>
 					{data?.getName()}
-				</Text>
+				</AppText.Medium>
 			</View>
 			<AppDivider.Hard
-				style={{ marginVertical: 8, marginTop: 16, marginHorizontal: 10 }}
+				style={{
+					marginVertical: 8,
+					marginTop: 16,
+					marginHorizontal: 10,
+					backgroundColor: '#282828',
+				}}
 			/>
 			<View style={{ paddingHorizontal: 12 }}>
 				{FOLLOW_POSSIBLE && (
@@ -92,7 +89,7 @@ function AppBottomSheetHashtag() {
 					}
 					label={'Preview'}
 					onPress={() => {}}
-					desc={'Quickly view posts using this tag'}
+					desc={'Preview posts using this tag'}
 				/>
 
 				<AppMenu.Option
@@ -101,19 +98,19 @@ function AppBottomSheetHashtag() {
 					}
 					label={'Pin to Social Hub'}
 					onPress={() => {}}
-					desc={'Pin this to your Social Hub'}
+					desc={'Pin this tag to your Hub profile'}
 				/>
-				<AppMenu.Option
-					appIconId={
-						<AppIcon
-							id={'language'}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						/>
-					}
-					label={'Explain'}
-					desc={'Explains the meaning of this word'}
-					onPress={() => {}}
-				/>
+				{/*<AppMenu.Option*/}
+				{/*	appIconId={*/}
+				{/*		<AppIcon*/}
+				{/*			id={'language'}*/}
+				{/*			emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
+				{/*		/>*/}
+				{/*	}*/}
+				{/*	label={'Explain'}*/}
+				{/*	desc={'Explains the meaning of this word'}*/}
+				{/*	onPress={() => {}}*/}
+				{/*/>*/}
 
 				<AppMenu.Option
 					appIconId={
@@ -121,7 +118,7 @@ function AppBottomSheetHashtag() {
 					}
 					label={'Open Timeline'}
 					onPress={() => {}}
-					desc={'Navigate and view posts using this tag.'}
+					desc={'Browse all posts using this tag'}
 				/>
 			</View>
 		</ScrollView>

@@ -1,7 +1,6 @@
-import { DependencyList, useEffect, useRef, useState } from 'react';
-import { View, Text } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleProp, TextStyle } from 'react-native';
 import MfmService from '../../services/mfm.service';
-import { Skeleton } from '@rneui/themed';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FacetService from '../../services/facets.service';
@@ -20,12 +19,8 @@ type Props = {
 	content: string;
 	// Mastodon sup-plied emoji list
 	emojiMap: Map<string, string>;
-	// instance of the target user (will resolve emojis from there)
-	remoteSubdomain: string;
-	deps: DependencyList;
 	expectedHeight?: number;
 	fontFamily?: string;
-
 	numberOfLines?: number;
 	acceptTouch?: boolean;
 	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
@@ -35,9 +30,7 @@ type Props = {
  * Use MfM to render content
  * @param content
  * @param emojiMap
- * @param remoteSubdomain
  * @param deps
- * @param expectedHeight
  * @param fontFamily
  * @param numberOfLines
  * @param acceptTouch
@@ -46,9 +39,6 @@ type Props = {
 function useMfm({
 	content,
 	emojiMap,
-	remoteSubdomain,
-	deps,
-	expectedHeight,
 	fontFamily,
 	numberOfLines,
 	acceptTouch,
@@ -60,15 +50,7 @@ function useMfm({
 
 	const defaultValue = useRef<any>({
 		isLoaded: false,
-		content: (
-			<Skeleton
-				style={{
-					height: expectedHeight || 32,
-					borderRadius: 8,
-					width: '100%',
-				}}
-			/>
-		),
+		content: <View />,
 		aiContext: [],
 	});
 
@@ -83,7 +65,7 @@ function useMfm({
 	const IsSolved = useRef(RandomUtil.nanoId());
 
 	// since font remains same for each reusable component
-	const fontStyle = {
+	const fontStyle: StyleProp<TextStyle> = {
 		color: AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis),
 		// fontFamily: fontFamily,
 	};
@@ -110,7 +92,7 @@ function useMfm({
 				content: (
 					<WithAppMfmContext acceptTouch={_acceptTouch}>
 						<View style={{ height: 'auto' }}>
-							<Text>{nodes.map((node, i) => node)}</Text>
+							<Text style={fontStyle}>{nodes.map((node, i) => node)}</Text>
 						</View>
 					</WithAppMfmContext>
 				),
@@ -122,7 +104,6 @@ function useMfm({
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
 			subdomain: acct?.server,
-			remoteSubdomain,
 			fontFamily,
 			emphasis,
 			colorScheme: theme,
@@ -169,7 +150,7 @@ function useMfm({
 			aiContext: openAiContext,
 		});
 		IsSolved.current = content;
-	}, [...deps, theme]);
+	}, [content, theme]);
 
 	return {
 		content: Data.content,

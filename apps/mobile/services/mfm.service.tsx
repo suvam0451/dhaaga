@@ -40,7 +40,6 @@ class MfmComponentBuilder {
 
 	constructor({
 		input,
-		targetSubdomain,
 		emojiMap,
 		opts,
 		fontFamily,
@@ -49,7 +48,6 @@ class MfmComponentBuilder {
 		style,
 	}: {
 		input: string;
-		targetSubdomain?: string;
 		emojiMap?: Map<string, string>;
 		opts?: {
 			parseMentions?: boolean;
@@ -62,7 +60,6 @@ class MfmComponentBuilder {
 	}) {
 		this.input = input;
 		this.emojis = new Set<string>();
-		this.targetSubdomain = targetSubdomain;
 		this.results = [];
 		this.aiContext = [];
 		this.emojiMap = emojiMap;
@@ -282,7 +279,6 @@ class MfmComponentBuilder {
 					<EmojiCodeSegment
 						key={k}
 						value={node.props.name}
-						remoteInstance={this.targetSubdomain}
 						emojiMap={this.emojiMap}
 						emphasis={this.emphasis}
 						fontFamily={this.fontFamily}
@@ -360,7 +356,6 @@ class MfmService {
 		const solver = new MfmComponentBuilder({
 			input,
 			emojiMap,
-			targetSubdomain: remoteSubdomain,
 			fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
 			emphasis: emphasis || APP_COLOR_PALETTE_EMPHASIS.A0,
 			colorScheme,

@@ -127,7 +127,6 @@ const PostStats = memo(function Foo({
 const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
-		marginTop: 8,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},

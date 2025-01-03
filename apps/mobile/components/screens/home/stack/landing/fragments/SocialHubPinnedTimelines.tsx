@@ -115,6 +115,7 @@ function PinnedTimelineItem({
 						width: 96,
 						color: theme.complementary.a0,
 					}}
+					numberOfLines={1}
 				>
 					{server}
 				</AppText.Medium>
