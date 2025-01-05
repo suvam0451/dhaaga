@@ -20,6 +20,8 @@ class AtprotoSessionService {
 	private nextSession: AtpSessionData;
 	private oldSession: AtpSessionData;
 	private nextStatusCode: string;
+	// PDS to hit, is obtainable after refreshing session
+	pdsUrl: string | null;
 
 	constructor(db: DataSource, acct: Account) {
 		this.db = db;
@@ -89,7 +91,21 @@ class AtprotoSessionService {
 			if (IS_EXPIRED) {
 				await this.sessionManager.refreshSession();
 			} else {
-				await this.sessionManager.resumeSession(this.sessionManager.session);
+				const sess = await this.sessionManager.resumeSession(
+					this.sessionManager.session,
+				);
+				const _serviceObj = (sess?.data?.didDoc as any)?.service;
+
+				if (Array.isArray(_serviceObj)) {
+					const pds = _serviceObj.find(
+						(o) =>
+							o['id'] === '#atproto_pds' &&
+							o['type'] === 'AtprotoPersonalDataServer',
+					);
+					this.pdsUrl = pds?.serviceEndpoint;
+				} else {
+					console.log('not saving pds?', _serviceObj);
+				}
 			}
 		} catch (e) {
 			console.log(e);

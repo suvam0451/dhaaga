@@ -1,4 +1,3 @@
-import { useAppNotifSeenContext } from '../../components/screens/notifications/landing/state/useNotifSeen';
 import {
 	DhaagaJsNotificationType,
 	KNOWN_SOFTWARE,
@@ -16,6 +15,13 @@ import {
 import { UserMiddleware } from '../../services/middlewares/user.middleware';
 import ActivityPubService from '../../services/activitypub.service';
 import { RandomUtil } from '../../utils/random.utils';
+import {
+	AppBskyNotificationListNotifications,
+	ChatBskyConvoListConvos,
+} from '@atproto/api';
+import ChatService, { AppChatRoom } from '../../services/chat.service';
+import useGlobalState from '../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type useApiGetNotificationsProps = {
 	include: DhaagaJsNotificationType[];
@@ -42,13 +48,6 @@ type MastoGroupedNotificationType = {
 const defaultHookResult: HookResultType = {
 	data: [],
 };
-
-/**
- * Generates
- */
-function notificationTypeArrayGenerator(
-	type: 'mentions' | 'chat' | 'socials' | 'updates',
-) {}
 
 /**
  * API Query for the notifications endpoint
@@ -153,6 +152,9 @@ function useApiGetMentionUpdates() {
 					minId: null,
 					maxId: null,
 				};
+			} else if (ActivityPubService.blueskyLike(driver)) {
+				const _data =
+					results.data as AppBskyNotificationListNotifications.OutputSchema;
 			}
 
 			const acctList = _data.data.accounts;
@@ -209,22 +211,33 @@ function useApiGetMentionUpdates() {
 function useApiGetChatUpdates() {
 	const [Results, setResults] = useState<AppNotificationObject[]>([]);
 	const { acct } = useAppAcct();
-	const { driver, client } = useAppApiClient();
+	const { driver, client, server } = useAppApiClient();
+	const { db } = useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
 
 	useEffect(() => {
 		setResults([]);
 	}, [acct]);
 
-	async function api() {
+	async function api(): Promise<AppChatRoom[]> {
+		const result = await client.notifications.getChats(driver);
+		if (result.error) throw new Error(result.error.message);
+
 		switch (driver) {
+			case KNOWN_SOFTWARE.BLUESKY: {
+				const _data: ChatBskyConvoListConvos.OutputSchema = result.data;
+				return ChatService.resolveAtProtoChat(db, _data, acct, driver, server);
+			}
 			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.MISSKEY:
 			case KNOWN_SOFTWARE.SHARKEY: {
-				const chatResult = await client.notifications.getChats(driver);
-				if (chatResult.error) {
-					return null;
+				if (result.error) {
+					throw new Error(result.error.message);
 				} else {
-					return chatResult.data;
+					return result.data;
 				}
 			}
 		}
@@ -233,27 +246,11 @@ function useApiGetChatUpdates() {
 	}
 
 	// Queries
-	const { fetchStatus, data, status, refetch } = useQuery<any>({
+	return useQuery<AppChatRoom[]>({
 		queryKey: ['chat', acct],
 		queryFn: api,
 		enabled: client !== null,
 	});
-
-	useEffect(() => {
-		if (fetchStatus === 'fetching' || status !== 'success') return;
-		switch (driver) {
-			case KNOWN_SOFTWARE.SHARKEY:
-			case KNOWN_SOFTWARE.MISSKEY: {
-				const interfaces = PostMiddleware.rawToInterface<unknown[]>(
-					data,
-					driver,
-				);
-				// (data as MisskeyNotificationResponseType)
-			}
-		}
-	}, [fetchStatus]);
-
-	return { data: Results, refetch };
 }
 
 function useApiGetSocialUpdates() {

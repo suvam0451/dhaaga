@@ -262,6 +262,7 @@ class GlobalStateService {
 				payload = {
 					...data,
 					subdomain: acct.server,
+					pdsUrl: session.pdsUrl,
 				};
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);

@@ -13,6 +13,34 @@ import { Profile, ProfilePinnedTimeline } from '../database/_schema';
 
 class ActivityPubService {
 	/**
+	 * Does this driver implement
+	 * bookmarks?
+	 * @param driver
+	 */
+	static canBookmark(driver: KNOWN_SOFTWARE | string) {
+		return ActivityPubService.mastodonLike(driver);
+	}
+
+	/**
+	 * Does this driver implement
+	 * likes?
+	 * @param driver
+	 */
+	static canLike(driver: KNOWN_SOFTWARE | string) {
+		return (
+			ActivityPubService.mastodonLike(driver) ||
+			ActivityPubService.blueskyLike(driver)
+		);
+	}
+
+	static canAddReactions(driver: string) {
+		return (
+			ActivityPubService.misskeyLike(driver) ||
+			ActivityPubService.pleromaLike(driver)
+		);
+	}
+
+	/**
 	 * Check MastoAPI compatibility
 	 * @param driver
 	 */
@@ -39,8 +67,8 @@ class ActivityPubService {
 		].includes(driver as KNOWN_SOFTWARE);
 	}
 
-	static blueskyLike(driver: KNOWN_SOFTWARE) {
-		return [KNOWN_SOFTWARE.BLUESKY].includes(driver);
+	static blueskyLike(driver: KNOWN_SOFTWARE | string) {
+		return [KNOWN_SOFTWARE.BLUESKY].includes(driver as KNOWN_SOFTWARE);
 	}
 
 	/**

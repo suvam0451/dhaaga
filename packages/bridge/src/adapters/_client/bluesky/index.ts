@@ -11,12 +11,11 @@ import BlueskyStatusesRouter from './statuses.js';
 import BlueskyTagsRouter from './tags.js';
 import BlueskyTimelinesRouter from './timelines.js';
 import BlueskyTrendsRouter from './trends.js';
-import { Agent, AtpSessionData } from '@atproto/api';
+import { Agent } from '@atproto/api';
 import { getBskyAgent } from '../_router/_api.js';
+import { AppAtpSessionData } from '../../../types/atproto.js';
 
-export type AtprotoClientCreateDTO = {
-	subdomain: string;
-} & AtpSessionData;
+export type AtprotoClientCreateDTO = AppAtpSessionData;
 
 class BlueskyRestClient implements ActivityPubClient {
 	client: Agent | null;
@@ -51,7 +50,7 @@ class BlueskyRestClient implements ActivityPubClient {
 		this.lists = new BlueskyListRoute();
 		this.me = new BlueskyMeRouter(this.dto);
 		this.media = new BlueskyMediaRouter();
-		this.notifications = new BlueskyNotificationsRouter();
+		this.notifications = new BlueskyNotificationsRouter(this.dto);
 		this.profile = new BlueskyProfileRouter();
 		this.search = new BlueskySearchRouter(this.dto);
 		this.statuses = new BlueskyStatusesRouter(this.dto);

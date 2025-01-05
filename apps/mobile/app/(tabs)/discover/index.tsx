@@ -126,7 +126,7 @@ const widgetStyles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginBottom: 8,
+		marginBottom: 4,
 		borderRadius: 8,
 	},
 });
@@ -215,8 +215,6 @@ const FloatingButtonCircular = () => {
 		};
 	});
 
-	const searchTabs = DriverService.getSearchTabs(driver);
-
 	const { theme } = useAppTheme();
 	return (
 		<View style={styles.root}>
@@ -247,7 +245,6 @@ const FloatingButtonCircular = () => {
 						placeholder={'Discover something new!'}
 						style={[
 							{
-								padding: 8,
 								paddingLeft: 4,
 								flex: 1,
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
@@ -288,14 +285,13 @@ export default function Tab() {
 const styles = StyleSheet.create({
 	root: {
 		position: 'absolute',
-		bottom: 28,
+		bottom: 20,
 		width: '100%',
 	},
 
 	container: {
 		flexDirection: 'row',
-		zIndex: 5,
-		// borderRadius: SIZE / 2,
+		zIndex: 5, // borderRadius: SIZE / 2,
 		// backgroundColor: 'rgba(1,123,254,0.8)',
 		// justifyContent: 'center',
 		// alignItems: 'center',
@@ -307,9 +303,7 @@ const styles = StyleSheet.create({
 		borderRadius: BUTTON_SIZE / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'rgba(1,123,254,1)',
-		// position
-
+		backgroundColor: 'rgba(1,123,254,1)', // position
 		alignSelf: 'flex-end',
 	},
 	actionButton: {

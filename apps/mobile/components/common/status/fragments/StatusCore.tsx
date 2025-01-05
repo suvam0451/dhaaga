@@ -103,8 +103,7 @@ const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
 	const { content: PostContent, isLoaded } = useMfm({
 		content: _target.content.raw,
 		emojiMap: _target.calculated.emojis,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-		// fontFamily: APP_FONTS.INTER_400_REGULAR,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10, // fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});
 
 	const isSensitive = _target.meta.sensitive;

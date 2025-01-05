@@ -9,7 +9,7 @@ import {
 	StyleSheet,
 	View,
 } from 'react-native';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import FlashListService, {
 	FlashListType_PinnedTag,
 } from '../../services/flashlist.service';
@@ -40,6 +40,10 @@ import SearchResultUserItem from '../screens/search/SearchResultUserItem';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppText } from './Text';
+import { AppChatRoom } from '../../services/chat.service';
+import { AppDivider } from './Divider';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import { AppIcon } from './Icon';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -96,6 +100,74 @@ function Pinned_Users_LastItem() {
 				</View>
 			</View>
 		</Pressable>
+	);
+}
+
+function Chatroom_Item({ item }: { item: AppChatRoom }) {
+	const [MemberAvatar, setMemberAvatar] = useState<AppUserObject>(null);
+	const [LatestMessageMe, setLatestMessageMe] = useState(false);
+	const { theme } = useAppTheme();
+
+	const AVATAR_SIZE = 54;
+
+	useEffect(() => {
+		const others = item.members.filter((o) => o.id !== item.myId);
+		if (others.length > 0) {
+			setMemberAvatar(others[0]);
+		}
+		setLatestMessageMe(item.lastMessage.sender.id === item.myId);
+	}, [item]);
+
+	return (
+		<View style={{ paddingHorizontal: 10 }}>
+			<View style={{ flexDirection: 'row' }}>
+				<View>
+					{/*@ts-ignore-next-line*/}
+					<Image
+						source={{ uri: MemberAvatar?.avatarUrl }}
+						style={{
+							width: AVATAR_SIZE,
+							height: AVATAR_SIZE,
+							borderRadius: AVATAR_SIZE / 2,
+						}}
+					/>
+				</View>
+				<View style={{ marginLeft: 10, flexGrow: 1 }}>
+					<AppText.Medium
+						style={{ marginBottom: 4, width: '100%' }}
+						numberOfLines={1}
+					>
+						{MemberAvatar?.displayName || MemberAvatar?.handle}
+					</AppText.Medium>
+
+					<AppText.Normal
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+						numberOfLines={1}
+					>
+						{LatestMessageMe ? (
+							<AppText.Normal style={{ color: theme.primary.a0 }}>
+								You:{' '}
+							</AppText.Normal>
+						) : (
+							''
+						)}
+						{item.lastMessage.content.raw}
+					</AppText.Normal>
+				</View>
+				<View
+					style={{
+						// height: '100%',
+						alignItems: 'center', // backgroundColor: 'red',
+						alignSelf: 'center',
+					}}
+				>
+					<AppIcon id={'chevron-right'} />
+				</View>
+			</View>
+			<AppDivider.Hard
+				style={{ backgroundColor: '#242424', marginVertical: 8 }}
+			/>
+		</View>
 	);
 }
 
@@ -331,7 +403,8 @@ type AppFlatListProps<
 		| AppNotificationObject
 		| ProfilePinnedUser
 		| ProfilePinnedTimeline
-		| ProfilePinnedTag,
+		| ProfilePinnedTag
+		| AppChatRoom,
 > = {
 	// the data used for render
 	data: T[];
@@ -473,6 +546,21 @@ export class AppFlashList {
 					<Pinned_Tags_ListItem key={i} item={tag} />
 				))}
 			</View>
+		);
+	}
+
+	static Chatrooms({
+		data,
+		ListHeaderComponent,
+	}: AppFlatListProps<AppChatRoom>) {
+		return (
+			<FlatList
+				data={data}
+				renderItem={({ item }) => {
+					return <Chatroom_Item item={item} />;
+				}}
+				ListHeaderComponent={ListHeaderComponent}
+			/>
 		);
 	}
 }
