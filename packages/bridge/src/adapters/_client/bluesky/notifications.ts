@@ -12,9 +12,12 @@ import {
 	ChatBskyConvoGetConvo,
 	ChatBskyConvoGetMessages,
 	ChatBskyConvoListConvos,
+	ChatBskyConvoSendMessage,
+	Facet,
 } from '@atproto/api';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
+import * as ChatBskyConvoDefs from '@atproto/api/src/client/types/chat/bsky/convo/defs.js';
 
 class BlueskyNotificationsRouter implements NotificationsRoute {
 	dto: AppAtpSessionData;
@@ -96,6 +99,30 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 			{
 				reasons: ['mention', 'reply', 'quote'],
 				limit: 30,
+			},
+		);
+	}
+
+	async sendMessage(
+		convoId: string,
+		content: { text?: string; facets?: Facet[] },
+	): LibraryPromise<ChatBskyConvoDefs.MessageView> {
+		const agent = getXrpcAgent(this.dto);
+		return await InvokeBskyFunction<ChatBskyConvoDefs.MessageView>(
+			'sendMessage',
+			agent.chat.bsky.convo.sendMessage,
+			agent.chat.bsky.convo,
+			{
+				convoId,
+				message: {
+					text: content.text,
+					facets: content.facets,
+				},
+			},
+			{
+				headers: {
+					'Atproto-Proxy': 'did:web:api.bsky.chat#bsky_chat',
+				},
 			},
 		);
 	}

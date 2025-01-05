@@ -146,4 +146,8 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
 	}
+
+	async sendMessage() {
+		return notImplementedErrorBuilder();
+	}
 }

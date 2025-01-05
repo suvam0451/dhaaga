@@ -66,17 +66,23 @@ function reducer(state: State, action: Actions): State {
 			});
 		}
 		case ACTION.INIT_MESSAGES: {
+			let _copy = [...action.payload.messages];
+			_copy.sort((a, b) =>
+				new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()
+					? 1
+					: -1,
+			);
+
 			return produce(state, (draft) => {
-				draft.messages = action.payload.messages;
-				draft.messages = draft.messages.sort((a, b) =>
-					new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()
-						? 1
-						: -1,
-				);
+				draft.messages = _copy;
 				draft.minId = action.payload.minId;
 			});
 		}
 		case ACTION.APPEND_MESSAGE: {
+			const match = state.messages.find(
+				(o) => o.id === action.payload.message?.id,
+			);
+			if (match) return state;
 			return produce(state, (draft) => {
 				draft.messages.push(action.payload.message);
 			});

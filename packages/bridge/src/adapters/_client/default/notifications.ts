@@ -33,6 +33,10 @@ export class DefaultNotificationsRouter implements NotificationsRoute {
 		return notImplementedErrorBuilder();
 	}
 
+	async sendMessage() {
+		return notImplementedErrorBuilder();
+	}
+
 	async getMentions() {
 		return notImplementedErrorBuilder();
 	}

@@ -64,7 +64,6 @@ function useApiGetChatMessages(roomId: string, maxId: string | undefined) {
 		switch (driver) {
 			case KNOWN_SOFTWARE.BLUESKY: {
 				const _data: ChatBskyConvoGetMessages.OutputSchema = result.data;
-				console.log('msgs', _data.messages);
 				return {
 					items: ChatMiddleware.deserialize<unknown[]>(
 						_data.messages,

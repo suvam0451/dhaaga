@@ -131,7 +131,7 @@ function Chatroom_Item({ item }: { item: AppChatRoom }) {
 
 	return (
 		<Pressable style={{ paddingHorizontal: 10 }} onPress={onPress}>
-			<View style={{ flexDirection: 'row' }}>
+			<View style={{ flexDirection: 'row', width: '100%' }}>
 				<View>
 					{/*@ts-ignore-next-line*/}
 					<Image
@@ -143,7 +143,7 @@ function Chatroom_Item({ item }: { item: AppChatRoom }) {
 						}}
 					/>
 				</View>
-				<View style={{ marginLeft: 10, flexGrow: 1 }}>
+				<View style={{ marginLeft: 10, flexGrow: 1, flex: 1 }}>
 					<AppText.Medium
 						style={{ marginBottom: 4, width: '100%' }}
 						numberOfLines={1}

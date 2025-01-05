@@ -3,16 +3,8 @@ import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetChatUpdates } from '../../../../../hooks/api/useNotifications';
-import {
-	RefreshControl,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { AppFlashList } from '../../../../lib/AppFlashList';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 const ChatView = memo(() => {
 	const { refetch, data } = useApiGetChatUpdates();
@@ -50,12 +42,3 @@ const ChatView = memo(() => {
 });
 
 export default ChatView;
-
-const styles = StyleSheet.create({
-	tipText: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-		textAlign: 'center',
-		marginHorizontal: 10,
-		marginBottom: 16,
-	},
-});

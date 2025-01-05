@@ -86,4 +86,8 @@ export class PleromaNotificationsRouter implements NotificationsRoute {
 	async getSocialUpdates() {
 		return notImplementedErrorBuilder();
 	}
+
+	async sendMessage() {
+		return notImplementedErrorBuilder();
+	}
 }

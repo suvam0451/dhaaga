@@ -4,13 +4,14 @@ import {
 	View,
 	Text,
 	KeyboardAvoidingView,
+	Pressable,
 } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import {
 	useApiGetChatMessages,
 	useApiGetChatroom,
 } from '../../../hooks/api/inbox/useApiGetChats';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import {
 	chatroomReducer,
 	ChatroomReducerActionType,
@@ -28,6 +29,7 @@ import { Image } from 'expo-image';
 import { AppDivider } from '../../../components/lib/Divider';
 import {
 	useAppAcct,
+	useAppApiClient,
 	useAppDb,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
@@ -37,6 +39,9 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AccountMetadataService } from '../../../database/entities/account-metadata';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
+import { detectFacets } from '../../../utils/atproto-facets.utils';
+import { ChatMiddleware } from '../../../services/middlewares/chat.middleware';
+import { Loader } from '../../../components/lib/Loader';
 
 type ParticipantsProps = {
 	accounts: AppUserObject[];
@@ -146,7 +151,9 @@ function Page() {
 	const [State, dispatch] = useReducer(chatroomReducer, chatroomReducerDefault);
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
+	const { driver, client, server } = useAppApiClient();
 	const { db } = useAppDb();
+	const [MessageText, setMessageText] = useState(null);
 	// reset the timeline on param change
 	const params = useLocalSearchParams();
 	const roomId: string = params['roomId'] as string;
@@ -186,10 +193,42 @@ function Page() {
 		});
 	}, [RoomData, nextMessages]);
 
+	const [height, setHeight] = useState(40); // Initial height
+	const [IsMessageLoading, setIsMessageLoading] = useState(false);
+	const MAX_HEIGHT = 160;
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
 		itemCount: 0,
 		updateQueryCache: () => {},
 	});
+
+	/**
+	 * Send the message
+	 */
+	async function onSendMessage() {
+		setIsMessageLoading(true);
+		client.notifications
+			.sendMessage(roomId, {
+				text: MessageText,
+				facets: detectFacets(MessageText),
+			})
+			.then((res) => {
+				dispatch({
+					type: ChatroomReducerActionType.APPEND_MESSAGE,
+					payload: {
+						message: ChatMiddleware.deserialize<unknown>(
+							res.data,
+							driver,
+							server,
+						),
+					},
+				});
+				setMessageText(null);
+			})
+			.catch((e) => {})
+			.finally(() => {
+				setIsMessageLoading(false);
+			});
+	}
 
 	return (
 		<KeyboardAvoidingView>
@@ -246,7 +285,8 @@ function Page() {
 						paddingHorizontal: 10,
 						flexDirection: 'row',
 						width: '100%',
-						alignItems: 'center',
+						alignItems: 'center', // height: 'auto',
+						height: Math.max(56, height),
 					}}
 				>
 					<View>
@@ -259,7 +299,14 @@ function Page() {
 					<View style={{ flexGrow: 1 }}>
 						<TextInput
 							placeholder={'Message'}
+							multiline={true}
 							placeholderTextColor={theme.secondary.a40}
+							onContentSizeChange={(e) => {
+								const _height = e.nativeEvent.contentSize.height;
+								setHeight(Math.min(MAX_HEIGHT, _height)); // Update height based on content
+							}}
+							onChangeText={setMessageText}
+							value={MessageText}
 							style={{
 								textDecorationLine: 'none',
 								flex: 1,
@@ -270,20 +317,37 @@ function Page() {
 								marginLeft: 6,
 								color: theme.secondary.a20,
 								fontFamily: APP_FONTS.INTER_400_REGULAR,
+								height: 'auto',
+								maxHeight: 192,
 							}}
 						/>
 					</View>
-
-					<View
-						style={{
-							marginLeft: 12,
-							backgroundColor: theme.primary.a0,
-							padding: 10,
-							borderRadius: '100%',
-						}}
-					>
-						<FontAwesome name="send" size={20} color={'black'} />
-					</View>
+					{IsMessageLoading ? (
+						<View
+							style={{
+								marginLeft: 16,
+							}}
+						>
+							<Loader />
+						</View>
+					) : (
+						<Pressable
+							style={{
+								marginLeft: 12,
+								backgroundColor: theme.primary.a0,
+								padding: 10,
+								borderRadius: '100%',
+							}}
+							onPress={onSendMessage}
+						>
+							<FontAwesome
+								name="send"
+								size={20}
+								color={'black'}
+								onPress={onSendMessage}
+							/>
+						</Pressable>
+					)}
 				</View>
 			</AppTopNavbar>
 		</KeyboardAvoidingView>
