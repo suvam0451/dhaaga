@@ -1,11 +1,5 @@
 import { memo } from 'react';
-import {
-	FlatList,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { APP_ICON_ENUM, AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { SocialHubPinSectionContainer } from './_factory';
@@ -25,6 +19,7 @@ import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../../../../states/useAppNavigator';
 import { DialogBuilderService } from '../../../../../../services/dialog-builder.service';
+import { AppText } from '../../../../../lib/Text';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -76,8 +71,6 @@ function PinnedTimelineItem({
 	const { show, hide } = useAppDialog();
 	const { toTimelineViaPin } = useAppNavigator();
 
-	const TEXT_COLOR = theme.secondary.a10; // theme.textColor.medium;
-
 	function onPress() {
 		if (account.id !== acct.id) {
 			show(
@@ -114,27 +107,18 @@ function PinnedTimelineItem({
 						iconStyle={{ color: theme.secondary.a0 }}
 					/>
 				</View>
-				<Text
-					style={[
-						styles.text,
-						{
-							color: TEXT_COLOR,
-						},
-					]}
-				>
+				<AppText.H6 emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
 					{label}
-				</Text>
-				<Text
+				</AppText.H6>
+				<AppText.Medium
 					style={{
-						color: theme.complementary.a0,
-						fontSize: 13,
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 						width: 96,
+						color: theme.complementary.a0,
 					}}
 					numberOfLines={1}
 				>
 					{server}
-				</Text>
+				</AppText.Medium>
 			</TouchableOpacity>
 		</View>
 	);

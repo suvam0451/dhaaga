@@ -1,12 +1,13 @@
 import { CheckBox } from '@rneui/base';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import { memo } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONTS } from '../../styles/AppFonts';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { AppText } from './Text';
 
 type Props = {
 	title?: string;
@@ -98,6 +99,19 @@ export const NativeCheckbox = memo(function Foo({
 		useShallow((o) => ({
 			theme: o.colorScheme,
 		})),
+	);
+
+	return (
+		<Pressable onPress={onClick}>
+			<AppText.Medium
+				style={{
+					color: checked ? theme.primary.a0 : theme.secondary.a20,
+					fontSize: 16,
+				}}
+			>
+				{label}
+			</AppText.Medium>
+		</Pressable>
 	);
 
 	return (

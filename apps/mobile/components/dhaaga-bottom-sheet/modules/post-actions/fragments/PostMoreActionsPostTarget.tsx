@@ -3,18 +3,17 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import ActivityPubService from '../../../../../services/activitypub.service';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import useGlobalState from '../../../../../states/_global';
 import { AppIcon } from '../../../../lib/Icon';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 import {
 	useAppApiClient,
+	useAppBottomSheet_Improved,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { AppPostObject } from '../../../../../types/app-post.types';
 import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../Core';
 
 function SectionDivider() {
 	return (
@@ -47,11 +46,7 @@ const ActionButton = memo(
 		desc?: string;
 		onClick: () => void;
 	}) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 		return (
 			<TouchableOpacity
 				style={{
@@ -73,8 +68,8 @@ const ActionButton = memo(
 				>
 					<Text
 						style={{
-							color: theme.textColor.high,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							color: theme.secondary.a10,
+							fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
 							fontSize: 18,
 						}}
 					>
@@ -85,6 +80,7 @@ const ActionButton = memo(
 							style={{
 								color: theme.textColor.medium,
 								flexWrap: 'wrap',
+								fontFamily: APP_FONTS.INTER_400_REGULAR,
 							}}
 						>
 							{desc}
@@ -108,6 +104,7 @@ const PostMoreActionsPostTarget = memo(
 		const { driver } = useAppApiClient();
 		const { theme } = useAppTheme();
 		const _target = PostMiddleware.getContentTarget(item);
+		const { show, setCtx } = useAppBottomSheet_Improved();
 
 		const IS_BOOKMARKED = _target?.interaction.bookmarked;
 		const IS_LIKED = _target?.interaction.liked;
@@ -122,8 +119,6 @@ const PostMoreActionsPostTarget = memo(
 			}
 		}
 
-		const IS_MASTODON = driver === KNOWN_SOFTWARE.MASTODON;
-
 		function onClickAddReaction() {
 			setEditMode('emoji');
 		}
@@ -136,23 +131,28 @@ const PostMoreActionsPostTarget = memo(
 			postPub.toggleBookmark(item.uuid);
 		}
 
-		const IS_MASTODON_LIKE = ActivityPubService.mastodonLike(driver);
+		function onReply() {
+			setCtx({ uuid: _target.uuid });
+			show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
+		}
 
 		return (
 			<Fragment>
-				<ActionButton
-					Icon={
-						<Ionicons
-							color={IS_BOOKMARKED ? theme.primary.a0 : theme.secondary.a10}
-							name={'bookmark'}
-							size={24}
-						/>
-					}
-					label={IS_BOOKMARKED ? 'Remove Bookmark' : 'Bookmark'}
-					desc={'Save this post to view later.'}
-					onClick={onClickToggleBookmark}
-				/>
-				{IS_MASTODON_LIKE && (
+				{ActivityPubService.canBookmark(driver) && (
+					<ActionButton
+						Icon={
+							<Ionicons
+								color={IS_BOOKMARKED ? theme.primary.a0 : theme.secondary.a10}
+								name={'bookmark'}
+								size={24}
+							/>
+						}
+						label={IS_BOOKMARKED ? 'Remove Bookmark' : 'Bookmark'}
+						desc={'Save this post to view later.'}
+						onClick={onClickToggleBookmark}
+					/>
+				)}
+				{ActivityPubService.canLike(driver) && (
 					<ActionButton
 						Icon={
 							<AntDesign
@@ -162,11 +162,11 @@ const PostMoreActionsPostTarget = memo(
 							/>
 						}
 						label={IS_LIKED ? 'Remove Like' : 'Add Like'}
-						desc={'Your likes can be seen by other users.'}
+						desc={'Your likes are visible publicly.'}
 						onClick={onClickToggleLike}
 					/>
 				)}
-				{!IS_MASTODON && (
+				{ActivityPubService.canAddReactions(driver) && (
 					<ActionButton
 						Icon={
 							<AppIcon
@@ -181,10 +181,13 @@ const PostMoreActionsPostTarget = memo(
 
 				<ActionButton
 					Icon={
-						<AppIcon id={'smiley'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
+						<AppIcon
+							id={'chatbox-outline'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						/>
 					}
 					label={'Reply'}
-					onClick={() => {}}
+					onClick={onReply}
 				/>
 
 				<SectionDivider />

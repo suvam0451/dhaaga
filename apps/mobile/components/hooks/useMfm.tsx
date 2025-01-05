@@ -1,25 +1,26 @@
-import { DependencyList, useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleProp, TextStyle } from 'react-native';
 import MfmService from '../../services/mfm.service';
-import { Skeleton } from '@rneui/themed';
 import WithAppMfmContext from '../../hooks/app/useAppMfmContext';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FacetService from '../../services/facets.service';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../utils/random.utils';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import {
+	APP_COLOR_PALETTE_EMPHASIS,
+	AppThemingUtil,
+} from '../../utils/theming.util';
+import {
+	useAppAcct,
+	useAppApiClient,
+	useAppTheme,
+} from '../../hooks/utility/global-state-extractors';
 
 type Props = {
 	content: string;
 	// Mastodon sup-plied emoji list
 	emojiMap: Map<string, string>;
-	// instance of the target user (will resolve emojis from there)
-	remoteSubdomain: string;
-	deps: DependencyList;
 	expectedHeight?: number;
 	fontFamily?: string;
-
 	numberOfLines?: number;
 	acceptTouch?: boolean;
 	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
@@ -29,9 +30,7 @@ type Props = {
  * Use MfM to render content
  * @param content
  * @param emojiMap
- * @param remoteSubdomain
  * @param deps
- * @param expectedHeight
  * @param fontFamily
  * @param numberOfLines
  * @param acceptTouch
@@ -40,33 +39,18 @@ type Props = {
 function useMfm({
 	content,
 	emojiMap,
-	remoteSubdomain,
-	deps,
-	expectedHeight,
 	fontFamily,
 	numberOfLines,
 	acceptTouch,
 	emphasis,
 }: Props) {
-	const { acct, driver, theme } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			driver: o.driver,
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
+	const { acct } = useAppAcct();
+	const { driver } = useAppApiClient();
 
 	const defaultValue = useRef<any>({
 		isLoaded: false,
-		content: (
-			<Skeleton
-				style={{
-					height: expectedHeight || 32,
-					borderRadius: 8,
-					width: '100%',
-				}}
-			/>
-		),
+		content: <View />,
 		aiContext: [],
 	});
 
@@ -80,36 +64,10 @@ function useMfm({
 	 * */
 	const IsSolved = useRef(RandomUtil.nanoId());
 
-	let color = useMemo(() => {
-		switch (emphasis) {
-			case APP_COLOR_PALETTE_EMPHASIS.A0: {
-				return theme.secondary.a0;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A10: {
-				return theme.secondary.a10;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A20: {
-				return theme.secondary.a20;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A30: {
-				return theme.secondary.a30;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A40: {
-				return theme.secondary.a40;
-			}
-			case APP_COLOR_PALETTE_EMPHASIS.A50: {
-				return theme.secondary.a50;
-			}
-			default: {
-				return theme.secondary.a0;
-			}
-		}
-	}, [emphasis, theme]);
-
 	// since font remains same for each reusable component
-	const fontStyle = {
-		color: color,
-		fontFamily: fontFamily,
+	const fontStyle: StyleProp<TextStyle> = {
+		color: AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis),
+		// fontFamily: fontFamily,
 	};
 
 	useEffect(() => {
@@ -134,7 +92,7 @@ function useMfm({
 				content: (
 					<WithAppMfmContext acceptTouch={_acceptTouch}>
 						<View style={{ height: 'auto' }}>
-							<Text>{nodes.map((node, i) => node)}</Text>
+							<Text style={fontStyle}>{nodes.map((node, i) => node)}</Text>
 						</View>
 					</WithAppMfmContext>
 				),
@@ -145,12 +103,13 @@ function useMfm({
 
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
-			domain: driver,
 			subdomain: acct?.server,
-			remoteSubdomain,
 			fontFamily,
 			emphasis,
 			colorScheme: theme,
+			style: {
+				fontFamily,
+			},
 		});
 		setData({
 			isLoaded: true,
@@ -191,7 +150,7 @@ function useMfm({
 			aiContext: openAiContext,
 		});
 		IsSolved.current = content;
-	}, [...deps, theme]);
+	}, [content, theme]);
 
 	return {
 		content: Data.content,

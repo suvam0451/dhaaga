@@ -35,6 +35,14 @@ export function useAppApiClient() {
 	);
 }
 
+export function useAppDb() {
+	return useGlobalState(
+		useShallow((o) => ({
+			db: o.db,
+		})),
+	);
+}
+
 export function useAppManager() {
 	return useGlobalState(
 		useShallow((o) => ({

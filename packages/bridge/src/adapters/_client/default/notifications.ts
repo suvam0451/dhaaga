@@ -25,6 +25,18 @@ export class DefaultNotificationsRouter implements NotificationsRoute {
 		return notImplementedErrorBuilder();
 	}
 
+	async getChat() {
+		return notImplementedErrorBuilder();
+	}
+
+	async getMessages() {
+		return notImplementedErrorBuilder();
+	}
+
+	async sendMessage() {
+		return notImplementedErrorBuilder();
+	}
+
 	async getMentions() {
 		return notImplementedErrorBuilder();
 	}

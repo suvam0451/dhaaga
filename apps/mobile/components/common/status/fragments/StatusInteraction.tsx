@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
-import BoostAdvanced from '../../../dialogs/BoostAdvanced';
 import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import {

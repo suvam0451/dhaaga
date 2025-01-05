@@ -26,6 +26,26 @@ class TextParserUtil {
 	}
 
 	/**
+	 * Useful for ActivityPub content objects
+	 * @param text input (html) content
+	 */
+	static mapLinksUsingAnchorTags(text: string): Map<string, string> {
+		const mp = new Map<string, string>();
+		// @ts-ignore-next-line
+		const ex = /<a.*?href="(.*?)".*?>(.*?)<\/a>/gu;
+
+		const aRefContentCleanupRegex = /(<([^>]+)>)/gi;
+
+		const matches = text.matchAll(ex);
+		// @ts-ignore-next-line
+		for (const match of matches) {
+			const result = match[2].replace(aRefContentCleanupRegex, '');
+			mp.set(match[1], result);
+		}
+		return mp;
+	}
+
+	/**
 	 * Removes www and http(s) from front
 	 * @param input input url
 	 */

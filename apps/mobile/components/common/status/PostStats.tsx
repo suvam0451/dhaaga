@@ -7,10 +7,11 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppBottomSheet_Improved,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 
@@ -35,12 +36,7 @@ function util(o: number): string {
  */
 const StatItem = memo(
 	({ count, label, nextCounts, onPress, me }: StatItemProps) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
-
+		const { theme } = useAppTheme();
 		const formatted = util(count);
 		const color = me ? theme.primary.a0 : theme.complementary.a0;
 
@@ -131,14 +127,13 @@ const PostStats = memo(function Foo({
 const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
-		marginTop: 8,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	text: {
 		fontSize: 14,
 		textAlign: 'right',
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+		fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
 	},
 	bull: {
 		marginHorizontal: 2,

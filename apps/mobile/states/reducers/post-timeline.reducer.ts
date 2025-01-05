@@ -211,6 +211,7 @@ function reducer(state: State, action: Actions): State {
 					const match = ProfilePinnedTimelineService.findById(state.db, _id);
 					if (!match) return;
 					switch (match.category) {
+						case APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_HOME:
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_HOME: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.HOME;

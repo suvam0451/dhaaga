@@ -7,11 +7,12 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '../../styles/AppFonts';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../shared/topnavbar/AppTopNavbar';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { AppText } from '../lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
 type UserGuideContainerProps = {
 	questionnaire: { question: string; answers: string[] }[];
@@ -28,17 +29,7 @@ function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
 	};
 
 	const qStyle: StyleProp<TextStyle> = {
-		color: theme.secondary.a0,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		marginBottom: 8,
-		fontSize: 16,
-	};
-
-	const aStyle: StyleProp<TextStyle> = {
-		color: theme.secondary.a10,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		marginBottom: 5,
-		fontSize: 14,
 	};
 
 	return (
@@ -52,10 +43,28 @@ function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
 			>
 				{questionnaire.map((block, i) => (
 					<View key={i} style={sectionStyle}>
-						<Text style={qStyle}>{block.question}</Text>
+						<Text
+							style={[
+								qStyle,
+								{
+									fontFamily: 'BebasNeue_400Regular',
+									fontSize: 22,
+									color: theme.secondary.a10,
+								},
+							]}
+						>
+							{block.question}
+						</Text>
 						{block.answers.map((answer, i) => (
 							<View key={i}>
-								<Text style={aStyle}>{answer}</Text>
+								<AppText.Normal
+									style={{
+										color: theme.secondary.a20,
+									}}
+									emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+								>
+									{answer}
+								</AppText.Normal>
 							</View>
 						))}
 					</View>

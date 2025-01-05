@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer } from 'react';
 import {
 	DiscoverTabReducerStateType as State,
 	DiscoverTabDispatchType as DispatchType,
-	discoverTabReducerReducer as reducer,
+	discoverTabReducer as reducer,
 	discoverTabReducerDefault as reducerDefault,
 } from '../../states/reducers/discover-tab.reducer';
 

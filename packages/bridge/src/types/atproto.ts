@@ -1,3 +1,5 @@
+import { AtpSessionData } from '@atproto/api';
+
 export type AtpLoginResponse = {
 	success: boolean;
 	headers: {
@@ -30,4 +32,9 @@ export type AtpLoginResponse = {
 		emailAuthFactor: false;
 		emailConfirmed: false;
 	};
+};
+
+export type AppAtpSessionData = AtpSessionData & {
+	subdomain: string;
+	pdsUrl: string;
 };

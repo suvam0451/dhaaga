@@ -18,4 +18,6 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_TAB_GOODIE_HUT = '/profile/settings/goodie-hut',
 	SETTINGS_TAB_DIGITAL_WELLBEING = '/profile/settings/digital-wellbeing',
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
+
+	CHATROOM = '/notifications/chat',
 }

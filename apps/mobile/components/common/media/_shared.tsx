@@ -10,6 +10,8 @@ import { Text } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useGalleryDims from '../../../hooks/app/useGalleryDims';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../lib/Text';
 
 type Props = {
 	url?: string;
@@ -269,6 +271,8 @@ export const CarousalIndicatorOverlay = memo(function Foo({
 	top?: number;
 	right?: number;
 }) {
+	const { theme } = useAppTheme();
+
 	const CarousalIndicators = useMemo(() => {
 		if (index === undefined || totalCount === undefined) return <View></View>;
 
@@ -316,16 +320,17 @@ export const CarousalIndicatorOverlay = memo(function Foo({
 					style={{
 						position: 'absolute',
 						left: -48,
-						backgroundColor: 'rgba(100, 100, 100, 0.87)',
+						backgroundColor: theme.palette.bg,
+						opacity: 0.6,
 						top: 8,
 						padding: 4,
 						paddingHorizontal: 8,
 						borderRadius: 8,
 					}}
 				>
-					<Text style={{ color: APP_FONT.MONTSERRAT_HEADER }}>
+					<AppText.Normal>
 						{index + 1}/{totalCount}
-					</Text>
+					</AppText.Normal>
 				</View>
 			</View>
 		</Fragment>

@@ -1,9 +1,10 @@
+// @ts-ignore-next-line
+import TLDs from 'tlds';
 import { AppBskyRichtextFacet } from '@atproto/api';
 
 type Facet = AppBskyRichtextFacet.Main;
 
 const encoder = new TextEncoder();
-const decoder = new TextDecoder();
 
 export class UnicodeString {
 	utf16: string;
@@ -53,8 +54,7 @@ export function detectFacets(_text: string): Facet[] | undefined {
 	}
 	{
 		// links
-		const re =
-			// @ts-ignore-next-line
+		const re = // @ts-ignore-next-line
 			/(^|\s|\()((https?:\/\/[\S]+)|((?<domain>[a-z][a-z0-9]*(\.[a-z0-9]+)+)[\S]*))/gim;
 		while ((match = re.exec(text.utf16))) {
 			let uri = match[2];
@@ -122,13 +122,12 @@ export function detectFacets(_text: string): Facet[] | undefined {
 }
 
 function isValidDomain(str: string): boolean {
-	return true;
 	// NOTE: atproto should already be doing this from backend
-	// return !!TLDs.find((tld) => {
-	// 	const i = str.lastIndexOf(tld);
-	// 	if (i === -1) {
-	// 		return false;
-	// 	}
-	// 	return str.charAt(i - 1) === '.' && i === str.length - tld.length;
-	// });
+	return !!TLDs.find((tld) => {
+		const i = str.lastIndexOf(tld);
+		if (i === -1) {
+			return false;
+		}
+		return str.charAt(i - 1) === '.' && i === str.length - tld.length;
+	});
 }

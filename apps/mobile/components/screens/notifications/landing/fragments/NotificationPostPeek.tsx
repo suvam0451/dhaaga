@@ -8,8 +8,10 @@ import NotificationMediaThumbs from '../../../../common/media/NotificationMediaT
 import { appDimensions } from '../../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 import { AppUserObject } from '../../../../../types/app-user.types';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import {
+	useAppApiClient,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	acct: AppUserObject;
@@ -22,11 +24,7 @@ type Props = {
  * - upto 3 lines for text-only posts
  */
 export const NotificationPostPeek = memo(({ acct, post }: Props) => {
-	const { driver } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-		})),
-	);
+	const { driver } = useAppApiClient();
 	let _post = post;
 	if (post.boostedFrom) {
 		_post = post.boostedFrom;
@@ -43,7 +41,6 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 	});
 
 	const { toPost } = useAppNavigator();
-
 	function onPress() {
 		toPost(post.id);
 	}

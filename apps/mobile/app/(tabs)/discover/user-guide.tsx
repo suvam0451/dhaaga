@@ -3,7 +3,7 @@ import UserGuideContainer from '../../../components/containers/UserGuideContaine
 function Page() {
 	const qa: { question: string; answers: string[] }[] = [
 		{
-			question: 'Where am I?',
+			question: 'Where is this?',
 			answers: [
 				'This is the discovery portal of Dhaaga.',
 				'It is just a search and history tab for now 😅.',
@@ -11,8 +11,14 @@ function Page() {
 			],
 		},
 		{
-			question: 'How do I go back to the start?',
-			answers: ['Press the Home button on the right side of the search bar.'],
+			question: 'How do I go back to the beginning?',
+			answers: ['Simply open the search widget and clear (x) the search text.'],
+		},
+		{
+			question: 'How can I customise this page?',
+			answers: [
+				'As more modules get added, you will be able to add and organise their order',
+			],
 		},
 		{
 			question: 'Why are some of my radio buttons disabled?',
@@ -24,9 +30,9 @@ function Page() {
 		{
 			question: 'Where are my trending tabs?',
 			answers: [
-				'By principle, Dhaaga does not push news and trending topics on you.',
-				'This tab is dedicated to help you organically discover communities and shared interests.',
-				'In a future update, you will be able to show/hide News and tending topics in your Social Hub.',
+				'Dhaaga hides news and trending topics, by default.',
+				'You can add and customise any extra modules, as needed.',
+				'[NOTE]: There are no extra modules introduced as of v0.11.0',
 			],
 		},
 	];
@@ -34,7 +40,7 @@ function Page() {
 	return (
 		<UserGuideContainer
 			questionnaire={qa}
-			label={'User Guide (New Tab)'}
+			label={'User Guide'}
 			language={'en'}
 		/>
 	);

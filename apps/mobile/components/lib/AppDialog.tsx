@@ -4,10 +4,10 @@ import {
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../styles/AppFonts';
-import { modalStyles } from '../common/relationship/dialogs/_common';
 import { Fragment, useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
+import { APP_FONT } from '../../styles/AppTheme';
 
 type DialogOptionsProps = {
 	label: string;
@@ -120,7 +120,8 @@ export function AppDialog() {
 								style={[
 									modalStyles.modalDescription,
 									{
-										color: theme.textColor.medium,
+										color: theme.secondary.a20,
+										fontSize: 14,
 									},
 								]}
 							>
@@ -175,16 +176,16 @@ export function AppDialog() {
 
 const styles = StyleSheet.create({
 	modalTitle: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		textAlign: 'center',
 		fontSize: 22,
 		marginBottom: 16,
 		paddingTop: 32,
 	},
 	modalDescription: {
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		textAlign: 'center',
-		fontSize: 14,
+		fontSize: 16,
 	},
 	actionButtonContainer: {
 		justifyContent: 'center',
@@ -196,5 +197,25 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+});
+
+const modalStyles = StyleSheet.create({
+	modalTitle: {
+		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		textAlign: 'center',
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 18,
+		marginBottom: 16,
+	},
+	modalDescription: {
+		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		textAlign: 'center',
+		color: APP_FONT.MONTSERRAT_BODY,
+		fontSize: 14,
+	},
+	actionButtonContainer: {
+		marginVertical: 16,
+		marginTop: 32,
 	},
 });

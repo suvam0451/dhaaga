@@ -29,6 +29,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 export type APP_ICON_ENUM =
+	| 'add'
 	| 'add-circle-outline'
 	| 'albums-outline'
 	| 'bell'
@@ -80,6 +81,7 @@ export type APP_ICON_ENUM =
 	| 'retweet'
 	| 'save'
 	| 'search'
+	| 'send'
 	| 'share'
 	| 'feelings'
 	| 'smiley'
@@ -258,6 +260,15 @@ export const AppIcon = memo(
 
 		const Icon = useMemo(() => {
 			switch (id) {
+				case 'add':
+					return (
+						<Ionicons
+							name={'add-outline'}
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
 				case 'add-circle-outline':
 					return (
 						<Ionicons
@@ -729,6 +740,15 @@ export const AppIcon = memo(
 					return (
 						<AntDesign
 							name="search1"
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
+				case 'send':
+					return (
+						<Ionicons
+							name="send"
 							size={_size}
 							color={_color}
 							style={iconStyle}

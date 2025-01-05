@@ -2,6 +2,7 @@ import { LibraryPromise } from './_types.js';
 import { KNOWN_SOFTWARE } from './instance.js';
 import { MastoNotification } from '../../../../types/mastojs.types.js';
 import { MegaNotification } from '../../../../types/megalodon.types.js';
+import { Facet } from '@atproto/api';
 
 export enum DhaagaJsNotificationType {
 	CHAT = 'chat', // direct
@@ -43,8 +44,7 @@ export enum DhaagaJsNotificationType {
 	ADMIN_SIGNUP = 'admin.sign_up',
 	ADMIN_REPORT = 'admin.report',
 
-	NOTE = 'note',
-	// follow
+	NOTE = 'note', // follow
 	// mention
 	REPLY = 'reply',
 	RENOTE = 'renote',
@@ -88,8 +88,24 @@ export interface NotificationsRoute {
 	}>;
 
 	getMentions(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
+
 	getChats(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
+
 	getSocialUpdates(query: NotificationGetQueryDto): LibraryPromise<any>;
+
+	getChat(roomId: string): LibraryPromise<any>;
+
+	getMessages(roomId: string): LibraryPromise<any>;
+
+	/**
+	 * Supporting text-only replies for now
+	 * @param convoId
+	 * @param content
+	 */
+	sendMessage(
+		convoId: string,
+		content: { text?: string; facets?: Facet[] },
+	): LibraryPromise<any>;
 
 	// e,g. of how to get new notifs
 	// https://blob.cat/api/v1/notifications?since_id=2455610&with_muted=true&limit=20

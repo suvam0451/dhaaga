@@ -90,6 +90,10 @@ class ProfileSessionManager {
 	 */
 	async loadCustomEmojis(debug = false) {
 		const _server = this.acct.server;
+
+		// Not Supported
+		if (this.acct.driver === KNOWN_SOFTWARE.BLUESKY) return;
+
 		const emojis = await this.downloadInstanceEmojis(_server);
 		if (emojis) {
 			if (debug)

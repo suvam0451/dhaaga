@@ -112,6 +112,14 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		}
 	}
 
+	async getChat() {
+		return notImplementedErrorBuilder();
+	}
+
+	async getMessages() {
+		return notImplementedErrorBuilder();
+	}
+
 	async markChatRead(id: string): LibraryPromise<MastoConversation> {
 		try {
 			const data = await this.client.lib.v1.conversations.$select(id).read();
@@ -137,5 +145,9 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
+	}
+
+	async sendMessage() {
+		return notImplementedErrorBuilder();
 	}
 }
