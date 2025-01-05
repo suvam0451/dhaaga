@@ -44,6 +44,8 @@ import { AppChatRoom } from '../../services/chat.service';
 import { AppDivider } from './Divider';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 import { AppIcon } from './Icon';
+import { router } from 'expo-router';
+import { APP_ROUTING_ENUM } from '../../utils/route-list';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -118,8 +120,17 @@ function Chatroom_Item({ item }: { item: AppChatRoom }) {
 		setLatestMessageMe(item.lastMessage.sender.id === item.myId);
 	}, [item]);
 
+	function onPress() {
+		router.navigate({
+			pathname: APP_ROUTING_ENUM.CHATROOM,
+			params: {
+				roomId: item.externalId,
+			},
+		});
+	}
+
 	return (
-		<View style={{ paddingHorizontal: 10 }}>
+		<Pressable style={{ paddingHorizontal: 10 }} onPress={onPress}>
 			<View style={{ flexDirection: 'row' }}>
 				<View>
 					{/*@ts-ignore-next-line*/}
@@ -167,7 +178,7 @@ function Chatroom_Item({ item }: { item: AppChatRoom }) {
 			<AppDivider.Hard
 				style={{ backgroundColor: '#242424', marginVertical: 8 }}
 			/>
-		</View>
+		</Pressable>
 	);
 }
 

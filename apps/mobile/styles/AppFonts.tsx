@@ -30,4 +30,7 @@ export enum APP_FONTS {
 	ROBOTO_400 = 'Roboto_400Regular',
 	ROBOTO_500 = 'Roboto_500Medium',
 	ROBOTO_700 = 'Roboto_700Bold',
+
+	// Bebas Neue
+	BEBAS_NEUE_400 = 'BebasNeue_400Regular',
 }

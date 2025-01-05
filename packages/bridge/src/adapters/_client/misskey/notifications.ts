@@ -9,6 +9,7 @@ import { MastoNotification } from '../../../types/mastojs.types.js';
 import { LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 
 export class MisskeyNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;
@@ -64,6 +65,14 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 			visibility: 'specified',
 		});
 		return { data: { data: data as any } };
+	}
+
+	async getChat() {
+		return notImplementedErrorBuilder();
+	}
+
+	async getMessages() {
+		return notImplementedErrorBuilder();
 	}
 
 	async getSocialUpdates(query: NotificationGetQueryDto) {

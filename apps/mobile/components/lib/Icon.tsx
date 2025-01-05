@@ -81,6 +81,7 @@ export type APP_ICON_ENUM =
 	| 'retweet'
 	| 'save'
 	| 'search'
+	| 'send'
 	| 'share'
 	| 'feelings'
 	| 'smiley'
@@ -739,6 +740,15 @@ export const AppIcon = memo(
 					return (
 						<AntDesign
 							name="search1"
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
+				case 'send':
+					return (
+						<Ionicons
+							name="send"
 							size={_size}
 							color={_color}
 							style={iconStyle}

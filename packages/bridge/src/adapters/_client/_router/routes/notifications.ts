@@ -91,6 +91,9 @@ export interface NotificationsRoute {
 	getChats(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
 	getSocialUpdates(query: NotificationGetQueryDto): LibraryPromise<any>;
 
+	getChat(roomId: string): LibraryPromise<any>;
+	getMessages(roomId: string): LibraryPromise<any>;
+
 	// e,g. of how to get new notifs
 	// https://blob.cat/api/v1/notifications?since_id=2455610&with_muted=true&limit=20
 }

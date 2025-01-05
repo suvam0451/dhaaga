@@ -7,8 +7,26 @@ import {
 import { AppPostObject } from '../../types/app-post.types';
 
 export class ChatMiddleware {
-	static deserialize(input: any, driver: KNOWN_SOFTWARE, server: string) {
-		return ChatMiddleware.rawToJson(input, { driver, server });
+	static deserialize<T>(
+		input: T | T[],
+		driver: KNOWN_SOFTWARE,
+		server: string,
+	): T extends unknown[] ? AppMessageObject[] : AppMessageObject {
+		if (Array.isArray(input)) {
+			return input
+				.filter((o) => !!o)
+				.map((o) =>
+					ChatMiddleware.rawToJson(o, {
+						driver,
+						server,
+					}),
+				) as unknown as T extends unknown[] ? AppMessageObject[] : never;
+		} else {
+			return ChatMiddleware.rawToJson(input, {
+				driver,
+				server,
+			}) as unknown as T extends unknown[] ? never : AppMessageObject;
+		}
 	}
 
 	static rawToJson(

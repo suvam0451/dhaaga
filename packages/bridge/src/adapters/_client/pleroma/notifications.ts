@@ -71,6 +71,14 @@ export class PleromaNotificationsRouter implements NotificationsRoute {
 		}
 	}
 
+	async getChat() {
+		return notImplementedErrorBuilder();
+	}
+
+	async getMessages() {
+		return notImplementedErrorBuilder();
+	}
+
 	async getMentions() {
 		return notImplementedErrorBuilder();
 	}

@@ -170,7 +170,7 @@ function reducer(state: State, action: Actions): State {
 
 type DiscoverTabDispatchType = Dispatch<Actions>;
 export {
-	reducer as discoverTabReducerReducer,
+	reducer as discoverTabReducer,
 	DEFAULT as discoverTabReducerDefault,
 	ACTION as DiscoverTabReducerActionType,
 	Actions as discoverTabReducerActions,

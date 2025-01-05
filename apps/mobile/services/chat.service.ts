@@ -1,10 +1,7 @@
-import { ChatBskyConvoListConvos } from '@atproto/api';
+import { ChatBskyConvoDefs, ChatBskyConvoListConvos } from '@atproto/api';
 import { Account } from '../database/_schema';
 import { DataSource } from '../database/dataSource';
-import {
-	ACCOUNT_METADATA_KEY,
-	AccountMetadataService,
-} from '../database/entities/account-metadata';
+import { AccountMetadataService } from '../database/entities/account-metadata';
 import { AppUserObject } from '../types/app-user.types';
 import { UserMiddleware } from './middlewares/user.middleware';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
@@ -25,6 +22,41 @@ export type AppChatRoom = {
 };
 
 class ChatService {
+	/**
+	 * Convert an Atproto ConvoView to
+	 * AppChatRoom
+	 * @param input
+	 * @param driver
+	 * @param server
+	 * @param myDid
+	 */
+	static convoToChatroom(
+		input: ChatBskyConvoDefs.ConvoView,
+		driver: KNOWN_SOFTWARE,
+		server: string,
+		myDid: string,
+	): AppChatRoom {
+		const lastMessage = ChatMiddleware.deserialize(
+			input.lastMessage,
+			driver,
+			server,
+		);
+		const members = UserMiddleware.deserialize<unknown[]>(
+			input.members,
+			driver,
+			server,
+		);
+		return {
+			externalId: input.id,
+			unreadCount: input.unreadCount,
+			muted: input.muted === undefined ? false : input.muted,
+			members,
+			seen: input.opened === undefined ? false : input.seen,
+			lastMessage,
+			myId: myDid,
+		} as AppChatRoom;
+	}
+
 	static resolveAtProtoChat(
 		db: DataSource,
 		data: ChatBskyConvoListConvos.OutputSchema,
@@ -32,32 +64,10 @@ class ChatService {
 		driver: KNOWN_SOFTWARE,
 		server: string,
 	) {
-		const myDid = AccountMetadataService.getKeyValueForAccountSync(
-			db,
-			me,
-			ACCOUNT_METADATA_KEY.ATPROTO_DID,
+		const myDid = AccountMetadataService.getAccountDid(db, me);
+		return data.convos.map((o) =>
+			ChatService.convoToChatroom(o, driver, server, myDid),
 		);
-		return data.convos.map((o) => {
-			const lastMessage = ChatMiddleware.deserialize(
-				o.lastMessage,
-				driver,
-				server,
-			);
-			const members = UserMiddleware.deserialize<unknown[]>(
-				o.members,
-				driver,
-				server,
-			);
-			return {
-				externalId: o.id,
-				unreadCount: o.unreadCount,
-				muted: o.muted === undefined ? false : o.muted,
-				members,
-				seen: o.opened === undefined ? false : o.seen,
-				lastMessage,
-				myId: myDid,
-			} as AppChatRoom;
-		});
 	}
 }
 

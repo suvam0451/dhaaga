@@ -17,9 +17,10 @@ import {
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import SocialHubPinnedTimelines from './stack/landing/fragments/SocialHubPinnedTimelines';
-import { AppSegmentedControl } from '../../lib/SegmentedControl';
-import { SocialHubAvatarCircle } from '../../lib/Avatar';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppDb,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../shared/topnavbar/AppTabLandingNavbar';
@@ -30,7 +31,6 @@ import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import { SocialHubPinSectionContainer } from './stack/landing/fragments/_factory';
 import { AppFlashList } from '../../lib/AppFlashList';
 import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
-import { AppPagerView } from '../../lib/AppPagerView';
 import { BottomNavBarInfinite } from '../../shared/pager-view/BottomNavBar';
 import PagerView from 'react-native-pager-view';
 import { ProfileService } from '../../../database/entities/profile';
@@ -167,11 +167,7 @@ type SocialHubTabProps = {
  * represent a unique profile each
  */
 function SocialHubTab({ profile }: SocialHubTabProps) {
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
 	const [State, dispatch] = useReducer(
 		socialHubTabReducer,
 		socialHubTabReducerDefault,

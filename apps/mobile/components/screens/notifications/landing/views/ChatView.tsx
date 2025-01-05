@@ -16,7 +16,6 @@ import { useAppTheme } from '../../../../../hooks/utility/global-state-extractor
 
 const ChatView = memo(() => {
 	const { refetch, data } = useApiGetChatUpdates();
-	const { theme } = useAppTheme();
 
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 

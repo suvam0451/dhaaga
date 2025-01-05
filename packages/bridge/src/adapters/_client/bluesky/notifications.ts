@@ -9,6 +9,8 @@ import { MegaNotification } from '../../../types/megalodon.types.js';
 import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import {
 	AppBskyNotificationListNotifications,
+	ChatBskyConvoGetConvo,
+	ChatBskyConvoGetMessages,
 	ChatBskyConvoListConvos,
 } from '@atproto/api';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
@@ -37,6 +39,45 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 			agent.chat.bsky.convo,
 			{
 				limit: 10,
+			},
+			{
+				headers: {
+					'Atproto-Proxy': 'did:web:api.bsky.chat#bsky_chat',
+				},
+			},
+		);
+	}
+
+	async getChat(
+		convoId: string,
+	): LibraryPromise<ChatBskyConvoGetConvo.OutputSchema> {
+		const agent = getXrpcAgent(this.dto);
+		return InvokeBskyFunction<ChatBskyConvoGetConvo.OutputSchema>(
+			'getConvo',
+			agent.chat.bsky.convo.getConvo,
+			agent.chat.bsky.convo,
+			{
+				convoId,
+			},
+			{
+				headers: {
+					'Atproto-Proxy': 'did:web:api.bsky.chat#bsky_chat',
+				},
+			},
+		);
+	}
+
+	async getMessages(
+		convoId: string,
+	): LibraryPromise<ChatBskyConvoGetMessages.OutputSchema> {
+		const agent = getXrpcAgent(this.dto);
+		return InvokeBskyFunction<ChatBskyConvoGetMessages.OutputSchema>(
+			'getMessages',
+			agent.chat.bsky.convo.getMessages,
+			agent.chat.bsky.convo,
+			{
+				convoId,
+				limit: 60,
 			},
 			{
 				headers: {
