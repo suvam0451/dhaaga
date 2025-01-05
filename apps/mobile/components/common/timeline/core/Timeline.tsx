@@ -8,8 +8,6 @@ import Introduction from '../../../tutorials/screens/home/new-user/Introduction'
 import useTimeline from '../api/useTimeline';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { AppFlashList } from '../../../../components/lib/AppFlashList';
 import { useLocalSearchParams } from 'expo-router';
 import {
@@ -17,7 +15,12 @@ import {
 	TimelineFetchMode,
 } from '../../../../states/reducers/post-timeline.reducer';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import {
+	useAppAcct,
+	useAppApiClient,
+	useAppDb,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
@@ -28,11 +31,9 @@ import UserPeekModal from '../../../modals/UserPeekModal';
  * Render a Timeline
  */
 function Base() {
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
+	const { client, driver } = useAppApiClient();
+	const { acct } = useAppAcct();
 
 	const State = useTimelineState();
 	const dispatch = useTimelineDispatch();
@@ -62,14 +63,6 @@ function Base() {
 			});
 		}
 	}, [pinId, pinType, db]);
-
-	const { client, driver, acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			client: o.router,
-			driver: o.driver,
-		})),
-	);
 
 	useEffect(() => {
 		dispatch({

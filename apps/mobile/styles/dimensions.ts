@@ -14,4 +14,11 @@ export const appDimensions = {
 			tiltedIconSize: 48,
 		},
 	},
+	topNavbar: {
+		iconSize: 26,
+		padding: 6,
+		marginLeft: 4,
+		height: 44,
+		scrollViewTopPadding: 44 + 2,
+	},
 };

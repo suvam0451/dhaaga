@@ -3,16 +3,37 @@ import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../../shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetChatUpdates } from '../../../../../hooks/api/useNotifications';
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { AppFlashList } from '../../../../lib/AppFlashList';
+import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import AppNotificationViewContainer from './_container';
 
 const ChatView = memo(() => {
+	const { driver } = useAppApiClient();
 	const { refetch, data } = useApiGetChatUpdates();
 
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 
 	function onRefresh() {
 		refetch();
+	}
+
+	if (driver !== KNOWN_SOFTWARE.BLUESKY) {
+		return (
+			<AppNotificationViewContainer
+				menuItems={[
+					{
+						iconId: 'user-guide',
+					},
+				]}
+				tabType={APP_LANDING_PAGE_TYPE.MENTIONS}
+				tip={'Chat has only been implemented for Bluesky.'}
+				data={[]}
+				refreshing={IsRefreshing}
+				onRefresh={onRefresh}
+			/>
+		);
 	}
 
 	return (

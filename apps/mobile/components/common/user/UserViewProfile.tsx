@@ -42,9 +42,7 @@ export function ProfileContextWrapped() {
 
 	const { content: ParsedDisplayName } = useMfm({
 		content: acct?.displayName,
-		remoteSubdomain: acct?.instance,
 		emojiMap: acct?.calculated?.emojis,
-		deps: [acct?.displayName],
 		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
@@ -193,7 +191,7 @@ export default ProfileContextWrapped;
 
 const localStyles = StyleSheet.create({
 	rootScrollView: {
-		paddingTop: 50,
+		paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
 		backgroundColor: '#121212',
 		minHeight: '100%',
 	},

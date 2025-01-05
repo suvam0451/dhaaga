@@ -3,6 +3,7 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppText } from '../../lib/Text';
+import { appDimensions } from '../../../styles/dimensions';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -63,7 +64,10 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 				{menuItems.map(({ iconId, disabled, onPress }, i) => (
 					<Pressable
 						key={i}
-						style={{ padding: 6, marginLeft: 4 }}
+						style={{
+							padding: appDimensions.topNavbar.padding,
+							marginLeft: appDimensions.topNavbar.marginLeft,
+						}}
 						onPress={onPress}
 					>
 						<AppIcon
@@ -74,7 +78,7 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 									: APP_COLOR_PALETTE_EMPHASIS.A10
 							}
 							onPress={onPress}
-							size={26}
+							size={appDimensions.topNavbar.iconSize}
 						/>
 					</Pressable>
 				))}
