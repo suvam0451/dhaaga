@@ -66,7 +66,28 @@ function PostedByTextOneLine({
 
 	if (!VALID_DISPLAY_NAME) return <View />;
 
-	return <MfmComponent raw={text} knownReactions={new Map()} />;
+	return (
+		<View
+			style={{
+				flexDirection: 'row',
+				flex: 1,
+				alignItems: 'center',
+			}}
+		>
+			<View style={{ flex: 1, flexShrink: 1 }}>
+				<MfmComponent raw={text} knownReactions={new Map()} />
+			</View>
+			<AppText.Normal
+				style={{
+					fontSize: 13,
+					marginRight: 6,
+				}}
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+			>
+				{DatetimeUtil.timeAgo(createdAt)}
+			</AppText.Normal>
+		</View>
+	);
 }
 
 function ReplyIndicator() {

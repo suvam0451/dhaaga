@@ -23,6 +23,8 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
+import { AppPostObject } from '../../../../types/app-post.types';
+import { AppText } from '../../../lib/Text';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -35,6 +37,7 @@ type StatusCoreProps = {
 	hasBoost?: boolean;
 	isPreview?: boolean;
 	isPin?: boolean;
+	showFullDetails?: boolean;
 };
 
 function StatusMoreOptionsButton() {
@@ -78,6 +81,27 @@ function PinIndicator() {
 	);
 }
 
+type PostFullDetailsProps = {
+	dto: AppPostObject;
+};
+function PostFullDetails({ dto }: PostFullDetailsProps) {
+	const { theme } = useAppTheme();
+	const POST = PostMiddleware.getContentTarget(dto);
+
+	return (
+		<View
+			style={{
+				marginTop: appDimensions.timelines.sectionBottomMargin * 4,
+				marginHorizontal: 6,
+			}}
+		>
+			<AppText.Medium style={{ color: theme.complementary.a0 }}>
+				{new Date(POST.createdAt).toLocaleString()}
+			</AppText.Medium>
+		</View>
+	);
+}
+
 function HiddenByCw({
 	children,
 	visible,
@@ -89,119 +113,124 @@ function HiddenByCw({
 	return <Fragment>{children}</Fragment>;
 }
 
-const StatusCore = memo(({ isPreview, isPin }: StatusCoreProps) => {
-	const { dto } = useAppStatusItem();
-	const { toPost } = useAppNavigator();
-	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
+const StatusCore = memo(
+	({ isPreview, isPin, showFullDetails }: StatusCoreProps) => {
+		const { dto } = useAppStatusItem();
+		const { toPost } = useAppNavigator();
+		const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
-	const _target = PostMiddleware.getContentTarget(dto);
-	const HAS_MEDIA = _target.content?.media?.length > 0;
-	const IS_TRANSLATED = _target.calculated.translationOutput;
+		const _target = PostMiddleware.getContentTarget(dto);
+		const HAS_MEDIA = _target.content?.media?.length > 0;
+		const IS_TRANSLATED = _target.calculated.translationOutput;
 
-	const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
+		const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
 
-	const { content: PostContent, isLoaded } = useMfm({
-		content: _target.content.raw,
-		emojiMap: _target.calculated.emojis,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10, // fontFamily: APP_FONTS.INTER_400_REGULAR,
-	});
+		const { content: PostContent, isLoaded } = useMfm({
+			content: _target.content.raw,
+			emojiMap: _target.calculated.emojis,
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10, // fontFamily: APP_FONTS.INTER_400_REGULAR,
+		});
 
-	const isSensitive = _target.meta.sensitive;
-	const spoilerText = _target.meta.cw;
+		const isSensitive = _target.meta.sensitive;
+		const spoilerText = _target.meta.cw;
 
-	const { showInspector, appSession } = useGlobalState(
-		useShallow((o) => ({
-			showInspector: o.imageInspectModal.show,
-			appSession: o.appSession,
-		})),
-	);
-
-	function onGalleryInspect() {
-		appSession.storage.setPostForMediaInspect(dto as any);
-		showInspector(true);
-	}
-
-	return useMemo(() => {
-		if (!isLoaded) return <StatusItemSkeleton />;
-		return (
-			<Fragment>
-				{isPin && <PinIndicator />}
-				<View
-					style={{
-						flexDirection: 'row',
-						marginBottom: SECTION_MARGIN_BOTTOM,
-					}}
-				>
-					<PostCreatedBy
-						style={{
-							paddingBottom: 4,
-							flex: 1,
-						}}
-					/>
-					{!isPreview && <StatusMoreOptionsButton />}
-				</View>
-
-				{isSensitive && (
-					<StatusCw
-						cw={spoilerText}
-						show={ShowSensitiveContent}
-						setShow={setShowSensitiveContent}
-					/>
-				)}
-
-				{/* --- Media Items --- */}
-				<HiddenByCw
-					visible={isSensitive ? ShowSensitiveContent && HAS_MEDIA : HAS_MEDIA}
-				>
-					<Pressable
-						style={{
-							marginBottom: SECTION_MARGIN_BOTTOM,
-						}}
-						onPress={onGalleryInspect}
-					>
-						<MediaItem
-							attachments={_target.content.media}
-							calculatedHeight={_target.calculated.mediaContainerHeight}
-						/>
-					</Pressable>
-				</HiddenByCw>
-
-				{/* --- Text Content --- */}
-				<HiddenByCw visible={isSensitive ? ShowSensitiveContent : true}>
-					<Pressable
-						style={{
-							marginBottom: SECTION_MARGIN_BOTTOM,
-						}}
-						onPress={() => {
-							toPost(_target.id);
-						}}
-					>
-						{PostContent}
-						{IS_TRANSLATED && (
-							<ExplainOutput
-								additionalInfo={'Translated using OpenAI'}
-								fromLang={'jp'}
-								toLang={'en'}
-								text={_target.calculated.translationOutput}
-							/>
-						)}
-					</Pressable>
-				</HiddenByCw>
-
-				{/*FIXME: enable for bluesky*/}
-				{/*{IS_QUOTE_BOOST && (*/}
-				{/*	<WithAppStatusItemContext dto={_target.boostedFrom}>*/}
-				{/*		<StatusQuoted />*/}
-				{/*	</WithAppStatusItemContext>*/}
-				{/*)}*/}
-
-				{/* Lock reactions for preview (to be refactored) */}
-				{!isPreview && <EmojiReactions dto={_target} />}
-				{!isPreview && <StatusInteraction />}
-			</Fragment>
+		const { showInspector, appSession } = useGlobalState(
+			useShallow((o) => ({
+				showInspector: o.imageInspectModal.show,
+				appSession: o.appSession,
+			})),
 		);
-	}, [ShowSensitiveContent, PostContent, _target]);
-});
+
+		function onGalleryInspect() {
+			appSession.storage.setPostForMediaInspect(dto as any);
+			showInspector(true);
+		}
+
+		return useMemo(() => {
+			if (!isLoaded) return <StatusItemSkeleton />;
+			return (
+				<Fragment>
+					{isPin && <PinIndicator />}
+					<View
+						style={{
+							flexDirection: 'row',
+							marginBottom: SECTION_MARGIN_BOTTOM,
+						}}
+					>
+						<PostCreatedBy
+							style={{
+								paddingBottom: 4,
+								flex: 1,
+							}}
+						/>
+						{!isPreview && <StatusMoreOptionsButton />}
+					</View>
+
+					{isSensitive && (
+						<StatusCw
+							cw={spoilerText}
+							show={ShowSensitiveContent}
+							setShow={setShowSensitiveContent}
+						/>
+					)}
+
+					{/* --- Media Items --- */}
+					<HiddenByCw
+						visible={
+							isSensitive ? ShowSensitiveContent && HAS_MEDIA : HAS_MEDIA
+						}
+					>
+						<Pressable
+							style={{
+								marginBottom: SECTION_MARGIN_BOTTOM,
+							}}
+							onPress={onGalleryInspect}
+						>
+							<MediaItem
+								attachments={_target.content.media}
+								calculatedHeight={_target.calculated.mediaContainerHeight}
+							/>
+						</Pressable>
+					</HiddenByCw>
+
+					{/* --- Text Content --- */}
+					<HiddenByCw visible={isSensitive ? ShowSensitiveContent : true}>
+						<Pressable
+							style={{
+								marginBottom: SECTION_MARGIN_BOTTOM,
+							}}
+							onPress={() => {
+								toPost(_target.id);
+							}}
+						>
+							{PostContent}
+							{IS_TRANSLATED && (
+								<ExplainOutput
+									additionalInfo={'Translated using OpenAI'}
+									fromLang={'jp'}
+									toLang={'en'}
+									text={_target.calculated.translationOutput}
+								/>
+							)}
+						</Pressable>
+					</HiddenByCw>
+
+					{/*FIXME: enable for bluesky*/}
+					{/*{IS_QUOTE_BOOST && (*/}
+					{/*	<WithAppStatusItemContext dto={_target.boostedFrom}>*/}
+					{/*		<StatusQuoted />*/}
+					{/*	</WithAppStatusItemContext>*/}
+					{/*)}*/}
+
+					{/* Lock reactions for preview (to be refactored) */}
+					{!isPreview && <EmojiReactions dto={_target} />}
+					{!isPreview && <StatusInteraction />}
+					{showFullDetails && <PostFullDetails dto={dto} />}
+				</Fragment>
+			);
+		}, [ShowSensitiveContent, PostContent, _target]);
+	},
+);
 
 export default StatusCore;
 

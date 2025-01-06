@@ -111,9 +111,10 @@ function SearchResultsUser({ Header }: SearchResultTabProps) {
 function SearchResultsPost({ Header }: SearchResultTabProps) {
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverTabState();
+	const DiscoverTabDispatch = useDiscoverTabDispatch();
 	const TimelineState = useTimelineState();
 	const TimelineDispatch = useTimelineDispatch();
-	const { data, error, fetchStatus, refetch } = useApiSearchPosts(
+	const { data, fetchStatus, refetch } = useApiSearchPosts(
 		State.q,
 		TimelineState.appliedMaxId,
 	);
@@ -125,7 +126,15 @@ function SearchResultsPost({ Header }: SearchResultTabProps) {
 	}, [State.q]);
 
 	useEffect(() => {
-		if (!data.success) return;
+		if (!data.success) {
+			DiscoverTabDispatch({
+				type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+			});
+			return;
+		}
+		DiscoverTabDispatch({
+			type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+		});
 		TimelineDispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
 			payload: {

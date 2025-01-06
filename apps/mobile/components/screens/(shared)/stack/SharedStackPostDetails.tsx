@@ -42,14 +42,14 @@ function StatusContextComponent() {
 		return getChildren(data.root);
 	}, [data]);
 
-	if (!data.root) return <View></View>;
+	if (!data.root) return <View />;
 
 	const rootObject = data.lookup.get(data.root);
 
 	return (
 		<View>
 			<WithAppStatusItemContext dto={rootObject}>
-				<StatusItem />
+				<StatusItem showFullDetails />
 			</WithAppStatusItemContext>
 			<ReplySection />
 			<FlatList

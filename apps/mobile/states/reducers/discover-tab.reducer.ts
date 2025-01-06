@@ -25,6 +25,8 @@ type State = {
 	category: APP_SEARCH_TYPE;
 	tab: SEARCH_RESULT_TAB;
 	results: DiscoverTabSearchResultType;
+	//to indicate loading status for the user
+	searchStatus: 'idle' | 'loading';
 };
 
 export const defaultAppSearchResults = {
@@ -44,6 +46,7 @@ enum ACTION {
 	SET_CATEGORY_TAGS,
 	SET_CATEGORY_LINKS, // search results
 	SET_SEARCH_RESULTS,
+	MARK_LOADING_DONE,
 }
 
 const DEFAULT: State = {
@@ -52,6 +55,7 @@ const DEFAULT: State = {
 	tab: SEARCH_RESULT_TAB.HOME,
 	category: APP_SEARCH_TYPE.USERS,
 	results: defaultAppSearchResults,
+	searchStatus: 'idle',
 };
 
 type Actions =
@@ -86,6 +90,9 @@ type Actions =
 	| {
 			type: ACTION.SET_SEARCH_RESULTS;
 			payload: DiscoverTabSearchResultType;
+	  }
+	| {
+			type: ACTION.MARK_LOADING_DONE;
 	  };
 
 /**
@@ -135,6 +142,7 @@ function reducer(state: State, action: Actions): State {
 			return produce(state, (draft) => {
 				draft.q = draft.text;
 				draft.category = convertTabToResultPageType(draft.tab, draft.text);
+				draft.searchStatus = 'loading';
 			});
 		}
 		case ACTION.SET_CATEGORY: {
@@ -164,6 +172,11 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.SET_CATEGORY_LINKS: {
 			return produce(state, (draft) => {
 				draft.category = APP_SEARCH_TYPE.LINKS;
+			});
+		}
+		case ACTION.MARK_LOADING_DONE: {
+			return produce(state, (draft) => {
+				draft.searchStatus = 'idle';
 			});
 		}
 	}
