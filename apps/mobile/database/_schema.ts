@@ -131,6 +131,10 @@ export class Profile extends BaseEntity<Profile> {
 	active: boolean;
 	accountId: number | null;
 
+	// v5
+	visible: boolean;
+	itemOrder: number;
+
 	// joins
 	account?: Account;
 }

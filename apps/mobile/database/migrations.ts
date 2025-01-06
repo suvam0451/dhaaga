@@ -1,8 +1,14 @@
 import { SQLiteDatabase } from 'expo-sqlite';
-import { createTable, dropTable, migrator as orm } from '@dhaaga/orm';
+import {
+	addColumn,
+	createTable,
+	dropTable,
+	migrator as orm,
+	removeColumn,
+} from '@dhaaga/orm';
 
 // ^0.11.0 --> >3
-const APP_DB_TARGET_VERSION = 4;
+const APP_DB_TARGET_VERSION = 5;
 
 /**
  * Version control for migrations
@@ -278,6 +284,19 @@ const migrations: MigrationEntry[] = [
 			dropTable('accountSavedPost'),
 			dropTable('accountCollection'),
 			dropTable('accountSavedUser'),
+		],
+	},
+	{
+		version: 5,
+		versionCode: 'v0.12.0',
+		name: 'profile organisation',
+		up: [
+			addColumn('profile', 'visible', 'int', true, 1),
+			addColumn('profile', 'itemOrder', 'int', true, 1),
+		],
+		down: [
+			removeColumn('profile', 'itemOrder'),
+			removeColumn('profile', 'visible'),
 		],
 	},
 ];

@@ -26,6 +26,24 @@ class Service {
 		db.profile.update({ id: gt(0) as any }, { selected: false });
 	}
 
+	static hideProfile(db: DataSource, id: number) {
+		db.profile.updateById(id, {
+			visible: false,
+		});
+	}
+
+	static unhideProfile(db: DataSource, id: number) {
+		db.profile.updateById(id, {
+			visible: true,
+		});
+	}
+
+	static removeProfile(db: DataSource, id: number) {
+		db.profile.updateById(id, {
+			active: false,
+		});
+	}
+
 	static getDefaultProfile(db: DataSource, acct: Account) {
 		const match = db.profile.findOne({
 			accountId: acct.id,

@@ -30,16 +30,41 @@ type ProfileFragmentProps = {
 
 function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	const { theme } = useAppTheme();
-	const { show } = useAppDialog();
+	const { show, hide } = useAppDialog();
+	const { appSub } = useAppPublishers();
+	const { db } = useAppDb();
+
+	function _onDone() {
+		hide();
+		appSub.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
+	}
+	function onUnhide() {
+		ProfileService.unhideProfile(db, profile.id);
+		_onDone();
+	}
+
+	function onMoveUp() {}
+
+	function onRemove() {
+		ProfileService.removeProfile(db, profile.id);
+		_onDone();
+	}
+
+	function onMoveDown() {}
+
+	function onHide() {
+		ProfileService.hideProfile(db, profile.id);
+		_onDone();
+	}
 
 	function onPressProfileMoreOptions() {
 		show(
-			DialogBuilderService.profileActions(0, 10, false, {
-				onUnhide: () => {},
-				onMoveUp: () => {},
-				onRemove: () => {},
-				onMoveDown: () => {},
-				onHide: () => {},
+			DialogBuilderService.profileActions(0, 10, !profile.visible, {
+				onUnhide,
+				onMoveUp,
+				onRemove,
+				onMoveDown,
+				onHide,
 			}),
 		);
 	}
@@ -50,12 +75,20 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 			acct={acct}
 			RightComponent={
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					{!profile.visible && (
+						<AppIcon
+							id={'eye-off-filled'}
+							size={20}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
+							containerStyle={{ marginRight: 8 }}
+						/>
+					)}
 					<AppText.Medium
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 						style={{
 							fontSize: 16,
-							color: theme.complementary.a0,
-							marginRight: 6,
+							color: profile.visible ? theme.primary.a0 : theme.secondary.a50,
+							marginRight: 16,
 						}}
 					>
 						{profile.name}
