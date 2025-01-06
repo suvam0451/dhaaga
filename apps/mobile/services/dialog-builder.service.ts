@@ -16,6 +16,92 @@ type ActionType = {
  */
 export class DialogBuilderService {
 	/**
+	 * Indicate to the user that their focused profile
+	 * is a protected one
+	 */
+	static defaultProfileIndication(): AppDialogInstanceState {
+		return {
+			title: 'Default Profiles',
+			description: [
+				'This is a default profile for one of your accounts',
+				'You may only hide or rename this profile.',
+			],
+			actions: [],
+		};
+	}
+
+	static confirmProfileDeletion(
+		onConfirm: () => Promise<void>,
+	): AppDialogInstanceState {
+		return {
+			title: 'Confirm Deletion',
+			description: [
+				'This profile will be deleted',
+				'You will lose all your pins created under this profile!',
+			],
+			actions: [
+				{
+					label: 'Confirm and Delete',
+					onPress: onConfirm,
+					variant: 'destructive',
+				},
+			],
+		};
+	}
+
+	static profileActions(
+		index: number,
+		totalCount: number,
+		hidden: boolean,
+		actions: {
+			onMoveUp: () => void;
+			onHide: () => void;
+			onUnhide: () => void;
+			onMoveDown: () => void;
+			onRemove: () => void;
+		},
+	): AppDialogInstanceState {
+		const _actions = [];
+
+		// if (index !== 0) {
+		// 	_actions.push({
+		// 		label: 'Move Up',
+		// 		onPress: actions.onMoveUp,
+		// 	});
+		// }
+		// if (index !== totalCount - 1) {
+		// 	_actions.push({
+		// 		label: 'Move Down',
+		// 		onPress: actions.onMoveDown,
+		// 	});
+		// }
+		if (hidden) {
+			_actions.push({
+				label: 'Unhide',
+				onPress: actions.onUnhide,
+			});
+		} else {
+			_actions.push({
+				label: 'Hide',
+				onPress: actions.onHide,
+			});
+		}
+
+		return {
+			title: 'Organise Profile',
+			description: ['You can move, hide or remove this profile.'],
+			actions: [
+				..._actions,
+				{
+					label: 'Delete',
+					onPress: actions.onRemove,
+					variant: 'destructive',
+				},
+			],
+		};
+	}
+
+	/**
 	 * Currently unrelated
 	 */
 	static currentlyUnrelatedMoreActions(follow: any): AppDialogInstanceState {
@@ -75,6 +161,7 @@ export class DialogBuilderService {
 			],
 		};
 	}
+
 	/**
 	 * ----- Social Hub -----
 	 */

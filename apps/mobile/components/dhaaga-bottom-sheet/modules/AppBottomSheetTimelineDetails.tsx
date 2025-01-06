@@ -6,15 +6,10 @@ import { AppIcon } from '../../lib/Icon';
 
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { useEffect } from 'react';
-import { useAppBottomSheet } from './_api/useAppBottomSheet';
-import {
-	useAppBottomSheet_Improved,
-	useAppBottomSheet_TimelineReference,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
 
 function AppBottomSheetTimelineDetails() {
 	const { stateId, visible } = useAppBottomSheet_Improved();
-	const { dispatch, draft } = useAppBottomSheet_TimelineReference();
 
 	useEffect(() => {
 		if (!visible) return;
@@ -34,17 +29,17 @@ function AppBottomSheetTimelineDetails() {
 				}}
 			/>
 
-			<AppMenu.Option
-				appIconId={
-					<AppIcon
-						id={'pin-octicons'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				}
-				label={'Add Pin'}
-				onPress={() => {}}
-				desc={'Pin this timeline to the Social Hub'}
-			/>
+			{/*<AppMenu.Option*/}
+			{/*	appIconId={*/}
+			{/*		<AppIcon*/}
+			{/*			id={'pin-octicons'}*/}
+			{/*			emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
+			{/*		/>*/}
+			{/*	}*/}
+			{/*	label={'Add Pin'}*/}
+			{/*	onPress={() => {}}*/}
+			{/*	desc={'Pin this timeline to the Social Hub'}*/}
+			{/*/>*/}
 			<AppMenu.Option
 				appIconId={
 					<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
@@ -54,41 +49,41 @@ function AppBottomSheetTimelineDetails() {
 				desc={'View in external browser'}
 			/>
 
-			<AppDivider.Hard
-				style={{
-					marginHorizontal: 10,
-					marginVertical: 8,
-					backgroundColor: '#2c2c2c',
-				}}
-			/>
+			{/*<AppDivider.Hard*/}
+			{/*	style={{*/}
+			{/*		marginHorizontal: 10,*/}
+			{/*		marginVertical: 8,*/}
+			{/*		backgroundColor: '#2c2c2c',*/}
+			{/*	}}*/}
+			{/*/>*/}
 
-			<AppMenu.Option
-				appIconId={
-					<AppIcon id={'to-top'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
-				}
-				label={'Scroll to Top'}
-				onPress={() => {}}
-			/>
-			<AppMenu.Option
-				appIconId={
-					<AppIcon
-						id={'layers-outline'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				}
-				label={'Switch Timeline'}
-				onPress={() => {}}
-			/>
-			<AppMenu.Option
-				appIconId={
-					<AppIcon
-						id={'layers-outline'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				}
-				label={'Switch Timeline'}
-				onPress={() => {}}
-			/>
+			{/*<AppMenu.Option*/}
+			{/*	appIconId={*/}
+			{/*		<AppIcon id={'to-top'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />*/}
+			{/*	}*/}
+			{/*	label={'Scroll to Top'}*/}
+			{/*	onPress={() => {}}*/}
+			{/*/>*/}
+			{/*<AppMenu.Option*/}
+			{/*	appIconId={*/}
+			{/*		<AppIcon*/}
+			{/*			id={'layers-outline'}*/}
+			{/*			emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
+			{/*		/>*/}
+			{/*	}*/}
+			{/*	label={'Switch Timeline'}*/}
+			{/*	onPress={() => {}}*/}
+			{/*/>*/}
+			{/*<AppMenu.Option*/}
+			{/*	appIconId={*/}
+			{/*		<AppIcon*/}
+			{/*			id={'layers-outline'}*/}
+			{/*			emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
+			{/*		/>*/}
+			{/*	}*/}
+			{/*	label={'Switch Timeline'}*/}
+			{/*	onPress={() => {}}*/}
+			{/*/>*/}
 		</ScrollView>
 	);
 }

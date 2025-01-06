@@ -105,7 +105,12 @@ const Chip = memo(({ active, label, onLayout, onPress }: ChipProps) => {
 		};
 	});
 	return (
-		<Pressable onLayout={onLayout} ref={ref} onPress={onSelect}>
+		<Pressable
+			onLayout={onLayout}
+			ref={ref}
+			onPress={onSelect}
+			style={styles.chip}
+		>
 			<Animated.Text style={[styles.label, animStyle]}>{label}</Animated.Text>
 		</Pressable>
 	);
@@ -301,8 +306,6 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		flexDirection: 'row', // alignItems: 'center',
-		paddingHorizontal: 12,
-		paddingVertical: 12,
 		borderRadius: 20, // width: TAB_BAR_WIDTH,
 	},
 	indicator: {
@@ -316,5 +319,9 @@ const styles = StyleSheet.create({
 		// fontWeight: '500',
 		fontSize: 18,
 		fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
+	},
+	chip: {
+		paddingVertical: 12,
+		paddingHorizontal: 12,
 	},
 });

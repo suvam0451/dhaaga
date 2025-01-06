@@ -135,7 +135,6 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const BUTTON_SIZE = 50;
 
 const FloatingButtonCircular = () => {
-	const { driver } = useAppApiClient();
 	const isRotated = useSharedValue(0);
 	const MAX_WIDTH = Dimensions.get('window').width;
 	const CONTAINER_PADDING = 24;
@@ -174,7 +173,6 @@ const FloatingButtonCircular = () => {
 	 */
 
 	const toggleMenu = () => {
-		console.log('click acquired...');
 		const isExpanding = !IsWidgetExpanded;
 		if (!isExpanding) {
 			textInputRef.current?.blur();

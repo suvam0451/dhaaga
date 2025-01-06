@@ -147,8 +147,26 @@ function createTable(
 	return sql;
 }
 
+function addColumn(
+	tableName: string,
+	columnName: string,
+	dataType: SqliteTypes,
+	notNull = false,
+	defaultValue: string | number | null = null,
+) {
+	let type = dataType.toUpperCase();
+	let q = `ALTER TABLE \'${tableName}\' ADD COLUMN \`${columnName}\` ${type}`;
+	if (notNull) q += ` NOT NULL`;
+	if (defaultValue) q += ` DEFAULT ${defaultValue.toString()}`;
+	return q + ';';
+}
+
+function removeColumn(tableName: string, columnName: string) {
+	return `ALTER TABLE \'${tableName}\' DROP COLUMN \'${columnName}\';`;
+}
+
 function dropTable(name: string): string {
-	return `DROP TABLE IF EXISTS ${name}`;
+	return `DROP TABLE IF EXISTS ${name};`;
 }
 
 const migrator = {
@@ -158,4 +176,4 @@ const migrator = {
 	blob: () => new ColumnInterface('blob'),
 };
 
-export { migrator, createTable, dropTable };
+export { migrator, createTable, dropTable, addColumn, removeColumn };

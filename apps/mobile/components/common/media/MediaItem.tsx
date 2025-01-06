@@ -71,7 +71,7 @@ const TimelineMediaRendered = memo(function Foo({
 				return (
 					<AppVideoComponent
 						type={'video'}
-						url={attachment.previewUrl}
+						url={attachment.url}
 						height={_height}
 					/>
 				);

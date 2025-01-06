@@ -6,8 +6,7 @@ import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from 'expo-router';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
 
 const ICON_SIZE = 24;
 
@@ -18,11 +17,7 @@ type ActionButtonProps = {
 };
 
 const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 	return (
 		<TouchableOpacity
 			style={styles.moduleContainer}
@@ -45,11 +40,7 @@ const ActionButton = memo(({ Icon, label, to }: ActionButtonProps) => {
 });
 
 function ProfileLandingAccountModules() {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 	return (
 		<View style={{ paddingTop: 28 }}>
 			<ActionButton
@@ -89,18 +80,6 @@ function ProfileLandingAccountModules() {
 					marginBottom: 24,
 				}}
 			/>
-			<Text
-				style={{
-					marginTop: 32,
-					fontSize: 14,
-					color: theme.textColor.low,
-					textAlign: 'center',
-					paddingHorizontal: 32,
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
-				}}
-			>
-				[TIP] Long press your avatar in navbar to quickly swap accounts
-			</Text>
 		</View>
 	);
 }

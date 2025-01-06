@@ -1,7 +1,14 @@
 import { SQLiteDatabase } from 'expo-sqlite';
-import { createTable, dropTable, migrator as orm } from '@dhaaga/orm';
+import {
+	addColumn,
+	createTable,
+	dropTable,
+	migrator as orm,
+	removeColumn,
+} from '@dhaaga/orm';
 
-const APP_DB_TARGET_VERSION = 3;
+// ^0.11.0 --> >3
+const APP_DB_TARGET_VERSION = 5;
 
 /**
  * Version control for migrations
@@ -190,6 +197,106 @@ const migrations: MigrationEntry[] = [
 			dropTable('profilePinnedTag'),
 			dropTable('profilePinnedUser'),
 			dropTable('profilePinnedTimeline'),
+		],
+	},
+	{
+		version: 4,
+		versionCode: 'v0.12.0',
+		name: 'settings and collections',
+		up: [
+			createTable('accountSavedUser', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				identifier: orm.text().notNull(),
+				isRemote: orm.int().default(0),
+				remoteServer: orm.text(),
+				username: orm.text().notNull(),
+				avatarUrl: orm.text(),
+				displayName: orm.text(),
+				active: orm.int().default(1), //fk
+				accountId: orm.int().fk('account'),
+			}),
+			createTable('accountCollection', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				identifier: orm.text().notNull(),
+				alias: orm.text(),
+				itemOrder: orm.int().default(1),
+				active: orm.int().default(1), //fk
+				accountId: orm.int().fk('account'),
+			}),
+			createTable('accountSavedPost', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				identifier: orm.text().notNull(),
+				textContent: orm.text(),
+				authoredAt: orm.text().notNull(),
+				spoilerText: orm.text(),
+				remoteUrl: orm.text(),
+				sensitive: orm.int().default(0),
+				active: orm.int().default(1), //fk
+				accountId: orm.int().fk('account'),
+				savedUserId: orm.int().fk('accountSavedUser'),
+			}),
+			createTable('savedPostMediaAttachment', {
+				id: orm.int().pk(),
+				uuid: orm.text().notNull(),
+				previewUrl: orm.text(),
+				url: orm.text().notNull(),
+				alt: orm.text(),
+				height: orm.int(),
+				width: orm.int(),
+				mimeType: orm.text().notNull(),
+				active: orm.int().default(1),
+				savedPostId: orm.int().fk('accountSavedPost'),
+			}),
+			createTable('collectionSavedPost', {
+				id: orm.int().pk(),
+				savedPostId: orm.int().fk('accountSavedPost'),
+				collectionId: orm.int().fk('accountCollection'),
+				active: orm.int().default(1),
+			}),
+			createTable('appSetting', {
+				id: orm.int().pk(),
+				key: orm.text().notNull(),
+				value: orm.text().notNull(),
+				type: orm.text().notNull(),
+			}),
+			createTable('accountSetting', {
+				id: orm.int().pk(),
+				key: orm.text().notNull(),
+				value: orm.text().notNull(),
+				type: orm.text().notNull(),
+			}),
+			createTable('profileSetting', {
+				id: orm.int().pk(),
+				key: orm.text().notNull(),
+				value: orm.text().notNull(),
+				type: orm.text().notNull(),
+			}),
+		],
+		down: [
+			dropTable('profileSetting'),
+			dropTable('accountSetting'),
+			dropTable('appSetting'),
+			dropTable('collectionSavedPost'),
+			dropTable('savedPostMediaAttachment'),
+			dropTable('accountSavedPost'),
+			dropTable('accountCollection'),
+			dropTable('accountSavedUser'),
+		],
+	},
+	{
+		version: 5,
+		versionCode: 'v0.12.0',
+		name: 'profile organisation',
+		up: [
+			addColumn('profile', 'visible', 'int', true, 1),
+			addColumn('profile', 'itemOrder', 'int', true, 1),
+		],
+		down: [
+			removeColumn('profile', 'itemOrder'),
+			removeColumn('profile', 'visible'),
 		],
 	},
 ];

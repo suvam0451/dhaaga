@@ -1,15 +1,12 @@
 import {
 	useAnimatedStyle,
 	useSharedValue,
-	withSpring,
 	withTiming,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Dimensions } from 'react-native';
 import { APP_BOTTOM_SHEET_ENUM } from '../../Core';
 import { useAppBottomSheet_Improved } from '../../../../hooks/utility/global-state-extractors';
-
-const POST_COMPOSE_HEIGHT_MAX = 420;
 
 function useAnimatedHeight() {
 	const { visible, stateId, type } = useAppBottomSheet_Improved();
@@ -44,11 +41,10 @@ function useAnimatedHeight() {
 				}
 			}
 
-			height.value = withSpring(_target, {
-				duration: 2000,
-				dampingRatio: 0.55,
-				stiffness: 500,
-				overshootClamping: false,
+			height.value = withTiming(_target, {
+				duration: 200, // dampingRatio: 0.55,
+				// stiffness: 500,
+				// overshootClamping: false,
 			});
 		}
 	}, [visible, type, stateId]);

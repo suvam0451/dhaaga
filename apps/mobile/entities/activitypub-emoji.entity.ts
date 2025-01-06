@@ -1,5 +1,4 @@
 import { ActivityPubCustomEmojiCategory } from './activitypub-emoji-category.entity';
-import { ActivityPubServer } from './activitypub-server.entity';
 
 export type ActivityPubCustomEmojiItemDTO = {
 	shortcode: string;
@@ -21,7 +20,7 @@ export class ActivityPubCustomEmojiItem extends Object {
 	// aliases: Realm.List<string>;
 	timesUsed: number;
 	category?: ActivityPubCustomEmojiCategory;
-	server?: ActivityPubServer;
+	// server?: ActivityPubServer;
 
 	// static schema: ObjectSchema = {
 	// 	name: 'ActivityPubCustomEmojiItem',

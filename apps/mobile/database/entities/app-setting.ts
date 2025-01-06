@@ -1,6 +1,6 @@
 import { SQLiteDatabase } from 'expo-sqlite';
 import { z } from 'zod';
-import { AppSetting } from '../../entities/app-settings.entity';
+import { AppSetting } from '../../database/_schema';
 import { appSettingsKeys } from '../../services/app-settings/app-settings';
 import AppSettingsRepository from '../../repositories/app-settings.repo';
 

@@ -1,11 +1,12 @@
 import { useEffect, useReducer, useState } from 'react';
 import { Profile } from '../database/_schema';
 import { produce } from 'immer';
-import useGlobalState from './_global';
-import { useShallow } from 'zustand/react/shallow';
 import { DataSource } from '../database/dataSource';
 import { AccountService } from '../database/entities/account';
-import { useAppPublishers } from '../hooks/utility/global-state-extractors';
+import {
+	useAppDb,
+	useAppPublishers,
+} from '../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../services/publishers/app.publisher';
 import { ProfileService } from '../database/entities/profile';
 
@@ -51,28 +52,31 @@ function useSocialHub() {
 	const [Data, dispatch] = useReducer(reducer, {
 		profiles: [],
 	});
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const [IsLoading, setIsLoading] = useState(false);
+	const { db } = useAppDb();
 	const { appSub } = useAppPublishers();
 
 	function refresh() {
 		if (!db) return;
+		setIsLoading(true);
 		dispatch({
 			type: REDUCER_ACTION.INIT,
 			payload: {
 				db,
 			},
 		});
+		setTimeout(() => {
+			setIsLoading(false);
+		}, 200);
 	}
 
 	useEffect(() => {
-		refresh();
 		appSub.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
+		// appSub.subscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, refresh);
+		refresh();
 		return () => {
 			appSub.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
+			// appSub.unsubscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, refresh);
 		};
 	}, [db]);
 
@@ -82,7 +86,7 @@ function useSocialHub() {
 		setTabIndex(newIndex);
 	}
 
-	return { index: TabIndex, onPageScroll, data: Data };
+	return { index: TabIndex, onPageScroll, data: Data, loading: IsLoading };
 }
 
 export default useSocialHub;

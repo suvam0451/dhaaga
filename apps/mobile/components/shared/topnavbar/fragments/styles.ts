@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { appDimensions } from '../../../../styles/dimensions';
 
 const styles = StyleSheet.create({
 	subHeader: {
@@ -8,7 +9,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		backgroundColor: '#1c1c1c',
-		height: 50,
+		height: appDimensions.topNavbar.height,
 	},
 	navbarTitleContainer: {
 		flexDirection: 'row',

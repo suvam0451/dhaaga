@@ -3,6 +3,7 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppText } from '../../lib/Text';
+import { appDimensions } from '../../../styles/dimensions';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -20,6 +21,7 @@ export enum APP_LANDING_PAGE_TYPE {
 	APP_SETTINGS,
 	MY_ACCOUNT,
 	MY_PROFILE,
+	ACCOUNT_HUB,
 }
 
 type AppTabLandingNavbarProps = {
@@ -37,8 +39,7 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 	[APP_LANDING_PAGE_TYPE.DISCOVER]: 'Discover',
 	[APP_LANDING_PAGE_TYPE.COMPOSE]: 'Compose',
 	[APP_LANDING_PAGE_TYPE.INBOX]: 'Inbox',
-	[APP_LANDING_PAGE_TYPE.PROFILE]: 'App Profile',
-	// Modules within "Inbox" tab
+	[APP_LANDING_PAGE_TYPE.PROFILE]: 'App Profile', // Modules within "Inbox" tab
 	[APP_LANDING_PAGE_TYPE.MENTIONS]: 'Mentions',
 	[APP_LANDING_PAGE_TYPE.CHAT]: 'Chat',
 	[APP_LANDING_PAGE_TYPE.SOCIAL]: 'Social',
@@ -46,6 +47,7 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 	[APP_LANDING_PAGE_TYPE.APP_SETTINGS]: 'App Settings',
 	[APP_LANDING_PAGE_TYPE.MY_ACCOUNT]: 'My Account',
 	[APP_LANDING_PAGE_TYPE.MY_PROFILE]: 'My Profile',
+	[APP_LANDING_PAGE_TYPE.ACCOUNT_HUB]: 'My Account',
 };
 
 /**
@@ -63,7 +65,10 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 				{menuItems.map(({ iconId, disabled, onPress }, i) => (
 					<Pressable
 						key={i}
-						style={{ padding: 6, marginLeft: 4 }}
+						style={{
+							padding: appDimensions.topNavbar.padding,
+							marginLeft: appDimensions.topNavbar.marginLeft,
+						}}
 						onPress={onPress}
 					>
 						<AppIcon
@@ -74,7 +79,7 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 									: APP_COLOR_PALETTE_EMPHASIS.A10
 							}
 							onPress={onPress}
-							size={26}
+							size={appDimensions.topNavbar.iconSize}
 						/>
 					</Pressable>
 				))}
@@ -95,7 +100,6 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		fontSize: 28,
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-		// fontWeight: '600',
+		fontFamily: APP_FONTS.INTER_700_BOLD, // fontWeight: '600',
 	},
 });

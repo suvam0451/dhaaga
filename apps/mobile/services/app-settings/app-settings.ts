@@ -1,4 +1,4 @@
-import { AppSetting } from '../../entities/app-settings.entity';
+import { AppSetting } from '../../database/_schema';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { AppSettingService } from '../../database/entities/app-setting';
 

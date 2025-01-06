@@ -17,7 +17,92 @@ export class Account extends BaseEntity<Account> {
 
 	// inverse joins
 	metadata: AccountMetadata[];
+	profiles: Profile[];
 }
+
+/**
+ * --- Collections Module
+ */
+
+@Entity('accountSavedUser')
+export class AccountSavedUser extends BaseEntity<AccountSavedUser> {
+	uuid: string;
+	identifier: string;
+	isRemote: boolean;
+	remoteServer: string;
+	username: string;
+	avatarUrl: string | null;
+	displayName: string | null;
+	active: boolean;
+	accountId: number | null;
+
+	// joins
+	account?: Account;
+}
+
+@Entity('accountSavedPost')
+export class AccountSavedPost extends BaseEntity<AccountSavedPost> {
+	uuid: string;
+	identifier: string;
+	textContent: string | null;
+	authoredAt: string; // date
+	spoilerText: string | null;
+	remoteUrl: string;
+	sensitive: boolean;
+	active: boolean;
+
+	accountId: number | null;
+	savedUserId: number | null;
+
+	// joins
+	account?: Account;
+	savedUser?: AccountSavedUser;
+}
+
+@Entity('savedPostMediaAttachment')
+export class SavedPostMediaAttachment extends BaseEntity<SavedPostMediaAttachment> {
+	uuid: string;
+	previewUrl: string | null;
+	url: string | null;
+	alt: string | null;
+	height: number | null;
+	width: number | null;
+	mimeType: string | null;
+	active: boolean;
+
+	savedPostId: number | null;
+
+	savedPost?: AccountSavedPost;
+}
+
+@Entity('accountCollection')
+export class AccountCollection extends BaseEntity<AccountCollection> {
+	uuid: string;
+	identifier: string;
+	alias: string;
+	itemOrder: number; // determines order
+	active: boolean;
+
+	accountId: number | null;
+
+	// joins
+	account?: Account;
+}
+
+@Entity('collectionSavedPost')
+export class CollectionSavedPost extends BaseEntity<CollectionSavedPost> {
+	savedPostId: number | null;
+	collectionId: number | null;
+	active: boolean;
+
+	// joins
+	savedPost?: AccountSavedPost;
+	collection?: AccountCollection;
+}
+
+/**
+ * ------------------
+ */
 
 /**
  * List of known metadata:
@@ -46,12 +131,23 @@ export class Profile extends BaseEntity<Profile> {
 	active: boolean;
 	accountId: number | null;
 
+	// v5
+	visible: boolean;
+	itemOrder: number;
+
 	// joins
 	account?: Account;
 }
 
 @Entity('appSetting')
 export class AppSetting extends BaseEntity<AppSetting> {
+	key: string;
+	value: string;
+	type: string;
+}
+
+@Entity('accountSetting')
+export class AccountSetting extends BaseEntity<AccountSetting> {
 	key: string;
 	value: string;
 	type: string;

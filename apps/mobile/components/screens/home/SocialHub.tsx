@@ -6,7 +6,7 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import useSocialHub from '../../../states/useSocialHub';
 import { Profile } from '../../../database/_schema';
 import {
@@ -14,8 +14,6 @@ import {
 	socialHubTabReducerActionType,
 	socialHubTabReducerDefault,
 } from '../../../states/reducers/social-hub-tab.reducer';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import SocialHubPinnedTimelines from './stack/landing/fragments/SocialHubPinnedTimelines';
 import {
 	useAppDb,
@@ -37,11 +35,7 @@ import { ProfileService } from '../../../database/entities/profile';
 
 function Header({ profile }: { profile: Profile }) {
 	const [Acct, setAcct] = useState(null);
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
 
 	useEffect(() => {
 		setAcct(ProfileService.getOwnerAccount(db, profile));
@@ -119,7 +113,7 @@ function SocialHubTabAdd() {
 						},
 					]}
 					onPress={() => {
-						router.navigate(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
+						router.navigate(APP_ROUTING_ENUM.PROFILES);
 					}}
 				>
 					<Text
@@ -282,8 +276,13 @@ function SocialHub() {
 		setIndex(nextIdx);
 	}
 
-	return (
-		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
+	/**
+	 * To avoid the following error when items are
+	 * added and the dispatch causes a shift in the
+	 * elements
+	 */
+	const PagerViewComponent = useMemo(() => {
+		return (
 			<PagerView
 				ref={ref}
 				scrollEnabled={true}
@@ -295,6 +294,12 @@ function SocialHub() {
 					<View key={index}>{renderScene(index)}</View>
 				))}
 			</PagerView>
+		);
+	}, [data.profiles]);
+
+	return (
+		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
+			{PagerViewComponent}
 			<BottomNavBarInfinite
 				Index={Index}
 				setIndex={onChipSelect}

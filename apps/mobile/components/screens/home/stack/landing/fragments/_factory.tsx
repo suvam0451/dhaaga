@@ -2,6 +2,7 @@ import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
 import { AppIcon } from '../../../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
+import { APP_FONTS } from '../../../../../../styles/AppFonts';
 
 type SocialHubPinSectionContainer = {
 	label: string;
@@ -29,7 +30,7 @@ export function SocialHubPinSectionContainer({
 						styles.sectionLabel,
 						{
 							color: theme.secondary.a10,
-							fontFamily: 'BebasNeue_400Regular',
+							fontFamily: APP_FONTS.BEBAS_NEUE_400,
 							fontSize: 32,
 						},
 					]}

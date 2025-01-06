@@ -1,9 +1,8 @@
 import { UserInterface } from '@dhaaga/bridge';
-import { ActivityPubChatRoom } from '../entities/activitypub-chatroom.entity';
-import { ActivityPubUserRepository } from './activitypub-user.repo';
-import { ActivityPubConversation } from '../entities/activitypub-conversation.entity';
 import { ActivityPubUser } from '../entities/activitypub-user.entity';
 import { SQLiteDatabase } from 'expo-sqlite';
+import { AppChatRoom } from '../services/chat.service';
+import { AppMessageObject } from '../types/app-message.types';
 
 export class ActivityPubChatroomRepository {
 	static clearAll(db: SQLiteDatabase) {
@@ -16,8 +15,8 @@ export class ActivityPubChatroomRepository {
 
 	static addConversation(
 		db: SQLiteDatabase,
-		target: ActivityPubChatRoom,
-		item: ActivityPubConversation,
+		target: AppChatRoom,
+		item: AppMessageObject,
 	) {
 		if (!target) {
 			return;
@@ -35,7 +34,7 @@ export class ActivityPubChatroomRepository {
 
 	static updateParticipants(
 		db: SQLiteDatabase,
-		chatroom: ActivityPubChatRoom,
+		chatroom: AppChatRoom,
 		list: ActivityPubUser[],
 	) {
 		// while (chatroom.participants.length > 0) {

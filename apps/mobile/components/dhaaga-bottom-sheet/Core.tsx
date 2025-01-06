@@ -28,10 +28,12 @@ import ABS_Post_Show_Likes from './modules/ABS_Post_Show_Likes';
 import ABS_Post_Show_Shares from './modules/ABS_Post_Show_Shares';
 import ABS_Post_Preview from './modules/ABS_Post_Preview';
 import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
+import ABS_Add_Profile from './modules/ABS_Add_Profile';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	QUICK_POST = 'QuickPost',
 	APP_PROFILE = 'AppProfile',
+	ADD_PROFILE = 'AddProfile',
 	HASHTAG = 'Hashtag',
 	LINK = 'Link',
 	MORE_POST_ACTIONS = 'MorePostActions',
@@ -66,7 +68,10 @@ function Factory() {
 		switch (type) {
 			case APP_BOTTOM_SHEET_ENUM.QUICK_POST:
 				return <AppBottomSheetQuickPost />;
+			case APP_BOTTOM_SHEET_ENUM.ADD_PROFILE:
+
 			case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
+				return <ABS_Add_Profile />;
 			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW:
 				return <PostPreview />;
 			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:

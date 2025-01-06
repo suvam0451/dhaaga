@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { MEDIA_CONTAINER_WIDTH } from './_common';
-import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, memo, useEffect, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { Pressable, StyleSheet, View } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -176,6 +176,7 @@ type AltTextDialogProps = {
 export const AltTextOverlay = memo(function Foo({
 	altText,
 }: AltTextDialogProps) {
+	const { theme } = useAppTheme();
 	const [IsVisible, setIsVisible] = useState(false);
 	return (
 		<Fragment>
@@ -184,8 +185,6 @@ export const AltTextOverlay = memo(function Foo({
 					position: 'absolute',
 					display: altText ? 'flex' : 'none',
 					top: '100%',
-					left: '0%',
-					zIndex: 99,
 				}}
 			>
 				<View style={{ position: 'relative' }}>
@@ -194,9 +193,10 @@ export const AltTextOverlay = memo(function Foo({
 							position: 'absolute',
 							top: -40,
 							left: 8,
-							backgroundColor: 'rgba(100, 100, 100, 0.87)',
+							backgroundColor: theme.palette.bg,
 							padding: 4,
 							borderRadius: 8,
+							opacity: 0.75,
 						}}
 						onPress={() => {
 							setIsVisible(true);
@@ -205,7 +205,7 @@ export const AltTextOverlay = memo(function Foo({
 						<FontAwesome5
 							name="info-circle"
 							size={24}
-							color={APP_FONT.MONTSERRAT_BODY}
+							color={theme.secondary.a20}
 						/>
 					</Pressable>
 				</View>
@@ -273,67 +273,32 @@ export const CarousalIndicatorOverlay = memo(function Foo({
 }) {
 	const { theme } = useAppTheme();
 
-	const CarousalIndicators = useMemo(() => {
-		if (index === undefined || totalCount === undefined) return <View></View>;
-
-		const retval = [];
-		for (let i = 0; i < totalCount; i++) {
-			retval.push(
-				<View
-					key={i}
-					style={{
-						height: 12,
-						width: 12,
-						borderRadius: 8,
-						backgroundColor: 'rgba(100, 100, 100, 0.87)',
-						marginHorizontal: 4,
-					}}
-				></View>,
-			);
-		}
-		return (
-			<View
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'center', // backgroundColor: 'red',
-					width: '100%',
-					alignItems: 'center',
-				}}
-			>
-				{retval}
-			</View>
-		);
-	}, [index, totalCount]);
-
-	if (index === undefined || totalCount === undefined) return <View></View>;
+	if (!index || !totalCount) return <View />;
 	return (
-		<Fragment>
+		<View
+			style={{
+				position: 'absolute',
+				right: right || 0,
+				top: top || 0,
+			}}
+		>
 			<View
 				style={{
 					position: 'absolute',
-					right: right || 0,
-					top: top || 0,
+					left: -48,
+					backgroundColor: theme.palette.bg,
+					opacity: 0.6,
+					top: 8,
+					padding: 4,
+					paddingHorizontal: 8,
+					borderRadius: 8,
 				}}
 			>
-				<View
-					style={{
-						position: 'absolute',
-						left: -48,
-						backgroundColor: theme.palette.bg,
-						opacity: 0.6,
-						top: 8,
-						padding: 4,
-						paddingHorizontal: 8,
-						borderRadius: 8,
-					}}
-				>
-					<AppText.Normal>
-						{index + 1}/{totalCount}
-					</AppText.Normal>
-				</View>
+				<AppText.Normal>
+					{index + 1}/{totalCount}
+				</AppText.Normal>
 			</View>
-		</Fragment>
+		</View>
 	);
 });
 

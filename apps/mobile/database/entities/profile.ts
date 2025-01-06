@@ -5,6 +5,7 @@ import { eq, gt } from '@dhaaga/orm';
 import { AccountService } from './account';
 import { ProfilePinnedTimelineService } from './profile-pinned-timeline';
 import { ProfilePinnedTagService } from './profile-pinned-tag';
+import { RandomUtil } from '../../utils/random.utils';
 
 @DbErrorHandler()
 class Repo {}
@@ -18,11 +19,32 @@ class Service {
 	}
 
 	static getAllShown(db: DataSource) {
-		return db.profile.find({ active: true });
+		return db.profile.find({ active: true, visible: true });
 	}
 
 	static deselectAll(db: DataSource) {
 		db.profile.update({ id: gt(0) as any }, { selected: false });
+	}
+
+	static hideProfile(db: DataSource, id: number) {
+		db.profile.updateById(id, {
+			visible: false,
+		});
+	}
+
+	static unhideProfile(db: DataSource, id: number) {
+		db.profile.updateById(id, {
+			visible: true,
+		});
+	}
+
+	static removeProfile(db: DataSource, id: number) {
+		const match = db.profile.findOne({ id });
+		//may never delete the default profile
+		if (match && match.uuid === 'DEFAULT') return;
+		db.profile.updateById(id, {
+			active: false,
+		});
 	}
 
 	static getDefaultProfile(db: DataSource, acct: Account) {
@@ -76,6 +98,31 @@ class Service {
 
 	static getOwnerAccount(db: DataSource, profile: Profile): Account {
 		return AccountService.getById(db, profile.accountId);
+	}
+
+	/**
+	 * Add a new profile for this account.
+	 *
+	 * name collisions are allowed
+	 * @param db
+	 * @param acct
+	 * @param name
+	 * @constructor
+	 */
+	static addProfile(db: DataSource, acct: Account, name: string) {
+		const _key = RandomUtil.nanoId();
+		db.profile.insert({
+			accountId: acct.id,
+			uuid: _key,
+			name,
+			selected: false,
+		});
+
+		const savedProfile = db.profile.findOne({
+			uuid: _key,
+		});
+
+		Service._postInsert(db, savedProfile);
 	}
 
 	/**

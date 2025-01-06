@@ -23,6 +23,7 @@ import {
 	useTimelineManager,
 	useTimelineState,
 } from '../../../context-wrappers/WithPostTimeline';
+import { appDimensions } from '../../../../styles/dimensions';
 
 /**
  * A custom navbar that invokes
@@ -112,21 +113,33 @@ function TimelinesHeader() {
 				]}
 			>
 				<Pressable
-					style={{ paddingHorizontal: 6 }}
+					style={{
+						padding: appDimensions.topNavbar.padding,
+						marginLeft: appDimensions.topNavbar.marginLeft,
+					}}
 					onPress={onViewTimelineController}
 				>
 					<AppIcon
-						id={'info'}
-						size={25}
+						id={'layers-outline'}
+						size={appDimensions.topNavbar.iconSize}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+						onPress={onViewTimelineController}
 					/>
 				</Pressable>
-				<AppIcon
-					id={'user-guide'}
-					size={25}
-					color={theme.secondary.a20}
+				<Pressable
+					style={{
+						padding: appDimensions.topNavbar.padding,
+						marginLeft: appDimensions.topNavbar.marginLeft,
+					}}
 					onPress={onUserGuidePress}
-				/>
+				>
+					<AppIcon
+						id={'user-guide'}
+						size={appDimensions.topNavbar.iconSize}
+						color={theme.secondary.a20}
+						onPress={onUserGuidePress}
+					/>
+				</Pressable>
 			</View>
 			<TimelineWidgetModal />
 		</View>
@@ -151,7 +164,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: 48,
+		height: appDimensions.topNavbar.height,
 	},
 	label: {
 		color: APP_FONT.MONTSERRAT_BODY,

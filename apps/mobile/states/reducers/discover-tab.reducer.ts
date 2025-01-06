@@ -134,6 +134,7 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.APPLY_SEARCH: {
 			return produce(state, (draft) => {
 				draft.q = draft.text;
+				draft.category = convertTabToResultPageType(draft.tab, draft.text);
 			});
 		}
 		case ACTION.SET_CATEGORY: {

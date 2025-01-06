@@ -1,4 +1,10 @@
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	TouchableOpacity,
+	Text,
+	Pressable,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { memo, MutableRefObject } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
@@ -12,10 +18,9 @@ import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '../../../database/entities/account-metadata';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../../database/entities/account';
 import {
+	useAppDb,
 	useAppDialog,
 	useAppPublishers,
 	useAppTheme,
@@ -118,6 +123,7 @@ type AccountPfpProps = {
 	selected: boolean;
 	onClicked: () => void;
 };
+
 export const AccountPfp = memo(function Foo({
 	url,
 	selected,
@@ -125,7 +131,7 @@ export const AccountPfp = memo(function Foo({
 }: AccountPfpProps) {
 	const { theme } = useAppTheme();
 	return (
-		<TouchableOpacity
+		<Pressable
 			style={{
 				height: 48,
 				width: 48,
@@ -153,7 +159,7 @@ export const AccountPfp = memo(function Foo({
 					},
 				]}
 			/>
-		</TouchableOpacity>
+		</Pressable>
 	);
 });
 
@@ -174,13 +180,10 @@ export const AccountDetails = memo(function Foo({
 	const { theme } = useAppTheme();
 
 	return (
-		<TouchableOpacity
-			style={{ marginLeft: 8, flexGrow: 1 }}
-			onPress={onClicked}
-		>
+		<Pressable style={{ marginLeft: 8, flexGrow: 1 }} onPress={onClicked}>
 			<Text
 				style={{
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					color: theme.secondary.a10,
 				}}
 				numberOfLines={1}
@@ -207,7 +210,7 @@ export const AccountDetails = memo(function Foo({
 			>
 				{subdomain}
 			</Text>
-		</TouchableOpacity>
+		</Pressable>
 	);
 });
 
@@ -215,11 +218,7 @@ function AccountListingFragment({ acct }: Props) {
 	const { theme } = useAppTheme();
 	const { appSub } = useAppPublishers();
 	const { show, hide } = useAppDialog();
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
 
 	function onMoreActions() {
 		show(

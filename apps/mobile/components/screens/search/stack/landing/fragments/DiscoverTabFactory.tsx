@@ -113,7 +113,7 @@ function SearchResultsPost({ Header }: SearchResultTabProps) {
 	const State = useDiscoverTabState();
 	const TimelineState = useTimelineState();
 	const TimelineDispatch = useTimelineDispatch();
-	const { data, fetchStatus, refetch } = useApiSearchPosts(
+	const { data, error, fetchStatus, refetch } = useApiSearchPosts(
 		State.q,
 		TimelineState.appliedMaxId,
 	);

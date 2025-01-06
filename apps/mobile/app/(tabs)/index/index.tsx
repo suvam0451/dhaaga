@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
-import { Text, View } from 'react-native';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { View } from 'react-native';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
 import SocialHub from '../../../components/screens/home/SocialHub';
 import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
 import { Account } from '../../../database/_schema';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppAcct,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
@@ -139,11 +140,7 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 }
 
 function Screen() {
-	const { acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-		})),
-	);
+	const { acct } = useAppAcct();
 
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
 	return <SocialHub />;

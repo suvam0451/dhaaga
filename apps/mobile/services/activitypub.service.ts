@@ -4,12 +4,15 @@ import {
 	MisskeyRestClient,
 	UnknownRestClient,
 } from '@dhaaga/bridge';
-import { ActivityPubServer } from '../entities/activitypub-server.entity';
 import { PleromaRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { RandomUtil } from '../utils/random.utils';
 import AppSessionManager from './session/app-session.service';
-import { Profile, ProfilePinnedTimeline } from '../database/_schema';
+import {
+	KnownServer,
+	Profile,
+	ProfilePinnedTimeline,
+} from '../database/_schema';
 
 class ActivityPubService {
 	/**
@@ -80,7 +83,7 @@ class ActivityPubService {
 	static async syncSoftware(
 		db: SQLiteDatabase,
 		urlLike: string,
-	): Promise<ActivityPubServer> {
+	): Promise<KnownServer> {
 		return null;
 		/**
 		 * either instance info is not cached

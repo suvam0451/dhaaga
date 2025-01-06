@@ -65,7 +65,8 @@ export function useApiSearchPosts(q: string, maxId: string | null) {
 			limit: 10,
 			query: q,
 			type: 'statuses',
-			untilId: _untilId,
+			// for misskey
+			untilId: !!_untilId ? _untilId : undefined,
 			offset,
 		});
 		if (error) {
@@ -107,8 +108,8 @@ export function useApiSearchPosts(q: string, maxId: string | null) {
 		}
 
 		return {
-			maxId,
-			items: __maxId,
+			maxId: __maxId,
+			items: _posts,
 			minId: null,
 			success: true,
 		};
