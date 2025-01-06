@@ -1,6 +1,5 @@
-import { View } from 'react-native';
-import { Skeleton, Text } from '@rneui/themed';
-import { ActivityPubServer } from '../../../entities/activitypub-server.entity';
+import { View, Text } from 'react-native';
+import { Skeleton } from '@rneui/themed';
 import { memo, useEffect, useRef, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { AnimatedFlashList } from '@shopify/flash-list';
@@ -19,6 +18,7 @@ import WithSearchTermContext, {
 } from '../../../hooks/forms/useSearchTerm';
 import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
 import { useAppAssetsContext } from '../../../hooks/app/useAssets';
+import { KnownServer } from '../../../database/_schema';
 
 type ServerItemProps = {
 	url: string;
@@ -444,7 +444,7 @@ const FlashListRenderer = ({ item }: { item: ListItem }) => {
 
 function ServerDebuggerStackBase() {
 	const servers: any[] = []; // useQuery(ActivityPubServer);
-	const [SearchResults, setSearchResults] = useState<ActivityPubServer[]>([]);
+	const [SearchResults, setSearchResults] = useState<KnownServer[]>([]);
 	const [FlashListProps, setFlashListProps] = useState<ListItem[]>([]);
 	const { searchText } = useSearchTermContext();
 	const { isAssetsLoaded } = useAppAssetsContext();

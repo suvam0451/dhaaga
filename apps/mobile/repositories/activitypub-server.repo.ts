@@ -1,8 +1,5 @@
-import {
-	ActivityPubServer,
-	ActivityPubServerCreateDTO,
-} from '../entities/activitypub-server.entity';
 import { SQLiteDatabase } from 'expo-sqlite';
+import { KnownServer } from '../database/_schema';
 
 export class ActivityPubServerRepository {
 	db: SQLiteDatabase;
@@ -25,7 +22,7 @@ export class ActivityPubServerRepository {
 		db: SQLiteDatabase,
 		url: string,
 		software?: string,
-	): ActivityPubServer | null {
+	): KnownServer | null {
 		if (!url) return null;
 		const removeHttps = url.replace(/^https?:\/\//, '');
 
@@ -53,18 +50,15 @@ export class ActivityPubServerRepository {
 	 * (Always) Inserts new record, if not exists
 	 * Skips if detected software is "unknown"
 	 */
-	static updateSoftwareType(
-		db: SQLiteDatabase,
-		dto: ActivityPubServerCreateDTO,
-	) {
+	static updateSoftwareType(db: SQLiteDatabase, dto: any) {
 		return this.upsert(db, dto.url, dto.type);
 	}
 
-	static updateNodeInfo(db: SQLiteDatabase, urlLike: string, nodeinfo: string) {
-		const _server = this.upsert(db, urlLike);
-		_server.nodeinfo = nodeinfo;
-		return _server;
-	}
+	static updateNodeInfo(
+		db: SQLiteDatabase,
+		urlLike: string,
+		nodeinfo: string,
+	) {}
 
 	static get(db: SQLiteDatabase, url: string) {
 		url = url.replace(/^https?:\/\//, '');

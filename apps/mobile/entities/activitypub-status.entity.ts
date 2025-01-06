@@ -1,8 +1,6 @@
-import { ActivityPubServer } from './activitypub-server.entity';
 import { ActivityPubUser } from './activitypub-user.entity';
 import { z } from 'zod';
 import { ActivityPubMediaAttachment } from './activitypub-media-attachment.entity';
-import { ActivityPubTag } from './activitypub-tag.entity';
 
 const ActivityPubStatusUpsertDTO = z.object({
 	statusId: z.string(),
@@ -46,6 +44,6 @@ export class ActivityPubStatus extends Object {
 	sensitive: boolean;
 
 	postedBy?: ActivityPubUser;
-	server?: ActivityPubServer;
+	// server?: ActivityPubServer;
 	mediaAttachments: ActivityPubMediaAttachment[];
 }

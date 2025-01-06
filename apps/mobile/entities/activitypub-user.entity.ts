@@ -1,4 +1,3 @@
-import { ActivityPubServer } from './activitypub-server.entity';
 import { z } from 'zod';
 
 export const ActivityPubUserCreateDTO = z.object({
@@ -21,5 +20,5 @@ export class ActivityPubUser
 	accountId?: string; // suvam@mastodon.social
 	avatarUrl?: string;
 	displayName?: string;
-	server?: ActivityPubServer;
+	// server?: ActivityPubServer;
 }

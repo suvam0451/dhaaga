@@ -11,9 +11,9 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { Account } from '../entities/account.entity';
 import { ActivityPubStatus } from '../entities/activitypub-status.entity';
 import { RandomUtil } from '../utils/random.utils';
+import { Account } from '../database/_schema';
 
 type InheritedType = {};
 

@@ -11,7 +11,7 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
-import { AppSetting } from '../../../../entities/app-settings.entity';
+import { AppSetting } from '../../../../database/_schema';
 
 type AppSettingBooleanToggleProps = {
 	label: string;
