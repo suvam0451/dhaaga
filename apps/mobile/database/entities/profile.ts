@@ -19,7 +19,7 @@ class Service {
 	}
 
 	static getAllShown(db: DataSource) {
-		return db.profile.find({ active: true });
+		return db.profile.find({ active: true, visible: true });
 	}
 
 	static deselectAll(db: DataSource) {
@@ -39,6 +39,9 @@ class Service {
 	}
 
 	static removeProfile(db: DataSource, id: number) {
+		const match = db.profile.findOne({ id });
+		//may never delete the default profile
+		if (match && match.uuid === 'DEFAULT') return;
 		db.profile.updateById(id, {
 			active: false,
 		});

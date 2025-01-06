@@ -80,18 +80,6 @@ function ProfileLandingAccountModules() {
 					marginBottom: 24,
 				}}
 			/>
-			<Text
-				style={{
-					marginTop: 32,
-					fontSize: 14,
-					color: theme.textColor.low,
-					textAlign: 'center',
-					paddingHorizontal: 32,
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
-				}}
-			>
-				[TIP] Long press your avatar in navbar to quickly swap accounts
-			</Text>
 		</View>
 	);
 }

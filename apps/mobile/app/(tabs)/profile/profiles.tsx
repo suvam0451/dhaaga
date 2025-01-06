@@ -35,8 +35,8 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	const { db } = useAppDb();
 
 	function _onDone() {
-		hide();
 		appSub.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
+		hide();
 	}
 	function onUnhide() {
 		ProfileService.unhideProfile(db, profile.id);
@@ -45,9 +45,13 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 
 	function onMoveUp() {}
 
-	function onRemove() {
+	async function onRemoveConfirm() {
 		ProfileService.removeProfile(db, profile.id);
 		_onDone();
+	}
+
+	function onRemove() {
+		show(DialogBuilderService.confirmProfileDeletion(onRemoveConfirm));
 	}
 
 	function onMoveDown() {}
@@ -69,12 +73,26 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 		);
 	}
 
+	function onDefaultProfileIndicatorPressed() {
+		show(DialogBuilderService.defaultProfileIndication());
+	}
+
 	return (
 		<AppAccountSelectionItem
 			style={{ padding: 4, flexDirection: 'row' }}
 			acct={acct}
 			RightComponent={
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					{profile.uuid === 'DEFAULT' && (
+						<AppIcon
+							id={'lock-closed-outline'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
+							containerStyle={{
+								padding: 8,
+							}}
+							onPress={onDefaultProfileIndicatorPressed}
+						/>
+					)}
 					{!profile.visible && (
 						<AppIcon
 							id={'eye-off-filled'}
@@ -88,7 +106,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 						style={{
 							fontSize: 16,
 							color: profile.visible ? theme.primary.a0 : theme.secondary.a50,
-							marginRight: 16,
+							marginRight: 8,
 						}}
 					>
 						{profile.name}
@@ -98,6 +116,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						size={20}
 						onPress={onPressProfileMoreOptions}
+						containerStyle={{ padding: 8 }}
 					/>
 				</View>
 			}
@@ -151,12 +170,25 @@ function Page() {
 					<RefreshControl refreshing={IsRefreshing} onRefresh={init} />
 				}
 			>
-				<AppText.Medium
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-					style={{ fontSize: 16, marginVertical: 20, textAlign: 'center' }}
+				<View
+					style={{
+						marginVertical: 20,
+					}}
 				>
-					Add, remove and order your profiles.
-				</AppText.Medium>
+					<AppText.Medium
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						style={{ fontSize: 16, textAlign: 'center' }}
+					>
+						Add, remove and order your profiles.
+					</AppText.Medium>
+					<AppText.Normal
+						style={{ textAlign: 'center' }}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
+					>
+						Requires an app restart to be reflected in the hub.
+					</AppText.Normal>
+				</View>
+
 				{Data.map((acct, i) => (
 					<View key={i}>
 						{acct.profiles.map((o, k) => (
@@ -177,7 +209,9 @@ function Page() {
 							alignSelf: 'center',
 						}}
 					>
-						<AppText.SemiBold style={{ color: 'black', textAlign: 'center' }}>
+						<AppText.SemiBold
+							style={{ color: 'black', textAlign: 'center', fontSize: 18 }}
+						>
 							Add Profile
 						</AppText.SemiBold>
 					</View>

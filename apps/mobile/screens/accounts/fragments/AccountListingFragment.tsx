@@ -1,4 +1,10 @@
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	TouchableOpacity,
+	Text,
+	Pressable,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { memo, MutableRefObject } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
@@ -125,7 +131,7 @@ export const AccountPfp = memo(function Foo({
 }: AccountPfpProps) {
 	const { theme } = useAppTheme();
 	return (
-		<TouchableOpacity
+		<Pressable
 			style={{
 				height: 48,
 				width: 48,
@@ -153,7 +159,7 @@ export const AccountPfp = memo(function Foo({
 					},
 				]}
 			/>
-		</TouchableOpacity>
+		</Pressable>
 	);
 });
 
@@ -174,10 +180,7 @@ export const AccountDetails = memo(function Foo({
 	const { theme } = useAppTheme();
 
 	return (
-		<TouchableOpacity
-			style={{ marginLeft: 8, flexGrow: 1 }}
-			onPress={onClicked}
-		>
+		<Pressable style={{ marginLeft: 8, flexGrow: 1 }} onPress={onClicked}>
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
@@ -207,7 +210,7 @@ export const AccountDetails = memo(function Foo({
 			>
 				{subdomain}
 			</Text>
-		</TouchableOpacity>
+		</Pressable>
 	);
 });
 

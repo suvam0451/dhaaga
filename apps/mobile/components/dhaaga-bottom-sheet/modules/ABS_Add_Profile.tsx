@@ -7,12 +7,14 @@ import { AppAccountSelectionItem } from '../../common/app/Account';
 import {
 	useAppBottomSheet_Improved,
 	useAppDb,
+	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { AccountService } from '../../../database/entities/account';
 import { ProfileService } from '../../../database/entities/profile';
 import { AppText } from '../../lib/Text';
 import { AppTextInput } from '../../lib/TextInput';
+import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
 
 type AS_Add_Profile_Select_AccountProps = {
 	accts: Account[];
@@ -64,7 +66,11 @@ function ABS_Add_Profile_Name_Profile({
 					placeholder={'Enter name. You can change this later.'}
 					value={Text}
 					onChangeText={setText}
-					style={{ fontSize: 16, textAlign: 'center' }}
+					style={{
+						fontSize: 18,
+						textAlign: 'center',
+						height: 128,
+					}}
 				/>
 			</View>
 
@@ -95,6 +101,7 @@ function ABS_Add_Profile_Name_Profile({
 function ABS_Add_Profile() {
 	const { db } = useAppDb();
 	const { stateId, hide } = useAppBottomSheet_Improved();
+	const { appSub } = useAppPublishers();
 	const [Data, setData] = useState<Account[]>([]);
 	const [SelectedAcct, setSelectedAcct] = useState(null);
 
@@ -119,6 +126,7 @@ function ABS_Add_Profile() {
 		if (!name) return;
 
 		ProfileService.addProfile(db, SelectedAcct, name);
+		appSub.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
 		hide();
 	}
 

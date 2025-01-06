@@ -24,6 +24,7 @@ function Page() {
 			id: 'settings',
 		},
 	];
+
 	return <SwipeableTabsContainer renderScene={renderScene} pages={tabs} />;
 }
 

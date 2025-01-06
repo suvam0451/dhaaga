@@ -9,10 +9,11 @@ import {
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import ProfileLandingAccountOverview from './landing/fragments/ProfileLandingAccountOverview';
 import ProfileLandingAccountModules from './landing/fragments/ProfileLandingAccountModules';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import AppNoAccount from '../../../error-screen/AppNoAccount';
-import { APP_LANDING_PAGE_TYPE } from '../../../shared/topnavbar/AppTabLandingNavbar';
+import AppTabLandingNavbar, {
+	APP_LANDING_PAGE_TYPE,
+} from '../../../shared/topnavbar/AppTabLandingNavbar';
 import {
 	useAppAcct,
 	useAppTheme,
@@ -72,47 +73,6 @@ function AppModules({ label, desc, iconId, to }: AppModulesProps) {
 	);
 }
 
-type HeaderProps = {
-	label: string;
-};
-
-function Header({ label }: HeaderProps) {
-	const { theme } = useAppTheme();
-	return (
-		<View
-			style={{
-				paddingHorizontal: 12,
-				paddingVertical: 16,
-			}}
-		>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					width: '100%',
-				}}
-			>
-				<View style={{ flexGrow: 1, flex: 1 }}>
-					<Text style={[styles.headerText, { color: theme.textColor.high }]}>
-						{label}
-					</Text>
-				</View>
-
-				<View
-					style={{ padding: 4, marginLeft: 4, transform: [{ translateX: -1 }] }}
-				>
-					<MaterialIcons
-						name="notes"
-						size={24}
-						color={theme.textColor.high}
-						style={{ transform: [{ scaleX: -1 }] }}
-					/>
-				</View>
-			</View>
-		</View>
-	);
-}
-
 function MyAccountPage() {
 	const { onScroll } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
@@ -138,9 +98,31 @@ function MyAccountPage() {
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
 			<Animated.ScrollView onScroll={onScroll}>
-				<Header label={'My Account'} />
+				<AppTabLandingNavbar
+					type={APP_LANDING_PAGE_TYPE.ACCOUNT_HUB}
+					menuItems={[
+						// {
+						// 	iconId: 'cog',
+						// },
+						{
+							iconId: 'user-guide',
+						},
+					]}
+				/>
 				<ProfileLandingAccountOverview />
 				<ProfileLandingAccountModules />
+
+				<AppText.Normal
+					style={{
+						paddingHorizontal: 10,
+						fontSize: 32,
+						fontFamily: APP_FONTS.BEBAS_NEUE_400,
+						marginVertical: 16,
+					}}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+				>
+					App Features
+				</AppText.Normal>
 				<FlatList
 					data={appModules}
 					numColumns={2}
@@ -156,6 +138,18 @@ function MyAccountPage() {
 						marginHorizontal: 8,
 					}}
 				/>
+				<Text
+					style={{
+						marginTop: 32,
+						fontSize: 14,
+						color: theme.textColor.low,
+						textAlign: 'center',
+						paddingHorizontal: 32,
+						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					}}
+				>
+					[TIP] Long press your avatar in navbar to quickly swap accounts
+				</Text>
 			</Animated.ScrollView>
 		</View>
 	);

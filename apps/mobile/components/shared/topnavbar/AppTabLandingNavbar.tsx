@@ -21,6 +21,7 @@ export enum APP_LANDING_PAGE_TYPE {
 	APP_SETTINGS,
 	MY_ACCOUNT,
 	MY_PROFILE,
+	ACCOUNT_HUB,
 }
 
 type AppTabLandingNavbarProps = {
@@ -38,8 +39,7 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 	[APP_LANDING_PAGE_TYPE.DISCOVER]: 'Discover',
 	[APP_LANDING_PAGE_TYPE.COMPOSE]: 'Compose',
 	[APP_LANDING_PAGE_TYPE.INBOX]: 'Inbox',
-	[APP_LANDING_PAGE_TYPE.PROFILE]: 'App Profile',
-	// Modules within "Inbox" tab
+	[APP_LANDING_PAGE_TYPE.PROFILE]: 'App Profile', // Modules within "Inbox" tab
 	[APP_LANDING_PAGE_TYPE.MENTIONS]: 'Mentions',
 	[APP_LANDING_PAGE_TYPE.CHAT]: 'Chat',
 	[APP_LANDING_PAGE_TYPE.SOCIAL]: 'Social',
@@ -47,6 +47,7 @@ const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 	[APP_LANDING_PAGE_TYPE.APP_SETTINGS]: 'App Settings',
 	[APP_LANDING_PAGE_TYPE.MY_ACCOUNT]: 'My Account',
 	[APP_LANDING_PAGE_TYPE.MY_PROFILE]: 'My Profile',
+	[APP_LANDING_PAGE_TYPE.ACCOUNT_HUB]: 'My Account',
 };
 
 /**
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		fontSize: 28,
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-		// fontWeight: '600',
+		fontFamily: APP_FONTS.INTER_700_BOLD, // fontWeight: '600',
 	},
 });
