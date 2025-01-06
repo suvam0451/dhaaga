@@ -17,6 +17,7 @@ export class Account extends BaseEntity<Account> {
 
 	// inverse joins
 	metadata: AccountMetadata[];
+	profiles: Profile[];
 }
 
 /**

@@ -15,6 +15,58 @@ type ActionType = {
  * loader animation
  */
 export class DialogBuilderService {
+	static profileActions(
+		index: number,
+		totalCount: number,
+		hidden: boolean,
+		actions: {
+			onMoveUp: () => void;
+			onHide: () => void;
+			onUnhide: () => void;
+			onMoveDown: () => void;
+			onRemove: () => void;
+		},
+	): AppDialogInstanceState {
+		const _actions = [];
+
+		if (index !== 0) {
+			_actions.push({
+				label: 'Move Up',
+				onPress: actions.onMoveUp,
+			});
+		}
+		if (index !== totalCount - 1) {
+			_actions.push({
+				label: 'Move Down',
+				onPress: actions.onMoveDown,
+			});
+		}
+		if (hidden) {
+			_actions.push({
+				label: 'Unhide',
+				onPress: actions.onUnhide,
+			});
+		} else {
+			_actions.push({
+				label: 'Hide',
+				onPress: actions.onHide,
+			});
+		}
+
+		return {
+			title: 'Organise Profile',
+			description: ['You can move, hide or remove this profile.'],
+			actions: [
+				..._actions,
+				{
+					label: 'Delete',
+					onPress: actions.onRemove,
+					variant: 'destructive',
+				},
+			],
+		};
+	}
+
 	/**
 	 * Currently unrelated
 	 */
@@ -75,6 +127,7 @@ export class DialogBuilderService {
 			],
 		};
 	}
+
 	/**
 	 * ----- Social Hub -----
 	 */

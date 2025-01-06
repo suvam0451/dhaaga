@@ -12,10 +12,9 @@ import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '../../../database/entities/account-metadata';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../../database/entities/account';
 import {
+	useAppDb,
 	useAppDialog,
 	useAppPublishers,
 	useAppTheme,
@@ -118,6 +117,7 @@ type AccountPfpProps = {
 	selected: boolean;
 	onClicked: () => void;
 };
+
 export const AccountPfp = memo(function Foo({
 	url,
 	selected,
@@ -180,7 +180,7 @@ export const AccountDetails = memo(function Foo({
 		>
 			<Text
 				style={{
-					fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					color: theme.secondary.a10,
 				}}
 				numberOfLines={1}
@@ -215,11 +215,7 @@ function AccountListingFragment({ acct }: Props) {
 	const { theme } = useAppTheme();
 	const { appSub } = useAppPublishers();
 	const { show, hide } = useAppDialog();
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
 
 	function onMoreActions() {
 		show(

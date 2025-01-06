@@ -5,6 +5,7 @@ import { eq, gt } from '@dhaaga/orm';
 import { AccountService } from './account';
 import { ProfilePinnedTimelineService } from './profile-pinned-timeline';
 import { ProfilePinnedTagService } from './profile-pinned-tag';
+import { RandomUtil } from '../../utils/random.utils';
 
 @DbErrorHandler()
 class Repo {}
@@ -76,6 +77,31 @@ class Service {
 
 	static getOwnerAccount(db: DataSource, profile: Profile): Account {
 		return AccountService.getById(db, profile.accountId);
+	}
+
+	/**
+	 * Add a new profile for this account.
+	 *
+	 * name collisions are allowed
+	 * @param db
+	 * @param acct
+	 * @param name
+	 * @constructor
+	 */
+	static addProfile(db: DataSource, acct: Account, name: string) {
+		const _key = RandomUtil.nanoId();
+		db.profile.insert({
+			accountId: acct.id,
+			uuid: _key,
+			name,
+			selected: false,
+		});
+
+		const savedProfile = db.profile.findOne({
+			uuid: _key,
+		});
+
+		Service._postInsert(db, savedProfile);
 	}
 
 	/**

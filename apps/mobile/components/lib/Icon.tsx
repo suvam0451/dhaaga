@@ -46,6 +46,7 @@ export type APP_ICON_ENUM =
 	| 'chevron-right'
 	| 'chevron-down'
 	| 'cloud-upload-outline'
+	| 'close-outline'
 	| 'cog'
 	| 'copy'
 	| 'create'
@@ -399,6 +400,15 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name={'cloud-upload-outline'}
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
+				case 'close-outline':
+					return (
+						<Ionicons
+							name={'close-outline'}
 							size={_size}
 							color={_color}
 							style={iconStyle}
@@ -792,8 +802,8 @@ export const AppIcon = memo(
 					);
 				case 'trash':
 					return (
-						<FontAwesome
-							name="trash-o"
+						<Ionicons
+							name="trash-outline"
 							size={_size}
 							color={_color}
 							style={iconStyle}

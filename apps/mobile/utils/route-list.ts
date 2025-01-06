@@ -20,4 +20,7 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
 
 	CHATROOM = '/notifications/chat',
+
+	COLLECTIONS = '/profile/collections',
+	PROFILES = '/profile/profiles',
 }

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import WithAppPaginationContext from '../../../../states/usePagination';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import WithActivitypubUserContext, {
@@ -17,6 +17,7 @@ import { ActivitypubHelper } from '@dhaaga/bridge';
 import useGetFollowers from '../../../../hooks/api/accounts/useGetFollowers';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 export function UserItem() {
 	const { acct } = useGlobalState(
@@ -30,11 +31,9 @@ export function UserItem() {
 
 	const { content } = useMfm({
 		content: user.getDisplayName(),
-		remoteSubdomain: user?.getInstanceUrl(subdomain),
 		emojiMap: user?.getEmojiMap(),
-		deps: [user.getDisplayName()],
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		emphasis: 'high',
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 
 	const handle = ActivitypubHelper.getHandle(
@@ -129,7 +128,7 @@ function WithApi() {
 			me: o.me,
 		})),
 	);
-	const { Data, loadNext } = useGetFollowers(me?.getId());
+	const { Data, loadNext } = useGetFollowers(me.id);
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
 		itemCount: Data.length,
 		updateQueryCache: loadNext,
