@@ -21,6 +21,7 @@ const AppBottomSheetPostMoreActions = memo(() => {
 	const [PostTarget, setPostTarget] = useState<AppPostObject>(
 		postPub.readCache(ctx.uuid),
 	);
+	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
 	const { router, driver, acct, hide, theme, acctManager } = useGlobalState(
 		useShallow((o) => ({
 			router: o.router,
@@ -38,6 +39,7 @@ const AppBottomSheetPostMoreActions = memo(() => {
 	}
 
 	useEffect(() => {
+		setEditMode('root');
 		if (!ctx.uuid) return;
 
 		if (!postPub.readCache(ctx.uuid)) {
@@ -77,8 +79,6 @@ const AppBottomSheetPostMoreActions = memo(() => {
 		// });
 		hide();
 	}
-
-	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
 
 	useEffect(() => {
 		if (lastSubdomain.current === acct?.server) return;

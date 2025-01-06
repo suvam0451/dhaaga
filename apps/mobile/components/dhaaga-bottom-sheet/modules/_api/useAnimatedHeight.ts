@@ -44,11 +44,11 @@ function useAnimatedHeight() {
 				}
 			}
 
-			height.value = withSpring(_target, {
-				duration: 2000,
-				dampingRatio: 0.55,
-				stiffness: 500,
-				overshootClamping: false,
+			height.value = withTiming(_target, {
+				duration: 200,
+				// dampingRatio: 0.55,
+				// stiffness: 500,
+				// overshootClamping: false,
 			});
 		}
 	}, [visible, type, stateId]);
