@@ -10,6 +10,8 @@ type StatusItemProps = {
 	// disables all interactions
 	isPreview?: boolean;
 	isPin?: boolean;
+	// for post details page
+	showFullDetails?: boolean;
 };
 
 function PostContainer({ children }: any) {
@@ -39,7 +41,11 @@ function PostContainer({ children }: any) {
  * Renders a status/note
  * @constructor
  */
-const StatusItem = memo(function Foo({ isPreview, isPin }: StatusItemProps) {
+const StatusItem = memo(function Foo({
+	isPreview,
+	isPin,
+	showFullDetails,
+}: StatusItemProps) {
 	const { acct } = useAppAcct();
 	const { dto } = useAppStatusItem();
 
@@ -53,7 +59,12 @@ const StatusItem = memo(function Foo({ isPreview, isPin }: StatusItemProps) {
 			) {
 				return (
 					<PostContainer>
-						<StatusCore hasBoost={true} isPreview={isPreview} isPin={isPin} />
+						<StatusCore
+							hasBoost={true}
+							isPreview={isPreview}
+							isPin={isPin}
+							showFullDetails={showFullDetails}
+						/>
 					</PostContainer>
 				);
 			} else {
@@ -68,6 +79,7 @@ const StatusItem = memo(function Foo({ isPreview, isPin }: StatusItemProps) {
 								hasParent={true}
 								isPreview={isPreview}
 								isPin
+								showFullDetails={showFullDetails}
 							/>
 						</PostContainer>
 					);
@@ -75,7 +87,12 @@ const StatusItem = memo(function Foo({ isPreview, isPin }: StatusItemProps) {
 					return (
 						<PostContainer>
 							<SharedStatusFragment />
-							<StatusCore hasBoost={true} isPreview={isPreview} isPin={isPin} />
+							<StatusCore
+								hasBoost={true}
+								isPreview={isPreview}
+								isPin={isPin}
+								showFullDetails={showFullDetails}
+							/>
 						</PostContainer>
 					);
 				}
@@ -84,13 +101,22 @@ const StatusItem = memo(function Foo({ isPreview, isPin }: StatusItemProps) {
 			return (
 				<PostContainer>
 					<ParentPostFragment />
-					<StatusCore hasParent={true} isPreview={isPreview} isPin={isPin} />
+					<StatusCore
+						hasParent={true}
+						isPreview={isPreview}
+						isPin={isPin}
+						showFullDetails={showFullDetails}
+					/>
 				</PostContainer>
 			);
 		} else {
 			return (
 				<PostContainer>
-					<StatusCore isPreview={isPreview} isPin={isPin} />
+					<StatusCore
+						isPreview={isPreview}
+						isPin={isPin}
+						showFullDetails={showFullDetails}
+					/>
 				</PostContainer>
 			);
 		}

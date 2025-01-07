@@ -38,6 +38,7 @@ import DriverService, {
 	SEARCH_RESULT_TAB,
 } from '../../../services/driver.service';
 import { AppText } from '../../../components/lib/Text';
+import { Loader } from '../../../components/lib/Loader';
 
 function Header() {
 	return (
@@ -149,6 +150,7 @@ const FloatingButtonCircular = () => {
 	/**
 	 * --- State Management ---
 	 */
+	const State = useDiscoverTabState();
 	const dispatch = useDiscoverTabDispatch();
 
 	const updateSearch = (search: string) => {
@@ -174,9 +176,7 @@ const FloatingButtonCircular = () => {
 
 	const toggleMenu = () => {
 		const isExpanding = !IsWidgetExpanded;
-		if (!isExpanding) {
-			textInputRef.current?.blur();
-		}
+		if (!isExpanding) textInputRef.current?.blur();
 		setIsWidgetExpanded(!IsWidgetExpanded);
 
 		if (isRotated.value === 0) {
@@ -231,7 +231,11 @@ const FloatingButtonCircular = () => {
 				]}
 			>
 				<AnimatedPressable style={{ padding: 8 }} onPress={toggleMenu}>
-					<Feather name="search" color={'black'} size={25} />
+					{State.searchStatus === 'loading' ? (
+						<Loader />
+					) : (
+						<Feather name="search" color={'black'} size={25} />
+					)}
 				</AnimatedPressable>
 				{IsWidgetExpanded && (
 					<TextInput
