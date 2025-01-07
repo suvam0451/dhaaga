@@ -878,10 +878,10 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
-"@expo-google-fonts/dev@^0.2.3":
+"@expo-google-fonts/bebas-neue@^0.2.3":
   version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@expo-google-fonts/dev/-/dev-0.2.3.tgz#b52587de9f4562185d223d1ec3cb163ea49ace12"
-  integrity sha512-b0s8mqYb2IJn5pWyFmM4qD3Urbfz7DmRb1tNnSYMlQdj94YaFGGCTcXGPtQJ2m7p+aPWlZLkK0capQgYrPpJUw==
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/bebas-neue/-/bebas-neue-0.2.3.tgz#41df66599a96dd9ba208f2c59ac86e7a24fa7bcf"
+  integrity sha512-FrFjb2gShHLM/XTL0nYcxRt4dHjbVPmg6HzcJRoIIVt+HJQU6Nbh7Nan8KeeEny8wQFDEVCdJATnofS5xaDxqA==
 
 "@expo-google-fonts/inter@^0.2.3":
   version "0.2.3"
@@ -892,6 +892,11 @@
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/montserrat/-/montserrat-0.2.3.tgz#e22b337ee6bd2007126b466ddd18f9de59eb3fc6"
   integrity sha512-9imhwIs6j5uyTkTxoNplC5T8ERES1W98ZgF7kf7OaypnbcoLoIW0wKH6oudecZyiEqoSktC7epkRpj+UEUvzWg==
+
+"@expo-google-fonts/roboto@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/roboto/-/roboto-0.2.3.tgz#c103422a3c8f461aaada33acaf06418f6650dc19"
+  integrity sha512-PF6S//ZYWeXfpYTwvY2oEe0d5RnqwR5KMsGjuTgg6y9p/CPK/IkWL+wsbkzjfd+Jck1Q1pRlWOoe5uz42sQFRg==
 
 "@expo/bunyan@^4.0.0":
   version "4.0.1"

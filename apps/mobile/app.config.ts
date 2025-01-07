@@ -6,7 +6,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
 	slug: 'dhaaga',
-	version: '0.11.1',
+	version: '0.12.0',
 	orientation: 'portrait',
 	icon: './assets/placeholder_icon.png',
 	userInterfaceStyle: 'dark',
@@ -21,7 +21,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
-		versionCode: 16,
+		versionCode: 17,
 	},
 	androidStatusBar: {
 		barStyle: 'dark-content',
@@ -85,6 +85,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_600SemiBold.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_700Bold.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_800ExtraBold.ttf',
+					// BebasNeue
+					'../../node_modules/@expo-google-fonts/bebas-neue/BebasNeue_400Regular.ttf',
+					// Roboto
+					'../../node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf',
+					'../../node_modules/@expo-google-fonts/roboto/Roboto_500Medium.ttf',
+					'../../node_modules/@expo-google-fonts/roboto/Roboto_700Bold.ttf',
 				],
 			},
 		],

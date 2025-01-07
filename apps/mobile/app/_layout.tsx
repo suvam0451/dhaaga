@@ -21,18 +21,18 @@ import useAppSession from '../states/useAppSession';
 import ImageInspectModal from '../components/modals/ImageInspectModal';
 import { AppDialog } from '../components/lib/AppDialog';
 import { useAppTheme } from '../hooks/utility/global-state-extractors';
-import {
-	BebasNeue_400Regular,
-	PublicSans_600SemiBold,
-	Roboto_400Regular,
-	Roboto_500Medium,
-	Roboto_700Bold,
-	SourceSansPro_400Regular,
-	SourceSansPro_400Regular_Italic,
-	SourceSansPro_600SemiBold,
-	SourceSansPro_600SemiBold_Italic,
-	useFonts,
-} from '@expo-google-fonts/dev';
+// import {
+// 	BebasNeue_400Regular,
+// 	PublicSans_600SemiBold,
+// 	Roboto_400Regular,
+// 	Roboto_500Medium,
+// 	Roboto_700Bold,
+// 	SourceSansPro_400Regular,
+// 	SourceSansPro_400Regular_Italic,
+// 	SourceSansPro_600SemiBold,
+// 	SourceSansPro_600SemiBold_Italic,
+// 	useFonts,
+// } from '@expo-google-fonts/dev';
 
 enableMapSet();
 
@@ -74,18 +74,18 @@ function App() {
 
 	const pathname = usePathname();
 
-	const [loaded, error] = useFonts({
-		// SourceSansPro
-		SourceSansPro_400Regular: SourceSansPro_400Regular,
-		SourceSansPro_400Regular_Italic: SourceSansPro_400Regular_Italic,
-		SourceSansPro_600SemiBold: SourceSansPro_600SemiBold,
-		SourceSansPro_600SemiBold_Italic: SourceSansPro_600SemiBold_Italic, // PublicSans
-		PublicSans_600SemiBold: PublicSans_600SemiBold,
-		Roboto_400Regular: Roboto_400Regular,
-		Roboto_500Medium: Roboto_500Medium,
-		Roboto_700Bold: Roboto_700Bold,
-		BebasNeue_400Regular: BebasNeue_400Regular,
-	});
+	// const [loaded, error] = useFonts({
+	// 	// SourceSansPro
+	// 	SourceSansPro_400Regular: SourceSansPro_400Regular,
+	// 	SourceSansPro_400Regular_Italic: SourceSansPro_400Regular_Italic,
+	// 	SourceSansPro_600SemiBold: SourceSansPro_600SemiBold,
+	// 	SourceSansPro_600SemiBold_Italic: SourceSansPro_600SemiBold_Italic, // PublicSans
+	// 	PublicSans_600SemiBold: PublicSans_600SemiBold,
+	// 	Roboto_400Regular: Roboto_400Regular,
+	// 	Roboto_500Medium: Roboto_500Medium,
+	// 	Roboto_700Bold: Roboto_700Bold,
+	// 	BebasNeue_400Regular: BebasNeue_400Regular,
+	// });
 
 	const { appReady } = useAppSession();
 
@@ -93,7 +93,7 @@ function App() {
 	 * Wait for fonts and database to load
 	 */
 	const onLayoutRootView = useCallback(async () => {
-		if (!appReady || !loaded || error) {
+		if (!appReady) {
 			await SplashScreen.hideAsync();
 		}
 	}, [appReady]);

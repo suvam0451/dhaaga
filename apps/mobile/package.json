@@ -1,6 +1,6 @@
 {
   "name": "@dhaaga/mobile",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -17,9 +17,10 @@
     "@atproto/api": "^0.13.23",
     "@dhaaga/bridge": "*",
     "@dhaaga/orm": "*",
-    "@expo-google-fonts/dev": "^0.2.3",
+    "@expo-google-fonts/bebas-neue": "^0.2.3",
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
+    "@expo-google-fonts/roboto": "^0.2.3",
     "@expo/downloader": "^1.0.118",
     "@expo/metro-config": "~0.19.0",
     "@expo/vector-icons": "^14.0.4",
