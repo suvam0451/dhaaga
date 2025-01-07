@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { AppSetting } from '../../database/_schema';
 import { appSettingsKeys } from '../../services/app-settings/app-settings';
 import AppSettingsRepository from '../../repositories/app-settings.repo';
+import { DataSource } from '../dataSource';
 
 let BOOLEAN_DEFAULT: { type: 'boolean' | 'string' | 'json'; value: string } = {
 	type: 'boolean',
@@ -14,6 +15,8 @@ export const AppSettingCreateDTO = z.object({
 	value: z.string(),
 	type: z.enum(['boolean', 'string', 'json'] as const),
 });
+
+export type AppSettingType = z.infer<typeof AppSettingCreateDTO>;
 
 class Repo {
 	static async get(db: SQLiteDatabase, key: string) {}
@@ -28,6 +31,45 @@ class Service {
 
 	static async toggle(db: SQLiteDatabase, key: string): Promise<AppSetting> {
 		return null;
+	}
+
+	static setValue(db: DataSource, input: AppSettingType) {
+		const conflict = db.appSetting.findOne({
+			key: input.key,
+		});
+		if (conflict) {
+			db.appSetting.updateById(conflict.id, {
+				value:
+					input.type === 'json'
+						? JSON.stringify(input.value)
+						: input.value.toString(),
+				type: input.type,
+			});
+		} else {
+			db.appSetting.insert({
+				key: input.key,
+				value:
+					input.type === 'json'
+						? JSON.stringify(input.value)
+						: input.value.toString(),
+				type: input.type,
+			});
+		}
+	}
+
+	static setValueNoUpsert(db: DataSource, input: AppSettingType) {
+		const conflict = db.appSetting.findOne({
+			key: input.key,
+		});
+		if (conflict) return;
+		db.appSetting.insert({
+			key: input.key,
+			value:
+				input.type === 'json'
+					? JSON.stringify(input.value)
+					: input.value.toString(),
+			type: input.type,
+		});
 	}
 
 	/**

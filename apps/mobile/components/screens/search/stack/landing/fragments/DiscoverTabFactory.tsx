@@ -59,7 +59,18 @@ function SearchResultsUser({ Header }: SearchResultTabProps) {
 		});
 	}
 
+	const DiscoverTabDispatch = useDiscoverTabDispatch();
 	useEffect(() => {
+		if (!data) {
+			DiscoverTabDispatch({
+				type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+			});
+			return;
+		}
+		DiscoverTabDispatch({
+			type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+		});
+
 		if (data.length === 0) return;
 
 		let maxId = (TimelineState.items.length + data.length).toString();
@@ -207,25 +218,6 @@ function DiscoverTabFactory({ Header }: DiscoverTabFactoryProps) {
 		dispatch({
 			type: DiscoverTabReducerActionType.CLEAR_SEARCH,
 		});
-	}, []);
-
-	useEffect(() => {
-		switch (State.category) {
-			case APP_SEARCH_TYPE.POSTS: {
-				break;
-			}
-			case APP_SEARCH_TYPE.USERS: {
-				// if (SomeData?.accounts?.length === 0) return;
-				// setMaxId(SomeData.accounts[SomeData.accounts.length - 1].getId());
-				// append(SomeData.accounts);
-				break;
-			}
-			default: {
-				// if (SomeData?.statuses?.length === 0) return;
-				// setMaxId(SomeData.statuses[SomeData.statuses.length - 1].getId());
-				// append(SomeData.statuses);
-			}
-		}
 	}, []);
 
 	return useMemo(() => {

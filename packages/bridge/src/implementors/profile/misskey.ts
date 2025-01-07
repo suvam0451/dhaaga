@@ -61,7 +61,25 @@ export class MisskeyUser implements UserInterface {
 	}
 
 	getEmojiMap(): Map<string, string> {
-		return new Map<string, string>();
+		const retval: Map<string, string> = new Map();
+		const src = (this.ref.instance as any).emojis || {};
+		for (const k in src) {
+			if (typeof src[k] === 'string') {
+				// misskey
+				retval.set(k, src[k]);
+			} else {
+				// firefish (deprecated)
+				retval.set(src[k]?.['name'], src[k]?.['url']);
+				// firefish
+				// retval.push({
+				// 	name: (src[k] as any)?.['name'],
+				// 	url: (src[k] as any)?.['url'],
+				// 	height: (src[k] as any)?.['height'],
+				// 	width: (src[k] as any)?.['width'],
+				// });
+			}
+		}
+		return new Map([...retval]);
 	}
 
 	findEmoji(q: string) {

@@ -1,11 +1,16 @@
 {
-  "app": {
-    "tabHeaders": {
+  "navBars": {
+    "primary": {
       "home": "Social Hub",
       "discover": "Discover",
       "compose": "Compose",
       "account": "My Account"
+    },
+    "secondary": {
     }
+  },
+  "database": {
+    "defaultText": "Default"
   },
   "hub": {
     "greetings": {
@@ -13,6 +18,17 @@
       "goodAfternoon": "Good Afternoon",
       "goodEvening": "Good Evening",
       "goodNight": "Good Night"
+    },
+    "sections": {
+      "feeds": "Timelines",
+      "users": "Users",
+      "tags": "Tags"
+    },
+    "feeds": {
+      "global": "Global",
+      "local": "Local",
+      "social": "Social",
+      "home": "Home"
     }
   },
   "composer": {
