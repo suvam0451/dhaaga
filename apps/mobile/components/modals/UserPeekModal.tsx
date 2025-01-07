@@ -235,6 +235,7 @@ function UserPeekModal() {
 		}
 
 		const data = appManager.storage.getUserPeekModalData();
+		if (!data) return;
 		if (data.measurement.y >= height / 2) {
 			setPosition({
 				x: data.measurement.x,
