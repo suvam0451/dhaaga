@@ -6,7 +6,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
 	slug: 'dhaaga',
-	version: '0.12.1',
+	version: '0.12.2',
 	orientation: 'portrait',
 	icon: './assets/placeholder_icon.png',
 	userInterfaceStyle: 'dark',
@@ -21,7 +21,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
-		versionCode: 18,
+		versionCode: 19,
 	},
 	androidStatusBar: {
 		barStyle: 'dark-content',
