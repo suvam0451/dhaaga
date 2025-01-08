@@ -6,7 +6,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
 	slug: 'dhaaga',
-	version: '0.12.2',
+	version: '0.12.3',
 	orientation: 'portrait',
 	icon: './assets/placeholder_icon.png',
 	userInterfaceStyle: 'dark',
@@ -16,12 +16,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		silentLaunch: true,
 	},
 	ios: {
-		bundleIdentifier: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
+		bundleIdentifier: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga.lite',
 		supportsTablet: false,
 	},
 	android: {
-		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
-		versionCode: 19,
+		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga.lite',
+		versionCode: 20,
 	},
 	androidStatusBar: {
 		barStyle: 'dark-content',
@@ -78,16 +78,13 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					'../../node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_600SemiBold.ttf',
-					'../../node_modules/@expo-google-fonts/inter/Inter_700Bold.ttf',
-					// Montserrat
+					'../../node_modules/@expo-google-fonts/inter/Inter_700Bold.ttf', // Montserrat
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_400Regular.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_500Medium.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_600SemiBold.ttf',
 					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_700Bold.ttf',
-					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_800ExtraBold.ttf',
-					// BebasNeue
-					'../../node_modules/@expo-google-fonts/bebas-neue/BebasNeue_400Regular.ttf',
-					// Roboto
+					'../../node_modules/@expo-google-fonts/montserrat/Montserrat_800ExtraBold.ttf', // BebasNeue
+					'../../node_modules/@expo-google-fonts/bebas-neue/BebasNeue_400Regular.ttf', // Roboto
 					'../../node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf',
 					'../../node_modules/@expo-google-fonts/roboto/Roboto_500Medium.ttf',
 					'../../node_modules/@expo-google-fonts/roboto/Roboto_700Bold.ttf',
