@@ -7,6 +7,7 @@ import { produce } from 'immer';
 import ActivityPubReactionsService, {
 	ActivityPubReactionStateDto,
 } from './approto/activitypub-reactions.service';
+import AtprotoService from './atproto.service';
 
 export class PostMutatorService {
 	private readonly driver: KNOWN_SOFTWARE;
@@ -19,6 +20,37 @@ export class PostMutatorService {
 
 	async toggleLike(input: AppPostObject): Promise<AppPostObject> {
 		const target = PostMiddleware.getContentTarget(input);
+
+		/**
+		 * Handle for AT protocol
+		 */
+		if (this.driver === KNOWN_SOFTWARE.BLUESKY) {
+			const result = await AtprotoService.toggleLike(
+				this.client,
+				target.meta.uri,
+				target.meta.cid,
+				target.atProto?.viewer,
+			);
+			if (!result.success) return input;
+
+			if (input.id === target.id) {
+				return produce(input, (draft) => {
+					draft.interaction.liked = result.state;
+					draft.stats.likeCount += result.state ? 1 : -1;
+					draft.atProto.viewer.like = result.uri;
+				});
+			} else if (input.boostedFrom?.id === target.id) {
+				return produce(input, (draft) => {
+					draft.boostedFrom.interaction.liked = result.state;
+					draft.boostedFrom.stats.likeCount += result.state ? 1 : -1;
+					draft.boostedFrom.atProto.viewer.like = result.uri;
+				});
+			}
+		}
+
+		/**
+		 * Handle for AP protocol
+		 */
 		try {
 			const res = await ActivityPubService.toggleLike(
 				this.client,

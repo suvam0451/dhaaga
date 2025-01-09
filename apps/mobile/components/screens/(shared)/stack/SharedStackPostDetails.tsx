@@ -54,7 +54,7 @@ function StatusContextComponent() {
 			<ReplySection />
 			<FlatList
 				data={children}
-				renderItem={({ item }) => <PostReply lookupId={item.id} />}
+				renderItem={({ item }) => <PostReply colors={[]} lookupId={item.id} />}
 			/>
 			<View style={{ marginVertical: 16 }}>
 				<Text style={{ textAlign: 'center', color: APP_FONT.MONTSERRAT_BODY }}>

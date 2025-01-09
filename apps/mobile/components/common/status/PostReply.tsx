@@ -1,19 +1,27 @@
 import { useRef, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import {
+	StyleSheet,
+	TouchableOpacity,
+	View,
+	Text,
+	Pressable,
+} from 'react-native';
 import ExplainOutput from '../explanation/ExplainOutput';
 import MediaItem from '../media/MediaItem';
 import useMfm from '../../hooks/useMfm';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
+import { APP_FONT } from '../../../styles/AppTheme';
 import ReplyOwner from '../user/ReplyOwner';
 import PostReplyToReply from './PostReplyToReply';
 import { useAppStatusContextDataContext } from '../../../hooks/api/statuses/WithAppStatusContextData';
+import { AppThemingUtil } from '../../../utils/theming.util';
 
 type PostReplyProps = {
 	lookupId: string;
+	colors: string[];
 };
 
-function PostReplyContent({ lookupId }: PostReplyProps) {
+function PostReplyContent({ lookupId, colors }: PostReplyProps) {
 	const { data, getChildren } = useAppStatusContextDataContext();
 
 	const [ExplanationObject, setExplanationObject] = useState<string | null>(
@@ -25,9 +33,7 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 
 	const { content } = useMfm({
 		content: dto.content.raw,
-		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis as any,
-		deps: [dto.content.raw, dto.postedBy.instance],
 	});
 
 	const [IsMediaShown, setIsMediaShown] = useState(false);
@@ -44,7 +50,8 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 		setIsReplyThreadVisible(!IsReplyThreadVisible);
 	}
 
-	const color = useRef(APP_THEME.COLOR_SCHEME_C);
+	const depthIndicator = AppThemingUtil.getThreadColorForDepth(0);
+
 	return (
 		<View style={{ marginTop: 8, padding: 8 }}>
 			<ReplyOwner dto={dto} />
@@ -82,30 +89,33 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 									<FontAwesome6
 										name="square-minus"
 										size={20}
-										color={
-											IsReplyThreadVisible
-												? color.current
-												: APP_FONT.MONTSERRAT_BODY
-										}
+										color={AppThemingUtil.getThreadColorForDepth(0)}
+										// color={
+										// 	IsReplyThreadVisible
+										// 		? color.current
+										// 		: APP_FONT.MONTSERRAT_BODY
+										// }
 									/>
 								) : (
 									<FontAwesome6
 										name="plus-square"
 										size={20}
-										color={
-											IsReplyThreadVisible
-												? color.current
-												: APP_FONT.MONTSERRAT_BODY
-										}
+										color={AppThemingUtil.getThreadColorForDepth(0)}
+										// color={
+										// 	IsReplyThreadVisible
+										// 		? color.current
+										// 		: APP_FONT.MONTSERRAT_BODY
+										// }
 									/>
 								)}
 							</View>
 							<View>
 								<Text
 									style={{
-										color: IsReplyThreadVisible
-											? color.current
-											: APP_FONT.MONTSERRAT_BODY,
+										color: AppThemingUtil.getThreadColorForDepth(0),
+										// color: IsReplyThreadVisible
+										// 	? color.current
+										// 	: APP_FONT.MONTSERRAT_BODY,
 									}}
 								>
 									{replyCount} replies
@@ -116,7 +126,7 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 				</View>
 				<View style={{ flexShrink: 1 }}>
 					{mediaCount > 0 && (
-						<TouchableOpacity
+						<Pressable
 							style={styles.actionButton}
 							onPress={toggleMediaVisibility}
 						>
@@ -140,7 +150,7 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 									Hidden ({mediaCount})
 								</Text>
 							)}
-						</TouchableOpacity>
+						</Pressable>
 					)}
 				</View>
 			</View>
@@ -150,8 +160,9 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 					{children.map((o, i) => (
 						<PostReplyToReply
 							key={i}
-							colors={[color.current]}
+							colors={[...colors, depthIndicator]}
 							lookupId={o.id}
+							depth={1}
 						/>
 					))}
 				</View>
@@ -167,8 +178,8 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
  * WithActivitypubStatusContext
  * @constructor
  */
-function PostReply({ lookupId }: PostReplyProps) {
-	return <PostReplyContent lookupId={lookupId} />;
+function PostReply({ lookupId, colors }: PostReplyProps) {
+	return <PostReplyContent colors={colors} lookupId={lookupId} />;
 }
 
 const styles = StyleSheet.create({

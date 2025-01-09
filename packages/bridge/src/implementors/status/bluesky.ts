@@ -50,6 +50,15 @@ class BlueskyStatusAdapter implements StatusInterface {
 	getCid = () => this.post.cid;
 	getUri = () => this.post.uri;
 
+	getLikeUri = () => this.post.viewer?.like;
+	getEmbeddingDisabled = () => this.post.viewer?.embeddingDisabled;
+	getPinUri = () => this.post.viewer?.pinned;
+	getRepostUri = () => this.post.viewer?.repost;
+	getReplyDisabled = () => this.post.viewer?.replyDisabled;
+	getThreadMuted = () => this.post.viewer?.threadMuted;
+
+	getViewer = () => this.post.viewer;
+
 	hasQuoteAvailable(): boolean {
 		return !!(
 			this.post.embed &&

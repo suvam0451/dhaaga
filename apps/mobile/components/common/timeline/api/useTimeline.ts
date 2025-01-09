@@ -77,7 +77,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 	function generateFeedBatch(data: any) {
 		let _feed = [];
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			const _payload = data.data as unknown as AppBskyFeedGetTimeline.Response;
+			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
 			_feed = _payload.data.feed;
 		} else {
 			_feed = data;

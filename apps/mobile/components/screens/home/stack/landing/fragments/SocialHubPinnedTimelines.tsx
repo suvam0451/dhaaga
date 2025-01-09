@@ -89,42 +89,40 @@ function PinnedTimelineItem({
 	}
 
 	return (
-		<Animated.View
-			entering={FadeIn}
-			exiting={FadeOut}
-			style={styles.buttonContainer}
-		>
-			<TouchableOpacity
-				style={[
-					styles.button,
-					{
-						backgroundColor: '#242424', // '#282828',
-					},
-				]}
-				onPress={onPress}
-			>
-				<View style={styles.tiltedIconContainer}>
-					<AppIcon
-						id={iconId}
-						size={appDimensions.socialHub.feeds.tiltedIconSize}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						iconStyle={{ color: theme.secondary.a0 }}
-					/>
-				</View>
-				<AppText.H6 emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
-					{label}
-				</AppText.H6>
-				<AppText.Medium
-					style={{
-						width: 96,
-						color: theme.complementary.a0,
-					}}
-					numberOfLines={1}
+		<View style={styles.buttonContainer}>
+			<Animated.View entering={FadeIn} exiting={FadeOut}>
+				<TouchableOpacity
+					style={[
+						styles.button,
+						{
+							backgroundColor: '#242424', // '#282828',
+						},
+					]}
+					onPress={onPress}
 				>
-					{server}
-				</AppText.Medium>
-			</TouchableOpacity>
-		</Animated.View>
+					<View style={styles.tiltedIconContainer}>
+						<AppIcon
+							id={iconId}
+							size={appDimensions.socialHub.feeds.tiltedIconSize}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+							iconStyle={{ color: theme.secondary.a0 }}
+						/>
+					</View>
+					<AppText.H6 emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
+						{label}
+					</AppText.H6>
+					<AppText.Medium
+						style={{
+							width: 96,
+							color: theme.complementary.a0,
+						}}
+						numberOfLines={1}
+					>
+						{server}
+					</AppText.Medium>
+				</TouchableOpacity>
+			</Animated.View>
+		</View>
 	);
 }
 

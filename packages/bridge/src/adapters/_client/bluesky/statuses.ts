@@ -18,6 +18,7 @@ import { DhaagaErrorCode } from '../../../types/result.types.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
+
 	constructor(dto: AtpSessionData) {
 		this.dto = dto;
 	}
@@ -85,6 +86,34 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		id: string,
 	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/create']['res']> {
 		return Promise.resolve(undefined) as any;
+	}
+
+	async atProtoLike(
+		uri: string,
+		cid: string,
+	): Promise<{ success: boolean; liked?: boolean; uri?: string }> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const result = await agent.like(uri, cid);
+			console.log(result);
+			return { success: true, liked: true, uri: result.uri };
+		} catch (e) {
+			console.log(e);
+			return { success: false };
+		}
+	}
+
+	async atProtoDeleteLike(
+		uri: string,
+	): Promise<{ success: boolean; liked?: boolean }> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			await agent.deleteLike(uri);
+			return { success: true, liked: false };
+		} catch (e) {
+			console.log(e);
+			return { success: false };
+		}
 	}
 
 	removeLike(

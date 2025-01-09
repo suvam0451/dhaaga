@@ -128,15 +128,15 @@ const StatusCore = memo(
 		const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
 		const _target = PostMiddleware.getContentTarget(dto);
-		const HAS_MEDIA = _target.content?.media?.length > 0;
-		const IS_TRANSLATED = _target.calculated.translationOutput;
+		const HAS_MEDIA = _target?.content?.media?.length > 0;
+		const IS_TRANSLATED = _target?.calculated?.translationOutput;
 
 		const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
 
 		const { content: PostContent, isLoaded } = useMfm({
 			content: _target.content.raw,
 			emojiMap: _target.calculated.emojis,
-			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10, // fontFamily: APP_FONTS.INTER_400_REGULAR,
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10, // fontFamily: APP_FONTS.INTER_400_REGULAR
 		});
 
 		const isSensitive = _target.meta.sensitive;

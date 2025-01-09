@@ -1,5 +1,5 @@
 import {
-	Animated,
+	Animated as RN_Animated,
 	FlatList,
 	Pressable,
 	RefreshControl,
@@ -29,6 +29,7 @@ import DriverService, {
 } from '../../../../services/driver.service';
 import useApiGetMyAccount from '../../../../hooks/api/accounts/useApiGetMyAccount';
 import { useState } from 'react';
+import Animated from 'react-native-reanimated';
 
 function AppModules({ label, desc, iconId, to }: AppModulesProps) {
 	const { theme } = useAppTheme();
@@ -108,7 +109,7 @@ function MyAccountPage() {
 
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
-			<Animated.ScrollView
+			<RN_Animated.ScrollView
 				onScroll={onScroll}
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
@@ -131,7 +132,7 @@ function MyAccountPage() {
 				<ProfileLandingAccountOverview user={data} />
 				<View style={{ marginVertical: 16 }} />
 
-				<FlatList
+				<Animated.FlatList
 					data={serverModules}
 					numColumns={2}
 					renderItem={({ item }) => (
@@ -153,7 +154,7 @@ function MyAccountPage() {
 				>
 					App Features
 				</AppText.Normal>
-				<FlatList
+				<Animated.FlatList
 					data={appModules}
 					numColumns={2}
 					renderItem={({ item }) => (
@@ -180,7 +181,7 @@ function MyAccountPage() {
 				>
 					[TIP] Press and hold avatar (5th tab) to switch accounts
 				</AppText.Medium>
-			</Animated.ScrollView>
+			</RN_Animated.ScrollView>
 		</View>
 	);
 }

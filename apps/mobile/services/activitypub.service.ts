@@ -195,6 +195,7 @@ class ActivityPubService {
 		) {
 			return null;
 		}
+
 		if (localState) {
 			const { error } = await client.statuses.removeLike(id);
 			if (error) {

@@ -10,11 +10,12 @@ import { AppThemingUtil } from '../../../utils/theming.util';
 type PostReplyToReplyProps = {
 	colors: string[];
 	lookupId: string;
+	depth: number;
 };
 
 type PostReplyToReplyContentProps = {
 	lookupId: string;
-	color: MutableRefObject<string>;
+	color: string;
 	IsReplyThreadVisible: boolean;
 	setIsReplyThreadVisible: any;
 };
@@ -37,18 +38,16 @@ function PostReplyToReplyContent({
 
 	const { content } = useMfm({
 		content: dto.content.raw,
-		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis as any,
-		deps: [dto.content.raw, dto.postedBy.instance],
 	});
 
 	return (
 		<View
 			style={{
+				width: '100%',
 				marginTop: 8,
-				backgroundColor: '#1e1e1e',
 				padding: 8,
-				paddingBottom: 0,
+				paddingBottom: 8,
 			}}
 		>
 			<ReplyOwner dto={dto} />
@@ -64,30 +63,20 @@ function PostReplyToReplyContent({
 							<FontAwesome6
 								name="square-minus"
 								size={20}
-								color={
-									IsReplyThreadVisible
-										? color.current
-										: APP_FONT.MONTSERRAT_BODY
-								}
+								color={IsReplyThreadVisible ? color : APP_FONT.MONTSERRAT_BODY}
 							/>
 						) : (
 							<FontAwesome6
 								name="plus-square"
 								size={20}
-								color={
-									IsReplyThreadVisible
-										? color.current
-										: APP_FONT.MONTSERRAT_BODY
-								}
+								color={IsReplyThreadVisible ? color : APP_FONT.MONTSERRAT_BODY}
 							/>
 						)}
 					</View>
 					<View>
 						<Text
 							style={{
-								color: IsReplyThreadVisible
-									? color.current
-									: APP_FONT.MONTSERRAT_BODY,
+								color: IsReplyThreadVisible ? color : APP_FONT.MONTSERRAT_BODY,
 							}}
 						>
 							{replyCount} replies
@@ -99,15 +88,14 @@ function PostReplyToReplyContent({
 	);
 }
 
-function PostReplyToReply({ colors, lookupId }: PostReplyToReplyProps) {
-	const { data, getChildren } = useAppStatusContextDataContext();
+function PostReplyToReply({ colors, lookupId, depth }: PostReplyToReplyProps) {
+	const { getChildren } = useAppStatusContextDataContext();
 
-	const dto = data.lookup.get(lookupId);
 	const children = getChildren(lookupId);
 
 	const [IsReplyThreadVisible, setIsReplyThreadVisible] = useState(false);
 
-	const color = useRef(AppThemingUtil.generateRandomColorHex());
+	const depthIndicator = AppThemingUtil.getThreadColorForDepth(depth + 1);
 
 	return (
 		<View>
@@ -124,11 +112,16 @@ function PostReplyToReply({ colors, lookupId }: PostReplyToReplyProps) {
 				{colors.map((o, i) => (
 					<View
 						key={i}
-						style={{ height: '100%', width: 2, backgroundColor: o }}
-					></View>
+						style={{
+							height: '100%',
+							width: 2,
+							backgroundColor: o,
+							marginRight: 4,
+						}}
+					/>
 				))}
 				<PostReplyToReplyContent
-					color={color}
+					color={depthIndicator}
 					lookupId={lookupId}
 					IsReplyThreadVisible={IsReplyThreadVisible}
 					setIsReplyThreadVisible={setIsReplyThreadVisible}
@@ -139,8 +132,9 @@ function PostReplyToReply({ colors, lookupId }: PostReplyToReplyProps) {
 					{children.map((o, i) => (
 						<PostReplyToReply
 							key={i}
-							colors={[color.current]}
+							colors={[...colors, depthIndicator]}
 							lookupId={o.id}
+							depth={1}
 						/>
 					))}
 				</View>

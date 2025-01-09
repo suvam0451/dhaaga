@@ -34,8 +34,8 @@ class BlueskySearchRouter implements SearchRoute {
 			const agent = getBskyAgent(this.dto);
 			const data = await agent.app.bsky.feed.searchPosts({
 				q: q.q,
-				limit: 20,
-				sort: 'top',
+				limit: 10,
+				sort: q.sort,
 				cursor: q.maxId === null ? undefined : q.maxId,
 			});
 

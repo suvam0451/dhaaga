@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { ActivitypubHelper, StatusInterface } from '@dhaaga/bridge';
+import {
+	ActivitypubHelper,
+	BlueskyStatusAdapter,
+	StatusInterface,
+} from '@dhaaga/bridge';
 import ActivitypubAdapterService from '../services/activitypub-adapter.service';
 import MediaService from '../services/media.service';
 import { Dimensions } from 'react-native';
@@ -102,6 +106,19 @@ export const ActivityPubStatusItemDto = z.object({
 	state: z.object({
 		isBookmarkStateFinal: z.boolean(),
 	}),
+	atProto: z
+		.object({
+			viewer: z.object({
+				like: z.string().nullable().optional(),
+				embeddingDisabled: z.boolean().optional(),
+				pinned: z.any().optional(),
+				repost: z.any().optional(),
+				replyDisabled: z.boolean().optional(),
+				threadMuted: z.boolean().optional(),
+			}),
+		})
+		.nullable()
+		.optional(),
 });
 
 export const ActivityPubStatusLevelTwo = ActivityPubStatusItemDto.extend({
@@ -237,6 +254,12 @@ export class AppStatusDtoService {
 			},
 			state: {
 				isBookmarkStateFinal: IS_BOOKMARK_RESOLVED,
+			},
+			atProto: {
+				viewer:
+					domain === KNOWN_SOFTWARE.BLUESKY
+						? (input as BlueskyStatusAdapter).getViewer()
+						: undefined,
 			},
 		};
 	}

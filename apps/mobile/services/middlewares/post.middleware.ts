@@ -322,7 +322,10 @@ export class PostMiddleware {
 	 *  - Quotes -> Returns the object itself
 	 */
 	static getContentTarget(input: AppPostObject): AppPostObject {
-		if (!input) return input;
+		if (!input) {
+			console.log('[WARN]: trying to obtain target post for', input);
+			return input;
+		}
 		return input.meta.isBoost
 			? input.content.raw
 				? input

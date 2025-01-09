@@ -41,7 +41,11 @@ type PostResults = {
 	success: boolean;
 };
 
-export function useApiSearchPosts(q: string, maxId: string | null) {
+export function useApiSearchPosts(
+	q: string,
+	maxId: string | null,
+	sort?: 'top' | 'latest',
+) {
 	const { client, server, driver } = useAppApiClient();
 
 	async function api(): Promise<PostResults> {
@@ -65,6 +69,7 @@ export function useApiSearchPosts(q: string, maxId: string | null) {
 			limit: 10,
 			query: q,
 			type: 'statuses',
+			sort: sort,
 			// for misskey
 			untilId: !!_untilId ? _untilId : undefined,
 			offset,
@@ -116,7 +121,7 @@ export function useApiSearchPosts(q: string, maxId: string | null) {
 	}
 
 	return useQuery<PostResults>({
-		queryKey: ['search/posts', server, q, maxId],
+		queryKey: ['search/posts', server, q, maxId, sort],
 		queryFn: api,
 		enabled: client !== null && !!q,
 		initialData: { maxId: null, minId: null, items: [], success: false },

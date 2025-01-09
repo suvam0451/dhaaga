@@ -87,6 +87,7 @@ function TimelinesHeader() {
 					height: '100%',
 					flex: 1,
 					justifyContent: 'center',
+					maxWidth: '40%',
 				}}
 				onPress={onIconPress}
 			>

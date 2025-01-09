@@ -1,7 +1,6 @@
 import { Dispatch, Fragment, memo, SetStateAction } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
 import ActivityPubService from '../../../../../services/activitypub.service';
 import { AppIcon } from '../../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
@@ -141,9 +140,9 @@ const PostMoreActionsPostTarget = memo(
 				{ActivityPubService.canBookmark(driver) && (
 					<ActionButton
 						Icon={
-							<Ionicons
+							<AppIcon
 								color={IS_BOOKMARKED ? theme.primary.a0 : theme.secondary.a10}
-								name={'bookmark'}
+								id={'bookmark'}
 								size={24}
 							/>
 						}
@@ -155,9 +154,8 @@ const PostMoreActionsPostTarget = memo(
 				{ActivityPubService.canLike(driver) && (
 					<ActionButton
 						Icon={
-							<AntDesign
-								name={IS_LIKED ? 'like1' : 'like2'}
-								size={24}
+							<AppIcon
+								id={IS_LIKED ? 'heart' : 'heart-outline'}
 								color={IS_LIKED ? theme.primary.a0 : theme.secondary.a10}
 							/>
 						}
