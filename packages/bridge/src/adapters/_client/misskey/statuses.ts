@@ -83,19 +83,18 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		}
 	}
 
-	async delete(id: string): LibraryPromise<{ success: true }> {
+	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
 		try {
 			// @ts-ignore-next-line
 			await this.client.client.request('notes/delete', {
 				noteId: id,
 			});
-			return { data: { success: true } };
+			return { success: true, deleted: true };
 		} catch (e: any) {
 			if (e.code) {
-				return errorBuilder(e);
+				return { success: false, deleted: false };
 			}
-			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return { success: false, deleted: false };
 		}
 	}
 

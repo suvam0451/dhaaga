@@ -78,5 +78,5 @@ export interface StatusesRoute {
 		  }
 	>;
 
-	delete(id: string): LibraryPromise<MastoStatus | { success: true }>;
+	delete(id: string): Promise<{ success: boolean; deleted: boolean }>;
 }

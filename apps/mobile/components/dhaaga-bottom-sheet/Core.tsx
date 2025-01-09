@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetQuickPost from './modules/AppBottomSheetQuickPost';
-import PostPreview from './modules/post-preview/PostPreview';
 import WithComposerContext from './modules/post-composer/api/useComposerContext';
 import PostCompose from './modules/post-composer/pages/PostCompose';
 import AppBottomSheetProfilePeek from './modules/profile-peek/AppBottomSheetProfilePeek';
@@ -72,8 +71,6 @@ function Factory() {
 
 			case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
 				return <ABS_Add_Profile />;
-			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW:
-				return <PostPreview />;
 			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
 				return (
 					<WithComposerContext textSeed={null}>

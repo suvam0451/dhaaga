@@ -64,9 +64,14 @@ class AtprotoComposerService {
 		} else if (embeds.quote) {
 		} else if (embeds.images) {
 		} else {
-			postData = await agent.post({
-				text,
-			});
+			try {
+				postData = await agent.post({
+					text,
+				});
+				console.log(postData);
+			} catch (e) {
+				console.log(e);
+			}
 		}
 
 		if (!postData) return null;

@@ -108,14 +108,16 @@ export const ActivityPubStatusItemDto = z.object({
 	}),
 	atProto: z
 		.object({
-			viewer: z.object({
-				like: z.string().nullable().optional(),
-				embeddingDisabled: z.boolean().optional(),
-				pinned: z.any().optional(),
-				repost: z.any().optional(),
-				replyDisabled: z.boolean().optional(),
-				threadMuted: z.boolean().optional(),
-			}),
+			viewer: z
+				.object({
+					like: z.string().nullable().optional(),
+					embeddingDisabled: z.boolean().optional(),
+					pinned: z.any().optional(),
+					repost: z.any().optional(),
+					replyDisabled: z.boolean().optional(),
+					threadMuted: z.boolean().optional(),
+				})
+				.optional(),
 		})
 		.nullable()
 		.optional(),

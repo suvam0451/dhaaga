@@ -44,8 +44,14 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		}
 	}
 
-	delete(id: string): LibraryPromise<MastoStatus | { success: true }> {
-		return Promise.resolve(undefined) as any;
+	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			await agent.deletePost(id);
+			return { success: true, deleted: true };
+		} catch (e) {
+			return { success: false, deleted: false };
+		}
 	}
 
 	async get(id: string): LibraryPromise<AppBskyFeedGetPostThread.Response> {

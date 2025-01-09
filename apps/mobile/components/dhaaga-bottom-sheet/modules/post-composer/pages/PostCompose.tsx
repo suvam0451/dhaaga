@@ -72,9 +72,7 @@ function ActionButtons() {
 						<Ionicons
 							name="warning"
 							size={ICON_SIZE}
-							color={
-								state.cw === '' ? theme.secondary.a20 : theme.complementary.a0
-							}
+							color={!!state.cw ? theme.complementary.a0 : theme.secondary.a20}
 						/>
 					</Pressable>
 					<Pressable

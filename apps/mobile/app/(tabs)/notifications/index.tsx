@@ -80,7 +80,13 @@ function Page() {
 
 	return (
 		<WithAppNotifSeenContext>
-			<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
+			<View
+				style={{
+					height: '100%',
+					backgroundColor: theme.palette.bg,
+					position: 'relative',
+				}}
+			>
 				<PagerView
 					ref={ref}
 					scrollEnabled={true}
@@ -92,7 +98,6 @@ function Page() {
 						<View key={index}>{renderScene(index)}</View>
 					))}
 				</PagerView>
-
 				<BottomNavBar Index={Index} setIndex={onChipSelect} items={tabLabels} />
 			</View>
 		</WithAppNotifSeenContext>

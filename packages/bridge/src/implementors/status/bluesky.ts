@@ -75,8 +75,13 @@ class BlueskyStatusAdapter implements StatusInterface {
 	getUsername = () => this.post?.author?.handle;
 	getDisplayName = () => this.post?.author?.displayName;
 	getAvatarUrl = () => this.post?.author?.avatar;
-	getCreatedAt = () =>
-		(this.post.record as any)?.createdAt || this.post.indexedAt;
+	getCreatedAt = () => {
+		if (this.isReposted()) {
+			return this.reason!.indexedAt;
+		}
+		// for original posts
+		return (this.post.record as any)?.createdAt || this.post.indexedAt;
+	};
 
 	getVisibility() {
 		return 'public';

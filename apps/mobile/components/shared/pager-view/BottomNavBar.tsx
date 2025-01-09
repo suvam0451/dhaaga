@@ -183,7 +183,10 @@ export const BottomNavBar = memo(
 		});
 
 		return (
-			<View style={styles.root}>
+			<LinearGradient
+				colors={['transparent', theme.palette.bg]}
+				style={styles.root}
+			>
 				<View style={[styles.container, { justifyContent: 'space-around' }]}>
 					{items.map((o, i) => (
 						<Chip
@@ -194,15 +197,9 @@ export const BottomNavBar = memo(
 							onLayout={(e) => handleLayout(i, e)}
 						/>
 					))}
-					<Animated.View
-						style={[
-							styles.indicator,
-							{ backgroundColor: theme.palette.buttonUnstyled },
-							indicatorAnimatedStyle,
-						]}
-					/>
+					<Animated.View style={[styles.indicator, indicatorAnimatedStyle]} />
 				</View>
-			</View>
+			</LinearGradient>
 		);
 	},
 );
@@ -336,6 +333,8 @@ const styles = StyleSheet.create({
 		flexShrink: 1,
 		backgroundColor: 'transparent',
 		height: 48,
+		position: 'absolute',
+		bottom: 0,
 	},
 	infiniteContainer: {
 		flexDirection: 'row',

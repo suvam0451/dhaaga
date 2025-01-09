@@ -8,10 +8,7 @@ import NotificationMediaThumbs from '../../../../common/media/NotificationMediaT
 import { appDimensions } from '../../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 import { AppUserObject } from '../../../../../types/app-user.types';
-import {
-	useAppApiClient,
-	useAppTheme,
-} from '../../../../../hooks/utility/global-state-extractors';
+import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	acct: AppUserObject;
@@ -32,9 +29,7 @@ export const NotificationPostPeek = memo(({ acct, post }: Props) => {
 
 	const { content } = useMfm({
 		content: _post.content.raw,
-		remoteSubdomain: acct.instance,
 		emojiMap: _post.calculated.emojis,
-		deps: [_post.content.raw],
 		expectedHeight: 20,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
