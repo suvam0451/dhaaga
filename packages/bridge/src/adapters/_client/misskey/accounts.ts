@@ -186,10 +186,8 @@ export class MisskeyAccountsRouter
 			>(
 				'/api/i/favorites',
 				{
-					...query,
-					allowPartial: true,
 					limit: query.limit,
-					untilId: query.maxId,
+					untilId: !!query.maxId ? query.maxId : undefined,
 				},
 				{},
 			);
@@ -210,7 +208,7 @@ export class MisskeyAccountsRouter
 			}
 			return {
 				data: {
-					data,
+					data: data.map((o) => o.note) as any[],
 					maxId,
 					minId,
 				},
