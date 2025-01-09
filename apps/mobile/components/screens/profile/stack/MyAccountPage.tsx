@@ -76,7 +76,7 @@ function MyAccountPage() {
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 	const { driver } = useAppApiClient();
-	const { refetch } = useApiGetMyAccount();
+	const { refetch, data } = useApiGetMyAccount();
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 
 	function _refresh() {
@@ -128,7 +128,7 @@ function MyAccountPage() {
 						},
 					]}
 				/>
-				<ProfileLandingAccountOverview />
+				<ProfileLandingAccountOverview user={data} />
 				<View style={{ marginVertical: 16 }} />
 
 				<FlatList

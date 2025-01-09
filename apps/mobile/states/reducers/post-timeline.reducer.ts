@@ -96,6 +96,8 @@ export enum ACTION {
 	UPDATE_LIKE_STATUS,
 	UPDATE_REACTION_STATE,
 	POST_OBJECT_CHANGED,
+
+	SETUP_USER_POST_TIMELINE,
 }
 
 type Actions =
@@ -189,6 +191,13 @@ type Actions =
 			type: ACTION.POST_OBJECT_CHANGED;
 			payload: {
 				item: AppPostObject;
+			};
+	  }
+	| {
+			type: ACTION.SETUP_USER_POST_TIMELINE;
+			payload: {
+				id: string;
+				label: string;
 			};
 	  };
 
@@ -472,9 +481,20 @@ function reducer(state: State, action: Actions): State {
 				);
 			});
 		}
+		case ACTION.SETUP_USER_POST_TIMELINE: {
+			return produce(state, (draft) => {
+				draft.feedType = TimelineFetchMode.USER;
+				draft.sessionIdentifier = RandomUtil.nanoId();
+				draft.query = {
+					id: action.payload.id,
+					label: action.payload.label,
+				};
+				draft.seen = new Set();
+			});
+		}
+		default:
+			return state;
 	}
-
-	return state;
 }
 
 type AppTimelineReducerDispatchType = Dispatch<Actions>;

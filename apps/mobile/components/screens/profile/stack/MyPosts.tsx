@@ -1,93 +1,100 @@
-import WithAppPaginationContext, {
-	useAppPaginationContext,
-} from '../../../../states/usePagination';
-import WithAppTimelineDataContext, {
-	useAppTimelinePosts,
-} from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import { View } from 'react-native';
 import useTimeline from '../../../common/timeline/api/useTimeline';
 import { useEffect, useState } from 'react';
-import ActivityPubAdapterService from '../../../../services/activitypub-adapter.service';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
-import LoadingMore from '../../home/LoadingMore';
-import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
-import WithTimelineControllerContext, {
-	useTimelineController,
-} from '../../../common/timeline/api/useTimelineController';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../states/_global';
-import { AppFlashList } from '../../../lib/AppFlashList';
-import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
+import { AppTimelineReducerActionType } from '../../../../states/reducers/post-timeline.reducer';
+import WithPostTimelineCtx, {
+	useTimelineDispatch,
+	useTimelineState,
+} from '../../../context-wrappers/WithPostTimeline';
+import {
+	useAppAcct,
+	useAppDb,
+} from '../../../../hooks/utility/global-state-extractors';
+import { PostTimeline } from '../../../data-views/PostTimeline';
 
-function Core() {
-	const { driver, me } = useGlobalState(
-		useShallow((o) => ({
-			me: o.me,
-			driver: o.driver,
-			acct: o.acct,
-		})),
-	);
-	const {
-		updateQueryCache,
-		queryCacheMaxId,
-		setMaxId,
-		clear: paginationClear,
-	} = useAppPaginationContext();
-	const { addPosts, data: timelineData, clear } = useAppTimelinePosts();
+function DataView() {
+	const { db } = useAppDb();
+	const { acct } = useAppAcct();
 
-	const { timelineType, query, opts, setTimelineType, setQuery } =
-		useTimelineController();
+	// state management
+	const State = useTimelineState();
+	const dispatch = useTimelineDispatch();
 
 	useEffect(() => {
-		setPageLoadedAtLeastOnce(false);
-		paginationClear();
-		clear();
-	}, [timelineType, query, opts]);
+		if (!db) return;
+		dispatch({
+			type: AppTimelineReducerActionType.INIT,
+			payload: {
+				db,
+			},
+		});
 
-	useEffect(() => {
-		setTimelineType(TimelineFetchMode.USER);
-		setQuery({ id: me.id, label: 'My Posts' });
-	}, [me.id]);
+		dispatch({
+			type: AppTimelineReducerActionType.SETUP_USER_POST_TIMELINE,
+			payload: {
+				id: acct?.identifier,
+				label: acct?.displayName || acct?.username,
+			},
+		});
+	}, [db]);
 
-	const { fetchStatus, data, status } = useTimeline({
-		type: TimelineFetchMode.USER,
-		query,
-		opts,
-		maxId: queryCacheMaxId,
+	const { fetchStatus, data, status, refetch } = useTimeline({
+		type: State.feedType,
+		query: State.query,
+		opts: State.opts,
+		maxId: State.appliedMaxId,
 	});
-
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: timelineData.length,
-		updateQueryCache,
-	});
-
-	const [PageLoadedAtLeastOnce, setPageLoadedAtLeastOnce] = useState(false);
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
-
-		if (data?.length > 0) {
-			setMaxId(data[data.length - 1]?.id);
-			const _data = ActivityPubAdapterService.adaptManyStatuses(data, driver);
-			addPosts(_data);
-			setPageLoadedAtLeastOnce(true);
-		}
+		dispatch({
+			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			payload: {
+				items: data.data,
+				maxId: data.maxId,
+			},
+		});
 	}, [fetchStatus]);
 
-	if (!me.id) {
-		return (
-			<WithAutoHideTopNavBar title={'My Posts'} translateY={translateY}>
-				<View />
-			</WithAutoHideTopNavBar>
-		);
+	useEffect(() => {
+		if (fetchStatus === 'fetching' || status !== 'success') return;
+		dispatch({
+			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			payload: {
+				items: data.data,
+				maxId: data.maxId,
+			},
+		});
+	}, [fetchStatus]);
+
+	function loadMore() {
+		dispatch({
+			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+		});
 	}
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
+
+	/**
+	 * Composite Hook Collection
+	 */
+	const { onScroll, translateY } = useScrollMoreOnPageEnd({
+		itemCount: State.items.length,
+		updateQueryCache: loadMore,
 	});
+
+	const [Refreshing, setRefreshing] = useState(false);
+
+	function onRefresh() {
+		setRefreshing(true);
+		dispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
+	}
 
 	return (
 		<AppTopNavbar
@@ -95,27 +102,22 @@ function Core() {
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
-			<AppFlashList.Post
-				data={timelineData}
+			<PostTimeline
+				data={State.items}
 				onScroll={onScroll}
-				paddingTop={50}
-				refreshing={loading}
-				onRefresh={() => {}}
+				refreshing={Refreshing}
+				onRefresh={onRefresh}
+				fetchStatus={fetchStatus}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
 		</AppTopNavbar>
 	);
 }
 
 function MyPosts() {
 	return (
-		<WithTimelineControllerContext>
-			<WithAppPaginationContext>
-				<WithAppTimelineDataContext>
-					<Core />
-				</WithAppTimelineDataContext>
-			</WithAppPaginationContext>
-		</WithTimelineControllerContext>
+		<WithPostTimelineCtx>
+			<DataView />
+		</WithPostTimelineCtx>
 	);
 }
 
