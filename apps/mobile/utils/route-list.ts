@@ -13,6 +13,7 @@ export enum APP_ROUTING_ENUM {
 	SELECT_DRIVER = '/profile/pick-driver',
 
 	// Settings Modules
+	SETTINGS_PAGE = '/profile/settings',
 	SETTINGS_TAB_ACCOUNTS = '/profile/settings/accounts',
 	SETTINGS_TAB_GENERAL = '/profile/settings/general',
 	SETTINGS_TAB_GOODIE_HUT = '/profile/settings/goodie-hut',
@@ -23,4 +24,8 @@ export enum APP_ROUTING_ENUM {
 
 	COLLECTIONS = '/profile/collections',
 	PROFILES = '/profile/profiles',
+
+	LIKES = '/profile/account/likes',
+	BOOKMARK = '/profile/account/bookmarks',
+	LISTS = '/profile/account/lists',
 }

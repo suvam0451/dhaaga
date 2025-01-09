@@ -2,13 +2,12 @@ import {
 	Animated,
 	FlatList,
 	Pressable,
+	RefreshControl,
 	StyleSheet,
-	Text,
 	View,
 } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import ProfileLandingAccountOverview from './landing/fragments/ProfileLandingAccountOverview';
-import ProfileLandingAccountModules from './landing/fragments/ProfileLandingAccountModules';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import AppNoAccount from '../../../error-screen/AppNoAccount';
 import AppTabLandingNavbar, {
@@ -16,21 +15,20 @@ import AppTabLandingNavbar, {
 } from '../../../shared/topnavbar/AppTabLandingNavbar';
 import {
 	useAppAcct,
+	useAppApiClient,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
-import { APP_ICON_ENUM, AppIcon } from '../../../lib/Icon';
+import { AppIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { AppText } from '../../../lib/Text';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import { router } from 'expo-router';
-
-type AppModulesProps = {
-	label: string;
-	desc: string;
-	iconId: APP_ICON_ENUM;
-	to: APP_ROUTING_ENUM;
-};
+import DriverService, {
+	AppModulesProps,
+} from '../../../../services/driver.service';
+import useApiGetMyAccount from '../../../../hooks/api/accounts/useApiGetMyAccount';
+import { useState } from 'react';
 
 function AppModules({ label, desc, iconId, to }: AppModulesProps) {
 	const { theme } = useAppTheme();
@@ -77,8 +75,21 @@ function MyAccountPage() {
 	const { onScroll } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
+	const { driver } = useAppApiClient();
+	const { refetch } = useApiGetMyAccount();
+	const [IsRefreshing, setIsRefreshing] = useState(false);
+
+	function _refresh() {
+		setIsRefreshing(true);
+		refetch().finally(() => {
+			setIsRefreshing(false);
+		});
+	}
 
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.PROFILE} />;
+
+	const serverModules: AppModulesProps[] =
+		DriverService.getAccountModules(driver);
 
 	const appModules: AppModulesProps[] = [
 		{
@@ -97,28 +108,47 @@ function MyAccountPage() {
 
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
-			<Animated.ScrollView onScroll={onScroll}>
+			<Animated.ScrollView
+				onScroll={onScroll}
+				refreshControl={
+					<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
+				}
+			>
 				<AppTabLandingNavbar
 					type={APP_LANDING_PAGE_TYPE.ACCOUNT_HUB}
 					menuItems={[
-						// {
-						// 	iconId: 'cog',
-						// },
+						{
+							iconId: 'cog',
+							onPress: () => {
+								router.navigate(APP_ROUTING_ENUM.SETTINGS_PAGE);
+							},
+						},
 						{
 							iconId: 'user-guide',
 						},
 					]}
 				/>
 				<ProfileLandingAccountOverview />
-				<ProfileLandingAccountModules />
+				<View style={{ marginVertical: 16 }} />
 
-				<AppText.Normal
+				<FlatList
+					data={serverModules}
+					numColumns={2}
+					renderItem={({ item }) => (
+						<AppModules
+							desc={item.desc}
+							label={item.label}
+							iconId={item.iconId}
+							to={item.to}
+						/>
+					)}
 					style={{
-						paddingHorizontal: 10,
-						fontSize: 32,
-						fontFamily: APP_FONTS.BEBAS_NEUE_400,
-						marginVertical: 16,
+						marginHorizontal: 8,
 					}}
+				/>
+				<View style={{ marginVertical: 8 }} />
+				<AppText.Normal
+					style={styles.sectionHeader}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				>
 					App Features
@@ -138,18 +168,18 @@ function MyAccountPage() {
 						marginHorizontal: 8,
 					}}
 				/>
-				<Text
+				<AppText.Medium
 					style={{
 						marginTop: 32,
 						fontSize: 14,
-						color: theme.textColor.low,
 						textAlign: 'center',
 						paddingHorizontal: 32,
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,
 					}}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 				>
-					[TIP] Long press your avatar in navbar to quickly swap accounts
-				</Text>
+					[TIP] Press and hold avatar (5th tab) to switch accounts
+				</AppText.Medium>
 			</Animated.ScrollView>
 		</View>
 	);
@@ -183,5 +213,11 @@ const styles = StyleSheet.create({
 		opacity: 0.48,
 		right: 0,
 		bottom: -6,
+	},
+	sectionHeader: {
+		paddingHorizontal: 10,
+		fontSize: 32,
+		fontFamily: APP_FONTS.BEBAS_NEUE_400,
+		marginVertical: 16,
 	},
 });

@@ -1,85 +1,104 @@
-import { useEffect } from 'react';
-import WithAppPaginationContext, {
-	useAppPaginationContext,
-} from '../../../../states/usePagination';
-import LoadingMore from '../../home/LoadingMore';
+import { useEffect, useState } from 'react';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
-import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
-import useGetBookmarks from '../../../../hooks/api/accounts/useGetBookmarks';
-import WithAppTimelineDataContext, {
-	useAppTimelinePosts,
-} from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { AppFlashList } from '../../../lib/AppFlashList';
+import { useAppDb } from '../../../../hooks/utility/global-state-extractors';
+import WithPostTimelineCtx, {
+	useTimelineDispatch,
+	useTimelineState,
+} from '../../../context-wrappers/WithPostTimeline';
+import {
+	AppTimelineReducerActionType,
+	TimelineFetchMode,
+} from '../../../../states/reducers/post-timeline.reducer';
+import useTimeline from '../../../common/timeline/api/useTimeline';
+import { PostTimeline } from '../../../data-views/PostTimeline';
 
-function Core() {
-	const { driver, acct } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			acct: o.acct,
-		})),
-	);
-	const { updateQueryCache, queryCacheMaxId, setMaxId } =
-		useAppPaginationContext();
+function DataView() {
+	const { db } = useAppDb();
 
-	const { addPosts, clear, data: timelineData } = useAppTimelinePosts();
+	// state management
+	const State = useTimelineState();
+	const dispatch = useTimelineDispatch();
 
 	useEffect(() => {
-		clear();
-	}, [acct?.server, acct?.username]);
+		if (!db) return;
+		dispatch({
+			type: AppTimelineReducerActionType.INIT,
+			payload: {
+				db,
+			},
+		});
 
-	const { data, refetch, fetchStatus } = useGetBookmarks({
-		limit: 10,
-		maxId: queryCacheMaxId,
+		dispatch({
+			type: AppTimelineReducerActionType.RESET_USING_QUERY,
+			payload: {
+				type: TimelineFetchMode.BOOKMARKS,
+			},
+		});
+	}, [db]);
+
+	const { fetchStatus, data, status, refetch } = useTimeline({
+		type: State.feedType,
+		query: State.query,
+		opts: State.opts,
+		maxId: State.appliedMaxId,
 	});
 
 	useEffect(() => {
-		const statuses = data.data;
-		if (statuses.length <= 0) return;
+		if (fetchStatus === 'fetching' || status !== 'success') return;
+		dispatch({
+			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			payload: {
+				items: data.data,
+				maxId: data.maxId,
+			},
+		});
+	}, [fetchStatus]);
 
-		setMaxId(data.maxId);
-		addPosts(statuses);
-	}, [data, driver, acct?.server]);
+	function loadMore() {
+		dispatch({
+			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+		});
+	}
 
 	/**
 	 * Composite Hook Collection
 	 */
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
-	});
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: timelineData.length,
-		updateQueryCache,
+		itemCount: State.items.length,
+		updateQueryCache: loadMore,
 	});
-	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
-		fetchStatus,
-		refetch,
-	});
+
+	const [Refreshing, setRefreshing] = useState(false);
+
+	function onRefresh() {
+		setRefreshing(true);
+		dispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
+	}
 
 	return (
 		<WithAutoHideTopNavBar title={'My Bookmarks'} translateY={translateY}>
-			<AppFlashList.Post
-				data={timelineData}
-				paddingTop={50 + 4}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+			<PostTimeline
+				data={State.items}
 				onScroll={onScroll}
+				refreshing={Refreshing}
+				onRefresh={onRefresh}
+				fetchStatus={fetchStatus}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
 		</WithAutoHideTopNavBar>
 	);
 }
 
 function MyBookmark() {
 	return (
-		<WithAppPaginationContext>
-			<WithAppTimelineDataContext>
-				<Core />
-			</WithAppTimelineDataContext>
-		</WithAppPaginationContext>
+		<WithPostTimelineCtx>
+			<DataView />
+		</WithPostTimelineCtx>
 	);
 }
 

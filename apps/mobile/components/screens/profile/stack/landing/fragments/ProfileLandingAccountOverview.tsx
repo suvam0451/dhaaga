@@ -1,27 +1,12 @@
 import { memo } from 'react';
 import useApiGetMyAccount from '../../../../../../hooks/api/accounts/useApiGetMyAccount';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import useMfm from '../../../../../hooks/useMfm';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
 import UserViewProfileStats from '../../../../../common/user/fragments/UserViewProfileStats';
-import styles from '../../../../../common/user/utils/styles';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
-import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
 
 const ProfileAndSettings = memo(() => {
-	const { theme } = useAppTheme();
 	const { data } = useApiGetMyAccount();
-
-	const { content: ParsedDisplayName } = useMfm({
-		content: data?.displayName,
-		remoteSubdomain: data?.instance,
-		emojiMap: data?.calculated?.emojis,
-		deps: [data?.displayName],
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-	});
 
 	if (!data) return <View />;
 
@@ -49,17 +34,6 @@ const ProfileAndSettings = memo(() => {
 					followingCount={data?.stats?.following}
 					followerCount={data?.stats?.followers}
 				/>
-			</View>
-			<View style={{ flexShrink: 1, marginTop: 8, marginLeft: 8 }}>
-				{ParsedDisplayName}
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-					<Text
-						style={[styles.secondaryText, { color: theme.textColor.medium }]}
-						numberOfLines={1}
-					>
-						{data?.handle}
-					</Text>
-				</View>
 			</View>
 		</View>
 	);

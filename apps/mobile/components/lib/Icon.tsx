@@ -67,6 +67,7 @@ export type APP_ICON_ENUM =
 	| 'info'
 	| 'language'
 	| 'layers-outline'
+	| 'list'
 	| 'lock-closed-outline'
 	| 'menu'
 	| 'message'
@@ -606,6 +607,15 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name={'layers-outline'}
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
+				case 'list':
+					return (
+						<Ionicons
+							name={'list'}
 							size={_size}
 							color={_color}
 							style={iconStyle}

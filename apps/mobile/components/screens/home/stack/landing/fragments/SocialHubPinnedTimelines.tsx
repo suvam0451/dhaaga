@@ -1,5 +1,4 @@
-import { memo } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { APP_ICON_ENUM, AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { SocialHubPinSectionContainer } from './_factory';
@@ -134,28 +133,31 @@ type SocialHubPinnedTimelinesProps = {
 	items: ProfilePinnedTimeline[];
 };
 
-const SocialHubPinnedTimelines = memo(
-	({ items, account }: SocialHubPinnedTimelinesProps) => {
-		const destinations = HubService.resolveTimelineDestinations(items);
-		return (
-			<SocialHubPinSectionContainer label={'Timelines'} style={styles.root}>
-				<FlatList
-					data={destinations}
-					numColumns={2}
-					renderItem={({ item }) => (
-						<PinnedTimelineItem
-							pinId={item.pinId}
-							label={item.label}
-							iconId={item.iconId}
-							server={item.server}
-							account={account}
-						/>
-					)}
-				/>
-			</SocialHubPinSectionContainer>
-		);
-	},
-);
+function SocialHubPinnedTimelines({
+	items,
+	account,
+}: SocialHubPinnedTimelinesProps) {
+	const destinations = HubService.resolveTimelineDestinations(items);
+	return (
+		<SocialHubPinSectionContainer label={'Timelines'} style={styles.root}>
+			<Animated.FlatList
+				data={destinations}
+				numColumns={2}
+				horizontal={false}
+				renderItem={({ item }) => (
+					<PinnedTimelineItem
+						pinId={item.pinId}
+						label={item.label}
+						iconId={item.iconId}
+						server={item.server}
+						account={account}
+					/>
+				)}
+			/>
+		</SocialHubPinSectionContainer>
+	);
+}
+
 export default SocialHubPinnedTimelines;
 
 const styles = StyleSheet.create({

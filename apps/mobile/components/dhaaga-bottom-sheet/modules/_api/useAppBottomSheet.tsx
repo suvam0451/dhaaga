@@ -1,6 +1,5 @@
 import {
 	createContext,
-	Dispatch,
 	MutableRefObject,
 	useContext,
 	useEffect,
@@ -10,10 +9,6 @@ import {
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import AppBottomSheet from '../../Core';
 import { UserInterface } from '@dhaaga/bridge';
-import {
-	TIMELINE_POST_LIST_DATA_REDUCER_TYPE,
-	TimelineDataReducerFunction,
-} from '../../../common/timeline/api/postArrayReducer';
 import { AppPostObject } from '../../../../types/app-post.types';
 
 type Type = {
@@ -42,9 +37,6 @@ type Type = {
 	UserIdRef: MutableRefObject<string>;
 	// pre-populate the post-composer to this content
 	PostComposerTextSeedRef: MutableRefObject<string>;
-
-	// reducers
-	timelineDataPostListReducer: MutableRefObject<TimelineDataReducerFunction>;
 };
 
 const defaultValue: Type = {
@@ -65,7 +57,6 @@ const defaultValue: Type = {
 	UserRef: undefined,
 	UserIdRef: undefined,
 	PostComposerTextSeedRef: undefined,
-	timelineDataPostListReducer: undefined,
 };
 
 const AppBottomSheetContext = createContext<Type>(defaultValue);
@@ -106,14 +97,6 @@ function WithAppBottomSheetContext({ children }: Props) {
 	const ParentRef = useRef<AppPostObject>(null);
 	const RootRef = useRef<AppPostObject>(null);
 
-	// reducers
-	const timelineDataPostListReducer = useRef<
-		Dispatch<{
-			type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE;
-			payload?: any;
-		}>
-	>(null);
-
 	return (
 		<AppBottomSheetContext.Provider
 			value={{
@@ -132,7 +115,6 @@ function WithAppBottomSheetContext({ children }: Props) {
 				PostComposerTextSeedRef,
 				ParentRef,
 				RootRef,
-				timelineDataPostListReducer,
 				isAnimating: IsAnimating,
 			}}
 		>

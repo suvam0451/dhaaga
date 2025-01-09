@@ -1,22 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
-import LoadingMore from '../../../screens/home/LoadingMore';
-import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
 import useTimeline from '../api/useTimeline';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { AppFlashList } from '../../../../components/lib/AppFlashList';
 import { useLocalSearchParams } from 'expo-router';
 import {
 	AppTimelineReducerActionType,
 	TimelineFetchMode,
 } from '../../../../states/reducers/post-timeline.reducer';
-import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import {
-	useAppAcct,
 	useAppApiClient,
 	useAppDb,
 	useAppTheme,
@@ -25,15 +18,14 @@ import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
 } from '../../../context-wrappers/WithPostTimeline';
-import UserPeekModal from '../../../modals/UserPeekModal';
+import { PostTimeline } from '../../../data-views/PostTimeline';
 
 /*
  * Render a Timeline
  */
-function Base() {
+function DataView() {
 	const { db } = useAppDb();
-	const { client, driver } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { client } = useAppApiClient();
 
 	const State = useTimelineState();
 	const dispatch = useTimelineDispatch();
@@ -68,7 +60,7 @@ function Base() {
 		dispatch({
 			type: AppTimelineReducerActionType.RESET,
 		});
-	}, [State.feedType, State.query, State.opts]);
+	}, [State.feedType, State.query, State.opts, db]);
 
 	const { fetchStatus, data, status, refetch } = useTimeline({
 		type: State.feedType,
@@ -91,28 +83,11 @@ function Base() {
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
-
-		let maxId = null;
-		let nextBatch = [];
-
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
-			maxId = _payload.data.cursor;
-			nextBatch = _payload.data.feed;
-		} else {
-			maxId = data[data.length - 1]?.id;
-			nextBatch = data;
-		}
-		const retval = PostMiddleware.deserialize<unknown[]>(
-			nextBatch,
-			driver,
-			acct?.server,
-		);
 		dispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
 			payload: {
-				items: retval,
-				maxId,
+				items: data.data,
+				maxId: data.maxId,
 			},
 		});
 	}, [fetchStatus]);
@@ -128,9 +103,6 @@ function Base() {
 	/**
 	 * Composite Hook Collection
 	 */
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
-	});
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: State.items.length,
 		updateQueryCache: loadMore,
@@ -153,15 +125,13 @@ function Base() {
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
 				<TimelinesHeader />
 			</Animated.View>
-			<AppFlashList.Post
+			<PostTimeline
 				data={State.items}
 				onScroll={onScroll}
 				refreshing={Refreshing}
 				onRefresh={onRefresh}
-				paddingTop={50 + 16}
+				fetchStatus={fetchStatus}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
-			<UserPeekModal />
 		</View>
 	);
 }
@@ -169,10 +139,12 @@ function Base() {
 function Timeline() {
 	return (
 		<WithPostTimelineCtx>
-			<Base />
+			<DataView />
 		</WithPostTimelineCtx>
 	);
 }
+
+export default Timeline;
 
 const styles = StyleSheet.create({
 	header: {
@@ -188,5 +160,3 @@ const styles = StyleSheet.create({
 		position: 'relative',
 	},
 });
-
-export default Timeline;

@@ -50,6 +50,8 @@ export function useAppPaginationContext() {
  * can be lazy loaded in page before going to the next
  * (performance considerations)
  * @constructor
+ *
+ * @deprecated
  */
 function WithAppPaginationContext({ children }: any) {
 	const [PageData, setPageData] = useState([]);

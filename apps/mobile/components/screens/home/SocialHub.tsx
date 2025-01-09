@@ -179,7 +179,7 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 		dispatch({
 			type: socialHubTabReducerActionType.RELOAD_PINS,
 		});
-	}, [profile]);
+	}, [profile, db]);
 
 	function refresh() {
 		setIsRefreshing(true);
@@ -244,12 +244,6 @@ function SocialHub() {
 	const { theme } = useAppTheme();
 	const { accounts, loadNext, loadPrev, navigation, selectProfile } = useHub();
 
-	// function renderScene(index: number) {
-	// 	if (index >= data.profiles.length) return <SocialHubTabAdd />;
-	// 	if (!data.profiles[index]) return <View />;
-	// 	return <SocialHubTab profile={data.profiles[index]} />;
-	// }
-
 	const tabLabels = useMemo(() => {
 		if (navigation.accountIndex === -1 || navigation.profileIndex === -1)
 			return [{ label: 'New +', id: '__add__' }];
@@ -265,22 +259,9 @@ function SocialHub() {
 		];
 	}, [accounts, navigation]);
 
-	// const [Index, setIndex] = useState(0);
-
-	// const ref = useRef<PagerView>(null);
 	const onChipSelect = (index: number) => {
 		selectProfile(index);
-		// setIndex(index);
-		// if (Index !== index) {
-		// 	ref.current.setPage(index);
-		// }
 	};
-
-	// function onPageScroll(e: any) {
-	// 	const { offset, position } = e.nativeEvent;
-	// 	const nextIdx = Math.round(position + offset);
-	// 	setIndex(nextIdx);
-	// }
 
 	const HubComponent = useMemo(() => {
 		if (navigation.accountIndex === -1 || navigation.profileIndex === -1)
@@ -300,30 +281,6 @@ function SocialHub() {
 			/>
 		);
 	}, [accounts, navigation]);
-
-	/**
-	 * To avoid the following error when items are
-	 * added and the dispatch causes a shift in the
-	 * elements
-	 */
-	// const PagerViewComponent = useMemo(() => {
-	// 	return (
-	// 		<View>
-	// 			{HubComponent}
-	// 			{/*<PagerView*/}
-	// 			{/*	ref={ref}*/}
-	// 			{/*	scrollEnabled={true}*/}
-	// 			{/*	style={styles.pagerView}*/}
-	// 			{/*	initialPage={0}*/}
-	// 			{/*	onPageScroll={onPageScroll}*/}
-	// 			{/*>*/}
-	// 			{/*	{Array.from({ length: data.profiles.length + 1 }).map((_, index) => (*/}
-	// 			{/*		<View key={index}>{renderScene(index)}</View>*/}
-	// 			{/*	))}*/}
-	// 			{/*</PagerView>*/}
-	// 		</View>
-	// 	);
-	// }, [data.profiles]);
 
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>

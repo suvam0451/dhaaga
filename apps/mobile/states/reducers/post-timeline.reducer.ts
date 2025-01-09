@@ -29,6 +29,10 @@ export enum TimelineFetchMode {
 	REMOTE_TIMELINE = 'Remote Timeline',
 
 	ADD_NEW = 'Add New',
+
+	// account modules
+	BOOKMARKS = 'Bookmarks',
+	LIKES = 'Likes',
 }
 
 type State = {
@@ -312,6 +316,12 @@ function reducer(state: State, action: Actions): State {
 			}
 		}
 		case ACTION.APPEND_RESULTS: {
+			/**
+			 * TODO: dedup the posts and add extra logic
+			 * 	to clean up duplicated post contexts in
+			 * 	Bluesky driver
+			 */
+
 			const copy = Array.from(state.items);
 			for (const item of action.payload.items) {
 				if (state.seen.has(item.id)) continue;

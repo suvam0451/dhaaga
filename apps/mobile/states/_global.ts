@@ -18,7 +18,6 @@ import {
 import { Result } from '../utils/result';
 import { RandomUtil } from '../utils/random.utils';
 import { DataSource } from '../database/dataSource';
-import AppUserService from '../services/approto/app-user-service';
 import { AppUserObject } from '../types/app-user.types';
 import ProfileSessionManager from '../services/session/profile-session.service';
 import { ProfileService } from '../database/entities/profile';
@@ -34,6 +33,7 @@ import {
 import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';
+import { UserMiddleware } from '../services/middlewares/user.middleware';
 
 type AppThemePack = {
 	id: string;
@@ -280,7 +280,7 @@ class GlobalStateService {
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
 			const { data } = await _router.me.getMe();
-			const obj: AppUserObject = AppUserService.exportRaw(
+			const obj: AppUserObject = UserMiddleware.deserialize(
 				data,
 				acct.driver,
 				acct.server,
@@ -433,7 +433,7 @@ const useGlobalState = create<State & Actions>()(
 				let nextProfileIndex = -1;
 
 				if (currentAccountIndex - 1 < 0) {
-					nextAccountIndex = _accounts.length;
+					nextAccountIndex = _accounts.length - 1;
 					nextProfileIndex = 0;
 				} else {
 					nextAccountIndex = currentAccountIndex - 1;

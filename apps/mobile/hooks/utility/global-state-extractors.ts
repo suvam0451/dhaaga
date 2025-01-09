@@ -51,6 +51,14 @@ export function useAppManager() {
 	);
 }
 
+export function useAccountManager() {
+	return useGlobalState(
+		useShallow((o) => ({
+			acctManager: o.acctManager,
+		})),
+	);
+}
+
 export function useProfileManager() {
 	return useGlobalState(
 		useShallow((o) => ({

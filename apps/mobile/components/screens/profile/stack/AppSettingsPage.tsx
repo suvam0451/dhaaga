@@ -318,8 +318,15 @@ function SettingCategoryList() {
 }
 
 function AppSettingsPage() {
+	const { theme } = useAppTheme();
 	return (
-		<ScrollView style={{ minHeight: '100%', paddingBottom: 16 }}>
+		<ScrollView
+			style={{
+				minHeight: '100%',
+				paddingBottom: 16,
+				backgroundColor: theme.palette.bg,
+			}}
+		>
 			<View style={{ minHeight: '100%' }}>
 				<AppTabLandingNavbar
 					type={APP_LANDING_PAGE_TYPE.APP_SETTINGS}
