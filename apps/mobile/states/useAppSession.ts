@@ -2,6 +2,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
+import { useHub } from '../hooks/utility/global-state-extractors';
 
 /**
  * Responsible for ensuring all
@@ -37,12 +38,14 @@ function useAppSession() {
 			profileManager: o.profileSessionManager,
 		})),
 	);
+	const { loadAccounts } = useHub();
 
 	// load essential app data
 	useEffect(() => {
 		setAppReady(false);
 		appInitialize(db);
 		loadApp();
+		loadAccounts();
 		setAppReady(true);
 	}, [db]);
 

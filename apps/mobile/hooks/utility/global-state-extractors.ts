@@ -67,6 +67,18 @@ export function useAppTheme() {
 	);
 }
 
+export function useHub() {
+	return useGlobalState(
+		useShallow((o) => ({
+			accounts: o.hubState.accounts,
+			loadAccounts: o.hubState.refresh,
+			navigation: o.hubState.navigation,
+			loadNext: o.hubState.loadNext,
+			loadPrev: o.hubState.loadPrev,
+		})),
+	);
+}
+
 export function useAppPublishers() {
 	return useGlobalState(
 		useShallow((o) => ({

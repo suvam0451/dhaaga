@@ -18,6 +18,7 @@ import SocialHubPinnedTimelines from './stack/landing/fragments/SocialHubPinnedT
 import {
 	useAppDb,
 	useAppTheme,
+	useHub,
 } from '../../../hooks/utility/global-state-extractors';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
@@ -190,6 +191,7 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 		setIsRefreshing(false);
 	}
 
+	console.log(State.acct);
 	return (
 		<ScrollView
 			style={{
@@ -244,12 +246,13 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 function SocialHub() {
 	const { data } = useSocialHub();
 	const { theme } = useAppTheme();
+	const { accounts, loadNext, loadPrev, navigation } = useHub();
 
-	function renderScene(index: number) {
-		if (index >= data.profiles.length) return <SocialHubTabAdd />;
-		if (!data.profiles[index]) return <View />;
-		return <SocialHubTab profile={data.profiles[index]} />;
-	}
+	// function renderScene(index: number) {
+	// 	if (index >= data.profiles.length) return <SocialHubTabAdd />;
+	// 	if (!data.profiles[index]) return <View />;
+	// 	return <SocialHubTab profile={data.profiles[index]} />;
+	// }
 
 	const tabLabels = data.profiles.map((o) => ({
 		label: o.name,
@@ -270,40 +273,62 @@ function SocialHub() {
 		}
 	};
 
-	function onPageScroll(e: any) {
-		const { offset, position } = e.nativeEvent;
-		const nextIdx = Math.round(position + offset);
-		setIndex(nextIdx);
-	}
+	// function onPageScroll(e: any) {
+	// 	const { offset, position } = e.nativeEvent;
+	// 	const nextIdx = Math.round(position + offset);
+	// 	setIndex(nextIdx);
+	// }
+
+	const HubComponent = useMemo(() => {
+		if (navigation.accountIndex === -1 || navigation.profileIndex === -1)
+			return <SocialHubTabAdd />;
+		if (navigation.accountIndex === accounts.length) return <SocialHubTabAdd />;
+		console.log(
+			accounts[navigation.accountIndex].profiles[navigation.profileIndex],
+		);
+		return (
+			<SocialHubTab
+				profile={
+					accounts[navigation.accountIndex].profiles[navigation.profileIndex]
+				}
+			/>
+		);
+	}, [accounts, navigation]);
 
 	/**
 	 * To avoid the following error when items are
 	 * added and the dispatch causes a shift in the
 	 * elements
 	 */
-	const PagerViewComponent = useMemo(() => {
-		return (
-			<PagerView
-				ref={ref}
-				scrollEnabled={true}
-				style={styles.pagerView}
-				initialPage={0}
-				onPageScroll={onPageScroll}
-			>
-				{Array.from({ length: data.profiles.length + 1 }).map((_, index) => (
-					<View key={index}>{renderScene(index)}</View>
-				))}
-			</PagerView>
-		);
-	}, [data.profiles]);
+	// const PagerViewComponent = useMemo(() => {
+	// 	return (
+	// 		<View>
+	// 			{HubComponent}
+	// 			{/*<PagerView*/}
+	// 			{/*	ref={ref}*/}
+	// 			{/*	scrollEnabled={true}*/}
+	// 			{/*	style={styles.pagerView}*/}
+	// 			{/*	initialPage={0}*/}
+	// 			{/*	onPageScroll={onPageScroll}*/}
+	// 			{/*>*/}
+	// 			{/*	{Array.from({ length: data.profiles.length + 1 }).map((_, index) => (*/}
+	// 			{/*		<View key={index}>{renderScene(index)}</View>*/}
+	// 			{/*	))}*/}
+	// 			{/*</PagerView>*/}
+	// 		</View>
+	// 	);
+	// }, [data.profiles]);
 
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
-			{PagerViewComponent}
+			{HubComponent}
+			{/*{PagerViewComponent}*/}
 			<BottomNavBarInfinite
 				Index={Index}
 				setIndex={onChipSelect}
 				items={tabLabels}
+				loadNext={loadNext}
+				loadPrev={loadPrev}
 			/>
 		</View>
 	);

@@ -93,6 +93,17 @@ type AppPubSubState = {
 	appSub: AppPublisherService;
 };
 
+type AppHubState = {
+	accounts: Account[];
+	navigation: {
+		accountIndex: number;
+		profileIndex: number;
+	};
+	refresh: () => void;
+	loadNext: () => void;
+	loadPrev: () => void;
+};
+
 type AppBottomSheetState = {
 	type: APP_BOTTOM_SHEET_ENUM;
 
@@ -165,6 +176,7 @@ type State = {
 
 	// sheets
 	bottomSheet: AppBottomSheetState;
+	hubState: AppHubState;
 
 	// modals
 	[APP_KNOWN_MODAL.IMAGE_INSPECT]: AppModalStateBase;
@@ -359,6 +371,81 @@ const useGlobalState = create<State & Actions>()(
 					state.driver = KNOWN_SOFTWARE.UNKNOWN;
 				}
 			});
+		},
+		hubState: {
+			accounts: [],
+			navigation: {
+				accountIndex: -1,
+				profileIndex: -1,
+			},
+			refresh: () => {
+				const _accounts = AccountService.getAllWithProfiles(get().db);
+				let nextAccountIndex = -1;
+				let nextProfileIndex = -1;
+				if (_accounts.length !== 0) {
+					nextAccountIndex =
+						_accounts.length >= get().hubState.navigation.accountIndex
+							? 0
+							: get().hubState.navigation.accountIndex;
+					nextProfileIndex =
+						_accounts[nextAccountIndex].profiles.length >=
+						get().hubState.navigation.profileIndex
+							? 0
+							: get().hubState.navigation.profileIndex;
+				}
+
+				set((state) => {
+					state.hubState.accounts = AccountService.getAllWithProfiles(get().db);
+					state.hubState.navigation = {
+						accountIndex: nextAccountIndex,
+						profileIndex: nextProfileIndex,
+					};
+				});
+			},
+			loadNext: () => {
+				const _accounts = get().hubState.accounts;
+				const currentAccountIndex = get().hubState.navigation.accountIndex;
+				const currentProfileIndex = get().hubState.navigation.profileIndex;
+				let nextAccountIndex = -1;
+				let nextProfileIndex = -1;
+
+				if (currentAccountIndex + 1 > _accounts.length) {
+					nextAccountIndex = 0;
+					nextProfileIndex = 0;
+				} else {
+					nextAccountIndex = currentAccountIndex + 1;
+					nextProfileIndex = 0;
+				}
+
+				set((state) => {
+					state.hubState.navigation = {
+						accountIndex: nextAccountIndex,
+						profileIndex: nextProfileIndex,
+					};
+				});
+			},
+			loadPrev: () => {
+				const _accounts = get().hubState.accounts;
+				const currentAccountIndex = get().hubState.navigation.accountIndex;
+				const currentProfileIndex = get().hubState.navigation.profileIndex;
+				let nextAccountIndex = -1;
+				let nextProfileIndex = -1;
+
+				if (currentAccountIndex - 1 < 0) {
+					nextAccountIndex = _accounts.length;
+					nextProfileIndex = 0;
+				} else {
+					nextAccountIndex = currentAccountIndex - 1;
+					nextProfileIndex = 0;
+				}
+
+				set((state) => {
+					state.hubState.navigation = {
+						accountIndex: nextAccountIndex,
+						profileIndex: nextProfileIndex,
+					};
+				});
+			},
 		},
 		bottomSheet: {
 			type: APP_BOTTOM_SHEET_ENUM.NA,

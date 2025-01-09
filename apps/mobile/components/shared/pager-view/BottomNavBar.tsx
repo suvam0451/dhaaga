@@ -22,6 +22,7 @@ import Animated, {
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { LinearGradient } from 'expo-linear-gradient';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 type ChipProps = {
 	active: boolean;
@@ -210,7 +211,12 @@ export function BottomNavBarInfinite({
 	items,
 	Index,
 	setIndex,
-}: SingleSelectAnimatedProps) {
+	loadNext,
+	loadPrev,
+}: SingleSelectAnimatedProps & {
+	loadNext: () => void;
+	loadPrev: () => void;
+}) {
 	const { theme } = useAppTheme();
 	const ref = useRef<FlatList>(null);
 
@@ -261,28 +267,65 @@ export function BottomNavBarInfinite({
 			colors={['transparent', theme.palette.bg]}
 			style={styles.infiniteContainer}
 		>
-			<View style={{ flex: 1, flexGrow: 1 }}>
-				<FlatList
-					data={items}
-					showsHorizontalScrollIndicator={false}
-					horizontal={true}
-					style={[styles.root]}
-					ref={ref}
-					renderItem={({ item, index }) => (
-						<View style={[styles.infiniteContainerChip]}>
-							<ChipInfinite
-								active={Index === index}
-								label={item.label}
-								onPress={(e) => onSelect(index, e)}
-								onLayout={(e) => handleLayout(index, e)}
-								containerStyle={{ paddingHorizontal: 8 }}
-							/>
-						</View>
-					)}
-					onScrollToIndexFailed={() => {
-						console.log('[WARN]:scroll to index failed...');
+			<View style={{ flex: 1, flexDirection: 'row' }}>
+				<View style={{ flex: 1, flexGrow: 1 }}>
+					<FlatList
+						data={items}
+						showsHorizontalScrollIndicator={false}
+						horizontal={true}
+						style={[styles.root]}
+						ref={ref}
+						renderItem={({ item, index }) => (
+							<View style={[styles.infiniteContainerChip]}>
+								<ChipInfinite
+									active={Index === index}
+									label={item.label}
+									onPress={(e) => onSelect(index, e)}
+									onLayout={(e) => handleLayout(index, e)}
+									containerStyle={{ paddingHorizontal: 8 }}
+								/>
+							</View>
+						)}
+						onScrollToIndexFailed={() => {
+							console.log('[WARN]:scroll to index failed...');
+						}}
+					/>
+				</View>
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						paddingHorizontal: 8,
 					}}
-				/>
+				>
+					<Pressable
+						style={{
+							borderRadius: '100%',
+							padding: 6,
+						}}
+						onPress={loadPrev}
+					>
+						<Ionicons
+							name={'chevron-back-circle'}
+							color={theme.primary.a0}
+							size={32}
+						/>
+					</Pressable>
+					<Pressable
+						style={{
+							borderRadius: '100%',
+							padding: 2,
+							marginRight: 10,
+						}}
+						onPress={loadNext}
+					>
+						<Ionicons
+							name={'chevron-forward-circle'}
+							color={theme.primary.a0}
+							size={32}
+						/>
+					</Pressable>
+				</View>
 			</View>
 		</LinearGradient>
 	);

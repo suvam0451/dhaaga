@@ -136,6 +136,14 @@ class Service {
 		return Repo.getAll(db);
 	}
 
+	static getAllWithProfiles(db: DataSource) {
+		const accounts = Service.getAll(db);
+		for (const account of accounts) {
+			account.profiles = ProfileService.getForAccount(db, account);
+		}
+		return accounts;
+	}
+
 	static remove(db: DataSource, acct: Account) {
 		return Repo.removeById(db, acct.id);
 	}

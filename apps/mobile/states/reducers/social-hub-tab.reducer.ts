@@ -13,6 +13,7 @@ import { ProfilePinnedTagService } from '../../database/entities/profile-pinned-
 import { ProfileService } from '../../database/entities/profile';
 
 type SocialHubProfile = {
+	acct: Account;
 	item: Profile;
 	pins: {
 		timelines: ProfilePinnedTimeline[];
@@ -71,8 +72,10 @@ class Service {
 			const _timelines = ProfilePinnedTimelineService.getShownForProfile(db, o);
 			const _users = ProfilePinnedUserService.getShownForProfile(db, o);
 			const _tags = ProfilePinnedTagService.getShownForProfile(db, o);
+			const _acct = ProfileService.getOwnerAccount(db, o);
 
 			return {
+				acct: _acct,
 				item: o,
 				pins: {
 					timelines: _timelines,
@@ -91,8 +94,10 @@ class Service {
 		);
 		const _users = ProfilePinnedUserService.getShownForProfile(db, profile);
 		const _tags = ProfilePinnedTagService.getShownForProfile(db, profile);
+		const _acct = ProfileService.getOwnerAccount(db, profile);
 
 		return {
+			acct: _acct,
 			item: profile,
 			pins: {
 				timelines: _timelines,
@@ -109,10 +114,14 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.INIT: {
 			if (!action.payload.db || !action.payload.profile) return state;
 
+			const _acct = ProfileService.getOwnerAccount(
+				action.payload.db,
+				action.payload.profile,
+			);
 			return produce(state, (draft) => {
 				draft.db = action.payload.db;
 				draft.profile = action.payload.profile;
-				draft.acct = action.payload.profile.account;
+				draft.acct = _acct;
 			});
 		}
 		case ACTION.RELOAD_PINS: {

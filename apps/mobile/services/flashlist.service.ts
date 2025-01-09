@@ -71,9 +71,6 @@ class FlashListService {
 						},
 					}) as FlashListType_PinnedTag,
 			),
-			{
-				type: 'eol',
-			},
 		];
 	}
 
