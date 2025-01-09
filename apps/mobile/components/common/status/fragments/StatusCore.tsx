@@ -18,13 +18,16 @@ import { appDimensions } from '../../../../styles/dimensions';
 import { Text, StyleSheet } from 'react-native';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import {
+	useAppApiClient,
 	useAppBottomSheet_Improved,
+	useAppPublishers,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
 import { AppPostObject } from '../../../../types/app-post.types';
 import { AppText } from '../../../lib/Text';
+import ActivityPubService from '../../../../services/activitypub.service';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -41,10 +44,15 @@ type StatusCoreProps = {
 };
 
 function StatusMoreOptionsButton() {
+	const { driver } = useAppApiClient();
 	const { dto } = useAppStatusItem();
 	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { postPub } = useAppPublishers();
 
 	function onPress() {
+		if (ActivityPubService.misskeyLike(driver)) {
+			postPub.finalizeBookmarkState(dto?.uuid).finally(() => {});
+		}
 		setCtx({ uuid: dto.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
 	}

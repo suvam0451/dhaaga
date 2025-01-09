@@ -1,22 +1,30 @@
 import {
+	useAppApiClient,
 	useAppBottomSheet_Improved,
+	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
 import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
 import { AppToggleIcon } from '../../../../lib/Icon';
 import { appDimensions } from '../../../../../styles/dimensions';
+import ActivityPubService from '../../../../../services/activitypub.service';
 
 /**
  * Bookmark toggle indicator button
  */
 function PostActionButtonToggleBookmark() {
+	const { driver } = useAppApiClient();
 	const { dto } = useAppStatusItem();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { postPub } = useAppPublishers();
 
 	// helper functions
 	function _toggleBookmark() {
+		if (ActivityPubService.misskeyLike(driver)) {
+			postPub.finalizeBookmarkState(dto?.uuid).finally(() => {});
+		}
 		setCtx({ uuid: dto?.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK, true);
 	}

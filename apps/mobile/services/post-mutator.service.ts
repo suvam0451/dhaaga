@@ -79,11 +79,15 @@ export class PostMutatorService {
 			if (res === null) return;
 
 			if (input.id === target.id) {
-				input.interaction.bookmarked = res;
-				input.state.isBookmarkStateFinal = true;
+				return produce(input, (draft) => {
+					draft.interaction.bookmarked = res;
+					draft.state.isBookmarkStateFinal = true;
+				});
 			} else if (input.boostedFrom?.id === target.id) {
-				input.boostedFrom.interaction.bookmarked = res;
-				input.boostedFrom.state.isBookmarkStateFinal = true;
+				return produce(input, (draft) => {
+					draft.boostedFrom.interaction.bookmarked = res;
+					draft.boostedFrom.state.isBookmarkStateFinal = true;
+				});
 			}
 		} catch (e) {
 			console.log('[WARN]: failed to finalize bookmark state', e);

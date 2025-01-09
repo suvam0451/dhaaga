@@ -21,7 +21,10 @@ class ActivityPubService {
 	 * @param driver
 	 */
 	static canBookmark(driver: KNOWN_SOFTWARE | string) {
-		return ActivityPubService.mastodonLike(driver);
+		return (
+			ActivityPubService.mastodonLike(driver) ||
+			ActivityPubService.misskeyLike(driver)
+		);
 	}
 
 	/**
@@ -325,6 +328,14 @@ class ActivityPubService {
 		return data;
 	}
 
+	/**
+	 * For misskey specifically, finalises and binds the current
+	 * bookmark status for a post object
+	 *
+	 * This function would fail for drivers other than misskey
+	 * @param client
+	 * @param id
+	 */
 	static async getBookmarkState(
 		client: ActivityPubClient,
 		id: string,
