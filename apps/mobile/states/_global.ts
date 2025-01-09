@@ -102,6 +102,7 @@ type AppHubState = {
 	refresh: () => void;
 	loadNext: () => void;
 	loadPrev: () => void;
+	selectProfile: (index: number) => void;
 };
 
 type AppBottomSheetState = {
@@ -409,7 +410,7 @@ const useGlobalState = create<State & Actions>()(
 				let nextAccountIndex = -1;
 				let nextProfileIndex = -1;
 
-				if (currentAccountIndex + 1 > _accounts.length) {
+				if (currentAccountIndex + 1 >= _accounts.length) {
 					nextAccountIndex = 0;
 					nextProfileIndex = 0;
 				} else {
@@ -444,6 +445,11 @@ const useGlobalState = create<State & Actions>()(
 						accountIndex: nextAccountIndex,
 						profileIndex: nextProfileIndex,
 					};
+				});
+			},
+			selectProfile: (index: number) => {
+				set((state) => {
+					state.hubState.navigation.profileIndex = index;
 				});
 			},
 		},

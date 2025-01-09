@@ -6,8 +6,7 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import useSocialHub from '../../../states/useSocialHub';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import { Profile } from '../../../database/_schema';
 import {
 	socialHubTabReducer,
@@ -31,7 +30,6 @@ import { SocialHubPinSectionContainer } from './stack/landing/fragments/_factory
 import { AppFlashList } from '../../lib/AppFlashList';
 import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
 import { BottomNavBarInfinite } from '../../shared/pager-view/BottomNavBar';
-import PagerView from 'react-native-pager-view';
 import { ProfileService } from '../../../database/entities/profile';
 
 function Header({ profile }: { profile: Profile }) {
@@ -191,7 +189,6 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 		setIsRefreshing(false);
 	}
 
-	console.log(State.acct);
 	return (
 		<ScrollView
 			style={{
@@ -244,9 +241,8 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 }
 
 function SocialHub() {
-	const { data } = useSocialHub();
 	const { theme } = useAppTheme();
-	const { accounts, loadNext, loadPrev, navigation } = useHub();
+	const { accounts, loadNext, loadPrev, navigation, selectProfile } = useHub();
 
 	// function renderScene(index: number) {
 	// 	if (index >= data.profiles.length) return <SocialHubTabAdd />;
@@ -254,23 +250,30 @@ function SocialHub() {
 	// 	return <SocialHubTab profile={data.profiles[index]} />;
 	// }
 
-	const tabLabels = data.profiles.map((o) => ({
-		label: o.name,
-		id: o.id.toString(),
-	}));
+	const tabLabels = useMemo(() => {
+		if (navigation.accountIndex === -1 || navigation.profileIndex === -1)
+			return [{ label: 'New +', id: '__add__' }];
+		if (navigation.accountIndex === accounts.length)
+			return [{ label: 'New +', id: '__add__' }];
 
-	tabLabels.push({
-		label: 'New +',
-		id: '__add__',
-	});
+		return [
+			...accounts[navigation.accountIndex].profiles.map((o) => ({
+				label: o.name,
+				id: o.id.toString(),
+			})),
+			{ label: 'Add +', id: '__add__' },
+		];
+	}, [accounts, navigation]);
 
-	const [Index, setIndex] = useState(0);
+	// const [Index, setIndex] = useState(0);
 
-	const ref = useRef<PagerView>(null);
+	// const ref = useRef<PagerView>(null);
 	const onChipSelect = (index: number) => {
-		if (Index !== index) {
-			ref.current.setPage(index);
-		}
+		selectProfile(index);
+		// setIndex(index);
+		// if (Index !== index) {
+		// 	ref.current.setPage(index);
+		// }
 	};
 
 	// function onPageScroll(e: any) {
@@ -283,9 +286,12 @@ function SocialHub() {
 		if (navigation.accountIndex === -1 || navigation.profileIndex === -1)
 			return <SocialHubTabAdd />;
 		if (navigation.accountIndex === accounts.length) return <SocialHubTabAdd />;
-		console.log(
-			accounts[navigation.accountIndex].profiles[navigation.profileIndex],
-		);
+		if (
+			navigation.profileIndex ===
+			accounts[navigation.accountIndex].profiles.length
+		)
+			return <SocialHubTabAdd />;
+
 		return (
 			<SocialHubTab
 				profile={
@@ -322,9 +328,8 @@ function SocialHub() {
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
 			{HubComponent}
-			{/*{PagerViewComponent}*/}
 			<BottomNavBarInfinite
-				Index={Index}
+				Index={navigation.profileIndex}
 				setIndex={onChipSelect}
 				items={tabLabels}
 				loadNext={loadNext}

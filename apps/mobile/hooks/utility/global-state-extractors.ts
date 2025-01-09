@@ -75,6 +75,7 @@ export function useHub() {
 			navigation: o.hubState.navigation,
 			loadNext: o.hubState.loadNext,
 			loadPrev: o.hubState.loadPrev,
+			selectProfile: o.hubState.selectProfile,
 		})),
 	);
 }

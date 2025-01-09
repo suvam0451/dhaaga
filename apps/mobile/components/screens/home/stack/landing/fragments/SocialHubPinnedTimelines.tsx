@@ -20,6 +20,7 @@ import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../../../../states/useAppNavigator';
 import { DialogBuilderService } from '../../../../../../services/dialog-builder.service';
 import { AppText } from '../../../../../lib/Text';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -89,7 +90,11 @@ function PinnedTimelineItem({
 	}
 
 	return (
-		<View style={styles.buttonContainer}>
+		<Animated.View
+			entering={FadeIn}
+			exiting={FadeOut}
+			style={styles.buttonContainer}
+		>
 			<TouchableOpacity
 				style={[
 					styles.button,
@@ -120,7 +125,7 @@ function PinnedTimelineItem({
 					{server}
 				</AppText.Medium>
 			</TouchableOpacity>
-		</View>
+		</Animated.View>
 	);
 }
 
