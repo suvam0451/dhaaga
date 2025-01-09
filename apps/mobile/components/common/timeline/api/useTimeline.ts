@@ -82,7 +82,12 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 		} else {
 			_feed = data;
 		}
-		return PostMiddleware.deserialize<unknown[]>(_feed, driver, server);
+		try {
+			return PostMiddleware.deserialize<unknown[]>(_feed, driver, server);
+		} catch (e) {
+			console.log('[ERROR]: failed to convert posts', e);
+			return [];
+		}
 	}
 
 	/**

@@ -117,11 +117,12 @@ class BlueskyStatusAdapter implements StatusInterface {
 		(this.post?.record as any)?.text || (this.post?.value as any)?.text;
 
 	getUser() {
-		if (this.isReposted()) return this.reason!.by as ProfileViewBasic;
+		if (this.reason?.$type === 'app.bsky.feed.defs#reasonRepost')
+			return this.reason!.by as ProfileViewBasic;
 		return this.post.author;
 	}
 
-	isReposted = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
+	isReposted = () => this.post.viewer?.repost !== undefined;
 
 	getMediaAttachments(): MediaAttachmentInterface[] {
 		const target: any[] = this.post?.embed?.images as any[];

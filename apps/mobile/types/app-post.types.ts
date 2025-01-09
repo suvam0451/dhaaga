@@ -226,7 +226,7 @@ export class AppStatusDtoService {
 			},
 			interaction: {
 				bookmarked: input.getIsBookmarked(),
-				boosted: false,
+				boosted: input.isReposted(),
 				liked: input.getIsFavourited(),
 			},
 			calculated: {

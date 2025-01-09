@@ -129,6 +129,31 @@ export class PostMutatorService {
 
 	async toggleShare(input: AppPostObject): Promise<AppPostObject> {
 		const target = PostMiddleware.getContentTarget(input);
+
+		if (this.driver === KNOWN_SOFTWARE.BLUESKY) {
+			const result = await AtprotoService.toggleRepost(
+				this.client,
+				target.meta.uri,
+				target.meta.cid,
+				target.atProto?.viewer,
+			);
+			if (!result.success) return input;
+
+			if (input.id === target.id) {
+				return produce(input, (draft) => {
+					draft.interaction.boosted = result.state;
+					draft.stats.boostCount += result.state ? 1 : -1;
+					draft.atProto.viewer.repost = result.uri;
+				});
+			} else if (input.boostedFrom?.id === target.id) {
+				return produce(input, (draft) => {
+					draft.boostedFrom.interaction.boosted = result.state;
+					draft.boostedFrom.stats.boostCount += result.state ? 1 : -1;
+					draft.boostedFrom.atProto.viewer.repost = result.uri;
+				});
+			}
+		}
+
 		try {
 			const res = await ActivityPubService.toggleBoost(
 				this.client,
