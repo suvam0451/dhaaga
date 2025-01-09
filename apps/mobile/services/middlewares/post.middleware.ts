@@ -326,6 +326,10 @@ export class PostMiddleware {
 			console.log('[WARN]: trying to obtain target post for', input);
 			return input;
 		}
+		if (input.meta.isBoost && !input.boostedFrom) {
+			console.log('[WARN]: original object not available for a repost', input);
+			return input;
+		}
 		return input.meta.isBoost
 			? input.content.raw
 				? input

@@ -1,6 +1,8 @@
 import { Fragment, memo, useMemo, useState } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext, {
+	useAppStatusItem,
+} from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
 import { Pressable, View } from 'react-native';
@@ -28,6 +30,7 @@ import StatusInteraction from './StatusInteraction';
 import { AppPostObject } from '../../../../types/app-post.types';
 import { AppText } from '../../../lib/Text';
 import ActivityPubService from '../../../../services/activitypub.service';
+import StatusQuoted from './StatusQuoted';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -134,8 +137,8 @@ const StatusCore = memo(
 		const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
 
 		const { content: PostContent, isLoaded } = useMfm({
-			content: _target.content.raw,
-			emojiMap: _target.calculated.emojis,
+			content: _target?.content?.raw,
+			emojiMap: _target?.calculated?.emojis,
 			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10, // fontFamily: APP_FONTS.INTER_400_REGULAR
 		});
 
@@ -224,11 +227,11 @@ const StatusCore = memo(
 					</HiddenByCw>
 
 					{/*FIXME: enable for bluesky*/}
-					{/*{IS_QUOTE_BOOST && (*/}
-					{/*	<WithAppStatusItemContext dto={_target.boostedFrom}>*/}
-					{/*		<StatusQuoted />*/}
-					{/*	</WithAppStatusItemContext>*/}
-					{/*)}*/}
+					{IS_QUOTE_BOOST && (
+						<WithAppStatusItemContext dto={_target.boostedFrom}>
+							<StatusQuoted />
+						</WithAppStatusItemContext>
+					)}
 
 					{/* Lock reactions for preview (to be refactored) */}
 					{!isPreview && <EmojiReactions dto={_target} />}

@@ -84,12 +84,22 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	getAccountUrl(mySubdomain?: string | undefined): string | null | undefined {
-		// console.log('[INFO]: my subdomain', mySubdomain);
-		// NOTE: something like this
 		return `https://bsky.app/profile/${this.post?.author?.handle}`;
 	}
 
 	getRepostedStatus(): StatusInterface | null | undefined {
+		if (this.isReposted()) {
+			const { post, ...rest } = this;
+			/**
+			 * by stripping reason, we avoid recursive call
+			 * + replies are not needed for reposts
+			 */
+			return new BlueskyStatusAdapter({
+				post: this.post,
+				reason: null as any,
+				reply: null as any,
+			});
+		}
 		// if (this.reason.reply) {
 		// 	// TODO: type checking required
 		// 	// typeof this.parent === PostView
@@ -99,6 +109,16 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	getRepostedStatusRaw(): Status {
+		if (this.isReposted()) {
+			/**
+			 * by stripping reason/reply, we avoid recursive call
+			 *
+			 * DOWNSIDES: reply is not shown for reposted object
+			 */
+			const { post, ...rest } = this;
+			// strip repost/reply information
+			return { post } as any;
+		}
 		return null;
 	}
 
@@ -113,16 +133,22 @@ class BlueskyStatusAdapter implements StatusInterface {
 	 *
 	 * ^ a.k.a. quoted posts
 	 */
-	getContent = () =>
-		(this.post?.record as any)?.text || (this.post?.value as any)?.text;
+	getContent = () => {
+		// handle pure reposts
+		if (this.isReposted()) {
+			return null;
+		}
+
+		// TODO: handle quotes
+		return (this.post?.record as any)?.text || (this.post?.value as any)?.text;
+	};
 
 	getUser() {
-		if (this.reason?.$type === 'app.bsky.feed.defs#reasonRepost')
-			return this.reason!.by as ProfileViewBasic;
+		if (this.isReposted()) return this.reason!.by as ProfileViewBasic;
 		return this.post.author;
 	}
 
-	isReposted = () => this.post.viewer?.repost !== undefined;
+	isReposted = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
 
 	getMediaAttachments(): MediaAttachmentInterface[] {
 		const target: any[] = this.post?.embed?.images as any[];
@@ -149,9 +175,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 		console.log(this.post);
 	}
 
-	getIsRebloggedByMe(): boolean | null | undefined {
-		throw new Error('Method not implemented.');
-	}
+	getIsRebloggedByMe = () => this.post.viewer?.repost !== undefined;
 
 	getIsFavourited = () => false;
 
