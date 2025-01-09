@@ -1,6 +1,5 @@
 import TimelineWidgetUserApi from '../api/4_User';
 import { useState } from 'react';
-import { useDebounce } from 'use-debounce';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import AppInput from '../../../lib/Inputs';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -15,7 +14,7 @@ import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.red
 
 function TimelineWidgetUserScene() {
 	const [SearchTerm, setSearchTerm] = useState('');
-	const [debouncedSearchTerm] = useDebounce(SearchTerm, 100);
+	const debouncedSearchTerm = SearchTerm;
 	const { setTimelineType, setQuery, setShowTimelineSelection } =
 		useTimelineController();
 

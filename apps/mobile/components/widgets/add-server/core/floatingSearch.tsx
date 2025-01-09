@@ -2,7 +2,6 @@ import { View } from 'react-native';
 import { AppInputSimpleSearch } from '../../../lib/Inputs';
 import { useEffect, useState } from 'react';
 import { useSearchTermContext } from '../../../../hooks/forms/useSearchTerm';
-import { useDebounce } from 'use-debounce';
 import { useFabController } from '../../../shared/fab/hooks/useFabController';
 
 function KnownServerSearchWidget() {
@@ -11,7 +10,7 @@ function KnownServerSearchWidget() {
 
 	const [Value, setValue] = useState('');
 
-	const [searchInput] = useDebounce(Value, 200);
+	const searchInput = Value;
 	useEffect(() => {
 		setSearchText(searchInput);
 	}, [searchInput]);

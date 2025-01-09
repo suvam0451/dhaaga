@@ -1,8 +1,0 @@
-mastodon:
-  label: Mastodon
-  permalink: /mastodon
-  description: Everything related to Mastodon SNS
-misskey:
-  label: Misskey
-  permalink: /misskey
-  description: Everything related to Misskey SNS
