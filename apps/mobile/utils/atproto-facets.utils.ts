@@ -6,6 +6,12 @@ type Facet = AppBskyRichtextFacet.Main;
 
 const encoder = new TextEncoder();
 
+export enum ATPROTO_FACET_ENUM {
+	MENTION = 'app.bsky.richtext.facet#mention',
+	LINK = 'app.bsky.richtext.facet#link',
+	TAG = 'app.bsky.richtext.facet#tag',
+}
+
 export class UnicodeString {
 	utf16: string;
 	utf8: Uint8Array;
@@ -45,8 +51,8 @@ export function detectFacets(_text: string): Facet[] | undefined {
 				},
 				features: [
 					{
-						$type: 'app.bsky.richtext.facet#mention',
-						did: match[3], // must be resolved afterwards
+						$type: ATPROTO_FACET_ENUM.MENTION,
+						did: match[3], // must be resolved afterward
 					},
 				],
 			});
@@ -67,7 +73,7 @@ export function detectFacets(_text: string): Facet[] | undefined {
 			}
 			const start = text.utf16.indexOf(match[2], match.index);
 			const index = { start, end: start + match[2].length };
-			// strip ending puncuation
+			// strip ending punctuation
 			if (/[.,;!?]$/.test(uri)) {
 				uri = uri.slice(0, -1);
 				index.end--;
@@ -83,7 +89,7 @@ export function detectFacets(_text: string): Facet[] | undefined {
 				},
 				features: [
 					{
-						$type: 'app.bsky.richtext.facet#link',
+						$type: ATPROTO_FACET_ENUM.LINK,
 						uri,
 					},
 				],
@@ -111,7 +117,7 @@ export function detectFacets(_text: string): Facet[] | undefined {
 				},
 				features: [
 					{
-						$type: 'app.bsky.richtext.facet#tag',
+						$type: ATPROTO_FACET_ENUM.TAG,
 						tag: tag.replace(/^#/, ''),
 					},
 				],

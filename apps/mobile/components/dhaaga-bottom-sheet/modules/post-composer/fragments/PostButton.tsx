@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
@@ -18,17 +18,18 @@ import {
 } from '../../../../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../Core';
 import { Loader } from '../../../../lib/Loader';
+import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 
 /**
  * Click to Post!
  */
-const PostButton = memo(() => {
+function PostButton() {
 	const [Loading, setLoading] = useState(false);
 	const { state } = useComposerContext();
 	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { postPub } = useAppPublishers();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx, ctx } = useAppBottomSheet_Improved();
 
 	async function onClick() {
 		setLoading(true);
@@ -63,12 +64,10 @@ const PostButton = memo(() => {
 			// 	};
 			// }
 			// }
-			const data = await AtprotoComposerService.post(
-				client as any,
-				state.text,
-				{
-					reply,
-				},
+
+			const data = await AtprotoComposerService.postUsingReducerState(
+				client as BlueskyRestClient,
+				state,
 			);
 			if (data) {
 				/**
@@ -183,6 +182,6 @@ const PostButton = memo(() => {
 			/>
 		</TouchableOpacity>
 	);
-});
+}
 
 export default PostButton;

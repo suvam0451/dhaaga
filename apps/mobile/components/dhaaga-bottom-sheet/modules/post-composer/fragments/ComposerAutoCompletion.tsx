@@ -8,10 +8,12 @@ import {
 	StyleSheet,
 } from 'react-native';
 import { useComposerContext } from '../api/useComposerContext';
-import usePostComposeAutoCompletion from '../api/usePostComposeAutoCompletion';
-import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { InstanceApi_CustomEmojiDTO, UserInterface } from '@dhaaga/bridge';
+import {
+	InstanceApi_CustomEmojiDTO,
+	KNOWN_SOFTWARE,
+	UserInterface,
+} from '@dhaaga/bridge';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -19,12 +21,16 @@ import Animated, {
 } from 'react-native-reanimated';
 import TextEditorService from '../../../../../services/text-editor.service';
 import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppApiClient,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
 
 const AVATAR_ICON_SIZE = 32;
 
 const ComposerAutoCompletion = memo(() => {
 	const { theme } = useAppTheme();
+	const { driver } = useAppApiClient();
 	const { state, dispatch } = useComposerContext();
 
 	const available = useSharedValue(0);
@@ -54,7 +60,9 @@ const ComposerAutoCompletion = memo(() => {
 			payload: {
 				content: TextEditorService.autoCompleteHandler(
 					state.text,
-					`@${item.getUsername()}@${item.getInstanceUrl()}`,
+					driver === KNOWN_SOFTWARE.BLUESKY
+						? `@${item.getUsername()}`
+						: `@${item.getUsername()}@${item.getInstanceUrl()}`,
 					state.keyboardSelection,
 				),
 			},
@@ -206,7 +214,6 @@ const ComposerAutoCompletion = memo(() => {
 
 const styles = StyleSheet.create({
 	emojiText: {
-		color: APP_FONT.MONTSERRAT_BODY,
 		marginLeft: 4,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
