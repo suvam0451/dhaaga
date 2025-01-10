@@ -173,7 +173,6 @@ function PostCompose() {
 				styles.bottomSheetContentContainer,
 				{
 					display: visible ? 'flex' : 'none',
-					backgroundColor: theme.palette.menubar,
 				},
 			]}
 		>

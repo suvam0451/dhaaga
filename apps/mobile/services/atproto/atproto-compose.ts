@@ -22,11 +22,6 @@ export type AtprotoImageEmbed = {
 	};
 };
 
-type AtprotoPostEmbed = {
-	uri: string;
-	cid: string;
-};
-
 export type AtprotoReplyEmbed = {
 	root: {
 		uri: string;
@@ -39,6 +34,15 @@ export type AtprotoReplyEmbed = {
 };
 
 class AtprotoComposerService {
+	private static async getPost(client: BlueskyRestClient, uri: string) {
+		const { data, error } = await client.statuses.get(uri);
+		if (error) {
+			console.log('[WARN]: failed to fetch freshly created post');
+			return null;
+		}
+		return data.data.thread as ThreadViewPost;
+	}
+
 	/**
 	 * shared function to post and return preview forn
 	 * @param client
@@ -51,13 +55,7 @@ class AtprotoComposerService {
 	) {
 		const agent = client.getAgent();
 		try {
-			const result: AtprotoPostEmbed = await agent.post(record);
-			const { data, error } = await client.statuses.get(result.uri);
-			if (error) {
-				console.log('[WARN]: failed to fetch freshly created post');
-				return null;
-			}
-			return data.data.thread as ThreadViewPost;
+			return await agent.post(record);
 		} catch (e) {
 			console.log('[WARN]: failed to create post:', record, e);
 			return null;
@@ -136,7 +134,36 @@ class AtprotoComposerService {
 
 		// handle quotes
 
-		return this.post(client, record);
+		const result = await this.post(client, record);
+
+		/**
+		 * Thanks Graysky again!
+		 */
+		if (state.visibilityRules.length > 0) {
+			const _none = state.visibilityRules.find((v) => v.type === 'nobody');
+			if (_none) return await this.getPost(client, result.uri);
+			const allow = [];
+
+			for (const rule of state.visibilityRules) {
+				if (rule.type === 'mentioned') {
+					allow.push({ $type: 'app.bsky.feed.threadgate#mentionRule' });
+				} else if (rule.type === 'following') {
+					allow.push({ $type: 'app.bsky.feed.threadgate#followingRule' });
+				} else if (rule.type === 'list') {
+					allow.push({
+						$type: 'app.bsky.feed.threadgate#listRule',
+						list: rule.list,
+					});
+				}
+			}
+
+			await agent.app.bsky.feed.threadgate.create(
+				{ repo: agent.session!.did, rkey: result.uri.split('/').pop() },
+				{ post: result.uri, createdAt: new Date().toISOString(), allow },
+			);
+		}
+
+		return await this.getPost(client, result.uri);
 	}
 
 	static async chat(

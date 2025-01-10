@@ -89,7 +89,7 @@ function Page() {
 			>
 				<PagerView
 					ref={ref}
-					scrollEnabled={true}
+					scrollEnabled={false}
 					style={{ flex: 1 }}
 					initialPage={Index}
 					onPageScroll={onPageScroll}

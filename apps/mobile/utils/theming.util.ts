@@ -77,6 +77,9 @@ export type AppColorSchemeType = {
 
 	surface?: ColorRangeType;
 	secondary: ColorRangeType;
+
+	// represents elevation in dark mode
+	background: ColorRangeType;
 };
 
 export enum AppTextVariant {
