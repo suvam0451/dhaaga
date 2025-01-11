@@ -4,13 +4,13 @@ import {
 	BlueskyStatusAdapter,
 	StatusInterface,
 } from '@dhaaga/bridge';
-import ActivitypubAdapterService from '../services/activitypub-adapter.service';
 import MediaService from '../services/media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../components/common/media/_common';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { ActivityPubReactionStateDto } from '../services/approto/activitypub-reactions.service';
 import { RandomUtil } from '../utils/random.utils';
+import { UserMiddleware } from '../services/middlewares/user.middleware';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -180,7 +180,7 @@ export class AppStatusDtoService {
 			},
 		);
 
-		const user = ActivitypubAdapterService.adaptUser(input.getUser(), domain);
+		const user = UserMiddleware.rawToInterface(input.getUser(), domain);
 		let handle =
 			domain === KNOWN_SOFTWARE.BLUESKY
 				? `@${user.getUsername()}`

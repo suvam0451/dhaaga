@@ -1,14 +1,14 @@
 import { DataSource } from '../../database/dataSource';
-import { RandomUtil } from '../../utils/random.utils';
-import { AppUserObject } from '../../types/app-user.types';
-import { produce } from 'immer';
-import { Dispatch } from 'react';
 import {
 	timelineReducerBaseDefaults,
 	TimelineReducerBaseState,
 } from './_timeline.shared';
+import { AppFeedObject } from '../../types/app-feed.types';
+import { produce } from 'immer';
+import { RandomUtil } from '../../utils/random.utils';
+import { Dispatch } from 'react';
 
-type State = TimelineReducerBaseState<AppUserObject> & {};
+type State = TimelineReducerBaseState<AppFeedObject> & {};
 
 export const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
@@ -38,7 +38,7 @@ type Actions =
 	| {
 			type: ACTION.APPEND_RESULTS;
 			payload: {
-				items: AppUserObject[];
+				items: AppFeedObject[];
 				minId?: string;
 				maxId?: string;
 			};
@@ -57,11 +57,6 @@ function reducer(state: State, action: Actions): State {
 				draft.sessionId = RandomUtil.nanoId();
 			});
 		}
-		case ACTION.REQUEST_LOAD_MORE: {
-			return produce(state, (draft) => {
-				draft.appliedMaxId = state.maxId;
-			});
-		}
 		case ACTION.RESET: {
 			return produce(state, (draft) => {
 				draft.items = [];
@@ -72,10 +67,15 @@ function reducer(state: State, action: Actions): State {
 				draft.seen = new Set();
 			});
 		}
+		case ACTION.REQUEST_LOAD_MORE: {
+			return produce(state, (draft) => {
+				draft.appliedMaxId = state.maxId;
+			});
+		}
 		case ACTION.APPEND_RESULTS: {
 			const copy = Array.from(state.items);
 			for (const item of action.payload.items) {
-				if (state.seen.has(item.id)) continue;
+				if (state.seen.has(item.uri)) continue;
 				copy.push(item);
 			}
 			return produce(state, (draft) => {
@@ -88,16 +88,18 @@ function reducer(state: State, action: Actions): State {
 				draft.opts = action.payload;
 			});
 		}
+		default:
+			return state;
 	}
 }
 
-type AppUserTimelineReducerDispatchType = Dispatch<Actions>;
+type AppFeedTimelineReducerDispatchType = Dispatch<Actions>;
 
 export {
-	State as AppUserTimelineReducerStateType,
-	reducer as appUserTimelineReducer,
-	DEFAULT as appUserTimelineReducerDefault,
-	ACTION as AppUserTimelineReducerActionType,
-	Actions as appUserTimelineActions,
-	AppUserTimelineReducerDispatchType,
+	reducer as appFeedTimelineReducer,
+	State as AppFeedTimelineReducerStateType,
+	DEFAULT as appFeedTimelineReducerDefault,
+	ACTION as AppFeedTimelineReducerActionType,
+	Actions as appFeedTimelineReducerActions,
+	AppFeedTimelineReducerDispatchType,
 };

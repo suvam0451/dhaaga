@@ -8,17 +8,20 @@ import { Endpoints } from 'misskey-js';
 import {
 	AppBskyActorSearchActorsTypeahead,
 	AppBskyFeedSearchPosts,
-	AtpSessionData,
+	AppBskyUnspeccedGetPopularFeedGenerators,
 } from '@atproto/api';
-import { getBskyAgent } from '../_router/_api.js';
+import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import { MastoStatus } from '../../../types/mastojs.types.js';
 import { MegaStatus } from '../../../types/megalodon.types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { AppAtpSessionData } from '../../../types/atproto.js';
+import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 
 class BlueskySearchRouter implements SearchRoute {
-	dto: AtpSessionData;
-	constructor(dto: AtpSessionData) {
+	dto: AppAtpSessionData;
+
+	constructor(dto: AppAtpSessionData) {
 		this.dto = dto;
 	}
 
@@ -55,6 +58,18 @@ class BlueskySearchRouter implements SearchRoute {
 			limit: q.limit || 8,
 		});
 		return { data };
+	}
+
+	async findFeeds(
+		query: AppBskyUnspeccedGetPopularFeedGenerators.QueryParams,
+	): LibraryPromise<AppBskyUnspeccedGetPopularFeedGenerators.OutputSchema> {
+		const agent = getXrpcAgent(this.dto);
+		return InvokeBskyFunction<AppBskyUnspeccedGetPopularFeedGenerators.OutputSchema>(
+			'getPopularFeedGenerators',
+			agent.app.bsky.unspecced.getPopularFeedGenerators,
+			agent.app.bsky.unspecced,
+			query,
+		);
 	}
 }
 

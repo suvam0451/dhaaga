@@ -108,6 +108,7 @@ export {
 	MisskeyRestClient,
 	UnknownRestClient,
 	PleromaRestClient,
+	BlueskyRestClient,
 };
 export {
 	DhaagaJsTimelineQueryOptions,

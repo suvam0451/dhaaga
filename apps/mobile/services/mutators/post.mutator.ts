@@ -1,15 +1,15 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
-import { PostMiddleware } from './middlewares/post.middleware';
-import ActivityPubService from './activitypub.service';
-import { AppPostObject } from '../types/app-post.types';
+import { PostMiddleware } from '../middlewares/post.middleware';
+import ActivityPubService from '../activitypub.service';
+import { AppPostObject } from '../../types/app-post.types';
 import { produce } from 'immer';
 import ActivityPubReactionsService, {
 	ActivityPubReactionStateDto,
-} from './approto/activitypub-reactions.service';
-import AtprotoService from './atproto.service';
+} from '../approto/activitypub-reactions.service';
+import AtprotoService from '../atproto.service';
 
-export class PostMutatorService {
+export class PostMutator {
 	private readonly driver: KNOWN_SOFTWARE;
 	private readonly client: ActivityPubClient;
 

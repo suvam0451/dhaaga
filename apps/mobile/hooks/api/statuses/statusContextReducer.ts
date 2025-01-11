@@ -110,7 +110,10 @@ function statusContextReducer(
 				for (let [key, value] of itemLookup) {
 					draft.lookup.set(
 						key,
-						new PostMiddleware(value, _domain, _subdomain).export(),
+						PostMiddleware.interfaceToJson(value, {
+							driver: _domain,
+							server: _subdomain,
+						}),
 					);
 				}
 

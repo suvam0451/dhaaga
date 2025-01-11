@@ -102,7 +102,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	const { content: UsernameWithEmojis } = useMfm({
 		content: displayNameRaw,
 		emojiMap: emojiMap,
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		numberOfLines: 1,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});

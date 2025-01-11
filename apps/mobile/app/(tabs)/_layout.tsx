@@ -21,7 +21,7 @@ export default function TabLayout() {
 						return {
 							tabBarHideOnKeyboard: true,
 							tabBarStyle: {
-								backgroundColor: theme.palette.bg,
+								backgroundColor: theme.background.a0,
 								borderTopWidth: 0,
 							},
 							tabBarIconStyle: {

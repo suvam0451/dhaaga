@@ -12,7 +12,6 @@ import {
 	ChatBskyConvoGetConvo,
 	ChatBskyConvoGetMessages,
 	ChatBskyConvoListConvos,
-	ChatBskyConvoSendMessage,
 	Facet,
 } from '@atproto/api';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';

@@ -1,28 +1,30 @@
-import { useEffect, useState } from 'react';
-import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import { useAppDb } from '../../../../hooks/utility/global-state-extractors';
+import { useLocalSearchParams } from 'expo-router';
+import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import { useAppDb } from '../../../hooks/utility/global-state-extractors';
+import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
+import { PostTimeline } from '../../../components/data-views/PostTimeline';
 import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
-} from '../../../context-wrappers/WithPostTimeline';
-import {
-	AppTimelineReducerActionType,
-	TimelineFetchMode,
-} from '../../../../states/reducers/post-timeline.reducer';
-import useTimeline from '../../../common/timeline/api/useTimeline';
-import { PostTimeline } from '../../../data-views/PostTimeline';
+} from '../../../components/context-wrappers/WithPostTimeline';
+import { useEffect, useState } from 'react';
+import { AppTimelineReducerActionType } from '../../../states/reducers/post-timeline.reducer';
+import useTimeline from '../../../components/common/timeline/api/useTimeline';
 
 function DataView() {
 	const [Refreshing, setRefreshing] = useState(false);
 	const { db } = useAppDb();
+
+	const params = useLocalSearchParams();
+	const id: string = params['uri'] as string;
+	const label: string = params['displayName'] as string;
 
 	// state management
 	const State = useTimelineState();
 	const dispatch = useTimelineDispatch();
 
 	useEffect(() => {
-		if (!db) return;
+		if (!db || !id) return;
 		dispatch({
 			type: AppTimelineReducerActionType.INIT,
 			payload: {
@@ -31,12 +33,13 @@ function DataView() {
 		});
 
 		dispatch({
-			type: AppTimelineReducerActionType.RESET_USING_QUERY,
+			type: AppTimelineReducerActionType.SETUP_CUSTOM_FEED_TIMELINE,
 			payload: {
-				type: TimelineFetchMode.BOOKMARKS,
+				uri: id,
+				label: label,
 			},
 		});
-	}, [db]);
+	}, [db, id]);
 
 	const { fetchStatus, data, status, refetch } = useTimeline({
 		type: State.feedType,
@@ -81,7 +84,7 @@ function DataView() {
 	}
 
 	return (
-		<WithAutoHideTopNavBar title={'My Bookmarks'} translateY={translateY}>
+		<WithAutoHideTopNavBar title={'Feed'} translateY={translateY}>
 			<PostTimeline
 				data={State.items}
 				onScroll={onScroll}
@@ -93,7 +96,11 @@ function DataView() {
 	);
 }
 
-function MyBookmark() {
+/**
+ * Feed preview page
+ * @constructor
+ */
+function Page() {
 	return (
 		<WithPostTimelineCtx>
 			<DataView />
@@ -101,4 +108,4 @@ function MyBookmark() {
 	);
 }
 
-export default MyBookmark;
+export default Page;

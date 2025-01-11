@@ -10,6 +10,7 @@ export enum APP_SEARCH_TYPE {
 	LINKS,
 	HASHTAGS,
 	HOME,
+	FEEDS,
 }
 
 export type DiscoverTabSearchResultType = {
@@ -118,6 +119,8 @@ function convertTabToResultPageType(tab: SEARCH_RESULT_TAB, q: any) {
 		case SEARCH_RESULT_TAB.TAGS: {
 			return APP_SEARCH_TYPE.HASHTAGS;
 		}
+		case SEARCH_RESULT_TAB.FEEDS:
+			return APP_SEARCH_TYPE.FEEDS;
 		default: {
 			return APP_SEARCH_TYPE.HOME;
 		}

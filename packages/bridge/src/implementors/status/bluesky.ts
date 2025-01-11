@@ -9,7 +9,10 @@ import {
 	ReasonRepost,
 } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
-import BlueskyMediaAttachmentAdapter from '../media-attachment/bluesky.js';
+import {
+	BlueskyMediaAttachmentAdapter,
+	BlueskyVideoAttachmentAdapter,
+} from '../media-attachment/bluesky.js';
 import { ReplyRef } from '@atproto/api/src/client/types/app/bsky/feed/defs.js';
 
 type BlueskyRichTextFacet = {
@@ -156,9 +159,15 @@ class BlueskyStatusAdapter implements StatusInterface {
 	isReposted = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
 
 	getMediaAttachments(): MediaAttachmentInterface[] {
+		// handle image embeds
 		const target: any[] = this.post?.embed?.images as any[];
 		if (target)
 			return target.map((o) => BlueskyMediaAttachmentAdapter.create(o));
+
+		// handle video embeds
+		if (this.post?.embed?.$type === 'app.bsky.embed.video#view')
+			return [BlueskyVideoAttachmentAdapter.create(this.post?.embed as any)];
+
 		return [];
 	}
 

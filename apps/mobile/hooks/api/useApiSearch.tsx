@@ -6,7 +6,78 @@ import { PostMiddleware } from '../../services/middlewares/post.middleware';
 import { UserMiddleware } from '../../services/middlewares/user.middleware';
 import { AppUserObject } from '../../types/app-user.types';
 import { AppBskyFeedSearchPosts } from '@atproto/api';
+import { AppFeedObject } from '../../types/app-feed.types';
+import { BlueskyRestClient } from '@dhaaga/bridge';
+import { FeedMiddleware } from '../../services/middlewares/feed-middleware';
 
+/**
+ * ------ Shared ------
+ */
+
+const defaultResult = {
+	success: true,
+	maxId: null,
+	minId: null,
+	items: [],
+};
+
+type AppQuerySearchResultType<T> = {
+	items: T[];
+	maxId: string | null;
+	minId: string | null;
+	success: boolean;
+};
+
+type PostResultPage = AppQuerySearchResultType<AppPostObject>;
+type UserResultPage = AppQuerySearchResultType<AppUserObject>;
+type TagResultPage = AppQuerySearchResultType<unknown>;
+type LinkResultPage = AppQuerySearchResultType<unknown>;
+type FeedResultPage = AppQuerySearchResultType<AppFeedObject>;
+
+/**
+ * --------------------
+ */
+
+/**
+ * Search and paginate through for feeds
+ * @param q query
+ * @param maxId cursor
+ */
+export function useApiSearchFeeds(q: string, maxId: string | null) {
+	const { client, server, driver } = useAppApiClient();
+
+	return useQuery<FeedResultPage>({
+		queryKey: ['search/feeds', server, q, maxId],
+		queryFn: async () => {
+			const { data, error } = await (
+				client as BlueskyRestClient
+			).search.findFeeds({
+				limit: 5,
+				query: q,
+				cursor: maxId,
+			});
+			if (error) return defaultResult;
+			console.log(data);
+			return {
+				...defaultResult,
+				items: FeedMiddleware.deserialize<unknown[]>(
+					data.feeds,
+					driver,
+					server,
+				),
+				maxId: data.cursor,
+			};
+		},
+		enabled: !!client && driver === KNOWN_SOFTWARE.BLUESKY,
+		initialData: defaultResult,
+	});
+}
+
+/**
+ * Search and paginate through for users
+ * @param q query
+ * @param maxId cursor
+ */
 export function useApiSearchUsers(q: string, maxId: string | null) {
 	const { client, server, driver } = useAppApiClient();
 
@@ -34,13 +105,12 @@ export function useApiSearchUsers(q: string, maxId: string | null) {
 	});
 }
 
-type PostResults = {
-	items: AppPostObject[];
-	maxId: string | null;
-	minId: string | null;
-	success: boolean;
-};
-
+/**
+ * Search and paginate through for posts
+ * @param q query
+ * @param maxId cursor
+ * @param sort (bluesky only) "top"/"latest" search tabs
+ */
 export function useApiSearchPosts(
 	q: string,
 	maxId: string | null,
@@ -48,7 +118,7 @@ export function useApiSearchPosts(
 ) {
 	const { client, server, driver } = useAppApiClient();
 
-	async function api(): Promise<PostResults> {
+	async function api(): Promise<PostResultPage> {
 		// Akko-gang, nani da fukk? Y your maxId no work? 😭
 		// et tu, sharks 🤨?
 		const FALLBACK_TO_OFFSET = [
@@ -69,8 +139,7 @@ export function useApiSearchPosts(
 			limit: 10,
 			query: q,
 			type: 'statuses',
-			sort: sort,
-			// for misskey
+			sort: sort, // for bluesky
 			untilId: !!_untilId ? _untilId : undefined,
 			offset,
 		});
@@ -82,14 +151,13 @@ export function useApiSearchPosts(
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const _data = data as AppBskyFeedSearchPosts.Response;
 			return {
+				...defaultResult,
 				maxId: _data.data.cursor,
 				items: PostMiddleware.deserialize<unknown[]>(
 					_data.data.posts,
 					driver,
 					server,
 				),
-				minId: null,
-				success: true,
 			};
 		}
 
@@ -120,10 +188,10 @@ export function useApiSearchPosts(
 		};
 	}
 
-	return useQuery<PostResults>({
+	return useQuery<PostResultPage>({
 		queryKey: ['search/posts', server, q, maxId, sort],
 		queryFn: api,
 		enabled: client !== null && !!q,
-		initialData: { maxId: null, minId: null, items: [], success: false },
+		initialData: defaultResult,
 	});
 }

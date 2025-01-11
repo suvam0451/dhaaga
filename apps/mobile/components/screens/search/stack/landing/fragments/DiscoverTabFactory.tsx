@@ -15,6 +15,7 @@ import WithPostTimelineCtx, {
 import { AppFlashList } from '../../../../../lib/AppFlashList';
 import { AppTimelineReducerActionType } from '../../../../../../states/reducers/post-timeline.reducer';
 import {
+	useApiSearchFeeds,
 	useApiSearchPosts,
 	useApiSearchUsers,
 } from '../../../../../../hooks/api/useApiSearch';
@@ -27,8 +28,14 @@ import WithUserTimelineCtx, {
 	useUserTimelineDispatch,
 	useUserTimelineState,
 } from '../../../../../context-wrappers/WithUserTimeline';
+import WithFeedTimelineCtx, {
+	useFeedTimelineDispatch,
+	useFeedTimelineState,
+} from '../../../../../context-wrappers/WithFeedTimeline';
+
 import { AppUserTimelineReducerActionType } from '../../../../../../states/reducers/user-timeline.reducer';
 import { SEARCH_RESULT_TAB } from '../../../../../../services/driver.service';
+import { AppFeedTimelineReducerActionType } from '../../../../../../states/reducers/feed-timeline.reducer';
 
 type SearchResultTabProps = {
 	Header: any;
@@ -82,9 +89,84 @@ function LandingPage({ Header }: LandingPageProps) {
 	);
 }
 
+function SearchResultsFeeds({ Header }: SearchResultTabProps) {
+	const [Refreshing, setRefreshing] = useState(false);
+	const State = useDiscoverTabState();
+	const DiscoverTabDispatch = useDiscoverTabDispatch();
+	const TimelineState = useFeedTimelineState();
+	const TimelineDispatch = useFeedTimelineDispatch();
+	const { data, fetchStatus, refetch } = useApiSearchFeeds(
+		State.q,
+		TimelineState.appliedMaxId,
+	);
+
+	useEffect(() => {
+		if (!data) {
+			DiscoverTabDispatch({
+				type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+			});
+			return;
+		}
+		DiscoverTabDispatch({
+			type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+		});
+
+		if (data.items.length === 0) return;
+
+		TimelineDispatch({
+			type: AppFeedTimelineReducerActionType.APPEND_RESULTS,
+			payload: {
+				items: data.items,
+				maxId: data.maxId,
+			},
+		});
+	}, [fetchStatus]);
+
+	function onRefresh() {
+		setRefreshing(true);
+		TimelineDispatch({
+			type: AppUserTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
+	}
+
+	function loadMore() {
+		TimelineDispatch({
+			type: AppUserTimelineReducerActionType.REQUEST_LOAD_MORE,
+		});
+	}
+
+	/**
+	 * Composite Hook Collection
+	 */
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus,
+	});
+	const { onScroll } = useScrollMoreOnPageEnd({
+		itemCount: TimelineState.items.length,
+		updateQueryCache: loadMore,
+	});
+
+	return (
+		<View style={{ flex: 1 }}>
+			<AppFlashList.Feeds
+				data={TimelineState.items}
+				onScroll={onScroll}
+				refreshing={Refreshing}
+				onRefresh={onRefresh}
+				ListHeaderComponent={Header}
+			/>
+			<LoadingMore visible={visible} loading={loading} />
+		</View>
+	);
+}
+
 function SearchResultsUser({ Header }: SearchResultTabProps) {
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverTabState();
+	const DiscoverTabDispatch = useDiscoverTabDispatch();
 	const TimelineState = useUserTimelineState();
 	const TimelineDispatch = useUserTimelineDispatch();
 	const { data, fetchStatus, refetch } = useApiSearchUsers(
@@ -108,7 +190,6 @@ function SearchResultsUser({ Header }: SearchResultTabProps) {
 		});
 	}
 
-	const DiscoverTabDispatch = useDiscoverTabDispatch();
 	useEffect(() => {
 		if (!data) {
 			DiscoverTabDispatch({
@@ -292,6 +373,13 @@ function DiscoverTabFactory({ Header }: DiscoverTabFactoryProps) {
 						<SearchResultsUser Header={Header} />
 					</WithUserTimelineCtx>
 				);
+			case APP_SEARCH_TYPE.FEEDS:
+				return (
+					<WithFeedTimelineCtx>
+						<SearchResultsFeeds Header={Header} />;
+					</WithFeedTimelineCtx>
+				);
+
 			default:
 				return <View>{Header}</View>;
 		}

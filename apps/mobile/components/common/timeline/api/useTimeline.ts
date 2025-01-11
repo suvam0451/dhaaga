@@ -1,9 +1,10 @@
 import { AppTimelineQuery } from './useTimelineController';
 import { useQuery } from '@tanstack/react-query';
 import {
+	BlueskyRestClient,
 	DhaagaJsTimelineQueryOptions,
-	MisskeyRestClient,
 	KNOWN_SOFTWARE,
+	MisskeyRestClient,
 	PleromaRestClient,
 } from '@dhaaga/bridge';
 import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
@@ -196,6 +197,25 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 				const { data, error } = await client.accounts.bookmarks(_query);
 				if (error) return DEFAULT_RETURN_VALUE;
 				return createResultBatch(data.data, data?.maxId);
+			}
+			case TimelineFetchMode.FEED: {
+				const { data, error } = await (
+					client as BlueskyRestClient
+				).timelines.feed({
+					limit: 10,
+					cursor: maxId === null ? undefined : maxId,
+					feed: query.id,
+				});
+				if (error) return DEFAULT_RETURN_VALUE;
+				return {
+					data: PostMiddleware.deserialize<unknown[]>(
+						data.feed,
+						driver,
+						server,
+					),
+					maxId: data.cursor === undefined ? null : data.cursor,
+					minId: null,
+				};
 			}
 			default:
 				return DEFAULT_RETURN_VALUE;

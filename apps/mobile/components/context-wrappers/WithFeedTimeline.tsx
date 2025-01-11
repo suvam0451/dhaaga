@@ -6,28 +6,27 @@ import {
 	useReducer,
 	useRef,
 } from 'react';
-import { UserTimelineSessionService } from '../../services/session/user-timeline-session.service';
 import {
-	appUserTimelineReducer,
-	appUserTimelineReducerDefault,
-	AppUserTimelineReducerDispatchType,
-	AppUserTimelineReducerStateType,
-} from '../../states/reducers/user-timeline.reducer';
+	AppFeedTimelineReducerDispatchType,
+	AppFeedTimelineReducerStateType,
+	appFeedTimelineReducer,
+	appFeedTimelineReducerDefault,
+} from '../../states/reducers/feed-timeline.reducer';
 import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
-import WithTimelineControllerContext from '../common/timeline/api/useTimelineController';
+import { UserTimelineSessionService } from '../../services/session/user-timeline-session.service';
 
 /**
  * --- Context Setup ---
  */
 
-const _StateCtx = createContext<AppUserTimelineReducerStateType>(null);
-const _DispatchCtx = createContext<AppUserTimelineReducerDispatchType>(null);
+const _StateCtx = createContext<AppFeedTimelineReducerStateType>(null);
+const _DispatchCtx = createContext<AppFeedTimelineReducerDispatchType>(null);
 const _ManagerCtx =
 	createContext<MutableRefObject<UserTimelineSessionService>>(null);
 // exports
-export const useUserTimelineState = () => useContext(_StateCtx);
-export const useUserTimelineDispatch = () => useContext(_DispatchCtx);
-export const useUserTimelineManager = () => useContext(_ManagerCtx);
+export const useFeedTimelineState = () => useContext(_StateCtx);
+export const useFeedTimelineDispatch = () => useContext(_DispatchCtx);
+export const useFeedTimelineManager = () => useContext(_ManagerCtx);
 
 /**
  * --- Context Wrapper ---
@@ -36,8 +35,8 @@ export const useUserTimelineManager = () => useContext(_ManagerCtx);
 export function CtxWrapper({ children }) {
 	const { driver, client } = useAppApiClient();
 	const [state, dispatch] = useReducer(
-		appUserTimelineReducer,
-		appUserTimelineReducerDefault,
+		appFeedTimelineReducer,
+		appFeedTimelineReducerDefault,
 	);
 
 	const manager = useRef<UserTimelineSessionService>(null);
@@ -57,20 +56,16 @@ export function CtxWrapper({ children }) {
 /**
  * makes the following hooks available
  *
- * - useUserTimelineState
- * - useUserTimelineDispatch
- * - useUserTimelineManager
+ * - useFeedTimelineState
+ * - useFeedTimelineDispatch
+ * - useFeedTimelineManager
  *
  * Makes the following modals available
  *
  * - UserPeekModal
  */
 function WithUserTimelineCtx({ children }: any) {
-	return (
-		<WithTimelineControllerContext>
-			<CtxWrapper>{children}</CtxWrapper>
-		</WithTimelineControllerContext>
-	);
+	return <CtxWrapper>{children}</CtxWrapper>;
 }
 
 export default WithUserTimelineCtx;

@@ -1,7 +1,6 @@
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
-import ActivityPubAdapterService from '../activitypub-adapter.service';
-import ActivitypubAdapterService from '../activitypub-adapter.service';
+import { PostMiddleware } from '../middlewares/post.middleware';
 
 class AtprotoContextService {
 	/**
@@ -18,7 +17,7 @@ class AtprotoContextService {
 		let lookup = new Map<string, StatusInterface>();
 		let childrenMapper = new Map<string, StatusInterface[]>();
 
-		let curr: StatusInterface = ActivityPubAdapterService.adaptStatus(
+		let curr: StatusInterface = PostMiddleware.rawToInterface<unknown>(
 			_thread.post,
 			KNOWN_SOFTWARE.BLUESKY,
 		);
@@ -28,7 +27,7 @@ class AtprotoContextService {
 		let parent: any = _thread.parent;
 		let child: StatusInterface = curr;
 		while (!!parent) {
-			const data = ActivityPubAdapterService.adaptStatus(
+			const data = PostMiddleware.rawToInterface<unknown>(
 				parent,
 				KNOWN_SOFTWARE.BLUESKY,
 			);
@@ -48,7 +47,7 @@ class AtprotoContextService {
 
 		function processList(replies: any[], parentId: string) {
 			replies.forEach((o) => {
-				const _o = ActivitypubAdapterService.adaptStatus(
+				const _o = PostMiddleware.rawToInterface<unknown>(
 					o,
 					KNOWN_SOFTWARE.BLUESKY,
 				);

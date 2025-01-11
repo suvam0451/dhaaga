@@ -1,6 +1,6 @@
 import StatusItem from '../../../common/status/StatusItem';
-import { Fragment, useMemo, useState } from 'react';
-import { Animated, RefreshControl, View, Text, FlatList } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Animated, FlatList, RefreshControl, View } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { useLocalSearchParams } from 'expo-router';
@@ -10,29 +10,31 @@ import WithAppStatusContextDataContext, {
 	useAppStatusContextDataContext,
 } from '../../../../hooks/api/statuses/WithAppStatusContextData';
 import PostReply from '../../../common/status/PostReply';
-import { APP_FONT } from '../../../../styles/AppTheme';
-import WithAppTimelineDataContext from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { AppDivider } from '../../../lib/Divider';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '../../../../styles/dimensions';
+import { AppText } from '../../../lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 function ReplySection() {
 	const { theme } = useAppTheme();
 	return (
-		<Fragment>
-			<View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-				<Text
-					style={{
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-						color: theme.secondary.a20,
-						fontSize: 18,
-					}}
-				>
-					Replies
-				</Text>
-			</View>
-			<AppDivider.Soft style={{ marginVertical: 16 }} />
-		</Fragment>
+		<View
+			style={{
+				flexDirection: 'row',
+				paddingHorizontal: 10,
+				backgroundColor: theme.background.a40,
+				paddingVertical: 10,
+			}}
+		>
+			<AppText.SemiBold
+				style={{
+					color: theme.secondary.a20,
+					fontSize: 18,
+				}}
+			>
+				Replies
+			</AppText.SemiBold>
+		</View>
 	);
 }
 
@@ -43,7 +45,6 @@ function StatusContextComponent() {
 	}, [data]);
 
 	if (!data.root) return <View />;
-
 	const rootObject = data.lookup.get(data.root);
 
 	return (
@@ -56,11 +57,12 @@ function StatusContextComponent() {
 				data={children}
 				renderItem={({ item }) => <PostReply colors={[]} lookupId={item.id} />}
 			/>
-			<View style={{ marginVertical: 16 }}>
-				<Text style={{ textAlign: 'center', color: APP_FONT.MONTSERRAT_BODY }}>
-					No more replies
-				</Text>
-			</View>
+			<AppText.Medium
+				style={{ textAlign: 'center', marginVertical: 16 }}
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+			>
+				No more replies
+			</AppText.Medium>
 		</View>
 	);
 }
@@ -81,17 +83,17 @@ function SharedStackPostDetails() {
 	return (
 		<WithAutoHideTopNavBar title={'Post'} translateY={translateY}>
 			<WithAppStatusContextDataContext data={Data} dispatch={dispatch}>
-				<WithAppTimelineDataContext>
-					<Animated.ScrollView
-						refreshControl={
-							<RefreshControl refreshing={refreshing} onRefresh={refetch} />
-						}
-						contentContainerStyle={{ paddingTop: 54 }}
-						onScroll={onScroll}
-					>
-						<StatusContextComponent />
-					</Animated.ScrollView>
-				</WithAppTimelineDataContext>
+				<Animated.ScrollView
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={refetch} />
+					}
+					contentContainerStyle={{
+						paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
+					}}
+					onScroll={onScroll}
+				>
+					<StatusContextComponent />
+				</Animated.ScrollView>
 			</WithAppStatusContextDataContext>
 		</WithAutoHideTopNavBar>
 	);

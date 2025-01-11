@@ -292,7 +292,9 @@ export function BottomNavBarInfinite({
 					style={{
 						flexDirection: 'row',
 						alignItems: 'center',
-						paddingHorizontal: 8,
+						paddingHorizontal: 8, // 8
+						backgroundColor: theme.background.a0,
+						borderTopLeftRadius: 32,
 					}}
 				>
 					<Pressable
@@ -303,8 +305,8 @@ export function BottomNavBarInfinite({
 						onPress={loadPrev}
 					>
 						<Ionicons
-							name={'chevron-back-circle'}
-							color={theme.primary.a0}
+							name={'arrow-back-circle'}
+							color={theme.secondary.a40}
 							size={32}
 						/>
 					</Pressable>
@@ -317,8 +319,8 @@ export function BottomNavBarInfinite({
 						onPress={loadNext}
 					>
 						<Ionicons
-							name={'chevron-forward-circle'}
-							color={theme.primary.a0}
+							name={'arrow-forward-circle'}
+							color={theme.secondary.a40}
 							size={32}
 						/>
 					</Pressable>

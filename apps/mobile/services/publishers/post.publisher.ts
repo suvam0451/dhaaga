@@ -2,7 +2,7 @@ import { BasePubSubService } from './_base.pubisher';
 import { AppPostObject } from '../../types/app-post.types';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
-import { PostMutatorService } from '../post-mutator.service';
+import { PostMutator } from '../mutators/post.mutator';
 import { Emoji } from '../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
 
@@ -19,7 +19,7 @@ export class PostPublisherService extends BasePubSubService {
 	private readonly cache: Map<string, AppPostObject>;
 	private readonly driver: KNOWN_SOFTWARE;
 	private readonly client: ActivityPubClient;
-	private readonly mutator: PostMutatorService;
+	private readonly mutator: PostMutator;
 
 	constructor(driver: KNOWN_SOFTWARE, client: ActivityPubClient) {
 		super();
@@ -29,7 +29,7 @@ export class PostPublisherService extends BasePubSubService {
 		if (!this.client) {
 			console.log('[WARN]: client empty');
 		}
-		this.mutator = new PostMutatorService(this.driver, this.client);
+		this.mutator = new PostMutator(this.driver, this.client);
 	}
 
 	writeCache(uuid: string, data: AppPostObject) {

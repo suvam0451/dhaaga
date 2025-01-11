@@ -1,10 +1,11 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { Image } from 'expo-image';
 import useMfm from '../../hooks/useMfm';
-import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppPostObject } from '../../../types/app-post.types';
 import { appDimensions } from '../../../styles/dimensions';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../lib/Text';
 
 type Props = {
 	dto: AppPostObject;
@@ -14,20 +15,21 @@ type Props = {
  * @constructor
  */
 function ReplyOwner({ dto }: Props) {
-	const { content: UsernameWithEmojis } = useMfm({
-		content: dto.postedBy.displayName,
-		remoteSubdomain: dto.postedBy.instance,
+	const { theme } = useAppTheme();
+	const { content } = useMfm({
+		content: dto.postedBy.displayName || 'N/A',
 		emojiMap: dto.calculated.emojis as any,
-		deps: [dto.postedBy.displayName],
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 	});
+
+	const IS_VALID_DISPLAY_NAME = !!dto.postedBy.displayName;
 
 	return (
 		<View
 			style={{
 				display: 'flex',
 				flexDirection: 'row',
-				marginBottom: 8,
+				marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
 			}}
 		>
 			<View
@@ -51,16 +53,19 @@ function ReplyOwner({ dto }: Props) {
 				/>
 			</View>
 			<View style={{ marginLeft: 8 }}>
-				{UsernameWithEmojis}
-				<Text
+				{IS_VALID_DISPLAY_NAME ? (
+					content
+				) : (
+					<AppText.SemiBold>{''}</AppText.SemiBold>
+				)}
+				<AppText.Medium
 					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-						fontSize: 12,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						color: theme.secondary.a30,
+						fontSize: 13,
 					}}
 				>
 					{dto.postedBy.handle}
-				</Text>
+				</AppText.Medium>
 			</View>
 		</View>
 	);

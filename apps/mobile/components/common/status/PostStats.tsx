@@ -34,7 +34,7 @@ function util(o: number): string {
 /**
  * Shows a post stat
  */
-const StatItem = memo(
+export const StatItem = memo(
 	({ count, label, nextCounts, onPress, me }: StatItemProps) => {
 		const { theme } = useAppTheme();
 		const formatted = util(count);

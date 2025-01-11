@@ -14,9 +14,17 @@ export const appUserObjectSchema = z.object({
 		isBot: z.boolean(),
 		fields: z.array(
 			z.object({
-				name: z.string(),
-				value: z.string(),
+				// some label behave like this
+				name: z.ostring(),
+				value: z.ostring(),
 				verifiedAt: z.string().nullable().optional(),
+
+				// other labels (feed.creator) behave like this
+				cid: z.ostring(),
+				cts: z.date({ coerce: true }),
+				src: z.ostring(),
+				uri: z.ostring(),
+				val: z.ostring(), // e.g. --> "!no-unauthenticated"
 			}),
 		),
 	}),
