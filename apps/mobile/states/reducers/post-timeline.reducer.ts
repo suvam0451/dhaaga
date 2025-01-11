@@ -9,6 +9,10 @@ import { ProfilePinnedUserService } from '../../database/entities/profile-pinned
 import { ProfilePinnedTagService } from '../../database/entities/profile-pinned-tag';
 import { Dispatch } from 'react';
 import { ActivityPubReactionStateDto } from '../../services/approto/activitypub-reactions.service';
+import {
+	timelineReducerBaseDefaults,
+	TimelineReducerBaseState,
+} from './_timeline.shared';
 
 type AppTimelineQueryOptions = DhaagaJsTimelineQueryOptions;
 
@@ -29,48 +33,27 @@ export enum TimelineFetchMode {
 	REMOTE_TIMELINE = 'Remote Timeline',
 
 	ADD_NEW = 'Add New',
+
+	// account modules
+	BOOKMARKS = 'Bookmarks',
+	LIKES = 'Likes',
+
+	FEED = 'Feed',
 }
 
-type State = {
-	db: DataSource | null;
-	sessionIdentifier: string;
+type State = TimelineReducerBaseState<AppPostObject> & {
 	feedType: TimelineFetchMode;
 
 	opts: AppTimelineQueryOptions; // for users/hashtags
 	query: { id: string; label: string } | null;
 	isWidgetVisible: boolean;
-	isEol: boolean;
-	items: AppPostObject[];
-	seen: Set<string>;
-
-	// pagination state
-	isFirstLoadPending: boolean;
-	minId: string | null;
-	maxId: string | null;
-
-	/**
-	 * Updating this value will result in
-	 * fetching the next set of data
-	 */
-	appliedMaxId: string | null;
 };
 
 export const DEFAULT: State = {
-	db: null,
-	sessionIdentifier: RandomUtil.nanoId(),
+	...timelineReducerBaseDefaults,
 	feedType: TimelineFetchMode.IDLE,
-	isEol: false,
-	opts: { limit: 20 },
 	query: null,
 	isWidgetVisible: false,
-	items: [],
-	seen: new Set<string>(),
-
-	// pagination state
-	isFirstLoadPending: true,
-	minId: null,
-	maxId: null,
-	appliedMaxId: null,
 };
 
 export enum ACTION {
@@ -92,6 +75,9 @@ export enum ACTION {
 	UPDATE_LIKE_STATUS,
 	UPDATE_REACTION_STATE,
 	POST_OBJECT_CHANGED,
+
+	SETUP_USER_POST_TIMELINE,
+	SETUP_CUSTOM_FEED_TIMELINE,
 }
 
 type Actions =
@@ -186,6 +172,20 @@ type Actions =
 			payload: {
 				item: AppPostObject;
 			};
+	  }
+	| {
+			type: ACTION.SETUP_USER_POST_TIMELINE;
+			payload: {
+				id: string;
+				label: string;
+			};
+	  }
+	| {
+			type: ACTION.SETUP_CUSTOM_FEED_TIMELINE;
+			payload: {
+				uri: string;
+				label: string;
+			};
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -199,7 +199,7 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.RESET_USING_QUERY: {
 			return produce(state, (draft) => {
 				draft.feedType = action.payload.type;
-				draft.sessionIdentifier = RandomUtil.nanoId();
+				draft.sessionId = RandomUtil.nanoId();
 				draft.seen = new Set();
 			});
 		}
@@ -215,35 +215,35 @@ function reducer(state: State, action: Actions): State {
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_HOME: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.HOME;
-								draft.sessionIdentifier = RandomUtil.nanoId();
+								draft.sessionId = RandomUtil.nanoId();
 								draft.seen = new Set();
 							});
 						}
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_LOCAL: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.LOCAL;
-								draft.sessionIdentifier = RandomUtil.nanoId();
+								draft.sessionId = RandomUtil.nanoId();
 								draft.seen = new Set();
 							});
 						}
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_SOCIAL: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.SOCIAL;
-								draft.sessionIdentifier = RandomUtil.nanoId();
+								draft.sessionId = RandomUtil.nanoId();
 								draft.seen = new Set();
 							});
 						}
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_BUBBLE: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.BUBBLE;
-								draft.sessionIdentifier = RandomUtil.nanoId();
+								draft.sessionId = RandomUtil.nanoId();
 								draft.seen = new Set();
 							});
 						}
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_GLOBAL: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.FEDERATED;
-								draft.sessionIdentifier = RandomUtil.nanoId();
+								draft.sessionId = RandomUtil.nanoId();
 								draft.seen = new Set();
 							});
 						}
@@ -265,7 +265,7 @@ function reducer(state: State, action: Actions): State {
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_REMOTE: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.USER;
-								draft.sessionIdentifier = RandomUtil.nanoId();
+								draft.sessionId = RandomUtil.nanoId();
 								draft.query = {
 									id: match.identifier,
 									label: match.displayName || match.username,
@@ -312,6 +312,12 @@ function reducer(state: State, action: Actions): State {
 			}
 		}
 		case ACTION.APPEND_RESULTS: {
+			/**
+			 * TODO: dedup the posts and add extra logic
+			 * 	to clean up duplicated post contexts in
+			 * 	Bluesky driver
+			 */
+
 			const copy = Array.from(state.items);
 			for (const item of action.payload.items) {
 				if (state.seen.has(item.id)) continue;
@@ -338,7 +344,7 @@ function reducer(state: State, action: Actions): State {
 				draft.maxId = null;
 				draft.minId = null;
 				draft.isEol = false;
-				draft.isFirstLoadPending = true;
+				draft.isFirstLoad = false;
 				draft.isWidgetVisible = false;
 				draft.seen = new Set();
 			});
@@ -462,9 +468,30 @@ function reducer(state: State, action: Actions): State {
 				);
 			});
 		}
+		case ACTION.SETUP_USER_POST_TIMELINE: {
+			return produce(state, (draft) => {
+				draft.feedType = TimelineFetchMode.USER;
+				draft.sessionId = RandomUtil.nanoId();
+				draft.query = {
+					id: action.payload.id,
+					label: action.payload.label,
+				};
+				draft.seen = new Set();
+			});
+		}
+		case ACTION.SETUP_CUSTOM_FEED_TIMELINE: {
+			return produce(state, (draft) => {
+				draft.feedType = TimelineFetchMode.FEED;
+				draft.sessionId = RandomUtil.nanoId();
+				draft.query = {
+					id: action.payload.uri,
+					label: action.payload.label,
+				};
+			});
+		}
+		default:
+			return state;
 	}
-
-	return state;
 }
 
 type AppTimelineReducerDispatchType = Dispatch<Actions>;

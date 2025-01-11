@@ -67,7 +67,7 @@ function useMfm({
 	// since font remains same for each reusable component
 	const fontStyle: StyleProp<TextStyle> = {
 		color: AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis),
-		// fontFamily: fontFamily,
+		fontFamily: fontFamily,
 	};
 
 	useEffect(() => {

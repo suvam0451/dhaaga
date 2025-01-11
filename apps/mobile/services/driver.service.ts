@@ -1,4 +1,6 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { APP_ICON_ENUM } from '../components/lib/Icon';
+import { APP_ROUTING_ENUM } from '../utils/route-list';
 
 export enum APP_PINNED_OBJECT_TYPE {
 	/**
@@ -34,7 +36,58 @@ export enum SEARCH_RESULT_TAB {
 	HOME = 'home',
 }
 
+export type AppModulesProps = {
+	label: string;
+	desc: string;
+	iconId: APP_ICON_ENUM;
+	to: APP_ROUTING_ENUM;
+};
+
 class DriverService {
+	static getAccountModules(driver: KNOWN_SOFTWARE): AppModulesProps[] {
+		switch (driver) {
+			case KNOWN_SOFTWARE.MASTODON: {
+				return [
+					{
+						label: 'Likes',
+						desc: "Posts I've Liked",
+						iconId: 'heart',
+						to: APP_ROUTING_ENUM.LIKES,
+					},
+					{
+						label: 'Bookmarks',
+						desc: 'My Bookmarks',
+						iconId: 'bookmark',
+						to: APP_ROUTING_ENUM.BOOKMARK,
+					},
+					{
+						label: 'Lists',
+						desc: 'My lists',
+						iconId: 'list',
+						to: APP_ROUTING_ENUM.LISTS,
+					},
+				];
+			}
+			case KNOWN_SOFTWARE.MISSKEY:
+			case KNOWN_SOFTWARE.SHARKEY: {
+				return [
+					{
+						label: 'Bookmarks',
+						desc: 'My Bookmarks',
+						iconId: 'bookmark',
+						to: APP_ROUTING_ENUM.BOOKMARK,
+					},
+					{
+						label: 'Lists',
+						desc: 'My lists',
+						iconId: 'language',
+						to: APP_ROUTING_ENUM.LISTS,
+					},
+				];
+			}
+		}
+	}
+
 	/**
 	 * @param driver protocol driver enum string
 	 * @returns a list of pin objects that should be

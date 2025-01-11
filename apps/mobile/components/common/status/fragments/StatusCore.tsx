@@ -1,6 +1,8 @@
 import { Fragment, memo, useMemo, useState } from 'react';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext, {
+	useAppStatusItem,
+} from '../../../../hooks/ap-proto/useAppStatusItem';
 import useMfm from '../../../hooks/useMfm';
 import StatusItemSkeleton from '../../../skeletons/StatusItemSkeleton';
 import { Pressable, View } from 'react-native';
@@ -18,13 +20,17 @@ import { appDimensions } from '../../../../styles/dimensions';
 import { Text, StyleSheet } from 'react-native';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import {
+	useAppApiClient,
 	useAppBottomSheet_Improved,
+	useAppPublishers,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
 import { AppPostObject } from '../../../../types/app-post.types';
 import { AppText } from '../../../lib/Text';
+import ActivityPubService from '../../../../services/activitypub.service';
+import StatusQuoted from './StatusQuoted';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -41,10 +47,15 @@ type StatusCoreProps = {
 };
 
 function StatusMoreOptionsButton() {
+	const { driver } = useAppApiClient();
 	const { dto } = useAppStatusItem();
 	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { postPub } = useAppPublishers();
 
 	function onPress() {
+		if (ActivityPubService.misskeyLike(driver)) {
+			postPub.finalizeBookmarkState(dto?.uuid).finally(() => {});
+		}
 		setCtx({ uuid: dto.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
 	}
@@ -120,15 +131,15 @@ const StatusCore = memo(
 		const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
 		const _target = PostMiddleware.getContentTarget(dto);
-		const HAS_MEDIA = _target.content?.media?.length > 0;
-		const IS_TRANSLATED = _target.calculated.translationOutput;
+		const HAS_MEDIA = _target?.content?.media?.length > 0;
+		const IS_TRANSLATED = _target?.calculated?.translationOutput;
 
 		const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
 
 		const { content: PostContent, isLoaded } = useMfm({
-			content: _target.content.raw,
-			emojiMap: _target.calculated.emojis,
-			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10, // fontFamily: APP_FONTS.INTER_400_REGULAR,
+			content: _target?.content?.raw,
+			emojiMap: _target?.calculated?.emojis,
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10, // fontFamily: APP_FONTS.INTER_400_REGULAR
 		});
 
 		const isSensitive = _target.meta.sensitive;
@@ -216,11 +227,11 @@ const StatusCore = memo(
 					</HiddenByCw>
 
 					{/*FIXME: enable for bluesky*/}
-					{/*{IS_QUOTE_BOOST && (*/}
-					{/*	<WithAppStatusItemContext dto={_target.boostedFrom}>*/}
-					{/*		<StatusQuoted />*/}
-					{/*	</WithAppStatusItemContext>*/}
-					{/*)}*/}
+					{IS_QUOTE_BOOST && (
+						<WithAppStatusItemContext dto={_target.boostedFrom}>
+							<StatusQuoted />
+						</WithAppStatusItemContext>
+					)}
 
 					{/* Lock reactions for preview (to be refactored) */}
 					{!isPreview && <EmojiReactions dto={_target} />}

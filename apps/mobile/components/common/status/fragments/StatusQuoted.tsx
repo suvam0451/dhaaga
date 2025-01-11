@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import useMfm from '../../../hooks/useMfm';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
@@ -6,22 +5,15 @@ import MediaItem from '../../media/MediaItem';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import PostCreatedBy from './PostCreatedBy';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
-const StatusQuoted = memo(() => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+function StatusQuoted() {
+	const { theme } = useAppTheme();
 	const { dto } = useAppStatusItem();
 	const { content: PostContent } = useMfm({
 		content: dto.content.raw,
-		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis as any,
-		deps: [dto],
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 
@@ -62,7 +54,7 @@ const StatusQuoted = memo(() => {
 					</Text>
 				</View>
 
-				<PostCreatedBy dto={dto} />
+				<PostCreatedBy />
 				{PostContent}
 			</View>
 
@@ -72,7 +64,7 @@ const StatusQuoted = memo(() => {
 			/>
 		</View>
 	);
-});
+}
 
 const styles = StyleSheet.create({
 	rootContainer: {
@@ -82,7 +74,7 @@ const styles = StyleSheet.create({
 		borderRadius: 6,
 		borderStyle: 'dashed',
 		borderWidth: 1,
-		// borderColor: 'orange',
 	},
 });
+
 export default StatusQuoted;

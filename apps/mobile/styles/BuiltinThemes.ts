@@ -11,6 +11,14 @@ export const APP_DEFAULT_COLOR_SCHEME: AppColorSchemeType = {
 		hashtagLow: 'rgba(248,199,124,0.87)',
 		link: '#45a0be',
 	},
+	background: {
+		a0: '#121212',
+		a10: '#121212',
+		a20: '#121212',
+		a30: '#121212',
+		a40: '#121212',
+		a50: '#121212',
+	},
 	textColor: {
 		high: '#f5f5f5',
 		medium: '#999999',
@@ -79,6 +87,14 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			hashtagLow: 'rgba(248,199,124,0.87)',
 			link: '#45a0be',
 			// #f5f4f6
+		},
+		background: {
+			a0: '#121212', // 7%
+			a10: '#171717', // 9%
+			a20: '#1c1c1c', // 11%
+			a30: '#212121', // 13%
+			a40: '#262626', // 15%
+			a50: '#2b2b2b', // 17%, 2b2b2b
 		},
 		textColor: {
 			high: '#f5f5f5', // 96%
@@ -160,6 +176,14 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			hashtagHigh: '#fea7a6',
 			hashtagLow: '#dc9497',
 			link: '#9c6e5c',
+		},
+		background: {
+			a0: '#301515',
+			a10: '#301515',
+			a20: '#301515',
+			a30: '#301515',
+			a40: '#301515',
+			a50: '#301515',
 		},
 		textColor: {
 			high: '#fcc', // 96 --> 92%, ffd6d6

@@ -1,20 +1,25 @@
 import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
-import { DhaagaJsPostCreateDto } from '@dhaaga/bridge/dist/adapters/_client/_router/routes/statuses';
 import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs';
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
+import {
+	ATPROTO_FACET_ENUM,
+	detectFacets,
+} from '../../utils/atproto-facets.utils';
+import { AtpAgent, BlobRef, Facet } from '@atproto/api';
+import { PostComposerReducerStateType } from '../../states/reducers/post-composer.reducer';
+import MediaUtils from '../../utils/media.utils';
+import { AppBskyFeedPost } from '@atproto/api/src/client';
 
-type AtprotoImageEmbed = {
+type AtProtoPostRecordType = Partial<AppBskyFeedPost.Record> &
+	Omit<AppBskyFeedPost.Record, 'createdAt'>;
+
+export type AtprotoImageEmbed = {
 	alt: string;
-	image: Blob;
+	image: BlobRef;
 	aspectRatio: {
 		width: number;
 		height: number;
 	};
-};
-
-type AtprotoPostEmbed = {
-	uri: string;
-	cid: string;
 };
 
 export type AtprotoReplyEmbed = {
@@ -29,51 +34,136 @@ export type AtprotoReplyEmbed = {
 };
 
 class AtprotoComposerService {
-	private static async submit(
-		client: BlueskyRestClient,
-		dto: DhaagaJsPostCreateDto,
-	) {
-		const { data, error } = await client.statuses.create(dto);
+	private static async getPost(client: BlueskyRestClient, uri: string) {
+		const { data, error } = await client.statuses.get(uri);
 		if (error) {
+			console.log('[WARN]: failed to fetch freshly created post');
 			return null;
 		}
-		const { data: postThreadData, error: postThreadError } =
-			await client.statuses.get(data.uri);
-
-		if (postThreadError) return null;
-		return postThreadData.data.thread;
+		return data.data.thread as ThreadViewPost;
 	}
-	static async post(
+
+	/**
+	 * shared function to post and return preview forn
+	 * @param client
+	 * @param record
+	 * @private
+	 */
+	private static async post(
 		client: BlueskyRestClient,
-		text: string,
-		embeds: {
-			images?: AtprotoImageEmbed[];
-			quote?: AtprotoPostEmbed;
-			reply?: AtprotoReplyEmbed;
-		},
+		record: AtProtoPostRecordType,
+	) {
+		const agent = client.getAgent();
+		try {
+			return await agent.post(record);
+		} catch (e) {
+			console.log('[WARN]: failed to create post:', record, e);
+			return null;
+		}
+	}
+
+	static async resolveMentions(agent: AtpAgent, items: Facet[]) {
+		const pending: { index: number; pointer: number; handle: string }[] = [];
+		let count = 0;
+		for (let i = 0; i < items.length; i++) {
+			if (items[i].features[0].$type === ATPROTO_FACET_ENUM.MENTION) {
+				pending.push({
+					index: count++,
+					pointer: i,
+					handle: items[i].features[0].did as string,
+				});
+			}
+		}
+		const handles = await Promise.all(
+			pending.map((item) => agent.resolveHandle({ handle: item.handle })),
+		);
+		console.log(handles);
+		for (let i = 0; i < pending.length; i++) {
+			items[pending[i].pointer].features[0].did = handles[i].data.did;
+		}
+		return items;
+	}
+
+	static async postUsingReducerState(
+		client: BlueskyRestClient,
+		state: PostComposerReducerStateType,
 	): Promise<ThreadViewPost> {
 		const agent = client.getAgent();
 
-		let postData: { uri: string; cid: string } = null;
+		let record: Partial<AppBskyFeedPost.Record> &
+			Omit<AppBskyFeedPost.Record, 'createdAt'> = {};
 
-		if (embeds.reply) {
-			postData = await agent.post({
-				text,
-				reply: embeds.reply,
-			});
-		} else if (embeds.quote) {
-		} else if (embeds.images) {
-		} else {
-			postData = await agent.post({
-				text,
-			});
+		if (state.text) {
+			record.text = state.text;
+			record.facets = await this.resolveMentions(
+				agent,
+				detectFacets(state.text),
+			);
 		}
 
-		if (!postData) return null;
+		if (state.cw) {
+			record.cw;
+		}
 
-		const { data: postThreadData, error: postThreadError } =
-			await client.statuses.get(postData.uri);
-		return postThreadData.data.thread as ThreadViewPost;
+		if (state.medias.length > 0) {
+			/**
+			 * Upload Media Attachments
+			 */
+			const uploadedImageBlobData = await Promise.all(
+				state.medias.map((o) => MediaUtils.uploadBlob(agent, o.localUri)),
+			);
+			const mediaAttachmentObject: AtprotoImageEmbed[] = [];
+			for (let i = 0; i < state.medias.length; i++) {
+				const _alt = state.medias[i].localAlt;
+				mediaAttachmentObject.push({
+					alt: _alt === null ? undefined : _alt,
+					aspectRatio: {
+						height: 1,
+						width: 1,
+					},
+					image: uploadedImageBlobData[0].data.blob,
+				});
+			}
+			record.embed = {
+				$type: 'app.bsky.embed.images',
+				images: mediaAttachmentObject,
+			};
+		}
+
+		// handle reply
+
+		// handle quotes
+
+		const result = await this.post(client, record);
+
+		/**
+		 * Thanks Graysky again!
+		 */
+		if (state.visibilityRules.length > 0) {
+			const _none = state.visibilityRules.find((v) => v.type === 'nobody');
+			if (_none) return await this.getPost(client, result.uri);
+			const allow = [];
+
+			for (const rule of state.visibilityRules) {
+				if (rule.type === 'mentioned') {
+					allow.push({ $type: 'app.bsky.feed.threadgate#mentionRule' });
+				} else if (rule.type === 'following') {
+					allow.push({ $type: 'app.bsky.feed.threadgate#followingRule' });
+				} else if (rule.type === 'list') {
+					allow.push({
+						$type: 'app.bsky.feed.threadgate#listRule',
+						list: rule.list,
+					});
+				}
+			}
+
+			await agent.app.bsky.feed.threadgate.create(
+				{ repo: agent.session!.did, rkey: result.uri.split('/').pop() },
+				{ post: result.uri, createdAt: new Date().toISOString(), allow },
+			);
+		}
+
+		return await this.getPost(client, result.uri);
 	}
 
 	static async chat(

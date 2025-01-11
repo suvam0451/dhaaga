@@ -2,12 +2,13 @@ import { Fragment } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import PostButton from './PostButton';
 import { useComposerContext } from '../api/useComposerContext';
 import appTextStyling from '../../../../../styles/AppTextStyling';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppAcct,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
 
 /**
@@ -65,12 +66,8 @@ function ReplyIndicator() {
  * For emoji selections, this section is hidden
  */
 function ComposerTopMenu() {
-	const { acct, theme } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
+	const { acct } = useAppAcct();
 
 	return (
 		<Fragment>

@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
 	View,
 	Text,
@@ -8,10 +8,12 @@ import {
 	StyleSheet,
 } from 'react-native';
 import { useComposerContext } from '../api/useComposerContext';
-import usePostComposeAutoCompletion from '../api/usePostComposeAutoCompletion';
-import { APP_FONT } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { InstanceApi_CustomEmojiDTO, UserInterface } from '@dhaaga/bridge';
+import {
+	InstanceApi_CustomEmojiDTO,
+	KNOWN_SOFTWARE,
+	UserInterface,
+} from '@dhaaga/bridge';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -19,12 +21,16 @@ import Animated, {
 } from 'react-native-reanimated';
 import TextEditorService from '../../../../../services/text-editor.service';
 import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppApiClient,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
 
 const AVATAR_ICON_SIZE = 32;
 
-const ComposerAutoCompletion = memo(() => {
+function ComposerAutoCompletion() {
 	const { theme } = useAppTheme();
+	const { driver } = useAppApiClient();
 	const { state, dispatch } = useComposerContext();
 
 	const available = useSharedValue(0);
@@ -54,17 +60,15 @@ const ComposerAutoCompletion = memo(() => {
 			payload: {
 				content: TextEditorService.autoCompleteHandler(
 					state.text,
-					`@${item.getUsername()}@${item.getInstanceUrl()}`,
+					driver === KNOWN_SOFTWARE.BLUESKY
+						? `@${item.getUsername()}`
+						: `@${item.getUsername()}@${item.getInstanceUrl()}`,
 					state.keyboardSelection,
 				),
 			},
 		});
 		dispatch({
-			type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
-			payload: {
-				type: 'none',
-				q: '',
-			},
+			type: PostComposerReducerActionType.CLEAR_SEARCH_PROMPT,
 		});
 	}
 
@@ -80,11 +84,7 @@ const ComposerAutoCompletion = memo(() => {
 			},
 		});
 		dispatch({
-			type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
-			payload: {
-				type: 'none',
-				q: '',
-			},
+			type: PostComposerReducerActionType.CLEAR_SEARCH_PROMPT,
 		});
 	}
 
@@ -92,15 +92,10 @@ const ComposerAutoCompletion = memo(() => {
 		<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 			<Animated.View
 				style={[
+					styles.autoCompletionResultAnimatedContainer,
 					{
-						flexDirection: 'row',
-						alignItems: 'center',
-						backgroundColor: '#161616',
-						borderRadius: 8,
-						marginHorizontal: -6,
+						backgroundColor: theme.background.a30,
 						width: HAS_NO_CONTENT ? 32 : 'auto',
-						margin: 'auto',
-						paddingHorizontal: 4,
 					},
 					animatedContainerStyle,
 				]}
@@ -202,13 +197,20 @@ const ComposerAutoCompletion = memo(() => {
 			</Animated.View>
 		</View>
 	);
-});
+}
 
 const styles = StyleSheet.create({
 	emojiText: {
-		color: APP_FONT.MONTSERRAT_BODY,
 		marginLeft: 4,
 		fontFamily: APP_FONTS.INTER_500_MEDIUM,
+	},
+	autoCompletionResultAnimatedContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		borderRadius: 8,
+		marginHorizontal: -6,
+		margin: 'auto',
+		paddingHorizontal: 4,
 	},
 });
 export default ComposerAutoCompletion;

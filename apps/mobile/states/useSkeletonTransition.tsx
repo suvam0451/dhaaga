@@ -1,5 +1,3 @@
-import {useDebounce} from "use-debounce";
-
 /**
  * Prevents flashy screens,
  * When multiple visibility booleans A, B, C
@@ -14,18 +12,20 @@ import {useDebounce} from "use-debounce";
  * if the condition has been met already
  */
 function useSkeletonSmoothTransition(
-    input: boolean,
-    {condition, preventLoadingForCondition}: {condition: boolean, preventLoadingForCondition: boolean}
+	input: boolean,
+	{
+		condition,
+		preventLoadingForCondition,
+	}: { condition: boolean; preventLoadingForCondition: boolean },
 ) {
-  const IsHardTruthy = input
-  const [ISSoftTruthy] = useDebounce(input, 150)
-  const [IsConditionSatisfied] = useDebounce(condition, 150)
+	const IsHardTruthy = input;
+	const ISSoftTruthy = input;
+	const IsConditionSatisfied = condition;
 
-  const retval = IsHardTruthy || ISSoftTruthy
-  if(preventLoadingForCondition && IsConditionSatisfied)
-    return true
+	const retval = IsHardTruthy || ISSoftTruthy;
+	if (preventLoadingForCondition && IsConditionSatisfied) return true;
 
-  return retval
+	return retval;
 }
 
-export default useSkeletonSmoothTransition
+export default useSkeletonSmoothTransition;

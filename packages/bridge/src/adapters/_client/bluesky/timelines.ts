@@ -3,14 +3,22 @@ import {
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
-import { AppBskyFeedGetTimeline, AtpSessionData } from '@atproto/api';
+import { AppBskyFeedGetFeed, AppBskyFeedGetTimeline } from '@atproto/api';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { getBskyAgent } from '../_router/_api.js';
+import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
+import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
+import { AppAtpSessionData } from '../../../types/atproto.js';
+
+type FeedGetQueryDto = {
+	feed: string;
+	limit?: number;
+	cursor?: string;
+};
 
 class BlueskyTimelinesRouter implements TimelinesRoute {
-	dto: AtpSessionData;
-	constructor(dto: AtpSessionData) {
+	dto: AppAtpSessionData;
+	constructor(dto: AppAtpSessionData) {
 		this.dto = dto;
 	}
 
@@ -63,6 +71,16 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
 		return Promise.resolve(undefined) as any;
+	}
+
+	async feed(params: FeedGetQueryDto) {
+		const agent = getXrpcAgent(this.dto);
+		return InvokeBskyFunction<AppBskyFeedGetFeed.OutputSchema>(
+			'getFeed',
+			agent.app.bsky.feed.getFeed,
+			agent.app.bsky.feed,
+			params,
+		);
 	}
 }
 

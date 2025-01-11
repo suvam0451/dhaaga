@@ -5,6 +5,11 @@ import { Account } from '../../database/_schema';
 import ActivityPubReactionsService, {
 	ActivityPubReactionStateDtoType,
 } from '../approto/activitypub-reactions.service';
+import { AppUserObject } from '../../types/app-user.types';
+
+enum KEY {
+	APP_ACCOUNT_USER_OBJECT_CACHE = 'app/_cache/account/:uuid',
+}
 
 class Storage extends BaseStorageManager {
 	getEmojis(server: string) {
@@ -19,6 +24,20 @@ class Storage extends BaseStorageManager {
 			data,
 			lastFetchedAt: new Date(),
 		});
+	}
+
+	getProfile(acctUuid: string) {
+		return this.getJson<{
+			updatedAt: string;
+			value: AppUserObject;
+		}>(KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(':uuid', acctUuid));
+	}
+
+	setProfile(acctUuid: string, data: AppUserObject) {
+		this.setJsonWithExpiry(
+			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(':uuid', acctUuid),
+			data,
+		);
 	}
 }
 

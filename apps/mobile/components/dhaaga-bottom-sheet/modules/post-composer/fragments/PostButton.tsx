@@ -1,44 +1,35 @@
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import { useComposerContext } from '../api/useComposerContext';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { useAppBottomSheet } from '../../_api/useAppBottomSheet';
-import ActivityPubAdapterService from '../../../../../services/activitypub-adapter.service';
 import ActivityPubService from '../../../../../services/activitypub.service';
 import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
 import AtprotoComposerService, {
 	AtprotoReplyEmbed,
 } from '../../../../../services/atproto/atproto-compose';
-import useGlobalState from '../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import {
+	useAppApiClient,
 	useAppBottomSheet_Improved,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../Core';
 import { Loader } from '../../../../lib/Loader';
+import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 
 /**
  * Click to Post!
  */
-const PostButton = memo(() => {
+function PostButton() {
 	const [Loading, setLoading] = useState(false);
 	const { state } = useComposerContext();
-	const { client, driver, acct } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-			driver: o.driver,
-			acct: o.acct,
-		})),
-	);
+	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const { setType, PostRef } = useAppBottomSheet();
 	const { postPub } = useAppPublishers();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx, ctx } = useAppBottomSheet_Improved();
 
 	async function onClick() {
 		setLoading(true);
@@ -73,12 +64,10 @@ const PostButton = memo(() => {
 			// 	};
 			// }
 			// }
-			const data = await AtprotoComposerService.post(
-				client as any,
-				state.text,
-				{
-					reply,
-				},
+
+			const data = await AtprotoComposerService.postUsingReducerState(
+				client as BlueskyRestClient,
+				state,
 			);
 			if (data) {
 				/**
@@ -86,13 +75,10 @@ const PostButton = memo(() => {
 				 * 		We can use the logic from context builder
 				 * 		to render the parent and root, as well
 				 */
-				const res = ActivityPubAdapterService.adaptStatus(data, driver);
-				PostRef.current = new PostMiddleware(
-					res,
-					driver,
-					acct?.server,
-				).export();
-				setType(APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW);
+				const _data = PostMiddleware.deserialize<unknown>(data, driver, server);
+				postPub.writeCache(_data.uuid, _data);
+				setCtx({ uuid: _data.uuid });
+				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 				return;
 			}
 		}
@@ -141,7 +127,7 @@ const PostButton = memo(() => {
 			console.log('resounding success...');
 
 			if (ActivityPubService.mastodonLike(driver)) {
-				const _data = PostMiddleware.deserialize(data, driver, acct?.server);
+				const _data = PostMiddleware.deserialize(data, driver, server);
 				postPub.writeCache(_data.uuid, _data);
 				setCtx({ uuid: _data.uuid });
 				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
@@ -149,7 +135,7 @@ const PostButton = memo(() => {
 				const _data = PostMiddleware.deserialize<unknown>(
 					(data as any).createdNote,
 					driver,
-					acct?.server,
+					server,
 				);
 				postPub.writeCache(_data.uuid, _data);
 				setCtx({ uuid: _data.uuid });
@@ -196,6 +182,6 @@ const PostButton = memo(() => {
 			/>
 		</TouchableOpacity>
 	);
-});
+}
 
 export default PostButton;

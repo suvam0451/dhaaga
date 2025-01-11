@@ -31,8 +31,8 @@ export class DefaultStatusesRouter implements StatusesRoute {
 		return notImplementedErrorBuilder<MastoScheduledStatus>();
 	}
 
-	async delete(id: string): LibraryPromise<any> {
-		return notImplementedErrorBuilder<MastoScheduledStatus>();
+	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
+		return { success: false, deleted: false };
 	}
 
 	async bookmark(

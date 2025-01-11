@@ -10,7 +10,6 @@ import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
 	AppButtonBottomSheetAction,
 } from '../../../lib/Buttons';
-import { TIMELINE_POST_LIST_DATA_REDUCER_TYPE } from '../../../common/timeline/api/postArrayReducer';
 import useMfm from '../../../hooks/useMfm';
 import { AnimatedFlashList } from '@shopify/flash-list';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
@@ -20,18 +19,13 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppUserObject } from '../../../../types/app-user.types';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 const ReactingUser = memo(({ dto }: { dto: AppUserObject }) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 	const { content } = useMfm({
 		content: dto.displayName,
-		remoteSubdomain: dto.instance,
 		emojiMap: new Map<string, string>(),
-		deps: [dto.displayName],
 		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		acceptTouch: false,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A20,
@@ -65,8 +59,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 			theme: o.colorScheme,
 		})),
 	);
-	const { TextRef, PostRef, timelineDataPostListReducer, setVisible, visible } =
-		useAppBottomSheet();
+	const { TextRef, PostRef, setVisible, visible } = useAppBottomSheet();
 	const { Data, fetchStatus } = useGetReactionDetails(
 		PostRef.current?.id,
 		TextRef.current,
@@ -104,13 +97,6 @@ const AppBottomSheetReactionDetails = memo(() => {
 
 		// request reducer to update reaction state
 		if (state === null) return;
-		timelineDataPostListReducer.current({
-			type: TIMELINE_POST_LIST_DATA_REDUCER_TYPE.UPDATE_REACTION_STATE,
-			payload: {
-				id: PostRef.current.id,
-				state,
-			},
-		});
 		setVisible(false);
 	}
 

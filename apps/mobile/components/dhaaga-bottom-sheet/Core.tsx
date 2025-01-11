@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetQuickPost from './modules/AppBottomSheetQuickPost';
-import PostPreview from './modules/post-preview/PostPreview';
 import WithComposerContext from './modules/post-composer/api/useComposerContext';
 import PostCompose from './modules/post-composer/pages/PostCompose';
 import AppBottomSheetProfilePeek from './modules/profile-peek/AppBottomSheetProfilePeek';
@@ -29,6 +28,7 @@ import ABS_Post_Show_Shares from './modules/ABS_Post_Show_Shares';
 import ABS_Post_Preview from './modules/ABS_Post_Preview';
 import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
 import ABS_Add_Profile from './modules/ABS_Add_Profile';
+import { appVerticalIndex } from '../../styles/dimensions';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	QUICK_POST = 'QuickPost',
@@ -72,8 +72,6 @@ function Factory() {
 
 			case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
 				return <ABS_Add_Profile />;
-			case APP_BOTTOM_SHEET_ENUM.STATUS_PREVIEW:
-				return <PostPreview />;
 			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
 				return (
 					<WithComposerContext textSeed={null}>
@@ -153,14 +151,14 @@ const AppBottomSheet = memo(() => {
 					width: '100%',
 					backgroundColor: theme.palette.bg,
 					opacity: 0.48,
-					zIndex: 1,
+					zIndex: appVerticalIndex.sheetBackdrop,
 				}}
 				onPress={onBottomSheetCloseEvent}
 			/>
 			<Animated.View
 				style={[
 					styles.rootContainer,
-					{ backgroundColor: theme.palette.menubar },
+					{ backgroundColor: theme.background.a20 },
 					animStyle,
 				]}
 			>
@@ -199,7 +197,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		borderTopRightRadius: 8,
 		borderTopLeftRadius: 8,
-		zIndex: 2,
+		zIndex: appVerticalIndex.sheetContent,
 	},
 	text: {
 		textAlign: 'center',

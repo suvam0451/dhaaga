@@ -15,6 +15,7 @@ import WithPostTimelineCtx, {
 import { AppFlashList } from '../../../../../lib/AppFlashList';
 import { AppTimelineReducerActionType } from '../../../../../../states/reducers/post-timeline.reducer';
 import {
+	useApiSearchFeeds,
 	useApiSearchPosts,
 	useApiSearchUsers,
 } from '../../../../../../hooks/api/useApiSearch';
@@ -27,15 +28,145 @@ import WithUserTimelineCtx, {
 	useUserTimelineDispatch,
 	useUserTimelineState,
 } from '../../../../../context-wrappers/WithUserTimeline';
+import WithFeedTimelineCtx, {
+	useFeedTimelineDispatch,
+	useFeedTimelineState,
+} from '../../../../../context-wrappers/WithFeedTimeline';
+
 import { AppUserTimelineReducerActionType } from '../../../../../../states/reducers/user-timeline.reducer';
+import { SEARCH_RESULT_TAB } from '../../../../../../services/driver.service';
+import { AppFeedTimelineReducerActionType } from '../../../../../../states/reducers/feed-timeline.reducer';
 
 type SearchResultTabProps = {
 	Header: any;
 };
 
+type LandingPageProps = {
+	Header: any;
+};
+
+function LandingPage({ Header }: LandingPageProps) {
+	const { theme } = useAppTheme();
+	return (
+		<View style={{ flex: 1 }}>
+			{Header}
+			<View
+				style={{
+					alignItems: 'center',
+					justifyContent: 'center',
+					flex: 1,
+					paddingBottom: 128,
+				}}
+			>
+				<Text
+					style={[
+						styles.bodyText,
+						{
+							color: theme.secondary.a10,
+							marginBottom: 32,
+							fontSize: 20,
+							fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+						},
+					]}
+				>
+					More stuff coming{' '}
+					<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
+				</Text>
+				<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+					1) Press 🔍 to start searching
+				</Text>
+				<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+					2)️ Submit (↵) to search.
+				</Text>
+				<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+					3)️ Press 🔍 again to hide widget
+				</Text>
+				<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
+					4) Clear (x) to come back here
+				</Text>
+			</View>
+		</View>
+	);
+}
+
+function SearchResultsFeeds({ Header }: SearchResultTabProps) {
+	const [Refreshing, setRefreshing] = useState(false);
+	const State = useDiscoverTabState();
+	const DiscoverTabDispatch = useDiscoverTabDispatch();
+	const TimelineState = useFeedTimelineState();
+	const TimelineDispatch = useFeedTimelineDispatch();
+	const { data, fetchStatus, refetch } = useApiSearchFeeds(
+		State.q,
+		TimelineState.appliedMaxId,
+	);
+
+	useEffect(() => {
+		if (!data) {
+			DiscoverTabDispatch({
+				type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+			});
+			return;
+		}
+		DiscoverTabDispatch({
+			type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+		});
+
+		if (data.items.length === 0) return;
+
+		TimelineDispatch({
+			type: AppFeedTimelineReducerActionType.APPEND_RESULTS,
+			payload: {
+				items: data.items,
+				maxId: data.maxId,
+			},
+		});
+	}, [fetchStatus]);
+
+	function onRefresh() {
+		setRefreshing(true);
+		TimelineDispatch({
+			type: AppUserTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
+	}
+
+	function loadMore() {
+		TimelineDispatch({
+			type: AppUserTimelineReducerActionType.REQUEST_LOAD_MORE,
+		});
+	}
+
+	/**
+	 * Composite Hook Collection
+	 */
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus,
+	});
+	const { onScroll } = useScrollMoreOnPageEnd({
+		itemCount: TimelineState.items.length,
+		updateQueryCache: loadMore,
+	});
+
+	return (
+		<View style={{ flex: 1 }}>
+			<AppFlashList.Feeds
+				data={TimelineState.items}
+				onScroll={onScroll}
+				refreshing={Refreshing}
+				onRefresh={onRefresh}
+				ListHeaderComponent={Header}
+			/>
+			<LoadingMore visible={visible} loading={loading} />
+		</View>
+	);
+}
+
 function SearchResultsUser({ Header }: SearchResultTabProps) {
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverTabState();
+	const DiscoverTabDispatch = useDiscoverTabDispatch();
 	const TimelineState = useUserTimelineState();
 	const TimelineDispatch = useUserTimelineDispatch();
 	const { data, fetchStatus, refetch } = useApiSearchUsers(
@@ -59,7 +190,6 @@ function SearchResultsUser({ Header }: SearchResultTabProps) {
 		});
 	}
 
-	const DiscoverTabDispatch = useDiscoverTabDispatch();
 	useEffect(() => {
 		if (!data) {
 			DiscoverTabDispatch({
@@ -128,6 +258,7 @@ function SearchResultsPost({ Header }: SearchResultTabProps) {
 	const { data, fetchStatus, refetch } = useApiSearchPosts(
 		State.q,
 		TimelineState.appliedMaxId,
+		State.tab === SEARCH_RESULT_TAB.LATEST ? 'latest' : 'top',
 	);
 
 	useEffect(() => {
@@ -135,6 +266,13 @@ function SearchResultsPost({ Header }: SearchResultTabProps) {
 			type: AppTimelineReducerActionType.RESET,
 		});
 	}, [State.q]);
+
+	useEffect(() => {
+		TimelineDispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+		refetch();
+	}, [State.tab]);
 
 	useEffect(() => {
 		if (!data.success) {
@@ -210,7 +348,6 @@ type DiscoverTabFactoryProps = {
  * tab
  */
 function DiscoverTabFactory({ Header }: DiscoverTabFactoryProps) {
-	const { theme } = useAppTheme();
 	const State = useDiscoverTabState();
 	const dispatch = useDiscoverTabDispatch();
 
@@ -221,47 +358,7 @@ function DiscoverTabFactory({ Header }: DiscoverTabFactoryProps) {
 	}, []);
 
 	return useMemo(() => {
-		if (!State.q)
-			return (
-				<View style={{ flex: 1 }}>
-					{Header}
-					<View
-						style={{
-							alignItems: 'center',
-							justifyContent: 'center',
-							flex: 1,
-							paddingBottom: 128,
-						}}
-					>
-						<Text
-							style={[
-								styles.bodyText,
-								{
-									color: theme.secondary.a10,
-									marginBottom: 32,
-									fontSize: 20,
-									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-								},
-							]}
-						>
-							More stuff coming{' '}
-							<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
-						</Text>
-						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							1) Press 🔍 to start searching
-						</Text>
-						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							2)️ Submit (↵) to search.
-						</Text>
-						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							3)️ Press 🔍 again to hide widget
-						</Text>
-						<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-							4) Clear (x) to come back here
-						</Text>
-					</View>
-				</View>
-			);
+		if (!State.q) return <LandingPage Header={Header} />;
 
 		switch (State.category) {
 			case APP_SEARCH_TYPE.POSTS:
@@ -276,10 +373,17 @@ function DiscoverTabFactory({ Header }: DiscoverTabFactoryProps) {
 						<SearchResultsUser Header={Header} />
 					</WithUserTimelineCtx>
 				);
+			case APP_SEARCH_TYPE.FEEDS:
+				return (
+					<WithFeedTimelineCtx>
+						<SearchResultsFeeds Header={Header} />;
+					</WithFeedTimelineCtx>
+				);
+
 			default:
 				return <View>{Header}</View>;
 		}
-	}, [State.category, State.q, theme, Header]);
+	}, [State.category, State.q, Header]);
 }
 
 export default DiscoverTabFactory;

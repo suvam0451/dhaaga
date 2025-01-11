@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
-import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import {
 	useAppAcct,
@@ -147,7 +146,6 @@ function ReactButton() {
 
 function StatusInteractionButtons() {
 	const { dto: item } = useAppStatusItem();
-	const { explain } = useAppTimelinePosts();
 	const { client } = useAppApiClient();
 	const { acct } = useAppAcct();
 
@@ -181,7 +179,7 @@ function StatusInteractionButtons() {
 		)
 			return;
 
-		explain(item.id, null, setIsTranslateStateLoading);
+		// explain(item.id, null, setIsTranslateStateLoading);
 	}
 
 	const IS_MISSKEY = ActivityPubService.misskeyLike(acct.driver);

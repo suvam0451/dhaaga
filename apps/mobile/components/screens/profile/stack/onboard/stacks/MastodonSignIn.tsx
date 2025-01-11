@@ -8,25 +8,22 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { UnknownRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import PleromaPasteToken from '../fragments/PleromaPasteToken';
 import { AccountService } from '../../../../../../database/entities/account';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
 import { APP_EVENT_ENUM } from '../../../../../../services/publishers/app.publisher';
 import {
+	useAppDb,
 	useAppPublishers,
 	useAppTheme,
+	useHub,
 } from '../../../../../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
 	const { appSub } = useAppPublishers();
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
+	const { loadAccounts } = useHub();
 	const [Code, setCode] = useState<string | null>(null);
 
 	const params = useLocalSearchParams();
@@ -104,6 +101,7 @@ function MastodonSignInStack() {
 		if (upsertResult.type === 'success') {
 			Alert.alert('Account Added. Refresh if any screen is outdated.');
 			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+			loadAccounts();
 			router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 		}
 	}

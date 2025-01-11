@@ -1,20 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { StatusInterface } from '@dhaaga/bridge';
+import { useAppApiClient } from '../../utility/global-state-extractors';
 
 /**
  * Returns the interface for a post
  * @param id apProto id, or atProto cid
  */
 function useGetPostInterface(id: string) {
-	const { client, driver } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-			driver: o.driver,
-		})),
-	);
+	const { client, driver } = useAppApiClient();
 
 	async function api(): Promise<StatusInterface> {
 		if (!client) throw new Error('_client not initialized');

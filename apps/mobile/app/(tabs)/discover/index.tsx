@@ -244,6 +244,7 @@ const FloatingButtonCircular = () => {
 						placeholderTextColor={'rgba(0, 0, 0, 0.84)'}
 						onChangeText={updateSearch}
 						onSubmitEditing={submitSearch}
+						value={State.text}
 						placeholder={'Discover something new!'}
 						style={[
 							{

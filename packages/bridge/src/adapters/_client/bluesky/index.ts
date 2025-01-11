@@ -14,6 +14,7 @@ import BlueskyTrendsRouter from './trends.js';
 import { Agent } from '@atproto/api';
 import { getBskyAgent } from '../_router/_api.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
+import BlueskyFeedRouter from './feeds.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;
 
@@ -31,6 +32,7 @@ class BlueskyRestClient implements ActivityPubClient {
 	tags: BlueskyTagsRouter;
 	timelines: BlueskyTimelinesRouter;
 	trends: BlueskyTrendsRouter;
+	feeds: BlueskyFeedRouter;
 
 	dto: AtprotoClientCreateDTO;
 
@@ -57,6 +59,7 @@ class BlueskyRestClient implements ActivityPubClient {
 		this.tags = new BlueskyTagsRouter();
 		this.timelines = new BlueskyTimelinesRouter(this.dto);
 		this.trends = new BlueskyTrendsRouter();
+		this.feeds = new BlueskyFeedRouter(this.dto);
 	}
 
 	getAgent() {

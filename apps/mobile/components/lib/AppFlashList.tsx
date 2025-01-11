@@ -46,6 +46,8 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 import { AppIcon } from './Icon';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../utils/route-list';
+import { AppFeedObject } from '../../types/app-feed.types';
+import SearchResultFeedItem from '../screens/search/SearchResultFeedItem';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -440,6 +442,7 @@ type AppFlatListPinCategory<
 const POST_ESTIMATED_SIZE = 200;
 const NOTIFICATION_ESTIMATED_SIZE = 100;
 const USER_ESTIMATED_SIZE = 72;
+const FEED_ESTIMATED_SIZE = 48;
 
 /**
  * Collection of various FlatLists
@@ -465,6 +468,32 @@ export class AppFlashList {
 				data={listItems}
 				renderItem={FlashListPostRenderer}
 				getItemType={(o) => o.type}
+				onScroll={onScroll}
+				contentContainerStyle={{
+					paddingTop,
+				}}
+				ListHeaderComponent={ListHeaderComponent}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
+			/>
+		);
+	}
+
+	static Feeds({
+		data,
+		onScroll,
+		refreshing,
+		onRefresh,
+		paddingTop,
+		ListHeaderComponent,
+	}: AppFlashListProps<AppFeedObject>) {
+		return (
+			<AnimatedFlashList
+				estimatedItemSize={FEED_ESTIMATED_SIZE}
+				data={data}
+				renderItem={({ item }) => <SearchResultFeedItem item={item} />}
 				onScroll={onScroll}
 				contentContainerStyle={{
 					paddingTop,

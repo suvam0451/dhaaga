@@ -18,6 +18,7 @@ import { DhaagaErrorCode } from '../../../types/result.types.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
+
 	constructor(dto: AtpSessionData) {
 		this.dto = dto;
 	}
@@ -43,8 +44,14 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		}
 	}
 
-	delete(id: string): LibraryPromise<MastoStatus | { success: true }> {
-		return Promise.resolve(undefined) as any;
+	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			await agent.deletePost(id);
+			return { success: true, deleted: true };
+		} catch (e) {
+			return { success: false, deleted: false };
+		}
 	}
 
 	async get(id: string): LibraryPromise<AppBskyFeedGetPostThread.Response> {
@@ -141,6 +148,64 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		} catch (e) {
 			console.log('[ERROR]: bluesky', e);
 			return errorBuilder();
+		}
+	}
+
+	/**
+	 * AT protocol specific implementation
+	 * @param uri
+	 * @param cid
+	 */
+
+	async atProtoLike(
+		uri: string,
+		cid: string,
+	): Promise<{ success: boolean; liked?: boolean; uri?: string }> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			const result = await agent.like(uri, cid);
+			return { success: true, liked: true, uri: result.uri };
+		} catch (e) {
+			console.log(e);
+			return { success: false };
+		}
+	}
+
+	async atProtoDeleteLike(
+		uri: string,
+	): Promise<{ success: boolean; liked?: boolean }> {
+		const agent = getBskyAgent(this.dto);
+		try {
+			await agent.deleteLike(uri);
+			return { success: true, liked: false };
+		} catch (e) {
+			console.log(e);
+			return { success: false };
+		}
+	}
+
+	async atProtoRepost(
+		uri: string,
+		cid: string,
+	): Promise<{ success: boolean; liked?: boolean; uri?: string }> {
+		try {
+			const agent = getBskyAgent(this.dto);
+			const result = await agent.repost(uri, cid);
+			return { success: true, liked: true, uri: result.uri };
+		} catch (e) {
+			console.log(e);
+			return { success: false };
+		}
+	}
+
+	async atProtoDeleteRepost(uri: string) {
+		const agent = getBskyAgent(this.dto);
+		try {
+			await agent.deleteRepost(uri);
+			return { success: true, liked: false };
+		} catch (e) {
+			console.log(e);
+			return { success: false };
 		}
 	}
 }

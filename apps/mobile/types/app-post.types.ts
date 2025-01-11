@@ -1,12 +1,16 @@
 import { z } from 'zod';
-import { ActivitypubHelper, StatusInterface } from '@dhaaga/bridge';
-import ActivitypubAdapterService from '../services/activitypub-adapter.service';
+import {
+	ActivitypubHelper,
+	BlueskyStatusAdapter,
+	StatusInterface,
+} from '@dhaaga/bridge';
 import MediaService from '../services/media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../components/common/media/_common';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { ActivityPubReactionStateDto } from '../services/approto/activitypub-reactions.service';
 import { RandomUtil } from '../utils/random.utils';
+import { UserMiddleware } from '../services/middlewares/user.middleware';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -102,6 +106,21 @@ export const ActivityPubStatusItemDto = z.object({
 	state: z.object({
 		isBookmarkStateFinal: z.boolean(),
 	}),
+	atProto: z
+		.object({
+			viewer: z
+				.object({
+					like: z.string().nullable().optional(),
+					embeddingDisabled: z.boolean().optional(),
+					pinned: z.any().optional(),
+					repost: z.any().optional(),
+					replyDisabled: z.boolean().optional(),
+					threadMuted: z.boolean().optional(),
+				})
+				.optional(),
+		})
+		.nullable()
+		.optional(),
 });
 
 export const ActivityPubStatusLevelTwo = ActivityPubStatusItemDto.extend({
@@ -161,7 +180,7 @@ export class AppStatusDtoService {
 			},
 		);
 
-		const user = ActivitypubAdapterService.adaptUser(input.getUser(), domain);
+		const user = UserMiddleware.rawToInterface(input.getUser(), domain);
 		let handle =
 			domain === KNOWN_SOFTWARE.BLUESKY
 				? `@${user.getUsername()}`
@@ -209,7 +228,7 @@ export class AppStatusDtoService {
 			},
 			interaction: {
 				bookmarked: input.getIsBookmarked(),
-				boosted: false,
+				boosted: input.getIsRebloggedByMe(),
 				liked: input.getIsFavourited(),
 			},
 			calculated: {
@@ -237,6 +256,12 @@ export class AppStatusDtoService {
 			},
 			state: {
 				isBookmarkStateFinal: IS_BOOKMARK_RESOLVED,
+			},
+			atProto: {
+				viewer:
+					domain === KNOWN_SOFTWARE.BLUESKY
+						? (input as BlueskyStatusAdapter).getViewer()
+						: undefined,
 			},
 		};
 	}

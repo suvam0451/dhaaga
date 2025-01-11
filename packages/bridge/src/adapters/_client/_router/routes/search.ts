@@ -27,6 +27,7 @@ export type DhaagaJsUserSearchDTO = {
 } & MastoUnifiedSearchType;
 
 export type DhaagaJsPostSearchDTO = {
+	sort?: string;
 	allowPartial?: true;
 	filetype?: null | 'image' | 'video' | 'audio';
 	limit: number;

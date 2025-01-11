@@ -25,6 +25,7 @@ import {
 	useAppAcct,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
+import { AppText } from '../lib/Text';
 
 /**
  * This UI fragment can be shared with other
@@ -39,9 +40,11 @@ export function DriverSelectionFragment() {
 		padding: number;
 		rightComponent: any;
 		to: string;
+		desc?: string;
 	}[] = [
 		{
-			label: 'Bluesky (⛔, 🚧)',
+			label: 'Bluesky',
+			desc: '- Custom PDS (for now)',
 			padding: 0,
 			rightComponent: (
 				<SoftwareHeader
@@ -55,65 +58,29 @@ export function DriverSelectionFragment() {
 		},
 		{
 			label: 'Mastodon',
-			padding: 24,
+			padding: 20,
+			desc: '+ Pleroma, Akkoma',
 			rightComponent: (
-				<View style={{ flexDirection: 'row' }}>
-					<View style={{ paddingHorizontal: 4 }}>
-						<SoftwareHeader
-							software={KNOWN_SOFTWARE.MASTODON}
-							mb={0}
-							mt={0}
-							iconSizeMultiplier={2}
-						/>
-					</View>
-					<SoftwareHeader
-						software={KNOWN_SOFTWARE.PLEROMA}
-						mb={0}
-						mt={0}
-						iconSizeMultiplier={2}
-					/>
-					<SoftwareHeader
-						software={KNOWN_SOFTWARE.AKKOMA}
-						mb={0}
-						mt={0}
-						iconSizeMultiplier={2}
-					/>
-				</View>
+				<SoftwareHeader
+					software={KNOWN_SOFTWARE.MASTODON}
+					mb={0}
+					mt={0}
+					iconSizeMultiplier={2.2}
+				/>
 			),
 			to: '/profile/onboard/add-mastodon',
 		},
 		{
 			label: 'Misskey',
-			padding: 20,
+			padding: 12,
+			desc: '+ Sharkey',
 			rightComponent: (
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-					}}
-				>
-					<View style={{}}>
-						<SoftwareHeader
-							software={KNOWN_SOFTWARE.MISSKEY}
-							mb={0}
-							mt={0}
-							iconSizeMultiplier={2}
-						/>
-					</View>
-
-					<SoftwareHeader
-						software={KNOWN_SOFTWARE.SHARKEY}
-						mb={0}
-						mt={0}
-						iconSizeMultiplier={1.75}
-					/>
-					<SoftwareHeader
-						software={KNOWN_SOFTWARE.FIREFISH}
-						mb={0}
-						mt={0}
-						iconSizeMultiplier={1.5}
-					/>
-				</View>
+				<SoftwareHeader
+					software={KNOWN_SOFTWARE.MISSKEY}
+					mb={0}
+					mt={0}
+					iconSizeMultiplier={2.5}
+				/>
 			),
 			to: '/profile/onboard/add-misskey',
 		},
@@ -135,18 +102,26 @@ export function DriverSelectionFragment() {
 						router.push(option.to);
 					}}
 				>
-					<Text
-						style={[
-							styles.selectSnsLabel,
-							{
-								color: theme.textColor.high,
-								flex: 1,
-							},
-						]}
-					>
-						{option.label}
-					</Text>
-					{option.rightComponent}
+					<View style={{ flex: 1, justifyContent: 'center' }}>
+						<Text
+							style={[
+								styles.selectSnsLabel,
+								{
+									color: theme.secondary.a10,
+								},
+							]}
+						>
+							{option.label}
+						</Text>
+						{option.desc && (
+							<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}>
+								{option.desc}
+							</AppText.Normal>
+						)}
+					</View>
+					<View style={{ width: 80, alignItems: 'center' }}>
+						{option.rightComponent}
+					</View>
 				</Pressable>
 			))}
 		</View>
@@ -185,13 +160,13 @@ export function AddAccountLandingFragment({
 				<AppIcon
 					id={'info'}
 					size={24}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
 				/>
 				<Text
 					style={[
 						styles.tipText,
 						{
-							color: theme.secondary.a30,
+							color: theme.secondary.a50,
 						},
 					]}
 				>
@@ -280,7 +255,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 	},
 	selectSnsLabel: {
-		padding: 6,
+		// padding: 6,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		fontSize: 22,
 	},

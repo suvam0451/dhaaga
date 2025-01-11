@@ -9,13 +9,13 @@ import { Button } from '@rneui/base';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { router } from 'expo-router';
 import AtprotoSessionService from '../../../../services/atproto/atproto-session.service';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import { AppText } from '../../../../components/lib/Text';
 import {
+	useAppDb,
 	useAppPublishers,
 	useAppTheme,
+	useHub,
 } from '../../../../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
 import { Loader } from '../../../../components/lib/Loader';
@@ -23,11 +23,8 @@ import { Loader } from '../../../../components/lib/Loader';
 function SigninBsky() {
 	const [IsLoading, setIsLoading] = useState(false);
 	const { theme } = useAppTheme();
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
+	const { loadAccounts } = useHub();
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { appSub } = useAppPublishers();
 
@@ -50,6 +47,7 @@ function SigninBsky() {
 			if (success) {
 				Alert.alert('Account Added. Refresh if any screen is outdated.');
 				appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+				loadAccounts();
 				router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 			} else {
 				console.log(reason);

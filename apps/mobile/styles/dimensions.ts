@@ -22,3 +22,13 @@ export const appDimensions = {
 		scrollViewTopPadding: 44 + 2,
 	},
 };
+
+export const appVerticalIndex = {
+	menu: 2,
+	sheetBackdrop: 2,
+	sheetContent: 3,
+	modalBackdrop: 4,
+	modalContent: 5,
+	dialogBackdrop: 6,
+	dialogContent: 7,
+};

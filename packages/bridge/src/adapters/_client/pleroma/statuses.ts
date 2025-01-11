@@ -10,10 +10,7 @@ import {
 	MastoStatus,
 } from '../../../types/mastojs.types.js';
 import { MegaReaction, MegaStatus } from '../../../types/megalodon.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -57,12 +54,12 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		return { data: camelcaseKeys(response.data, { deep: true }) as any };
 	}
 
-	async delete(id: string): LibraryPromise<{ success: true }> {
+	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
 		const data = await this.client.client.deleteStatus(id);
 		if (data.status === 200 || data.status === 204) {
-			return { data: { success: true } };
+			return { success: true, deleted: true };
 		}
-		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		return { success: false, deleted: false };
 	}
 
 	/**

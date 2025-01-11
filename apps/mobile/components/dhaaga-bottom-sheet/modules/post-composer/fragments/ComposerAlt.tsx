@@ -1,12 +1,13 @@
-import { memo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { useComposerContext } from '../api/useComposerContext';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { APP_FONT } from '../../../../../styles/AppTheme';
 import ComposeMediaTargets from './MediaTargets';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../../../states/_global';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppAcct,
+	useAppApiClient,
+	useAppDb,
+	useAppTheme,
+} from '../../../../../hooks/utility/global-state-extractors';
 import { AppBottomSheetMenu } from '../../../../lib/Menu';
 import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 import { AppIcon } from '../../../../lib/Icon';
@@ -16,15 +17,12 @@ import {
 	AccountMetadataService,
 } from '../../../../../database/entities/account-metadata';
 import ActivityPubProviderService from '../../../../../services/activitypub-provider.service';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
-const ComposerAlt = memo(() => {
-	const { acct, driver, db } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			driver: o.driver,
-			db: o.db,
-		})),
-	);
+function ComposerAlt() {
+	const { driver } = useAppApiClient();
+	const { acct } = useAppAcct();
+	const { db } = useAppDb();
 	const { state, dispatch } = useComposerContext();
 	const { theme } = useAppTheme();
 
@@ -55,6 +53,9 @@ const ComposerAlt = memo(() => {
 				item: _asset,
 			},
 		});
+
+		// media attachments are uploaded during post creation
+		if (driver === KNOWN_SOFTWARE.BLUESKY) return;
 
 		// try upload
 		try {
@@ -151,29 +152,8 @@ const ComposerAlt = memo(() => {
 					No attachments added.
 				</Text>
 			)}
-			{/*<FlatList*/}
-			{/*	data={state.medias}*/}
-			{/*	renderItem={({ item, index }) => (*/}
-			{/*		<ComposerAltListItem item={item} index={index} />*/}
-			{/*	)}*/}
-			{/*	contentContainerStyle={{*/}
-			{/*		marginVertical: 16,*/}
-			{/*	}}*/}
-			{/*/>*/}
 		</View>
 	);
-});
-
-const styles = StyleSheet.create({
-	textInput: {
-		textDecorationLine: 'none',
-		textDecorationStyle: undefined,
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_400_REGULAR, // backgroundColor: 'red',
-		flex: 1,
-		width: '100%',
-	},
-});
+}
 
 export default ComposerAlt;

@@ -58,11 +58,13 @@ import {
 	MegaStatus,
 } from './types/megalodon.types.js';
 import { MissUserDetailed } from './types/misskey-js.types.js';
+import BlueskyStatusAdapter from './implementors/status/bluesky.js';
 
 export {
 	UnknownToStatusAdapter,
 	MastodonToStatusAdapter,
 	MisskeyToStatusAdapter,
+	BlueskyStatusAdapter,
 	ActivityPubClient,
 };
 
@@ -106,6 +108,7 @@ export {
 	MisskeyRestClient,
 	UnknownRestClient,
 	PleromaRestClient,
+	BlueskyRestClient,
 };
 export {
 	DhaagaJsTimelineQueryOptions,

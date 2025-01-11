@@ -10,14 +10,17 @@ import WithAutoHideTopNavBar from '../../../../../containers/WithAutoHideTopNavB
 import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
 import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
 import { AccountService } from '../../../../../../database/entities/account';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { RandomUtil } from '../../../../../../utils/random.utils';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
 import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
 import { Image } from 'expo-image';
-import { useAppPublishers } from '../../../../../../hooks/utility/global-state-extractors';
+import {
+	useAppDb,
+	useAppPublishers,
+	useAppTheme,
+	useHub,
+} from '../../../../../../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../../../../../../services/publishers/app.publisher';
 
 export type AccountCreationPreviewProps = {
@@ -85,18 +88,14 @@ function MisskeySignInStack() {
 	const [Token, setToken] = useState<string | null>(null);
 	const [MisskeyId, setMisskeyId] = useState<string | null>(null);
 	const { appSub } = useAppPublishers();
+	const { db } = useAppDb();
+	const { theme } = useAppTheme();
+	const { loadAccounts } = useHub();
 
 	const params = useLocalSearchParams();
 	const _signInUrl: string = params['signInUrl'] as string;
 	const _subdomain: string = params['subdomain'] as string;
 	const _domain: string = params['domain'] as string;
-
-	const { db, theme } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-			theme: o.colorScheme,
-		})),
-	);
 
 	useEffect(() => {
 		try {
@@ -170,6 +169,8 @@ function MisskeySignInStack() {
 		if (upsertResult.type === 'success') {
 			Alert.alert('Account Added. Refresh if any screen is outdated.');
 			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+			loadAccounts();
+			``;
 			router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 		} else {
 			console.log(upsertResult);

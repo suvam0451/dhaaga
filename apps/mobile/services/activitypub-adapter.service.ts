@@ -7,6 +7,8 @@ import {
 
 /**
  * Wrapper service to invoke provider functions
+ *
+ * @depreacted
  */
 class ActivityPubAdapterService {
 	static adaptStatus(item: any, domain: string): StatusInterface {

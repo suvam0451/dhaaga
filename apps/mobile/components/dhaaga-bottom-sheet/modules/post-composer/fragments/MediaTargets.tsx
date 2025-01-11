@@ -1,11 +1,10 @@
-import { memo } from 'react';
 import { useComposerContext } from '../api/useComposerContext';
 import {
 	FlatList,
+	Pressable,
+	Text,
 	TouchableOpacity,
 	View,
-	Text,
-	Pressable,
 } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
@@ -17,14 +16,15 @@ import {
 import { Image } from 'expo-image';
 import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
 import { AppIcon } from '../../../../lib/Icon';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 /**
  * Shows a list of uploaded
  * media files and options to
  * select/remove
  */
-const ComposeMediaTargets = memo(function Foo() {
-	const { client } = useAppApiClient();
+function ComposeMediaTargets() {
+	const { client, driver } = useAppApiClient();
 	const { state, dispatch } = useComposerContext();
 	const { theme } = useAppTheme();
 	const { show } = useAppDialog();
@@ -37,6 +37,10 @@ const ComposeMediaTargets = memo(function Foo() {
 				text: input,
 			},
 		});
+
+		// for bluesky, media assets are not preloaded
+		if (driver === KNOWN_SOFTWARE.BLUESKY) return;
+
 		dispatch({
 			type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
 			payload: {
@@ -264,5 +268,6 @@ const ComposeMediaTargets = memo(function Foo() {
 			/>
 		</View>
 	);
-});
+}
+
 export default ComposeMediaTargets;

@@ -3,48 +3,23 @@ import { RandomUtil } from '../../utils/random.utils';
 import { AppUserObject } from '../../types/app-user.types';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
+import {
+	timelineReducerBaseDefaults,
+	TimelineReducerBaseState,
+} from './_timeline.shared';
 
-type State = {
-	db: DataSource | null;
-	sessionIdentifier: string;
-
-	// pagination state
-	isFirstLoadPending: boolean;
-
-	isEol: boolean;
-	opts: { limit: number; q?: string };
-	items: AppUserObject[];
-	seen: Set<string>;
-
-	minId: string | null;
-	maxId: string | null;
-
-	/**
-	 * Updating this value will result in
-	 * fetching the next set of data
-	 */
-	appliedMaxId: string | null;
-};
+type State = TimelineReducerBaseState<AppUserObject> & {};
 
 export const DEFAULT: State = {
-	db: null,
-	sessionIdentifier: RandomUtil.nanoId(),
-	isEol: false,
-	opts: { limit: 20 },
-	isFirstLoadPending: true,
-	items: [],
-	seen: new Set<string>(),
-	minId: null,
-	maxId: null,
-	appliedMaxId: null,
+	...timelineReducerBaseDefaults,
 };
 
 export enum ACTION {
 	INIT,
-	APPEND_RESULTS,
-	SET_QUERY_OPTS,
-	REQUEST_LOAD_MORE,
 	RESET,
+	APPEND_RESULTS,
+	REQUEST_LOAD_MORE,
+	SET_QUERY_OPTS,
 }
 
 type Actions =
@@ -53,6 +28,12 @@ type Actions =
 			payload: {
 				db: DataSource;
 			};
+	  }
+	| {
+			type: ACTION.RESET;
+	  }
+	| {
+			type: ACTION.REQUEST_LOAD_MORE;
 	  }
 	| {
 			type: ACTION.APPEND_RESULTS;
@@ -65,12 +46,6 @@ type Actions =
 	| {
 			type: ACTION.SET_QUERY_OPTS;
 			payload: { limit: number; q?: string };
-	  }
-	| {
-			type: ACTION.REQUEST_LOAD_MORE;
-	  }
-	| {
-			type: ACTION.RESET;
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -79,7 +54,7 @@ function reducer(state: State, action: Actions): State {
 			return produce(state, (draft) => {
 				draft.db = action.payload.db;
 				draft.seen = new Set();
-				draft.sessionIdentifier = RandomUtil.nanoId();
+				draft.sessionId = RandomUtil.nanoId();
 			});
 		}
 		case ACTION.REQUEST_LOAD_MORE: {
@@ -93,7 +68,7 @@ function reducer(state: State, action: Actions): State {
 				draft.maxId = null;
 				draft.minId = null;
 				draft.isEol = false;
-				draft.isFirstLoadPending = true;
+				draft.isFirstLoad = false;
 				draft.seen = new Set();
 			});
 		}

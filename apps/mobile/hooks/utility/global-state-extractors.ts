@@ -51,6 +51,14 @@ export function useAppManager() {
 	);
 }
 
+export function useAccountManager() {
+	return useGlobalState(
+		useShallow((o) => ({
+			acctManager: o.acctManager,
+		})),
+	);
+}
+
 export function useProfileManager() {
 	return useGlobalState(
 		useShallow((o) => ({
@@ -75,6 +83,7 @@ export function useHub() {
 			navigation: o.hubState.navigation,
 			loadNext: o.hubState.loadNext,
 			loadPrev: o.hubState.loadPrev,
+			selectProfile: o.hubState.selectProfile,
 		})),
 	);
 }

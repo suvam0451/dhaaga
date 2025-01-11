@@ -6,10 +6,6 @@ import {
 	useReducer,
 	useRef,
 } from 'react';
-
-/**
- * --- Context Setup ---
- */
 import { UserTimelineSessionService } from '../../services/session/user-timeline-session.service';
 import {
 	appUserTimelineReducer,
@@ -19,8 +15,10 @@ import {
 } from '../../states/reducers/user-timeline.reducer';
 import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
 import WithTimelineControllerContext from '../common/timeline/api/useTimelineController';
-import WithAppTimelineDataContext from '../../hooks/app/timelines/useAppTimelinePosts';
-import UserPeekModal from '../modals/UserPeekModal';
+
+/**
+ * --- Context Setup ---
+ */
 
 const _StateCtx = createContext<AppUserTimelineReducerStateType>(null);
 const _DispatchCtx = createContext<AppUserTimelineReducerDispatchType>(null);
@@ -70,9 +68,7 @@ export function CtxWrapper({ children }) {
 function WithUserTimelineCtx({ children }: any) {
 	return (
 		<WithTimelineControllerContext>
-			<CtxWrapper>
-				<WithAppTimelineDataContext>{children}</WithAppTimelineDataContext>
-			</CtxWrapper>
+			<CtxWrapper>{children}</CtxWrapper>
 		</WithTimelineControllerContext>
 	);
 }

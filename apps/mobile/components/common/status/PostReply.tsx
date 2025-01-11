@@ -1,19 +1,104 @@
-import { useRef, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import ExplainOutput from '../explanation/ExplainOutput';
 import MediaItem from '../media/MediaItem';
 import useMfm from '../../hooks/useMfm';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
 import ReplyOwner from '../user/ReplyOwner';
 import PostReplyToReply from './PostReplyToReply';
 import { useAppStatusContextDataContext } from '../../../hooks/api/statuses/WithAppStatusContextData';
+import {
+	APP_COLOR_PALETTE_EMPHASIS,
+	AppThemingUtil,
+} from '../../../utils/theming.util';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '../../../styles/AppFonts';
+import { appDimensions } from '../../../styles/dimensions';
+import { AppText } from '../../lib/Text';
+
+type ToggleReplyVisibilityProps = {
+	enabled: boolean;
+	expanded: boolean;
+	onPress: () => void;
+	count: number;
+};
+
+function ToggleReplyVisibility({
+	enabled,
+	expanded,
+	onPress,
+	count,
+}: ToggleReplyVisibilityProps) {
+	const { theme } = useAppTheme();
+	if (!enabled) return <View />;
+
+	const EXPANDED_COLOR = AppThemingUtil.getThreadColorForDepth(0);
+	const COLLAPSED_COLOR = theme.complementary.a0;
+
+	return (
+		<Pressable style={styles.actionButton} onPress={onPress}>
+			<View style={{ width: 24 }}>
+				{expanded ? (
+					<FontAwesome6 name="square-minus" size={20} color={EXPANDED_COLOR} />
+				) : (
+					<FontAwesome6 name="plus-square" size={20} color={COLLAPSED_COLOR} />
+				)}
+			</View>
+			<View>
+				<Text
+					style={{
+						color: expanded
+							? AppThemingUtil.getThreadColorForDepth(0)
+							: theme.complementary.a0,
+					}}
+				>
+					{count} replies
+				</Text>
+			</View>
+		</Pressable>
+	);
+}
+
+function ToggleMediaVisibility({
+	enabled,
+	expanded,
+	onPress,
+	count,
+}: ToggleReplyVisibilityProps) {
+	const { theme } = useAppTheme();
+	if (!enabled) return <View />;
+
+	const EXPANDED_COLOR = AppThemingUtil.getThreadColorForDepth(0);
+	const COLLAPSED_COLOR = theme.complementary.a0;
+
+	return (
+		<Pressable style={styles.actionButton} onPress={onPress}>
+			<View style={{ width: 24 }}>
+				<FontAwesome6
+					name="image"
+					size={20}
+					color={expanded ? EXPANDED_COLOR : COLLAPSED_COLOR}
+				/>
+			</View>
+			{expanded ? (
+				<AppText.Medium style={{ color: EXPANDED_COLOR, marginLeft: 4 }}>
+					Shown ({count})
+				</AppText.Medium>
+			) : (
+				<AppText.Medium style={{ color: COLLAPSED_COLOR, marginLeft: 4 }}>
+					Hidden ({count})
+				</AppText.Medium>
+			)}
+		</Pressable>
+	);
+}
 
 type PostReplyProps = {
 	lookupId: string;
+	colors: string[];
 };
 
-function PostReplyContent({ lookupId }: PostReplyProps) {
+function PostReplyContent({ lookupId, colors }: PostReplyProps) {
 	const { data, getChildren } = useAppStatusContextDataContext();
 
 	const [ExplanationObject, setExplanationObject] = useState<string | null>(
@@ -25,9 +110,9 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 
 	const { content } = useMfm({
 		content: dto.content.raw,
-		remoteSubdomain: dto.postedBy.instance,
 		emojiMap: dto.calculated.emojis as any,
-		deps: [dto.content.raw, dto.postedBy.instance],
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 
 	const [IsMediaShown, setIsMediaShown] = useState(false);
@@ -44,11 +129,16 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 		setIsReplyThreadVisible(!IsReplyThreadVisible);
 	}
 
-	const color = useRef(APP_THEME.COLOR_SCHEME_C);
+	const DEPTH_COLOR = AppThemingUtil.getThreadColorForDepth(0);
+
 	return (
-		<View style={{ marginTop: 8, padding: 8 }}>
+		<View style={{ marginTop: 8, padding: 10 }}>
 			<ReplyOwner dto={dto} />
-			{content}
+			<View
+				style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
+			>
+				{content}
+			</View>
 			{ExplanationObject !== null && (
 				<ExplainOutput
 					additionalInfo={'Translated using OpenAI'}
@@ -65,83 +155,27 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 			)}
 			<View
 				style={{
-					paddingTop: 8,
+					marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'flex-start',
 				}}
 			>
-				<View style={{ flexShrink: 1, marginRight: 4 }}>
-					{replyCount > 0 && (
-						<TouchableOpacity
-							style={styles.actionButton}
-							onPress={toggleReplyVisibility}
-						>
-							<View style={{ width: 24 }}>
-								{IsReplyThreadVisible ? (
-									<FontAwesome6
-										name="square-minus"
-										size={20}
-										color={
-											IsReplyThreadVisible
-												? color.current
-												: APP_FONT.MONTSERRAT_BODY
-										}
-									/>
-								) : (
-									<FontAwesome6
-										name="plus-square"
-										size={20}
-										color={
-											IsReplyThreadVisible
-												? color.current
-												: APP_FONT.MONTSERRAT_BODY
-										}
-									/>
-								)}
-							</View>
-							<View>
-								<Text
-									style={{
-										color: IsReplyThreadVisible
-											? color.current
-											: APP_FONT.MONTSERRAT_BODY,
-									}}
-								>
-									{replyCount} replies
-								</Text>
-							</View>
-						</TouchableOpacity>
-					)}
+				<View style={{ marginRight: 4 }}>
+					<ToggleReplyVisibility
+						enabled={replyCount > 0}
+						onPress={toggleReplyVisibility}
+						expanded={IsReplyThreadVisible}
+						count={replyCount}
+					/>
 				</View>
-				<View style={{ flexShrink: 1 }}>
-					{mediaCount > 0 && (
-						<TouchableOpacity
-							style={styles.actionButton}
-							onPress={toggleMediaVisibility}
-						>
-							<View style={{ width: 24 }}>
-								<FontAwesome6
-									name="image"
-									size={20}
-									color={APP_FONT.MONTSERRAT_BODY}
-								/>
-							</View>
-							{IsMediaShown ? (
-								<Text
-									style={{ color: APP_FONT.MONTSERRAT_BODY, marginLeft: 4 }}
-								>
-									Shown ({mediaCount})
-								</Text>
-							) : (
-								<Text
-									style={{ color: APP_FONT.MONTSERRAT_BODY, marginLeft: 4 }}
-								>
-									Hidden ({mediaCount})
-								</Text>
-							)}
-						</TouchableOpacity>
-					)}
+				<View>
+					<ToggleMediaVisibility
+						enabled={mediaCount > 0}
+						onPress={toggleMediaVisibility}
+						expanded={IsMediaShown}
+						count={mediaCount}
+					/>
 				</View>
 			</View>
 			{/*	Reply Thread*/}
@@ -150,8 +184,9 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
 					{children.map((o, i) => (
 						<PostReplyToReply
 							key={i}
-							colors={[color.current]}
+							colors={[...colors, DEPTH_COLOR]}
 							lookupId={o.id}
+							depth={1}
 						/>
 					))}
 				</View>
@@ -167,8 +202,8 @@ function PostReplyContent({ lookupId }: PostReplyProps) {
  * WithActivitypubStatusContext
  * @constructor
  */
-function PostReply({ lookupId }: PostReplyProps) {
-	return <PostReplyContent lookupId={lookupId} />;
+function PostReply({ lookupId, colors }: PostReplyProps) {
+	return <PostReplyContent colors={colors} lookupId={lookupId} />;
 }
 
 const styles = StyleSheet.create({

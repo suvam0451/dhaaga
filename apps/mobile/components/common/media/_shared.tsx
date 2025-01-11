@@ -132,7 +132,6 @@ export const AppVideoComponent = memo(function Foo({
 	type: string;
 }) {
 	const ref = useRef(null);
-	const [isPlaying, setIsPlaying] = useState(true);
 	let modifiedUrl = url?.replace('?sensitive=true', '');
 
 	const player = useVideoPlayer(modifiedUrl, (player) => {
@@ -164,6 +163,7 @@ export const AppVideoComponent = memo(function Foo({
 					borderRadius: 8,
 				}}
 				player={player}
+				nativeControls={true}
 			/>
 		</View>
 	);

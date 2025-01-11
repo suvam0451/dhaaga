@@ -10,7 +10,6 @@ import {
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import { useAppTimelinePosts } from '../../../../hooks/app/timelines/useAppTimelinePosts';
 import * as Haptics from 'expo-haptics';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
@@ -36,11 +35,9 @@ const EmojiReaction = memo(function Foo({
 		PostRef,
 		setType,
 		setVisible,
-		timelineDataPostListReducer,
 		updateRequestId: updateBottomSheetRequestId,
 	} = useAppBottomSheet();
 
-	const { getPostListReducer } = useAppTimelinePosts();
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
 	const { theme } = useAppTheme();
@@ -88,7 +85,7 @@ const EmojiReaction = memo(function Foo({
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 		TextRef.current = dto.name;
 		PostRef.current = postDto;
-		timelineDataPostListReducer.current = getPostListReducer();
+		// timelineDataPostListReducer.current = getPostListReducer();
 		setType(APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS);
 		updateBottomSheetRequestId();
 		setVisible(true);

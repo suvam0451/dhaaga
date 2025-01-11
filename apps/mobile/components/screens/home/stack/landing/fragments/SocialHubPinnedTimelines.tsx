@@ -1,5 +1,4 @@
-import { memo } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { APP_ICON_ENUM, AppIcon } from '../../../../../lib/Icon';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { SocialHubPinSectionContainer } from './_factory';
@@ -20,6 +19,7 @@ import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../../../../states/useAppNavigator';
 import { DialogBuilderService } from '../../../../../../services/dialog-builder.service';
 import { AppText } from '../../../../../lib/Text';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -90,36 +90,38 @@ function PinnedTimelineItem({
 
 	return (
 		<View style={styles.buttonContainer}>
-			<TouchableOpacity
-				style={[
-					styles.button,
-					{
-						backgroundColor: '#242424', // '#282828',
-					},
-				]}
-				onPress={onPress}
-			>
-				<View style={styles.tiltedIconContainer}>
-					<AppIcon
-						id={iconId}
-						size={appDimensions.socialHub.feeds.tiltedIconSize}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						iconStyle={{ color: theme.secondary.a0 }}
-					/>
-				</View>
-				<AppText.H6 emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
-					{label}
-				</AppText.H6>
-				<AppText.Medium
-					style={{
-						width: 96,
-						color: theme.complementary.a0,
-					}}
-					numberOfLines={1}
+			<Animated.View entering={FadeIn} exiting={FadeOut}>
+				<TouchableOpacity
+					style={[
+						styles.button,
+						{
+							backgroundColor: '#242424', // '#282828',
+						},
+					]}
+					onPress={onPress}
 				>
-					{server}
-				</AppText.Medium>
-			</TouchableOpacity>
+					<View style={styles.tiltedIconContainer}>
+						<AppIcon
+							id={iconId}
+							size={appDimensions.socialHub.feeds.tiltedIconSize}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+							iconStyle={{ color: theme.secondary.a0 }}
+						/>
+					</View>
+					<AppText.H6 emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
+						{label}
+					</AppText.H6>
+					<AppText.Medium
+						style={{
+							width: 96,
+							color: theme.complementary.a0,
+						}}
+						numberOfLines={1}
+					>
+						{server}
+					</AppText.Medium>
+				</TouchableOpacity>
+			</Animated.View>
 		</View>
 	);
 }
@@ -129,28 +131,31 @@ type SocialHubPinnedTimelinesProps = {
 	items: ProfilePinnedTimeline[];
 };
 
-const SocialHubPinnedTimelines = memo(
-	({ items, account }: SocialHubPinnedTimelinesProps) => {
-		const destinations = HubService.resolveTimelineDestinations(items);
-		return (
-			<SocialHubPinSectionContainer label={'Timelines'} style={styles.root}>
-				<FlatList
-					data={destinations}
-					numColumns={2}
-					renderItem={({ item }) => (
-						<PinnedTimelineItem
-							pinId={item.pinId}
-							label={item.label}
-							iconId={item.iconId}
-							server={item.server}
-							account={account}
-						/>
-					)}
-				/>
-			</SocialHubPinSectionContainer>
-		);
-	},
-);
+function SocialHubPinnedTimelines({
+	items,
+	account,
+}: SocialHubPinnedTimelinesProps) {
+	const destinations = HubService.resolveTimelineDestinations(items);
+	return (
+		<SocialHubPinSectionContainer label={'Timelines'} style={styles.root}>
+			<Animated.FlatList
+				data={destinations}
+				numColumns={2}
+				horizontal={false}
+				renderItem={({ item }) => (
+					<PinnedTimelineItem
+						pinId={item.pinId}
+						label={item.label}
+						iconId={item.iconId}
+						server={item.server}
+						account={account}
+					/>
+				)}
+			/>
+		</SocialHubPinSectionContainer>
+	);
+}
+
 export default SocialHubPinnedTimelines;
 
 const styles = StyleSheet.create({

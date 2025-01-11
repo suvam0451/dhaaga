@@ -183,7 +183,10 @@ export const BottomNavBar = memo(
 		});
 
 		return (
-			<View style={styles.root}>
+			<LinearGradient
+				colors={['transparent', theme.palette.bg]}
+				style={styles.root}
+			>
 				<View style={[styles.container, { justifyContent: 'space-around' }]}>
 					{items.map((o, i) => (
 						<Chip
@@ -194,15 +197,9 @@ export const BottomNavBar = memo(
 							onLayout={(e) => handleLayout(i, e)}
 						/>
 					))}
-					<Animated.View
-						style={[
-							styles.indicator,
-							{ backgroundColor: theme.palette.buttonUnstyled },
-							indicatorAnimatedStyle,
-						]}
-					/>
+					<Animated.View style={[styles.indicator, indicatorAnimatedStyle]} />
 				</View>
-			</View>
+			</LinearGradient>
 		);
 	},
 );
@@ -295,7 +292,9 @@ export function BottomNavBarInfinite({
 					style={{
 						flexDirection: 'row',
 						alignItems: 'center',
-						paddingHorizontal: 8,
+						paddingHorizontal: 8, // 8
+						backgroundColor: theme.background.a0,
+						borderTopLeftRadius: 32,
 					}}
 				>
 					<Pressable
@@ -306,8 +305,8 @@ export function BottomNavBarInfinite({
 						onPress={loadPrev}
 					>
 						<Ionicons
-							name={'chevron-back-circle'}
-							color={theme.primary.a0}
+							name={'arrow-back-circle'}
+							color={theme.secondary.a40}
 							size={32}
 						/>
 					</Pressable>
@@ -320,8 +319,8 @@ export function BottomNavBarInfinite({
 						onPress={loadNext}
 					>
 						<Ionicons
-							name={'chevron-forward-circle'}
-							color={theme.primary.a0}
+							name={'arrow-forward-circle'}
+							color={theme.secondary.a40}
 							size={32}
 						/>
 					</Pressable>
@@ -336,6 +335,8 @@ const styles = StyleSheet.create({
 		flexShrink: 1,
 		backgroundColor: 'transparent',
 		height: 48,
+		position: 'absolute',
+		bottom: 0,
 	},
 	infiniteContainer: {
 		flexDirection: 'row',

@@ -25,6 +25,7 @@
  */
 import { APP_FONTS } from '../styles/AppFonts';
 import { StyleProp, TextStyle } from 'react-native';
+import { commentThreadPalette } from '../styles/comment-threads';
 
 export enum APP_COLOR_PALETTE_EMPHASIS {
 	A0 = 'a0',
@@ -76,6 +77,9 @@ export type AppColorSchemeType = {
 
 	surface?: ColorRangeType;
 	secondary: ColorRangeType;
+
+	// represents elevation in dark mode
+	background: ColorRangeType;
 };
 
 export enum AppTextVariant {
@@ -93,6 +97,16 @@ export enum AppTextVariant {
 }
 
 export class AppThemingUtil {
+	static getThreadColorForDepth(depth: number): string {
+		const n = commentThreadPalette.length; // Get the length of the array
+
+		// Normalize the rotation number to avoid unnecessary large rotations
+		const rotatedIndex = depth % n;
+
+		// Return the color at the new index after rotation
+		return commentThreadPalette[rotatedIndex];
+	}
+
 	static getColorForEmphasis(
 		store: ColorRangeType,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS,

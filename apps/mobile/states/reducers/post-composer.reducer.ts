@@ -9,6 +9,12 @@ import {
 } from '@dhaaga/bridge';
 import { ImagePickerAsset } from 'expo-image-picker';
 
+export type ThreadGateSetting =
+	| { type: 'nobody' }
+	| { type: 'following' }
+	| { type: 'mentioned' }
+	| { type: 'list'; list: string };
+
 export type PostComposer_MediaState = {
 	status: 'idle' | 'uploading' | 'uploaded' | 'failed';
 	altSyncStatus: 'idle' | 'uploading' | 'uploaded' | 'failed';
@@ -52,6 +58,9 @@ type State = {
 	parent: AppPostObject | null;
 
 	suggestions: Suggestion;
+
+	// at proto
+	visibilityRules: ThreadGateSetting[];
 };
 
 enum ACTION {
@@ -81,6 +90,7 @@ enum ACTION {
 	SET_PARENT,
 
 	SET_SEARCH_PROMPT,
+	CLEAR_SEARCH_PROMPT,
 
 	SET_VISIBILITY,
 
@@ -112,6 +122,7 @@ const DEFAULT: State = {
 		end: 0,
 	},
 	suggestions: defaultSuggestions,
+	visibilityRules: [],
 };
 
 type Actions =
@@ -230,6 +241,9 @@ type Actions =
 				remoteId: string;
 				previewUrl: string;
 			};
+	  }
+	| {
+			type: ACTION.CLEAR_SEARCH_PROMPT;
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -303,6 +317,14 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.SET_SEARCH_PROMPT: {
 			return produce(state, (draft) => {
 				draft.prompt = action.payload;
+			});
+		}
+		case ACTION.CLEAR_SEARCH_PROMPT: {
+			return produce(state, (draft) => {
+				draft.prompt = {
+					type: 'none',
+					q: '',
+				};
 			});
 		}
 		case ACTION.SET_KEYBOARD_SELECTION: {

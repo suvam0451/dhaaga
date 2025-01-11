@@ -19,6 +19,7 @@ import { PostMiddleware } from '../../../../services/middlewares/post.middleware
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
+import useAppNavigator from '../../../../states/useAppNavigator';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -101,7 +102,7 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 	const { content: UsernameWithEmojis } = useMfm({
 		content: displayNameRaw,
 		emojiMap: emojiMap,
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		numberOfLines: 1,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 	});
@@ -119,7 +120,9 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 					<View>
 						{/* No need to parse for Bluesky */}
 						{driver === KNOWN_SOFTWARE.BLUESKY ? (
-							<AppText.Medium>{displayNameRaw}</AppText.Medium>
+							<AppText.Medium numberOfLines={1}>
+								{displayNameRaw}
+							</AppText.Medium>
 						) : UsernameWithEmojis ? (
 							UsernameWithEmojis
 						) : (
@@ -156,10 +159,11 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 	const { show, refresh } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { dto } = useAppStatusItem();
 	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
+	const { toProfile } = useAppNavigator();
 
 	const UserDivRef = useRef(null);
 
-	function onProfileClicked() {
+	function onAvatarClicked() {
 		UserDivRef.current.measureInWindow((x, y, width, height) => {
 			appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.userId, {
 				x,
@@ -172,6 +176,10 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 				show();
 			}, 100);
 		});
+	}
+
+	function onProfileClicked() {
+		toProfile(dto.postedBy?.userId);
 	}
 
 	return useMemo(() => {
@@ -192,7 +200,7 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 			>
 				<View ref={UserDivRef}>
 					<TouchableOpacity
-						onPress={onProfileClicked}
+						onPress={onAvatarClicked}
 						style={{
 							width: TIMELINE_PFP_SIZE,
 							height: TIMELINE_PFP_SIZE,

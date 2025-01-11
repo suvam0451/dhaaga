@@ -9,7 +9,10 @@ import {
 	ReasonRepost,
 } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
-import BlueskyMediaAttachmentAdapter from '../media-attachment/bluesky.js';
+import {
+	BlueskyMediaAttachmentAdapter,
+	BlueskyVideoAttachmentAdapter,
+} from '../media-attachment/bluesky.js';
 import { ReplyRef } from '@atproto/api/src/client/types/app/bsky/feed/defs.js';
 
 type BlueskyRichTextFacet = {
@@ -50,6 +53,15 @@ class BlueskyStatusAdapter implements StatusInterface {
 	getCid = () => this.post.cid;
 	getUri = () => this.post.uri;
 
+	getLikeUri = () => this.post.viewer?.like;
+	getEmbeddingDisabled = () => this.post.viewer?.embeddingDisabled;
+	getPinUri = () => this.post.viewer?.pinned;
+	getRepostUri = () => this.post.viewer?.repost;
+	getReplyDisabled = () => this.post.viewer?.replyDisabled;
+	getThreadMuted = () => this.post.viewer?.threadMuted;
+
+	getViewer = () => this.post.viewer;
+
 	hasQuoteAvailable(): boolean {
 		return !!(
 			this.post.embed &&
@@ -66,8 +78,13 @@ class BlueskyStatusAdapter implements StatusInterface {
 	getUsername = () => this.post?.author?.handle;
 	getDisplayName = () => this.post?.author?.displayName;
 	getAvatarUrl = () => this.post?.author?.avatar;
-	getCreatedAt = () =>
-		(this.post.record as any)?.createdAt || this.post.indexedAt;
+	getCreatedAt = () => {
+		if (this.isReposted()) {
+			return this.reason!.indexedAt;
+		}
+		// for original posts
+		return (this.post.record as any)?.createdAt || this.post.indexedAt;
+	};
 
 	getVisibility() {
 		return 'public';
@@ -75,12 +92,22 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	getAccountUrl(mySubdomain?: string | undefined): string | null | undefined {
-		// console.log('[INFO]: my subdomain', mySubdomain);
-		// NOTE: something like this
 		return `https://bsky.app/profile/${this.post?.author?.handle}`;
 	}
 
 	getRepostedStatus(): StatusInterface | null | undefined {
+		if (this.isReposted()) {
+			const { post, ...rest } = this;
+			/**
+			 * by stripping reason, we avoid recursive call
+			 * + replies are not needed for reposts
+			 */
+			return new BlueskyStatusAdapter({
+				post: this.post,
+				reason: null as any,
+				reply: null as any,
+			});
+		}
 		// if (this.reason.reply) {
 		// 	// TODO: type checking required
 		// 	// typeof this.parent === PostView
@@ -90,6 +117,16 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	getRepostedStatusRaw(): Status {
+		if (this.isReposted()) {
+			/**
+			 * by stripping reason/reply, we avoid recursive call
+			 *
+			 * DOWNSIDES: reply is not shown for reposted object
+			 */
+			const { post, ...rest } = this;
+			// strip repost/reply information
+			return { post } as any;
+		}
 		return null;
 	}
 
@@ -104,8 +141,15 @@ class BlueskyStatusAdapter implements StatusInterface {
 	 *
 	 * ^ a.k.a. quoted posts
 	 */
-	getContent = () =>
-		(this.post?.record as any)?.text || (this.post?.value as any)?.text;
+	getContent = () => {
+		// handle pure reposts
+		if (this.isReposted()) {
+			return null;
+		}
+
+		// TODO: handle quotes
+		return (this.post?.record as any)?.text || (this.post?.value as any)?.text;
+	};
 
 	getUser() {
 		if (this.isReposted()) return this.reason!.by as ProfileViewBasic;
@@ -115,9 +159,15 @@ class BlueskyStatusAdapter implements StatusInterface {
 	isReposted = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
 
 	getMediaAttachments(): MediaAttachmentInterface[] {
+		// handle image embeds
 		const target: any[] = this.post?.embed?.images as any[];
 		if (target)
 			return target.map((o) => BlueskyMediaAttachmentAdapter.create(o));
+
+		// handle video embeds
+		if (this.post?.embed?.$type === 'app.bsky.embed.video#view')
+			return [BlueskyVideoAttachmentAdapter.create(this.post?.embed as any)];
+
 		return [];
 	}
 
@@ -139,9 +189,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 		console.log(this.post);
 	}
 
-	getIsRebloggedByMe(): boolean | null | undefined {
-		throw new Error('Method not implemented.');
-	}
+	getIsRebloggedByMe = () => this.post.viewer?.repost !== undefined;
 
 	getIsFavourited = () => false;
 

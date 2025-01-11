@@ -8,6 +8,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
 import { APP_FONT } from '../../styles/AppTheme';
+import { appVerticalIndex } from '../../styles/dimensions';
 
 type DialogOptionsProps = {
 	label: string;
@@ -93,6 +94,7 @@ export function AppDialog() {
 					height: '100%',
 					width: '100%',
 					opacity: 0.64,
+					zIndex: appVerticalIndex.dialogBackdrop,
 				}}
 				onPress={hide}
 			/>
@@ -100,8 +102,8 @@ export function AppDialog() {
 				style={{
 					maxWidth: '80%',
 					borderRadius: 8,
-					backgroundColor: theme.palette.menubar,
-					zIndex: 2000,
+					backgroundColor: theme.background.a20,
+					zIndex: appVerticalIndex.dialogContent,
 					position: 'absolute',
 					left: '50%',
 					top: '50%',
