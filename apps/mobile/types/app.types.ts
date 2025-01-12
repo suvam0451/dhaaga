@@ -15,3 +15,17 @@ export enum APP_SETTINGS {
 	TIMELINE_SENSITIVE_CONTENT = 'timeline/sensitive-content',
 	TIMELINE_CONTENT_WARNING = 'timeline/content-warning',
 }
+
+export type AppSearchResultType<T> = {
+	items: T[];
+	/**
+	 * Some drivers don't support null
+	 * and must be converted to undefined
+	 */
+	maxId: string | null /**
+	 * Some drivers don't support null
+	 * and must be converted to undefined
+	 */;
+	minId: string | null;
+	success: boolean;
+};

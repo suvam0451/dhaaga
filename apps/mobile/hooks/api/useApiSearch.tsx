@@ -9,6 +9,7 @@ import { AppBskyFeedSearchPosts } from '@atproto/api';
 import { AppFeedObject } from '../../types/app-feed.types';
 import { BlueskyRestClient } from '@dhaaga/bridge';
 import { FeedMiddleware } from '../../services/middlewares/feed-middleware';
+import { AppSearchResultType } from '../../types/app.types';
 
 /**
  * ------ Shared ------
@@ -21,18 +22,11 @@ const defaultResult = {
 	items: [],
 };
 
-type AppQuerySearchResultType<T> = {
-	items: T[];
-	maxId: string | null;
-	minId: string | null;
-	success: boolean;
-};
-
-type PostResultPage = AppQuerySearchResultType<AppPostObject>;
-type UserResultPage = AppQuerySearchResultType<AppUserObject>;
-type TagResultPage = AppQuerySearchResultType<unknown>;
-type LinkResultPage = AppQuerySearchResultType<unknown>;
-type FeedResultPage = AppQuerySearchResultType<AppFeedObject>;
+type PostResultPage = AppSearchResultType<AppPostObject>;
+type UserResultPage = AppSearchResultType<AppUserObject>;
+type TagResultPage = AppSearchResultType<unknown>;
+type LinkResultPage = AppSearchResultType<unknown>;
+type FeedResultPage = AppSearchResultType<AppFeedObject>;
 
 /**
  * --------------------

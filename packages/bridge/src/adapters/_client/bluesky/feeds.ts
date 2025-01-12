@@ -2,12 +2,18 @@ import { getXrpcAgent } from '../_router/_api.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import { RandomUtil } from '../../../utiils/random.util.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import {
+	errorBuilder,
+	notImplementedErrorBuilder,
+} from '../_router/dto/api-responses.dto.js';
 import {
 	AppBskyActorDefs,
 	AppBskyActorGetPreferences,
+	AppBskyFeedGetFeedGenerator,
+	AppBskyFeedGetFeedGenerators,
 	AtpAgent,
 } from '@atproto/api';
+import { LibraryPromise } from '../_router/routes/_types.js';
 
 type SubscriptionUpdateResult = Promise<{
 	success: boolean;
@@ -51,6 +57,41 @@ class BlueskyFeedRouter {
 			(o) => o.value === uri,
 		);
 		return [i, j];
+	}
+
+	/**
+	 * Resolve and fetch details of a single feed
+	 * @param uri uri of the feed
+	 */
+	async getFeedGenerator(
+		uri: string,
+	): LibraryPromise<AppBskyFeedGetFeedGenerator.OutputSchema> {
+		try {
+			const data = await this.xrpc.app.bsky.feed.getFeedGenerator({
+				feed: uri,
+			});
+			return { data: data.data };
+		} catch (e) {
+			return errorBuilder(e);
+		}
+	}
+
+	/**
+	 * Resolve and fetch details of multiple feed
+	 * @param uriList a list of uris of the feeds
+	 */
+	async getFeedGenerators(
+		uriList: string[],
+	): LibraryPromise<AppBskyFeedGetFeedGenerators.OutputSchema> {
+		try {
+			const data = await this.xrpc.app.bsky.feed.getFeedGenerators({
+				feeds: uriList,
+			});
+			return { data: data.data };
+		} catch (e) {
+			console.log(uriList, e);
+			return errorBuilder(e);
+		}
 	}
 
 	// dont know how com.atproto.repo.createRecord works

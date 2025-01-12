@@ -7,7 +7,7 @@ import { produce } from 'immer';
 import ActivityPubReactionsService, {
 	ActivityPubReactionStateDto,
 } from '../approto/activitypub-reactions.service';
-import AtprotoService from '../atproto.service';
+import { AtprotoPostService } from '../atproto.service';
 
 export class PostMutator {
 	private readonly driver: KNOWN_SOFTWARE;
@@ -25,7 +25,7 @@ export class PostMutator {
 		 * Handle for AT protocol
 		 */
 		if (this.driver === KNOWN_SOFTWARE.BLUESKY) {
-			const result = await AtprotoService.toggleLike(
+			const result = await AtprotoPostService.toggleLike(
 				this.client,
 				target.meta.uri,
 				target.meta.cid,
@@ -131,7 +131,7 @@ export class PostMutator {
 		const target = PostMiddleware.getContentTarget(input);
 
 		if (this.driver === KNOWN_SOFTWARE.BLUESKY) {
-			const result = await AtprotoService.toggleRepost(
+			const result = await AtprotoPostService.toggleRepost(
 				this.client,
 				target.meta.uri,
 				target.meta.cid,
