@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import useMfm from '../../hooks/useMfm';
 import { APP_FONTS } from '../../../styles/AppFonts';
@@ -9,13 +9,14 @@ import { AppText } from '../../lib/Text';
 
 type Props = {
 	dto: AppPostObject;
+	style?: StyleProp<ViewStyle>;
 };
 
 /**
  *
  * @constructor
  */
-function ReplyOwner({ dto }: Props) {
+function ReplyOwner({ dto, style }: Props) {
 	const { theme } = useAppTheme();
 	const { content } = useMfm({
 		content: dto.postedBy.displayName || 'N/A',
@@ -27,11 +28,14 @@ function ReplyOwner({ dto }: Props) {
 
 	return (
 		<View
-			style={{
-				display: 'flex',
-				flexDirection: 'row',
-				marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
-			}}
+			style={[
+				{
+					display: 'flex',
+					flexDirection: 'row',
+					marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
+				},
+				style,
+			]}
 		>
 			<View
 				style={{

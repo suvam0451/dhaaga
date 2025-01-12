@@ -16,6 +16,8 @@ import {
 	ToggleMediaVisibility,
 	ToggleReplyVisibility,
 } from './DetailView/_shared';
+import { MiniMoreOptionsButton, MiniReplyButton } from './_shared';
+import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -61,43 +63,50 @@ function PostReplyContent({ lookupId, colors }: PostReplyProps) {
 		<View
 			style={{ paddingHorizontal: 10, marginBottom: SECTION_MARGIN_BOTTOM * 4 }}
 		>
-			<ReplyOwner dto={dto} />
-			<View style={{ marginBottom: SECTION_MARGIN_BOTTOM }}>{content}</View>
-			{ExplanationObject !== null && (
-				<ExplainOutput
-					additionalInfo={'Translated using OpenAI'}
-					fromLang={'jp'}
-					toLang={'en'}
-					text={ExplanationObject}
-				/>
-			)}
-			{IsMediaShown && (
-				<MediaItem
-					attachments={dto.content.media}
-					calculatedHeight={dto.calculated.mediaContainerHeight}
-				/>
-			)}
-			<View
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'flex-start',
-				}}
-			>
-				<ToggleReplyVisibility
-					enabled={replyCount > 0}
-					onPress={toggleReplyVisibility}
-					expanded={IsReplyThreadVisible}
-					count={replyCount}
-					style={{ marginRight: 4 }}
-				/>
-				<ToggleMediaVisibility
-					enabled={mediaCount > 0}
-					onPress={toggleMediaVisibility}
-					expanded={IsMediaShown}
-					count={mediaCount}
-				/>
-			</View>
+			<WithAppStatusItemContext dto={dto}>
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<ReplyOwner dto={dto} style={{ flex: 1 }} />
+					<MiniReplyButton post={dto} />
+					<MiniMoreOptionsButton post={dto} />
+				</View>
+
+				<View style={{ marginBottom: SECTION_MARGIN_BOTTOM }}>{content}</View>
+				{ExplanationObject !== null && (
+					<ExplainOutput
+						additionalInfo={'Translated using OpenAI'}
+						fromLang={'jp'}
+						toLang={'en'}
+						text={ExplanationObject}
+					/>
+				)}
+				{IsMediaShown && (
+					<MediaItem
+						attachments={dto.content.media}
+						calculatedHeight={dto.calculated.mediaContainerHeight}
+					/>
+				)}
+				<View
+					style={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'flex-start',
+					}}
+				>
+					<ToggleReplyVisibility
+						enabled={replyCount > 0}
+						onPress={toggleReplyVisibility}
+						expanded={IsReplyThreadVisible}
+						count={replyCount}
+						style={{ marginRight: 4 }}
+					/>
+					<ToggleMediaVisibility
+						enabled={mediaCount > 0}
+						onPress={toggleMediaVisibility}
+						expanded={IsMediaShown}
+						count={mediaCount}
+					/>
+				</View>
+			</WithAppStatusItemContext>
 			{/*	Reply Thread*/}
 			{IsReplyThreadVisible && (
 				<View>

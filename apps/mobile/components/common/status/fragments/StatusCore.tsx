@@ -18,19 +18,13 @@ import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
 import { Text, StyleSheet } from 'react-native';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
-import {
-	useAppApiClient,
-	useAppBottomSheet_Improved,
-	useAppPublishers,
-	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
 import { AppPostObject } from '../../../../types/app-post.types';
 import { AppText } from '../../../lib/Text';
-import ActivityPubService from '../../../../services/activitypub.service';
 import StatusQuoted from './StatusQuoted';
+import { PostMoreOptionsButton } from '../_shared';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -45,34 +39,6 @@ type StatusCoreProps = {
 	isPin?: boolean;
 	showFullDetails?: boolean;
 };
-
-function StatusMoreOptionsButton() {
-	const { driver } = useAppApiClient();
-	const { dto } = useAppStatusItem();
-	const { show, setCtx } = useAppBottomSheet_Improved();
-	const { postPub } = useAppPublishers();
-
-	function onPress() {
-		if (ActivityPubService.misskeyLike(driver)) {
-			postPub.finalizeBookmarkState(dto?.uuid).finally(() => {});
-		}
-		setCtx({ uuid: dto.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
-	}
-
-	return (
-		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
-			<View style={styles.statusMoreOptionsButton}>
-				<AppIcon
-					id={'more-options-vertical'}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
-					size={16}
-					onPress={onPress}
-				/>
-			</View>
-		</Pressable>
-	);
-}
 
 function PinIndicator() {
 	const { theme } = useAppTheme();
@@ -174,7 +140,7 @@ const StatusCore = memo(
 								flex: 1,
 							}}
 						/>
-						{!isPreview && <StatusMoreOptionsButton />}
+						{!isPreview && <PostMoreOptionsButton post={_target} />}
 					</View>
 
 					{isSensitive && (

@@ -21,18 +21,6 @@ import useAppSession from '../states/useAppSession';
 import ImageInspectModal from '../components/modals/ImageInspectModal';
 import { AppDialog } from '../components/lib/AppDialog';
 import { useAppTheme } from '../hooks/utility/global-state-extractors';
-// import {
-// 	BebasNeue_400Regular,
-// 	PublicSans_600SemiBold,
-// 	Roboto_400Regular,
-// 	Roboto_500Medium,
-// 	Roboto_700Bold,
-// 	SourceSansPro_400Regular,
-// 	SourceSansPro_400Regular_Italic,
-// 	SourceSansPro_600SemiBold,
-// 	SourceSansPro_600SemiBold_Italic,
-// 	useFonts,
-// } from '@expo-google-fonts/dev';
 
 enableMapSet();
 

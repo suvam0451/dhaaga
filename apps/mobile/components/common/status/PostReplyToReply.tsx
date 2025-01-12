@@ -10,6 +10,8 @@ import {
 import { appDimensions } from '../../../styles/dimensions';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { ToggleReplyVisibility } from './DetailView/_shared';
+import { MiniMoreOptionsButton, MiniReplyButton } from './_shared';
+import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 
 type PostReplyToReplyProps = {
 	colors: string[];
@@ -57,18 +59,24 @@ function PostReplyToReplyContent({
 				paddingHorizontal: 8,
 			}}
 		>
-			<ReplyOwner dto={dto} />
-			{/* Some magical numbers to get rid of overflow */}
-			<View style={{ width: '84%', marginBottom: SECTION_MARGIN_BOTTOM }}>
-				{content}
-			</View>
-			<ToggleReplyVisibility
-				enabled={replyCount > 0}
-				onPress={toggleReplyVisibility}
-				expanded={IsReplyThreadVisible}
-				count={replyCount}
-				style={{ marginRight: 4 }}
-			/>
+			<WithAppStatusItemContext dto={dto}>
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<ReplyOwner dto={dto} style={{ flex: 1 }} />
+					<MiniReplyButton post={dto} />
+					<MiniMoreOptionsButton post={dto} />
+				</View>
+				{/* Some magical numbers to get rid of overflow */}
+				<View style={{ width: '84%', marginBottom: SECTION_MARGIN_BOTTOM }}>
+					{content}
+				</View>
+				<ToggleReplyVisibility
+					enabled={replyCount > 0}
+					onPress={toggleReplyVisibility}
+					expanded={IsReplyThreadVisible}
+					count={replyCount}
+					style={{ marginRight: 4 }}
+				/>
+			</WithAppStatusItemContext>
 		</View>
 	);
 }
