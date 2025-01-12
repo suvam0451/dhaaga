@@ -21,7 +21,7 @@ export const appUserObjectSchema = z.object({
 
 				// other labels (feed.creator) behave like this
 				cid: z.ostring(),
-				cts: z.date({ coerce: true }),
+				cts: z.ostring(),
 				src: z.ostring(),
 				uri: z.ostring(),
 				val: z.ostring(), // e.g. --> "!no-unauthenticated"

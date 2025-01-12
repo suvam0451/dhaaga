@@ -1,21 +1,23 @@
-import { Modal, useWindowDimensions, View } from 'react-native';
+import { Modal, useWindowDimensions, View, Text } from 'react-native';
 import { TabView } from 'react-native-tab-view';
 import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import { Text } from '@rneui/themed';
-import * as React from 'react';
 import useKeyboard from '../../../hooks/useKeyboard';
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import renderScene from './renderScene';
 import tabBarRenderer from './renderTabBar';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
+import { useState } from 'react';
 
 function TimelineWidgetModal() {
-	const [index, setIndex] = React.useState(0);
-	const [routes] = React.useState([
+	const [index, setIndex] = useState(0);
+	const [routes] = useState([
 		{ key: 'pinned', title: 'Pinned' },
 		{ key: 'lists', title: 'Lists' },
-		{ key: 'tags', title: 'Tags' },
+		{
+			key: 'tags',
+			title: 'Tags',
+		},
 		{ key: 'users', title: 'Users' },
 		{ key: 'custom', title: 'Custom' },
 	]);

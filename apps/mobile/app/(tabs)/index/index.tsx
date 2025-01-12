@@ -22,6 +22,7 @@ enum TIME_OF_DAY {
 
 type TimeOfDayGreetingProps = {
 	acct: Account;
+	noLogo?: boolean;
 };
 
 type HubGreetingFragmentProps = {
@@ -29,9 +30,14 @@ type HubGreetingFragmentProps = {
 	acct: Account;
 	desc: string;
 	driver: string;
+	noLogo?: boolean;
 };
 
-function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
+function HubGreetingFragment({
+	greeting,
+	acct,
+	noLogo,
+}: HubGreetingFragmentProps) {
 	const { theme } = useAppTheme();
 
 	return (
@@ -59,22 +65,24 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 					@{acct?.username}@{acct?.server}
 				</AppText.Medium>
 			</View>
-			<View
-				style={{
-					position: 'absolute',
-					right: 8,
-					justifyContent: 'center',
-					height: '100%',
-					marginTop: 'auto',
-				}}
-			>
-				<SoftwareHeader software={acct?.driver} iconSizeMultiplier={2.5} />
-			</View>
+			{!noLogo && (
+				<View
+					style={{
+						position: 'absolute',
+						right: 8,
+						justifyContent: 'center',
+						height: '100%',
+						marginTop: 'auto',
+					}}
+				>
+					<SoftwareHeader software={acct?.driver} iconSizeMultiplier={2.5} />
+				</View>
+			)}
 		</View>
 	);
 }
 
-export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
+export function TimeOfDayGreeting({ acct, noLogo }: TimeOfDayGreetingProps) {
 	const Component = useMemo(() => {
 		const currentHours = new Date().getHours();
 		let timeOfDay: TIME_OF_DAY;
@@ -96,6 +104,7 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 						driver={acct?.driver}
 						greeting={`Good Morning`}
 						desc={`@${acct?.username}@${acct?.server}`}
+						noLogo
 					/>
 				);
 			case TIME_OF_DAY.AFTERNOON:
@@ -105,6 +114,7 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 						driver={acct?.driver}
 						greeting={`Good Afternoon`}
 						desc={`@${acct?.username}@${acct?.server}`}
+						noLogo
 					/>
 				);
 			case TIME_OF_DAY.EVENING:
@@ -114,6 +124,7 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 						driver={acct?.driver}
 						greeting={`Good Evening`}
 						desc={`@${acct?.username}@${acct?.server}`}
+						noLogo
 					/>
 				);
 			case TIME_OF_DAY.NIGHT:
@@ -123,6 +134,7 @@ export function TimeOfDayGreeting({ acct }: TimeOfDayGreetingProps) {
 						driver={acct?.driver}
 						greeting={`Good Night`}
 						desc={`@${acct?.username}@${acct?.server}`}
+						noLogo
 					/>
 				);
 		}

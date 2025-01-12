@@ -48,24 +48,23 @@ function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
 								qStyle,
 								{
 									fontFamily: 'BebasNeue_400Regular',
-									fontSize: 22,
-									color: theme.secondary.a10,
+									fontSize: 24,
+									color: theme.primary.a0,
 								},
 							]}
 						>
 							{block.question}
 						</Text>
 						{block.answers.map((answer, i) => (
-							<View key={i}>
-								<AppText.Normal
-									style={{
-										color: theme.secondary.a20,
-									}}
-									emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-								>
-									{answer}
-								</AppText.Normal>
-							</View>
+							<AppText.Normal
+								key={i}
+								style={{
+									color: theme.secondary.a10,
+								}}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+							>
+								{answer}
+							</AppText.Normal>
 						))}
 					</View>
 				))}

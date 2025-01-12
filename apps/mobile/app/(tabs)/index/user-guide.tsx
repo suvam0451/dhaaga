@@ -9,7 +9,6 @@ function Page() {
 				'It lets you organise pins and keep up across your accounts seamlessly.',
 			],
 		},
-
 		{
 			question: 'What are profiles?',
 			answers: [

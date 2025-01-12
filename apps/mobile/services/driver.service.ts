@@ -46,6 +46,28 @@ export type AppModulesProps = {
 class DriverService {
 	static getAccountModules(driver: KNOWN_SOFTWARE): AppModulesProps[] {
 		switch (driver) {
+			case KNOWN_SOFTWARE.BLUESKY: {
+				return [
+					{
+						label: 'Feeds',
+						desc: 'Subscribed Feeds',
+						iconId: 'edit',
+						to: APP_ROUTING_ENUM.FEEDS,
+					},
+					{
+						label: 'Likes',
+						desc: 'I liked these',
+						iconId: 'heart',
+						to: APP_ROUTING_ENUM.LIKES,
+					},
+					{
+						label: 'Lists',
+						desc: 'My lists',
+						iconId: 'list',
+						to: APP_ROUTING_ENUM.LISTS,
+					},
+				];
+			}
 			case KNOWN_SOFTWARE.MASTODON: {
 				return [
 					{

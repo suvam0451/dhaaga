@@ -6,25 +6,36 @@ import {
 	useAppAcct,
 	useAppApiClient,
 } from '../../utility/global-state-extractors';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { AppBskyActorGetProfile } from '@atproto/api';
 
+/**
+ * Gets the user's account, and
+ * serializes the user object onto
+ * the cache with a fixed expiry
+ */
 function useApiGetMyAccount() {
-	const { client } = useAppApiClient();
+	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
 	const { acctManager } = useAccountManager();
 
-	async function api(): Promise<AppUserObject> {
-		if (!client) return null;
-		const { data, error } = await client.accounts.get(acct.identifier);
-		if (error) return null;
-		const _value = UserMiddleware.deserialize(data, acct?.driver, acct?.server);
-		acctManager.storage.setProfile(acct?.uuid, _value);
-		return UserMiddleware.deserialize(data, acct?.driver, acct?.server);
-	}
-
 	// Queries
-	return useQuery({
+	return useQuery<AppUserObject>({
 		queryKey: ['user/me', acct?.id],
-		queryFn: api,
+		queryFn: async () => {
+			if (!client) return null;
+			const { data, error } = await client.accounts.get(acct.identifier);
+			if (error) return null;
+			if (driver === KNOWN_SOFTWARE.BLUESKY) {
+				const _data = data as AppBskyActorGetProfile.Response;
+				const _value = UserMiddleware.deserialize(_data.data, driver, server);
+				acctManager.storage.setProfile(acct?.uuid, _value);
+				return _value;
+			}
+			const _value = UserMiddleware.deserialize(data, driver, server);
+			acctManager.storage.setProfile(acct?.uuid, _value);
+			return _value;
+		},
 		enabled: client !== null && acct !== null,
 		initialData: acctManager.storage.getProfile(acct?.uuid)?.value,
 	});
