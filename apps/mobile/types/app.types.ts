@@ -16,7 +16,7 @@ export enum APP_SETTINGS {
 	TIMELINE_CONTENT_WARNING = 'timeline/content-warning',
 }
 
-export type AppSearchResultType<T> = {
+export type AppResultPageType<T> = {
 	items: T[];
 	/**
 	 * Some drivers don't support null
@@ -28,4 +28,11 @@ export type AppSearchResultType<T> = {
 	 */;
 	minId: string | null;
 	success: boolean;
+};
+
+export const pageResultDefault = {
+	success: false,
+	maxId: null,
+	minId: null,
+	items: [],
 };

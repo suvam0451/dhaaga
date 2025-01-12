@@ -214,10 +214,8 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 						<Image
 							style={{
 								flex: 1,
-								backgroundColor: '#0553',
 								padding: 2,
 								borderRadius: TIMELINE_PFP_SIZE / 2,
-								overflow: 'hidden',
 							}}
 							source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
 						/>

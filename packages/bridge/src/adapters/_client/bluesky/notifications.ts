@@ -127,6 +127,11 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 	}
 
 	async getSocialUpdates(query: NotificationGetQueryDto) {
+		const agent = getBskyAgent(this.dto);
+
+		// agent.listNotifications({
+		// 	reasons: ['like', 'follow', 'repost'],
+		// });
 		return notImplementedErrorBuilder();
 	}
 }

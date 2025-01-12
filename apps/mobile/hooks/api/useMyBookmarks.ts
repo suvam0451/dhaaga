@@ -2,12 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { AppPostObject } from '../../types/app-post.types';
 import { PostMiddleware } from '../../services/middlewares/post.middleware';
 import { useAppApiClient } from '../utility/global-state-extractors';
-import { AppSearchResultType } from '../../types/app.types';
+import { AppResultPageType } from '../../types/app.types';
 
 function useMyBookmarks(maxId: string) {
 	const { client, server, driver } = useAppApiClient();
 
-	return useQuery<AppSearchResultType<AppPostObject>>({
+	return useQuery<AppResultPageType<AppPostObject>>({
 		queryKey: [maxId],
 		queryFn: async () => {
 			if (!client) throw new Error('_client not initialized');

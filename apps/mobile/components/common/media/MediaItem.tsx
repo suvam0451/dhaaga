@@ -1,5 +1,5 @@
-import { View } from 'react-native';
-import { memo, useMemo } from 'react';
+import { StyleProp, View, ViewStyle } from 'react-native';
+import { useMemo } from 'react';
 import {
 	AltTextOverlay,
 	AppAudioComponent,
@@ -15,12 +15,13 @@ import { appDimensions } from '../../../styles/dimensions';
 type ImageCarousalProps = {
 	attachments: AppMediaObject[];
 	calculatedHeight: number;
+	style?: StyleProp<ViewStyle>;
 };
 
 /**
  * Media Renderer for a single item
  */
-const TimelineMediaRendered = memo(function Foo({
+function TimelineMediaRendered({
 	attachment,
 	CalculatedHeight,
 	altText,
@@ -90,34 +91,34 @@ const TimelineMediaRendered = memo(function Foo({
 	return (
 		<View onLayout={onLayoutChanged}>
 			{MediaItem}
-			<CarousalIndicatorOverlay index={index} totalCount={totalCount} />
+			<CarousalIndicatorOverlay index={index} total={totalCount} />
 			<AltTextOverlay altText={altText} />
 		</View>
 	);
-});
+}
 
-const MediaItem = memo(function Foo({
+function MediaItem({
 	attachments,
 	calculatedHeight,
+	style,
 }: ImageCarousalProps) {
-	if (attachments === undefined || attachments === null) {
-		console.log('[WARN]: no attachments');
-	}
+	if (!attachments || attachments.length === 0) return <View />;
 
-	if (!attachments) return <View />;
-
-	if (attachments?.length === 0) return <View></View>;
-	if (attachments?.length === 1) {
+	if (attachments.length === 1) {
 		return (
 			<View
-				style={{
-					marginBottom: appDimensions.timelines.sectionBottomMargin,
-				}}
+				style={[
+					{
+						marginBottom: appDimensions.timelines.sectionBottomMargin,
+					},
+					style,
+				]}
 			>
 				<TimelineMediaRendered
 					attachment={attachments[0]}
 					CalculatedHeight={calculatedHeight}
 					altText={attachments[0]?.alt}
+					totalCount={1}
 				/>
 			</View>
 		);
@@ -134,6 +135,6 @@ const MediaItem = memo(function Foo({
 			}))}
 		/>
 	);
-});
+}
 
 export default MediaItem;

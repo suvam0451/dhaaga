@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { AppSearchResultType } from '../../types/app.types';
+import { AppResultPageType } from '../../types/app.types';
 import { AppFeedObject } from '../../types/app-feed.types';
 import {
 	useAppAcct,
@@ -12,7 +12,7 @@ import { FeedMiddleware } from '../../services/middlewares/feed-middleware';
 function useApiGetMyFeeds() {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
-	return useQuery<AppSearchResultType<AppFeedObject>>({
+	return useQuery<AppResultPageType<AppFeedObject>>({
 		queryKey: ['my/feeds', acct],
 		initialData: {
 			success: true,

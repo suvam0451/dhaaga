@@ -4,7 +4,7 @@ import {
 	useAppAcct,
 	useAppApiClient,
 } from '../../utility/global-state-extractors';
-import { AppSearchResultType } from '../../../types/app.types';
+import { AppResultPageType } from '../../../types/app.types';
 import { AppPostObject } from '../../../types/app-post.types';
 import ActivityPubService from '../../../services/activitypub.service';
 import { BlueskyRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
@@ -14,7 +14,7 @@ function useGetLikes(query: GetPostsQueryDTO) {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
 
-	return useQuery<AppSearchResultType<AppPostObject>>({
+	return useQuery<AppResultPageType<AppPostObject>>({
 		queryKey: ['acct/likes', acct, query],
 		queryFn: async () => {
 			if (driver === KNOWN_SOFTWARE.BLUESKY) {

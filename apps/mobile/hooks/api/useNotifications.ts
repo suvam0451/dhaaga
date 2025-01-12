@@ -11,27 +11,23 @@ import { PostMiddleware } from '../../services/middlewares/post.middleware';
 import {
 	useAppAcct,
 	useAppApiClient,
+	useAppDb,
 } from '../utility/global-state-extractors';
 import { UserMiddleware } from '../../services/middlewares/user.middleware';
 import ActivityPubService from '../../services/activitypub.service';
-import { RandomUtil } from '../../utils/random.utils';
 import {
 	AppBskyNotificationListNotifications,
 	ChatBskyConvoListConvos,
 } from '@atproto/api';
 import ChatService, { AppChatRoom } from '../../services/chat.service';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { AppResultPageType, pageResultDefault } from '../../types/app.types';
+import { MisskeyService } from '../../services/misskey.service';
 
 type useApiGetNotificationsProps = {
 	include: DhaagaJsNotificationType[];
 };
 
-type HookResultType = {
-	data: AppNotificationObject[];
-	minId?: string;
-	maxId?: string;
-};
+type NotificationResults = AppResultPageType<AppNotificationObject>;
 
 type MastoGroupedNotificationType = {
 	groupKey: string;
@@ -45,10 +41,6 @@ type MastoGroupedNotificationType = {
 	statusId: string;
 };
 
-const defaultHookResult: HookResultType = {
-	data: [],
-};
-
 /**
  * API Query for the notifications endpoint
  */
@@ -56,7 +48,7 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 	const { acct } = useAppAcct();
 	const { client, driver } = useAppApiClient();
 
-	async function api(): Promise<HookResultType> {
+	async function api(): Promise<NotificationResults> {
 		if (!client) throw new Error('no client found');
 		if (driver === KNOWN_SOFTWARE.FIREFISH) {
 			/**
@@ -73,7 +65,8 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 
 			if (error) throw new Error(error.message);
 			return {
-				data: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
+				success: true,
+				items: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
 					data.data.filter((o) => ['login'].includes(o.type)),
 					driver,
 					acct?.server,
@@ -90,7 +83,8 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 
 			if (error) throw new Error(error.message);
 			return {
-				data: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
+				success: true,
+				items: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
 					data.data,
 					driver,
 					acct?.server,
@@ -102,11 +96,11 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 	}
 
 	// Queries
-	return useQuery<HookResultType>({
+	return useQuery<NotificationResults>({
 		queryKey: ['notifications', driver, acct?.server, include],
 		queryFn: api,
 		enabled: client !== null,
-		initialData: { data: [] },
+		initialData: pageResultDefault,
 	});
 }
 
@@ -119,89 +113,69 @@ function useApiGetMentionUpdates() {
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
 
-	async function api(): Promise<HookResultType> {
+	async function api(): Promise<NotificationResults> {
 		const results = await client.notifications.getMentions(driver);
-		if (results.error) {
-			throw new Error(results.error.message);
-		} else {
-			const _data = results.data;
-			if (ActivityPubService.misskeyLike(driver)) {
-				return {
-					data: _data.data.map((o: any) => {
-						const _acct = UserMiddleware.deserialize<unknown>(
-							o.user,
-							driver,
-							server,
-						);
-						const _post = PostMiddleware.deserialize<unknown>(
-							o,
-							driver,
-							server,
-						);
-						const _obj: AppNotificationObject = {
-							id: RandomUtil.nanoId(),
-							type: _post.visibility === 'specified' ? 'chat' : 'mention',
-							post: _post,
-							user: _acct,
-							read: false,
-							createdAt: new Date(_post.createdAt),
-							extraData: {},
-						};
-						return _obj;
-					}),
-					minId: null,
-					maxId: null,
-				};
-			} else if (ActivityPubService.blueskyLike(driver)) {
-				const _data =
-					results.data as AppBskyNotificationListNotifications.OutputSchema;
-			}
+		if (results.error) throw new Error(results.error.message);
 
-			const acctList = _data.data.accounts;
-			const postList = _data.data.statuses;
-			const _retval = _data.data.notificationGroups
-				.map((o: MastoGroupedNotificationType) => {
-					const _acct = UserMiddleware.deserialize<unknown>(
-						acctList.find((x) => x.id === o.sampleAccountIds[0]),
-						driver,
-						server,
-					);
-					const _post = PostMiddleware.deserialize<unknown>(
-						postList.find((x) => x.id === o.statusId),
-						driver,
-						server,
-					);
-
-					// bring this back when chat is implemented
-					// if (o.type === 'mention' && _post.visibility === 'direct')
-					// 	return null;
-					const _obj: AppNotificationObject = {
-						id: o.groupKey,
-						type: o.type,
-						post: _post,
-						user: _acct,
-						read: false,
-						createdAt: new Date(o.mostRecentNotificationId),
-						extraData: {},
-					};
-					return _obj;
-				})
-				.filter((o) => !!o);
-
-			return {
-				data: _retval,
-				maxId: _data.maxId,
-				minId: _data.minId,
-			};
+		const _data = results.data;
+		if (ActivityPubService.misskeyLike(driver))
+			if (ActivityPubService.misskeyLike(driver))
+				return MisskeyService.deserializeNotifications(
+					results.data,
+					driver,
+					server,
+				);
+		if (ActivityPubService.blueskyLike(driver)) {
+			const _data =
+				results.data as AppBskyNotificationListNotifications.OutputSchema;
+			console.log(_data);
 		}
+
+		const acctList = _data.data.accounts;
+		const postList = _data.data.statuses;
+		const _retval = _data.data.notificationGroups
+			.map((o: MastoGroupedNotificationType) => {
+				const _acct = UserMiddleware.deserialize<unknown>(
+					acctList.find((x) => x.id === o.sampleAccountIds[0]),
+					driver,
+					server,
+				);
+				const _post = PostMiddleware.deserialize<unknown>(
+					postList.find((x) => x.id === o.statusId),
+					driver,
+					server,
+				);
+
+				// bring this back when chat is implemented
+				// if (o.type === 'mention' && _post.visibility === 'direct')
+				// 	return null;
+				const _obj: AppNotificationObject = {
+					id: o.groupKey,
+					type: o.type,
+					post: _post,
+					user: _acct,
+					read: false,
+					createdAt: new Date(o.mostRecentNotificationId),
+					extraData: {},
+				};
+				return _obj;
+			})
+			.filter((o) => !!o);
+
+		return {
+			success: true,
+			items: _retval,
+			maxId: _data.maxId,
+			minId: _data.minId,
+		};
 	}
 
 	// Queries
-	return useQuery<HookResultType>({
+	return useQuery<NotificationResults>({
 		queryKey: ['notifications/mentions', acct],
 		queryFn: api,
 		enabled: client !== null,
-		initialData: defaultHookResult,
+		initialData: pageResultDefault,
 	});
 }
 
@@ -212,11 +186,7 @@ function useApiGetChatUpdates() {
 	const [Results, setResults] = useState<AppNotificationObject[]>([]);
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
 
 	useEffect(() => {
 		setResults([]);
@@ -257,7 +227,7 @@ function useApiGetSocialUpdates() {
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
 
-	async function api(): Promise<HookResultType> {
+	async function api(): Promise<NotificationResults> {
 		const results = await client.notifications.getSocialUpdates({
 			limit: 40,
 			excludeTypes: [],
@@ -267,34 +237,12 @@ function useApiGetSocialUpdates() {
 			throw new Error(results.error.message);
 		} else {
 			const _data = results.data;
-			if (ActivityPubService.misskeyLike(driver)) {
-				return {
-					data: _data.data.map((o: any) => {
-						const _acct = UserMiddleware.deserialize<unknown>(
-							o.user,
-							driver,
-							server,
-						);
-						const _post = PostMiddleware.deserialize<unknown>(
-							o,
-							driver,
-							server,
-						);
-						const _obj: AppNotificationObject = {
-							id: RandomUtil.nanoId(),
-							type: _post.visibility === 'specified' ? 'chat' : 'mention',
-							post: _post,
-							user: _acct,
-							read: false,
-							createdAt: new Date(_post.createdAt),
-							extraData: {},
-						};
-						return _obj;
-					}),
-					minId: null,
-					maxId: null,
-				};
-			}
+			if (ActivityPubService.misskeyLike(driver))
+				return MisskeyService.deserializeNotifications(
+					results.data,
+					driver,
+					server,
+				);
 
 			const acctList = _data.data.accounts;
 			const postList = _data.data.statuses;
@@ -329,33 +277,20 @@ function useApiGetSocialUpdates() {
 				.filter((o) => !['mention'].includes(o.type));
 
 			return {
-				data: _retval,
+				success: true,
+				items: _retval,
 				maxId: _data.maxId,
 				minId: _data.minId,
 			};
 		}
 	}
 
-	// const { driver } = useAppApiClient();
-	// const { data } = useApiGetNotifications({
-	// 	include: ActivityPubService.mastodonLike(driver)
-	// 		? [
-	// 				// Mastodon
-	// 				DhaagaJsNotificationType.FAVOURITE,
-	// 				DhaagaJsNotificationType.POLL_ENDED,
-	// 				DhaagaJsNotificationType.POLL_NOTIFICATION,
-	// 				DhaagaJsNotificationType.POLL_VOTE,
-	// 				DhaagaJsNotificationType.REBLOG,
-	// 			]
-	// 		: [],
-	// });
-
 	// Queries
-	return useQuery<HookResultType>({
+	return useQuery<NotificationResults>({
 		queryKey: ['notifications/social', acct],
 		queryFn: api,
 		enabled: client !== null,
-		initialData: defaultHookResult,
+		initialData: pageResultDefault,
 	});
 }
 
@@ -371,7 +306,7 @@ function useApiGetSubscriptionUpdates() {
 
 	return {
 		data: {
-			data: data.data.filter((o) => ['note', 'renote'].includes(o.type)),
+			data: data.items.filter((o) => ['note', 'renote'].includes(o.type)),
 			maxId: data.maxId,
 			minId: data.minId,
 		},

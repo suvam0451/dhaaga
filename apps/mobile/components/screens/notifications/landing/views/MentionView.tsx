@@ -23,7 +23,7 @@ const MentionView = memo(() => {
 			]}
 			tabType={APP_LANDING_PAGE_TYPE.MENTIONS}
 			tip={'These users have mentioned or replied to you.'}
-			data={data.data}
+			data={data.items}
 			refreshing={IsRefreshing}
 			onRefresh={refresh}
 		/>

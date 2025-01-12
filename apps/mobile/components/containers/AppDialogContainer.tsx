@@ -1,11 +1,14 @@
 import { RneuiDialogProps } from '../dialogs/_types';
 import { Dialog } from '@rneui/themed';
+import { appVerticalIndex } from '../../styles/dimensions';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 function AppDialogContainer({
 	IsVisible,
 	setIsVisible,
 	children,
 }: RneuiDialogProps & { children: any }) {
+	const { theme } = useAppTheme();
 	return (
 		<Dialog
 			isVisible={IsVisible}
@@ -13,9 +16,13 @@ function AppDialogContainer({
 				setIsVisible(false);
 			}}
 			style={{
-				backgroundColor: '#121212',
+				backgroundColor: theme.background.a20,
 			}}
-			overlayStyle={{ backgroundColor: '#1c1c1c', borderRadius: 8 }}
+			overlayStyle={{
+				backgroundColor: 'black',
+				borderRadius: 8,
+				zIndex: appVerticalIndex.dialogBackdrop,
+			}}
 		>
 			{children}
 		</Dialog>

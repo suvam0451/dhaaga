@@ -2,16 +2,16 @@ import { Image } from 'expo-image';
 import { MEDIA_CONTAINER_WIDTH } from './_common';
 import { Fragment, memo, useEffect, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, Text } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { APP_FONT } from '../../../styles/AppTheme';
 import { Dialog } from '@rneui/themed';
-import { Text } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useGalleryDims from '../../../hooks/app/useGalleryDims';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { appVerticalIndex } from '../../../styles/dimensions';
 
 type Props = {
 	url?: string;
@@ -73,7 +73,8 @@ export const AppImageComponent = memo(function Foo({
 	);
 });
 
-export const AppAudioComponent = memo(function Foo({ url }: { url: string }) {
+export function AppAudioComponent({ url }: { url: string }) {
+	const { theme } = useAppTheme();
 	// const [sound, setSound] = useState<Audio.Sound | null>(null);
 	//
 	// async function create() {
@@ -111,15 +112,15 @@ export const AppAudioComponent = memo(function Foo({ url }: { url: string }) {
 					// onPress={create}
 					name="play"
 					size={24}
-					color={APP_FONT.MONTSERRAT_BODY}
+					color={theme.secondary.a20}
 				/>
-				<Text style={{ color: APP_FONT.MONTSERRAT_BODY, marginLeft: 8 }}>
+				<Text style={{ color: theme.secondary.a20, marginLeft: 8 }}>
 					Audio Not Implemented
 				</Text>
 			</View>
 		</View>
 	);
-});
+}
 
 export const AppVideoComponent = memo(function Foo({
 	url,
@@ -215,7 +216,12 @@ export const AltTextOverlay = memo(function Foo({
 				onBackdropPress={() => {
 					setIsVisible(false);
 				}}
-				overlayStyle={{ backgroundColor: '#383838', borderRadius: 8 }}
+				overlayStyle={{
+					backgroundColor: theme.background.a20,
+					zIndex: appVerticalIndex.dialogContent,
+					borderRadius: 8,
+					maxWidth: '80%',
+				}}
 			>
 				<View
 					style={{
@@ -227,82 +233,73 @@ export const AltTextOverlay = memo(function Foo({
 						marginBottom: 4,
 					}}
 				>
-					<View>
-						<Text
-							style={{
-								color: APP_FONT.MONTSERRAT_BODY,
-								fontFamily: 'Inter-Bold',
-								fontSize: 20,
-							}}
-						>
-							Alt Text
-						</Text>
-					</View>
+					<AppText.SemiBold
+						style={{
+							fontSize: 20,
+						}}
+					>
+						Alt Text
+					</AppText.SemiBold>
 
 					<View style={{ padding: 8, marginRight: -8, marginTop: -12 }}>
 						<MaterialCommunityIcons
 							name="text-to-speech"
 							size={28}
-							color={APP_FONT.MONTSERRAT_BODY}
+							color={theme.secondary.a20}
 						/>
 					</View>
 				</View>
 
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-					}}
-				>
+				<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
 					{altText}
-				</Text>
+				</AppText.Normal>
 			</Dialog>
 		</Fragment>
 	);
 });
 
-export const CarousalIndicatorOverlay = memo(function Foo({
+export function CarousalIndicatorOverlay({
 	index,
-	totalCount,
-	top,
-	right,
+	total,
 }: {
 	index?: number;
-	totalCount?: number;
-	top?: number;
-	right?: number;
+	total?: number;
 }) {
 	const { theme } = useAppTheme();
 
-	if (!index || !totalCount) return <View />;
+	if (total < 2) return <View />;
 	return (
-		<View
-			style={{
-				position: 'absolute',
-				right: right || 0,
-				top: top || 0,
-			}}
-		>
+		<View style={styles.carousalIndexContainer}>
 			<View
-				style={{
-					position: 'absolute',
-					left: -48,
-					backgroundColor: theme.palette.bg,
-					opacity: 0.6,
-					top: 8,
-					padding: 4,
-					paddingHorizontal: 8,
-					borderRadius: 8,
-				}}
+				style={[
+					styles.carousalIndexContent,
+					{
+						backgroundColor: theme.palette.bg,
+					},
+				]}
 			>
 				<AppText.Normal>
-					{index + 1}/{totalCount}
+					{index + 1}/{total}
 				</AppText.Normal>
 			</View>
 		</View>
 	);
-});
+}
 
 const styles = StyleSheet.create({
+	carousalIndexContainer: {
+		position: 'absolute',
+		right: 0,
+		top: 8,
+	},
+	carousalIndexContent: {
+		position: 'absolute',
+		left: -48,
+		opacity: 0.7,
+		padding: 4,
+		paddingHorizontal: 8,
+		borderRadius: 8,
+	},
 	contentContainer: {
 		flex: 1,
 		alignItems: 'center',

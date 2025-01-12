@@ -15,7 +15,7 @@ import {
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { AppPostObject } from '../../../../types/app-post.types';
-import { AppSearchResultType } from '../../../../types/app.types';
+import { AppResultPageType } from '../../../../types/app.types';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -25,7 +25,7 @@ type TimelineQueryParams = {
 	maxId?: string;
 };
 
-type TimelineFetchResultType = AppSearchResultType<AppPostObject>;
+type TimelineFetchResultType = AppResultPageType<AppPostObject>;
 
 const DEFAULT_RETURN_VALUE: TimelineFetchResultType = {
 	success: true,
@@ -85,7 +85,7 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 
 	function outputSchemaToResultPage(
 		data: any,
-	): AppSearchResultType<AppPostObject> {
+	): AppResultPageType<AppPostObject> {
 		return {
 			success: true,
 			items: PostMiddleware.deserialize<unknown[]>(data.feed, driver, server),

@@ -85,10 +85,7 @@ function DataView() {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
-			payload: {
-				items: data.data,
-				maxId: data.maxId,
-			},
+			payload: data,
 		});
 	}, [fetchStatus]);
 
