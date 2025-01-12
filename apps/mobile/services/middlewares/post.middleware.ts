@@ -200,6 +200,9 @@ export class PostMiddleware {
 		const HAS_PARENT = input.isReply();
 		const HAS_ROOT = input.hasRootAvailable();
 
+		if (IS_SHARE) {
+			console.log('repost object', input.getRepostedStatusRaw());
+		}
 		let sharedFrom: z.infer<typeof ActivityPubStatusItemDto> = IS_SHARE
 			? PostMiddleware.deserialize(input.getRepostedStatusRaw(), driver, server)
 			: null;
@@ -331,13 +334,28 @@ export class PostMiddleware {
 			return input;
 		}
 		return input.meta.isBoost
-			? input.content.raw
+			? input.content.raw || input.content.media.length > 0
 				? input
 				: input.boostedFrom
 			: input;
 	}
 
+	/**
+	 * ------ Utility functions follow ------
+	 */
+
 	static isQuoteObject(input: AppPostObject) {
-		return input?.meta?.isBoost && input?.content?.raw;
+		return (
+			input?.meta?.isBoost &&
+			(input?.content?.raw || input?.content?.media?.length > 0)
+		);
+	}
+
+	static isLiked(input: AppPostObject) {
+		return !!input.atProto?.viewer?.like || input.interaction.liked;
+	}
+
+	static isShared(input: AppPostObject) {
+		return !!input.atProto?.viewer?.repost || input.interaction.boosted;
 	}
 }

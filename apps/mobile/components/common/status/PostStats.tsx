@@ -9,13 +9,12 @@ import {
 } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import {
-	useAppApiClient,
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 
 type StatItemProps = {
 	count: number;
@@ -73,21 +72,14 @@ type PostStatsProps = {
  */
 function PostStats({ style }: PostStatsProps) {
 	const { show, setCtx } = useAppBottomSheet_Improved();
-	const { driver } = useAppApiClient();
 	const { dto } = useAppStatusItem();
 
 	const LIKE_COUNT = dto.stats.likeCount;
 	const REPLY_COUNT = dto.stats.replyCount;
 	const SHARE_COUNT = dto.stats.boostCount;
 
-	const LIKED =
-		driver === KNOWN_SOFTWARE.BLUESKY
-			? !!dto.atProto?.viewer?.like
-			: dto.interaction.liked;
-	const SHARED =
-		driver === KNOWN_SOFTWARE.BLUESKY
-			? !!dto.atProto?.viewer?.repost
-			: dto.interaction.boosted;
+	const LIKED = PostMiddleware.isLiked(dto);
+	const SHARED = PostMiddleware.isShared(dto);
 
 	// No stat to show
 	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1) return <View />;

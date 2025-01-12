@@ -6,7 +6,6 @@ import PostStats from '../PostStats';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import {
 	useAppAcct,
-	useAppApiClient,
 	useAppBottomSheet_Improved,
 	useAppPublishers,
 	useAppTheme,
@@ -16,7 +15,7 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { AppToggleIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import ActivityPubService from '../../../../services/activitypub.service';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 
 /**
  * Press this to toggle sharing status
@@ -26,7 +25,6 @@ function ShareButton() {
 	const [IsLoading, setIsLoading] = useState(false);
 	const { postPub } = useAppPublishers();
 	const { theme } = useAppTheme();
-	const { driver } = useAppApiClient();
 
 	async function onPress() {
 		postPub.toggleShare(item.uuid, setIsLoading).finally(() => {
@@ -34,10 +32,7 @@ function ShareButton() {
 		});
 	}
 
-	const FLAG =
-		driver === KNOWN_SOFTWARE.BLUESKY
-			? !!item.atProto?.viewer?.repost
-			: item.interaction.boosted;
+	const FLAG = PostMiddleware.isShared(item);
 
 	return (
 		<AppToggleIcon
@@ -68,7 +63,6 @@ function LikeButton() {
 	const [IsLoading, setIsLoading] = useState(false);
 	const { postPub } = useAppPublishers();
 	const { theme } = useAppTheme();
-	const { driver } = useAppApiClient();
 
 	async function _toggleLike() {
 		postPub.toggleLike(item.uuid, setIsLoading).finally(() => {
@@ -76,10 +70,7 @@ function LikeButton() {
 		});
 	}
 
-	const FLAG =
-		driver === KNOWN_SOFTWARE.BLUESKY
-			? !!item.atProto?.viewer?.like
-			: item.interaction.liked;
+	const FLAG = PostMiddleware.isLiked(item);
 
 	return (
 		<AppToggleIcon
@@ -221,7 +212,11 @@ function StatusInteraction() {
 				paddingHorizontal: 4,
 			}}
 		>
-			<PostStats />
+			<PostStats
+				style={{
+					marginBottom: appDimensions.timelines.sectionBottomMargin,
+				}}
+			/>
 			<StatusInteractionButtons />
 		</View>
 	);
@@ -234,6 +229,5 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginTop: 4,
 	},
 });

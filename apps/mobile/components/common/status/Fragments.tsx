@@ -34,6 +34,13 @@ type PostedByTextOneLineProps = {
 	visibility?: any;
 };
 
+/**
+ * Shows the
+ * @param text
+ * @param driver
+ * @param createdAt
+ * @constructor
+ */
 function PostedByTextOneLine({
 	text,
 	driver,

@@ -141,6 +141,7 @@ const StatusCore = memo(
 		const IS_TRANSLATED = _target?.calculated?.translationOutput;
 
 		const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
+		const HAS_TEXT_CONTENT = !!_target?.content?.raw;
 
 		const { content: PostContent, isLoaded } = useMfm({
 			content: _target?.content?.raw,
@@ -190,12 +191,7 @@ const StatusCore = memo(
 							isSensitive ? ShowSensitiveContent && HAS_MEDIA : HAS_MEDIA
 						}
 					>
-						<Pressable
-							style={{
-								marginBottom: SECTION_MARGIN_BOTTOM,
-							}}
-							onPress={onGalleryInspect}
-						>
+						<Pressable onPress={onGalleryInspect}>
 							<MediaItem
 								attachments={_target.content.media}
 								calculatedHeight={_target.calculated.mediaContainerHeight}
@@ -213,7 +209,7 @@ const StatusCore = memo(
 								toPost(_target.id);
 							}}
 						>
-							{PostContent}
+							{HAS_TEXT_CONTENT ? PostContent : <View />}
 							{IS_TRANSLATED && (
 								<ExplainOutput
 									additionalInfo={'Translated using OpenAI'}
@@ -226,7 +222,7 @@ const StatusCore = memo(
 					</HiddenByCw>
 
 					{/*FIXME: enable for bluesky*/}
-					{IS_QUOTE_BOOST && (
+					{IS_QUOTE_BOOST && !!dto.boostedFrom && (
 						<WithAppStatusItemContext dto={_target.boostedFrom}>
 							<StatusQuoted />
 						</WithAppStatusItemContext>

@@ -1,10 +1,34 @@
-import { memo, useMemo } from 'react';
-import { ParentPostFragment } from './_static';
+import { Fragment, memo, useMemo } from 'react';
 import SharedStatusFragment from './fragments/SharedStatusFragment';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
 import { View } from 'react-native';
 import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
+import { ReplyIndicator } from './ListView/_shared';
+import ParentPost from './fragments/ParentPost';
+
+/**
+ * ActivityPub post objects sometimes
+ * offer parent post information (Misskey)
+ *
+ * AT protocol also providers root status
+ * information (Bluesy)
+ */
+function AncestorFragment() {
+	const { dto } = useAppStatusItem();
+
+	if (!dto.replyTo) return <ReplyIndicator />;
+
+	const IS_PARENT_ALSO_ROOT = dto.rootPost?.id === dto.replyTo?.id;
+	return (
+		<Fragment>
+			{dto.rootPost && !IS_PARENT_ALSO_ROOT && (
+				<ParentPost dto={dto.rootPost} />
+			)}
+			<ParentPost dto={dto.replyTo} />
+		</Fragment>
+	);
+}
 
 type StatusItemProps = {
 	// disables all interactions
@@ -52,11 +76,7 @@ const StatusItem = memo(function Foo({
 	return useMemo(() => {
 		if (dto.meta.isBoost) {
 			// Quote Boost
-			if (
-				dto.content.raw !== undefined &&
-				dto.content.raw !== null &&
-				dto.content.raw !== ''
-			) {
+			if (!!dto.content.raw || dto.content.media.length > 0) {
 				return (
 					<PostContainer>
 						<StatusCore
@@ -73,7 +93,7 @@ const StatusItem = memo(function Foo({
 					return (
 						<PostContainer>
 							<SharedStatusFragment />
-							<ParentPostFragment />
+							<AncestorFragment />
 							<StatusCore
 								hasBoost={true}
 								hasParent={true}
@@ -100,7 +120,7 @@ const StatusItem = memo(function Foo({
 		} else if (dto.meta.isReply) {
 			return (
 				<PostContainer>
-					<ParentPostFragment />
+					<AncestorFragment />
 					<StatusCore
 						hasParent={true}
 						isPreview={isPreview}

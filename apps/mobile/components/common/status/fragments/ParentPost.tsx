@@ -39,7 +39,7 @@ function ParentPost({ dto }: Props) {
 					emojis={dto.calculated.emojis}
 					raw={dto.content.raw}
 				/>
-				{IS_QUOTE_BOOST && (
+				{IS_QUOTE_BOOST && !!dto.boostedFrom && (
 					<WithAppStatusItemContext dto={dto.boostedFrom}>
 						<StatusQuoted />
 					</WithAppStatusItemContext>

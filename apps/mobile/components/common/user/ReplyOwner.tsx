@@ -10,6 +10,7 @@ import { AppText } from '../../lib/Text';
 type Props = {
 	dto: AppPostObject;
 };
+
 /**
  *
  * @constructor

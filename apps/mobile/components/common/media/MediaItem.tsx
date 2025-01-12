@@ -111,7 +111,7 @@ const MediaItem = memo(function Foo({
 		return (
 			<View
 				style={{
-					marginBottom: appDimensions.timelines.sectionBottomMargin * 1.5,
+					marginBottom: appDimensions.timelines.sectionBottomMargin,
 				}}
 			>
 				<TimelineMediaRendered
