@@ -9,11 +9,13 @@ import {
 } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import {
+	useAppApiClient,
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 type StatItemProps = {
 	count: number;
@@ -59,6 +61,9 @@ export const StatItem = memo(
 	},
 );
 
+type PostStatsProps = {
+	style?: StyleProp<ViewStyle>;
+};
 /**
  * Show metrics for a post
  *
@@ -66,22 +71,26 @@ export const StatItem = memo(
  * vertical screen estate
  * @constructor
  */
-const PostStats = memo(function Foo({
-	style,
-}: {
-	style?: StyleProp<ViewStyle>;
-}) {
+function PostStats({ style }: PostStatsProps) {
 	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { driver } = useAppApiClient();
 	const { dto } = useAppStatusItem();
+
 	const LIKE_COUNT = dto.stats.likeCount;
 	const REPLY_COUNT = dto.stats.replyCount;
 	const SHARE_COUNT = dto.stats.boostCount;
 
-	const LIKED = dto.interaction.liked;
-	const SHARED = dto.interaction.boosted;
+	const LIKED =
+		driver === KNOWN_SOFTWARE.BLUESKY
+			? !!dto.atProto?.viewer?.like
+			: dto.interaction.liked;
+	const SHARED =
+		driver === KNOWN_SOFTWARE.BLUESKY
+			? !!dto.atProto?.viewer?.repost
+			: dto.interaction.boosted;
 
-	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1)
-		return <View></View>;
+	// No stat to show
+	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1) return <View />;
 
 	function onPressLikeCounter() {
 		setCtx({ uuid: dto.uuid });
@@ -122,7 +131,9 @@ const PostStats = memo(function Foo({
 			/>
 		</View>
 	);
-});
+}
+
+export default PostStats;
 
 const styles = StyleSheet.create({
 	container: {
@@ -139,4 +150,3 @@ const styles = StyleSheet.create({
 		marginHorizontal: 2,
 	},
 });
-export default PostStats;

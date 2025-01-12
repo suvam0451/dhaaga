@@ -8,7 +8,10 @@ import {
 import { FollowPostDto, GetPostsQueryDTO } from '../_interface.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
+import {
+	LibraryPromise,
+	PaginatedLibraryPromise,
+} from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import {
 	MastoAccount,
@@ -131,7 +134,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 
 	async likes(
 		opts: GetPostsQueryDTO,
-	): LibraryPromise<MastoStatus[] | MegaStatus[]> {
+	): PaginatedLibraryPromise<MastoStatus[] | MegaStatus[]> {
 		return notImplementedErrorBuilder();
 	}
 

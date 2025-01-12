@@ -8,10 +8,14 @@ import {
 	PleromaRestClient,
 } from '@dhaaga/bridge';
 import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
-import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
+import {
+	useAppAcct,
+	useAppApiClient,
+} from '../../../../hooks/utility/global-state-extractors';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { AppPostObject } from '../../../../types/app-post.types';
+import { AppSearchResultType } from '../../../../types/app.types';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -21,20 +25,24 @@ type TimelineQueryParams = {
 	maxId?: string;
 };
 
-type TimelineFetchResultType = {
-	data: AppPostObject[];
-	minId?: string | null;
-	maxId?: string | null;
+type TimelineFetchResultType = AppSearchResultType<AppPostObject>;
+
+const DEFAULT_RETURN_VALUE: TimelineFetchResultType = {
+	success: true,
+	items: [],
+	maxId: undefined,
+	minId: undefined,
 };
 
-const DEFAULT_RETURN_VALUE = { data: [], maxId: undefined, minId: undefined };
-
 /**
- * For use with the main timeline renderer
- * component
+ * Use to fetch paginated data for
+ * various timelines containing posts
+ *
+ * Is consumed by various DataViews
  */
 function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 	const { client, driver, server } = useAppApiClient();
+	const { acct } = useAppAcct();
 
 	// to be adjusted based on performance
 	const TIMELINE_STATUS_LIMIT = 10;
@@ -75,6 +83,17 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 		}
 	}
 
+	function outputSchemaToResultPage(
+		data: any,
+	): AppSearchResultType<AppPostObject> {
+		return {
+			success: true,
+			items: PostMiddleware.deserialize<unknown[]>(data.feed, driver, server),
+			maxId: data.cursor === undefined ? null : data.cursor,
+			minId: null,
+		};
+	}
+
 	function generateFeedBatch(data: any) {
 		let _feed = [];
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
@@ -102,13 +121,14 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 		maxId?: string | null,
 	): TimelineFetchResultType {
 		return {
-			data: generateFeedBatch(data),
+			success: true,
+			items: generateFeedBatch(data),
 			maxId: generateMaxId(data, maxId),
 			minId: undefined,
 		};
 	}
 
-	async function api() {
+	async function api(): Promise<TimelineFetchResultType> {
 		if (client === null) return DEFAULT_RETURN_VALUE;
 		switch (type) {
 			case TimelineFetchMode.IDLE:
@@ -165,24 +185,28 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 						_query,
 					);
 					return {
-						data: PostMiddleware.deserialize<unknown[]>(
+						success: true,
+						items: PostMiddleware.deserialize<unknown[]>(
 							data as any[],
 							driver,
 							server,
 						),
 						maxId: generateMaxId(data),
+						minId: undefined,
 					};
 				} else if (driver === KNOWN_SOFTWARE.SHARKEY) {
 					const { data } = await (client as MisskeyRestClient).timelines.bubble(
 						_query,
 					);
 					return {
-						data: PostMiddleware.deserialize<unknown[]>(
+						success: true,
+						items: PostMiddleware.deserialize<unknown[]>(
 							data as any[],
 							driver,
 							server,
 						),
 						maxId: generateMaxId(data),
+						minId: undefined,
 					};
 				} else {
 					return DEFAULT_RETURN_VALUE;
@@ -207,15 +231,32 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 					feed: query.id,
 				});
 				if (error) return DEFAULT_RETURN_VALUE;
-				return {
-					data: PostMiddleware.deserialize<unknown[]>(
-						data.feed,
-						driver,
-						server,
-					),
-					maxId: data.cursor === undefined ? null : data.cursor,
-					minId: null,
-				};
+				return outputSchemaToResultPage(data);
+			}
+			case TimelineFetchMode.LIKES: {
+				if (driver === KNOWN_SOFTWARE.BLUESKY) {
+					const { data, error } = await (
+						client as BlueskyRestClient
+					).accounts.atProtoLikes(acct.identifier, {
+						limit: 5,
+						cursor: _query.maxId === null ? undefined : _query.maxId,
+					});
+					if (error) return DEFAULT_RETURN_VALUE;
+					return {
+						success: true,
+						items: PostMiddleware.deserialize<unknown[]>(
+							data.feed,
+							driver,
+							server,
+						),
+						maxId: data.cursor === undefined ? null : data.cursor,
+						minId: null,
+					};
+				}
+
+				const { data, error } = await client.accounts.likes(_query);
+				if (error) return DEFAULT_RETURN_VALUE;
+				return outputSchemaToResultPage(data);
 			}
 			default:
 				return DEFAULT_RETURN_VALUE;

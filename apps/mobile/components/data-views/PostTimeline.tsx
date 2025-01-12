@@ -22,9 +22,9 @@ type PostTimelineProps = {
 export function PostTimeline({
 	data,
 	refreshing,
+	fetchStatus,
 	onRefresh,
 	onScroll,
-	fetchStatus,
 }: PostTimelineProps) {
 	const { visible, loading } = useLoadingMoreIndicatorState({
 		fetchStatus,

@@ -13,7 +13,10 @@ import {
 } from '../_router/routes/accounts.js';
 import { FollowPostDto, GetPostsQueryDTO } from '../_interface.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
+import {
+	LibraryPromise,
+	PaginatedLibraryPromise,
+} from '../_router/routes/_types.js';
 import {
 	MastoAccount,
 	MastoFamiliarFollowers,
@@ -150,14 +153,23 @@ export class MastodonAccountsRouter implements AccountRoute {
 		return successWithData(data);
 	}
 
-	async likes(opts: GetPostsQueryDTO) {
-		const fn = this.client.lib.v1.favourites.list;
-		const { data, error } = await MastoErrorHandler(fn, [opts]);
-		const resData = await data;
-		if (error || resData === undefined) {
-			return errorBuilder(error);
+	async likes(query: GetPostsQueryDTO): PaginatedLibraryPromise<MastoStatus[]> {
+		const { data: _data, error } =
+			await this.direct.getCamelCaseWithLinkPagination<MastoStatus[]>(
+				'/api/v1/favourites',
+				query,
+			);
+
+		if (!_data || error) {
+			return notImplementedErrorBuilder<{
+				data: MastoStatus[];
+				minId: string | null;
+				maxId: string | null;
+			}>();
 		}
-		return successWithData(data);
+		return {
+			data: _data,
+		};
 	}
 
 	async bookmarks(query: BookmarkGetQueryDTO): Promise<

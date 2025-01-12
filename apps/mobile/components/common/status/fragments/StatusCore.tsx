@@ -128,6 +128,12 @@ const StatusCore = memo(
 	({ isPreview, isPin, showFullDetails }: StatusCoreProps) => {
 		const { dto } = useAppStatusItem();
 		const { toPost } = useAppNavigator();
+		const { showInspector, appSession } = useGlobalState(
+			useShallow((o) => ({
+				showInspector: o.imageInspectModal.show,
+				appSession: o.appSession,
+			})),
+		);
 		const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
 		const _target = PostMiddleware.getContentTarget(dto);
@@ -144,13 +150,6 @@ const StatusCore = memo(
 
 		const isSensitive = _target.meta.sensitive;
 		const spoilerText = _target.meta.cw;
-
-		const { showInspector, appSession } = useGlobalState(
-			useShallow((o) => ({
-				showInspector: o.imageInspectModal.show,
-				appSession: o.appSession,
-			})),
-		);
 
 		function onGalleryInspect() {
 			appSession.storage.setPostForMediaInspect(dto as any);
