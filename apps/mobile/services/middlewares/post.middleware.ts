@@ -15,6 +15,8 @@ import { z } from 'zod';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import AppPrivacySettingsService from '../app-settings/app-settings-privacy.service';
 import { SQLiteDatabase } from 'expo-sqlite';
+import { AccountSavedPost } from '../../database/_schema';
+import { DataSource } from '../../database/dataSource';
 
 /**
  * converts unified interfaces into
@@ -183,6 +185,39 @@ export class PostMiddleware {
 		return data as AppPostObject;
 	}
 
+	/**
+	 * Converts a savedPost (post saved locally
+	 * on the database) to in-app dto object
+	 *
+	 * Notably, no need to look for
+	 * shares/parents/root/quotes/embeds
+	 * @param db
+	 * @param input
+	 * @param driver
+	 * @param server
+	 */
+	static databaseToJson(
+		db: DataSource,
+		input: AccountSavedPost,
+		{
+			driver,
+			server,
+		}: {
+			driver: KNOWN_SOFTWARE | string;
+			server: string;
+		},
+	): AppPostObject {
+		const parsed = AppStatusDtoService.exportLocal(db, input, driver, server);
+
+		const { data, error, success } = appPostObjectSchema.safeParse(parsed);
+		if (!success) {
+			console.log('[ERROR]: failed to convert local savedPost', error);
+			console.log('[INFO]: input used', input);
+			return null;
+		}
+		return data as AppPostObject;
+	}
+
 	static interfaceToJson(
 		input: StatusInterface,
 		{
@@ -301,6 +336,50 @@ export class PostMiddleware {
 						server,
 					},
 				) as unknown as T extends unknown[] ? never : AppPostObject;
+			} catch (e) {
+				console.log(
+					'[ERROR]: failed to deserialize post object',
+					e,
+					'input:',
+					input,
+				);
+				return null;
+			}
+		}
+	}
+
+	/**
+	 * Deserializes (skips returning the interface step)
+	 * locally saved ap/at proto post objects
+	 * @param db database reference
+	 * @param input raw ap/at proto post object
+	 * @param driver being used to deserialize this object
+	 * @param server
+	 */
+	static deserializeLocal<T>(
+		db: DataSource,
+		input: T | T[],
+		driver: string | KNOWN_SOFTWARE,
+		server: string,
+	): T extends unknown[] ? AppPostObject[] : AppPostObject {
+		if (input instanceof Array) {
+			return input
+				.map((o) =>
+					PostMiddleware.databaseToJson(db, o as AccountSavedPost, {
+						driver,
+						server,
+					}),
+				)
+				.filter((o) => !!o) as unknown as T extends unknown[]
+				? AppPostObject[]
+				: never;
+		} else {
+			try {
+				if (!input) return null;
+				return PostMiddleware.databaseToJson(db, input as AccountSavedPost, {
+					driver,
+					server,
+				}) as unknown as T extends unknown[] ? never : AppPostObject;
 			} catch (e) {
 				console.log(
 					'[ERROR]: failed to deserialize post object',

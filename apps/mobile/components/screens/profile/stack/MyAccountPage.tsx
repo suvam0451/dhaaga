@@ -102,7 +102,7 @@ function MyAccountPage() {
 			label: 'Collections',
 			desc: 'Bookmark++',
 			iconId: 'layers-outline',
-			to: APP_ROUTING_ENUM.PROFILES,
+			to: APP_ROUTING_ENUM.COLLECTIONS,
 		},
 		{
 			label: 'Drafts',

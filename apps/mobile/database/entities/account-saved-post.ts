@@ -71,6 +71,22 @@ class Service {
 			identifier: post.id,
 		});
 	}
+
+	/**
+	 * Get a list of saved posts for
+	 * this collection
+	 * @param db db reference
+	 * @param collectionId id of collection
+	 */
+	static listForCollectionId(db: DataSource, collectionId: number) {
+		const all = db.accountSavedPost.find({ active: true });
+		const refs = db.collectionSavedPost.find({
+			active: true,
+			collectionId,
+		});
+		const valid = new Map(all.map((obj) => [obj.id, obj]));
+		return refs.map((o) => valid.get(o.savedPostId)).filter((o) => !!o);
+	}
 }
 
 export { Repo as AccountSavedPostRepo, Service as AccountSavedPostService };

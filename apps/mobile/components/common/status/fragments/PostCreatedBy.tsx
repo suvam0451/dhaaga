@@ -20,6 +20,7 @@ import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
 import useAppNavigator from '../../../../states/useAppNavigator';
+import { AccountSavedUser } from '../../../../database/_schema';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -82,7 +83,7 @@ function OriginalPosterSkeleton() {
 	);
 }
 
-export const OriginalPosterPostedByFragment = memo(function Foo({
+export function OriginalPosterPostedByFragment({
 	displayNameRaw,
 	onClick,
 	emojiMap,
@@ -144,7 +145,84 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 			</View>
 		</View>
 	);
-});
+}
+
+type SavedPostCreatedByProps = {
+	user: AccountSavedUser;
+	authoredAt: Date | string;
+	style?: StyleProp<ViewStyle>;
+};
+
+/**
+ * Author indicator for a post
+ *
+ * The local version must check online
+ * connectivity and resolve the handle
+ * prior t show information
+ * @constructor
+ */
+export function SavedPostCreatedBy({
+	user,
+	style,
+	authoredAt,
+}: SavedPostCreatedByProps) {
+	const UserDivRef = useRef(null);
+
+	// resolve handle and show modal
+	function onAvatarClicked() {}
+
+	// redirect to profile
+	function onProfilePressed() {}
+
+	return (
+		<View
+			style={[
+				{
+					alignItems: 'center',
+					flexDirection: 'row',
+					flexGrow: 1,
+					overflowX: 'hidden',
+					width: 'auto',
+					position: 'relative',
+				},
+				style,
+			]}
+		>
+			<View ref={UserDivRef}>
+				<TouchableOpacity
+					onPress={onAvatarClicked}
+					style={{
+						width: TIMELINE_PFP_SIZE,
+						height: TIMELINE_PFP_SIZE,
+						borderColor: 'rgba(200, 200, 200, 0.3)',
+						borderWidth: 1,
+						borderRadius: TIMELINE_PFP_SIZE / 2,
+						flexShrink: 1,
+					}}
+				>
+					{/* @ts-ignore */}
+					<Image
+						style={{
+							flex: 1,
+							padding: 2,
+							borderRadius: TIMELINE_PFP_SIZE / 2,
+						}}
+						source={{ uri: user.avatarUrl }}
+					/>
+				</TouchableOpacity>
+			</View>
+
+			<OriginalPosterPostedByFragment
+				onClick={onProfilePressed}
+				displayNameRaw={user.displayName}
+				instanceUrl={user.remoteServer}
+				postedAt={new Date(authoredAt)}
+				visibility={'N/A'}
+				emojiMap={new Map()}
+			/>
+		</View>
+	);
+}
 
 type OriginalPosterProps = {
 	style?: StyleProp<ViewStyle>;

@@ -1,6 +1,7 @@
 import { Button } from '@rneui/themed';
 import {
 	ActivityIndicator,
+	Pressable,
 	StyleProp,
 	StyleSheet,
 	Text,
@@ -14,6 +15,7 @@ import { memo, useMemo } from 'react';
 import { AppRelationship } from '../../types/ap.types';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { AppText } from './Text';
 
 type AppButtonFollowIndicatorProps = {
 	onClick: () => void;
@@ -384,5 +386,43 @@ export const AppButtonBottomSheetAction = memo(
 		);
 	},
 );
+
+type AppCtaButtonProps = {
+	onPress: () => void;
+	style?: StyleProp<ViewStyle>;
+};
+
+/**
+ * This button appears on pages with a cta
+ * @param onPress
+ * @param style
+ * @constructor
+ */
+export function AppCtaButton({ onPress, style }: AppCtaButtonProps) {
+	const { theme } = useAppTheme();
+	return (
+		<Pressable
+			style={[{ marginTop: 48, paddingBottom: 54 + 16 }, style]}
+			onPress={onPress}
+		>
+			<View
+				style={{
+					backgroundColor: theme.primary.a0,
+					padding: 8,
+					borderRadius: 8,
+					paddingHorizontal: 16,
+					maxWidth: 128,
+					alignSelf: 'center',
+				}}
+			>
+				<AppText.SemiBold
+					style={{ color: 'black', textAlign: 'center', fontSize: 18 }}
+				>
+					Add Profile
+				</AppText.SemiBold>
+			</View>
+		</Pressable>
+	);
+}
 
 export default AppButtonFollowIndicator;

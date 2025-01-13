@@ -2,6 +2,7 @@ import {
 	useAppApiClient,
 	useAppBottomSheet_Improved,
 	useAppPublishers,
+	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import ActivityPubService from '../../../services/activitypub.service';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
@@ -9,6 +10,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppPostObject } from '../../../types/app-post.types';
+import { Fragment } from 'react';
+import { AccountSavedPost } from '../../../database/_schema';
 
 type PostMoreOptionsButtonProps = {
 	post: AppPostObject;
@@ -30,6 +33,41 @@ export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 		}
 		setCtx({ uuid: post.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
+	}
+
+	return (
+		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
+			<View style={styles.statusMoreOptionsButton}>
+				<AppIcon
+					id={'more-options-vertical'}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+					size={16}
+					onPress={onPress}
+				/>
+			</View>
+		</Pressable>
+	);
+}
+
+type SavedPostMoreOptionsButtonProps = {
+	post: AccountSavedPost;
+};
+
+/**
+ *
+ * @param post
+ * @constructor
+ */
+export function SavedPostMoreOptionsButton({
+	post,
+}: SavedPostMoreOptionsButtonProps) {
+	const { driver } = useAppApiClient();
+	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { postPub } = useAppPublishers();
+
+	function onPress() {
+		setCtx({ uuid: post.uuid });
+		// show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
 	}
 
 	return (
@@ -107,6 +145,36 @@ export function MiniReplyButton({}: PostMoreOptionsButtonProps) {
 				/>
 			</View>
 		</Pressable>
+	);
+}
+
+/**
+ * Essential padding and spacing for
+ * timeline post items (be it loaded
+ * locally or using server api)
+ * @param children
+ * @constructor
+ */
+export function PostContainer({ children }: any) {
+	const { theme } = useAppTheme();
+	return (
+		<Fragment>
+			<View
+				style={{
+					paddingHorizontal: 10,
+					backgroundColor: theme.palette.bg,
+				}}
+			>
+				{children}
+			</View>
+			<View
+				style={{
+					backgroundColor: '#1c1c1c',
+					height: 1,
+					marginVertical: 16,
+				}}
+			/>
+		</Fragment>
 	);
 }
 

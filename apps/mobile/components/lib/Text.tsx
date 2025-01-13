@@ -57,6 +57,44 @@ export class AppText {
 		);
 	}
 
+	/**
+	 * The unique BebasNeue font used for
+	 * some of the headers throughout
+	 * the app
+	 * @constructor
+	 */
+	static Special({
+		key,
+		keygen,
+		style,
+		color,
+		children,
+		numberOfLines,
+		emphasis,
+	}: AppTextProps) {
+		const { theme } = useAppTheme();
+
+		let _color =
+			color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
+		let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
+			AppTextVariant.BODY_MEDIUM,
+		);
+
+		return (
+			<Text
+				key={keygen ? RandomUtil.nanoId() : key}
+				style={[
+					_baseStyling,
+					{ color: _color, fontFamily: APP_FONTS.BEBAS_NEUE_400, fontSize: 32 },
+					style,
+				]}
+				numberOfLines={numberOfLines}
+			>
+				{children}
+			</Text>
+		);
+	}
+
 	static Medium({
 		key,
 		keygen,

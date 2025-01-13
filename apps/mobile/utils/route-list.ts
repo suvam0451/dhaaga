@@ -32,4 +32,6 @@ export enum APP_ROUTING_ENUM {
 	LISTS = '/profile/account/lists',
 	FEEDS = '/profile/account/feeds',
 	DRAFTS = '/profile/account/drafts',
+
+	APP_FEATURE_COLLECTION = '/profile/app-features/collection',
 }

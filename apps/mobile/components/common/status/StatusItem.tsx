@@ -2,10 +2,10 @@ import { Fragment, memo, useMemo } from 'react';
 import SharedStatusFragment from './fragments/SharedStatusFragment';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
-import { View } from 'react-native';
 import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
 import { ReplyIndicator } from './ListView/_shared';
 import ParentPost from './fragments/ParentPost';
+import { PostContainer } from './_shared';
 
 /**
  * ActivityPub post objects sometimes
@@ -37,29 +37,6 @@ type StatusItemProps = {
 	// for post details page
 	showFullDetails?: boolean;
 };
-
-function PostContainer({ children }: any) {
-	return (
-		<View>
-			<View
-				style={{
-					paddingHorizontal: 10,
-					backgroundColor: '#121212',
-					borderRadius: 16,
-				}}
-			>
-				{children}
-			</View>
-			<View
-				style={{
-					backgroundColor: '#1c1c1c',
-					height: 1,
-					marginVertical: 16,
-				}}
-			/>
-		</View>
-	);
-}
 
 /**
  * Renders a status/note

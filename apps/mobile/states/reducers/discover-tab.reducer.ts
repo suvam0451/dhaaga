@@ -25,8 +25,7 @@ type State = {
 	q: string | null;
 	category: APP_SEARCH_TYPE;
 	tab: SEARCH_RESULT_TAB;
-	results: DiscoverTabSearchResultType;
-	//to indicate loading status for the user
+	results: DiscoverTabSearchResultType; //to indicate loading status for the user
 	searchStatus: 'idle' | 'loading';
 };
 

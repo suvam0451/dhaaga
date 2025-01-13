@@ -3,9 +3,10 @@ import {
 	useAppAcct,
 	useAppDb,
 } from '../../hooks/utility/global-state-extractors';
-import { AccountCollection } from '../_schema';
+import { AccountCollection, AccountSavedPost } from '../_schema';
 import { AccountCollectionService } from '../entities/account-collection';
 import { CollectionSavedPostService } from '../entities/collection-saved-post';
+import { AccountSavedPostService } from '../entities/account-saved-post';
 
 export function useDbListCollections() {
 	const { db } = useAppDb();
@@ -51,5 +52,24 @@ export function useDbSavedPostStatus(id: string) {
 			}
 			return collections as CollectionHasSavedPost[];
 		},
+	});
+}
+
+export function useDbGetSavedPostsForCollection(id: number | string) {
+	const { db } = useAppDb();
+
+	return useQuery<AccountSavedPost[]>({
+		queryKey: ['db', 'savedPosts', id],
+		queryFn: () => {
+			try {
+				return AccountSavedPostService.listForCollectionId(
+					db,
+					parseInt(id as any),
+				);
+			} catch (e) {
+				throw new Error(e);
+			}
+		},
+		initialData: [],
 	});
 }

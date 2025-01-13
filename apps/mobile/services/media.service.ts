@@ -1,5 +1,11 @@
 import { MediaAttachmentInterface } from '@dhaaga/bridge';
 import { ActivityPubMediaAttachment } from '../entities/activitypub-media-attachment.entity';
+import { SavedPostMediaAttachment } from '../database/_schema';
+
+type CarousalContainerSpecificationType = {
+	maxHeight: number;
+	maxWidth: number;
+};
 
 class MediaService {
 	static calculateDimensions({
@@ -31,15 +37,39 @@ class MediaService {
 		};
 	}
 
+	static calculateHeightForLocalMediaCarousal(
+		items: SavedPostMediaAttachment[],
+		{ maxHeight, maxWidth }: CarousalContainerSpecificationType,
+	) {
+		if (!items) return;
+		let MIN_HEIGHT = 0;
+
+		try {
+			for (const item of items) {
+				let seedWidth = item.width;
+				let seedHeight = item.height;
+
+				const { height } = this.calculateDimensions({
+					maxW: maxWidth,
+					maxH: maxHeight,
+					H: seedHeight,
+					W: seedWidth,
+				});
+				MIN_HEIGHT = Math.max(MIN_HEIGHT, height);
+			}
+		} catch (e) {
+			console.error(
+				'[ERROR]: calculating estimated height for media attachments',
+				e,
+				items,
+			);
+		}
+		return MIN_HEIGHT;
+	}
+
 	static calculateHeightForMediaContentCarousal(
 		items: MediaAttachmentInterface[],
-		{
-			maxHeight,
-			deviceWidth,
-		}: {
-			maxHeight: number;
-			deviceWidth: number;
-		},
+		{ maxHeight, maxWidth }: CarousalContainerSpecificationType,
 	) {
 		if (!items) return;
 		let MIN_HEIGHT = 0;
@@ -63,7 +93,7 @@ class MediaService {
 				// }
 
 				const { height } = this.calculateDimensions({
-					maxW: deviceWidth,
+					maxW: maxWidth,
 					maxH: maxHeight,
 					H: seedHeight,
 					W: seedWidth,
