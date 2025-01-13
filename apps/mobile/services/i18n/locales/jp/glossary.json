@@ -1,0 +1,14 @@
+{
+  "noun": {
+    "post_one": "投稿",
+    "post_other": "投稿たち",
+    "user_one": "ユーザ",
+    "user_other": "ユーザたち"
+  },
+  "label": {
+    "mentions": "メンション",
+    "chat": "チャット",
+    "social": "ソーシャル",
+    "updates": "ソーシャル"
+  }
+}

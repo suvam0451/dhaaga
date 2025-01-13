@@ -19,7 +19,7 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
-import AppBottomSheetAddBookmark from './modules/AppBottomSheetAddBookmark';
+import ABS_Bookmark_Collections from './modules/ABS_Bookmark_Collections';
 import ABS_Add_Hub_Tag from './modules/ABS_Add_Hub_Tag';
 import ABS_Add_Hub_User from './modules/ABS_Add_Hub_User';
 import ABS_Post_Show_Comments from './modules/ABS_Post_Show_Comments';
@@ -97,7 +97,7 @@ function Factory() {
 			case APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS:
 				return <AppBottomSheetUserMoreActions />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
-				return <AppBottomSheetAddBookmark />;
+				return <ABS_Bookmark_Collections />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
 				return <ABS_Add_Hub_Tag />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:

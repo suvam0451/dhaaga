@@ -1,7 +1,6 @@
 import * as SQLite from 'expo-sqlite';
-import { APP_DB } from '../repositories/_var';
 import { Result } from '../../utils/result';
-import { ExpoSqliteColumnDefinition } from '../utils/db-typings';
+import { APP_DB, ExpoSqliteColumnDefinition } from '../../types/db.types';
 
 type Migration = {
 	id: number;
@@ -23,9 +22,6 @@ export class MigrationRepo {
 		const result = db.getAllSync<ExpoSqliteColumnDefinition>(
 			`PRAGMA table_info(${TABLE_NAME});`,
 		);
-
-		console.log(result);
-		console.log(result.map((o) => ({ name: o.name, type: o.type })));
 	}
 
 	static list(
@@ -38,7 +34,6 @@ export class MigrationRepo {
 				opts.limit || 10,
 				opts.offset || 0,
 			);
-			console.log(result);
 			return { type: 'success', value: result };
 		} catch (e) {
 			console.log(e, e.message);

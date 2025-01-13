@@ -1,11 +1,10 @@
 import * as SQLite from 'expo-sqlite';
-import { APP_DB } from '../repositories/_var';
 import { Result } from '../../utils/result';
 import { z } from 'zod';
-import { ExpoSqliteColumnDefinition } from '../utils/db-typings';
 import { DbErrorHandler, RepoTemplate } from './_base.repo';
 import { Account, AccountMetadata } from '../_schema';
 import { DataSource } from '../dataSource';
+import { APP_DB, ExpoSqliteColumnDefinition } from '../../types/db.types';
 
 export type AccountMetadataRecordType = {
 	key: string;

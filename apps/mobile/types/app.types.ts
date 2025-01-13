@@ -36,3 +36,9 @@ export const pageResultDefault = {
 	minId: null,
 	items: [],
 };
+
+export enum LOCALIZATION_NAMESPACE {
+	CORE = 'core',
+	GUIDES = 'guides',
+	GLOSSARY = 'glossary',
+}

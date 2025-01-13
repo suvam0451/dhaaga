@@ -1,0 +1,73 @@
+{
+  "topNav": {
+    "primary": {
+      "home": "Social Hub",
+      "discover": "Discover",
+      "compose": "Compose",
+      "account": "My Account",
+      "setting": "App Settings"
+    },
+    "secondary": {
+      "myLikes": "",
+      "myBookmarks": ""
+    }
+  },
+  "bottomNav": {
+    "inbox": {
+      "mentions": "",
+      "chat": "",
+      "social": "",
+      "updates": ""
+    }
+  },
+  "database": {
+    "defaultText": "Default"
+  },
+  "hub": {
+    "greetings": {
+      "goodMorning": "Good Morning",
+      "goodAfternoon": "Good Afternoon",
+      "goodEvening": "Good Evening",
+      "goodNight": "Good Night"
+    },
+    "section": {
+      "feeds": "Timelines",
+      "users": "Users",
+      "tags": "Tags"
+    },
+    "feeds": {
+      "global": "Global",
+      "local": "Local",
+      "social": "Social",
+      "home": "Home"
+    }
+  },
+  "composer": {
+    "quickPost": "Quick Post",
+    "quickPostCta": "What's on your mind?",
+    "quickPostSubmit": "Post"
+  },
+  "setting": {
+    "accountModule": {
+      "title": "Accounts",
+      "desc": "Add and Manage Accounts"
+    },
+    "generalModule": {
+      "title": "General",
+      "desc": "Most usual boring settings are here"
+    },
+    "appFeaturesModule": {
+      "title": "Goodie Hut",
+      "desc": "Tweak unique features of Dhaaga"
+    },
+    "digitalWellbeingModule": {
+      "title": "Digital Wellbeing",
+      "desc": "Disconnect to reconnect with yourself"
+    },
+    "advancedModule": {
+      "title": "Advanced",
+      "desc": "'For power users"
+    },
+    "footer": "Built with \uD83D\uDC9B by Debashish Patra"
+  }
+}

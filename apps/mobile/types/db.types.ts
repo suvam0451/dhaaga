@@ -6,3 +6,5 @@ export type ExpoSqliteColumnDefinition = {
 	type: 'INTEGER' | 'TEXT';
 	dflt_value: null;
 };
+
+export const APP_DB = 'app.db';

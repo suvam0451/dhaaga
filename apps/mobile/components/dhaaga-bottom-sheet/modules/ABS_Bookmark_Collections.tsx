@@ -9,6 +9,10 @@ import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { useEffect, useState } from 'react';
 import { AppPostObject } from '../../../types/app-post.types';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { useDbSavedPostStatus } from '../../../database/queries/useDbCollectionQuery';
+import { useDbCollections } from '../../../database/mutations/useDbCollectionMutation';
+import { AccountCollection } from '../../../database/_schema';
+import { AppText } from '../../lib/Text';
 
 type CollectionItemProps = {
 	active: boolean;
@@ -106,13 +110,15 @@ function CollectionItem({
 	);
 }
 
-function AppBottomSheetAddBookmark() {
+function ABS_Bookmark_Collections() {
 	const { theme } = useAppTheme();
 	const { ctx } = useAppBottomSheet_Improved();
 	const { postPub } = useAppPublishers();
 	const [PostObject, setPostObject] = useState<AppPostObject>(
 		postPub.readCache(ctx?.uuid),
 	);
+	const { data, refetch } = useDbSavedPostStatus(PostObject?.id);
+	const { togglePostToCollection } = useDbCollections();
 
 	function onUpdate({ uuid }: { uuid: string }) {
 		setPostObject(postPub.readCache(uuid));
@@ -130,12 +136,21 @@ function AppBottomSheetAddBookmark() {
 		postPub.toggleBookmark(PostObject.uuid);
 	}
 
+	function onCollectionToggle(collection: AccountCollection) {
+		togglePostToCollection
+			.mutateAsync({
+				post: PostObject,
+				collection,
+			})
+			.finally(() => {
+				refetch();
+			});
+	}
+
 	if (!PostObject) return <View />;
 
 	const _target = PostMiddleware.getContentTarget(PostObject);
 	const IS_BOOKMARKED = _target.interaction.bookmarked;
-
-	const collection = ['Default', 'Default 2', 'Default 3'];
 
 	const TIP_TEXT_COLOR = theme.secondary.a40;
 	return (
@@ -162,18 +177,6 @@ function AppBottomSheetAddBookmark() {
 				/>
 			</View>
 
-			<Text
-				style={{
-					color: theme.primary.a0,
-					marginVertical: 16,
-					textAlign: 'center',
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
-					marginBottom: 24,
-				}}
-			>
-				🏗️ The following section is just a UI mockup! 🏗️
-			</Text>
-
 			<View
 				style={{
 					flexDirection: 'row',
@@ -195,24 +198,37 @@ function AppBottomSheetAddBookmark() {
 					New collection
 				</Text>
 			</View>
-			{collection.map((collection, i) => (
+			{data.map((item, index) => (
 				<CollectionItem
-					key={i}
-					label={collection}
-					desc={['Local Only', 'Not Synced']}
+					key={index}
+					active={item.has}
 					activeIconId={'checkmark-circle'}
 					inactiveIconId={'add-circle-outline'}
-					active={false}
 					activeTint={theme.primary.a0}
 					inactiveTint={theme.secondary.a30}
-					onPress={() => {}}
+					label={item.alias}
+					desc={['Local Only', 'Not Synced']}
+					onPress={() => {
+						onCollectionToggle(item);
+					}}
 				/>
 			))}
+			<AppText.Medium
+				style={{
+					color: theme.primary.a0,
+					marginVertical: 16,
+					textAlign: 'center',
+					fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					marginBottom: 24,
+				}}
+			>
+				ℹ️ Collections are local to this device only!
+			</AppText.Medium>
 		</ScrollView>
 	);
 }
 
-export default AppBottomSheetAddBookmark;
+export default ABS_Bookmark_Collections;
 
 const styles = StyleSheet.create({
 	root: {

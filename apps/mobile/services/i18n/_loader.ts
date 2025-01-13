@@ -1,14 +1,17 @@
+// @ts-nocheck
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
-// @ts-ignore
-import translationEn from './en.json';
-// @ts-ignore
-import translationJa from './ja.json';
+import enCore from './locales/en/core.json';
+import enGuides from './locales/en/guides.json';
+import enGlossary from './locales/en/glossary.json';
+import jpCore from './locales/jp/core.json';
+import jpGuides from './locales/jp/guides.json';
+import jpGlossary from './locales/jp/glossary.json';
 
 const resources = {
-	en: { translation: translationEn },
-	jp: { translation: translationJa },
+	en: { core: enCore, guides: enGuides, glossary: enGlossary },
+	jp: { core: jpCore, guides: jpGuides, glossary: jpGlossary },
 };
 
 const initI18n = async () => {

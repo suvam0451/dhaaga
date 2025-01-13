@@ -11,6 +11,10 @@ import { DataSource } from '../dataSource';
 import { gt } from '@dhaaga/orm';
 import { RandomUtil } from '../../utils/random.utils';
 import { ProfileService } from './profile';
+import {
+	AccountCollectionService,
+	ReservedCollection,
+} from './account-collection';
 
 /**
  * --- Validators
@@ -162,7 +166,9 @@ class Service {
 
 	static getSelected(db: DataSource): Account | null {
 		try {
-			return Repo.getFirstSelected(db);
+			const found = Repo.getFirstSelected(db);
+			Service._postSelect(db, found);
+			return found;
 		} catch (e) {
 			return null;
 		}
@@ -191,6 +197,15 @@ class Service {
 		} catch (e) {
 			console.log('[WARN]: failed to select default account', e);
 		}
+	}
+
+	static _postSelect(db: DataSource, acct: Account) {
+		// upsert timeline items
+		AccountCollectionService.upsertReservedCollections(
+			db,
+			acct,
+			ReservedCollection.DEFAULT,
+		);
 	}
 }
 

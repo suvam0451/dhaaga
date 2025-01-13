@@ -21,6 +21,7 @@ import useAppSession from '../states/useAppSession';
 import ImageInspectModal from '../components/modals/ImageInspectModal';
 import { AppDialog } from '../components/lib/AppDialog';
 import { useAppTheme } from '../hooks/utility/global-state-extractors';
+import '../services/i18n/_loader';
 
 enableMapSet();
 

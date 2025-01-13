@@ -20,6 +20,8 @@ export const ActivityPubBoostedByDto = z.object({
 	instance: z.string(),
 });
 
+export type AppPostAuthorType = z.infer<typeof ActivityPubBoostedByDto>;
+
 export const AppActivityPubMediaDto = z.object({
 	url: z.string(),
 	previewUrl: z.string().nullable().optional(),

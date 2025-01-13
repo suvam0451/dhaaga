@@ -20,6 +20,13 @@ class Service {
 		});
 	}
 
+	static find(db: DataSource, id: string): AccountSavedPost {
+		return db.accountSavedPost.findOne({
+			identifier: id,
+			active: true,
+		});
+	}
+
 	static upsert(
 		db: DataSource,
 		acct: Account,
@@ -57,6 +64,12 @@ class Service {
 				savedUserId: postedBy.id,
 			});
 		}
+
+		return db.accountSavedPost.findOne({
+			active: true,
+			accountId: acct.id,
+			identifier: post.id,
+		});
 	}
 }
 
