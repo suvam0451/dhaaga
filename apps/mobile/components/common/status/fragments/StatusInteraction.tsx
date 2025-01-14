@@ -40,7 +40,7 @@ function ShareButton() {
 			activeIconId={'sync-outline'}
 			inactiveIconId={'sync-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a10}
+			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',
@@ -78,7 +78,7 @@ function LikeButton() {
 			activeIconId={'heart'}
 			inactiveIconId={'heart-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a10}
+			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',
@@ -113,7 +113,7 @@ function CommentButton() {
 			activeIconId={'chatbox-outline'}
 			inactiveIconId={'chatbox-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a10}
+			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',

@@ -139,11 +139,14 @@ function ABS_Bookmark_Collections() {
 	function onCollectionToggle(collection: AccountCollection) {
 		togglePostToCollection
 			.mutateAsync({
-				post: PostObject,
+				post: PostMiddleware.getContentTarget(PostObject),
 				collection,
 			})
 			.finally(() => {
 				refetch();
+			})
+			.catch((e) => {
+				console.log(e);
 			});
 	}
 
@@ -222,7 +225,7 @@ function ABS_Bookmark_Collections() {
 					marginBottom: 24,
 				}}
 			>
-				ℹ️ Collections are local to this device only!
+				ℹ️ Collections can only be viewed from this device!
 			</AppText.Medium>
 		</ScrollView>
 	);

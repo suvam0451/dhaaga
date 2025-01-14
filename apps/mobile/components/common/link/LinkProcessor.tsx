@@ -63,7 +63,7 @@ function LinkProcessor({
 		<Text
 			style={{
 				color: theme.complementaryA.a0,
-				fontFamily: 'SourceSansPro_600SemiBold',
+				fontFamily,
 				maxWidth: 128,
 				display: 'flex',
 				flexDirection: 'row',

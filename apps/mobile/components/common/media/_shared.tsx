@@ -3,7 +3,6 @@ import { MEDIA_CONTAINER_WIDTH } from './_common';
 import { Fragment, memo, useEffect, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -195,7 +194,7 @@ export const AltTextOverlay = memo(function Foo({
 							top: -40,
 							left: 8,
 							backgroundColor: theme.palette.bg,
-							padding: 4,
+							padding: 6,
 							borderRadius: 8,
 							opacity: 0.75,
 						}}
@@ -203,11 +202,7 @@ export const AltTextOverlay = memo(function Foo({
 							setIsVisible(true);
 						}}
 					>
-						<FontAwesome5
-							name="info-circle"
-							size={24}
-							color={theme.secondary.a20}
-						/>
+						<AppText.Medium>ALT</AppText.Medium>
 					</Pressable>
 				</View>
 			</View>

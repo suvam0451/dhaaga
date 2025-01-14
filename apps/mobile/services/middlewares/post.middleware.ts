@@ -431,10 +431,12 @@ export class PostMiddleware {
 	}
 
 	static isLiked(input: AppPostObject) {
+		if (!input) return false;
 		return !!input.atProto?.viewer?.like || input.interaction.liked;
 	}
 
 	static isShared(input: AppPostObject) {
+		if (!input) return false;
 		return !!input.atProto?.viewer?.repost || input.interaction.boosted;
 	}
 }

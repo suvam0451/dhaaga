@@ -15,6 +15,9 @@ export class QueryResolver {
 	 *	resolves eq/ne/gt/gte/le/lte
 	 */
 	private static serializeOperation(key: string, value: any) {
+		if (value === null || value === undefined) {
+			return [`${key} = ?`, 'NULL'];
+		}
 		if (value['operator']) {
 			return [
 				`${key} ${value['operator']} ?`,

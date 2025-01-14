@@ -1,21 +1,29 @@
 import { AccountSavedPost, AccountSavedUser } from '../../database/_schema';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
+import { AppParsedTextNodes } from '../../types/parsed-text.types';
+import MfmService from '../../services/mfm.service';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
-type CollectionDataViewUserEntry = {
+export type CollectionDataViewUserEntry = {
 	item: AccountSavedUser;
 	shown: boolean;
 	selected: boolean;
 	postCount: number;
 };
 
+export type CollectionDataViewPostEntry = {
+	item: AccountSavedPost;
+	parsedTextContent: AppParsedTextNodes;
+};
+
 type State = {
-	posts: AccountSavedPost[] /**
+	posts: CollectionDataViewPostEntry[] /**
 	 * 	this is what is shown to the user
 	 * 	upto a maximum of 100 items, unless
 	 * 	the user chooses to load more
 	 */;
-	results: AccountSavedPost[];
+	results: CollectionDataViewPostEntry[];
 	users: CollectionDataViewUserEntry[];
 	widgetShown: boolean;
 	widgetDimmed: boolean;
@@ -86,8 +94,20 @@ function reducer(state: State, action: Actions): State {
 			}
 
 			return produce(state, (draft) => {
-				draft.posts = action.payload.items;
-				draft.results = action.payload.items.slice(0, 100);
+				draft.posts = action.payload.items.map((o) => {
+					const parsedContent = MfmService.renderMfm(o.textContent, {
+						emojiMap: new Map(),
+						emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+						colorScheme: null,
+						variant: 'bodyContent',
+						nonInteractive: false,
+					});
+					return {
+						item: o,
+						parsedTextContent: parsedContent.parsed || [],
+					};
+				});
+				draft.results = draft.posts.slice(0, 100);
 				draft.users = Array.from(users.values()).map((o) => ({
 					item: o.item,
 					postCount: o.postCount,

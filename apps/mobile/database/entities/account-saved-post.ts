@@ -4,6 +4,7 @@ import { AppPostObject } from '../../types/app-post.types';
 import { DataSource } from '../dataSource';
 import { AccountSavedUserService } from './account-saved-user';
 import { RandomUtil } from '../../utils/random.utils';
+import { SavedPostMediaAttachmentService } from './saved-post-media-attachment';
 
 class Repo implements RepoTemplate<AccountSavedPost> {}
 
@@ -65,27 +66,49 @@ class Service {
 			});
 		}
 
-		return db.accountSavedPost.findOne({
+		const savedPost = db.accountSavedPost.findOne({
 			active: true,
 			accountId: acct.id,
 			identifier: post.id,
 		});
+
+		// sync the media attachments for this post
+		SavedPostMediaAttachmentService.syncMediaAttachmentsForSavedPost(
+			db,
+			savedPost,
+			post.content.media,
+		);
+		return savedPost;
 	}
 
 	/**
 	 * Get a list of saved posts for
 	 * this collection
+	 *
+	 * also left joins savedPost
 	 * @param db db reference
 	 * @param collectionId id of collection
 	 */
 	static listForCollectionId(db: DataSource, collectionId: number) {
-		const all = db.accountSavedPost.find({ active: true });
+		const allSavedPosts = db.accountSavedPost.find({ active: true });
+		const allSavedUsers = db.accountSavedUser.find({ active: true });
+		const allMediaAttachments = db.savedPostMediaAttachment.find({
+			active: true,
+		});
 		const refs = db.collectionSavedPost.find({
 			active: true,
 			collectionId,
 		});
-		const valid = new Map(all.map((obj) => [obj.id, obj]));
-		return refs.map((o) => valid.get(o.savedPostId)).filter((o) => !!o);
+		const valid = new Map(allSavedPosts.map((obj) => [obj.id, obj]));
+		const users = new Map(allSavedUsers.map((obj) => [obj.id, obj]));
+		return refs
+			.map((o) => {
+				const item = valid.get(o.savedPostId);
+				item.savedUser = users.get(item.savedUserId);
+				item.medias = allMediaAttachments.filter((k) => k.savedPostId === o.id);
+				return item;
+			})
+			.filter((o) => !!o);
 	}
 }
 

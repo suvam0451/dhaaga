@@ -1,11 +1,13 @@
-import { AccountSavedPost } from '../../../../database/_schema';
 import { PostContainer, SavedPostMoreOptionsButton } from '../_shared';
 import { View } from 'react-native';
 import { SavedPostCreatedBy } from '../fragments/PostCreatedBy';
 import { appDimensions } from '../../../../styles/dimensions';
+import { CollectionDataViewPostEntry } from '../../../../states/reducers/collection-view.reducer';
+import { TextContentView } from '../TextContentView';
+import { LocalMediaItem } from '../../media/LocalView';
 
 type SavedPostItemProps = {
-	item: AccountSavedPost;
+	item: CollectionDataViewPostEntry;
 };
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
@@ -24,11 +26,21 @@ export function SavedPostItem({ item }: SavedPostItemProps) {
 						paddingBottom: 4,
 						flex: 1,
 					}}
-					user={item.savedUser}
-					authoredAt={item.authoredAt}
+					user={item.item.savedUser}
+					authoredAt={item.item.authoredAt}
 				/>
-				<SavedPostMoreOptionsButton post={item} />
+				<SavedPostMoreOptionsButton post={item.item} />
 			</View>
+			<LocalMediaItem items={item.item.medias} />
+			<TextContentView
+				tree={item.parsedTextContent}
+				variant={'bodyContent'}
+				mentions={[]}
+				style={{
+					marginBottom:
+						item.parsedTextContent.length === 0 ? 0 : SECTION_MARGIN_BOTTOM,
+				}}
+			/>
 		</PostContainer>
 	);
 }

@@ -87,13 +87,13 @@ export function OriginalPosterPostedByFragment({
 	displayNameRaw,
 	onClick,
 	emojiMap,
-	instanceUrl,
+	handle,
 	postedAt,
 }: {
 	displayNameRaw: string;
 	onClick: () => void;
 	emojiMap?: Map<string, string>;
-	instanceUrl: string;
+	handle: string;
 	visibility: string;
 	postedAt: Date;
 }) {
@@ -140,7 +140,7 @@ export function OriginalPosterPostedByFragment({
 						}}
 						numberOfLines={1}
 					>
-						{instanceUrl} • {DatetimeUtil.timeAgo(postedAt)}
+						{handle} • {DatetimeUtil.timeAgo(postedAt)}
 					</Text>
 				</Pressable>
 			</View>
@@ -175,6 +175,7 @@ export function SavedPostCreatedBy({
 	// redirect to profile
 	function onProfilePressed() {}
 
+	if (!user) return <View />;
 	return (
 		<View
 			style={[
@@ -216,7 +217,7 @@ export function SavedPostCreatedBy({
 			<OriginalPosterPostedByFragment
 				onClick={onProfilePressed}
 				displayNameRaw={user.displayName}
-				instanceUrl={user.remoteServer}
+				handle={user.username}
 				postedAt={new Date(authoredAt)}
 				visibility={'N/A'}
 				emojiMap={new Map()}
@@ -304,7 +305,7 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 				<OriginalPosterPostedByFragment
 					onClick={onProfileClicked}
 					displayNameRaw={STATUS_DTO.postedBy.displayName}
-					instanceUrl={STATUS_DTO.postedBy.handle}
+					handle={STATUS_DTO.postedBy.handle}
 					postedAt={new Date(STATUS_DTO.createdAt)}
 					visibility={STATUS_DTO.visibility}
 					emojiMap={STATUS_DTO.calculated.emojis}

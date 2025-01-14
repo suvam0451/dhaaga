@@ -24,7 +24,6 @@ function TextContentNode({ node, variant, mentions }: TextContentNodeProps) {
 	if (!WrapperNode.includes(node.type)) {
 		switch (node.type) {
 			case 'text': {
-				console.log('render text', node.text);
 				return (
 					<RawTextSegment
 						key={node.uuid}
