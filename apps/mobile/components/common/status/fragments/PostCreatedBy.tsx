@@ -105,7 +105,8 @@ export function OriginalPosterPostedByFragment({
 		emojiMap: emojiMap,
 		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		numberOfLines: 1,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
+		variant: 'displayName',
 	});
 
 	return (

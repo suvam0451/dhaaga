@@ -25,6 +25,7 @@ import { AppPostObject } from '../../../../types/app-post.types';
 import { AppText } from '../../../lib/Text';
 import StatusQuoted from './StatusQuoted';
 import { PostMoreOptionsButton } from '../_shared';
+import { TextContentView } from '../TextContentView';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -107,7 +108,6 @@ const StatusCore = memo(
 		const IS_TRANSLATED = _target?.calculated?.translationOutput;
 
 		const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
-		const HAS_TEXT_CONTENT = !!_target?.content?.raw;
 
 		const { content: PostContent, isLoaded } = useMfm({
 			content: _target?.content?.raw,
@@ -175,7 +175,11 @@ const StatusCore = memo(
 								toPost(_target.id);
 							}}
 						>
-							{HAS_TEXT_CONTENT ? PostContent : <View />}
+							<TextContentView
+								tree={_target.content.parsed}
+								variant={'bodyContent'}
+								mentions={_target.calculated.mentions as any}
+							/>
 							{IS_TRANSLATED && (
 								<ExplainOutput
 									additionalInfo={'Translated using OpenAI'}
@@ -205,20 +209,3 @@ const StatusCore = memo(
 );
 
 export default StatusCore;
-
-const styles = StyleSheet.create({
-	statusMoreOptionsContainer: {
-		justifyContent: 'flex-start',
-		flexDirection: 'row',
-		alignItems: 'flex-start',
-		flexShrink: 1,
-		height: '100%',
-		paddingRight: 8,
-		paddingTop: 4,
-	},
-	statusMoreOptionsButton: {
-		height: '100%',
-		paddingTop: 4,
-		paddingLeft: 16,
-	},
-});

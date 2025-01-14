@@ -13,6 +13,9 @@ import { RandomUtil } from '../utils/random.utils';
 import { UserMiddleware } from '../services/middlewares/user.middleware';
 import { DataSource } from '../database/dataSource';
 import { AccountSavedPost } from '../database/_schema';
+import MfmService from '../services/mfm.service';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../utils/theming.util';
+import { TextParserService } from '../services/text-parser.service';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -67,6 +70,7 @@ export const ActivityPubStatusItemDto = z.object({
 	postedBy: ActivityPubBoostedByDto,
 	content: z.object({
 		raw: z.string().nullable().optional(),
+		parsed: z.array(z.any()),
 		media: z.array(AppActivityPubMediaDto),
 	}),
 	interaction: z.object({
@@ -86,6 +90,13 @@ export const ActivityPubStatusItemDto = z.object({
 				width: z.number().nullable().optional(),
 				name: z.string(),
 				url: z.string().url(),
+			}),
+		),
+		mentions: z.array(
+			z.object({
+				text: z.string(),
+				url: z.string().nullable(),
+				resolved: z.boolean(),
 			}),
 		),
 	}),
@@ -220,6 +231,7 @@ export class AppStatusDtoService {
 				emojis: new Map([]),
 				mediaContainerHeight: height,
 				reactionEmojis: [],
+				mentions: TextParserService.findMentions(input.textContent),
 			},
 			meta: {
 				sensitive: input.sensitive,
@@ -264,6 +276,20 @@ export class AppStatusDtoService {
 			KNOWN_SOFTWARE.AKKOMA,
 		].includes(domain as any);
 
+		const emojiMap = new Map<string, string>([
+			// @ts-ignore-next-line
+			...user.getEmojiMap(), // @ts-ignore-next-line
+			...input.getCachedEmojis(),
+		]);
+
+		const parsedContent = MfmService.renderMfm(input.getContent(), {
+			emojiMap,
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+			colorScheme: null,
+			variant: 'bodyContent',
+			nonInteractive: false,
+		});
+
 		return {
 			uuid: RandomUtil.nanoId(),
 			id: input.getId(),
@@ -278,6 +304,7 @@ export class AppStatusDtoService {
 			},
 			content: {
 				raw: input.getContent(),
+				parsed: parsedContent?.parsed || [],
 				media:
 					medias?.map((o) => ({
 						height: o.getHeight(),
@@ -308,6 +335,7 @@ export class AppStatusDtoService {
 				]),
 				mediaContainerHeight: height,
 				reactionEmojis: input.getReactionEmojis(),
+				mentions: TextParserService.findMentions(input.getContent()),
 			},
 			meta: {
 				sensitive: input.getIsSensitive(),

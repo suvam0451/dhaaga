@@ -35,6 +35,7 @@ export class TextParserService {
 	}
 
 	static findMentions(input: string) {
+		if (!input) return [];
 		const ex = new RegExp('<a.*?href="(.*?)".*?>@(.*?)</a>', 'g');
 		const matches = Array.from(input.matchAll(ex));
 		return matches.map((o) => ({ url: o[1], text: o[2] }));

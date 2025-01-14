@@ -42,3 +42,10 @@ export enum LOCALIZATION_NAMESPACE {
 	GUIDES = 'guides',
 	GLOSSARY = 'glossary',
 }
+
+/**
+ * Everything is parsed for "textContent"
+ * hashtags and links are not parsed for
+ * "displayName"
+ */
+export type TEXT_PARSING_VARIANT = 'bodyContent' | 'displayName';

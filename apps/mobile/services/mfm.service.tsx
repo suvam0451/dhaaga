@@ -1,4 +1,4 @@
-import { StyleProp, Text, TextStyle } from 'react-native';
+import { Text } from 'react-native';
 import LinkProcessor from '../components/common/link/LinkProcessor';
 import { TextParserService } from './text-parser.service';
 import type { MfmNode } from '@dhaaga/bridge';
@@ -15,8 +15,10 @@ import {
 	AppThemingUtil,
 } from '../utils/theming.util';
 import { AppText } from '../components/lib/Text';
+import { TEXT_PARSING_VARIANT } from '../types/app.types';
+import { AppParsedTextNodes, NodeContent } from '../types/parsed-text.types';
 
-class MfmComponentBuilder {
+export class MfmComponentBuilder {
 	protected readonly input: string;
 	protected readonly myDomain: string;
 	protected readonly mySubdomain: string;
@@ -37,40 +39,38 @@ class MfmComponentBuilder {
 
 	fontFamily: string;
 	colorScheme: AppColorSchemeType;
+	nonInteractive?: boolean;
+	variant: TEXT_PARSING_VARIANT;
+	parsed: AppParsedTextNodes;
 
 	constructor({
 		input,
 		emojiMap,
-		opts,
 		fontFamily,
 		emphasis,
 		colorScheme,
-		style,
+		nonInteractive,
+		variant,
 	}: {
 		input: string;
 		emojiMap?: Map<string, string>;
-		opts?: {
-			parseMentions?: boolean;
-			parseLinks?: boolean;
-		};
-		fontFamily?: string;
+		fontFamily: string;
 		emphasis: APP_COLOR_PALETTE_EMPHASIS;
 		colorScheme: AppColorSchemeType;
-		style?: StyleProp<TextStyle>;
+		nonInteractive?: boolean;
+		variant: TEXT_PARSING_VARIANT;
 	}) {
 		this.input = input;
 		this.emojis = new Set<string>();
 		this.results = [];
 		this.aiContext = [];
 		this.emojiMap = emojiMap;
-		this.fontFamily = fontFamily || APP_FONTS.INTER_400_REGULAR;
+		this.fontFamily = fontFamily;
 		this.emphasis = emphasis;
 		this.colorScheme = colorScheme;
-
-		// options
-		if (opts?.parseMentions !== undefined)
-			this.parseMentions = opts?.parseMentions;
-		if (opts?.parseLinks !== undefined) this.parseLinks = opts?.parseLinks;
+		this.nonInteractive = nonInteractive;
+		this.variant = variant;
+		this.parsed = [];
 	}
 
 	solve() {
@@ -110,24 +110,65 @@ class MfmComponentBuilder {
 
 		for (const para of this.nodes) {
 			this.results.push([]);
+			this.parsed.push({
+				uuid: RandomUtil.nanoId(),
+				type: 'para',
+				nodes: [],
+			});
 			for (const node of para) {
-				// handle line breaks
+				/**
+				 * handle text nodes exclusively.
+				 * also handles line breaks (<br/>)
+				 */
 				if (node.type === 'text') {
 					const splits = node.props?.text.split(/<br ?\/?>/);
 
-					// first item is always text
-					this.results[paraCount].push(
-						<AppText.BodyNormal keygen>{splits[0]}</AppText.BodyNormal>,
-					);
+					switch (this.variant) {
+						case 'displayName': {
+							// first item is always text
+							this.results[paraCount].push(
+								<AppText.SemiBold emphasis={this.emphasis} keygen>
+									{splits[0]}
+								</AppText.SemiBold>,
+							);
+							break;
+						}
+						case 'bodyContent': {
+							// first item is always text
+							this.results[paraCount].push(
+								<AppText.BodyNormal emphasis={this.emphasis} keygen>
+									{splits[0]}
+								</AppText.BodyNormal>,
+							);
+						}
+					}
+
+					this.parsed[paraCount].nodes.push({
+						uuid: RandomUtil.nanoId(),
+						nodes: [],
+						type: 'text',
+						text: splits[0],
+					});
 					count++;
 
 					// each n-1 item results in a split
 					for (let i = 1; i < splits.length; i++) {
 						this.results.push([]);
+						this.parsed.push({
+							uuid: RandomUtil.nanoId(),
+							type: 'para',
+							nodes: [],
+						});
 						paraCount++;
 
+						this.parsed[paraCount].nodes.push({
+							uuid: RandomUtil.nanoId(),
+							type: 'text',
+							nodes: [],
+							text: splits[i],
+						});
 						this.results[paraCount].push(
-							<AppText.BodyNormal keygen>{splits[1]}</AppText.BodyNormal>,
+							<AppText.BodyNormal keygen>{splits[i]}</AppText.BodyNormal>,
 						);
 					}
 
@@ -138,17 +179,18 @@ class MfmComponentBuilder {
 					continue;
 				}
 
-				const item = this.parser(node);
-				this.results[paraCount].push(item);
+				const [Component, data] = this.parser(node);
+				this.results[paraCount].push(Component);
+				this.parsed[paraCount].nodes.push(data);
 				count++;
 			}
 			paraCount++;
 		}
 	}
 
-	private parser(node: any) {
+	private parser(node: any): [React.JSX.Element, NodeContent] {
 		let color = AppThemingUtil.getColorForEmphasis(
-			this.colorScheme.secondary,
+			this.colorScheme?.secondary,
 			this.emphasis,
 		);
 
@@ -161,14 +203,21 @@ class MfmComponentBuilder {
 				 * */
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
 				if (mention) {
-					return (
+					return [
 						<MentionSegment
 							key={k}
 							value={mention.text}
 							link={mention.url}
 							fontFamily={this.fontFamily}
-						/>
-					);
+						/>,
+						{
+							type: 'mention',
+							uuid: RandomUtil.nanoId(),
+							text: mention.text,
+							url: mention.url,
+							nodes: [],
+						},
+					];
 				}
 
 				/**
@@ -176,13 +225,19 @@ class MfmComponentBuilder {
 				 */
 				const hashtag = TextParserService.isHashtag(node.props.url);
 				if (hashtag)
-					return (
+					return [
 						<HashtagSegment
 							key={k}
 							value={hashtag}
 							fontFamily={this.fontFamily}
-						/>
-					);
+						/>,
+						{
+							type: 'tag',
+							uuid: RandomUtil.nanoId(),
+							text: hashtag,
+							nodes: [],
+						},
+					];
 
 				let displayName = null;
 				if (this.links) {
@@ -191,19 +246,26 @@ class MfmComponentBuilder {
 						displayName = match;
 					}
 				}
-				return (
+				return [
 					<LinkProcessor
 						key={k}
 						url={node.props.url}
 						displayName={displayName}
 						fontFamily={this.fontFamily}
 						emphasis={this.emphasis}
-					/>
-				);
+					/>,
+					{
+						type: 'link',
+						uuid: RandomUtil.nanoId(),
+						text: displayName,
+						url: node.props.url,
+						nodes: [],
+					},
+				];
 			}
 
 			case 'plain': {
-				return (
+				return [
 					<Text
 						key={k}
 						style={{
@@ -212,11 +274,16 @@ class MfmComponentBuilder {
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
-					</Text>
-				);
+					</Text>,
+					{
+						type: 'inline',
+						uuid: RandomUtil.nanoId(),
+						nodes: node.children.map((o: any) => this.parser(o)),
+					},
+				];
 			}
 			case 'italic': {
-				return (
+				return [
 					<Text
 						key={k}
 						style={{
@@ -225,11 +292,16 @@ class MfmComponentBuilder {
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
-					</Text>
-				);
+					</Text>,
+					{
+						type: 'italic',
+						uuid: RandomUtil.nanoId(),
+						nodes: node.children.map((o: any) => this.parser(o)),
+					},
+				];
 			}
 			case 'bold': {
-				return (
+				return [
 					<Text
 						key={k}
 						style={{
@@ -238,58 +310,104 @@ class MfmComponentBuilder {
 						}}
 					>
 						{node.children.map((o: any) => this.parser(o))}
-					</Text>
-				);
+					</Text>,
+					{
+						type: 'bold',
+						uuid: RandomUtil.nanoId(),
+						nodes: node.children.map((o: any) => this.parser(o)),
+					},
+				];
 			}
 			// NOTE: node.props.acct is also an option
 			case 'mention': {
 				const mention = this.mentions?.find((o) => o.url === node.props.url);
-				return (
+				return [
 					<MentionSegment
 						key={k}
 						value={node.props.acct}
 						link={mention?.url}
 						fontFamily={this.fontFamily}
-					/>
-				);
+					/>,
+					{
+						type: 'mention',
+						uuid: RandomUtil.nanoId(),
+						text: node.props.acct,
+						url: mention?.url,
+						nodes: [],
+					},
+				];
 			}
 			case 'inlineCode':
-				return <InlineCodeSegment key={k} value={node.props.code} />;
+				return [
+					<InlineCodeSegment key={k} value={node.props.code} />,
+					{
+						type: 'code',
+						uuid: RandomUtil.nanoId(),
+						text: node.props.code,
+						nodes: [],
+					},
+				];
 			case 'hashtag':
-				return (
+				return [
 					<HashtagSegment
 						key={k}
 						value={node.props.hashtag}
 						fontFamily={this.fontFamily}
-					/>
-				);
+					/>,
+					{
+						type: 'tag',
+						text: node.props.hashtag,
+						uuid: RandomUtil.nanoId(),
+						nodes: [],
+					},
+				];
 			// TODO: quote resolver
 			case 'quote':
 			case 'text':
-				return (
+				return [
 					<RawTextSegment
 						key={k}
 						value={node.props?.text}
 						fontFamily={this.fontFamily}
 						emphasis={this.emphasis}
-					/>
-				);
+					/>,
+					{
+						type: 'text',
+						text: node.props.emoji,
+						uuid: RandomUtil.nanoId(),
+						nodes: [],
+					},
+				];
 			case 'emojiCode':
-				return (
+				return [
 					<EmojiCodeSegment
 						key={k}
 						value={node.props.name}
 						emojiMap={this.emojiMap}
 						emphasis={this.emphasis}
 						fontFamily={this.fontFamily}
-					/>
-				);
+					/>,
+					{
+						type: 'customEmoji',
+						text: node.props.emoji,
+						value: node.props.emoji,
+						uuid: RandomUtil.nanoId(),
+						nodes: [],
+					},
+				];
 			case 'unicodeEmoji':
-				return <Text key={k}>{node.props.emoji}</Text>;
-
+				return [
+					<Text key={k}>{node.props.emoji}</Text>,
+					{
+						type: 'text',
+						text: node.props.emoji,
+						uuid: RandomUtil.nanoId(),
+						nodes: [],
+					},
+				];
 			default: {
 				console.log('[WARN]: node type not evaluated', node);
-				return <Text key={k}></Text>;
+				return [<Text key={k}></Text>, null];
 			}
 		}
 	}
@@ -310,43 +428,25 @@ class MfmService {
 	 * @param input
 	 * @param emojiMap
 	 * @param domain
-	 * @param subdomain
-	 * @param db
-	 * @param remoteSubdomain is the subdomain of target user
 	 * @param emphasis
-	 * @param fontFamily
+	 * @param nonInteractive
 	 */
 	static renderMfm(
 		input: string,
 		{
 			emojiMap,
-			subdomain,
-			remoteSubdomain,
-			fontFamily,
 			emphasis,
 			colorScheme,
-			style,
+			variant,
+			nonInteractive,
 		}: {
-			subdomain: string;
 			emojiMap: Map<string, string>;
-			remoteSubdomain?: string;
-			fontFamily?: string;
-			emphasis?: APP_COLOR_PALETTE_EMPHASIS;
-			opts?: {
-				mentionsClickable?: boolean;
-				fontFamily?: string;
-			};
+			emphasis: APP_COLOR_PALETTE_EMPHASIS;
 			colorScheme: AppColorSchemeType;
-			style?: StyleProp<TextStyle>;
+			variant: TEXT_PARSING_VARIANT;
+			nonInteractive?: boolean;
 		},
 	) {
-		/**
-		 * Misskey hack.
-		 *
-		 * When user belongs to same instance, host = null
-		 */
-		if (!remoteSubdomain && subdomain) remoteSubdomain = subdomain;
-
 		if (!input || !emojiMap)
 			return {
 				reactNodes: [],
@@ -356,15 +456,20 @@ class MfmService {
 		const solver = new MfmComponentBuilder({
 			input,
 			emojiMap,
-			fontFamily: fontFamily || APP_FONTS.INTER_400_REGULAR,
+			fontFamily:
+				variant === 'displayName'
+					? APP_FONTS.INTER_600_SEMIBOLD
+					: APP_FONTS.INTER_400_REGULAR,
 			emphasis: emphasis || APP_COLOR_PALETTE_EMPHASIS.A0,
 			colorScheme,
-			style,
+			nonInteractive,
+			variant,
 		});
 		solver.solve();
 		return {
 			reactNodes: solver.results,
 			openAiContext: solver.aiContext,
+			parsed: solver.parsed,
 		};
 	}
 }

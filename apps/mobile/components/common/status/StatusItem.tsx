@@ -1,4 +1,4 @@
-import { Fragment, memo, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import SharedStatusFragment from './fragments/SharedStatusFragment';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
@@ -42,11 +42,7 @@ type StatusItemProps = {
  * Renders a status/note
  * @constructor
  */
-const StatusItem = memo(function Foo({
-	isPreview,
-	isPin,
-	showFullDetails,
-}: StatusItemProps) {
+function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 	const { acct } = useAppAcct();
 	const { dto } = useAppStatusItem();
 
@@ -118,6 +114,6 @@ const StatusItem = memo(function Foo({
 			);
 		}
 	}, [dto, acct]);
-});
+}
 
 export default StatusItem;
