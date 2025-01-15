@@ -1,12 +1,17 @@
-import { Image } from 'expo-image';
+import { Image, useImage } from 'expo-image';
 import { MEDIA_CONTAINER_WIDTH } from './_common';
 import { Fragment, memo, useEffect, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { Pressable, StyleSheet, View, Text } from 'react-native';
+import {
+	Pressable,
+	StyleSheet,
+	View,
+	Text,
+	LayoutChangeEvent,
+} from 'react-native';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import useGalleryDims from '../../../hooks/app/useGalleryDims';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
@@ -22,24 +27,19 @@ type Props = {
 
 export const AppImageComponent = memo(function Foo({
 	url,
-	parentContainerHeight,
 	parentContainerWidth,
 }: Props) {
-	/**
-	 * FIXME:
-	 *
-	 * #1: The ImageHeight should be capped to the height of container
-	 * #2: overflow: "hidden" should not be needed
-	 */
-	const { ImageHeight, ImageWidth, onLayoutChanged } = useGalleryDims([
-		{ url },
-	]);
+	const [Width, setWidth] = useState(parentContainerWidth);
+	const img = useImage(url, { maxWidth: Width, maxHeight: 540 }, [Width]);
 
+	function onLayoutChanged(event: LayoutChangeEvent) {
+		setWidth(event.nativeEvent.layout.width);
+	}
+
+	if (!img) return <View />;
 	return (
 		<View
 			style={{
-				height: parentContainerHeight,
-				width: parentContainerWidth,
 				alignItems: 'center',
 				justifyContent: 'center',
 				overflow: 'hidden',
@@ -49,18 +49,15 @@ export const AppImageComponent = memo(function Foo({
 		>
 			{/*@ts-ignore-next-line*/}
 			<Image
-				contentFit="fill"
+				source={img}
 				style={{
 					// flex: 1,
 					borderRadius: 8,
-					opacity: 0.87,
-					width: ImageWidth,
-					height: ImageHeight,
+
+					height: img.height,
+					width: img.width,
 					alignItems: 'center',
 					justifyContent: 'center',
-				}}
-				source={{
-					uri: url,
 				}}
 				transition={{
 					effect: 'flip-from-right',
@@ -191,8 +188,8 @@ export const AltTextOverlay = memo(function Foo({
 					<Pressable
 						style={{
 							position: 'absolute',
-							top: -40,
-							left: 8,
+							top: -36,
+							left: 6,
 							backgroundColor: theme.palette.bg,
 							padding: 6,
 							borderRadius: 8,
@@ -202,7 +199,7 @@ export const AltTextOverlay = memo(function Foo({
 							setIsVisible(true);
 						}}
 					>
-						<AppText.Medium>ALT</AppText.Medium>
+						<AppText.Medium style={{ fontSize: 13 }}>ALT</AppText.Medium>
 					</Pressable>
 				</View>
 			</View>

@@ -192,7 +192,7 @@ export function TextContentView({
 }: TextContentViewProps) {
 	return (
 		// Negative padding to offset weird bottom margin
-		<View style={[{ height: 'auto', marginBottom: -6, flexShrink: 1 }, style]}>
+		<View style={[{ height: 'auto', flexShrink: 1 }, style]}>
 			{/* --- paragraphs --- */}
 			{tree.map((item) => (
 				<TextContentNode

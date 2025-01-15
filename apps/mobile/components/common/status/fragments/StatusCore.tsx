@@ -131,12 +131,11 @@ const StatusCore = memo(
 					<View
 						style={{
 							flexDirection: 'row',
-							marginBottom: SECTION_MARGIN_BOTTOM,
+							marginBottom: SECTION_MARGIN_BOTTOM * 2,
 						}}
 					>
 						<PostCreatedBy
 							style={{
-								paddingBottom: 4,
 								flex: 1,
 							}}
 						/>

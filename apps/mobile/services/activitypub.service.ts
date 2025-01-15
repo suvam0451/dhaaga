@@ -184,15 +184,7 @@ class ActivityPubService {
 		localState: boolean,
 		domain: KNOWN_SOFTWARE,
 	) {
-		if (
-			[
-				KNOWN_SOFTWARE.MISSKEY,
-				KNOWN_SOFTWARE.SHARKEY,
-				KNOWN_SOFTWARE.FIREFISH,
-			].includes(domain as any)
-		) {
-			return null;
-		}
+		if (ActivityPubService.misskeyLike(domain)) return null;
 
 		if (localState) {
 			const { error } = await client.statuses.removeLike(id);
@@ -217,13 +209,7 @@ class ActivityPubService {
 		localState: boolean,
 		domain: KNOWN_SOFTWARE,
 	) {
-		if (
-			[
-				KNOWN_SOFTWARE.MISSKEY,
-				KNOWN_SOFTWARE.SHARKEY,
-				KNOWN_SOFTWARE.FIREFISH,
-			].includes(domain)
-		) {
+		if (ActivityPubService.misskeyLike(domain)) {
 			if (localState) {
 				const { error } = await (client as MisskeyRestClient).statuses.unrenote(
 					id,

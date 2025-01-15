@@ -121,6 +121,7 @@ export function OriginalPosterPostedByFragment({
 						mentions={[]}
 						emojiMap={emojiMap}
 						oneLine
+						style={{ marginBottom: -4 }}
 					/>
 					<Text
 						style={{
