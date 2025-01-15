@@ -230,9 +230,6 @@ export class PostMiddleware {
 		const HAS_PARENT = input.isReply();
 		const HAS_ROOT = input.hasRootAvailable();
 
-		if (IS_SHARE) {
-			console.log('repost object', input.getRepostedStatusRaw());
-		}
 		let sharedFrom: z.infer<typeof ActivityPubStatusItemDto> = IS_SHARE
 			? PostMiddleware.deserialize(input.getRepostedStatusRaw(), driver, server)
 			: null;

@@ -1,7 +1,14 @@
-import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
+import {
+	Pressable,
+	StyleProp,
+	Text,
+	View,
+	ViewStyle,
+	StyleSheet,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { memo, useMemo, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { Skeleton } from '@rneui/base';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_KNOWN_MODAL } from '../../../../states/_global';
@@ -113,6 +120,7 @@ export function OriginalPosterPostedByFragment({
 						variant={'displayName'}
 						mentions={[]}
 						emojiMap={emojiMap}
+						oneLine
 					/>
 					<Text
 						style={{
@@ -225,7 +233,7 @@ type OriginalPosterProps = {
  * This is the author indicator for
  * the bottom-most post item
  */
-const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
+function PostCreatedBy({ style }: OriginalPosterProps) {
 	const { appManager } = useAppManager();
 	const { show, refresh } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { dto } = useAppStatusItem();
@@ -253,57 +261,54 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 		toProfile(dto.postedBy?.userId);
 	}
 
-	return useMemo(() => {
-		if (!STATUS_DTO.postedBy) return <OriginalPosterSkeleton />;
-		return (
-			<View
-				style={[
-					{
-						alignItems: 'center',
-						flexDirection: 'row',
-						flexGrow: 1,
-						overflowX: 'hidden',
-						width: 'auto',
-						position: 'relative',
-					},
-					style,
-				]}
-			>
-				<View ref={UserDivRef}>
-					<TouchableOpacity
-						onPress={onAvatarClicked}
+	return (
+		<View style={[styles.authorContainerRoot, style]}>
+			<View ref={UserDivRef}>
+				<TouchableOpacity
+					onPress={onAvatarClicked}
+					style={styles.authorAvatarContainer}
+				>
+					{/* @ts-ignore */}
+					<Image
 						style={{
-							width: TIMELINE_PFP_SIZE,
-							height: TIMELINE_PFP_SIZE,
-							borderColor: 'rgba(200, 200, 200, 0.3)',
-							borderWidth: 1,
+							flex: 1,
+							padding: 2,
 							borderRadius: TIMELINE_PFP_SIZE / 2,
-							flexShrink: 1,
 						}}
-					>
-						{/* @ts-ignore */}
-						<Image
-							style={{
-								flex: 1,
-								padding: 2,
-								borderRadius: TIMELINE_PFP_SIZE / 2,
-							}}
-							source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
-						/>
-					</TouchableOpacity>
-				</View>
-
-				<OriginalPosterPostedByFragment
-					onClick={onProfileClicked}
-					displayNameParsed={STATUS_DTO.postedBy.parsedDisplayName}
-					handle={STATUS_DTO.postedBy.handle}
-					postedAt={new Date(STATUS_DTO.createdAt)}
-					visibility={STATUS_DTO.visibility}
-					emojiMap={STATUS_DTO.calculated.emojis}
-				/>
+						source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
+					/>
+				</TouchableOpacity>
 			</View>
-		);
-	}, [STATUS_DTO.postedBy, style]);
-});
+
+			<OriginalPosterPostedByFragment
+				onClick={onProfileClicked}
+				displayNameParsed={STATUS_DTO.postedBy.parsedDisplayName}
+				handle={STATUS_DTO.postedBy.handle}
+				postedAt={new Date(STATUS_DTO.createdAt)}
+				visibility={STATUS_DTO.visibility}
+				emojiMap={STATUS_DTO.calculated.emojis}
+			/>
+		</View>
+	);
+}
 
 export default PostCreatedBy;
+
+const styles = StyleSheet.create({
+	authorContainerRoot: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		flexGrow: 1,
+		overflowX: 'hidden',
+		width: 'auto',
+		position: 'relative',
+	}, // with border decoration
+	authorAvatarContainer: {
+		width: TIMELINE_PFP_SIZE,
+		height: TIMELINE_PFP_SIZE,
+		borderColor: 'rgba(200, 200, 200, 0.3)',
+		borderWidth: 1,
+		borderRadius: TIMELINE_PFP_SIZE / 2,
+		flexShrink: 1,
+	},
+});

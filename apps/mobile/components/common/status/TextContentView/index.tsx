@@ -20,6 +20,7 @@ type TextContentNodeProps = {
 	variant: TEXT_PARSING_VARIANT;
 	mentions: { url: string; text: string; resolved: boolean }[];
 	emojiMap: Map<string, string>;
+	oneLine?: boolean;
 };
 
 function TextContentNode({
@@ -27,6 +28,7 @@ function TextContentNode({
 	variant,
 	mentions,
 	emojiMap,
+	oneLine,
 }: TextContentNodeProps) {
 	if (!WrapperNode.includes(node.type)) {
 		switch (node.type) {
@@ -140,6 +142,7 @@ function TextContentNode({
 				<Text
 					key={node.uuid}
 					style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
+					numberOfLines={oneLine ? 1 : undefined}
 				>
 					{node.nodes.map((_node) => (
 						<TextContentNode
@@ -176,6 +179,7 @@ type TextContentViewProps = {
 	mentions: { url: string; text: string; resolved: boolean }[];
 	emojiMap: Map<string, string>;
 	style?: StyleProp<ViewStyle>;
+	oneLine?: boolean;
 };
 
 export function TextContentView({
@@ -184,6 +188,7 @@ export function TextContentView({
 	variant,
 	mentions,
 	emojiMap,
+	oneLine,
 }: TextContentViewProps) {
 	return (
 		// Negative padding to offset weird bottom margin
@@ -195,6 +200,7 @@ export function TextContentView({
 					variant={variant}
 					mentions={mentions}
 					emojiMap={emojiMap}
+					oneLine={oneLine}
 				/>
 			))}
 		</View>
