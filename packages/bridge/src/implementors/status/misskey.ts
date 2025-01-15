@@ -46,7 +46,7 @@ class MisskeyToStatusAdapter
 		return retval;
 	}
 
-	isReply = () => !!this.ref.reply;
+	isReply = () => !!this.ref.replyId;
 	hasParentAvailable = () => !!this.ref.reply;
 	getParentRaw = () => this.ref.reply;
 
@@ -59,21 +59,43 @@ class MisskeyToStatusAdapter
 		url: string;
 	}[] {
 		const retval = [];
-		const src = this.ref.reactionEmojis || {};
-		for (const k in src) {
-			if (typeof src[k] === 'string') {
-				// misskey
-				retval.push({ name: k, url: src[k] });
-			} else {
-				// firefish
-				retval.push({
-					name: (src[k] as any)?.['name'],
-					url: (src[k] as any)?.['url'],
-					height: (src[k] as any)?.['height'],
-					width: (src[k] as any)?.['width'],
-				});
+		const _reactionEmojis = this.ref.reactionEmojis;
+		if (_reactionEmojis) {
+			for (const k in _reactionEmojis) {
+				if (typeof _reactionEmojis[k] === 'string') {
+					// misskey
+					retval.push({ name: k, url: _reactionEmojis[k] });
+				} else {
+					// firefish
+					retval.push({
+						name: (_reactionEmojis[k] as any)?.['name'],
+						url: (_reactionEmojis[k] as any)?.['url'],
+						height: (_reactionEmojis[k] as any)?.['height'],
+						width: (_reactionEmojis[k] as any)?.['width'],
+					});
+				}
 			}
 		}
+
+		// CherryPick ?
+		const _emojis = this.ref.emojis;
+		if (_emojis) {
+			for (const k in _emojis) {
+				if (typeof _emojis[k] === 'string') {
+					// misskey
+					retval.push({ name: k, url: _emojis[k] });
+				} else {
+					// firefish
+					retval.push({
+						name: (_emojis[k] as any)?.['name'],
+						url: (_emojis[k] as any)?.['url'],
+						height: (_emojis[k] as any)?.['height'],
+						width: (_emojis[k] as any)?.['width'],
+					});
+				}
+			}
+		}
+
 		return retval;
 	}
 
@@ -95,7 +117,9 @@ class MisskeyToStatusAdapter
 		return null;
 	}
 
-	getRepostedStatusRaw = () => this.ref.renote;
+	getRepostedStatusRaw = () => {
+		return this.ref.renote;
+	};
 
 	getId = () => this.ref.id;
 

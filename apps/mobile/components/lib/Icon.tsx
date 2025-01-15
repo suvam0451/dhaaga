@@ -45,6 +45,7 @@ export type APP_ICON_ENUM =
 	| 'chevron-left'
 	| 'chevron-right'
 	| 'chevron-down'
+	| 'chevron-down-circle'
 	| 'cloud-upload-outline'
 	| 'close-outline'
 	| 'cog'
@@ -392,6 +393,15 @@ export const AppIcon = memo(
 					return (
 						<Ionicons
 							name="chevron-down"
+							size={_size}
+							color={_color}
+							style={iconStyle}
+						/>
+					);
+				case 'chevron-down-circle':
+					return (
+						<Ionicons
+							name="chevron-down-circle"
 							size={_size}
 							color={_color}
 							style={iconStyle}

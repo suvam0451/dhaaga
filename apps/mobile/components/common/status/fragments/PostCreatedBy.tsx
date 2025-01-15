@@ -3,24 +3,23 @@ import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { memo, useMemo, useRef } from 'react';
 import { Skeleton } from '@rneui/base';
-import useMfm from '../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_KNOWN_MODAL } from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
-	useAppApiClient,
 	useAppManager,
 	useAppModalState,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AppText } from '../../../lib/Text';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { AccountSavedUser } from '../../../../database/_schema';
+import { TextContentView } from '../TextContentView';
+import { AppParsedTextNodes } from '../../../../types/parsed-text.types';
+import MfmService from '../../../../services/mfm.service';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -84,13 +83,13 @@ function OriginalPosterSkeleton() {
 }
 
 export function OriginalPosterPostedByFragment({
-	displayNameRaw,
+	displayNameParsed,
 	onClick,
 	emojiMap,
 	handle,
 	postedAt,
 }: {
-	displayNameRaw: string;
+	displayNameParsed: AppParsedTextNodes;
 	onClick: () => void;
 	emojiMap?: Map<string, string>;
 	handle: string;
@@ -98,16 +97,6 @@ export function OriginalPosterPostedByFragment({
 	postedAt: Date;
 }) {
 	const { theme } = useAppTheme();
-	const { driver } = useAppApiClient();
-
-	const { content: UsernameWithEmojis } = useMfm({
-		content: displayNameRaw,
-		emojiMap: emojiMap,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-		numberOfLines: 1,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-		variant: 'displayName',
-	});
 
 	return (
 		<View
@@ -119,21 +108,15 @@ export function OriginalPosterPostedByFragment({
 		>
 			<View>
 				<Pressable onPress={onClick}>
-					<View>
-						{/* No need to parse for Bluesky */}
-						{driver === KNOWN_SOFTWARE.BLUESKY ? (
-							<AppText.Medium numberOfLines={1}>
-								{displayNameRaw}
-							</AppText.Medium>
-						) : UsernameWithEmojis ? (
-							UsernameWithEmojis
-						) : (
-							<Text> </Text>
-						)}
-					</View>
+					<TextContentView
+						tree={displayNameParsed}
+						variant={'displayName'}
+						mentions={[]}
+						emojiMap={emojiMap}
+					/>
 					<Text
 						style={{
-							color: theme.secondary.a40,
+							color: theme.secondary.a20,
 							fontSize: 13,
 							fontFamily: APP_FONTS.INTER_400_REGULAR,
 							maxWidth: 196,
@@ -174,6 +157,14 @@ export function SavedPostCreatedBy({
 
 	// redirect to profile
 	function onProfilePressed() {}
+
+	const _displayNameParsed = MfmService.renderMfm(user.displayName, {
+		emojiMap: new Map(),
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+		colorScheme: null,
+		variant: 'displayName',
+		nonInteractive: false,
+	});
 
 	if (!user) return <View />;
 	return (
@@ -216,7 +207,7 @@ export function SavedPostCreatedBy({
 
 			<OriginalPosterPostedByFragment
 				onClick={onProfilePressed}
-				displayNameRaw={user.displayName}
+				displayNameParsed={_displayNameParsed?.parsed || []}
 				handle={user.username}
 				postedAt={new Date(authoredAt)}
 				visibility={'N/A'}
@@ -304,7 +295,7 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 
 				<OriginalPosterPostedByFragment
 					onClick={onProfileClicked}
-					displayNameRaw={STATUS_DTO.postedBy.displayName}
+					displayNameParsed={STATUS_DTO.postedBy.parsedDisplayName}
 					handle={STATUS_DTO.postedBy.handle}
 					postedAt={new Date(STATUS_DTO.createdAt)}
 					visibility={STATUS_DTO.visibility}

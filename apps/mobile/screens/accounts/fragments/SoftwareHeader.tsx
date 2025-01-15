@@ -2,10 +2,8 @@ import { memo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { APP_FONT } from '../../../styles/AppTheme';
 import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	software: string;
@@ -24,11 +22,7 @@ const SoftwareHeader = memo(function Foo({
 	iconSizeMultiplier,
 	addText,
 }: Props) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 	const Theming = useKnownSoftware(software);
 	const _mt = mt === undefined ? 8 : mt;
 	const _mb = mb === undefined ? 12 : mb;
@@ -72,7 +66,6 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginLeft: 6,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
 	},
 });
 

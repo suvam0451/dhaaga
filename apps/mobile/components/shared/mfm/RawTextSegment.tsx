@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Text } from 'react-native';
 import { RandomUtil } from '../../../utils/random.utils';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
@@ -29,6 +28,7 @@ function RawTextSegment({ value, fontFamily, emphasis }: Props) {
 			key={k}
 			style={{
 				color: color,
+				fontFamily,
 			}}
 		>
 			{_value}

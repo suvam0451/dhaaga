@@ -27,6 +27,8 @@ type State = {
 	users: CollectionDataViewUserEntry[];
 	widgetShown: boolean;
 	widgetDimmed: boolean;
+	all: boolean;
+	none: boolean;
 };
 
 const DEFAULT: State = {
@@ -35,6 +37,8 @@ const DEFAULT: State = {
 	users: [],
 	widgetShown: false,
 	widgetDimmed: false,
+	all: true,
+	none: false,
 };
 
 enum ACTION {

@@ -17,7 +17,7 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
@@ -179,6 +179,7 @@ const StatusCore = memo(
 								tree={_target.content.parsed}
 								variant={'bodyContent'}
 								mentions={_target.calculated.mentions as any}
+								emojiMap={_target.calculated.emojis}
 							/>
 							{IS_TRANSLATED && (
 								<ExplainOutput

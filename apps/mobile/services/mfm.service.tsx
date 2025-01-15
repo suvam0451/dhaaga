@@ -389,8 +389,8 @@ export class MfmComponentBuilder {
 					/>,
 					{
 						type: 'customEmoji',
-						text: node.props.emoji,
-						value: node.props.emoji,
+						text: node.props.name,
+						value: node.props.name,
 						uuid: RandomUtil.nanoId(),
 						nodes: [],
 					},

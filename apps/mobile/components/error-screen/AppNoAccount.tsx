@@ -73,7 +73,7 @@ export function DriverSelectionFragment() {
 		{
 			label: 'Misskey',
 			padding: 12,
-			desc: '+ Sharkey',
+			desc: '+ Sharkey, CherryPick',
 			rightComponent: (
 				<SoftwareHeader
 					software={KNOWN_SOFTWARE.MISSKEY}
@@ -114,9 +114,9 @@ export function DriverSelectionFragment() {
 							{option.label}
 						</Text>
 						{option.desc && (
-							<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}>
+							<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
 								{option.desc}
-							</AppText.Normal>
+							</AppText.Medium>
 						)}
 					</View>
 					<View style={{ width: 80, alignItems: 'center' }}>

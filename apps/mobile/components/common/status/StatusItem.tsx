@@ -23,9 +23,9 @@ function AncestorFragment() {
 	return (
 		<Fragment>
 			{dto.rootPost && !IS_PARENT_ALSO_ROOT && (
-				<ParentPost dto={dto.rootPost} />
+				<ParentPost dto={dto.rootPost} showReplyIndicator={false} />
 			)}
-			<ParentPost dto={dto.replyTo} />
+			<ParentPost dto={dto.replyTo} showReplyIndicator={!dto.rootPost} />
 		</Fragment>
 	);
 }

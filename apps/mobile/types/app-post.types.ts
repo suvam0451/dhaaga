@@ -21,6 +21,7 @@ export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
 	avatarUrl: z.string(),
 	displayName: z.string().nullable().optional(),
+	parsedDisplayName: z.array(z.any()),
 	handle: z.string().regex(/^@.*?@?.*?$/),
 	instance: z.string(),
 });
@@ -289,6 +290,13 @@ export class AppStatusDtoService {
 			variant: 'bodyContent',
 			nonInteractive: false,
 		});
+		const parsedDisplayName = MfmService.renderMfm(user.getDisplayName(), {
+			emojiMap,
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+			colorScheme: null,
+			variant: 'displayName',
+			nonInteractive: false,
+		});
 
 		return {
 			uuid: RandomUtil.nanoId(),
@@ -299,6 +307,7 @@ export class AppStatusDtoService {
 				userId: user.getId(),
 				avatarUrl: user.getAvatarUrl(),
 				displayName: user.getDisplayName(),
+				parsedDisplayName: parsedDisplayName?.parsed || [],
 				handle: handle,
 				instance: user.getInstanceUrl() || subdomain,
 			},

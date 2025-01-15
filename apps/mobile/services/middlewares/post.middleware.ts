@@ -17,6 +17,8 @@ import AppPrivacySettingsService from '../app-settings/app-settings-privacy.serv
 import { SQLiteDatabase } from 'expo-sqlite';
 import { AccountSavedPost } from '../../database/_schema';
 import { DataSource } from '../../database/dataSource';
+import ActivityPubService from '../activitypub.service';
+import ActivitypubService from '../activitypub.service';
 
 /**
  * converts unified interfaces into
@@ -93,7 +95,6 @@ export class PostMiddleware {
 	}
 
 	export(): AppPostObject {
-		// console.log('step 1/4');
 		// to prevent infinite recursion
 		if (!this.statusI || !this.statusI.getId()) return null;
 
@@ -110,7 +111,6 @@ export class PostMiddleware {
 					this.subdomain,
 				).export()
 			: null;
-		// console.log('step 2/4');
 
 		/**
 		 * Misskey Compat
@@ -129,7 +129,6 @@ export class PostMiddleware {
 						this.subdomain,
 					).export()
 				: null;
-		// console.log('step 3/4');
 
 		let rootI: z.infer<typeof ActivityPubStatusItemDto> =
 			this.statusI.hasRootAvailable()
@@ -142,20 +141,16 @@ export class PostMiddleware {
 						this.subdomain,
 					).export()
 				: null;
-		// console.log('step 4/4');
 
 		const dto: AppPostObject =
 			IS_REPLY &&
-			[
-				KNOWN_SOFTWARE.MISSKEY,
-				KNOWN_SOFTWARE.FIREFISH,
-				KNOWN_SOFTWARE.SHARKEY,
-				KNOWN_SOFTWARE.BLUESKY,
-			].includes(this.domain as any) /**
-			 * 	Replies in Misskey is actually present in the
-			 * 	"reply" object, instead of root. へんですね?
-			 */
-				? {
+			(ActivityPubService.misskeyLike(this.domain) ||
+				ActivityPubService.blueskyLike(this.domain))
+				? /**
+					 * 	Replies in Misskey is actually present in the
+					 * 	"reply" object, instead of root. へんですね?
+					 */
+					{
 						...AppStatusDtoService.export(
 							this.statusI,
 							this.domain,
@@ -253,16 +248,13 @@ export class PostMiddleware {
 
 		const dto: AppPostObject =
 			HAS_PARENT &&
-			[
-				KNOWN_SOFTWARE.MISSKEY,
-				KNOWN_SOFTWARE.FIREFISH,
-				KNOWN_SOFTWARE.SHARKEY,
-				KNOWN_SOFTWARE.BLUESKY,
-			].includes(driver as KNOWN_SOFTWARE) /**
-			 * 	Replies in Misskey is actually present in the
-			 * 	"reply" object, instead of root. へんですね?
-			 */
-				? {
+			(ActivityPubService.blueskyLike(driver) ||
+				ActivitypubService.misskeyLike(driver))
+				? /**
+					 * 	Replies in Misskey is actually present in the
+					 * 	"reply" object, instead of root. へんですね?
+					 */
+					{
 						...AppStatusDtoService.export(input, driver, server),
 						boostedFrom: sharedFrom,
 						replyTo,

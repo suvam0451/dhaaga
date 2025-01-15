@@ -13,14 +13,21 @@ import { appDimensions } from '../../../../styles/dimensions';
 import MentionSegment from '../../../shared/mfm/MentionSegment';
 import { TextParserService } from '../../../../services/text-parser.service';
 import LinkProcessor from '../../link/LinkProcessor';
+import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
 
 type TextContentNodeProps = {
 	node: NodeContent;
 	variant: TEXT_PARSING_VARIANT;
 	mentions: { url: string; text: string; resolved: boolean }[];
+	emojiMap: Map<string, string>;
 };
 
-function TextContentNode({ node, variant, mentions }: TextContentNodeProps) {
+function TextContentNode({
+	node,
+	variant,
+	mentions,
+	emojiMap,
+}: TextContentNodeProps) {
 	if (!WrapperNode.includes(node.type)) {
 		switch (node.type) {
 			case 'text': {
@@ -38,6 +45,27 @@ function TextContentNode({ node, variant, mentions }: TextContentNodeProps) {
 								? APP_COLOR_PALETTE_EMPHASIS.A0
 								: APP_COLOR_PALETTE_EMPHASIS.A10
 						}
+					/>
+				);
+			}
+			case 'mention': {
+				return (
+					<MentionSegment
+						key={node.uuid}
+						value={node.text}
+						link={node.url}
+						fontFamily={APP_FONTS.INTER_500_MEDIUM}
+					/>
+				);
+			}
+			case 'customEmoji': {
+				return (
+					<EmojiCodeSegment
+						key={node.uuid}
+						value={node.text}
+						emojiMap={emojiMap}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						fontFamily={APP_FONTS.INTER_500_MEDIUM}
 					/>
 				);
 			}
@@ -118,6 +146,7 @@ function TextContentNode({ node, variant, mentions }: TextContentNodeProps) {
 							mentions={mentions}
 							node={_node}
 							variant={variant}
+							emojiMap={emojiMap}
 						/>
 					))}
 				</Text>
@@ -132,6 +161,7 @@ function TextContentNode({ node, variant, mentions }: TextContentNodeProps) {
 							mentions={mentions}
 							node={_node}
 							variant={variant}
+							emojiMap={emojiMap}
 						/>
 					))}
 				</Text>
@@ -144,6 +174,7 @@ type TextContentViewProps = {
 	tree: AppParsedTextNodes;
 	variant: TEXT_PARSING_VARIANT;
 	mentions: { url: string; text: string; resolved: boolean }[];
+	emojiMap: Map<string, string>;
 	style?: StyleProp<ViewStyle>;
 };
 
@@ -152,12 +183,19 @@ export function TextContentView({
 	style,
 	variant,
 	mentions,
+	emojiMap,
 }: TextContentViewProps) {
 	return (
-		<View style={[style]}>
+		// Negative padding to offset weird bottom margin
+		<View style={[{ height: 'auto', marginBottom: -6, flexShrink: 1 }, style]}>
 			{/* --- paragraphs --- */}
 			{tree.map((item) => (
-				<TextContentNode node={item} variant={variant} mentions={mentions} />
+				<TextContentNode
+					node={item}
+					variant={variant}
+					mentions={mentions}
+					emojiMap={emojiMap}
+				/>
 			))}
 		</View>
 	);

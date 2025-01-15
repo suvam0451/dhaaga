@@ -287,8 +287,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			case KNOWN_SOFTWARE.FIREFISH:
 			case KNOWN_SOFTWARE.ICESHRIMP:
 			case KNOWN_SOFTWARE.MASTODON:
-			case KNOWN_SOFTWARE.KMYBLUE:
-			case KNOWN_SOFTWARE.SHARKEY: {
+			case KNOWN_SOFTWARE.KMYBLUE: {
 				const emojiFn = MastoJsWrapper.create(urlLike).lib.v1.customEmojis.list;
 				const { data, error } = await MastoErrorHandler(emojiFn);
 				if (error) return { error };
@@ -306,7 +305,9 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					data: mapped,
 				};
 			}
-			case KNOWN_SOFTWARE.MISSKEY: {
+			case KNOWN_SOFTWARE.SHARKEY:
+			case KNOWN_SOFTWARE.MISSKEY:
+			case KNOWN_SOFTWARE.CHERRYPICK: {
 				const emojiFn = await MisskeyJsWrapper.create(urlLike).client.request(
 					'emojis',
 					{},

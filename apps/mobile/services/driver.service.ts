@@ -1,6 +1,7 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_ICON_ENUM } from '../components/lib/Icon';
 import { APP_ROUTING_ENUM } from '../utils/route-list';
+import ActivityPubService from './activitypub.service';
 
 export enum APP_PINNED_OBJECT_TYPE {
 	/**
@@ -45,68 +46,65 @@ export type AppModulesProps = {
 
 class DriverService {
 	static getAccountModules(driver: KNOWN_SOFTWARE): AppModulesProps[] {
-		switch (driver) {
-			case KNOWN_SOFTWARE.BLUESKY: {
-				return [
-					{
-						label: 'Feeds',
-						desc: 'Subscribed Feeds',
-						iconId: 'edit',
-						to: APP_ROUTING_ENUM.FEEDS,
-					},
-					{
-						label: 'Likes',
-						desc: 'I liked these',
-						iconId: 'heart',
-						to: APP_ROUTING_ENUM.LIKES,
-					},
-					{
-						label: 'Lists',
-						desc: 'My lists',
-						iconId: 'list',
-						to: APP_ROUTING_ENUM.LISTS,
-					},
-				];
-			}
-			case KNOWN_SOFTWARE.MASTODON: {
-				return [
-					{
-						label: 'Likes',
-						desc: "Posts I've Liked",
-						iconId: 'heart',
-						to: APP_ROUTING_ENUM.LIKES,
-					},
-					{
-						label: 'Bookmarks',
-						desc: 'My Bookmarks',
-						iconId: 'bookmark',
-						to: APP_ROUTING_ENUM.BOOKMARK,
-					},
-					{
-						label: 'Lists',
-						desc: 'My lists',
-						iconId: 'list',
-						to: APP_ROUTING_ENUM.LISTS,
-					},
-				];
-			}
-			case KNOWN_SOFTWARE.MISSKEY:
-			case KNOWN_SOFTWARE.SHARKEY: {
-				return [
-					{
-						label: 'Bookmarks',
-						desc: 'My Bookmarks',
-						iconId: 'bookmark',
-						to: APP_ROUTING_ENUM.BOOKMARK,
-					},
-					{
-						label: 'Lists',
-						desc: 'My lists',
-						iconId: 'language',
-						to: APP_ROUTING_ENUM.LISTS,
-					},
-				];
-			}
+		if (ActivityPubService.blueskyLike(driver)) {
+			return [
+				{
+					label: 'Feeds',
+					desc: 'Subscribed Feeds',
+					iconId: 'edit',
+					to: APP_ROUTING_ENUM.FEEDS,
+				},
+				{
+					label: 'Likes',
+					desc: 'I liked these',
+					iconId: 'heart',
+					to: APP_ROUTING_ENUM.LIKES,
+				},
+				{
+					label: 'Lists',
+					desc: 'My lists',
+					iconId: 'list',
+					to: APP_ROUTING_ENUM.LISTS,
+				},
+			];
+		} else if (ActivityPubService.misskeyLike(driver)) {
+			return [
+				{
+					label: 'Bookmarks',
+					desc: 'My Bookmarks',
+					iconId: 'bookmark',
+					to: APP_ROUTING_ENUM.BOOKMARK,
+				},
+				{
+					label: 'Lists',
+					desc: 'My lists',
+					iconId: 'language',
+					to: APP_ROUTING_ENUM.LISTS,
+				},
+			];
+		} else if (ActivityPubService.mastodonLike(driver)) {
+			return [
+				{
+					label: 'Likes',
+					desc: "Posts I've Liked",
+					iconId: 'heart',
+					to: APP_ROUTING_ENUM.LIKES,
+				},
+				{
+					label: 'Bookmarks',
+					desc: 'My Bookmarks',
+					iconId: 'bookmark',
+					to: APP_ROUTING_ENUM.BOOKMARK,
+				},
+				{
+					label: 'Lists',
+					desc: 'My lists',
+					iconId: 'list',
+					to: APP_ROUTING_ENUM.LISTS,
+				},
+			];
+		} else {
+			return [];
 		}
 	}
 
@@ -146,37 +144,29 @@ class DriverService {
 	 * should appear above the search widget
 	 */
 	static getSearchTabs(driver: KNOWN_SOFTWARE | string) {
-		switch (driver) {
-			case KNOWN_SOFTWARE.BLUESKY:
-				return [
-					SEARCH_RESULT_TAB.TOP,
-					SEARCH_RESULT_TAB.LATEST,
-					SEARCH_RESULT_TAB.PEOPLE,
-					SEARCH_RESULT_TAB.FEEDS,
-				];
-			case KNOWN_SOFTWARE.MASTODON:
-				return [
-					SEARCH_RESULT_TAB.POSTS,
-					SEARCH_RESULT_TAB.PEOPLE,
-					SEARCH_RESULT_TAB.TAGS,
-					SEARCH_RESULT_TAB.NEWS,
-				];
-			case KNOWN_SOFTWARE.PLEROMA:
-			case KNOWN_SOFTWARE.AKKOMA:
-				return [
-					SEARCH_RESULT_TAB.POSTS,
-					SEARCH_RESULT_TAB.PEOPLE,
-					SEARCH_RESULT_TAB.TAGS,
-				];
-			case KNOWN_SOFTWARE.MISSKEY:
-			case KNOWN_SOFTWARE.SHARKEY:
-				return [SEARCH_RESULT_TAB.POSTS, SEARCH_RESULT_TAB.PEOPLE];
-			default:
-				return [
-					SEARCH_RESULT_TAB.POSTS,
-					SEARCH_RESULT_TAB.TAGS,
-					SEARCH_RESULT_TAB.PEOPLE,
-				];
+		if (ActivityPubService.blueskyLike(driver)) {
+			return [
+				SEARCH_RESULT_TAB.TOP,
+				SEARCH_RESULT_TAB.LATEST,
+				SEARCH_RESULT_TAB.PEOPLE,
+				SEARCH_RESULT_TAB.FEEDS,
+			];
+		} else if (ActivityPubService.misskeyLike(driver)) {
+			return [SEARCH_RESULT_TAB.POSTS, SEARCH_RESULT_TAB.PEOPLE];
+		} else if (driver === KNOWN_SOFTWARE.MASTODON) {
+			return [
+				SEARCH_RESULT_TAB.POSTS,
+				SEARCH_RESULT_TAB.PEOPLE,
+				SEARCH_RESULT_TAB.TAGS,
+				SEARCH_RESULT_TAB.NEWS,
+			];
+		} else if (ActivityPubService.mastodonLike(driver)) {
+			return [
+				SEARCH_RESULT_TAB.POSTS,
+				SEARCH_RESULT_TAB.PEOPLE,
+				SEARCH_RESULT_TAB.TAGS,
+				SEARCH_RESULT_TAB.NEWS,
+			];
 		}
 	}
 }
