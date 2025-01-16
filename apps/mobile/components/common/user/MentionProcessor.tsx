@@ -1,9 +1,8 @@
-import { StyleSheet } from 'react-native';
-import { Text } from '@rneui/themed';
+import { StyleSheet, Text } from 'react-native';
 import { useMemo } from 'react';
 import { APP_THEME } from '../../../styles/AppTheme';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type Props = {
 	url: string;
@@ -12,16 +11,11 @@ type Props = {
 };
 
 /**
- *
  * @param props
  * @constructor
  */
 function MentionProcessor(props: Props) {
-	const { acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-		})),
-	);
+	const { acct } = useAppAcct();
 
 	const { text } = props;
 
@@ -49,7 +43,7 @@ function MentionProcessor(props: Props) {
 const styles = StyleSheet.create({
 	text: {
 		color: APP_THEME.MENTION,
-		fontFamily: 'Montserrat-Bold',
+		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 	},
 });
 

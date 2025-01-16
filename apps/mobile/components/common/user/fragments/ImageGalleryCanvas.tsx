@@ -1,4 +1,4 @@
-import { Animated, Dimensions } from 'react-native';
+import { Animated, Dimensions, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import {
 	Directions,
@@ -9,8 +9,6 @@ import {
 } from 'react-native-gesture-handler';
 import { useMemo, useRef } from 'react';
 import MediaService from '../../../../services/media.service';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	src: string;
@@ -22,12 +20,6 @@ type Props = {
 };
 
 function ImageGalleryCanvas({ src, onNext, onPrev, height, width }: Props) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
 	const start =
 		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
 	const end =
@@ -64,19 +56,7 @@ function ImageGalleryCanvas({ src, onNext, onPrev, height, width }: Props) {
 
 	return (
 		<GestureDetector gesture={fling}>
-			<Animated.View
-				style={{
-					width: '100%',
-					height: 420,
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'center',
-					// borderRadius: 8,
-					alignSelf: 'center',
-					backgroundColor: theme.palette.menubar,
-				}}
-			>
+			<Animated.View style={styles.rootView}>
 				{/*@ts-ignore-next-line*/}
 				<Image
 					source={{ uri: src }}
@@ -93,3 +73,14 @@ function ImageGalleryCanvas({ src, onNext, onPrev, height, width }: Props) {
 }
 
 export default ImageGalleryCanvas;
+
+const styles = StyleSheet.create({
+	rootView: {
+		width: '100%', // need to adjust based on available screen space
+		height: 420,
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+});

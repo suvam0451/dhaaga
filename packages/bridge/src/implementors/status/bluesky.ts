@@ -63,10 +63,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 	getViewer = () => this.post.viewer;
 
 	hasQuoteAvailable(): boolean {
-		return !!(
-			this.post.embed &&
-			this.post.embed['type'] === 'app.bsky.embed.record#view'
-		);
+		return !!(this.post.embed && this.isQuote());
 	}
 
 	getQuoteRaw(): PostView | null | undefined {
@@ -79,10 +76,8 @@ class BlueskyStatusAdapter implements StatusInterface {
 	getDisplayName = () => this.post?.author?.displayName;
 	getAvatarUrl = () => this.post?.author?.avatar;
 	getCreatedAt = () => {
-		if (this.isReposted()) {
-			return this.reason!.indexedAt;
-		}
-		// for original posts
+		if (this.isShare()) return this.reason?.indexedAt;
+		// for original posts (or quotes)
 		return (this.post.record as any)?.createdAt || this.post.indexedAt;
 	};
 
@@ -96,7 +91,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	getRepostedStatus(): StatusInterface | null | undefined {
-		if (this.isReposted()) {
+		if (this.isShare()) {
 			const { post, ...rest } = this;
 			/**
 			 * by stripping reason, we avoid recursive call
@@ -104,6 +99,12 @@ class BlueskyStatusAdapter implements StatusInterface {
 			 */
 			return new BlueskyStatusAdapter({
 				post: this.post,
+				reason: null as any,
+				reply: null as any,
+			});
+		} else if (this.isQuote()) {
+			return new BlueskyStatusAdapter({
+				post: this.post.embed?.record as any,
 				reason: null as any,
 				reply: null as any,
 			});
@@ -117,7 +118,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	getRepostedStatusRaw(): Status {
-		if (this.isReposted()) {
+		if (this.isShare()) {
 			/**
 			 * by stripping reason/reply, we avoid recursive call
 			 *
@@ -126,6 +127,19 @@ class BlueskyStatusAdapter implements StatusInterface {
 			const { post, ...rest } = this;
 			// strip repost/reply information
 			return { post } as any;
+		}
+		if (this.isQuote()) {
+			switch ((this.post.embed as any)?.$type) {
+				case 'app.bsky.embed.recordWithMedia#view': {
+					// also has record?.media object
+					return { post: (this.post.embed?.record as any)?.record } as any;
+				}
+				case 'app.bsky.embed.record#view': {
+					return { post: this.post.embed?.record } as any;
+				}
+				default:
+					return null;
+			}
 		}
 		return null;
 	}
@@ -143,7 +157,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 	 */
 	getContent = () => {
 		// handle pure reposts
-		if (this.isReposted()) {
+		if (this.isShare()) {
 			return null;
 		}
 
@@ -152,13 +166,56 @@ class BlueskyStatusAdapter implements StatusInterface {
 	};
 
 	getUser() {
-		if (this.isReposted()) return this.reason!.by as ProfileViewBasic;
+		if (this.isShare()) return this.reason!.by as ProfileViewBasic;
 		return this.post.author;
 	}
 
-	isReposted = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
+	isQuote = () =>
+		this.post.embed?.$type === 'app.bsky.embed.record#view' ||
+		this.post.embed?.$type === 'app.bsky.embed.recordWithMedia#view';
+	isShare = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
+
+	isReposted = () => this.isShare() || this.isQuote();
 
 	getMediaAttachments(): MediaAttachmentInterface[] {
+		if (this.post.embed?.$type === 'app.bsky.embed.recordWithMedia#view') {
+			// certain quotes (observed to be ones with image embed only, and no text)
+			if (
+				(this.post as any)?.embed?.media?.$type === 'app.bsky.embed.images#view'
+			) {
+				return (this.post as any)?.embed?.media?.images?.map((o: any) =>
+					BlueskyMediaAttachmentAdapter.create(o),
+				);
+			}
+		} else if (this.post.$type === 'app.bsky.embed.record#viewRecord') {
+			// this handles an original post attached to a quote post
+			const embeds = this.post.embeds as any;
+
+			if (embeds && Array.isArray(embeds)) {
+				const attachments = [];
+
+				for (const embed of embeds) {
+					switch (embed.$type) {
+						case 'app.bsky.embed.images#view':
+						case 'app.bsky.embed.images': {
+							attachments.push(
+								...embed.images.map((o: any) =>
+									BlueskyMediaAttachmentAdapter.create(o),
+								),
+							);
+							break;
+						}
+						case 'app.bsky.embed.video#view': {
+							attachments.push(
+								BlueskyVideoAttachmentAdapter.create(embed as any),
+							);
+						}
+					}
+				}
+				return attachments;
+			}
+		}
+
 		// handle image embeds
 		const target: any[] = this.post?.embed?.images as any[];
 		if (target)

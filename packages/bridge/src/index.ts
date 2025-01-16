@@ -125,6 +125,7 @@ const userMap = {
 	[KNOWN_SOFTWARE.FIREFISH]: MisskeyRestClient,
 	[KNOWN_SOFTWARE.MISSKEY]: MisskeyRestClient,
 	[KNOWN_SOFTWARE.SHARKEY]: MisskeyRestClient,
+	[KNOWN_SOFTWARE.CHERRYPICK]: MisskeyRestClient,
 
 	// Mastodon Compat
 	[KNOWN_SOFTWARE.MASTODON]: MastodonRestClient,

@@ -60,10 +60,12 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 		},
 	): LibraryPromise<Endpoints['notes/global-timeline']['res']> {
 		if (query?.local) {
-			const data = await this.client.client.request(
-				'notes/local-timeline',
-				query as any,
-			);
+			const data = await this.client.client.request('notes/local-timeline', {
+				...query,
+				allowPartial: true,
+				withBots: true,
+				local: undefined,
+			} as any);
 			return { data };
 		}
 		if (query?.social) {

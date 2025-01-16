@@ -24,6 +24,16 @@ function useKnownSoftware(software: string) {
 				height: 28,
 			};
 		}
+		case KNOWN_SOFTWARE.CHERRYPICK: {
+			return {
+				bg: 'black',
+				fg: 'white',
+				label: 'CherryPick',
+				logo: branding[10],
+				width: 116,
+				height: 20,
+			};
+		}
 		case KNOWN_SOFTWARE.MISSKEY:
 			return {
 				bg: '#8ae805',

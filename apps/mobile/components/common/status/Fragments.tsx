@@ -7,6 +7,8 @@ import { appDimensions } from '../../../styles/dimensions';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useAppNavigator from '../../../states/useAppNavigator';
+import { AppParsedTextNodes } from '../../../types/parsed-text.types';
+import { TextContentView } from './TextContentView';
 
 type MfmComponentProps = {
 	raw: string;
@@ -16,28 +18,27 @@ type MfmComponentProps = {
 	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
 };
 
-function MfmComponent({ raw, knownReactions, ...rest }: MfmComponentProps) {
-	const { content, isLoaded } = useMfm({
-		...rest,
-		content: raw,
-		emojiMap: knownReactions,
-	});
-
-	if (!isLoaded) return <View />;
-	return <>{content}</>;
-}
-
 type PostedByTextOneLineProps = {
-	text: string;
+	parsedText: AppParsedTextNodes;
+	altText: string;
 	driver: KNOWN_SOFTWARE;
 	createdAt: Date | string;
 	visibility?: any;
 };
 
+/**
+ * Shows the
+ * @param text
+ * @param driver
+ * @param createdAt
+ * @param altText
+ * @constructor
+ */
 function PostedByTextOneLine({
-	text,
+	parsedText,
 	driver,
 	createdAt,
+	altText,
 }: PostedByTextOneLineProps) {
 	if (driver === KNOWN_SOFTWARE.BLUESKY)
 		return (
@@ -49,7 +50,7 @@ function PostedByTextOneLine({
 					marginBottom: appDimensions.timelines.sectionBottomMargin,
 				}}
 			>
-				<AppText.Medium>{text}</AppText.Medium>
+				<AppText.Medium>{parsedText}</AppText.Medium>
 				<AppText.Normal
 					style={{
 						fontSize: 13,
@@ -62,20 +63,26 @@ function PostedByTextOneLine({
 			</View>
 		);
 
-	const VALID_DISPLAY_NAME = text !== null && text !== '';
-
-	if (!VALID_DISPLAY_NAME) return <View />;
-
 	return (
 		<View
 			style={{
 				flexDirection: 'row',
 				flex: 1,
 				alignItems: 'center',
+				marginBottom: appDimensions.timelines.sectionBottomMargin,
 			}}
 		>
 			<View style={{ flex: 1, flexShrink: 1 }}>
-				<MfmComponent raw={text} knownReactions={new Map()} />
+				{parsedText ? (
+					<TextContentView
+						tree={parsedText}
+						variant={'displayName'}
+						mentions={[]}
+						emojiMap={new Map()}
+					/>
+				) : (
+					<AppText.Medium>{altText}</AppText.Medium>
+				)}
 			</View>
 			<AppText.Normal
 				style={{

@@ -28,17 +28,13 @@ export function FlatListRenderer({
 			return <ReplyNotificationFragment item={item.props.dto} />;
 		case DhaagaJsNotificationType.MENTION:
 		case DhaagaJsNotificationType.CHAT:
+		case DhaagaJsNotificationType.HOME:
+		case DhaagaJsNotificationType.PUBLIC:
 			return <MentionNotificationFragment item={item.props.dto} />;
 		case DhaagaJsNotificationType.FAVOURITE:
 			return <FavouriteNotificationFragment item={item.props.dto} />;
 		case DhaagaJsNotificationType.FOLLOW:
-			return (
-				<NotificationUpdateItem
-					acct={item.props.dto.user}
-					type={DhaagaJsNotificationType.FOLLOW}
-					createdAt={item.props.dto.createdAt}
-				/>
-			);
+			return <NotificationUpdateItem item={item.props.dto} />;
 		case DhaagaJsNotificationType.STATUS:
 		case DhaagaJsNotificationType.NOTE:
 			return <StatusAlertNotificationFragment item={item.props.dto} />;

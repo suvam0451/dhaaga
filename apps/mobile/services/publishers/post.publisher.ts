@@ -11,9 +11,9 @@ export enum POST_EVENT_ENUM {
 }
 
 /**
- * Build this bad boi and pass it
- * around, when a post object needs
- * to be operated all way from Narnia
+ * Responsible for mutating post objects,
+ * as per requested operation and publishing
+ * the updates to all subscribed data stores
  */
 export class PostPublisherService extends BasePubSubService {
 	private readonly cache: Map<string, AppPostObject>;

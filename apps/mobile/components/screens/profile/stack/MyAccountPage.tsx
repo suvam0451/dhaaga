@@ -1,6 +1,5 @@
 import {
 	Animated as RN_Animated,
-	FlatList,
 	Pressable,
 	RefreshControl,
 	StyleSheet,
@@ -10,15 +9,13 @@ import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import ProfileLandingAccountOverview from './landing/fragments/ProfileLandingAccountOverview';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import AppNoAccount from '../../../error-screen/AppNoAccount';
-import AppTabLandingNavbar, {
-	APP_LANDING_PAGE_TYPE,
-} from '../../../shared/topnavbar/AppTabLandingNavbar';
+import { APP_LANDING_PAGE_TYPE } from '../../../shared/topnavbar/AppTabLandingNavbar';
 import {
 	useAppAcct,
 	useAppApiClient,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
-import { AppIcon } from '../../../lib/Icon';
+import { APP_ICON_ENUM, AppIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { AppText } from '../../../lib/Text';
@@ -30,6 +27,8 @@ import DriverService, {
 import useApiGetMyAccount from '../../../../hooks/api/accounts/useApiGetMyAccount';
 import { useState } from 'react';
 import Animated from 'react-native-reanimated';
+import MyProfileNavbar from '../../../shared/topnavbar/MyProfileNavbar';
+import { TimeOfDayGreeting } from '../../../../app/(tabs)/index';
 
 function AppModules({ label, desc, iconId, to }: AppModulesProps) {
 	const { theme } = useAppTheme();
@@ -40,7 +39,7 @@ function AppModules({ label, desc, iconId, to }: AppModulesProps) {
 				style={[
 					styles.appModuleContent,
 					{
-						backgroundColor: '#242424', // '#282828',
+						backgroundColor: theme.background.a40, // '#282828',
 					},
 				]}
 				onPress={() => {
@@ -94,16 +93,37 @@ function MyAccountPage() {
 
 	const appModules: AppModulesProps[] = [
 		{
-			label: 'Profiles',
-			desc: 'More hub tabs!',
+			label: 'Social Hub',
+			desc: 'Manage profiles!',
 			iconId: 'layers-outline',
 			to: APP_ROUTING_ENUM.PROFILES,
 		},
 		{
 			label: 'Collections',
-			desc: 'bookmark++',
+			desc: 'Bookmark++',
 			iconId: 'layers-outline',
-			to: APP_ROUTING_ENUM.PROFILES,
+			to: APP_ROUTING_ENUM.COLLECTIONS,
+		},
+		{
+			label: 'Drafts',
+			desc: 'Lost letters',
+			iconId: 'layers-outline',
+			to: APP_ROUTING_ENUM.DRAFTS,
+		},
+	];
+
+	const MENU_ITEMS = [
+		{
+			iconId: 'cog' as APP_ICON_ENUM,
+			onPress: () => {
+				router.navigate(APP_ROUTING_ENUM.SETTINGS_PAGE);
+			},
+		},
+		{
+			iconId: 'user-guide' as APP_ICON_ENUM,
+			onPress: () => {
+				router.navigate(APP_ROUTING_ENUM.GUIDE_MY_PROFILE);
+			},
 		},
 	];
 
@@ -115,23 +135,11 @@ function MyAccountPage() {
 					<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
 				}
 			>
-				<AppTabLandingNavbar
-					type={APP_LANDING_PAGE_TYPE.ACCOUNT_HUB}
-					menuItems={[
-						{
-							iconId: 'cog',
-							onPress: () => {
-								router.navigate(APP_ROUTING_ENUM.SETTINGS_PAGE);
-							},
-						},
-						{
-							iconId: 'user-guide',
-						},
-					]}
-				/>
+				<MyProfileNavbar menuItems={MENU_ITEMS} />
 				<ProfileLandingAccountOverview user={data} />
-				<View style={{ marginVertical: 16 }} />
-
+				<View style={{ marginVertical: 4 }} />
+				<TimeOfDayGreeting acct={acct} />
+				<View style={{ marginVertical: 12 }} />
 				<Animated.FlatList
 					data={serverModules}
 					numColumns={2}
@@ -169,18 +177,6 @@ function MyAccountPage() {
 						marginHorizontal: 8,
 					}}
 				/>
-				<AppText.Medium
-					style={{
-						marginTop: 32,
-						fontSize: 14,
-						textAlign: 'center',
-						paddingHorizontal: 32,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-					}}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
-				>
-					[TIP] Press and hold avatar (5th tab) to switch accounts
-				</AppText.Medium>
 			</RN_Animated.ScrollView>
 		</View>
 	);

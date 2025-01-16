@@ -1,8 +1,8 @@
 import { RepoTemplate } from './_base.repo';
 import { Account, AccountSavedUser } from '../_schema';
 import { DataSource } from '../dataSource';
-import { AppUserObject } from '../../types/app-user.types';
 import { RandomUtil } from '../../utils/random.utils';
+import { AppPostAuthorType } from '../../types/app-post.types';
 
 class Repo implements RepoTemplate<AccountSavedUser> {}
 
@@ -19,14 +19,14 @@ class Service {
 			active: true,
 		});
 	}
-	static upsert(db: DataSource, acct: Account, user: AppUserObject) {
+	static upsert(db: DataSource, acct: Account, user: AppPostAuthorType) {
 		const conflict = db.accountSavedUser.findOne({
 			active: true,
-			identifier: user.id,
+			identifier: user.userId,
 		});
 		if (conflict) {
 			db.accountSavedUser.updateById(conflict.id, {
-				identifier: user.id,
+				identifier: user.userId,
 				remoteServer: user.instance,
 				avatarUrl: user.avatarUrl,
 				displayName: user.displayName,
@@ -38,7 +38,7 @@ class Service {
 		} else {
 			db.accountSavedUser.insert({
 				uuid: RandomUtil.nanoId(),
-				identifier: user.id,
+				identifier: user.userId,
 				remoteServer: user.instance,
 				avatarUrl: user.avatarUrl,
 				displayName: user.displayName,
@@ -50,7 +50,7 @@ class Service {
 		}
 
 		return db.accountSavedUser.findOne({
-			identifier: user.id,
+			identifier: user.userId,
 		});
 	}
 }

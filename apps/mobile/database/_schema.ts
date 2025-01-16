@@ -57,6 +57,8 @@ export class AccountSavedPost extends BaseEntity<AccountSavedPost> {
 	// joins
 	account?: Account;
 	savedUser?: AccountSavedUser;
+
+	medias?: SavedPostMediaAttachment[];
 }
 
 @Entity('savedPostMediaAttachment')

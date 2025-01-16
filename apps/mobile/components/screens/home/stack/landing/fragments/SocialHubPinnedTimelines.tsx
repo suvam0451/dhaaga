@@ -20,6 +20,8 @@ import useAppNavigator from '../../../../../../states/useAppNavigator';
 import { DialogBuilderService } from '../../../../../../services/dialog-builder.service';
 import { AppText } from '../../../../../lib/Text';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../../../types/app.types';
 
 /**
  * If whitelist is present, filtered for those drivers only
@@ -136,8 +138,12 @@ function SocialHubPinnedTimelines({
 	account,
 }: SocialHubPinnedTimelinesProps) {
 	const destinations = HubService.resolveTimelineDestinations(items);
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	return (
-		<SocialHubPinSectionContainer label={'Timelines'} style={styles.root}>
+		<SocialHubPinSectionContainer
+			label={t(`hub.section.feeds`, { ns: LOCALIZATION_NAMESPACE.CORE })}
+			style={styles.root}
+		>
 			<Animated.FlatList
 				data={destinations}
 				numColumns={2}

@@ -1,10 +1,13 @@
 import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 import { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import { ActivityPubClient } from '@dhaaga/bridge';
+import { AppBskyActorDefs, AppBskyActorGetPreferences } from '@atproto/api';
 
-class AtprotoService {
+export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
+
+export class AtprotoPostService {
 	/**
-	 * toggle like for an at proto post
+	 * toggle like for an at proto post object
 	 */
 	static async toggleLike(
 		client: ActivityPubClient,
@@ -25,6 +28,9 @@ class AtprotoService {
 		return { state: !!viewer.like, uri: viewer?.like, success: false };
 	}
 
+	/**
+	 * toggle sharing status for an at proto post object
+	 */
 	static async toggleRepost(
 		client: ActivityPubClient,
 		uri: string,
@@ -45,4 +51,14 @@ class AtprotoService {
 	}
 }
 
-export default AtprotoService;
+export class AtprotoFeedService {
+	/**
+	 * Helper function to get saved feeds
+	 * from an AT proto preference (saved or fetched)
+	 * @param pref
+	 */
+	static extractFeedPreferences(pref: AppSavedPrefDate) {
+		const match = pref.preferences.find(AppBskyActorDefs.isSavedFeedsPrefV2);
+		return match ? match.items : [];
+	}
+}

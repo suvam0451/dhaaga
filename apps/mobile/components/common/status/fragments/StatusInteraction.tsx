@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import PostStats from '../PostStats';
 import * as Haptics from 'expo-haptics';
+import { ImpactFeedbackStyle } from 'expo-haptics';
+import { StyleSheet, View } from 'react-native';
+import PostStats from '../PostStats';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import {
 	useAppAcct,
@@ -15,19 +16,27 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { AppToggleIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import ActivityPubService from '../../../../services/activitypub.service';
+import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 
+/**
+ * Press this to toggle sharing status
+ */
 function ShareButton() {
 	const { dto: item } = useAppStatusItem();
 	const [IsLoading, setIsLoading] = useState(false);
 	const { postPub } = useAppPublishers();
 	const { theme } = useAppTheme();
+	const { driver } = useAppApiClient();
 
 	async function onPress() {
-		await postPub.toggleShare(item.uuid, setIsLoading);
+		postPub.toggleShare(item.uuid, setIsLoading).finally(() => {
+			Haptics.impactAsync(ImpactFeedbackStyle.Medium);
+		});
 	}
 
-	const FLAG = item.interaction.boosted;
+	const FLAG = PostMiddleware.isShared(item);
 
+	const canLike = ActivityPubService.canLike(driver);
 	return (
 		<AppToggleIcon
 			flag={FLAG}
@@ -43,12 +52,16 @@ function ShareButton() {
 				paddingTop: 8,
 				paddingBottom: 8,
 				paddingHorizontal: 6,
+				paddingLeft: canLike ? 6 : 0,
 			}}
 			onPress={onPress}
 		/>
 	);
 }
 
+/**
+ * Press this to toggle like
+ */
 function LikeButton() {
 	const { dto: item } = useAppStatusItem();
 	const [IsLoading, setIsLoading] = useState(false);
@@ -56,9 +69,12 @@ function LikeButton() {
 	const { theme } = useAppTheme();
 
 	async function _toggleLike() {
-		await postPub.toggleLike(item.uuid, setIsLoading);
+		postPub.toggleLike(item.uuid, setIsLoading).finally(() => {
+			Haptics.impactAsync(ImpactFeedbackStyle.Medium);
+		});
 	}
-	const FLAG = item.interaction.liked;
+
+	const FLAG = PostMiddleware.isLiked(item);
 
 	return (
 		<AppToggleIcon
@@ -82,6 +98,9 @@ function LikeButton() {
 	);
 }
 
+/**
+ * Press this to open composer (reply mode)
+ */
 function CommentButton() {
 	const { dto: item } = useAppStatusItem();
 	const { theme } = useAppTheme();
@@ -98,7 +117,7 @@ function CommentButton() {
 			activeIconId={'chatbox-outline'}
 			inactiveIconId={'chatbox-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a10}
+			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',
@@ -145,42 +164,27 @@ function ReactButton() {
 }
 
 function StatusInteractionButtons() {
-	const { dto: item } = useAppStatusItem();
-	const { client } = useAppApiClient();
 	const { acct } = useAppAcct();
 
-	function OnTranslationClicked() {
-		if (IsTranslateStateLoading) return;
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-		client.instances
-			.getTranslation(item.id, 'en')
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((e) => {
-				console.log(e);
-			});
-	}
-
-	const IS_TRANSLATED =
-		item.calculated.translationOutput !== undefined &&
-		item.calculated.translationOutput !== null;
+	// function OnTranslationClicked() {
+	// 	if (IsTranslateStateLoading) return;
+	// 	Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+	// 	client.instances
+	// 		.getTranslation(item.id, 'en')
+	// 		.then((res) => {
+	// 			console.log(res);
+	// 		})
+	// 		.catch((e) => {
+	// 			console.log(e);
+	// 		});
+	// }
+	//
+	// const IS_TRANSLATED =
+	// 	item.calculated.translationOutput !== undefined &&
+	// 	item.calculated.translationOutput !== null;
 
 	// loading state
-	const [IsTranslateStateLoading, setIsTranslateStateLoading] = useState(false);
-	const [BoostOptionsVisible, setBoostOptionsVisible] = useState(false);
-
-	function onTranslationLongPress() {
-		// TODO: implement instance translation
-		//  + fedilab libre translate endpoint.
-		if (
-			!process.env.EXPO_PUBLIC_OPENAI_API_KEY ||
-			process.env.EXPO_PUBLIC_OPENAI_API_KEY === ''
-		)
-			return;
-
-		// explain(item.id, null, setIsTranslateStateLoading);
-	}
+	// const [IsTranslateStateLoading, setIsTranslateStateLoading] = useState(false);
 
 	const IS_MISSKEY = ActivityPubService.misskeyLike(acct.driver);
 
@@ -191,10 +195,6 @@ function StatusInteractionButtons() {
 				<ShareButton />
 				<CommentButton />
 				{IS_MISSKEY && <ReactButton />}
-				{/*<BoostAdvanced*/}
-				{/*	IsVisible={BoostOptionsVisible}*/}
-				{/*	setIsVisible={setBoostOptionsVisible}*/}
-				{/*/>*/}
 			</View>
 			<View
 				style={{
@@ -216,7 +216,11 @@ function StatusInteraction() {
 				paddingHorizontal: 4,
 			}}
 		>
-			<PostStats />
+			<PostStats
+				style={{
+					marginBottom: appDimensions.timelines.sectionBottomMargin,
+				}}
+			/>
 			<StatusInteractionButtons />
 		</View>
 	);
@@ -229,6 +233,5 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginTop: 4,
 	},
 });

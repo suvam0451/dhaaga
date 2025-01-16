@@ -1,0 +1,14 @@
+{
+  "noun": {
+    "post_one": "Post",
+    "post_other": "Posts",
+    "user_one": "User",
+    "user_other": "Users"
+  },
+  "label": {
+    "mentions": "Mentions",
+    "chat": "Chat",
+    "social": "Social",
+    "updates": "Updates"
+  }
+}

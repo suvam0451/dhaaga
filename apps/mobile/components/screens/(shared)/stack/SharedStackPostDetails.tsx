@@ -56,6 +56,7 @@ function StatusContextComponent() {
 			<FlatList
 				data={children}
 				renderItem={({ item }) => <PostReply colors={[]} lookupId={item.id} />}
+				contentContainerStyle={{ marginTop: 24 }}
 			/>
 			<AppText.Medium
 				style={{ textAlign: 'center', marginVertical: 16 }}

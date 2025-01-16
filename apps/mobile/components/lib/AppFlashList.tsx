@@ -544,9 +544,7 @@ export class AppFlashList {
 		return (
 			<FlatList
 				data={listItems}
-				renderItem={({ item }) => {
-					return <FlatListRenderer item={item} />;
-				}}
+				renderItem={({ item }) => <FlatListRenderer item={item} />}
 				ListHeaderComponent={ListHeaderComponent}
 			/>
 		);

@@ -10,10 +10,11 @@ import {
 	AppThemingUtil,
 } from '../../utils/theming.util';
 import {
-	useAppAcct,
 	useAppApiClient,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '../../styles/AppFonts';
+import { TEXT_PARSING_VARIANT } from '../../types/app.types';
 
 type Props = {
 	content: string;
@@ -24,6 +25,8 @@ type Props = {
 	numberOfLines?: number;
 	acceptTouch?: boolean;
 	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
+	variant?: TEXT_PARSING_VARIANT;
+	nonInteractive?: boolean;
 };
 
 /**
@@ -35,6 +38,7 @@ type Props = {
  * @param numberOfLines
  * @param acceptTouch
  * @param emphasis
+ * @param nonInteractive makes the fragments not interactable
  */
 function useMfm({
 	content,
@@ -43,9 +47,10 @@ function useMfm({
 	numberOfLines,
 	acceptTouch,
 	emphasis,
+	variant,
+	nonInteractive,
 }: Props) {
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
 	const { driver } = useAppApiClient();
 
 	const defaultValue = useRef<any>({
@@ -67,7 +72,10 @@ function useMfm({
 	// since font remains same for each reusable component
 	const fontStyle: StyleProp<TextStyle> = {
 		color: AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis),
-		fontFamily: fontFamily,
+		fontFamily:
+			variant === 'displayName'
+				? APP_FONTS.INTER_600_SEMIBOLD
+				: APP_FONTS.INTER_400_REGULAR,
 	};
 
 	useEffect(() => {
@@ -103,13 +111,10 @@ function useMfm({
 
 		const { reactNodes, openAiContext } = MfmService.renderMfm(content, {
 			emojiMap: emojiMap || new Map(),
-			subdomain: acct?.server,
-			fontFamily,
-			emphasis,
+			emphasis: emphasis || APP_COLOR_PALETTE_EMPHASIS.A0,
 			colorScheme: theme,
-			style: {
-				fontFamily,
-			},
+			variant,
+			nonInteractive,
 		});
 		setData({
 			isLoaded: true,

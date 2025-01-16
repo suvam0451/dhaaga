@@ -10,7 +10,10 @@ import {
 } from '../_router/dto/api-responses.dto.js';
 import { BaseAccountsRouter } from '../default/accounts.js';
 import { GetPostsQueryDTO } from '../_interface.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
+import {
+	LibraryPromise,
+	PaginatedLibraryPromise,
+} from '../_router/routes/_types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import camelcaseKeys from 'camelcase-keys';
 import snakecaseKeys from 'snakecase-keys';
@@ -81,12 +84,30 @@ export class PleromaAccountsRouter
 		return { data: camelcaseKeys(data.data) as any };
 	}
 
-	async likes(opts: GetPostsQueryDTO): LibraryPromise<MegaStatus[]> {
-		const data = await this.client.client.getFavourites(opts);
-		if (data.status !== 200) {
-			return errorBuilder<MegaStatus[]>(data.statusText);
+	async likes(query: GetPostsQueryDTO): PaginatedLibraryPromise<MegaStatus[]> {
+		// NOTE: do not use Megalodon
+		// const data = await this.client.client.getFavourites(opts);
+		// if (data.status !== 200) {
+		// 	return errorBuilder<MegaStatus[]>(data.statusText);
+		// }
+		// return { data: data.data };
+
+		const { data: _data, error } =
+			await this.direct.getCamelCaseWithLinkPagination<MegaStatus[]>(
+				'/api/v1/favourites',
+				query,
+			);
+
+		if (!_data || error) {
+			return notImplementedErrorBuilder<{
+				data: MegaStatus[];
+				minId: string | null;
+				maxId: string | null;
+			}>();
 		}
-		return { data: data.data };
+		return {
+			data: _data,
+		};
 	}
 
 	async bookmarks(query: BookmarkGetQueryDTO): LibraryPromise<{

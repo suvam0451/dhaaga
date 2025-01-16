@@ -288,7 +288,7 @@ const migrations: MigrationEntry[] = [
 	},
 	{
 		version: 5,
-		versionCode: 'v0.12.0',
+		versionCode: 'v0.12.2',
 		name: 'profile organisation',
 		up: [
 			addColumn('profile', 'visible', 'int', true, 1),

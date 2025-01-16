@@ -1,84 +1,100 @@
-import WithAppPaginationContext, {
-	useAppPaginationContext,
-} from '../../../../states/usePagination';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import LoadingMore from '../../home/LoadingMore';
-import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
-import usePageRefreshIndicatorState from '../../../../states/usePageRefreshIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import useGetLikes from '../../../../hooks/api/accounts/useGetLikes';
-import WithAppTimelineDataContext, {
-	useAppTimelinePosts,
-} from '../../../../hooks/app/timelines/useAppTimelinePosts';
-import { useEffect } from 'react';
-import ActivityPubService from '../../../../services/activitypub.service';
-import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { AppFlashList } from '../../../lib/AppFlashList';
+import { useEffect, useState } from 'react';
+import { useAppDb } from '../../../../hooks/utility/global-state-extractors';
+import WithPostTimelineCtx, {
+	useTimelineDispatch,
+	useTimelineState,
+} from '../../../context-wrappers/WithPostTimeline';
+import {
+	AppTimelineReducerActionType,
+	TimelineFetchMode,
+} from '../../../../states/reducers/post-timeline.reducer';
+import useTimeline from '../../../common/timeline/api/useTimeline';
+import { PostTimeline } from '../../../data-views/PostTimeline';
 
-function Core() {
-	const { driver, acct } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			acct: o.acct,
-		})),
-	);
-	const { updateQueryCache, queryCacheMaxId, setMaxId } =
-		useAppPaginationContext();
+function DataView() {
+	const [Refreshing, setRefreshing] = useState(false);
+	const { db } = useAppDb();
 
-	const { data, fetchStatus, refetch } = useGetLikes({
-		limit: 10,
-		maxId: queryCacheMaxId,
-	});
-	const { addPosts, data: timelineData } = useAppTimelinePosts();
+	// state management
+	const State = useTimelineState();
+	const dispatch = useTimelineDispatch();
 
 	useEffect(() => {
-		if (data.length <= 0) return;
+		if (!db) return;
+		dispatch({
+			type: AppTimelineReducerActionType.INIT,
+			payload: {
+				db,
+			},
+		});
 
-		setMaxId(data[data.length - 1].getId());
-		addPosts(data);
-	}, [data, driver, acct?.server]);
+		dispatch({
+			type: AppTimelineReducerActionType.RESET_USING_QUERY,
+			payload: {
+				type: TimelineFetchMode.LIKES,
+			},
+		});
+	}, [db]);
 
-	const { visible, loading } = useLoadingMoreIndicatorState({ fetchStatus });
+	const { fetchStatus, data, status, refetch } = useTimeline({
+		type: State.feedType,
+		query: State.query,
+		opts: State.opts,
+		maxId: State.appliedMaxId,
+	});
+
+	useEffect(() => {
+		if (fetchStatus === 'fetching' || status !== 'success') return;
+		dispatch({
+			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			payload: data,
+		});
+	}, [fetchStatus]);
+
+	function loadMore() {
+		dispatch({
+			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+		});
+	}
+
+	/**
+	 * Composite Hook Collection
+	 */
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: data.length,
-		updateQueryCache,
-	});
-	const { onRefresh, refreshing } = usePageRefreshIndicatorState({
-		fetchStatus,
-		refetch,
+		itemCount: State.items.length,
+		updateQueryCache: loadMore,
 	});
 
-	if (!ActivityPubService.mastodonLike(driver)) {
-		return (
-			<WithAutoHideTopNavBar title={'My Liked Posts'} translateY={translateY}>
-				<FeatureUnsupported />;
-			</WithAutoHideTopNavBar>
-		);
+	function onRefresh() {
+		setRefreshing(true);
+		dispatch({
+			type: AppTimelineReducerActionType.RESET,
+		});
+		refetch().finally(() => {
+			setRefreshing(false);
+		});
 	}
 
 	return (
 		<WithAutoHideTopNavBar title={'My Liked Posts'} translateY={translateY}>
-			<AppFlashList.Post
+			<PostTimeline
+				data={State.items}
 				onScroll={onScroll}
-				data={timelineData}
-				paddingTop={50 + 4}
-				refreshing={refreshing}
+				refreshing={Refreshing}
 				onRefresh={onRefresh}
+				fetchStatus={fetchStatus}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
 		</WithAutoHideTopNavBar>
 	);
 }
 
 function MyLikes() {
 	return (
-		<WithAppPaginationContext>
-			<WithAppTimelineDataContext>
-				<Core />
-			</WithAppTimelineDataContext>
-		</WithAppPaginationContext>
+		<WithPostTimelineCtx>
+			<DataView />
+		</WithPostTimelineCtx>
 	);
 }
 

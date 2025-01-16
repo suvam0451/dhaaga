@@ -1,25 +1,32 @@
-import { Pressable, StyleProp, Text, View, ViewStyle } from 'react-native';
+import {
+	Pressable,
+	StyleProp,
+	Text,
+	View,
+	ViewStyle,
+	StyleSheet,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { memo, useMemo, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { Skeleton } from '@rneui/base';
-import useMfm from '../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_KNOWN_MODAL } from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
-	useAppApiClient,
 	useAppManager,
 	useAppModalState,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AppText } from '../../../lib/Text';
 import useAppNavigator from '../../../../states/useAppNavigator';
+import { AccountSavedUser } from '../../../../database/_schema';
+import { TextContentView } from '../TextContentView';
+import { AppParsedTextNodes } from '../../../../types/parsed-text.types';
+import MfmService from '../../../../services/mfm.service';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -82,30 +89,21 @@ function OriginalPosterSkeleton() {
 	);
 }
 
-export const OriginalPosterPostedByFragment = memo(function Foo({
-	displayNameRaw,
+export function OriginalPosterPostedByFragment({
+	displayNameParsed,
 	onClick,
 	emojiMap,
-	instanceUrl,
+	handle,
 	postedAt,
 }: {
-	displayNameRaw: string;
+	displayNameParsed: AppParsedTextNodes;
 	onClick: () => void;
 	emojiMap?: Map<string, string>;
-	instanceUrl: string;
+	handle: string;
 	visibility: string;
 	postedAt: Date;
 }) {
 	const { theme } = useAppTheme();
-	const { driver } = useAppApiClient();
-
-	const { content: UsernameWithEmojis } = useMfm({
-		content: displayNameRaw,
-		emojiMap: emojiMap,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-		numberOfLines: 1,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-	});
 
 	return (
 		<View
@@ -117,34 +115,116 @@ export const OriginalPosterPostedByFragment = memo(function Foo({
 		>
 			<View>
 				<Pressable onPress={onClick}>
-					<View>
-						{/* No need to parse for Bluesky */}
-						{driver === KNOWN_SOFTWARE.BLUESKY ? (
-							<AppText.Medium numberOfLines={1}>
-								{displayNameRaw}
-							</AppText.Medium>
-						) : UsernameWithEmojis ? (
-							UsernameWithEmojis
-						) : (
-							<Text> </Text>
-						)}
-					</View>
+					<TextContentView
+						tree={displayNameParsed}
+						variant={'displayName'}
+						mentions={[]}
+						emojiMap={emojiMap}
+						oneLine
+						style={{ marginBottom: -4 }}
+					/>
 					<Text
 						style={{
-							color: theme.secondary.a40,
+							color: theme.secondary.a20,
 							fontSize: 13,
 							fontFamily: APP_FONTS.INTER_400_REGULAR,
 							maxWidth: 196,
 						}}
 						numberOfLines={1}
 					>
-						{instanceUrl} • {DatetimeUtil.timeAgo(postedAt)}
+						{handle} • {DatetimeUtil.timeAgo(postedAt)}
 					</Text>
 				</Pressable>
 			</View>
 		</View>
 	);
-});
+}
+
+type SavedPostCreatedByProps = {
+	user: AccountSavedUser;
+	authoredAt: Date | string;
+	style?: StyleProp<ViewStyle>;
+};
+
+/**
+ * Author indicator for a post
+ *
+ * The local version must check online
+ * connectivity and resolve the handle
+ * prior t show information
+ * @constructor
+ */
+export function SavedPostCreatedBy({
+	user,
+	style,
+	authoredAt,
+}: SavedPostCreatedByProps) {
+	const UserDivRef = useRef(null);
+
+	// resolve handle and show modal
+	function onAvatarClicked() {}
+
+	// redirect to profile
+	function onProfilePressed() {}
+
+	const _displayNameParsed = MfmService.renderMfm(user.displayName, {
+		emojiMap: new Map(),
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+		colorScheme: null,
+		variant: 'displayName',
+		nonInteractive: false,
+	});
+
+	if (!user) return <View />;
+	return (
+		<View
+			style={[
+				{
+					alignItems: 'center',
+					flexDirection: 'row',
+					flexGrow: 1,
+					overflowX: 'hidden',
+					width: 'auto',
+					position: 'relative',
+				},
+				style,
+			]}
+		>
+			<View ref={UserDivRef}>
+				<TouchableOpacity
+					onPress={onAvatarClicked}
+					style={{
+						width: TIMELINE_PFP_SIZE,
+						height: TIMELINE_PFP_SIZE,
+						borderColor: 'rgba(200, 200, 200, 0.3)',
+						borderWidth: 1,
+						borderRadius: TIMELINE_PFP_SIZE / 2,
+						flexShrink: 1,
+					}}
+				>
+					{/* @ts-ignore */}
+					<Image
+						style={{
+							flex: 1,
+							padding: 2,
+							borderRadius: TIMELINE_PFP_SIZE / 2,
+						}}
+						source={{ uri: user.avatarUrl }}
+					/>
+				</TouchableOpacity>
+			</View>
+
+			<OriginalPosterPostedByFragment
+				onClick={onProfilePressed}
+				displayNameParsed={_displayNameParsed?.parsed || []}
+				handle={user.username}
+				postedAt={new Date(authoredAt)}
+				visibility={'N/A'}
+				emojiMap={new Map()}
+			/>
+		</View>
+	);
+}
 
 type OriginalPosterProps = {
 	style?: StyleProp<ViewStyle>;
@@ -154,7 +234,7 @@ type OriginalPosterProps = {
  * This is the author indicator for
  * the bottom-most post item
  */
-const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
+function PostCreatedBy({ style }: OriginalPosterProps) {
 	const { appManager } = useAppManager();
 	const { show, refresh } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { dto } = useAppStatusItem();
@@ -179,62 +259,57 @@ const PostCreatedBy = memo(({ style }: OriginalPosterProps) => {
 	}
 
 	function onProfileClicked() {
-		toProfile(dto.postedBy?.userId);
+		toProfile(PostMiddleware.getContentTarget(dto)?.postedBy?.userId);
 	}
 
-	return useMemo(() => {
-		if (!STATUS_DTO.postedBy) return <OriginalPosterSkeleton />;
-		return (
-			<View
-				style={[
-					{
-						alignItems: 'center',
-						flexDirection: 'row',
-						flexGrow: 1,
-						overflowX: 'hidden',
-						width: 'auto',
-						position: 'relative',
-					},
-					style,
-				]}
-			>
-				<View ref={UserDivRef}>
-					<TouchableOpacity
-						onPress={onAvatarClicked}
+	return (
+		<View style={[styles.authorContainerRoot, style]}>
+			<View ref={UserDivRef}>
+				<TouchableOpacity
+					onPress={onAvatarClicked}
+					style={styles.authorAvatarContainer}
+				>
+					{/* @ts-ignore */}
+					<Image
 						style={{
-							width: TIMELINE_PFP_SIZE,
-							height: TIMELINE_PFP_SIZE,
-							borderColor: 'rgba(200, 200, 200, 0.3)',
-							borderWidth: 1,
+							flex: 1,
+							padding: 2,
 							borderRadius: TIMELINE_PFP_SIZE / 2,
-							flexShrink: 1,
 						}}
-					>
-						{/* @ts-ignore */}
-						<Image
-							style={{
-								flex: 1,
-								backgroundColor: '#0553',
-								padding: 2,
-								borderRadius: TIMELINE_PFP_SIZE / 2,
-								overflow: 'hidden',
-							}}
-							source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
-						/>
-					</TouchableOpacity>
-				</View>
-
-				<OriginalPosterPostedByFragment
-					onClick={onProfileClicked}
-					displayNameRaw={STATUS_DTO.postedBy.displayName}
-					instanceUrl={STATUS_DTO.postedBy.handle}
-					postedAt={new Date(STATUS_DTO.createdAt)}
-					visibility={STATUS_DTO.visibility}
-					emojiMap={STATUS_DTO.calculated.emojis}
-				/>
+						source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
+					/>
+				</TouchableOpacity>
 			</View>
-		);
-	}, [STATUS_DTO.postedBy, style]);
-});
+
+			<OriginalPosterPostedByFragment
+				onClick={onProfileClicked}
+				displayNameParsed={STATUS_DTO.postedBy.parsedDisplayName}
+				handle={STATUS_DTO.postedBy.handle}
+				postedAt={new Date(STATUS_DTO.createdAt)}
+				visibility={STATUS_DTO.visibility}
+				emojiMap={STATUS_DTO.calculated.emojis}
+			/>
+		</View>
+	);
+}
 
 export default PostCreatedBy;
+
+const styles = StyleSheet.create({
+	authorContainerRoot: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		flexGrow: 1,
+		overflowX: 'hidden',
+		width: 'auto',
+		position: 'relative',
+	}, // with border decoration
+	authorAvatarContainer: {
+		width: TIMELINE_PFP_SIZE,
+		height: TIMELINE_PFP_SIZE,
+		borderColor: 'rgba(200, 200, 200, 0.3)',
+		borderWidth: 1,
+		borderRadius: TIMELINE_PFP_SIZE / 2,
+		flexShrink: 1,
+	},
+});

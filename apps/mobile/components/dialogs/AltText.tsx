@@ -1,15 +1,14 @@
 import { RneuiDialogProps } from './_types';
-import { Text, View } from 'react-native';
-import { APP_FONT } from '../../styles/AppTheme';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { View } from 'react-native';
 import AppDialogContainer from '../containers/AppDialogContainer';
-import { memo } from 'react';
+import { AppText } from '../lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
 type Props = {
 	text: string;
 } & RneuiDialogProps;
 
-const AltText = memo(function Foo({ IsVisible, setIsVisible, text }: Props) {
+function AltText({ IsVisible, setIsVisible, text }: Props) {
 	return (
 		<AppDialogContainer IsVisible={IsVisible} setIsVisible={setIsVisible}>
 			<View
@@ -22,36 +21,28 @@ const AltText = memo(function Foo({ IsVisible, setIsVisible, text }: Props) {
 					marginBottom: 4,
 				}}
 			>
-				<View>
-					<Text
-						style={{
-							color: APP_FONT.MONTSERRAT_BODY,
-							fontFamily: 'Inter-Bold',
-							fontSize: 20,
-						}}
-					>
-						Alt Text
-					</Text>
-				</View>
+				<AppText.SemiBold
+					style={{
+						fontSize: 20,
+					}}
+				>
+					Alt Text
+				</AppText.SemiBold>
 
-				<View style={{ padding: 8, marginRight: -8, marginTop: -12 }}>
-					<MaterialCommunityIcons
-						name="text-to-speech"
-						size={28}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
-				</View>
+				{/*<View style={{ padding: 8, marginRight: -8, marginTop: -12 }}>*/}
+				{/*	<MaterialCommunityIcons*/}
+				{/*		name="text-to-speech"*/}
+				{/*		size={28}*/}
+				{/*		color={APP_FONT.MONTSERRAT_BODY}*/}
+				{/*	/>*/}
+				{/*</View>*/}
 			</View>
 
-			<Text
-				style={{
-					color: APP_FONT.MONTSERRAT_BODY,
-				}}
-			>
+			<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
 				{text}
-			</Text>
+			</AppText.Normal>
 		</AppDialogContainer>
 	);
-});
+}
 
 export default AltText;

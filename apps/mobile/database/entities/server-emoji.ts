@@ -1,9 +1,9 @@
 import * as SQLite from 'expo-sqlite';
-import { APP_DB } from '../repositories/_var';
-import { Server, ServerEmoji } from '../_schema';
+import { KnownServer, ServerEmoji } from '../_schema';
 import { Result } from '../../utils/result';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
+import { APP_DB } from '../../types/db.types';
 
 export class Repo {
 	/**
@@ -28,13 +28,13 @@ export class Repo {
 }
 
 class Service {
-	static find(server: Server, identifier: string): Result<ServerEmoji> {
+	static find(server: KnownServer, identifier: string): Result<ServerEmoji> {
 		return Repo.find(server.id, identifier);
 	}
 
 	static async upsertMany(
 		db: SQLiteDatabase,
-		server: Server,
+		server: KnownServer,
 		items: InstanceApi_CustomEmojiDTO[],
 	) {
 		for await (const item of items) {

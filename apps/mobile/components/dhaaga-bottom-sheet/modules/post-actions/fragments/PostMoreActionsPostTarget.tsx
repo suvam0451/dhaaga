@@ -106,7 +106,8 @@ const PostMoreActionsPostTarget = memo(
 		const { show, setCtx } = useAppBottomSheet_Improved();
 
 		const IS_BOOKMARKED = _target?.interaction.bookmarked;
-		const IS_LIKED = _target?.interaction.liked;
+		const IS_LIKED = PostMiddleware.isLiked(_target);
+		const IS_SHARED = PostMiddleware.isShared(_target);
 		const IS_REACTED = _target?.stats?.reactions?.every((o) => o.me === false);
 
 		let ReactionCta = 'Add Reaction';

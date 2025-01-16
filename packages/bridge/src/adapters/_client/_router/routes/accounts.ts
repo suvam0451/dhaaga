@@ -164,7 +164,13 @@ export interface AccountRoute {
 	 */
 	lists(id: string): LibraryPromise<MastoList[]>;
 
-	likes(opts: GetPostsQueryDTO): LibraryPromise<MastoStatus[] | MegaStatus[]>;
+	likes(opts: GetPostsQueryDTO): Promise<
+		LibraryResponse<{
+			data: MastoStatus[] | MegaStatus[];
+			minId?: string | null;
+			maxId?: string | null;
+		}>
+	>;
 
 	bookmarks(query: BookmarkGetQueryDTO): Promise<
 		LibraryResponse<{
@@ -175,7 +181,11 @@ export interface AccountRoute {
 	>;
 
 	followers(query: FollowerGetQueryDTO): LibraryPromise<
-		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
+		| {
+				data: MastoAccount[];
+				minId?: string | null;
+				maxId?: string | null;
+		  }
 		| {
 				data: Endpoints['users/followers']['res'];
 				minId?: string | null;
@@ -185,7 +195,11 @@ export interface AccountRoute {
 	>;
 
 	followings(query: FollowerGetQueryDTO): LibraryPromise<
-		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
+		| {
+				data: MastoAccount[];
+				minId?: string | null;
+				maxId?: string | null;
+		  }
 		| {
 				data: Endpoints['users/followers']['res'];
 				minId?: string | null;

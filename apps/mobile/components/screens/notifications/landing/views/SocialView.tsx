@@ -16,7 +16,7 @@ const SocialView = memo(() => {
 
 	return (
 		<AppNotificationViewContainer
-			data={data.data}
+			data={data.items}
 			tabType={APP_LANDING_PAGE_TYPE.SOCIAL}
 			menuItems={[
 				{

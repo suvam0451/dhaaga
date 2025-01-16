@@ -10,6 +10,7 @@ import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import {
 	AppBskyActorGetProfile,
+	AppBskyFeedGetActorLikes,
 	AppBskyFeedGetAuthorFeed,
 	AppBskyGraphGetFollowers,
 	AppBskyGraphGetFollows,
@@ -36,9 +37,11 @@ import {
 	DhaagaErrorCode,
 	LibraryResponse,
 } from '../../../types/result.types.js';
+import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AtpSessionData;
+
 	constructor(dto: AtpSessionData) {
 		this.dto = dto;
 	}
@@ -134,8 +137,31 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	likes(opts: GetPostsQueryDTO): LibraryPromise<MastoStatus[] | MegaStatus[]> {
-		return Promise.resolve(undefined) as any;
+	likes(query: GetPostsQueryDTO) {
+		return errorBuilder<any>(DhaagaErrorCode.FEATURE_UNSUPPORTED) as any;
+	}
+
+	async atProtoLikes(
+		actor: string,
+		{
+			limit,
+			cursor,
+		}: {
+			limit: number;
+			cursor: string | undefined;
+		},
+	): LibraryPromise<AppBskyFeedGetActorLikes.OutputSchema> {
+		const agent = getBskyAgent(this.dto);
+		return InvokeBskyFunction<AppBskyFeedGetActorLikes.OutputSchema>(
+			'getActorLikes',
+			agent.getActorLikes,
+			agent.app.bsky.feed,
+			{
+				actor,
+				cursor,
+				limit,
+			},
+		);
 	}
 
 	lists(id: string): LibraryPromise<MastoList[]> {

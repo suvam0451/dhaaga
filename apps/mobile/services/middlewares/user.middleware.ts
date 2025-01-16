@@ -9,7 +9,8 @@ import {
 	AppUserObject,
 	appUserObjectSchema,
 } from '../../types/app-user.types';
-import { PostMiddleware } from './post.middleware';
+import MfmService from '../mfm.service';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 
 export class UserMiddleware {
 	static rawToInterface<T>(
@@ -48,10 +49,28 @@ export class UserMiddleware {
 		// prevent infinite recursion
 		if (!input || !input.getId()) return null;
 
+		const parsedDisplayName = MfmService.renderMfm(input.getDisplayName(), {
+			emojiMap: input.getEmojiMap(),
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+			colorScheme: null,
+			variant: 'displayName',
+			nonInteractive: false,
+		});
+
+		const parsedDescription = MfmService.renderMfm(input.getDescription(), {
+			emojiMap: input.getEmojiMap(),
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+			colorScheme: null,
+			variant: 'bodyContent',
+			nonInteractive: false,
+		});
+
 		const dto: AppUserObject = {
 			id: input.getId(),
 			displayName: input.getDisplayName(),
+			parsedDisplayName: parsedDisplayName?.parsed || [],
 			description: input.getDescription() || '',
+			parsedDescription: parsedDescription?.parsed || [],
 			avatarUrl: input.getAvatarUrl(),
 			banner: input.getBannerUrl(),
 			handle: ActivitypubHelper.getHandle(
@@ -73,11 +92,11 @@ export class UserMiddleware {
 			},
 			calculated: {
 				emojis: input.getEmojiMap(), // misskey only
-				pinnedPosts: PostMiddleware.deserialize<unknown[]>(
-					input.getPinnedNotes(),
-					driver,
-					server,
-				),
+				// pinnedPosts: PostMiddleware.deserialize<unknown[]>(
+				// 	input.getPinnedNotes(),
+				// 	driver,
+				// 	server,
+				// ),
 			},
 			relationship: APP_USER_DEFAULT_RELATIONSHIP,
 		};

@@ -3,16 +3,13 @@ import {
 	MastodonRestClient,
 	MisskeyRestClient,
 	UnknownRestClient,
+	PleromaRestClient,
+	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
-import { PleromaRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { RandomUtil } from '../utils/random.utils';
 import AppSessionManager from './session/app-session.service';
-import {
-	KnownServer,
-	Profile,
-	ProfilePinnedTimeline,
-} from '../database/_schema';
+import { KnownServer, Profile } from '../database/_schema';
 
 class ActivityPubService {
 	/**
@@ -70,6 +67,7 @@ class ActivityPubService {
 			KNOWN_SOFTWARE.SHARKEY,
 			KNOWN_SOFTWARE.FIREFISH,
 			KNOWN_SOFTWARE.ICESHRIMP,
+			KNOWN_SOFTWARE.CHERRYPICK,
 		].includes(driver as KNOWN_SOFTWARE);
 	}
 
@@ -186,15 +184,7 @@ class ActivityPubService {
 		localState: boolean,
 		domain: KNOWN_SOFTWARE,
 	) {
-		if (
-			[
-				KNOWN_SOFTWARE.MISSKEY,
-				KNOWN_SOFTWARE.SHARKEY,
-				KNOWN_SOFTWARE.FIREFISH,
-			].includes(domain as any)
-		) {
-			return null;
-		}
+		if (ActivityPubService.misskeyLike(domain)) return null;
 
 		if (localState) {
 			const { error } = await client.statuses.removeLike(id);
@@ -219,13 +209,7 @@ class ActivityPubService {
 		localState: boolean,
 		domain: KNOWN_SOFTWARE,
 	) {
-		if (
-			[
-				KNOWN_SOFTWARE.MISSKEY,
-				KNOWN_SOFTWARE.SHARKEY,
-				KNOWN_SOFTWARE.FIREFISH,
-			].includes(domain)
-		) {
+		if (ActivityPubService.misskeyLike(domain)) {
 			if (localState) {
 				const { error } = await (client as MisskeyRestClient).statuses.unrenote(
 					id,
@@ -357,9 +341,7 @@ class ActivityPubService {
 	 * @param manager the app level session manager, with db connection
 	 * @param profile
 	 */
-	static createDefaultPins(manager: AppSessionManager, profile: Profile) {
-		ProfilePinnedTimeline;
-	}
+	static createDefaultPins(manager: AppSessionManager, profile: Profile) {}
 }
 
 export default ActivityPubService;

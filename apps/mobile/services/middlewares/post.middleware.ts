@@ -15,6 +15,10 @@ import { z } from 'zod';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import AppPrivacySettingsService from '../app-settings/app-settings-privacy.service';
 import { SQLiteDatabase } from 'expo-sqlite';
+import { AccountSavedPost } from '../../database/_schema';
+import { DataSource } from '../../database/dataSource';
+import ActivityPubService from '../activitypub.service';
+import ActivitypubService from '../activitypub.service';
 
 /**
  * converts unified interfaces into
@@ -90,8 +94,10 @@ export class PostMiddleware {
 		return new PostMiddleware(ref, domain, subdomain);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	export(): AppPostObject {
-		// console.log('step 1/4');
 		// to prevent infinite recursion
 		if (!this.statusI || !this.statusI.getId()) return null;
 
@@ -108,7 +114,6 @@ export class PostMiddleware {
 					this.subdomain,
 				).export()
 			: null;
-		// console.log('step 2/4');
 
 		/**
 		 * Misskey Compat
@@ -127,7 +132,6 @@ export class PostMiddleware {
 						this.subdomain,
 					).export()
 				: null;
-		// console.log('step 3/4');
 
 		let rootI: z.infer<typeof ActivityPubStatusItemDto> =
 			this.statusI.hasRootAvailable()
@@ -140,20 +144,16 @@ export class PostMiddleware {
 						this.subdomain,
 					).export()
 				: null;
-		// console.log('step 4/4');
 
 		const dto: AppPostObject =
 			IS_REPLY &&
-			[
-				KNOWN_SOFTWARE.MISSKEY,
-				KNOWN_SOFTWARE.FIREFISH,
-				KNOWN_SOFTWARE.SHARKEY,
-				KNOWN_SOFTWARE.BLUESKY,
-			].includes(this.domain as any) /**
-			 * 	Replies in Misskey is actually present in the
-			 * 	"reply" object, instead of root. へんですね?
-			 */
-				? {
+			(ActivityPubService.misskeyLike(this.domain) ||
+				ActivityPubService.blueskyLike(this.domain))
+				? /**
+					 * 	Replies in Misskey is actually present in the
+					 * 	"reply" object, instead of root. へんですね?
+					 */
+					{
 						...AppStatusDtoService.export(
 							this.statusI,
 							this.domain,
@@ -180,6 +180,39 @@ export class PostMiddleware {
 			return null;
 		}
 
+		return data as AppPostObject;
+	}
+
+	/**
+	 * Converts a savedPost (post saved locally
+	 * on the database) to in-app dto object
+	 *
+	 * Notably, no need to look for
+	 * shares/parents/root/quotes/embeds
+	 * @param db
+	 * @param input
+	 * @param driver
+	 * @param server
+	 */
+	static databaseToJson(
+		db: DataSource,
+		input: AccountSavedPost,
+		{
+			driver,
+			server,
+		}: {
+			driver: KNOWN_SOFTWARE | string;
+			server: string;
+		},
+	): AppPostObject {
+		const parsed = AppStatusDtoService.exportLocal(db, input, driver, server);
+
+		const { data, error, success } = appPostObjectSchema.safeParse(parsed);
+		if (!success) {
+			console.log('[ERROR]: failed to convert local savedPost', error);
+			console.log('[INFO]: input used', input);
+			return null;
+		}
 		return data as AppPostObject;
 	}
 
@@ -215,16 +248,13 @@ export class PostMiddleware {
 
 		const dto: AppPostObject =
 			HAS_PARENT &&
-			[
-				KNOWN_SOFTWARE.MISSKEY,
-				KNOWN_SOFTWARE.FIREFISH,
-				KNOWN_SOFTWARE.SHARKEY,
-				KNOWN_SOFTWARE.BLUESKY,
-			].includes(driver as KNOWN_SOFTWARE) /**
-			 * 	Replies in Misskey is actually present in the
-			 * 	"reply" object, instead of root. へんですね?
-			 */
-				? {
+			(ActivityPubService.blueskyLike(driver) ||
+				ActivitypubService.misskeyLike(driver))
+				? /**
+					 * 	Replies in Misskey is actually present in the
+					 * 	"reply" object, instead of root. へんですね?
+					 */
+					{
 						...AppStatusDtoService.export(input, driver, server),
 						boostedFrom: sharedFrom,
 						replyTo,
@@ -311,6 +341,50 @@ export class PostMiddleware {
 	}
 
 	/**
+	 * Deserializes (skips returning the interface step)
+	 * locally saved ap/at proto post objects
+	 * @param db database reference
+	 * @param input raw ap/at proto post object
+	 * @param driver being used to deserialize this object
+	 * @param server
+	 */
+	static deserializeLocal<T>(
+		db: DataSource,
+		input: T | T[],
+		driver: string | KNOWN_SOFTWARE,
+		server: string,
+	): T extends unknown[] ? AppPostObject[] : AppPostObject {
+		if (input instanceof Array) {
+			return input
+				.map((o) =>
+					PostMiddleware.databaseToJson(db, o as AccountSavedPost, {
+						driver,
+						server,
+					}),
+				)
+				.filter((o) => !!o) as unknown as T extends unknown[]
+				? AppPostObject[]
+				: never;
+		} else {
+			try {
+				if (!input) return null;
+				return PostMiddleware.databaseToJson(db, input as AccountSavedPost, {
+					driver,
+					server,
+				}) as unknown as T extends unknown[] ? never : AppPostObject;
+			} catch (e) {
+				console.log(
+					'[ERROR]: failed to deserialize post object',
+					e,
+					'input:',
+					input,
+				);
+				return null;
+			}
+		}
+	}
+
+	/**
 	 * Since the share item itself
 	 * is a protocol object, the underlying
 	 * post target with the actual content needs to
@@ -331,13 +405,30 @@ export class PostMiddleware {
 			return input;
 		}
 		return input.meta.isBoost
-			? input.content.raw
+			? input.content.raw || input.content.media.length > 0
 				? input
 				: input.boostedFrom
 			: input;
 	}
 
+	/**
+	 * ------ Utility functions follow ------
+	 */
+
 	static isQuoteObject(input: AppPostObject) {
-		return input?.meta?.isBoost && input?.content?.raw;
+		return (
+			input?.meta?.isBoost &&
+			(input?.content?.raw || input?.content?.media?.length > 0)
+		);
+	}
+
+	static isLiked(input: AppPostObject) {
+		if (!input) return false;
+		return !!input.atProto?.viewer?.like || input.interaction.liked;
+	}
+
+	static isShared(input: AppPostObject) {
+		if (!input) return false;
+		return !!input.atProto?.viewer?.repost || input.interaction.boosted;
 	}
 }

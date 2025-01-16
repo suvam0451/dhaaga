@@ -11,14 +11,22 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { ActivityPubReactionStateDto } from '../services/approto/activitypub-reactions.service';
 import { RandomUtil } from '../utils/random.utils';
 import { UserMiddleware } from '../services/middlewares/user.middleware';
+import { DataSource } from '../database/dataSource';
+import { AccountSavedPost } from '../database/_schema';
+import MfmService from '../services/mfm.service';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../utils/theming.util';
+import { TextParserService } from '../services/text-parser.service';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
 	avatarUrl: z.string(),
 	displayName: z.string().nullable().optional(),
+	parsedDisplayName: z.array(z.any()),
 	handle: z.string().regex(/^@.*?@?.*?$/),
 	instance: z.string(),
 });
+
+export type AppPostAuthorType = z.infer<typeof ActivityPubBoostedByDto>;
 
 export const AppActivityPubMediaDto = z.object({
 	url: z.string(),
@@ -63,6 +71,7 @@ export const ActivityPubStatusItemDto = z.object({
 	postedBy: ActivityPubBoostedByDto,
 	content: z.object({
 		raw: z.string().nullable().optional(),
+		parsed: z.array(z.any()),
 		media: z.array(AppActivityPubMediaDto),
 	}),
 	interaction: z.object({
@@ -84,6 +93,13 @@ export const ActivityPubStatusItemDto = z.object({
 				url: z.string().url(),
 			}),
 		),
+		mentions: z.array(
+			z.object({
+				text: z.string(),
+				url: z.string().nullable(),
+				resolved: z.boolean(),
+			}),
+		),
 	}),
 	meta: z.object({
 		sensitive: z.boolean(),
@@ -92,8 +108,7 @@ export const ActivityPubStatusItemDto = z.object({
 		isReply: z.boolean(),
 		mentions: z.array(
 			z.object({
-				id: z.string(),
-				// lazy loaded for misskey forks
+				id: z.string(), // lazy loaded for misskey forks
 				handle: z.string().optional(),
 				url: z.string().optional(),
 			}),
@@ -124,20 +139,15 @@ export const ActivityPubStatusItemDto = z.object({
 });
 
 export const ActivityPubStatusLevelTwo = ActivityPubStatusItemDto.extend({
-	replyTo: ActivityPubStatusItemDto.nullable().optional(),
-	// Misskey/Firefish natively supports quote boosting
-	boostedFrom: ActivityPubStatusItemDto.nullable().optional(),
-	// Pleroma feature
+	replyTo: ActivityPubStatusItemDto.nullable().optional(), // Misskey/Firefish natively supports quote boosting
+	boostedFrom: ActivityPubStatusItemDto.nullable().optional(), // Pleroma feature
 	quotedFrom: ActivityPubStatusItemDto.nullable().optional(),
 });
 
 export const appPostObjectSchema = ActivityPubStatusLevelTwo.extend({
-	replyTo: ActivityPubStatusLevelTwo.nullable().optional(),
-	// Misskey/Firefish natively supports quote boosting
-	boostedFrom: ActivityPubStatusLevelTwo.nullable().optional(),
-	// Pleroma feature
-	quotedFrom: ActivityPubStatusLevelTwo.nullable().optional(),
-	// Bluesky feature
+	replyTo: ActivityPubStatusLevelTwo.nullable().optional(), // Misskey/Firefish natively supports quote boosting
+	boostedFrom: ActivityPubStatusLevelTwo.nullable().optional(), // Pleroma feature
+	quotedFrom: ActivityPubStatusLevelTwo.nullable().optional(), // Bluesky feature
 	rootPost: ActivityPubStatusItemDto.nullable().optional(),
 });
 
@@ -164,21 +174,93 @@ export class AppStatusDtoService {
 		this.ref = ref;
 	}
 
+	static exportLocal(
+		db: DataSource,
+		input: AccountSavedPost,
+		driver: KNOWN_SOFTWARE | string,
+		server: string,
+	) {
+		if (!input) return null;
+
+		const medias = input.medias || [];
+		const height = MediaService.calculateHeightForLocalMediaCarousal(medias, {
+			maxWidth: Dimensions.get('window').width - 32,
+			maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
+		});
+		const user = input.savedUser;
+		let handle =
+			driver === KNOWN_SOFTWARE.BLUESKY
+				? `@${user.username}`
+				: ActivitypubHelper.getHandle(user.username, server);
+
+		return {
+			uuid: RandomUtil.nanoId(),
+			id: input.identifier,
+			visibility: 'N/A',
+			createdAt: input.authoredAt,
+			postedBy: {
+				userId: user.identifier,
+				avatarUrl: user.avatarUrl,
+				displayName: user.displayName,
+				handle: handle,
+				instance: user.remoteServer,
+			},
+			content: {
+				raw: input.textContent,
+				media:
+					medias?.map((o) => ({
+						height: o.height,
+						width: o.width,
+						alt: o.alt,
+						type: o.mimeType,
+						url: o.url,
+						previewUrl: o.previewUrl,
+					})) || [],
+			},
+			stats: {
+				replyCount: -1,
+				boostCount: -1,
+				likeCount: -1,
+				reactions: [],
+			},
+			interaction: {
+				bookmarked: false,
+				boosted: false,
+				liked: false,
+			},
+			calculated: {
+				emojis: new Map([]),
+				mediaContainerHeight: height,
+				reactionEmojis: [],
+				mentions: TextParserService.findMentions(input.textContent),
+			},
+			meta: {
+				sensitive: input.sensitive,
+				cw: input.spoilerText,
+				isBoost: false,
+				isReply: false,
+				mentions: [],
+				cid: input.identifier,
+				uri: input.identifier,
+			},
+			state: {
+				isBookmarkStateFinal: true,
+			},
+		} as AppPostObject;
+	}
+
 	static export(
 		input: StatusInterface,
 		domain: string,
 		subdomain: string,
-	): z.infer<typeof ActivityPubStatusItemDto> {
+	): AppPostObject {
 		if (!input) return null;
 
-		const mediaAttachments = input?.getMediaAttachments();
-		const height = MediaService.calculateHeightForMediaContentCarousal(
-			mediaAttachments,
-			{
-				deviceWidth: Dimensions.get('window').width - 32,
-				maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
-			},
-		);
+		const medias = input?.getMediaAttachments();
+		const height = MediaService.calculateHeightForMediaContentCarousal(medias, {
+			maxWidth: Dimensions.get('window').width - 32,
+			maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
+		});
 
 		const user = UserMiddleware.rawToInterface(input.getUser(), domain);
 		let handle =
@@ -195,6 +277,27 @@ export class AppStatusDtoService {
 			KNOWN_SOFTWARE.AKKOMA,
 		].includes(domain as any);
 
+		const emojiMap = new Map<string, string>([
+			// @ts-ignore-next-line
+			...user.getEmojiMap(), // @ts-ignore-next-line
+			...input.getCachedEmojis(),
+		]);
+
+		const parsedContent = MfmService.renderMfm(input.getContent(), {
+			emojiMap,
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+			colorScheme: null,
+			variant: 'bodyContent',
+			nonInteractive: false,
+		});
+		const parsedDisplayName = MfmService.renderMfm(user.getDisplayName(), {
+			emojiMap,
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+			colorScheme: null,
+			variant: 'displayName',
+			nonInteractive: false,
+		});
+
 		return {
 			uuid: RandomUtil.nanoId(),
 			id: input.getId(),
@@ -204,13 +307,15 @@ export class AppStatusDtoService {
 				userId: user.getId(),
 				avatarUrl: user.getAvatarUrl(),
 				displayName: user.getDisplayName(),
+				parsedDisplayName: parsedDisplayName?.parsed || [],
 				handle: handle,
 				instance: user.getInstanceUrl() || subdomain,
 			},
 			content: {
 				raw: input.getContent(),
+				parsed: parsedContent?.parsed || [],
 				media:
-					mediaAttachments?.map((o) => ({
+					medias?.map((o) => ({
 						height: o.getHeight(),
 						width: o.getWidth(),
 						alt: o.getAltText(),
@@ -234,12 +339,12 @@ export class AppStatusDtoService {
 			calculated: {
 				emojis: new Map([
 					// @ts-ignore-next-line
-					...user.getEmojiMap(),
-					// @ts-ignore-next-line
+					...user.getEmojiMap(), // @ts-ignore-next-line
 					...input.getCachedEmojis(),
 				]),
 				mediaContainerHeight: height,
 				reactionEmojis: input.getReactionEmojis(),
+				mentions: TextParserService.findMentions(input.getContent()),
 			},
 			meta: {
 				sensitive: input.getIsSensitive(),
@@ -263,6 +368,6 @@ export class AppStatusDtoService {
 						? (input as BlueskyStatusAdapter).getViewer()
 						: undefined,
 			},
-		};
+		} as AppPostObject;
 	}
 }

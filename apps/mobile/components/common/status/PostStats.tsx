@@ -14,6 +14,7 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 
 type StatItemProps = {
 	count: number;
@@ -59,6 +60,9 @@ export const StatItem = memo(
 	},
 );
 
+type PostStatsProps = {
+	style?: StyleProp<ViewStyle>;
+};
 /**
  * Show metrics for a post
  *
@@ -66,22 +70,19 @@ export const StatItem = memo(
  * vertical screen estate
  * @constructor
  */
-const PostStats = memo(function Foo({
-	style,
-}: {
-	style?: StyleProp<ViewStyle>;
-}) {
+function PostStats({ style }: PostStatsProps) {
 	const { show, setCtx } = useAppBottomSheet_Improved();
 	const { dto } = useAppStatusItem();
+
 	const LIKE_COUNT = dto.stats.likeCount;
 	const REPLY_COUNT = dto.stats.replyCount;
 	const SHARE_COUNT = dto.stats.boostCount;
 
-	const LIKED = dto.interaction.liked;
-	const SHARED = dto.interaction.boosted;
+	const LIKED = PostMiddleware.isLiked(dto);
+	const SHARED = PostMiddleware.isShared(dto);
 
-	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1)
-		return <View></View>;
+	// No stat to show
+	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1) return <View />;
 
 	function onPressLikeCounter() {
 		setCtx({ uuid: dto.uuid });
@@ -122,7 +123,9 @@ const PostStats = memo(function Foo({
 			/>
 		</View>
 	);
-});
+}
+
+export default PostStats;
 
 const styles = StyleSheet.create({
 	container: {
@@ -139,4 +142,3 @@ const styles = StyleSheet.create({
 		marginHorizontal: 2,
 	},
 });
-export default PostStats;

@@ -7,8 +7,6 @@ import {
 	ViewStyle,
 } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { APP_ICON_ENUM, AppIcon } from './Icon';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { Loader } from './Loader';
@@ -45,11 +43,7 @@ export function AppMenuItem({
 	activeLabel,
 	activeDesc,
 }: AppMenuOptionType_New) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	const _label = active ? activeLabel || label : label;
 	const _desc = active ? activeDesc || desc : desc;

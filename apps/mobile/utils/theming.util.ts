@@ -111,6 +111,7 @@ export class AppThemingUtil {
 		store: ColorRangeType,
 		emphasis: APP_COLOR_PALETTE_EMPHASIS,
 	) {
+		if (!store) return '#121212';
 		try {
 			if (!emphasis) return store[APP_COLOR_PALETTE_EMPHASIS.A0];
 			return store[emphasis];

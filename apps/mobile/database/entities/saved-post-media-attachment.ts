@@ -28,16 +28,20 @@ class Service {
 			const match = allMediaAttachments.find((o) => o.url === media.url);
 			if (match) {
 				touched.add(match.id);
-				db.savedPostMediaAttachment.updateById(match.id, {
-					previewUrl: media.previewUrl,
-					url: media.url,
-					alt: media.alt,
-					height: media.height,
-					width: media.width,
-					mimeType: media.type,
-					active: true,
-					savedPostId: savedPost.id,
-				});
+				try {
+					db.savedPostMediaAttachment.updateById(match.id, {
+						previewUrl: media.previewUrl,
+						url: media.url,
+						alt: media.alt,
+						height: media.height,
+						width: media.width,
+						mimeType: media.type,
+						active: true,
+						savedPostId: savedPost.id,
+					});
+				} catch (e) {
+					console.log('[WARN]: update attempt failed', e, media);
+				}
 			} else {
 				db.savedPostMediaAttachment.insert({
 					uuid: RandomUtil.nanoId(),

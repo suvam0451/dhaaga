@@ -17,6 +17,7 @@ import {
 } from 'react-native-gesture-handler';
 import useCircularList from '../state/useCircularList';
 import useGalleryDims from '../../../../hooks/app/useGalleryDims';
+import { appDimensions } from '../../../../styles/dimensions';
 
 export type AppImageCarouselItem = {
 	src: string;
@@ -153,7 +154,12 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 
 	return (
 		<GestureDetector gesture={fling}>
-			<View onLayout={onLayoutChanged}>
+			<View
+				style={{
+					marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
+				}}
+				onLayout={onLayoutChanged}
+			>
 				<AppImageCarouselItem
 					src={item.src}
 					type={item.type}
@@ -161,12 +167,7 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 					parentWidth={ContainerWidth}
 					calculatedHeight={ImageHeight}
 				/>
-				<CarousalIndicatorOverlay
-					index={Pointer}
-					totalCount={items.length}
-					top={8}
-					right={0}
-				/>
+				<CarousalIndicatorOverlay index={Pointer} total={items.length} />
 				<AltTextOverlay altText={item.altText} />
 			</View>
 		</GestureDetector>

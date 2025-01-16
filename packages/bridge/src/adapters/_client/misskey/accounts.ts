@@ -17,7 +17,6 @@ import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import type {
 	MastoAccount,
 	MastoRelationship,
-	MastoStatus,
 } from '../../../types/mastojs.types.js';
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
 import {
@@ -164,7 +163,7 @@ export class MisskeyAccountsRouter
 		}
 	}
 
-	async likes(opts: GetPostsQueryDTO): LibraryPromise<MastoStatus[]> {
+	async likes(query: GetPostsQueryDTO): Promise<any> {
 		return errorBuilder(DhaagaErrorCode.FEATURE_UNSUPPORTED);
 	}
 

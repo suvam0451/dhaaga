@@ -1,11 +1,17 @@
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
-import { MutableRefObject, useRef, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { useState } from 'react';
 import useMfm from '../../hooks/useMfm';
 import ReplyOwner from '../user/ReplyOwner';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { APP_FONT } from '../../../styles/AppTheme';
 import { useAppStatusContextDataContext } from '../../../hooks/api/statuses/WithAppStatusContextData';
-import { AppThemingUtil } from '../../../utils/theming.util';
+import {
+	APP_COLOR_PALETTE_EMPHASIS,
+	AppThemingUtil,
+} from '../../../utils/theming.util';
+import { appDimensions } from '../../../styles/dimensions';
+import { APP_FONTS } from '../../../styles/AppFonts';
+import { ToggleReplyVisibility } from './DetailView/_shared';
+import { MiniMoreOptionsButton, MiniReplyButton } from './_shared';
+import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 
 type PostReplyToReplyProps = {
 	colors: string[];
@@ -20,9 +26,10 @@ type PostReplyToReplyContentProps = {
 	setIsReplyThreadVisible: any;
 };
 
+const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
+
 function PostReplyToReplyContent({
 	lookupId,
-	color,
 	IsReplyThreadVisible,
 	setIsReplyThreadVisible,
 }: PostReplyToReplyContentProps) {
@@ -31,6 +38,7 @@ function PostReplyToReplyContent({
 	const dto = data.lookup.get(lookupId);
 
 	const replyCount = dto.stats.replyCount;
+	const mediaCount = dto.content.media.length;
 
 	function toggleReplyVisibility() {
 		setIsReplyThreadVisible(!IsReplyThreadVisible);
@@ -39,51 +47,36 @@ function PostReplyToReplyContent({
 	const { content } = useMfm({
 		content: dto.content.raw,
 		emojiMap: dto.calculated.emojis as any,
+		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 	});
 
 	return (
 		<View
 			style={{
 				width: '100%',
-				marginTop: 8,
-				padding: 8,
-				paddingBottom: 8,
+				paddingTop: 8,
+				paddingHorizontal: 8,
 			}}
 		>
-			<ReplyOwner dto={dto} />
-			{content}
-
-			{replyCount > 0 && (
-				<TouchableOpacity
-					style={styles.actionButton}
+			<WithAppStatusItemContext dto={dto}>
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<ReplyOwner dto={dto} style={{ flex: 1 }} />
+					<MiniReplyButton post={dto} />
+					<MiniMoreOptionsButton post={dto} />
+				</View>
+				{/* Some magical numbers to get rid of overflow */}
+				<View style={{ width: '84%', marginBottom: SECTION_MARGIN_BOTTOM }}>
+					{content}
+				</View>
+				<ToggleReplyVisibility
+					enabled={replyCount > 0}
 					onPress={toggleReplyVisibility}
-				>
-					<View style={{ width: 24 }}>
-						{IsReplyThreadVisible ? (
-							<FontAwesome6
-								name="square-minus"
-								size={20}
-								color={IsReplyThreadVisible ? color : APP_FONT.MONTSERRAT_BODY}
-							/>
-						) : (
-							<FontAwesome6
-								name="plus-square"
-								size={20}
-								color={IsReplyThreadVisible ? color : APP_FONT.MONTSERRAT_BODY}
-							/>
-						)}
-					</View>
-					<View>
-						<Text
-							style={{
-								color: IsReplyThreadVisible ? color : APP_FONT.MONTSERRAT_BODY,
-							}}
-						>
-							{replyCount} replies
-						</Text>
-					</View>
-				</TouchableOpacity>
-			)}
+					expanded={IsReplyThreadVisible}
+					count={replyCount}
+					style={{ marginRight: 4 }}
+				/>
+			</WithAppStatusItemContext>
 		</View>
 	);
 }
@@ -104,7 +97,6 @@ function PostReplyToReply({ colors, lookupId, depth }: PostReplyToReplyProps) {
 					display: 'flex',
 					flexDirection: 'row',
 					width: '100%',
-					marginVertical: 8,
 					marginLeft: 6,
 					borderRadius: 8,
 				}}

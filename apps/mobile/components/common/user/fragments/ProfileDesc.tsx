@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import useMfm from '../../../hooks/useMfm';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 
 type ProfileDescProps = {
 	rawContext: string;
@@ -16,21 +17,13 @@ type ProfileDescProps = {
  * the profile's description
  */
 const ProfileDesc = memo(
-	({
-		rawContext,
-		remoteSubdomain,
-		style,
-		acceptTouch,
-		emojiMap,
-	}: ProfileDescProps) => {
+	({ rawContext, style, acceptTouch, emojiMap }: ProfileDescProps) => {
 		const { content } = useMfm({
 			content: rawContext,
-			remoteSubdomain,
 			emojiMap: emojiMap || new Map(),
-			deps: [rawContext],
 			fontFamily: APP_FONTS.INTER_500_MEDIUM,
 			acceptTouch,
-			emphasis: 'high',
+			emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 		});
 
 		return <View style={style}>{content}</View>;

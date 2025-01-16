@@ -11,26 +11,19 @@ import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 import { AppIcon } from '../../../lib/Icon';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
-import { Text, StyleSheet } from 'react-native';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
-import {
-	useAppApiClient,
-	useAppBottomSheet_Improved,
-	useAppPublishers,
-	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
 import { AppPostObject } from '../../../../types/app-post.types';
 import { AppText } from '../../../lib/Text';
-import ActivityPubService from '../../../../services/activitypub.service';
 import StatusQuoted from './StatusQuoted';
+import { PostMoreOptionsButton } from '../_shared';
+import { TextContentView } from '../TextContentView';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -46,48 +39,19 @@ type StatusCoreProps = {
 	showFullDetails?: boolean;
 };
 
-function StatusMoreOptionsButton() {
-	const { driver } = useAppApiClient();
-	const { dto } = useAppStatusItem();
-	const { show, setCtx } = useAppBottomSheet_Improved();
-	const { postPub } = useAppPublishers();
-
-	function onPress() {
-		if (ActivityPubService.misskeyLike(driver)) {
-			postPub.finalizeBookmarkState(dto?.uuid).finally(() => {});
-		}
-		setCtx({ uuid: dto.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
-	}
-
-	return (
-		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
-			<View style={styles.statusMoreOptionsButton}>
-				<AppIcon
-					id={'more-options-vertical'}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
-					size={16}
-					onPress={onPress}
-				/>
-			</View>
-		</Pressable>
-	);
-}
-
 function PinIndicator() {
 	const { theme } = useAppTheme();
 	return (
 		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 			<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
-			<Text
+			<AppText.Medium
 				style={{
 					color: theme.complementary.a0,
 					marginLeft: 6,
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
 				}}
 			>
 				Pinned
-			</Text>
+			</AppText.Medium>
 		</View>
 	);
 }
@@ -128,6 +92,12 @@ const StatusCore = memo(
 	({ isPreview, isPin, showFullDetails }: StatusCoreProps) => {
 		const { dto } = useAppStatusItem();
 		const { toPost } = useAppNavigator();
+		const { showInspector, appSession } = useGlobalState(
+			useShallow((o) => ({
+				showInspector: o.imageInspectModal.show,
+				appSession: o.appSession,
+			})),
+		);
 		const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
 		const _target = PostMiddleware.getContentTarget(dto);
@@ -145,13 +115,6 @@ const StatusCore = memo(
 		const isSensitive = _target.meta.sensitive;
 		const spoilerText = _target.meta.cw;
 
-		const { showInspector, appSession } = useGlobalState(
-			useShallow((o) => ({
-				showInspector: o.imageInspectModal.show,
-				appSession: o.appSession,
-			})),
-		);
-
 		function onGalleryInspect() {
 			appSession.storage.setPostForMediaInspect(dto as any);
 			showInspector(true);
@@ -165,16 +128,15 @@ const StatusCore = memo(
 					<View
 						style={{
 							flexDirection: 'row',
-							marginBottom: SECTION_MARGIN_BOTTOM,
+							marginBottom: SECTION_MARGIN_BOTTOM * 2,
 						}}
 					>
 						<PostCreatedBy
 							style={{
-								paddingBottom: 4,
 								flex: 1,
 							}}
 						/>
-						{!isPreview && <StatusMoreOptionsButton />}
+						{!isPreview && <PostMoreOptionsButton post={_target} />}
 					</View>
 
 					{isSensitive && (
@@ -191,12 +153,7 @@ const StatusCore = memo(
 							isSensitive ? ShowSensitiveContent && HAS_MEDIA : HAS_MEDIA
 						}
 					>
-						<Pressable
-							style={{
-								marginBottom: SECTION_MARGIN_BOTTOM,
-							}}
-							onPress={onGalleryInspect}
-						>
+						<Pressable onPress={onGalleryInspect}>
 							<MediaItem
 								attachments={_target.content.media}
 								calculatedHeight={_target.calculated.mediaContainerHeight}
@@ -214,7 +171,12 @@ const StatusCore = memo(
 								toPost(_target.id);
 							}}
 						>
-							{PostContent}
+							<TextContentView
+								tree={_target.content.parsed}
+								variant={'bodyContent'}
+								mentions={_target.calculated.mentions as any}
+								emojiMap={_target.calculated.emojis}
+							/>
 							{IS_TRANSLATED && (
 								<ExplainOutput
 									additionalInfo={'Translated using OpenAI'}
@@ -227,7 +189,7 @@ const StatusCore = memo(
 					</HiddenByCw>
 
 					{/*FIXME: enable for bluesky*/}
-					{IS_QUOTE_BOOST && (
+					{IS_QUOTE_BOOST && !!dto.boostedFrom && (
 						<WithAppStatusItemContext dto={_target.boostedFrom}>
 							<StatusQuoted />
 						</WithAppStatusItemContext>
@@ -244,20 +206,3 @@ const StatusCore = memo(
 );
 
 export default StatusCore;
-
-const styles = StyleSheet.create({
-	statusMoreOptionsContainer: {
-		justifyContent: 'flex-start',
-		flexDirection: 'row',
-		alignItems: 'flex-start',
-		flexShrink: 1,
-		height: '100%',
-		paddingRight: 8,
-		paddingTop: 4,
-	},
-	statusMoreOptionsButton: {
-		height: '100%',
-		paddingTop: 4,
-		paddingLeft: 16,
-	},
-});

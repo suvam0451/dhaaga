@@ -1,37 +1,34 @@
 import UserGuideContainer from '../../../components/containers/UserGuideContainer';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+
+const NS = { ns: LOCALIZATION_NAMESPACE.GUIDES };
+const NS_OBJ = {
+	ns: LOCALIZATION_NAMESPACE.GUIDES,
+	returnObjects: true,
+};
 
 function Page() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GUIDES]);
 	const qa: { question: string; answers: string[] }[] = [
 		{
-			question: 'Where am I?',
-			answers: [
-				'From here, you can tweak various settings that affect' +
-					' your experience throughout the app ' +
-					'and extra goodie features offered by Dhaaga.',
-			],
+			question: t(`settings.qWhereAmI`, NS),
+			answers: t(`settings.aWhereAmI`, NS_OBJ) as unknown as string[],
 		},
 		{
-			question: 'Why are my server settings not imported?',
-			answers: [
-				'Dhaaga is a multi-protocol client supporting many SNS software.',
-				'So, these settings have to be set-up locally.',
-				'But, once done, they will then be applied to all your SNS accounts!',
-			],
+			question: t(`settings.qServerSettingMismatch`),
+			answers: t(
+				`settings.aServerSettingMismatch`,
+				NS_OBJ,
+			) as unknown as string[],
 		},
 		{
-			question: 'How can I pay and unlock the "Pro" version?',
-			answers: ['What is a... "Pro" version? Is it a bird ? 🤔'],
+			question: t(`settings.qProGetHow`),
+			answers: t(`settings.aProGetHow`, NS_OBJ) as unknown as string[],
 		},
 		{
-			question: 'For real though, How can I support you ?',
-			answers: [
-				'Wow, gee. Thanks 💛.',
-				'I built this app and made it free and open-source because I want the community to enjoy a superior SNS experience' +
-					"—One, which isn't restricted by platforms and protocols, and one that isn't bogged down by the same old social media anti-features.",
-				"As an indie developer, I'd really appreciate your feedback, encouragement and support.",
-				'So, feel free to drop by and say hi 👋:',
-				'Hated it ? Tell me what I can improve!\nLiked it ? maybe share it with your friends!\nLoved it ? consider leaving a tip!',
-			],
+			question: t(`settings.qSupportHow`),
+			answers: t(`settings.aSupportHow`, NS_OBJ) as unknown as string[],
 		},
 	];
 
