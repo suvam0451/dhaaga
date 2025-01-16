@@ -1,1 +1,1 @@
-An Opinionated Fediverse Microblogging App
+An indie SNS and chat app for the decentralized social web

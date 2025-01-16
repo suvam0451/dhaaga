@@ -1,0 +1,6 @@
+Dhaaga (Lite) v0.13.0 (17 Jan 2025)
+
+✨ Cherrypick (Misskey fork) support was added
+✨ You can now view, react and compose poss in Bluesky
+✨ You can now view and browse feeds in Bluesky
+⚡ Timeline scrolling and performance is now smoother

@@ -1,25 +1,21 @@
-An Opinionated SNS Client | Put the Fun Back in Fediverse 🥳
+Dhaaga is a third-party client for various social networking platforms and
+protocols.
 
-Dhaaga is a companion client for your fediverse adventures.
-It has a heavy focus on social features, modern UI
-and better offline capabilities.
+🩵 Bluesky 💙 Mastodon 💚 Misskey 💛 Pleroma 🩷 Sharkey 🧡 Cherrypick 💜 Akkoma
 
-It supports all your favourite platforms (Mastodon, Misskey, Pleroma),
-and their forks (Firefish, Sharkey, Akkoma).
+It implements a subset of platform features (relevant to SNS and
+cat bases use cases), but crafts them in a modern and well-thought-out manner.
 
-Innovative features added in Dhaaga:
+It has a very modern and user-friendly interface, lots of quality of life
+improvements and well-considered performance optimisations.
 
-* [v0.1.0] "Timeline Widget" | Instantly jump to ANY timeline
-* [v0.2.0] "Bookmark Gallery" | Store and view your bookmarks offline
-* [v0.3.0] "Known Servers" | A social graph of every instance you visit
-* [v0.4.0] "Profile Gallery" | Browse a profile as an art gallery
-* [v0.5.0] Misskey/Firefish/Sharkey support added
-* [v0.6.0] Micro-blogging style post composer
-* [v0.7.0] Polled Notifications
-* ...and more in the way ✌️
+Some unique feature that Dhaaga adds (usable regardless of your server or
+software support):
 
-To get involved with the project, join:
-
-* Discord - https://discord.gg/kMp5JA9jwD
-* Matrix (Bridged) - https://app.element.io/#/room/#server0451:matrix.org
-* Website - https://dhaaga.app/
+- 🗞️ "Social Hub" helps you manage pins and profiles to easily keep up to date.
+- 📁 "Collections" to help organise and view bookmarks locally.
+- 📝 "Quick Composer" helps you create posts/replies, in a mini form-factor.
+- 🧵 "Thread View" to keep track of reply contexts.
+- 📥 "Inbox Categories" to organise and view your notifications/updates.
+- 🖼️ "Gallery Mode" for browsing media posts from user profiles.
+- 💬 Dedicated "Chat interface" for fun conversations.
