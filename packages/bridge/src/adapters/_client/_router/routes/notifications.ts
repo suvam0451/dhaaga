@@ -10,6 +10,8 @@ export enum DhaagaJsNotificationType {
 	 * Someone mentioned you in their status
 	 */
 	MENTION = 'mention', // shared with misskey
+	HOME = 'home', // CherryPick ("Home" visibility)
+	PUBLIC = 'public', // Misskey ("Public" visibility)
 	/**
 	 * Someone you enabled notifications for has posted a status
 	 */

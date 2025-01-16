@@ -94,6 +94,9 @@ export class PostMiddleware {
 		return new PostMiddleware(ref, domain, subdomain);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	export(): AppPostObject {
 		// to prevent infinite recursion
 		if (!this.statusI || !this.statusI.getId()) return null;

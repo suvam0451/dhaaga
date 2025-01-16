@@ -1,11 +1,10 @@
-import { memo } from 'react';
 import { Props, styles } from './_common';
 import { View } from 'react-native';
 import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
-import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
+import { AppDivider } from '../../../../lib/Divider';
 
-const FollowReqAcceptNotificationFragment = memo(({ item }: Props) => {
+function FollowReqAcceptNotificationFragment({ item }: Props) {
 	const user = item.user;
 	return (
 		<View style={styles.container}>
@@ -14,13 +13,9 @@ const FollowReqAcceptNotificationFragment = memo(({ item }: Props) => {
 				type={DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED}
 				createdAt={item.createdAt}
 			/>
-			<NotificationDescriptionText
-				type={DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED}
-				createdAt={item.createdAt}
-				id={item.id}
-			/>
+			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
-});
+}
 
 export default FollowReqAcceptNotificationFragment;

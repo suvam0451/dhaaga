@@ -1,29 +1,21 @@
-import { memo } from 'react';
-import { NotificationSenderMiniInterface } from './NotificationSenderMini';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { View } from 'react-native';
-import { styles } from '../segments/_common';
-import { AppUserObject } from '../../../../../types/app-user.types';
+import { Props, styles } from '../segments/_common';
 import { AppDivider } from '../../../../lib/Divider';
+import { NotificationSenderInterface } from './NotificationSender';
 
-type NotificationUpdateItemProps = {
-	acct: AppUserObject;
-	type: DhaagaJsNotificationType;
-	createdAt: Date;
-};
-const NotificationUpdateItem = memo(
-	({ acct, type, createdAt }: NotificationUpdateItemProps) => {
-		return (
-			<View style={styles.container}>
-				<NotificationSenderMiniInterface
-					acct={acct}
-					type={type}
-					createdAt={createdAt}
-				/>
-				<AppDivider.Soft style={{ marginVertical: 12 }} />
-			</View>
-		);
-	},
-);
+function NotificationUpdateItem({ item }: Props) {
+	const user = item.user;
+	return (
+		<View style={styles.container}>
+			<NotificationSenderInterface
+				user={user}
+				type={DhaagaJsNotificationType.FOLLOW}
+				createdAt={item.createdAt}
+			/>
+			<AppDivider.Soft style={{ marginVertical: 12 }} />
+		</View>
+	);
+}
 
 export default NotificationUpdateItem;

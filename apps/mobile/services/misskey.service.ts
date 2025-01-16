@@ -23,24 +23,47 @@ export class MisskeyService {
 	): AppResultPageType<AppNotificationObject> {
 		return {
 			success: true,
-			items: data.data.map((o: any) => {
-				const _acct = UserMiddleware.deserialize<unknown>(
-					o.user,
-					driver,
-					server,
-				);
-				const _post = PostMiddleware.deserialize<unknown>(o, driver, server);
-				const _obj: AppNotificationObject = {
-					id: RandomUtil.nanoId(),
-					type: _post.visibility === 'specified' ? 'chat' : _post.visibility,
-					post: _post,
-					user: _acct,
-					read: false,
-					createdAt: new Date(_post.createdAt),
-					extraData: {},
-				};
-				return _obj;
-			}),
+			items: data.data
+				.map((o: any) => {
+					try {
+						if (['achievementEarned'].includes(o.type)) {
+							return null;
+						}
+
+						const _postTarget = !!o.note ? o.note : o;
+
+						const _acct = !['login'].includes(o.type)
+							? UserMiddleware.deserialize<unknown>(o.user, driver, server)
+							: null;
+						// cherrypick fixes
+						const _post =
+							_postTarget &&
+							!['login', 'follow', 'followRequestAccepted'].includes(o.type)
+								? PostMiddleware.deserialize<unknown>(
+										_postTarget,
+										driver,
+										server,
+									)
+								: null;
+
+						const _obj: AppNotificationObject = {
+							id: RandomUtil.nanoId(),
+							type:
+								o.type ||
+								(_post.visibility === 'specified' ? 'chat' : _post.visibility),
+							post: _post,
+							user: _acct,
+							read: false,
+							createdAt: new Date(o.createdAt || _post.createdAt),
+							extraData: {},
+						};
+						return _obj;
+					} catch (e) {
+						console.log('[WARN]: failed to resolve notification', e);
+						return null;
+					}
+				})
+				.filter((o) => !!o),
 			minId: null,
 			maxId: null,
 		};

@@ -231,56 +231,59 @@ function useApiGetSocialUpdates() {
 			excludeTypes: [],
 			types: [],
 		});
-		if (results.error) {
-			throw new Error(results.error.message);
-		} else {
-			const _data = results.data;
-			if (ActivityPubService.misskeyLike(driver))
-				return MisskeyService.deserializeNotifications(
-					results.data,
+		if (results.error) throw new Error(results.error.message);
+
+		const _data = results.data;
+		if (ActivityPubService.misskeyLike(driver)) {
+			const obj = MisskeyService.deserializeNotifications(
+				results.data,
+				driver,
+				server,
+			);
+			obj.items = obj.items.filter(
+				(o) => !['mention', 'login', 'note', 'status'].includes(o.type),
+			);
+			return obj;
+		}
+
+		const acctList = _data.data.accounts;
+		const postList = _data.data.statuses;
+		const _retval = _data.data.notificationGroups
+			.map((o: MastoGroupedNotificationType) => {
+				const _acct = UserMiddleware.deserialize<unknown>(
+					acctList.find((x) => x.id === o.sampleAccountIds[0]),
+					driver,
+					server,
+				);
+				const _post = PostMiddleware.deserialize<unknown>(
+					postList.find((x) => x.id === o.statusId),
 					driver,
 					server,
 				);
 
-			const acctList = _data.data.accounts;
-			const postList = _data.data.statuses;
-			const _retval = _data.data.notificationGroups
-				.map((o: MastoGroupedNotificationType) => {
-					const _acct = UserMiddleware.deserialize<unknown>(
-						acctList.find((x) => x.id === o.sampleAccountIds[0]),
-						driver,
-						server,
-					);
-					const _post = PostMiddleware.deserialize<unknown>(
-						postList.find((x) => x.id === o.statusId),
-						driver,
-						server,
-					);
+				// bring this back when chat is implemented
+				// if (o.type === 'mention' && _post.visibility === 'direct')
+				// 	return null;
+				const _obj: AppNotificationObject = {
+					id: o.groupKey,
+					type: o.type,
+					post: _post,
+					user: _acct,
+					read: false,
+					createdAt: new Date(o.mostRecentNotificationId),
+					extraData: {},
+				};
+				return _obj;
+			})
+			.filter((o) => !!o)
+			.filter((o) => !['mention'].includes(o.type));
 
-					// bring this back when chat is implemented
-					// if (o.type === 'mention' && _post.visibility === 'direct')
-					// 	return null;
-					const _obj: AppNotificationObject = {
-						id: o.groupKey,
-						type: o.type,
-						post: _post,
-						user: _acct,
-						read: false,
-						createdAt: new Date(o.mostRecentNotificationId),
-						extraData: {},
-					};
-					return _obj;
-				})
-				.filter((o) => !!o)
-				.filter((o) => !['mention'].includes(o.type));
-
-			return {
-				success: true,
-				items: _retval,
-				maxId: _data.maxId,
-				minId: _data.minId,
-			};
-		}
+		return {
+			success: true,
+			items: _retval,
+			maxId: _data.maxId,
+			minId: _data.minId,
+		};
 	}
 
 	// Queries
