@@ -60,7 +60,9 @@ function ComposerAutoCompletion() {
 			payload: {
 				content: TextEditorService.autoCompleteHandler(
 					state.text,
-					driver === KNOWN_SOFTWARE.BLUESKY
+					driver === KNOWN_SOFTWARE.BLUESKY ||
+						item.getInstanceUrl() === undefined ||
+						item.getInstanceUrl() === null
 						? `@${item.getUsername()}`
 						: `@${item.getUsername()}@${item.getInstanceUrl()}`,
 					state.keyboardSelection,

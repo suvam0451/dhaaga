@@ -253,7 +253,7 @@ export class AppStatusDtoService {
 		input: StatusInterface,
 		domain: string,
 		subdomain: string,
-	): z.infer<typeof ActivityPubStatusItemDto> {
+	): AppPostObject {
 		if (!input) return null;
 
 		const medias = input?.getMediaAttachments();
@@ -368,6 +368,6 @@ export class AppStatusDtoService {
 						? (input as BlueskyStatusAdapter).getViewer()
 						: undefined,
 			},
-		};
+		} as AppPostObject;
 	}
 }

@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { appPostObjectSchema } from './app-post.types';
 
 export const appUserObjectSchema = z.object({
 	id: z.string(),
 	avatarUrl: z.string(),
 	displayName: z.string().nullable(),
+	parsedDisplayName: z.array(z.any()),
 	// regex(/^@.*?@?.*?$/),
 	handle: z.string(),
 	instance: z.string(),
@@ -29,6 +29,7 @@ export const appUserObjectSchema = z.object({
 		),
 	}),
 	description: z.string(),
+	parsedDescription: z.array(z.any()),
 	stats: z.object({
 		posts: z.number().nullable(),
 		followers: z.number().nullable(),
@@ -36,7 +37,7 @@ export const appUserObjectSchema = z.object({
 	}),
 	calculated: z.object({
 		emojis: z.map(z.string(), z.string()),
-		pinnedPosts: z.array(appPostObjectSchema),
+		// pinnedPosts: z.array(appPostObjectSchema),
 	}),
 	/**
 	 * 	this data block does not need to be cached

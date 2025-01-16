@@ -6,6 +6,7 @@ import PostStats from '../PostStats';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import {
 	useAppAcct,
+	useAppApiClient,
 	useAppBottomSheet_Improved,
 	useAppPublishers,
 	useAppTheme,
@@ -25,6 +26,7 @@ function ShareButton() {
 	const [IsLoading, setIsLoading] = useState(false);
 	const { postPub } = useAppPublishers();
 	const { theme } = useAppTheme();
+	const { driver } = useAppApiClient();
 
 	async function onPress() {
 		postPub.toggleShare(item.uuid, setIsLoading).finally(() => {
@@ -34,13 +36,14 @@ function ShareButton() {
 
 	const FLAG = PostMiddleware.isShared(item);
 
+	const canLike = ActivityPubService.canLike(driver);
 	return (
 		<AppToggleIcon
 			flag={FLAG}
 			activeIconId={'sync-outline'}
 			inactiveIconId={'sync-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a20}
+			inactiveTint={theme.secondary.a10}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',
@@ -49,6 +52,7 @@ function ShareButton() {
 				paddingTop: 8,
 				paddingBottom: 8,
 				paddingHorizontal: 6,
+				paddingLeft: canLike ? 6 : 0,
 			}}
 			onPress={onPress}
 		/>
@@ -78,7 +82,7 @@ function LikeButton() {
 			activeIconId={'heart'}
 			inactiveIconId={'heart-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a20}
+			inactiveTint={theme.secondary.a10}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',

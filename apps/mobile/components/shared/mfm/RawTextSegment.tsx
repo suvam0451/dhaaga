@@ -20,9 +20,8 @@ function RawTextSegment({ value, fontFamily, emphasis }: Props) {
 
 	let color = AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
 
-	if (!_value) {
-		return <Text key={k}></Text>;
-	}
+	if (!_value) return <Text key={k}></Text>;
+
 	return (
 		<Text
 			key={k}

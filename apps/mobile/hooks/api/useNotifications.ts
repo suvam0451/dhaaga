@@ -119,16 +119,14 @@ function useApiGetMentionUpdates() {
 
 		const _data = results.data;
 		if (ActivityPubService.misskeyLike(driver))
-			if (ActivityPubService.misskeyLike(driver))
-				return MisskeyService.deserializeNotifications(
-					results.data,
-					driver,
-					server,
-				);
+			return MisskeyService.deserializeNotifications(
+				results.data,
+				driver,
+				server,
+			);
 		if (ActivityPubService.blueskyLike(driver)) {
 			const _data =
 				results.data as AppBskyNotificationListNotifications.OutputSchema;
-			console.log(_data);
 		}
 
 		const acctList = _data.data.accounts;

@@ -329,7 +329,7 @@ export const AppIcon = memo(
 				case 'block':
 					return (
 						<Ionicons
-							id={'ban-outline'}
+							name="ban-outline"
 							size={_size}
 							color={_color}
 							style={iconStyle}

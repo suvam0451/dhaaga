@@ -129,11 +129,15 @@ export class MisskeyUser implements UserInterface {
 	}
 
 	getFollowersCount() {
-		return this.ref?.instance?.followersCount;
+		return (this.ref?.instance?.followersCount as any) === '?'
+			? 0
+			: this.ref?.instance?.followersCount;
 	}
 
 	getFollowingCount() {
-		return this.ref?.instance?.followingCount;
+		return (this.ref?.instance?.followingCount as any) === '?'
+			? 0
+			: this.ref?.instance?.followingCount;
 	}
 
 	hasPendingFollowRequestFromYou() {

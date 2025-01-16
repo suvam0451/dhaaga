@@ -11,13 +11,11 @@ import MediaItem from '../../media/MediaItem';
 import EmojiReactions from './EmojiReactions';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 import { AppIcon } from '../../../lib/Icon';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { appDimensions } from '../../../../styles/dimensions';
-import { Text } from 'react-native';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
@@ -46,15 +44,14 @@ function PinIndicator() {
 	return (
 		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 			<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
-			<Text
+			<AppText.Medium
 				style={{
 					color: theme.complementary.a0,
 					marginLeft: 6,
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
 				}}
 			>
 				Pinned
-			</Text>
+			</AppText.Medium>
 		</View>
 	);
 }

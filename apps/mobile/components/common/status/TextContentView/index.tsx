@@ -30,6 +30,8 @@ function TextContentNode({
 	emojiMap,
 	oneLine,
 }: TextContentNodeProps) {
+	if (!node) return <View />;
+
 	if (!WrapperNode.includes(node.type)) {
 		switch (node.type) {
 			case 'text': {
@@ -144,8 +146,9 @@ function TextContentNode({
 					style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
 					numberOfLines={oneLine ? 1 : undefined}
 				>
-					{node.nodes.map((_node) => (
+					{node.nodes.map((_node, i) => (
 						<TextContentNode
+							key={i}
 							mentions={mentions}
 							node={_node}
 							variant={variant}
@@ -159,8 +162,9 @@ function TextContentNode({
 		case 'bold': {
 			return (
 				<Text key={node.uuid}>
-					{node.nodes.map((_node) => (
+					{node.nodes.map((_node, i) => (
 						<TextContentNode
+							key={i}
 							mentions={mentions}
 							node={_node}
 							variant={variant}
@@ -190,12 +194,14 @@ export function TextContentView({
 	emojiMap,
 	oneLine,
 }: TextContentViewProps) {
+	if (!Array.isArray(tree)) return <View />;
 	return (
 		// Negative padding to offset weird bottom margin
 		<View style={[{ height: 'auto', flexShrink: 1 }, style]}>
 			{/* --- paragraphs --- */}
-			{tree.map((item) => (
+			{tree.map((item, i) => (
 				<TextContentNode
+					key={i}
 					node={item}
 					variant={variant}
 					mentions={mentions}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../shared/topnavbar/fragments/TopNavbarTimelineStack';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import Introduction from '../../../tutorials/screens/home/new-user/Introduction';
+import ErrorNoClient from '../../../tutorials/screens/home/new-user/Introduction';
 import useTimeline from '../api/useTimeline';
 import { useLocalSearchParams } from 'expo-router';
 import {
@@ -105,10 +105,8 @@ function DataView() {
 		updateQueryCache: loadMore,
 	});
 
-	if (client === null) return <Introduction />;
-	if (State.feedType === TimelineFetchMode.IDLE) {
-		return <View />;
-	}
+	if (client === null) return <ErrorNoClient />;
+	if (State.feedType === TimelineFetchMode.IDLE) return <View />;
 
 	return (
 		<View

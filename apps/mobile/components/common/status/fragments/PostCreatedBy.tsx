@@ -259,7 +259,7 @@ function PostCreatedBy({ style }: OriginalPosterProps) {
 	}
 
 	function onProfileClicked() {
-		toProfile(dto.postedBy?.userId);
+		toProfile(PostMiddleware.getContentTarget(dto)?.postedBy?.userId);
 	}
 
 	return (
