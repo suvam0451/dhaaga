@@ -50,7 +50,12 @@ function PostedByTextOneLine({
 					marginBottom: appDimensions.timelines.sectionBottomMargin,
 				}}
 			>
-				<AppText.Medium>{parsedText}</AppText.Medium>
+				<TextContentView
+					tree={parsedText}
+					variant={'displayName'}
+					mentions={[]}
+					emojiMap={new Map()}
+				/>
 				<AppText.Normal
 					style={{
 						fontSize: 13,

@@ -71,7 +71,7 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 								hasBoost={true}
 								hasParent={true}
 								isPreview={isPreview}
-								isPin
+								isPin={isPin}
 								showFullDetails={showFullDetails}
 							/>
 						</PostContainer>

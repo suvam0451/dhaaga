@@ -70,7 +70,7 @@ class AccountSessionManager {
 		// avoid storage reads
 		let store = null;
 
-		if (emojiMap.has(id)) {
+		if (emojiMap?.has(id)) {
 			return {
 				url: emojiMap.get(id),
 				shortCode: id,

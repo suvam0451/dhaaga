@@ -16,11 +16,11 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		silentLaunch: true,
 	},
 	ios: {
-		bundleIdentifier: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga.lite',
+		bundleIdentifier: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
 		supportsTablet: false,
 	},
 	android: {
-		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga.lite',
+		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
 		versionCode: 21,
 	},
 	androidStatusBar: {
