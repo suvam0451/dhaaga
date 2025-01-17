@@ -6,11 +6,11 @@ import { AppIcon } from '../../../components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { Image } from 'expo-image';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { useCollectionViewState } from '../contexts/CollectionViewCtx';
+import { useCollectionDetailState } from '../contexts/CollectionDetailCtx';
 
-function Widget() {
+function CollectionDetailWidget() {
 	const { theme } = useAppTheme();
-	const state = useCollectionViewState();
+	const state = useCollectionDetailState();
 
 	return (
 		<View
@@ -156,7 +156,7 @@ function Widget() {
 	);
 }
 
-export default Widget;
+export default CollectionDetailWidget;
 
 const styles = StyleSheet.create({
 	userContainer: {

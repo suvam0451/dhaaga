@@ -2,7 +2,7 @@ import { PostContainer, SavedPostMoreOptionsButton } from '../_shared';
 import { View } from 'react-native';
 import { SavedPostCreatedBy } from '../fragments/PostCreatedBy';
 import { appDimensions } from '../../../../styles/dimensions';
-import { CollectionDataViewPostEntry } from '../../../../features/collections/reducers/collection-view.reducer';
+import { CollectionDataViewPostEntry } from '../../../../features/collections/reducers/collection-detail.reducer';
 import { TextContentView } from '../TextContentView';
 import { LocalMediaItem } from '../../media/LocalView';
 

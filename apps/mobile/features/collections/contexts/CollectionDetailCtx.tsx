@@ -4,14 +4,14 @@ import {
 	CollectionViewDispatchType as Dispatch,
 	collectionViewReducer as reducer,
 	collectionViewDefault as reducerDefault,
-} from '../reducers/collection-view.reducer';
+} from '../reducers/collection-detail.reducer';
 
 // contexts
 const StateCtx = createContext<State>(null);
 const DispatchCtx = createContext<Dispatch>(null);
 // hooks
-export const useCollectionViewState = () => useContext(StateCtx);
-export const useCollectionViewDispatch = () => useContext(DispatchCtx);
+export const useCollectionDetailState = () => useContext(StateCtx);
+export const useCollectionDetailDispatch = () => useContext(DispatchCtx);
 // wrapper
 function CtxWrapper({ children }) {
 	const [state, dispatch] = useReducer(reducer, reducerDefault);
@@ -32,8 +32,8 @@ function CtxWrapper({ children }) {
  *
  * - UserPeekModal
  */
-function CollectionViewCtx({ children }: any) {
+function CollectionDetailCtx({ children }: any) {
 	return <CtxWrapper>{children}</CtxWrapper>;
 }
 
-export default CollectionViewCtx;
+export default CollectionDetailCtx;
