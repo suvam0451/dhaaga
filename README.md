@@ -8,10 +8,11 @@ src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d5
 align="left"
 style="margin-right:8px"/>
 
-**Dhaaga** is a multiprotocol, multi-platform SNS client.
-It emphasizes on perfecting the core SNS experience.
-It adds unique and innovative features,
-which help you easily follow your interests, 
+**Dhaaga** is a multiprotocol, multi-platform SNS client
+designed to enhance your social networking experience.
+By retrofitting the core SNS features,
+it introduces unique and innovative tools that allow
+you to easily follow your interests, 
 discover new topics and connect with 
 your friends—without having to jump between apps and platforms.
 
