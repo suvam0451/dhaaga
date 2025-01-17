@@ -20,7 +20,7 @@ import Animated, {
 	withSpring,
 } from 'react-native-reanimated';
 import TextEditorService from '../../../../../services/text-editor.service';
-import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 import {
 	useAppApiClient,
 	useAppTheme,

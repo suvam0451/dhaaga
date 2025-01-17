@@ -8,7 +8,7 @@ import { useLocalSearchParams } from 'expo-router';
 import {
 	AppTimelineReducerActionType,
 	TimelineFetchMode,
-} from '../../../../states/reducers/post-timeline.reducer';
+} from '../../../../states/interactors/post-timeline.reducer';
 import {
 	useAppApiClient,
 	useAppDb,

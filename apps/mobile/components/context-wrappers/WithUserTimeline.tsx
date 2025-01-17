@@ -12,7 +12,7 @@ import {
 	appUserTimelineReducerDefault,
 	AppUserTimelineReducerDispatchType,
 	AppUserTimelineReducerStateType,
-} from '../../states/reducers/user-timeline.reducer';
+} from '../../states/interactors/user-timeline.reducer';
 import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
 import WithTimelineControllerContext from '../common/timeline/api/useTimelineController';
 

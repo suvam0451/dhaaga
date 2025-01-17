@@ -9,7 +9,7 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { DialogBuilderService } from '../../../../../services/dialog-builder.service';
-import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 
 function VisibilityPicker() {
 	const { state, dispatch } = useComposerContext();

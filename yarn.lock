@@ -15,20 +15,6 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@atproto/api@^0.13.26":
-  version "0.13.26"
-  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.13.26.tgz#1a6272fda28f3faaa65a933b73e62ff50b48a152"
-  integrity sha512-W3zsgCdEuyvP2Qj3Np858kwjv5/pAd/pX3Z5HtLKIYt8uQottAZkuH+2dV+WRovgxHekyCyFJK07NuD4TQ9WMQ==
-  dependencies:
-    "@atproto/common-web" "^0.3.2"
-    "@atproto/lexicon" "^0.4.5"
-    "@atproto/syntax" "^0.3.1"
-    "@atproto/xrpc" "^0.6.6"
-    await-lock "^2.2.2"
-    multiformats "^9.9.0"
-    tlds "^1.234.0"
-    zod "^3.23.8"
-
 "@atproto/api@^0.13.27":
   version "0.13.27"
   resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.13.27.tgz#54d1172fbc4415d41089d2715a657052b26b60bc"

@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { DhaagaJsPostSearchDTO } from '@dhaaga/bridge/dist/adapters/_client/_router/routes/search';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
+import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { UserMiddleware } from '../../../services/middlewares/user.middleware';
 import {
 	defaultAppSearchResults,
 	DiscoverTabSearchResultType,
-} from '../../../../states/reducers/discover-tab.reducer';
-import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
-import { UserMiddleware } from '../../../../services/middlewares/user.middleware';
+} from '../reducers/discover-tab.reducer';
 
 export enum APP_SEARCH_TYPE {
 	POSTS,
@@ -30,8 +30,7 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 				// Akko-gang, nani da fukk? Y your maxId no work? 😭
 				// et tu, sharks 🤨?
 				const FALLBACK_TO_OFFSET = [
-					KNOWN_SOFTWARE.AKKOMA,
-					// KNOWN_SOFTWARE.SHARKEY,
+					KNOWN_SOFTWARE.AKKOMA, // KNOWN_SOFTWARE.SHARKEY,
 				].includes(driver);
 				const offset = FALLBACK_TO_OFFSET
 					? dto.maxId
@@ -58,7 +57,11 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 				console.log(data);
 				return {
 					...defaultAppSearchResults,
-					posts: PostMiddleware.deserialize<unknown[]>(data, driver, server),
+					posts: PostMiddleware.deserialize<unknown[]>(
+						data as any,
+						driver,
+						server,
+					),
 				};
 			}
 			case APP_SEARCH_TYPE.USERS: {

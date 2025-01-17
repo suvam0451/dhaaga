@@ -1,7 +1,7 @@
 import useHookLoadingState from '../../../../states/useHookLoadingState';
 import { useEffect, useRef } from 'react';
 import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
-import { AppTimelineReducerActionType } from '../../../../states/reducers/post-timeline.reducer';
+import { AppTimelineReducerActionType } from '../../../../states/interactors/post-timeline.reducer';
 
 const OPTION_GROUP_A = ['local', 'remote'];
 const OPTION_GROUP_B = ['media-only'];

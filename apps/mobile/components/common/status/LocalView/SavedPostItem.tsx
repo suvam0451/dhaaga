@@ -2,7 +2,7 @@ import { PostContainer, SavedPostMoreOptionsButton } from '../_shared';
 import { View } from 'react-native';
 import { SavedPostCreatedBy } from '../fragments/PostCreatedBy';
 import { appDimensions } from '../../../../styles/dimensions';
-import { CollectionDataViewPostEntry } from '../../../../states/reducers/collection-view.reducer';
+import { CollectionDataViewPostEntry } from '../../../../features/collections/reducers/collection-view.reducer';
 import { TextContentView } from '../TextContentView';
 import { LocalMediaItem } from '../../media/LocalView';
 
@@ -36,6 +36,7 @@ export function SavedPostItem({ item }: SavedPostItemProps) {
 				tree={item.parsedTextContent}
 				variant={'bodyContent'}
 				mentions={[]}
+				emojiMap={new Map()}
 				style={{
 					marginBottom:
 						item.parsedTextContent.length === 0 ? 0 : SECTION_MARGIN_BOTTOM,

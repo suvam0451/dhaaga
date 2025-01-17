@@ -1,17 +1,17 @@
 import { createContext, useContext, useReducer } from 'react';
 import {
-	CollectionViewStateType as State,
-	CollectionViewDispatchType as Dispatch,
-	collectionViewReducer as reducer,
-	collectionViewDefault as reducerDefault,
-} from '../../states/reducers/collection-view.reducer';
+	DiscoverTabReducerStateType as State,
+	DiscoverTabDispatchType as DispatchType,
+	discoverTabReducer as reducer,
+	discoverTabReducerDefault as reducerDefault,
+} from '../reducers/discover-tab.reducer';
 
 // contexts
 const StateCtx = createContext<State>(null);
-const DispatchCtx = createContext<Dispatch>(null);
+const DispatchCtx = createContext<DispatchType>(null);
 // hooks
-export const useCollectionViewState = () => useContext(StateCtx);
-export const useCollectionViewDispatch = () => useContext(DispatchCtx);
+export const useDiscoverTabState = () => useContext(StateCtx);
+export const useDiscoverTabDispatch = () => useContext(DispatchCtx);
 // wrapper
 function CtxWrapper({ children }) {
 	const [state, dispatch] = useReducer(reducer, reducerDefault);
@@ -32,8 +32,8 @@ function CtxWrapper({ children }) {
  *
  * - UserPeekModal
  */
-function WithCollectionViewCtx({ children }: any) {
+function DiscoverTabCtx({ children }: any) {
 	return <CtxWrapper>{children}</CtxWrapper>;
 }
 
-export default WithCollectionViewCtx;
+export default DiscoverTabCtx;

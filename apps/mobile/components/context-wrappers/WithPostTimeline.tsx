@@ -11,7 +11,7 @@ import {
 	appTimelineReducerDefault as reducerDefault,
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-} from '../../states/reducers/post-timeline.reducer';
+} from '../../states/interactors/post-timeline.reducer';
 import { TimelineSessionService } from '../../services/session/timeline-session.service';
 import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
 import WithTimelineControllerContext from '../common/timeline/api/useTimelineController';

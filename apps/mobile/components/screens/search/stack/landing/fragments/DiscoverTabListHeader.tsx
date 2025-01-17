@@ -4,7 +4,7 @@ import SearchScreenManual from '../../../../../error-screen/SearchScreenManual';
 import AppLoadingIndicator from '../../../../../error-screen/AppLoadingIndicator';
 import NoResults from '../../../../../error-screen/NoResults';
 import { View } from 'react-native';
-import { APP_SEARCH_TYPE } from '../../../api/useSearch';
+import { APP_SEARCH_TYPE } from '../../../../../../features/search/api/useSearch';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../../../shared/topnavbar/AppTabLandingNavbar';

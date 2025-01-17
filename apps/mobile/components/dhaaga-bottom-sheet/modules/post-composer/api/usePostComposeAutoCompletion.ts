@@ -14,7 +14,7 @@ import {
 	PostComposerDispatchType,
 	PostComposerReducerActionType,
 	PostComposerReducerStateType,
-} from '../../../../../states/reducers/post-composer.reducer';
+} from '../../../../../states/interactors/post-composer.reducer';
 
 // TODO: convert interfaces to objects
 type PostComposeAutoCompletionResults = {

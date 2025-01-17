@@ -12,7 +12,7 @@ import {
 	socialHubTabReducer,
 	socialHubTabReducerActionType,
 	socialHubTabReducerDefault,
-} from '../../../states/reducers/social-hub-tab.reducer';
+} from '../../../states/interactors/social-hub-tab.reducer';
 import SocialHubPinnedTimelines from './stack/landing/fragments/SocialHubPinnedTimelines';
 import {
 	useAppDb,

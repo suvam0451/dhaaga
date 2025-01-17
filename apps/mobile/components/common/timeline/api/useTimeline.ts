@@ -7,7 +7,7 @@ import {
 	MisskeyRestClient,
 	PleromaRestClient,
 } from '@dhaaga/bridge';
-import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/interactors/post-timeline.reducer';
 import {
 	useAppAcct,
 	useAppApiClient,

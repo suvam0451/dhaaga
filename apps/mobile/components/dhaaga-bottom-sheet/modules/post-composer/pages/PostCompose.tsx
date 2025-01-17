@@ -13,7 +13,7 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Emoji } from '../../emoji-picker/emojiPickerReducer';
-import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 import ComposerAutoCompletion from '../fragments/ComposerAutoCompletion';
 import { Ionicons } from '@expo/vector-icons';
 import VisibilityPicker from '../fragments/VisibilityPicker';

@@ -1,9 +1,10 @@
-import { AccountSavedPost, AccountSavedUser } from '../../database/_schema';
+import { AccountSavedPost, AccountSavedUser } from '../../../database/_schema';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
-import { AppParsedTextNodes } from '../../types/parsed-text.types';
-import MfmService from '../../services/mfm.service';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import { AppParsedTextNodes } from '../../../types/parsed-text.types';
+import MfmService from '../../../services/mfm.service';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { RefetchOptions } from '@tanstack/react-query';
 
 export type CollectionDataViewUserEntry = {
 	item: AccountSavedUser;
@@ -29,6 +30,7 @@ type State = {
 	widgetDimmed: boolean;
 	all: boolean;
 	none: boolean;
+	refetch: (options?: RefetchOptions) => void;
 };
 
 const DEFAULT: State = {
@@ -39,10 +41,12 @@ const DEFAULT: State = {
 	widgetDimmed: false,
 	all: true,
 	none: false,
+	refetch: undefined,
 };
 
 enum ACTION {
-	LOAD,
+	INIT,
+	SET_DATA,
 	SELECT_ALL_USERS,
 	SELECT_NONE_USERS,
 	TOGGLE_USER_SELECT,
@@ -52,7 +56,13 @@ enum ACTION {
 
 type Actions =
 	| {
-			type: ACTION.LOAD;
+			type: ACTION.INIT;
+			payload: {
+				refetch: (options?: RefetchOptions) => void;
+			};
+	  }
+	| {
+			type: ACTION.SET_DATA;
 			payload: {
 				items: AccountSavedPost[];
 			};
@@ -78,7 +88,7 @@ type Actions =
 
 function reducer(state: State, action: Actions): State {
 	switch (action.type) {
-		case ACTION.LOAD: {
+		case ACTION.SET_DATA: {
 			let users: Map<
 				string,
 				{

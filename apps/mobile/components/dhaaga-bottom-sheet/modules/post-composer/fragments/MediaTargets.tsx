@@ -14,7 +14,7 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
-import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 import { AppIcon } from '../../../../lib/Icon';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 

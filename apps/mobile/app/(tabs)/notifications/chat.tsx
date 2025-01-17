@@ -16,7 +16,7 @@ import {
 	chatroomReducer,
 	ChatroomReducerActionType,
 	chatroomReducerDefault,
-} from '../../../states/reducers/chatroom.reducer';
+} from '../../../states/interactors/chatroom.reducer';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';

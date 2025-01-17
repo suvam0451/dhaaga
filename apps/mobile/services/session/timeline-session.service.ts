@@ -3,7 +3,7 @@ import {
 	AppTimelineReducerActionType,
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-} from '../../states/reducers/post-timeline.reducer';
+} from '../../states/interactors/post-timeline.reducer';
 import { Result } from '../../utils/result';
 import ActivityPubService from '../activitypub.service';
 

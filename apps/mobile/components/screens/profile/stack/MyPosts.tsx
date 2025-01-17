@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
-import { AppTimelineReducerActionType } from '../../../../states/reducers/post-timeline.reducer';
+import { AppTimelineReducerActionType } from '../../../../states/interactors/post-timeline.reducer';
 import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
@@ -52,21 +52,7 @@ function DataView() {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
-			payload: {
-				items: data.data,
-				maxId: data.maxId,
-			},
-		});
-	}, [fetchStatus]);
-
-	useEffect(() => {
-		if (fetchStatus === 'fetching' || status !== 'success') return;
-		dispatch({
-			type: AppTimelineReducerActionType.APPEND_RESULTS,
-			payload: {
-				items: data.data,
-				maxId: data.maxId,
-			},
+			payload: data,
 		});
 	}, [fetchStatus]);
 

@@ -8,7 +8,7 @@ import WithPostTimelineCtx, {
 	useTimelineState,
 } from '../../../components/context-wrappers/WithPostTimeline';
 import { useEffect, useState } from 'react';
-import { AppTimelineReducerActionType } from '../../../states/reducers/post-timeline.reducer';
+import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
 import useTimeline from '../../../components/common/timeline/api/useTimeline';
 
 function DataView() {
@@ -52,10 +52,7 @@ function DataView() {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
-			payload: {
-				items: data.data,
-				maxId: data.maxId,
-			},
+			payload: data,
 		});
 	}, [fetchStatus]);
 

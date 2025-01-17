@@ -1,5 +1,5 @@
 import { ActivityPubClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AppUserTimelineReducerDispatchType } from '../../states/reducers/user-timeline.reducer';
+import { AppUserTimelineReducerDispatchType } from '../../states/interactors/user-timeline.reducer';
 
 /**
  * User timeline wrapper to let you

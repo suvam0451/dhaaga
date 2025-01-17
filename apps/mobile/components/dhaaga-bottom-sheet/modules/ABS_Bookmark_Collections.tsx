@@ -9,8 +9,8 @@ import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { useEffect, useState } from 'react';
 import { AppPostObject } from '../../../types/app-post.types';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-import { useDbSavedPostStatus } from '../../../database/queries/useDbCollectionQuery';
-import { useDbCollections } from '../../../database/mutations/useDbCollectionMutation';
+import { useDbSavedPostStatus } from '../../../features/collections/api/useCollectionsQuery';
+import { useDbCollections } from '../../../features/collections/api/useCollectionsMutation';
 import { AccountCollection } from '../../../database/_schema';
 import { AppText } from '../../lib/Text';
 

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useComposerContext } from './useComposerContext';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 
 const EMOJI_REGEX = /:[a-zA-Z_@]+?$/;
 const ACCT_REGEX = /(@[a-zA-Z_0-9.]+(@[a-zA-Z_0-9.]*)?)$/;

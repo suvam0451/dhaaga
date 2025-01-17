@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AccountCollection } from '../_schema';
-import { AccountCollectionService } from '../entities/account-collection';
+import { AccountCollection } from '../../../database/_schema';
+import { AccountCollectionService } from '../../../database/entities/account-collection';
 import {
 	useAppAcct,
 	useAppDb,
-} from '../../hooks/utility/global-state-extractors';
-import { AppPostObject } from '../../types/app-post.types';
-import { AccountSavedPostService } from '../entities/account-saved-post';
+} from '../../../hooks/utility/global-state-extractors';
+import { AppPostObject } from '../../../types/app-post.types';
+import { AccountSavedPostService } from '../../../database/entities/account-saved-post';
 
 export function useDbCollections() {
 	const { db } = useAppDb();

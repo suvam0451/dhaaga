@@ -6,7 +6,7 @@ import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVi
 import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
 import { ActivitypubHelper } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/interactors/post-timeline.reducer';
 import { useApiSearchUsers } from '../../../../hooks/api/useApiSearch';
 import {
 	useAppAcct,

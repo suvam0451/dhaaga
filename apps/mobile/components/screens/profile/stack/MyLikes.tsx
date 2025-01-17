@@ -9,7 +9,7 @@ import WithPostTimelineCtx, {
 import {
 	AppTimelineReducerActionType,
 	TimelineFetchMode,
-} from '../../../../states/reducers/post-timeline.reducer';
+} from '../../../../states/interactors/post-timeline.reducer';
 import useTimeline from '../../../common/timeline/api/useTimeline';
 import { PostTimeline } from '../../../data-views/PostTimeline';
 
