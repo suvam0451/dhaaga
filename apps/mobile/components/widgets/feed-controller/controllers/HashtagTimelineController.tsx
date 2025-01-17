@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import { View, Text } from 'react-native';
 import ControlSegment from '../components/ControlSegment';
 import useTimelineOptions from '../states/useTimelineOptions';

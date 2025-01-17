@@ -1,5 +1,5 @@
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import useTimeline from '../../../common/timeline/api/useTimeline';
+import useTimeline from '../../../../features/timelines/api/useTimeline';
 import { useEffect, useState } from 'react';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
@@ -8,7 +8,7 @@ import { AppTimelineReducerActionType } from '../../../../states/interactors/pos
 import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
-} from '../../../context-wrappers/WithPostTimeline';
+} from '../../../../features/timelines/contexts/PostTimelineCtx';
 import {
 	useAppAcct,
 	useAppDb,

@@ -6,10 +6,10 @@ import { PostTimeline } from '../../../components/data-views/PostTimeline';
 import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
-} from '../../../components/context-wrappers/WithPostTimeline';
+} from '../../../features/timelines/contexts/PostTimelineCtx';
 import { useEffect, useState } from 'react';
 import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
-import useTimeline from '../../../components/common/timeline/api/useTimeline';
+import useTimeline from '../../../features/timelines/api/useTimeline';
 
 function DataView() {
 	const [Refreshing, setRefreshing] = useState(false);

@@ -22,7 +22,7 @@ import {
 	useTimelineDispatch,
 	useTimelineManager,
 	useTimelineState,
-} from '../../../context-wrappers/WithPostTimeline';
+} from '../../../../features/timelines/contexts/PostTimelineCtx';
 import { appDimensions } from '../../../../styles/dimensions';
 
 /**

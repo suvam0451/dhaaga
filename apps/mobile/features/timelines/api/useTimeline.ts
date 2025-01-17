@@ -7,15 +7,15 @@ import {
 	MisskeyRestClient,
 	PleromaRestClient,
 } from '@dhaaga/bridge';
-import { TimelineFetchMode } from '../../../../states/interactors/post-timeline.reducer';
+import { TimelineFetchMode } from '../../../states/interactors/post-timeline.reducer';
 import {
 	useAppAcct,
 	useAppApiClient,
-} from '../../../../hooks/utility/global-state-extractors';
+} from '../../../hooks/utility/global-state-extractors';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
-import { AppPostObject } from '../../../../types/app-post.types';
-import { AppResultPageType } from '../../../../types/app.types';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { AppPostObject } from '../../../types/app-post.types';
+import { AppResultPageType } from '../../../types/app.types';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;

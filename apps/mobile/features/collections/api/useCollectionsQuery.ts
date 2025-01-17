@@ -8,7 +8,7 @@ import { AccountCollectionService } from '../../../database/entities/account-col
 import { CollectionSavedPostService } from '../../../database/entities/collection-saved-post';
 import { AccountSavedPostService } from '../../../database/entities/account-saved-post';
 
-export function useDbListCollections() {
+export function useCollectionListInteractor() {
 	const { db } = useAppDb();
 	const { acct } = useAppAcct();
 
@@ -21,7 +21,7 @@ export function useDbListCollections() {
 	});
 }
 
-type CollectionHasSavedPost = AccountCollection & {
+export type CollectionHasSavedPost = AccountCollection & {
 	has: boolean;
 };
 

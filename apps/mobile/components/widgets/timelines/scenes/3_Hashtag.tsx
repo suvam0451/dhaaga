@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View, Text } from 'react-native';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import { useEffect, useRef, useState } from 'react';
 import { APP_THEME } from '../../../../styles/AppTheme';
 import AppInput from '../../../lib/Inputs';

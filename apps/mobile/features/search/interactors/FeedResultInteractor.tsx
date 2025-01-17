@@ -3,7 +3,7 @@ import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
 import {
 	useFeedTimelineDispatch,
 	useFeedTimelineState,
-} from '../../../components/context-wrappers/WithFeedTimeline';
+} from '../../timelines/contexts/FeedTimelineCtx';
 import { useApiSearchFeeds } from '../../../hooks/api/useApiSearch';
 import { AppFeedTimelineReducerActionType } from '../../../states/interactors/feed-timeline.reducer';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';

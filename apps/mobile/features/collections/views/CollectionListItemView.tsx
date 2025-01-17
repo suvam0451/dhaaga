@@ -10,7 +10,7 @@ type ReadOnlyViewProps = {
 	onPress: (idx: number) => void;
 };
 
-function ReadOnlyView({ onPress, item }: ReadOnlyViewProps) {
+function CollectionListItemView({ onPress, item }: ReadOnlyViewProps) {
 	const { theme } = useAppTheme();
 	return (
 		<Pressable
@@ -62,4 +62,4 @@ function ReadOnlyView({ onPress, item }: ReadOnlyViewProps) {
 	);
 }
 
-export default ReadOnlyView;
+export default CollectionListItemView;

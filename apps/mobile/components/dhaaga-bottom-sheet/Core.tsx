@@ -19,7 +19,6 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
-import ABS_Bookmark_Collections from './modules/ABS_Bookmark_Collections';
 import ABS_Add_Hub_Tag from './modules/ABS_Add_Hub_Tag';
 import ABS_Add_Hub_User from './modules/ABS_Add_Hub_User';
 import ABS_Post_Show_Comments from './modules/ABS_Post_Show_Comments';
@@ -29,6 +28,7 @@ import ABS_Post_Preview from './modules/ABS_Post_Preview';
 import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
 import ABS_Add_Profile from './modules/ABS_Add_Profile';
 import { appVerticalIndex } from '../../styles/dimensions';
+import CollectionAssignmentSheetPresenter from '../../features/collections/presenters/CollectionAssignmentSheetPresenter';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	QUICK_POST = 'QuickPost',
@@ -97,7 +97,7 @@ function Factory() {
 			case APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS:
 				return <AppBottomSheetUserMoreActions />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
-				return <ABS_Bookmark_Collections />;
+				return <CollectionAssignmentSheetPresenter />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
 				return <ABS_Add_Hub_Tag />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:

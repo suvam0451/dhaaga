@@ -6,15 +6,15 @@ import {
 	useReducer,
 	useRef,
 } from 'react';
-import { UserTimelineSessionService } from '../../services/session/user-timeline-session.service';
+import { UserTimelineSessionService } from '../../../services/session/user-timeline-session.service';
 import {
 	appUserTimelineReducer,
 	appUserTimelineReducerDefault,
 	AppUserTimelineReducerDispatchType,
 	AppUserTimelineReducerStateType,
-} from '../../states/interactors/user-timeline.reducer';
-import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
-import WithTimelineControllerContext from '../common/timeline/api/useTimelineController';
+} from '../../../states/interactors/user-timeline.reducer';
+import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
+import WithTimelineControllerContext from '../api/useTimelineController';
 
 /**
  * --- Context Setup ---

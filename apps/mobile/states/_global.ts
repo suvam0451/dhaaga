@@ -26,14 +26,14 @@ import { AppColorSchemeType } from '../utils/theming.util';
 import AccountSessionManager from '../services/session/account-session.service';
 import { WritableDraft } from 'immer';
 import { APP_BOTTOM_SHEET_ENUM } from '../components/dhaaga-bottom-sheet/Core';
-import {
-	AppTimelineReducerDispatchType,
-	AppTimelineReducerStateType,
-} from './reducers/post-timeline.reducer';
 import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';
 import { UserMiddleware } from '../services/middlewares/user.middleware';
+import {
+	AppTimelineReducerDispatchType,
+	AppTimelineReducerStateType,
+} from './interactors/post-timeline.reducer';
 
 type AppThemePack = {
 	id: string;

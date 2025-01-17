@@ -6,9 +6,7 @@ import {
 	useContext,
 	useState,
 } from 'react';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { TimelineFetchMode } from '../../../../states/interactors/post-timeline.reducer';
+import { TimelineFetchMode } from '../../../states/interactors/post-timeline.reducer';
 
 export type AppTimelineQuery = {
 	id: string;
@@ -54,15 +52,15 @@ type Props = {
 };
 
 function WithTimelineControllerContext({ children }: Props) {
-	const { get, set } = useGlobalState(
-		useShallow((o) => ({
-			get: o.homepageType,
-			set: o.setHomepageType,
-		})),
-	);
+	// const { get, set } = useGlobalState(
+	// 	useShallow((o) => ({
+	// 		get: o.homepageType,
+	// 		set: o.setHomepageType,
+	// 	})),
+	// );
 
 	function setTimelineTypeFn(x: TimelineFetchMode) {
-		set(x);
+		// set(x);
 	}
 
 	const [ShowTimelineSelection, setShowTimelineSelection] = useState(false);
@@ -81,7 +79,7 @@ function WithTimelineControllerContext({ children }: Props) {
 	return (
 		<TimelineControllerContext.Provider
 			value={{
-				timelineType: get,
+				timelineType: TimelineFetchMode.HOME,
 				setTimelineType: setTimelineTypeFn,
 				opts: Opts,
 				setOpts: setQueryOptions,

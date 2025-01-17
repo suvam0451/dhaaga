@@ -3,7 +3,7 @@ import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
 import {
 	useTimelineDispatch,
 	useTimelineState,
-} from '../../../components/context-wrappers/WithPostTimeline';
+} from '../../timelines/contexts/PostTimelineCtx';
 import { useApiSearchPosts } from '../../../hooks/api/useApiSearch';
 import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
 import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';

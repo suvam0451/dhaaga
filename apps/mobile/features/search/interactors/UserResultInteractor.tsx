@@ -3,7 +3,7 @@ import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
 import {
 	useUserTimelineDispatch,
 	useUserTimelineState,
-} from '../../../components/context-wrappers/WithUserTimeline';
+} from '../../timelines/contexts/UserTimelineCtx';
 import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
 import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';

@@ -11,9 +11,9 @@ import {
 	AppFeedTimelineReducerStateType,
 	appFeedTimelineReducer,
 	appFeedTimelineReducerDefault,
-} from '../../states/interactors/feed-timeline.reducer';
-import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
-import { UserTimelineSessionService } from '../../services/session/user-timeline-session.service';
+} from '../../../states/interactors/feed-timeline.reducer';
+import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
+import { UserTimelineSessionService } from '../../../services/session/user-timeline-session.service';
 
 /**
  * --- Context Setup ---

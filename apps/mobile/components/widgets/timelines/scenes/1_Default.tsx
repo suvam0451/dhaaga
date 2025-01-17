@@ -5,7 +5,7 @@ import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Button, Text } from '@rneui/themed';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import useGlobalState from '../../../../states/_global';

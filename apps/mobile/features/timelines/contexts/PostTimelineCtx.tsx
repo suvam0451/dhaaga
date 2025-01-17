@@ -11,10 +11,10 @@ import {
 	appTimelineReducerDefault as reducerDefault,
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
-} from '../../states/interactors/post-timeline.reducer';
-import { TimelineSessionService } from '../../services/session/timeline-session.service';
-import { useAppApiClient } from '../../hooks/utility/global-state-extractors';
-import WithTimelineControllerContext from '../common/timeline/api/useTimelineController';
+} from '../../../states/interactors/post-timeline.reducer';
+import { TimelineSessionService } from '../../../services/session/timeline-session.service';
+import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
+import WithTimelineControllerContext from '../api/useTimelineController';
 
 // contexts
 const _StateCtx = createContext<AppTimelineReducerStateType>(null);

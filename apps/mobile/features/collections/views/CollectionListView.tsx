@@ -5,7 +5,7 @@ import AppTopNavbar, {
 import { FlatList, RefreshControl } from 'react-native';
 import { appDimensions } from '../../../styles/dimensions';
 import { AppText } from '../../../components/lib/Text';
-import ReadOnlyView from '../views/ReadOnlyView';
+import CollectionListItemView from './CollectionListItemView';
 import { AppCtaButton } from '../../../components/lib/Buttons';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
@@ -19,10 +19,7 @@ type CollectionListInteractorProps = {
 	refetch: (options?: RefetchOptions) => Promise<any>;
 };
 
-function CollectionListInteractor({
-	items,
-	refetch,
-}: CollectionListInteractorProps) {
+function CollectionListView({ items, refetch }: CollectionListInteractorProps) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
@@ -54,7 +51,7 @@ function CollectionListInteractor({
 			<FlatList
 				data={items}
 				renderItem={({ item }) => (
-					<ReadOnlyView item={item} onPress={onItemPress} />
+					<CollectionListItemView item={item} onPress={onItemPress} />
 				)}
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
@@ -76,4 +73,4 @@ function CollectionListInteractor({
 	);
 }
 
-export default CollectionListInteractor;
+export default CollectionListView;

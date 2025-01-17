@@ -1,5 +1,5 @@
 import { TimelineFetchMode } from '../states/interactors/post-timeline.reducer';
-import { AppTimelineQuery } from '../components/common/timeline/api/useTimelineController';
+import { AppTimelineQuery } from '../features/timelines/api/useTimelineController';
 import { DhaagaJsNotificationType, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 export class LocalizationService {

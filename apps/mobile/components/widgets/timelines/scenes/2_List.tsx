@@ -1,5 +1,5 @@
 import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import useActivityPubLists, {
 	AppAntennaDto,
 	AppListDto,

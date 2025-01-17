@@ -1,7 +1,3 @@
-import Timeline from '../../../components/common/timeline/core/Timeline';
+import Page from '../../../features/timelines/Timeline';
 
-function Screen() {
-	return <Timeline />;
-}
-
-export default Screen;
+export default Page;

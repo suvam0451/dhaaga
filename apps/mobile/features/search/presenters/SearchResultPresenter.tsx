@@ -1,11 +1,11 @@
-import WithFeedTimelineCtx from '../../../components/context-wrappers/WithFeedTimeline';
+import WithFeedTimelineCtx from '../../timelines/contexts/FeedTimelineCtx';
 import { RefetchOptions } from '@tanstack/react-query';
 import {
 	APP_SEARCH_TYPE,
 	DiscoverTabReducerActionType,
 } from '../reducers/discover-tab.reducer';
-import WithPostTimelineCtx from '../../../components/context-wrappers/WithPostTimeline';
-import WithUserTimelineCtx from '../../../components/context-wrappers/WithUserTimeline';
+import WithPostTimelineCtx from '../../timelines/contexts/PostTimelineCtx';
+import WithUserTimelineCtx from '../../timelines/contexts/UserTimelineCtx';
 import {
 	useDiscoverTabDispatch,
 	useDiscoverTabState,

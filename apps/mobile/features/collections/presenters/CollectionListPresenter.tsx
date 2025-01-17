@@ -1,13 +1,13 @@
-import { useDbListCollections } from '../api/useCollectionsQuery';
+import { useCollectionListInteractor } from '../api/useCollectionsQuery';
 import { View } from 'react-native';
-import CollectionListInteractor from '../interactors/CollectionListInteractor';
+import CollectionListView from '../views/CollectionListView';
 
 function CollectionListPresenter() {
-	const { data, error, refetch } = useDbListCollections();
+	const { data, error, refetch } = useCollectionListInteractor();
 
 	if (error) return <View />;
 
-	return <CollectionListInteractor items={data} refetch={refetch} />;
+	return <CollectionListView items={data} refetch={refetch} />;
 }
 
 export default CollectionListPresenter;
