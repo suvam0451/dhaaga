@@ -1,6 +1,6 @@
 <!-- SOCIALS -->
 [![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat&label=Chat)](https://discord.gg/kMp5JA9jwD)
-![Static Badge](https://img.shields.io/badge/Sponsor-Me-f79a13)
+[![Static Badge](https://img.shields.io/badge/Sponsor-Me-f79a13)](https://suvam.io/sponsor)
 <!-- SOCIALS -->
 
 <img width="64"
@@ -8,8 +8,9 @@ src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d5
 align="left"
 style="margin-right:8px"/>
 
-**Dhaaga** is an indie third-party SNS client app that supports multiple 
-platforms. It offers powerful and intuitive tools designed to help 
+**Dhaaga** is an indie third-party, multi-platform, multiprotocol SNS client.
+It excels in general SNS usage and chat based use cases.
+It offers powerful and intuitive tools designed to help 
 you follow your interests, discover new topics and connect with 
 others—without having to jump between apps and platforms.
 
@@ -27,9 +28,6 @@ others—without having to jump between apps and platforms.
 
 
 <div align="center" style="margin-top:32px">
-  <a href="https://github.com/suvam0451/dhaaga/releases/latest" target="_blank">
-    <img src="./.github/badges/github.png" height="48px"/>
-  </a>
   <a href="https://play.google.com/store/apps/details?id=io.suvam.dhaaga" target="_blank">    
     <img src="./.github/badges/google_play.svg" height="48px"/>
   </a>
@@ -47,27 +45,25 @@ others—without having to jump between apps and platforms.
 - 🖼️ Instagram mode for art/photography/blog profiles
 - 📰 Aesthetic™ timelines
 - 💬 Ergonomic post/reply composer
-- 🏕️ Powerful offline capabilities¹
+- 🏕️ Powerful offline capabilities
 - 🦉 Dark mode by default
 - 👌 Out of the box one-handed mode support
-- 🥳 Fun, Free (💰)² and FOSS
-
-> ¹ Coming soon™<br/>
-> ² Tips welcome 😉
+- 🥳 Fun, Free (💰) and FOSS
 
 > [!TIP]
-> This app might not support certain features from your platform.</br> 
-> They are added on a **fun-first** basis. Feel free to request!
+> 
+> This app only implements a subset of server features.</br> 
+> Feel free to request anything you need!
 
 ## 💁 About
 
 Dhaaga is an indie side project I’ve been working on.
 
-It lets you use and connect with your friends from various platforms using a 
-single app! It also adds many useful features, tweaks and QoL improvements
-to make your SNS experience more fun 🥳 and pleasant ☕
+It lets you connect with your friends from various platforms using a 
+single app! It also boasts many useful features, tweaks and QoL improvements
+to make your SNS experience cozy ☕ and fun 🥳
 
-I'd love to hear about your experience with the app! Come say hi~ 🤗
+I'd love to hear about your experience with the app! Come say hi anytime~ 🤗
 
 [Bluesky](https://bsky.app/profile/suvam.io) |
 [Mastodon](https://mastodon.social/@suvam) |
@@ -75,11 +71,11 @@ I'd love to hear about your experience with the app! Come say hi~ 🤗
 [Misskey](https://misskey.io/@suvam0451) |
 [X](https://x.com/suvam0451)
 
-By the way, the word **'Dhaaga (धागा)'** means 'thread' or
+Btw, the word **'Dhaaga (धागा)'** means 'thread' or
 'string' in Hindi.
 It carries deep symbolic significance,
 representing *connection, unity and bonding*.
 
 ---
 
-© 2024-Present Debashish Patra 
+© 2025 Debashish Patra and contributors.
