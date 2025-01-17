@@ -8,11 +8,12 @@ src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d5
 align="left"
 style="margin-right:8px"/>
 
-**Dhaaga** is an indie third-party, multi-platform, multiprotocol SNS client.
-It excels in general SNS usage and chat based use cases.
-It offers powerful and intuitive tools designed to help 
-you follow your interests, discover new topics and connect with 
-others—without having to jump between apps and platforms.
+**Dhaaga** is a multiprotocol, multi-platform SNS client.
+It emphasizes on perfecting the core SNS experience.
+It adds unique and innovative features,
+which help you easily follow your interests, 
+discover new topics and connect with 
+your friends—without having to jump between apps and platforms.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
@@ -52,8 +53,8 @@ others—without having to jump between apps and platforms.
 
 > [!TIP]
 > 
-> This app only implements a subset of server features.</br> 
-> Feel free to request anything you need!
+> This app only implements selected features from your server.</br> 
+> Feel free to request anything extra you need!
 
 ## 💁 About
 
@@ -63,7 +64,7 @@ It lets you connect with your friends from various platforms using a
 single app! It also boasts many useful features, tweaks and QoL improvements
 to make your SNS experience cozy ☕ and fun 🥳
 
-I'd love to hear about your experience with the app! Come say hi anytime~ 🤗
+I'd love to hear about your experience with the app! Come say hi~ 🤗
 
 [Bluesky](https://bsky.app/profile/suvam.io) |
 [Mastodon](https://mastodon.social/@suvam) |
