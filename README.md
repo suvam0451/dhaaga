@@ -8,10 +8,9 @@ src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d5
 align="left"
 style="margin-right:8px"/>
 
-**Dhaaga** is an indie SNS app designed to enhance your social networking experience.
-By retrofitting the core SNS features, it introduces unique and innovative tools that allow
-you to easily follow your interests, discover new topics and connect with 
-your friends—all from a single app.
+**Dhaaga** is an SNS app designed to enhance your social networking experience.
+By retrofitting the core SNS features, it brings you useful tools to easily follow your interests,
+discover new topics and connect with your friends—all from within a single app.
 
 <div align="center">
   <img width="720px"  src="https://repository-images.githubusercontent.com/664825261/58e60a61-2d3b-4275-89bc-c180adb58a7d" style="top:80px"/>
