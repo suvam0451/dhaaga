@@ -36,7 +36,7 @@ import { AccountService } from '../../database/entities/account';
 import * as Haptics from 'expo-haptics';
 import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
 import { DialogBuilderService } from '../../services/dialog-builder.service';
-import SearchResultUserItem from '../screens/search/SearchResultUserItem';
+import UserListItemView from '../../features/timelines/view/UserListItemView';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppText } from './Text';
@@ -47,7 +47,7 @@ import { AppIcon } from './Icon';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../utils/route-list';
 import { AppFeedObject } from '../../types/app-feed.types';
-import SearchResultFeedItem from '../screens/search/SearchResultFeedItem';
+import FeedListItemView from '../../features/timelines/view/FeedListItemView';
 import { appDimensions } from '../../styles/dimensions';
 
 // avatar width + (padding + border) * 2
@@ -494,7 +494,7 @@ export class AppFlashList {
 			<AnimatedFlashList
 				estimatedItemSize={FEED_ESTIMATED_SIZE}
 				data={data}
-				renderItem={({ item }) => <SearchResultFeedItem item={item} />}
+				renderItem={({ item }) => <FeedListItemView item={item} />}
 				onScroll={onScroll}
 				contentContainerStyle={{
 					paddingTop,
@@ -520,7 +520,7 @@ export class AppFlashList {
 			<AnimatedFlashList
 				estimatedItemSize={USER_ESTIMATED_SIZE}
 				data={data}
-				renderItem={({ item }) => <SearchResultUserItem item={item} />}
+				renderItem={({ item }) => <UserListItemView item={item} />}
 				onScroll={onScroll}
 				contentContainerStyle={{
 					paddingTop:

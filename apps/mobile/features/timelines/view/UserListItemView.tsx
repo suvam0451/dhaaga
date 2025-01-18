@@ -3,15 +3,13 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { AppDivider } from '../../lib/Divider';
-import useMfm from '../../hooks/useMfm';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import ProfileDesc from '../../common/user/fragments/ProfileDesc';
+import { AppDivider } from '../../../components/lib/Divider';
+import ProfileDesc from '../../../components/common/user/fragments/ProfileDesc';
 import { appDimensions } from '../../../styles/dimensions';
 import { useState } from 'react';
-import UserViewProfileStats from '../../common/user/fragments/UserViewProfileStats';
-import RelationshipButtonCore from '../../common/relationship/RelationshipButtonCore';
-import { TextContentView } from '../../common/status/TextContentView';
+import UserViewProfileStats from '../../../components/common/user/fragments/UserViewProfileStats';
+import UserRelationPresenter from '../../user-profiles/presenters/UserRelationPresenter';
+import { TextContentView } from '../../../components/common/status/TextContentView';
 
 type SearchResultUserItemProps = {
 	item: AppUserObject;
@@ -60,15 +58,8 @@ function Banner({ uri }: BannerProps) {
 	);
 }
 
-function SearchResultUserItem({ item }: SearchResultUserItemProps) {
+function UserListItemView({ item }: SearchResultUserItemProps) {
 	const { theme } = useAppTheme();
-
-	const { content: ParsedDisplayName } = useMfm({
-		content: item?.displayName,
-		emojiMap: item?.calculated?.emojis,
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-	});
 
 	return (
 		<View style={styles.userResultContainer}>
@@ -146,14 +137,14 @@ function SearchResultUserItem({ item }: SearchResultUserItemProps) {
 							style={{ marginLeft: 0 }}
 						/>
 					</View>
-					<RelationshipButtonCore userId={item.id} />
+					<UserRelationPresenter userId={item.id} />
 				</View>
 			</View>
 		</View>
 	);
 }
 
-export default SearchResultUserItem;
+export default UserListItemView;
 
 const styles = StyleSheet.create({
 	userResultContainer: {

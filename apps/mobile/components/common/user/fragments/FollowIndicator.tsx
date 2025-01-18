@@ -1,11 +1,9 @@
 import { memo, useMemo, useState } from 'react';
 import AppButtonFollowIndicator from '../../../lib/Buttons';
-import useRelationshipWith from '../../../../states/useRelationshipWith';
+import useRelationInteractor from '../../../../features/user-profiles/interactors/useRelationInteractor';
 import { AppRelationship } from '../../../../types/ap.types';
 import ConfirmRelationshipChangeDialog from '../../../screens/shared/fragments/ConfirmRelationshipChange';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 
 /**
  * A label to indicate your current
@@ -19,53 +17,38 @@ const FollowIndicator = memo(function Foo({
 	userId: string;
 	style?: StyleProp<ViewStyle>;
 }) {
-	const { client, driver } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-			driver: o.driver,
-		})),
-	);
-
 	const [
 		IsUnfollowConfirmationDialogVisible,
 		setIsUnfollowConfirmationDialogVisible,
 	] = useState(false);
 
-	const {
-		relationState,
-		refetchRelation,
-		relation,
-		setRelation,
-		relationLoading,
-		setRelationLoading,
-		follow,
-		unfollow,
-	} = useRelationshipWith(userId);
+	const { relationState, data, relationLoading, follow, unfollow } =
+		useRelationInteractor(userId);
 
 	const FollowLabel = useMemo(() => {
-		if (relation.requested) {
+		if (data.requested) {
 			return AppRelationship.FOLLOW_REQUEST_PENDING;
 		}
-		if (!relation.following && !relation.followedBy) {
+		if (!data.following && !data.followedBy) {
 			return AppRelationship.UNRELATED;
 		}
-		if (relation.following && !relation.followedBy) {
+		if (data.following && !data.followedBy) {
 			return AppRelationship.FOLLOWING;
 		}
-		if (relation.following && relation.followedBy) {
+		if (data.following && data.followedBy) {
 			return AppRelationship.FRIENDS;
 		}
-		if (!relation.following && relation.followedBy) {
+		if (!data.following && data.followedBy) {
 			return AppRelationship.FOLLOWED_BY;
 		}
-		if (relation.blocking) {
+		if (data.blocking) {
 			return AppRelationship.BLOCKED;
 		}
-		if (relation.blockedBy) {
+		if (data.blockedBy) {
 			return AppRelationship.BLOCKED_BY;
 		}
 		return AppRelationship.UNKNOWN;
-	}, [relation, relationState]);
+	}, [data, relationState]);
 
 	return (
 		<View style={style}>

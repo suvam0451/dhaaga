@@ -14,10 +14,9 @@ import {
 	AppBskyFeedGetAuthorFeed,
 	AppBskyGraphGetFollowers,
 	AppBskyGraphGetFollows,
-	AtpSessionData,
 	ComAtprotoIdentityResolveHandle,
 } from '@atproto/api';
-import { getBskyAgent } from '../_router/_api.js';
+import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import {
 	MastoAccount,
@@ -38,11 +37,12 @@ import {
 	LibraryResponse,
 } from '../../../types/result.types.js';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
+import { AppAtpSessionData } from '../../../types/atproto.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
-	dto: AtpSessionData;
+	dto: AppAtpSessionData;
 
-	constructor(dto: AtpSessionData) {
+	constructor(dto: AppAtpSessionData) {
 		this.dto = dto;
 	}
 
@@ -74,13 +74,19 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve([]) as any;
 	}
 
-	follow(
+	async follow(
 		id: string,
 		opts: FollowPostDto,
 	): LibraryPromise<
 		MastoRelationship | Endpoints['following/create']['res'] | MegaRelationship
 	> {
-		return Promise.resolve(undefined) as any;
+		try {
+			const agent = getXrpcAgent(this.dto);
+			const followResult = await agent.follow(id);
+			return { data: null as any };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async followers(
@@ -206,22 +212,18 @@ class BlueskyAccountsRouter implements AccountRoute {
 		}
 	}
 
-	unblock(
-		id: string,
-	): Promise<
-		LibraryResponse<
-			MastoRelationship | Endpoints['blocking/delete']['res'] | MegaRelationship
-		>
-	> {
+	unblock(id: string): Promise<LibraryResponse<MastoRelationship>> {
 		return Promise.resolve(undefined) as any;
 	}
 
-	unfollow(
-		id: string,
-	): LibraryPromise<
-		MastoRelationship | Endpoints['following/delete']['res'] | MegaRelationship
-	> {
-		return Promise.resolve(undefined) as any;
+	async unfollow(id: string): LibraryPromise<MastoRelationship> {
+		try {
+			const agent = getXrpcAgent(this.dto);
+			await agent.deleteFollow(id);
+			return { data: null as any };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	unmute(

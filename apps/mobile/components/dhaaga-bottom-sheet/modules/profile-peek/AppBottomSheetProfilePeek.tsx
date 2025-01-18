@@ -13,7 +13,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import ProfileDesc from '../../../common/user/fragments/ProfileDesc';
 import ProfileButtonMessage from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
-import RelationshipButtonCore from '../../../common/relationship/RelationshipButtonCore';
+import UserRelationPresenter from '../../../../features/user-profiles/presenters/UserRelationPresenter';
 import ProfileButtonPhonebook from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
 import UserViewProfileStats from '../../../common/user/fragments/UserViewProfileStats';
 import useGlobalState from '../../../../states/_global';
@@ -97,7 +97,7 @@ const AppBottomSheetProfilePeek = memo(() => {
 							color={APP_FONT.MONTSERRAT_BODY}
 						/>
 					</View>
-					<RelationshipButtonCore userId={acct?.id} />
+					<UserRelationPresenter userId={acct?.id} />
 				</View>
 			</View>
 			<ProfileDesc

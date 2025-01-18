@@ -14,7 +14,7 @@ import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
 import styles from './utils/styles';
 import UserViewProfileStats from './fragments/UserViewProfileStats';
 import ProfileAvatar from './fragments/ProfileAvatar';
-import RelationshipButtonCore from '../relationship/RelationshipButtonCore';
+import UserRelationPresenter from '../../../features/user-profiles/presenters/UserRelationPresenter';
 import ProfileModules from '../../screens/(shared)/stack/profile/modules/ProfileModules';
 import { AppIcon } from '../../lib/Icon';
 import { appDimensions } from '../../../styles/dimensions';
@@ -131,7 +131,7 @@ export function ProfileContextWrapped() {
 
 			<View style={localStyles.relationManagerSection}>
 				<View style={{ flex: 1 }}>
-					<RelationshipButtonCore userId={acct?.id} />
+					<UserRelationPresenter userId={acct?.id} />
 				</View>
 				<View
 					style={{

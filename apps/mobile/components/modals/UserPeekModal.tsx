@@ -19,7 +19,7 @@ import useGetProfile from '../../hooks/api/accounts/useGetProfile';
 import { Image } from 'expo-image';
 import { AppText } from '../lib/Text';
 import { appDimensions } from '../../styles/dimensions';
-import RelationshipButtonCore from '../common/relationship/RelationshipButtonCore';
+import UserRelationPresenter from '../../features/user-profiles/presenters/UserRelationPresenter';
 import useAppNavigator from '../../states/useAppNavigator';
 
 const DEFAULT_POSITION = {
@@ -183,7 +183,7 @@ function UserPeekModalContent({ userId }: { userId: string }) {
 				}}
 			>
 				<View style={{ flex: 1 }}>
-					<RelationshipButtonCore userId={userId} />
+					<UserRelationPresenter userId={userId} />
 				</View>
 				<Pressable
 					style={{

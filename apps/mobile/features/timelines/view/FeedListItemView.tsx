@@ -1,13 +1,13 @@
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
 import { Pressable, View } from 'react-native';
-import { AppText } from '../../lib/Text';
+import { AppText } from '../../../components/lib/Text';
 import { AppFeedObject } from '../../../types/app-feed.types';
-import { AppDivider } from '../../lib/Divider';
+import { AppDivider } from '../../../components/lib/Divider';
 import { appDimensions } from '../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppIcon } from '../../lib/Icon';
-import { StatItem } from '../../common/status/PostStats';
+import { AppIcon } from '../../../components/lib/Icon';
+import { StatItem } from '../../../components/common/status/PostStats';
 import { router } from 'expo-router';
 
 type SearchResultFeedItemProps = {
@@ -16,7 +16,7 @@ type SearchResultFeedItemProps = {
 
 const FEED_AVATAR_SIZE = 42;
 
-function SearchResultFeedItem({ item }: SearchResultFeedItemProps) {
+function FeedListItemView({ item }: SearchResultFeedItemProps) {
 	const { theme } = useAppTheme();
 	const img = useImage(item.avatar);
 
@@ -101,4 +101,4 @@ function SearchResultFeedItem({ item }: SearchResultFeedItemProps) {
 	);
 }
 
-export default SearchResultFeedItem;
+export default FeedListItemView;
