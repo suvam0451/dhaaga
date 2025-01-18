@@ -6,7 +6,7 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Profile } from '../../../database/_schema';
 import {
 	socialHubTabReducer,
@@ -28,9 +28,17 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import { SocialHubPinSectionContainer } from './stack/landing/fragments/_factory';
 import { AppFlashList } from '../../lib/AppFlashList';
-import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
-import { BottomNavBarInfinite } from '../../shared/pager-view/BottomNavBar';
 import { ProfileService } from '../../../database/entities/profile';
+import {
+	Directions,
+	FlingGestureHandlerEventPayload,
+	Gesture,
+	GestureDetector,
+	GestureStateChangeEvent,
+} from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
+import SocialHubHeader from '../../../features/social-hub/components/Header';
+import HubProfileListView from '../../../features/social-hub/views/HubProfileListView';
 
 function Header({ profile }: { profile: Profile }) {
 	const [Acct, setAcct] = useState(null);
@@ -40,15 +48,11 @@ function Header({ profile }: { profile: Profile }) {
 		setAcct(ProfileService.getOwnerAccount(db, profile));
 	}, [profile]);
 
+	return <SocialHubHeader acct={Acct} />;
 	return (
 		<AppTabLandingNavbar
 			type={APP_LANDING_PAGE_TYPE.HOME}
 			menuItems={[
-				{
-					iconId: 'layers-outline',
-					onPress: () => {},
-				},
-
 				{
 					iconId: 'user-guide',
 					onPress: () => {
@@ -190,53 +194,53 @@ function SocialHubTab({ profile }: SocialHubTabProps) {
 	}
 
 	return (
-		<ScrollView
-			style={{
-				backgroundColor: theme.palette.bg,
-				height: '100%',
-			}}
-			contentContainerStyle={{
-				// for the selection bar
-				paddingBottom: 50,
-			}}
-			refreshControl={
-				<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
-			}
-		>
-			<Header profile={profile} />
-			<View style={{ marginBottom: 16 }}>
-				<TimeOfDayGreeting acct={State.acct} />
-			</View>
-
-			{/* --- Pinned Timelines --- */}
-			<SocialHubPinnedTimelines
-				account={State.acct}
-				items={State.pins.timelines}
-			/>
-
-			{/* --- Pinned Users --- */}
-			<SocialHubPinSectionContainer
-				label={'Users'}
+		<View>
+			<ScrollView
 				style={{
-					marginTop: 16,
+					backgroundColor: theme.palette.bg,
+					height: '100%',
 				}}
+				contentContainerStyle={{
+					// for the selection bar
+					paddingBottom: 50,
+				}}
+				refreshControl={
+					<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
+				}
 			>
-				<AppFlashList.PinnedProfiles
+				<Header profile={profile} />
+				<HubProfileListView />
+
+				{/* --- Pinned Timelines --- */}
+				<SocialHubPinnedTimelines
 					account={State.acct}
-					data={State.pins.users}
+					items={State.pins.timelines}
 				/>
-			</SocialHubPinSectionContainer>
 
-			{/* --- Pinned Tags --- */}
-			<SocialHubPinSectionContainer
-				label={'Tags'}
-				style={{
-					marginTop: 16,
-				}}
-			>
-				<AppFlashList.PinnedTags data={State.pins.tags} />
-			</SocialHubPinSectionContainer>
-		</ScrollView>
+				{/* --- Pinned Users --- */}
+				<SocialHubPinSectionContainer
+					label={'Users'}
+					style={{
+						marginTop: 16,
+					}}
+				>
+					<AppFlashList.PinnedProfiles
+						account={State.acct}
+						data={State.pins.users}
+					/>
+				</SocialHubPinSectionContainer>
+
+				{/* --- Pinned Tags --- */}
+				<SocialHubPinSectionContainer
+					label={'Tags'}
+					style={{
+						marginTop: 16,
+					}}
+				>
+					<AppFlashList.PinnedTags data={State.pins.tags} />
+				</SocialHubPinSectionContainer>
+			</ScrollView>
+		</View>
 	);
 }
 
@@ -282,17 +286,45 @@ function SocialHub() {
 		);
 	}, [accounts, navigation]);
 
+	const start =
+		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
+	const end =
+		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
+
+	function yoink() {
+		if (start.current.absoluteX > end.current.absoluteX) {
+			loadNext();
+		} else {
+			loadPrev();
+		}
+	}
+
+	const fling = Gesture.Fling()
+		.direction(Directions.LEFT | Directions.RIGHT)
+		.onBegin((event) => {
+			start.current = event;
+		})
+		.onEnd((event) => {
+			end.current = event;
+			yoink();
+		})
+		.runOnJS(true);
+
 	return (
-		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
-			{HubComponent}
-			<BottomNavBarInfinite
-				Index={navigation.profileIndex}
-				setIndex={onChipSelect}
-				items={tabLabels}
-				loadNext={loadNext}
-				loadPrev={loadPrev}
-			/>
-		</View>
+		<GestureDetector gesture={fling}>
+			<Animated.View
+				style={{ backgroundColor: theme.palette.bg, height: '100%' }}
+			>
+				{HubComponent}
+				{/*<BottomNavBarInfinite*/}
+				{/*	Index={navigation.profileIndex}*/}
+				{/*	setIndex={onChipSelect}*/}
+				{/*	items={tabLabels}*/}
+				{/*	loadNext={loadNext}*/}
+				{/*	loadPrev={loadPrev}*/}
+				{/*/>*/}
+			</Animated.View>
+		</GestureDetector>
 	);
 }
 

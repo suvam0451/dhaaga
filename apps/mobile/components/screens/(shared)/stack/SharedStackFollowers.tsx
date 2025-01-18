@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import useGetFollowers from '../../../../hooks/api/accounts/useGetFollowers';
+import useGetFollowers from '../../../../features/user-profiles/api/useGetFollowers';
 import { memo } from 'react';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AppTopNavbar, {
@@ -11,7 +11,7 @@ import { UserItem } from '../../profile/stack/MyFollowers';
 
 const SharedStackFollowers = memo(() => {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { Data } = useGetFollowers(id);
+	const { data } = useGetFollowers(id);
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
@@ -28,7 +28,7 @@ const SharedStackFollowers = memo(() => {
 				estimatedItemSize={48}
 				contentContainerStyle={{ paddingTop: 54 }}
 				onScroll={onScroll}
-				data={Data}
+				data={data}
 				renderItem={({ item }) => (
 					<WithActivitypubUserContext userI={item}>
 						<UserItem />

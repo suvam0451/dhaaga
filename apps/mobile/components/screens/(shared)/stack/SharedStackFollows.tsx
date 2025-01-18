@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import useGetFollows from '../../../../hooks/api/accounts/useGetFollows';
+import useGetFollows from '../../../../features/user-profiles/api/useGetFollows';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,

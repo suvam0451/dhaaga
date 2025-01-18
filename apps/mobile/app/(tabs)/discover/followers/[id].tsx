@@ -1,3 +1,3 @@
-import SharedStackFollowers from '../../../../components/screens/(shared)/stack/SharedStackFollowers';
+import ProfileFollowersPresenter from '../../../../features/user-profiles/presenters/ProfileFollowersPresenter';
 
-export default SharedStackFollowers;
+export default ProfileFollowersPresenter;

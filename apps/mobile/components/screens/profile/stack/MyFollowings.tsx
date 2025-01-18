@@ -5,7 +5,7 @@ import { UserItem } from './MyFollowers';
 import WithActivitypubUserContext from '../../../../states/useProfile';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import useGetFollows from '../../../../hooks/api/accounts/useGetFollows';
+import useGetFollows from '../../../../features/user-profiles/api/useGetFollows';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 

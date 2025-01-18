@@ -11,6 +11,7 @@ import { appDimensions } from '../../../styles/dimensions';
 import { useState } from 'react';
 import UserViewProfileStats from '../../common/user/fragments/UserViewProfileStats';
 import RelationshipButtonCore from '../../common/relationship/RelationshipButtonCore';
+import { TextContentView } from '../../common/status/TextContentView';
 
 type SearchResultUserItemProps = {
 	item: AppUserObject;
@@ -97,7 +98,12 @@ function SearchResultUserItem({ item }: SearchResultUserItemProps) {
 						/>
 					</View>
 					<View style={{ marginLeft: 12, maxWidth: '50%' }}>
-						{ParsedDisplayName}
+						<TextContentView
+							tree={item.parsedDisplayName}
+							variant={'displayName'}
+							mentions={[]}
+							emojiMap={item.calculated.emojis}
+						/>
 						<Text
 							style={{
 								color: theme.secondary.a30,

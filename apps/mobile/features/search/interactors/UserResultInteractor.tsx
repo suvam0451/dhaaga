@@ -9,9 +9,9 @@ import { AppUserTimelineReducerActionType } from '../../../states/interactors/us
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { View } from 'react-native';
-import { AppFlashList } from '../../../components/lib/AppFlashList';
 import LoadingMore from '../../../components/screens/home/LoadingMore';
 import Header from '../components/Header';
+import { UserListView } from '../../_shared/views/UserListView';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -86,8 +86,8 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				flex: 1,
 			}}
 		>
-			<AppFlashList.Users
-				data={TimelineState.items}
+			<UserListView
+				items={TimelineState.items}
 				onScroll={onScroll}
 				refreshing={Refreshing}
 				onRefresh={onRefresh}

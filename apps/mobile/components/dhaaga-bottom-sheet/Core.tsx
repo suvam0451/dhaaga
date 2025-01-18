@@ -27,7 +27,7 @@ import ABS_Post_Show_Shares from './modules/ABS_Post_Show_Shares';
 import ABS_Post_Preview from './modules/ABS_Post_Preview';
 import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
 import ABS_Add_Profile from './modules/ABS_Add_Profile';
-import { appVerticalIndex } from '../../styles/dimensions';
+import { appDimensions, appVerticalIndex } from '../../styles/dimensions';
 import CollectionAssignmentSheetPresenter from '../../features/collections/presenters/CollectionAssignmentSheetPresenter';
 
 export enum APP_BOTTOM_SHEET_ENUM {
@@ -158,7 +158,7 @@ const AppBottomSheet = memo(() => {
 			<Animated.View
 				style={[
 					styles.rootContainer,
-					{ backgroundColor: theme.background.a20 },
+					{ backgroundColor: theme.background.a10 },
 					animStyle,
 				]}
 			>
@@ -170,15 +170,15 @@ const AppBottomSheet = memo(() => {
 						justifyContent: 'center',
 						left: '50%',
 						transform: [{ translateX: '-50%' }],
-						top: 8,
+						top: 10,
 						zIndex: 9000,
 					}}
 				>
 					<View
 						style={{
-							height: 4,
-							width: 48,
-							backgroundColor: theme.textColor.low,
+							height: 3,
+							width: 42,
+							backgroundColor: theme.secondary.a50,
 							marginBottom: 16,
 							borderRadius: 16,
 						}}
@@ -195,8 +195,8 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		bottom: 0,
 		width: '100%',
-		borderTopRightRadius: 8,
-		borderTopLeftRadius: 8,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
 		zIndex: appVerticalIndex.sheetContent,
 	},
 	text: {

@@ -21,6 +21,10 @@ export const appDimensions = {
 		height: 44,
 		scrollViewTopPadding: 44 + 2,
 	},
+	bottomSheet: {
+		borderRadius: 32,
+		clearanceTop: 24,
+	},
 };
 
 export const appVerticalIndex = {

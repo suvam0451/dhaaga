@@ -110,7 +110,7 @@ export function OriginalPosterPostedByFragment({
 			style={{
 				alignItems: 'flex-start',
 				marginLeft: 8, // to leave sufficient space to show indicator icons
-				marginRight: 84,
+				marginRight: 48,
 			}}
 		>
 			<View>
@@ -121,7 +121,6 @@ export function OriginalPosterPostedByFragment({
 						mentions={[]}
 						emojiMap={emojiMap}
 						oneLine
-						style={{ marginBottom: displayNameParsed.length > 0 ? -4 : 0 }}
 					/>
 					<Text
 						style={{

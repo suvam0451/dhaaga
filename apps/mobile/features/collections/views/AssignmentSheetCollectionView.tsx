@@ -14,27 +14,32 @@ type Props = {
 function AssignmentSheetCollectionView({ items, toggle }: Props) {
 	const { theme } = useAppTheme();
 	return (
-		<>
+		<View
+			style={{
+				paddingHorizontal: 16,
+			}}
+		>
 			<View
 				style={{
 					flexDirection: 'row',
 					justifyContent: 'space-between',
 					width: '100%',
-					marginBottom: 16,
+					marginBottom: 8,
 				}}
 			>
-				<Text style={[styles.sectionLabel, { color: theme.secondary.a0 }]}>
+				<AppText.Medium
+					style={[styles.sectionLabel, { color: theme.secondary.a10 }]}
+				>
 					Collections
-				</Text>
-				<Text
+				</AppText.Medium>
+				<AppText.Medium
 					style={{
 						color: theme.complementary.a0,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
 						fontSize: 16,
 					}}
 				>
 					New collection
-				</Text>
+				</AppText.Medium>
 			</View>
 			{items.map((item, index) => (
 				<CollectionItem
@@ -45,24 +50,13 @@ function AssignmentSheetCollectionView({ items, toggle }: Props) {
 					activeTint={theme.primary.a0}
 					inactiveTint={theme.secondary.a30}
 					label={item.alias}
-					desc={['Local Only', 'Not Synced']}
+					desc={['Private', 'Local Only']}
 					onPress={() => {
 						toggle(item);
 					}}
 				/>
 			))}
-			<AppText.Medium
-				style={{
-					color: theme.primary.a0,
-					marginVertical: 16,
-					textAlign: 'center',
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
-					marginBottom: 24,
-				}}
-			>
-				ℹ️ Collections can only be viewed from this device!
-			</AppText.Medium>
-		</>
+		</View>
 	);
 }
 
@@ -78,8 +72,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	sectionLabel: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		fontSize: 18,
+		fontSize: 20,
 		marginBottom: 16,
 	},
 	tipText: {

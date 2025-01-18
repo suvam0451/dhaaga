@@ -214,6 +214,11 @@ class BlueskyStatusAdapter implements StatusInterface {
 				}
 				return attachments;
 			}
+		} else if (
+			// FIXME: how to extract images for quote posts
+			(this.reason as any)?.$type === 'app.bsky.feed.defs#reasonRepost'
+		) {
+			return [];
 		}
 
 		// handle image embeds

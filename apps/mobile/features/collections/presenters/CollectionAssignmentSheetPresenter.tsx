@@ -1,6 +1,6 @@
 import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
 import { usePostInteractor } from '../../_pubsub/interactors/usePostInteractor';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import AssignmentSheetBookmarkView from '../views/AssignmentSheetBookmarkView';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import AssignmentSheetCollectionView from '../views/AssignmentSheetCollectionView';
@@ -23,14 +23,7 @@ function CollectionAssignmentSheetPresenter() {
 		toggleForCollection(post?.id, collection, post);
 	}
 	return (
-		<ScrollView
-			style={styles.root}
-			contentContainerStyle={{
-				paddingTop: 32,
-				paddingBottom: 48,
-			}}
-		>
-			<View style={{ backgroundColor: 'red', height: 200, width: 100 }}></View>
+		<ScrollView>
 			<AssignmentSheetBookmarkView
 				bookmarked={IS_BOOKMARKED}
 				toggleBookmark={toggleBookmark}
@@ -41,11 +34,3 @@ function CollectionAssignmentSheetPresenter() {
 }
 
 export default CollectionAssignmentSheetPresenter;
-
-const styles = StyleSheet.create({
-	root: {
-		paddingHorizontal: 16,
-		flex: 1,
-		marginTop: 12,
-	},
-});

@@ -48,6 +48,7 @@ import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../utils/route-list';
 import { AppFeedObject } from '../../types/app-feed.types';
 import SearchResultFeedItem from '../screens/search/SearchResultFeedItem';
+import { appDimensions } from '../../styles/dimensions';
 
 // avatar width + (padding + border) * 2
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
@@ -517,12 +518,13 @@ export class AppFlashList {
 	}: AppFlashListProps<AppUserObject>) {
 		return (
 			<AnimatedFlashList
-				estimatedItemSize={POST_ESTIMATED_SIZE}
+				estimatedItemSize={USER_ESTIMATED_SIZE}
 				data={data}
 				renderItem={({ item }) => <SearchResultUserItem item={item} />}
 				onScroll={onScroll}
 				contentContainerStyle={{
-					paddingTop,
+					paddingTop:
+						paddingTop || appDimensions.topNavbar.scrollViewTopPadding,
 				}}
 				ListHeaderComponent={ListHeaderComponent}
 				scrollEventThrottle={16}

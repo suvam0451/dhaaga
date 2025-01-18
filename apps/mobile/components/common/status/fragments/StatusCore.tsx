@@ -59,6 +59,7 @@ function PinIndicator() {
 type PostFullDetailsProps = {
 	dto: AppPostObject;
 };
+
 function PostFullDetails({ dto }: PostFullDetailsProps) {
 	const { theme } = useAppTheme();
 	const POST = PostMiddleware.getContentTarget(dto);

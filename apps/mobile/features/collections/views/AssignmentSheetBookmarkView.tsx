@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import CollectionItem from '../components/CollectionItem';
 
 type AssignmentSheetBookmarkViewProps = {
@@ -17,13 +16,21 @@ function AssignmentSheetBookmarkView({
 	const TIP_TEXT_COLOR = theme.secondary.a40;
 
 	return (
-		<View style={styles.sectionContainer}>
-			<Text style={[styles.sectionLabel, { color: theme.secondary.a10 }]}>
-				Bookmark
-			</Text>
+		<View
+			style={[
+				styles.sectionContainer,
+				{
+					paddingTop: 36,
+					paddingHorizontal: 16,
+					backgroundColor: theme.background.a30,
+					borderTopLeftRadius: 32,
+					borderTopRightRadius: 32,
+				},
+			]}
+		>
 			<CollectionItem
 				label={'Bookmark'}
-				desc={['Server Feature', 'Synced']}
+				desc={['Synced With Your Server']}
 				activeIconId={'bookmark'}
 				inactiveIconId={'bookmark-outline'}
 				active={bookmarked}
@@ -44,8 +51,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	sectionLabel: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		fontSize: 18,
+		fontSize: 20,
 		marginBottom: 16,
 	},
 });

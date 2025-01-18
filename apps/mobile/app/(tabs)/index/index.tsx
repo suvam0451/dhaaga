@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
 import SocialHub from '../../../components/screens/home/SocialHub';
@@ -23,6 +23,7 @@ enum TIME_OF_DAY {
 type TimeOfDayGreetingProps = {
 	acct: Account;
 	noLogo?: boolean;
+	style?: StyleProp<ViewStyle>;
 };
 
 type HubGreetingFragmentProps = {
@@ -82,7 +83,11 @@ function HubGreetingFragment({
 	);
 }
 
-export function TimeOfDayGreeting({ acct, noLogo }: TimeOfDayGreetingProps) {
+export function TimeOfDayGreeting({
+	acct,
+	noLogo,
+	style,
+}: TimeOfDayGreetingProps) {
 	const Component = useMemo(() => {
 		const currentHours = new Date().getHours();
 		let timeOfDay: TIME_OF_DAY;
@@ -142,9 +147,12 @@ export function TimeOfDayGreeting({ acct, noLogo }: TimeOfDayGreetingProps) {
 
 	return (
 		<View
-			style={{
-				paddingHorizontal: 8,
-			}}
+			style={[
+				{
+					paddingHorizontal: 8,
+				},
+				style,
+			]}
 		>
 			{Component}
 		</View>

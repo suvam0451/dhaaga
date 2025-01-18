@@ -1,7 +1,7 @@
-import { Pressable, View, Text } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { AppText } from '../../../components/lib/Text';
 
 type CollectionItemProps = {
 	active: boolean;
@@ -59,23 +59,22 @@ function CollectionItem({
 				<AppIcon id={'albums-outline'} size={24} color={theme.secondary.a20} />
 			</View>
 			<View style={{ marginLeft: 16, justifyContent: 'center' }}>
-				<Text
+				<AppText.Medium
 					style={{
-						color: theme.secondary.a0,
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+						color: theme.secondary.a10,
 						fontSize: 18,
+						marginBottom: 4,
 					}}
 				>
 					{label}
-				</Text>
-				<Text
+				</AppText.Medium>
+				<AppText.Medium
 					style={{
-						color: theme.secondary.a20,
-						fontFamily: APP_FONTS.INTER_400_REGULAR,
+						color: theme.secondary.a30,
 					}}
 				>
-					{desc.join(' · ')}
-				</Text>
+					{desc.join(' • ')}
+				</AppText.Medium>
 			</View>
 			<View style={{ flexGrow: 1 }} />
 			<Pressable onPress={onPress}>
