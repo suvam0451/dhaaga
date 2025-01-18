@@ -12,9 +12,7 @@ import ProfileNameAndHandle from '../../../common/user/fragments/ProfileNameAndH
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import ProfileDesc from '../../../common/user/fragments/ProfileDesc';
-import ProfileButtonMessage from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
 import UserRelationPresenter from '../../../../features/user-profiles/presenters/UserRelationPresenter';
-import ProfileButtonPhonebook from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
 import UserViewProfileStats from '../../../common/user/fragments/UserViewProfileStats';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -67,18 +65,6 @@ const AppBottomSheetProfilePeek = memo(() => {
 					imageStyle={localStyles.avatarImageContainer}
 					uri={acct?.avatarUrl}
 				/>
-				<View
-					style={{
-						alignItems: 'center',
-						justifyContent: 'space-evenly',
-						flexDirection: 'row',
-						marginHorizontal: 8,
-					}}
-				>
-					<ProfileButtonMessage handle={acct?.handle} />
-					<View style={{ width: 8 }} />
-					<ProfileButtonPhonebook />
-				</View>
 				<UserViewProfileStats
 					userId={acct?.id}
 					followerCount={acct?.stats?.followers}

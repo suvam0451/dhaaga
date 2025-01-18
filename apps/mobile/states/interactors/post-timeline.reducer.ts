@@ -319,11 +319,14 @@ function reducer(state: State, action: Actions): State {
 			 */
 
 			const copy = Array.from(state.items);
-			for (const item of action.payload.items) {
-				if (state.seen.has(item.id)) continue;
-				copy.push(item);
-			}
+
 			return produce(state, (draft) => {
+				for (const item of action.payload.items) {
+					if (state.seen.has(item.id)) continue;
+					copy.push(item);
+					draft.seen.add(item.id);
+				}
+
 				draft.items = copy;
 				draft.maxId = action.payload.maxId;
 			});

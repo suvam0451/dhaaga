@@ -1,95 +1,20 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { KNOWN_SOFTWARE, MediaAttachmentInterface } from '@dhaaga/bridge';
-import ActivityPubAdapterService from '../../../../../../services/activitypub-adapter.service';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { MediaAttachmentInterface } from '@dhaaga/bridge';
 import { FlatList, View } from 'react-native';
-import { APP_THEME } from '../../../../../../styles/AppTheme';
-import MediaThumbnail from '../../../../../common/media/Thumb';
-import ImageGalleryCanvas from '../../../../../common/user/fragments/ImageGalleryCanvas';
-import { AppBskyFeedGetAuthorFeed } from '@atproto/api';
+import ImageGalleryCanvas from '../../../../../components/common/user/fragments/ImageGalleryCanvas';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import {
-	useAppApiClient,
-	useAppTheme,
-} from '../../../../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../../../lib/Text';
-
-type FlashListItemProps = {
-	selected: boolean;
-	type: string;
-	url: string;
-	width: number;
-	height: number;
-	activeIndex: number;
-	myIndex: number;
-	onClick: (index: number) => void;
-};
-
-const FlashListItem = memo(
-	({
-		type,
-		url,
-		width,
-		height,
-		activeIndex,
-		myIndex,
-		onClick,
-	}: FlashListItemProps) => {
-		const selected = activeIndex === myIndex;
-		return (
-			<View
-				style={{
-					marginHorizontal: 2,
-					borderColor: selected ? APP_THEME.COLOR_SCHEME_D_NORMAL : 'gray',
-					borderWidth: 0.25,
-					borderRadius: 8,
-				}}
-				onTouchEnd={() => {
-					onClick(myIndex);
-				}}
-			>
-				<MediaThumbnail
-					type={type}
-					url={url}
-					width={width}
-					height={height}
-					size={72}
-				/>
-			</View>
-		);
-	},
-);
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../../../../components/lib/Text';
+import SeeMore from '../components/SeeMore';
+import ThumbnailView from '../views/ThumbnailView';
+import useProfileGalleryModeInteractor from '../interactors/useProfileGalleryModeInteractor';
 
 type Props = {
 	userId: string;
 };
 
-function SeeMore() {
-	return (
-		<View
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				justifyContent: 'center',
-				width: 64,
-				height: 64,
-				marginHorizontal: 4,
-				borderColor: 'gray',
-				borderWidth: 1,
-				borderRadius: 4,
-			}}
-		>
-			<AppText.SemiBold>See</AppText.SemiBold>
-			<AppText.SemiBold>More</AppText.SemiBold>
-		</View>
-	);
-}
-
-function ProfileImageGallery({ userId }: Props) {
+function ProfileGalleryModePresenter({ userId }: Props) {
 	const { theme } = useAppTheme();
-	const { client, driver } = useAppApiClient();
-	const [Data, setData] = useState([]);
 	const [MediaItems, setMediaItems] = useState<MediaAttachmentInterface[]>([]);
 	const [MediaGalleryCtrl, setMediaGalleryCtrl] = useState({
 		total: 0,
@@ -98,43 +23,14 @@ function ProfileImageGallery({ userId }: Props) {
 	const [CurrentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {
-		setData([]);
 		setMediaGalleryCtrl({ total: 0, curr: 0 });
 		setCurrentIndex(0);
 	}, [userId]);
-
-	async function fn() {
-		const { data } = await client.accounts.statuses(userId, {
-			limit: 40,
-			userId,
-			onlyMedia: true,
-			excludeReblogs: true,
-			bskyFilter:
-				driver === KNOWN_SOFTWARE.BLUESKY ? 'posts_with_media' : undefined,
-		});
-		return data;
-	}
-
-	// Post Queries
-	const { status, data, fetchStatus } = useQuery({
-		queryKey: [client, userId],
-		queryFn: fn,
-		enabled: userId !== undefined,
-	});
+	const { data } = useProfileGalleryModeInteractor(userId);
 
 	useEffect(() => {
-		if (status !== 'success' || !data) return;
-		const is =
-			driver === KNOWN_SOFTWARE.BLUESKY
-				? ActivityPubAdapterService.adaptManyStatuses(
-						(data as AppBskyFeedGetAuthorFeed.Response).data.feed,
-						driver,
-					)
-				: ActivityPubAdapterService.adaptManyStatuses(data as any[], driver);
-		setData(is);
-
 		let images = [];
-		for (const i of is) {
+		for (const i of data) {
 			const count = i.getMediaAttachments().length;
 			if (count > 0) {
 				images.push(
@@ -160,9 +56,8 @@ function ProfileImageGallery({ userId }: Props) {
 		}
 		setMediaItems(images);
 		setMediaGalleryCtrl({ total: images.length, curr: 0 });
-	}, [fetchStatus]);
+	}, [data]);
 
-	// const ListRef = useRef<FlashList<any>>(null);
 	const ListRef = useRef<FlatList>(null);
 
 	const onNext = useCallback(() => {
@@ -337,7 +232,7 @@ function ProfileImageGallery({ userId }: Props) {
 				horizontal={true}
 				data={MediaItems}
 				renderItem={({ item, index }) => (
-					<FlashListItem
+					<ThumbnailView
 						myIndex={index}
 						activeIndex={CurrentIndex}
 						onClick={onThumbClick}
@@ -362,4 +257,4 @@ function ProfileImageGallery({ userId }: Props) {
 	);
 }
 
-export default ProfileImageGallery;
+export default ProfileGalleryModePresenter;
