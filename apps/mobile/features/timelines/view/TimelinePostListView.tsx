@@ -7,7 +7,7 @@ import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicato
 import { Fragment } from 'react';
 import { AppFlashList } from '../../../components/lib/AppFlashList';
 import LoadingMore from '../../../components/screens/home/LoadingMore';
-import UserPeekModal from '../../../components/modals/UserPeekModal';
+import UserPeekModalPresenter from '../../user-profiles/presenters/UserPeekModalPresenter';
 import { FetchStatus } from '@tanstack/react-query';
 import { appDimensions } from '../../../styles/dimensions';
 
@@ -63,7 +63,7 @@ function TimelinePostListView({
 					onScroll={onScroll}
 				/>
 				<LoadingMore visible={visible} loading={loading} />
-				<UserPeekModal />
+				<UserPeekModalPresenter />
 			</Fragment>
 		</View>
 	);
