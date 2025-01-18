@@ -4,9 +4,9 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { useEffect, useReducer, useState } from 'react';
 import {
-	socialHubTabReducer,
-	socialHubTabReducerActionType,
-	socialHubTabReducerDefault,
+	socialHubTabReducer as reducer,
+	socialHubTabReducerActionType as ACTION,
+	socialHubTabReducerDefault as reducerDefault,
 } from '../../../states/interactors/social-hub-tab.reducer';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
@@ -28,30 +28,27 @@ type Props = {
  */
 function SocialHubTabPresenter({ profile }: Props) {
 	const { db } = useAppDb();
-	const [State, dispatch] = useReducer(
-		socialHubTabReducer,
-		socialHubTabReducerDefault,
-	);
+	const [State, dispatch] = useReducer(reducer, reducerDefault);
 	const { theme } = useAppTheme();
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 
 	useEffect(() => {
 		dispatch({
-			type: socialHubTabReducerActionType.INIT,
+			type: ACTION.INIT,
 			payload: {
 				db,
 				profile: profile,
 			},
 		});
 		dispatch({
-			type: socialHubTabReducerActionType.RELOAD_PINS,
+			type: ACTION.RELOAD_PINS,
 		});
 	}, [profile, db]);
 
 	function refresh() {
 		setIsRefreshing(true);
 		dispatch({
-			type: socialHubTabReducerActionType.RELOAD_PINS,
+			type: ACTION.RELOAD_PINS,
 		});
 		setIsRefreshing(false);
 	}

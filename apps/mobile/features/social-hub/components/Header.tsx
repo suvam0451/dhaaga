@@ -7,7 +7,11 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useHub } from '../../../hooks/utility/global-state-extractors';
-import Animated, { FadeOut, FadeInLeft } from 'react-native-reanimated';
+import Animated, {
+	FadeOut,
+	FadeInLeft,
+	FlipOutXUp,
+} from 'react-native-reanimated';
 import { AppText } from '../../../components/lib/Text';
 import { APP_FONTS } from '../../../styles/AppFonts';
 
@@ -42,17 +46,18 @@ function SocialHubHeader({ acct }: Props) {
 
 	return (
 		<View style={[styles.container]}>
+			{/*FIXME: not animating as expected*/}
 			<Animated.View
 				style={{
 					flex: 1,
 				}}
-				entering={FadeInLeft}
-				exiting={FadeOut}
 			>
 				{GreetingActive ? (
-					<TimeOfDayGreeting style={{ paddingHorizontal: 0 }} acct={acct} />
+					<Animated.View entering={FadeInLeft} exiting={FadeOut}>
+						<TimeOfDayGreeting style={{ paddingHorizontal: 0 }} acct={acct} />
+					</Animated.View>
 				) : (
-					<Animated.View entering={FadeInLeft}>
+					<Animated.View entering={FadeInLeft} exiting={FlipOutXUp}>
 						<AppText.H1>Social Hub</AppText.H1>
 					</Animated.View>
 				)}
