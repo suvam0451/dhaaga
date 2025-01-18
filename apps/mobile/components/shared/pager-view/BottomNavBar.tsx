@@ -342,6 +342,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		position: 'absolute',
 		bottom: 0,
+		justifyContent: 'space-around',
+		backgroundColor: 'red',
 	},
 	infiniteContainerChip: {
 		paddingHorizontal: 6,

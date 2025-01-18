@@ -23,22 +23,13 @@ import {
 } from '../../database/_schema';
 import {
 	useAppBottomSheet_Improved,
-	useAppDialog,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import useAppNavigator from '../../states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { AccountService } from '../../database/entities/account';
-import * as Haptics from 'expo-haptics';
 import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
-import { DialogBuilderService } from '../../services/dialog-builder.service';
 import UserListItemView from '../../features/timelines/view/UserListItemView';
-import MaskedView from '@react-native-masked-view/masked-view';
-import { LinearGradient } from 'expo-linear-gradient';
 import { AppText } from './Text';
 import { AppChatRoom } from '../../services/chat.service';
 import { AppDivider } from './Divider';
@@ -49,64 +40,6 @@ import { APP_ROUTING_ENUM } from '../../utils/route-list';
 import { AppFeedObject } from '../../types/app-feed.types';
 import FeedListItemView from '../../features/timelines/view/FeedListItemView';
 import { appDimensions } from '../../styles/dimensions';
-
-// avatar width + (padding + border) * 2
-const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
-
-function Pinned_Users_LastItem() {
-	const { theme } = useAppTheme();
-	const { show } = useAppBottomSheet_Improved();
-
-	function onPress() {
-		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
-	}
-
-	return (
-		<Pressable
-			style={{
-				flex: 1,
-				marginBottom: 8,
-				maxWidth: '25%',
-				height: '100%',
-			}}
-			onPress={onPress}
-		>
-			<View
-				style={{
-					width: PINNED_USER_BOX_SIZE,
-					alignSelf: 'center',
-				}}
-			>
-				<View
-					style={{
-						borderRadius: '100%',
-						overflow: 'hidden',
-						padding: 2,
-						borderColor: theme.secondary.a50,
-						borderWidth: 2.75,
-						opacity: 0.78,
-						height: 71.5,
-					}}
-				>
-					<View
-						style={{
-							width: 48,
-							height: 48,
-							alignSelf: 'center',
-							margin: 'auto',
-						}}
-					>
-						<Ionicons
-							name={'add-outline'}
-							size={48}
-							color={theme.secondary.a50}
-						/>
-					</View>
-				</View>
-			</View>
-		</Pressable>
-	);
-}
 
 function Chatroom_Item({ item }: { item: AppChatRoom }) {
 	const [MemberAvatar, setMemberAvatar] = useState<AppUserObject>(null);
@@ -181,134 +114,6 @@ function Chatroom_Item({ item }: { item: AppChatRoom }) {
 			<AppDivider.Hard
 				style={{ backgroundColor: '#242424', marginVertical: 8 }}
 			/>
-		</Pressable>
-	);
-}
-
-type ListItemProps = {
-	item: ProfilePinnedUser;
-	account: Account;
-};
-
-function Pinned_Users_ListItem({ item, account }: ListItemProps) {
-	const { theme } = useAppTheme();
-	const { acct, db, loadApp } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			db: o.db,
-			loadApp: o.loadApp,
-		})),
-	);
-	const { show, hide } = useAppDialog();
-	const { toTimelineViaPin } = useAppNavigator();
-
-	function onPress() {
-		if (account.id !== acct.id) {
-			show(
-				DialogBuilderService.toSwitchActiveAccount(() => {
-					AccountService.select(db, account);
-					try {
-						loadApp().then(() => {
-							hide();
-							toTimelineViaPin(item.id, 'user');
-						});
-					} catch (e) {
-						hide();
-					}
-				}),
-			);
-			return;
-		}
-
-		switch (item.category) {
-			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL: {
-				// toProfile(item.identifier);
-				toTimelineViaPin(item.id, 'user');
-				break;
-			}
-			case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_REMOTE: {
-				/**
-				 * 	NOTE: this would need to resolve the remote server's
-				 * 	drivers and make the necessary network calls to open
-				 * 	and "anonymous" tab
-				 */
-				console.log('[WARN]: pin category not implemented');
-				break;
-			}
-			default: {
-				console.log('[WARN]: pin category not registered');
-			}
-		}
-	}
-
-	function onLongPress() {
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-	}
-
-	return (
-		<Pressable
-			style={{
-				flex: 1,
-				marginBottom: 8,
-				maxWidth: '25%',
-				width: 72,
-				height: 72,
-			}}
-			onPress={onPress}
-			onLongPress={onLongPress}
-		>
-			<MaskedView
-				maskElement={
-					<View
-						pointerEvents="none"
-						style={[
-							{
-								borderWidth: 1.75,
-								borderRadius: '100%',
-								height: 72,
-								width: 72,
-								margin: 'auto',
-							},
-						]}
-					/>
-				}
-				style={[StyleSheet.absoluteFill]}
-			>
-				<LinearGradient
-					colors={['red', 'orange']}
-					pointerEvents="none"
-					style={{ height: 80, width: 80 }}
-				/>
-			</MaskedView>
-			<View
-				style={{
-					width: 62,
-					height: 62,
-					margin: 'auto', // alignSelf: 'center',
-					justifyContent: 'center',
-				}}
-			>
-				<View
-					style={{
-						borderRadius: '100%',
-						overflow: 'hidden',
-						borderColor: theme.complementary.a0,
-						opacity: 0.78,
-					}}
-				>
-					{/*@ts-ignore-next-line*/}
-					<Image
-						source={{
-							uri: item.avatarUrl,
-						}}
-						style={{
-							borderRadius: 62 / 2,
-							width: 62,
-							height: 62,
-						}}
-					/>
-				</View>
-			</View>
 		</Pressable>
 	);
 }
@@ -548,29 +353,6 @@ export class AppFlashList {
 				data={listItems}
 				renderItem={({ item }) => <FlatListRenderer item={item} />}
 				ListHeaderComponent={ListHeaderComponent}
-			/>
-		);
-	}
-
-	static PinnedProfiles({
-		data,
-		account,
-	}: AppFlatListPinCategory<ProfilePinnedUser>) {
-		const listItems = useMemo(() => {
-			return FlashListService.pinnedUsers(data);
-		}, [data]);
-
-		return (
-			<FlatList
-				data={listItems}
-				numColumns={4}
-				renderItem={({ item }) => {
-					if (item.type === 'entry')
-						return (
-							<Pinned_Users_ListItem item={item.props.dto} account={account} />
-						);
-					return <Pinned_Users_LastItem />;
-				}}
 			/>
 		);
 	}

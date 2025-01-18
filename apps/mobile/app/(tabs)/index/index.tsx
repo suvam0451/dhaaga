@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
-import SocialHub from '../../../components/screens/home/SocialHub';
+import SocialHubPresenter from '../../../features/social-hub/presenters/SocialHubPresenter';
 import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
 import { Account } from '../../../database/_schema';
 import {
@@ -163,7 +163,7 @@ function Screen() {
 	const { acct } = useAppAcct();
 
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
-	return <SocialHub />;
+	return <SocialHubPresenter />;
 }
 
 export default Screen;
