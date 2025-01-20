@@ -1,4 +1,32 @@
 {
+  "composer": {
+    "label": "Guide (Composer)",
+    "qPageIntro": "What does this page do?",
+    "aPageIntro": [
+      "This page lets you compose posts.",
+      "In the future, you will also be able to create polls and track your published content."
+    ],
+    "qSuchLayoutsMuchWow": "Why so many layouts?",
+    "aSuchLayoutsMuchWow": [
+      "Dhaaga has three unique composer layouts! Phew!",
+      "The smallest one appears when replying to direct messages and posts. Quick and easy!",
+      "The medium sized one (a.k.a. - \"Quick Post\") appears when publishing original posts. It has most options, but a bit cramped for longer posts.",
+      "The full sized composer (not implemented yet) will have every option to express your creativity!"
+    ],
+    "qHowConfigureLayout": "How to configure default layouts?",
+    "aHowConfigureLayout": [
+      "Mini layouts can get cramped, I know! But, please advise on how they can be improved, instead of replacing them.",
+      "If you must, then future updates will include options to force larger layouts."
+    ],
+    "qGrayedOut": "Why are some options grayed out?",
+    "aGrayedOut": [
+      "They are either implemented yet, or your server does not support them yet."
+    ],
+    "qOneMoreThing": "One more thing...",
+    "aOneMoreThing": [
+      "You can switch from the mini layout to \"Quick Post\" anytime, by pressing the button on the left."
+    ]
+  },
   "hub": {
     "label": "Guide (Hub)",
     "qPageIntro": "What does this page do?",

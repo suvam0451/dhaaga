@@ -165,27 +165,6 @@ function ReactButton() {
 
 function StatusInteractionButtons() {
 	const { acct } = useAppAcct();
-
-	// function OnTranslationClicked() {
-	// 	if (IsTranslateStateLoading) return;
-	// 	Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-	// 	client.instances
-	// 		.getTranslation(item.id, 'en')
-	// 		.then((res) => {
-	// 			console.log(res);
-	// 		})
-	// 		.catch((e) => {
-	// 			console.log(e);
-	// 		});
-	// }
-	//
-	// const IS_TRANSLATED =
-	// 	item.calculated.translationOutput !== undefined &&
-	// 	item.calculated.translationOutput !== null;
-
-	// loading state
-	// const [IsTranslateStateLoading, setIsTranslateStateLoading] = useState(false);
-
 	const IS_MISSKEY = ActivityPubService.misskeyLike(acct.driver);
 
 	return (

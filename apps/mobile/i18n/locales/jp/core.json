@@ -26,9 +26,6 @@
       "goodNight": "おやすみ"
     }
   },
-  "composer": {
-    "quickPost": "短い投稿"
-  },
   "inbox": {
     "pageHeader": {
       "mentions": "メンション",
@@ -47,6 +44,31 @@
   },
   "sheets": {
     "composer": {
+    }
+  },
+  "composer": {
+    "pageTitle": "作成",
+    "quickPost": "クイック投稿",
+    "quickPostCta": "何を考えていますか？",
+    "quickPostSubmit": "投稿",
+    "landing": {
+      "tComposeFull": "投稿を作成",
+      "dComposeFull": [
+        "長めの投稿",
+        "もっと多くのオプション"
+      ],
+      "tComposePoll": "投票を作成",
+      "dComposePoll": [
+        "<未実装>"
+      ],
+      "tViewScheduled": "公開された投稿を見る",
+      "dViewScheduled": [
+        "<未実装>"
+      ],
+      "tViewDrafts": "ドラフトを見る",
+      "dViewDrafts": [
+        "<未実装>"
+      ]
     }
   },
   "setting": {

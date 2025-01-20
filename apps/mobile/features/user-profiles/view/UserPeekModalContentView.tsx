@@ -126,7 +126,7 @@ function UserPeekModalContentView({ toProfile, user }: Props) {
 							textAlign: 'center',
 							alignSelf: 'center',
 							margin: 'auto',
-							fontSize: 16,
+							fontSize: 15,
 						}}
 						color={theme.primary.a0}
 					>

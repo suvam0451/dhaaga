@@ -12,6 +12,7 @@ export enum APP_ROUTING_ENUM {
 	// guides (5th tab)
 	GUIDE_MY_PROFILE = '/profile/user-guide-my-profile',
 	GUIDE_TIMELINES = '/user-guide-timelines',
+	GUIDE_COMPOSER = '/apps/user-guide',
 
 	SELECT_DRIVER = '/profile/pick-driver',
 

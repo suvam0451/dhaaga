@@ -43,9 +43,29 @@
     }
   },
   "composer": {
+    "pageTitle": "Compose",
     "quickPost": "Quick Post",
     "quickPostCta": "What's on your mind?",
-    "quickPostSubmit": "Post"
+    "quickPostSubmit": "Post",
+    "landing": {
+      "tComposeFull": "Create a Post",
+      "dComposeFull": [
+        "Longer Posts",
+        "More Options"
+      ],
+      "tComposePoll": "Create a Poll",
+      "dComposePoll": [
+        "<Not Implemented>"
+      ],
+      "tViewScheduled": "View Published Posts",
+      "dViewScheduled": [
+        "<Not Implemented>"
+      ],
+      "tViewDrafts": "View Drafts",
+      "dViewDrafts": [
+        "<Not Implemented>"
+      ]
+    }
   },
   "setting": {
     "accountModule": {
