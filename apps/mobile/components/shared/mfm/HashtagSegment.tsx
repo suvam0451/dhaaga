@@ -2,9 +2,8 @@ import { memo } from 'react';
 import { Text } from 'react-native';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
 import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../states/_global';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { RandomUtil } from '../../../utils/random.utils';
-import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 import { AppText } from '../../lib/Text';
 
 type Props = {
@@ -12,7 +11,7 @@ type Props = {
 	fontFamily: string;
 };
 
-const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
+const HashtagSegment = memo(function Foo({ value }: Props) {
 	const { theme, show, appSession } = useGlobalState(
 		useShallow((o) => ({
 			show: o.bottomSheet.show,

@@ -2,9 +2,9 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../components/dhaaga-bottom-sheet/Core';
 import { Pressable, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
 

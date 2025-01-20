@@ -1,13 +1,11 @@
 import { Text } from 'react-native';
-import { useMemo } from 'react';
 import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
-import useGlobalState from '../../../states/_global';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import TextUtils from '../../../utils/text.utils';
-import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 type LinkProcessorProps = {
 	url: string;
@@ -16,28 +14,12 @@ type LinkProcessorProps = {
 	emphasis: APP_COLOR_PALETTE_EMPHASIS;
 };
 
-function LinkProcessor({
-	url,
-	displayName,
-	fontFamily,
-	emphasis,
-}: LinkProcessorProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+function LinkProcessor({ url, displayName, fontFamily }: LinkProcessorProps) {
+	const { theme } = useAppTheme();
 
 	const { acceptTouch } = useAppMfmContext();
 	const httpsRemoved = url.replace(/(https:\/\/)(.+)/, '$2');
 	const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, '$2');
-
-	const linkTextFontFamily = useMemo(() => {
-		switch (emphasis) {
-			default:
-				return APP_FONTS.INTER_600_SEMIBOLD;
-		}
-	}, [fontFamily, emphasis]);
 
 	const linkDisplayName = TextUtils.shorten(
 		TextUtils.displayNameForLink(displayName),

@@ -1,5 +1,5 @@
 import { ScrollView, Text, View } from 'react-native';
-import useGlobalState from '../../../states/_global';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useRef, useState } from 'react';
 import { useApiGetTagInterface } from '../../../hooks/api/useTags';
@@ -9,7 +9,6 @@ import { AppMenu } from '../../lib/Menu';
 import { AppIcon } from '../../lib/Icon';
 import ActivityPubService from '../../../services/activitypub.service';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { APP_BOTTOM_SHEET_ENUM } from '../Core';
 import { AppText } from '../../lib/Text';
 
 function AppBottomSheetHashtag() {

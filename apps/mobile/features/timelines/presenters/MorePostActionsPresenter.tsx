@@ -11,10 +11,10 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { AppPostObject } from '../../../types/app-post.types';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../components/dhaaga-bottom-sheet/Core';
 import { AppText } from '../../../components/lib/Text';
 import { AppDivider } from '../../../components/lib/Divider';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 function ActionButton({
 	Icon,

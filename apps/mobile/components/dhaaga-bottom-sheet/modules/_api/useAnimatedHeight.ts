@@ -5,8 +5,8 @@ import {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Dimensions } from 'react-native';
-import { APP_BOTTOM_SHEET_ENUM } from '../../Core';
 import { useAppBottomSheet_Improved } from '../../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 function useAnimatedHeight() {
 	const { visible, stateId, type } = useAppBottomSheet_Improved();

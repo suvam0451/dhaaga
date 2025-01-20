@@ -13,9 +13,9 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
-import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { appDimensions } from '../../../styles/dimensions';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 type StatItemProps = {
 	count: number;

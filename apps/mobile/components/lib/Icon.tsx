@@ -13,7 +13,6 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
-import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
 // icons packs
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -29,6 +28,7 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 
 export type APP_ICON_ENUM =
 	| 'add'

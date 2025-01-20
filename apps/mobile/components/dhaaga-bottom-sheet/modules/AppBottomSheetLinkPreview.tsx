@@ -1,4 +1,4 @@
-import useGlobalState from '../../../states/_global';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { ScrollView, View, Text } from 'react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -13,7 +13,6 @@ import { AppIcon } from '../../lib/Icon';
 import { AppDivider } from '../../lib/Divider';
 
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { APP_BOTTOM_SHEET_ENUM } from '../Core';
 import { LinkingUtils } from '../../../utils/linking.utils';
 
 type OpenGraphParsingState = {

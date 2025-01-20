@@ -28,7 +28,6 @@ import {
 import { Image } from 'expo-image';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
-import { APP_BOTTOM_SHEET_ENUM } from '../dhaaga-bottom-sheet/Core';
 import UserListItemView from '../../features/timelines/view/UserListItemView';
 import { AppText } from './Text';
 import { AppChatRoom } from '../../services/chat.service';
@@ -40,6 +39,7 @@ import { APP_ROUTING_ENUM } from '../../utils/route-list';
 import { AppFeedObject } from '../../types/app-feed.types';
 import FeedListItemView from '../../features/timelines/view/FeedListItemView';
 import { appDimensions } from '../../styles/dimensions';
+import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 
 function Chatroom_Item({ item }: { item: AppChatRoom }) {
 	const [MemberAvatar, setMemberAvatar] = useState<AppUserObject>(null);

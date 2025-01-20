@@ -23,9 +23,9 @@ import {
 	useAppManager,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 import { TextContentView } from '../status/TextContentView';
 import UserViewNavbar from '../../shared/topnavbar/UserViewNavbar';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 export function ProfileContextWrapped() {
 	const { theme } = useAppTheme();

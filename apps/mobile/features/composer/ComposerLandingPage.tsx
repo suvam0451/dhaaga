@@ -11,7 +11,6 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
-import { APP_BOTTOM_SHEET_ENUM } from '../../components/dhaaga-bottom-sheet/Core';
 import { APP_ROUTING_ENUM } from '../../utils/route-list';
 import { AppText } from '../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
@@ -20,6 +19,7 @@ import QuickPost from './components/QuickPost';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../types/app.types';
 import { AppIcon } from '../../components/lib/Icon';
+import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 
 const MARGON_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 

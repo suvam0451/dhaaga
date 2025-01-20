@@ -25,7 +25,6 @@ import AppSessionManager from '../services/session/app-session.service';
 import { AppColorSchemeType } from '../utils/theming.util';
 import AccountSessionManager from '../services/session/account-session.service';
 import { WritableDraft } from 'immer';
-import { APP_BOTTOM_SHEET_ENUM } from '../components/dhaaga-bottom-sheet/Core';
 import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';
@@ -104,6 +103,38 @@ type AppHubState = {
 	loadPrev: () => void;
 	selectProfile: (index: number) => void;
 };
+
+/**
+ * App crashes on moving to different file...
+ */
+export enum APP_BOTTOM_SHEET_ENUM {
+	QUICK_POST = 'QuickPost',
+	APP_PROFILE = 'AppProfile',
+	ADD_PROFILE = 'AddProfile',
+	HASHTAG = 'Hashtag',
+	LINK = 'Link',
+	MORE_POST_ACTIONS = 'MorePostActions',
+	MORE_USER_ACTIONS = 'MoreUserActions',
+	NA = 'N/A',
+	PROFILE_PEEK = 'ProfilePeek',
+	REACTION_DETAILS = 'ReactionDetails',
+	SELECT_ACCOUNT = 'SelectAccount',
+	STATUS_COMPOSER = 'StatusComposer',
+	STATUS_MENU = 'StatusMenu',
+	STATUS_PREVIEW = 'StatusPreview',
+	SWITCH_THEME_PACK = 'SwitchThemePack',
+	TIMELINE_CONTROLLER = 'TimeLineController',
+	ADD_BOOKMARK = 'AddBookmark',
+	ADD_HUB_TAG = 'AddHubTag',
+	ADD_HUB_USER = 'AddHubUser',
+
+	POST_SHOW_REPLIES = 'PostShowReplies',
+	POST_SHOW_LIKES = 'PostShowLikes',
+	POST_SHOW_SHARES = 'PostShowShares',
+
+	POST_PREVIEW = 'PostPreview',
+	ADD_REACTION = 'AddReaction',
+}
 
 type AppBottomSheetState = {
 	type: APP_BOTTOM_SHEET_ENUM;

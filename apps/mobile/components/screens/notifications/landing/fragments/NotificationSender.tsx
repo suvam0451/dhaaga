@@ -16,12 +16,12 @@ import { AppIcon } from '../../../../lib/Icon';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { AppUserObject } from '../../../../../types/app-user.types';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
 import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { LocalizationService } from '../../../../../services/localization.service';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
 
 type Props = {
 	type: DhaagaJsNotificationType;

@@ -12,11 +12,11 @@ import {
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { AppToggleIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import ActivityPubService from '../../../../services/activitypub.service';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 /**
  * Press this to toggle sharing status

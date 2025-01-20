@@ -12,7 +12,6 @@ import { router } from 'expo-router';
 import TopNavbarBackButton from './TopNavbarBackButton';
 import { AppIcon } from '../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { LocalizationService } from '../../../../services/localization.service';
 import { ACTION } from '../../../../states/interactors/post-timeline.reducer';
 import {
@@ -28,6 +27,7 @@ import {
 } from '../../../../features/timelines/contexts/PostTimelineCtx';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 /**
  * A custom navbar that invokes
