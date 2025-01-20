@@ -1,6 +1,6 @@
-import { APP_THEME } from '../../styles/AppTheme';
 import { Animated, StyleSheet } from 'react-native';
 import TopNavbarGeneric from '../shared/topnavbar/fragments/TopNavbarGeneric';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type AutoHideNavBarProps = {
 	title: string;
@@ -22,12 +22,21 @@ function WithAutoHideTopNavBar({
 	children,
 	translateY,
 }: AutoHideNavBarProps) {
+	const { theme } = useAppTheme();
 	return (
-		<Animated.View style={styles.root}>
+		<Animated.View
+			style={[
+				styles.root,
+				{
+					backgroundColor: theme.palette.bg,
+				},
+			]}
+		>
 			<Animated.View
 				style={[
 					styles.nav,
 					{
+						backgroundColor: theme.background.a20,
 						transform: [
 							{
 								translateY,
@@ -46,7 +55,6 @@ function WithAutoHideTopNavBar({
 const styles = StyleSheet.create({
 	root: {
 		height: '100%',
-		backgroundColor: APP_THEME.BACKGROUND,
 	},
 	nav: {
 		position: 'absolute',

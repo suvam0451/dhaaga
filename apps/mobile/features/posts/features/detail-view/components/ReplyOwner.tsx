@@ -1,16 +1,17 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
-import useMfm from '../../hooks/useMfm';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { AppPostObject } from '../../../types/app-post.types';
-import { appDimensions } from '../../../styles/dimensions';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../lib/Text';
+import { AppPostObject } from '../../../../../types/app-post.types';
+import { appDimensions } from '../../../../../styles/dimensions';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../../../../components/lib/Text';
+import { TextContentView } from '../../../../../components/common/status/TextContentView';
 
 type Props = {
 	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
 };
+
+const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 /**
  *
@@ -18,21 +19,13 @@ type Props = {
  */
 function ReplyOwner({ dto, style }: Props) {
 	const { theme } = useAppTheme();
-	const { content } = useMfm({
-		content: dto.postedBy.displayName || 'N/A',
-		emojiMap: dto.calculated.emojis as any,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-	});
-
-	const IS_VALID_DISPLAY_NAME = !!dto.postedBy.displayName;
-
 	return (
 		<View
 			style={[
 				{
 					display: 'flex',
 					flexDirection: 'row',
-					marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
+					marginBottom: MARGIN_BOTTOM,
 				},
 				style,
 			]}
@@ -51,26 +44,27 @@ function ReplyOwner({ dto, style }: Props) {
 					style={{
 						flex: 1,
 						width: '100%',
-						opacity: 0.87,
 						borderRadius: appDimensions.timelines.avatarIconSize / 2,
 					}}
 					source={{ uri: dto.postedBy.avatarUrl }}
 				/>
 			</View>
-			<View style={{ marginLeft: 8 }}>
-				{IS_VALID_DISPLAY_NAME ? (
-					content
-				) : (
-					<AppText.SemiBold>{''}</AppText.SemiBold>
-				)}
-				<AppText.Medium
+			<View style={{ marginLeft: 8, flex: 1 }}>
+				<TextContentView
+					tree={dto.postedBy.parsedDisplayName}
+					variant={'displayName'}
+					mentions={[]}
+					emojiMap={dto.calculated.emojis}
+					oneLine
+				/>
+				<AppText.Normal
 					style={{
-						color: theme.secondary.a30,
+						color: theme.secondary.a40,
 						fontSize: 13,
 					}}
 				>
 					{dto.postedBy.handle}
-				</AppText.Medium>
+				</AppText.Normal>
 			</View>
 		</View>
 	);

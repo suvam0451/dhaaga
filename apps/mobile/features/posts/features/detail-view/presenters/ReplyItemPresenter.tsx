@@ -1,23 +1,21 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import ExplainOutput from '../explanation/ExplainOutput';
-import MediaItem from '../media/MediaItem';
-import useMfm from '../../hooks/useMfm';
-import ReplyOwner from '../user/ReplyOwner';
-import PostReplyToReply from './PostReplyToReply';
-import { useAppStatusContextDataContext } from '../../../hooks/api/statuses/WithAppStatusContextData';
-import {
-	APP_COLOR_PALETTE_EMPHASIS,
-	AppThemingUtil,
-} from '../../../utils/theming.util';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { appDimensions } from '../../../styles/dimensions';
+import MediaItem from '../../../../../components/common/media/MediaItem';
+import ReplyOwner from '../components/ReplyOwner';
+import ReplyToReplyItemPresenter from './ReplyToReplyItemPresenter';
+import { useAppStatusContextDataContext } from '../../../../../hooks/api/statuses/WithAppStatusContextData';
+import { AppThemingUtil } from '../../../../../utils/theming.util';
+import { appDimensions } from '../../../../../styles/dimensions';
 import {
 	ToggleMediaVisibility,
 	ToggleReplyVisibility,
-} from './DetailView/_shared';
-import { MiniMoreOptionsButton, MiniReplyButton } from './_shared';
-import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+} from '../../../../../components/common/status/DetailView/_shared';
+import {
+	MiniMoreOptionsButton,
+	MiniReplyButton,
+} from '../../../../../components/common/status/_shared';
+import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
+import { TextContentView } from '../../../../../components/common/status/TextContentView';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -26,25 +24,13 @@ type PostReplyProps = {
 	colors: string[];
 };
 
-function PostReplyContent({ lookupId, colors }: PostReplyProps) {
+function ReplyItemPresenter({ lookupId, colors }: PostReplyProps) {
 	const { data, getChildren } = useAppStatusContextDataContext();
-
-	const [ExplanationObject, setExplanationObject] = useState<string | null>(
-		null,
-	);
+	const [IsMediaShown, setIsMediaShown] = useState(false);
+	const [IsThreadShown, setIsThreadShown] = useState(false);
 
 	const dto = data.lookup.get(lookupId);
 	const children = getChildren(lookupId);
-
-	const { content } = useMfm({
-		content: dto.content.raw,
-		emojiMap: dto.calculated.emojis as any,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-	});
-
-	const [IsMediaShown, setIsMediaShown] = useState(false);
-	const [IsReplyThreadVisible, setIsReplyThreadVisible] = useState(false);
 
 	const replyCount = dto.stats.replyCount;
 	const mediaCount = dto.content.media.length;
@@ -54,14 +40,14 @@ function PostReplyContent({ lookupId, colors }: PostReplyProps) {
 	}
 
 	function toggleReplyVisibility() {
-		setIsReplyThreadVisible(!IsReplyThreadVisible);
+		setIsThreadShown(!IsThreadShown);
 	}
 
 	const DEPTH_COLOR = AppThemingUtil.getThreadColorForDepth(0);
 
 	return (
 		<View
-			style={{ paddingHorizontal: 10, marginBottom: SECTION_MARGIN_BOTTOM * 4 }}
+			style={{ paddingHorizontal: 10, marginBottom: SECTION_MARGIN_BOTTOM }}
 		>
 			<WithAppStatusItemContext dto={dto}>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -70,19 +56,22 @@ function PostReplyContent({ lookupId, colors }: PostReplyProps) {
 					<MiniMoreOptionsButton post={dto} />
 				</View>
 
-				<View style={{ marginBottom: SECTION_MARGIN_BOTTOM }}>{content}</View>
-				{ExplanationObject !== null && (
-					<ExplainOutput
-						additionalInfo={'Translated using OpenAI'}
-						fromLang={'jp'}
-						toLang={'en'}
-						text={ExplanationObject}
-					/>
-				)}
+				<TextContentView
+					tree={dto.content.parsed}
+					variant={'bodyContent'}
+					mentions={dto.calculated.mentions as any}
+					emojiMap={dto.calculated.emojis}
+					style={{
+						marginBottom: SECTION_MARGIN_BOTTOM,
+					}}
+				/>
 				{IsMediaShown && (
 					<MediaItem
 						attachments={dto.content.media}
 						calculatedHeight={dto.calculated.mediaContainerHeight}
+						style={{
+							marginBottom: SECTION_MARGIN_BOTTOM,
+						}}
 					/>
 				)}
 				<View
@@ -95,7 +84,7 @@ function PostReplyContent({ lookupId, colors }: PostReplyProps) {
 					<ToggleReplyVisibility
 						enabled={replyCount > 0}
 						onPress={toggleReplyVisibility}
-						expanded={IsReplyThreadVisible}
+						expanded={IsThreadShown}
 						count={replyCount}
 						style={{ marginRight: 4 }}
 					/>
@@ -108,10 +97,10 @@ function PostReplyContent({ lookupId, colors }: PostReplyProps) {
 				</View>
 			</WithAppStatusItemContext>
 			{/*	Reply Thread*/}
-			{IsReplyThreadVisible && (
+			{IsThreadShown && (
 				<View>
 					{children.map((o, i) => (
-						<PostReplyToReply
+						<ReplyToReplyItemPresenter
 							key={i}
 							colors={[...colors, DEPTH_COLOR]}
 							lookupId={o.id}
@@ -124,4 +113,4 @@ function PostReplyContent({ lookupId, colors }: PostReplyProps) {
 	);
 }
 
-export default PostReplyContent;
+export default ReplyItemPresenter;

@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		backgroundColor: '#1c1c1c',
 		height: appDimensions.topNavbar.height,
 	},
 	navbarTitleContainer: {
