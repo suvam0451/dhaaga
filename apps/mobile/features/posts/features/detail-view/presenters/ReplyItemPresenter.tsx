@@ -52,7 +52,7 @@ function ReplyItemPresenter({ lookupId, colors }: PostReplyProps) {
 			<WithAppStatusItemContext dto={dto}>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<ReplyOwner dto={dto} style={{ flex: 1 }} />
-					<MiniReplyButton post={dto} />
+					{/*<MiniReplyButton post={dto} />*/}
 					<MiniMoreOptionsButton post={dto} />
 				</View>
 
