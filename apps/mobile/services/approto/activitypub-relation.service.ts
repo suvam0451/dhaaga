@@ -53,9 +53,11 @@ class ActivitypubRelationService {
 		}
 	}
 
-	async unFollow() {
+	async unFollow(did?: string) {
 		try {
-			const { data, error } = await this.client.accounts.unfollow(this.userId);
+			const { data, error } = await this.client.accounts.unfollow(
+				did || this.userId,
+			);
 			if (error) {
 				console.log('failed to unfollow', error);
 				return false;

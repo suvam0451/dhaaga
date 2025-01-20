@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import ProfileImageGallery from './ProfileImageGallery';
+import ProfileGalleryModePresenter from '../../../../../../features/user-profiles/features/gallery-mode/presenters/ProfileGalleryModePresenter';
 import { StyleProp, View, ViewStyle, Dimensions, FlatList } from 'react-native';
 import { AppUserObject } from '../../../../../../types/app-user.types';
 import { AppInstagramTabControl } from '../../../../../lib/SegmentedControl';
@@ -68,7 +68,7 @@ function ProfileModules({ profileId, acct }: ProfileModulesProps) {
 	const Content = useMemo(() => {
 		switch (TabIndex) {
 			case 0:
-				return <ProfileImageGallery userId={profileId} />;
+				return <ProfileGalleryModePresenter userId={profileId} />;
 			case 1:
 				return <ProfilePinnedPosts previewedAcct={acct} userId={profileId} />;
 			case 2:

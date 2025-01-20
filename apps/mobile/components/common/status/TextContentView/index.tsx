@@ -143,7 +143,12 @@ function TextContentNode({
 			return (
 				<Text
 					key={node.uuid}
-					style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
+					style={{
+						marginBottom:
+							variant === 'displayName'
+								? 0
+								: appDimensions.timelines.sectionBottomMargin * 0.5,
+					}}
 					numberOfLines={oneLine ? 1 : undefined}
 				>
 					{node.nodes.map((_node, i) => (

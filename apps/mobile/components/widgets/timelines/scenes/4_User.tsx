@@ -3,10 +3,10 @@ import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import AppInput from '../../../lib/Inputs';
 import { Image } from 'expo-image';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import { ActivitypubHelper } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/interactors/post-timeline.reducer';
 import { useApiSearchUsers } from '../../../../hooks/api/useApiSearch';
 import {
 	useAppAcct,

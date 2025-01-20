@@ -4,11 +4,11 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
 import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
 import { AppToggleIcon } from '../../../../lib/Icon';
 import { appDimensions } from '../../../../../styles/dimensions';
 import ActivityPubService from '../../../../../services/activitypub.service';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
 
 /**
  * Bookmark toggle indicator button

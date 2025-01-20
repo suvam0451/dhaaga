@@ -1,7 +1,7 @@
 import { AppPostObject } from '../../types/app-post.types';
 import { AppFlashList } from '../lib/AppFlashList';
 import LoadingMore from '../screens/home/LoadingMore';
-import UserPeekModal from '../modals/UserPeekModal';
+import UserPeekModalPresenter from '../../features/user-profiles/presenters/UserPeekModalPresenter';
 import { Fragment } from 'react';
 import { FetchStatus } from '@tanstack/react-query';
 import useLoadingMoreIndicatorState from '../../states/useLoadingMoreIndicatorState';
@@ -40,7 +40,7 @@ export function PostTimeline({
 				onScroll={onScroll}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
-			<UserPeekModal />
+			<UserPeekModalPresenter />
 		</Fragment>
 	);
 }

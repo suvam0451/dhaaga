@@ -1,7 +1,7 @@
-import MyAccountPage from '../../../components/screens/profile/stack/MyAccountPage';
+import MyAccountPresenter from '../../../features/my-account/presenters/MyAccountPresenter';
 
 function Page() {
-	return <MyAccountPage />;
+	return <MyAccountPresenter />;
 }
 
 export default Page;

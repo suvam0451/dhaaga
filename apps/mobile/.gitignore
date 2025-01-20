@@ -1,5 +1,5 @@
 android/**
 .expo/devices.json
-eas.json
+# eas.json
 ios/**
 .expo/**

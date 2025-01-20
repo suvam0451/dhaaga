@@ -10,7 +10,6 @@ import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActio
 import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from './modules/select-account/AppBottomSheetSelectAccount';
 import AppBottomSheetPickThemePack from './modules/theme-pack/AppBottomSheetPickThemePack';
-import AppBottomSheetTimelineDetails from './modules/AppBottomSheetTimelineDetails';
 import AppBottomSheetLinkPreview from './modules/AppBottomSheetLinkPreview';
 import AppBottomSheetHashtag from './modules/AppBottomSheetHashtag';
 import { APP_FONTS } from '../../styles/AppFonts';
@@ -19,7 +18,6 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
-import ABS_Bookmark_Collections from './modules/ABS_Bookmark_Collections';
 import ABS_Add_Hub_Tag from './modules/ABS_Add_Hub_Tag';
 import ABS_Add_Hub_User from './modules/ABS_Add_Hub_User';
 import ABS_Post_Show_Comments from './modules/ABS_Post_Show_Comments';
@@ -28,36 +26,10 @@ import ABS_Post_Show_Shares from './modules/ABS_Post_Show_Shares';
 import ABS_Post_Preview from './modules/ABS_Post_Preview';
 import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
 import ABS_Add_Profile from './modules/ABS_Add_Profile';
-import { appVerticalIndex } from '../../styles/dimensions';
-
-export enum APP_BOTTOM_SHEET_ENUM {
-	QUICK_POST = 'QuickPost',
-	APP_PROFILE = 'AppProfile',
-	ADD_PROFILE = 'AddProfile',
-	HASHTAG = 'Hashtag',
-	LINK = 'Link',
-	MORE_POST_ACTIONS = 'MorePostActions',
-	MORE_USER_ACTIONS = 'MoreUserActions',
-	NA = 'N/A',
-	PROFILE_PEEK = 'ProfilePeek',
-	REACTION_DETAILS = 'ReactionDetails',
-	SELECT_ACCOUNT = 'SelectAccount',
-	STATUS_COMPOSER = 'StatusComposer',
-	STATUS_MENU = 'StatusMenu',
-	STATUS_PREVIEW = 'StatusPreview',
-	SWITCH_THEME_PACK = 'SwitchThemePack',
-	TIMELINE_CONTROLLER = 'TimeLineController',
-	ADD_BOOKMARK = 'AddBookmark',
-	ADD_HUB_TAG = 'AddHubTag',
-	ADD_HUB_USER = 'AddHubUser',
-
-	POST_SHOW_REPLIES = 'PostShowReplies',
-	POST_SHOW_LIKES = 'PostShowLikes',
-	POST_SHOW_SHARES = 'PostShowShares',
-
-	POST_PREVIEW = 'PostPreview',
-	ADD_REACTION = 'AddReaction',
-}
+import { appDimensions, appVerticalIndex } from '../../styles/dimensions';
+import CollectionAssignmentSheetPresenter from '../../features/collections/presenters/CollectionAssignmentSheetPresenter';
+import TimelineControllerSheetPresenter from '../../features/timelines/features/controller/presenters/TimelineControllerSheetPresenter';
+import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 
 /**
  * Responsible for generating content
@@ -89,7 +61,7 @@ function Factory() {
 			case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
 				return <AppBottomSheetPickThemePack />;
 			case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:
-				return <AppBottomSheetTimelineDetails />;
+				return <TimelineControllerSheetPresenter />;
 			case APP_BOTTOM_SHEET_ENUM.LINK:
 				return <AppBottomSheetLinkPreview />;
 			case APP_BOTTOM_SHEET_ENUM.HASHTAG:
@@ -97,7 +69,7 @@ function Factory() {
 			case APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS:
 				return <AppBottomSheetUserMoreActions />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
-				return <ABS_Bookmark_Collections />;
+				return <CollectionAssignmentSheetPresenter />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
 				return <ABS_Add_Hub_Tag />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
@@ -158,7 +130,7 @@ const AppBottomSheet = memo(() => {
 			<Animated.View
 				style={[
 					styles.rootContainer,
-					{ backgroundColor: theme.background.a20 },
+					{ backgroundColor: theme.background.a10 },
 					animStyle,
 				]}
 			>
@@ -170,15 +142,15 @@ const AppBottomSheet = memo(() => {
 						justifyContent: 'center',
 						left: '50%',
 						transform: [{ translateX: '-50%' }],
-						top: 8,
+						top: 10,
 						zIndex: 9000,
 					}}
 				>
 					<View
 						style={{
-							height: 4,
-							width: 48,
-							backgroundColor: theme.textColor.low,
+							height: 3,
+							width: 42,
+							backgroundColor: theme.secondary.a50,
 							marginBottom: 16,
 							borderRadius: 16,
 						}}
@@ -195,8 +167,8 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		bottom: 0,
 		width: '100%',
-		borderTopRightRadius: 8,
-		borderTopLeftRadius: 8,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
 		zIndex: appVerticalIndex.sheetContent,
 	},
 	text: {

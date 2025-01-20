@@ -1,7 +1,6 @@
 import {
 	Pressable,
 	StyleProp,
-	Text,
 	View,
 	ViewStyle,
 	StyleSheet,
@@ -10,10 +9,8 @@ import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { memo, useRef } from 'react';
 import { Skeleton } from '@rneui/base';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_KNOWN_MODAL } from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
-import { appDimensions } from '../../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
 	useAppManager,
@@ -27,8 +24,9 @@ import { AccountSavedUser } from '../../../../database/_schema';
 import { TextContentView } from '../TextContentView';
 import { AppParsedTextNodes } from '../../../../types/parsed-text.types';
 import MfmService from '../../../../services/mfm.service';
+import { AppText } from '../../../lib/Text';
 
-const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
+const TIMELINE_PFP_SIZE = 44; // appDimensions.timelines.avatarIconSize;
 
 /**
  * Renders the user (poster)'s avatar
@@ -110,7 +108,7 @@ export function OriginalPosterPostedByFragment({
 			style={{
 				alignItems: 'flex-start',
 				marginLeft: 8, // to leave sufficient space to show indicator icons
-				marginRight: 84,
+				marginRight: 48,
 			}}
 		>
 			<View>
@@ -121,19 +119,17 @@ export function OriginalPosterPostedByFragment({
 						mentions={[]}
 						emojiMap={emojiMap}
 						oneLine
-						style={{ marginBottom: displayNameParsed.length > 0 ? -4 : 0 }}
 					/>
-					<Text
+					<AppText.Normal
 						style={{
-							color: theme.secondary.a20,
+							color: theme.secondary.a40,
 							fontSize: 13,
-							fontFamily: APP_FONTS.INTER_400_REGULAR,
 							maxWidth: 196,
 						}}
 						numberOfLines={1}
 					>
 						{handle} • {DatetimeUtil.timeAgo(postedAt)}
-					</Text>
+					</AppText.Normal>
 				</Pressable>
 			</View>
 		</View>

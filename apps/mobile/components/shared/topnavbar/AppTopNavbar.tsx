@@ -50,7 +50,7 @@ const AppTopNavbar = memo(
 				default:
 					return <TopNavbarGeneric title={title} />;
 			}
-		}, [type]);
+		}, [title, type]);
 		return (
 			<Animated.View
 				style={{

@@ -11,6 +11,8 @@ export enum APP_ROUTING_ENUM {
 	GUIDE_SETTINGS_TAB = '/profile/user-guide-settings',
 	// guides (5th tab)
 	GUIDE_MY_PROFILE = '/profile/user-guide-my-profile',
+	GUIDE_TIMELINES = '/user-guide-timelines',
+	GUIDE_COMPOSER = '/apps/user-guide',
 
 	SELECT_DRIVER = '/profile/pick-driver',
 
@@ -27,11 +29,12 @@ export enum APP_ROUTING_ENUM {
 	COLLECTIONS = '/profile/collections',
 	PROFILES = '/profile/profiles',
 
-	LIKES = '/profile/account/likes',
-	BOOKMARK = '/profile/account/bookmarks',
-	LISTS = '/profile/account/lists',
-	FEEDS = '/profile/account/feeds',
-	DRAFTS = '/profile/account/drafts',
+	MY_LIKES = '/profile/account/likes',
+	MY_BOOKMARKS = '/profile/account/bookmarks',
+	MY_LISTS = '/profile/account/lists',
+	MY_FEEDS = '/profile/account/feeds',
+	MY_DRAFTS = '/profile/account/drafts',
+	MY_POSTS = '/profile/account/posts',
 
 	APP_FEATURE_COLLECTION = '/profile/app-features/collection',
 }

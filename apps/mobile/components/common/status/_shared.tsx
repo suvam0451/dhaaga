@@ -5,13 +5,13 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import ActivityPubService from '../../../services/activitypub.service';
-import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppPostObject } from '../../../types/app-post.types';
 import { Fragment } from 'react';
 import { AccountSavedPost } from '../../../database/_schema';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 type PostMoreOptionsButtonProps = {
 	post: AppPostObject;

@@ -6,7 +6,7 @@ import {
 	detectFacets,
 } from '../../utils/atproto-facets.utils';
 import { AtpAgent, BlobRef, Facet } from '@atproto/api';
-import { PostComposerReducerStateType } from '../../states/reducers/post-composer.reducer';
+import { PostComposerReducerStateType } from '../../states/interactors/post-composer.reducer';
 import MediaUtils from '../../utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
 

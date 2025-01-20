@@ -12,7 +12,6 @@ import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
 import * as Haptics from 'expo-haptics';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { AppPostObject } from '../../../../types/app-post.types';
 import {
 	useAppPublishers,
@@ -20,6 +19,7 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { Loader } from '../../../lib/Loader';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 const EmojiReaction = memo(function Foo({
 	dto,

@@ -13,8 +13,9 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
-import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { appDimensions } from '../../../styles/dimensions';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 type StatItemProps = {
 	count: number;
@@ -99,6 +100,8 @@ function PostStats({ style }: PostStatsProps) {
 		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES, true);
 	}
 
+	if (!LIKE_COUNT && !SHARE_COUNT && !REPLY_COUNT) return <View />;
+
 	return (
 		<View style={[styles.container, style]}>
 			<StatItem
@@ -132,6 +135,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
+		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 	text: {
 		fontSize: 14,

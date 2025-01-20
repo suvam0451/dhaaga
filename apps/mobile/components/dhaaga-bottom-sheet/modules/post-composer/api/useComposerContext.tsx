@@ -5,7 +5,7 @@ import {
 	PostComposerReducerActionType,
 	postComposerReducerDefault as reducerDefault,
 	PostComposerReducerStateType,
-} from '../../../../../states/reducers/post-composer.reducer';
+} from '../../../../../states/interactors/post-composer.reducer';
 import { useAppBottomSheet_Improved } from '../../../../../hooks/utility/global-state-extractors';
 import usePostComposeAutoCompletion from './usePostComposeAutoCompletion';
 

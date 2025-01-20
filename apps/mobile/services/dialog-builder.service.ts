@@ -163,6 +163,42 @@ export class DialogBuilderService {
 	}
 
 	/**
+	 * Perform more actions when currently
+	 * following, but not followed by a user
+	 */
+	static currentlyFollowedMoreActions(onFollow: any): AppDialogInstanceState {
+		return {
+			title: 'Followed',
+			description: ['This user currently follows you.'],
+			actions: [
+				{
+					label: 'Follow Back',
+					onPress: onFollow,
+					variant: 'default',
+				},
+			],
+		};
+	}
+
+	/**
+	 * Perform more actions when currently
+	 * following each other
+	 */
+	static currentlyFriendsMoreActions(onUnfollow: any): AppDialogInstanceState {
+		return {
+			title: 'Friends',
+			description: ['You currently follow each other.'],
+			actions: [
+				{
+					label: 'Unfollow',
+					onPress: onUnfollow,
+					variant: 'destructive',
+				},
+			],
+		};
+	}
+
+	/**
 	 * ----- Social Hub -----
 	 */
 	static toSwitchActiveAccount(onPress: any): AppDialogInstanceState {

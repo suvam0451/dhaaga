@@ -5,12 +5,12 @@ import { useAppDb } from '../../../../hooks/utility/global-state-extractors';
 import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
-} from '../../../context-wrappers/WithPostTimeline';
+} from '../../../../features/timelines/contexts/PostTimelineCtx';
 import {
 	AppTimelineReducerActionType,
 	TimelineFetchMode,
-} from '../../../../states/reducers/post-timeline.reducer';
-import useTimeline from '../../../common/timeline/api/useTimeline';
+} from '../../../../states/interactors/post-timeline.reducer';
+import useTimeline from '../../../../features/timelines/api/useTimeline';
 import { PostTimeline } from '../../../data-views/PostTimeline';
 
 function DataView() {

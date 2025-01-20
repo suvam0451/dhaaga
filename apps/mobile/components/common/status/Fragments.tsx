@@ -1,22 +1,11 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppText } from '../../lib/Text';
-import { Pressable, StyleSheet, View } from 'react-native';
-import useMfm from '../../hooks/useMfm';
+import { StyleSheet, View } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { appDimensions } from '../../../styles/dimensions';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import useAppNavigator from '../../../states/useAppNavigator';
 import { AppParsedTextNodes } from '../../../types/parsed-text.types';
 import { TextContentView } from './TextContentView';
-
-type MfmComponentProps = {
-	raw: string;
-	knownReactions: Map<string, string>;
-	fontFamily?: string;
-	numberOfLines?: number;
-	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
-};
 
 type PostedByTextOneLineProps = {
 	parsedText: AppParsedTextNodes;
@@ -42,20 +31,17 @@ function PostedByTextOneLine({
 }: PostedByTextOneLineProps) {
 	if (driver === KNOWN_SOFTWARE.BLUESKY)
 		return (
-			<View
-				style={{
-					flexDirection: 'row',
-					flex: 1,
-					alignItems: 'center',
-					marginBottom: appDimensions.timelines.sectionBottomMargin,
-				}}
-			>
-				<TextContentView
-					tree={parsedText}
-					variant={'displayName'}
-					mentions={[]}
-					emojiMap={new Map()}
-				/>
+			<View style={timelineStyles.oneLineDisplayNameRoot}>
+				{parsedText ? (
+					<TextContentView
+						tree={parsedText}
+						variant={'displayName'}
+						mentions={[]}
+						emojiMap={new Map()}
+					/>
+				) : (
+					<AppText.Medium>{altText}</AppText.Medium>
+				)}
 				<AppText.Normal
 					style={{
 						fontSize: 13,
@@ -69,14 +55,7 @@ function PostedByTextOneLine({
 		);
 
 	return (
-		<View
-			style={{
-				flexDirection: 'row',
-				flex: 1,
-				alignItems: 'center',
-				marginBottom: appDimensions.timelines.sectionBottomMargin,
-			}}
-		>
+		<View style={timelineStyles.oneLineDisplayNameRoot}>
 			<View style={{ flex: 1, flexShrink: 1 }}>
 				{parsedText ? (
 					<TextContentView
@@ -124,45 +103,6 @@ function ReplyIndicator() {
 	);
 }
 
-type PostTextContentProps = {
-	postId: string;
-	raw: string;
-	disableTouch?: boolean;
-	emojis?: Map<string, string>;
-};
-
-function PostTextContent({
-	postId,
-	raw,
-	disableTouch,
-	emojis,
-}: PostTextContentProps) {
-	const { toPost } = useAppNavigator();
-	const { content, isLoaded } = useMfm({
-		content: raw,
-		emojiMap: emojis,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-	});
-
-	// TODO: render skeleton based on content size
-	if (!isLoaded) return <View />;
-	return (
-		<Pressable
-			onPress={() => {
-				if (!disableTouch) {
-					toPost(postId);
-				}
-			}}
-			style={{
-				marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
-			}}
-		>
-			{content}
-		</Pressable>
-	);
-}
-
 const timelineStyles = StyleSheet.create({
 	parentPostRootView: {
 		position: 'relative',
@@ -175,6 +115,12 @@ const timelineStyles = StyleSheet.create({
 		flex: 1,
 		marginBottom: appDimensions.timelines.sectionBottomMargin * 4,
 	},
+	oneLineDisplayNameRoot: {
+		flexDirection: 'row',
+		flex: 1,
+		alignItems: 'center',
+		marginBottom: appDimensions.timelines.sectionBottomMargin,
+	},
 });
 
-export { PostedByTextOneLine, ReplyIndicator, PostTextContent, timelineStyles };
+export { PostedByTextOneLine, ReplyIndicator, timelineStyles };

@@ -77,7 +77,6 @@ class Service {
 		}
 
 		return db.collectionSavedPost.findOne({
-			active: true,
 			collectionId: collection.id,
 			savedPostId: savedPost.id,
 		});
@@ -98,6 +97,7 @@ class Service {
 		const conflict = db.accountCollection.findOne({
 			active: true,
 			identifier: identifier,
+			accountId: acct.id,
 		});
 		if (conflict) return;
 		db.accountCollection.insert({

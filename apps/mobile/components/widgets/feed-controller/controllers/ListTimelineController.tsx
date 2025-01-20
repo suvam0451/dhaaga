@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { styles } from './_shared';

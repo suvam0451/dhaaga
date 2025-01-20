@@ -1,8 +1,7 @@
 import { Stack } from 'expo-router/stack';
-import RneuiTheme from '../styles/RneuiTheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ThemeProvider } from '@rneui/themed';
+import { createTheme, ThemeProvider } from '@rneui/themed';
 import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
@@ -21,7 +20,7 @@ import useAppSession from '../states/useAppSession';
 import ImageInspectModal from '../components/modals/ImageInspectModal';
 import { AppDialog } from '../components/lib/AppDialog';
 import { useAppTheme } from '../hooks/utility/global-state-extractors';
-import '../services/i18n/_loader';
+import '../i18n/_loader';
 
 enableMapSet();
 
@@ -129,6 +128,8 @@ function App() {
 		</View>
 	);
 }
+
+const RneuiTheme = createTheme({});
 
 export default function Page() {
 	const queryClient = new QueryClient();

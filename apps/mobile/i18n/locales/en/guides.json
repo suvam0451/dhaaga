@@ -1,0 +1,110 @@
+{
+  "composer": {
+    "label": "Guide (Composer)",
+    "qPageIntro": "What does this page do?",
+    "aPageIntro": [
+      "This page lets you compose posts.",
+      "In the future, you will also be able to create polls and track your published content."
+    ],
+    "qSuchLayoutsMuchWow": "Why so many layouts?",
+    "aSuchLayoutsMuchWow": [
+      "Dhaaga has three unique composer layouts! Phew!",
+      "The smallest one appears when replying to direct messages and posts. Quick and easy!",
+      "The medium sized one (a.k.a. - \"Quick Post\") appears when publishing original posts. It has most options, but a bit cramped for longer posts.",
+      "The full sized composer (not implemented yet) will have every option to express your creativity!"
+    ],
+    "qHowConfigureLayout": "How to configure default layouts?",
+    "aHowConfigureLayout": [
+      "Mini layouts can get cramped, I know! But, please advise on how they can be improved, instead of replacing them.",
+      "If you must, then future updates will include options to force larger layouts."
+    ],
+    "qGrayedOut": "Why are some options grayed out?",
+    "aGrayedOut": [
+      "They are either implemented yet, or your server does not support them yet."
+    ],
+    "qOneMoreThing": "One more thing...",
+    "aOneMoreThing": [
+      "You can switch from the mini layout to \"Quick Post\" anytime, by pressing the button on the left."
+    ]
+  },
+  "hub": {
+    "label": "Guide (Hub)",
+    "qPageIntro": "What does this page do?",
+    "aPageIntro": [
+      "The \"Social Hub\" is a powerful profile management and hub customization experience unique to Dhaaga.",
+      "Easily organise and keep track of your interests.",
+      "No need to trawl through algorithmic feeds!"
+    ],
+    "qHowToUse": "How to use the hub?",
+    "aHowToUse": [
+      "Swipe left/right to switch accounts.",
+      "Press (+) to pin more feeds/users/tags."
+    ],
+    "qExplainProfiles": "What are profiles?",
+    "aExplainProfiles": [
+      "You can have multiple profiles for every account.",
+      "A nice way to decorate the hub pins by interest."
+    ],
+    "qHowToDeletePins": "How to delete pins?",
+    "aHowToDeletePins": [
+      "Long press any pin to show more options!"
+    ],
+    "qHowToArrangePins": "How to rearrange pins?",
+    "aHowToArrangePins": [
+      "Not available yet."
+    ],
+    "qOneMoreThing": "One more thing...",
+    "aOneMoreThing": [
+      "You can freely switch between accounts here,",
+      "But, it does not change which account is active everywhere else in the app.",
+      "If you try to open a pin for an inactive account, a dialog box will help you switch and continue."
+    ]
+  },
+  "myAccount": {
+    "label": "Guide (My Account)",
+    "qPageIntro": "What does this page do?",
+    "aPageIntro": [
+      "This is your account overview!",
+      "You can access most of your server's features, as well as Dhaaga special features from here."
+    ],
+    "qHowAddSwitchAccount": "How can I add/switch accounts?",
+    "aHowAddSwitchAccount": [
+      "To switch, long press the 5th tab (works from anywhere).",
+      "To add, either use the above or go to Settings -> Accounts -> Add"
+    ],
+    "qHowEditAccountDetails": "How can I edit my account details?",
+    "aHowEditAccountDetails": [
+      "Editing avatar and banner etc. has to be done using websites (for now).",
+      "Since Dhaaga focuses on browsing and chat use cases, such features are slow to be added."
+    ],
+    "qProfileOutOfSync": "My profile is out of sync",
+    "aProfileOutOfSync": [
+      "If something feels out of sync (e.g. - counters, avatar, banner etc),",
+      "Try to pull down and refresh this page. It is designed to fix most sync issues.",
+      "If the issue persists, please report it to the developer."
+    ]
+  },
+  "settings": {
+    "qWhereAmI": "Where am I?",
+    "aWhereAmI": [
+      "From here, you can tweak various settings that affect your experience throughout the app and extra goodie features offered by Dhaaga."
+    ],
+    "qServerSettingMismatch": "Why are my server settings not imported?",
+    "aServerSettingMismatch": [
+      "Dhaaga is a multi-protocol client supporting many SNS software.",
+      "So, these settings have to be set-up locally.",
+      "But, once done, they will then be applied to all your SNS accounts!"
+    ],
+    "qProGetHow": "How can I pay and unlock the \"Pro\" version?",
+    "aProGetHow": [
+      "What is a... \"Pro\" version? Is it a bird ? \uD83E\uDD14"
+    ],
+    "qSupportHow": "For real though, How can I support you ?",
+    "aSupportHow": [
+      "Wow, gee. Thanks 💛.",
+      "I built this app and made it free and open-source because I want the community to enjoy a superior SNS experience—One, which isn't restricted by platforms and protocols, and one that isn't bogged down by the same old social media anti-features.",
+      "As an indie developer, I'd really appreciate your feedback, encouragement and support.",
+      "So, feel free to drop by and say hi 👋: \nHated it ? Tell me what I can improve!\nLiked it ? maybe share it with your friends!\nLoved it ? consider leaving a tip!"
+    ]
+  }
+}

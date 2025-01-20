@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, View, Text } from 'react-native';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import { useEffect, useRef, useState } from 'react';
 import { APP_THEME } from '../../../../styles/AppTheme';
 import AppInput from '../../../lib/Inputs';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
-import { TimelineFetchMode } from '../../../../states/reducers/post-timeline.reducer';
+import { TimelineFetchMode } from '../../../../states/interactors/post-timeline.reducer';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 type SearchResults = {

@@ -7,6 +7,7 @@ import {
 	AppThemingUtil,
 } from '../../utils/theming.util';
 import { RandomUtil } from '../../utils/random.utils';
+import { useTranslation } from 'react-i18next';
 
 type AppTextProps = {
 	key?: any;
@@ -73,6 +74,7 @@ export class AppText {
 		emphasis,
 	}: AppTextProps) {
 		const { theme } = useAppTheme();
+		const { i18n } = useTranslation();
 
 		let _color =
 			color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
@@ -80,12 +82,19 @@ export class AppText {
 			AppTextVariant.BODY_MEDIUM,
 		);
 
+		const FONT_INCOMPATIBLE = ['jp'].includes(i18n.language);
 		return (
 			<Text
 				key={keygen ? RandomUtil.nanoId() : key}
 				style={[
 					_baseStyling,
-					{ color: _color, fontFamily: APP_FONTS.BEBAS_NEUE_400, fontSize: 32 },
+					{
+						color: _color,
+						fontFamily: FONT_INCOMPATIBLE
+							? APP_FONTS.ROBOTO_500
+							: APP_FONTS.BEBAS_NEUE_400,
+						fontSize: FONT_INCOMPATIBLE ? 18 : 22,
+					},
 					style,
 				]}
 				numberOfLines={numberOfLines}
@@ -211,8 +220,6 @@ export class AppText {
 	}
 
 	static Normal({
-		key,
-		keygen,
 		style,
 		color,
 		children,
@@ -244,8 +251,6 @@ export class AppText {
 	}
 
 	static SemiBold({
-		key,
-		keygen,
 		style,
 		color,
 		children,
@@ -277,15 +282,7 @@ export class AppText {
 		);
 	}
 
-	static SemiBoldAlt({
-		key,
-		keygen,
-		style,
-		color,
-		children,
-		numberOfLines,
-		emphasis,
-	}: AppTextProps) {
+	static SemiBoldAlt({ style, children, numberOfLines }: AppTextProps) {
 		const { theme } = useAppTheme();
 		return (
 			<Text

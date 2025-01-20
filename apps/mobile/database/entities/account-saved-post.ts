@@ -21,9 +21,10 @@ class Service {
 		});
 	}
 
-	static find(db: DataSource, id: string): AccountSavedPost {
+	static find(db: DataSource, acct: Account, id: string): AccountSavedPost {
 		return db.accountSavedPost.findOne({
 			identifier: id,
+			accountId: acct.id,
 			active: true,
 		});
 	}
@@ -42,7 +43,6 @@ class Service {
 		const conflict = db.accountSavedPost.findOne({
 			accountId: acct.id,
 			identifier: post.id,
-			active: true,
 		});
 
 		if (conflict) {
@@ -52,6 +52,7 @@ class Service {
 				spoilerText: post.meta.cw,
 				sensitive: post.meta.sensitive,
 				savedUserId: postedBy.id,
+				active: true,
 			});
 		} else {
 			db.accountSavedPost.insert({

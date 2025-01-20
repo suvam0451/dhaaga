@@ -19,9 +19,9 @@ import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppIcon } from '../../../components/lib/Icon';
 import { AppAccountSelectionItem } from '../../../components/common/app/Account';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../components/dhaaga-bottom-sheet/Core';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 type ProfileFragmentProps = {
 	acct: Account;

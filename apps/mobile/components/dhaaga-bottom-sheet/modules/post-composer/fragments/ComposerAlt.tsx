@@ -9,7 +9,7 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { AppBottomSheetMenu } from '../../../../lib/Menu';
-import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 import { AppIcon } from '../../../../lib/Icon';
 import MediaUtils from '../../../../../utils/media.utils';
 import {

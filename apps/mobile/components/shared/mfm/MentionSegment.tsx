@@ -1,6 +1,5 @@
 import { Text } from 'react-native';
 import { RandomUtil } from '../../../utils/random.utils';
-import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import {
 	useAppAcct,
@@ -8,6 +7,7 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { TextParserService } from '../../../services/text-parser.service';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 type Props = {
 	value: string;

@@ -9,7 +9,7 @@ import useGetStatusCtxInterface from '../../../../hooks/api/statuses/useGetStatu
 import WithAppStatusContextDataContext, {
 	useAppStatusContextDataContext,
 } from '../../../../hooks/api/statuses/WithAppStatusContextData';
-import PostReply from '../../../common/status/PostReply';
+import PostReply from '../../../../features/posts/features/detail-view/presenters/ReplyItemPresenter';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
 import { AppText } from '../../../lib/Text';
@@ -89,7 +89,7 @@ function SharedStackPostDetails() {
 						<RefreshControl refreshing={refreshing} onRefresh={refetch} />
 					}
 					contentContainerStyle={{
-						paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
+						paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
 					}}
 					onScroll={onScroll}
 				>

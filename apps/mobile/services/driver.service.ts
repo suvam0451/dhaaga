@@ -52,19 +52,19 @@ class DriverService {
 					label: 'Feeds',
 					desc: 'Subscribed Feeds',
 					iconId: 'edit',
-					to: APP_ROUTING_ENUM.FEEDS,
+					to: APP_ROUTING_ENUM.MY_FEEDS,
 				},
 				{
 					label: 'Likes',
 					desc: 'I liked these',
 					iconId: 'heart',
-					to: APP_ROUTING_ENUM.LIKES,
+					to: APP_ROUTING_ENUM.MY_LIKES,
 				},
 				{
 					label: 'Lists',
 					desc: 'My lists',
 					iconId: 'list',
-					to: APP_ROUTING_ENUM.LISTS,
+					to: APP_ROUTING_ENUM.MY_LISTS,
 				},
 			];
 		} else if (ActivityPubService.misskeyLike(driver)) {
@@ -73,13 +73,13 @@ class DriverService {
 					label: 'Bookmarks',
 					desc: 'My Bookmarks',
 					iconId: 'bookmark',
-					to: APP_ROUTING_ENUM.BOOKMARK,
+					to: APP_ROUTING_ENUM.MY_BOOKMARKS,
 				},
 				{
 					label: 'Lists',
 					desc: 'My lists',
 					iconId: 'language',
-					to: APP_ROUTING_ENUM.LISTS,
+					to: APP_ROUTING_ENUM.MY_LISTS,
 				},
 			];
 		} else if (ActivityPubService.mastodonLike(driver)) {
@@ -88,19 +88,19 @@ class DriverService {
 					label: 'Likes',
 					desc: "Posts I've Liked",
 					iconId: 'heart',
-					to: APP_ROUTING_ENUM.LIKES,
+					to: APP_ROUTING_ENUM.MY_LIKES,
 				},
 				{
 					label: 'Bookmarks',
 					desc: 'My Bookmarks',
 					iconId: 'bookmark',
-					to: APP_ROUTING_ENUM.BOOKMARK,
+					to: APP_ROUTING_ENUM.MY_BOOKMARKS,
 				},
 				{
 					label: 'Lists',
 					desc: 'My lists',
 					iconId: 'list',
-					to: APP_ROUTING_ENUM.LISTS,
+					to: APP_ROUTING_ENUM.MY_LISTS,
 				},
 			];
 		} else {

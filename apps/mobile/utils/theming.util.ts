@@ -151,9 +151,9 @@ export class AppThemingUtil {
 	): StyleProp<TextStyle> {
 		switch (variant) {
 			case AppTextVariant.BODY_NORMAL:
-				return { fontSize: 14, fontFamily: APP_FONTS.INTER_400_REGULAR };
+				return { fontSize: 15, fontFamily: APP_FONTS.ROBOTO_400 };
 			case AppTextVariant.BODY_MEDIUM:
-				return { fontSize: 14, fontFamily: APP_FONTS.ROBOTO_500 };
+				return { fontSize: 15, fontFamily: APP_FONTS.ROBOTO_500 };
 			case AppTextVariant.BODY_SEMIBOLD:
 				return { fontSize: 14, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
 			case AppTextVariant.BODY_BOLD:

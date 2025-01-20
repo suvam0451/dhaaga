@@ -9,7 +9,7 @@ import {
 import { APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { useComposerContext } from '../api/useComposerContext';
-import { PostComposerReducerActionType } from '../../../../../states/reducers/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 
 const ComposerSpoiler = memo(() => {
 	const { state, dispatch } = useComposerContext();

@@ -68,7 +68,6 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@react-native-community/cli": "^15.1.2",
     "typescript": "^5.7.2"
   },
   "type": "module"

@@ -16,12 +16,12 @@ import { AppIcon } from '../../../../lib/Icon';
 import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { AppUserObject } from '../../../../../types/app-user.types';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../dhaaga-bottom-sheet/Core';
 import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { LocalizationService } from '../../../../../services/localization.service';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
 
 type Props = {
 	type: DhaagaJsNotificationType;
@@ -50,20 +50,11 @@ export const NotificationSender = memo(
 	}: Props) => {
 		const { theme } = useAppTheme();
 
-		// const { content: _displayName } = useMfm({
-		// 	content: displayName,
-		// 	remoteSubdomain,
-		// 	emojiMap: new Map(),
-		// 	deps: [displayName],
-		// 	fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		// });
-
 		const { find } = useAppCustomEmoji();
 		const { Icon, bg } = useMemo(() => {
 			switch (type) {
 				case DhaagaJsNotificationType.FAVOURITE: {
 					return {
-						// Icon: <FontAwesome name="star" size={16} color={'#feac33'} />,
 						Icon: (
 							<AntDesign
 								name="like1"

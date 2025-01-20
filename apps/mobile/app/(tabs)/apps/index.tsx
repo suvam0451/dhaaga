@@ -1,7 +1,7 @@
-import AppTabLanding from '../../../components/screens/apps/stack/AppTabLanding';
+import ComposerLandingPage from '../../../features/composer/ComposerLandingPage';
 
 function Screen() {
-	return <AppTabLanding />;
+	return <ComposerLandingPage />;
 }
 
 export default Screen;

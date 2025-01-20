@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import {
 	useTimelineManager,
 	useTimelineState,
-} from '../../components/context-wrappers/WithPostTimeline';
+} from '../../features/timelines/contexts/PostTimelineCtx';
 
 /**
  * Allows performing actions against a post

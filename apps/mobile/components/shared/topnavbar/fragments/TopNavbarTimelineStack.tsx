@@ -1,29 +1,33 @@
 import {
 	Pressable,
+	StatusBar,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import { APP_FONT } from '../../../../styles/AppTheme';
 import TimelineWidgetModal from '../../../widgets/timelines/core/Modal';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { router } from 'expo-router';
 import TopNavbarBackButton from './TopNavbarBackButton';
 import { AppIcon } from '../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { LocalizationService } from '../../../../services/localization.service';
-import { ACTION } from '../../../../states/reducers/post-timeline.reducer';
-import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
+import { ACTION } from '../../../../states/interactors/post-timeline.reducer';
+import {
+	useAppApiClient,
+	useAppBottomSheet_Improved,
+	useAppBottomSheet_TimelineReference,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 import {
 	useTimelineDispatch,
 	useTimelineManager,
 	useTimelineState,
-} from '../../../context-wrappers/WithPostTimeline';
+} from '../../../../features/timelines/contexts/PostTimelineCtx';
 import { appDimensions } from '../../../../styles/dimensions';
+import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 /**
  * A custom navbar that invokes
@@ -33,14 +37,9 @@ import { appDimensions } from '../../../../styles/dimensions';
  * NOTE: ScrollView not included
  */
 function TimelinesHeader() {
-	const { theme, show, driver } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-			theme: o.colorScheme,
-			show: o.bottomSheet.show,
-			driver: o.driver,
-		})),
-	);
+	const { driver } = useAppApiClient();
+	const { theme } = useAppTheme();
+	const { show } = useAppBottomSheet_Improved();
 	const { attach } = useAppBottomSheet_TimelineReference();
 
 	const State = useTimelineState();
@@ -65,7 +64,7 @@ function TimelinesHeader() {
 	}
 
 	function onUserGuidePress() {
-		router.push('/user-guide-timelines');
+		router.push(APP_ROUTING_ENUM.GUIDE_TIMELINES);
 	}
 
 	const _label = LocalizationService.timelineLabelText(
@@ -75,7 +74,8 @@ function TimelinesHeader() {
 	);
 
 	return (
-		<View style={[styles.root, { backgroundColor: theme.palette.menubar }]}>
+		<View style={[styles.root, { backgroundColor: theme.background.a10 }]}>
+			<StatusBar backgroundColor={theme.background.a10} />
 			<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>
 				<TopNavbarBackButton />
 			</View>
@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
 		height: appDimensions.topNavbar.height,
 	},
 	label: {
-		color: APP_FONT.MONTSERRAT_BODY,
 		fontFamily: APP_FONTS.INTER_700_BOLD,
 		fontSize: 16,
 	},

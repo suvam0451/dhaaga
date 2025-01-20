@@ -18,9 +18,7 @@ const ProfileNameAndHandle = memo(
 	({ style, dto }: ProfileNameAndHandleProps) => {
 		const { content: ParsedDisplayName } = useMfm({
 			content: dto?.displayName,
-			remoteSubdomain: dto?.instance,
 			emojiMap: dto?.calculated?.emojis,
-			deps: [dto?.displayName],
 			fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 			numberOfLines: 1,
 			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,

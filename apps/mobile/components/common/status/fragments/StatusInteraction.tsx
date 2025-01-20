@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { StyleSheet, View } from 'react-native';
@@ -12,11 +12,11 @@ import {
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../dhaaga-bottom-sheet/Core';
 import { AppToggleIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import ActivityPubService from '../../../../services/activitypub.service';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 /**
  * Press this to toggle sharing status
@@ -43,7 +43,7 @@ function ShareButton() {
 			activeIconId={'sync-outline'}
 			inactiveIconId={'sync-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a10}
+			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',
@@ -82,7 +82,7 @@ function LikeButton() {
 			activeIconId={'heart'}
 			inactiveIconId={'heart-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a10}
+			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',
@@ -165,27 +165,6 @@ function ReactButton() {
 
 function StatusInteractionButtons() {
 	const { acct } = useAppAcct();
-
-	// function OnTranslationClicked() {
-	// 	if (IsTranslateStateLoading) return;
-	// 	Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-	// 	client.instances
-	// 		.getTranslation(item.id, 'en')
-	// 		.then((res) => {
-	// 			console.log(res);
-	// 		})
-	// 		.catch((e) => {
-	// 			console.log(e);
-	// 		});
-	// }
-	//
-	// const IS_TRANSLATED =
-	// 	item.calculated.translationOutput !== undefined &&
-	// 	item.calculated.translationOutput !== null;
-
-	// loading state
-	// const [IsTranslateStateLoading, setIsTranslateStateLoading] = useState(false);
-
 	const IS_MISSKEY = ActivityPubService.misskeyLike(acct.driver);
 
 	return (
@@ -211,18 +190,10 @@ function StatusInteractionButtons() {
 
 function StatusInteraction() {
 	return (
-		<View
-			style={{
-				paddingHorizontal: 4,
-			}}
-		>
-			<PostStats
-				style={{
-					marginBottom: appDimensions.timelines.sectionBottomMargin,
-				}}
-			/>
+		<Fragment>
+			<PostStats />
 			<StatusInteractionButtons />
-		</View>
+		</Fragment>
 	);
 }
 

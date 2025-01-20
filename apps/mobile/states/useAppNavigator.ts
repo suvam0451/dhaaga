@@ -1,6 +1,10 @@
 import { router, useNavigation } from 'expo-router';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { useAppApiClient } from '../hooks/utility/global-state-extractors';
+import {
+	useAppAcct,
+	useAppApiClient,
+} from '../hooks/utility/global-state-extractors';
+import { APP_ROUTING_ENUM } from '../utils/route-list';
 
 /**
  * Hook to correctly navigate
@@ -9,6 +13,7 @@ import { useAppApiClient } from '../hooks/utility/global-state-extractors';
 function useAppNavigator() {
 	const { driver } = useAppApiClient();
 	const navigator = useNavigation();
+	const { acct } = useAppAcct();
 
 	function toHome() {
 		// probably in bottom sheet
@@ -93,6 +98,24 @@ function useAppNavigator() {
 		}
 	}
 
+	function toUserPosts(id: string) {
+		// probably in bottom sheet
+		if (!navigator || !navigator.getId) return;
+
+		console.log(id, acct.identifier);
+		if (id === acct.identifier) {
+			router.navigate(APP_ROUTING_ENUM.MY_POSTS);
+			return;
+		}
+
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index') {
+			router.navigate(`/posts/${id}`);
+		} else {
+			router.navigate(`${navigator.getId()}/posts/${id}`);
+		}
+	}
+
 	function toTimelineViaPin(pinId: number, pinType: 'feed' | 'user' | 'tag') {
 		// probably in bottom sheet
 		if (!navigator || !navigator.getId) return;
@@ -125,6 +148,7 @@ function useAppNavigator() {
 		toFollowers,
 		toFollows,
 		toTimelineViaPin,
+		toUserPosts,
 	};
 }
 

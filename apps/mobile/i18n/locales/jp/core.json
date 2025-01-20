@@ -1,0 +1,97 @@
+{
+  "topNav": {
+    "primary": {
+      "home": "ソーシャルハブ",
+      "discover": "発見する",
+      "compose": "しっぴつする",
+      "account": "マイアカウント",
+      "setting": "アプリ設定"
+    },
+    "secondary": {
+    }
+  },
+  "bottomNav": {
+    "inbox": {
+      "mentions": "",
+      "chat": "",
+      "social": "",
+      "updates": ""
+    }
+  },
+  "hub": {
+    "greetings": {
+      "goodMorning": "おはよう",
+      "goodAfternoon": "こんにちは",
+      "goodEvening": "こんばんは",
+      "goodNight": "おやすみ"
+    }
+  },
+  "inbox": {
+    "pageHeader": {
+      "mentions": "メンション",
+      "chat": "チャット",
+      "social": "ソーシャル",
+      "updates": "アップデート"
+    },
+    "pageDescription": {
+      "mentions": "「これらのユーザーはあなたに言及または返信しました」",
+      "chat": "",
+      "social": "「これらの人々はあなたの投稿にいいね、シェア、またはリアクションしました」",
+      "updates": "「これはあなたが購読しているアカウントからの更新です」"
+    }
+  },
+  "profile": {
+  },
+  "sheets": {
+    "composer": {
+    }
+  },
+  "composer": {
+    "pageTitle": "作成",
+    "quickPost": "クイック投稿",
+    "quickPostCta": "何を考えていますか？",
+    "quickPostSubmit": "投稿",
+    "landing": {
+      "tComposeFull": "投稿を作成",
+      "dComposeFull": [
+        "長めの投稿",
+        "もっと多くのオプション"
+      ],
+      "tComposePoll": "投票を作成",
+      "dComposePoll": [
+        "<未実装>"
+      ],
+      "tViewScheduled": "公開された投稿を見る",
+      "dViewScheduled": [
+        "<未実装>"
+      ],
+      "tViewDrafts": "ドラフトを見る",
+      "dViewDrafts": [
+        "<未実装>"
+      ]
+    }
+  },
+  "setting": {
+    "accountModule": {
+      "title": "アカウント",
+      "desc": "アカウントの追加と管理"
+    },
+    "generalModule": {
+      "title": "一般",
+      "desc": "一般的で退屈な設定がここにあります"
+    },
+    "appFeaturesModule": {
+      "title": "グッディ・ハット",
+      "desc": "Dhaagaのユニークな機能を調整"
+    },
+    "digitalWellbeingModule": {
+      "title": "デジタルウェルビーイング",
+      "desc": "自分自身と再接続するために切り離す"
+    },
+    "advancedModule": {
+      "title": "高度な設定",
+      "desc": "パワーユーザー向け"
+    },
+    "footer": "\uD83D\uDC9Bで作成された — スヴァムによって"
+  }
+}

@@ -11,14 +11,12 @@ import ProfileAvatar from '../../../common/user/fragments/ProfileAvatar';
 import ProfileNameAndHandle from '../../../common/user/fragments/ProfileNameAndHandle';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import ProfileDesc from '../../../common/user/fragments/ProfileDesc';
-import ProfileButtonMessage from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonMessage';
-import RelationshipButtonCore from '../../../common/relationship/RelationshipButtonCore';
-import ProfileButtonPhonebook from '../../../screens/(shared)/stack/profile/fragments/ProfileButtonPhonebook';
+import UserRelationPresenter from '../../../../features/user-profiles/presenters/UserRelationPresenter';
 import UserViewProfileStats from '../../../common/user/fragments/UserViewProfileStats';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppUserObject } from '../../../../types/app-user.types';
+import { TextContentView } from '../../../common/status/TextContentView';
 
 /**
  * This bottom sheet will show a preview
@@ -67,18 +65,6 @@ const AppBottomSheetProfilePeek = memo(() => {
 					imageStyle={localStyles.avatarImageContainer}
 					uri={acct?.avatarUrl}
 				/>
-				<View
-					style={{
-						alignItems: 'center',
-						justifyContent: 'space-evenly',
-						flexDirection: 'row',
-						marginHorizontal: 8,
-					}}
-				>
-					<ProfileButtonMessage handle={acct?.handle} />
-					<View style={{ width: 8 }} />
-					<ProfileButtonPhonebook />
-				</View>
 				<UserViewProfileStats
 					userId={acct?.id}
 					followerCount={acct?.stats?.followers}
@@ -97,24 +83,20 @@ const AppBottomSheetProfilePeek = memo(() => {
 							color={APP_FONT.MONTSERRAT_BODY}
 						/>
 					</View>
-					<RelationshipButtonCore userId={acct?.id} />
+					<UserRelationPresenter userId={acct?.id} />
 				</View>
 			</View>
-			<ProfileDesc
-				style={localStyles.parsedDescriptionContainer}
-				rawContext={acct?.description}
-				remoteSubdomain={acct?.instance}
-				acceptTouch={false}
+			<TextContentView
+				tree={acct?.parsedDescription}
+				variant={'bodyContent'}
+				mentions={[]}
+				emojiMap={acct?.calculated?.emojis}
 			/>
 		</ScrollView>
 	);
 });
 
 const localStyles = StyleSheet.create({
-	parsedDescriptionContainer: {
-		marginTop: 12,
-		padding: 8,
-	},
 	avatarImageContainer: {
 		flex: 1,
 		width: '100%',
@@ -139,14 +121,6 @@ const localStyles = StyleSheet.create({
 		paddingHorizontal: 8,
 		marginLeft: 4,
 		marginRight: 8,
-	},
-	statSectionContainer: {
-		backgroundColor: '#202020',
-		marginRight: 4,
-		borderRadius: 6,
-		marginTop: 4,
-		padding: 4,
-		paddingLeft: 0,
 	},
 	secondSectionContainer: {
 		flexDirection: 'row',

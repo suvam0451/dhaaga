@@ -70,13 +70,15 @@ const UserViewProfileStats = memo(
 		userId,
 		style,
 	}: ProfileStatsProps) => {
-		const { toFollows, toFollowers } = useAppNavigator();
+		const { toFollows, toFollowers, toUserPosts } = useAppNavigator();
 
 		const data = [
 			{
 				count: postCount,
 				label: 'Posts',
-				onPress: () => {},
+				onPress: () => {
+					toUserPosts(userId);
+				},
 			},
 			{
 				count: followingCount,

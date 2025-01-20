@@ -3,7 +3,7 @@ import { TabView } from 'react-native-tab-view';
 import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import useKeyboard from '../../../hooks/useKeyboard';
-import { useTimelineController } from '../../../common/timeline/api/useTimelineController';
+import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import renderScene from './renderScene';
 import tabBarRenderer from './renderTabBar';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';

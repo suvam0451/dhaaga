@@ -77,11 +77,16 @@ export class PostPublisherService extends BasePubSubService {
 	) {
 		const data = this.cache.get(uuid);
 		if (!data) return;
-		if (loader) loader(true);
-		const next = await fn.call(this.mutator, data);
-		this.cache.set(next.uuid, next);
-		this.publish(next.uuid);
-		if (loader) loader(false);
+
+		try {
+			if (loader) loader(true);
+			const next = await fn.call(this.mutator, data);
+			this.cache.set(next.uuid, next);
+			this.publish(next.uuid);
+			if (loader) loader(false);
+		} catch (e) {
+			loader(false);
+		}
 	}
 
 	async toggleLike(uuid: string, loader?: (flag: boolean) => void) {
