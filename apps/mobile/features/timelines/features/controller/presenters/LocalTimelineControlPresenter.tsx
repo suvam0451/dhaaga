@@ -1,13 +1,8 @@
-import { memo } from 'react';
-import { Text } from '@rneui/themed';
-import ControlSegment from '../components/ControlSegment';
-import { View } from 'react-native';
-import useTimelineOptions from '../states/useTimelineOptions';
-import { styles } from './_shared';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import ControlSegment from '../../../../../components/widgets/feed-controller/components/ControlSegment';
+import useTimelineControllerInteractor from '../interactors/useTimelineControllerInteractor';
+import { Fragment } from 'react';
 
-const LocalTimelineController = memo(function Foo() {
+function LocalTimelineControlPresenter() {
 	const {
 		FeedOpt,
 		MediaOpt,
@@ -16,19 +11,11 @@ const LocalTimelineController = memo(function Foo() {
 		onMediaOptSelected,
 		onMediaOptAllSelected,
 		State,
-	} = useTimelineOptions();
-	const { acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-		})),
-	);
-
+	} = useTimelineControllerInteractor();
 	return (
-		<View>
-			<Text style={styles.timelineTypeText}>Local Timeline</Text>
-			<Text style={styles.timelineTargetText}>{acct?.server}</Text>
+		<Fragment>
 			<ControlSegment
-				label={'Show feed from:'}
+				label={'Show posts from:'}
 				buttons={[
 					{
 						label: 'All',
@@ -73,11 +60,8 @@ const LocalTimelineController = memo(function Foo() {
 				selection={MediaOpt}
 				hash={State}
 			/>
-			<Text style={styles.timelineDescription}>
-				This timeline displays posts from you and other users in your instance
-			</Text>
-		</View>
+		</Fragment>
 	);
-});
+}
 
-export default LocalTimelineController;
+export default LocalTimelineControlPresenter;

@@ -1,19 +1,23 @@
-import useHookLoadingState from '../../../../states/useHookLoadingState';
-import { useEffect, useRef } from 'react';
-import { useAppBottomSheet_TimelineReference } from '../../../../hooks/utility/global-state-extractors';
-import { AppTimelineReducerActionType } from '../../../../states/interactors/post-timeline.reducer';
+import useHookLoadingState from '../../../../../states/useHookLoadingState';
+import { useEffect, useRef, useState } from 'react';
+import { useAppBottomSheet_TimelineReference } from '../../../../../hooks/utility/global-state-extractors';
+import { AppTimelineReducerActionType } from '../../../../../states/interactors/post-timeline.reducer';
 
 const OPTION_GROUP_A = ['local', 'remote'];
 const OPTION_GROUP_B = ['media-only'];
 
-function useTimelineOptions() {
+/**
+ * Helps perform updates on a timeline
+ * opts/query inputs
+ */
+function useTimelineControllerInteractor() {
 	const { State, forceUpdate } = useHookLoadingState();
 	const FeedSelected = useRef(new Set(['all']));
 	const MediaSelected = useRef(new Set(['all']));
 	const { dispatch, draft } = useAppBottomSheet_TimelineReference();
 
-	const HideReply = useRef(false);
-	const HideReblog = useRef(false);
+	const [HideReplies, setHideReplies] = useState(false);
+	const [HideReposts, setHideReposts] = useState(false);
 
 	useEffect(() => {
 		if (!draft) return;
@@ -26,8 +30,8 @@ function useTimelineOptions() {
 		if (opts?.local) FeedSelected.current.add('local');
 		if (opts?.remote) FeedSelected.current.add('remote');
 		if (opts?.local || opts?.remote) FeedSelected.current.delete('all');
-		if (opts?.excludeReplies) HideReply.current = true;
-		if (opts?.excludeReblogs) HideReblog.current = true;
+		if (opts?.excludeReplies) setHideReplies(true);
+		if (opts?.excludeReblogs) setHideReposts(true);
 		forceUpdate();
 	}, [draft.opts]);
 
@@ -42,8 +46,8 @@ function useTimelineOptions() {
 				local: FeedSelected.current.has('local'),
 				remote: FeedSelected.current.has('remote'),
 				onlyMedia: MediaSelected.current.has('media-only'),
-				excludeReblogs: HideReblog.current,
-				excludeReplies: HideReply.current,
+				excludeReblogs: HideReposts,
+				excludeReplies: HideReplies,
 			},
 		});
 		forceUpdate();
@@ -92,10 +96,12 @@ function useTimelineOptions() {
 		onMediaOptAllSelected,
 		State,
 		broadcastChanges,
-		HideReply,
-		HideReblog,
+		HideReplies,
+		HideReposts,
 		updateLocalState,
+		setHideReplies,
+		setHideReposts,
 	};
 }
 
-export default useTimelineOptions;
+export default useTimelineControllerInteractor;

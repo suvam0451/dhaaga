@@ -19,7 +19,9 @@ type ImageAspectRatioProps = {
  */
 function useGalleryDims(items: ImageAspectRatioProps) {
 	// set width
-	const [ImageWidth, setImageWidth] = useState(Dimensions.get('window').width);
+	const [ImageWidth, setImageWidth] = useState(
+		Dimensions.get('window').width - 20,
+	);
 	// set height
 	const [ImageHeight, setImageHeight] = useState(MEDIA_CONTAINER_MAX_HEIGHT);
 	// set container

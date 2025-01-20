@@ -1,6 +1,7 @@
 import { ScrollView, View, Text } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../../lib/Text';
 
 type Props = {
 	label?: string;
@@ -36,15 +37,15 @@ function ControlSegment({
 	return (
 		<View style={{ marginTop: 16, overflow: 'scroll' }}>
 			{label && (
-				<Text
+				<AppText.Medium
 					style={{
-						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-						color: theme.secondary.a20,
-						marginBottom: 8,
+						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+						color: theme.secondary.a10,
+						marginBottom: 12,
 					}}
 				>
 					{label}
-				</Text>
+				</AppText.Medium>
 			)}
 			<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
 				<View style={{ display: 'flex', flexDirection: 'row' }}>

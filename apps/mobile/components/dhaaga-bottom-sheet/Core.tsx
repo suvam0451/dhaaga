@@ -10,7 +10,6 @@ import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActio
 import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from './modules/select-account/AppBottomSheetSelectAccount';
 import AppBottomSheetPickThemePack from './modules/theme-pack/AppBottomSheetPickThemePack';
-import AppBottomSheetTimelineDetails from './modules/AppBottomSheetTimelineDetails';
 import AppBottomSheetLinkPreview from './modules/AppBottomSheetLinkPreview';
 import AppBottomSheetHashtag from './modules/AppBottomSheetHashtag';
 import { APP_FONTS } from '../../styles/AppFonts';
@@ -29,6 +28,7 @@ import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
 import ABS_Add_Profile from './modules/ABS_Add_Profile';
 import { appDimensions, appVerticalIndex } from '../../styles/dimensions';
 import CollectionAssignmentSheetPresenter from '../../features/collections/presenters/CollectionAssignmentSheetPresenter';
+import TimelineControllerSheetPresenter from '../../features/timelines/features/controller/presenters/TimelineControllerSheetPresenter';
 
 export enum APP_BOTTOM_SHEET_ENUM {
 	QUICK_POST = 'QuickPost',
@@ -89,7 +89,7 @@ function Factory() {
 			case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
 				return <AppBottomSheetPickThemePack />;
 			case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:
-				return <AppBottomSheetTimelineDetails />;
+				return <TimelineControllerSheetPresenter />;
 			case APP_BOTTOM_SHEET_ENUM.LINK:
 				return <AppBottomSheetLinkPreview />;
 			case APP_BOTTOM_SHEET_ENUM.HASHTAG:
