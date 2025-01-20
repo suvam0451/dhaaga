@@ -1,6 +1,8 @@
 import { FlatList, Pressable, ScrollView, View } from 'react-native';
 import useApiGetMyFeeds from '../../../../hooks/api/useFeeds';
-import AppTopNavbar from '../../../../components/shared/topnavbar/AppTopNavbar';
+import AppTopNavbar, {
+	APP_TOPBAR_TYPE_ENUM,
+} from '../../../../components/shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { AppText } from '../../../../components/lib/Text';
 import { appDimensions } from '../../../../styles/dimensions';
@@ -69,7 +71,11 @@ function Page() {
 
 	if (error) {
 		return (
-			<AppTopNavbar title={'My Feeds'} translateY={translateY}>
+			<AppTopNavbar
+				title={'My Feeds'}
+				translateY={translateY}
+				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+			>
 				<ScrollView
 					contentContainerStyle={{
 						marginTop: appDimensions.topNavbar.scrollViewTopPadding,

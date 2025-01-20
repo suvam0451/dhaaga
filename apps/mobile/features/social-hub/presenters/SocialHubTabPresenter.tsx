@@ -30,7 +30,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const { db } = useAppDb();
 	const [State, dispatch] = useReducer(reducer, reducerDefault);
 	const { theme } = useAppTheme();
-	const [IsRefreshing, setIsRefreshing] = useState(false);
+	const [Refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
 		dispatch({
@@ -46,11 +46,11 @@ function SocialHubTabPresenter({ profile }: Props) {
 	}, [profile, db]);
 
 	function refresh() {
-		setIsRefreshing(true);
+		setRefreshing(true);
 		dispatch({
 			type: ACTION.RELOAD_PINS,
 		});
-		setIsRefreshing(false);
+		setRefreshing(false);
 	}
 
 	const acct = ProfileService.getOwnerAccount(db, profile);
@@ -62,16 +62,11 @@ function SocialHubTabPresenter({ profile }: Props) {
 					backgroundColor: theme.palette.bg,
 					height: '100%',
 				}}
-				contentContainerStyle={{
-					// for the selection bar
-					paddingBottom: 50,
-				}}
 				refreshControl={
-					<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
+					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
 			>
 				<Header acct={acct} />
-				<HubProfileListView />
 
 				{/* --- Pinned Timelines --- */}
 				<PinnedTimelineListPresenter
@@ -91,6 +86,9 @@ function SocialHubTabPresenter({ profile }: Props) {
 					parentAcct={State.acct}
 				/>
 			</ScrollView>
+			<View style={{ position: 'absolute', bottom: 0 }}>
+				<HubProfileListView />
+			</View>
 		</View>
 	);
 }

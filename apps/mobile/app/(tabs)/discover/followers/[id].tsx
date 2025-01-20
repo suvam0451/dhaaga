@@ -1,3 +1,3 @@
-import ProfileFollowersPresenter from '../../../../features/user-profiles/presenters/ProfileFollowersPresenter';
+import Followers from '../../../../features/user-profiles/Followers';
 
-export default ProfileFollowersPresenter;
+export default Followers;

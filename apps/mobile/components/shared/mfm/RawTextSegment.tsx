@@ -5,6 +5,7 @@ import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppThemingUtil,
 } from '../../../utils/theming.util';
+import { AppText } from '../../lib/Text';
 
 type Props = {
 	value: string;
@@ -23,7 +24,7 @@ function RawTextSegment({ value, fontFamily, emphasis }: Props) {
 	if (!_value) return <Text key={k}></Text>;
 
 	return (
-		<Text
+		<AppText.Normal
 			key={k}
 			style={{
 				color: color,
@@ -31,7 +32,7 @@ function RawTextSegment({ value, fontFamily, emphasis }: Props) {
 			}}
 		>
 			{_value}
-		</Text>
+		</AppText.Normal>
 	);
 }
 

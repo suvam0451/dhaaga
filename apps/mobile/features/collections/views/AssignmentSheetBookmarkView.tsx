@@ -20,11 +20,7 @@ function AssignmentSheetBookmarkView({
 			style={[
 				styles.sectionContainer,
 				{
-					paddingTop: 36,
-					paddingHorizontal: 16,
 					backgroundColor: theme.background.a30,
-					borderTopLeftRadius: 32,
-					borderTopRightRadius: 32,
 				},
 			]}
 		>
@@ -49,6 +45,10 @@ export default AssignmentSheetBookmarkView;
 const styles = StyleSheet.create({
 	sectionContainer: {
 		marginBottom: 16,
+		paddingTop: 36,
+		paddingHorizontal: 16,
+		borderTopLeftRadius: 32,
+		borderTopRightRadius: 32,
 	},
 	sectionLabel: {
 		fontSize: 20,

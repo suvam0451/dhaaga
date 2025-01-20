@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppText } from '../../../components/lib/Text';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import CollectionItem from '../components/CollectionItem';
 import { AccountCollection } from '../../../database/_schema';
 import { CollectionHasSavedPost } from '../api/useCollectionsQuery';
+import { appDimensions } from '../../../styles/dimensions';
 
 type Props = {
 	items: CollectionHasSavedPost[];
@@ -24,7 +25,7 @@ function AssignmentSheetCollectionView({ items, toggle }: Props) {
 					flexDirection: 'row',
 					justifyContent: 'space-between',
 					width: '100%',
-					marginBottom: 8,
+					marginBottom: appDimensions.timelines.sectionBottomMargin,
 				}}
 			>
 				<AppText.Medium

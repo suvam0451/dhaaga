@@ -1,7 +1,7 @@
 import WithUserTimelineCtx from '../timelines/contexts/UserTimelineCtx';
 import ProfileFollowersPresenter from './presenters/ProfileFollowersPresenter';
 
-function Followings() {
+function Followers() {
 	return (
 		<WithUserTimelineCtx>
 			<ProfileFollowersPresenter />
@@ -9,4 +9,4 @@ function Followings() {
 	);
 }
 
-export default Followings;
+export default Followers;

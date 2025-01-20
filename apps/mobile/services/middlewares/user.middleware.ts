@@ -82,7 +82,7 @@ export class UserMiddleware {
 			stats: {
 				posts: input.getPostCount() || 0,
 				followers: input.getFollowersCount() || 0,
-				following: input.getFollowersCount() || 0,
+				following: input.getFollowingCount() || 0,
 			},
 			meta: {
 				// NOTE: be careful using these in misskey

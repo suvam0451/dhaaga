@@ -1,14 +1,11 @@
 import { Account, ProfilePinnedUser } from '../../../database/_schema';
-import { useMemo } from 'react';
-import FlashListService from '../../../services/flashlist.service';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import PinnedUserView from '../views/PinnedUserView';
 import {
 	useAppAcct,
 	useAppDb,
 	useAppDialog,
 } from '../../../hooks/utility/global-state-extractors';
-import PinnedUserLastItem from '../components/PinnedUserLastItem';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { AccountService } from '../../../database/entities/account';
 import useGlobalState from '../../../states/_global';
@@ -16,7 +13,7 @@ import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '../../../services/driver.service';
 import * as Haptics from 'expo-haptics';
-import { SocialHubPinSectionContainer } from '../../../components/screens/home/stack/landing/fragments/_factory';
+import HubTabSectionContainer from '../components/HubTabSectionContainer';
 
 type Props = {
 	items: ProfilePinnedUser[];
@@ -25,9 +22,6 @@ type Props = {
 
 function PinnedUserListPresenter({ items, parentAcct }: Props) {
 	const { acct } = useAppAcct();
-	const listItems = useMemo(() => {
-		return FlashListService.pinnedUsers(items);
-	}, [items]);
 	const { db } = useAppDb();
 	const { loadApp } = useGlobalState(
 		useShallow((o) => ({
@@ -80,30 +74,34 @@ function PinnedUserListPresenter({ items, parentAcct }: Props) {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 	}
 
+	function onPressAdd() {}
+
 	return (
-		<SocialHubPinSectionContainer
+		<HubTabSectionContainer
 			label={'Users'}
-			style={{
-				marginTop: 16,
-			}}
+			style={styles.root}
+			onPressAdd={onPressAdd}
 		>
 			<FlatList
-				data={listItems}
+				data={items}
 				numColumns={4}
-				renderItem={({ item }) => {
-					if (item.type === 'entry')
-						return (
-							<PinnedUserView
-								item={item.props.dto}
-								onPress={onPress}
-								onLongPress={onLongPress}
-							/>
-						);
-					return <PinnedUserLastItem />;
-				}}
+				renderItem={({ item }) => (
+					<PinnedUserView
+						item={item}
+						onPress={onPress}
+						onLongPress={onLongPress}
+					/>
+				)}
 			/>
-		</SocialHubPinSectionContainer>
+		</HubTabSectionContainer>
 	);
 }
 
 export default PinnedUserListPresenter;
+
+const styles = StyleSheet.create({
+	root: {
+		marginTop: 16,
+		marginHorizontal: 8,
+	},
+});

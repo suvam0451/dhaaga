@@ -36,7 +36,17 @@ function ProfileFollowersPresenter() {
 		updateQueryCache: loadMore,
 	});
 
-	if (TimelineState.items.length === 0) return <View />;
+	if (TimelineState.items.length === 0)
+		return (
+			<AppTopNavbar
+				title={'Followers'}
+				translateY={translateY}
+				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+			>
+				<View />
+			</AppTopNavbar>
+		);
+
 	return (
 		<AppTopNavbar
 			title={'Followers'}

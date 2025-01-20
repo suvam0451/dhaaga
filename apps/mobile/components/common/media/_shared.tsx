@@ -42,8 +42,8 @@ export const AppImageComponent = memo(function Foo({
 			style={{
 				alignItems: 'center',
 				justifyContent: 'center',
-				overflow: 'hidden',
 				borderRadius: 8,
+				width: '100%',
 			}}
 			onLayout={onLayoutChanged}
 		>

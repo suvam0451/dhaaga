@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { SocialHubPinSectionContainer } from '../../../components/screens/home/stack/landing/fragments/_factory';
 import { Account, ProfilePinnedTimeline } from '../../../database/_schema';
 import { HubService } from '../../../services/hub.service';
 import Animated from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import PinnedTimelineItemView from '../views/PinnedTimelineItemView';
+import HubTabSectionContainer from '../components/HubTabSectionContainer';
 
 type SocialHubPinnedTimelinesProps = {
 	account: Account;
@@ -18,10 +18,14 @@ function PinnedTimelineListPresenter({
 }: SocialHubPinnedTimelinesProps) {
 	const destinations = HubService.resolveTimelineDestinations(items);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+
+	function onPressAdd() {}
+
 	return (
-		<SocialHubPinSectionContainer
+		<HubTabSectionContainer
 			label={t(`hub.section.feeds`, { ns: LOCALIZATION_NAMESPACE.CORE })}
 			style={styles.root}
+			onPressAdd={onPressAdd}
 		>
 			<Animated.FlatList
 				data={destinations}
@@ -37,7 +41,7 @@ function PinnedTimelineListPresenter({
 					/>
 				)}
 			/>
-		</SocialHubPinSectionContainer>
+		</HubTabSectionContainer>
 	);
 }
 

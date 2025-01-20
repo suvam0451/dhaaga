@@ -147,7 +147,7 @@ function TextContentNode({
 						marginBottom:
 							variant === 'displayName'
 								? 0
-								: appDimensions.timelines.sectionBottomMargin,
+								: appDimensions.timelines.sectionBottomMargin * 0.5,
 					}}
 					numberOfLines={oneLine ? 1 : undefined}
 				>

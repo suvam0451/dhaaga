@@ -1,9 +1,9 @@
 import { Dispatch, memo, SetStateAction } from 'react';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { AppIcon } from '../../../lib/Icon';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '../../../../styles/dimensions';
 
 type WithCwTextProps = {
 	cw?: string;
@@ -16,11 +16,7 @@ type WithCwTextProps = {
  * and text content
  */
 const StatusCw = memo(({ show, setShow, cw }: WithCwTextProps) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	return (
 		<Pressable
@@ -87,7 +83,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderRadius: 6,
-		marginVertical: 8,
+		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 });
 

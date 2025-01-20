@@ -1,7 +1,7 @@
 import { Account, ProfilePinnedTag } from '../../../database/_schema';
 import { StyleSheet, View } from 'react-native';
 import PinnedTagView from '../views/PinnedTagView';
-import { SocialHubPinSectionContainer } from '../../../components/screens/home/stack/landing/fragments/_factory';
+import HubTabSectionContainer from '../components/HubTabSectionContainer';
 
 type Props = {
 	items: ProfilePinnedTag[];
@@ -13,12 +13,15 @@ function PinnedTagListPresenter({ items, parentAcct }: Props) {
 
 	function onLongPress(item: ProfilePinnedTag) {}
 
+	function onPressAdd() {}
+
 	return (
-		<SocialHubPinSectionContainer
+		<HubTabSectionContainer
 			label={'Tags'}
 			style={{
 				marginTop: 16,
 			}}
+			onPressAdd={onPressAdd}
 		>
 			<View style={styles.pinnedTagListContainer}>
 				{items.map((tag, i) => (
@@ -30,13 +33,17 @@ function PinnedTagListPresenter({ items, parentAcct }: Props) {
 					/>
 				))}
 			</View>
-		</SocialHubPinSectionContainer>
+		</HubTabSectionContainer>
 	);
 }
 
 export default PinnedTagListPresenter;
 
 const styles = StyleSheet.create({
+	root: {
+		marginTop: 16,
+		marginHorizontal: 8,
+	},
 	pinnedTagListContainer: {
 		flexWrap: 'wrap',
 		display: 'flex',

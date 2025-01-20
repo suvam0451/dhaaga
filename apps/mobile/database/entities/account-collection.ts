@@ -77,7 +77,6 @@ class Service {
 		}
 
 		return db.collectionSavedPost.findOne({
-			active: true,
 			collectionId: collection.id,
 			savedPostId: savedPost.id,
 		});

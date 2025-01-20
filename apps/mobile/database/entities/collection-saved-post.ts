@@ -7,7 +7,7 @@ class Repo {}
 
 class Service {
 	static findSavedPost(db: DataSource, acct: Account, id: string) {
-		const post = AccountSavedPostService.find(db, id);
+		const post = AccountSavedPostService.find(db, acct, id);
 		if (!post) return [];
 
 		const collections = AccountCollectionService.listAllForAccount(db, acct);

@@ -5,6 +5,7 @@ import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../../states/_global';
 import { RandomUtil } from '../../../utils/random.utils';
 import { APP_BOTTOM_SHEET_ENUM } from '../../dhaaga-bottom-sheet/Core';
+import { AppText } from '../../lib/Text';
 
 type Props = {
 	value: string;
@@ -32,7 +33,7 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 
 	return (
 		<Text key={k}>
-			<Text
+			<AppText.Normal
 				style={{
 					color: theme.secondary.a40,
 					// fontFamily: APP_FONTS.INTER_400_REGULAR,
@@ -40,8 +41,8 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 				}}
 			>
 				#
-			</Text>
-			<Text
+			</AppText.Normal>
+			<AppText.Medium
 				onPress={onPress}
 				style={{
 					color: theme.complementary.a0,
@@ -49,11 +50,10 @@ const HashtagSegment = memo(function Foo({ value, fontFamily }: Props) {
 					// fontFamily: 'SourceSansPro_600SemiBold', // APP_FONTS.INTER_500_MEDIUM,
 					// fontSize: 15,
 					// fontSize: 13.5,
-					fontWeight: '600',
 				}}
 			>
 				{_value}
-			</Text>
+			</AppText.Medium>
 		</Text>
 	);
 });

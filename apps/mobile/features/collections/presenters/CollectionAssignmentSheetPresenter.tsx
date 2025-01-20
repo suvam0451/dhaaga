@@ -11,7 +11,7 @@ function CollectionAssignmentSheetPresenter() {
 	const { ctx } = useAppBottomSheet_Improved();
 	const { post, toggleBookmark } = usePostInteractor(ctx?.uuid);
 	const { data, toggleForCollection } = useCollectionAssignmentInteractor(
-		post?.uuid,
+		post?.id,
 	);
 
 	if (!post) return <View />;
@@ -20,6 +20,7 @@ function CollectionAssignmentSheetPresenter() {
 	const IS_BOOKMARKED = _target.interaction.bookmarked;
 
 	function toggle(collection: AccountCollection) {
+		console.log(post?.id, collection);
 		toggleForCollection(post?.id, collection, post);
 	}
 	return (

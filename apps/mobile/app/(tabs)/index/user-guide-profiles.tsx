@@ -1,4 +1,4 @@
-import UserGuideContainer from '../../../components/containers/UserGuideContainer';
+import GuideFactory from '../../../features/guides/components/GuideFactory';
 
 function Page() {
 	const qa: { question: string; answers: string[] }[] = [
@@ -27,13 +27,7 @@ function Page() {
 		},
 	];
 
-	return (
-		<UserGuideContainer
-			questionnaire={qa}
-			label={'User Guide (New Tab)'}
-			language={'en'}
-		/>
-	);
+	return <GuideFactory questionnaire={qa} label={'User Guide (New Tab)'} />;
 }
 
 export default Page;

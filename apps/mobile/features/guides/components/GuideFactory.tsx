@@ -1,35 +1,30 @@
-import useScrollMoreOnPageEnd from '../../states/useScrollMoreOnPageEnd';
+import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import {
 	ScrollView,
 	StyleProp,
-	Text,
-	TextStyle,
 	View,
 	ViewStyle,
+	StyleSheet,
 } from 'react-native';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../shared/topnavbar/AppTopNavbar';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
-import { AppText } from '../lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+} from '../../../components/shared/topnavbar/AppTopNavbar';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../../components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { appDimensions } from '../../../styles/dimensions';
 
-type UserGuideContainerProps = {
+export type UserGuideContainerProps = {
 	questionnaire: { question: string; answers: string[] }[];
-	language: string;
 	label: string;
 };
 
-function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
+function GuideFactory({ questionnaire, label }: UserGuideContainerProps) {
 	const { translateY } = useScrollMoreOnPageEnd({});
 	const { theme } = useAppTheme();
 
 	const sectionStyle: StyleProp<ViewStyle> = {
 		marginBottom: 16,
-	};
-
-	const qStyle: StyleProp<TextStyle> = {
-		marginBottom: 8,
 	};
 
 	return (
@@ -38,28 +33,26 @@ function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
 			title={label}
 			translateY={translateY}
 		>
-			<ScrollView
-				contentContainerStyle={{ paddingTop: 54 + 12, paddingHorizontal: 10 }}
-			>
+			<ScrollView contentContainerStyle={styles.scrollView}>
 				{questionnaire.map((block, i) => (
 					<View key={i} style={sectionStyle}>
-						<Text
+						<AppText.Special
 							style={[
-								qStyle,
 								{
-									fontFamily: 'BebasNeue_400Regular',
-									fontSize: 24,
 									color: theme.primary.a0,
+									marginBottom: 8,
 								},
 							]}
 						>
 							{block.question}
-						</Text>
+						</AppText.Special>
 						{block.answers.map((answer, i) => (
 							<AppText.Normal
 								key={i}
 								style={{
 									color: theme.secondary.a10,
+									fontSize: 14,
+									marginBottom: 4,
 								}}
 								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 							>
@@ -73,4 +66,11 @@ function UserGuideContainer({ questionnaire, label }: UserGuideContainerProps) {
 	);
 }
 
-export default UserGuideContainer;
+export default GuideFactory;
+
+const styles = StyleSheet.create({
+	scrollView: {
+		paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 12,
+		paddingHorizontal: 10,
+	},
+});

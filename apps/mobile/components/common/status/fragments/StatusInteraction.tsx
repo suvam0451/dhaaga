@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { StyleSheet, View } from 'react-native';
@@ -82,7 +82,7 @@ function LikeButton() {
 			activeIconId={'heart'}
 			inactiveIconId={'heart-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a10}
+			inactiveTint={theme.secondary.a30}
 			size={appDimensions.timelines.actionButtonSize}
 			style={{
 				display: 'flex',
@@ -211,18 +211,10 @@ function StatusInteractionButtons() {
 
 function StatusInteraction() {
 	return (
-		<View
-			style={{
-				paddingHorizontal: 4,
-			}}
-		>
-			<PostStats
-				style={{
-					marginBottom: appDimensions.timelines.sectionBottomMargin,
-				}}
-			/>
+		<Fragment>
+			<PostStats />
 			<StatusInteractionButtons />
-		</View>
+		</Fragment>
 	);
 }
 

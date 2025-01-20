@@ -4,7 +4,6 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppDivider } from '../../../components/lib/Divider';
-import ProfileDesc from '../../../components/common/user/fragments/ProfileDesc';
 import { appDimensions } from '../../../styles/dimensions';
 import { useState } from 'react';
 import UserViewProfileStats from '../../../components/common/user/fragments/UserViewProfileStats';
@@ -108,13 +107,14 @@ function UserListItemView({ item }: SearchResultUserItemProps) {
 					</View>
 					<View style={{ flexGrow: 1 }} />
 				</View>
-				<ProfileDesc
+				<TextContentView
+					tree={item.parsedDisplayName}
+					variant={'bodyContent'}
+					mentions={[]}
+					emojiMap={item.calculated.emojis}
 					style={{
 						marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
 					}}
-					rawContext={item?.description}
-					remoteSubdomain={item?.instance}
-					emojiMap={item?.calculated?.emojis}
 				/>
 				<AppDivider.Hard
 					style={{

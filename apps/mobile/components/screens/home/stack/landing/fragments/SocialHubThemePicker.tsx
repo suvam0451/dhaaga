@@ -1,15 +1,9 @@
 import { Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
 
 function SocialHubThemePicker() {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
+	const { theme } = useAppTheme();
 	return (
 		<View
 			style={{

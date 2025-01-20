@@ -1,19 +1,17 @@
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
-import { AppIcon } from '../../../../../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '../../../styles/AppFonts';
+import { AppIcon } from '../../../components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
-type SocialHubPinSectionContainer = {
+type Props = {
 	label: string;
 	children: any;
 	style?: StyleProp<ViewStyle>;
+	onPressAdd: () => void;
 };
-export function SocialHubPinSectionContainer({
-	label,
-	children,
-	style,
-}: SocialHubPinSectionContainer) {
+
+function HubTabSectionContainer({ style, children, label, onPressAdd }: Props) {
 	const { theme } = useAppTheme();
 
 	return (
@@ -41,7 +39,7 @@ export function SocialHubPinSectionContainer({
 				<AppIcon
 					id={'add'}
 					containerStyle={{ padding: 6 }}
-					onPress={() => {}}
+					onPress={onPressAdd}
 					size={28}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 				/>
@@ -50,6 +48,8 @@ export function SocialHubPinSectionContainer({
 		</View>
 	);
 }
+
+export default HubTabSectionContainer;
 
 const styles = StyleSheet.create({
 	root: {

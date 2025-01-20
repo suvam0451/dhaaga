@@ -27,11 +27,12 @@ export enum APP_ROUTING_ENUM {
 	COLLECTIONS = '/profile/collections',
 	PROFILES = '/profile/profiles',
 
-	LIKES = '/profile/account/likes',
-	BOOKMARK = '/profile/account/bookmarks',
-	LISTS = '/profile/account/lists',
-	FEEDS = '/profile/account/feeds',
-	DRAFTS = '/profile/account/drafts',
+	MY_LIKES = '/profile/account/likes',
+	MY_BOOKMARKS = '/profile/account/bookmarks',
+	MY_LISTS = '/profile/account/lists',
+	MY_FEEDS = '/profile/account/feeds',
+	MY_DRAFTS = '/profile/account/drafts',
+	MY_POSTS = '/profile/account/posts',
 
 	APP_FEATURE_COLLECTION = '/profile/app-features/collection',
 }
