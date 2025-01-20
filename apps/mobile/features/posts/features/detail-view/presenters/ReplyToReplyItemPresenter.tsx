@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Fragment, useState } from 'react';
 import ReplyOwner from '../components/ReplyOwner';
 import { useAppStatusContextDataContext } from '../../../../../hooks/api/statuses/WithAppStatusContextData';
@@ -11,11 +11,13 @@ import {
 } from '../../../../../components/common/status/_shared';
 import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
 import { TextContentView } from '../../../../../components/common/status/TextContentView';
+import CurvedLine from '../components/CurvedLine';
 
 type PostReplyToReplyProps = {
 	colors: string[];
 	lookupId: string;
 	depth: number;
+	last: boolean;
 };
 
 type PostReplyToReplyContentProps = {
@@ -23,14 +25,18 @@ type PostReplyToReplyContentProps = {
 	color: string;
 	IsReplyThreadVisible: boolean;
 	setIsReplyThreadVisible: any;
+	style?: StyleProp<ViewStyle>;
 };
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
+
+const INDICATOR_LINE_SPACING = 10;
 
 function PostReplyToReplyContent({
 	lookupId,
 	IsReplyThreadVisible,
 	setIsReplyThreadVisible,
+	style,
 }: PostReplyToReplyContentProps) {
 	const { data } = useAppStatusContextDataContext();
 
@@ -45,11 +51,14 @@ function PostReplyToReplyContent({
 
 	return (
 		<View
-			style={{
-				width: '100%',
-				paddingTop: 8,
-				paddingHorizontal: 8,
-			}}
+			style={[
+				{
+					width: '100%',
+					paddingTop: 8,
+					paddingHorizontal: 8,
+				},
+				style,
+			]}
 		>
 			<WithAppStatusItemContext dto={dto}>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -83,15 +92,15 @@ function ReplyToReplyItemPresenter({
 	colors,
 	lookupId,
 	depth,
+	last,
 }: PostReplyToReplyProps) {
 	const { getChildren } = useAppStatusContextDataContext();
 	const children = getChildren(lookupId);
 	const [IsReplyThreadVisible, setIsReplyThreadVisible] = useState(false);
 	const depthIndicator = AppThemingUtil.getThreadColorForDepth(depth + 1);
-
 	return (
 		<Fragment>
-			<View style={styles.container}>
+			<View style={[styles.container]}>
 				{colors.map((o, i) => (
 					<View
 						key={i}
@@ -99,15 +108,30 @@ function ReplyToReplyItemPresenter({
 							styles.contextLine,
 							{
 								backgroundColor: o,
+								height:
+									i === colors.length - 1 && last && !IsReplyThreadVisible
+										? 4
+										: '100%',
 							},
 						]}
 					/>
 				))}
+				<View
+					style={{
+						position: 'absolute',
+						left: (colors.length - 1) * (INDICATOR_LINE_SPACING + 2),
+						zIndex: -1,
+					}}
+				>
+					<CurvedLine color={colors[colors.length - 1]} />
+				</View>
+
 				<PostReplyToReplyContent
 					color={depthIndicator}
 					lookupId={lookupId}
 					IsReplyThreadVisible={IsReplyThreadVisible}
 					setIsReplyThreadVisible={setIsReplyThreadVisible}
+					style={{ marginLeft: -INDICATOR_LINE_SPACING }}
 				/>
 			</View>
 			{IsReplyThreadVisible && (
@@ -118,6 +142,7 @@ function ReplyToReplyItemPresenter({
 							colors={[...colors, depthIndicator]}
 							lookupId={o.id}
 							depth={1}
+							last={i === children.length - 1}
 						/>
 					))}
 				</View>
@@ -138,6 +163,6 @@ const styles = StyleSheet.create({
 	contextLine: {
 		height: '100%',
 		width: 2,
-		marginRight: 4,
+		marginRight: INDICATOR_LINE_SPACING,
 	},
 });

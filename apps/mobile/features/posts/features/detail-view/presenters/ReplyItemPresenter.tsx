@@ -105,6 +105,7 @@ function ReplyItemPresenter({ lookupId, colors }: PostReplyProps) {
 							colors={[...colors, DEPTH_COLOR]}
 							lookupId={o.id}
 							depth={1}
+							last={i === children.length - 1}
 						/>
 					))}
 				</View>
