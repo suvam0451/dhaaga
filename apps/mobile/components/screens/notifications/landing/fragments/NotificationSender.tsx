@@ -50,20 +50,11 @@ export const NotificationSender = memo(
 	}: Props) => {
 		const { theme } = useAppTheme();
 
-		// const { content: _displayName } = useMfm({
-		// 	content: displayName,
-		// 	remoteSubdomain,
-		// 	emojiMap: new Map(),
-		// 	deps: [displayName],
-		// 	fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		// });
-
 		const { find } = useAppCustomEmoji();
 		const { Icon, bg } = useMemo(() => {
 			switch (type) {
 				case DhaagaJsNotificationType.FAVOURITE: {
 					return {
-						// Icon: <FontAwesome name="star" size={16} color={'#feac33'} />,
 						Icon: (
 							<AntDesign
 								name="like1"
