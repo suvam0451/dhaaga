@@ -14,6 +14,34 @@ class Service {
 	static getShownProfiles(db: DataSource) {
 		return db.profile.find({ active: true });
 	}
+
+	static renameProfileById(
+		db: DataSource,
+		id: number | string,
+		newName: string,
+	) {
+		const profile = Service.getById(db, id);
+		if (profile) {
+			db.profile.updateById(profile.id, {
+				name: newName,
+			});
+		}
+	}
+
+	static isDefaultProfile(db: DataSource, profile: Profile) {
+		return profile.uuid === 'DEFAULT';
+	}
+
+	static getById(db: DataSource, id: number | string) {
+		try {
+			return db.profile.findOne({
+				id: typeof id === 'string' ? parseInt(id) : id,
+			});
+		} catch (e) {
+			return null;
+		}
+	}
+
 	static getForAccount(db: DataSource, acct: Account) {
 		return db.profile.find({ active: true, accountId: acct.id });
 	}
@@ -123,6 +151,7 @@ class Service {
 		});
 
 		Service._postInsert(db, savedProfile);
+		return savedProfile;
 	}
 
 	/**

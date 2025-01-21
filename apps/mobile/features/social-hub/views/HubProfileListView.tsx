@@ -3,12 +3,22 @@ import {
 	useAppTheme,
 	useHub,
 } from '../../../hooks/utility/global-state-extractors';
-import { FlatList, View } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
 import { Account } from '../../../database/_schema';
 import { Image } from 'expo-image';
 
-function HubProfileListView() {
+type Props = {
+	onPressAddProfile: () => void;
+	onPressProfile: (profileId: number | string) => void;
+	onLongPressProfile: (profileId: number | string) => void;
+};
+
+function HubProfileListView({
+	onPressAddProfile,
+	onPressProfile,
+	onLongPressProfile,
+}: Props) {
 	const { accounts, navigation } = useHub();
 	const { theme } = useAppTheme();
 
@@ -34,15 +44,14 @@ function HubProfileListView() {
 			<View
 				style={{
 					flexDirection: 'row',
-					marginHorizontal: 10,
-					marginVertical: 8,
+					paddingHorizontal: 10,
 				}}
 			>
 				<FlatList
 					horizontal={true}
 					data={tabLabels}
 					renderItem={({ item, index }) => (
-						<View
+						<Pressable
 							style={{
 								padding: 8,
 								marginHorizontal: 6,
@@ -52,6 +61,20 @@ function HubProfileListView() {
 										: theme.background.a30,
 								borderRadius: 8,
 								paddingHorizontal: 12,
+							}}
+							onPress={() => {
+								if (index === tabLabels.length - 1) {
+									onPressAddProfile();
+								} else {
+									onPressProfile(item.id);
+								}
+							}}
+							onLongPress={() => {
+								if (index === tabLabels.length - 1) {
+									onPressAddProfile();
+								} else {
+									onLongPressProfile(item.id);
+								}
 							}}
 						>
 							<AppText.Medium
@@ -65,8 +88,12 @@ function HubProfileListView() {
 							>
 								{item.label}
 							</AppText.Medium>
-						</View>
+						</Pressable>
 					)}
+					contentContainerStyle={{
+						paddingVertical: 12,
+						marginHorizontal: 10,
+					}}
 					ListHeaderComponent={
 						<View style={{ marginRight: 6 }}>
 							{/*@ts-ignore-next-line*/}

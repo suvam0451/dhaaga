@@ -10,10 +10,7 @@ import {
 	ToggleMediaVisibility,
 	ToggleReplyVisibility,
 } from '../../../../../components/common/status/DetailView/_shared';
-import {
-	MiniMoreOptionsButton,
-	MiniReplyButton,
-} from '../../../../../components/common/status/_shared';
+import { MiniMoreOptionsButton } from '../../../../../components/common/status/_shared';
 import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
 import { TextContentView } from '../../../../../components/common/status/TextContentView';
 

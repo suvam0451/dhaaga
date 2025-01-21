@@ -556,6 +556,9 @@ const useGlobalState = create<State & Actions>()(
 						state.dialog.type = APP_DIALOG_SHEET_ENUM.TEXT_INPUT;
 						state.dialog.textSeed = textSeed;
 						state.dialog.textSubmitCallback = callback;
+					} else {
+						state.dialog.textSeed = null;
+						state.dialog.textSubmitCallback = undefined;
 					}
 					state.dialog.visible = true;
 				});
