@@ -9,6 +9,7 @@ import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
 import { APP_FONT } from '../../styles/AppTheme';
 import { appVerticalIndex } from '../../styles/dimensions';
+import { AppText } from './Text';
 
 type DialogOptionsProps = {
 	label: string;
@@ -78,7 +79,7 @@ export function AppDialog() {
 	const [Input, setInput] = useState(null);
 
 	useEffect(() => {
-		setInput(textSeed);
+		setInput('');
 	}, [stateId, textSeed]);
 
 	const IS_TXT_MODE =
@@ -100,7 +101,7 @@ export function AppDialog() {
 			/>
 			<View
 				style={{
-					maxWidth: '80%',
+					maxWidth: '75%',
 					borderRadius: 8,
 					backgroundColor: theme.background.a20,
 					zIndex: appVerticalIndex.dialogContent,
@@ -112,33 +113,38 @@ export function AppDialog() {
 			>
 				<View>
 					<View style={{ paddingHorizontal: 24 }}>
-						<Text style={[styles.modalTitle, { color: theme.textColor.high }]}>
+						<AppText.SemiBold
+							style={[styles.modalTitle, { color: theme.secondary.a0 }]}
+						>
 							{state.title}
-						</Text>
+						</AppText.SemiBold>
 
 						{state.description.map((text, i) => (
-							<Text
+							<AppText.Medium
 								key={i}
 								style={[
 									modalStyles.modalDescription,
 									{
 										color: theme.secondary.a20,
-										fontSize: 14,
+										fontSize: 15,
 									},
 								]}
 							>
 								{text}
-							</Text>
+							</AppText.Medium>
 						))}
 						{IS_TXT_MODE && (
 							<AppTextInput.SingleLine
-								placeholder={'Your input here'}
+								placeholder={textSeed}
 								onChangeText={setInput}
 								value={Input}
 								style={{
 									fontSize: 16,
 									textAlign: 'center',
 									marginTop: 20,
+									fontFamily: APP_FONTS.ROBOTO_500,
+									color: theme.primary.a0,
+									textDecorationLine: 'none',
 								}}
 							/>
 						)}
@@ -178,7 +184,6 @@ export function AppDialog() {
 
 const styles = StyleSheet.create({
 	modalTitle: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		textAlign: 'center',
 		fontSize: 22,
 		marginBottom: 16,
@@ -211,9 +216,7 @@ const modalStyles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	modalDescription: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		textAlign: 'center',
-		color: APP_FONT.MONTSERRAT_BODY,
 		fontSize: 14,
 	},
 	actionButtonContainer: {
