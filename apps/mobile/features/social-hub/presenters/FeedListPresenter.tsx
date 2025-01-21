@@ -12,10 +12,7 @@ type SocialHubPinnedTimelinesProps = {
 	items: ProfilePinnedTimeline[];
 };
 
-function PinnedTimelineListPresenter({
-	items,
-	account,
-}: SocialHubPinnedTimelinesProps) {
+function FeedListPresenter({ items, account }: SocialHubPinnedTimelinesProps) {
 	const destinations = HubService.resolveTimelineDestinations(items);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
@@ -45,7 +42,7 @@ function PinnedTimelineListPresenter({
 	);
 }
 
-export default PinnedTimelineListPresenter;
+export default FeedListPresenter;
 
 const styles = StyleSheet.create({
 	root: {

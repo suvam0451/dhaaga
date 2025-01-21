@@ -18,8 +18,8 @@ import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
-import ABS_Add_Hub_Tag from './modules/ABS_Add_Hub_Tag';
-import ABS_Add_Hub_User from './modules/ABS_Add_Hub_User';
+import TagAddSheetPresenter from '../../features/social-hub/presenters/TagAddSheetPresenter';
+import UserAddSheetPresenter from '../../features/social-hub/presenters/UserAddSheetPresenter';
 import ABS_Post_Show_Comments from './modules/ABS_Post_Show_Comments';
 import ABS_Post_Show_Likes from './modules/ABS_Post_Show_Likes';
 import ABS_Post_Show_Shares from './modules/ABS_Post_Show_Shares';
@@ -30,6 +30,7 @@ import { appDimensions, appVerticalIndex } from '../../styles/dimensions';
 import CollectionAssignmentSheetPresenter from '../../features/collections/presenters/CollectionAssignmentSheetPresenter';
 import TimelineControllerSheetPresenter from '../../features/timelines/features/controller/presenters/TimelineControllerSheetPresenter';
 import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
+import FeedAddSheetPresenter from '../../features/social-hub/presenters/FeedAddSheetPresenter';
 
 /**
  * Responsible for generating content
@@ -71,9 +72,11 @@ function Factory() {
 			case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
 				return <CollectionAssignmentSheetPresenter />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
-				return <ABS_Add_Hub_Tag />;
+				return <TagAddSheetPresenter />;
 			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
-				return <ABS_Add_Hub_User />;
+				return <UserAddSheetPresenter />;
+			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED:
+				return <FeedAddSheetPresenter />;
 			case APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES:
 				return <ABS_Post_Show_Comments />;
 			case APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES:

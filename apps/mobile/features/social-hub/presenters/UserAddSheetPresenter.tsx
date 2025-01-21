@@ -2,7 +2,7 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { ScrollView, Text, StyleSheet } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 
-function ABS_Add_Hub_User() {
+function UserAddSheetPresenter() {
 	const { theme } = useAppTheme();
 
 	const title = 'Sorry 😔';
@@ -28,7 +28,7 @@ function ABS_Add_Hub_User() {
 	);
 }
 
-export default ABS_Add_Hub_User;
+export default UserAddSheetPresenter;
 
 const styles = StyleSheet.create({
 	sheetTitle: {

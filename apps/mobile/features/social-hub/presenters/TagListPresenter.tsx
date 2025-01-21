@@ -8,7 +8,7 @@ type Props = {
 	parentAcct: Account;
 };
 
-function PinnedTagListPresenter({ items, parentAcct }: Props) {
+function TagListPresenter({ items, parentAcct }: Props) {
 	function onPress(item: ProfilePinnedTag) {}
 
 	function onLongPress(item: ProfilePinnedTag) {}
@@ -37,7 +37,7 @@ function PinnedTagListPresenter({ items, parentAcct }: Props) {
 	);
 }
 
-export default PinnedTagListPresenter;
+export default TagListPresenter;
 
 const styles = StyleSheet.create({
 	root: {
