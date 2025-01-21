@@ -127,6 +127,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	ADD_BOOKMARK = 'AddBookmark',
 	ADD_HUB_TAG = 'AddHubTag',
 	ADD_HUB_USER = 'AddHubUser',
+	ADD_HUB_FEED = 'AddHubFeed',
 
 	POST_SHOW_REPLIES = 'PostShowReplies',
 	POST_SHOW_LIKES = 'PostShowLikes',

@@ -2,7 +2,7 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 
-function ABS_Add_Hub_Tag() {
+function TagAddSheetPresenter() {
 	const { theme } = useAppTheme();
 	const title = 'Sorry 😔';
 	const desc = [
@@ -29,7 +29,7 @@ function ABS_Add_Hub_Tag() {
 	);
 }
 
-export default ABS_Add_Hub_Tag;
+export default TagAddSheetPresenter;
 
 const styles = StyleSheet.create({
 	sheetTitle: {

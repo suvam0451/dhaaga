@@ -12,12 +12,12 @@ import {
 } from '../../../states/interactors/social-hub-tab.reducer';
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
-import PinnedTimelineListPresenter from './PinnedTimelineListPresenter';
+import FeedListPresenter from './FeedListPresenter';
 import { Profile } from '../../../database/_schema';
 import Header from '../components/Header';
 import { ProfileService } from '../../../database/entities/profile';
-import PinnedUserListPresenter from './PinnedUserListPresenter';
-import PinnedTagListPresenter from './PinnedTagListPresenter';
+import UserListPresenter from './UserListPresenter';
+import TagListPresenter from './TagListPresenter';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 
@@ -202,22 +202,13 @@ function SocialHubTabPresenter({ profile }: Props) {
 				<Header acct={acct} />
 
 				{/* --- Pinned Timelines --- */}
-				<PinnedTimelineListPresenter
-					account={State.acct}
-					items={State.pins.timelines}
-				/>
+				<FeedListPresenter account={State.acct} items={State.pins.timelines} />
 
 				{/* --- Pinned Users --- */}
-				<PinnedUserListPresenter
-					parentAcct={State.acct}
-					items={State.pins.users}
-				/>
+				<UserListPresenter parentAcct={State.acct} items={State.pins.users} />
 
 				{/* --- Pinned Tags --- */}
-				<PinnedTagListPresenter
-					items={State.pins.tags}
-					parentAcct={State.acct}
-				/>
+				<TagListPresenter items={State.pins.tags} parentAcct={State.acct} />
 			</ScrollView>
 			<Pressable
 				style={{ position: 'absolute', bottom: 0, zIndex: 2 }}

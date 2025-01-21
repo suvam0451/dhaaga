@@ -20,7 +20,7 @@ type Props = {
 	parentAcct: Account;
 };
 
-function PinnedUserListPresenter({ items, parentAcct }: Props) {
+function UserListPresenter({ items, parentAcct }: Props) {
 	const { acct } = useAppAcct();
 	const { db } = useAppDb();
 	const { loadApp } = useGlobalState(
@@ -97,7 +97,7 @@ function PinnedUserListPresenter({ items, parentAcct }: Props) {
 	);
 }
 
-export default PinnedUserListPresenter;
+export default UserListPresenter;
 
 const styles = StyleSheet.create({
 	root: {
