@@ -37,6 +37,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const [Refreshing, setRefreshing] = useState(false);
 	const { show, hide } = useAppDialog();
 	const { loadAccounts } = useHub();
+	const { accounts, selectProfile } = useHub();
 
 	function refresh() {
 		setRefreshing(true);
@@ -85,7 +86,20 @@ function SocialHubTabPresenter({ profile }: Props) {
 		);
 	}
 
-	function onPressProfile(profileId: number | string) {}
+	/**
+	 * Switch to profile
+	 */
+	function onPressProfile(profileId: number | string) {
+		const ownerIndex = accounts.findIndex((o) => o.id == acct.id);
+		if (ownerIndex !== -1) {
+			const _profileIndex = accounts[ownerIndex].profiles.findIndex(
+				(o) => o.id == profileId,
+			);
+			if (_profileIndex !== -1) {
+				selectProfile(_profileIndex);
+			}
+		}
+	}
 
 	function onLongPressProfile(profileId: number | string) {
 		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
