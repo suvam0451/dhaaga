@@ -1,28 +1,31 @@
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { ScrollView, Text, StyleSheet } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { ScrollView, StyleSheet } from 'react-native';
+import { AppText } from '../../../components/lib/Text';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 function FeedAddSheetPresenter() {
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
-	const title = 'Sorry 😔';
-	const desc = [
-		'This feature is not implemented yet!',
-		'A default set of feed destinations has been populated for you!',
-		'Bluesky users can access their feeds from the profile page (5th tab) for now.',
-	];
+	const title = t(`hubAddFeedSheet.title`);
+	const desc = t(`hubAddFeedSheet.desc`, {
+		returnObjects: true,
+	}) as string[];
 	return (
 		<ScrollView contentContainerStyle={{ padding: 10 }}>
-			<Text style={[styles.sheetTitle, { color: theme.secondary.a10 }]}>
+			<AppText.SemiBold
+				style={[styles.sheetTitle, { color: theme.secondary.a10 }]}
+			>
 				{title}
-			</Text>
+			</AppText.SemiBold>
 			{desc.map((o, i) => (
-				<Text
+				<AppText.Medium
 					key={i}
 					style={[styles.sheetDesc, { color: theme.secondary.a30 }]}
 				>
 					{o}
-				</Text>
+				</AppText.Medium>
 			))}
 		</ScrollView>
 	);
@@ -34,7 +37,6 @@ const styles = StyleSheet.create({
 	sheetTitle: {
 		fontSize: 28,
 		textAlign: 'center',
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		marginTop: 48,
 		marginBottom: 24,
 	},

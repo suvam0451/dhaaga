@@ -20,6 +20,8 @@ import UserListPresenter from './UserListPresenter';
 import TagListPresenter from './TagListPresenter';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	// account left join guaranteed
@@ -38,6 +40,10 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const { show, hide } = useAppDialog();
 	const { loadAccounts } = useHub();
 	const { accounts, selectProfile } = useHub();
+	const { t } = useTranslation([
+		LOCALIZATION_NAMESPACE.DIALOGS,
+		LOCALIZATION_NAMESPACE.CORE,
+	]);
 
 	function refresh() {
 		setRefreshing(true);
@@ -69,17 +75,16 @@ function SocialHubTabPresenter({ profile }: Props) {
 	function onPressAddProfile() {
 		show(
 			{
-				title: 'Add Profile',
+				title: t(`hub.profileAdd.title`),
 				actions: [],
-				description: [
-					'Profiles help you keep your pins and hub layout organised based on interest.',
-				],
+				description: t(`hub.profileAdd.description`, {
+					returnObjects: true,
+				}) as string[],
 			},
-			'Name your profile',
+			t(`hub.profileAdd.placeholder`),
 			(name: string) => {
 				if (!!name) {
-					const profile = ProfileService.addProfile(db, acct, name);
-					console.log(profile);
+					ProfileService.addProfile(db, acct, name);
 					loadAccounts();
 				}
 			},
@@ -106,19 +111,23 @@ function SocialHubTabPresenter({ profile }: Props) {
 		const _profile = ProfileService.getById(db, profileId);
 		if (ProfileService.isDefaultProfile(db, _profile)) {
 			show({
-				title: 'Edit Profile',
-				description: ['You can only rename a default profile.'],
+				title: t(`hub.profileEdit.title`),
+				description: t(`hub.profileEdit.descriptionAlt`, {
+					returnObjects: true,
+				}) as string[],
 				actions: [
 					{
-						label: 'Rename',
+						label: t(`hub.profileEdit.renameOption`),
 						onPress: async () => {
 							show(
 								{
-									title: 'Rename Profile',
+									title: t(`hub.profileRename.title`),
 									actions: [],
-									description: ['Assign a new name for this profile.'],
+									description: t(`hub.profileRename.description`, {
+										returnObjects: true,
+									}) as string[],
 								},
-								'Name your profile',
+								t(`hub.profileRename.placeholder`),
 								(name: string) => {
 									if (!!name) {
 										ProfileService.renameProfileById(db, profileId, name);
@@ -133,19 +142,23 @@ function SocialHubTabPresenter({ profile }: Props) {
 			});
 		} else {
 			show({
-				title: 'Edit Profile',
-				description: ['You can rename or delete this profile'],
+				title: t(`hub.profileEdit.title`),
+				description: t(`hub.profileEdit.description`, {
+					returnObjects: true,
+				}) as string[],
 				actions: [
 					{
-						label: 'Rename',
+						label: t(`hub.profileEdit.renameOption`),
 						onPress: async () => {
 							show(
 								{
-									title: 'Rename Profile',
+									title: t(`hub.profileRename.title`),
 									actions: [],
-									description: ['Assign a new name for this profile.'],
+									description: t(`hub.profileRename.description`, {
+										returnObjects: true,
+									}) as string[],
 								},
-								'Name your profile',
+								t(`hub.profileRename.placeholder`),
 								(name: string) => {
 									if (!!name) {
 										ProfileService.renameProfileById(db, profileId, name);
@@ -157,17 +170,16 @@ function SocialHubTabPresenter({ profile }: Props) {
 						},
 					},
 					{
-						label: 'Delete',
+						label: t(`hub.profileEdit.deleteOption`),
 						onPress: async () => {
 							show({
-								title: 'Confirm Delete',
-								description: [
-									'Are you sure you want to delete this profile?',
-									'All pins and saved layout will be lost.',
-								],
+								title: t(`hub.profileDelete.title`),
+								description: t(`hub.profileDelete.description`, {
+									returnObjects: true,
+								}) as string[],
 								actions: [
 									{
-										label: 'Confirm and Delete',
+										label: t(`hub.profileDelete.deleteConfirmOption`),
 										onPress: async () => {
 											ProfileService.removeProfile(
 												db,

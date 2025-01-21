@@ -1,0 +1,93 @@
+{
+  "topNav": {
+    "primary": {
+      "home": "Soziales Zentrum",
+      "discover": "Entdecken",
+      "compose": "Erstellen",
+      "account": "Mein Konto",
+      "setting": "App-Einstellungen"
+    },
+    "secondary": {
+      "myLikes": "",
+      "myBookmarks": ""
+    }
+  },
+  "bottomNav": {
+    "inbox": {
+      "mentions": "",
+      "chat": "",
+      "social": "",
+      "updates": ""
+    }
+  },
+  "database": {
+    "defaultText": "Standard"
+  },
+  "hub": {
+    "greetings": {
+      "goodMorning": "Guten Morgen",
+      "goodAfternoon": "Guten Nachmittag",
+      "goodEvening": "Guten Abend",
+      "goodNight": "Gute Nacht"
+    },
+    "section": {
+      "feeds": "Zeitleisten",
+      "users": "Benutzer",
+      "tags": "Tags"
+    },
+    "feeds": {
+      "global": "Global",
+      "local": "Lokal",
+      "social": "Sozial",
+      "home": "Startseite"
+    }
+  },
+  "composer": {
+    "pageTitle": "Erstellen",
+    "quickPost": "Schnellpost",
+    "quickPostCta": "Was denkst du gerade?",
+    "quickPostSubmit": "Posten",
+    "landing": {
+      "tComposeFull": "Erstelle einen Beitrag",
+      "dComposeFull": [
+        "Längere Beiträge",
+        "Mehr Optionen"
+      ],
+      "tComposePoll": "Erstelle eine Umfrage",
+      "dComposePoll": [
+        "<Nicht Implementiert>"
+      ],
+      "tViewScheduled": "Geplante Beiträge ansehen",
+      "dViewScheduled": [
+        "<Nicht Implementiert>"
+      ],
+      "tViewDrafts": "Entwürfe ansehen",
+      "dViewDrafts": [
+        "<Nicht Implementiert>"
+      ]
+    }
+  },
+  "setting": {
+    "accountModule": {
+      "title": "Konten",
+      "desc": "Konten hinzufügen und verwalten"
+    },
+    "generalModule": {
+      "title": "Allgemein",
+      "desc": "Die üblichsten, langweiligen Einstellungen sind hier"
+    },
+    "appFeaturesModule": {
+      "title": "Goodie-Hütte",
+      "desc": "Passen Sie die einzigartigen Funktionen von Dhaaga an"
+    },
+    "digitalWellbeingModule": {
+      "title": "Digitale Gesundheit",
+      "desc": "Trennen, um sich selbst wieder zu verbinden"
+    },
+    "advancedModule": {
+      "title": "Erweitert",
+      "desc": "'Für Power-User"
+    },
+    "footer": "Erstellt mit \uD83D\uDC9B von Debashish Patra"
+  }
+}

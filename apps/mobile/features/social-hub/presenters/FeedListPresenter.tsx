@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import PinnedTimelineItemView from '../views/PinnedTimelineItemView';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
+import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 type SocialHubPinnedTimelinesProps = {
 	account: Account;
@@ -15,12 +17,15 @@ type SocialHubPinnedTimelinesProps = {
 function FeedListPresenter({ items, account }: SocialHubPinnedTimelinesProps) {
 	const destinations = HubService.resolveTimelineDestinations(items);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const { show } = useAppBottomSheet_Improved();
 
-	function onPressAdd() {}
+	function onPressAdd() {
+		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED, true);
+	}
 
 	return (
 		<HubTabSectionContainer
-			label={t(`hub.section.feeds`, { ns: LOCALIZATION_NAMESPACE.CORE })}
+			label={t(`hub.section.feeds`)}
 			style={styles.root}
 			onPressAdd={onPressAdd}
 		>

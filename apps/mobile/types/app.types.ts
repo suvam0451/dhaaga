@@ -41,6 +41,8 @@ export enum LOCALIZATION_NAMESPACE {
 	CORE = 'core',
 	GUIDES = 'guides',
 	GLOSSARY = 'glossary',
+	SHEETS = 'sheets',
+	DIALOGS = 'dialogs',
 }
 
 /**
