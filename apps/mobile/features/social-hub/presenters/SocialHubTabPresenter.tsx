@@ -1,6 +1,10 @@
 import {
+	useAppAcct,
+	useAppBottomSheet_Improved,
 	useAppDb,
+	useAppDialog,
 	useAppTheme,
+	useHub,
 } from '../../../hooks/utility/global-state-extractors';
 import { useEffect, useReducer, useState } from 'react';
 import {
@@ -8,14 +12,28 @@ import {
 	socialHubTabReducerActionType as ACTION,
 	socialHubTabReducerDefault as reducerDefault,
 } from '../../../states/interactors/social-hub-tab.reducer';
-import { RefreshControl, ScrollView, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
-import PinnedTimelineListPresenter from './PinnedTimelineListPresenter';
-import { Profile } from '../../../database/_schema';
+import FeedListPresenter from './FeedListPresenter';
+import {
+	Profile,
+	ProfilePinnedTag,
+	ProfilePinnedUser,
+} from '../../../database/_schema';
 import Header from '../components/Header';
 import { ProfileService } from '../../../database/entities/profile';
-import PinnedUserListPresenter from './PinnedUserListPresenter';
-import PinnedTagListPresenter from './PinnedTagListPresenter';
+import UserListPresenter from './UserListPresenter';
+import TagListPresenter from './TagListPresenter';
+import * as Haptics from 'expo-haptics';
+import { ImpactFeedbackStyle } from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { DialogBuilderService } from '../../../services/dialog-builder.service';
+import { AccountService } from '../../../database/entities/account';
+import { useShallow } from 'zustand/react/shallow';
+import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
+import { ProfilePinnedTagService } from '../../../database/entities/profile-pinned-tag';
 
 type Props = {
 	// account left join guaranteed
@@ -31,8 +49,30 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const [State, dispatch] = useReducer(reducer, reducerDefault);
 	const { theme } = useAppTheme();
 	const [Refreshing, setRefreshing] = useState(false);
+	const { show, hide } = useAppDialog();
+	const { loadAccounts } = useHub();
+	const { accounts, selectProfile } = useHub();
+	const { setCtx, show: showSheet } = useAppBottomSheet_Improved();
+	const { acct } = useAppAcct();
+	const { loadApp } = useGlobalState(
+		useShallow((o) => ({
+			loadApp: o.loadApp,
+		})),
+	);
+	const { t } = useTranslation([
+		LOCALIZATION_NAMESPACE.DIALOGS,
+		LOCALIZATION_NAMESPACE.CORE,
+	]);
 
-	useEffect(() => {
+	function refresh() {
+		setRefreshing(true);
+		dispatch({
+			type: ACTION.RELOAD_PINS,
+		});
+		setRefreshing(false);
+	}
+
+	function hardRefresh() {
 		dispatch({
 			type: ACTION.INIT,
 			payload: {
@@ -43,17 +83,246 @@ function SocialHubTabPresenter({ profile }: Props) {
 		dispatch({
 			type: ACTION.RELOAD_PINS,
 		});
-	}, [profile, db]);
-
-	function refresh() {
-		setRefreshing(true);
-		dispatch({
-			type: ACTION.RELOAD_PINS,
-		});
-		setRefreshing(false);
 	}
 
-	const acct = ProfileService.getOwnerAccount(db, profile);
+	useEffect(() => {
+		hardRefresh();
+	}, [profile, db]);
+
+	const parentAcct = ProfileService.getOwnerAccount(db, profile);
+
+	function onPressAddUser() {
+		if (parentAcct.id !== acct.id) {
+			show(
+				DialogBuilderService.toSwitchActiveAccount(() => {
+					AccountService.select(db, parentAcct);
+					try {
+						loadApp().then(() => {
+							hide();
+							setCtx({ profileId: profile.id, onChange: refresh });
+							showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
+						});
+					} catch (e) {
+						hide();
+					}
+				}),
+			);
+		} else {
+			setCtx({ profileId: profile.id, onChange: refresh });
+			showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
+		}
+	}
+
+	function onPressAddTag() {
+		show(
+			{
+				title: t(`hub.tagAdd.title`),
+				description: t(`hub.tagAdd.description`, {
+					returnObjects: true,
+				}) as string[],
+				actions: [],
+			},
+			t(`hub.tagAdd.placeholder`),
+			(text: string) => {
+				ProfilePinnedTagService.add(db, acct, profile, text);
+				refresh();
+			},
+		);
+	}
+
+	function onLongPressUser(pinnedUser: ProfilePinnedUser) {
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
+		show({
+			title: t(`hub.userEdit.title`),
+			description: t(`hub.userEdit.description`, {
+				returnObjects: true,
+			}) as string[],
+			actions: [
+				{
+					label: t(`dialogs.deleteOption`, { ns: LOCALIZATION_NAMESPACE.CORE }),
+					variant: 'destructive',
+					onPress: async () => {
+						ProfilePinnedUserService.toggle(db, pinnedUser);
+						refresh();
+						hide();
+					},
+				},
+			],
+		});
+	}
+
+	function onLongPressTag(pinnedTag: ProfilePinnedTag) {
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
+		show({
+			title: t(`hub.tagEdit.title`),
+			description: t(`hub.tagEdit.description`, {
+				returnObjects: true,
+			}) as string[],
+			actions: [
+				{
+					label: t(`dialogs.renameOption`, { ns: LOCALIZATION_NAMESPACE.CORE }),
+					onPress: async () => {
+						show(
+							{
+								title: t(`hub.tagRename.title`),
+								actions: [],
+								description: t(`hub.tagRename.description`, {
+									returnObjects: true,
+								}) as string[],
+							},
+							t(`hub.tagRename.placeholder`),
+							(name: string) => {
+								if (!!name) {
+									ProfilePinnedTagService.renameById(db, pinnedTag.id, name);
+									hide();
+									refresh();
+								}
+							},
+						);
+					},
+				},
+				{
+					label: t(`dialogs.deleteOption`, { ns: LOCALIZATION_NAMESPACE.CORE }),
+					onPress: async () => {
+						ProfilePinnedTagService.delete(db, pinnedTag.id);
+						hide();
+						refresh();
+					},
+					variant: 'destructive',
+				},
+			],
+		});
+	}
+
+	function onPressAddProfile() {
+		show(
+			{
+				title: t(`hub.profileAdd.title`),
+				actions: [],
+				description: t(`hub.profileAdd.description`, {
+					returnObjects: true,
+				}) as string[],
+			},
+			t(`hub.profileAdd.placeholder`),
+			(name: string) => {
+				if (!!name) {
+					ProfileService.addProfile(db, parentAcct, name);
+					loadAccounts();
+				}
+			},
+		);
+	}
+
+	/**
+	 * Switch to profile
+	 */
+	function onPressProfile(profileId: number | string) {
+		const ownerIndex = accounts.findIndex((o) => o.id == parentAcct.id);
+		if (ownerIndex !== -1) {
+			const _profileIndex = accounts[ownerIndex].profiles.findIndex(
+				(o) => o.id == profileId,
+			);
+			if (_profileIndex !== -1) {
+				selectProfile(_profileIndex);
+			}
+		}
+	}
+
+	function onLongPressProfile(profileId: number | string) {
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
+		const _profile = ProfileService.getById(db, profileId);
+		if (ProfileService.isDefaultProfile(db, _profile)) {
+			show({
+				title: t(`hub.profileEdit.title`),
+				description: t(`hub.profileEdit.descriptionAlt`, {
+					returnObjects: true,
+				}) as string[],
+				actions: [
+					{
+						label: t(`dialogs.renameOption`, {
+							ns: LOCALIZATION_NAMESPACE.CORE,
+						}),
+						onPress: async () => {
+							show(
+								{
+									title: t(`hub.profileRename.title`),
+									actions: [],
+									description: t(`hub.profileRename.description`, {
+										returnObjects: true,
+									}) as string[],
+								},
+								t(`hub.profileRename.placeholder`),
+								(name: string) => {
+									if (!!name) {
+										ProfileService.renameProfileById(db, profileId, name);
+										hide();
+										loadAccounts();
+									}
+								},
+							);
+						},
+					},
+				],
+			});
+		} else {
+			show({
+				title: t(`hub.profileEdit.title`),
+				description: t(`hub.profileEdit.description`, {
+					returnObjects: true,
+				}) as string[],
+				actions: [
+					{
+						label: t(`hub.profileEdit.renameOption`),
+						onPress: async () => {
+							show(
+								{
+									title: t(`hub.profileRename.title`),
+									actions: [],
+									description: t(`hub.profileRename.description`, {
+										returnObjects: true,
+									}) as string[],
+								},
+								t(`hub.profileRename.placeholder`),
+								(name: string) => {
+									if (!!name) {
+										ProfileService.renameProfileById(db, profileId, name);
+										hide();
+										loadAccounts();
+									}
+								},
+							);
+						},
+					},
+					{
+						label: t(`hub.profileEdit.deleteOption`),
+						onPress: async () => {
+							show({
+								title: t(`hub.profileDelete.title`),
+								description: t(`hub.profileDelete.description`, {
+									returnObjects: true,
+								}) as string[],
+								actions: [
+									{
+										label: t(`hub.profileDelete.deleteConfirmOption`),
+										onPress: async () => {
+											ProfileService.removeProfile(
+												db,
+												profileId as unknown as number,
+											);
+											hide();
+											loadAccounts();
+										},
+										variant: 'destructive',
+									},
+								],
+							});
+						},
+						variant: 'destructive',
+					},
+				],
+			});
+		}
+	}
 
 	return (
 		<View>
@@ -66,29 +335,38 @@ function SocialHubTabPresenter({ profile }: Props) {
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
 			>
-				<Header acct={acct} />
+				<Header acct={parentAcct} />
 
 				{/* --- Pinned Timelines --- */}
-				<PinnedTimelineListPresenter
-					account={State.acct}
-					items={State.pins.timelines}
-				/>
+				<FeedListPresenter account={State.acct} items={State.pins.timelines} />
 
 				{/* --- Pinned Users --- */}
-				<PinnedUserListPresenter
+				<UserListPresenter
 					parentAcct={State.acct}
 					items={State.pins.users}
+					profile={profile}
+					onPressAddUser={onPressAddUser}
+					onLongPressUser={onLongPressUser}
 				/>
 
 				{/* --- Pinned Tags --- */}
-				<PinnedTagListPresenter
+				<TagListPresenter
 					items={State.pins.tags}
 					parentAcct={State.acct}
+					onPressAddTag={onPressAddTag}
+					onLongPressTag={onLongPressTag}
 				/>
 			</ScrollView>
-			<View style={{ position: 'absolute', bottom: 0 }}>
-				<HubProfileListView />
-			</View>
+			<Pressable
+				style={{ position: 'absolute', bottom: 0, zIndex: 2 }}
+				onPress={() => {}}
+			>
+				<HubProfileListView
+					onLongPressProfile={onLongPressProfile}
+					onPressAddProfile={onPressAddProfile}
+					onPressProfile={onPressProfile}
+				/>
+			</Pressable>
 		</View>
 	);
 }

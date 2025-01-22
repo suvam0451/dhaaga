@@ -23,10 +23,6 @@ function SettingsGuide() {
 			) as unknown as string[],
 		},
 		{
-			question: t(`settings.qProGetHow`),
-			answers: t(`settings.aProGetHow`, NS_OBJ) as unknown as string[],
-		},
-		{
 			question: t(`settings.qSupportHow`),
 			answers: t(`settings.aSupportHow`, NS_OBJ) as unknown as string[],
 		},

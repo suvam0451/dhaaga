@@ -24,7 +24,11 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_TAB_DIGITAL_WELLBEING = '/profile/settings/digital-wellbeing',
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
 
-	CHATROOM = '/notifications/chat',
+	NOTIFICATIONS_MENTIONS = '/notifications',
+	NOTIFICATIONS_CHAT = '/notifications/chat',
+	NOTIFICATIONS_SOCIAL = '/notifications/social',
+	NOTIFICATIONS_UPDATES = '/notifications/updates',
+	CHATROOM = '/notifications/chatroom',
 
 	COLLECTIONS = '/profile/collections',
 	PROFILES = '/profile/profiles',

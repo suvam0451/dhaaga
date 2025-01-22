@@ -1,4 +1,4 @@
-import { Account, ProfilePinnedUser } from '../../../database/_schema';
+import { Account, Profile, ProfilePinnedUser } from '../../../database/_schema';
 import { FlatList, StyleSheet } from 'react-native';
 import PinnedUserView from '../views/PinnedUserView';
 import {
@@ -16,11 +16,19 @@ import * as Haptics from 'expo-haptics';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
 
 type Props = {
+	profile: Profile;
 	items: ProfilePinnedUser[];
 	parentAcct: Account;
+	onPressAddUser: () => void;
+	onLongPressUser: (item: ProfilePinnedUser) => void;
 };
 
-function PinnedUserListPresenter({ items, parentAcct }: Props) {
+function UserListPresenter({
+	onPressAddUser,
+	items,
+	parentAcct,
+	onLongPressUser,
+}: Props) {
 	const { acct } = useAppAcct();
 	const { db } = useAppDb();
 	const { loadApp } = useGlobalState(
@@ -72,15 +80,14 @@ function PinnedUserListPresenter({ items, parentAcct }: Props) {
 
 	function onLongPress(item: ProfilePinnedUser) {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+		onLongPressUser(item);
 	}
-
-	function onPressAdd() {}
 
 	return (
 		<HubTabSectionContainer
 			label={'Users'}
 			style={styles.root}
-			onPressAdd={onPressAdd}
+			onPressAdd={onPressAddUser}
 		>
 			<FlatList
 				data={items}
@@ -97,7 +104,7 @@ function PinnedUserListPresenter({ items, parentAcct }: Props) {
 	);
 }
 
-export default PinnedUserListPresenter;
+export default UserListPresenter;
 
 const styles = StyleSheet.create({
 	root: {

@@ -9,10 +9,10 @@ import {
 	AccountPfp,
 } from '../../../screens/accounts/fragments/AccountListingFragment';
 import AppDialogContainer from '../../containers/AppDialogContainer';
-import { Accounts } from '../../../database/entities/account';
+import { Account } from '../../../database/_schema';
 
 type Props = {
-	acct: Accounts;
+	acct: Account;
 	children: any;
 	title: string;
 	onClicked: () => void;
@@ -26,8 +26,10 @@ const AccountOverviewFragment = memo(function Foo({
 	title,
 	onClicked,
 }: Props) {
-	const avatar = acct?.meta?.find((o) => o.key === 'avatar')?.value;
-	const displayName = acct?.meta?.find((o) => o.key === 'display_name')?.value;
+	const avatar = acct?.metadata?.find((o) => o.key === 'avatar')?.value;
+	const displayName = acct?.metadata?.find(
+		(o) => o.key === 'display_name',
+	)?.value;
 
 	if (!IsVisible || !acct) return <View />;
 	return (

@@ -95,16 +95,11 @@
       "So, these settings have to be set-up locally.",
       "But, once done, they will then be applied to all your SNS accounts!"
     ],
-    "qProGetHow": "How can I pay and unlock the \"Pro\" version?",
-    "aProGetHow": [
-      "What is a... \"Pro\" version? Is it a bird ? \uD83E\uDD14"
-    ],
     "qSupportHow": "For real though, How can I support you ?",
     "aSupportHow": [
       "Wow, gee. Thanks 💛.",
-      "I built this app and made it free and open-source because I want the community to enjoy a superior SNS experience—One, which isn't restricted by platforms and protocols, and one that isn't bogged down by the same old social media anti-features.",
       "As an indie developer, I'd really appreciate your feedback, encouragement and support.",
-      "So, feel free to drop by and say hi 👋: \nHated it ? Tell me what I can improve!\nLiked it ? maybe share it with your friends!\nLoved it ? consider leaving a tip!"
+      "Feel free to drop by and say hello 👋: \nHated it ? Tell me what I can improve!\nLiked it ? maybe share it with your friends!\nLoved it ? consider leaving a tip!"
     ]
   }
 }

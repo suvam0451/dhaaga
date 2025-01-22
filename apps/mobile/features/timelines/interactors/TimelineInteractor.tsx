@@ -8,7 +8,7 @@ import {
 } from '../contexts/PostTimelineCtx';
 import useTimeline from '../api/useTimeline';
 import TimelinePresenter from '../presenters/TimelinePresenter';
-import { View } from 'react-native';
+import TimelineErrorView from '../view/TimelineErrorView';
 
 function TimelineInteractor() {
 	const { db } = useAppDb();
@@ -63,7 +63,7 @@ function TimelineInteractor() {
 		});
 	}, [fetchStatus]);
 
-	if (error) return <View />;
+	if (error) return <TimelineErrorView error={error} />;
 	return <TimelinePresenter refetch={refetch} fetchStatus={fetchStatus} />;
 }
 

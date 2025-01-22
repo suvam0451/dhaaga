@@ -127,6 +127,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	ADD_BOOKMARK = 'AddBookmark',
 	ADD_HUB_TAG = 'AddHubTag',
 	ADD_HUB_USER = 'AddHubUser',
+	ADD_HUB_FEED = 'AddHubFeed',
 
 	POST_SHOW_REPLIES = 'PostShowReplies',
 	POST_SHOW_LIKES = 'PostShowLikes',
@@ -152,8 +153,8 @@ type AppBottomSheetState = {
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
 
-	ctx: { uuid: string };
-	setCtx: (ctx: { uuid: string }) => void;
+	ctx: any;
+	setCtx: (ctx: any) => void;
 
 	broadcastEndSession: () => void;
 
@@ -556,6 +557,9 @@ const useGlobalState = create<State & Actions>()(
 						state.dialog.type = APP_DIALOG_SHEET_ENUM.TEXT_INPUT;
 						state.dialog.textSeed = textSeed;
 						state.dialog.textSubmitCallback = callback;
+					} else {
+						state.dialog.textSeed = null;
+						state.dialog.textSubmitCallback = undefined;
 					}
 					state.dialog.visible = true;
 				});

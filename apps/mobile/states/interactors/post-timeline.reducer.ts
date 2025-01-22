@@ -292,6 +292,10 @@ function reducer(state: State, action: Actions): State {
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_TAG_REMOTE: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.HASHTAG;
+								draft.query = {
+									id: match.name,
+									label: match.name,
+								};
 								draft.seen = new Set();
 							});
 						}

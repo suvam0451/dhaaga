@@ -1,18 +1,19 @@
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { ScrollView, Text, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 
-function ABS_Add_Hub_User() {
+function TagAddSheetPresenter() {
 	const { theme } = useAppTheme();
-
 	const title = 'Sorry 😔';
 	const desc = [
 		'This feature is not implemented yet!',
-		"Please visit a user's profile and add them via the 'More Options' menu, instead.",
+		'Please either click a tag from your timeline, ' +
+			'or add it from the timeline relevant to the tag',
 		'The feature to add users directly will be implemented in a later patch',
 	];
+
 	return (
-		<ScrollView contentContainerStyle={{ padding: 10 }}>
+		<ScrollView>
 			<Text style={[styles.sheetTitle, { color: theme.secondary.a10 }]}>
 				{title}
 			</Text>
@@ -28,7 +29,7 @@ function ABS_Add_Hub_User() {
 	);
 }
 
-export default ABS_Add_Hub_User;
+export default TagAddSheetPresenter;
 
 const styles = StyleSheet.create({
 	sheetTitle: {

@@ -1,15 +1,10 @@
 import { useAppPaginationContext } from '../../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
 
 function useTrendingPosts() {
-	const { client } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-		})),
-	);
+	const { client } = useAppApiClient();
 	const {
 		data: PageData,
 		setMaxId,

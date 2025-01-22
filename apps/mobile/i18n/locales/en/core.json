@@ -23,6 +23,10 @@
   "database": {
     "defaultText": "Default"
   },
+  "dialogs": {
+    "renameOption": "Rename",
+    "deleteOption": "Delete"
+  },
   "hub": {
     "greetings": {
       "goodMorning": "Good Morning",

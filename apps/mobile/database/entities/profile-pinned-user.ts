@@ -5,6 +5,7 @@ import { AccountService } from './account';
 import { z } from 'zod';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 import { RandomUtil } from '../../utils/random.utils';
+import { AppUserObject } from '../../types/app-user.types';
 
 const profileUserPinCreateSchema = z.object({
 	server: z.string(),
@@ -25,9 +26,52 @@ export type ProfileUserPinCreateType = z.infer<
 >;
 
 @DbErrorHandler()
-export class Repo {}
+export class Repo {
+	/**
+	 *
+	 */
+	static addLocalPin(
+		db: DataSource,
+		profile: Profile,
+		acct: Account,
+		user: AppUserObject,
+	) {
+		const _uuid = RandomUtil.nanoId();
+		db.profilePinnedUser.insert({
+			uuid: RandomUtil.nanoId(),
+			server: acct.server,
+			category: APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL,
+			driver: acct.driver,
+			required: false,
+			itemOrder: 0,
+			page: 0, // optional
+			avatarUrl: user.avatarUrl,
+			displayName: user.displayName, // fk
+			profileId: profile.id,
+			identifier: user.id,
+			username: user.handle,
+		});
+
+		return db.profilePinnedUser.findOne({
+			uuid: _uuid,
+		});
+	}
+}
 
 export class Service {
+	static toggle(db: DataSource, pinnedUser: ProfilePinnedUser) {
+		const match = db.profilePinnedUser.findOne({
+			id: pinnedUser.id,
+		});
+		if (!match) return;
+		db.profilePinnedUser.updateById(pinnedUser.id, {
+			active: !match.active,
+		});
+		return db.profilePinnedUser.findOne({
+			id: pinnedUser.id,
+		});
+	}
+
 	static findById(db: DataSource, id: number): ProfilePinnedUser {
 		return db.profilePinnedUser.findOne({ id });
 	}
@@ -59,53 +103,33 @@ export class Service {
 		server: string,
 		userId: string,
 	) {
-		return !!Service.find(db, profile, server, userId);
+		const match = Service.find(db, profile, server, userId);
+		return match && match?.active;
 	}
 
 	/**
 	 *
 	 * @param db
 	 * @param profile
-	 * @param homeServer is not always necessarily user's own server
-	 * @param input
+	 * @param acct
+	 * @param user
 	 */
 	static addForProfile(
 		db: DataSource,
 		profile: Profile,
-		homeServer: string,
-		input: ProfileUserPinCreateType,
+		acct: Account,
+		user: AppUserObject,
 	) {
-		const { success, data, error } =
-			profileUserPinCreateSchema.safeParse(input);
-		if (!success) {
-			console.log('[WARN]: invalid input for user pin creation', error);
-			return null;
-		}
-		const duplicate = Service.find(db, profile, homeServer, data.identifier);
-		console.log('duplicate', duplicate);
+		const duplicate = Service.find(db, profile, acct.server, user.id);
 		if (duplicate) {
 			if (duplicate.active === false) {
 				Service.setActive(db, duplicate);
 			}
-
 			return duplicate;
 		}
 
-		db.profilePinnedUser.insert({
-			uuid: RandomUtil.nanoId(),
-			server: homeServer,
-			category: data.category,
-			driver: data.driver,
-			required: data.required,
-			itemOrder: 0,
-			page: 0,
-			// optional
-			avatarUrl: data.avatarUrl,
-			displayName: data.displayName, // fk
-			profileId: profile.id,
-			identifier: data.identifier,
-			username: data.username,
-		});
+		// create if not exists
+		return Repo.addLocalPin(db, profile, acct, user);
 	}
 
 	static getShownForProfile(
@@ -127,6 +151,29 @@ export class Service {
 			);
 			return [];
 		}
+	}
+
+	/**
+	 * Creates if not exists
+	 */
+	static toggleUserPin(
+		db: DataSource,
+		profile: Profile,
+		acct: Account,
+		user: AppUserObject,
+	) {
+		const matched = Service.find(db, profile, acct.server, user.id);
+
+		if (matched) {
+			db.profilePinnedUser.updateById(matched.id, {
+				active: !matched.active,
+				show: true,
+			});
+			return Service.find(db, profile, acct.server, user.id);
+		}
+
+		// create if not exists
+		return Repo.addLocalPin(db, profile, acct, user);
 	}
 }
 

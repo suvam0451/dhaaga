@@ -9,8 +9,8 @@ align="left"
 style="margin-right:8px"/>
 
 **Dhaaga** is an SNS app designed to enhance your social networking experience.
-By retrofitting the core SNS features, it brings you useful tools to easily 
-keep up-to date, discover new topics and connect with your friends—without 
+By retrofitting the core SNS features, it brings you useful tools to easily
+keep up-to date, discover new topics and connect with your friends—without
 switching apps or websites.
 
 <div align="center">
@@ -50,15 +50,15 @@ switching apps or websites.
 - 🥳 Fun, Free (💰) and FOSS
 
 > [!TIP]
-> 
-> This app only implements selected features from your server.</br> 
+>
+> This app only implements selected features from your server.</br>
 > Feel free to request anything extra you need!
 
 ## 💁 About
 
 Dhaaga is an indie side project I’ve been working on.
 
-It lets you connect with your friends from various platforms using a 
+It lets you connect with your friends from various platforms using a
 single app! It also boasts many useful features, tweaks and QoL improvements
 to make your SNS experience cozy ☕ and fun 🥳
 
