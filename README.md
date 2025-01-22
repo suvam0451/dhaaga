@@ -77,11 +77,14 @@ representing *connection, unity and bonding*.
 
 ## 📝 License
 
-- [AGPL-v3](./LICENSE) @ apps/*
-- [MIT](./.github/ALT_LICENSE.md) @ packages/*
+- [AGPL-v3](./LICENSE) @ `apps/*`
+- [MIT](./.github/ALT_LICENSE.md) @ `packages/*`
 
-Pull requests and Ttranslations are only accepted
-under MIT *(or compatible)* license 🙏
+This project only accepts pull requests under the MIT license
+*(though some parts are sublicensed under AGPL v3)* 🙏
+
+This gives me flexibility and assurance as a dev/publisher,
+while keeping the source code available for public benefit.
 
 ---
 
