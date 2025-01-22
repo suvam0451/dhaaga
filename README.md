@@ -77,4 +77,12 @@ representing *connection, unity and bonding*.
 
 ---
 
+## 📝 License
+
+- [AGPL-v3](./LICENSE) @ apps/*
+- [MIT](./.github/ALT_LICENSE.md) @ packages/*
+
+PRs and Translations are only accepted 
+under MIT *(or compatible)* license 🙏
+
 © 2025 Debashish Patra and contributors.
