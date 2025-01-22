@@ -2,9 +2,13 @@ import { ExpoConfig, ConfigContext } from 'expo/config.js';
 
 const IS_DEV = process.env.APP_VARIANT === 'dev';
 
+// Replace "Dhaaga" with "Dhaaga (Lite)" for Lite edition
+const APP_NAME = IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga';
+const BUNDLE_ID = IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga';
+
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
-	name: IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga',
+	name: APP_NAME,
 	slug: 'dhaaga',
 	version: '0.14.0',
 	orientation: 'portrait',
@@ -16,21 +20,27 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		silentLaunch: true,
 	},
 	ios: {
-		bundleIdentifier: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
+		bundleIdentifier: BUNDLE_ID,
 		supportsTablet: false,
 	},
 	android: {
-		package: IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga',
+		package: BUNDLE_ID,
 		versionCode: 23,
+		blockedPermissions: [
+			'android.permission.SYSTEM_ALERT_WINDOW',
+			'android.permission.READ_EXTERNAL_STORAGE',
+			'android.permission.WRITE_EXTERNAL_STORAGE',
+			'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
+		],
 	},
 	androidStatusBar: {
 		barStyle: 'dark-content',
-		backgroundColor: '#1c1c1c',
+		backgroundColor: '#121212',
 	},
 	splash: {
 		image: './assets/splash.png',
 		resizeMode: 'contain',
-		backgroundColor: '#242424',
+		backgroundColor: '#121212',
 	},
 	assetBundlePatterns: ['**/*'],
 	web: {
@@ -58,7 +68,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 						'android.permission.SYSTEM_ALERT_WINDOW',
 						'android.permission.READ_EXTERNAL_STORAGE',
 						'android.permission.WRITE_EXTERNAL_STORAGE',
-						'android.permission.RECORD_AUDIO',
+						'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
 					],
 				},
 			},
