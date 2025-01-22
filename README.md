@@ -75,15 +75,6 @@ Btw, the word **'Dhaaga (धागा)'** means 'thread' or
 It carries deep symbolic significance,
 representing *connection, unity and bonding*.
 
-## 📝 License
-
-- [AGPL-v3](./LICENSE) @ `apps/*`
-- [MIT](./.github/ALT_LICENSE.md) @ `packages/*`
-
-This project only accepts PRs that are under MIT-compatible licenses.
-This gives me flexibility and assurance as a dev/publisher,
-while keeping the source code available for public benefit.
-
 ---
 
 © 2025 Debashish Patra and contributors.
