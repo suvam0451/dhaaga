@@ -80,7 +80,8 @@ representing *connection, unity and bonding*.
 - [AGPL-v3](./LICENSE) @ `apps/*`
 - [MIT](./.github/ALT_LICENSE.md) @ `packages/*`
 
-This project only accepts pull requests under the MIT license. This gives me flexibility and assurance as a dev/publisher,
+This project only accepts PRs that are under MIT-compatible licenses.
+This gives me flexibility and assurance as a dev/publisher,
 while keeping the source code available for public benefit.
 
 ---
