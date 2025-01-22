@@ -3,7 +3,11 @@ import {
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
-import { AppBskyFeedGetFeed, AppBskyFeedGetTimeline } from '@atproto/api';
+import {
+	AppBskyFeedGetFeed,
+	AppBskyFeedGetTimeline,
+	AppBskyFeedSearchPosts,
+} from '@atproto/api';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
@@ -22,11 +26,21 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 		this.dto = dto;
 	}
 
-	hashtag(
+	async hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
-		return Promise.resolve(undefined) as any;
+	): LibraryPromise<AppBskyFeedSearchPosts.OutputSchema> {
+		const agent = getBskyAgent(this.dto);
+		return InvokeBskyFunction<AppBskyFeedSearchPosts.OutputSchema>(
+			'searchPosts',
+			agent.app.bsky.feed.searchPosts,
+			agent.app.bsky.feed,
+			{
+				q: q,
+				limit: 10,
+				cursor: query.maxId === null ? undefined : query.maxId,
+			},
+		);
 	}
 
 	hashtagAsGuest(

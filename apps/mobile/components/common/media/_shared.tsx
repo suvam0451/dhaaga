@@ -30,7 +30,11 @@ export const AppImageComponent = memo(function Foo({
 	parentContainerWidth,
 }: Props) {
 	const [Width, setWidth] = useState(parentContainerWidth);
-	const img = useImage(url, { maxWidth: Width, maxHeight: 540 }, [Width]);
+	const img = useImage(
+		url,
+		{ maxWidth: Math.min(parentContainerWidth, Width), maxHeight: 540 },
+		[Width],
+	);
 
 	function onLayoutChanged(event: LayoutChangeEvent) {
 		setWidth(event.nativeEvent.layout.width);

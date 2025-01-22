@@ -8,7 +8,7 @@ import { TimelineFetchMode } from '../../../../../states/interactors/post-timeli
 import BubbleTimelineController from '../../../../../components/widgets/feed-controller/controllers/BubbleTimelineController';
 import OverviewView from '../views/OverviewView';
 import SocialTimelineController from '../../../../../components/widgets/feed-controller/controllers/SocialTimelineController';
-import HashtagTimelineController from '../../../../../components/widgets/feed-controller/controllers/HashtagTimelineController';
+import TagTimelineControlPresenter from './TagTimelineControlPresenter';
 import FederatedTimelineController from '../../../../../components/widgets/feed-controller/controllers/FederatedTimelineController';
 import ListTimelineController from '../../../../../components/widgets/feed-controller/controllers/ListTimelineController';
 import { ScrollView, Text, View } from 'react-native';
@@ -23,6 +23,8 @@ function TimelineControllerSheetPresenter() {
 	const { acct } = useAppAcct();
 	const { endSessionSeed, stateId } = useAppBottomSheet_Improved();
 	const {
+		onFeedOptSelected,
+		FeedOpt,
 		MediaOpt,
 		onMediaOptSelected,
 		onMediaOptAllSelected,
@@ -33,6 +35,7 @@ function TimelineControllerSheetPresenter() {
 		broadcastChanges,
 		setHideReposts,
 		setHideReplies,
+		onFeedOptAllSelected,
 	} = useTimelineControllerInteractor();
 
 	/**
@@ -128,7 +131,27 @@ function TimelineControllerSheetPresenter() {
 			case TimelineFetchMode.SOCIAL:
 				return <SocialTimelineController />;
 			case TimelineFetchMode.HASHTAG: {
-				return <HashtagTimelineController />;
+				return (
+					<Fragment>
+						<OverviewView
+							title={'Hashtag Timeline'}
+							subtitle={draft?.query?.label}
+							description={[
+								'This is a hashtag timeline.',
+								'You can see a list of all posts made using this hashtag here.',
+							]}
+						/>
+						<TagTimelineControlPresenter
+							MediaOpt={MediaOpt}
+							onMediaOptSelected={onMediaOptSelected}
+							onMediaOptAllSelected={onMediaOptAllSelected}
+							hash={State}
+							FeedOpt={FeedOpt}
+							onFeedOptSelected={onFeedOptSelected}
+							onFeedOptAllSelected={onFeedOptAllSelected}
+						/>
+					</Fragment>
+				);
 			}
 			case TimelineFetchMode.FEDERATED:
 				return <FederatedTimelineController />;
