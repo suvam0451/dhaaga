@@ -24,7 +24,7 @@
     "dom-serializer": "^2.0.0",
     "domhandler": "^5.0.3",
     "html-entities": "^2.5.2",
-    "htmlparser2": "^10.0.0",
+    "htmlparser2": "~9.1.0",
     "masto": "^6.10.3",
     "megalodon": "^10.1.1",
     "mfm-js": "^0.24.0",
