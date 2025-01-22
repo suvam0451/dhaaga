@@ -1,10 +1,8 @@
 import { Modal, useWindowDimensions, View, Text } from 'react-native';
-import { TabView } from 'react-native-tab-view';
 import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import useKeyboard from '../../../hooks/useKeyboard';
 import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
-import renderScene from './renderScene';
 import tabBarRenderer from './renderTabBar';
 import HideOnKeyboardVisibleContainer from '../../../containers/HideOnKeyboardVisibleContainer';
 import { useState } from 'react';
@@ -60,14 +58,14 @@ function TimelineWidgetModal() {
 							zIndex: 99,
 						}}
 					>
-						<TabView
-							navigationState={{ index, routes }}
-							renderScene={renderScene}
-							onIndexChange={setIndex}
-							renderTabBar={renderTabBar}
-							initialLayout={{ width: layout.width }}
-							onMoveShouldSetResponder={() => true}
-						/>
+						{/*<TabView*/}
+						{/*	navigationState={{ index, routes }}*/}
+						{/*	renderScene={renderScene}*/}
+						{/*	onIndexChange={setIndex}*/}
+						{/*	renderTabBar={renderTabBar}*/}
+						{/*	initialLayout={{ width: layout.width }}*/}
+						{/*	onMoveShouldSetResponder={() => true}*/}
+						{/*/>*/}
 						<HideOnKeyboardVisibleContainer
 							style={{
 								display: 'flex',

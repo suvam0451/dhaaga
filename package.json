@@ -1,23 +1,23 @@
 {
   "name": "dhaaga",
-  "version": "0.13.0",
-  "description": "A fun 🥳 and cozy ☕ microblogging app for the decentralized social web ",
+  "version": "0.14.0",
+  "description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
   "author": "Debashish Patra <suvam.io>",
   "license": "AGPLv3",
   "private": true,
   "scripts": {
     "dev:app": "yarn workspace @dhaaga/mobile dev",
     "dev:web": "yarn workspace @dhaaga/web dev",
-    "build:bridge": "yarn --cwd ./packages/bridge build",
-    "build:orm": "yarn --cwd ./packages/orm build",
-    "build": "yarn build:bridge && yarn build:orm"
+    "build:bridge": "bun run --cwd ./packages/bridge build",
+    "build:orm": "bun run --cwd ./packages/orm build",
+    "build": "bun run build:bridge && bun run build:orm"
   },
   "workspaces": [
     "packages/**",
     "apps/mobile"
   ],
   "dependencies": {
-    "prettier": "^3.3.2"
+    "prettier": "^3.4.2"
   },
   "prettier": {
     "bracketSpacing": true,
