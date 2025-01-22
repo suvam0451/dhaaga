@@ -20,9 +20,15 @@ type Props = {
 	items: ProfilePinnedUser[];
 	parentAcct: Account;
 	onPressAddUser: () => void;
+	onLongPressUser: (item: ProfilePinnedUser) => void;
 };
 
-function UserListPresenter({ onPressAddUser, items, parentAcct }: Props) {
+function UserListPresenter({
+	onPressAddUser,
+	items,
+	parentAcct,
+	onLongPressUser,
+}: Props) {
 	const { acct } = useAppAcct();
 	const { db } = useAppDb();
 	const { loadApp } = useGlobalState(
@@ -74,6 +80,7 @@ function UserListPresenter({ onPressAddUser, items, parentAcct }: Props) {
 
 	function onLongPress(item: ProfilePinnedUser) {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+		onLongPressUser(item);
 	}
 
 	return (

@@ -43,6 +43,13 @@
       "successToast": "Tag added successfully!"
     },
     "tagRemove": {
+    },
+    "userEdit": {
+      "title": "Modify Pinned User",
+      "description": [
+        "You can remove this pin.",
+        "Re-ordering will be supported in a future update."
+      ]
     }
   }
 }

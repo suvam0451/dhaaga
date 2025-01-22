@@ -59,6 +59,19 @@ export class Repo {
 }
 
 export class Service {
+	static toggle(db: DataSource, pinnedUser: ProfilePinnedUser) {
+		const match = db.profilePinnedUser.findOne({
+			id: pinnedUser.id,
+		});
+		if (!match) return;
+		db.profilePinnedUser.updateById(pinnedUser.id, {
+			active: !match.active,
+		});
+		return db.profilePinnedUser.findOne({
+			id: pinnedUser.id,
+		});
+	}
+
 	static findById(db: DataSource, id: number): ProfilePinnedUser {
 		return db.profilePinnedUser.findOne({ id });
 	}

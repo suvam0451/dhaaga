@@ -15,7 +15,7 @@ import {
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
 import FeedListPresenter from './FeedListPresenter';
-import { Profile } from '../../../database/_schema';
+import { Profile, ProfilePinnedUser } from '../../../database/_schema';
 import Header from '../components/Header';
 import { ProfileService } from '../../../database/entities/profile';
 import UserListPresenter from './UserListPresenter';
@@ -28,6 +28,7 @@ import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { AccountService } from '../../../database/entities/account';
 import { useShallow } from 'zustand/react/shallow';
+import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
 
 type Props = {
 	// account left join guaranteed
@@ -107,6 +108,27 @@ function SocialHubTabPresenter({ profile }: Props) {
 		}
 	}
 
+	function onLongPressUser(pinnedUser: ProfilePinnedUser) {
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
+		show({
+			title: t(`hub.userEdit.title`),
+			description: t(`hub.userEdit.description`, {
+				returnObjects: true,
+			}) as string[],
+			actions: [
+				{
+					label: t(`dialogs.deleteOption`, { ns: LOCALIZATION_NAMESPACE.CORE }),
+					variant: 'destructive',
+					onPress: async () => {
+						ProfilePinnedUserService.toggle(db, pinnedUser);
+						refresh();
+						hide();
+					},
+				},
+			],
+		});
+	}
+
 	function onPressAddProfile() {
 		show(
 			{
@@ -152,7 +174,9 @@ function SocialHubTabPresenter({ profile }: Props) {
 				}) as string[],
 				actions: [
 					{
-						label: t(`hub.profileEdit.renameOption`),
+						label: t(`dialogs.renameOption`, {
+							ns: LOCALIZATION_NAMESPACE.CORE,
+						}),
 						onPress: async () => {
 							show(
 								{
@@ -257,6 +281,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 					items={State.pins.users}
 					profile={profile}
 					onPressAddUser={onPressAddUser}
+					onLongPressUser={onLongPressUser}
 				/>
 
 				{/* --- Pinned Tags --- */}

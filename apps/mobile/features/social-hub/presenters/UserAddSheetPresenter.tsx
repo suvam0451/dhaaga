@@ -50,6 +50,11 @@ function UserAddSheetPresenter() {
 		}
 	}
 
+	function onClearSearch() {
+		setSearchQuery(null);
+		setDebouncedQuery(null);
+	}
+
 	return (
 		<View
 			style={{
@@ -86,9 +91,17 @@ function UserAddSheetPresenter() {
 							fontFamily: APP_FONTS.ROBOTO_500,
 							color: theme.secondary.a20,
 							marginLeft: 12,
+							flex: 1,
 						},
 					]}
 				/>
+				<View>
+					<AppIcon
+						id={'clear'}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+						onPress={onClearSearch}
+					/>
+				</View>
 			</Pressable>
 			<FlatList
 				data={data}
