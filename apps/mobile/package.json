@@ -47,6 +47,7 @@
     "expo-splash-screen": "~0.29.21",
     "expo-sqlite": "~15.0.6",
     "expo-video": "~2.0.5",
+    "fast-text-encoding": "^1.0.6",
     "i18next": "^24.2.1",
     "immer": "^10.1.1",
     "jwt-decode": "^4.0.0",
