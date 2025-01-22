@@ -2,33 +2,24 @@ import { Account, ProfilePinnedTag } from '../../../database/_schema';
 import { StyleSheet, View } from 'react-native';
 import PinnedTagView from '../views/PinnedTagView';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
-import { useAppDialog } from '../../../hooks/utility/global-state-extractors';
 
 type Props = {
 	items: ProfilePinnedTag[];
 	parentAcct: Account;
+	onPressAddTag: () => void;
+	onLongPressTag: (pinnedTag: ProfilePinnedTag) => void;
 };
 
-function TagListPresenter({ items, parentAcct }: Props) {
-	const { show } = useAppDialog();
+function TagListPresenter({
+	items,
+	parentAcct,
+	onPressAddTag,
+	onLongPressTag,
+}: Props) {
 	function onPress(item: ProfilePinnedTag) {}
 
-	function onLongPress(item: ProfilePinnedTag) {}
-
-	function onPressAdd() {
-		show(
-			{
-				title: 'Add Hashtag',
-				description: [
-					'Tags can also be added when browsing timelines (by pressing the tag).',
-				],
-				actions: [],
-			},
-			'Name of the tag',
-			(text: string) => {
-				console.log(text);
-			},
-		);
+	function onLongPress(item: ProfilePinnedTag) {
+		onLongPressTag(item);
 	}
 
 	return (
@@ -37,7 +28,7 @@ function TagListPresenter({ items, parentAcct }: Props) {
 			style={{
 				marginTop: 16,
 			}}
-			onPressAdd={onPressAdd}
+			onPressAdd={onPressAddTag}
 		>
 			<View style={styles.pinnedTagListContainer}>
 				{items.map((tag, i) => (

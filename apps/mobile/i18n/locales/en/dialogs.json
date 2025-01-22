@@ -44,6 +44,19 @@
     },
     "tagRemove": {
     },
+    "tagEdit": {
+      "title": "Modify Pinned Tag",
+      "description": [
+        "You can rename or delete this pinned tag."
+      ]
+    },
+    "tagRename": {
+      "title": "Rename Pinned Tag",
+      "description": [
+        "Change which hashtag this pin takes you to."
+      ],
+      "placeholder": "Update your tag here"
+    },
     "userEdit": {
       "title": "Modify Pinned User",
       "description": [

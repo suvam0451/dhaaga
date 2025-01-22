@@ -1,6 +1,6 @@
 import { DbErrorHandler } from './_base.repo';
 import { DataSource } from '../dataSource';
-import { Profile, ProfilePinnedTag } from '../_schema';
+import { Account, Profile, ProfilePinnedTag } from '../_schema';
 import { ProfileService } from './profile';
 import { RandomUtil } from '../../utils/random.utils';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
@@ -9,6 +9,48 @@ import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 export class Repo {}
 
 export class Service {
+	static delete(db: DataSource, id: number) {
+		const match = Service.findById(db, id);
+		if (match) db.profilePinnedTag.updateById(id, { active: false });
+	}
+	static add(db: DataSource, acct: Account, profile: Profile, name: string) {
+		if (!name) return;
+		const _uuid = RandomUtil.nanoId();
+		db.profilePinnedTag.insert({
+			uuid: _uuid,
+			server: acct.server,
+			category: APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_TAG_LOCAL,
+			driver: acct.driver,
+			required: true,
+			show: true,
+			itemOrder: 0,
+			page: 1,
+			unseenCount: 0,
+
+			active: true,
+
+			identifier: name,
+			name: name,
+
+			profileId: profile.id,
+		});
+		return db.profilePinnedTag.findOne({ uuid: _uuid });
+	}
+
+	static renameById(
+		db: DataSource,
+		id: number,
+		name: string,
+	): ProfilePinnedTag {
+		const match = Service.findById(db, id);
+		if (!match) return null;
+		db.profilePinnedTag.updateById(match.id, {
+			alias: name,
+			name: name,
+		});
+		return Service.findById(db, id);
+	}
+
 	static findById(db: DataSource, id: number): ProfilePinnedTag {
 		return db.profilePinnedTag.findOne({ id });
 	}
@@ -29,6 +71,7 @@ export class Service {
 			return [];
 		}
 	}
+
 	/**
 	 * Make sure that the essential tags are
 	 * added for profile (if missing).

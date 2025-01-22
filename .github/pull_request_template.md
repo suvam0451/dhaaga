@@ -13,8 +13,10 @@ The outgoing licensing terms of the project are as follows:
 This project accepts incoming contributions under MIT-compatible 
 licenses only.
 
-*(This gives the author flexibility and assurance as a dev/publisher,
-while keeping the source code available for public benefit.)*
+*(This gives me flexibility and assurance as a dev/publisher,
+while keeping the source code available for public benefit.
+I would like to one day fully change the license to MIT, when I feel 
+I no longer need that assurance.)*
 
 ## Pre-Requisites
 

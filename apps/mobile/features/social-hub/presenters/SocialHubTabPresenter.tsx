@@ -15,7 +15,11 @@ import {
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
 import FeedListPresenter from './FeedListPresenter';
-import { Profile, ProfilePinnedUser } from '../../../database/_schema';
+import {
+	Profile,
+	ProfilePinnedTag,
+	ProfilePinnedUser,
+} from '../../../database/_schema';
 import Header from '../components/Header';
 import { ProfileService } from '../../../database/entities/profile';
 import UserListPresenter from './UserListPresenter';
@@ -29,6 +33,7 @@ import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { AccountService } from '../../../database/entities/account';
 import { useShallow } from 'zustand/react/shallow';
 import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
+import { ProfilePinnedTagService } from '../../../database/entities/profile-pinned-tag';
 
 type Props = {
 	// account left join guaranteed
@@ -108,6 +113,23 @@ function SocialHubTabPresenter({ profile }: Props) {
 		}
 	}
 
+	function onPressAddTag() {
+		show(
+			{
+				title: t(`hub.tagAdd.title`),
+				description: t(`hub.tagAdd.description`, {
+					returnObjects: true,
+				}) as string[],
+				actions: [],
+			},
+			t(`hub.tagAdd.placeholder`),
+			(text: string) => {
+				ProfilePinnedTagService.add(db, acct, profile, text);
+				refresh();
+			},
+		);
+	}
+
 	function onLongPressUser(pinnedUser: ProfilePinnedUser) {
 		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 		show({
@@ -124,6 +146,49 @@ function SocialHubTabPresenter({ profile }: Props) {
 						refresh();
 						hide();
 					},
+				},
+			],
+		});
+	}
+
+	function onLongPressTag(pinnedTag: ProfilePinnedTag) {
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
+		show({
+			title: t(`hub.tagEdit.title`),
+			description: t(`hub.tagEdit.description`, {
+				returnObjects: true,
+			}) as string[],
+			actions: [
+				{
+					label: t(`dialogs.renameOption`, { ns: LOCALIZATION_NAMESPACE.CORE }),
+					onPress: async () => {
+						show(
+							{
+								title: t(`hub.tagRename.title`),
+								actions: [],
+								description: t(`hub.tagRename.description`, {
+									returnObjects: true,
+								}) as string[],
+							},
+							t(`hub.tagRename.placeholder`),
+							(name: string) => {
+								if (!!name) {
+									ProfilePinnedTagService.renameById(db, pinnedTag.id, name);
+									hide();
+									refresh();
+								}
+							},
+						);
+					},
+				},
+				{
+					label: t(`dialogs.deleteOption`, { ns: LOCALIZATION_NAMESPACE.CORE }),
+					onPress: async () => {
+						ProfilePinnedTagService.delete(db, pinnedTag.id);
+						hide();
+						refresh();
+					},
+					variant: 'destructive',
 				},
 			],
 		});
@@ -285,7 +350,12 @@ function SocialHubTabPresenter({ profile }: Props) {
 				/>
 
 				{/* --- Pinned Tags --- */}
-				<TagListPresenter items={State.pins.tags} parentAcct={State.acct} />
+				<TagListPresenter
+					items={State.pins.tags}
+					parentAcct={State.acct}
+					onPressAddTag={onPressAddTag}
+					onLongPressTag={onLongPressTag}
+				/>
 			</ScrollView>
 			<Pressable
 				style={{ position: 'absolute', bottom: 0, zIndex: 2 }}
