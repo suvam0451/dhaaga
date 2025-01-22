@@ -1,4 +1,6 @@
 import {
+	useAppAcct,
+	useAppBottomSheet_Improved,
 	useAppDb,
 	useAppDialog,
 	useAppTheme,
@@ -22,6 +24,10 @@ import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { DialogBuilderService } from '../../../services/dialog-builder.service';
+import { AccountService } from '../../../database/entities/account';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	// account left join guaranteed
@@ -40,6 +46,13 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const { show, hide } = useAppDialog();
 	const { loadAccounts } = useHub();
 	const { accounts, selectProfile } = useHub();
+	const { setCtx, show: showSheet } = useAppBottomSheet_Improved();
+	const { acct } = useAppAcct();
+	const { loadApp } = useGlobalState(
+		useShallow((o) => ({
+			loadApp: o.loadApp,
+		})),
+	);
 	const { t } = useTranslation([
 		LOCALIZATION_NAMESPACE.DIALOGS,
 		LOCALIZATION_NAMESPACE.CORE,
@@ -70,7 +83,29 @@ function SocialHubTabPresenter({ profile }: Props) {
 		hardRefresh();
 	}, [profile, db]);
 
-	const acct = ProfileService.getOwnerAccount(db, profile);
+	const parentAcct = ProfileService.getOwnerAccount(db, profile);
+
+	function onPressAddUser() {
+		if (parentAcct.id !== acct.id) {
+			show(
+				DialogBuilderService.toSwitchActiveAccount(() => {
+					AccountService.select(db, parentAcct);
+					try {
+						loadApp().then(() => {
+							hide();
+							setCtx({ profileId: profile.id, onChange: refresh });
+							showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
+						});
+					} catch (e) {
+						hide();
+					}
+				}),
+			);
+		} else {
+			setCtx({ profileId: profile.id, onChange: refresh });
+			showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
+		}
+	}
 
 	function onPressAddProfile() {
 		show(
@@ -84,7 +119,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 			t(`hub.profileAdd.placeholder`),
 			(name: string) => {
 				if (!!name) {
-					ProfileService.addProfile(db, acct, name);
+					ProfileService.addProfile(db, parentAcct, name);
 					loadAccounts();
 				}
 			},
@@ -95,7 +130,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 	 * Switch to profile
 	 */
 	function onPressProfile(profileId: number | string) {
-		const ownerIndex = accounts.findIndex((o) => o.id == acct.id);
+		const ownerIndex = accounts.findIndex((o) => o.id == parentAcct.id);
 		if (ownerIndex !== -1) {
 			const _profileIndex = accounts[ownerIndex].profiles.findIndex(
 				(o) => o.id == profileId,
@@ -211,13 +246,18 @@ function SocialHubTabPresenter({ profile }: Props) {
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
 			>
-				<Header acct={acct} />
+				<Header acct={parentAcct} />
 
 				{/* --- Pinned Timelines --- */}
 				<FeedListPresenter account={State.acct} items={State.pins.timelines} />
 
 				{/* --- Pinned Users --- */}
-				<UserListPresenter parentAcct={State.acct} items={State.pins.users} />
+				<UserListPresenter
+					parentAcct={State.acct}
+					items={State.pins.users}
+					profile={profile}
+					onPressAddUser={onPressAddUser}
+				/>
 
 				{/* --- Pinned Tags --- */}
 				<TagListPresenter items={State.pins.tags} parentAcct={State.acct} />

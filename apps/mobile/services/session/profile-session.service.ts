@@ -12,7 +12,6 @@ import { ProfileService } from '../../database/entities/profile';
 import { BaseStorageManager } from './_shared';
 import { AppUserObject } from '../../types/app-user.types';
 import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
-import { APP_PINNED_OBJECT_TYPE } from '../driver.service';
 
 /**
  * ---- Storage Interfaces ----
@@ -70,17 +69,8 @@ class ProfileSessionManager {
 		ProfilePinnedUserService.addForProfile(
 			this.db,
 			this.profile,
-			server || this.acct.server,
-			{
-				server: userObj.instance,
-				identifier: userObj.id,
-				avatarUrl: userObj.avatarUrl,
-				displayName: userObj.displayName,
-				driver: this.acct.driver, // to be changed later
-				required: false,
-				category: APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL,
-				username: userObj.handle,
-			},
+			this.acct,
+			userObj,
 		);
 	}
 

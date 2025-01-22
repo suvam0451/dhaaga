@@ -1,4 +1,8 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppBottomSheet_Improved,
+	useAppDb,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppIcon } from '../../../components/lib/Icon';
@@ -8,6 +12,7 @@ import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
 import UserSearchResultPresenter from './UserSearchResultPresenter';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { useTranslation } from 'react-i18next';
+import { ProfileService } from '../../../database/entities/profile';
 
 function UserAddSheetPresenter() {
 	const { theme } = useAppTheme();
@@ -15,8 +20,17 @@ function UserAddSheetPresenter() {
 	const [debouncedQuery, setDebouncedQuery] = useState(null);
 	const { data } = useApiSearchUsers(debouncedQuery, null);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
+	const { ctx } = useAppBottomSheet_Improved();
+	const [Profile, setProfile] = useState(null);
+	const { db } = useAppDb();
 
 	const TextInputRef = useRef<TextInput>(null);
+
+	useEffect(() => {
+		try {
+			setProfile(ProfileService.getById(db, parseInt(ctx?.profileId)));
+		} catch (e) {}
+	}, [ctx]);
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -28,6 +42,12 @@ function UserAddSheetPresenter() {
 
 	function onSectionPressed() {
 		TextInputRef.current?.focus();
+	}
+
+	function onChange() {
+		if (ctx?.onChange) {
+			ctx.onChange();
+		}
 	}
 
 	return (
@@ -72,7 +92,13 @@ function UserAddSheetPresenter() {
 			</Pressable>
 			<FlatList
 				data={data}
-				renderItem={({ item }) => <UserSearchResultPresenter user={item} />}
+				renderItem={({ item }) => (
+					<UserSearchResultPresenter
+						user={item}
+						profile={Profile}
+						onChangeCallback={onChange}
+					/>
+				)}
 				contentContainerStyle={{
 					backgroundColor: theme.background.a10,
 					paddingTop: 16,

@@ -1,15 +1,14 @@
-import { Account, ProfilePinnedUser } from '../../../database/_schema';
+import { Account, Profile, ProfilePinnedUser } from '../../../database/_schema';
 import { FlatList, StyleSheet } from 'react-native';
 import PinnedUserView from '../views/PinnedUserView';
 import {
 	useAppAcct,
-	useAppBottomSheet_Improved,
 	useAppDb,
 	useAppDialog,
 } from '../../../hooks/utility/global-state-extractors';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { AccountService } from '../../../database/entities/account';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '../../../services/driver.service';
@@ -17,11 +16,13 @@ import * as Haptics from 'expo-haptics';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
 
 type Props = {
+	profile: Profile;
 	items: ProfilePinnedUser[];
 	parentAcct: Account;
+	onPressAddUser: () => void;
 };
 
-function UserListPresenter({ items, parentAcct }: Props) {
+function UserListPresenter({ onPressAddUser, items, parentAcct }: Props) {
 	const { acct } = useAppAcct();
 	const { db } = useAppDb();
 	const { loadApp } = useGlobalState(
@@ -31,7 +32,6 @@ function UserListPresenter({ items, parentAcct }: Props) {
 	);
 	const { show, hide } = useAppDialog();
 	const { toTimelineViaPin } = useAppNavigator();
-	const { show: showSheet } = useAppBottomSheet_Improved();
 
 	function onPress(item: ProfilePinnedUser) {
 		if (parentAcct.id !== acct.id) {
@@ -76,15 +76,11 @@ function UserListPresenter({ items, parentAcct }: Props) {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 	}
 
-	function onPressAdd() {
-		showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
-	}
-
 	return (
 		<HubTabSectionContainer
 			label={'Users'}
 			style={styles.root}
-			onPressAdd={onPressAdd}
+			onPressAdd={onPressAddUser}
 		>
 			<FlatList
 				data={items}

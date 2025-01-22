@@ -153,8 +153,8 @@ type AppBottomSheetState = {
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
 
-	ctx: { uuid: string };
-	setCtx: (ctx: { uuid: string }) => void;
+	ctx: any;
+	setCtx: (ctx: any) => void;
 
 	broadcastEndSession: () => void;
 

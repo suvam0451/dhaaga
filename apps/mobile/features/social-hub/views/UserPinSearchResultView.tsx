@@ -14,7 +14,14 @@ function UserPinSearchResultView({ user }: Props) {
 
 	if (!img) return <View />;
 	return (
-		<View style={{ paddingHorizontal: 10, flex: 1 }}>
+		<View
+			style={{
+				paddingHorizontal: 10,
+				flex: 1,
+				overflow: 'hidden',
+				marginRight: 8,
+			}}
+		>
 			<View style={{ flexDirection: 'row' }}>
 				<View>
 					{/*@ts-ignore-next-line*/}
