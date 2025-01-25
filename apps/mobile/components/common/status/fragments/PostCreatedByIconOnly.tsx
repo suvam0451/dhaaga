@@ -11,7 +11,7 @@ const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 /**
  * Renders the user (poster)'s avatar
  */
-export const OriginalPostedPfpFragment = memo(function Foo({
+export function OriginalPostedPfpFragment({
 	url,
 	onClick,
 }: {
@@ -44,7 +44,7 @@ export const OriginalPostedPfpFragment = memo(function Foo({
 			/>
 		</TouchableOpacity>
 	);
-});
+}
 
 function OriginalPosterSkeleton() {
 	return (

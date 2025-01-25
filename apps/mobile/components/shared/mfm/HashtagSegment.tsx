@@ -35,7 +35,6 @@ const HashtagSegment = memo(function Foo({ value }: Props) {
 			<AppText.Normal
 				style={{
 					color: theme.secondary.a40,
-					// fontFamily: APP_FONTS.INTER_400_REGULAR,
 					fontSize: 12,
 				}}
 			>
@@ -44,8 +43,7 @@ const HashtagSegment = memo(function Foo({ value }: Props) {
 			<AppText.Medium
 				onPress={onPress}
 				style={{
-					color: theme.complementary.a0,
-					// fontWeight: '500',
+					color: theme.secondary.a0,
 					// fontFamily: 'SourceSansPro_600SemiBold', // APP_FONTS.INTER_500_MEDIUM,
 					// fontSize: 15,
 					// fontSize: 13.5,

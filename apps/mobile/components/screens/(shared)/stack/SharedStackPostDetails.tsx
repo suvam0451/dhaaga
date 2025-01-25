@@ -23,7 +23,7 @@ function ReplySection() {
 				flexDirection: 'row',
 				paddingHorizontal: 10,
 				backgroundColor: theme.background.a40,
-				paddingVertical: 10,
+				paddingVertical: 6,
 			}}
 		>
 			<AppText.SemiBold

@@ -87,7 +87,7 @@ function PinnedTimelineItemView({
 					<AppText.Medium
 						style={{
 							width: 96,
-							color: theme.complementary.a0,
+							color: theme.secondary.a40,
 						}}
 						numberOfLines={1}
 					>

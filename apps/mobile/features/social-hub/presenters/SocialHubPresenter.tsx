@@ -43,17 +43,6 @@ function SocialHubPresenter() {
 
 	const HubComponent = useMemo(() => {
 		// TODO handle index out of bounds (when deleting accts/profiles)
-
-		// if (navigation.accountIndex === -1 || navigation.profileIndex === -1)
-		// 	return <HubAddProfileView />;
-		// if (navigation.accountIndex === accounts.length)
-		// 	return <HubAddProfileView />;
-		// if (
-		// 	navigation.profileIndex ===
-		// 	accounts[navigation.accountIndex].profiles.length
-		// )
-		// 	return <HubAddProfileView />;
-
 		return (
 			<SocialHubTabPresenter
 				profile={

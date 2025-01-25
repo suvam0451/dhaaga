@@ -151,9 +151,6 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 			{/* --- Text Content --- */}
 			<HiddenByCw visible={isSensitive ? ShowSensitiveContent : true}>
 				<Pressable
-					style={{
-						marginBottom: SECTION_MARGIN_BOTTOM,
-					}}
 					onPress={() => {
 						toPost(_target.id);
 					}}

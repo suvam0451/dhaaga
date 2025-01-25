@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { StyleSheet, View } from 'react-native';
@@ -189,11 +189,13 @@ function StatusInteractionButtons() {
 }
 
 function StatusInteraction() {
+	const { dto } = useAppStatusItem();
+	const _dto = PostMiddleware.getContentTarget(dto);
 	return (
-		<Fragment>
-			<PostStats />
+		<View>
+			<PostStats dto={_dto} />
 			<StatusInteractionButtons />
-		</Fragment>
+		</View>
 	);
 }
 

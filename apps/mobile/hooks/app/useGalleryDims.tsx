@@ -26,11 +26,19 @@ function useGalleryDims(items: ImageAspectRatioProps) {
 	const [ImageHeight, setImageHeight] = useState(MEDIA_CONTAINER_MAX_HEIGHT);
 	// set container
 	const [ContainerWidth, setContainerWidth] = useState(
-		Dimensions.get('window').width,
+		Dimensions.get('window').width - 20,
 	);
 	const [ContainerHeight, setContainerHeight] = useState(
 		MEDIA_CONTAINER_MAX_HEIGHT,
 	);
+
+	function onLayoutChanged(event: LayoutChangeEvent) {
+		// console.log('layout event fired');
+		const { height, width } = event.nativeEvent.layout;
+		// do not update values if seeded
+		setContainerWidth(width);
+		setContainerHeight(Math.min(height, MEDIA_CONTAINER_MAX_HEIGHT));
+	}
 
 	// avoid rate limits due to infinite loops
 	const cache = useRef(new Map<string, { width: number; height: number }>());
@@ -41,43 +49,15 @@ function useGalleryDims(items: ImageAspectRatioProps) {
 	 */
 	useEffect(() => {
 		if (items.length === 1) {
-			setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
-			setImageWidth(items[0].width || Dimensions.get('window').width);
+			// setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
+			setImageWidth(items[0].width || Dimensions.get('window').width - 20);
 			setImageHeight(items[0].height || 0);
 		} else {
-			setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
-			setImageWidth(Dimensions.get('window').width);
+			// setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
+			setImageWidth(Dimensions.get('window').width - 20);
 			setImageHeight(0);
 		}
 	}, [items]);
-
-	// console.log('setting height', Height);
-
-	function onLayoutChanged(event: LayoutChangeEvent) {
-		// console.log('layout event fired');
-		const { height, width } = event.nativeEvent.layout;
-		// do not update values if seeded
-		setContainerWidth(width);
-		setContainerHeight(Math.min(height, ImageHeight));
-	}
-
-	/**
-	 * Helper function to get dimensions
-	 * for individual items
-	 * @param url
-	 */
-	const getImageSize = async (
-		url: string,
-	): Promise<{ width: number; height: number }> =>
-		new Promise((resolve, reject) => {
-			RNImage.getSize(
-				url,
-				(width, height) => {
-					resolve({ width, height });
-				},
-				(error) => reject(error),
-			);
-		});
 
 	async function CalculateSize(
 		url: string,
@@ -118,7 +98,7 @@ function useGalleryDims(items: ImageAspectRatioProps) {
 
 		// Maximum allowable dimensions height for containers
 		const _width = ContainerWidth;
-		const _height = MEDIA_CONTAINER_MAX_HEIGHT;
+		const _height = ContainerHeight;
 
 		let _resultHeight = 0;
 		let _resultWidth = ContainerWidth;
@@ -152,7 +132,7 @@ function useGalleryDims(items: ImageAspectRatioProps) {
 	}
 
 	useEffect(() => {
-		recalculateSizes().then(() => {});
+		recalculateSizes();
 	}, [items, ContainerWidth]);
 
 	return {

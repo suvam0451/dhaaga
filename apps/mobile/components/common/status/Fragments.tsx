@@ -113,13 +113,12 @@ const timelineStyles = StyleSheet.create({
 		marginLeft: 8,
 		position: 'relative',
 		flex: 1,
-		marginBottom: appDimensions.timelines.sectionBottomMargin * 4,
+		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 	oneLineDisplayNameRoot: {
 		flexDirection: 'row',
 		flex: 1,
 		alignItems: 'center',
-		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 });
 

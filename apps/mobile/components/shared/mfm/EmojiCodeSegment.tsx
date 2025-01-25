@@ -1,4 +1,4 @@
-import { Fragment, memo, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { Image } from 'expo-image';
 import { RandomUtil } from '../../../utils/random.utils';
@@ -18,14 +18,9 @@ type Props = {
 	fontFamily: string;
 };
 
-const EMOJI_HEIGHT = 22;
+const EMOJI_HEIGHT = 20;
 
-const EmojiCodeSegment = memo(function Foo({
-	emojiMap,
-	value,
-	emphasis,
-	fontFamily,
-}: Props) {
+function EmojiCodeSegment({ emojiMap, value, emphasis, fontFamily }: Props) {
 	const [ReactionData, setReactionData] =
 		useState<InstanceApi_CustomEmojiDTO>(null);
 	const { theme } = useAppTheme();
@@ -58,8 +53,6 @@ const EmojiCodeSegment = memo(function Foo({
 			});
 	}, [value, acctManager]);
 
-	useEffect(() => {}, []);
-
 	if (!ReactionData)
 		return (
 			<Text key={k} style={{ color, fontFamily }}>
@@ -79,6 +72,6 @@ const EmojiCodeSegment = memo(function Foo({
 			/>
 		</Fragment>
 	);
-});
+}
 
 export default EmojiCodeSegment;
