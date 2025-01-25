@@ -97,7 +97,15 @@ function Page() {
 					marginTop: appDimensions.topNavbar.scrollViewTopPadding,
 				}}
 			>
-				<AppText.SemiBold style={{ fontSize: 22 }}>My Feeds</AppText.SemiBold>
+				<AppText.Special
+					style={{
+						fontSize: 32,
+						marginHorizontal: 10,
+						marginVertical: appDimensions.timelines.sectionBottomMargin * 3,
+					}}
+				>
+					My Feeds
+				</AppText.Special>
 				<FlatList
 					data={data.items}
 					renderItem={({ item }) => <MyFeedItem item={item} />}

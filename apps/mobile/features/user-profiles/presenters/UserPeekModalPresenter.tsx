@@ -6,7 +6,10 @@ import {
 	StyleSheet,
 } from 'react-native';
 import { APP_KNOWN_MODAL } from '../../../states/_global';
-import { useAppModalState } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppModalState,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
 import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
 import useAppNavigator from '../../../states/useAppNavigator';
 import useUserPeekInteractor from '../interactors/useUserPeekInteractor';
@@ -23,6 +26,7 @@ import { Fragment } from 'react';
  * @constructor
  */
 function UserPeekModalPresenter() {
+	const { theme } = useAppTheme();
 	const { hide, visible } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { toProfile } = useAppNavigator();
 	const { pos, userId } = useUserPeekInteractor();
@@ -47,7 +51,7 @@ function UserPeekModalPresenter() {
 
 	const modalContentStyle: StyleProp<ViewStyle> = {
 		width: width - 48,
-		backgroundColor: '#282828',
+		backgroundColor: theme.background.a20,
 		left: pos.x,
 		top: IS_TOP_ORIENTED ? pos.y - 12 : pos.y + pos.height + 12 - 2,
 		transform: IS_TOP_ORIENTED

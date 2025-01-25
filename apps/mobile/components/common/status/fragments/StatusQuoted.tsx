@@ -1,13 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
-import useMfm from '../../../hooks/useMfm';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import MediaItem from '../../media/MediaItem';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import PostCreatedBy from './PostCreatedBy';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
+import { TextContentView } from '../TextContentView';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -45,12 +44,6 @@ function QuoteIndicator() {
 function StatusQuoted() {
 	const { theme } = useAppTheme();
 	const { dto } = useAppStatusItem();
-	const { content: PostContent } = useMfm({
-		content: dto?.content?.raw,
-		emojiMap: (dto?.calculated?.emojis as any) || new Map(),
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-		fontFamily: APP_FONTS.ROBOTO_400,
-	});
 
 	return (
 		<View
@@ -64,10 +57,15 @@ function StatusQuoted() {
 		>
 			<QuoteIndicator />
 			<PostCreatedBy style={{ marginBottom: SECTION_MARGIN_BOTTOM }} />
-			<View style={{ marginBottom: SECTION_MARGIN_BOTTOM }}>{PostContent}</View>
 			<MediaItem
 				attachments={dto.content.media}
 				calculatedHeight={dto.calculated.mediaContainerHeight}
+			/>
+			<TextContentView
+				tree={dto.content.parsed}
+				variant={'bodyContent'}
+				mentions={[]}
+				emojiMap={dto.calculated.emojis}
 			/>
 		</View>
 	);

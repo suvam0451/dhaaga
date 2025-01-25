@@ -87,16 +87,16 @@ function ReplyIndicator() {
 			style={{
 				position: 'absolute',
 				height: '100%',
-				left: 16,
+				left: 20,
 			}}
 		>
 			<View
 				style={{
 					flex: 1,
 					marginTop: 48,
-					marginBottom: 8,
+					marginBottom: 4,
 					width: 1.5,
-					backgroundColor: '#323232',
+					backgroundColor: '#424242',
 				}}
 			/>
 		</View>

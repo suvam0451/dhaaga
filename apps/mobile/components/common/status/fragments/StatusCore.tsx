@@ -117,7 +117,7 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 			<View
 				style={{
 					flexDirection: 'row',
-					marginBottom: SECTION_MARGIN_BOTTOM,
+					marginBottom: SECTION_MARGIN_BOTTOM * 0.5,
 				}}
 			>
 				<PostCreatedBy
@@ -140,7 +140,15 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 			<HiddenByCw
 				visible={isSensitive ? ShowSensitiveContent && HAS_MEDIA : HAS_MEDIA}
 			>
-				<Pressable onPress={onGalleryInspect}>
+				<Pressable
+					onPress={onGalleryInspect}
+					style={{
+						marginTop:
+							_target.content.media.length > 0
+								? SECTION_MARGIN_BOTTOM * 0.5
+								: 0,
+					}}
+				>
 					<MediaItem
 						attachments={_target.content.media}
 						calculatedHeight={_target.calculated.mediaContainerHeight}

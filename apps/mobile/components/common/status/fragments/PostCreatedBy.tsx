@@ -101,7 +101,7 @@ export function OriginalPosterPostedByFragment({
 					<AppText.Normal
 						style={{
 							color: theme.secondary.a40,
-							fontSize: 12,
+							fontSize: 13,
 							maxWidth: 196,
 						}}
 						numberOfLines={1}

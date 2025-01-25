@@ -45,15 +45,12 @@ function ShareButton() {
 			activeTint={theme.primary.a0}
 			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
-			style={{
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				paddingTop: 8,
-				paddingBottom: 8,
-				paddingHorizontal: 6,
-				paddingLeft: canLike ? 6 : 0,
-			}}
+			style={[
+				styles.actionButton,
+				{
+					paddingLeft: canLike ? 6 : 0,
+				},
+			]}
 			onPress={onPress}
 		/>
 	);
@@ -84,15 +81,12 @@ function LikeButton() {
 			activeTint={theme.primary.a0}
 			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
-			style={{
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				paddingTop: 8,
-				paddingBottom: 8,
-				paddingHorizontal: 6,
-				marginLeft: -6,
-			}}
+			style={[
+				styles.actionButton,
+				{
+					marginLeft: -6,
+				},
+			]}
 			onPress={_toggleLike}
 		/>
 	);
@@ -119,14 +113,7 @@ function CommentButton() {
 			activeTint={theme.primary.a0}
 			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
-			style={{
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				paddingTop: 8,
-				paddingBottom: 8,
-				paddingHorizontal: 6,
-			}}
+			style={styles.actionButton}
 			onPress={onPress}
 		/>
 	);
@@ -150,14 +137,7 @@ function ReactButton() {
 			activeTint={theme.primary.a0}
 			inactiveTint={theme.secondary.a10}
 			size={appDimensions.timelines.actionButtonSize}
-			style={{
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				paddingTop: 8,
-				paddingBottom: 8,
-				paddingHorizontal: 6,
-			}}
+			style={styles.actionButton}
 			onPress={onPress}
 		/>
 	);
@@ -206,5 +186,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		flexDirection: 'row',
 		alignItems: 'center',
+	},
+	actionButton: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingVertical: 4,
+		paddingTop: 8,
+		paddingHorizontal: 6,
 	},
 });

@@ -55,6 +55,11 @@ function PostActionButtonToggleBookmark() {
 			inactiveTint={theme.secondary.a20}
 			activeTint={theme.primary.a0}
 			onPress={_toggleBookmark}
+			style={{
+				paddingVertical: 6,
+				marginRight: -6,
+				paddingHorizontal: 6,
+			}}
 		/>
 	);
 }

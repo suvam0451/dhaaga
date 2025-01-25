@@ -35,13 +35,16 @@ function ModuleItemView({ label, desc, iconId, onPress }: Props) {
 						iconStyle={{ color: theme.secondary.a0 }}
 					/>
 				</View>
-				<AppText.H6 emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
+				<AppText.H6
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+					color={theme.complementary.a0}
+				>
 					{label}
 				</AppText.H6>
 				<AppText.Medium
 					style={{
 						width: 96,
-						color: theme.complementary.a0,
+						color: theme.secondary.a40,
 					}}
 					numberOfLines={1}
 				>
