@@ -1,35 +1,19 @@
+import { z } from 'zod';
 import { MediaAttachmentInterface } from './interface.js';
-
-export type BlueskyMediaAttachmentItem = {
-	alt: string; // can be empty string
-	aspectRatio: { height: number; width: number };
-	fullsize: string;
-	thumb: string;
-};
-
-export type BlueskyMediaEmbedItem = {
-	$type: 'app.bsky.embed.video#view';
-	cid: string;
-	playlist: string;
-	thumbnail: string;
-	aspectRatio: {
-		height: number;
-		width: number;
-	};
-};
+import { RandomUtil } from '../../utiils/random.util.js';
 
 /**
  * Bluesky Media Attachment
  * Adapter Interface
  */
-export class BlueskyMediaAttachmentAdapter implements MediaAttachmentInterface {
-	item: BlueskyMediaAttachmentItem;
+class BlueskyMediaAttachmentAdapter implements MediaAttachmentInterface {
+	item: BskyImageEmbedItem;
 
-	constructor(ref: BlueskyMediaAttachmentItem) {
+	constructor(ref: BskyImageEmbedItem) {
 		this.item = ref;
 	}
 
-	static create(ref: BlueskyMediaAttachmentItem) {
+	static create(ref: BskyImageEmbedItem) {
 		return new BlueskyMediaAttachmentAdapter(ref);
 	}
 
@@ -61,33 +45,29 @@ export class BlueskyMediaAttachmentAdapter implements MediaAttachmentInterface {
 	}
 }
 
-// Example included here for reference
-const bskyMediaEmbed = {
-	embed: {
-		$type: 'app.bsky.embed.video#view',
-		cid: 'bafkreiennzhlpiwdi3xtfotsadwh5k6xfdcahsnn5ton3zjzhfrgsxbzne',
-		playlist:
-			'https://video.bsky.app/watch/did%3Aplc%3Ahih2bsukkev2t5sxaytjysvb/bafkreiennzhlpiwdi3xtfotsadwh5k6xfdcahsnn5ton3zjzhfrgsxbzne/playlist.m3u8',
-		thumbnail:
-			'https://video.bsky.app/watch/did%3Aplc%3Ahih2bsukkev2t5sxaytjysvb/bafkreiennzhlpiwdi3xtfotsadwh5k6xfdcahsnn5ton3zjzhfrgsxbzne/thumbnail.jpg',
-		aspectRatio: {
-			height: 1080,
-			width: 1920,
-		},
-	},
-};
+class BlueskyVideoAttachmentAdapter implements MediaAttachmentInterface {
+	/**
+	 * For example:
+	 * {
+	 * 		$type: 'app.bsky.embed.video#view',
+	 * 		cid: 'bafkreiennzhlpiwdi3xtfotsadwh5k6xfdcahsnn5ton3zjzhfrgsxbzne',
+	 * 		playlist:
+	 * 			'https://video.bsky.app/watch/did%3Aplc%3Ahih2bsukkev2t5sxaytjysvb/bafkreiennzhlpiwdi3xtfotsadwh5k6xfdcahsnn5ton3zjzhfrgsxbzne/playlist.m3u8',
+	 * 		thumbnail:
+	 * 			'https://video.bsky.app/watch/did%3Aplc%3Ahih2bsukkev2t5sxaytjysvb/bafkreiennzhlpiwdi3xtfotsadwh5k6xfdcahsnn5ton3zjzhfrgsxbzne/thumbnail.jpg',
+	 * 		aspectRatio: {
+	 * 			height: 1080,
+	 * 			width: 1920,
+	 * 		},
+	 * 	}
+	 */
+	item: BskyVideoEmbedType;
 
-// video.cdn.bsky.app/hls/did:plc:hih2bsukkev2t5sxaytjysvb/bafkreiennzhlpiwdi3xtfotsadwh5k6xfdcahsnn5ton3zjzhfrgsxbzne/360p/video0.ts
-//video.bsky.app/watch/did%3Aplc%3Ahih2bsukkev2t5sxaytjysvb/bafkreiennzhlpiwdi3xtfotsadwh5k6xfdcahsnn5ton3zjzhfrgsxbzne/360p/video0.ts?session_id=cu17752djros72p433t0&dur=6.000000
-
-export class BlueskyVideoAttachmentAdapter implements MediaAttachmentInterface {
-	item: BlueskyMediaEmbedItem;
-
-	constructor(ref: BlueskyMediaEmbedItem) {
+	constructor(ref: BskyVideoEmbedType) {
 		this.item = ref;
 	}
 
-	static create(ref: BlueskyMediaEmbedItem) {
+	static create(ref: BskyVideoEmbedType) {
 		return new BlueskyVideoAttachmentAdapter(ref);
 	}
 
@@ -118,3 +98,177 @@ export class BlueskyVideoAttachmentAdapter implements MediaAttachmentInterface {
 		console.log(this.item);
 	}
 }
+
+export const bskyEmbedExternalSchema = z.object({
+	$type: z.literal('app.bsky.embed.external'),
+	external: z.object({
+		uri: z.string(),
+		title: z.string(),
+		description: z.string(),
+		thumb: z.any(),
+	}),
+});
+
+type BskyEmbedExternalType = z.infer<typeof bskyEmbedExternalSchema>;
+
+class EmbedViewProcessor_External implements MediaAttachmentInterface {
+	/**
+	 *  "thumb": {
+	 *		"$type": "blob",
+	 * 		"ref": {
+	 * 			"$link": "bafkreibyh7mqyyldtgxhdaqvkqjvrzzvynqsfyn2fxht4tg6nn2fbnptjy"
+	 * 		},
+	 * 		"mimeType": "image/jpeg",
+	 * 		"size": 269918
+	 * 	}
+	 */
+	item: BskyEmbedExternalType;
+
+	constructor(obj: BskyEmbedExternalType) {
+		this.item = obj;
+	}
+
+	static create(obj: BskyEmbedExternalType) {
+		return new EmbedViewProcessor_External(obj);
+	}
+
+	static isCompatible(obj: any) {
+		const { success, error, data } = bskyEmbedExternalSchema.safeParse(obj);
+		return success;
+	}
+
+	static compile(obj: any): MediaAttachmentInterface[] {
+		const { data } = bskyEmbedExternalSchema.safeParse(obj);
+		return [EmbedViewProcessor_External.create(data!)];
+	}
+
+	/**
+	 * 	TODO: hash these external image attachments
+	 * 	 based on something that will not result in
+	 * 	 db clutter
+	 */
+	getId() {
+		return RandomUtil.nanoId();
+	}
+
+	getAltText = () => null;
+	getBlurHash = () => null;
+	getCreatedAt = () => new Date().toString();
+	getMeta = () => {};
+	getName = () => '';
+	getPreviewUrl = () => this.item.external.uri;
+	getUrl = () => this.item.external.uri;
+	getHeight = () => null;
+	getWidth = () => null;
+
+	getType(): string {
+		return this.item.external.thumb?.['mimeType'];
+	}
+
+	print(): void {
+		console.log(this.item);
+	}
+}
+
+/**
+ * ------ Uploaded Images ------
+ */
+
+const bskyEmbedImagesSchemaImageItem = z.object({
+	alt: z.string(), // can be empty string
+	aspectRatio: z.object({
+		height: z.number().int(),
+		width: z.number().int(),
+	}),
+	thumb: z.string(),
+	fullsize: z.string(),
+});
+
+type BskyImageEmbedItem = z.infer<typeof bskyEmbedImagesSchemaImageItem>;
+
+const bskyEmbedImagesSchema = z.object({
+	$type: z.literal('app.bsky.embed.images#view'),
+	images: z.array(bskyEmbedImagesSchemaImageItem),
+});
+
+// handles --> app.bsky.embed.images#view
+class EmbedViewProcessor_Images {
+	static isCompatible(obj: any) {
+		const { success } = bskyEmbedImagesSchema.safeParse(obj);
+		return success;
+	}
+
+	static compile(obj: any): MediaAttachmentInterface[] {
+		const { data } = bskyEmbedImagesSchema.safeParse(obj);
+		return data!.images.map((o) => BlueskyMediaAttachmentAdapter.create(o));
+	}
+}
+
+/**
+ * --------------------
+ */
+
+/**
+ * ------ Videos ------
+ */
+
+const bskyEmbedVideoSchema = z.object({
+	$type: z.literal('app.bsky.embed.video#view'),
+	cid: z.string(),
+	playlist: z.string(),
+	thumbnail: z.string(),
+	aspectRatio: z.object({
+		height: z.number().int(),
+		width: z.number().int(),
+	}),
+});
+
+type BskyVideoEmbedType = z.infer<typeof bskyEmbedVideoSchema>;
+
+// handles --> app.bsky.embed.video#view
+class EmbedViewProcessor_Video {
+	static isCompatible(obj: any) {
+		const { success } = bskyEmbedVideoSchema.safeParse(obj);
+		return success;
+	}
+
+	static compile(obj: any): MediaAttachmentInterface[] {
+		const { data } = bskyEmbedVideoSchema.safeParse(obj);
+		return [BlueskyVideoAttachmentAdapter.create(data!)];
+	}
+}
+
+/**
+ * --------------------
+ */
+
+const bskyEmbedRecordWithMediaSchema = z.object({
+	$type: z.literal('app.bsky.embed.recordWithMedia#view'),
+	media: z.any(),
+	record: z.any(),
+});
+
+class EmbedViewProcessor_RecordWithMedia {
+	static isCompatible(obj: any) {
+		const { success } = bskyEmbedRecordWithMediaSchema.safeParse(obj);
+		return success;
+	}
+
+	static compile(obj: any): MediaAttachmentInterface[] {
+		const { data } = bskyEmbedRecordWithMediaSchema.safeParse(obj);
+		if (EmbedViewProcessor_Images.isCompatible(data!.media))
+			return EmbedViewProcessor_Images.compile(data!.media);
+		if (EmbedViewProcessor_Video.isCompatible(data!.media))
+			return EmbedViewProcessor_Video.compile(data!.media);
+		return [];
+	}
+}
+
+export {
+	EmbedViewProcessor_External,
+	EmbedViewProcessor_Images,
+	EmbedViewProcessor_RecordWithMedia,
+	EmbedViewProcessor_Video,
+	BlueskyMediaAttachmentAdapter,
+	BlueskyVideoAttachmentAdapter,
+};

@@ -1,7 +1,5 @@
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
-import { memo, useCallback, useMemo } from 'react';
-import { Skeleton } from '@rneui/themed';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { AppPostObject } from '../../../../types/app-post.types';
 import { appDimensions } from '../../../../styles/dimensions';
@@ -46,27 +44,6 @@ export function OriginalPostedPfpFragment({
 	);
 }
 
-function OriginalPosterSkeleton() {
-	return (
-		<View style={{ width: '90%' }}>
-			<View
-				style={{ display: 'flex', flexDirection: 'row', marginHorizontal: 0 }}
-			>
-				<Skeleton style={{ height: 52, width: 52, borderRadius: 4 }} />
-				<View style={{ flexGrow: 1, marginRight: 16 }}>
-					<Skeleton
-						style={{
-							height: 52,
-							marginLeft: 8,
-							borderRadius: 4,
-						}}
-					/>
-				</View>
-			</View>
-		</View>
-	);
-}
-
 type OriginalPosterProps = {
 	dto: AppPostObject;
 	style?: StyleProp<ViewStyle>;
@@ -76,7 +53,7 @@ type OriginalPosterProps = {
  * This is the author indicator for
  * the bottom-most post item
  */
-const PostCreatedByIconOnly = memo(({ dto, style }: OriginalPosterProps) => {
+function PostCreatedByIconOnly({ dto, style }: OriginalPosterProps) {
 	const { toProfile } = useAppNavigator();
 
 	const STATUS_DTO = dto.meta.isBoost
@@ -85,29 +62,26 @@ const PostCreatedByIconOnly = memo(({ dto, style }: OriginalPosterProps) => {
 			: dto.boostedFrom
 		: dto;
 
-	const onProfileClicked = useCallback(() => {
+	function onPress() {
 		toProfile(STATUS_DTO.postedBy.userId);
-	}, [STATUS_DTO.postedBy.userId]);
+	}
 
-	return useMemo(() => {
-		if (!STATUS_DTO.postedBy) return <OriginalPosterSkeleton />;
-		return (
-			<View
-				style={[
-					{
-						alignItems: 'center',
-						flexDirection: 'row',
-					},
-					style,
-				]}
-			>
-				<OriginalPostedPfpFragment
-					url={STATUS_DTO.postedBy.avatarUrl}
-					onClick={onProfileClicked}
-				/>
-			</View>
-		);
-	}, [STATUS_DTO.postedBy, style]);
-});
+	return (
+		<View
+			style={[
+				{
+					alignItems: 'center',
+					flexDirection: 'row',
+				},
+				style,
+			]}
+		>
+			<OriginalPostedPfpFragment
+				url={STATUS_DTO.postedBy.avatarUrl}
+				onClick={onPress}
+			/>
+		</View>
+	);
+}
 
 export default PostCreatedByIconOnly;

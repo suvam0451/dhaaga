@@ -72,7 +72,7 @@ function UserListItemView({ item }: SearchResultUserItemProps) {
 				<View
 					style={{
 						flexDirection: 'row',
-						marginBottom: appDimensions.timelines.sectionBottomMargin * 4,
+						marginBottom: appDimensions.timelines.sectionBottomMargin,
 						alignItems: 'center',
 					}}
 				>
@@ -112,13 +112,10 @@ function UserListItemView({ item }: SearchResultUserItemProps) {
 					variant={'bodyContent'}
 					mentions={[]}
 					emojiMap={item.calculated.emojis}
-					style={{
-						marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
-					}}
 				/>
 				<AppDivider.Hard
 					style={{
-						marginVertical: appDimensions.timelines.sectionBottomMargin * 2,
+						marginVertical: appDimensions.timelines.sectionBottomMargin * 0.5,
 						backgroundColor: '#323232',
 					}}
 				/>

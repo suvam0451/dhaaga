@@ -51,7 +51,7 @@ function StatusQuoted() {
 				styles.rootContainer,
 				{
 					borderColor: theme.complementaryA.a0,
-					marginBottom: SECTION_MARGIN_BOTTOM * 2,
+					marginBottom: SECTION_MARGIN_BOTTOM * 1.5,
 				},
 			]}
 		>
@@ -73,8 +73,8 @@ function StatusQuoted() {
 
 const styles = StyleSheet.create({
 	rootContainer: {
-		padding: 10,
-		paddingTop: 4,
+		paddingHorizontal: 10,
+		paddingVertical: 4,
 		marginTop: 8,
 		borderRadius: 6,
 		borderStyle: 'dashed',

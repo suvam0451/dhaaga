@@ -122,16 +122,18 @@ function MediaItem({
 		);
 	}
 	return (
-		<AppImageCarousel
-			timelineCacheId={'1'}
-			calculatedHeight={calculatedHeight}
-			items={attachments.map((o) => ({
-				altText: o.alt,
-				src: o.previewUrl,
-				type: o.type,
-				blurhash: o.blurhash,
-			}))}
-		/>
+		<View style={style}>
+			<AppImageCarousel
+				timelineCacheId={'1'}
+				calculatedHeight={calculatedHeight}
+				items={attachments.map((o) => ({
+					altText: o.alt,
+					src: o.previewUrl,
+					type: o.type,
+					blurhash: o.blurhash,
+				}))}
+			/>
+		</View>
 	);
 }
 

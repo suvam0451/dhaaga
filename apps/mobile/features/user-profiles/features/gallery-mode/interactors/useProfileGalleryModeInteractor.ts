@@ -21,6 +21,7 @@ function useProfileGalleryModeInteractor(userId: string) {
 						driver === KNOWN_SOFTWARE.BLUESKY ? 'posts_with_media' : undefined,
 				});
 
+				if (driver === KNOWN_SOFTWARE.BLUESKY) return [];
 				return driver === KNOWN_SOFTWARE.BLUESKY
 					? PostMiddleware.rawToInterface<unknown[]>(
 							(data as AppBskyFeedGetAuthorFeed.Response).data.feed,

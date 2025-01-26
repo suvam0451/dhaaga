@@ -87,7 +87,7 @@ function ReplyIndicator() {
 			style={{
 				position: 'absolute',
 				height: '100%',
-				left: 20,
+				left: 18,
 			}}
 		>
 			<View

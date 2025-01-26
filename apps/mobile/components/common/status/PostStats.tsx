@@ -43,7 +43,7 @@ export function StatItem({
 }: StatItemProps) {
 	const { theme } = useAppTheme();
 	const formatted = util(count);
-	const color = me ? theme.primary.a0 : theme.secondary.a30;
+	const color = me ? theme.primary.a0 : theme.complementary.a0;
 
 	const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
 	if (count === 0) return <View />;

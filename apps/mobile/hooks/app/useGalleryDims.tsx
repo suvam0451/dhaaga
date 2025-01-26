@@ -49,13 +49,13 @@ function useGalleryDims(items: ImageAspectRatioProps) {
 	 */
 	useEffect(() => {
 		if (items.length === 1) {
-			// setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
+			setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
 			setImageWidth(items[0].width || Dimensions.get('window').width - 20);
-			setImageHeight(items[0].height || 0);
+			// setImageHeight(items[0].height || 0);
 		} else {
-			// setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
+			setContainerHeight(MEDIA_CONTAINER_MAX_HEIGHT);
 			setImageWidth(Dimensions.get('window').width - 20);
-			setImageHeight(0);
+			// setImageHeight(0);
 		}
 	}, [items]);
 
