@@ -25,7 +25,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: BUNDLE_ID,
-		versionCode: 23,
+		versionCode: 24,
 		blockedPermissions: [
 			'android.permission.SYSTEM_ALERT_WINDOW',
 			'android.permission.READ_EXTERNAL_STORAGE',
