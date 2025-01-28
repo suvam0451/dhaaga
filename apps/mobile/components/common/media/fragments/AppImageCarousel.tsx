@@ -67,7 +67,8 @@ const AppImageCarouselItem = memo(function Foo({
 					<AppVideoComponent
 						type={'video'}
 						url={src}
-						height={calculatedHeight}
+						containerHeight={calculatedHeight}
+						containerWidth={parentWidth}
 					/>
 				);
 			}
@@ -77,7 +78,8 @@ const AppImageCarouselItem = memo(function Foo({
 					<AppVideoComponent
 						type={'gifv'}
 						url={src}
-						height={calculatedHeight}
+						containerHeight={calculatedHeight}
+						containerWidth={parentWidth}
 						loop
 					/>
 				);
@@ -98,11 +100,10 @@ const AppImageCarouselItem = memo(function Foo({
 			style={{
 				justifyContent: 'center',
 				alignItems: 'center',
-				width: '100%',
 				height: type === 'audio' ? 48 : calculatedHeight,
 			}}
 		>
-			<View>{MediaItem}</View>
+			{MediaItem}
 		</View>
 	);
 });
@@ -111,7 +112,7 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 	items,
 	timelineCacheId,
 }: AppImageCarouselData) {
-	const { ContainerWidth, ImageHeight, onLayoutChanged } = useGalleryDims(
+	const { ImageWidth, ImageHeight, onLayoutChanged } = useGalleryDims(
 		items.map((o) => ({
 			url: o.src,
 			width: o.width,
@@ -153,20 +154,19 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 		<GestureDetector gesture={fling}>
 			<View
 				style={{
-					marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
-					paddingHorizontal: 10,
+					marginBottom: appDimensions.timelines.sectionBottomMargin,
 				}}
 				onLayout={onLayoutChanged}
 			>
 				<AppImageCarouselItem
-					src={item.src}
-					type={item.type}
-					blurhash={item.blurhash}
-					parentWidth={ContainerWidth}
+					src={item?.src}
+					type={item?.type}
+					blurhash={item?.blurhash}
+					parentWidth={ImageWidth}
 					calculatedHeight={ImageHeight}
 				/>
-				<CarousalIndicatorOverlay index={Pointer} total={items.length} />
-				<AltTextOverlay altText={item.altText} />
+				<CarousalIndicatorOverlay index={Pointer} total={items?.length} />
+				<AltTextOverlay altText={item?.altText} />
 			</View>
 		</GestureDetector>
 	);

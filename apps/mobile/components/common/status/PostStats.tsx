@@ -1,21 +1,19 @@
-import { memo } from 'react';
 import {
 	Pressable,
 	StyleProp,
 	StyleSheet,
-	Text,
 	View,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import {
 	useAppBottomSheet_Improved,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { appDimensions } from '../../../styles/dimensions';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { AppText } from '../../lib/Text';
+import { AppPostObject } from '../../../types/app-post.types';
 
 type StatItemProps = {
 	count: number;
@@ -36,33 +34,49 @@ function util(o: number): string {
 /**
  * Shows a post stat
  */
-export const StatItem = memo(
-	({ count, label, nextCounts, onPress, me }: StatItemProps) => {
-		const { theme } = useAppTheme();
-		const formatted = util(count);
-		const color = me ? theme.primary.a0 : theme.complementary.a0;
+export function StatItem({
+	count,
+	label,
+	nextCounts,
+	onPress,
+	me,
+}: StatItemProps) {
+	const { theme } = useAppTheme();
+	const formatted = util(count);
+	const color = me ? theme.primary.a0 : theme.complementary.a0;
 
-		const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
-		if (count === 0) return <View />;
-		return (
-			<Pressable onPress={onPress}>
-				<View style={{ flexDirection: 'row' }}>
-					<Text style={[styles.text, { color }]}>
-						{formatted} {label}
-					</Text>
-					{SHOW_TRAILING_BULLET && (
-						<Text style={[{ color: theme.secondary.a30, marginHorizontal: 6 }]}>
-							&bull;
-						</Text>
-					)}
-				</View>
-			</Pressable>
-		);
-	},
-);
+	const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
+	if (count === 0) return <View />;
+	return (
+		<Pressable onPress={onPress}>
+			<View style={{ flexDirection: 'row' }}>
+				<AppText.Medium style={[{ color, fontSize: 14 }]}>
+					{formatted}{' '}
+					<AppText.Medium style={{ color, fontSize: 13 }}>
+						{label}
+					</AppText.Medium>
+				</AppText.Medium>
+				{SHOW_TRAILING_BULLET && (
+					<AppText.Medium
+						style={[
+							{
+								color: theme.secondary.a30,
+								fontSize: 13,
+								marginHorizontal: 6,
+							},
+						]}
+					>
+						&bull;
+					</AppText.Medium>
+				)}
+			</View>
+		</Pressable>
+	);
+}
 
 type PostStatsProps = {
 	style?: StyleProp<ViewStyle>;
+	dto: AppPostObject;
 };
 /**
  * Show metrics for a post
@@ -71,9 +85,8 @@ type PostStatsProps = {
  * vertical screen estate
  * @constructor
  */
-function PostStats({ style }: PostStatsProps) {
+function PostStats({ style, dto }: PostStatsProps) {
 	const { show, setCtx } = useAppBottomSheet_Improved();
-	const { dto } = useAppStatusItem();
 
 	const LIKE_COUNT = dto.stats.likeCount;
 	const REPLY_COUNT = dto.stats.replyCount;
@@ -135,13 +148,9 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: appDimensions.timelines.sectionBottomMargin,
+		marginBottom: appDimensions.timelines.sectionBottomMargin * 0.5,
 	},
-	text: {
-		fontSize: 14,
-		textAlign: 'right',
-		fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
-	},
+	text: {},
 	bull: {
 		marginHorizontal: 2,
 	},

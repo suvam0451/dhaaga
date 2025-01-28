@@ -46,7 +46,12 @@ function RealmMediaComponentSingleItem({
 			case 'video/webm':
 			case 'video/quicktime': {
 				return (
-					<AppVideoComponent url={data.url} height={height} type={'video'} />
+					<AppVideoComponent
+						url={data.url}
+						containerHeight={height}
+						containerWidth={ContainerWidth}
+						type={'video'}
+					/>
 				);
 			}
 			default: {

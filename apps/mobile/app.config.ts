@@ -10,11 +10,11 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: APP_NAME,
 	slug: 'dhaaga',
-	version: '0.14.0',
+	version: '0.14.1',
 	orientation: 'portrait',
-	icon: './assets/placeholder_icon.png',
+	icon: './assets/dhaaga_icon.png',
 	userInterfaceStyle: 'dark',
-	scheme: 'your-app-scheme',
+	scheme: 'dhaaga',
 	platforms: ['android'],
 	developmentClient: {
 		silentLaunch: true,
@@ -25,7 +25,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: BUNDLE_ID,
-		versionCode: 23,
+		versionCode: 24,
 		blockedPermissions: [
 			'android.permission.SYSTEM_ALERT_WINDOW',
 			'android.permission.READ_EXTERNAL_STORAGE',
@@ -35,12 +35,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	androidStatusBar: {
 		barStyle: 'dark-content',
-		backgroundColor: '#121212',
+		backgroundColor: '#e6cf8b',
 	},
 	splash: {
-		image: './assets/splash.png',
+		image: './assets/dhaaga_icon.png',
 		resizeMode: 'contain',
-		backgroundColor: '#121212',
+		backgroundColor: '#e6cf8b',
 	},
 	assetBundlePatterns: ['**/*'],
 	web: {

@@ -98,6 +98,7 @@ export class AppText {
 					style,
 				]}
 				numberOfLines={numberOfLines}
+				textBreakStrategy={'simple'}
 			>
 				{children}
 			</Text>
@@ -126,6 +127,7 @@ export class AppText {
 				key={keygen ? RandomUtil.nanoId() : key}
 				style={[_baseStyling, { color: _color }, style]}
 				numberOfLines={numberOfLines}
+				textBreakStrategy={'simple'}
 			>
 				{children}
 			</Text>
@@ -196,6 +198,7 @@ export class AppText {
 					style,
 				]}
 				numberOfLines={numberOfLines}
+				textBreakStrategy={'simple'}
 			>
 				{children}
 			</Text>
@@ -213,6 +216,7 @@ export class AppText {
 					style,
 				]}
 				numberOfLines={numberOfLines}
+				textBreakStrategy={'simple'}
 			>
 				{children}
 			</Text>
@@ -244,6 +248,7 @@ export class AppText {
 					style,
 				]}
 				numberOfLines={numberOfLines}
+				textBreakStrategy={'simple'}
 			>
 				{children}
 			</Text>

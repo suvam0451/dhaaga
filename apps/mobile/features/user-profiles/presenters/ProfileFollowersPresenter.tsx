@@ -47,6 +47,9 @@ function ProfileFollowersPresenter() {
 			</AppTopNavbar>
 		);
 
+	/**
+	 * NOTE: AT proto does not return a detailed view
+	 */
 	return (
 		<AppTopNavbar
 			title={'Followers'}

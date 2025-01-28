@@ -21,13 +21,15 @@ type Props = {
 	showReplyIndicator: boolean;
 };
 
-const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
-
 function ParentPost({ dto, showReplyIndicator }: Props) {
 	const { driver } = useAppApiClient();
 	const { toPost } = useAppNavigator();
 
 	const IS_QUOTE_BOOST = dto.meta.isBoost && dto.content.raw;
+
+	function onPressBody() {
+		toPost(dto.id);
+	}
 
 	return (
 		<View>
@@ -44,15 +46,11 @@ function ParentPost({ dto, showReplyIndicator }: Props) {
 					<MediaItem
 						attachments={dto.content.media}
 						calculatedHeight={dto.calculated.mediaContainerHeight}
-					/>
-					<Pressable
 						style={{
-							marginBottom: SECTION_MARGIN_BOTTOM,
+							marginTop: appDimensions.timelines.sectionBottomMargin,
 						}}
-						onPress={() => {
-							toPost(dto.id);
-						}}
-					>
+					/>
+					<Pressable onPress={onPressBody}>
 						<TextContentView
 							tree={dto.content.parsed}
 							variant={'bodyContent'}
@@ -65,7 +63,7 @@ function ParentPost({ dto, showReplyIndicator }: Props) {
 							<StatusQuoted />
 						</WithAppStatusItemContext>
 					)}
-					<PostStats />
+					<PostStats dto={dto} />
 				</View>
 				<ReplyContextLine />
 			</View>

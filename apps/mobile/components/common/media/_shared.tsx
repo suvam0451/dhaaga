@@ -1,14 +1,7 @@
-import { Image, useImage } from 'expo-image';
-import { MEDIA_CONTAINER_WIDTH } from './_common';
+import { Image } from 'expo-image';
 import { Fragment, memo, useEffect, useRef, useState } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import {
-	Pressable,
-	StyleSheet,
-	View,
-	Text,
-	LayoutChangeEvent,
-} from 'react-native';
+import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { Dialog } from '@rneui/themed';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -25,22 +18,11 @@ type Props = {
 	leftMarginAdjustment?: number;
 };
 
-export const AppImageComponent = memo(function Foo({
+export function AppImageComponent({
 	url,
 	parentContainerWidth,
+	parentContainerHeight,
 }: Props) {
-	const [Width, setWidth] = useState(parentContainerWidth);
-	const img = useImage(
-		url,
-		{ maxWidth: Math.min(parentContainerWidth, Width), maxHeight: 540 },
-		[Width],
-	);
-
-	function onLayoutChanged(event: LayoutChangeEvent) {
-		setWidth(event.nativeEvent.layout.width);
-	}
-
-	if (!img) return <View />;
 	return (
 		<View
 			style={{
@@ -49,17 +31,14 @@ export const AppImageComponent = memo(function Foo({
 				borderRadius: 8,
 				width: '100%',
 			}}
-			onLayout={onLayoutChanged}
 		>
 			{/*@ts-ignore-next-line*/}
 			<Image
-				source={img}
+				source={{ uri: url }}
 				style={{
-					// flex: 1,
 					borderRadius: 8,
-
-					height: img.height,
-					width: img.width,
+					height: parentContainerHeight,
+					width: parentContainerWidth,
 					alignItems: 'center',
 					justifyContent: 'center',
 				}}
@@ -71,7 +50,7 @@ export const AppImageComponent = memo(function Foo({
 			/>
 		</View>
 	);
-});
+}
 
 export function AppAudioComponent({ url }: { url: string }) {
 	const { theme } = useAppTheme();
@@ -124,11 +103,13 @@ export function AppAudioComponent({ url }: { url: string }) {
 
 export const AppVideoComponent = memo(function Foo({
 	url,
-	height,
+	containerHeight,
+	containerWidth,
 	loop,
 }: {
 	url: string;
-	height: number;
+	containerHeight: number;
+	containerWidth: number;
 	loop?: boolean;
 	type: string;
 }) {
@@ -154,13 +135,14 @@ export const AppVideoComponent = memo(function Foo({
 		};
 	}, [player]);
 
+	console.log(containerWidth, containerHeight);
 	return (
-		<View style={[styles.contentContainer, { height }]}>
+		<View style={[styles.contentContainer, { height: containerHeight }]}>
 			<VideoView
 				ref={ref}
 				style={{
-					width: MEDIA_CONTAINER_WIDTH,
-					height,
+					width: containerWidth,
+					height: containerHeight,
 					borderRadius: 8,
 				}}
 				player={player}

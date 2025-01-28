@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 import { appDimensions } from '../../../../styles/dimensions';
 
 const styles = StyleSheet.create({
@@ -16,7 +15,6 @@ const styles = StyleSheet.create({
 	},
 	navbarTitle: {
 		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_700_BOLD,
 	},
 });
 

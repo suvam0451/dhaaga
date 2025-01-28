@@ -29,7 +29,8 @@
     "megalodon": "^10.1.1",
     "mfm-js": "^0.24.0",
     "misskey-js": "^2025.1.0-beta.2",
-    "snakecase-keys": "^8.0.1"
+    "snakecase-keys": "^8.0.1",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/bun": "^1.2.0",

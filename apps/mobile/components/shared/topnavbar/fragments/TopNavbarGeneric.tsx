@@ -1,12 +1,18 @@
-import { StatusBar, Text, View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import styles from './styles';
 import TopNavbarBackButton from './TopNavbarBackButton';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../../lib/Text';
 
 type HeadersProps = {
 	title: string;
 };
-const TopNavbarGeneric = ({ title }: HeadersProps) => {
+/**
+ * A generic navbar with a back button
+ * @param title
+ * @constructor
+ */
+function TopNavbarGeneric({ title }: HeadersProps) {
 	const { theme } = useAppTheme();
 
 	return (
@@ -14,20 +20,18 @@ const TopNavbarGeneric = ({ title }: HeadersProps) => {
 			<StatusBar backgroundColor={theme.background.a0} />
 			<TopNavbarBackButton />
 			<View style={styles.navbarTitleContainer}>
-				<Text
-					style={[
-						styles.navbarTitle,
-						{
-							color: theme.textColor.medium,
-						},
-					]}
+				<AppText.SemiBold
+					style={{
+						fontSize: 16,
+						color: theme.secondary.a10,
+					}}
 				>
 					{title}
-				</Text>
+				</AppText.SemiBold>
 			</View>
 			<View style={{ width: 36 }}></View>
 		</View>
 	);
-};
+}
 
 export default TopNavbarGeneric;

@@ -87,16 +87,16 @@ function ReplyIndicator() {
 			style={{
 				position: 'absolute',
 				height: '100%',
-				left: 16,
+				left: 18,
 			}}
 		>
 			<View
 				style={{
 					flex: 1,
 					marginTop: 48,
-					marginBottom: 8,
+					marginBottom: 4,
 					width: 1.5,
-					backgroundColor: '#323232',
+					backgroundColor: '#424242',
 				}}
 			/>
 		</View>
@@ -113,13 +113,12 @@ const timelineStyles = StyleSheet.create({
 		marginLeft: 8,
 		position: 'relative',
 		flex: 1,
-		marginBottom: appDimensions.timelines.sectionBottomMargin * 4,
+		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 	oneLineDisplayNameRoot: {
 		flexDirection: 'row',
 		flex: 1,
 		alignItems: 'center',
-		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 });
 

@@ -23,7 +23,6 @@ type ImageCarousalProps = {
  */
 function TimelineMediaRendered({
 	attachment,
-	CalculatedHeight,
 	altText,
 	index,
 	totalCount,
@@ -42,8 +41,6 @@ function TimelineMediaRendered({
 			height: attachment.height,
 		},
 	]);
-
-	const _height = CalculatedHeight === 0 ? 360 : CalculatedHeight;
 
 	const MediaItem = useMemo(() => {
 		const type = attachment.type;
@@ -73,7 +70,8 @@ function TimelineMediaRendered({
 					<AppVideoComponent
 						type={'video'}
 						url={attachment.url}
-						height={_height}
+						containerHeight={ContainerHeight}
+						containerWidth={ContainerWidth}
 					/>
 				);
 			}
@@ -124,16 +122,18 @@ function MediaItem({
 		);
 	}
 	return (
-		<AppImageCarousel
-			timelineCacheId={'1'}
-			calculatedHeight={calculatedHeight}
-			items={attachments.map((o) => ({
-				altText: o.alt,
-				src: o.previewUrl,
-				type: o.type,
-				blurhash: o.blurhash,
-			}))}
-		/>
+		<View style={style}>
+			<AppImageCarousel
+				timelineCacheId={'1'}
+				calculatedHeight={calculatedHeight}
+				items={attachments.map((o) => ({
+					altText: o.alt,
+					src: o.previewUrl,
+					type: o.type,
+					blurhash: o.blurhash,
+				}))}
+			/>
+		</View>
 	);
 }
 

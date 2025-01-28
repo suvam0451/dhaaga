@@ -26,8 +26,9 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 		setMediaGalleryCtrl({ total: 0, curr: 0 });
 		setCurrentIndex(0);
 	}, [userId]);
-	const { data } = useProfileGalleryModeInteractor(userId);
+	// const { data } = useProfileGalleryModeInteractor(userId);
 
+	const data = [];
 	useEffect(() => {
 		let images = [];
 		for (const i of data) {

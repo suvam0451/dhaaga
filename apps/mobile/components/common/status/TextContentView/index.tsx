@@ -53,6 +53,24 @@ function TextContentNode({
 				);
 			}
 			case 'mention': {
+				if (variant === 'displayName') {
+					return (
+						<RawTextSegment
+							key={node.uuid}
+							value={node.text}
+							fontFamily={
+								variant === 'displayName'
+									? APP_FONTS.INTER_600_SEMIBOLD
+									: APP_FONTS.ROBOTO_400
+							}
+							emphasis={
+								variant === 'displayName'
+									? APP_COLOR_PALETTE_EMPHASIS.A0
+									: APP_COLOR_PALETTE_EMPHASIS.A10
+							}
+						/>
+					);
+				}
 				return (
 					<MentionSegment
 						key={node.uuid}
@@ -148,6 +166,8 @@ function TextContentNode({
 							variant === 'displayName'
 								? 0
 								: appDimensions.timelines.sectionBottomMargin * 0.5,
+						flexDirection: 'row',
+						alignItems: 'center',
 					}}
 					numberOfLines={oneLine ? 1 : undefined}
 				>
@@ -201,8 +221,7 @@ export function TextContentView({
 }: TextContentViewProps) {
 	if (!Array.isArray(tree)) return <View />;
 	return (
-		// Negative padding to offset weird bottom margin
-		<View style={[{ height: 'auto', flexShrink: 1 }, style]}>
+		<View style={style}>
 			{/* --- paragraphs --- */}
 			{tree.map((item, i) => (
 				<TextContentNode

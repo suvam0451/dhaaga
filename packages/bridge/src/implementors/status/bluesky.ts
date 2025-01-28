@@ -10,8 +10,10 @@ import {
 } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import {
-	BlueskyMediaAttachmentAdapter,
-	BlueskyVideoAttachmentAdapter,
+	EmbedViewProcessor_External,
+	EmbedViewProcessor_Images,
+	EmbedViewProcessor_RecordWithMedia,
+	EmbedViewProcessor_Video,
 } from '../media-attachment/bluesky.js';
 import { ReplyRef } from '@atproto/api/src/client/types/app/bsky/feed/defs.js';
 
@@ -103,11 +105,19 @@ class BlueskyStatusAdapter implements StatusInterface {
 				reply: null as any,
 			});
 		} else if (this.isQuote()) {
-			return new BlueskyStatusAdapter({
-				post: this.post.embed?.record as any,
-				reason: null as any,
-				reply: null as any,
-			});
+			if (this.post.embed?.$type === 'app.bsky.embed.recordWithMedia#view') {
+				return new BlueskyStatusAdapter({
+					post: (this.post.embed as any)?.record?.record as any,
+					reason: null as any,
+					reply: null as any,
+				});
+			} else {
+				return new BlueskyStatusAdapter({
+					post: this.post.embed?.record as any,
+					reason: null as any,
+					reply: null as any,
+				});
+			}
 		}
 		// if (this.reason.reply) {
 		// 	// TODO: type checking required
@@ -178,16 +188,19 @@ class BlueskyStatusAdapter implements StatusInterface {
 	isReposted = () => this.isShare() || this.isQuote();
 
 	getMediaAttachments(): MediaAttachmentInterface[] {
-		if (this.post.embed?.$type === 'app.bsky.embed.recordWithMedia#view') {
-			// certain quotes (observed to be ones with image embed only, and no text)
-			if (
-				(this.post as any)?.embed?.media?.$type === 'app.bsky.embed.images#view'
-			) {
-				return (this.post as any)?.embed?.media?.images?.map((o: any) =>
-					BlueskyMediaAttachmentAdapter.create(o),
-				);
-			}
-		} else if (this.post.$type === 'app.bsky.embed.record#viewRecord') {
+		// it seemed that some quotes can be made with image embed...
+		if ((this.reason as any)?.$type === 'app.bsky.feed.defs#reasonRepost') {
+			return [];
+		}
+
+		// tenor etc.
+		if (EmbedViewProcessor_External.isCompatible(this.post.embed))
+			return EmbedViewProcessor_External.compile(this.post.embed as any);
+
+		if (EmbedViewProcessor_RecordWithMedia.isCompatible(this.post.embed))
+			return EmbedViewProcessor_RecordWithMedia.compile(this.post.embed);
+
+		if (this.post.$type === 'app.bsky.embed.record#viewRecord') {
 			// this handles an original post attached to a quote post
 			const embeds = this.post.embeds as any;
 
@@ -195,22 +208,11 @@ class BlueskyStatusAdapter implements StatusInterface {
 				const attachments = [];
 
 				for (const embed of embeds) {
-					switch (embed.$type) {
-						case 'app.bsky.embed.images#view':
-						case 'app.bsky.embed.images': {
-							attachments.push(
-								...embed.images.map((o: any) =>
-									BlueskyMediaAttachmentAdapter.create(o),
-								),
-							);
-							break;
-						}
-						case 'app.bsky.embed.video#view': {
-							attachments.push(
-								BlueskyVideoAttachmentAdapter.create(embed as any),
-							);
-						}
-					}
+					if (EmbedViewProcessor_Images.isCompatible(embed))
+						attachments.push(...EmbedViewProcessor_Images.compile(embed));
+
+					if (EmbedViewProcessor_Video.isCompatible(embed))
+						attachments.push(...EmbedViewProcessor_Video.compile(embed));
 				}
 				return attachments;
 			}
@@ -221,14 +223,11 @@ class BlueskyStatusAdapter implements StatusInterface {
 			return [];
 		}
 
-		// handle image embeds
-		const target: any[] = this.post?.embed?.images as any[];
-		if (target)
-			return target.map((o) => BlueskyMediaAttachmentAdapter.create(o));
+		if (EmbedViewProcessor_Images.isCompatible(this.post.embed))
+			return EmbedViewProcessor_Images.compile(this.post.embed as any);
 
-		// handle video embeds
-		if (this.post?.embed?.$type === 'app.bsky.embed.video#view')
-			return [BlueskyVideoAttachmentAdapter.create(this.post?.embed as any)];
+		if (EmbedViewProcessor_Video.isCompatible(this.post.embed))
+			return EmbedViewProcessor_Video.compile(this.post.embed as any);
 
 		return [];
 	}

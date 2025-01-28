@@ -7,8 +7,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { memo, useRef } from 'react';
-import { Skeleton } from '@rneui/base';
+import { useRef } from 'react';
 import { APP_KNOWN_MODAL } from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
@@ -26,12 +25,12 @@ import { AppParsedTextNodes } from '../../../../types/parsed-text.types';
 import MfmService from '../../../../services/mfm.service';
 import { AppText } from '../../../lib/Text';
 
-const TIMELINE_PFP_SIZE = 44; // appDimensions.timelines.avatarIconSize;
+const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 
 /**
  * Renders the user (poster)'s avatar
  */
-export const OriginalPostedPfpFragment = memo(function Foo({
+export function OriginalPostedPfpFragment({
 	url,
 	onClick,
 }: {
@@ -63,27 +62,6 @@ export const OriginalPostedPfpFragment = memo(function Foo({
 				source={{ uri: url }}
 			/>
 		</TouchableOpacity>
-	);
-});
-
-function OriginalPosterSkeleton() {
-	return (
-		<View style={{ width: '90%' }}>
-			<View
-				style={{ display: 'flex', flexDirection: 'row', marginHorizontal: 0 }}
-			>
-				<Skeleton style={{ height: 52, width: 52, borderRadius: 4 }} />
-				<View style={{ flexGrow: 1, marginRight: 16 }}>
-					<Skeleton
-						style={{
-							height: 52,
-							marginLeft: 8,
-							borderRadius: 4,
-						}}
-					/>
-				</View>
-			</View>
-		</View>
 	);
 }
 

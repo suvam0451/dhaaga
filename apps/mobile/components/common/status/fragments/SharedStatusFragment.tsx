@@ -1,46 +1,29 @@
-import { memo } from 'react';
-import useMfm from '../../../hooks/useMfm';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { AppIcon } from '../../../lib/Icon';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '../../../../styles/dimensions';
+import { TextContentView } from '../TextContentView';
 
 /**
  * Adds booster's information on top
  *
  * NOTE: pass negative values to RootStatus margin
  */
-const SharedStatusFragment = memo(function Foo() {
+function SharedStatusFragment() {
 	const { dto } = useAppStatusItem();
+	const { theme } = useAppTheme();
 
 	const boostedBy = dto.postedBy;
-	const { content: ParsedDisplayName } = useMfm({
-		content: boostedBy.displayName,
-		remoteSubdomain: boostedBy.instance,
-		emojiMap: dto.calculated.emojis as any,
-		deps: [dto],
-		expectedHeight: 24,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-		numberOfLines: 1,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-	});
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
 
 	return (
 		<View
 			style={{
 				paddingTop: 4,
-				marginBottom: 8,
+				marginBottom: appDimensions.timelines.sectionBottomMargin,
 			}}
 		>
 			<View
@@ -60,13 +43,18 @@ const SharedStatusFragment = memo(function Foo() {
 						style={{
 							width: 20,
 							height: 20,
-							opacity: 0.75,
 							borderRadius: 20 / 2,
 							marginLeft: 4,
 						}}
 					/>
 				</View>
-				<View style={{ marginLeft: 6 }}>{ParsedDisplayName}</View>
+				<TextContentView
+					tree={boostedBy.parsedDisplayName}
+					variant={'displayName'}
+					mentions={[]}
+					emojiMap={new Map()}
+					style={{ marginLeft: 6 }}
+				/>
 				<Text
 					style={{
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,
@@ -80,6 +68,6 @@ const SharedStatusFragment = memo(function Foo() {
 			</View>
 		</View>
 	);
-});
+}
 
 export default SharedStatusFragment;

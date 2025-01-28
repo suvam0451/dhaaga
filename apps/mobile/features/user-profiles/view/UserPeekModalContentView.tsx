@@ -24,30 +24,90 @@ function UserPeekModalContentView({ toProfile, user }: Props) {
 	const { theme } = useAppTheme();
 
 	return (
-		<ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 20 }}>
-			<View style={{ flexDirection: 'row', marginBottom: 16 }}>
+		<ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+			{/*@ts-ignore-next-line*/}
+			<Image
+				source={{ uri: user.banner }}
+				style={{
+					width: '100%',
+					height: 128,
+					borderTopLeftRadius: 16,
+					borderTopRightRadius: 16,
+				}}
+			/>
+			<View
+				style={{
+					flexDirection: 'row',
+					marginBottom: 16,
+					paddingHorizontal: 16,
+				}}
+			>
 				<View style={{ flexGrow: 1, flex: 1 }}>
 					<View
 						style={{
 							marginBottom: appDimensions.timelines.sectionBottomMargin,
+							flexDirection: 'row',
 						}}
 					>
-						<TextContentView
-							oneLine
-							tree={user.parsedDisplayName}
-							variant={'displayName'}
-							mentions={[]}
-							emojiMap={user.calculated.emojis}
-						/>
-						<AppText.Medium
+						<View style={{ flex: 1 }}>
+							<TextContentView
+								oneLine
+								tree={user.parsedDisplayName}
+								variant={'displayName'}
+								mentions={[]}
+								emojiMap={user.calculated.emojis}
+							/>
+							<AppText.Medium
+								style={{
+									color: theme.secondary.a30,
+									fontSize: 12,
+									marginBottom: appDimensions.timelines.sectionBottomMargin,
+								}}
+								numberOfLines={1}
+							>
+								{user.handle}
+							</AppText.Medium>
+							<View
+								style={{
+									flexDirection: 'row',
+								}}
+							>
+								<Text>
+									<AppText.SemiBold
+										style={{ color: theme.secondary.a20, fontSize: 16 }}
+									>
+										{util(user.stats.followers)}
+									</AppText.SemiBold>
+									<AppText.Medium
+										style={{ color: theme.secondary.a20, fontSize: 13 }}
+									>
+										{' '}
+										followers
+									</AppText.Medium>
+								</Text>
+							</View>
+						</View>
+						<View
 							style={{
-								color: theme.secondary.a30,
-								fontSize: 12,
+								borderRadius: '100%',
+								overflow: 'hidden',
+								width: 64,
+								height: 64,
+								marginTop: -24,
+								borderColor: 'rgba(100, 100, 100, 0.5)',
+								borderWidth: 2,
 							}}
-							numberOfLines={1}
 						>
-							{user.handle}
-						</AppText.Medium>
+							{/*@ts-ignore-next-line*/}
+							<Image
+								source={{ uri: user.avatarUrl }}
+								style={{
+									width: 64,
+									height: 64,
+									borderRadius: '100%',
+								}}
+							/>
+						</View>
 					</View>
 
 					<View
@@ -64,44 +124,6 @@ function UserPeekModalContentView({ toProfile, user }: Props) {
 						/>
 					</View>
 				</View>
-				<View
-					style={{
-						borderRadius: '100%',
-						overflow: 'hidden',
-						width: 72,
-						height: 72,
-					}}
-				>
-					{/*@ts-ignore-next-line*/}
-					<Image
-						source={{ uri: user.avatarUrl }}
-						style={{
-							width: 72,
-							height: 72,
-							borderRadius: '100%',
-						}}
-					/>
-				</View>
-			</View>
-			<View
-				style={{
-					flexDirection: 'row',
-					marginBottom: appDimensions.timelines.sectionBottomMargin,
-				}}
-			>
-				<Text>
-					<AppText.SemiBold
-						style={{ color: theme.complementary.a0, fontSize: 16 }}
-					>
-						{util(user.stats.followers)}
-					</AppText.SemiBold>
-					<AppText.Medium
-						style={{ color: theme.complementary.a0, fontSize: 14 }}
-					>
-						{' '}
-						Followers
-					</AppText.Medium>
-				</Text>
 			</View>
 			<View
 				style={{
