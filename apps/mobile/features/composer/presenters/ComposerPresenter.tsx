@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import ComposerTextInput from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerText';
 import ComposerSpoiler from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerSpoiler';
 import { useComposerCtx } from '../contexts/useComposerCtx';
-import ComposerAlt from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerAlt';
+import ComposerMediaPresenter from './ComposerMediaPresenter';
 import EmojiPickerBottomSheet from '../../../components/dhaaga-bottom-sheet/modules/emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerTopMenu';
 import TextEditorService from '../../../services/text-editor.service';
@@ -81,7 +81,7 @@ function ComposerPresenter() {
 					/>
 				);
 			case 'media': {
-				return <ComposerAlt />;
+				return <ComposerMediaPresenter />;
 			}
 		}
 	}, [state.mode, theme]);

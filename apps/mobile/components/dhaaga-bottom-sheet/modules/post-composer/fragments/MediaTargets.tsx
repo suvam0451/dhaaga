@@ -1,13 +1,6 @@
 import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
-import {
-	FlatList,
-	Pressable,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
 import {
 	useAppApiClient,
 	useAppDialog,
@@ -17,6 +10,7 @@ import { Image } from 'expo-image';
 import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 import { AppIcon } from '../../../../lib/Icon';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { AppText } from '../../../../lib/Text';
 
 /**
  * Shows a list of uploaded
@@ -72,7 +66,7 @@ function ComposeMediaTargets() {
 		}
 		const _media = state.medias[idx];
 		try {
-			const { data, error } = await client.media.updateDescription(
+			const { error } = await client.media.updateDescription(
 				_media.remoteId,
 				text,
 			);
@@ -116,6 +110,8 @@ function ComposeMediaTargets() {
 	return (
 		<View
 			style={{
+				marginHorizontal: 10,
+				marginTop: 8,
 				marginBottom: state.medias.length > 0 ? 8 : 0,
 			}}
 		>
@@ -123,17 +119,13 @@ function ComposeMediaTargets() {
 				horizontal={true}
 				data={state.medias}
 				renderItem={({ item, index }) => {
-					const ALT_SYNCED =
-						state.medias[index].remoteAlt === state.medias[index].localAlt &&
-						!!state.medias[index].remoteAlt;
-
 					let indicatorIcon = <View />;
 					switch (item.status) {
 						case 'uploaded': {
 							indicatorIcon = (
 								<AppIcon
 									id={'checkmark-done-outline'}
-									size={28}
+									size={22}
 									color={theme.primary.a0}
 								/>
 							);
@@ -143,7 +135,7 @@ function ComposeMediaTargets() {
 							indicatorIcon = (
 								<AppIcon
 									id={'cloud-upload-outline'}
-									size={28}
+									size={22}
 									color={theme.complementary.a0}
 								/>
 							);
@@ -151,7 +143,7 @@ function ComposeMediaTargets() {
 						}
 						case 'failed': {
 							indicatorIcon = (
-								<AppIcon id={'warning-outline'} size={28} color={'red'} />
+								<AppIcon id={'warning-outline'} size={22} color={'red'} />
 							);
 							break;
 						}
@@ -159,9 +151,11 @@ function ComposeMediaTargets() {
 					return (
 						<View
 							style={{
-								position: 'relative',
 								overflow: 'visible',
-								marginHorizontal: 4,
+								marginRight: 8,
+								borderColor: theme.background.a50,
+								borderWidth: 2,
+								borderRadius: 12,
 							}}
 						>
 							{/* @ts-ignore-next-line */}
@@ -169,98 +163,42 @@ function ComposeMediaTargets() {
 								source={{ uri: item.previewUrl || item.localUri }}
 								height={196}
 								width={128}
-								style={{ borderRadius: 8 }}
+								style={{ borderRadius: 12 }}
 							/>
-							<View style={{ position: 'absolute', left: 8, bottom: 6 }}>
-								<View
-									style={{
-										backgroundColor: theme.palette.bg,
-										justifyContent: 'center',
-										alignItems: 'center',
-										borderRadius: '100%',
-									}}
-								>
-									{indicatorIcon}
-								</View>
-							</View>
-
-							<TouchableOpacity
-								style={{ position: 'absolute', right: 8, top: 6 }}
-								onPress={() => {
-									onRemovePress(index);
+							<View
+								style={{
+									flexDirection: 'row',
+									alignItems: 'center',
 								}}
 							>
-								<View
-									style={{
-										backgroundColor: theme.palette.bg,
-										justifyContent: 'center',
-										alignItems: 'center',
+								<View style={styles.button}>{indicatorIcon}</View>
+								<Pressable
+									onPress={() => {
+										onAltPress(index);
 									}}
+									style={styles.buttonMid}
 								>
-									<View style={{ height: 28, width: 28 }}>
-										<AntDesign
-											name="closecircle"
-											size={28}
-											color={theme.complementary.a0}
-										/>
-									</View>
-								</View>
-							</TouchableOpacity>
-
-							<TouchableOpacity
-								style={{ position: 'absolute', right: 8, top: 6 }}
-								onPress={() => {
-									onRemovePress(index);
-								}}
-							>
-								<View
-									style={{
-										backgroundColor: theme.palette.bg,
-										justifyContent: 'center',
-										alignItems: 'center',
-									}}
-								>
-									<View style={{ height: 28, width: 28 }}>
-										<AntDesign
-											name="closecircle"
-											size={28}
-											color={theme.complementary.a0}
-										/>
-									</View>
-								</View>
-							</TouchableOpacity>
-							<View style={{ position: 'absolute', right: 8, bottom: 8 }}>
-								<View
-									style={{
-										backgroundColor: theme.palette.bg,
-										justifyContent: 'center',
-										alignItems: 'center',
-										borderRadius: 8,
-										paddingHorizontal: 8,
-										paddingVertical: 6,
-										opacity: 0.9,
-									}}
-								>
-									<Pressable
-										onPress={() => {
-											onAltPress(index);
+									<AppText.Medium
+										style={{
+											color:
+												state.medias[index].remoteAlt ===
+													state.medias[index].localAlt &&
+												!!state.medias[index].remoteAlt
+													? theme.primary.a0
+													: theme.complementary.a0,
 										}}
 									>
-										<Text
-											style={{
-												color:
-													state.medias[index].remoteAlt ===
-														state.medias[index].localAlt &&
-													!!state.medias[index].remoteAlt
-														? theme.primary.a0
-														: theme.complementary.a0,
-												fontFamily: APP_FONTS.INTER_500_MEDIUM,
-											}}
-										>
-											ALT
-										</Text>
-									</Pressable>
-								</View>
+										ALT
+									</AppText.Medium>
+								</Pressable>
+								<Pressable
+									onPress={() => {
+										onRemovePress(index);
+									}}
+									style={styles.button}
+								>
+									<AppIcon id="close-outline" size={24} color={'red'} />
+								</Pressable>
 							</View>
 						</View>
 					);
@@ -271,3 +209,15 @@ function ComposeMediaTargets() {
 }
 
 export default ComposeMediaTargets;
+
+const styles = StyleSheet.create({
+	button: {
+		paddingHorizontal: 8,
+		paddingVertical: 6,
+	},
+	buttonMid: {
+		flex: 1,
+		alignItems: 'center',
+		paddingVertical: 6,
+	},
+});

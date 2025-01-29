@@ -1,36 +1,32 @@
-import { View, Text } from 'react-native';
-import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
-import ComposeMediaTargets from './MediaTargets';
+import { View, StyleSheet } from 'react-native';
+import { useComposerCtx } from '../contexts/useComposerCtx';
+import ComposeMediaTargets from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/MediaTargets';
 import {
 	useAppAcct,
 	useAppApiClient,
 	useAppDb,
 	useAppTheme,
-} from '../../../../../hooks/utility/global-state-extractors';
-import { AppBottomSheetMenu } from '../../../../lib/Menu';
-import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
-import { AppIcon } from '../../../../lib/Icon';
-import MediaUtils from '../../../../../utils/media.utils';
+} from '../../../hooks/utility/global-state-extractors';
+import { AppBottomSheetMenu } from '../../../components/lib/Menu';
+import { PostComposerReducerActionType } from '../../../states/interactors/post-composer.reducer';
+import { AppIcon } from '../../../components/lib/Icon';
+import MediaUtils from '../../../utils/media.utils';
 import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
-} from '../../../../../database/entities/account-metadata';
-import ActivityPubProviderService from '../../../../../services/activitypub-provider.service';
+} from '../../../database/entities/account-metadata';
+import ActivityPubProviderService from '../../../services/activitypub-provider.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import useComposer from '../interactors/useComposer';
+import { AppText } from '../../../components/lib/Text';
 
-function ComposerAlt() {
+function ComposerMediaPresenter() {
 	const { driver } = useAppApiClient();
 	const { acct } = useAppAcct();
 	const { db } = useAppDb();
 	const { state, dispatch } = useComposerCtx();
 	const { theme } = useAppTheme();
-
-	function onBack() {
-		dispatch({
-			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
-		});
-	}
+	const { toHome } = useComposer();
 
 	/**
 	 * Lets the user select an image item
@@ -116,10 +112,9 @@ function ComposerAlt() {
 			<AppBottomSheetMenu.WithBackNavigation
 				backLabel={'Back'}
 				nextLabel={''}
-				onBack={onBack}
+				onBack={toHome}
 				onNext={() => {}}
 				nextEnabled={false}
-				style={{ marginBottom: 24, marginTop: 24 }}
 				MiddleComponent={
 					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 						<AppIcon
@@ -137,23 +132,34 @@ function ComposerAlt() {
 						/>
 					</View>
 				}
+				style={{
+					paddingHorizontal: 6,
+				}}
 			/>
 			<ComposeMediaTargets />
 			{state.medias.length === 0 && (
-				<Text
-					style={{
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
-						color: theme.secondary.a30,
-						textAlign: 'center',
-						marginTop: 32,
-						padding: 16,
-					}}
+				<AppText.Medium
+					style={[
+						styles.noAttachments,
+						{
+							color: theme.secondary.a30,
+						},
+					]}
 				>
-					No attachments added.
-				</Text>
+					No attachments added
+				</AppText.Medium>
 			)}
 		</View>
 	);
 }
 
-export default ComposerAlt;
+export default ComposerMediaPresenter;
+
+const styles = StyleSheet.create({
+	noAttachments: {
+		textAlign: 'center',
+		marginTop: 32,
+		padding: 16,
+		fontSize: 18,
+	},
+});

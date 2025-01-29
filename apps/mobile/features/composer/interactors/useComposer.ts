@@ -39,7 +39,13 @@ function useComposer() {
 		});
 	}
 
-	return { state, onAcctAutofill, onEmojiAutofill };
+	function toHome() {
+		dispatch({
+			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+		});
+	}
+
+	return { state, toHome, onAcctAutofill, onEmojiAutofill };
 }
 
 export default useComposer;

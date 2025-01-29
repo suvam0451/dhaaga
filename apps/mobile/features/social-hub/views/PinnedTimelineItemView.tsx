@@ -81,7 +81,12 @@ function PinnedTimelineItemView({
 							iconStyle={{ color: theme.secondary.a0 }}
 						/>
 					</View>
-					<AppText.H6 emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
+					<AppText.H6
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						style={{
+							color: theme.complementary.a0,
+						}}
+					>
 						{label}
 					</AppText.H6>
 					<AppText.Medium
