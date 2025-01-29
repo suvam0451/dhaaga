@@ -1,4 +1,4 @@
-import { useComposerContext } from '../api/useComposerContext';
+import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import {
 	FlatList,
 	Pressable,
@@ -25,7 +25,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
  */
 function ComposeMediaTargets() {
 	const { client, driver } = useAppApiClient();
-	const { state, dispatch } = useComposerContext();
+	const { state, dispatch } = useComposerCtx();
 	const { theme } = useAppTheme();
 	const { show } = useAppDialog();
 

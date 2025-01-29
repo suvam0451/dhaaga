@@ -3,8 +3,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetQuickPost from './modules/AppBottomSheetQuickPost';
-import WithComposerContext from './modules/post-composer/api/useComposerContext';
-import PostCompose from './modules/post-composer/pages/PostCompose';
+import WithComposerContext from '../../features/composer/contexts/useComposerCtx';
+import ComposerPresenter from '../../features/composer/presenters/ComposerPresenter';
 import AppBottomSheetProfilePeek from './modules/profile-peek/AppBottomSheetProfilePeek';
 import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActions';
 import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
@@ -48,7 +48,7 @@ function Factory() {
 			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
 				return (
 					<WithComposerContext textSeed={null}>
-						<PostCompose />
+						<ComposerPresenter />
 					</WithComposerContext>
 				);
 			case APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK:
@@ -91,7 +91,7 @@ function Factory() {
 			default: {
 				return (
 					<WithComposerContext>
-						<PostCompose />
+						<ComposerPresenter />
 					</WithComposerContext>
 				);
 			}

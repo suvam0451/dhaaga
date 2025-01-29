@@ -1,12 +1,13 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 import { memo, useRef } from 'react';
-import { useComposerContext } from '../api/useComposerContext';
+import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import useInputGeneratePrompt from '../api/useInputGeneratePrompt';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '../../../../../styles/AppFonts';
 
 const ComposerTextInput = memo(function Foo() {
 	const { theme } = useAppTheme();
-	const { state } = useComposerContext();
+	const { state } = useComposerCtx();
 
 	const { onSelectionChange, onChange } = useInputGeneratePrompt();
 	const ref = useRef<TextInput>(null);
@@ -16,6 +17,7 @@ const ComposerTextInput = memo(function Foo() {
 			style={{
 				flexGrow: 1,
 				height: '100%',
+				paddingHorizontal: 10,
 			}}
 		>
 			<TextInput
@@ -24,7 +26,7 @@ const ComposerTextInput = memo(function Foo() {
 				multiline={true}
 				placeholder={"What's on your mind?"}
 				placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
-				style={[styles.textInput, { color: theme.textColor.high }]}
+				style={[styles.textInput, { color: theme.secondary.a10 }]}
 				onChange={onChange}
 				onSelectionChange={onSelectionChange}
 				scrollEnabled={true}
@@ -41,11 +43,11 @@ const styles = StyleSheet.create({
 	textInput: {
 		textDecorationLine: 'none',
 		textDecorationStyle: undefined,
-		marginTop: 16,
+		paddingVertical: 8,
 		fontSize: 16,
 		borderRadius: 8,
 		textAlignVertical: 'top',
-		paddingBottom: 0,
+		fontFamily: APP_FONTS.ROBOTO_400,
 		flexGrow: 1,
 	},
 });

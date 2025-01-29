@@ -3,7 +3,7 @@ import { APP_FONTS } from '../../../../../styles/AppFonts';
 import useAppVisibility, {
 	APP_POST_VISIBILITY,
 } from '../../../../../hooks/app/useVisibility';
-import { useComposerContext } from '../api/useComposerContext';
+import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import {
 	useAppDialog,
 	useAppTheme,
@@ -12,7 +12,7 @@ import { DialogBuilderService } from '../../../../../services/dialog-builder.ser
 import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 
 function VisibilityPicker() {
-	const { state, dispatch } = useComposerContext();
+	const { state, dispatch } = useComposerCtx();
 	const { theme } = useAppTheme();
 	const { show, hide } = useAppDialog();
 
@@ -32,10 +32,7 @@ function VisibilityPicker() {
 
 	const { icon, text } = useAppVisibility(state.visibility);
 	return (
-		<TouchableOpacity
-			onPress={showVisibilityMenu}
-			style={{ position: 'relative', maxWidth: 360, overflow: 'visible' }}
-		>
+		<TouchableOpacity onPress={showVisibilityMenu} style={{}}>
 			<View style={[styles.choiceContainer]}>
 				<Text
 					style={[
@@ -55,16 +52,13 @@ function VisibilityPicker() {
 
 const styles = StyleSheet.create({
 	choiceText: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+		fontFamily: APP_FONTS.ROBOTO_500,
 		fontSize: 16,
 	},
 	choiceContainer: {
 		padding: 6,
-		paddingHorizontal: 8,
-		borderRadius: 8,
 		alignItems: 'center',
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
 	},
 });
 

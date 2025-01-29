@@ -5,9 +5,9 @@ import {
 	PostComposerReducerActionType,
 	postComposerReducerDefault as reducerDefault,
 	PostComposerReducerStateType,
-} from '../../../../../states/interactors/post-composer.reducer';
-import { useAppBottomSheet_Improved } from '../../../../../hooks/utility/global-state-extractors';
-import usePostComposeAutoCompletion from './usePostComposeAutoCompletion';
+} from '../../../states/interactors/post-composer.reducer';
+import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
+import useAutoSuggestion from '../interactors/useAutoSuggestion';
 
 type Type = {
 	state: PostComposerReducerStateType;
@@ -19,10 +19,10 @@ const defaultValue: Type = {
 	dispatch: null,
 };
 
-const ComposerContext = createContext<Type>(defaultValue);
+const ComposerCtx = createContext<Type>(defaultValue);
 
-export function useComposerContext() {
-	return useContext(ComposerContext);
+export function useComposerCtx() {
+	return useContext(ComposerCtx);
 }
 
 type Props = {
@@ -33,7 +33,7 @@ type Props = {
 function WithComposerContext({ children, textSeed }: Props) {
 	const { stateId } = useAppBottomSheet_Improved();
 	const [state, dispatch] = useReducer(reducer, reducerDefault);
-	usePostComposeAutoCompletion(state, dispatch);
+	useAutoSuggestion(state, dispatch);
 
 	// reset content on request
 	useEffect(() => {
@@ -46,14 +46,14 @@ function WithComposerContext({ children, textSeed }: Props) {
 	}, [textSeed, stateId]);
 
 	return (
-		<ComposerContext.Provider
+		<ComposerCtx.Provider
 			value={{
 				state,
 				dispatch,
 			}}
 		>
 			{children}
-		</ComposerContext.Provider>
+		</ComposerCtx.Provider>
 	);
 }
 

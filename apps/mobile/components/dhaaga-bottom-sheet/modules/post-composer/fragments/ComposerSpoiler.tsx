@@ -6,13 +6,17 @@ import {
 	TextInputChangeEventData,
 	View,
 } from 'react-native';
-import { APP_THEME } from '../../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { useComposerContext } from '../api/useComposerContext';
+import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 
 const ComposerSpoiler = memo(() => {
-	const { state, dispatch } = useComposerContext();
+	const { theme } = useAppTheme();
+	const { state, dispatch } = useComposerCtx();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function onChange(e: NativeSyntheticEvent<TextInputChangeEventData>) {
 		dispatch({
@@ -24,13 +28,23 @@ const ComposerSpoiler = memo(() => {
 	}
 
 	return (
-		<View style={{ display: state.isCwVisible ? 'flex' : 'none' }}>
+		<View
+			style={{
+				display: state.isCwVisible ? 'flex' : 'none',
+				paddingHorizontal: 10,
+			}}
+		>
 			<TextInput
 				autoCapitalize={'none'}
 				multiline={true}
-				placeholder={'Place your cw here'}
-				placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
-				style={styles.textInput}
+				placeholder={t(`quickPost.spoilerPlaceholder`)}
+				placeholderTextColor={theme.secondary.a50}
+				style={[
+					styles.textInput,
+					{
+						color: theme.complementary.a0,
+					},
+				]}
 				onChange={onChange}
 				value={state.cw}
 			/>
@@ -42,14 +56,9 @@ const styles = StyleSheet.create({
 	textInput: {
 		textDecorationLine: 'none',
 		textDecorationStyle: undefined,
-		width: '100%',
-		maxHeight: 100,
-		paddingTop: 16,
-		paddingBottom: 0,
-		color: APP_THEME.COLOR_SCHEME_C,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
+		paddingVertical: 8,
+		fontFamily: APP_FONTS.ROBOTO_400,
 		fontSize: 16,
-		borderRadius: 8,
 	},
 });
 

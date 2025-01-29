@@ -131,7 +131,7 @@ const EmojiPickerBottomSheet = memo(
 			>
 				<AppBottomSheetMenu.WithBackNavigation
 					nextLabel={'Select'}
-					backLabel={'Go Back'}
+					backLabel={'Back'}
 					onBack={onCancel}
 					onNext={_onAccept}
 					nextEnabled={!!State.selectedReaction}
@@ -143,6 +143,9 @@ const EmojiPickerBottomSheet = memo(
 							value={SearchText}
 						/>
 					}
+					style={{
+						paddingHorizontal: 6,
+					}}
 					nextLoading={isProcessing}
 				/>
 				<SelectedEmojiPreview selection={State.selectedReaction} />
@@ -192,11 +195,8 @@ const styles = StyleSheet.create({
 		marginBottom: 8,
 	},
 	textInput: {
-		paddingVertical: 16,
-		paddingBottom: 12,
+		paddingVertical: 8,
 		fontSize: 16,
-		borderRadius: 8,
-		paddingTop: 16,
 		textAlign: 'center',
 		minWidth: 128,
 	}, // no reaction available prompt

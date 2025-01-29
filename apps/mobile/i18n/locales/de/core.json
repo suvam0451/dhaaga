@@ -67,6 +67,11 @@
       ]
     }
   },
+  "quickPost": {
+    "spoilerPlaceholder": "Spoiler / Inhoudswaarschuwing",
+    "ctaPlaceholder": "Waar denk je aan?",
+    "postButton": "Plaatsen"
+  },
   "setting": {
     "accountModule": {
       "title": "Konten",

@@ -2,12 +2,8 @@ import { produce } from 'immer';
 import { APP_POST_VISIBILITY } from '../../hooks/app/useVisibility';
 import { AppPostObject } from '../../types/app-post.types';
 import { Dispatch } from 'react';
-import {
-	InstanceApi_CustomEmojiDTO,
-	TagInterface,
-	UserInterface,
-} from '@dhaaga/bridge';
 import { ImagePickerAsset } from 'expo-image-picker';
+import { AutoFillResultsType } from '../../features/composer/types/composer.types';
 
 export type ThreadGateSetting =
 	| { type: 'nobody' }
@@ -25,12 +21,6 @@ export type PostComposer_MediaState = {
 	localAlt: string | null;
 	remoteAlt: string | null;
 	mimeType: string;
-};
-
-type Suggestion = {
-	accounts: UserInterface[];
-	hashtags: TagInterface[];
-	emojis: InstanceApi_CustomEmojiDTO[];
 };
 
 const defaultSuggestions = {
@@ -57,7 +47,7 @@ type State = {
 	visibility: APP_POST_VISIBILITY;
 	parent: AppPostObject | null;
 
-	suggestions: Suggestion;
+	suggestions: AutoFillResultsType;
 
 	// at proto
 	visibilityRules: ThreadGateSetting[];
@@ -193,7 +183,7 @@ type Actions =
 	  }
 	| {
 			type: ACTION.SET_SUGGESTION;
-			payload: Suggestion;
+			payload: AutoFillResultsType;
 	  }
 	| {
 			type: ACTION.CLEAR_SUGGESTION;

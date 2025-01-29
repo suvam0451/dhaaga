@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import { useComposerContext } from '../api/useComposerContext';
+import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import ComposeMediaTargets from './MediaTargets';
 import {
@@ -23,7 +23,7 @@ function ComposerAlt() {
 	const { driver } = useAppApiClient();
 	const { acct } = useAppAcct();
 	const { db } = useAppDb();
-	const { state, dispatch } = useComposerContext();
+	const { state, dispatch } = useComposerCtx();
 	const { theme } = useAppTheme();
 
 	function onBack() {

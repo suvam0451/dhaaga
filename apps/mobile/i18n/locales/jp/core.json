@@ -71,6 +71,11 @@
       ]
     }
   },
+  "quickPost": {
+    "spoilerPlaceholder": "ネタバレ / コンテンツ警告",
+    "ctaPlaceholder": "何を考えていますか？",
+    "postButton": "投稿"
+  },
   "setting": {
     "accountModule": {
       "title": "アカウント",

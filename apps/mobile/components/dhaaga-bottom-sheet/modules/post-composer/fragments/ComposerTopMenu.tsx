@@ -1,21 +1,21 @@
-import { Fragment } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import PostButton from './PostButton';
-import { useComposerContext } from '../api/useComposerContext';
+import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import appTextStyling from '../../../../../styles/AppTextStyling';
 import {
 	useAppAcct,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
+import { appDimensions } from '../../../../../styles/dimensions';
 
 /**
  * Indicates in which context this reply is being composed
  */
 function ReplyIndicator() {
-	const { state } = useComposerContext();
+	const { state } = useComposerCtx();
 	const { theme } = useAppTheme();
 
 	if (!state.parent) return <View />;
@@ -70,12 +70,18 @@ function ComposerTopMenu() {
 	const { acct } = useAppAcct();
 
 	return (
-		<Fragment>
+		<View
+			style={[
+				styles.root,
+				{
+					backgroundColor: theme.background.a30,
+				},
+			]}
+		>
 			<View
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
-					marginTop: 16,
 				}}
 			>
 				<View
@@ -114,11 +120,17 @@ function ComposerTopMenu() {
 				<PostButton />
 			</View>
 			<ReplyIndicator />
-		</Fragment>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	root: {
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
+		padding: 10,
+		paddingTop: appDimensions.bottomSheet.clearanceTop,
+	},
 	avatarContainer: {
 		height: 36,
 		width: 36,

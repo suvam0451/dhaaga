@@ -71,6 +71,11 @@
       ]
     }
   },
+  "quickPost": {
+    "spoilerPlaceholder": "Spoiler / Content Warning",
+    "ctaPlaceholder": "What's on your mind?",
+    "postButton": "Post"
+  },
   "setting": {
     "accountModule": {
       "title": "Accounts",

@@ -30,6 +30,8 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 		minId?: string | null;
 		maxId?: string | null;
 	}> {
+		const agent = getXrpcAgent(this.dto);
+		agent.listNotifications();
 		return Promise.resolve({ data: undefined }) as any;
 	}
 
@@ -129,9 +131,10 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 	async getSocialUpdates(query: NotificationGetQueryDto) {
 		const agent = getBskyAgent(this.dto);
 
-		// agent.listNotifications({
-		// 	reasons: ['like', 'follow', 'repost'],
-		// });
+		const resp = await agent.listNotifications({
+			reasons: ['like', 'follow', 'repost'],
+		});
+		return resp;
 		return notImplementedErrorBuilder();
 	}
 }
