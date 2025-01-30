@@ -1,4 +1,4 @@
-import { Pressable, View } from 'react-native';
+import { Pressable, View, StyleSheet } from 'react-native';
 import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../components/lib/Text';
@@ -40,14 +40,7 @@ function CollectionItem({
 	const { theme } = useAppTheme();
 
 	return (
-		<View
-			style={{
-				flexDirection: 'row',
-				marginBottom: 16,
-				alignItems: 'center',
-				paddingRight: 4,
-			}}
-		>
+		<View style={styles.root}>
 			<View
 				style={{
 					padding: 16,
@@ -99,3 +92,12 @@ function CollectionItem({
 }
 
 export default CollectionItem;
+
+const styles = StyleSheet.create({
+	root: {
+		flexDirection: 'row',
+		marginBottom: 16,
+		alignItems: 'center',
+		paddingRight: 4,
+	},
+});

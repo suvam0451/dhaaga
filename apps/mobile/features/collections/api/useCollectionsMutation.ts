@@ -57,9 +57,13 @@ export function useDbCollections() {
 			AccountCollectionService.toggleLink(db, collection, savedPost);
 		},
 		onSuccess: (data: any) => {
+			console.log('successfully toggled collection item');
 			void queryClient.invalidateQueries({
 				queryKey: ['db', 'accountCollection', acct?.id],
 			});
+		},
+		onError: (error) => {
+			console.log('failed to toggle collection item');
 		},
 	});
 

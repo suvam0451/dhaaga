@@ -9,38 +9,26 @@ import CollectionListItemView from './CollectionListItemView';
 import { AppCtaButton } from '../../../components/lib/Buttons';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { RefetchOptions } from '@tanstack/react-query';
-import { useState } from 'react';
-import { router } from 'expo-router';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 
 type CollectionListInteractorProps = {
 	items: AccountCollection[];
-	refetch: (options?: RefetchOptions) => Promise<any>;
+	onAdd: () => void;
+	onPress: (id: number) => void;
+	onLongPress: (id: number) => void;
+	refresh: () => void;
+	refreshing: boolean;
 };
 
-function CollectionListView({ items, refetch }: CollectionListInteractorProps) {
-	const [IsRefreshing, setIsRefreshing] = useState(false);
+function CollectionListView({
+	items,
+	onAdd,
+	onPress,
+	onLongPress,
+	refresh,
+	refreshing,
+}: CollectionListInteractorProps) {
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
-
-	function onRefresh() {
-		setIsRefreshing(true);
-		refetch().finally(() => {
-			setIsRefreshing(false);
-		});
-	}
-
-	function onAdd() {}
-
-	function onItemPress(id: number) {
-		router.navigate({
-			pathname: APP_ROUTING_ENUM.APP_FEATURE_COLLECTION,
-			params: {
-				id,
-			},
-		});
-	}
 
 	return (
 		<AppTopNavbar
@@ -51,22 +39,36 @@ function CollectionListView({ items, refetch }: CollectionListInteractorProps) {
 			<FlatList
 				data={items}
 				renderItem={({ item }) => (
-					<CollectionListItemView item={item} onPress={onItemPress} />
+					<CollectionListItemView
+						item={item}
+						onPress={() => {
+							onPress(item.id);
+						}}
+						onLongPress={() => {
+							onLongPress(item.id);
+						}}
+					/>
 				)}
 				contentContainerStyle={{
-					paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
+					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
 					paddingHorizontal: 10,
 				}}
 				ListHeaderComponent={
 					<AppText.Special
-						style={{ marginVertical: 24, color: theme.primary.a0 }}
+						style={{
+							marginVertical: 24,
+							fontSize: 32,
+							color: theme.primary.a0,
+						}}
 					>
 						Collections
 					</AppText.Special>
 				}
-				ListFooterComponent={<AppCtaButton onPress={onAdd} />}
+				ListFooterComponent={
+					<AppCtaButton label={'Add Collection'} onPress={onAdd} />
+				}
 				refreshControl={
-					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
+					<RefreshControl refreshing={refreshing} onRefresh={refresh} />
 				}
 			/>
 		</AppTopNavbar>

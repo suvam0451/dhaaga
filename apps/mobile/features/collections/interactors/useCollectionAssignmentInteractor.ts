@@ -3,6 +3,7 @@ import { useDbSavedPostStatus } from '../api/useCollectionsQuery';
 import { AccountCollection } from '../../../database/_schema';
 import { useDbCollections } from '../api/useCollectionsMutation';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import useCollections from './useCollections';
 
 /**
  * Helps add/remove a post to/from collections
@@ -13,6 +14,7 @@ import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 function useCollectionAssignmentInteractor(postId: string) {
 	const queryResult = useDbSavedPostStatus(postId);
 	const { togglePostToCollection } = useDbCollections();
+	const { add } = useCollections();
 
 	function toggleForCollection(
 		postId: string,
@@ -32,7 +34,12 @@ function useCollectionAssignmentInteractor(postId: string) {
 			});
 	}
 
-	return { ...queryResult, toggleForCollection };
+	function addCollection(text: string) {
+		add(text);
+		queryResult.refetch();
+	}
+
+	return { ...queryResult, toggleForCollection, addCollection };
 }
 
 export default useCollectionAssignmentInteractor;

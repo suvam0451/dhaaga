@@ -141,15 +141,15 @@ export function AppDialog() {
 								style={{
 									fontSize: 16,
 									textAlign: 'center',
-									marginTop: 20,
 									fontFamily: APP_FONTS.ROBOTO_500,
 									color: theme.primary.a0,
 									textDecorationLine: 'none',
+									paddingVertical: 20,
 								}}
 							/>
 						)}
 					</View>
-					<View style={{ marginTop: 32, marginBottom: 4 }}>
+					<View style={{ marginTop: 12, marginBottom: 4 }}>
 						{state.actions.map((action, i) => (
 							<DialogOption
 								key={i}
