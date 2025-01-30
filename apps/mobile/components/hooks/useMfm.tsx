@@ -15,6 +15,7 @@ import {
 } from '../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { TEXT_PARSING_VARIANT } from '../../types/app.types';
+import { TextContentView } from '../common/status/TextContentView';
 
 type Props = {
 	content: string;
@@ -39,6 +40,8 @@ type Props = {
  * @param acceptTouch
  * @param emphasis
  * @param nonInteractive makes the fragments not interactable
+ *
+ * @deprecated no longer using this...
  */
 function useMfm({
 	content,
@@ -94,14 +97,17 @@ function useMfm({
 		}
 
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			const nodes = FacetService.render(content, { fontFamily, emphasis });
+			const parsed = FacetService.parseTextContent(content);
 			setData({
 				isLoaded: true,
 				content: (
 					<WithAppMfmContext acceptTouch={_acceptTouch}>
-						<View style={{ height: 'auto' }}>
-							<Text style={fontStyle}>{nodes.map((node, i) => node)}</Text>
-						</View>
+						<TextContentView
+							tree={parsed}
+							variant={variant}
+							mentions={[]}
+							emojiMap={new Map()}
+						/>
 					</WithAppMfmContext>
 				),
 				aiContext: [],

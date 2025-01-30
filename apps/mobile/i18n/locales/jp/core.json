@@ -87,6 +87,9 @@
       "Limited": "限定"
     }
   },
+  "chatroom": {
+    "sendInterfacePlaceholder": "あなたのメッセージ"
+  },
   "setting": {
     "accountModule": {
       "title": "アカウント",

@@ -1,0 +1,28 @@
+{
+  "collections": {
+    "noBookmarkSupport": "あなたのプラットフォームはブックマークをサポートしていません。",
+    "noBookmarkRecommend": "コレクションは同様の効果を達成します。",
+    "collections": "コレクション",
+    "bookmark": "ブックマーク",
+    "bookmarkFeatures": [
+      "プラットフォーム機能",
+      "同期済み"
+    ]
+    "newCollection": "新しいコレクション",
+    "features": [
+      "プライベート",
+      "ローカルのみ"
+    ]
+  },
+  "hubAddFeedSheet": {
+    "title": "申し訳ありません \uD83D\uDE14",
+    "desc": [
+      "この機能は今後拡張される予定です！",
+      "デフォルトの宛先セットがあらかじめ設定されています。",
+      "Blueskyのユーザーは、今のところ自分のプロフィール（5番目のタブ）からフィードにアクセスできます。"
+    ]
+  },
+  "hubAddUserSheet": {
+    "searchPlaceholder": "ピン留めするユーザーを検索"
+  }
+}

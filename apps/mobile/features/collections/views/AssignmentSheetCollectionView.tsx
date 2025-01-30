@@ -6,6 +6,8 @@ import CollectionItem from '../components/CollectionItem';
 import { AccountCollection } from '../../../database/_schema';
 import { CollectionHasSavedPost } from '../api/useCollectionsQuery';
 import { appDimensions } from '../../../styles/dimensions';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	items: CollectionHasSavedPost[];
@@ -14,6 +16,8 @@ type Props = {
 
 function AssignmentSheetCollectionView({ items, toggle }: Props) {
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
+
 	return (
 		<View
 			style={{
@@ -31,7 +35,7 @@ function AssignmentSheetCollectionView({ items, toggle }: Props) {
 				<AppText.Medium
 					style={[styles.sectionLabel, { color: theme.secondary.a10 }]}
 				>
-					Collections
+					{t(`collections.collections`)}
 				</AppText.Medium>
 				<AppText.Medium
 					style={{
@@ -39,7 +43,7 @@ function AssignmentSheetCollectionView({ items, toggle }: Props) {
 						fontSize: 16,
 					}}
 				>
-					New collection
+					{t(`collections.newCollection`)}
 				</AppText.Medium>
 			</View>
 			{items.map((item, index) => (
@@ -51,7 +55,7 @@ function AssignmentSheetCollectionView({ items, toggle }: Props) {
 					activeTint={theme.primary.a0}
 					inactiveTint={theme.secondary.a30}
 					label={item.alias}
-					desc={['Private', 'Local Only']}
+					desc={t(`collections.features`, { returnObjects: true }) as string[]}
 					onPress={() => {
 						toggle(item);
 					}}

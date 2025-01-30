@@ -2,7 +2,7 @@ import {
 	useAppAcct,
 	useAppApiClient,
 	useAppDb,
-} from '../../utility/global-state-extractors';
+} from '../../../hooks/utility/global-state-extractors';
 import { useQuery } from '@tanstack/react-query';
 import ChatService, { AppChatRoom } from '../../../services/chat.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';

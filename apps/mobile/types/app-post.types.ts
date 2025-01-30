@@ -16,6 +16,8 @@ import { AccountSavedPost } from '../database/_schema';
 import MfmService from '../services/mfm.service';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../utils/theming.util';
 import { TextParserService } from '../services/text-parser.service';
+import ActivityPubService from '../services/activitypub.service';
+import FacetService from '../services/facets.service';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -283,20 +285,24 @@ export class AppStatusDtoService {
 			...input.getCachedEmojis(),
 		]);
 
-		const parsedContent = MfmService.renderMfm(input.getContent(), {
-			emojiMap,
-			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-			colorScheme: null,
-			variant: 'bodyContent',
-			nonInteractive: false,
-		});
-		const parsedDisplayName = MfmService.renderMfm(user.getDisplayName(), {
-			emojiMap,
-			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-			colorScheme: null,
-			variant: 'displayName',
-			nonInteractive: false,
-		});
+		const parsedContent = ActivityPubService.blueskyLike(domain)
+			? FacetService.parseTextContent(input.getContent())
+			: MfmService.renderMfm(input.getContent(), {
+					emojiMap,
+					emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+					colorScheme: null,
+					variant: 'bodyContent',
+					nonInteractive: false,
+				})?.parsed;
+		const parsedDisplayName = ActivityPubService.blueskyLike(domain)
+			? FacetService.parseTextContent(user.getDisplayName())
+			: MfmService.renderMfm(user.getDisplayName(), {
+					emojiMap,
+					emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+					colorScheme: null,
+					variant: 'displayName',
+					nonInteractive: false,
+				})?.parsed;
 
 		return {
 			uuid: RandomUtil.nanoId(),
@@ -307,13 +313,13 @@ export class AppStatusDtoService {
 				userId: user.getId(),
 				avatarUrl: user.getAvatarUrl(),
 				displayName: user.getDisplayName(),
-				parsedDisplayName: parsedDisplayName?.parsed || [],
+				parsedDisplayName: parsedDisplayName || [],
 				handle: handle,
 				instance: user.getInstanceUrl() || subdomain,
 			},
 			content: {
 				raw: input.getContent(),
-				parsed: parsedContent?.parsed || [],
+				parsed: parsedContent || [],
 				media:
 					medias?.map((o) => ({
 						height: o.getHeight(),

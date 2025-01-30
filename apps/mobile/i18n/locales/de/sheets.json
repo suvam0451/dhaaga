@@ -1,0 +1,28 @@
+{
+  "collections": {
+    "noBookmarkSupport": "Ihre Plattform unterstützt keine Lesezeichen.",
+    "noBookmarkRecommend": "Sammlungen erzielen einen ähnlichen Effekt.",
+    "collections": "Sammlungen",
+    "bookmark": "Lesezeichen",
+    "bookmarkFeatures": [
+      "Plattformfunktion",
+      "Synchronisiert"
+    ],
+    "newCollection": "Neue Sammlung",
+    "features": [
+      "Privat",
+      "Nur lokal"
+    ]
+  },
+  "hubAddFeedSheet": {
+    "title": "Sorry \uD83D\uDE14",
+    "desc": [
+      "Deze functie wordt in de toekomst uitgebreid!",
+      "Een standaard set bestemmingen is voor je ingesteld.",
+      "Bluesky-gebruikers kunnen hun feeds nu bekijken vanaf hun profiel (5e tabblad)."
+    ]
+  },
+  "hubAddUserSheet": {
+    "searchPlaceholder": "Zoek naar gebruikers om vast te pinnen"
+  }
+}

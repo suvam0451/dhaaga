@@ -83,6 +83,9 @@
       "Limited": "Beperkt"
     }
   },
+  "chatroom": {
+    "sendInterfacePlaceholder": "Jouw bericht"
+  },
   "setting": {
     "accountModule": {
       "title": "Konten",

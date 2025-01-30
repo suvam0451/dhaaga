@@ -88,6 +88,9 @@
       "Limited": "Limited"
     }
   },
+  "chatroom": {
+    "sendInterfacePlaceholder": "Your Message"
+  },
   "setting": {
     "accountModule": {
       "title": "Accounts",
