@@ -51,6 +51,7 @@
     "quickPost": "Quick Post",
     "quickPostCta": "What's on your mind?",
     "quickPostSubmit": "Post",
+    "noAttachments": "No attachments added",
     "landing": {
       "tComposeFull": "Create a Post",
       "dComposeFull": [
@@ -74,7 +75,18 @@
   "quickPost": {
     "spoilerPlaceholder": "Spoiler / Content Warning",
     "ctaPlaceholder": "What's on your mind?",
-    "postButton": "Post"
+    "postButton": "Post",
+    "visibility": {
+      "public": "Public",
+      "unlisted": "Home",
+      "direct": "Direct",
+      "private": "Followers"
+    },
+    "interactivity": {
+      "everybody": "Everyone",
+      "nobody": "Only Me",
+      "Limited": "Limited"
+    }
   },
   "setting": {
     "accountModule": {

@@ -48,11 +48,14 @@ function ComposeMediaTargets() {
 	function onAltPress(idx: number) {
 		show(
 			{
-				title: 'Edit Alt Text',
+				title: 'Alt Text',
 				actions: [],
-				description: ['Set/Update your alt text for this image.'],
+				description: [
+					'See alt text for this image.',
+					'Submit empty string to remove.',
+				],
 			},
-			state.medias[idx].remoteAlt || '',
+			state.medias[idx].remoteAlt || 'Enter new alt text',
 			(text: string) => {
 				altInputCallback(idx, text);
 			},
@@ -197,7 +200,7 @@ function ComposeMediaTargets() {
 									}}
 									style={styles.button}
 								>
-									<AppIcon id="close-outline" size={24} color={'red'} />
+									<AntDesign name="close" size={24} color={'red'} />
 								</Pressable>
 							</View>
 						</View>

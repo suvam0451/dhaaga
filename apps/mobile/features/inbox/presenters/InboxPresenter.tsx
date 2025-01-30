@@ -1,0 +1,106 @@
+import {
+	useAppAcct,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
+import AppNoAccount from '../../../components/error-screen/AppNoAccount';
+import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
+import { useRef, useState } from 'react';
+import PagerView from 'react-native-pager-view';
+import { View, StyleSheet } from 'react-native';
+import { BottomNavBar } from '../../../components/shared/pager-view/BottomNavBar';
+import MentionPresenter from './MentionPresenter';
+import ChatroomPresenter from './ChatroomPresenter';
+import SocialUpdatePresenter from './SocialUpdatePresenter';
+import UpdatesPresenter from './UpdatesPresenter';
+
+const renderScene = (index: number) => {
+	switch (index) {
+		case 0:
+			return <MentionPresenter />;
+		case 1:
+			return <ChatroomPresenter />;
+		case 2:
+			return <SocialUpdatePresenter />;
+		case 3:
+			return <UpdatesPresenter />;
+		default:
+			return <View />;
+	}
+};
+
+function InboxPresenter() {
+	const { theme } = useAppTheme();
+	const { acct } = useAppAcct();
+	const [TabIndex, setTabIndex] = useState(0);
+
+	const ref = useRef<PagerView>(null);
+
+	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.INBOX} />;
+
+	/**
+	 *	---- User Logged In ----
+	 */
+
+	const tabLabels = [
+		{
+			label: 'Mentions',
+			id: 'mentions',
+		},
+		{
+			label: 'Chat',
+			id: 'social',
+		},
+		{
+			label: 'Social',
+			id: 'chat',
+		},
+		{
+			label: 'Updates',
+			id: 'updates',
+		},
+	];
+
+	function onChipSelected(index: number) {
+		if (TabIndex !== index) {
+			ref.current.setPage(index);
+		}
+	}
+
+	function onPagerViewScroll(e: any) {
+		const { offset, position } = e.nativeEvent;
+		const nextIdx = Math.round(position + offset);
+		setTabIndex(nextIdx);
+	}
+
+	return (
+		<View style={[styles.root, { backgroundColor: theme.background.a0 }]}>
+			<PagerView
+				ref={ref}
+				scrollEnabled={false}
+				style={{ flex: 1 }}
+				initialPage={TabIndex}
+				onPageScroll={onPagerViewScroll}
+			>
+				{Array.from({ length: tabLabels.length }).map((_, index) => (
+					<View key={index} style={{ flex: 1 }}>
+						{renderScene(index)}
+					</View>
+				))}
+			</PagerView>
+			<BottomNavBar
+				Index={TabIndex}
+				setIndex={onChipSelected}
+				items={tabLabels}
+			/>
+		</View>
+	);
+}
+
+export default InboxPresenter;
+
+const styles = StyleSheet.create({
+	root: {
+		height: '100%',
+		position: 'relative',
+	},
+});

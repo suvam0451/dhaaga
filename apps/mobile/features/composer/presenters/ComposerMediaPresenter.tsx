@@ -19,6 +19,8 @@ import ActivityPubProviderService from '../../../services/activitypub-provider.s
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import useComposer from '../interactors/useComposer';
 import { AppText } from '../../../components/lib/Text';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 function ComposerMediaPresenter() {
 	const { driver } = useAppApiClient();
@@ -27,6 +29,7 @@ function ComposerMediaPresenter() {
 	const { state, dispatch } = useComposerCtx();
 	const { theme } = useAppTheme();
 	const { toHome } = useComposer();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	/**
 	 * Lets the user select an image item
@@ -146,7 +149,7 @@ function ComposerMediaPresenter() {
 						},
 					]}
 				>
-					No attachments added
+					{t(`composer.noAttachments`)}
 				</AppText.Medium>
 			)}
 		</View>

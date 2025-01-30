@@ -66,7 +66,14 @@ export type AppDialogInstanceState = {
 	actions: {
 		label: string;
 		onPress: () => Promise<void>;
-		variant?: 'default' | 'important' | 'dismiss' | 'warning' | 'destructive';
+		variant?:
+			| 'default'
+			| 'switch'
+			| 'important'
+			| 'dismiss'
+			| 'warning'
+			| 'destructive';
+		selected?: boolean;
 	}[];
 };
 

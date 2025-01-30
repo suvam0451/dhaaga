@@ -49,7 +49,6 @@ function WithAppNotifSeenContext({ children }: Props) {
 		setNotificationCount(UnseenCount);
 	}, [UnseenCount]);
 
-	// const Seen = useRef(new Set<string>());
 	const [Seen, setSeen] = useState(new Set<string>());
 
 	const All = useRef(new Set<string>());

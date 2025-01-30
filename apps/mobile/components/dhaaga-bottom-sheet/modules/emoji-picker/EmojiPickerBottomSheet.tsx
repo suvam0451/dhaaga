@@ -7,9 +7,12 @@ import emojiPickerReducer, {
 	EMOJI_PICKER_REDUCER_ACTION,
 } from './emojiPickerReducer';
 import EmojiPickerSearchResults from './fragments/EmojiPickerSearchResults';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import {
+	useAccountManager,
+	useAppAcct,
+	useAppApiClient,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
 import SelectedEmojiPreview from './fragments/SelectedEmojiPreview';
 import { AppBottomSheetMenu } from '../../../lib/Menu';
@@ -61,13 +64,9 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
  */
 const EmojiPickerBottomSheet = memo(
 	({ onAccept, onCancel, isProcessing }: EmojiPickerBottomSheetProps) => {
-		const { driver, acct, acctManager } = useGlobalState(
-			useShallow((o) => ({
-				driver: o.driver,
-				acct: o.acct,
-				acctManager: o.acctManager,
-			})),
-		);
+		const { driver } = useAppApiClient();
+		const { acct } = useAppAcct();
+		const { acctManager } = useAccountManager();
 		const { theme } = useAppTheme();
 		const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 

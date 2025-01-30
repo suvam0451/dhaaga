@@ -2,9 +2,10 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { AppIcon } from '../../../components/lib/Icon';
 import { Ionicons } from '@expo/vector-icons';
+import { AppText } from '../../../components/lib/Text';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 const ICON_SIZE = 26;
-const ICON_HORIZONTAL_PADDING = 6;
 
 type Props = {
 	canUseCw: boolean;
@@ -64,12 +65,7 @@ function ComposerActionListView({
 	return (
 		<View style={styles.root}>
 			{canUseMedia && (
-				<Pressable
-					style={{
-						paddingHorizontal: ICON_HORIZONTAL_PADDING,
-					}}
-					onPress={onMediaPressed}
-				>
+				<Pressable style={styles.pressableContainer} onPress={onMediaPressed}>
 					<AppIcon
 						id={'images'}
 						size={ICON_SIZE}
@@ -78,22 +74,13 @@ function ComposerActionListView({
 					/>
 				</Pressable>
 			)}
-			{!canUseVideo && (
-				<Pressable
-					style={{
-						paddingHorizontal: ICON_HORIZONTAL_PADDING,
-					}}
-				>
+			{canUseVideo && (
+				<Pressable style={styles.pressableContainer}>
 					<Ionicons name="videocam" size={ICON_SIZE} color={DEFAULT_COLOR} />
 				</Pressable>
 			)}
 			{canUseCw && (
-				<Pressable
-					style={{
-						paddingHorizontal: ICON_HORIZONTAL_PADDING,
-					}}
-					onPress={onCwPressed}
-				>
+				<Pressable style={styles.pressableContainer} onPress={onCwPressed}>
 					<Ionicons
 						name="warning"
 						size={ICON_SIZE}
@@ -104,9 +91,7 @@ function ComposerActionListView({
 			)}
 			{canUseCustomEmoji && (
 				<Pressable
-					style={{
-						paddingHorizontal: ICON_HORIZONTAL_PADDING,
-					}}
+					style={styles.pressableContainer}
 					onPress={onCustomEmojiPressed}
 				>
 					<Ionicons
@@ -117,16 +102,46 @@ function ComposerActionListView({
 					/>
 				</Pressable>
 			)}
+			{canUseGif && (
+				<Pressable style={styles.pressableContainer}>
+					<AppText.Medium
+						style={{
+							fontSize: 18,
+							color: DEFAULT_COLOR,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+						}}
+					>
+						GIF
+					</AppText.Medium>
+				</Pressable>
+			)}
+			<Pressable style={styles.pressableContainer}>
+				<AppText.Medium
+					style={{
+						fontSize: 18,
+						color: DEFAULT_COLOR,
+						fontFamily: APP_FONTS.INTER_500_MEDIUM,
+					}}
+				>
+					EN
+				</AppText.Medium>
+			</Pressable>
 		</View>
 	);
 }
 
 export default ComposerActionListView;
 
+const ICON_HORIZONTAL_PADDING = 6;
+
 const styles = StyleSheet.create({
 	root: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		flex: 1,
+	},
+	pressableContainer: {
+		paddingVertical: 10,
+		paddingHorizontal: ICON_HORIZONTAL_PADDING,
 	},
 });

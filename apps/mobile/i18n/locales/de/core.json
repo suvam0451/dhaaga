@@ -70,7 +70,18 @@
   "quickPost": {
     "spoilerPlaceholder": "Spoiler / Inhoudswaarschuwing",
     "ctaPlaceholder": "Waar denk je aan?",
-    "postButton": "Plaatsen"
+    "postButton": "Plaatsen",
+    "visibility": {
+      "public": "Openbaar",
+      "unlisted": "Thuis",
+      "direct": "Direct",
+      "private": "Volgers"
+    },
+    "interactivity": {
+      "everybody": "Iedereen",
+      "nobody": "Alleen ik",
+      "Limited": "Beperkt"
+    }
   },
   "setting": {
     "accountModule": {

@@ -12,7 +12,10 @@ import enDialogs from './locales/en/dialogs.json';
 import jpCore from './locales/jp/core.json';
 import jpGuides from './locales/jp/guides.json';
 import jpGlossary from './locales/jp/glossary.json';
+import jpDialogs from './locales/jp/dialogs.json';
 // de
+import deCore from './locales/de/core.json';
+import deDialogs from './locales/de/dialogs.json';
 
 const resources = {
 	en: {
@@ -22,7 +25,16 @@ const resources = {
 		sheets: enSheets,
 		dialogs: enDialogs,
 	},
-	jp: { core: jpCore, guides: jpGuides, glossary: jpGlossary },
+	jp: {
+		core: jpCore,
+		guides: jpGuides,
+		glossary: jpGlossary,
+		dialogs: jpDialogs,
+	},
+	de: {
+		core: deCore,
+		dialogs: deDialogs,
+	},
 };
 
 const initI18n = async () => {
