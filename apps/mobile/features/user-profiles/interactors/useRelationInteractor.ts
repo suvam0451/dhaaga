@@ -6,7 +6,6 @@ import {
 	MisskeyRestClient,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
-import { UserDetailed } from 'misskey-js/built/autogen/models';
 import ActivitypubRelationService from '../../../services/approto/activitypub-relation.service';
 import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 import { AppBskyActorGetProfile } from '@atproto/api';
@@ -143,7 +142,7 @@ function useRelationInteractor(id: string) {
 		});
 	}
 
-	function setMisskeyRelation({ data, error }: LibraryResponse<UserDetailed>) {
+	function setMisskeyRelation({ data, error }: LibraryResponse<any>) {
 		if (error) {
 			setRelation({
 				...Relation,
