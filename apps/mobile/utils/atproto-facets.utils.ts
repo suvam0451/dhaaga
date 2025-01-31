@@ -30,7 +30,7 @@ export class UnicodeString {
 /**
  * Notably, @suvam@mastodon.social would not be supported
  */
-export function detectFacets(_text: string): Facet[] | undefined {
+export function generateFacets(_text: string): Facet[] | undefined {
 	const text = new UnicodeString(_text);
 	let match;
 	const facets: Facet[] = [];

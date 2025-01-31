@@ -1,4 +1,4 @@
-import { detectFacets } from '../utils/atproto-facets.utils';
+import { generateFacets } from '../utils/atproto-facets.utils';
 import { AppParsedTextNodes } from '../types/parsed-text.types';
 import { RandomUtil } from '../utils/random.utils';
 
@@ -23,7 +23,7 @@ class FacetService {
 	static parseTextContent(input: string): AppParsedTextNodes {
 		if (!input) return [];
 
-		const results = detectFacets(input);
+		const results = generateFacets(input);
 		const byteArray: Uint8Array = toUtf8(input);
 
 		const elements = [];
@@ -40,7 +40,7 @@ class FacetService {
 		for (const result of results) {
 			// The raw text segments between facet segments
 			const prefix = byteArray.slice(idx, result.index.byteStart);
-			elements[0].push({
+			elements[0].nodes.push({
 				uuid: RandomUtil.nanoId(),
 				nodes: [],
 				type: 'text',

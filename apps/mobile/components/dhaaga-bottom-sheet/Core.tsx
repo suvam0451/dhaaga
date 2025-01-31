@@ -5,7 +5,7 @@ import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetQuickPost from './modules/AppBottomSheetQuickPost';
 import WithComposerContext from '../../features/composer/contexts/useComposerCtx';
 import ComposerPresenter from '../../features/composer/presenters/ComposerPresenter';
-import AppBottomSheetProfilePeek from './modules/profile-peek/AppBottomSheetProfilePeek';
+import UserPeekSheetPresenter from '../../features/user-profiles/presenters/UserPeekSheetPresenter';
 import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActions';
 import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from './modules/select-account/AppBottomSheetSelectAccount';
@@ -51,7 +51,7 @@ function Factory() {
 				</WithComposerContext>
 			);
 		case APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK:
-			return <AppBottomSheetProfilePeek />;
+			return <UserPeekSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
 			return <AppBottomSheetPostMoreActions />;
 		case APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS:

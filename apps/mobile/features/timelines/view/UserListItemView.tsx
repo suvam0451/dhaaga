@@ -6,7 +6,7 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { AppDivider } from '../../../components/lib/Divider';
 import { appDimensions } from '../../../styles/dimensions';
 import { useState } from 'react';
-import UserViewProfileStats from '../../../components/common/user/fragments/UserViewProfileStats';
+import ProfileStatView from '../../user-profiles/view/ProfileStatView';
 import UserRelationPresenter from '../../user-profiles/presenters/UserRelationPresenter';
 import { TextContentView } from '../../../components/common/status/TextContentView';
 
@@ -126,7 +126,7 @@ function UserListItemView({ item }: SearchResultUserItemProps) {
 					}}
 				>
 					<View style={{ flex: 1 }}>
-						<UserViewProfileStats
+						<ProfileStatView
 							userId={item.id}
 							postCount={item.stats.posts}
 							followingCount={item.stats.following}

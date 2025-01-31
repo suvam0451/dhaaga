@@ -15,7 +15,7 @@ import {
 	ChatroomReducerActionType,
 	chatroomReducerDefault,
 } from '../../../states/interactors/chatroom.reducer';
-import { detectFacets } from '../../../utils/atproto-facets.utils';
+import { generateFacets } from '../../../utils/atproto-facets.utils';
 import { ChatMiddleware } from '../../../services/middlewares/chat.middleware';
 
 function useChatroom() {
@@ -70,7 +70,7 @@ function useChatroom() {
 	async function sendMessage(msg: string) {
 		const sentMessageResult = await client.notifications.sendMessage(roomId, {
 			text: msg,
-			facets: detectFacets(msg),
+			facets: generateFacets(msg),
 		});
 		if (sentMessageResult.error) {
 			throw new Error(sentMessageResult.error.message);

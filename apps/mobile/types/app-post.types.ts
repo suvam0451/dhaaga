@@ -17,7 +17,7 @@ import MfmService from '../services/mfm.service';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../utils/theming.util';
 import { TextParserService } from '../services/text-parser.service';
 import ActivityPubService from '../services/activitypub.service';
-import FacetService from '../services/facets.service';
+import { AtprotoService } from '../services/atproto.service';
 
 export const ActivityPubBoostedByDto = z.object({
 	userId: z.string(),
@@ -286,7 +286,7 @@ export class AppStatusDtoService {
 		]);
 
 		const parsedContent = ActivityPubService.blueskyLike(domain)
-			? FacetService.parseTextContent(input.getContent())
+			? AtprotoService.processTextContent(input.getContent(), input.getFacets())
 			: MfmService.renderMfm(input.getContent(), {
 					emojiMap,
 					emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
@@ -295,7 +295,19 @@ export class AppStatusDtoService {
 					nonInteractive: false,
 				})?.parsed;
 		const parsedDisplayName = ActivityPubService.blueskyLike(domain)
-			? FacetService.parseTextContent(user.getDisplayName())
+			? [
+					{
+						uuid: RandomUtil.nanoId(),
+						type: 'para',
+						nodes: [
+							{
+								uuid: RandomUtil.nanoId(),
+								type: 'text',
+								text: user.getDisplayName(),
+							},
+						],
+					},
+				]
 			: MfmService.renderMfm(user.getDisplayName(), {
 					emojiMap,
 					emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,

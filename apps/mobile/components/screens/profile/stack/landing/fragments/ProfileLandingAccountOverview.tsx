@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
-import UserViewProfileStats from '../../../../../common/user/fragments/UserViewProfileStats';
+import ProfileStatView from '../../../../../../features/user-profiles/view/ProfileStatView';
 import { AppUserObject } from '../../../../../../types/app-user.types';
 
 type ProfileAndSettingsProp = {
@@ -27,7 +27,7 @@ function ProfileAndSettings({ user: data }: ProfileAndSettingsProp) {
 						uri={data?.avatarUrl}
 					/>
 				</View>
-				<UserViewProfileStats
+				<ProfileStatView
 					userId={data?.id}
 					postCount={data?.stats?.posts}
 					followingCount={data?.stats?.following}

@@ -5,7 +5,7 @@ import { UserMiddleware } from '../../../services/middlewares/user.middleware';
 import {
 	useAppAcct,
 	useAppApiClient,
-} from '../../utility/global-state-extractors';
+} from '../../../hooks/utility/global-state-extractors';
 
 type Type = {
 	userId?: string;

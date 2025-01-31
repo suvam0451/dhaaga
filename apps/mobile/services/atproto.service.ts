@@ -1,9 +1,12 @@
 import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 import { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import { ActivityPubClient } from '@dhaaga/bridge';
-import { AppBskyActorDefs, AppBskyActorGetPreferences } from '@atproto/api';
+import {
+	AppBskyActorDefs,
+	AppBskyActorGetPreferences,
+	Facet,
+} from '@atproto/api';
 import { AppParsedTextNodes } from '../types/parsed-text.types';
-import { detectFacets } from '../utils/atproto-facets.utils';
 import { RandomUtil } from '../utils/random.utils';
 
 export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
@@ -79,25 +82,33 @@ class Service {
 	}
 
 	/**
-	 * process the facet nodes in text content
+	 * process the facet nodes, as marked in record
 	 * and return app compatible AST
 	 * @param input
+	 * @param facets
 	 */
-	static processTextContent(input: string): AppParsedTextNodes {
+	static processTextContent(
+		input: string,
+		facets: Facet[],
+	): AppParsedTextNodes {
 		if (!input) return [];
 
-		const results = detectFacets(input);
 		const byteArray: Uint8Array = Service.toUtf8(input);
 
 		const elements = [];
-		results.sort((a, b) => a.index.byteStart - b.index.byteStart);
 		let idx = 0,
 			count = 0;
 
-		for (const result of results) {
+		elements.push({
+			uuid: RandomUtil.nanoId(),
+			type: 'para',
+			nodes: [],
+		});
+
+		for (const facet of facets) {
 			// The raw text segments between facet segments
-			const prefix = byteArray.slice(idx, result.index.byteStart);
-			elements.push({
+			const prefix = byteArray.slice(idx, facet.index.byteStart);
+			elements[0].nodes.push({
 				uuid: RandomUtil.nanoId(),
 				nodes: [],
 				type: 'text',
@@ -106,36 +117,36 @@ class Service {
 			count++;
 
 			const midSegment = byteArray.slice(
-				result.index.byteStart,
-				result.index.byteEnd,
+				facet.index.byteStart,
+				facet.index.byteEnd,
 			);
-			switch (result.features[0].$type) {
+			switch (facet.features[0].$type) {
 				case 'app.bsky.richtext.facet#mention': {
-					elements.push({
+					elements[0].nodes.push({
 						type: 'mention',
 						uuid: RandomUtil.nanoId(),
 						text: Service.toUtf16(midSegment),
-						url: result.features[0]?.did,
+						url: facet.features[0]?.did,
 						nodes: [],
 					});
 					break;
 				}
 				case 'app.bsky.richtext.facet#link': {
-					elements.push({
+					elements[0].nodes.push({
 						type: 'link',
 						uuid: RandomUtil.nanoId(),
 						text: Service.toUtf16(midSegment),
-						url: result.features[0]?.uri,
+						url: facet.features[0]?.uri,
 						nodes: [],
 					});
 					break;
 				}
 				case 'app.bsky.richtext.facet#tag': {
-					elements.push({
+					elements[0].nodes.push({
 						type: 'tag',
 						uuid: RandomUtil.nanoId(),
 						text: Service.toUtf16(midSegment),
-						url: result.features[0]?.tag,
+						url: facet.features[0]?.tag,
 						nodes: [],
 					});
 
@@ -143,12 +154,12 @@ class Service {
 				}
 			}
 			count++;
-			idx = result.index.byteEnd;
+			idx = facet.index.byteEnd;
 		}
 
 		// The suffix raw text segment
 		const suffix = byteArray.slice(idx);
-		elements.push({
+		elements[0].nodes.push({
 			uuid: RandomUtil.nanoId(),
 			nodes: [],
 			type: 'text',

@@ -3,7 +3,7 @@ import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import {
 	ATPROTO_FACET_ENUM,
-	detectFacets,
+	generateFacets,
 } from '../../utils/atproto-facets.utils';
 import { AtpAgent, BlobRef, Facet } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../states/interactors/post-composer.reducer';
@@ -97,7 +97,7 @@ class AtprotoComposerService {
 			record.text = state.text;
 			record.facets = await this.resolveMentions(
 				agent,
-				detectFacets(state.text),
+				generateFacets(state.text),
 			);
 		}
 

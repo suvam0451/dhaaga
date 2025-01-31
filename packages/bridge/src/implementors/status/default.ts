@@ -167,6 +167,8 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return '';
 	}
 
+	getFacets = () => [];
+
 	getMediaAttachments(): MediaAttachmentInterface[] {
 		return [];
 	}
