@@ -1,0 +1,78 @@
+{
+  "composer": {
+    "setAltText": {
+      "title": "Alternatieve Tekst",
+      "description": [
+        "Bekijk de alternatieve tekst voor deze afbeelding.",
+        "Stuur een lege string in om te verwijderen."
+      ],
+      "placeholder": "Voer nieuwe alternatieve tekst in"
+    }
+  },
+  "hub": {
+    "profileAdd": {
+      "title": "Voeg Profiel Toe",
+      "description": [
+        "Profielen helpen je om je pins en hub lay-out te organiseren op basis van interesse."
+      ],
+      "placeholder": "Geef je profiel een naam",
+      "successToast": "Profiel succesvol toegevoegd!"
+    },
+    "profileDelete": {
+      "title": "Bevestig Verwijdering",
+      "description": [
+        "Weet je zeker dat je dit profiel wilt verwijderen?",
+        "Alle pins en opgeslagen lay-outs gaan verloren."
+      ],
+      "deleteConfirmOption": "Bevestigen en Verwijderen"
+    },
+    "profileEdit": {
+      "title": "Profiel Bewerken",
+      "description": [
+        "Je kunt dit profiel hernoemen of verwijderen."
+      ],
+      "descriptionAlt": [
+        "Je kunt alleen een standaard profiel hernoemen."
+      ],
+      "renameOption": "Hernoemen",
+      "deleteOption": "Verwijderen"
+    },
+    "profileRename": {
+      "title": "Profiel Hernoemen",
+      "description": [
+        "Geef dit profiel een nieuwe naam."
+      ],
+      "placeholder": "Geef je profiel een naam"
+    },
+    "tagAdd": {
+      "title": "Voeg Hashtag Toe",
+      "description": [
+        "Tags kunnen ook worden toegevoegd tijdens het bladeren door tijdlijnen (door op de tag te drukken)."
+      ],
+      "placeholder": "Naam van de tag",
+      "successToast": "Tag succesvol toegevoegd!"
+    },
+    "tagRemove": {
+    },
+    "tagEdit": {
+      "title": "Bewerk Vastgezette Tag",
+      "description": [
+        "Je kunt deze vastgezette tag hernoemen of verwijderen."
+      ]
+    },
+    "tagRename": {
+      "title": "Hernoem Vastgezette Tag",
+      "description": [
+        "Verander welke hashtag deze pin je naartoe brengt."
+      ],
+      "placeholder": "Werk je tag hier bij"
+    },
+    "userEdit": {
+      "title": "Bewerk Vastgezette Gebruiker",
+      "description": [
+        "Je kunt deze pin verwijderen.",
+        "Het herordenen wordt ondersteund in een toekomstige update."
+      ]
+    }
+  }
+}

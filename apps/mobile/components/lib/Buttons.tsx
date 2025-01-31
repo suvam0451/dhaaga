@@ -388,17 +388,19 @@ export const AppButtonBottomSheetAction = memo(
 );
 
 type AppCtaButtonProps = {
+	label: string;
 	onPress: () => void;
 	style?: StyleProp<ViewStyle>;
 };
 
 /**
  * This button appears on pages with a cta
+ * @param label
  * @param onPress
  * @param style
  * @constructor
  */
-export function AppCtaButton({ onPress, style }: AppCtaButtonProps) {
+export function AppCtaButton({ label, onPress, style }: AppCtaButtonProps) {
 	const { theme } = useAppTheme();
 	return (
 		<Pressable
@@ -411,14 +413,14 @@ export function AppCtaButton({ onPress, style }: AppCtaButtonProps) {
 					padding: 8,
 					borderRadius: 8,
 					paddingHorizontal: 16,
-					maxWidth: 128,
+					maxWidth: 196,
 					alignSelf: 'center',
 				}}
 			>
 				<AppText.SemiBold
 					style={{ color: 'black', textAlign: 'center', fontSize: 18 }}
 				>
-					Add Profile
+					{label}
 				</AppText.SemiBold>
 			</View>
 		</Pressable>

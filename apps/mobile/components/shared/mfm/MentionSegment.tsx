@@ -1,6 +1,4 @@
-import { Text } from 'react-native';
 import { RandomUtil } from '../../../utils/random.utils';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import {
 	useAppAcct,
 	useAppBottomSheet_Improved,
@@ -8,6 +6,8 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { TextParserService } from '../../../services/text-parser.service';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { AppText } from '../../lib/Text';
+import { TouchableOpacity } from 'react-native';
 
 type Props = {
 	value: string;
@@ -17,7 +17,7 @@ type Props = {
 
 function MentionSegment({ value, link, fontFamily }: Props) {
 	const { theme } = useAppTheme();
-	const { show } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet_Improved();
 	const { acct } = useAppAcct();
 
 	const k = RandomUtil.nanoId();
@@ -25,20 +25,23 @@ function MentionSegment({ value, link, fontFamily }: Props) {
 	const parsed = TextParserService.mentionTextToHandle(value, acct);
 
 	function onPress() {
+		setCtx({
+			did: link,
+		});
 		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 	}
 
 	return (
-		<Text
+		<AppText.Medium
 			key={k}
 			style={{
-				fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-				color: parsed.me ? theme.primary.a0 : theme.complementary.a0,
+				fontFamily,
+				color: parsed.me ? theme.primary.a0 : theme.complementaryB.a0,
 			}}
 			onPress={onPress}
 		>
 			{parsed.text}
-		</Text>
+		</AppText.Medium>
 	);
 }
 

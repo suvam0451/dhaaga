@@ -3,7 +3,7 @@ import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import {
 	ATPROTO_FACET_ENUM,
-	detectFacets,
+	generateFacets,
 } from '../../utils/atproto-facets.utils';
 import { AtpAgent, BlobRef, Facet } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../states/interactors/post-composer.reducer';
@@ -97,7 +97,7 @@ class AtprotoComposerService {
 			record.text = state.text;
 			record.facets = await this.resolveMentions(
 				agent,
-				detectFacets(state.text),
+				generateFacets(state.text),
 			);
 		}
 
@@ -139,12 +139,12 @@ class AtprotoComposerService {
 		/**
 		 * Thanks Graysky again!
 		 */
-		if (state.visibilityRules.length > 0) {
-			const _none = state.visibilityRules.find((v) => v.type === 'nobody');
+		if (state.threadGates.length > 0) {
+			const _none = state.threadGates.find((v) => v.type === 'nobody');
 			if (_none) return await this.getPost(client, result.uri);
 			const allow = [];
 
-			for (const rule of state.visibilityRules) {
+			for (const rule of state.threadGates) {
 				if (rule.type === 'mentioned') {
 					allow.push({ $type: 'app.bsky.feed.threadgate#mentionRule' });
 				} else if (rule.type === 'following') {

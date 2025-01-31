@@ -1,11 +1,11 @@
-import { Fragment, memo, useMemo } from 'react';
+import { Fragment } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetQuickPost from './modules/AppBottomSheetQuickPost';
-import WithComposerContext from './modules/post-composer/api/useComposerContext';
-import PostCompose from './modules/post-composer/pages/PostCompose';
-import AppBottomSheetProfilePeek from './modules/profile-peek/AppBottomSheetProfilePeek';
+import WithComposerContext from '../../features/composer/contexts/useComposerCtx';
+import ComposerPresenter from '../../features/composer/presenters/ComposerPresenter';
+import UserPeekSheetPresenter from '../../features/user-profiles/presenters/UserPeekSheetPresenter';
 import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActions';
 import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from './modules/select-account/AppBottomSheetSelectAccount';
@@ -36,77 +36,68 @@ import FeedAddSheetPresenter from '../../features/social-hub/presenters/FeedAddS
  * Responsible for generating content
  */
 function Factory() {
-	const { type, stateId } = useAppBottomSheet_Improved();
-	return useMemo(() => {
-		switch (type) {
-			case APP_BOTTOM_SHEET_ENUM.QUICK_POST:
-				return <AppBottomSheetQuickPost />;
-			case APP_BOTTOM_SHEET_ENUM.ADD_PROFILE:
+	const { type } = useAppBottomSheet_Improved();
+	switch (type) {
+		case APP_BOTTOM_SHEET_ENUM.QUICK_POST:
+			return <AppBottomSheetQuickPost />;
+		case APP_BOTTOM_SHEET_ENUM.ADD_PROFILE:
 
-			case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
-				return <ABS_Add_Profile />;
-			case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
-				return (
-					<WithComposerContext textSeed={null}>
-						<PostCompose />
-					</WithComposerContext>
-				);
-			case APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK:
-				return <AppBottomSheetProfilePeek />;
-			case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
-				return <AppBottomSheetPostMoreActions />;
-			case APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS:
-				return <AppBottomSheetReactionDetails />;
-			case APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT:
-				return <AppBottomSheetSelectAccount />;
-			case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
-				return <AppBottomSheetPickThemePack />;
-			case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:
-				return <TimelineControllerSheetPresenter />;
-			case APP_BOTTOM_SHEET_ENUM.LINK:
-				return <AppBottomSheetLinkPreview />;
-			case APP_BOTTOM_SHEET_ENUM.HASHTAG:
-				return <AppBottomSheetHashtag />;
-			case APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS:
-				return <AppBottomSheetUserMoreActions />;
-			case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
-				return <CollectionAssignmentSheetPresenter />;
-			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
-				return <TagAddSheetPresenter />;
-			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
-				return <UserAddSheetPresenter />;
-			case APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED:
-				return <FeedAddSheetPresenter />;
-			case APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES:
-				return <ABS_Post_Show_Comments />;
-			case APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES:
-				return <ABS_Post_Show_Likes />;
-			case APP_BOTTOM_SHEET_ENUM.POST_SHOW_SHARES:
-				return <ABS_Post_Show_Shares />;
-			case APP_BOTTOM_SHEET_ENUM.POST_PREVIEW:
-				return <ABS_Post_Preview />;
-			case APP_BOTTOM_SHEET_ENUM.ADD_REACTION:
-				return <ABS_Add_Reaction />;
+		case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
+			return <ABS_Add_Profile />;
+		case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
+			return (
+				<WithComposerContext textSeed={null}>
+					<ComposerPresenter />
+				</WithComposerContext>
+			);
+		case APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK:
+			return <UserPeekSheetPresenter />;
+		case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
+			return <AppBottomSheetPostMoreActions />;
+		case APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS:
+			return <AppBottomSheetReactionDetails />;
+		case APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT:
+			return <AppBottomSheetSelectAccount />;
+		case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
+			return <AppBottomSheetPickThemePack />;
+		case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:
+			return <TimelineControllerSheetPresenter />;
+		case APP_BOTTOM_SHEET_ENUM.LINK:
+			return <AppBottomSheetLinkPreview />;
+		case APP_BOTTOM_SHEET_ENUM.HASHTAG:
+			return <AppBottomSheetHashtag />;
+		case APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS:
+			return <AppBottomSheetUserMoreActions />;
+		case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
+			return <CollectionAssignmentSheetPresenter />;
+		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
+			return <TagAddSheetPresenter />;
+		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
+			return <UserAddSheetPresenter />;
+		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED:
+			return <FeedAddSheetPresenter />;
+		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES:
+			return <ABS_Post_Show_Comments />;
+		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES:
+			return <ABS_Post_Show_Likes />;
+		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_SHARES:
+			return <ABS_Post_Show_Shares />;
+		case APP_BOTTOM_SHEET_ENUM.POST_PREVIEW:
+			return <ABS_Post_Preview />;
+		case APP_BOTTOM_SHEET_ENUM.ADD_REACTION:
+			return <ABS_Add_Reaction />;
 
-			default: {
-				return (
-					<WithComposerContext>
-						<PostCompose />
-					</WithComposerContext>
-				);
-			}
+		default: {
+			return (
+				<WithComposerContext>
+					<ComposerPresenter />
+				</WithComposerContext>
+			);
 		}
-	}, [type, stateId]);
+	}
 }
 
-/**
- * Switches what module will be shown
- * in the bottom sheet
- *
- * @param animStyle will animate the height
- * based on active module
- */
-const AppBottomSheet = memo(() => {
+function AppBottomSheet() {
 	const { animStyle } = useAnimatedHeight();
 
 	const { visible, hide, broadcastEndSession } = useAppBottomSheet_Improved();
@@ -138,7 +129,7 @@ const AppBottomSheet = memo(() => {
 				]}
 			>
 				{/* The little handle thingy on top of every bottom sheet */}
-				<View
+				<Animated.View
 					style={{
 						position: 'absolute',
 						alignItems: 'center',
@@ -149,7 +140,7 @@ const AppBottomSheet = memo(() => {
 						zIndex: 9000,
 					}}
 				>
-					<View
+					<Animated.View
 						style={{
 							height: 3,
 							width: 42,
@@ -158,12 +149,12 @@ const AppBottomSheet = memo(() => {
 							borderRadius: 16,
 						}}
 					/>
-				</View>
+				</Animated.View>
 				<Factory />
 			</Animated.View>
 		</Fragment>
 	);
-});
+}
 
 const styles = StyleSheet.create({
 	rootContainer: {

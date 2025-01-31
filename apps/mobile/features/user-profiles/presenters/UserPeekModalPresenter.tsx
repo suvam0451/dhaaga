@@ -10,7 +10,7 @@ import {
 	useAppModalState,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
+import useGetProfile from '../api/useGetProfile';
 import useAppNavigator from '../../../states/useAppNavigator';
 import useUserPeekInteractor from '../interactors/useUserPeekInteractor';
 import TaperedArrow from '../components/TaperedArrow';

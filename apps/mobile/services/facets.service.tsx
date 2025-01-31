@@ -1,11 +1,6 @@
-import { detectFacets } from '../utils/atproto-facets.utils';
-import RawTextSegment from '../components/shared/mfm/RawTextSegment';
-import MentionSegment from '../components/shared/mfm/MentionSegment';
-import LinkProcessor from '../components/common/link/LinkProcessor';
-import HashtagSegment from '../components/shared/mfm/HashtagSegment';
-
-import { APP_COLOR_PALETTE_EMPHASIS } from '../utils/theming.util';
-import { AppText } from '../components/lib/Text';
+import { generateFacets } from '../utils/atproto-facets.utils';
+import { AppParsedTextNodes } from '../types/parsed-text.types';
+import { RandomUtil } from '../utils/random.utils';
 
 function toUtf8(input: string): Uint8Array {
 	const encoder = new TextEncoder();
@@ -24,66 +19,69 @@ class FacetService {
 	 * as input and resolves embeds, links,
 	 * mentions etc.
 	 * @param input
-	 * @param fontFamily
-	 * @param emphasis
 	 */
-	static render(
-		input: string,
-		{
-			fontFamily,
-			emphasis,
-		}: { fontFamily?: string; emphasis?: APP_COLOR_PALETTE_EMPHASIS },
-	): JSX.Element[] {
+	static parseTextContent(input: string): AppParsedTextNodes {
 		if (!input) return [];
 
-		const results = detectFacets(input);
+		const results = generateFacets(input);
 		const byteArray: Uint8Array = toUtf8(input);
 
 		const elements = [];
+		// It is currently difficult to detect line breaks in at proto
+		elements.push({
+			uuid: RandomUtil.nanoId(),
+			type: 'para',
+			nodes: [],
+		});
 		results.sort((a, b) => a.index.byteStart - b.index.byteStart);
 		let idx = 0,
 			count = 0;
+
 		for (const result of results) {
-			const preSegment = byteArray.slice(idx, result.index.byteStart);
-			elements.push(
-				<AppText.Normal keygen emphasis={emphasis}>
-					{toUtf16(preSegment)}
-				</AppText.Normal>,
-			);
+			// The raw text segments between facet segments
+			const prefix = byteArray.slice(idx, result.index.byteStart);
+			elements[0].nodes.push({
+				uuid: RandomUtil.nanoId(),
+				nodes: [],
+				type: 'text',
+				text: toUtf16(prefix),
+			});
 			count++;
 
+			const midSegment = byteArray.slice(
+				result.index.byteStart,
+				result.index.byteEnd,
+			);
 			switch (result.features[0].$type) {
 				case 'app.bsky.richtext.facet#mention': {
-					elements.push(
-						<MentionSegment
-							key={count}
-							value={result.features[0]?.did as unknown as string}
-							fontFamily={fontFamily}
-							link={'https://weeb.sh'}
-						/>,
-					);
+					elements[0].nodes.push({
+						type: 'mention',
+						uuid: RandomUtil.nanoId(),
+						text: toUtf16(midSegment),
+						url: result.features[0]?.did,
+						nodes: [],
+					});
 					break;
 				}
 				case 'app.bsky.richtext.facet#link': {
-					elements.push(
-						<LinkProcessor
-							key={count}
-							url={result.features[0]?.uri as unknown as string}
-							displayName={result.features[0]?.uri as unknown as string}
-							fontFamily={fontFamily}
-							emphasis={emphasis}
-						/>,
-					);
+					elements[0].nodes.push({
+						type: 'link',
+						uuid: RandomUtil.nanoId(),
+						text: toUtf16(midSegment),
+						url: result.features[0]?.uri,
+						nodes: [],
+					});
 					break;
 				}
 				case 'app.bsky.richtext.facet#tag': {
-					elements.push(
-						<HashtagSegment
-							key={count}
-							value={result.features[0]?.tag as unknown as string}
-							fontFamily={fontFamily}
-						/>,
-					);
+					elements[0].nodes.push({
+						type: 'tag',
+						uuid: RandomUtil.nanoId(),
+						text: toUtf16(midSegment),
+						url: result.features[0]?.tag,
+						nodes: [],
+					});
+
 					break;
 				}
 			}
@@ -91,16 +89,14 @@ class FacetService {
 			idx = result.index.byteEnd;
 		}
 
-		// append trail
-		const trailSegment = byteArray.slice(idx);
-		elements.push(
-			<RawTextSegment
-				key={count}
-				value={toUtf16(trailSegment)}
-				fontFamily={fontFamily}
-				emphasis={emphasis}
-			/>,
-		);
+		// The suffix raw text segment
+		const suffix = byteArray.slice(idx);
+		elements[0].nodes.push({
+			uuid: RandomUtil.nanoId(),
+			nodes: [],
+			type: 'text',
+			text: toUtf16(suffix),
+		});
 
 		return elements;
 	}

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useComposerContext } from './useComposerContext';
+import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
 
@@ -7,7 +7,7 @@ const EMOJI_REGEX = /:[a-zA-Z_@]+?$/;
 const ACCT_REGEX = /(@[a-zA-Z_0-9.]+(@[a-zA-Z_0-9.]*)?)$/;
 
 function useInputGeneratePrompt() {
-	const { state, dispatch } = useComposerContext();
+	const { state, dispatch } = useComposerCtx();
 
 	function onSelectionChange(e: any) {
 		dispatch({

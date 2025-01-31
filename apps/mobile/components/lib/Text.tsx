@@ -113,6 +113,7 @@ export class AppText {
 		children,
 		numberOfLines,
 		emphasis,
+		onPress,
 	}: AppTextProps) {
 		const { theme } = useAppTheme();
 
@@ -128,6 +129,7 @@ export class AppText {
 				style={[_baseStyling, { color: _color }, style]}
 				numberOfLines={numberOfLines}
 				textBreakStrategy={'simple'}
+				onPress={onPress}
 			>
 				{children}
 			</Text>

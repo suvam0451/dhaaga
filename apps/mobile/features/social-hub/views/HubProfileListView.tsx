@@ -60,7 +60,7 @@ function HubProfileListView({
 										? theme.primary.a0
 										: theme.background.a30,
 								borderRadius: 8,
-								paddingHorizontal: 12,
+								paddingHorizontal: 10,
 							}}
 							onPress={() => {
 								if (index === tabLabels.length - 1) {

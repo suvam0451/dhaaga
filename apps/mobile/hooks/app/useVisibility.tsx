@@ -3,8 +3,9 @@ import { useMemo } from 'react';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Octicons from '@expo/vector-icons/Octicons';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../utility/global-state-extractors';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../types/app.types';
 
 export enum APP_POST_VISIBILITY {
 	PUBLIC = 'Public', // same in misskey
@@ -14,17 +15,14 @@ export enum APP_POST_VISIBILITY {
 }
 
 function useAppVisibility(visibility: APP_POST_VISIBILITY) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return useMemo(() => {
 		switch (visibility) {
 			case APP_POST_VISIBILITY.PUBLIC: {
 				return {
-					text: APP_POST_VISIBILITY.PUBLIC,
+					text: t(`quickPost.visibility.public`),
 					icon: (
 						<FontAwesome6
 							name="globe"
@@ -32,13 +30,12 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 							color={theme.complementary.a0}
 						/>
 					),
-					desc: 'Visible to all users',
 				};
 			}
 
 			case APP_POST_VISIBILITY.UNLISTED: {
 				return {
-					text: APP_POST_VISIBILITY.UNLISTED,
+					text: t(`quickPost.visibility.unlisted`),
 					icon: (
 						<FontAwesome5
 							name="home"
@@ -46,12 +43,11 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 							color={theme.complementary.a0}
 						/>
 					),
-					desc: 'Home timeline only',
 				};
 			}
 			case APP_POST_VISIBILITY.PRIVATE: {
 				return {
-					text: APP_POST_VISIBILITY.PRIVATE,
+					text: t(`quickPost.visibility.private`),
 					icon: (
 						<FontAwesome5
 							name="lock"
@@ -59,16 +55,14 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 							color={theme.complementary.a0}
 						/>
 					),
-					desc: 'Followers only',
 				};
 			}
 			case APP_POST_VISIBILITY.DIRECT: {
 				return {
-					text: APP_POST_VISIBILITY.DIRECT,
+					text: t(`quickPost.visibility.direct`),
 					icon: (
 						<Octicons name="mention" size={16} color={theme.complementary.a0} />
 					),
-					desc: 'Mentioned users only',
 				};
 			}
 			default:
@@ -82,7 +76,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 					),
 				};
 		}
-	}, [visibility, theme]);
+	}, [t, visibility, theme]);
 }
 
 export default useAppVisibility;

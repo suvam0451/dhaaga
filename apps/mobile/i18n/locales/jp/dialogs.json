@@ -1,0 +1,78 @@
+{
+  "composer": {
+    "setAltText": {
+      "title": "代替テキスト",
+      "description": [
+        "この画像の代替テキストを表示します。",
+        "空の文字列を送信して削除します。"
+      ],
+      "placeholder": "新しい代替テキストを入力してください"
+    }
+  },
+  "hub": {
+    "profileAdd": {
+      "title": "プロフィール追加",
+      "description": [
+        "プロフィールは、ピンやハブのレイアウトを興味に基づいて整理するのに役立ちます。"
+      ],
+      "placeholder": "プロフィールに名前を付けてください",
+      "successToast": "プロフィールが正常に追加されました！"
+    },
+    "profileDelete": {
+      "title": "削除の確認",
+      "description": [
+        "本当にこのプロフィールを削除してもよろしいですか？",
+        "すべてのピンと保存されたレイアウトが失われます。"
+      ],
+      "deleteConfirmOption": "確認して削除"
+    },
+    "profileEdit": {
+      "title": "プロフィールの編集",
+      "description": [
+        "このプロフィールの名前を変更するか、削除することができます。"
+      ],
+      "descriptionAlt": [
+        "デフォルトのプロフィールのみ名前を変更できます。"
+      ],
+      "renameOption": "名前変更",
+      "deleteOption": "削除"
+    },
+    "profileRename": {
+      "title": "プロフィール名の変更",
+      "description": [
+        "このプロフィールに新しい名前を付けてください。"
+      ],
+      "placeholder": "プロフィールに名前を付けてください"
+    },
+    "tagAdd": {
+      "title": "ハッシュタグ追加",
+      "description": [
+        "タイムラインを閲覧中に（タグを押すことで）タグを追加することもできます。"
+      ],
+      "placeholder": "タグの名前",
+      "successToast": "タグが正常に追加されました！"
+    },
+    "tagRemove": {
+    },
+    "tagEdit": {
+      "title": "ピン留めしたタグの変更",
+      "description": [
+        "このピン留めしたタグの名前を変更するか、削除することができます。"
+      ]
+    },
+    "tagRename": {
+      "title": "ピン留めしたタグの名前変更",
+      "description": [
+        "このピンが案内するハッシュタグを変更します。"
+      ],
+      "placeholder": "ここでタグを更新してください"
+    },
+    "userEdit": {
+      "title": "ピン留めしたユーザーの変更",
+      "description": [
+        "このピンを削除できます。",
+        "並べ替えは次回の更新でサポート予定です。"
+      ]
+    }
+  }
+}

@@ -11,6 +11,8 @@ import {
 } from '../../types/app-user.types';
 import MfmService from '../mfm.service';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import ActivityPubService from '../activitypub.service';
+import FacetService from '../facets.service';
 
 export class UserMiddleware {
 	static rawToInterface<T>(
@@ -57,20 +59,22 @@ export class UserMiddleware {
 			nonInteractive: false,
 		});
 
-		const parsedDescription = MfmService.renderMfm(input.getDescription(), {
-			emojiMap: input.getEmojiMap(),
-			emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-			colorScheme: null,
-			variant: 'bodyContent',
-			nonInteractive: false,
-		});
+		const parsedDescription = ActivityPubService.blueskyLike(driver)
+			? FacetService.parseTextContent(input.getDescription())
+			: MfmService.renderMfm(input.getDescription(), {
+					emojiMap: input.getEmojiMap(),
+					emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+					colorScheme: null,
+					variant: 'bodyContent',
+					nonInteractive: false,
+				})?.parsed;
 
 		const dto: AppUserObject = {
 			id: input.getId(),
 			displayName: input.getDisplayName(),
 			parsedDisplayName: parsedDisplayName?.parsed || [],
 			description: input.getDescription() || '',
-			parsedDescription: parsedDescription?.parsed || [],
+			parsedDescription: parsedDescription || [],
 			avatarUrl: input.getAvatarUrl(),
 			banner: input.getBannerUrl(),
 			handle: ActivitypubHelper.getHandle(

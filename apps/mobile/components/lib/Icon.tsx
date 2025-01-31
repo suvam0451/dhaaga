@@ -67,6 +67,7 @@ export type APP_ICON_ENUM =
 	| 'heart-outline'
 	| 'home'
 	| 'images'
+	| 'images-outline'
 	| 'info'
 	| 'language'
 	| 'layers-outline'
@@ -560,6 +561,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name="images"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'images-outline':
+				return (
+					<Ionicons
+						name="images-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}

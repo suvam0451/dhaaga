@@ -135,7 +135,7 @@ function ReactButton() {
 			activeIconId={'smiley'}
 			inactiveIconId={'smiley-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a10}
+			inactiveTint={theme.secondary.a20}
 			size={appDimensions.timelines.actionButtonSize}
 			style={styles.actionButton}
 			onPress={onPress}

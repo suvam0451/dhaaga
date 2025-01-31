@@ -7,6 +7,7 @@ import PostCreatedBy from './PostCreatedBy';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
 import { TextContentView } from '../TextContentView';
+import { AppText } from '../../../lib/Text';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -27,16 +28,14 @@ function QuoteIndicator() {
 				color={theme.complementary.a0}
 				style={{ width: 16 }}
 			/>
-			<Text
+			<AppText.SemiBold
 				style={{
 					color: theme.complementary.a0,
 					marginLeft: 4,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					fontSize: 13,
 				}}
 			>
 				Quoted this Post
-			</Text>
+			</AppText.SemiBold>
 		</View>
 	);
 }

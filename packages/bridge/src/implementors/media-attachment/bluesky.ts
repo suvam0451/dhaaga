@@ -100,12 +100,22 @@ class BlueskyVideoAttachmentAdapter implements MediaAttachmentInterface {
 }
 
 export const bskyEmbedExternalSchema = z.object({
-	$type: z.literal('app.bsky.embed.external'),
+	// Record
+	// $type: z.literal('app.bsky.embed.external'),
+	// external: z.object({
+	// 	uri: z.string(),
+	// 	title: z.string(),
+	// 	description: z.string(),
+	// 	thumb: z.any(),
+	// }),
+
+	// View
+	$type: z.literal('app.bsky.embed.external#view'),
 	external: z.object({
 		uri: z.string(),
 		title: z.string(),
 		description: z.string(),
-		thumb: z.any(),
+		thumb: z.string(),
 	}),
 });
 
@@ -133,7 +143,7 @@ class EmbedViewProcessor_External implements MediaAttachmentInterface {
 	}
 
 	static isCompatible(obj: any) {
-		const { success, error, data } = bskyEmbedExternalSchema.safeParse(obj);
+		const { success } = bskyEmbedExternalSchema.safeParse(obj);
 		return success;
 	}
 
@@ -151,18 +161,19 @@ class EmbedViewProcessor_External implements MediaAttachmentInterface {
 		return RandomUtil.nanoId();
 	}
 
-	getAltText = () => null;
+	getAltText = () => this.item.external.description;
 	getBlurHash = () => null;
 	getCreatedAt = () => new Date().toString();
 	getMeta = () => {};
 	getName = () => '';
-	getPreviewUrl = () => this.item.external.uri;
+	getPreviewUrl = () => this.item.external.thumb;
 	getUrl = () => this.item.external.uri;
 	getHeight = () => null;
 	getWidth = () => null;
 
 	getType(): string {
-		return this.item.external.thumb?.['mimeType'];
+		// anything other that jeffs supported?
+		return 'image/gif'; // this.item.external.thumb?.['mimeType'];
 	}
 
 	print(): void {

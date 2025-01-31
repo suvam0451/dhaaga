@@ -36,13 +36,6 @@ export class AppMessageDtoService {
 	): AppMessageObject {
 		if (!input) return null;
 		if (driver !== KNOWN_SOFTWARE.BLUESKY) return null;
-		// [NOTE] not returned for send messages
-		// if (input['$type'] !== 'chat.bsky.convo.defs#messageView') {
-		// 	console.log(
-		// 		'[WARN]: tried to deserialize an object that is not a message',
-		// 	);
-		// 	return null;
-		// }
 
 		return {
 			uuid: RandomUtil.nanoId(),

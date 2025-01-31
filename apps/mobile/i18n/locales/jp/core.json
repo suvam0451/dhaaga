@@ -71,6 +71,25 @@
       ]
     }
   },
+  "quickPost": {
+    "spoilerPlaceholder": "ネタバレ / コンテンツ警告",
+    "ctaPlaceholder": "何を考えていますか？",
+    "postButton": "投稿",
+    "visibility": {
+      "public": "公開",
+      "unlisted": "ホーム",
+      "direct": "ダイレクト",
+      "private": "フォロワー"
+    },
+    "interactivity": {
+      "everybody": "全員",
+      "nobody": "自分だけ",
+      "Limited": "限定"
+    }
+  },
+  "chatroom": {
+    "sendInterfacePlaceholder": "あなたのメッセージ"
+  },
   "setting": {
     "accountModule": {
       "title": "アカウント",

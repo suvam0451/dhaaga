@@ -1,6 +1,4 @@
 import { useCallback } from 'react';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 
 /**
  * Try to resolve (and cache)
@@ -8,13 +6,6 @@ import { useShallow } from 'zustand/react/shallow';
  * various methods
  */
 function useAppCustomEmoji() {
-	const { driver, acct } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			acct: o.acct,
-		})),
-	);
-
 	const find = useCallback((id: string, remoteSubdomain?: string): string => {
 		return '';
 	}, []);

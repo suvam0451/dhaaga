@@ -1,4 +1,14 @@
 {
+  "composer": {
+    "setAltText": {
+      "title": "Alt Text",
+      "description": [
+        "See alt text for this image.",
+        "Submit empty string to remove."
+      ],
+      "placeholder": "Enter new alt text"
+    }
+  },
   "hub": {
     "profileAdd": {
       "title": "Add Profile",

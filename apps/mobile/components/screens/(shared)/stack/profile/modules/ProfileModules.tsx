@@ -8,8 +8,8 @@ import { useAppTheme } from '../../../../../../hooks/utility/global-state-extrac
 import { AppText } from '../../../../../lib/Text';
 import StatusItem from '../../../../../common/status/StatusItem';
 import WithAppStatusItemContext from '../../../../../../hooks/ap-proto/useAppStatusItem';
-import SocialView from '../../../../notifications/landing/views/SocialView';
-import UpdatesView from '../../../../notifications/landing/views/UpdatesView';
+import SocialUpdatePresenter from '../../../../../../features/inbox/presenters/SocialUpdatePresenter';
+import UpdatesPresenter from '../../../../../../features/inbox/presenters/UpdatesPresenter';
 
 type AppPagerViewListProps = {
 	userId: string;
@@ -72,9 +72,9 @@ function ProfileModules({ profileId, acct }: ProfileModulesProps) {
 			case 1:
 				return <ProfilePinnedPosts previewedAcct={acct} userId={profileId} />;
 			case 2:
-				return <SocialView />;
+				return <SocialUpdatePresenter />;
 			case 3:
-				return <UpdatesView />;
+				return <UpdatesPresenter />;
 			default:
 				return null;
 		}

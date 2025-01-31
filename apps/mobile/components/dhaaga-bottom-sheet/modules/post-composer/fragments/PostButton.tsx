@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
-import { useComposerContext } from '../api/useComposerContext';
+import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubService from '../../../../../services/activitypub.service';
@@ -25,11 +25,11 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
  */
 function PostButton() {
 	const [Loading, setLoading] = useState(false);
-	const { state } = useComposerContext();
+	const { state } = useComposerCtx();
 	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { postPub } = useAppPublishers();
-	const { show, setCtx, ctx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet_Improved();
 
 	async function onClick() {
 		setLoading(true);

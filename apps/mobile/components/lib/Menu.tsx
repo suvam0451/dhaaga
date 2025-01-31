@@ -11,6 +11,8 @@ import { APP_ICON_ENUM, AppIcon } from './Icon';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { Loader } from './Loader';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import { appDimensions } from '../../styles/dimensions';
+import { AppText } from './Text';
 
 type AppMenuOptionType = {
 	appIconId: any;
@@ -231,7 +233,13 @@ export class AppBottomSheetMenu {
 	}: AppBottomSheetMenuWithBackNavigationProps) {
 		const { theme } = useAppTheme();
 		return (
-			<View style={[styles.cancelButtonContainer, style]}>
+			<View
+				style={[
+					styles.cancelButtonContainer,
+					{ backgroundColor: theme.background.a30 },
+					style,
+				]}
+			>
 				<Pressable
 					onPress={onBack}
 					style={{
@@ -249,7 +257,7 @@ export class AppBottomSheetMenu {
 							fontSize: 16,
 						}}
 					>
-						{backLabel || 'Go Back'}
+						{backLabel || 'Back'}
 					</Text>
 				</Pressable>
 				<View
@@ -283,17 +291,16 @@ export class AppBottomSheetMenu {
 							paddingVertical: 8,
 						}}
 					>
-						<Text
+						<AppText.Medium
 							style={{
 								color: nextEnabled ? theme.primary.a0 : theme.secondary.a20,
-								fontFamily: APP_FONTS.INTER_500_MEDIUM,
 								fontSize: 16,
 								textAlign: 'right',
 								marginLeft: 'auto',
 							}}
 						>
 							{nextLabel}
-						</Text>
+						</AppText.Medium>
 					</Pressable>
 				)}
 			</View>
@@ -307,6 +314,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		maxWidth: '100%',
 		marginBottom: 8,
-		marginTop: 12,
+		paddingTop: appDimensions.bottomSheet.clearanceTop,
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
 	},
 });

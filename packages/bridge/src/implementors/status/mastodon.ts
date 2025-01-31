@@ -128,6 +128,8 @@ class MastodonToStatusAdapter
 
 	getContent = () => this.ref.content;
 
+	getFacets = () => [];
+
 	print(): void {
 		console.log(this.ref);
 	}

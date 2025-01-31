@@ -10,9 +10,9 @@ import {
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import useGetProfile from '../../../hooks/api/accounts/useGetProfile';
+import useGetProfile from '../../../features/user-profiles/api/useGetProfile';
 import styles from './utils/styles';
-import UserViewProfileStats from './fragments/UserViewProfileStats';
+import ProfileStatView from '../../../features/user-profiles/view/ProfileStatView';
 import ProfileAvatar from './fragments/ProfileAvatar';
 import UserRelationPresenter from '../../../features/user-profiles/presenters/UserRelationPresenter';
 import ProfileModules from '../../screens/(shared)/stack/profile/modules/ProfileModules';
@@ -78,7 +78,7 @@ export function ProfileContextWrapped() {
 					imageStyle={localStyles.avatarImageContainer}
 					uri={avatarUrl}
 				/>
-				<UserViewProfileStats
+				<ProfileStatView
 					userId={acct?.id}
 					postCount={acct?.stats?.posts}
 					followingCount={acct?.stats?.following}

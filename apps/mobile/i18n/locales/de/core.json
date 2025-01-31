@@ -67,6 +67,25 @@
       ]
     }
   },
+  "quickPost": {
+    "spoilerPlaceholder": "Spoiler / Inhoudswaarschuwing",
+    "ctaPlaceholder": "Waar denk je aan?",
+    "postButton": "Plaatsen",
+    "visibility": {
+      "public": "Openbaar",
+      "unlisted": "Thuis",
+      "direct": "Direct",
+      "private": "Volgers"
+    },
+    "interactivity": {
+      "everybody": "Iedereen",
+      "nobody": "Alleen ik",
+      "Limited": "Beperkt"
+    }
+  },
+  "chatroom": {
+    "sendInterfacePlaceholder": "Jouw bericht"
+  },
   "setting": {
     "accountModule": {
       "title": "Konten",

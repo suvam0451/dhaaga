@@ -7,10 +7,15 @@ import { AppText } from '../../../components/lib/Text';
 
 type ReadOnlyViewProps = {
 	item: AccountCollection;
-	onPress: (idx: number) => void;
+	onPress: () => void;
+	onLongPress: () => void;
 };
 
-function CollectionListItemView({ onPress, item }: ReadOnlyViewProps) {
+function CollectionListItemView({
+	onPress,
+	onLongPress,
+	item,
+}: ReadOnlyViewProps) {
 	const { theme } = useAppTheme();
 	return (
 		<Pressable
@@ -20,9 +25,8 @@ function CollectionListItemView({ onPress, item }: ReadOnlyViewProps) {
 				alignItems: 'center',
 				paddingRight: 4,
 			}}
-			onPress={() => {
-				onPress(item.id);
-			}}
+			onPress={onPress}
+			onLongPress={onLongPress}
 		>
 			<View
 				style={{
@@ -38,6 +42,7 @@ function CollectionListItemView({ onPress, item }: ReadOnlyViewProps) {
 				<AppText.SemiBold
 					style={{
 						fontSize: 18,
+						color: theme.primary.a0,
 					}}
 				>
 					{item.alias}

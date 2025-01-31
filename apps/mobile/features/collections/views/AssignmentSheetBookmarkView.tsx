@@ -1,6 +1,9 @@
 import { StyleSheet, View } from 'react-native';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import CollectionItem from '../components/CollectionItem';
+import { appDimensions } from '../../../styles/dimensions';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type AssignmentSheetBookmarkViewProps = {
 	bookmarked: boolean;
@@ -12,21 +15,24 @@ function AssignmentSheetBookmarkView({
 	toggleBookmark,
 }: AssignmentSheetBookmarkViewProps) {
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
 	const TIP_TEXT_COLOR = theme.secondary.a40;
 
 	return (
 		<View
 			style={[
-				styles.sectionContainer,
+				styles.root,
 				{
 					backgroundColor: theme.background.a30,
 				},
 			]}
 		>
 			<CollectionItem
-				label={'Bookmark'}
-				desc={['Synced With Your Server']}
+				label={t(`collections.bookmark`)}
+				desc={
+					t(`collections.bookmarkFeatures`, { returnObjects: true }) as string[]
+				}
 				activeIconId={'bookmark'}
 				inactiveIconId={'bookmark-outline'}
 				active={bookmarked}
@@ -43,12 +49,12 @@ function AssignmentSheetBookmarkView({
 export default AssignmentSheetBookmarkView;
 
 const styles = StyleSheet.create({
-	sectionContainer: {
+	root: {
 		marginBottom: 16,
-		paddingTop: 36,
+		paddingTop: appDimensions.bottomSheet.clearanceTop + 8,
 		paddingHorizontal: 16,
-		borderTopLeftRadius: 32,
-		borderTopRightRadius: 32,
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
 	},
 	sectionLabel: {
 		fontSize: 20,

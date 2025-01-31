@@ -337,6 +337,7 @@ const styles = StyleSheet.create({
 		height: 48,
 		position: 'absolute',
 		bottom: 0,
+		width: '100%',
 	},
 	infiniteContainer: {
 		flexDirection: 'row',
@@ -362,6 +363,7 @@ const styles = StyleSheet.create({
 		zIndex: -1,
 	},
 	label: {
+		textAlign: 'center',
 		// fontWeight: '500',
 		fontSize: 18,
 		fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,

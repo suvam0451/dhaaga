@@ -22,7 +22,7 @@ export const appDimensions = {
 		scrollViewTopPadding: 44 + 2,
 	},
 	bottomSheet: {
-		borderRadius: 32,
+		borderRadius: 16,
 		clearanceTop: 24,
 	},
 };

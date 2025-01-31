@@ -1,4 +1,19 @@
 {
+  "collections": {
+    "noBookmarkSupport": "Your platform does not support bookmarks.",
+    "noBookmarkRecommend": "Collections achieve a similar effect.",
+    "collections": "Collections",
+    "bookmark": "Bookmark",
+    "bookmarkFeatures": [
+      "Platform Feature",
+      "Synced"
+    ],
+    "newCollection": "New Collection",
+    "features": [
+      "Private",
+      "Local Only"
+    ]
+  },
   "hubAddFeedSheet": {
     "title": "Sorry \uD83D\uDE14",
     "desc": [

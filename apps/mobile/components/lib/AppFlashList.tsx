@@ -6,14 +6,21 @@ import {
 	FlatList,
 	Pressable,
 	RefreshControl,
+	RefreshControlProps,
 	StyleSheet,
 	View,
 } from 'react-native';
-import { useEffect, useMemo, useState } from 'react';
+import {
+	JSXElementConstructor,
+	ReactElement,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import FlashListService, {
 	FlashListType_PinnedTag,
 } from '../../services/flashlist.service';
-import FlatListRenderer from '../screens/notifications/landing/fragments/FlatListRenderer';
+import NotificationItemPresenter from '../../features/inbox/presenters/NotificationItemPresenter';
 import { AppNotificationObject } from '../../types/app-notification.types';
 import {
 	Account,
@@ -231,6 +238,11 @@ type AppFlatListProps<
 	refreshing?: boolean;
 	onRefresh?: () => void;
 	ListHeaderComponent?: any;
+
+	refreshControl?: ReactElement<
+		RefreshControlProps,
+		string | JSXElementConstructor<any>
+	>;
 };
 
 type AppFlatListPinCategory<
@@ -343,6 +355,7 @@ export class AppFlashList {
 	static Mentions({
 		data,
 		ListHeaderComponent,
+		refreshControl,
 	}: AppFlatListProps<AppNotificationObject>) {
 		const listItems = useMemo(() => {
 			return FlashListService.notifications(data);
@@ -351,8 +364,9 @@ export class AppFlashList {
 		return (
 			<FlatList
 				data={listItems}
-				renderItem={({ item }) => <FlatListRenderer item={item} />}
+				renderItem={({ item }) => <NotificationItemPresenter item={item} />}
 				ListHeaderComponent={ListHeaderComponent}
+				refreshControl={refreshControl}
 			/>
 		);
 	}
@@ -374,6 +388,7 @@ export class AppFlashList {
 	static Chatrooms({
 		data,
 		ListHeaderComponent,
+		refreshControl,
 	}: AppFlatListProps<AppChatRoom>) {
 		return (
 			<FlatList
@@ -382,6 +397,7 @@ export class AppFlashList {
 					return <Chatroom_Item item={item} />;
 				}}
 				ListHeaderComponent={ListHeaderComponent}
+				refreshControl={refreshControl}
 			/>
 		);
 	}

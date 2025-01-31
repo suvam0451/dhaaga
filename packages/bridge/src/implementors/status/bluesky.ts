@@ -165,15 +165,21 @@ class BlueskyStatusAdapter implements StatusInterface {
 	 *
 	 * ^ a.k.a. quoted posts
 	 */
-	getContent = () => {
+	getContent() {
 		// handle pure reposts
-		if (this.isShare()) {
-			return null;
-		}
+		if (this.isShare()) return null;
 
 		// TODO: handle quotes
 		return (this.post?.record as any)?.text || (this.post?.value as any)?.text;
-	};
+	}
+
+	getFacets() {
+		// handle pure reposts
+		if (this.isShare()) return [];
+
+		// TODO: handle quotes
+		return (this.post?.record as any)?.facets || [];
+	}
 
 	getUser() {
 		if (this.isShare()) return this.reason!.by as ProfileViewBasic;

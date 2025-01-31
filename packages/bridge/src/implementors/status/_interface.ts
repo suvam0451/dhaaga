@@ -75,6 +75,8 @@ export interface StatusInterface {
 
 	getContent(): string | null | undefined;
 
+	getFacets(): any[];
+
 	getUser(): UserType | ProfileViewBasic | null;
 
 	isReposted(): boolean;

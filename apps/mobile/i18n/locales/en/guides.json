@@ -60,6 +60,42 @@
       "If you try to open a pin for an inactive account, a dialog box will help you switch and continue."
     ]
   },
+  "inbox": {
+    "label": "Guide (Inbox)",
+    "qPageIntro": "What does this page do?",
+    "aPageIntro": [
+      "In Dhaaga, your notifications are split into four tabs. This feature is also called \"Inbox Categories\".",
+      "Each tab presents the information in a format more suited for that category."
+    ],
+    "qTabMention": "What does the mentions tab show?",
+    "aTabMention": [
+      "The \"Mentions\" tab shows replies/quotes to your posts. It also shows posts where you are mentioned."
+    ],
+    "qTabChat": "What does the chat tab show?",
+    "aTabChat": [
+      "The \"Chat\" tab shows all conversations you are a participant in.",
+      "p.s. - Only Bluesky has dedicated chat features. Fediverse implementation will vary between software."
+    ],
+    "qTabSocial": "What does the social tab show?",
+    "aTabSocial": [
+      "The \"Social\" tab shows people who liked/shared your posts, as well as follower/following changes."
+    ],
+    "qTabUpdates": "What does the updates tab show?",
+    "aTabUpdates": [
+      "The \"Updates\" interface shows posts from users you are subscribed to.",
+      "p.s. - Subscribing to account updates is not implemented by Bluesky yet. So, the tab will be empty."
+    ],
+    "qWhyFewSettings": "How to customize my notifications?",
+    "aWhyFewSettings": [
+      "Additional settings and features are still being worked on."
+    ],
+    "qOneMoreThing": "One more thing...",
+    "aOneMoreThing": [
+      "Ok, two more things :)",
+      "1) All the buttons in Dhaaga are bottom aligned for easy one-handed use.",
+      "2) Swiping between tabs was disabled to make it easy to swipe media carousels (and motion sickness, obviously)."
+    ]
+  },
   "myAccount": {
     "label": "Guide (My Account)",
     "qPageIntro": "What does this page do?",

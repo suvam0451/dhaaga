@@ -2,18 +2,17 @@ import { produce } from 'immer';
 import { APP_POST_VISIBILITY } from '../../hooks/app/useVisibility';
 import { AppPostObject } from '../../types/app-post.types';
 import { Dispatch } from 'react';
-import {
-	InstanceApi_CustomEmojiDTO,
-	TagInterface,
-	UserInterface,
-} from '@dhaaga/bridge';
 import { ImagePickerAsset } from 'expo-image-picker';
+import { AutoFillResultsType } from '../../features/composer/types/composer.types';
 
 export type ThreadGateSetting =
 	| { type: 'nobody' }
 	| { type: 'following' }
 	| { type: 'mentioned' }
-	| { type: 'list'; list: string };
+	| {
+			type: 'list';
+			list: string;
+	  };
 
 export type PostComposer_MediaState = {
 	status: 'idle' | 'uploading' | 'uploaded' | 'failed';
@@ -25,12 +24,6 @@ export type PostComposer_MediaState = {
 	localAlt: string | null;
 	remoteAlt: string | null;
 	mimeType: string;
-};
-
-type Suggestion = {
-	accounts: UserInterface[];
-	hashtags: TagInterface[];
-	emojis: InstanceApi_CustomEmojiDTO[];
 };
 
 const defaultSuggestions = {
@@ -57,10 +50,11 @@ type State = {
 	visibility: APP_POST_VISIBILITY;
 	parent: AppPostObject | null;
 
-	suggestions: Suggestion;
+	suggestions: AutoFillResultsType;
 
 	// at proto
-	visibilityRules: ThreadGateSetting[];
+	threadGates: ThreadGateSetting[];
+	allowQuotes: boolean;
 };
 
 enum ACTION {
@@ -70,16 +64,13 @@ enum ACTION {
 	SET_MODE_MEDIA,
 	SWITCH_TO_EMOJI_TAB,
 	SWITCH_TO_TEXT_TAB,
-	SWITCH_TO_MEDIA_TAB,
-	// text content
+	SWITCH_TO_MEDIA_TAB, // text content
 	SET_TEXT,
-	CLEAR_TEXT,
-	// cw
+	CLEAR_TEXT, // cw
 	SET_CW,
 	TOGGLE_CW_SECTION_SHOWN,
 	SHOW_CW_SECTION,
-	HIDE_CW_SECTION,
-	// media
+	HIDE_CW_SECTION, // media
 	ADD_MEDIA,
 	REMOVE_MEDIA,
 	SET_UPLOAD_STATUS,
@@ -93,6 +84,14 @@ enum ACTION {
 	CLEAR_SEARCH_PROMPT,
 
 	SET_VISIBILITY,
+
+	// quotes
+	QUOTES_SET_ALLOWED,
+	QUOTES_SET_BLOCKED, // thread gates
+	THREADGATE_SET_ALL,
+	THREADGATE_SET_NONE,
+	THREADGATE_SET_MENTIONED,
+	THREADGATE_SET_FOLLOWED,
 
 	SET_KEYBOARD_SELECTION,
 
@@ -122,7 +121,9 @@ const DEFAULT: State = {
 		end: 0,
 	},
 	suggestions: defaultSuggestions,
-	visibilityRules: [],
+
+	threadGates: [],
+	allowQuotes: true,
 };
 
 type Actions =
@@ -193,7 +194,7 @@ type Actions =
 	  }
 	| {
 			type: ACTION.SET_SUGGESTION;
-			payload: Suggestion;
+			payload: AutoFillResultsType;
 	  }
 	| {
 			type: ACTION.CLEAR_SUGGESTION;
@@ -244,6 +245,25 @@ type Actions =
 	  }
 	| {
 			type: ACTION.CLEAR_SEARCH_PROMPT;
+	  }
+	| {
+			// quotes
+			type: ACTION.QUOTES_SET_ALLOWED;
+	  }
+	| {
+			type: ACTION.QUOTES_SET_BLOCKED; // thread gates
+	  }
+	| {
+			type: ACTION.THREADGATE_SET_ALL;
+	  }
+	| {
+			type: ACTION.THREADGATE_SET_NONE;
+	  }
+	| {
+			type: ACTION.THREADGATE_SET_MENTIONED;
+	  }
+	| {
+			type: ACTION.THREADGATE_SET_FOLLOWED;
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -410,6 +430,52 @@ function reducer(state: State, action: Actions): State {
 				draft.medias[_index].status = action.payload.status;
 			});
 		}
+
+		// quotes
+		case ACTION.QUOTES_SET_ALLOWED: {
+			return produce(state, (draft) => {
+				draft.allowQuotes = true;
+			});
+		}
+		case ACTION.QUOTES_SET_BLOCKED: {
+			return produce(state, (draft) => {
+				draft.allowQuotes = false;
+			});
+		}
+		// thread gates
+		case ACTION.THREADGATE_SET_ALL: {
+			return produce(state, (draft) => {
+				draft.threadGates = [];
+			});
+		}
+		case ACTION.THREADGATE_SET_NONE: {
+			return produce(state, (draft) => {
+				draft.threadGates = [
+					{
+						type: 'nobody',
+					},
+				];
+			});
+		}
+		case ACTION.THREADGATE_SET_MENTIONED: {
+			const match = state.threadGates.find((o) => o.type === 'mentioned');
+			if (match) return state;
+			return produce(state, (draft) => {
+				draft.threadGates.push({
+					type: 'mentioned',
+				});
+			});
+		}
+		case ACTION.THREADGATE_SET_FOLLOWED: {
+			const match = state.threadGates.find((o) => o.type === 'following');
+			if (match) return state;
+			return produce(state, (draft) => {
+				draft.threadGates.push({
+					type: 'following',
+				});
+			});
+		}
+
 		default: {
 			return state;
 		}

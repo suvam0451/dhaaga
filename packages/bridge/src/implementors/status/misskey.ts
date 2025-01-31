@@ -172,6 +172,8 @@ class MisskeyToStatusAdapter
 
 	getContent = () => this.ref?.text;
 
+	getFacets = () => [];
+
 	print() {
 		console.log(this.ref);
 	}
