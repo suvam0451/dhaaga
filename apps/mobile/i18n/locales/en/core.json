@@ -46,6 +46,10 @@
       "home": "Home"
     }
   },
+  "collections": {
+    "emptyTitle": "Collection Empty",
+    "emptyDesc": "This collection has no saved posts"
+  },
   "composer": {
     "pageTitle": "Compose",
     "quickPost": "Quick Post",

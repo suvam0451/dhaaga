@@ -46,6 +46,10 @@
     "composer": {
     }
   },
+  "collections": {
+    "emptyTitle": "コレクションは空です",
+    "emptyDesc": "このコレクションには保存された投稿がありません"
+  },
   "composer": {
     "pageTitle": "作成",
     "quickPost": "クイック投稿",

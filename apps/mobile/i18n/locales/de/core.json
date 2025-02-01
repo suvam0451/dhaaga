@@ -42,6 +42,10 @@
       "home": "Startseite"
     }
   },
+  "collections": {
+    "emptyTitle": "Sammlung leer",
+    "emptyDesc": "Diese Sammlung enthält keine gespeicherten Beiträge"
+  },
   "composer": {
     "pageTitle": "Erstellen",
     "quickPost": "Schnellpost",
