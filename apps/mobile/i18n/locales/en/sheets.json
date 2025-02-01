@@ -9,10 +9,9 @@
       "Synced"
     ],
     "newCollection": "New Collection",
-    "features": [
-      "Private",
-      "Local Only"
-    ]
+    "fallbackDesc": "No Description Provided",
+    "bookmarkDesc": "Synced with your server",
+    "disclaimer": "⚠\uFE0F Collections are stored locally on this device ⚠\uFE0F"
   },
   "hubAddFeedSheet": {
     "title": "Sorry \uD83D\uDE14",

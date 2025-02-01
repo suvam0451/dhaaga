@@ -47,6 +47,9 @@
     }
   },
   "collections": {
+    "name": "コレクション",
+    "addButton": "コレクションを追加",
+    "fallbackDesc": "説明は提供されていません",
     "emptyTitle": "コレクションは空です",
     "emptyDesc": "このコレクションには保存された投稿がありません"
   },

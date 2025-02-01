@@ -5,7 +5,7 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { usePostInteractor } from '../../_pubsub/interactors/usePostInteractor';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import AssignmentSheetBookmarkView from '../views/AssignmentSheetBookmarkView';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import useCollectionAssignInteractor from '../interactors/useCollectionAssignInteractor';
@@ -17,7 +17,8 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import CollectionSheetControlView from '../views/CollectionSheetControlView';
 import { Fragment } from 'react';
-import Animated from 'react-native-reanimated';
+import { AppText } from '../../../components/lib/Text';
+import { appDimensions } from '../../../styles/dimensions';
 
 function CollectionAssignmentSheetPresenter() {
 	const { driver } = useAppApiClient();
@@ -59,7 +60,7 @@ function CollectionAssignmentSheetPresenter() {
 	return (
 		// required for touch inputs to work
 		<View style={{ flex: 1 }}>
-			<Animated.FlatList
+			<FlatList
 				data={data}
 				ListHeaderComponent={
 					<Fragment>
@@ -75,7 +76,7 @@ function CollectionAssignmentSheetPresenter() {
 					</Fragment>
 				}
 				renderItem={({ item }) => (
-					<Animated.View style={{ paddingLeft: 16, paddingRight: 8 }}>
+					<View style={{ paddingLeft: 16, paddingRight: 8 }}>
 						<CollectionItem
 							active={item.has}
 							activeIconId={'checkmark-circle'}
@@ -83,15 +84,29 @@ function CollectionAssignmentSheetPresenter() {
 							activeTint={theme.primary.a0}
 							inactiveTint={theme.secondary.a30}
 							label={item.alias}
-							desc={
-								t(`collections.features`, { returnObjects: true }) as string[]
-							}
+							desc={item.desc || t(`collections.fallbackDesc`)}
 							onPress={() => {
 								onToggle(item);
 							}}
 						/>
-					</Animated.View>
+					</View>
 				)}
+				ListFooterComponent={
+					<View>
+						<AppText.Medium
+							style={{
+								color: theme.complementary.a0,
+								textAlign: 'center',
+								marginTop: appDimensions.timelines.sectionBottomMargin,
+							}}
+						>
+							{t(`collections.disclaimer`)}
+						</AppText.Medium>
+					</View>
+				}
+				contentContainerStyle={{
+					paddingBottom: appDimensions.timelines.sectionBottomMargin * 4,
+				}}
 			/>
 		</View>
 	);

@@ -10,7 +10,7 @@ type CollectionItemProps = {
 	activeTint: string;
 	inactiveTint: string;
 	label: string;
-	desc: string[];
+	desc: string;
 	onPress: () => void;
 };
 
@@ -54,7 +54,7 @@ function CollectionItem({
 			<View style={{ marginLeft: 16, justifyContent: 'center' }}>
 				<AppText.Medium
 					style={{
-						color: theme.secondary.a10,
+						color: active ? theme.primary.a0 : theme.secondary.a10,
 						fontSize: 18,
 						marginBottom: 4,
 					}}
@@ -66,7 +66,7 @@ function CollectionItem({
 						color: theme.secondary.a30,
 					}}
 				>
-					{desc.join(' • ')}
+					{desc}
 				</AppText.Medium>
 			</View>
 			<View style={{ flexGrow: 1 }} />

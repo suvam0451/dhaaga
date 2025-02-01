@@ -47,6 +47,9 @@
     }
   },
   "collections": {
+    "name": "Collections",
+    "addButton": "Add Collection",
+    "fallbackDesc": "No Description Provided",
     "emptyTitle": "Collection Empty",
     "emptyDesc": "This collection has no saved posts"
   },

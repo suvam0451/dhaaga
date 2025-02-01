@@ -9,10 +9,7 @@
       "Synchronisiert"
     ],
     "newCollection": "Neue Sammlung",
-    "features": [
-      "Privat",
-      "Nur lokal"
-    ]
+    "fallbackDesc": "Geen Beschrijving Beschikbaar"
   },
   "hubAddFeedSheet": {
     "title": "Sorry \uD83D\uDE14",

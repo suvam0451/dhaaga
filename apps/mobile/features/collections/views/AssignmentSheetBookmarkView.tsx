@@ -30,9 +30,7 @@ function AssignmentSheetBookmarkView({
 		>
 			<CollectionItem
 				label={t(`collections.bookmark`)}
-				desc={
-					t(`collections.bookmarkFeatures`, { returnObjects: true }) as string[]
-				}
+				desc={t(`collections.bookmarkDesc`)}
 				activeIconId={'bookmark'}
 				inactiveIconId={'bookmark-outline'}
 				active={bookmarked}

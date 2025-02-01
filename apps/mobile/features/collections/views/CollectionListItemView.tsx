@@ -1,40 +1,31 @@
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, StyleSheet } from 'react-native';
 import { AppIcon } from '../../../components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AccountCollection } from '../../../database/_schema';
 import { AppText } from '../../../components/lib/Text';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { useTranslation } from 'react-i18next';
 
-type ReadOnlyViewProps = {
+type Props = {
 	item: AccountCollection;
 	onPress: () => void;
 	onLongPress: () => void;
 };
 
-function CollectionListItemView({
-	onPress,
-	onLongPress,
-	item,
-}: ReadOnlyViewProps) {
+function CollectionListItemView({ onPress, onLongPress, item }: Props) {
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+
 	return (
-		<Pressable
-			style={{
-				flexDirection: 'row',
-				marginBottom: 16,
-				alignItems: 'center',
-				paddingRight: 4,
-			}}
-			onPress={onPress}
-			onLongPress={onLongPress}
-		>
+		<Pressable style={styles.root} onPress={onPress} onLongPress={onLongPress}>
 			<View
-				style={{
-					padding: 16,
-					borderWidth: 2,
-					borderRadius: 12,
-					borderColor: theme.secondary.a50,
-				}}
+				style={[
+					styles.iconContainer,
+					{
+						borderColor: theme.secondary.a50,
+					},
+				]}
 			>
 				<AppIcon id={'albums-outline'} size={24} color={theme.secondary.a20} />
 			</View>
@@ -52,10 +43,9 @@ function CollectionListItemView({
 						color: theme.secondary.a20,
 					}}
 				>
-					Local Only Not Synced
+					{item.desc || t(`collections.fallbackDesc`)}
 				</AppText.Normal>
 			</View>
-
 			<View style={{ flexGrow: 1 }} />
 			<AppIcon
 				id={'chevron-right'}
@@ -68,3 +58,17 @@ function CollectionListItemView({
 }
 
 export default CollectionListItemView;
+
+const styles = StyleSheet.create({
+	root: {
+		flexDirection: 'row',
+		marginBottom: 16,
+		alignItems: 'center',
+		paddingRight: 4,
+	},
+	iconContainer: {
+		padding: 16,
+		borderWidth: 2,
+		borderRadius: 12,
+	},
+});

@@ -43,6 +43,9 @@
     }
   },
   "collections": {
+    "name": "Collecties",
+    "addButton": "Voeg Collectie Toe",
+    "fallbackDesc": "Geen Beschrijving Beschikbaar",
     "emptyTitle": "Sammlung leer",
     "emptyDesc": "Diese Sammlung enthält keine gespeicherten Beiträge"
   },

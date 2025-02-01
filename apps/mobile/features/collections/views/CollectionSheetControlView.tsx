@@ -32,7 +32,7 @@ function CollectionSheetControlView({ onPressAddNew }: Props) {
 			<Pressable onPress={onPressAddNew}>
 				<AppText.Medium
 					style={{
-						color: theme.complementary.a0,
+						color: theme.primary.a0,
 						fontSize: 16,
 					}}
 				>
