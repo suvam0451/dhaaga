@@ -1,4 +1,45 @@
 {
+  "collection": {
+    "moreOptions": {
+      "title": "Update Collection",
+      "description": [
+        "Rename, describe or remove this collection"
+      ],
+      "renameOption": "Rename",
+      "updateDescriptionOption": "Update Description",
+      "removeOption": "Remove"
+    },
+    "add": {
+      "title": "Add Collection",
+      "description": [
+        "You can manage collections from your account overview (5th tab)."
+      ],
+      "placeholder": "Name your collection"
+    },
+    "rename": {
+      "title": "Rename Collection",
+      "description": [
+        "Assign a new name for this collection."
+      ],
+      "placeholder": "Name for your collection"
+    },
+    "describe": {
+      "title": "Describe this Collection",
+      "description": [
+        "Update your description for this collection",
+        "Submit empty string to set default"
+      ],
+      "placeholder": "Describe your collection"
+    },
+    "delete": {
+      "title": "Confirm Deletion",
+      "description": [
+        "Are you sure you want to delete this collection?",
+        "Any posts you saved under this collection will be lost."
+      ],
+      "deleteConfirmOption": "Confirm and Delete"
+    }
+  },
   "composer": {
     "setAltText": {
       "title": "Alt Text",

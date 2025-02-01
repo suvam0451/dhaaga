@@ -29,15 +29,15 @@ function useApiGetMyAccount() {
 			if (driver === KNOWN_SOFTWARE.BLUESKY) {
 				const _data = data as AppBskyActorGetProfile.Response;
 				const _value = UserMiddleware.deserialize(_data.data, driver, server);
-				acctManager.storage.setProfile(acct?.uuid, _value);
+				if (acctManager) acctManager.storage.setProfile(acct?.uuid, _value);
 				return _value;
 			}
 			const _value = UserMiddleware.deserialize(data, driver, server);
-			acctManager.storage.setProfile(acct?.uuid, _value);
+			if (acctManager) acctManager.storage.setProfile(acct?.uuid, _value);
 			return _value;
 		},
 		enabled: client !== null && acct !== null,
-		initialData: acctManager.storage.getProfile(acct?.uuid)?.value,
+		initialData: acctManager?.storage?.getProfile(acct?.uuid)?.value,
 	});
 }
 

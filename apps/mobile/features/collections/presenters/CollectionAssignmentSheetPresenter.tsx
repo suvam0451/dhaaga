@@ -8,7 +8,7 @@ import { usePostInteractor } from '../../_pubsub/interactors/usePostInteractor';
 import { View } from 'react-native';
 import AssignmentSheetBookmarkView from '../views/AssignmentSheetBookmarkView';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-import useCollectionAssignmentInteractor from '../interactors/useCollectionAssignmentInteractor';
+import useCollectionAssignInteractor from '../interactors/useCollectionAssignInteractor';
 import { AccountCollection } from '../../../database/_schema';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import BookmarkUnsupported from '../components/BookmarkUnsupported';
@@ -27,18 +27,17 @@ function CollectionAssignmentSheetPresenter() {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
-	const { data, toggleForCollection, addCollection } =
-		useCollectionAssignmentInteractor(
-			PostMiddleware.getContentTarget(post)?.id,
-		);
+	const { data, toggle, add } = useCollectionAssignInteractor(
+		PostMiddleware.getContentTarget(post)?.id,
+	);
 
 	if (!post) return <View />;
 
 	const _target = PostMiddleware.getContentTarget(post);
 	const IS_BOOKMARKED = _target.interaction.bookmarked;
 
-	function toggle(collection: AccountCollection) {
-		toggleForCollection(post?.id, collection, post);
+	function onToggle(collection: AccountCollection) {
+		toggle(collection, post);
 	}
 
 	function onAddNewCollection() {
@@ -52,7 +51,7 @@ function CollectionAssignmentSheetPresenter() {
 			},
 			'Name your collection',
 			(text: string) => {
-				addCollection(text);
+				add(text);
 			},
 		);
 	}
@@ -88,7 +87,7 @@ function CollectionAssignmentSheetPresenter() {
 								t(`collections.features`, { returnObjects: true }) as string[]
 							}
 							onPress={() => {
-								toggle(item);
+								onToggle(item);
 							}}
 						/>
 					</Animated.View>

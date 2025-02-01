@@ -32,6 +32,12 @@ class Service {
 		});
 	}
 
+	static describeCollection(db: DataSource, id: number | string, desc: string) {
+		db.accountCollection.updateById(id, {
+			desc,
+		});
+	}
+
 	static removeCollection(db: DataSource, id: number): AccountCollection {
 		db.accountCollection.updateById(id, {
 			active: false,

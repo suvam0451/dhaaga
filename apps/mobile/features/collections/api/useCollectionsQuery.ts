@@ -7,18 +7,58 @@ import { AccountCollection, AccountSavedPost } from '../../../database/_schema';
 import { AccountCollectionService } from '../../../database/entities/account-collection';
 import { CollectionSavedPostService } from '../../../database/entities/collection-saved-post';
 import { AccountSavedPostService } from '../../../database/entities/account-saved-post';
+import useCollections from './useCollections';
+import { useState } from 'react';
 
 export function useCollectionListInteractor() {
+	const [IsLoading, setIsLoading] = useState(false);
 	const { db } = useAppDb();
 	const { acct } = useAppAcct();
+	const { add, rename, describe, remove } = useCollections();
 
-	return useQuery<AccountCollection[]>({
+	const queryData = useQuery<AccountCollection[]>({
 		queryKey: ['db', 'accountCollection', acct?.id],
 		initialData: [],
 		queryFn: () => {
 			return AccountCollectionService.listAllForAccount(db, acct);
 		},
 	});
+
+	async function _refetch() {
+		setIsLoading(true);
+		queryData.refetch().then(() => {
+			setIsLoading(false);
+		});
+	}
+
+	function onAdd(text: string) {
+		add(text);
+		_refetch();
+	}
+
+	function onRenamed(id: number, text: string) {
+		rename(id, text);
+		_refetch();
+	}
+
+	function onDescribe(id: number, text: string) {
+		describe(id, text);
+		_refetch();
+	}
+
+	function onRemove(id: number) {
+		remove(id);
+		_refetch();
+	}
+
+	return {
+		...queryData,
+		add: onAdd,
+		loading: IsLoading,
+		rename: onRenamed,
+		describe: onDescribe,
+		remove: onRemove,
+	};
 }
 
 export type CollectionHasSavedPost = AccountCollection & {
