@@ -78,9 +78,9 @@ export function useAppTheme() {
 export function useHub() {
 	return useGlobalState(
 		useShallow((o) => ({
-			accounts: o.hubState.accounts,
+			profiles: o.hubState.profiles,
 			loadAccounts: o.hubState.refresh,
-			navigation: o.hubState.navigation,
+			pageIndex: o.hubState.pageIndex,
 			loadNext: o.hubState.loadNext,
 			loadPrev: o.hubState.loadPrev,
 			selectProfile: o.hubState.selectProfile,

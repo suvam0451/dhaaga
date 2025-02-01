@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { MisskeyRestClient } from '@dhaaga/bridge';
-import { UserDetailed } from 'misskey-js/built/autogen/models';
 import { AppPostObject } from '../../../types/app-post.types';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import {
@@ -31,7 +30,7 @@ function useApiGetPinnedPosts(userId: string) {
 				userId,
 			);
 			if (error) throw new Error(error.message);
-			const _data = data as UserDetailed;
+			const _data = data as any;
 			return PostMiddleware.deserialize<unknown[]>(
 				_data.pinnedNotes,
 				driver,

@@ -84,7 +84,7 @@ export class AccountCollection extends BaseEntity<AccountCollection> {
 	alias: string;
 	itemOrder: number; // determines order
 	active: boolean;
-
+	desc: string | null;
 	accountId: number | null;
 
 	// joins

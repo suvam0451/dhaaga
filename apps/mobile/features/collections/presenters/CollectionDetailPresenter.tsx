@@ -1,11 +1,11 @@
 import useCollectionDetailInteractor from '../interactors/useCollectionDetailInteractor';
-import { View } from 'react-native';
 import CollectionDetailView from '../views/CollectionDetailView';
 import CollectionDetailWidget from '../components/CollectionDetailWidget';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import CollectionEmpty from '../components/CollectionEmpty';
 
 function CollectionDetailPresenter() {
 	const { state, onRefresh, IsRefreshing } = useCollectionDetailInteractor();
@@ -18,7 +18,7 @@ function CollectionDetailPresenter() {
 				title={'Collection'}
 				translateY={translateY}
 			>
-				<View />
+				<CollectionEmpty />
 			</AppTopNavbar>
 		);
 

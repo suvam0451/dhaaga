@@ -2,43 +2,46 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import PostButton from './PostButton';
-import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
-import appTextStyling from '../../../../../styles/AppTextStyling';
 import {
 	useAppAcct,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
 import { appDimensions } from '../../../../../styles/dimensions';
+import { AppText } from '../../../../lib/Text';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
+import useComposer from '../../../../../features/composer/interactors/useComposer';
 
 /**
  * Indicates in which context this reply is being composed
  */
 function ReplyIndicator() {
-	const { state } = useComposerCtx();
+	const { state } = useComposer();
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	if (!state.parent) return <View />;
 
 	const _target = PostMiddleware.getContentTarget(state.parent);
 	return (
-		<View style={{ marginTop: 6, flexDirection: 'row', alignItems: 'center' }}>
-			<Text
+		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<AppText.Medium
 				style={[
-					appTextStyling.postContext,
-					{ flexShrink: 1, color: theme.secondary.a30 },
+					{
+						flexShrink: 1,
+						color: theme.secondary.a30,
+					},
 				]}
 			>
-				Replying to{' '}
-			</Text>
+				{t(`quickPost.replyingTo`)}
+			</AppText.Medium>
 			<View
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
-					backgroundColor: theme.palette.menubar,
-					borderRadius: 8,
-					padding: 4,
-					paddingHorizontal: 6,
+					marginLeft: 6,
 				}}
 			>
 				{/*@ts-ignore-next-line*/}
@@ -46,15 +49,18 @@ function ReplyIndicator() {
 					source={{ uri: _target.postedBy.avatarUrl }}
 					style={{ width: 24, height: 24, borderRadius: 8 }}
 				/>
-				<Text
+				<AppText.Medium
 					style={[
-						appTextStyling.postContext,
-						{ maxWidth: 208, color: theme.complementary.a0 },
+						{
+							maxWidth: 208,
+							color: theme.complementary.a0,
+							marginLeft: 6,
+						},
 					]}
 					numberOfLines={1}
 				>
 					{_target.postedBy.handle}
-				</Text>
+				</AppText.Medium>
 			</View>
 		</View>
 	);
@@ -82,11 +88,12 @@ function ComposerTopMenu() {
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
+					marginBottom: appDimensions.timelines.sectionBottomMargin,
 				}}
 			>
 				<View
 					style={{
-						borderWidth: 0.7,
+						borderWidth: 0.75,
 						borderColor: '#666',
 						borderRadius: '100%',
 						overflow: 'hidden',
@@ -96,16 +103,12 @@ function ComposerTopMenu() {
 					<Image source={acct?.avatarUrl} style={styles.avatarContainer} />
 				</View>
 				<View style={{ flexGrow: 1, marginLeft: 6 }}>
-					<Text
-						style={[
-							styles.displayName,
-							{
-								color: theme.textColor.medium,
-							},
-						]}
+					<AppText.SemiBold
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						style={[styles.displayName]}
 					>
 						{acct?.displayName}
-					</Text>
+					</AppText.SemiBold>
 					<Text
 						style={[
 							styles.username,
@@ -138,7 +141,6 @@ const styles = StyleSheet.create({
 	},
 	displayName: {
 		fontSize: 16,
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		marginLeft: 4,
 	},
 	username: {

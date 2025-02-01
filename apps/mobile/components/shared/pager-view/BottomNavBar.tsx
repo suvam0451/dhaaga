@@ -141,68 +141,70 @@ type SingleSelectAnimatedProps = {
  * @param justify use space-between for
  * full width and flex-start for left aligned
  */
-export const BottomNavBar = memo(
-	({ items, Index, setIndex }: SingleSelectAnimatedProps) => {
-		const { theme } = useAppTheme();
+export function BottomNavBar({
+	items,
+	Index,
+	setIndex,
+}: SingleSelectAnimatedProps) {
+	const { theme } = useAppTheme();
 
-		const xPos = useSharedValue(0);
-		const xWidth = useSharedValue(0);
+	const xPos = useSharedValue(0);
+	const xWidth = useSharedValue(0);
 
-		const onSelect = (index: number, dims?: any) => {
-			setIndex(index);
+	const onSelect = (index: number, dims?: any) => {
+		setIndex(index);
 
-			if (dims) {
-				const adjustedXPosition =
-					dims.pageX - INDICATOR_PADDING / 2 - SIDE_PADDING;
-				xPos.value = withTiming(adjustedXPosition, {
-					duration: ANIMATION_DURATION,
-				});
-				xWidth.value = withTiming(dims.width + INDICATOR_PADDING, {
-					duration: ANIMATION_DURATION,
-				});
-			}
+		if (dims) {
+			const adjustedXPosition =
+				dims.pageX - INDICATOR_PADDING / 2 - SIDE_PADDING;
+			xPos.value = withTiming(adjustedXPosition, {
+				duration: ANIMATION_DURATION,
+			});
+			xWidth.value = withTiming(dims.width + INDICATOR_PADDING, {
+				duration: ANIMATION_DURATION,
+			});
+		}
+	};
+
+	useEffect(() => {
+		onSelect(Index);
+	}, [Index]);
+
+	const handleLayout = (index: number, event: any) => {
+		if (index === 0) {
+			const layout = event.nativeEvent.layout;
+			xPos.value = layout.x - INDICATOR_PADDING / 2;
+			xWidth.value = layout.width + INDICATOR_PADDING;
+		}
+	};
+
+	const indicatorAnimatedStyle = useAnimatedStyle(() => {
+		return {
+			width: xWidth.value,
+			transform: [{ translateX: xPos.value }],
 		};
+	});
 
-		useEffect(() => {
-			onSelect(Index);
-		}, [Index]);
-
-		const handleLayout = (index: number, event: any) => {
-			if (index === 0) {
-				const layout = event.nativeEvent.layout;
-				xPos.value = layout.x - INDICATOR_PADDING / 2;
-				xWidth.value = layout.width + INDICATOR_PADDING;
-			}
-		};
-
-		const indicatorAnimatedStyle = useAnimatedStyle(() => {
-			return {
-				width: xWidth.value,
-				transform: [{ translateX: xPos.value }],
-			};
-		});
-
-		return (
-			<LinearGradient
-				colors={['transparent', theme.palette.bg]}
-				style={styles.root}
-			>
-				<View style={[styles.container, { justifyContent: 'space-around' }]}>
-					{items.map((o, i) => (
-						<Chip
-							key={i}
-							active={Index === i}
-							label={o.label}
-							onPress={(e) => onSelect(i, e)}
-							onLayout={(e) => handleLayout(i, e)}
-						/>
-					))}
-					<Animated.View style={[styles.indicator, indicatorAnimatedStyle]} />
-				</View>
-			</LinearGradient>
-		);
-	},
-);
+	return (
+		<LinearGradient
+			colors={['transparent', theme.palette.bg]}
+			style={styles.root}
+		>
+			<View style={[styles.container, { justifyContent: 'space-around' }]}>
+				{items.map((o, i) => (
+					<Chip
+						key={i}
+						active={Index === i}
+						label={o.label}
+						onPress={(e) => onSelect(i, e)}
+						onLayout={(e) => handleLayout(i, e)}
+					/>
+				))}
+				<Animated.View style={[styles.indicator, indicatorAnimatedStyle]} />
+			</View>
+		</LinearGradient>
+	);
+}
 
 export function BottomNavBarInfinite({
 	items,

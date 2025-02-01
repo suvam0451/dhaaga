@@ -329,7 +329,8 @@ function reducer(state: State, action: Actions): State {
 			});
 		}
 		case ACTION.SET_PARENT: {
-			if (!action.payload.item) return state;
+			// NOTE: null allowed!
+			// if (!action.payload.item) return state;
 			return produce(state, (draft) => {
 				draft.parent = action.payload.item;
 			});

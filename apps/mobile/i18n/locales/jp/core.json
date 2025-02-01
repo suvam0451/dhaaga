@@ -46,6 +46,13 @@
     "composer": {
     }
   },
+  "collections": {
+    "name": "コレクション",
+    "addButton": "コレクションを追加",
+    "fallbackDesc": "説明は提供されていません",
+    "emptyTitle": "コレクションは空です",
+    "emptyDesc": "このコレクションには保存された投稿がありません"
+  },
   "composer": {
     "pageTitle": "作成",
     "quickPost": "クイック投稿",
@@ -72,9 +79,11 @@
     }
   },
   "quickPost": {
+    "name": "クイック投稿",
     "spoilerPlaceholder": "ネタバレ / コンテンツ警告",
     "ctaPlaceholder": "何を考えていますか？",
     "postButton": "投稿",
+    "replyingTo": "返信中：",
     "visibility": {
       "public": "公開",
       "unlisted": "ホーム",

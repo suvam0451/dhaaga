@@ -1,3 +1,5 @@
+import { EventEmitter } from 'events';
+
 /**
  * When multiple UI components need
  * to listen to status updates in a
@@ -7,9 +9,11 @@
  */
 export class BasePubSubService {
 	protected readonly subscribers: Map<string, Function[]>;
+	readonly emitter: EventEmitter;
 
 	constructor() {
 		this.subscribers = new Map<string, Function[]>();
+		this.emitter = new EventEmitter();
 	}
 
 	// remove dead refs

@@ -100,11 +100,8 @@ type AppPubSubState = {
 };
 
 type AppHubState = {
-	accounts: Account[];
-	navigation: {
-		accountIndex: number;
-		profileIndex: number;
-	};
+	profiles: Profile[];
+	pageIndex: number;
 	refresh: () => void;
 	loadNext: () => void;
 	loadPrev: () => void;
@@ -413,82 +410,29 @@ const useGlobalState = create<State & Actions>()(
 			});
 		},
 		hubState: {
-			accounts: [],
-			navigation: {
-				accountIndex: -1,
-				profileIndex: -1,
-			},
+			profiles: [],
+			pageIndex: -1,
 			refresh: () => {
-				const _accounts = AccountService.getAllWithProfiles(get().db);
-				let nextAccountIndex = -1;
-				let nextProfileIndex = -1;
-				if (_accounts.length !== 0) {
-					nextAccountIndex =
-						_accounts.length >= get().hubState.navigation.accountIndex
-							? 0
-							: get().hubState.navigation.accountIndex;
-					nextProfileIndex =
-						_accounts[nextAccountIndex].profiles.length >=
-						get().hubState.navigation.profileIndex
-							? 0
-							: get().hubState.navigation.profileIndex;
-				}
-
+				if (!get().acct) return;
+				const profiles = ProfileService.getForAccount(get().db, get().acct);
+				if (profiles.length === 0) return;
 				set((state) => {
-					state.hubState.accounts = AccountService.getAllWithProfiles(get().db);
-					state.hubState.navigation = {
-						accountIndex: nextAccountIndex,
-						profileIndex: nextProfileIndex,
-					};
+					state.hubState.profiles = ProfileService.getForAccount(
+						get().db,
+						get().acct,
+					);
+					state.hubState.pageIndex = 0;
 				});
 			},
 			loadNext: () => {
-				const _accounts = get().hubState.accounts;
-				const currentAccountIndex = get().hubState.navigation.accountIndex;
-				const currentProfileIndex = get().hubState.navigation.profileIndex;
-				let nextAccountIndex = -1;
-				let nextProfileIndex = -1;
-
-				if (currentAccountIndex + 1 >= _accounts.length) {
-					nextAccountIndex = 0;
-					nextProfileIndex = 0;
-				} else {
-					nextAccountIndex = currentAccountIndex + 1;
-					nextProfileIndex = 0;
-				}
-
-				set((state) => {
-					state.hubState.navigation = {
-						accountIndex: nextAccountIndex,
-						profileIndex: nextProfileIndex,
-					};
-				});
+				// return state
 			},
 			loadPrev: () => {
-				const _accounts = get().hubState.accounts;
-				const currentAccountIndex = get().hubState.navigation.accountIndex;
-				const currentProfileIndex = get().hubState.navigation.profileIndex;
-				let nextAccountIndex = -1;
-				let nextProfileIndex = -1;
-
-				if (currentAccountIndex - 1 < 0) {
-					nextAccountIndex = _accounts.length - 1;
-					nextProfileIndex = 0;
-				} else {
-					nextAccountIndex = currentAccountIndex - 1;
-					nextProfileIndex = 0;
-				}
-
-				set((state) => {
-					state.hubState.navigation = {
-						accountIndex: nextAccountIndex,
-						profileIndex: nextProfileIndex,
-					};
-				});
+				// return state
 			},
 			selectProfile: (index: number) => {
 				set((state) => {
-					state.hubState.navigation.profileIndex = index;
+					state.hubState.pageIndex = index;
 				});
 			},
 		},

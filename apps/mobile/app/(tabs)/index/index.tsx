@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import AppNoAccount from '../../../components/error-screen/AppNoAccount';
@@ -8,6 +8,7 @@ import { Account } from '../../../database/_schema';
 import {
 	useAppAcct,
 	useAppTheme,
+	useHub,
 } from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
@@ -83,11 +84,7 @@ function HubGreetingFragment({
 	);
 }
 
-export function TimeOfDayGreeting({
-	acct,
-	noLogo,
-	style,
-}: TimeOfDayGreetingProps) {
+export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 	const Component = useMemo(() => {
 		const currentHours = new Date().getHours();
 		let timeOfDay: TIME_OF_DAY;
@@ -161,6 +158,11 @@ export function TimeOfDayGreeting({
 
 function Screen() {
 	const { acct } = useAppAcct();
+	const { loadAccounts } = useHub();
+
+	useEffect(() => {
+		loadAccounts();
+	}, [acct]);
 
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.HOME} />;
 	return <SocialHubPresenter />;

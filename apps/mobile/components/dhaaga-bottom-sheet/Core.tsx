@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import AppBottomSheetQuickPost from './modules/AppBottomSheetQuickPost';
@@ -33,6 +33,37 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 import FeedAddSheetPresenter from '../../features/social-hub/presenters/FeedAddSheetPresenter';
 
 /**
+ * The little handle thingy on top of every bottom sheet
+ * @constructor
+ */
+function Handle() {
+	const { theme } = useAppTheme();
+
+	return (
+		<Animated.View
+			style={{
+				position: 'absolute',
+				alignItems: 'center',
+				justifyContent: 'center',
+				left: '50%',
+				transform: [{ translateX: '-50%' }],
+				top: 10,
+				zIndex: 9000,
+			}}
+		>
+			<Animated.View
+				style={{
+					height: 3,
+					width: 42,
+					backgroundColor: theme.secondary.a50,
+					marginBottom: 16,
+					borderRadius: 16,
+				}}
+			/>
+		</Animated.View>
+	);
+}
+/**
  * Responsible for generating content
  */
 function Factory() {
@@ -41,7 +72,6 @@ function Factory() {
 		case APP_BOTTOM_SHEET_ENUM.QUICK_POST:
 			return <AppBottomSheetQuickPost />;
 		case APP_BOTTOM_SHEET_ENUM.ADD_PROFILE:
-
 		case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
 			return <ABS_Add_Profile />;
 		case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
@@ -128,28 +158,7 @@ function AppBottomSheet() {
 					animStyle,
 				]}
 			>
-				{/* The little handle thingy on top of every bottom sheet */}
-				<Animated.View
-					style={{
-						position: 'absolute',
-						alignItems: 'center',
-						justifyContent: 'center',
-						left: '50%',
-						transform: [{ translateX: '-50%' }],
-						top: 10,
-						zIndex: 9000,
-					}}
-				>
-					<Animated.View
-						style={{
-							height: 3,
-							width: 42,
-							backgroundColor: theme.secondary.a50,
-							marginBottom: 16,
-							borderRadius: 16,
-						}}
-					/>
-				</Animated.View>
+				<Handle />
 				<Factory />
 			</Animated.View>
 		</Fragment>

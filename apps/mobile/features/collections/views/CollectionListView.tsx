@@ -9,6 +9,8 @@ import CollectionListItemView from './CollectionListItemView';
 import { AppCtaButton } from '../../../components/lib/Buttons';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type CollectionListInteractorProps = {
 	items: AccountCollection[];
@@ -29,11 +31,12 @@ function CollectionListView({
 }: CollectionListInteractorProps) {
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return (
 		<AppTopNavbar
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			title={'Collections'}
+			title={t(`collections.name`)}
 			translateY={translateY}
 		>
 			<FlatList
@@ -61,11 +64,11 @@ function CollectionListView({
 							color: theme.primary.a0,
 						}}
 					>
-						Collections
+						{t(`collections.name`)}
 					</AppText.Special>
 				}
 				ListFooterComponent={
-					<AppCtaButton label={'Add Collection'} onPress={onAdd} />
+					<AppCtaButton label={t(`collections.addButton`)} onPress={onAdd} />
 				}
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={refresh} />

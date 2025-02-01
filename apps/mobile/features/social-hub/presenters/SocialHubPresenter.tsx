@@ -12,10 +12,11 @@ import {
 } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import SocialHubTabPresenter from './SocialHubTabPresenter';
+import { View } from 'react-native';
 
 function SocialHubPresenter() {
 	const { theme } = useAppTheme();
-	const { accounts, loadNext, loadPrev, navigation } = useHub();
+	const { profiles, loadNext, loadPrev, pageIndex } = useHub();
 
 	const start =
 		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
@@ -42,15 +43,10 @@ function SocialHubPresenter() {
 		.runOnJS(true);
 
 	const HubComponent = useMemo(() => {
+		if (profiles.length === 0) return <View />;
 		// TODO handle index out of bounds (when deleting accts/profiles)
-		return (
-			<SocialHubTabPresenter
-				profile={
-					accounts[navigation.accountIndex].profiles[navigation.profileIndex]
-				}
-			/>
-		);
-	}, [accounts, navigation]);
+		return <SocialHubTabPresenter profile={profiles[pageIndex]} />;
+	}, [profiles, pageIndex]);
 
 	return (
 		<GestureDetector gesture={fling}>

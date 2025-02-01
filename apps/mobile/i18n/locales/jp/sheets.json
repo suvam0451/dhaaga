@@ -9,10 +9,7 @@
       "同期済み"
     ],
     "newCollection": "新しいコレクション",
-    "features": [
-      "プライベート",
-      "ローカルのみ"
-    ]
+    "fallbackDesc": "説明は提供されていません"
   },
   "hubAddFeedSheet": {
     "title": "申し訳ありません \uD83D\uDE14",

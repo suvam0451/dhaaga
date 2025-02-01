@@ -7,8 +7,8 @@ import {
 	removeColumn,
 } from '@dhaaga/orm';
 
-// ^0.11.0 --> >3
-const APP_DB_TARGET_VERSION = 5;
+// ^0.15.0 --> >6
+const APP_DB_TARGET_VERSION = 6;
 
 /**
  * Version control for migrations
@@ -298,6 +298,13 @@ const migrations: MigrationEntry[] = [
 			removeColumn('profile', 'itemOrder'),
 			removeColumn('profile', 'visible'),
 		],
+	},
+	{
+		version: 6,
+		versionCode: 'v0.15.0',
+		name: 'tweak collections',
+		up: [addColumn('accountCollection', 'desc', 'text')],
+		down: [removeColumn('accountCollection', 'desc')],
 	},
 ];
 
