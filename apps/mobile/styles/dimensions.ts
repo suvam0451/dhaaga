@@ -3,7 +3,7 @@ export const appDimensions = {
 		avatarIconSize: 40,
 		mediaPadding: 10,
 		sectionBottomMargin: 8,
-		actionButtonSize: 22,
+		actionButtonSize: 23,
 		moreOptionsButtonSize: 24,
 	},
 	buttons: {
