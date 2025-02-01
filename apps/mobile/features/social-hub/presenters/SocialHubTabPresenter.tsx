@@ -51,7 +51,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const [Refreshing, setRefreshing] = useState(false);
 	const { show, hide } = useAppDialog();
 	const { loadAccounts } = useHub();
-	const { accounts, selectProfile } = useHub();
+	const { profiles, selectProfile } = useHub();
 	const { setCtx, show: showSheet } = useAppBottomSheet_Improved();
 	const { acct } = useAppAcct();
 	const { loadApp } = useGlobalState(
@@ -217,14 +217,9 @@ function SocialHubTabPresenter({ profile }: Props) {
 	 * Switch to profile
 	 */
 	function onPressProfile(profileId: number | string) {
-		const ownerIndex = accounts.findIndex((o) => o.id == parentAcct.id);
-		if (ownerIndex !== -1) {
-			const _profileIndex = accounts[ownerIndex].profiles.findIndex(
-				(o) => o.id == profileId,
-			);
-			if (_profileIndex !== -1) {
-				selectProfile(_profileIndex);
-			}
+		const _profileIndex = profiles.findIndex((o) => o.id == profileId);
+		if (_profileIndex !== -1) {
+			selectProfile(_profileIndex);
 		}
 	}
 
@@ -357,16 +352,11 @@ function SocialHubTabPresenter({ profile }: Props) {
 					onLongPressTag={onLongPressTag}
 				/>
 			</ScrollView>
-			<Pressable
-				style={{ position: 'absolute', bottom: 0, zIndex: 2 }}
-				onPress={() => {}}
-			>
-				<HubProfileListView
-					onLongPressProfile={onLongPressProfile}
-					onPressAddProfile={onPressAddProfile}
-					onPressProfile={onPressProfile}
-				/>
-			</Pressable>
+			<HubProfileListView
+				onLongPressProfile={onLongPressProfile}
+				onPressAddProfile={onPressAddProfile}
+				onPressProfile={onPressProfile}
+			/>
 		</View>
 	);
 }

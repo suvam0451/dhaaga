@@ -73,9 +73,11 @@
     }
   },
   "quickPost": {
+    "name": "Quick Post",
     "spoilerPlaceholder": "Spoiler / Content Warning",
     "ctaPlaceholder": "What's on your mind?",
     "postButton": "Post",
+    "replyingTo": "Replying to: ",
     "visibility": {
       "public": "Public",
       "unlisted": "Home",

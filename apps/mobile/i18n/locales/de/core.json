@@ -68,9 +68,11 @@
     }
   },
   "quickPost": {
+    "name": "Schneller Beitrag",
     "spoilerPlaceholder": "Spoiler / Inhoudswaarschuwing",
     "ctaPlaceholder": "Waar denk je aan?",
     "postButton": "Plaatsen",
+    "replyingTo": "Antworten auf",
     "visibility": {
       "public": "Openbaar",
       "unlisted": "Thuis",

@@ -70,7 +70,7 @@ function CollectionItem({
 				</AppText.Medium>
 			</View>
 			<View style={{ flexGrow: 1 }} />
-			<Pressable onPress={onPress}>
+			<Pressable onPress={onPress} style={{ padding: 8 }}>
 				{active ? (
 					<AppIcon
 						id={activeIconId}
