@@ -5,7 +5,10 @@ import { appSettingsKeys } from '../../services/app-settings/app-settings';
 import AppSettingsRepository from '../../repositories/app-settings.repo';
 import { DataSource } from '../dataSource';
 
-let BOOLEAN_DEFAULT: { type: 'boolean' | 'string' | 'json'; value: string } = {
+let BOOLEAN_DEFAULT: {
+	type: 'boolean' | 'string' | 'json' | 'csv';
+	value: string;
+} = {
 	type: 'boolean',
 	value: '0',
 };
@@ -13,7 +16,7 @@ let BOOLEAN_DEFAULT: { type: 'boolean' | 'string' | 'json'; value: string } = {
 export const AppSettingCreateDTO = z.object({
 	key: z.string(),
 	value: z.string(),
-	type: z.enum(['boolean', 'string', 'json'] as const),
+	type: z.enum(['boolean', 'string', 'json', 'csv'] as const),
 });
 
 export type AppSettingType = z.infer<typeof AppSettingCreateDTO>;
@@ -25,11 +28,30 @@ class Repo {
 }
 
 class Service {
-	static get(db: SQLiteDatabase, key: string): AppSetting {
+	static getValue<T>(db: DataSource, key: string): T {
+		const setting = db.appSetting.findOne({
+			key,
+		});
+		if (!setting) return null;
+
+		try {
+			switch (setting.type) {
+				case 'boolean':
+					return Boolean(setting.value) as T;
+				case 'string':
+					return setting.value as T;
+				case 'json':
+					return JSON.parse(setting.value as string) as T;
+			}
+		} catch (e) {
+			console.log('[WARN]: error parsing setting');
+			return null;
+		}
+
 		return null;
 	}
 
-	static async toggle(db: SQLiteDatabase, key: string): Promise<AppSetting> {
+	static async toggle(db: DataSource, key: string): Promise<AppSetting> {
 		return null;
 	}
 

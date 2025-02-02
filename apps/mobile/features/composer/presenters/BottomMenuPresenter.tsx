@@ -18,13 +18,15 @@ import useAppVisibility, {
 } from '../../../hooks/app/useVisibility';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function BottomMenuPresenter() {
 	const { theme } = useAppTheme();
 	const { state, dispatch } = useComposerCtx();
 	const { driver } = useAppApiClient();
-
 	const { show, hide } = useAppDialog();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.DIALOGS]);
 
 	/**
 	 * Visibility Related State Management
@@ -79,7 +81,9 @@ function BottomMenuPresenter() {
 	}
 
 	function handleVisibilityUpdate() {
-		show(DialogBuilderService.changePostVisibility_ActivityPub(setVisibility));
+		show(
+			DialogBuilderService.changePostVisibility_ActivityPub(t, setVisibility),
+		);
 	}
 
 	function showVisibilityMenu() {

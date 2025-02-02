@@ -56,7 +56,7 @@ export class AppSettingsBase {
 	}
 
 	protected getBool(key: string): boolean {
-		const match = AppSettingService.get(this.db, key);
+		const match = AppSettingService.getValue(this.db, key);
 		if (!match) return false;
 		return Boolean(match.value) == true;
 	}

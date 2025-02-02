@@ -4,6 +4,8 @@ import { useComposerCtx } from '../../../../../features/composer/contexts/useCom
 import useInputGeneratePrompt from '../api/useInputGeneratePrompt';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 
 const ComposerTextInput = memo(function Foo() {
 	const { theme } = useAppTheme();
@@ -11,6 +13,7 @@ const ComposerTextInput = memo(function Foo() {
 
 	const { onSelectionChange, onChange } = useInputGeneratePrompt();
 	const ref = useRef<TextInput>(null);
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return (
 		<View
@@ -24,7 +27,7 @@ const ComposerTextInput = memo(function Foo() {
 				ref={ref}
 				autoCapitalize={'none'}
 				multiline={true}
-				placeholder={"What's on your mind?"}
+				placeholder={t(`composer.quickPostCta`)}
 				placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
 				style={[styles.textInput, { color: theme.secondary.a10 }]}
 				onChange={onChange}

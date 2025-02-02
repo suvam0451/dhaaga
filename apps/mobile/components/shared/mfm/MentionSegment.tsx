@@ -1,4 +1,3 @@
-import { RandomUtil } from '../../../utils/random.utils';
 import {
 	useAppAcct,
 	useAppBottomSheet_Improved,
@@ -7,7 +6,6 @@ import {
 import { TextParserService } from '../../../services/text-parser.service';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../lib/Text';
-import { TouchableOpacity } from 'react-native';
 
 type Props = {
 	value: string;
@@ -20,8 +18,6 @@ function MentionSegment({ value, link, fontFamily }: Props) {
 	const { show, setCtx } = useAppBottomSheet_Improved();
 	const { acct } = useAppAcct();
 
-	const k = RandomUtil.nanoId();
-
 	const parsed = TextParserService.mentionTextToHandle(value, acct);
 
 	function onPress() {
@@ -33,7 +29,6 @@ function MentionSegment({ value, link, fontFamily }: Props) {
 
 	return (
 		<AppText.Medium
-			key={k}
 			style={{
 				fontFamily,
 				color: parsed.me ? theme.primary.a0 : theme.complementaryB.a0,

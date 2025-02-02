@@ -1,13 +1,24 @@
 {
   "topNav": {
     "primary": {
-      "home": "ソーシャルハブ",
-      "discover": "発見する",
-      "compose": "しっぴつする",
+      "hub": "ソーシャルハブ",
+      "discover": "発見",
+      "compose": "作成",
       "account": "マイアカウント",
-      "setting": "アプリ設定"
+      "setting": "アプリ設定",
+      "inbox": "受信箱",
+      "mentions": "メンション",
+      "chat": "チャット",
+      "social": "ソーシャル",
+      "updates": "更新"
     },
     "secondary": {
+      "addProfile": "プロフィールを追加",
+      "myLikes": "マイライク",
+      "myBookmarks": "マイブックマーク",
+      "myAccount": "マイアカウント",
+      "myProfile": "マイプロフィール",
+      "appSettings": "アプリ設定"
     }
   },
   "bottomNav": {
@@ -19,11 +30,24 @@
     }
   },
   "hub": {
+    "feeds": {
+      "global": "グローバル",
+      "local": "ローカル",
+      "social": "ソーシャル",
+      "home": "ホーム"
+    },
     "greetings": {
       "goodMorning": "おはよう",
       "goodAfternoon": "こんにちは",
       "goodEvening": "こんばんは",
       "goodNight": "おやすみ"
+    },
+    "navbarLabel": "ソーシャルハブ",
+    "section": {
+      "feeds": "フィード",
+      "users": "ユーザー",
+      "tags": "タグ",
+      "timelines": "タイムライン"
     }
   },
   "inbox": {

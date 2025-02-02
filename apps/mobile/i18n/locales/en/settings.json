@@ -1,0 +1,18 @@
+{
+  "general": {
+    "language": {
+      "S_Language": "Language",
+      "L_appLanguage": "App Language",
+      "L_contentLanguages": "Content Languages",
+      "L_translatorMode": "Translator Mode",
+      "D_translatorMode": "This will add a button to every page, which will let you quickly switch languages to test translations.",
+      "L_translationLanguages": "Translation Languages"
+    },
+    "timelines": {
+      "S_Timelines": "Timelines",
+      "L_lurkerMode": "Lurker Mode",
+      "D_lurkerMode": "This will hide certain buttons and prevent you from  accidentally interacting with posts.",
+      "L_contentWarnings": "Content Warnings"
+    }
+  }
+}

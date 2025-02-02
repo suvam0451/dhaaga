@@ -84,6 +84,12 @@ with open(strings_xml, 'w') as file:
 
 # ------------------
 
+# ------ Path to the file you want to modify -------
+
+# NOTE: at this step, you would to add core to replace your signing key
+
+# ------------------
+
 # NOTE: iOS not supported yet!
 
 # Comment out, if added permanently to your fork

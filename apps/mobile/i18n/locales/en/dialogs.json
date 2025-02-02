@@ -48,6 +48,17 @@
         "Submit empty string to remove."
       ],
       "placeholder": "Enter new alt text"
+    },
+    "setVisibility": {
+      "title": "Set Visibility",
+      "description": [
+        "Your \"Unlisted\" posts are hidden from feeds and search.",
+        "Your \"Direct\" messages are not encrypted."
+      ],
+      "publicLabel": "Public",
+      "unlistedLabel": "Unlisted",
+      "followersOnlyLabel": "Followers",
+      "directLabel": "Direct"
     }
   },
   "hub": {

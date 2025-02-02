@@ -79,6 +79,7 @@ function PinnedTimelineItemView({
 							size={appDimensions.socialHub.feeds.tiltedIconSize}
 							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 							iconStyle={{ color: theme.secondary.a0 }}
+							onPress={onPress}
 						/>
 					</View>
 					<AppText.H6
