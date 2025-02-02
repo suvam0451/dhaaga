@@ -6,15 +6,15 @@ import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
 import ActivitypubReactionsService from '../../../services/approto/activitypub-reactions.service';
 import {
 	useAppApiClient,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 } from '../../../hooks/utility/global-state-extractors';
 import { usePostInteractor } from '../../../features/_pubsub/interactors/usePostInteractor';
 import { appDimensions } from '../../../styles/dimensions';
 
 const AppBottomSheetPostMoreActions = memo(() => {
-	const { ctx, stateId } = useAppBottomSheet_Improved();
+	const { ctx, stateId } = useAppBottomSheet();
 	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
-	const { hide } = useAppBottomSheet_Improved();
+	const { hide } = useAppBottomSheet();
 	const { client, driver } = useAppApiClient();
 
 	const { post } = usePostInteractor(ctx?.uuid);

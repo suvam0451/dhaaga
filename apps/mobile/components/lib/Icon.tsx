@@ -25,7 +25,7 @@ import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
 import {
 	useAppAcct,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
@@ -42,6 +42,7 @@ export type APP_ICON_ENUM =
 	| 'browser'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
+	| 'checkmark'
 	| 'checkmark-circle'
 	| 'checkmark-done-outline'
 	| 'chevron-left'
@@ -61,6 +62,7 @@ export type APP_ICON_ENUM =
 	| 'eye'
 	| 'eye-filled'
 	| 'eye-off-filled'
+	| 'flash'
 	| 'gallery'
 	| 'globe'
 	| 'heart'
@@ -154,7 +156,7 @@ export function HomeNavigationIcon({
 }
 
 export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
-	const { show } = useAppBottomSheet_Improved();
+	const { show } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 
@@ -358,6 +360,15 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'checkmark':
+				return (
+					<Ionicons
+						name={'checkmark'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'checkmark-circle':
 				return (
 					<Ionicons
@@ -517,6 +528,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name="eye-off"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'flash':
+				return (
+					<Ionicons
+						name="flash"
 						size={_size}
 						color={_color}
 						style={iconStyle}

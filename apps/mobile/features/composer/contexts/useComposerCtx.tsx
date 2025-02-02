@@ -6,7 +6,7 @@ import {
 	postComposerReducerDefault as reducerDefault,
 	PostComposerReducerStateType,
 } from '../../../states/interactors/post-composer.reducer';
-import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet } from '../../../hooks/utility/global-state-extractors';
 import useAutoSuggestion from '../interactors/useAutoSuggestion';
 
 type Type = {
@@ -31,7 +31,7 @@ type Props = {
 };
 
 function WithComposerContext({ children, textSeed }: Props) {
-	const { stateId } = useAppBottomSheet_Improved();
+	const { stateId } = useAppBottomSheet();
 	const [state, dispatch] = useReducer(reducer, reducerDefault);
 	useAutoSuggestion(state, dispatch);
 

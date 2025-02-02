@@ -25,6 +25,8 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_TAB_DIGITAL_WELLBEING = '/profile/settings/digital-wellbeing',
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
 
+	SETTINGS_GENERAL_APP_LANGUAGE = '/profile/settings/general/app-language',
+
 	NOTIFICATIONS_MENTIONS = '/notifications',
 	NOTIFICATIONS_CHAT = '/notifications/chat',
 	NOTIFICATIONS_SOCIAL = '/notifications/social',

@@ -24,25 +24,16 @@ const ExtraInformationField = memo(function Foo({
 	last,
 }: ExtraInformationFieldProps) {
 	const { user } = useActivitypubUserContext();
-	const { acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-		})),
-	);
 
 	const { content: ParsedValue } = useMfm({
 		content: value,
-		remoteSubdomain: user?.getInstanceUrl(acct?.server),
 		emojiMap: user?.getEmojiMap(),
-		deps: [value],
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
 	});
 	const { content: ParsedLabel } = useMfm({
 		content: label,
-		remoteSubdomain: user?.getInstanceUrl(acct?.server),
 		emojiMap: user?.getEmojiMap(),
-		deps: [label],
 		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
 		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 	});

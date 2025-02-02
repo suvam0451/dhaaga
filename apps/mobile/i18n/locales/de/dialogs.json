@@ -7,6 +7,17 @@
         "Stuur een lege string in om te verwijderen."
       ],
       "placeholder": "Voer nieuwe alternatieve tekst in"
+    },
+    "setVisibility": {
+      "title": "Stel zichtbaarheid in",
+      "description": [
+        "Je \"Niet openbaar\" berichten zijn verborgen voor feeds en zoekopdrachten.",
+        "Je \"Direct\" berichten zijn niet versleuteld."
+      ],
+      "publicLabel": "Openbaar",
+      "unlistedLabel": "Niet openbaar",
+      "followersOnlyLabel": "Alleen volgers",
+      "directLabel": "Direct"
     }
   },
   "hub": {

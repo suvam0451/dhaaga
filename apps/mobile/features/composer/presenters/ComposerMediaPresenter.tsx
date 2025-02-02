@@ -113,7 +113,7 @@ function ComposerMediaPresenter() {
 	return (
 		<View>
 			<AppBottomSheetMenu.WithBackNavigation
-				backLabel={'Back'}
+				backLabel={t(`sheets.backOption`)}
 				nextLabel={''}
 				onBack={toHome}
 				onNext={() => {}}

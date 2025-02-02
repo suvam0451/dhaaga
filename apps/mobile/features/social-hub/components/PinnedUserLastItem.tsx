@@ -1,5 +1,5 @@
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { Pressable, View } from 'react-native';
@@ -10,7 +10,7 @@ const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
 
 function PinnedUserLastItem() {
 	const { theme } = useAppTheme();
-	const { show } = useAppBottomSheet_Improved();
+	const { show } = useAppBottomSheet();
 
 	function onPress() {
 		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);

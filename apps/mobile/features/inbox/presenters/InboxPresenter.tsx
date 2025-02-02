@@ -12,6 +12,8 @@ import MentionPresenter from './MentionPresenter';
 import ChatroomPresenter from './ChatroomPresenter';
 import SocialUpdatePresenter from './SocialUpdatePresenter';
 import UpdatesPresenter from './UpdatesPresenter';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 const renderScene = (index: number) => {
 	switch (index) {
@@ -32,6 +34,7 @@ function InboxPresenter() {
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 	const [TabIndex, setTabIndex] = useState(0);
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	const ref = useRef<PagerView>(null);
 
@@ -43,19 +46,19 @@ function InboxPresenter() {
 
 	const tabLabels = [
 		{
-			label: 'Mentions',
+			label: t(`inbox.nav.mentions`),
 			id: 'mentions',
 		},
 		{
-			label: 'Chat',
+			label: t(`inbox.nav.chat`),
 			id: 'social',
 		},
 		{
-			label: 'Social',
+			label: t(`inbox.nav.social`),
 			id: 'chat',
 		},
 		{
-			label: 'Updates',
+			label: t(`inbox.nav.updates`),
 			id: 'updates',
 		},
 	];

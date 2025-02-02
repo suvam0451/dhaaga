@@ -1,0 +1,141 @@
+{
+  "composer": {
+    "label": "Gids (Componist)",
+    "qPageIntro": "Wat doet deze pagina?",
+    "aPageIntro": [
+      "Deze pagina stelt je in staat om berichten te schrijven.",
+      "In de toekomst kun je ook polls maken en je gepubliceerde inhoud volgen."
+    ],
+    "qSuchLayoutsMuchWow": "Waarom zoveel lay-outs?",
+    "aSuchLayoutsMuchWow": [
+      "Dhaaga heeft drie unieke componist-lay-outs! Pfoe!",
+      "De kleinste verschijnt wanneer je reageert op directe berichten en berichten. Snel en eenvoudig!",
+      "De middelgrote (ook wel 'Quick Post' genoemd) verschijnt bij het publiceren van originele berichten. Het heeft de meeste opties, maar is een beetje krap voor langere berichten.",
+      "De volledige componist (nog niet geïmplementeerd) zal alle opties bevatten om je creativiteit te uiten!"
+    ],
+    "qHowConfigureLayout": "Hoe configureer ik de standaard lay-outs?",
+    "aHowConfigureLayout": [
+      "Mini-lay-outs kunnen krap zijn, ik weet het! Maar geef aan hoe ze verbeterd kunnen worden, in plaats van ze te vervangen.",
+      "Als het echt moet, zullen toekomstige updates opties bevatten om grotere lay-outs af te dwingen."
+    ],
+    "qGrayedOut": "Waarom zijn sommige opties grijs?",
+    "aGrayedOut": [
+      "Ze zijn nog niet geïmplementeerd, of je server ondersteunt ze nog niet."
+    ],
+    "qOneMoreThing": "Nog één ding...",
+    "aOneMoreThing": [
+      "Je kunt altijd van de mini-lay-out naar 'Quick Post' schakelen door op de knop aan de linkerkant te drukken."
+    ]
+  },
+  "hub": {
+    "label": "Gids (Hub)",
+    "qPageIntro": "Wat doet deze pagina?",
+    "aPageIntro": [
+      "De 'Social Hub' is een krachtige profielbeheer- en hub-aanpassingservaring die uniek is voor Dhaaga.",
+      "Organiseer en houd eenvoudig je interesses bij.",
+      "Geen behoefte om door algoritmische feeds te bladeren!"
+    ],
+    "qHowToUse": "Hoe gebruik je de hub?",
+    "aHowToUse": [
+      "Veeg naar links/rechts om van account te wisselen.",
+      "Druk op (+) om meer feeds/gebruikerstags vast te zetten."
+    ],
+    "qExplainProfiles": "Wat zijn profielen?",
+    "aExplainProfiles": [
+      "Je kunt meerdere profielen hebben voor elk account.",
+      "Een mooie manier om de hub-pinnen op interesse in te richten."
+    ],
+    "qHowToDeletePins": "Hoe verwijder ik pinnen?",
+    "aHowToDeletePins": [
+      "Druk lang op een pin om meer opties weer te geven!"
+    ],
+    "qHowToArrangePins": "Hoe rangschik ik pinnen?",
+    "aHowToArrangePins": [
+      "Nog niet beschikbaar."
+    ],
+    "qOneMoreThing": "Nog één ding...",
+    "aOneMoreThing": [
+      "Je kunt hier vrij wisselen tussen accounts,",
+      "Maar dit verandert niet welk account actief is overal elders in de app.",
+      "Als je probeert een pin te openen voor een inactief account, zal een dialoogvenster je helpen om te schakelen en door te gaan."
+    ]
+  },
+  "inbox": {
+    "label": "Gids (Inbox)",
+    "qPageIntro": "Wat doet deze pagina?",
+    "aPageIntro": [
+      "In Dhaaga worden je meldingen verdeeld over vier tabbladen. Deze functie wordt ook wel 'Inbox-categorieën' genoemd.",
+      "Elk tabblad toont de informatie in een formaat dat beter past bij die categorie."
+    ],
+    "qTabMention": "Wat toont het 'Vermeldingen' tabblad?",
+    "aTabMention": [
+      "Het 'Vermeldingen' tabblad toont reacties/citaten op je berichten. Het toont ook berichten waarin je wordt genoemd."
+    ],
+    "qTabChat": "Wat toont het 'Chat' tabblad?",
+    "aTabChat": [
+      "Het 'Chat' tabblad toont alle gesprekken waaraan je deelneemt.",
+      "p.s. - Alleen Bluesky heeft specifieke chatfuncties. De implementatie in het Fediverse kan variëren tussen software."
+    ],
+    "qTabSocial": "Wat toont het 'Sociaal' tabblad?",
+    "aTabSocial": [
+      "Het 'Sociaal' tabblad toont mensen die je berichten leuk vonden/gedeeld hebben, evenals veranderingen in volgers/volgen."
+    ],
+    "qTabUpdates": "Wat toont het 'Updates' tabblad?",
+    "aTabUpdates": [
+      "De 'Updates' interface toont berichten van gebruikers waarop je geabonneerd bent.",
+      "p.s. - Abonneren op account-updates is nog niet geïmplementeerd door Bluesky. Dus het tabblad zal leeg zijn."
+    ],
+    "qWhyFewSettings": "Hoe pas ik mijn meldingen aan?",
+    "aWhyFewSettings": [
+      "Extra instellingen en functies worden nog steeds ontwikkeld."
+    ],
+    "qOneMoreThing": "Nog één ding...",
+    "aOneMoreThing": [
+      "Oké, twee dingen :)",
+      "1) Alle knoppen in Dhaaga zijn onderaan uitgelijnd voor eenvoudig gebruik met één hand.",
+      "2) Het vegen tussen tabbladen is uitgeschakeld om het makkelijker te maken media-carousels te vegen (en natuurlijk om wagenziekte te voorkomen)."
+    ]
+  },
+  "myAccount": {
+    "label": "Gids (Mijn Account)",
+    "qPageIntro": "Wat doet deze pagina?",
+    "aPageIntro": [
+      "Dit is een overzicht van je account!",
+      "Je kunt de meeste functies van je server gebruiken, evenals de speciale Dhaaga-functies."
+    ],
+    "qHowAddSwitchAccount": "Hoe voeg ik een account toe/wissel ik van account?",
+    "aHowAddSwitchAccount": [
+      "Om te wisselen, houd de 5e tab vast (werkt overal).",
+      "Om toe te voegen, gebruik bovenstaand of ga naar Instellingen -> Accounts -> Toevoegen"
+    ],
+    "qHowEditAccountDetails": "Hoe bewerk ik mijn accountgegevens?",
+    "aHowEditAccountDetails": [
+      "Het bewerken van avatar en banner enz. moet via websites (voor nu) worden gedaan.",
+      "Aangezien Dhaaga zich richt op browsen en chatgebruik, worden dergelijke functies langzaam toegevoegd."
+    ],
+    "qProfileOutOfSync": "Mijn profiel is niet in sync",
+    "aProfileOutOfSync": [
+      "Als iets niet in sync voelt (bijvoorbeeld - tellers, avatar, banner, enz.),",
+      "Probeer dan de pagina naar beneden te trekken en deze opnieuw te laden. Dit is ontworpen om de meeste synchronisatieproblemen op te lossen.",
+      "Als het probleem aanhoudt, meld dit dan bij de ontwikkelaar."
+    ]
+  },
+  "settings": {
+    "qWhereAmI": "Waar ben ik?",
+    "aWhereAmI": [
+      "Vanaf hier kun je verschillende instellingen aanpassen die je ervaring in de app beïnvloeden, evenals extra functies die Dhaaga biedt."
+    ],
+    "qServerSettingMismatch": "Waarom zijn mijn serverinstellingen niet geïmporteerd?",
+    "aServerSettingMismatch": [
+      "Dhaaga is een multi-protocol client die veel SNS-software ondersteunt.",
+      "Dus, deze instellingen moeten lokaal worden ingesteld.",
+      "Maar, eenmaal ingesteld, worden ze toegepast op al je SNS-accounts!"
+    ],
+    "qSupportHow": "Hoe kan ik je steunen?",
+    "aSupportHow": [
+      "Wauw, bedankt 💛.",
+      "Als indie-ontwikkelaar zou ik je feedback, aanmoediging en steun enorm waarderen.",
+      "Voel je vrij om langs te komen en hallo te zeggen 👋: \nHield je het niet van? Vertel me wat ik kan verbeteren!\nVond je het leuk? Deel het dan met je vrienden!\nLiefde voor het? Overweeg dan een fooi achter te laten!"
+    ]
+  }
+}

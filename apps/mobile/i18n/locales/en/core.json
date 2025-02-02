@@ -1,49 +1,64 @@
 {
   "topNav": {
     "primary": {
-      "home": "Social Hub",
+      "hub": "Social Hub",
       "discover": "Discover",
       "compose": "Compose",
       "account": "My Account",
-      "setting": "App Settings"
+      "setting": "App Settings",
+      "inbox": "Inbox",
+      "mentions": "Mentions",
+      "chat": "Chat",
+      "social": "Social",
+      "updates": "Updates"
     },
     "secondary": {
-      "myLikes": "",
-      "myBookmarks": ""
+      "addProfile": "Add Profile",
+      "myLikes": "My Likes",
+      "myBookmarks": "My Bookmarks",
+      "myAccount": "My Account",
+      "myProfile": "My Profile",
+      "appSettings": "App Settings"
     }
-  },
-  "bottomNav": {
-    "inbox": {
-      "mentions": "",
-      "chat": "",
-      "social": "",
-      "updates": ""
-    }
-  },
-  "database": {
-    "defaultText": "Default"
   },
   "dialogs": {
     "renameOption": "Rename",
-    "deleteOption": "Delete"
+    "deleteOption": "Delete",
+    "dismissOption": "Dismiss",
+    "saveOption": "Save"
+  },
+  "sheets": {
+    "backOption": "Back"
   },
   "hub": {
+    "feeds": {
+      "global": "Global",
+      "local": "Local",
+      "social": "Social",
+      "home": "Home",
+      "bubble": "Bubble"
+    },
     "greetings": {
       "goodMorning": "Good Morning",
       "goodAfternoon": "Good Afternoon",
       "goodEvening": "Good Evening",
       "goodNight": "Good Night"
     },
+    "navbarLabel": "Social Hub",
     "section": {
-      "feeds": "Timelines",
+      "feeds": "Feeds",
       "users": "Users",
-      "tags": "Tags"
-    },
-    "feeds": {
-      "global": "Global",
-      "local": "Local",
+      "tags": "Tags",
+      "timelines": "Timelines"
+    }
+  },
+  "inbox": {
+    "name": "Inbox",
+    "nav": {
+      "mentions": "Mentions",
+      "chat": "Chat",
       "social": "Social",
-      "home": "Home"
+      "updates": "Updates"
     }
   },
   "collections": {

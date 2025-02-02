@@ -1,5 +1,7 @@
 import { AppDialogInstanceState } from '../states/_global';
 import { APP_POST_VISIBILITY } from '../hooks/app/useVisibility';
+import { TFunction } from 'i18next';
+import { LOCALIZATION_NAMESPACE } from '../types/app.types';
 
 type ActionType = {
 	label: string;
@@ -303,35 +305,35 @@ export class DialogBuilderService {
 	}
 
 	static changePostVisibility_ActivityPub(
+		t: TFunction<LOCALIZATION_NAMESPACE.DIALOGS[], undefined>,
 		fn: (visibility: APP_POST_VISIBILITY) => Promise<void>,
 	) {
 		return {
-			title: 'Set Visibility',
-			description: [
-				'Your \"Unlisted\" posts will be hidden from feeds and search.',
-				'Your \"Direct\" messages are not encrypted.',
-			],
+			title: t(`composer.setVisibility.title`),
+			description: t(`composer.setVisibility.description`, {
+				returnObjects: true,
+			}) as string[],
 			actions: [
 				{
-					label: 'Public',
+					label: t(`composer.setVisibility.publicLabel`),
 					onPress: async () => {
 						fn.call(null, APP_POST_VISIBILITY.PUBLIC);
 					},
 				},
 				{
-					label: 'Unlisted',
+					label: t(`composer.setVisibility.unlistedLabel`),
 					onPress: async () => {
 						fn.call(null, APP_POST_VISIBILITY.UNLISTED);
 					},
 				},
 				{
-					label: 'Followers',
+					label: t(`composer.setVisibility.followersOnlyLabel`),
 					onPress: async () => {
 						fn.call(null, APP_POST_VISIBILITY.PRIVATE);
 					},
 				},
 				{
-					label: 'Direct',
+					label: t(`composer.setVisibility.directLabel`),
 					onPress: async () => {
 						fn.call(null, APP_POST_VISIBILITY.DIRECT);
 					},

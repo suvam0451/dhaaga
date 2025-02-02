@@ -5,7 +5,7 @@ import { AppIcon } from '../../../components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import {
 	useAppApiClient,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
@@ -84,7 +84,7 @@ function MorePostActionsPresenter({
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const _target = PostMiddleware.getContentTarget(item);
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 
 	const IS_BOOKMARKED = _target?.interaction.bookmarked;
 	const IS_LIKED = PostMiddleware.isLiked(_target);

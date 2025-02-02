@@ -18,7 +18,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useAppListAccounts } from '../../../../hooks/db/useAppListAccounts';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { AppBottomSheetMenu } from '../../../lib/Menu';
@@ -35,7 +35,7 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 			db: o.db,
 		})),
 	);
-	const { hide, refresh } = useAppBottomSheet_Improved();
+	const { hide, refresh } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 
 	const avatar = AccountMetadataService.getKeyValueForAccountSync(

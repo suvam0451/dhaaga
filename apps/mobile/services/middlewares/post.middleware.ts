@@ -13,7 +13,6 @@ import {
 import ActivitypubAdapterService from '../activitypub-adapter.service';
 import { z } from 'zod';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import AppPrivacySettingsService from '../app-settings/app-settings-privacy.service';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { AccountSavedPost } from '../../database/_schema';
 import { DataSource } from '../../database/dataSource';
@@ -73,21 +72,7 @@ export class PostMiddleware {
 		return this;
 	}
 
-	async syncSoftware(db: SQLiteDatabase) {
-		if (
-			AppPrivacySettingsService.create(
-				db,
-			).isDisabledCrossInstanceSoftwareCaching()
-		) {
-			return this;
-		}
-
-		// const promises = Array.from(this.foundInstances).map((o) => {
-		// 	return ProfileKnownServerService.syncDriver(db, o);
-		// });
-		// await Promise.all(promises);
-		return this;
-	}
+	async syncSoftware(db: SQLiteDatabase) {}
 
 	// Static method that returns an instance of MyClass
 	static factory(ref: StatusInterface, domain?: string, subdomain?: string) {

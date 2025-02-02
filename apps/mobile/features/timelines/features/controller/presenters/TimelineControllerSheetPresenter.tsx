@@ -1,6 +1,6 @@
 import {
 	useAppAcct,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppBottomSheet_TimelineReference,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Fragment, useEffect, useMemo, useRef } from 'react';
@@ -21,7 +21,7 @@ import UserTimelineControlPresenter from './UserTimelineControlPresenter';
 function TimelineControllerSheetPresenter() {
 	const { draft } = useAppBottomSheet_TimelineReference();
 	const { acct } = useAppAcct();
-	const { endSessionSeed, stateId } = useAppBottomSheet_Improved();
+	const { endSessionSeed, stateId } = useAppBottomSheet();
 	const {
 		onFeedOptSelected,
 		FeedOpt,

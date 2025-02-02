@@ -12,6 +12,8 @@ import {
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../states/useAppNavigator';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	items: ProfilePinnedTag[];
@@ -35,6 +37,7 @@ function TagListPresenter({
 	);
 	const { show, hide } = useAppDialog();
 	const { toTimelineViaPin } = useAppNavigator();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function onPress(item: ProfilePinnedTag) {
 		if (parentAcct.id !== acct.id) {
@@ -64,7 +67,7 @@ function TagListPresenter({
 
 	return (
 		<HubTabSectionContainer
-			label={'Tags'}
+			label={t(`hub.section.tags`)}
 			style={{
 				marginTop: 16,
 			}}

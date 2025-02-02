@@ -7,6 +7,17 @@
         "空の文字列を送信して削除します。"
       ],
       "placeholder": "新しい代替テキストを入力してください"
+    },
+    "setVisibility": {
+      "title": "表示設定",
+      "description": [
+        "\"未公開\"の投稿はフィードや検索結果に表示されません。",
+        "\"ダイレクト\"メッセージは暗号化されていません。"
+      ],
+      "publicLabel": "公開",
+      "unlistedLabel": "未公開",
+      "followersOnlyLabel": "フォロワー限定",
+      "directLabel": "ダイレクト"
     }
   },
   "hub": {

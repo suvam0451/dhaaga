@@ -1,45 +1,58 @@
 {
   "topNav": {
     "primary": {
-      "home": "Soziales Zentrum",
-      "discover": "Entdecken",
-      "compose": "Erstellen",
-      "account": "Mein Konto",
-      "setting": "App-Einstellungen"
+      "hub": "Social Hub",
+      "discover": "Ontdek",
+      "compose": "Opstellen",
+      "account": "Mijn Account",
+      "setting": "App Instellingen",
+      "inbox": "Inbox",
+      "mentions": "Vermeldingen",
+      "chat": "Chat",
+      "social": "Sociaal",
+      "updates": "Updates"
     },
     "secondary": {
-      "myLikes": "",
-      "myBookmarks": ""
+      "addProfile": "Profiel Toevoegen",
+      "myLikes": "Mijn Likes",
+      "myBookmarks": "Mijn Bladwijzers",
+      "myAccount": "Mijn Account",
+      "myProfile": "Mijn Profiel",
+      "appSettings": "App Instellingen"
     }
   },
-  "bottomNav": {
-    "inbox": {
-      "mentions": "",
-      "chat": "",
-      "social": "",
-      "updates": ""
-    }
-  },
-  "database": {
-    "defaultText": "Standard"
+  "sheets": {
+    "backOption": "Terug"
   },
   "hub": {
+    "feeds": {
+      "global": "Globaal",
+      "local": "Lokaal",
+      "social": "Sociaal",
+      "home": "Huis",
+      "bubble": "Bubble"
+    },
     "greetings": {
       "goodMorning": "Guten Morgen",
       "goodAfternoon": "Guten Nachmittag",
       "goodEvening": "Guten Abend",
       "goodNight": "Gute Nacht"
     },
+    "navbarLabel": "Social Hub",
     "section": {
-      "feeds": "Zeitleisten",
-      "users": "Benutzer",
-      "tags": "Tags"
-    },
-    "feeds": {
-      "global": "Global",
-      "local": "Lokal",
-      "social": "Sozial",
-      "home": "Startseite"
+      "feeds": "Feeds",
+      "users": "Gebruikers",
+      "tags": "Tags",
+      "timelines": "Tijdlijnen"
+    }
+  },
+  "inbox": {
+    "name": "Inbox",
+    "pageHeader": {
+      "mentions": "Vermeldingen",
+      "chat": "Chat",
+      "social": "Sociaal",
+      "updates": "Updates"
     }
   },
   "collections": {
@@ -54,6 +67,7 @@
     "quickPost": "Schnellpost",
     "quickPostCta": "Was denkst du gerade?",
     "quickPostSubmit": "Posten",
+    "noAttachments": "Geen bijlagen toegevoegd",
     "landing": {
       "tComposeFull": "Erstelle einen Beitrag",
       "dComposeFull": [

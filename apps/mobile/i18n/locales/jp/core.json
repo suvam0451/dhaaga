@@ -1,49 +1,64 @@
 {
   "topNav": {
     "primary": {
-      "home": "ソーシャルハブ",
-      "discover": "発見する",
-      "compose": "しっぴつする",
+      "hub": "ソーシャルハブ",
+      "discover": "発見",
+      "compose": "作成",
       "account": "マイアカウント",
-      "setting": "アプリ設定"
+      "setting": "アプリ設定",
+      "inbox": "受信箱",
+      "mentions": "メンション",
+      "chat": "チャット",
+      "social": "社交",
+      "updates": "更新"
     },
     "secondary": {
+      "addProfile": "プロフィールを追加",
+      "myLikes": "マイライク",
+      "myBookmarks": "マイブックマーク",
+      "myAccount": "マイアカウント",
+      "myProfile": "マイプロフィール",
+      "appSettings": "アプリ設定"
     }
   },
-  "bottomNav": {
-    "inbox": {
-      "mentions": "",
-      "chat": "",
-      "social": "",
-      "updates": ""
-    }
+  "dialogs": {
+    "renameOption": "名前を変更",
+    "deleteOption": "削除",
+    "dismissOption": "閉じる",
+    "saveOption": "保存"
+  },
+  "sheets": {
+    "backOption": "戻る"
   },
   "hub": {
+    "feeds": {
+      "global": "グローバル",
+      "local": "ローカル",
+      "social": "ソーシャル",
+      "home": "ホーム",
+      "bubble": "バブル"
+    },
     "greetings": {
       "goodMorning": "おはよう",
       "goodAfternoon": "こんにちは",
       "goodEvening": "こんばんは",
       "goodNight": "おやすみ"
+    },
+    "navbarLabel": "ソーシャルハブ",
+    "section": {
+      "feeds": "フィード",
+      "users": "ユーザー",
+      "tags": "タグ",
+      "timelines": "タイムライン"
     }
   },
   "inbox": {
-    "pageHeader": {
+    "name": "受信箱",
+    "nav": {
       "mentions": "メンション",
       "chat": "チャット",
-      "social": "ソーシャル",
-      "updates": "アップデート"
-    },
-    "pageDescription": {
-      "mentions": "「これらのユーザーはあなたに言及または返信しました」",
-      "chat": "",
-      "social": "「これらの人々はあなたの投稿にいいね、シェア、またはリアクションしました」",
-      "updates": "「これはあなたが購読しているアカウントからの更新です」"
-    }
-  },
-  "profile": {
-  },
-  "sheets": {
-    "composer": {
+      "social": "社交",
+      "updates": "更新"
     }
   },
   "collections": {
@@ -58,6 +73,7 @@
     "quickPost": "クイック投稿",
     "quickPostCta": "何を考えていますか？",
     "quickPostSubmit": "投稿",
+    "noAttachments": "添付ファイルはありません",
     "landing": {
       "tComposeFull": "投稿を作成",
       "dComposeFull": [

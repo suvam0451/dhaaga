@@ -7,7 +7,7 @@ import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBook
 import {
 	useAppAcct,
 	useAppApiClient,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
@@ -98,7 +98,7 @@ function LikeButton() {
 function CommentButton() {
 	const { dto: item } = useAppStatusItem();
 	const { theme } = useAppTheme();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 
 	function onPress() {
 		setCtx({ uuid: item.uuid });
@@ -122,7 +122,7 @@ function CommentButton() {
 function ReactButton() {
 	const { dto: item } = useAppStatusItem();
 	const { theme } = useAppTheme();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 
 	function onPress() {
 		setCtx({ uuid: item.uuid });

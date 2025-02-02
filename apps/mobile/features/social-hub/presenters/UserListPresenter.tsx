@@ -14,6 +14,8 @@ import useAppNavigator from '../../../states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '../../../services/driver.service';
 import * as Haptics from 'expo-haptics';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	profile: Profile;
@@ -38,6 +40,7 @@ function UserListPresenter({
 	);
 	const { show, hide } = useAppDialog();
 	const { toTimelineViaPin } = useAppNavigator();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function onPress(item: ProfilePinnedUser) {
 		if (parentAcct.id !== acct.id) {
@@ -85,7 +88,7 @@ function UserListPresenter({
 
 	return (
 		<HubTabSectionContainer
-			label={'Users'}
+			label={t(`hub.section.users`)}
 			style={styles.root}
 			onPressAdd={onPressAddUser}
 		>

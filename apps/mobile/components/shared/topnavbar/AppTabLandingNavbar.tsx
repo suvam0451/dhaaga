@@ -4,6 +4,8 @@ import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppText } from '../../lib/Text';
 import { appDimensions } from '../../../styles/dimensions';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -33,29 +35,30 @@ type AppTabLandingNavbarProps = {
 	}[];
 };
 
-const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
-	[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Profile',
-	[APP_LANDING_PAGE_TYPE.HOME]: 'Social Hub',
-	[APP_LANDING_PAGE_TYPE.DISCOVER]: 'Discover',
-	[APP_LANDING_PAGE_TYPE.COMPOSE]: 'Compose',
-	[APP_LANDING_PAGE_TYPE.INBOX]: 'Inbox',
-	[APP_LANDING_PAGE_TYPE.PROFILE]: 'App Profile', // Modules within "Inbox" tab
-	[APP_LANDING_PAGE_TYPE.MENTIONS]: 'Mentions',
-	[APP_LANDING_PAGE_TYPE.CHAT]: 'Chat',
-	[APP_LANDING_PAGE_TYPE.SOCIAL]: 'Social',
-	[APP_LANDING_PAGE_TYPE.UPDATES]: 'Updates',
-	[APP_LANDING_PAGE_TYPE.APP_SETTINGS]: 'App Settings',
-	[APP_LANDING_PAGE_TYPE.MY_ACCOUNT]: 'My Account',
-	[APP_LANDING_PAGE_TYPE.MY_PROFILE]: 'My Profile',
-	[APP_LANDING_PAGE_TYPE.ACCOUNT_HUB]: 'My Account',
-};
-
 /**
  * This navbar is expected on the
  * landing pages for each of the five
  * main routes
  */
 function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
+		[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Profile',
+		[APP_LANDING_PAGE_TYPE.HOME]: t(`topNav.primary.hub`),
+		[APP_LANDING_PAGE_TYPE.DISCOVER]: t(`topNav.primary.discover`),
+		[APP_LANDING_PAGE_TYPE.COMPOSE]: t(`topNav.primary.compose`),
+		[APP_LANDING_PAGE_TYPE.INBOX]: t(`topNav.primary.inbox`),
+		[APP_LANDING_PAGE_TYPE.PROFILE]: 'App Profile', // Modules within "Inbox" tab
+		[APP_LANDING_PAGE_TYPE.MENTIONS]: t(`topNav.primary.mentions`),
+		[APP_LANDING_PAGE_TYPE.CHAT]: t(`topNav.primary.chat`),
+		[APP_LANDING_PAGE_TYPE.SOCIAL]: t(`topNav.primary.social`),
+		[APP_LANDING_PAGE_TYPE.UPDATES]: t(`topNav.primary.updates`),
+		[APP_LANDING_PAGE_TYPE.APP_SETTINGS]: t(`topNav.secondary.appSettings`),
+		[APP_LANDING_PAGE_TYPE.MY_ACCOUNT]: t(`topNav.secondary.myAccount`),
+		[APP_LANDING_PAGE_TYPE.MY_PROFILE]: t(`topNav.secondary.myProfile`),
+		[APP_LANDING_PAGE_TYPE.ACCOUNT_HUB]: t(`topNav.secondary.myAccount`),
+	};
+
 	return (
 		<View style={[styles.container]}>
 			<View style={{ flexGrow: 1 }}>

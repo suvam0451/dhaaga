@@ -2,8 +2,6 @@ import { Fragment, memo } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import TitleOnlyScrollContainer from '../../../../components/containers/TitleOnlyScrollContainer';
 import AppSettingListItem from '../../../../components/screens/settings/fragments/AppSettingListItem';
-import AppSettingBooleanToggle from '../../../../components/screens/settings/fragments/AppSettingBooleanToggle';
-import { appSettingsKeys } from '../../../../services/app-settings/app-settings';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../styles/AppTheme';
 
@@ -13,56 +11,6 @@ const UserPreferences = memo(() => {
 			title={'User Preferences'}
 			contentContainerStyle={{ paddingHorizontal: 8 }}
 		>
-			{/*<Text style={styles.sectionLabel}>Composer</Text>*/}
-			{/*<AppSettingListItem*/}
-			{/*	label={'Mastodon and Pleroma'}*/}
-			{/*	subtext={*/}
-			{/*		'Set defaults for all your Mastodon/Pleroma compatible' + ' accounts.'*/}
-			{/*	}*/}
-			{/*	children={*/}
-			{/*		<Fragment>*/}
-			{/*			<AppSettingBooleanToggle*/}
-			{/*				label={'Post Visibility'}*/}
-			{/*				subtext={'Default visibility selected when creating new posts.'}*/}
-			{/*				settingKey={*/}
-			{/*					appSettingsKeys.preferences.post.interaction.quickReaction*/}
-			{/*				}*/}
-			{/*				style={{ marginBottom: 16 }}*/}
-			{/*			/>*/}
-			{/*			<AppSettingBooleanToggle*/}
-			{/*				label={'Reply Visibility'}*/}
-			{/*				subtext={'Default visibility selected when replying.'}*/}
-			{/*				settingKey={*/}
-			{/*					appSettingsKeys.preferences.post.interaction.quickReaction*/}
-			{/*				}*/}
-			{/*			/>*/}
-			{/*		</Fragment>*/}
-			{/*	}*/}
-			{/*/>*/}
-			{/*<AppSettingListItem*/}
-			{/*	label={'Misskey'}*/}
-			{/*	subtext={'Set defaults for all your Misskey compatible accounts.'}*/}
-			{/*	children={*/}
-			{/*		<Fragment>*/}
-			{/*			<AppSettingBooleanToggle*/}
-			{/*				label={'Post Visibility'}*/}
-			{/*				subtext={'Default visibility selected when creating new posts.'}*/}
-			{/*				settingKey={*/}
-			{/*					appSettingsKeys.preferences.post.interaction.quickReaction*/}
-			{/*				}*/}
-			{/*				style={{ marginBottom: 16 }}*/}
-			{/*			/>*/}
-			{/*			<AppSettingBooleanToggle*/}
-			{/*				label={'Reply Visibility'}*/}
-			{/*				subtext={'Default visibility selected when replying.'}*/}
-			{/*				settingKey={*/}
-			{/*					appSettingsKeys.preferences.post.interaction.quickReaction*/}
-			{/*				}*/}
-			{/*			/>*/}
-			{/*		</Fragment>*/}
-			{/*	}*/}
-			{/*/>*/}
-
 			<Text style={styles.sectionLabel}>Miscellaneous</Text>
 
 			<AppSettingListItem
@@ -70,29 +18,7 @@ const UserPreferences = memo(() => {
 				subtext={
 					'Skip confirmation dialogs when performing' + ' various actions.'
 				}
-				children={
-					<Fragment>
-						<AppSettingBooleanToggle
-							label={'Quick Reactions'}
-							subtext={
-								'Pressing reactions add/remove them. Holding views details.'
-							}
-							settingKey={
-								appSettingsKeys.preferences.post.interaction.quickReaction
-							}
-							style={{ marginBottom: 16 }}
-						/>
-						<AppSettingBooleanToggle
-							label={'Quick Boost'}
-							subtext={
-								'Pressing boost add/removes them. Holding shows advanced menu.'
-							}
-							settingKey={
-								appSettingsKeys.preferences.post.interaction.quickBoost
-							}
-						/>
-					</Fragment>
-				}
+				children={<Fragment></Fragment>}
 			></AppSettingListItem>
 		</TitleOnlyScrollContainer>
 	);

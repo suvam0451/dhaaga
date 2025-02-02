@@ -17,7 +17,7 @@ import { DatetimeUtil } from '../../../../../utils/datetime.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { AppUserObject } from '../../../../../types/app-user.types';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { LocalizationService } from '../../../../../services/localization.service';
@@ -271,7 +271,7 @@ type InterfaceProps = {
  */
 export const NotificationSenderInterface = memo(
 	({ user, type, extraData, createdAt }: InterfaceProps) => {
-		const { show } = useAppBottomSheet_Improved();
+		const { show } = useAppBottomSheet();
 
 		const id = user.id;
 

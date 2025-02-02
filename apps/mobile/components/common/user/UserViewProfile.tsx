@@ -19,7 +19,7 @@ import ProfileModules from '../../screens/(shared)/stack/profile/modules/Profile
 import { AppIcon } from '../../lib/Icon';
 import { appDimensions } from '../../../styles/dimensions';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppManager,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
@@ -43,7 +43,7 @@ export function ProfileContextWrapped() {
 		updateQueryCache: () => {},
 	});
 
-	const { show } = useAppBottomSheet_Improved();
+	const { show } = useAppBottomSheet();
 	const { appManager } = useAppManager();
 	function onMoreOptionsPressed() {
 		if (!acct) return;

@@ -2,7 +2,11 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
-import { useHub } from '../hooks/utility/global-state-extractors';
+import { useAppDb, useHub } from '../hooks/utility/global-state-extractors';
+import { AppSettingService } from '../database/entities/app-setting';
+import SettingsService, { APP_SETTING_KEY } from '../services/settings.service';
+import useAppSettings from '../features/settings/interactors/useAppSettings';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Responsible for ensuring all
@@ -21,6 +25,9 @@ function useAppSession() {
 	const [ProfileReady, setProfileReady] = useState(false);
 
 	const db = useSQLiteContext();
+	const { db: appDb } = useAppDb();
+	const { getValue, setValue, setAppLangauge } = useAppSettings();
+	const { i18n } = useTranslation();
 
 	const {
 		appInitialize,
@@ -48,6 +55,14 @@ function useAppSession() {
 		loadAccounts();
 		setAppReady(true);
 	}, [db]);
+
+	// load settings
+	useEffect(() => {
+		if (!appDb) return;
+		SettingsService.init(appDb);
+		const lang = getValue<string>(APP_SETTING_KEY.APP_LANGUAGE);
+		if (lang) i18n.changeLanguage(lang);
+	}, [appDb]);
 
 	// load essential account data
 	useEffect(() => {

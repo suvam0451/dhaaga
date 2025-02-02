@@ -1,10 +1,10 @@
-import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet } from '../../../hooks/utility/global-state-extractors';
 import { useEffect, useState } from 'react';
 import useGetProfile from '../api/useGetProfile';
 import { AppUserObject } from '../../../types/app-user.types';
 
 function useProfilePeekSheetInteractor() {
-	const { ctx, stateId } = useAppBottomSheet_Improved();
+	const { ctx, stateId } = useAppBottomSheet();
 	const [UserId, setUserId] = useState<string>(null);
 	const [UserObject, setUserObject] = useState<AppUserObject>(null);
 

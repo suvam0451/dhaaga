@@ -14,6 +14,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { AppText } from '../../../components/lib/Text';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	acct?: Account;
@@ -21,7 +23,8 @@ type Props = {
 
 function SocialHubHeader({ acct }: Props) {
 	const [GreetingActive, setGreetingActive] = useState(false);
-	const { navigation } = useHub();
+	const { pageIndex } = useHub();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	useEffect(() => {
 		setGreetingActive(true);
@@ -33,7 +36,7 @@ function SocialHubHeader({ acct }: Props) {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [navigation]);
+	}, [pageIndex]);
 
 	const menuItems = [
 		{
@@ -58,7 +61,7 @@ function SocialHubHeader({ acct }: Props) {
 					</Animated.View>
 				) : (
 					<Animated.View entering={FadeInLeft} exiting={FlipOutXUp}>
-						<AppText.H1>Social Hub</AppText.H1>
+						<AppText.H1>{t(`hub.navbarLabel`)}</AppText.H1>
 					</Animated.View>
 				)}
 			</Animated.View>
