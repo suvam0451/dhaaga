@@ -25,7 +25,7 @@ import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
 import {
 	useAppAcct,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
@@ -156,7 +156,7 @@ export function HomeNavigationIcon({
 }
 
 export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
-	const { show } = useAppBottomSheet_Improved();
+	const { show } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 

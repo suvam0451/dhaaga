@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
+	useAppDb,
 	useAppManager,
 	useAppTheme,
 	useProfileManager,
 } from '../../../hooks/utility/global-state-extractors';
 import { View } from 'react-native';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
 import { AppMenu, AppMenuItem } from '../../lib/Menu';
 import { AppIcon } from '../../lib/Icon';
@@ -17,18 +16,14 @@ import { AppUserObject } from '../../../types/app-user.types';
 function AppBottomSheetUserMoreActions() {
 	const currentTargetId = useRef(null);
 	const currentTargetObj = useRef<AppUserObject>(null);
-	const { stateId } = useAppBottomSheet_Improved();
+	const { stateId } = useAppBottomSheet();
 	const { appManager } = useAppManager();
 	const { profileManager } = useProfileManager();
 	const { theme } = useAppTheme();
 
 	const [IsPinnedForProfile, setIsPinnedForProfile] = useState(false);
 
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
 	useEffect(() => {
 		const userId = appManager.storage.getUserId();
 		const userObj = appManager.storage.getUserObject();

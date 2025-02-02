@@ -1,6 +1,6 @@
 import {
 	useAppApiClient,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
@@ -17,7 +17,7 @@ function PostActionButtonToggleBookmark() {
 	const { driver } = useAppApiClient();
 	const { dto } = useAppStatusItem();
 	const { theme } = useAppTheme();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 	const { postPub } = useAppPublishers();
 
 	// helper functions

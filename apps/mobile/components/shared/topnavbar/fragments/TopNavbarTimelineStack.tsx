@@ -16,7 +16,7 @@ import { LocalizationService } from '../../../../services/localization.service';
 import { ACTION } from '../../../../states/interactors/post-timeline.reducer';
 import {
 	useAppApiClient,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppBottomSheet_TimelineReference,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
@@ -39,7 +39,7 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 function TimelinesHeader() {
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const { show } = useAppBottomSheet_Improved();
+	const { show } = useAppBottomSheet();
 	const { attach } = useAppBottomSheet_TimelineReference();
 
 	const State = useTimelineState();

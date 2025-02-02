@@ -1,6 +1,6 @@
 import {
 	useAppAcct,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { TextParserService } from '../../../services/text-parser.service';
@@ -15,7 +15,7 @@ type Props = {
 
 function MentionSegment({ value, link, fontFamily }: Props) {
 	const { theme } = useAppTheme();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 	const { acct } = useAppAcct();
 
 	const parsed = TextParserService.mentionTextToHandle(value, acct);

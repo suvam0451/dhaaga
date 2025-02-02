@@ -8,7 +8,7 @@ import { router } from 'expo-router';
 import AppNoAccount from '../../components/error-screen/AppNoAccount';
 import {
 	useAppAcct,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { APP_ROUTING_ENUM } from '../../utils/route-list';
@@ -25,7 +25,7 @@ const MARGON_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 function ComposerLandingPage() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 

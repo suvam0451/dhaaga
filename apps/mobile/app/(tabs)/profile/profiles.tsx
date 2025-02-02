@@ -5,7 +5,7 @@ import AppTopNavbar, {
 } from '../../../components/shared/topnavbar/AppTopNavbar';
 import { useEffect, useState } from 'react';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppDb,
 	useAppDialog,
 	useAppPublishers,
@@ -130,7 +130,7 @@ function Page() {
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { db } = useAppDb();
 	const { theme } = useAppTheme();
-	const { show, stateId } = useAppBottomSheet_Improved();
+	const { show, stateId } = useAppBottomSheet();
 	const { appSub } = useAppPublishers();
 
 	function init() {

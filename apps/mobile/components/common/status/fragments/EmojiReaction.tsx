@@ -1,5 +1,5 @@
 import { EmojiDto, styles } from './_shared.types';
-import { memo, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
 	TouchableOpacity,
 	View,
@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppBottomSheet } from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
-import * as Haptics from 'expo-haptics';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { AppPostObject } from '../../../../types/app-post.types';
 import {
@@ -19,24 +17,9 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { Loader } from '../../../lib/Loader';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
-const EmojiReaction = memo(function Foo({
-	dto,
-	postDto,
-}: {
-	dto: EmojiDto;
-	postDto: AppPostObject;
-}) {
+function EmojiReaction({ dto }: { dto: EmojiDto; postDto: AppPostObject }) {
 	const { dto: postItem } = useAppStatusItem();
-
-	const {
-		TextRef,
-		PostRef,
-		setType,
-		setVisible,
-		updateRequestId: updateBottomSheetRequestId,
-	} = useAppBottomSheet();
 
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
@@ -80,15 +63,6 @@ const EmojiReaction = memo(function Foo({
 
 	function onReactionLongPress() {
 		return;
-
-		// FIXME: bring back reaction preview (users who reacted)
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		TextRef.current = dto.name;
-		PostRef.current = postDto;
-		// timelineDataPostListReducer.current = getPostListReducer();
-		setType(APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS);
-		updateBottomSheetRequestId();
-		setVisible(true);
 	}
 
 	if (EmojiStateLoading) return <Loader />;
@@ -145,7 +119,7 @@ const EmojiReaction = memo(function Foo({
 	}
 
 	return <View />;
-});
+}
 
 export default EmojiReaction;
 

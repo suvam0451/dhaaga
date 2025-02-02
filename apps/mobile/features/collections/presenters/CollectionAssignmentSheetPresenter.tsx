@@ -1,6 +1,6 @@
 import {
 	useAppApiClient,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppDialog,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
@@ -22,7 +22,7 @@ import { appDimensions } from '../../../styles/dimensions';
 
 function CollectionAssignmentSheetPresenter() {
 	const { driver } = useAppApiClient();
-	const { ctx } = useAppBottomSheet_Improved();
+	const { ctx } = useAppBottomSheet();
 	const { post, toggleBookmark } = usePostInteractor(ctx?.uuid);
 	const { show } = useAppDialog();
 	const { theme } = useAppTheme();

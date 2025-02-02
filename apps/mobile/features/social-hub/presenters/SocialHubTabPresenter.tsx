@@ -1,6 +1,6 @@
 import {
 	useAppAcct,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppDb,
 	useAppDialog,
 	useAppTheme,
@@ -52,7 +52,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const { show, hide } = useAppDialog();
 	const { loadAccounts } = useHub();
 	const { profiles, selectProfile } = useHub();
-	const { setCtx, show: showSheet } = useAppBottomSheet_Improved();
+	const { setCtx, show: showSheet } = useAppBottomSheet();
 	const { acct } = useAppAcct();
 	const { loadApp } = useGlobalState(
 		useShallow((o) => ({

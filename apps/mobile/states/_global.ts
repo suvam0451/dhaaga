@@ -112,7 +112,6 @@ type AppHubState = {
  * App crashes on moving to different file...
  */
 export enum APP_BOTTOM_SHEET_ENUM {
-	QUICK_POST = 'QuickPost',
 	APP_PROFILE = 'AppProfile',
 	ADD_PROFILE = 'AddProfile',
 	HASHTAG = 'Hashtag',

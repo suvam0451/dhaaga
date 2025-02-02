@@ -1,6 +1,5 @@
-import { Fragment, memo, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Text, View } from 'react-native';
-import { useAppBottomSheet } from '../_api/useAppBottomSheet';
 import useGetReactionDetails from '../../../../hooks/api/useGetReactionDetails';
 import { Image } from 'expo-image';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -15,13 +14,16 @@ import { AnimatedFlashList } from '@shopify/flash-list';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { AppAvatar } from '../../../lib/Avatar';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { AppUserObject } from '../../../../types/app-user.types';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import {
+	useAppAcct,
+	useAppApiClient,
+	useAppBottomSheet,
+	useAppTheme,
+} from '../../../../hooks/utility/global-state-extractors';
 
-const ReactingUser = memo(({ dto }: { dto: AppUserObject }) => {
+function ReactingUser({ dto }: { dto: AppUserObject }) {
 	const { theme } = useAppTheme();
 	const { content } = useMfm({
 		content: dto.displayName,
@@ -48,22 +50,14 @@ const ReactingUser = memo(({ dto }: { dto: AppUserObject }) => {
 			</View>
 		</View>
 	);
-});
+}
 
-const AppBottomSheetReactionDetails = memo(() => {
-	const { client, driver, acct, theme } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			acct: o.acct,
-			client: o.router,
-			theme: o.colorScheme,
-		})),
-	);
-	const { TextRef, PostRef, setVisible, visible } = useAppBottomSheet();
-	const { Data, fetchStatus } = useGetReactionDetails(
-		PostRef.current?.id,
-		TextRef.current,
-	);
+function AppBottomSheetReactionDetails() {
+	const { theme } = useAppTheme();
+	const { client, driver } = useAppApiClient();
+	const { acct } = useAppAcct();
+	const { Data, fetchStatus } = useGetReactionDetails(null, null);
+	const { visible, hide } = useAppBottomSheet();
 
 	const IS_REMOTE = ActivitypubReactionsService.cannotReact(Data?.id);
 
@@ -74,7 +68,7 @@ const AppBottomSheetReactionDetails = memo(() => {
 
 		setLoading(true);
 		const { id } = ActivitypubReactionsService.extractReactionCode(
-			TextRef.current,
+			null,
 			driver,
 			acct?.server,
 		);
@@ -82,22 +76,22 @@ const AppBottomSheetReactionDetails = memo(() => {
 		const state = Data.reacted
 			? await ActivityPubReactionsService.removeReaction(
 					client,
-					PostRef.current.id,
+					null,
 					id,
 					driver,
 					setLoading,
 				)
 			: await ActivityPubReactionsService.addReaction(
 					client,
-					PostRef.current.id,
-					TextRef.current,
+					null,
+					null,
 					driver,
 					setLoading,
 				);
 
 		// request reducer to update reaction state
 		if (state === null) return;
-		setVisible(false);
+		hide();
 	}
 
 	/**
@@ -210,6 +204,6 @@ const AppBottomSheetReactionDetails = memo(() => {
 			</View>
 		</View>
 	);
-});
+}
 
 export default AppBottomSheetReactionDetails;

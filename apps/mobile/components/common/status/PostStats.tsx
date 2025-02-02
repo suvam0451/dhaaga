@@ -6,7 +6,7 @@ import {
 	ViewStyle,
 } from 'react-native';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
@@ -86,7 +86,7 @@ type PostStatsProps = {
  * @constructor
  */
 function PostStats({ style, dto }: PostStatsProps) {
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 
 	const LIKE_COUNT = dto.stats.likeCount;
 	const REPLY_COUNT = dto.stats.replyCount;

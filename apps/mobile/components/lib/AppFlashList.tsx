@@ -29,7 +29,7 @@ import {
 	ProfilePinnedUser,
 } from '../../database/_schema';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
@@ -131,7 +131,7 @@ type PinnedTag_ListItemProps = {
 
 function Pinned_Tags_ListItem({ item }: PinnedTag_ListItemProps) {
 	const { theme } = useAppTheme();
-	const { show } = useAppBottomSheet_Improved();
+	const { show } = useAppBottomSheet();
 
 	function onPressAddedTag() {
 		if (item.type === 'eol') return;

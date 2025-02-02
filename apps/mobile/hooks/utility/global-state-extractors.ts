@@ -98,7 +98,7 @@ export function useAppPublishers() {
 	);
 }
 
-export function useAppBottomSheet_Improved() {
+export function useAppBottomSheet() {
 	return useGlobalState(
 		useShallow((o) => ({
 			type: o.bottomSheet.type,

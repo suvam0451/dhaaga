@@ -2,7 +2,6 @@ import { Fragment } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
-import AppBottomSheetQuickPost from './modules/AppBottomSheetQuickPost';
 import WithComposerContext from '../../features/composer/contexts/useComposerCtx';
 import ComposerPresenter from '../../features/composer/presenters/ComposerPresenter';
 import UserPeekSheetPresenter from '../../features/user-profiles/presenters/UserPeekSheetPresenter';
@@ -15,7 +14,7 @@ import AppBottomSheetHashtag from './modules/AppBottomSheetHashtag';
 import { APP_FONTS } from '../../styles/AppFonts';
 import AppBottomSheetUserMoreActions from './modules/AppBottomSheetUserMoreActions';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import TagAddSheetPresenter from '../../features/social-hub/presenters/TagAddSheetPresenter';
@@ -67,10 +66,8 @@ function Handle() {
  * Responsible for generating content
  */
 function Factory() {
-	const { type } = useAppBottomSheet_Improved();
+	const { type } = useAppBottomSheet();
 	switch (type) {
-		case APP_BOTTOM_SHEET_ENUM.QUICK_POST:
-			return <AppBottomSheetQuickPost />;
 		case APP_BOTTOM_SHEET_ENUM.ADD_PROFILE:
 		case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
 			return <ABS_Add_Profile />;
@@ -130,7 +127,7 @@ function Factory() {
 function AppBottomSheet() {
 	const { animStyle } = useAnimatedHeight();
 
-	const { visible, hide, broadcastEndSession } = useAppBottomSheet_Improved();
+	const { visible, hide, broadcastEndSession } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 
 	function onBottomSheetCloseEvent() {

@@ -1,33 +1,20 @@
 import { FAB_MENU_ICON_SIZE, FabModuleProps } from './_common';
-import { memo, useCallback } from 'react';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import { FabMenuItemText } from '../fragments/FabMenuItemIcon';
 import { FabMenuItemFactory } from '../fragments/FabMenuItemFactory';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import {
-	APP_BOTTOM_SHEET_ENUM,
-	useAppBottomSheet,
-} from '../../../dhaaga-bottom-sheet/modules/_api/useAppBottomSheet';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
+import { useAppBottomSheet } from '../../../../hooks/utility/global-state-extractors';
 
 const MENU_ITEM_LABEL = 'Create Post';
 
-const CreatePostModule = memo(({ index }: FabModuleProps) => {
-	const {
-		setVisible,
-		setType,
-		PostComposerTextSeedRef,
-		PostRef,
-		updateRequestId,
-	} = useAppBottomSheet();
+function CreatePostModule({ index }: FabModuleProps) {
+	const { show, setCtx } = useAppBottomSheet();
 
-	const onClick = useCallback(() => {
-		PostComposerTextSeedRef.current = null;
-		PostRef.current = null;
-
-		setType(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER);
-		updateRequestId();
-		setVisible(true);
-	}, [PostComposerTextSeedRef, PostRef]);
+	function onClick() {
+		setCtx({ uuid: null });
+		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
+	}
 
 	return (
 		<FabMenuItemFactory
@@ -43,6 +30,6 @@ const CreatePostModule = memo(({ index }: FabModuleProps) => {
 			TextComponent={<FabMenuItemText label={MENU_ITEM_LABEL} />}
 		/>
 	);
-});
+}
 
 export default CreatePostModule;

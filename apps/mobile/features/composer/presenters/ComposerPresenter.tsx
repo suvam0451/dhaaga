@@ -7,14 +7,14 @@ import ComposerMediaPresenter from './ComposerMediaPresenter';
 import EmojiPickerBottomSheet from '../../../components/dhaaga-bottom-sheet/modules/emoji-picker/EmojiPickerBottomSheet';
 import ComposerTopMenu from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerTopMenu';
 import TextEditorService from '../../../services/text-editor.service';
-import { useAppBottomSheet_Improved } from '../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet } from '../../../hooks/utility/global-state-extractors';
 import { Emoji } from '../../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { PostComposerReducerActionType } from '../../../states/interactors/post-composer.reducer';
 import BottomMenuPresenter from './BottomMenuPresenter';
 import useComposer from '../interactors/useComposer';
 
 function ComposerPresenter() {
-	const { visible } = useAppBottomSheet_Improved();
+	const { visible } = useAppBottomSheet();
 	const { dispatch } = useComposerCtx();
 	const { state, toHome } = useComposer();
 

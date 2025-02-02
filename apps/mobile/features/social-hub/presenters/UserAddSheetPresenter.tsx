@@ -1,5 +1,5 @@
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppDb,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
@@ -20,7 +20,7 @@ function UserAddSheetPresenter() {
 	const [debouncedQuery, setDebouncedQuery] = useState(null);
 	const { data } = useApiSearchUsers(debouncedQuery, null);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
-	const { ctx } = useAppBottomSheet_Improved();
+	const { ctx } = useAppBottomSheet();
 	const [Profile, setProfile] = useState(null);
 	const { db } = useAppDb();
 

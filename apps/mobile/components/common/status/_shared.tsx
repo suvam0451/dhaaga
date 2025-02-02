@@ -1,6 +1,6 @@
 import {
 	useAppApiClient,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
@@ -24,7 +24,7 @@ type PostMoreOptionsButtonProps = {
  */
 export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 	const { postPub } = useAppPublishers();
 
 	function onPress() {
@@ -62,7 +62,7 @@ export function SavedPostMoreOptionsButton({
 	post,
 }: SavedPostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 	const { postPub } = useAppPublishers();
 
 	function onPress() {
@@ -93,7 +93,7 @@ export function SavedPostMoreOptionsButton({
  */
 export function MiniMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 	const { postPub } = useAppPublishers();
 
 	function onPress() {
@@ -127,7 +127,7 @@ export function MiniMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 
 export function MiniReplyButton({}: PostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 	const { postPub } = useAppPublishers();
 
 	function onPress() {

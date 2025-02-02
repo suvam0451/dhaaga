@@ -12,7 +12,7 @@ import AtprotoComposerService, {
 } from '../../../../../services/atproto/atproto-compose';
 import {
 	useAppApiClient,
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
@@ -31,7 +31,7 @@ function PostButton() {
 	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { postPub } = useAppPublishers();
-	const { show, setCtx } = useAppBottomSheet_Improved();
+	const { show, setCtx } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	async function onClick() {

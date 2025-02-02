@@ -4,13 +4,13 @@ import { PostComposerReducerActionType } from '../../../states/interactors/post-
 import TextEditorService from '../../../services/text-editor.service';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import {
-	useAppBottomSheet_Improved,
+	useAppBottomSheet,
 	useAppPublishers,
 } from '../../../hooks/utility/global-state-extractors';
 import { useEffect } from 'react';
 
 function useComposer() {
-	const { visible, ctx, stateId } = useAppBottomSheet_Improved();
+	const { visible, ctx, stateId } = useAppBottomSheet();
 	const { state, dispatch } = useComposerCtx();
 	const { postPub } = useAppPublishers();
 
