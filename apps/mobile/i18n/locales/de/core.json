@@ -21,23 +21,16 @@
       "appSettings": "App Instellingen"
     }
   },
-  "bottomNav": {
-    "inbox": {
-      "mentions": "",
-      "chat": "",
-      "social": "",
-      "updates": ""
-    }
-  },
-  "database": {
-    "defaultText": "Standard"
+  "sheets": {
+    "backOption": "Terug"
   },
   "hub": {
     "feeds": {
       "global": "Globaal",
       "local": "Lokaal",
       "social": "Sociaal",
-      "home": "Huis"
+      "home": "Huis",
+      "bubble": "Bubble"
     },
     "greetings": {
       "goodMorning": "Guten Morgen",
@@ -53,6 +46,15 @@
       "timelines": "Tijdlijnen"
     }
   },
+  "inbox": {
+    "name": "Inbox",
+    "pageHeader": {
+      "mentions": "Vermeldingen",
+      "chat": "Chat",
+      "social": "Sociaal",
+      "updates": "Updates"
+    }
+  },
   "collections": {
     "name": "Collecties",
     "addButton": "Voeg Collectie Toe",
@@ -65,6 +67,7 @@
     "quickPost": "Schnellpost",
     "quickPostCta": "Was denkst du gerade?",
     "quickPostSubmit": "Posten",
+    "noAttachments": "Geen bijlagen toegevoegd",
     "landing": {
       "tComposeFull": "Erstelle einen Beitrag",
       "dComposeFull": [

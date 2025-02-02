@@ -21,27 +21,22 @@
       "appSettings": "App Settings"
     }
   },
-  "bottomNav": {
-    "inbox": {
-      "mentions": "",
-      "chat": "",
-      "social": "",
-      "updates": ""
-    }
-  },
-  "database": {
-    "defaultText": "Default"
-  },
   "dialogs": {
     "renameOption": "Rename",
-    "deleteOption": "Delete"
+    "deleteOption": "Delete",
+    "dismissOption": "Dismiss",
+    "saveOption": "Save"
+  },
+  "sheets": {
+    "backOption": "Back"
   },
   "hub": {
     "feeds": {
       "global": "Global",
       "local": "Local",
       "social": "Social",
-      "home": "Home"
+      "home": "Home",
+      "bubble": "Bubble"
     },
     "greetings": {
       "goodMorning": "Good Morning",
@@ -55,6 +50,15 @@
       "users": "Users",
       "tags": "Tags",
       "timelines": "Timelines"
+    }
+  },
+  "inbox": {
+    "name": "Inbox",
+    "nav": {
+      "mentions": "Mentions",
+      "chat": "Chat",
+      "social": "Social",
+      "updates": "Updates"
     }
   },
   "collections": {

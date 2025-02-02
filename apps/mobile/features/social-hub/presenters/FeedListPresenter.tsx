@@ -15,8 +15,8 @@ type SocialHubPinnedTimelinesProps = {
 };
 
 function FeedListPresenter({ items, account }: SocialHubPinnedTimelinesProps) {
-	const destinations = HubService.resolveTimelineDestinations(items);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const destinations = HubService.resolveTimelineDestinations(t, items);
 	const { show } = useAppBottomSheet();
 
 	function onPressAdd() {
