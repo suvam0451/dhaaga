@@ -73,13 +73,7 @@ function Page() {
 					<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
 						English
 					</AppText.Medium>
-					<AppIcon
-						id={'chevron-right'}
-						size={28}
-						onPress={() => {
-							router.navigate(APP_ROUTING_ENUM.SETTINGS_GENERAL_APP_LANGUAGE);
-						}}
-					/>
+					<AppIcon id={'chevron-right'} size={28} />
 				</Pressable>
 
 				<View style={styles.settingItemContainer}>

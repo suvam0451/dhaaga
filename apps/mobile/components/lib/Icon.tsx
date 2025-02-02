@@ -160,13 +160,15 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 
-	function onLongPress() {
+	function onLongPress(e: any) {
+		e.preventDefault();
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT, true);
 	}
 
-	function onPress() {
+	function onPress(e: any) {
 		router.navigate('/profile');
+		router.dismissAll();
 	}
 
 	// if (visible && isAnimating) return <View />;
@@ -183,7 +185,7 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 
 	return (
 		<View style={{ flexDirection: 'row', flex: 1 }}>
-			<TouchableOpacity
+			<Pressable
 				style={styles.accountIconTouchableContainer}
 				onPress={onPress}
 				onLongPress={onLongPress}
@@ -204,7 +206,7 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 				<View style={{ width: 14 }}>
 					<Feather name="more-vertical" size={24} color={theme.textColor.low} />
 				</View>
-			</TouchableOpacity>
+			</Pressable>
 		</View>
 	);
 }
