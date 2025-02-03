@@ -9,7 +9,7 @@ import ComposerTopMenu from '../../../components/dhaaga-bottom-sheet/modules/pos
 import TextEditorService from '../../../services/text-editor.service';
 import { useAppBottomSheet } from '../../../hooks/utility/global-state-extractors';
 import { Emoji } from '../../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
-import { PostComposerReducerActionType } from '../../../states/interactors/post-composer.reducer';
+import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import BottomMenuPresenter from './BottomMenuPresenter';
 import useComposer from '../interactors/useComposer';
 

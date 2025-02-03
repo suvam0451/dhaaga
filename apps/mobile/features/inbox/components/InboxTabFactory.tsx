@@ -31,6 +31,9 @@ function AppNotificationViewContainer({
 			refreshControl={
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}
+			contentContainerStyle={{
+				paddingBottom: 32,
+			}}
 		/>
 	);
 }

@@ -3,7 +3,7 @@ import {
 	PostComposerDispatchType,
 	PostComposerReducerActionType,
 	PostComposerReducerStateType,
-} from '../../../states/interactors/post-composer.reducer';
+} from '../reducers/composer.reducer';
 import useSuggestionsApi from './useSuggestionsApi';
 
 /**
