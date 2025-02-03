@@ -404,7 +404,7 @@ export function AppCtaButton({ label, onPress, style }: AppCtaButtonProps) {
 	const { theme } = useAppTheme();
 	return (
 		<Pressable
-			style={[{ marginTop: 48, paddingBottom: 54 + 16 }, style]}
+			style={[{ marginTop: 20, paddingBottom: 54 + 16 }, style]}
 			onPress={onPress}
 		>
 			<View

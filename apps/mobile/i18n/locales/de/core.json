@@ -53,6 +53,16 @@
       "chat": "Chat",
       "social": "Sociaal",
       "updates": "Updates"
+    },
+    "summary": {
+      "liked": "Hat deinen Beitrag gemocht",
+      "followRequestAccepted": "Hat deine Follow-Anfrage akzeptiert",
+      "followed": "Hat dir gefolgt",
+      "shared": "Hat deinen Beitrag geteilt",
+      "reacted": "Hat auf deinen Beitrag reagiert",
+      "posted": "Hat gepostet",
+      "replied": "Hat dir geantwortet",
+      "mentioned": "Hat dich erwähnt"
     }
   },
   "collections": {

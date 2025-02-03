@@ -1,20 +1,19 @@
-import { memo } from 'react';
 import { Props, styles } from './_common';
 import { View } from 'react-native';
-import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 import { AppDivider } from '../../../../lib/Divider';
+import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
 
-const StatusAlertNotificationFragment = memo(({ item }: Props) => {
+function StatusAlertNotificationFragment({ item }: Props) {
 	const user = item.user;
 	const post = item.post;
 
 	return (
 		<View style={styles.container}>
-			<NotificationSenderInterface
+			<AuthorItemPresenter
 				user={user}
-				type={DhaagaJsNotificationType.STATUS}
+				notificationType={DhaagaJsNotificationType.STATUS}
 				extraData={item?.extraData}
 				createdAt={item.createdAt}
 			/>
@@ -22,6 +21,6 @@ const StatusAlertNotificationFragment = memo(({ item }: Props) => {
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
-});
+}
 
 export default StatusAlertNotificationFragment;

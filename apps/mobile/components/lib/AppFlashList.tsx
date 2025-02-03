@@ -20,7 +20,6 @@ import {
 import FlashListService, {
 	FlashListType_PinnedTag,
 } from '../../services/flashlist.service';
-import NotificationItemPresenter from '../../features/inbox/presenters/NotificationItemPresenter';
 import { AppNotificationObject } from '../../types/app-notification.types';
 import {
 	Account,
@@ -257,8 +256,7 @@ type AppFlatListPinCategory<
 	account: Account;
 };
 
-const POST_ESTIMATED_SIZE = 200;
-const NOTIFICATION_ESTIMATED_SIZE = 100;
+const POST_ESTIMATED_SIZE = 120;
 const USER_ESTIMATED_SIZE = 72;
 const FEED_ESTIMATED_SIZE = 48;
 
@@ -348,25 +346,6 @@ export class AppFlashList {
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
-			/>
-		);
-	}
-
-	static Mentions({
-		data,
-		ListHeaderComponent,
-		refreshControl,
-	}: AppFlatListProps<AppNotificationObject>) {
-		const listItems = useMemo(() => {
-			return FlashListService.notifications(data);
-		}, [data]);
-
-		return (
-			<FlatList
-				data={listItems}
-				renderItem={({ item }) => <NotificationItemPresenter item={item} />}
-				ListHeaderComponent={ListHeaderComponent}
-				refreshControl={refreshControl}
 			/>
 		);
 	}

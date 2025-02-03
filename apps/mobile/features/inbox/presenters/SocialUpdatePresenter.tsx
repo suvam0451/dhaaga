@@ -1,9 +1,9 @@
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import AppNotificationViewContainer from '../components/InboxTabFactory';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetSocialUpdates } from '../../../hooks/api/useNotifications';
 
-const SocialUpdatePresenter = memo(() => {
+function SocialUpdatePresenter() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { data, refetch } = useApiGetSocialUpdates();
 
@@ -22,6 +22,6 @@ const SocialUpdatePresenter = memo(() => {
 			onRefresh={refresh}
 		/>
 	);
-});
+}
 
 export default SocialUpdatePresenter;

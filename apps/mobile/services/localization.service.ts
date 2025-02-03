@@ -1,6 +1,8 @@
 import { TimelineFetchMode } from '../states/interactors/post-timeline.reducer';
 import { AppTimelineQuery } from '../features/timelines/api/useTimelineController';
 import { DhaagaJsNotificationType, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { TFunction } from 'i18next';
+import { LOCALIZATION_NAMESPACE } from '../types/app.types';
 
 export class LocalizationService {
 	/**
@@ -49,34 +51,36 @@ export class LocalizationService {
 	}
 
 	static notificationLabel(
+		t: TFunction<LOCALIZATION_NAMESPACE.CORE[], undefined>,
 		notificationType: DhaagaJsNotificationType,
 		visibility?: string,
 	): string {
 		switch (notificationType) {
 			case DhaagaJsNotificationType.FAVOURITE: {
-				return 'Liked your post';
+				return t(`inbox.summary.liked`);
 			}
 			case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
-				return 'Accepted your follow request';
+				return t(`inbox.summary.followRequestAccepted`);
 			}
 			case DhaagaJsNotificationType.FOLLOW: {
-				return 'Followed You';
+				return t(`inbox.summary.followed`);
 			}
 			case DhaagaJsNotificationType.REBLOG:
 			case DhaagaJsNotificationType.RENOTE: {
-				return 'Shared your post';
+				return t(`inbox.summary.shared`);
 			}
 			case DhaagaJsNotificationType.REACTION: {
-				return 'Reacted to your post';
+				return t(`inbox.summary.reacted`);
 			}
-			case DhaagaJsNotificationType.STATUS: {
-				return 'Posted';
+			case DhaagaJsNotificationType.STATUS:
+			case DhaagaJsNotificationType.NOTE: {
+				return t(`inbox.summary.posted`);
 			}
 			case DhaagaJsNotificationType.REPLY: {
-				return 'Replied to you';
+				return t(`inbox.summary.replied`);
 			}
 			case DhaagaJsNotificationType.MENTION: {
-				return 'Mentioned you';
+				return t(`inbox.summary.mentioned`);
 			}
 		}
 	}

@@ -50,6 +50,7 @@ function LinkProcessor({ url, displayName, fontFamily }: LinkProcessorProps) {
 				display: 'flex',
 				flexDirection: 'row',
 				alignItems: 'center',
+				fontSize: 15,
 			}}
 			onPress={onTextPress}
 			onTextLayout={onTextLayout}

@@ -59,6 +59,16 @@
       "chat": "Chat",
       "social": "Social",
       "updates": "Updates"
+    },
+    "summary": {
+      "liked": "Liked your post",
+      "followRequestAccepted": "Accepted your follow request",
+      "followed": "Followed You",
+      "shared": "Shared your post",
+      "reacted": "Reacted to your post",
+      "posted": "Posted",
+      "replied": "Replied to you",
+      "mentioned": "Mentioned you"
     }
   },
   "collections": {

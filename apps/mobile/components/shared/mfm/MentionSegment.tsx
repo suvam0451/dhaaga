@@ -28,7 +28,7 @@ function MentionSegment({ value, link, fontFamily }: Props) {
 	}
 
 	return (
-		<AppText.Medium
+		<AppText.Normal
 			style={{
 				fontFamily,
 				color: parsed.me ? theme.primary.a0 : theme.complementaryB.a0,
@@ -36,7 +36,7 @@ function MentionSegment({ value, link, fontFamily }: Props) {
 			onPress={onPress}
 		>
 			{parsed.text}
-		</AppText.Medium>
+		</AppText.Normal>
 	);
 }
 

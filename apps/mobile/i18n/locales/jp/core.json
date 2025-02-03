@@ -59,6 +59,16 @@
       "chat": "チャット",
       "social": "社交",
       "updates": "更新"
+    },
+    "summary": {
+      "liked": "あなたの投稿をいいねしました",
+      "followRequestAccepted": "あなたのフォローリクエストを承認しました",
+      "followed": "あなたをフォローしました",
+      "shared": "あなたの投稿をシェアしました",
+      "reacted": "あなたの投稿にリアクションしました",
+      "posted": "投稿しました",
+      "replied": "あなたに返信しました",
+      "mentioned": "あなたをメンションしました"
     }
   },
   "collections": {
