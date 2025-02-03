@@ -6,17 +6,18 @@ import { useState } from 'react';
 function UpdatesPresenter() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 
-	const { data } = useApiGetSubscriptionUpdates();
+	const { data, refetch } = useApiGetSubscriptionUpdates();
+
 	function refresh() {
 		setIsRefreshing(true);
-		// refetch().finally(() => {
-		setIsRefreshing(false);
-		// });
+		refetch().finally(() => {
+			setIsRefreshing(false);
+		});
 	}
 
 	return (
 		<AppNotificationViewContainer
-			data={data.data}
+			data={data.items}
 			tabType={APP_LANDING_PAGE_TYPE.UPDATES}
 			refreshing={IsRefreshing}
 			onRefresh={refresh}

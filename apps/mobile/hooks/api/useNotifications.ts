@@ -235,15 +235,14 @@ function useApiGetSocialUpdates() {
 
 		const _data = results.data;
 		if (ActivityPubService.misskeyLike(driver)) {
-			const obj = MisskeyService.deserializeNotifications(
+			// obj.items = obj.items.filter(
+			// 	(o) => !['mention', 'login', 'note', 'status'].includes(o.type),
+			// );
+			return MisskeyService.deserializeNotifications(
 				results.data,
 				driver,
 				server,
 			);
-			obj.items = obj.items.filter(
-				(o) => !['mention', 'login', 'note', 'status'].includes(o.type),
-			);
-			return obj;
 		}
 
 		const acctList = _data.data.accounts;
@@ -290,28 +289,56 @@ function useApiGetSocialUpdates() {
 	return useQuery<NotificationResults>({
 		queryKey: ['notifications/social', acct],
 		queryFn: api,
-		enabled: client !== null,
+		enabled: !!client,
 		initialData: pageResultDefault,
 	});
 }
 
 function useApiGetSubscriptionUpdates() {
-	const { data } = useApiGetNotifications({
-		include: [
-			// Mastodon
-			DhaagaJsNotificationType.STATUS,
-			DhaagaJsNotificationType.FOLLOW,
-			DhaagaJsNotificationType.POLL_NOTIFICATION,
-		],
-	});
+	const { acct } = useAppAcct();
+	const { driver, client, server } = useAppApiClient();
 
-	return {
-		data: {
-			data: data.items.filter((o) => ['note', 'renote'].includes(o.type)),
-			maxId: data.maxId,
-			minId: data.minId,
-		},
-	};
+	// const { data } = useApiGetNotifications({
+	// 	include: [
+	// 		// Mastodon
+	// 		DhaagaJsNotificationType.STATUS,
+	// 		DhaagaJsNotificationType.FOLLOW,
+	// 		DhaagaJsNotificationType.POLL_NOTIFICATION,
+	// 	],
+	// });
+
+	async function api() {
+		if (ActivityPubService.misskeyLike(driver)) {
+			const result = await (
+				client as MisskeyRestClient
+			).notifications.getSubscriptions({
+				limit: 5,
+				types: [],
+				excludeTypes: [],
+			});
+			console.log(result.data);
+
+			if (ActivityPubService.misskeyLike(driver)) {
+				// obj.items = obj.items.filter(
+				// 	(o) => !['mention', 'login', 'note', 'status'].includes(o.type),
+				// );
+				return MisskeyService.deserializeNotifications(
+					result.data,
+					driver,
+					server,
+				);
+			}
+		} else {
+			return pageResultDefault;
+		}
+	}
+
+	return useQuery<NotificationResults>({
+		queryKey: ['notifications/subs', acct],
+		queryFn: api,
+		enabled: !!client,
+		initialData: pageResultDefault,
+	});
 }
 
 export {
