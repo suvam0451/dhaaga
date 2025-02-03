@@ -1,23 +1,26 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { AppIcon } from '../../../lib/Icon';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
 import { TextContentView } from '../TextContentView';
+import { AppParsedTextNodes } from '../../../../types/parsed-text.types';
+import { AppText } from '../../../lib/Text';
+
+type Props = {
+	avatarUrl: string;
+	parsedDisplayName: AppParsedTextNodes;
+	createdAt: Date | string;
+};
 
 /**
  * Adds booster's information on top
  *
  * NOTE: pass negative values to RootStatus margin
  */
-function SharedStatusFragment() {
-	const { dto } = useAppStatusItem();
+function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 	const { theme } = useAppTheme();
-
-	const boostedBy = dto.postedBy;
 
 	return (
 		<View
@@ -39,7 +42,7 @@ function SharedStatusFragment() {
 				<View>
 					{/*@ts-ignore-next-line*/}
 					<Image
-						source={boostedBy.avatarUrl}
+						source={avatarUrl}
 						style={{
 							width: 20,
 							height: 20,
@@ -49,25 +52,24 @@ function SharedStatusFragment() {
 					/>
 				</View>
 				<TextContentView
-					tree={boostedBy.parsedDisplayName}
+					tree={parsedDisplayName}
 					variant={'displayName'}
 					mentions={[]}
 					emojiMap={new Map()}
 					style={{ marginLeft: 6 }}
 				/>
-				<Text
+				<AppText.Medium
 					style={{
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
 						color: theme.secondary.a40,
 						fontSize: 13,
 						marginLeft: 6,
 					}}
 				>
-					{DatetimeUtil.timeAgo(dto.createdAt)}
-				</Text>
+					{DatetimeUtil.timeAgo(createdAt)}
+				</AppText.Medium>
 			</View>
 		</View>
 	);
 }
 
-export default SharedStatusFragment;
+export default ShareIndicator;
