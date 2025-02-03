@@ -30,6 +30,7 @@ export function AppImageComponent({
 				justifyContent: 'center',
 				borderRadius: 8,
 				width: '100%',
+				flex: 1,
 			}}
 		>
 			{/*@ts-ignore-next-line*/}
@@ -41,12 +42,9 @@ export function AppImageComponent({
 					width: parentContainerWidth,
 					alignItems: 'center',
 					justifyContent: 'center',
+					flex: 1,
 				}}
-				transition={{
-					effect: 'flip-from-right',
-					duration: 120,
-					timing: 'ease-in',
-				}}
+				objectFit="cover"
 			/>
 		</View>
 	);
