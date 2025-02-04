@@ -18,26 +18,41 @@ import jpSheets from './locales/jp/sheets.json';
 import deCore from './locales/de/core.json';
 import deDialogs from './locales/de/dialogs.json';
 import deSheets from './locales/de/sheets.json';
+import deGlossary from './locales/de/glossary.json';
+// id
+import idCore from './locales/id/core.json';
+import idDialogs from './locales/id/dialogs.json';
+import idGlossary from './locales/id/glossary.json';
+import idGuides from './locales/id/guides.json';
+import idSheets from './locales/id/sheets.json';
 
 const resources = {
 	en: {
 		core: enCore,
-		guides: enGuides,
-		glossary: enGlossary,
-		sheets: enSheets,
 		dialogs: enDialogs,
+		glossary: enGlossary,
+		guides: enGuides,
+		sheets: enSheets,
+	},
+	id: {
+		core: idCore,
+		dialogs: idDialogs,
+		glossary: idGlossary,
+		guides: idGuides,
+		sheets: idSheets,
 	},
 	jp: {
 		core: jpCore,
-		guides: jpGuides,
-		glossary: jpGlossary,
 		dialogs: jpDialogs,
+		glossary: jpGlossary,
+		guides: jpGuides,
 		sheets: jpSheets,
 	},
 	de: {
 		core: deCore,
 		dialogs: deDialogs,
 		sheets: deSheets,
+		glossary: deGlossary,
 	},
 };
 

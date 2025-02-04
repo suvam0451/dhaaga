@@ -1,0 +1,12 @@
+{
+  "noun": {
+    "post_one": "Pos",
+    "post_other": "Pos-pos",
+    "user_one": "Pengguna",
+    "user_other": "Pengguna-pengguna",
+    "follower_one": "Pengikut",
+    "follower_other": "Pengikut-pengikut",
+    "following": "Mengikuti",
+    "following_other": "Mengikuti"
+  }
+}

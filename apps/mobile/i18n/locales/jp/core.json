@@ -39,6 +39,39 @@
       "4) (x) でここに戻る"
     ]
   },
+  "profile": {
+    "appFeatures": {
+      "sectionLabel": "アプリ機能",
+      "likes": {
+        "label": "いいね",
+        "desc": "私がいいねした投稿"
+      },
+      "bookmarks": {
+        "label": "ブックマーク",
+        "desc": "私のブックマーク"
+      },
+      "feeds": {
+        "label": "フィード",
+        "desc": "私がフォローしているフィード"
+      },
+      "lists": {
+        "label": "リスト",
+        "desc": "私のリスト"
+      },
+      "socialHub": {
+        "label": "ソーシャルハブ",
+        "desc": "プロフィールを管理"
+      },
+      "collections": {
+        "label": "コレクション",
+        "desc": "ブックマーク++"
+      },
+      "drafts": {
+        "label": "ドラフト",
+        "desc": "失われたメッセージ"
+      }
+    }
+  },
   "sheets": {
     "backOption": "戻る"
   },

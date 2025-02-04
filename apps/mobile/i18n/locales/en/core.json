@@ -39,6 +39,39 @@
       "4) Clear (x) to come back here"
     ]
   },
+  "profile": {
+    "appFeatures": {
+      "sectionLabel": "App Features",
+      "likes": {
+        "label": "Likes",
+        "desc": "Posts I've Liked"
+      },
+      "bookmarks": {
+        "label": "Bookmarks",
+        "desc": "My Bookmarks"
+      },
+      "feeds": {
+        "label": "Feeds",
+        "desc": "Subscribed Feeds"
+      },
+      "lists": {
+        "label": "Lists",
+        "desc": "My Lists"
+      },
+      "socialHub": {
+        "label": "Social Hub",
+        "desc": "Manage profiles"
+      },
+      "collections": {
+        "label": "Collections",
+        "desc": "Bookmark++"
+      },
+      "drafts": {
+        "label": "Drafts",
+        "desc": "Lost letters"
+      }
+    }
+  },
   "sheets": {
     "backOption": "Back"
   },

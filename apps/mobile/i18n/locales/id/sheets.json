@@ -1,0 +1,27 @@
+{
+  "collections": {
+    "noBookmarkSupport": "Platform Anda tidak mendukung bookmark.",
+    "noBookmarkRecommend": "Koleksi mencapai efek serupa.",
+    "collections": "Koleksi",
+    "bookmark": "Bookmark",
+    "bookmarkFeatures": [
+      "Fitur Platform",
+      "Tersinkronisasi"
+    ],
+    "newCollection": "Koleksi Baru",
+    "fallbackDesc": "Deskripsi Tidak Tersedia",
+    "bookmarkDesc": "Tersinkronisasi dengan server Anda",
+    "disclaimer": "⚠️ Koleksi disimpan secara lokal di perangkat ini ⚠️"
+  },
+  "hubAddFeedSheet": {
+    "title": "Maaf \uD83D\uDE14",
+    "desc": [
+      "Fitur ini akan diperluas di masa depan!",
+      "Sekelompok tujuan default telah dipilih untuk Anda.",
+      "Pengguna Bluesky dapat mengakses feed mereka dari profil mereka (tab ke-5), untuk saat ini."
+    ]
+  },
+  "hubAddUserSheet": {
+    "searchPlaceholder": "Cari pengguna untuk dipin"
+  }
+}

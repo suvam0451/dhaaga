@@ -1,0 +1,12 @@
+{
+  "noun": {
+    "post_one": "Beitrag",
+    "post_other": "Beiträge",
+    "user_one": "Benutzer",
+    "user_other": "Benutzer",
+    "follower_one": "Follower",
+    "follower_other": "Follower",
+    "following": "Folge ich",
+    "following_other": "Folge ich"
+  }
+}

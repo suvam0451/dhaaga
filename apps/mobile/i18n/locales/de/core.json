@@ -39,6 +39,39 @@
       "Löschen (x), um hierher zurückzukehren]"
     ]
   },
+  "profile": {
+    "appFeatures": {
+      "sectionLabel": "App-Funktionen",
+      "likes": {
+        "label": "Gefällt mir",
+        "desc": "Beiträge, die mir gefallen haben"
+      },
+      "bookmarks": {
+        "label": "Lesezeichen",
+        "desc": "Meine Lesezeichen"
+      },
+      "feeds": {
+        "label": "Feeds",
+        "desc": "Abonnierte Feeds"
+      },
+      "lists": {
+        "label": "Listen",
+        "desc": "Meine Listen"
+      },
+      "socialHub": {
+        "label": "Social Hub",
+        "desc": "Profile verwalten"
+      },
+      "collections": {
+        "label": "Sammlungen",
+        "desc": "Lesezeichen++"
+      },
+      "drafts": {
+        "label": "Entwürfe",
+        "desc": "Verlorene Nachrichten"
+      }
+    }
+  },
   "sheets": {
     "backOption": "Zurück"
   },

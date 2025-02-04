@@ -28,6 +28,8 @@ import Animated from 'react-native-reanimated';
 import MyProfileNavbar from '../../../components/shared/topnavbar/MyProfileNavbar';
 import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
 import ModuleItemView from '../views/ModuleItemView';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 function MyAccountPresenter() {
 	const { onScroll } = useScrollMoreOnPageEnd();
@@ -36,6 +38,7 @@ function MyAccountPresenter() {
 	const { driver } = useAppApiClient();
 	const { refetch, data } = useApiGetMyAccount();
 	const [IsRefreshing, setIsRefreshing] = useState(false);
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function _refresh() {
 		setIsRefreshing(true);
@@ -46,25 +49,27 @@ function MyAccountPresenter() {
 
 	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.PROFILE} />;
 
-	const serverModules: AppModulesProps[] =
-		DriverService.getAccountModules(driver);
+	const serverModules: AppModulesProps[] = DriverService.getAccountModules(
+		t,
+		driver,
+	);
 
 	const appModules: AppModulesProps[] = [
 		{
-			label: 'Social Hub',
-			desc: 'Manage profiles!',
+			label: t(`profile.appFeatures.socialHub.label`),
+			desc: t(`profile.appFeatures.socialHub.desc`),
 			iconId: 'layers-outline',
 			to: APP_ROUTING_ENUM.PROFILES,
 		},
 		{
-			label: 'Collections',
-			desc: 'Bookmark++',
+			label: t(`profile.appFeatures.collections.label`),
+			desc: t(`profile.appFeatures.collections.desc`),
 			iconId: 'layers-outline',
 			to: APP_ROUTING_ENUM.COLLECTIONS,
 		},
 		{
-			label: 'Drafts',
-			desc: 'Lost letters',
+			label: t(`profile.appFeatures.drafts.label`),
+			desc: t(`profile.appFeatures.drafts.desc`),
 			iconId: 'layers-outline',
 			to: APP_ROUTING_ENUM.MY_DRAFTS,
 		},
@@ -124,7 +129,7 @@ function MyAccountPresenter() {
 					style={styles.sectionHeader}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				>
-					App Features
+					{t(`profile.appFeatures.sectionLabel`)}
 				</AppText.Normal>
 				<Animated.FlatList
 					data={appModules}
