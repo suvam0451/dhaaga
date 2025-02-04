@@ -1,36 +1,54 @@
 {
   "topNav": {
     "primary": {
-      "hub": "Social Hub",
-      "discover": "Ontdek",
-      "compose": "Opstellen",
-      "account": "Mijn Account",
-      "setting": "App Instellingen",
-      "inbox": "Inbox",
-      "mentions": "Vermeldingen",
+      "hub": "Soziales Hub",
+      "discover": "Entdecken",
+      "compose": "Erstellen",
+      "account": "Mein Konto",
+      "setting": "App-Einstellungen",
+      "inbox": "Posteingang",
+      "mentions": "Erwähnungen",
       "chat": "Chat",
-      "social": "Sociaal",
+      "social": "Soziales",
       "updates": "Updates"
     },
     "secondary": {
-      "addProfile": "Profiel Toevoegen",
-      "myLikes": "Mijn Likes",
-      "myBookmarks": "Mijn Bladwijzers",
-      "myAccount": "Mijn Account",
-      "myProfile": "Mijn Profiel",
-      "appSettings": "App Instellingen"
+      "addProfile": "Profil hinzufügen",
+      "myLikes": "Meine Likes",
+      "myBookmarks": "Meine Lesezeichen",
+      "myAccount": "Mein Konto",
+      "myProfile": "Mein Profil",
+      "appSettings": "App-Einstellungen"
     }
   },
+  "dialogs": {
+    "renameOption": "Umbenennen",
+    "deleteOption": "Löschen",
+    "dismissOption": "Abbrechen",
+    "saveOption": "Speichern"
+  },
+  "discover": {
+    "moreSoon": {
+      "firstHalf": "Mehr kommt noch",
+      "secondHalf": "bald™"
+    },
+    "instructions": [
+      "1) Drücke 🔍, um mit der Suche zu beginnen",
+      "2)️ Sende (↵), um zu suchen",
+      "3)️ Drücke 🔍 erneut, um das Widget zu verbergen",
+      "Löschen (x), um hierher zurückzukehren]"
+    ]
+  },
   "sheets": {
-    "backOption": "Terug"
+    "backOption": "Zurück"
   },
   "hub": {
     "feeds": {
-      "global": "Globaal",
-      "local": "Lokaal",
-      "social": "Sociaal",
-      "home": "Huis",
-      "bubble": "Bubble"
+      "global": "Global",
+      "local": "Lokal",
+      "social": "Sozial",
+      "home": "Startseite",
+      "bubble": "Blase"
     },
     "greetings": {
       "goodMorning": "Guten Morgen",
@@ -38,53 +56,53 @@
       "goodEvening": "Guten Abend",
       "goodNight": "Gute Nacht"
     },
-    "navbarLabel": "Social Hub",
+    "navbarLabel": "Soziales Hub",
     "section": {
       "feeds": "Feeds",
-      "users": "Gebruikers",
+      "users": "Benutzer",
       "tags": "Tags",
-      "timelines": "Tijdlijnen"
+      "timelines": "Zeitleisten"
     }
   },
   "inbox": {
-    "name": "Inbox",
-    "pageHeader": {
-      "mentions": "Vermeldingen",
+    "name": "Posteingang",
+    "nav": {
+      "mentions": "Erwähnungen",
       "chat": "Chat",
-      "social": "Sociaal",
+      "social": "Sozial",
       "updates": "Updates"
     },
     "summary": {
-      "liked": "Hat deinen Beitrag gemocht",
+      "liked": "Hat deinen Beitrag geliked",
       "followRequestAccepted": "Hat deine Follow-Anfrage akzeptiert",
       "followed": "Hat dir gefolgt",
       "shared": "Hat deinen Beitrag geteilt",
       "reacted": "Hat auf deinen Beitrag reagiert",
-      "posted": "Hat gepostet",
+      "posted": "Beitrag veröffentlicht",
       "replied": "Hat dir geantwortet",
       "mentioned": "Hat dich erwähnt"
     }
   },
   "collections": {
-    "name": "Collecties",
-    "addButton": "Voeg Collectie Toe",
-    "fallbackDesc": "Geen Beschrijving Beschikbaar",
+    "name": "Sammlungen",
+    "addButton": "Sammlung hinzufügen",
+    "fallbackDesc": "Keine Beschreibung angegeben",
     "emptyTitle": "Sammlung leer",
     "emptyDesc": "Diese Sammlung enthält keine gespeicherten Beiträge"
   },
   "composer": {
     "pageTitle": "Erstellen",
-    "quickPost": "Schnellpost",
-    "quickPostCta": "Was denkst du gerade?",
-    "quickPostSubmit": "Posten",
-    "noAttachments": "Geen bijlagen toegevoegd",
+    "quickPost": "Schnellbeitrag",
+    "quickPostCta": "Was denkst du?",
+    "quickPostSubmit": "Beitrag posten",
+    "noAttachments": "Keine Anhänge hinzugefügt",
     "landing": {
-      "tComposeFull": "Erstelle einen Beitrag",
+      "tComposeFull": "Beitrag erstellen",
       "dComposeFull": [
         "Längere Beiträge",
         "Mehr Optionen"
       ],
-      "tComposePoll": "Erstelle eine Umfrage",
+      "tComposePoll": "Umfrage erstellen",
       "dComposePoll": [
         "<Nicht Implementiert>"
       ],
@@ -99,25 +117,25 @@
     }
   },
   "quickPost": {
-    "name": "Schneller Beitrag",
-    "spoilerPlaceholder": "Spoiler / Inhoudswaarschuwing",
-    "ctaPlaceholder": "Waar denk je aan?",
-    "postButton": "Plaatsen",
-    "replyingTo": "Antworten auf",
+    "name": "Schnellbeitrag",
+    "spoilerPlaceholder": "Spoiler / Inhaltswarnung",
+    "ctaPlaceholder": "Was denkst du?",
+    "postButton": "Beitrag posten",
+    "replyingTo": "Antworten auf: ",
     "visibility": {
-      "public": "Openbaar",
-      "unlisted": "Thuis",
-      "direct": "Direct",
-      "private": "Volgers"
+      "public": "Öffentlich",
+      "unlisted": "Startseite",
+      "direct": "Direkt",
+      "private": "Folge mir"
     },
     "interactivity": {
-      "everybody": "Iedereen",
-      "nobody": "Alleen ik",
-      "Limited": "Beperkt"
+      "everybody": "Jeder",
+      "nobody": "Nur ich",
+      "Limited": "Eingeschränkt"
     }
   },
   "chatroom": {
-    "sendInterfacePlaceholder": "Jouw bericht"
+    "sendInterfacePlaceholder": "Deine Nachricht"
   },
   "setting": {
     "accountModule": {
@@ -129,12 +147,12 @@
       "desc": "Die üblichsten, langweiligen Einstellungen sind hier"
     },
     "appFeaturesModule": {
-      "title": "Goodie-Hütte",
-      "desc": "Passen Sie die einzigartigen Funktionen von Dhaaga an"
+      "title": "Goodie Hut",
+      "desc": "Einzigartige Funktionen von Dhaaga anpassen"
     },
     "digitalWellbeingModule": {
       "title": "Digitale Gesundheit",
-      "desc": "Trennen, um sich selbst wieder zu verbinden"
+      "desc": "Trenne dich, um dich wieder mit dir selbst zu verbinden"
     },
     "advancedModule": {
       "title": "Erweitert",

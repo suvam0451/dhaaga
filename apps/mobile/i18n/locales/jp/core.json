@@ -27,6 +27,18 @@
     "dismissOption": "閉じる",
     "saveOption": "保存"
   },
+  "discover": {
+    "moreSoon": {
+      "fistHalf": "さらに色々なものが登場予定",
+      "secondHalf": "近日™"
+    },
+    "instructions": [
+      "1) \uD83D\uDD0D を押して検索を開始",
+      "2)️ 検索するには (↵) を送信 3)️ 再度",
+      "3) \uD83D\uDD0D を押してウィジェットを隠す",
+      "4) (x) でここに戻る"
+    ]
+  },
   "sheets": {
     "backOption": "戻る"
   },

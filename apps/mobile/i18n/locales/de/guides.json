@@ -27,6 +27,25 @@
       "Je kunt altijd van de mini-lay-out naar 'Quick Post' schakelen door op de knop aan de linkerkant te drukken."
     ]
   },
+  "discover": {
+    "label": "Leitfaden (Entdecken)",
+    "qPageIntro": "Was macht diese Seite?",
+    "aPageIntro": [
+      "Dies ist das Entdeckungsportal von Dhaaga.",
+      "Es ist momentan nur eine Such- und Historientab 😅.",
+      "Aber in Zukunft werden weitere unterhaltsame Möglichkeiten hinzugefügt, um deine Freunde und Communities zu finden."
+    ],
+    "qStuckCannotReset": "Wie komme ich zurück zum Anfang?",
+    "aStuckCannotReset": [
+      "Öffne das Such-Widget und drücke (x), um die Suche zu löschen.",
+      "Dadurch wirst du zurück zur Startseite geschickt."
+    ],
+    "qNoRecommendations": "Wo sind meine empfohlenen und trendigen Tabs?",
+    "aNoRecommendations": [
+      "Dhaaga blendet standardmäßig Nachrichten und Trendthemen aus.",
+      "In Zukunft werden sie als optionale Tab-Ziele eingeführt."
+    ]
+  },
   "hub": {
     "label": "Gids (Hub)",
     "qPageIntro": "Wat doet deze pagina?",

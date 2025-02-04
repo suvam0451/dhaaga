@@ -9,10 +9,10 @@ function Header() {
 		<AppTabLandingNavbar
 			type={APP_LANDING_PAGE_TYPE.DISCOVER}
 			menuItems={[
-				{
-					iconId: 'layers-outline',
-					onPress: () => {},
-				},
+				// {
+				// 	iconId: 'layers-outline',
+				// 	onPress: () => {},
+				// },
 				{
 					iconId: 'user-guide',
 					onPress: () => {

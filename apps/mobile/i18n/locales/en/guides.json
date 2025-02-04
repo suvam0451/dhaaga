@@ -27,6 +27,25 @@
       "You can switch from the mini layout to \"Quick Post\" anytime, by pressing the button on the left."
     ]
   },
+  "discover": {
+    "label": "Guide (Discover)",
+    "qPageIntro": "What does this page do?",
+    "aPageIntro": [
+      "This is the discovery portal of Dhaaga.",
+      "It is just a search and history tab for now 😅.",
+      "But, more fun ways to find your friends and communities will be added in the future."
+    ],
+    "qStuckCannotReset": "How to go back to the beginning?",
+    "aStuckCannotReset": [
+      "Open the search widget and press (x) to clear search.",
+      "It will send you back home."
+    ],
+    "qNoRecommendations": "Where are my recommended and trending tabs?",
+    "aNoRecommendations": [
+      "Dhaaga hides news and trending topics, by default.",
+      "In the future, they will be introduced as optional tab destinations."
+    ]
+  },
   "hub": {
     "label": "Guide (Hub)",
     "qPageIntro": "What does this page do?",
