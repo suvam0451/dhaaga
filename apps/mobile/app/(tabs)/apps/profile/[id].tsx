@@ -1,3 +1,3 @@
-import UserViewProfile from '../../../../components/common/user/UserViewProfile';
+import UserViewProfile from '../../../../features/user-profiles/presenters/UserProfilePresenter';
 
 export default UserViewProfile;

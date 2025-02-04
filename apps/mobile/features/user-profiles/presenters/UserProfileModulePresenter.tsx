@@ -1,15 +1,16 @@
 import { useMemo, useState } from 'react';
-import ProfileGalleryModePresenter from '../../../../../../features/user-profiles/features/gallery-mode/presenters/ProfileGalleryModePresenter';
+import ProfileGalleryModePresenter from '../features/gallery-mode/presenters/ProfileGalleryModePresenter';
 import { StyleProp, View, ViewStyle, Dimensions, FlatList } from 'react-native';
-import { AppUserObject } from '../../../../../../types/app-user.types';
-import { AppInstagramTabControl } from '../../../../../lib/SegmentedControl';
-import useApiGetPinnedPosts from '../../../../../../hooks/api/accounts/useApiGetPinnedPosts';
-import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../../../lib/Text';
-import StatusItem from '../../../../../common/status/StatusItem';
-import WithAppStatusItemContext from '../../../../../../hooks/ap-proto/useAppStatusItem';
-import SocialUpdatePresenter from '../../../../../../features/inbox/presenters/SocialUpdatePresenter';
-import UpdatesPresenter from '../../../../../../features/inbox/presenters/UpdatesPresenter';
+import { AppUserObject } from '../../../types/app-user.types';
+import { AppInstagramTabControl } from '../../../components/lib/SegmentedControl';
+import useApiGetPinnedPosts from '../../../hooks/api/accounts/useApiGetPinnedPosts';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../../components/lib/Text';
+import StatusItem from '../../../components/common/status/StatusItem';
+import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import SocialUpdatePresenter from '../../inbox/presenters/SocialUpdatePresenter';
+import { appDimensions } from '../../../styles/dimensions';
+import UpdatesPresenter from '../../inbox/presenters/UpdatesPresenter';
 
 type AppPagerViewListProps = {
 	userId: string;
@@ -60,7 +61,7 @@ type ProfileModulesProps = {
  * in profile page that can be
  * expanded
  */
-function ProfileModules({ profileId, acct }: ProfileModulesProps) {
+function UserProfileModulePresenter({ profileId, acct }: ProfileModulesProps) {
 	const { theme } = useAppTheme();
 	const { height } = Dimensions.get('window');
 	const [TabIndex, setTabIndex] = useState(0);
@@ -81,11 +82,11 @@ function ProfileModules({ profileId, acct }: ProfileModulesProps) {
 	}, [TabIndex, profileId]);
 
 	return (
-		<View style={{ paddingBottom: 12, minHeight: height - 36 }}>
+		<View style={{ minHeight: height - 50 }}>
 			<View
 				style={{
 					flexDirection: 'row',
-					marginTop: 36,
+					marginTop: 12,
 					marginHorizontal: 10,
 				}}
 			>
@@ -101,14 +102,14 @@ function ProfileModules({ profileId, acct }: ProfileModulesProps) {
 					style={{
 						backgroundColor: theme.background.a20,
 						paddingTop: 8,
-						marginBottom: 16,
+						marginBottom: appDimensions.timelines.sectionBottomMargin,
 						borderRadius: 8,
 					}}
 				/>
 			</View>
-			<View style={{ minHeight: height / 2 }}>{Content}</View>
+			<View style={{ flex: 1 }}>{Content}</View>
 		</View>
 	);
 }
 
-export default ProfileModules;
+export default UserProfileModulePresenter;

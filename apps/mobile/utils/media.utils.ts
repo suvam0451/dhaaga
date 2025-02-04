@@ -26,6 +26,20 @@ class MediaUtils {
 		});
 	}
 
+	static isImageType(type: string) {
+		switch (type) {
+			case 'image':
+			case 'image/jpeg':
+			case 'image/png':
+			case 'image/webp':
+			case 'image/gif':
+			case 'image/avif':
+				return true;
+			default:
+				return false;
+		}
+	}
+
 	// private static async compress_impl({
 	// 	uri,
 	// 	width,

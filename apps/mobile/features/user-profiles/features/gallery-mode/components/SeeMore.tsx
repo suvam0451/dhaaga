@@ -1,7 +1,10 @@
 import { View } from 'react-native';
 import { AppText } from '../../../../../components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
+import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 function SeeMore() {
+	const { theme } = useAppTheme();
 	return (
 		<View
 			style={{
@@ -9,16 +12,20 @@ function SeeMore() {
 				flexDirection: 'column',
 				alignItems: 'center',
 				justifyContent: 'center',
-				width: 64,
-				height: 64,
+				width: 72,
+				height: 72,
 				marginHorizontal: 4,
-				borderColor: 'gray',
+				borderColor: theme.background.a50,
 				borderWidth: 1,
 				borderRadius: 4,
 			}}
 		>
-			<AppText.SemiBold>See</AppText.SemiBold>
-			<AppText.SemiBold>More</AppText.SemiBold>
+			<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
+				See
+			</AppText.Medium>
+			<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
+				More
+			</AppText.Medium>
 		</View>
 	);
 }

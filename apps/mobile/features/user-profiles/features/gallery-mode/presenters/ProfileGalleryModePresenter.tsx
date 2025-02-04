@@ -1,21 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { MediaAttachmentInterface } from '@dhaaga/bridge';
 import { FlatList, View } from 'react-native';
-import ImageGalleryCanvas from '../../../../../components/common/user/fragments/ImageGalleryCanvas';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../../../components/lib/Text';
 import SeeMore from '../components/SeeMore';
 import ThumbnailView from '../views/ThumbnailView';
 import useProfileGalleryModeInteractor from '../interactors/useProfileGalleryModeInteractor';
+import {
+	AppMediaObject,
+	AppPostObject,
+} from '../../../../../types/app-post.types';
+import MediaUtils from '../../../../../utils/media.utils';
+import { appDimensions } from '../../../../../styles/dimensions';
+import CanvasPresenter from './CanvasPresenter';
+import MenuPresenter from './MenuPresenter';
+
+const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 type Props = {
 	userId: string;
 };
 
+type MediaPostTuple = { media: AppMediaObject; post: AppPostObject };
+
 function ProfileGalleryModePresenter({ userId }: Props) {
-	const { theme } = useAppTheme();
-	const [MediaItems, setMediaItems] = useState<MediaAttachmentInterface[]>([]);
+	const [MediaItems, setMediaItems] = useState<MediaPostTuple[]>([]);
 	const [MediaGalleryCtrl, setMediaGalleryCtrl] = useState({
 		total: 0,
 		curr: 0,
@@ -26,33 +32,18 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 		setMediaGalleryCtrl({ total: 0, curr: 0 });
 		setCurrentIndex(0);
 	}, [userId]);
-	// const { data } = useProfileGalleryModeInteractor(userId);
+	const { data } = useProfileGalleryModeInteractor(userId);
 
-	const data = [];
 	useEffect(() => {
-		let images = [];
-		for (const i of data) {
-			const count = i.getMediaAttachments().length;
-			if (count > 0) {
-				images.push(
-					...i.getMediaAttachments().filter((o) => {
-						if (
-							[
-								'image/jpeg',
-								'image/png',
-								'image',
-								'image/webp',
-								'gifv',
-							].includes(o.getType())
-						)
-							return true;
-						console.log(
-							'[WARN]: unknown image type in profile gallery',
-							o.getType(),
-						);
-						return false;
-					}),
-				);
+		let images: MediaPostTuple[] = [];
+		for (const item of data) {
+			for (const mediaItem of item.content.media) {
+				if (MediaUtils.isImageType(mediaItem.type)) {
+					images.push({
+						post: item,
+						media: mediaItem,
+					});
+				}
 			}
 		}
 		setMediaItems(images);
@@ -108,127 +99,35 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 		}
 	}, [MediaGalleryCtrl, CurrentIndex]);
 
-	const onThumbClick = useCallback((index: number) => {
+	function onThumbClick(index: number) {
 		setCurrentIndex(index);
 		setMediaGalleryCtrl((o) => ({ curr: index, total: o.total }));
-	}, []);
+	}
 
 	return (
-		<View>
-			<View style={{ marginHorizontal: 10 }}>
-				<ImageGalleryCanvas
-					src={MediaItems[CurrentIndex]?.getUrl()}
-					width={MediaItems[CurrentIndex]?.getWidth()}
-					height={MediaItems[CurrentIndex]?.getHeight()}
-					onNext={onNext}
-					onPrev={onPrev}
-				/>
-			</View>
-
+		<View style={{ height: '100%' }}>
 			<View
 				style={{
-					height: 48,
-					width: 256,
-					backgroundColor: theme.background.a40,
-					zIndex: 99,
-					opacity: 0.75,
-					borderRadius: 16,
-					marginVertical: 16,
-					alignSelf: 'center',
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'center',
+					marginBottom: MARGIN_BOTTOM * 2,
+					// flex: 1,
 				}}
 			>
-				<View
-					style={{
-						flex: 1,
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<Ionicons
-						name={'heart-outline'}
-						size={24}
-						color={theme.secondary.a10}
-						style={{ width: 24 }}
+				{MediaItems[CurrentIndex] && (
+					<CanvasPresenter
+						src={MediaItems[CurrentIndex].media.url}
+						width={MediaItems[CurrentIndex].media.width}
+						height={MediaItems[CurrentIndex].media.height}
+						onNext={onNext}
+						onPrev={onPrev}
 					/>
-					<AppText.Medium
-						style={{
-							marginLeft: 6,
-							fontSize: 16,
-						}}
-					>
-						24
-					</AppText.Medium>
-				</View>
-				<View
-					style={{
-						flex: 1,
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<Ionicons
-						name={'heart-outline'}
-						size={24}
-						color={theme.textColor.medium}
-						style={{ width: 24 }}
-					/>
-					<AppText.Medium
-						style={{
-							marginLeft: 6,
-							fontSize: 16,
-						}}
-					>
-						0
-					</AppText.Medium>
-				</View>
-				<View
-					style={{
-						flex: 1,
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<Ionicons
-						name={'heart-outline'}
-						size={24}
-						color={theme.textColor.medium}
-						style={{ width: 24 }}
-					/>
-					<AppText.Medium
-						style={{
-							marginLeft: 6,
-							fontSize: 16,
-						}}
-					>
-						24
-					</AppText.Medium>
-				</View>
-				<View
-					style={{
-						flex: 1,
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<Ionicons
-						name={'cloud-download-outline'}
-						size={24}
-						color={theme.textColor.medium}
-						style={{ width: 24 }}
-					/>
-				</View>
+				)}
 			</View>
+
+			<MenuPresenter post={MediaItems[CurrentIndex]?.post} />
 
 			<FlatList
 				ref={ListRef}
-				contentContainerStyle={{ paddingBottom: 24 }}
+				contentContainerStyle={{ paddingBottom: 8, height: 84 }}
 				ListFooterComponent={<SeeMore />}
 				horizontal={true}
 				data={MediaItems}
@@ -238,10 +137,10 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 						activeIndex={CurrentIndex}
 						onClick={onThumbClick}
 						selected={false}
-						type={item.getType()}
-						url={item.getUrl()}
-						width={item.getWidth()}
-						height={item.getHeight()}
+						type={item.media.type}
+						url={item.media.url}
+						width={item.media.width}
+						height={item.media.height}
 					/>
 				)}
 				onScrollToIndexFailed={(info) => {

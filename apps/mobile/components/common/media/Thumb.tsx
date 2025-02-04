@@ -35,24 +35,16 @@ function MediaThumbnail({
 						H: height,
 					});
 				return (
-					<View
+					/*@ts-ignore-next-line*/
+					<Image
 						style={{
 							width: _width,
 							height: _height,
+							borderRadius: 4,
+							opacity: 0.87,
 						}}
-					>
-						{/*@ts-ignore-next-line*/}
-						<Image
-							style={{
-								flex: 1,
-								width: _width,
-								height: _height,
-								borderRadius: 4,
-								opacity: 0.87,
-							}}
-							source={{ uri: url }}
-						/>
-					</View>
+						source={{ uri: url }}
+					/>
 				);
 			}
 			default: {

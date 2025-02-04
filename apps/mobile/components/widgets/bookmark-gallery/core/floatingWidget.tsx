@@ -1,16 +1,15 @@
 import {
-	ScrollView,
 	View,
 	StyleSheet,
 	ViewStyle,
 	TouchableOpacity,
 	Dimensions,
+	FlatList,
+	Text,
 } from 'react-native';
-import { Text } from '@rneui/themed';
 import { FontAwesome } from '@expo/vector-icons';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { useBookmarkGalleryControllerContext } from '../../../../states/useBookmarkGalleryController';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import { memo, useRef, useState } from 'react';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import RealmTag from '../../../common/tag/RealmTag';
@@ -238,48 +237,39 @@ const BookmarkGalleryWidgetExpanded = memo(function Foo() {
 					</View>
 				</View>
 
-				<AnimatedFlashList
+				<FlatList
 					ListHeaderComponent={UserSelectionListHeaderComponent}
 					horizontal={true}
-					estimatedItemSize={48}
-					estimatedListSize={{
-						width: DeviceWidth.current,
-						height: 64,
-					}}
 					data={loadedUserData}
 					renderItem={({ item }) => (
 						<UserSelectionIndicator
-							_id={item.user._id}
+							_id={item.user.userId}
 							count={item.count}
 							onClick={() => {
-								onUserSelected(item.user._id);
+								onUserSelected(item.user.userId);
 							}}
-							isSelected={isUserSelected(item.user._id)}
+							isSelected={isUserSelected(item.user.userId)}
 							avatarUrl={item.user.avatarUrl}
 						/>
 					)}
 				/>
 
-				<AnimatedFlashList
+				<FlatList
 					ListHeaderComponent={TagSelectionListHeaderComponent}
 					horizontal={true}
-					estimatedItemSize={72}
 					data={loadedTagData}
-					estimatedListSize={{
-						width: DeviceWidth.current,
-						height: 32,
-					}}
 					contentContainerStyle={{ paddingBottom: 8 }}
 					renderItem={({ item }) => (
-						<RealmTag
-							onPress={() => {}}
-							dto={{
-								name: item.tag.name,
-								following: item.tag.following,
-								privatelyFollowing: item.tag.privatelyFollowing,
-							}}
-							count={item.count}
-						/>
+						<View />
+						// <RealmTag
+						// 	onPress={() => {}}
+						// 	dto={{
+						// 		name: item.tag,
+						// 		following: item.tag.following,
+						// 		privatelyFollowing: item.tag.privatelyFollowing,
+						// 	}}
+						// 	count={item.count}
+						// />
 					)}
 				/>
 			</View>

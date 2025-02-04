@@ -23,7 +23,7 @@ function CurrentRelationView({
 	const bgColor: Record<ButtonVariant, string> = {
 		error: 'red',
 		cta: theme.primary.a0,
-		info: theme.background.a40,
+		info: theme.background.a20,
 		warn: 'orange',
 		warm: 'transparent',
 	};
@@ -49,7 +49,11 @@ function CurrentRelationView({
 			{loading ? (
 				<ActivityIndicator size={20} color={fgColor[variant]} />
 			) : (
-				<AppText.Medium style={[{ color: fgColor[variant], fontSize: 16 }]}>
+				<AppText.Medium
+					style={[
+						{ color: fgColor[variant], fontSize: 16, textAlign: 'center' },
+					]}
+				>
 					{label}
 				</AppText.Medium>
 			)}
@@ -63,10 +67,6 @@ const styles = StyleSheet.create({
 	button: {
 		borderRadius: appDimensions.buttons.borderRadius,
 		paddingVertical: 8,
-		paddingHorizontal: 20,
-		alignItems: 'center',
-	},
-	buttonContainer: {
-		borderRadius: 12,
+		flex: 1,
 	},
 });

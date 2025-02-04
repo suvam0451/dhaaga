@@ -16,7 +16,7 @@ type SearchResultFeedItemProps = {
 
 const FEED_AVATAR_SIZE = 42;
 
-function FeedListItemView({ item }: SearchResultFeedItemProps) {
+export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 	const { theme } = useAppTheme();
 	const img = useImage(item.avatar);
 

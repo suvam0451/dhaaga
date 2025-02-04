@@ -8,5 +8,13 @@
     "follower_other": "Followers",
     "following": "Following",
     "following_other": "Following"
+  },
+  "relationship": {
+    "friends": "Friends",
+    "following": "Following"
+  },
+  "relationshipCta": {
+    "followBack": "Follow Back",
+    "follow": "Follow"
   }
 }

@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import useGetReactionDetails from '../../../../hooks/api/useGetReactionDetails';
 import { Image } from 'expo-image';
 import { APP_FONT } from '../../../../styles/AppTheme';
@@ -10,7 +10,6 @@ import {
 	AppButtonBottomSheetAction,
 } from '../../../lib/Buttons';
 import useMfm from '../../../hooks/useMfm';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { AppAvatar } from '../../../lib/Avatar';
@@ -167,9 +166,8 @@ function AppBottomSheetReactionDetails() {
 					flexGrow: 1,
 				}}
 			>
-				<AnimatedFlashList
+				<FlatList
 					renderItem={({ item }) => <ReactingUser dto={item} />}
-					estimatedItemSize={32}
 					data={Data.accounts}
 					ListHeaderComponent={
 						<Fragment>

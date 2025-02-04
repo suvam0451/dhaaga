@@ -1,4 +1,4 @@
-import { ActivityIndicator, View, Text } from 'react-native';
+import { ActivityIndicator, View, Text, FlatList } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import RealmStatus from '../../../common/status/RealmStatus';
@@ -9,7 +9,6 @@ import BookmarkGalleryWidgetExpanded from '../../../widgets/bookmark-gallery/cor
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import WithAppPaginationContext from '../../../../states/usePagination';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import { memo, useEffect, useRef } from 'react';
 
 function LoadingState() {
@@ -118,12 +117,11 @@ function PostList({ onScroll, resetPosition }: Props) {
 	const ref = useRef(null);
 
 	return (
-		<AnimatedFlashList
+		<FlatList
 			ListHeaderComponent={ListHeaderComponent}
 			ref={ref}
-			estimatedItemSize={320}
 			data={posts}
-			renderItem={({ item }) => <RealmStatus _id={item._id} />}
+			renderItem={({ item }) => <RealmStatus _id={item.statusId} />}
 			scrollEventThrottle={16}
 			onScroll={onScroll}
 			contentContainerStyle={{ paddingTop: 50 + 4 }}

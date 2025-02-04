@@ -1,3 +1,3 @@
-import SharedStackUserProfile from '../../../../components/common/user/UserViewProfile';
+import SharedStackUserProfile from '../../../../features/user-profiles/presenters/UserProfilePresenter';
 
 export default SharedStackUserProfile;

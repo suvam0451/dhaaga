@@ -1,14 +1,14 @@
 import { memo } from 'react';
 import { Text, View } from 'react-native';
-import { useActivitypubUserContext } from '../../../../../../states/useProfile';
-import useMfm from '../../../../../hooks/useMfm';
+import { useActivitypubUserContext } from '../../../states/useProfile';
+import useMfm from '../../../components/hooks/useMfm';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ProfileModuleFactory from './ProfileModuleFactory';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { AppUserObject } from '../../../../../../types/app-user.types';
-import useGlobalState from '../../../../../../states/_global';
+import { APP_FONTS } from '../../../styles/AppFonts';
+import { AppUserObject } from '../../../types/app-user.types';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../../utils/theming.util';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 
 type ExtraInformationFieldProps = {
 	label: string;

@@ -15,13 +15,14 @@ type SearchResultUserItemProps = {
 };
 
 const ICON_SIZE = 42;
+const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 type BannerProps = {
 	uri: string;
 };
 
 function Banner({ uri }: BannerProps) {
-	const image = useImage(uri, { maxHeight: 256 });
+	const image = useImage(uri, { maxHeight: 128 });
 	const [ImageDims, setImageDims] = useState({
 		width: Dimensions.get('window').width,
 		height: 128,
@@ -39,7 +40,7 @@ function Banner({ uri }: BannerProps) {
 	return (
 		<View
 			style={{
-				marginBottom: appDimensions.timelines.sectionBottomMargin * 3,
+				marginBottom: MARGIN_BOTTOM,
 			}}
 			onLayout={handleLayout}
 		>
@@ -61,7 +62,12 @@ function UserListItemView({ item }: SearchResultUserItemProps) {
 	const { theme } = useAppTheme();
 
 	return (
-		<View style={styles.userResultContainer}>
+		<View
+			style={[
+				styles.userResultContainer,
+				{ backgroundColor: theme.background.a20 },
+			]}
+		>
 			{item.banner && <Banner uri={item.banner} />}
 			{!item.banner && <View style={{ height: 12 }} />}
 			<View
@@ -72,22 +78,20 @@ function UserListItemView({ item }: SearchResultUserItemProps) {
 				<View
 					style={{
 						flexDirection: 'row',
-						marginBottom: appDimensions.timelines.sectionBottomMargin,
+						marginBottom: MARGIN_BOTTOM,
 						alignItems: 'center',
 					}}
 				>
-					<View>
-						{/*@ts-ignore-next-line*/}
-						<Image
-							source={{ uri: item.avatarUrl }}
-							style={{
-								width: ICON_SIZE,
-								height: ICON_SIZE,
-								borderRadius: ICON_SIZE / 2,
-							}}
-						/>
-					</View>
-					<View style={{ marginLeft: 12, maxWidth: '50%' }}>
+					{/*@ts-ignore-next-line*/}
+					<Image
+						source={{ uri: item.avatarUrl }}
+						style={{
+							width: ICON_SIZE,
+							height: ICON_SIZE,
+							borderRadius: ICON_SIZE / 2,
+						}}
+					/>
+					<View style={{ marginLeft: 12, maxWidth: '75%' }}>
 						<TextContentView
 							tree={item.parsedDisplayName}
 							variant={'displayName'}
@@ -108,15 +112,15 @@ function UserListItemView({ item }: SearchResultUserItemProps) {
 					<View style={{ flexGrow: 1 }} />
 				</View>
 				<TextContentView
-					tree={item.parsedDisplayName}
+					tree={item.parsedDescription}
 					variant={'bodyContent'}
 					mentions={[]}
 					emojiMap={item.calculated.emojis}
 				/>
 				<AppDivider.Hard
 					style={{
-						marginVertical: appDimensions.timelines.sectionBottomMargin * 0.5,
-						backgroundColor: '#323232',
+						marginVertical: MARGIN_BOTTOM,
+						backgroundColor: theme.background.a50,
 					}}
 				/>
 				<View
@@ -146,7 +150,6 @@ export default UserListItemView;
 const styles = StyleSheet.create({
 	userResultContainer: {
 		borderRadius: 12,
-		backgroundColor: '#1f1f1f',
 		margin: 6,
 		marginBottom: 12,
 	},

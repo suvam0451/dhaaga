@@ -28,8 +28,8 @@ function ThumbnailView({
 		<View
 			style={{
 				marginHorizontal: 2,
-				borderColor: SELECTED ? theme.primary.a0 : theme.secondary.a30,
-				borderWidth: 0.5,
+				borderColor: SELECTED ? theme.primary.a0 : theme.background.a50,
+				borderWidth: 1.5,
 				borderRadius: 8,
 			}}
 			onTouchEnd={() => {

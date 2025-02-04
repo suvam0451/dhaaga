@@ -2,9 +2,10 @@ import useRelationInteractor from '../interactors/useRelationInteractor';
 import FollowRequestPendingState from '../../../components/common/relationship/fragments/FollowRequestPendingState';
 import { View } from 'react-native';
 import CurrentRelationView from '../view/CurrentRelationView';
-import RelationFollowing from '../../../components/common/relationship/fragments/RelationFollowing';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { useAppDialog } from '../../../hooks/utility/global-state-extractors';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { useTranslation } from 'react-i18next';
 
 type RelationshipButtonCoreProps = {
 	userId: string;
@@ -20,6 +21,10 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 
 	const { refetch, data, relationLoading, follow, unfollow } =
 		useRelationInteractor(userId);
+	const { t } = useTranslation([
+		LOCALIZATION_NAMESPACE.DIALOGS,
+		LOCALIZATION_NAMESPACE.GLOSSARY,
+	]);
 
 	if (data.requested) {
 		return (
@@ -54,13 +59,15 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 						}),
 					);
 				}}
-				label={'Follow'}
+				label={t(`relationshipCta.follow`, {
+					ns: LOCALIZATION_NAMESPACE.GLOSSARY,
+				})}
 				variant={'cta'}
 			/>
 		);
 	} else if (data.following && !data.followedBy) {
 		return (
-			<RelationFollowing
+			<CurrentRelationView
 				loading={relationLoading}
 				onPress={() => {
 					show(
@@ -71,6 +78,10 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 						}),
 					);
 				}}
+				label={t(`relationship.following`, {
+					ns: LOCALIZATION_NAMESPACE.GLOSSARY,
+				})}
+				variant={'info'}
 			/>
 		);
 	} else if (data.followedBy && !data.following) {
@@ -86,7 +97,9 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 						}),
 					);
 				}}
-				label={'Follow Back'}
+				label={t(`relationshipCta.followBack`, {
+					ns: LOCALIZATION_NAMESPACE.GLOSSARY,
+				})}
 				variant={'info'}
 			/>
 		);
@@ -103,7 +116,9 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 						}),
 					);
 				}}
-				label={'Friends'}
+				label={t(`relationship.friends`, {
+					ns: LOCALIZATION_NAMESPACE.GLOSSARY,
+				})}
 				variant={'warm'}
 			/>
 		);
