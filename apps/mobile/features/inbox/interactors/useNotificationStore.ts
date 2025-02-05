@@ -12,7 +12,7 @@ import { inboxCategoryActionType as ActionType } from '../reducers/inbox-categor
  * an inbox category
  */
 function useNotificationStore() {
-	const { lastId, loadNext, MaxId } = useAppPaginator();
+	const { lastId, loadNext, MaxId, reset: resetPaginator } = useAppPaginator();
 	const state = useInboxCategoryState();
 	const dispatch = useInboxCategoryDispatch();
 
@@ -30,6 +30,7 @@ function useNotificationStore() {
 		dispatch({
 			type: ActionType.RESET,
 		});
+		resetPaginator();
 	}
 
 	return {
