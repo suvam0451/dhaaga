@@ -108,6 +108,7 @@ function MediaItem({
 				style={[
 					{
 						marginBottom: appDimensions.timelines.sectionBottomMargin,
+						flex: 1,
 					},
 					style,
 				]}

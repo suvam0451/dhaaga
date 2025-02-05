@@ -111,8 +111,9 @@ function MisskeySignInStack() {
 
 	const [SessionConfirmed, setSessionConfirmed] = useState(false);
 
+	// Misskey has no use for the callback token
 	function callback(state) {
-		const regex = /^https:\/\/example.com\/\?session=(.*?)/;
+		const regex = /^https:\/\/suvam.io\/\?session=(.*?)/;
 		if (regex.test(state.url)) {
 			setSessionConfirmed(true);
 			autoVerifyFromSession();

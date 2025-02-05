@@ -73,7 +73,7 @@ function Factory() {
 			return <ABS_Add_Profile />;
 		case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
 			return (
-				<WithComposerContext textSeed={null}>
+				<WithComposerContext>
 					<ComposerPresenter />
 				</WithComposerContext>
 			);

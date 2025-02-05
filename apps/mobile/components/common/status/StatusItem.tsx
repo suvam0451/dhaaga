@@ -1,5 +1,5 @@
 import { Fragment, useMemo } from 'react';
-import SharedStatusFragment from './fragments/SharedStatusFragment';
+import ShareIndicator from './fragments/ShareIndicator';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
 import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
@@ -65,7 +65,11 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 				if (dto.meta.isReply) {
 					return (
 						<PostContainer>
-							<SharedStatusFragment />
+							<ShareIndicator
+								avatarUrl={dto.postedBy?.avatarUrl}
+								parsedDisplayName={dto.postedBy?.parsedDisplayName}
+								createdAt={dto.createdAt}
+							/>
 							<AncestorFragment />
 							<StatusCore
 								hasBoost={true}
@@ -79,7 +83,11 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 				} else {
 					return (
 						<PostContainer>
-							<SharedStatusFragment />
+							<ShareIndicator
+								avatarUrl={dto.postedBy?.avatarUrl}
+								parsedDisplayName={dto.postedBy?.parsedDisplayName}
+								createdAt={dto.createdAt}
+							/>
 							<StatusCore
 								hasBoost={true}
 								isPreview={isPreview}

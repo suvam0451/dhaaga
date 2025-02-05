@@ -68,14 +68,11 @@ export enum DhaagaJsNotificationType {
 export type NotificationGetQueryDto = {
 	limit: number;
 	minId?: string;
-	maxId?: string;
-	sinceId?: string;
-	untilId?: string; // misskey
+	maxId?: string; // doubles as untilId for misskey
 	accountId?: string; // restrict to notifications recieved from this account
 	types: DhaagaJsNotificationType[];
 	excludeTypes: DhaagaJsNotificationType[];
 	markAsRead?: boolean; // misskey
-
 	excludeType?: string[];
 	includeType?: string[];
 };
@@ -89,7 +86,7 @@ export interface NotificationsRoute {
 		maxId?: string | null;
 	}>;
 
-	getMentions(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
+	getMentions(query: NotificationGetQueryDto): LibraryPromise<any>;
 
 	getChats(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
 

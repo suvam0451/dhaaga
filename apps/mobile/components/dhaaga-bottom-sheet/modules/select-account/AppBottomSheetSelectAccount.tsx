@@ -1,6 +1,5 @@
 import { memo } from 'react';
-import { AnimatedFlashList } from '@shopify/flash-list';
-import { Pressable, Text, View } from 'react-native';
+import { Animated, Pressable, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import {
 	AccountDetails,
@@ -144,8 +143,7 @@ const AppBottomSheetSelectAccount = memo(() => {
 
 	return (
 		<View style={{ height: '100%' }}>
-			<AnimatedFlashList
-				estimatedItemSize={72}
+			<Animated.FlatList
 				ListHeaderComponent={() => (
 					<AppBottomSheetMenu.Header
 						title={'Select Account'}

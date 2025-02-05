@@ -2,7 +2,6 @@ import { View, Text } from 'react-native';
 import { Skeleton } from '@rneui/themed';
 import { memo, useEffect, useRef, useState } from 'react';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
@@ -495,13 +494,14 @@ function ServerDebuggerStackBase() {
 	return (
 		<View style={{ backgroundColor: '#121212', height: '100%' }}>
 			<WithAutoHideTopNavBar title={'Known Servers'} translateY={translateY}>
-				<AnimatedFlashList
-					estimatedItemSize={48}
-					renderItem={FlashListRenderer}
-					contentContainerStyle={{ paddingTop: 54 }}
-					data={FlashListProps}
-					onScroll={onScroll}
-				/>
+				<View />
+				{/*<AnimatedFlashList*/}
+				{/*	estimatedItemSize={48}*/}
+				{/*	renderItem={FlashListRenderer}*/}
+				{/*	contentContainerStyle={{ paddingTop: 54 }}*/}
+				{/*	data={FlashListProps}*/}
+				{/*	onScroll={onScroll}*/}
+				{/*/>*/}
 			</WithAutoHideTopNavBar>
 			<AddServerWidget
 				onPress={() => {

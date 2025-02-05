@@ -1,4 +1,10 @@
 {
+  "features": {
+    "notAvailable": {
+      "title": "Not Available",
+      "desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform."
+    }
+  },
   "topNav": {
     "primary": {
       "hub": "Social Hub",
@@ -26,6 +32,51 @@
     "deleteOption": "Delete",
     "dismissOption": "Dismiss",
     "saveOption": "Save"
+  },
+  "discover": {
+    "moreSoon": {
+      "fistHalf": "More stuff coming",
+      "secondHalf": "soon™"
+    },
+    "instructions": [
+      "1) Press \uD83D\uDD0D to start searching",
+      "2) Submit (↵) to search.",
+      "3) Press \uD83D\uDD0D again to hide widget",
+      "4) Clear (x) to come back here"
+    ]
+  },
+  "profile": {
+    "appFeatures": {
+      "sectionLabel": "App Features",
+      "likes": {
+        "label": "Likes",
+        "desc": "Posts I've Liked"
+      },
+      "bookmarks": {
+        "label": "Bookmarks",
+        "desc": "My Bookmarks"
+      },
+      "feeds": {
+        "label": "Feeds",
+        "desc": "Subscribed Feeds"
+      },
+      "lists": {
+        "label": "Lists",
+        "desc": "My Lists"
+      },
+      "socialHub": {
+        "label": "Social Hub",
+        "desc": "Manage profiles"
+      },
+      "collections": {
+        "label": "Collections",
+        "desc": "Bookmark++"
+      },
+      "drafts": {
+        "label": "Drafts",
+        "desc": "Lost letters"
+      }
+    }
   },
   "sheets": {
     "backOption": "Back"
@@ -59,6 +110,16 @@
       "chat": "Chat",
       "social": "Social",
       "updates": "Updates"
+    },
+    "summary": {
+      "liked": "Liked your post",
+      "followRequestAccepted": "Accepted your follow request",
+      "followed": "Followed You",
+      "shared": "Shared your post",
+      "reacted": "Reacted to your post",
+      "posted": "Posted",
+      "replied": "Replied to you",
+      "mentioned": "Mentioned you"
     }
   },
   "collections": {

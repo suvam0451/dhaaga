@@ -1,4 +1,10 @@
 {
+  "features": {
+    "notAvailable": {
+      "title": "利用できません",
+      "desc": "この機能はDhaagaによって実装されていないか、またはあなたのSNSプラットフォームでは利用できません。"
+    }
+  },
   "topNav": {
     "primary": {
       "hub": "ソーシャルハブ",
@@ -26,6 +32,51 @@
     "deleteOption": "削除",
     "dismissOption": "閉じる",
     "saveOption": "保存"
+  },
+  "discover": {
+    "moreSoon": {
+      "fistHalf": "さらに色々なものが登場予定",
+      "secondHalf": "近日™"
+    },
+    "instructions": [
+      "1) \uD83D\uDD0D を押して検索を開始",
+      "2)️ 検索するには (↵) を送信 3)️ 再度",
+      "3) \uD83D\uDD0D を押してウィジェットを隠す",
+      "4) (x) でここに戻る"
+    ]
+  },
+  "profile": {
+    "appFeatures": {
+      "sectionLabel": "アプリ機能",
+      "likes": {
+        "label": "いいね",
+        "desc": "私がいいねした投稿"
+      },
+      "bookmarks": {
+        "label": "ブックマーク",
+        "desc": "私のブックマーク"
+      },
+      "feeds": {
+        "label": "フィード",
+        "desc": "私がフォローしているフィード"
+      },
+      "lists": {
+        "label": "リスト",
+        "desc": "私のリスト"
+      },
+      "socialHub": {
+        "label": "ソーシャルハブ",
+        "desc": "プロフィールを管理"
+      },
+      "collections": {
+        "label": "コレクション",
+        "desc": "ブックマーク++"
+      },
+      "drafts": {
+        "label": "ドラフト",
+        "desc": "失われたメッセージ"
+      }
+    }
   },
   "sheets": {
     "backOption": "戻る"
@@ -59,6 +110,16 @@
       "chat": "チャット",
       "social": "社交",
       "updates": "更新"
+    },
+    "summary": {
+      "liked": "あなたの投稿をいいねしました",
+      "followRequestAccepted": "あなたのフォローリクエストを承認しました",
+      "followed": "あなたをフォローしました",
+      "shared": "あなたの投稿をシェアしました",
+      "reacted": "あなたの投稿にリアクションしました",
+      "posted": "投稿しました",
+      "replied": "あなたに返信しました",
+      "mentioned": "あなたをメンションしました"
     }
   },
   "collections": {

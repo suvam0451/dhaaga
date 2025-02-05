@@ -9,10 +9,11 @@ import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
 import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { View } from 'react-native';
-import { AppFlashList } from '../../../components/lib/AppFlashList';
+import { Animated, RefreshControl, View } from 'react-native';
 import LoadingMore from '../../../components/screens/home/LoadingMore';
 import Header from '../components/Header';
+import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import StatusItem from '../../../components/common/status/StatusItem';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -90,12 +91,19 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				flex: 1,
 			}}
 		>
-			<AppFlashList.Post
+			<Animated.FlatList
 				data={TimelineState.items}
+				renderItem={({ item }) => (
+					<WithAppStatusItemContext dto={item}>
+						<StatusItem />
+					</WithAppStatusItemContext>
+				)}
 				onScroll={onScroll}
-				refreshing={Refreshing}
-				onRefresh={onRefresh}
 				ListHeaderComponent={Header}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
+				}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
 		</View>

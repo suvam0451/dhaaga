@@ -109,12 +109,17 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
  *
  * - Grouped for Mastodon
  */
-function useApiGetMentionUpdates() {
+function useApiGetMentionUpdates(maxId?: string | null) {
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
 
 	async function api(): Promise<NotificationResults> {
-		const results = await client.notifications.getMentions(driver);
+		const results = await client.notifications.getMentions({
+			limit: 10,
+			maxId,
+			types: [],
+			excludeTypes: [],
+		});
 		if (results.error) throw new Error(results.error.message);
 
 		const _data = results.data;
@@ -221,31 +226,27 @@ function useApiGetChatUpdates() {
 	});
 }
 
-function useApiGetSocialUpdates() {
+function useApiGetSocialUpdates(maxId?: string | null) {
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
 
 	async function api(): Promise<NotificationResults> {
 		const results = await client.notifications.getSocialUpdates({
-			limit: 40,
+			limit: 4,
 			excludeTypes: [],
 			types: [],
+			maxId,
 		});
 		if (results.error) throw new Error(results.error.message);
 
-		const _data = results.data;
-		if (ActivityPubService.misskeyLike(driver)) {
-			const obj = MisskeyService.deserializeNotifications(
+		if (ActivityPubService.misskeyLike(driver))
+			return MisskeyService.deserializeNotifications(
 				results.data,
 				driver,
 				server,
 			);
-			obj.items = obj.items.filter(
-				(o) => !['mention', 'login', 'note', 'status'].includes(o.type),
-			);
-			return obj;
-		}
 
+		const _data = results.data;
 		const acctList = _data.data.accounts;
 		const postList = _data.data.statuses;
 		const _retval = _data.data.notificationGroups
@@ -288,30 +289,44 @@ function useApiGetSocialUpdates() {
 
 	// Queries
 	return useQuery<NotificationResults>({
-		queryKey: ['notifications/social', acct],
+		queryKey: ['notifications/social', acct, maxId],
 		queryFn: api,
-		enabled: client !== null,
+		enabled: !!client,
 		initialData: pageResultDefault,
 	});
 }
 
-function useApiGetSubscriptionUpdates() {
-	const { data } = useApiGetNotifications({
-		include: [
-			// Mastodon
-			DhaagaJsNotificationType.STATUS,
-			DhaagaJsNotificationType.FOLLOW,
-			DhaagaJsNotificationType.POLL_NOTIFICATION,
-		],
-	});
+function useApiGetSubscriptionUpdates(maxId?: string | null) {
+	const { acct } = useAppAcct();
+	const { driver, client, server } = useAppApiClient();
 
-	return {
-		data: {
-			data: data.items.filter((o) => ['note', 'renote'].includes(o.type)),
-			maxId: data.maxId,
-			minId: data.minId,
+	return useQuery<NotificationResults>({
+		queryKey: ['notifications/subs', acct, maxId],
+		queryFn: async () => {
+			if (ActivityPubService.misskeyLike(driver)) {
+				const result = await (
+					client as MisskeyRestClient
+				).notifications.getSubscriptions({
+					limit: 5,
+					types: [],
+					excludeTypes: [],
+					maxId,
+				});
+
+				if (ActivityPubService.misskeyLike(driver)) {
+					return MisskeyService.deserializeNotifications(
+						result.data,
+						driver,
+						server,
+					);
+				}
+			} else {
+				return pageResultDefault;
+			}
 		},
-	};
+		enabled: !!client,
+		initialData: pageResultDefault,
+	});
 }
 
 export {

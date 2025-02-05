@@ -11,12 +11,15 @@ import { UserListView } from '../../_shared/views/UserListView';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useState } from 'react';
 import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 function ProfileFollowersPresenter() {
 	const [Refreshing, setRefreshing] = useState(false);
 	const { data, refetch } = useFollowersInteractor();
 	const TimelineState = useUserTimelineState();
 	const TimelineDispatch = useUserTimelineDispatch();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
 	function onRefresh() {
 		setRefreshing(true);
@@ -39,7 +42,7 @@ function ProfileFollowersPresenter() {
 	if (TimelineState.items.length === 0)
 		return (
 			<AppTopNavbar
-				title={'Followers'}
+				title={t(`noun.follower_other`)}
 				translateY={translateY}
 				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 			>
@@ -52,7 +55,7 @@ function ProfileFollowersPresenter() {
 	 */
 	return (
 		<AppTopNavbar
-			title={'Followers'}
+			title={t(`noun.follower_other`)}
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>

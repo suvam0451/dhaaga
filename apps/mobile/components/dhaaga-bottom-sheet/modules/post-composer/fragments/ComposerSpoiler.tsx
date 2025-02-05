@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
-import { PostComposerReducerActionType } from '../../../../../states/interactors/post-composer.reducer';
+import { PostComposerReducerActionType } from '../../../../../features/composer/reducers/composer.reducer';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';

@@ -1,21 +1,21 @@
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../components/shared/topnavbar/fragments/TopNavbarTimelineStack';
 import { AppPostObject } from '../../../types/app-post.types';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import { Fragment } from 'react';
-import { AppFlashList } from '../../../components/lib/AppFlashList';
 import LoadingMore from '../../../components/screens/home/LoadingMore';
 import UserPeekModalPresenter from '../../user-profiles/presenters/UserPeekModalPresenter';
-import { FetchStatus } from '@tanstack/react-query';
 import { appDimensions } from '../../../styles/dimensions';
+import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import StatusItem from '../../../components/common/status/StatusItem';
 
 type TimelinePostListViewProps = {
 	items: AppPostObject[];
 	numItems: number;
 	loadMore: () => void;
-	fetchStatus: FetchStatus;
+	fetching: boolean;
 	onRefresh: () => void;
 	refreshing: boolean;
 };
@@ -24,7 +24,7 @@ function TimelinePostListView({
 	numItems,
 	items,
 	loadMore,
-	fetchStatus,
+	fetching,
 	onRefresh,
 	refreshing,
 }: TimelinePostListViewProps) {
@@ -38,7 +38,7 @@ function TimelinePostListView({
 	});
 
 	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
+		fetchStatus: fetching ? 'fetching' : 'idle',
 	});
 
 	return (
@@ -55,13 +55,24 @@ function TimelinePostListView({
 			</Animated.View>
 
 			<Fragment>
-				<AppFlashList.Post
-					data={items}
-					paddingTop={appDimensions.topNavbar.scrollViewTopPadding + 16}
-					refreshing={refreshing}
-					onRefresh={onRefresh}
-					onScroll={onScroll}
-				/>
+				<View style={{ flex: 1 }}>
+					<Animated.FlatList
+						data={items}
+						renderItem={({ item }) => (
+							<WithAppStatusItemContext dto={item}>
+								<StatusItem />
+							</WithAppStatusItemContext>
+						)}
+						onScroll={onScroll}
+						contentContainerStyle={{
+							paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
+						}}
+						scrollEventThrottle={16}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+						}
+					/>
+				</View>
 				<LoadingMore visible={visible} loading={loading} />
 				<UserPeekModalPresenter />
 			</Fragment>

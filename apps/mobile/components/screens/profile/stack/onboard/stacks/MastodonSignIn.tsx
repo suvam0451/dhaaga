@@ -33,6 +33,7 @@ function MastodonSignInStack() {
 	const _clientId: string = params['clientId'] as string;
 	const _clientSecret: string = params['clientSecret'] as string;
 
+	// Mastodon/Pleroma need to use the callback code to work
 	function callback(state) {
 		const regex = /^https:\/\/(.*?)\/oauth\/authorize\/native\?code=(.*?)$/;
 		if (regex.test(state.url)) {

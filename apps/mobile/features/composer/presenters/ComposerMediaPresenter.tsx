@@ -8,7 +8,7 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { AppBottomSheetMenu } from '../../../components/lib/Menu';
-import { PostComposerReducerActionType } from '../../../states/interactors/post-composer.reducer';
+import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import { AppIcon } from '../../../components/lib/Icon';
 import MediaUtils from '../../../utils/media.utils';
 import {

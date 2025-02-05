@@ -1,0 +1,202 @@
+{
+  "features": {
+    "notAvailable": {
+      "title": "Tidak Tersedia",
+      "desc": "Fitur ini belum diimplementasikan oleh Dhaaga, atau tidak tersedia untuk platform SNS Anda."
+    }
+  },
+  "topNav": {
+    "primary": {
+      "hub": "Pusat Sosial",
+      "discover": "Temukan",
+      "compose": "Buat",
+      "account": "Akun Saya",
+      "setting": "Pengaturan Aplikasi",
+      "inbox": "Kotak Masuk",
+      "mentions": "Sebutan",
+      "chat": "Obrolan",
+      "social": "Sosial",
+      "updates": "Pembaruan"
+    },
+    "secondary": {
+      "addProfile": "Tambah Profil",
+      "myLikes": "Suka Saya",
+      "myBookmarks": "Tandai Saya",
+      "myAccount": "Akun Saya",
+      "myProfile": "Profil Saya",
+      "appSettings": "Pengaturan Aplikasi"
+    }
+  },
+  "dialogs": {
+    "renameOption": "Ganti Nama",
+    "deleteOption": "Hapus",
+    "dismissOption": "Tutup",
+    "saveOption": "Simpan"
+  },
+  "discover": {
+    "moreSoon": {
+      "fistHalf": "Lebih banyak konten akan datang",
+      "secondHalf": "segera™"
+    },
+    "instructions": [
+      "1) Tekan \uD83D\uDD0D untuk mulai mencari",
+      "2) Kirim (↵) untuk mencari.",
+      "3) Tekan \uD83D\uDD0D lagi untuk menyembunyikan widget",
+      "4) Bersihkan (x) untuk kembali ke sini"
+    ]
+  },
+  "profile": {
+    "appFeatures": {
+      "sectionLabel": "Fitur Aplikasi",
+      "likes": {
+        "label": "Suka",
+        "desc": "Postingan yang saya sukai"
+      },
+      "bookmarks": {
+        "label": "Bookmark",
+        "desc": "Bookmark saya"
+      },
+      "feeds": {
+        "label": "Feeds",
+        "desc": "Feeds yang saya ikuti"
+      },
+      "lists": {
+        "label": "Daftar",
+        "desc": "Daftar saya"
+      },
+      "socialHub": {
+        "label": "Social Hub",
+        "desc": "Kelola profil"
+      },
+      "collections": {
+        "label": "Koleksi",
+        "desc": "Bookmark++"
+      },
+      "drafts": {
+        "label": "Draf",
+        "desc": "Pesan yang hilang"
+      }
+    }
+  },
+  "sheets": {
+    "backOption": "Kembali"
+  },
+  "hub": {
+    "feeds": {
+      "global": "Global",
+      "local": "Lokal",
+      "social": "Sosial",
+      "home": "Beranda",
+      "bubble": "Bubble"
+    },
+    "greetings": {
+      "goodMorning": "Selamat Pagi",
+      "goodAfternoon": "Selamat Siang",
+      "goodEvening": "Selamat Sore",
+      "goodNight": "Selamat Malam"
+    },
+    "navbarLabel": "Pusat Sosial",
+    "section": {
+      "feeds": "Feed",
+      "users": "Pengguna",
+      "tags": "Tag",
+      "timelines": "Garis Waktu"
+    }
+  },
+  "inbox": {
+    "name": "Kotak Masuk",
+    "nav": {
+      "mentions": "Sebutan",
+      "chat": "Obrolan",
+      "social": "Sosial",
+      "updates": "Pembaruan"
+    },
+    "summary": {
+      "liked": "Suka pada postingan Anda",
+      "followRequestAccepted": "Menerima permintaan mengikuti Anda",
+      "followed": "Mengikuti Anda",
+      "shared": "Membagikan postingan Anda",
+      "reacted": "Bereaksi terhadap postingan Anda",
+      "posted": "Diposting",
+      "replied": "Menjawab Anda",
+      "mentioned": "Menyebut Anda"
+    }
+  },
+  "collections": {
+    "name": "Koleksi",
+    "addButton": "Tambah Koleksi",
+    "fallbackDesc": "Tidak ada deskripsi yang diberikan",
+    "emptyTitle": "Koleksi Kosong",
+    "emptyDesc": "Koleksi ini tidak memiliki postingan yang disimpan"
+  },
+  "composer": {
+    "pageTitle": "Buat",
+    "quickPost": "Post Cepat",
+    "quickPostCta": "Apa yang ada di pikiran Anda?",
+    "quickPostSubmit": "Post",
+    "noAttachments": "Tidak ada lampiran yang ditambahkan",
+    "landing": {
+      "tComposeFull": "Buat Postingan",
+      "dComposeFull": [
+        "Postingan Lebih Panjang",
+        "Lebih Banyak Pilihan"
+      ],
+      "tComposePoll": "Buat Polling",
+      "dComposePoll": [
+        "<Belum Diimplementasikan>"
+      ],
+      "tViewScheduled": "Lihat Postingan yang Dijadwalkan",
+      "dViewScheduled": [
+        "<Belum Diimplementasikan>"
+      ],
+      "tViewDrafts": "Lihat Draf",
+      "dViewDrafts": [
+        "<Belum Diimplementasikan>"
+      ]
+    }
+  },
+  "quickPost": {
+    "name": "Post Cepat",
+    "spoilerPlaceholder": "Peringatan Spoiler / Konten",
+    "ctaPlaceholder": "Apa yang ada di pikiran Anda?",
+    "postButton": "Post",
+    "replyingTo": "Membalas: ",
+    "visibility": {
+      "public": "Publik",
+      "unlisted": "Beranda",
+      "direct": "Langsung",
+      "private": "Pengikut"
+    },
+    "interactivity": {
+      "everybody": "Semua Orang",
+      "nobody": "Hanya Saya",
+      "Limited": "Terbatas"
+    }
+  },
+  "chatroom": {
+    "sendInterfacePlaceholder": "Pesan Anda"
+  },
+  "setting": {
+    "accountModule": {
+      "title": "Akun",
+      "desc": "Tambahkan dan Kelola Akun"
+    },
+    "generalModule": {
+      "title": "Umum",
+      "desc": "Pengaturan umum yang membosankan ada di sini"
+    },
+    "appFeaturesModule": {
+      "title": "Fitur Aplikasi",
+      "desc": "Sesuaikan fitur unik Dhaaga"
+    },
+    "digitalWellbeingModule": {
+      "title": "Kesejahteraan Digital",
+      "desc": "Putuskan untuk menyambung kembali dengan diri Anda sendiri"
+    },
+    "advancedModule": {
+      "title": "Lanjutan",
+      "desc": "'Untuk pengguna tingkat lanjut"
+    },
+    "footer": "Dibuat dengan \uD83D\uDC9B oleh Debashish Patra"
+  }
+}

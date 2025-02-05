@@ -12,6 +12,8 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -85,6 +87,7 @@ function HubGreetingFragment({
 }
 
 export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const Component = useMemo(() => {
 		const currentHours = new Date().getHours();
 		let timeOfDay: TIME_OF_DAY;
@@ -104,7 +107,7 @@ export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 					<HubGreetingFragment
 						acct={acct}
 						driver={acct?.driver}
-						greeting={`Good Morning`}
+						greeting={t(`hub.greetings.goodMorning`)}
 						desc={`@${acct?.username}@${acct?.server}`}
 						noLogo
 					/>
@@ -114,7 +117,7 @@ export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 					<HubGreetingFragment
 						acct={acct}
 						driver={acct?.driver}
-						greeting={`Good Afternoon`}
+						greeting={t(`hub.greetings.goodAfternoon`)}
 						desc={`@${acct?.username}@${acct?.server}`}
 						noLogo
 					/>
@@ -124,7 +127,7 @@ export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 					<HubGreetingFragment
 						acct={acct}
 						driver={acct?.driver}
-						greeting={`Good Evening`}
+						greeting={t(`hub.greetings.goodEvening`)}
 						desc={`@${acct?.username}@${acct?.server}`}
 						noLogo
 					/>
@@ -134,13 +137,13 @@ export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 					<HubGreetingFragment
 						acct={acct}
 						driver={acct?.driver}
-						greeting={`Good Night`}
+						greeting={t(`hub.greetings.goodNight`)}
 						desc={`@${acct?.username}@${acct?.server}`}
 						noLogo
 					/>
 				);
 		}
-	}, [acct]);
+	}, [acct, t]);
 
 	return (
 		<View

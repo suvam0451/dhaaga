@@ -1,5 +1,5 @@
 import { FetchStatus } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import useSkeletonSmoothTransition from './useSkeletonTransition';
 
 type Props = {
@@ -26,16 +26,39 @@ function useLoadingMoreIndicatorState({
 	 * Fast scrolling, especially in longer lists will
 	 * cause app to lag
 	 */
-	const forceLoadingState =
-		additionalLoadingStates !== undefined ? additionalLoadingStates : false;
-	const overallLoading = fetchStatus === 'fetching' || forceLoadingState;
-	const loading = useSkeletonSmoothTransition(overallLoading, {
-		condition: fetchStatus === 'idle' || forceLoadingState,
-		preventLoadingForCondition: false,
-	});
+	// const forceLoadingState =
+	// 	additionalLoadingStates !== undefined ? additionalLoadingStates : false;
+	// const overallLoading = fetchStatus === 'fetching' || forceLoadingState;
+	// const loading = useSkeletonSmoothTransition(overallLoading, {
+	// 	condition: fetchStatus === 'idle' || forceLoadingState,
+	// 	preventLoadingForCondition: false,
+	// });
+
+	/**
+	 * 	show the loading indicator for an extended
+	 * 	amount of time
+	 */
+	const [extendedLoading, setExtendedLoading] = useState(false);
+	const timeoutRef = useRef(null);
+	const debounceFn = (state: boolean) => {
+		if (state === false && extendedLoading === true) {
+			clearTimeout(timeoutRef.current);
+			timeoutRef.current = setTimeout(() => {
+				setExtendedLoading(false);
+			}, 420);
+		} else {
+			clearTimeout(timeoutRef.current);
+			setExtendedLoading(true);
+		}
+	};
+
+	useEffect(() => {
+		debounceFn(fetchStatus === 'fetching');
+		return () => clearTimeout(timeoutRef.current);
+	}, [fetchStatus]);
 
 	return useMemo(() => {
-		if (loading) {
+		if (extendedLoading) {
 			return {
 				visible: true,
 				loading: true,
@@ -46,7 +69,7 @@ function useLoadingMoreIndicatorState({
 				loading: false,
 			};
 		}
-	}, [loading]);
+	}, [extendedLoading]);
 }
 
 export default useLoadingMoreIndicatorState;

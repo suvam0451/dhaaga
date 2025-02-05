@@ -1,4 +1,4 @@
-import { RefreshControl } from 'react-native';
+import { Animated, RefreshControl } from 'react-native';
 import { Fragment, useRef, useState } from 'react';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import WithAppPaginationContext, {
@@ -6,7 +6,6 @@ import WithAppPaginationContext, {
 } from '../../../../states/usePagination';
 import WithActivitypubStatusContext from '../../../../states/useStatus';
 import StatusItem from '../../../common/status/StatusItem';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import LoadingMore from '../../home/LoadingMore';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
@@ -55,8 +54,7 @@ function ApiWrapper() {
 		<WithAutoHideTopNavBar title={'Trending Posts'} translateY={translateY}>
 			{driver === KNOWN_SOFTWARE.MASTODON ? (
 				<Fragment>
-					<AnimatedFlashList
-						estimatedItemSize={200}
+					<Animated.FlatList
 						data={PageData}
 						ref={ref}
 						renderItem={(o) => (

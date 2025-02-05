@@ -1,10 +1,12 @@
 import { AppPostObject } from '../../types/app-post.types';
-import { AppFlashList } from '../lib/AppFlashList';
 import LoadingMore from '../screens/home/LoadingMore';
 import UserPeekModalPresenter from '../../features/user-profiles/presenters/UserPeekModalPresenter';
 import { Fragment } from 'react';
 import { FetchStatus } from '@tanstack/react-query';
 import useLoadingMoreIndicatorState from '../../states/useLoadingMoreIndicatorState';
+import { Animated, RefreshControl } from 'react-native';
+import StatusItem from '../common/status/StatusItem';
+import WithAppStatusItemContext from '../../hooks/ap-proto/useAppStatusItem';
 
 type PostTimelineProps = {
 	data: AppPostObject[];
@@ -32,12 +34,21 @@ export function PostTimeline({
 
 	return (
 		<Fragment>
-			<AppFlashList.Post
+			<Animated.FlatList
 				data={data}
-				paddingTop={50 + 16}
-				refreshing={refreshing}
-				onRefresh={onRefresh}
+				renderItem={({ item }) => (
+					<WithAppStatusItemContext dto={item}>
+						<StatusItem />
+					</WithAppStatusItemContext>
+				)}
 				onScroll={onScroll}
+				contentContainerStyle={{
+					paddingTop: 50 + 16,
+				}}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
 			<UserPeekModalPresenter />

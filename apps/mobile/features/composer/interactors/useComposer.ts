@@ -1,6 +1,6 @@
 import { useComposerCtx } from '../contexts/useComposerCtx';
 import { AppUserObject } from '../../../types/app-user.types';
-import { PostComposerReducerActionType } from '../../../states/interactors/post-composer.reducer';
+import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import TextEditorService from '../../../services/text-editor.service';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import {
@@ -8,11 +8,13 @@ import {
 	useAppPublishers,
 } from '../../../hooks/utility/global-state-extractors';
 import { useEffect } from 'react';
+import useAutoSuggestion from './useAutoSuggestion';
 
 function useComposer() {
 	const { visible, ctx, stateId } = useAppBottomSheet();
 	const { state, dispatch } = useComposerCtx();
 	const { postPub } = useAppPublishers();
+	useAutoSuggestion(state, dispatch);
 
 	useEffect(() => {
 		if (!visible) return;

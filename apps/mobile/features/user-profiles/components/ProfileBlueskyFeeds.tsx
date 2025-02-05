@@ -2,7 +2,7 @@ import { memo } from 'react';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { View, Text } from 'react-native';
-import useGlobalState from '../../../../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 type Props = {

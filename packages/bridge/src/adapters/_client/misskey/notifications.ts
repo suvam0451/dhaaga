@@ -11,6 +11,28 @@ import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 
+type MISSKEY_NOTIFICATION_TYPE =
+	| 'note'
+	| 'follow'
+	| 'mention'
+	| 'reply'
+	| 'renote'
+	| 'quote'
+	| 'reaction'
+	| 'pollEnded'
+	| 'receiveFollowRequest'
+	| 'followRequestAccepted'
+	| 'roleAssigned'
+	| 'achievementEarned'
+	| 'exportCompleted'
+	| 'login'
+	| 'app'
+	| 'test'
+	| 'reaction:grouped'
+	| 'renote:grouped'
+	| 'pollVote'
+	| 'groupInvited';
+
 export class MisskeyNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;
 	client: MisskeyJsWrapper;
@@ -46,12 +68,13 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		return { data: { data: data as any } };
 	}
 
-	async getMentions(driver: KNOWN_SOFTWARE) {
+	async getMentions(query: NotificationGetQueryDto) {
 		const data = await this.client.client.request<
 			'notes/mentions',
 			Endpoints['notes/mentions']['req']
 		>('notes/mentions', {
 			limit: 40,
+			untilId: query.maxId || undefined,
 		});
 		return { data: { data: data as any } };
 	}
@@ -79,7 +102,32 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		const data = await this.client.client.request<
 			'i/notifications-grouped',
 			Endpoints['i/notifications-grouped']['req']
-		>('i/notifications-grouped', query as any);
+		>('i/notifications-grouped', {
+			limit: query.limit,
+			untilId: query.maxId ?? undefined,
+			includeTypes: [
+				'follow',
+				'followRequestAccepted',
+				'receiveFollowRequest',
+				'groupInvited',
+				'reaction',
+				'reaction:grouped',
+				'renote',
+				'renote:grouped',
+			] as MISSKEY_NOTIFICATION_TYPE[],
+		});
+		return { data: { data: data as any } };
+	}
+
+	async getSubscriptions(query: NotificationGetQueryDto) {
+		const data = await this.client.client.request<
+			'i/notifications-grouped',
+			Endpoints['i/notifications-grouped']['req']
+		>('i/notifications-grouped', {
+			limit: query.limit,
+			untilId: query.maxId ?? undefined,
+			includeTypes: ['note'] as MISSKEY_NOTIFICATION_TYPE[],
+		});
 		return { data: { data: data as any } };
 	}
 

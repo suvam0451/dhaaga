@@ -4,7 +4,7 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { useComposerCtx } from '../contexts/useComposerCtx';
-import { PostComposerReducerActionType } from '../../../states/interactors/post-composer.reducer';
+import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import { Fragment } from 'react';
 import AutoFillPresenter from './AutoFillPresenter';
 import { View } from 'react-native';

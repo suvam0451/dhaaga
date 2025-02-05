@@ -1,4 +1,10 @@
-import { FlatList, View, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import {
+	FlatList,
+	View,
+	KeyboardAvoidingView,
+	StyleSheet,
+	Animated,
+} from 'react-native';
 import { useState } from 'react';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
@@ -6,7 +12,6 @@ import AppTopNavbar, {
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { AppMessageObject } from '../../../types/app-message.types';
 import { AppText } from '../../../components/lib/Text';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import { AppUserObject } from '../../../types/app-user.types';
 import { Image } from 'expo-image';
 import { AppDivider } from '../../../components/lib/Divider';
@@ -98,7 +103,7 @@ function Page() {
 				translateY={translateY}
 				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 			>
-				<AnimatedFlashList
+				<Animated.FlatList
 					data={state.messages}
 					renderItem={({ item }: { item: AppMessageObject }) => (
 						<Message message={item} myId={myId} members={state.room?.members} />

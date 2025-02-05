@@ -76,6 +76,7 @@ function TextContentNode({
 						key={node.uuid}
 						value={node.text}
 						link={node.url}
+						mentions={mentions}
 						fontFamily={APP_FONTS.INTER_500_MEDIUM}
 					/>
 				);
@@ -99,7 +100,7 @@ function TextContentNode({
 						fontFamily={
 							variant === 'displayName'
 								? APP_FONTS.INTER_600_SEMIBOLD
-								: APP_FONTS.ROBOTO_500
+								: APP_FONTS.ROBOTO_400
 						}
 					/>
 				);
@@ -116,8 +117,9 @@ function TextContentNode({
 							fontFamily={
 								variant === 'displayName'
 									? APP_FONTS.INTER_600_SEMIBOLD
-									: APP_FONTS.ROBOTO_500
+									: APP_FONTS.ROBOTO_400
 							}
+							mentions={mentions}
 						/>
 					);
 				}
@@ -145,7 +147,7 @@ function TextContentNode({
 						fontFamily={
 							variant === 'displayName'
 								? APP_FONTS.INTER_600_SEMIBOLD
-								: APP_FONTS.ROBOTO_500
+								: APP_FONTS.ROBOTO_400
 						}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 					/>

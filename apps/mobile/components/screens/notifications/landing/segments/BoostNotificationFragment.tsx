@@ -1,26 +1,25 @@
-import { memo } from 'react';
 import { Props, styles } from './_common';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { View } from 'react-native';
-import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 import { AppDivider } from '../../../../lib/Divider';
+import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
 
-const BoostNotificationFragment = memo(function Foo({ item }: Props) {
+function BoostNotificationFragment({ item }: Props) {
 	const user = item.user;
 	const post = item.post;
 
 	return (
 		<View style={styles.container}>
-			<NotificationSenderInterface
+			<AuthorItemPresenter
 				user={user}
-				type={DhaagaJsNotificationType.REBLOG}
+				notificationType={DhaagaJsNotificationType.REBLOG}
 				createdAt={item.createdAt}
 			/>
-			<NotificationPostPeek acct={user} post={post} />
+			<NotificationPostPeek acct={user} post={post?.boostedFrom || post} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
-});
+}
 
 export default BoostNotificationFragment;

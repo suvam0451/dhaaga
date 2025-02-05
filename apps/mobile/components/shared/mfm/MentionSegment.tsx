@@ -6,14 +6,16 @@ import {
 import { TextParserService } from '../../../services/text-parser.service';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../lib/Text';
+import { Text } from 'react-native';
 
 type Props = {
 	value: string;
 	link: string;
 	fontFamily: string;
+	mentions: any[];
 };
 
-function MentionSegment({ value, link, fontFamily }: Props) {
+function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 	const { acct } = useAppAcct();
@@ -23,20 +25,24 @@ function MentionSegment({ value, link, fontFamily }: Props) {
 	function onPress() {
 		setCtx({
 			did: link,
+			mentions,
+			handle: value,
 		});
 		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 	}
 
 	return (
-		<AppText.Medium
-			style={{
-				fontFamily,
-				color: parsed.me ? theme.primary.a0 : theme.complementaryB.a0,
-			}}
-			onPress={onPress}
-		>
-			{parsed.text}
-		</AppText.Medium>
+		<Text onPress={onPress}>
+			<AppText.Normal
+				style={{
+					fontFamily,
+					color: parsed.me ? theme.primary.a0 : theme.complementaryB.a0,
+				}}
+				onPress={onPress}
+			>
+				{parsed.text}
+			</AppText.Normal>
+		</Text>
 	);
 }
 

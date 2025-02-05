@@ -1,9 +1,9 @@
 import { memo } from 'react';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import { FlashListType_Post } from '../../../services/flashlist.service';
-import FlashListPostRenderer from '../../common/timeline/fragments/FlashListPostRenderer';
+import { Animated } from 'react-native';
+import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import StatusItem from '../../common/status/StatusItem';
 
-const ESTIMATED_POST_HEIGHT = 200;
 const SCROLL_EVENT_THROTTLE = 16;
 const DEFAULT_TOP_PADDING = 54;
 
@@ -26,17 +26,19 @@ const FlashListPosts = memo(
 		paddingTop,
 	}: FlashListPostsProps) => {
 		return (
-			<AnimatedFlashList
+			<Animated.FlatList
 				ListHeaderComponent={ListHeaderComponent}
 				contentContainerStyle={{
 					paddingTop:
 						paddingTop === undefined ? DEFAULT_TOP_PADDING : paddingTop,
 				}}
-				estimatedItemSize={ESTIMATED_POST_HEIGHT}
 				data={data}
-				renderItem={FlashListPostRenderer}
+				renderItem={({ item }) => (
+					<WithAppStatusItemContext dto={item.props.dto}>
+						<StatusItem />
+					</WithAppStatusItemContext>
+				)}
 				scrollEventThrottle={SCROLL_EVENT_THROTTLE}
-				getItemType={(o) => o.type}
 				onScroll={onScroll}
 			/>
 		);

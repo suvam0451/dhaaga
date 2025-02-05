@@ -139,6 +139,61 @@ export class MisskeyAccountsRouter
 		}
 	}
 
+	/**
+	 * Webfinger user search
+	 * @param username
+	 * @param host
+	 */
+	async findByWebfinger({
+		username,
+		host,
+	}: {
+		username: string;
+		host: string | null;
+	}) {
+		try {
+			const data = await this.client.client.request<
+				any,
+				Endpoints['users/show']['req']
+			>('users/show', {
+				username,
+				host,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async findByUserId(id: string) {
+		try {
+			const data = await this.client.client.request<
+				any,
+				Endpoints['users/show']['req']
+			>('users/show', {
+				userId: id,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
+	async findByUserIds(ids: string[]) {
+		if (ids.length === 0) return { data: [] };
+		try {
+			const data = await this.client.client.request<
+				any,
+				Endpoints['users/show']['req']
+			>('users/show', {
+				userIds: ids,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
+	}
+
 	async renoteMute(id: string): LibraryPromise<{ renoteMuted: true }> {
 		try {
 			await this.client.client.request('renote-mute/create', {

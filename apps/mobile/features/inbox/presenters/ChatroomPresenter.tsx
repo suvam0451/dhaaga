@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetChatUpdates } from '../../../hooks/api/useNotifications';
 import { RefreshControl } from 'react-native';
 import { AppFlashList } from '../../../components/lib/AppFlashList';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import AppNotificationViewContainer from '../components/InboxTabFactory';
 import Header from '../components/Header';
+import FeatureNotAvailable from '../components/FeatureNotAvailable';
 
 function ChatroomPresenter() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
@@ -22,12 +22,10 @@ function ChatroomPresenter() {
 
 	if (driver !== KNOWN_SOFTWARE.BLUESKY) {
 		return (
-			<AppNotificationViewContainer
-				tabType={APP_LANDING_PAGE_TYPE.CHAT}
-				data={[]}
-				refreshing={IsRefreshing}
-				onRefresh={refresh}
-			/>
+			<Fragment>
+				<Header type={APP_LANDING_PAGE_TYPE.CHAT} />
+				<FeatureNotAvailable />
+			</Fragment>
 		);
 	}
 

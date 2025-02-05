@@ -8,11 +8,11 @@ import { useApiSearchFeeds } from '../../../hooks/api/useApiSearch';
 import { AppFeedTimelineReducerActionType } from '../../../states/interactors/feed-timeline.reducer';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { View } from 'react-native';
-import { AppFlashList } from '../../../components/lib/AppFlashList';
+import { Animated, RefreshControl, View } from 'react-native';
 import LoadingMore from '../../../components/screens/home/LoadingMore';
 import Header from '../components/Header';
 import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
+import FeedListItemView from '../../timelines/view/FeedListItemView';
 
 type FeedResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -76,12 +76,15 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<AppFlashList.Feeds
+			<Animated.FlatList
 				data={TimelineState.items}
+				renderItem={({ item }) => <FeedListItemView item={item} />}
 				onScroll={onScroll}
-				refreshing={Refreshing}
-				onRefresh={refresh}
 				ListHeaderComponent={Header}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
+				}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
 		</View>

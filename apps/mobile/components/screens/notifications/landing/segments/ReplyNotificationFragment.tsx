@@ -1,30 +1,23 @@
-import { memo } from 'react';
 import { Props, styles } from './_common';
 import { View } from 'react-native';
-import { NotificationSenderInterface } from '../fragments/NotificationSender';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
-import { NotificationDescriptionText } from '../fragments/NotificationDescriptionText';
+import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
 
-const ReplyNotificationFragment = memo(({ item }: Props) => {
+function ReplyNotificationFragment({ item }: Props) {
 	const user = item.user;
 	const post = item.post;
 
 	return (
 		<View style={styles.container}>
-			<NotificationSenderInterface
+			<AuthorItemPresenter
 				user={user}
-				type={DhaagaJsNotificationType.REPLY}
-				createdAt={item.post?.createdAt}
-			/>
-			<NotificationDescriptionText
-				type={DhaagaJsNotificationType.REPLY}
-				createdAt={item.createdAt}
-				id={item.id}
+				notificationType={DhaagaJsNotificationType.REPLY}
+				createdAt={item.post?.createdAt as any}
 			/>
 			<NotificationPostPeek acct={user} post={post} />
 		</View>
 	);
-});
+}
 
 export default ReplyNotificationFragment;

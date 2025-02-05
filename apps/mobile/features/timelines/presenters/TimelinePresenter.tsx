@@ -3,7 +3,7 @@ import {
 	useTimelineDispatch,
 	useTimelineState,
 } from '../contexts/PostTimelineCtx';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
 import { FetchStatus, RefetchOptions } from '@tanstack/react-query';
 
@@ -34,6 +34,26 @@ function TimelinePresenter({ refetch, fetchStatus }: TimelinePresenterProps) {
 		});
 	}
 
+	const [debouncedFetchStatus, setDebouncedFetchStatus] = useState(false);
+	const timeoutRef = useRef(null);
+
+	const debounceFn = (state: boolean) => {
+		if (state === false && debouncedFetchStatus === true) {
+			clearTimeout(timeoutRef.current);
+			timeoutRef.current = setTimeout(() => {
+				setDebouncedFetchStatus(false);
+			}, 1000);
+		} else {
+			clearTimeout(timeoutRef.current);
+			setDebouncedFetchStatus(true);
+		}
+	};
+
+	useEffect(() => {
+		debounceFn(fetchStatus === 'fetching');
+		return () => clearTimeout(timeoutRef.current);
+	}, [fetchStatus]);
+
 	return (
 		<TimelinePostListView
 			items={State.items}
@@ -41,7 +61,7 @@ function TimelinePresenter({ refetch, fetchStatus }: TimelinePresenterProps) {
 			onRefresh={onRefresh}
 			refreshing={Refreshing}
 			loadMore={loadMore}
-			fetchStatus={fetchStatus}
+			fetching={debouncedFetchStatus}
 		/>
 	);
 }

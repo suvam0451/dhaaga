@@ -1,9 +1,9 @@
 import { produce } from 'immer';
-import { APP_POST_VISIBILITY } from '../../hooks/app/useVisibility';
-import { AppPostObject } from '../../types/app-post.types';
+import { APP_POST_VISIBILITY } from '../../../hooks/app/useVisibility';
+import { AppPostObject } from '../../../types/app-post.types';
 import { Dispatch } from 'react';
 import { ImagePickerAsset } from 'expo-image-picker';
-import { AutoFillResultsType } from '../../features/composer/types/composer.types';
+import { AutoFillResultsType } from '../types/composer.types';
 
 export type ThreadGateSetting =
 	| { type: 'nobody' }
@@ -483,7 +483,7 @@ function reducer(state: State, action: Actions): State {
 	}
 }
 
-type PostComposerDispatchType = Dispatch<Actions>;
+type DispatchType = Dispatch<Actions>;
 
 export {
 	reducer as postComposerReducer,
@@ -491,5 +491,5 @@ export {
 	State as PostComposerReducerStateType,
 	ACTION as PostComposerReducerActionType,
 	Actions as postComposerReducerActions,
-	PostComposerDispatchType,
+	DispatchType as PostComposerDispatchType,
 };

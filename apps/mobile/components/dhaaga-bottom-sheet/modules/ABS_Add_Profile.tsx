@@ -1,8 +1,7 @@
 import { AppBottomSheetMenu } from '../../lib/Menu';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import { useEffect, useState } from 'react';
 import { Account } from '../../../database/_schema';
-import { Pressable, View } from 'react-native';
+import { Animated, Pressable, View } from 'react-native';
 import { AppAccountSelectionItem } from '../../common/app/Account';
 import {
 	useAppBottomSheet,
@@ -26,8 +25,7 @@ function AS_Add_Profile_Select_Account({
 	onSelectAccount,
 }: AS_Add_Profile_Select_AccountProps) {
 	return (
-		<AnimatedFlashList
-			estimatedItemSize={72}
+		<Animated.FlatList
 			ListHeaderComponent={() => (
 				<AppBottomSheetMenu.Header
 					title={'For which Account?'}

@@ -1,7 +1,8 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import useAppNavigator from '../../../states/useAppNavigator';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import ProfileStatItemView from './ProfileStatItemView';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	userId: string;
@@ -23,32 +24,34 @@ function ProfileStatView({
 	style,
 }: Props) {
 	const { toFollows, toFollowers, toUserPosts } = useAppNavigator();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
 	const data = [
 		{
 			count: postCount,
-			label: 'Posts',
+			label: t(`noun.post`, { count: postCount }),
 			onPress: () => {
 				toUserPosts(userId);
 			},
 		},
 		{
 			count: followingCount,
-			label: 'Following',
+			label: t(`noun.following`, { count: followingCount }),
 			onPress: () => {
 				toFollows(userId);
 			},
 		},
 		{
 			count: followerCount,
-			label: 'Followers',
+			label: t(`noun.follower`, { count: followerCount }),
 			onPress: () => {
 				toFollowers(userId);
 			},
 		},
 	];
+
 	return (
-		<View style={[{ flexDirection: 'row' }, styles.container, style]}>
+		<View style={[styles.container, style]}>
 			{data.map((o, i) => (
 				<ProfileStatItemView
 					key={i}
@@ -65,18 +68,8 @@ export default ProfileStatView;
 
 const styles = StyleSheet.create({
 	container: {
+		flexDirection: 'row',
 		flexGrow: 1,
 		marginHorizontal: 10,
-	},
-	primaryText: {
-		fontSize: 18,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-	},
-	secondaryText: { fontSize: 13, fontFamily: APP_FONTS.INTER_400_REGULAR },
-	touchContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingVertical: 8,
 	},
 });

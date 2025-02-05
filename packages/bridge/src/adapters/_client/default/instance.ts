@@ -49,7 +49,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 		// Set up parameters for the query string
 		const options: Record<string, string> = {
 			name: appName,
-			callback: appCallback, // 'write:notes,write:following,read:drive'
+			callback: appCallback, // https://example.com --> https://suvam.io
 			permission: perms.join(','),
 		};
 

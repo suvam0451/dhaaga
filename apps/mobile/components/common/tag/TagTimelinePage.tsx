@@ -10,13 +10,12 @@ import WithAppPaginationContext, {
 import WithScrollOnRevealContext, {
 	useScrollOnReveal,
 } from '../../../states/useScrollOnReveal';
-import { RefreshControl } from 'react-native';
+import { Animated, RefreshControl } from 'react-native';
 import LoadingMore from '../../screens/home/LoadingMore';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import WithAutoHideTopNavBar from '../../containers/WithAutoHideTopNavBar';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import usePageRefreshIndicatorState from '../../../states/usePageRefreshIndicatorState';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import { useLocalSearchParams } from 'expo-router';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
 import useGlobalState from '../../../states/_global';
@@ -80,8 +79,7 @@ function ApiWrapper() {
 	if (!data) return <Skeleton />;
 	return (
 		<WithAutoHideTopNavBar title={`#${id}`} translateY={translateY}>
-			<AnimatedFlashList
-				estimatedItemSize={72}
+			<Animated.FlatList
 				data={PageData}
 				renderItem={(o) => (
 					<WithActivitypubStatusContext statusInterface={o.item}>

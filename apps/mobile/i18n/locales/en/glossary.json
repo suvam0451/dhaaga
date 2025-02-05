@@ -3,12 +3,18 @@
     "post_one": "Post",
     "post_other": "Posts",
     "user_one": "User",
-    "user_other": "Users"
+    "user_other": "Users",
+    "follower_one": "Follower",
+    "follower_other": "Followers",
+    "following": "Following",
+    "following_other": "Following"
   },
-  "label": {
-    "mentions": "Mentions",
-    "chat": "Chat",
-    "social": "Social",
-    "updates": "Updates"
+  "relationship": {
+    "friends": "Friends",
+    "following": "Following"
+  },
+  "relationshipCta": {
+    "followBack": "Follow Back",
+    "follow": "Follow"
   }
 }

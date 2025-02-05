@@ -2,6 +2,8 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_ICON_ENUM } from '../components/lib/Icon';
 import { APP_ROUTING_ENUM } from '../utils/route-list';
 import ActivityPubService from './activitypub.service';
+import { TFunction } from 'i18next';
+import { LOCALIZATION_NAMESPACE } from '../types/app.types';
 
 export enum APP_PINNED_OBJECT_TYPE {
 	/**
@@ -45,24 +47,55 @@ export type AppModulesProps = {
 };
 
 class DriverService {
-	static getAccountModules(driver: KNOWN_SOFTWARE): AppModulesProps[] {
+	/**
+	 * ActivityPub handle to webfinger
+	 * lookup compatible object
+	 * @param handle handle resolved by app
+	 * @param server home server
+	 */
+	static splitHandle(handle: string, server: string) {
+		if (!handle)
+			return {
+				username: null,
+				host: null,
+				handle: null,
+			};
+		const splits = handle.split('@');
+		if (splits.length === 3) {
+			return {
+				username: splits[1],
+				host: server === splits[2] ? null : splits[1],
+				handle,
+			};
+		} else if (splits.length === 2) {
+			return {
+				username: splits[1],
+				host: null,
+				handle,
+			};
+		}
+	}
+	static getAccountModules(
+		t: TFunction<LOCALIZATION_NAMESPACE.CORE[], undefined>,
+		driver: KNOWN_SOFTWARE,
+	): AppModulesProps[] {
 		if (ActivityPubService.blueskyLike(driver)) {
 			return [
 				{
-					label: 'Feeds',
-					desc: 'Subscribed Feeds',
+					label: t(`profile.appFeatures.feeds.label`),
+					desc: t(`profile.appFeatures.feeds.desc`),
 					iconId: 'edit',
 					to: APP_ROUTING_ENUM.MY_FEEDS,
 				},
 				{
-					label: 'Likes',
-					desc: 'I liked these',
+					label: t(`profile.appFeatures.likes.label`),
+					desc: t(`profile.appFeatures.likes.desc`),
 					iconId: 'heart',
 					to: APP_ROUTING_ENUM.MY_LIKES,
 				},
 				{
-					label: 'Lists',
-					desc: 'My lists',
+					label: t(`profile.appFeatures.lists.label`),
+					desc: t(`profile.appFeatures.lists.desc`),
 					iconId: 'list',
 					to: APP_ROUTING_ENUM.MY_LISTS,
 				},
@@ -70,14 +103,14 @@ class DriverService {
 		} else if (ActivityPubService.misskeyLike(driver)) {
 			return [
 				{
-					label: 'Bookmarks',
-					desc: 'My Bookmarks',
+					label: t(`profile.appFeatures.bookmarks.label`),
+					desc: t(`profile.appFeatures.bookmarks.desc`),
 					iconId: 'bookmark',
 					to: APP_ROUTING_ENUM.MY_BOOKMARKS,
 				},
 				{
-					label: 'Lists',
-					desc: 'My lists',
+					label: t(`profile.appFeatures.lists.label`),
+					desc: t(`profile.appFeatures.lists.desc`),
 					iconId: 'language',
 					to: APP_ROUTING_ENUM.MY_LISTS,
 				},
@@ -85,20 +118,20 @@ class DriverService {
 		} else if (ActivityPubService.mastodonLike(driver)) {
 			return [
 				{
-					label: 'Likes',
-					desc: "Posts I've Liked",
+					label: t(`profile.appFeatures.likes.label`),
+					desc: t(`profile.appFeatures.likes.desc`),
 					iconId: 'heart',
 					to: APP_ROUTING_ENUM.MY_LIKES,
 				},
 				{
-					label: 'Bookmarks',
-					desc: 'My Bookmarks',
+					label: t(`profile.appFeatures.bookmarks.label`),
+					desc: t(`profile.appFeatures.bookmarks.desc`),
 					iconId: 'bookmark',
 					to: APP_ROUTING_ENUM.MY_BOOKMARKS,
 				},
 				{
-					label: 'Lists',
-					desc: 'My lists',
+					label: t(`profile.appFeatures.lists.label`),
+					desc: t(`profile.appFeatures.lists.desc`),
 					iconId: 'list',
 					to: APP_ROUTING_ENUM.MY_LISTS,
 				},
