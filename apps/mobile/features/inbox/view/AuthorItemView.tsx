@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE } from '../../../components/screens/notifications/landing/segments/_common';
 import { AppIcon } from '../../../components/lib/Icon';
@@ -35,6 +35,9 @@ export function AuthorItemView({
 	bg,
 	emojiMap,
 	desc,
+	onAvatarPressed,
+	onUserPressed,
+	onMoreOptionsPressed,
 }: Props) {
 	const { theme } = useAppTheme();
 
@@ -47,7 +50,7 @@ export function AuthorItemView({
 				marginBottom: appDimensions.timelines.sectionBottomMargin,
 			}}
 		>
-			<View style={styles.senderAvatarContainer}>
+			<Pressable style={styles.senderAvatarContainer} onPress={onAvatarPressed}>
 				{/*@ts-ignore-next-line*/}
 				<Image
 					source={{
@@ -67,8 +70,8 @@ export function AuthorItemView({
 				>
 					{Icon}
 				</View>
-			</View>
-			<View style={{ marginLeft: 12, flex: 1 }}>
+			</Pressable>
+			<Pressable style={{ marginLeft: 12, flex: 1 }} onPress={onUserPressed}>
 				<TextContentView
 					tree={parsedDisplayName}
 					variant={'displayName'}
@@ -94,17 +97,18 @@ export function AuthorItemView({
 						{DatetimeUtil.timeAgo(createdAt)}
 					</AppText.Medium>
 				</Text>
-			</View>
-			<View
+			</Pressable>
+			<Pressable
 				style={{
 					height: '100%',
 					paddingTop: 4,
 					paddingHorizontal: 4,
 					paddingLeft: 16,
 				}}
+				onPress={onMoreOptionsPressed}
 			>
 				<AppIcon id={'ellipsis-v'} color={theme.secondary.a40} size={20} />
-			</View>
+			</Pressable>
 		</View>
 	);
 }

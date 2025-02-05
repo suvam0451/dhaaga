@@ -25,7 +25,7 @@ function CanvasView({ src, height, width, gesture, maxW, maxH }: Props) {
 	}, [height, width, maxW, maxH]);
 
 	return (
-		<View style={{ flex: 1, height: maxH }}>
+		<View style={{ flex: 1 }}>
 			<GestureDetector gesture={gesture}>
 				<View style={styles.rootView}>
 					{/*@ts-ignore-next-line*/}

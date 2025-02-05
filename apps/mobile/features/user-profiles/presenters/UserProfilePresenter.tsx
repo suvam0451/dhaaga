@@ -53,6 +53,10 @@ export function ProfileContextWrapped() {
 		show(APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS, true);
 	}
 
+	function onModuleViewLayout(e: any) {
+		console.log(e.nativeEvent.layout);
+	}
+
 	if (error || !acct) return <View />;
 
 	return (
@@ -157,11 +161,13 @@ export function ProfileContextWrapped() {
 					</Pressable>
 				</View>
 			</View>
-			<UserProfileModulePresenter
-				acct={acct}
-				fields={fields}
-				profileId={acct?.id}
-			/>
+			<View onLayout={onModuleViewLayout}>
+				<UserProfileModulePresenter
+					acct={acct}
+					fields={fields}
+					profileId={acct?.id}
+				/>
+			</View>
 		</Animated.ScrollView>
 	);
 }

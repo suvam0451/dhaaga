@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import SeeMore from '../components/SeeMore';
 import ThumbnailView from '../views/ThumbnailView';
 import useProfileGalleryModeInteractor from '../interactors/useProfileGalleryModeInteractor';
@@ -105,11 +105,15 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 	}
 
 	return (
-		<View style={{ height: '100%' }}>
+		<View
+			style={{
+				flex: 1,
+			}}
+		>
 			<View
 				style={{
 					marginBottom: MARGIN_BOTTOM * 2,
-					// flex: 1,
+					flex: 1,
 				}}
 			>
 				{MediaItems[CurrentIndex] && (
@@ -125,34 +129,36 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 
 			<MenuPresenter post={MediaItems[CurrentIndex]?.post} />
 
-			<FlatList
-				ref={ListRef}
-				contentContainerStyle={{ paddingBottom: 8, height: 84 }}
-				ListFooterComponent={<SeeMore />}
-				horizontal={true}
-				data={MediaItems}
-				renderItem={({ item, index }) => (
-					<ThumbnailView
-						myIndex={index}
-						activeIndex={CurrentIndex}
-						onClick={onThumbClick}
-						selected={false}
-						type={item.media.type}
-						url={item.media.url}
-						width={item.media.width}
-						height={item.media.height}
-					/>
-				)}
-				onScrollToIndexFailed={(info) => {
-					const wait = new Promise((resolve) => setTimeout(resolve, 500));
-					wait.then(() => {
-						ListRef.current?.scrollToIndex({
-							index: info.index,
-							animated: true,
+			<View>
+				<FlatList
+					ref={ListRef}
+					contentContainerStyle={{ paddingBottom: 8, height: 84 }}
+					ListFooterComponent={<SeeMore />}
+					horizontal={true}
+					data={MediaItems}
+					renderItem={({ item, index }) => (
+						<ThumbnailView
+							myIndex={index}
+							activeIndex={CurrentIndex}
+							onClick={onThumbClick}
+							selected={false}
+							type={item.media.type}
+							url={item.media.url}
+							width={item.media.width}
+							height={item.media.height}
+						/>
+					)}
+					onScrollToIndexFailed={(info) => {
+						const wait = new Promise((resolve) => setTimeout(resolve, 500));
+						wait.then(() => {
+							ListRef.current?.scrollToIndex({
+								index: info.index,
+								animated: true,
+							});
 						});
-					});
-				}}
-			/>
+					}}
+				/>
+			</View>
 		</View>
 	);
 }

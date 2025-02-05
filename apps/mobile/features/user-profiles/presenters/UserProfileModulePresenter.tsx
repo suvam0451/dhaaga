@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import ProfileGalleryModePresenter from '../features/gallery-mode/presenters/ProfileGalleryModePresenter';
 import { StyleProp, View, ViewStyle, Dimensions, FlatList } from 'react-native';
 import { AppUserObject } from '../../../types/app-user.types';
@@ -18,8 +18,8 @@ type AppPagerViewListProps = {
 };
 
 function ProfilePinnedPosts({ userId }: AppPagerViewListProps) {
-	const { height } = Dimensions.get('window');
 	const { data, error } = useApiGetPinnedPosts(userId);
+	const ref = useRef<FlatList>(null);
 
 	if (error) {
 		console.log('[ERROR]: profile pinned posts', error);
@@ -36,8 +36,9 @@ function ProfilePinnedPosts({ userId }: AppPagerViewListProps) {
 		);
 
 	return (
-		<View style={{ minHeight: height, marginTop: 8 }}>
+		<View style={{ marginTop: 8 }}>
 			<FlatList
+				ref={ref}
 				data={data}
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item}>
@@ -63,15 +64,34 @@ type ProfileModulesProps = {
  */
 function UserProfileModulePresenter({ profileId, acct }: ProfileModulesProps) {
 	const { theme } = useAppTheme();
-	const { height } = Dimensions.get('window');
 	const [TabIndex, setTabIndex] = useState(0);
 
 	const Content = useMemo(() => {
 		switch (TabIndex) {
 			case 0:
-				return <ProfileGalleryModePresenter userId={profileId} />;
+				return (
+					<View
+						style={{
+							// 54 for bottom menu, 64 for profile module menu
+							height: Dimensions.get('window').height - 54 - 64,
+						}}
+					>
+						<ProfileGalleryModePresenter userId={profileId} />;
+					</View>
+				);
+
 			case 1:
-				return <ProfilePinnedPosts previewedAcct={acct} userId={profileId} />;
+				return (
+					<View
+						style={{
+							// 54 for bottom menu, 64 for profile module menu
+							minHeight: Dimensions.get('window').height - 54 - 64,
+							paddingBottom: 32,
+						}}
+					>
+						<ProfilePinnedPosts previewedAcct={acct} userId={profileId} />
+					</View>
+				);
 			case 2:
 				return <SocialUpdatePresenter />;
 			case 3:
@@ -82,7 +102,7 @@ function UserProfileModulePresenter({ profileId, acct }: ProfileModulesProps) {
 	}, [TabIndex, profileId]);
 
 	return (
-		<View style={{ minHeight: height - 50 }}>
+		<View>
 			<View
 				style={{
 					flexDirection: 'row',
@@ -94,8 +114,8 @@ function UserProfileModulePresenter({ profileId, acct }: ProfileModulesProps) {
 					tabIcons={[
 						'gallery',
 						'pin-octicons',
-						'newspaper',
-						'chat-ellipses-outline',
+						// 'newspaper',
+						// 'chat-ellipses-outline',
 					]}
 					index={TabIndex}
 					onIndexChange={setTabIndex}
@@ -107,7 +127,7 @@ function UserProfileModulePresenter({ profileId, acct }: ProfileModulesProps) {
 					}}
 				/>
 			</View>
-			<View style={{ flex: 1 }}>{Content}</View>
+			{Content}
 		</View>
 	);
 }

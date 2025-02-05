@@ -1,19 +1,19 @@
 import {
 	Pressable,
 	StyleProp,
+	StyleSheet,
 	View,
 	ViewStyle,
-	StyleSheet,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRef } from 'react';
-import { APP_KNOWN_MODAL } from '../../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
-	useAppManager,
-	useAppModalState,
+	useAppApiClient,
+	useAppBottomSheet,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
@@ -24,6 +24,7 @@ import { TextContentView } from '../TextContentView';
 import { AppParsedTextNodes } from '../../../../types/parsed-text.types';
 import MfmService from '../../../../services/mfm.service';
 import { AppText } from '../../../lib/Text';
+import ActivitypubService from '../../../../services/activitypub.service';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 
@@ -209,27 +210,40 @@ type OriginalPosterProps = {
  * the bottom-most post item
  */
 function PostCreatedBy({ style }: OriginalPosterProps) {
-	const { appManager } = useAppManager();
-	const { show, refresh } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
+	// const { appManager } = useAppManager();
+	// const { show, refresh } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
+	const { show, setCtx } = useAppBottomSheet();
 	const { dto } = useAppStatusItem();
 	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
 	const { toProfile } = useAppNavigator();
+	const { server } = useAppApiClient();
 
 	const UserDivRef = useRef(null);
 
 	function onAvatarClicked() {
-		UserDivRef.current.measureInWindow((x, y, width, height) => {
-			appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.userId, {
-				x,
-				y,
-				width,
-				height,
+		if (ActivitypubService.blueskyLike(server)) {
+			setCtx({
+				did: PostMiddleware.getContentTarget(dto)?.postedBy?.userId,
 			});
-			refresh();
-			setTimeout(() => {
-				show();
-			}, 100);
-		});
+		} else {
+			setCtx({
+				userId: PostMiddleware.getContentTarget(dto)?.postedBy?.userId,
+			});
+		}
+		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
+
+		// UserDivRef.current.measureInWindow((x, y, width, height) => {
+		// 	appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.userId, {
+		// 		x,
+		// 		y,
+		// 		width,
+		// 		height,
+		// 	});
+		// 	refresh();
+		// 	setTimeout(() => {
+		// 		show();
+		// 	}, 100);
+		// });
 	}
 
 	function onProfileClicked() {

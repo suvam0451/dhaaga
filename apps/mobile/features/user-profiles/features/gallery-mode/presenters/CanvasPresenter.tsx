@@ -50,16 +50,14 @@ function CanvasPresenter({ src, onNext, onPrev, height, width }: Props) {
 	const [ContainerHeight, setContainerHeight] = useState(
 		MEDIA_CONTAINER_MAX_HEIGHT,
 	);
+
 	function onLayout(event: LayoutChangeEvent) {
-		const { height, width } = event.nativeEvent.layout;
+		const { height } = event.nativeEvent.layout;
 		setContainerHeight(Math.min(height, MEDIA_CONTAINER_MAX_HEIGHT));
 	}
 
 	return (
-		<View
-			onLayout={onLayout}
-			style={{ height: 'auto', flex: 1, marginVertical: 'auto' }}
-		>
+		<View onLayout={onLayout} style={{ flex: 1 }}>
 			<CanvasView
 				src={src}
 				width={width}

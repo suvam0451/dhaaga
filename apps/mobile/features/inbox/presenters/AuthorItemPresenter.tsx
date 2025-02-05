@@ -17,6 +17,7 @@ import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { AuthorItemView } from '../view/AuthorItemView';
 import { LocalizationService } from '../../../services/localization.service';
 import { AppIcon } from '../../../components/lib/Icon';
+import useAppNavigator from '../../../states/useAppNavigator';
 
 type Props = {
 	user: AppUserObject;
@@ -37,6 +38,7 @@ function AuthorItemPresenter({
 	const { show, setCtx } = useAppBottomSheet();
 	const { acctManager } = useAccountManager();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const { toProfile } = useAppNavigator();
 
 	const desc = LocalizationService.notificationLabel(t, notificationType);
 
@@ -132,11 +134,7 @@ function AuthorItemPresenter({
 			case DhaagaJsNotificationType.MENTION: {
 				return {
 					Icon: (
-						<Octicons
-							name="mention"
-							size={16}
-							color={APP_FONT.MONTSERRAT_BODY}
-						/>
+						<Octicons name="mention" size={16} color={theme.secondary.a20} />
 					),
 					bg: 'purple',
 				};
@@ -144,11 +142,7 @@ function AuthorItemPresenter({
 			case DhaagaJsNotificationType.STATUS: {
 				return {
 					Icon: (
-						<FontAwesome6
-							name="rss"
-							size={14}
-							color={APP_FONT.MONTSERRAT_BODY}
-						/>
+						<FontAwesome6 name="rss" size={16} color={theme.secondary.a20} />
 					),
 					bg: 'purple',
 				};
@@ -169,7 +163,9 @@ function AuthorItemPresenter({
 		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 	}
 
-	function onUserPressed() {}
+	function onUserPressed() {
+		toProfile(user.id);
+	}
 
 	function onMoreOptionsPressed() {}
 
