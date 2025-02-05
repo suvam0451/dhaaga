@@ -303,7 +303,7 @@ class ActivityPubService {
 
 		const client = new UnknownRestClient();
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {
-			appCallback: 'https://example.com',
+			appCallback: 'https://suvam.io',
 			appName: 'Dhaaga',
 			appClientId: tokens?.clientId,
 			appClientSecret: tokens?.clientSecret,
