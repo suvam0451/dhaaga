@@ -68,12 +68,13 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		return { data: { data: data as any } };
 	}
 
-	async getMentions(driver: KNOWN_SOFTWARE) {
+	async getMentions(query: NotificationGetQueryDto) {
 		const data = await this.client.client.request<
 			'notes/mentions',
 			Endpoints['notes/mentions']['req']
 		>('notes/mentions', {
 			limit: 40,
+			untilId: query.maxId || undefined,
 		});
 		return { data: { data: data as any } };
 	}
@@ -124,7 +125,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 			Endpoints['i/notifications-grouped']['req']
 		>('i/notifications-grouped', {
 			limit: query.limit,
-			sinceId: query.maxId ?? undefined,
+			untilId: query.maxId ?? undefined,
 			includeTypes: ['note'] as MISSKEY_NOTIFICATION_TYPE[],
 		});
 		return { data: { data: data as any } };

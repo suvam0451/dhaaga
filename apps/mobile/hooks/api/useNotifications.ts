@@ -109,12 +109,17 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
  *
  * - Grouped for Mastodon
  */
-function useApiGetMentionUpdates() {
+function useApiGetMentionUpdates(maxId?: string | null) {
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
 
 	async function api(): Promise<NotificationResults> {
-		const results = await client.notifications.getMentions(driver);
+		const results = await client.notifications.getMentions({
+			limit: 10,
+			maxId,
+			types: [],
+			excludeTypes: [],
+		});
 		if (results.error) throw new Error(results.error.message);
 
 		const _data = results.data;
@@ -291,48 +296,34 @@ function useApiGetSocialUpdates(maxId?: string | null) {
 	});
 }
 
-function useApiGetSubscriptionUpdates() {
+function useApiGetSubscriptionUpdates(maxId?: string | null) {
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
 
-	// const { data } = useApiGetNotifications({
-	// 	include: [
-	// 		// Mastodon
-	// 		DhaagaJsNotificationType.STATUS,
-	// 		DhaagaJsNotificationType.FOLLOW,
-	// 		DhaagaJsNotificationType.POLL_NOTIFICATION,
-	// 	],
-	// });
-
-	async function api() {
-		if (ActivityPubService.misskeyLike(driver)) {
-			const result = await (
-				client as MisskeyRestClient
-			).notifications.getSubscriptions({
-				limit: 5,
-				types: [],
-				excludeTypes: [],
-			});
-			console.log(result.data);
-
-			if (ActivityPubService.misskeyLike(driver)) {
-				// obj.items = obj.items.filter(
-				// 	(o) => !['mention', 'login', 'note', 'status'].includes(o.type),
-				// );
-				return MisskeyService.deserializeNotifications(
-					result.data,
-					driver,
-					server,
-				);
-			}
-		} else {
-			return pageResultDefault;
-		}
-	}
-
 	return useQuery<NotificationResults>({
-		queryKey: ['notifications/subs', acct],
-		queryFn: api,
+		queryKey: ['notifications/subs', acct, maxId],
+		queryFn: async () => {
+			if (ActivityPubService.misskeyLike(driver)) {
+				const result = await (
+					client as MisskeyRestClient
+				).notifications.getSubscriptions({
+					limit: 5,
+					types: [],
+					excludeTypes: [],
+					maxId,
+				});
+
+				if (ActivityPubService.misskeyLike(driver)) {
+					return MisskeyService.deserializeNotifications(
+						result.data,
+						driver,
+						server,
+					);
+				}
+			} else {
+				return pageResultDefault;
+			}
+		},
 		enabled: !!client,
 		initialData: pageResultDefault,
 	});
