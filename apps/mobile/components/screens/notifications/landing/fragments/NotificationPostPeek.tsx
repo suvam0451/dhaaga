@@ -25,6 +25,7 @@ export function NotificationPostPeek({ post }: Props) {
 	function onPress() {
 		toPost(post.id);
 	}
+
 	return (
 		<Pressable onPress={onPress}>
 			<NotificationMediaThumbs
@@ -36,7 +37,7 @@ export function NotificationPostPeek({ post }: Props) {
 				<TextContentView
 					tree={post.content.parsed}
 					variant={'bodyContent'}
-					mentions={post.calculated.mentions as any}
+					mentions={post.meta.mentions as any}
 					emojiMap={post.calculated.emojis}
 				/>
 			</Pressable>

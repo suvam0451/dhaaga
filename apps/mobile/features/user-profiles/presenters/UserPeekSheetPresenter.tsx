@@ -1,6 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import ProfileAvatar from '../../../components/common/user/fragments/ProfileAvatar';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import UserRelationPresenter from './UserRelationPresenter';
 import { TextContentView } from '../../../components/common/status/TextContentView';
 import useProfilePeekSheetInteractor from '../interactors/useProfilePeekSheetInteractor';
@@ -21,15 +20,19 @@ function UserPeekSheetPresenter() {
 	if (!acct) return <View />;
 
 	return (
-		<ScrollView style={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}>
-			{/*@ts-ignore-next-line*/}
-			<Image source={{ uri: acct?.banner }} style={styles.banner} />
-			<View
-				style={{
-					flexDirection: 'row',
-					marginBottom: MARGIN_BOTTOM,
-				}}
-			>
+		<ScrollView
+			style={styles.root}
+			contentContainerStyle={{
+				paddingBottom: 16,
+			}}
+		>
+			{acct?.banner ? (
+				// @ts-ignore-next-line
+				<Image source={{ uri: acct?.banner }} style={styles.banner} />
+			) : (
+				<View style={styles.bannerReplacement} />
+			)}
+			<View style={styles.sectionA}>
 				<ProfileAvatar
 					containerStyle={styles.avatarContainer}
 					imageStyle={styles.avatarImageContainer}
@@ -42,9 +45,8 @@ function UserPeekSheetPresenter() {
 					postCount={acct.stats.posts}
 				/>
 			</View>
-
-			<View style={styles.secondSectionContainer}>
-				<View style={{ flexShrink: 1 }}>
+			<View style={styles.sectionB}>
+				<View style={{ flex: 1 }}>
 					<TextContentView
 						tree={acct.parsedDisplayName}
 						variant={'displayName'}
@@ -62,16 +64,7 @@ function UserPeekSheetPresenter() {
 						{acct?.handle}
 					</AppText.Medium>
 				</View>
-				<View style={styles.relationManagerSection}>
-					<View style={{ marginRight: 8 }}>
-						<Ionicons
-							name="notifications"
-							size={22}
-							color={theme.secondary.a30}
-						/>
-					</View>
-					<UserRelationPresenter userId={acct?.id} />
-				</View>
+				<UserRelationPresenter userId={acct?.id} />
 			</View>
 			<TextContentView
 				tree={acct?.parsedDescription}
@@ -88,11 +81,23 @@ const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 const BORDER_RADIUS = appDimensions.bottomSheet.borderRadius;
 
 const styles = StyleSheet.create({
+	root: {
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
+	},
+	bannerReplacement: {
+		height: 32,
+		marginTop: appDimensions.bottomSheet.clearanceTop,
+	},
 	banner: {
 		height: 128,
 		flex: 1,
 		borderTopLeftRadius: BORDER_RADIUS,
 		borderTopRightRadius: BORDER_RADIUS,
+	},
+	sectionA: {
+		flexDirection: 'row',
+		marginBottom: MARGIN_BOTTOM,
 	},
 	avatarImageContainer: {
 		flex: 1,
@@ -119,12 +124,10 @@ const styles = StyleSheet.create({
 		marginLeft: 4,
 		marginRight: 8,
 	},
-	secondSectionContainer: {
+	sectionB: {
 		flexDirection: 'row',
-		justifyContent: 'space-between',
 		alignItems: 'center',
 		marginLeft: 8,
-		width: '100%',
 		marginRight: 8,
 		marginBottom: MARGIN_BOTTOM,
 	},

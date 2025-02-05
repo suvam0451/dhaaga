@@ -8,6 +8,7 @@ import { AppDivider } from '../../../../lib/Divider';
 function ReactionNotificationFragment({ item }: Props) {
 	const user = item.user;
 	const post = item.post;
+
 	return (
 		<View style={styles.container}>
 			<AuthorItemPresenter

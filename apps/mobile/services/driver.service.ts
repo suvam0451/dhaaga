@@ -47,6 +47,34 @@ export type AppModulesProps = {
 };
 
 class DriverService {
+	/**
+	 * ActivityPub handle to webfinger
+	 * lookup compatible object
+	 * @param handle handle resolved by app
+	 * @param server home server
+	 */
+	static splitHandle(handle: string, server: string) {
+		if (!handle)
+			return {
+				username: null,
+				host: null,
+				handle: null,
+			};
+		const splits = handle.split('@');
+		if (splits.length === 3) {
+			return {
+				username: splits[1],
+				host: server === splits[2] ? null : splits[1],
+				handle,
+			};
+		} else if (splits.length === 2) {
+			return {
+				username: splits[1],
+				host: null,
+				handle,
+			};
+		}
+	}
 	static getAccountModules(
 		t: TFunction<LOCALIZATION_NAMESPACE.CORE[], undefined>,
 		driver: KNOWN_SOFTWARE,

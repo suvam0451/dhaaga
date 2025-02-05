@@ -76,6 +76,7 @@ function TextContentNode({
 						key={node.uuid}
 						value={node.text}
 						link={node.url}
+						mentions={mentions}
 						fontFamily={APP_FONTS.INTER_500_MEDIUM}
 					/>
 				);
@@ -118,6 +119,7 @@ function TextContentNode({
 									? APP_FONTS.INTER_600_SEMIBOLD
 									: APP_FONTS.ROBOTO_400
 							}
+							mentions={mentions}
 						/>
 					);
 				}

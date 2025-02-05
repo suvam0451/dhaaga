@@ -1,20 +1,30 @@
-import { useAppBottomSheet } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppApiClient,
+	useAppBottomSheet,
+} from '../../../hooks/utility/global-state-extractors';
 import { useEffect, useState } from 'react';
-import useGetProfile from '../api/useGetProfile';
+import useGetProfile, { ProfileSearchQueryType } from '../api/useGetProfile';
 import { AppUserObject } from '../../../types/app-user.types';
+import DriverService from '../../../services/driver.service';
 
 function useProfilePeekSheetInteractor() {
+	const { server } = useAppApiClient();
 	const { ctx, stateId } = useAppBottomSheet();
-	const [UserId, setUserId] = useState<string>(null);
+	const [SearchQuery, setSearchQuery] = useState<ProfileSearchQueryType>(null);
 	const [UserObject, setUserObject] = useState<AppUserObject>(null);
 
-	const { data, fetchStatus } = useGetProfile({
-		userId: UserId,
-	});
+	const { data, fetchStatus } = useGetProfile(SearchQuery);
 
 	useEffect(() => {
 		if (ctx?.did) {
-			setUserId(ctx?.did);
+			setSearchQuery({ did: ctx.did });
+		} else if (ctx?.handle) {
+			const webfinger = DriverService.splitHandle(ctx.handle, server);
+			setSearchQuery({ webfinger });
+		} else if (ctx?.userId) {
+			setSearchQuery({ userId: ctx.userId });
+		} else {
+			setSearchQuery(null);
 		}
 	}, [ctx, stateId]);
 
