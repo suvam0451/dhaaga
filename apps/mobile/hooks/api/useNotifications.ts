@@ -115,7 +115,7 @@ function useApiGetMentionUpdates(maxId?: string | null) {
 
 	async function api(): Promise<NotificationResults> {
 		const results = await client.notifications.getMentions({
-			limit: 10,
+			limit: 20,
 			maxId,
 			types: [],
 			excludeTypes: [],
@@ -232,7 +232,7 @@ function useApiGetSocialUpdates(maxId?: string | null) {
 
 	async function api(): Promise<NotificationResults> {
 		const results = await client.notifications.getSocialUpdates({
-			limit: 4,
+			limit: 20,
 			excludeTypes: [],
 			types: [],
 			maxId,
@@ -307,7 +307,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 				const result = await (
 					client as MisskeyRestClient
 				).notifications.getSubscriptions({
-					limit: 5,
+					limit: 20,
 					types: [],
 					excludeTypes: [],
 					maxId,

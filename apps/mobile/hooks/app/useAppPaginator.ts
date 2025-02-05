@@ -32,6 +32,8 @@ function useAppPaginator() {
 	}
 
 	function reset() {
+		lastId.current = null;
+		firstId.current = null;
 		setMaxId(null);
 		setMinId(null);
 	}
