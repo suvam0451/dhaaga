@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
 import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
+import { AppDivider } from '../../../../lib/Divider';
 
 function ReactionNotificationFragment({ item }: Props) {
 	const user = item.user;
@@ -16,6 +17,7 @@ function ReactionNotificationFragment({ item }: Props) {
 				createdAt={item.createdAt}
 			/>
 			<NotificationPostPeek acct={user} post={post} />
+			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 }
