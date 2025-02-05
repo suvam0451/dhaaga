@@ -221,30 +221,27 @@ function useApiGetChatUpdates() {
 	});
 }
 
-function useApiGetSocialUpdates() {
+function useApiGetSocialUpdates(maxId?: string | null) {
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
 
 	async function api(): Promise<NotificationResults> {
 		const results = await client.notifications.getSocialUpdates({
-			limit: 40,
+			limit: 4,
 			excludeTypes: [],
 			types: [],
+			maxId,
 		});
 		if (results.error) throw new Error(results.error.message);
 
-		const _data = results.data;
-		if (ActivityPubService.misskeyLike(driver)) {
-			// obj.items = obj.items.filter(
-			// 	(o) => !['mention', 'login', 'note', 'status'].includes(o.type),
-			// );
+		if (ActivityPubService.misskeyLike(driver))
 			return MisskeyService.deserializeNotifications(
 				results.data,
 				driver,
 				server,
 			);
-		}
 
+		const _data = results.data;
 		const acctList = _data.data.accounts;
 		const postList = _data.data.statuses;
 		const _retval = _data.data.notificationGroups
@@ -287,7 +284,7 @@ function useApiGetSocialUpdates() {
 
 	// Queries
 	return useQuery<NotificationResults>({
-		queryKey: ['notifications/social', acct],
+		queryKey: ['notifications/social', acct, maxId],
 		queryFn: api,
 		enabled: !!client,
 		initialData: pageResultDefault,

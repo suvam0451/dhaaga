@@ -1,4 +1,10 @@
 {
+  "features": {
+    "notAvailable": {
+      "title": "Tidak Tersedia",
+      "desc": "Fitur ini belum diimplementasikan oleh Dhaaga, atau tidak tersedia untuk platform SNS Anda."
+    }
+  },
   "topNav": {
     "primary": {
       "hub": "Pusat Sosial",

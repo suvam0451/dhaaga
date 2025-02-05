@@ -1,4 +1,10 @@
 {
+  "features": {
+    "notAvailable": {
+      "title": "利用できません",
+      "desc": "この機能はDhaagaによって実装されていないか、またはあなたのSNSプラットフォームでは利用できません。"
+    }
+  },
   "topNav": {
     "primary": {
       "hub": "ソーシャルハブ",

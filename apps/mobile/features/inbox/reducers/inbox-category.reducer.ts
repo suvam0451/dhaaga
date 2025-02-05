@@ -5,7 +5,6 @@ import { Dispatch } from 'react';
 
 type State = {
 	seen: Set<string>;
-	isLoaded: boolean;
 	items: AppNotificationObject[];
 };
 
@@ -17,7 +16,6 @@ enum ACTION {
 
 const DEFAULT: State = {
 	seen: new Set(),
-	isLoaded: false,
 	items: [],
 };
 
@@ -39,7 +37,6 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.RESET: {
 			return produce(state, (draft) => {
 				draft.seen = new Set();
-				draft.isLoaded = false;
 				draft.items = [];
 			});
 		}
@@ -48,10 +45,8 @@ function reducer(state: State, action: Actions): State {
 				for (const item of action.payload.page.items) {
 					if (draft.seen.has(item.id)) continue;
 					draft.seen.add(item.id);
-
 					draft.items.push(item);
 				}
-				draft.isLoaded = true;
 			});
 		}
 		case ACTION.REPLACE_WITH_PAGE: {
@@ -64,7 +59,6 @@ function reducer(state: State, action: Actions): State {
 
 					draft.items.push(item);
 				}
-				draft.isLoaded = true;
 			});
 		}
 	}

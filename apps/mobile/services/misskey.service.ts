@@ -65,7 +65,7 @@ export class MisskeyService {
 				})
 				.filter((o) => !!o),
 			minId: null,
-			maxId: null,
+			maxId: data.data[data.data.length - 1].id,
 		};
 	}
 }

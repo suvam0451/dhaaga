@@ -1,4 +1,10 @@
 {
+  "features": {
+    "notAvailable": {
+      "title": "Not Available",
+      "desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform."
+    }
+  },
   "topNav": {
     "primary": {
       "hub": "Social Hub",

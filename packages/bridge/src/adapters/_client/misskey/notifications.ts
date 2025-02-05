@@ -103,7 +103,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 			Endpoints['i/notifications-grouped']['req']
 		>('i/notifications-grouped', {
 			limit: query.limit,
-			sinceId: query.sinceId || query.maxId,
+			untilId: query.maxId ?? undefined,
 			includeTypes: [
 				'follow',
 				'followRequestAccepted',
@@ -124,7 +124,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 			Endpoints['i/notifications-grouped']['req']
 		>('i/notifications-grouped', {
 			limit: query.limit,
-			sinceId: query.sinceId || query.maxId,
+			sinceId: query.maxId ?? undefined,
 			includeTypes: ['note'] as MISSKEY_NOTIFICATION_TYPE[],
 		});
 		return { data: { data: data as any } };

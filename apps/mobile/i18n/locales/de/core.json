@@ -1,4 +1,10 @@
 {
+  "features": {
+    "notAvailable": {
+      "title": "Nicht verfügbar",
+      "desc": "Dieses Feature ist entweder nicht von Dhaaga implementiert oder auf deiner SNS-Plattform nicht verfügbar."
+    }
+  },
   "topNav": {
     "primary": {
       "hub": "Soziales Hub",

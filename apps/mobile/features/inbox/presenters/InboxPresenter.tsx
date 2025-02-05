@@ -14,17 +14,34 @@ import SocialUpdatePresenter from './SocialUpdatePresenter';
 import UpdatesPresenter from './UpdatesPresenter';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import WithInboxCategoryCtx from '../contexts/useInboxCategoryCtx';
 
 const renderScene = (index: number) => {
 	switch (index) {
 		case 0:
-			return <MentionPresenter />;
+			return (
+				<WithInboxCategoryCtx>
+					<MentionPresenter />
+				</WithInboxCategoryCtx>
+			);
 		case 1:
-			return <ChatroomPresenter />;
+			return (
+				<WithInboxCategoryCtx>
+					<ChatroomPresenter />
+				</WithInboxCategoryCtx>
+			);
 		case 2:
-			return <SocialUpdatePresenter />;
+			return (
+				<WithInboxCategoryCtx>
+					<SocialUpdatePresenter />;
+				</WithInboxCategoryCtx>
+			);
 		case 3:
-			return <UpdatesPresenter />;
+			return (
+				<WithInboxCategoryCtx>
+					<UpdatesPresenter />
+				</WithInboxCategoryCtx>
+			);
 		default:
 			return <View />;
 	}

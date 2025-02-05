@@ -68,8 +68,7 @@ export enum DhaagaJsNotificationType {
 export type NotificationGetQueryDto = {
 	limit: number;
 	minId?: string;
-	maxId?: string;
-	sinceId?: string;
+	maxId?: string; // doubles as sinceId
 	untilId?: string; // misskey
 	accountId?: string; // restrict to notifications recieved from this account
 	types: DhaagaJsNotificationType[];
