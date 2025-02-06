@@ -23,6 +23,8 @@ import ChatService, { AppChatRoom } from '../../services/chat.service';
 import { AppResultPageType, pageResultDefault } from '../../types/app.types';
 import { MisskeyService } from '../../services/misskey.service';
 
+const NOTIFICATION_PAGE_SIZE = 20;
+
 type useApiGetNotificationsProps = {
 	include: DhaagaJsNotificationType[];
 };
@@ -58,7 +60,7 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 			const { data, error } = await (
 				client as MisskeyRestClient
 			).notifications.getUngrouped({
-				limit: 40,
+				limit: 5,
 				excludeTypes: [],
 				types: include,
 			});
@@ -76,7 +78,7 @@ function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
 			};
 		} else {
 			const { data, error } = await client.notifications.get({
-				limit: 40,
+				limit: 5,
 				excludeTypes: [],
 				types: include,
 			});
@@ -115,7 +117,7 @@ function useApiGetMentionUpdates(maxId?: string | null) {
 
 	async function api(): Promise<NotificationResults> {
 		const results = await client.notifications.getMentions({
-			limit: 20,
+			limit: 5,
 			maxId,
 			types: [],
 			excludeTypes: [],
@@ -175,7 +177,7 @@ function useApiGetMentionUpdates(maxId?: string | null) {
 
 	// Queries
 	return useQuery<NotificationResults>({
-		queryKey: ['notifications/mentions', acct],
+		queryKey: ['notifications/mentions', acct, maxId],
 		queryFn: api,
 		enabled: client !== null,
 		initialData: pageResultDefault,
@@ -232,7 +234,7 @@ function useApiGetSocialUpdates(maxId?: string | null) {
 
 	async function api(): Promise<NotificationResults> {
 		const results = await client.notifications.getSocialUpdates({
-			limit: 20,
+			limit: 5,
 			excludeTypes: [],
 			types: [],
 			maxId,
@@ -271,13 +273,12 @@ function useApiGetSocialUpdates(maxId?: string | null) {
 					post: _post,
 					user: _acct,
 					read: false,
-					createdAt: new Date(o.mostRecentNotificationId),
+					createdAt: new Date(o.latestPageNotificationAt),
 					extraData: {},
 				};
 				return _obj;
 			})
-			.filter((o) => !!o)
-			.filter((o) => !['mention'].includes(o.type));
+			.filter((o) => !!o);
 
 		return {
 			success: true,
@@ -307,7 +308,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 				const result = await (
 					client as MisskeyRestClient
 				).notifications.getSubscriptions({
-					limit: 20,
+					limit: 5,
 					types: [],
 					excludeTypes: [],
 					maxId,

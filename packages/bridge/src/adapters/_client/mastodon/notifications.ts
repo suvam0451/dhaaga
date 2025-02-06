@@ -59,24 +59,35 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		return { data: _data };
 	}
 
-	async getMentions(): Promise<
+	async getMentions(query: NotificationGetQueryDto): Promise<
 		LibraryResponse<{
 			data: MastoGroupedNotificationsResults;
 			minId?: string | null;
 			maxId?: string | null;
 		}>
 	> {
+		let url =
+			'/api/v2/notifications' +
+			'?exclude_types[]=follow' +
+			'&exclude_types[]=follow_request&exclude_types[]=favourite' +
+			'&exclude_types[]=reblog&exclude_types[]=poll' +
+			'&exclude_types[]=status&exclude_types[]=update' +
+			'&exclude_types[]=admin.sign_up&exclude_types[]=admin.report' +
+			'&exclude_types[]=moderation_warning' +
+			'&exclude_types[]=severed_relationships' +
+			'&exclude_types[]=annual_report';
+		if (query.limit) {
+			url += '&limit=' + query.limit;
+		}
+		if (query.maxId) {
+			url += '&max_id=' + query.maxId;
+		}
+
+		console.log(url);
+
 		const { data: _data, error } =
 			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
-				'/api/v2/notifications' +
-					'?exclude_types[]=follow' +
-					'&exclude_types[]=follow_request&exclude_types[]=favourite' +
-					'&exclude_types[]=reblog&exclude_types[]=poll' +
-					'&exclude_types[]=status&exclude_types[]=update' +
-					'&exclude_types[]=admin.sign_up&exclude_types[]=admin.report' +
-					'&exclude_types[]=moderation_warning' +
-					'&exclude_types[]=severed_relationships' +
-					'&exclude_types[]=annual_report',
+				url,
 			);
 		if (error) return errorBuilder();
 		return { data: _data };
