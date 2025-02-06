@@ -53,9 +53,6 @@ function ApiWrapper() {
 							paddingTop: 50 + 4,
 						}}
 						scrollEventThrottle={16}
-						// refreshControl={
-						// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-						// }
 					/>
 					<LoadingMore visible={visible} loading={loading} />
 				</Fragment>

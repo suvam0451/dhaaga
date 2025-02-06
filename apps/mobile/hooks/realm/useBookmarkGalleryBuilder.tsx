@@ -1,17 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityPubUser } from '../../entities/activitypub-user.entity';
-import { ActivityPubStatus } from '../../entities/activitypub-status.entity';
-import { ActivityPubTag } from '../../entities/activitypub-tag.entity';
 
 export type GalleryUserAggregationItem = {
-	user: ActivityPubUser;
-	posts: ActivityPubStatus[];
+	user: any;
+	posts: any[];
 	count: number;
 };
 
 export type GalleryTagAggregationItem = {
-	tag: ActivityPubTag;
-	posts: ActivityPubStatus[];
+	tag: any;
+	posts: any[];
 	count: number;
 };
 
@@ -30,10 +27,10 @@ function useBookmarkGalleryBuilder({ q, limit, offset }: Props) {
 
 	useEffect(() => {
 		let start = performance.now();
-		const acctLookup = new Map<string, ActivityPubUser>();
-		const acctBookmarks = new Map<string, ActivityPubStatus[]>();
-		const tagLookup = new Map<string, ActivityPubTag>();
-		const tagBookmarks = new Map<string, ActivityPubStatus[]>();
+		const acctLookup = new Map<string, any>();
+		const acctBookmarks = new Map<string, any[]>();
+		const tagLookup = new Map<string, any>();
+		const tagBookmarks = new Map<string, any[]>();
 
 		for (const acctBookmark of []) {
 			const k = acctBookmark.postedBy.userId;

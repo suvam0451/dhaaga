@@ -119,32 +119,30 @@ export class AppMenu {
 				}}
 				onPress={onPress}
 			>
-				{appIconId}
+				<View>{appIconId}</View>
 				<View
 					style={{
 						marginLeft: 12,
 						paddingRight: 4,
 					}}
 				>
-					<Text
+					<AppText.SemiBold
 						style={{
 							color: theme.secondary.a10,
-							fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 							fontSize: 18,
 							marginBottom: _desc ? 0 : 2,
 						}}
 					>
 						{_label}
-					</Text>
+					</AppText.SemiBold>
 					{_desc && (
-						<Text
+						<AppText.Medium
 							style={{
 								color: theme.secondary.a30,
-								flexWrap: 'wrap',
 							}}
 						>
 							{_desc}
-						</Text>
+						</AppText.Medium>
 					)}
 				</View>
 			</Pressable>

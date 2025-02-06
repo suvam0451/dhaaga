@@ -57,7 +57,8 @@ export function ProfileContextWrapped() {
 		console.log(e.nativeEvent.layout);
 	}
 
-	if (error || !acct) return <View />;
+	if (error || !acct)
+		return <View style={{ flex: 1, backgroundColor: theme.background.a0 }} />;
 
 	return (
 		<Animated.ScrollView

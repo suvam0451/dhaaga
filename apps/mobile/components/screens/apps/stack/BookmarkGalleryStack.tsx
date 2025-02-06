@@ -1,7 +1,6 @@
-import { ActivityIndicator, View, Text, FlatList } from 'react-native';
+import { ActivityIndicator, View, Text } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { APP_FONT } from '../../../../styles/AppTheme';
-import RealmStatus from '../../../common/status/RealmStatus';
 import WithBookmarkGalleryControllerContext, {
 	useBookmarkGalleryControllerContext,
 } from '../../../../states/useBookmarkGalleryController';
@@ -116,17 +115,7 @@ function PostList({ onScroll, resetPosition }: Props) {
 
 	const ref = useRef(null);
 
-	return (
-		<FlatList
-			ListHeaderComponent={ListHeaderComponent}
-			ref={ref}
-			data={posts}
-			renderItem={({ item }) => <RealmStatus _id={item.statusId} />}
-			scrollEventThrottle={16}
-			onScroll={onScroll}
-			contentContainerStyle={{ paddingTop: 50 + 4 }}
-		/>
-	);
+	return <View />;
 }
 
 function Core() {

@@ -55,6 +55,10 @@ class ActivityPubService {
 		].includes(driver as KNOWN_SOFTWARE);
 	}
 
+	static supportsV2(driver: string) {
+		return [KNOWN_SOFTWARE.MASTODON].includes(driver as KNOWN_SOFTWARE);
+	}
+
 	static pleromaLike(driver: string) {
 		return [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
 			driver as KNOWN_SOFTWARE,
@@ -86,51 +90,6 @@ class ActivityPubService {
 		urlLike: string,
 	): Promise<KnownServer> {
 		return null;
-		/**
-		 * either instance info is not cached
-		 * or, neither nodeinfo nor software
-		 * info is available
-		 * */
-		// if (
-		// 	!match ||
-		// 	(match && (!match.nodeinfo || !match.instanceSoftwareLastFetchedAt))
-		// ) {
-		// 	const { data: nodeinfoData, error: nodeinfoError } =
-		// 		await x.instances.getNodeInfo(urlLike);
-		//
-		// 	if (nodeinfoError) {
-		// 		// console.log('[WARN]: error fetching nodeinfo for', urlLike);
-		// 		return;
-		// 	}
-		// 	match = db.write(() => {
-		// 		return ActivityPubServerRepository.updateNodeInfo(
-		// 			db,
-		// 			urlLike,
-		// 			nodeinfoData,
-		// 		);
-		// 	});
-		// }
-		/**
-		 * either the software type is not resolved
-		 * or it is of type unknown
-		 */
-		// if ((match && !match.type) || match.type === KNOWN_SOFTWARE.UNKNOWN) {
-		// 	const { data: softwareData, error: softwareError } =
-		// 		await x.instances.getSoftware(match.nodeinfo);
-		// 	if (softwareError) {
-		// 		console.log('[WARN]: error fetching software for', urlLike);
-		// 		return;
-		// 	}
-		//
-		// 	match = db.write(() => {
-		// 		return ActivityPubServerRepository.updateSoftwareType(db, {
-		// 			type: softwareData.software,
-		// 			url: urlLike,
-		// 			description: 'N/A',
-		// 		});
-		// 	});
-		// }
-		// return match;
 	}
 
 	/**

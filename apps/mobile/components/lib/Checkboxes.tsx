@@ -4,8 +4,6 @@ import { memo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { APP_FONTS } from '../../styles/AppFonts';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { AppText } from './Text';
 
@@ -95,11 +93,7 @@ export const NativeCheckbox = memo(function Foo({
 	checked,
 	onClick,
 }: AppInlineCheckboxProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 
 	return (
 		<Pressable onPress={onClick}>

@@ -23,5 +23,12 @@
   },
   "hubAddUserSheet": {
     "searchPlaceholder": "Cari pengguna untuk dipin"
+  },
+  "linkPreview": {
+    "failedStateLabel": "Gagal mengurai URL ini",
+    "menuLabel_copyLink": "Salin Tautan",
+    "menuLabel_retry": "Coba Lagi",
+    "menu_openInBrowser_label": "Buka di Browser",
+    "menu_openInBrowser_desc": "Browser eksternal akan dibuka"
   }
 }

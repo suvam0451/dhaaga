@@ -140,7 +140,9 @@ export function HomeNavigationIcon({
 		router.navigate('/');
 	}
 
-	function onLongPress() {
+	function onLongPress(e: any) {
+		e.preventDefault();
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 		router.navigate('/');
 	}
 

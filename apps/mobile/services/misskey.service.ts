@@ -16,7 +16,7 @@ export class MisskeyService {
 	 * NOTE: converts 'specified' visibility to
 	 * 'chat'
 	 */
-	static deserializeNotifications(
+	static packNotifs(
 		data: any,
 		driver: KNOWN_SOFTWARE,
 		server: string,

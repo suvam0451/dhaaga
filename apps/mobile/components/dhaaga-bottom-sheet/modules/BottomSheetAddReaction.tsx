@@ -1,26 +1,25 @@
-import { memo, useEffect, useReducer, useRef } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import SelectedEmojiPreview from '../../dhaaga-bottom-sheet/modules/emoji-picker/fragments/SelectedEmojiPreview';
-import SelectedEmojiActionButtons from '../../dhaaga-bottom-sheet/modules/emoji-picker/fragments/SelectedEmojiActionButtons';
+import SelectedEmojiPreview from './emoji-picker/fragments/SelectedEmojiPreview';
+import SelectedEmojiActionButtons from './emoji-picker/fragments/SelectedEmojiActionButtons';
 import emojiPickerReducer, {
 	defaultValue,
 	Emoji,
 	EMOJI_PICKER_REDUCER_ACTION,
-} from '../../dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
+} from './emoji-picker/emojiPickerReducer';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import EmojiPickerSearchResults from '../../dhaaga-bottom-sheet/modules/emoji-picker/fragments/EmojiPickerSearchResults';
-import EmojiPickerCategoryList from '../../dhaaga-bottom-sheet/modules/emoji-picker/fragments/EmojiPickerCategoryList';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import EmojiPickerSearchResults from './emoji-picker/fragments/EmojiPickerSearchResults';
+import EmojiPickerCategoryList from './emoji-picker/fragments/EmojiPickerCategoryList';
+import {
+	useAppAcct,
+	useAppApiClient,
+} from '../../../hooks/utility/global-state-extractors';
 
-const BottomSheetAddReaction = memo(() => {
-	const { driver, acct } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			acct: o.acct,
-		})),
-	);
+function BottomSheetAddReaction() {
+	const { driver } = useAppApiClient();
+	const { acct } = useAppAcct();
+
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 	const lastSubdomain = useRef(null);
 	useEffect(() => {
@@ -76,7 +75,7 @@ const BottomSheetAddReaction = memo(() => {
 			<EmojiPickerCategoryList State={State} onSelect={onTagSelect} />
 		</View>
 	);
-});
+}
 
 const EMOJI_SIZE = 38;
 const styles = StyleSheet.create({

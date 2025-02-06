@@ -24,6 +24,7 @@ type AppTextProps = {
 	 */
 	inherit?: boolean;
 	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
+	onTextLayout?: (e: any) => void;
 };
 
 export class AppText {
@@ -114,6 +115,7 @@ export class AppText {
 		numberOfLines,
 		emphasis,
 		onPress,
+		onTextLayout,
 	}: AppTextProps) {
 		const { theme } = useAppTheme();
 
@@ -130,6 +132,7 @@ export class AppText {
 				numberOfLines={numberOfLines}
 				textBreakStrategy={'simple'}
 				onPress={onPress}
+				onTextLayout={onTextLayout}
 			>
 				{children}
 			</Text>

@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 
 export enum ACTIVITYPUB_SYNC_TASK {
 	BOOKMARK_SYNC = 'BOOKMARK_SYNC',
@@ -21,14 +19,6 @@ function useSyncWithProgress(
 		onSuccess?: () => void;
 	},
 ) {
-	const { client, acct, db } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			client: o.router,
-			db: o.db,
-		})),
-	);
-
 	const [Numerator, setNumerator] = useState(0);
 	const [IsTaskRunning, setIsTaskRunning] = useState(false);
 
@@ -36,16 +26,9 @@ function useSyncWithProgress(
 		setIsTaskRunning(true);
 		switch (task) {
 			case ACTIVITYPUB_SYNC_TASK.BOOKMARK_SYNC: {
-				// await BookmarkBrowserService.updateBookmarkCache(
-				// 	primaryAcct,
-				// 	client,
-				// 	db,
-				// 	setNumerator,
-				// );
 				break;
 			}
 			case ACTIVITYPUB_SYNC_TASK.CLEAR_BOOKMARK_CACHE: {
-				// BookmarkBrowserService.clearBookmarkCache(db, primaryAcct);
 				break;
 			}
 			default: {

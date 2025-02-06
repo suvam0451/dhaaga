@@ -1,6 +1,5 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../states/_global';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type AppDividerProps = {
 	style?: StyleProp<ViewStyle>;
@@ -11,16 +10,12 @@ export class AppDivider {
 	 * Divider. Works well on darkest backgrounds.
 	 */
 	static Soft({ style }: AppDividerProps) {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 		return (
 			<View
 				style={[
 					{
-						backgroundColor: '#1d1d1d',
+						backgroundColor: theme.background.a50,
 						height: 1,
 					},
 					style,
@@ -30,11 +25,7 @@ export class AppDivider {
 	}
 
 	static Hard({ style }: AppDividerProps) {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 		return (
 			<View
 				style={[

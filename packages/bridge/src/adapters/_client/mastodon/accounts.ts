@@ -41,10 +41,14 @@ export class MastodonAccountsRouter implements AccountRoute {
 	}
 
 	async lookup(webfingerUrl: string): Promise<LibraryResponse<MastoAccount>> {
-		const fn = this.client.lib.v1.accounts.lookup;
-		return await MastojsHandler(
-			await MastoErrorHandler(fn, [{ acct: webfingerUrl }]),
-		);
+		try {
+			const data = await this.client.lib.v1.accounts.lookup({
+				acct: webfingerUrl,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder('Record not found');
+		}
 	}
 
 	async follow(

@@ -1,5 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { KNOWN_SOFTWARE, MisskeyRestClient } from '@dhaaga/bridge';
+import {
+	KNOWN_SOFTWARE,
+	MastodonRestClient,
+	MisskeyRestClient,
+} from '@dhaaga/bridge';
 import { AppUserObject } from '../../../types/app-user.types';
 import { UserMiddleware } from '../../../services/middlewares/user.middleware';
 import {
@@ -63,9 +67,23 @@ function useGetProfile(query: ProfileSearchQueryType) {
 			}
 		}
 
-		const { data, error } = await client.accounts.get(userId);
-		if (error) throw new Error('Failed to fetch user for AtpProto');
-		return UserMiddleware.deserialize(data, driver, server);
+		if (ActivityPubService.mastodonLike(driver)) {
+			if (userId) {
+				const findResult = await client.accounts.get(userId);
+				if (findResult.error)
+					throw new Error('Failed to fetch user for Mastodon');
+				return UserMiddleware.deserialize(findResult.data, driver, server);
+			} else if (webfinger) {
+				const findResult = await (client as MastodonRestClient).accounts.lookup(
+					webfinger.host
+						? `${webfinger.username}@${webfinger.host}`
+						: webfinger.username,
+				);
+				if (findResult.error)
+					throw new Error('Failed to fetch user for Mastodon');
+				return UserMiddleware.deserialize(findResult.data, driver, server);
+			}
+		}
 	}
 
 	// Queries
