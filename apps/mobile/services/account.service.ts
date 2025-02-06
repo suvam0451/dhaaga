@@ -7,10 +7,6 @@ class AccountService {
 				console.log('[ERROR]: failed to fetch followed tags', error);
 				return;
 			}
-			// db.write(() => {
-			// 	ActivityPubTagRepository.clearFollowing(db);
-			// 	ActivityPubTagRepository.applyFollowing(db, data.data as MastoTag[]);
-			// });
 		});
 	}
 }

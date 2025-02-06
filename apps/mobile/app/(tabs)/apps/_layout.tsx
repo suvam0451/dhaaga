@@ -1,11 +1,7 @@
 import { Stack } from 'expo-router/stack';
 
-function FavouritesScreen() {
-	return (
-		<Stack initialRouteName={'index'} screenOptions={{ headerShown: false }}>
-			<Stack.Screen name={'index'} />
-		</Stack>
-	);
-}
+const Layout = () => (
+	<Stack initialRouteName={'index'} screenOptions={{ headerShown: false }} />
+);
 
-export default FavouritesScreen;
+export default Layout;

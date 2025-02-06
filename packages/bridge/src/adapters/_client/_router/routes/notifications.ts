@@ -70,8 +70,8 @@ export type NotificationGetQueryDto = {
 	minId?: string;
 	maxId?: string; // doubles as untilId for misskey
 	accountId?: string; // restrict to notifications recieved from this account
-	types: DhaagaJsNotificationType[];
-	excludeTypes: DhaagaJsNotificationType[];
+	types?: DhaagaJsNotificationType[];
+	excludeTypes?: DhaagaJsNotificationType[];
 	markAsRead?: boolean; // misskey
 	excludeType?: string[];
 	includeType?: string[];

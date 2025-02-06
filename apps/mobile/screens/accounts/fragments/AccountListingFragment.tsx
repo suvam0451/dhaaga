@@ -41,6 +41,9 @@ type AccountOptionsProps = {
 
 const ICON_SIZE = 22;
 
+/**
+ * @deprecated
+ */
 export const AccountOptions = memo(function Foo({
 	IsExpanded,
 	dialogTarget,

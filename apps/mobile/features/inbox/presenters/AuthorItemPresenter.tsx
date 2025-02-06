@@ -4,23 +4,23 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { AppUserObject } from '../../../types/app-user.types';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { useMemo } from 'react';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Text } from 'react-native';
 import { Image } from 'expo-image';
 import Octicons from '@expo/vector-icons/Octicons';
-import { APP_FONT } from '../../../styles/AppTheme';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { AuthorItemView } from '../view/AuthorItemView';
 import { LocalizationService } from '../../../services/localization.service';
 import { AppIcon } from '../../../components/lib/Icon';
 import useAppNavigator from '../../../states/useAppNavigator';
+import { AppPostAuthorType } from '../../../types/app-post.types';
+import { AppUserObject } from '../../../types/app-user.types';
 
 type Props = {
-	user: AppUserObject;
+	user: AppPostAuthorType | AppUserObject;
 	createdAt: Date;
 	notificationType: DhaagaJsNotificationType;
 	extraData?: string;

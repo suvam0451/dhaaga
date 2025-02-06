@@ -20,7 +20,7 @@ import ActivityPubService from '../services/activitypub.service';
 import { AtprotoService } from '../services/atproto.service';
 
 export const ActivityPubBoostedByDto = z.object({
-	userId: z.string(),
+	id: z.string(),
 	avatarUrl: z.string(),
 	displayName: z.string().nullable().optional(),
 	parsedDisplayName: z.array(z.any()),
@@ -201,7 +201,7 @@ export class AppStatusDtoService {
 			visibility: 'N/A',
 			createdAt: input.authoredAt,
 			postedBy: {
-				userId: user.identifier,
+				id: user.identifier,
 				avatarUrl: user.avatarUrl,
 				displayName: user.displayName,
 				handle: handle,
@@ -322,7 +322,7 @@ export class AppStatusDtoService {
 			visibility: input.getVisibility(),
 			createdAt: input.getCreatedAt(),
 			postedBy: {
-				userId: user.getId(),
+				id: user.getId(),
 				avatarUrl: user.getAvatarUrl(),
 				displayName: user.getDisplayName(),
 				parsedDisplayName: parsedDisplayName || [],
