@@ -1,0 +1,4 @@
+Dhaaga (Lite) v0.15.3 (6 Feb 2025)
+
+✨ Mentions inside posts are now clickable
+🛠️ Fixed mentions tab for mastodon, in particular

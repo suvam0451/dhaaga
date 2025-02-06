@@ -1,21 +1,20 @@
-Dhaaga is a third-party client for various social networking platforms and
-protocols.
+Dhaaga is a third-party app with a focus on browsing,
+general SNS features and chat based use cases.
 
+It supports multiple platforms, has a modern and user-friendly
+interface, adds lots of quality of life improvements and has superior
+performance than installing websites as PWAs on your smartphone.
+
+Some unique feature of Dhaaga (available for all platforms):
+
+- 🗞️ "Social Hub" lets you organise profiles and pins
+- 📁 "Collections" help you save and organise posts
+- 📝 "Quick Post" improves UX when you reply/post
+- 🧵 "Thread View" lets you visualize replies
+- 📥 "Inbox Tabs" help you easily group notifications
+- 🖼️ "Gallery Mode" let you browse profiles as an image gallery
+- 💬 "Chat interface" lets you easily talk with your friends
+
+Available (so far) for the following platforms:
+---
 🩵 Bluesky 💙 Mastodon 💚 Misskey 💛 Pleroma 🩷 Sharkey 🧡 Cherrypick 💜 Akkoma
-
-It implements a subset of platform features (relevant to SNS and
-cat bases use cases), but crafts them in a modern and well-thought-out manner.
-
-It has a very modern and user-friendly interface, lots of quality of life
-improvements and well-considered performance optimisations.
-
-Some unique feature that Dhaaga adds (usable regardless of your server or
-software support):
-
-- 🗞️ "Social Hub" helps you manage pins and profiles to easily keep up to date.
-- 📁 "Collections" to help organise and view bookmarks locally.
-- 📝 "Quick Composer" helps you create posts/replies, in a mini form-factor.
-- 🧵 "Thread View" to keep track of reply contexts.
-- 📥 "Inbox Categories" to organise and view your notifications/updates.
-- 🖼️ "Gallery Mode" for browsing media posts from user profiles.
-- 💬 Dedicated "Chat interface" for fun conversations.
