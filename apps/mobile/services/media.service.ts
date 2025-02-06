@@ -1,5 +1,4 @@
 import { MediaAttachmentInterface } from '@dhaaga/bridge';
-import { ActivityPubMediaAttachment } from '../entities/activitypub-media-attachment.entity';
 import { SavedPostMediaAttachment } from '../database/_schema';
 
 type CarousalContainerSpecificationType = {
@@ -106,29 +105,6 @@ class MediaService {
 				e,
 				items,
 			);
-		}
-		return MIN_HEIGHT;
-	}
-
-	static calculateHeightRealmAttachments(
-		items: ActivityPubMediaAttachment[],
-		{
-			maxHeight,
-			deviceWidth,
-		}: {
-			maxHeight: number;
-			deviceWidth: number;
-		},
-	) {
-		let MIN_HEIGHT = 0;
-		for (const item of items) {
-			const width = item.width;
-			const height = item.height;
-
-			if (height && height > MIN_HEIGHT) {
-				const multiplier = deviceWidth / width;
-				MIN_HEIGHT = Math.min(height * multiplier, maxHeight);
-			}
 		}
 		return MIN_HEIGHT;
 	}

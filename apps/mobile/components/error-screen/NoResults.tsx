@@ -2,8 +2,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { APP_FONT } from '../../styles/AppTheme';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { memo } from 'react';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type NoResultsProps = {
 	text: string;
@@ -11,11 +10,7 @@ type NoResultsProps = {
 };
 
 const NoResults = memo(({ text, subtext }: NoResultsProps) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+	const { theme } = useAppTheme();
 	return (
 		<View style={styles.rootContainer}>
 			<View style={styles.container}>

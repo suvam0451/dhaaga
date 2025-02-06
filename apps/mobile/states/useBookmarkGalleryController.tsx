@@ -11,14 +11,13 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { ActivityPubStatus } from '../entities/activitypub-status.entity';
 import { RandomUtil } from '../utils/random.utils';
 import { Account } from '../database/_schema';
 
 type InheritedType = {};
 
 type Type = {
-	posts: ActivityPubStatus[];
+	posts: any[];
 	acct: Account;
 	loadedUserData: GalleryUserAggregationItem[];
 	loadedTagData: GalleryTagAggregationItem[];

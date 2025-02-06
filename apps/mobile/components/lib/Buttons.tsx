@@ -12,7 +12,7 @@ import {
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
 import { memo, useMemo } from 'react';
-import { AppRelationship } from '../../types/ap.types';
+import { AppRelationship } from '../../features/user-profiles/types/ap.types';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { AppText } from './Text';
