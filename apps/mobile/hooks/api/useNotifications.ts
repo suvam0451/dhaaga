@@ -23,7 +23,7 @@ import { AppResultPageType, pageResultDefault } from '../../types/app.types';
 import { MisskeyService } from '../../services/misskey.service';
 import { MastoApiV2Service } from '../../services/masto-api.service';
 
-const NOTIFICATION_PAGE_SIZE = 10;
+const NOTIFICATION_PAGE_SIZE = 20;
 
 type useApiGetNotificationsProps = {
 	include: DhaagaJsNotificationType[];
