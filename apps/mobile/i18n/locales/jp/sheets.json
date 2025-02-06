@@ -21,5 +21,12 @@
   },
   "hubAddUserSheet": {
     "searchPlaceholder": "ピン留めするユーザーを検索"
+  },
+  "linkPreview": {
+    "failedStateLabel": "このURLの解析に失敗しました",
+    "menuLabel_copyLink": "リンクをコピー",
+    "menuLabel_retry": "再試行",
+    "menu_openInBrowser_label": "ブラウザで開く",
+    "menu_openInBrowser_desc": "外部ブラウザが開かれます"
   }
 }

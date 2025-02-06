@@ -9,7 +9,9 @@
       "Synchronisiert"
     ],
     "newCollection": "Neue Sammlung",
-    "fallbackDesc": "Geen Beschrijving Beschikbaar"
+    "fallbackDesc": "Beschreibung nicht verfügbar",
+    "bookmarkDesc": "Mit Ihrem Server synchronisiert",
+    "disclaimer": "⚠️ Sammlungen werden lokal auf diesem Gerät gespeichert ⚠️"
   },
   "hubAddFeedSheet": {
     "title": "Sorry \uD83D\uDE14",
@@ -21,5 +23,12 @@
   },
   "hubAddUserSheet": {
     "searchPlaceholder": "Zoek naar gebruikers om vast te pinnen"
+  },
+  "linkPreview": {
+    "failedStateLabel": "Fehler beim Parsen dieser URL",
+    "menuLabel_copyLink": "Link kopieren",
+    "menuLabel_retry": "Erneut versuchen",
+    "menu_openInBrowser_label": "Im Browser öffnen",
+    "menu_openInBrowser_desc": "Ein externer Browser wird geöffnet"
   }
 }

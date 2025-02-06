@@ -12,7 +12,6 @@ import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { useBookmarkGalleryControllerContext } from '../../../../states/useBookmarkGalleryController';
 import { memo, useRef, useState } from 'react';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import RealmTag from '../../../common/tag/RealmTag';
 import BookmarkGalleryWidgetSkeleton from '../../../skeletons/widgets/BookmarkGalleryWidget';
 import { UserSelectionIndicator } from './indicators';
 
@@ -259,18 +258,7 @@ const BookmarkGalleryWidgetExpanded = memo(function Foo() {
 					horizontal={true}
 					data={loadedTagData}
 					contentContainerStyle={{ paddingBottom: 8 }}
-					renderItem={({ item }) => (
-						<View />
-						// <RealmTag
-						// 	onPress={() => {}}
-						// 	dto={{
-						// 		name: item.tag,
-						// 		following: item.tag.following,
-						// 		privatelyFollowing: item.tag.privatelyFollowing,
-						// 	}}
-						// 	count={item.count}
-						// />
-					)}
+					renderItem={({ item }) => <View />}
 				/>
 			</View>
 		</View>

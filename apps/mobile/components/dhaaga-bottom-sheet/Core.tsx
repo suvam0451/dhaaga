@@ -9,7 +9,7 @@ import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActio
 import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
 import AppBottomSheetSelectAccount from './modules/select-account/AppBottomSheetSelectAccount';
 import AppBottomSheetPickThemePack from './modules/theme-pack/AppBottomSheetPickThemePack';
-import AppBottomSheetLinkPreview from './modules/AppBottomSheetLinkPreview';
+import ABS_Link_Preview from './modules/ABS_Link_Preview';
 import AppBottomSheetHashtag from './modules/AppBottomSheetHashtag';
 import { APP_FONTS } from '../../styles/AppFonts';
 import AppBottomSheetUserMoreActions from './modules/AppBottomSheetUserMoreActions';
@@ -90,7 +90,7 @@ function Factory() {
 		case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:
 			return <TimelineControllerSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.LINK:
-			return <AppBottomSheetLinkPreview />;
+			return <ABS_Link_Preview />;
 		case APP_BOTTOM_SHEET_ENUM.HASHTAG:
 			return <AppBottomSheetHashtag />;
 		case APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS:
