@@ -15,10 +15,9 @@
 
 export const POPULAR_MISSKEY_SERVERS = [
 	{ value: 'misskey.io', label: '👑 🇯🇵 misskey.io' },
-	{ value: 'misskey.dev', label: 'misskey.dev' },
 	{ value: 'misskey.id', label: ' 🇮🇩 misskey.id' },
 	{ value: 'misskey.design', label: 'misskey.design' },
-	{ value: 'trpger.us', label: '🇯🇵 trpger.us' },
+	{ value: 'takusuki.com', label: '🇯🇵 takusuki.com' },
 	{ value: 'sushi.ski', label: '🇯🇵 sushi.ski' },
 	{ value: 'nijimiss.moe', label: '🇯🇵 nijimiss.moe' },
 ];
