@@ -365,6 +365,38 @@ class AtprotoSessionService {
 			return false;
 		}
 	}
+
+	static async exchangeCodeForSession(
+		code: string,
+		verifier: string,
+		pds?: string,
+	) {
+		const body = {
+			grant_type: 'authorization_code',
+			redirect_uri: 'https://suvam.io/dhaaga',
+			code,
+			code_verifier: verifier,
+			client_id: 'https://suvam.io/dhaaga/client-metadata.json',
+		};
+
+		const response = await fetch(
+			pds ? `https://${pds}/oauth/token` : 'https://bsky.social/oauth/token',
+			{
+				method: 'POST',
+				body: JSON.stringify(body),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			},
+		);
+		if (!response.ok) {
+			console.log(response);
+			return null;
+		}
+		const data = await response.json();
+		console.log(data);
+		return data;
+	}
 }
 
 export default AtprotoSessionService;

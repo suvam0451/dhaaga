@@ -2,22 +2,22 @@ import { Dimensions, View, ScrollView, Alert, Text } from 'react-native';
 import { useState } from 'react';
 import WebView from 'react-native-webview';
 import { Button } from '@rneui/base';
-import TitleOnlyNoScrollContainer from '../../../../../containers/TitleOnlyNoScrollContainer';
-import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
+import TitleOnlyNoScrollContainer from '../../../components/containers/TitleOnlyNoScrollContainer';
+import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
 import { UnknownRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import PleromaPasteToken from '../fragments/PleromaPasteToken';
-import { AccountService } from '../../../../../../database/entities/account';
-import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
-import { ACCOUNT_METADATA_KEY } from '../../../../../../database/entities/account-metadata';
-import { APP_EVENT_ENUM } from '../../../../../../services/publishers/app.publisher';
+import PleromaPasteToken from '../components/PleromaPasteToken';
+import { AccountService } from '../../../database/entities/account';
+import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+import { ACCOUNT_METADATA_KEY } from '../../../database/entities/account-metadata';
+import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
 import {
 	useAppDb,
 	useAppPublishers,
 	useAppTheme,
 	useHub,
-} from '../../../../../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
+} from '../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();

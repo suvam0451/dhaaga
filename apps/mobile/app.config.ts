@@ -15,6 +15,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'dark',
 	scheme: 'dhaaga',
+	jsEngine: 'hermes',
 	platforms: ['android'],
 	developmentClient: {
 		silentLaunch: true,

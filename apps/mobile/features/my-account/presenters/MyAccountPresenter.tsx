@@ -7,7 +7,7 @@ import {
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import ProfileLandingAccountOverview from '../../../components/screens/profile/stack/landing/fragments/ProfileLandingAccountOverview';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import AppNoAccount from '../../../components/error-screen/AppNoAccount';
+import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import {
 	useAppAcct,
@@ -47,7 +47,7 @@ function MyAccountPresenter() {
 		});
 	}
 
-	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.PROFILE} />;
+	if (!acct) return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.PROFILE} />;
 
 	const serverModules: AppModulesProps[] = DriverService.getAccountModules(
 		t,

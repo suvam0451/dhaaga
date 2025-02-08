@@ -1,7 +1,7 @@
-import MyLists from '../../../../components/screens/profile/stack/MyLists';
+import MyListsPresenter from '../../../../features/my-account/presenters/MyListsPresenter';
 
 function BookmarkClassic() {
-	return <MyLists />;
+	return <MyListsPresenter />;
 }
 
 export default BookmarkClassic;

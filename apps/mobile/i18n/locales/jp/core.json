@@ -5,6 +5,17 @@
       "desc": "この機能はDhaagaによって実装されていないか、またはあなたのSNSプラットフォームでは利用できません。"
     }
   },
+  "onboarding": {
+    "needBlueskyAccount": "Blueskyアカウントが必要です",
+    "createOneHere": "こちらで作成してください",
+    "loginButton": "ログイン",
+    "appPassword": "アプリパスワード",
+    "enterYourServer": "サーバーを入力してください",
+    "serverUrl": "あなたのサーバーURL",
+    "popularMastodon": "人気のMastodonサーバー",
+    "popularPleroma": "人気のPleromaサーバー",
+    "popularAkkoma": "人気のAkkomaサーバー"
+  },
   "topNav": {
     "primary": {
       "hub": "ソーシャルハブ",
@@ -24,7 +35,12 @@
       "myBookmarks": "マイブックマーク",
       "myAccount": "マイアカウント",
       "myProfile": "マイプロフィール",
-      "appSettings": "アプリ設定"
+      "appSettings": "アプリ設定",
+      "manageAccounts": "アカウント管理",
+      "blueskySignIn": "Bluesky サインイン",
+      "selectServer": "サーバーを選択",
+      "mastodonSignIn": "Mastodon サインイン",
+      "misskeySignIn": "Misskey サインイン"
     }
   },
   "dialogs": {

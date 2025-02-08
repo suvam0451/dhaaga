@@ -170,7 +170,7 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 
 	function onPress(e: any) {
 		router.navigate('/profile');
-		router.dismissAll();
+		router.dismiss(2);
 	}
 
 	// if (visible && isAnimating) return <View />;

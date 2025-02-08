@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { APP_FONT, APP_THEME } from '../../../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { APP_FONT, APP_THEME } from '../../../styles/AppTheme';
+import { APP_FONTS } from '../../../styles/AppFonts';
 
 type PopularServersDto = {
 	label: string;

@@ -5,6 +5,17 @@
       "desc": "Dieses Feature ist entweder nicht von Dhaaga implementiert oder auf deiner SNS-Plattform nicht verfügbar."
     }
   },
+  "onboarding": {
+    "needBlueskyAccount": "Du benötigst ein Bluesky-Konto",
+    "createOneHere": "Erstelle eines hier",
+    "loginButton": "Einloggen",
+    "appPassword": "App-Passwort",
+    "enterYourServer": "Geben Sie Ihren Server ein",
+    "serverUrl": "Ihre Server-URL",
+    "popularMastodon": "Beliebte Mastodon-Server",
+    "popularPleroma": "Beliebte Pleroma-Server",
+    "popularAkkoma": "Beliebte Akkoma-Server"
+  },
   "topNav": {
     "primary": {
       "hub": "Soziales Hub",
@@ -24,7 +35,12 @@
       "myBookmarks": "Meine Lesezeichen",
       "myAccount": "Mein Konto",
       "myProfile": "Mein Profil",
-      "appSettings": "App-Einstellungen"
+      "appSettings": "App-Einstellungen",
+      "manageAccounts": "Konten verwalten",
+      "blueskySignIn": "Bluesky Anmelden",
+      "selectServer": "Server auswählen",
+      "mastodonSignIn": "Mastodon Anmelden",
+      "misskeySignIn": "Misskey Anmelden"
     }
   },
   "dialogs": {

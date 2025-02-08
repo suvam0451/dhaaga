@@ -26,6 +26,8 @@ import {
 import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import { appDimensions } from '../../../../styles/dimensions';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
@@ -37,6 +39,7 @@ function SelectAccountStack() {
 	);
 	const [Data, setData] = useState<Account[]>([]);
 	const [Refreshing, setRefreshing] = useState(false);
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function refresh() {
 		try {
@@ -84,7 +87,7 @@ function SelectAccountStack() {
 
 	return (
 		<AppTopNavbar
-			title={'Manage Accounts'}
+			title={t(`topNav.secondary.manageAccounts`)}
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
@@ -109,19 +112,10 @@ function SelectAccountStack() {
 								},
 							]}
 						>
-							<Text style={styles.ctaButtonText}>Add Account</Text>
+							<Text style={styles.ctaButtonText}>
+								{t(`onboarding.addAccountButton`)}
+							</Text>
 						</Pressable>
-						<Text
-							style={[
-								styles.tipText,
-								{
-									color: theme.secondary.a30,
-								},
-							]}
-						>
-							Bluesky, Mastodon, Misskey, Pleroma, Akkoma, Sharkey, Firefish
-							(Legacy)
-						</Text>
 					</View>
 				}
 				refreshControl={
@@ -137,12 +131,15 @@ export default SelectAccountStack;
 const styles = StyleSheet.create({
 	footerContainer: {
 		marginHorizontal: 16,
-		marginBottom: 32,
+		marginBottom: 48,
 		marginTop: 72,
+		marginLeft: 'auto',
+		marginRight: 'auto',
 	},
 	ctaButtonContainer: {
 		borderRadius: appDimensions.buttons.borderRadius,
 		padding: 8,
+		paddingHorizontal: 16,
 	},
 	ctaButtonText: {
 		color: 'black',

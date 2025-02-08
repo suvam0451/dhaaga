@@ -1,8 +1,3 @@
-import { memo } from 'react';
-import MastodonServerSelect from '../../../../components/screens/profile/stack/onboard/stacks/MastodonServerSelection';
+import MastodonServerSelect from '../../../../features/onboarding/presenters/MastoApiServerPresenter';
 
-const AddMastodonStack = memo(function Foo() {
-	return <MastodonServerSelect />;
-});
-
-export default AddMastodonStack;
+export default MastodonServerSelect;
