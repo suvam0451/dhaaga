@@ -9,6 +9,8 @@ import { AtpAgent, BlobRef, Facet } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../features/composer/reducers/composer.reducer';
 import MediaUtils from '../../utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
+import { AppPostObject } from '../../types/app-post.types';
+import { PostMiddleware } from '../middlewares/post.middleware';
 
 type AtProtoPostRecordType = Partial<AppBskyFeedPost.Record> &
 	Omit<AppBskyFeedPost.Record, 'createdAt'>;
@@ -84,9 +86,18 @@ class AtprotoComposerService {
 		return items;
 	}
 
+	/**
+	 * Generate post record from reducer state
+	 * @param client
+	 * @param state
+	 * @param replyTo the post to which to reply to
+	 * @param isQuote is this reply a quote?
+	 */
 	static async postUsingReducerState(
 		client: BlueskyRestClient,
 		state: PostComposerReducerStateType,
+		replyTo: AppPostObject | null,
+		isQuote: boolean,
 	): Promise<ThreadViewPost> {
 		const agent = client.getAgent();
 
@@ -131,6 +142,24 @@ class AtprotoComposerService {
 		}
 
 		// handle reply
+		if (replyTo) {
+			const _replyTarget = PostMiddleware.getContentTarget(replyTo);
+			record.reply = {
+				root: _replyTarget.rootPost
+					? {
+							uri: _replyTarget.rootPost.meta.uri,
+							cid: _replyTarget.rootPost.meta.cid,
+						}
+					: {
+							uri: _replyTarget.meta.uri,
+							cid: _replyTarget.meta.cid,
+						},
+				parent: {
+					uri: _replyTarget.meta.uri,
+					cid: _replyTarget.meta.cid,
+				},
+			};
+		}
 
 		// handle quotes
 

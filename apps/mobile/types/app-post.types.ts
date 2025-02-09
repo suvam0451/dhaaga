@@ -33,8 +33,8 @@ export type AppPostAuthorType = z.infer<typeof ActivityPubBoostedByDto>;
 export const AppActivityPubMediaDto = z.object({
 	url: z.string(),
 	previewUrl: z.string().nullable().optional(),
-	width: z.number().optional(),
-	height: z.number().optional(),
+	width: z.number().optional().nullable(), // bsky can be null
+	height: z.number().optional().nullable(), // bsky can be null
 	alt: z.string().nullable(),
 	type: z.string(),
 	blurhash: z.string().nullable(),

@@ -210,30 +210,28 @@ type OriginalPosterProps = {
  * the bottom-most post item
  */
 function PostCreatedBy({ style }: OriginalPosterProps) {
-	// const { appManager } = useAppManager();
-	// const { show, refresh } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { show, setCtx } = useAppBottomSheet();
 	const { dto } = useAppStatusItem();
 	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
 	const { toProfile } = useAppNavigator();
-	const { server } = useAppApiClient();
+	const { driver } = useAppApiClient();
 
 	const UserDivRef = useRef(null);
 
 	function onAvatarClicked() {
-		if (ActivitypubService.blueskyLike(server)) {
+		if (ActivitypubService.blueskyLike(driver)) {
 			setCtx({
-				did: PostMiddleware.getContentTarget(dto)?.postedBy?.userId,
+				did: PostMiddleware.getContentTarget(dto)?.postedBy?.id,
 			});
 		} else {
 			setCtx({
-				userId: PostMiddleware.getContentTarget(dto)?.postedBy?.userId,
+				userId: PostMiddleware.getContentTarget(dto)?.postedBy?.id,
 			});
 		}
 		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 
 		// UserDivRef.current.measureInWindow((x, y, width, height) => {
-		// 	appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.userId, {
+		// 	appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.id, {
 		// 		x,
 		// 		y,
 		// 		width,
@@ -247,7 +245,7 @@ function PostCreatedBy({ style }: OriginalPosterProps) {
 	}
 
 	function onProfileClicked() {
-		toProfile(PostMiddleware.getContentTarget(dto)?.postedBy?.userId);
+		toProfile(PostMiddleware.getContentTarget(dto)?.postedBy?.id);
 	}
 
 	return (

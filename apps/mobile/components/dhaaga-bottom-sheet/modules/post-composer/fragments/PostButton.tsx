@@ -7,9 +7,7 @@ import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubService from '../../../../../services/activitypub.service';
 import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
-import AtprotoComposerService, {
-	AtprotoReplyEmbed,
-} from '../../../../../services/atproto/atproto-compose';
+import AtprotoComposerService from '../../../../../services/atproto/atproto-compose';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
@@ -31,47 +29,25 @@ function PostButton() {
 	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { postPub } = useAppPublishers();
-	const { show, setCtx } = useAppBottomSheet();
+	const { show, setCtx, ctx } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	async function onClick() {
 		setLoading(true);
 		let _visibility: any = state.visibility;
-
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			let reply: AtprotoReplyEmbed = null;
-			// if (ParentRef.current) {
-			// if (ParentRef.current.rootPost) {
-			// 	// both parent and root available
-			// 	reply = {
-			// 		root: {
-			// 			uri: ParentRef.current.rootPost.meta.uri,
-			// 			cid: ParentRef.current.rootPost.meta.cid,
-			// 		},
-			// 		parent: {
-			// 			uri: ParentRef.current.meta.uri,
-			// 			cid: ParentRef.current.meta.cid,
-			// 		},
-			// 	};
-			// } else {
-			// 	// parent must be root
-			// 	reply = {
-			// 		root: {
-			// 			uri: ParentRef.current.meta.uri,
-			// 			cid: ParentRef.current.meta.cid,
-			// 		},
-			// 		parent: {
-			// 			uri: ParentRef.current.meta.uri,
-			// 			cid: ParentRef.current.meta.cid,
-			// 		},
-			// 	};
-			// }
-			// }
+			const replyTo =
+				ctx.uuid && postPub.readCache(ctx.uuid)
+					? postPub.readCache(ctx.uuid)
+					: null;
 
 			const data = await AtprotoComposerService.postUsingReducerState(
 				client as BlueskyRestClient,
 				state,
+				replyTo,
+				false,
 			);
+
 			if (data) {
 				/**
 				 * 	FIXME: Currently only shows the latest record
@@ -127,7 +103,6 @@ function PostButton() {
 				spoilerText: state.cw === '' ? undefined : state.cw,
 			});
 			if (error) throw new Error(error.message);
-			console.log('resounding success...');
 
 			if (ActivityPubService.mastodonLike(driver)) {
 				const _data = PostMiddleware.deserialize(data, driver, server);
