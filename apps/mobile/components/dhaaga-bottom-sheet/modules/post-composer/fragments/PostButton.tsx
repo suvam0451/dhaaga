@@ -29,37 +29,38 @@ function PostButton() {
 	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { postPub } = useAppPublishers();
-	const { show, setCtx, ctx } = useAppBottomSheet();
+	const { show, setCtx } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	async function onClick() {
 		setLoading(true);
 		let _visibility: any = state.visibility;
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			const replyTo =
-				ctx.uuid && postPub.readCache(ctx.uuid)
-					? postPub.readCache(ctx.uuid)
-					: null;
-
-			const data = await AtprotoComposerService.postUsingReducerState(
+			const newPost = await AtprotoComposerService.postUsingReducerState(
 				client as BlueskyRestClient,
 				state,
-				replyTo,
-				false,
 			);
 
-			if (data) {
-				/**
-				 * 	FIXME: Currently only shows the latest record
-				 * 		We can use the logic from context builder
-				 * 		to render the parent and root, as well
-				 */
-				const _data = PostMiddleware.deserialize<unknown>(data, driver, server);
-				postPub.writeCache(_data.uuid, _data);
-				setCtx({ uuid: _data.uuid });
-				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
+			if (!newPost) {
+				setLoading(false);
 				return;
 			}
+
+			/**
+			 * 	FIXME: Currently only shows the latest record
+			 * 		We can use the logic from context builder
+			 * 		to render the parent and root, as well
+			 */
+			const _newPostObject = PostMiddleware.deserialize<unknown>(
+				newPost,
+				driver,
+				server,
+			);
+			postPub.writeCache(_newPostObject.uuid, _newPostObject);
+			setCtx({ uuid: _newPostObject.uuid });
+			show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
+			setLoading(false);
+			return;
 		}
 
 		switch (_visibility) {

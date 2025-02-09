@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+	Pressable,
+	StyleProp,
+	StyleSheet,
+	Text,
+	View,
+	ViewStyle,
+} from 'react-native';
 import {
 	useAppDialog,
 	useAppTheme,
@@ -7,17 +14,17 @@ import { APP_FONTS } from '../../styles/AppFonts';
 import { Fragment, useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
-import { APP_FONT } from '../../styles/AppTheme';
-import { appVerticalIndex } from '../../styles/dimensions';
+import { appDimensions, appVerticalIndex } from '../../styles/dimensions';
 import { AppText } from './Text';
 
 type DialogOptionsProps = {
 	label: string;
 	onPress: () => Promise<void>;
 	variant?: 'default' | 'dismiss' | 'destructive';
+	style?: StyleProp<ViewStyle>;
 };
 
-function DialogOption({ label, onPress, variant }: DialogOptionsProps) {
+function DialogOption({ label, onPress, variant, style }: DialogOptionsProps) {
 	const [IsLoading, setIsLoading] = useState(false);
 	const { theme } = useAppTheme();
 
@@ -30,20 +37,18 @@ function DialogOption({ label, onPress, variant }: DialogOptionsProps) {
 				setIsLoading(false);
 			});
 		} catch (e) {
-			//
-			// setIsLoading(false);
+			setIsLoading(false);
 		}
 	}
 
 	const color =
 		variant && (variant === 'dismiss' || variant === 'destructive')
 			? '#fd413b'
-			: theme.textColor.medium;
+			: theme.secondary.a10;
 
 	return (
-		<View>
-			<View style={{ height: 1, backgroundColor: '#333' }} />
-
+		<View style={style}>
+			<View style={{ height: 1, backgroundColor: theme.background.a50 }} />
 			{IsLoading ? (
 				<View style={{ paddingVertical: 19 }}>
 					<Loader />
@@ -88,101 +93,103 @@ export function AppDialog() {
 	if (!visible) return <View />;
 	return (
 		<Fragment>
-			<Pressable
-				style={{
-					position: 'absolute',
-					backgroundColor: 'black',
-					height: '100%',
-					width: '100%',
-					opacity: 0.64,
-					zIndex: appVerticalIndex.dialogBackdrop,
-				}}
-				onPress={hide}
-			/>
+			<Pressable style={styles.backdrop} onPress={hide} />
 			<View
-				style={{
-					maxWidth: '75%',
-					borderRadius: 8,
-					backgroundColor: theme.background.a20,
-					zIndex: appVerticalIndex.dialogContent,
-					position: 'absolute',
-					left: '50%',
-					top: '50%',
-					transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
-				}}
+				style={[
+					styles.root,
+					{
+						backgroundColor: theme.background.a20,
+						transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
+					},
+				]}
 			>
-				<View>
-					<View style={{ paddingHorizontal: 24 }}>
-						<AppText.SemiBold
-							style={[styles.modalTitle, { color: theme.secondary.a0 }]}
-						>
-							{state.title}
-						</AppText.SemiBold>
+				<View
+					style={{ paddingHorizontal: 24, marginBottom: MARGIN_BOTTOM * 2 }}
+				>
+					<AppText.SemiBold
+						style={[styles.modalTitle, { color: theme.primary.a0 }]}
+					>
+						{state.title}
+					</AppText.SemiBold>
 
-						{state.description.map((text, i) => (
-							<AppText.Medium
-								key={i}
-								style={[
-									modalStyles.modalDescription,
-									{
-										color: theme.secondary.a20,
-										fontSize: 15,
-									},
-								]}
-							>
-								{text}
-							</AppText.Medium>
-						))}
-						{IS_TXT_MODE && (
-							<AppTextInput.SingleLine
-								placeholder={textSeed}
-								onChangeText={setInput}
-								value={Input}
-								style={{
-									fontSize: 16,
-									textAlign: 'center',
-									fontFamily: APP_FONTS.ROBOTO_500,
-									color: theme.primary.a0,
-									textDecorationLine: 'none',
-									paddingVertical: 20,
-								}}
-							/>
-						)}
-					</View>
-					<View style={{ marginTop: 12, marginBottom: 4 }}>
-						{state.actions.map((action, i) => (
-							<DialogOption
-								key={i}
-								label={action.label}
-								onPress={action.onPress}
-								variant={(action.variant || 'default') as any}
-							/>
-						))}
-						{IS_TXT_MODE && (
-							<DialogOption
-								label={'Save'}
-								onPress={async () => {
-									textSubmitCallback(Input);
-									hide();
-								}}
-								variant={'default'}
-							/>
-						)}
-						<DialogOption
-							label={'Dismiss'}
-							onPress={async () => {
-								hide();
+					{state.description.map((text, i) => (
+						<AppText.Medium
+							key={i}
+							style={[
+								styles.modalDescription,
+								{
+									color: theme.secondary.a20,
+									fontSize: 15,
+								},
+							]}
+						>
+							{text}
+						</AppText.Medium>
+					))}
+					{IS_TXT_MODE && (
+						<AppTextInput.SingleLine
+							placeholder={textSeed}
+							onChangeText={setInput}
+							value={Input}
+							style={{
+								fontSize: 16,
+								textAlign: 'center',
+								fontFamily: APP_FONTS.ROBOTO_500,
+								color: theme.primary.a0,
+								textDecorationLine: 'none',
+								paddingVertical: 20,
 							}}
-							variant={'dismiss'}
 						/>
-					</View>
+					)}
 				</View>
+
+				{/* ---- Additional Dialog Options ---- */}
+				{state.actions.map((action, i) => (
+					<DialogOption
+						key={i}
+						label={action.label}
+						onPress={action.onPress}
+						variant={(action.variant || 'default') as any}
+					/>
+				))}
+
+				{/* ---- Save Option (TextInput Dialogs) ---- */}
+				{IS_TXT_MODE && (
+					<DialogOption
+						label={'Save'}
+						onPress={async () => {
+							textSubmitCallback(Input);
+							hide();
+						}}
+						variant={'default'}
+					/>
+				)}
+
+				{/* ---- Dismiss Option (Universal) ---- */}
+				<DialogOption
+					label={'Dismiss'}
+					onPress={async () => {
+						hide();
+					}}
+					variant={'dismiss'}
+					style={{ paddingBottom: MARGIN_BOTTOM * 0.5 }}
+				/>
 			</View>
 		</Fragment>
 	);
 }
 
+const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
+
 const styles = StyleSheet.create({
+	root: {
+		maxWidth: '75%',
+		borderRadius: 8,
+		zIndex: appVerticalIndex.dialogContent,
+		position: 'absolute',
+		left: '50%',
+		top: '50%',
+	},
 	modalTitle: {
 		textAlign: 'center',
 		fontSize: 22,
@@ -205,22 +212,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-});
-
-const modalStyles = StyleSheet.create({
-	modalTitle: {
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-		textAlign: 'center',
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontSize: 18,
-		marginBottom: 16,
-	},
-	modalDescription: {
-		textAlign: 'center',
-		fontSize: 14,
-	},
-	actionButtonContainer: {
-		marginVertical: 16,
-		marginTop: 32,
+	backdrop: {
+		position: 'absolute',
+		backgroundColor: 'black',
+		height: '100%',
+		width: '100%',
+		opacity: 0.64,
+		zIndex: appVerticalIndex.dialogBackdrop,
 	},
 });

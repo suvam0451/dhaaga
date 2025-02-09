@@ -183,6 +183,7 @@
     "ctaPlaceholder": "What's on your mind?",
     "postButton": "Post",
     "replyingTo": "Replying to: ",
+    "quoting": "Quoting: ",
     "visibility": {
       "public": "Public",
       "unlisted": "Home",

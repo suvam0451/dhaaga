@@ -59,6 +59,13 @@ class ActivityPubService {
 		return [KNOWN_SOFTWARE.MASTODON].includes(driver as KNOWN_SOFTWARE);
 	}
 
+	static supportsQuotesNatively(driver: string) {
+		return (
+			ActivityPubService.blueskyLike(driver) ||
+			ActivityPubService.misskeyLike(driver)
+		);
+	}
+
 	static pleromaLike(driver: string) {
 		return [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
 			driver as KNOWN_SOFTWARE,

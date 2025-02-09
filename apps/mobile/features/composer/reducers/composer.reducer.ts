@@ -48,7 +48,9 @@ type State = {
 	keyboardSelection: { start: number; end: number };
 
 	visibility: APP_POST_VISIBILITY;
+
 	parent: AppPostObject | null;
+	isQuote: boolean;
 
 	suggestions: AutoFillResultsType;
 
@@ -116,6 +118,7 @@ const DEFAULT: State = {
 	text: null,
 	visibility: APP_POST_VISIBILITY.PUBLIC,
 	parent: null,
+	isQuote: false,
 	keyboardSelection: {
 		start: 0,
 		end: 0,
