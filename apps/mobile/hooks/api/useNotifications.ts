@@ -112,8 +112,15 @@ function useApiGetMentionUpdates(maxId?: string | null) {
 
 		if (ActivityPubService.misskeyLike(driver)) {
 			return MisskeyService.packNotifs(results.data, driver, server);
-		} else if (driver === KNOWN_SOFTWARE.MASTODON) {
+		} else if (ActivityPubService.supportsV2(driver)) {
 			return MastoApiV2Service.packNotifs(results.data, driver, server);
+		} else if (ActivityPubService.pleromaLike(driver)) {
+			return MastoApiV1Service.packNotifs(
+				results.data,
+				driver,
+				server,
+				'mentions',
+			);
 		} else if (ActivityPubService.blueskyLike(driver)) {
 			const _data =
 				results.data as AppBskyNotificationListNotifications.OutputSchema;
@@ -198,6 +205,13 @@ function useApiGetSocialUpdates(maxId?: string | null) {
 				return MisskeyService.packNotifs(result.data, driver, server);
 			} else if (ActivityPubService.supportsV2(driver)) {
 				return MastoApiV2Service.packNotifs(result.data, driver, server);
+			} else if (ActivityPubService.pleromaLike(driver)) {
+				return MastoApiV1Service.packNotifs(
+					result.data,
+					driver,
+					server,
+					'social',
+				);
 			} else {
 				return pageResultDefault;
 			}
