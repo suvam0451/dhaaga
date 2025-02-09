@@ -5,7 +5,13 @@
       "desc": "この機能はDhaagaによって実装されていないか、またはあなたのSNSプラットフォームでは利用できません。"
     }
   },
+  "errors": {
+    "errorLabel": "エラー",
+    "timelineErrorLabel": "Dhaagaがこのタイムラインを読み込めませんでした。開発者にこのエラーを報告してください。"
+  },
   "onboarding": {
+    "addAccountButton": "アカウントを追加",
+    "accountCreationNotSupported": "アカウントの作成はサポートされていません",
     "needBlueskyAccount": "Blueskyアカウントが必要です",
     "createOneHere": "こちらで作成してください",
     "loginButton": "ログイン",

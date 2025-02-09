@@ -3,6 +3,7 @@ import {
 	KNOWN_SOFTWARE,
 	MastodonRestClient,
 	MisskeyRestClient,
+	PleromaRestClient,
 } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import { AppNotificationObject } from '../../types/app-notification.types';
@@ -21,7 +22,10 @@ import {
 import ChatService, { AppChatRoom } from '../../services/chat.service';
 import { AppResultPageType, pageResultDefault } from '../../types/app.types';
 import { MisskeyService } from '../../services/misskey.service';
-import { MastoApiV2Service } from '../../services/masto-api.service';
+import {
+	MastoApiV1Service,
+	MastoApiV2Service,
+} from '../../services/masto-api.service';
 
 const NOTIFICATION_PAGE_SIZE = 20;
 
@@ -215,6 +219,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 	return useQuery<NotificationResults>({
 		queryKey: ['notifications/subs', acct, maxId],
 		queryFn: async () => {
+			console.log(ActivityPubService.pleromaLike(driver));
 			if (ActivityPubService.misskeyLike(driver)) {
 				const result = await (
 					client as MisskeyRestClient
@@ -232,6 +237,19 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 					maxId,
 				});
 				return MastoApiV2Service.packNotifs(result.data, driver, server);
+			} else if (ActivityPubService.pleromaLike(driver)) {
+				const result = await (
+					client as PleromaRestClient
+				).notifications.getSubscriptionUpdates({
+					limit: NOTIFICATION_PAGE_SIZE,
+					maxId,
+				});
+				return MastoApiV1Service.packNotifs(
+					result.data,
+					driver,
+					server,
+					'updates',
+				);
 			} else {
 				return pageResultDefault;
 			}

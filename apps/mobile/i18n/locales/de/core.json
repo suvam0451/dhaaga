@@ -5,7 +5,13 @@
       "desc": "Dieses Feature ist entweder nicht von Dhaaga implementiert oder auf deiner SNS-Plattform nicht verfügbar."
     }
   },
+  "errors": {
+    "errorLabel": "Fehler",
+    "timelineErrorLabel": "Dhaaga konnte diese Zeitleiste nicht laden. Melden Sie diesen Fehler dem Entwickler."
+  },
   "onboarding": {
+    "addAccountButton": "Konto hinzufügen",
+    "accountCreationNotSupported": "Die Kontenerstellung wird nicht unterstützt",
     "needBlueskyAccount": "Du benötigst ein Bluesky-Konto",
     "createOneHere": "Erstelle eines hier",
     "loginButton": "Einloggen",

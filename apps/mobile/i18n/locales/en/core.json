@@ -5,6 +5,10 @@
       "desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform."
     }
   },
+  "errors": {
+    "errorLabel": "Error",
+    "timelineErrorLabel": "Dhaaga failed to load this timeline. Report this error to the developer."
+  },
   "onboarding": {
     "addAccountButton": "Add Account",
     "accountCreationNotSupported": "Account creation is not supported",

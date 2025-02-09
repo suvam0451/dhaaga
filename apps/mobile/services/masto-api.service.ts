@@ -16,7 +16,40 @@ export type MastoApiGroupedNotificationType = {
 	statusId: string;
 };
 
-class ServiceV1 {}
+class ServiceV1 {
+	/**
+	 * Resolve notifications for v1 api
+	 * grouped notification objects
+	 * @param input
+	 * @param driver
+	 * @param server
+	 * @param category
+	 */
+	static packNotifs(
+		input: any,
+		driver: KNOWN_SOFTWARE,
+		server: string,
+		category: 'mentions' | 'chat' | 'social' | 'updates',
+	): AppResultPageType<AppNotificationObject> {
+		return {
+			items: input.data.map((o) => {
+				return {
+					id: o.id,
+					// akkoma uses "mention" type for "status" updates
+					type: category === 'updates' ? 'status' : o.type,
+					post: PostMiddleware.deserialize(o.status, driver, server),
+					user: UserMiddleware.deserialize(o.account, driver, server),
+					read: o.pleroma?.isSeen, // also have o.pleroma.isMuted
+					createdAt: new Date(o.createdAt),
+					extraData: {},
+				};
+			}),
+			maxId: input.maxId,
+			minId: input.minId,
+			success: true,
+		};
+	}
+}
 
 class ServiceV2 {
 	/**

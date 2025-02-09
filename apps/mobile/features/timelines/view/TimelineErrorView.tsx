@@ -5,18 +5,17 @@ import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { AppText } from '../../../components/lib/Text';
 import { appDimensions } from '../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	error: any;
 };
+
 function TimelineErrorView({ error }: Props) {
 	const { theme } = useAppTheme();
-	/**
-	 * Composite Hook Collection
-	 */
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: 0,
-	});
+	const { translateY } = useScrollMoreOnPageEnd();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return (
 		<View
@@ -39,14 +38,13 @@ function TimelineErrorView({ error }: Props) {
 				<AppText.SemiBold
 					style={{ textAlign: 'center', marginTop: 24, fontSize: 24 }}
 				>
-					Error
+					{t(`errors.errorLabel`)}
 				</AppText.SemiBold>
 				<AppText.Medium
 					style={{ textAlign: 'center', marginVertical: 16 }}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 				>
-					Dhaaga failed to load this timeline. Report this error to the
-					developer.
+					{t(`errors.timelineErrorLabel`)}
 				</AppText.Medium>
 				<AppText.Medium
 					style={{ color: theme.complementary.a0, textAlign: 'center' }}

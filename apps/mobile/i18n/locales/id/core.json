@@ -5,7 +5,13 @@
       "desc": "Fitur ini belum diimplementasikan oleh Dhaaga, atau tidak tersedia untuk platform SNS Anda."
     }
   },
+  "errors": {
+    "errorLabel": "Kesalahan",
+    "timelineErrorLabel": "Dhaaga gagal memuat timeline ini. Laporkan kesalahan ini ke pengembang."
+  },
   "onboarding": {
+    "addAccountButton": "Tambah Akun",
+    "accountCreationNotSupported": "Pembuatan akun tidak didukung",
     "needBlueskyAccount": "Anda memerlukan akun Bluesky",
     "createOneHere": "Buat akun di sini",
     "loginButton": "Masuk",

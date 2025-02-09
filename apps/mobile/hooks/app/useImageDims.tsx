@@ -2,74 +2,33 @@ import { AppMediaObject } from '../../types/app-post.types';
 import { useEffect, useRef, useState } from 'react';
 import MediaService from '../../services/media.service';
 import MediaUtils from '../../utils/media.utils';
+import { useImage } from 'expo-image';
 
 /**
  * calculates the image width
  * for a fixed height container
+ *
+ * @param imageUrl
+ * @param maxH
+ * @param defaultW
  */
 export function useImageAutoHeight(
-	item: AppMediaObject,
-	W: number,
-	maxH: number,
+	imageUrl: string,
+	maxH?: number,
+	defaultW?: number,
 ) {
-	const [Data, setData] = useState({ resolved: false, height: maxH, width: W });
-	const ValueRef = useRef(null);
-	useEffect(() => {
-		if (!item) {
-			setData({
-				resolved: false,
-				height: maxH,
-				width: W,
-			});
-			return;
-		}
-		if (ValueRef.current === item.previewUrl) return;
-		setData({
-			resolved: false,
-			height: maxH,
-			width: W,
-		});
+	const DEFAULT_WIDTH = 240;
+	const DEFAULT_HEIGHT = 240;
 
-		/**
-		 * Use image dimensions provided
-		 * by server to calculate dimensions
-		 */
-		if (item.height && item.width) {
-			const { height } = MediaService.calculateDimensions({
-				maxW: W,
-				maxH,
-				H: item.height,
-				W: item.width,
-			});
-			setData({ resolved: true, height, width: W });
-			ValueRef.current = item.previewUrl;
-			return;
-		}
+	const _maxH = maxH || DEFAULT_HEIGHT;
+	const _maxW = defaultW || DEFAULT_WIDTH;
+	const image = useImage({ uri: imageUrl, height: _maxH });
 
-		/**
-		 * Fetch the original image size
-		 * to calculate dimensions
-		 */
-		MediaUtils.fetchImageSize(item.url)
-			.then(({ width: rnWidth, height: rnHeight }) => {
-				const { height } = MediaService.calculateDimensions({
-					maxW: W,
-					maxH,
-					H: rnHeight,
-					W: rnWidth,
-				});
-				setData({ resolved: false, height, width: W });
-			})
-			.finally(() => {
-				setData({
-					...Data,
-					resolved: true,
-				});
-				ValueRef.current = item.previewUrl;
-			});
-	}, [item]);
-
-	return Data;
+	return {
+		resolved: true,
+		height: _maxH,
+		width: image ? (_maxH / image.height) * image.width : _maxW,
+	};
 }
 
 /**
