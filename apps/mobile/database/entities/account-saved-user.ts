@@ -22,11 +22,11 @@ class Service {
 	static upsert(db: DataSource, acct: Account, user: AppPostAuthorType) {
 		const conflict = db.accountSavedUser.findOne({
 			active: true,
-			identifier: user.userId,
+			identifier: user.id,
 		});
 		if (conflict) {
 			db.accountSavedUser.updateById(conflict.id, {
-				identifier: user.userId,
+				identifier: user.id,
 				remoteServer: user.instance,
 				avatarUrl: user.avatarUrl,
 				displayName: user.displayName,
@@ -38,7 +38,7 @@ class Service {
 		} else {
 			db.accountSavedUser.insert({
 				uuid: RandomUtil.nanoId(),
-				identifier: user.userId,
+				identifier: user.id,
 				remoteServer: user.instance,
 				avatarUrl: user.avatarUrl,
 				displayName: user.displayName,
@@ -50,7 +50,7 @@ class Service {
 		}
 
 		return db.accountSavedUser.findOne({
-			identifier: user.userId,
+			identifier: user.id,
 		});
 	}
 }
