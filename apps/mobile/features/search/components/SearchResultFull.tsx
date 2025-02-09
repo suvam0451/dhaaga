@@ -53,8 +53,9 @@ function WidgetExpanded() {
 				},
 			]}
 		>
-			{Tabs.map((o) => (
+			{Tabs.map((o, i) => (
 				<Pressable
+					key={i}
 					onPress={() => {
 						setCategory(o);
 					}}

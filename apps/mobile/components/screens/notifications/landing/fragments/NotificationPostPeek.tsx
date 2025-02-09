@@ -1,7 +1,7 @@
 import { Pressable, View } from 'react-native';
 import useAppNavigator from '../../../../../states/useAppNavigator';
 import { AppPostObject } from '../../../../../types/app-post.types';
-import NotificationMediaThumbs from '../../../../common/media/NotificationMediaThumbs';
+import MediaThumbListPresenter from '../../../../../features/inbox/presenters/MediaThumbListPresenter';
 import { AppUserObject } from '../../../../../types/app-user.types';
 import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
 import { TextContentView } from '../../../../common/status/TextContentView';
@@ -28,7 +28,7 @@ export function NotificationPostPeek({ post }: Props) {
 
 	return (
 		<Pressable onPress={onPress}>
-			<NotificationMediaThumbs
+			<MediaThumbListPresenter
 				post={post}
 				items={post?.content?.media}
 				server={driver}

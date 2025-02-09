@@ -8,21 +8,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to report a bug.
-        
-        No need to search for duplicate issues. Just ask away.
-        
-        #### Considerations
-        
-        * Support is currently only offered for latest version. So, update your app! 
-        * The only supported backends are [Mastodon, Misskey, Firefish, Sharkey, Pleroma, Akkoma]
-        * ^ You may request support for additional backends via "Feature Request"
-
+        Don't worry about duplicate issues. Just ask what you want ^^
   - type: textarea
     id: description
     attributes:
       label: Description
-      description: A clear and concise description of what the bug is.
+      description: |
+        Describe the issue you are facing.
     validations:
       required: true
 
@@ -30,8 +22,8 @@ body:
     id: version
     attributes:
       label: App Version
-      description: The app version this issue occurs on.
-      placeholder: "v0.9.0 or v0.9.0-lite"
+      description: App version can be seen in the settings screen
+      placeholder: "v0.15.3"
     validations:
       required: true
   - type: dropdown
@@ -42,10 +34,9 @@ body:
       multiple: false
       options:
         - Play Store
-        - GitHub Releases
+        - GitHub (Lite)
         - IzzyOnDroid (Lite)
         - Self-Compiled
-        - Self-Compiled (Lite)
     validations:
       required: true
 

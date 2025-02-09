@@ -9,6 +9,8 @@ import { AtpAgent, BlobRef, Facet } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../features/composer/reducers/composer.reducer';
 import MediaUtils from '../../utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
+import { AppPostObject } from '../../types/app-post.types';
+import { PostMiddleware } from '../middlewares/post.middleware';
 
 type AtProtoPostRecordType = Partial<AppBskyFeedPost.Record> &
 	Omit<AppBskyFeedPost.Record, 'createdAt'>;
@@ -84,6 +86,11 @@ class AtprotoComposerService {
 		return items;
 	}
 
+	/**
+	 * Generate post record from reducer state
+	 * @param client
+	 * @param state
+	 */
 	static async postUsingReducerState(
 		client: BlueskyRestClient,
 		state: PostComposerReducerStateType,
@@ -130,9 +137,36 @@ class AtprotoComposerService {
 			};
 		}
 
-		// handle reply
-
-		// handle quotes
+		if (state.parent) {
+			const _replyTarget = PostMiddleware.getContentTarget(state.parent);
+			if (state.isQuote) {
+				// handle quotes
+				record.embed = {
+					$type: 'app.bsky.embed.record',
+					record: {
+						uri: _replyTarget.meta.uri,
+						cid: _replyTarget.meta.cid,
+					},
+				};
+			} else {
+				// handle reply
+				record.reply = {
+					root: _replyTarget.rootPost
+						? {
+								uri: _replyTarget.rootPost.meta.uri,
+								cid: _replyTarget.rootPost.meta.cid,
+							}
+						: {
+								uri: _replyTarget.meta.uri,
+								cid: _replyTarget.meta.cid,
+							},
+					parent: {
+						uri: _replyTarget.meta.uri,
+						cid: _replyTarget.meta.cid,
+					},
+				};
+			}
+		}
 
 		const result = await this.post(client, record);
 

@@ -77,7 +77,7 @@ function TextContentNode({
 						value={node.text}
 						link={node.url}
 						mentions={mentions}
-						fontFamily={APP_FONTS.INTER_500_MEDIUM}
+						fontFamily={APP_FONTS.ROBOTO_500}
 					/>
 				);
 			}

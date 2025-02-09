@@ -5,6 +5,7 @@ import Header from '../components/Header';
 
 function LandingPageView() {
 	const { theme } = useAppTheme();
+
 	return (
 		<View style={{ flex: 1 }}>
 			<Header />

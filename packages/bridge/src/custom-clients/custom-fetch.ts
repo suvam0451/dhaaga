@@ -1,6 +1,5 @@
-import camelcaseKeys from 'camelcase-keys';
-import * as snakecaseKeys from 'snakecase-keys';
 import { DhaagaErrorCode, LibraryResponse } from '../types/result.types.js';
+import { CasingUtils } from '../utiils/casing.utils.js';
 
 /**
  * Use Fetch API to
@@ -42,7 +41,7 @@ class FetchWrapper {
 
 		// You do me dirty, ruby gang :)
 		let typesOverride = obj['types[]'];
-		const retval = snakecaseKeys.default(obj) as Record<string, any>;
+		const retval = CasingUtils.snakeCaseKeys(obj) as Record<string, any>;
 		if (typesOverride) {
 			delete retval['types'];
 			retval['types[]'] = typesOverride;
@@ -101,7 +100,7 @@ class FetchWrapper {
 				const { minId, maxId } = DhaagaApiUtils.extractPaginationFromLinkHeader(
 					response.headers,
 				);
-				const _data = camelcaseKeys(await response.json(), { deep: true });
+				const _data = CasingUtils.camelCaseKeys(await response.json());
 				return {
 					data: {
 						data: _data,
@@ -140,7 +139,7 @@ class FetchWrapper {
 					);
 				}
 				DhaagaApiUtils.extractPaginationFromLinkHeader(response.headers);
-				const data = camelcaseKeys(await response.json(), { deep: true });
+				const data = CasingUtils.camelCaseKeys(await response.json());
 				return { data };
 			})
 			.catch((e) => {
@@ -201,7 +200,6 @@ class FetchWrapper {
 				new URLSearchParams(this.cleanObject(query))
 			: `${this.baseUrl}${endpoint}?`;
 
-		console.log(endpoint, query);
 		return await fetch(endpoint, {
 			method: 'GET',
 			headers: this.token

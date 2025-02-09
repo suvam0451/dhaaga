@@ -2,7 +2,7 @@ import {
 	useAppAcct,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import AppNoAccount from '../../../components/error-screen/AppNoAccount';
+import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import { useRef, useState } from 'react';
 import PagerView from 'react-native-pager-view';
@@ -55,7 +55,7 @@ function InboxPresenter() {
 
 	const ref = useRef<PagerView>(null);
 
-	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.INBOX} />;
+	if (!acct) return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.INBOX} />;
 
 	/**
 	 *	---- User Logged In ----

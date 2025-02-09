@@ -5,6 +5,23 @@
       "desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform."
     }
   },
+  "errors": {
+    "errorLabel": "Error",
+    "timelineErrorLabel": "Dhaaga failed to load this timeline. Report this error to the developer."
+  },
+  "onboarding": {
+    "addAccountButton": "Add Account",
+    "accountCreationNotSupported": "Account creation is not supported",
+    "needBlueskyAccount": "You need a Bluesky account",
+    "createOneHere": "Create one here",
+    "loginButton": "Log-In",
+    "appPassword": "App Password",
+    "enterYourServer": "Enter your server",
+    "serverUrl": "Your server url",
+    "popularMastodon": "Popular Mastodon Servers",
+    "popularPleroma": "Popular Pleroma Servers",
+    "popularAkkoma": "Popular Akkoma Servers"
+  },
   "topNav": {
     "primary": {
       "hub": "Social Hub",
@@ -24,7 +41,12 @@
       "myBookmarks": "My Bookmarks",
       "myAccount": "My Account",
       "myProfile": "My Profile",
-      "appSettings": "App Settings"
+      "appSettings": "App Settings",
+      "manageAccounts": "Manage Accounts",
+      "blueskySignIn": "Bluesky Sign-In",
+      "selectServer": "Select Server",
+      "mastodonSignIn": "Mastodon Sign-In",
+      "misskeySignIn": "Misskey Sign-In"
     }
   },
   "dialogs": {
@@ -161,6 +183,7 @@
     "ctaPlaceholder": "What's on your mind?",
     "postButton": "Post",
     "replyingTo": "Replying to: ",
+    "quoting": "Quoting: ",
     "visibility": {
       "public": "Public",
       "unlisted": "Home",

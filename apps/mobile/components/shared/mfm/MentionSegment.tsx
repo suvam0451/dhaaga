@@ -52,7 +52,7 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			<AppText.Normal
 				style={{
 					fontFamily,
-					color: parsed.me ? theme.primary.a0 : theme.complementaryB.a0,
+					color: parsed.me ? theme.primary.a0 : theme.complementary.a0,
 				}}
 				onPress={onPress}
 			>

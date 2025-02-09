@@ -44,7 +44,7 @@ function BottomMenuPresenter() {
 	function handleThreadGate() {
 		show({
 			title: 'Set Interaction',
-			description: ['Customize who can interact with this post.'],
+			description: ['Set who can interact with this post.'],
 			actions: [
 				{
 					label: 'Allow Quotes',

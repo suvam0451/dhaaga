@@ -19,17 +19,33 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
 import { Loader } from '../../../../components/lib/Loader';
+import { Image } from 'expo-image';
+import { useAssets } from 'expo-asset';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { LinkingUtils } from '../../../../utils/linking.utils';
+import useAtprotoLogin from '../../../../features/onboarding/interactors/useAtprotoLogin';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 
-function SigninBsky() {
+// WebBrowser.maybeCompleteAuthSession();
+
+function AddBluesky() {
 	const [IsLoading, setIsLoading] = useState(false);
 	const { theme } = useAppTheme();
 	const { db } = useAppDb();
 	const { loadAccounts } = useHub();
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { appSub } = useAppPublishers();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	const [Username, setUsername] = useState(null);
 	const [Password, setPassword] = useState(null);
+	const [assets, error] = useAssets([
+		require('../../../../assets/branding/bluesky/logo.png'),
+		require('../../../../assets/icon.png'),
+	]);
+
+	const { isLoading } = useAtprotoLogin();
 
 	async function onSubmit() {
 		setIsLoading(true);
@@ -59,9 +75,20 @@ function SigninBsky() {
 		}
 	}
 
+	if (error || !assets)
+		return (
+			<AppTopNavbar
+				title={t(`topNav.secondary.blueskySignIn`)}
+				translateY={translateY}
+				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+			>
+				<View style={{ flex: 1 }} />
+			</AppTopNavbar>
+		);
+
 	return (
 		<AppTopNavbar
-			title={'Bluesky Sign In'}
+			title={t(`topNav.secondary.blueskySignIn`)}
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
@@ -69,11 +96,67 @@ function SigninBsky() {
 				contentContainerStyle={{ paddingTop: 54, paddingHorizontal: 8 }}
 			>
 				<View style={{ height: 32 }} />
-				<AppText.H1
-					style={{ textAlign: 'center', paddingVertical: 16, marginBottom: 32 }}
+
+				<View
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+						marginHorizontal: 'auto',
+					}}
 				>
-					Enter Server Details
-				</AppText.H1>
+					{/*@ts-ignore-next-line*/}
+					<Image
+						source={{ uri: assets[0].localUri }}
+						style={{
+							width: 84,
+							height: 84,
+							marginHorizontal: 'auto',
+							borderRadius: 16,
+							backgroundColor: '#1f2836',
+						}}
+						contentFit={'cover'}
+					/>
+					<Ionicons
+						name={'close-outline'}
+						color={theme.secondary.a50}
+						size={32}
+						style={{ marginHorizontal: 16 }}
+					/>
+					{/*@ts-ignore-next-line*/}
+					<Image
+						source={{ uri: assets[1].localUri }}
+						style={{
+							width: 84,
+							height: 84,
+							marginHorizontal: 'auto',
+							borderRadius: 16,
+						}}
+					/>
+				</View>
+				<View style={{ marginBottom: 32 }}>
+					<AppText.Medium
+						style={{
+							textAlign: 'center',
+							paddingTop: 16,
+							paddingBottom: 8,
+							fontSize: 20,
+						}}
+					>
+						{t(`onboarding.needBlueskyAccount`)}
+					</AppText.Medium>
+					<AppText.Medium
+						style={{
+							color: theme.complementary.a0,
+							fontSize: 18,
+							textAlign: 'center',
+						}}
+						onPress={LinkingUtils.openBluesky}
+					>
+						{t(`onboarding.createOneHere`)}
+					</AppText.Medium>
+				</View>
+
 				<View style={styles.inputContainerRoot}>
 					<View style={styles.inputContainer}>
 						<AntDesign name="user" size={24} color={theme.secondary.a30} />
@@ -82,14 +165,14 @@ function SigninBsky() {
 					<TextInput
 						style={{
 							fontSize: 16,
-							color: theme.secondary.a30,
+							color: theme.secondary.a10,
 							textDecorationLine: 'none',
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							flex: 1,
 						}}
 						autoCapitalize={'none'}
 						placeholderTextColor={theme.secondary.a30}
-						placeholder="Username or email address"
+						placeholder="handle.bsky.social"
 						onChangeText={setUsername}
 						value={Username}
 					/>
@@ -101,13 +184,13 @@ function SigninBsky() {
 					<TextInput
 						style={{
 							fontSize: 16,
-							color: theme.secondary.a30,
+							color: theme.secondary.a10,
 							textDecorationLine: 'none',
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							flex: 1,
 						}}
 						autoCapitalize={'none'}
-						placeholder="App Password"
+						placeholder={t(`onboarding.appPassword`)}
 						placeholderTextColor={theme.secondary.a30}
 						onChangeText={setPassword}
 						value={Password}
@@ -115,7 +198,7 @@ function SigninBsky() {
 				</View>
 
 				<View style={{ alignItems: 'center', marginTop: 16 }}>
-					{IsLoading ? (
+					{IsLoading || isLoading ? (
 						<View style={{ paddingVertical: 16 }}>
 							<Loader />
 						</View>
@@ -127,7 +210,7 @@ function SigninBsky() {
 							buttonStyle={{ width: 128, borderRadius: 8 }}
 						>
 							<AppText.SemiBold style={{ fontSize: 16, color: 'black' }}>
-								Log In
+								{t(`onboarding.loginButton`)}
 							</AppText.SemiBold>
 						</Button>
 					)}
@@ -148,4 +231,4 @@ const styles = StyleSheet.create({
 	inputContainer: { width: 24 + 8 * 2, padding: 8 },
 });
 
-export default SigninBsky;
+export default AddBluesky;

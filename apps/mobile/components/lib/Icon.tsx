@@ -40,6 +40,7 @@ export type APP_ICON_ENUM =
 	| 'bookmark-outline'
 	| 'block'
 	| 'browser'
+	| 'cog'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
 	| 'checkmark'
@@ -51,7 +52,8 @@ export type APP_ICON_ENUM =
 	| 'chevron-down-circle'
 	| 'cloud-upload-outline'
 	| 'close-outline'
-	| 'cog'
+	| 'settings'
+	| 'settings-outline'
 	| 'copy'
 	| 'create'
 	| 'clear'
@@ -86,6 +88,7 @@ export type APP_ICON_ENUM =
 	| 'phonebook'
 	| 'pin'
 	| 'pin-octicons'
+	| 'quote'
 	| 'retweet'
 	| 'save'
 	| 'search'
@@ -170,7 +173,7 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 
 	function onPress(e: any) {
 		router.navigate('/profile');
-		router.dismissAll();
+		router.dismiss(2);
 	}
 
 	// if (visible && isAnimating) return <View />;
@@ -346,6 +349,15 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'cog':
+				return (
+					<FontAwesome5
+						name="cog"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'chatbox-outline':
 				return (
 					<Ionicons
@@ -445,12 +457,19 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
-			case 'cog':
-				return Platform.OS === 'ios' ? (
-					<Ionicons name="cog" size={_size} color={_color} style={iconStyle} />
-				) : (
-					<FontAwesome5
-						name="cog"
+			case 'settings':
+				return (
+					<Ionicons
+						name="settings"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'settings-outline':
+				return (
+					<Ionicons
+						name="settings-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -741,6 +760,15 @@ export function AppIcon({
 			case 'pin-octicons':
 				return (
 					<Octicons name="pin" size={_size} color={_color} style={iconStyle} />
+				);
+			case 'quote':
+				return (
+					<FontAwesome
+						name="quote-left"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
 				);
 			case 'retweet':
 				return (

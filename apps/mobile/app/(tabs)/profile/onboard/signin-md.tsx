@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import MastoSignIn from '../../../../components/screens/profile/stack/onboard/stacks/MastodonSignIn';
+import MastoSignIn from '../../../../features/onboarding/presenters/MastoApiSignIn';
 
 const SigninMd = memo(function Foo() {
 	return <MastoSignIn />;

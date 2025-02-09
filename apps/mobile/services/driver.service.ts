@@ -193,13 +193,8 @@ class DriverService {
 				SEARCH_RESULT_TAB.TAGS,
 				SEARCH_RESULT_TAB.NEWS,
 			];
-		} else if (ActivityPubService.mastodonLike(driver)) {
-			return [
-				SEARCH_RESULT_TAB.POSTS,
-				SEARCH_RESULT_TAB.PEOPLE,
-				SEARCH_RESULT_TAB.TAGS,
-				SEARCH_RESULT_TAB.NEWS,
-			];
+		} else if (ActivityPubService.pleromaLike(driver)) {
+			return [SEARCH_RESULT_TAB.POSTS, SEARCH_RESULT_TAB.PEOPLE];
 		}
 	}
 }

@@ -19,19 +19,26 @@ import {
 	LibraryResponse,
 } from '../../../types/result.types.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
+import {
+	MegaConversation,
+	MegaNotification,
+} from '../../../types/megalodon.types.js';
 
 export class MastodonNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;
-	client: MastoJsWrapper;
+	mastoClient: MastoJsWrapper;
 
 	constructor(forwarded: FetchWrapper) {
 		this.direct = forwarded;
-		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
+		this.mastoClient = MastoJsWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
+		);
 	}
 
 	async get(query: NotificationGetQueryDto): Promise<
 		LibraryResponse<{
-			data: MastoNotification[];
+			data: MastoNotification[] | MegaNotification[];
 			minId?: string | null;
 			maxId?: string | null;
 		}>
@@ -127,11 +134,10 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 
 	/**
 	 * a.k.a. - conversations
-	 * @param driver
 	 */
-	async getChats(driver: KNOWN_SOFTWARE): LibraryPromise<MastoConversation[]> {
+	async getChats(): LibraryPromise<MastoConversation[] | MegaConversation[]> {
 		try {
-			const data = await this.client.lib.v1.conversations.list();
+			const data = await this.mastoClient.lib.v1.conversations.list();
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
@@ -148,7 +154,9 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 
 	async markChatRead(id: string): LibraryPromise<MastoConversation> {
 		try {
-			const data = await this.client.lib.v1.conversations.$select(id).read();
+			const data = await this.mastoClient.lib.v1.conversations
+				.$select(id)
+				.read();
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
@@ -157,7 +165,9 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 
 	async markChatUnread(id: string): LibraryPromise<MastoConversation> {
 		try {
-			const data = await this.client.lib.v1.conversations.$select(id).unread();
+			const data = await this.mastoClient.lib.v1.conversations
+				.$select(id)
+				.unread();
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
@@ -166,7 +176,9 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 
 	async markChatRemove(id: string): LibraryPromise<void> {
 		try {
-			const data = await this.client.lib.v1.conversations.$select(id).remove();
+			const data = await this.mastoClient.lib.v1.conversations
+				.$select(id)
+				.remove();
 			return { data };
 		} catch (e) {
 			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);

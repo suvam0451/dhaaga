@@ -15,11 +15,8 @@ import {
 	PaginatedLibraryPromise,
 } from '../_router/routes/_types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import camelcaseKeys from 'camelcase-keys';
-import snakecaseKeys from 'snakecase-keys';
 import type {
 	MastoAccount,
-	MastoRelationship,
 	MastoStatus,
 } from '../../../types/mastojs.types.js';
 import type {
@@ -29,6 +26,7 @@ import type {
 } from '../../../types/megalodon.types.js';
 import { DhaagaErrorCode } from '../../../types/result.types.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
+import { CasingUtils } from '../../../utiils/casing.utils.js';
 
 export class PleromaAccountsRouter
 	extends BaseAccountsRouter
@@ -49,7 +47,7 @@ export class PleromaAccountsRouter
 	async get(id: string): LibraryPromise<MegaAccount> {
 		const data = await this.client.client.getAccount(id);
 		if (data.status !== 200) return errorBuilder(data.statusText);
-		return { data: camelcaseKeys(data.data) as any };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async lookup(webfingerUrl: string): LibraryPromise<MegaAccount> {
@@ -67,21 +65,21 @@ export class PleromaAccountsRouter
 		try {
 			const data = await this.client.client.getAccountStatuses(
 				id,
-				snakecaseKeys(query) as any,
+				CasingUtils.snakeCaseKeys(query) as any,
 			);
-			return { data: camelcaseKeys(data.data, { deep: true }) };
+			return { data: CasingUtils.camelCaseKeys(data.data) };
 		} catch (e) {
 			console.log('[ERROR]: getting pleroma user timeline', e);
 			return { data: [] };
 		}
 	}
 
-	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {
+	async relationships(ids: string[]): LibraryPromise<MegaRelationship[]> {
 		const data = await this.client.client.getRelationships(ids);
 		if (data.status !== 200) {
-			return errorBuilder<MastoRelationship[]>(data.statusText);
+			return errorBuilder<MegaRelationship[]>(data.statusText);
 		}
-		return { data: camelcaseKeys(data.data) as any };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async likes(query: GetPostsQueryDTO): PaginatedLibraryPromise<MegaStatus[]> {
@@ -150,7 +148,7 @@ export class PleromaAccountsRouter
 			return errorBuilder(data.statusText);
 		}
 		// console.log(data, error);
-		return { data: camelcaseKeys(data.data as any) as any };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async unfollow(id: string): LibraryPromise<MegaRelationship> {
@@ -158,7 +156,7 @@ export class PleromaAccountsRouter
 		if (data.status !== 200) {
 			return errorBuilder(data.statusText);
 		}
-		return { data: camelcaseKeys(data.data) as any };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async followers(query: FollowerGetQueryDTO): LibraryPromise<{

@@ -1,6 +1,6 @@
 {
   "name": "@dhaaga/bridge",
-  "description": "using design patterns to work around the differences between various Mastodon forks",
+  "description": "Bridging the fediverse using various design patterns!",
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,9 +18,6 @@
   "dependencies": {
     "@atproto/api": "^0.13.31",
     "axios": "^1.7.9",
-    "camelcase-keys": "^9.1.3",
-    "change-case": "^5.4.4",
-    "decamelize-keys": "^2.0.1",
     "dom-serializer": "^2.0.0",
     "domhandler": "^5.0.3",
     "html-entities": "^2.5.2",
@@ -28,8 +25,7 @@
     "masto": "^6.10.3",
     "megalodon": "^10.1.1",
     "mfm-js": "^0.24.0",
-    "misskey-js": "^2025.1.0",
-    "snakecase-keys": "^8.0.1",
+    "misskey-js": "^2025.2.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

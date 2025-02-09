@@ -30,7 +30,7 @@ const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 export function ProfileContextWrapped() {
 	const { theme } = useAppTheme();
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { data: acct, error } = useGetProfile({ userId: id });
+	const { data: acct, error } = useGetProfile({ userId: id, did: id });
 
 	const fields = acct?.meta?.fields;
 	const avatarUrl = acct?.avatarUrl;
@@ -38,10 +38,7 @@ export function ProfileContextWrapped() {
 
 	const IS_LOCKED = acct?.meta?.isProfileLocked;
 
-	const { onScroll } = useScrollMoreOnPageEnd({
-		itemCount: 0,
-		updateQueryCache: () => {},
-	});
+	const { onScroll } = useScrollMoreOnPageEnd();
 
 	const { show } = useAppBottomSheet();
 	const { appManager } = useAppManager();

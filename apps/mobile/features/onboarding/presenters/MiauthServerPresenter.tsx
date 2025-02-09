@@ -9,14 +9,14 @@ import {
 	ScrollView,
 } from 'react-native';
 import { Button } from '@rneui/base';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import HideOnKeyboardVisibleContainer from '../../../../../containers/HideOnKeyboardVisibleContainer';
+import { APP_FONT } from '../../../styles/AppTheme';
+import { APP_FONTS } from '../../../styles/AppFonts';
+import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router } from 'expo-router';
-import ActivityPubService from '../../../../../../services/activitypub.service';
-import useScrollMoreOnPageEnd from '../../../../../../states/useScrollMoreOnPageEnd';
+import ActivityPubService from '../../../services/activitypub.service';
+import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import Feather from '@expo/vector-icons/Feather';
-import PopularServers from '../fragments/PopularServers';
+import PopularServers from '../components/PopularServers';
 import {
 	POPULAR_FIREFISH_SERVERS,
 	POPULAR_MISSKEY_SERVERS,
@@ -24,15 +24,15 @@ import {
 } from '../data/server-meta';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../../shared/topnavbar/AppTopNavbar';
-import { APP_ROUTING_ENUM } from '../../../../../../utils/route-list';
+} from '../../../components/shared/topnavbar/AppTopNavbar';
+import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import {
 	useAppManager,
 	useAppTheme,
-} from '../../../../../../hooks/utility/global-state-extractors';
-import { Loader } from '../../../../../lib/Loader';
+} from '../../../hooks/utility/global-state-extractors';
+import { Loader } from '../../../components/lib/Loader';
 
-function MisskeyServerSelection() {
+function MiauthServerPresenter() {
 	const [InputText, setInputText] = useState('misskey.io');
 	const { appManager } = useAppManager();
 	const { theme } = useAppTheme();
@@ -177,4 +177,4 @@ const styles = StyleSheet.create({
 	inputContainer: { width: 24 + 8 * 2, padding: 8 },
 });
 
-export default MisskeyServerSelection;
+export default MiauthServerPresenter;

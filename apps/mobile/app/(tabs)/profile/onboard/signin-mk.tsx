@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import MisskeySignIn from '../../../../components/screens/profile/stack/onboard/stacks/MisskeySignIn';
+import MisskeySignIn from '../../../../features/onboarding/presenters/MiauthSignIn';
 
 const SigninMk = memo(function Foo() {
 	return <MisskeySignIn />;

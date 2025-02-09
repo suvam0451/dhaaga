@@ -143,10 +143,37 @@ function ReactButton() {
 	);
 }
 
-function StatusInteractionButtons() {
+function SettingsButton() {
+	const { dto: item } = useAppStatusItem();
+	const { theme } = useAppTheme();
+	const { show, setCtx } = useAppBottomSheet();
 	const { acct } = useAppAcct();
-	const IS_MISSKEY = ActivityPubService.misskeyLike(acct.driver);
 
+	const _target = PostMiddleware.getContentTarget(item);
+	if (_target.postedBy.id !== acct.identifier) return <View />;
+
+	function onPress() {
+		setCtx({ uuid: item.uuid });
+		show(APP_BOTTOM_SHEET_ENUM.ADD_REACTION, true);
+	}
+
+	return (
+		<AppToggleIcon
+			flag={false}
+			activeIconId={'settings'}
+			inactiveIconId={'settings-outline'}
+			activeTint={theme.primary.a0}
+			inactiveTint={theme.primary.a0}
+			size={appDimensions.timelines.actionButtonSize}
+			style={styles.actionButton}
+			onPress={onPress}
+		/>
+	);
+}
+
+function StatusInteractionButtons() {
+	const { driver } = useAppApiClient();
+	const IS_MISSKEY = ActivityPubService.misskeyLike(driver);
 	return (
 		<View style={styles.interactionButtonSection}>
 			<View style={{ flexDirection: 'row' }}>
@@ -154,6 +181,7 @@ function StatusInteractionButtons() {
 				<ShareButton />
 				<CommentButton />
 				{IS_MISSKEY && <ReactButton />}
+				<SettingsButton />
 			</View>
 			<View
 				style={{

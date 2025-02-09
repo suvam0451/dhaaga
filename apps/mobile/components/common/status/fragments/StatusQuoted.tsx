@@ -1,13 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import MediaItem from '../../media/MediaItem';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { FontAwesome } from '@expo/vector-icons';
 import PostCreatedBy from './PostCreatedBy';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
 import { TextContentView } from '../TextContentView';
 import { AppText } from '../../../lib/Text';
+import { AppIcon } from '../../../lib/Icon';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -22,12 +21,7 @@ function QuoteIndicator() {
 				marginBottom: SECTION_MARGIN_BOTTOM,
 			}}
 		>
-			<FontAwesome
-				name="quote-left"
-				size={14}
-				color={theme.complementary.a0}
-				style={{ width: 16 }}
-			/>
+			<AppIcon id={'quote'} size={14} color={theme.complementary.a0} />
 			<AppText.SemiBold
 				style={{
 					color: theme.complementary.a0,
@@ -47,7 +41,7 @@ function StatusQuoted() {
 	return (
 		<View
 			style={[
-				styles.rootContainer,
+				styles.root,
 				{
 					borderColor: theme.complementaryA.a0,
 					marginBottom: SECTION_MARGIN_BOTTOM * 1.5,
@@ -71,7 +65,7 @@ function StatusQuoted() {
 }
 
 const styles = StyleSheet.create({
-	rootContainer: {
+	root: {
 		paddingHorizontal: 10,
 		paddingVertical: 4,
 		marginTop: 8,

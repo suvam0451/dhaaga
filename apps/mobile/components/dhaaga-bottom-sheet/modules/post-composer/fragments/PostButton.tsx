@@ -7,9 +7,7 @@ import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubService from '../../../../../services/activitypub.service';
 import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
-import AtprotoComposerService, {
-	AtprotoReplyEmbed,
-} from '../../../../../services/atproto/atproto-compose';
+import AtprotoComposerService from '../../../../../services/atproto/atproto-compose';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
@@ -37,53 +35,32 @@ function PostButton() {
 	async function onClick() {
 		setLoading(true);
 		let _visibility: any = state.visibility;
-
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			let reply: AtprotoReplyEmbed = null;
-			// if (ParentRef.current) {
-			// if (ParentRef.current.rootPost) {
-			// 	// both parent and root available
-			// 	reply = {
-			// 		root: {
-			// 			uri: ParentRef.current.rootPost.meta.uri,
-			// 			cid: ParentRef.current.rootPost.meta.cid,
-			// 		},
-			// 		parent: {
-			// 			uri: ParentRef.current.meta.uri,
-			// 			cid: ParentRef.current.meta.cid,
-			// 		},
-			// 	};
-			// } else {
-			// 	// parent must be root
-			// 	reply = {
-			// 		root: {
-			// 			uri: ParentRef.current.meta.uri,
-			// 			cid: ParentRef.current.meta.cid,
-			// 		},
-			// 		parent: {
-			// 			uri: ParentRef.current.meta.uri,
-			// 			cid: ParentRef.current.meta.cid,
-			// 		},
-			// 	};
-			// }
-			// }
-
-			const data = await AtprotoComposerService.postUsingReducerState(
+			const newPost = await AtprotoComposerService.postUsingReducerState(
 				client as BlueskyRestClient,
 				state,
 			);
-			if (data) {
-				/**
-				 * 	FIXME: Currently only shows the latest record
-				 * 		We can use the logic from context builder
-				 * 		to render the parent and root, as well
-				 */
-				const _data = PostMiddleware.deserialize<unknown>(data, driver, server);
-				postPub.writeCache(_data.uuid, _data);
-				setCtx({ uuid: _data.uuid });
-				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
+
+			if (!newPost) {
+				setLoading(false);
 				return;
 			}
+
+			/**
+			 * 	FIXME: Currently only shows the latest record
+			 * 		We can use the logic from context builder
+			 * 		to render the parent and root, as well
+			 */
+			const _newPostObject = PostMiddleware.deserialize<unknown>(
+				newPost,
+				driver,
+				server,
+			);
+			postPub.writeCache(_newPostObject.uuid, _newPostObject);
+			setCtx({ uuid: _newPostObject.uuid });
+			show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
+			setLoading(false);
+			return;
 		}
 
 		switch (_visibility) {
@@ -127,7 +104,6 @@ function PostButton() {
 				spoilerText: state.cw === '' ? undefined : state.cw,
 			});
 			if (error) throw new Error(error.message);
-			console.log('resounding success...');
 
 			if (ActivityPubService.mastodonLike(driver)) {
 				const _data = PostMiddleware.deserialize(data, driver, server);

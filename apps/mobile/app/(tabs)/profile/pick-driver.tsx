@@ -1,6 +1,6 @@
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import AppTopNavbar from '../../../components/shared/topnavbar/AppTopNavbar';
-import { AddAccountLandingFragment } from '../../../components/error-screen/AppNoAccount';
+import { AddAccountLandingFragment } from '../../../features/onboarding/presenters/AddAccountPresenter';
 
 function Page() {
 	const { translateY } = useScrollMoreOnPageEnd();

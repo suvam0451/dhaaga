@@ -3,8 +3,8 @@ import MastodonToStatusAdapter from './mastodon.js';
 import UnknownToStatusAdapter from './default.js';
 import { StatusInterface } from './_interface.js';
 import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
-import camelcaseKeys from 'camelcase-keys';
 import BlueskyStatusAdapter from './bluesky.js';
+import { CasingUtils } from '../../utiils/casing.utils.js';
 
 /**
  * @param status any status object
@@ -31,7 +31,7 @@ export function ActivitypubStatusAdapter(
 
 		case KNOWN_SOFTWARE.PLEROMA:
 		case KNOWN_SOFTWARE.AKKOMA: {
-			const _camel = camelcaseKeys(status, { deep: true });
+			const _camel = CasingUtils.camelCaseKeys(status);
 			return new MastodonToStatusAdapter(_camel as any);
 		}
 		case KNOWN_SOFTWARE.BLUESKY: {

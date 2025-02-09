@@ -14,6 +14,10 @@ export class LinkingUtils {
 		}
 	}
 
+	static openBluesky() {
+		LinkingUtils.openURL('https://bsky.app/');
+	}
+
 	static openCoffeeLink() {
 		LinkingUtils.openURL('https://buymeacoffee.com/suvam');
 	}

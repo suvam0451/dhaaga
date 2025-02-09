@@ -4,15 +4,15 @@ import {
 } from '../_router/routes/statuses.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import camelcaseKeys from 'camelcase-keys';
 import {
-	MastoScheduledStatus,
-	MastoStatus,
-} from '../../../types/mastojs.types.js';
-import { MegaReaction, MegaStatus } from '../../../types/megalodon.types.js';
+	MegaReaction,
+	MegaScheduledStatus,
+	MegaStatus,
+} from '../../../types/megalodon.types.js';
 import { LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
+import { CasingUtils } from '../../../utiils/casing.utils.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -26,19 +26,19 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		);
 	}
 
-	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
+	async get(id: string): LibraryPromise<MegaStatus> {
 		const response = await this.client.client.getStatus(id);
 		if (response.status !== 200) {
 			console.log('[ERROR]: failed to get status', response.statusText);
 		}
 		return {
-			data: camelcaseKeys(response.data) as any,
+			data: CasingUtils.camelCaseKeys(response.data),
 		};
 	}
 
 	async create(
 		dto: DhaagaJsPostCreateDto,
-	): LibraryPromise<MastoScheduledStatus> {
+	): LibraryPromise<MegaStatus | MegaScheduledStatus> {
 		const response = await this.client.client.postStatus(dto.status, {
 			language: dto.language,
 			visibility: dto.mastoVisibility,
@@ -51,7 +51,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			console.log('[ERROR]: failed to create status', response.statusText);
 		}
 
-		return { data: camelcaseKeys(response.data, { deep: true }) as any };
+		return { data: CasingUtils.camelCaseKeys(response.data) };
 	}
 
 	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
@@ -68,19 +68,19 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async getReactions(id: string): Promise<LibraryResponse<MegaReaction[]>> {
 		const data = await this.client.client.getEmojiReactions(id);
-		return { data: camelcaseKeys(data.data, { deep: true }) as any };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async getReactionDetails(
 		postId: string,
 		reactionId: string,
 	): LibraryPromise<MegaReaction[]> {
-		const data = await this.client.client.getEmojiReaction(postId, reactionId);
+		const data = await this.client.client.getEmojiReactions(postId);
 		if (data.status !== 200) {
 			console.log('[ERROR]: failed to get reaction details', data.statusText);
 			return errorBuilder<MegaReaction[]>(data.statusText);
 		}
-		return { data: camelcaseKeys(data.data) as any };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async addReaction(id: string, shortCode: string): LibraryPromise<any> {
@@ -89,7 +89,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			console.log('[ERROR]: failed to add reaction', data.statusText);
 			return errorBuilder(data.statusText);
 		}
-		return { data: camelcaseKeys(data.data, { deep: true }) as any };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async removeReaction(id: string, shortCode: string): LibraryPromise<any> {
@@ -98,7 +98,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			console.log('[ERROR]: failed to remove reaction', data.statusText);
 			return errorBuilder(data.statusText);
 		}
-		return { data: camelcaseKeys(data.data, { deep: true }) };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async bookmark(id: string) {
@@ -127,7 +127,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async getContext(id: string) {
 		const data = await this.client.client.getStatusContext(id);
-		return { data: camelcaseKeys(data.data) };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 
 	async boost(id: string): LibraryPromise<MegaStatus> {

@@ -1,10 +1,10 @@
 import { DhaagaJsMediaCreateDTO, MediaRoute } from '../_router/routes/media.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import camelcaseKeys from 'camelcase-keys';
 import { MastoMediaAttachment } from '../../../types/mastojs.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
+import { CasingUtils } from '../../../utiils/casing.utils.js';
 
 export class PleromaMediaRoute implements MediaRoute {
 	direct: FetchWrapper;
@@ -33,6 +33,6 @@ export class PleromaMediaRoute implements MediaRoute {
 			console.log(data.statusText);
 			return errorBuilder(data.statusText);
 		}
-		return { data: camelcaseKeys(data.data) };
+		return { data: CasingUtils.camelCaseKeys(data.data) };
 	}
 }

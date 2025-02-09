@@ -5,7 +5,7 @@ import AppTabLandingNavbar, {
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
-import AppNoAccount from '../../components/error-screen/AppNoAccount';
+import AddAccountPresenter from '../onboarding/presenters/AddAccountPresenter';
 import {
 	useAppAcct,
 	useAppBottomSheet,
@@ -80,7 +80,7 @@ function ComposerLandingPage() {
 		},
 	];
 
-	if (!acct) return <AppNoAccount tab={APP_LANDING_PAGE_TYPE.COMPOSE} />;
+	if (!acct) return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.COMPOSE} />;
 
 	function onQuickPost() {
 		setCtx({

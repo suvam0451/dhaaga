@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { AppPostObject } from '../../../../types/app-post.types';
 import { appDimensions } from '../../../../styles/dimensions';
+import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -56,14 +57,10 @@ type OriginalPosterProps = {
 function PostCreatedByIconOnly({ dto, style }: OriginalPosterProps) {
 	const { toProfile } = useAppNavigator();
 
-	const STATUS_DTO = dto.meta.isBoost
-		? dto.content.raw
-			? dto
-			: dto.boostedFrom
-		: dto;
+	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
 
 	function onPress() {
-		toProfile(STATUS_DTO.postedBy.userId);
+		toProfile(STATUS_DTO.postedBy.id);
 	}
 
 	return (

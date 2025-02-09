@@ -88,17 +88,10 @@ function ComposerTopMenu() {
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
-					marginBottom: appDimensions.timelines.sectionBottomMargin,
+					marginBottom: appDimensions.timelines.sectionBottomMargin * 0.5,
 				}}
 			>
-				<View
-					style={{
-						borderWidth: 0.75,
-						borderColor: '#666',
-						borderRadius: '100%',
-						overflow: 'hidden',
-					}}
-				>
+				<View style={styles.avatarBorderBox}>
 					{/*@ts-ignore-next-line*/}
 					<Image source={acct?.avatarUrl} style={styles.avatarContainer} />
 				</View>
@@ -133,6 +126,12 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
 		padding: 10,
 		paddingTop: appDimensions.bottomSheet.clearanceTop,
+	},
+	avatarBorderBox: {
+		borderWidth: 0.75,
+		borderColor: '#666',
+		borderRadius: '100%',
+		overflow: 'hidden',
 	},
 	avatarContainer: {
 		height: 36,

@@ -5,6 +5,23 @@
       "desc": "Fitur ini belum diimplementasikan oleh Dhaaga, atau tidak tersedia untuk platform SNS Anda."
     }
   },
+  "errors": {
+    "errorLabel": "Kesalahan",
+    "timelineErrorLabel": "Dhaaga gagal memuat timeline ini. Laporkan kesalahan ini ke pengembang."
+  },
+  "onboarding": {
+    "addAccountButton": "Tambah Akun",
+    "accountCreationNotSupported": "Pembuatan akun tidak didukung",
+    "needBlueskyAccount": "Anda memerlukan akun Bluesky",
+    "createOneHere": "Buat akun di sini",
+    "loginButton": "Masuk",
+    "appPassword": "Kata Sandi Aplikasi",
+    "enterYourServer": "Masukkan server Anda",
+    "serverUrl": "URL server Anda",
+    "popularMastodon": "Server Mastodon Populer",
+    "popularPleroma": "Server Pleroma Populer",
+    "popularAkkoma": "Server Akkoma Populer"
+  },
   "topNav": {
     "primary": {
       "hub": "Pusat Sosial",
@@ -24,7 +41,12 @@
       "myBookmarks": "Tandai Saya",
       "myAccount": "Akun Saya",
       "myProfile": "Profil Saya",
-      "appSettings": "Pengaturan Aplikasi"
+      "appSettings": "Pengaturan Aplikasi",
+      "manageAccounts": "Kelola Akun",
+      "blueskySignIn": "Masuk Bluesky",
+      "selectServer": "Pilih Server",
+      "mastodonSignIn": "Masuk Mastodon",
+      "misskeySignIn": "Masuk Misskey"
     }
   },
   "dialogs": {
