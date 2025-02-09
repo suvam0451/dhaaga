@@ -40,6 +40,7 @@ export type APP_ICON_ENUM =
 	| 'bookmark-outline'
 	| 'block'
 	| 'browser'
+	| 'cog'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
 	| 'checkmark'
@@ -343,6 +344,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name="browsers-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'cog':
+				return (
+					<FontAwesome5
+						name="cog"
 						size={_size}
 						color={_color}
 						style={iconStyle}
