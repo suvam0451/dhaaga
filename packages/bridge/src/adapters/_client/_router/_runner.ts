@@ -15,7 +15,6 @@ async function CommonErrorHandler(e: any) {
 			},
 		};
 	} else if (e?.code) {
-		// axios
 		return {
 			error: {
 				code: e.code,

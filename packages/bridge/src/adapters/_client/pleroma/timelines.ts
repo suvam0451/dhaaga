@@ -4,12 +4,11 @@ import {
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
 import { DefaultTimelinesRouter } from '../default/timelines.js';
-import { toSnakeCase } from '../_router/utils/casing.utils.js';
+import { CasingUtils } from '../../../utiils/casing.utils.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import snakecaseKeys from 'snakecase-keys';
-import camelcaseKeys from 'camelcase-keys';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
 
 export class PleromaTimelinesRouter
 	extends DefaultTimelinesRouter
@@ -30,8 +29,15 @@ export class PleromaTimelinesRouter
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
-		const data = await this.client.client.getHomeTimeline(toSnakeCase(query));
-		return { data: data.data };
+		try {
+			const data = await this.client.client.getHomeTimeline(
+				CasingUtils.snakeCaseKeys(query),
+			);
+			return { data: data.data };
+		} catch (e) {
+			console.log('error is here', e);
+			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async public(
@@ -39,12 +45,12 @@ export class PleromaTimelinesRouter
 	): DhaagaJsTimelineArrayPromise {
 		if (query.local === true) {
 			const data = await this.client.client.getLocalTimeline(
-				toSnakeCase(query),
+				CasingUtils.snakeCaseKeys(query),
 			);
 			return { data: data.data };
 		} else {
 			const data = await this.client.client.getPublicTimeline(
-				toSnakeCase(query),
+				CasingUtils.snakeCaseKeys(query),
 			);
 			return { data: data.data };
 		}
@@ -55,10 +61,10 @@ export class PleromaTimelinesRouter
 	): DhaagaJsTimelineArrayPromise {
 		const { data: _data, error } = await this.direct.get<any[]>(
 			'/api/v1/timelines/bubble',
-			snakecaseKeys(query),
+			CasingUtils.snakeCaseKeys(query),
 		);
 		if (error) return errorBuilder(error.code);
-		return { data: camelcaseKeys(_data as any, { deep: true }) };
+		return { data: CasingUtils.camelCaseKeys(_data) };
 	}
 
 	async list(
@@ -67,7 +73,7 @@ export class PleromaTimelinesRouter
 	): DhaagaJsTimelineArrayPromise {
 		const data = await this.client.client.getListTimeline(
 			q,
-			toSnakeCase(query),
+			CasingUtils.snakeCaseKeys(query),
 		);
 		return { data: data.data };
 	}
@@ -76,7 +82,10 @@ export class PleromaTimelinesRouter
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
 	): DhaagaJsTimelineArrayPromise {
-		const data = await this.client.client.getTagTimeline(q, toSnakeCase(query));
+		const data = await this.client.client.getTagTimeline(
+			q,
+			CasingUtils.snakeCaseKeys(query),
+		);
 		return {
 			data: data.data,
 		};

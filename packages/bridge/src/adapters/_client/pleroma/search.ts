@@ -4,7 +4,6 @@ import {
 } from '../_router/routes/search.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import snakecaseKeys from 'snakecase-keys';
 import type {
 	MegaAccount,
 	MegaStatus,
@@ -12,6 +11,7 @@ import type {
 import { DhaagaErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
+import { CasingUtils } from '../../../utiils/casing.utils.js';
 
 export class PleromaSearchRouter implements SearchRoute {
 	direct: FetchWrapper;
@@ -48,10 +48,9 @@ export class PleromaSearchRouter implements SearchRoute {
 
 	async findPosts(query: DhaagaJsUserSearchDTO): LibraryPromise<MegaStatus[]> {
 		try {
-			console.log(snakecaseKeys(query));
 			const data = await this.client.client.search(
 				query.q || query.query,
-				snakecaseKeys(query),
+				CasingUtils.snakeCaseKeys(query),
 			);
 			if (data.status !== 200) {
 				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);

@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "expo start --dev-client --localhost",
+    "dev": "expo start --dev-client -c",
     "apk": "eas build -p android --profile apk",
     "aab": "eas build -p android --profile aab",
     "client": "eas build -p android --profile dev",

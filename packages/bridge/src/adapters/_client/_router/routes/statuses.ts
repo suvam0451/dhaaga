@@ -7,6 +7,10 @@ import {
 	MastoStatus,
 } from '../../../../types/mastojs.types.js';
 import { MissContext, MissNote } from '../../../../types/misskey-js.types.js';
+import {
+	MegaScheduledStatus,
+	MegaStatus,
+} from '../../../../types/megalodon.types.js';
 
 export type DhaagaJsPostCreateDto = {
 	inReplyToId: null | string;
@@ -45,7 +49,9 @@ export type DhaagaJsPostCreateDto = {
 export interface StatusesRoute {
 	get(
 		id: string,
-	): LibraryPromise<MastoStatus | MissNote | AppBskyFeedGetPostThread.Response>;
+	): LibraryPromise<
+		MastoStatus | MegaStatus | MissNote | AppBskyFeedGetPostThread.Response
+	>;
 
 	bookmark(
 		id: string,
@@ -72,6 +78,8 @@ export interface StatusesRoute {
 
 	create(dto: DhaagaJsPostCreateDto): LibraryPromise<
 		| MastoScheduledStatus
+		| MegaStatus
+		| MegaScheduledStatus
 		| {
 				uri: string;
 				cid: string;

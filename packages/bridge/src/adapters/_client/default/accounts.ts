@@ -128,7 +128,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 
 	async relationships(
 		ids: string[],
-	): Promise<LibraryResponse<MastoRelationship[]>> {
+	): Promise<LibraryResponse<MastoRelationship[] | MegaRelationship[]>> {
 		return notImplementedErrorBuilder();
 	}
 

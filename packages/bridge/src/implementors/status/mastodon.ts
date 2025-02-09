@@ -1,9 +1,9 @@
 import { DhaagaJsMentionObject, StatusInterface } from './_interface.js';
 import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
-import camelcaseKeys from 'camelcase-keys';
 import UnknownToStatusAdapter from './default.js';
 import { MastoAccount, MastoStatus } from '../../types/mastojs.types.js';
+import { CasingUtils } from '../../utiils/casing.utils.js';
 
 class MastodonToStatusAdapter
 	extends UnknownToStatusAdapter
@@ -121,7 +121,7 @@ class MastodonToStatusAdapter
 	getMediaAttachments() {
 		return this.ref.mediaAttachments?.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
-				new MediaAttachmentInstance(camelcaseKeys(o as any, { deep: true })),
+				new MediaAttachmentInstance(CasingUtils.camelCaseKeys(o)),
 			);
 		});
 	}
