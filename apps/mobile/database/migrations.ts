@@ -7,8 +7,8 @@ import {
 	removeColumn,
 } from '@dhaaga/orm';
 
-// ^0.15.0 --> >6
-const APP_DB_TARGET_VERSION = 6;
+// ^0.16.0 --> >7
+const APP_DB_TARGET_VERSION = 7;
 
 /**
  * Version control for migrations
@@ -305,6 +305,21 @@ const migrations: MigrationEntry[] = [
 		name: 'tweak collections',
 		up: [addColumn('accountCollection', 'desc', 'text')],
 		down: [removeColumn('accountCollection', 'desc')],
+	},
+	{
+		version: 7,
+		versionCode: 'v0.16.0',
+		name: 'bluesky feed support',
+		up: [
+			addColumn('profilePinnedTimeline', 'uri', 'text'),
+			addColumn('profilePinnedTimeline', 'displayName', 'text'),
+			addColumn('profilePinnedTimeline', 'avatarUrl', 'text'),
+		],
+		down: [
+			removeColumn('profilePinnedTimeline', 'avatarUrl'),
+			removeColumn('profilePinnedTimeline', 'displayName'),
+			removeColumn('profilePinnedTimeline', 'uri'),
+		],
 	},
 ];
 

@@ -14,6 +14,11 @@ import { useState } from 'react';
 import { AppDivider } from '../../../../../components/lib/Divider';
 import { APP_ROUTING_ENUM } from '../../../../../utils/route-list';
 import { router } from 'expo-router';
+import { APP_SETTING_KEY } from '../../../../../services/settings.service';
+import useAppSettings from '../../../../../features/settings/interactors/useAppSettings';
+import { LocaleOptions } from '../../../../../i18n/data';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 
 function Divider() {
 	const { theme } = useAppTheme();
@@ -32,10 +37,15 @@ function Page() {
 	const [IsChecked, setIsChecked] = useState(false);
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
+	const { getValue } = useAppSettings();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SETTINGS]);
 
 	function toggleCheck() {
 		setIsChecked(!IsChecked);
 	}
+
+	const lang = getValue(APP_SETTING_KEY.APP_LANGUAGE);
+	const selectedLocale = LocaleOptions.find((o) => o.code === lang);
 
 	return (
 		<AppTopNavbar
@@ -56,7 +66,7 @@ function Page() {
 					<AppText.Medium
 						style={{ fontSize: 18, color: theme.primary.a0, marginLeft: 6 }}
 					>
-						Language
+						{t(`general.language.S_Language`)}
 					</AppText.Medium>
 				</View>
 				<Divider />
@@ -71,7 +81,7 @@ function Page() {
 					</AppText.Medium>
 					<View style={{ flex: 1 }} />
 					<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
-						English
+						{selectedLocale.nativeLabel}
 					</AppText.Medium>
 					<AppIcon id={'chevron-right'} size={28} />
 				</Pressable>

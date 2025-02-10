@@ -1,0 +1,18 @@
+{
+  "general": {
+    "language": {
+      "S_Language": "Sprache",
+      "L_appLanguage": "App-Sprache",
+      "L_contentLanguages": "Inhalts-Sprachen",
+      "L_translatorMode": "Übersetzermodus",
+      "D_translatorMode": "Dies fügt jeder Seite eine Schaltfläche hinzu, mit der du schnell zwischen Sprachen wechseln kannst, um Übersetzungen zu testen.",
+      "L_translationLanguages": "Übersetzungssprachen"
+    },
+    "timelines": {
+      "S_Timelines": "Zeitlinien",
+      "L_lurkerMode": "Lurker-Modus",
+      "D_lurkerMode": "Dies blendet bestimmte Schaltflächen aus und verhindert, dass du versehentlich mit Beiträgen interagierst.",
+      "L_contentWarnings": "Inhaltswarnungen"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Dimensions, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import SeeMore from '../components/SeeMore';
 import ThumbnailView from '../views/ThumbnailView';
 import useProfileGalleryModeInteractor from '../interactors/useProfileGalleryModeInteractor';

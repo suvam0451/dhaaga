@@ -44,6 +44,7 @@ export function useApiSearchFeeds(q: string, maxId: string | null) {
 	return useQuery<FeedResultPage>({
 		queryKey: ['search/feeds', server, q, maxId],
 		queryFn: async () => {
+			if (!q) return defaultResult;
 			const { data, error } = await (
 				client as BlueskyRestClient
 			).search.findFeeds({

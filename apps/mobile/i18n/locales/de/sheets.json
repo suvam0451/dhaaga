@@ -19,7 +19,8 @@
       "Deze functie wordt in de toekomst uitgebreid!",
       "Een standaard set bestemmingen is voor je ingesteld.",
       "Bluesky-gebruikers kunnen hun feeds nu bekijken vanaf hun profiel (5e tabblad)."
-    ]
+    ],
+    "searchPlaceholder": "Suche nach Feeds zum Anheften"
   },
   "hubAddUserSheet": {
     "searchPlaceholder": "Zoek naar gebruikers om vast te pinnen"

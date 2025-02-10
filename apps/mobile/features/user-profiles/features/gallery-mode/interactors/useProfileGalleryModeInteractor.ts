@@ -10,36 +10,30 @@ function useProfileGalleryModeInteractor(userId: string) {
 
 	// Post Queries
 	return useQuery<AppPostObject[]>({
-		queryKey: [client, userId],
+		queryKey: ['user/gallery', userId],
 		queryFn: async () => {
-			{
-				const { data } = await client.accounts.statuses(userId, {
-					limit: 40,
-					userId,
-					onlyMedia: true,
-					excludeReblogs: true,
-					// misskey
-					allowPartial: true,
-					withFiles: true,
-					withRenotes: false,
-					withReplies: false,
-					// bluesky
-					bskyFilter:
-						driver === KNOWN_SOFTWARE.BLUESKY ? 'posts_with_media' : undefined,
-				});
+			const { data } = await client.accounts.statuses(userId, {
+				limit: 40,
+				userId,
+				onlyMedia: true,
+				excludeReblogs: true,
+				// misskey
+				allowPartial: true,
+				withFiles: true,
+				withRenotes: false,
+				withReplies: false,
+				// bluesky
+				bskyFilter:
+					driver === KNOWN_SOFTWARE.BLUESKY ? 'posts_with_media' : undefined,
+			});
 
-				return driver === KNOWN_SOFTWARE.BLUESKY
-					? PostMiddleware.deserialize<unknown[]>(
-							(data as AppBskyFeedGetAuthorFeed.Response).data.feed,
-							driver,
-							server,
-						)
-					: PostMiddleware.deserialize<unknown[]>(
-							data as any[],
-							driver,
-							server,
-						);
-			}
+			return driver === KNOWN_SOFTWARE.BLUESKY
+				? PostMiddleware.deserialize<unknown[]>(
+						(data as AppBskyFeedGetAuthorFeed.Response).data.feed,
+						driver,
+						server,
+					).filter((o) => !o.meta.isReply)
+				: PostMiddleware.deserialize<unknown[]>(data as any[], driver, server);
 		},
 		enabled: !!client && !!userId,
 		initialData: [],

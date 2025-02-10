@@ -19,7 +19,8 @@
       "This feature will be expanded in the future!",
       "A default set of destinations has been populated for you.",
       "Bluesky users can access their feeds from their profile (5th tab), for now."
-    ]
+    ],
+    "searchPlaceholder": "Search for feeds to pin"
   },
   "hubAddUserSheet": {
     "searchPlaceholder": "Search for users to pin"

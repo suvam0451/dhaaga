@@ -12,22 +12,22 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 type SocialHubPinnedTimelinesProps = {
 	account: Account;
 	items: ProfilePinnedTimeline[];
+	onPressAddFeed: () => void;
 };
 
-function FeedListPresenter({ items, account }: SocialHubPinnedTimelinesProps) {
+function FeedListPresenter({
+	items,
+	account,
+	onPressAddFeed,
+}: SocialHubPinnedTimelinesProps) {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const destinations = HubService.resolveTimelineDestinations(t, items);
-	const { show } = useAppBottomSheet();
-
-	function onPressAdd() {
-		show(APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED, true);
-	}
 
 	return (
 		<HubTabSectionContainer
 			label={t(`hub.section.feeds`)}
 			style={styles.root}
-			onPressAdd={onPressAdd}
+			onPressAdd={onPressAddFeed}
 		>
 			<Animated.FlatList
 				data={destinations}

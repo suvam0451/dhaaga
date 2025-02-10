@@ -230,6 +230,11 @@ export class ProfilePinnedTimeline extends BaseEntity<ProfilePinnedTimeline> {
 	// joins
 	profile?: Profile;
 
+	// these columns are extra on top
+	uri: string | null;
+	displayName: string | null;
+	avatarUrl: string | null;
+
 	profileId: number | null;
 	active: boolean;
 }
@@ -285,6 +290,7 @@ export class ProfilePinnedUser extends BaseEntity<ProfilePinnedUser> {
 	username: string;
 	avatarUrl: string | null;
 	displayName: string | null;
+
 	profileId: number | null;
 	active: boolean;
 }

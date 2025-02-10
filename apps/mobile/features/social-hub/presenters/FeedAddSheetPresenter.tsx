@@ -1,10 +1,20 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppApiClient,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
 import { ScrollView, StyleSheet } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import ActivitypubService from '../../../services/activitypub.service';
+import BskyFeedAddPresenter from './BskyFeedAddPresenter';
 
-function FeedAddSheetPresenter() {
+/**
+ * Adding remote feeds is currently
+ * not supported for Mastodon and Misskey
+ * @constructor
+ */
+function FeatureNotSupported() {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
@@ -29,6 +39,13 @@ function FeedAddSheetPresenter() {
 			))}
 		</ScrollView>
 	);
+}
+
+function FeedAddSheetPresenter() {
+	const { driver } = useAppApiClient();
+
+	if (!ActivitypubService.blueskyLike(driver)) return <FeatureNotSupported />;
+	return <BskyFeedAddPresenter />;
 }
 
 export default FeedAddSheetPresenter;

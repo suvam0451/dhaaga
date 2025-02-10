@@ -1,0 +1,18 @@
+{
+  "general": {
+    "language": {
+      "S_Language": "言語",
+      "L_appLanguage": "アプリの言語",
+      "L_contentLanguages": "コンテンツの言語",
+      "L_translatorMode": "翻訳者モード",
+      "D_translatorMode": "これにより、すべてのページにボタンが追加され、翻訳をテストするために言語を簡単に切り替えることができます。",
+      "L_translationLanguages": "翻訳言語"
+    },
+    "timelines": {
+      "S_Timelines": "タイムライン",
+      "L_lurkerMode": "隠れモード",
+      "D_lurkerMode": "これにより、特定のボタンが隠され、投稿に誤って反応するのを防ぐことができます。",
+      "L_contentWarnings": "コンテンツ警告"
+    }
+  }
+}

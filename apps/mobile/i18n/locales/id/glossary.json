@@ -7,6 +7,16 @@
     "follower_one": "Pengikut",
     "follower_other": "Pengikut-pengikut",
     "following": "Mengikuti",
-    "following_other": "Mengikuti"
+    "following_other": "Mengikuti",
+    "like_one": "Suka",
+    "like_other": "Suka"
+  },
+  "relationship": {
+    "friends": "Teman",
+    "following": "Mengikuti"
+  },
+  "relationshipCta": {
+    "followBack": "Ikuti Kembali",
+    "follow": "Ikuti"
   }
 }

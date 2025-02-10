@@ -7,6 +7,16 @@
     "follower_one": "フォロワー",
     "follower_other": "フォロワー",
     "following_one": "フォロー中",
-    "following_other": "フォロー中"
+    "following_other": "フォロー中",
+    "like_one": "いいね",
+    "like_other": "いいね数"
+  },
+  "relationship": {
+    "friends": "友達",
+    "following": "フォロー中"
+  },
+  "relationshipCta": {
+    "followBack": "フォローバック",
+    "follow": "フォロー"
   }
 }

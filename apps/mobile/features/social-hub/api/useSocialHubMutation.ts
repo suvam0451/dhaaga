@@ -4,6 +4,7 @@ import { Profile } from '../../../database/_schema';
 import { AppUserObject } from '../../../types/app-user.types';
 import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
 import { ProfileService } from '../../../database/entities/profile';
+import { AppFeedObject } from '../../../types/app-feed.types';
 
 export function useSocialHubMutation(profile: Profile) {
 	const { db } = useAppDb();
@@ -16,7 +17,15 @@ export function useSocialHubMutation(profile: Profile) {
 		},
 	});
 
+	const toggleFeedToProfile = useMutation({
+		mutationKey: ['hub', profile],
+		mutationFn: async ({ feed }: { feed: AppFeedObject }) => {
+			const acct = ProfileService.getOwnerAccount(db, profile);
+		},
+	});
+
 	return {
 		toggleUserToProfile,
+		toggleFeedToProfile,
 	};
 }

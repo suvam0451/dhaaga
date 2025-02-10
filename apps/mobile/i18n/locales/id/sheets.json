@@ -19,7 +19,8 @@
       "Fitur ini akan diperluas di masa depan!",
       "Sekelompok tujuan default telah dipilih untuk Anda.",
       "Pengguna Bluesky dapat mengakses feed mereka dari profil mereka (tab ke-5), untuk saat ini."
-    ]
+    ],
+    "searchPlaceholder": "Cari feed untuk dipin"
   },
   "hubAddUserSheet": {
     "searchPlaceholder": "Cari pengguna untuk dipin"

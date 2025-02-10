@@ -8,7 +8,7 @@ export const appFeedObjectSchema = z.object({
 	creator: appUserObjectSchema,
 	displayName: z.string(),
 	description: z.string(),
-	avatar: z.string(),
+	avatar: z.string().optional(),
 	likeCount: z.number().int(),
 	labels: z.array(z.any()),
 	viewer: z.object({

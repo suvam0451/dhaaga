@@ -91,6 +91,11 @@ function SocialHubTabPresenter({ profile }: Props) {
 
 	const parentAcct = ProfileService.getOwnerAccount(db, profile);
 
+	function onPressAddFeed() {
+		setCtx({ profileId: profile.id, onChange: refresh });
+		showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED, true);
+	}
+
 	function onPressAddUser() {
 		if (parentAcct.id !== acct.id) {
 			show(
@@ -333,7 +338,11 @@ function SocialHubTabPresenter({ profile }: Props) {
 				<Header acct={parentAcct} />
 
 				{/* --- Pinned Timelines --- */}
-				<FeedListPresenter account={State.acct} items={State.pins.timelines} />
+				<FeedListPresenter
+					account={State.acct}
+					items={State.pins.timelines}
+					onPressAddFeed={onPressAddFeed}
+				/>
 
 				{/* --- Pinned Users --- */}
 				<UserListPresenter
