@@ -68,7 +68,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					compileSdkVersion: 35,
 					targetSdkVersion: 35,
 					buildToolsVersion: '35.0.0',
-					newArchEnabled: true,
 					enableProguardInReleaseBuilds: false,
 					enableShrinkResourcesInReleaseBuilds: false,
 					blockedPermissions: [

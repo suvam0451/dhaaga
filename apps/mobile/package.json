@@ -47,6 +47,7 @@
     "expo-router": "~4.0.17",
     "expo-splash-screen": "~0.29.21",
     "expo-sqlite": "~15.1.2",
+    "expo-system-ui": "^4.0.8",
     "expo-video": "~2.0.5",
     "expo-web-browser": "~14.0.2",
     "fast-text-encoding": "^1.0.6",
