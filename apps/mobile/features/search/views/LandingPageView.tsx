@@ -2,10 +2,16 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import Header from '../components/Header';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 function LandingPageView() {
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
+	const instructions = t(`discover.instructions`, {
+		returnObjects: true,
+	}) as string[];
 	return (
 		<View style={{ flex: 1 }}>
 			<Header />
@@ -28,21 +34,19 @@ function LandingPageView() {
 						},
 					]}
 				>
-					More stuff coming{' '}
-					<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
+					{t(`discover.moreSoon.firstHalf`)}{' '}
+					<Text style={{ color: theme.complementary.a0 }}>
+						{t(`discover.moreSoon.secondHalf`)}
+					</Text>
 				</Text>
-				<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-					1) Press 🔍 to start searching
-				</Text>
-				<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-					2)️ Submit (↵) to search.
-				</Text>
-				<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-					3)️ Press 🔍 again to hide widget
-				</Text>
-				<Text style={[styles.bodyText, { color: theme.secondary.a10 }]}>
-					4) Clear (x) to come back here
-				</Text>
+				{instructions.map((o, i) => (
+					<Text
+						key={i}
+						style={[styles.bodyText, { color: theme.secondary.a10 }]}
+					>
+						{o}
+					</Text>
+				))}
 			</View>
 		</View>
 	);

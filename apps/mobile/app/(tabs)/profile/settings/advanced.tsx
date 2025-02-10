@@ -24,7 +24,7 @@ function Page() {
 		>
 			<ScrollView>
 				<Text style={[styles.text, { color: theme.secondary.a20 }]}>
-					{t(`discover.moreSoon.fistHalf`, {
+					{t(`discover.moreSoon.firstHalf`, {
 						ns: LOCALIZATION_NAMESPACE.CORE,
 					})}{' '}
 					<Text style={{ color: theme.complementary.a0 }}>

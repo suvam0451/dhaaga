@@ -46,7 +46,8 @@
       "blueskySignIn": "Bluesky Sign-In",
       "selectServer": "Select Server",
       "mastodonSignIn": "Mastodon Sign-In",
-      "misskeySignIn": "Misskey Sign-In"
+      "misskeySignIn": "Misskey Sign-In",
+      "pickPlatform": "Pick Platform"
     }
   },
   "dialogs": {
@@ -57,7 +58,7 @@
   },
   "discover": {
     "moreSoon": {
-      "fistHalf": "More stuff coming",
+      "firstHalf": "More stuff coming",
       "secondHalf": "soon™"
     },
     "instructions": [
