@@ -66,7 +66,8 @@
       "2)️ Sende (↵), um zu suchen",
       "3)️ Drücke 🔍 erneut, um das Widget zu verbergen",
       "Löschen (x), um hierher zurückzukehren]"
-    ]
+    ],
+    "welcome": "Lass uns etwas Neues entdecken!"
   },
   "profile": {
     "appFeatures": {

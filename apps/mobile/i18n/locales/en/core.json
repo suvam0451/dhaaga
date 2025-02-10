@@ -66,7 +66,8 @@
       "2) Submit (↵) to search.",
       "3) Press \uD83D\uDD0D again to hide widget",
       "4) Clear (x) to come back here"
-    ]
+    ],
+    "welcome": "Let's discover something new!"
   },
   "profile": {
     "appFeatures": {
