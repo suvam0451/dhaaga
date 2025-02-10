@@ -232,21 +232,22 @@ export class DialogBuilderService {
 	}
 
 	static appAccountMoreActions(
+		t: TFunction<LOCALIZATION_NAMESPACE.DIALOGS[], undefined>,
 		onSync: () => Promise<void>,
 		onDeleteAttempt: () => Promise<void>,
 	): AppDialogInstanceState {
 		return {
-			title: 'Account Actions',
-			description: [
-				'Sync your profile data (pfp, name etc.) or remove your account.',
-			],
+			title: t(`account.moreActions.title`),
+			description: t(`account.moreActions.description`, {
+				returnObjects: true,
+			}) as string[],
 			actions: [
 				{
-					label: 'Sync (🚧)',
+					label: t(`account.moreActions.syncOption`),
 					onPress: onSync,
 				},
 				{
-					label: 'Remove Account',
+					label: t(`account.moreActions.removeOption`),
 					onPress: onDeleteAttempt,
 					variant: 'destructive',
 				},
@@ -286,17 +287,17 @@ export class DialogBuilderService {
 	}
 
 	static deleteAccountConfirm(
+		t: TFunction<LOCALIZATION_NAMESPACE.DIALOGS[], undefined>,
 		onConfirmDelete: () => Promise<void>,
 	): AppDialogInstanceState {
 		return {
-			title: 'Confirm Deletion',
-			description: [
-				'Deleting your account removes all hub profiles, collections and browsing data',
-				'Confirm and Continue?',
-			],
+			title: t(`account.confirmDelete.title`),
+			description: t(`account.confirmDelete.description`, {
+				returnObjects: true,
+			}) as string[],
 			actions: [
 				{
-					label: 'Confirm & Delete',
+					label: t(`account.confirmDelete.confirmOption`),
 					onPress: onConfirmDelete,
 					variant: 'destructive',
 				},

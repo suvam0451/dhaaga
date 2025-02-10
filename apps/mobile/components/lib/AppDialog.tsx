@@ -16,6 +16,8 @@ import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
 import { appDimensions, appVerticalIndex } from '../../styles/dimensions';
 import { AppText } from './Text';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../types/app.types';
 
 type DialogOptionsProps = {
 	label: string;
@@ -82,6 +84,7 @@ export function AppDialog() {
 		useAppDialog();
 	const { theme } = useAppTheme();
 	const [Input, setInput] = useState(null);
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	useEffect(() => {
 		setInput('');
@@ -156,7 +159,7 @@ export function AppDialog() {
 				{/* ---- Save Option (TextInput Dialogs) ---- */}
 				{IS_TXT_MODE && (
 					<DialogOption
-						label={'Save'}
+						label={t(`dialogs.saveOption`)}
 						onPress={async () => {
 							textSubmitCallback(Input);
 							hide();
@@ -167,7 +170,7 @@ export function AppDialog() {
 
 				{/* ---- Dismiss Option (Universal) ---- */}
 				<DialogOption
-					label={'Dismiss'}
+					label={t(`dialogs.dismissOption`)}
 					onPress={async () => {
 						hide();
 					}}

@@ -46,7 +46,8 @@
       "blueskySignIn": "Masuk Bluesky",
       "selectServer": "Pilih Server",
       "mastodonSignIn": "Masuk Mastodon",
-      "misskeySignIn": "Masuk Misskey"
+      "misskeySignIn": "Masuk Misskey",
+      "pickPlatform": "Pilih Platform"
     }
   },
   "dialogs": {

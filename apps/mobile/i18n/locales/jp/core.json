@@ -46,7 +46,8 @@
       "blueskySignIn": "Bluesky サインイン",
       "selectServer": "サーバーを選択",
       "mastodonSignIn": "Mastodon サインイン",
-      "misskeySignIn": "Misskey サインイン"
+      "misskeySignIn": "Misskey サインイン",
+      "pickPlatform": "プラットフォームを選択"
     }
   },
   "dialogs": {

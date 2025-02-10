@@ -29,6 +29,8 @@ import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	acct: Account;
@@ -225,6 +227,7 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 	const { appSub } = useAppPublishers();
 	const { show, hide } = useAppDialog();
 	const { db } = useAppDb();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.DIALOGS]);
 	const { loadApp } = useGlobalState(
 		useShallow((o) => ({
 			loadApp: o.loadApp,
@@ -234,10 +237,11 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 	function onMoreActions() {
 		show(
 			DialogBuilderService.appAccountMoreActions(
+				t,
 				async () => {},
 				async () => {
 					show(
-						DialogBuilderService.deleteAccountConfirm(async () => {
+						DialogBuilderService.deleteAccountConfirm(t, async () => {
 							AccountService.removeById(db, acct.id);
 							loadApp();
 							hide();
@@ -248,6 +252,7 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 			),
 		);
 	}
+
 	const avatar = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,

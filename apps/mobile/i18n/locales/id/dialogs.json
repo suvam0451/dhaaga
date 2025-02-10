@@ -1,4 +1,22 @@
 {
+  "account": {
+    "moreActions": {
+      "title": "Tindakan Akun",
+      "description": [
+        "Sinkronkan data profil Anda (foto profil, nama, dll.) atau hapus akun Anda."
+      ],
+      "syncOption": "Sinkronkan (🚧)",
+      "removeOption": "Hapus Akun"
+    },
+    "confirmDelete": {
+      "title": "Konfirmasi Penghapusan",
+      "description": [
+        "Menghapus akun Anda akan menghapus semua profil hub, koleksi, dan data penjelajahan.",
+        "Konfirmasi dan Lanjutkan?"
+      ],
+      "confirmOption": "Konfirmasi & Hapus"
+    }
+  },
   "collection": {
     "moreOptions": {
       "title": "Perbarui Koleksi",

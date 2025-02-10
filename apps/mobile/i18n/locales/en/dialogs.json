@@ -1,4 +1,22 @@
 {
+  "account": {
+    "moreActions": {
+      "title": "Account Actions",
+      "description": [
+        "Sync your profile data (pfp, name etc.) or remove your account."
+      ],
+      "syncOption": "Sync (🚧)",
+      "removeOption": "Remove Account"
+    },
+    "confirmDelete": {
+      "title": "Confirm Deletion",
+      "description": [
+        "Deleting your account removes all hub profiles, collections and browsing data",
+        "Confirm and Continue?"
+      ],
+      "confirmOption": "Confirm & Delete"
+    }
+  },
   "collection": {
     "moreOptions": {
       "title": "Update Collection",

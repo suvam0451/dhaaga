@@ -1,4 +1,63 @@
 {
+  "account": {
+    "moreActions": {
+      "title": "Kontoaktionen",
+      "description": [
+        "Synchronisieren Sie Ihre Profildaten (Profilbild, Name usw.) oder entfernen Sie Ihr Konto."
+      ],
+      "syncOption": "Synchronisieren (🚧)",
+      "removeOption": "Konto entfernen"
+    },
+    "confirmDelete": {
+      "title": "Löschung bestätigen",
+      "description": [
+        "Das Löschen Ihres Kontos entfernt alle Hub-Profile, Sammlungen und Browserverläufe.",
+        "Bestätigen und fortfahren?"
+      ],
+      "confirmOption": "Bestätigen & Löschen"
+    }
+  },
+  "collection": {
+    "moreOptions": {
+      "title": "Sammlung aktualisieren",
+      "description": [
+        "Bennen Sie diese Sammlung um, beschreiben Sie sie oder entfernen Sie sie."
+      ],
+      "renameOption": "Umbenennen",
+      "updateDescriptionOption": "Beschreibung aktualisieren",
+      "removeOption": "Entfernen"
+    },
+    "add": {
+      "title": "Sammlung hinzufügen",
+      "description": [
+        "Sie können Sammlungen über Ihre Kontübersicht (5. Tab) verwalten."
+      ],
+      "placeholder": "Nennen Sie Ihre Sammlung"
+    },
+    "rename": {
+      "title": "Sammlung umbenennen",
+      "description": [
+        "Weisen Sie dieser Sammlung einen neuen Namen zu."
+      ],
+      "placeholder": "Name für Ihre Sammlung"
+    },
+    "describe": {
+      "title": "Diese Sammlung beschreiben",
+      "description": [
+        "Aktualisieren Sie Ihre Beschreibung für diese Sammlung",
+        "Leeren Sie das Feld, um die Standardbeschreibung festzulegen"
+      ],
+      "placeholder": "Beschreiben Sie Ihre Sammlung"
+    },
+    "delete": {
+      "title": "Löschung bestätigen",
+      "description": [
+        "Sind Sie sicher, dass Sie diese Sammlung löschen möchten?",
+        "Alle Beiträge, die Sie unter dieser Sammlung gespeichert haben, gehen verloren."
+      ],
+      "deleteConfirmOption": "Bestätigen und Löschen"
+    }
+  },
   "composer": {
     "setAltText": {
       "title": "Alternatieve Tekst",

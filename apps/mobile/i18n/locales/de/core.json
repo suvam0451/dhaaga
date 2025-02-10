@@ -46,7 +46,8 @@
       "blueskySignIn": "Bluesky Anmelden",
       "selectServer": "Server auswählen",
       "mastodonSignIn": "Mastodon Anmelden",
-      "misskeySignIn": "Misskey Anmelden"
+      "misskeySignIn": "Misskey Anmelden",
+      "pickPlatform": "Plattform wählen"
     }
   },
   "dialogs": {

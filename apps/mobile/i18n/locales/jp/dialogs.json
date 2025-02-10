@@ -1,4 +1,63 @@
 {
+  "account": {
+    "moreActions": {
+      "title": "アカウント操作",
+      "description": [
+        "プロフィールデータ（アイコン、名前など）を同期するか、アカウントを削除します。"
+      ],
+      "syncOption": "同期する（🚧）",
+      "removeOption": "アカウント削除"
+    },
+    "confirmDelete": {
+      "title": "削除確認",
+      "description": [
+        "アカウントを削除すると、すべてのハブプロフィール、コレクション、閲覧データが削除されます。",
+        "確認して続行しますか？"
+      ],
+      "confirmOption": "確認して削除"
+    }
+  },
+  "collection": {
+    "moreOptions": {
+      "title": "コレクションを更新",
+      "description": [
+        "このコレクションの名前変更、説明の追加、または削除を行います。"
+      ],
+      "renameOption": "名前変更",
+      "updateDescriptionOption": "説明を更新",
+      "removeOption": "削除"
+    },
+    "add": {
+      "title": "コレクションを追加",
+      "description": [
+        "アカウントの概要（5番目のタブ）からコレクションを管理できます。"
+      ],
+      "placeholder": "コレクションに名前を付けてください"
+    },
+    "rename": {
+      "title": "コレクションの名前変更",
+      "description": [
+        "このコレクションに新しい名前を付けてください。"
+      ],
+      "placeholder": "コレクションの名前"
+    },
+    "describe": {
+      "title": "このコレクションを説明する",
+      "description": [
+        "このコレクションの説明を更新します。",
+        "空の文字列を送信してデフォルトに設定します。"
+      ],
+      "placeholder": "コレクションの説明を入力"
+    },
+    "delete": {
+      "title": "削除確認",
+      "description": [
+        "本当にこのコレクションを削除してもよろしいですか？",
+        "このコレクションに保存した投稿は失われます。"
+      ],
+      "deleteConfirmOption": "確認して削除"
+    }
+  },
   "composer": {
     "setAltText": {
       "title": "代替テキスト",
