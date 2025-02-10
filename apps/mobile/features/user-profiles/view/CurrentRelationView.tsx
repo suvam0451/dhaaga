@@ -1,4 +1,4 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native';
 import { appDimensions } from '../../../styles/dimensions';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../components/lib/Text';
@@ -67,6 +67,6 @@ const styles = StyleSheet.create({
 	button: {
 		borderRadius: appDimensions.buttons.borderRadius,
 		paddingVertical: 8,
-		flex: 1,
+		minWidth: 128,
 	},
 });

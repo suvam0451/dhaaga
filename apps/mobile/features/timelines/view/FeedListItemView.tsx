@@ -9,6 +9,7 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppIcon } from '../../../components/lib/Icon';
 import { StatItem } from '../../../components/common/status/PostStats';
 import { router } from 'expo-router';
+import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 
 type SearchResultFeedItemProps = {
 	item: AppFeedObject;
@@ -18,11 +19,11 @@ const FEED_AVATAR_SIZE = 42;
 
 export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 	const { theme } = useAppTheme();
-	const img = useImage(item.avatar);
+	const img = useImage({ uri: item.avatar });
 
 	function onPressFeed() {
 		router.navigate({
-			pathname: `/discover/feed`,
+			pathname: APP_ROUTING_ENUM.DISCOVER_FEED,
 			params: {
 				uri: item.uri,
 				displayName: item.displayName,

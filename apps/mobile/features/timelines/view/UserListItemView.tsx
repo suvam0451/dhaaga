@@ -10,10 +10,6 @@ import ProfileStatView from '../../user-profiles/view/ProfileStatView';
 import UserRelationPresenter from '../../user-profiles/presenters/UserRelationPresenter';
 import { TextContentView } from '../../../components/common/status/TextContentView';
 
-type SearchResultUserItemProps = {
-	item: AppUserObject;
-};
-
 const ICON_SIZE = 42;
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -58,7 +54,11 @@ function Banner({ uri }: BannerProps) {
 	);
 }
 
-function UserListItemView({ item }: SearchResultUserItemProps) {
+type Props = {
+	item: AppUserObject;
+};
+
+function UserListItemView({ item }: Props) {
 	const { theme } = useAppTheme();
 
 	return (
@@ -129,15 +129,13 @@ function UserListItemView({ item }: SearchResultUserItemProps) {
 						alignItems: 'center',
 					}}
 				>
-					<View style={{ flex: 1 }}>
-						<ProfileStatView
-							userId={item.id}
-							postCount={item.stats.posts}
-							followingCount={item.stats.following}
-							followerCount={item.stats.followers}
-							style={{ marginLeft: 0 }}
-						/>
-					</View>
+					<ProfileStatView
+						userId={item.id}
+						postCount={item.stats.posts}
+						followingCount={item.stats.following}
+						followerCount={item.stats.followers}
+						style={{ flex: 1, marginLeft: 0 }}
+					/>
 					<UserRelationPresenter userId={item.id} />
 				</View>
 			</View>

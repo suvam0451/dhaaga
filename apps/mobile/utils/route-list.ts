@@ -5,6 +5,9 @@ export enum APP_ROUTING_ENUM {
 	MASTODON_SERVER_SELECTION = '/profile/onboard/add-mastodon',
 	ATPROTO_SIGNIN = '/profile/onboard/add-bluesky',
 
+	// discover modules
+	DISCOVER_FEED = '/discover/feed',
+
 	// guides
 	GUIDE_NEW_TAB_INTERFACE = '/user-guide-profiles',
 	GUIDE_INBOX = '/notifications/user-guide',
