@@ -17,5 +17,5 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
       - run: bun install # install dependencies
-      - run: eas build --non-interactive # build app
+      - run: eas build --non-interactive --platform=android # build app
         working-directory: ./apps/mobile
