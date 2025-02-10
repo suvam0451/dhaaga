@@ -1,0 +1,28 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # pull code
+        with:
+          lfs: true
+      - uses: actions/setup-node@v4 # setup node
+        with:
+          node-version: latest
+      - uses: oven-sh/setup-bun@v2 # install bun
+      - uses: expo/expo-github-action@v8 # setup EAS
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: bun install # install dependencies
+      - run: eas build --local --profile=lite --non-interactive --platform=android --output=./output/dhaaga.apk # build app
+        working-directory: ./apps/mobile
+      - uses: actions/upload-artifact@v4 # upload artifacts
+        with:
+          name: app apk
+          path: |
+            dist
+            !dist/**/*.md

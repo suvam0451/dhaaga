@@ -1,4 +1,7 @@
 {
+  "cli": {
+    "appVersionSource": "local"
+  },
   "build": {
     "aab": {
       "node": "22.11.0",
@@ -18,10 +21,28 @@
         "APP_VARIANT": "prod"
       }
     },
+    "production": {
+      "node": "22.11.0",
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "APP_VARIANT": "prod"
+      }
+    },
     "dev": {
       "node": "22.11.0",
       "developmentClient": true,
       "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "dev"
+      }
+    },
+    "lite": {
+      "node": "22.11.0",
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "APP_VARIANT": "dev"
       }
