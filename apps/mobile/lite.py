@@ -98,8 +98,8 @@ subprocess.run(["bun", "add", "-D", "@react-native-community/cli"])
 # --- Core RN scripts ---
 # If the build fails at this point, just run "yarn lite:manual"
 subprocess.run(["npx", "react-native", "build-android", "--mode=release"])
-subprocess.run(["cd", "android"])
-subprocess.run(["gradlew", "assembleRelease"])
+# subprocess.run(["cd", "android"])
+# subprocess.run(["gradlew", "assembleRelease"])
 
 # Comment out, if added permanently to your fork
 subprocess.run(["bun", "remove", "@react-native-community/cli"])
