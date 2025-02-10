@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - main
-      - feat/setup-ci-runner
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,18 +13,16 @@ jobs:
         with:
           node-version: latest
       - uses: oven-sh/setup-bun@v2 # install bun
-      - run: bun install # install dependencies
-      - run: bun remove react-native-purchases # remove optional dependencies
-        working-directory: ./apps/mobile
-      - uses: actions/setup-python@v5
+      - uses: expo/expo-github-action@v8 # setup EAS
         with:
-          python-version: '3.13'
-      - run: python lite.py # pre-requisites scripts
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: bun install # install dependencies
+      - run: eas build --local --profile=lite --non-interactive --platform=android --output=./output/dhaaga.apk # build app
         working-directory: ./apps/mobile
-      - run: ./gradlew assembleRelease # produce aab
-        working-directory: ./apps/mobile/android
       - uses: actions/upload-artifact@v4 # upload artifacts
         with:
           name: app apk
           path: |
-            apps/mobile/android/app/build/outputs/apk/release
+            dist
+            !dist/**/*.md
