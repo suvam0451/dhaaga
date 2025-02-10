@@ -37,6 +37,15 @@
       "env": {
         "APP_VARIANT": "dev"
       }
+    },
+    "lite": {
+      "node": "22.11.0",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "APP_VARIANT": "dev"
+      }
     }
   }
 }
