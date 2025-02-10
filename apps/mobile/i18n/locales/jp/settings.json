@@ -29,10 +29,12 @@
   },
   "wellbeing": {
     "mainMenu_Label": "ウェルビーイング",
-    "mainMenu_Desc": "健康的なインターネットとあなた"
+    "mainMenu_Desc": "健康的なインターネットとあなた。",
+    "navbar_Label": "ウェルビーイング設定"
   },
   "advanced": {
     "mainMenu_Label": "詳細設定",
-    "mainMenu_Desc": "パワーユーザーおよびデバッグ用"
+    "mainMenu_Desc": "パワーユーザーおよびデバッグ用",
+    "navbar_Label": "詳細設定"
   }
 }

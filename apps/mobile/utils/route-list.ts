@@ -22,8 +22,8 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_PAGE = '/profile/settings',
 	SETTINGS_TAB_ACCOUNTS = '/profile/settings/accounts',
 	SETTINGS_TAB_GENERAL = '/profile/settings/general',
-	SETTINGS_TAB_GOODIE_HUT = '/profile/settings/goodie-hut',
-	SETTINGS_TAB_DIGITAL_WELLBEING = '/profile/settings/digital-wellbeing',
+	SETTINGS_TAB_GOODIE_HUT = '/profile/settings/dhaaga',
+	SETTINGS_TAB_DIGITAL_WELLBEING = '/profile/settings/wellbeing',
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
 
 	SETTINGS_GENERAL_APP_LANGUAGE = '/profile/settings/general/app-language',

@@ -29,10 +29,12 @@
   },
   "wellbeing": {
     "mainMenu_Label": "Wellbeing",
-    "mainMenu_Desc": "Healthier internet and you."
+    "mainMenu_Desc": "Healthier internet and you.",
+    "navbar_Label": "Wellbeing Settings"
   },
   "advanced": {
     "mainMenu_Label": "Advanced",
-    "mainMenu_Desc": "For power users and debugging"
+    "mainMenu_Desc": "For power users and debugging",
+    "navbar_Label": "Advanced Settings"
   }
 }

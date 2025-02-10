@@ -5,21 +5,33 @@ import AppTopNavbar, {
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { APP_FONTS } from '../../../../styles/AppFonts';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 
 function Page() {
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([
+		LOCALIZATION_NAMESPACE.SETTINGS,
+		LOCALIZATION_NAMESPACE.CORE,
+	]);
 
 	return (
 		<AppTopNavbar
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			title={'Wellbeing Settings'}
+			title={t(`wellbeing.navbar_Label`)}
 			translateY={translateY}
 		>
 			<ScrollView>
 				<Text style={[styles.text, { color: theme.secondary.a20 }]}>
-					More settings coming{' '}
-					<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
+					{t(`discover.moreSoon.fistHalf`, {
+						ns: LOCALIZATION_NAMESPACE.CORE,
+					})}{' '}
+					<Text style={{ color: theme.complementary.a0 }}>
+						{t(`discover.moreSoon.secondHalf`, {
+							ns: LOCALIZATION_NAMESPACE.CORE,
+						})}
+					</Text>
 				</Text>
 			</ScrollView>
 		</AppTopNavbar>

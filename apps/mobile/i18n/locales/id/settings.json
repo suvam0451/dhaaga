@@ -29,10 +29,12 @@
   },
   "wellbeing": {
     "mainMenu_Label": "Kesejahteraan",
-    "mainMenu_Desc": "Internet yang lebih sehat dan Anda"
+    "mainMenu_Desc": "Internet yang lebih sehat dan Anda.",
+    "navbar_Label": "Pengaturan Kesejahteraan"
   },
   "advanced": {
     "mainMenu_Label": "Lanjutan",
-    "mainMenu_Desc": "Untuk pengguna power dan debugging"
+    "mainMenu_Desc": "Untuk pengguna power dan debugging",
+    "navbar_Label": "Pengaturan Lanjutan"
   }
 }

@@ -29,10 +29,12 @@
   },
   "wellbeing": {
     "mainMenu_Label": "Wohlergehen",
-    "mainMenu_Desc": "Gesünderes Internet und Sie"
+    "mainMenu_Desc": "Gesünderes Internet und Sie.",
+    "navbar_Label": "Wohlergehen-Einstellungen"
   },
   "advanced": {
     "mainMenu_Label": "Erweitert",
-    "mainMenu_Desc": "Für Power-User und Debugging"
+    "mainMenu_Desc": "Für Power-User und Debugging",
+    "navbar_Label": "Erweiterte Einstellungen"
   }
 }

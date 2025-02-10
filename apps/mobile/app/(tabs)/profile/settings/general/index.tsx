@@ -164,8 +164,14 @@ function Page() {
 				</View>
 
 				<Text style={[styles.text, { color: theme.secondary.a20 }]}>
-					More settings coming{' '}
-					<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
+					{t(`discover.moreSoon.fistHalf`, {
+						ns: LOCALIZATION_NAMESPACE.CORE,
+					})}{' '}
+					<Text style={{ color: theme.complementary.a0 }}>
+						{t(`discover.moreSoon.secondHalf`, {
+							ns: LOCALIZATION_NAMESPACE.CORE,
+						})}
+					</Text>
 				</Text>
 			</ScrollView>
 		</AppTopNavbar>
