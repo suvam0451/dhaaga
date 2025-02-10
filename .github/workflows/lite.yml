@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - main
+      - feat/setup-ci-runner
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 # pull code
+      - uses: actions/setup-node@v4 # setup node
+        with:
+          node-version: latest
+      - uses: oven-sh/setup-bun@v2 # install bun
+      - uses: expo/expo-github-action@v8 # setup EAS
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: bun install # install dependencies
+      - run: eas build --local --non-interactive --platform=android --output=./app-build # build app
+        working-directory: ./apps/mobile
