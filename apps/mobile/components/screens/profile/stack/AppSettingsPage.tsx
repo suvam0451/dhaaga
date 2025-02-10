@@ -13,6 +13,9 @@ import AppTabLandingNavbar, {
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { CoffeeIconOnly } from '../../../static/sponsorship/Coffee';
 import { LinkingUtils } from '../../../../utils/linking.utils';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
+import { AppText } from '../../../lib/Text';
 
 function Header() {
 	return (
@@ -30,7 +33,7 @@ function Header() {
 
 function Footer() {
 	const { theme } = useAppTheme();
-
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const ICON_COLOR = theme.complementary.a0;
 	const ICON_SIZE = 32;
 
@@ -81,24 +84,24 @@ function Footer() {
 					}}
 				/>
 			</View>
-			<Text
+			<AppText.SemiBold
 				style={[
 					styles.metadataText,
-					{ color: theme.secondary.a30, fontSize: 16 },
+					{ color: theme.secondary.a20, fontSize: 16 },
 				]}
 			>
-				{'Built with 💛 by Debashish Patra'}
-			</Text>
-			{/*<Text*/}
-			{/*	style={{*/}
-			{/*		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,*/}
-			{/*		color: theme.secondary.a10,*/}
-			{/*		textAlign: 'center',*/}
-			{/*		fontSize: 20,*/}
-			{/*	}}*/}
-			{/*>*/}
-			{/*	v0.11.0*/}
-			{/*</Text>*/}
+				{t(`setting.footer`)}
+			</AppText.SemiBold>
+			<AppText.SemiBold
+				style={{
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					color: theme.primary.a0,
+					textAlign: 'center',
+					fontSize: 16,
+				}}
+			>
+				v0.16.0
+			</AppText.SemiBold>
 		</View>
 	);
 }
@@ -210,22 +213,23 @@ function SettingCategoryListItem({
 		>
 			<View style={{ width: 24, height: 24, marginRight: 6 }}>{Icon}</View>
 			<View style={styles.settingCategoryItemTextarea}>
-				<Text
+				<AppText.SemiBold
 					style={[
 						styles.collapsibleSettingsLabel,
-						{ color: theme.secondary.a10 },
+						{ color: theme.secondary.a0 },
 					]}
 				>
 					{label}
-				</Text>
+				</AppText.SemiBold>
 				{desc && (
-					<Text
+					<AppText.Normal
 						style={{
-							color: theme.secondary.a30,
+							color: theme.secondary.a20,
+							fontSize: 14,
 						}}
 					>
 						{desc}
-					</Text>
+					</AppText.Normal>
 				)}
 			</View>
 
@@ -242,11 +246,12 @@ function SettingCategoryListItem({
 function SettingCategoryList() {
 	const { theme } = useAppTheme();
 	const SETTING_CATEGORY_ICON_COLOR = theme.primary.a10;
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SETTINGS]);
 
 	const items = [
 		{
-			label: 'Accounts',
-			desc: 'Add and Manage Accounts',
+			label: t(`accounts.mainMenu_Label`),
+			desc: t(`accounts.mainMenu_Desc`),
 			Icon: (
 				<MaterialIcons
 					name="manage-accounts"
@@ -257,8 +262,8 @@ function SettingCategoryList() {
 			to: APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS,
 		},
 		{
-			label: 'General',
-			desc: 'Most usual boring settings are here',
+			label: t(`general.mainMenu_Label`),
+			desc: t(`general.mainMenu_Desc`),
 			Icon: (
 				<Ionicons
 					name="language"
@@ -269,16 +274,16 @@ function SettingCategoryList() {
 			to: APP_ROUTING_ENUM.SETTINGS_TAB_GENERAL,
 		},
 		{
-			label: 'Goodie Hut',
-			desc: 'Tweak unique features of Dhaaga',
+			label: t(`dhaaga.mainMenu_Label`),
+			desc: t(`dhaaga.mainMenu_Desc`),
 			Icon: (
 				<Ionicons name="flash" size={24} color={SETTING_CATEGORY_ICON_COLOR} />
 			),
 			to: APP_ROUTING_ENUM.SETTINGS_TAB_GOODIE_HUT,
 		},
 		{
-			label: 'Digital Wellbeing',
-			desc: 'Disconnect to reconnect with yourself',
+			label: t(`wellbeing.mainMenu_Label`),
+			desc: t(`wellbeing.mainMenu_Desc`),
 			Icon: (
 				<FontAwesome6
 					name="hand-holding-heart"
@@ -289,8 +294,8 @@ function SettingCategoryList() {
 			to: APP_ROUTING_ENUM.SETTINGS_TAB_DIGITAL_WELLBEING,
 		},
 		{
-			label: 'Advanced',
-			desc: 'For power users',
+			label: t(`advanced.mainMenu_Label`),
+			desc: t(`advanced.mainMenu_Desc`),
 			Icon: (
 				<Ionicons
 					name="construct"
@@ -366,7 +371,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 	},
 	collapsibleSettingsLabel: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 		fontSize: 18,
 	},
 	settingCategoryItemTextarea: {
@@ -379,7 +383,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	metadataText: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		fontSize: 18,
 		textAlign: 'center',
 		marginBottom: 8,

@@ -1,5 +1,12 @@
 {
+  "accounts": {
+    "mainMenu_Label": "Konten",
+    "mainMenu_Desc": "Konten hinzufügen und verwalten"
+  },
   "general": {
+    "mainMenu_Label": "Allgemein",
+    "mainMenu_Desc": "Die meisten üblichen, langweiligen Einstellungen befinden sich hier",
+    "navbar_Label": "Allgemeine Einstellungen",
     "language": {
       "S_Language": "Sprache",
       "L_appLanguage": "App-Sprache",
@@ -11,8 +18,21 @@
     "timelines": {
       "S_Timelines": "Zeitlinien",
       "L_lurkerMode": "Lurker-Modus",
-      "D_lurkerMode": "Dies blendet bestimmte Schaltflächen aus und verhindert, dass du versehentlich mit Beiträgen interagierst.",
+      "D_lurkerMode": "Versteckt interaktive Schaltflächen",
       "L_contentWarnings": "Inhaltswarnungen"
     }
+  },
+  "dhaaga": {
+    "mainMenu_Label": "Dhaaga",
+    "mainMenu_Desc": "Dhaaga-Funktionen anpassen",
+    "navbar_Label": "Dhaaga anpassen"
+  },
+  "wellbeing": {
+    "mainMenu_Label": "Wohlergehen",
+    "mainMenu_Desc": "Gesünderes Internet und Sie"
+  },
+  "advanced": {
+    "mainMenu_Label": "Erweitert",
+    "mainMenu_Desc": "Für Power-User und Debugging"
   }
 }

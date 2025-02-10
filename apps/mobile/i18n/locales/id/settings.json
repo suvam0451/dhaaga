@@ -1,5 +1,12 @@
 {
+  "accounts": {
+    "mainMenu_Label": "Akun",
+    "mainMenu_Desc": "Tambahkan dan kelola akun"
+  },
   "general": {
+    "mainMenu_Label": "Umum",
+    "mainMenu_Desc": "Pengaturan yang paling umum dan membosankan ada di sini",
+    "navbar_Label": "Pengaturan Umum",
     "language": {
       "S_Language": "Bahasa",
       "L_appLanguage": "Bahasa Aplikasi",
@@ -11,8 +18,21 @@
     "timelines": {
       "S_Timelines": "Waktu Linimasa",
       "L_lurkerMode": "Mode Lurker",
-      "D_lurkerMode": "Ini akan menyembunyikan beberapa tombol dan mencegah Anda berinteraksi secara tidak sengaja dengan postingan.",
+      "D_lurkerMode": "Menyembunyikan tombol interaktif",
       "L_contentWarnings": "Peringatan Konten"
     }
+  },
+  "dhaaga": {
+    "mainMenu_Label": "Dhaaga",
+    "mainMenu_Desc": "Kustomisasi fitur unik dari Dhaaga",
+    "navbar_Label": "Kustomisasi Dhaaga"
+  },
+  "wellbeing": {
+    "mainMenu_Label": "Kesejahteraan",
+    "mainMenu_Desc": "Internet yang lebih sehat dan Anda"
+  },
+  "advanced": {
+    "mainMenu_Label": "Lanjutan",
+    "mainMenu_Desc": "Untuk pengguna power dan debugging"
   }
 }

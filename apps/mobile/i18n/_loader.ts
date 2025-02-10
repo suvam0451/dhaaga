@@ -15,7 +15,7 @@ import jpGuides from './locales/jp/guides.json';
 import jpGlossary from './locales/jp/glossary.json';
 import jpDialogs from './locales/jp/dialogs.json';
 import jpSheets from './locales/jp/sheets.json';
-import jpSettings from './locales/jp/';
+import jpSettings from './locales/jp/settings.json';
 // de
 import deCore from './locales/de/core.json';
 import deGuides from './locales/de/guides.json';

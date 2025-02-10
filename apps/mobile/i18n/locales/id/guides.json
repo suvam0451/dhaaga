@@ -140,6 +140,7 @@
     ]
   },
   "settings": {
+    "label": "Panduan (Pengaturan)",
     "qWhereAmI": "Di mana saya?",
     "aWhereAmI": [
       "Dari sini, Anda dapat menyesuaikan berbagai pengaturan yang memengaruhi pengalaman Anda di seluruh aplikasi dan fitur menarik lainnya yang ditawarkan oleh Dhaaga."
