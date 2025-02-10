@@ -27,9 +27,12 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	acct: Account;
+	onListChange: () => void;
 };
 
 type AccountOptionsProps = {
@@ -217,11 +220,16 @@ export const AccountDetails = memo(function Foo({
 	);
 });
 
-function AccountListingFragment({ acct }: Props) {
+function AccountListingFragment({ acct, onListChange }: Props) {
 	const { theme } = useAppTheme();
 	const { appSub } = useAppPublishers();
 	const { show, hide } = useAppDialog();
 	const { db } = useAppDb();
+	const { loadApp } = useGlobalState(
+		useShallow((o) => ({
+			loadApp: o.loadApp,
+		})),
+	);
 
 	function onMoreActions() {
 		show(
@@ -231,8 +239,9 @@ function AccountListingFragment({ acct }: Props) {
 					show(
 						DialogBuilderService.deleteAccountConfirm(async () => {
 							AccountService.removeById(db, acct.id);
-							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							loadApp();
 							hide();
+							onListChange();
 						}),
 					);
 				},

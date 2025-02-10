@@ -10,6 +10,7 @@ import { AppFeedObject } from '../../types/app-feed.types';
 import { BlueskyRestClient } from '@dhaaga/bridge';
 import { FeedMiddleware } from '../../services/middlewares/feed-middleware';
 import { AppResultPageType } from '../../types/app.types';
+import ActivitypubService from '../../services/activitypub.service';
 
 /**
  * ------ Shared ------
@@ -88,7 +89,19 @@ export function useApiSearchUsers(q: string, maxId: string | null) {
 			console.log('[WARN]: error searching for posts', error.message);
 			throw new Error(error.message);
 		}
-		return UserMiddleware.deserialize<unknown[]>(data as any[], driver, server);
+		if (ActivitypubService.blueskyLike(driver)) {
+			return UserMiddleware.deserialize<unknown[]>(
+				(data as any).data.actors as any[],
+				driver,
+				server,
+			);
+		} else {
+			return UserMiddleware.deserialize<unknown[]>(
+				data as any[],
+				driver,
+				server,
+			);
+		}
 	}
 
 	return useQuery<AppUserObject[]>({
