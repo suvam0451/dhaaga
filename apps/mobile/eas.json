@@ -18,6 +18,15 @@
         "APP_VARIANT": "prod"
       }
     },
+    "production": {
+      "node": "22.11.0",
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "APP_VARIANT": "prod"
+      }
+    },
     "dev": {
       "node": "22.11.0",
       "developmentClient": true,
