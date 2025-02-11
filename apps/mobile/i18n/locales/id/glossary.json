@@ -18,5 +18,8 @@
   "relationshipCta": {
     "followBack": "Ikuti Kembali",
     "follow": "Ikuti"
+  },
+  "verb": {
+    "message": "Pesan 🚧"
   }
 }

@@ -18,5 +18,8 @@
   "relationshipCta": {
     "followBack": "Zurückfolgen",
     "follow": "Folgen"
+  },
+  "verb": {
+    "message": "Nachricht 🚧"
   }
 }

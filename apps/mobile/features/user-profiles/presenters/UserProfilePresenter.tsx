@@ -24,6 +24,8 @@ import { TextContentView } from '../../../components/common/status/TextContentVi
 import UserViewNavbar from '../../../components/shared/topnavbar/UserViewNavbar';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../../components/lib/Text';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -31,6 +33,7 @@ export function ProfileContextWrapped() {
 	const { theme } = useAppTheme();
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { data: acct, error } = useGetProfile({ userId: id, did: id });
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
 	const fields = acct?.meta?.fields;
 	const avatarUrl = acct?.avatarUrl;
@@ -48,10 +51,6 @@ export function ProfileContextWrapped() {
 		appManager.storage.setUserId(acct.id);
 		appManager.storage.setUserObject(acct);
 		show(APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS, true);
-	}
-
-	function onModuleViewLayout(e: any) {
-		console.log(e.nativeEvent.layout);
 	}
 
 	if (error || !acct)
@@ -143,7 +142,7 @@ export function ProfileContextWrapped() {
 								fontSize: 16,
 							}}
 						>
-							Message
+							{t(`verb.message`)}
 						</AppText.Medium>
 					</View>
 					<Pressable
@@ -159,13 +158,11 @@ export function ProfileContextWrapped() {
 					</Pressable>
 				</View>
 			</View>
-			<View onLayout={onModuleViewLayout}>
-				<UserProfileModulePresenter
-					acct={acct}
-					fields={fields}
-					profileId={acct?.id}
-				/>
-			</View>
+			<UserProfileModulePresenter
+				acct={acct}
+				fields={fields}
+				profileId={acct?.id}
+			/>
 		</Animated.ScrollView>
 	);
 }

@@ -18,5 +18,8 @@
   "relationshipCta": {
     "followBack": "フォローバック",
     "follow": "フォロー"
+  },
+  "verb": {
+    "message": "メッセージ 🚧"
   }
 }

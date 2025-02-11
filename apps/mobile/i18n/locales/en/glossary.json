@@ -18,5 +18,8 @@
   "relationshipCta": {
     "followBack": "Follow Back",
     "follow": "Follow"
+  },
+  "verb": {
+    "message": "Message \uD83D\uDEA7"
   }
 }
