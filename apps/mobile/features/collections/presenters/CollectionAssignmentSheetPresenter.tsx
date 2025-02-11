@@ -27,6 +27,7 @@ function CollectionAssignmentSheetPresenter() {
 	const { show } = useAppDialog();
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
+	const { t: tDialog } = useTranslation([LOCALIZATION_NAMESPACE.DIALOGS]);
 
 	const { data, toggle, add } = useCollectionAssignInteractor(
 		PostMiddleware.getContentTarget(post)?.id,
@@ -44,13 +45,13 @@ function CollectionAssignmentSheetPresenter() {
 	function onAddNewCollection() {
 		show(
 			{
-				title: 'Add Collection',
-				description: [
-					'You can further manage collections from the profile (5th) tab.',
-				],
+				title: tDialog(`collection.add.title`),
+				description: tDialog(`collection.add.description`, {
+					returnObjects: true,
+				}) as string[],
 				actions: [],
 			},
-			'Name your collection',
+			tDialog(`collection.add.placeholder`),
 			(text: string) => {
 				add(text);
 			},

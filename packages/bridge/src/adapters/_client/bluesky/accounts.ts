@@ -38,6 +38,7 @@ import {
 } from '../../../types/result.types.js';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
+import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;
@@ -230,6 +231,26 @@ class BlueskyAccountsRouter implements AccountRoute {
 		id: string,
 	): Promise<LibraryResponse<MastoRelationship | MegaRelationship>> {
 		return Promise.resolve(undefined) as any;
+	}
+
+	/**
+	 * Fetch at max 10 posts pinned by this user
+	 * @param did
+	 */
+	async getPinnedPosts(did: string): Promise<FeedViewPost[]> {
+		const agent = getXrpcAgent(this.dto);
+		try {
+			const data = await agent.getAuthorFeed({
+				includePins: true,
+				actor: did,
+				limit: 10,
+			});
+			return data.data.feed.filter(
+				(o) => o.reason && o.reason.$type === 'app.bsky.feed.defs#reasonPin',
+			);
+		} catch (e) {
+			return [];
+		}
 	}
 }
 

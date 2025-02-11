@@ -140,6 +140,7 @@
     ]
   },
   "settings": {
+    "label": "Guide (Settings)",
     "qWhereAmI": "Where am I?",
     "aWhereAmI": [
       "From here, you can tweak various settings that affect your experience throughout the app and extra goodie features offered by Dhaaga."

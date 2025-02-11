@@ -1,26 +1,42 @@
 import {
 	useAppAcct,
+	useAppApiClient,
 	useAppBottomSheet,
 	useAppBottomSheet_TimelineReference,
+	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Fragment, useEffect, useMemo, useRef } from 'react';
 import { TimelineFetchMode } from '../../../../../states/interactors/post-timeline.reducer';
-import BubbleTimelineController from '../../../../../components/widgets/feed-controller/controllers/BubbleTimelineController';
 import OverviewView from '../views/OverviewView';
-import SocialTimelineController from '../../../../../components/widgets/feed-controller/controllers/SocialTimelineController';
 import TagTimelineControlPresenter from './TagTimelineControlPresenter';
-import FederatedTimelineController from '../../../../../components/widgets/feed-controller/controllers/FederatedTimelineController';
-import ListTimelineController from '../../../../../components/widgets/feed-controller/controllers/ListTimelineController';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View, StyleSheet } from 'react-native';
 import { AppDivider } from '../../../../../components/lib/Divider';
 import MenuView from '../views/MenuView';
 import LocalTimelineControlPresenter from './LocalTimelineControlPresenter';
 import useTimelineControllerInteractor from '../interactors/useTimelineControllerInteractor';
 import UserTimelineControlPresenter from './UserTimelineControlPresenter';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { appDimensions } from '../../../../../styles/dimensions';
+
+function Divider() {
+	const { theme } = useAppTheme();
+	return (
+		<AppDivider.Hard
+			style={{
+				marginHorizontal: 10,
+				marginVertical: appDimensions.timelines.sectionBottomMargin * 2,
+				backgroundColor: '#363636',
+			}}
+		/>
+	);
+}
 
 function TimelineControllerSheetPresenter() {
 	const { draft } = useAppBottomSheet_TimelineReference();
 	const { acct } = useAppAcct();
+	const { driver } = useAppApiClient();
 	const { endSessionSeed, stateId } = useAppBottomSheet();
 	const {
 		onFeedOptSelected,
@@ -37,6 +53,7 @@ function TimelineControllerSheetPresenter() {
 		setHideReplies,
 		onFeedOptAllSelected,
 	} = useTimelineControllerInteractor();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
 	/**
 	 * Broadcast the timeline query changes
@@ -74,47 +91,56 @@ function TimelineControllerSheetPresenter() {
 				return (
 					<Fragment>
 						<OverviewView
-							title={'Local Timeline'}
+							title={t(`timelines.infoSheet.infoLocal.label`)}
 							subtitle={acct?.server}
-							description={[
-								'This timeline displays posts from you and other users in your instance',
-							]}
+							description={
+								t(`timelines.infoSheet.infoLocal.description`, {
+									returnObjects: true,
+								}) as string[]
+							}
 						/>
-						<AppDivider.Hard
-							style={{
-								marginHorizontal: 10,
-								marginVertical: 8,
-								backgroundColor: '#2c2c2c',
-							}}
-						/>
+						<Divider />
 						<LocalTimelineControlPresenter />
 					</Fragment>
 				);
 			}
 			case TimelineFetchMode.BUBBLE:
-				return <BubbleTimelineController />;
+				return (
+					<OverviewView
+						title={t(`timelines.infoSheet.infoBubble.label`)}
+						subtitle={acct?.server}
+						description={
+							t(`timelines.infoSheet.infoBubble.description`, {
+								returnObjects: true,
+							}) as string[]
+						}
+					/>
+				);
 			case TimelineFetchMode.HOME:
 				return (
 					<OverviewView
-						title={'Home Timeline'}
+						title={t(`timelines.infoSheet.infoHome.label`)}
 						subtitle={acct?.server}
-						description={[
-							'This is your home timeline.',
-							'You can see posts from yourself and everyone you follow here.',
-						]}
+						description={
+							t(`timelines.infoSheet.infoHome.description`, {
+								returnObjects: true,
+							}) as string[]
+						}
 					/>
 				);
 			case TimelineFetchMode.USER: {
 				return (
 					<Fragment>
 						<OverviewView
-							title={'User Timeline'}
+							title={t(`timelines.infoSheet.infoUser.label`)}
 							subtitle={draft?.query?.label}
-							description={[
-								'This is a user timeline.',
-								'You can see posts, boosts and replies from the selected user here.',
-							]}
+							description={
+								t(`timelines.infoSheet.infoUser.description`, {
+									returnObjects: true,
+								}) as string[]
+							}
 						/>
+						<Divider />
 						<UserTimelineControlPresenter
 							onClickHideReblog={onClickHideReblog}
 							onClickHideReply={onClickHideReply}
@@ -129,18 +155,30 @@ function TimelineControllerSheetPresenter() {
 				);
 			}
 			case TimelineFetchMode.SOCIAL:
-				return <SocialTimelineController />;
+				return (
+					<OverviewView
+						title={t(`timelines.infoSheet.infoSocial.label`)}
+						subtitle={draft?.query?.label}
+						description={
+							t(`timelines.infoSheet.infoSocial.description`, {
+								returnObjects: true,
+							}) as string[]
+						}
+					/>
+				);
 			case TimelineFetchMode.HASHTAG: {
 				return (
 					<Fragment>
 						<OverviewView
-							title={'Hashtag Timeline'}
+							title={t(`timelines.infoSheet.infoHashtag.label`)}
 							subtitle={draft?.query?.label}
-							description={[
-								'This is a hashtag timeline.',
-								'You can see a list of all posts made using this hashtag here.',
-							]}
+							description={
+								t(`timelines.infoSheet.infoHashtag.description`, {
+									returnObjects: true,
+								}) as string[]
+							}
 						/>
+						<Divider />
 						<TagTimelineControlPresenter
 							MediaOpt={MediaOpt}
 							onMediaOptSelected={onMediaOptSelected}
@@ -154,9 +192,33 @@ function TimelineControllerSheetPresenter() {
 				);
 			}
 			case TimelineFetchMode.FEDERATED:
-				return <FederatedTimelineController />;
+				return (
+					<OverviewView
+						title={
+							[KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(driver)
+								? 'Known Network'
+								: t(`timelines.infoSheet.infoPublic.label`)
+						}
+						subtitle={acct?.server}
+						description={
+							t(`timelines.infoSheet.infoPublic.description`, {
+								returnObjects: true,
+							}) as string[]
+						}
+					/>
+				);
 			case TimelineFetchMode.LIST: {
-				return <ListTimelineController />;
+				return (
+					<OverviewView
+						title={t(`timelines.infoSheet.infoList.label`)}
+						subtitle={acct?.server}
+						description={
+							t(`timelines.infoSheet.infoList.description`, {
+								returnObjects: true,
+							}) as string[]
+						}
+					/>
+				);
 			}
 			default: {
 				return (
@@ -169,19 +231,21 @@ function TimelineControllerSheetPresenter() {
 	}, [draft.feedType, State]);
 
 	function onOpenInBrowser() {}
+
 	return (
-		<ScrollView contentContainerStyle={{ paddingBottom: 32, paddingTop: 36 }}>
-			<View style={{ marginHorizontal: 12, marginBottom: 16 }}>{Comp}</View>;
-			<AppDivider.Hard
-				style={{
-					marginHorizontal: 10,
-					marginVertical: 8,
-					backgroundColor: '#2c2c2c',
-				}}
-			/>
+		<ScrollView contentContainerStyle={styles.scrollViewContainer}>
+			<View style={{ marginHorizontal: 12 }}>{Comp}</View>;
+			<Divider />
 			<MenuView onOpenInBrowser={onOpenInBrowser} />
 		</ScrollView>
 	);
 }
 
 export default TimelineControllerSheetPresenter;
+
+const styles = StyleSheet.create({
+	scrollViewContainer: {
+		paddingBottom: 32,
+		paddingTop: appDimensions.bottomSheet.clearanceTop,
+	},
+});

@@ -5,6 +5,9 @@ export enum APP_ROUTING_ENUM {
 	MASTODON_SERVER_SELECTION = '/profile/onboard/add-mastodon',
 	ATPROTO_SIGNIN = '/profile/onboard/add-bluesky',
 
+	// discover modules
+	DISCOVER_FEED = '/discover/feed',
+
 	// guides
 	GUIDE_NEW_TAB_INTERFACE = '/user-guide-profiles',
 	GUIDE_INBOX = '/notifications/user-guide',
@@ -22,8 +25,8 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_PAGE = '/profile/settings',
 	SETTINGS_TAB_ACCOUNTS = '/profile/settings/accounts',
 	SETTINGS_TAB_GENERAL = '/profile/settings/general',
-	SETTINGS_TAB_GOODIE_HUT = '/profile/settings/goodie-hut',
-	SETTINGS_TAB_DIGITAL_WELLBEING = '/profile/settings/digital-wellbeing',
+	SETTINGS_TAB_GOODIE_HUT = '/profile/settings/dhaaga',
+	SETTINGS_TAB_DIGITAL_WELLBEING = '/profile/settings/wellbeing',
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
 
 	SETTINGS_GENERAL_APP_LANGUAGE = '/profile/settings/general/app-language',

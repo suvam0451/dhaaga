@@ -1,7 +1,6 @@
 import { AppUserObject } from '../../../types/app-user.types';
 import UserListItemView from '../../timelines/view/UserListItemView';
-import { appDimensions } from '../../../styles/dimensions';
-import { Animated, RefreshControl } from 'react-native';
+import { Animated, RefreshControl, StyleProp, ViewStyle } from 'react-native';
 
 type Props<T> = {
 	items: T[];
@@ -9,6 +8,7 @@ type Props<T> = {
 	refreshing: boolean;
 	onRefresh: () => void;
 	ListHeaderComponent: any;
+	style?: StyleProp<ViewStyle>;
 };
 
 export function UserListView({
@@ -17,20 +17,19 @@ export function UserListView({
 	refreshing,
 	onRefresh,
 	ListHeaderComponent,
+	style,
 }: Props<AppUserObject>) {
 	return (
 		<Animated.FlatList
 			data={items}
 			renderItem={({ item }) => <UserListItemView item={item} />}
 			onScroll={onScroll}
-			contentContainerStyle={{
-				paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
-			}}
 			ListHeaderComponent={ListHeaderComponent}
 			scrollEventThrottle={16}
 			refreshControl={
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}
+			style={style}
 		/>
 	);
 }

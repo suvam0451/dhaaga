@@ -25,12 +25,16 @@ import { Loader } from '../../../components/lib/Loader';
 import { Feather } from '@expo/vector-icons';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import WidgetExpanded from './SearchResultFull';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const BUTTON_SIZE = 50;
 
 function SearchWidget() {
 	const isRotated = useSharedValue(0);
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+
 	const MAX_WIDTH = Dimensions.get('window').width;
 	const CONTAINER_PADDING = 24;
 	const WIDGET_MAX_WIDTH = MAX_WIDTH - CONTAINER_PADDING * 2;
@@ -138,7 +142,7 @@ function SearchWidget() {
 						onChangeText={updateSearch}
 						onSubmitEditing={submitSearch}
 						value={State.text}
-						placeholder={'Discover something new!'}
+						placeholder={t(`discover.welcome`)}
 						style={[
 							{
 								paddingLeft: 4,

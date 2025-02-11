@@ -1,5 +1,12 @@
 {
+  "accounts": {
+    "mainMenu_Label": "Accounts",
+    "mainMenu_Desc": "Add and manage accounts"
+  },
   "general": {
+    "mainMenu_Label": "General",
+    "mainMenu_Desc": "Most usual boring settings are here",
+    "navbar_Label": "General Settings",
     "language": {
       "S_Language": "Language",
       "L_appLanguage": "App Language",
@@ -11,8 +18,23 @@
     "timelines": {
       "S_Timelines": "Timelines",
       "L_lurkerMode": "Lurker Mode",
-      "D_lurkerMode": "This will hide certain buttons and prevent you from  accidentally interacting with posts.",
+      "D_lurkerMode": "Hides interactive buttons",
       "L_contentWarnings": "Content Warnings"
     }
+  },
+  "dhaaga": {
+    "mainMenu_Label": "Dhaaga",
+    "mainMenu_Desc": "Customize Dhaaga features",
+    "navbar_Label": "Customize Dhaaga"
+  },
+  "wellbeing": {
+    "mainMenu_Label": "Wellbeing",
+    "mainMenu_Desc": "Healthier internet and you.",
+    "navbar_Label": "Wellbeing Settings"
+  },
+  "advanced": {
+    "mainMenu_Label": "Advanced",
+    "mainMenu_Desc": "For power users and debugging",
+    "navbar_Label": "Advanced Settings"
   }
 }

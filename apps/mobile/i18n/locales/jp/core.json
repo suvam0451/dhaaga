@@ -46,7 +46,8 @@
       "blueskySignIn": "Bluesky サインイン",
       "selectServer": "サーバーを選択",
       "mastodonSignIn": "Mastodon サインイン",
-      "misskeySignIn": "Misskey サインイン"
+      "misskeySignIn": "Misskey サインイン",
+      "pickPlatform": "プラットフォームを選択"
     }
   },
   "dialogs": {
@@ -57,7 +58,7 @@
   },
   "discover": {
     "moreSoon": {
-      "fistHalf": "さらに色々なものが登場予定",
+      "firstHalf": "さらに色々なものが登場予定",
       "secondHalf": "近日™"
     },
     "instructions": [
@@ -65,7 +66,8 @@
       "2)️ 検索するには (↵) を送信 3)️ 再度",
       "3) \uD83D\uDD0D を押してウィジェットを隠す",
       "4) (x) でここに戻る"
-    ]
+    ],
+    "welcome": "何か新しいことを発見しましょう！"
   },
   "profile": {
     "appFeatures": {
@@ -183,6 +185,7 @@
     "ctaPlaceholder": "何を考えていますか？",
     "postButton": "投稿",
     "replyingTo": "返信中：",
+    "quoting": "引用: ",
     "visibility": {
       "public": "公開",
       "unlisted": "ホーム",

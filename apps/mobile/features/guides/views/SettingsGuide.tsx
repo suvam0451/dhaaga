@@ -28,7 +28,7 @@ function SettingsGuide() {
 		},
 	];
 
-	return <GuideFactory questionnaire={qa} label={'User Guide (Settings)'} />;
+	return <GuideFactory questionnaire={qa} label={t(`settings.label`)} />;
 }
 
 export default SettingsGuide;

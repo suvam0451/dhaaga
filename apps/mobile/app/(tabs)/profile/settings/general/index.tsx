@@ -14,6 +14,11 @@ import { useState } from 'react';
 import { AppDivider } from '../../../../../components/lib/Divider';
 import { APP_ROUTING_ENUM } from '../../../../../utils/route-list';
 import { router } from 'expo-router';
+import { APP_SETTING_KEY } from '../../../../../services/settings.service';
+import useAppSettings from '../../../../../features/settings/interactors/useAppSettings';
+import { LocaleOptions } from '../../../../../i18n/data';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 
 function Divider() {
 	const { theme } = useAppTheme();
@@ -32,15 +37,20 @@ function Page() {
 	const [IsChecked, setIsChecked] = useState(false);
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
+	const { getValue } = useAppSettings();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SETTINGS]);
 
 	function toggleCheck() {
 		setIsChecked(!IsChecked);
 	}
 
+	const lang = getValue(APP_SETTING_KEY.APP_LANGUAGE);
+	const selectedLocale = LocaleOptions.find((o) => o.code === lang);
+
 	return (
 		<AppTopNavbar
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			title={'General Settings'}
+			title={t(`general.navbar_Label`)}
 			translateY={translateY}
 		>
 			<ScrollView
@@ -56,7 +66,7 @@ function Page() {
 					<AppText.Medium
 						style={{ fontSize: 18, color: theme.primary.a0, marginLeft: 6 }}
 					>
-						Language
+						{t(`general.language.S_Language`)}
 					</AppText.Medium>
 				</View>
 				<Divider />
@@ -67,36 +77,36 @@ function Page() {
 					}}
 				>
 					<AppText.Medium style={{ fontSize: 18, color: theme.secondary.a10 }}>
-						App Language
+						{t(`general.language.L_appLanguage`)}
 					</AppText.Medium>
 					<View style={{ flex: 1 }} />
 					<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
-						English
+						{selectedLocale.nativeLabel}
 					</AppText.Medium>
 					<AppIcon id={'chevron-right'} size={28} />
 				</Pressable>
 
 				<View style={styles.settingItemContainer}>
 					<AppText.Medium style={{ fontSize: 18, color: theme.secondary.a10 }}>
-						Content Languages
+						{t(`general.language.L_contentLanguages`)}
 					</AppText.Medium>
 					<View style={{ flex: 1 }} />
 					<AppIcon id={'chevron-right'} size={28} />
 				</View>
-				<View style={styles.settingItemContainer}>
-					<AppText.Medium
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						style={{ fontSize: 18 }}
-					>
-						Translator Mode
-					</AppText.Medium>
-					<View style={{ flex: 1 }} />
-					<AppIcon id={'info'} color={theme.complementary.a0} size={28} />
-					<AppSettingBooleanToggle
-						isChecked={IsChecked}
-						onPress={toggleCheck}
-					/>
-				</View>
+				{/*<View style={styles.settingItemContainer}>*/}
+				{/*	<AppText.Medium*/}
+				{/*		emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
+				{/*		style={{ fontSize: 18 }}*/}
+				{/*	>*/}
+				{/*		{t(`general.language.L_translatorMode`)}*/}
+				{/*	</AppText.Medium>*/}
+				{/*	<View style={{ flex: 1 }} />*/}
+				{/*	<AppIcon id={'info'} color={theme.complementary.a0} size={28} />*/}
+				{/*	<AppSettingBooleanToggle*/}
+				{/*		isChecked={IsChecked}*/}
+				{/*		onPress={toggleCheck}*/}
+				{/*	/>*/}
+				{/*</View>*/}
 
 				<View
 					style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16 }}
@@ -105,7 +115,7 @@ function Page() {
 					<AppText.Medium
 						style={{ fontSize: 18, color: theme.primary.a0, marginLeft: 6 }}
 					>
-						Timelines
+						{t(`general.timelines.S_Timelines`)}
 					</AppText.Medium>
 				</View>
 				<Divider />
@@ -115,10 +125,10 @@ function Page() {
 							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 							style={{ fontSize: 18 }}
 						>
-							Lurker Mode
+							{t(`general.timelines.L_lurkerMode`)}
 						</AppText.Medium>
 						<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
-							Hides interactive buttons
+							{t(`general.timelines.D_lurkerMode`)}
 						</AppText.Normal>
 					</View>
 
@@ -139,7 +149,7 @@ function Page() {
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{ fontSize: 18 }}
 					>
-						Content Warnings
+						{t(`general.timelines.L_contentWarnings`)}
 					</AppText.Medium>
 					<View style={{ flex: 1 }} />
 					<AppIcon
@@ -154,8 +164,14 @@ function Page() {
 				</View>
 
 				<Text style={[styles.text, { color: theme.secondary.a20 }]}>
-					More settings coming{' '}
-					<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
+					{t(`discover.moreSoon.firstHalf`, {
+						ns: LOCALIZATION_NAMESPACE.CORE,
+					})}{' '}
+					<Text style={{ color: theme.complementary.a0 }}>
+						{t(`discover.moreSoon.secondHalf`, {
+							ns: LOCALIZATION_NAMESPACE.CORE,
+						})}
+					</Text>
 				</Text>
 			</ScrollView>
 		</AppTopNavbar>

@@ -1,3 +1,10 @@
+/**
+ * The following language codes are
+ * intended to be supported in Dhaaga
+ *
+ * For introducing extra languages/dialects,
+ * please feel free to reach out to me!
+ */
 export const LocaleOptions: {
 	enLabel: string;
 	nativeLabel: string;

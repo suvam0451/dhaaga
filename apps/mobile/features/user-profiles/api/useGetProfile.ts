@@ -32,6 +32,8 @@ function useGetProfile(query: ProfileSearchQueryType) {
 		if (!client || query === null) throw new Error('E_No_Client');
 		const { did, userId, webfinger } = query;
 
+		if (!did && !userId && !webfinger) return null;
+
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			// fetch did for handle (not needed, if regex check passes)
 			// const { data: didData, error: didError } = await (

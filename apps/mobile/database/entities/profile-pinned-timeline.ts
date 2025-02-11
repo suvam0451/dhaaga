@@ -14,6 +14,30 @@ export class Service {
 		return db.profilePinnedTimeline.findOne({ id });
 	}
 
+	static findByUri(
+		db: DataSource,
+		profile: Profile,
+		server: string,
+		uri: string,
+	) {
+		return db.profilePinnedTimeline.findOne({
+			profileId: profile.id,
+			server,
+			uri,
+			active: true,
+		});
+	}
+
+	static isPinnedForProfile(
+		db: DataSource,
+		profile: Profile,
+		server: string,
+		uri: string,
+	): boolean {
+		const match = Service.findByUri(db, profile, server, uri);
+		return match && match.active;
+	}
+
 	static getShownForProfile(db: DataSource, profile: Profile) {
 		if (!db || !profile) return [];
 		try {

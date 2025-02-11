@@ -23,6 +23,7 @@ type TimelineQueryParams = {
 	opts?: DhaagaJsTimelineQueryOptions;
 	minId?: string;
 	maxId?: string;
+	sessionId?: string;
 };
 
 type TimelineFetchResultType = AppResultPageType<AppPostObject>;
@@ -40,7 +41,14 @@ const DEFAULT_RETURN_VALUE: TimelineFetchResultType = {
  *
  * Is consumed by various DataViews
  */
-function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
+function useTimeline({
+	type,
+	query,
+	opts,
+	maxId,
+	minId,
+	sessionId,
+}: TimelineQueryParams) {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
 
@@ -265,9 +273,9 @@ function useTimeline({ type, query, opts, maxId, minId }: TimelineQueryParams) {
 
 	// Queries
 	return useQuery<TimelineFetchResultType>({
-		queryKey: [type, _id, _query],
+		queryKey: [type, _id, _query, maxId, minId, sessionId],
 		queryFn: api,
-		enabled: client !== null && type !== TimelineFetchMode.IDLE,
+		enabled: !!client && type !== TimelineFetchMode.IDLE,
 		initialData: DEFAULT_RETURN_VALUE,
 	});
 }

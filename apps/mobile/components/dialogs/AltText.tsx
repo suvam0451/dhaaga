@@ -28,14 +28,6 @@ function AltText({ IsVisible, setIsVisible, text }: Props) {
 				>
 					Alt Text
 				</AppText.SemiBold>
-
-				{/*<View style={{ padding: 8, marginRight: -8, marginTop: -12 }}>*/}
-				{/*	<MaterialCommunityIcons*/}
-				{/*		name="text-to-speech"*/}
-				{/*		size={28}*/}
-				{/*		color={APP_FONT.MONTSERRAT_BODY}*/}
-				{/*	/>*/}
-				{/*</View>*/}
 			</View>
 
 			<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>

@@ -46,7 +46,8 @@
       "blueskySignIn": "Bluesky Sign-In",
       "selectServer": "Select Server",
       "mastodonSignIn": "Mastodon Sign-In",
-      "misskeySignIn": "Misskey Sign-In"
+      "misskeySignIn": "Misskey Sign-In",
+      "pickPlatform": "Pick Platform"
     }
   },
   "dialogs": {
@@ -57,7 +58,7 @@
   },
   "discover": {
     "moreSoon": {
-      "fistHalf": "More stuff coming",
+      "firstHalf": "More stuff coming",
       "secondHalf": "soon™"
     },
     "instructions": [
@@ -65,7 +66,8 @@
       "2) Submit (↵) to search.",
       "3) Press \uD83D\uDD0D again to hide widget",
       "4) Clear (x) to come back here"
-    ]
+    ],
+    "welcome": "Let's discover something new!"
   },
   "profile": {
     "appFeatures": {

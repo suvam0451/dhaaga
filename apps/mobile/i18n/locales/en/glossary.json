@@ -7,7 +7,15 @@
     "follower_one": "Follower",
     "follower_other": "Followers",
     "following": "Following",
-    "following_other": "Following"
+    "following_other": "Following",
+    "like_one": "Like",
+    "like_other": "Likes",
+    "share_one": "Share",
+    "share_other": "Shared",
+    "reply_one": "Reply",
+    "reply_other": "Replies",
+    "quote_one": "Quote",
+    "quote_other": "Quotes"
   },
   "relationship": {
     "friends": "Friends",
@@ -16,5 +24,8 @@
   "relationshipCta": {
     "followBack": "Follow Back",
     "follow": "Follow"
+  },
+  "verb": {
+    "message": "Message \uD83D\uDEA7"
   }
 }

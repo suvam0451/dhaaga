@@ -14,6 +14,8 @@ import { appDimensions } from '../../../styles/dimensions';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../lib/Text';
 import { AppPostObject } from '../../../types/app-post.types';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type StatItemProps = {
 	count: number;
@@ -87,6 +89,7 @@ type PostStatsProps = {
  */
 function PostStats({ style, dto }: PostStatsProps) {
 	const { show, setCtx } = useAppBottomSheet();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
 	const LIKE_COUNT = dto.stats.likeCount;
 	const REPLY_COUNT = dto.stats.replyCount;
@@ -119,21 +122,21 @@ function PostStats({ style, dto }: PostStatsProps) {
 		<View style={[styles.container, style]}>
 			<StatItem
 				count={LIKE_COUNT}
-				label={'Likes'}
+				label={t(`noun.like`, { count: LIKE_COUNT })}
 				nextCounts={[REPLY_COUNT, SHARE_COUNT]}
 				onPress={onPressLikeCounter}
 				me={LIKED}
 			/>
 			<StatItem
 				count={SHARE_COUNT}
-				label={'Shares'}
+				label={t(`noun.share`, { count: SHARE_COUNT })}
 				nextCounts={[REPLY_COUNT]}
 				onPress={onPressShareCounter}
 				me={SHARED}
 			/>
 			<StatItem
 				count={REPLY_COUNT}
-				label={'Replies'}
+				label={t(`noun.reply`, { count: REPLY_COUNT })}
 				nextCounts={[]}
 				onPress={onPressCommentCounter}
 			/>

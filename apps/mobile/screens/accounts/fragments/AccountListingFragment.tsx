@@ -27,9 +27,14 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
+import useGlobalState from '../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	acct: Account;
+	onListChange: () => void;
 };
 
 type AccountOptionsProps = {
@@ -217,28 +222,37 @@ export const AccountDetails = memo(function Foo({
 	);
 });
 
-function AccountListingFragment({ acct }: Props) {
+function AccountListingFragment({ acct, onListChange }: Props) {
 	const { theme } = useAppTheme();
 	const { appSub } = useAppPublishers();
 	const { show, hide } = useAppDialog();
 	const { db } = useAppDb();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.DIALOGS]);
+	const { loadApp } = useGlobalState(
+		useShallow((o) => ({
+			loadApp: o.loadApp,
+		})),
+	);
 
 	function onMoreActions() {
 		show(
 			DialogBuilderService.appAccountMoreActions(
+				t,
 				async () => {},
 				async () => {
 					show(
-						DialogBuilderService.deleteAccountConfirm(async () => {
+						DialogBuilderService.deleteAccountConfirm(t, async () => {
 							AccountService.removeById(db, acct.id);
-							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							loadApp();
 							hide();
+							onListChange();
 						}),
 					);
 				},
 			),
 		);
 	}
+
 	const avatar = AccountMetadataService.getKeyValueForAccountSync(
 		db,
 		acct,
@@ -281,12 +295,14 @@ function AccountListingFragment({ acct }: Props) {
 						onClicked={() => {
 							AccountService.select(db, acct);
 							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							loadApp();
 						}}
 					/>
 					<AccountDetails
 						onClicked={() => {
 							AccountService.select(db, acct);
 							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							loadApp();
 						}}
 						selected={acct.selected as boolean}
 						displayName={displayName}

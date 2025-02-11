@@ -14,9 +14,12 @@ import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
 import { AppText } from '../../../lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 
 function ReplySection() {
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 	return (
 		<View
 			style={{
@@ -32,7 +35,7 @@ function ReplySection() {
 					fontSize: 18,
 				}}
 			>
-				Replies
+				{t(`noun.reply_other`)}
 			</AppText.SemiBold>
 		</View>
 	);
@@ -70,6 +73,7 @@ function StatusContextComponent() {
 
 function SharedStackPostDetails() {
 	const [refreshing, setRefreshing] = useState(false);
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
 	const { id, uri } = useLocalSearchParams<{ id: string; uri: string }>();
 	const { Data, dispatch, refetch } = useGetStatusCtxInterface(
@@ -82,7 +86,7 @@ function SharedStackPostDetails() {
 	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Post'} translateY={translateY}>
+		<WithAutoHideTopNavBar title={t(`noun.post_one`)} translateY={translateY}>
 			<WithAppStatusContextDataContext data={Data} dispatch={dispatch}>
 				<Animated.ScrollView
 					refreshControl={

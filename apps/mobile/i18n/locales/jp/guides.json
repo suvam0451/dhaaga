@@ -140,12 +140,13 @@
     ]
   },
   "settings": {
+    "label": "ガイド（設定）",
     "qWhereAmI": "ここはどこですか?",
     "aWhereAmI": [
       "ここから、アプリ全体の体験やDhaagaが提供する特別な機能に影響を与えるさまざまな設定を調整できます。"
     ],
-    "qServerSettingNotImported": "なぜサーバー設定がインポートされないのですか？",
-    "aServerSettingNotImported": [
+    "qServerSettingMismatch": "なぜサーバー設定がインポートされないのですか？",
+    "aServerSettingMismatch": [
       "Dhaagaは多くのSNSソフトウェアをサポートするマルチプロトコルクライアントです。",
       "そのため、これらの設定はローカルで設定する必要があります。",
       "しかし、一度設定すれば、それらはすべてのSNSアカウントに適用されます！"

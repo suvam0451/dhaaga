@@ -46,7 +46,8 @@
       "blueskySignIn": "Masuk Bluesky",
       "selectServer": "Pilih Server",
       "mastodonSignIn": "Masuk Mastodon",
-      "misskeySignIn": "Masuk Misskey"
+      "misskeySignIn": "Masuk Misskey",
+      "pickPlatform": "Pilih Platform"
     }
   },
   "dialogs": {
@@ -57,7 +58,7 @@
   },
   "discover": {
     "moreSoon": {
-      "fistHalf": "Lebih banyak konten akan datang",
+      "firstHalf": "Lebih banyak konten akan datang",
       "secondHalf": "segera™"
     },
     "instructions": [
@@ -65,7 +66,8 @@
       "2) Kirim (↵) untuk mencari.",
       "3) Tekan \uD83D\uDD0D lagi untuk menyembunyikan widget",
       "4) Bersihkan (x) untuk kembali ke sini"
-    ]
+    ],
+    "welcome": "Mari temukan sesuatu yang baru!"
   },
   "profile": {
     "appFeatures": {
@@ -183,6 +185,7 @@
     "ctaPlaceholder": "Apa yang ada di pikiran Anda?",
     "postButton": "Post",
     "replyingTo": "Membalas: ",
+    "quoting": "Mengutip: ",
     "visibility": {
       "public": "Publik",
       "unlisted": "Beranda",

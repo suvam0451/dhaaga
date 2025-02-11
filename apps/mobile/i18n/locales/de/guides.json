@@ -140,6 +140,7 @@
     ]
   },
   "settings": {
+    "label": "Panduan (Pengaturan)",
     "qWhereAmI": "Waar ben ik?",
     "aWhereAmI": [
       "Vanaf hier kun je verschillende instellingen aanpassen die je ervaring in de app beïnvloeden, evenals extra functies die Dhaaga biedt."

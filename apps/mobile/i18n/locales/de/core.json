@@ -46,7 +46,8 @@
       "blueskySignIn": "Bluesky Anmelden",
       "selectServer": "Server auswählen",
       "mastodonSignIn": "Mastodon Anmelden",
-      "misskeySignIn": "Misskey Anmelden"
+      "misskeySignIn": "Misskey Anmelden",
+      "pickPlatform": "Plattform wählen"
     }
   },
   "dialogs": {
@@ -65,7 +66,8 @@
       "2)️ Sende (↵), um zu suchen",
       "3)️ Drücke 🔍 erneut, um das Widget zu verbergen",
       "Löschen (x), um hierher zurückzukehren]"
-    ]
+    ],
+    "welcome": "Lass uns etwas Neues entdecken!"
   },
   "profile": {
     "appFeatures": {
@@ -183,6 +185,7 @@
     "ctaPlaceholder": "Was denkst du?",
     "postButton": "Beitrag posten",
     "replyingTo": "Antworten auf: ",
+    "quoting": "Zitat: ",
     "visibility": {
       "public": "Öffentlich",
       "unlisted": "Startseite",

@@ -89,8 +89,8 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 			<UserListView
 				items={TimelineState.items}
 				onScroll={onScroll}
-				refreshing={Refreshing}
 				onRefresh={onRefresh}
+				refreshing={Refreshing}
 				ListHeaderComponent={Header}
 			/>
 			<LoadingMore visible={visible} loading={loading} />

@@ -16,10 +16,9 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
 import { Account } from '../../../../database/_schema';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { AccountService } from '../../../../database/entities/account';
 import {
+	useAppDb,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
@@ -32,11 +31,7 @@ import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
 	const { appSub } = useAppPublishers();
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
 	const [Data, setData] = useState<Account[]>([]);
 	const [Refreshing, setRefreshing] = useState(false);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
@@ -94,7 +89,11 @@ function SelectAccountStack() {
 			<FlatList
 				data={SOFTWARE_ARRAY}
 				renderItem={({ item }) => (
-					<AccountListForSoftware data={Data} software={item} />
+					<AccountListForSoftware
+						data={Data}
+						software={item}
+						onListChange={refresh}
+					/>
 				)}
 				contentContainerStyle={{
 					paddingHorizontal: 4,

@@ -58,7 +58,6 @@ export default OverviewView;
 export const styles = StyleSheet.create({
 	desc: {
 		marginBottom: 4,
-		fontSize: 14,
 	},
 	title: {
 		fontSize: 20,

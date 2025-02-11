@@ -30,6 +30,7 @@ function ProfileStatItemView({ count, label, onPress }: Props) {
 			<AppText.Medium
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 				style={[{ fontSize: 13 }]}
+				numberOfLines={1}
 			>
 				{label}
 			</AppText.Medium>

@@ -43,6 +43,7 @@ export enum LOCALIZATION_NAMESPACE {
 	GLOSSARY = 'glossary',
 	SHEETS = 'sheets',
 	DIALOGS = 'dialogs',
+	SETTINGS = 'settings',
 }
 
 /**

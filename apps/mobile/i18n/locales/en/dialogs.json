@@ -1,4 +1,22 @@
 {
+  "account": {
+    "moreActions": {
+      "title": "Account Actions",
+      "description": [
+        "Sync your profile data (pfp, name etc.) or remove your account."
+      ],
+      "syncOption": "Sync (🚧)",
+      "removeOption": "Remove Account"
+    },
+    "confirmDelete": {
+      "title": "Confirm Deletion",
+      "description": [
+        "Deleting your account removes all hub profiles, collections and browsing data",
+        "Confirm and Continue?"
+      ],
+      "confirmOption": "Confirm & Delete"
+    }
+  },
   "collection": {
     "moreOptions": {
       "title": "Update Collection",
@@ -104,8 +122,7 @@
       "placeholder": "Name of the tag",
       "successToast": "Tag added successfully!"
     },
-    "tagRemove": {
-    },
+    "tagRemove": {},
     "tagEdit": {
       "title": "Modify Pinned Tag",
       "description": [
@@ -125,6 +142,46 @@
         "You can remove this pin.",
         "Re-ordering will be supported in a future update."
       ]
+    }
+  },
+  "relationship": {
+    "notRelated": {
+      "title": "Not Related",
+      "description": [
+        "You are currently not related to this user."
+      ],
+      "followOption": "Follow"
+    },
+    "follower": {
+      "title": "Follower",
+      "description": [
+        "This user currently follows you."
+      ],
+      "followBackOption": "Follow Back"
+    },
+    "following": {
+      "title": "Following",
+      "description": [
+        "You currently follow this user."
+      ],
+      "unfollowOption": "Unfollow"
+    },
+    "friends": {
+      "title": "Friends",
+      "description": [
+        "You follow each other."
+      ],
+      "unfollowOption": "Unfollow"
+    },
+    "requestPending": {
+      "title": "Request Pending",
+      "description": [
+        "You have sent this user a follow request.",
+        "But, it seems to not have been accepted yet.",
+        "You can try to refresh the status or wait."
+      ],
+      "refreshOption": "Refresh",
+      "cancelOption": "Cancel"
     }
   }
 }

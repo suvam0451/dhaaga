@@ -5,21 +5,33 @@ import AppTopNavbar, {
 } from '../../../../components/shared/topnavbar/AppTopNavbar';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function Page() {
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([
+		LOCALIZATION_NAMESPACE.SETTINGS,
+		LOCALIZATION_NAMESPACE.CORE,
+	]);
 
 	return (
 		<AppTopNavbar
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			title={'Advanced Settings'}
+			title={t(`advanced.navbar_Label`)}
 			translateY={translateY}
 		>
 			<ScrollView>
 				<Text style={[styles.text, { color: theme.secondary.a20 }]}>
-					More settings coming{' '}
-					<Text style={{ color: theme.complementary.a0 }}>soon™</Text>
+					{t(`discover.moreSoon.firstHalf`, {
+						ns: LOCALIZATION_NAMESPACE.CORE,
+					})}{' '}
+					<Text style={{ color: theme.complementary.a0 }}>
+						{t(`discover.moreSoon.secondHalf`, {
+							ns: LOCALIZATION_NAMESPACE.CORE,
+						})}
+					</Text>
 				</Text>
 			</ScrollView>
 		</AppTopNavbar>

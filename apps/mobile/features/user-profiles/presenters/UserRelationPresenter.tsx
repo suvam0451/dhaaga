@@ -18,7 +18,6 @@ type RelationshipButtonCoreProps = {
  */
 function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 	const { show, hide } = useAppDialog();
-
 	const { refetch, data, relationLoading, follow, unfollow } =
 		useRelationInteractor(userId);
 	const { t } = useTranslation([
@@ -33,6 +32,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				onPress={() => {
 					show(
 						DialogBuilderService.currentlySentRequestMoreActions(
+							t,
 							() => {
 								refetch().finally(() => {
 									hide();
@@ -52,7 +52,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlyUnrelatedMoreActions(() => {
+						DialogBuilderService.currentlyUnrelatedMoreActions(t, () => {
 							follow().finally(() => {
 								hide();
 							});
@@ -71,7 +71,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlyFollowingMoreActions(() => {
+						DialogBuilderService.currentlyFollowingMoreActions(t, () => {
 							unfollow().finally(() => {
 								hide();
 							});
@@ -90,7 +90,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlyFollowedMoreActions(() => {
+						DialogBuilderService.currentlyFollowedMoreActions(t, () => {
 							follow().finally(() => {
 								hide();
 							});
@@ -109,7 +109,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlyFriendsMoreActions(() => {
+						DialogBuilderService.currentlyFriendsMoreActions(t, () => {
 							unfollow().finally(() => {
 								hide();
 							});

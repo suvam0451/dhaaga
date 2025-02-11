@@ -12,12 +12,10 @@ import AtprotoSessionService from '../../../../services/atproto/atproto-session.
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import { AppText } from '../../../../components/lib/Text';
 import {
+	useAppAcct,
 	useAppDb,
-	useAppPublishers,
 	useAppTheme,
-	useHub,
 } from '../../../../hooks/utility/global-state-extractors';
-import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
 import { Loader } from '../../../../components/lib/Loader';
 import { Image } from 'expo-image';
 import { useAssets } from 'expo-asset';
@@ -26,6 +24,9 @@ import { LinkingUtils } from '../../../../utils/linking.utils';
 import useAtprotoLogin from '../../../../features/onboarding/interactors/useAtprotoLogin';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
+import { AccountService } from '../../../../database/entities/account';
+import useGlobalState from '../../../../states/_global';
+import { useShallow } from 'zustand/react/shallow';
 
 // WebBrowser.maybeCompleteAuthSession();
 
@@ -33,10 +34,14 @@ function AddBluesky() {
 	const [IsLoading, setIsLoading] = useState(false);
 	const { theme } = useAppTheme();
 	const { db } = useAppDb();
-	const { loadAccounts } = useHub();
 	const { translateY } = useScrollMoreOnPageEnd();
-	const { appSub } = useAppPublishers();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const { acct } = useAppAcct();
+	const { loadApp } = useGlobalState(
+		useShallow((o) => ({
+			loadApp: o.loadApp,
+		})),
+	);
 
 	const [Username, setUsername] = useState(null);
 	const [Password, setPassword] = useState(null);
@@ -61,9 +66,11 @@ function AddBluesky() {
 			);
 
 			if (success) {
-				Alert.alert('Account Added. Refresh if any screen is outdated.');
-				appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
-				loadAccounts();
+				if (!acct) {
+					AccountService.ensureAccountSelection(db);
+					loadApp();
+				}
+				Alert.alert('Account Added. Welcome to Dhaaga.');
 				router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 			} else {
 				console.log(reason);
@@ -172,7 +179,7 @@ function AddBluesky() {
 						}}
 						autoCapitalize={'none'}
 						placeholderTextColor={theme.secondary.a30}
-						placeholder="handle.bsky.social"
+						placeholder="handle.bsky.social or Email"
 						onChangeText={setUsername}
 						value={Username}
 					/>

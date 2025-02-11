@@ -1,4 +1,4 @@
-import ControlSegment from '../../../../../components/widgets/feed-controller/components/ControlSegment';
+import ControlSegmentView from '../../../../../components/lib/ControlSegmentView';
 import useTimelineControllerInteractor from '../interactors/useTimelineControllerInteractor';
 import { Fragment } from 'react';
 
@@ -14,7 +14,7 @@ function LocalTimelineControlPresenter() {
 	} = useTimelineControllerInteractor();
 	return (
 		<Fragment>
-			<ControlSegment
+			<ControlSegmentView
 				label={'Show posts from:'}
 				buttons={[
 					{
@@ -41,7 +41,7 @@ function LocalTimelineControlPresenter() {
 				hash={State}
 			/>
 
-			<ControlSegment
+			<ControlSegmentView
 				label={'More options:'}
 				buttons={[
 					{

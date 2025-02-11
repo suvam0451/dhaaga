@@ -62,30 +62,30 @@ function AppBottomSheetUserMoreActions() {
 	}
 	return (
 		<View style={{ paddingHorizontal: 10, marginTop: 24 }}>
-			<AppMenu.Option
-				active={IsPinnedForProfile}
-				label={'Pin to Social Hub'}
-				activeLabel={'Remove from Social Hub'}
-				desc={'Adds this user to quick access'}
-				appIconId={
-					<AppIcon
-						id={'pin-octicons'}
-						size={24}
-						color={theme.complementary.a0}
-						onPress={() => {}}
-					/>
-				}
-				onPress={onTogglePin}
-			/>
+			{/*<AppMenu.Option*/}
+			{/*	active={IsPinnedForProfile}*/}
+			{/*	label={'Pin to Social Hub'}*/}
+			{/*	activeLabel={'Remove from Social Hub'}*/}
+			{/*	desc={'Adds this user to quick access'}*/}
+			{/*	appIconId={*/}
+			{/*		<AppIcon*/}
+			{/*			id={'pin-octicons'}*/}
+			{/*			size={24}*/}
+			{/*			color={theme.complementary.a0}*/}
+			{/*			onPress={() => {}}*/}
+			{/*		/>*/}
+			{/*	}*/}
+			{/*	onPress={onTogglePin}*/}
+			{/*/>*/}
 
-			<AppDivider.Hard
-				style={{
-					marginVertical: 8,
-					marginTop: 16,
-					marginHorizontal: 10,
-					backgroundColor: '#363636',
-				}}
-			/>
+			{/*<AppDivider.Hard*/}
+			{/*	style={{*/}
+			{/*		marginVertical: 8,*/}
+			{/*		marginTop: 16,*/}
+			{/*		marginHorizontal: 10,*/}
+			{/*		backgroundColor: '#363636',*/}
+			{/*	}}*/}
+			{/*/>*/}
 			<AppMenuItem
 				appIconId={'mute-outline'}
 				label={'Mute'}
