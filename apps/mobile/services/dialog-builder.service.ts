@@ -106,13 +106,18 @@ export class DialogBuilderService {
 	/**
 	 * Currently unrelated
 	 */
-	static currentlyUnrelatedMoreActions(follow: any): AppDialogInstanceState {
+	static currentlyUnrelatedMoreActions(
+		t: TFunction<LOCALIZATION_NAMESPACE.DIALOGS[], undefined>,
+		follow: any,
+	): AppDialogInstanceState {
 		return {
-			title: 'Following',
-			description: ['You are currently unrelated to this user.'],
+			title: t(`relationship.notRelated.title`),
+			description: t(`relationship.notRelated.description`, {
+				returnObjects: true,
+			}) as string[],
 			actions: [
 				{
-					label: 'Follow',
+					label: t(`relationship.notRelated.followOption`),
 					onPress: follow,
 				},
 			],
@@ -120,23 +125,22 @@ export class DialogBuilderService {
 	}
 
 	static currentlySentRequestMoreActions(
+		t: TFunction<LOCALIZATION_NAMESPACE.DIALOGS[], undefined>,
 		refreshStatus: any,
 		cancelRequest: any,
 	): AppDialogInstanceState {
 		return {
-			title: 'Request Pending',
-			description: [
-				'You have sent this user a follow request.',
-				'But, it seems to not have been accepted yet.',
-				'You can try to refresh the status or wait.',
-			],
+			title: t(`relationship.requestPending.title`),
+			description: t(`relationship.requestPending.description`, {
+				returnObjects: true,
+			}) as string[],
 			actions: [
 				{
-					label: 'Refresh',
+					label: t(`relationship.requestPending.refreshOption`),
 					onPress: refreshStatus,
 				},
 				{
-					label: 'Cancel',
+					label: t(`relationship.requestPending.cancelOption`),
 					onPress: cancelRequest,
 					variant: 'destructive',
 				},
@@ -149,14 +153,17 @@ export class DialogBuilderService {
 	 * following, but not followed by a user
 	 */
 	static currentlyFollowingMoreActions(
+		t: TFunction<LOCALIZATION_NAMESPACE.DIALOGS[], undefined>,
 		onUnfollow: any,
 	): AppDialogInstanceState {
 		return {
-			title: 'Following',
-			description: ['You currently follow this user.'],
+			title: t(`relationship.following.title`),
+			description: t(`relationship.following.description`, {
+				returnObjects: true,
+			}) as string[],
 			actions: [
 				{
-					label: 'Unfollow',
+					label: t(`relationship.following.unfollowOption`),
 					onPress: onUnfollow,
 					variant: 'destructive',
 				},
@@ -168,13 +175,18 @@ export class DialogBuilderService {
 	 * Perform more actions when currently
 	 * following, but not followed by a user
 	 */
-	static currentlyFollowedMoreActions(onFollow: any): AppDialogInstanceState {
+	static currentlyFollowedMoreActions(
+		t: TFunction<LOCALIZATION_NAMESPACE.DIALOGS[], undefined>,
+		onFollow: any,
+	): AppDialogInstanceState {
 		return {
-			title: 'Followed',
-			description: ['This user currently follows you.'],
+			title: t(`relationship.follower.title`),
+			description: t(`relationship.follower.description`, {
+				returnObjects: true,
+			}) as string[],
 			actions: [
 				{
-					label: 'Follow Back',
+					label: t(`relationship.follower.followBackOption`),
 					onPress: onFollow,
 					variant: 'default',
 				},
@@ -186,13 +198,18 @@ export class DialogBuilderService {
 	 * Perform more actions when currently
 	 * following each other
 	 */
-	static currentlyFriendsMoreActions(onUnfollow: any): AppDialogInstanceState {
+	static currentlyFriendsMoreActions(
+		t: TFunction<LOCALIZATION_NAMESPACE.DIALOGS[], undefined>,
+		onUnfollow: any,
+	): AppDialogInstanceState {
 		return {
-			title: 'Friends',
-			description: ['You currently follow each other.'],
+			title: t(`relationship.friends.title`),
+			description: t(`relationship.friends.description`, {
+				returnObjects: true,
+			}) as string[],
 			actions: [
 				{
-					label: 'Unfollow',
+					label: t(`relationship.friends.unfollowOption`),
 					onPress: onUnfollow,
 					variant: 'destructive',
 				},
@@ -260,18 +277,12 @@ export class DialogBuilderService {
 	 */
 	static chooseWhomToPingInReply(numUsers: number) {
 		return {
-			title: 'Ping Controls',
+			title: 'Reply Control',
 			description: [
-				'Select who is relevant to this reply. Avoid pinging everyone.',
-				'Choosing \"Nobody\" will remove mention texts, but still' +
-					' ping the user you are replying to.',
+				'Avoid pinging everyone.',
+				'Select who should be notified of this reply.',
 			],
 			actions: [
-				{
-					label: 'This User Only',
-					onPress: () => {},
-					variant: 'default',
-				},
 				{
 					label: 'Nobody',
 					onPress: () => {},
@@ -279,6 +290,16 @@ export class DialogBuilderService {
 				},
 				{
 					label: `Everyone (${numUsers})`,
+					onPress: () => {},
+					variant: 'default',
+				},
+				{
+					label: 'This User Only',
+					onPress: () => {},
+					variant: 'default',
+				},
+				{
+					label: `Custom`,
 					onPress: () => {},
 					variant: 'default',
 				},

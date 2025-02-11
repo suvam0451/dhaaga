@@ -144,5 +144,45 @@
         "Re-ordering will be supported in a future update."
       ]
     }
+  },
+  "relationship": {
+    "notRelated": {
+      "title": "Not Related",
+      "description": [
+        "You are currently not related to this user."
+      ],
+      "followOption": "Follow"
+    },
+    "follower": {
+      "title": "Follower",
+      "description": [
+        "This user currently follows you."
+      ],
+      "followBackOption": "Follow Back"
+    },
+    "following": {
+      "title": "Following",
+      "description": [
+        "You currently follow this user."
+      ],
+      "unfollowOption": "Unfollow"
+    },
+    "friends": {
+      "title": "Friends",
+      "description": [
+        "You follow each other."
+      ],
+      "unfollowOption": "Unfollow"
+    },
+    "requestPending": {
+      "title": "Request Pending",
+      "description": [
+        "You have sent this user a follow request.",
+        "But, it seems to not have been accepted yet.",
+        "You can try to refresh the status or wait."
+      ],
+      "refreshOption": "Refresh",
+      "cancelOption": "Cancel"
+    }
   }
 }

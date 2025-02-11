@@ -144,5 +144,45 @@
         "Het herordenen wordt ondersteund in een toekomstige update."
       ]
     }
+  },
+  "relationship": {
+    "notRelated": {
+      "title": "Nicht Verwandt",
+      "description": [
+        "Du bist derzeit nicht mit diesem Benutzer verbunden."
+      ],
+      "followOption": "Folgen"
+    },
+    "follower": {
+      "title": "Follower",
+      "description": [
+        "Dieser Benutzer folgt dir derzeit."
+      ],
+      "followBackOption": "Zurückfolgen"
+    },
+    "following": {
+      "title": "Folgend",
+      "description": [
+        "Du folgst diesem Benutzer derzeit."
+      ],
+      "unfollowOption": "Nicht mehr folgen"
+    },
+    "friends": {
+      "title": "Freunde",
+      "description": [
+        "Ihr folgt euch gegenseitig."
+      ],
+      "unfollowOption": "Nicht mehr folgen"
+    },
+    "requestPending": {
+      "title": "Anfrage Ausstehend",
+      "description": [
+        "Du hast diesem Benutzer eine Follow-Anfrage gesendet.",
+        "Es scheint jedoch, dass sie noch nicht akzeptiert wurde.",
+        "Du kannst versuchen, den Status zu aktualisieren oder warten."
+      ],
+      "refreshOption": "Aktualisieren",
+      "cancelOption": "Abbrechen"
+    }
   }
 }

@@ -144,5 +144,45 @@
         "並べ替えは次回の更新でサポート予定です。"
       ]
     }
+  },
+  "relationship": {
+    "notRelated": {
+      "title": "関連なし",
+      "description": [
+        "現在、このユーザーとは関連がありません。"
+      ],
+      "followOption": "フォロー"
+    },
+    "follower": {
+      "title": "フォロワー",
+      "description": [
+        "このユーザーは現在あなたをフォローしています。"
+      ],
+      "followBackOption": "フォロー返し"
+    },
+    "following": {
+      "title": "フォロー中",
+      "description": [
+        "あなたは現在このユーザーをフォローしています。"
+      ],
+      "unfollowOption": "フォロー解除"
+    },
+    "friends": {
+      "title": "友達",
+      "description": [
+        "お互いにフォローし合っています。"
+      ],
+      "unfollowOption": "フォロー解除"
+    },
+    "requestPending": {
+      "title": "リクエスト保留中",
+      "description": [
+        "あなたはこのユーザーにフォロリクエストを送信しました。",
+        "しかし、まだ受け入れられていないようです。",
+        "ステータスを更新するか、待ってみてください。"
+      ],
+      "refreshOption": "更新",
+      "cancelOption": "キャンセル"
+    }
   }
 }

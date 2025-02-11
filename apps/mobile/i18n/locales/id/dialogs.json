@@ -144,5 +144,45 @@
         "Penataan ulang akan didukung dalam pembaruan mendatang."
       ]
     }
+  },
+  "relationship": {
+    "notRelated": {
+      "title": "Tidak Terkait",
+      "description": [
+        "Anda saat ini tidak terkait dengan pengguna ini."
+      ],
+      "followOption": "Ikuti"
+    },
+    "follower": {
+      "title": "Pengikut",
+      "description": [
+        "Pengguna ini saat ini mengikuti Anda."
+      ],
+      "followBackOption": "Ikuti Kembali"
+    },
+    "following": {
+      "title": "Mengikuti",
+      "description": [
+        "Anda saat ini mengikuti pengguna ini."
+      ],
+      "unfollowOption": "Berhenti Mengikuti"
+    },
+    "friends": {
+      "title": "Teman",
+      "description": [
+        "Kalian saling mengikuti."
+      ],
+      "unfollowOption": "Berhenti Mengikuti"
+    },
+    "requestPending": {
+      "title": "Permintaan Tertunda",
+      "description": [
+        "Anda telah mengirim permintaan mengikuti kepada pengguna ini.",
+        "Namun, sepertinya permintaan tersebut belum diterima.",
+        "Anda dapat mencoba untuk memperbarui status atau menunggu."
+      ],
+      "refreshOption": "Perbarui",
+      "cancelOption": "Batal"
+    }
   }
 }
