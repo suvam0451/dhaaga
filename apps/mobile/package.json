@@ -1,6 +1,6 @@
 {
   "name": "@dhaaga/mobile",
-  "version": "0.15.4",
+  "version": "0.15.5",
   "private": true,
   "main": "index.js",
   "scripts": {

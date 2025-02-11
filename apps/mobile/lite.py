@@ -102,4 +102,4 @@ subprocess.run(["npx", "react-native", "build-android", "--mode=release"])
 # subprocess.run(["gradlew", "assembleRelease"])
 
 # Comment out, if added permanently to your fork
-subprocess.run(["bun", "remove", "@react-native-community/cli"])
+# subprocess.run(["bun", "remove", "@react-native-community/cli"])

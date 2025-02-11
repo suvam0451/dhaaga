@@ -9,7 +9,7 @@
     },
     "apps/mobile": {
       "name": "@dhaaga/mobile",
-      "version": "0.15.4",
+      "version": "0.15.5",
       "dependencies": {
         "@atproto/api": "^0.13.35",
         "@dhaaga/bridge": "*",
