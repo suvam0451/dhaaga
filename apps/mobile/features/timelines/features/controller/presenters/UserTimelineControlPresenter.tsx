@@ -1,9 +1,10 @@
-import ControlSegment from '../../../../../components/widgets/feed-controller/components/ControlSegment';
-import { Text, View } from 'react-native';
-import { styles } from '../../../../../components/widgets/feed-controller/controllers/_shared';
-import { AppInlineCheckbox } from '../../../../../components/lib/Checkboxes';
+import ControlSegmentView from '../../../../../components/lib/ControlSegmentView';
+import { View } from 'react-native';
+import { InlineCheckboxView } from '../../../../../components/lib/Checkboxes';
 import { Fragment } from 'react';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '../../../../../styles/dimensions';
+import { AppText } from '../../../../../components/lib/Text';
 
 type Props = {
 	onClickHideReply: () => void;
@@ -30,7 +31,7 @@ function UserTimelineControlPresenter({
 
 	return (
 		<Fragment>
-			<ControlSegment
+			<ControlSegmentView
 				label={'Timeline Options'}
 				buttons={[
 					{
@@ -50,16 +51,15 @@ function UserTimelineControlPresenter({
 				selection={MediaOpt}
 			/>
 
-			<Text
-				style={[
-					styles.controlSectionLabel,
-					{
-						color: theme.secondary.a20,
-					},
-				]}
+			<AppText.SemiBold
+				style={{
+					color: theme.secondary.a10,
+					marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
+					fontSize: 16,
+				}}
 			>
 				Extra Filters
-			</Text>
+			</AppText.SemiBold>
 			<View
 				style={{
 					display: 'flex',
@@ -67,12 +67,12 @@ function UserTimelineControlPresenter({
 					justifyContent: 'flex-start',
 				}}
 			>
-				<AppInlineCheckbox
+				<InlineCheckboxView
 					label={'Hide Replies'}
 					checked={HideReplies}
 					onClick={onClickHideReply}
 				/>
-				<AppInlineCheckbox
+				<InlineCheckboxView
 					label={'Hide Reblogs'}
 					checked={HideReposts}
 					onClick={onClickHideReblog}

@@ -9,7 +9,13 @@
     "following": "Mengikuti",
     "following_other": "Mengikuti",
     "like_one": "Suka",
-    "like_other": "Suka"
+    "like_other": "Suka",
+    "share_one": "Bagikan",
+    "share_other": "Tersharing",
+    "reply_one": "Balas",
+    "reply_other": "Balasan",
+    "quote_one": "Kutip",
+    "quote_other": "Kutipan"
   },
   "relationship": {
     "friends": "Teman",

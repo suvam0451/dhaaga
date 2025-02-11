@@ -9,7 +9,13 @@
     "following_one": "フォロー中",
     "following_other": "フォロー中",
     "like_one": "いいね",
-    "like_other": "いいね数"
+    "like_other": "いいね数",
+    "share_one": "シェア",
+    "share_other": "シェア済み",
+    "reply_one": "返信",
+    "reply_other": "返信数",
+    "quote_one": "引用",
+    "quote_other": "引用数"
   },
   "relationship": {
     "friends": "友達",

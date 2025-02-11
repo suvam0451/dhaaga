@@ -1,6 +1,6 @@
 import { memo, useRef } from 'react';
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
-import ControlSegment from '../../../../widgets/feed-controller/components/ControlSegment';
+import ControlSegmentView from '../../../../lib/ControlSegmentView';
 import { View } from 'react-native';
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
 
@@ -14,7 +14,7 @@ const NotificationControlSegment = memo(() => {
 
 	return (
 		<View>
-			<ControlSegment
+			<ControlSegmentView
 				hash={State}
 				selection={NotificationFilters.current}
 				// label={'User Interactions'}

@@ -18,7 +18,7 @@ type AppPagerViewListProps = {
 };
 
 function ProfilePinnedPosts({ userId }: AppPagerViewListProps) {
-	const { data, error } = useApiGetPinnedPosts(userId);
+	const { data, error, isFetched } = useApiGetPinnedPosts(userId);
 	const ref = useRef<FlatList>(null);
 
 	if (error) {
@@ -26,7 +26,8 @@ function ProfilePinnedPosts({ userId }: AppPagerViewListProps) {
 		return <View />;
 	}
 
-	if (data.length === 0)
+	if (!isFetched) return <View />;
+	if (isFetched && data.length === 0)
 		return (
 			<View>
 				<AppText.Medium style={{ fontSize: 18 }}>

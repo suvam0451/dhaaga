@@ -49,7 +49,7 @@ function PinnedUserView({ item, onPress, onLongPress }: Props) {
 				<LinearGradient
 					colors={['red', 'orange']}
 					pointerEvents="none"
-					style={{ height: 80, width: 80 }}
+					style={{ height: 92, width: 92 }}
 				/>
 			</MaskedView>
 			<View

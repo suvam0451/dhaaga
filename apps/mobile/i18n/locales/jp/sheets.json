@@ -9,7 +9,9 @@
       "同期済み"
     ],
     "newCollection": "新しいコレクション",
-    "fallbackDesc": "説明は提供されていません"
+    "fallbackDesc": "説明は提供されていません",
+    "bookmarkDesc": "あなたのサーバーと同期されています",
+    "disclaimer": "⚠️ コレクションはこのデバイスにローカルで保存されています ⚠️"
   },
   "hubAddFeedSheet": {
     "title": "申し訳ありません \uD83D\uDE14",

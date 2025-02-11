@@ -1,40 +1,9 @@
-import { CheckBox } from '@rneui/base';
-import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
-import { memo } from 'react';
-import { View, Text, Pressable } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { View } from 'react-native';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { AppText } from './Text';
+import { AppIcon } from './Icon';
 
 type Props = {
-	title?: string;
-	checked: boolean;
-	onPress: () => void;
-};
-
-function AppCheckBox(props: Props) {
-	return (
-		<CheckBox
-			checked={props.checked}
-			containerStyle={{
-				backgroundColor: '#363636',
-				borderRadius: 8,
-				padding: 8,
-			}}
-			textStyle={{
-				color: APP_FONT.MONTSERRAT_BODY,
-				fontFamily: APP_FONTS.INTER_500_MEDIUM,
-			}}
-			iconRight
-			title={props?.title}
-			checkedColor={APP_THEME.COLOR_SCHEME_D_EMPHASIS}
-			onPress={props.onPress}
-		/>
-	);
-}
-
-type AppInlineCheckboxProps = {
 	label: string;
 	checked: boolean;
 	onClick: () => void;
@@ -45,11 +14,7 @@ type AppInlineCheckboxProps = {
  * that turn white and add a
  * cross sign at end
  */
-export const AppInlineCheckbox = memo(function Foo({
-	label,
-	checked,
-	onClick,
-}: AppInlineCheckboxProps) {
+export function InlineCheckboxView({ label, checked, onClick }: Props) {
 	const { theme } = useAppTheme();
 
 	const _activeForeground = 'black';
@@ -70,67 +35,19 @@ export const AppInlineCheckbox = memo(function Foo({
 			}}
 			onTouchEnd={onClick}
 		>
-			<Text
+			<AppText.SemiBold
 				style={{
 					color: checked ? _activeForeground : _inactiveForeground,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					paddingHorizontal: 8,
 				}}
 			>
 				{label}
-			</Text>
+			</AppText.SemiBold>
 			{checked && (
 				<View style={{ marginLeft: 4 }}>
-					<Ionicons name="close" size={18} color={'rgba(0, 0, 0, 1)'} />
+					<AppIcon id="close" size={18} color={'black'} />
 				</View>
 			)}
 		</View>
 	);
-});
-
-export const NativeCheckbox = memo(function Foo({
-	label,
-	checked,
-	onClick,
-}: AppInlineCheckboxProps) {
-	const { theme } = useAppTheme();
-
-	return (
-		<Pressable onPress={onClick}>
-			<AppText.Medium
-				style={{
-					color: checked ? theme.primary.a0 : theme.secondary.a20,
-					fontSize: 16,
-				}}
-			>
-				{label}
-			</AppText.Medium>
-		</Pressable>
-	);
-
-	return (
-		<CheckBox
-			checked={checked}
-			onPress={onClick}
-			checkedIcon="dot-circle-o"
-			uncheckedIcon="circle-o"
-			containerStyle={{
-				backgroundColor: theme.palette.menubar,
-				flex: 1,
-				margin: 0,
-				padding: 0,
-				marginHorizontal: 'auto',
-			}}
-			textStyle={{
-				color: checked ? theme.textColor.high : theme.textColor.medium,
-				fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-				marginLeft: 4,
-			}}
-			checkedColor={theme.reactions.highlight}
-			uncheckedColor={theme.textColor.medium}
-			title={label}
-		/>
-	);
-});
-
-export default AppCheckBox;
+}

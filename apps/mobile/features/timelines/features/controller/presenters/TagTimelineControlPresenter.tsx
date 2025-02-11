@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import ControlSegment from '../../../../../components/widgets/feed-controller/components/ControlSegment';
+import ControlSegmentView from '../../../../../components/lib/ControlSegmentView';
 
 type Props = {
 	MediaOpt: Set<string>;
@@ -22,7 +22,7 @@ function TagTimelineControlPresenter({
 }: Props) {
 	return (
 		<View>
-			<ControlSegment
+			<ControlSegmentView
 				label={'Show feed from:'}
 				buttons={[
 					{
@@ -50,7 +50,7 @@ function TagTimelineControlPresenter({
 				hash={hash}
 			/>
 
-			<ControlSegment
+			<ControlSegmentView
 				label={'More options:'}
 				buttons={[
 					{

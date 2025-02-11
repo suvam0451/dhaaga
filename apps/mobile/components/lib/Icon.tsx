@@ -51,6 +51,7 @@ export type APP_ICON_ENUM =
 	| 'chevron-down'
 	| 'chevron-down-circle'
 	| 'cloud-upload-outline'
+	| 'close'
 	| 'close-outline'
 	| 'settings'
 	| 'settings-outline'
@@ -434,6 +435,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name={'cloud-upload-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'close':
+				return (
+					<Ionicons
+						name={'close'}
 						size={_size}
 						color={_color}
 						style={iconStyle}

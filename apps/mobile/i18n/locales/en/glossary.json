@@ -9,7 +9,13 @@
     "following": "Following",
     "following_other": "Following",
     "like_one": "Like",
-    "like_other": "Likes"
+    "like_other": "Likes",
+    "share_one": "Share",
+    "share_other": "Shared",
+    "reply_one": "Reply",
+    "reply_other": "Replies",
+    "quote_one": "Quote",
+    "quote_other": "Quotes"
   },
   "relationship": {
     "friends": "Friends",

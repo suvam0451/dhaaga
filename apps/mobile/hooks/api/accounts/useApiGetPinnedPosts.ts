@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { MisskeyRestClient } from '@dhaaga/bridge';
+import { BlueskyRestClient, MisskeyRestClient } from '@dhaaga/bridge';
 import { AppPostObject } from '../../../types/app-post.types';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import {
@@ -33,6 +33,12 @@ function useApiGetPinnedPosts(userId: string) {
 			const _data = data as any;
 			return PostMiddleware.deserialize<unknown[]>(
 				_data.pinnedNotes,
+				driver,
+				acct?.server,
+			).slice(0, 10);
+		} else if (ActivityPubService.blueskyLike(driver)) {
+			return PostMiddleware.deserialize<unknown[]>(
+				await (client as BlueskyRestClient).accounts.getPinnedPosts(userId),
 				driver,
 				acct?.server,
 			).slice(0, 10);

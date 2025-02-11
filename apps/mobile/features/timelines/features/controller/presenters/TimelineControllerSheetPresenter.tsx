@@ -17,6 +17,8 @@ import MenuView from '../views/MenuView';
 import LocalTimelineControlPresenter from './LocalTimelineControlPresenter';
 import useTimelineControllerInteractor from '../interactors/useTimelineControllerInteractor';
 import UserTimelineControlPresenter from './UserTimelineControlPresenter';
+import { useTranslation } from 'react-i18next';
+import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 
 function TimelineControllerSheetPresenter() {
 	const { draft } = useAppBottomSheet_TimelineReference();
@@ -37,6 +39,7 @@ function TimelineControllerSheetPresenter() {
 		setHideReplies,
 		onFeedOptAllSelected,
 	} = useTimelineControllerInteractor();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
 	/**
 	 * Broadcast the timeline query changes
