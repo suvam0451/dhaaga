@@ -200,6 +200,9 @@ function reducer(state: State, action: Actions): State {
 			return produce(state, (draft) => {
 				draft.feedType = action.payload.type;
 				draft.sessionId = RandomUtil.nanoId();
+				draft.appliedMaxId = null;
+				draft.maxId = null;
+				draft.minId = null;
 				draft.seen = new Set();
 			});
 		}
@@ -337,6 +340,12 @@ function reducer(state: State, action: Actions): State {
 		}
 		case ACTION.SET_QUERY_OPTS: {
 			return produce(state, (draft) => {
+				draft.maxId = null;
+				draft.minId = null;
+				draft.items = [];
+				draft.isEol = false;
+				draft.isFirstLoad = false;
+				draft.isWidgetVisible = false;
 				draft.opts = action.payload;
 			});
 		}
@@ -351,6 +360,7 @@ function reducer(state: State, action: Actions): State {
 				draft.maxId = null;
 				draft.minId = null;
 				draft.isEol = false;
+				draft.appliedMaxId = null;
 				draft.isFirstLoad = false;
 				draft.isWidgetVisible = false;
 				draft.seen = new Set();

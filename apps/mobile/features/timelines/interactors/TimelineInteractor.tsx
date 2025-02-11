@@ -53,6 +53,7 @@ function TimelineInteractor() {
 		query: State.query,
 		opts: State.opts,
 		maxId: State.appliedMaxId,
+		sessionId: State.sessionId,
 	});
 
 	useEffect(() => {

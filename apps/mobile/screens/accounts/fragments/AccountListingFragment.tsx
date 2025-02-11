@@ -295,12 +295,14 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 						onClicked={() => {
 							AccountService.select(db, acct);
 							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							loadApp();
 						}}
 					/>
 					<AccountDetails
 						onClicked={() => {
 							AccountService.select(db, acct);
 							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							loadApp();
 						}}
 						selected={acct.selected as boolean}
 						displayName={displayName}

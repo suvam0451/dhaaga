@@ -95,7 +95,7 @@ function ControlSegmentView({
 export default ControlSegmentView;
 
 const styles = StyleSheet.create({
-	root: { marginTop: MARGIN_BOTTOM * 2, marginBottom: MARGIN_BOTTOM * 2.5 },
+	root: { marginBottom: MARGIN_BOTTOM * 2.5 },
 	label: {
 		marginBottom: MARGIN_BOTTOM * 1.5,
 		fontSize: 16,

@@ -34,11 +34,60 @@
   },
   "timelines": {
     "infoSheet": {
+      "infoHome": {
+        "label": "Home Timeline",
+        "description": [
+          "This is your home timeline.",
+          "You can see posts from yourself and everyone you follow here."
+        ]
+      },
+      "infoLocal": {
+        "label": "Local Timeline",
+        "description": [
+          "This is your server's local timeline.",
+          "It displays posts from you and other users in your server."
+        ]
+      },
+      "infoHashtag": {
+        "label": "Hashtag Timeline",
+        "description": [
+          "This ia a hashtag timeline.",
+          "It displays a list of all posts containing this hashtag."
+        ]
+      },
       "infoUser": {
         "label": "User Timeline",
         "description": [
           "This is a user feed.",
           "You can view posts, shares and replies from the selected user here."
+        ]
+      },
+      "infoPublic": {
+        "label": "Public Timeline",
+        "description": [
+          "This timeline displays every posts visible to your server.",
+          "This includes posts from your server, as well as other servers your server can talk with."
+        ]
+      },
+      "infoBubble": {
+        "label": "Bubble Timeline",
+        "description": [
+          "This timeline displays all posts made by users in a list of servers curated by your server admin.",
+          "You can find this list of servers as \"Known Network\", from your server's documentation."
+        ]
+      },
+      "infoSocial": {
+        "label": "Social Timeline",
+        "description": [
+          "This timeline is a combination of your home and local timelines.",
+          "So, it shows posts from you, your friends and local posts from users in your server."
+        ]
+      },
+      "infoList": {
+        "label": "List Timeline",
+        "description": [
+          "This timeline displays posts saved inside your selected list.",
+          "You can edit what gets saved to this list from your server's web interface!"
         ]
       },
       "_menuItems": {
