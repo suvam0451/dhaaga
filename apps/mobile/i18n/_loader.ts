@@ -4,32 +4,39 @@ import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
 // en
 import enCore from './locales/en/core.json';
-import enGuides from './locales/en/guides.json';
-import enGlossary from './locales/en/glossary.json';
-import enSheets from './locales/en/sheets.json';
 import enDialogs from './locales/en/dialogs.json';
+import enGlossary from './locales/en/glossary.json';
+import enGuides from './locales/en/guides.json';
 import enSettings from './locales/en/settings.json';
+import enSheets from './locales/en/sheets.json';
 // jp
 import jpCore from './locales/jp/core.json';
-import jpGuides from './locales/jp/guides.json';
-import jpGlossary from './locales/jp/glossary.json';
 import jpDialogs from './locales/jp/dialogs.json';
-import jpSheets from './locales/jp/sheets.json';
+import jpGlossary from './locales/jp/glossary.json';
+import jpGuides from './locales/jp/guides.json';
 import jpSettings from './locales/jp/settings.json';
+import jpSheets from './locales/jp/sheets.json';
 // de
 import deCore from './locales/de/core.json';
-import deGuides from './locales/de/guides.json';
 import deDialogs from './locales/de/dialogs.json';
-import deSheets from './locales/de/sheets.json';
 import deGlossary from './locales/de/glossary.json';
+import deGuides from './locales/de/guides.json';
 import deSettings from './locales/de/settings.json';
+import deSheets from './locales/de/sheets.json';
 // id
 import idCore from './locales/id/core.json';
 import idDialogs from './locales/id/dialogs.json';
 import idGlossary from './locales/id/glossary.json';
 import idGuides from './locales/id/guides.json';
-import idSheets from './locales/id/sheets.json';
 import idSettings from './locales/id/settings.json';
+import idSheets from './locales/id/sheets.json';
+// pl
+import plCore from './locales/pl/core.json';
+import plDialogs from './locales/pl/dialogs.json';
+import plGlossary from './locales/pl/glossary.json';
+import plGuides from './locales/pl/guides.json';
+import plSettings from './locales/pl/settings.json';
+import plSheets from './locales/pl/sheets.json';
 
 const resources = {
 	en: {
@@ -59,10 +66,18 @@ const resources = {
 	de: {
 		core: deCore,
 		dialogs: deDialogs,
-		guides: deGuides,
 		glossary: deGlossary,
+		guides: deGuides,
 		sheets: deSheets,
 		settings: deSettings,
+	},
+	pl: {
+		core: plCore,
+		dialogs: plDialogs,
+		glossary: plGlossary,
+		guides: plGuides,
+		sheets: plSheets,
+		settings: plSettings,
 	},
 };
 

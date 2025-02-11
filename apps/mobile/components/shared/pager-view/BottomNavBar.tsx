@@ -191,15 +191,27 @@ export function BottomNavBar({
 			style={styles.root}
 		>
 			<View style={[styles.container, { justifyContent: 'space-around' }]}>
-				{items.map((o, i) => (
-					<Chip
-						key={i}
-						active={Index === i}
-						label={o.label}
-						onPress={(e) => onSelect(i, e)}
-						onLayout={(e) => handleLayout(i, e)}
-					/>
-				))}
+				<FlatList
+					data={items}
+					horizontal={true}
+					renderItem={({ item: o, index: i }) => (
+						<Chip
+							active={Index === i}
+							label={o.label}
+							onPress={(e) => onSelect(i, e)}
+							onLayout={(e) => handleLayout(i, e)}
+						/>
+					)}
+				/>
+				{/*{items.map((o, i) => (*/}
+				{/*	<Chip*/}
+				{/*		key={i}*/}
+				{/*		active={Index === i}*/}
+				{/*		label={o.label}*/}
+				{/*		onPress={(e) => onSelect(i, e)}*/}
+				{/*		onLayout={(e) => handleLayout(i, e)}*/}
+				{/*	/>*/}
+				{/*))}*/}
 				<Animated.View style={[styles.indicator, indicatorAnimatedStyle]} />
 			</View>
 		</LinearGradient>
@@ -371,6 +383,7 @@ const styles = StyleSheet.create({
 		fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
 	},
 	chip: {
+		// minWidth: '25%',
 		paddingVertical: 12,
 		paddingHorizontal: 12,
 	},

@@ -122,8 +122,7 @@
       "placeholder": "Name of the tag",
       "successToast": "Tag added successfully!"
     },
-    "tagRemove": {
-    },
+    "tagRemove": {},
     "tagEdit": {
       "title": "Modify Pinned Tag",
       "description": [

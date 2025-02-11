@@ -233,7 +233,6 @@ function SettingCategoryListItem({
 				)}
 			</View>
 
-			<View style={{ flexGrow: 1 }} />
 			{to && (
 				<View>
 					<Ionicons name="chevron-forward" size={24} color={ARROW_COLOR} />
@@ -375,6 +374,7 @@ const styles = StyleSheet.create({
 	},
 	settingCategoryItemTextarea: {
 		marginLeft: 12,
+		flex: 1,
 	},
 	appFeaturesGridRow: {
 		marginHorizontal: 8,
