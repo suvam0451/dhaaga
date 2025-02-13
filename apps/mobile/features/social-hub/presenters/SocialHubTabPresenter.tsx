@@ -12,7 +12,7 @@ import {
 	socialHubTabReducerActionType as ACTION,
 	socialHubTabReducerDefault as reducerDefault,
 } from '../../../states/interactors/social-hub-tab.reducer';
-import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
 import FeedListPresenter from './FeedListPresenter';
 import {

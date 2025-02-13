@@ -209,6 +209,7 @@ export class MfmComponentBuilder {
 							value={mention.text}
 							link={mention.url}
 							fontFamily={this.fontFamily}
+							mentions={[]}
 						/>,
 						{
 							type: 'mention',
@@ -327,6 +328,7 @@ export class MfmComponentBuilder {
 						value={node.props.acct}
 						link={mention?.url}
 						fontFamily={this.fontFamily}
+						mentions={[]}
 					/>,
 					{
 						type: 'mention',

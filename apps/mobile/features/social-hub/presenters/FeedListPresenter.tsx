@@ -40,6 +40,7 @@ function FeedListPresenter({
 						iconId={item.iconId}
 						server={item.server}
 						account={account}
+						avatar={item.avatar}
 					/>
 				)}
 			/>

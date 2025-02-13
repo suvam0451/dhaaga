@@ -24,7 +24,9 @@ export enum APP_PINNED_OBJECT_TYPE {
 	/**
 	 * AT Protocol
 	 */
-	AT_PROTO_MICROBLOG_HOME = 'atProto_microBlog_HOME',
+	AT_PROTO_MICROBLOG_HOME = 'atProto_microBlog_HOME', // Following
+	AT_PROTO_MICROBLOG_DISCOVER = 'atProto_microBlog_DISCOVER', // Discover
+	AT_PROTO_MICROBLOG_FEED = 'apProto_microBlog_FEED', // Any feed with uri
 }
 
 export enum SEARCH_RESULT_TAB {
