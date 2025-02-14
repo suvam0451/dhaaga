@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Animated, RefreshControl, View } from 'react-native';
 import useFollowersInteractor from '../interactors/useFollowersInteractor';
 import {
 	useUserTimelineDispatch,
@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import UserListItemView from '../../timelines/view/UserListItemView';
+import { appDimensions } from '../../../styles/dimensions';
 
 function ProfileFollowersPresenter() {
 	const [Refreshing, setRefreshing] = useState(false);
@@ -59,12 +61,18 @@ function ProfileFollowersPresenter() {
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
-			<UserListView
-				items={TimelineState.items}
+			<Animated.FlatList
+				data={TimelineState.items}
+				renderItem={({ item }) => <UserListItemView item={item} />}
 				onScroll={onScroll}
-				onRefresh={onRefresh}
-				refreshing={Refreshing}
 				ListHeaderComponent={<View />}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
+				}
+				contentContainerStyle={{
+					marginTop: appDimensions.topNavbar.scrollViewTopPadding,
+				}}
 			/>
 		</AppTopNavbar>
 	);

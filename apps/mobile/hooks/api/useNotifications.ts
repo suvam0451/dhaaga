@@ -233,7 +233,6 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 	return useQuery<NotificationResults>({
 		queryKey: ['notifications/subs', acct, maxId],
 		queryFn: async () => {
-			console.log(ActivityPubService.pleromaLike(driver));
 			if (ActivityPubService.misskeyLike(driver)) {
 				const result = await (
 					client as MisskeyRestClient

@@ -90,6 +90,14 @@
           "Możesz edytować, co zostanie zapisane na tej liście z interfejsu internetowego twojego serwera!"
         ]
       },
+      "infoFeed": {
+        "label": "Oś czasu feeda",
+        "description": [
+          "To jest niestandardowa oś czasu feeda.",
+          "Niestandardowe feedy to usługi, które oferują użytkownikom niestandardowe algorytmy za pośrednictwem protokołu AT.",
+          "Dzięki temu użytkownicy mogą wybierać własne osie czasu."
+        ]
+      },
       "_menuItems": {
         "L_openInBrowser": "Otwórz w przeglądarce",
         "D_openInBrowser": "Zobacz w zewnętrznej przeglądarce"

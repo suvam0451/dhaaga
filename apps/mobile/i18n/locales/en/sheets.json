@@ -90,6 +90,14 @@
           "You can edit what gets saved to this list from your server's web interface!"
         ]
       },
+      "infoFeed": {
+        "label": "Feed Timeline",
+        "description": [
+          "This is a custom feed timeline.",
+          "Custom feeds are services that provide custom algorithms to users through the AT Protocol.",
+          "This allows users to choose their own timelines."
+        ]
+      },
       "_menuItems": {
         "L_openInBrowser": "Open in Browser",
         "D_openInBrowser": "View in external browser"

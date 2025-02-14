@@ -19,6 +19,9 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { appDimensions } from '../../../../../styles/dimensions';
+import { AtprotoService } from '../../../../../services/atproto.service';
+import { LinkingUtils } from '../../../../../utils/linking.utils';
+import FeedControlPresenter from './FeedControlPresenter';
 
 function Divider() {
 	const { theme } = useAppTheme();
@@ -36,7 +39,7 @@ function Divider() {
 function TimelineControllerSheetPresenter() {
 	const { draft } = useAppBottomSheet_TimelineReference();
 	const { acct } = useAppAcct();
-	const { driver } = useAppApiClient();
+	const { driver, client } = useAppApiClient();
 	const { endSessionSeed, stateId } = useAppBottomSheet();
 	const {
 		onFeedOptSelected,
@@ -191,6 +194,21 @@ function TimelineControllerSheetPresenter() {
 					</Fragment>
 				);
 			}
+			case TimelineFetchMode.FEED:
+				return (
+					<Fragment>
+						<OverviewView
+							title={t(`timelines.infoSheet.infoFeed.label`)}
+							subtitle={draft?.query?.label}
+							description={
+								t(`timelines.infoSheet.infoFeed.description`, {
+									returnObjects: true,
+								}) as string[]
+							}
+						/>
+						<FeedControlPresenter uri={draft?.query?.id} />
+					</Fragment>
+				);
 			case TimelineFetchMode.FEDERATED:
 				return (
 					<OverviewView
@@ -230,7 +248,23 @@ function TimelineControllerSheetPresenter() {
 		}
 	}, [draft.feedType, State]);
 
-	function onOpenInBrowser() {}
+	function onOpenInBrowser() {
+		switch (draft.feedType) {
+			case 'Feed': {
+				AtprotoService.generateFeedRemoteUrl(
+					client as any,
+					draft.query.id,
+				).then((result) => {
+					if (result.type === 'success') {
+						console.log(result.value.url);
+						LinkingUtils.openURL(result.value.url);
+					}
+				});
+				break;
+			}
+		}
+		// https://bsky.app/profile/skyfeed.xyz/feed/mutuals
+	}
 
 	return (
 		<ScrollView contentContainerStyle={styles.scrollViewContainer}>

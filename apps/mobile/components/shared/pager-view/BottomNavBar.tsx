@@ -23,6 +23,7 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { AppText } from '../../lib/Text';
 
 type ChipProps = {
 	active: boolean;
@@ -76,7 +77,7 @@ function ChipInfinite({
 			onPress={onSelect}
 			style={containerStyle}
 		>
-			<Animated.Text style={[styles.label, animStyle]}>{label}</Animated.Text>
+			<AppText.Medium style={[styles.label, animStyle]}>{label}</AppText.Medium>
 		</Pressable>
 	);
 }
@@ -366,6 +367,7 @@ const styles = StyleSheet.create({
 		borderRadius: 20, // width: TAB_BAR_WIDTH,
 	},
 	container: {
+		flex: 1,
 		flexDirection: 'row', // alignItems: 'center',
 		borderRadius: 20, // width: TAB_BAR_WIDTH,
 	},
@@ -378,12 +380,14 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		textAlign: 'center',
-		// fontWeight: '500',
+		marginLeft: 'auto', // fontWeight: '500',
 		fontSize: 18,
 		fontFamily: APP_FONTS.MONTSERRAT_500_MEDIUM,
 	},
 	chip: {
 		// minWidth: '25%',
+		// alignItems: 'center',
+		// justifyContent: 'center',
 		paddingVertical: 12,
 		paddingHorizontal: 12,
 	},

@@ -90,6 +90,14 @@
           "Du kannst bearbeiten, was in dieser Liste von der Web-Oberfläche deines Servers gespeichert wird!"
         ]
       },
+      "infoFeed": {
+        "label": "Feed-Zeitleiste",
+        "description": [
+          "Dies ist eine benutzerdefinierte Feed-Zeitleiste.",
+          "Benutzerdefinierte Feeds sind Dienste, die den Nutzern benutzerdefinierte Algorithmen über das AT-Protokoll bereitstellen.",
+          "Dies ermöglicht es den Nutzern, ihre eigenen Zeitleisten auszuwählen."
+        ]
+      },
       "_menuItems": {
         "L_openInBrowser": "Im Browser öffnen",
         "D_openInBrowser": "Im externen Browser anzeigen"

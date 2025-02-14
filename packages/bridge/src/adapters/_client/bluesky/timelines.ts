@@ -5,6 +5,8 @@ import {
 } from '../_router/routes/timelines.js';
 import {
 	AppBskyFeedGetFeed,
+	AppBskyFeedGetFeedGenerator,
+	AppBskyFeedGetFeedGenerators,
 	AppBskyFeedGetTimeline,
 	AppBskyFeedSearchPosts,
 } from '@atproto/api';
@@ -94,6 +96,38 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 			agent.app.bsky.feed.getFeed,
 			agent.app.bsky.feed,
 			params,
+		);
+	}
+
+	/**
+	 * Get details for a single feed
+	 * @param uri uri of the feed
+	 */
+	async getFeedGenerator(uri: string) {
+		const agent = getXrpcAgent(this.dto);
+		return InvokeBskyFunction<AppBskyFeedGetFeedGenerator.OutputSchema>(
+			'getFeedGenerator',
+			agent.app.bsky.feed.getFeedGenerator,
+			agent.app.bsky.feed,
+			{
+				feed: uri,
+			},
+		);
+	}
+
+	/**
+	 * Get details for multiple feeds
+	 * @param uriList list of feed uris
+	 */
+	async getFeedGenerators(uriList: string[]) {
+		const agent = getXrpcAgent(this.dto);
+		return InvokeBskyFunction<AppBskyFeedGetFeedGenerators.OutputSchema>(
+			'getFeedGenerator',
+			agent.app.bsky.feed.getFeedGenerators,
+			agent.app.bsky.feed,
+			{
+				feed: uriList,
+			},
 		);
 	}
 }

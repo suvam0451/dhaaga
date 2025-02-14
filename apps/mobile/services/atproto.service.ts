@@ -8,6 +8,7 @@ import {
 } from '@atproto/api';
 import { AppParsedTextNodes } from '../types/parsed-text.types';
 import { RandomUtil } from '../utils/random.utils';
+import { Result } from '../utils/result';
 
 export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
 
@@ -167,6 +168,31 @@ class Service {
 		});
 
 		return elements;
+	}
+
+	static async generateFeedRemoteUrl(
+		client: BlueskyRestClient,
+		uri: string,
+	): Promise<Result<{ url: string }>> {
+		const feed = await client.timelines.getFeedGenerator(uri);
+		if (!feed.data.isValid)
+			return {
+				type: 'error',
+				error: new Error('[E_FeedInvalid]'),
+			};
+		if (!feed.data.isOnline)
+			return {
+				type: 'error',
+				error: new Error('[E_FeedOffline]'),
+			};
+		const regex = /([^/]+)$/;
+		const feedUrl = feed.data.view.uri.match(regex)[1];
+		const handle = feed.data.view.creator.handle;
+
+		return {
+			type: 'success',
+			value: { url: `https://bsky.app/profile/${handle}/feed/${feedUrl}` },
+		};
 	}
 }
 
