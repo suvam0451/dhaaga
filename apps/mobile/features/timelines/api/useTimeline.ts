@@ -84,6 +84,7 @@ function useTimeline({
 		if (maxId) return maxId;
 
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+			if (data.posts !== undefined) return data.cursor;
 			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
 			return _payload.data.cursor;
 		} else {
@@ -105,10 +106,15 @@ function useTimeline({
 	function generateFeedBatch(data: any) {
 		let _feed = [];
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
-			_feed = _payload.data.feed;
+			if (data.posts) {
+				// for hashtags
+				_feed = data.posts;
+			} else {
+				const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
+				_feed = _payload.data.feed;
+			}
 		} else {
-			_feed = data;
+			_feed = data.posts ? data.posts : data;
 		}
 		try {
 			return PostMiddleware.deserialize<unknown[]>(_feed, driver, server);
@@ -163,6 +169,7 @@ function useTimeline({
 			}
 			case TimelineFetchMode.HASHTAG: {
 				const { data, error } = await client.timelines.hashtag(_id, _query);
+				console.log('all eyes on me', data, error);
 				if (error) return DEFAULT_RETURN_VALUE;
 				return createResultBatch(data);
 			}

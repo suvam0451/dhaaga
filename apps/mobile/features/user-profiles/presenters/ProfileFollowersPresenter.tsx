@@ -72,6 +72,7 @@ function ProfileFollowersPresenter() {
 				}
 				contentContainerStyle={{
 					marginTop: appDimensions.topNavbar.scrollViewTopPadding,
+					paddingBottom: 54,
 				}}
 			/>
 		</AppTopNavbar>
