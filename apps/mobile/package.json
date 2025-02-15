@@ -16,7 +16,7 @@
     "tl:sync": "python3 ./i18n/sync.py"
   },
   "dependencies": {
-    "@atproto/api": "^0.13.35",
+    "@atproto/api": "^0.14.1",
     "@dhaaga/bridge": "*",
     "@dhaaga/orm": "*",
     "@expo-google-fonts/bebas-neue": "^0.2.3",
