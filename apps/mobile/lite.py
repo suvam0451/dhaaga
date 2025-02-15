@@ -2,7 +2,24 @@ import subprocess
 import base64
 import os
 
+#
+def switch_to_lite_edition():
+    TARGET = './app.config.ts'
+
+    with open(TARGET, 'r') as file:
+        content = file.read()
+    # Edit
+    content = content.replace("const BUNDLE_ID = IS_DEV ? " +
+                              "'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga'",
+                              "const BUNDLE_ID = IS_DEV ? "
+                              "" + "'io.suvam.dhaaga.dev' : " +
+                                   "'io.suvam.dhaaga.lite'")
+    with open(TARGET, 'w') as file:
+        file.write(content)
+switch_to_lite_edition()
+
 subprocess.run(["npx", "expo", "prebuild", "--platform=android"])
+
 
 # ------ Path to the file you want to modify -------
 
@@ -13,15 +30,19 @@ def tweak_gradle_properties():
         content = file.read()
 
     # Edit
-    content = content.replace('reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64',
+    content = content.replace(
+        'reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64',
         'reactNativeArchitectures=arm64-v8a')
     content = content.replace('expo.useLegacyPackaging=false',
-        'expo.useLegacyPackaging=true')
+                              'expo.useLegacyPackaging=true')
 
     with open(TARGET, 'w') as file:
         file.write(content)
 
+
 tweak_gradle_properties()
+
+
 # ------------------
 
 # ------ Path to the file you want to modify -------
@@ -34,12 +55,15 @@ def fix_application_id():
 
     # Edit
     content = content.replace("applicationId 'io.suvam.dhaaga'",
-        "applicationId 'io.suvam.dhaaga.lite'")
+                              "applicationId 'io.suvam.dhaaga.lite'")
 
     with open(TARGET, 'w') as file:
         file.write(content)
 
+
 fix_application_id()
+
+
 # ------------------
 
 # ------ Path to the file you want to modify -------
@@ -54,7 +78,7 @@ def disable_dependency_info():
     }\n"""
 
     with open(TARGET, 'r') as file:
-       lines = file.readlines()
+        lines = file.readlines()
 
     android_block_line_index = -1
     for i, line in enumerate(lines):
@@ -74,7 +98,10 @@ def disable_dependency_info():
     with open(TARGET, 'w') as file:
         file.writelines(lines)
 
+
 disable_dependency_info()
+
+
 # ------ Path to the file you want to modify -------
 
 def change_app_name():
@@ -85,15 +112,18 @@ def change_app_name():
 
     # Edit
     content = content.replace("name=\"app_name\">Dhaaga</string>",
-        "name=\"app_name\">Dhaaga (Lite)</string>")
+                              "name=\"app_name\">Dhaaga (Lite)</string>")
 
     with open(TARGET, 'w') as file:
         file.write(content)
+
 
 change_app_name()
 '''
 
 '''
+
+
 def add_signing_key():
     BASE64_SOURCE = os.getenv("LITE_EDITION_SIGNING_KEY")
     KEY_STORE_PASSWORD = os.getenv("KEY_STORE_PASSWORD")
@@ -127,6 +157,7 @@ def add_signing_key():
 
     with open(GRADLE_FILE, 'w') as file:
         file.writelines(content)
+
 
 add_signing_key()
 # ------------------
