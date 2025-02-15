@@ -1,6 +1,6 @@
 import ControlSegmentView from '../../../../../components/lib/ControlSegmentView';
 import useTimelineControllerInteractor from '../interactors/useTimelineControllerInteractor';
-import { Fragment } from 'react';
+import { View } from 'react-native';
 
 function LocalTimelineControlPresenter() {
 	const {
@@ -13,7 +13,7 @@ function LocalTimelineControlPresenter() {
 		State,
 	} = useTimelineControllerInteractor();
 	return (
-		<Fragment>
+		<View style={{ paddingHorizontal: 12 }}>
 			<ControlSegmentView
 				label={'Show posts from:'}
 				buttons={[
@@ -60,7 +60,7 @@ function LocalTimelineControlPresenter() {
 				selection={MediaOpt}
 				hash={State}
 			/>
-		</Fragment>
+		</View>
 	);
 }
 

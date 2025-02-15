@@ -17,6 +17,7 @@ import { appDimensions } from '../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppText } from '../../../components/lib/Text';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { Image } from 'expo-image';
 
 type Props = {
 	pinId: number;
@@ -24,6 +25,7 @@ type Props = {
 	label: string;
 	iconId: APP_ICON_ENUM;
 	server: string;
+	avatar?: string;
 };
 
 function PinnedTimelineItemView({
@@ -32,6 +34,7 @@ function PinnedTimelineItemView({
 	label,
 	iconId,
 	server,
+	avatar,
 }: Props) {
 	const { theme } = useAppTheme();
 	const { db } = useAppDb();
@@ -68,25 +71,43 @@ function PinnedTimelineItemView({
 					style={[
 						styles.button,
 						{
-							backgroundColor: '#242424', // '#282828',
+							backgroundColor: theme.background.a30, // '#282828',
 						},
 					]}
 					onPress={onPress}
 				>
 					<View style={styles.tiltedIconContainer}>
-						<AppIcon
-							id={iconId}
-							size={appDimensions.socialHub.feeds.tiltedIconSize}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-							iconStyle={{ color: theme.secondary.a0 }}
-							onPress={onPress}
-						/>
+						{avatar ? (
+							// @ts-ignore-next-line
+							<Image
+								source={{ uri: avatar }}
+								style={{
+									width: 44,
+									height: 44,
+									opacity: 0.84,
+									transform: [{ rotateZ: '-15deg' }],
+								}}
+							/>
+						) : (
+							<AppIcon
+								id={iconId}
+								size={appDimensions.socialHub.feeds.tiltedIconSize}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+								iconStyle={{
+									color: theme.secondary.a0,
+									opacity: 0.48,
+									transform: [{ rotateZ: '-15deg' }],
+								}}
+								onPress={onPress}
+							/>
+						)}
 					</View>
 					<AppText.H6
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{
 							color: theme.complementary.a0,
 						}}
+						numberOfLines={1}
 					>
 						{label}
 					</AppText.H6>
@@ -131,10 +152,8 @@ const styles = StyleSheet.create({
 		width: 'auto',
 	},
 	tiltedIconContainer: {
-		transform: [{ rotateZ: '-15deg' }],
 		width: 42,
 		position: 'absolute',
-		opacity: 0.48,
 		right: 0,
 		bottom: -6,
 	},

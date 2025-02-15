@@ -90,6 +90,14 @@
           "Anda dapat mengedit apa yang disimpan dalam daftar ini dari antarmuka web server Anda!"
         ]
       },
+      "infoFeed": {
+        "label": "Feed Timeline",
+        "description": [
+          "Ini adalah timeline feed kustom.",
+          "Feed kustom adalah layanan yang menyediakan algoritma kustom kepada pengguna melalui AT Protocol.",
+          "Ini memungkinkan pengguna untuk memilih timeline mereka sendiri."
+        ]
+      },
       "_menuItems": {
         "L_openInBrowser": "Buka di Browser",
         "D_openInBrowser": "Lihat di browser eksternal"

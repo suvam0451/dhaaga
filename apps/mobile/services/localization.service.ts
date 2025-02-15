@@ -44,6 +44,9 @@ export class LocalizationService {
 					? `Known Network`
 					: `Federated`;
 			}
+			case TimelineFetchMode.FEED: {
+				return `${query?.label}`;
+			}
 			default: {
 				return 'Unknown';
 			}

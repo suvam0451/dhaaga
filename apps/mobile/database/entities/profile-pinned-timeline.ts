@@ -3,13 +3,47 @@ import { DataSource } from '../dataSource';
 import { Account, Profile, ProfilePinnedTimeline } from '../_schema';
 import { AccountService } from './account';
 import { ProfileService } from './profile';
-import DriverService from '../../services/driver.service';
+import DriverService, {
+	APP_PINNED_OBJECT_TYPE,
+} from '../../services/driver.service';
 import { RandomUtil } from '../../utils/random.utils';
+import { AppFeedObject } from '../../types/app-feed.types';
 
 @DbErrorHandler()
-export class Repo {}
+export class Repo {
+	static addFeed(
+		db: DataSource,
+		acct: Account,
+		profile: Profile,
+		feed: AppFeedObject,
+	) {
+		const _uuid = RandomUtil.nanoId();
+		db.profilePinnedTimeline.insert({
+			uuid: _uuid,
+			server: acct.server,
+			category: APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_FEED,
+			driver: acct.driver,
+			required: false,
+			show: true,
+			itemOrder: 1,
+			page: 1,
+			uri: feed.uri,
+			displayName: feed.displayName,
+			avatarUrl: feed.avatar || null,
+			profileId: profile.id,
+			active: true,
+		});
+
+		return db.profilePinnedTimeline.findOne({
+			uuid: _uuid,
+		});
+	}
+}
 
 export class Service {
+	static listByUri(db: DataSource, uri: string) {
+		return db.profilePinnedTimeline.find({ uri, active: true });
+	}
 	static findById(db: DataSource, id: number): ProfilePinnedTimeline {
 		return db.profilePinnedTimeline.findOne({ id });
 	}
@@ -134,6 +168,24 @@ export class Service {
 
 	static getOwnerAccount(db: DataSource, profile: Profile): Account {
 		return AccountService.getById(db, profile.accountId);
+	}
+
+	static toggleTimelinePin(
+		db: DataSource,
+		acct: Account,
+		profile: Profile,
+		feed: AppFeedObject,
+	) {
+		const matched = Service.findByUri(db, profile, acct.server, feed.uri);
+		if (matched) {
+			db.profilePinnedTimeline.updateById(matched.id, {
+				active: !matched.active,
+				show: true,
+			});
+			return Service.findByUri(db, profile, acct.server, feed.uri);
+		}
+
+		return Repo.addFeed(db, acct, profile, feed);
 	}
 }
 

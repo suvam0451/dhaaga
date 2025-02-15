@@ -1,11 +1,11 @@
 import useRelationInteractor from '../interactors/useRelationInteractor';
 import FollowRequestPendingState from '../../../components/common/relationship/fragments/FollowRequestPendingState';
 import { View } from 'react-native';
-import CurrentRelationView from '../view/CurrentRelationView';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { useAppDialog } from '../../../hooks/utility/global-state-extractors';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { useTranslation } from 'react-i18next';
+import { CurrentRelationView } from '../../../components/lib/Buttons';
 
 type RelationshipButtonCoreProps = {
 	userId: string;

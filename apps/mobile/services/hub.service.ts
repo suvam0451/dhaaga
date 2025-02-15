@@ -15,6 +15,7 @@ export class HubService {
 		destination: TimelineFetchMode;
 		iconId: APP_ICON_ENUM;
 		server: string;
+		avatar?: string;
 	}[] {
 		return items
 			.map((item) => {
@@ -62,6 +63,16 @@ export class HubService {
 							label: t(`hub.feeds.bubble`),
 							destination: TimelineFetchMode.SOCIAL,
 							iconId: 'create' as APP_ICON_ENUM,
+							server: item.server,
+						};
+					}
+					case APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_FEED: {
+						return {
+							pinId: item.id,
+							label: item.displayName,
+							destination: TimelineFetchMode.FEED,
+							iconId: 'create' as APP_ICON_ENUM,
+							avatar: item.avatarUrl,
 							server: item.server,
 						};
 					}

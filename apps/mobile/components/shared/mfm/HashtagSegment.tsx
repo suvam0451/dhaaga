@@ -16,7 +16,7 @@ function HashtagSegment({ value }: Props) {
 	const { theme } = useAppTheme();
 	const { setCtx, show } = useAppBottomSheet();
 
-	const _value = decodeURI(value);
+	const _value = decodeURI(value.replace('#', '')); // atproto
 
 	function onPress() {
 		setCtx({ tag: _value });

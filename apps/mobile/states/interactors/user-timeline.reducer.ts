@@ -74,11 +74,14 @@ function reducer(state: State, action: Actions): State {
 		}
 		case ACTION.APPEND_RESULTS: {
 			const copy = Array.from(state.items);
-			for (const item of action.payload.items) {
-				if (state.seen.has(item.id)) continue;
-				copy.push(item);
-			}
+
 			return produce(state, (draft) => {
+				for (const item of action.payload.items) {
+					if (draft.seen.has(item.id)) continue;
+					draft.seen.add(item.id);
+					copy.push(item);
+				}
+
 				draft.items = copy;
 				draft.maxId = action.payload.maxId;
 			});

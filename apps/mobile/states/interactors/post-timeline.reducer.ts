@@ -222,6 +222,17 @@ function reducer(state: State, action: Actions): State {
 								draft.seen = new Set();
 							});
 						}
+						case APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_FEED: {
+							return produce(state, (draft) => {
+								draft.feedType = TimelineFetchMode.FEED;
+								draft.sessionId = RandomUtil.nanoId();
+								draft.seen = new Set();
+								draft.query = {
+									id: match.uri,
+									label: match.displayName,
+								};
+							});
+						}
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_LOCAL: {
 							return produce(state, (draft) => {
 								draft.feedType = TimelineFetchMode.LOCAL;

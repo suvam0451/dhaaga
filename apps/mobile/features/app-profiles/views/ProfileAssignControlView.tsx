@@ -1,0 +1,3 @@
+type Props = {
+	onPressAddNew: () => void;
+};

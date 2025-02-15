@@ -15,7 +15,7 @@ import BookmarkUnsupported from '../components/BookmarkUnsupported';
 import CollectionItem from '../components/CollectionItem';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import CollectionSheetControlView from '../views/CollectionSheetControlView';
+import AssignmentListControlView from '../../_shared/views/AssignmentListControlView';
 import { Fragment } from 'react';
 import { AppText } from '../../../components/lib/Text';
 import { appDimensions } from '../../../styles/dimensions';
@@ -73,7 +73,11 @@ function CollectionAssignmentSheetPresenter() {
 								toggleBookmark={toggleBookmark}
 							/>
 						)}
-						<CollectionSheetControlView onPressAddNew={onAddNewCollection} />
+						<AssignmentListControlView
+							onPressAddNew={onAddNewCollection}
+							sectionLabel={t(`collections.collections`)}
+							actionButtonLabel={t(`collections.newCollection`)}
+						/>
 					</Fragment>
 				}
 				renderItem={({ item }) => (

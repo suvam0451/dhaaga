@@ -1,4 +1,10 @@
 {
+  "feed": {
+    "subscribeOption": "購読する",
+    "unsubscribeOption": "購読解除",
+    "pinOption": "ピン留め",
+    "unpinOption": "ピン留め解除"
+  },
   "features": {
     "notAvailable": {
       "title": "利用できません",

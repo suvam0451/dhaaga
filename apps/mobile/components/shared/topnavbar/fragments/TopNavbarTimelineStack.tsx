@@ -97,14 +97,14 @@ function TimelinesHeader() {
 				>
 					{_label || 'Unknown'}
 				</Text>
-				<View
-					style={{
-						marginLeft: 4,
-						marginTop: 2,
-					}}
-				>
-					<AppIcon id={'chevron-down'} color={theme.primary.a0} size={20} />
-				</View>
+				{/*<View*/}
+				{/*	style={{*/}
+				{/*		marginLeft: 4,*/}
+				{/*		marginTop: 2,*/}
+				{/*	}}*/}
+				{/*>*/}
+				{/*	<AppIcon id={'chevron-down'} color={theme.primary.a0} size={20} />*/}
+				{/*</View>*/}
 			</TouchableOpacity>
 
 			<View
