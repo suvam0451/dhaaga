@@ -1,4 +1,10 @@
 {
+  "feed": {
+    "subscribeOption": "Langganan",
+    "unsubscribeOption": "Berhenti Langganan",
+    "pinOption": "Pin",
+    "unpinOption": "Hapus Pin"
+  },
   "features": {
     "notAvailable": {
       "title": "Tidak Tersedia",

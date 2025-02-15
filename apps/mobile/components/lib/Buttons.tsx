@@ -16,6 +16,7 @@ import { AppRelationship } from '../../features/user-profiles/types/ap.types';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { AppText } from './Text';
+import { appDimensions } from '../../styles/dimensions';
 
 type AppButtonFollowIndicatorProps = {
 	onClick: () => void;
@@ -224,6 +225,11 @@ export function AppButtonVariantDestructive({
 }
 
 const styles = StyleSheet.create({
+	button: {
+		borderRadius: appDimensions.buttons.borderRadius,
+		paddingVertical: 8,
+		minWidth: 128,
+	},
 	passiveButtonStyle: {
 		borderColor: 'red',
 		backgroundColor: '#2e6945', // '#cb6483',
@@ -236,7 +242,6 @@ const styles = StyleSheet.create({
 	},
 	activeButtonStyle: {
 		borderColor: '#cb6483',
-		// backgroundColor: 'rgba(39, 39, 39, 1)',
 		backgroundColor: '#363636',
 		borderRadius: 4,
 		paddingVertical: 8,
@@ -428,3 +433,68 @@ export function AppCtaButton({ label, onPress, style }: AppCtaButtonProps) {
 }
 
 export default AppButtonFollowIndicator;
+
+type ButtonVariant = 'blank' | 'cta' | 'warm' | 'info' | 'warn' | 'error';
+
+export type RelationshipButtonProps = {
+	loading: boolean;
+	onPress: () => void;
+	label: string;
+	variant: ButtonVariant;
+	style?: StyleProp<ViewStyle>;
+};
+
+export function CurrentRelationView({
+	loading,
+	onPress,
+	label,
+	variant,
+	style,
+}: RelationshipButtonProps) {
+	const { theme } = useAppTheme();
+
+	const bgColor: Record<ButtonVariant, string> = {
+		blank: 'transparent',
+		error: 'red',
+		cta: theme.primary.a0,
+		info: theme.background.a20,
+		warn: 'orange',
+		warm: 'transparent',
+	};
+
+	const fgColor: Record<ButtonVariant, string> = {
+		blank: 'transparent',
+		error: 'red',
+		cta: 'black',
+		info: theme.complementary.a0,
+		warn: 'orange',
+		warm: theme.primary.a0,
+	};
+
+	if (variant === 'blank') return <View style={[styles.button, style]} />;
+
+	return (
+		<Pressable
+			onPress={onPress}
+			style={[
+				styles.button,
+				{
+					backgroundColor: bgColor[variant],
+				},
+				style,
+			]}
+		>
+			{loading ? (
+				<ActivityIndicator size={20} color={fgColor[variant]} />
+			) : (
+				<AppText.Medium
+					style={[
+						{ color: fgColor[variant], fontSize: 16, textAlign: 'center' },
+					]}
+				>
+					{label}
+				</AppText.Medium>
+			)}
+		</Pressable>
+	);
+}

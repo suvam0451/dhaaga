@@ -1,4 +1,10 @@
 {
+  "feed": {
+    "subscribeOption": "Subscribe",
+    "unsubscribeOption": "Unsubscribe",
+    "pinOption": "Pin",
+    "unpinOption": "Unpin"
+  },
   "features": {
     "notAvailable": {
       "title": "Not Available",
