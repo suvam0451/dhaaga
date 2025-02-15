@@ -23,6 +23,8 @@ jobs:
           python-version: '3.13'
       - run: python lite.py # pre-requisites scripts
         working-directory: ./apps/mobile
+      - run: bun add -D @react-native-community/cli # add cli
+        working-directory: ./apps/mobile
       - run: npx react-native build-android --mode=release # produce aab
         working-directory: ./apps/mobile
       - run: ./gradlew assembleRelease # produce apk
