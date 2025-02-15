@@ -1,7 +1,6 @@
 import ControlSegmentView from '../../../../../components/lib/ControlSegmentView';
 import { View } from 'react-native';
 import { InlineCheckboxView } from '../../../../../components/lib/Checkboxes';
-import { Fragment } from 'react';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { AppText } from '../../../../../components/lib/Text';
@@ -30,7 +29,7 @@ function UserTimelineControlPresenter({
 	const { theme } = useAppTheme();
 
 	return (
-		<Fragment>
+		<View style={{ paddingHorizontal: 12 }}>
 			<ControlSegmentView
 				label={'Timeline Options'}
 				buttons={[
@@ -78,7 +77,7 @@ function UserTimelineControlPresenter({
 					onClick={onClickHideReblog}
 				/>
 			</View>
-		</Fragment>
+		</View>
 	);
 }
 

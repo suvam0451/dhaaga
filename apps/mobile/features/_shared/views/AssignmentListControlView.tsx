@@ -8,26 +8,34 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 
 type Props = {
 	onPressAddNew: () => void;
+	sectionLabel: string;
+	actionButtonLabel: string;
 };
 
-function CollectionSheetControlView({ onPressAddNew }: Props) {
+/**
+ * Shown on top of an assignment matrix
+ * (bottom sheet specific component),
+ * which allows the user to add a new
+ * profile/collection etc. by clicking
+ * the cta button
+ * @param onPressAddNew
+ * @param sectionLabel
+ * @param actionButtonLabel
+ * @constructor
+ */
+function AssignmentListControlView({
+	onPressAddNew,
+	sectionLabel,
+	actionButtonLabel,
+}: Props) {
 	const { theme } = useAppTheme();
-	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
 	return (
-		<View
-			style={{
-				flexDirection: 'row',
-				justifyContent: 'space-between',
-				width: '100%',
-				paddingHorizontal: 16,
-				marginBottom: appDimensions.timelines.sectionBottomMargin,
-			}}
-		>
+		<View style={styles.root}>
 			<AppText.Medium
 				style={[styles.sectionLabel, { color: theme.secondary.a10 }]}
 			>
-				{t(`collections.collections`)}
+				{sectionLabel}
 			</AppText.Medium>
 			<Pressable onPress={onPressAddNew}>
 				<AppText.Medium
@@ -36,18 +44,22 @@ function CollectionSheetControlView({ onPressAddNew }: Props) {
 						fontSize: 16,
 					}}
 				>
-					{t(`collections.newCollection`)}
+					{actionButtonLabel}
 				</AppText.Medium>
 			</Pressable>
 		</View>
 	);
 }
 
-export default CollectionSheetControlView;
+export default AssignmentListControlView;
 
 const styles = StyleSheet.create({
 	root: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		width: '100%',
 		paddingHorizontal: 16,
+		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 	sectionContainer: {
 		marginBottom: 16,

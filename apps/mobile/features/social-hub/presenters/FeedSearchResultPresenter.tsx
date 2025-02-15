@@ -1,7 +1,7 @@
 import { useSocialHubFeedPinStatus } from '../api/useSocialHubFeedPinStatus';
 import { Profile } from '../../../database/_schema';
 import { AppFeedObject } from '../../../types/app-feed.types';
-import { useSocialHubMutation } from '../api/useSocialHubMutation';
+import { useProfileMutation } from '../../app-profiles/api/useProfileMutation';
 import { StyleSheet, View } from 'react-native';
 import UserPinSearchResultControllerView from '../views/UserPinSearchResultController';
 import { AppDivider } from '../../../components/lib/Divider';
@@ -16,12 +16,13 @@ type Props = {
 
 function FeedSearchResultPresenter({ profile, feed, onChangeCallback }: Props) {
 	const { theme } = useAppTheme();
-	const { toggleFeedToProfile } = useSocialHubMutation(profile);
+	const { toggleFeedPin } = useProfileMutation();
 	const { data, refetch } = useSocialHubFeedPinStatus(profile, feed);
 	function onToggle() {
-		toggleFeedToProfile
+		toggleFeedPin
 			.mutateAsync({
 				feed,
+				profile,
 			})
 			.finally(() => {
 				refetch();

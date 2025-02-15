@@ -1,16 +1,16 @@
-import useApiGetFeedDetails from '../interactors/useApiGetFeedDetails';
+import useApiGetFeedDetails from '../../timelines/features/controller/interactors/useApiGetFeedDetails';
 import { View } from 'react-native';
-import { CurrentRelationView } from '../../../../../components/lib/Buttons';
-import { appDimensions } from '../../../../../styles/dimensions';
+import { CurrentRelationView } from '../../../components/lib/Buttons';
+import { appDimensions } from '../../../styles/dimensions';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 type Props = {
 	uri: string;
 };
 
-function FeedControlPresenter({ uri }: Props) {
+function SyncStatusPresenter({ uri }: Props) {
 	const [SubscriptionLoading, setSubscriptionLoading] = useState(false);
 	const [PinStatusLoading, setPinStatusLoading] = useState(false);
 	const { data, isFetched, error, toggleSubscription, togglePin } =
@@ -61,4 +61,4 @@ function FeedControlPresenter({ uri }: Props) {
 	);
 }
 
-export default FeedControlPresenter;
+export default SyncStatusPresenter;

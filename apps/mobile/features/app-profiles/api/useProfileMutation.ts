@@ -7,20 +7,32 @@ import { ProfileService } from '../../../database/entities/profile';
 import { AppFeedObject } from '../../../types/app-feed.types';
 import { ProfilePinnedTimelineService } from '../../../database/entities/profile-pinned-timeline';
 
-export function useSocialHubMutation(profile: Profile) {
+export function useProfileMutation() {
 	const { db } = useAppDb();
 
-	const toggleUserToProfile = useMutation({
-		mutationKey: ['hub', profile],
-		mutationFn: async ({ user }: { user: AppUserObject }) => {
+	const toggleUserPin = useMutation({
+		mutationKey: ['hub/user-assign'],
+		mutationFn: async ({
+			user,
+			profile,
+		}: {
+			user: AppUserObject;
+			profile: Profile;
+		}) => {
 			const acct = ProfileService.getOwnerAccount(db, profile);
 			return ProfilePinnedUserService.toggleUserPin(db, profile, acct, user);
 		},
 	});
 
-	const toggleFeedToProfile = useMutation({
-		mutationKey: ['hub', profile],
-		mutationFn: async ({ feed }: { feed: AppFeedObject }) => {
+	const toggleFeedPin = useMutation({
+		mutationKey: ['hub/feed-assign'],
+		mutationFn: async ({
+			feed,
+			profile,
+		}: {
+			feed: AppFeedObject;
+			profile: Profile;
+		}) => {
 			const acct = ProfileService.getOwnerAccount(db, profile);
 			return ProfilePinnedTimelineService.toggleTimelinePin(
 				db,
@@ -32,7 +44,7 @@ export function useSocialHubMutation(profile: Profile) {
 	});
 
 	return {
-		toggleUserToProfile,
-		toggleFeedToProfile,
+		toggleUserPin,
+		toggleFeedPin,
 	};
 }

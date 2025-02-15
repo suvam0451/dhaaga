@@ -79,18 +79,14 @@ export function useDbSavedPostStatus(id: string) {
 	const { acct } = useAppAcct();
 
 	return useQuery<CollectionHasSavedPost[]>({
-		queryKey: ['db', 'accountCollection', acct?.id, id],
+		queryKey: ['db', 'collections/post-assign', acct?.id, id],
 		initialData: [],
 		queryFn: () => {
 			const saved = CollectionSavedPostService.findSavedPost(db, acct, id);
+			const st = new Set(saved.map((obj) => obj.collectionId));
+
 			const collections = AccountCollectionService.listAllForAccount(db, acct);
-			const collectionIdsWithObject = new Set(
-				saved.map((obj) => obj.collectionId),
-			);
-			for (let i = 0; i < collections.length; i++) {
-				collections[i]['has'] = collectionIdsWithObject.has(collections[i].id);
-			}
-			return collections as CollectionHasSavedPost[];
+			return collections.map((o) => ({ ...o, has: st.has(o.id) })) as any;
 		},
 	});
 }

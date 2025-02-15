@@ -1,7 +1,8 @@
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../../../components/lib/Text';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Fragment } from 'react';
+import { appDimensions } from '../../../../../styles/dimensions';
 
 type Props = {
 	title: string;
@@ -14,41 +15,52 @@ function OverviewView({ title, subtitle, description }: Props) {
 
 	return (
 		<Fragment>
-			<AppText.SemiBold
+			<View
 				style={[
-					styles.title,
+					styles.sheetHeader,
 					{
-						color: theme.primary.a0,
+						backgroundColor: theme.background.a30,
 					},
 				]}
 			>
-				{title}
-			</AppText.SemiBold>
-			{subtitle && (
-				<AppText.Medium
+				<AppText.SemiBold
 					style={[
-						styles.subtitle,
+						styles.title,
 						{
-							color: theme.complementary.a0,
+							color: theme.primary.a0,
 						},
 					]}
 				>
-					{subtitle}
-				</AppText.Medium>
-			)}
-			{description.map((item, i) => (
-				<AppText.Normal
-					key={i}
-					style={[
-						styles.desc,
-						{
-							color: theme.secondary.a10,
-						},
-					]}
-				>
-					{item}
-				</AppText.Normal>
-			))}
+					{title}
+				</AppText.SemiBold>
+				{subtitle && (
+					<AppText.Medium
+						style={[
+							styles.subtitle,
+							{
+								color: theme.complementary.a0,
+							},
+						]}
+					>
+						{subtitle}
+					</AppText.Medium>
+				)}
+			</View>
+			<View style={styles.descContainer}>
+				{description.map((item, i) => (
+					<AppText.Normal
+						key={i}
+						style={[
+							styles.desc,
+							{
+								color: theme.secondary.a10,
+							},
+						]}
+					>
+						{item}
+					</AppText.Normal>
+				))}
+			</View>
 		</Fragment>
 	);
 }
@@ -56,6 +68,17 @@ function OverviewView({ title, subtitle, description }: Props) {
 export default OverviewView;
 
 export const styles = StyleSheet.create({
+	sheetHeader: {
+		paddingTop: appDimensions.bottomSheet.clearanceTop,
+		paddingBottom: appDimensions.timelines.sectionBottomMargin * 1.5,
+		marginBottom: appDimensions.timelines.sectionBottomMargin * 1.5,
+		paddingHorizontal: 12,
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
+	},
+	descContainer: {
+		paddingHorizontal: 12,
+	},
 	desc: {
 		marginBottom: 4,
 	},
@@ -64,6 +87,5 @@ export const styles = StyleSheet.create({
 	},
 	subtitle: {
 		fontSize: 16,
-		marginBottom: 16,
 	},
 });

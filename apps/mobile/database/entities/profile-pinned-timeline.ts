@@ -41,6 +41,9 @@ export class Repo {
 }
 
 export class Service {
+	static listByUri(db: DataSource, uri: string) {
+		return db.profilePinnedTimeline.find({ uri, active: true });
+	}
 	static findById(db: DataSource, id: number): ProfilePinnedTimeline {
 		return db.profilePinnedTimeline.findOne({ id });
 	}

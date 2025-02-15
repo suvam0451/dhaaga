@@ -72,6 +72,14 @@ export class Service {
 		});
 	}
 
+	static listByUserId(db: DataSource, server: string, userId: string) {
+		return db.profilePinnedUser.find({
+			server,
+			identifier: userId,
+			active: true,
+		});
+	}
+
 	static findById(db: DataSource, id: number): ProfilePinnedUser {
 		return db.profilePinnedUser.findOne({ id });
 	}

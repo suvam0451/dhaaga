@@ -4,7 +4,7 @@ import UserPinSearchResultView from '../views/UserPinSearchResultView';
 import { View, StyleSheet } from 'react-native';
 import { AppDivider } from '../../../components/lib/Divider';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { useSocialHubMutation } from '../api/useSocialHubMutation';
+import { useProfileMutation } from '../../app-profiles/api/useProfileMutation';
 import { Profile } from '../../../database/_schema';
 import { useSocialHubUserPinStatus } from '../api/useSocialHubUserPinStatus';
 
@@ -17,11 +17,12 @@ type Props = {
 function UserSearchResultPresenter({ profile, user, onChangeCallback }: Props) {
 	const { theme } = useAppTheme();
 	const { data, refetch } = useSocialHubUserPinStatus(profile, user);
-	const { toggleUserToProfile } = useSocialHubMutation(profile);
+	const { toggleUserPin } = useProfileMutation();
 	function onToggle() {
-		toggleUserToProfile
+		toggleUserPin
 			.mutateAsync({
 				user,
+				profile,
 			})
 			.finally(() => {
 				refetch();

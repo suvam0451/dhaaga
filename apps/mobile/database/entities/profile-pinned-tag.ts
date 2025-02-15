@@ -9,6 +9,13 @@ import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 export class Repo {}
 
 export class Service {
+	static listByName(db: DataSource, name: string) {
+		return db.profilePinnedTag.find({
+			name: name,
+			active: true,
+		});
+	}
+
 	static delete(db: DataSource, id: number) {
 		const match = Service.findById(db, id);
 		if (match) db.profilePinnedTag.updateById(id, { active: false });
