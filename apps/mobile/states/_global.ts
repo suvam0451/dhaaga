@@ -118,6 +118,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	LINK = 'Link',
 	MORE_POST_ACTIONS = 'MorePostActions',
 	MORE_USER_ACTIONS = 'MoreUserActions',
+	MORE_FEED_ACTIONS = 'MoreFeedActions',
 	NA = 'N/A',
 	PROFILE_PEEK = 'ProfilePeek',
 	REACTION_DETAILS = 'ReactionDetails',

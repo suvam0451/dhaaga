@@ -7,7 +7,6 @@ import {
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';
-import { UserListView } from '../../_shared/views/UserListView';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useState } from 'react';
 import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';

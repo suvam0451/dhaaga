@@ -6,10 +6,10 @@ import { AppFeedObject } from '../../../types/app-feed.types';
 import { AppDivider } from '../../../components/lib/Divider';
 import { appDimensions } from '../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppIcon } from '../../../components/lib/Icon';
 import { StatItem } from '../../../components/common/status/PostStats';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+import TimelineIndicatorPresenter from '../../feeds/presenters/TimelineIndicatorPresenter';
 
 type SearchResultFeedItemProps = {
 	item: AppFeedObject;
@@ -68,13 +68,7 @@ export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 						</AppText.Medium>
 					</AppText.Medium>
 				</View>
-				<AppIcon
-					id={'add'}
-					containerStyle={{ padding: 6 }}
-					onPress={() => {}}
-					size={28}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-				/>
+				<TimelineIndicatorPresenter item={item} />
 			</View>
 			<AppText.Normal
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}

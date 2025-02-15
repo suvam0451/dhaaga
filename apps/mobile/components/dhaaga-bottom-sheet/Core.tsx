@@ -30,6 +30,7 @@ import CollectionAssignmentSheetPresenter from '../../features/collections/prese
 import TimelineControllerSheetPresenter from '../../features/timelines/features/controller/presenters/TimelineControllerSheetPresenter';
 import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 import FeedAddSheetPresenter from '../../features/social-hub/presenters/FeedAddSheetPresenter';
+import MoreActionsSheetPresenter from '../../features/feeds/presenters/MoreActionsSheetPresenter';
 
 /**
  * The little handle thingy on top of every bottom sheet
@@ -81,6 +82,8 @@ function Factory() {
 			return <UserPeekSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
 			return <AppBottomSheetPostMoreActions />;
+		case APP_BOTTOM_SHEET_ENUM.MORE_FEED_ACTIONS:
+			return <MoreActionsSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS:
 			return <AppBottomSheetReactionDetails />;
 		case APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT:

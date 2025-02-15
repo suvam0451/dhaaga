@@ -121,7 +121,10 @@ function SearchWidget() {
 					{
 						flexDirection: 'row',
 						paddingLeft: IsWidgetExpanded ? 6 : 0,
-						backgroundColor: theme.primary.a0,
+						backgroundColor:
+							!IsWidgetExpanded && !!State.q
+								? 'rgba(160, 160, 160, 0.28)'
+								: theme.primary.a0,
 						right: CONTAINER_PADDING,
 						borderRadius: 16,
 					},
@@ -131,7 +134,13 @@ function SearchWidget() {
 					{State.searchStatus === 'loading' ? (
 						<Loader />
 					) : (
-						<Feather name="search" color={'black'} size={25} />
+						<Feather
+							name="search"
+							color={
+								!IsWidgetExpanded && !!State.q ? 'rgba(0, 0, 0, 0.36)' : 'black'
+							}
+							size={25}
+						/>
 					)}
 				</AnimatedPressable>
 				{IsWidgetExpanded && (
@@ -163,7 +172,7 @@ export default SearchWidget;
 const styles = StyleSheet.create({
 	root: {
 		position: 'absolute',
-		bottom: 20,
+		bottom: 16,
 		width: '100%',
 	},
 
