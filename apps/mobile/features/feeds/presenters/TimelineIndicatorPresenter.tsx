@@ -2,7 +2,11 @@ import { AppFeedObject } from '../../../types/app-feed.types';
 import useApiGetFeedDetails from '../../timelines/features/controller/interactors/useApiGetFeedDetails';
 import { View } from 'react-native';
 import { AppIcon } from '../../../components/lib/Icon';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppBottomSheet,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 type Props = {
 	item: AppFeedObject;
@@ -16,8 +20,17 @@ type Props = {
 function TimelineIndicatorPresenter({ item }: Props) {
 	const { data, isFetched, error } = useApiGetFeedDetails(item.uri);
 	const { theme } = useAppTheme();
+	const { setCtx, show } = useAppBottomSheet();
 
 	if (!isFetched || error) return <View />;
+
+	function onMoreOptionsPressed() {
+		setCtx({
+			feedUri: item.uri,
+			feed: item,
+		});
+		show(APP_BOTTOM_SHEET_ENUM.MORE_FEED_ACTIONS, true);
+	}
 
 	return data?.subscribed ? (
 		<AppIcon
@@ -25,7 +38,7 @@ function TimelineIndicatorPresenter({ item }: Props) {
 			size={32}
 			color={theme.primary.a0}
 			containerStyle={{ padding: 6 }}
-			onPress={() => {}}
+			onPress={onMoreOptionsPressed}
 		/>
 	) : (
 		<AppIcon
@@ -33,7 +46,7 @@ function TimelineIndicatorPresenter({ item }: Props) {
 			size={32}
 			color={theme.secondary.a20}
 			containerStyle={{ padding: 6 }}
-			onPress={() => {}}
+			onPress={onMoreOptionsPressed}
 		/>
 	);
 }

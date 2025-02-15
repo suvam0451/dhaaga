@@ -298,7 +298,6 @@ function TimelineControllerSheetPresenter() {
 								<View style={{ marginHorizontal: 12 }}>
 									<SyncStatusPresenter uri={draft?.query?.id} />
 								</View>
-
 								<Divider />
 							</View>
 						}
