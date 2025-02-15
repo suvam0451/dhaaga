@@ -19,15 +19,15 @@ type MyFeedItemProps = {
 
 function MyFeedItem({ item }: MyFeedItemProps) {
 	const { theme } = useAppTheme();
-	const image = useImage(item.avatar);
+	const image = useImage({ uri: item?.avatar });
 	if (!image) return <View />;
 
 	function onPress() {
 		router.navigate({
 			pathname: '/profile/feed',
 			params: {
-				uri: item.uri,
-				displayName: item.displayName,
+				uri: item?.uri,
+				displayName: item?.displayName,
 			},
 		});
 	}
@@ -69,6 +69,7 @@ function Page() {
 	const { data, error } = useApiGetMyFeeds();
 	const { translateY } = useScrollMoreOnPageEnd();
 
+	console.log('items', data.items);
 	if (error) {
 		return (
 			<AppTopNavbar
