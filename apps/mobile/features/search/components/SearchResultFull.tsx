@@ -29,7 +29,9 @@ function WidgetExpanded() {
 		dispatch({
 			type: DiscoverTabReducerActionType.SET_CATEGORY,
 			payload: {
-				tab: searchTabs[0],
+				tab: searchTabs.find((o) => o === State.tab)
+					? searchTabs.find((o) => o === State.tab)
+					: searchTabs[0],
 			},
 		});
 	}, [driver]);

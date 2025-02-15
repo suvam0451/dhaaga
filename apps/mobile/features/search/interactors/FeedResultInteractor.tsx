@@ -5,7 +5,10 @@ import {
 	useFeedTimelineState,
 } from '../../timelines/contexts/FeedTimelineCtx';
 import { useApiSearchFeeds } from '../../../hooks/api/useApiSearch';
-import { AppFeedTimelineReducerActionType } from '../../../states/interactors/feed-timeline.reducer';
+import {
+	ACTION,
+	AppFeedTimelineReducerActionType,
+} from '../../../states/interactors/feed-timeline.reducer';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
@@ -13,6 +16,7 @@ import LoadingMore from '../../../components/screens/home/LoadingMore';
 import Header from '../components/Header';
 import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
 import FeedListItemView from '../../timelines/view/FeedListItemView';
+import NoResults from '../../../components/error-screen/NoResults';
 
 type FeedResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -23,10 +27,15 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	const State = useDiscoverTabState();
 	const TimelineState = useFeedTimelineState();
 	const TimelineDispatch = useFeedTimelineDispatch();
-	const { data, fetchStatus, refetch } = useApiSearchFeeds(
+	const { data, fetchStatus, refetch, isFetched } = useApiSearchFeeds(
 		State.q,
 		TimelineState.appliedMaxId,
 	);
+	useEffect(() => {
+		TimelineDispatch({
+			type: ACTION.RESET,
+		});
+	}, [State.q]);
 
 	async function refresh() {
 		setRefreshing(true);
@@ -72,7 +81,13 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 		updateQueryCache: loadMore,
 	});
 
-	if (TimelineState.items.length === 0) return <View />;
+	if (isFetched && TimelineState.items.length === 0)
+		return (
+			<View>
+				<Header />
+				<NoResults text={'No results 🤔'} subtext={'Try a different keyword'} />
+			</View>
+		);
 
 	return (
 		<View style={{ flex: 1 }}>
