@@ -75,9 +75,9 @@ function App() {
 
 	useEffect(() => {
 		setTimeout(() => {
-			Appearance.setColorScheme('dark');
+			// Appearance.setColorScheme('dark');
 			StatusBar.setBarStyle('light-content');
-			StatusBar.setBackgroundColor(theme.palette.bg);
+			StatusBar.setBackgroundColor(theme.background.a0);
 		}, 0);
 	}, [pathname, theme]);
 
@@ -86,7 +86,6 @@ function App() {
 			style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
 			onLayout={onLayoutRootView}
 		>
-			<StatusBar backgroundColor={theme.palette.bg} />
 			<Stack initialRouteName={'(tabs)'} screenOptions={{ headerShown: false }}>
 				<Stack.Screen
 					name="(tabs)"

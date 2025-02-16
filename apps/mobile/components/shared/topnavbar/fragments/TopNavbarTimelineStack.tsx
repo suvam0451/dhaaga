@@ -75,7 +75,6 @@ function TimelinesHeader() {
 
 	return (
 		<View style={[styles.root, { backgroundColor: theme.background.a10 }]}>
-			<StatusBar backgroundColor={theme.background.a10} />
 			<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>
 				<TopNavbarBackButton />
 			</View>
