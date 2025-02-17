@@ -130,8 +130,6 @@ def add_signing_key():
     KEY_ALIAS = os.getenv("KEY_ALIAS")
     KEY_PASSWORD = os.getenv("KEY_PASSWORD")
 
-    print(BASE64_SOURCE, KEY_STORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD)
-
     OUTPUT_FILE = "./android/app/dhaaga-lite.keystore"
     GRADLE_FILE = "./android/app/build.gradle"
 
