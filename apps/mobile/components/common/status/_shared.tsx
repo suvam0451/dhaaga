@@ -12,6 +12,8 @@ import { AppPostObject } from '../../../types/app-post.types';
 import { Fragment } from 'react';
 import { AccountSavedPost } from '../../../database/_schema';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { DatetimeUtil } from '../../../utils/datetime.utils';
+import { AppText } from '../../lib/Text';
 
 type PostMoreOptionsButtonProps = {
 	post: AppPostObject;
@@ -26,6 +28,7 @@ export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
 	const { show, setCtx } = useAppBottomSheet();
 	const { postPub } = useAppPublishers();
+	const { theme } = useAppTheme();
 
 	function onPress() {
 		if (ActivityPubService.misskeyLike(driver)) {
@@ -37,10 +40,19 @@ export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 
 	return (
 		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
+			<AppText.Normal
+				style={{
+					color: theme.secondary.a20,
+					fontSize: 14,
+					paddingTop: 2,
+				}}
+			>
+				{DatetimeUtil.timeAgo(post.createdAt)}
+			</AppText.Normal>
 			<View style={styles.statusMoreOptionsButton}>
 				<AppIcon
 					id={'more-options-vertical'}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 					size={16}
 					onPress={onPress}
 				/>
@@ -126,10 +138,6 @@ export function MiniMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 }
 
 export function MiniReplyButton({}: PostMoreOptionsButtonProps) {
-	const { driver } = useAppApiClient();
-	const { show, setCtx } = useAppBottomSheet();
-	const { postPub } = useAppPublishers();
-
 	function onPress() {
 		console.log('reply prompt pasted...');
 	}
@@ -185,12 +193,12 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		flexShrink: 1,
 		height: '100%',
-		paddingRight: 8,
+		paddingRight: 4,
 		paddingTop: 4,
 	},
 	statusMoreOptionsButton: {
 		height: '100%',
 		paddingTop: 4,
-		paddingLeft: 16,
+		paddingLeft: 4,
 	},
 });

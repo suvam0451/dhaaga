@@ -2,7 +2,6 @@ import { useState } from 'react';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { StyleSheet, View } from 'react-native';
-import PostStats from '../PostStats';
 import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
 import {
 	useAppAcct,
