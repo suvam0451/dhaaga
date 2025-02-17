@@ -4,7 +4,7 @@ const IS_DEV = process.env.APP_VARIANT === 'dev';
 
 // Replace "Dhaaga" with "Dhaaga (Lite)" for Lite edition
 const APP_NAME = IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga';
-const BUNDLE_ID = IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga';
+const BUNDLE_ID = IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga.lite';
 
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,

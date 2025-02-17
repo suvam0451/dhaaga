@@ -72,6 +72,7 @@ function LikeButton() {
 	}
 
 	const FLAG = PostMiddleware.isLiked(item);
+	const COUNT = item.stats.likeCount;
 
 	return (
 		<AppToggleIcon
@@ -88,6 +89,7 @@ function LikeButton() {
 				},
 			]}
 			onPress={_toggleLike}
+			count={COUNT}
 		/>
 	);
 }

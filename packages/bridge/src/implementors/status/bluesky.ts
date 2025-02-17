@@ -34,7 +34,7 @@ type BlueskyRichTextFacet = {
 };
 
 class BlueskyStatusAdapter implements StatusInterface {
-	post: PostView;
+	post: any; // PostView;
 	reply: ReplyRef;
 	reason: ReasonRepost;
 
@@ -43,7 +43,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 		reply,
 		reason,
 	}: {
-		post: PostView;
+		post: any; // PostView;
 		reply: ReplyRef;
 		reason: ReasonRepost;
 	}) {

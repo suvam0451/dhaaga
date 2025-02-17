@@ -6,7 +6,6 @@ import { APP_FONTS } from '../../styles/AppFonts';
 const MigrationFailed = memo(() => {
 	return (
 		<View style={{ flex: 1, backgroundColor: '#121212' }}>
-			{/*<StatusBar backgroundColor={APP_THEME.DARK_THEME_MENUBAR} />*/}
 			<View style={{ paddingTop: 54 + 64, paddingHorizontal: 16 }}>
 				<Text style={styles.text}>
 					It seems, unfortunately, that the database migrations required by the

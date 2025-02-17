@@ -17,7 +17,6 @@ function TopNavbarGeneric({ title }: HeadersProps) {
 
 	return (
 		<View style={[styles.subHeader, { backgroundColor: theme.background.a0 }]}>
-			<StatusBar backgroundColor={theme.background.a0} />
 			<TopNavbarBackButton />
 			<View style={styles.navbarTitleContainer}>
 				<AppText.SemiBold
