@@ -23,6 +23,11 @@ jobs:
           python-version: '3.13'
       - run: python lite.py # pre-requisites scripts
         working-directory: ./apps/mobile
+        env:
+          LITE_EDITION_SIGNING_KEY: ${{ secrets.LITE_EDITION_SIGNING_KEY }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       - run: bun add -D @react-native-community/cli # add cli
         working-directory: ./apps/mobile
       - run: npx react-native build-android --mode=release # produce aab
