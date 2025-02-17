@@ -132,6 +132,9 @@ function emojiPickerReducer(
 		case EMOJI_PICKER_REDUCER_ACTION.APPLY_SEARCH: {
 			const _searchTerm = action.payload.searchTerm;
 
+			const selectedTag = state.tagEmojiMap.get(state.selectedTag);
+			if (!selectedTag) return state;
+
 			return produce(state, (draft) => {
 				const results = draft.tagEmojiMap
 					.get(draft.selectedTag)
