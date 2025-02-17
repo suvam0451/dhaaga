@@ -1,12 +1,12 @@
-import { AppPostObject } from '../../types/app-post.types';
-import LoadingMore from '../screens/home/LoadingMore';
-import UserPeekModalPresenter from '../../features/user-profiles/presenters/UserPeekModalPresenter';
+import { AppPostObject } from '../../../types/app-post.types';
+import LoadingMore from '../../../components/screens/home/LoadingMore';
 import { Fragment } from 'react';
 import { FetchStatus } from '@tanstack/react-query';
-import useLoadingMoreIndicatorState from '../../states/useLoadingMoreIndicatorState';
+import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import { Animated, RefreshControl } from 'react-native';
-import StatusItem from '../common/status/StatusItem';
-import WithAppStatusItemContext from '../../hooks/ap-proto/useAppStatusItem';
+import StatusItem from '../../../components/common/status/StatusItem';
+import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import { appDimensions } from '../../../styles/dimensions';
 
 type PostTimelineProps = {
 	data: AppPostObject[];
@@ -21,7 +21,7 @@ type PostTimelineProps = {
  * with WithPostTimelineCtx
  * @constructor
  */
-export function PostTimeline({
+export function PostTimelinePresenter({
 	data,
 	refreshing,
 	fetchStatus,
@@ -43,7 +43,7 @@ export function PostTimeline({
 				)}
 				onScroll={onScroll}
 				contentContainerStyle={{
-					paddingTop: 50 + 16,
+					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
 				}}
 				scrollEventThrottle={16}
 				refreshControl={
@@ -51,7 +51,6 @@ export function PostTimeline({
 				}
 			/>
 			<LoadingMore visible={visible} loading={loading} />
-			<UserPeekModalPresenter />
 		</Fragment>
 	);
 }

@@ -56,17 +56,18 @@ function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 					variant={'displayName'}
 					mentions={[]}
 					emojiMap={new Map()}
-					style={{ marginLeft: 6 }}
+					style={{ marginLeft: 6, flex: 1 }}
 				/>
-				<AppText.Medium
+				<AppText.Normal
 					style={{
-						color: theme.secondary.a40,
+						color: theme.secondary.a20,
 						fontSize: 13,
 						marginLeft: 6,
+						marginRight: 8,
 					}}
 				>
 					{DatetimeUtil.timeAgo(createdAt)}
-				</AppText.Medium>
+				</AppText.Normal>
 			</View>
 		</View>
 	);

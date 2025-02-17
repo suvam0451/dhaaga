@@ -1,7 +1,3 @@
-import MyBookmark from '../../../../components/screens/profile/stack/MyBookmark';
+import Page from '../../../../features/timelines/presenters/MyBookmarkListPresenter';
 
-function BookmarkClassic() {
-	return <MyBookmark />;
-}
-
-export default BookmarkClassic;
+export default Page;

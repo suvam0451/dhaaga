@@ -6,7 +6,6 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import { Fragment } from 'react';
 import LoadingMore from '../../../components/screens/home/LoadingMore';
-import UserPeekModalPresenter from '../../user-profiles/presenters/UserPeekModalPresenter';
 import { appDimensions } from '../../../styles/dimensions';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusItem from '../../../components/common/status/StatusItem';
@@ -74,7 +73,6 @@ function TimelinePostListView({
 					/>
 				</View>
 				<LoadingMore visible={visible} loading={loading} />
-				<UserPeekModalPresenter />
 			</Fragment>
 		</View>
 	);

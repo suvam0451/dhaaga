@@ -48,4 +48,12 @@ export class LinkingUtils {
 			console.log('[WARN]: could not share app with your friends!');
 		});
 	}
+
+	static shareImageWithFriends(imageUrl: string) {
+		Share.share({
+			url: imageUrl,
+			message: imageUrl,
+			title: 'Share this image with your friends',
+		});
+	}
 }

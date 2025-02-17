@@ -107,7 +107,7 @@ export function OriginalPosterPostedByFragment({
 						}}
 						numberOfLines={1}
 					>
-						{handle} • {DatetimeUtil.timeAgo(postedAt)}
+						{handle}
 					</AppText.Normal>
 				</Pressable>
 			</View>

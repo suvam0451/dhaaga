@@ -4,6 +4,7 @@ import { appDimensions } from '../../../styles/dimensions';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppUserObject } from '../../../types/app-user.types';
+import { router } from 'expo-router';
 
 type UserViewNavbarProps = {
 	acct: AppUserObject;
@@ -21,9 +22,31 @@ function UserViewNavbar({}: UserViewNavbarProps) {
 		},
 	];
 
+	function onPressBack() {
+		if (router.canGoBack()) {
+			router.back();
+		}
+	}
+
 	return (
 		<View style={[styles.container]}>
 			<View style={{ flexDirection: 'row' }}>
+				<Pressable
+					style={{
+						padding: appDimensions.topNavbar.padding * 2,
+						marginLeft: appDimensions.topNavbar.marginLeft,
+						backgroundColor: 'rgba(40, 40, 40, 0.56)',
+						borderRadius: '100%',
+					}}
+					onPress={onPressBack}
+				>
+					<AppIcon
+						id={'chevron-left'}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						onPress={onPressBack}
+						size={appDimensions.topNavbar.iconSize}
+					/>
+				</Pressable>
 				<View style={{ marginBottom: 0, flexGrow: 1 }}></View>
 				{MENU_ITEMS.map(({ iconId, onPress }, i) => (
 					<Pressable

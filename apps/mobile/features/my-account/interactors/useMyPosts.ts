@@ -8,7 +8,7 @@ import {
 } from '../../timelines/contexts/PostTimelineCtx';
 import { useEffect } from 'react';
 import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
-import useTimeline from '../../timelines/api/useTimeline';
+import useTimelineQuery from '../../timelines/api/useTimelineQuery';
 
 function useMyPosts() {
 	const { db } = useAppDb();
@@ -36,7 +36,7 @@ function useMyPosts() {
 		});
 	}, [db]);
 
-	const { fetchStatus, data, status, refetch } = useTimeline({
+	const { fetchStatus, data, status, refetch } = useTimelineQuery({
 		type: State.feedType,
 		query: State.query,
 		opts: State.opts,

@@ -1,22 +1,25 @@
-import { createContext, useContext, useEffect, useState } from 'react';
 import {
-	Easing,
-	SharedValue,
+	createContext,
+	Dispatch,
+	SetStateAction,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
+import {
 	useAnimatedStyle,
 	useSharedValue,
 	withDelay,
 	withSpring,
-	withTiming,
 } from 'react-native-reanimated';
-import { DefaultStyle } from 'react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes';
 import { undefined } from 'zod';
 
 type Type = {
 	activeMenu: 'fab' | 'drawer' | null;
 	setActiveMenu: (activeMenu: 'fab' | 'drawer' | null) => void;
 	isFabExpanded: boolean;
-	setIsFabExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-	textAnim: DefaultStyle;
+	setIsFabExpanded: Dispatch<SetStateAction<boolean>>;
+	textAnim: any;
 };
 
 const defaultValue: Type = {

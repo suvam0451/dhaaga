@@ -6,7 +6,7 @@ import {
 	useTimelineDispatch,
 	useTimelineState,
 } from '../contexts/PostTimelineCtx';
-import useTimeline from '../api/useTimeline';
+import useTimelineQuery from '../api/useTimelineQuery';
 import TimelinePresenter from '../presenters/TimelinePresenter';
 import TimelineErrorView from '../view/TimelineErrorView';
 
@@ -48,7 +48,7 @@ function TimelineInteractor() {
 		});
 	}, [State.feedType, State.query, State.opts, db]);
 
-	const { fetchStatus, data, status, refetch, error } = useTimeline({
+	const { fetchStatus, data, status, refetch, error } = useTimelineQuery({
 		type: State.feedType,
 		query: State.query,
 		opts: State.opts,

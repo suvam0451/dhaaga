@@ -67,12 +67,12 @@ function MyAccountPresenter() {
 			iconId: 'layers-outline',
 			to: APP_ROUTING_ENUM.COLLECTIONS,
 		},
-		{
-			label: t(`profile.appFeatures.drafts.label`),
-			desc: t(`profile.appFeatures.drafts.desc`),
-			iconId: 'layers-outline',
-			to: APP_ROUTING_ENUM.MY_DRAFTS,
-		},
+		// {
+		// 	label: t(`profile.appFeatures.drafts.label`),
+		// 	desc: t(`profile.appFeatures.drafts.desc`),
+		// 	iconId: 'layers-outline',
+		// 	to: APP_ROUTING_ENUM.MY_DRAFTS,
+		// },
 	];
 
 	const MENU_ITEMS = [

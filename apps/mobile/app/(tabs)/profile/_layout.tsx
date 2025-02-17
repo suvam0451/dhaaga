@@ -1,10 +1,16 @@
 import { Stack } from 'expo-router/stack';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 function AccountsScreen() {
+	const { theme } = useAppTheme();
 	return (
-		<Stack screenOptions={{ headerShown: false }}>
-			<Stack.Screen name={'index'} />
-		</Stack>
+		<Stack
+			initialRouteName={'index'}
+			screenOptions={{
+				headerShown: false,
+				navigationBarColor: theme.background.a0,
+			}}
+		/>
 	);
 }
 

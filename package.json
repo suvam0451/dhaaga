@@ -1,6 +1,6 @@
 {
   "name": "dhaaga",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
   "author": "Debashish Patra <suvam.io>",
   "license": "AGPLv3",
@@ -17,7 +17,7 @@
     "apps/mobile"
   ],
   "dependencies": {
-    "prettier": "^3.4.2"
+    "prettier": "^3.5.1"
   },
   "prettier": {
     "bracketSpacing": true,

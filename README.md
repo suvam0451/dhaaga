@@ -4,7 +4,7 @@
 <!-- SOCIALS -->
 
 <img width="64"
-src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d56143"
+src="./.github/badges/app_icon.png"
 align="left"
 style="margin-right:8px"/>
 
@@ -19,8 +19,7 @@ switching apps or websites.
 
 <p align="center">
   <a href="https://suvam.io/dhaaga">Website</a> •
-  <a href="https://suvam.io/dhaaga/guides">Guides</a> •
-  <a href="https://suvam.io/dhaaga/compatibility">Compatibility</a> •
+  <a href="https://suvam.io/discord">Discord</a> •
   <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml">Report a Bug</a> •
   <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml">Request a Feature</a>
 </p>

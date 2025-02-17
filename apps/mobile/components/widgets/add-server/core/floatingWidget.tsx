@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { APP_FONT } from '../../../../styles/AppTheme';
 import Animated, {
@@ -8,10 +8,9 @@ import Animated, {
 	withSpring,
 	withTiming,
 } from 'react-native-reanimated';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback } from 'react';
 import FloatingActionButtonOption from '../../../lib/FloatingActionButtonOption';
 import { useFabController } from '../../../shared/fab/hooks/useFabController';
-import { useAppDrawerContext } from '../../../../states/useAppDrawer';
 
 const Y_OFFSET_MENU_ITEM = 72;
 
@@ -22,7 +21,6 @@ const Y_OFFSET_MENU_ITEM = 72;
  */
 function AddServerWidget({ onPress }: { onPress: () => void }) {
 	const { activeMenu, isFabExpanded, setIsFabExpanded } = useFabController();
-	const { setOpen } = useAppDrawerContext();
 
 	const rotation = useSharedValue(0);
 
@@ -112,9 +110,7 @@ function AddServerWidget({ onPress }: { onPress: () => void }) {
 				isExpanded={isFabExpanded}
 				index={2}
 				label={'Open Drawer'}
-				onPress={() => {
-					setOpen(true);
-				}}
+				onPress={() => {}}
 				icon={'drawer'}
 			/>
 		</Fragment>
