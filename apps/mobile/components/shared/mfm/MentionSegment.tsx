@@ -32,7 +32,7 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 		) {
 			// MastoAPI usually bundles the mentions in post object
 			const match = mentions.find((o) =>
-				o.handle.includes(parsed?.text?.replace('@', '')),
+				o?.acct?.includes(parsed?.text?.replace('@', '')),
 			);
 			if (match) {
 				setCtx({ userId: match.id });

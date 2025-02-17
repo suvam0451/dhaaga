@@ -125,7 +125,9 @@ export function ProfileContextWrapped() {
 				/>
 
 				<View style={localStyles.relationManagerSection}>
-					<UserRelationPresenter userId={acct?.id} />
+					<View style={{ flex: 1 }}>
+						<UserRelationPresenter userId={acct?.id} />
+					</View>
 					<View
 						style={{
 							backgroundColor: theme.background.a20,
