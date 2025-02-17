@@ -11,7 +11,7 @@ import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../shared/topnavbar/AppTabLandingNavbar';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import { CoffeeIconOnly } from '../../../static/sponsorship/Coffee';
+import { CoffeeIconOnly } from '../../../../features/settings/components/Coffee';
 import { LinkingUtils } from '../../../../utils/linking.utils';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';

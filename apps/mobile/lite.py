@@ -130,6 +130,8 @@ def add_signing_key():
     KEY_ALIAS = os.getenv("KEY_ALIAS")
     KEY_PASSWORD = os.getenv("KEY_PASSWORD")
 
+    print(BASE64_SOURCE, KEY_STORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD)
+
     OUTPUT_FILE = "./android/app/dhaaga-lite.keystore"
     GRADLE_FILE = "./android/app/build.gradle"
 
@@ -144,8 +146,7 @@ def add_signing_key():
     with open(GRADLE_FILE, 'r') as file:
         content = file.read()
 
-    content = content.replace("name=\"app_name\">Dhaaga</string>",
-                              "name=\"app_name\">Dhaaga (Lite)</string>")
+
     content = content.replace("storeFile file('debug.keystore')",
                               "storeFile file('dhaaga-lite.keystore')")
     content = content.replace("storePassword 'android'",
@@ -158,6 +159,7 @@ def add_signing_key():
     with open(GRADLE_FILE, 'w') as file:
         file.writelines(content)
 
+    print("files written")
 
 add_signing_key()
 # ------------------

@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import {
-	Platform,
 	Pressable,
 	StyleProp,
 	StyleSheet,
@@ -29,6 +28,7 @@ import {
 	useAppTheme,
 } from '../../hooks/utility/global-state-extractors';
 import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
+import { AppText } from './Text';
 
 export type APP_ICON_ENUM =
 	| 'add'
@@ -945,6 +945,7 @@ type ToggleIconProps = {
 	size?: number;
 	onPress?: () => void;
 	style?: StyleProp<ViewStyle>;
+	count?: number;
 };
 
 export function AppToggleIcon({
@@ -956,9 +957,10 @@ export function AppToggleIcon({
 	size,
 	onPress,
 	style,
+	count,
 }: ToggleIconProps) {
 	return (
-		<View style={style}>
+		<View style={[{}, style]}>
 			{flag ? (
 				<AppIcon
 					id={activeIconId}
@@ -973,6 +975,14 @@ export function AppToggleIcon({
 					size={size}
 					onPress={onPress}
 				/>
+			)}
+			{count && (
+				<AppText.Medium
+					style={{ marginLeft: 4 }}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+				>
+					{count}
+				</AppText.Medium>
 			)}
 		</View>
 	);
