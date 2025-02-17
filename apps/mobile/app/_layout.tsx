@@ -119,6 +119,7 @@ function App() {
 						}}
 					/>
 				</Stack>
+				{/* Globally shared components */}
 				<ImageInspectModal />
 				<AppBottomSheet />
 				<AppDialog />

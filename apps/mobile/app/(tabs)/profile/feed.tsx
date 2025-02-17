@@ -2,14 +2,14 @@ import { useLocalSearchParams } from 'expo-router';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
-import { PostTimeline } from '../../../components/data-views/PostTimeline';
+import { PostTimelinePresenter } from '../../../features/timelines/presenters/PostTimelinePresenter';
 import WithPostTimelineCtx, {
 	useTimelineDispatch,
 	useTimelineState,
 } from '../../../features/timelines/contexts/PostTimelineCtx';
 import { useEffect, useState } from 'react';
 import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
-import useTimeline from '../../../features/timelines/api/useTimeline';
+import useTimelineQuery from '../../../features/timelines/api/useTimelineQuery';
 
 function DataView() {
 	const [Refreshing, setRefreshing] = useState(false);
@@ -41,7 +41,7 @@ function DataView() {
 		});
 	}, [db, id]);
 
-	const { fetchStatus, data, status, refetch } = useTimeline({
+	const { fetchStatus, data, status, refetch } = useTimelineQuery({
 		type: State.feedType,
 		query: State.query,
 		opts: State.opts,
@@ -82,7 +82,7 @@ function DataView() {
 
 	return (
 		<WithAutoHideTopNavBar title={'Feed'} translateY={translateY}>
-			<PostTimeline
+			<PostTimelinePresenter
 				data={State.items}
 				onScroll={onScroll}
 				refreshing={Refreshing}

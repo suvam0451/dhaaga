@@ -1,3 +1,3 @@
-import Page from '../../../../components/screens/profile/stack/MyLikes';
+import Page from '../../../../features/timelines/presenters/MyLikeListPresenter';
 
 export default Page;

@@ -4,7 +4,7 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';
 import { useTimelineState } from '../../timelines/contexts/PostTimelineCtx';
-import { PostTimeline } from '../../../components/data-views/PostTimeline';
+import { PostTimelinePresenter } from '../../timelines/presenters/PostTimelinePresenter';
 import useMyPosts from '../interactors/useMyPosts';
 
 function MyPostsPresenter() {
@@ -30,7 +30,7 @@ function MyPostsPresenter() {
 			translateY={translateY}
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 		>
-			<PostTimeline
+			<PostTimelinePresenter
 				data={State.items}
 				onScroll={onScroll}
 				refreshing={Refreshing}

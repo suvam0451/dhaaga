@@ -150,8 +150,8 @@ function ImageInspectModal() {
 	);
 
 	const { height, width, resolved } = useImageAutoHeight(
-		Data.length > 0 ? Data[0] : null,
-		Dimensions.get('window').width - 20,
+		Data.length > 0 ? Data[0].url : null,
+		Dimensions.get('window').width - 8,
 		Dimensions.get('window').height - 108,
 	);
 
@@ -195,7 +195,7 @@ function ImageInspectModal() {
 			isPinching.value = true;
 		})
 		.onEnd(() => {
-			if (scale.value > 2) {
+			if (scale.value > 3) {
 				scale.value = withTiming(1, { duration: 100 });
 			} else if (scale.value < 1) {
 				scale.value = withTiming(1, { duration: 100 });
@@ -249,7 +249,17 @@ function ImageInspectModal() {
 			<ImageInspectPostMetrics post={PostData} />
 			<GestureDetector gesture={composed}>
 				{/*@ts-ignore-next-line*/}
-				<Animated.View style={[styles.box, animatedStyle]}>
+				<Animated.View
+					style={[
+						styles.box,
+						{
+							height: Dimensions.get('window').height - 108,
+							borderRadius: 8,
+						},
+						// @ts-ignore-next-line
+						animatedStyle,
+					]}
+				>
 					{Data.length > 0 && (
 						// @ts-ignore-next-line
 						<Image
@@ -261,6 +271,7 @@ function ImageInspectModal() {
 								width: Dimensions.get('window').width - 20,
 								borderRadius: 8,
 							}}
+							contentFit={'contain'}
 						/>
 					)}
 				</Animated.View>
@@ -277,7 +288,8 @@ const styles = StyleSheet.create({
 		width: '100%',
 		position: 'absolute',
 		alignItems: 'center',
-		justifyContent: 'flex-start',
+		// justifyContent: 'flex-start',
+		flex: 1,
 	},
 	imageInspectorPostMetricsContainer: {
 		position: 'absolute',
@@ -297,9 +309,10 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 	},
 	box: {
-		paddingTop: 48,
+		// marginTop: 48,
 		position: 'absolute',
-		alignItems: 'flex-start',
-		justifyContent: 'flex-start',
+		height: '100%',
+		// backgroundColor: 'red',
+		justifyContent: 'center',
 	},
 });

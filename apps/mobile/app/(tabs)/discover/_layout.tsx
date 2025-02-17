@@ -10,10 +10,7 @@ function DiscoverScreen() {
 				headerShown: false,
 				navigationBarColor: theme.background.a0,
 			}}
-		>
-			<Stack.Screen name={'index'} />
-			<Stack.Screen name={'trending-tags'} />
-		</Stack>
+		/>
 	);
 }
 
