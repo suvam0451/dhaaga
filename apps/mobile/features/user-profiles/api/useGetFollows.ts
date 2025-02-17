@@ -49,7 +49,7 @@ function useGetFollows(acctId: string, maxId?: string) {
 		if (ActivityPubService.misskeyLike(driver)) {
 			return {
 				items: UserMiddleware.deserialize<unknown[]>(
-					(data as any).data.map((o: any) => o.follower),
+					(data as any).data.map((o: any) => o.followee),
 					driver,
 					server,
 				),
