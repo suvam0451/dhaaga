@@ -4,7 +4,7 @@
 <!-- SOCIALS -->
 
 <img width="64"
-src="https://github.com/user-attachments/assets/1718fef2-f10a-4a72-b7cb-819e85d56143"
+src="./.github/badges/app_icon.png"
 align="left"
 style="margin-right:8px"/>
 
