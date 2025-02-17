@@ -19,8 +19,7 @@ switching apps or websites.
 
 <p align="center">
   <a href="https://suvam.io/dhaaga">Website</a> •
-  <a href="https://suvam.io/dhaaga/guides">Guides</a> •
-  <a href="https://suvam.io/dhaaga/compatibility">Compatibility</a> •
+  <a href="https://suvam.io/discord">Discord</a> •
   <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml">Report a Bug</a> •
   <a href="https://github.com/suvam0451/dhaaga/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml">Request a Feature</a>
 </p>

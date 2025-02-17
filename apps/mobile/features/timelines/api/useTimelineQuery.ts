@@ -53,7 +53,7 @@ function useTimelineQuery({
 	const { acct } = useAppAcct();
 
 	// to be adjusted based on performance
-	const TIMELINE_STATUS_LIMIT = 10;
+	const TIMELINE_STATUS_LIMIT = 20;
 
 	const _id = query?.id;
 	const _query = {
@@ -241,7 +241,7 @@ function useTimelineQuery({
 				const { data, error } = await (
 					client as BlueskyRestClient
 				).timelines.feed({
-					limit: 10,
+					limit: TIMELINE_STATUS_LIMIT,
 					cursor: maxId === null ? undefined : maxId,
 					feed: query.id,
 				});
@@ -253,7 +253,7 @@ function useTimelineQuery({
 					const { data, error } = await (
 						client as BlueskyRestClient
 					).accounts.atProtoLikes(acct.identifier, {
-						limit: 5,
+						limit: TIMELINE_STATUS_LIMIT,
 						cursor: _query.maxId === null ? undefined : _query.maxId,
 					});
 					if (error) return DEFAULT_RETURN_VALUE;

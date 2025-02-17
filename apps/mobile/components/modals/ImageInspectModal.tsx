@@ -4,7 +4,7 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
-import { Dimensions, StyleSheet, View, Text } from 'react-native';
+import { Alert, Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useState } from 'react';
@@ -13,22 +13,23 @@ import { Image } from 'expo-image';
 import { AppIcon } from '../lib/Icon';
 import { useImageAutoHeight } from '../../hooks/app/useImageDims';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { AppText } from '../lib/Text';
 import { APP_FONTS } from '../../styles/AppFonts';
+import { LinkingUtils } from '../../utils/linking.utils';
+import { AppDownloadService } from '../../services/app.service';
+import { RandomUtil } from '../../utils/random.utils';
 
 type StatSectionProps = {
 	icon: any;
 	count: number;
 	last?: boolean;
+	label: string;
+	onPress: () => void;
 };
 
-function StatSection({ icon, count, last }: StatSectionProps) {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
-
-	if (count === 0)
+function StatSection({ icon, count, last, label, onPress }: StatSectionProps) {
+	if (count === 0 && !label)
 		return (
 			<View style={{ paddingHorizontal: 4, paddingRight: last ? 0 : 16 }}>
 				{icon}
@@ -36,77 +37,83 @@ function StatSection({ icon, count, last }: StatSectionProps) {
 		);
 
 	return (
-		<View style={{ paddingHorizontal: 4, flexDirection: 'row' }}>
-			{icon}
-			<Text
-				style={{
-					color: theme.secondary.a20,
-					fontSize: 16,
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
-					marginLeft: 6,
-				}}
+		<Pressable
+			style={{ paddingHorizontal: 4, flexDirection: 'row' }}
+			onPress={onPress}
+		>
+			<AppText.Medium
+				style={{ fontFamily: APP_FONTS.INTER_500_MEDIUM, marginRight: 6 }}
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 			>
-				{count}
-			</Text>
-		</View>
+				{label}
+			</AppText.Medium>
+			{icon}
+		</Pressable>
 	);
 }
 
 type ImageInspectPostMetricsProps = {
 	post: AppPostObject;
+	imageUrl: string;
 };
 
-function ImageInspectPostMetrics({ post }: ImageInspectPostMetricsProps) {
-	const { theme } = useGlobalState(
+function ImageInspectPostMetrics({
+	post,
+	imageUrl,
+}: ImageInspectPostMetricsProps) {
+	const { theme } = useAppTheme();
+	const { hide } = useGlobalState(
 		useShallow((o) => ({
-			theme: o.colorScheme,
+			hide: o.imageInspectModal.hide,
 		})),
 	);
-
-	const likeCount = post?.stats?.likeCount;
-	const replyCount = post?.stats?.replyCount;
-	const shareCount = post?.stats?.boostCount;
-
 	return (
 		<View
 			style={[
 				styles.imageInspectorPostMetricsContainer,
 				{
-					backgroundColor: theme.palette.menubar,
+					backgroundColor: theme.background.a20,
 				},
 			]}
 		>
 			<View style={{ flexDirection: 'row' }}>
-				<StatSection
-					icon={
-						<AppIcon
-							id={'heart'}
-							size={24}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-						/>
-					}
-					count={likeCount}
-				/>
-
-				<StatSection
-					icon={
-						<AppIcon
-							id={'chatbox-outline'}
-							size={24}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-						/>
-					}
-					count={replyCount}
+				<Pressable
+					style={{ paddingHorizontal: 0, paddingRight: 8 }}
+					onPress={() => {
+						hide();
+					}}
+				>
+					<AppIcon
+						id={'close'}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+						onPress={() => {
+							hide();
+						}}
+					/>
+				</Pressable>
+				<View
+					style={{
+						height: '100%',
+						width: 2,
+						backgroundColor: '#363636',
+						marginHorizontal: 8,
+						marginLeft: 0,
+					}}
 				/>
 				<StatSection
 					icon={
 						<AppIcon
 							id={'share'}
-							size={24}
+							size={22}
 							emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 						/>
 					}
-					count={shareCount}
+					count={0}
+					last
+					label={'Share'}
+					onPress={() => {
+						LinkingUtils.shareImageWithFriends(imageUrl);
+					}}
 				/>
 				<View
 					style={{
@@ -116,6 +123,7 @@ function ImageInspectPostMetrics({ post }: ImageInspectPostMetricsProps) {
 						marginHorizontal: 8,
 					}}
 				/>
+
 				<StatSection
 					icon={
 						<AppIcon
@@ -126,6 +134,23 @@ function ImageInspectPostMetrics({ post }: ImageInspectPostMetricsProps) {
 					}
 					count={0}
 					last
+					label={'Save'}
+					onPress={async () => {
+						try {
+							const result = await AppDownloadService.saveToAppDirectory(
+								imageUrl,
+								`${RandomUtil.nanoId()}_1.png`,
+							);
+							if (result.success) {
+								Alert.alert('Download Succeeded!');
+							} else {
+								Alert.alert('Download Failed!');
+							}
+						} catch (e) {
+							console.log(e);
+							Alert.alert('Download Failed!');
+						}
+					}}
 				/>
 			</View>
 		</View>
@@ -139,9 +164,8 @@ function ImageInspectPostMetrics({ post }: ImageInspectPostMetricsProps) {
 function ImageInspectModal() {
 	const [Data, setData] = useState<AppMediaObject[]>([]);
 	const [PostData, setPostData] = useState(null);
-	const { visible, stateId, appSession, hide, theme } = useGlobalState(
+	const { visible, stateId, appSession, hide } = useGlobalState(
 		useShallow((o) => ({
-			theme: o.colorScheme,
 			visible: o.imageInspectModal.visible,
 			stateId: o.imageInspectModal.stateId,
 			appSession: o.appSession,
@@ -149,8 +173,9 @@ function ImageInspectModal() {
 		})),
 	);
 
+	const imgUrl = Data.length > 0 ? Data[0].url : null;
 	const { height, width, resolved } = useImageAutoHeight(
-		Data.length > 0 ? Data[0].url : null,
+		imgUrl,
 		Dimensions.get('window').width - 8,
 		Dimensions.get('window').height - 108,
 	);
@@ -246,7 +271,7 @@ function ImageInspectModal() {
 	return (
 		<View style={styles.root}>
 			<View style={styles.backdrop} />
-			<ImageInspectPostMetrics post={PostData} />
+			<ImageInspectPostMetrics post={PostData} imageUrl={imgUrl} />
 			<GestureDetector gesture={composed}>
 				{/*@ts-ignore-next-line*/}
 				<Animated.View
