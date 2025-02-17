@@ -100,7 +100,7 @@ function Footer() {
 					fontSize: 16,
 				}}
 			>
-				v0.16.0
+				v0.16.1
 			</AppText.SemiBold>
 		</View>
 	);
