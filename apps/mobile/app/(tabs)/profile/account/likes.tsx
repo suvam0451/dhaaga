@@ -1,7 +1,3 @@
-import MyLikes from '../../../../components/screens/profile/stack/MyLikes';
+import Page from '../../../../components/screens/profile/stack/MyLikes';
 
-function BookmarkClassic() {
-	return <MyLikes />;
-}
-
-export default BookmarkClassic;
+export default Page;

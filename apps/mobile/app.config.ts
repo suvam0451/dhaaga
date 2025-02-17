@@ -43,6 +43,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	androidStatusBar: {
 		barStyle: 'dark-content',
 		backgroundColor: '#e6cf8b',
+		translucent: false,
 	},
 	splash: {
 		image: './assets/icon.png',

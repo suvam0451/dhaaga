@@ -82,35 +82,47 @@ function App() {
 	}, [pathname, theme]);
 
 	return (
-		<View
-			style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
-			onLayout={onLayoutRootView}
-		>
-			<Stack initialRouteName={'(tabs)'} screenOptions={{ headerShown: false }}>
-				<Stack.Screen
-					name="(tabs)"
-					options={{
-						presentation: 'modal',
-					}}
-				/>
-				<Stack.Screen
-					name="modal"
-					options={{
-						presentation: 'modal',
-					}}
-				/>
-				<Stack.Screen
-					name="formSheet"
-					options={{
-						presentation: 'formSheet',
+		<View>
+			<StatusBar
+				barStyle="light-content"
+				backgroundColor={theme.background.a0}
+			/>
+			<View
+				style={{ paddingTop: top, marginBottom: bottom, height: '100%' }}
+				onLayout={onLayoutRootView}
+			>
+				<Stack
+					initialRouteName={'(tabs)'}
+					screenOptions={{
 						headerShown: false,
-						animation: 'flip',
+						navigationBarColor: theme.background.a0,
 					}}
-				/>
-			</Stack>
-			<ImageInspectModal />
-			<AppBottomSheet />
-			<AppDialog />
+				>
+					<Stack.Screen
+						name="(tabs)"
+						options={{
+							presentation: 'modal',
+						}}
+					/>
+					<Stack.Screen
+						name="modal"
+						options={{
+							presentation: 'modal',
+						}}
+					/>
+					<Stack.Screen
+						name="formSheet"
+						options={{
+							presentation: 'formSheet',
+							headerShown: false,
+							animation: 'flip',
+						}}
+					/>
+				</Stack>
+				<ImageInspectModal />
+				<AppBottomSheet />
+				<AppDialog />
+			</View>
 		</View>
 	);
 }
