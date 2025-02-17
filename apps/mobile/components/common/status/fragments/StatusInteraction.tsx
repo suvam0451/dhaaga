@@ -35,6 +35,8 @@ function ShareButton() {
 	}
 
 	const FLAG = PostMiddleware.isShared(item);
+	const _target = PostMiddleware.getContentTarget(item);
+	const COUNT = _target.stats.boostCount;
 
 	const canLike = ActivityPubService.canLike(driver);
 	return (
@@ -52,6 +54,7 @@ function ShareButton() {
 				},
 			]}
 			onPress={onPress}
+			count={COUNT}
 		/>
 	);
 }
@@ -72,7 +75,8 @@ function LikeButton() {
 	}
 
 	const FLAG = PostMiddleware.isLiked(item);
-	const COUNT = item.stats.likeCount;
+	const _target = PostMiddleware.getContentTarget(item);
+	const COUNT = _target.stats.likeCount;
 
 	return (
 		<AppToggleIcon
@@ -107,6 +111,9 @@ function CommentButton() {
 		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
 	}
 
+	const _target = PostMiddleware.getContentTarget(item);
+	const COUNT = _target.stats.replyCount;
+
 	return (
 		<AppToggleIcon
 			flag={false}
@@ -117,6 +124,7 @@ function CommentButton() {
 			size={appDimensions.timelines.actionButtonSize}
 			style={styles.actionButton}
 			onPress={onPress}
+			count={COUNT}
 		/>
 	);
 }
@@ -203,7 +211,7 @@ function StatusInteraction() {
 	const _dto = PostMiddleware.getContentTarget(dto);
 	return (
 		<View>
-			<PostStats dto={_dto} />
+			{/*<PostStats dto={_dto} />*/}
 			<StatusInteractionButtons />
 		</View>
 	);

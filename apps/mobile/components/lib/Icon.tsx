@@ -960,7 +960,7 @@ export function AppToggleIcon({
 	count,
 }: ToggleIconProps) {
 	return (
-		<View style={[{}, style]}>
+		<View style={[style]}>
 			{flag ? (
 				<AppIcon
 					id={activeIconId}
@@ -978,8 +978,7 @@ export function AppToggleIcon({
 			)}
 			{count && (
 				<AppText.Medium
-					style={{ marginLeft: 4 }}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+					style={{ marginLeft: 4, color: flag ? activeTint : inactiveTint }}
 				>
 					{count}
 				</AppText.Medium>
