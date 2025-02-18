@@ -16,7 +16,7 @@ function BoostNotificationFragment({ item }: Props) {
 				notificationType={DhaagaJsNotificationType.REBLOG}
 				createdAt={item.createdAt}
 			/>
-			<NotificationPostPeek acct={user} post={post?.boostedFrom || post} />
+			<NotificationPostPeek post={post?.boostedFrom || post} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);

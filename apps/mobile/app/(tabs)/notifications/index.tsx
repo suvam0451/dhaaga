@@ -1,3 +1,3 @@
-import InboxPresenter from '../../../features/inbox/presenters/InboxPresenter';
+import Page from '../../../features/inbox/presenters/InboxPresenter';
 
-export default InboxPresenter;
+export default Page;

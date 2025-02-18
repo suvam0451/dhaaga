@@ -16,7 +16,7 @@ function MentionNotificationFragment({ item }: Props) {
 				notificationType={DhaagaJsNotificationType.MENTION}
 				createdAt={item.post?.createdAt || (item.createdAt as any)}
 			/>
-			<NotificationPostPeek acct={user} post={post} />
+			<NotificationPostPeek post={post} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);

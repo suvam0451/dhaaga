@@ -8,10 +8,13 @@ import AchiEarnedNotificationFragment from '../../../components/screens/notifica
 import AppNotificationFragment from '../../../components/screens/notifications/landing/segments/AppNotificationFragment';
 import FollowReqAcceptNotificationFragment from '../../../components/screens/notifications/landing/segments/FollowReqAccepNotificationFragment';
 import ReactionNotificationFragment from '../../../components/screens/notifications/landing/segments/ReactionNotificationFragment';
-import NotificationUpdateItem from '../../../components/screens/notifications/landing/fragments/NotificationUpdateItem';
+import FollowPresenter from './FollowPresenter';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { FlashListType_Notification } from '../../../services/flashlist.service';
 import { AppText } from '../../../components/lib/Text';
+import GroupedFollowPresenter from './GroupedFollowPresenter';
+import { View } from 'react-native';
+import GroupedPostInteractionPresenter from './GroupedPostInteractionPresenter';
 
 type Props = {
 	item: FlashListType_Notification;
@@ -23,6 +26,33 @@ type Props = {
  */
 export function NotificationItemPresenter({ item }: Props) {
 	const { theme } = useAppTheme();
+
+	let _obj = item.props.dto;
+
+	if (_obj.user === null) {
+		if (_obj.users.length > 1) {
+			switch (item.type) {
+				case DhaagaJsNotificationType.FOLLOW:
+					return <GroupedFollowPresenter item={_obj} />;
+				case DhaagaJsNotificationType.REBLOG:
+				case DhaagaJsNotificationType.RENOTE:
+				case DhaagaJsNotificationType.FAVOURITE:
+					return <GroupedPostInteractionPresenter item={_obj} />;
+				default:
+					return <GroupedFollowPresenter item={_obj} />;
+			}
+		} else {
+			// For a single user, render the legacy singlet components
+			_obj.user = _obj.users[0].item;
+		}
+	}
+
+	if (_obj.users.length > 0) return <View />;
+
+	/**
+	 * Legacy Singlet Notification Components
+	 */
+
 	switch (item.type) {
 		case DhaagaJsNotificationType.REPLY:
 			return <ReplyNotificationFragment item={item.props.dto} />;
@@ -34,7 +64,7 @@ export function NotificationItemPresenter({ item }: Props) {
 		case DhaagaJsNotificationType.FAVOURITE:
 			return <FavouriteNotificationFragment item={item.props.dto} />;
 		case DhaagaJsNotificationType.FOLLOW:
-			return <NotificationUpdateItem item={item.props.dto} />;
+			return <FollowPresenter item={item.props.dto} />;
 		case DhaagaJsNotificationType.STATUS:
 		case DhaagaJsNotificationType.NOTE:
 			return <StatusAlertNotificationFragment item={item.props.dto} />;

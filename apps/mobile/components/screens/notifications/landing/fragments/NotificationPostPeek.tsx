@@ -7,7 +7,6 @@ import { useAppApiClient } from '../../../../../hooks/utility/global-state-extra
 import { TextContentView } from '../../../../common/status/TextContentView';
 
 type Props = {
-	acct: AppUserObject;
 	post: AppPostObject;
 };
 
