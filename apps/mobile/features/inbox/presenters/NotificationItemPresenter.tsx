@@ -13,7 +13,6 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { FlashListType_Notification } from '../../../services/flashlist.service';
 import { AppText } from '../../../components/lib/Text';
 import GroupedFollowPresenter from './GroupedFollowPresenter';
-import { View } from 'react-native';
 import GroupedPostInteractionPresenter from './GroupedPostInteractionPresenter';
 
 type Props = {
@@ -41,49 +40,49 @@ export function NotificationItemPresenter({ item }: Props) {
 				default:
 					return <GroupedFollowPresenter item={_obj} />;
 			}
-		} else {
+		} else if (_obj.users.length === 1) {
 			// For a single user, render the legacy singlet components
-			_obj.user = _obj.users[0].item;
+			_obj = { ..._obj, user: _obj.users[0].item };
 		}
 	}
 
-	if (_obj.users.length > 0) return <View />;
+	// if (_obj.users.length > 0) return <View />;
 
 	/**
 	 * Legacy Singlet Notification Components
 	 */
 
-	switch (item.type) {
+	switch (_obj.type) {
 		case DhaagaJsNotificationType.REPLY:
-			return <ReplyNotificationFragment item={item.props.dto} />;
+			return <ReplyNotificationFragment item={_obj} />;
 		case DhaagaJsNotificationType.MENTION:
 		case DhaagaJsNotificationType.CHAT:
 		case DhaagaJsNotificationType.HOME:
 		case DhaagaJsNotificationType.PUBLIC:
-			return <MentionNotificationFragment item={item.props.dto} />;
+			return <MentionNotificationFragment item={_obj} />;
 		case DhaagaJsNotificationType.FAVOURITE:
-			return <FavouriteNotificationFragment item={item.props.dto} />;
+			return <FavouriteNotificationFragment item={_obj} />;
 		case DhaagaJsNotificationType.FOLLOW:
-			return <FollowPresenter item={item.props.dto} />;
+			return <FollowPresenter item={_obj} />;
 		case DhaagaJsNotificationType.STATUS:
 		case DhaagaJsNotificationType.NOTE:
-			return <StatusAlertNotificationFragment item={item.props.dto} />;
+			return <StatusAlertNotificationFragment item={_obj} />;
 		case DhaagaJsNotificationType.REBLOG:
 		case DhaagaJsNotificationType.RENOTE:
-			return <BoostNotificationFragment item={item.props.dto} />;
+			return <BoostNotificationFragment item={_obj} />;
 		case DhaagaJsNotificationType.ACHIEVEMENT_EARNED:
 			return <AchiEarnedNotificationFragment />;
 		case DhaagaJsNotificationType.APP:
 			return <AppNotificationFragment />;
 		case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED:
-			return <FollowReqAcceptNotificationFragment item={item.props.dto} />;
+			return <FollowReqAcceptNotificationFragment item={_obj} />;
 		case DhaagaJsNotificationType.REACTION:
-			return <ReactionNotificationFragment item={item.props.dto} />;
+			return <ReactionNotificationFragment item={_obj} />;
 		default: {
-			console.log('notification type not handled', item.type);
+			console.log('notification type not handled', _obj.type);
 			return (
 				<AppText.Medium style={{ color: theme.complementaryB.a0 }}>
-					Notification Type not handled: {item.type}
+					Notification Type not handled: {_obj.type}
 				</AppText.Medium>
 			);
 		}

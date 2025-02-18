@@ -10,7 +10,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: APP_NAME,
 	slug: 'dhaaga',
-	version: '0.16.1',
+	version: '0.16.2',
 	orientation: 'portrait',
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'dark',
@@ -26,7 +26,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: BUNDLE_ID,
-		versionCode: 32,
+		versionCode: 33,
 		blockedPermissions: [
 			'android.permission.SYSTEM_ALERT_WINDOW',
 			'android.permission.READ_EXTERNAL_STORAGE',
