@@ -78,7 +78,7 @@ function statusContextReducer(
 				for (let [key, value] of itemLookup) {
 					draft.lookup.set(
 						key,
-						new PostMiddleware(value, _driver, _server).export(),
+						PostMiddleware.deserialize<unknown>(value, _driver, _server),
 					);
 				}
 

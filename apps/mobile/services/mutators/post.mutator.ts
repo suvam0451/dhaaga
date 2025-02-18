@@ -5,7 +5,7 @@ import ActivityPubService from '../activitypub.service';
 import { AppPostObject } from '../../types/app-post.types';
 import { produce } from 'immer';
 import ActivityPubReactionsService, {
-	ActivityPubReactionStateDto,
+	ActivityPubReactionStateSchema,
 } from '../approto/activitypub-reactions.service';
 import { AtprotoPostService } from '../atproto.service';
 
@@ -181,7 +181,7 @@ export class PostMutator {
 
 	private applyReactionData(input: AppPostObject, _data: any) {
 		const target = PostMiddleware.getContentTarget(input);
-		const { data, error } = ActivityPubReactionStateDto.safeParse(_data);
+		const { data, error } = ActivityPubReactionStateSchema.safeParse(_data);
 		if (error) return input;
 		return produce(input, (draft) => {
 			if (draft.id === target.id) draft.stats.reactions = data;

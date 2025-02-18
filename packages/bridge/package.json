@@ -14,7 +14,6 @@
       "types": "./dist/*"
     }
   },
-  "version": "0.16.1",
   "dependencies": {
     "@atproto/api": "^0.14.1",
     "axios": "^1.7.9",

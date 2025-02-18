@@ -9,10 +9,11 @@
     },
     "apps/mobile": {
       "name": "@dhaaga/mobile",
-      "version": "0.16.0",
+      "version": "0.16.1",
       "dependencies": {
         "@atproto/api": "^0.14.1",
         "@dhaaga/bridge": "*",
+        "@dhaaga/core": "*",
         "@dhaaga/orm": "*",
         "@expo-google-fonts/bebas-neue": "^0.2.3",
         "@expo-google-fonts/inter": "^0.2.3",
@@ -72,7 +73,6 @@
     },
     "packages/bridge": {
       "name": "@dhaaga/bridge",
-      "version": "0.16.0",
       "dependencies": {
         "@atproto/api": "^0.14.1",
         "axios": "^1.7.9",
@@ -91,9 +91,20 @@
         "typescript": "^5.7.3",
       },
     },
+    "packages/core": {
+      "name": "@dhaaga/core",
+      "dependencies": {
+        "@dhaaga/bridge": "*",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+      "peerDependencies": {
+        "typescript": "^5.7.3",
+      },
+    },
     "packages/orm": {
       "name": "@dhaaga/orm",
-      "version": "0.15.3",
       "devDependencies": {
         "typescript": "^5.7.3",
       },
@@ -376,6 +387,8 @@
     "@badgateway/oauth2-client": ["@badgateway/oauth2-client@2.4.2", "", {}, "sha512-70Fmzlmn8EfCjjssls8N6E94quBUWnLhu4inPZU2pkwpc6ZvbErkLRvtkYl81KFCvVcuVC0X10QPZVNwjXo2KA=="],
 
     "@dhaaga/bridge": ["@dhaaga/bridge@workspace:packages/bridge"],
+
+    "@dhaaga/core": ["@dhaaga/core@workspace:packages/core"],
 
     "@dhaaga/mobile": ["@dhaaga/mobile@workspace:apps/mobile"],
 

@@ -19,7 +19,6 @@ export class TextParserService {
 	static findHashtags(input: string) {
 		if (!input) return [];
 		input = preprocessPostContent(input);
-
 		const setter = new Set<string>();
 		const ex = /#([a-zA-Z_-]+)/gm;
 
@@ -84,6 +83,7 @@ export class TextParserService {
 		input: string,
 		acct: Account,
 	): { text: string; me: boolean } {
+		if (!input) return { text: input, me: false };
 		try {
 			let retval = input;
 
@@ -115,6 +115,7 @@ export class TextParserService {
 			console.log(
 				'[WARN]: could not resolve mention object to a valid protocol handle',
 				input,
+				e,
 			);
 			return { text: input, me: false };
 		}

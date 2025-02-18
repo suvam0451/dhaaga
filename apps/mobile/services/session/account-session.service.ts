@@ -3,7 +3,7 @@ import { BaseStorageManager } from './_shared';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import { Account } from '../../database/_schema';
 import ActivityPubReactionsService, {
-	ActivityPubReactionStateDtoType,
+	ActivityPubReactionStateType,
 } from '../approto/activitypub-reactions.service';
 import { AppUserObject } from '../../types/app-user.types';
 
@@ -102,7 +102,7 @@ class AccountSessionManager {
 	 * by the app dto converters
 	 */
 	resolveReactions(
-		reactions: ActivityPubReactionStateDtoType,
+		reactions: ActivityPubReactionStateType,
 		preCalculated: {
 			url?: string;
 			width?: number;

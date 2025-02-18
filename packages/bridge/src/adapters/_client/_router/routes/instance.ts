@@ -3,10 +3,10 @@ import { LibraryPromise } from './_types.js';
 import { LibraryResponse } from '../../../../types/result.types.js';
 
 export enum KNOWN_SOFTWARE {
-	// Bluesky
-	BLUESKY = 'bluesky',
 	// Fediverse Parent Software
 	AKKOMA = 'akkoma',
+	// Bluesky
+	BLUESKY = 'bluesky',
 	CHERRYPICK = 'cherrypick',
 	FIREFISH = 'firefish',
 	FRIENDICA = 'friendica',

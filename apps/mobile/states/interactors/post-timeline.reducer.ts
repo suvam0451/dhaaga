@@ -8,7 +8,7 @@ import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
 import { ProfilePinnedTagService } from '../../database/entities/profile-pinned-tag';
 import { Dispatch } from 'react';
-import { ActivityPubReactionStateDto } from '../../services/approto/activitypub-reactions.service';
+import { ActivityPubReactionStateSchema } from '../../services/approto/activitypub-reactions.service';
 import {
 	timelineReducerBaseDefaults,
 	TimelineReducerBaseState,
@@ -470,7 +470,7 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.UPDATE_REACTION_STATE: {
 			const _id = action.payload.id;
 			const _state = action.payload.state;
-			const { data, error } = ActivityPubReactionStateDto.safeParse(_state);
+			const { data, error } = ActivityPubReactionStateSchema.safeParse(_state);
 			if (error) {
 				// this is expected, for e.g. {"code": "ALREADY_REACTED"}
 				// console.log('[WARN]: reaction state incorrect', error);

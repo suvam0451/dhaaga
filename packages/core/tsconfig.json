@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    // Enable latest features
+//    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "module": "ESNext",
+//    "jsx": "react-jsx",
+    "allowJs": true,
+
+    // Bundler mode
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+
+    // Best practices
+    "strict": false,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // extras
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "composite": true,
+    "emitDeclarationOnly": true
+  },
+  "include": [
+    "src",
+  ],
+  "exclude": [
+    "__test__",
+    "lib",
+    "dist/**/*"
+  ]
+}

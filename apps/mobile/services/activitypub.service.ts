@@ -6,10 +6,9 @@ import {
 	PleromaRestClient,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
-import { SQLiteDatabase } from 'expo-sqlite';
 import { RandomUtil } from '../utils/random.utils';
 import AppSessionManager from './session/app-session.service';
-import { KnownServer, Profile } from '../database/_schema';
+import { DriverService } from '@dhaaga/core';
 
 class ActivityPubService {
 	/**
@@ -18,10 +17,7 @@ class ActivityPubService {
 	 * @param driver
 	 */
 	static canBookmark(driver: KNOWN_SOFTWARE | string) {
-		return (
-			ActivityPubService.mastodonLike(driver) ||
-			ActivityPubService.misskeyLike(driver)
-		);
+		return DriverService.canBookmark(driver);
 	}
 
 	/**
@@ -30,17 +26,11 @@ class ActivityPubService {
 	 * @param driver
 	 */
 	static canLike(driver: KNOWN_SOFTWARE | string) {
-		return (
-			ActivityPubService.mastodonLike(driver) ||
-			ActivityPubService.blueskyLike(driver)
-		);
+		return DriverService.canLike(driver);
 	}
 
 	static canAddReactions(driver: string) {
-		return (
-			ActivityPubService.misskeyLike(driver) ||
-			ActivityPubService.pleromaLike(driver)
-		);
+		DriverService.canReact(driver);
 	}
 
 	/**
@@ -56,14 +46,11 @@ class ActivityPubService {
 	}
 
 	static supportsV2(driver: string) {
-		return [KNOWN_SOFTWARE.MASTODON].includes(driver as KNOWN_SOFTWARE);
+		return DriverService.supportsMastoApiV2(driver);
 	}
 
 	static supportsQuotesNatively(driver: string) {
-		return (
-			ActivityPubService.blueskyLike(driver) ||
-			ActivityPubService.misskeyLike(driver)
-		);
+		return DriverService.canQuote(driver);
 	}
 
 	static pleromaLike(driver: string) {
@@ -73,30 +60,11 @@ class ActivityPubService {
 	}
 
 	static misskeyLike(driver: string) {
-		return [
-			KNOWN_SOFTWARE.MISSKEY,
-			KNOWN_SOFTWARE.SHARKEY,
-			KNOWN_SOFTWARE.FIREFISH,
-			KNOWN_SOFTWARE.ICESHRIMP,
-			KNOWN_SOFTWARE.CHERRYPICK,
-		].includes(driver as KNOWN_SOFTWARE);
+		return DriverService.supportsMisskeyApi(driver);
 	}
 
 	static blueskyLike(driver: KNOWN_SOFTWARE | string) {
-		return [KNOWN_SOFTWARE.BLUESKY].includes(driver as KNOWN_SOFTWARE);
-	}
-
-	/**
-	 * Syncs the nodeinfo and software
-	 * for a subdomain
-	 * @param db
-	 * @param urlLike
-	 */
-	static async syncSoftware(
-		db: SQLiteDatabase,
-		urlLike: string,
-	): Promise<KnownServer> {
-		return null;
+		return DriverService.supportsAtProto(driver);
 	}
 
 	/**
@@ -300,14 +268,6 @@ class ActivityPubService {
 		}
 		return data.isFavorited;
 	}
-
-	/**
-	 * Pin the default timelines and hashtags for
-	 * the profile
-	 * @param manager the app level session manager, with db connection
-	 * @param profile
-	 */
-	static createDefaultPins(manager: AppSessionManager, profile: Profile) {}
 }
 
 export default ActivityPubService;

@@ -1,23 +1,29 @@
 import {
+	ActivitypubHelper,
 	ActivitypubStatusAdapter,
+	BlueskyStatusAdapter,
 	StatusInterface,
 	UserInterface,
 } from '@dhaaga/bridge';
-import activitypubAdapterService from '../activitypub-adapter.service';
 import {
 	AppPostObject,
-	AppStatusDtoService,
 	ActivityPubStatusItemDto,
 	appPostObjectSchema,
 } from '../../types/app-post.types';
-import ActivitypubAdapterService from '../activitypub-adapter.service';
 import { z } from 'zod';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { SQLiteDatabase } from 'expo-sqlite';
 import { AccountSavedPost } from '../../database/_schema';
-import { DataSource } from '../../database/dataSource';
 import ActivityPubService from '../activitypub.service';
 import ActivitypubService from '../activitypub.service';
+import MediaService from '../media.service';
+import { Dimensions } from 'react-native';
+import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
+import { UserMiddleware } from './user.middleware';
+import { AtprotoService } from '../atproto.service';
+import MfmService from '../mfm.service';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import { RandomUtil } from '../../utils/random.utils';
+import { TextParserService } from '../text-parser.service';
 
 /**
  * converts unified interfaces into
@@ -28,7 +34,7 @@ import ActivitypubService from '../activitypub.service';
  * objects. Also see other files
  * in this folder
  */
-export class PostMiddleware {
+class PostMiddleware {
 	domain: string;
 	subdomain: string;
 	statusI: StatusInterface;
@@ -48,124 +54,223 @@ export class PostMiddleware {
 		return this;
 	}
 
-	/**
-	 * Find a list of instances associated
-	 * wit this status
-	 */
-	resolveInstances() {
-		const _user = activitypubAdapterService.adaptUser(
-			this.statusI.getUser(),
-			this.domain,
-		);
-		const _subdomain = _user.getInstanceUrl(this.subdomain);
-		this.foundInstances.add(_subdomain);
-
-		// handle boosted content
-		if (this.statusI.isReposted()) {
-			const _userR = activitypubAdapterService.adaptUser(
-				this.statusI.getRepostedStatus()?.getUser(),
-				this.domain,
-			);
-			const _subdomain = _userR.getInstanceUrl();
-			this.foundInstances.add(_subdomain);
-		}
-		return this;
-	}
-
-	async syncSoftware(db: SQLiteDatabase) {}
-
 	// Static method that returns an instance of MyClass
 	static factory(ref: StatusInterface, domain?: string, subdomain?: string) {
 		return new PostMiddleware(ref, domain, subdomain);
 	}
 
-	/**
-	 * @deprecated
-	 */
-	export(): AppPostObject {
-		// to prevent infinite recursion
-		if (!this.statusI || !this.statusI.getId()) return null;
+	static export(
+		input: StatusInterface,
+		domain: string,
+		subdomain: string,
+	): AppPostObject {
+		if (!input) return null;
 
-		const IS_REPOSTED = this.statusI.isReposted();
-		const IS_REPLY = this.statusI.isReply();
+		const medias = input?.getMediaAttachments();
+		const height = MediaService.calculateHeightForMediaContentCarousal(medias, {
+			maxWidth: Dimensions.get('window').width - 32,
+			maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
+		});
 
-		let boostedFrom: z.infer<typeof ActivityPubStatusItemDto> = IS_REPOSTED
-			? new PostMiddleware(
-					ActivitypubAdapterService.adaptStatus(
-						this.statusI.getRepostedStatusRaw(),
-						this.domain,
-					),
-					this.domain,
-					this.subdomain,
-				).export()
-			: null;
+		const user = UserMiddleware.rawToInterface(input.getUser(), domain);
+		let handle =
+			domain === KNOWN_SOFTWARE.BLUESKY
+				? `@${user.getUsername()}`
+				: ActivitypubHelper.getHandle(
+						input?.getAccountUrl(subdomain),
+						subdomain,
+					);
 
-		/**
-		 * Misskey Compat
-		 *
-		 * NOTE: For mastodon, we need to show reply
-		 * but not render the status
-		 */
-		let replyTo: z.infer<typeof ActivityPubStatusItemDto> =
-			IS_REPLY && this.statusI.getParentRaw()
-				? new PostMiddleware(
-						ActivitypubAdapterService.adaptStatus(
-							this.statusI.getParentRaw(),
-							this.domain,
-						),
-						this.domain,
-						this.subdomain,
-					).export()
-				: null;
+		const IS_BOOKMARK_RESOLVED = [
+			KNOWN_SOFTWARE.MASTODON,
+			KNOWN_SOFTWARE.PLEROMA,
+			KNOWN_SOFTWARE.AKKOMA,
+		].includes(domain as any);
 
-		let rootI: z.infer<typeof ActivityPubStatusItemDto> =
-			this.statusI.hasRootAvailable()
-				? new PostMiddleware(
-						ActivitypubAdapterService.adaptStatus(
-							this.statusI.getRootRaw(),
-							this.domain,
-						),
-						this.domain,
-						this.subdomain,
-					).export()
-				: null;
+		const emojiMap = new Map<string, string>([
+			// @ts-ignore-next-line
+			...user.getEmojiMap(), // @ts-ignore-next-line
+			...input.getCachedEmojis(),
+		]);
 
-		const dto: AppPostObject =
-			IS_REPLY &&
-			(ActivityPubService.misskeyLike(this.domain) ||
-				ActivityPubService.blueskyLike(this.domain))
-				? /**
-					 * 	Replies in Misskey is actually present in the
-					 * 	"reply" object, instead of root. へんですね?
-					 */
+		const parsedContent = ActivityPubService.blueskyLike(domain)
+			? AtprotoService.processTextContent(input.getContent(), input.getFacets())
+			: MfmService.renderMfm(input.getContent(), {
+					emojiMap,
+					emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+					colorScheme: null,
+					variant: 'bodyContent',
+					nonInteractive: false,
+				})?.parsed;
+		const parsedDisplayName = ActivityPubService.blueskyLike(domain)
+			? [
 					{
-						...AppStatusDtoService.export(
-							this.statusI,
-							this.domain,
-							this.subdomain,
-						),
-						boostedFrom,
-						replyTo,
-						rootPost: rootI,
-					}
-				: {
-						...AppStatusDtoService.export(
-							this.statusI,
-							this.domain,
-							this.subdomain,
-						),
-						boostedFrom,
-					};
+						uuid: RandomUtil.nanoId(),
+						type: 'para',
+						nodes: [
+							{
+								uuid: RandomUtil.nanoId(),
+								type: 'text',
+								text: user.getDisplayName(),
+							},
+						],
+					},
+				]
+			: MfmService.renderMfm(user.getDisplayName(), {
+					emojiMap,
+					emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
+					colorScheme: null,
+					variant: 'displayName',
+					nonInteractive: false,
+				})?.parsed;
 
-		const { data, error, success } = appPostObjectSchema.safeParse(dto);
-		if (!success) {
-			console.log('[ERROR]: status item dto validation failed', error);
-			console.log('[INFO]: generated object', dto);
-			this.statusI.print();
-			return null;
-		}
+		return {
+			uuid: RandomUtil.nanoId(),
+			id: input.getId(),
+			visibility: input.getVisibility(),
+			createdAt: input.getCreatedAt(),
+			postedBy: {
+				id: user.getId(),
+				avatarUrl: user.getAvatarUrl(),
+				displayName: user.getDisplayName(),
+				parsedDisplayName: parsedDisplayName || [],
+				handle: handle,
+				instance: user.getInstanceUrl() || subdomain,
+			},
+			content: {
+				raw: input.getContent(),
+				parsed: parsedContent || [],
+				media:
+					medias?.map((o) => ({
+						height: o.getHeight(),
+						width: o.getWidth(),
+						alt: o.getAltText(),
+						blurhash: o.getBlurHash(),
+						type: o.getType(),
+						url: o.getUrl(),
+						previewUrl: o.getPreviewUrl(),
+					})) || [],
+			},
+			stats: {
+				replyCount: input.getRepliesCount(),
+				boostCount: input.getRepostsCount(),
+				likeCount: input.getFavouritesCount(),
+				reactions: input.getReactions(input.getMyReaction()),
+			},
+			interaction: {
+				bookmarked: input.getIsBookmarked(),
+				boosted: input.getIsRebloggedByMe(),
+				liked: input.getIsFavourited(),
+			},
+			calculated: {
+				emojis: new Map([
+					// @ts-ignore-next-line
+					...user.getEmojiMap(), // @ts-ignore-next-line
+					...input.getCachedEmojis(),
+				]),
+				mediaContainerHeight: height,
+				reactionEmojis: input.getReactionEmojis(),
+				mentions: TextParserService.findMentions(input.getContent()),
+			},
+			meta: {
+				sensitive: input.getIsSensitive(),
+				cw: input.getSpoilerText(),
+				isBoost: input.isReposted(),
+				isReply: input.isReply(),
+				mentions: input.getMentions().map((o) => ({
+					id: o.id,
+					// handle: o.acct,
+					url: o.url,
+					username: o.username,
+					acct: o.acct,
+				})),
+				cid: input.getCid(),
+				uri: input.getUri(),
+			},
+			state: {
+				isBookmarkStateFinal: IS_BOOKMARK_RESOLVED,
+			},
+			atProto: {
+				viewer:
+					domain === KNOWN_SOFTWARE.BLUESKY
+						? (input as BlueskyStatusAdapter).getViewer()
+						: undefined,
+			},
+		} as AppPostObject;
+	}
 
-		return data as AppPostObject;
+	static exportLocal(
+		input: AccountSavedPost,
+		driver: KNOWN_SOFTWARE | string,
+		server: string,
+	) {
+		if (!input) return null;
+
+		const medias = input.medias || [];
+		const height = MediaService.calculateHeightForLocalMediaCarousal(medias, {
+			maxWidth: Dimensions.get('window').width - 32,
+			maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
+		});
+		const user = input.savedUser;
+		let handle =
+			driver === KNOWN_SOFTWARE.BLUESKY
+				? `@${user.username}`
+				: ActivitypubHelper.getHandle(user.username, server);
+
+		return {
+			uuid: RandomUtil.nanoId(),
+			id: input.identifier,
+			visibility: 'N/A',
+			createdAt: input.authoredAt,
+			postedBy: {
+				id: user.identifier,
+				avatarUrl: user.avatarUrl,
+				displayName: user.displayName,
+				handle: handle,
+				instance: user.remoteServer,
+			},
+			content: {
+				raw: input.textContent,
+				media:
+					medias?.map((o) => ({
+						height: o.height,
+						width: o.width,
+						alt: o.alt,
+						type: o.mimeType,
+						url: o.url,
+						previewUrl: o.previewUrl,
+					})) || [],
+			},
+			stats: {
+				replyCount: -1,
+				boostCount: -1,
+				likeCount: -1,
+				reactions: [],
+			},
+			interaction: {
+				bookmarked: false,
+				boosted: false,
+				liked: false,
+			},
+			calculated: {
+				emojis: new Map([]),
+				mediaContainerHeight: height,
+				reactionEmojis: [],
+				mentions: TextParserService.findMentions(input.textContent),
+			},
+			meta: {
+				sensitive: input.sensitive,
+				cw: input.spoilerText,
+				isBoost: false,
+				isReply: false,
+				mentions: [],
+				cid: input.identifier,
+				uri: input.identifier,
+			},
+			state: {
+				isBookmarkStateFinal: true,
+			},
+		} as AppPostObject;
 	}
 
 	/**
@@ -180,7 +285,6 @@ export class PostMiddleware {
 	 * @param server
 	 */
 	static databaseToJson(
-		db: DataSource,
 		input: AccountSavedPost,
 		{
 			driver,
@@ -190,7 +294,7 @@ export class PostMiddleware {
 			server: string;
 		},
 	): AppPostObject {
-		const parsed = AppStatusDtoService.exportLocal(db, input, driver, server);
+		const parsed = PostMiddleware.exportLocal(input, driver, server);
 
 		const { data, error, success } = appPostObjectSchema.safeParse(parsed);
 		if (!success) {
@@ -240,13 +344,13 @@ export class PostMiddleware {
 					 * 	"reply" object, instead of root. へんですね?
 					 */
 					{
-						...AppStatusDtoService.export(input, driver, server),
+						...PostMiddleware.export(input, driver, server),
 						boostedFrom: sharedFrom,
 						replyTo,
 						rootPost: root,
 					}
 				: {
-						...AppStatusDtoService.export(input, driver, server),
+						...PostMiddleware.export(input, driver, server),
 						boostedFrom: sharedFrom,
 					};
 
@@ -328,13 +432,11 @@ export class PostMiddleware {
 	/**
 	 * Deserializes (skips returning the interface step)
 	 * locally saved ap/at proto post objects
-	 * @param db database reference
 	 * @param input raw ap/at proto post object
 	 * @param driver being used to deserialize this object
 	 * @param server
 	 */
 	static deserializeLocal<T>(
-		db: DataSource,
 		input: T | T[],
 		driver: string | KNOWN_SOFTWARE,
 		server: string,
@@ -342,7 +444,7 @@ export class PostMiddleware {
 		if (input instanceof Array) {
 			return input
 				.map((o) =>
-					PostMiddleware.databaseToJson(db, o as AccountSavedPost, {
+					PostMiddleware.databaseToJson(o as AccountSavedPost, {
 						driver,
 						server,
 					}),
@@ -353,7 +455,7 @@ export class PostMiddleware {
 		} else {
 			try {
 				if (!input) return null;
-				return PostMiddleware.databaseToJson(db, input as AccountSavedPost, {
+				return PostMiddleware.databaseToJson(input as AccountSavedPost, {
 					driver,
 					server,
 				}) as unknown as T extends unknown[] ? never : AppPostObject;
@@ -417,3 +519,5 @@ export class PostMiddleware {
 		return !!input.atProto?.viewer?.repost || input.interaction.boosted;
 	}
 }
+
+export { PostMiddleware };

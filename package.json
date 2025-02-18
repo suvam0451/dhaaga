@@ -9,8 +9,9 @@
     "dev:app": "yarn workspace @dhaaga/mobile dev",
     "dev:web": "yarn workspace @dhaaga/web dev",
     "build:bridge": "bun run --cwd ./packages/bridge build",
+    "build:core": "bun run --cwd ./packages/core build",
     "build:orm": "bun run --cwd ./packages/orm build",
-    "build": "bun run build:bridge && bun run build:orm"
+    "build": "bun run build:bridge && bun run build:orm && bun run build:core"
   },
   "workspaces": [
     "packages/**",

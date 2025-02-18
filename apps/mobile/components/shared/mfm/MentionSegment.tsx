@@ -30,6 +30,7 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			ActivitypubService.mastodonLike(driver) ||
 			ActivitypubService.misskeyLike(driver)
 		) {
+			console.log(mentions);
 			// MastoAPI usually bundles the mentions in post object
 			const match = mentions.find((o) =>
 				o?.acct?.includes(parsed?.text?.replace('@', '')),
