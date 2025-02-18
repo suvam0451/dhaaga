@@ -12,13 +12,21 @@ export const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		width: '100%',
 	},
+	groupIndicatorIcon: {
+		padding: 4,
+		borderRadius: '100%',
+		borderColor: 'black',
+		borderWidth: 3,
+	},
 	notificationCategoryIconContainer: {
 		position: 'absolute',
 		zIndex: 99,
-		bottom: -6,
-		right: -6,
-		padding: 3,
+		bottom: -9,
+		right: -9,
+		padding: 0.5,
 		borderRadius: '100%',
+		borderColor: 'black',
+		borderWidth: 3,
 	},
 	gradientContainerTextOnlyPost: {
 		// maxHeight: 128,
@@ -28,5 +36,13 @@ export const styles = StyleSheet.create({
 		padding: 6,
 		overflow: 'hidden',
 		marginBottom: 8,
+	},
+	senderAvatarContainer: {
+		width: ICON_SIZE + 2,
+		height: ICON_SIZE + 2,
+		position: 'relative',
+		borderWidth: 1,
+		borderColor: 'grey',
+		borderRadius: ICON_SIZE / 2,
 	},
 });

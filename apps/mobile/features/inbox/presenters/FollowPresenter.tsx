@@ -1,10 +1,13 @@
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { View } from 'react-native';
-import { Props, styles } from '../segments/_common';
-import { AppDivider } from '../../../../lib/Divider';
-import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
+import {
+	Props,
+	styles,
+} from '../../../components/screens/notifications/landing/segments/_common';
+import { AppDivider } from '../../../components/lib/Divider';
+import AuthorItemPresenter from './AuthorItemPresenter';
 
-function NotificationUpdateItem({ item }: Props) {
+function FollowPresenter({ item }: Props) {
 	const user = item.user;
 	return (
 		<View style={styles.container}>
@@ -18,4 +21,4 @@ function NotificationUpdateItem({ item }: Props) {
 	);
 }
 
-export default NotificationUpdateItem;
+export default FollowPresenter;

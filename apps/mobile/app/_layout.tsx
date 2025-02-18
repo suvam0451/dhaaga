@@ -82,7 +82,7 @@ function App() {
 	}, [pathname, theme]);
 
 	return (
-		<View>
+		<View style={{ backgroundColor: theme.background.a10 }}>
 			<StatusBar
 				barStyle="light-content"
 				backgroundColor={theme.background.a0}

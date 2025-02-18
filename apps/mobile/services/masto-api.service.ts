@@ -3,6 +3,7 @@ import { UserMiddleware } from './middlewares/user.middleware';
 import { PostMiddleware } from './middlewares/post.middleware';
 import { AppNotificationObject } from '../types/app-notification.types';
 import { AppResultPageType } from '../types/app.types';
+import { produce } from 'immer';
 
 export type MastoApiGroupedNotificationType = {
 	groupKey: string;
@@ -66,38 +67,133 @@ class ServiceV2 {
 	): AppResultPageType<AppNotificationObject> {
 		const acctList = input.data.accounts;
 		const postList = input.data.statuses;
-		const _retval = input.data.notificationGroups.map(
-			(o: MastoApiGroupedNotificationType) => {
-				const _acct = UserMiddleware.deserialize<unknown>(
-					acctList.find((x) => x.id === o.sampleAccountIds[0]),
-					driver,
-					server,
-				);
-				const _post = PostMiddleware.deserialize<unknown>(
-					postList.find((x) => x.id === o.statusId),
-					driver,
-					server,
-				);
+		const seenPost = new Map();
+		let counter = 0;
+		const results: AppNotificationObject[] = [];
+		for (const group of input.data.notificationGroups) {
+			const _group: MastoApiGroupedNotificationType = group;
 
-				const _obj: AppNotificationObject = {
-					id: o.groupKey,
-					type: o.type,
-					post: _post,
-					user: _acct,
-					read: false,
-					createdAt: new Date(o.latestPageNotificationAt),
-					extraData: {},
-				};
-				return _obj;
-			},
-		);
+			// handles groups that have no post association
+			if (_group.statusId === undefined) {
+				results.push({
+					id: group.groupKey,
+					type: group.type,
+					user: null,
+					post: null,
+					users: group.sampleAccountIds.map((o: string) => ({
+						item: UserMiddleware.deserialize<unknown>(
+							acctList.find((x: any) => x.id === o),
+							driver,
+							server,
+						),
+						type: group.type,
+					})),
+					read: true,
+					createdAt: group.latestPageNotificationAt,
+				});
+				counter++;
+				continue;
+			}
+
+			// handle groups that have no post association
+			if (!seenPost.has(group.statusId)) {
+				results.push({
+					id: group.groupKey,
+					/**
+					 * Keep it as is. In case of ungrouped
+					 * notification with 1 user, this will
+					 * make sure the singlet views are used,
+					 * instead
+					 */
+					type: group.type,
+					user: null,
+					post: PostMiddleware.deserialize<unknown>(
+						postList.find((x) => x.id === group.statusId),
+						driver,
+						server,
+					),
+					users: group.sampleAccountIds.map((o: string) => ({
+						item: UserMiddleware.deserialize<unknown>(
+							acctList.find((x: any) => x.id === o),
+							driver,
+							server,
+						),
+						types: [group.type],
+					})),
+					read: true,
+					createdAt: group.latestPageNotificationAt,
+				});
+
+				seenPost.set(group.statusId, counter);
+				counter++;
+			} else {
+				const idx = seenPost.get(group.statusId);
+				for (const id of group.sampleAccountIds) {
+					results[idx] = produce(results[idx], (draft) => {
+						const match = draft.users.find((o) => o.item.id === id);
+						if (match) {
+							if (!match.types.includes(group.type)) {
+								match.types.push(group.type);
+							}
+						} else {
+							draft.users.push({
+								item: UserMiddleware.deserialize<unknown>(
+									acctList.find((x: any) => x.id === id),
+									driver,
+									server,
+								),
+								types: [group.type],
+							});
+						}
+					});
+				}
+			}
+		}
 
 		return {
 			success: true,
-			items: _retval,
+			items: results,
 			maxId: input.maxId,
 			minId: input.minId,
 		};
+
+		/**
+		 * This was previously used to handle
+		 * Mastodon notifications as singlets
+		 */
+
+		// const _retval = input.data.notificationGroups.map(
+		// 	(o: MastoApiGroupedNotificationType) => {
+		// 		const _acct = UserMiddleware.deserialize<unknown>(
+		// 			acctList.find((x) => x.id === o.sampleAccountIds[0]),
+		// 			driver,
+		// 			server,
+		// 		);
+		// 		const _post = PostMiddleware.deserialize<unknown>(
+		// 			postList.find((x) => x.id === o.statusId),
+		// 			driver,
+		// 			server,
+		// 		);
+		//
+		// 		const _obj: AppNotificationObject = {
+		// 			id: o.groupKey,
+		// 			type: o.type,
+		// 			post: _post,
+		// 			user: _acct,
+		// 			read: false,
+		// 			createdAt: new Date(o.latestPageNotificationAt),
+		// 			extraData: {},
+		// 		};
+		// 		return _obj;
+		// 	},
+		// );
+
+		// return {
+		// 	success: true,
+		// 	items: _retval,
+		// 	maxId: input.maxId,
+		// 	minId: input.minId,
+		// };
 	}
 }
 
