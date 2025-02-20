@@ -1,17 +1,21 @@
-import { DataSource } from '../../database/dataSource';
-import { Account, Profile, KnownServer } from '../../database/_schema';
+import {
+	DataSource,
+	Account,
+	Profile,
+	KnownServer,
+	KnownServerService,
+	AccountService,
+	ProfileService,
+	ProfilePinnedUserService,
+} from '@dhaaga/db';
 import {
 	ActivityPubClient,
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 	UnknownRestClient,
 } from '@dhaaga/bridge';
-import { KnownServerService } from '../../database/entities/server';
-import { AccountService } from '../../database/entities/account';
-import { ProfileService } from '../../database/entities/profile';
 import { BaseStorageManager } from './_shared';
 import type { UserObjectType } from '@dhaaga/core';
-import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
 
 /**
  * ---- Storage Interfaces ----
@@ -54,7 +58,7 @@ class ProfileSessionManager {
 		this.db = db;
 		this.cacheManager = new Storage();
 
-		this.acct = AccountService.getSelected(this.db);
+		this.acct = AccountService.getSelected(this.db).unwrap();
 		this.profile = ProfileService.getActiveProfile(this.db, this.acct);
 		this.customEmojis = [];
 	}

@@ -10,7 +10,6 @@ import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { AppMessageObject } from '../../../types/app-message.types';
 import { AppText } from '../../../components/lib/Text';
 import { Image } from 'expo-image';
 import { AppDivider } from '../../../components/lib/Divider';
@@ -23,7 +22,7 @@ import InputView from '../../../features/chats/views/InputView';
 import { appDimensions } from '../../../styles/dimensions';
 import RecievedMessageView from '../../../features/chats/views/RecievedMessageView';
 import SentMessageView from '../../../features/chats/views/SentMessageView';
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType, MessageObjectType } from '@dhaaga/core';
 
 type ParticipantsProps = {
 	accounts: UserObjectType[];
@@ -53,7 +52,7 @@ function Participants({ accounts }: ParticipantsProps) {
 }
 
 type MessageProps = {
-	message: AppMessageObject;
+	message: MessageObjectType;
 	members: UserObjectType[];
 	myId: string;
 };
@@ -105,7 +104,7 @@ function Page() {
 			>
 				<Animated.FlatList
 					data={state.messages}
-					renderItem={({ item }: { item: AppMessageObject }) => (
+					renderItem={({ item }: { item: MessageObjectType }) => (
 						<Message message={item} myId={myId} members={state.room?.members} />
 					)}
 					contentContainerStyle={{

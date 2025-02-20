@@ -1,4 +1,3 @@
-import { AppFeedObject } from '../../../types/app-feed.types';
 import { Image, useImage } from 'expo-image';
 import { View } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
@@ -7,9 +6,10 @@ import { appDimensions } from '../../../styles/dimensions';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import type { FeedObjectType } from '@dhaaga/core';
 
 type Props = {
-	feed: AppFeedObject;
+	feed: FeedObjectType;
 };
 
 function FeedPinSearchResultView({ feed }: Props) {

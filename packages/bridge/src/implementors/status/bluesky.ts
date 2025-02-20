@@ -1,15 +1,12 @@
 import { MediaAttachmentInterface } from '../media-attachment/interface.js';
-import {
-	DhaagaJsMentionObject,
-	Status,
-	StatusInterface,
-} from './_interface.js';
+import { DhaagaJsMentionObject, StatusInterface } from './_interface.js';
 import {
 	EmbedViewProcessor_External,
 	EmbedViewProcessor_Images,
 	EmbedViewProcessor_RecordWithMedia,
 	EmbedViewProcessor_Video,
 } from '../media-attachment/bluesky.js';
+import { AppBskyRichtextFacet } from '@atproto/api';
 
 type BlueskyRichTextFacet = {
 	$type?: 'app.bsky.richtext.facet';
@@ -121,7 +118,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 		return null;
 	}
 
-	getRepostedStatusRaw(): Status {
+	getRepostedStatusRaw() {
 		if (this.isShare()) {
 			/**
 			 * by stripping reason/reply, we avoid recursive call
@@ -236,11 +233,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 		const facets: BlueskyRichTextFacet[] = (this.post?.record as any)?.facets;
 		if (facets) {
 			facets
-				.filter((o) =>
-					o.features
-						.map((o) => o.$type)
-						.includes('app.bsky.richtext.facet#mention'),
-				)
+				.filter((o) => o.features.every(AppBskyRichtextFacet.isMention))
 				.map((o) => ({ id: o.features[0].did }));
 		}
 		return [];

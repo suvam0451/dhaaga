@@ -14,33 +14,33 @@ import SocialUpdatePresenter from './SocialUpdatePresenter';
 import UpdatesPresenter from './UpdatesPresenter';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import WithInboxCategoryCtx from '../contexts/useInboxCategoryCtx';
+import { InboxCtx } from '@dhaaga/core';
 
 const renderScene = (index: number) => {
 	switch (index) {
 		case 0:
 			return (
-				<WithInboxCategoryCtx>
+				<InboxCtx>
 					<MentionPresenter />
-				</WithInboxCategoryCtx>
+				</InboxCtx>
 			);
 		case 1:
 			return (
-				<WithInboxCategoryCtx>
+				<InboxCtx>
 					<ChatroomPresenter />
-				</WithInboxCategoryCtx>
+				</InboxCtx>
 			);
 		case 2:
 			return (
-				<WithInboxCategoryCtx>
+				<InboxCtx>
 					<SocialUpdatePresenter />;
-				</WithInboxCategoryCtx>
+				</InboxCtx>
 			);
 		case 3:
 			return (
-				<WithInboxCategoryCtx>
+				<InboxCtx>
 					<UpdatesPresenter />
-				</WithInboxCategoryCtx>
+				</InboxCtx>
 			);
 		default:
 			return <View />;

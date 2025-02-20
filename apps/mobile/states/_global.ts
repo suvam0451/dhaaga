@@ -2,23 +2,22 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { ThemePackType } from '../assets/loaders/UseAppThemePackLoader';
 import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
-import { Account, Profile } from '../database/_schema';
+import { Account, Profile, AccountService } from '@dhaaga/db';
 import {
 	ActivityPubClient,
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
-import { AccountService } from '../database/entities/account';
 import { SQLiteDatabase } from 'expo-sqlite';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
 import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
-} from '../database/entities/account-metadata';
+	ProfileService,
+	DataSource,
+} from '@dhaaga/db';
 import { Result } from '../utils/result';
-import { DataSource } from '../database/dataSource';
 import ProfileSessionManager from '../services/session/profile-session.service';
-import { ProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
 import { AppColorSchemeType } from '../utils/theming.util';
 import AccountSessionManager from '../services/session/account-session.service';
@@ -272,11 +271,12 @@ class GlobalStateService {
 	> {
 		try {
 			const acct = AccountService.getSelected(db);
-			if (!acct) {
+			if (acct.isErr()) {
 				console.log('[WARN]: no account was found');
 				return { type: 'invalid' };
 			}
-			const profile = ProfileService.getActiveProfile(db, acct);
+			const _acct = acct.unwrap();
+			const profile = ProfileService.getActiveProfile(db, _acct);
 			if (!profile) {
 				console.log('[WARN]: no profile was found');
 				return { type: 'invalid' };
@@ -284,22 +284,22 @@ class GlobalStateService {
 
 			const token = AccountMetadataService.getKeyValueForAccountSync(
 				db,
-				acct,
+				_acct,
 				ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
 			);
 			let payload: any = {
-				instance: acct?.server,
+				instance: _acct.server,
 				token,
 			};
 
 			// Bluesky is built different
-			if (acct.driver === KNOWN_SOFTWARE.BLUESKY) {
-				let session = AtprotoSessionService.create(db, acct);
+			if (_acct.driver === KNOWN_SOFTWARE.BLUESKY) {
+				let session = AtprotoSessionService.create(db, _acct);
 
 				// re-login login
 				if (session.checkTokenExpiry()) {
-					await AtprotoSessionService.reLogin(db, acct);
-					session = AtprotoSessionService.create(db, acct);
+					await AtprotoSessionService.reLogin(db, _acct);
+					session = AtprotoSessionService.create(db, _acct);
 				}
 
 				await session.resume(db);
@@ -308,19 +308,25 @@ class GlobalStateService {
 					console.log('[INFO]: session restore status', success, reason);
 				payload = {
 					...data,
-					subdomain: acct.server,
+					subdomain: _acct.server,
 					pdsUrl: session.pdsUrl,
 				};
 			}
-			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
+			const _router = ActivityPubClientFactory.get(
+				_acct.driver as any,
+				payload,
+			);
 			const { data } = await _router.me.getMe();
 			// console.log('will parse', data);
 			const obj: UserObjectType = UserParser.parse(
 				data,
-				acct.driver,
-				acct.server,
+				_acct.driver,
+				_acct.server,
 			);
-			return { type: 'success', value: { acct, router: _router, me: obj } };
+			return {
+				type: 'success',
+				value: { acct: _acct, router: _router, me: obj },
+			};
 		} catch (e) {
 			console.log(e);
 			console.log('[ERROR]: failed to restore previous app session');

@@ -1,8 +1,8 @@
-import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
-import { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
-import { ActivityPubClient } from '@dhaaga/bridge';
+import { BlueskyRestClient } from '@dhaaga/bridge';
+import type { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
+import type { ActivityPubClient } from '@dhaaga/bridge';
 import { AppBskyActorDefs, AppBskyActorGetPreferences } from '@atproto/api';
-import { Result } from '../utils/result';
+import type { Result } from '../utils/result';
 
 export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
 

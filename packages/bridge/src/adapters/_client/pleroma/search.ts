@@ -11,7 +11,7 @@ import type {
 import { DhaagaErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { CasingUtils } from '../../../utiils/casing.utils.js';
+import { CasingUtil } from '../../../utils/casing.js';
 
 export class PleromaSearchRouter implements SearchRoute {
 	direct: FetchWrapper;
@@ -50,7 +50,7 @@ export class PleromaSearchRouter implements SearchRoute {
 		try {
 			const data = await this.client.client.search(
 				query.q || query.query,
-				CasingUtils.snakeCaseKeys(query),
+				CasingUtil.snakeCaseKeys(query),
 			);
 			if (data.status !== 200) {
 				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);

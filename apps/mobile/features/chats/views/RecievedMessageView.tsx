@@ -3,14 +3,14 @@ import { Image } from 'expo-image';
 import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
-import { AppMessageObject } from '../../../types/app-message.types';
+import type { MessageObjectType } from '@dhaaga/core';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 const MINI_AVATAR_SIZE = 28;
 
 type Props = {
 	avatarUrl: string;
-	item: AppMessageObject;
+	item: MessageObjectType;
 };
 
 function RecievedMessageView({ item, avatarUrl }: Props) {

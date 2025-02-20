@@ -2,7 +2,7 @@ import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import { CasingUtils } from '../../../utiils/casing.utils.js';
+import { CasingUtil } from '../../../utils/casing.js';
 import {
 	errorBuilder,
 	notImplementedErrorBuilder,
@@ -45,7 +45,7 @@ export class PleromaNotificationsRouter
 		}>
 	> {
 		const data = await this.pleromaClient.client.getNotifications(
-			CasingUtils.snakeCaseKeys(query),
+			CasingUtil.snakeCaseKeys(query),
 		);
 		return {
 			data: {

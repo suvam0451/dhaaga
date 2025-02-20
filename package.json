@@ -2,14 +2,35 @@
   "name": "dhaaga",
   "version": "0.16.2",
   "description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
+  "homepage": "https://suvam.io/dhaaga",
   "author": "Debashish Patra <suvam.io>",
   "license": "AGPLv3",
   "private": true,
+  "keywords": [
+    "fediverse",
+    "bluesky",
+    "mastodon",
+    "misskey",
+    "ios",
+    "android",
+    "sharkey",
+    "meisskey",
+    "cherrypick",
+    "pleroma",
+    "akkoma"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suvam0451/dhaaga.git"
+  },
+  "bugs": {
+    "url": "https://github.com/suvam0451/dhaaga/issues"
+  },
   "scripts": {
     "dev:app": "yarn workspace @dhaaga/mobile dev",
     "dev:web": "yarn workspace @dhaaga/web dev",
-    "build:bridge": "bun run --cwd ./packages/bridge build",
-    "build:core": "bun run --cwd ./packages/core build",
+    "build:bridge": "bun run --cwd ./packages/bridge up",
+    "build:core": "bun run --cwd ./packages/core up",
     "build:orm": "bun run --cwd ./packages/orm build",
     "build": "bun run build:bridge && bun run build:orm && bun run build:core"
   },

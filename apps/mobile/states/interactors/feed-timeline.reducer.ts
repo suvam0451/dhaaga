@@ -1,17 +1,18 @@
-import { DataSource } from '../../database/dataSource';
+import { DataSource } from '@dhaaga/db';
 import {
 	timelineReducerBaseDefaults,
 	TimelineReducerBaseState,
 } from './_timeline.shared';
-import { AppFeedObject } from '../../types/app-feed.types';
 import { produce } from 'immer';
 import { RandomUtil } from '@dhaaga/core';
+import type { FeedObjectType } from '@dhaaga/core';
 import { Dispatch } from 'react';
 
-type State = TimelineReducerBaseState<AppFeedObject> & {};
+type State = TimelineReducerBaseState<FeedObjectType> & {};
 
 export const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
+	items: [],
 };
 
 export enum ACTION {
@@ -38,7 +39,7 @@ type Actions =
 	| {
 			type: ACTION.APPEND_RESULTS;
 			payload: {
-				items: AppFeedObject[];
+				items: FeedObjectType[];
 				minId?: string;
 				maxId?: string;
 			};

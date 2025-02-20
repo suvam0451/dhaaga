@@ -14,7 +14,7 @@ import { enableMapSet } from 'immer';
 import { SQLiteProvider } from 'expo-sqlite';
 import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
 import { usePathname } from 'expo-router';
-import { migrateDbIfNeeded } from '../database/migrations';
+import { migrateDbIfNeeded } from '@dhaaga/db';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
 import useAppSession from '../states/useAppSession';
 import ImageInspectModal from '../components/modals/ImageInspectModal';

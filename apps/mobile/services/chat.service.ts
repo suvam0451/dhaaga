@@ -1,11 +1,8 @@
 import { ChatBskyConvoDefs, ChatBskyConvoListConvos } from '@atproto/api';
-import { Account } from '../database/_schema';
-import { DataSource } from '../database/dataSource';
-import { AccountMetadataService } from '../database/entities/account-metadata';
+import { Account, AccountMetadataService, DataSource } from '@dhaaga/db';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { ChatMiddleware } from './middlewares/chat.middleware';
-import { AppMessageObject } from '../types/app-message.types';
-import { UserParser, UserObjectType } from '@dhaaga/core';
+import type { MessageObjectType } from '@dhaaga/core';
+import { UserParser, UserObjectType, ChatParser } from '@dhaaga/core';
 
 /**
  * Represents a chatroom item
@@ -16,7 +13,7 @@ export type AppChatRoom = {
 	seen: boolean;
 	members: UserObjectType[];
 	muted: boolean; // atproto
-	lastMessage: AppMessageObject;
+	lastMessage: MessageObjectType;
 	myId: string;
 };
 
@@ -35,11 +32,7 @@ class ChatService {
 		server: string,
 		myDid: string,
 	): AppChatRoom {
-		const lastMessage = ChatMiddleware.deserialize(
-			input.lastMessage,
-			driver,
-			server,
-		);
+		const lastMessage = ChatParser.parse(input.lastMessage, driver, server);
 		const members = UserParser.parse<unknown[]>(input.members, driver, server);
 		return {
 			externalId: input.id,

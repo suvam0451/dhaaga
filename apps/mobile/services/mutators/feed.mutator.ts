@@ -1,6 +1,5 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
-import { AppFeedObject } from '../../types/app-feed.types';
+import { KNOWN_SOFTWARE, ActivityPubClient } from '@dhaaga/bridge';
+import type { FeedObjectType } from '@dhaaga/core';
 
 export class FeedMutator {
 	private readonly driver: KNOWN_SOFTWARE;
@@ -11,15 +10,15 @@ export class FeedMutator {
 		this.client = client;
 	}
 
-	async toggleLike(input: AppFeedObject): Promise<AppFeedObject> {
+	async toggleLike(input: FeedObjectType): Promise<FeedObjectType> {
 		if (this.driver !== KNOWN_SOFTWARE.BLUESKY) return input;
 	}
 
-	async addSubscription(input: AppFeedObject): Promise<AppFeedObject> {
+	async addSubscription(input: FeedObjectType): Promise<FeedObjectType> {
 		if (this.driver !== KNOWN_SOFTWARE.BLUESKY) return input;
 	}
 
-	async removeSubscription(input: AppFeedObject): Promise<AppFeedObject> {
+	async removeSubscription(input: FeedObjectType): Promise<FeedObjectType> {
 		if (this.driver !== KNOWN_SOFTWARE.BLUESKY) return input;
 	}
 }

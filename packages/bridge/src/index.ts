@@ -1,6 +1,4 @@
 import ActivityPubClient, {
-	FollowPostDto,
-	GetPostsQueryDTO,
 	RestClientCreateDTO,
 } from './adapters/_client/_interface.js';
 import UnknownRestClient from './adapters/_client/default/index.js';
@@ -14,7 +12,6 @@ import MisskeyToStatusAdapter from './implementors/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
 import {
 	InstanceApi_CustomEmojiDTO,
-	InstanceRoute,
 	KNOWN_SOFTWARE,
 } from './adapters/_client/_router/routes/instance.js';
 import axios from 'axios';
@@ -25,39 +22,11 @@ import { errorBuilder } from './adapters/_client/_router/dto/api-responses.dto.j
 import { LibraryPromise } from './adapters/_client/_router/routes/_types.js';
 import {
 	AccountMutePostDto,
-	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from './adapters/_client/_router/routes/accounts.js';
-import { BaseAccountsRouter } from './adapters/_client/default/accounts.js';
-import {
-	ListsRoute,
-	MeRoute,
-	MediaRoute,
-	NotificationsRoute,
-	ParserRoute,
-	ProfileRoute,
-	SearchRoute,
-	StatusesRoute,
-	TagRoute,
-	TimelinesRoute,
-	TrendsRoute,
-} from './adapters/_client/_router/routes/_index.js';
-import {
-	MastoAccount,
-	MastoFamiliarFollowers,
-	MastoFeaturedTag,
-	MastoList,
-	MastoRelationship,
-	MastoStatus,
-} from './types/mastojs.types.js';
-import {
-	MegaAccount,
-	MegaRelationship,
-	MegaStatus,
-} from './types/megalodon.types.js';
-import { MissUserDetailed } from './types/misskey-js.types.js';
+// used to read viewer
 import BlueskyStatusAdapter from './implementors/status/bluesky.js';
 
 export {
@@ -177,39 +146,6 @@ export const verifyMisskeyToken = async (host: string, session: string) => {
 
 export { LibraryPromise, errorBuilder };
 
-// Routes
-export {
-	AccountRoute,
-	InstanceRoute,
-	ListsRoute,
-	MeRoute,
-	MediaRoute,
-	NotificationsRoute,
-	ParserRoute,
-	ProfileRoute,
-	SearchRoute,
-	StatusesRoute,
-	TagRoute,
-	TimelinesRoute,
-	TrendsRoute,
-};
-
-// Library Typings
-export {
-	FollowPostDto,
-	GetPostsQueryDTO,
-	MastoAccount,
-	MastoFamiliarFollowers,
-	MastoFeaturedTag,
-	MastoList,
-	MastoRelationship,
-	MastoStatus,
-	MegaAccount,
-	MegaRelationship,
-	MegaStatus,
-	MissUserDetailed,
-};
-
 // DTOs
 export {
 	AccountMutePostDto,
@@ -218,9 +154,14 @@ export {
 	FollowerGetQueryDTO,
 };
 
-// Template Routers
-export { BaseAccountsRouter };
-
 export { KNOWN_SOFTWARE, InstanceApi_CustomEmojiDTO };
 export { LibraryResponse } from './types/result.types.js';
 export { DhaagaErrorCode } from './types/result.types.js';
+
+export {
+	RandomUtil,
+	ResultOk,
+	ResultErr,
+	Result,
+	AsyncResult,
+} from './utils/index.js';

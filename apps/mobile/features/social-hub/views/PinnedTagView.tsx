@@ -1,4 +1,4 @@
-import { ProfilePinnedTag } from '../../../database/_schema';
+import { ProfilePinnedTag } from '@dhaaga/db';
 import { Pressable, StyleSheet } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';

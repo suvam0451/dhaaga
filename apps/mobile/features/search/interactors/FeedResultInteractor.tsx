@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
 import {
 	useFeedTimelineDispatch,
 	useFeedTimelineState,
@@ -17,6 +16,7 @@ import Header from '../components/Header';
 import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
 import FeedListItemView from '../../timelines/view/FeedListItemView';
 import NoResults from '../../../components/error-screen/NoResults';
+import { useDiscoverState } from '@dhaaga/core';
 
 type FeedResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -24,7 +24,7 @@ type FeedResultInteractorProps = {
 
 function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	const [Refreshing, setRefreshing] = useState(false);
-	const State = useDiscoverTabState();
+	const State = useDiscoverState();
 	const TimelineState = useFeedTimelineState();
 	const TimelineDispatch = useFeedTimelineDispatch();
 	const { data, fetchStatus, refetch, isFetched } = useApiSearchFeeds(

@@ -1,16 +1,16 @@
 import { useSocialHubFeedPinStatus } from '../api/useSocialHubFeedPinStatus';
-import { Profile } from '../../../database/_schema';
-import { AppFeedObject } from '../../../types/app-feed.types';
+import { Profile } from '@dhaaga/db';
 import { useProfileMutation } from '../../app-profiles/api/useProfileMutation';
 import { StyleSheet, View } from 'react-native';
 import UserPinSearchResultControllerView from '../views/UserPinSearchResultController';
 import { AppDivider } from '../../../components/lib/Divider';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import FeedPinSearchResultView from '../views/FeedPinSearchResultView';
+import type { FeedObjectType } from '@dhaaga/core';
 
 type Props = {
 	profile: Profile;
-	feed: AppFeedObject;
+	feed: FeedObjectType;
 	onChangeCallback: () => void;
 };
 

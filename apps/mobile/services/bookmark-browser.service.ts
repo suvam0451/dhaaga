@@ -2,7 +2,7 @@ import { ActivityPubClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubAdapterService from './activitypub-adapter.service';
 import { Dispatch, SetStateAction } from 'react';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { Account } from '../database/_schema';
+import { Account } from '@dhaaga/db';
 
 class BookmarkBrowserService {
 	/**

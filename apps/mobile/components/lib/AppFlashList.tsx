@@ -14,7 +14,7 @@ import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
 	ProfilePinnedUser,
-} from '../../database/_schema';
+} from '@dhaaga/db';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
 import { AppText } from './Text';

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { MediaAttachmentInterface } from './interface.js';
-import { RandomUtil } from '../../utiils/random.util.js';
+import { RandomUtil } from '../../utils/random.js';
 
 /**
  * Bluesky Media Attachment

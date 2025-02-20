@@ -4,7 +4,7 @@ import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { MastoMediaAttachment } from '../../../types/mastojs.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { CasingUtils } from '../../../utiils/casing.utils.js';
+import { CasingUtil } from '../../../utils/casing.js';
 
 export class PleromaMediaRoute implements MediaRoute {
 	direct: FetchWrapper;
@@ -33,6 +33,6 @@ export class PleromaMediaRoute implements MediaRoute {
 			console.log(data.statusText);
 			return errorBuilder(data.statusText);
 		}
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 }

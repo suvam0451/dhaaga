@@ -22,6 +22,7 @@ type LibraryResponseBase = {
 	 */;
 	raw?: any;
 };
+
 export type LibraryResponse<T> =
 	| ({ error: ApiErrorComponent; data?: undefined } & LibraryResponseBase)
 	| ({

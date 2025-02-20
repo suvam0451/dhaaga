@@ -1,8 +1,8 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { APP_ICON_ENUM } from '../components/lib/Icon';
+import type { APP_ICON_ENUM } from '../components/lib/Icon';
 import { APP_ROUTING_ENUM } from '../utils/route-list';
 import ActivityPubService from './activitypub.service';
-import { TFunction } from 'i18next';
+import type { TFunction } from 'i18next';
 import { LOCALIZATION_NAMESPACE } from '../types/app.types';
 
 export enum APP_PINNED_OBJECT_TYPE {
@@ -140,63 +140,6 @@ class DriverService {
 			];
 		} else {
 			return [];
-		}
-	}
-
-	/**
-	 * @param driver protocol driver enum string
-	 * @returns a list of pin objects that should be
-	 * populated by default for this protocol driver
-	 */
-	static getTimelinePins(driver: string): APP_PINNED_OBJECT_TYPE[] {
-		const results: APP_PINNED_OBJECT_TYPE[] = [];
-
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
-			return [APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_HOME];
-		}
-
-		results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_HOME);
-		results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_LOCAL);
-
-		if (
-			driver === KNOWN_SOFTWARE.SHARKEY ||
-			driver === KNOWN_SOFTWARE.MISSKEY
-		) {
-			results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_SOCIAL);
-		}
-
-		if (driver === KNOWN_SOFTWARE.SHARKEY || driver === KNOWN_SOFTWARE.AKKOMA) {
-			results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_BUBBLE);
-		}
-
-		results.push(APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_GLOBAL);
-		return results;
-	}
-
-	/**
-	 * @param driver protocol driver enum string
-	 * @returns a list of search destinations, that
-	 * should appear above the search widget
-	 */
-	static getSearchTabs(driver: KNOWN_SOFTWARE | string) {
-		if (ActivityPubService.blueskyLike(driver)) {
-			return [
-				SEARCH_RESULT_TAB.TOP,
-				SEARCH_RESULT_TAB.LATEST,
-				SEARCH_RESULT_TAB.PEOPLE,
-				SEARCH_RESULT_TAB.FEEDS,
-			];
-		} else if (ActivityPubService.misskeyLike(driver)) {
-			return [SEARCH_RESULT_TAB.POSTS, SEARCH_RESULT_TAB.PEOPLE];
-		} else if (driver === KNOWN_SOFTWARE.MASTODON) {
-			return [
-				SEARCH_RESULT_TAB.POSTS,
-				SEARCH_RESULT_TAB.PEOPLE,
-				SEARCH_RESULT_TAB.TAGS,
-				SEARCH_RESULT_TAB.NEWS,
-			];
-		} else if (ActivityPubService.pleromaLike(driver)) {
-			return [SEARCH_RESULT_TAB.POSTS, SEARCH_RESULT_TAB.PEOPLE];
 		}
 	}
 }

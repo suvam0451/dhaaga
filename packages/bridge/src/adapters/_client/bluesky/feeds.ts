@@ -1,7 +1,7 @@
 import { getXrpcAgent } from '../_router/_api.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
-import { RandomUtil } from '../../../utiils/random.util.js';
+import { RandomUtil } from '../../../utils/random.js';
 import {
 	errorBuilder,
 	notImplementedErrorBuilder,
@@ -14,15 +14,13 @@ import {
 	AtpAgent,
 } from '@atproto/api';
 import { LibraryPromise } from '../_router/routes/_types.js';
+import { ResultErr, ResultOk } from '../../../utils/result.js';
+import { DhaagaErrorCode } from '../../../types/result.types.js';
+import type { ApiAsyncResult } from '../../../utils/api-result.js';
 
 type SubscriptionUpdateResult = Promise<{
 	success: boolean;
 	subscribed: boolean;
-}>;
-
-type LikeStatusUpdateResult = Promise<{
-	success: boolean;
-	liked: boolean;
 }>;
 
 type PinStatusUpdateResult = Promise<{
@@ -65,14 +63,14 @@ class BlueskyFeedRouter {
 	 */
 	async getFeedGenerator(
 		uri: string,
-	): LibraryPromise<AppBskyFeedGetFeedGenerator.OutputSchema> {
+	): ApiAsyncResult<AppBskyFeedGetFeedGenerator.OutputSchema> {
 		try {
 			const data = await this.xrpc.app.bsky.feed.getFeedGenerator({
 				feed: uri,
 			});
-			return { data: data.data };
+			return ResultOk(data.data);
 		} catch (e) {
-			return errorBuilder(e);
+			return ResultErr(DhaagaErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

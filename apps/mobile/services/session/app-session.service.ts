@@ -1,6 +1,6 @@
 import { BaseStorageManager } from './_shared';
 import { z } from 'zod';
-import { DataSource } from '../../database/dataSource';
+import { DataSource } from '@dhaaga/db';
 import type { PostObjectType, UserObjectType } from '@dhaaga/core';
 import { ViewMeasurement } from '../../utils/viewport.utils';
 

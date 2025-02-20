@@ -2,7 +2,7 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { AppIcon } from '../../../components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AccountCollection } from '../../../database/_schema';
+import { AccountCollection } from '@dhaaga/db';
 import { AppText } from '../../../components/lib/Text';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { useTranslation } from 'react-i18next';

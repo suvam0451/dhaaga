@@ -3,7 +3,7 @@ import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/ada
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
 import UnknownToStatusAdapter from './default.js';
 import type { MastoStatus } from '../../types/mastojs.types.js';
-import { CasingUtils } from '../../utiils/casing.utils.js';
+import { CasingUtil } from '../../utils/casing.js';
 
 class MastodonToStatusAdapter
 	extends UnknownToStatusAdapter
@@ -121,7 +121,7 @@ class MastodonToStatusAdapter
 	getMediaAttachments() {
 		return this.ref.mediaAttachments?.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
-				new MediaAttachmentInstance(CasingUtils.camelCaseKeys(o)),
+				new MediaAttachmentInstance(CasingUtil.camelCaseKeys(o)),
 			);
 		});
 	}

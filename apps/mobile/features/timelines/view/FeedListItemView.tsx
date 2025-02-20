@@ -2,7 +2,6 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
 import { Pressable, View } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
-import { AppFeedObject } from '../../../types/app-feed.types';
 import { AppDivider } from '../../../components/lib/Divider';
 import { appDimensions } from '../../../styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
@@ -10,9 +9,10 @@ import { StatItem } from '../../../components/common/status/PostStats';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import TimelineIndicatorPresenter from '../../feeds/presenters/TimelineIndicatorPresenter';
+import type { FeedObjectType } from '@dhaaga/core';
 
 type SearchResultFeedItemProps = {
-	item: AppFeedObject;
+	item: FeedObjectType;
 };
 
 const FEED_AVATAR_SIZE = 42;

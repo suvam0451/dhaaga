@@ -1,11 +1,8 @@
 import { BlueskyRestClient } from '@dhaaga/bridge';
 import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs';
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
-import {
-	ATPROTO_FACET_ENUM,
-	generateFacets,
-} from '../../utils/atproto-facets.utils';
-import { AtpAgent, BlobRef, Facet } from '@atproto/api';
+import { generateFacets } from '../../utils/atproto-facets.utils';
+import { AtpAgent, BlobRef, Facet, AppBskyRichtextFacet } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../features/composer/reducers/composer.reducer';
 import MediaUtils from '../../utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
@@ -67,18 +64,18 @@ class AtprotoComposerService {
 		const pending: { index: number; pointer: number; handle: string }[] = [];
 		let count = 0;
 		for (let i = 0; i < items.length; i++) {
-			if (items[i].features[0].$type === ATPROTO_FACET_ENUM.MENTION) {
+			const target = items[i].features[0];
+			if (AppBskyRichtextFacet.isMention(target)) {
 				pending.push({
 					index: count++,
 					pointer: i,
-					handle: items[i].features[0].did as string,
+					handle: target.did,
 				});
 			}
 		}
 		const handles = await Promise.all(
 			pending.map((item) => agent.resolveHandle({ handle: item.handle })),
 		);
-		console.log(handles);
 		for (let i = 0; i < pending.length; i++) {
 			items[pending[i].pointer].features[0].did = handles[i].data.did;
 		}

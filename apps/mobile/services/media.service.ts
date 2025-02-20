@@ -1,5 +1,5 @@
 import { MediaAttachmentInterface } from '@dhaaga/bridge';
-import { SavedPostMediaAttachment } from '../database/_schema';
+import { SavedPostMediaAttachment } from '@dhaaga/db';
 
 type CarousalContainerSpecificationType = {
 	maxHeight: number;

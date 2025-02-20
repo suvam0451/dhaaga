@@ -4,7 +4,7 @@ import {
 	StatusInterface,
 } from '@dhaaga/bridge';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AccountSavedPost } from '../../database/_schema';
+import { AccountSavedPost } from '@dhaaga/db';
 import MediaService from '../media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';

@@ -6,7 +6,7 @@ import {
 	useProfileManager,
 } from '../../../hooks/utility/global-state-extractors';
 import { View } from 'react-native';
-import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
+import { ProfilePinnedUserService } from '@dhaaga/db';
 import { AppMenuItem } from '../../lib/Menu';
 import type { UserObjectType } from '@dhaaga/core';
 

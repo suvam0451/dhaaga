@@ -8,7 +8,7 @@ import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
 	ProfilePinnedUser,
-} from '../database/_schema';
+} from '@dhaaga/db';
 
 /**
  * Convert DTO/Interface arrays

@@ -1,5 +1,5 @@
 import { DhaagaErrorCode, LibraryResponse } from '../types/result.types.js';
-import { CasingUtils } from '../utiils/casing.utils.js';
+import { CasingUtil } from '../utils/casing.js';
 
 /**
  * Use Fetch API to
@@ -41,7 +41,7 @@ class FetchWrapper {
 
 		// You do me dirty, ruby gang :)
 		let typesOverride = obj['types[]'];
-		const retval = CasingUtils.snakeCaseKeys(obj) as Record<string, any>;
+		const retval = CasingUtil.snakeCaseKeys(obj) as Record<string, any>;
 		if (typesOverride) {
 			delete retval['types'];
 			retval['types[]'] = typesOverride;
@@ -100,7 +100,7 @@ class FetchWrapper {
 				const { minId, maxId } = DhaagaApiUtils.extractPaginationFromLinkHeader(
 					response.headers,
 				);
-				const _data = CasingUtils.camelCaseKeys(await response.json());
+				const _data = CasingUtil.camelCaseKeys(await response.json());
 				return {
 					data: {
 						data: _data,
@@ -139,7 +139,7 @@ class FetchWrapper {
 					);
 				}
 				DhaagaApiUtils.extractPaginationFromLinkHeader(response.headers);
-				const data = CasingUtils.camelCaseKeys(await response.json());
+				const data = CasingUtil.camelCaseKeys(await response.json());
 				return { data };
 			})
 			.catch((e) => {

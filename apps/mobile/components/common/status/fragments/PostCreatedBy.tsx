@@ -16,7 +16,7 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { AccountSavedUser } from '../../../../database/_schema';
+import { AccountSavedUser } from '@dhaaga/db';
 import { TextContentView } from '../TextContentView';
 import type { AppParsedTextNodes } from '@dhaaga/core';
 import { AppText } from '../../../lib/Text';

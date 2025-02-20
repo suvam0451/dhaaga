@@ -9,7 +9,7 @@ import { FlatList, View } from 'react-native';
 import AssignmentSheetBookmarkView from '../views/AssignmentSheetBookmarkView';
 import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import useCollectionAssignInteractor from '../interactors/useCollectionAssignInteractor';
-import { AccountCollection } from '../../../database/_schema';
+import { AccountCollection } from '@dhaaga/db';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import BookmarkUnsupported from '../components/BookmarkUnsupported';
 import CollectionItem from '../components/CollectionItem';

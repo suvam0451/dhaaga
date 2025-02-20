@@ -1,4 +1,4 @@
-import { DataSource } from '../../database/dataSource';
+import { DataSource } from '@dhaaga/db';
 import { RandomUtil } from '@dhaaga/core';
 
 export type TimelineReducerBaseState<T> = {

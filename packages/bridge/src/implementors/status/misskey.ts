@@ -16,10 +16,6 @@ class MisskeyToStatusAdapter
 		this.ref = ref;
 	}
 
-	// getCachedEmojis(): Map<string, string> {
-	// 	return new Map<string, string>();
-	// }
-
 	getMentions = () =>
 		this.ref.mentions?.map((o) => ({
 			id: o,

@@ -2,11 +2,13 @@ import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
 import { RandomUtil } from '@dhaaga/core';
 import type { PostObjectType } from '@dhaaga/core';
 import { produce } from 'immer';
-import { DataSource } from '../../database/dataSource';
-import { ProfilePinnedTimelineService } from '../../database/entities/profile-pinned-timeline';
-import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
-import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
-import { ProfilePinnedTagService } from '../../database/entities/profile-pinned-tag';
+import {
+	DataSource,
+	ProfilePinnedTimelineService,
+	ProfilePinnedUserService,
+	ProfilePinnedTagService,
+	APP_PINNED_OBJECT_TYPE,
+} from '@dhaaga/db';
 import { Dispatch } from 'react';
 import {
 	timelineReducerBaseDefaults,
@@ -53,6 +55,7 @@ export const DEFAULT: State = {
 	feedType: TimelineFetchMode.IDLE,
 	query: null,
 	isWidgetVisible: false,
+	items: [],
 };
 
 export enum ACTION {

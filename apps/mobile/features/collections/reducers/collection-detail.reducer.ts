@@ -1,8 +1,4 @@
-import {
-	Account,
-	AccountSavedPost,
-	AccountSavedUser,
-} from '../../../database/_schema';
+import { Account, AccountSavedPost, AccountSavedUser } from '@dhaaga/db';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
 import { TextNodeParser } from '@dhaaga/core';

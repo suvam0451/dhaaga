@@ -13,10 +13,11 @@
     "zod": "^3.24.2"
   },
   "peerDependencies": {
+    "react": ">=18.2.0",
     "typescript": "^5.7.3"
   },
   "scripts": {
-    "bun:up": "bun build --outdir ./dist --outfile ./dist/index.js --target node ./src/index.ts && tsc -p ./tsconfig.json",
+    "bun:up": "rm -rf ./dist/** && bun build --outdir ./dist --outfile ./dist/index.js --target node ./src/index.ts && tsc -p ./tsconfig.json",
     "up": "tsc -p ./tsconfig.json"
   },
   "exports": {

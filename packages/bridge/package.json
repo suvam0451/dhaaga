@@ -15,7 +15,7 @@
     }
   },
   "dependencies": {
-    "@atproto/api": "^0.14.1",
+    "@atproto/api": "^0.14.2",
     "axios": "^1.7.9",
     "dom-serializer": "^2.0.0",
     "domhandler": "^5.0.3",
@@ -32,7 +32,7 @@
     "typescript": "^5.7.3"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.json"
+    "up": "tsc -p ./tsconfig.json"
   },
   "type": "module"
 }

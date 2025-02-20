@@ -26,7 +26,7 @@ import type {
 } from '../../../types/megalodon.types.js';
 import { DhaagaErrorCode } from '../../../types/result.types.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { CasingUtils } from '../../../utiils/casing.utils.js';
+import { CasingUtil } from '../../../utils/casing.js';
 
 export class PleromaAccountsRouter
 	extends BaseAccountsRouter
@@ -47,7 +47,7 @@ export class PleromaAccountsRouter
 	async get(id: string): LibraryPromise<MegaAccount> {
 		const data = await this.client.client.getAccount(id);
 		if (data.status !== 200) return errorBuilder(data.statusText);
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async lookup(webfingerUrl: string): LibraryPromise<MegaAccount> {
@@ -65,9 +65,9 @@ export class PleromaAccountsRouter
 		try {
 			const data = await this.client.client.getAccountStatuses(
 				id,
-				CasingUtils.snakeCaseKeys(query) as any,
+				CasingUtil.snakeCaseKeys(query) as any,
 			);
-			return { data: CasingUtils.camelCaseKeys(data.data) };
+			return { data: CasingUtil.camelCaseKeys(data.data) };
 		} catch (e) {
 			console.log('[ERROR]: getting pleroma user timeline', e);
 			return { data: [] };
@@ -79,7 +79,7 @@ export class PleromaAccountsRouter
 		if (data.status !== 200) {
 			return errorBuilder<MegaRelationship[]>(data.statusText);
 		}
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async likes(query: GetPostsQueryDTO): PaginatedLibraryPromise<MegaStatus[]> {
@@ -148,7 +148,7 @@ export class PleromaAccountsRouter
 			return errorBuilder(data.statusText);
 		}
 		// console.log(data, error);
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async unfollow(id: string): LibraryPromise<MegaRelationship> {
@@ -156,7 +156,7 @@ export class PleromaAccountsRouter
 		if (data.status !== 200) {
 			return errorBuilder(data.statusText);
 		}
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async followers(query: FollowerGetQueryDTO): LibraryPromise<{
