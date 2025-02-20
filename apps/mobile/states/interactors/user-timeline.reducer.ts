@@ -1,4 +1,4 @@
-import { DataSource } from '../../database/dataSource';
+import { DataSource } from '@dhaaga/db';
 import { RandomUtil } from '@dhaaga/core';
 import type { UserObjectType } from '@dhaaga/core';
 import { produce } from 'immer';
@@ -12,6 +12,7 @@ type State = TimelineReducerBaseState<UserObjectType> & {};
 
 export const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
+	items: [],
 };
 
 export enum ACTION {

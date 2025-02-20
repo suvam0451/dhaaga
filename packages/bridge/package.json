@@ -2,6 +2,7 @@
   "name": "@dhaaga/bridge",
   "description": "Bridging the fediverse using various design patterns!",
   "private": true,
+  "license": "AGPL-3.0-or-later",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

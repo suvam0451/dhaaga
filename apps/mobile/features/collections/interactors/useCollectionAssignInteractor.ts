@@ -1,5 +1,5 @@
 import { useDbSavedPostStatus } from '../api/useCollectionsQuery';
-import { AccountCollection } from '../../../database/_schema';
+import { AccountCollection } from '@dhaaga/db';
 import useCollections from '../api/useCollections';
 import { useState } from 'react';
 import { PostInspector } from '@dhaaga/core';

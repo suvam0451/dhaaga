@@ -1,4 +1,4 @@
-import { ProfileService } from '../../../database/entities/profile';
+import { ProfileService } from '@dhaaga/db';
 import {
 	useAppAcct,
 	useAppDb,

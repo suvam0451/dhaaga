@@ -23,3 +23,12 @@ export enum APP_PINNED_OBJECT_TYPE {
 }
 
 export const DATABASE_NAME = 'app.db';
+
+export type ExpoSqliteColumnDefinition = {
+	cid: number;
+	name: string;
+	notnull: boolean;
+	pk: boolean;
+	type: 'INTEGER' | 'TEXT';
+	dflt_value: null;
+};

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AccountService } from '../../database/entities/account';
+import { AccountService } from '@dhaaga/db';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 

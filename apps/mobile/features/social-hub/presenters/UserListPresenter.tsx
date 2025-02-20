@@ -1,4 +1,9 @@
-import { Account, Profile, ProfilePinnedUser } from '../../../database/_schema';
+import {
+	Account,
+	Profile,
+	ProfilePinnedUser,
+	AccountService,
+} from '@dhaaga/db';
 import { FlatList, StyleSheet } from 'react-native';
 import PinnedUserView from '../views/PinnedUserView';
 import {
@@ -7,7 +12,6 @@ import {
 	useAppDialog,
 } from '../../../hooks/utility/global-state-extractors';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import { AccountService } from '../../../database/entities/account';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../states/useAppNavigator';

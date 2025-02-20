@@ -7,9 +7,9 @@ import { useQuery } from '@tanstack/react-query';
 import ChatService, { AppChatRoom } from '../../../services/chat.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { ChatBskyConvoGetConvo, ChatBskyConvoGetMessages } from '@atproto/api';
-import { AccountMetadataService } from '../../../database/entities/account-metadata';
-import { ChatMiddleware } from '../../../services/middlewares/chat.middleware';
-import { AppMessageObject } from '../../../types/app-message.types';
+import { AccountMetadataService } from '@dhaaga/db';
+import { ChatParser } from '@dhaaga/core';
+import type { MessageObjectType } from '@dhaaga/core';
 
 /**
  * Helper function to refetch details
@@ -46,7 +46,7 @@ function useApiGetChatroom(roomId: string) {
 }
 
 type GetChatMessagesResponse = {
-	items: AppMessageObject[];
+	items: MessageObjectType[];
 	cursor: string | undefined;
 };
 
@@ -65,11 +65,7 @@ function useApiGetChatMessages(roomId: string, maxId: string | undefined) {
 			case KNOWN_SOFTWARE.BLUESKY: {
 				const _data: ChatBskyConvoGetMessages.OutputSchema = result.data;
 				return {
-					items: ChatMiddleware.deserialize<unknown[]>(
-						_data.messages,
-						driver,
-						server,
-					),
+					items: ChatParser.parse<unknown[]>(_data.messages, driver, server),
 					cursor: _data.cursor,
 				};
 			}

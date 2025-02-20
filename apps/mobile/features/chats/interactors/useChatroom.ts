@@ -3,7 +3,7 @@ import {
 	useApiGetChatMessages,
 	useApiGetChatroom,
 } from '../api/useApiGetChats';
-import { AccountMetadataService } from '../../../database/entities/account-metadata';
+import { AccountMetadataService } from '@dhaaga/db';
 import {
 	useAppAcct,
 	useAppApiClient,
@@ -16,7 +16,7 @@ import {
 	chatroomReducerDefault,
 } from '../../../states/interactors/chatroom.reducer';
 import { generateFacets } from '../../../utils/atproto-facets.utils';
-import { ChatMiddleware } from '../../../services/middlewares/chat.middleware';
+import { ChatParser } from '@dhaaga/core';
 
 function useChatroom() {
 	const { db } = useAppDb();
@@ -79,7 +79,7 @@ function useChatroom() {
 		dispatch({
 			type: ChatroomReducerActionType.APPEND_MESSAGE,
 			payload: {
-				message: ChatMiddleware.deserialize<unknown>(
+				message: ChatParser.parse<unknown>(
 					sentMessageResult.data,
 					driver,
 					server,

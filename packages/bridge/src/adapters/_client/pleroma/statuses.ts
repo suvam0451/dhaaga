@@ -12,7 +12,7 @@ import {
 import { LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { CasingUtils } from '../../../utiils/casing.utils.js';
+import { CasingUtil } from '../../../utils/casing.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -32,7 +32,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			console.log('[ERROR]: failed to get status', response.statusText);
 		}
 		return {
-			data: CasingUtils.camelCaseKeys(response.data),
+			data: CasingUtil.camelCaseKeys(response.data),
 		};
 	}
 
@@ -51,7 +51,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			console.log('[ERROR]: failed to create status', response.statusText);
 		}
 
-		return { data: CasingUtils.camelCaseKeys(response.data) };
+		return { data: CasingUtil.camelCaseKeys(response.data) };
 	}
 
 	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
@@ -68,7 +68,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async getReactions(id: string): Promise<LibraryResponse<MegaReaction[]>> {
 		const data = await this.client.client.getEmojiReactions(id);
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async getReactionDetails(
@@ -80,7 +80,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			console.log('[ERROR]: failed to get reaction details', data.statusText);
 			return errorBuilder<MegaReaction[]>(data.statusText);
 		}
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async addReaction(id: string, shortCode: string): LibraryPromise<any> {
@@ -89,7 +89,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			console.log('[ERROR]: failed to add reaction', data.statusText);
 			return errorBuilder(data.statusText);
 		}
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async removeReaction(id: string, shortCode: string): LibraryPromise<any> {
@@ -98,7 +98,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			console.log('[ERROR]: failed to remove reaction', data.statusText);
 			return errorBuilder(data.statusText);
 		}
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async bookmark(id: string) {
@@ -127,7 +127,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 
 	async getContext(id: string) {
 		const data = await this.client.client.getStatusContext(id);
-		return { data: CasingUtils.camelCaseKeys(data.data) };
+		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
 	async boost(id: string): LibraryPromise<MegaStatus> {

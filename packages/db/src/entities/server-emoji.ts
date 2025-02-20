@@ -1,17 +1,16 @@
 import * as SQLite from 'expo-sqlite';
-import { KnownServer, ServerEmoji } from '../_schema';
-import { Result } from '../../utils/result';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
-import { APP_DB } from '../../types/db.types';
+import { KnownServer, type ServerEmoji } from '../_schema';
+import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result';
+import { DATABASE_NAME } from '../types/db.types';
 
-export class Repo {
+class Repo {
 	/**
 	 * @param serverId fk
 	 * @param identifier shortCode/alias of the reaction
 	 */
-	static find(serverId: number, identifier: string): Result<ServerEmoji> {
-		const db = SQLite.openDatabaseSync(APP_DB);
+	static find(serverId: number, identifier: string): DbResult<ServerEmoji> {
+		const db = SQLite.openDatabaseSync(DATABASE_NAME);
 
 		try {
 			const emoji = db.getFirstSync<ServerEmoji>(
@@ -19,23 +18,23 @@ export class Repo {
 				serverId,
 				identifier,
 			);
-			if (emoji) return { type: 'success', value: emoji };
-			return { type: 'not-found' };
+			if (emoji) return Ok(emoji);
+			return Err(DbErrorCode.NOT_FOUND);
 		} catch (e) {
-			return { type: 'error', error: e };
+			return Err(DbErrorCode.UNKNOWN);
 		}
 	}
 }
 
 class Service {
-	static find(server: KnownServer, identifier: string): Result<ServerEmoji> {
+	static find(server: KnownServer, identifier: string): DbResult<ServerEmoji> {
 		return Repo.find(server.id, identifier);
 	}
 
 	static async upsertMany(
 		db: SQLiteDatabase,
 		server: KnownServer,
-		items: InstanceApi_CustomEmojiDTO[],
+		items: any[],
 	) {
 		for await (const item of items) {
 		}

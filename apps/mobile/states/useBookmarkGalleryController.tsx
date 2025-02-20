@@ -12,7 +12,7 @@ import {
 	useState,
 } from 'react';
 import { RandomUtil } from '@dhaaga/core';
-import { Account } from '../database/_schema';
+import { Account } from '@dhaaga/db';
 
 type InheritedType = {};
 

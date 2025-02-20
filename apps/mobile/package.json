@@ -18,6 +18,7 @@
   "dependencies": {
     "@atproto/api": "^0.14.2",
     "@dhaaga/bridge": "*",
+    "@dhaaga/db": "*",
     "@dhaaga/core": "*",
     "@dhaaga/orm": "*",
     "@expo-google-fonts/bebas-neue": "^0.2.3",

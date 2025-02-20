@@ -1,6 +1,5 @@
-import { Profile } from '../../../database/_schema';
+import { Profile, ProfilePinnedUserService } from '@dhaaga/db';
 import { useQuery } from '@tanstack/react-query';
-import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
 import {
 	useAppAcct,
 	useAppDb,

@@ -1,12 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AccountCollection } from '../../../database/_schema';
-import { AccountCollectionService } from '../../../database/entities/account-collection';
+import {
+	AccountCollection,
+	AccountCollectionService,
+	AccountSavedPostService,
+} from '@dhaaga/db';
 import {
 	useAppAcct,
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
 import type { PostObjectType } from '@dhaaga/core';
-import { AccountSavedPostService } from '../../../database/entities/account-saved-post';
 
 export function useDbCollections() {
 	const { db } = useAppDb();

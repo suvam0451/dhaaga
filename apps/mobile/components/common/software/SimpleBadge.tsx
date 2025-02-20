@@ -1,14 +1,13 @@
 import { memo } from 'react';
 import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { Text } from '@rneui/themed';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { Accounts } from '../../../database/entities/account';
+import { Account } from '@dhaaga/db';
 
 type SoftwareBadgeUpdateAccountOnClickProps = {
-	acct: Accounts;
+	acct: Account;
 };
 
 export const SoftwareBadgeUpdateAccountOnClick = memo(function Foo({

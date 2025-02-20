@@ -43,7 +43,7 @@ class Repo {
 		});
 	}
 
-	static upsert(db: DataSource, input: ServerRecordType): KnownServer {
+	static upsert(db: DataSource, input: ServerRecordType): KnownServer | null {
 		const conflict = Repo.findByProfileAndUrl(db, input.url);
 
 		if (conflict) {
@@ -86,7 +86,7 @@ class Repo {
 	}
 }
 
-export class Service {
+class Service {
 	static upsertMeta(
 		db: DataSource,
 		server: KnownServer,

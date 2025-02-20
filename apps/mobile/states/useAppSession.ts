@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppDb, useHub } from '../hooks/utility/global-state-extractors';
-import { AppSettingService } from '../database/entities/app-setting';
 import SettingsService, { APP_SETTING_KEY } from '../services/settings.service';
 import useAppSettings from '../features/settings/interactors/useAppSettings';
 import { useTranslation } from 'react-i18next';
