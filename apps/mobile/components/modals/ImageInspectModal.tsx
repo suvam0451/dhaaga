@@ -8,7 +8,7 @@ import { Alert, Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import useGlobalState from '../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useState } from 'react';
-import { AppMediaObject, AppPostObject } from '../../types/app-post.types';
+import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/core';
 import { Image } from 'expo-image';
 import { AppIcon } from '../lib/Icon';
 import { useImageAutoHeight } from '../../hooks/app/useImageDims';
@@ -18,7 +18,7 @@ import { AppText } from '../lib/Text';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { LinkingUtils } from '../../utils/linking.utils';
 import { AppDownloadService } from '../../services/app.service';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 
 type StatSectionProps = {
 	icon: any;
@@ -53,7 +53,7 @@ function StatSection({ icon, count, last, label, onPress }: StatSectionProps) {
 }
 
 type ImageInspectPostMetricsProps = {
-	post: AppPostObject;
+	post: PostObjectType;
 	imageUrl: string;
 };
 
@@ -162,7 +162,7 @@ function ImageInspectPostMetrics({
  * @constructor
  */
 function ImageInspectModal() {
-	const [Data, setData] = useState<AppMediaObject[]>([]);
+	const [Data, setData] = useState<PostMediaAttachmentType[]>([]);
 	const [PostData, setPostData] = useState(null);
 	const { visible, stateId, appSession, hide } = useGlobalState(
 		useShallow((o) => ({

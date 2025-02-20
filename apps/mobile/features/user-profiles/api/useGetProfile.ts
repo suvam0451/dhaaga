@@ -4,13 +4,12 @@ import {
 	MastodonRestClient,
 	MisskeyRestClient,
 } from '@dhaaga/bridge';
-import { AppUserObject } from '../../../types/app-user.types';
-import { UserMiddleware } from '../../../services/middlewares/user.middleware';
 import {
 	useAppAcct,
 	useAppApiClient,
 } from '../../../hooks/utility/global-state-extractors';
 import ActivityPubService from '../../../services/activitypub.service';
+import { UserObjectType, UserParser } from '@dhaaga/core';
 
 export type ProfileSearchQueryType = {
 	did?: string;
@@ -28,7 +27,7 @@ function useGetProfile(query: ProfileSearchQueryType) {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
 
-	async function api(): Promise<AppUserObject> {
+	async function api(): Promise<UserObjectType> {
 		if (!client || query === null) throw new Error('E_No_Client');
 		const { did, userId, webfinger } = query;
 
@@ -44,7 +43,7 @@ function useGetProfile(query: ProfileSearchQueryType) {
 			// fetch account for did
 			const { data, error } = await client.accounts.get(did);
 			if (error) throw new Error('Failed to fetch user for AtProto');
-			return UserMiddleware.deserialize(data.data, driver, server);
+			return UserParser.parse(data.data, driver, server);
 		}
 
 		if (ActivityPubService.misskeyLike(driver)) {
@@ -52,20 +51,12 @@ function useGetProfile(query: ProfileSearchQueryType) {
 				const findResult = await (
 					client as MisskeyRestClient
 				).accounts.findByUserId(userId);
-				return UserMiddleware.deserialize<unknown>(
-					findResult.data,
-					driver,
-					server,
-				);
+				return UserParser.parse<unknown>(findResult.data, driver, server);
 			} else if (webfinger) {
 				const findResult = await (
 					client as MisskeyRestClient
 				).accounts.findByWebfinger(webfinger);
-				return UserMiddleware.deserialize<unknown>(
-					findResult.data,
-					driver,
-					server,
-				);
+				return UserParser.parse<unknown>(findResult.data, driver, server);
 			}
 		}
 
@@ -74,7 +65,7 @@ function useGetProfile(query: ProfileSearchQueryType) {
 				const findResult = await client.accounts.get(userId);
 				if (findResult.error)
 					throw new Error('Failed to fetch user for Mastodon');
-				return UserMiddleware.deserialize(findResult.data, driver, server);
+				return UserParser.parse(findResult.data, driver, server);
 			} else if (webfinger) {
 				const findResult = await (client as MastodonRestClient).accounts.lookup(
 					webfinger.host
@@ -83,13 +74,13 @@ function useGetProfile(query: ProfileSearchQueryType) {
 				);
 				if (findResult.error)
 					throw new Error('Failed to fetch user for Mastodon');
-				return UserMiddleware.deserialize(findResult.data, driver, server);
+				return UserParser.parse(findResult.data, driver, server);
 			}
 		}
 	}
 
 	// Queries
-	return useQuery<AppUserObject>({
+	return useQuery<UserObjectType>({
 		queryKey: ['profile', acct, query],
 		queryFn: api,
 		enabled: !!client,

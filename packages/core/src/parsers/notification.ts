@@ -1,26 +1,38 @@
+import { z } from 'zod';
+import { postObjectSchema } from './post';
+import { appUserObjectSchema, UserParser } from './user';
 import { DhaagaJsNotificationType, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import {
-	AppNotificationObject,
-	appNotificationObjectSchema,
-} from '../../types/app-notification.types';
-import { UserMiddleware } from './user.middleware';
-import { PostMiddleware } from './post.middleware';
+import { PostParser } from './post';
 
-/**
- * converts raw objects (unlike post
- * and user) into light-weight JSON
- * objects, to be consumed by the app
- *
- * This middleware deals with post
- * objects. Also see other files
- * in this folder
- */
-export class NotificationMiddleware {
+const appNotificationGroupedUserItemSchema = z.object({
+	item: appUserObjectSchema,
+	types: z.array(z.string()),
+	extraData: z.any(),
+});
+
+type NotificationUserGroupType = z.infer<
+	typeof appNotificationGroupedUserItemSchema
+>;
+
+export const appNotificationObjectSchema = z.object({
+	id: z.string(),
+	type: z.string(),
+	createdAt: z.date({ coerce: true }),
+	user: appUserObjectSchema.nullable(),
+	post: postObjectSchema.nullable(),
+	extraData: z.any(),
+	read: z.boolean(),
+	users: z.array(appNotificationGroupedUserItemSchema).optional(),
+});
+
+type NotificationObjectType = z.infer<typeof appNotificationObjectSchema>;
+
+class Parser {
 	static rawToObject(
 		input: any,
 		driver: string | KNOWN_SOFTWARE,
 		server: string,
-	): AppNotificationObject {
+	): NotificationObjectType | null {
 		if (driver === KNOWN_SOFTWARE.MASTODON) {
 			return {
 				id: input.id,
@@ -29,12 +41,8 @@ export class NotificationMiddleware {
 						? DhaagaJsNotificationType.CHAT
 						: DhaagaJsNotificationType.MENTION,
 				createdAt: input.createdAt,
-				user: UserMiddleware.deserialize<unknown>(
-					input.account,
-					driver,
-					server,
-				),
-				post: PostMiddleware.deserialize<unknown>(input, driver, server),
+				user: UserParser.parse<unknown>(input.account, driver, server),
+				post: PostParser.parse<unknown>(input, driver, server) || null,
 				extraData: {},
 				read: false,
 			};
@@ -44,12 +52,12 @@ export class NotificationMiddleware {
 			type: input.type as DhaagaJsNotificationType,
 			createdAt: input.createdAt,
 			groupKey: input.groupKey,
-			user: UserMiddleware.deserialize<unknown>(
+			user: UserParser.parse<unknown>(
 				input.account || input.user,
 				driver,
 				server,
 			),
-			post: PostMiddleware.deserialize<unknown>(
+			post: PostParser.parse<unknown>(
 				input.status || input.data || input.note,
 				driver,
 				server,
@@ -65,7 +73,7 @@ export class NotificationMiddleware {
 			console.log(input);
 			return null;
 		}
-		return data as AppNotificationObject;
+		return data as NotificationObjectType;
 	}
 
 	/**
@@ -75,23 +83,27 @@ export class NotificationMiddleware {
 	 * @param driver being used to deserialize this object
 	 * @param server
 	 */
-	static deserialize<T>(
+	static parse<T>(
 		input: T | T[],
 		driver: string | KNOWN_SOFTWARE,
 		server: string,
-	): T extends unknown[] ? AppNotificationObject[] : AppNotificationObject {
+	): T extends unknown[] ? NotificationObjectType[] : NotificationObjectType {
 		if (Array.isArray(input)) {
 			return input
-				.map((o) => NotificationMiddleware.rawToObject(o, driver, server))
+				.map((o) => Parser.rawToObject(o, driver, server))
 				.filter((o) => !!o) as unknown as T extends unknown[]
-				? AppNotificationObject[]
+				? NotificationObjectType[]
 				: never;
 		} else {
-			return NotificationMiddleware.rawToObject(
+			return Parser.rawToObject(
 				input,
 				driver,
 				server,
-			) as unknown as T extends unknown[] ? never : AppNotificationObject;
+			) as unknown as T extends unknown[] ? never : NotificationObjectType;
 		}
 	}
 }
+
+export { Parser as NotificationParser };
+
+export type { NotificationObjectType, NotificationUserGroupType };

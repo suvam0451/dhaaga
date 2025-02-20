@@ -1,8 +1,3 @@
-import {
-	AppParsedTextNodes,
-	NodeContent,
-	WrapperNode,
-} from '../../../../types/parsed-text.types';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import RawTextSegment from '../../../shared/mfm/RawTextSegment';
 import { TEXT_PARSING_VARIANT } from '../../../../types/app.types';
@@ -11,7 +6,8 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import HashtagSegment from '../../../shared/mfm/HashtagSegment';
 import { appDimensions } from '../../../../styles/dimensions';
 import MentionSegment from '../../../shared/mfm/MentionSegment';
-import { TextParserService } from '../../../../services/text-parser.service';
+import { TextParser } from '@dhaaga/core';
+import type { NodeContent, AppParsedTextNodes } from '@dhaaga/core';
 import LinkProcessor from '../../link/LinkProcessor';
 import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
 
@@ -32,7 +28,12 @@ function TextContentNode({
 }: TextContentNodeProps) {
 	if (!node) return <View />;
 
-	if (!WrapperNode.includes(node.type)) {
+	if (
+		node.type !== 'para' &&
+		node.type !== 'bold' &&
+		node.type !== 'italic' &&
+		node.type !== 'inline'
+	) {
 		switch (node.type) {
 			case 'text': {
 				return (
@@ -124,7 +125,7 @@ function TextContentNode({
 					);
 				}
 
-				const isHashtag = TextParserService.isHashtag(node.url);
+				const isHashtag = TextParser.isHashtag(node.url);
 				if (isHashtag) {
 					return (
 						<HashtagSegment

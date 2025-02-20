@@ -4,9 +4,9 @@ import { MisskeyRestClient } from '@dhaaga/bridge';
 import * as Haptics from 'expo-haptics';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { AppPostObject } from '../../../../types/app-post.types';
+import { PostObjectType } from '@dhaaga/core';
 
-function useBoost(dto: AppPostObject) {
+function useBoost(dto: PostObjectType) {
 	const { client, driver, me } = useGlobalState(
 		useShallow((o) => ({
 			me: o.me,

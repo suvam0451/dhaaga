@@ -6,7 +6,7 @@ import {
 	AccountCollectionService,
 	AccountCollectionService as Service,
 } from '../../../database/entities/account-collection';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import { AccountCollection } from '../../../database/_schema';
 import { AccountSavedPostService } from '../../../database/entities/account-saved-post';
 
@@ -38,7 +38,7 @@ function useCollections() {
 
 	function toggleForCollection(
 		collection: AccountCollection,
-		post: AppPostObject,
+		post: PostObjectType,
 	) {
 		const savedPost = AccountSavedPostService.upsert(db, acct, post);
 		AccountCollectionService.toggleLink(db, collection, savedPost);

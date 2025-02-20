@@ -1,11 +1,11 @@
-import { AppNotificationObject } from '../../../types/app-notification.types';
+import { NotificationObjectType } from '@dhaaga/core';
 import { produce } from 'immer';
 import { AppResultPageType } from '../../../types/app.types';
 import { Dispatch } from 'react';
 
 type State = {
 	seen: Set<string>;
-	items: AppNotificationObject[];
+	items: NotificationObjectType[];
 };
 
 enum ACTION {
@@ -22,11 +22,11 @@ const DEFAULT: State = {
 type Actions =
 	| {
 			type: ACTION.APPEND_PAGE;
-			payload: { page: AppResultPageType<AppNotificationObject> };
+			payload: { page: AppResultPageType<NotificationObjectType> };
 	  }
 	| {
 			type: ACTION.REPLACE_WITH_PAGE;
-			payload: { page: AppResultPageType<AppNotificationObject> };
+			payload: { page: AppResultPageType<NotificationObjectType> };
 	  }
 	| {
 			type: ACTION.RESET;

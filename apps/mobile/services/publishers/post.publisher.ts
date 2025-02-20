@@ -1,5 +1,5 @@
 import { BasePubSubService } from './_base.pubisher';
-import { AppPostObject } from '../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import { PostMutator } from '../mutators/post.mutator';
@@ -16,7 +16,7 @@ export enum POST_EVENT_ENUM {
  * the updates to all subscribed data stores
  */
 export class PostPublisherService extends BasePubSubService {
-	private readonly cache: Map<string, AppPostObject>;
+	private readonly cache: Map<string, PostObjectType>;
 	private readonly driver: KNOWN_SOFTWARE;
 	private readonly client: ActivityPubClient;
 	private readonly mutator: PostMutator;
@@ -32,7 +32,7 @@ export class PostPublisherService extends BasePubSubService {
 		this.mutator = new PostMutator(this.driver, this.client);
 	}
 
-	writeCache(uuid: string, data: AppPostObject) {
+	writeCache(uuid: string, data: PostObjectType) {
 		this.cache.set(uuid, data);
 	}
 
@@ -40,7 +40,7 @@ export class PostPublisherService extends BasePubSubService {
 		return this.cache.get(uuid);
 	}
 
-	addIfNotExist(uuid: string, data: AppPostObject) {
+	addIfNotExist(uuid: string, data: PostObjectType) {
 		if (!this.cache.get(uuid)) this.cache.set(uuid, data);
 		return this.cache.get(uuid);
 	}
@@ -90,7 +90,6 @@ export class PostPublisherService extends BasePubSubService {
 	}
 
 	async toggleLike(uuid: string, loader?: (flag: boolean) => void) {
-		console.log(uuid);
 		await this._bind(uuid, this.mutator.toggleLike, loader);
 	}
 

@@ -4,8 +4,8 @@ import { Account, Profile, ProfilePinnedUser } from '../_schema';
 import { AccountService } from './account';
 import { z } from 'zod';
 import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
-import { RandomUtil } from '../../utils/random.utils';
-import { AppUserObject } from '../../types/app-user.types';
+import { RandomUtil } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/core';
 
 const profileUserPinCreateSchema = z.object({
 	server: z.string(),
@@ -34,7 +34,7 @@ export class Repo {
 		db: DataSource,
 		profile: Profile,
 		acct: Account,
-		user: AppUserObject,
+		user: UserObjectType,
 	) {
 		const _uuid = RandomUtil.nanoId();
 		db.profilePinnedUser.insert({
@@ -126,7 +126,7 @@ export class Service {
 		db: DataSource,
 		profile: Profile,
 		acct: Account,
-		user: AppUserObject,
+		user: UserObjectType,
 	) {
 		const duplicate = Service.find(db, profile, acct.server, user.id);
 		if (duplicate) {
@@ -168,7 +168,7 @@ export class Service {
 		db: DataSource,
 		profile: Profile,
 		acct: Account,
-		user: AppUserObject,
+		user: UserObjectType,
 	) {
 		const matched = Service.find(db, profile, acct.server, user.id);
 

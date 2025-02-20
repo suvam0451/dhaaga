@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { RandomUtil } from '../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 
 export const appMessageObjectSchema = z.object({
 	uuid: z.string(),

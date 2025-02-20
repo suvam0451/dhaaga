@@ -12,7 +12,6 @@ import AppTopNavbar, {
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { AppMessageObject } from '../../../types/app-message.types';
 import { AppText } from '../../../components/lib/Text';
-import { AppUserObject } from '../../../types/app-user.types';
 import { Image } from 'expo-image';
 import { AppDivider } from '../../../components/lib/Divider';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
@@ -24,9 +23,10 @@ import InputView from '../../../features/chats/views/InputView';
 import { appDimensions } from '../../../styles/dimensions';
 import RecievedMessageView from '../../../features/chats/views/RecievedMessageView';
 import SentMessageView from '../../../features/chats/views/SentMessageView';
+import type { UserObjectType } from '@dhaaga/core';
 
 type ParticipantsProps = {
-	accounts: AppUserObject[];
+	accounts: UserObjectType[];
 };
 
 function Participants({ accounts }: ParticipantsProps) {
@@ -35,7 +35,7 @@ function Participants({ accounts }: ParticipantsProps) {
 		<FlatList
 			horizontal={true}
 			data={accounts}
-			renderItem={({ item }: { item: AppUserObject }) => (
+			renderItem={({ item }: { item: UserObjectType }) => (
 				<View style={{ padding: 4 }}>
 					{/*@ts-ignore-next-line*/}
 					<Image
@@ -54,7 +54,7 @@ function Participants({ accounts }: ParticipantsProps) {
 
 type MessageProps = {
 	message: AppMessageObject;
-	members: AppUserObject[];
+	members: UserObjectType[];
 	myId: string;
 };
 

@@ -4,7 +4,7 @@ import {
 	AppMessageObject,
 	appMessageObjectSchema,
 } from '../../types/app-message.types';
-import { AppPostObject } from '../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 
 export class ChatMiddleware {
 	static deserialize<T>(
@@ -51,6 +51,6 @@ export class ChatMiddleware {
 			input.print();
 			return null;
 		}
-		return data as AppPostObject;
+		return data as PostObjectType;
 	}
 }

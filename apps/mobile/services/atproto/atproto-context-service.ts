@@ -1,6 +1,8 @@
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
-import { PostMiddleware } from '../middlewares/post.middleware';
+import { PostParser } from '@dhaaga/core';
+import { $Typed } from '@atproto/api/src/client/util';
+import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 
 class AtprotoContextService {
 	/**
@@ -12,12 +14,22 @@ class AtprotoContextService {
 	 * (just like mastodon)
 	 */
 	static solve(data: AppBskyFeedGetPostThread.Response) {
-		const _thread = data?.data?.thread;
+		const thread = data?.data?.thread;
+
+		// TODO: handle blocked/missing posts
+		if (
+			thread.$type === 'app.bsky.feed.defs#blockedPost' ||
+			thread.$type === 'app.bsky.feed.defs#notFoundPost'
+		) {
+			return null;
+		}
+
+		const _thread = data?.data?.thread as $Typed<ThreadViewPost>;
 
 		let lookup = new Map<string, StatusInterface>();
 		let childrenMapper = new Map<string, StatusInterface[]>();
 
-		let curr: StatusInterface = PostMiddleware.rawToInterface<unknown>(
+		let curr: StatusInterface = PostParser.rawToInterface<unknown>(
 			_thread.post,
 			KNOWN_SOFTWARE.BLUESKY,
 		);
@@ -27,7 +39,7 @@ class AtprotoContextService {
 		let parent: any = _thread.parent;
 		let child: StatusInterface = curr;
 		while (!!parent) {
-			const data = PostMiddleware.rawToInterface<unknown>(
+			const data = PostParser.rawToInterface<unknown>(
 				parent,
 				KNOWN_SOFTWARE.BLUESKY,
 			);
@@ -47,7 +59,7 @@ class AtprotoContextService {
 
 		function processList(replies: any[], parentId: string) {
 			replies.forEach((o) => {
-				const _o = PostMiddleware.rawToInterface<unknown>(
+				const _o = PostParser.rawToInterface<unknown>(
 					o,
 					KNOWN_SOFTWARE.BLUESKY,
 				);

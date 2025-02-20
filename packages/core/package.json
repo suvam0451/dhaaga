@@ -9,13 +9,15 @@
     "@types/bun": "latest"
   },
   "dependencies": {
-    "@dhaaga/bridge": "*"
+    "@dhaaga/bridge": "*",
+    "zod": "^3.24.2"
   },
   "peerDependencies": {
     "typescript": "^5.7.3"
   },
   "scripts": {
-    "up": "bun build --outdir ./dist --outfile ./dist/index.js --target node ./src/index.ts && tsc -p ./tsconfig.json"
+    "bun:up": "bun build --outdir ./dist --outfile ./dist/index.js --target node ./src/index.ts && tsc -p ./tsconfig.json",
+    "up": "tsc -p ./tsconfig.json"
   },
   "exports": {
     ".": {

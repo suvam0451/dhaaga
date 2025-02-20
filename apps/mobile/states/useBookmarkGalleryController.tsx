@@ -11,7 +11,7 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { RandomUtil } from '../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 import { Account } from '../database/_schema';
 
 type InheritedType = {};

@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { appDimensions } from '../../../styles/dimensions';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
-import { AppParsedTextNodes } from '../../../types/parsed-text.types';
+import type { AppParsedTextNodes } from '@dhaaga/core';
 import { TextContentView } from './TextContentView';
 
 type PostedByTextOneLineProps = {

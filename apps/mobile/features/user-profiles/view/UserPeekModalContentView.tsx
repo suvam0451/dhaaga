@@ -4,7 +4,7 @@ import { appDimensions } from '../../../styles/dimensions';
 import { AppText } from '../../../components/lib/Text';
 import { Image } from 'expo-image';
 import UserRelationPresenter from '../presenters/UserRelationPresenter';
-import { AppUserObject } from '../../../types/app-user.types';
+import { UserObjectType } from '@dhaaga/core';
 import { TextContentView } from '../../../components/common/status/TextContentView';
 
 function util(o: number): string {
@@ -17,7 +17,7 @@ function util(o: number): string {
 
 type Props = {
 	toProfile: () => void;
-	user: AppUserObject;
+	user: UserObjectType;
 };
 
 function UserPeekModalContentView({ toProfile, user }: Props) {

@@ -5,16 +5,16 @@ import {
 	useAppApiClient,
 } from '../../utility/global-state-extractors';
 import { AppResultPageType } from '../../../types/app.types';
-import { AppPostObject } from '../../../types/app-post.types';
 import ActivityPubService from '../../../services/activitypub.service';
 import { BlueskyRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { PostParser } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/core';
 
 function useGetLikes(query: GetPostsQueryDTO) {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
 
-	return useQuery<AppResultPageType<AppPostObject>>({
+	return useQuery<AppResultPageType<PostObjectType>>({
 		queryKey: ['acct/likes', acct, query],
 		queryFn: async () => {
 			if (driver === KNOWN_SOFTWARE.BLUESKY) {
@@ -27,11 +27,7 @@ function useGetLikes(query: GetPostsQueryDTO) {
 				if (error) throw new Error(error.message);
 				return {
 					success: true,
-					items: PostMiddleware.deserialize<unknown[]>(
-						data.feed,
-						driver,
-						server,
-					),
+					items: PostParser.parse<unknown[]>(data.feed, driver, server),
 					maxId: data.cursor,
 					minId: null,
 				};
@@ -45,11 +41,7 @@ function useGetLikes(query: GetPostsQueryDTO) {
 
 			return {
 				success: true,
-				items: PostMiddleware.deserialize<unknown[]>(
-					data as any,
-					driver,
-					server,
-				),
+				items: PostParser.parse<unknown[]>(data as any, driver, server),
 				maxId: null,
 				minId: null,
 			};

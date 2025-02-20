@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { appUserObjectSchema } from './app-user.types';
+import { appUserObjectSchema } from '@dhaaga/core';
 
 export const appFeedObjectSchema = z.object({
 	uri: z.string(),

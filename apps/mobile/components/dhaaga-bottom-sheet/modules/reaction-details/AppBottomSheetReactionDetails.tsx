@@ -9,34 +9,31 @@ import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
 	AppButtonBottomSheetAction,
 } from '../../../lib/Buttons';
-import useMfm from '../../../hooks/useMfm';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
 import { AppAvatar } from '../../../lib/Avatar';
-import { AppUserObject } from '../../../../types/app-user.types';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
 	useAppAcct,
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
+import { TextContentView } from '../../../common/status/TextContentView';
+import type { UserObjectType } from '@dhaaga/core';
 
-function ReactingUser({ dto }: { dto: AppUserObject }) {
+function ReactingUser({ dto }: { dto: UserObjectType }) {
 	const { theme } = useAppTheme();
-	const { content } = useMfm({
-		content: dto.displayName,
-		emojiMap: new Map<string, string>(),
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		acceptTouch: false,
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A20,
-	});
 
 	return (
 		<View style={{ flexDirection: 'row', marginVertical: 4 }}>
 			<AppAvatar uri={dto.avatarUrl} />
 			<View style={{ marginLeft: 6, justifyContent: 'center' }}>
-				<View>{content}</View>
+				<TextContentView
+					tree={dto.parsedDisplayName}
+					variant={'displayName'}
+					mentions={[]}
+					emojiMap={dto.calculated.emojis}
+				/>
 				<Text
 					style={{
 						color: theme.textColor.medium,

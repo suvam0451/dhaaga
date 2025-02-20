@@ -6,7 +6,7 @@ import {
 import { createContext, useContext, useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
-import { AppUserObject } from '../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/core';
 
 type Type = {
 	user: UserInterface | null;
@@ -33,7 +33,7 @@ export function useActivitypubUserContext() {
 }
 
 type Props = {
-	user?: AppUserObject;
+	user?: UserObjectType;
 	userI?: UserInterface;
 	children: any;
 };

@@ -10,7 +10,7 @@ import {
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import { AppPostObject } from '../../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import {
 	useAppPublishers,
 	useAppTheme,
@@ -18,7 +18,7 @@ import {
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { Loader } from '../../../lib/Loader';
 
-function EmojiReaction({ dto }: { dto: EmojiDto; postDto: AppPostObject }) {
+function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 	const { dto: postItem } = useAppStatusItem();
 
 	// TODO: use this to show loading animation in place

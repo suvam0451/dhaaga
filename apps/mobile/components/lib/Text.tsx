@@ -6,7 +6,7 @@ import {
 	AppTextVariant,
 	AppThemingUtil,
 } from '../../utils/theming.util';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 import { useTranslation } from 'react-i18next';
 
 type AppTextProps = {

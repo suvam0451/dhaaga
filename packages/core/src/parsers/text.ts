@@ -1,7 +1,6 @@
 import { parseStatusContent, preprocessPostContent } from '@dhaaga/bridge';
-import { Account } from '../database/_schema';
 
-export class TextParserService {
+export class TextParser {
 	/**
 	 * Is the input url a hashtag?
 	 * @param url
@@ -13,7 +12,7 @@ export class TextParserService {
 		if (!tagRegex.test(url)) return null;
 
 		const match = tagRegex.exec(url);
-		return match[2];
+		return match === null ? null : (match[2] as string);
 	}
 
 	static findHashtags(input: string) {
@@ -23,10 +22,9 @@ export class TextParserService {
 		const ex = /#([a-zA-Z_-]+)/gm;
 
 		const res = input.matchAll(ex);
-		// @ts-ignore-next-line
 		for (let match of res) {
-			if (!setter.has(match[1])) {
-				setter.add(match[1]);
+			if (!setter.has(match[1]!)) {
+				setter.add(match[1]!);
 			}
 		}
 
@@ -42,16 +40,14 @@ export class TextParserService {
 
 	static findHyperlinks(input: string) {
 		const mp = new Map<string, string>();
-		// @ts-ignore-next-line
 		const ex = /<a.*?href="(.*?)".*?>(.*?)<\/a>/gu;
 
 		const aRefContentCleanupRegex = /(<([^>]+)>)/gi;
 
 		const matches = input.matchAll(ex);
-		// @ts-ignore-next-line
 		for (const match of matches) {
-			const result = match[2].replace(aRefContentCleanupRegex, '');
-			mp.set(match[1], result);
+			const result = match[2]!.replace(aRefContentCleanupRegex, '');
+			mp.set(match[1]!, result);
 		}
 		return mp;
 	}
@@ -77,11 +73,13 @@ export class TextParserService {
 	 * converts a mention object into an
 	 * ActivityPub handle
 	 * @param input input text
-	 * @param acct logged in account (to indicate DM)
+	 * @param server
+	 * @param username
 	 */
 	static mentionTextToHandle(
 		input: string,
-		acct: Account,
+		server: string,
+		username: string,
 	): { text: string; me: boolean } {
 		if (!input) return { text: input, me: false };
 		try {
@@ -90,10 +88,10 @@ export class TextParserService {
 			/**
 			 * Try resolving as a remote mention
 			 */
-			const ex = new RegExp(`@?(.*?)@${acct?.server}`, 'g');
+			const ex = new RegExp(`@?(.*?)@${server}`, 'g');
 			const res = Array.from(input.matchAll(ex));
 			if (res.length > 0) {
-				retval = `${res[0][1]}`;
+				retval = `${res[0]![1]}`;
 			} else {
 				retval = `${input}`;
 			}
@@ -104,12 +102,12 @@ export class TextParserService {
 			const removeSpanEx = /<span>(.*?)<\/span>/g;
 			const removeSpanRes = Array.from(input.matchAll(removeSpanEx));
 			if (removeSpanRes.length > 0) {
-				retval = `${removeSpanRes[0][1]}`;
+				retval = `${removeSpanRes[0]![1]}`;
 			}
 			const _text = retval[0] === '@' ? retval : '@' + retval;
 			return {
 				text: retval[0] === '@' ? retval : '@' + retval,
-				me: _text === `@${acct.username}`,
+				me: _text === `@${username}`,
 			};
 		} catch (e) {
 			console.log(

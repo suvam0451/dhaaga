@@ -1,5 +1,4 @@
-import { AppUserObject } from '../../../types/app-user.types';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType, UserObjectType } from '@dhaaga/core';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
 import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
@@ -14,8 +13,8 @@ export enum APP_SEARCH_TYPE {
 }
 
 export type DiscoverTabSearchResultType = {
-	users: AppUserObject[];
-	posts: AppPostObject[];
+	users: UserObjectType[];
+	posts: PostObjectType[];
 	tags: any[];
 	links: string[];
 };

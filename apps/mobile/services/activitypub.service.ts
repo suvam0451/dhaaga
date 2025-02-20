@@ -6,9 +6,8 @@ import {
 	PleromaRestClient,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
-import { RandomUtil } from '../utils/random.utils';
 import AppSessionManager from './session/app-session.service';
-import { DriverService } from '@dhaaga/core';
+import { DriverService, RandomUtil } from '@dhaaga/core';
 
 class ActivityPubService {
 	/**

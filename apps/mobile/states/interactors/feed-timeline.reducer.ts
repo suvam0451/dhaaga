@@ -5,7 +5,7 @@ import {
 } from './_timeline.shared';
 import { AppFeedObject } from '../../types/app-feed.types';
 import { produce } from 'immer';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 import { Dispatch } from 'react';
 
 type State = TimelineReducerBaseState<AppFeedObject> & {};

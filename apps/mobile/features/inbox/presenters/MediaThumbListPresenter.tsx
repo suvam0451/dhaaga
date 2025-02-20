@@ -1,13 +1,13 @@
 import { FlatList } from 'react-native';
 import { appDimensions } from '../../../styles/dimensions';
-import { AppMediaObject, AppPostObject } from '../../../types/app-post.types';
+import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/core';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import MediaThumbView from '../view/MediaThumbView';
 import { useAppDialog } from '../../../hooks/utility/global-state-extractors';
 
 type Props = {
-	items: AppMediaObject[];
-	post: AppPostObject;
+	items: PostMediaAttachmentType[];
+	post: PostObjectType;
 	server?: KNOWN_SOFTWARE;
 };
 

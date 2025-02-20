@@ -5,17 +5,11 @@ import {
 	StatusInterface,
 } from './_interface.js';
 import {
-	PostView,
-	ReasonRepost,
-} from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
-import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
-import {
 	EmbedViewProcessor_External,
 	EmbedViewProcessor_Images,
 	EmbedViewProcessor_RecordWithMedia,
 	EmbedViewProcessor_Video,
 } from '../media-attachment/bluesky.js';
-import { ReplyRef } from '@atproto/api/src/client/types/app/bsky/feed/defs.js';
 
 type BlueskyRichTextFacet = {
 	$type?: 'app.bsky.richtext.facet';
@@ -35,8 +29,8 @@ type BlueskyRichTextFacet = {
 
 class BlueskyStatusAdapter implements StatusInterface {
 	post: any; // PostView;
-	reply: ReplyRef;
-	reason: ReasonRepost;
+	reply: any; // ReplyRef
+	reason: any; // ReasonRepost
 
 	constructor({
 		post,
@@ -44,8 +38,8 @@ class BlueskyStatusAdapter implements StatusInterface {
 		reason,
 	}: {
 		post: any; // PostView;
-		reply: ReplyRef;
-		reason: ReasonRepost;
+		reply: any; // ReplyRef
+		reason: any; // ReasonRepost
 	}) {
 		this.post = post;
 		this.reply = reply;
@@ -65,11 +59,11 @@ class BlueskyStatusAdapter implements StatusInterface {
 	getViewer = () => this.post.viewer;
 
 	hasQuoteAvailable(): boolean {
-		return !!(this.post.embed && this.isQuote());
+		return this.post.embed && this.isQuote();
 	}
 
-	getQuoteRaw(): PostView | null | undefined {
-		return this.post.embed!.record as PostView;
+	getQuoteRaw(): null | undefined {
+		return this.post.embed!.record;
 	}
 
 	getRaw = () => this.post;
@@ -155,9 +149,9 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	hasParentAvailable = () => !!this.reply?.parent;
-	getParentRaw = () => this.reply?.parent as PostView;
+	getParentRaw = () => this.reply?.parent;
 	hasRootAvailable = () => !!this.reply?.root;
-	getRootRaw = () => this.reply?.root as PostView;
+	getRootRaw = () => this.reply?.root;
 
 	/**
 	 * record is used for app.bsky.feed.defs#postView
@@ -182,7 +176,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 	}
 
 	getUser() {
-		if (this.isShare()) return this.reason!.by as ProfileViewBasic;
+		if (this.isShare()) return this.reason!.by;
 		return this.post.author;
 	}
 

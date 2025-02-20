@@ -1,9 +1,7 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { UserMiddleware } from './middlewares/user.middleware';
-import { PostMiddleware } from './middlewares/post.middleware';
-import { AppNotificationObject } from '../types/app-notification.types';
-import { RandomUtil } from '../utils/random.utils';
 import { AppResultPageType } from '../types/app.types';
+import { PostParser, UserParser, RandomUtil } from '@dhaaga/core';
+import type { NotificationObjectType } from '@dhaaga/core';
 
 export class MisskeyService {
 	/**
@@ -20,7 +18,7 @@ export class MisskeyService {
 		data: any,
 		driver: KNOWN_SOFTWARE,
 		server: string,
-	): AppResultPageType<AppNotificationObject> {
+	): AppResultPageType<NotificationObjectType> {
 		return {
 			success: true,
 			items: data.data
@@ -33,20 +31,16 @@ export class MisskeyService {
 						const _postTarget = !!o.note ? o.note : o;
 
 						const _acct = !['login'].includes(o.type)
-							? UserMiddleware.deserialize<unknown>(o.user, driver, server)
+							? UserParser.parse<unknown>(o.user, driver, server)
 							: null;
 						// cherrypick fixes
 						const _post =
 							_postTarget &&
 							!['login', 'follow', 'followRequestAccepted'].includes(o.type)
-								? PostMiddleware.deserialize<unknown>(
-										_postTarget,
-										driver,
-										server,
-									)
+								? PostParser.parse<unknown>(_postTarget, driver, server)
 								: null;
 
-						const _obj: AppNotificationObject = {
+						const _obj: NotificationObjectType = {
 							id: RandomUtil.nanoId(),
 							type:
 								o.type ||

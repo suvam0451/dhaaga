@@ -5,8 +5,8 @@ import { DatetimeUtil } from '../../../../utils/datetime.utils';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
 import { TextContentView } from '../TextContentView';
-import { AppParsedTextNodes } from '../../../../types/parsed-text.types';
 import { AppText } from '../../../lib/Text';
+import type { AppParsedTextNodes } from '@dhaaga/core';
 
 type Props = {
 	avatarUrl: string;

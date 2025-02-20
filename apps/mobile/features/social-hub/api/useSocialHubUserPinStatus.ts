@@ -1,15 +1,15 @@
 import { Profile } from '../../../database/_schema';
 import { useQuery } from '@tanstack/react-query';
-import { AppUserObject } from '../../../types/app-user.types';
 import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
 import {
 	useAppAcct,
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
+import type { UserObjectType } from '@dhaaga/core';
 
 export function useSocialHubUserPinStatus(
 	profile: Profile,
-	user: AppUserObject,
+	user: UserObjectType,
 ) {
 	const { db } = useAppDb();
 	const { acct } = useAppAcct();

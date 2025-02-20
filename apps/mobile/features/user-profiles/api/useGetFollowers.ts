@@ -1,15 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppBskyGraphGetFollowers } from '@atproto/api';
-import ActivityPubService from '../../../services/activitypub.service';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
 import { AppResultPageType } from '../../../types/app.types';
-import { AppUserObject } from '../../../types/app-user.types';
-import { UserMiddleware } from '../../../services/middlewares/user.middleware';
-
-/**
- * ------ Shared ------
- */
+import { UserObjectType, UserParser, DriverService } from '@dhaaga/core';
 
 const defaultResult = {
 	success: true,
@@ -18,7 +11,7 @@ const defaultResult = {
 	items: [],
 };
 
-type UserResultPage = AppResultPageType<AppUserObject>;
+type UserResultPage = AppResultPageType<UserObjectType>;
 
 function useGetFollowers(acctId: string, maxId?: string) {
 	const { driver, client, server } = useAppApiClient();
@@ -32,22 +25,17 @@ function useGetFollowers(acctId: string, maxId?: string) {
 		});
 		if (error) throw new Error(error.message);
 
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+		if (DriverService.supportsAtProto(driver)) {
 			const _data = (data as AppBskyGraphGetFollowers.Response).data;
 			return {
 				success: true,
 				maxId: _data.cursor,
 				minId: null,
-				items: UserMiddleware.deserialize<unknown[]>(
-					_data.followers,
-					driver,
-					server,
-				),
+				items: UserParser.parse<unknown[]>(_data.followers, driver, server),
 			};
-		}
-		if (ActivityPubService.misskeyLike(driver)) {
+		} else if (DriverService.supportsMisskeyApi(driver)) {
 			return {
-				items: UserMiddleware.deserialize<unknown[]>(
+				items: UserParser.parse<unknown[]>(
 					(data as any).data.map((o: any) => o.follower),
 					driver,
 					server,
@@ -59,11 +47,7 @@ function useGetFollowers(acctId: string, maxId?: string) {
 		}
 
 		return {
-			items: UserMiddleware.deserialize<unknown[]>(
-				(data as any)?.data,
-				driver,
-				server,
-			),
+			items: UserParser.parse<unknown[]>((data as any)?.data, driver, server),
 			maxId: (data as any)?.data?.maxId,
 			minId: null,
 			success: true,

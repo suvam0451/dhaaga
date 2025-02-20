@@ -1,8 +1,8 @@
 import { RepoTemplate } from './_base.repo';
 import { Account, AccountSavedUser } from '../_schema';
 import { DataSource } from '../dataSource';
-import { RandomUtil } from '../../utils/random.utils';
-import { AppPostAuthorType } from '../../types/app-post.types';
+import { RandomUtil } from '@dhaaga/core';
+import type { PostAuthorType } from '@dhaaga/core';
 
 class Repo implements RepoTemplate<AccountSavedUser> {}
 
@@ -19,7 +19,7 @@ class Service {
 			active: true,
 		});
 	}
-	static upsert(db: DataSource, acct: Account, user: AppPostAuthorType) {
+	static upsert(db: DataSource, acct: Account, user: PostAuthorType) {
 		const conflict = db.accountSavedUser.findOne({
 			active: true,
 			identifier: user.id,

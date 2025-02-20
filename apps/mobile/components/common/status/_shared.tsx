@@ -8,7 +8,7 @@ import ActivityPubService from '../../../services/activitypub.service';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import { Fragment } from 'react';
 import { AccountSavedPost } from '../../../database/_schema';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
@@ -16,7 +16,7 @@ import { DatetimeUtil } from '../../../utils/datetime.utils';
 import { AppText } from '../../lib/Text';
 
 type PostMoreOptionsButtonProps = {
-	post: AppPostObject;
+	post: PostObjectType;
 };
 
 /**

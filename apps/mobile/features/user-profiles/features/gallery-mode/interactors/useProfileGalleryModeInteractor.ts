@@ -1,15 +1,14 @@
 import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useQuery } from '@tanstack/react-query';
 import { AppBskyFeedGetAuthorFeed } from '@atproto/api';
-import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
-import { AppPostObject } from '../../../../../types/app-post.types';
+import { PostParser, DriverService } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/core';
 
 function useProfileGalleryModeInteractor(userId: string) {
 	const { client, driver, server } = useAppApiClient();
 
 	// Post Queries
-	return useQuery<AppPostObject[]>({
+	return useQuery<PostObjectType[]>({
 		queryKey: ['user/gallery', userId],
 		queryFn: async () => {
 			const { data } = await client.accounts.statuses(userId, {
@@ -23,17 +22,18 @@ function useProfileGalleryModeInteractor(userId: string) {
 				withRenotes: false,
 				withReplies: false,
 				// bluesky
-				bskyFilter:
-					driver === KNOWN_SOFTWARE.BLUESKY ? 'posts_with_media' : undefined,
+				bskyFilter: DriverService.supportsAtProto(driver)
+					? 'posts_with_media'
+					: undefined,
 			});
 
-			return driver === KNOWN_SOFTWARE.BLUESKY
-				? PostMiddleware.deserialize<unknown[]>(
+			return DriverService.supportsAtProto(driver)
+				? PostParser.parse<unknown[]>(
 						(data as AppBskyFeedGetAuthorFeed.Response).data.feed,
 						driver,
 						server,
 					).filter((o) => !o.meta.isReply)
-				: PostMiddleware.deserialize<unknown[]>(data as any[], driver, server);
+				: PostParser.parse<unknown[]>(data as any[], driver, server);
 		},
 		enabled: !!client && !!userId,
 		initialData: [],

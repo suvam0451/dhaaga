@@ -1,8 +1,7 @@
 import { RepoTemplate } from './_base.repo';
 import { AccountSavedPost, SavedPostMediaAttachment } from '../_schema';
 import { DataSource } from '../dataSource';
-import { AppMediaObject } from '../../types/app-post.types';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil, PostMediaAttachmentType } from '@dhaaga/core';
 
 class Repo implements RepoTemplate<SavedPostMediaAttachment> {}
 
@@ -16,7 +15,7 @@ class Service {
 	static syncMediaAttachmentsForSavedPost(
 		db: DataSource,
 		savedPost: AccountSavedPost,
-		medias: AppMediaObject[],
+		medias: PostMediaAttachmentType[],
 	) {
 		const allMediaAttachments = db.savedPostMediaAttachment.find({
 			savedPostId: savedPost.id,

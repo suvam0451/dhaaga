@@ -2,7 +2,7 @@ import { KnownServer } from '../_schema';
 import { DbErrorHandler } from './_base.repo';
 import { KNOWN_SOFTWARE, UnknownRestClient } from '@dhaaga/bridge';
 import { DataSource } from '../dataSource';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 
 export type ServerRecordType = {
 	driver: string;

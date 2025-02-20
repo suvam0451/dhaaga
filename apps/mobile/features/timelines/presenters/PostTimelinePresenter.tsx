@@ -1,4 +1,3 @@
-import { AppPostObject } from '../../../types/app-post.types';
 import LoadingMore from '../../../components/screens/home/LoadingMore';
 import { Fragment } from 'react';
 import { FetchStatus } from '@tanstack/react-query';
@@ -7,9 +6,10 @@ import { Animated, RefreshControl } from 'react-native';
 import StatusItem from '../../../components/common/status/StatusItem';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import { appDimensions } from '../../../styles/dimensions';
+import type { PostObjectType } from '@dhaaga/core';
 
 type PostTimelineProps = {
-	data: AppPostObject[];
+	data: PostObjectType[];
 	refreshing: boolean;
 	onRefresh: () => void;
 	onScroll: (...args: any[]) => void;

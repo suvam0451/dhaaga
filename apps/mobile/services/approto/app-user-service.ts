@@ -1,6 +1,7 @@
 import { ActivitypubHelper, UserInterface } from '@dhaaga/bridge';
 import ActivityPubAdapterService from '../activitypub-adapter.service';
-import { AppUserObject, appUserObjectSchema } from '../../types/app-user.types';
+import { appUserObjectSchema } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/core';
 
 class AppUserService {
 	/**
@@ -17,8 +18,8 @@ class AppUserService {
 		input: UserInterface,
 		domain: string,
 		subdomain: string,
-	): AppUserObject | null {
-		const dto: AppUserObject = {
+	): UserObjectType | null {
+		const dto: UserObjectType = {
 			id: input.getId(),
 			displayName: input.getDisplayName(),
 			description: input.getDescription() || '',
@@ -60,7 +61,7 @@ class AppUserService {
 		input: any,
 		domain: string,
 		subdomain: string,
-	): AppUserObject {
+	): UserObjectType {
 		const _interface = ActivityPubAdapterService.adaptUser(input, domain);
 		return AppUserService.export(_interface, domain, subdomain);
 	}

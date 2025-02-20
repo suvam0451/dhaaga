@@ -1,5 +1,5 @@
 import { useComposerCtx } from '../contexts/useComposerCtx';
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/core';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import TextEditorService from '../../../services/text-editor.service';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
@@ -38,7 +38,7 @@ function useComposer() {
 		}
 	}, [stateId, ctx, visible]);
 
-	function onAcctAutofill(item: AppUserObject) {
+	function onAcctAutofill(item: UserObjectType) {
 		dispatch({
 			type: PostComposerReducerActionType.SET_TEXT,
 			payload: {

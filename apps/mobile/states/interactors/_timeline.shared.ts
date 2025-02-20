@@ -1,5 +1,5 @@
 import { DataSource } from '../../database/dataSource';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 
 export type TimelineReducerBaseState<T> = {
 	db: DataSource | null;

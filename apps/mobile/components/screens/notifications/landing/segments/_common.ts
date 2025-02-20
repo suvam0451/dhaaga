@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { AppNotificationObject } from '../../../../../types/app-notification.types';
+import { NotificationParser } from '@dhaaga/core';
 
 export const ICON_SIZE = 36;
 
 export type Props = {
-	item: AppNotificationObject;
+	item: NotificationParser;
 };
 
 export const styles = StyleSheet.create({

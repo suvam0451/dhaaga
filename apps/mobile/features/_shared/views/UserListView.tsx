@@ -1,4 +1,4 @@
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/core';
 import UserListItemView from '../../timelines/view/UserListItemView';
 import { Animated, RefreshControl, StyleProp, ViewStyle } from 'react-native';
 
@@ -18,7 +18,7 @@ export function UserListView({
 	onRefresh,
 	ListHeaderComponent,
 	style,
-}: Props<AppUserObject>) {
+}: Props<UserObjectType>) {
 	return (
 		<Animated.FlatList
 			data={items}

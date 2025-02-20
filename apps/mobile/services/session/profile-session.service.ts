@@ -10,7 +10,7 @@ import { KnownServerService } from '../../database/entities/server';
 import { AccountService } from '../../database/entities/account';
 import { ProfileService } from '../../database/entities/profile';
 import { BaseStorageManager } from './_shared';
-import { AppUserObject } from '../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/core';
 import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
 
 /**
@@ -65,7 +65,7 @@ class ProfileSessionManager {
 	 * should be the user's home server for the foreseeable future
 	 * @param userObj copy of the deserialized user object
 	 */
-	async pinUser(server: string, userObj: AppUserObject) {
+	async pinUser(server: string, userObj: UserObjectType) {
 		ProfilePinnedUserService.addForProfile(
 			this.db,
 			this.profile,

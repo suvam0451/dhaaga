@@ -1,4 +1,4 @@
-import { AppNotificationGroupedUserItem } from '../../../types/app-notification.types';
+import { NotificationUserGroupType } from '@dhaaga/core';
 import { FlatList, Pressable } from 'react-native';
 import {
 	ICON_SIZE,
@@ -7,7 +7,7 @@ import {
 import { Image } from 'expo-image';
 
 type Props = {
-	items: AppNotificationGroupedUserItem[];
+	items: NotificationUserGroupType[];
 	Header: JSX.Element;
 };
 const _ICON_SIZE = ICON_SIZE + 8;

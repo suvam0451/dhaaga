@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import { APP_POST_VISIBILITY } from '../../../hooks/app/useVisibility';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import { Dispatch } from 'react';
 import { ImagePickerAsset } from 'expo-image-picker';
 import { AutoFillResultsType } from '../types/composer.types';
@@ -49,7 +49,7 @@ type State = {
 
 	visibility: APP_POST_VISIBILITY;
 
-	parent: AppPostObject | null;
+	parent: PostObjectType | null;
 	isQuote: boolean;
 
 	suggestions: AutoFillResultsType;
@@ -175,7 +175,7 @@ type Actions =
 	| {
 			type: ACTION.SET_PARENT;
 			payload: {
-				item: AppPostObject;
+				item: PostObjectType;
 			};
 	  }
 	| {

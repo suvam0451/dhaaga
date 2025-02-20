@@ -1,6 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { AppUserObject } from '../../../types/app-user.types';
-import { UserMiddleware } from '../../../services/middlewares/user.middleware';
 import {
 	useAccountManager,
 	useAppAcct,
@@ -8,6 +6,8 @@ import {
 } from '../../utility/global-state-extractors';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppBskyActorGetProfile } from '@atproto/api';
+import { UserParser } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/core';
 
 /**
  * Gets the user's account, and
@@ -20,7 +20,7 @@ function useApiGetMyAccount() {
 	const { acctManager } = useAccountManager();
 
 	// Queries
-	return useQuery<AppUserObject>({
+	return useQuery<UserObjectType>({
 		queryKey: ['user/me', acct?.id],
 		queryFn: async () => {
 			if (!client) return null;
@@ -28,11 +28,11 @@ function useApiGetMyAccount() {
 			if (error) return null;
 			if (driver === KNOWN_SOFTWARE.BLUESKY) {
 				const _data = data as AppBskyActorGetProfile.Response;
-				const _value = UserMiddleware.deserialize(_data.data, driver, server);
+				const _value = UserParser.parse(_data.data, driver, server);
 				if (acctManager) acctManager.storage.setProfile(acct?.uuid, _value);
 				return _value;
 			}
-			const _value = UserMiddleware.deserialize(data, driver, server);
+			const _value = UserParser.parse(data, driver, server);
 			if (acctManager) acctManager.storage.setProfile(acct?.uuid, _value);
 			return _value;
 		},

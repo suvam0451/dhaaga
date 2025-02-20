@@ -2,12 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { DhaagaJsPostSearchDTO } from '@dhaaga/bridge/dist/adapters/_client/_router/routes/search';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-import { UserMiddleware } from '../../../services/middlewares/user.middleware';
 import {
 	defaultAppSearchResults,
 	DiscoverTabSearchResultType,
 } from '../reducers/discover-tab.reducer';
+import { UserParser, PostParser } from '@dhaaga/core';
 
 export enum APP_SEARCH_TYPE {
 	POSTS,
@@ -54,14 +53,9 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 					throw new Error(error.message);
 				}
 
-				console.log(data);
 				return {
 					...defaultAppSearchResults,
-					posts: PostMiddleware.deserialize<unknown[]>(
-						data as any,
-						driver,
-						server,
-					),
+					posts: PostParser.parse<unknown[]>(data as any, driver, server),
 				};
 			}
 			case APP_SEARCH_TYPE.USERS: {
@@ -75,11 +69,7 @@ function useSearch(type: APP_SEARCH_TYPE, dto: DhaagaJsPostSearchDTO) {
 				if (error) throw new Error(error.message);
 				return {
 					...defaultAppSearchResults,
-					users: UserMiddleware.deserialize<unknown[]>(
-						data as any[],
-						driver,
-						server,
-					),
+					users: UserParser.parse<unknown[]>(data as any[], driver, server),
 				};
 			}
 			default:

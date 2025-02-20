@@ -4,14 +4,14 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { useEffect, useState } from 'react';
 import useGetProfile, { ProfileSearchQueryType } from '../api/useGetProfile';
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/core';
 import DriverService from '../../../services/driver.service';
 
 function useProfilePeekSheetInteractor() {
 	const { server } = useAppApiClient();
 	const { ctx, stateId } = useAppBottomSheet();
 	const [SearchQuery, setSearchQuery] = useState<ProfileSearchQueryType>(null);
-	const [UserObject, setUserObject] = useState<AppUserObject>(null);
+	const [UserObject, setUserObject] = useState<UserObjectType>(null);
 
 	const { data, fetchStatus } = useGetProfile(SearchQuery);
 

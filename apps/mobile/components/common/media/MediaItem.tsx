@@ -9,11 +9,11 @@ import {
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
 import useGalleryDims from '../../../hooks/app/useGalleryDims';
-import { AppMediaObject } from '../../../types/app-post.types';
+import type { PostMediaAttachmentType } from '@dhaaga/core';
 import { appDimensions } from '../../../styles/dimensions';
 
 type ImageCarousalProps = {
-	attachments: AppMediaObject[];
+	attachments: PostMediaAttachmentType[];
 	calculatedHeight: number;
 	style?: StyleProp<ViewStyle>;
 };
@@ -27,7 +27,7 @@ function TimelineMediaRendered({
 	index,
 	totalCount,
 }: {
-	attachment: AppMediaObject;
+	attachment: PostMediaAttachmentType;
 	CalculatedHeight: number;
 	altText?: string;
 	index?: number;

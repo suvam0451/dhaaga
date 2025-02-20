@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
-import { RandomUtil } from '../../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 import { AppText } from '../../lib/Text';
 import {
 	useAppBottomSheet,

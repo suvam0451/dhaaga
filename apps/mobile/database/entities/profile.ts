@@ -5,7 +5,7 @@ import { eq, gt } from '@dhaaga/orm';
 import { AccountService } from './account';
 import { ProfilePinnedTimelineService } from './profile-pinned-timeline';
 import { ProfilePinnedTagService } from './profile-pinned-tag';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 
 @DbErrorHandler()
 class Repo {}

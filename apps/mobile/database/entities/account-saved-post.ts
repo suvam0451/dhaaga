@@ -1,9 +1,9 @@
 import { RepoTemplate } from './_base.repo';
 import { Account, AccountSavedPost } from '../_schema';
-import { AppPostObject } from '../../types/app-post.types';
 import { DataSource } from '../dataSource';
 import { AccountSavedUserService } from './account-saved-user';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/core';
 import { SavedPostMediaAttachmentService } from './saved-post-media-attachment';
 
 class Repo implements RepoTemplate<AccountSavedPost> {}
@@ -32,7 +32,7 @@ class Service {
 	static upsert(
 		db: DataSource,
 		acct: Account,
-		post: AppPostObject,
+		post: PostObjectType,
 	): AccountSavedPost {
 		const postedBy = AccountSavedUserService.upsert(db, acct, post.postedBy);
 		if (!postedBy) {

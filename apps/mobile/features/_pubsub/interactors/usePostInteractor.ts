@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import { useAppPublishers } from '../../../hooks/utility/global-state-extractors';
 import { Emoji } from '../../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '../../../components/common/status/fragments/_shared.types';
@@ -11,9 +11,9 @@ import { EmojiDto } from '../../../components/common/status/fragments/_shared.ty
  *
  * @param input post object or uuid reference
  */
-export function usePostInteractor(input: string | AppPostObject) {
+export function usePostInteractor(input: string | PostObjectType) {
 	const { postPub } = useAppPublishers();
-	const [PostObject, setPostObject] = useState<AppPostObject>(
+	const [PostObject, setPostObject] = useState<PostObjectType>(
 		postPub.readCache(typeof input === 'string' ? input : null),
 	);
 

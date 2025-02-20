@@ -8,13 +8,12 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { AppPostObject } from '../../../types/app-post.types';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { AppText } from '../../../components/lib/Text';
 import { AppDivider } from '../../../components/lib/Divider';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
-import { DriverService } from '@dhaaga/core';
+import { DriverService, PostInspector } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/core';
 
 function ActionButton({
 	Icon,
@@ -78,17 +77,17 @@ function MorePostActionsPresenter({
 	item,
 }: {
 	setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
-	item: AppPostObject;
+	item: PostObjectType;
 }) {
 	const { postPub } = useAppPublishers();
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const _target = PostMiddleware.getContentTarget(item);
+	const _target = PostInspector.getContentTarget(item);
 	const { show, setCtx } = useAppBottomSheet();
 
 	const IS_BOOKMARKED = _target?.interaction.bookmarked;
-	const IS_LIKED = PostMiddleware.isLiked(_target);
-	const IS_SHARED = PostMiddleware.isShared(_target);
+	const IS_LIKED = PostInspector.isLiked(_target);
+	const IS_SHARED = PostInspector.isShared(_target);
 	const IS_REACTED = _target?.stats?.reactions?.every((o) => o.me === false);
 
 	let ReactionCta = 'Add Reaction';

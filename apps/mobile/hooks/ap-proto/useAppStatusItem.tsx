@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { AppPostObject } from '../../types/app-post.types';
+import { PostObjectType } from '@dhaaga/core';
 import { useAppPublishers } from '../utility/global-state-extractors';
 
 type Type = {
-	dto: AppPostObject;
+	dto: PostObjectType;
 };
 
 const defaultValue: Type = {
@@ -20,12 +20,12 @@ export const useAppStatusItem = () => useContext(AppStatusItemContext);
 
 type Props = {
 	children: any;
-	dto: AppPostObject;
+	dto: PostObjectType;
 };
 
 function WithAppStatusItemContext({ children, dto }: Props) {
 	const { postPub } = useAppPublishers();
-	const [Post, setPost] = useState(postPub.addIfNotExist(dto?.uuid, dto));
+	const [Post, setPost] = useState(postPub?.addIfNotExist(dto?.uuid, dto));
 
 	function onSubscription({ uuid }) {
 		setPost(postPub.readCache(uuid));

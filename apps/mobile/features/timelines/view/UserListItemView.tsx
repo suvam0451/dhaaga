@@ -1,4 +1,4 @@
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/core';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
@@ -55,7 +55,7 @@ function Banner({ uri }: BannerProps) {
 }
 
 type Props = {
-	item: AppUserObject;
+	item: UserObjectType;
 };
 
 function UserListItemView({ item }: Props) {

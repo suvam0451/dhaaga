@@ -5,7 +5,7 @@ import {
 	useAppAcct,
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import { AccountSavedPostService } from '../../../database/entities/account-saved-post';
 
 export function useDbCollections() {
@@ -50,7 +50,7 @@ export function useDbCollections() {
 			collection,
 			post,
 		}: {
-			post: AppPostObject;
+			post: PostObjectType;
 			collection: AccountCollection;
 		}) => {
 			const savedPost = AccountSavedPostService.upsert(db, acct, post);

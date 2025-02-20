@@ -13,9 +13,9 @@ import {
 	useAppApiClient,
 } from '../../../hooks/utility/global-state-extractors';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-import { AppPostObject } from '../../../types/app-post.types';
 import { AppResultPageType } from '../../../types/app.types';
+import { PostParser, DriverService } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/core';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -26,7 +26,7 @@ type TimelineQueryParams = {
 	sessionId?: string;
 };
 
-type TimelineFetchResultType = AppResultPageType<AppPostObject>;
+type TimelineFetchResultType = AppResultPageType<PostObjectType>;
 
 const DEFAULT_RETURN_VALUE: TimelineFetchResultType = {
 	success: true,
@@ -83,7 +83,7 @@ function useTimelineQuery({
 	function generateMaxId(data: any, maxId?: string | null): string | null {
 		if (maxId) return maxId;
 
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+		if (DriverService.supportsAtProto(driver)) {
 			if (data.posts !== undefined) return data.cursor;
 			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
 			return _payload.data.cursor;
@@ -94,10 +94,10 @@ function useTimelineQuery({
 
 	function outputSchemaToResultPage(
 		data: any,
-	): AppResultPageType<AppPostObject> {
+	): AppResultPageType<PostObjectType> {
 		return {
 			success: true,
-			items: PostMiddleware.deserialize<unknown[]>(data.feed, driver, server),
+			items: PostParser.parse<unknown[]>(data.feed, driver, server),
 			maxId: data.cursor === undefined ? null : data.cursor,
 			minId: null,
 		};
@@ -105,7 +105,7 @@ function useTimelineQuery({
 
 	function generateFeedBatch(data: any) {
 		let _feed = [];
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+		if (DriverService.supportsAtProto(driver)) {
 			if (data.posts) {
 				// for hashtags
 				_feed = data.posts;
@@ -117,7 +117,7 @@ function useTimelineQuery({
 			_feed = data.posts ? data.posts : data;
 		}
 		try {
-			return PostMiddleware.deserialize<unknown[]>(_feed, driver, server);
+			return PostParser.parse<unknown[]>(_feed, driver, server);
 		} catch (e) {
 			console.log('[ERROR]: failed to convert posts', e);
 			return [];
@@ -156,9 +156,7 @@ function useTimelineQuery({
 				const { data, error } = await client.timelines.public({
 					..._query,
 					local: true, // Pleroma/Akkoma thing
-					withMuted: [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
-						driver,
-					)
+					withMuted: DriverService.supportsPleromaApi(driver)
 						? true
 						: undefined,
 					withRenotes: !opts?.excludeReblogs,
@@ -195,17 +193,13 @@ function useTimelineQuery({
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.BUBBLE: {
-				if (driver === KNOWN_SOFTWARE.AKKOMA) {
+				if (DriverService.supportsPleromaApi(driver)) {
 					const { data } = await (client as PleromaRestClient).timelines.bubble(
 						_query,
 					);
 					return {
 						success: true,
-						items: PostMiddleware.deserialize<unknown[]>(
-							data as any[],
-							driver,
-							server,
-						),
+						items: PostParser.parse<unknown[]>(data as any[], driver, server),
 						maxId: generateMaxId(data),
 						minId: undefined,
 					};
@@ -215,11 +209,7 @@ function useTimelineQuery({
 					);
 					return {
 						success: true,
-						items: PostMiddleware.deserialize<unknown[]>(
-							data as any[],
-							driver,
-							server,
-						),
+						items: PostParser.parse<unknown[]>(data as any[], driver, server),
 						maxId: generateMaxId(data),
 						minId: undefined,
 					};
@@ -249,7 +239,7 @@ function useTimelineQuery({
 				return outputSchemaToResultPage(data);
 			}
 			case TimelineFetchMode.LIKES: {
-				if (driver === KNOWN_SOFTWARE.BLUESKY) {
+				if (DriverService.supportsAtProto(driver)) {
 					const { data, error } = await (
 						client as BlueskyRestClient
 					).accounts.atProtoLikes(acct.identifier, {
@@ -259,11 +249,7 @@ function useTimelineQuery({
 					if (error) return DEFAULT_RETURN_VALUE;
 					return {
 						success: true,
-						items: PostMiddleware.deserialize<unknown[]>(
-							data.feed,
-							driver,
-							server,
-						),
+						items: PostParser.parse<unknown[]>(data.feed, driver, server),
 						maxId: data.cursor === undefined ? null : data.cursor,
 						minId: null,
 					};

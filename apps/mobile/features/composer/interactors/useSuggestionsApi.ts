@@ -7,8 +7,7 @@ import {
 	AutoFillResultsType,
 } from '../types/composer.types';
 import { useQuery } from '@tanstack/react-query';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { UserMiddleware } from '../../../services/middlewares/user.middleware';
+import { DriverService, UserParser } from '@dhaaga/core';
 
 const DEFAULT: AutoFillResultsType = {
 	accounts: [],
@@ -36,10 +35,10 @@ function useSuggestionsApi(prompt: AutoFillPromptType) {
 					if (error) throw new Error(error.message);
 
 					// Custom Logic
-					if (driver === KNOWN_SOFTWARE.BLUESKY) {
+					if (DriverService.supportsAtProto(driver)) {
 						return {
 							...DEFAULT,
-							accounts: UserMiddleware.deserialize<unknown[]>(
+							accounts: UserParser.parse<unknown[]>(
 								(data as any).data.actors as any[],
 								driver,
 								server,
@@ -49,7 +48,7 @@ function useSuggestionsApi(prompt: AutoFillPromptType) {
 
 					return {
 						...DEFAULT,
-						accounts: UserMiddleware.deserialize<unknown[]>(
+						accounts: UserParser.parse<unknown[]>(
 							data as any[],
 							driver,
 							server,

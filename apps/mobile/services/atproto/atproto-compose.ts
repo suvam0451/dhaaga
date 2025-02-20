@@ -1,4 +1,4 @@
-import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
+import { BlueskyRestClient } from '@dhaaga/bridge';
 import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs';
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import {
@@ -9,8 +9,7 @@ import { AtpAgent, BlobRef, Facet } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../features/composer/reducers/composer.reducer';
 import MediaUtils from '../../utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
-import { AppPostObject } from '../../types/app-post.types';
-import { PostMiddleware } from '../middlewares/post.middleware';
+import { PostInspector } from '@dhaaga/core';
 
 type AtProtoPostRecordType = Partial<AppBskyFeedPost.Record> &
 	Omit<AppBskyFeedPost.Record, 'createdAt'>;
@@ -138,7 +137,7 @@ class AtprotoComposerService {
 		}
 
 		if (state.parent) {
-			const _replyTarget = PostMiddleware.getContentTarget(state.parent);
+			const _replyTarget = PostInspector.getContentTarget(state.parent);
 			if (state.isQuote) {
 				// handle quotes
 				record.embed = {

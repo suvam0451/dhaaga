@@ -1,6 +1,6 @@
 import useAppPaginator from '../../../hooks/app/useAppPaginator';
 import { AppResultPageType } from '../../../types/app.types';
-import { AppNotificationObject } from '../../../types/app-notification.types';
+import { NotificationObjectType } from '@dhaaga/core';
 import {
 	useInboxCategoryDispatch,
 	useInboxCategoryState,
@@ -16,7 +16,9 @@ function useNotificationStore() {
 	const state = useInboxCategoryState();
 	const dispatch = useInboxCategoryDispatch();
 
-	function appendNotifications(page: AppResultPageType<AppNotificationObject>) {
+	function appendNotifications(
+		page: AppResultPageType<NotificationObjectType>,
+	) {
 		dispatch({
 			type: ActionType.APPEND_PAGE,
 			payload: {

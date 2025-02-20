@@ -1,13 +1,13 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
-import { AppPostObject } from '../../../../../types/app-post.types';
+import { PostObjectType } from '@dhaaga/core';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../../../components/lib/Text';
 import { TextContentView } from '../../../../../components/common/status/TextContentView';
 
 type Props = {
-	dto: AppPostObject;
+	dto: PostObjectType;
 	style?: StyleProp<ViewStyle>;
 };
 

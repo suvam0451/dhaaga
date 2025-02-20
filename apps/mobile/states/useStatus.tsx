@@ -13,7 +13,7 @@ import ActivityPubAdapterService from '../services/activitypub-adapter.service';
 import useHookLoadingState from './useHookLoadingState';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
-import { AppPostObject } from '../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 
 type OgObject = {
 	url: string;
@@ -42,11 +42,11 @@ type Type = {
 	sharedStatus: StatusInterface | null;
 	openGraph: OgObject | null;
 
-	statusRaw: AppPostObject | any | null;
+	statusRaw: PostObjectType | any | null;
 	setData: (o: StatusInterface) => void;
 	setStatusContextData: (data: any) => void;
-	setDataRaw: (o: AppPostObject | any) => void;
-	setSharedDataRaw: (o: AppPostObject | any) => void;
+	setDataRaw: (o: PostObjectType | any) => void;
+	setSharedDataRaw: (o: PostObjectType | any) => void;
 	updateOpenGraph: (og: OgObject | null) => void;
 	toggleBookmark: () => void;
 
@@ -62,7 +62,7 @@ type Type = {
 const defaultValue: Type = {
 	openGraph: undefined,
 	updateOpenGraph(og: OgObject | null): void {},
-	setDataRaw(o: AppPostObject | any): void {},
+	setDataRaw(o: PostObjectType | any): void {},
 	setData(o: StatusInterface): void {},
 	status: null,
 	sharedStatus: null,

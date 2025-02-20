@@ -1,7 +1,7 @@
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
 import { useMutation } from '@tanstack/react-query';
 import { Profile } from '../../../database/_schema';
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/core';
 import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
 import { ProfileService } from '../../../database/entities/profile';
 import { AppFeedObject } from '../../../types/app-feed.types';
@@ -16,7 +16,7 @@ export function useProfileMutation() {
 			user,
 			profile,
 		}: {
-			user: AppUserObject;
+			user: UserObjectType;
 			profile: Profile;
 		}) => {
 			const acct = ProfileService.getOwnerAccount(db, profile);

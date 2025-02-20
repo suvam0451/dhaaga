@@ -1,6 +1,6 @@
 import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../components/shared/topnavbar/fragments/TopNavbarTimelineStack';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
@@ -11,7 +11,7 @@ import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusItem from '../../../components/common/status/StatusItem';
 
 type TimelinePostListViewProps = {
-	items: AppPostObject[];
+	items: PostObjectType[];
 	numItems: number;
 	loadMore: () => void;
 	fetching: boolean;

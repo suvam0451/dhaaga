@@ -1,7 +1,7 @@
 import { AppFeedObject, appFeedObjectSchema } from '../../types/app-feed.types';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppBskyFeedDefs } from '@atproto/api';
-import { UserMiddleware } from './user.middleware';
+import { UserParser } from '@dhaaga/core';
 
 export class FeedMiddleware {
 	static rawToObject(
@@ -16,7 +16,7 @@ export class FeedMiddleware {
 			uri: _input.uri,
 			cid: _input.cid,
 			did: _input.did,
-			creator: UserMiddleware.deserialize(_input.creator, driver, server),
+			creator: UserParser.parse(_input.creator, driver, server),
 			displayName: _input.displayName,
 			description: _input.description,
 			avatar: _input.avatar,

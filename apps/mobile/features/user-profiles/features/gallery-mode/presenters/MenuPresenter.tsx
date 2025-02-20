@@ -4,10 +4,10 @@ import { AppText } from '../../../../../components/lib/Text';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../../styles/dimensions';
-import { AppPostObject } from '../../../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 
 type Props = {
-	post: AppPostObject;
+	post: PostObjectType;
 };
 
 function MenuPresenter({ post }: Props) {

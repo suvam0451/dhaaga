@@ -16,9 +16,7 @@ import {
 	AccountMetadataService,
 } from '../database/entities/account-metadata';
 import { Result } from '../utils/result';
-import { RandomUtil } from '../utils/random.utils';
 import { DataSource } from '../database/dataSource';
-import { AppUserObject } from '../types/app-user.types';
 import ProfileSessionManager from '../services/session/profile-session.service';
 import { ProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
@@ -28,11 +26,11 @@ import { WritableDraft } from 'immer';
 import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';
-import { UserMiddleware } from '../services/middlewares/user.middleware';
 import {
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
 } from './interactors/post-timeline.reducer';
+import { UserObjectType, UserParser, RandomUtil } from '@dhaaga/core';
 
 type AppThemePack = {
 	id: string;
@@ -200,7 +198,7 @@ type State = {
 	 * compatible interface
 	 * */
 	driver: KNOWN_SOFTWARE;
-	me: AppUserObject | null;
+	me: UserObjectType | null;
 
 	// router used to make api requests
 	router: ActivityPubClient | null;
@@ -269,7 +267,7 @@ class GlobalStateService {
 		Result<{
 			acct: Account;
 			router: ActivityPubClient;
-			me: AppUserObject;
+			me: UserObjectType;
 		}>
 	> {
 		try {
@@ -316,7 +314,8 @@ class GlobalStateService {
 			}
 			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
 			const { data } = await _router.me.getMe();
-			const obj: AppUserObject = UserMiddleware.deserialize(
+			// console.log('will parse', data);
+			const obj: UserObjectType = UserParser.parse(
 				data,
 				acct.driver,
 				acct.server,

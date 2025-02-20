@@ -16,11 +16,10 @@ import { AuthorItemView } from '../view/AuthorItemView';
 import { LocalizationService } from '../../../services/localization.service';
 import { AppIcon } from '../../../components/lib/Icon';
 import useAppNavigator from '../../../states/useAppNavigator';
-import { AppPostAuthorType } from '../../../types/app-post.types';
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType, PostAuthorType } from '@dhaaga/core';
 
 type Props = {
-	user: AppPostAuthorType | AppUserObject;
+	user: PostAuthorType | UserObjectType;
 	createdAt: Date;
 	notificationType: DhaagaJsNotificationType;
 	extraData?: string;
@@ -173,7 +172,7 @@ function AuthorItemPresenter({
 		<AuthorItemView
 			handle={user.handle}
 			parsedDisplayName={user.parsedDisplayName}
-			emojiMap={(user as AppUserObject)?.calculated?.emojis || new Map()}
+			emojiMap={(user as UserObjectType).calculated.emojis}
 			avatarUrl={user.avatarUrl}
 			extraData={extraData}
 			createdAt={createdAt}

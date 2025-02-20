@@ -1,5 +1,18 @@
 import { z } from 'zod';
-import { ActivityPubReactionStateSchema } from '../services/approto/activitypub-reactions.service';
+
+export const ActivityPubReactionStateSchema = z.array(
+	z.object({
+		id: z.string(),
+		count: z.number().positive(),
+		me: z.boolean(),
+		accounts: z.array(z.string()),
+		url: z.string().nullable().optional(),
+	}),
+);
+
+type ActivityPubReactionStateType = z.infer<
+	typeof ActivityPubReactionStateSchema
+>;
 
 export const ActivityPubBoostedByDto = z.object({
 	id: z.string(),
@@ -10,7 +23,7 @@ export const ActivityPubBoostedByDto = z.object({
 	instance: z.string(),
 });
 
-export type AppPostAuthorType = z.infer<typeof ActivityPubBoostedByDto>;
+type PostAuthorType = z.infer<typeof ActivityPubBoostedByDto>;
 
 export const AppActivityPubMediaDto = z.object({
 	url: z.string(),
@@ -130,7 +143,7 @@ export const ActivityPubStatusLevelTwo = ActivityPubStatusItemDto.extend({
 	quotedFrom: ActivityPubStatusItemDto.nullable().optional(),
 });
 
-export const appPostObjectSchema = ActivityPubStatusLevelTwo.extend({
+export const postObjectSchema = ActivityPubStatusLevelTwo.extend({
 	replyTo: ActivityPubStatusLevelTwo.nullable().optional(), // Misskey/Firefish natively supports quote boosting
 	boostedFrom: ActivityPubStatusLevelTwo.nullable().optional(), // Pleroma feature
 	quotedFrom: ActivityPubStatusLevelTwo.nullable().optional(), // Bluesky feature
@@ -142,4 +155,6 @@ export const appPostObjectSchema = ActivityPubStatusLevelTwo.extend({
  *
  * The object is validated to contain no errors
  */
-export type AppPostObject = z.infer<typeof appPostObjectSchema>;
+type PostObjectType = z.infer<typeof postObjectSchema>;
+
+export type { ActivityPubReactionStateType, PostObjectType, PostAuthorType };

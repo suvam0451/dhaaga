@@ -1,10 +1,10 @@
 import MastodonService from '../../../services/mastodon.service';
 import { produce } from 'immer';
 import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import AtprotoContextService from '../../../services/atproto/atproto-context-service';
-import { AppPostObject } from '../../../types/app-post.types';
+import { PostParser } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/core';
 
 export enum STATUS_CONTEXT_REDUCER_ACTION {
 	INIT = 'init',
@@ -13,7 +13,7 @@ export enum STATUS_CONTEXT_REDUCER_ACTION {
 
 export type AppStatusContext = {
 	entrypoint: string | null;
-	lookup: Map<string, AppPostObject>;
+	lookup: Map<string, PostObjectType>;
 	children: Map<string, string[]>;
 	root: string | null;
 };
@@ -78,7 +78,7 @@ function statusContextReducer(
 				for (let [key, value] of itemLookup) {
 					draft.lookup.set(
 						key,
-						PostMiddleware.deserialize<unknown>(value, _driver, _server),
+						PostParser.parse<unknown>(value, _driver, _server),
 					);
 				}
 
@@ -110,7 +110,7 @@ function statusContextReducer(
 				for (let [key, value] of itemLookup) {
 					draft.lookup.set(
 						key,
-						PostMiddleware.interfaceToJson(value, {
+						PostParser.interfaceToJson(value, {
 							driver: _domain,
 							server: _subdomain,
 						}),

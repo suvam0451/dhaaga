@@ -8,7 +8,7 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { appDimensions } from '../../../../styles/dimensions';
-import { AppPostObject } from '../../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import {
 	useAppApiClient,
 	useAppTheme,
@@ -17,7 +17,7 @@ import {
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
 type EmojiReactionsProps = {
-	dto: AppPostObject;
+	dto: PostObjectType;
 };
 
 const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {

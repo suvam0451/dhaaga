@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { Image } from 'expo-image';
-import { RandomUtil } from '../../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import {

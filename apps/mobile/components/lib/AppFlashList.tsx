@@ -1,5 +1,3 @@
-import { AppUserObject } from '../../types/app-user.types';
-import { AppPostObject } from '../../types/app-post.types';
 import { FlatList, Pressable, RefreshControlProps, View } from 'react-native';
 import {
 	JSXElementConstructor,
@@ -7,7 +5,11 @@ import {
 	useEffect,
 	useState,
 } from 'react';
-import { AppNotificationObject } from '../../types/app-notification.types';
+import type {
+	NotificationObjectType,
+	UserObjectType,
+	PostObjectType,
+} from '@dhaaga/core';
 import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
@@ -24,7 +26,7 @@ import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../utils/route-list';
 
 export function Chatroom_Item({ item }: { item: AppChatRoom }) {
-	const [MemberAvatar, setMemberAvatar] = useState<AppUserObject>(null);
+	const [MemberAvatar, setMemberAvatar] = useState<UserObjectType>(null);
 	const [LatestMessageMe, setLatestMessageMe] = useState(false);
 	const { theme } = useAppTheme();
 
@@ -102,9 +104,9 @@ export function Chatroom_Item({ item }: { item: AppChatRoom }) {
 
 type AppFlatListProps<
 	T extends
-		| AppPostObject
-		| AppUserObject
-		| AppNotificationObject
+		| PostObjectType
+		| UserObjectType
+		| NotificationObjectType
 		| ProfilePinnedUser
 		| ProfilePinnedTimeline
 		| ProfilePinnedTag

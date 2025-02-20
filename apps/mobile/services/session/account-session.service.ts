@@ -5,7 +5,7 @@ import { Account } from '../../database/_schema';
 import ActivityPubReactionsService, {
 	ActivityPubReactionStateType,
 } from '../approto/activitypub-reactions.service';
-import { AppUserObject } from '../../types/app-user.types';
+import { UserObjectType } from '@dhaaga/core';
 
 enum KEY {
 	APP_ACCOUNT_USER_OBJECT_CACHE = 'app/_cache/account/:uuid',
@@ -29,11 +29,11 @@ class Storage extends BaseStorageManager {
 	getProfile(acctUuid: string) {
 		return this.getJson<{
 			updatedAt: string;
-			value: AppUserObject;
+			value: UserObjectType;
 		}>(KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(':uuid', acctUuid));
 	}
 
-	setProfile(acctUuid: string, data: AppUserObject) {
+	setProfile(acctUuid: string, data: UserObjectType) {
 		this.setJsonWithExpiry(
 			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(':uuid', acctUuid),
 			data,

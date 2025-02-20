@@ -4,8 +4,7 @@ import { AppBskyGraphGetFollows } from '@atproto/api';
 import ActivityPubService from '../../../services/activitypub.service';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
 import { AppResultPageType } from '../../../types/app.types';
-import { AppUserObject } from '../../../types/app-user.types';
-import { UserMiddleware } from '../../../services/middlewares/user.middleware';
+import { UserParser, UserObjectType } from '@dhaaga/core';
 
 /**
  * ------ Shared ------
@@ -18,7 +17,7 @@ const defaultResult = {
 	items: [],
 };
 
-type UserResultPage = AppResultPageType<AppUserObject>;
+type UserResultPage = AppResultPageType<UserObjectType>;
 
 function useGetFollows(acctId: string, maxId?: string) {
 	const { driver, client, server } = useAppApiClient();
@@ -38,17 +37,13 @@ function useGetFollows(acctId: string, maxId?: string) {
 				success: true,
 				maxId: _data.cursor,
 				minId: null,
-				items: UserMiddleware.deserialize<unknown[]>(
-					_data.follows,
-					driver,
-					server,
-				),
+				items: UserParser.parse<unknown[]>(_data.follows, driver, server),
 			};
 		}
 
 		if (ActivityPubService.misskeyLike(driver)) {
 			return {
-				items: UserMiddleware.deserialize<unknown[]>(
+				items: UserParser.parse<unknown[]>(
 					(data as any).data.map((o: any) => o.followee),
 					driver,
 					server,
@@ -60,11 +55,7 @@ function useGetFollows(acctId: string, maxId?: string) {
 		}
 
 		return {
-			items: UserMiddleware.deserialize<unknown[]>(
-				(data as any)?.data,
-				driver,
-				server,
-			),
+			items: UserParser.parse<unknown[]>((data as any)?.data, driver, server),
 			maxId: (data as any)?.data?.maxId,
 			minId: null,
 			success: true,

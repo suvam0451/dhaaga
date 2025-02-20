@@ -5,7 +5,7 @@ import {
 } from '../../../database/entities/app-setting';
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
 import { useState } from 'react';
-import { RandomUtil } from '../../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 
 function useAppSettings() {
 	const [Hash, setHash] = useState(RandomUtil.nanoId());

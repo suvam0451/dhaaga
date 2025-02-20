@@ -1,7 +1,7 @@
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/core';
 
 type Props = {
-	item: AppUserObject;
+	item: UserObjectType;
 };
 
 /**

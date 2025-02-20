@@ -6,7 +6,7 @@ import { ProfileService } from './profile';
 import DriverService, {
 	APP_PINNED_OBJECT_TYPE,
 } from '../../services/driver.service';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 import { AppFeedObject } from '../../types/app-feed.types';
 
 @DbErrorHandler()

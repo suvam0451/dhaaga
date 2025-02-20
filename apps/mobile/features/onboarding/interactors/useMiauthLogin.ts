@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { verifyMisskeyToken } from '@dhaaga/bridge';
 import { AccountCreationPreviewProps } from '../presenters/MiauthSignIn';
 import { router, useLocalSearchParams } from 'expo-router';
-import { RandomUtil } from '../../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
 import { AccountService } from '../../../database/entities/account';
 import { ACCOUNT_METADATA_KEY } from '../../../database/entities/account-metadata';
 import { Alert } from 'react-native';

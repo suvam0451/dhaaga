@@ -14,8 +14,8 @@ import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { AppToggleIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import ActivityPubService from '../../../../services/activitypub.service';
-import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
+import { PostInspector } from '@dhaaga/core';
 
 /**
  * Press this to toggle sharing status
@@ -33,8 +33,8 @@ function ShareButton() {
 		});
 	}
 
-	const FLAG = PostMiddleware.isShared(item);
-	const _target = PostMiddleware.getContentTarget(item);
+	const FLAG = PostInspector.isShared(item);
+	const _target = PostInspector.getContentTarget(item);
 	const COUNT = _target.stats.boostCount;
 
 	const canLike = ActivityPubService.canLike(driver);
@@ -73,8 +73,8 @@ function LikeButton() {
 		});
 	}
 
-	const FLAG = PostMiddleware.isLiked(item);
-	const _target = PostMiddleware.getContentTarget(item);
+	const FLAG = PostInspector.isLiked(item);
+	const _target = PostInspector.getContentTarget(item);
 	const COUNT = _target.stats.likeCount;
 
 	return (
@@ -110,7 +110,7 @@ function CommentButton() {
 		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
 	}
 
-	const _target = PostMiddleware.getContentTarget(item);
+	const _target = PostInspector.getContentTarget(item);
 	const COUNT = _target.stats.replyCount;
 
 	return (
@@ -158,7 +158,7 @@ function SettingsButton() {
 	const { show, setCtx } = useAppBottomSheet();
 	const { acct } = useAppAcct();
 
-	const _target = PostMiddleware.getContentTarget(item);
+	const _target = PostInspector.getContentTarget(item);
 	if (_target.postedBy.id !== acct.identifier) return <View />;
 
 	function onPress() {
@@ -207,7 +207,7 @@ function StatusInteractionButtons() {
 
 function StatusInteraction() {
 	const { dto } = useAppStatusItem();
-	const _dto = PostMiddleware.getContentTarget(dto);
+	const _dto = PostInspector.getContentTarget(dto);
 	return (
 		<View>
 			{/*<PostStats dto={_dto} />*/}

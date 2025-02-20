@@ -1,12 +1,10 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
-import { PostMiddleware } from '../middlewares/post.middleware';
 import ActivityPubService from '../activitypub.service';
-import { AppPostObject } from '../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
+import { PostInspector } from '@dhaaga/core';
 import { produce } from 'immer';
-import ActivityPubReactionsService, {
-	ActivityPubReactionStateSchema,
-} from '../approto/activitypub-reactions.service';
+import ActivityPubReactionsService from '../approto/activitypub-reactions.service';
 import { AtprotoPostService } from '../atproto.service';
 
 export class PostMutator {
@@ -18,8 +16,8 @@ export class PostMutator {
 		this.client = client;
 	}
 
-	async toggleLike(input: AppPostObject): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	async toggleLike(input: PostObjectType): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 
 		/**
 		 * Handle for AT protocol
@@ -74,8 +72,8 @@ export class PostMutator {
 		}
 	}
 
-	async toggleBookmark(input: AppPostObject): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	async toggleBookmark(input: PostObjectType): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 
 		try {
 			const res = await ActivityPubService.toggleBookmark(
@@ -100,8 +98,8 @@ export class PostMutator {
 		return input;
 	}
 
-	async finalizeBookmarkState(input: AppPostObject): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	async finalizeBookmarkState(input: PostObjectType): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 
 		try {
 			const res = await ActivityPubService.getBookmarkState(
@@ -127,8 +125,8 @@ export class PostMutator {
 		return input;
 	}
 
-	async toggleShare(input: AppPostObject): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	async toggleShare(input: PostObjectType): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 
 		if (this.driver === KNOWN_SOFTWARE.BLUESKY) {
 			const result = await AtprotoPostService.toggleRepost(
@@ -179,22 +177,20 @@ export class PostMutator {
 		return input;
 	}
 
-	private applyReactionData(input: AppPostObject, _data: any) {
-		const target = PostMiddleware.getContentTarget(input);
-		const { data, error } = ActivityPubReactionStateSchema.safeParse(_data);
-		if (error) return input;
+	private applyReactionData(input: PostObjectType, _data: any) {
+		const target = PostInspector.getContentTarget(input);
 		return produce(input, (draft) => {
-			if (draft.id === target.id) draft.stats.reactions = data;
+			if (draft.id === target.id) draft.stats.reactions = _data;
 			if (draft.boostedFrom?.id === target.id)
-				draft.boostedFrom.stats.reactions = data;
+				draft.boostedFrom.stats.reactions = _data;
 		});
 	}
 
 	async addReaction(
-		input: AppPostObject,
+		input: PostObjectType,
 		reactionCode: string,
-	): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 		try {
 			/**
 			 * Response looks like this
@@ -215,10 +211,10 @@ export class PostMutator {
 	}
 
 	async removeReaction(
-		input: AppPostObject,
+		input: PostObjectType,
 		reactionCode: string,
-	): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 		try {
 			/**
 			 * Response looks like this

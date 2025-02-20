@@ -1,5 +1,4 @@
 import { BasePubSubService } from './_base.pubisher';
-import { AppPostObject } from '../../types/app-post.types';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import { PostMutator } from '../mutators/post.mutator';

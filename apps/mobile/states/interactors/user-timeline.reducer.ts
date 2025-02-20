@@ -1,6 +1,6 @@
 import { DataSource } from '../../database/dataSource';
-import { RandomUtil } from '../../utils/random.utils';
-import { AppUserObject } from '../../types/app-user.types';
+import { RandomUtil } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/core';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
 import {
@@ -8,7 +8,7 @@ import {
 	TimelineReducerBaseState,
 } from './_timeline.shared';
 
-type State = TimelineReducerBaseState<AppUserObject> & {};
+type State = TimelineReducerBaseState<UserObjectType> & {};
 
 export const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
@@ -38,7 +38,7 @@ type Actions =
 	| {
 			type: ACTION.APPEND_RESULTS;
 			payload: {
-				items: AppUserObject[];
+				items: UserObjectType[];
 				minId?: string;
 				maxId?: string;
 			};

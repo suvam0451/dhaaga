@@ -2,7 +2,7 @@ import { DhaagaJsMentionObject, StatusInterface } from './_interface.js';
 import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
 import UnknownToStatusAdapter from './default.js';
-import { MastoAccount, MastoStatus } from '../../types/mastojs.types.js';
+import type { MastoStatus } from '../../types/mastojs.types.js';
 import { CasingUtils } from '../../utiils/casing.utils.js';
 
 class MastodonToStatusAdapter
@@ -69,7 +69,7 @@ class MastodonToStatusAdapter
 
 	getIsFavourited = () => this.ref.favourited;
 
-	getUser = () => this.ref.account as MastoAccount;
+	getUser = () => this.ref.account as any;
 
 	isReply() {
 		return (

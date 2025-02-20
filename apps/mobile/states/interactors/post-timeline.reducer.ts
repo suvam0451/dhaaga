@@ -1,6 +1,6 @@
 import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
-import { AppPostObject } from '../../types/app-post.types';
-import { RandomUtil } from '../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/core';
 import { produce } from 'immer';
 import { DataSource } from '../../database/dataSource';
 import { ProfilePinnedTimelineService } from '../../database/entities/profile-pinned-timeline';
@@ -8,7 +8,6 @@ import { APP_PINNED_OBJECT_TYPE } from '../../services/driver.service';
 import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
 import { ProfilePinnedTagService } from '../../database/entities/profile-pinned-tag';
 import { Dispatch } from 'react';
-import { ActivityPubReactionStateSchema } from '../../services/approto/activitypub-reactions.service';
 import {
 	timelineReducerBaseDefaults,
 	TimelineReducerBaseState,
@@ -41,7 +40,7 @@ export enum TimelineFetchMode {
 	FEED = 'Feed',
 }
 
-type State = TimelineReducerBaseState<AppPostObject> & {
+type State = TimelineReducerBaseState<PostObjectType> & {
 	feedType: TimelineFetchMode;
 
 	opts: AppTimelineQueryOptions; // for users/hashtags
@@ -103,7 +102,7 @@ type Actions =
 	| {
 			type: ACTION.APPEND_RESULTS;
 			payload: {
-				items: AppPostObject[];
+				items: PostObjectType[];
 				minId?: string;
 				maxId?: string;
 			};
@@ -170,7 +169,7 @@ type Actions =
 	| {
 			type: ACTION.POST_OBJECT_CHANGED;
 			payload: {
-				item: AppPostObject;
+				item: PostObjectType;
 			};
 	  }
 	| {
@@ -470,18 +469,11 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.UPDATE_REACTION_STATE: {
 			const _id = action.payload.id;
 			const _state = action.payload.state;
-			const { data, error } = ActivityPubReactionStateSchema.safeParse(_state);
-			if (error) {
-				// this is expected, for e.g. {"code": "ALREADY_REACTED"}
-				// console.log('[WARN]: reaction state incorrect', error);
-				return state;
-			}
-
 			return produce(state, (draft) => {
 				for (const post of draft.items) {
-					if (post.id === _id) post.stats.reactions = data;
+					if (post.id === _id) post.stats.reactions = _state;
 					if (post.boostedFrom?.id === _id)
-						post.boostedFrom.stats.reactions = data;
+						post.boostedFrom.stats.reactions = _state;
 				}
 			});
 		}

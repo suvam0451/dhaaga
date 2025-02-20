@@ -1,13 +1,12 @@
 import { Pressable, View } from 'react-native';
 import useAppNavigator from '../../../../../states/useAppNavigator';
-import { AppPostObject } from '../../../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/core';
 import MediaThumbListPresenter from '../../../../../features/inbox/presenters/MediaThumbListPresenter';
-import { AppUserObject } from '../../../../../types/app-user.types';
 import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
 import { TextContentView } from '../../../../common/status/TextContentView';
 
 type Props = {
-	post: AppPostObject;
+	post: PostObjectType;
 };
 
 /**
