@@ -31,7 +31,8 @@ type MISSKEY_NOTIFICATION_TYPE =
 	| 'reaction:grouped'
 	| 'renote:grouped'
 	| 'pollVote'
-	| 'groupInvited';
+	| 'groupInvited'
+	| 'note:grouped'; // cherrypick
 
 export class MisskeyNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;
@@ -114,7 +115,8 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 				'reaction:grouped',
 				'renote',
 				'renote:grouped',
-			] as MISSKEY_NOTIFICATION_TYPE[],
+			] as MISSKEY_NOTIFICATION_TYPE[] as any,
+			excludeTypes: ['note:grouped'] as any,
 		});
 		return { data: { data: data as any } };
 	}
@@ -126,7 +128,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		>('i/notifications-grouped', {
 			limit: query.limit,
 			untilId: query.maxId ?? undefined,
-			includeTypes: ['note'] as MISSKEY_NOTIFICATION_TYPE[],
+			includeTypes: ['note'] as MISSKEY_NOTIFICATION_TYPE[] as any,
 		});
 		return { data: { data: data as any } };
 	}

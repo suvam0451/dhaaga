@@ -42,7 +42,7 @@ export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
 			<AppText.Normal
 				style={{
-					color: theme.secondary.a20,
+					color: theme.secondary.a30,
 					fontSize: 14,
 					paddingTop: 2,
 				}}

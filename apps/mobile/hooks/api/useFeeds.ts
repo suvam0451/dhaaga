@@ -1,18 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { AppResultPageType } from '../../types/app.types';
-import { AppFeedObject } from '../../types/app-feed.types';
+import { type FeedObjectType, FeedParser } from '@dhaaga/core';
 import {
 	useAppAcct,
 	useAppApiClient,
 } from '../utility/global-state-extractors';
 import { BlueskyRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AtprotoFeedService } from '../../services/atproto.service';
-import { FeedMiddleware } from '../../services/middlewares/feed-middleware';
 
 function useApiGetMyFeeds() {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
-	return useQuery<AppResultPageType<AppFeedObject>>({
+	return useQuery<AppResultPageType<FeedObjectType>>({
 		queryKey: ['my/feeds', acct],
 		initialData: {
 			success: true,
@@ -36,11 +35,7 @@ function useApiGetMyFeeds() {
 				console.log('feed generator get', feedError);
 			}
 			return {
-				items: FeedMiddleware.deserialize<unknown[]>(
-					feedResult.feeds,
-					driver,
-					server,
-				),
+				items: FeedParser.parse<unknown[]>(feedResult.feeds, driver, server),
 				maxId: null,
 				minId: null,
 				success: true,

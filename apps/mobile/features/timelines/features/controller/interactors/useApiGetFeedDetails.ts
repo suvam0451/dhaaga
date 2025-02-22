@@ -2,7 +2,7 @@ import { useAppApiClient } from '../../../../../hooks/utility/global-state-extra
 import { BlueskyRestClient } from '@dhaaga/bridge';
 import { AtprotoFeedService } from '../../../../../services/atproto.service';
 import { useQuery } from '@tanstack/react-query';
-import { FeedMiddleware } from '../../../../../services/middlewares/feed-middleware';
+import { FeedParser } from '@dhaaga/core';
 
 function useApiGetFeedDetails(uri: string) {
 	const { client } = useAppApiClient();
@@ -26,11 +26,7 @@ function useApiGetFeedDetails(uri: string) {
 				(o) => o.type === 'feed' && o.value === uri,
 			);
 			return {
-				feed: FeedMiddleware.deserialize<unknown>(
-					feedResult.data.view,
-					driver,
-					server,
-				),
+				feed: FeedParser.parse<unknown>(feedResult.data.view, driver, server),
 				pref: feedPrefs?.find((o) => o.type === 'feed' && o.value === uri),
 				subscribed: !!_pref,
 				pinned: _pref?.pinned || false,

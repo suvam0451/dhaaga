@@ -1,4 +1,5 @@
-import type { PostObjectType, UserObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '../parsers/post.js';
+import type { UserObjectType } from '../parsers/user.js';
 import { produce } from 'immer';
 import {
 	createContext,

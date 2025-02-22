@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { PostParser } from '@dhaaga/core';
 import { StatusInterface } from '@dhaaga/bridge';
 import { useAppApiClient } from '../../utility/global-state-extractors';
 
@@ -14,7 +14,7 @@ function useGetPostInterface(id: string) {
 		if (!client) throw new Error('_client not initialized');
 		const { data, error } = await client.statuses.get(id);
 		if (error) throw new Error(error.message);
-		return PostMiddleware.rawToInterface(data, driver);
+		return PostParser.rawToInterface(data, driver);
 	}
 
 	return useQuery<StatusInterface>({

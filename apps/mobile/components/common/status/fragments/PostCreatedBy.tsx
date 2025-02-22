@@ -21,7 +21,7 @@ import { TextContentView } from '../TextContentView';
 import type { AppParsedTextNodes } from '@dhaaga/core';
 import { AppText } from '../../../lib/Text';
 import ActivitypubService from '../../../../services/activitypub.service';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { RandomUtil } from '@dhaaga/bridge';
 import { TextNodeParser, PostInspector } from '@dhaaga/core';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
@@ -90,7 +90,11 @@ export function OriginalPosterPostedByFragment({
 			<View>
 				<Pressable onPress={onClick}>
 					<TextContentView
-						tree={displayNameParsed}
+						tree={
+							displayNameParsed.length === 0
+								? [{ uuid: RandomUtil.nanoId(), type: 'para', nodes: [] }]
+								: displayNameParsed
+						}
 						variant={'displayName'}
 						mentions={[]}
 						emojiMap={emojiMap}
@@ -131,6 +135,7 @@ export function SavedPostCreatedBy({
 	style,
 	authoredAt,
 }: SavedPostCreatedByProps) {
+	const { driver } = useAppApiClient();
 	const UserDivRef = useRef(null);
 
 	// resolve handle and show modal
@@ -180,10 +185,7 @@ export function SavedPostCreatedBy({
 
 			<OriginalPosterPostedByFragment
 				onClick={onProfilePressed}
-				displayNameParsed={TextNodeParser.parse(
-					KNOWN_SOFTWARE.UNKNOWN,
-					user.displayName,
-				)}
+				displayNameParsed={TextNodeParser.parse(driver, user.displayName)}
 				handle={user.username}
 				postedAt={new Date(authoredAt)}
 				visibility={'N/A'}

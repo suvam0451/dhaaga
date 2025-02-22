@@ -78,7 +78,10 @@ function statusContextReducer(
 				for (let [key, value] of itemLookup) {
 					draft.lookup.set(
 						key,
-						PostParser.parse<unknown>(value, _driver, _server),
+						PostParser.interfaceToJson(value, {
+							driver: _driver,
+							server: _server,
+						}),
 					);
 				}
 

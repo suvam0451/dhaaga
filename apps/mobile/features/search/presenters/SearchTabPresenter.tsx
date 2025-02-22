@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { DiscoverTabReducerActionType } from '../reducers/discover-tab.reducer';
-import { useDiscoverTabDispatch } from '../contexts/DiscoverTabCtx';
+import { useDiscoverDispatch, DiscoverStateAction } from '@dhaaga/core';
 import SearchResultPresenter from './SearchResultPresenter';
 
 /**
@@ -9,11 +8,11 @@ import SearchResultPresenter from './SearchResultPresenter';
  * tab
  */
 function SearchTabPresenter() {
-	const dispatch = useDiscoverTabDispatch();
+	const dispatch = useDiscoverDispatch();
 
 	useEffect(() => {
 		dispatch({
-			type: DiscoverTabReducerActionType.CLEAR_SEARCH,
+			type: DiscoverStateAction.CLEAR_SEARCH,
 		});
 	}, []);
 

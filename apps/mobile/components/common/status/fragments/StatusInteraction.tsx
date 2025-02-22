@@ -44,7 +44,7 @@ function ShareButton() {
 			activeIconId={'sync-outline'}
 			inactiveIconId={'sync-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a20}
+			inactiveTint={theme.secondary.a40}
 			size={appDimensions.timelines.actionButtonSize}
 			style={[
 				styles.actionButton,
@@ -83,7 +83,7 @@ function LikeButton() {
 			activeIconId={'heart'}
 			inactiveIconId={'heart-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a20}
+			inactiveTint={theme.secondary.a40}
 			size={appDimensions.timelines.actionButtonSize}
 			style={[
 				styles.actionButton,
@@ -119,7 +119,7 @@ function CommentButton() {
 			activeIconId={'chatbox-outline'}
 			inactiveIconId={'chatbox-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a20}
+			inactiveTint={theme.secondary.a40}
 			size={appDimensions.timelines.actionButtonSize}
 			style={styles.actionButton}
 			onPress={onPress}
@@ -144,7 +144,7 @@ function ReactButton() {
 			activeIconId={'smiley'}
 			inactiveIconId={'smiley-outline'}
 			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a20}
+			inactiveTint={theme.secondary.a40}
 			size={appDimensions.timelines.actionButtonSize}
 			style={styles.actionButton}
 			onPress={onPress}

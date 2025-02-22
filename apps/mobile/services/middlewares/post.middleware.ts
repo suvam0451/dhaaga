@@ -127,24 +127,6 @@ class PostMiddleware {
 		return data as PostObjectType;
 	}
 
-	static rawToInterface<T>(
-		input: T | T[],
-		driver: string | KNOWN_SOFTWARE,
-	): T extends unknown[] ? StatusInterface[] : StatusInterface {
-		if (Array.isArray(input)) {
-			return input
-				.filter((o) => !!o)
-				.map((o) =>
-					ActivitypubStatusAdapter(o, driver),
-				) as unknown as T extends unknown[] ? StatusInterface[] : never;
-		} else {
-			return ActivitypubStatusAdapter(
-				input,
-				driver,
-			) as unknown as T extends unknown[] ? never : StatusInterface;
-		}
-	}
-
 	/**
 	 * Deserializes (skips returning the interface step)
 	 * locally saved ap/at proto post objects
@@ -152,7 +134,7 @@ class PostMiddleware {
 	 * @param driver being used to deserialize this object
 	 * @param server
 	 */
-	static deserializeLocal<T>(
+	private static deserializeLocal<T>(
 		input: T | T[],
 		driver: string | KNOWN_SOFTWARE,
 		server: string,
@@ -177,7 +159,7 @@ class PostMiddleware {
 				}) as unknown as T extends unknown[] ? never : PostObjectType;
 			} catch (e) {
 				console.log(
-					'[ERROR]: failed to deserialize post object',
+					'[ERROR]: failed to deserialize local post object',
 					e,
 					'input:',
 					input,

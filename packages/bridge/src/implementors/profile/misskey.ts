@@ -62,7 +62,7 @@ export class MisskeyUser implements UserInterface {
 
 	getEmojiMap(): Map<string, string> {
 		const retval: Map<string, string> = new Map();
-		const src = (this.ref.instance as any).emojis || {};
+		const src = (this.ref.instance as any)?.emojis || {};
 		for (const k in src) {
 			if (typeof src[k] === 'string') {
 				// misskey

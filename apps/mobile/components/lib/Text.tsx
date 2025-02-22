@@ -28,37 +28,6 @@ type AppTextProps = {
 };
 
 export class AppText {
-	static BodyNormal({
-		key,
-		keygen,
-		style,
-		color,
-		children,
-		numberOfLines,
-		emphasis,
-	}: AppTextProps) {
-		const { theme } = useAppTheme();
-
-		let _color =
-			color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
-
-		return (
-			<Text
-				key={keygen ? RandomUtil.nanoId() : key}
-				style={[
-					{
-						color: _color,
-						fontFamily: 'SourceSansPro_400Regular',
-					},
-					style,
-				]}
-				numberOfLines={numberOfLines}
-			>
-				{children}
-			</Text>
-		);
-	}
-
 	/**
 	 * The unique BebasNeue font used for
 	 * some of the headers throughout
@@ -199,24 +168,6 @@ export class AppText {
 					_baseStyling,
 					{
 						color: _color,
-					},
-					style,
-				]}
-				numberOfLines={numberOfLines}
-				textBreakStrategy={'simple'}
-			>
-				{children}
-			</Text>
-		);
-	}
-
-	static BodyMedium({ style, children, numberOfLines }: AppTextProps) {
-		const { theme } = useAppTheme();
-		return (
-			<Text
-				style={[
-					{
-						color: theme.secondary.a10,
 					},
 					style,
 				]}

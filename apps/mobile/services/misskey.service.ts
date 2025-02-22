@@ -24,7 +24,7 @@ export class MisskeyService {
 			items: data.data
 				.map((o: any) => {
 					try {
-						if (['achievementEarned'].includes(o.type)) {
+						if (['achievementEarned', 'note:grouped'].includes(o.type)) {
 							return null;
 						}
 

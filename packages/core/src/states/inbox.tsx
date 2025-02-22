@@ -19,28 +19,34 @@ const DEFAULT: State = {
 	items: [],
 };
 
+enum ACTION {
+	APPEND,
+	REPLACE,
+	RESET,
+}
+
 type Actions =
 	| {
-			type: 'append';
+			type: ACTION.APPEND;
 			payload: { page: ResultPage<NotificationObjectType> };
 	  }
 	| {
-			type: 'replace';
+			type: ACTION.REPLACE;
 			payload: { page: ResultPage<NotificationObjectType> };
 	  }
 	| {
-			type: 'reset';
+			type: ACTION.RESET;
 	  };
 
 function reducer(state: State, action: Actions): State {
 	switch (action.type) {
-		case 'reset': {
+		case ACTION.RESET: {
 			return produce(state, (draft) => {
 				draft.seen = new Set();
 				draft.items = [];
 			});
 		}
-		case 'append': {
+		case ACTION.APPEND: {
 			return produce(state, (draft) => {
 				for (const item of action.payload.page.items) {
 					if (draft.seen.has(item.id)) continue;
@@ -49,7 +55,7 @@ function reducer(state: State, action: Actions): State {
 				}
 			});
 		}
-		case 'replace': {
+		case ACTION.REPLACE: {
 			return produce(state, (draft) => {
 				draft.seen = new Set();
 				draft.items = [];
@@ -81,5 +87,10 @@ function Ctx({ children }: { children: ReactNode }) {
 	);
 }
 
-export { Ctx as InboxCtx, useInboxState, useInboxDispatch };
+export {
+	Ctx as InboxCtx,
+	useInboxState,
+	useInboxDispatch,
+	ACTION as InboxStateAction,
+};
 export type { State as InboxStateType, DispatchType as InboxDispatchType };

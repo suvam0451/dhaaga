@@ -1,5 +1,4 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { RandomUtil } from '@dhaaga/core';
+import { KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
 import { z } from 'zod';
 
 const appMessageObjectSchema = z.object({

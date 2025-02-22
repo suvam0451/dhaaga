@@ -1,7 +1,7 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AppBskyFeedDefs } from '@atproto/api';
-import { appUserObjectSchema, UserParser } from '@dhaaga/core';
+import { appUserObjectSchema, UserParser } from './user.js';
 import { z } from 'zod';
+import { AppBskyFeedDefs } from '@atproto/api';
 
 const feedObjectSchema = z.object({
 	uri: z.string(),

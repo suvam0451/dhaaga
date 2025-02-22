@@ -11,6 +11,8 @@ import { RandomUtil } from '../utils/random';
 import { TextParser } from './text';
 import { UserParser } from './user';
 import { TextNodeParser } from './text-nodes';
+import { type ResultPage } from '../types/core.types';
+import { AppErrorCode, type AppResult, Err, Ok } from '../utils/app-result';
 
 const ActivityPubReactionStateSchema = z.array(
 	z.object({
@@ -259,11 +261,7 @@ class Parser {
 				liked: input.getIsFavourited() || false,
 			},
 			calculated: {
-				emojis: new Map([
-					// @ts-ignore-next-line
-					...user.getEmojiMap(), // @ts-ignore-next-line
-					...input.getCachedEmojis(),
-				]),
+				emojis: new Map([...user.getEmojiMap(), ...input.getCachedEmojis()]),
 				mediaContainerHeight: 0, // height,
 				reactionEmojis: input.getReactionEmojis(),
 				mentions: TextParser.findMentions(input.getContent() || ''),
@@ -407,10 +405,29 @@ class Parser {
 					e,
 					'input:',
 					input,
+					driver,
+					server,
 				);
 				return null as unknown as T extends unknown[] ? never : null;
 			}
 		}
+	}
+
+	static parseApiResponse(
+		input: any,
+		driver: string | KNOWN_SOFTWARE,
+		server: string,
+	): AppResult<ResultPage<PostObjectType>> {
+		if (Array.isArray(input)) {
+			return Ok({
+				items: Parser.parse<unknown[]>(input, driver, server),
+				maxId: null,
+				minId: null,
+				isLoaded: true,
+			});
+		}
+		console.log('[WARN]: failed to identify shape of the input');
+		return Err(AppErrorCode.PARSING_ERROR);
 	}
 }
 

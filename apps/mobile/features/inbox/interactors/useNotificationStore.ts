@@ -2,10 +2,10 @@ import useAppPaginator from '../../../hooks/app/useAppPaginator';
 import { AppResultPageType } from '../../../types/app.types';
 import { NotificationObjectType } from '@dhaaga/core';
 import {
-	useInboxCategoryDispatch,
-	useInboxCategoryState,
-} from '../contexts/useInboxCategoryCtx';
-import { inboxCategoryActionType as ActionType } from '../reducers/inbox-category.reducer';
+	InboxStateAction,
+	useInboxState,
+	useInboxDispatch,
+} from '@dhaaga/core';
 
 /**
  * Help manage notifications for
@@ -13,14 +13,14 @@ import { inboxCategoryActionType as ActionType } from '../reducers/inbox-categor
  */
 function useNotificationStore() {
 	const { lastId, loadNext, MaxId, reset: resetPaginator } = useAppPaginator();
-	const state = useInboxCategoryState();
-	const dispatch = useInboxCategoryDispatch();
+	const state = useInboxState();
+	const dispatch = useInboxDispatch();
 
 	function appendNotifications(
 		page: AppResultPageType<NotificationObjectType>,
 	) {
 		dispatch({
-			type: ActionType.APPEND_PAGE,
+			type: InboxStateAction.APPEND,
 			payload: {
 				page: page,
 			},
@@ -30,7 +30,7 @@ function useNotificationStore() {
 
 	function reset() {
 		dispatch({
-			type: ActionType.RESET,
+			type: InboxStateAction.RESET,
 		});
 		resetPaginator();
 	}

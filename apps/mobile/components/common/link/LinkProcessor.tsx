@@ -29,7 +29,7 @@ function LinkProcessor({ url, displayName, fontFamily }: LinkProcessorProps) {
 
 	const httpsRemoved = url.replace(/(https:\/\/)(.+)/, '$2');
 	const wwwRemoved = httpsRemoved.replace(/(www\.)(.+)/, '$2');
-	const { onTextLayout, Result } = useLongLinkTextCollapse(wwwRemoved, 32);
+	const { onTextLayout, Result } = useLongLinkTextCollapse(wwwRemoved, 24);
 
 	const linkDisplayName = TextUtils.shorten(
 		TextUtils.displayNameForLink(displayName),

@@ -1,4 +1,4 @@
-import DiscoverTabCtx from '../contexts/DiscoverTabCtx';
+import { DiscoverCtx } from '@dhaaga/core';
 import SearchTabPresenter from '../presenters/SearchTabPresenter';
 import {
 	useAppAcct,
@@ -26,11 +26,11 @@ function WithSearchBar({ children }: any) {
 
 function SearchTabInteractor() {
 	return (
-		<DiscoverTabCtx>
+		<DiscoverCtx>
 			<WithSearchBar>
 				<SearchTabPresenter />
 			</WithSearchBar>
-		</DiscoverTabCtx>
+		</DiscoverCtx>
 	);
 }
 

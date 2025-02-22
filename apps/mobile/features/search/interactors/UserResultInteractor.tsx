@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
+import { useDiscoverState } from '@dhaaga/core';
 import {
 	useUserTimelineDispatch,
 	useUserTimelineState,
@@ -19,7 +19,7 @@ type ResultInteractorProps = {
 
 function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	const [Refreshing, setRefreshing] = useState(false);
-	const State = useDiscoverTabState();
+	const State = useDiscoverState();
 	const TimelineState = useUserTimelineState();
 	const TimelineDispatch = useUserTimelineDispatch();
 	const { data, fetchStatus, refetch } = useApiSearchUsers(

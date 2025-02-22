@@ -154,125 +154,137 @@ export class Builder {
 	}
 
 	private parser(node: any): NodeContent | null {
-		switch (node.type) {
-			case 'link':
-			case 'url': {
-				/**
-				 * The link/url might be a mention
-				 * */
-				const mention = this.mentions?.find((o) => o.url === node.props.url);
-				if (mention) {
+		try {
+			switch (node.type) {
+				case 'link':
+				case 'url': {
+					/**
+					 * The link/url might be a mention
+					 * */
+					const mention = this.mentions?.find((o) => o.url === node.props.url);
+					if (mention) {
+						return {
+							type: 'mention',
+							uuid: RandomUtil.nanoId(),
+							text: mention.text || null,
+							url: mention.url || null,
+							nodes: [],
+						};
+					}
+
+					/**
+					 * The link/url might be a hashtag
+					 */
+					const hashtag = TextParser.isHashtag(node.props.url);
+					if (hashtag)
+						return {
+							type: 'tag',
+							uuid: RandomUtil.nanoId(),
+							text: hashtag,
+							nodes: [],
+						};
+
+					let displayName = null;
+					if (this.links) {
+						const match = this.links.get(node.props.url);
+						if (match) {
+							displayName = match;
+						}
+					}
+					return {
+						type: 'link',
+						uuid: RandomUtil.nanoId(),
+						text: displayName || '',
+						url: node.props.url,
+						nodes: [],
+					};
+				}
+
+				case 'plain': {
+					return {
+						type: 'inline',
+						uuid: RandomUtil.nanoId(),
+						nodes: node.children.map((o: any) => this.parser(o)),
+					};
+				}
+				case 'italic': {
+					return {
+						type: 'italic',
+						uuid: RandomUtil.nanoId(),
+						nodes: node.children.map((o: any) => this.parser(o)),
+					};
+				}
+				case 'bold': {
+					return {
+						type: 'bold',
+						uuid: RandomUtil.nanoId(),
+						nodes: node.children.map((o: any) => this.parser(o)),
+					};
+				}
+				// NOTE: node.props.acct is also an option
+				case 'mention': {
+					const mention = this.mentions?.find((o) => o.url === node.props.url);
 					return {
 						type: 'mention',
 						uuid: RandomUtil.nanoId(),
-						text: mention.text || null,
-						url: mention.url || null,
+						text: node.props.acct,
+						url: mention?.url || null,
 						nodes: [],
 					};
 				}
-
-				/**
-				 * The link/url might be a hashtag
-				 */
-				const hashtag = TextParser.isHashtag(node.props.url);
-				if (hashtag)
+				case 'inlineCode':
+					return {
+						type: 'code',
+						uuid: RandomUtil.nanoId(),
+						text: node.props.code,
+						nodes: [],
+					};
+				case 'hashtag':
 					return {
 						type: 'tag',
+						text: node.props.hashtag,
 						uuid: RandomUtil.nanoId(),
-						text: hashtag,
 						nodes: [],
 					};
-
-				let displayName = null;
-				if (this.links) {
-					const match = this.links.get(node.props.url);
-					if (match) {
-						displayName = match;
-					}
+				// TODO: quote resolver
+				case 'quote':
+				case 'text':
+					return {
+						type: 'text',
+						text: node.props.text,
+						uuid: RandomUtil.nanoId(),
+						nodes: [],
+					};
+				case 'emojiCode':
+					return {
+						type: 'customEmoji',
+						text: node.props.name,
+						value: node.props.name,
+						uuid: RandomUtil.nanoId(),
+						nodes: [],
+					};
+				case 'unicodeEmoji':
+					return {
+						type: 'text',
+						text: node.props.emoji,
+						uuid: RandomUtil.nanoId(),
+						nodes: [],
+					};
+				default: {
+					console.log('[WARN] [MFM]: node not evaluated', node);
+					return null;
 				}
-				return {
-					type: 'link',
-					uuid: RandomUtil.nanoId(),
-					text: displayName || '',
-					url: node.props.url,
-					nodes: [],
-				};
 			}
-
-			case 'plain': {
-				return {
-					type: 'inline',
-					uuid: RandomUtil.nanoId(),
-					nodes: node.children.map((o: any) => this.parser(o)),
-				};
-			}
-			case 'italic': {
-				return {
-					type: 'italic',
-					uuid: RandomUtil.nanoId(),
-					nodes: node.children.map((o: any) => this.parser(o)),
-				};
-			}
-			case 'bold': {
-				return {
-					type: 'bold',
-					uuid: RandomUtil.nanoId(),
-					nodes: node.children.map((o: any) => this.parser(o)),
-				};
-			}
-			// NOTE: node.props.acct is also an option
-			case 'mention': {
-				const mention = this.mentions?.find((o) => o.url === node.props.url);
-				return {
-					type: 'mention',
-					uuid: RandomUtil.nanoId(),
-					text: node.props.acct,
-					url: mention?.url || null,
-					nodes: [],
-				};
-			}
-			case 'inlineCode':
-				return {
-					type: 'code',
-					uuid: RandomUtil.nanoId(),
-					text: node.props.code,
-					nodes: [],
-				};
-			case 'hashtag':
-				return {
-					type: 'tag',
-					text: node.props.hashtag,
-					uuid: RandomUtil.nanoId(),
-					nodes: [],
-				};
-			// TODO: quote resolver
-			case 'quote':
-			case 'text':
-				return {
-					type: 'text',
-					text: node.props.emoji,
-					uuid: RandomUtil.nanoId(),
-					nodes: [],
-				};
-			case 'emojiCode':
-				return {
-					type: 'customEmoji',
-					text: node.props.name,
-					value: node.props.name,
-					uuid: RandomUtil.nanoId(),
-					nodes: [],
-				};
-			case 'unicodeEmoji':
-				return {
-					type: 'text',
-					text: node.props.emoji,
-					uuid: RandomUtil.nanoId(),
-					nodes: [],
-				};
-			default: {
-				console.log('[WARN]: node type not evaluated', node);
-				return null;
-			}
+		} catch (e) {
+			// e.g. - quote
+			console.log(
+				'[WARN] [MFM]: failed to process node',
+				node.type,
+				node.children,
+				node.props,
+				e,
+			);
+			return null;
 		}
 	}
 

@@ -2,13 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '../utility/global-state-extractors';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppBskyFeedSearchPosts } from '@atproto/api';
-import { AppFeedObject } from '../../types/app-feed.types';
+import { FeedParser } from '@dhaaga/core';
 import { BlueskyRestClient } from '@dhaaga/bridge';
-import { FeedMiddleware } from '../../services/middlewares/feed-middleware';
 import { AppResultPageType } from '../../types/app.types';
 import ActivitypubService from '../../services/activitypub.service';
 import { UserParser, PostParser, DriverService } from '@dhaaga/core';
-import type { UserObjectType, PostObjectType } from '@dhaaga/core';
+import type {
+	UserObjectType,
+	PostObjectType,
+	FeedObjectType,
+} from '@dhaaga/core';
 
 /**
  * ------ Shared ------
@@ -22,7 +25,7 @@ const defaultResult = {
 };
 
 type PostResultPage = AppResultPageType<PostObjectType>;
-type FeedResultPage = AppResultPageType<AppFeedObject>;
+type FeedResultPage = AppResultPageType<FeedObjectType>;
 
 /**
  * --------------------
@@ -51,11 +54,7 @@ export function useApiSearchFeeds(q: string, maxId: string | null) {
 			console.log(data);
 			return {
 				...defaultResult,
-				items: FeedMiddleware.deserialize<unknown[]>(
-					data.feeds,
-					driver,
-					server,
-				),
+				items: FeedParser.parse<unknown[]>(data.feeds, driver, server),
 				maxId: data.cursor,
 			};
 		},
