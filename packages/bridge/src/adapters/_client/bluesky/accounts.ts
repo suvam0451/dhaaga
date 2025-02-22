@@ -32,10 +32,7 @@ import {
 	MegaStatus,
 } from '../../../types/megalodon.types.js';
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
@@ -86,7 +83,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 			const followResult = await agent.follow(id);
 			return { data: null as any };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -136,7 +133,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 			return { data };
 		} catch (e) {
 			console.log('[WARN]: failed to resolve handle', e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -145,7 +142,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 	}
 
 	likes(query: GetPostsQueryDTO) {
-		return errorBuilder<any>(DhaagaErrorCode.FEATURE_UNSUPPORTED) as any;
+		return errorBuilder<any>(ApiErrorCode.FEATURE_UNSUPPORTED) as any;
 	}
 
 	async atProtoLikes(
@@ -209,7 +206,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -223,7 +220,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 			await agent.deleteFollow(id);
 			return { data: null as any };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

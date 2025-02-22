@@ -1,4 +1,4 @@
-import { DhaagaErrorCode, LibraryResponse } from '../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../types/result.types.js';
 import { CasingUtil } from '../utils/casing.js';
 
 /**
@@ -113,7 +113,7 @@ class FetchWrapper {
 				console.log(e);
 				return {
 					error: {
-						code: DhaagaErrorCode.UNKNOWN_ERROR,
+						code: ApiErrorCode.UNKNOWN_ERROR,
 						message: e,
 					},
 				};
@@ -145,7 +145,7 @@ class FetchWrapper {
 			.catch((e) => {
 				return {
 					error: {
-						code: DhaagaErrorCode.UNKNOWN_ERROR,
+						code: ApiErrorCode.UNKNOWN_ERROR,
 						message: e,
 					},
 				};
@@ -184,7 +184,7 @@ class FetchWrapper {
 			.catch((e) => {
 				return {
 					error: {
-						code: DhaagaErrorCode.UNKNOWN_ERROR,
+						code: ApiErrorCode.UNKNOWN_ERROR,
 						message: e,
 					},
 				};
@@ -225,7 +225,7 @@ class FetchWrapper {
 			.catch((e) => {
 				return {
 					error: {
-						code: DhaagaErrorCode.UNKNOWN_ERROR,
+						code: ApiErrorCode.UNKNOWN_ERROR,
 						message: e,
 					},
 				};

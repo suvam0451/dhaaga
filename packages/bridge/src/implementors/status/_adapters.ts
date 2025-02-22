@@ -2,9 +2,9 @@ import MisskeyToStatusAdapter from './misskey.js';
 import MastodonToStatusAdapter from './mastodon.js';
 import UnknownToStatusAdapter from './default.js';
 import { StatusInterface } from './_interface.js';
-import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
 import BlueskyStatusAdapter from './bluesky.js';
 import { CasingUtil } from '../../utils/casing.js';
+import { KNOWN_SOFTWARE } from '../../data/driver.js';
 
 /**
  * @param status any status object

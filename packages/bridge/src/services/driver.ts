@@ -1,4 +1,13 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import ApiDriver, {
+	RestClientCreateDTO,
+} from '../adapters/_client/_interface.js';
+import { ApiErrorCode, BlueskyRestClient, KNOWN_SOFTWARE } from '../index.js';
+import { AppAtpSessionData } from '../types/atproto.js';
+import MisskeyRestClient from '../adapters/_client/misskey/_router.js';
+import PleromaRestClient from '../adapters/_client/pleroma/_router.js';
+import MastodonRestClient from '../adapters/_client/mastodon/_router.js';
+import { ApiResult } from '../utils/api-result.js';
+import { Err, Ok } from '../utils/index.js';
 
 class Service {
 	static supportsMastoApiV1(driver: KNOWN_SOFTWARE | string) {
@@ -61,6 +70,28 @@ class Service {
 		return (
 			Service.supportsAtProto(driver) || Service.supportsMisskeyApi(driver)
 		);
+	}
+
+	/**
+	 * This client should be generated at runtime
+	 */
+	static generateApiClient(
+		driver: KNOWN_SOFTWARE | string,
+		payload: RestClientCreateDTO | AppAtpSessionData,
+	): ApiResult<ApiDriver> {
+		if (Service.supportsAtProto(driver))
+			return Ok(new BlueskyRestClient(payload as AppAtpSessionData));
+
+		if (Service.supportsMisskeyApi(driver))
+			return Ok(new MisskeyRestClient(payload as RestClientCreateDTO));
+
+		if (Service.supportsPleromaApi(driver))
+			return Ok(new PleromaRestClient(payload as RestClientCreateDTO));
+
+		if (Service.supportsMastoApiV2(driver))
+			return Ok(new MastodonRestClient(payload as RestClientCreateDTO));
+
+		return Err(ApiErrorCode.INCOMPATIBLE_DRIVER);
 	}
 }
 

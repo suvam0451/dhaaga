@@ -11,16 +11,13 @@ import {
 	MastoStatus,
 } from '../../../types/mastojs.types.js';
 import { MissContext } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 
 export class DefaultStatusesRouter implements StatusesRoute {
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
 		return {
 			error: {
-				code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
+				code: ApiErrorCode.FEATURE_UNSUPPORTED,
 			},
 		};
 	}

@@ -14,7 +14,7 @@ import {
 } from '@atproto/api';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { MastoStatus } from '../../../types/mastojs.types.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
@@ -40,7 +40,7 @@ class BlueskyStatusesRouter implements StatusesRoute {
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -67,7 +67,7 @@ class BlueskyStatusesRouter implements StatusesRoute {
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

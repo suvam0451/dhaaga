@@ -27,10 +27,7 @@ import {
 	MegaStatus,
 } from '../../../types/megalodon.types.js';
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 
 export abstract class BaseAccountsRouter implements AccountRoute {
 	async lookup(
@@ -108,7 +105,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	): Promise<LibraryResponse<MastoAccount | MissUserDetailed | MegaAccount>> {
 		return {
 			error: {
-				code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
+				code: ApiErrorCode.FEATURE_UNSUPPORTED,
 			},
 		} as LibraryResponse<MastoAccount | UserDetailed>;
 	}

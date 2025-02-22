@@ -1,5 +1,6 @@
-import { KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
 import { z } from 'zod';
+import { RandomUtil } from '../utils/index.js';
+import { KNOWN_SOFTWARE } from '../data/driver.js';
 
 const appMessageObjectSchema = z.object({
 	uuid: z.string(),

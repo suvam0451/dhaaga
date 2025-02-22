@@ -1,8 +1,9 @@
 import type { Facet } from '@atproto/api';
-import { RandomUtil } from '../utils/random';
-import type { KNOWN_SOFTWARE, MfmNode } from '@dhaaga/bridge';
-import { DriverService } from '../services/driver.service';
-import { TextParser } from './text';
+import { TextParser } from './text.js';
+import { RandomUtil } from '../utils/index.js';
+import { DriverService } from '../services/driver.js';
+import { MfmNode } from '../services/index.js';
+import { KNOWN_SOFTWARE } from '../data/driver.js';
 
 export type AppTextNodeType =
 	| 'para'

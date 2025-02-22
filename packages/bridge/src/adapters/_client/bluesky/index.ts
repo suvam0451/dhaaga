@@ -1,4 +1,4 @@
-import ActivityPubClient, { MediaUploadDTO } from '../_interface.js';
+import ApiDriver, { MediaUploadDTO } from '../_interface.js';
 import BlueskyAccountsRouter from './accounts.js';
 import { BlueskyInstanceRouter } from './instance.js';
 import { BlueskyListRoute } from './lists.js';
@@ -18,7 +18,7 @@ import BlueskyFeedRouter from './feeds.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;
 
-class BlueskyRestClient implements ActivityPubClient {
+class BlueskyRestClient implements ApiDriver {
 	client: Agent | null;
 	accounts: BlueskyAccountsRouter;
 	instances: BlueskyInstanceRouter;

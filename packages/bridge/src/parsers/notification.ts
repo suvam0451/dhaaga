@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { postObjectSchema } from './post';
-import { appUserObjectSchema, UserParser } from './user';
-import { DhaagaJsNotificationType, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { PostParser } from './post';
+import { postObjectSchema } from './post.js';
+import { appUserObjectSchema, UserParser } from './user.js';
+import { PostParser } from './post.js';
+import { DriverNotificationType, KNOWN_SOFTWARE } from '../data/driver.js';
 
 const appNotificationGroupedUserItemSchema = z.object({
 	item: appUserObjectSchema,
@@ -38,8 +38,8 @@ class Parser {
 				id: input.id,
 				type:
 					input['visibility'] === 'direct'
-						? DhaagaJsNotificationType.CHAT
-						: DhaagaJsNotificationType.MENTION,
+						? DriverNotificationType.CHAT
+						: DriverNotificationType.MENTION,
 				createdAt: input.createdAt,
 				user: UserParser.parse<unknown>(input.account, driver, server),
 				post: PostParser.parse<unknown>(input, driver, server) || null,
@@ -49,7 +49,7 @@ class Parser {
 		}
 		const obj = {
 			id: input.id,
-			type: input.type as DhaagaJsNotificationType,
+			type: input.type as DriverNotificationType,
 			createdAt: input.createdAt,
 			groupKey: input.groupKey,
 			user: UserParser.parse<unknown>(

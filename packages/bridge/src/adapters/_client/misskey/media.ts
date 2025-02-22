@@ -2,7 +2,7 @@ import { DhaagaJsMediaCreateDTO, MediaRoute } from '../_router/routes/media.js';
 import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -30,7 +30,7 @@ export class MisskeyMediaRouter implements MediaRoute {
 			return { data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -46,7 +46,7 @@ export class MisskeyMediaRouter implements MediaRoute {
 				return errorBuilder(e.code);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

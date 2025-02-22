@@ -1,8 +1,5 @@
 import { errorBuilder, successWithData } from './dto/api-responses.dto.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 
 async function CommonErrorHandler(e: any) {
 	if (e?.response?.data?.error?.code) {
@@ -25,7 +22,7 @@ async function CommonErrorHandler(e: any) {
 		console.log('[WARN]: new error', e);
 		return {
 			error: {
-				code: DhaagaErrorCode.UNKNOWN_ERROR,
+				code: ApiErrorCode.UNKNOWN_ERROR,
 				message: e,
 			},
 		};
@@ -62,7 +59,7 @@ export async function MastojsHandler<T>({
 		return successWithData(data);
 	} catch (e) {
 		console.log(e);
-		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 	}
 }
 

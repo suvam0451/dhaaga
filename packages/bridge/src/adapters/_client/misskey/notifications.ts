@@ -4,12 +4,12 @@ import {
 } from '../_router/routes/notifications.js';
 import type { Endpoints } from 'misskey-js/autogen/endpoint.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { MastoNotification } from '../../../types/mastojs.types.js';
 import { LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 
 type MISSKEY_NOTIFICATION_TYPE =
 	| 'note'

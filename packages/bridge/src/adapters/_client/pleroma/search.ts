@@ -8,7 +8,7 @@ import type {
 	MegaAccount,
 	MegaStatus,
 } from '../../../types/megalodon.types.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 import { CasingUtil } from '../../../utils/casing.js';
@@ -38,11 +38,11 @@ export class PleromaSearchRouter implements SearchRoute {
 				query,
 			);
 			if (data.status !== 200) {
-				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+				return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 			}
 			return { data: data.data.accounts };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -53,11 +53,11 @@ export class PleromaSearchRouter implements SearchRoute {
 				CasingUtil.snakeCaseKeys(query),
 			);
 			if (data.status !== 200) {
-				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+				return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 			}
 			return { data: data.data.statuses };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

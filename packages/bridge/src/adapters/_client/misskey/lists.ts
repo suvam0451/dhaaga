@@ -3,7 +3,7 @@ import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { MegaList } from '../../../types/megalodon.types.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -17,7 +17,7 @@ export class MisskeyListsRoute implements ListsRoute {
 	}
 
 	async get(): LibraryPromise<MegaList> {
-		return errorBuilder<MegaList>(DhaagaErrorCode.UNKNOWN_ERROR);
+		return errorBuilder<MegaList>(ApiErrorCode.UNKNOWN_ERROR);
 	}
 
 	async list(): LibraryPromise<Endpoints['users/lists/list']['res']> {
@@ -26,7 +26,7 @@ export class MisskeyListsRoute implements ListsRoute {
 	}
 
 	async update() {
-		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 	}
 
 	async listAntennas(): LibraryPromise<Endpoints['antennas/list']['res']> {

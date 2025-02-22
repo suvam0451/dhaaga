@@ -1,7 +1,6 @@
 import MisskeyUser from './misskey.js';
 import MastodonUser from './mastodon.js';
 import DefaultUser from './default.js';
-import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
 import BlueskyUserInterface from './bluesky.js';
 import type {
 	MissNote,
@@ -10,6 +9,7 @@ import type {
 } from '../../types/misskey-js.types.js';
 import type { MastoAccount } from '../../types/mastojs.types.js';
 import { CasingUtil } from '../../utils/casing.js';
+import { KNOWN_SOFTWARE } from '../../data/driver.js';
 
 export type UserType =
 	| MastoAccount

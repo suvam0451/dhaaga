@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { DriverService } from '../../src/services/driver.service';
-import { data } from '../../src/data/drivers';
+import { data } from '../src/data/driver';
+import { DriverService } from '../src/services/driver';
 
 const keys = Object.keys(data) as KNOWN_SOFTWARE[];
 

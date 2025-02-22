@@ -7,7 +7,7 @@ import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MisskeyTimelinesRouter implements TimelinesRoute {
@@ -44,9 +44,9 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 			return { data };
 		} catch (e: any) {
 			if (e.code) {
-				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+				return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -94,11 +94,11 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 				query,
 				{},
 			);
-			if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			if (error) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 			return { data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

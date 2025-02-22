@@ -6,8 +6,7 @@ import {
 	useContext,
 	useReducer,
 } from 'react';
-import type { NotificationObjectType } from '../parsers/notification';
-import type { ResultPage } from '../types/core.types';
+import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 
 type State = {
 	seen: Set<string>;

@@ -79,9 +79,9 @@ export type FollowPostDto = {
  * What common functionalities do we want to support
  * across all ActivityPub based clients
  */
-interface ActivityPubClient extends RouterInterface {
+interface ApiDriver extends RouterInterface {
 	// routes
 	instances: InstanceRoute;
 }
 
-export default ActivityPubClient;
+export default ApiDriver;

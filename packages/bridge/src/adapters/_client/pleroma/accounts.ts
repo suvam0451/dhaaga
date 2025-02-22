@@ -24,7 +24,7 @@ import type {
 	MegaRelationship,
 	MegaStatus,
 } from '../../../types/megalodon.types.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 import { CasingUtil } from '../../../utils/casing.js';
 
@@ -173,12 +173,12 @@ export class PleromaAccountsRouter
 				);
 
 			if (error) {
-				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+				return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 			}
 			return { data: _data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -196,12 +196,12 @@ export class PleromaAccountsRouter
 				);
 
 			if (error) {
-				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+				return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 			}
 			return { data: _data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

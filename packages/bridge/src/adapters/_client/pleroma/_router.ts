@@ -1,4 +1,4 @@
-import ActivityPubClient, { RestClientCreateDTO } from '../_interface.js';
+import ApiDriver, { RestClientCreateDTO } from '../_interface.js';
 import { PleromaInstanceRouter } from './instance.js';
 import { PleromaAccountsRouter } from './accounts.js';
 import { PleromaStatusesRouter } from './statuses.js';
@@ -12,7 +12,7 @@ import { PleromaMediaRoute } from './media.js';
 import { PleromaListsRoute } from './lists.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 
-class PleromaRestClient implements ActivityPubClient {
+class PleromaRestClient implements ApiDriver {
 	fetch: FetchWrapper;
 	instances: PleromaInstanceRouter;
 	accounts: PleromaAccountsRouter;

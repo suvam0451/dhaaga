@@ -15,7 +15,7 @@ import {
 } from '@atproto/api';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { ResultErr, ResultOk } from '../../../utils/result.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import type { ApiAsyncResult } from '../../../utils/api-result.js';
 
 type SubscriptionUpdateResult = Promise<{
@@ -70,7 +70,7 @@ class BlueskyFeedRouter {
 			});
 			return ResultOk(data.data);
 		} catch (e) {
-			return ResultErr(DhaagaErrorCode.UNKNOWN_ERROR);
+			return ResultErr(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

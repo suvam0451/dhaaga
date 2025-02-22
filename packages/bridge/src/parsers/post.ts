@@ -6,13 +6,14 @@ import {
 	type StatusInterface,
 } from '@dhaaga/bridge';
 import { z } from 'zod';
-import { DriverService } from '../services/driver.service';
-import { RandomUtil } from '../utils/random';
-import { TextParser } from './text';
-import { UserParser } from './user';
-import { TextNodeParser } from './text-nodes';
-import { type ResultPage } from '../types/core.types';
-import { AppErrorCode, type AppResult, Err, Ok } from '../utils/app-result';
+import { TextParser } from './text.js';
+import { UserParser } from './user.js';
+import { TextNodeParser } from './text-nodes.js';
+import { DriverService } from '../services/driver.js';
+import { ResultPage } from '../utils/pagination.js';
+import { Err, Ok, RandomUtil } from '../utils/index.js';
+import { ApiErrorCode } from '../types/result.types.js';
+import { ApiResult } from '../utils/api-result.js';
 
 const ActivityPubReactionStateSchema = z.array(
 	z.object({
@@ -417,7 +418,7 @@ class Parser {
 		input: any,
 		driver: string | KNOWN_SOFTWARE,
 		server: string,
-	): AppResult<ResultPage<PostObjectType>> {
+	): ApiResult<ResultPage<PostObjectType>> {
 		if (Array.isArray(input)) {
 			return Ok({
 				items: Parser.parse<unknown[]>(input, driver, server),
@@ -427,7 +428,7 @@ class Parser {
 			});
 		}
 		console.log('[WARN]: failed to identify shape of the input');
-		return Err(AppErrorCode.PARSING_ERROR);
+		return Err(ApiErrorCode.PARSING_FAILED);
 	}
 }
 

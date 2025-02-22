@@ -11,10 +11,7 @@ import type {
 	MastoStatus,
 } from '../../../types/mastojs.types.js';
 import type { MissContext, MissNote } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 type RenoteCreateDTO = {
@@ -79,7 +76,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -123,7 +120,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -144,7 +141,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		} catch (e: any) {
 			if (e.code) return errorBuilder(e);
 			console.log('[ERROR]: failed to add reaction', reactionId, e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -165,7 +162,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		} catch (e: any) {
 			if (e.code) return errorBuilder(e);
 			console.log('[ERROR]: failed to remove reaction', reactionId, e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -180,7 +177,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -202,7 +199,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -224,7 +221,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -239,7 +236,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -256,7 +253,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			{ noteId: id },
 			{},
 		);
-		if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		if (error) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		return { data: { success: true, isFavourited: true } };
 	}
 
@@ -272,12 +269,12 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			{ noteId: id },
 			{},
 		);
-		if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		if (error) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		return { data: { success: true, hasReacted: true } };
 	}
 
 	async removeLike(id: string): LibraryPromise<MastoStatus> {
-		return errorBuilder<MastoStatus>(DhaagaErrorCode.UNKNOWN_ERROR);
+		return errorBuilder<MastoStatus>(ApiErrorCode.UNKNOWN_ERROR);
 	}
 
 	/**
@@ -303,7 +300,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -321,7 +318,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -353,7 +350,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			});
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

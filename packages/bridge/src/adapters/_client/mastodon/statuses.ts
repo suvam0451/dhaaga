@@ -10,7 +10,7 @@ import type {
 	MastoScheduledStatus,
 	MastoStatus,
 } from '../../../types/mastojs.types.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -79,7 +79,7 @@ export class MastodonStatusesRouter implements StatusesRoute {
 			return { data: ctx };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

@@ -19,10 +19,7 @@ import type {
 	MastoRelationship,
 } from '../../../types/mastojs.types.js';
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MisskeyAccountsRouter
@@ -68,7 +65,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -93,7 +90,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -109,7 +106,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -121,7 +118,7 @@ export class MisskeyAccountsRouter
 			return { data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -135,7 +132,7 @@ export class MisskeyAccountsRouter
 			return { data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -161,7 +158,7 @@ export class MisskeyAccountsRouter
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -175,7 +172,7 @@ export class MisskeyAccountsRouter
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -190,7 +187,7 @@ export class MisskeyAccountsRouter
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -202,7 +199,7 @@ export class MisskeyAccountsRouter
 			return { data: { renoteMuted: true } };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -214,12 +211,12 @@ export class MisskeyAccountsRouter
 			return { data: { renoteMuted: false } };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
 	async likes(query: GetPostsQueryDTO): Promise<any> {
-		return errorBuilder(DhaagaErrorCode.FEATURE_UNSUPPORTED);
+		return errorBuilder(ApiErrorCode.FEATURE_UNSUPPORTED);
 	}
 
 	/**
@@ -269,9 +266,9 @@ export class MisskeyAccountsRouter
 			};
 		} catch (e: any) {
 			if (e.code) {
-				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+				return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -299,7 +296,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -320,7 +317,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

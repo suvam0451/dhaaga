@@ -12,10 +12,7 @@ import {
 	MegaConversation,
 	MegaNotification,
 } from '../../../types/megalodon.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 import { MastoGroupedNotificationsResults } from '../../../types/mastojs.types.js';
@@ -66,7 +63,7 @@ export class PleromaNotificationsRouter
 				data: data.data,
 			};
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

@@ -8,7 +8,7 @@ import { CasingUtil } from '../../../utils/casing.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 
 export class PleromaTimelinesRouter
 	extends DefaultTimelinesRouter
@@ -36,7 +36,7 @@ export class PleromaTimelinesRouter
 			return { data: data.data };
 		} catch (e) {
 			console.log('error is here', e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

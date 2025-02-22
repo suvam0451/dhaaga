@@ -1,7 +1,6 @@
 import {
 	InstanceApi_CustomEmojiDTO,
 	InstanceRoute,
-	KNOWN_SOFTWARE,
 } from '../_router/routes/instance.js';
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import { MastoErrorHandler } from '../_router/_runner.js';
@@ -9,15 +8,13 @@ import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MastoAccountCredentials } from '../../../types/mastojs.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import {
 	MastoJsWrapper,
 	MegalodonGoToSocialWrapper,
 	MisskeyJsWrapper,
 } from '../../../custom-clients/custom-clients.js';
+import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 
 type WelKnownNodeinfo = {
 	links: {
@@ -351,7 +348,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 						if (e?.response?.status === 401) {
 							return {
 								error: {
-									code: DhaagaErrorCode.UNAUTHORIZED,
+									code: ApiErrorCode.UNAUTHORIZED,
 									message: e?.response?.statusText,
 								},
 							};
@@ -359,7 +356,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					}
 					return {
 						error: {
-							code: DhaagaErrorCode.UNKNOWN_ERROR,
+							code: ApiErrorCode.UNKNOWN_ERROR,
 							message: e,
 						},
 					};
@@ -387,7 +384,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 						if (e?.response?.status === 401) {
 							return {
 								error: {
-									code: DhaagaErrorCode.UNAUTHORIZED,
+									code: ApiErrorCode.UNAUTHORIZED,
 									message: e?.response?.statusText,
 								},
 							};
@@ -395,7 +392,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					}
 					return {
 						error: {
-							code: DhaagaErrorCode.UNKNOWN_ERROR,
+							code: ApiErrorCode.UNKNOWN_ERROR,
 							message: e,
 						},
 					};
@@ -404,7 +401,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			default: {
 				return {
 					error: {
-						code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
+						code: ApiErrorCode.FEATURE_UNSUPPORTED,
 						message: software,
 					},
 				};
@@ -433,10 +430,10 @@ export class DefaultInstanceRouter implements InstanceRoute {
 				[NODEINFO_21, NODEINFO_20, NODEINFO_10].includes(l.rel),
 			);
 
-			if (!nodeType) return errorBuilder<string>(DhaagaErrorCode.UNKNOWN_ERROR);
+			if (!nodeType) return errorBuilder<string>(ApiErrorCode.UNKNOWN_ERROR);
 			return { data: nodeType.href };
 		} catch (e) {
-			return errorBuilder<string>(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder<string>(ApiErrorCode.UNKNOWN_ERROR);
 		} finally {
 			clearTimeout(timeoutId); // Clear the timeout
 		}
@@ -477,7 +474,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			return errorBuilder<{
 				software: string;
 				version: string | null;
-			}>(DhaagaErrorCode.UNKNOWN_ERROR);
+			}>(ApiErrorCode.UNKNOWN_ERROR);
 		} finally {
 			clearTimeout(timeoutId); // Clear the timeout
 		}
@@ -492,7 +489,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	async getTranslation(id: string, lang: string) {
 		return {
 			error: {
-				code: DhaagaErrorCode.DEFAULT_CLIENT,
+				code: ApiErrorCode.DEFAULT_CLIENT,
 			},
 		};
 	}

@@ -1,4 +1,4 @@
-import ActivityPubClient, { GetPostsQueryDTO } from '../_interface.js';
+import ApiDriver, { GetPostsQueryDTO } from '../_interface.js';
 import { DefaultInstanceRouter } from './instance.js';
 import { DefaultAccountRouter } from './accounts.js';
 import { DefaultStatusesRouter } from './statuses.js';
@@ -13,7 +13,7 @@ import { DefaultListRoute } from './lists.js';
 import { DefaultProfileRouter } from './profile.js';
 import { MastoAccount } from '../../../types/mastojs.types.js';
 
-class UnknownRestClient implements ActivityPubClient {
+class UnknownRestClient implements ApiDriver {
 	instances: DefaultInstanceRouter;
 	accounts: DefaultAccountRouter;
 	statuses: DefaultStatusesRouter;

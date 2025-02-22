@@ -1,11 +1,11 @@
 import { z } from 'zod';
+import { TextNodeParser } from './text-nodes.js';
+import { KNOWN_SOFTWARE } from '../data/driver.js';
 import {
-	ActivitypubHelper,
 	ActivityPubUserAdapter,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/bridge';
-import type { UserInterface } from '@dhaaga/bridge';
-import { TextNodeParser } from './text-nodes';
+	UserInterface,
+} from '../implementors/profile/_interface.js';
+import { ActivitypubHelper } from '../index.js';
 
 export const appUserObjectSchema = z.object({
 	id: z.string(),

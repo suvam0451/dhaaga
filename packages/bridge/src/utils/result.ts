@@ -3,7 +3,7 @@
  * Implementation for Typescript
  */
 
-import { DhaagaErrorCode } from '../types/result.types.js';
+import { ApiErrorCode } from '../types/result.types.js';
 
 /**
  * Classes
@@ -132,11 +132,11 @@ function ResultErr<T, E>(error: E): Result<T, E> {
 	return new ErrClass(error);
 }
 
-function Ok<T>(value: T): Result<T, DhaagaErrorCode> {
+function Ok<T>(value: T): Result<T, ApiErrorCode> {
 	return new OkClass(value);
 }
 
-function Err<T>(error: DhaagaErrorCode): Result<T, DhaagaErrorCode> {
+function Err<T>(error: ApiErrorCode): Result<T, ApiErrorCode> {
 	return new ErrClass(error);
 }
 

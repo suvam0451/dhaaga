@@ -1,4 +1,4 @@
-import ActivityPubClient, {
+import ApiDriver, {
 	RestClientCreateDTO,
 } from './adapters/_client/_interface.js';
 import UnknownRestClient from './adapters/_client/default/index.js';
@@ -10,10 +10,7 @@ import UnknownToStatusAdapter from './implementors/status/default.js';
 import MastodonToStatusAdapter from './implementors/status/mastodon.js';
 import MisskeyToStatusAdapter from './implementors/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
-import {
-	InstanceApi_CustomEmojiDTO,
-	KNOWN_SOFTWARE,
-} from './adapters/_client/_router/routes/instance.js';
+import { InstanceApi_CustomEmojiDTO } from './adapters/_client/_router/routes/instance.js';
 import axios from 'axios';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
 import PleromaRestClient from './adapters/_client/pleroma/_router.js';
@@ -28,13 +25,15 @@ import {
 } from './adapters/_client/_router/routes/accounts.js';
 // used to read viewer
 import BlueskyStatusAdapter from './implementors/status/bluesky.js';
+import { KNOWN_SOFTWARE } from './data/driver.js';
+import { DriverService } from './services/driver.js';
 
 export {
 	UnknownToStatusAdapter,
 	MastodonToStatusAdapter,
 	MisskeyToStatusAdapter,
 	BlueskyStatusAdapter,
-	ActivityPubClient,
+	ApiDriver,
 };
 
 // export media attachment adapters and interfaces
@@ -79,44 +78,11 @@ export {
 	PleromaRestClient,
 	BlueskyRestClient,
 };
-export {
-	DhaagaJsTimelineQueryOptions,
-	DhaagaJsNotificationType,
-} from './adapters/_client/_router/routes/_index.js';
-
-const userMap = {
-	[KNOWN_SOFTWARE.BLUESKY]: BlueskyRestClient,
-	// Pleroma Compat
-	[KNOWN_SOFTWARE.AKKOMA]: PleromaRestClient,
-	[KNOWN_SOFTWARE.PLEROMA]: PleromaRestClient,
-
-	// Misskey Compat
-	[KNOWN_SOFTWARE.FIREFISH]: MisskeyRestClient,
-	[KNOWN_SOFTWARE.MISSKEY]: MisskeyRestClient,
-	[KNOWN_SOFTWARE.SHARKEY]: MisskeyRestClient,
-	[KNOWN_SOFTWARE.CHERRYPICK]: MisskeyRestClient,
-
-	// Mastodon Compat
-	[KNOWN_SOFTWARE.MASTODON]: MastodonRestClient,
-};
-
-type UserMap = typeof userMap;
-type Keys = keyof UserMap;
-type Tuples<T> = T extends Keys ? [T, InstanceType<UserMap[T]>] : never;
-type SingleKeys<K> = [K] extends (K extends Keys ? [K] : never) ? K : never;
-type ClassType<A extends Keys> = Extract<Tuples<Keys>, [A, any]>[1];
+export { DhaagaJsTimelineQueryOptions } from './adapters/_client/_router/routes/_index.js';
 
 export class ActivityPubClientFactory {
-	static get<K extends Keys>(
-		domain: SingleKeys<K>,
-		payload: RestClientCreateDTO,
-	): ClassType<K> {
-		try {
-			// FIXME: remove any
-			return new userMap[domain](payload as any);
-		} catch (e) {
-			return new userMap[KNOWN_SOFTWARE.MASTODON](payload);
-		}
+	static get(domain: KNOWN_SOFTWARE | string, payload: RestClientCreateDTO) {
+		return DriverService.generateApiClient(domain, payload);
 	}
 }
 
@@ -155,8 +121,9 @@ export {
 };
 
 export { KNOWN_SOFTWARE, InstanceApi_CustomEmojiDTO };
+export { DriverNotificationType } from './data/driver.js';
 export { LibraryResponse } from './types/result.types.js';
-export { DhaagaErrorCode } from './types/result.types.js';
+export { ApiErrorCode } from './types/result.types.js';
 
 export {
 	RandomUtil,
@@ -165,3 +132,37 @@ export {
 	Result,
 	AsyncResult,
 } from './utils/index.js';
+
+// chat services
+export { ChatParser } from './parsers/chat.js';
+export type { MessageObjectType } from './parsers/chat.js';
+// feed services
+export { FeedParser } from './parsers/feed.js';
+export type { FeedObjectType } from './parsers/feed.js';
+// text services
+export { TextParser } from './parsers/text.js';
+// post services
+export { PostParser, PostInspector, postObjectSchema } from './parsers/post.js';
+export type {
+	PostObjectType,
+	PostRootObjectType,
+	PostAuthorType,
+	PostStatsType,
+	PostMediaAttachmentType,
+} from './parsers/post.js';
+// user services
+export { UserParser, appUserObjectSchema } from './parsers/user.js';
+export type { UserObjectType } from './parsers/user.js';
+// notification services
+export { NotificationParser } from './parsers/notification.js';
+export type {
+	NotificationObjectType,
+	NotificationUserGroupType,
+} from './parsers/notification.js';
+// text node services
+export { TextNodeParser } from './parsers/text-nodes.js';
+export type { AppParsedTextNodes, NodeContent } from './parsers/text-nodes.js';
+
+// pagination util
+export { defaultResultPage } from './utils/pagination.js';
+export type { ResultPage } from './utils/pagination.js';
