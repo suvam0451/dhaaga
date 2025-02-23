@@ -14,7 +14,10 @@ import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 import { Err, Ok } from '../../../utils/index.js';
-import { DriverLikeStateResult } from '../../../types/driver.types.js';
+import {
+	DriverBookmarkStateResult,
+	DriverLikeStateResult,
+} from '../../../types/driver.types.js';
 
 export class MastodonStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -55,14 +58,22 @@ export class MastodonStatusesRouter implements StatusesRoute {
 		return { data: retData };
 	}
 
-	async bookmark(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.client.lib.v1.statuses.$select(id).bookmark();
-		return { data };
+	async bookmark(id: string): DriverBookmarkStateResult {
+		try {
+			const data = await this.client.lib.v1.statuses.$select(id).bookmark();
+			return Ok({ state: !!data.bookmarked });
+		} catch (e) {
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
-	async unBookmark(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.client.lib.v1.statuses.$select(id).unbookmark();
-		return { data };
+	async unBookmark(id: string): DriverBookmarkStateResult {
+		try {
+			const data = await this.client.lib.v1.statuses.$select(id).unbookmark();
+			return Ok({ state: !!data.bookmarked });
+		} catch (e) {
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async like(id: string): DriverLikeStateResult {

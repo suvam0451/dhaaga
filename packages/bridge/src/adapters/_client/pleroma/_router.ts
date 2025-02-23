@@ -12,8 +12,8 @@ import { PleromaMeRouter } from './me.js';
 import { PleromaMediaRoute } from './media.js';
 import { PleromaListsRoute } from './lists.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { UnifiedPostRouter } from '../default/post.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostMutatorRoute } from '../_router/routes/post.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
@@ -31,7 +31,7 @@ class Adapter implements ApiTargetInterface {
 	me: PleromaMeRouter;
 	media: PleromaMediaRoute;
 	lists: PleromaListsRoute;
-	post: UnifiedPostRouter;
+	post: PostMutatorRoute;
 
 	constructor(
 		driver: KNOWN_SOFTWARE | string,
@@ -52,7 +52,7 @@ class Adapter implements ApiTargetInterface {
 		this.me = new PleromaMeRouter(this.fetch);
 		this.media = new PleromaMediaRoute(this.fetch);
 		this.lists = new PleromaListsRoute(this.fetch);
-		this.post = new UnifiedPostRouter(this);
+		this.post = new PostMutatorRoute(this);
 	}
 }
 

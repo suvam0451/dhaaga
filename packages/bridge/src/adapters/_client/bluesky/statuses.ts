@@ -13,10 +13,12 @@ import {
 	ChatBskyConvoSendMessage,
 } from '@atproto/api';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { MastoStatus } from '../../../types/mastojs.types.js';
 import { ApiErrorCode } from '../../../types/result.types.js';
 import { Err, Ok } from '../../../utils/index.js';
-import { DriverLikeStateResult } from '../../../types/driver.types.js';
+import {
+	DriverBookmarkStateResult,
+	DriverLikeStateResult,
+} from '../../../types/driver.types.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
@@ -25,9 +27,7 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		this.dto = dto;
 	}
 
-	bookmark(
-		id: string,
-	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/create']['res']> {
+	bookmark(id: string): DriverBookmarkStateResult {
 		return Promise.resolve(undefined) as any;
 	}
 
@@ -112,9 +112,7 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		}
 	}
 
-	unBookmark(
-		id: string,
-	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']> {
+	unBookmark(id: string): DriverBookmarkStateResult {
 		return Promise.resolve(undefined) as any;
 	}
 

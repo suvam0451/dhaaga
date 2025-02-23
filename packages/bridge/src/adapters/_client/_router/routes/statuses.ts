@@ -1,5 +1,4 @@
 import { LibraryPromise } from './_types.js';
-import { Endpoints } from 'misskey-js';
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import {
 	MastoContext,
@@ -11,7 +10,10 @@ import {
 	MegaScheduledStatus,
 	MegaStatus,
 } from '../../../../types/megalodon.types.js';
-import { DriverLikeStateResult } from '../../../../types/driver.types.js';
+import {
+	DriverBookmarkStateResult,
+	DriverLikeStateResult,
+} from '../../../../types/driver.types.js';
 
 export type DhaagaJsPostCreateDto = {
 	inReplyToId: null | string;
@@ -53,13 +55,9 @@ export interface StatusesRoute {
 		MastoStatus | MegaStatus | MissNote | AppBskyFeedGetPostThread.Response
 	>;
 
-	bookmark(
-		id: string,
-	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/create']['res']>;
+	bookmark(id: string): DriverBookmarkStateResult;
 
-	unBookmark(
-		id: string,
-	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']>;
+	unBookmark(id: string): DriverBookmarkStateResult;
 
 	/**
 	 * AT protocol specific implementation

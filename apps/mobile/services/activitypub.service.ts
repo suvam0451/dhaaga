@@ -76,39 +76,10 @@ class ActivityPubService {
 		client: ApiTargetInterface,
 		id: string,
 		localState: boolean,
-	): Promise<boolean> {
-		try {
-			if (localState) {
-				const { error } = await client.statuses.unBookmark(id);
-				if (error?.code === 'NOT_FAVOURITED') return false;
-				if (error) {
-					if (error.code === 'NOT_FAVORITED') {
-						return false;
-					}
-					console.log('[WARN]: could not remove bookmark', error);
-					return localState;
-				}
-				return false;
-			} else {
-				const { error } = await client.statuses.bookmark(id);
-				if (error?.code === 'ALREADY_FAVOURITED') return true;
-				if (error) {
-					if (error.code === 'ALREADY_FAVORITED') {
-						return true;
-					}
-					console.log('[WARN]: could not add bookmark', error);
-					return localState;
-				}
-				return true;
-			}
-		} catch (e) {
-			// incorrect local state
-			if (e.code === 'ERR_BAD_REQUEST' || e.code === 'ERR_BAD_RESPONSE') {
-				return !localState;
-			}
-			console.log(e.code);
-			return localState;
-		}
+	) {
+		return localState
+			? client.statuses.unBookmark(id)
+			: client.statuses.bookmark(id);
 	}
 
 	static async toggleLike(

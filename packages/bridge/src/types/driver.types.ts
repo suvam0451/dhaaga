@@ -9,3 +9,12 @@ export type DriverPostLikeState = {
 	uri?: string;
 };
 export type DriverLikeStateResult = ApiAsyncResult<DriverPostLikeState>;
+
+/**
+ * Post Bookmark Status
+ */
+export type DriverBookmarkLikeState = {
+	state: boolean;
+	counter?: number;
+};
+export type DriverBookmarkStateResult = ApiAsyncResult<DriverPostLikeState>;

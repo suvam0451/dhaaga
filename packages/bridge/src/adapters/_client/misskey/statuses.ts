@@ -10,7 +10,10 @@ import type { MastoScheduledStatus } from '../../../types/mastojs.types.js';
 import type { MissContext, MissNote } from '../../../types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
-import { DriverLikeStateResult } from '../../../types/driver.types.js';
+import {
+	DriverBookmarkStateResult,
+	DriverLikeStateResult,
+} from '../../../types/driver.types.js';
 import { Err, Ok } from '../../../utils/index.js';
 
 type RenoteCreateDTO = {
@@ -180,47 +183,35 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		}
 	}
 
-	async bookmark(
-		id: string,
-	): LibraryPromise<Endpoints['notes/favorites/create']['res']> {
+	async bookmark(id: string): DriverBookmarkStateResult {
 		try {
 			await this.client.client.request('notes/favorites/create', {
 				noteId: id,
 			});
-			return {
-				data: {
-					success: true,
-					isBookmarked: true,
-				},
-			};
+			return Ok({ state: true });
 		} catch (e: any) {
 			if (e.code) {
-				return errorBuilder(e);
+				// ERR_BAD_REQUEST, ERR_BAD_RESPONSE
+				if (e.code === 'ALREADY_FAVORITED') return Ok({ state: true });
+				return Err(e.code);
 			}
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
-	async unBookmark(
-		id: string,
-	): LibraryPromise<Endpoints['notes/favorites/delete']['res']> {
+	async unBookmark(id: string): DriverBookmarkStateResult {
 		try {
 			await this.client.client.request('notes/favorites/delete', {
 				noteId: id,
 			});
-			return {
-				data: {
-					success: true,
-					isBookmarked: false,
-				},
-			};
+			return Ok({ state: false });
 		} catch (e: any) {
 			if (e.code) {
-				return errorBuilder(e);
+				// ERR_BAD_REQUEST, ERR_BAD_RESPONSE
+				if (e.code === 'NOT_FAVORITED') return Ok({ state: false });
+				return Err(e.code);
 			}
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

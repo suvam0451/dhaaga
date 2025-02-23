@@ -12,8 +12,8 @@ import { MisskeyMediaRouter } from './media.js';
 import { MisskeyListsRoute } from './lists.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { ApiTargetInterface } from '../_router/routes/_index.js';
-import { UnifiedPostRouter } from '../default/post.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostMutatorRoute } from '../_router/routes/post.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
@@ -31,7 +31,7 @@ class Adapter implements ApiTargetInterface {
 	me: MisskeyMeRouter;
 	media: MisskeyMediaRouter;
 	lists: MisskeyListsRoute;
-	post: UnifiedPostRouter;
+	post: PostMutatorRoute;
 
 	constructor(
 		driver: KNOWN_SOFTWARE | string,
@@ -53,7 +53,7 @@ class Adapter implements ApiTargetInterface {
 		this.me = new MisskeyMeRouter(this.fetch);
 		this.media = new MisskeyMediaRouter(this.fetch);
 		this.lists = new MisskeyListsRoute(this.fetch);
-		this.post = new UnifiedPostRouter(this);
+		this.post = new PostMutatorRoute(this);
 	}
 }
 

@@ -4,7 +4,6 @@ import {
 } from '../_router/routes/statuses.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { Endpoints } from 'misskey-js';
 import {
 	MastoContext,
 	MastoScheduledStatus,
@@ -12,7 +11,10 @@ import {
 } from '../../../types/mastojs.types.js';
 import { MissContext } from '../../../types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
-import { DriverLikeStateResult } from '../../../types/driver.types.js';
+import {
+	DriverBookmarkStateResult,
+	DriverLikeStateResult,
+} from '../../../types/driver.types.js';
 import { Err } from '../../../utils/index.js';
 
 export class DefaultStatusesRouter implements StatusesRoute {
@@ -34,16 +36,12 @@ export class DefaultStatusesRouter implements StatusesRoute {
 		return { success: false, deleted: false };
 	}
 
-	async bookmark(
-		id: string,
-	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/create']['res']> {
-		return notImplementedErrorBuilder<any>();
+	async bookmark(id: string): DriverBookmarkStateResult {
+		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
-	async unBookmark(
-		id: string,
-	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']> {
-		return notImplementedErrorBuilder<any>();
+	async unBookmark(id: string): DriverBookmarkStateResult {
+		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
 	async like(id: string): DriverLikeStateResult {

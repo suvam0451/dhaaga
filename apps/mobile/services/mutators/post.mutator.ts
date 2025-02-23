@@ -1,9 +1,4 @@
-import {
-	DriverPostLikeState,
-	DriverService,
-	KNOWN_SOFTWARE,
-	Result,
-} from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubService from '../activitypub.service';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { PostInspector, ApiTargetInterface } from '@dhaaga/bridge';
@@ -20,77 +15,16 @@ export class PostMutator {
 		this.client = client;
 	}
 
-	async toggleLike(input: PostObjectType): Promise<PostObjectType> {
-		const target = PostInspector.getContentTarget(input);
-
-		let nextState: Result<DriverPostLikeState, string>;
-
-		try {
-			if (DriverService.supportsAtProto(this.driver)) {
-				nextState = await AtprotoPostService.toggleLike(
-					this.client,
-					target.meta.uri,
-					target.meta.cid,
-					target.atProto?.viewer,
-				);
-			} else if (!DriverService.supportsMisskeyApi(this.driver)) {
-				nextState = await ActivityPubService.toggleLike(
-					this.client,
-					target.interaction.liked,
-					target.id,
-				);
-			}
-
-			if (nextState.isErr()) {
-				console.log('[WARN]: failed to toggle like', nextState.error);
-				return input;
-			}
-
-			const _state = nextState.unwrap();
-			if (input.id === target.id) {
-				return produce(input, (draft) => {
-					draft.interaction.liked = _state.state;
-					draft.stats.likeCount += _state.state ? 1 : -1;
-					if (draft.atProto.viewer) draft.atProto.viewer.like = _state.uri;
-				});
-			} else if (input.boostedFrom?.id === target.id) {
-				return produce(input, (draft) => {
-					draft.boostedFrom.interaction.liked = _state.state;
-					draft.boostedFrom.stats.likeCount += _state.state ? 1 : -1;
-					if (draft.atProto.viewer)
-						draft.boostedFrom.atProto.viewer.like = _state.uri;
-				});
-			}
-		} catch (e) {
-			console.log('[WARN]: failed to toggle like', e);
-			return input;
-		}
+	async toggleLike(input: PostObjectType) {
+		return this.client.post
+			.toggleLike(input)
+			.then((res) => res.unwrapOrElse(input));
 	}
 
-	async toggleBookmark(input: PostObjectType): Promise<PostObjectType> {
-		const target = PostInspector.getContentTarget(input);
-
-		try {
-			const res = await ActivityPubService.toggleBookmark(
-				this.client,
-				target.id,
-				target.interaction.bookmarked,
-			);
-			if (input.id === target.id) {
-				return produce(input, (draft) => {
-					draft.interaction.bookmarked = res;
-					draft.state.isBookmarkStateFinal = true;
-				});
-			} else if (input.boostedFrom?.id === target.id) {
-				return produce(input, (draft) => {
-					draft.boostedFrom.interaction.bookmarked = res;
-					draft.boostedFrom.state.isBookmarkStateFinal = true;
-				});
-			}
-		} catch (e) {
-			console.log('[WARN]: failed to toggle bookmark', e);
-		}
-		return input;
+	async toggleBookmark(input: PostObjectType) {
+		return this.client.post
+			.toggleBookmark(input)
+			.then((res) => res.unwrapOrElse(input));
 	}
 
 	async finalizeBookmarkState(input: PostObjectType): Promise<PostObjectType> {

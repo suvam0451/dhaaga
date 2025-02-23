@@ -16,9 +16,13 @@ import { ListsRoute } from './lists.js';
 import { ParserRoute } from './parser.js';
 import { ProfileRoute } from './profile.js';
 // mutators
-import { PostRoute } from './post.js';
+import { PostMutatorRoute } from './post.js';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
 export interface ApiTargetInterface {
+	driver: KNOWN_SOFTWARE | string;
+	server: string | null;
+
 	instances: InstanceRoute;
 	accounts: AccountRoute;
 	statuses: StatusesRoute;
@@ -31,7 +35,7 @@ export interface ApiTargetInterface {
 	media: MediaRoute;
 	lists: ListsRoute;
 	// mutators
-	post: PostRoute;
+	post: PostMutatorRoute;
 }
 
 export type {

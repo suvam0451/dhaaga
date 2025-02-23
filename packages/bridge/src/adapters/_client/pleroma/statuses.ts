@@ -13,7 +13,10 @@ import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 import { CasingUtil } from '../../../utils/casing.js';
-import { DriverLikeStateResult } from '../../../types/driver.types.js';
+import {
+	DriverBookmarkStateResult,
+	DriverLikeStateResult,
+} from '../../../types/driver.types.js';
 import { Err, Ok } from '../../../utils/index.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
@@ -103,14 +106,14 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
-	async bookmark(id: string) {
+	async bookmark(id: string): DriverBookmarkStateResult {
 		const data = await this.client.client.bookmarkStatus(id);
-		return { data: data.data };
+		return Ok({ state: data.data.bookmarked });
 	}
 
-	async unBookmark(id: string) {
+	async unBookmark(id: string): DriverBookmarkStateResult {
 		const data = await this.client.client.unbookmarkStatus(id);
-		return { data: data.data };
+		return Ok({ state: data.data.bookmarked });
 	}
 
 	async like(id: string): DriverLikeStateResult {

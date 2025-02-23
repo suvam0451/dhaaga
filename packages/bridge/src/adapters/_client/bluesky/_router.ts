@@ -14,7 +14,7 @@ import BlueskyTrendsRouter from './trends.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import BlueskyFeedRouter from './feeds.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { UnifiedPostRouter } from '../default/post.js';
+import { PostMutatorRoute } from '../_router/routes/post.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;
 
@@ -35,7 +35,7 @@ class Adapter implements ApiTargetInterface {
 	timelines: BlueskyTimelinesRouter;
 	trends: BlueskyTrendsRouter;
 	feeds: BlueskyFeedRouter;
-	post: UnifiedPostRouter;
+	post: PostMutatorRoute;
 
 	dto: AtprotoClientCreateDTO;
 
@@ -60,7 +60,7 @@ class Adapter implements ApiTargetInterface {
 		this.timelines = new BlueskyTimelinesRouter(this.dto);
 		this.trends = new BlueskyTrendsRouter();
 		this.feeds = new BlueskyFeedRouter(this.dto);
-		this.post = new UnifiedPostRouter(this);
+		this.post = new PostMutatorRoute(this);
 	}
 }
 
