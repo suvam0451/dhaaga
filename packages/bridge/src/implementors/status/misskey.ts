@@ -1,13 +1,13 @@
-import { StatusInterface } from './_interface.js';
+import { PostTargetInterface } from './_interface.js';
 import { DriveFile } from 'misskey-js/autogen/models.js';
 import { DriveFileToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { DriveFileInstance } from '../media-attachment/unique.js';
-import UnknownToStatusAdapter from './default.js';
+import PostAdapterBase from './default.js';
 import { Note } from 'misskey-js/autogen/models.js';
 
-class MisskeyToStatusAdapter
-	extends UnknownToStatusAdapter
-	implements StatusInterface
+class MisskeyApiPostAdapter
+	extends PostAdapterBase
+	implements PostTargetInterface
 {
 	ref: Note;
 
@@ -144,14 +144,14 @@ class MisskeyToStatusAdapter
 		return `https://${this.ref.user?.host}/@${this.ref.user?.username}`;
 	}
 
-	getRepostedStatus(): StatusInterface | null | undefined {
+	getRepostedStatus(): PostTargetInterface | null | undefined {
 		if (this.ref?.renote !== undefined && this.ref.renote !== null) {
-			return new MisskeyToStatusAdapter(this.ref?.renote);
+			return new MisskeyApiPostAdapter(this.ref?.renote);
 		}
 		return null;
 	}
 
-	getQuote(): StatusInterface | null | undefined {
+	getQuote(): PostTargetInterface | null | undefined {
 		return null;
 	}
 
@@ -179,4 +179,4 @@ class MisskeyToStatusAdapter
 	getMyReaction = (): string | null | undefined => this.ref.myReaction;
 }
 
-export default MisskeyToStatusAdapter;
+export default MisskeyApiPostAdapter;

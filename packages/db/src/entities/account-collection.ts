@@ -1,5 +1,5 @@
 import { DataSource } from '../dataSource';
-import { RandomUtil } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
 import { Account, AccountCollection, AccountSavedPost } from '../_schema';
 
 export enum ReservedCollection {

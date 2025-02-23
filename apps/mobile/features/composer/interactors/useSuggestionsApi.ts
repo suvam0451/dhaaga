@@ -7,7 +7,7 @@ import {
 	AutoFillResultsType,
 } from '../types/composer.types';
 import { useQuery } from '@tanstack/react-query';
-import { DriverService, UserParser } from '@dhaaga/core';
+import { DriverService, UserParser } from '@dhaaga/bridge';
 
 const DEFAULT: AutoFillResultsType = {
 	accounts: [],

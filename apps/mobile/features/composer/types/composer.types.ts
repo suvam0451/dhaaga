@@ -1,5 +1,5 @@
-import { InstanceApi_CustomEmojiDTO, TagInterface } from '@dhaaga/bridge';
-import type { UserObjectType } from '@dhaaga/core';
+import { InstanceApi_CustomEmojiDTO, TagTargetInterface } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 /**
  * Indicates what is currently being typed
@@ -18,6 +18,6 @@ export type AutoFillPromptType = {
 
 export type AutoFillResultsType = {
 	accounts: UserObjectType[];
-	hashtags: TagInterface[];
+	hashtags: TagTargetInterface[];
 	emojis: InstanceApi_CustomEmojiDTO[];
 };

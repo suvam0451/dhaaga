@@ -2,8 +2,8 @@ import { RepoTemplate } from './_base.repo';
 import { Account, AccountSavedPost } from '../_schema';
 import { DataSource } from '../dataSource';
 import { AccountSavedUserService } from './account-saved-user';
-import { RandomUtil } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { SavedPostMediaAttachmentService } from './saved-post-media-attachment';
 
 class Repo implements RepoTemplate<AccountSavedPost> {}

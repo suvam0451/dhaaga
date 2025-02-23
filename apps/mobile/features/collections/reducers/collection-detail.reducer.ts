@@ -1,8 +1,8 @@
 import { Account, AccountSavedPost, AccountSavedUser } from '@dhaaga/db';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
-import { TextNodeParser } from '@dhaaga/core';
-import type { AppParsedTextNodes } from '@dhaaga/core';
+import { TextNodeParser } from '@dhaaga/bridge';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 
 export type CollectionDataViewUserEntry = {
 	item: AccountSavedUser;

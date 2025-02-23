@@ -18,7 +18,7 @@ import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
 import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 import { useTranslation } from 'react-i18next';
-import { PostParser } from '@dhaaga/core';
+import { PostParser } from '@dhaaga/bridge';
 
 /**
  * Click to Post!

@@ -6,9 +6,9 @@ import {
 } from '../../utility/global-state-extractors';
 import { AppResultPageType } from '../../../types/app.types';
 import ActivityPubService from '../../../services/activitypub.service';
-import { BlueskyRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { PostParser } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { AtprotoApiAdapter, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostParser } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 function useGetLikes(query: GetPostsQueryDTO) {
 	const { client, driver, server } = useAppApiClient();
@@ -19,7 +19,7 @@ function useGetLikes(query: GetPostsQueryDTO) {
 		queryFn: async () => {
 			if (driver === KNOWN_SOFTWARE.BLUESKY) {
 				const { data, error } = await (
-					client as BlueskyRestClient
+					client as AtprotoApiAdapter
 				).accounts.atProtoLikes(acct.identifier, {
 					limit: 5,
 					cursor: query.maxId === null ? undefined : query.maxId,

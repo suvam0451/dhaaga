@@ -4,7 +4,7 @@ import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import ActivityPubReactionsService, {
 	ActivityPubReactionStateType,
 } from '../approto/activitypub-reactions.service';
-import { UserObjectType } from '@dhaaga/core';
+import { UserObjectType } from '@dhaaga/bridge';
 
 enum KEY {
 	APP_ACCOUNT_USER_OBJECT_CACHE = 'app/_cache/account/:uuid',

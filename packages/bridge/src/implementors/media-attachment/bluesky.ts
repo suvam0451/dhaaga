@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { MediaAttachmentInterface } from './interface.js';
+import { MediaAttachmentTargetInterface } from './_interface.js';
 import { RandomUtil } from '../../utils/random.js';
 
 /**
  * Bluesky Media Attachment
  * Adapter Interface
  */
-class BlueskyMediaAttachmentAdapter implements MediaAttachmentInterface {
+class BlueskyMediaAttachmentAdapter implements MediaAttachmentTargetInterface {
 	item: BskyImageEmbedItem;
 
 	constructor(ref: BskyImageEmbedItem) {
@@ -45,7 +45,7 @@ class BlueskyMediaAttachmentAdapter implements MediaAttachmentInterface {
 	}
 }
 
-class BlueskyVideoAttachmentAdapter implements MediaAttachmentInterface {
+class BlueskyVideoAttachmentAdapter implements MediaAttachmentTargetInterface {
 	/**
 	 * For example:
 	 * {
@@ -121,7 +121,7 @@ export const bskyEmbedExternalSchema = z.object({
 
 type BskyEmbedExternalType = z.infer<typeof bskyEmbedExternalSchema>;
 
-class EmbedViewProcessor_External implements MediaAttachmentInterface {
+class EmbedViewProcessor_External implements MediaAttachmentTargetInterface {
 	/**
 	 *  "thumb": {
 	 *		"$type": "blob",
@@ -147,7 +147,7 @@ class EmbedViewProcessor_External implements MediaAttachmentInterface {
 		return success;
 	}
 
-	static compile(obj: any): MediaAttachmentInterface[] {
+	static compile(obj: any): MediaAttachmentTargetInterface[] {
 		const { data } = bskyEmbedExternalSchema.safeParse(obj);
 		return [EmbedViewProcessor_External.create(data!)];
 	}
@@ -209,7 +209,7 @@ class EmbedViewProcessor_Images {
 		return success;
 	}
 
-	static compile(obj: any): MediaAttachmentInterface[] {
+	static compile(obj: any): MediaAttachmentTargetInterface[] {
 		const { data } = bskyEmbedImagesSchema.safeParse(obj);
 		return data!.images.map((o) => BlueskyMediaAttachmentAdapter.create(o));
 	}
@@ -243,7 +243,7 @@ class EmbedViewProcessor_Video {
 		return success;
 	}
 
-	static compile(obj: any): MediaAttachmentInterface[] {
+	static compile(obj: any): MediaAttachmentTargetInterface[] {
 		const { data } = bskyEmbedVideoSchema.safeParse(obj);
 		return [BlueskyVideoAttachmentAdapter.create(data!)];
 	}
@@ -265,7 +265,7 @@ class EmbedViewProcessor_RecordWithMedia {
 		return success;
 	}
 
-	static compile(obj: any): MediaAttachmentInterface[] {
+	static compile(obj: any): MediaAttachmentTargetInterface[] {
 		const { data } = bskyEmbedRecordWithMediaSchema.safeParse(obj);
 		if (EmbedViewProcessor_Images.isCompatible(data!.media))
 			return EmbedViewProcessor_Images.compile(data!.media);

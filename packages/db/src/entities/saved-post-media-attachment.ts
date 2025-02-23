@@ -1,7 +1,7 @@
 import { RepoTemplate } from './_base.repo';
 import { AccountSavedPost, SavedPostMediaAttachment } from '../_schema';
 import { DataSource } from '../dataSource';
-import { RandomUtil, type PostMediaAttachmentType } from '@dhaaga/core';
+import { RandomUtil, type PostMediaAttachmentType } from '@dhaaga/bridge';
 
 class Repo implements RepoTemplate<SavedPostMediaAttachment> {}
 

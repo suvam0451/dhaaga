@@ -6,8 +6,8 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import HashtagSegment from '../../../shared/mfm/HashtagSegment';
 import { appDimensions } from '../../../../styles/dimensions';
 import MentionSegment from '../../../shared/mfm/MentionSegment';
-import { TextParser } from '@dhaaga/core';
-import type { NodeContent, AppParsedTextNodes } from '@dhaaga/core';
+import { TextParser } from '@dhaaga/bridge';
+import type { NodeContent, AppParsedTextNodes } from '@dhaaga/bridge';
 import LinkProcessor from '../../link/LinkProcessor';
 import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
 

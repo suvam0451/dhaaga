@@ -1,5 +1,5 @@
-import { MediaAttachmentInterface } from '../media-attachment/interface.js';
-import { DhaagaJsMentionObject, StatusInterface } from './_interface.js';
+import { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
+import { DhaagaJsMentionObject, PostTargetInterface } from './_interface.js';
 import {
 	EmbedViewProcessor_External,
 	EmbedViewProcessor_Images,
@@ -24,7 +24,7 @@ type BlueskyRichTextFacet = {
 	};
 };
 
-class BlueskyStatusAdapter implements StatusInterface {
+class AtprotoPostAdapter implements PostTargetInterface {
 	post: any; // PostView;
 	reply: any; // ReplyRef
 	reason: any; // ReasonRepost
@@ -83,27 +83,27 @@ class BlueskyStatusAdapter implements StatusInterface {
 		return `https://bsky.app/profile/${this.post?.author?.handle}`;
 	}
 
-	getRepostedStatus(): StatusInterface | null | undefined {
+	getRepostedStatus(): PostTargetInterface | null | undefined {
 		if (this.isShare()) {
 			const { post, ...rest } = this;
 			/**
 			 * by stripping reason, we avoid recursive call
 			 * + replies are not needed for reposts
 			 */
-			return new BlueskyStatusAdapter({
+			return new AtprotoPostAdapter({
 				post: this.post,
 				reason: null as any,
 				reply: null as any,
 			});
 		} else if (this.isQuote()) {
 			if (this.post.embed?.$type === 'app.bsky.embed.recordWithMedia#view') {
-				return new BlueskyStatusAdapter({
+				return new AtprotoPostAdapter({
 					post: (this.post.embed as any)?.record?.record as any,
 					reason: null as any,
 					reply: null as any,
 				});
 			} else {
-				return new BlueskyStatusAdapter({
+				return new AtprotoPostAdapter({
 					post: this.post.embed?.record as any,
 					reason: null as any,
 					reply: null as any,
@@ -184,7 +184,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 
 	isReposted = () => this.isShare() || this.isQuote();
 
-	getMediaAttachments(): MediaAttachmentInterface[] {
+	getMediaAttachments(): MediaAttachmentTargetInterface[] {
 		// it seemed that some quotes can be made with image embed...
 		if ((this.reason as any)?.$type === 'app.bsky.feed.defs#reasonRepost') {
 			return [];
@@ -274,7 +274,7 @@ class BlueskyStatusAdapter implements StatusInterface {
 
 	getSpoilerText = () => null;
 
-	setDescendents = (items: StatusInterface[]) => [];
+	setDescendents = (items: PostTargetInterface[]) => [];
 	getDescendants = () => [];
 
 	// Unsupported by Bluesky
@@ -292,4 +292,4 @@ class BlueskyStatusAdapter implements StatusInterface {
 	getIsBookmarked = () => false;
 }
 
-export default BlueskyStatusAdapter;
+export default AtprotoPostAdapter;

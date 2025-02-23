@@ -1,6 +1,6 @@
-import { UserDetailedInstance, UserInterface } from './_interface.js';
+import { UserDetailedInstance, UserTargetInterface } from './_interface.js';
 
-export class MisskeyUser implements UserInterface {
+export class MisskeyUser implements UserTargetInterface {
 	ref: UserDetailedInstance;
 
 	constructor(ref: UserDetailedInstance) {

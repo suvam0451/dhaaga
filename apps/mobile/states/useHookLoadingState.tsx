@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { RandomUtil } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
 
 /**
  *

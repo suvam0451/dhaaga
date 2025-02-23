@@ -1,8 +1,8 @@
 import { KnownServer } from '../_schema';
 import { DbErrorHandler } from './_base.repo';
-import { KNOWN_SOFTWARE, UnknownRestClient } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, BaseApiAdapter } from '@dhaaga/bridge';
 import { DataSource } from '../dataSource';
-import { RandomUtil } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
 
 export type ServerRecordType = {
 	driver: string;
@@ -113,7 +113,7 @@ class Service {
 
 	static async syncDriver(db: DataSource, url: string, force = false) {
 		let match = Service.getByUrl(db, url);
-		const x = new UnknownRestClient();
+		const x = new BaseApiAdapter();
 		if (!match || force) {
 			const instanceResult = await x.instances.getNodeInfo(url);
 			if (instanceResult.error) return;

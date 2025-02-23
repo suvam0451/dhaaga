@@ -4,7 +4,7 @@ import {
 	useAppAcct,
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 export function useSocialHubUserPinStatus(
 	profile: Profile,

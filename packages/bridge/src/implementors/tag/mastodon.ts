@@ -1,6 +1,6 @@
-import { MastodonTagInstance, TagInterface } from './_interface.js';
+import { MastodonTagInstance, TagTargetInterface } from './_interface.js';
 
-class MastodonTag implements TagInterface {
+class MastodonTag implements TagTargetInterface {
 	ref: MastodonTagInstance;
 
 	constructor(ref: MastodonTagInstance) {

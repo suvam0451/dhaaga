@@ -4,7 +4,7 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { useEffect, useState } from 'react';
 import useGetProfile, { ProfileSearchQueryType } from '../api/useGetProfile';
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/bridge';
 import DriverService from '../../../services/driver.service';
 
 function useProfilePeekSheetInteractor() {

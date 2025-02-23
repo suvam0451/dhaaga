@@ -1,10 +1,10 @@
 import MastodonService from '../../../services/mastodon.service';
 import { produce } from 'immer';
-import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, PostTargetInterface } from '@dhaaga/bridge';
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import AtprotoContextService from '../../../services/atproto/atproto-context-service';
-import { PostParser } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { PostParser } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 export enum STATUS_CONTEXT_REDUCER_ACTION {
 	INIT = 'init',
@@ -29,9 +29,9 @@ type ActionType =
 	| {
 			type: STATUS_CONTEXT_REDUCER_ACTION.INIT;
 			payload: {
-				source: StatusInterface;
-				ancestors: StatusInterface[];
-				descendants: StatusInterface[];
+				source: PostTargetInterface;
+				ancestors: PostTargetInterface[];
+				descendants: PostTargetInterface[];
 				driver: KNOWN_SOFTWARE;
 				server: string;
 			};
@@ -89,7 +89,7 @@ function statusContextReducer(
 				for (let [key, value] of childrenLookup) {
 					draft.children.set(
 						key,
-						value.map((o: StatusInterface) => o.getId()),
+						value.map((o: PostTargetInterface) => o.getId()),
 					);
 				}
 			});
@@ -124,7 +124,7 @@ function statusContextReducer(
 				for (let [key, value] of childrenLookup) {
 					draft.children.set(
 						key,
-						value.map((o: StatusInterface) => o.getId()),
+						value.map((o: PostTargetInterface) => o.getId()),
 					);
 				}
 			});

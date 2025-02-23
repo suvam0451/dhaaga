@@ -9,13 +9,13 @@ import {
 	ProfilePinnedUserService,
 } from '@dhaaga/db';
 import {
-	ActivityPubClient,
+	ApiTargetInterface,
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
-	UnknownRestClient,
+	BaseApiAdapter,
 } from '@dhaaga/bridge';
 import { BaseStorageManager } from './_shared';
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 /**
  * ---- Storage Interfaces ----
@@ -49,7 +49,7 @@ class ProfileSessionManager {
 	// databases
 	db: DataSource;
 	// api clients
-	client: ActivityPubClient;
+	client: ApiTargetInterface;
 
 	cacheManager: Storage;
 	customEmojis: InstanceApi_CustomEmojiDTO[];
@@ -109,7 +109,7 @@ class ProfileSessionManager {
 		if (serverRecord && serverRecord.driver !== KNOWN_SOFTWARE.UNKNOWN)
 			return serverRecord;
 		if (!serverRecord || serverRecord.driver === KNOWN_SOFTWARE.UNKNOWN) {
-			const x = new UnknownRestClient();
+			const x = new BaseApiAdapter();
 			const softwareInfoResult = await x.instances.getSoftwareInfo(server);
 			if (softwareInfoResult.error) {
 				console.log('[WARN]: failed to fetch server info', server);
@@ -146,7 +146,7 @@ class ProfileSessionManager {
 		if (!serverRecord) return;
 		const _url = serverRecord.server;
 
-		const x = new UnknownRestClient();
+		const x = new BaseApiAdapter();
 		const { data, error } = await x.instances.getCustomEmojis(_url);
 		if (error) {
 			console.log('[WARN]: failed to get emojis');

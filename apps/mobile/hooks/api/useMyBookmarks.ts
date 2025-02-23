@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '../utility/global-state-extractors';
 import { AppResultPageType } from '../../types/app.types';
-import { PostParser } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { PostParser } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 function useMyBookmarks(maxId: string) {
 	const { client, server, driver } = useAppApiClient();

@@ -6,7 +6,7 @@ import {
 	defaultAppSearchResults,
 	DiscoverTabSearchResultType,
 } from '../reducers/discover-tab.reducer';
-import { UserParser, PostParser } from '@dhaaga/core';
+import { UserParser, PostParser } from '@dhaaga/bridge';
 
 export enum APP_SEARCH_TYPE {
 	POSTS,

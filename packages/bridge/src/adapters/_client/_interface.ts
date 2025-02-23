@@ -1,5 +1,3 @@
-import { RouterInterface } from './_router/routes/_index.js';
-import { InstanceRoute } from './_router/routes/instance.js';
 import { MastoTag, MastoTrendLink } from '../../types/mastojs.types.js';
 
 export type HashtagTimelineQuery = {
@@ -74,14 +72,3 @@ export type FollowPostDto = {
 	// misskey, default false
 	withReplies?: boolean;
 };
-
-/**
- * What common functionalities do we want to support
- * across all ActivityPub based clients
- */
-interface ApiDriver extends RouterInterface {
-	// routes
-	instances: InstanceRoute;
-}
-
-export default ApiDriver;

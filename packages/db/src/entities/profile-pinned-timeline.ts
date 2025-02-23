@@ -3,8 +3,8 @@ import { DataSource } from '../dataSource';
 import { Account, Profile, ProfilePinnedTimeline } from '../_schema';
 import { AccountService } from './account';
 import { ProfileService } from './profile';
-import { RandomUtil } from '@dhaaga/core';
-import type { FeedObjectType } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
 import { getTimelinePins } from '../data/driver';
 

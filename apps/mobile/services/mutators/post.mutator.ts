@@ -1,17 +1,16 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
 import ActivityPubService from '../activitypub.service';
-import type { PostObjectType } from '@dhaaga/core';
-import { PostInspector } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
+import { PostInspector, ApiTargetInterface } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import ActivityPubReactionsService from '../approto/activitypub-reactions.service';
 import { AtprotoPostService } from '../atproto.service';
 
 export class PostMutator {
 	private readonly driver: KNOWN_SOFTWARE;
-	private readonly client: ActivityPubClient;
+	private readonly client: ApiTargetInterface;
 
-	constructor(driver: KNOWN_SOFTWARE, client: ActivityPubClient) {
+	constructor(driver: KNOWN_SOFTWARE, client: ApiTargetInterface) {
 		this.driver = driver;
 		this.client = client;
 	}

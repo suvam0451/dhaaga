@@ -1,8 +1,8 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppResultPageType } from '../types/app.types';
 import { produce } from 'immer';
-import { UserParser, PostParser } from '@dhaaga/core';
-import type { NotificationObjectType } from '@dhaaga/core';
+import { UserParser, PostParser } from '@dhaaga/bridge';
+import type { NotificationObjectType } from '@dhaaga/bridge';
 
 export type MastoApiGroupedNotificationType = {
 	groupKey: string;

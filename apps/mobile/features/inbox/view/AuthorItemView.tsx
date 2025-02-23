@@ -7,7 +7,7 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { TextContentView } from '../../../components/common/status/TextContentView';
 import { AppText } from '../../../components/lib/Text';
 import { appDimensions } from '../../../styles/dimensions';
-import type { AppParsedTextNodes } from '@dhaaga/core';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 
 type Props = {
 	handle: string;

@@ -1,9 +1,9 @@
 import {
-	DhaagaJsNotificationType,
+	DriverNotificationType,
 	KNOWN_SOFTWARE,
-	MastodonRestClient,
-	MisskeyRestClient,
-	PleromaRestClient,
+	MastoApiAdapter,
+	MisskeyApiAdapter,
+	PleromaApiAdapter,
 } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -24,12 +24,12 @@ import {
 	MastoApiV1Service,
 	MastoApiV2Service,
 } from '../../services/masto-api.service';
-import type { NotificationObjectType } from '@dhaaga/core';
+import type { NotificationObjectType } from '@dhaaga/bridge';
 
 const NOTIFICATION_PAGE_SIZE = 20;
 
 type useApiGetNotificationsProps = {
-	include: DhaagaJsNotificationType[];
+	include: DriverNotificationType[];
 };
 
 type NotificationResults = AppResultPageType<NotificationObjectType>;
@@ -175,7 +175,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 		queryFn: async () => {
 			if (ActivityPubService.misskeyLike(driver)) {
 				const result = await (
-					client as MisskeyRestClient
+					client as MisskeyApiAdapter
 				).notifications.getSubscriptions({
 					limit: NOTIFICATION_PAGE_SIZE,
 					maxId,
@@ -184,7 +184,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 				return MisskeyService.packNotifs(result.data, driver, server);
 			} else if (ActivityPubService.supportsV2(driver)) {
 				const result = await (
-					client as MastodonRestClient
+					client as MastoApiAdapter
 				).notifications.getSubscriptionUpdates({
 					limit: NOTIFICATION_PAGE_SIZE,
 					maxId,
@@ -192,7 +192,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 				return MastoApiV2Service.packNotifs(result.data, driver, server);
 			} else if (ActivityPubService.pleromaLike(driver)) {
 				const result = await (
-					client as PleromaRestClient
+					client as PleromaApiAdapter
 				).notifications.getSubscriptionUpdates({
 					limit: NOTIFICATION_PAGE_SIZE,
 					maxId,

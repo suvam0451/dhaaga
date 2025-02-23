@@ -1,6 +1,6 @@
 import { AppBskyFeedGetPostThread } from '@atproto/api';
-import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
-import { PostParser } from '@dhaaga/core';
+import { KNOWN_SOFTWARE, PostTargetInterface } from '@dhaaga/bridge';
+import { PostParser } from '@dhaaga/bridge';
 import { $Typed } from '@atproto/api/src/client/util';
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 
@@ -26,10 +26,10 @@ class AtprotoContextService {
 
 		const _thread = data?.data?.thread as $Typed<ThreadViewPost>;
 
-		let lookup = new Map<string, StatusInterface>();
-		let childrenMapper = new Map<string, StatusInterface[]>();
+		let lookup = new Map<string, PostTargetInterface>();
+		let childrenMapper = new Map<string, PostTargetInterface[]>();
 
-		let curr: StatusInterface = PostParser.rawToInterface<unknown>(
+		let curr: PostTargetInterface = PostParser.rawToInterface<unknown>(
 			_thread.post,
 			KNOWN_SOFTWARE.BLUESKY,
 		);
@@ -37,7 +37,7 @@ class AtprotoContextService {
 
 		// recurse parents
 		let parent: any = _thread.parent;
-		let child: StatusInterface = curr;
+		let child: PostTargetInterface = curr;
 		while (!!parent) {
 			const data = PostParser.rawToInterface<unknown>(
 				parent,
@@ -55,7 +55,7 @@ class AtprotoContextService {
 			child = data;
 		}
 		// the topmost child is the root
-		let root: StatusInterface = child;
+		let root: PostTargetInterface = child;
 
 		function processList(replies: any[], parentId: string) {
 			replies.forEach((o) => {

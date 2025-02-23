@@ -2,7 +2,7 @@ import { DbErrorHandler } from './_base.repo';
 import { DataSource } from '../dataSource';
 import { Account, Profile, ProfilePinnedTag } from '../_schema';
 import { ProfileService } from './profile';
-import { RandomUtil } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
 import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
 
 @DbErrorHandler()

@@ -3,8 +3,8 @@ import { DataSource } from '../dataSource';
 import { Account, Profile, ProfilePinnedUser } from '../_schema';
 import { AccountService } from './account';
 import { z } from 'zod';
-import { RandomUtil } from '@dhaaga/core';
-import type { UserObjectType } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
 
 const profileUserPinCreateSchema = z.object({

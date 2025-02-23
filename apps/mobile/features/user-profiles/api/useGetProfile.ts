@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import {
 	KNOWN_SOFTWARE,
-	MastodonRestClient,
-	MisskeyRestClient,
+	MastoApiAdapter,
+	MisskeyApiAdapter,
 } from '@dhaaga/bridge';
 import {
 	useAppAcct,
 	useAppApiClient,
 } from '../../../hooks/utility/global-state-extractors';
 import ActivityPubService from '../../../services/activitypub.service';
-import { UserObjectType, UserParser } from '@dhaaga/core';
+import { UserObjectType, UserParser } from '@dhaaga/bridge';
 
 export type ProfileSearchQueryType = {
 	did?: string;
@@ -49,12 +49,12 @@ function useGetProfile(query: ProfileSearchQueryType) {
 		if (ActivityPubService.misskeyLike(driver)) {
 			if (userId) {
 				const findResult = await (
-					client as MisskeyRestClient
+					client as MisskeyApiAdapter
 				).accounts.findByUserId(userId);
 				return UserParser.parse<unknown>(findResult.data, driver, server);
 			} else if (webfinger) {
 				const findResult = await (
-					client as MisskeyRestClient
+					client as MisskeyApiAdapter
 				).accounts.findByWebfinger(webfinger);
 				return UserParser.parse<unknown>(findResult.data, driver, server);
 			}
@@ -67,7 +67,7 @@ function useGetProfile(query: ProfileSearchQueryType) {
 					throw new Error('Failed to fetch user for Mastodon');
 				return UserParser.parse(findResult.data, driver, server);
 			} else if (webfinger) {
-				const findResult = await (client as MastodonRestClient).accounts.lookup(
+				const findResult = await (client as MastoApiAdapter).accounts.lookup(
 					webfinger.host
 						? `${webfinger.username}@${webfinger.host}`
 						: webfinger.username,

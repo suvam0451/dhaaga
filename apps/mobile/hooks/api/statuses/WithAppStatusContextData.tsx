@@ -3,7 +3,7 @@ import {
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
 import { createContext, Dispatch, useCallback, useContext } from 'react';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 type Type = {
 	data: AppStatusContext;

@@ -1,7 +1,6 @@
 import { BasePubSubService } from './_base.pubisher';
-import type { PostObjectType } from '@dhaaga/core';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
+import type { PostObjectType } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, ApiTargetInterface } from '@dhaaga/bridge';
 import { PostMutator } from '../mutators/post.mutator';
 import { Emoji } from '../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
@@ -18,10 +17,10 @@ export enum POST_EVENT_ENUM {
 export class PostPublisherService extends BasePubSubService {
 	private readonly cache: Map<string, PostObjectType>;
 	private readonly driver: KNOWN_SOFTWARE;
-	private readonly client: ActivityPubClient;
+	private readonly client: ApiTargetInterface;
 	private readonly mutator: PostMutator;
 
-	constructor(driver: KNOWN_SOFTWARE, client: ActivityPubClient) {
+	constructor(driver: KNOWN_SOFTWARE, client: ApiTargetInterface) {
 		super();
 		this.driver = driver;
 		this.client = client;

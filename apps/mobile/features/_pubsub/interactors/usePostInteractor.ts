@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppPublishers } from '../../../hooks/utility/global-state-extractors';
 import { Emoji } from '../../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '../../../components/common/status/fragments/_shared.types';

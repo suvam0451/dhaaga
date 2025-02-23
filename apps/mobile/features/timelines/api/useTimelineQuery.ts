@@ -1,11 +1,11 @@
 import { AppTimelineQuery } from './useTimelineController';
 import { useQuery } from '@tanstack/react-query';
 import {
-	BlueskyRestClient,
+	AtprotoApiAdapter,
 	DhaagaJsTimelineQueryOptions,
 	KNOWN_SOFTWARE,
-	MisskeyRestClient,
-	PleromaRestClient,
+	MisskeyApiAdapter,
+	PleromaApiAdapter,
 } from '@dhaaga/bridge';
 import { TimelineFetchMode } from '../../../states/interactors/post-timeline.reducer';
 import {
@@ -14,8 +14,8 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import { AppResultPageType } from '../../../types/app.types';
-import { PostParser, DriverService } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { PostParser, DriverService } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -194,7 +194,7 @@ function useTimelineQuery({
 			}
 			case TimelineFetchMode.BUBBLE: {
 				if (DriverService.supportsPleromaApi(driver)) {
-					const { data } = await (client as PleromaRestClient).timelines.bubble(
+					const { data } = await (client as PleromaApiAdapter).timelines.bubble(
 						_query,
 					);
 					return {
@@ -204,7 +204,7 @@ function useTimelineQuery({
 						minId: undefined,
 					};
 				} else if (driver === KNOWN_SOFTWARE.SHARKEY) {
-					const { data } = await (client as MisskeyRestClient).timelines.bubble(
+					const { data } = await (client as MisskeyApiAdapter).timelines.bubble(
 						_query,
 					);
 					return {
@@ -229,7 +229,7 @@ function useTimelineQuery({
 			}
 			case TimelineFetchMode.FEED: {
 				const { data, error } = await (
-					client as BlueskyRestClient
+					client as AtprotoApiAdapter
 				).timelines.feed({
 					limit: TIMELINE_STATUS_LIMIT,
 					cursor: maxId === null ? undefined : maxId,
@@ -241,7 +241,7 @@ function useTimelineQuery({
 			case TimelineFetchMode.LIKES: {
 				if (DriverService.supportsAtProto(driver)) {
 					const { data, error } = await (
-						client as BlueskyRestClient
+						client as AtprotoApiAdapter
 					).accounts.atProtoLikes(acct.identifier, {
 						limit: TIMELINE_STATUS_LIMIT,
 						cursor: _query.maxId === null ? undefined : _query.maxId,

@@ -1,10 +1,3 @@
-import {
-	ActivitypubHelper,
-	ActivitypubStatusAdapter,
-	BlueskyStatusAdapter,
-	type KNOWN_SOFTWARE,
-	type StatusInterface,
-} from '@dhaaga/bridge';
 import { z } from 'zod';
 import { TextParser } from './text.js';
 import { UserParser } from './user.js';
@@ -14,6 +7,11 @@ import { ResultPage } from '../utils/pagination.js';
 import { Err, Ok, RandomUtil } from '../utils/index.js';
 import { ApiErrorCode } from '../types/result.types.js';
 import { ApiResult } from '../utils/api-result.js';
+import { ActivitypubStatusAdapter } from '../implementors/status/_adapters.js';
+import { PostTargetInterface } from '../implementors/index.js';
+import { KNOWN_SOFTWARE } from '../data/driver.js';
+import AtprotoPostAdapter from '../implementors/status/bluesky.js';
+import { ActivitypubHelper } from '../index.js';
 
 const ActivityPubReactionStateSchema = z.array(
 	z.object({
@@ -175,7 +173,7 @@ type PostRootObjectType = z.infer<typeof ActivityPubStatusItemDto>;
 
 class Parser {
 	static export(
-		input: StatusInterface,
+		input: PostTargetInterface,
 		domain: string,
 		subdomain: string,
 	): PostObjectType | null {
@@ -281,7 +279,7 @@ class Parser {
 			},
 			atProto: {
 				viewer: DriverService.supportsAtProto(domain)
-					? (input as BlueskyStatusAdapter).getViewer()
+					? (input as AtprotoPostAdapter).getViewer()
 					: undefined,
 			},
 		};
@@ -290,23 +288,23 @@ class Parser {
 	static rawToInterface<T>(
 		input: T | T[],
 		driver: string | KNOWN_SOFTWARE,
-	): T extends unknown[] ? StatusInterface[] : StatusInterface {
+	): T extends unknown[] ? PostTargetInterface[] : PostTargetInterface {
 		if (Array.isArray(input)) {
 			return input
 				.filter((o) => !!o)
 				.map((o) =>
 					ActivitypubStatusAdapter(o, driver),
-				) as unknown as T extends unknown[] ? StatusInterface[] : never;
+				) as unknown as T extends unknown[] ? PostTargetInterface[] : never;
 		} else {
 			return ActivitypubStatusAdapter(
 				input,
 				driver,
-			) as unknown as T extends unknown[] ? never : StatusInterface;
+			) as unknown as T extends unknown[] ? never : PostTargetInterface;
 		}
 	}
 
 	static interfaceToJson(
-		input: StatusInterface,
+		input: PostTargetInterface,
 		{
 			driver,
 			server,

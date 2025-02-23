@@ -1,4 +1,4 @@
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { FlatList, Image, Pressable, View } from 'react-native';
 import { TextContentView } from '../../../components/common/status/TextContentView';
 import { AppText } from '../../../components/lib/Text';

@@ -1,12 +1,12 @@
 import useGetPostInterface from './useGetPostInterface';
 import { useEffect, useReducer } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, PostTargetInterface } from '@dhaaga/bridge';
 import statusContextReducer, {
 	defaultAppStatusContext,
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
-import { PostParser } from '@dhaaga/core';
+import { PostParser } from '@dhaaga/bridge';
 import {
 	useAppAcct,
 	useAppApiClient,
@@ -54,8 +54,8 @@ function useGetStatusCtxInterface(id: string) {
 		fetchStatus,
 		refetch,
 	} = useQuery<{
-		ancestors: StatusInterface[];
-		descendants: StatusInterface[];
+		ancestors: PostTargetInterface[];
+		descendants: PostTargetInterface[];
 	}>({
 		queryKey: ['status/view', id],
 		queryFn: api,

@@ -1,7 +1,7 @@
 import { BaseStorageManager } from './_shared';
 import { z } from 'zod';
 import { DataSource } from '@dhaaga/db';
-import type { PostObjectType, UserObjectType } from '@dhaaga/core';
+import type { PostObjectType, UserObjectType } from '@dhaaga/bridge';
 import { ViewMeasurement } from '../../utils/viewport.utils';
 
 enum APP_CACHE_KEY {

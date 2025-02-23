@@ -1,6 +1,6 @@
-import { DriverService, type SearchTabType } from '@dhaaga/core';
+import { type SearchTabType } from '@dhaaga/core';
 import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, DriverService } from '@dhaaga/bridge';
 
 /**
  * @param driver protocol driver enum string
@@ -35,13 +35,13 @@ function getTimelinePins(driver: string): APP_PINNED_OBJECT_TYPE[] {
  * should appear above the search widget
  */
 function getSearchTabs(driver: KNOWN_SOFTWARE | string): SearchTabType[] {
-	if (DriverService.blueskyLike(driver)) {
+	if (DriverService.supportsAtProto(driver)) {
 		return ['top', 'latest', 'users', 'feeds'];
-	} else if (DriverService.misskeyLike(driver)) {
+	} else if (DriverService.supportsMisskeyApi(driver)) {
 		return ['posts', 'users'];
 	} else if (driver === KNOWN_SOFTWARE.MASTODON) {
 		return ['posts', 'users', 'tags', 'news'];
-	} else if (DriverService.pleromaLike(driver)) {
+	} else if (DriverService.supportsPleromaApi(driver)) {
 		return ['posts', 'users'];
 	} else {
 		return [];

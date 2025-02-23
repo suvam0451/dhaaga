@@ -1,31 +1,29 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '../utility/global-state-extractors';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppBskyFeedSearchPosts } from '@atproto/api';
-import { FeedParser } from '@dhaaga/core';
-import { BlueskyRestClient } from '@dhaaga/bridge';
-import { AppResultPageType } from '../../types/app.types';
 import ActivitypubService from '../../services/activitypub.service';
-import { UserParser, PostParser, DriverService } from '@dhaaga/core';
+import {
+	UserParser,
+	PostParser,
+	DriverService,
+	defaultResultPage,
+	FeedParser,
+	AtprotoApiAdapter,
+	KNOWN_SOFTWARE,
+} from '@dhaaga/bridge';
 import type {
 	UserObjectType,
 	PostObjectType,
 	FeedObjectType,
-} from '@dhaaga/core';
+	ResultPage,
+} from '@dhaaga/bridge';
 
 /**
  * ------ Shared ------
  */
 
-const defaultResult = {
-	success: true,
-	maxId: null,
-	minId: null,
-	items: [],
-};
-
-type PostResultPage = AppResultPageType<PostObjectType>;
-type FeedResultPage = AppResultPageType<FeedObjectType>;
+type PostResultPage = ResultPage<PostObjectType>;
+type FeedResultPage = ResultPage<FeedObjectType>;
 
 /**
  * --------------------
@@ -42,24 +40,24 @@ export function useApiSearchFeeds(q: string, maxId: string | null) {
 	return useQuery<FeedResultPage>({
 		queryKey: ['search/feeds', server, q, maxId],
 		queryFn: async () => {
-			if (!q) return defaultResult;
+			if (!q) return defaultResultPage;
 			const { data, error } = await (
-				client as BlueskyRestClient
+				client as AtprotoApiAdapter
 			).search.findFeeds({
 				limit: 5,
 				query: q,
 				cursor: maxId,
 			});
-			if (error) return defaultResult;
+			if (error) return defaultResultPage;
 			console.log(data);
 			return {
-				...defaultResult,
+				...defaultResultPage,
 				items: FeedParser.parse<unknown[]>(data.feeds, driver, server),
 				maxId: data.cursor,
 			};
 		},
 		enabled: !!client && DriverService.supportsAtProto(driver),
-		initialData: defaultResult,
+		initialData: defaultResultPage,
 	});
 }
 
@@ -149,7 +147,7 @@ export function useApiSearchPosts(
 		if (DriverService.supportsAtProto(driver)) {
 			const _data = data as AppBskyFeedSearchPosts.Response;
 			return {
-				...defaultResult,
+				...defaultResultPage,
 				maxId: _data.data.cursor,
 				items: PostParser.parse<unknown[]>(_data.data.posts, driver, server),
 			};
@@ -174,7 +172,6 @@ export function useApiSearchPosts(
 			maxId: __maxId,
 			items: _posts,
 			minId: null,
-			success: true,
 		};
 	}
 
@@ -182,6 +179,6 @@ export function useApiSearchPosts(
 		queryKey: ['search/posts', server, q, maxId, sort],
 		queryFn: api,
 		enabled: client !== null && !!q,
-		initialData: defaultResult,
+		initialData: defaultResultPage,
 	});
 }

@@ -1,12 +1,12 @@
 import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
-import { BlueskyRestClient } from '@dhaaga/bridge';
+import { AtprotoApiAdapter } from '@dhaaga/bridge';
 import { AtprotoFeedService } from '../../../../../services/atproto.service';
 import { useQuery } from '@tanstack/react-query';
-import { FeedParser } from '@dhaaga/core';
+import { FeedParser } from '@dhaaga/bridge';
 
 function useApiGetFeedDetails(uri: string) {
 	const { client } = useAppApiClient();
-	const _client = client as BlueskyRestClient;
+	const _client = client as AtprotoApiAdapter;
 	const { driver, server } = useAppApiClient();
 
 	const queryResult = useQuery({

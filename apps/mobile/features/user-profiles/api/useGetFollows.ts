@@ -4,7 +4,7 @@ import { AppBskyGraphGetFollows } from '@atproto/api';
 import ActivityPubService from '../../../services/activitypub.service';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
 import { AppResultPageType } from '../../../types/app.types';
-import { UserParser, UserObjectType } from '@dhaaga/core';
+import { UserParser, UserObjectType } from '@dhaaga/bridge';
 
 /**
  * ------ Shared ------

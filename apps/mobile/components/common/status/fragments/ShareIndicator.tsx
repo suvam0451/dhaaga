@@ -6,7 +6,7 @@ import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';
 import { TextContentView } from '../TextContentView';
 import { AppText } from '../../../lib/Text';
-import type { AppParsedTextNodes } from '@dhaaga/core';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 
 type Props = {
 	avatarUrl: string;

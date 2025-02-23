@@ -1,8 +1,8 @@
 import { RepoTemplate } from './_base.repo';
 import { Account, AccountSavedUser } from '../_schema';
 import { DataSource } from '../dataSource';
-import { RandomUtil } from '@dhaaga/core';
-import type { PostAuthorType } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { PostAuthorType } from '@dhaaga/bridge';
 
 class Repo implements RepoTemplate<AccountSavedUser> {}
 

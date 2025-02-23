@@ -9,7 +9,7 @@ import { StatItem } from '../../../components/common/status/PostStats';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import TimelineIndicatorPresenter from '../../feeds/presenters/TimelineIndicatorPresenter';
-import type { FeedObjectType } from '@dhaaga/core';
+import type { FeedObjectType } from '@dhaaga/bridge';
 
 type SearchResultFeedItemProps = {
 	item: FeedObjectType;

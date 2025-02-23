@@ -7,7 +7,7 @@ import {
 	AccountCollection,
 	AccountSavedPostService,
 } from '@dhaaga/db';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 /**
  * Perform operations on the

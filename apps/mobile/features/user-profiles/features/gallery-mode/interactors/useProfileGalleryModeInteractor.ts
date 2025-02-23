@@ -1,8 +1,8 @@
 import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
 import { useQuery } from '@tanstack/react-query';
 import { AppBskyFeedGetAuthorFeed } from '@atproto/api';
-import { PostParser, DriverService } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { PostParser, DriverService } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 function useProfileGalleryModeInteractor(userId: string) {
 	const { client, driver, server } = useAppApiClient();

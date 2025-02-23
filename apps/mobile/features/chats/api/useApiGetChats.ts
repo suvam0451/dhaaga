@@ -8,8 +8,8 @@ import ChatService, { AppChatRoom } from '../../../services/chat.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { ChatBskyConvoGetConvo, ChatBskyConvoGetMessages } from '@atproto/api';
 import { AccountMetadataService } from '@dhaaga/db';
-import { ChatParser } from '@dhaaga/core';
-import type { MessageObjectType } from '@dhaaga/core';
+import { ChatParser } from '@dhaaga/bridge';
+import type { MessageObjectType } from '@dhaaga/bridge';
 
 /**
  * Helper function to refetch details

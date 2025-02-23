@@ -19,7 +19,7 @@ import {
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { TextContentView } from '../../../common/status/TextContentView';
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 function ReactingUser({ dto }: { dto: UserObjectType }) {
 	const { theme } = useAppTheme();

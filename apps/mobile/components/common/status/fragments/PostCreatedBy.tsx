@@ -18,11 +18,11 @@ import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { AccountSavedUser } from '@dhaaga/db';
 import { TextContentView } from '../TextContentView';
-import type { AppParsedTextNodes } from '@dhaaga/core';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
 import ActivitypubService from '../../../../services/activitypub.service';
 import { RandomUtil } from '@dhaaga/bridge';
-import { TextNodeParser, PostInspector } from '@dhaaga/core';
+import { TextNodeParser, PostInspector } from '@dhaaga/bridge';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 

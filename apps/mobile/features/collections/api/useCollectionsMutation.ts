@@ -8,7 +8,7 @@ import {
 	useAppAcct,
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 export function useDbCollections() {
 	const { db } = useAppDb();

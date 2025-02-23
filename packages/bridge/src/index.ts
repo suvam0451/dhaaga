@@ -1,20 +1,21 @@
-import ApiDriver, {
-	RestClientCreateDTO,
-} from './adapters/_client/_interface.js';
-import UnknownRestClient from './adapters/_client/default/index.js';
-import MastodonRestClient from './adapters/_client/mastodon/_router.js';
-import MisskeyRestClient from './adapters/_client/misskey/_router.js';
+import { RestClientCreateDTO } from './adapters/_client/_interface.js';
+export {
+	ApiTargetInterface,
+	AtprotoApiAdapter,
+	BaseApiAdapter,
+	MastoApiAdapter,
+	MisskeyApiAdapter,
+	PleromaApiAdapter,
+} from './adapters/index.js';
 
 //  status adapters
-import UnknownToStatusAdapter from './implementors/status/default.js';
-import MastodonToStatusAdapter from './implementors/status/mastodon.js';
-import MisskeyToStatusAdapter from './implementors/status/misskey.js';
+import PostAdapterBase from './implementors/status/default.js';
+import MastoApiPostAdapter from './implementors/status/mastodon.js';
+import MisskeyApiPostAdapter from './implementors/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
 import { InstanceApi_CustomEmojiDTO } from './adapters/_client/_router/routes/instance.js';
 import axios from 'axios';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
-import PleromaRestClient from './adapters/_client/pleroma/_router.js';
-import BlueskyRestClient from './adapters/_client/bluesky/index.js';
 import { errorBuilder } from './adapters/_client/_router/dto/api-responses.dto.js';
 import { LibraryPromise } from './adapters/_client/_router/routes/_types.js';
 import {
@@ -24,16 +25,16 @@ import {
 	FollowerGetQueryDTO,
 } from './adapters/_client/_router/routes/accounts.js';
 // used to read viewer
-import BlueskyStatusAdapter from './implementors/status/bluesky.js';
+import AtprotoPostAdapter from './implementors/status/bluesky.js';
 import { KNOWN_SOFTWARE } from './data/driver.js';
 import { DriverService } from './services/driver.js';
 
 export {
-	UnknownToStatusAdapter,
-	MastodonToStatusAdapter,
-	MisskeyToStatusAdapter,
-	BlueskyStatusAdapter,
-	ApiDriver,
+	DriverService,
+	PostAdapterBase,
+	MastoApiPostAdapter,
+	MisskeyApiPostAdapter,
+	AtprotoPostAdapter,
 };
 
 // export media attachment adapters and interfaces
@@ -46,7 +47,7 @@ export {
 	DriveFileInstance,
 	MediaAttachmentInstance,
 } from './implementors/media-attachment/unique.js';
-export { MediaAttachmentInterface } from './implementors/media-attachment/interface.js';
+export { MediaAttachmentTargetInterface } from './implementors/index.js';
 
 // export user profile adapters and interfaces
 export { DefaultUser } from './implementors/profile/default.js';
@@ -61,23 +62,16 @@ export {
 // export types, adapters and interfaces
 export {
 	ActivityPubUserAdapter,
-	UserInterface,
+	UserTargetInterface,
 	UserType,
 } from './implementors/profile/_interface.js';
-export { StatusInterface } from './implementors/status/_interface.js';
+export { PostTargetInterface } from './implementors/status/_interface.js';
 export {
 	ActivityPubTagAdapter,
-	TagInterface,
+	TagTargetInterface,
 	TagType,
 } from './implementors/tag/_interface.js';
 
-export {
-	MastodonRestClient,
-	MisskeyRestClient,
-	UnknownRestClient,
-	PleromaRestClient,
-	BlueskyRestClient,
-};
 export { DhaagaJsTimelineQueryOptions } from './adapters/_client/_router/routes/_index.js';
 
 export class ActivityPubClientFactory {

@@ -9,7 +9,7 @@ import type {
 	NotificationObjectType,
 	UserObjectType,
 	PostObjectType,
-} from '@dhaaga/core';
+} from '@dhaaga/bridge';
 import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,

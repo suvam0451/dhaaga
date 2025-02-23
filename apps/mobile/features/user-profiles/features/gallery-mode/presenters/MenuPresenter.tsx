@@ -4,7 +4,7 @@ import { AppText } from '../../../../../components/lib/Text';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../../styles/dimensions';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	post: PostObjectType;

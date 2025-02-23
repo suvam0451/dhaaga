@@ -1,6 +1,6 @@
 import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../components/shared/topnavbar/fragments/TopNavbarTimelineStack';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';

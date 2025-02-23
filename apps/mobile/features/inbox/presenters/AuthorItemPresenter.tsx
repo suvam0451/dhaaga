@@ -4,7 +4,7 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
+import { DriverNotificationType } from '@dhaaga/bridge';
 import { useMemo } from 'react';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Text } from 'react-native';
@@ -16,12 +16,12 @@ import { AuthorItemView } from '../view/AuthorItemView';
 import { LocalizationService } from '../../../services/localization.service';
 import { AppIcon } from '../../../components/lib/Icon';
 import useAppNavigator from '../../../states/useAppNavigator';
-import type { UserObjectType, PostAuthorType } from '@dhaaga/core';
+import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge';
 
 type Props = {
 	user: PostAuthorType | UserObjectType;
 	createdAt: Date;
-	notificationType: DhaagaJsNotificationType;
+	notificationType: DriverNotificationType;
 	extraData?: string;
 };
 
@@ -43,7 +43,7 @@ function AuthorItemPresenter({
 
 	const { Icon, bg } = useMemo(() => {
 		switch (notificationType) {
-			case DhaagaJsNotificationType.FAVOURITE: {
+			case DriverNotificationType.FAVOURITE: {
 				return {
 					Icon: (
 						<AppIcon
@@ -55,8 +55,8 @@ function AuthorItemPresenter({
 					bg: '#1f1f1f',
 				};
 			}
-			case DhaagaJsNotificationType.REBLOG:
-			case DhaagaJsNotificationType.RENOTE: {
+			case DriverNotificationType.REBLOG:
+			case DriverNotificationType.RENOTE: {
 				return {
 					Icon: (
 						<AppIcon
@@ -68,7 +68,7 @@ function AuthorItemPresenter({
 					bg: '#34d299',
 				};
 			}
-			case DhaagaJsNotificationType.FOLLOW: {
+			case DriverNotificationType.FOLLOW: {
 				return {
 					Icon: (
 						<AppIcon
@@ -80,7 +80,7 @@ function AuthorItemPresenter({
 					bg: '#34aed2',
 				};
 			}
-			case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
+			case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED: {
 				return {
 					Icon: (
 						<AppIcon
@@ -92,7 +92,7 @@ function AuthorItemPresenter({
 					bg: '#34aed2',
 				};
 			}
-			case DhaagaJsNotificationType.REACTION: {
+			case DriverNotificationType.REACTION: {
 				console.log('izanagi', extraData);
 				const emoji = acctManager.resolveEmoji(extraData, new Map());
 
@@ -129,8 +129,8 @@ function AuthorItemPresenter({
 					};
 				}
 			}
-			case DhaagaJsNotificationType.REPLY:
-			case DhaagaJsNotificationType.MENTION: {
+			case DriverNotificationType.REPLY:
+			case DriverNotificationType.MENTION: {
 				return {
 					Icon: (
 						<Octicons name="mention" size={16} color={theme.secondary.a20} />
@@ -138,7 +138,7 @@ function AuthorItemPresenter({
 					bg: 'purple',
 				};
 			}
-			case DhaagaJsNotificationType.STATUS: {
+			case DriverNotificationType.STATUS: {
 				return {
 					Icon: (
 						<FontAwesome6 name="rss" size={16} color={theme.secondary.a20} />

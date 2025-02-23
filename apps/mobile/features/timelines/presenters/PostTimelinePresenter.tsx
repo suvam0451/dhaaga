@@ -6,7 +6,7 @@ import { Animated, RefreshControl } from 'react-native';
 import StatusItem from '../../../components/common/status/StatusItem';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import { appDimensions } from '../../../styles/dimensions';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 type PostTimelineProps = {
 	data: PostObjectType[];

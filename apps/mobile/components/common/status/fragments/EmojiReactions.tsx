@@ -8,7 +8,7 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { appDimensions } from '../../../../styles/dimensions';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppApiClient,
 	useAppTheme,

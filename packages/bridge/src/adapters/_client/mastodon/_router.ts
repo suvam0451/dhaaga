@@ -11,10 +11,10 @@ import { MastodonMeRouter } from './me.js';
 import { MastodonMediaRoute } from './media.js';
 import { MastodonListRoute } from './lists.js';
 import { MastodonProfileRouter } from './profile.js';
-import { RouterInterface } from '../_router/routes/_index.js';
+import { ApiTargetInterface } from '../_router/routes/_index.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 
-class MastodonRestClient implements RouterInterface {
+class Adapter implements ApiTargetInterface {
 	fetch: FetchWrapper;
 	instances: MastodonInstanceRouter;
 	accounts: MastodonAccountsRouter;
@@ -46,4 +46,4 @@ class MastodonRestClient implements RouterInterface {
 	}
 }
 
-export default MastodonRestClient;
+export { Adapter as MastoApiAdapter };

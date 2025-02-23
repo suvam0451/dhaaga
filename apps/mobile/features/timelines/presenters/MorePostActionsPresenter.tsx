@@ -12,8 +12,8 @@ import { AppText } from '../../../components/lib/Text';
 import { AppDivider } from '../../../components/lib/Divider';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
-import { DriverService, PostInspector } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { DriverService, PostInspector } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 function ActionButton({
 	Icon,

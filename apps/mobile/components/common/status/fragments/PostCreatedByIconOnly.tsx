@@ -2,8 +2,8 @@ import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { appDimensions } from '../../../../styles/dimensions';
-import { PostInspector } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { PostInspector } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 

@@ -1,8 +1,8 @@
 import { ChatBskyConvoDefs, ChatBskyConvoListConvos } from '@atproto/api';
 import { Account, AccountMetadataService, DataSource } from '@dhaaga/db';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import type { MessageObjectType } from '@dhaaga/core';
-import { UserParser, UserObjectType, ChatParser } from '@dhaaga/core';
+import type { MessageObjectType } from '@dhaaga/bridge';
+import { UserParser, UserObjectType, ChatParser } from '@dhaaga/bridge';
 
 /**
  * Represents a chatroom item

@@ -1,13 +1,15 @@
-import ApiDriver, {
-	RestClientCreateDTO,
-} from '../adapters/_client/_interface.js';
-import { ApiErrorCode, BlueskyRestClient, KNOWN_SOFTWARE } from '../index.js';
+import { RestClientCreateDTO } from '../adapters/_client/_interface.js';
+import { AtprotoApiAdapter, BaseApiAdapter, KNOWN_SOFTWARE } from '../index.js';
 import { AppAtpSessionData } from '../types/atproto.js';
-import MisskeyRestClient from '../adapters/_client/misskey/_router.js';
-import PleromaRestClient from '../adapters/_client/pleroma/_router.js';
-import MastodonRestClient from '../adapters/_client/mastodon/_router.js';
+
+import {
+	MisskeyApiAdapter,
+	PleromaApiAdapter,
+	MastoApiAdapter,
+} from '../adapters/index.js';
 import { ApiResult } from '../utils/api-result.js';
-import { Err, Ok } from '../utils/index.js';
+import { Ok } from '../utils/index.js';
+import { ApiTargetInterface } from '../adapters/_client/_router/routes/_index.js';
 
 class Service {
 	static supportsMastoApiV1(driver: KNOWN_SOFTWARE | string) {
@@ -78,20 +80,21 @@ class Service {
 	static generateApiClient(
 		driver: KNOWN_SOFTWARE | string,
 		payload: RestClientCreateDTO | AppAtpSessionData,
-	): ApiResult<ApiDriver> {
+	): ApiResult<ApiTargetInterface> {
 		if (Service.supportsAtProto(driver))
-			return Ok(new BlueskyRestClient(payload as AppAtpSessionData));
+			return Ok(new AtprotoApiAdapter(payload as AppAtpSessionData));
 
 		if (Service.supportsMisskeyApi(driver))
-			return Ok(new MisskeyRestClient(payload as RestClientCreateDTO));
+			return Ok(new MisskeyApiAdapter(payload as RestClientCreateDTO));
 
 		if (Service.supportsPleromaApi(driver))
-			return Ok(new PleromaRestClient(payload as RestClientCreateDTO));
+			return Ok(new PleromaApiAdapter(payload as RestClientCreateDTO));
 
 		if (Service.supportsMastoApiV2(driver))
-			return Ok(new MastodonRestClient(payload as RestClientCreateDTO));
+			return Ok(new MastoApiAdapter(payload as RestClientCreateDTO));
 
-		return Err(ApiErrorCode.INCOMPATIBLE_DRIVER);
+		return Ok(new BaseApiAdapter());
+		// return Err(ApiErrorCode.INCOMPATIBLE_DRIVER);
 	}
 }
 

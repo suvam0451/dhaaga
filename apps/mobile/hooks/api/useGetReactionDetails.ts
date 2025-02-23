@@ -1,13 +1,13 @@
 import ActivitypubService from '../../services/activitypub.service';
-import { MisskeyRestClient, PleromaRestClient } from '@dhaaga/bridge';
+import { MisskeyApiAdapter, PleromaApiAdapter } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ActivityPubService from '../../services/activitypub.service';
 import ActivitypubReactionsService from '../../services/approto/activitypub-reactions.service';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../states/_global';
-import { UserParser } from '@dhaaga/core';
-import type { UserObjectType } from '@dhaaga/core';
+import { UserParser } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type ReactionDetails = {
 	id: string;
@@ -36,7 +36,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 		);
 		if (ActivitypubService.pleromaLike(driver)) {
 			const { data, error } = await (
-				client as PleromaRestClient
+				client as PleromaApiAdapter
 			).statuses.getReactions(postId);
 
 			if (error) {
@@ -60,7 +60,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 			};
 		} else if (ActivityPubService.misskeyLike(driver)) {
 			const { data, error } = await (
-				client as MisskeyRestClient
+				client as MisskeyApiAdapter
 			).statuses.getReactionDetails(postId, id);
 
 			if (error) {

@@ -13,8 +13,7 @@ import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import useTrendingPosts from '../api/useTrendingPosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
 
 const SHOWN_SECTION_HEIGHT = 50;
 const HIDDEN_SECTION_HEIGHT = 50;
@@ -23,11 +22,7 @@ const HIDDEN_SECTION_HEIGHT = 50;
  * Search Module -- Trending Posts
  */
 function ApiWrapper() {
-	const { driver } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-		})),
-	);
+	const { driver } = useAppApiClient();
 	const { data: PageData, updateQueryCache, clear } = useAppPaginationContext();
 
 	const { IsLoading, fetchStatus, refetch } = useTrendingPosts();

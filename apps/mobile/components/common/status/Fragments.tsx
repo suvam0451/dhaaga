@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { appDimensions } from '../../../styles/dimensions';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
-import type { AppParsedTextNodes } from '@dhaaga/core';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { TextContentView } from './TextContentView';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 

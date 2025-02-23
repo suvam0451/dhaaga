@@ -1,4 +1,5 @@
-import ApiDriver, { MediaUploadDTO } from '../_interface.js';
+import { ApiTargetInterface } from '../_router/routes/_index.js';
+import { MediaUploadDTO } from '../_interface.js';
 import BlueskyAccountsRouter from './accounts.js';
 import { BlueskyInstanceRouter } from './instance.js';
 import { BlueskyListRoute } from './lists.js';
@@ -18,7 +19,7 @@ import BlueskyFeedRouter from './feeds.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;
 
-class BlueskyRestClient implements ApiDriver {
+class Adapter implements ApiTargetInterface {
 	client: Agent | null;
 	accounts: BlueskyAccountsRouter;
 	instances: BlueskyInstanceRouter;
@@ -103,4 +104,4 @@ class BlueskyRestClient implements ApiDriver {
 	}
 }
 
-export default BlueskyRestClient;
+export { Adapter as AtprotoApiAdapter };

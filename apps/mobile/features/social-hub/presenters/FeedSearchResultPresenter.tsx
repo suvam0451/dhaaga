@@ -6,7 +6,7 @@ import UserPinSearchResultControllerView from '../views/UserPinSearchResultContr
 import { AppDivider } from '../../../components/lib/Divider';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import FeedPinSearchResultView from '../views/FeedPinSearchResultView';
-import type { FeedObjectType } from '@dhaaga/core';
+import type { FeedObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	profile: Profile;

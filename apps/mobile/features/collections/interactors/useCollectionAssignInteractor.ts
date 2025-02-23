@@ -2,8 +2,8 @@ import { useDbSavedPostStatus } from '../api/useCollectionsQuery';
 import { AccountCollection } from '@dhaaga/db';
 import useCollections from '../api/useCollections';
 import { useState } from 'react';
-import { PostInspector } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { PostInspector } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 /**
  * Helps add/remove a post to/from collections

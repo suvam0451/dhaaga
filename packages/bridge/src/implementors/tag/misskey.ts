@@ -1,6 +1,6 @@
-import { MisskeyTagInstance, TagInterface } from './_interface.js';
+import { MisskeyTagInstance, TagTargetInterface } from './_interface.js';
 
-class MisskeyTag implements TagInterface {
+class MisskeyTag implements TagTargetInterface {
 	ref: MisskeyTagInstance;
 
 	constructor(ref: MisskeyTagInstance) {

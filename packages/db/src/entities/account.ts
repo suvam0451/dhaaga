@@ -8,7 +8,7 @@ import {
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { DataSource } from '../dataSource';
 import { gt } from '@dhaaga/orm';
-import { RandomUtil } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
 import { ProfileService } from './profile';
 import {
 	AccountCollectionService,

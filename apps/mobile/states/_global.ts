@@ -4,7 +4,7 @@ import { ThemePackType } from '../assets/loaders/UseAppThemePackLoader';
 import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
 import { Account, Profile, AccountService } from '@dhaaga/db';
 import {
-	ActivityPubClient,
+	ApiTargetInterface,
 	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
@@ -29,7 +29,7 @@ import {
 	AppTimelineReducerDispatchType,
 	AppTimelineReducerStateType,
 } from './interactors/post-timeline.reducer';
-import { UserObjectType, UserParser, RandomUtil } from '@dhaaga/core';
+import { UserObjectType, UserParser, RandomUtil } from '@dhaaga/bridge';
 
 type AppThemePack = {
 	id: string;
@@ -200,7 +200,7 @@ type State = {
 	me: UserObjectType | null;
 
 	// router used to make api requests
-	router: ActivityPubClient | null;
+	router: ApiTargetInterface | null;
 
 	packId: string;
 	colorScheme: AppColorSchemeType;
@@ -265,7 +265,7 @@ class GlobalStateService {
 	static async restoreAppSession(db: DataSource): Promise<
 		Result<{
 			acct: Account;
-			router: ActivityPubClient;
+			router: ApiTargetInterface;
 			me: UserObjectType;
 		}>
 	> {
@@ -316,8 +316,9 @@ class GlobalStateService {
 				_acct.driver as any,
 				payload,
 			);
-			const { data } = await _router.me.getMe();
-			// console.log('will parse', data);
+			if (_router.isErr())
+				return { type: 'error', error: new Error(_router.error) };
+			const { data } = await _router.unwrap().me.getMe();
 			const obj: UserObjectType = UserParser.parse(
 				data,
 				_acct.driver,
@@ -325,7 +326,7 @@ class GlobalStateService {
 			);
 			return {
 				type: 'success',
-				value: { acct: _acct, router: _router, me: obj },
+				value: { acct: _acct, router: _router.unwrap(), me: obj },
 			};
 		} catch (e) {
 			console.log(e);

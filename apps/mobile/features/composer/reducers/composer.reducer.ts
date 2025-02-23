@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import { APP_POST_VISIBILITY } from '../../../hooks/app/useVisibility';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { Dispatch } from 'react';
 import { ImagePickerAsset } from 'expo-image-picker';
 import { AutoFillResultsType } from '../types/composer.types';

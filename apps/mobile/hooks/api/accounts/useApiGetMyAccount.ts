@@ -6,8 +6,8 @@ import {
 } from '../../utility/global-state-extractors';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppBskyActorGetProfile } from '@atproto/api';
-import { UserParser } from '@dhaaga/core';
-import type { UserObjectType } from '@dhaaga/core';
+import { UserParser } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 /**
  * Gets the user's account, and

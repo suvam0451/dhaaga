@@ -2,8 +2,8 @@ import type {
 	UserObjectType,
 	NotificationObjectType,
 	PostObjectType,
-} from '@dhaaga/core';
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
+} from '@dhaaga/bridge';
+import { DriverNotificationType } from '@dhaaga/bridge';
 import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
@@ -54,7 +54,7 @@ class FlashListService {
 		if (!input || !Array.isArray(input)) return [];
 		return input
 			.map((o) => ({
-				type: o.type as unknown as DhaagaJsNotificationType,
+				type: o.type as unknown as DriverNotificationType,
 				props: {
 					dto: o,
 				},
@@ -146,7 +146,7 @@ export type FlashListType_Post =
 	| FLC_Post_WithSpoiler;
 
 export type FlashListType_Notification = {
-	type: DhaagaJsNotificationType;
+	type: DriverNotificationType;
 	props: {
 		dto: NotificationObjectType;
 	};

@@ -6,7 +6,7 @@ import AppTopNavbar, {
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { AppText } from '../../../../components/lib/Text';
 import { appDimensions } from '../../../../styles/dimensions';
-import type { FeedObjectType } from '@dhaaga/core';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { AppIcon } from '../../../../components/lib/Icon';
 import { AppDivider } from '../../../../components/lib/Divider';
 import { Image, useImage } from 'expo-image';

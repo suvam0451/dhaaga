@@ -1,4 +1,4 @@
-import ApiDriver, { GetPostsQueryDTO } from '../_interface.js';
+import { ApiTargetInterface } from '../_router/routes/_index.js';
 import { DefaultInstanceRouter } from './instance.js';
 import { DefaultAccountRouter } from './accounts.js';
 import { DefaultStatusesRouter } from './statuses.js';
@@ -12,8 +12,9 @@ import { DefaultMediaRoute } from './media.js';
 import { DefaultListRoute } from './lists.js';
 import { DefaultProfileRouter } from './profile.js';
 import { MastoAccount } from '../../../types/mastojs.types.js';
+import { GetPostsQueryDTO } from '../_interface.js';
 
-class UnknownRestClient implements ApiDriver {
+class Adapter implements ApiTargetInterface {
 	instances: DefaultInstanceRouter;
 	accounts: DefaultAccountRouter;
 	statuses: DefaultStatusesRouter;
@@ -83,4 +84,4 @@ class UnknownRestClient implements ApiDriver {
 	}
 }
 
-export default UnknownRestClient;
+export { Adapter as BaseApiAdapter };

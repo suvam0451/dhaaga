@@ -1,4 +1,4 @@
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';

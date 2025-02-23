@@ -1,64 +1,52 @@
-import MisskeyToStatusAdapter from './misskey.js';
-import MastodonToStatusAdapter from './mastodon.js';
-import UnknownToStatusAdapter from './default.js';
-import { StatusInterface } from './_interface.js';
-import BlueskyStatusAdapter from './bluesky.js';
+import { PostTargetInterface } from './_interface.js';
+import MisskeyApiPostAdapter from './misskey.js';
+import MastoApiPostAdapter from './mastodon.js';
+import AtprotoPostAdapter from './bluesky.js';
 import { CasingUtil } from '../../utils/casing.js';
-import { KNOWN_SOFTWARE } from '../../data/driver.js';
+import { DriverService } from '../../services/driver.js';
 
 /**
  * @param status any status object
- * @param domain domain from database
- * @returns StatusInterface
+ * @param driver driver from database
+ * @returns PostTargetInterface
  */
 export function ActivitypubStatusAdapter(
 	status: any,
-	domain: string,
-): StatusInterface {
-	switch (domain) {
-		case KNOWN_SOFTWARE.MISSKEY:
-		case KNOWN_SOFTWARE.FIREFISH:
-		case KNOWN_SOFTWARE.SHARKEY:
-		case KNOWN_SOFTWARE.MEISSKEY:
-		case KNOWN_SOFTWARE.KMYBLUE:
-		case KNOWN_SOFTWARE.CHERRYPICK: {
-			return new MisskeyToStatusAdapter(status);
-		}
-
-		case KNOWN_SOFTWARE.MASTODON: {
-			return new MastodonToStatusAdapter(status);
-		}
-
-		case KNOWN_SOFTWARE.PLEROMA:
-		case KNOWN_SOFTWARE.AKKOMA: {
-			const _camel = CasingUtil.camelCaseKeys(status);
-			return new MastodonToStatusAdapter(_camel as any);
-		}
-		case KNOWN_SOFTWARE.BLUESKY: {
-			/**
-			 * What even makes a post be blocked/notfound?
-			 */
-			if (status?.['$type'] === 'app.bsky.feed.defs#blockedPost')
-				return null as any;
-
-			return new BlueskyStatusAdapter(
-				status?.post
-					? {
-							// FeedPostView
-							post: status.post,
-							reply: status.reply,
-							reason: status.reason,
-						}
-					: {
-							// PostView
-							post: status,
-							reply: undefined,
-							reason: undefined,
-						},
-			);
-		}
-		default: {
-			return new UnknownToStatusAdapter();
-		}
+	driver: string,
+): PostTargetInterface | null {
+	if (DriverService.supportsMisskeyApi(driver))
+		return new MisskeyApiPostAdapter(status);
+	if (DriverService.supportsPleromaApi(driver)) {
+		const _camel = CasingUtil.camelCaseKeys(status);
+		return new MastoApiPostAdapter(_camel as any);
 	}
+	if (DriverService.supportsAtProto(driver)) {
+		/**
+		 * What even makes a post be blocked/notfound?
+		 */
+		if (status?.['$type'] === 'app.bsky.feed.defs#blockedPost')
+			return null as any;
+
+		return new AtprotoPostAdapter(
+			status?.post
+				? {
+						// FeedPostView
+						post: status.post,
+						reply: status.reply,
+						reason: status.reason,
+					}
+				: {
+						// PostView
+						post: status,
+						reply: undefined,
+						reason: undefined,
+					},
+		);
+	}
+	if (DriverService.supportsMastoApiV2(driver)) {
+		return new MastoApiPostAdapter(status);
+	}
+
+	console.log('[WARN]: driver not handled', driver);
+	return null;
 }

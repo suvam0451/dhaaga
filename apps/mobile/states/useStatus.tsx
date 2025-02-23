@@ -1,4 +1,4 @@
-import { ActivitypubStatusAdapter, StatusInterface } from '@dhaaga/bridge';
+import { ActivitypubStatusAdapter, PostTargetInterface } from '@dhaaga/bridge';
 import {
 	createContext,
 	MutableRefObject,
@@ -13,7 +13,7 @@ import ActivityPubAdapterService from '../services/activitypub-adapter.service';
 import useHookLoadingState from './useHookLoadingState';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 type OgObject = {
 	url: string;
@@ -35,15 +35,15 @@ type OgObject = {
 
 type Type = {
 	// the current status. could be report. could be a reply.
-	status: StatusInterface | null;
+	status: PostTargetInterface | null;
 	statusContext: any | null;
 
 	// the original status being reposted
-	sharedStatus: StatusInterface | null;
+	sharedStatus: PostTargetInterface | null;
 	openGraph: OgObject | null;
 
 	statusRaw: PostObjectType | any | null;
-	setData: (o: StatusInterface) => void;
+	setData: (o: PostTargetInterface) => void;
 	setStatusContextData: (data: any) => void;
 	setDataRaw: (o: PostObjectType | any) => void;
 	setSharedDataRaw: (o: PostObjectType | any) => void;
@@ -51,9 +51,9 @@ type Type = {
 	toggleBookmark: () => void;
 
 	// status context interface
-	contextItemLookup: MutableRefObject<Map<string, StatusInterface>>;
-	contextChildrenLookup: MutableRefObject<Map<string, StatusInterface[]>>;
-	contextRootLookup: MutableRefObject<StatusInterface>;
+	contextItemLookup: MutableRefObject<Map<string, PostTargetInterface>>;
+	contextChildrenLookup: MutableRefObject<Map<string, PostTargetInterface[]>>;
+	contextRootLookup: MutableRefObject<PostTargetInterface>;
 
 	// uuid state for forcing re-renders
 	stateKey: string;
@@ -63,7 +63,7 @@ const defaultValue: Type = {
 	openGraph: undefined,
 	updateOpenGraph(og: OgObject | null): void {},
 	setDataRaw(o: PostObjectType | any): void {},
-	setData(o: StatusInterface): void {},
+	setData(o: PostTargetInterface): void {},
 	status: null,
 	sharedStatus: null,
 	statusRaw: null,
@@ -98,7 +98,7 @@ export function useActivitypubStatusContext() {
 
 type Props = {
 	status?: any;
-	statusInterface?: StatusInterface;
+	statusInterface?: PostTargetInterface;
 	children: any;
 };
 
@@ -120,11 +120,11 @@ function WithActivitypubStatusContext({
 	 * Storing raw object and interfaces for:
 	 * Status and RebloggedStatus
 	 */
-	const Status = useRef<StatusInterface>(
+	const Status = useRef<PostTargetInterface>(
 		ActivitypubStatusAdapter(null, driver),
 	);
 	const StatusRaw = useRef<any | null>(null);
-	const SharedStatus = useRef<StatusInterface>(
+	const SharedStatus = useRef<PostTargetInterface>(
 		ActivitypubStatusAdapter(null, driver),
 	);
 	const SharedStatusRaw = useRef<any | null>(null);
@@ -134,9 +134,9 @@ function WithActivitypubStatusContext({
 		// ActivityPubStatusContextAdapter(null, driver),
 	);
 
-	const contextItemLookup = useRef<Map<string, StatusInterface>>();
-	const contextChildrenLookup = useRef<Map<string, StatusInterface[]>>();
-	const contextRootLookup = useRef<StatusInterface>();
+	const contextItemLookup = useRef<Map<string, PostTargetInterface>>();
+	const contextChildrenLookup = useRef<Map<string, PostTargetInterface[]>>();
+	const contextRootLookup = useRef<PostTargetInterface>();
 
 	const [OpenGraph, setOpenGraph] = useState<OgObject | null>(null);
 
@@ -182,7 +182,7 @@ function WithActivitypubStatusContext({
 		forceUpdate();
 	}
 
-	const setData = useCallback((o: StatusInterface) => {
+	const setData = useCallback((o: PostTargetInterface) => {
 		Status.current = o;
 		forceUpdate();
 	}, []);

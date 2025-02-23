@@ -19,8 +19,8 @@ import { AppText } from '../../../lib/Text';
 import StatusQuoted from './StatusQuoted';
 import { PostMoreOptionsButton } from '../_shared';
 import { TextContentView } from '../TextContentView';
-import { PostInspector } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { PostInspector } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 

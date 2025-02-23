@@ -1,4 +1,4 @@
-import { NotificationUserGroupType } from '@dhaaga/core';
+import { NotificationUserGroupType } from '@dhaaga/bridge';
 import { FlatList, Pressable } from 'react-native';
 import {
 	ICON_SIZE,

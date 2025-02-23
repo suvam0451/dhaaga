@@ -1,6 +1,6 @@
 import useAppPaginator from '../../../hooks/app/useAppPaginator';
 import { AppResultPageType } from '../../../types/app.types';
-import { NotificationObjectType } from '@dhaaga/core';
+import { NotificationObjectType } from '@dhaaga/bridge';
 import {
 	InboxStateAction,
 	useInboxState,

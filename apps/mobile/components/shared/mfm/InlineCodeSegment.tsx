@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { RandomUtil } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
 
 type Props = {
 	value: string;

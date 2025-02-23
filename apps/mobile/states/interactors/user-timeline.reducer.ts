@@ -1,6 +1,6 @@
 import { DataSource } from '@dhaaga/db';
-import { RandomUtil } from '@dhaaga/core';
-import type { UserObjectType } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
 import {

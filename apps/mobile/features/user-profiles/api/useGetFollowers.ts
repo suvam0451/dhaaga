@@ -1,17 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { AppBskyGraphGetFollowers } from '@atproto/api';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
-import { AppResultPageType } from '../../../types/app.types';
-import { UserObjectType, UserParser, DriverService } from '@dhaaga/core';
+import {
+	UserObjectType,
+	UserParser,
+	DriverService,
+	defaultResultPage,
+} from '@dhaaga/bridge';
+import type { ResultPage } from '@dhaaga/bridge';
 
-const defaultResult = {
-	success: true,
-	maxId: null,
-	minId: null,
-	items: [],
-};
-
-type UserResultPage = AppResultPageType<UserObjectType>;
+type UserResultPage = ResultPage<UserObjectType>;
 
 function useGetFollowers(acctId: string, maxId?: string) {
 	const { driver, client, server } = useAppApiClient();
@@ -59,7 +57,7 @@ function useGetFollowers(acctId: string, maxId?: string) {
 		queryKey: ['followers', acctId, maxId],
 		queryFn: api,
 		enabled: !!client,
-		initialData: defaultResult,
+		initialData: defaultResultPage,
 	});
 }
 

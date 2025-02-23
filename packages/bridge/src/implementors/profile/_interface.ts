@@ -18,7 +18,7 @@ export type UserType =
 	| null
 	| undefined;
 
-export interface UserInterface {
+export interface UserTargetInterface {
 	getAvatarBlurHash(): string | null | undefined;
 
 	getAvatarUrl(): string | null | undefined;
@@ -93,7 +93,7 @@ export class AccountInstance {
 export function ActivityPubUserAdapter(
 	profile: any,
 	domain: string,
-): UserInterface {
+): UserTargetInterface {
 	if (!profile) return new DefaultUser();
 
 	switch (domain) {

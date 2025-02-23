@@ -3,7 +3,7 @@ import { TextNodeParser } from './text-nodes.js';
 import { KNOWN_SOFTWARE } from '../data/driver.js';
 import {
 	ActivityPubUserAdapter,
-	UserInterface,
+	UserTargetInterface,
 } from '../implementors/profile/_interface.js';
 import { ActivitypubHelper } from '../index.js';
 
@@ -90,18 +90,18 @@ class Parser {
 	static rawToInterface<T>(
 		input: T | T[],
 		driver: string | KNOWN_SOFTWARE,
-	): T extends unknown[] ? UserInterface[] : UserInterface {
+	): T extends unknown[] ? UserTargetInterface[] : UserTargetInterface {
 		if (Array.isArray(input)) {
 			return input
 				.filter((o) => !!o)
 				.map((o) =>
 					ActivityPubUserAdapter(o, driver),
-				) as unknown as T extends unknown[] ? UserInterface[] : never;
+				) as unknown as T extends unknown[] ? UserTargetInterface[] : never;
 		} else {
 			return ActivityPubUserAdapter(
 				input,
 				driver,
-			) as unknown as T extends unknown[] ? never : UserInterface;
+			) as unknown as T extends unknown[] ? never : UserTargetInterface;
 		}
 	}
 
@@ -111,7 +111,7 @@ class Parser {
 	 * @private
 	 */
 	static interfaceToJson(
-		input: UserInterface,
+		input: UserTargetInterface,
 		{
 			driver,
 			server,

@@ -1,4 +1,4 @@
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 export enum ListItemEnum {
 	ListItemWithText,

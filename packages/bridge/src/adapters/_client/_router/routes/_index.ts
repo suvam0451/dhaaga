@@ -16,7 +16,7 @@ import { ListsRoute } from './lists.js';
 import { ParserRoute } from './parser.js';
 import { ProfileRoute } from './profile.js';
 
-export interface RouterInterface {
+export interface ApiTargetInterface {
 	instances: InstanceRoute;
 	accounts: AccountRoute;
 	statuses: StatusesRoute;

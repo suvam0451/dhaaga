@@ -8,7 +8,7 @@ import ActivityPubService from '../../../services/activitypub.service';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { Fragment } from 'react';
 import { AccountSavedPost } from '@dhaaga/db';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';

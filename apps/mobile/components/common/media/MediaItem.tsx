@@ -9,7 +9,7 @@ import {
 } from './_shared';
 import AppImageCarousel from './fragments/AppImageCarousel';
 import useGalleryDims from '../../../hooks/app/useGalleryDims';
-import type { PostMediaAttachmentType } from '@dhaaga/core';
+import type { PostMediaAttachmentType } from '@dhaaga/bridge';
 import { appDimensions } from '../../../styles/dimensions';
 
 type ImageCarousalProps = {

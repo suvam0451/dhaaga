@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { NotificationParser } from '@dhaaga/core';
+import { NotificationParser } from '@dhaaga/bridge';
 
 export const ICON_SIZE = 36;
 

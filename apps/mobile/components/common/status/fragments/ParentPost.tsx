@@ -4,7 +4,7 @@ import PostStats from '../PostStats';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import StatusQuoted from './StatusQuoted';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
 import {
 	PostedByTextOneLine,

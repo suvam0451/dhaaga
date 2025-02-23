@@ -10,7 +10,7 @@ import {
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import type { PostObjectType } from '@dhaaga/core';
+import type { PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppPublishers,
 	useAppTheme,

@@ -11,7 +11,7 @@ export type TagType = mastodon.v1.Tag | Hashtag | null | undefined;
 /**
  * Interface
  */
-export interface TagInterface {
+export interface TagTargetInterface {
 	isFollowing(): boolean | null | undefined;
 
 	getHistory(): any | null | undefined;
@@ -43,7 +43,10 @@ export class MisskeyTagInstance {
 	}
 }
 
-export function ActivityPubTagAdapter(tag: any, domain: string): TagInterface {
+export function ActivityPubTagAdapter(
+	tag: any,
+	domain: string,
+): TagTargetInterface {
 	switch (domain) {
 		case KNOWN_SOFTWARE.MISSKEY:
 		case KNOWN_SOFTWARE.FIREFISH:

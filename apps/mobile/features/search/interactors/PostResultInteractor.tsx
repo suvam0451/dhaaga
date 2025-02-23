@@ -44,17 +44,10 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	}, [State.tab]);
 
 	useEffect(() => {
-		if (!data.success) {
-			onDataLoaded(true);
-			return;
-		}
 		onDataLoaded(false);
 		TimelineDispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
-			payload: {
-				items: data.items,
-				maxId: data.maxId,
-			},
+			payload: data,
 		});
 	}, [fetchStatus]);
 

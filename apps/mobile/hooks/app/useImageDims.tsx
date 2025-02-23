@@ -1,4 +1,4 @@
-import type { PostMediaAttachmentType } from '@dhaaga/core';
+import type { PostMediaAttachmentType } from '@dhaaga/bridge';
 import { useEffect, useRef, useState } from 'react';
 import MediaService from '../../services/media.service';
 import MediaUtils from '../../utils/media.utils';

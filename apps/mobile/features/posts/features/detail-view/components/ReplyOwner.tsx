@@ -1,6 +1,6 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
-import { PostObjectType } from '@dhaaga/core';
+import { PostObjectType } from '@dhaaga/bridge';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../../../components/lib/Text';

@@ -4,8 +4,8 @@ import {
 	TimelineReducerBaseState,
 } from './_timeline.shared';
 import { produce } from 'immer';
-import { RandomUtil } from '@dhaaga/core';
-import type { FeedObjectType } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { Dispatch } from 'react';
 
 type State = TimelineReducerBaseState<FeedObjectType> & {};

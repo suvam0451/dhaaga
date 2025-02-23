@@ -1,4 +1,4 @@
-import { BlueskyRestClient } from '@dhaaga/bridge';
+import { AtprotoApiAdapter } from '@dhaaga/bridge';
 import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs';
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import { generateFacets } from '../../utils/atproto-facets.utils';
@@ -6,7 +6,7 @@ import { AtpAgent, BlobRef, Facet, AppBskyRichtextFacet } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../features/composer/reducers/composer.reducer';
 import MediaUtils from '../../utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
-import { PostInspector } from '@dhaaga/core';
+import { PostInspector } from '@dhaaga/bridge';
 
 type AtProtoPostRecordType = Partial<AppBskyFeedPost.Record> &
 	Omit<AppBskyFeedPost.Record, 'createdAt'>;
@@ -32,7 +32,7 @@ export type AtprotoReplyEmbed = {
 };
 
 class AtprotoComposerService {
-	private static async getPost(client: BlueskyRestClient, uri: string) {
+	private static async getPost(client: AtprotoApiAdapter, uri: string) {
 		const { data, error } = await client.statuses.get(uri);
 		if (error) {
 			console.log('[WARN]: failed to fetch freshly created post');
@@ -48,7 +48,7 @@ class AtprotoComposerService {
 	 * @private
 	 */
 	private static async post(
-		client: BlueskyRestClient,
+		client: AtprotoApiAdapter,
 		record: AtProtoPostRecordType,
 	) {
 		const agent = client.getAgent();
@@ -88,7 +88,7 @@ class AtprotoComposerService {
 	 * @param state
 	 */
 	static async postUsingReducerState(
-		client: BlueskyRestClient,
+		client: AtprotoApiAdapter,
 		state: PostComposerReducerStateType,
 	): Promise<ThreadViewPost> {
 		const agent = client.getAgent();
@@ -197,7 +197,7 @@ class AtprotoComposerService {
 	}
 
 	static async chat(
-		client: BlueskyRestClient,
+		client: AtprotoApiAdapter,
 		{
 			id,
 			members,

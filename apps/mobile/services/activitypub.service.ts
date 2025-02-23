@@ -1,13 +1,13 @@
 import {
-	ActivityPubClient,
-	MastodonRestClient,
-	MisskeyRestClient,
-	UnknownRestClient,
-	PleromaRestClient,
+	ApiTargetInterface,
+	MastoApiAdapter,
+	MisskeyApiAdapter,
+	BaseApiAdapter,
+	PleromaApiAdapter,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
 import AppSessionManager from './session/app-session.service';
-import { DriverService, RandomUtil } from '@dhaaga/core';
+import { DriverService, RandomUtil } from '@dhaaga/bridge';
 
 class ActivityPubService {
 	/**
@@ -73,7 +73,7 @@ class ActivityPubService {
 	 * @param localState
 	 */
 	static async toggleBookmark(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		id: string,
 		localState: boolean,
 	): Promise<boolean> {
@@ -112,7 +112,7 @@ class ActivityPubService {
 	}
 
 	static async toggleLike(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		id: string,
 		localState: boolean,
 		domain: KNOWN_SOFTWARE,
@@ -137,14 +137,14 @@ class ActivityPubService {
 	}
 
 	static async toggleBoost(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		id: string,
 		localState: boolean,
 		domain: KNOWN_SOFTWARE,
 	) {
 		if (ActivityPubService.misskeyLike(domain)) {
 			if (localState) {
-				const { error } = await (client as MisskeyRestClient).statuses.unrenote(
+				const { error } = await (client as MisskeyApiAdapter).statuses.unrenote(
 					id,
 				);
 				if (error) {
@@ -153,7 +153,7 @@ class ActivityPubService {
 				}
 				return -1;
 			} else {
-				const { error } = await (client as MisskeyRestClient).statuses.renote({
+				const { error } = await (client as MisskeyApiAdapter).statuses.renote({
 					renoteId: id,
 					visibility: 'followers',
 					localOnly: true,
@@ -167,7 +167,7 @@ class ActivityPubService {
 		} else if (domain === KNOWN_SOFTWARE.MASTODON) {
 			if (localState) {
 				const { error } = await (
-					client as MastodonRestClient
+					client as MastoApiAdapter
 				).statuses.removeBoost(id);
 				if (error) {
 					console.log('[WARN]: failed to remove boost', error);
@@ -175,9 +175,7 @@ class ActivityPubService {
 				}
 				return -1;
 			} else {
-				const { error } = await (client as MastodonRestClient).statuses.boost(
-					id,
-				);
+				const { error } = await (client as MastoApiAdapter).statuses.boost(id);
 				if (error) {
 					console.log('[WARN]: failed to boost', error);
 					return null;
@@ -187,7 +185,7 @@ class ActivityPubService {
 		} else {
 			if (localState) {
 				const { error } = await (
-					client as PleromaRestClient
+					client as PleromaApiAdapter
 				).statuses.removeBoost(id);
 				if (error) {
 					console.log('[WARN]: failed to remove boost', error);
@@ -195,7 +193,7 @@ class ActivityPubService {
 				}
 				return -1;
 			} else {
-				const { error } = await (client as PleromaRestClient).statuses.boost(
+				const { error } = await (client as PleromaApiAdapter).statuses.boost(
 					id,
 				);
 				if (error) {
@@ -212,7 +210,7 @@ class ActivityPubService {
 	 * @param urlLike
 	 */
 	static async detectSoftware(urlLike: string) {
-		const client = new UnknownRestClient();
+		const client = new BaseApiAdapter();
 		const { data, error } = await client.instances.getSoftwareInfo(urlLike);
 		if (error || !data) return null;
 		return data.software;
@@ -234,7 +232,7 @@ class ActivityPubService {
 		console.log(urlLike);
 		const tokens = mngr.storage.getAtprotoServerClientTokens(urlLike);
 
-		const client = new UnknownRestClient();
+		const client = new BaseApiAdapter();
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {
 			appCallback: 'https://suvam.io',
 			appName: 'Dhaaga',
@@ -255,11 +253,11 @@ class ActivityPubService {
 	 * @param id
 	 */
 	static async getBookmarkState(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		id: string,
 	): Promise<boolean> {
 		const { data, error } = await (
-			client as MisskeyRestClient
+			client as MisskeyApiAdapter
 		).statuses.getState(id);
 		if (error) {
 			console.log('[WARN]: error fetching bookmarked state');

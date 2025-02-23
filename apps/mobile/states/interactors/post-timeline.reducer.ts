@@ -1,6 +1,6 @@
 import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
-import { RandomUtil } from '@dhaaga/core';
-import type { PostObjectType } from '@dhaaga/core';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import {
 	DataSource,

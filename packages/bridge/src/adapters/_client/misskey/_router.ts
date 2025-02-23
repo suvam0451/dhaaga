@@ -11,9 +11,9 @@ import { MisskeyMeRouter } from './me.js';
 import { MisskeyMediaRouter } from './media.js';
 import { MisskeyListsRoute } from './lists.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { RouterInterface } from '../_router/routes/_index.js';
+import { ApiTargetInterface } from '../_router/routes/_index.js';
 
-class MisskeyRestClient implements RouterInterface {
+class Adapter implements ApiTargetInterface {
 	fetch: FetchWrapper;
 	instances: MisskeyInstanceRouter;
 	accounts: MisskeyAccountsRouter;
@@ -43,4 +43,4 @@ class MisskeyRestClient implements RouterInterface {
 	}
 }
 
-export default MisskeyRestClient;
+export { Adapter as MisskeyApiAdapter };

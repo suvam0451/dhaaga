@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { PostObjectType } from '@dhaaga/core';
+import { PostObjectType } from '@dhaaga/bridge';
 import { useAppPublishers } from '../utility/global-state-extractors';
 
 type Type = {

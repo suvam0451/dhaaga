@@ -6,7 +6,7 @@ import { appDimensions } from '../../../styles/dimensions';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import type { FeedObjectType } from '@dhaaga/core';
+import type { FeedObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	feed: FeedObjectType;

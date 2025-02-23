@@ -15,7 +15,7 @@ import { AppToggleIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import ActivityPubService from '../../../../services/activitypub.service';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
-import { PostInspector } from '@dhaaga/core';
+import { PostInspector } from '@dhaaga/bridge';
 
 /**
  * Press this to toggle sharing status

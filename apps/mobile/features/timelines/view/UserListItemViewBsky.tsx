@@ -1,4 +1,4 @@
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	item: UserObjectType;

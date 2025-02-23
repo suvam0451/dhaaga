@@ -1,4 +1,4 @@
-import { FeedObjectType } from '@dhaaga/core';
+import { FeedObjectType } from '@dhaaga/bridge';
 import { Profile, ProfilePinnedTimelineService } from '@dhaaga/db';
 import {
 	useAppAcct,

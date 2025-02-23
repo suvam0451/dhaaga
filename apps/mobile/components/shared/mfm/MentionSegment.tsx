@@ -4,7 +4,7 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { TextParser } from '@dhaaga/core';
+import { TextParser } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../lib/Text';
 import { Text } from 'react-native';

@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import ProfileGalleryModePresenter from '../features/gallery-mode/presenters/ProfileGalleryModePresenter';
 import { StyleProp, View, ViewStyle, Dimensions, FlatList } from 'react-native';
-import type { UserObjectType } from '@dhaaga/core';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { AppInstagramTabControl } from '../../../components/lib/SegmentedControl';
 import useApiGetPinnedPosts from '../../../hooks/api/accounts/useApiGetPinnedPosts';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
