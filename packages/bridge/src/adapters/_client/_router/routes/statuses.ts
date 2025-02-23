@@ -11,6 +11,7 @@ import {
 	MegaScheduledStatus,
 	MegaStatus,
 } from '../../../../types/megalodon.types.js';
+import { DriverLikeStateResult } from '../../../../types/driver.types.js';
 
 export type DhaagaJsPostCreateDto = {
 	inReplyToId: null | string;
@@ -33,8 +34,7 @@ export type DhaagaJsPostCreateDto = {
 		| 'likeOnly'
 		| 'likeOnlyForRemote'
 		| 'nonSensitiveOnly'
-		| 'nonSensitiveOnlyForLocalLikeOnlyForRemote';
-	// lang: string;
+		| 'nonSensitiveOnlyForLocalLikeOnlyForRemote'; // lang: string;
 	// replyId?: string | null;
 	// renoteId?: string | null;
 	// channelId?: string | null;
@@ -61,13 +61,14 @@ export interface StatusesRoute {
 		id: string,
 	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']>;
 
-	like(
-		id: string,
-	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/create']['res']>;
+	/**
+	 * AT protocol specific implementation
+	 * @param uri
+	 * @param cid
+	 */
+	like(uri: string, cid?: string): DriverLikeStateResult;
 
-	removeLike(
-		id: string,
-	): LibraryPromise<MastoStatus | Endpoints['notes/favorites/delete']['res']>;
+	removeLike(uri: string, cid?: string): DriverLikeStateResult;
 
 	getContext(
 		id: string,

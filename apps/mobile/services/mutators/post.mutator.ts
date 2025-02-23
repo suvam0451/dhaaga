@@ -1,4 +1,9 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import {
+	DriverPostLikeState,
+	DriverService,
+	KNOWN_SOFTWARE,
+	Result,
+} from '@dhaaga/bridge';
 import ActivityPubService from '../activitypub.service';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { PostInspector, ApiTargetInterface } from '@dhaaga/bridge';
@@ -18,56 +23,43 @@ export class PostMutator {
 	async toggleLike(input: PostObjectType): Promise<PostObjectType> {
 		const target = PostInspector.getContentTarget(input);
 
-		/**
-		 * Handle for AT protocol
-		 */
-		if (this.driver === KNOWN_SOFTWARE.BLUESKY) {
-			const result = await AtprotoPostService.toggleLike(
-				this.client,
-				target.meta.uri,
-				target.meta.cid,
-				target.atProto?.viewer,
-			);
-			if (!result.success) return input;
+		let nextState: Result<DriverPostLikeState, string>;
 
-			if (input.id === target.id) {
-				return produce(input, (draft) => {
-					draft.interaction.liked = result.state;
-					draft.stats.likeCount += result.state ? 1 : -1;
-					draft.atProto.viewer.like = result.uri;
-				});
-			} else if (input.boostedFrom?.id === target.id) {
-				return produce(input, (draft) => {
-					draft.boostedFrom.interaction.liked = result.state;
-					draft.boostedFrom.stats.likeCount += result.state ? 1 : -1;
-					draft.boostedFrom.atProto.viewer.like = result.uri;
-				});
-			}
-		}
-
-		/**
-		 * Handle for AP protocol
-		 */
 		try {
-			const res = await ActivityPubService.toggleLike(
-				this.client,
-				target.id,
-				target.interaction.liked,
-				this.driver,
-			);
-			if (input.id === target.id) {
-				return produce(input, (draft) => {
-					draft.interaction.liked = res !== -1;
-					draft.stats.likeCount += res;
-				});
-			} else if (input.boostedFrom?.id === target.id) {
-				return produce(input, (draft) => {
-					draft.boostedFrom.interaction.liked = res != -1;
-					draft.boostedFrom.stats.likeCount += res;
-				});
+			if (DriverService.supportsAtProto(this.driver)) {
+				nextState = await AtprotoPostService.toggleLike(
+					this.client,
+					target.meta.uri,
+					target.meta.cid,
+					target.atProto?.viewer,
+				);
+			} else if (!DriverService.supportsMisskeyApi(this.driver)) {
+				nextState = await ActivityPubService.toggleLike(
+					this.client,
+					target.interaction.liked,
+					target.id,
+				);
+			}
+
+			if (nextState && nextState.isOk()) {
+				const _state = nextState.unwrap();
+				if (input.id === target.id) {
+					return produce(input, (draft) => {
+						draft.interaction.liked = _state.state;
+						draft.stats.likeCount += _state.state ? 1 : -1;
+						draft.atProto.viewer.like = _state.uri;
+					});
+				} else if (input.boostedFrom?.id === target.id) {
+					return produce(input, (draft) => {
+						draft.boostedFrom.interaction.liked = _state.state;
+						draft.boostedFrom.stats.likeCount += _state.state ? 1 : -1;
+						draft.boostedFrom.atProto.viewer.like = _state.uri;
+					});
+				}
 			}
 		} catch (e) {
 			console.log('[WARN]: failed to toggle like', e);
+			return input;
 		}
 	}
 

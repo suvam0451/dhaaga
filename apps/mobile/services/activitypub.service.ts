@@ -113,27 +113,12 @@ class ActivityPubService {
 
 	static async toggleLike(
 		client: ApiTargetInterface,
-		id: string,
-		localState: boolean,
-		domain: KNOWN_SOFTWARE,
+		localState: boolean | undefined,
+		idA: string,
+		idB?: string,
 	) {
-		if (ActivityPubService.misskeyLike(domain)) return null;
-
-		if (localState) {
-			const { error } = await client.statuses.removeLike(id);
-			if (error) {
-				console.log('[WARN]: failed to like status', error);
-				return null;
-			}
-			return -1;
-		} else {
-			const { error } = await client.statuses.like(id);
-			if (error) {
-				console.log('[WARN]: failed to remove like for status', error);
-				return null;
-			}
-			return +1;
-		}
+		if (localState) return client.statuses.removeLike(idA, idB);
+		return client.statuses.like(idA, idB);
 	}
 
 	static async toggleBoost(

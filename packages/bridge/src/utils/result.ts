@@ -44,6 +44,10 @@ class OkClass<T, E> {
 		return this.value;
 	}
 
+	unwrapOrElse(defaultValue: T): T {
+		return this.value;
+	}
+
 	unwrapOr(fallback: T): T {
 		return this.value;
 	}
@@ -97,6 +101,10 @@ class ErrClass<T, E> {
 		);
 	}
 
+	unwrapOrElse(defaultValue: T): T {
+		return defaultValue;
+	}
+
 	unwrapOr(fallback: never): never {
 		return fallback;
 	}
@@ -132,11 +140,11 @@ function ResultErr<T, E>(error: E): Result<T, E> {
 	return new ErrClass(error);
 }
 
-function Ok<T>(value: T): Result<T, ApiErrorCode> {
+function Ok<T>(value: T): Result<T, string> {
 	return new OkClass(value);
 }
 
-function Err<T>(error: ApiErrorCode): Result<T, ApiErrorCode> {
+function Err<T>(error: string): Result<T, string> {
 	return new ErrClass(error);
 }
 

@@ -20,7 +20,7 @@ function useApiGetFeedDetails(uri: string) {
 				getPrefPromise,
 			]);
 			const feedPrefs = AtprotoFeedService.extractFeedPreferences(
-				prefResult.data,
+				prefResult.unwrap(),
 			);
 			const _pref = feedPrefs?.find(
 				(o) => o.type === 'feed' && o.value === uri,

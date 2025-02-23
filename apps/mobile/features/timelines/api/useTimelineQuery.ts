@@ -14,8 +14,8 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
 import { AppResultPageType } from '../../../types/app.types';
-import { PostParser, DriverService } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge';
+import { PostParser, DriverService, defaultResultPage } from '@dhaaga/bridge';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -26,14 +26,7 @@ type TimelineQueryParams = {
 	sessionId?: string;
 };
 
-type TimelineFetchResultType = AppResultPageType<PostObjectType>;
-
-const DEFAULT_RETURN_VALUE: TimelineFetchResultType = {
-	success: true,
-	items: [],
-	maxId: undefined,
-	minId: undefined,
-};
+type TimelineFetchResultType = ResultPage<PostObjectType>;
 
 /**
  * Use to fetch paginated data for
@@ -135,21 +128,20 @@ function useTimelineQuery({
 		maxId?: string | null,
 	): TimelineFetchResultType {
 		return {
-			success: true,
 			items: generateFeedBatch(data),
 			maxId: generateMaxId(data, maxId),
-			minId: undefined,
+			minId: null,
 		};
 	}
 
 	async function api(): Promise<TimelineFetchResultType> {
-		if (client === null) return DEFAULT_RETURN_VALUE;
+		if (client === null) return defaultResultPage;
 		switch (type) {
 			case TimelineFetchMode.IDLE:
-				return DEFAULT_RETURN_VALUE;
+				return defaultResultPage;
 			case TimelineFetchMode.HOME: {
 				const { data, error } = await client.timelines.home(_query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.LOCAL: {
@@ -162,18 +154,18 @@ function useTimelineQuery({
 					withRenotes: !opts?.excludeReblogs,
 					withReplies: !opts?.excludeReplies,
 				});
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.HASHTAG: {
 				const { data, error } = await client.timelines.hashtag(_id, _query);
 				console.log('all eyes on me', data, error);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.LIST: {
 				const { data, error } = await client.timelines.list(_id, _query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.USER: {
@@ -181,7 +173,7 @@ function useTimelineQuery({
 					_id,
 					_query,
 				)) as any;
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.SOCIAL: {
@@ -189,7 +181,7 @@ function useTimelineQuery({
 					..._query,
 					social: true,
 				});
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.BUBBLE: {
@@ -198,33 +190,31 @@ function useTimelineQuery({
 						_query,
 					);
 					return {
-						success: true,
 						items: PostParser.parse<unknown[]>(data as any[], driver, server),
 						maxId: generateMaxId(data),
-						minId: undefined,
+						minId: null,
 					};
 				} else if (driver === KNOWN_SOFTWARE.SHARKEY) {
 					const { data } = await (client as MisskeyApiAdapter).timelines.bubble(
 						_query,
 					);
 					return {
-						success: true,
 						items: PostParser.parse<unknown[]>(data as any[], driver, server),
 						maxId: generateMaxId(data),
-						minId: undefined,
+						minId: null,
 					};
 				} else {
-					return DEFAULT_RETURN_VALUE;
+					return defaultResultPage;
 				}
 			}
 			case TimelineFetchMode.FEDERATED: {
 				const { data, error } = await client.timelines.public(_query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.BOOKMARKS: {
 				const { data, error } = await client.accounts.bookmarks(_query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data.data, data?.maxId);
 			}
 			case TimelineFetchMode.FEED: {
@@ -235,7 +225,7 @@ function useTimelineQuery({
 					cursor: maxId === null ? undefined : maxId,
 					feed: query.id,
 				});
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return outputSchemaToResultPage(data);
 			}
 			case TimelineFetchMode.LIKES: {
@@ -246,9 +236,8 @@ function useTimelineQuery({
 						limit: TIMELINE_STATUS_LIMIT,
 						cursor: _query.maxId === null ? undefined : _query.maxId,
 					});
-					if (error) return DEFAULT_RETURN_VALUE;
+					if (error) return defaultResultPage;
 					return {
-						success: true,
 						items: PostParser.parse<unknown[]>(data.feed, driver, server),
 						maxId: data.cursor === undefined ? null : data.cursor,
 						minId: null,
@@ -256,11 +245,11 @@ function useTimelineQuery({
 				}
 
 				const { data, error } = await client.accounts.likes(_query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data.data, data.maxId);
 			}
 			default:
-				return DEFAULT_RETURN_VALUE;
+				return defaultResultPage;
 		}
 	}
 
@@ -269,7 +258,7 @@ function useTimelineQuery({
 		queryKey: [type, _id, _query, maxId, minId, sessionId],
 		queryFn: api,
 		enabled: !!client && type !== TimelineFetchMode.IDLE,
-		initialData: DEFAULT_RETURN_VALUE,
+		initialData: defaultResultPage,
 	});
 }
 

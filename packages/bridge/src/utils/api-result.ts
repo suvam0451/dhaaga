@@ -3,10 +3,9 @@
  * for the Dhaaga codebase
  */
 
-import { ApiErrorCode } from '../types/result.types.js';
 import { Result } from './result.js';
 
-type ApiResult<T> = Result<T, ApiErrorCode>;
-type ApiAsyncResult<T> = Promise<Result<T, ApiErrorCode>>;
+type ApiResult<T> = Result<T, string>;
+type ApiAsyncResult<T> = Promise<Result<T, string>>;
 
 export type { ApiResult, ApiAsyncResult };

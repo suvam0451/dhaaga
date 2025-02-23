@@ -13,6 +13,8 @@ import type {
 import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
+import { Err, Ok } from '../../../utils/index.js';
+import { DriverLikeStateResult } from '../../../types/driver.types.js';
 
 export class MastodonStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -63,14 +65,22 @@ export class MastodonStatusesRouter implements StatusesRoute {
 		return { data };
 	}
 
-	async like(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.client.lib.v1.statuses.$select(id).favourite();
-		return { data };
+	async like(id: string): DriverLikeStateResult {
+		try {
+			const data = await this.client.lib.v1.statuses.$select(id).favourite();
+			return Ok({ state: !!data.favourited, counter: data.favouritesCount });
+		} catch (e) {
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
-	async removeLike(id: string): LibraryPromise<MastoStatus> {
-		const data = await this.client.lib.v1.statuses.$select(id).unfavourite();
-		return { data };
+	async removeLike(id: string): DriverLikeStateResult {
+		try {
+			const data = await this.client.lib.v1.statuses.$select(id).unfavourite();
+			return Ok({ state: !!data.favourited, counter: data.favouritesCount });
+		} catch (e) {
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async getContext(id: string): LibraryPromise<MastoContext> {

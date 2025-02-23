@@ -19,12 +19,9 @@ function useApiGetMyFeeds() {
 		initialData: defaultResultPage,
 		queryFn: async () => {
 			const _client = client as AtprotoApiAdapter;
-			const { data: prefs, error: prefError } =
-				await _client.me.getPreferences();
-			if (prefError) {
-				console.log('pref get', prefError);
-			}
-			const feeds = AtprotoFeedService.extractFeedPreferences(prefs);
+			const result = await _client.me.getPreferences();
+			if (result.isErr()) return defaultResultPage;
+			const feeds = AtprotoFeedService.extractFeedPreferences(result.unwrap());
 			const { data: feedResult, error: feedError } =
 				await _client.feeds.getFeedGenerators(
 					feeds.filter((o) => o.type === 'feed').map((o) => o.value),

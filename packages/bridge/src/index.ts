@@ -160,3 +160,5 @@ export type { AppParsedTextNodes, NodeContent } from './parsers/text-nodes.js';
 // pagination util
 export { defaultResultPage } from './utils/pagination.js';
 export type { ResultPage } from './utils/pagination.js';
+
+export { AtprotoUtils } from './utils/atproto.js';

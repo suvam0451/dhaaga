@@ -12,6 +12,8 @@ import {
 } from '../../../types/mastojs.types.js';
 import { MissContext } from '../../../types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
+import { DriverLikeStateResult } from '../../../types/driver.types.js';
+import { Err } from '../../../utils/index.js';
 
 export class DefaultStatusesRouter implements StatusesRoute {
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
@@ -44,12 +46,12 @@ export class DefaultStatusesRouter implements StatusesRoute {
 		return notImplementedErrorBuilder<any>();
 	}
 
-	async like(id: string) {
-		return notImplementedErrorBuilder<any>();
+	async like(id: string): DriverLikeStateResult {
+		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
-	async removeLike(id: string) {
-		return notImplementedErrorBuilder<any>();
+	async removeLike(id: string): DriverLikeStateResult {
+		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
 	async getContext(id: string): LibraryPromise<MastoContext | MissContext> {

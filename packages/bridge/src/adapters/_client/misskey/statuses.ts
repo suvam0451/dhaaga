@@ -6,13 +6,12 @@ import { LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import type {
-	MastoScheduledStatus,
-	MastoStatus,
-} from '../../../types/mastojs.types.js';
+import type { MastoScheduledStatus } from '../../../types/mastojs.types.js';
 import type { MissContext, MissNote } from '../../../types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import { DriverLikeStateResult } from '../../../types/driver.types.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 type RenoteCreateDTO = {
 	localOnly: boolean;
@@ -261,20 +260,18 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	 * a.k.a. like -- applicable for Sharkey only
 	 * @param id
 	 */
-	async like(
-		id: string,
-	): LibraryPromise<{ success: boolean; hasReacted: true }> {
+	async like(id: string): DriverLikeStateResult {
 		const { error } = await this.direct.post(
 			'/api/notes/like',
 			{ noteId: id },
 			{},
 		);
-		if (error) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		return { data: { success: true, hasReacted: true } };
+		if (error) return Err(ApiErrorCode.REMOTE_SERVER_ERROR);
+		return Ok({ state: true });
 	}
 
-	async removeLike(id: string): LibraryPromise<MastoStatus> {
-		return errorBuilder<MastoStatus>(ApiErrorCode.UNKNOWN_ERROR);
+	async removeLike(id: string): DriverLikeStateResult {
+		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
 	/**

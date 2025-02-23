@@ -9,10 +9,12 @@ import {
 	MegaScheduledStatus,
 	MegaStatus,
 } from '../../../types/megalodon.types.js';
-import { LibraryResponse } from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 import { CasingUtil } from '../../../utils/casing.js';
+import { DriverLikeStateResult } from '../../../types/driver.types.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -111,18 +113,28 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		return { data: data.data };
 	}
 
-	async like(id: string) {
-		// const { data, error } = await new AppApi(
-		// 	this.client.url,
-		// 	this.client.accessToken,
-		// ).post(`/api/v1/statuses/${id}/favourite`, {}, {});
-		const data = await this.client.client.favouriteStatus(id);
-		return { data: data as any };
+	async like(id: string): DriverLikeStateResult {
+		try {
+			const data = await this.client.client.favouriteStatus(id);
+			return Ok({
+				state: !!data.data.favourited,
+				counter: data.data.favourites_count,
+			});
+		} catch (e) {
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
-	async removeLike(id: string) {
-		const data = await this.client.client.unfavouriteStatus(id);
-		return { data: data.data };
+	async removeLike(id: string): DriverLikeStateResult {
+		try {
+			const data = await this.client.client.unfavouriteStatus(id);
+			return Ok({
+				state: !!data.data.favourited,
+				counter: data.data.favourites_count,
+			});
+		} catch (e) {
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async getContext(id: string) {
