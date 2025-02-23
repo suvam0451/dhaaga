@@ -12,7 +12,7 @@ import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
 import UserSearchResultPresenter from './UserSearchResultPresenter';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { useTranslation } from 'react-i18next';
-import { ProfileService } from '../../../database/entities/profile';
+import { ProfileService } from '@dhaaga/db';
 
 function UserAddSheetPresenter() {
 	const { theme } = useAppTheme();

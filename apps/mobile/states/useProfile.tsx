@@ -1,24 +1,24 @@
 import {
 	ActivityPubUserAdapter,
-	UserInterface,
+	UserTargetInterface,
 	UserType,
 } from '@dhaaga/bridge';
 import { createContext, useContext, useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
-import { AppUserObject } from '../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type Type = {
-	user: UserInterface | null;
+	user: UserTargetInterface | null;
 	userRaw: UserType | null;
-	setData: (o: UserInterface) => void;
+	setData: (o: UserTargetInterface) => void;
 	setDataRaw: (o: UserType) => void;
 };
 
 const defaultValue: Type = {
 	user: undefined,
 	userRaw: undefined,
-	setData: function (o: UserInterface): void {
+	setData: function (o: UserTargetInterface): void {
 		throw new Error('Function not implemented.');
 	},
 	setDataRaw: function (o: UserType): void {
@@ -33,8 +33,8 @@ export function useActivitypubUserContext() {
 }
 
 type Props = {
-	user?: AppUserObject;
-	userI?: UserInterface;
+	user?: UserObjectType;
+	userI?: UserTargetInterface;
 	children: any;
 };
 
@@ -46,7 +46,7 @@ function WithActivitypubUserContext({ user, userI, children }: Props) {
 		})),
 	);
 
-	const [Value, setValue] = useState<UserInterface | null>(
+	const [Value, setValue] = useState<UserTargetInterface | null>(
 		ActivityPubUserAdapter(null, driver),
 	);
 	const [RawValue, setRawValue] = useState<UserType | null>(null);
@@ -64,7 +64,7 @@ function WithActivitypubUserContext({ user, userI, children }: Props) {
 		setValue(ActivityPubUserAdapter(user, driver));
 	}, [user, userI, driver]);
 
-	const set = (o: UserInterface) => setValue(o);
+	const set = (o: UserTargetInterface) => setValue(o);
 	const setRaw = (o: UserType) => {
 		setRawValue(o);
 		setValue(ActivityPubUserAdapter(o, driver));

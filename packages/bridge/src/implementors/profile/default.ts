@@ -1,6 +1,6 @@
-import { UserInterface } from './_interface.js';
+import { UserTargetInterface } from './_interface.js';
 
-export class DefaultUser implements UserInterface {
+export class DefaultUser implements UserTargetInterface {
 	getInstanceUrl(): string {
 		return '';
 	}

@@ -1,4 +1,4 @@
-import { Account } from '../../../database/_schema';
+import { Account, AccountService } from '@dhaaga/db';
 import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
 import {
 	useAppAcct,
@@ -10,7 +10,6 @@ import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../states/useAppNavigator';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import { AccountService } from '../../../database/entities/account';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { appDimensions } from '../../../styles/dimensions';

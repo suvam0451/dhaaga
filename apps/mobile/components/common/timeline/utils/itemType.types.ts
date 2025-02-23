@@ -1,4 +1,4 @@
-import { AppPostObject } from '../../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 export enum ListItemEnum {
 	ListItemWithText,
@@ -8,21 +8,21 @@ export enum ListItemEnum {
 
 interface ListItemWithTextInterface {
 	props: {
-		dto: AppPostObject;
+		dto: PostObjectType;
 	};
 	type: ListItemEnum.ListItemWithText;
 }
 
 interface ListItemWithImageInterface {
 	props: {
-		dto: AppPostObject;
+		dto: PostObjectType;
 	};
 	type: ListItemEnum.ListItemWithImage;
 }
 
 interface ListItemWithSpoilerInterface {
 	props: {
-		dto: AppPostObject;
+		dto: PostObjectType;
 	};
 	type: ListItemEnum.ListItemWithSpoiler;
 }

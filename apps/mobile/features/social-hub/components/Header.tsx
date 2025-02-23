@@ -1,4 +1,4 @@
-import { Account } from '../../../database/_schema';
+import { Account } from '@dhaaga/db';
 import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { appDimensions } from '../../../styles/dimensions';

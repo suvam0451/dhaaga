@@ -1,4 +1,4 @@
-import { ProfilePinnedUser } from '../../../database/_schema';
+import { ProfilePinnedUser } from '@dhaaga/db';
 import { Pressable, StyleSheet, View } from 'react-native';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';

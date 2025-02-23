@@ -2,7 +2,7 @@ import { memo, useEffect, useRef, useState } from 'react';
 import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../styles/AppTheme';
 import { View } from 'react-native';
-import { AppSetting } from '../../../database/_schema';
+import { AppSetting } from '@dhaaga/db';
 
 type SingleChoiceSettingProps = {
 	label: string;

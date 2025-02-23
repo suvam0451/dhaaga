@@ -151,27 +151,65 @@ export class AppThemingUtil {
 	): StyleProp<TextStyle> {
 		switch (variant) {
 			case AppTextVariant.BODY_NORMAL:
-				return { fontSize: 15, fontFamily: APP_FONTS.ROBOTO_400 };
+				return {
+					fontSize: 15,
+					fontFamily: APP_FONTS.ROBOTO_400,
+					lineHeight: 19,
+				};
 			case AppTextVariant.BODY_MEDIUM:
-				return { fontSize: 15, fontFamily: APP_FONTS.ROBOTO_500 };
+				return {
+					fontSize: 15,
+					fontFamily: APP_FONTS.ROBOTO_500,
+					lineHeight: 19,
+				};
 			case AppTextVariant.BODY_SEMIBOLD:
-				return { fontSize: 14, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+				return {
+					fontSize: 14,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					lineHeight: 18,
+				};
 			case AppTextVariant.BODY_BOLD:
-				return { fontSize: 14, fontFamily: APP_FONTS.INTER_700_BOLD };
+				return {
+					fontSize: 14,
+					fontFamily: APP_FONTS.INTER_700_BOLD,
+					lineHeight: 18,
+				};
 			case AppTextVariant.H6:
-				return { fontSize: 18, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+				return {
+					fontSize: 18,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					lineHeight: 22,
+				};
 			case AppTextVariant.H5:
-				return { fontSize: 20, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+				return {
+					fontSize: 20,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					lineHeight: 24,
+				};
 			case AppTextVariant.H4:
-				return { fontSize: 22, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+				return {
+					fontSize: 22,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					lineHeight: 26,
+				};
 			case AppTextVariant.H3:
-				return { fontSize: 24, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+				return {
+					fontSize: 24,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					lineHeight: 28,
+				};
 			case AppTextVariant.H2:
-				return { fontSize: 26, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
+				return {
+					fontSize: 26,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					lineHeight: 30,
+				};
 			case AppTextVariant.H1:
-				return { fontSize: 28, fontFamily: APP_FONTS.INTER_600_SEMIBOLD };
-			// return { fontSize: 30, fontFamily: APP_FONTS.SOURCE_SANS_PRO_600 };
-			// return { fontSize: 28, fontFamily: 'PublicSans_600SemiBold' };
+				return {
+					fontSize: 28,
+					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+					lineHeight: 32,
+				};
 		}
 	}
 }

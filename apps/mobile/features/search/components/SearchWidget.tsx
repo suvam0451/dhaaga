@@ -14,10 +14,10 @@ import {
 } from 'react-native';
 import { useRef, useState } from 'react';
 import {
-	useDiscoverTabDispatch,
-	useDiscoverTabState,
-} from '../contexts/DiscoverTabCtx';
-import { DiscoverTabReducerActionType } from '../reducers/discover-tab.reducer';
+	useDiscoverState,
+	useDiscoverDispatch,
+	DiscoverStateAction,
+} from '@dhaaga/core';
 import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
@@ -48,12 +48,12 @@ function SearchWidget() {
 	/**
 	 * --- State Management ---
 	 */
-	const State = useDiscoverTabState();
-	const dispatch = useDiscoverTabDispatch();
+	const State = useDiscoverState();
+	const dispatch = useDiscoverDispatch();
 
 	const updateSearch = (search: string) => {
 		dispatch({
-			type: DiscoverTabReducerActionType.SET_SEARCH,
+			type: DiscoverStateAction.SET_SEARCH,
 			payload: {
 				q: search,
 			},
@@ -64,7 +64,7 @@ function SearchWidget() {
 		search: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
 	) => {
 		dispatch({
-			type: DiscoverTabReducerActionType.APPLY_SEARCH,
+			type: DiscoverStateAction.APPLY_SEARCH,
 		});
 	};
 

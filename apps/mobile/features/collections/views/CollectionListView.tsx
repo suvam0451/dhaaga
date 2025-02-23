@@ -1,4 +1,4 @@
-import { AccountCollection } from '../../../database/_schema';
+import { AccountCollection } from '@dhaaga/db';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';

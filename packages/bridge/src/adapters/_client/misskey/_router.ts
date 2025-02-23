@@ -11,9 +11,15 @@ import { MisskeyMeRouter } from './me.js';
 import { MisskeyMediaRouter } from './media.js';
 import { MisskeyListsRoute } from './lists.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { RouterInterface } from '../_router/routes/_index.js';
+import { ApiTargetInterface } from '../_router/routes/_index.js';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostMutatorRoute } from '../_router/routes/post.js';
+import { UserRoute } from '../_router/routes/user.js';
 
-class MisskeyRestClient implements RouterInterface {
+class Adapter implements ApiTargetInterface {
+	driver: KNOWN_SOFTWARE | string;
+	server: string | null;
+
 	fetch: FetchWrapper;
 	instances: MisskeyInstanceRouter;
 	accounts: MisskeyAccountsRouter;
@@ -26,8 +32,17 @@ class MisskeyRestClient implements RouterInterface {
 	me: MisskeyMeRouter;
 	media: MisskeyMediaRouter;
 	lists: MisskeyListsRoute;
+	post: PostMutatorRoute;
+	user: UserRoute;
 
-	constructor(dto: RestClientCreateDTO) {
+	constructor(
+		driver: KNOWN_SOFTWARE | string,
+		server: string | null,
+		dto: RestClientCreateDTO,
+	) {
+		this.driver = driver;
+		this.server = server;
+
 		this.fetch = FetchWrapper.create(dto.instance, dto.token);
 		this.instances = new MisskeyInstanceRouter(this.fetch);
 		this.accounts = new MisskeyAccountsRouter(this.fetch);
@@ -40,7 +55,9 @@ class MisskeyRestClient implements RouterInterface {
 		this.me = new MisskeyMeRouter(this.fetch);
 		this.media = new MisskeyMediaRouter(this.fetch);
 		this.lists = new MisskeyListsRoute(this.fetch);
+		this.post = new PostMutatorRoute(this);
+		this.user = new UserRoute(this);
 	}
 }
 
-export default MisskeyRestClient;
+export { Adapter as MisskeyApiAdapter };

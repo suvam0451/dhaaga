@@ -11,10 +11,7 @@ import { AppBottomSheetMenu } from '../../../components/lib/Menu';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import { AppIcon } from '../../../components/lib/Icon';
 import MediaUtils from '../../../utils/media.utils';
-import {
-	ACCOUNT_METADATA_KEY,
-	AccountMetadataService,
-} from '../../../database/entities/account-metadata';
+import { ACCOUNT_METADATA_KEY, AccountMetadataService } from '@dhaaga/db';
 import ActivityPubProviderService from '../../../services/activitypub-provider.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import useComposer from '../interactors/useComposer';

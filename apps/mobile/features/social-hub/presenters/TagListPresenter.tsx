@@ -1,9 +1,8 @@
-import { Account, ProfilePinnedTag } from '../../../database/_schema';
+import { Account, ProfilePinnedTag, AccountService } from '@dhaaga/db';
 import { StyleSheet, View } from 'react-native';
 import PinnedTagView from '../views/PinnedTagView';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import { AccountService } from '../../../database/entities/account';
 import {
 	useAppAcct,
 	useAppDb,

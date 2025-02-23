@@ -1,6 +1,5 @@
 import { Dispatch, Fragment, SetStateAction } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import ActivityPubService from '../../../services/activitypub.service';
 import { AppIcon } from '../../../components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import {
@@ -9,12 +8,12 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { AppPostObject } from '../../../types/app-post.types';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { AppText } from '../../../components/lib/Text';
 import { AppDivider } from '../../../components/lib/Divider';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { DriverService, PostInspector } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 function ActionButton({
 	Icon,
@@ -78,22 +77,22 @@ function MorePostActionsPresenter({
 	item,
 }: {
 	setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
-	item: AppPostObject;
+	item: PostObjectType;
 }) {
 	const { postPub } = useAppPublishers();
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const _target = PostMiddleware.getContentTarget(item);
+	const _target = PostInspector.getContentTarget(item);
 	const { show, setCtx } = useAppBottomSheet();
 
 	const IS_BOOKMARKED = _target?.interaction.bookmarked;
-	const IS_LIKED = PostMiddleware.isLiked(_target);
-	const IS_SHARED = PostMiddleware.isShared(_target);
+	const IS_LIKED = PostInspector.isLiked(_target);
+	const IS_SHARED = PostInspector.isShared(_target);
 	const IS_REACTED = _target?.stats?.reactions?.every((o) => o.me === false);
 
 	let ReactionCta = 'Add Reaction';
 	if (IS_REACTED) {
-		if (ActivityPubService.pleromaLike(driver)) {
+		if (DriverService.supportsPleromaApi(driver)) {
 			ReactionCta = 'Add More Reactions';
 		} else {
 			ReactionCta = 'Change Reaction';
@@ -119,7 +118,7 @@ function MorePostActionsPresenter({
 
 	return (
 		<Fragment>
-			{ActivityPubService.canBookmark(driver) && (
+			{DriverService.canBookmark(driver) && (
 				<ActionButton
 					Icon={
 						<AppIcon
@@ -134,7 +133,7 @@ function MorePostActionsPresenter({
 					onClick={onClickToggleBookmark}
 				/>
 			)}
-			{ActivityPubService.canLike(driver) && (
+			{DriverService.canLike(driver) && (
 				<ActionButton
 					Icon={
 						<AppIcon
@@ -148,7 +147,7 @@ function MorePostActionsPresenter({
 					onClick={onClickToggleLike}
 				/>
 			)}
-			{ActivityPubService.canAddReactions(driver) && (
+			{DriverService.canReact(driver) && (
 				<ActionButton
 					Icon={
 						<AppIcon id={'smiley'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />

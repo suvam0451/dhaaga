@@ -1,8 +1,7 @@
 import { BaseStorageManager } from './_shared';
 import { z } from 'zod';
-import { DataSource } from '../../database/dataSource';
-import { AppUserObject } from '../../types/app-user.types';
-import { AppPostObject } from '../../types/app-post.types';
+import { DataSource } from '@dhaaga/db';
+import type { PostObjectType, UserObjectType } from '@dhaaga/bridge';
 import { ViewMeasurement } from '../../utils/viewport.utils';
 
 enum APP_CACHE_KEY {
@@ -82,41 +81,43 @@ class Storage extends BaseStorageManager {
 		return this.set(APP_CACHE_KEY.USER_ID_TARGET, value);
 	}
 
-	getBottomSheetPostActionsTarget(): AppPostObject {
-		return this.getJson<AppPostObject>(
+	getBottomSheetPostActionsTarget(): PostObjectType {
+		return this.getJson<PostObjectType>(
 			APP_CACHE_KEY.BOTTOM_SHEET_MORE_ACTION_POST_TARGET,
 		);
 	}
 
-	setBottomSheetPostActionsTarget(input: AppPostObject) {
+	setBottomSheetPostActionsTarget(input: PostObjectType) {
 		return this.setJson(
 			APP_CACHE_KEY.BOTTOM_SHEET_MORE_ACTION_POST_TARGET,
 			input,
 		);
 	}
 
-	getPostObject(): AppPostObject {
-		return this.getJson<AppPostObject>(APP_CACHE_KEY.POST_OBJECT_TARGET);
+	getPostObject(): PostObjectType {
+		return this.getJson<PostObjectType>(APP_CACHE_KEY.POST_OBJECT_TARGET);
 	}
 
-	setPostObject(target: AppPostObject) {
+	setPostObject(target: PostObjectType) {
 		return this.setJson(APP_CACHE_KEY.POST_OBJECT_TARGET, target);
 	}
 
-	getUserObject(): AppUserObject {
-		return this.getJson<AppUserObject>(APP_CACHE_KEY.USER_OBJECT_TARGET);
+	getUserObject(): UserObjectType {
+		return this.getJson<UserObjectType>(APP_CACHE_KEY.USER_OBJECT_TARGET);
 	}
 
-	setUserObject(obj: AppUserObject) {
+	setUserObject(obj: UserObjectType) {
 		return this.setJson(APP_CACHE_KEY.USER_OBJECT_TARGET, obj);
 	}
 
-	setPostForMediaInspect(obj: AppUserObject) {
+	setPostForMediaInspect(obj: UserObjectType) {
 		return this.setJson(APP_CACHE_KEY.MEDIA_INSPECT_POST_TARGET, obj);
 	}
 
 	getPostForMediaInspect() {
-		return this.getJson<AppPostObject>(APP_CACHE_KEY.MEDIA_INSPECT_POST_TARGET);
+		return this.getJson<PostObjectType>(
+			APP_CACHE_KEY.MEDIA_INSPECT_POST_TARGET,
+		);
 	}
 
 	/**

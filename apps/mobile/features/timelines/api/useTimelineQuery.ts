@@ -1,11 +1,11 @@
 import { AppTimelineQuery } from './useTimelineController';
 import { useQuery } from '@tanstack/react-query';
 import {
-	BlueskyRestClient,
+	AtprotoApiAdapter,
 	DhaagaJsTimelineQueryOptions,
 	KNOWN_SOFTWARE,
-	MisskeyRestClient,
-	PleromaRestClient,
+	MisskeyApiAdapter,
+	PleromaApiAdapter,
 } from '@dhaaga/bridge';
 import { TimelineFetchMode } from '../../../states/interactors/post-timeline.reducer';
 import {
@@ -13,9 +13,9 @@ import {
 	useAppApiClient,
 } from '../../../hooks/utility/global-state-extractors';
 import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
-import { AppPostObject } from '../../../types/app-post.types';
 import { AppResultPageType } from '../../../types/app.types';
+import { PostParser, DriverService, defaultResultPage } from '@dhaaga/bridge';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -26,14 +26,7 @@ type TimelineQueryParams = {
 	sessionId?: string;
 };
 
-type TimelineFetchResultType = AppResultPageType<AppPostObject>;
-
-const DEFAULT_RETURN_VALUE: TimelineFetchResultType = {
-	success: true,
-	items: [],
-	maxId: undefined,
-	minId: undefined,
-};
+type TimelineFetchResultType = ResultPage<PostObjectType>;
 
 /**
  * Use to fetch paginated data for
@@ -83,7 +76,7 @@ function useTimelineQuery({
 	function generateMaxId(data: any, maxId?: string | null): string | null {
 		if (maxId) return maxId;
 
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+		if (DriverService.supportsAtProto(driver)) {
 			if (data.posts !== undefined) return data.cursor;
 			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
 			return _payload.data.cursor;
@@ -94,10 +87,10 @@ function useTimelineQuery({
 
 	function outputSchemaToResultPage(
 		data: any,
-	): AppResultPageType<AppPostObject> {
+	): AppResultPageType<PostObjectType> {
 		return {
 			success: true,
-			items: PostMiddleware.deserialize<unknown[]>(data.feed, driver, server),
+			items: PostParser.parse<unknown[]>(data.feed, driver, server),
 			maxId: data.cursor === undefined ? null : data.cursor,
 			minId: null,
 		};
@@ -105,7 +98,7 @@ function useTimelineQuery({
 
 	function generateFeedBatch(data: any) {
 		let _feed = [];
-		if (driver === KNOWN_SOFTWARE.BLUESKY) {
+		if (DriverService.supportsAtProto(driver)) {
 			if (data.posts) {
 				// for hashtags
 				_feed = data.posts;
@@ -117,7 +110,7 @@ function useTimelineQuery({
 			_feed = data.posts ? data.posts : data;
 		}
 		try {
-			return PostMiddleware.deserialize<unknown[]>(_feed, driver, server);
+			return PostParser.parse<unknown[]>(_feed, driver, server);
 		} catch (e) {
 			console.log('[ERROR]: failed to convert posts', e);
 			return [];
@@ -135,47 +128,44 @@ function useTimelineQuery({
 		maxId?: string | null,
 	): TimelineFetchResultType {
 		return {
-			success: true,
 			items: generateFeedBatch(data),
 			maxId: generateMaxId(data, maxId),
-			minId: undefined,
+			minId: null,
 		};
 	}
 
 	async function api(): Promise<TimelineFetchResultType> {
-		if (client === null) return DEFAULT_RETURN_VALUE;
+		if (client === null) return defaultResultPage;
 		switch (type) {
 			case TimelineFetchMode.IDLE:
-				return DEFAULT_RETURN_VALUE;
+				return defaultResultPage;
 			case TimelineFetchMode.HOME: {
 				const { data, error } = await client.timelines.home(_query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.LOCAL: {
 				const { data, error } = await client.timelines.public({
 					..._query,
 					local: true, // Pleroma/Akkoma thing
-					withMuted: [KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(
-						driver,
-					)
+					withMuted: DriverService.supportsPleromaApi(driver)
 						? true
 						: undefined,
 					withRenotes: !opts?.excludeReblogs,
 					withReplies: !opts?.excludeReplies,
 				});
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.HASHTAG: {
 				const { data, error } = await client.timelines.hashtag(_id, _query);
 				console.log('all eyes on me', data, error);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.LIST: {
 				const { data, error } = await client.timelines.list(_id, _query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.USER: {
@@ -183,7 +173,7 @@ function useTimelineQuery({
 					_id,
 					_query,
 				)) as any;
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.SOCIAL: {
@@ -191,90 +181,75 @@ function useTimelineQuery({
 					..._query,
 					social: true,
 				});
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.BUBBLE: {
-				if (driver === KNOWN_SOFTWARE.AKKOMA) {
-					const { data } = await (client as PleromaRestClient).timelines.bubble(
+				if (DriverService.supportsPleromaApi(driver)) {
+					const { data } = await (client as PleromaApiAdapter).timelines.bubble(
 						_query,
 					);
 					return {
-						success: true,
-						items: PostMiddleware.deserialize<unknown[]>(
-							data as any[],
-							driver,
-							server,
-						),
+						items: PostParser.parse<unknown[]>(data as any[], driver, server),
 						maxId: generateMaxId(data),
-						minId: undefined,
+						minId: null,
 					};
 				} else if (driver === KNOWN_SOFTWARE.SHARKEY) {
-					const { data } = await (client as MisskeyRestClient).timelines.bubble(
+					const { data } = await (client as MisskeyApiAdapter).timelines.bubble(
 						_query,
 					);
 					return {
-						success: true,
-						items: PostMiddleware.deserialize<unknown[]>(
-							data as any[],
-							driver,
-							server,
-						),
+						items: PostParser.parse<unknown[]>(data as any[], driver, server),
 						maxId: generateMaxId(data),
-						minId: undefined,
+						minId: null,
 					};
 				} else {
-					return DEFAULT_RETURN_VALUE;
+					return defaultResultPage;
 				}
 			}
 			case TimelineFetchMode.FEDERATED: {
 				const { data, error } = await client.timelines.public(_query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data);
 			}
 			case TimelineFetchMode.BOOKMARKS: {
 				const { data, error } = await client.accounts.bookmarks(_query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data.data, data?.maxId);
 			}
 			case TimelineFetchMode.FEED: {
 				const { data, error } = await (
-					client as BlueskyRestClient
+					client as AtprotoApiAdapter
 				).timelines.feed({
 					limit: TIMELINE_STATUS_LIMIT,
 					cursor: maxId === null ? undefined : maxId,
 					feed: query.id,
 				});
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return outputSchemaToResultPage(data);
 			}
 			case TimelineFetchMode.LIKES: {
-				if (driver === KNOWN_SOFTWARE.BLUESKY) {
+				if (DriverService.supportsAtProto(driver)) {
 					const { data, error } = await (
-						client as BlueskyRestClient
+						client as AtprotoApiAdapter
 					).accounts.atProtoLikes(acct.identifier, {
 						limit: TIMELINE_STATUS_LIMIT,
 						cursor: _query.maxId === null ? undefined : _query.maxId,
 					});
-					if (error) return DEFAULT_RETURN_VALUE;
+					if (error) return defaultResultPage;
 					return {
-						success: true,
-						items: PostMiddleware.deserialize<unknown[]>(
-							data.feed,
-							driver,
-							server,
-						),
+						items: PostParser.parse<unknown[]>(data.feed, driver, server),
 						maxId: data.cursor === undefined ? null : data.cursor,
 						minId: null,
 					};
 				}
 
 				const { data, error } = await client.accounts.likes(_query);
-				if (error) return DEFAULT_RETURN_VALUE;
+				if (error) return defaultResultPage;
 				return createResultBatch(data.data, data.maxId);
 			}
 			default:
-				return DEFAULT_RETURN_VALUE;
+				return defaultResultPage;
 		}
 	}
 
@@ -283,7 +258,7 @@ function useTimelineQuery({
 		queryKey: [type, _id, _query, maxId, minId, sessionId],
 		queryFn: api,
 		enabled: !!client && type !== TimelineFetchMode.IDLE,
-		initialData: DEFAULT_RETURN_VALUE,
+		initialData: defaultResultPage,
 	});
 }
 

@@ -4,7 +4,7 @@ import SoftwareHeader from '../../../../../../screens/accounts/fragments/Softwar
 import AccountListingFragment from '../../../../../../screens/accounts/fragments/AccountListingFragment';
 import NoAccounts from './NoAccounts';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { Account } from '../../../../../../database/_schema';
+import { Account } from '@dhaaga/db';
 
 type AccountListForSoftwareProps = {
 	data: Account[];

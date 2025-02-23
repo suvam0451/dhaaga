@@ -1,12 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AccountCollection } from '../../../database/_schema';
-import { AccountCollectionService } from '../../../database/entities/account-collection';
+import {
+	AccountCollection,
+	AccountCollectionService,
+	AccountSavedPostService,
+} from '@dhaaga/db';
 import {
 	useAppAcct,
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
-import { AppPostObject } from '../../../types/app-post.types';
-import { AccountSavedPostService } from '../../../database/entities/account-saved-post';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 export function useDbCollections() {
 	const { db } = useAppDb();
@@ -50,7 +52,7 @@ export function useDbCollections() {
 			collection,
 			post,
 		}: {
-			post: AppPostObject;
+			post: PostObjectType;
 			collection: AccountCollection;
 		}) => {
 			const savedPost = AccountSavedPostService.upsert(db, acct, post);

@@ -1,4 +1,4 @@
-import { ProfilePinnedTimeline } from '../database/_schema';
+import { ProfilePinnedTimeline } from '@dhaaga/db';
 import { APP_PINNED_OBJECT_TYPE } from './driver.service';
 import { TimelineFetchMode } from '../states/interactors/post-timeline.reducer';
 import { APP_ICON_ENUM } from '../components/lib/Icon';

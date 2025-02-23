@@ -1,9 +1,9 @@
-import { AppPostObject } from '../../../types/app-post.types';
 import { useDbSavedPostStatus } from '../api/useCollectionsQuery';
-import { AccountCollection } from '../../../database/_schema';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { AccountCollection } from '@dhaaga/db';
 import useCollections from '../api/useCollections';
 import { useState } from 'react';
+import { PostInspector } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 /**
  * Helps add/remove a post to/from collections
@@ -21,8 +21,8 @@ function useCollectionAssignInteractor(postId: string) {
 		queryResult.refetch().finally(() => setIsRefreshing(false));
 	}
 
-	function onToggle(collection: AccountCollection, post: AppPostObject) {
-		toggleForCollection(collection, PostMiddleware.getContentTarget(post));
+	function onToggle(collection: AccountCollection, post: PostObjectType) {
+		toggleForCollection(collection, PostInspector.getContentTarget(post));
 		_refetch();
 	}
 

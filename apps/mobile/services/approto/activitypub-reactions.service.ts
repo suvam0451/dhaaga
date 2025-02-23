@@ -16,7 +16,7 @@ const MISSKEY_LOCAL_ALT_EX = /:(.*?)@.:/;
 const MISSKEY_REMOTE_EX = /:(.*?)@(.*?):/;
 const PLEROMA_REMOTE_EX = /(.*?)@(.*?)/;
 
-export const ActivityPubReactionStateDto = z.array(
+export const ActivityPubReactionStateSchema = z.array(
 	z.object({
 		id: z.string(),
 		count: z.number().positive(),
@@ -26,8 +26,8 @@ export const ActivityPubReactionStateDto = z.array(
 	}),
 );
 
-export type ActivityPubReactionStateDtoType = z.infer<
-	typeof ActivityPubReactionStateDto
+export type ActivityPubReactionStateType = z.infer<
+	typeof ActivityPubReactionStateSchema
 >;
 
 class ActivityPubReactionsService {
@@ -72,7 +72,7 @@ class ActivityPubReactionsService {
 	 * NOTE: Don't touch this. It just works !
 	 */
 	static renderData(
-		input: ActivityPubReactionStateDtoType,
+		input: ActivityPubReactionStateType,
 		{
 			me,
 			calculated,
@@ -264,7 +264,7 @@ class ActivityPubReactionsService {
 		postId: string,
 		domain: string,
 		setLoading: Dispatch<SetStateAction<boolean>>,
-	): Promise<ActivityPubReactionStateDtoType> {
+	): Promise<ActivityPubReactionStateType> {
 		const { data: newStateData, error: newStateError } = await (
 			client as MisskeyRestClient
 		).statuses.get(postId);
@@ -293,7 +293,7 @@ class ActivityPubReactionsService {
 		reactionId: string,
 		domain: string,
 		setLoading: Dispatch<SetStateAction<boolean>>,
-	): Promise<ActivityPubReactionStateDtoType> {
+	): Promise<ActivityPubReactionStateType> {
 		setLoading(true);
 		if (ActivityPubService.pleromaLike(domain)) {
 			const { data, error } = await (

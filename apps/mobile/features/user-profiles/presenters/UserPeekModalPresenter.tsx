@@ -30,7 +30,7 @@ function UserPeekModalPresenter() {
 	const { hide, visible } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { toProfile } = useAppNavigator();
 	const { pos, userId } = useUserPeekInteractor();
-	const { data, fetchStatus } = useGetProfile({ userId });
+	const { data, fetchStatus } = useGetProfile({ use: 'userId', userId });
 	const { width } = Dimensions.get('window');
 
 	if (!visible || !pos.ready) return <View />;

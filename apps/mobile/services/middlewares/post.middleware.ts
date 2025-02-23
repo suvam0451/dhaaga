@@ -1,23 +1,11 @@
-import {
-	ActivitypubStatusAdapter,
-	StatusInterface,
-	UserInterface,
-} from '@dhaaga/bridge';
-import activitypubAdapterService from '../activitypub-adapter.service';
-import {
-	AppPostObject,
-	AppStatusDtoService,
-	ActivityPubStatusItemDto,
-	appPostObjectSchema,
-} from '../../types/app-post.types';
-import ActivitypubAdapterService from '../activitypub-adapter.service';
-import { z } from 'zod';
+import { ActivitypubHelper } from '@dhaaga/bridge';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { SQLiteDatabase } from 'expo-sqlite';
-import { AccountSavedPost } from '../../database/_schema';
-import { DataSource } from '../../database/dataSource';
-import ActivityPubService from '../activitypub.service';
-import ActivitypubService from '../activitypub.service';
+import { AccountSavedPost } from '@dhaaga/db';
+import MediaService from '../media.service';
+import { Dimensions } from 'react-native';
+import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
+import { TextParser, RandomUtil, postObjectSchema } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 /**
  * converts unified interfaces into
@@ -28,144 +16,79 @@ import ActivitypubService from '../activitypub.service';
  * objects. Also see other files
  * in this folder
  */
-export class PostMiddleware {
-	domain: string;
-	subdomain: string;
-	statusI: StatusInterface;
-	userI: UserInterface;
-	/**
-	 * list of instances found
-	 * can belong to current/parent/boosted status
-	 * and associated users
-	 */
-	foundInstances: Set<string>;
+class PostMiddleware {
+	static exportLocal(
+		input: AccountSavedPost,
+		driver: KNOWN_SOFTWARE | string,
+		server: string,
+	) {
+		if (!input) return null;
 
-	constructor(ref: StatusInterface, driver: string, server: string) {
-		this.statusI = ref;
-		this.domain = driver;
-		this.subdomain = server;
-		this.foundInstances = new Set();
-		return this;
-	}
+		const medias = input.medias || [];
+		const height = MediaService.calculateHeightForLocalMediaCarousal(medias, {
+			maxWidth: Dimensions.get('window').width - 32,
+			maxHeight: MEDIA_CONTAINER_MAX_HEIGHT,
+		});
+		const user = input.savedUser;
+		let handle =
+			driver === KNOWN_SOFTWARE.BLUESKY
+				? `@${user.username}`
+				: ActivitypubHelper.getHandle(user.username, server);
 
-	/**
-	 * Find a list of instances associated
-	 * wit this status
-	 */
-	resolveInstances() {
-		const _user = activitypubAdapterService.adaptUser(
-			this.statusI.getUser(),
-			this.domain,
-		);
-		const _subdomain = _user.getInstanceUrl(this.subdomain);
-		this.foundInstances.add(_subdomain);
-
-		// handle boosted content
-		if (this.statusI.isReposted()) {
-			const _userR = activitypubAdapterService.adaptUser(
-				this.statusI.getRepostedStatus()?.getUser(),
-				this.domain,
-			);
-			const _subdomain = _userR.getInstanceUrl();
-			this.foundInstances.add(_subdomain);
-		}
-		return this;
-	}
-
-	async syncSoftware(db: SQLiteDatabase) {}
-
-	// Static method that returns an instance of MyClass
-	static factory(ref: StatusInterface, domain?: string, subdomain?: string) {
-		return new PostMiddleware(ref, domain, subdomain);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	export(): AppPostObject {
-		// to prevent infinite recursion
-		if (!this.statusI || !this.statusI.getId()) return null;
-
-		const IS_REPOSTED = this.statusI.isReposted();
-		const IS_REPLY = this.statusI.isReply();
-
-		let boostedFrom: z.infer<typeof ActivityPubStatusItemDto> = IS_REPOSTED
-			? new PostMiddleware(
-					ActivitypubAdapterService.adaptStatus(
-						this.statusI.getRepostedStatusRaw(),
-						this.domain,
-					),
-					this.domain,
-					this.subdomain,
-				).export()
-			: null;
-
-		/**
-		 * Misskey Compat
-		 *
-		 * NOTE: For mastodon, we need to show reply
-		 * but not render the status
-		 */
-		let replyTo: z.infer<typeof ActivityPubStatusItemDto> =
-			IS_REPLY && this.statusI.getParentRaw()
-				? new PostMiddleware(
-						ActivitypubAdapterService.adaptStatus(
-							this.statusI.getParentRaw(),
-							this.domain,
-						),
-						this.domain,
-						this.subdomain,
-					).export()
-				: null;
-
-		let rootI: z.infer<typeof ActivityPubStatusItemDto> =
-			this.statusI.hasRootAvailable()
-				? new PostMiddleware(
-						ActivitypubAdapterService.adaptStatus(
-							this.statusI.getRootRaw(),
-							this.domain,
-						),
-						this.domain,
-						this.subdomain,
-					).export()
-				: null;
-
-		const dto: AppPostObject =
-			IS_REPLY &&
-			(ActivityPubService.misskeyLike(this.domain) ||
-				ActivityPubService.blueskyLike(this.domain))
-				? /**
-					 * 	Replies in Misskey is actually present in the
-					 * 	"reply" object, instead of root. へんですね?
-					 */
-					{
-						...AppStatusDtoService.export(
-							this.statusI,
-							this.domain,
-							this.subdomain,
-						),
-						boostedFrom,
-						replyTo,
-						rootPost: rootI,
-					}
-				: {
-						...AppStatusDtoService.export(
-							this.statusI,
-							this.domain,
-							this.subdomain,
-						),
-						boostedFrom,
-					};
-
-		const { data, error, success } = appPostObjectSchema.safeParse(dto);
-		if (!success) {
-			console.log('[ERROR]: status item dto validation failed', error);
-			console.log('[INFO]: generated object', dto);
-			this.statusI.print();
-			return null;
-		}
-
-		return data as AppPostObject;
+		return {
+			uuid: RandomUtil.nanoId(),
+			id: input.identifier,
+			visibility: 'N/A',
+			createdAt: input.authoredAt,
+			postedBy: {
+				id: user.identifier,
+				avatarUrl: user.avatarUrl,
+				displayName: user.displayName,
+				handle: handle,
+				instance: user.remoteServer,
+			},
+			content: {
+				raw: input.textContent,
+				media:
+					medias?.map((o) => ({
+						height: o.height,
+						width: o.width,
+						alt: o.alt,
+						type: o.mimeType,
+						url: o.url,
+						previewUrl: o.previewUrl,
+					})) || [],
+			},
+			stats: {
+				replyCount: -1,
+				boostCount: -1,
+				likeCount: -1,
+				reactions: [],
+			},
+			interaction: {
+				bookmarked: false,
+				boosted: false,
+				liked: false,
+			},
+			calculated: {
+				emojis: new Map([]),
+				mediaContainerHeight: height,
+				reactionEmojis: [],
+				mentions: TextParser.findMentions(input.textContent),
+			},
+			meta: {
+				sensitive: input.sensitive,
+				cw: input.spoilerText,
+				isBoost: false,
+				isReply: false,
+				mentions: [],
+				cid: input.identifier,
+				uri: input.identifier,
+			},
+			state: {
+				isBookmarkStateFinal: true,
+			},
+		} as PostObjectType;
 	}
 
 	/**
@@ -180,7 +103,6 @@ export class PostMiddleware {
 	 * @param server
 	 */
 	static databaseToJson(
-		db: DataSource,
 		input: AccountSavedPost,
 		{
 			driver,
@@ -189,177 +111,51 @@ export class PostMiddleware {
 			driver: KNOWN_SOFTWARE | string;
 			server: string;
 		},
-	): AppPostObject {
-		const parsed = AppStatusDtoService.exportLocal(db, input, driver, server);
+	): PostObjectType {
+		const parsed = PostMiddleware.exportLocal(input, driver, server);
 
-		const { data, error, success } = appPostObjectSchema.safeParse(parsed);
+		const { data, error, success } = postObjectSchema.safeParse(parsed);
 		if (!success) {
 			console.log('[ERROR]: failed to convert local savedPost', error);
 			console.log('[INFO]: input used', input);
 			return null;
 		}
-		return data as AppPostObject;
-	}
-
-	static interfaceToJson(
-		input: StatusInterface,
-		{
-			driver,
-			server,
-		}: {
-			driver: KNOWN_SOFTWARE | string;
-			server: string;
-		},
-	): AppPostObject {
-		// prevent infinite recursion
-		if (!input) return null;
-
-		const IS_SHARE = input.isReposted();
-		const HAS_PARENT = input.isReply();
-		const HAS_ROOT = input.hasRootAvailable();
-
-		let sharedFrom: z.infer<typeof ActivityPubStatusItemDto> = IS_SHARE
-			? PostMiddleware.deserialize(input.getRepostedStatusRaw(), driver, server)
-			: null;
-
-		// Null for Mastodon
-		let replyTo: z.infer<typeof ActivityPubStatusItemDto> = HAS_PARENT
-			? PostMiddleware.deserialize(input.getParentRaw(), driver, server)
-			: null;
-
-		let root: z.infer<typeof ActivityPubStatusItemDto> = HAS_ROOT
-			? PostMiddleware.deserialize(input.getRootRaw(), driver, server)
-			: null;
-
-		const dto: AppPostObject =
-			HAS_PARENT &&
-			(ActivityPubService.blueskyLike(driver) ||
-				ActivitypubService.misskeyLike(driver))
-				? /**
-					 * 	Replies in Misskey is actually present in the
-					 * 	"reply" object, instead of root. へんですね?
-					 */
-					{
-						...AppStatusDtoService.export(input, driver, server),
-						boostedFrom: sharedFrom,
-						replyTo,
-						rootPost: root,
-					}
-				: {
-						...AppStatusDtoService.export(input, driver, server),
-						boostedFrom: sharedFrom,
-					};
-
-		const { data, error, success } = appPostObjectSchema.safeParse(dto);
-		if (!success) {
-			console.log('[ERROR]: status item dto validation failed', error);
-			console.log('[INFO]: generated object', dto);
-			input.print();
-			return null;
-		}
-		return data as AppPostObject;
-	}
-
-	static rawToInterface<T>(
-		input: T | T[],
-		driver: string | KNOWN_SOFTWARE,
-	): T extends unknown[] ? StatusInterface[] : StatusInterface {
-		if (Array.isArray(input)) {
-			return input
-				.filter((o) => !!o)
-				.map((o) =>
-					ActivitypubStatusAdapter(o, driver),
-				) as unknown as T extends unknown[] ? StatusInterface[] : never;
-		} else {
-			return ActivitypubStatusAdapter(
-				input,
-				driver,
-			) as unknown as T extends unknown[] ? never : StatusInterface;
-		}
-	}
-
-	/**
-	 * Deserializes (skips returning the interface step)
-	 * raw ap/at proto post objects
-	 * @param input raw ap/at proto post object
-	 * @param driver being used to deserialize this object
-	 * @param server
-	 */
-	static deserialize<T>(
-		input: T | T[],
-		driver: string | KNOWN_SOFTWARE,
-		server: string,
-	): T extends unknown[] ? AppPostObject[] : AppPostObject {
-		if (input instanceof Array) {
-			return input
-				.map((o) => PostMiddleware.rawToInterface<unknown>(o, driver))
-				.filter((o) => !!o)
-				.map((o) =>
-					PostMiddleware.interfaceToJson(o, {
-						driver,
-						server,
-					}),
-				)
-				.filter((o) => !!o) as unknown as T extends unknown[]
-				? AppPostObject[]
-				: never;
-		} else {
-			try {
-				if (!input) return null;
-				return PostMiddleware.interfaceToJson(
-					PostMiddleware.rawToInterface<unknown>(input, driver),
-					{
-						driver,
-						server,
-					},
-				) as unknown as T extends unknown[] ? never : AppPostObject;
-			} catch (e) {
-				console.log(
-					'[ERROR]: failed to deserialize post object',
-					e,
-					'input:',
-					input,
-				);
-				return null;
-			}
-		}
+		return data as PostObjectType;
 	}
 
 	/**
 	 * Deserializes (skips returning the interface step)
 	 * locally saved ap/at proto post objects
-	 * @param db database reference
 	 * @param input raw ap/at proto post object
 	 * @param driver being used to deserialize this object
 	 * @param server
 	 */
-	static deserializeLocal<T>(
-		db: DataSource,
+	private static deserializeLocal<T>(
 		input: T | T[],
 		driver: string | KNOWN_SOFTWARE,
 		server: string,
-	): T extends unknown[] ? AppPostObject[] : AppPostObject {
+	): T extends unknown[] ? PostObjectType[] : PostObjectType {
 		if (input instanceof Array) {
 			return input
 				.map((o) =>
-					PostMiddleware.databaseToJson(db, o as AccountSavedPost, {
+					PostMiddleware.databaseToJson(o as AccountSavedPost, {
 						driver,
 						server,
 					}),
 				)
 				.filter((o) => !!o) as unknown as T extends unknown[]
-				? AppPostObject[]
+				? PostObjectType[]
 				: never;
 		} else {
 			try {
 				if (!input) return null;
-				return PostMiddleware.databaseToJson(db, input as AccountSavedPost, {
+				return PostMiddleware.databaseToJson(input as AccountSavedPost, {
 					driver,
 					server,
-				}) as unknown as T extends unknown[] ? never : AppPostObject;
+				}) as unknown as T extends unknown[] ? never : PostObjectType;
 			} catch (e) {
 				console.log(
-					'[ERROR]: failed to deserialize post object',
+					'[ERROR]: failed to deserialize local post object',
 					e,
 					'input:',
 					input,
@@ -380,7 +176,7 @@ export class PostMiddleware {
 	 *  - Shares -> Returns boostedFrom
 	 *  - Quotes -> Returns the object itself
 	 */
-	static getContentTarget(input: AppPostObject): AppPostObject {
+	static getContentTarget(input: PostObjectType): PostObjectType {
 		if (!input) {
 			console.log('[WARN]: trying to obtain target post for', input);
 			return input;
@@ -395,25 +191,6 @@ export class PostMiddleware {
 				: input.boostedFrom
 			: input;
 	}
-
-	/**
-	 * ------ Utility functions follow ------
-	 */
-
-	static isQuoteObject(input: AppPostObject) {
-		return (
-			input?.meta?.isBoost &&
-			(input?.content?.raw || input?.content?.media?.length > 0)
-		);
-	}
-
-	static isLiked(input: AppPostObject) {
-		if (!input) return false;
-		return !!input.atProto?.viewer?.like || input.interaction.liked;
-	}
-
-	static isShared(input: AppPostObject) {
-		if (!input) return false;
-		return !!input.atProto?.viewer?.repost || input.interaction.boosted;
-	}
 }
+
+export { PostMiddleware };

@@ -15,13 +15,14 @@ import {
 import { RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
 import FeedListPresenter from './FeedListPresenter';
-import {
-	Profile,
-	ProfilePinnedTag,
-	ProfilePinnedUser,
-} from '../../../database/_schema';
+import { Profile, ProfilePinnedTag, ProfilePinnedUser } from '@dhaaga/db';
 import Header from '../components/Header';
-import { ProfileService } from '../../../database/entities/profile';
+import {
+	ProfileService,
+	ProfilePinnedUserService,
+	ProfilePinnedTagService,
+	AccountService,
+} from '@dhaaga/db';
 import UserListPresenter from './UserListPresenter';
 import TagListPresenter from './TagListPresenter';
 import * as Haptics from 'expo-haptics';
@@ -30,10 +31,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import { AccountService } from '../../../database/entities/account';
 import { useShallow } from 'zustand/react/shallow';
-import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
-import { ProfilePinnedTagService } from '../../../database/entities/profile-pinned-tag';
 
 type Props = {
 	// account left join guaranteed

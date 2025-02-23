@@ -13,12 +13,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
-import { Account } from '../../../database/_schema';
 import {
+	Account,
+	AccountService,
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
-} from '../../../database/entities/account-metadata';
-import { AccountService } from '../../../database/entities/account';
+} from '@dhaaga/db';
 import {
 	useAppDb,
 	useAppDialog,

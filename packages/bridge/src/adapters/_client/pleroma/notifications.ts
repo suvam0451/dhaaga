@@ -2,7 +2,7 @@ import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import { CasingUtils } from '../../../utiils/casing.utils.js';
+import { CasingUtil } from '../../../utils/casing.js';
 import {
 	errorBuilder,
 	notImplementedErrorBuilder,
@@ -12,10 +12,7 @@ import {
 	MegaConversation,
 	MegaNotification,
 } from '../../../types/megalodon.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 import { MastoGroupedNotificationsResults } from '../../../types/mastojs.types.js';
@@ -45,7 +42,7 @@ export class PleromaNotificationsRouter
 		}>
 	> {
 		const data = await this.pleromaClient.client.getNotifications(
-			CasingUtils.snakeCaseKeys(query),
+			CasingUtil.snakeCaseKeys(query),
 		);
 		return {
 			data: {
@@ -66,7 +63,7 @@ export class PleromaNotificationsRouter
 				data: data.data,
 			};
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

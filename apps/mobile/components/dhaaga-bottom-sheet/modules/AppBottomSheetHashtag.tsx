@@ -33,24 +33,18 @@ function AppBottomSheetHashtag() {
 
 	const FOLLOW_POSSIBLE = ActivityPubService.mastodonLike(driver);
 
-	const { data, error } = useApiGetTagInterface(TagName);
-
-	console.log(TagName, data, error, data?.getName());
+	const { data } = useApiGetTagInterface(TagName);
 
 	if (INACTIVE) return <View />;
 	return (
-		<ScrollView
-			contentContainerStyle={{
-				paddingBottom: 32,
-			}}
-		>
+		<ScrollView>
 			<View
 				style={{
 					paddingLeft: 12,
 					flexDirection: 'row',
 					alignItems: 'flex-end',
 					backgroundColor: theme.background.a30,
-					paddingTop: appDimensions.bottomSheet.clearanceTop,
+					paddingTop: appDimensions.bottomSheet.clearanceTop + 8,
 					borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
 					borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
 					paddingBottom: 16,
@@ -66,12 +60,12 @@ function AppBottomSheetHashtag() {
 					#
 				</AppText.Normal>
 				<AppText.Medium
-					style={{ fontSize: 22, marginLeft: 2, color: theme.primary.a0 }}
+					style={{ fontSize: 20, marginLeft: 3, color: theme.primary.a0 }}
 				>
 					{data?.getName()}
 				</AppText.Medium>
 			</View>
-			<View style={{ paddingHorizontal: 12 }}>
+			<View style={{ paddingHorizontal: 12, marginTop: 12 }}>
 				{FOLLOW_POSSIBLE && (
 					<AppMenu.Option
 						appIconId={
@@ -81,27 +75,6 @@ function AppBottomSheetHashtag() {
 						onPress={() => {}}
 					/>
 				)}
-				{/*<AppMenu.Option*/}
-				{/*	appIconId={*/}
-				{/*		<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />*/}
-				{/*	}*/}
-				{/*	label={'Preview'}*/}
-				{/*	onPress={() => {}}*/}
-				{/*	desc={'Preview posts using this tag'}*/}
-				{/*/>*/}
-
-				{/*<AppMenu.Option*/}
-				{/*	appIconId={*/}
-				{/*		<AppIcon*/}
-				{/*			id={'language'}*/}
-				{/*			emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
-				{/*		/>*/}
-				{/*	}*/}
-				{/*	label={'Explain'}*/}
-				{/*	desc={'Explains the meaning of this word'}*/}
-				{/*	onPress={() => {}}*/}
-				{/*/>*/}
-
 				<AppMenu.Option
 					appIconId={
 						<AppIcon id={'eye'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
@@ -110,7 +83,6 @@ function AppBottomSheetHashtag() {
 					onPress={() => {}}
 					desc={'Browse posts using this tag'}
 				/>
-
 				<AppMenu.Option
 					appIconId={
 						<AppIcon id={'pin'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />

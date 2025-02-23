@@ -3,20 +3,20 @@ import {
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import { MastoNotification } from '../../../types/mastojs.types.js';
 import { MegaNotification } from '../../../types/megalodon.types.js';
 import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
-import {
+import type {
 	AppBskyNotificationListNotifications,
 	ChatBskyConvoGetConvo,
 	ChatBskyConvoGetMessages,
 	ChatBskyConvoListConvos,
 	Facet,
+	ChatBskyConvoDefs,
+	ChatBskyConvoSendMessage,
 } from '@atproto/api';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
-import { AppAtpSessionData } from '../../../types/atproto.js';
-import * as ChatBskyConvoDefs from '@atproto/api/src/client/types/chat/bsky/convo/defs.js';
+import type { AppAtpSessionData } from '../../../types/atproto.js';
 
 class BlueskyNotificationsRouter implements NotificationsRoute {
 	dto: AppAtpSessionData;
@@ -106,10 +106,10 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 
 	async sendMessage(
 		convoId: string,
-		content: { text?: string; facets?: Facet[] },
+		content: { text: string; facets?: Facet[] },
 	): LibraryPromise<ChatBskyConvoDefs.MessageView> {
 		const agent = getXrpcAgent(this.dto);
-		return await InvokeBskyFunction<ChatBskyConvoDefs.MessageView>(
+		return await InvokeBskyFunction<ChatBskyConvoSendMessage.OutputSchema>(
 			'sendMessage',
 			agent.chat.bsky.convo.sendMessage,
 			agent.chat.bsky.convo,
@@ -135,7 +135,6 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 			reasons: ['like', 'follow', 'repost'],
 		});
 		return resp;
-		return notImplementedErrorBuilder();
 	}
 }
 

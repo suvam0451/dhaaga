@@ -1,17 +1,15 @@
 import { BasePubSubService } from './_base.pubisher';
-import { AppPostObject } from '../../types/app-post.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
+import { KNOWN_SOFTWARE, ApiTargetInterface } from '@dhaaga/bridge';
 import { PostMutator } from '../mutators/post.mutator';
-import { AppFeedObject } from '../../types/app-feed.types';
+import type { FeedObjectType } from '@dhaaga/bridge';
 
 export enum FEED_EVENT_ENUM {
 	UPDATE = 'feedObjectChanged',
 }
 
 export class FeedPublisherService extends BasePubSubService {
-	private readonly cache: Map<string, AppFeedObject>;
+	private readonly cache: Map<string, FeedObjectType>;
 	private readonly driver: KNOWN_SOFTWARE;
-	private readonly client: ActivityPubClient;
+	private readonly client: ApiTargetInterface;
 	private readonly mutator: PostMutator;
 }

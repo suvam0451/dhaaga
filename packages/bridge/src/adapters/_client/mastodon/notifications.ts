@@ -7,17 +7,13 @@ import {
 	errorBuilder,
 	notImplementedErrorBuilder,
 } from '../_router/dto/api-responses.dto.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import {
 	MastoConversation,
 	MastoGroupedNotificationsResults,
 	MastoNotification,
 } from '../../../types/mastojs.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 import {
 	MegaConversation,
@@ -140,7 +136,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 			const data = await this.mastoClient.lib.v1.conversations.list();
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -159,7 +155,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 				.read();
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -170,7 +166,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 				.unread();
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -181,7 +177,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 				.remove();
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

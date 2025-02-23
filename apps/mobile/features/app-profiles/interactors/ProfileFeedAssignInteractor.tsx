@@ -1,6 +1,5 @@
 import { useProfileListFeedAssignment } from '../api/useProfileQuery';
 import ProfileAssignmentPresenter from '../presenters/ProfileAssignmentPresenter';
-import { ProfileService } from '../../../database/entities/profile';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import {
@@ -9,7 +8,7 @@ import {
 	useAppDialog,
 } from '../../../hooks/utility/global-state-extractors';
 import { useProfileMutation } from '../api/useProfileMutation';
-import { Profile } from '../../../database/_schema';
+import { Profile, ProfileService } from '@dhaaga/db';
 import useApiGetFeedDetails from '../../timelines/features/controller/interactors/useApiGetFeedDetails';
 
 type Props = {

@@ -1,13 +1,13 @@
 import { AppChatRoom } from '../../services/chat.service';
-import { AppMessageObject } from '../../types/app-message.types';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
+import type { MessageObjectType } from '@dhaaga/bridge';
 
 type CHATROOM_SEND_STATUS = 'idle' | 'typing' | 'sending' | 'sent';
 
 type State = {
 	room: AppChatRoom;
-	messages: AppMessageObject[];
+	messages: MessageObjectType[];
 	minId: string | undefined;
 	sendStatus: 'idle' | 'typing' | 'sending' | 'sent';
 };
@@ -36,14 +36,14 @@ type Actions =
 	| {
 			type: ACTION.INIT_MESSAGES;
 			payload: {
-				messages: AppMessageObject[];
+				messages: MessageObjectType[];
 				minId: string | undefined;
 			};
 	  }
 	| {
 			type: ACTION.APPEND_MESSAGE;
 			payload: {
-				message: AppMessageObject;
+				message: MessageObjectType;
 			};
 	  }
 	| {

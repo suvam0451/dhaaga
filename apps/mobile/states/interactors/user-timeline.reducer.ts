@@ -1,6 +1,6 @@
-import { DataSource } from '../../database/dataSource';
-import { RandomUtil } from '../../utils/random.utils';
-import { AppUserObject } from '../../types/app-user.types';
+import { DataSource } from '@dhaaga/db';
+import { RandomUtil, ResultPage } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
 import {
@@ -8,16 +8,17 @@ import {
 	TimelineReducerBaseState,
 } from './_timeline.shared';
 
-type State = TimelineReducerBaseState<AppUserObject> & {};
+type State = TimelineReducerBaseState<UserObjectType> & {};
 
 export const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
+	items: [],
 };
 
 export enum ACTION {
 	INIT,
 	RESET,
-	APPEND_RESULTS,
+	APPEND,
 	REQUEST_LOAD_MORE,
 	SET_QUERY_OPTS,
 }
@@ -36,12 +37,8 @@ type Actions =
 			type: ACTION.REQUEST_LOAD_MORE;
 	  }
 	| {
-			type: ACTION.APPEND_RESULTS;
-			payload: {
-				items: AppUserObject[];
-				minId?: string;
-				maxId?: string;
-			};
+			type: ACTION.APPEND;
+			payload: ResultPage<UserObjectType>;
 	  }
 	| {
 			type: ACTION.SET_QUERY_OPTS;
@@ -72,7 +69,7 @@ function reducer(state: State, action: Actions): State {
 				draft.seen = new Set();
 			});
 		}
-		case ACTION.APPEND_RESULTS: {
+		case ACTION.APPEND: {
 			const copy = Array.from(state.items);
 
 			return produce(state, (draft) => {

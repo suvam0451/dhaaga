@@ -4,7 +4,7 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { TextParserService } from '../../../services/text-parser.service';
+import { TextParser } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../lib/Text';
 import { Text } from 'react-native';
@@ -23,13 +23,18 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 	const { show, setCtx } = useAppBottomSheet();
 	const { acct } = useAppAcct();
 
-	const parsed = TextParserService.mentionTextToHandle(value, acct);
+	const parsed = TextParser.mentionTextToHandle(
+		value,
+		acct.server,
+		acct.username,
+	);
 
 	function onPress() {
 		if (
 			ActivitypubService.mastodonLike(driver) ||
 			ActivitypubService.misskeyLike(driver)
 		) {
+			console.log(mentions);
 			// MastoAPI usually bundles the mentions in post object
 			const match = mentions.find((o) =>
 				o?.acct?.includes(parsed?.text?.replace('@', '')),

@@ -1,13 +1,13 @@
-import { DhaagaJsMentionObject, StatusInterface } from './_interface.js';
+import { DhaagaJsMentionObject, PostTargetInterface } from './_interface.js';
 import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
-import UnknownToStatusAdapter from './default.js';
-import { MastoAccount, MastoStatus } from '../../types/mastojs.types.js';
-import { CasingUtils } from '../../utiils/casing.utils.js';
+import PostAdapterBase from './default.js';
+import type { MastoStatus } from '../../types/mastojs.types.js';
+import { CasingUtil } from '../../utils/casing.js';
 
-class MastodonToStatusAdapter
-	extends UnknownToStatusAdapter
-	implements StatusInterface
+class MastoApiPostAdapter
+	extends PostAdapterBase
+	implements PostTargetInterface
 {
 	ref: MastoStatus;
 
@@ -69,7 +69,7 @@ class MastodonToStatusAdapter
 
 	getIsFavourited = () => this.ref.favourited;
 
-	getUser = () => this.ref.account as MastoAccount;
+	getUser = () => this.ref.account as any;
 
 	isReply() {
 		return (
@@ -107,7 +107,7 @@ class MastodonToStatusAdapter
 
 	getRepostedStatus() {
 		if (this.ref.reblog) {
-			return new MastodonToStatusAdapter(this.ref.reblog);
+			return new MastoApiPostAdapter(this.ref.reblog);
 		}
 		return null;
 	}
@@ -121,7 +121,7 @@ class MastodonToStatusAdapter
 	getMediaAttachments() {
 		return this.ref.mediaAttachments?.map((o) => {
 			return new MediaAttachmentToMediaAttachmentAdapter(
-				new MediaAttachmentInstance(CasingUtils.camelCaseKeys(o)),
+				new MediaAttachmentInstance(CasingUtil.camelCaseKeys(o)),
 			);
 		});
 	}
@@ -137,4 +137,4 @@ class MastodonToStatusAdapter
 	getAccountId_Poster = () => this.ref.account?.id;
 }
 
-export default MastodonToStatusAdapter;
+export default MastoApiPostAdapter;

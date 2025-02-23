@@ -1,5 +1,5 @@
 import {
-	DhaagaErrorCode,
+	ApiErrorCode,
 	LibraryResponse,
 } from '../../../../types/result.types.js';
 
@@ -12,7 +12,7 @@ export function successWithData(data: any) {
 export function errorBuilder<T>(error?: any): LibraryResponse<T> {
 	return {
 		error: {
-			code: error?.code || DhaagaErrorCode.UNKNOWN_ERROR,
+			code: error?.code || ApiErrorCode.UNKNOWN_ERROR,
 		},
 	};
 }
@@ -20,7 +20,7 @@ export function errorBuilder<T>(error?: any): LibraryResponse<T> {
 export function notImplementedErrorBuilder<T>(): LibraryResponse<T> {
 	return {
 		error: {
-			code: DhaagaErrorCode.UNKNOWN_ERROR,
+			code: ApiErrorCode.UNKNOWN_ERROR,
 		},
 	};
 }

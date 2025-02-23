@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { KNOWN_SOFTWARE } from '../adapters/_client/_router/routes/instance.js';
-import { DhaagaErrorCode, LibraryResponse } from '../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../types/result.types.js';
+import { KNOWN_SOFTWARE } from '../data/driver.js';
+import { DriverService } from './driver.js';
 
 const NODEINFO_10 = 'http://nodeinfo.diaspora.software/ns/schema/1.0';
 const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
@@ -44,10 +45,11 @@ class ActivitypubHelper {
 	 *
 	 * @param url preferably using instanceUrl
 	 * @param myDomain
-	 * @param domain
+	 * @param driver
 	 */
-	static getHandle(url: string, myDomain: string, domain?: string) {
-		if (domain === KNOWN_SOFTWARE.BLUESKY) return url;
+	static getHandle(url: string, myDomain: string, driver?: string) {
+		if (DriverService.supportsAtProto(driver || KNOWN_SOFTWARE.UNKNOWN))
+			return url;
 
 		const ex = /^https?:\/\/(.*?)\/(.*?)/;
 		const subdomainExtractUrl = /^https?:\/\/(.*?)\/?/;
@@ -201,7 +203,7 @@ class ActivitypubHelper {
 							// js api is outdated
 							return {
 								error: {
-									code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
+									code: ApiErrorCode.FEATURE_UNSUPPORTED,
 								},
 							};
 						}
@@ -218,7 +220,7 @@ class ActivitypubHelper {
 			}
 			return {
 				error: {
-					code: DhaagaErrorCode.UNKNOWN_ERROR,
+					code: ApiErrorCode.UNKNOWN_ERROR,
 				},
 			};
 		} catch (e: any) {
@@ -232,7 +234,7 @@ class ActivitypubHelper {
 			}
 			return {
 				error: {
-					code: DhaagaErrorCode.UNKNOWN_ERROR,
+					code: ApiErrorCode.UNKNOWN_ERROR,
 				},
 			};
 		}

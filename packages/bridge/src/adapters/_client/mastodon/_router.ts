@@ -11,10 +11,16 @@ import { MastodonMeRouter } from './me.js';
 import { MastodonMediaRoute } from './media.js';
 import { MastodonListRoute } from './lists.js';
 import { MastodonProfileRouter } from './profile.js';
-import { RouterInterface } from '../_router/routes/_index.js';
+import { ApiTargetInterface } from '../_router/routes/_index.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostMutatorRoute } from '../_router/routes/post.js';
+import { UserRoute } from '../_router/routes/user.js';
 
-class MastodonRestClient implements RouterInterface {
+class Adapter implements ApiTargetInterface {
+	driver: KNOWN_SOFTWARE | string;
+	server: string | null;
+
 	fetch: FetchWrapper;
 	instances: MastodonInstanceRouter;
 	accounts: MastodonAccountsRouter;
@@ -28,8 +34,16 @@ class MastodonRestClient implements RouterInterface {
 	media: MastodonMediaRoute;
 	lists: MastodonListRoute;
 	profile: MastodonProfileRouter;
+	post: PostMutatorRoute;
+	user: UserRoute;
 
-	constructor(dto: RestClientCreateDTO) {
+	constructor(
+		driver: KNOWN_SOFTWARE | string,
+		server: string | null,
+		dto: RestClientCreateDTO,
+	) {
+		this.driver = driver;
+		this.server = server;
 		this.fetch = FetchWrapper.create(dto.instance, dto.token);
 		this.instances = new MastodonInstanceRouter(this.fetch);
 		this.accounts = new MastodonAccountsRouter(this.fetch);
@@ -43,7 +57,9 @@ class MastodonRestClient implements RouterInterface {
 		this.media = new MastodonMediaRoute(this.fetch);
 		this.lists = new MastodonListRoute(this.fetch);
 		this.profile = new MastodonProfileRouter(this.fetch);
+		this.post = new PostMutatorRoute(this);
+		this.user = new UserRoute(this);
 	}
 }
 
-export default MastodonRestClient;
+export { Adapter as MastoApiAdapter };

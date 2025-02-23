@@ -1,9 +1,9 @@
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { AppPostObject } from '../../../../types/app-post.types';
 import { appDimensions } from '../../../../styles/dimensions';
-import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
+import { PostInspector } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 const TIMELINE_PFP_SIZE = appDimensions.timelines.avatarIconSize;
 
@@ -46,7 +46,7 @@ export function OriginalPostedPfpFragment({
 }
 
 type OriginalPosterProps = {
-	dto: AppPostObject;
+	dto: PostObjectType;
 	style?: StyleProp<ViewStyle>;
 };
 
@@ -57,7 +57,7 @@ type OriginalPosterProps = {
 function PostCreatedByIconOnly({ dto, style }: OriginalPosterProps) {
 	const { toProfile } = useAppNavigator();
 
-	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
+	const STATUS_DTO = PostInspector.getContentTarget(dto);
 
 	function onPress() {
 		toProfile(STATUS_DTO.postedBy.id);

@@ -1,23 +1,33 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "nodenext",
+    "target": "ESNext",
+    "module": "NodeNext",
+    "jsx": "preserve",
     "moduleResolution": "NodeNext",
+    "verbatimModuleSyntax": false,
+    "moduleDetection": "force",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "skipLibCheck": true,
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "composite": true
+    // Strictness
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    // perf
+    "removeComments": true,
+    "preserveConstEnums": true,
+    // debugging
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
   },
   "include": [
     "src",
-    "test"
   ],
   "exclude": [
-    "test",
-    "lib",
-    "dist/**/*"
+    "__test__",
+    "dist"
   ]
 }

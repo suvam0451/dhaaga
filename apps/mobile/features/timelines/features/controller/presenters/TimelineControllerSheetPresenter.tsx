@@ -17,9 +17,12 @@ import useTimelineControllerInteractor from '../interactors/useTimelineControlle
 import UserTimelineControlPresenter from './UserTimelineControlPresenter';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import {
+	AtprotoApiAdapter,
+	AtprotoUtils,
+	KNOWN_SOFTWARE,
+} from '@dhaaga/bridge';
 import { appDimensions } from '../../../../../styles/dimensions';
-import { AtprotoService } from '../../../../../services/atproto.service';
 import { LinkingUtils } from '../../../../../utils/linking.utils';
 import SyncStatusPresenter from '../../../../feeds/presenters/SyncStatusPresenter';
 import ProfileFeedAssignInteractor from '../../../../app-profiles/interactors/ProfileFeedAssignInteractor';
@@ -263,19 +266,13 @@ function TimelineControllerSheetPresenter() {
 	function onOpenInBrowser() {
 		switch (draft.feedType) {
 			case 'Feed': {
-				AtprotoService.generateFeedRemoteUrl(
-					client as any,
+				AtprotoUtils.generateFeedUrl(
+					client as AtprotoApiAdapter,
 					draft.query.id,
-				).then((result) => {
-					if (result.type === 'success') {
-						console.log(result.value.url);
-						LinkingUtils.openURL(result.value.url);
-					}
-				});
+				).then((o) => o.tap(LinkingUtils.openURL));
 				break;
 			}
 		}
-		// https://bsky.app/profile/skyfeed.xyz/feed/mutuals
 	}
 
 	const BottomComp = useMemo(() => {

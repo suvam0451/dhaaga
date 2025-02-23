@@ -6,15 +6,12 @@ import { useUserTimelineDispatch } from '../../timelines/contexts/UserTimelineCt
 
 function useFollowersInteractor() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const queryResult = useGetFollowers(id);
+	const queryResult = useGetFollowers(id, null);
 	const TimelineDispatch = useUserTimelineDispatch();
 
 	useEffect(() => {
-		if (!queryResult.data.success) {
-			return;
-		}
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.APPEND_RESULTS,
+			type: AppUserTimelineReducerActionType.APPEND,
 			payload: queryResult.data,
 		});
 	}, [queryResult.fetchStatus]);

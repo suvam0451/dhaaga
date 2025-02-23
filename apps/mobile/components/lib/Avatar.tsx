@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Image } from 'expo-image';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import { APP_FONTS } from '../../styles/AppFonts';
-import { Account } from '../../database/_schema';
+import { Account } from '@dhaaga/db';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
 type AppAvatarProps = {

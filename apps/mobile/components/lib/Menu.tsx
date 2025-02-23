@@ -111,7 +111,7 @@ export class AppMenu {
 			<Pressable
 				style={{
 					flexDirection: 'row',
-					padding: 8,
+					// padding: 8,
 					paddingVertical: _desc ? 10 : 12,
 					alignItems: 'center',
 					width: '100%',
@@ -126,23 +126,25 @@ export class AppMenu {
 						paddingRight: 4,
 					}}
 				>
-					<AppText.SemiBold
+					<AppText.Medium
 						style={{
 							color: theme.secondary.a10,
 							fontSize: 18,
-							marginBottom: _desc ? 0 : 2,
+							marginBottom: _desc
+								? appDimensions.timelines.sectionBottomMargin * 0.5
+								: 0,
 						}}
 					>
 						{_label}
-					</AppText.SemiBold>
+					</AppText.Medium>
 					{_desc && (
-						<AppText.Medium
+						<AppText.Normal
 							style={{
 								color: theme.secondary.a30,
 							}}
 						>
 							{_desc}
-						</AppText.Medium>
+						</AppText.Normal>
 					)}
 				</View>
 			</Pressable>

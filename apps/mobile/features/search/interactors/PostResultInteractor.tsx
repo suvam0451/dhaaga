@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
 import {
 	useTimelineDispatch,
 	useTimelineState,
@@ -14,6 +13,7 @@ import LoadingMore from '../../../components/screens/home/LoadingMore';
 import Header from '../components/Header';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusItem from '../../../components/common/status/StatusItem';
+import { useDiscoverState } from '@dhaaga/core';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -21,7 +21,7 @@ type ResultInteractorProps = {
 
 function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	const [Refreshing, setRefreshing] = useState(false);
-	const State = useDiscoverTabState();
+	const State = useDiscoverState();
 	const TimelineState = useTimelineState();
 	const TimelineDispatch = useTimelineDispatch();
 	const { data, fetchStatus, refetch } = useApiSearchPosts(
@@ -44,17 +44,10 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	}, [State.tab]);
 
 	useEffect(() => {
-		if (!data.success) {
-			onDataLoaded(true);
-			return;
-		}
 		onDataLoaded(false);
 		TimelineDispatch({
 			type: AppTimelineReducerActionType.APPEND_RESULTS,
-			payload: {
-				items: data.items,
-				maxId: data.maxId,
-			},
+			payload: data,
 		});
 	}, [fetchStatus]);
 

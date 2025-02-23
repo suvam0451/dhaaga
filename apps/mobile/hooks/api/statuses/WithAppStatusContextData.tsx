@@ -3,12 +3,12 @@ import {
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
 import { createContext, Dispatch, useCallback, useContext } from 'react';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 type Type = {
 	data: AppStatusContext;
 	dispatch: Dispatch<{ type: STATUS_CONTEXT_REDUCER_ACTION; payload: any }>;
-	getChildren: (id: string) => AppPostObject[];
+	getChildren: (id: string) => PostObjectType[];
 };
 
 const defaultValue: Type = {
@@ -24,7 +24,7 @@ const defaultValue: Type = {
 	}): void {
 		throw new Error('Function not implemented.');
 	},
-	getChildren: function (id: string): AppPostObject[] {
+	getChildren: function (id: string): PostObjectType[] {
 		throw new Error('Function not implemented.');
 	},
 };

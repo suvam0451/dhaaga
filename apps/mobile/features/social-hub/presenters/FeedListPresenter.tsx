@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Account, ProfilePinnedTimeline } from '../../../database/_schema';
+import { Account, ProfilePinnedTimeline } from '@dhaaga/db';
 import { HubService } from '../../../services/hub.service';
 import Animated from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';

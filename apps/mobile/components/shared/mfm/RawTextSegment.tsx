@@ -1,5 +1,5 @@
 import { Text } from 'react-native';
-import { RandomUtil } from '../../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/bridge';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import {
 	APP_COLOR_PALETTE_EMPHASIS,

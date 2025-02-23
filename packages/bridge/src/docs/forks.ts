@@ -3,7 +3,7 @@
  * developer community by highlighting
  * their forks to the world
  */
-import { KNOWN_SOFTWARE } from '../adapters/_client/_router/routes/instance.js';
+import { KNOWN_SOFTWARE } from '../data/driver.js';
 
 type Documentation = {
 	url: string;

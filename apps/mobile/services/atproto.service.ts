@@ -1,14 +1,7 @@
-import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
-import { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
-import { ActivityPubClient } from '@dhaaga/bridge';
-import {
-	AppBskyActorDefs,
-	AppBskyActorGetPreferences,
-	Facet,
-} from '@atproto/api';
-import { AppParsedTextNodes } from '../types/parsed-text.types';
-import { RandomUtil } from '../utils/random.utils';
-import { Result } from '../utils/result';
+import { AtprotoApiAdapter } from '@dhaaga/bridge';
+import type { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
+import type { ApiTargetInterface } from '@dhaaga/bridge';
+import { AppBskyActorDefs, AppBskyActorGetPreferences } from '@atproto/api';
 
 export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
 
@@ -17,34 +10,27 @@ class AtprotoPostService {
 	 * toggle like for an at proto post object
 	 */
 	static async toggleLike(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		uri: string,
 		cid: string,
 		viewer: ViewerState,
 	) {
-		const _client = client as BlueskyRestClient;
-		if (viewer.like === undefined) {
-			const result = await _client.statuses.atProtoLike(uri, cid);
-			if (result.success)
-				return { state: result.liked, uri: result.uri, success: true };
-			return { state: !!viewer.like, uri: viewer?.like, success: false };
-		}
-
-		const result = await _client.statuses.atProtoDeleteLike(viewer.like);
-		if (result.success) return { state: result.liked, success: true };
-		return { state: !!viewer.like, uri: viewer?.like, success: false };
+		const _client = client as AtprotoApiAdapter;
+		if (viewer.like === undefined)
+			return _client.statuses.atProtoLike(uri, cid);
+		return _client.statuses.atProtoDeleteLike(viewer.like);
 	}
 
 	/**
 	 * toggle sharing status for an at proto post object
 	 */
 	static async toggleRepost(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		uri: string,
 		cid: string,
 		viewer: ViewerState,
 	) {
-		const _client = client as BlueskyRestClient;
+		const _client = client as AtprotoApiAdapter;
 		if (viewer.repost === undefined) {
 			const result = await _client.statuses.atProtoRepost(uri, cid);
 			if (result.success)
@@ -70,130 +56,4 @@ class AtprotoFeedService {
 	}
 }
 
-class Service {
-	static toUtf8(input: string): Uint8Array {
-		const encoder = new TextEncoder();
-		return encoder.encode(input);
-	}
-
-	static toUtf16(input: Uint8Array): string {
-		// Optionally decode back to string
-		const decoder = new TextDecoder('utf-8');
-		return decoder.decode(input);
-	}
-
-	/**
-	 * process the facet nodes, as marked in record
-	 * and return app compatible AST
-	 * @param input
-	 * @param facets
-	 */
-	static processTextContent(
-		input: string,
-		facets: Facet[],
-	): AppParsedTextNodes {
-		if (!input) return [];
-
-		const byteArray: Uint8Array = Service.toUtf8(input);
-
-		const elements = [];
-		let idx = 0,
-			count = 0;
-
-		elements.push({
-			uuid: RandomUtil.nanoId(),
-			type: 'para',
-			nodes: [],
-		});
-
-		for (const facet of facets) {
-			// The raw text segments between facet segments
-			const prefix = byteArray.slice(idx, facet.index.byteStart);
-			elements[0].nodes.push({
-				uuid: RandomUtil.nanoId(),
-				nodes: [],
-				type: 'text',
-				text: Service.toUtf16(prefix),
-			});
-			count++;
-
-			const midSegment = byteArray.slice(
-				facet.index.byteStart,
-				facet.index.byteEnd,
-			);
-			switch (facet.features[0].$type) {
-				case 'app.bsky.richtext.facet#mention': {
-					elements[0].nodes.push({
-						type: 'mention',
-						uuid: RandomUtil.nanoId(),
-						text: Service.toUtf16(midSegment),
-						url: facet.features[0]?.did,
-						nodes: [],
-					});
-					break;
-				}
-				case 'app.bsky.richtext.facet#link': {
-					elements[0].nodes.push({
-						type: 'link',
-						uuid: RandomUtil.nanoId(),
-						text: Service.toUtf16(midSegment),
-						url: facet.features[0]?.uri,
-						nodes: [],
-					});
-					break;
-				}
-				case 'app.bsky.richtext.facet#tag': {
-					elements[0].nodes.push({
-						type: 'tag',
-						uuid: RandomUtil.nanoId(),
-						text: Service.toUtf16(midSegment),
-						url: facet.features[0]?.tag,
-						nodes: [],
-					});
-
-					break;
-				}
-			}
-			count++;
-			idx = facet.index.byteEnd;
-		}
-
-		// The suffix raw text segment
-		const suffix = byteArray.slice(idx);
-		elements[0].nodes.push({
-			uuid: RandomUtil.nanoId(),
-			nodes: [],
-			type: 'text',
-			text: Service.toUtf16(suffix),
-		});
-
-		return elements;
-	}
-
-	static async generateFeedRemoteUrl(
-		client: BlueskyRestClient,
-		uri: string,
-	): Promise<Result<{ url: string }>> {
-		const feed = await client.timelines.getFeedGenerator(uri);
-		if (!feed.data.isValid)
-			return {
-				type: 'error',
-				error: new Error('[E_FeedInvalid]'),
-			};
-		if (!feed.data.isOnline)
-			return {
-				type: 'error',
-				error: new Error('[E_FeedOffline]'),
-			};
-		const regex = /([^/]+)$/;
-		const feedUrl = feed.data.view.uri.match(regex)[1];
-		const handle = feed.data.view.creator.handle;
-
-		return {
-			type: 'success',
-			value: { url: `https://bsky.app/profile/${handle}/feed/${feedUrl}` },
-		};
-	}
-}
-
-export { Service as AtprotoService, AtprotoPostService, AtprotoFeedService };
+export { AtprotoPostService, AtprotoFeedService };

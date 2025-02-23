@@ -5,11 +5,10 @@ import { Button } from '@rneui/base';
 import TitleOnlyNoScrollContainer from '../../../components/containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
-import { UnknownRestClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { UnknownRestClient, KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
 import PleromaPasteToken from '../components/PleromaPasteToken';
-import { AccountService } from '../../../database/entities/account';
+import { AccountService, ACCOUNT_METADATA_KEY } from '@dhaaga/db';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
-import { ACCOUNT_METADATA_KEY } from '../../../database/entities/account-metadata';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
 import {
 	useAppDb,
@@ -68,6 +67,7 @@ function MastodonSignInStack() {
 		const upsertResult = AccountService.upsert(
 			db,
 			{
+				uuid: RandomUtil.nanoId(),
 				identifier: verified.id,
 				server: _subdomain,
 				driver: _domain,
@@ -99,7 +99,7 @@ function MastodonSignInStack() {
 				{ key: 'url', value: verified.url, type: 'string' },
 			],
 		);
-		if (upsertResult.type === 'success') {
+		if (upsertResult.isOk()) {
 			Alert.alert('Account Added. Refresh if any screen is outdated.');
 			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
