@@ -3,26 +3,26 @@ import {
 	useAppBottomSheet,
 } from '../../../hooks/utility/global-state-extractors';
 import { useEffect, useState } from 'react';
-import useGetProfile, { ProfileSearchQueryType } from '../api/useGetProfile';
-import type { UserObjectType } from '@dhaaga/bridge';
+import useGetProfile from '../api/useGetProfile';
+import { DriverUserFindQueryType, UserObjectType } from '@dhaaga/bridge';
 import DriverService from '../../../services/driver.service';
 
 function useProfilePeekSheetInteractor() {
 	const { server } = useAppApiClient();
 	const { ctx, stateId } = useAppBottomSheet();
-	const [SearchQuery, setSearchQuery] = useState<ProfileSearchQueryType>(null);
+	const [SearchQuery, setSearchQuery] = useState<DriverUserFindQueryType>(null);
 	const [UserObject, setUserObject] = useState<UserObjectType>(null);
 
 	const { data, fetchStatus } = useGetProfile(SearchQuery);
 
 	useEffect(() => {
 		if (ctx?.did) {
-			setSearchQuery({ did: ctx.did });
+			setSearchQuery({ use: 'did', did: ctx.did });
 		} else if (ctx?.handle) {
 			const webfinger = DriverService.splitHandle(ctx.handle, server);
-			setSearchQuery({ webfinger });
+			setSearchQuery({ use: 'webfinger', webfinger });
 		} else if (ctx?.userId) {
-			setSearchQuery({ userId: ctx.userId });
+			setSearchQuery({ use: 'userId', userId: ctx.userId });
 		} else {
 			setSearchQuery(null);
 		}

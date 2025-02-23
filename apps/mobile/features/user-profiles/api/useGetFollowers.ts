@@ -1,61 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
-import { AppBskyGraphGetFollowers } from '@atproto/api';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
-import {
-	UserObjectType,
-	UserParser,
-	DriverService,
-	defaultResultPage,
-} from '@dhaaga/bridge';
-import type { ResultPage } from '@dhaaga/bridge';
+import { defaultResultPage } from '@dhaaga/bridge';
 
-type UserResultPage = ResultPage<UserObjectType>;
+function useGetFollowers(acctId: string, maxId: string | null) {
+	const { client } = useAppApiClient();
 
-function useGetFollowers(acctId: string, maxId?: string) {
-	const { driver, client, server } = useAppApiClient();
-
-	async function api() {
-		const { data, error } = await client.accounts.followers({
-			id: acctId,
-			limit: 10,
-			maxId,
-			allowPartial: true,
-		});
-		if (error) throw new Error(error.message);
-
-		if (DriverService.supportsAtProto(driver)) {
-			const _data = (data as AppBskyGraphGetFollowers.Response).data;
-			return {
-				success: true,
-				maxId: _data.cursor,
-				minId: null,
-				items: UserParser.parse<unknown[]>(_data.followers, driver, server),
-			};
-		} else if (DriverService.supportsMisskeyApi(driver)) {
-			return {
-				items: UserParser.parse<unknown[]>(
-					(data as any).data.map((o: any) => o.follower),
-					driver,
-					server,
-				),
-				maxId: (data as any).data[(data as any).data.length - 1].id,
-				minId: null,
-				success: true,
-			};
-		}
-
-		return {
-			items: UserParser.parse<unknown[]>((data as any)?.data, driver, server),
-			maxId: (data as any)?.data?.maxId,
-			minId: null,
-			success: true,
-		};
-	}
-
-	// Queries
-	return useQuery<UserResultPage>({
+	return useQuery({
 		queryKey: ['followers', acctId, maxId],
-		queryFn: api,
+		queryFn: () =>
+			client.user
+				.getFollowers({
+					id: acctId,
+					limit: 10,
+					maxId,
+					allowPartial: true,
+				})
+				.then((o) => o.unwrapOrElse(defaultResultPage)),
 		enabled: !!client,
 		initialData: defaultResultPage,
 	});

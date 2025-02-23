@@ -13,6 +13,7 @@ import { DefaultListRoute } from './lists.js';
 import { DefaultProfileRouter } from './profile.js';
 import { PostMutatorRoute } from '../_router/routes/post.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { UserRoute } from '../_router/routes/user.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
@@ -31,6 +32,7 @@ class Adapter implements ApiTargetInterface {
 	lists: DefaultListRoute;
 	profile: DefaultProfileRouter;
 	post: PostMutatorRoute;
+	user: UserRoute;
 
 	constructor() {
 		this.driver = KNOWN_SOFTWARE.UNKNOWN;
@@ -48,6 +50,7 @@ class Adapter implements ApiTargetInterface {
 		this.lists = new DefaultListRoute();
 		this.profile = new DefaultProfileRouter();
 		this.post = new PostMutatorRoute(this);
+		this.user = new UserRoute(this);
 	}
 }
 

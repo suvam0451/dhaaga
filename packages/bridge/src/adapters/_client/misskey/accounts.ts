@@ -51,8 +51,17 @@ export class MisskeyAccountsRouter
 	}
 
 	async get(id: string): LibraryPromise<MissUserDetailed> {
-		const data = await this.client.client.request('users/show', { userId: id });
-		return { data };
+		try {
+			const data = await this.client.client.request<
+				any,
+				Endpoints['users/show']['req']
+			>('users/show', {
+				userId: id,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async getMany(ids: string[]): LibraryPromise<MissUserDetailed[]> {

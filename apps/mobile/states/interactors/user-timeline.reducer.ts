@@ -1,5 +1,5 @@
 import { DataSource } from '@dhaaga/db';
-import { RandomUtil } from '@dhaaga/bridge';
+import { RandomUtil, ResultPage } from '@dhaaga/bridge';
 import type { UserObjectType } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
@@ -18,7 +18,7 @@ export const DEFAULT: State = {
 export enum ACTION {
 	INIT,
 	RESET,
-	APPEND_RESULTS,
+	APPEND,
 	REQUEST_LOAD_MORE,
 	SET_QUERY_OPTS,
 }
@@ -37,12 +37,8 @@ type Actions =
 			type: ACTION.REQUEST_LOAD_MORE;
 	  }
 	| {
-			type: ACTION.APPEND_RESULTS;
-			payload: {
-				items: UserObjectType[];
-				minId?: string;
-				maxId?: string;
-			};
+			type: ACTION.APPEND;
+			payload: ResultPage<UserObjectType>;
 	  }
 	| {
 			type: ACTION.SET_QUERY_OPTS;
@@ -73,7 +69,7 @@ function reducer(state: State, action: Actions): State {
 				draft.seen = new Set();
 			});
 		}
-		case ACTION.APPEND_RESULTS: {
+		case ACTION.APPEND: {
 			const copy = Array.from(state.items);
 
 			return produce(state, (draft) => {

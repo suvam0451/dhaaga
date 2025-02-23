@@ -14,9 +14,10 @@ class Mutator {
 	}
 
 	/**
-	 * Toggle like on this post object and
-	 * return an updated object
-	 * @param input
+	 * Toggles like for this post object and
+	 * return it with mutations, if successful
+	 * @param {PostObjectType} input post object
+	 * @returns {PostObjectType} wrapped as result
 	 */
 	async toggleLike(input: PostObjectType): ApiAsyncResult<PostObjectType> {
 		const target = PostInspector.getContentTarget(input);
@@ -71,6 +72,12 @@ class Mutator {
 		return input;
 	}
 
+	/**
+	 * Toggles bookmark for this post object and
+	 * return it with mutations, if successful
+	 * @param {PostObjectType} input post object
+	 * @returns {PostObjectType} wrapped as result
+	 */
 	async toggleBookmark(input: PostObjectType): ApiAsyncResult<PostObjectType> {
 		if (!DriverService.canBookmark(this.client.driver))
 			return Err(ApiErrorCode.OPERATION_UNSUPPORTED);

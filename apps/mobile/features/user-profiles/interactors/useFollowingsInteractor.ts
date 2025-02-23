@@ -6,15 +6,12 @@ import useGetFollows from '../api/useGetFollows';
 
 function useFollowersInteractor() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const queryResult = useGetFollows(id);
+	const queryResult = useGetFollows(id, null);
 	const TimelineDispatch = useUserTimelineDispatch();
 
 	useEffect(() => {
-		if (!queryResult.data.success) {
-			return;
-		}
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.APPEND_RESULTS,
+			type: AppUserTimelineReducerActionType.APPEND,
 			payload: queryResult.data,
 		});
 	}, [queryResult.fetchStatus]);

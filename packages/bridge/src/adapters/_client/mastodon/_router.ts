@@ -15,6 +15,7 @@ import { ApiTargetInterface } from '../_router/routes/_index.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMutatorRoute } from '../_router/routes/post.js';
+import { UserRoute } from '../_router/routes/user.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
@@ -34,6 +35,7 @@ class Adapter implements ApiTargetInterface {
 	lists: MastodonListRoute;
 	profile: MastodonProfileRouter;
 	post: PostMutatorRoute;
+	user: UserRoute;
 
 	constructor(
 		driver: KNOWN_SOFTWARE | string,
@@ -56,6 +58,7 @@ class Adapter implements ApiTargetInterface {
 		this.lists = new MastodonListRoute(this.fetch);
 		this.profile = new MastodonProfileRouter(this.fetch);
 		this.post = new PostMutatorRoute(this);
+		this.user = new UserRoute(this);
 	}
 }
 

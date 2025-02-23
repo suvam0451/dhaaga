@@ -18,6 +18,7 @@ import { ProfileRoute } from './profile.js';
 // mutators
 import { PostMutatorRoute } from './post.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { UserRoute } from './user.js';
 
 export interface ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
@@ -36,6 +37,7 @@ export interface ApiTargetInterface {
 	lists: ListsRoute;
 	// mutators
 	post: PostMutatorRoute;
+	user: UserRoute;
 }
 
 export type {

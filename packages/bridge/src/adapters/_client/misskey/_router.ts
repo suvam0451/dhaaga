@@ -14,6 +14,7 @@ import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { ApiTargetInterface } from '../_router/routes/_index.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMutatorRoute } from '../_router/routes/post.js';
+import { UserRoute } from '../_router/routes/user.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
@@ -32,6 +33,7 @@ class Adapter implements ApiTargetInterface {
 	media: MisskeyMediaRouter;
 	lists: MisskeyListsRoute;
 	post: PostMutatorRoute;
+	user: UserRoute;
 
 	constructor(
 		driver: KNOWN_SOFTWARE | string,
@@ -54,6 +56,7 @@ class Adapter implements ApiTargetInterface {
 		this.media = new MisskeyMediaRouter(this.fetch);
 		this.lists = new MisskeyListsRoute(this.fetch);
 		this.post = new PostMutatorRoute(this);
+		this.user = new UserRoute(this);
 	}
 }
 

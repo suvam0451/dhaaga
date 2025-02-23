@@ -55,7 +55,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		let maxId = (TimelineState.items.length + data.length).toString();
 		// let maxId = data[data.length - 1].id;
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.APPEND_RESULTS,
+			type: AppUserTimelineReducerActionType.APPEND,
 			payload: {
 				items: data,
 				maxId,
