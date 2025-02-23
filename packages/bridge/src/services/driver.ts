@@ -79,22 +79,30 @@ class Service {
 	 */
 	static generateApiClient(
 		driver: KNOWN_SOFTWARE | string,
+		server: string,
 		payload: RestClientCreateDTO | AppAtpSessionData,
 	): ApiResult<ApiTargetInterface> {
 		if (Service.supportsAtProto(driver))
-			return Ok(new AtprotoApiAdapter(payload as AppAtpSessionData));
+			return Ok(
+				new AtprotoApiAdapter(driver, server, payload as AppAtpSessionData),
+			);
 
 		if (Service.supportsMisskeyApi(driver))
-			return Ok(new MisskeyApiAdapter(payload as RestClientCreateDTO));
+			return Ok(
+				new MisskeyApiAdapter(driver, server, payload as RestClientCreateDTO),
+			);
 
 		if (Service.supportsPleromaApi(driver))
-			return Ok(new PleromaApiAdapter(payload as RestClientCreateDTO));
+			return Ok(
+				new PleromaApiAdapter(driver, server, payload as RestClientCreateDTO),
+			);
 
 		if (Service.supportsMastoApiV2(driver))
-			return Ok(new MastoApiAdapter(payload as RestClientCreateDTO));
+			return Ok(
+				new MastoApiAdapter(driver, server, payload as RestClientCreateDTO),
+			);
 
 		return Ok(new BaseApiAdapter());
-		// return Err(ApiErrorCode.INCOMPATIBLE_DRIVER);
 	}
 }
 

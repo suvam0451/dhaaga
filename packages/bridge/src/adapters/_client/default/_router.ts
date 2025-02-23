@@ -13,6 +13,7 @@ import { DefaultListRoute } from './lists.js';
 import { DefaultProfileRouter } from './profile.js';
 import { MastoAccount } from '../../../types/mastojs.types.js';
 import { GetPostsQueryDTO } from '../_interface.js';
+import { UnifiedPostRouter } from './post.js';
 
 class Adapter implements ApiTargetInterface {
 	instances: DefaultInstanceRouter;
@@ -27,6 +28,7 @@ class Adapter implements ApiTargetInterface {
 	media: DefaultMediaRoute;
 	lists: DefaultListRoute;
 	profile: DefaultProfileRouter;
+	post: UnifiedPostRouter;
 
 	constructor() {
 		this.instances = new DefaultInstanceRouter();
@@ -41,6 +43,7 @@ class Adapter implements ApiTargetInterface {
 		this.media = new DefaultMediaRoute();
 		this.lists = new DefaultListRoute();
 		this.profile = new DefaultProfileRouter();
+		this.post = new UnifiedPostRouter(this);
 	}
 
 	async getMyLists() {

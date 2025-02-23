@@ -1,5 +1,4 @@
 import { ApiTargetInterface } from '../_router/routes/_index.js';
-import { MediaUploadDTO } from '../_interface.js';
 import BlueskyAccountsRouter from './accounts.js';
 import { BlueskyInstanceRouter } from './instance.js';
 import { BlueskyListRoute } from './lists.js';
@@ -12,15 +11,17 @@ import BlueskyStatusesRouter from './statuses.js';
 import BlueskyTagsRouter from './tags.js';
 import BlueskyTimelinesRouter from './timelines.js';
 import BlueskyTrendsRouter from './trends.js';
-import { Agent } from '@atproto/api';
-import { getBskyAgent } from '../_router/_api.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import BlueskyFeedRouter from './feeds.js';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { UnifiedPostRouter } from '../default/post.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;
 
 class Adapter implements ApiTargetInterface {
-	client: Agent | null;
+	driver: KNOWN_SOFTWARE | string;
+	server: string | null;
+
 	accounts: BlueskyAccountsRouter;
 	instances: BlueskyInstanceRouter;
 	lists: BlueskyListRoute;
@@ -34,19 +35,17 @@ class Adapter implements ApiTargetInterface {
 	timelines: BlueskyTimelinesRouter;
 	trends: BlueskyTrendsRouter;
 	feeds: BlueskyFeedRouter;
+	post: UnifiedPostRouter;
 
 	dto: AtprotoClientCreateDTO;
 
-	cleanLink(urlLike: string) {
-		if (urlLike.startsWith('http://') || urlLike.startsWith('https://')) {
-		} else {
-			urlLike = 'https://' + urlLike;
-		}
-		return urlLike.replace(/\/+$/, '');
-	}
-
-	constructor(dto: AtprotoClientCreateDTO) {
-		this.client = null;
+	constructor(
+		driver: KNOWN_SOFTWARE | string,
+		server: string | null,
+		dto: AtprotoClientCreateDTO,
+	) {
+		this.driver = driver;
+		this.server = server;
 		this.dto = dto;
 		this.accounts = new BlueskyAccountsRouter(this.dto);
 		this.instances = new BlueskyInstanceRouter();
@@ -61,46 +60,7 @@ class Adapter implements ApiTargetInterface {
 		this.timelines = new BlueskyTimelinesRouter(this.dto);
 		this.trends = new BlueskyTrendsRouter();
 		this.feeds = new BlueskyFeedRouter(this.dto);
-	}
-
-	getAgent() {
-		return getBskyAgent(this.dto);
-	}
-
-	favourite(id: string): Promise<any> {
-		return Promise.resolve(undefined);
-	}
-
-	getFollowers(id: string): Promise<any | null> {
-		return Promise.resolve(undefined);
-	}
-
-	getFollowing(id: string): Promise<any | null> {
-		return Promise.resolve(undefined);
-	}
-
-	getMe(): Promise<any> {
-		return Promise.resolve(undefined);
-	}
-
-	getMyConversations(): Promise<any> {
-		return Promise.resolve([]);
-	}
-
-	getMyLists(): Promise<any> {
-		return Promise.resolve([]);
-	}
-
-	getRelationshipWith(ids: string[]): Promise<any> {
-		return Promise.resolve([]);
-	}
-
-	unFavourite(id: string): Promise<any> {
-		return Promise.resolve(undefined);
-	}
-
-	uploadMedia(params: MediaUploadDTO): Promise<any> {
-		return Promise.resolve(undefined);
+		this.post = new UnifiedPostRouter(this);
 	}
 }
 

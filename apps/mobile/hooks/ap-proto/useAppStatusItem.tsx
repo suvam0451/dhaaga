@@ -32,7 +32,7 @@ function WithAppStatusItemContext({ children, dto }: Props) {
 	}
 
 	useEffect(() => {
-		if (!dto) return;
+		if (!dto || !postPub) return;
 		setPost(postPub.addIfNotExist(dto.uuid, dto));
 		postPub.subscribe(dto.uuid, onSubscription);
 		return () => {

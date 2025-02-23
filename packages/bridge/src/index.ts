@@ -1,4 +1,3 @@
-import { RestClientCreateDTO } from './adapters/_client/_interface.js';
 export {
 	ApiTargetInterface,
 	AtprotoApiAdapter,
@@ -73,12 +72,6 @@ export {
 } from './implementors/tag/_interface.js';
 
 export { DhaagaJsTimelineQueryOptions } from './adapters/_client/_router/routes/_index.js';
-
-export class ActivityPubClientFactory {
-	static get(domain: KNOWN_SOFTWARE | string, payload: RestClientCreateDTO) {
-		return DriverService.generateApiClient(domain, payload);
-	}
-}
 
 export type { MfmNode } from './services/index.js';
 
@@ -162,3 +155,4 @@ export { defaultResultPage } from './utils/pagination.js';
 export type { ResultPage } from './utils/pagination.js';
 
 export { AtprotoUtils } from './utils/atproto.js';
+export { DriverPostLikeState } from './types/driver.types.js';

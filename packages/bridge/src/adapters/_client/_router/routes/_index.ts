@@ -15,6 +15,8 @@ import { MediaRoute } from './media.js';
 import { ListsRoute } from './lists.js';
 import { ParserRoute } from './parser.js';
 import { ProfileRoute } from './profile.js';
+// mutators
+import { PostRoute } from './post.js';
 
 export interface ApiTargetInterface {
 	instances: InstanceRoute;
@@ -28,6 +30,8 @@ export interface ApiTargetInterface {
 	me: MeRoute;
 	media: MediaRoute;
 	lists: ListsRoute;
+	// mutators
+	post: PostRoute;
 }
 
 export type {

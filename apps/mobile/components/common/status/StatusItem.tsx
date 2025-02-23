@@ -6,6 +6,7 @@ import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
 import { ReplyIndicator } from './ListView/_shared';
 import ParentPost from './fragments/ParentPost';
 import { PostContainer } from './_shared';
+import { View } from 'react-native';
 
 /**
  * ActivityPub post objects sometimes
@@ -47,6 +48,7 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 	const { dto } = useAppStatusItem();
 
 	return useMemo(() => {
+		if (!dto) return <View />;
 		if (dto.meta.isBoost) {
 			// Quote Boost
 			if (!!dto.content.raw || dto.content.media.length > 0) {

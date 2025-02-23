@@ -5,8 +5,8 @@ import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
 import { Account, Profile, AccountService } from '@dhaaga/db';
 import {
 	ApiTargetInterface,
-	ActivityPubClientFactory,
 	KNOWN_SOFTWARE,
+	DriverService,
 } from '@dhaaga/bridge';
 import { SQLiteDatabase } from 'expo-sqlite';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
@@ -312,8 +312,9 @@ class GlobalStateService {
 					pdsUrl: session.pdsUrl,
 				};
 			}
-			const _router = ActivityPubClientFactory.get(
-				_acct.driver as any,
+			const _router = DriverService.generateApiClient(
+				_acct.driver,
+				_acct.server,
 				payload,
 			);
 			if (_router.isErr())

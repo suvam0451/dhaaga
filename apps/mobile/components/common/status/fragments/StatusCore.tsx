@@ -117,7 +117,7 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 			<View
 				style={{
 					flexDirection: 'row',
-					marginBottom: SECTION_MARGIN_BOTTOM * 0.5,
+					marginBottom: SECTION_MARGIN_BOTTOM * 0.75,
 				}}
 			>
 				<PostCreatedBy

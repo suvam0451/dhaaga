@@ -41,21 +41,25 @@ export class PostMutator {
 				);
 			}
 
-			if (nextState && nextState.isOk()) {
-				const _state = nextState.unwrap();
-				if (input.id === target.id) {
-					return produce(input, (draft) => {
-						draft.interaction.liked = _state.state;
-						draft.stats.likeCount += _state.state ? 1 : -1;
-						draft.atProto.viewer.like = _state.uri;
-					});
-				} else if (input.boostedFrom?.id === target.id) {
-					return produce(input, (draft) => {
-						draft.boostedFrom.interaction.liked = _state.state;
-						draft.boostedFrom.stats.likeCount += _state.state ? 1 : -1;
+			if (nextState.isErr()) {
+				console.log('[WARN]: failed to toggle like', nextState.error);
+				return input;
+			}
+
+			const _state = nextState.unwrap();
+			if (input.id === target.id) {
+				return produce(input, (draft) => {
+					draft.interaction.liked = _state.state;
+					draft.stats.likeCount += _state.state ? 1 : -1;
+					if (draft.atProto.viewer) draft.atProto.viewer.like = _state.uri;
+				});
+			} else if (input.boostedFrom?.id === target.id) {
+				return produce(input, (draft) => {
+					draft.boostedFrom.interaction.liked = _state.state;
+					draft.boostedFrom.stats.likeCount += _state.state ? 1 : -1;
+					if (draft.atProto.viewer)
 						draft.boostedFrom.atProto.viewer.like = _state.uri;
-					});
-				}
+				});
 			}
 		} catch (e) {
 			console.log('[WARN]: failed to toggle like', e);
