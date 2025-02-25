@@ -1,14 +1,21 @@
 import { DataSource } from '@dhaaga/db';
 import {
 	timelineReducerBaseDefaults,
-	TimelineReducerBaseState,
+	type TimelineReducerBaseState,
 } from './_timeline.shared';
 import { produce } from 'immer';
-import { RandomUtil } from '@dhaaga/bridge';
+import { RandomUtil, type ResultPage } from '@dhaaga/bridge';
 import type { FeedObjectType } from '@dhaaga/bridge';
-import { Dispatch } from 'react';
+import {
+	createContext,
+	type Dispatch,
+	type ReactNode,
+	useContext,
+	useReducer,
+} from 'react';
 
 type State = TimelineReducerBaseState<FeedObjectType> & {};
+type PageType = ResultPage<FeedObjectType>;
 
 export const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
@@ -38,11 +45,7 @@ type Actions =
 	  }
 	| {
 			type: ACTION.APPEND_RESULTS;
-			payload: {
-				items: FeedObjectType[];
-				minId?: string;
-				maxId?: string;
-			};
+			payload: PageType;
 	  }
 	| {
 			type: ACTION.SET_QUERY_OPTS;
@@ -94,13 +97,31 @@ function reducer(state: State, action: Actions): State {
 	}
 }
 
-type AppFeedTimelineReducerDispatchType = Dispatch<Actions>;
+type DispatchType = Dispatch<Actions>;
+
+// contexts
+const StateCtx = createContext<State | null>(null);
+const DispatchCtx = createContext<DispatchType | null>(null);
+// hooks
+const useFeedTimelineState = () => useContext(StateCtx);
+const useFeedTimelineDispatch = () => useContext(DispatchCtx);
+// wrapper
+function Ctx({ children }: { children: ReactNode }) {
+	const [state, dispatch] = useReducer(reducer, DEFAULT);
+	return (
+		<StateCtx.Provider value={state}>
+			<DispatchCtx.Provider value={dispatch}>{children}</DispatchCtx.Provider>
+		</StateCtx.Provider>
+	);
+}
 
 export {
-	reducer as appFeedTimelineReducer,
-	State as AppFeedTimelineReducerStateType,
-	DEFAULT as appFeedTimelineReducerDefault,
-	ACTION as AppFeedTimelineReducerActionType,
-	Actions as appFeedTimelineReducerActions,
-	AppFeedTimelineReducerDispatchType,
+	Ctx as FeedTimelineCtx,
+	useFeedTimelineState,
+	useFeedTimelineDispatch,
+	ACTION as FeedTimelineStateAction,
+};
+export type {
+	State as FeedTimelineStateType,
+	DispatchType as FeedTimelineDispatchType,
 };

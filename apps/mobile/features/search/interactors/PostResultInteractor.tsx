@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import {
-	useTimelineDispatch,
-	useTimelineState,
-} from '../../timelines/contexts/PostTimelineCtx';
 import { useApiSearchPosts } from '../../../hooks/api/useApiSearch';
 import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
-import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
+import {
+	PostTimelineStateAction,
+	usePostTimelineState,
+	usePostTimelineDispatch,
+} from '@dhaaga/core';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
@@ -22,8 +22,8 @@ type ResultInteractorProps = {
 function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverState();
-	const TimelineState = useTimelineState();
-	const TimelineDispatch = useTimelineDispatch();
+	const TimelineState = usePostTimelineState();
+	const TimelineDispatch = usePostTimelineDispatch();
 	const { data, fetchStatus, refetch } = useApiSearchPosts(
 		State.q,
 		TimelineState.appliedMaxId,
@@ -32,13 +32,13 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 
 	useEffect(() => {
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 	}, [State.q]);
 
 	useEffect(() => {
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 		refetch();
 	}, [State.tab]);
@@ -46,21 +46,21 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	useEffect(() => {
 		onDataLoaded(false);
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			type: PostTimelineStateAction.APPEND_RESULTS,
 			payload: data,
 		});
 	}, [fetchStatus]);
 
 	function loadMore() {
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 
 	function onRefresh() {
 		setRefreshing(true);
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 		refetch().finally(() => {
 			setRefreshing(false);

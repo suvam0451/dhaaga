@@ -1,11 +1,11 @@
-import WithFeedTimelineCtx from '../../timelines/contexts/FeedTimelineCtx';
 import { RefetchOptions } from '@tanstack/react-query';
-import WithPostTimelineCtx from '../../timelines/contexts/PostTimelineCtx';
-import WithUserTimelineCtx from '../../timelines/contexts/UserTimelineCtx';
 import {
 	useDiscoverDispatch,
 	useDiscoverState,
 	DiscoverStateAction,
+	PostTimelineCtx,
+	UserTimelineCtx,
+	FeedTimelineCtx,
 } from '@dhaaga/core';
 import FeedResultInteractor from '../interactors/FeedResultInteractor';
 import Header from '../components/Header';
@@ -32,21 +32,21 @@ function SearchResultPresenter({ refetch }: FeedSearchResultPresenterProps) {
 	switch (State.category) {
 		case 'posts':
 			return (
-				<WithPostTimelineCtx>
+				<PostTimelineCtx>
 					<PostResultInteractor onDataLoaded={onDataLoaded} />
-				</WithPostTimelineCtx>
+				</PostTimelineCtx>
 			);
 		case 'users':
 			return (
-				<WithUserTimelineCtx>
+				<UserTimelineCtx>
 					<UserResultInteractor onDataLoaded={onDataLoaded} />
-				</WithUserTimelineCtx>
+				</UserTimelineCtx>
 			);
 		case 'feeds':
 			return (
-				<WithFeedTimelineCtx>
+				<FeedTimelineCtx>
 					<FeedResultInteractor onDataLoaded={onDataLoaded} />
-				</WithFeedTimelineCtx>
+				</FeedTimelineCtx>
 			);
 
 		default:

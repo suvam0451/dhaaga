@@ -1,6 +1,9 @@
-import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
+import type {
+	DhaagaJsTimelineQueryOptions,
+	ResultPage,
+	PostObjectType,
+} from '@dhaaga/bridge';
 import { RandomUtil } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import {
 	DataSource,
@@ -9,15 +12,22 @@ import {
 	ProfilePinnedTagService,
 	APP_PINNED_OBJECT_TYPE,
 } from '@dhaaga/db';
-import { Dispatch } from 'react';
+import {
+	createContext,
+	type Dispatch,
+	type ReactNode,
+	useContext,
+	useReducer,
+} from 'react';
 import {
 	timelineReducerBaseDefaults,
-	TimelineReducerBaseState,
+	type TimelineReducerBaseState,
 } from './_timeline.shared';
 
 type AppTimelineQueryOptions = DhaagaJsTimelineQueryOptions;
+type PageType = ResultPage<PostObjectType>;
 
-export enum TimelineFetchMode {
+enum TimelineFetchMode {
 	IDLE = 'Idle',
 
 	HOME = 'Home',
@@ -50,7 +60,7 @@ type State = TimelineReducerBaseState<PostObjectType> & {
 	isWidgetVisible: boolean;
 };
 
-export const DEFAULT: State = {
+const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
 	feedType: TimelineFetchMode.IDLE,
 	query: null,
@@ -58,7 +68,7 @@ export const DEFAULT: State = {
 	items: [],
 };
 
-export enum ACTION {
+enum ACTION {
 	INIT,
 	RESET_USING_QUERY,
 	RESET_USING_PIN_ID, // also handles empty timeline state (first loading)
@@ -104,11 +114,7 @@ type Actions =
 	  }
 	| {
 			type: ACTION.APPEND_RESULTS;
-			payload: {
-				items: PostObjectType[];
-				minId?: string;
-				maxId?: string;
-			};
+			payload: PageType;
 	  }
 	| {
 			type: ACTION.SET_QUERY_PARAMS;
@@ -213,8 +219,9 @@ function reducer(state: State, action: Actions): State {
 			const _type = action.payload.type;
 			switch (_type) {
 				case 'feed': {
+					if (!state.db) return state;
 					const match = ProfilePinnedTimelineService.findById(state.db, _id);
-					if (!match) return;
+					if (!match) return state;
 					switch (match.category) {
 						case APP_PINNED_OBJECT_TYPE.AT_PROTO_MICROBLOG_HOME:
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_HOME: {
@@ -230,8 +237,8 @@ function reducer(state: State, action: Actions): State {
 								draft.sessionId = RandomUtil.nanoId();
 								draft.seen = new Set();
 								draft.query = {
-									id: match.uri,
-									label: match.displayName,
+									id: match.uri!,
+									label: match.displayName!,
 								};
 							});
 						}
@@ -269,13 +276,14 @@ function reducer(state: State, action: Actions): State {
 								_id,
 								_type,
 							);
-							return;
+							return state;
 						}
 					}
 				}
 				case 'user': {
+					if (!state.db) return state;
 					const match = ProfilePinnedUserService.findById(state.db, _id);
-					if (!match) return;
+					if (!match) return state;
 					switch (match.category) {
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_LOCAL:
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_USER_REMOTE: {
@@ -295,14 +303,15 @@ function reducer(state: State, action: Actions): State {
 								_id,
 								_type,
 							);
-							return;
+							return state;
 						}
 					}
 				}
 
 				case 'tag': {
+					if (!state.db) return state;
 					const match = ProfilePinnedTagService.findById(state.db, _id);
-					if (!match) return;
+					if (!match) return state;
 					switch (match.category) {
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_TAG_LOCAL:
 						case APP_PINNED_OBJECT_TYPE.AP_PROTO_MICROBLOG_TAG_REMOTE: {
@@ -321,7 +330,7 @@ function reducer(state: State, action: Actions): State {
 								_id,
 								_type,
 							);
-							return;
+							return state;
 						}
 					}
 				}
@@ -517,13 +526,32 @@ function reducer(state: State, action: Actions): State {
 	}
 }
 
-type AppTimelineReducerDispatchType = Dispatch<Actions>;
+type DispatchType = Dispatch<Actions>;
+
+// contexts
+const StateCtx = createContext<State | null>(null);
+const DispatchCtx = createContext<DispatchType | null>(null);
+// hooks
+const usePostTimelineState = () => useContext(StateCtx);
+const usePostTimelineDispatch = () => useContext(DispatchCtx);
+// wrapper
+function Ctx({ children }: { children: ReactNode }) {
+	const [state, dispatch] = useReducer(reducer, DEFAULT);
+	return (
+		<StateCtx.Provider value={state}>
+			<DispatchCtx.Provider value={dispatch}>{children}</DispatchCtx.Provider>
+		</StateCtx.Provider>
+	);
+}
 
 export {
-	State as AppTimelineReducerStateType,
-	reducer as appTimelineReducer,
-	DEFAULT as appTimelineReducerDefault,
-	ACTION as AppTimelineReducerActionType,
-	Actions as appTimelineReducerActions,
-	AppTimelineReducerDispatchType,
+	TimelineFetchMode,
+	Ctx as PostTimelineCtx,
+	usePostTimelineState,
+	usePostTimelineDispatch,
+	ACTION as PostTimelineStateAction,
+};
+export type {
+	State as PostTimelineStateType,
+	DispatchType as PostTimelineDispatchType,
 };

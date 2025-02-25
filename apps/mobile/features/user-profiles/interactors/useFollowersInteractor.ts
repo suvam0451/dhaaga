@@ -1,17 +1,16 @@
 import { useLocalSearchParams } from 'expo-router';
 import useGetFollowers from '../api/useGetFollowers';
 import { useEffect } from 'react';
-import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
-import { useUserTimelineDispatch } from '../../timelines/contexts/UserTimelineCtx';
+import { UserTimelineStateAction, useUserTimelineDispatch } from '@dhaaga/core';
 
 function useFollowersInteractor() {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const queryResult = useGetFollowers(id, null);
-	const TimelineDispatch = useUserTimelineDispatch();
+	const dispatch = useUserTimelineDispatch();
 
 	useEffect(() => {
-		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.APPEND,
+		dispatch({
+			type: UserTimelineStateAction.APPEND,
 			payload: queryResult.data,
 		});
 	}, [queryResult.fetchStatus]);

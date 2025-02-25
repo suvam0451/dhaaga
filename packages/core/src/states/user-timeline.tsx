@@ -1,21 +1,27 @@
 import { DataSource } from '@dhaaga/db';
-import { RandomUtil, ResultPage } from '@dhaaga/bridge';
+import { RandomUtil, type ResultPage } from '@dhaaga/bridge';
 import type { UserObjectType } from '@dhaaga/bridge';
 import { produce } from 'immer';
-import { Dispatch } from 'react';
+import {
+	createContext,
+	type Dispatch,
+	type ReactNode,
+	useContext,
+	useReducer,
+} from 'react';
 import {
 	timelineReducerBaseDefaults,
-	TimelineReducerBaseState,
+	type TimelineReducerBaseState,
 } from './_timeline.shared';
 
 type State = TimelineReducerBaseState<UserObjectType> & {};
 
-export const DEFAULT: State = {
+const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
 	items: [],
 };
 
-export enum ACTION {
+enum ACTION {
 	INIT,
 	RESET,
 	APPEND,
@@ -91,13 +97,31 @@ function reducer(state: State, action: Actions): State {
 	}
 }
 
-type AppUserTimelineReducerDispatchType = Dispatch<Actions>;
+type DispatchType = Dispatch<Actions>;
+
+// contexts
+const StateCtx = createContext<State | null>(null);
+const DispatchCtx = createContext<DispatchType | null>(null);
+// hooks
+const useUserTimelineState = () => useContext(StateCtx);
+const useUserTimelineDispatch = () => useContext(DispatchCtx);
+// wrapper
+function Ctx({ children }: { children: ReactNode }) {
+	const [state, dispatch] = useReducer(reducer, DEFAULT);
+	return (
+		<StateCtx.Provider value={state}>
+			<DispatchCtx.Provider value={dispatch}>{children}</DispatchCtx.Provider>
+		</StateCtx.Provider>
+	);
+}
 
 export {
-	State as AppUserTimelineReducerStateType,
-	reducer as appUserTimelineReducer,
-	DEFAULT as appUserTimelineReducerDefault,
-	ACTION as AppUserTimelineReducerActionType,
-	Actions as appUserTimelineActions,
-	AppUserTimelineReducerDispatchType,
+	Ctx as UserTimelineCtx,
+	useUserTimelineState,
+	useUserTimelineDispatch,
+	ACTION as UserTimelineStateAction,
+};
+export type {
+	State as UserTimelineStateType,
+	DispatchType as UserTimelineDispatchType,
 };

@@ -8,48 +8,40 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { TimelineFetchMode } from '../../../../states/interactors/post-timeline.reducer';
-
+import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
 const ICON_SIZE = 20;
 
 function DefaultTimelineOptions() {
-	const { driver, setHomepageType } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			setHomepageType: o.setHomepageType,
-		})),
-	);
+	const { driver } = useAppApiClient();
 	const { setShowTimelineSelection } = useTimelineController();
 
 	function onClickHome() {
-		setHomepageType(TimelineFetchMode.HOME);
+		// setHomepageType(TimelineFetchMode.HOME);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickLocal() {
-		setHomepageType(TimelineFetchMode.LOCAL);
+		// setHomepageType(TimelineFetchMode.LOCAL);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickFederated() {
-		setHomepageType(TimelineFetchMode.FEDERATED);
+		// setHomepageType(TimelineFetchMode.FEDERATED);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickGoToSocialHub() {
-		setHomepageType(TimelineFetchMode.IDLE);
+		// setHomepageType(TimelineFetchMode.IDLE);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickBubble() {
-		setHomepageType(TimelineFetchMode.BUBBLE);
+		// setHomepageType(TimelineFetchMode.BUBBLE);
 		setShowTimelineSelection(false);
 	}
 
 	function onClickSocial() {
-		setHomepageType(TimelineFetchMode.SOCIAL);
+		// setHomepageType(TimelineFetchMode.SOCIAL);
 		setShowTimelineSelection(false);
 	}
 

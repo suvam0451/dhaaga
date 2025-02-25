@@ -7,7 +7,7 @@ import {
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
 } from '@dhaaga/bridge';
-import { TimelineFetchMode } from '../../../states/interactors/post-timeline.reducer';
+import { TimelineFetchMode } from '@dhaaga/core';
 import {
 	useAppAcct,
 	useAppApiClient,

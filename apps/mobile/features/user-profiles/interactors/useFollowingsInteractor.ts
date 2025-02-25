@@ -1,7 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
-import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
-import { useUserTimelineDispatch } from '../../timelines/contexts/UserTimelineCtx';
+import { UserTimelineStateAction, useUserTimelineDispatch } from '@dhaaga/core';
 import useGetFollows from '../api/useGetFollows';
 
 function useFollowersInteractor() {
@@ -11,7 +10,7 @@ function useFollowersInteractor() {
 
 	useEffect(() => {
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.APPEND,
+			type: UserTimelineStateAction.APPEND,
 			payload: queryResult.data,
 		});
 	}, [queryResult.fetchStatus]);

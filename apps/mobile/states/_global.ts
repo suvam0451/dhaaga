@@ -22,13 +22,9 @@ import AppSessionManager from '../services/session/app-session.service';
 import { AppColorSchemeType } from '../utils/theming.util';
 import AccountSessionManager from '../services/session/account-session.service';
 import { WritableDraft } from 'immer';
-import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';
-import {
-	AppTimelineReducerDispatchType,
-	AppTimelineReducerStateType,
-} from './interactors/post-timeline.reducer';
+import { PostTimelineStateType, PostTimelineDispatchType } from '@dhaaga/core';
 import { UserObjectType, UserParser, RandomUtil } from '@dhaaga/bridge';
 
 type AppThemePack = {
@@ -175,14 +171,12 @@ type AppBottomSheetState = {
 
 	// timeline invoking the sheet
 	timeline: {
-		draftState: AppTimelineReducerStateType | null;
-		dispatch: AppTimelineReducerDispatchType | null;
+		draftState: PostTimelineStateType | null;
+		dispatch: PostTimelineDispatchType | null;
 		attach: (
-			state: AppTimelineReducerStateType,
-			dispatch: AppTimelineReducerDispatchType,
-			manager: TimelineSessionService,
+			state: PostTimelineStateType,
+			dispatch: PostTimelineDispatchType,
 		) => void;
-		manager: TimelineSessionService;
 	};
 };
 
@@ -504,14 +498,12 @@ const useGlobalState = create<State & Actions>()(
 				dispatch: null,
 				manager: null,
 				attach: (
-					_state: AppTimelineReducerStateType,
-					_dispatch: AppTimelineReducerDispatchType,
-					manager: TimelineSessionService,
+					_state: PostTimelineStateType,
+					_dispatch: PostTimelineDispatchType,
 				) => {
 					set((state) => {
 						state.bottomSheet.timeline.draftState = _state;
 						state.bottomSheet.timeline.dispatch = _dispatch;
-						state.bottomSheet.timeline.manager = manager;
 					});
 				},
 			},

@@ -6,7 +6,7 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Fragment, useEffect, useMemo, useRef } from 'react';
-import { TimelineFetchMode } from '../../../../../states/interactors/post-timeline.reducer';
+import { TimelineFetchMode } from '@dhaaga/core';
 import OverviewView from '../views/OverviewView';
 import TagTimelineControlPresenter from './TagTimelineControlPresenter';
 import { ScrollView, Text, View, StyleSheet } from 'react-native';

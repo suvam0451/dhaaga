@@ -1,10 +1,10 @@
 import { Animated, RefreshControl, View } from 'react-native';
 import { useState } from 'react';
 import {
+	UserTimelineStateAction,
 	useUserTimelineDispatch,
 	useUserTimelineState,
-} from '../../timelines/contexts/UserTimelineCtx';
-import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
+} from '@dhaaga/core';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
@@ -31,7 +31,7 @@ function ProfileFollowingsPresenter() {
 
 	function loadMore() {
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: UserTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 

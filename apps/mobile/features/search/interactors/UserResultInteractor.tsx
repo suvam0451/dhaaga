@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDiscoverState } from '@dhaaga/core';
+import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
 import {
+	UserTimelineStateAction,
 	useUserTimelineDispatch,
 	useUserTimelineState,
-} from '../../timelines/contexts/UserTimelineCtx';
-import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
-import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
+} from '@dhaaga/core';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { View } from 'react-native';
@@ -29,14 +29,14 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 
 	useEffect(() => {
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.RESET,
+			type: UserTimelineStateAction.RESET,
 		});
 	}, [State.q]);
 
 	function onRefresh() {
 		setRefreshing(true);
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.RESET,
+			type: UserTimelineStateAction.RESET,
 		});
 		refetch().finally(() => {
 			setRefreshing(false);
@@ -54,7 +54,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 
 		let maxId = (TimelineState.items.length + data.length).toString();
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.APPEND,
+			type: UserTimelineStateAction.APPEND,
 			payload: {
 				items: data,
 				maxId,
@@ -65,7 +65,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 
 	function loadMore() {
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: UserTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 
