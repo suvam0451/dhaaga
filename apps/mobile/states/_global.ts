@@ -154,6 +154,13 @@ type AppBottomSheetState = {
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
 
+	/**
+	 * Animation
+	 */
+	animating: boolean;
+	startAnimation: () => void;
+	endAnimation: () => void;
+
 	ctx: any;
 	setCtx: (ctx: any) => void;
 
@@ -449,6 +456,18 @@ const useGlobalState = create<State & Actions>()(
 			stateId: RandomUtil.nanoId(),
 			endSessionSeed: RandomUtil.nanoId(),
 			ctx: null,
+
+			animating: false,
+			startAnimation: () => {
+				set((state) => {
+					state.bottomSheet.animating = true;
+				});
+			},
+			endAnimation: () => {
+				set((state) => {
+					state.bottomSheet.animating = false;
+				});
+			},
 			setCtx: function (ctx: { uuid: string }) {
 				set((state) => {
 					state.bottomSheet.ctx = ctx;

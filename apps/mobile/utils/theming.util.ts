@@ -166,7 +166,7 @@ export class AppThemingUtil {
 				return {
 					fontSize: 14,
 					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					lineHeight: 18,
+					// lineHeight: 18,
 				};
 			case AppTextVariant.BODY_BOLD:
 				return {

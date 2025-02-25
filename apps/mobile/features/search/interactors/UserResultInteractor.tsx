@@ -53,12 +53,12 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		if (data.length === 0) return;
 
 		let maxId = (TimelineState.items.length + data.length).toString();
-		// let maxId = data[data.length - 1].id;
 		TimelineDispatch({
 			type: AppUserTimelineReducerActionType.APPEND,
 			payload: {
 				items: data,
 				maxId,
+				minId: null,
 			},
 		});
 	}, [fetchStatus]);

@@ -1,4 +1,5 @@
 import {
+	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming,
@@ -9,12 +10,16 @@ import { useAppBottomSheet } from '../../../../hooks/utility/global-state-extrac
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 
 function useAnimatedHeight() {
-	const { visible, stateId, type } = useAppBottomSheet();
+	const { visible, stateId, type, startAnimation, endAnimation } =
+		useAppBottomSheet();
 	const height = useSharedValue(0);
 
 	useEffect(() => {
 		if (!visible) {
-			height.value = withTiming(0, { duration: 100 });
+			startAnimation();
+			height.value = withTiming(0, { duration: 100 }, () => {
+				runOnJS(endAnimation)();
+			});
 		} else {
 			let _target;
 			switch (type) {
@@ -33,7 +38,8 @@ function useAnimatedHeight() {
 				}
 				case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
 				case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG: {
-					_target = Dimensions.get('window').height * 0.7;
+					_target = Dimensions.get('window').height * 0.55;
+					break;
 				}
 				default: {
 					_target = Dimensions.get('window').height * 0.55;
@@ -41,11 +47,18 @@ function useAnimatedHeight() {
 				}
 			}
 
-			height.value = withTiming(_target, {
-				duration: 200, // dampingRatio: 0.55,
-				// stiffness: 500,
-				// overshootClamping: false,
-			});
+			startAnimation();
+			height.value = withTiming(
+				_target,
+				{
+					duration: 200, // dampingRatio: 0.55,
+					// stiffness: 500,
+					// overshootClamping: false,
+				},
+				() => {
+					runOnJS(endAnimation)();
+				},
+			);
 		}
 	}, [visible, type, stateId]);
 
