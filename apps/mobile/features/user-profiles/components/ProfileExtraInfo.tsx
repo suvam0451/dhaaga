@@ -1,6 +1,5 @@
 import { memo } from 'react';
-import { Text, View } from 'react-native';
-import { useActivitypubUserContext } from '../../../states/useProfile';
+import { View } from 'react-native';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import useGlobalState from '../../../states/_global';
@@ -20,8 +19,6 @@ const ExtraInformationField = memo(function Foo({
 	value,
 	last,
 }: ExtraInformationFieldProps) {
-	const { user } = useActivitypubUserContext();
-
 	return (
 		<View
 			style={{

@@ -1,8 +1,8 @@
 import {
-	ActivityPubClient,
+	ApiTargetInterface,
 	InstanceApi_CustomEmojiDTO,
-	MisskeyRestClient,
-	PleromaRestClient,
+	MisskeyApiAdapter,
+	PleromaApiAdapter,
 } from '@dhaaga/bridge';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
 import ActivityPubService from '../activitypub.service';
@@ -208,7 +208,7 @@ class ActivityPubReactionsService {
 	}
 
 	static async removeReaction(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		postId: string,
 		reactionId: string,
 		domain: string,
@@ -217,7 +217,7 @@ class ActivityPubReactionsService {
 		setLoading(true);
 		if (ActivityPubService.pleromaLike(domain)) {
 			const { data, error } = await (
-				client as PleromaRestClient
+				client as PleromaApiAdapter
 			).statuses.removeReaction(postId, reactionId);
 			if (error) {
 				console.log('[WARN]: failed to add reaction', error);
@@ -233,7 +233,7 @@ class ActivityPubReactionsService {
 			}));
 		} else if (ActivityPubService.misskeyLike(domain)) {
 			const { error } = await (
-				client as MisskeyRestClient
+				client as MisskeyApiAdapter
 			).statuses.removeReaction(postId, reactionId);
 			if (error && error.code) {
 				console.log('[WARN]: failed to remove reaction', error);
@@ -260,13 +260,13 @@ class ActivityPubReactionsService {
 	 * @param setLoading
 	 */
 	private static async syncMisskeyReactionState(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		postId: string,
 		domain: string,
 		setLoading: Dispatch<SetStateAction<boolean>>,
 	): Promise<ActivityPubReactionStateType> {
 		const { data: newStateData, error: newStateError } = await (
-			client as MisskeyRestClient
+			client as MisskeyApiAdapter
 		).statuses.get(postId);
 
 		if (newStateError) {
@@ -288,7 +288,7 @@ class ActivityPubReactionsService {
 	 * @param setLoading
 	 */
 	static async addReaction(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		postId: string,
 		reactionId: string,
 		domain: string,
@@ -297,7 +297,7 @@ class ActivityPubReactionsService {
 		setLoading(true);
 		if (ActivityPubService.pleromaLike(domain)) {
 			const { data, error } = await (
-				client as PleromaRestClient
+				client as PleromaApiAdapter
 			).statuses.addReaction(postId, reactionId);
 
 			if (error) {
@@ -317,7 +317,7 @@ class ActivityPubReactionsService {
 				reactionId = `:${reactionId}:`;
 			}
 			const { error } = await (
-				client as MisskeyRestClient
+				client as MisskeyApiAdapter
 			).statuses.addReaction(postId, reactionId);
 
 			if (error) {
