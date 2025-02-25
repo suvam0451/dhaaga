@@ -1,15 +1,15 @@
 import { Animated, RefreshControl, View } from 'react-native';
 import useFollowersInteractor from '../interactors/useFollowersInteractor';
-import {
-	useUserTimelineDispatch,
-	useUserTimelineState,
-} from '../../timelines/contexts/UserTimelineCtx';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useState } from 'react';
-import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
+import {
+	UserTimelineStateAction,
+	useUserTimelineDispatch,
+	useUserTimelineState,
+} from '@dhaaga/core';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import UserListItemView from '../../timelines/view/UserListItemView';
@@ -31,7 +31,7 @@ function ProfileFollowersPresenter() {
 
 	function loadMore() {
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: UserTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 

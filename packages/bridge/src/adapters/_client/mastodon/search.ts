@@ -10,7 +10,7 @@ import {
 	MastoStatus,
 	MastoTag,
 } from '../../../types/mastojs.types.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -33,7 +33,7 @@ export class MastodonSearchRouter implements SearchRoute {
 			});
 			return { data: data.accounts };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -45,7 +45,7 @@ export class MastodonSearchRouter implements SearchRoute {
 			});
 			return { data: data.statuses };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -60,7 +60,7 @@ export class MastodonSearchRouter implements SearchRoute {
 			});
 			return { data: data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

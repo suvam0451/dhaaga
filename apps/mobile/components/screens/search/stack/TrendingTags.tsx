@@ -1,11 +1,8 @@
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
-import WithAppPaginationContext, {
-	useAppPaginationContext,
-} from '../../../../states/usePagination';
 import WithActivitypubTagContext from '../../../../states/useTag';
 import TagItem from '../../../common/tag/TagItem';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import LoadingMore from '../../home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../../ui/LoadingIndicator';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useTrendingTags from '../api/useTrendingTags';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
@@ -21,20 +18,9 @@ import { Animated } from 'react-native';
 function ApiWrapper() {
 	const { driver } = useAppApiClient();
 
-	const { data: PageData, updateQueryCache } = useAppPaginationContext();
-	// const [refreshing, setRefreshing] = useState(false);
-	// const onRefresh = () => {
-	// 	setRefreshing(true);
-	// 	clear();
-	// 	refetch();
-	// };
-
 	const { fetchStatus } = useTrendingTags();
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: PageData.length,
-		updateQueryCache,
-	});
+	const { onScroll, translateY } = useScrollMoreOnPageEnd();
 
 	const { visible, loading } = useLoadingMoreIndicatorState({ fetchStatus });
 	return (
@@ -42,7 +28,7 @@ function ApiWrapper() {
 			{driver === KNOWN_SOFTWARE.MASTODON ? (
 				<Fragment>
 					<Animated.FlatList
-						data={PageData}
+						data={[]}
 						renderItem={(o) => (
 							<WithActivitypubTagContext tag={o.item} key={o.index}>
 								<TagItem />
@@ -54,7 +40,7 @@ function ApiWrapper() {
 						}}
 						scrollEventThrottle={16}
 					/>
-					<LoadingMore visible={visible} loading={loading} />
+					<TimelineLoadingIndicator visible={visible} loading={loading} />
 				</Fragment>
 			) : (
 				<FeatureUnsupported />
@@ -66,9 +52,7 @@ function ApiWrapper() {
 function TrendingPostsContainer() {
 	return (
 		<WithScrollOnRevealContext maxDisplacement={150}>
-			<WithAppPaginationContext>
-				<ApiWrapper />
-			</WithAppPaginationContext>
+			<ApiWrapper />
 		</WithScrollOnRevealContext>
 	);
 }

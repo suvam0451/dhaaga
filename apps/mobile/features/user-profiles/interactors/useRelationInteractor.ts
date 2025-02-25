@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import useHookLoadingState from '../../../states/useHookLoadingState';
 import {
 	LibraryResponse,
-	MastodonRestClient,
-	MisskeyRestClient,
+	MastoApiAdapter,
+	MisskeyApiAdapter,
 	KNOWN_SOFTWARE,
+	AtprotoApiAdapter,
 } from '@dhaaga/bridge';
 import ActivitypubRelationService from '../../../services/approto/activitypub-relation.service';
-import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
 import { AppBskyActorGetProfile } from '@atproto/api';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
 import ActivityPubService from '../../../services/activitypub.service';
@@ -178,7 +178,7 @@ function useRelationInteractor(id: string) {
 		setIsLoading(true);
 
 		if (ActivityPubService.mastodonLike(driver)) {
-			(client as MastodonRestClient).accounts
+			(client as MastoApiAdapter).accounts
 				.relationships([id])
 				.then(setMastoRelation)
 				.finally(() => {
@@ -186,7 +186,7 @@ function useRelationInteractor(id: string) {
 					forceUpdate();
 				});
 		} else if (ActivityPubService.misskeyLike(driver)) {
-			(client as MisskeyRestClient).accounts
+			(client as MisskeyApiAdapter).accounts
 				.get(id)
 				.then(setMisskeyRelation)
 				.finally(() => {
@@ -194,7 +194,7 @@ function useRelationInteractor(id: string) {
 					forceUpdate();
 				});
 		} else if (ActivityPubService.blueskyLike(driver)) {
-			(client as BlueskyRestClient).accounts
+			(client as AtprotoApiAdapter).accounts
 				.get(id)
 				.then(setBlueskyRelation)
 				.then(() => {

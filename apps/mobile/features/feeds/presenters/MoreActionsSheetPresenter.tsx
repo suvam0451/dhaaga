@@ -6,7 +6,6 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { View } from 'react-native';
-import { AppFeedObject } from '../../../types/app-feed.types';
 import { appDimensions } from '../../../styles/dimensions';
 import { Image } from 'expo-image';
 import { AppText } from '../../../components/lib/Text';
@@ -14,9 +13,13 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { StatItem } from '../../../components/common/status/PostStats';
 import ProfileFeedAssignInteractor from '../../app-profiles/interactors/ProfileFeedAssignInteractor';
 import MenuView from '../../timelines/features/controller/views/MenuView';
-import { AtprotoService } from '../../../services/atproto.service';
 import { LinkingUtils } from '../../../utils/linking.utils';
 import { AppDivider } from '../../../components/lib/Divider';
+import {
+	AtprotoApiAdapter,
+	AtprotoUtils,
+	FeedObjectType,
+} from '@dhaaga/bridge';
 
 function Divider() {
 	const { theme } = useAppTheme();
@@ -36,7 +39,7 @@ const FEED_AVATAR_SIZE = 42;
 function MoreActionsSheetPresenter() {
 	const { client } = useAppApiClient();
 	const [Uri, setUri] = useState<string>(null);
-	const [Feed, setFeed] = useState<AppFeedObject>(null);
+	const [Feed, setFeed] = useState<FeedObjectType>(null);
 	const { ctx, stateId } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 
@@ -48,12 +51,9 @@ function MoreActionsSheetPresenter() {
 	if (!Feed) return <View />;
 
 	function onOpenInBrowser() {
-		AtprotoService.generateFeedRemoteUrl(client as any, Uri).then((result) => {
-			if (result.type === 'success') {
-				console.log(result.value.url);
-				LinkingUtils.openURL(result.value.url);
-			}
-		});
+		AtprotoUtils.generateFeedUrl(client as AtprotoApiAdapter, Uri).then((o) =>
+			o.tap(LinkingUtils.openURL),
+		);
 	}
 
 	return (

@@ -1,6 +1,5 @@
 import * as Localization from 'expo-localization';
-import { DataSource } from '../database/dataSource';
-import { AppSettingService } from '../database/entities/app-setting';
+import { AppSettingService, DataSource } from '@dhaaga/db';
 
 export enum APP_SETTING_KEY {
 	SYSTEM_LOCALE = 'appSetting_systemLocale',

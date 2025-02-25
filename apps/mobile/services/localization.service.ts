@@ -1,6 +1,6 @@
-import { TimelineFetchMode } from '../states/interactors/post-timeline.reducer';
+import { TimelineFetchMode } from '@dhaaga/core';
 import { AppTimelineQuery } from '../features/timelines/api/useTimelineController';
-import { DhaagaJsNotificationType, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { DriverNotificationType, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { TFunction } from 'i18next';
 import { LOCALIZATION_NAMESPACE } from '../types/app.types';
 
@@ -55,34 +55,34 @@ export class LocalizationService {
 
 	static notificationLabel(
 		t: TFunction<LOCALIZATION_NAMESPACE.CORE[], undefined>,
-		notificationType: DhaagaJsNotificationType,
+		notificationType: DriverNotificationType,
 		visibility?: string,
 	): string {
 		switch (notificationType) {
-			case DhaagaJsNotificationType.FAVOURITE: {
+			case DriverNotificationType.FAVOURITE: {
 				return t(`inbox.summary.liked`);
 			}
-			case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED: {
+			case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED: {
 				return t(`inbox.summary.followRequestAccepted`);
 			}
-			case DhaagaJsNotificationType.FOLLOW: {
+			case DriverNotificationType.FOLLOW: {
 				return t(`inbox.summary.followed`);
 			}
-			case DhaagaJsNotificationType.REBLOG:
-			case DhaagaJsNotificationType.RENOTE: {
+			case DriverNotificationType.REBLOG:
+			case DriverNotificationType.RENOTE: {
 				return t(`inbox.summary.shared`);
 			}
-			case DhaagaJsNotificationType.REACTION: {
+			case DriverNotificationType.REACTION: {
 				return t(`inbox.summary.reacted`);
 			}
-			case DhaagaJsNotificationType.STATUS:
-			case DhaagaJsNotificationType.NOTE: {
+			case DriverNotificationType.STATUS:
+			case DriverNotificationType.NOTE: {
 				return t(`inbox.summary.posted`);
 			}
-			case DhaagaJsNotificationType.REPLY: {
+			case DriverNotificationType.REPLY: {
 				return t(`inbox.summary.replied`);
 			}
-			case DhaagaJsNotificationType.MENTION: {
+			case DriverNotificationType.MENTION: {
 				return t(`inbox.summary.mentioned`);
 			}
 		}

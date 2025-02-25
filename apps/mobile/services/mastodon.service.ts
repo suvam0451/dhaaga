@@ -1,4 +1,4 @@
-import { StatusInterface } from '@dhaaga/bridge';
+import { PostTargetInterface } from '@dhaaga/bridge';
 
 class MastodonService {
 	/**
@@ -7,12 +7,12 @@ class MastodonService {
 	 * @param contextChain
 	 */
 	static solveContext(
-		target: StatusInterface,
-		contextChain: StatusInterface[],
+		target: PostTargetInterface,
+		contextChain: PostTargetInterface[],
 	) {
 		let deque: string[] = [];
-		let lookup = new Map<string, StatusInterface>();
-		let childrenMapper = new Map<string, StatusInterface[]>();
+		let lookup = new Map<string, PostTargetInterface>();
+		let childrenMapper = new Map<string, PostTargetInterface[]>();
 
 		/**
 		 *  flatten the chain

@@ -1,7 +1,6 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { Text } from '@rneui/themed';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { APP_FONT } from '../../../../styles/AppTheme';
 import { useBookmarkGalleryControllerContext } from '../../../../states/useBookmarkGalleryController';
 import { UUID } from 'bson';
 import { memo, useMemo } from 'react';

@@ -1,5 +1,5 @@
-import { ActivityPubClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AppUserTimelineReducerDispatchType } from '../../states/interactors/user-timeline.reducer';
+import { ApiTargetInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { UserTimelineDispatchType } from '@dhaaga/core';
 
 /**
  * User timeline wrapper to let you
@@ -9,13 +9,13 @@ import { AppUserTimelineReducerDispatchType } from '../../states/interactors/use
 export class UserTimelineSessionService {
 	isValid: boolean;
 	driver: KNOWN_SOFTWARE;
-	client: ActivityPubClient;
-	dispatch: AppUserTimelineReducerDispatchType;
+	client: ApiTargetInterface;
+	dispatch: UserTimelineDispatchType;
 
 	constructor(
 		driver: KNOWN_SOFTWARE,
-		client: ActivityPubClient,
-		dispatch: AppUserTimelineReducerDispatchType,
+		client: ApiTargetInterface,
+		dispatch: UserTimelineDispatchType,
 	) {
 		this.isValid = !!driver && !!client && !!dispatch;
 		this.driver = driver;

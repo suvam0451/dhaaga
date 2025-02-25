@@ -15,8 +15,7 @@ import AccountListForSoftware from './landing/fragments/AccountListForSoftware';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../shared/topnavbar/AppTopNavbar';
-import { Account } from '../../../../database/_schema';
-import { AccountService } from '../../../../database/entities/account';
+import { Account, AccountService } from '@dhaaga/db';
 import {
 	useAppDb,
 	useAppPublishers,

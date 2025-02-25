@@ -6,7 +6,7 @@ import {
 	useContext,
 	useState,
 } from 'react';
-import { TimelineFetchMode } from '../../../states/interactors/post-timeline.reducer';
+import { TimelineFetchMode } from '@dhaaga/core';
 
 export type AppTimelineQuery = {
 	id: string;

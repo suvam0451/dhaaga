@@ -5,7 +5,7 @@ import {
 	LayoutChangeEvent,
 	Dimensions,
 } from 'react-native';
-import { SavedPostMediaAttachment } from '../../../../database/_schema';
+import { SavedPostMediaAttachment } from '@dhaaga/db';
 import { Image, useImage } from 'expo-image';
 import { useState } from 'react';
 

@@ -2,12 +2,12 @@ import {
 	useAppAcct,
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
-import {
-	useTimelineDispatch,
-	useTimelineState,
-} from '../../timelines/contexts/PostTimelineCtx';
 import { useEffect } from 'react';
-import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
+import {
+	PostTimelineStateAction,
+	usePostTimelineDispatch,
+	usePostTimelineState,
+} from '@dhaaga/core';
 import useTimelineQuery from '../../timelines/api/useTimelineQuery';
 
 function useMyPosts() {
@@ -15,20 +15,20 @@ function useMyPosts() {
 	const { acct } = useAppAcct();
 
 	// state management
-	const State = useTimelineState();
-	const dispatch = useTimelineDispatch();
+	const State = usePostTimelineState();
+	const dispatch = usePostTimelineDispatch();
 
 	useEffect(() => {
 		if (!db) return;
 		dispatch({
-			type: AppTimelineReducerActionType.INIT,
+			type: PostTimelineStateAction.INIT,
 			payload: {
 				db,
 			},
 		});
 
 		dispatch({
-			type: AppTimelineReducerActionType.SETUP_USER_POST_TIMELINE,
+			type: PostTimelineStateAction.SETUP_USER_POST_TIMELINE,
 			payload: {
 				id: acct?.identifier,
 				label: acct?.displayName || acct?.username,
@@ -46,20 +46,20 @@ function useMyPosts() {
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
-			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			type: PostTimelineStateAction.APPEND_RESULTS,
 			payload: data,
 		});
 	}, [fetchStatus]);
 
 	function loadMore() {
 		dispatch({
-			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 
 	async function onRefresh() {
 		dispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 		await refetch();
 	}

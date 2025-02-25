@@ -1,9 +1,6 @@
 import { DhaagaJsNotificationType } from '@dhaaga/bridge';
 import { View } from 'react-native';
-import {
-	Props,
-	styles,
-} from '../../../components/screens/notifications/landing/segments/_common';
+import { Props, styles } from '../components/_common';
 import { AppDivider } from '../../../components/lib/Divider';
 import AuthorItemPresenter from './AuthorItemPresenter';
 

@@ -2,37 +2,30 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { ThemePackType } from '../assets/loaders/UseAppThemePackLoader';
 import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
-import { Account, Profile } from '../database/_schema';
+import { Account, Profile, AccountService } from '@dhaaga/db';
 import {
-	ActivityPubClient,
-	ActivityPubClientFactory,
+	ApiTargetInterface,
 	KNOWN_SOFTWARE,
+	DriverService,
 } from '@dhaaga/bridge';
-import { AccountService } from '../database/entities/account';
 import { SQLiteDatabase } from 'expo-sqlite';
 import AtprotoSessionService from '../services/atproto/atproto-session.service';
 import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
-} from '../database/entities/account-metadata';
+	ProfileService,
+	DataSource,
+} from '@dhaaga/db';
 import { Result } from '../utils/result';
-import { RandomUtil } from '../utils/random.utils';
-import { DataSource } from '../database/dataSource';
-import { AppUserObject } from '../types/app-user.types';
 import ProfileSessionManager from '../services/session/profile-session.service';
-import { ProfileService } from '../database/entities/profile';
 import AppSessionManager from '../services/session/app-session.service';
 import { AppColorSchemeType } from '../utils/theming.util';
 import AccountSessionManager from '../services/session/account-session.service';
 import { WritableDraft } from 'immer';
-import { TimelineSessionService } from '../services/session/timeline-session.service';
 import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';
-import { UserMiddleware } from '../services/middlewares/user.middleware';
-import {
-	AppTimelineReducerDispatchType,
-	AppTimelineReducerStateType,
-} from './interactors/post-timeline.reducer';
+import { PostTimelineStateType, PostTimelineDispatchType } from '@dhaaga/core';
+import { UserObjectType, UserParser, RandomUtil } from '@dhaaga/bridge';
 
 type AppThemePack = {
 	id: string;
@@ -157,6 +150,13 @@ type AppBottomSheetState = {
 	show: (type?: APP_BOTTOM_SHEET_ENUM, refresh?: boolean) => void;
 	hide: () => void;
 
+	/**
+	 * Animation
+	 */
+	animating: boolean;
+	startAnimation: () => void;
+	endAnimation: () => void;
+
 	ctx: any;
 	setCtx: (ctx: any) => void;
 
@@ -171,14 +171,12 @@ type AppBottomSheetState = {
 
 	// timeline invoking the sheet
 	timeline: {
-		draftState: AppTimelineReducerStateType | null;
-		dispatch: AppTimelineReducerDispatchType | null;
+		draftState: PostTimelineStateType | null;
+		dispatch: PostTimelineDispatchType | null;
 		attach: (
-			state: AppTimelineReducerStateType,
-			dispatch: AppTimelineReducerDispatchType,
-			manager: TimelineSessionService,
+			state: PostTimelineStateType,
+			dispatch: PostTimelineDispatchType,
 		) => void;
-		manager: TimelineSessionService;
 	};
 };
 
@@ -200,10 +198,10 @@ type State = {
 	 * compatible interface
 	 * */
 	driver: KNOWN_SOFTWARE;
-	me: AppUserObject | null;
+	me: UserObjectType | null;
 
 	// router used to make api requests
-	router: ActivityPubClient | null;
+	router: ApiTargetInterface | null;
 
 	packId: string;
 	colorScheme: AppColorSchemeType;
@@ -268,17 +266,18 @@ class GlobalStateService {
 	static async restoreAppSession(db: DataSource): Promise<
 		Result<{
 			acct: Account;
-			router: ActivityPubClient;
-			me: AppUserObject;
+			router: ApiTargetInterface;
+			me: UserObjectType;
 		}>
 	> {
 		try {
 			const acct = AccountService.getSelected(db);
-			if (!acct) {
+			if (acct.isErr()) {
 				console.log('[WARN]: no account was found');
 				return { type: 'invalid' };
 			}
-			const profile = ProfileService.getActiveProfile(db, acct);
+			const _acct = acct.unwrap();
+			const profile = ProfileService.getActiveProfile(db, _acct);
 			if (!profile) {
 				console.log('[WARN]: no profile was found');
 				return { type: 'invalid' };
@@ -286,22 +285,22 @@ class GlobalStateService {
 
 			const token = AccountMetadataService.getKeyValueForAccountSync(
 				db,
-				acct,
+				_acct,
 				ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
 			);
 			let payload: any = {
-				instance: acct?.server,
+				instance: _acct.server,
 				token,
 			};
 
 			// Bluesky is built different
-			if (acct.driver === KNOWN_SOFTWARE.BLUESKY) {
-				let session = AtprotoSessionService.create(db, acct);
+			if (_acct.driver === KNOWN_SOFTWARE.BLUESKY) {
+				let session = AtprotoSessionService.create(db, _acct);
 
 				// re-login login
 				if (session.checkTokenExpiry()) {
-					await AtprotoSessionService.reLogin(db, acct);
-					session = AtprotoSessionService.create(db, acct);
+					await AtprotoSessionService.reLogin(db, _acct);
+					session = AtprotoSessionService.create(db, _acct);
 				}
 
 				await session.resume(db);
@@ -310,18 +309,27 @@ class GlobalStateService {
 					console.log('[INFO]: session restore status', success, reason);
 				payload = {
 					...data,
-					subdomain: acct.server,
+					subdomain: _acct.server,
 					pdsUrl: session.pdsUrl,
 				};
 			}
-			const _router = ActivityPubClientFactory.get(acct.driver as any, payload);
-			const { data } = await _router.me.getMe();
-			const obj: AppUserObject = UserMiddleware.deserialize(
-				data,
-				acct.driver,
-				acct.server,
+			const _router = DriverService.generateApiClient(
+				_acct.driver,
+				_acct.server,
+				payload,
 			);
-			return { type: 'success', value: { acct, router: _router, me: obj } };
+			if (_router.isErr())
+				return { type: 'error', error: new Error(_router.error) };
+			const { data } = await _router.unwrap().me.getMe();
+			const obj: UserObjectType = UserParser.parse(
+				data,
+				_acct.driver,
+				_acct.server,
+			);
+			return {
+				type: 'success',
+				value: { acct: _acct, router: _router.unwrap(), me: obj },
+			};
 		} catch (e) {
 			console.log(e);
 			console.log('[ERROR]: failed to restore previous app session');
@@ -442,6 +450,18 @@ const useGlobalState = create<State & Actions>()(
 			stateId: RandomUtil.nanoId(),
 			endSessionSeed: RandomUtil.nanoId(),
 			ctx: null,
+
+			animating: false,
+			startAnimation: () => {
+				set((state) => {
+					state.bottomSheet.animating = true;
+				});
+			},
+			endAnimation: () => {
+				set((state) => {
+					state.bottomSheet.animating = false;
+				});
+			},
 			setCtx: function (ctx: { uuid: string }) {
 				set((state) => {
 					state.bottomSheet.ctx = ctx;
@@ -478,14 +498,12 @@ const useGlobalState = create<State & Actions>()(
 				dispatch: null,
 				manager: null,
 				attach: (
-					_state: AppTimelineReducerStateType,
-					_dispatch: AppTimelineReducerDispatchType,
-					manager: TimelineSessionService,
+					_state: PostTimelineStateType,
+					_dispatch: PostTimelineDispatchType,
 				) => {
 					set((state) => {
 						state.bottomSheet.timeline.draftState = _state;
 						state.bottomSheet.timeline.dispatch = _dispatch;
-						state.bottomSheet.timeline.manager = manager;
 					});
 				},
 			},

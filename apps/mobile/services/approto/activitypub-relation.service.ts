@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ActivityPubClient } from '@dhaaga/bridge';
+import { ApiTargetInterface } from '@dhaaga/bridge';
 
 class ActivitypubRelationService {
 	blockedBy: boolean;
@@ -19,12 +19,12 @@ class ActivitypubRelationService {
 	showingReblogs: boolean;
 	error: boolean;
 
-	client: ActivityPubClient;
+	client: ApiTargetInterface;
 	userId: string;
 	setLoading: Dispatch<SetStateAction<boolean>>;
 
 	constructor(
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		userId: string,
 		setLoading: Dispatch<SetStateAction<boolean>>,
 	) {

@@ -6,7 +6,6 @@ import { useComposerCtx } from '../../../../../features/composer/contexts/useCom
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubService from '../../../../../services/activitypub.service';
-import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
 import AtprotoComposerService from '../../../../../services/atproto/atproto-compose';
 import {
 	useAppApiClient,
@@ -15,10 +14,11 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Loader } from '../../../../lib/Loader';
-import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
+import { AtprotoApiAdapter } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
 import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 import { useTranslation } from 'react-i18next';
+import { PostParser } from '@dhaaga/bridge';
 
 /**
  * Click to Post!
@@ -37,7 +37,7 @@ function PostButton() {
 		let _visibility: any = state.visibility;
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const newPost = await AtprotoComposerService.postUsingReducerState(
-				client as BlueskyRestClient,
+				client as AtprotoApiAdapter,
 				state,
 			);
 
@@ -51,11 +51,7 @@ function PostButton() {
 			 * 		We can use the logic from context builder
 			 * 		to render the parent and root, as well
 			 */
-			const _newPostObject = PostMiddleware.deserialize<unknown>(
-				newPost,
-				driver,
-				server,
-			);
+			const _newPostObject = PostParser.parse<unknown>(newPost, driver, server);
 			postPub.writeCache(_newPostObject.uuid, _newPostObject);
 			setCtx({ uuid: _newPostObject.uuid });
 			show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
@@ -106,12 +102,12 @@ function PostButton() {
 			if (error) throw new Error(error.message);
 
 			if (ActivityPubService.mastodonLike(driver)) {
-				const _data = PostMiddleware.deserialize(data, driver, server);
+				const _data = PostParser.parse(data, driver, server);
 				postPub.writeCache(_data.uuid, _data);
 				setCtx({ uuid: _data.uuid });
 				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 			} else {
-				const _data = PostMiddleware.deserialize<unknown>(
+				const _data = PostParser.parse<unknown>(
 					(data as any).createdNote,
 					driver,
 					server,

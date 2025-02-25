@@ -1,5 +1,5 @@
 import { errorBuilder } from '../adapters/_client/_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../types/result.types.js';
+import { ApiErrorCode } from '../types/result.types.js';
 import { LibraryPromise } from '../adapters/_client/_router/routes/_types.js';
 
 /**
@@ -27,11 +27,11 @@ export async function InvokeBskyFunction<T>(
 				: fn.call(agent);
 		if (!data.success) {
 			console.log('[WARN]: atproto agent returned failure', name);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 		return { data: data.data };
 	} catch (e) {
 		console.log('[WARN]: atproto agent failed request', name, e);
-		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 	}
 }

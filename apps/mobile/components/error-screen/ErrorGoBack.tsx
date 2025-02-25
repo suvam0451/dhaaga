@@ -1,6 +1,5 @@
-import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../styles/AppTheme';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { router } from 'expo-router';
 
 type Props = {

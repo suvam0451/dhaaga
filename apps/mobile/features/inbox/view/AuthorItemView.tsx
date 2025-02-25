@@ -1,13 +1,13 @@
 import { Text, View, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import { ICON_SIZE } from '../../../components/screens/notifications/landing/segments/_common';
+import { ICON_SIZE } from '../components/_common';
 import { AppIcon } from '../../../components/lib/Icon';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppParsedTextNodes } from '../../../types/parsed-text.types';
 import { TextContentView } from '../../../components/common/status/TextContentView';
 import { AppText } from '../../../components/lib/Text';
 import { appDimensions } from '../../../styles/dimensions';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 
 type Props = {
 	handle: string;

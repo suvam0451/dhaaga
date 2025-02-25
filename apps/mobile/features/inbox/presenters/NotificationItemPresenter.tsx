@@ -1,13 +1,11 @@
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
-import ReplyNotificationFragment from '../../../components/screens/notifications/landing/segments/ReplyNotificationFragment';
-import MentionNotificationFragment from '../../../components/screens/notifications/landing/segments/MentionNotificationFragment';
-import FavouriteNotificationFragment from '../../../components/screens/notifications/landing/segments/FavouriteNotificationFragment';
-import StatusAlertNotificationFragment from '../../../components/screens/notifications/landing/segments/StatusAlertNotificationFragment';
-import BoostNotificationFragment from '../../../components/screens/notifications/landing/segments/BoostNotificationFragment';
-import AchiEarnedNotificationFragment from '../../../components/screens/notifications/landing/segments/AchiEarnedNotificationFragment';
-import AppNotificationFragment from '../../../components/screens/notifications/landing/segments/AppNotificationFragment';
-import FollowReqAcceptNotificationFragment from '../../../components/screens/notifications/landing/segments/FollowReqAccepNotificationFragment';
-import ReactionNotificationFragment from '../../../components/screens/notifications/landing/segments/ReactionNotificationFragment';
+import { DriverNotificationType } from '@dhaaga/bridge';
+import ReplyNotificationFragment from '../components/ReplyNotificationFragment';
+import MentionNotificationFragment from '../components/MentionNotificationFragment';
+import FavouriteNotificationFragment from '../components/FavouriteNotificationFragment';
+import StatusAlertNotificationFragment from '../components/StatusAlertNotificationFragment';
+import BoostNotificationFragment from '../components/BoostNotificationFragment';
+import FollowReqAcceptNotificationFragment from '../components/FollowReqAccepNotificationFragment';
+import ReactionNotificationFragment from '../components/ReactionNotificationFragment';
 import FollowPresenter from './FollowPresenter';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { FlashListType_Notification } from '../../../services/flashlist.service';
@@ -31,11 +29,11 @@ export function NotificationItemPresenter({ item }: Props) {
 	if (_obj.user === null) {
 		if (_obj.users.length > 1) {
 			switch (item.type) {
-				case DhaagaJsNotificationType.FOLLOW:
+				case DriverNotificationType.FOLLOW:
 					return <GroupedFollowPresenter item={_obj} />;
-				case DhaagaJsNotificationType.REBLOG:
-				case DhaagaJsNotificationType.RENOTE:
-				case DhaagaJsNotificationType.FAVOURITE:
+				case DriverNotificationType.REBLOG:
+				case DriverNotificationType.RENOTE:
+				case DriverNotificationType.FAVOURITE:
 					return <GroupedPostInteractionPresenter item={_obj} />;
 				default:
 					return <GroupedFollowPresenter item={_obj} />;
@@ -53,31 +51,29 @@ export function NotificationItemPresenter({ item }: Props) {
 	 */
 
 	switch (_obj.type) {
-		case DhaagaJsNotificationType.REPLY:
+		case DriverNotificationType.REPLY:
 			return <ReplyNotificationFragment item={_obj} />;
-		case DhaagaJsNotificationType.MENTION:
-		case DhaagaJsNotificationType.CHAT:
-		case DhaagaJsNotificationType.HOME:
-		case DhaagaJsNotificationType.PUBLIC:
+		case DriverNotificationType.MENTION:
+		case DriverNotificationType.CHAT:
+		case DriverNotificationType.HOME:
+		case DriverNotificationType.PUBLIC:
 			return <MentionNotificationFragment item={_obj} />;
-		case DhaagaJsNotificationType.FAVOURITE:
+		case DriverNotificationType.FAVOURITE:
 			return <FavouriteNotificationFragment item={_obj} />;
-		case DhaagaJsNotificationType.FOLLOW:
+		case DriverNotificationType.FOLLOW:
 			return <FollowPresenter item={_obj} />;
-		case DhaagaJsNotificationType.STATUS:
-		case DhaagaJsNotificationType.NOTE:
+		case DriverNotificationType.STATUS:
+		case DriverNotificationType.NOTE:
 			return <StatusAlertNotificationFragment item={_obj} />;
-		case DhaagaJsNotificationType.REBLOG:
-		case DhaagaJsNotificationType.RENOTE:
+		case DriverNotificationType.REBLOG:
+		case DriverNotificationType.RENOTE:
 			return <BoostNotificationFragment item={_obj} />;
-		case DhaagaJsNotificationType.ACHIEVEMENT_EARNED:
-			return <AchiEarnedNotificationFragment />;
-		case DhaagaJsNotificationType.APP:
-			return <AppNotificationFragment />;
-		case DhaagaJsNotificationType.FOLLOW_REQUEST_ACCEPTED:
+		case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED:
 			return <FollowReqAcceptNotificationFragment item={_obj} />;
-		case DhaagaJsNotificationType.REACTION:
+		case DriverNotificationType.REACTION:
 			return <ReactionNotificationFragment item={_obj} />;
+		case DriverNotificationType.ACHIEVEMENT_EARNED:
+		case DriverNotificationType.APP:
 		default: {
 			console.log('notification type not handled', _obj.type);
 			return (

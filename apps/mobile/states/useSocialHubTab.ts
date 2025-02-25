@@ -5,11 +5,12 @@ import {
 	ProfilePinnedTimeline,
 	ProfilePinnedUser,
 	Profile,
-} from '../database/_schema';
+	ProfilePinnedTagService,
+	ProfilePinnedUserService,
+	ProfilePinnedTimelineService,
+} from '@dhaaga/db';
 import AppSessionManager from '../services/session/app-session.service';
 import ProfileSessionManager from '../services/session/profile-session.service';
-import { ProfilePinnedTagService } from '../database/entities/profile-pinned-tag';
-import { ProfilePinnedUserService } from '../database/entities/profile-pinned-user';
 
 export type SocialHubTabPinData = {
 	timelines: ProfilePinnedTimeline[];
@@ -37,7 +38,7 @@ function reducer(
 			const _profile = action.payload.profile;
 			const _db = action.payload.db;
 
-			const timelines = ProfilePinnedTagService.getShownForProfile(
+			const timelines = ProfilePinnedTimelineService.getShownForProfile(
 				_db,
 				_profile,
 			);

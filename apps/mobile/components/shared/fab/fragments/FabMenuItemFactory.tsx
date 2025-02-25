@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import * as React from 'react';
 import useFabMenuItemAnim from '../hooks/useFabMenuItemAnim';
 import { useFabController } from '../hooks/useFabController';
 import { View } from 'react-native';

@@ -1,107 +1,34 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
-import { PostMiddleware } from '../middlewares/post.middleware';
 import ActivityPubService from '../activitypub.service';
-import { AppPostObject } from '../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/bridge';
+import { PostInspector, ApiTargetInterface } from '@dhaaga/bridge';
 import { produce } from 'immer';
-import ActivityPubReactionsService, {
-	ActivityPubReactionStateDto,
-} from '../approto/activitypub-reactions.service';
+import ActivityPubReactionsService from '../approto/activitypub-reactions.service';
 import { AtprotoPostService } from '../atproto.service';
 
 export class PostMutator {
 	private readonly driver: KNOWN_SOFTWARE;
-	private readonly client: ActivityPubClient;
+	private readonly client: ApiTargetInterface;
 
-	constructor(driver: KNOWN_SOFTWARE, client: ActivityPubClient) {
+	constructor(driver: KNOWN_SOFTWARE, client: ApiTargetInterface) {
 		this.driver = driver;
 		this.client = client;
 	}
 
-	async toggleLike(input: AppPostObject): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
-
-		/**
-		 * Handle for AT protocol
-		 */
-		if (this.driver === KNOWN_SOFTWARE.BLUESKY) {
-			const result = await AtprotoPostService.toggleLike(
-				this.client,
-				target.meta.uri,
-				target.meta.cid,
-				target.atProto?.viewer,
-			);
-			if (!result.success) return input;
-
-			if (input.id === target.id) {
-				return produce(input, (draft) => {
-					draft.interaction.liked = result.state;
-					draft.stats.likeCount += result.state ? 1 : -1;
-					draft.atProto.viewer.like = result.uri;
-				});
-			} else if (input.boostedFrom?.id === target.id) {
-				return produce(input, (draft) => {
-					draft.boostedFrom.interaction.liked = result.state;
-					draft.boostedFrom.stats.likeCount += result.state ? 1 : -1;
-					draft.boostedFrom.atProto.viewer.like = result.uri;
-				});
-			}
-		}
-
-		/**
-		 * Handle for AP protocol
-		 */
-		try {
-			const res = await ActivityPubService.toggleLike(
-				this.client,
-				target.id,
-				target.interaction.liked,
-				this.driver,
-			);
-			if (input.id === target.id) {
-				return produce(input, (draft) => {
-					draft.interaction.liked = res !== -1;
-					draft.stats.likeCount += res;
-				});
-			} else if (input.boostedFrom?.id === target.id) {
-				return produce(input, (draft) => {
-					draft.boostedFrom.interaction.liked = res != -1;
-					draft.boostedFrom.stats.likeCount += res;
-				});
-			}
-		} catch (e) {
-			console.log('[WARN]: failed to toggle like', e);
-		}
+	async toggleLike(input: PostObjectType) {
+		return this.client.post
+			.toggleLike(input)
+			.then((res) => res.unwrapOrElse(input));
 	}
 
-	async toggleBookmark(input: AppPostObject): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
-
-		try {
-			const res = await ActivityPubService.toggleBookmark(
-				this.client,
-				target.id,
-				target.interaction.bookmarked,
-			);
-			if (input.id === target.id) {
-				return produce(input, (draft) => {
-					draft.interaction.bookmarked = res;
-					draft.state.isBookmarkStateFinal = true;
-				});
-			} else if (input.boostedFrom?.id === target.id) {
-				return produce(input, (draft) => {
-					draft.boostedFrom.interaction.bookmarked = res;
-					draft.boostedFrom.state.isBookmarkStateFinal = true;
-				});
-			}
-		} catch (e) {
-			console.log('[WARN]: failed to toggle bookmark', e);
-		}
-		return input;
+	async toggleBookmark(input: PostObjectType) {
+		return this.client.post
+			.toggleBookmark(input)
+			.then((res) => res.unwrapOrElse(input));
 	}
 
-	async finalizeBookmarkState(input: AppPostObject): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	async finalizeBookmarkState(input: PostObjectType): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 
 		try {
 			const res = await ActivityPubService.getBookmarkState(
@@ -127,8 +54,8 @@ export class PostMutator {
 		return input;
 	}
 
-	async toggleShare(input: AppPostObject): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	async toggleShare(input: PostObjectType): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 
 		if (this.driver === KNOWN_SOFTWARE.BLUESKY) {
 			const result = await AtprotoPostService.toggleRepost(
@@ -179,22 +106,20 @@ export class PostMutator {
 		return input;
 	}
 
-	private applyReactionData(input: AppPostObject, _data: any) {
-		const target = PostMiddleware.getContentTarget(input);
-		const { data, error } = ActivityPubReactionStateDto.safeParse(_data);
-		if (error) return input;
+	private applyReactionData(input: PostObjectType, _data: any) {
+		const target = PostInspector.getContentTarget(input);
 		return produce(input, (draft) => {
-			if (draft.id === target.id) draft.stats.reactions = data;
+			if (draft.id === target.id) draft.stats.reactions = _data;
 			if (draft.boostedFrom?.id === target.id)
-				draft.boostedFrom.stats.reactions = data;
+				draft.boostedFrom.stats.reactions = _data;
 		});
 	}
 
 	async addReaction(
-		input: AppPostObject,
+		input: PostObjectType,
 		reactionCode: string,
-	): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 		try {
 			/**
 			 * Response looks like this
@@ -215,10 +140,10 @@ export class PostMutator {
 	}
 
 	async removeReaction(
-		input: AppPostObject,
+		input: PostObjectType,
 		reactionCode: string,
-	): Promise<AppPostObject> {
-		const target = PostMiddleware.getContentTarget(input);
+	): Promise<PostObjectType> {
+		const target = PostInspector.getContentTarget(input);
 		try {
 			/**
 			 * Response looks like this

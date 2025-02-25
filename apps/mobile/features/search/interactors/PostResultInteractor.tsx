@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
-import {
-	useTimelineDispatch,
-	useTimelineState,
-} from '../../timelines/contexts/PostTimelineCtx';
 import { useApiSearchPosts } from '../../../hooks/api/useApiSearch';
 import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
-import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
+import {
+	PostTimelineStateAction,
+	usePostTimelineState,
+	usePostTimelineDispatch,
+} from '@dhaaga/core';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusItem from '../../../components/common/status/StatusItem';
+import { useDiscoverState } from '@dhaaga/core';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -21,9 +21,9 @@ type ResultInteractorProps = {
 
 function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	const [Refreshing, setRefreshing] = useState(false);
-	const State = useDiscoverTabState();
-	const TimelineState = useTimelineState();
-	const TimelineDispatch = useTimelineDispatch();
+	const State = useDiscoverState();
+	const TimelineState = usePostTimelineState();
+	const TimelineDispatch = usePostTimelineDispatch();
 	const { data, fetchStatus, refetch } = useApiSearchPosts(
 		State.q,
 		TimelineState.appliedMaxId,
@@ -32,42 +32,35 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 
 	useEffect(() => {
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 	}, [State.q]);
 
 	useEffect(() => {
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 		refetch();
 	}, [State.tab]);
 
 	useEffect(() => {
-		if (!data.success) {
-			onDataLoaded(true);
-			return;
-		}
 		onDataLoaded(false);
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.APPEND_RESULTS,
-			payload: {
-				items: data.items,
-				maxId: data.maxId,
-			},
+			type: PostTimelineStateAction.APPEND_RESULTS,
+			payload: data,
 		});
 	}, [fetchStatus]);
 
 	function loadMore() {
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 
 	function onRefresh() {
 		setRefreshing(true);
 		TimelineDispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 		refetch().finally(() => {
 			setRefreshing(false);
@@ -105,7 +98,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
 				}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</View>
 	);
 }

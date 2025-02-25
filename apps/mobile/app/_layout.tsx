@@ -1,12 +1,12 @@
 import { Stack } from 'expo-router/stack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createTheme, ThemeProvider } from '@rneui/themed';
+import { ThemeProvider } from '@rneui/themed';
 import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { StatusBar, View, Appearance } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { useCallback, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
@@ -14,7 +14,7 @@ import { enableMapSet } from 'immer';
 import { SQLiteProvider } from 'expo-sqlite';
 import WithAppNotificationBadge from '../hooks/app/useAppNotificationBadge';
 import { usePathname } from 'expo-router';
-import { migrateDbIfNeeded } from '../database/migrations';
+import { migrateDbIfNeeded } from '@dhaaga/db';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
 import useAppSession from '../states/useAppSession';
 import ImageInspectModal from '../components/modals/ImageInspectModal';
@@ -128,8 +128,6 @@ function App() {
 	);
 }
 
-const RneuiTheme = createTheme({});
-
 export default function Page() {
 	const queryClient = new QueryClient();
 	return (
@@ -137,7 +135,7 @@ export default function Page() {
 			{/* API Caching -- Tanstack */}
 			<QueryClientProvider client={queryClient}>
 				{/* Rneui Custom Themes */}
-				<ThemeProvider theme={RneuiTheme}>
+				<ThemeProvider>
 					<GestureHandlerRootView>
 						<SafeAreaProvider>
 							<WithAppNotificationBadge>

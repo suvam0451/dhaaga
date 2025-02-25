@@ -1,11 +1,11 @@
-import WithUserTimelineCtx from '../timelines/contexts/UserTimelineCtx';
 import ProfileFollowingsPresenter from './presenters/ProfileFollowingsPresenter';
+import { UserTimelineCtx } from '@dhaaga/core';
 
 function Followings() {
 	return (
-		<WithUserTimelineCtx>
+		<UserTimelineCtx>
 			<ProfileFollowingsPresenter />
-		</WithUserTimelineCtx>
+		</UserTimelineCtx>
 	);
 }
 

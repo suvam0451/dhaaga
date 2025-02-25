@@ -1,6 +1,5 @@
 import { FetchStatus } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import useSkeletonSmoothTransition from './useSkeletonTransition';
 
 type Props = {
 	fetchStatus: FetchStatus;

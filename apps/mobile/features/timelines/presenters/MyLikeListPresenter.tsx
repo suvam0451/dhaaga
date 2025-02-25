@@ -1,6 +1,5 @@
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
-import WithPostTimelineCtx from '../contexts/PostTimelineCtx';
-import { TimelineFetchMode } from '../../../states/interactors/post-timeline.reducer';
+import { PostTimelineCtx, TimelineFetchMode } from '@dhaaga/core';
 import { PostTimelinePresenter } from './PostTimelinePresenter';
 import useTimeline from '../api/useTimeline';
 
@@ -23,9 +22,9 @@ function DataView() {
 
 function MyLikeListPresenter() {
 	return (
-		<WithPostTimelineCtx>
+		<PostTimelineCtx>
 			<DataView />
-		</WithPostTimelineCtx>
+		</PostTimelineCtx>
 	);
 }
 

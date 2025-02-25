@@ -1,11 +1,11 @@
-import WithPostTimelineCtx from '../timelines/contexts/PostTimelineCtx';
 import MyPostsPresenter from './presenters/MyPostsPresenter';
+import { PostTimelineCtx } from '@dhaaga/core';
 
 function MyPosts() {
 	return (
-		<WithPostTimelineCtx>
+		<PostTimelineCtx>
 			<MyPostsPresenter />
-		</WithPostTimelineCtx>
+		</PostTimelineCtx>
 	);
 }
 

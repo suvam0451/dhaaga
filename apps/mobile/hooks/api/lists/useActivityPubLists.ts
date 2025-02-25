@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { KNOWN_SOFTWARE, MisskeyRestClient } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, MisskeyApiAdapter } from '@dhaaga/bridge';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -72,7 +72,7 @@ function useActivityPubLists() {
 			].includes(driver)
 		) {
 			const { data: antennaData, error: antennaError } = await (
-				client as MisskeyRestClient
+				client as MisskeyApiAdapter
 			).lists.listAntennas();
 
 			if (antennaError) {

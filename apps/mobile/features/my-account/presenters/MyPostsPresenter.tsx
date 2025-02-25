@@ -3,14 +3,14 @@ import { useState } from 'react';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
 } from '../../../components/shared/topnavbar/AppTopNavbar';
-import { useTimelineState } from '../../timelines/contexts/PostTimelineCtx';
 import { PostTimelinePresenter } from '../../timelines/presenters/PostTimelinePresenter';
 import useMyPosts from '../interactors/useMyPosts';
+import { usePostTimelineState } from '@dhaaga/core';
 
 function MyPostsPresenter() {
 	const [Refreshing, setRefreshing] = useState(false);
 	const { loadMore, onRefresh, fetchStatus } = useMyPosts();
-	const State = useTimelineState();
+	const State = usePostTimelineState();
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: State.items.length,

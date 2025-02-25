@@ -15,7 +15,7 @@ import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import { useState } from 'react';
-import { AccountService } from '../../../database/entities/account';
+import { AccountService } from '@dhaaga/db';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import {
 	useAppAcct,

@@ -1,17 +1,21 @@
-import { ActivityPubTagAdapter, TagInterface, TagType } from '@dhaaga/bridge';
+import {
+	ActivityPubTagAdapter,
+	TagTargetInterface,
+	TagType,
+} from '@dhaaga/bridge';
 import { createContext, useContext, useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
 
 type Type = {
-	tag: TagInterface;
-	setData: (o: TagInterface) => void;
+	tag: TagTargetInterface;
+	setData: (o: TagTargetInterface) => void;
 	setDataRaw: (o: TagType) => void;
 };
 
 const defaultValue: Type = {
 	tag: undefined,
-	setData: function (o: TagInterface): void {
+	setData: function (o: TagTargetInterface): void {
 		throw new Error('Function not implemented.');
 	},
 	setDataRaw: function (o: TagType): void {
@@ -40,7 +44,7 @@ function WithActivitypubTagContext({ tag, children }: Props) {
 		})),
 	);
 
-	const [Value, setValue] = useState<TagInterface | null>(
+	const [Value, setValue] = useState<TagTargetInterface | null>(
 		ActivityPubTagAdapter(null, driver),
 	);
 	const [RawValue, setRawValue] = useState<TagType | null>(null);
@@ -51,7 +55,7 @@ function WithActivitypubTagContext({ tag, children }: Props) {
 		setValue(ActivityPubTagAdapter(tag, driver));
 	}, [tag]);
 
-	const set = (o: TagInterface) => setValue(o);
+	const set = (o: TagTargetInterface) => setValue(o);
 	const setRaw = (o: TagType) => {
 		setRawValue(o);
 		setValue(ActivityPubTagAdapter(o, driver));

@@ -1,3 +1,3 @@
-import SharedStackPostDetails from '../../../../components/screens/(shared)/stack/SharedStackPostDetails';
+import Page from '../../../../features/posts/features/detail-view/PostDetailView';
 
-export default SharedStackPostDetails;
+export default Page;

@@ -1,6 +1,6 @@
-import { AccountInstance, UserInterface } from './_interface.js';
+import { AccountInstance, UserTargetInterface } from './_interface.js';
 
-class MastodonUser implements UserInterface {
+class MastodonUser implements UserTargetInterface {
 	ref: AccountInstance;
 
 	constructor(ref: AccountInstance) {

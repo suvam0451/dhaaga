@@ -3,12 +3,13 @@ import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 import { PostTimelinePresenter } from '../../../features/timelines/presenters/PostTimelinePresenter';
-import WithPostTimelineCtx, {
-	useTimelineDispatch,
-	useTimelineState,
-} from '../../../features/timelines/contexts/PostTimelineCtx';
 import { useEffect, useState } from 'react';
-import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
+import {
+	PostTimelineStateAction,
+	PostTimelineCtx,
+	usePostTimelineState,
+	usePostTimelineDispatch,
+} from '@dhaaga/core';
 import useTimelineQuery from '../../../features/timelines/api/useTimelineQuery';
 
 function DataView() {
@@ -20,20 +21,20 @@ function DataView() {
 	const label: string = params['displayName'] as string;
 
 	// state management
-	const State = useTimelineState();
-	const dispatch = useTimelineDispatch();
+	const State = usePostTimelineState();
+	const dispatch = usePostTimelineDispatch();
 
 	useEffect(() => {
 		if (!db || !id) return;
 		dispatch({
-			type: AppTimelineReducerActionType.INIT,
+			type: PostTimelineStateAction.INIT,
 			payload: {
 				db,
 			},
 		});
 
 		dispatch({
-			type: AppTimelineReducerActionType.SETUP_CUSTOM_FEED_TIMELINE,
+			type: PostTimelineStateAction.SETUP_CUSTOM_FEED_TIMELINE,
 			payload: {
 				uri: id,
 				label: label,
@@ -51,14 +52,14 @@ function DataView() {
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
-			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			type: PostTimelineStateAction.APPEND_RESULTS,
 			payload: data,
 		});
 	}, [fetchStatus]);
 
 	function loadMore() {
 		dispatch({
-			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 
@@ -73,7 +74,7 @@ function DataView() {
 	function onRefresh() {
 		setRefreshing(true);
 		dispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 		refetch().finally(() => {
 			setRefreshing(false);
@@ -99,9 +100,9 @@ function DataView() {
  */
 function Page() {
 	return (
-		<WithPostTimelineCtx>
+		<PostTimelineCtx>
 			<DataView />
-		</WithPostTimelineCtx>
+		</PostTimelineCtx>
 	);
 }
 

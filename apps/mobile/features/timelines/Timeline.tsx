@@ -1,11 +1,11 @@
-import WithPostTimelineCtx from './contexts/PostTimelineCtx';
 import TimelineInteractor from './interactors/TimelineInteractor';
+import { PostTimelineCtx } from '@dhaaga/core';
 
 function Timeline() {
 	return (
-		<WithPostTimelineCtx>
+		<PostTimelineCtx>
 			<TimelineInteractor />
-		</WithPostTimelineCtx>
+		</PostTimelineCtx>
 	);
 }
 

@@ -1,5 +1,4 @@
-import { ActivityIndicator, View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { ActivityIndicator, View, Text } from 'react-native';
 
 type LoadingIndicatorProps = {
 	text: string;

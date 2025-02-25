@@ -1,10 +1,8 @@
-import { AccountSavedPost, AccountSavedUser } from '../../../database/_schema';
+import { Account, AccountSavedPost, AccountSavedUser } from '@dhaaga/db';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
-import { AppParsedTextNodes } from '../../../types/parsed-text.types';
-import MfmService from '../../../services/mfm.service';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { RefetchOptions } from '@tanstack/react-query';
+import { TextNodeParser } from '@dhaaga/bridge';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 
 export type CollectionDataViewUserEntry = {
 	item: AccountSavedUser;
@@ -19,6 +17,7 @@ export type CollectionDataViewPostEntry = {
 };
 
 type State = {
+	acct: Account | null;
 	posts: CollectionDataViewPostEntry[] /**
 	 * 	this is what is shown to the user
 	 * 	upto a maximum of 100 items, unless
@@ -30,10 +29,11 @@ type State = {
 	widgetDimmed: boolean;
 	all: boolean;
 	none: boolean;
-	refetch: (options?: RefetchOptions) => void;
+	refetch: () => void;
 };
 
 const DEFAULT: State = {
+	acct: null,
 	posts: [],
 	results: [],
 	users: [],
@@ -58,7 +58,8 @@ type Actions =
 	| {
 			type: ACTION.INIT;
 			payload: {
-				refetch: (options?: RefetchOptions) => void;
+				refetch: () => void;
+				acct: Account;
 			};
 	  }
 	| {
@@ -109,16 +110,12 @@ function reducer(state: State, action: Actions): State {
 
 			return produce(state, (draft) => {
 				draft.posts = action.payload.items.map((o) => {
-					const parsedContent = MfmService.renderMfm(o.textContent, {
-						emojiMap: new Map(),
-						emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-						colorScheme: null,
-						variant: 'bodyContent',
-						nonInteractive: false,
-					});
 					return {
 						item: o,
-						parsedTextContent: parsedContent.parsed || [],
+						parsedTextContent: TextNodeParser.parse(
+							state.acct.driver,
+							o.textContent,
+						),
 					};
 				});
 				draft.results = draft.posts.slice(0, 100);

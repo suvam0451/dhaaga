@@ -1,6 +1,5 @@
 import {
 	Pressable,
-	StatusBar,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
@@ -13,18 +12,17 @@ import TopNavbarBackButton from './TopNavbarBackButton';
 import { AppIcon } from '../../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import { LocalizationService } from '../../../../services/localization.service';
-import { ACTION } from '../../../../states/interactors/post-timeline.reducer';
+import {
+	PostTimelineStateAction,
+	usePostTimelineState,
+	usePostTimelineDispatch,
+} from '@dhaaga/core';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppBottomSheet_TimelineReference,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
-import {
-	useTimelineDispatch,
-	useTimelineManager,
-	useTimelineState,
-} from '../../../../features/timelines/contexts/PostTimelineCtx';
 import { appDimensions } from '../../../../styles/dimensions';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
@@ -42,24 +40,23 @@ function TimelinesHeader() {
 	const { show } = useAppBottomSheet();
 	const { attach } = useAppBottomSheet_TimelineReference();
 
-	const State = useTimelineState();
-	const dispatch = useTimelineDispatch();
-	const manager = useTimelineManager();
+	const State = usePostTimelineState();
+	const dispatch = usePostTimelineDispatch();
 
 	function onIconPress() {
 		if (!router) {
 			dispatch({
-				type: ACTION.HIDE_WIDGET,
+				type: PostTimelineStateAction.HIDE_WIDGET,
 			});
 		} else {
 			dispatch({
-				type: ACTION.SHOW_WIDGET,
+				type: PostTimelineStateAction.SHOW_WIDGET,
 			});
 		}
 	}
 
 	function onViewTimelineController() {
-		attach(State, dispatch, manager.current);
+		attach(State, dispatch);
 		show(APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER);
 	}
 

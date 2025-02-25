@@ -4,7 +4,7 @@ import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppT
 import AddAccountPresenter from '../../../features/onboarding/presenters/AddAccountPresenter';
 import SocialHubPresenter from '../../../features/social-hub/presenters/SocialHubPresenter';
 import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
-import { Account } from '../../../database/_schema';
+import { Account } from '@dhaaga/db';
 import {
 	useAppAcct,
 	useAppTheme,

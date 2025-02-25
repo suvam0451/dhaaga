@@ -1,11 +1,9 @@
 import { memo } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Text } from '@rneui/themed';
 import TimelineWidgetModal from '../../../widgets/timelines/core/Modal';
-import * as React from 'react';
 
 const NotificationsHeader = memo(() => {
 	function onIconPress() {}

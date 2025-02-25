@@ -1,6 +1,8 @@
 import { AppBskyFeedGetPostThread } from '@atproto/api';
-import { KNOWN_SOFTWARE, StatusInterface } from '@dhaaga/bridge';
-import { PostMiddleware } from '../middlewares/post.middleware';
+import { KNOWN_SOFTWARE, PostTargetInterface } from '@dhaaga/bridge';
+import { PostParser } from '@dhaaga/bridge';
+import { $Typed } from '@atproto/api/src/client/util';
+import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 
 class AtprotoContextService {
 	/**
@@ -12,12 +14,22 @@ class AtprotoContextService {
 	 * (just like mastodon)
 	 */
 	static solve(data: AppBskyFeedGetPostThread.Response) {
-		const _thread = data?.data?.thread;
+		const thread = data?.data?.thread;
 
-		let lookup = new Map<string, StatusInterface>();
-		let childrenMapper = new Map<string, StatusInterface[]>();
+		// TODO: handle blocked/missing posts
+		if (
+			thread.$type === 'app.bsky.feed.defs#blockedPost' ||
+			thread.$type === 'app.bsky.feed.defs#notFoundPost'
+		) {
+			return null;
+		}
 
-		let curr: StatusInterface = PostMiddleware.rawToInterface<unknown>(
+		const _thread = data?.data?.thread as $Typed<ThreadViewPost>;
+
+		let lookup = new Map<string, PostTargetInterface>();
+		let childrenMapper = new Map<string, PostTargetInterface[]>();
+
+		let curr: PostTargetInterface = PostParser.rawToInterface<unknown>(
 			_thread.post,
 			KNOWN_SOFTWARE.BLUESKY,
 		);
@@ -25,9 +37,9 @@ class AtprotoContextService {
 
 		// recurse parents
 		let parent: any = _thread.parent;
-		let child: StatusInterface = curr;
+		let child: PostTargetInterface = curr;
 		while (!!parent) {
-			const data = PostMiddleware.rawToInterface<unknown>(
+			const data = PostParser.rawToInterface<unknown>(
 				parent,
 				KNOWN_SOFTWARE.BLUESKY,
 			);
@@ -43,11 +55,11 @@ class AtprotoContextService {
 			child = data;
 		}
 		// the topmost child is the root
-		let root: StatusInterface = child;
+		let root: PostTargetInterface = child;
 
 		function processList(replies: any[], parentId: string) {
 			replies.forEach((o) => {
-				const _o = PostMiddleware.rawToInterface<unknown>(
+				const _o = PostParser.rawToInterface<unknown>(
 					o,
 					KNOWN_SOFTWARE.BLUESKY,
 				);

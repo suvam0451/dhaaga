@@ -3,10 +3,7 @@ import { FlatList, View } from 'react-native';
 import SeeMore from '../components/SeeMore';
 import ThumbnailView from '../views/ThumbnailView';
 import useProfileGalleryModeInteractor from '../interactors/useProfileGalleryModeInteractor';
-import {
-	AppMediaObject,
-	AppPostObject,
-} from '../../../../../types/app-post.types';
+import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/bridge';
 import MediaUtils from '../../../../../utils/media.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import CanvasPresenter from './CanvasPresenter';
@@ -18,7 +15,7 @@ type Props = {
 	userId: string;
 };
 
-type MediaPostTuple = { media: AppMediaObject; post: AppPostObject };
+type MediaPostTuple = { media: PostMediaAttachmentType; post: PostObjectType };
 
 function ProfileGalleryModePresenter({ userId }: Props) {
 	const [MediaItems, setMediaItems] = useState<MediaPostTuple[]>([]);

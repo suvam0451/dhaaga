@@ -2,12 +2,12 @@ import { UserType } from '../profile/_interface.js';
 import {
 	DhaagaJsMentionObject,
 	Status,
-	StatusInterface,
+	PostTargetInterface,
 } from './_interface.js';
 import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
-import { MediaAttachmentInterface } from '../media-attachment/interface.js';
+import { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
 
-class UnknownToStatusAdapter implements StatusInterface {
+class PostAdapterBase implements PostTargetInterface {
 	getCid(): string | null {
 		return null;
 	}
@@ -103,7 +103,7 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return null;
 	}
 
-	getQuote(): StatusInterface | null | undefined {
+	getQuote(): PostTargetInterface | null | undefined {
 		return undefined;
 	}
 
@@ -155,7 +155,7 @@ class UnknownToStatusAdapter implements StatusInterface {
 		return '';
 	}
 
-	getRepostedStatus(): StatusInterface | null | undefined {
+	getRepostedStatus(): PostTargetInterface | null | undefined {
 		return null;
 	}
 
@@ -169,7 +169,7 @@ class UnknownToStatusAdapter implements StatusInterface {
 
 	getFacets = () => [];
 
-	getMediaAttachments(): MediaAttachmentInterface[] {
+	getMediaAttachments(): MediaAttachmentTargetInterface[] {
 		return [];
 	}
 
@@ -182,4 +182,4 @@ class UnknownToStatusAdapter implements StatusInterface {
 	}
 }
 
-export default UnknownToStatusAdapter;
+export default PostAdapterBase;

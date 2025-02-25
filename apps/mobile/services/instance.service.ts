@@ -1,9 +1,9 @@
-import { TagInterface } from '@dhaaga/bridge';
+import { TagTargetInterface } from '@dhaaga/bridge';
 import axios from 'axios';
 
 class InstanceService {
 	static async getTagInfoCrossDomain(
-		tag: TagInterface,
+		tag: TagTargetInterface,
 		ourDomain: string,
 		theirDomain?: string,
 	) {

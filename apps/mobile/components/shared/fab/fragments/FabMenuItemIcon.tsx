@@ -1,7 +1,6 @@
 import { memo } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { styles } from '../fab.styles';
-import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../../styles/AppTheme';
 
 type FabMenuItemIconProps = {

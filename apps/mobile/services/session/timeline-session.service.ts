@@ -1,22 +1,22 @@
-import { ActivityPubClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { ApiTargetInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import {
-	AppTimelineReducerActionType,
-	AppTimelineReducerDispatchType,
-	AppTimelineReducerStateType,
-} from '../../states/interactors/post-timeline.reducer';
+	PostTimelineStateType,
+	PostTimelineDispatchType,
+	PostTimelineStateAction,
+} from '@dhaaga/core';
 import { Result } from '../../utils/result';
 import ActivityPubService from '../activitypub.service';
 
 export class TimelineSessionService {
 	isValid: boolean;
 	driver: KNOWN_SOFTWARE;
-	client: ActivityPubClient;
-	dispatch: AppTimelineReducerDispatchType;
+	client: ApiTargetInterface;
+	dispatch: PostTimelineDispatchType;
 
 	constructor(
 		driver: KNOWN_SOFTWARE,
-		client: ActivityPubClient,
-		dispatch: AppTimelineReducerDispatchType,
+		client: ApiTargetInterface,
+		dispatch: PostTimelineDispatchType,
 	) {
 		this.isValid = !!driver && !!client && !!dispatch;
 		this.driver = driver;
@@ -29,14 +29,14 @@ export class TimelineSessionService {
 	 * @param State copy of timeline state
 	 * @param key id of status
 	 */
-	findById(State: AppTimelineReducerStateType, key: string) {
+	findById(State: PostTimelineStateType, key: string) {
 		let match = State.items.find((o) => o.id === key);
 		if (!match) match = State.items.find((o) => o.boostedFrom?.id === key);
 		return !!match.boostedFrom ? match.boostedFrom : match;
 	}
 
 	async toggleLike(
-		draft: AppTimelineReducerStateType,
+		draft: PostTimelineStateType,
 		key: string,
 	): Promise<Result<undefined>> {
 		const match = this.findById(draft, key);
@@ -45,16 +45,15 @@ export class TimelineSessionService {
 		try {
 			const response = await ActivityPubService.toggleLike(
 				this.client,
-				key,
 				match.interaction.liked,
-				this.driver,
+				key,
 			);
 			if (response !== null) {
 				this.dispatch({
-					type: AppTimelineReducerActionType.UPDATE_LIKE_STATUS,
+					type: PostTimelineStateAction.UPDATE_LIKE_STATUS,
 					payload: {
 						id: key,
-						delta: response,
+						delta: response.unwrap().state ? 1 : -1,
 					},
 				});
 			}
@@ -68,7 +67,7 @@ export class TimelineSessionService {
 	/**
 	 * Loads bookmark status for posts
 	 */
-	async loadBookmarkState(State: AppTimelineReducerStateType, key: string) {
+	async loadBookmarkState(State: PostTimelineStateType, key: string) {
 		if (
 			!this.client ||
 			[
@@ -90,7 +89,7 @@ export class TimelineSessionService {
 				return;
 			}
 			this.dispatch({
-				type: AppTimelineReducerActionType.UPDATE_BOOKMARK_STATUS,
+				type: PostTimelineStateAction.UPDATE_BOOKMARK_STATUS,
 				payload: {
 					id: key,
 					value: res,
@@ -101,7 +100,7 @@ export class TimelineSessionService {
 		}
 	}
 
-	async toggleBookmark(State: AppTimelineReducerStateType, key: string) {
+	async toggleBookmark(State: PostTimelineStateType, key: string) {
 		const match = this.findById(State, key);
 		if (!match) return { type: 'error', error: new Error('E_Not_Found') };
 
@@ -113,10 +112,10 @@ export class TimelineSessionService {
 			.then((res) => {
 				console.log('bookmark action result', res);
 				this.dispatch({
-					type: AppTimelineReducerActionType.UPDATE_BOOKMARK_STATUS,
+					type: PostTimelineStateAction.UPDATE_BOOKMARK_STATUS,
 					payload: {
 						id: key,
-						value: res,
+						value: res.unwrap().state,
 					},
 				});
 				return { type: 'success' };
@@ -127,7 +126,7 @@ export class TimelineSessionService {
 			});
 	}
 
-	async finalizeBookmarkState(State: AppTimelineReducerStateType, key: string) {
+	async finalizeBookmarkState(State: PostTimelineStateType, key: string) {
 		const match = this.findById(State, key);
 		if (!match) return { type: 'error', error: new Error('E_Not_Found') };
 
@@ -138,7 +137,7 @@ export class TimelineSessionService {
 		if (res === null) return;
 
 		this.dispatch({
-			type: AppTimelineReducerActionType.UPDATE_BOOKMARK_STATUS,
+			type: PostTimelineStateAction.UPDATE_BOOKMARK_STATUS,
 			payload: {
 				id: key,
 				value: res,

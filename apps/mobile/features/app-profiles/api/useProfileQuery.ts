@@ -4,11 +4,13 @@ import {
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
 import { useQuery } from '@tanstack/react-query';
-import { Profile } from '../../../database/_schema';
-import { ProfileService } from '../../../database/entities/profile';
-import { ProfilePinnedTimelineService } from '../../../database/entities/profile-pinned-timeline';
-import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
-import { ProfilePinnedTagService } from '../../../database/entities/profile-pinned-tag';
+import {
+	Profile,
+	ProfileService,
+	ProfilePinnedTimelineService,
+	ProfilePinnedUserService,
+	ProfilePinnedTagService,
+} from '@dhaaga/db';
 
 export type ProfileAssigned = Profile & {
 	has: boolean;

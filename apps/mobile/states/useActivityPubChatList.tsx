@@ -1,16 +1,16 @@
-import { StatusInterface, UserInterface } from '@dhaaga/bridge';
+import { PostTargetInterface, UserTargetInterface } from '@dhaaga/bridge';
 import { createContext, useContext, useMemo, useState } from 'react';
 
 type AppConversationDTO = {
 	id: string;
-	participants: UserInterface[];
-	tail: StatusInterface;
+	participants: UserTargetInterface[];
+	tail: PostTargetInterface;
 };
 
 type ActivityPubChatRoomDTO = {
 	id: string;
-	participants: UserInterface[];
-	tails: StatusInterface[];
+	participants: UserTargetInterface[];
+	tails: PostTargetInterface[];
 	conversationIds: string[];
 	conversationIdsSeen: Set<string>;
 };
@@ -21,17 +21,15 @@ type Type = {
 	 */
 	conversations: {
 		id: string;
-		participants: UserInterface[];
-		tail: StatusInterface;
+		participants: UserTargetInterface[];
+		tail: PostTargetInterface;
 		roomId: number;
-	}[];
-	/**
+	}[] /**
 	 *
-	 */
+	 */;
 	rooms: {
 		id: number;
-		participants: UserInterface[];
-		// tail: StatusInterface
+		participants: UserTargetInterface[]; // tail: PostTargetInterface
 		conversationIds: Set<number>;
 	}[];
 	loadConversations: (items: AppConversationDTO[]) => void;

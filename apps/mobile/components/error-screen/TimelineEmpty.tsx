@@ -1,5 +1,4 @@
-import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { View, Text } from 'react-native';
 
 function TimelineEmpty() {
 	return (

@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
-import {
-	useTimelineDispatch,
-	useTimelineState,
-} from '../contexts/PostTimelineCtx';
 import useTimelineQuery from './useTimelineQuery';
 import {
-	AppTimelineReducerActionType,
+	PostTimelineStateAction,
 	TimelineFetchMode,
-} from '../../../states/interactors/post-timeline.reducer';
+	usePostTimelineDispatch,
+	usePostTimelineState,
+} from '@dhaaga/core';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
 
@@ -16,13 +14,13 @@ function useTimeline(mode: TimelineFetchMode) {
 	const { db } = useAppDb();
 
 	// state management
-	const State = useTimelineState();
-	const dispatch = useTimelineDispatch();
+	const State = usePostTimelineState();
+	const dispatch = usePostTimelineDispatch();
 
 	useEffect(() => {
 		if (!db) return;
 		dispatch({
-			type: AppTimelineReducerActionType.INIT,
+			type: PostTimelineStateAction.INIT,
 			payload: {
 				db,
 			},
@@ -31,7 +29,7 @@ function useTimeline(mode: TimelineFetchMode) {
 
 	useEffect(() => {
 		dispatch({
-			type: AppTimelineReducerActionType.RESET_USING_QUERY,
+			type: PostTimelineStateAction.RESET_USING_QUERY,
 			payload: {
 				type: mode,
 			},
@@ -48,14 +46,14 @@ function useTimeline(mode: TimelineFetchMode) {
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
-			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			type: PostTimelineStateAction.APPEND_RESULTS,
 			payload: data,
 		});
 	}, [fetchStatus]);
 
 	function loadMore() {
 		dispatch({
-			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 
@@ -70,7 +68,7 @@ function useTimeline(mode: TimelineFetchMode) {
 	function onRefresh() {
 		IsRefreshing(true);
 		dispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 		refetch().finally(() => {
 			IsRefreshing(false);

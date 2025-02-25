@@ -1,8 +1,8 @@
-import { MediaAttachmentInterface } from './interface.js';
+import { MediaAttachmentTargetInterface } from './_interface.js';
 import { DriveFileInstance, MediaAttachmentInstance } from './unique.js';
 
 export class DriveFileToMediaAttachmentAdapter
-	implements MediaAttachmentInterface
+	implements MediaAttachmentTargetInterface
 {
 	ref: DriveFileInstance;
 
@@ -60,7 +60,7 @@ export class DriveFileToMediaAttachmentAdapter
 }
 
 export class MediaAttachmentToMediaAttachmentAdapter
-	implements MediaAttachmentInterface
+	implements MediaAttachmentTargetInterface
 {
 	ref: MediaAttachmentInstance;
 
@@ -128,7 +128,7 @@ export class MediaAttachmentToMediaAttachmentAdapter
 }
 
 export class UnknownToMediaAttachmentAdapter
-	implements MediaAttachmentInterface
+	implements MediaAttachmentTargetInterface
 {
 	ref: any;
 

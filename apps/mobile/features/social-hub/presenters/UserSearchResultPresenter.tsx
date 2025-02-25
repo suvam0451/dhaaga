@@ -1,16 +1,16 @@
-import { AppUserObject } from '../../../types/app-user.types';
 import UserPinSearchResultControllerView from '../views/UserPinSearchResultController';
 import UserPinSearchResultView from '../views/UserPinSearchResultView';
 import { View, StyleSheet } from 'react-native';
 import { AppDivider } from '../../../components/lib/Divider';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { useProfileMutation } from '../../app-profiles/api/useProfileMutation';
-import { Profile } from '../../../database/_schema';
+import { Profile } from '@dhaaga/db';
 import { useSocialHubUserPinStatus } from '../api/useSocialHubUserPinStatus';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	profile: Profile;
-	user: AppUserObject;
+	user: UserObjectType;
 	onChangeCallback: () => void;
 };
 

@@ -7,7 +7,6 @@ import WithBookmarkGalleryControllerContext, {
 import BookmarkGalleryWidgetExpanded from '../../../widgets/bookmark-gallery/core/floatingWidget';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
-import WithAppPaginationContext from '../../../../states/usePagination';
 import { memo, useEffect, useRef } from 'react';
 
 function LoadingState() {
@@ -143,11 +142,9 @@ function Core() {
 function BookmarkGalleryStack() {
 	return (
 		<WithScrollOnRevealContext maxDisplacement={150}>
-			<WithAppPaginationContext>
-				<WithBookmarkGalleryControllerContext>
-					<Core />
-				</WithBookmarkGalleryControllerContext>
-			</WithAppPaginationContext>
+			<WithBookmarkGalleryControllerContext>
+				<Core />
+			</WithBookmarkGalleryControllerContext>
 		</WithScrollOnRevealContext>
 	);
 }

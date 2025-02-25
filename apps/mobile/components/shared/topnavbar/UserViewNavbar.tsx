@@ -3,11 +3,11 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import { appDimensions } from '../../../styles/dimensions';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { router } from 'expo-router';
 
 type UserViewNavbarProps = {
-	acct: AppUserObject;
+	acct: UserObjectType;
 };
 
 function UserViewNavbar({}: UserViewNavbarProps) {

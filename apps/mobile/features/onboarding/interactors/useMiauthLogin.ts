@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { verifyMisskeyToken } from '@dhaaga/bridge';
 import { AccountCreationPreviewProps } from '../presenters/MiauthSignIn';
 import { router, useLocalSearchParams } from 'expo-router';
-import { RandomUtil } from '../../../utils/random.utils';
-import { AccountService } from '../../../database/entities/account';
-import { ACCOUNT_METADATA_KEY } from '../../../database/entities/account-metadata';
+import { RandomUtil } from '@dhaaga/bridge';
+import { AccountService, ACCOUNT_METADATA_KEY } from '@dhaaga/db';
 import { Alert } from 'react-native';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
@@ -68,6 +67,7 @@ function useMiauthLogin() {
 		const upsertResult = AccountService.upsert(
 			db,
 			{
+				uuid: RandomUtil.nanoId(),
 				identifier: MisskeyId,
 				server: _subdomain,
 				driver: _domain,
@@ -98,14 +98,14 @@ function useMiauthLogin() {
 				},
 			],
 		);
-		if (upsertResult.type === 'success') {
+		if (upsertResult.isOk()) {
 			Alert.alert('Account Added. Refresh if any screen feels outdated.');
 			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
 			``;
 			router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
 		} else {
-			console.log(upsertResult);
+			console.log(upsertResult.error);
 		}
 	}
 

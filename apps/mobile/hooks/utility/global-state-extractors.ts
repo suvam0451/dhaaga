@@ -111,6 +111,9 @@ export function useAppBottomSheet() {
 			broadcastEndSession: o.bottomSheet.broadcastEndSession,
 			ctx: o.bottomSheet.ctx,
 			setCtx: o.bottomSheet.setCtx,
+			animating: o.bottomSheet.animating,
+			startAnimation: o.bottomSheet.startAnimation,
+			endAnimation: o.bottomSheet.endAnimation,
 		})),
 	);
 }
@@ -137,7 +140,6 @@ export function useAppBottomSheet_TimelineReference() {
 			draft: o.bottomSheet.timeline.draftState,
 			dispatch: o.bottomSheet.timeline.dispatch,
 			attach: o.bottomSheet.timeline.attach,
-			manager: o.bottomSheet.timeline.manager,
 		})),
 	);
 }

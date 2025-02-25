@@ -25,10 +25,7 @@ import {
 	MastoRelationship,
 	MastoStatus,
 } from '../../../types/mastojs.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
 export class MastodonAccountsRouter implements AccountRoute {
@@ -99,7 +96,7 @@ export class MastodonAccountsRouter implements AccountRoute {
 				.featuredTags.list();
 			return successWithData(fn);
 		} catch (e) {
-			return errorBuilder<MastoFeaturedTag[]>(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder<MastoFeaturedTag[]>(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -124,7 +121,7 @@ export class MastodonAccountsRouter implements AccountRoute {
 				.statuses.list(query);
 			return { data };
 		} catch (e) {
-			return errorBuilder<MastoStatus[]>(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder<MastoStatus[]>(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -215,12 +212,12 @@ export class MastodonAccountsRouter implements AccountRoute {
 				);
 
 			if (error) {
-				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+				return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 			}
 			return { data: _data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -238,12 +235,12 @@ export class MastodonAccountsRouter implements AccountRoute {
 				);
 
 			if (error) {
-				return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+				return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 			}
 			return { data: _data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

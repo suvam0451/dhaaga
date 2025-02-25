@@ -1,7 +1,6 @@
 import MisskeyUser from './misskey.js';
 import MastodonUser from './mastodon.js';
 import DefaultUser from './default.js';
-import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
 import BlueskyUserInterface from './bluesky.js';
 import type {
 	MissNote,
@@ -9,7 +8,8 @@ import type {
 	MissUserDetailed,
 } from '../../types/misskey-js.types.js';
 import type { MastoAccount } from '../../types/mastojs.types.js';
-import { CasingUtils } from '../../utiils/casing.utils.js';
+import { CasingUtil } from '../../utils/casing.js';
+import { KNOWN_SOFTWARE } from '../../data/driver.js';
 
 export type UserType =
 	| MastoAccount
@@ -18,7 +18,7 @@ export type UserType =
 	| null
 	| undefined;
 
-export interface UserInterface {
+export interface UserTargetInterface {
 	getAvatarBlurHash(): string | null | undefined;
 
 	getAvatarUrl(): string | null | undefined;
@@ -93,7 +93,7 @@ export class AccountInstance {
 export function ActivityPubUserAdapter(
 	profile: any,
 	domain: string,
-): UserInterface {
+): UserTargetInterface {
 	if (!profile) return new DefaultUser();
 
 	switch (domain) {
@@ -113,7 +113,7 @@ export function ActivityPubUserAdapter(
 		}
 		case KNOWN_SOFTWARE.PLEROMA:
 		case KNOWN_SOFTWARE.AKKOMA: {
-			const _camel = CasingUtils.camelCaseKeys(profile);
+			const _camel = CasingUtil.camelCaseKeys(profile);
 			return new MastodonUser(new AccountInstance(_camel as MastoAccount));
 		}
 		case KNOWN_SOFTWARE.BLUESKY:

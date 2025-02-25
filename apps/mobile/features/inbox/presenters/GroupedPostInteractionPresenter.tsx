@@ -1,9 +1,6 @@
 import { View } from 'react-native';
 import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
-import {
-	Props,
-	styles,
-} from '../../../components/screens/notifications/landing/segments/_common';
+import { Props } from '../components/_common';
 import { AppText } from '../../../components/lib/Text';
 import { AppDivider } from '../../../components/lib/Divider';
 import GroupedUsersItemView from '../view/GroupedUsersItemView';

@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import ProfileGalleryModePresenter from '../features/gallery-mode/presenters/ProfileGalleryModePresenter';
 import { StyleProp, View, ViewStyle, Dimensions, FlatList } from 'react-native';
-import { AppUserObject } from '../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { AppInstagramTabControl } from '../../../components/lib/SegmentedControl';
 import useApiGetPinnedPosts from '../../../hooks/api/accounts/useApiGetPinnedPosts';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
@@ -14,7 +14,7 @@ import UpdatesPresenter from '../../inbox/presenters/UpdatesPresenter';
 
 type AppPagerViewListProps = {
 	userId: string;
-	previewedAcct: AppUserObject;
+	previewedAcct: UserObjectType;
 };
 
 function ProfilePinnedPosts({ userId }: AppPagerViewListProps) {
@@ -52,7 +52,7 @@ function ProfilePinnedPosts({ userId }: AppPagerViewListProps) {
 }
 
 type ProfileModulesProps = {
-	acct: AppUserObject;
+	acct: UserObjectType;
 	profileId: string;
 	fields: any[];
 	style?: StyleProp<ViewStyle>;

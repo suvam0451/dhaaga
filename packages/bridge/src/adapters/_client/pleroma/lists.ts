@@ -2,7 +2,7 @@ import { ListsRoute } from '../_router/routes/lists.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import type { MegaList } from '../../../types/megalodon.types.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -31,6 +31,6 @@ export class PleromaListsRoute implements ListsRoute {
 	}
 
 	async update() {
-		return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 	}
 }

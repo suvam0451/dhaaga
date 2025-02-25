@@ -1,22 +1,16 @@
-import { useAppPaginationContext } from '../../../../states/usePagination';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
 
 function useTrendingPosts() {
 	const { client } = useAppApiClient();
-	const {
-		data: PageData,
-		setMaxId,
-		queryCacheMaxId,
-	} = useAppPaginationContext();
 	const [IsLoading, setIsLoading] = useState(false);
 
 	async function api() {
 		if (!client) return null;
 		const { data, error } = await client.trends.posts({
 			limit: 5,
-			offset: parseInt(queryCacheMaxId),
+			offset: parseInt('0'),
 		});
 		if (error) {
 			console.log(error);
@@ -28,7 +22,7 @@ function useTrendingPosts() {
 
 	// Queries
 	const { status, data, fetchStatus, refetch } = useQuery({
-		queryKey: ['trending/posts', queryCacheMaxId],
+		queryKey: ['trending/posts'],
 		queryFn: api,
 		enabled: client !== null,
 	});
@@ -37,7 +31,7 @@ function useTrendingPosts() {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 
 		if (data?.length > 0) {
-			setMaxId((PageData.length + data.length).toString());
+			// setMaxId((PageData.length + data.length).toString());
 			setIsLoading(true);
 		}
 	}, [fetchStatus]);

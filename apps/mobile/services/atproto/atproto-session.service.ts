@@ -1,12 +1,12 @@
 import { Agent, AtpSessionData, CredentialSession } from '@atproto/api';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AccountService } from '../../database/entities/account';
+import { KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
 import {
+	Account,
+	AccountService,
 	AccountMetadataService,
 	ACCOUNT_METADATA_KEY,
-} from '../../database/entities/account-metadata';
-import { Account } from '../../database/_schema';
-import { DataSource } from '../../database/dataSource';
+	DataSource,
+} from '@dhaaga/db';
 import { jwtDecode } from 'jwt-decode';
 
 /**
@@ -200,6 +200,7 @@ class AtprotoSessionService {
 			AccountService.upsert(
 				db,
 				{
+					uuid: RandomUtil.nanoId(),
 					identifier: res.data.did,
 					server: instance,
 					driver: KNOWN_SOFTWARE.BLUESKY,
@@ -312,6 +313,7 @@ class AtprotoSessionService {
 			AccountService.upsert(
 				db,
 				{
+					uuid: RandomUtil.nanoId(),
 					identifier: res.data.did,
 					server: instance,
 					driver: KNOWN_SOFTWARE.BLUESKY,

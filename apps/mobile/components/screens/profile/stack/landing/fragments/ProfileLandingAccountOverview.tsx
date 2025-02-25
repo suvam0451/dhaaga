@@ -2,10 +2,10 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
 import ProfileStatView from '../../../../../../features/user-profiles/view/ProfileStatView';
-import { AppUserObject } from '../../../../../../types/app-user.types';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type ProfileAndSettingsProp = {
-	user: AppUserObject;
+	user: UserObjectType;
 };
 
 function ProfileAndSettings({ user: data }: ProfileAndSettingsProp) {

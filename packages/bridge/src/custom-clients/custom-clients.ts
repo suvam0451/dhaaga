@@ -15,7 +15,7 @@ import FetchWrapper from './custom-fetch.js';
 import { mastodon, createRestAPIClient } from 'masto';
 import { Agent, CredentialSession } from '@atproto/api';
 import generator, { MegalodonInterface } from 'megalodon';
-import { KNOWN_SOFTWARE } from '../adapters/_client/_router/routes/instance.js';
+import { KNOWN_SOFTWARE } from '../data/driver.js';
 
 /**
  * Used for --> Bluesky

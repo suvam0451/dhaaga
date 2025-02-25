@@ -1,7 +1,6 @@
 import { BasePubSubService } from './_base.pubisher';
-import { AppPostObject } from '../../types/app-post.types';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import ActivityPubClient from '@dhaaga/bridge/dist/adapters/_client/_interface';
+import type { PostObjectType } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, ApiTargetInterface } from '@dhaaga/bridge';
 import { PostMutator } from '../mutators/post.mutator';
 import { Emoji } from '../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
@@ -16,12 +15,12 @@ export enum POST_EVENT_ENUM {
  * the updates to all subscribed data stores
  */
 export class PostPublisherService extends BasePubSubService {
-	private readonly cache: Map<string, AppPostObject>;
+	private readonly cache: Map<string, PostObjectType>;
 	private readonly driver: KNOWN_SOFTWARE;
-	private readonly client: ActivityPubClient;
+	private readonly client: ApiTargetInterface;
 	private readonly mutator: PostMutator;
 
-	constructor(driver: KNOWN_SOFTWARE, client: ActivityPubClient) {
+	constructor(driver: KNOWN_SOFTWARE, client: ApiTargetInterface) {
 		super();
 		this.driver = driver;
 		this.client = client;
@@ -32,7 +31,7 @@ export class PostPublisherService extends BasePubSubService {
 		this.mutator = new PostMutator(this.driver, this.client);
 	}
 
-	writeCache(uuid: string, data: AppPostObject) {
+	writeCache(uuid: string, data: PostObjectType) {
 		this.cache.set(uuid, data);
 	}
 
@@ -40,7 +39,7 @@ export class PostPublisherService extends BasePubSubService {
 		return this.cache.get(uuid);
 	}
 
-	addIfNotExist(uuid: string, data: AppPostObject) {
+	addIfNotExist(uuid: string, data: PostObjectType) {
 		if (!this.cache.get(uuid)) this.cache.set(uuid, data);
 		return this.cache.get(uuid);
 	}
@@ -90,7 +89,6 @@ export class PostPublisherService extends BasePubSubService {
 	}
 
 	async toggleLike(uuid: string, loader?: (flag: boolean) => void) {
-		console.log(uuid);
 		await this._bind(uuid, this.mutator.toggleLike, loader);
 	}
 

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
 	ActivityPubTagAdapter,
 	KNOWN_SOFTWARE,
-	TagInterface,
+	TagTargetInterface,
 } from '@dhaaga/bridge';
 import { useAppApiClient } from '../utility/global-state-extractors';
 
@@ -10,7 +10,7 @@ export function useApiGetTagInterface(query: string) {
 	const { client, driver, server } = useAppApiClient();
 
 	// Queries
-	return useQuery<TagInterface>({
+	return useQuery<TagTargetInterface>({
 		queryKey: ['tag', server, query],
 		queryFn: async () => {
 			if (driver === KNOWN_SOFTWARE.BLUESKY)

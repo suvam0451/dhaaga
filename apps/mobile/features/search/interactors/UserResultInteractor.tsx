@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
+import { useDiscoverState } from '@dhaaga/core';
+import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
 import {
+	UserTimelineStateAction,
 	useUserTimelineDispatch,
 	useUserTimelineState,
-} from '../../timelines/contexts/UserTimelineCtx';
-import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
-import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
+} from '@dhaaga/core';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { View } from 'react-native';
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
 import { UserListView } from '../../_shared/views/UserListView';
 
@@ -19,7 +19,7 @@ type ResultInteractorProps = {
 
 function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	const [Refreshing, setRefreshing] = useState(false);
-	const State = useDiscoverTabState();
+	const State = useDiscoverState();
 	const TimelineState = useUserTimelineState();
 	const TimelineDispatch = useUserTimelineDispatch();
 	const { data, fetchStatus, refetch } = useApiSearchUsers(
@@ -29,14 +29,14 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 
 	useEffect(() => {
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.RESET,
+			type: UserTimelineStateAction.RESET,
 		});
 	}, [State.q]);
 
 	function onRefresh() {
 		setRefreshing(true);
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.RESET,
+			type: UserTimelineStateAction.RESET,
 		});
 		refetch().finally(() => {
 			setRefreshing(false);
@@ -53,19 +53,19 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		if (data.length === 0) return;
 
 		let maxId = (TimelineState.items.length + data.length).toString();
-		// let maxId = data[data.length - 1].id;
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.APPEND_RESULTS,
+			type: UserTimelineStateAction.APPEND,
 			payload: {
 				items: data,
 				maxId,
+				minId: null,
 			},
 		});
 	}, [fetchStatus]);
 
 	function loadMore() {
 		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: UserTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 
@@ -93,7 +93,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				refreshing={Refreshing}
 				ListHeaderComponent={Header}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</View>
 	);
 }

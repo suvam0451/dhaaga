@@ -3,31 +3,30 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import {
-	useDiscoverTabDispatch,
-	useDiscoverTabState,
-} from '../contexts/DiscoverTabCtx';
+	useDiscoverState,
+	useDiscoverDispatch,
+	DiscoverStateAction,
+} from '@dhaaga/core';
 import { useEffect, useState } from 'react';
-import DriverService, {
-	SEARCH_RESULT_TAB,
-} from '../../../services/driver.service';
-import { DiscoverTabReducerActionType } from '../reducers/discover-tab.reducer';
+import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
+import { getSearchTabs } from '@dhaaga/db';
 
 function WidgetExpanded() {
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const dispatch = useDiscoverTabDispatch();
-	const State = useDiscoverTabState();
+	const dispatch = useDiscoverDispatch();
+	const State = useDiscoverState();
 	const CONTAINER_PADDING = 24;
 	const [Tabs, setTabs] = useState<SEARCH_RESULT_TAB[]>([]);
 
 	useEffect(() => {
-		const searchTabs = DriverService.getSearchTabs(driver);
-		setTabs(searchTabs);
+		const searchTabs = getSearchTabs(driver);
+		setTabs(searchTabs as any);
 
 		dispatch({
-			type: DiscoverTabReducerActionType.SET_CATEGORY,
+			type: DiscoverStateAction.SET_CATEGORY,
 			payload: {
 				tab: searchTabs.find((o) => o === State.tab)
 					? searchTabs.find((o) => o === State.tab)
@@ -38,9 +37,9 @@ function WidgetExpanded() {
 
 	function setCategory(tab: SEARCH_RESULT_TAB) {
 		dispatch({
-			type: DiscoverTabReducerActionType.SET_CATEGORY,
+			type: DiscoverStateAction.SET_CATEGORY,
 			payload: {
-				tab,
+				tab: tab as any,
 			},
 		});
 	}
