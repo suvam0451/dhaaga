@@ -9,7 +9,7 @@ import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppT
 import { View } from 'react-native';
 import SearchWidget from '../components/SearchWidget';
 
-function WithSearchBar({ children }: any) {
+function SearchTabInteractor() {
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 
@@ -17,19 +17,11 @@ function WithSearchBar({ children }: any) {
 		return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.DISCOVER} />;
 
 	return (
-		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
-			{children}
-			<SearchWidget />
-		</View>
-	);
-}
-
-function SearchTabInteractor() {
-	return (
 		<DiscoverCtx>
-			<WithSearchBar>
+			<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
 				<SearchTabPresenter />
-			</WithSearchBar>
+				<SearchWidget />
+			</View>
 		</DiscoverCtx>
 	);
 }

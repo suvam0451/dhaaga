@@ -1,3 +1,3 @@
-import SearchTabInteractor from '../../../features/search/interactors/SearchTabInteractor';
+import Page from '../../../features/search/interactors/SearchTabInteractor';
 
-export default SearchTabInteractor;
+export default Page;
