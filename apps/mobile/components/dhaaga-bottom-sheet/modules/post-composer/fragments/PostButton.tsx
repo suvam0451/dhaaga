@@ -14,7 +14,7 @@ import {
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
 import { Loader } from '../../../../lib/Loader';
-import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
+import { AtprotoApiAdapter } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
 import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
 import { useTranslation } from 'react-i18next';
@@ -37,7 +37,7 @@ function PostButton() {
 		let _visibility: any = state.visibility;
 		if (driver === KNOWN_SOFTWARE.BLUESKY) {
 			const newPost = await AtprotoComposerService.postUsingReducerState(
-				client as BlueskyRestClient,
+				client as AtprotoApiAdapter,
 				state,
 			);
 

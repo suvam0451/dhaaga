@@ -1,9 +1,6 @@
 import { NotificationUserGroupType } from '@dhaaga/bridge';
 import { FlatList, Pressable } from 'react-native';
-import {
-	ICON_SIZE,
-	styles,
-} from '../../../components/screens/notifications/landing/segments/_common';
+import { ICON_SIZE, styles } from '../components/_common';
 import { Image } from 'expo-image';
 
 type Props = {

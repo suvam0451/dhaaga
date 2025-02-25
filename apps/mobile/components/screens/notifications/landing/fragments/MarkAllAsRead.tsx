@@ -2,7 +2,7 @@ import { memo } from 'react';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useAppNotifSeenContext } from '../state/useNotifSeen';
+import { useAppNotifSeenContext } from '../../../../../features/inbox/interactors/useNotifSeen';
 import { useAppNotificationBadge } from '../../../../../hooks/app/useAppNotificationBadge';
 import NotificationVibrationToggle from './NotificationVibrationToggle';
 

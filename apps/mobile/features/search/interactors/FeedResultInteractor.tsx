@@ -11,7 +11,7 @@ import {
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
 import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
 import FeedListItemView from '../../timelines/view/FeedListItemView';
@@ -101,7 +101,7 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</View>
 	);
 }

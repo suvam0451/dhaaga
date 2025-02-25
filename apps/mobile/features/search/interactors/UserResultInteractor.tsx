@@ -9,7 +9,7 @@ import { AppUserTimelineReducerActionType } from '../../../states/interactors/us
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { View } from 'react-native';
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
 import { UserListView } from '../../_shared/views/UserListView';
 
@@ -93,7 +93,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				refreshing={Refreshing}
 				ListHeaderComponent={Header}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</View>
 	);
 }

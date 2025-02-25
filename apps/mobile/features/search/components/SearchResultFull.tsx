@@ -8,9 +8,7 @@ import {
 	DiscoverStateAction,
 } from '@dhaaga/core';
 import { useEffect, useState } from 'react';
-import DriverService, {
-	SEARCH_RESULT_TAB,
-} from '../../../services/driver.service';
+import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
 import { getSearchTabs } from '@dhaaga/db';

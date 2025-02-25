@@ -1,7 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { Text } from '@rneui/themed';
 import { APP_FONT } from '../../../styles/AppTheme';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { AppSetting } from '@dhaaga/db';
 
 type SingleChoiceSettingProps = {

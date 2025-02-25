@@ -5,7 +5,7 @@ import WithAppPaginationContext, {
 import WithActivitypubTagContext from '../../../../states/useTag';
 import TagItem from '../../../common/tag/TagItem';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import LoadingMore from '../../home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../../ui/LoadingIndicator';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useTrendingTags from '../api/useTrendingTags';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
@@ -54,7 +54,7 @@ function ApiWrapper() {
 						}}
 						scrollEventThrottle={16}
 					/>
-					<LoadingMore visible={visible} loading={loading} />
+					<TimelineLoadingIndicator visible={visible} loading={loading} />
 				</Fragment>
 			) : (
 				<FeatureUnsupported />

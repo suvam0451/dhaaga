@@ -1,9 +1,9 @@
 import { View } from 'react-native';
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
+import { DriverNotificationType } from '@dhaaga/bridge';
 import { Props, styles } from './_common';
-import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
-import { AppDivider } from '../../../../lib/Divider';
-import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
+import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
+import { AppDivider } from '../../../components/lib/Divider';
+import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
 
 function MentionNotificationFragment({ item }: Props) {
 	const user = item.user;
@@ -13,8 +13,8 @@ function MentionNotificationFragment({ item }: Props) {
 		<View style={[styles.container]}>
 			<AuthorItemPresenter
 				user={user}
-				notificationType={DhaagaJsNotificationType.MENTION}
-				createdAt={item.post?.createdAt || (item.createdAt as any)}
+				notificationType={DriverNotificationType.MENTION}
+				createdAt={item.createdAt}
 			/>
 			<NotificationPostPeek post={post} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />

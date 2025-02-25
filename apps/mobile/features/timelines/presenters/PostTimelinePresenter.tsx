@@ -1,4 +1,4 @@
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import { Fragment } from 'react';
 import { FetchStatus } from '@tanstack/react-query';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
@@ -50,7 +50,7 @@ export function PostTimelinePresenter({
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</Fragment>
 	);
 }

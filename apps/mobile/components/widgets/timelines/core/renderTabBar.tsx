@@ -4,7 +4,6 @@ import { APP_THEME } from '../../../../styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import * as React from 'react';
 
 /**
  * @param index is the currently active page index

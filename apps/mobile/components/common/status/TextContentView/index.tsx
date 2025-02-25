@@ -8,7 +8,7 @@ import { appDimensions } from '../../../../styles/dimensions';
 import MentionSegment from '../../../shared/mfm/MentionSegment';
 import { TextParser } from '@dhaaga/bridge';
 import type { NodeContent, AppParsedTextNodes } from '@dhaaga/bridge';
-import LinkProcessor from '../../link/LinkProcessor';
+import LinkSegment from '../../../shared/mfm/LinkSegment';
 import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
 
 type TextContentNodeProps = {
@@ -141,7 +141,7 @@ function TextContentNode({
 				}
 
 				return (
-					<LinkProcessor
+					<LinkSegment
 						key={node.uuid}
 						url={node.url}
 						displayName={node.text}

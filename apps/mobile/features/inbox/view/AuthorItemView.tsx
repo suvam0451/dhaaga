@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import { ICON_SIZE } from '../../../components/screens/notifications/landing/segments/_common';
+import { ICON_SIZE } from '../components/_common';
 import { AppIcon } from '../../../components/lib/Icon';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';

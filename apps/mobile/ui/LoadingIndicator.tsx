@@ -6,10 +6,8 @@ import {
 	StyleProp,
 	ViewStyle,
 } from 'react-native';
-import { memo } from 'react';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { APP_FONTS } from '../styles/AppFonts';
+import { useAppTheme } from '../hooks/utility/global-state-extractors';
 
 type LoadingMoreProps = {
 	visible: boolean;
@@ -17,12 +15,12 @@ type LoadingMoreProps = {
 	style?: StyleProp<ViewStyle>;
 };
 
-const LoadingMore = memo(({ visible, loading, style }: LoadingMoreProps) => {
-	const { theme } = useGlobalState(
-		useShallow((o) => ({
-			theme: o.colorScheme,
-		})),
-	);
+function TimelineLoadingIndicator({
+	visible,
+	loading,
+	style,
+}: LoadingMoreProps) {
+	const { theme } = useAppTheme();
 	if (!visible) return <View />;
 	if (visible && loading)
 		return (
@@ -48,7 +46,7 @@ const LoadingMore = memo(({ visible, loading, style }: LoadingMoreProps) => {
 			</View>
 		);
 	return <View />;
-});
+}
 
 const styles = StyleSheet.create({
 	widgetRootContainer: {
@@ -75,4 +73,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default LoadingMore;
+export { TimelineLoadingIndicator };

@@ -1,9 +1,9 @@
 import { Props, styles } from './_common';
 import { View } from 'react-native';
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
-import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
-import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
-import { AppDivider } from '../../../../lib/Divider';
+import { DriverNotificationType } from '@dhaaga/bridge';
+import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
+import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
+import { AppDivider } from '../../../components/lib/Divider';
 
 function ReactionNotificationFragment({ item }: Props) {
 	const user = item.user;
@@ -13,11 +13,11 @@ function ReactionNotificationFragment({ item }: Props) {
 		<View style={styles.container}>
 			<AuthorItemPresenter
 				user={user}
-				notificationType={DhaagaJsNotificationType.REACTION}
+				notificationType={DriverNotificationType.REACTION}
 				extraData={item?.extraData}
 				createdAt={item.createdAt}
 			/>
-			<NotificationPostPeek acct={user} post={post} />
+			<NotificationPostPeek post={post} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);

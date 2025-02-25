@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { NotificationParser } from '@dhaaga/bridge';
+import type { NotificationObjectType } from '@dhaaga/bridge';
 
 export const ICON_SIZE = 36;
 
 export type Props = {
-	item: NotificationParser;
+	item: NotificationObjectType;
 };
 
 export const styles = StyleSheet.create({
@@ -27,15 +27,6 @@ export const styles = StyleSheet.create({
 		borderRadius: '100%',
 		borderColor: 'black',
 		borderWidth: 3,
-	},
-	gradientContainerTextOnlyPost: {
-		// maxHeight: 128,
-		// flex: 1,
-		marginTop: 8,
-		borderRadius: 8,
-		padding: 6,
-		overflow: 'hidden',
-		marginBottom: 8,
 	},
 	senderAvatarContainer: {
 		width: ICON_SIZE + 2,

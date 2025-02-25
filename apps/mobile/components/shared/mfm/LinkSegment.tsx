@@ -17,7 +17,7 @@ type LinkProcessorProps = {
 	emphasis: APP_COLOR_PALETTE_EMPHASIS;
 };
 
-function LinkProcessor({ url, displayName, fontFamily }: LinkProcessorProps) {
+function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 	const { acceptTouch } = useAppMfmContext();
@@ -63,7 +63,7 @@ function LinkProcessor({ url, displayName, fontFamily }: LinkProcessorProps) {
 	);
 }
 
-export default LinkProcessor;
+export default LinkSegment;
 
 const styles = StyleSheet.create({
 	text: {

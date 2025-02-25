@@ -11,100 +11,11 @@ import {
 } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
-import { memo, useMemo } from 'react';
-import { AppRelationship } from '../../features/user-profiles/types/ap.types';
+import { memo } from 'react';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { AppText } from './Text';
 import { appDimensions } from '../../styles/dimensions';
-
-type AppButtonFollowIndicatorProps = {
-	onClick: () => void;
-	label: AppRelationship;
-	loading: boolean;
-};
-
-function AppButtonFollowIndicator({
-	onClick,
-	label,
-	loading,
-}: AppButtonFollowIndicatorProps) {
-	function onButtonClick() {
-		if (!loading) {
-			onClick();
-		}
-	}
-
-	return useMemo(() => {
-		switch (label) {
-			case AppRelationship.FOLLOW_REQUEST_PENDING: {
-				return <Button size={'sm'}></Button>;
-			}
-			case AppRelationship.UNRELATED: {
-				return (
-					<Button
-						size={'sm'}
-						onPress={onButtonClick}
-						buttonStyle={styles.passiveButtonStyle}
-						containerStyle={{ borderRadius: 8 }}
-					>
-						{loading ? (
-							<ActivityIndicator
-								size={20}
-								color={APP_THEME.COLOR_SCHEME_D_NORMAL}
-							/>
-						) : (
-							<Text style={styles.passiveTextStyle}>
-								{AppRelationship.UNRELATED}
-							</Text>
-						)}
-					</Button>
-				);
-			}
-			case AppRelationship.FOLLOWING:
-			case AppRelationship.FRIENDS: {
-				return (
-					<Button
-						size={'sm'}
-						onPress={onButtonClick}
-						buttonStyle={styles.activeButtonStyle}
-						containerStyle={{ borderRadius: 8 }}
-					>
-						{loading ? (
-							<ActivityIndicator
-								size={20}
-								color={APP_THEME.COLOR_SCHEME_D_NORMAL}
-							/>
-						) : (
-							<Text style={styles.activeTextStyle}>{label}</Text>
-						)}
-					</Button>
-				);
-			}
-			default: {
-				return (
-					<Button
-						size={'sm'}
-						onPress={onButtonClick}
-						buttonStyle={styles.passiveButtonStyle}
-						containerStyle={{ borderRadius: 4 }}
-					>
-						{loading ? (
-							<ActivityIndicator
-								size={20}
-								color={APP_THEME.COLOR_SCHEME_D_NORMAL}
-							/>
-						) : (
-							<Text style={styles.passiveTextStyle}>
-								{AppRelationship.UNKNOWN}
-							</Text>
-						)}
-					</Button>
-				);
-			}
-		}
-	}, [label, loading]);
-}
 
 type AppButtonVariantAProps = {
 	label: string;
@@ -431,8 +342,6 @@ export function AppCtaButton({ label, onPress, style }: AppCtaButtonProps) {
 		</Pressable>
 	);
 }
-
-export default AppButtonFollowIndicator;
 
 type ButtonVariant = 'blank' | 'cta' | 'warm' | 'info' | 'warn' | 'error';
 

@@ -1,11 +1,11 @@
 import { Props, styles } from './_common';
 import { View } from 'react-native';
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
-import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
-import { AppDivider } from '../../../../lib/Divider';
-import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
-import ShareIndicator from '../../../../common/status/fragments/ShareIndicator';
-import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
+import { DriverNotificationType } from '@dhaaga/bridge';
+import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
+import { AppDivider } from '../../../components/lib/Divider';
+import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
+import ShareIndicator from '../../../components/common/status/fragments/ShareIndicator';
+import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 
 function StatusAlertNotificationFragment({ item }: Props) {
 	const post = item.post;
@@ -27,11 +27,11 @@ function StatusAlertNotificationFragment({ item }: Props) {
 			)}
 			<AuthorItemPresenter
 				user={user}
-				notificationType={DhaagaJsNotificationType.STATUS}
+				notificationType={DriverNotificationType.STATUS}
 				extraData={item?.extraData}
 				createdAt={item.createdAt}
 			/>
-			<NotificationPostPeek acct={user} post={target} />
+			<NotificationPostPeek post={target} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);

@@ -2,7 +2,6 @@ import { Fragment } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import SoftwareHeader from '../../../../../../screens/accounts/fragments/SoftwareHeader';
 import AccountListingFragment from '../../../../../../screens/accounts/fragments/AccountListingFragment';
-import NoAccounts from './NoAccounts';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Account } from '@dhaaga/db';
 
@@ -23,7 +22,7 @@ function AccountListForSoftware({
 	return (
 		<View style={style}>
 			{filteredForSoftware.length == 0 ? (
-				<NoAccounts service={software} />
+				<View />
 			) : (
 				<Fragment>
 					<SoftwareHeader software={software} mb={4} mt={8} addText={true} />

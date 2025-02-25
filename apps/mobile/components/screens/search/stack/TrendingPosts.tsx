@@ -6,7 +6,7 @@ import WithAppPaginationContext, {
 } from '../../../../states/usePagination';
 import WithActivitypubStatusContext from '../../../../states/useStatus';
 import StatusItem from '../../../common/status/StatusItem';
-import LoadingMore from '../../home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../../ui/LoadingIndicator';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
@@ -66,7 +66,7 @@ function ApiWrapper() {
 							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 						}
 					/>
-					<LoadingMore visible={visible} loading={loading} />
+					<TimelineLoadingIndicator visible={visible} loading={loading} />
 				</Fragment>
 			) : (
 				<FeatureUnsupported />

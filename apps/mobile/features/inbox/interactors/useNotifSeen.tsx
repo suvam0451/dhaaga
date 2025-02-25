@@ -7,9 +7,9 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { useAppNotificationBadge } from '../../../../../hooks/app/useAppNotificationBadge';
+import { useAppNotificationBadge } from '../../../hooks/app/useAppNotificationBadge';
 import * as Haptics from 'expo-haptics';
-import useGlobalState from '../../../../../states/_global';
+import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 
 type Type = {

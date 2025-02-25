@@ -171,7 +171,7 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 					/>
 					{IS_TRANSLATED && (
 						<ExplainOutput
-							additionalInfo={'Translated using OpenAI'}
+							additionalInfo={'Translated using DeepL'}
 							fromLang={'jp'}
 							toLang={'en'}
 							text={_target.calculated.translationOutput}

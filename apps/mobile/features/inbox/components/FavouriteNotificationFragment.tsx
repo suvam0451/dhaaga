@@ -1,9 +1,9 @@
 import { Props, styles } from './_common';
 import { View } from 'react-native';
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
-import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
-import { AppDivider } from '../../../../lib/Divider';
-import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
+import { DriverNotificationType } from '@dhaaga/bridge';
+import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
+import { AppDivider } from '../../../components/lib/Divider';
+import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
 
 function FavouriteNotificationFragment({ item }: Props) {
 	const user = item.user;
@@ -13,10 +13,10 @@ function FavouriteNotificationFragment({ item }: Props) {
 		<View style={styles.container}>
 			<AuthorItemPresenter
 				user={user}
-				notificationType={DhaagaJsNotificationType.FAVOURITE}
+				notificationType={DriverNotificationType.FAVOURITE}
 				createdAt={item.createdAt}
 			/>
-			<NotificationPostPeek acct={user} post={post} />
+			<NotificationPostPeek post={post} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);

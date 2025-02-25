@@ -1,8 +1,5 @@
 import { View } from 'react-native';
-import {
-	Props,
-	styles,
-} from '../../../components/screens/notifications/landing/segments/_common';
+import { Props, styles } from '../components/_common';
 import { AppText } from '../../../components/lib/Text';
 import { AppIcon } from '../../../components/lib/Icon';
 import GroupedUsersItemView from '../view/GroupedUsersItemView';

@@ -9,7 +9,7 @@ import { AppTimelineReducerActionType } from '../../../states/interactors/post-t
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusItem from '../../../components/common/status/StatusItem';
@@ -98,7 +98,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
 				}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</View>
 	);
 }

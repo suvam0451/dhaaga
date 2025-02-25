@@ -1,9 +1,9 @@
 import { Props, styles } from './_common';
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
+import { DriverNotificationType } from '@dhaaga/bridge';
 import { View } from 'react-native';
-import { NotificationPostPeek } from '../fragments/NotificationPostPeek';
-import { AppDivider } from '../../../../lib/Divider';
-import AuthorItemPresenter from '../../../../../features/inbox/presenters/AuthorItemPresenter';
+import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
+import { AppDivider } from '../../../components/lib/Divider';
+import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
 
 function BoostNotificationFragment({ item }: Props) {
 	const user = item.user;
@@ -13,7 +13,7 @@ function BoostNotificationFragment({ item }: Props) {
 		<View style={styles.container}>
 			<AuthorItemPresenter
 				user={user}
-				notificationType={DhaagaJsNotificationType.REBLOG}
+				notificationType={DriverNotificationType.REBLOG}
 				createdAt={item.createdAt}
 			/>
 			<NotificationPostPeek post={post?.boostedFrom || post} />
