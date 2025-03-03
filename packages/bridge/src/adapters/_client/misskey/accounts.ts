@@ -21,6 +21,7 @@ import type {
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import { Ok } from '../../../utils/index.js';
 
 export class MisskeyAccountsRouter
 	extends BaseAccountsRouter
@@ -43,7 +44,7 @@ export class MisskeyAccountsRouter
 			...query,
 			withFiles: !!query.onlyMedia ? query.onlyMedia : undefined,
 		});
-		return successWithData(data);
+		return Ok(data as any);
 	}
 
 	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {

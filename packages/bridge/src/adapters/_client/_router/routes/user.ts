@@ -8,7 +8,7 @@ import { ApiErrorCode } from '../../../../types/result.types.js';
 import { DriverService } from '../../../../services/driver.js';
 import { AtprotoApiAdapter } from '../../bluesky/_router.js';
 import { FollowerGetQueryDTO } from './accounts.js';
-import { extractKeys } from '../../../../utils/key-extractor.js';
+import { KeyExtractorUtil } from '../../../../utils/key-extractor.js';
 import { ResultPage } from '../../../../utils/pagination.js';
 
 class Route {
@@ -99,7 +99,7 @@ class Route {
 	): ApiAsyncResult<ResultPage<UserObjectType>> {
 		const result = await this.client.accounts.followers(query);
 		return Ok(
-			extractKeys<UserObjectType>(result, (o) =>
+			KeyExtractorUtil.getPage<UserObjectType>(result, (o) =>
 				UserParser.parse<unknown[]>(o, this.client.driver, this.client.server!),
 			),
 		);
@@ -110,7 +110,7 @@ class Route {
 	): ApiAsyncResult<ResultPage<UserObjectType>> {
 		const result = await this.client.accounts.followings(query);
 		return Ok(
-			extractKeys<UserObjectType>(result, (o) =>
+			KeyExtractorUtil.getPage<UserObjectType>(result, (o) =>
 				UserParser.parse<unknown[]>(o, this.client.driver, this.client.server!),
 			),
 		);

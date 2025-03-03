@@ -27,6 +27,8 @@ import {
 } from '../../../types/mastojs.types.js';
 import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 export class MastodonAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;
@@ -114,14 +116,14 @@ export class MastodonAccountsRouter implements AccountRoute {
 	async statuses(
 		id: string,
 		query: AccountRouteStatusQueryDto,
-	): Promise<LibraryResponse<MastoStatus[]>> {
+	): ApiAsyncResult<MastoStatus[]> {
 		try {
 			const data = await this.client.lib.v1.accounts
 				.$select(id)
 				.statuses.list(query);
-			return { data };
+			return Ok(data);
 		} catch (e) {
-			return errorBuilder<MastoStatus[]>(ApiErrorCode.UNKNOWN_ERROR);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

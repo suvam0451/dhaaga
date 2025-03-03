@@ -2,19 +2,15 @@ import { getXrpcAgent } from '../_router/_api.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import { RandomUtil } from '../../../utils/random.js';
-import {
-	errorBuilder,
-	notImplementedErrorBuilder,
-} from '../_router/dto/api-responses.dto.js';
+import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
 import {
 	AppBskyActorDefs,
 	AppBskyActorGetPreferences,
+	AppBskyFeedDefs,
 	AppBskyFeedGetFeedGenerator,
-	AppBskyFeedGetFeedGenerators,
 	AtpAgent,
 } from '@atproto/api';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { ResultErr, ResultOk } from '../../../utils/result.js';
+import { Err, Ok, ResultErr, ResultOk } from '../../../utils/result.js';
 import { ApiErrorCode } from '../../../types/result.types.js';
 import type { ApiAsyncResult } from '../../../utils/api-result.js';
 
@@ -80,15 +76,15 @@ class BlueskyFeedRouter {
 	 */
 	async getFeedGenerators(
 		uriList: string[],
-	): LibraryPromise<AppBskyFeedGetFeedGenerators.OutputSchema> {
+	): ApiAsyncResult<AppBskyFeedDefs.GeneratorView[]> {
 		try {
 			const data = await this.xrpc.app.bsky.feed.getFeedGenerators({
 				feeds: uriList,
 			});
-			return { data: data.data };
+			if (!data.success) return Err(ApiErrorCode.REMOTE_SERVER_ERROR);
+			return Ok(data.data.feeds);
 		} catch (e) {
-			console.log(uriList, e);
-			return errorBuilder(e);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

@@ -27,6 +27,8 @@ import type {
 import { ApiErrorCode } from '../../../types/result.types.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 import { CasingUtil } from '../../../utils/casing.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 export class PleromaAccountsRouter
 	extends BaseAccountsRouter
@@ -61,16 +63,16 @@ export class PleromaAccountsRouter
 	async statuses(
 		id: string,
 		query: AccountRouteStatusQueryDto,
-	): LibraryPromise<any> {
+	): ApiAsyncResult<any> {
 		try {
 			const data = await this.client.client.getAccountStatuses(
 				id,
 				CasingUtil.snakeCaseKeys(query) as any,
 			);
-			return { data: CasingUtil.camelCaseKeys(data.data) };
+			return Ok(CasingUtil.camelCaseKeys(data.data));
 		} catch (e) {
 			console.log('[ERROR]: getting pleroma user timeline', e);
-			return { data: [] };
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

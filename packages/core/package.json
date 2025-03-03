@@ -21,7 +21,7 @@
   },
   "scripts": {
     "bun:up": "rm -rf ./dist/** && bun build --outdir ./dist --outfile ./dist/index.js --target node ./src/index.ts && tsc -p ./tsconfig.json",
-    "up": "tsc -p ./tsconfig.json"
+    "up": "rm -rf ./dist/** && tsc -p ./tsconfig.json"
   },
   "exports": {
     ".": {

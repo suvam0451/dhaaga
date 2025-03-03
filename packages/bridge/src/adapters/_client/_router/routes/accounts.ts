@@ -24,6 +24,7 @@ import {
 } from '../../../../types/megalodon.types.js';
 import { MissUserDetailed } from '../../../../types/misskey-js.types.js';
 import { LibraryResponse } from '../../../../types/result.types.js';
+import { ApiAsyncResult } from '../../../../utils/api-result.js';
 
 export type BookmarkGetQueryDTO = {
 	limit: number;
@@ -133,10 +134,8 @@ export interface AccountRoute {
 	statuses(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): Promise<
-		LibraryResponse<
-			mastodon.v1.Status[] | Note[] | AppBskyFeedGetAuthorFeed.Response | any[]
-		>
+	): ApiAsyncResult<
+		mastodon.v1.Status[] | Note[] | AppBskyFeedGetAuthorFeed.Response | any[]
 	>;
 
 	get(

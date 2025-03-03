@@ -28,6 +28,8 @@ import {
 } from '../../../types/megalodon.types.js';
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { Err } from '../../../utils/index.js';
 
 export abstract class BaseAccountsRouter implements AccountRoute {
 	async lookup(
@@ -119,8 +121,8 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	async statuses(
 		id: string,
 		query: AccountRouteStatusQueryDto,
-	): Promise<LibraryResponse<MastoStatus[]>> {
-		return notImplementedErrorBuilder<MastoStatus[]>();
+	): ApiAsyncResult<MastoStatus[]> {
+		return Err(ApiErrorCode.INCOMPATIBLE_DRIVER);
 	}
 
 	async relationships(

@@ -155,5 +155,7 @@ export { defaultResultPage } from './utils/pagination.js';
 export type { ResultPage } from './utils/pagination.js';
 
 export { AtprotoUtils } from './utils/atproto.js';
+export { KeyExtractorUtil } from './utils/key-extractor.js';
+export { ApiResult } from './utils/api-result.js';
 export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';

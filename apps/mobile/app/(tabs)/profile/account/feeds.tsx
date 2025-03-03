@@ -69,7 +69,6 @@ function Page() {
 	const { data, error } = useApiGetMyFeeds();
 	const { translateY } = useScrollMoreOnPageEnd();
 
-	console.log('items', data.items);
 	if (error) {
 		return (
 			<AppTopNavbar

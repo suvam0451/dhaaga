@@ -1,5 +1,5 @@
 import {
-	DhaagaJsTimelineArrayPromise,
+	DriverTimelineGetApiResponse,
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
@@ -10,11 +10,15 @@ import {
 	AppBskyFeedGetTimeline,
 	AppBskyFeedSearchPosts,
 } from '@atproto/api';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
-import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
+import {
+	InvokeBskyFunction,
+	InvokeBskyFunction_Improved,
+} from '../../../custom-clients/custom-bsky-agent.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 type FeedGetQueryDto = {
 	feed: string;
@@ -31,9 +35,10 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 	async hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): LibraryPromise<AppBskyFeedSearchPosts.OutputSchema> {
+	): ApiAsyncResult<AppBskyFeedSearchPosts.OutputSchema> {
 		const agent = getBskyAgent(this.dto);
-		return InvokeBskyFunction<AppBskyFeedSearchPosts.OutputSchema>(
+
+		return InvokeBskyFunction_Improved<AppBskyFeedSearchPosts.OutputSchema>(
 			'searchPosts',
 			agent.app.bsky.feed.searchPosts,
 			agent.app.bsky.feed,
@@ -49,13 +54,13 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 		urlLike: string,
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		return Promise.resolve(undefined) as any;
 	}
 
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
-	): LibraryPromise<AppBskyFeedGetTimeline.Response> {
+	): ApiAsyncResult<AppBskyFeedGetTimeline.Response> {
 		const agent = getBskyAgent(this.dto);
 		try {
 			const data = await agent.getTimeline({
@@ -64,28 +69,28 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 				cursor: query.maxId === null ? undefined : query.maxId,
 				algorithm: 'reverse-chronological',
 			});
-			return { data };
+			return Ok(data);
 		} catch (e) {
 			console.log('[ERROR]: bluesky', e);
-			return errorBuilder();
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
 	list(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		return Promise.resolve(undefined) as any;
 	}
 
-	public(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise {
+	public(query: DhaagaJsTimelineQueryOptions): DriverTimelineGetApiResponse {
 		return Promise.resolve(undefined) as any;
 	}
 
 	publicAsGuest(
 		urlLike: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		return Promise.resolve(undefined) as any;
 	}
 

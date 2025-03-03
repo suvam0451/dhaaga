@@ -36,6 +36,8 @@ import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;
@@ -196,7 +198,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 	async statuses(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): LibraryPromise<AppBskyFeedGetAuthorFeed.Response> {
+	): ApiAsyncResult<AppBskyFeedGetAuthorFeed.Response> {
 		const agent = getBskyAgent(this.dto);
 		try {
 			const data = await agent.getAuthorFeed({
@@ -204,9 +206,9 @@ class BlueskyAccountsRouter implements AccountRoute {
 				filter: params.bskyFilter,
 				limit: params.limit,
 			});
-			return { data };
+			return Ok(data);
 		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

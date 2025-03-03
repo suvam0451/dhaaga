@@ -3,6 +3,7 @@ import { Endpoints } from 'misskey-js';
 import { AppBskyFeedGetTimeline, AppBskyFeedSearchPosts } from '@atproto/api';
 import { MastoStatus } from '../../../../types/mastojs.types.js';
 import { MegaStatus } from '../../../../types/megalodon.types.js';
+import { ApiAsyncResult } from '../../../../utils/api-result.js';
 
 type __MisskeyTimelineOptions = {
 	// common
@@ -63,7 +64,7 @@ export type DhaagaJsTimelineQueryOptions = {
 	// withReplies?: boolean | null;
 } & __MisskeyTimelineOptions;
 
-export type DhaagaJsTimelineArrayPromise = LibraryPromise<
+export type DriverTimelineGetApiResponse = ApiAsyncResult<
 	| MastoStatus[]
 	| MegaStatus[]
 	| Endpoints['notes/timeline']['res']
@@ -74,32 +75,32 @@ export type DhaagaJsTimelineArrayPromise = LibraryPromise<
 >;
 
 export interface TimelinesRoute {
-	home(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise;
+	home(query: DhaagaJsTimelineQueryOptions): DriverTimelineGetApiResponse;
 
 	public(
 		query: DhaagaJsTimelineQueryOptions & {
 			withReplies?: boolean | null;
 		},
-	): DhaagaJsTimelineArrayPromise;
+	): DriverTimelineGetApiResponse;
 
 	publicAsGuest(
 		urlLike: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise;
+	): DriverTimelineGetApiResponse;
 
 	hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise;
+	): DriverTimelineGetApiResponse;
 
 	hashtagAsGuest(
 		urlLike: string,
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise;
+	): DriverTimelineGetApiResponse;
 
 	list(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise;
+	): DriverTimelineGetApiResponse;
 }

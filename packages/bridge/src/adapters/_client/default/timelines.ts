@@ -1,29 +1,29 @@
 import {
-	DhaagaJsTimelineArrayPromise,
+	DriverTimelineGetApiResponse,
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
 
 export class DefaultTimelinesRouter implements TimelinesRoute {
-	home(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise {
+	home(query: DhaagaJsTimelineQueryOptions): DriverTimelineGetApiResponse {
 		throw new Error('Method not implemented.');
 	}
 
-	public(query: DhaagaJsTimelineQueryOptions): DhaagaJsTimelineArrayPromise {
+	public(query: DhaagaJsTimelineQueryOptions): DriverTimelineGetApiResponse {
 		throw new Error('Method not implemented.');
 	}
 
 	publicAsGuest(
 		urlLike: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		throw new Error('Method not implemented.');
 	}
 
 	hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		throw new Error('Method not implemented.');
 	}
 
@@ -31,14 +31,14 @@ export class DefaultTimelinesRouter implements TimelinesRoute {
 		urlLike: string,
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		throw new Error('Method not implemented.');
 	}
 
 	list(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		throw new Error('Method not implemented.');
 	}
 }

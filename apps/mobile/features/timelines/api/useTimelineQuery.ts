@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
 	AtprotoApiAdapter,
 	DhaagaJsTimelineQueryOptions,
+	KeyExtractorUtil,
 	KNOWN_SOFTWARE,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
@@ -16,6 +17,7 @@ import { AppBskyFeedGetTimeline } from '@atproto/api';
 import { AppResultPageType } from '../../../types/app.types';
 import { PostParser, DriverService, defaultResultPage } from '@dhaaga/bridge';
 import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
+import { ApiResult } from '@dhaaga/bridge';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -85,6 +87,16 @@ function useTimelineQuery({
 		}
 	}
 
+	function getPageFromResult(result: ApiResult<any>) {
+		if (result.isErr()) {
+			console.log('[WARN]: this timeline failed to load...');
+			return defaultResultPage;
+		}
+		return KeyExtractorUtil.getPage<PostObjectType>(result.unwrap(), (o) =>
+			PostParser.parse<unknown[]>(o, driver, server),
+		);
+	}
+
 	function outputSchemaToResultPage(
 		data: any,
 	): AppResultPageType<PostObjectType> {
@@ -140,12 +152,12 @@ function useTimelineQuery({
 			case TimelineFetchMode.IDLE:
 				return defaultResultPage;
 			case TimelineFetchMode.HOME: {
-				const { data, error } = await client.timelines.home(_query);
-				if (error) return defaultResultPage;
-				return createResultBatch(data);
+				const result = await client.timelines.home(_query);
+				if (result.isErr()) return defaultResultPage;
+				return createResultBatch(result.unwrap());
 			}
 			case TimelineFetchMode.LOCAL: {
-				const { data, error } = await client.timelines.public({
+				const result = await client.timelines.public({
 					..._query,
 					local: true, // Pleroma/Akkoma thing
 					withMuted: DriverService.supportsPleromaApi(driver)
@@ -154,53 +166,60 @@ function useTimelineQuery({
 					withRenotes: !opts?.excludeReblogs,
 					withReplies: !opts?.excludeReplies,
 				});
-				if (error) return defaultResultPage;
-				return createResultBatch(data);
+				console.log(result);
+				if (result.isErr()) return defaultResultPage;
+				return createResultBatch(result.unwrap());
 			}
 			case TimelineFetchMode.HASHTAG: {
-				const { data, error } = await client.timelines.hashtag(_id, _query);
-				console.log('all eyes on me', data, error);
-				if (error) return defaultResultPage;
-				return createResultBatch(data);
+				const result = await client.timelines.hashtag(_id, _query);
+				if (result.isErr()) return defaultResultPage;
+				return createResultBatch(result.unwrap());
 			}
 			case TimelineFetchMode.LIST: {
-				const { data, error } = await client.timelines.list(_id, _query);
-				if (error) return defaultResultPage;
-				return createResultBatch(data);
+				const result = await client.timelines.list(_id, _query);
+				if (result.isErr()) return defaultResultPage;
+				return createResultBatch(result.unwrap());
 			}
 			case TimelineFetchMode.USER: {
-				const { data, error } = (await client.accounts.statuses(
-					_id,
-					_query,
-				)) as any;
-				if (error) return defaultResultPage;
-				return createResultBatch(data);
+				const result = await client.accounts.statuses(_id, _query);
+				if (result.isErr()) return defaultResultPage;
+				return createResultBatch(result.unwrap());
 			}
 			case TimelineFetchMode.SOCIAL: {
-				const { data, error } = await client.timelines.public({
+				const result = await client.timelines.public({
 					..._query,
 					social: true,
 				});
-				if (error) return defaultResultPage;
-				return createResultBatch(data);
+				if (result.isErr()) return defaultResultPage;
+				return createResultBatch(result.unwrap());
 			}
 			case TimelineFetchMode.BUBBLE: {
 				if (DriverService.supportsPleromaApi(driver)) {
-					const { data } = await (client as PleromaApiAdapter).timelines.bubble(
+					const result = await (client as PleromaApiAdapter).timelines.bubble(
 						_query,
 					);
+					if (result.isErr()) return defaultResultPage;
 					return {
-						items: PostParser.parse<unknown[]>(data as any[], driver, server),
-						maxId: generateMaxId(data),
+						items: PostParser.parse<unknown[]>(
+							result.unwrap() as any[],
+							driver,
+							server,
+						),
+						maxId: generateMaxId(result.unwrap()),
 						minId: null,
 					};
 				} else if (driver === KNOWN_SOFTWARE.SHARKEY) {
-					const { data } = await (client as MisskeyApiAdapter).timelines.bubble(
+					const result = await (client as MisskeyApiAdapter).timelines.bubble(
 						_query,
 					);
+					if (result.isErr()) return defaultResultPage;
 					return {
-						items: PostParser.parse<unknown[]>(data as any[], driver, server),
-						maxId: generateMaxId(data),
+						items: PostParser.parse<unknown[]>(
+							result.unwrap() as any[],
+							driver,
+							server,
+						),
+						maxId: generateMaxId(result.unwrap()),
 						minId: null,
 					};
 				} else {
@@ -208,9 +227,8 @@ function useTimelineQuery({
 				}
 			}
 			case TimelineFetchMode.FEDERATED: {
-				const { data, error } = await client.timelines.public(_query);
-				if (error) return defaultResultPage;
-				return createResultBatch(data);
+				const result = await client.timelines.public(_query);
+				return getPageFromResult(result);
 			}
 			case TimelineFetchMode.BOOKMARKS: {
 				const { data, error } = await client.accounts.bookmarks(_query);
