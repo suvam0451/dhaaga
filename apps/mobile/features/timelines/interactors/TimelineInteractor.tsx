@@ -9,6 +9,7 @@ import { useAppDb } from '../../../hooks/utility/global-state-extractors';
 import useTimelineQuery from '../api/useTimelineQuery';
 import TimelinePresenter from '../presenters/TimelinePresenter';
 import TimelineErrorView from '../view/TimelineErrorView';
+import { PostTimelinePlaceholderView } from '../components/PostSkeletonView';
 
 function TimelineInteractor() {
 	const { db } = useAppDb();
@@ -48,13 +49,14 @@ function TimelineInteractor() {
 		});
 	}, [State.feedType, State.query, State.opts, db]);
 
-	const { fetchStatus, data, status, refetch, error } = useTimelineQuery({
-		type: State.feedType,
-		query: State.query,
-		opts: State.opts,
-		maxId: State.appliedMaxId,
-		sessionId: State.sessionId,
-	});
+	const { fetchStatus, data, status, refetch, error, isFetched } =
+		useTimelineQuery({
+			type: State.feedType,
+			query: State.query,
+			opts: State.opts,
+			maxId: State.appliedMaxId,
+			sessionId: State.sessionId,
+		});
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
@@ -64,6 +66,8 @@ function TimelineInteractor() {
 		});
 	}, [fetchStatus]);
 
+	if (State.items.length === 0 && !isFetched)
+		return <PostTimelinePlaceholderView />;
 	if (error) return <TimelineErrorView error={error} />;
 	return <TimelinePresenter refetch={refetch} fetchStatus={fetchStatus} />;
 }

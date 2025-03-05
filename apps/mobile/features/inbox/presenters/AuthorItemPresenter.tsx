@@ -172,7 +172,7 @@ function AuthorItemPresenter({
 		<AuthorItemView
 			handle={user.handle}
 			parsedDisplayName={user.parsedDisplayName}
-			emojiMap={(user as UserObjectType).calculated.emojis}
+			emojiMap={(user as UserObjectType)?.calculated?.emojis}
 			avatarUrl={user.avatarUrl}
 			extraData={extraData}
 			createdAt={createdAt}

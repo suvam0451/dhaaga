@@ -44,7 +44,7 @@ function useLoadingMoreIndicatorState({
 			clearTimeout(timeoutRef.current);
 			timeoutRef.current = setTimeout(() => {
 				setExtendedLoading(false);
-			}, 420);
+			}, 200);
 		} else {
 			clearTimeout(timeoutRef.current);
 			setExtendedLoading(true);

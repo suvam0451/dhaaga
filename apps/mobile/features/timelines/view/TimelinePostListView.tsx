@@ -4,7 +4,6 @@ import type { PostObjectType } from '@dhaaga/bridge';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
-import { Fragment } from 'react';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import { appDimensions } from '../../../styles/dimensions';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
@@ -53,27 +52,25 @@ function TimelinePostListView({
 				<TimelinesHeader />
 			</Animated.View>
 
-			<Fragment>
-				<View style={{ flex: 1 }}>
-					<Animated.FlatList
-						data={items}
-						renderItem={({ item }) => (
-							<WithAppStatusItemContext dto={item}>
-								<StatusItem />
-							</WithAppStatusItemContext>
-						)}
-						onScroll={onScroll}
-						contentContainerStyle={{
-							paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
-						}}
-						scrollEventThrottle={16}
-						refreshControl={
-							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-						}
-					/>
-				</View>
-				<TimelineLoadingIndicator visible={visible} loading={loading} />
-			</Fragment>
+			<View style={{ flex: 1 }}>
+				<Animated.FlatList
+					data={items}
+					renderItem={({ item }) => (
+						<WithAppStatusItemContext dto={item}>
+							<StatusItem />
+						</WithAppStatusItemContext>
+					)}
+					onScroll={onScroll}
+					contentContainerStyle={{
+						paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
+					}}
+					scrollEventThrottle={16}
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+				/>
+			</View>
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</View>
 	);
 }
