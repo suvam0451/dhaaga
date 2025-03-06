@@ -65,7 +65,7 @@ function Chip({ active, label, onLayout, onPress }: ChipProps) {
 	};
 	const animStyle = useAnimatedStyle(() => {
 		return {
-			color: withTiming(active ? theme.primary.a0 : theme.textColor.medium, {
+			color: withTiming(active ? theme.primary.a0 : theme.secondary.a30, {
 				duration: ANIMATION_DURATION,
 			}),
 		};
@@ -81,7 +81,11 @@ function Chip({ active, label, onLayout, onPress }: ChipProps) {
 			<Animated.Text
 				style={[
 					styles.label,
-					{ fontFamily: APP_FONTS.INTER_500_MEDIUM },
+					{
+						fontFamily: active
+							? APP_FONTS.INTER_500_MEDIUM
+							: APP_FONTS.INTER_500_MEDIUM,
+					},
 					animStyle,
 				]}
 			>
@@ -210,9 +214,9 @@ export { AppPagerView };
 
 const styles = StyleSheet.create({
 	navbarRoot: {
+		paddingTop: 42, // for smooth transparency effect
 		flex: 1,
 		backgroundColor: 'transparent',
-		height: 32,
 		position: 'absolute',
 		bottom: 0,
 		width: '100%',
@@ -223,7 +227,7 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 	},
 	chip: {
-		paddingVertical: 4,
+		paddingVertical: 6,
 		flex: 1,
 		paddingHorizontal: 12,
 	},

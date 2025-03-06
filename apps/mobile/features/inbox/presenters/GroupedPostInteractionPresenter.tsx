@@ -4,46 +4,37 @@ import { Props } from '../components/_common';
 import { AppText } from '../../../components/lib/Text';
 import { AppDivider } from '../../../components/lib/Divider';
 import GroupedUsersItemView from '../view/GroupedUsersItemView';
-import { AppIcon } from '../../../components/lib/Icon';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { MoreOptionsButtonSectionView } from '../components/MoreOptionsButtonSectionView';
 
 function GroupedPostInteractionPresenter({ item }: Props) {
-	const { theme } = useAppTheme();
 	return (
 		<View>
-			<GroupedUsersItemView
-				items={item.users}
-				Header={
-					<View style={{ paddingHorizontal: 6 }}>
-						<AppIcon
-							id="heart-outline"
-							size={24}
-							color="red"
-							containerStyle={{ marginTop: 'auto', marginBottom: 'auto' }}
-						/>
-						<AppIcon
-							id="retweet"
-							size={24}
-							color="green"
-							containerStyle={{
-								marginTop: 'auto',
-								marginBottom: 'auto',
-							}}
-						/>
+			<View style={{ paddingHorizontal: 10 }}>
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						marginBottom: appDimensions.timelines.sectionBottomMargin * 1.25,
+					}}
+				>
+					<View style={{ flex: 1 }}>
+						<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
+							Your post was liked/shared by {item.users.length} users
+						</AppText.Medium>
 					</View>
-				}
-			/>
-			<AppText.Normal
-				style={{
-					color: theme.primary.a0,
-					marginTop: appDimensions.timelines.sectionBottomMargin * 0.5,
-					marginBottom: appDimensions.timelines.sectionBottomMargin,
-				}}
-			>
-				Your post was liked and shared by {item.users.length} users
-			</AppText.Normal>
-			<NotificationPostPeek post={item.post?.boostedFrom || item.post} />
+					<MoreOptionsButtonSectionView createdAt={item.createdAt} />
+				</View>
+				<View
+					style={{
+						marginBottom: appDimensions.timelines.sectionBottomMargin * 1.5,
+					}}
+				>
+					<GroupedUsersItemView items={item.users} />
+				</View>
+				<NotificationPostPeek post={item.post?.boostedFrom || item.post} />
+			</View>
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
