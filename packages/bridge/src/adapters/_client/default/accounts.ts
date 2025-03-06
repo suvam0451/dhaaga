@@ -30,11 +30,12 @@ import { MissUserDetailed } from '../../../types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { ApiAsyncResult } from '../../../utils/api-result.js';
 import { Err } from '../../../utils/index.js';
+import { DriverWebfingerType } from '../../../types/query.types.js';
 
 export abstract class BaseAccountsRouter implements AccountRoute {
 	async lookup(
-		webfingerUrl: string,
-	): LibraryPromise<MastoAccount | MegaAccount> {
+		webfinger: DriverWebfingerType,
+	): ApiAsyncResult<MastoAccount | MegaAccount> {
 		throw new Error('Method not implemented.');
 	}
 

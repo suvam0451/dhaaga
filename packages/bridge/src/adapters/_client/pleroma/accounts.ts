@@ -29,6 +29,7 @@ import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.
 import { CasingUtil } from '../../../utils/casing.js';
 import { ApiAsyncResult } from '../../../utils/api-result.js';
 import { Err, Ok } from '../../../utils/index.js';
+import { DriverWebfingerType } from '../../../types/query.types.js';
 
 export class PleromaAccountsRouter
 	extends BaseAccountsRouter
@@ -52,12 +53,14 @@ export class PleromaAccountsRouter
 		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
-	async lookup(webfingerUrl: string): LibraryPromise<MegaAccount> {
-		const data = await this.client.client.lookupAccount(webfingerUrl);
-		if (data.status !== 200) {
-			return errorBuilder(data.statusText);
-		}
-		return { data: data.data };
+	async lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MegaAccount> {
+		const data = await this.client.client.lookupAccount(
+			webfinger.host
+				? `${webfinger.username}@${webfinger.host}`
+				: webfinger.username,
+		);
+		if (data.status !== 200) return Err(data.statusText);
+		return Ok(data.data);
 	}
 
 	async statuses(

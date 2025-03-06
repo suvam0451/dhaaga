@@ -4,7 +4,11 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { TextParser } from '@dhaaga/bridge';
+import {
+	PostMentionObjectType,
+	PostResolver,
+	TextParser,
+} from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../lib/Text';
 import { Text } from 'react-native';
@@ -14,7 +18,7 @@ type Props = {
 	value: string;
 	link: string;
 	fontFamily: string;
-	mentions: any[];
+	mentions: PostMentionObjectType[];
 };
 
 function MentionSegment({ value, link, fontFamily, mentions }: Props) {
@@ -34,15 +38,10 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			ActivitypubService.mastodonLike(driver) ||
 			ActivitypubService.misskeyLike(driver)
 		) {
-			console.log(mentions);
-			// MastoAPI usually bundles the mentions in post object
-			const match = mentions.find((o) =>
-				o?.acct?.includes(parsed?.text?.replace('@', '')),
-			);
-			if (match) {
-				setCtx({ userId: match.id });
-			} else {
-				setCtx({ handle: parsed?.text || value });
+			const ctx = PostResolver.mentionItemsToWebfinger(parsed?.text, mentions);
+			console.log(ctx, parsed?.text, mentions);
+			if (ctx) {
+				setCtx(ctx);
 			}
 		} else {
 			setCtx({

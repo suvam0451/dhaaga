@@ -7,7 +7,7 @@ import {
 import { MastoAccount, MastoStatus } from '../../../../types/mastojs.types.js';
 import { MegaAccount, MegaStatus } from '../../../../types/megalodon.types.js';
 
-export type MastoUnifiedSearchType = {
+type MastoUnifiedSearchType = {
 	q: string;
 	following?: boolean;
 	type?: 'accounts' | 'hashtags' | 'statuses';
@@ -18,7 +18,7 @@ export type MastoUnifiedSearchType = {
 	accountId?: string;
 };
 
-export type DhaagaJsUserSearchDTO = {
+type DhaagaJsUserSearchDTO = {
 	origin?: 'combined' | 'local' | 'remote';
 	allowPartial?: boolean;
 	limit: number;
@@ -26,7 +26,7 @@ export type DhaagaJsUserSearchDTO = {
 	untilId?: string;
 } & MastoUnifiedSearchType;
 
-export type DhaagaJsPostSearchDTO = {
+type DhaagaJsPostSearchDTO = {
 	sort?: string;
 	allowPartial?: true;
 	filetype?: null | 'image' | 'video' | 'audio';
@@ -39,7 +39,7 @@ export type DhaagaJsPostSearchDTO = {
 	untilId?: string;
 } & MastoUnifiedSearchType;
 
-export interface SearchRoute {
+interface SearchRoute {
 	findUsers(
 		q: DhaagaJsUserSearchDTO,
 	): LibraryPromise<
@@ -58,3 +58,10 @@ export interface SearchRoute {
 		| AppBskyFeedSearchPosts.Response
 	>;
 }
+
+export type {
+	MastoUnifiedSearchType,
+	DhaagaJsUserSearchDTO,
+	DhaagaJsPostSearchDTO,
+	SearchRoute,
+};

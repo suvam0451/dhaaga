@@ -1,4 +1,4 @@
-export { ApiTargetInterface } from './_client/_router/routes/_index.js';
+export type { ApiTargetInterface } from './_client/_router/routes/_index.js';
 export { AtprotoApiAdapter } from './_client/bluesky/_router.js';
 export { BaseApiAdapter } from './_client/default/_router.js';
 export { MastoApiAdapter } from './_client/mastodon/_router.js';

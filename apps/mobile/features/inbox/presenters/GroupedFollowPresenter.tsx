@@ -20,7 +20,7 @@ function GroupedFollowPresenter({ item }: Props) {
 				>
 					<View style={{ flex: 1 }}>
 						<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
-							You have {item.users.length} new followers
+							{item.users.length} users followed you
 						</AppText.Medium>
 					</View>
 					<MoreOptionsButtonSectionView createdAt={item.createdAt} />

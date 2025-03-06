@@ -34,11 +34,14 @@ class Route {
 				);
 			}
 			case 'userId': {
-				// AT protocol exclusive
 				const { data, error } = await this.client.accounts.get(query.userId);
 				if (error) return Err(ApiErrorCode.UNKNOWN_ERROR);
 				return Ok(
-					UserParser.parse<unknown>((data as any).data, driver, server!),
+					UserParser.parse<unknown>(
+						(data as any).data ? (data as any).data : data,
+						driver,
+						server!,
+					),
 				);
 			}
 			/**
@@ -61,11 +64,13 @@ class Route {
 						UserParser.parse<unknown>((data as any).data, driver, server),
 					);
 				} else if (DriverService.supportsMastoApiV1(this.client.driver)) {
-					const res = await (this.client as MastoApiAdapter).accounts.lookup(
-						query.handle,
-					);
-					if (res.error) return Err(ApiErrorCode.UNKNOWN_ERROR);
-					return Ok(UserParser.parse(res.data, driver, server));
+					// FIXME: need to split this
+					const res = await (this.client as MastoApiAdapter).accounts.lookup({
+						username: query.handle,
+						host: null,
+					});
+					if (res.isErr()) return Err(ApiErrorCode.UNKNOWN_ERROR);
+					return Ok(UserParser.parse(res.unwrap(), driver, server));
 				} else if (DriverService.supportsMisskeyApi(this.client.driver)) {
 					return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
 				} else {
@@ -78,7 +83,10 @@ class Route {
 			 */
 			case 'webfinger': {
 				if (DriverService.supportsMastoApiV1(this.client.driver)) {
-					return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
+					const res = await (this.client as MastoApiAdapter).accounts.lookup(
+						query.webfinger,
+					);
+					return res.map((o) => UserParser.parse<unknown>(o, driver, server));
 				} else if (DriverService.supportsMisskeyApi(this.client.driver)) {
 					const findResult = await (
 						this.client as MisskeyApiAdapter

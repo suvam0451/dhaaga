@@ -36,7 +36,7 @@ export function NotificationPostPeek({ post }: Props) {
 				<TextContentView
 					tree={post.content.parsed}
 					variant={'bodyContent'}
-					mentions={post.meta.mentions as any}
+					mentions={post.meta.mentions}
 					emojiMap={post.calculated.emojis}
 				/>
 			</PressableDisabledOnSwipe>

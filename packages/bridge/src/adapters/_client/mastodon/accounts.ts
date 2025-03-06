@@ -29,6 +29,7 @@ import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 import { ApiAsyncResult } from '../../../utils/api-result.js';
 import { Err, Ok } from '../../../utils/index.js';
+import { DriverWebfingerType } from '../../../types/query.types.js';
 
 export class MastodonAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;
@@ -39,14 +40,16 @@ export class MastodonAccountsRouter implements AccountRoute {
 		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
-	async lookup(webfingerUrl: string): Promise<LibraryResponse<MastoAccount>> {
+	async lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MastoAccount> {
 		try {
 			const data = await this.client.lib.v1.accounts.lookup({
-				acct: webfingerUrl,
+				acct: webfinger.host
+					? `${webfinger.username}@${webfinger.host}`
+					: webfinger.username,
 			});
-			return { data };
+			return Ok(data);
 		} catch (e) {
-			return errorBuilder('Record not found');
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

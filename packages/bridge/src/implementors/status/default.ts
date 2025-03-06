@@ -5,7 +5,7 @@ import {
 	PostTargetInterface,
 } from './_interface.js';
 import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
-import { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
+import type { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
 
 class PostAdapterBase implements PostTargetInterface {
 	getCid(): string | null {

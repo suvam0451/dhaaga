@@ -6,7 +6,7 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import HashtagSegment from '../../../shared/mfm/HashtagSegment';
 import { appDimensions } from '../../../../styles/dimensions';
 import MentionSegment from '../../../shared/mfm/MentionSegment';
-import { TextParser } from '@dhaaga/bridge';
+import { PostMentionObjectType, TextParser } from '@dhaaga/bridge';
 import type { NodeContent, AppParsedTextNodes } from '@dhaaga/bridge';
 import LinkSegment from '../../../shared/mfm/LinkSegment';
 import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
@@ -14,7 +14,7 @@ import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
 type TextContentNodeProps = {
 	node: NodeContent;
 	variant: TEXT_PARSING_VARIANT;
-	mentions: { url: string; text: string; resolved: boolean }[];
+	mentions: PostMentionObjectType[];
 	emojiMap: Map<string, string>;
 	oneLine?: boolean;
 };
@@ -107,23 +107,23 @@ function TextContentNode({
 				);
 			}
 			case 'link': {
-				const mention = mentions.find((o) => o.url === node.url);
-
-				if (mention) {
-					return (
-						<MentionSegment
-							key={node.uuid}
-							value={mention.text}
-							link={mention.url}
-							fontFamily={
-								variant === 'displayName'
-									? APP_FONTS.INTER_600_SEMIBOLD
-									: APP_FONTS.ROBOTO_400
-							}
-							mentions={mentions}
-						/>
-					);
-				}
+				// const mention = mentions.find((o) => o.url === node.url);
+				//
+				// if (mention) {
+				// 	return (
+				// 		<MentionSegment
+				// 			key={node.uuid}
+				// 			value={mention.text}
+				// 			link={mention.url}
+				// 			fontFamily={
+				// 				variant === 'displayName'
+				// 					? APP_FONTS.INTER_600_SEMIBOLD
+				// 					: APP_FONTS.ROBOTO_400
+				// 			}
+				// 			mentions={mentions}
+				// 		/>
+				// 	);
+				// }
 
 				const isHashtag = TextParser.isHashtag(node.url);
 				if (isHashtag) {
@@ -208,7 +208,7 @@ function TextContentNode({
 type TextContentViewProps = {
 	tree: AppParsedTextNodes;
 	variant: TEXT_PARSING_VARIANT;
-	mentions: { url: string; text: string; resolved: boolean }[];
+	mentions: PostMentionObjectType[];
 	emojiMap: Map<string, string>;
 	style?: StyleProp<ViewStyle>;
 	oneLine?: boolean;

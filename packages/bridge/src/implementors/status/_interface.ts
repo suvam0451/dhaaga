@@ -26,7 +26,7 @@ export type AppBlueskyAuthor = {
 	viewer: { muted: boolean; blockedBy: boolean };
 };
 
-export interface PostTargetInterface {
+interface PostTargetInterface {
 	getRaw(): Status | PostView;
 
 	getId(): string;
@@ -138,3 +138,5 @@ export interface PostTargetInterface {
 		url: string;
 	}[];
 }
+
+export type { PostTargetInterface };

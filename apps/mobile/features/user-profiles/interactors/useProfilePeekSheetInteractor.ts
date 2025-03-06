@@ -13,7 +13,8 @@ function useProfilePeekSheetInteractor() {
 	const [SearchQuery, setSearchQuery] = useState<DriverUserFindQueryType>(null);
 	const [UserObject, setUserObject] = useState<UserObjectType>(null);
 
-	const { data, fetchStatus } = useGetProfile(SearchQuery);
+	const { data, fetchStatus, isLoading, isFetching } =
+		useGetProfile(SearchQuery);
 
 	useEffect(() => {
 		if (ctx?.did) {
@@ -33,7 +34,7 @@ function useProfilePeekSheetInteractor() {
 		setUserObject(data);
 	}, [data, fetchStatus]);
 
-	return { data: UserObject };
+	return { data: UserObject, isLoading, isFetching };
 }
 
 export default useProfilePeekSheetInteractor;

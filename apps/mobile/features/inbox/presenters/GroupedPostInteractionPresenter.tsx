@@ -21,7 +21,7 @@ function GroupedPostInteractionPresenter({ item }: Props) {
 				>
 					<View style={{ flex: 1 }}>
 						<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
-							Your post was liked/shared by {item.users.length} users
+							{item.users.length} users liked/shared your post
 						</AppText.Medium>
 					</View>
 					<MoreOptionsButtonSectionView createdAt={item.createdAt} />

@@ -8,7 +8,7 @@ import { MastoMediaAttachmentMeta } from '../../types/mastojs.types.js';
  * For type, see
  * @type {MediaAttachmentType} --> "image" | "video" | "gifv" | "audio" | "unknown";
  */
-export interface MediaAttachmentTargetInterface {
+interface MediaAttachmentTargetInterface {
 	getAltText(): string | null | undefined;
 
 	getBlurHash(): string | null | undefined;
@@ -34,3 +34,5 @@ export interface MediaAttachmentTargetInterface {
 
 	print(): void;
 }
+
+export type { MediaAttachmentTargetInterface };

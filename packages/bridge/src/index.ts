@@ -1,5 +1,5 @@
 export {
-	ApiTargetInterface,
+	type ApiTargetInterface,
 	AtprotoApiAdapter,
 	BaseApiAdapter,
 	MastoApiAdapter,
@@ -46,13 +46,13 @@ export {
 	DriveFileInstance,
 	MediaAttachmentInstance,
 } from './implementors/media-attachment/unique.js';
-export { MediaAttachmentTargetInterface } from './implementors/index.js';
+export type { MediaAttachmentTargetInterface } from './implementors/index.js';
 
 // export user profile adapters and interfaces
 export { DefaultUser } from './implementors/profile/default.js';
 
 // stub types
-export {
+export type {
 	ActivityPubStatus,
 	ActivityPubStatuses,
 	ActivityPubAccount,
@@ -61,17 +61,17 @@ export {
 // export types, adapters and interfaces
 export {
 	ActivityPubUserAdapter,
-	UserTargetInterface,
-	UserType,
+	type UserTargetInterface,
+	type UserType,
 } from './implementors/profile/_interface.js';
-export { PostTargetInterface } from './implementors/status/_interface.js';
+export type { PostTargetInterface } from './implementors/status/_interface.js';
 export {
 	ActivityPubTagAdapter,
-	TagTargetInterface,
-	TagType,
+	type TagTargetInterface,
+	type TagType,
 } from './implementors/tag/_interface.js';
 
-export { DhaagaJsTimelineQueryOptions } from './adapters/_client/_router/routes/_index.js';
+export type { DhaagaJsTimelineQueryOptions } from './adapters/_client/_router/routes/_index.js';
 
 export type { MfmNode } from './services/index.js';
 
@@ -97,27 +97,28 @@ export const verifyMisskeyToken = async (host: string, session: string) => {
 	return res.data;
 };
 
-export { LibraryPromise, errorBuilder };
+export { type LibraryPromise, errorBuilder };
 
 // DTOs
-export {
+export type {
 	AccountMutePostDto,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 };
 
-export { KNOWN_SOFTWARE, InstanceApi_CustomEmojiDTO };
+export { KNOWN_SOFTWARE };
+export type { InstanceApi_CustomEmojiDTO };
 export { DriverNotificationType } from './data/driver.js';
-export { LibraryResponse } from './types/result.types.js';
+export type { LibraryResponse } from './types/result.types.js';
 export { ApiErrorCode } from './types/result.types.js';
 
 export {
 	RandomUtil,
 	ResultOk,
 	ResultErr,
-	Result,
-	AsyncResult,
+	type Result,
+	type AsyncResult,
 } from './utils/index.js';
 
 // chat services
@@ -129,13 +130,19 @@ export type { FeedObjectType } from './parsers/feed.js';
 // text services
 export { TextParser } from './parsers/text.js';
 // post services
-export { PostParser, PostInspector, postObjectSchema } from './parsers/post.js';
+export {
+	PostParser,
+	PostInspector,
+	PostResolver,
+	postObjectSchema,
+} from './parsers/post.js';
 export type {
 	PostObjectType,
 	PostRootObjectType,
 	PostAuthorType,
 	PostStatsType,
 	PostMediaAttachmentType,
+	PostMentionObjectType,
 } from './parsers/post.js';
 // user services
 export { UserParser, appUserObjectSchema } from './parsers/user.js';
@@ -156,6 +163,6 @@ export type { ResultPage } from './utils/pagination.js';
 
 export { AtprotoUtils } from './utils/atproto.js';
 export { KeyExtractorUtil } from './utils/key-extractor.js';
-export { ApiResult } from './utils/api-result.js';
+export type { ApiResult } from './utils/api-result.js';
 export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';

@@ -1,6 +1,13 @@
 import { z } from 'zod';
 
-export const userFindQuerySchema = z
+const DriverWebfingerSchema = z.object({
+	username: z.string(),
+	host: z.string().nullable(),
+});
+
+type DriverWebfingerType = z.infer<typeof DriverWebfingerSchema>;
+
+const userFindQuerySchema = z
 	.object({
 		use: z.literal('did'),
 		did: z.string(),
@@ -20,11 +27,11 @@ export const userFindQuerySchema = z
 	.or(
 		z.object({
 			use: z.literal('webfinger'),
-			webfinger: z.object({
-				username: z.string(),
-				host: z.string().nullable(),
-			}),
+			webfinger: DriverWebfingerSchema,
 		}),
 	);
 
-export type DriverUserFindQueryType = z.infer<typeof userFindQuerySchema>;
+type DriverUserFindQueryType = z.infer<typeof userFindQuerySchema>;
+
+export { userFindQuerySchema };
+export type { DriverWebfingerType, DriverUserFindQueryType };

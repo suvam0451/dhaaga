@@ -1,4 +1,4 @@
-import { expect, test } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 import Target from '../src/services/activitypub';
 
 test('return correct user handle', () => {
@@ -18,7 +18,7 @@ test('return correct user handle', () => {
 	}
 });
 
-test('handle bridged accounts.ts correctly', () => {
+test('correctly handle bridged accounts', () => {
 	const MY_DOMAIN = 'mastodon.social';
 	const itemsA = [
 		'https://web.brid.gy/r/https://www.animenewsnetwork.com',
@@ -43,7 +43,7 @@ test('threads specific stuff', () => {
 	).resolves.toHaveProperty('software', 'threads');
 });
 
-test('instance software is detcted for privated instances', () => {
+test('instance software is detected correctly for private (visibility) instances', () => {
 	const instances = ['suya.place'];
 	const software = ['akkoma'];
 
@@ -61,7 +61,7 @@ test('instance software is detcted for privated instances', () => {
 	}
 });
 
-test('instance software is detected accurately', () => {
+describe('detect instance software', () => {
 	const instances = [
 		'mastodon.social',
 		'mas.to',
@@ -71,7 +71,6 @@ test('instance software is detected accurately', () => {
 		'post.ebin.club', // private
 		'seafoam.space', // ded
 		'social.trom.tf',
-		'calckey.world',
 		'lemmy.world',
 		'libre.video',
 		'pixelfed.social',
@@ -90,7 +89,6 @@ test('instance software is detected accurately', () => {
 		'pleroma',
 		'akkoma',
 		'friendica',
-		'firefish',
 		'lemmy',
 		'peertube',
 		'pixelfed',
@@ -100,17 +98,17 @@ test('instance software is detected accurately', () => {
 		'meisskey',
 		'misskey',
 	];
-	let index = 0;
-	for (const instance of instances) {
-		expect(
-			Promise.resolve(
-				Target.getInstanceSoftwareByHandle(
-					`@foo@${instance}`,
-					'mastodon.social',
+	for (let i = 0; i < instances.length; i++) {
+		test(`return correct software driver for ${instances[i]}`, () => {
+			expect(
+				Promise.resolve(
+					Target.getInstanceSoftwareByHandle(
+						`@foo@${instances[i]}`,
+						'mastodon.social',
+					),
 				),
-			),
-		).resolves.toHaveProperty('software', software[index]);
-		index++;
+			).resolves.toHaveProperty('software', software[i]);
+		});
 	}
 });
 

@@ -38,6 +38,7 @@ import { AppAtpSessionData } from '../../../types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ApiAsyncResult } from '../../../utils/api-result.js';
 import { Err, Ok } from '../../../utils/index.js';
+import { DriverWebfingerType } from '../../../types/query.types.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;
@@ -174,7 +175,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve([]) as any;
 	}
 
-	lookup(webfingerUrl: string): LibraryPromise<MastoAccount | MegaAccount> {
+	lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MastoAccount> {
 		return Promise.resolve(undefined) as any;
 	}
 

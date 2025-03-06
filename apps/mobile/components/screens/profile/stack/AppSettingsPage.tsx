@@ -1,7 +1,6 @@
 import { ScrollView, StyleSheet, View, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Ionicons } from '@expo/vector-icons';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
@@ -92,13 +91,12 @@ function Footer() {
 			</AppText.SemiBold>
 			<AppText.SemiBold
 				style={{
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					color: theme.primary.a0,
 					textAlign: 'center',
 					fontSize: 16,
 				}}
 			>
-				v0.16.2
+				v0.17.0
 			</AppText.SemiBold>
 		</View>
 	);

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { TextParser } from './text.js';
 import { UserParser } from './user.js';
 import { TextNodeParser } from './text-nodes.js';
 import { DriverService } from '../services/driver.js';
@@ -11,7 +10,17 @@ import { ActivitypubStatusAdapter } from '../implementors/status/_adapters.js';
 import { PostTargetInterface } from '../implementors/index.js';
 import { KNOWN_SOFTWARE } from '../data/driver.js';
 import AtprotoPostAdapter from '../implementors/status/bluesky.js';
-import { ActivitypubHelper } from '../index.js';
+import { ActivitypubHelper, DriverUserFindQueryType } from '../index.js';
+
+const mentionObjectSchema = z.object({
+	id: z.string(),
+	handle: z.string().optional(),
+	url: z.string().optional(),
+	acct: z.string().optional().nullable(),
+	username: z.string().optional().nullable(),
+});
+
+type PostMentionObjectType = z.infer<typeof mentionObjectSchema>;
 
 const ActivityPubReactionStateSchema = z.array(
 	z.object({
@@ -105,9 +114,9 @@ const ActivityPubStatusItemDto = z.object({
 		),
 		mentions: z.array(
 			z.object({
+				id: z.string().optional().nullable(),
 				text: z.string().optional(),
 				url: z.string().nullable().optional(),
-				resolved: z.boolean(),
 				username: z.string().optional().nullable(),
 				acct: z.string().optional().nullable(),
 			}),
@@ -122,7 +131,10 @@ const ActivityPubStatusItemDto = z.object({
 			z.object({
 				id: z.string(), // lazy loaded for misskey forks
 				handle: z.string().optional(),
+				// mastoAPI
 				url: z.string().optional(),
+				acct: z.string().optional().nullable(),
+				username: z.string().optional().nullable(),
 			}),
 		),
 
@@ -263,7 +275,8 @@ class Parser {
 				emojis: new Map([...user.getEmojiMap(), ...input.getCachedEmojis()]),
 				mediaContainerHeight: 0, // height,
 				reactionEmojis: input.getReactionEmojis(),
-				mentions: TextParser.findMentions(input.getContent() || ''),
+				// mentions: TextParser.findMentions(input.getContent() || ''),
+				mentions: input.getMentions(),
 			},
 			meta: {
 				sensitive: input.getIsSensitive(),
@@ -479,8 +492,46 @@ class Inspector {
 		return !!input.atProto?.viewer?.repost || input.interaction.boosted;
 	}
 }
-export { Parser as PostParser, Inspector as PostInspector, postObjectSchema };
+
+class Resolver {
+	static mentionItemsToWebfinger(
+		handle: string,
+		items: PostMentionObjectType[],
+	): DriverUserFindQueryType | null {
+		const parts = handle.split('@').filter(Boolean); // Remove empty elements after splitting
+		if (parts.length === 1) {
+			/**
+			 * Mastodon has acct/url
+			 */
+			const match = items.find(
+				(o) => o.acct?.startsWith(parts[0]) && o.url?.endsWith(parts[0]),
+			);
+			if (match) {
+				return {
+					use: 'userId',
+					userId: match.id,
+				};
+			}
+		}
+		const match = items.find((o) => o.acct === `${parts[0]}@${parts[1]}`);
+		if (match) {
+			return {
+				use: 'userId',
+				userId: match.id,
+			};
+		}
+		return null;
+	}
+}
+
+export {
+	Parser as PostParser,
+	Inspector as PostInspector,
+	Resolver as PostResolver,
+	postObjectSchema,
+};
 export type {
+	PostMentionObjectType,
 	ActivityPubReactionStateType,
 	PostObjectType,
 	PostRootObjectType,

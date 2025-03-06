@@ -43,7 +43,6 @@ function PostTimelinePlaceholderView() {
 		setNumNodes(Math.floor(event.nativeEvent.layout.height / 310));
 	}
 
-	console.log(NumNodes);
 	if (NumNodes === 0)
 		return <View style={{ height: '100%' }} onLayout={onLayout} />;
 	return (

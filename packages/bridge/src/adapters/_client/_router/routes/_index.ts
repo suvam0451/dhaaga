@@ -20,7 +20,7 @@ import { PostMutatorRoute } from './post.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { UserRoute } from './user.js';
 
-export interface ApiTargetInterface {
+interface ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
 	server: string | null;
 
@@ -59,7 +59,8 @@ export type {
 /**
  * export typings and DTOs
  */
-export {
+export type {
+	ApiTargetInterface,
 	DhaagaJsTimelineQueryOptions,
 	DhaagaJsUserSearchDTO,
 	DhaagaJsPostSearchDTO,
