@@ -2,7 +2,7 @@ import { AtprotoApiAdapter } from '@dhaaga/bridge';
 import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs';
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import { generateFacets } from '../../utils/atproto-facets.utils';
-import { AtpAgent, BlobRef, Facet, AppBskyRichtextFacet } from '@atproto/api';
+import { BlobRef, Facet, AppBskyRichtextFacet, Agent } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../features/composer/reducers/composer.reducer';
 import MediaUtils from '../../utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
@@ -60,7 +60,7 @@ class AtprotoComposerService {
 		}
 	}
 
-	static async resolveMentions(agent: AtpAgent, items: Facet[]) {
+	static async resolveMentions(agent: Agent, items: Facet[]) {
 		const pending: { index: number; pointer: number; handle: string }[] = [];
 		let count = 0;
 		for (let i = 0; i < items.length; i++) {

@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import MediaThumbnail from '../../../../../components/common/media/Thumb';
+import MediaThumbnail from '../../../../../ui/media/Thumb';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 
 type FlashListItemProps = {

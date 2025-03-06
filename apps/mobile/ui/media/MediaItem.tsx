@@ -6,11 +6,11 @@ import {
 	AppImageComponent,
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
-} from './_shared';
-import AppImageCarousel from './fragments/AppImageCarousel';
-import useGalleryDims from '../../../hooks/app/useGalleryDims';
+} from '../../components/common/media/_shared';
+import AppImageCarousel from '../../components/common/media/fragments/AppImageCarousel';
+import useGalleryDims from '../../hooks/app/useGalleryDims';
 import type { PostMediaAttachmentType } from '@dhaaga/bridge';
-import { appDimensions } from '../../../styles/dimensions';
+import { appDimensions } from '../../styles/dimensions';
 
 type ImageCarousalProps = {
 	attachments: PostMediaAttachmentType[];
@@ -127,12 +127,7 @@ function MediaItem({
 			<AppImageCarousel
 				timelineCacheId={'1'}
 				calculatedHeight={calculatedHeight}
-				items={attachments.map((o) => ({
-					altText: o.alt,
-					src: o.previewUrl,
-					type: o.type,
-					blurhash: o.blurhash,
-				}))}
+				items={attachments}
 			/>
 		</View>
 	);

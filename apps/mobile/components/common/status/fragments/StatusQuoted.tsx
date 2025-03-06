@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
-import MediaItem from '../../media/MediaItem';
+import MediaItem from '../../../../ui/media/MediaItem';
 import PostCreatedBy from './PostCreatedBy';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { appDimensions } from '../../../../styles/dimensions';

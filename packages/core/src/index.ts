@@ -1,4 +1,2 @@
-// misc. services
-export { ReactionService } from './services/reaction.service';
-
+export * from './services';
 export * from './states';

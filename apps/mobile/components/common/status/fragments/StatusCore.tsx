@@ -5,7 +5,7 @@ import WithAppStatusItemContext, {
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { Pressable, View } from 'react-native';
 import ExplainOutput from '../../explanation/ExplainOutput';
-import MediaItem from '../../media/MediaItem';
+import MediaItem from '../../../../ui/media/MediaItem';
 import EmojiReactions from './EmojiReactions';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';

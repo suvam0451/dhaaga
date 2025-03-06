@@ -1,5 +1,5 @@
 import { Pressable, View } from 'react-native';
-import MediaItem from '../../media/MediaItem';
+import MediaItem from '../../../../ui/media/MediaItem';
 import PostStats from '../PostStats';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import StatusQuoted from './StatusQuoted';

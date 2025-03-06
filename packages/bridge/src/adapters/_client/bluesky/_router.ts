@@ -16,6 +16,7 @@ import BlueskyFeedRouter from './feeds.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMutatorRoute } from '../_router/routes/post.js';
 import { UserRoute } from '../_router/routes/user.js';
+import { getXrpcAgent } from '../_router/_api.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;
 
@@ -64,6 +65,10 @@ class Adapter implements ApiTargetInterface {
 		this.feeds = new BlueskyFeedRouter(this.dto);
 		this.post = new PostMutatorRoute(this);
 		this.user = new UserRoute(this);
+	}
+
+	getAgent() {
+		return getXrpcAgent(this.dto);
 	}
 }
 

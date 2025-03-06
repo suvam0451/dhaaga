@@ -1,4 +1,4 @@
-import { MediaAttachmentInterface } from '@dhaaga/bridge';
+import { MediaAttachmentTargetInterface } from '@dhaaga/bridge';
 import { SavedPostMediaAttachment } from '@dhaaga/db';
 
 type CarousalContainerSpecificationType = {
@@ -67,7 +67,7 @@ class MediaService {
 	}
 
 	static calculateHeightForMediaContentCarousal(
-		items: MediaAttachmentInterface[],
+		items: MediaAttachmentTargetInterface[],
 		{ maxHeight, maxWidth }: CarousalContainerSpecificationType,
 	) {
 		if (!items) return;
