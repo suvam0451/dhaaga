@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import ProfileLandingAccountOverview from '../../../components/screens/profile/stack/landing/fragments/ProfileLandingAccountOverview';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import {
@@ -125,12 +124,12 @@ function MyAccountPresenter() {
 					}}
 				/>
 				<View style={{ marginVertical: 8 }} />
-				<AppText.Normal
+				<AppText.Special
 					style={styles.sectionHeader}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				>
 					{t(`profile.appFeatures.sectionLabel`)}
-				</AppText.Normal>
+				</AppText.Special>
 				<Animated.FlatList
 					data={appModules}
 					numColumns={2}
@@ -156,36 +155,10 @@ function MyAccountPresenter() {
 export default MyAccountPresenter;
 
 const styles = StyleSheet.create({
-	headerText: {
-		fontSize: 28,
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-	},
-	appModuleContainer: {
-		maxWidth: '50%',
-		flex: 1,
-		paddingHorizontal: 6,
-	},
-	appModuleContent: {
-		paddingVertical: 10,
-		paddingHorizontal: 12, // marginHorizontal: 8,
-		borderRadius: 8,
-		marginBottom: 12,
-
-		overflow: 'hidden',
-		width: 'auto',
-	},
-	tiltedIconContainer: {
-		transform: [{ rotateZ: '-15deg' }],
-		width: 42,
-		position: 'absolute',
-		opacity: 0.48,
-		right: 0,
-		bottom: -6,
-	},
 	sectionHeader: {
 		paddingHorizontal: 10,
 		fontSize: 32,
-		fontFamily: APP_FONTS.BEBAS_NEUE_400,
+		lineHeight: 32,
 		marginVertical: 16,
 	},
 });

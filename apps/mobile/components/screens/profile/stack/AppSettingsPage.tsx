@@ -244,27 +244,24 @@ function AppSettingsPage() {
 	return (
 		<ScrollView
 			style={{
-				minHeight: '100%',
 				paddingBottom: 16,
 				backgroundColor: theme.palette.bg,
 			}}
 		>
-			<View style={{ minHeight: '100%' }}>
-				<AppTabLandingNavbar
-					type={APP_LANDING_PAGE_TYPE.APP_SETTINGS}
-					menuItems={[
-						{
-							iconId: 'user-guide',
-							onPress: () => {
-								router.navigate(APP_ROUTING_ENUM.GUIDE_SETTINGS_TAB);
-							},
+			<AppTabLandingNavbar
+				type={APP_LANDING_PAGE_TYPE.APP_SETTINGS}
+				menuItems={[
+					{
+						iconId: 'user-guide',
+						onPress: () => {
+							router.navigate(APP_ROUTING_ENUM.GUIDE_SETTINGS_TAB);
 						},
-					]}
-				/>
-				<Header />
-				<SettingCategoryList />
-				<Footer />
-			</View>
+					},
+				]}
+			/>
+			<Header />
+			<SettingCategoryList />
+			<Footer />
 		</ScrollView>
 	);
 }
