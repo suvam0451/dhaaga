@@ -30,6 +30,7 @@ function StatusAlertNotificationFragment({ item }: Props) {
 				notificationType={DriverNotificationType.STATUS}
 				extraData={item?.extraData}
 				createdAt={item.createdAt}
+				noIcon
 			/>
 			<NotificationPostPeek post={target} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />

@@ -23,6 +23,7 @@ type Props = {
 	createdAt: Date;
 	notificationType: DriverNotificationType;
 	extraData?: string;
+	noIcon?: boolean;
 };
 
 const NOTIFICATION_TYPE_ICON_SIZE = 18;
@@ -32,6 +33,7 @@ function AuthorItemPresenter({
 	createdAt,
 	extraData,
 	notificationType,
+	noIcon,
 }: Props) {
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
@@ -176,7 +178,7 @@ function AuthorItemPresenter({
 			avatarUrl={user.avatarUrl}
 			extraData={extraData}
 			createdAt={createdAt}
-			Icon={Icon}
+			Icon={noIcon ? null : Icon}
 			bg={bg}
 			desc={desc}
 			onAvatarPressed={onAvatarPressed}

@@ -1,28 +1,45 @@
-import NotificationItemPresenter from '../features/inbox/presenters/NotificationItemPresenter';
-import Header from '../features/inbox/components/Header';
-import { APP_LANDING_PAGE_TYPE } from '../components/shared/topnavbar/AppTabLandingNavbar';
 import { FlatList, RefreshControl } from 'react-native';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 
-type ListWithSkeletonsProps = {
-	items: any[];
+type ListWithSkeletonsProps<T> = {
+	items: T[];
 	isLoading: boolean;
-	isRefreshing: boolean;
-	refresh: () => {};
-	SkeletonView: JSX.Element;
+	onRefresh: () => Promise<void>;
+	SkeletonView: () => ReactElement;
+	ItemView: (item: T) => ReactElement;
 	SkeletonEstimatedHeight: number;
+	ListHeaderComponent?: ReactElement;
 	onEndReached?: (info: { distanceFromEnd: number }) => void;
 };
 
-function ListWithPlaceholder({
+/**
+ * A FlatList renderer, that can also render a list
+ * of skeleton views as placeholder
+ *
+ * The number of skeleton copies to show is
+ * estimated, based on ListHeaderComponent input prop
+ *
+ * @param items
+ * @param isLoading
+ * @param isRefreshing
+ * @param SkeletonView
+ * @param SkeletonEstimatedHeight
+ * @param onEndReached
+ * @param ListHeaderComponent
+ * @param ItemView
+ * @constructor
+ */
+function ListWithSkeletonPlaceholder<T>({
 	items,
 	isLoading,
-	isRefreshing,
-	refresh,
 	SkeletonView,
 	SkeletonEstimatedHeight,
 	onEndReached,
-}: ListWithSkeletonsProps) {
+	ListHeaderComponent,
+	ItemView,
+	onRefresh,
+}: ListWithSkeletonsProps<T>) {
+	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const [NumNodes, setNumNodes] = useState(0);
 	function onLayout(event: any) {
 		setNumNodes(
@@ -32,16 +49,21 @@ function ListWithPlaceholder({
 		);
 	}
 
+	function _onRefresh() {
+		setIsRefreshing(true);
+		onRefresh().finally(() => {
+			setIsRefreshing(false);
+		});
+	}
+
 	return (
 		<FlatList
 			onLayout={onLayout}
 			data={isLoading ? Array(NumNodes).fill(null) : items}
-			renderItem={({ item }) =>
-				isLoading ? SkeletonView : <NotificationItemPresenter item={item} />
-			}
-			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.MENTIONS} />}
+			renderItem={({ item }) => (isLoading ? SkeletonView() : ItemView(item))}
+			ListHeaderComponent={ListHeaderComponent}
 			refreshControl={
-				<RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
+				<RefreshControl refreshing={IsRefreshing} onRefresh={_onRefresh} />
 			}
 			contentContainerStyle={{
 				paddingBottom: 32,
@@ -51,4 +73,4 @@ function ListWithPlaceholder({
 	);
 }
 
-export { ListWithPlaceholder };
+export { ListWithSkeletonPlaceholder };

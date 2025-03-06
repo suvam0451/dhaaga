@@ -15,6 +15,7 @@ function MentionNotificationFragment({ item }: Props) {
 				user={user}
 				notificationType={DriverNotificationType.MENTION}
 				createdAt={item.createdAt}
+				noIcon
 			/>
 			<NotificationPostPeek post={post} />
 			<AppDivider.Soft style={{ marginVertical: 12 }} />

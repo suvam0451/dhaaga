@@ -31,8 +31,6 @@ function MediaThumbListPresenter({ items, post, server }: Props) {
 			style={{
 				marginBottom:
 					items.length > 0 ? appDimensions.timelines.sectionBottomMargin : 0,
-				marginTop:
-					items.length > 0 ? appDimensions.timelines.sectionBottomMargin : 0,
 			}}
 		/>
 	);

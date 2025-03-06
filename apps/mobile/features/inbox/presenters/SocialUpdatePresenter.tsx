@@ -1,17 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetSocialUpdates } from '../../../hooks/api/useNotifications';
 import useNotificationStore from '../interactors/useNotificationStore';
-import { FlatList, RefreshControl } from 'react-native';
 import NotificationItemPresenter from './NotificationItemPresenter';
 import Header from '../components/Header';
 import FlashListService from '../../../services/flashlist.service';
+import { ListWithSkeletonPlaceholder } from '../../../ui/Lists';
+import { NotificationSkeletonView } from '../components/Skeleton';
 
 function SocialUpdatePresenter() {
-	const [IsRefreshing, setIsRefreshing] = useState(false);
-
 	const { state, loadNext, maxId, append, reset } = useNotificationStore();
-	const { data, fetchStatus, refetch, isPending } =
+	const { data, fetchStatus, refetch, isPending, isRefetching } =
 		useApiGetSocialUpdates(maxId);
 
 	useEffect(() => {
@@ -20,32 +19,29 @@ function SocialUpdatePresenter() {
 		}
 	}, [fetchStatus]);
 
-	function refresh() {
-		setIsRefreshing(true);
+	async function refresh() {
 		reset();
-		refetch().finally(() => {
-			setIsRefreshing(false);
-		});
+		await refetch();
 	}
 
 	const listItems = useMemo(() => {
 		return FlashListService.notifications(state.items);
 	}, [state.items]);
 
+	const IS_LOADING = listItems.length === 0 && (isPending || isRefetching);
+
 	return (
-		<FlatList
-			data={listItems}
-			renderItem={({ item }) => <NotificationItemPresenter item={item} />}
-			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.SOCIAL} />}
-			refreshControl={
-				<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
-			}
-			contentContainerStyle={{
-				paddingBottom: 32,
-			}}
+		<ListWithSkeletonPlaceholder
+			SkeletonView={NotificationSkeletonView}
+			ItemView={(item) => <NotificationItemPresenter item={item} />}
+			items={listItems}
+			isLoading={IS_LOADING}
 			onEndReached={() => {
 				if (!isPending) loadNext();
 			}}
+			SkeletonEstimatedHeight={136}
+			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.SOCIAL} />}
+			onRefresh={refresh}
 		/>
 	);
 }
