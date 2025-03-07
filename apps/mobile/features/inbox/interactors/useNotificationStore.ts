@@ -6,6 +6,8 @@ import {
 	useInboxState,
 	useInboxDispatch,
 } from '@dhaaga/core';
+import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
+import { useEffect } from 'react';
 
 /**
  * Help manage notifications for
@@ -15,6 +17,11 @@ function useNotificationStore() {
 	const { lastId, loadNext, MaxId, reset: resetPaginator } = useAppPaginator();
 	const state = useInboxState();
 	const dispatch = useInboxDispatch();
+	const { acct } = useAppAcct();
+
+	useEffect(() => {
+		reset();
+	}, [acct]);
 
 	function appendNotifications(
 		page: AppResultPageType<NotificationObjectType>,

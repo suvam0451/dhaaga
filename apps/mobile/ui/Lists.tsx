@@ -1,4 +1,4 @@
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { ReactElement, useState } from 'react';
 
 type ListWithSkeletonsProps<T> = {
@@ -10,6 +10,8 @@ type ListWithSkeletonsProps<T> = {
 	SkeletonEstimatedHeight: number;
 	ListHeaderComponent?: ReactElement;
 	onEndReached?: (info: { distanceFromEnd: number }) => void;
+	listEmpty?: boolean;
+	ListEmptyComponent?: ReactElement;
 };
 
 /**
@@ -38,6 +40,8 @@ function ListWithSkeletonPlaceholder<T>({
 	ListHeaderComponent,
 	ItemView,
 	onRefresh,
+	listEmpty,
+	ListEmptyComponent,
 }: ListWithSkeletonsProps<T>) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const [NumNodes, setNumNodes] = useState(0);
@@ -68,6 +72,7 @@ function ListWithSkeletonPlaceholder<T>({
 			contentContainerStyle={{
 				paddingBottom: 32,
 			}}
+			ListFooterComponent={listEmpty ? ListEmptyComponent : <View />}
 			onEndReached={onEndReached}
 		/>
 	);

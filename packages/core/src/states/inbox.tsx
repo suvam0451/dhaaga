@@ -11,11 +11,13 @@ import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 type State = {
 	seen: Set<string>;
 	items: NotificationObjectType[];
+	listEmpty: boolean;
 };
 
 const DEFAULT: State = {
 	seen: new Set(),
 	items: [],
+	listEmpty: false,
 };
 
 enum ACTION {
@@ -43,10 +45,14 @@ function reducer(state: State, action: Actions): State {
 			return produce(state, (draft) => {
 				draft.seen = new Set();
 				draft.items = [];
+				draft.listEmpty = false;
 			});
 		}
 		case ACTION.APPEND: {
 			return produce(state, (draft) => {
+				if (action.payload.page.items.length === 0 && state.items.length === 0)
+					draft.listEmpty = true;
+
 				for (const item of action.payload.page.items) {
 					if (draft.seen.has(item.id)) continue;
 					draft.seen.add(item.id);
@@ -76,6 +82,7 @@ const DispatchCtx = createContext<DispatchType | null>(null);
 // hooks
 const useInboxState = () => useContext(StateCtx);
 const useInboxDispatch = () => useContext(DispatchCtx);
+
 // wrapper
 function Ctx({ children }: { children: ReactNode }) {
 	const [state, dispatch] = useReducer(reducer, DEFAULT);

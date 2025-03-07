@@ -7,6 +7,8 @@ import FlashListService from '../../../services/flashlist.service';
 import useNotificationStore from '../interactors/useNotificationStore';
 import { NotificationSkeletonView } from '../components/Skeleton';
 import { ListWithSkeletonPlaceholder } from '../../../ui/Lists';
+import { View } from 'react-native';
+import { AppText } from '../../../components/lib/Text';
 
 function MentionPresenter() {
 	const { state, loadNext, maxId, append, reset } = useNotificationStore();
@@ -42,6 +44,12 @@ function MentionPresenter() {
 			SkeletonEstimatedHeight={136}
 			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.MENTIONS} />}
 			onRefresh={refresh}
+			listEmpty={state.listEmpty}
+			ListEmptyComponent={
+				<View>
+					<AppText.Normal>Notification List Empty</AppText.Normal>
+				</View>
+			}
 		/>
 	);
 }

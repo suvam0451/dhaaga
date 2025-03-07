@@ -7,6 +7,8 @@ import Header from '../components/Header';
 import FlashListService from '../../../services/flashlist.service';
 import { ListWithSkeletonPlaceholder } from '../../../ui/Lists';
 import { NotificationSkeletonView } from '../components/Skeleton';
+import { View } from 'react-native';
+import { AppText } from '../../../components/lib/Text';
 
 function UpdatesPresenter() {
 	const { state, loadNext, maxId, append, reset } = useNotificationStore();
@@ -42,6 +44,12 @@ function UpdatesPresenter() {
 			SkeletonEstimatedHeight={136}
 			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.UPDATES} />}
 			onRefresh={refresh}
+			listEmpty={state.listEmpty}
+			ListEmptyComponent={
+				<View>
+					<AppText.Normal>Notification List Empty</AppText.Normal>
+				</View>
+			}
 		/>
 	);
 }
