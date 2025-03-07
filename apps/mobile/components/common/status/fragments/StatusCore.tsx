@@ -5,7 +5,7 @@ import WithAppStatusItemContext, {
 } from '../../../../hooks/ap-proto/useAppStatusItem';
 import { Pressable, View } from 'react-native';
 import ExplainOutput from '../../explanation/ExplainOutput';
-import MediaItem from '../../media/MediaItem';
+import MediaItem from '../../../../ui/media/MediaItem';
 import EmojiReactions from './EmojiReactions';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
@@ -14,13 +14,13 @@ import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { appDimensions } from '../../../../styles/dimensions';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import StatusInteraction from './StatusInteraction';
-import { AppPostObject } from '../../../../types/app-post.types';
 import { AppText } from '../../../lib/Text';
 import StatusQuoted from './StatusQuoted';
 import { PostMoreOptionsButton } from '../_shared';
 import { TextContentView } from '../TextContentView';
+import { PostInspector } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -54,12 +54,12 @@ function PinIndicator() {
 }
 
 type PostFullDetailsProps = {
-	dto: AppPostObject;
+	dto: PostObjectType;
 };
 
 function PostFullDetails({ dto }: PostFullDetailsProps) {
 	const { theme } = useAppTheme();
-	const POST = PostMiddleware.getContentTarget(dto);
+	const POST = PostInspector.getContentTarget(dto);
 
 	return (
 		<View
@@ -97,11 +97,11 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 	);
 	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
-	const _target = PostMiddleware.getContentTarget(dto);
+	const _target = PostInspector.getContentTarget(dto);
 	const HAS_MEDIA = _target?.content?.media?.length > 0;
 	const IS_TRANSLATED = _target?.calculated?.translationOutput;
 
-	const IS_QUOTE_BOOST = PostMiddleware.isQuoteObject(dto);
+	const IS_QUOTE_BOOST = PostInspector.isQuoteObject(dto);
 
 	const isSensitive = _target.meta.sensitive;
 	const spoilerText = _target.meta.cw;
@@ -117,7 +117,7 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 			<View
 				style={{
 					flexDirection: 'row',
-					marginBottom: SECTION_MARGIN_BOTTOM * 0.5,
+					marginBottom: SECTION_MARGIN_BOTTOM * 0.75,
 				}}
 			>
 				<PostCreatedBy
@@ -171,7 +171,7 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 					/>
 					{IS_TRANSLATED && (
 						<ExplainOutput
-							additionalInfo={'Translated using OpenAI'}
+							additionalInfo={'Translated using DeepL'}
 							fromLang={'jp'}
 							toLang={'en'}
 							text={_target.calculated.translationOutput}

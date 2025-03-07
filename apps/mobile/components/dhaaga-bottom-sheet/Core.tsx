@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import WithComposerContext from '../../features/composer/contexts/useComposerCtx';
@@ -67,7 +67,10 @@ function Handle() {
  * Responsible for generating content
  */
 function Factory() {
-	const { type } = useAppBottomSheet();
+	const { type, animating } = useAppBottomSheet();
+
+	if (animating) return <View />;
+
 	switch (type) {
 		case APP_BOTTOM_SHEET_ENUM.ADD_PROFILE:
 		case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:

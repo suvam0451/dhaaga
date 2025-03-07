@@ -1,20 +1,21 @@
 import { useEffect } from 'react';
-import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
+import {
+	usePostTimelineState,
+	usePostTimelineDispatch,
+	PostTimelineStateAction,
+} from '@dhaaga/core';
 import { useLocalSearchParams } from 'expo-router';
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
-import {
-	useTimelineDispatch,
-	useTimelineState,
-} from '../contexts/PostTimelineCtx';
 import useTimelineQuery from '../api/useTimelineQuery';
 import TimelinePresenter from '../presenters/TimelinePresenter';
 import TimelineErrorView from '../view/TimelineErrorView';
+import { PostTimelinePlaceholderView } from '../components/PostSkeletonView';
 
 function TimelineInteractor() {
 	const { db } = useAppDb();
 
-	const State = useTimelineState();
-	const dispatch = useTimelineDispatch();
+	const State = usePostTimelineState();
+	const dispatch = usePostTimelineDispatch();
 
 	// reset the timeline on param change
 	const params = useLocalSearchParams();
@@ -24,7 +25,7 @@ function TimelineInteractor() {
 	useEffect(() => {
 		if (!db) return;
 		dispatch({
-			type: AppTimelineReducerActionType.INIT,
+			type: PostTimelineStateAction.INIT,
 			payload: {
 				db,
 			},
@@ -33,7 +34,7 @@ function TimelineInteractor() {
 		if (!pinType || !pinId) return;
 		if (pinId) {
 			dispatch({
-				type: AppTimelineReducerActionType.RESET_USING_PIN_ID,
+				type: PostTimelineStateAction.RESET_USING_PIN_ID,
 				payload: {
 					id: parseInt(pinId),
 					type: pinType as 'feed' | 'user' | 'tag',
@@ -44,26 +45,29 @@ function TimelineInteractor() {
 
 	useEffect(() => {
 		dispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 	}, [State.feedType, State.query, State.opts, db]);
 
-	const { fetchStatus, data, status, refetch, error } = useTimelineQuery({
-		type: State.feedType,
-		query: State.query,
-		opts: State.opts,
-		maxId: State.appliedMaxId,
-		sessionId: State.sessionId,
-	});
+	const { fetchStatus, data, status, refetch, error, isFetched } =
+		useTimelineQuery({
+			type: State.feedType,
+			query: State.query,
+			opts: State.opts,
+			maxId: State.appliedMaxId,
+			sessionId: State.sessionId,
+		});
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
-			type: AppTimelineReducerActionType.APPEND_RESULTS,
+			type: PostTimelineStateAction.APPEND_RESULTS,
 			payload: data,
 		});
 	}, [fetchStatus]);
 
+	if (State.items.length === 0 && !isFetched)
+		return <PostTimelinePlaceholderView />;
 	if (error) return <TimelineErrorView error={error} />;
 	return <TimelinePresenter refetch={refetch} fetchStatus={fetchStatus} />;
 }

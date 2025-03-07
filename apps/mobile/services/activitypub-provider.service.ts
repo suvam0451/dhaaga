@@ -1,4 +1,4 @@
-import { ActivityPubClient } from '@dhaaga/bridge';
+import { ApiTargetInterface } from '@dhaaga/bridge';
 import * as FileSystem from 'expo-file-system';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 
@@ -6,15 +6,15 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
  * Wrapper service to invoke provider functions
  */
 class ActivityPubProviderService {
-	static async getStatusContext(client: ActivityPubClient, id: string) {
+	static async getStatusContext(client: ApiTargetInterface, id: string) {
 		return client.statuses.getContext(id);
 	}
 
-	static async getStatus(client: ActivityPubClient, id: string) {
+	static async getStatus(client: ApiTargetInterface, id: string) {
 		return client.statuses.get(id);
 	}
 
-	static async getStatusAsArray(client: ActivityPubClient, id: string) {
+	static async getStatusAsArray(client: ApiTargetInterface, id: string) {
 		const status = await client.statuses.get(id);
 		return [status];
 	}

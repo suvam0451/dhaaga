@@ -1,7 +1,7 @@
-import { UserInterface } from './_interface.js';
+import { UserTargetInterface } from './_interface.js';
 import { AppBskyActorDefs } from '@atproto/api';
 
-export class BlueskyUserInterface implements UserInterface {
+export class BlueskyUserInterface implements UserTargetInterface {
 	// + AppBskyActorDefs.ProfileViewBasic;
 	ref: AppBskyActorDefs.ProfileViewDetailed;
 

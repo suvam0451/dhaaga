@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
-import { AccountService } from '../../database/entities/account';
-import useGlobalState from '../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { AccountService } from '@dhaaga/db';
+import { useAppDb } from '../utility/global-state-extractors';
 
 function useAppListAccounts(stateId?: string) {
 	const [Refreshing, setRefreshing] = useState(false);
-	const { db } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-		})),
-	);
+	const { db } = useAppDb();
 
 	const [Data, setData] = useState([]);
 

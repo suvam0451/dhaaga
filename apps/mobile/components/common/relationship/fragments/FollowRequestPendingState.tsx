@@ -4,18 +4,13 @@ import { RelationshipButtonProps } from './_common';
 import { ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 
 const LABEL = 'Pending';
 
 const FollowRequestPendingState = memo(
 	({ loading, onPress }: RelationshipButtonProps) => {
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+		const { theme } = useAppTheme();
 		return (
 			<Button
 				size={'sm'}

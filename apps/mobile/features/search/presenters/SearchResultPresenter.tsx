@@ -1,15 +1,12 @@
-import WithFeedTimelineCtx from '../../timelines/contexts/FeedTimelineCtx';
 import { RefetchOptions } from '@tanstack/react-query';
 import {
-	APP_SEARCH_TYPE,
-	DiscoverTabReducerActionType,
-} from '../reducers/discover-tab.reducer';
-import WithPostTimelineCtx from '../../timelines/contexts/PostTimelineCtx';
-import WithUserTimelineCtx from '../../timelines/contexts/UserTimelineCtx';
-import {
-	useDiscoverTabDispatch,
-	useDiscoverTabState,
-} from '../contexts/DiscoverTabCtx';
+	useDiscoverDispatch,
+	useDiscoverState,
+	DiscoverStateAction,
+	PostTimelineCtx,
+	UserTimelineCtx,
+	FeedTimelineCtx,
+} from '@dhaaga/core';
 import FeedResultInteractor from '../interactors/FeedResultInteractor';
 import Header from '../components/Header';
 import PostResultInteractor from '../interactors/PostResultInteractor';
@@ -21,35 +18,35 @@ type FeedSearchResultPresenterProps = {
 };
 
 function SearchResultPresenter({ refetch }: FeedSearchResultPresenterProps) {
-	const State = useDiscoverTabState();
-	const DiscoverTabDispatch = useDiscoverTabDispatch();
+	const State = useDiscoverState();
+	const DiscoverTabDispatch = useDiscoverDispatch();
 
 	function onDataLoaded(isEmpty: boolean) {
 		DiscoverTabDispatch({
-			type: DiscoverTabReducerActionType.MARK_LOADING_DONE,
+			type: DiscoverStateAction.MARK_LOADING_DONE,
 		});
 	}
 
 	if (!State.q) return <LandingPageView />;
 
 	switch (State.category) {
-		case APP_SEARCH_TYPE.POSTS:
+		case 'posts':
 			return (
-				<WithPostTimelineCtx>
+				<PostTimelineCtx>
 					<PostResultInteractor onDataLoaded={onDataLoaded} />
-				</WithPostTimelineCtx>
+				</PostTimelineCtx>
 			);
-		case APP_SEARCH_TYPE.USERS:
+		case 'users':
 			return (
-				<WithUserTimelineCtx>
+				<UserTimelineCtx>
 					<UserResultInteractor onDataLoaded={onDataLoaded} />
-				</WithUserTimelineCtx>
+				</UserTimelineCtx>
 			);
-		case APP_SEARCH_TYPE.FEEDS:
+		case 'feeds':
 			return (
-				<WithFeedTimelineCtx>
+				<FeedTimelineCtx>
 					<FeedResultInteractor onDataLoaded={onDataLoaded} />
-				</WithFeedTimelineCtx>
+				</FeedTimelineCtx>
 			);
 
 		default:

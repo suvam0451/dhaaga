@@ -11,9 +11,7 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { ProfileService } from '../../../database/entities/profile';
-import { AccountService } from '../../../database/entities/account';
-import { Account, Profile } from '../../../database/_schema';
+import { Account, Profile, ProfileService, AccountService } from '@dhaaga/db';
 import { appDimensions } from '../../../styles/dimensions';
 import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';

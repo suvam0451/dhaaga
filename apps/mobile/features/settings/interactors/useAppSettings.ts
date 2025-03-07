@@ -1,11 +1,8 @@
 import { APP_SETTING_KEY } from '../../../services/settings.service';
-import {
-	AppSettingService,
-	AppSettingType,
-} from '../../../database/entities/app-setting';
+import { AppSettingService, AppSettingType } from '@dhaaga/db';
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
 import { useState } from 'react';
-import { RandomUtil } from '../../../utils/random.utils';
+import { RandomUtil } from '@dhaaga/bridge';
 
 function useAppSettings() {
 	const [Hash, setHash] = useState(RandomUtil.nanoId());

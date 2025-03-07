@@ -12,7 +12,8 @@ import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
 import UserSearchResultPresenter from './UserSearchResultPresenter';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { useTranslation } from 'react-i18next';
-import { ProfileService } from '../../../database/entities/profile';
+import { ProfileService } from '@dhaaga/db';
+import { UserSearchResultSkeletonView } from '../components/UserSearchResultSkeleton';
 
 function UserAddSheetPresenter() {
 	const { theme } = useAppTheme();
@@ -55,6 +56,11 @@ function UserAddSheetPresenter() {
 		setDebouncedQuery(null);
 	}
 
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	const handleLayout = (event) => {
+		setContainerHeight(event.nativeEvent.layout.height);
+	};
+
 	return (
 		<View
 			style={{
@@ -63,6 +69,7 @@ function UserAddSheetPresenter() {
 				paddingTop: 16,
 				backgroundColor: theme.background.a30,
 			}}
+			onLayout={handleLayout}
 		>
 			<Pressable
 				style={{
@@ -103,6 +110,7 @@ function UserAddSheetPresenter() {
 					/>
 				</View>
 			</Pressable>
+
 			<FlatList
 				data={data}
 				renderItem={({ item }) => (
@@ -112,6 +120,9 @@ function UserAddSheetPresenter() {
 						onChangeCallback={onChange}
 					/>
 				)}
+				ListEmptyComponent={
+					<UserSearchResultSkeletonView totalHeight={ContainerHeight} />
+				}
 				contentContainerStyle={{
 					backgroundColor: theme.background.a10,
 					paddingTop: 16,

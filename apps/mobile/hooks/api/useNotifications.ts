@@ -1,13 +1,11 @@
 import {
-	DhaagaJsNotificationType,
+	DriverNotificationType,
 	KNOWN_SOFTWARE,
-	MastodonRestClient,
-	MisskeyRestClient,
-	PleromaRestClient,
+	MastoApiAdapter,
+	MisskeyApiAdapter,
+	PleromaApiAdapter,
 } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
-import { AppNotificationObject } from '../../types/app-notification.types';
-import { NotificationMiddleware } from '../../services/middlewares/notification.middleware';
 import { useQuery } from '@tanstack/react-query';
 import {
 	useAppAcct,
@@ -26,73 +24,15 @@ import {
 	MastoApiV1Service,
 	MastoApiV2Service,
 } from '../../services/masto-api.service';
+import type { NotificationObjectType } from '@dhaaga/bridge';
 
 const NOTIFICATION_PAGE_SIZE = 20;
 
 type useApiGetNotificationsProps = {
-	include: DhaagaJsNotificationType[];
+	include: DriverNotificationType[];
 };
 
-type NotificationResults = AppResultPageType<AppNotificationObject>;
-
-/**
- * API Query for the notifications endpoint
- */
-function useApiGetNotifications({ include }: useApiGetNotificationsProps) {
-	const { acct } = useAppAcct();
-	const { client, driver } = useAppApiClient();
-
-	async function api(): Promise<NotificationResults> {
-		if (!client) throw new Error('no client found');
-		if (driver === KNOWN_SOFTWARE.FIREFISH) {
-			/**
-			 * Firefish does not support grouped-notifications
-			 * Maybe Iceshrimp too?
-			 * */
-			const { data, error } = await (
-				client as MisskeyRestClient
-			).notifications.getUngrouped({
-				limit: NOTIFICATION_PAGE_SIZE,
-			});
-
-			if (error) throw new Error(error.message);
-			return {
-				success: true,
-				items: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
-					data.data.filter((o) => ['login'].includes(o.type)),
-					driver,
-					acct?.server,
-				),
-				maxId: data.maxId,
-				minId: data.minId,
-			};
-		} else {
-			const { data, error } = await client.notifications.get({
-				limit: NOTIFICATION_PAGE_SIZE,
-			});
-
-			if (error) throw new Error(error.message);
-			return {
-				success: true,
-				items: NotificationMiddleware.deserialize<unknown[]>( // ignore certain notification types
-					data.data,
-					driver,
-					acct?.server,
-				),
-				maxId: data.maxId,
-				minId: data.minId,
-			};
-		}
-	}
-
-	// Queries
-	return useQuery<NotificationResults>({
-		queryKey: ['notifications', driver, acct?.server, include],
-		queryFn: api,
-		enabled: client !== null,
-		initialData: pageResultDefault,
-	});
-}
+type NotificationResults = AppResultPageType<NotificationObjectType>;
 
 /**
  * Get Mentions
@@ -142,7 +82,7 @@ function useApiGetMentionUpdates(maxId?: string | null) {
  * Fetches direct message data
  */
 function useApiGetChatUpdates() {
-	const [Results, setResults] = useState<AppNotificationObject[]>([]);
+	const [Results, setResults] = useState<NotificationObjectType[]>([]);
 	const { acct } = useAppAcct();
 	const { driver, client, server } = useAppApiClient();
 	const { db } = useAppDb();
@@ -235,7 +175,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 		queryFn: async () => {
 			if (ActivityPubService.misskeyLike(driver)) {
 				const result = await (
-					client as MisskeyRestClient
+					client as MisskeyApiAdapter
 				).notifications.getSubscriptions({
 					limit: NOTIFICATION_PAGE_SIZE,
 					maxId,
@@ -244,7 +184,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 				return MisskeyService.packNotifs(result.data, driver, server);
 			} else if (ActivityPubService.supportsV2(driver)) {
 				const result = await (
-					client as MastodonRestClient
+					client as MastoApiAdapter
 				).notifications.getSubscriptionUpdates({
 					limit: NOTIFICATION_PAGE_SIZE,
 					maxId,
@@ -252,7 +192,7 @@ function useApiGetSubscriptionUpdates(maxId?: string | null) {
 				return MastoApiV2Service.packNotifs(result.data, driver, server);
 			} else if (ActivityPubService.pleromaLike(driver)) {
 				const result = await (
-					client as PleromaRestClient
+					client as PleromaApiAdapter
 				).notifications.getSubscriptionUpdates({
 					limit: NOTIFICATION_PAGE_SIZE,
 					maxId,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import MediaItem from '../../../../../components/common/media/MediaItem';
+import MediaItem from '../../../../../ui/media/MediaItem';
 import ReplyOwner from '../components/ReplyOwner';
 import ReplyToReplyItemPresenter from './ReplyToReplyItemPresenter';
 import { useAppStatusContextDataContext } from '../../../../../hooks/api/statuses/WithAppStatusContextData';

@@ -1,5 +1,4 @@
-import { AppPostObject } from '../../../types/app-post.types';
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import { Fragment } from 'react';
 import { FetchStatus } from '@tanstack/react-query';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
@@ -7,9 +6,10 @@ import { Animated, RefreshControl } from 'react-native';
 import StatusItem from '../../../components/common/status/StatusItem';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import { appDimensions } from '../../../styles/dimensions';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 type PostTimelineProps = {
-	data: AppPostObject[];
+	data: PostObjectType[];
 	refreshing: boolean;
 	onRefresh: () => void;
 	onScroll: (...args: any[]) => void;
@@ -50,7 +50,7 @@ export function PostTimelinePresenter({
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</Fragment>
 	);
 }

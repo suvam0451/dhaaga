@@ -3,15 +3,15 @@ import type { Hashtag } from 'misskey-js/autogen/models.js';
 import MisskeyTag from './misskey.js';
 import MastodonTag from './mastodon.js';
 import DefaultTag from './default.js';
-import { KNOWN_SOFTWARE } from '../../adapters/_client/_router/routes/instance.js';
 import BlueskyTag from './bluesky.js';
+import { KNOWN_SOFTWARE } from '../../data/driver.js';
 
 export type TagType = mastodon.v1.Tag | Hashtag | null | undefined;
 
 /**
  * Interface
  */
-export interface TagInterface {
+export interface TagTargetInterface {
 	isFollowing(): boolean | null | undefined;
 
 	getHistory(): any | null | undefined;
@@ -43,7 +43,10 @@ export class MisskeyTagInstance {
 	}
 }
 
-export function ActivityPubTagAdapter(tag: any, domain: string): TagInterface {
+export function ActivityPubTagAdapter(
+	tag: any,
+	domain: string,
+): TagTargetInterface {
 	switch (domain) {
 		case KNOWN_SOFTWARE.MISSKEY:
 		case KNOWN_SOFTWARE.FIREFISH:

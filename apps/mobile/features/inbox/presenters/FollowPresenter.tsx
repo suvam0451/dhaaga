@@ -1,9 +1,6 @@
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
+import { DriverNotificationType } from '@dhaaga/bridge';
 import { View } from 'react-native';
-import {
-	Props,
-	styles,
-} from '../../../components/screens/notifications/landing/segments/_common';
+import { Props, styles } from '../components/_common';
 import { AppDivider } from '../../../components/lib/Divider';
 import AuthorItemPresenter from './AuthorItemPresenter';
 
@@ -13,7 +10,7 @@ function FollowPresenter({ item }: Props) {
 		<View style={styles.container}>
 			<AuthorItemPresenter
 				user={user}
-				notificationType={DhaagaJsNotificationType.FOLLOW}
+				notificationType={DriverNotificationType.FOLLOW}
 				createdAt={item.createdAt}
 			/>
 			<AppDivider.Soft style={{ marginVertical: 12 }} />

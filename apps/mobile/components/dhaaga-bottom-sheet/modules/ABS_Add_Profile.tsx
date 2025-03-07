@@ -1,6 +1,6 @@
 import { AppBottomSheetMenu } from '../../lib/Menu';
 import { useEffect, useState } from 'react';
-import { Account } from '../../../database/_schema';
+import { Account, AccountService, ProfileService } from '@dhaaga/db';
 import { Animated, Pressable, View } from 'react-native';
 import { AppAccountSelectionItem } from '../../common/app/Account';
 import {
@@ -9,8 +9,6 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { AccountService } from '../../../database/entities/account';
-import { ProfileService } from '../../../database/entities/profile';
 import { AppText } from '../../lib/Text';
 import { AppTextInput } from '../../lib/TextInput';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';

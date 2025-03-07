@@ -3,23 +3,19 @@ import {
 	useAppBottomSheet,
 	useAppDb,
 	useAppManager,
-	useAppTheme,
 	useProfileManager,
 } from '../../../hooks/utility/global-state-extractors';
 import { View } from 'react-native';
-import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
-import { AppMenu, AppMenuItem } from '../../lib/Menu';
-import { AppIcon } from '../../lib/Icon';
-import { AppDivider } from '../../lib/Divider';
-import { AppUserObject } from '../../../types/app-user.types';
+import { ProfilePinnedUserService } from '@dhaaga/db';
+import { AppMenuItem } from '../../lib/Menu';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 function AppBottomSheetUserMoreActions() {
 	const currentTargetId = useRef(null);
-	const currentTargetObj = useRef<AppUserObject>(null);
+	const currentTargetObj = useRef<UserObjectType>(null);
 	const { stateId } = useAppBottomSheet();
 	const { appManager } = useAppManager();
 	const { profileManager } = useProfileManager();
-	const { theme } = useAppTheme();
 
 	const [IsPinnedForProfile, setIsPinnedForProfile] = useState(false);
 

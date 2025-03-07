@@ -1,20 +1,20 @@
 import ActivitypubService from '../../services/activitypub.service';
-import { MisskeyRestClient, PleromaRestClient } from '@dhaaga/bridge';
+import { MisskeyApiAdapter, PleromaApiAdapter } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ActivityPubService from '../../services/activitypub.service';
 import ActivitypubReactionsService from '../../services/approto/activitypub-reactions.service';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../states/_global';
-import { AppUserObject } from '../../types/app-user.types';
-import { UserMiddleware } from '../../services/middlewares/user.middleware';
+import { UserParser } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type ReactionDetails = {
 	id: string;
 	url: string;
 	count: number;
 	reacted: boolean;
-	accounts: AppUserObject[];
+	accounts: UserObjectType[];
 };
 
 function useGetReactionDetails(postId: string, reactionId: string) {
@@ -36,7 +36,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 		);
 		if (ActivitypubService.pleromaLike(driver)) {
 			const { data, error } = await (
-				client as PleromaRestClient
+				client as PleromaApiAdapter
 			).statuses.getReactions(postId);
 
 			if (error) {
@@ -52,7 +52,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 				count: match.count,
 				reacted: match.me,
 				url: match.url,
-				accounts: UserMiddleware.deserialize<unknown[]>(
+				accounts: UserParser.parse<unknown[]>(
 					match.accounts,
 					driver,
 					acct?.server,
@@ -60,7 +60,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 			};
 		} else if (ActivityPubService.misskeyLike(driver)) {
 			const { data, error } = await (
-				client as MisskeyRestClient
+				client as MisskeyApiAdapter
 			).statuses.getReactionDetails(postId, id);
 
 			if (error) {
@@ -68,8 +68,8 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 				return null;
 			}
 
-			const accts: AppUserObject[] = data.map((o) =>
-				UserMiddleware.deserialize<unknown[]>(o.user, driver, acct?.server),
+			const accts: UserObjectType[] = data.map((o) =>
+				UserParser.parse<unknown[]>(o.user, driver, acct?.server),
 			);
 
 			let reacted = false;

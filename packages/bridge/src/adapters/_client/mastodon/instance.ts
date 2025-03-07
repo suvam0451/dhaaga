@@ -6,10 +6,7 @@ import {
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import { MastoErrorHandler } from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -39,7 +36,7 @@ export class MastodonInstanceRouter implements InstanceRoute {
 		const { data, error } = await MastoErrorHandler(fn);
 		if (error) return { error };
 		const x = await data;
-		if (!x) return { error: { code: DhaagaErrorCode.UNKNOWN_ERROR } };
+		if (!x) return { error: { code: ApiErrorCode.UNKNOWN_ERROR } };
 		return {
 			data: x!.map((o: any) => ({
 				shortCode: o.shortcode,

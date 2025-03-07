@@ -1,17 +1,16 @@
 import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
 import TimelinesHeader from '../../../components/shared/topnavbar/fragments/TopNavbarTimelineStack';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/bridge';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
-import { Fragment } from 'react';
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import { appDimensions } from '../../../styles/dimensions';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusItem from '../../../components/common/status/StatusItem';
 
 type TimelinePostListViewProps = {
-	items: AppPostObject[];
+	items: PostObjectType[];
 	numItems: number;
 	loadMore: () => void;
 	fetching: boolean;
@@ -53,27 +52,25 @@ function TimelinePostListView({
 				<TimelinesHeader />
 			</Animated.View>
 
-			<Fragment>
-				<View style={{ flex: 1 }}>
-					<Animated.FlatList
-						data={items}
-						renderItem={({ item }) => (
-							<WithAppStatusItemContext dto={item}>
-								<StatusItem />
-							</WithAppStatusItemContext>
-						)}
-						onScroll={onScroll}
-						contentContainerStyle={{
-							paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
-						}}
-						scrollEventThrottle={16}
-						refreshControl={
-							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-						}
-					/>
-				</View>
-				<LoadingMore visible={visible} loading={loading} />
-			</Fragment>
+			<View style={{ flex: 1 }}>
+				<Animated.FlatList
+					data={items}
+					renderItem={({ item }) => (
+						<WithAppStatusItemContext dto={item}>
+							<StatusItem />
+						</WithAppStatusItemContext>
+					)}
+					onScroll={onScroll}
+					contentContainerStyle={{
+						paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
+					}}
+					scrollEventThrottle={16}
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+				/>
+			</View>
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</View>
 	);
 }

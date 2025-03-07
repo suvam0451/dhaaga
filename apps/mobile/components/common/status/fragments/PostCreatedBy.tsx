@@ -9,22 +9,20 @@ import { Image } from 'expo-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRef } from 'react';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
-import { DatetimeUtil } from '../../../../utils/datetime.utils';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
-import { PostMiddleware } from '../../../../services/middlewares/post.middleware';
 import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
 import useAppNavigator from '../../../../states/useAppNavigator';
-import { AccountSavedUser } from '../../../../database/_schema';
+import { AccountSavedUser } from '@dhaaga/db';
 import { TextContentView } from '../TextContentView';
-import { AppParsedTextNodes } from '../../../../types/parsed-text.types';
-import MfmService from '../../../../services/mfm.service';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
 import ActivitypubService from '../../../../services/activitypub.service';
+import { RandomUtil } from '@dhaaga/bridge';
+import { TextNodeParser, PostInspector } from '@dhaaga/bridge';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 
@@ -71,7 +69,6 @@ export function OriginalPosterPostedByFragment({
 	onClick,
 	emojiMap,
 	handle,
-	postedAt,
 }: {
 	displayNameParsed: AppParsedTextNodes;
 	onClick: () => void;
@@ -93,7 +90,11 @@ export function OriginalPosterPostedByFragment({
 			<View>
 				<Pressable onPress={onClick}>
 					<TextContentView
-						tree={displayNameParsed}
+						tree={
+							displayNameParsed.length === 0
+								? [{ uuid: RandomUtil.nanoId(), type: 'para', nodes: [] }]
+								: displayNameParsed
+						}
 						variant={'displayName'}
 						mentions={[]}
 						emojiMap={emojiMap}
@@ -134,6 +135,7 @@ export function SavedPostCreatedBy({
 	style,
 	authoredAt,
 }: SavedPostCreatedByProps) {
+	const { driver } = useAppApiClient();
 	const UserDivRef = useRef(null);
 
 	// resolve handle and show modal
@@ -141,14 +143,6 @@ export function SavedPostCreatedBy({
 
 	// redirect to profile
 	function onProfilePressed() {}
-
-	const _displayNameParsed = MfmService.renderMfm(user.displayName, {
-		emojiMap: new Map(),
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-		colorScheme: null,
-		variant: 'displayName',
-		nonInteractive: false,
-	});
 
 	if (!user) return <View />;
 	return (
@@ -191,7 +185,7 @@ export function SavedPostCreatedBy({
 
 			<OriginalPosterPostedByFragment
 				onClick={onProfilePressed}
-				displayNameParsed={_displayNameParsed?.parsed || []}
+				displayNameParsed={TextNodeParser.parse(driver, user.displayName)}
 				handle={user.username}
 				postedAt={new Date(authoredAt)}
 				visibility={'N/A'}
@@ -212,7 +206,7 @@ type OriginalPosterProps = {
 function PostCreatedBy({ style }: OriginalPosterProps) {
 	const { show, setCtx } = useAppBottomSheet();
 	const { dto } = useAppStatusItem();
-	const STATUS_DTO = PostMiddleware.getContentTarget(dto);
+	const STATUS_DTO = PostInspector.getContentTarget(dto);
 	const { toProfile } = useAppNavigator();
 	const { driver } = useAppApiClient();
 
@@ -221,11 +215,11 @@ function PostCreatedBy({ style }: OriginalPosterProps) {
 	function onAvatarClicked() {
 		if (ActivitypubService.blueskyLike(driver)) {
 			setCtx({
-				did: PostMiddleware.getContentTarget(dto)?.postedBy?.id,
+				did: PostInspector.getContentTarget(dto)?.postedBy?.id,
 			});
 		} else {
 			setCtx({
-				userId: PostMiddleware.getContentTarget(dto)?.postedBy?.id,
+				userId: PostInspector.getContentTarget(dto)?.postedBy?.id,
 			});
 		}
 		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
@@ -245,7 +239,7 @@ function PostCreatedBy({ style }: OriginalPosterProps) {
 	}
 
 	function onProfileClicked() {
-		toProfile(PostMiddleware.getContentTarget(dto)?.postedBy?.id);
+		toProfile(PostInspector.getContentTarget(dto)?.postedBy?.id);
 	}
 
 	return (

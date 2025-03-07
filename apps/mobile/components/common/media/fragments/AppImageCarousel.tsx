@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import {
 	AltTextOverlay,
@@ -7,148 +7,90 @@ import {
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
 } from '../_shared';
-import {
-	Directions,
-	FlingGestureHandlerEventPayload,
-	Gesture,
-	GestureDetector,
-	GestureStateChangeEvent,
-} from 'react-native-gesture-handler';
-import useCircularList from '../state/useCircularList';
+import { GestureDetector } from 'react-native-gesture-handler';
+import useCircularListSwipe from '../../../../hooks/useCircularListSwipe';
 import useGalleryDims from '../../../../hooks/app/useGalleryDims';
 import { appDimensions } from '../../../../styles/dimensions';
+import type { PostMediaAttachmentType } from '@dhaaga/bridge';
+import { MediaService } from '@dhaaga/core';
 
-export type AppImageCarouselItem = {
-	src: string;
-	type: string;
-	width?: number;
-	height?: number;
-	altText?: string;
-	blurhash?: string;
-};
-
-export type AppImageCarouselData = {
-	items: AppImageCarouselItem[];
+type MediaViewProps = {
+	item: PostMediaAttachmentType;
 	calculatedHeight: number;
-	timelineCacheId: string;
-};
-
-const AppImageCarouselItem = memo(function Foo({
-	src,
-	type,
-	blurhash,
-	calculatedHeight,
-	parentWidth,
-}: AppImageCarouselItem & {
-	calculatedHeight: number;
-	leftMarginAdjustment?: number;
 	parentWidth: number;
-}) {
+};
+
+function MediaView({ item, calculatedHeight, parentWidth }: MediaViewProps) {
 	const MediaItem = useMemo(() => {
-		switch (type) {
-			case 'image':
-			case 'image/jpeg':
-			case 'image/png':
-			case 'image/webp': {
-				return (
-					<AppImageComponent
-						url={src}
-						blurhash={blurhash}
-						parentContainerHeight={calculatedHeight}
-						parentContainerWidth={parentWidth}
-					/>
-				);
-			}
-			case 'video':
-			case 'video/mp4':
-			case 'video/webm':
-			case 'video/quicktime': {
-				return (
-					<AppVideoComponent
-						type={'video'}
-						url={src}
-						containerHeight={calculatedHeight}
-						containerWidth={parentWidth}
-					/>
-				);
-			}
-			case 'gifv':
-			case 'image/gif': {
+		if (MediaService.isImage(item.type)) {
+			if (MediaService.isAnimatedImage(item.type)) {
 				return (
 					<AppVideoComponent
 						type={'gifv'}
-						url={src}
+						url={item.url}
 						containerHeight={calculatedHeight}
 						containerWidth={parentWidth}
 						loop
 					/>
 				);
 			}
-			case 'audio':
-			case 'audio/mpeg': {
-				return <AppAudioComponent url={src} />;
-			}
-			default: {
-				console.log('[WARN]: unsupported media type', type);
-				return <View></View>;
-			}
+			return (
+				<AppImageComponent
+					url={item.url}
+					blurhash={item.blurhash}
+					parentContainerHeight={calculatedHeight}
+					parentContainerWidth={parentWidth}
+				/>
+			);
+		} else if (MediaService.isVideo(item.type)) {
+			return (
+				<AppVideoComponent
+					type={'video'}
+					url={item.url}
+					containerHeight={calculatedHeight}
+					containerWidth={parentWidth}
+				/>
+			);
+		} else if (MediaService.isAudio(item.type)) {
+			return <AppAudioComponent url={item.url} />;
+		} else {
+			return <View />;
 		}
-	}, [src, type, calculatedHeight, parentWidth]);
+	}, [item.url, item.type, calculatedHeight, parentWidth]);
 
 	return (
 		<View
 			style={{
 				justifyContent: 'center',
 				alignItems: 'center',
-				height: type === 'audio' ? 48 : calculatedHeight,
+				height: item.type === 'audio' ? 48 : calculatedHeight,
 			}}
 		>
 			{MediaItem}
 		</View>
 	);
-});
+}
 
-const AppImageCarousel = memo(function AppImageCarouselFoo({
-	items,
-	timelineCacheId,
-}: AppImageCarouselData) {
+type AppImageCarouselProps = {
+	items: PostMediaAttachmentType[];
+	calculatedHeight: number;
+	timelineCacheId: string;
+};
+
+function AppImageCarousel({ items, timelineCacheId }: AppImageCarouselProps) {
 	const { ImageWidth, ImageHeight, onLayoutChanged } = useGalleryDims(
 		items.map((o) => ({
-			url: o.src,
+			url: o.url,
 			width: o.width,
 			height: o.height,
 		})),
 	);
 
-	const start =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
-	const end =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
-
-	const { Pointer, onPrev, onNext } = useCircularList(
+	const { Pointer, fling } = useCircularListSwipe(
 		items.length,
 		timelineCacheId,
 	);
 	const item = items[Pointer];
-
-	function yoink() {
-		if (start.current.absoluteX > end.current.absoluteX) {
-			onNext();
-		} else {
-			onPrev();
-		}
-	}
-
-	const fling = Gesture.Fling()
-		.direction(Directions.LEFT | Directions.RIGHT)
-		.onBegin((event) => {
-			start.current = event;
-		})
-		.onEnd((event) => {
-			end.current = event;
-			yoink();
-		})
-		.runOnJS(true);
 
 	return (
 		<GestureDetector gesture={fling}>
@@ -158,18 +100,16 @@ const AppImageCarousel = memo(function AppImageCarouselFoo({
 				}}
 				onLayout={onLayoutChanged}
 			>
-				<AppImageCarouselItem
-					src={item?.src}
-					type={item?.type}
-					blurhash={item?.blurhash}
+				<MediaView
+					item={item}
 					parentWidth={ImageWidth}
 					calculatedHeight={ImageHeight}
 				/>
 				<CarousalIndicatorOverlay index={Pointer} total={items?.length} />
-				<AltTextOverlay altText={item?.altText} />
+				<AltTextOverlay altText={item?.alt} />
 			</View>
 		</GestureDetector>
 	);
-});
+}
 
 export default AppImageCarousel;

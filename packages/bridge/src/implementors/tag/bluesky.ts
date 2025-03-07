@@ -1,9 +1,9 @@
-import { TagInterface } from './_interface.js';
+import { TagTargetInterface } from './_interface.js';
 
 /**
  * In Bluesky, tags are simply string literals
  */
-class BlueskyTag implements TagInterface {
+class BlueskyTag implements TagTargetInterface {
 	ref: string;
 	domain: string;
 

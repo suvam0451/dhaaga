@@ -1,14 +1,14 @@
 import {
-	DhaagaJsTimelineArrayPromise,
+	DriverTimelineGetApiResponse,
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
 import { DefaultTimelinesRouter } from '../default/timelines.js';
-import { CasingUtils } from '../../../utiils/casing.utils.js';
+import { CasingUtil } from '../../../utils/casing.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 export class PleromaTimelinesRouter
 	extends DefaultTimelinesRouter
@@ -28,66 +28,63 @@ export class PleromaTimelinesRouter
 
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		try {
 			const data = await this.client.client.getHomeTimeline(
-				CasingUtils.snakeCaseKeys(query),
+				CasingUtil.snakeCaseKeys(query),
 			);
-			return { data: data.data };
+			return Ok(data.data);
 		} catch (e) {
-			console.log('error is here', e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
 	async public(
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		if (query.local === true) {
 			const data = await this.client.client.getLocalTimeline(
-				CasingUtils.snakeCaseKeys(query),
+				CasingUtil.snakeCaseKeys(query),
 			);
-			return { data: data.data };
+			return Ok(data.data);
 		} else {
 			const data = await this.client.client.getPublicTimeline(
-				CasingUtils.snakeCaseKeys(query),
+				CasingUtil.snakeCaseKeys(query),
 			);
-			return { data: data.data };
+			return Ok(data.data);
 		}
 	}
 
 	async bubble(
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		const { data: _data, error } = await this.direct.get<any[]>(
 			'/api/v1/timelines/bubble',
-			CasingUtils.snakeCaseKeys(query),
+			CasingUtil.snakeCaseKeys(query),
 		);
-		if (error) return errorBuilder(error.code);
-		return { data: CasingUtils.camelCaseKeys(_data) };
+		if (error) return Err(error.code);
+		return Ok(CasingUtil.camelCaseKeys(_data));
 	}
 
 	async list(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		const data = await this.client.client.getListTimeline(
 			q,
-			CasingUtils.snakeCaseKeys(query),
+			CasingUtil.snakeCaseKeys(query),
 		);
-		return { data: data.data };
+		return Ok(data.data);
 	}
 
 	async hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		const data = await this.client.client.getTagTimeline(
 			q,
-			CasingUtils.snakeCaseKeys(query),
+			CasingUtil.snakeCaseKeys(query),
 		);
-		return {
-			data: data.data,
-		};
+		return Ok(data.data);
 	}
 }

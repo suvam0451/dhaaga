@@ -6,7 +6,7 @@ import {
 import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import type { MastoTag } from '../../../types/mastojs.types.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -27,11 +27,11 @@ export class MisskeyTagsRouter implements TagRoute {
 	}
 
 	async follow(id: string): LibraryPromise<MastoTag> {
-		return errorBuilder<MastoTag>(DhaagaErrorCode.OPERATION_UNSUPPORTED);
+		return errorBuilder<MastoTag>(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
 	async unfollow(id: string): LibraryPromise<MastoTag> {
-		return errorBuilder<MastoTag>(DhaagaErrorCode.OPERATION_UNSUPPORTED);
+		return errorBuilder<MastoTag>(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
 	async get(id: string): LibraryPromise<Endpoints['hashtags/show']['res']> {

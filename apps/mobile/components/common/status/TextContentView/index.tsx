@@ -1,8 +1,3 @@
-import {
-	AppParsedTextNodes,
-	NodeContent,
-	WrapperNode,
-} from '../../../../types/parsed-text.types';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import RawTextSegment from '../../../shared/mfm/RawTextSegment';
 import { TEXT_PARSING_VARIANT } from '../../../../types/app.types';
@@ -11,14 +6,15 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import HashtagSegment from '../../../shared/mfm/HashtagSegment';
 import { appDimensions } from '../../../../styles/dimensions';
 import MentionSegment from '../../../shared/mfm/MentionSegment';
-import { TextParserService } from '../../../../services/text-parser.service';
-import LinkProcessor from '../../link/LinkProcessor';
+import { PostMentionObjectType, TextParser } from '@dhaaga/bridge';
+import type { NodeContent, AppParsedTextNodes } from '@dhaaga/bridge';
+import LinkSegment from '../../../shared/mfm/LinkSegment';
 import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
 
 type TextContentNodeProps = {
 	node: NodeContent;
 	variant: TEXT_PARSING_VARIANT;
-	mentions: { url: string; text: string; resolved: boolean }[];
+	mentions: PostMentionObjectType[];
 	emojiMap: Map<string, string>;
 	oneLine?: boolean;
 };
@@ -32,7 +28,12 @@ function TextContentNode({
 }: TextContentNodeProps) {
 	if (!node) return <View />;
 
-	if (!WrapperNode.includes(node.type)) {
+	if (
+		node.type !== 'para' &&
+		node.type !== 'bold' &&
+		node.type !== 'italic' &&
+		node.type !== 'inline'
+	) {
 		switch (node.type) {
 			case 'text': {
 				return (
@@ -106,25 +107,25 @@ function TextContentNode({
 				);
 			}
 			case 'link': {
-				const mention = mentions.find((o) => o.url === node.url);
+				// const mention = mentions.find((o) => o.url === node.url);
+				//
+				// if (mention) {
+				// 	return (
+				// 		<MentionSegment
+				// 			key={node.uuid}
+				// 			value={mention.text}
+				// 			link={mention.url}
+				// 			fontFamily={
+				// 				variant === 'displayName'
+				// 					? APP_FONTS.INTER_600_SEMIBOLD
+				// 					: APP_FONTS.ROBOTO_400
+				// 			}
+				// 			mentions={mentions}
+				// 		/>
+				// 	);
+				// }
 
-				if (mention) {
-					return (
-						<MentionSegment
-							key={node.uuid}
-							value={mention.text}
-							link={mention.url}
-							fontFamily={
-								variant === 'displayName'
-									? APP_FONTS.INTER_600_SEMIBOLD
-									: APP_FONTS.ROBOTO_400
-							}
-							mentions={mentions}
-						/>
-					);
-				}
-
-				const isHashtag = TextParserService.isHashtag(node.url);
+				const isHashtag = TextParser.isHashtag(node.url);
 				if (isHashtag) {
 					return (
 						<HashtagSegment
@@ -140,7 +141,7 @@ function TextContentNode({
 				}
 
 				return (
-					<LinkProcessor
+					<LinkSegment
 						key={node.uuid}
 						url={node.url}
 						displayName={node.text}
@@ -207,7 +208,7 @@ function TextContentNode({
 type TextContentViewProps = {
 	tree: AppParsedTextNodes;
 	variant: TEXT_PARSING_VARIANT;
-	mentions: { url: string; text: string; resolved: boolean }[];
+	mentions: PostMentionObjectType[];
 	emojiMap: Map<string, string>;
 	style?: StyleProp<ViewStyle>;
 	oneLine?: boolean;

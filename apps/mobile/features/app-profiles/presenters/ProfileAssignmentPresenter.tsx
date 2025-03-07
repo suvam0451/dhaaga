@@ -1,4 +1,4 @@
-import { Profile } from '../../../database/_schema';
+import { Profile } from '@dhaaga/db';
 import { FlatList, View } from 'react-native';
 import AssignmentListControlView from '../../_shared/views/AssignmentListControlView';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';

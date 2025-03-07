@@ -1,9 +1,8 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { UserMiddleware } from './middlewares/user.middleware';
-import { PostMiddleware } from './middlewares/post.middleware';
-import { AppNotificationObject } from '../types/app-notification.types';
 import { AppResultPageType } from '../types/app.types';
 import { produce } from 'immer';
+import { UserParser, PostParser } from '@dhaaga/bridge';
+import type { NotificationObjectType } from '@dhaaga/bridge';
 
 export type MastoApiGroupedNotificationType = {
 	groupKey: string;
@@ -31,15 +30,15 @@ class ServiceV1 {
 		driver: KNOWN_SOFTWARE,
 		server: string,
 		category: 'mentions' | 'chat' | 'social' | 'updates',
-	): AppResultPageType<AppNotificationObject> {
+	): AppResultPageType<NotificationObjectType> {
 		return {
 			items: input.data.map((o) => {
 				return {
 					id: o.id,
 					// akkoma uses "mention" type for "status" updates
 					type: category === 'updates' ? 'status' : o.type,
-					post: PostMiddleware.deserialize(o.status, driver, server),
-					user: UserMiddleware.deserialize(o.account, driver, server),
+					post: PostParser.parse(o.status, driver, server),
+					user: UserParser.parse(o.account, driver, server),
 					read: o.pleroma?.isSeen, // also have o.pleroma.isMuted
 					createdAt: new Date(o.createdAt),
 					extraData: {},
@@ -64,12 +63,12 @@ class ServiceV2 {
 		input: any,
 		driver: KNOWN_SOFTWARE,
 		server: string,
-	): AppResultPageType<AppNotificationObject> {
+	): AppResultPageType<NotificationObjectType> {
 		const acctList = input.data.accounts;
 		const postList = input.data.statuses;
 		const seenPost = new Map();
 		let counter = 0;
-		const results: AppNotificationObject[] = [];
+		const results: NotificationObjectType[] = [];
 		for (const group of input.data.notificationGroups) {
 			const _group: MastoApiGroupedNotificationType = group;
 
@@ -81,7 +80,7 @@ class ServiceV2 {
 					user: null,
 					post: null,
 					users: group.sampleAccountIds.map((o: string) => ({
-						item: UserMiddleware.deserialize<unknown>(
+						item: UserParser.parse<unknown>(
 							acctList.find((x: any) => x.id === o),
 							driver,
 							server,
@@ -107,13 +106,13 @@ class ServiceV2 {
 					 */
 					type: group.type,
 					user: null,
-					post: PostMiddleware.deserialize<unknown>(
+					post: PostParser.parse<unknown>(
 						postList.find((x) => x.id === group.statusId),
 						driver,
 						server,
 					),
 					users: group.sampleAccountIds.map((o: string) => ({
-						item: UserMiddleware.deserialize<unknown>(
+						item: UserParser.parse<unknown>(
 							acctList.find((x: any) => x.id === o),
 							driver,
 							server,
@@ -130,14 +129,14 @@ class ServiceV2 {
 				const idx = seenPost.get(group.statusId);
 				for (const id of group.sampleAccountIds) {
 					results[idx] = produce(results[idx], (draft) => {
-						const match = draft.users.find((o) => o.item.id === id);
+						const match = draft.users?.find((o) => o.item.id === id);
 						if (match) {
 							if (!match.types.includes(group.type)) {
 								match.types.push(group.type);
 							}
 						} else {
-							draft.users.push({
-								item: UserMiddleware.deserialize<unknown>(
+							draft.users?.push({
+								item: UserParser.parse<unknown>(
 									acctList.find((x: any) => x.id === id),
 									driver,
 									server,
@@ -164,12 +163,12 @@ class ServiceV2 {
 
 		// const _retval = input.data.notificationGroups.map(
 		// 	(o: MastoApiGroupedNotificationType) => {
-		// 		const _acct = UserMiddleware.deserialize<unknown>(
+		// 		const _acct = UserParser.parse<unknown>(
 		// 			acctList.find((x) => x.id === o.sampleAccountIds[0]),
 		// 			driver,
 		// 			server,
 		// 		);
-		// 		const _post = PostMiddleware.deserialize<unknown>(
+		// 		const _post = PostParser.parse<unknown>(
 		// 			postList.find((x) => x.id === o.statusId),
 		// 			driver,
 		// 			server,

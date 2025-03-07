@@ -1,14 +1,16 @@
 import { useEffect, useReducer, useState } from 'react';
-import { Profile } from '../database/_schema';
+import {
+	Profile,
+	DataSource,
+	AccountService,
+	ProfileService,
+} from '@dhaaga/db';
 import { produce } from 'immer';
-import { DataSource } from '../database/dataSource';
-import { AccountService } from '../database/entities/account';
 import {
 	useAppDb,
 	useAppPublishers,
 } from '../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../services/publishers/app.publisher';
-import { ProfileService } from '../database/entities/profile';
 
 enum REDUCER_ACTION {
 	INIT = 'init',

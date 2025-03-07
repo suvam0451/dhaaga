@@ -24,7 +24,7 @@ import { LinkingUtils } from '../../../../utils/linking.utils';
 import useAtprotoLogin from '../../../../features/onboarding/interactors/useAtprotoLogin';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
-import { AccountService } from '../../../../database/entities/account';
+import { AccountService } from '@dhaaga/db';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 

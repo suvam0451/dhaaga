@@ -1,12 +1,12 @@
 import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
-import { BlueskyRestClient } from '@dhaaga/bridge';
+import { AtprotoApiAdapter } from '@dhaaga/bridge';
 import { AtprotoFeedService } from '../../../../../services/atproto.service';
 import { useQuery } from '@tanstack/react-query';
-import { FeedMiddleware } from '../../../../../services/middlewares/feed-middleware';
+import { FeedParser } from '@dhaaga/bridge';
 
 function useApiGetFeedDetails(uri: string) {
 	const { client } = useAppApiClient();
-	const _client = client as BlueskyRestClient;
+	const _client = client as AtprotoApiAdapter;
 	const { driver, server } = useAppApiClient();
 
 	const queryResult = useQuery({
@@ -20,17 +20,13 @@ function useApiGetFeedDetails(uri: string) {
 				getPrefPromise,
 			]);
 			const feedPrefs = AtprotoFeedService.extractFeedPreferences(
-				prefResult.data,
+				prefResult.unwrap(),
 			);
 			const _pref = feedPrefs?.find(
 				(o) => o.type === 'feed' && o.value === uri,
 			);
 			return {
-				feed: FeedMiddleware.deserialize<unknown>(
-					feedResult.data.view,
-					driver,
-					server,
-				),
+				feed: FeedParser.parse<unknown>(feedResult.data.view, driver, server),
 				pref: feedPrefs?.find((o) => o.type === 'feed' && o.value === uri),
 				subscribed: !!_pref,
 				pinned: _pref?.pinned || false,

@@ -1,11 +1,10 @@
-import { DataSource } from '../../database/dataSource';
+import { DataSource, Account } from '@dhaaga/db';
 import { BaseStorageManager } from './_shared';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
-import { Account } from '../../database/_schema';
 import ActivityPubReactionsService, {
-	ActivityPubReactionStateDtoType,
+	ActivityPubReactionStateType,
 } from '../approto/activitypub-reactions.service';
-import { AppUserObject } from '../../types/app-user.types';
+import { UserObjectType } from '@dhaaga/bridge';
 
 enum KEY {
 	APP_ACCOUNT_USER_OBJECT_CACHE = 'app/_cache/account/:uuid',
@@ -29,11 +28,11 @@ class Storage extends BaseStorageManager {
 	getProfile(acctUuid: string) {
 		return this.getJson<{
 			updatedAt: string;
-			value: AppUserObject;
+			value: UserObjectType;
 		}>(KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(':uuid', acctUuid));
 	}
 
-	setProfile(acctUuid: string, data: AppUserObject) {
+	setProfile(acctUuid: string, data: UserObjectType) {
 		this.setJsonWithExpiry(
 			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(':uuid', acctUuid),
 			data,
@@ -102,7 +101,7 @@ class AccountSessionManager {
 	 * by the app dto converters
 	 */
 	resolveReactions(
-		reactions: ActivityPubReactionStateDtoType,
+		reactions: ActivityPubReactionStateType,
 		preCalculated: {
 			url?: string;
 			width?: number;

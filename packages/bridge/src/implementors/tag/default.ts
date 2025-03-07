@@ -1,6 +1,6 @@
-import { TagInterface } from './_interface.js';
+import { TagTargetInterface } from './_interface.js';
 
-export class DefaultTag implements TagInterface {
+export class DefaultTag implements TagTargetInterface {
 	isFollowing(): boolean {
 		throw new Error('Method not implemented.');
 	}

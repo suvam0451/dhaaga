@@ -1,4 +1,4 @@
-import { AppMediaObject } from '../../types/app-post.types';
+import type { PostMediaAttachmentType } from '@dhaaga/bridge';
 import { useEffect, useRef, useState } from 'react';
 import MediaService from '../../services/media.service';
 import MediaUtils from '../../utils/media.utils';
@@ -36,7 +36,7 @@ export function useImageAutoHeight(
  * for a fixed height container
  */
 export function useImageAutoWidth(
-	item: AppMediaObject,
+	item: PostMediaAttachmentType,
 	H: number,
 	maxW: number,
 ) {

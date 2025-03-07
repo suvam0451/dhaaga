@@ -5,10 +5,7 @@ import {
 import type { mastodon } from 'masto';
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -49,7 +46,7 @@ export class MisskeyInstanceRouter implements InstanceRoute {
 	): Promise<LibraryResponse<mastodon.v1.Translation>> {
 		return {
 			error: {
-				code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
+				code: ApiErrorCode.FEATURE_UNSUPPORTED,
 			},
 		};
 	}

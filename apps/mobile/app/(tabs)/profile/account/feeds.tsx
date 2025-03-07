@@ -6,7 +6,7 @@ import AppTopNavbar, {
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { AppText } from '../../../../components/lib/Text';
 import { appDimensions } from '../../../../styles/dimensions';
-import { AppFeedObject } from '../../../../types/app-feed.types';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { AppIcon } from '../../../../components/lib/Icon';
 import { AppDivider } from '../../../../components/lib/Divider';
 import { Image, useImage } from 'expo-image';
@@ -14,7 +14,7 @@ import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
 
 type MyFeedItemProps = {
-	item: AppFeedObject;
+	item: FeedObjectType;
 };
 
 function MyFeedItem({ item }: MyFeedItemProps) {
@@ -69,7 +69,6 @@ function Page() {
 	const { data, error } = useApiGetMyFeeds();
 	const { translateY } = useScrollMoreOnPageEnd();
 
-	console.log('items', data.items);
 	if (error) {
 		return (
 			<AppTopNavbar

@@ -6,16 +6,15 @@ import { LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import type {
-	MastoScheduledStatus,
-	MastoStatus,
-} from '../../../types/mastojs.types.js';
+import type { MastoScheduledStatus } from '../../../types/mastojs.types.js';
 import type { MissContext, MissNote } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import {
+	DriverBookmarkStateResult,
+	DriverLikeStateResult,
+} from '../../../types/driver.types.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 type RenoteCreateDTO = {
 	localOnly: boolean;
@@ -79,7 +78,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -123,7 +122,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -144,7 +143,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		} catch (e: any) {
 			if (e.code) return errorBuilder(e);
 			console.log('[ERROR]: failed to add reaction', reactionId, e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -165,7 +164,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		} catch (e: any) {
 			if (e.code) return errorBuilder(e);
 			console.log('[ERROR]: failed to remove reaction', reactionId, e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -180,51 +179,39 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
-	async bookmark(
-		id: string,
-	): LibraryPromise<Endpoints['notes/favorites/create']['res']> {
+	async bookmark(id: string): DriverBookmarkStateResult {
 		try {
 			await this.client.client.request('notes/favorites/create', {
 				noteId: id,
 			});
-			return {
-				data: {
-					success: true,
-					isBookmarked: true,
-				},
-			};
+			return Ok({ state: true });
 		} catch (e: any) {
 			if (e.code) {
-				return errorBuilder(e);
+				// ERR_BAD_REQUEST, ERR_BAD_RESPONSE
+				if (e.code === 'ALREADY_FAVORITED') return Ok({ state: true });
+				return Err(e.code);
 			}
-			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
-	async unBookmark(
-		id: string,
-	): LibraryPromise<Endpoints['notes/favorites/delete']['res']> {
+	async unBookmark(id: string): DriverBookmarkStateResult {
 		try {
 			await this.client.client.request('notes/favorites/delete', {
 				noteId: id,
 			});
-			return {
-				data: {
-					success: true,
-					isBookmarked: false,
-				},
-			};
+			return Ok({ state: false });
 		} catch (e: any) {
 			if (e.code) {
-				return errorBuilder(e);
+				// ERR_BAD_REQUEST, ERR_BAD_RESPONSE
+				if (e.code === 'NOT_FAVORITED') return Ok({ state: false });
+				return Err(e.code);
 			}
-			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -239,7 +226,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -256,7 +243,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			{ noteId: id },
 			{},
 		);
-		if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+		if (error) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		return { data: { success: true, isFavourited: true } };
 	}
 
@@ -264,20 +251,18 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	 * a.k.a. like -- applicable for Sharkey only
 	 * @param id
 	 */
-	async like(
-		id: string,
-	): LibraryPromise<{ success: boolean; hasReacted: true }> {
+	async like(id: string): DriverLikeStateResult {
 		const { error } = await this.direct.post(
 			'/api/notes/like',
 			{ noteId: id },
 			{},
 		);
-		if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
-		return { data: { success: true, hasReacted: true } };
+		if (error) return Err(ApiErrorCode.REMOTE_SERVER_ERROR);
+		return Ok({ state: true });
 	}
 
-	async removeLike(id: string): LibraryPromise<MastoStatus> {
-		return errorBuilder<MastoStatus>(DhaagaErrorCode.UNKNOWN_ERROR);
+	async removeLike(id: string): DriverLikeStateResult {
+		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
 	/**
@@ -303,7 +288,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -321,7 +306,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				return errorBuilder(e);
 			}
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 		}
 	}
 
@@ -353,7 +338,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			});
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

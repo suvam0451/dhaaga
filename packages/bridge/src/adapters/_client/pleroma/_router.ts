@@ -1,4 +1,5 @@
-import ActivityPubClient, { RestClientCreateDTO } from '../_interface.js';
+import { ApiTargetInterface } from '../_router/routes/_index.js';
+import { RestClientCreateDTO } from '../_interface.js';
 import { PleromaInstanceRouter } from './instance.js';
 import { PleromaAccountsRouter } from './accounts.js';
 import { PleromaStatusesRouter } from './statuses.js';
@@ -11,8 +12,14 @@ import { PleromaMeRouter } from './me.js';
 import { PleromaMediaRoute } from './media.js';
 import { PleromaListsRoute } from './lists.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostMutatorRoute } from '../_router/routes/post.js';
+import { UserRoute } from '../_router/routes/user.js';
 
-class PleromaRestClient implements ActivityPubClient {
+class Adapter implements ApiTargetInterface {
+	driver: KNOWN_SOFTWARE | string;
+	server: string | null;
+
 	fetch: FetchWrapper;
 	instances: PleromaInstanceRouter;
 	accounts: PleromaAccountsRouter;
@@ -25,8 +32,16 @@ class PleromaRestClient implements ActivityPubClient {
 	me: PleromaMeRouter;
 	media: PleromaMediaRoute;
 	lists: PleromaListsRoute;
+	post: PostMutatorRoute;
+	user: UserRoute;
 
-	constructor(dto: RestClientCreateDTO) {
+	constructor(
+		driver: KNOWN_SOFTWARE | string,
+		server: string | null,
+		dto: RestClientCreateDTO,
+	) {
+		this.driver = driver;
+		this.server = server;
 		this.fetch = FetchWrapper.create(dto.instance, dto.token);
 		this.instances = new PleromaInstanceRouter(this.fetch);
 		this.accounts = new PleromaAccountsRouter(this.fetch);
@@ -39,7 +54,9 @@ class PleromaRestClient implements ActivityPubClient {
 		this.me = new PleromaMeRouter(this.fetch);
 		this.media = new PleromaMediaRoute(this.fetch);
 		this.lists = new PleromaListsRoute(this.fetch);
+		this.post = new PostMutatorRoute(this);
+		this.user = new UserRoute(this);
 	}
 }
 
-export default PleromaRestClient;
+export { Adapter as PleromaApiAdapter };

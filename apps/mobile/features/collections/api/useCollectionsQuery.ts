@@ -3,10 +3,13 @@ import {
 	useAppAcct,
 	useAppDb,
 } from '../../../hooks/utility/global-state-extractors';
-import { AccountCollection, AccountSavedPost } from '../../../database/_schema';
-import { AccountCollectionService } from '../../../database/entities/account-collection';
-import { CollectionSavedPostService } from '../../../database/entities/collection-saved-post';
-import { AccountSavedPostService } from '../../../database/entities/account-saved-post';
+import {
+	AccountCollection,
+	AccountSavedPost,
+	AccountCollectionService,
+	CollectionSavedPostService,
+	AccountSavedPostService,
+} from '@dhaaga/db';
 import useCollections from './useCollections';
 import { useState } from 'react';
 

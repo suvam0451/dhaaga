@@ -19,11 +19,9 @@ import type {
 	MastoRelationship,
 } from '../../../types/mastojs.types.js';
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import { Ok } from '../../../utils/index.js';
 
 export class MisskeyAccountsRouter
 	extends BaseAccountsRouter
@@ -46,7 +44,7 @@ export class MisskeyAccountsRouter
 			...query,
 			withFiles: !!query.onlyMedia ? query.onlyMedia : undefined,
 		});
-		return successWithData(data);
+		return Ok(data as any);
 	}
 
 	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {
@@ -54,8 +52,17 @@ export class MisskeyAccountsRouter
 	}
 
 	async get(id: string): LibraryPromise<MissUserDetailed> {
-		const data = await this.client.client.request('users/show', { userId: id });
-		return { data };
+		try {
+			const data = await this.client.client.request<
+				any,
+				Endpoints['users/show']['req']
+			>('users/show', {
+				userId: id,
+			});
+			return { data };
+		} catch (e) {
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	async getMany(ids: string[]): LibraryPromise<MissUserDetailed[]> {
@@ -68,7 +75,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -93,7 +100,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -109,7 +116,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -121,7 +128,7 @@ export class MisskeyAccountsRouter
 			return { data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -135,7 +142,7 @@ export class MisskeyAccountsRouter
 			return { data };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -161,7 +168,7 @@ export class MisskeyAccountsRouter
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -175,7 +182,7 @@ export class MisskeyAccountsRouter
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -190,7 +197,7 @@ export class MisskeyAccountsRouter
 			});
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -202,7 +209,7 @@ export class MisskeyAccountsRouter
 			return { data: { renoteMuted: true } };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -214,12 +221,12 @@ export class MisskeyAccountsRouter
 			return { data: { renoteMuted: false } };
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
 	async likes(query: GetPostsQueryDTO): Promise<any> {
-		return errorBuilder(DhaagaErrorCode.FEATURE_UNSUPPORTED);
+		return errorBuilder(ApiErrorCode.FEATURE_UNSUPPORTED);
 	}
 
 	/**
@@ -269,9 +276,9 @@ export class MisskeyAccountsRouter
 			};
 		} catch (e: any) {
 			if (e.code) {
-				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
+				return errorBuilder(ApiErrorCode.UNAUTHORIZED);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -299,7 +306,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -320,7 +327,7 @@ export class MisskeyAccountsRouter
 			if (e.code) {
 				return errorBuilder(e.code);
 			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

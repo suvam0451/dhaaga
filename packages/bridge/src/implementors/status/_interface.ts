@@ -1,6 +1,5 @@
-import { MediaAttachmentInterface } from '../media-attachment/interface.js';
+import { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
 import { Note } from 'misskey-js/autogen/models.js';
-import { UserType } from '../profile/_interface.js';
 import type { mastodon } from 'masto';
 import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
@@ -27,7 +26,7 @@ export type AppBlueskyAuthor = {
 	viewer: { muted: boolean; blockedBy: boolean };
 };
 
-export interface StatusInterface {
+interface PostTargetInterface {
 	getRaw(): Status | PostView;
 
 	getId(): string;
@@ -48,7 +47,7 @@ export interface StatusInterface {
 
 	getAccountUrl(mySubdomain?: string): string | null | undefined;
 
-	getRepostedStatus(): StatusInterface | null | undefined;
+	getRepostedStatus(): PostTargetInterface | null | undefined;
 
 	getRepostedStatusRaw(): Status;
 
@@ -71,17 +70,17 @@ export interface StatusInterface {
 	 * --- Post Hierarchy | END ---
 	 */
 
-	getQuote(): StatusInterface | null | undefined;
+	getQuote(): PostTargetInterface | null | undefined;
 
 	getContent(): string | null | undefined;
 
 	getFacets(): any[];
 
-	getUser(): UserType | ProfileViewBasic | null;
+	getUser(): any | ProfileViewBasic | null;
 
 	isReposted(): boolean;
 
-	getMediaAttachments(): MediaAttachmentInterface[];
+	getMediaAttachments(): MediaAttachmentTargetInterface[];
 
 	getMentions(): DhaagaJsMentionObject[];
 
@@ -139,3 +138,5 @@ export interface StatusInterface {
 		url: string;
 	}[];
 }
+
+export type { PostTargetInterface };

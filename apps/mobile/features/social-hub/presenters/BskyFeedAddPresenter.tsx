@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { useApiSearchFeeds } from '../../../hooks/api/useApiSearch';
 import { useEffect, useRef, useState } from 'react';
-import { ProfileService } from '../../../database/entities/profile';
+import { ProfileService } from '@dhaaga/db';
 import FeedSearchResultPresenter from './FeedSearchResultPresenter';
 import { AppIcon } from '../../../components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';

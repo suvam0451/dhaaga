@@ -7,11 +7,11 @@ import {
 } from '../../../../screens/accounts/fragments/AccountListingFragment';
 import SoftwareHeader from '../../../../screens/accounts/fragments/SoftwareHeader';
 import { router } from 'expo-router';
-import { Account } from '../../../../database/_schema';
 import {
+	Account,
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
-} from '../../../../database/entities/account-metadata';
+} from '@dhaaga/db';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppListAccounts } from '../../../../hooks/db/useAppListAccounts';

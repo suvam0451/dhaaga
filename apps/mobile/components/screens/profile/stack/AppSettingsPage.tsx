@@ -1,11 +1,8 @@
-import { ScrollView, StyleSheet, View, Text, Pressable } from 'react-native';
-import { Link, router } from 'expo-router';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { ScrollView, StyleSheet, View, Pressable } from 'react-native';
+import { router } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Ionicons } from '@expo/vector-icons';
-import * as React from 'react';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
@@ -94,95 +91,14 @@ function Footer() {
 			</AppText.SemiBold>
 			<AppText.SemiBold
 				style={{
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					color: theme.primary.a0,
 					textAlign: 'center',
 					fontSize: 16,
 				}}
 			>
-				v0.16.2
+				v0.17.0
 			</AppText.SemiBold>
 		</View>
-	);
-}
-
-type AppFeatureSmallGridItemProps = {
-	Icon: JSX.Element;
-	disabled?: boolean;
-	alignment: 'left' | 'right';
-	iconSize: number;
-};
-
-export function AppFeatureSmallGridItem({
-	Icon,
-	disabled,
-	alignment,
-	iconSize,
-}: AppFeatureSmallGridItemProps) {
-	return (
-		<View
-			style={{
-				flex: 1,
-				backgroundColor: '#1e1e1e',
-				padding: 8,
-				borderRadius: 8,
-				marginLeft: alignment === 'right' ? 4 : 0,
-				marginRight: alignment === 'left' ? 4 : 0,
-				alignItems: 'center',
-				flexDirection: 'row',
-				display: 'flex',
-				justifyContent: 'center',
-				opacity: disabled ? 0.5 : 1,
-			}}
-		>
-			<View style={{ width: iconSize, height: iconSize }}>{Icon}</View>
-		</View>
-	);
-}
-
-type AppFeatureLargeGridItemProps = {
-	label: string;
-	link: string;
-	Icon: JSX.Element;
-	disabled?: boolean;
-	alignment: 'left' | 'right';
-};
-
-export function AppFeatureLargeGridItem({
-	label,
-	link,
-	Icon,
-	disabled,
-	alignment,
-}: AppFeatureLargeGridItemProps) {
-	return (
-		<Link disabled={disabled} href={link}>
-			<View
-				style={{
-					backgroundColor: '#1e1e1e',
-					padding: 8,
-					borderRadius: 8,
-					width: '100%',
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginLeft: alignment === 'right' ? 8 : 0,
-					marginRight: alignment === 'left' ? 8 : 0,
-					height: 36 + 8 * 2,
-				}}
-			>
-				<View style={{ width: 24 }}>{Icon}</View>
-				<Text
-					style={{
-						fontFamily: 'Montserrat-Bold',
-						marginLeft: 8,
-						color: APP_FONT.MONTSERRAT_BODY,
-					}}
-				>
-					{label}
-				</Text>
-			</View>
-		</Link>
 	);
 }
 
@@ -326,27 +242,24 @@ function AppSettingsPage() {
 	return (
 		<ScrollView
 			style={{
-				minHeight: '100%',
 				paddingBottom: 16,
 				backgroundColor: theme.palette.bg,
 			}}
 		>
-			<View style={{ minHeight: '100%' }}>
-				<AppTabLandingNavbar
-					type={APP_LANDING_PAGE_TYPE.APP_SETTINGS}
-					menuItems={[
-						{
-							iconId: 'user-guide',
-							onPress: () => {
-								router.navigate(APP_ROUTING_ENUM.GUIDE_SETTINGS_TAB);
-							},
+			<AppTabLandingNavbar
+				type={APP_LANDING_PAGE_TYPE.APP_SETTINGS}
+				menuItems={[
+					{
+						iconId: 'user-guide',
+						onPress: () => {
+							router.navigate(APP_ROUTING_ENUM.GUIDE_SETTINGS_TAB);
 						},
-					]}
-				/>
-				<Header />
-				<SettingCategoryList />
-				<Footer />
-			</View>
+					},
+				]}
+			/>
+			<Header />
+			<SettingCategoryList />
+			<Footer />
 		</ScrollView>
 	);
 }
@@ -375,12 +288,6 @@ const styles = StyleSheet.create({
 	settingCategoryItemTextarea: {
 		marginLeft: 12,
 		flex: 1,
-	},
-	appFeaturesGridRow: {
-		marginHorizontal: 8,
-		marginBottom: 8,
-		display: 'flex',
-		flexDirection: 'row',
 	},
 	metadataText: {
 		fontSize: 18,

@@ -14,7 +14,7 @@ import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import { MastoStatus } from '../../../types/mastojs.types.js';
 import { MegaStatus } from '../../../types/megalodon.types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 
@@ -42,10 +42,10 @@ class BlueskySearchRouter implements SearchRoute {
 				cursor: q.maxId === null ? undefined : q.maxId,
 			});
 
-			if (!data.success) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			if (!data.success) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

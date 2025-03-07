@@ -1,14 +1,12 @@
-import { AppNotificationGroupedUserItem } from '../../../types/app-notification.types';
-import { FlatList, Pressable } from 'react-native';
-import {
-	ICON_SIZE,
-	styles,
-} from '../../../components/screens/notifications/landing/segments/_common';
+import { NotificationUserGroupType } from '@dhaaga/bridge';
+import { FlatList, Pressable, View } from 'react-native';
+import { ICON_SIZE, styles } from '../components/_common';
 import { Image } from 'expo-image';
+import { AppIcon } from '../../../components/lib/Icon';
 
 type Props = {
-	items: AppNotificationGroupedUserItem[];
-	Header: JSX.Element;
+	items: NotificationUserGroupType[];
+	Header?: JSX.Element;
 };
 const _ICON_SIZE = ICON_SIZE + 8;
 
@@ -28,6 +26,8 @@ function GroupedUsersItemView({ items, Header }: Props) {
 							borderWidth: 1,
 							borderColor: 'grey',
 							borderRadius: _ICON_SIZE / 2,
+							overflow: 'visible',
+							marginRight: 6,
 						},
 						{ marginHorizontal: 2 },
 					]}
@@ -44,10 +44,26 @@ function GroupedUsersItemView({ items, Header }: Props) {
 							borderRadius: _ICON_SIZE / 2,
 						}}
 					/>
+					<View
+						style={[
+							styles.groupIndicatorIcon,
+							{
+								backgroundColor: '#34aed2',
+								padding: 2,
+								position: 'absolute',
+								right: -6,
+								bottom: -6,
+								overflow: 'visible',
+							},
+						]}
+					>
+						<AppIcon id="add" size={16} color="white" />
+					</View>
 				</Pressable>
 			)}
 			style={{ flex: 1 }}
 			ListHeaderComponent={Header}
+			contentContainerStyle={{ paddingBottom: 10 }}
 		/>
 	);
 }

@@ -1,8 +1,8 @@
-import { ActivityPubClient, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { ApiTargetInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ActivityPubAdapterService from './activitypub-adapter.service';
 import { Dispatch, SetStateAction } from 'react';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { Account } from '../database/_schema';
+import { Account } from '@dhaaga/db';
 
 class BookmarkBrowserService {
 	/**
@@ -16,7 +16,7 @@ class BookmarkBrowserService {
 	 */
 	static async updateBookmarkCache(
 		primaryAcct: Account,
-		client: ActivityPubClient,
+		client: ApiTargetInterface,
 		db: SQLiteDatabase,
 		callback?: Dispatch<SetStateAction<number>>,
 	) {

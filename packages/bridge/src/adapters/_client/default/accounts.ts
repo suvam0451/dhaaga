@@ -27,15 +27,15 @@ import {
 	MegaStatus,
 } from '../../../types/megalodon.types.js';
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { Err } from '../../../utils/index.js';
+import { DriverWebfingerType } from '../../../types/query.types.js';
 
 export abstract class BaseAccountsRouter implements AccountRoute {
 	async lookup(
-		webfingerUrl: string,
-	): LibraryPromise<MastoAccount | MegaAccount> {
+		webfinger: DriverWebfingerType,
+	): ApiAsyncResult<MastoAccount | MegaAccount> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -108,7 +108,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	): Promise<LibraryResponse<MastoAccount | MissUserDetailed | MegaAccount>> {
 		return {
 			error: {
-				code: DhaagaErrorCode.FEATURE_UNSUPPORTED,
+				code: ApiErrorCode.FEATURE_UNSUPPORTED,
 			},
 		} as LibraryResponse<MastoAccount | UserDetailed>;
 	}
@@ -122,8 +122,8 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	async statuses(
 		id: string,
 		query: AccountRouteStatusQueryDto,
-	): Promise<LibraryResponse<MastoStatus[]>> {
-		return notImplementedErrorBuilder<MastoStatus[]>();
+	): ApiAsyncResult<MastoStatus[]> {
+		return Err(ApiErrorCode.INCOMPATIBLE_DRIVER);
 	}
 
 	async relationships(

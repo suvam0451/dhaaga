@@ -5,12 +5,12 @@ import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
 	ProfilePinnedUser,
-} from '../../database/_schema';
-import { ProfilePinnedTimelineService } from '../../database/entities/profile-pinned-timeline';
-import { DataSource } from '../../database/dataSource';
-import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
-import { ProfilePinnedTagService } from '../../database/entities/profile-pinned-tag';
-import { ProfileService } from '../../database/entities/profile';
+	ProfilePinnedTimelineService,
+	DataSource,
+	ProfilePinnedUserService,
+	ProfilePinnedTagService,
+	ProfileService,
+} from '@dhaaga/db';
 
 type SocialHubProfile = {
 	acct: Account;

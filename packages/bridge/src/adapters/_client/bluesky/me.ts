@@ -7,7 +7,9 @@ import {
 } from '@atproto/api';
 import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
-import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { Err, Ok } from '../../../utils/index.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 
 export class BlueskyMeRouter implements MeRoute {
 	dto: AppAtpSessionData;
@@ -24,12 +26,13 @@ export class BlueskyMeRouter implements MeRoute {
 		return { data };
 	}
 
-	async getPreferences(): LibraryPromise<AppBskyActorGetPreferences.OutputSchema> {
+	async getPreferences(): ApiAsyncResult<AppBskyActorGetPreferences.OutputSchema> {
 		try {
 			const data = await this.xrpc.app.bsky.actor.getPreferences();
-			return { data: data.data };
+			if (!data.success) return Err(ApiErrorCode.REMOTE_SERVER_ERROR);
+			return Ok(data.data);
 		} catch (e) {
-			return errorBuilder(e);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

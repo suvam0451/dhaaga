@@ -32,7 +32,7 @@ const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 export function ProfileContextWrapped() {
 	const { theme } = useAppTheme();
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { data: acct, error } = useGetProfile({ userId: id, did: id });
+	const { data: acct, error } = useGetProfile({ use: 'userId', userId: id });
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
 	const fields = acct?.meta?.fields;

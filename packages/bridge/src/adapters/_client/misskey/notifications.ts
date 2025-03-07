@@ -4,12 +4,12 @@ import {
 } from '../_router/routes/notifications.js';
 import type { Endpoints } from 'misskey-js/autogen/endpoint.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { KNOWN_SOFTWARE } from '../_router/routes/instance.js';
 import { MastoNotification } from '../../../types/mastojs.types.js';
 import { LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 
 type MISSKEY_NOTIFICATION_TYPE =
 	| 'note'
@@ -31,7 +31,8 @@ type MISSKEY_NOTIFICATION_TYPE =
 	| 'reaction:grouped'
 	| 'renote:grouped'
 	| 'pollVote'
-	| 'groupInvited';
+	| 'groupInvited'
+	| 'note:grouped'; // cherrypick
 
 export class MisskeyNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;
@@ -114,7 +115,8 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 				'reaction:grouped',
 				'renote',
 				'renote:grouped',
-			] as MISSKEY_NOTIFICATION_TYPE[],
+			] as MISSKEY_NOTIFICATION_TYPE[] as any,
+			excludeTypes: ['note:grouped'] as any,
 		});
 		return { data: { data: data as any } };
 	}
@@ -126,7 +128,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		>('i/notifications-grouped', {
 			limit: query.limit,
 			untilId: query.maxId ?? undefined,
-			includeTypes: ['note'] as MISSKEY_NOTIFICATION_TYPE[],
+			includeTypes: ['note'] as MISSKEY_NOTIFICATION_TYPE[] as any,
 		});
 		return { data: { data: data as any } };
 	}

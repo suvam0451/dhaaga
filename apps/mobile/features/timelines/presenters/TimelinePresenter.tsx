@@ -1,10 +1,10 @@
 import TimelinePostListView from '../view/TimelinePostListView';
-import {
-	useTimelineDispatch,
-	useTimelineState,
-} from '../contexts/PostTimelineCtx';
 import { useEffect, useRef, useState } from 'react';
-import { AppTimelineReducerActionType } from '../../../states/interactors/post-timeline.reducer';
+import {
+	PostTimelineStateAction,
+	usePostTimelineState,
+	usePostTimelineDispatch,
+} from '@dhaaga/core';
 import { FetchStatus, RefetchOptions } from '@tanstack/react-query';
 
 type TimelinePresenterProps = {
@@ -14,13 +14,13 @@ type TimelinePresenterProps = {
 
 function TimelinePresenter({ refetch, fetchStatus }: TimelinePresenterProps) {
 	const [Refreshing, setRefreshing] = useState(false);
-	const State = useTimelineState();
-	const dispatch = useTimelineDispatch();
+	const State = usePostTimelineState();
+	const dispatch = usePostTimelineDispatch();
 
 	function onRefresh() {
 		setRefreshing(true);
 		dispatch({
-			type: AppTimelineReducerActionType.RESET,
+			type: PostTimelineStateAction.RESET,
 		});
 		refetch().finally(() => {
 			setRefreshing(false);
@@ -30,7 +30,7 @@ function TimelinePresenter({ refetch, fetchStatus }: TimelinePresenterProps) {
 
 	function loadMore() {
 		dispatch({
-			type: AppTimelineReducerActionType.REQUEST_LOAD_MORE,
+			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 

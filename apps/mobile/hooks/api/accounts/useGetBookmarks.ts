@@ -1,7 +1,7 @@
 import { BookmarkGetQueryDTO } from '@dhaaga/bridge/dist/adapters/_client/_router/routes/bookmarks';
 import { useQuery } from '@tanstack/react-query';
 import ActivityPubAdapterService from '../../../services/activitypub-adapter.service';
-import { StatusInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { PostTargetInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -16,7 +16,7 @@ function useGetBookmarks(query: BookmarkGetQueryDTO) {
 	);
 
 	const [Data, setData] = useState<{
-		data: StatusInterface[];
+		data: PostTargetInterface[];
 		minId?: string;
 		maxId?: string;
 	}>({
@@ -60,7 +60,7 @@ function useGetBookmarks(query: BookmarkGetQueryDTO) {
 
 	// Queries
 	const { status, data, refetch, fetchStatus } = useQuery<{
-		data: StatusInterface[];
+		data: PostTargetInterface[];
 		minId?: string;
 		maxId?: string;
 	}>({

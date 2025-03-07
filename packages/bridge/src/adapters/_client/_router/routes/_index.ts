@@ -2,10 +2,7 @@ import { InstanceRoute } from './instance.js';
 import { AccountRoute } from './accounts.js';
 import { StatusesRoute } from './statuses.js';
 import { TrendsRoute } from './trends.js';
-import {
-	DhaagaJsNotificationType,
-	NotificationsRoute,
-} from './notifications.js';
+import { NotificationsRoute } from './notifications.js';
 import { DhaagaJsTimelineQueryOptions, TimelinesRoute } from './timelines.js';
 import { TagRoute } from './tags.js';
 import {
@@ -18,8 +15,15 @@ import { MediaRoute } from './media.js';
 import { ListsRoute } from './lists.js';
 import { ParserRoute } from './parser.js';
 import { ProfileRoute } from './profile.js';
+// mutators
+import { PostMutatorRoute } from './post.js';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { UserRoute } from './user.js';
 
-export interface RouterInterface {
+interface ApiTargetInterface {
+	driver: KNOWN_SOFTWARE | string;
+	server: string | null;
+
 	instances: InstanceRoute;
 	accounts: AccountRoute;
 	statuses: StatusesRoute;
@@ -31,6 +35,9 @@ export interface RouterInterface {
 	me: MeRoute;
 	media: MediaRoute;
 	lists: ListsRoute;
+	// mutators
+	post: PostMutatorRoute;
+	user: UserRoute;
 }
 
 export type {
@@ -52,9 +59,9 @@ export type {
 /**
  * export typings and DTOs
  */
-export {
+export type {
+	ApiTargetInterface,
 	DhaagaJsTimelineQueryOptions,
-	DhaagaJsNotificationType, // search
 	DhaagaJsUserSearchDTO,
 	DhaagaJsPostSearchDTO,
 };

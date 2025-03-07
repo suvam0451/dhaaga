@@ -1,13 +1,13 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import useAppNavigator from '../../../../../states/useAppNavigator';
-import { AppPostObject } from '../../../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/bridge';
 import MediaThumbListPresenter from '../../../../../features/inbox/presenters/MediaThumbListPresenter';
-import { AppUserObject } from '../../../../../types/app-user.types';
 import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
 import { TextContentView } from '../../../../common/status/TextContentView';
+import { PressableDisabledOnSwipe } from '../../../../../ui/Touchable';
 
 type Props = {
-	post: AppPostObject;
+	post: PostObjectType;
 };
 
 /**
@@ -26,20 +26,20 @@ export function NotificationPostPeek({ post }: Props) {
 	}
 
 	return (
-		<Pressable onPress={onPress}>
+		<View>
 			<MediaThumbListPresenter
 				post={post}
 				items={post?.content?.media}
 				server={driver}
 			/>
-			<Pressable onPress={onPress}>
+			<PressableDisabledOnSwipe onPress={onPress}>
 				<TextContentView
 					tree={post.content.parsed}
 					variant={'bodyContent'}
-					mentions={post.meta.mentions as any}
+					mentions={post.meta.mentions}
 					emojiMap={post.calculated.emojis}
 				/>
-			</Pressable>
-		</Pressable>
+			</PressableDisabledOnSwipe>
+		</View>
 	);
 }

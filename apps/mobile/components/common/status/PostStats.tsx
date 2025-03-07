@@ -9,13 +9,13 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
 import { appDimensions } from '../../../styles/dimensions';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../lib/Text';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { PostInspector } from '@dhaaga/bridge';
 
 type StatItemProps = {
 	count: number;
@@ -78,7 +78,7 @@ export function StatItem({
 
 type PostStatsProps = {
 	style?: StyleProp<ViewStyle>;
-	dto: AppPostObject;
+	dto: PostObjectType;
 };
 /**
  * Show metrics for a post
@@ -95,8 +95,8 @@ function PostStats({ style, dto }: PostStatsProps) {
 	const REPLY_COUNT = dto.stats.replyCount;
 	const SHARE_COUNT = dto.stats.boostCount;
 
-	const LIKED = PostMiddleware.isLiked(dto);
-	const SHARED = PostMiddleware.isShared(dto);
+	const LIKED = PostInspector.isLiked(dto);
+	const SHARED = PostInspector.isShared(dto);
 
 	// No stat to show
 	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1) return <View />;

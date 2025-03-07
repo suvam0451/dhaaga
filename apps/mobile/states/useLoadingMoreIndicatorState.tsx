@@ -1,6 +1,5 @@
 import { FetchStatus } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import useSkeletonSmoothTransition from './useSkeletonTransition';
 
 type Props = {
 	fetchStatus: FetchStatus;
@@ -45,7 +44,7 @@ function useLoadingMoreIndicatorState({
 			clearTimeout(timeoutRef.current);
 			timeoutRef.current = setTimeout(() => {
 				setExtendedLoading(false);
-			}, 420);
+			}, 200);
 		} else {
 			clearTimeout(timeoutRef.current);
 			setExtendedLoading(true);

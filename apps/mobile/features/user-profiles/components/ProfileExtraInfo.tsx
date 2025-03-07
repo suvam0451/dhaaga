@@ -1,14 +1,10 @@
 import { memo } from 'react';
-import { Text, View } from 'react-native';
-import { useActivitypubUserContext } from '../../../states/useProfile';
-import useMfm from '../../../components/hooks/useMfm';
+import { View } from 'react-native';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ProfileModuleFactory from './ProfileModuleFactory';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { AppUserObject } from '../../../types/app-user.types';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type ExtraInformationFieldProps = {
 	label: string;
@@ -23,21 +19,6 @@ const ExtraInformationField = memo(function Foo({
 	value,
 	last,
 }: ExtraInformationFieldProps) {
-	const { user } = useActivitypubUserContext();
-
-	const { content: ParsedValue } = useMfm({
-		content: value,
-		emojiMap: user?.getEmojiMap(),
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A10,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-	});
-	const { content: ParsedLabel } = useMfm({
-		content: label,
-		emojiMap: user?.getEmojiMap(),
-		emphasis: APP_COLOR_PALETTE_EMPHASIS.A0,
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-	});
-
 	return (
 		<View
 			style={{
@@ -49,18 +30,18 @@ const ExtraInformationField = memo(function Foo({
 				borderColor: 'rgba(50, 50, 50, 0.87)',
 			}}
 		>
-			<View style={{ width: ADDITIONAL_INFO_MAX_LABEL_WIDTH }}>
-				{ParsedLabel}
-			</View>
-			<View style={{ flexGrow: 1, flex: 1, marginLeft: 4 }}>
-				<Text numberOfLines={1}>{ParsedValue}</Text>
-			</View>
+			{/*<View style={{ width: ADDITIONAL_INFO_MAX_LABEL_WIDTH }}>*/}
+			{/*	{ParsedLabel}*/}
+			{/*</View>*/}
+			{/*<View style={{ flexGrow: 1, flex: 1, marginLeft: 4 }}>*/}
+			{/*	<Text numberOfLines={1}>{ParsedValue}</Text>*/}
+			{/*</View>*/}
 		</View>
 	);
 });
 
 type UserProfileExtraInformationProps = {
-	acct: AppUserObject;
+	acct: UserObjectType;
 };
 
 function UserProfileExtraInformation({

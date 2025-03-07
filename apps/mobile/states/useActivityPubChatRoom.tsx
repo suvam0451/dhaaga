@@ -1,19 +1,19 @@
-import { StatusInterface, UserInterface } from '@dhaaga/bridge';
+import { PostTargetInterface, UserTargetInterface } from '@dhaaga/bridge';
 import { createContext, useContext, useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
 
 type Type = {
-	participants: UserInterface[];
-	messages: StatusInterface[];
+	participants: UserTargetInterface[];
+	messages: PostTargetInterface[];
 	/**
 	 * Oldest status fetched, against each conversation id
 	 */
-	tails: StatusInterface[];
+	tails: PostTargetInterface[];
 	/**
 	 * Latest status fetched, against each conversation id
 	 */
-	heads: StatusInterface[];
+	heads: PostTargetInterface[];
 	/**
 	 * Color allocated to each conversation thread
 	 */
@@ -26,7 +26,7 @@ type Type = {
 	 * @param ids list of chatroom ids
 	 * @param items
 	 */
-	setHeads: (ids: string[], items: StatusInterface[]) => void;
+	setHeads: (ids: string[], items: PostTargetInterface[]) => void;
 };
 
 const defaultValue: Type = {
@@ -36,7 +36,7 @@ const defaultValue: Type = {
 	heads: [],
 	colors: [],
 	chatroomName: '',
-	setHeads: function (ids: string[], items: StatusInterface[]): void {
+	setHeads: function (ids: string[], items: PostTargetInterface[]): void {
 		throw new Error('Function not implemented.');
 	},
 };
@@ -48,8 +48,8 @@ export function useActivitypubChatRoomContext() {
 }
 
 type Props = {
-	participants: UserInterface[];
-	tails: StatusInterface[];
+	participants: UserTargetInterface[];
+	tails: PostTargetInterface[];
 	children: any;
 };
 
@@ -58,8 +58,8 @@ function WithActivitypubChatRoomContext({
 	tails,
 	children,
 }: Props) {
-	const [Messages, setMessages] = useState<StatusInterface[]>([]);
-	const [Participants, setParticipants] = useState<UserInterface[]>([]);
+	const [Messages, setMessages] = useState<PostTargetInterface[]>([]);
+	const [Participants, setParticipants] = useState<UserTargetInterface[]>([]);
 	const [Tails, setTails] = useState([]);
 	const [Heads, setHeads] = useState([]);
 
@@ -74,7 +74,7 @@ function WithActivitypubChatRoomContext({
 		if (!client) return;
 	}, [client, participants, tails]);
 
-	function setHeadsWithData(ids: string[], items: StatusInterface[]) {
+	function setHeadsWithData(ids: string[], items: PostTargetInterface[]) {
 		if (ids.length !== items.length) {
 			console.warn('[WARN]: length mismatch while setting up the chatroom');
 		}

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { BlueskyRestClient, MisskeyRestClient } from '@dhaaga/bridge';
-import { AppPostObject } from '../../../types/app-post.types';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { AtprotoApiAdapter, MisskeyApiAdapter } from '@dhaaga/bridge';
+import { PostParser } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppAcct,
 	useAppApiClient,
@@ -26,19 +26,19 @@ function useApiGetPinnedPosts(userId: string) {
 		 */
 
 		if (ActivityPubService.misskeyLike(driver)) {
-			const { data, error } = await (client as MisskeyRestClient).accounts.get(
+			const { data, error } = await (client as MisskeyApiAdapter).accounts.get(
 				userId,
 			);
 			if (error) throw new Error(error.message);
 			const _data = data as any;
-			return PostMiddleware.deserialize<unknown[]>(
+			return PostParser.parse<unknown[]>(
 				_data.pinnedNotes,
 				driver,
 				acct?.server,
 			).slice(0, 10);
 		} else if (ActivityPubService.blueskyLike(driver)) {
-			return PostMiddleware.deserialize<unknown[]>(
-				await (client as BlueskyRestClient).accounts.getPinnedPosts(userId),
+			return PostParser.parse<unknown[]>(
+				await (client as AtprotoApiAdapter).accounts.getPinnedPosts(userId),
 				driver,
 				acct?.server,
 			).slice(0, 10);
@@ -49,16 +49,15 @@ function useApiGetPinnedPosts(userId: string) {
 				userId,
 			})) as any;
 			if (error) throw new Error(error.message);
-			return PostMiddleware.deserialize<unknown[]>(
-				data,
-				driver,
-				acct?.server,
-			).slice(0, 10);
+			return PostParser.parse<unknown[]>(data, driver, acct?.server).slice(
+				0,
+				10,
+			);
 		}
 	}
 
 	// Post Queries
-	return useQuery<AppPostObject[]>({
+	return useQuery<PostObjectType[]>({
 		queryKey: ['acct', acct?.server, userId],
 		queryFn: fn,
 		enabled: !!userId && typeof userId === 'string',

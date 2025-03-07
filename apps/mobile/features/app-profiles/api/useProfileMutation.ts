@@ -1,11 +1,12 @@
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
 import { useMutation } from '@tanstack/react-query';
-import { Profile } from '../../../database/_schema';
-import { AppUserObject } from '../../../types/app-user.types';
-import { ProfilePinnedUserService } from '../../../database/entities/profile-pinned-user';
-import { ProfileService } from '../../../database/entities/profile';
-import { AppFeedObject } from '../../../types/app-feed.types';
-import { ProfilePinnedTimelineService } from '../../../database/entities/profile-pinned-timeline';
+import {
+	Profile,
+	ProfilePinnedUserService,
+	ProfileService,
+	ProfilePinnedTimelineService,
+} from '@dhaaga/db';
+import type { UserObjectType, FeedObjectType } from '@dhaaga/bridge';
 
 export function useProfileMutation() {
 	const { db } = useAppDb();
@@ -16,7 +17,7 @@ export function useProfileMutation() {
 			user,
 			profile,
 		}: {
-			user: AppUserObject;
+			user: UserObjectType;
 			profile: Profile;
 		}) => {
 			const acct = ProfileService.getOwnerAccount(db, profile);
@@ -30,7 +31,7 @@ export function useProfileMutation() {
 			feed,
 			profile,
 		}: {
-			feed: AppFeedObject;
+			feed: FeedObjectType;
 			profile: Profile;
 		}) => {
 			const acct = ProfileService.getOwnerAccount(db, profile);

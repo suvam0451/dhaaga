@@ -8,16 +8,65 @@ import { AppText } from '../../../components/lib/Text';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
 import ProfileStatPresenter from './ProfileStatPresenter';
+import { Skeleton } from '../../../ui/Skeleton';
 
 /**
  * This bottom sheet will show a preview
  * of the selected user's profile.
  */
 function UserPeekSheetPresenter() {
-	const { data: acct } = useProfilePeekSheetInteractor();
+	const { data: acct, isLoading, isFetching } = useProfilePeekSheetInteractor();
 	const { theme } = useAppTheme();
 
-	if (!acct) return <View />;
+	if (isLoading || isFetching || !acct)
+		return (
+			<View style={[styles.root, { overflow: 'hidden' }]}>
+				<Skeleton height={128} width={'100%'} style={{ marginBottom: 12 }} />
+				<Skeleton
+					height={42}
+					width={'75%'}
+					style={{
+						marginLeft: 'auto',
+						marginBottom: 12,
+						marginHorizontal: 10,
+					}}
+				/>
+				<View
+					style={{
+						flexDirection: 'row',
+						paddingHorizontal: 10,
+						marginBottom: 16,
+					}}
+				>
+					<Skeleton
+						height={42}
+						width={'60%'}
+						style={{ marginLeft: 'auto', flex: 1 }}
+					/>
+					<Skeleton
+						height={42}
+						width={'20%'}
+						style={{ marginLeft: 12, marginBottom: 8 }}
+					/>
+				</View>
+				{/*text*/}
+				<Skeleton
+					height={20}
+					width={'100%'}
+					style={{ marginLeft: 12, marginBottom: 8 }}
+				/>
+				<Skeleton
+					height={20}
+					width={'100%'}
+					style={{ marginLeft: 12, marginBottom: 8 }}
+				/>
+				<Skeleton
+					height={20}
+					width={'40%'}
+					style={{ marginLeft: 12, marginBottom: 8 }}
+				/>
+			</View>
+		);
 
 	return (
 		<ScrollView
@@ -84,6 +133,7 @@ const styles = StyleSheet.create({
 	root: {
 		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
 		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
+		// overflow: 'hidden',
 	},
 	bannerReplacement: {
 		height: 32,

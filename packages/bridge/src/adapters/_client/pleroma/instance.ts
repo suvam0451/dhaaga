@@ -5,10 +5,7 @@ import {
 import { getSoftwareInfoShared } from '../_router/shared.js';
 import { PleromaErrorHandler } from '../_router/_runner.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -81,7 +78,7 @@ export class PleromaInstanceRouter implements InstanceRoute {
 				return {
 					statusCode: e?.response?.status,
 					error: {
-						code: DhaagaErrorCode.UNKNOWN_ERROR,
+						code: ApiErrorCode.UNKNOWN_ERROR,
 						message: e,
 					},
 				};

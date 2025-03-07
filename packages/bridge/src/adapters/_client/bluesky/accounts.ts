@@ -32,13 +32,13 @@ import {
 	MegaStatus,
 } from '../../../types/megalodon.types.js';
 import { MissUserDetailed } from '../../../types/misskey-js.types.js';
-import {
-	DhaagaErrorCode,
-	LibraryResponse,
-} from '../../../types/result.types.js';
+import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { Err, Ok } from '../../../utils/index.js';
+import { DriverWebfingerType } from '../../../types/query.types.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;
@@ -86,7 +86,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 			const followResult = await agent.follow(id);
 			return { data: null as any };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -136,7 +136,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 			return { data };
 		} catch (e) {
 			console.log('[WARN]: failed to resolve handle', e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -145,7 +145,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 	}
 
 	likes(query: GetPostsQueryDTO) {
-		return errorBuilder<any>(DhaagaErrorCode.FEATURE_UNSUPPORTED) as any;
+		return errorBuilder<any>(ApiErrorCode.FEATURE_UNSUPPORTED) as any;
 	}
 
 	async atProtoLikes(
@@ -175,7 +175,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve([]) as any;
 	}
 
-	lookup(webfingerUrl: string): LibraryPromise<MastoAccount | MegaAccount> {
+	lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MastoAccount> {
 		return Promise.resolve(undefined) as any;
 	}
 
@@ -199,7 +199,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 	async statuses(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): LibraryPromise<AppBskyFeedGetAuthorFeed.Response> {
+	): ApiAsyncResult<AppBskyFeedGetAuthorFeed.Response> {
 		const agent = getBskyAgent(this.dto);
 		try {
 			const data = await agent.getAuthorFeed({
@@ -207,9 +207,9 @@ class BlueskyAccountsRouter implements AccountRoute {
 				filter: params.bskyFilter,
 				limit: params.limit,
 			});
-			return { data };
+			return Ok(data);
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -223,7 +223,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 			await agent.deleteFollow(id);
 			return { data: null as any };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

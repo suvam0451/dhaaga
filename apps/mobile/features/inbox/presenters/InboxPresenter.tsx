@@ -4,43 +4,41 @@ import {
 } from '../../../hooks/utility/global-state-extractors';
 import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter';
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
-import { useRef, useState } from 'react';
-import PagerView from 'react-native-pager-view';
-import { View, StyleSheet } from 'react-native';
-import { BottomNavBar } from '../../../components/shared/pager-view/BottomNavBar';
+import { View } from 'react-native';
 import MentionPresenter from './MentionPresenter';
 import ChatroomPresenter from './ChatroomPresenter';
 import SocialUpdatePresenter from './SocialUpdatePresenter';
 import UpdatesPresenter from './UpdatesPresenter';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import WithInboxCategoryCtx from '../contexts/useInboxCategoryCtx';
+import { InboxCtx } from '@dhaaga/core';
+import { AppPagerView } from '../../../ui/PagerView';
 
 const renderScene = (index: number) => {
 	switch (index) {
 		case 0:
 			return (
-				<WithInboxCategoryCtx>
+				<InboxCtx>
 					<MentionPresenter />
-				</WithInboxCategoryCtx>
+				</InboxCtx>
 			);
 		case 1:
 			return (
-				<WithInboxCategoryCtx>
+				<InboxCtx>
 					<ChatroomPresenter />
-				</WithInboxCategoryCtx>
+				</InboxCtx>
 			);
 		case 2:
 			return (
-				<WithInboxCategoryCtx>
+				<InboxCtx>
 					<SocialUpdatePresenter />;
-				</WithInboxCategoryCtx>
+				</InboxCtx>
 			);
 		case 3:
 			return (
-				<WithInboxCategoryCtx>
+				<InboxCtx>
 					<UpdatesPresenter />
-				</WithInboxCategoryCtx>
+				</InboxCtx>
 			);
 		default:
 			return <View />;
@@ -50,16 +48,9 @@ const renderScene = (index: number) => {
 function InboxPresenter() {
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
-	const [TabIndex, setTabIndex] = useState(0);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
-	const ref = useRef<PagerView>(null);
-
 	if (!acct) return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.INBOX} />;
-
-	/**
-	 *	---- User Logged In ----
-	 */
 
 	const tabLabels = [
 		{
@@ -80,47 +71,15 @@ function InboxPresenter() {
 		},
 	];
 
-	function onChipSelected(index: number) {
-		if (TabIndex !== index) {
-			ref.current.setPage(index);
-		}
-	}
-
-	function onPagerViewScroll(e: any) {
-		const { offset, position } = e.nativeEvent;
-		const nextIdx = Math.round(position + offset);
-		setTabIndex(nextIdx);
-	}
-
 	return (
-		<View style={[styles.root, { backgroundColor: theme.background.a0 }]}>
-			<PagerView
-				ref={ref}
-				scrollEnabled={false}
-				style={{ flex: 1 }}
-				initialPage={TabIndex}
-				onPageScroll={onPagerViewScroll}
-			>
-				{Array.from({ length: tabLabels.length }).map((_, index) => (
-					<View key={index} style={{ flex: 1 }}>
-						{renderScene(index)}
-					</View>
-				))}
-			</PagerView>
-			<BottomNavBar
-				Index={TabIndex}
-				setIndex={onChipSelected}
-				items={tabLabels}
-			/>
-		</View>
+		<AppPagerView
+			renderScene={renderScene}
+			tabCount={4}
+			labels={tabLabels}
+			showBottomNav
+			props={{ backgroundColor: theme.background.a0 }}
+		/>
 	);
 }
 
 export default InboxPresenter;
-
-const styles = StyleSheet.create({
-	root: {
-		height: '100%',
-		position: 'relative',
-	},
-});

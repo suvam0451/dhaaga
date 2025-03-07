@@ -1,12 +1,14 @@
-import { AppPostObject } from '../types/app-post.types';
-import { AppUserObject } from '../types/app-user.types';
-import { AppNotificationObject } from '../types/app-notification.types';
-import { DhaagaJsNotificationType } from '@dhaaga/bridge';
+import type {
+	UserObjectType,
+	NotificationObjectType,
+	PostObjectType,
+} from '@dhaaga/bridge';
+import { DriverNotificationType } from '@dhaaga/bridge';
 import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
 	ProfilePinnedUser,
-} from '../database/_schema';
+} from '@dhaaga/db';
 
 /**
  * Convert DTO/Interface arrays
@@ -14,7 +16,7 @@ import {
  * cell types
  */
 class FlashListService {
-	static posts(input: AppPostObject[]): FlashListType_Post[] {
+	static posts(input: PostObjectType[]): FlashListType_Post[] {
 		return input.map((o) => {
 			const HAS_MEDIA = o.content.media.length > 0;
 			const IS_SENSITIVE = o.meta.sensitive;
@@ -44,15 +46,15 @@ class FlashListService {
 		});
 	}
 
-	static users(input: AppUserObject[]) {}
+	static users(input: UserObjectType[]) {}
 
 	static notifications(
-		input: AppNotificationObject[],
+		input: NotificationObjectType[],
 	): FlashListType_Notification[] {
 		if (!input || !Array.isArray(input)) return [];
 		return input
 			.map((o) => ({
-				type: o.type as unknown as DhaagaJsNotificationType,
+				type: o.type as unknown as DriverNotificationType,
 				props: {
 					dto: o,
 				},
@@ -120,21 +122,21 @@ enum FLC_Post {
 interface FLC_Post_TextOnly {
 	type: FLC_Post.TextOnly;
 	props: {
-		dto: AppPostObject;
+		dto: PostObjectType;
 	};
 }
 
 interface FLC_Post_WithMedia {
 	type: FLC_Post.WithMedia;
 	props: {
-		dto: AppPostObject;
+		dto: PostObjectType;
 	};
 }
 
 interface FLC_Post_WithSpoiler {
 	type: FLC_Post.WithSpoiler;
 	props: {
-		dto: AppPostObject;
+		dto: PostObjectType;
 	};
 }
 
@@ -144,9 +146,9 @@ export type FlashListType_Post =
 	| FLC_Post_WithSpoiler;
 
 export type FlashListType_Notification = {
-	type: DhaagaJsNotificationType;
+	type: DriverNotificationType;
 	props: {
-		dto: AppNotificationObject;
+		dto: NotificationObjectType;
 	};
 };
 

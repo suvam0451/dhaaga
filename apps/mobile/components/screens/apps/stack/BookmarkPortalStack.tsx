@@ -73,30 +73,7 @@ export function BookmarkNeverSyncedPrompt() {
 	);
 }
 
-function RegularTimeline() {
-	return (
-		<View>
-			<View style={{ marginVertical: 8 }}>
-				<Text
-					style={{
-						textAlign: 'left',
-						paddingHorizontal: 8,
-						color: APP_FONT.MONTSERRAT_BODY,
-					}}
-				>
-					Use the regular timeline interface
-				</Text>
-			</View>
-		</View>
-	);
-}
-
 export function BookmarkSyncedPrompt() {
-	const { acct } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-		})),
-	);
 	const [
 		BookmarkGallerySettingDialogVisible,
 		setBookmarkGallerySettingDialogVisible,
@@ -201,7 +178,6 @@ const BookmarkPortalStack = memo(() => {
 			</View>
 			<View style={style.sectionContainer}>
 				<Text style={style.texStyle}>Classic View</Text>
-				<RegularTimeline />
 				<AppButtonVariantA
 					label={'Take me There'}
 					onClick={() => {

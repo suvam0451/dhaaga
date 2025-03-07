@@ -4,8 +4,9 @@ import { StyleSheet, View } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { appDimensions } from '../../../styles/dimensions';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
-import { AppParsedTextNodes } from '../../../types/parsed-text.types';
+import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { TextContentView } from './TextContentView';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 type PostedByTextOneLineProps = {
 	parsedText: AppParsedTextNodes;
@@ -57,7 +58,7 @@ function PostedByTextOneLine({
 	return (
 		<View style={timelineStyles.oneLineDisplayNameRoot}>
 			<View style={{ flex: 1, flexShrink: 1 }}>
-				{parsedText ? (
+				{parsedText && parsedText.length > 0 ? (
 					<TextContentView
 						tree={parsedText}
 						variant={'displayName'}
@@ -65,7 +66,12 @@ function PostedByTextOneLine({
 						emojiMap={new Map()}
 					/>
 				) : (
-					<AppText.Medium>{altText}</AppText.Medium>
+					<AppText.Normal
+						style={{ fontSize: 13 }}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+					>
+						{altText}
+					</AppText.Normal>
 				)}
 			</View>
 			<AppText.Normal
@@ -82,6 +88,7 @@ function PostedByTextOneLine({
 }
 
 function ReplyIndicator() {
+	const { theme } = useAppTheme();
 	return (
 		<View
 			style={{
@@ -93,10 +100,10 @@ function ReplyIndicator() {
 			<View
 				style={{
 					flex: 1,
-					marginTop: 48,
-					marginBottom: 4,
+					marginTop: 52,
+					marginBottom: 8,
 					width: 1.5,
-					backgroundColor: '#424242',
+					backgroundColor: theme.background.a50, // '#323232',
 				}}
 			/>
 		</View>
@@ -119,6 +126,7 @@ const timelineStyles = StyleSheet.create({
 		flexDirection: 'row',
 		flex: 1,
 		alignItems: 'center',
+		marginBottom: appDimensions.timelines.sectionBottomMargin * 0.75,
 	},
 });
 

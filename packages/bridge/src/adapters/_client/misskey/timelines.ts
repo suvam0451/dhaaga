@@ -1,14 +1,14 @@
 import {
-	DhaagaJsTimelineArrayPromise,
+	DriverTimelineGetApiResponse,
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
 import { Endpoints } from 'misskey-js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import { ApiAsyncResult } from '../../../utils/api-result.js';
+import { Err, Ok } from '../../../utils/index.js';
 
 export class MisskeyTimelinesRouter implements TimelinesRoute {
 	direct: FetchWrapper;
@@ -22,7 +22,7 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 	publicAsGuest(
 		urlLike: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		throw new Error('Method not implemented.');
 	}
 
@@ -30,23 +30,21 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 		urlLike: string,
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		throw new Error('Method not implemented.');
 	}
 
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
-	): LibraryPromise<Endpoints['notes/timeline']['res']> {
+	): ApiAsyncResult<Endpoints['notes/timeline']['res']> {
 		try {
 			const data = await this.client.client.request('notes/timeline', {
 				...query,
 			});
-			return { data };
+			return Ok(data);
 		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(DhaagaErrorCode.UNAUTHORIZED);
-			}
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			if (e.code) return Err(ApiErrorCode.UNAUTHORIZED);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -58,7 +56,7 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 		query: DhaagaJsTimelineQueryOptions & {
 			withReplies?: boolean | null;
 		},
-	): LibraryPromise<Endpoints['notes/global-timeline']['res']> {
+	): ApiAsyncResult<Endpoints['notes/global-timeline']['res']> {
 		if (query?.local) {
 			const data = await this.client.client.request('notes/local-timeline', {
 				...query,
@@ -66,46 +64,46 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 				withBots: true,
 				local: undefined,
 			} as any);
-			return { data };
+			return Ok(data);
 		}
 		if (query?.social) {
 			const data = await this.client.client.request(
 				'notes/hybrid-timeline',
 				query as any,
 			);
-			return { data };
+			return Ok(data);
 		} else {
 			// a.k.a. -- federated timeline
 			const data = await this.client.client.request(
 				'notes/global-timeline',
 				query,
 			);
-			return { data };
+			return Ok(data);
 		}
 	}
 
 	/**
 	 * Limited forks support this feature
 	 */
-	async bubble(query: DhaagaJsTimelineQueryOptions) {
+	async bubble(query: DhaagaJsTimelineQueryOptions): ApiAsyncResult<any[]> {
 		try {
 			const { data, error } = await this.direct.post(
 				'/api/notes/bubble-timeline',
 				query,
 				{},
 			);
-			if (error) return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
-			return { data };
+			if (error) return Err(ApiErrorCode.UNKNOWN_ERROR);
+			return Ok(data as any[]);
 		} catch (e) {
 			console.log(e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return Err(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
 	async hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): LibraryPromise<Endpoints['notes/search-by-tag']['res']> {
+	): ApiAsyncResult<Endpoints['notes/search-by-tag']['res']> {
 		const data = await this.client.client.request<
 			'notes/search-by-tag',
 			Endpoints['notes/search-by-tag']['req']
@@ -113,17 +111,17 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 			tag: q,
 			...query,
 		});
-		return { data };
+		return Ok(data);
 	}
 
 	async list(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): DhaagaJsTimelineArrayPromise {
+	): DriverTimelineGetApiResponse {
 		const data = await this.client.client.request<
 			'notes/user-list-timeline',
 			Endpoints['notes/user-list-timeline']['req']
 		>('notes/user-list-timeline', { listId: q, ...query });
-		return { data };
+		return Ok(data);
 	}
 }

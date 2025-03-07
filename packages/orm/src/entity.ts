@@ -52,7 +52,7 @@ export class BaseEntity<T extends BaseType> {
 	whereClauses: string[];
 	selectColumns: string[];
 
-	id: number | undefined;
+	id: number;
 	createdAt: Date;
 	updatedAt: Date;
 
@@ -65,7 +65,7 @@ export class BaseEntity<T extends BaseType> {
 		this.params = [];
 		this.debug = debug;
 
-		this.id = undefined;
+		this.id = -1;
 		this.createdAt = new Date();
 		this.updatedAt = new Date();
 		return this;

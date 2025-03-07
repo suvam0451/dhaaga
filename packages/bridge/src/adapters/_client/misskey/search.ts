@@ -6,7 +6,7 @@ import {
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { DhaagaErrorCode } from '../../../types/result.types.js';
+import { ApiErrorCode } from '../../../types/result.types.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
 
@@ -26,7 +26,7 @@ export class MisskeySearchRouter implements SearchRoute {
 			const data = await this.client.client.request('users/search', query);
 			return { data };
 		} catch (e) {
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -38,7 +38,7 @@ export class MisskeySearchRouter implements SearchRoute {
 			return { data };
 		} catch (e) {
 			console.log('[ERROR]: performing search', e);
-			return errorBuilder(DhaagaErrorCode.UNKNOWN_ERROR);
+			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 }

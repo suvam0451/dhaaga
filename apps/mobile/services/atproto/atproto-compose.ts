@@ -1,16 +1,12 @@
-import BlueskyRestClient from '@dhaaga/bridge/dist/adapters/_client/bluesky';
+import { AtprotoApiAdapter } from '@dhaaga/bridge';
 import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs';
 import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
-import {
-	ATPROTO_FACET_ENUM,
-	generateFacets,
-} from '../../utils/atproto-facets.utils';
-import { AtpAgent, BlobRef, Facet } from '@atproto/api';
+import { generateFacets } from '../../utils/atproto-facets.utils';
+import { BlobRef, Facet, AppBskyRichtextFacet, Agent } from '@atproto/api';
 import { PostComposerReducerStateType } from '../../features/composer/reducers/composer.reducer';
 import MediaUtils from '../../utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
-import { AppPostObject } from '../../types/app-post.types';
-import { PostMiddleware } from '../middlewares/post.middleware';
+import { PostInspector } from '@dhaaga/bridge';
 
 type AtProtoPostRecordType = Partial<AppBskyFeedPost.Record> &
 	Omit<AppBskyFeedPost.Record, 'createdAt'>;
@@ -36,7 +32,7 @@ export type AtprotoReplyEmbed = {
 };
 
 class AtprotoComposerService {
-	private static async getPost(client: BlueskyRestClient, uri: string) {
+	private static async getPost(client: AtprotoApiAdapter, uri: string) {
 		const { data, error } = await client.statuses.get(uri);
 		if (error) {
 			console.log('[WARN]: failed to fetch freshly created post');
@@ -52,7 +48,7 @@ class AtprotoComposerService {
 	 * @private
 	 */
 	private static async post(
-		client: BlueskyRestClient,
+		client: AtprotoApiAdapter,
 		record: AtProtoPostRecordType,
 	) {
 		const agent = client.getAgent();
@@ -64,22 +60,22 @@ class AtprotoComposerService {
 		}
 	}
 
-	static async resolveMentions(agent: AtpAgent, items: Facet[]) {
+	static async resolveMentions(agent: Agent, items: Facet[]) {
 		const pending: { index: number; pointer: number; handle: string }[] = [];
 		let count = 0;
 		for (let i = 0; i < items.length; i++) {
-			if (items[i].features[0].$type === ATPROTO_FACET_ENUM.MENTION) {
+			const target = items[i].features[0];
+			if (AppBskyRichtextFacet.isMention(target)) {
 				pending.push({
 					index: count++,
 					pointer: i,
-					handle: items[i].features[0].did as string,
+					handle: target.did,
 				});
 			}
 		}
 		const handles = await Promise.all(
 			pending.map((item) => agent.resolveHandle({ handle: item.handle })),
 		);
-		console.log(handles);
 		for (let i = 0; i < pending.length; i++) {
 			items[pending[i].pointer].features[0].did = handles[i].data.did;
 		}
@@ -92,7 +88,7 @@ class AtprotoComposerService {
 	 * @param state
 	 */
 	static async postUsingReducerState(
-		client: BlueskyRestClient,
+		client: AtprotoApiAdapter,
 		state: PostComposerReducerStateType,
 	): Promise<ThreadViewPost> {
 		const agent = client.getAgent();
@@ -138,7 +134,7 @@ class AtprotoComposerService {
 		}
 
 		if (state.parent) {
-			const _replyTarget = PostMiddleware.getContentTarget(state.parent);
+			const _replyTarget = PostInspector.getContentTarget(state.parent);
 			if (state.isQuote) {
 				// handle quotes
 				record.embed = {
@@ -201,7 +197,7 @@ class AtprotoComposerService {
 	}
 
 	static async chat(
-		client: BlueskyRestClient,
+		client: AtprotoApiAdapter,
 		{
 			id,
 			members,

@@ -1,7 +1,7 @@
 import useHookLoadingState from '../../../../../states/useHookLoadingState';
 import { useEffect, useRef, useState } from 'react';
 import { useAppBottomSheet_TimelineReference } from '../../../../../hooks/utility/global-state-extractors';
-import { AppTimelineReducerActionType } from '../../../../../states/interactors/post-timeline.reducer';
+import { PostTimelineStateAction } from '@dhaaga/core';
 
 const OPTION_GROUP_A = ['local', 'remote'];
 const OPTION_GROUP_B = ['media-only'];
@@ -40,7 +40,7 @@ function useTimelineControllerInteractor() {
 	 */
 	function broadcastChanges() {
 		dispatch({
-			type: AppTimelineReducerActionType.SET_QUERY_OPTS,
+			type: PostTimelineStateAction.SET_QUERY_OPTS,
 			payload: {
 				...draft.opts,
 				local: FeedSelected.current.has('local'),

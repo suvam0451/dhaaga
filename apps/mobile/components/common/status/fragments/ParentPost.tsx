@@ -1,10 +1,10 @@
 import { Pressable, View } from 'react-native';
-import MediaItem from '../../media/MediaItem';
+import MediaItem from '../../../../ui/media/MediaItem';
 import PostStats from '../PostStats';
 import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
 import StatusQuoted from './StatusQuoted';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
-import { AppPostObject } from '../../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
 import {
 	PostedByTextOneLine,
@@ -17,7 +17,7 @@ import useAppNavigator from '../../../../states/useAppNavigator';
 import { appDimensions } from '../../../../styles/dimensions';
 
 type Props = {
-	dto: AppPostObject;
+	dto: PostObjectType;
 	showReplyIndicator: boolean;
 };
 

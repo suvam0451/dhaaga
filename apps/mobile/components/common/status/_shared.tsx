@@ -8,15 +8,15 @@ import ActivityPubService from '../../../services/activitypub.service';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppPostObject } from '../../../types/app-post.types';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { Fragment } from 'react';
-import { AccountSavedPost } from '../../../database/_schema';
+import { AccountSavedPost } from '@dhaaga/db';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { DatetimeUtil } from '../../../utils/datetime.utils';
 import { AppText } from '../../lib/Text';
 
 type PostMoreOptionsButtonProps = {
-	post: AppPostObject;
+	post: PostObjectType;
 };
 
 /**
@@ -42,8 +42,8 @@ export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
 			<AppText.Normal
 				style={{
-					color: theme.secondary.a20,
-					fontSize: 14,
+					color: theme.secondary.a50,
+					fontSize: 13,
 					paddingTop: 2,
 				}}
 			>

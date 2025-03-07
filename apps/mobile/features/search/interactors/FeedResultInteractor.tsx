@@ -1,22 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useDiscoverTabState } from '../contexts/DiscoverTabCtx';
-import {
-	useFeedTimelineDispatch,
-	useFeedTimelineState,
-} from '../../timelines/contexts/FeedTimelineCtx';
+import { useFeedTimelineDispatch, useFeedTimelineState } from '@dhaaga/core';
 import { useApiSearchFeeds } from '../../../hooks/api/useApiSearch';
-import {
-	ACTION,
-	AppFeedTimelineReducerActionType,
-} from '../../../states/interactors/feed-timeline.reducer';
+import { ACTION, FeedTimelineStateAction } from '@dhaaga/core';
 import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
-import LoadingMore from '../../../components/screens/home/LoadingMore';
+import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
-import { AppUserTimelineReducerActionType } from '../../../states/interactors/user-timeline.reducer';
 import FeedListItemView from '../../timelines/view/FeedListItemView';
 import NoResults from '../../../components/error-screen/NoResults';
+import { useDiscoverState } from '@dhaaga/core';
 
 type FeedResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -24,23 +17,23 @@ type FeedResultInteractorProps = {
 
 function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	const [Refreshing, setRefreshing] = useState(false);
-	const State = useDiscoverTabState();
-	const TimelineState = useFeedTimelineState();
-	const TimelineDispatch = useFeedTimelineDispatch();
+	const State = useDiscoverState();
+	const feedState = useFeedTimelineState();
+	const dispatch = useFeedTimelineDispatch();
 	const { data, fetchStatus, refetch, isFetched } = useApiSearchFeeds(
 		State.q,
-		TimelineState.appliedMaxId,
+		feedState.appliedMaxId,
 	);
 	useEffect(() => {
-		TimelineDispatch({
+		dispatch({
 			type: ACTION.RESET,
 		});
 	}, [State.q]);
 
 	async function refresh() {
 		setRefreshing(true);
-		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.RESET,
+		dispatch({
+			type: FeedTimelineStateAction.RESET,
 		});
 		refetch().finally(() => {
 			setRefreshing(false);
@@ -48,8 +41,8 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	}
 
 	function loadMore() {
-		TimelineDispatch({
-			type: AppUserTimelineReducerActionType.REQUEST_LOAD_MORE,
+		dispatch({
+			type: FeedTimelineStateAction.REQUEST_LOAD_MORE,
 		});
 	}
 
@@ -61,11 +54,12 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 		onDataLoaded(false);
 		if (data.items.length === 0) return;
 
-		TimelineDispatch({
-			type: AppFeedTimelineReducerActionType.APPEND_RESULTS,
+		dispatch({
+			type: FeedTimelineStateAction.APPEND_RESULTS,
 			payload: {
 				items: data.items,
 				maxId: data.maxId,
+				minId: null,
 			},
 		});
 	}, [fetchStatus]);
@@ -77,11 +71,11 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 		fetchStatus,
 	});
 	const { onScroll } = useScrollMoreOnPageEnd({
-		itemCount: TimelineState.items.length,
+		itemCount: feedState.items.length,
 		updateQueryCache: loadMore,
 	});
 
-	if (isFetched && TimelineState.items.length === 0)
+	if (isFetched && feedState.items.length === 0)
 		return (
 			<View>
 				<Header />
@@ -92,7 +86,7 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	return (
 		<View style={{ flex: 1 }}>
 			<Animated.FlatList
-				data={TimelineState.items}
+				data={feedState.items}
 				renderItem={({ item }) => <FeedListItemView item={item} />}
 				onScroll={onScroll}
 				ListHeaderComponent={Header}
@@ -101,7 +95,7 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
 			/>
-			<LoadingMore visible={visible} loading={loading} />
+			<TimelineLoadingIndicator visible={visible} loading={loading} />
 		</View>
 	);
 }

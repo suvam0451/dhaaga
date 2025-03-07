@@ -1,5 +1,3 @@
-import { mastodon } from 'masto';
-import { Note } from 'misskey-js/autogen/models.js';
 import { Endpoints } from 'misskey-js';
 import { FollowPostDto, GetPostsQueryDTO } from '../../_interface.js';
 import { LibraryPromise } from './_types.js';
@@ -22,8 +20,13 @@ import {
 	MegaRelationship,
 	MegaStatus,
 } from '../../../../types/megalodon.types.js';
-import { MissUserDetailed } from '../../../../types/misskey-js.types.js';
+import {
+	MissNote,
+	MissUserDetailed,
+} from '../../../../types/misskey-js.types.js';
 import { LibraryResponse } from '../../../../types/result.types.js';
+import { ApiAsyncResult } from '../../../../utils/api-result.js';
+import { DriverWebfingerType } from '../../../../types/query.types.js';
 
 export type BookmarkGetQueryDTO = {
 	limit: number;
@@ -116,7 +119,9 @@ export interface AccountRoute {
 
 	// 200/400
 	// mastodon/misskey/akkoma/pleroma
-	lookup(webfingerUrl: string): LibraryPromise<MastoAccount | MegaAccount>;
+	lookup(
+		webfingerUrl: DriverWebfingerType,
+	): ApiAsyncResult<MastoAccount | MegaAccount>;
 
 	/**
 	 * General
@@ -133,10 +138,8 @@ export interface AccountRoute {
 	statuses(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): Promise<
-		LibraryResponse<
-			mastodon.v1.Status[] | Note[] | AppBskyFeedGetAuthorFeed.Response | any[]
-		>
+	): ApiAsyncResult<
+		MastoStatus[] | MissNote[] | AppBskyFeedGetAuthorFeed.Response | any[]
 	>;
 
 	get(

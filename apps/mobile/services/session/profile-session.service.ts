@@ -1,17 +1,21 @@
-import { DataSource } from '../../database/dataSource';
-import { Account, Profile, KnownServer } from '../../database/_schema';
 import {
-	ActivityPubClient,
+	DataSource,
+	Account,
+	Profile,
+	KnownServer,
+	KnownServerService,
+	AccountService,
+	ProfileService,
+	ProfilePinnedUserService,
+} from '@dhaaga/db';
+import {
+	ApiTargetInterface,
 	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
-	UnknownRestClient,
+	BaseApiAdapter,
 } from '@dhaaga/bridge';
-import { KnownServerService } from '../../database/entities/server';
-import { AccountService } from '../../database/entities/account';
-import { ProfileService } from '../../database/entities/profile';
 import { BaseStorageManager } from './_shared';
-import { AppUserObject } from '../../types/app-user.types';
-import { ProfilePinnedUserService } from '../../database/entities/profile-pinned-user';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 /**
  * ---- Storage Interfaces ----
@@ -45,7 +49,7 @@ class ProfileSessionManager {
 	// databases
 	db: DataSource;
 	// api clients
-	client: ActivityPubClient;
+	client: ApiTargetInterface;
 
 	cacheManager: Storage;
 	customEmojis: InstanceApi_CustomEmojiDTO[];
@@ -54,7 +58,7 @@ class ProfileSessionManager {
 		this.db = db;
 		this.cacheManager = new Storage();
 
-		this.acct = AccountService.getSelected(this.db);
+		this.acct = AccountService.getSelected(this.db).unwrap();
 		this.profile = ProfileService.getActiveProfile(this.db, this.acct);
 		this.customEmojis = [];
 	}
@@ -65,7 +69,7 @@ class ProfileSessionManager {
 	 * should be the user's home server for the foreseeable future
 	 * @param userObj copy of the deserialized user object
 	 */
-	async pinUser(server: string, userObj: AppUserObject) {
+	async pinUser(server: string, userObj: UserObjectType) {
 		ProfilePinnedUserService.addForProfile(
 			this.db,
 			this.profile,
@@ -105,7 +109,7 @@ class ProfileSessionManager {
 		if (serverRecord && serverRecord.driver !== KNOWN_SOFTWARE.UNKNOWN)
 			return serverRecord;
 		if (!serverRecord || serverRecord.driver === KNOWN_SOFTWARE.UNKNOWN) {
-			const x = new UnknownRestClient();
+			const x = new BaseApiAdapter();
 			const softwareInfoResult = await x.instances.getSoftwareInfo(server);
 			if (softwareInfoResult.error) {
 				console.log('[WARN]: failed to fetch server info', server);
@@ -142,7 +146,7 @@ class ProfileSessionManager {
 		if (!serverRecord) return;
 		const _url = serverRecord.server;
 
-		const x = new UnknownRestClient();
+		const x = new BaseApiAdapter();
 		const { data, error } = await x.instances.getCustomEmojis(_url);
 		if (error) {
 			console.log('[WARN]: failed to get emojis');
