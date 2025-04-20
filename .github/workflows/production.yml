@@ -2,7 +2,6 @@ on:
   push:
     branches:
       - production
-      - fix/main-ci-for-pnpm
 jobs:
   build:
     runs-on: ubuntu-latest
