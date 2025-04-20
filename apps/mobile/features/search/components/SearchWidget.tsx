@@ -27,6 +27,7 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 import WidgetExpanded from './SearchResultFull';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const BUTTON_SIZE = 50;
@@ -41,6 +42,8 @@ function SearchWidget() {
 	const textInputRef = useRef<TextInput>();
 
 	const [IsWidgetExpanded, setIsWidgetExpanded] = useState(false);
+	const [IsAdvancedOptionsVisible, setIsAdvancedOptionsVisible] =
+		useState(false);
 	const rotation = useSharedValue(0);
 	const containerWidth = useSharedValue(0);
 	const borderRadius = useSharedValue(16);
@@ -110,10 +113,18 @@ function SearchWidget() {
 		};
 	});
 
+	function onPressWidgetButton() {
+		if (IsWidgetExpanded) {
+			setIsAdvancedOptionsVisible(!IsAdvancedOptionsVisible);
+		} else {
+			toggleMenu();
+		}
+	}
+
 	const { theme } = useAppTheme();
 	return (
 		<View style={styles.root}>
-			{IsWidgetExpanded && <WidgetExpanded />}
+			{IsWidgetExpanded && IsAdvancedOptionsVisible && <WidgetExpanded />}
 			<Animated.View
 				style={[
 					styles.button,
@@ -121,39 +132,39 @@ function SearchWidget() {
 					{
 						flexDirection: 'row',
 						paddingLeft: IsWidgetExpanded ? 6 : 0,
-						backgroundColor:
-							!IsWidgetExpanded && !!State.q
-								? 'rgba(160, 160, 160, 0.28)'
-								: theme.primary.a0,
+						backgroundColor: theme.background.a50,
+						// backgroundColor:
+						// 	!IsWidgetExpanded && !!State.q
+						// 		? 'rgba(160, 160, 160, 0.28)'
+						// 		: theme.primary.a0,
 						right: CONTAINER_PADDING,
 						borderRadius: 16,
 					},
 				]}
 			>
-				<AnimatedPressable style={{ padding: 8 }} onPress={toggleMenu}>
-					{State.searchStatus === 'loading' ? (
-						<Loader />
-					) : (
-						<Feather
-							name="search"
-							color={
-								!IsWidgetExpanded && !!State.q ? 'rgba(0, 0, 0, 0.36)' : 'black'
-							}
-							size={25}
-						/>
-					)}
+				<AnimatedPressable style={{ padding: 4 }} onPress={onPressWidgetButton}>
+					<Feather
+						name={IsWidgetExpanded ? 'plus' : 'search'}
+						color={
+							!IsWidgetExpanded && !!State.q
+								? 'rgba(0, 0, 0, 0.36)'
+								: theme.secondary.a30 //'black'
+						}
+						size={25}
+					/>
 				</AnimatedPressable>
 				{IsWidgetExpanded && (
 					<TextInput
 						ref={textInputRef}
 						multiline={false}
-						placeholderTextColor={'rgba(0, 0, 0, 0.84)'}
+						placeholderTextColor={theme.secondary.a30} // 'rgba(0, 0, 0, 0.84)'
 						onChangeText={updateSearch}
 						onSubmitEditing={submitSearch}
 						value={State.text}
 						placeholder={t(`discover.welcome`)}
 						style={[
 							{
+								color: theme.secondary.a10,
 								paddingLeft: 4,
 								flex: 1,
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
@@ -161,6 +172,21 @@ function SearchWidget() {
 						]}
 						numberOfLines={1}
 					/>
+				)}
+				{IsWidgetExpanded && (
+					<View
+						style={{
+							borderRadius: '100%',
+							backgroundColor: theme.primary.a0,
+							height: 32,
+							width: 32,
+							marginRight: 8,
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<AntDesign name="arrowup" size={24} color="black" />
+					</View>
 				)}
 			</Animated.View>
 		</View>

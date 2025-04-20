@@ -17,6 +17,7 @@ import ImageInspectModal from '../components/modals/ImageInspectModal';
 import { AppDialog } from '../components/lib/AppDialog';
 import { useAppTheme } from '../hooks/utility/global-state-extractors';
 import '../i18n/_loader';
+import { LinearGradient } from 'expo-linear-gradient';
 
 enableMapSet();
 
@@ -99,6 +100,17 @@ function App() {
 					}}
 				/>
 			</Stack>
+			{/*<LinearGradient*/}
+			{/*	colors={['transparent', theme.background.a0]}*/}
+			{/*	style={{*/}
+			{/*		height: 42, // for smooth transparency effect*/}
+			{/*		flex: 1,*/}
+			{/*		backgroundColor: 'transparent',*/}
+			{/*		position: 'absolute',*/}
+			{/*		bottom: 0,*/}
+			{/*		width: '100%',*/}
+			{/*	}}*/}
+			{/*></LinearGradient>*/}
 			{/* Globally shared components */}
 			<ImageInspectModal />
 			<AppBottomSheet />

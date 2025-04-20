@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
@@ -6,6 +6,8 @@ import { AppText } from '../../lib/Text';
 import { appDimensions } from '../../../styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -14,6 +16,18 @@ export enum APP_LANDING_PAGE_TYPE {
 	COMPOSE,
 	INBOX,
 	PROFILE,
+
+	/**
+	 * Search Modules
+	 */
+	SEARCH_HOME,
+	SEARCH_POSTS,
+	SEARCH_USERS,
+	SEARCH_FEEDS,
+	SEARCH_LINKS,
+	SEARCH_TAGS,
+	SEARCH_FAVOURITES,
+	SEARCH_HISTORY,
 
 	// Modules within "Inbox" tab
 	MENTIONS,
@@ -33,6 +47,12 @@ type AppTabLandingNavbarProps = {
 		onPress?: () => void;
 		disabled?: boolean;
 	}[];
+	/**
+	 * adds a dropdown arrow and makes
+	 * press interaction possible
+	 */
+	isLabelTextInteractable?: boolean;
+	onLabelTextPress?: () => void;
 };
 
 /**
@@ -40,11 +60,29 @@ type AppTabLandingNavbarProps = {
  * landing pages for each of the five
  * main routes
  */
-function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
+function AppTabLandingNavbar({
+	type,
+	menuItems,
+	isLabelTextInteractable,
+	onLabelTextPress,
+}: AppTabLandingNavbarProps) {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const { theme } = useAppTheme();
 	const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 		[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Profile',
 		[APP_LANDING_PAGE_TYPE.HOME]: t(`topNav.primary.hub`),
+		/**
+		 * Search Module
+		 */
+		[APP_LANDING_PAGE_TYPE.SEARCH_HOME]: 'Home',
+		[APP_LANDING_PAGE_TYPE.SEARCH_POSTS]: 'Posts',
+		[APP_LANDING_PAGE_TYPE.SEARCH_USERS]: 'Users',
+		[APP_LANDING_PAGE_TYPE.SEARCH_FEEDS]: 'Feeds',
+		[APP_LANDING_PAGE_TYPE.SEARCH_LINKS]: 'Links',
+		[APP_LANDING_PAGE_TYPE.SEARCH_TAGS]: 'Tags',
+		[APP_LANDING_PAGE_TYPE.SEARCH_FAVOURITES]: 'Favourites',
+		[APP_LANDING_PAGE_TYPE.SEARCH_HISTORY]: 'History',
+
 		[APP_LANDING_PAGE_TYPE.DISCOVER]: t(`topNav.primary.discover`),
 		[APP_LANDING_PAGE_TYPE.COMPOSE]: t(`topNav.primary.compose`),
 		[APP_LANDING_PAGE_TYPE.INBOX]: t(`topNav.primary.inbox`),
@@ -59,11 +97,35 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 		[APP_LANDING_PAGE_TYPE.ACCOUNT_HUB]: t(`topNav.secondary.myAccount`),
 	};
 
+	function onLabelTextPressHandler() {
+		if (isLabelTextInteractable && onLabelTextPress) {
+			onLabelTextPress();
+		}
+	}
+
 	return (
 		<View style={[styles.container]}>
-			<View style={{ flexGrow: 1 }}>
+			<TouchableOpacity
+				style={{ flexGrow: 1, flexDirection: 'row', alignItems: 'center' }}
+				onPress={onLabelTextPressHandler}
+			>
 				<AppText.H1>{navbarLabel[type]}</AppText.H1>
-			</View>
+				{isLabelTextInteractable && (
+					<View
+						style={{
+							marginLeft: 6,
+							alignItems: 'center',
+						}}
+					>
+						<Ionicons
+							name={'chevron-down'}
+							color={theme.primary.a0}
+							size={20}
+							style={{ alignSelf: 'center' }}
+						/>
+					</View>
+				)}
+			</TouchableOpacity>
 			<View style={{ flexDirection: 'row' }}>
 				{menuItems.map(({ iconId, disabled, onPress }, i) => (
 					<Pressable

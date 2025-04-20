@@ -6,7 +6,6 @@ import {
 	usePostTimelineState,
 	usePostTimelineDispatch,
 } from '@dhaaga/core';
-import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';

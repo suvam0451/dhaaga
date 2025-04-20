@@ -46,33 +46,45 @@ function WidgetExpanded() {
 
 	return (
 		<View
-			style={[
-				styles.root,
-				{
-					backgroundColor: theme.palette.menubar,
-					marginHorizontal: CONTAINER_PADDING,
-				},
-			]}
+			style={{
+				flexDirection: 'row',
+				flex: 1,
+				marginHorizontal: CONTAINER_PADDING,
+				paddingVertical: 6,
+				alignItems: 'center',
+			}}
 		>
-			{Tabs.map((o, i) => (
-				<Pressable
-					key={i}
-					onPress={() => {
-						setCategory(o);
-					}}
-					style={{ flex: 1, paddingVertical: 10 }}
-				>
-					<AppText.Medium
-						style={{
-							color: State.tab === o ? theme.primary.a0 : theme.secondary.a20,
-							fontSize: 18,
-							textAlign: 'center',
+			<View
+				style={[
+					styles.root,
+					{
+						backgroundColor: theme.palette.menubar,
+						flex: 1,
+						overflow: 'scroll',
+						paddingVertical: 2,
+					},
+				]}
+			>
+				{Tabs.map((o, i) => (
+					<Pressable
+						key={i}
+						onPress={() => {
+							setCategory(o);
 						}}
+						style={{ flex: 1, paddingVertical: 10 }}
 					>
-						{o}
-					</AppText.Medium>
-				</Pressable>
-			))}
+						<AppText.Medium
+							style={{
+								color: State.tab === o ? theme.primary.a0 : theme.secondary.a20,
+								fontSize: 18,
+								textAlign: 'center',
+							}}
+						>
+							{o}
+						</AppText.Medium>
+					</Pressable>
+				))}
+			</View>
 		</View>
 	);
 }
@@ -85,7 +97,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginBottom: 4,
+		marginTop: 4,
 		borderRadius: 8,
 	},
 });

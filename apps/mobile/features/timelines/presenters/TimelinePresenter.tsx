@@ -1,5 +1,5 @@
 import TimelinePostListView from '../view/TimelinePostListView';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import {
 	PostTimelineStateAction,
 	usePostTimelineState,
@@ -34,26 +34,6 @@ function TimelinePresenter({ refetch, fetchStatus }: TimelinePresenterProps) {
 		});
 	}
 
-	const [debouncedFetchStatus, setDebouncedFetchStatus] = useState(false);
-	const timeoutRef = useRef(null);
-
-	const debounceFn = (state: boolean) => {
-		if (state === false && debouncedFetchStatus === true) {
-			clearTimeout(timeoutRef.current);
-			timeoutRef.current = setTimeout(() => {
-				setDebouncedFetchStatus(false);
-			}, 1000);
-		} else {
-			clearTimeout(timeoutRef.current);
-			setDebouncedFetchStatus(true);
-		}
-	};
-
-	useEffect(() => {
-		debounceFn(fetchStatus === 'fetching');
-		return () => clearTimeout(timeoutRef.current);
-	}, [fetchStatus]);
-
 	return (
 		<TimelinePostListView
 			items={State.items}
@@ -61,7 +41,7 @@ function TimelinePresenter({ refetch, fetchStatus }: TimelinePresenterProps) {
 			onRefresh={onRefresh}
 			refreshing={Refreshing}
 			loadMore={loadMore}
-			fetching={debouncedFetchStatus}
+			fetching={fetchStatus === 'fetching' || State.isFetching}
 		/>
 	);
 }

@@ -54,6 +54,16 @@ enum TimelineFetchMode {
 
 type State = TimelineReducerBaseState<PostObjectType> & {
 	feedType: TimelineFetchMode;
+	/**
+	 * 	The FE may not have the results loaded,
+	 * 	even though the BE has finished fetching the
+	 * 	results.
+	 *
+	 * 	Pass this flag to LoadingIndicator to show
+	 * 	the indicator until both BE/FE are done.
+	 *
+	 */
+	isFetching: boolean;
 
 	opts: AppTimelineQueryOptions; // for users/hashtags
 	query: { id: string; label: string } | null;
@@ -64,6 +74,7 @@ const DEFAULT: State = {
 	...timelineReducerBaseDefaults,
 	feedType: TimelineFetchMode.IDLE,
 	query: null,
+	isFetching: false,
 	isWidgetVisible: false,
 	items: [],
 };
@@ -358,6 +369,7 @@ function reducer(state: State, action: Actions): State {
 
 				draft.items = copy;
 				draft.maxId = action.payload.maxId;
+				draft.isFetching = false;
 			});
 		}
 		case ACTION.SET_QUERY_OPTS: {
@@ -374,6 +386,7 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.REQUEST_LOAD_MORE: {
 			return produce(state, (draft) => {
 				draft.appliedMaxId = state.maxId;
+				draft.isFetching = true;
 			});
 		}
 		case ACTION.RESET: {
