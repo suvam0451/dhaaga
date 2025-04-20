@@ -1,8 +1,6 @@
 on:
   push:
-    branches:
-      - main
-      - fix/main-ci-for-pnpm
+    branches: ['**']
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -1,10 +1,6 @@
 on:
   push:
-    branches:
-      - main
-      - feat/setup-ci-runner
-      - feat/complete-ci-cd
-      - feat/global-state-to-core-pkg
+    branches: ['**']
 jobs:
   build:
     runs-on: ubuntu-latest
