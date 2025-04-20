@@ -1,6 +1,6 @@
 {
 	"name": "@dhaaga/mobile",
-	"version": "0.16.1",
+	"version": "0.16.2",
 	"main": "index.js",
 	"dependencies": {
 		"@atproto/api": "^0.15.3",
