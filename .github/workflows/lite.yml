@@ -4,6 +4,7 @@ on:
       - main
       - feat/setup-ci-runner
       - feat/complete-ci-cd
+      - feat/global-state-to-core-pkg
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,9 +15,11 @@ jobs:
       - uses: actions/setup-node@v4 # setup node
         with:
           node-version: latest
-      - uses: oven-sh/setup-bun@v2 # install bun
-      - run: bun install # install dependencies
-      - run: bun remove react-native-purchases # remove optional dependencies
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: true
+      - run: pnpm remove react-native-purchases # remove optional dependencies
         working-directory: ./apps/mobile
       - uses: actions/setup-python@v5
         with:
@@ -28,7 +31,7 @@ jobs:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      - run: bun add -D @react-native-community/cli # add cli
+      - run: pnpm install -D @react-native-community/cli # add cli
         working-directory: ./apps/mobile
       - run: npx react-native build-android --mode=release # produce aab
         working-directory: ./apps/mobile
