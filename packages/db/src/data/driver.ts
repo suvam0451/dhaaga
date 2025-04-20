@@ -1,6 +1,18 @@
-import { type SearchTabType } from '@dhaaga/core';
 import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
 import { KNOWN_SOFTWARE, DriverService } from '@dhaaga/bridge';
+
+const searchTabs = [
+	'top',
+	'latest',
+	'feeds',
+	'posts',
+	'users',
+	'tags',
+	'links',
+	'news',
+	'home',
+] as const;
+type SearchTabType = (typeof searchTabs)[number];
 
 /**
  * @param driver protocol driver enum string

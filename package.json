@@ -29,17 +29,18 @@
   "scripts": {
     "dev:app": "pnpm --filter @dhaaga/mobile dev",
     "dev:web": "pnpm --filter @dhaaga/web dev",
-    "build:bridge": "pnpm --filter @dhaaga/bridge up",
-    "build:core": "pnpm --filter @dhaaga/core up",
+    "build:db": "pnpm --filter @dhaaga/db build",
+    "build:bridge": "pnpm --filter @dhaaga/bridge build",
+    "build:core": "pnpm --filter @dhaaga/core build",
     "build:orm": "pnpm --filter @dhaaga/orm build",
-    "build": "pnpm build:bridge && pnpm build:orm && pnpm build:core"
+    "build": "pnpm build:bridge && pnpm build:orm && pnpm build:db && pnpm build:core"
   },
   "workspaces": [
     "packages/**",
     "apps/mobile"
   ],
   "dependencies": {
-    "prettier": "^3.5.1"
+    "prettier": "^3.5.3"
   },
   "prettier": {
     "bracketSpacing": true,

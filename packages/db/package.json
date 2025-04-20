@@ -15,6 +15,10 @@
       "types": "./dist/*"
     }
   },
+  "dependencies": {
+    "@dhaaga/bridge": "workspace:*",
+    "@dhaaga/orm": "workspace:*"
+  },
   "devDependencies": {
     "typescript": "^5.8.3"
   },
@@ -22,7 +26,7 @@
     "expo-sqlite": "^15.1.4"
   },
   "scripts": {
-    "up": "rm -rf ./dist/** && tsc -p ./tsconfig.json"
+    "build": "tsc -p ./tsconfig.json"
   },
   "type": "module"
 }

@@ -33,7 +33,7 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "up": "tsc -p ./tsconfig.json"
+    "build": "tsc -p ./tsconfig.json"
   },
   "type": "module"
 }

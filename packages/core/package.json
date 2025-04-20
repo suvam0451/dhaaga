@@ -21,7 +21,7 @@
 		"typescript": "^5.7.3"
 	},
 	"scripts": {
-		"up": "rm -rf ./dist/** && tsc -p ./tsconfig.json"
+		"build": "tsc -p ./tsconfig.json"
 	},
 	"exports": {
 		".": {
