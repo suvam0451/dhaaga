@@ -21,7 +21,7 @@ jobs:
           # NOTE: remove optional dependencies for lite builds
           run_install: |
             - recursive: false
-              args: [--no-optional]
+              args: []
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
