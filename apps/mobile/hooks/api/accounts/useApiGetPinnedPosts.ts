@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { AtprotoApiAdapter, MisskeyApiAdapter } from '@dhaaga/bridge';
-import { PostParser } from '@dhaaga/bridge';
+import { PostParser, ActivityPubService } from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppAcct,
 	useAppApiClient,
 } from '../../utility/global-state-extractors';
-import ActivityPubService from '../../../services/activitypub.service';
 
 /**
  * -- Obtain the pinned posts --

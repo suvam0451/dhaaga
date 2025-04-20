@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '../../../../styles/AppFonts';
-import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
+import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppPublishers,
@@ -52,7 +52,7 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 
 	async function onReactionPress() {
 		// nothing to do on short press for remote emojis
-		if (ActivitypubReactionsService.cannotReact(dto?.name)) {
+		if (ActivityPubReactionsService.cannotReact(dto?.name)) {
 			console.log('cannot react???');
 			return;
 		}

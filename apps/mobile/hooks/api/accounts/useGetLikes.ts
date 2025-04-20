@@ -5,9 +5,12 @@ import {
 	useAppApiClient,
 } from '../../utility/global-state-extractors';
 import { AppResultPageType } from '../../../types/app.types';
-import ActivityPubService from '../../../services/activitypub.service';
-import { AtprotoApiAdapter, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { PostParser } from '@dhaaga/bridge';
+import {
+	AtprotoApiAdapter,
+	KNOWN_SOFTWARE,
+	PostParser,
+	ActivityPubService,
+} from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
 
 function useGetLikes(query: GetPostsQueryDTO) {

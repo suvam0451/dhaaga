@@ -1,37 +1,37 @@
 {
-  "name": "@dhaaga/core",
-  "description": "Core business logic for the Dhaaga apps",
-  "license": "AGPL-3.0-or-later",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "dependencies": {
-    "@dhaaga/bridge": "*",
-    "@dhaaga/db": "*",
-    "immer": "^10.1.1",
-    "zod": "^3.24.2"
-  },
-  "peerDependencies": {
-    "@atproto/api": "^0.14.4",
-    "react": ">=18.2.0",
-    "typescript": "^5.7.3"
-  },
-  "scripts": {
-    "bun:up": "rm -rf ./dist/** && bun build --outdir ./dist --outfile ./dist/index.js --target node ./src/index.ts && tsc -p ./tsconfig.json",
-    "up": "rm -rf ./dist/** && tsc -p ./tsconfig.json"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./*": {
-      "import": "./dist/*",
-      "types": "./dist/*"
-    }
-  },
-  "private": true
+	"name": "@dhaaga/core",
+	"description": "Core business logic for the Dhaaga apps",
+	"license": "AGPL-3.0-or-later",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"devDependencies": {
+		"@types/bun": "latest",
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"@dhaaga/bridge": "workspace:*",
+		"@dhaaga/db": "workspace:*",
+		"immer": "^10.1.1",
+		"zod": "^3.24.3"
+	},
+	"peerDependencies": {
+		"@atproto/api": "^0.14.4",
+		"react": ">=18.2.0",
+		"typescript": "^5.7.3"
+	},
+	"scripts": {
+		"build": "tsc -p ./tsconfig.json"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./*": {
+			"import": "./dist/*",
+			"types": "./dist/*"
+		}
+	},
+	"private": true
 }

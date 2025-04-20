@@ -1,9 +1,10 @@
-import ActivitypubService from '../../services/activitypub.service';
 import { MisskeyApiAdapter, PleromaApiAdapter } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import ActivityPubService from '../../services/activitypub.service';
-import ActivitypubReactionsService from '../../services/approto/activitypub-reactions.service';
+import {
+	ActivityPubService,
+	ActivityPubReactionsService,
+} from '@dhaaga/bridge';
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../states/_global';
 import { UserParser } from '@dhaaga/bridge';
@@ -29,12 +30,12 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 	const [Data, setData] = useState<ReactionDetails>(null);
 
 	async function api(): Promise<ReactionDetails> {
-		const { id } = ActivitypubReactionsService.extractReactionCode(
+		const { id } = ActivityPubReactionsService.extractReactionCode(
 			reactionId,
 			driver,
 			acct?.server,
 		);
-		if (ActivitypubService.pleromaLike(driver)) {
+		if (ActivityPubService.pleromaLike(driver)) {
 			const { data, error } = await (
 				client as PleromaApiAdapter
 			).statuses.getReactions(postId);

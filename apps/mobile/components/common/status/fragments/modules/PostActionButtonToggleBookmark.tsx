@@ -7,7 +7,7 @@ import {
 import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
 import { AppToggleIcon } from '../../../../lib/Icon';
 import { appDimensions } from '../../../../../styles/dimensions';
-import ActivityPubService from '../../../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
 
 /**

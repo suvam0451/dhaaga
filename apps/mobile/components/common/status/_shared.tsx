@@ -4,7 +4,7 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import ActivityPubService from '../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';

@@ -1,9 +1,10 @@
 import { DataSource, Account } from '@dhaaga/db';
 import { BaseStorageManager } from './_shared';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
-import ActivityPubReactionsService, {
+import {
+	ActivityPubReactionsService,
 	ActivityPubReactionStateType,
-} from '../approto/activitypub-reactions.service';
+} from '@dhaaga/bridge';
 import { UserObjectType } from '@dhaaga/bridge';
 
 enum KEY {

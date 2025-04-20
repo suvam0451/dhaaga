@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppManager } from '../../../hooks/utility/global-state-extractors';
-import ActivityPubService from '../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 
@@ -17,10 +17,8 @@ function useMastoApiLogin() {
 	async function resolve() {
 		setIsLoading(true);
 		try {
-			const signInStrategy = await ActivityPubService.signInUrl(
-				Server,
-				appManager,
-			);
+			const tokens = appManager.storage.getAtprotoServerClientTokens(Server);
+			const signInStrategy = await ActivityPubService.signInUrl(Server, tokens);
 			if (signInStrategy?.clientId && signInStrategy?.clientSecret) {
 				appManager.storage.setAtprotoServerClientTokens(
 					Server,

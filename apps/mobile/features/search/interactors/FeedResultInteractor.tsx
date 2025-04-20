@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useFeedTimelineDispatch, useFeedTimelineState } from '@dhaaga/core';
 import { useApiSearchFeeds } from '../../../hooks/api/useApiSearch';
 import { ACTION, FeedTimelineStateAction } from '@dhaaga/core';
-import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
@@ -67,9 +66,6 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	/**
 	 * Composite Hook Collection
 	 */
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
-	});
 	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: feedState.items.length,
 		updateQueryCache: loadMore,
@@ -95,7 +91,7 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
 			/>
-			<TimelineLoadingIndicator visible={visible} loading={loading} />
+			<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
 		</View>
 	);
 }

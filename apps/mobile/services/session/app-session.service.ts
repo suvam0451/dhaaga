@@ -125,7 +125,9 @@ class Storage extends BaseStorageManager {
 	 * registration results in hour long rate limits
 	 */
 
-	getAtprotoServerClientTokens(server: string) {
+	getAtprotoServerClientTokens(
+		server: string,
+	): AppAtprotoServerClientTokenType | null {
 		// Get the current date and time
 		const sixHoursBefore = new Date();
 		sixHoursBefore.setHours(sixHoursBefore.getHours() - 6);

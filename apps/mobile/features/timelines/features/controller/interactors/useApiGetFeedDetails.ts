@@ -1,6 +1,5 @@
 import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
-import { AtprotoApiAdapter } from '@dhaaga/bridge';
-import { AtprotoFeedService } from '../../../../../services/atproto.service';
+import { AtprotoApiAdapter, AtprotoFeedService } from '@dhaaga/bridge';
 import { useQuery } from '@tanstack/react-query';
 import { FeedParser } from '@dhaaga/bridge';
 

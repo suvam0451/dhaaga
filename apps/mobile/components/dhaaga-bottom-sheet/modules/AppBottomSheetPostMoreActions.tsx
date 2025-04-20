@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Emoji } from './emoji-picker/emojiPickerReducer';
 import MorePostActionsPresenter from '../../../features/timelines/presenters/MorePostActionsPresenter';
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
-import ActivitypubReactionsService from '../../../services/approto/activitypub-reactions.service';
+import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
@@ -26,7 +26,7 @@ const AppBottomSheetPostMoreActions = memo(() => {
 	const [Loading, setLoading] = useState(false);
 
 	async function onReactionRequested(emoji: Emoji) {
-		const state = await ActivitypubReactionsService.addReaction(
+		const state = await ActivityPubReactionsService.addReaction(
 			client,
 			post.id,
 			emoji.shortCode,

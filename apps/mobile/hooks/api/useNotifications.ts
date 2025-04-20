@@ -4,6 +4,7 @@ import {
 	MastoApiAdapter,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
+	ActivityPubService,
 } from '@dhaaga/bridge';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +13,6 @@ import {
 	useAppApiClient,
 	useAppDb,
 } from '../utility/global-state-extractors';
-import ActivityPubService from '../../services/activitypub.service';
 import {
 	AppBskyNotificationListNotifications,
 	ChatBskyConvoListConvos,

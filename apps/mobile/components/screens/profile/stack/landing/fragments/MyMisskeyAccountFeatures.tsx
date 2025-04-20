@@ -4,7 +4,7 @@ import { APP_FONTS } from '../../../../../../styles/AppFonts';
 import { APP_FONT } from '../../../../../../styles/AppTheme';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import ActivityPubService from '../../../../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import useGlobalState from '../../../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 

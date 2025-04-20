@@ -1,5 +1,5 @@
 import { FetchStatus } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
 	fetchStatus: FetchStatus;
@@ -56,19 +56,24 @@ function useLoadingMoreIndicatorState({
 		return () => clearTimeout(timeoutRef.current);
 	}, [fetchStatus]);
 
-	return useMemo(() => {
-		if (extendedLoading) {
-			return {
-				visible: true,
-				loading: true,
-			};
-		} else {
-			return {
-				visible: false,
-				loading: false,
-			};
-		}
-	}, [extendedLoading]);
+	return {
+		visible: fetchStatus !== 'idle',
+		loading: fetchStatus === 'fetching',
+	};
+
+	// return useMemo(() => {
+	// 	if (extendedLoading) {
+	// 		return {
+	// 			visible: true,
+	// 			loading: true,
+	// 		};
+	// 	} else {
+	// 		return {
+	// 			visible: false,
+	// 			loading: false,
+	// 		};
+	// 	}
+	// }, [extendedLoading]);
 }
 
 export default useLoadingMoreIndicatorState;

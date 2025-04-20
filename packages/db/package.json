@@ -15,15 +15,18 @@
       "types": "./dist/*"
     }
   },
+  "dependencies": {
+    "@dhaaga/bridge": "workspace:*",
+    "@dhaaga/orm": "workspace:*"
+  },
   "devDependencies": {
-    "@types/bun": "latest",
-    "typescript": "^5.0.0"
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "expo-sqlite": "^15.1.2"
+    "expo-sqlite": "^15.1.4"
   },
   "scripts": {
-    "up": "tsc -p ./tsconfig.json"
+    "build": "tsc -p ./tsconfig.json"
   },
   "type": "module"
 }

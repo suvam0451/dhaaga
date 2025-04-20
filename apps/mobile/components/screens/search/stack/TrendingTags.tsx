@@ -3,7 +3,6 @@ import WithActivitypubTagContext from '../../../../states/useTag';
 import TagItem from '../../../common/tag/TagItem';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { TimelineLoadingIndicator } from '../../../../ui/LoadingIndicator';
-import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useTrendingTags from '../api/useTrendingTags';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { Fragment } from 'react';
@@ -22,7 +21,6 @@ function ApiWrapper() {
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd();
 
-	const { visible, loading } = useLoadingMoreIndicatorState({ fetchStatus });
 	return (
 		<WithAutoHideTopNavBar title={'Trending Tags'} translateY={translateY}>
 			{driver === KNOWN_SOFTWARE.MASTODON ? (
@@ -40,7 +38,7 @@ function ApiWrapper() {
 						}}
 						scrollEventThrottle={16}
 					/>
-					<TimelineLoadingIndicator visible={visible} loading={loading} />
+					<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
 				</Fragment>
 			) : (
 				<FeatureUnsupported />

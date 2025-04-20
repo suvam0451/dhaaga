@@ -4,7 +4,6 @@ import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
 import StatusItem from '../../../common/status/StatusItem';
 import { TimelineLoadingIndicator } from '../../../../ui/LoadingIndicator';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import useLoadingMoreIndicatorState from '../../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import useTrendingPosts from '../api/useTrendingPosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
@@ -12,7 +11,6 @@ import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
 import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
 
 const SHOWN_SECTION_HEIGHT = 50;
-const HIDDEN_SECTION_HEIGHT = 50;
 
 /**
  * Search Module -- Trending Posts
@@ -29,11 +27,6 @@ function ApiWrapper() {
 		setRefreshing(true);
 		refetch();
 	};
-
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
-		additionalLoadingStates: IsLoading,
-	});
 
 	return (
 		<WithAutoHideTopNavBar title={'Trending Posts'} translateY={translateY}>
@@ -52,7 +45,10 @@ function ApiWrapper() {
 							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 						}
 					/>
-					<TimelineLoadingIndicator visible={visible} loading={loading} />
+					<TimelineLoadingIndicator
+						networkFetchStatus={fetchStatus}
+						isLoading={IsLoading}
+					/>
 				</Fragment>
 			) : (
 				<FeatureUnsupported />

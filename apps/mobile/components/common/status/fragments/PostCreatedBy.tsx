@@ -20,8 +20,7 @@ import { AccountSavedUser } from '@dhaaga/db';
 import { TextContentView } from '../TextContentView';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
-import ActivitypubService from '../../../../services/activitypub.service';
-import { RandomUtil } from '@dhaaga/bridge';
+import { RandomUtil, ActivityPubService } from '@dhaaga/bridge';
 import { TextNodeParser, PostInspector } from '@dhaaga/bridge';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
@@ -213,7 +212,7 @@ function PostCreatedBy({ style }: OriginalPosterProps) {
 	const UserDivRef = useRef(null);
 
 	function onAvatarClicked() {
-		if (ActivitypubService.blueskyLike(driver)) {
+		if (ActivityPubService.blueskyLike(driver)) {
 			setCtx({
 				did: PostInspector.getContentTarget(dto)?.postedBy?.id,
 			});

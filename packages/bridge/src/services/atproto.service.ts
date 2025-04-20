@@ -1,7 +1,7 @@
 import { AtprotoApiAdapter } from '@dhaaga/bridge';
-import type { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
 import type { ApiTargetInterface } from '@dhaaga/bridge';
 import { AppBskyActorDefs, AppBskyActorGetPreferences } from '@atproto/api';
+import { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 
 export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
 
@@ -28,19 +28,19 @@ class AtprotoPostService {
 		client: ApiTargetInterface,
 		uri: string,
 		cid: string,
-		viewer: ViewerState,
+		repostView: string | undefined,
 	) {
 		const _client = client as AtprotoApiAdapter;
-		if (viewer.repost === undefined) {
+		if (repostView === undefined) {
 			const result = await _client.statuses.atProtoRepost(uri, cid);
 			if (result.success)
 				return { state: result.liked, uri: result.uri, success: true };
-			return { state: !!viewer.repost, uri: viewer?.repost, success: false };
+			return { state: false, uri: undefined, success: false };
 		}
 
-		const result = await _client.statuses.atProtoDeleteRepost(viewer.repost);
+		const result = await _client.statuses.atProtoDeleteRepost(repostView);
 		if (result.success) return { state: result.liked, success: true };
-		return { state: !!viewer.repost, uri: viewer?.repost, success: false };
+		return { state: true, uri: repostView, success: false };
 	}
 }
 

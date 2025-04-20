@@ -5,7 +5,7 @@ import {
 	PostTimelineStateAction,
 } from '@dhaaga/core';
 import { Result } from '../../utils/result';
-import ActivityPubService from '../activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 
 export class TimelineSessionService {
 	isValid: boolean;

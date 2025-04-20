@@ -91,7 +91,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-font',
 			{
 				fonts: [
-					// Inter
+					// Applicable for flat node_modules
 					'../../node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_600SemiBold.ttf',
@@ -100,6 +100,15 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					'../../node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf', // Roboto
 					'../../node_modules/@expo-google-fonts/roboto/Roboto_500Medium.ttf',
 					'../../node_modules/@expo-google-fonts/roboto/Roboto_700Bold.ttf',
+					// Applicable for pnpm (when not hoisted)
+					// '../../node_modules/.pnpm/@expo-google-fonts+inter@0.2.3/node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf',
+					// '../../node_modules/.pnpm/@expo-google-fonts+inter@0.2.3/node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf',
+					// '../../node_modules/.pnpm/@expo-google-fonts+inter@0.2.3/node_modules/@expo-google-fonts/inter/Inter_600SemiBold.ttf',
+					// '../../node_modules/.pnpm/@expo-google-fonts+inter@0.2.3/node_modules/@expo-google-fonts/inter/Inter_700Bold.ttf', // Montserrat
+					// '../../node_modules/.pnpm/@expo-google-fonts+bebas-neue@0.2.3/node_modules/@expo-google-fonts/bebas-neue/BebasNeue_400Regular.ttf', // BebasNeue
+					// '../../node_modules/.pnpm/@expo-google-fonts+roboto@0.2.3/node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf', // Roboto
+					// '../../node_modules/.pnpm/@expo-google-fonts+roboto@0.2.3/node_modules/@expo-google-fonts/roboto/Roboto_500Medium.ttf',
+					// '../../node_modules/.pnpm/@expo-google-fonts+roboto@0.2.3/node_modules/@expo-google-fonts/roboto/Roboto_700Bold.ttf',
 				],
 			},
 		],

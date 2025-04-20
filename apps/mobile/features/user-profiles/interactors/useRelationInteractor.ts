@@ -10,7 +10,7 @@ import {
 import ActivitypubRelationService from '../../../services/approto/activitypub-relation.service';
 import { AppBskyActorGetProfile } from '@atproto/api';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
-import ActivityPubService from '../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 
 const defaultValue = {
 	blockedBy: false,

@@ -12,7 +12,7 @@ import {
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../lib/Text';
 import { Text } from 'react-native';
-import ActivitypubService from '../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 
 type Props = {
 	value: string;
@@ -35,8 +35,8 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 
 	function onPress() {
 		if (
-			ActivitypubService.mastodonLike(driver) ||
-			ActivitypubService.misskeyLike(driver)
+			ActivityPubService.mastodonLike(driver) ||
+			ActivityPubService.misskeyLike(driver)
 		) {
 			const ctx = PostResolver.mentionItemsToWebfinger(parsed?.text, mentions);
 			console.log(ctx, parsed?.text, mentions);

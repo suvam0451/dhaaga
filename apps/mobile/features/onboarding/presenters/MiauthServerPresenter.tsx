@@ -13,7 +13,7 @@ import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router } from 'expo-router';
-import ActivityPubService from '../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import Feather from '@expo/vector-icons/Feather';
 import PopularServers from '../components/PopularServers';
