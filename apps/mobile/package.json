@@ -69,7 +69,7 @@
 		"client": "eas build -p android --profile dev",
 		"lite:manual": "react-native build-android --mode=release && cd android && ./gradlew assembleRelease",
 		"lite": "python3 ./lite.py",
-		"postinstall": "cd ../.. && bun run build",
+		"postinstall": "cd ../.. && pnpm run build",
 		"android": "expo run:android",
 		"ios": "expo run:ios",
 		"tl:sync": "python3 ./i18n/sync.py"
