@@ -3,7 +3,6 @@ import TimelinesHeader from '../../../components/shared/topnavbar/fragments/TopN
 import type { PostObjectType } from '@dhaaga/bridge';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import { appDimensions } from '../../../styles/dimensions';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
@@ -33,10 +32,6 @@ function TimelinePostListView({
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: numItems,
 		updateQueryCache: loadMore,
-	});
-
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus: fetching ? 'fetching' : 'idle',
 	});
 
 	return (
@@ -70,7 +65,9 @@ function TimelinePostListView({
 					}
 				/>
 			</View>
-			<TimelineLoadingIndicator visible={visible} loading={loading} />
+			<TimelineLoadingIndicator
+				networkFetchStatus={fetching ? 'fetching' : 'idle'}
+			/>
 		</View>
 	);
 }

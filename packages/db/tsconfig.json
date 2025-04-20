@@ -20,7 +20,8 @@
     "sourceMap": true,
     "strict": true,
     "target": "ESNext",
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "experimentalDecorators": true
   },
   "include": [
     "src"

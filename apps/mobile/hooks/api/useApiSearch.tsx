@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '../utility/global-state-extractors';
 import { AppBskyFeedSearchPosts } from '@atproto/api';
-import ActivitypubService from '../../services/activitypub.service';
 import {
 	UserParser,
 	PostParser,
@@ -10,6 +9,7 @@ import {
 	FeedParser,
 	AtprotoApiAdapter,
 	KNOWN_SOFTWARE,
+	ActivityPubService,
 } from '@dhaaga/bridge';
 import type {
 	UserObjectType,
@@ -82,7 +82,7 @@ export function useApiSearchUsers(q: string, maxId: string | null) {
 			console.log('[WARN]: error searching for posts', error.message);
 			throw new Error(error.message);
 		}
-		if (ActivitypubService.blueskyLike(driver)) {
+		if (ActivityPubService.blueskyLike(driver)) {
 			return UserParser.parse<unknown[]>(
 				(data as any).data.actors as any[],
 				driver,

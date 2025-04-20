@@ -70,9 +70,6 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	/**
 	 * Composite Hook Collection
 	 */
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
-	});
 	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: TimelineState.items.length,
 		updateQueryCache: loadMore,
@@ -98,7 +95,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
 				}
 			/>
-			<TimelineLoadingIndicator visible={visible} loading={loading} />
+			<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
 		</View>
 	);
 }

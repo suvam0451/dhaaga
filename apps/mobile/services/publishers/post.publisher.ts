@@ -1,9 +1,54 @@
 import { BasePubSubService } from './_base.pubisher';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { KNOWN_SOFTWARE, ApiTargetInterface } from '@dhaaga/bridge';
-import { PostMutator } from '../mutators/post.mutator';
 import { Emoji } from '../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
+
+class Mutator {
+	private readonly client: ApiTargetInterface;
+
+	constructor(client: ApiTargetInterface) {
+		this.client = client;
+	}
+
+	async toggleLike(input: PostObjectType) {
+		return this.client.post
+			.toggleLike(input)
+			.then((res) => res.unwrapOrElse(input));
+	}
+
+	async toggleBookmark(input: PostObjectType) {
+		return this.client.post
+			.toggleBookmark(input)
+			.then((res) => res.unwrapOrElse(input));
+	}
+
+	async finalizeBookmarkState(input: PostObjectType): Promise<PostObjectType> {
+		return this.client.post.loadBookmarkState(input);
+	}
+
+	async toggleShare(input: PostObjectType): Promise<PostObjectType> {
+		return this.client.post.toggleShare(input);
+	}
+
+	async addReaction(
+		input: PostObjectType,
+		reactionCode: string,
+	): Promise<PostObjectType> {
+		return this.client.post
+			.addReaction(input, reactionCode)
+			.then((res) => res.unwrapOrElse(input));
+	}
+
+	async removeReaction(
+		input: PostObjectType,
+		reactionCode: string,
+	): Promise<PostObjectType> {
+		return this.client.post
+			.removeReaction(input, reactionCode)
+			.then((res) => res.unwrapOrElse(input));
+	}
+}
 
 export enum POST_EVENT_ENUM {
 	UPDATE = 'postObjectChanged',
@@ -18,7 +63,7 @@ export class PostPublisherService extends BasePubSubService {
 	private readonly cache: Map<string, PostObjectType>;
 	private readonly driver: KNOWN_SOFTWARE;
 	private readonly client: ApiTargetInterface;
-	private readonly mutator: PostMutator;
+	private readonly mutator: Mutator;
 
 	constructor(driver: KNOWN_SOFTWARE, client: ApiTargetInterface) {
 		super();
@@ -28,7 +73,7 @@ export class PostPublisherService extends BasePubSubService {
 		if (!this.client) {
 			console.log('[WARN]: client empty');
 		}
-		this.mutator = new PostMutator(this.driver, this.client);
+		this.mutator = new Mutator(this.client);
 	}
 
 	writeCache(uuid: string, data: PostObjectType) {
@@ -68,6 +113,7 @@ export class PostPublisherService extends BasePubSubService {
 			if (!activeKeys.has(key)) this.cache.delete(key);
 		}
 	}
+	x;
 
 	private async _bind(
 		uuid: string,

@@ -6,7 +6,6 @@ import {
 	useUserTimelineDispatch,
 	useUserTimelineState,
 } from '@dhaaga/core';
-import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { View } from 'react-native';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
@@ -72,9 +71,6 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	/**
 	 * Composite Hook Collection
 	 */
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
-	});
 	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: TimelineState.items.length,
 		updateQueryCache: loadMore,
@@ -93,7 +89,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				refreshing={Refreshing}
 				ListHeaderComponent={Header}
 			/>
-			<TimelineLoadingIndicator visible={visible} loading={loading} />
+			<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
 		</View>
 	);
 }

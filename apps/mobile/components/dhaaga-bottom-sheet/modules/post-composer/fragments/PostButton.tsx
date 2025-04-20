@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import ActivityPubService from '../../../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import AtprotoComposerService from '../../../../../services/atproto/atproto-compose';
 import {
 	useAppApiClient,

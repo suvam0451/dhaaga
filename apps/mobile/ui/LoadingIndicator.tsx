@@ -8,18 +8,32 @@ import {
 } from 'react-native';
 import { APP_FONTS } from '../styles/AppFonts';
 import { useAppTheme } from '../hooks/utility/global-state-extractors';
+import useLoadingMoreIndicatorState from '../states/useLoadingMoreIndicatorState';
+import { FetchStatus } from '@tanstack/react-query';
 
 type LoadingMoreProps = {
-	visible: boolean;
-	loading: boolean;
+	networkFetchStatus: FetchStatus;
+	isLoading?: boolean;
 	style?: StyleProp<ViewStyle>;
 };
 
+/**
+ * Loading indicator for timeline
+ * @param networkFetchStatus
+ * @param isLoading
+ * @param style
+ * @constructor
+ */
 function TimelineLoadingIndicator({
-	visible,
-	loading,
+	networkFetchStatus,
+	isLoading,
 	style,
 }: LoadingMoreProps) {
+	const { visible, loading } = useLoadingMoreIndicatorState({
+		fetchStatus: networkFetchStatus,
+		additionalLoadingStates: isLoading,
+	});
+
 	const { theme } = useAppTheme();
 	if (!visible) return <View />;
 	if (visible && loading)

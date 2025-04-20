@@ -7,6 +7,15 @@ export {
 	PleromaApiAdapter,
 } from './adapters/index.js';
 
+import ActivityPubService from './services/activitypub.service.js';
+export { ActivityPubService };
+import ActivityPubReactionsService, {
+	type ActivityPubReactionStateType,
+	type ActivityPubReactionItemType,
+} from './services/activitypub-reactions.service.js';
+export { ActivityPubReactionsService };
+export type { ActivityPubReactionStateType, ActivityPubReactionItemType };
+
 //  status adapters
 import PostAdapterBase from './implementors/status/default.js';
 import MastoApiPostAdapter from './implementors/status/mastodon.js';
@@ -74,6 +83,7 @@ export {
 export type { DhaagaJsTimelineQueryOptions } from './adapters/_client/_router/routes/_index.js';
 
 export type { MfmNode } from './services/index.js';
+export { AtprotoPostService, AtprotoFeedService } from './services/index.js';
 
 export { UserDetailedInstance } from './implementors/profile/_interface.js';
 export { AccountInstance } from './implementors/profile/_interface.js';

@@ -1,32 +1,48 @@
-import {
-	ApiTargetInterface,
-	InstanceApi_CustomEmojiDTO,
-	MisskeyApiAdapter,
-	PleromaApiAdapter,
-} from '@dhaaga/bridge';
-import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
-import ActivityPubService from '../activitypub.service';
+import ActivityPubService from './activitypub.service.js';
 import { Dispatch, SetStateAction } from 'react';
 import { z } from 'zod';
-import activitypubService from '../activitypub.service';
-import ActivityPubAdapterService from '../activitypub-adapter.service';
+import activitypubService from './activitypub.service.js';
+import { InstanceApi_CustomEmojiDTO } from '../adapters/_client/_router/routes/instance.js';
+import {
+	ApiTargetInterface,
+	MisskeyApiAdapter,
+	PleromaApiAdapter,
+} from '../adapters/index.js';
+import { PostParser } from '../parsers/post.js';
+import { DriverReactionResolvedType } from '../types/activitypub.js';
 
 const MISSKEY_LOCAL_EX = /:(.*?):/;
 const MISSKEY_LOCAL_ALT_EX = /:(.*?)@.:/;
 const MISSKEY_REMOTE_EX = /:(.*?)@(.*?):/;
 const PLEROMA_REMOTE_EX = /(.*?)@(.*?)/;
 
-export const ActivityPubReactionStateSchema = z.array(
-	z.object({
-		id: z.string(),
-		count: z.number().positive(),
-		me: z.boolean(),
-		accounts: z.array(z.string()),
-		url: z.string().nullable().optional(),
-	}),
-);
+const pleromaReactionItemSchema = z.object({
+	count: z.number().positive(),
+	me: z.boolean(),
+	url: z.string(),
+	name: z.string(), // pleroma, resolved into id by parser
+	accountIds: z.array(z.string()), // pleroma, resolved into accounts by parser
+});
 
-export type ActivityPubReactionStateType = z.infer<
+type PleromaReactionItemType = z.infer<typeof pleromaReactionItemSchema>;
+
+const activityPubReactionItemSchema = z.object({
+	id: z.string(),
+	count: z.number().positive(),
+	me: z.boolean(),
+	accounts: z.array(z.string()),
+	url: z.string().nullable().optional(),
+	// name: z.string().optional(), // pleroma, resolved into id by parser
+	// accountIds: z.array(z.string()), // pleroma, resolved into accounts by parser
+});
+
+type ActivityPubReactionItemType = z.infer<
+	typeof activityPubReactionItemSchema
+>;
+
+const ActivityPubReactionStateSchema = z.array(activityPubReactionItemSchema);
+
+type ActivityPubReactionStateType = z.infer<
 	typeof ActivityPubReactionStateSchema
 >;
 
@@ -43,11 +59,11 @@ class ActivityPubReactionsService {
 			return { id: input };
 		}
 		if (MISSKEY_LOCAL_ALT_EX.test(input)) {
-			const _name = MISSKEY_LOCAL_ALT_EX.exec(input)[1];
+			const _name = MISSKEY_LOCAL_ALT_EX.exec(input)![1];
 			return { id: _name };
 		}
 		if (MISSKEY_LOCAL_EX.test(input)) {
-			const _name = MISSKEY_LOCAL_EX.exec(input)[1];
+			const _name = MISSKEY_LOCAL_EX.exec(input)![1];
 			return { id: _name };
 		}
 		return { id: input };
@@ -88,7 +104,7 @@ class ActivityPubReactionsService {
 			me: string;
 		},
 	) {
-		let retval: EmojiDto[] = [];
+		let retval: DriverReactionResolvedType[] = [];
 
 		for (const reaction of input) {
 			let IS_ME = reaction.me;
@@ -113,7 +129,7 @@ class ActivityPubReactionsService {
 
 			if (MISSKEY_LOCAL_ALT_EX.test(reaction.id)) {
 				// [Misskey] [Local] emoji (search in cache)
-				const _name = MISSKEY_LOCAL_ALT_EX.exec(reaction.id)[1];
+				const _name = MISSKEY_LOCAL_ALT_EX.exec(reaction.id)![1];
 				const match = cache.find(
 					(o) => o.shortCode === _name || o.aliases.includes(_name),
 				);
@@ -129,7 +145,7 @@ class ActivityPubReactionsService {
 				});
 			} else if (MISSKEY_REMOTE_EX.test(reaction.id)) {
 				// [Misskey] [Remote] reaction (search in payload)
-				const _name = MISSKEY_LOCAL_EX.exec(reaction.id)[1];
+				const _name = MISSKEY_LOCAL_EX.exec(reaction.id)![1];
 				const match = calculated.find((o) => o.name === _name);
 
 				if (!match) {
@@ -148,7 +164,7 @@ class ActivityPubReactionsService {
 					height: match.height,
 				});
 			} else if (MISSKEY_LOCAL_EX.test(reaction.id)) {
-				const _name = MISSKEY_LOCAL_EX.exec(reaction.id)[1];
+				const _name = MISSKEY_LOCAL_EX.exec(reaction.id)![1];
 				const match = calculated.find((o) => o.name === _name);
 				const cacheHit = cache.find(
 					(o) => o.shortCode === _name || o.aliases.includes(_name),
@@ -212,7 +228,7 @@ class ActivityPubReactionsService {
 		postId: string,
 		reactionId: string,
 		domain: string,
-		setLoading: Dispatch<SetStateAction<boolean>>,
+		setLoading: (val: boolean) => void,
 	) {
 		setLoading(true);
 		if (ActivityPubService.pleromaLike(domain)) {
@@ -225,11 +241,11 @@ class ActivityPubReactionsService {
 			}
 
 			setLoading(false);
-			return data.emojiReactions.map((o) => ({
+			return data.emojiReactions.map((o: PleromaReactionItemType) => ({
 				id: o.name.length > 2 ? `:${o.name}:` : o.name,
 				me: o.me,
 				count: o.count,
-				accounts: o.accounts || [],
+				accounts: o.accountIds || [],
 			}));
 		} else if (ActivityPubService.misskeyLike(domain)) {
 			const { error } = await (
@@ -263,7 +279,7 @@ class ActivityPubReactionsService {
 		client: ApiTargetInterface,
 		postId: string,
 		domain: string,
-		setLoading: Dispatch<SetStateAction<boolean>>,
+		setLoading: (val: boolean) => void,
 	): Promise<ActivityPubReactionStateType> {
 		const { data: newStateData, error: newStateError } = await (
 			client as MisskeyApiAdapter
@@ -271,12 +287,12 @@ class ActivityPubReactionsService {
 
 		if (newStateError) {
 			setLoading(false);
-			return;
+			return [];
 		}
 
-		const status = ActivityPubAdapterService.adaptStatus(newStateData, domain);
+		const status = PostParser.rawToInterface(newStateData, domain);
 		setLoading(false);
-		return status.getReactions(status.getMyReaction());
+		return status.getReactions(status.getMyReaction() || 'N/A');
 	}
 
 	/**
@@ -302,15 +318,15 @@ class ActivityPubReactionsService {
 
 			if (error) {
 				console.log('[WARN]: failed to add reaction', error);
-				return null;
+				return [];
 			}
 
 			setLoading(false);
-			return data.emojiReactions.map((o) => ({
+			return data.emojiReactions.map((o: PleromaReactionItemType) => ({
 				id: o.name.length > 2 ? `:${o.name}:` : o.name,
 				me: o.me,
 				count: o.count,
-				accounts: o.accounts || [],
+				accounts: o.accountIds || [],
 			}));
 		} else if (ActivityPubService.misskeyLike(domain)) {
 			if (!MISSKEY_LOCAL_EX.test(reactionId)) {
@@ -322,7 +338,7 @@ class ActivityPubReactionsService {
 
 			if (error) {
 				console.log('[WARN]: failed to add reaction', error);
-				return null;
+				return [];
 			}
 
 			return ActivityPubReactionsService.syncMisskeyReactionState(
@@ -332,8 +348,11 @@ class ActivityPubReactionsService {
 				setLoading,
 			);
 		}
-		return null;
+		return [];
 	}
 }
+
+export { activityPubReactionItemSchema, ActivityPubReactionStateSchema };
+export type { ActivityPubReactionStateType, ActivityPubReactionItemType };
 
 export default ActivityPubReactionsService;

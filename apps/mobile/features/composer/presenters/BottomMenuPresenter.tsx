@@ -9,8 +9,7 @@ import { Fragment } from 'react';
 import AutoFillPresenter from './AutoFillPresenter';
 import { View } from 'react-native';
 import ComposerActionListView from '../views/ComposerActionListView';
-import ActivitypubService from '../../../services/activitypub.service';
-import ActivityPubService from '../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import { AppService } from '../../../services/app.service';
 import PostVisibilityView from '../views/PostVisibilityView';
 import useAppVisibility, {
@@ -132,10 +131,10 @@ function BottomMenuPresenter() {
 				}}
 			>
 				<ComposerActionListView
-					canUseCw={!ActivitypubService.blueskyLike(driver)}
+					canUseCw={!ActivityPubService.blueskyLike(driver)}
 					canUseMedia={true}
 					canUseVideo={
-						ActivitypubService.blueskyLike(driver) &&
+						ActivityPubService.blueskyLike(driver) &&
 						!AppService.isLiteEdition()
 					}
 					canUseGif={

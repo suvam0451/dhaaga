@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useApiGetTagInterface } from '../../../hooks/api/useTags';
 import { AppMenu } from '../../lib/Menu';
 import { AppIcon } from '../../lib/Icon';
-import ActivityPubService from '../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { AppText } from '../../lib/Text';
 import {

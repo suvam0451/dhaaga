@@ -9,8 +9,7 @@ import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
 	AppButtonBottomSheetAction,
 } from '../../../lib/Buttons';
-import ActivitypubReactionsService from '../../../../services/approto/activitypub-reactions.service';
-import ActivityPubReactionsService from '../../../../services/approto/activitypub-reactions.service';
+import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import { AppAvatar } from '../../../lib/Avatar';
 import {
 	useAppAcct,
@@ -55,7 +54,7 @@ function AppBottomSheetReactionDetails() {
 	const { Data, fetchStatus } = useGetReactionDetails(null, null);
 	const { visible, hide } = useAppBottomSheet();
 
-	const IS_REMOTE = ActivitypubReactionsService.cannotReact(Data?.id);
+	const IS_REMOTE = ActivityPubReactionsService.cannotReact(Data?.id);
 
 	const [Loading, setLoading] = useState(false);
 
@@ -63,7 +62,7 @@ function AppBottomSheetReactionDetails() {
 		if (IS_REMOTE) return;
 
 		setLoading(true);
-		const { id } = ActivitypubReactionsService.extractReactionCode(
+		const { id } = ActivityPubReactionsService.extractReactionCode(
 			null,
 			driver,
 			acct?.server,

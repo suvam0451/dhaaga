@@ -992,7 +992,7 @@ const styles = StyleSheet.create({
 		height: '100%',
 		alignItems: 'center',
 		flexDirection: 'row',
-		paddingTop: 12,
+		paddingTop: 6,
 	},
 	accountIconTouchableContainerRight: {
 		height: '100%',

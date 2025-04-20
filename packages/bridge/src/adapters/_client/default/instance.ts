@@ -78,9 +78,9 @@ export class DefaultInstanceRouter implements InstanceRoute {
 		}: {
 			appName: string;
 			appCallback: string;
-			appClientId: string;
+			appClientId?: string;
 			uuid: string;
-			appClientSecret: string;
+			appClientSecret?: string;
 		},
 	): LibraryPromise<{
 		software: string;
@@ -230,7 +230,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 
 				// Set up parameters for the query string
 				const options: Record<string, string> = {
-					client_id: _appClientId,
+					client_id: _appClientId!,
 					redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
 					response_type: 'code',
 					scope: 'read write follow push',

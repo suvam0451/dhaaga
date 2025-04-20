@@ -23,9 +23,10 @@ export default function TabLayout() {
 							tabBarStyle: {
 								backgroundColor: theme.background.a0,
 								borderTopWidth: 0,
+								height: 42,
 							},
 							tabBarIconStyle: {
-								height: 42,
+								height: 32,
 								width: 64,
 							},
 							tabBarActiveTintColor: theme.primary.a0,

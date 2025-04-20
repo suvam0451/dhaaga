@@ -27,12 +27,12 @@
     "url": "https://github.com/suvam0451/dhaaga/issues"
   },
   "scripts": {
-    "dev:app": "yarn workspace @dhaaga/mobile dev",
-    "dev:web": "yarn workspace @dhaaga/web dev",
-    "build:bridge": "bun run --cwd ./packages/bridge up",
-    "build:core": "bun run --cwd ./packages/core up",
-    "build:orm": "bun run --cwd ./packages/orm build",
-    "build": "bun run build:bridge && bun run build:orm && bun run build:core"
+    "dev:app": "pnpm --filter @dhaaga/mobile dev",
+    "dev:web": "pnpm --filter @dhaaga/web dev",
+    "build:bridge": "pnpm --filter @dhaaga/bridge up",
+    "build:core": "pnpm --filter @dhaaga/core up",
+    "build:orm": "pnpm --filter @dhaaga/orm build",
+    "build": "pnpm build:bridge && pnpm build:orm && pnpm build:core"
   },
   "workspaces": [
     "packages/**",

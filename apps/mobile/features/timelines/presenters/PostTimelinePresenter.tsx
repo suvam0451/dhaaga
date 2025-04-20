@@ -1,7 +1,6 @@
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import { Fragment } from 'react';
 import { FetchStatus } from '@tanstack/react-query';
-import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import { Animated, RefreshControl } from 'react-native';
 import StatusItem from '../../../components/common/status/StatusItem';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
@@ -28,10 +27,6 @@ export function PostTimelinePresenter({
 	onRefresh,
 	onScroll,
 }: PostTimelineProps) {
-	const { visible, loading } = useLoadingMoreIndicatorState({
-		fetchStatus,
-	});
-
 	return (
 		<Fragment>
 			<Animated.FlatList
@@ -50,7 +45,7 @@ export function PostTimelinePresenter({
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
 			/>
-			<TimelineLoadingIndicator visible={visible} loading={loading} />
+			<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
 		</Fragment>
 	);
 }

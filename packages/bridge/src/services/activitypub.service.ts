@@ -1,14 +1,45 @@
 import {
-	ApiTargetInterface,
+	type ApiTargetInterface,
+	BaseApiAdapter,
 	MastoApiAdapter,
 	MisskeyApiAdapter,
-	BaseApiAdapter,
 	PleromaApiAdapter,
-	KNOWN_SOFTWARE,
-} from '@dhaaga/bridge';
-import AppSessionManager from './session/app-session.service';
-import { DriverService, RandomUtil } from '@dhaaga/bridge';
+} from '../adapters/index.js';
+import { DriverService } from './driver.js';
+import { RandomUtil } from '../utils/index.js';
 
+enum KNOWN_SOFTWARE {
+	// Fediverse Parent Software
+	AKKOMA = 'akkoma', // Bluesky
+	BLUESKY = 'bluesky',
+	CHERRYPICK = 'cherrypick',
+	FIREFISH = 'firefish',
+	FRIENDICA = 'friendica',
+	GOTOSOCIAL = 'gotosocial',
+	HOMETOWN = 'hometown',
+	ICESHRIMP = 'iceshrimp', // smol fork
+	KMYBLUE = 'kmyblue',
+	LEMMY = 'lemmy',
+
+	MASTODON = 'mastodon',
+	MEISSKEY = 'meisskey',
+	MISSKEY = 'misskey',
+
+	PEERTUBE = 'peertube',
+	PIXELFED = 'pixelfed',
+	PLEROMA = 'pleroma',
+	SHARKEY = 'sharkey',
+
+	// software could not be detected
+	UNKNOWN = 'unknown',
+}
+
+/**
+ * Provides a set of static utility methods for interacting with ActivityPub-compatible
+ * software and APIs, such as Mastodon, Misskey, Pleroma, etc. This service centralizes
+ * the logic for checking feature support, toggling state (e.g., bookmarks, likes, boosts),
+ * detecting software, and constructing sign-in URLs for ActivityPub instances.
+ */
 class ActivityPubService {
 	/**
 	 * Does this driver implement
@@ -97,7 +128,7 @@ class ActivityPubService {
 		id: string,
 		localState: boolean,
 		domain: KNOWN_SOFTWARE,
-	) {
+	): Promise<-1 | 1 | null> {
 		if (ActivityPubService.misskeyLike(domain)) {
 			if (localState) {
 				const { error } = await (client as MisskeyApiAdapter).statuses.unrenote(
@@ -182,18 +213,21 @@ class ActivityPubService {
 	 * - code
 	 * - miauth
 	 * @param urlLike
-	 * @param mngr
+	 * @param token
 	 */
-	static async signInUrl(urlLike: string, mngr: AppSessionManager) {
-		console.log(urlLike);
-		const tokens = mngr.storage.getAtprotoServerClientTokens(urlLike);
-
+	static async signInUrl(
+		urlLike: string,
+		token?: {
+			clientId: string;
+			clientSecret: string;
+		},
+	) {
 		const client = new BaseApiAdapter();
 		const { data, error } = await client.instances.getLoginUrl(urlLike, {
 			appCallback: 'https://suvam.io',
 			appName: 'Dhaaga',
-			appClientId: tokens?.clientId,
-			appClientSecret: tokens?.clientSecret,
+			appClientId: token?.clientId,
+			appClientSecret: token?.clientSecret,
 			uuid: RandomUtil.nanoId(),
 		});
 		if (error) return null;
@@ -211,7 +245,7 @@ class ActivityPubService {
 	static async getBookmarkState(
 		client: ApiTargetInterface,
 		id: string,
-	): Promise<boolean> {
+	): Promise<boolean | null> {
 		const { data, error } = await (
 			client as MisskeyApiAdapter
 		).statuses.getState(id);

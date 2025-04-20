@@ -9,8 +9,11 @@ import {
 	useAppAcct,
 	useAppApiClient,
 } from '../utility/global-state-extractors';
-import { AtprotoApiAdapter, defaultResultPage } from '@dhaaga/bridge';
-import { AtprotoFeedService } from '../../services/atproto.service';
+import {
+	AtprotoApiAdapter,
+	defaultResultPage,
+	AtprotoFeedService,
+} from '@dhaaga/bridge';
 
 function useApiGetMyFeeds() {
 	const { client, driver, server } = useAppApiClient();

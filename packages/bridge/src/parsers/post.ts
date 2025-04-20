@@ -183,6 +183,11 @@ const postObjectSchema = ActivityPubStatusLevelTwo.extend({
 type PostObjectType = z.infer<typeof postObjectSchema>;
 type PostRootObjectType = z.infer<typeof ActivityPubStatusItemDto>;
 
+/**
+ * The Parser class provides a set of static methods to handle tasks such as
+ * converting raw data into structured objects, serializing/deserializing
+ * data for various protocols, and parsing API responses.
+ */
 class Parser {
 	static export(
 		input: PostTargetInterface,

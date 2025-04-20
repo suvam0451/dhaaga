@@ -6,7 +6,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import ActivitypubService from '../../../services/activitypub.service';
+import { ActivityPubService } from '@dhaaga/bridge';
 import BskyFeedAddPresenter from './BskyFeedAddPresenter';
 
 /**
@@ -44,7 +44,7 @@ function FeatureNotSupported() {
 function FeedAddSheetPresenter() {
 	const { driver } = useAppApiClient();
 
-	if (!ActivitypubService.blueskyLike(driver)) return <FeatureNotSupported />;
+	if (!ActivityPubService.blueskyLike(driver)) return <FeatureNotSupported />;
 	return <BskyFeedAddPresenter />;
 }
 

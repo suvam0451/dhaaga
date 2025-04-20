@@ -1,11 +1,12 @@
 import * as mfm from 'mfm-js';
-import type { MfmNode } from 'mfm-js/built';
+import type { MfmNode } from 'mfm-js';
 import { decode } from 'html-entities';
 import HtmlParserService from './htmlparser2.js';
 import ActivitypubHelper from './activitypub.js';
 
 export { ActivitypubHelper };
-export type { MfmNode, MfmEmojiCode } from 'mfm-js/built';
+export type { MfmNode, MfmEmojiCode } from 'mfm-js';
+export { AtprotoPostService, AtprotoFeedService } from './atproto.service.js';
 
 /**
  * Stops at the pre-processing step

@@ -13,7 +13,6 @@ import UserSearchResultPresenter from './UserSearchResultPresenter';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { useTranslation } from 'react-i18next';
 import { ProfileService } from '@dhaaga/db';
-import { UserSearchResultSkeletonView } from '../components/UserSearchResultSkeleton';
 
 function UserAddSheetPresenter() {
 	const { theme } = useAppTheme();
@@ -120,9 +119,6 @@ function UserAddSheetPresenter() {
 						onChangeCallback={onChange}
 					/>
 				)}
-				ListEmptyComponent={
-					<UserSearchResultSkeletonView totalHeight={ContainerHeight} />
-				}
 				contentContainerStyle={{
 					backgroundColor: theme.background.a10,
 					paddingTop: 16,
