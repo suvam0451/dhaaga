@@ -59,6 +59,9 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			projectId: '6a318c01-ca78-440f-840f-64c54ddc94fe',
 		},
 	},
+	experiments: {
+		reactCanary: true,
+	},
 	newArchEnabled: true,
 	plugins: [
 		'expo-sqlite',

@@ -28,7 +28,7 @@
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "expo-sqlite": "~15.1.1"
+    "expo-sqlite": "~15.2.7"
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.json"

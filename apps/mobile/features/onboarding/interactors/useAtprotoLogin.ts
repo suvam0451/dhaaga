@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { SuvamIoService } from '../../../services/suvamio.service';
-import * as WebBrowser from 'expo-web-browser';
 import { useLocalSearchParams } from 'expo-router';
 import AtprotoSessionService from '../../../services/atproto/atproto-session.service';
 
@@ -44,7 +43,7 @@ function useAtprotoLogin() {
 		 * will perform the oauth, redirecting the
 		 * user here after completion
 		 */
-		await WebBrowser.openAuthSessionAsync(data.href, undefined, {});
+		// await WebBrowser.openAuthSessionAsync(data.href, undefined, {});
 		setIsLoading(false);
 	}
 
