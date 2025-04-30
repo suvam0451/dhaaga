@@ -16,7 +16,7 @@
 		"zod": "^3.24.3"
 	},
 	"peerDependencies": {
-		"@atproto/api": "^0.14.4",
+		"@atproto/api": "^0.15.5",
 		"react": ">=19.0.0"
 	},
 	"scripts": {
