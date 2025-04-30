@@ -1,6 +1,6 @@
 {
   "name": "dhaaga",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
   "homepage": "https://suvam.io/dhaaga",
   "author": "Debashish Patra <suvam.io>",
@@ -50,5 +50,12 @@
     "tabWidth": 2,
     "useTabs": true
   },
-  "type": "module"
+  "type": "module",
+  "pnpm": {
+    "overrides": {
+      "cheerio": "1.0.0",
+      "entities": "4.5.0",
+      "parse5": "<7.3.0"
+    }
+  }
 }

@@ -16,9 +16,8 @@
 		"zod": "^3.24.3"
 	},
 	"peerDependencies": {
-		"@atproto/api": "^0.14.4",
-		"react": ">=18.2.0",
-		"typescript": "^5.7.3"
+		"@atproto/api": "^0.15.5",
+		"react": ">=19.0.0"
 	},
 	"scripts": {
 		"build": "tsc -p ./tsconfig.json"
