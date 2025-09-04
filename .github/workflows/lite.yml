@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: latest
           cache: "npm"
-#      - run: pnpm install # Install dependencies
+      - run: npm install # Install dependencies
       - run: npm run build
       - run: node lite.js # pre-requisites scripts
         working-directory: ./apps/mobile
