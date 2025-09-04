@@ -60,7 +60,7 @@
     }
   },
   "overrides": {
-    "react-native-safe-area-context": "^5.4.0"
+    "react-native-safe-area-context": "~5.4.0"
   },
   "devDependencies": {
     "@typescript/native-preview": "7.0.0-dev.20250904.1"
