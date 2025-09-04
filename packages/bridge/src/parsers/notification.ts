@@ -17,7 +17,7 @@ type NotificationUserGroupType = z.infer<
 export const appNotificationObjectSchema = z.object({
 	id: z.string(),
 	type: z.string(),
-	createdAt: z.date({ coerce: true }),
+	createdAt: z.coerce.date(),
 	user: appUserObjectSchema.nullable(),
 	post: postObjectSchema.nullable(),
 	extraData: z.any(),

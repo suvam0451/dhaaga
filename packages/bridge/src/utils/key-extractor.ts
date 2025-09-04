@@ -13,7 +13,7 @@ const driverLinkHeaderPaginationBlock = z.object({
 const atProtoUserFollowsResponseSchema = z.object({
 	success: z.boolean(),
 	data: z.object({
-		cursor: z.ostring(),
+		cursor: z.string().optional(),
 		follows: z.array(z.any()),
 	}),
 });
@@ -21,13 +21,13 @@ const atProtoUserFollowsResponseSchema = z.object({
 const atProtoUserFollowersResponseSchema = z.object({
 	success: z.boolean(),
 	data: z.object({
-		cursor: z.ostring(),
+		cursor: z.string().optional(),
 		followers: z.array(z.any()),
 	}),
 });
 
 const atProtoPostSearchResultResponseSchema = z.object({
-	cursor: z.ostring(),
+	cursor: z.string().optional(),
 	posts: z.array(z.any()),
 });
 
