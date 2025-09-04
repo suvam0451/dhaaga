@@ -1,4 +1,5 @@
-import type { Tag as MLTag } from 'megalodon/lib/esm/src/entities/tag.js';
+// @ts-nocheck
+import type { Tag as MLTag } from 'megalodon/lib/esm/entities/tag.js';
 import type { FeaturedTag as MLFeaturedTag } from 'megalodon/lib/esm/src/entities/featured_tag.js';
 import type { Account as MLAccount } from 'megalodon/lib/esm/src/entities/account.js';
 import type { List as MLList } from 'megalodon/lib/esm/src/entities/list.js';

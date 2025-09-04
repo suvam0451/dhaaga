@@ -16,8 +16,8 @@
     }
   },
   "dependencies": {
-    "@dhaaga/bridge": "workspace:*",
-    "@dhaaga/orm": "workspace:*"
+    "@dhaaga/bridge": "*",
+    "@dhaaga/orm": "*"
   },
   "devDependencies": {
     "typescript": "^5.8.3"

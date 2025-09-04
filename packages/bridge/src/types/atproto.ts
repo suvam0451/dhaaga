@@ -1,4 +1,4 @@
-import { AtpSessionData } from '@atproto/api';
+// import { AtpSessionData } from '@atproto/api';
 
 export type AtpLoginResponse = {
 	success: boolean;
@@ -34,7 +34,7 @@ export type AtpLoginResponse = {
 	};
 };
 
-export type AppAtpSessionData = AtpSessionData & {
+export type AppAtpSessionData = any & {
 	subdomain: string;
 	pdsUrl: string;
 };

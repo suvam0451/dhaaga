@@ -2,7 +2,7 @@ import { ExpoConfig, ConfigContext } from 'expo/config.js';
 
 const IS_DEV = process.env.APP_VARIANT === 'dev';
 
-// Replace "Dhaaga" with "Dhaaga (Lite)" for Lite edition
+// Replace "Dhaaga" with "Dhaaga (Lite)" for Lite Edition
 const APP_NAME = IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga';
 const BUNDLE_ID = IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga';
 
@@ -94,7 +94,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-font',
 			{
 				fonts: [
-					// Applicable for flat node_modules
+					// Applicable for flat node_modules (yarn, pnpm with node-linker=hoisted etc.)
 					'../../node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf',
 					'../../node_modules/@expo-google-fonts/inter/Inter_600SemiBold.ttf',
