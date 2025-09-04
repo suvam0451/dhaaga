@@ -92,5 +92,5 @@ The lite edition shipped to IzzyOnDroid needs further adjustments, as follows:
 ```shell
 # All this is covered by the following script
 
-python lite.py
+node lite.js
 ```

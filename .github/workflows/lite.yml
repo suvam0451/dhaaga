@@ -24,8 +24,6 @@ jobs:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      - run: pnpm install -D @react-native-community/cli # add cli
-        working-directory: ./apps/mobile
       - run: npx react-native build-android --mode=release # produce aab
         working-directory: ./apps/mobile
       - run: ./gradlew assembleRelease # produce apk

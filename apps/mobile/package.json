@@ -58,6 +58,7 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@react-native-community/cli": "^20.0.1",
     "typescript": "^5.8.3"
   },
   "private": true,
@@ -67,11 +68,11 @@
     "aab": "eas build -p android --profile aab",
     "client": "eas build -p android --profile dev",
     "lite:manual": "react-native build-android --mode=release && cd android && ./gradlew assembleRelease",
-    "lite": "python3 ./lite.py",
+    "lite": "python3 ./lite.js",
     "postinstall": "cd ../.. && pnpm run build",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "tl:sync": "python3 ./i18n/sync.py"
+    "tl:sync": "python3 ./i18n/sync.js"
   },
   "type": "module"
 }
