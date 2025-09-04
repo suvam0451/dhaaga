@@ -5,19 +5,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4 # pull code
+      - uses: actions/checkout@v5 # Checkout
         with:
           lfs: true
-      - uses: actions/setup-node@v4 # setup node
+      - uses: actions/setup-node@v5 # Install Node.js
         with:
           node-version: latest
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-          # NOTE: remove optional dependencies for lite builds
-          run_install: |
-            - recursive: false
-              args: []
+          cache: "npm"
+      - run: npm install # Install dependencies
+      # - run: npm run build # Taken care of by "eas-build-post-install" hook
       - uses: expo/expo-github-action@v8 # setup EAS
         with:
           eas-version: latest

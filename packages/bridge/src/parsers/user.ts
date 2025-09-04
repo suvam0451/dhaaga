@@ -22,16 +22,16 @@ export const appUserObjectSchema = z.object({
 		fields: z.array(
 			z.object({
 				// some label behave like this
-				name: z.ostring(),
-				value: z.ostring(),
+				name: z.string().optional(),
+				value: z.string().optional(),
 				verifiedAt: z.string().nullable().optional(),
 
 				// other labels (feed.creator) behave like this
-				cid: z.ostring(),
-				cts: z.ostring(),
-				src: z.ostring(),
-				uri: z.ostring(),
-				val: z.ostring(), // e.g. --> "!no-unauthenticated"
+				cid: z.string().optional(),
+				cts: z.string().optional(),
+				src: z.string().optional(),
+				uri: z.string().optional(),
+				val: z.string().optional(), // e.g. --> "!no-unauthenticated"
 			}),
 		),
 	}),

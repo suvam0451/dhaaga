@@ -2,9 +2,9 @@ import { ExpoConfig, ConfigContext } from 'expo/config.js';
 
 const IS_DEV = process.env.APP_VARIANT === 'dev';
 
-// Replace "Dhaaga" with "Dhaaga (Lite)" for Lite edition
+// Replace "Dhaaga" with "Dhaaga (Lite)" for Lite Edition
 const APP_NAME = IS_DEV ? 'Dhaaga (Dev)' : 'Dhaaga';
-const BUNDLE_ID = IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga.lite';
+const BUNDLE_ID = IS_DEV ? 'io.suvam.dhaaga.dev' : 'io.suvam.dhaaga';
 
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
@@ -94,15 +94,15 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-font',
 			{
 				fonts: [
-					// Applicable for flat node_modules
-					'../../node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf',
-					'../../node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf',
-					'../../node_modules/@expo-google-fonts/inter/Inter_600SemiBold.ttf',
-					'../../node_modules/@expo-google-fonts/inter/Inter_700Bold.ttf', // Montserrat
-					'../../node_modules/@expo-google-fonts/bebas-neue/BebasNeue_400Regular.ttf', // BebasNeue
-					'../../node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf', // Roboto
-					'../../node_modules/@expo-google-fonts/roboto/Roboto_500Medium.ttf',
-					'../../node_modules/@expo-google-fonts/roboto/Roboto_700Bold.ttf',
+					// Applicable for flat node_modules (yarn, pnpm with node-linker=hoisted etc.)
+					'../../node_modules/@expo-google-fonts/inter/400Regular/Inter_400Regular.ttf',
+					'../../node_modules/@expo-google-fonts/inter/500Medium/Inter_500Medium.ttf',
+					'../../node_modules/@expo-google-fonts/inter/600SemiBold/Inter_600SemiBold.ttf',
+					'../../node_modules/@expo-google-fonts/inter/700Bold/Inter_700Bold.ttf', // Montserrat
+					'../../node_modules/@expo-google-fonts/bebas-neue/400Regular/BebasNeue_400Regular.ttf', // BebasNeue
+					'../../node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.ttf', // Roboto
+					'../../node_modules/@expo-google-fonts/roboto/500Medium/Roboto_500Medium.ttf',
+					'../../node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.ttf',
 					// Applicable for pnpm (when not hoisted)
 					// '../../node_modules/.pnpm/@expo-google-fonts+inter@0.2.3/node_modules/@expo-google-fonts/inter/Inter_400Regular.ttf',
 					// '../../node_modules/.pnpm/@expo-google-fonts+inter@0.2.3/node_modules/@expo-google-fonts/inter/Inter_500Medium.ttf',

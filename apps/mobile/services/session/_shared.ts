@@ -2,7 +2,7 @@ import Storage from 'expo-sqlite/kv-store';
 import { z } from 'zod';
 
 const savedObjectWithExpiry = z.object({
-	updatedAt: z.date({ coerce: true }),
+	updatedAt: z.coerce.date(),
 	value: z.any(),
 });
 

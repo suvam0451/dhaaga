@@ -27,17 +27,18 @@
     "url": "https://github.com/suvam0451/dhaaga/issues"
   },
   "scripts": {
-    "dev:app": "pnpm --filter @dhaaga/mobile dev",
-    "dev:web": "pnpm --filter @dhaaga/web dev",
-    "build:db": "pnpm --filter @dhaaga/db build",
-    "build:bridge": "pnpm --filter @dhaaga/bridge build",
-    "build:core": "pnpm --filter @dhaaga/core build",
-    "build:orm": "pnpm --filter @dhaaga/orm build",
-    "build": "pnpm build:bridge && pnpm build:orm && pnpm build:db && pnpm build:core"
+    "dev:app": "npm run dev --workspace=@dhaaga/mobile",
+    "dev:web": "npm run dev --workspace=@dhaaga/web",
+    "build:db": "npm run build --workspace=@dhaaga/db",
+    "build:bridge": "npm run build --workspace=@dhaaga/bridge",
+    "build:core": "npm run build --workspace=@dhaaga/core",
+    "build:orm": "npm run build --workspace=@dhaaga/orm",
+    "build-deps": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core"
   },
   "workspaces": [
-    "packages/**",
-    "apps/mobile"
+    "packages/*",
+    "apps/mobile",
+    "apps/web"
   ],
   "dependencies": {
     "prettier": "^3.5.3"
@@ -57,5 +58,11 @@
       "entities": "4.5.0",
       "parse5": "<7.3.0"
     }
+  },
+  "overrides": {
+    "react-native-safe-area-context": "~5.4.0"
+  },
+  "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20250904.1"
   }
 }
