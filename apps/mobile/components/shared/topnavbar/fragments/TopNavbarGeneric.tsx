@@ -1,4 +1,4 @@
-import { StatusBar, View } from 'react-native';
+import { View } from 'react-native';
 import styles from './styles';
 import TopNavbarBackButton from './TopNavbarBackButton';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
