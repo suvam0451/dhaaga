@@ -5,7 +5,7 @@ import { Button } from '@rneui/base';
 import TitleOnlyNoScrollContainer from '../../../components/containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
-import { UnknownRestClient, KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
+import { BaseApiAdapter, KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
 import PleromaPasteToken from '../components/PleromaPasteToken';
 import { AccountService, ACCOUNT_METADATA_KEY } from '@dhaaga/db';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
@@ -42,17 +42,18 @@ function MastodonSignInStack() {
 	}
 
 	async function onPressConfirm() {
+		if (!db) return;
+
 		const instance = _subdomain;
-		const token =
-			await new UnknownRestClient().instances.getMastodonAccessToken(
-				instance,
-				Code,
-				_clientId,
-				_clientSecret,
-			);
+		const token = await new BaseApiAdapter().instances.getMastodonAccessToken(
+			instance,
+			Code!,
+			_clientId,
+			_clientSecret,
+		);
 
 		const { data: verified, error } =
-			await new UnknownRestClient().instances.verifyCredentials(
+			await new BaseApiAdapter().instances.verifyCredentials(
 				instance /**
 				 * It seems Pleroma/Akkoma give
 				 * us another token, while one
@@ -63,6 +64,8 @@ function MastodonSignInStack() {
 				 */,
 				token || Code, // fucking yolo it, xDD
 			);
+
+		if (error || !verified) return;
 
 		const upsertResult = AccountService.upsert(
 			db,
