@@ -8,10 +8,6 @@ jobs:
       - uses: actions/checkout@v5 # Checkout
         with:
           lfs: true
-#      - uses: pnpm/action-setup@v4 # Install pnpm
-#        with:
-#          version: 10
-#          run_install: false
       - uses: actions/setup-node@v5 # Install Node.js
         with:
           node-version: latest
