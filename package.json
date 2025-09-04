@@ -33,7 +33,7 @@
     "build:bridge": "npm run build --workspace=@dhaaga/bridge",
     "build:core": "npm run build --workspace=@dhaaga/core",
     "build:orm": "npm run build --workspace=@dhaaga/orm",
-    "build": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core"
+    "build-deps": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core"
   },
   "workspaces": [
     "packages/*",

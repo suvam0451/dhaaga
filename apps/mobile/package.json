@@ -71,7 +71,8 @@
     "lite": "python3 ./lite.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "tl:sync": "python3 ./i18n/sync.js"
+    "tl:sync": "python3 ./i18n/sync.js",
+    "eas-build-post-install": "cd ../.. && npm run build-deps"
   },
   "type": "module"
 }
