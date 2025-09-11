@@ -19,11 +19,11 @@
     "@dhaaga/bridge": "*",
     "@dhaaga/orm": "*"
   },
-  "devDependencies": {
-    "typescript": "^5.8.3"
-  },
   "peerDependencies": {
-    "expo-sqlite": "~15.2.7"
+    "expo": "*",
+    "expo-sqlite": ">=16.0.0",
+    "react": "*",
+    "react-native": "*"
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.json"

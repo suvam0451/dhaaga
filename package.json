@@ -41,7 +41,8 @@
     "apps/web"
   ],
   "dependencies": {
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "zod": "^4.1.7"
   },
   "prettier": {
     "bracketSpacing": true,
@@ -61,5 +62,9 @@
   },
   "overrides": {
     "react-native-safe-area-context": "~5.4.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.21",
+    "typescript": "~5.9.2"
   }
 }

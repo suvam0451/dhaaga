@@ -24,8 +24,7 @@
     "sourceMap": true
   },
   "include": [
-    "src",
-    "tests"
+    "src"
   ],
   "exclude": [
     "__test__",

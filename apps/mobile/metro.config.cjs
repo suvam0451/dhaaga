@@ -1,48 +1,21 @@
+// Learn more https://docs.expo.dev/guides/monorepos
 const { getDefaultConfig } = require('expo/metro-config');
 const { FileStore } = require('metro-cache');
-const path = require('path');
+const path = require('node:path');
 
-const config = getDefaultConfig(__dirname, {
-	isCSSEnabled: false,
-});
+// Create the default Expo config for Metro
+// This includes the automatic monorepo configuration for workspaces
+// See: https://docs.expo.dev/guides/monorepos/#automatic-configuration
+const config = getDefaultConfig(__dirname);
 
-config.resolver.disableHierarchicalLookup = true;
-config.resolver.sourceExts.push('sql');
+// bundle sqlite files
+// config.resolver.sourceExts.push('sql');
 
-/**
- * Move the Metro cache to the `node_modules/.cache/metro` folder.
- * This repository configured Turborepo to use this cache location as well.
- * If you have any environment variables, you can configure Turborepo to invalidate it when needed.
- *
- * @see https://turbo.build/repo/docs/reference/configuration#env
- * @param {import('expo/metro-config').MetroConfig} config
- * @returns {import('expo/metro-config').MetroConfig}
- */
-function withTurborepoManagedCache(config) {
-	config.cacheStores = [
-		new FileStore({ root: path.join(__dirname, 'node_modules/.cache/metro') }),
-	];
-	return config;
-}
+// Use turborepo to restore the cache when possible
+config.cacheStores = [
+	new FileStore({
+		root: path.join(__dirname, 'node_modules', '.cache', 'metro'),
+	}),
+];
 
-/**
- * Add the monorepo paths to the Metro config.
- */
-function withMonorepoPaths(config) {
-	const projectRoot = __dirname;
-	const workspaceRoot = path.resolve(projectRoot, '../..');
-
-	// #1 - Watch all files in the monorepo
-	// config.watchFolders = [workspaceRoot];
-	config.watchFolders = [workspaceRoot];
-
-	// #2 - Resolve modules within the project's `node_modules` first, then all monorepo modules
-	config.resolver['nodeModulesPaths'] = [
-		path.resolve(projectRoot, 'node_modules'),
-		path.resolve(workspaceRoot, 'node_modules'),
-	];
-
-	return config;
-}
-
-module.exports = withTurborepoManagedCache(withMonorepoPaths(config));
+module.exports = config;
