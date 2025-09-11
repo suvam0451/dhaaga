@@ -4,7 +4,7 @@
     "target": "ESNext",
     "module": "NodeNext",
     "jsx": "preserve",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "NodeNext",
     "verbatimModuleSyntax": false,
     "moduleDetection": "force",
     "esModuleInterop": true,
@@ -25,6 +25,7 @@
   },
   "include": [
     "src",
+    "tests"
   ],
   "exclude": [
     "__test__",

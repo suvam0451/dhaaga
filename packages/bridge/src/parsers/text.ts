@@ -1,4 +1,6 @@
-import { parseStatusContent, preprocessPostContent } from '@dhaaga/bridge';
+// import { parseStatusContent, preprocessPostContent } from '@dhaaga/bridge';
+
+import { parseStatusContent, preprocessPostContent } from '../index.js';
 
 export class TextParser {
 	/**
