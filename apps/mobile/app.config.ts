@@ -1,4 +1,4 @@
-import { ExpoConfig, ConfigContext } from 'expo/config';
+import { ExpoConfig, ConfigContext } from '@expo/config';
 
 const IS_DEV = process.env.APP_VARIANT === 'dev';
 
