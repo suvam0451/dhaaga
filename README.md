@@ -33,7 +33,7 @@ switching apps or websites.
     <img src="./.github/badges/izzy_on_droid.png" height="48px"/>
   </a>
   <a href="https://dhaaga.app" target="_blank">
-    <img src="./.github/badges/use_in_browser.svg" height="48px"/>
+    <img src="./.github/badges/use_in_browser.png" height="48px"/>
   </a>
 </div>
 
