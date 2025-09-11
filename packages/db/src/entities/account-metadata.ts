@@ -23,11 +23,11 @@ export type AppAtpSessionData = {
 };
 
 export const accountMetadataUpsertDto = accountMetadataRecordDto.extend({
-	accountId: z.onumber(),
+	accountId: z.number().optional(),
 });
 
 /**
- * List of recognised account metadata
+ * List of recognized account metadata
  *
  */
 export enum ACCOUNT_METADATA_KEY {
