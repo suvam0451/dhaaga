@@ -2,7 +2,7 @@ import { Stack } from 'expo-router/stack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@rneui/themed';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appearance, StatusBar, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
@@ -77,7 +77,7 @@ function App() {
 	}, [pathname]);
 
 	return (
-		<View
+		<SafeAreaView
 			style={{ backgroundColor: theme.background.a10, flex: 1 }}
 			onLayout={onLayout}
 		>
@@ -103,7 +103,7 @@ function App() {
 			<ImageInspectModal />
 			<AppBottomSheet />
 			<AppDialog />
-		</View>
+		</SafeAreaView>
 	);
 }
 
@@ -115,11 +115,9 @@ export default function Page() {
 			<QueryClientProvider client={queryClient}>
 				{/* Rneui Custom Themes */}
 				<ThemeProvider>
-					<SafeAreaProvider>
-						<GestureHandlerRootView>
-							<App />
-						</GestureHandlerRootView>
-					</SafeAreaProvider>
+					<GestureHandlerRootView>
+						<App />
+					</GestureHandlerRootView>
 				</ThemeProvider>
 			</QueryClientProvider>
 		</SQLiteProvider>
