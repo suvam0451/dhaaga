@@ -272,11 +272,14 @@ class GlobalStateService {
 	> {
 		try {
 			const acct = AccountService.getSelected(db);
+
 			if (acct.isErr()) {
 				console.log('[WARN]: no account was found');
 				return { type: 'invalid' };
 			}
+
 			const _acct = acct.unwrap();
+
 			const profile = ProfileService.getActiveProfile(db, _acct);
 			if (!profile) {
 				console.log('[WARN]: no profile was found');
@@ -288,6 +291,7 @@ class GlobalStateService {
 				_acct,
 				ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
 			);
+
 			let payload: any = {
 				instance: _acct.server,
 				token,

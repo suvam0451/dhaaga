@@ -14,7 +14,17 @@ export class MastodonMeRouter implements MeRoute {
 	}
 
 	async getMe(): LibraryPromise<MastoAccountCredentials> {
+		const result = await this.direct.get<MastoAccountCredentials>(
+			'/api/v1/accounts/verify_credentials',
+			{
+				transformResponse: 'camel',
+			},
+		);
+
+		if (!result.error) return { data: result.data };
+
 		const data = await this.client.lib.v1.accounts.verifyCredentials();
+		console.log('made api call with', this.client);
 		return { data };
 	}
 }

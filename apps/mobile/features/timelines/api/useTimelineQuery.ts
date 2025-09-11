@@ -45,6 +45,7 @@ function useTimelineQuery({
 	sessionId,
 }: TimelineQueryParams) {
 	const { client, driver, server } = useAppApiClient();
+
 	const { acct } = useAppAcct();
 
 	// to be adjusted based on performance

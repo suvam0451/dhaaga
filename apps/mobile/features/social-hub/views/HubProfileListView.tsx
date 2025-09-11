@@ -35,6 +35,7 @@ function HubProfileListView({
 			style={{
 				position: 'absolute',
 				bottom: 0,
+				paddingBottom: 8,
 				paddingHorizontal: 4,
 				backgroundColor: 'transparent',
 			}}

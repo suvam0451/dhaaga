@@ -3,7 +3,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Appearance, StatusBar, View } from 'react-native';
+import { Appearance, StatusBar } from 'react-native';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
@@ -17,6 +17,7 @@ import ImageInspectModal from '../components/modals/ImageInspectModal';
 import { AppDialog } from '../components/lib/AppDialog';
 import { useAppTheme } from '../hooks/utility/global-state-extractors';
 import '../i18n/_loader';
+import WithAppAssetsContext from '../hooks/app/useAssets';
 
 enableMapSet();
 
@@ -113,12 +114,15 @@ export default function Page() {
 		<SQLiteProvider databaseName="app.db" onInit={migrateDbIfNeeded}>
 			{/* API Caching -- Tanstack */}
 			<QueryClientProvider client={queryClient}>
-				{/* Rneui Custom Themes */}
-				<ThemeProvider>
-					<GestureHandlerRootView>
-						<App />
-					</GestureHandlerRootView>
-				</ThemeProvider>
+				{/* Asset Loader */}
+				<WithAppAssetsContext>
+					{/* Rneui Custom Themes */}
+					<ThemeProvider>
+						<GestureHandlerRootView>
+							<App />
+						</GestureHandlerRootView>
+					</ThemeProvider>
+				</WithAppAssetsContext>
 			</QueryClientProvider>
 		</SQLiteProvider>
 	);

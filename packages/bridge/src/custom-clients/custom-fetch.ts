@@ -1,5 +1,16 @@
 import { ApiErrorCode, LibraryResponse } from '../types/result.types.js';
 import { CasingUtil } from '../utils/casing.js';
+import { BaseUrlNormalizationService } from '../utils/urls.js';
+
+type DhaagaFetchRequestConfig = {
+	method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH';
+	baseURL?: string;
+	accessToken?: string;
+	queries?: Object | Record<string, string>;
+	transformQueryKeys?: 'snake' | 'camel';
+	transformQueryValues?: 'snake' | 'camel';
+	transformResponse?: 'snake' | 'camel';
+};
 
 /**
  * Use Fetch API to
@@ -15,7 +26,7 @@ class FetchWrapper {
 	requestHeader: HeadersInit;
 
 	constructor(urlLike: string, token?: string) {
-		this.baseUrl = DhaagaApiUtils.ensureHttpsAppend(urlLike);
+		this.baseUrl = BaseUrlNormalizationService.appendHttps(urlLike);
 		this.token = token;
 		this.requestHeader = this.token
 			? {
@@ -32,7 +43,15 @@ class FetchWrapper {
 		return new FetchWrapper(urlLike, token);
 	}
 
-	private cleanObject(obj: any) {
+	/**
+	 * 1) Removes null/undefined keys.
+	 * 2) Adjusts for RoR backends.
+	 *
+	 * which treats types[]=a&types[]=b as an array ["a", "b"].
+	 * @param obj
+	 * @private
+	 */
+	private static cleanObject(obj: any) {
 		Object.keys(obj).forEach((key) => {
 			if (obj[key] === null || obj[key] === undefined) {
 				delete obj[key];
@@ -55,11 +74,11 @@ class FetchWrapper {
 
 		// smh... ruby backend can't even deal with arrays...
 		if (query['types[]'] !== undefined) {
-			const sample = this.cleanObject(query);
+			const sample = FetchWrapper.cleanObject(query);
 			const items = sample['types[]'].split(';');
 			delete sample['query[]'];
 
-			const params = new URLSearchParams(this.cleanObject(sample));
+			const params = new URLSearchParams(FetchWrapper.cleanObject(sample));
 			for (const item of items) {
 				params.append('types[]', item);
 			}
@@ -69,7 +88,7 @@ class FetchWrapper {
 
 		return (
 			`${this.baseUrl}${endpoint}?` +
-			new URLSearchParams(this.cleanObject(query))
+			new URLSearchParams(FetchWrapper.cleanObject(query))
 		);
 	}
 
@@ -191,63 +210,102 @@ class FetchWrapper {
 			});
 	}
 
-	async get<T>(
-		endpoint: string,
-		query?: Object | Record<string, string>,
-	): Promise<LibraryResponse<T>> {
-		endpoint = query
-			? `${this.baseUrl}${endpoint}?` +
-				new URLSearchParams(this.cleanObject(query))
-			: `${this.baseUrl}${endpoint}?`;
+	private static applyQueriesToRequestUrl(
+		url: string,
+		opts: DhaagaFetchRequestConfig,
+	) {
+		return opts.queries
+			? `${opts.baseURL!}${url}?` +
+					new URLSearchParams(FetchWrapper.cleanObject(opts.queries))
+			: `${opts.baseURL!}${url}?`;
+	}
 
-		return await fetch(endpoint, {
-			method: 'GET',
-			headers: this.token
+	private static buildRequestInitObject(
+		opts?: DhaagaFetchRequestConfig,
+	): RequestInit {
+		if (!opts) return {};
+		return {
+			...opts,
+			headers: opts.accessToken
 				? {
 						'Content-Type': 'application/json',
-						Authorization: `Bearer ${this.token}`,
+						Authorization: `Bearer ${opts.accessToken}`,
 					}
 				: {
 						'Content-Type': 'application/json',
 					},
-		})
-			.then(async (response) => {
-				if (!response.ok) {
-					throw new Error(
-						JSON.stringify({
-							status: response.status,
-							statusText: response.statusText,
-						}),
-					);
+		};
+	}
+
+	private static execute() {}
+
+	async get<T>(
+		endpoint: string,
+		opts?: DhaagaFetchRequestConfig,
+	): Promise<LibraryResponse<T>> {
+		endpoint = FetchWrapper.applyQueriesToRequestUrl(endpoint, {
+			...opts,
+			baseURL: opts?.baseURL || this.baseUrl,
+		});
+
+		try {
+			const response = await fetch(
+				endpoint,
+				FetchWrapper.buildRequestInitObject({ ...opts, method: 'GET' }),
+			);
+
+			if (!response.ok) {
+				let errorBody;
+				let message = response.statusText;
+				let errorCode = ApiErrorCode.UNKNOWN_ERROR;
+				try {
+					errorBody = await response.json();
+					if (typeof errorBody?.error === 'string') message = errorBody.error;
+
+					if (typeof errorBody?.error?.message === 'string')
+						message = errorBody.error.message;
+				} catch {
+					errorBody = await response.text(); // fallback
+					console.log('via body', errorBody);
 				}
-				return { data: await response.json() };
-			})
-			.catch((e) => {
+
+				switch (response.status) {
+					case 401: {
+						errorCode = ApiErrorCode.UNAUTHORIZED;
+						break;
+					}
+				}
+
 				return {
 					error: {
-						code: ApiErrorCode.UNKNOWN_ERROR,
-						message: e,
+						code: errorCode,
+						// status: response.status,
+						// statusText: response.statusText,
+						// body: errorBody,
+						message,
 					},
 				};
-			});
+			}
+
+			let data = await response.json();
+			if (opts?.transformResponse === 'snake') {
+				data = CasingUtil.snakeCaseKeys(data) as T;
+			} else if (opts?.transformResponse === 'camel') {
+				data = CasingUtil.camelCaseKeys(data) as T;
+			}
+			return data;
+		} catch (e) {
+			return {
+				error: {
+					code: ApiErrorCode.UNKNOWN_ERROR,
+					message: e,
+				},
+			};
+		}
 	}
 }
 
 class DhaagaApiUtils {
-	/**
-	 * Since http(s) is not appended to server names
-	 * in our dhaaga app databases, we want the flexibility
-	 * of not having to worry about appending it
-	 * everywhere
-	 */
-	static ensureHttpsAppend(urlLike: string) {
-		if (urlLike.startsWith('http://') || urlLike.startsWith('https://')) {
-		} else {
-			urlLike = 'https://' + urlLike;
-		}
-		return urlLike.replace(/\/+$/, '');
-	}
-
 	/**
 	 * Mastodon sometimes embeds the
 	 * pagination tokens in Link header

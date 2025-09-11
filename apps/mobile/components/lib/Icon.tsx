@@ -127,6 +127,7 @@ type NavigationIconType = {
 	color: string;
 	size: number;
 	focused: boolean;
+	sizeOffset: number;
 };
 
 /**
@@ -139,6 +140,7 @@ export function HomeNavigationIcon({
 	focused,
 	color,
 	size,
+	sizeOffset,
 }: NavigationIconType) {
 	function onPress() {
 		router.navigate('/');
@@ -153,15 +155,19 @@ export function HomeNavigationIcon({
 	return (
 		<TouchableOpacity onPress={onPress} onLongPress={onLongPress}>
 			{focused ? (
-				<Ionicons size={size + 2} name="home" color={color} />
+				<Ionicons size={size + sizeOffset} name="home" color={color} />
 			) : (
-				<Ionicons size={size + 2} name="home-outline" color={color} />
+				<Ionicons size={size + sizeOffset} name="home-outline" color={color} />
 			)}
 		</TouchableOpacity>
 	);
 }
 
-export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
+export function ProfileTabNavbarIcon({
+	color,
+	size,
+	sizeOffset,
+}: NavigationIconType) {
 	const { show } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
@@ -185,35 +191,37 @@ export function ProfileTabNavbarIcon({ color, size }: NavigationIconType) {
 				onPress={onPress}
 				onLongPress={onLongPress}
 			>
-				<MaterialIcons name="no-accounts" size={size + 4} color={color} />
+				<MaterialIcons
+					name="no-accounts"
+					size={size + sizeOffset}
+					color={color}
+				/>
 			</TouchableOpacity>
 		);
 
 	return (
-		<View style={{ flexDirection: 'row', flex: 1 }}>
-			<Pressable
-				style={styles.accountIconTouchableContainer}
-				onPress={onPress}
-				onLongPress={onLongPress}
-			>
-				<View style={styles.accountIconInternalContainer}>
-					{/*@ts-ignore-next-line*/}
-					<Image
-						style={{
-							width: 36,
-							height: 36,
-							opacity: 0.87,
-							borderRadius: 8,
-						}}
-						source={{ uri: acct?.avatarUrl }}
-						contentFit="fill"
-					/>
-				</View>
-				<View style={{ width: 14 }}>
-					<Feather name="more-vertical" size={24} color={theme.textColor.low} />
-				</View>
-			</Pressable>
-		</View>
+		<Pressable
+			style={styles.accountIconTouchableContainer}
+			onPress={onPress}
+			onLongPress={onLongPress}
+		>
+			<View style={styles.accountIconInternalContainer}>
+				{/*@ts-ignore-next-line*/}
+				<Image
+					style={{
+						width: 38,
+						height: 38,
+						opacity: 0.92,
+						borderRadius: 16,
+					}}
+					source={{ uri: acct?.avatarUrl }}
+					contentFit="fill"
+				/>
+			</View>
+			<View style={{ width: 14 }}>
+				<Feather name="more-vertical" size={24} color={theme.secondary.a40} />
+			</View>
+		</Pressable>
 	);
 }
 
@@ -989,20 +997,26 @@ export function AppToggleIcon({
 
 const styles = StyleSheet.create({
 	accountIconTouchableContainer: {
-		height: '100%',
 		alignItems: 'center',
 		flexDirection: 'row',
-		paddingTop: 6,
 	},
 	accountIconTouchableContainerRight: {
-		height: '100%',
+		// height: '100%',
+		flex: 1,
+		// backgroundColor: 'red',
 		alignItems: 'center',
 		flexDirection: 'row',
-		marginTop: 10,
+		justifyContent: 'center',
+		margin: 'auto',
+		// marginTop: 10,
+		// marginBottom: 8,
+		// marginRight: 4,
+		// marginLeft: -8,
 	},
 	accountIconInternalContainer: {
-		borderRadius: 8,
+		borderRadius: 16,
 		borderWidth: 0.5,
 		borderColor: 'rgba(255, 255, 255, 0.25)',
+		marginRight: -2,
 	},
 });

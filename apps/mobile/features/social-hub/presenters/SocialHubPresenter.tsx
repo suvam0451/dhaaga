@@ -19,9 +19,9 @@ function SocialHubPresenter() {
 	const { profiles, loadNext, loadPrev, pageIndex } = useHub();
 
 	const start =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
+		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
 	const end =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
+		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
 
 	function onFlingGesture() {
 		if (start.current.absoluteX > end.current.absoluteX) {

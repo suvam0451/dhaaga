@@ -60,9 +60,9 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 	return (
 		<Pressable
 			style={{
-				backgroundColor: '#202020',
+				backgroundColor: theme.background.a20,
 				padding: 8,
-				paddingVertical: 6,
+				paddingVertical: 10,
 				marginBottom: 8,
 				borderRadius: 8,
 				marginHorizontal: 8,
@@ -73,13 +73,15 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
+					width: '100%',
 				}}
 			>
 				<View
 					style={{
 						flexDirection: 'row',
 						alignItems: 'center',
-						flex: 1,
+						marginRight: 'auto',
+						flexShrink: 1,
 					}}
 				>
 					<AccountPfp
@@ -95,8 +97,13 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 						subdomain={acct.server}
 					/>
 				</View>
-
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						flexShrink: 1,
+					}}
+				>
 					<View
 						style={{
 							alignItems: 'center',
@@ -109,6 +116,7 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 								style={{
 									fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 									color: theme.primary.a0,
+									fontSize: 16,
 								}}
 							>
 								Active
@@ -123,13 +131,12 @@ const FlashListItem = memo(({ acct }: FlashListItemProps) => {
 });
 
 const AppBottomSheetSelectAccount = memo(() => {
-	const { stateId, isAnimating, hide, theme } = useGlobalState(
+	const { stateId, isAnimating, hide } = useGlobalState(
 		useShallow((o) => ({
 			acct: o.acct,
 			stateId: o.bottomSheet.stateId,
 			isAnimating: o.bottomSheet.isAnimating,
 			hide: o.bottomSheet.hide,
-			theme: o.colorScheme,
 		})),
 	);
 	const { data } = useAppListAccounts(stateId);

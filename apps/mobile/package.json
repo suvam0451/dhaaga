@@ -62,7 +62,7 @@
   },
   "private": true,
   "scripts": {
-    "dev": "expo start --dev-client -c",
+    "dev": "expo start --dev-client",
     "apk": "eas build -p android --profile apk",
     "aab": "eas build -p android --profile aab",
     "client": "eas build -p android --profile dev",

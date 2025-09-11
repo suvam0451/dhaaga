@@ -60,7 +60,9 @@ export class PleromaTimelinesRouter
 	): DriverTimelineGetApiResponse {
 		const { data: _data, error } = await this.direct.get<any[]>(
 			'/api/v1/timelines/bubble',
-			CasingUtil.snakeCaseKeys(query),
+			{
+				queries: CasingUtil.snakeCaseKeys(query),
+			},
 		);
 		if (error) return Err(error.code);
 		return Ok(CasingUtil.camelCaseKeys(_data));
