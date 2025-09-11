@@ -32,6 +32,9 @@ switching apps or websites.
   <a href="https://apt.izzysoft.de/fdroid/index/apk/io.suvam.dhaaga.lite" target="_blank">
     <img src="./.github/badges/izzy_on_droid.png" height="48px"/>
   </a>
+  <a href="https://dhaaga.app" target="_blank">
+    <img src="./.github/badges/use_in_browser.svg" height="48px"/>
+  </a>
 </div>
 
 ## ✨ Features
@@ -65,7 +68,6 @@ I'd love to hear about your experience with the app! Come say hi~ 🤗
 
 [Bluesky](https://bsky.app/profile/suvam.io) |
 [Mastodon](https://mastodon.social/@suvam) |
-[Matrix](https://matrix.to/@suvam:matrix.org#/@suvam:matrix.org) |
 [Misskey](https://misskey.io/@suvam0451) |
 [X](https://x.com/suvam0451)
 
