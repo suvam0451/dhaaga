@@ -1,4 +1,4 @@
-import { ExpoConfig, ConfigContext } from 'expo/config.js';
+import { ExpoConfig, ConfigContext } from 'expo/config';
 
 const IS_DEV = process.env.APP_VARIANT === 'dev';
 
@@ -10,7 +10,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: APP_NAME,
 	slug: 'dhaaga',
-	version: '0.16.2',
+	version: '0.16.4',
 	orientation: 'portrait',
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'dark',
@@ -72,7 +72,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					compileSdkVersion: 35,
 					targetSdkVersion: 35,
 					buildToolsVersion: '35.0.0',
-					enableProguardInReleaseBuilds: false,
+					// enableProguardInReleaseBuilds: false, // deprecated
+					enableMinifyInReleaseBuilds: true,
 					enableShrinkResourcesInReleaseBuilds: false,
 					blockedPermissions: [
 						'android.permission.SYSTEM_ALERT_WINDOW',
@@ -117,6 +118,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		],
 		['expo-localization'],
 		['expo-video'],
+		[
+			'expo-audio',
+			{
+				microphonePermission: 'Allow Dhaaga to access your microphone.',
+			},
+		],
 		[
 			'expo-asset',
 			{
