@@ -29,15 +29,16 @@
     "masto": "^7.2.0",
     "megalodon": "^10.1.1",
     "mfm-js": "^0.25.0",
-    "misskey-js": "^2025.4.0",
+    "misskey-js": "^2025.9.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.10",
-    "typescript": "^5.8.3"
+    "@types/bun": "^1.2.21",
+    "typescript": "~5.8.3"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.json"
+    "build": "tsc -p ./tsconfig.json",
+    "test": "bun test"
   },
   "type": "module"
 }

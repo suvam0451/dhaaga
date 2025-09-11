@@ -10,12 +10,12 @@
  * API calls using fetch
  */
 
-import { api as misskeyApi } from 'misskey-js';
 import FetchWrapper from './custom-fetch.js';
 import { mastodon, createRestAPIClient } from 'masto';
 import { Agent, CredentialSession } from '@atproto/api';
 import generator, { MegalodonInterface } from 'megalodon';
 import { KNOWN_SOFTWARE } from '../data/driver.js';
+import { api } from 'misskey-js';
 
 /**
  * Used for --> Bluesky
@@ -102,12 +102,12 @@ export class MegalodonGoToSocialWrapper extends FetchWrapper {
  * Used for --> Misskey, Sharkey, Firefish
  */
 export class MisskeyJsWrapper extends FetchWrapper {
-	client: misskeyApi.APIClient;
+	client: api.APIClient;
 
 	constructor(baseUrl: string, token?: string) {
 		super(baseUrl, token);
 
-		this.client = new misskeyApi.APIClient({
+		this.client = new api.APIClient({
 			origin: this.baseUrl,
 			credential: this.token || undefined,
 		});

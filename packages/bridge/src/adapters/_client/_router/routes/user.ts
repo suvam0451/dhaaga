@@ -1,8 +1,8 @@
 import { ApiTargetInterface } from './_index.js';
 import { ApiAsyncResult } from '../../../../utils/api-result.js';
-import { UserObjectType } from '../../../../parsers/user.js';
+import { UserObjectType, UserParser } from '../../../../parsers/user.js';
 import { DriverUserFindQueryType } from '../../../../types/query.types.js';
-import { MastoApiAdapter, MisskeyApiAdapter, UserParser } from '@dhaaga/bridge';
+// import { MastoApiAdapter, MisskeyApiAdapter, UserParser } from '@dhaaga/bridge';
 import { Err, Ok } from '../../../../utils/index.js';
 import { ApiErrorCode } from '../../../../types/result.types.js';
 import { DriverService } from '../../../../services/driver.js';
@@ -10,6 +10,8 @@ import { AtprotoApiAdapter } from '../../bluesky/_router.js';
 import { FollowerGetQueryDTO } from './accounts.js';
 import { KeyExtractorUtil } from '../../../../utils/key-extractor.js';
 import { ResultPage } from '../../../../utils/pagination.js';
+import { MastoApiAdapter } from '../../mastodon/_router.js';
+import { MisskeyApiAdapter } from '../../misskey/_router.js';
 
 class Route {
 	private client: ApiTargetInterface;

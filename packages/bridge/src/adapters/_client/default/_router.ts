@@ -12,8 +12,8 @@ import { DefaultMediaRoute } from './media.js';
 import { DefaultListRoute } from './lists.js';
 import { DefaultProfileRouter } from './profile.js';
 import { PostMutatorRoute } from '../_router/routes/post.js';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { UserRoute } from '../_router/routes/user.js';
+import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
