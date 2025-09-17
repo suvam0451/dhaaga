@@ -20,10 +20,10 @@
     "accountCreationNotSupported": "Account creation is not supported",
     "needBlueskyAccount": "You need a Bluesky account",
     "createOneHere": "Create one here",
-    "loginButton": "Log-In",
+    "loginButton": "Sign In",
     "appPassword": "App Password",
-    "enterYourServer": "Enter your server",
-    "serverUrl": "Your server url",
+    "enterYourServer": "Enter your server address",
+    "serverUrl": "Enter your instance url",
     "popularMastodon": "Popular Mastodon Servers",
     "popularPleroma": "Popular Pleroma Servers",
     "popularAkkoma": "Popular Akkoma Servers"

@@ -1,9 +1,10 @@
+import { ReactNode } from 'react';
 import useKeyboard from '../hooks/useKeyboard';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 type Props = {
 	style?: StyleProp<ViewStyle>;
-	children: any;
+	children: ReactNode;
 };
 
 function HideOnKeyboardVisibleContainer({ children, style }: Props) {
@@ -21,13 +22,6 @@ function HideOnKeyboardVisibleContainer({ children, style }: Props) {
 			{children}
 		</View>
 	);
-}
-
-export function DisableOnKeyboardVisibleContainer({ children, style }: Props) {
-	const { KeyboardVisible } = useKeyboard();
-
-	if (KeyboardVisible) return <View />;
-	return <View style={style}>{children}</View>;
 }
 
 export default HideOnKeyboardVisibleContainer;

@@ -1,5 +1,5 @@
-import { memo, useMemo } from 'react';
-import { Animated } from 'react-native';
+import { ReactNode } from 'react';
+import { Animated, ScrollView, StyleProp, ViewStyle } from 'react-native';
 import TopNavbarGeneric from './fragments/TopNavbarGeneric';
 import TopNavbarLandingGeneric from './fragments/TopNavbarLandingGeneric';
 import TimelinesHeader from './fragments/TopNavbarTimelineStack';
@@ -24,59 +24,76 @@ type AutoHideNavBarProps = {
 	translateY: Animated.AnimatedInterpolation<string | number>;
 	type?: APP_TOPBAR_TYPE_ENUM;
 	onRefresh?: () => void;
+	contentContainerStyle?: StyleProp<ViewStyle>;
 };
 
-const AppTopNavbar = memo(
-	({
-		title,
-		children,
-		translateY,
-		type = APP_TOPBAR_TYPE_ENUM.GENERIC,
-	}: AutoHideNavBarProps) => {
-		const { theme } = useAppTheme();
+function AppTopNavbar({
+	title,
+	children,
+	translateY,
+	type = APP_TOPBAR_TYPE_ENUM.GENERIC,
+	contentContainerStyle,
+}: AutoHideNavBarProps) {
+	const { theme } = useAppTheme();
 
-		const Header = useMemo(() => {
-			switch (type) {
-				case APP_TOPBAR_TYPE_ENUM.GENERIC:
-					return <TopNavbarGeneric title={title} />;
-				case APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC:
-					return <TopNavbarLandingGeneric title={title} />;
-				case APP_TOPBAR_TYPE_ENUM.TIMELINE:
-					return <TimelinesHeader />;
-				case APP_TOPBAR_TYPE_ENUM.NOTIFICATION_CENTER:
-					return <NotificationsHeader />;
-				case APP_TOPBAR_TYPE_ENUM.PROFILE:
-					return <TopNavbarProfilePage title={title} />;
-				default:
-					return <TopNavbarGeneric title={title} />;
-			}
-		}, [title, type]);
-		return (
+	let Header: ReactNode;
+
+	switch (type) {
+		case APP_TOPBAR_TYPE_ENUM.GENERIC:
+			Header = <TopNavbarGeneric title={title} />;
+			break;
+		case APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC:
+			Header = <TopNavbarLandingGeneric title={title} />;
+			break;
+		case APP_TOPBAR_TYPE_ENUM.TIMELINE:
+			Header = <TimelinesHeader />;
+			break;
+		case APP_TOPBAR_TYPE_ENUM.NOTIFICATION_CENTER:
+			Header = <NotificationsHeader />;
+			break;
+		case APP_TOPBAR_TYPE_ENUM.PROFILE:
+			Header = <TopNavbarProfilePage title={title} />;
+			break;
+		default:
+			Header = <TopNavbarGeneric title={title} />;
+			break;
+	}
+
+	return (
+		<Animated.View
+			style={{
+				backgroundColor: theme.palette.bg,
+				height: '100%',
+			}}
+		>
 			<Animated.View
-				style={{
-					backgroundColor: theme.palette.bg,
-					height: '100%',
-				}}
+				style={[
+					{
+						position: 'absolute',
+						zIndex: 1,
+						transform: [
+							{
+								translateY,
+							},
+						],
+					},
+				]}
 			>
-				<Animated.View
-					style={[
-						{
-							position: 'absolute',
-							zIndex: 1,
-							transform: [
-								{
-									translateY,
-								},
-							],
-						},
-					]}
-				>
-					{Header}
-				</Animated.View>
-				{children}
+				{Header}
 			</Animated.View>
-		);
-	},
-);
+			<ScrollView
+				contentContainerStyle={[
+					{
+						paddingTop: 54,
+						paddingHorizontal: 8,
+					},
+					contentContainerStyle,
+				]}
+			>
+				{children}
+			</ScrollView>
+		</Animated.View>
+	);
+}
 
 export default AppTopNavbar;

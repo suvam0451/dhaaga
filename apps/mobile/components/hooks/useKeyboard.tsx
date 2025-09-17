@@ -27,7 +27,7 @@ function useKeyboard() {
 		};
 	}, []);
 
-	return { KeyboardVisible, setKeyboardVisible };
+	return { KeyboardVisible };
 }
 
 export default useKeyboard;

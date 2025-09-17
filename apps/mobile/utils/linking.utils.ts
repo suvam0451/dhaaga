@@ -18,6 +18,10 @@ export class LinkingUtils {
 		LinkingUtils.openURL('https://bsky.app/');
 	}
 
+	static openJoinMastodonHomepage() {
+		LinkingUtils.openURL('https://joinmastodon.org/servers');
+	}
+
 	static openCoffeeLink() {
 		LinkingUtils.openURL('https://buymeacoffee.com/suvam');
 	}
