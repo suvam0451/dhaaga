@@ -1,14 +1,15 @@
 import { PostInspector, PostObjectType } from '../../../../parsers/post.js';
 import { ApiTargetInterface } from './_index.js';
 import { DriverService } from '../../../../services/driver.js';
-import { AtprotoApiAdapter, DriverPostLikeState, Result } from '@dhaaga/bridge';
-import { Err, Ok } from '../../../../utils/index.js';
+import { Err, Ok, Result } from '../../../../utils/index.js';
 import { ApiAsyncResult } from '../../../../utils/api-result.js';
 import { ApiErrorCode } from '../../../../types/result.types.js';
 import ActivityPubService from '../../../../services/activitypub.service.js';
 import { KNOWN_SOFTWARE } from '../../../../data/driver.js';
 import { AtprotoPostService } from '../../../../services/atproto.service.js';
 import ActivityPubReactionsService from '../../../../services/activitypub-reactions.service.js';
+import { DriverPostLikeState } from '../../../../types/driver.types.js';
+import { AtprotoApiAdapter } from '../../bluesky/_router.js';
 
 class Mutator {
 	client: ApiTargetInterface;
@@ -88,7 +89,7 @@ class Mutator {
 
 		try {
 			if (DriverService.supportsAtProto(this.client.driver)) {
-				const _api = this.client as AtprotoApiAdapter;
+				const _api = this.client as unknown as AtprotoApiAdapter;
 				nextState = target.atProto?.viewer?.like
 					? await _api.statuses.atProtoDeleteLike(target.atProto?.viewer?.like)
 					: await _api.statuses.atProtoLike(target.meta.uri!, target.meta.cid!);

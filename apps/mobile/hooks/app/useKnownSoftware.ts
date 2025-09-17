@@ -20,8 +20,8 @@ function useKnownSoftware(software: string) {
 				fg: 'white',
 				label: 'Bluesky',
 				logo: branding[15],
-				width: 28,
-				height: 28,
+				width: 42,
+				height: 36,
 			};
 		}
 		case KNOWN_SOFTWARE.CHERRYPICK: {
@@ -99,6 +99,16 @@ function useKnownSoftware(software: string) {
 				fg: '#e9e7e4',
 				label: 'GoToSocial',
 				logo: branding[6],
+				width: 24,
+				height: 24,
+			};
+		}
+		case KNOWN_SOFTWARE.LEMMY: {
+			return {
+				bg: '#df8958',
+				fg: '#e9e7e4',
+				label: 'Lemmy',
+				logo: branding[12],
 				width: 24,
 				height: 24,
 			};

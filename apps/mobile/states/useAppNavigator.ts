@@ -16,13 +16,13 @@ function useAppNavigator() {
 	const { acct } = useAppAcct();
 
 	function toHome() {
-		// probably in bottom sheet
+		// probably in the bottom sheet
 		if (!navigator || !navigator.getId) return;
 		router.navigate(navigator.getId());
 	}
 
 	function toPost(id: string, params?: any) {
-		// probably in bottom sheet
+		// probably in the bottom sheet
 		if (!navigator || !navigator.getId) {
 			console.log('[WARN]: no navigator!');
 			return;
@@ -117,20 +117,20 @@ function useAppNavigator() {
 	}
 
 	function toTimelineViaPin(pinId: number, pinType: 'feed' | 'user' | 'tag') {
-		// probably in bottom sheet
+		// probably in the bottom sheet
 		if (!navigator || !navigator.getId) return;
 
 		const _id = navigator.getId();
 		if (!_id || _id === '/(tabs)/index') {
-			router.push({
-				pathname: `/timelines`,
+			router.navigate({
+				pathname: `/feed`,
 				params: {
 					pinId,
 					pinType,
 				},
 			});
 		} else {
-			router.push({
+			router.navigate({
 				pathname: `${navigator.getId()}/timelines`,
 				params: {
 					pinId,

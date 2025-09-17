@@ -17,7 +17,7 @@
   },
   "onboarding": {
     "addAccountButton": "Add Account",
-    "accountCreationNotSupported": "Account creation is not supported",
+    "accountCreationNotSupported": "Account creation is not supported.\nYou must already own an account.",
     "needBlueskyAccount": "You need a Bluesky account",
     "createOneHere": "Create one here",
     "loginButton": "Sign In",
@@ -125,7 +125,7 @@
       "goodEvening": "Good Evening",
       "goodNight": "Good Night"
     },
-    "navbarLabel": "Social Hub",
+    "navbarLabel": "Dhaaga Hub",
     "section": {
       "feeds": "Feeds",
       "users": "Users",

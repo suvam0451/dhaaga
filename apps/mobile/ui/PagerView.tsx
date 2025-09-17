@@ -189,6 +189,7 @@ function AppPagerView({
 
 	return (
 		<View style={[{ flex: 1, position: 'relative' }, props]}>
+			{/*@ts-ignore-next-line*/}
 			<PagerView
 				ref={ref}
 				scrollEnabled={true}

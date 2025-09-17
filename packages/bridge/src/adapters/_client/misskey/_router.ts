@@ -12,9 +12,9 @@ import { MisskeyMediaRouter } from './media.js';
 import { MisskeyListsRoute } from './lists.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { ApiTargetInterface } from '../_router/routes/_index.js';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMutatorRoute } from '../_router/routes/post.js';
 import { UserRoute } from '../_router/routes/user.js';
+import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;

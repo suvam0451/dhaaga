@@ -9,82 +9,143 @@ import { Asset, useAssets } from 'expo-asset';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { AppText } from '../lib/Text';
-import { Image } from 'expo-image';
 import { LOCALIZATION_NAMESPACE } from '../../types/app.types';
 import { useTranslation } from 'react-i18next';
+import Animated, {
+	useSharedValue,
+	useAnimatedStyle,
+	withSpring,
+} from 'react-native-reanimated';
+import { useEffect } from 'react';
 
 type OnboardingCtaBannerProps = {
 	titleText: string;
 	descText: string;
 	descExternalOnPress: () => void;
 	softwareLogoAsset: Asset;
+	platformSelected: boolean;
+	onPlatformSelectionReset: () => void;
 };
 
+const ANIM_DISTANCE = 72;
+const ANIM_FINAL_SIZE = 0.95;
 function OnboardingSignInBanner({
 	titleText,
 	descText,
 	descExternalOnPress,
 	softwareLogoAsset,
+	platformSelected = true,
+	onPlatformSelectionReset,
 }: OnboardingCtaBannerProps) {
 	const [assets, error] = useAssets([require('../../assets/icon.png')]);
 	const { theme } = useAppTheme();
+	const split = useSharedValue(0); // 0 = single, 1 = split
+
+	function onPlatformReset() {
+		if (onPlatformSelectionReset) onPlatformSelectionReset();
+	}
+
+	useEffect(() => {
+		split.value = platformSelected ? 1 : 0; // toggle
+	}, [platformSelected]);
+
+	const shiftLeft: any = useAnimatedStyle(() => {
+		return {
+			transform: [
+				{ translateX: withSpring(split.value * ANIM_DISTANCE) }, // move left
+				{ scale: withSpring(split.value === 1 ? ANIM_FINAL_SIZE : 1) },
+			],
+			opacity: withSpring(1),
+		} as any;
+	});
+
+	const shiftRight: any = useAnimatedStyle(() => {
+		return {
+			transform: [
+				{ translateX: withSpring(-split.value * ANIM_DISTANCE) }, // move right
+				{ scale: withSpring(split.value === 1 ? ANIM_FINAL_SIZE : 1) },
+			],
+			opacity: withSpring(split.value === 1 ? 1 : 0), // fade in second logo
+		} as any;
+	});
 
 	if (error || !assets) return <View />;
+
+	const ALL_LOGO_HEIGHT = 84;
+	const HOST_LOGO_WIDTH =
+		(assets[0].width / assets[0].height) * ALL_LOGO_HEIGHT;
+	const TARGET_LOGO_WIDTH =
+		(softwareLogoAsset?.width / softwareLogoAsset?.height) * ALL_LOGO_HEIGHT;
 
 	return (
 		<View style={{ marginBottom: 32 }}>
 			<HideOnKeyboardVisibleContainer>
 				<View style={styles.logoArrayContainer}>
-					{/*@ts-ignore-next-line*/}
-					<Image
-						source={{ uri: softwareLogoAsset.localUri }}
-						style={{
-							width: 84,
-							height: 84,
-							marginHorizontal: 'auto',
-							borderRadius: 16,
-							backgroundColor: '#1f2836',
-						}}
-						contentFit={'cover'}
-					/>
+					{/*</Pressable>*/}
 					<Ionicons
 						name={'close-outline'}
 						color={theme.secondary.a50}
 						size={32}
-						style={{ marginHorizontal: 16 }}
+						style={{ marginHorizontal: 16, position: 'absolute' }}
 					/>
-					{/*@ts-ignore-next-line*/}
-					<Image
+					<Animated.View
+						style={[{ position: 'absolute' }, shiftRight]}
+						onTouchStart={onPlatformReset}
+					>
+						<Animated.Image
+							source={{ uri: softwareLogoAsset.localUri }}
+							style={[
+								{
+									width: TARGET_LOGO_WIDTH,
+									height: ALL_LOGO_HEIGHT,
+									marginHorizontal: 'auto',
+									borderRadius: 16,
+									zIndex: 2,
+								},
+							]}
+						/>
+					</Animated.View>
+					<Animated.Image
 						source={{ uri: assets[0].localUri }}
-						style={{
-							width: 84,
-							height: 84,
-							marginHorizontal: 'auto',
-							borderRadius: 16,
-						}}
+						style={[
+							{
+								width: HOST_LOGO_WIDTH,
+								height: ALL_LOGO_HEIGHT,
+								marginHorizontal: 'auto',
+								borderRadius: 16,
+								backgroundColor: '#1f2836',
+								zIndex: 2,
+							},
+							shiftLeft,
+						]}
+						// contentFit={'cover'}
 					/>
 				</View>
 			</HideOnKeyboardVisibleContainer>
-			<AppText.Medium
-				style={{
-					textAlign: 'center',
-					paddingTop: 16,
-					paddingBottom: 8,
-					fontSize: 20,
-				}}
-			>
-				{titleText}
-			</AppText.Medium>
-			<AppText.Medium
-				style={{
-					color: theme.complementary.a0,
-					fontSize: 18,
-					textAlign: 'center',
-				}}
-				onPress={descExternalOnPress}
-			>
-				{descText}
-			</AppText.Medium>
+			{platformSelected && (
+				<View>
+					<AppText.Medium
+						style={{
+							textAlign: 'center',
+							paddingTop: 16,
+							paddingBottom: 8,
+							fontSize: 20,
+						}}
+					>
+						{titleText}
+					</AppText.Medium>
+					<AppText.Medium
+						style={{
+							color: theme.complementary.a0,
+							fontSize: 18,
+							textAlign: 'center',
+						}}
+						onPress={descExternalOnPress}
+					>
+						{descText}
+					</AppText.Medium>
+				</View>
+			)}
 		</View>
 	);
 }

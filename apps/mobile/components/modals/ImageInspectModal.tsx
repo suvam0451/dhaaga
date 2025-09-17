@@ -312,9 +312,10 @@ const styles = StyleSheet.create({
 		height: '100%',
 		width: '100%',
 		position: 'absolute',
-		alignItems: 'center',
+		// alignItems: 'center',
+		// opacity: 0.8,
 		// justifyContent: 'flex-start',
-		flex: 1,
+		// flex: 1,
 	},
 	imageInspectorPostMetricsContainer: {
 		position: 'absolute',
@@ -329,6 +330,7 @@ const styles = StyleSheet.create({
 	backdrop: {
 		height: '100%',
 		width: '100%',
+		flex: 1,
 		backgroundColor: 'black',
 		opacity: 0.84,
 		position: 'absolute',

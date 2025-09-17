@@ -7,6 +7,7 @@ import {
 } from '../adapters/index.js';
 import { DriverService } from './driver.js';
 import { RandomUtil } from '../utils/index.js';
+import { LibraryPromise } from '../adapters/_client/_router/routes/_types.js';
 
 enum KNOWN_SOFTWARE {
 	// Fediverse Parent Software
@@ -221,22 +222,27 @@ class ActivityPubService {
 			clientId: string;
 			clientSecret: string;
 		},
-	) {
+	): LibraryPromise<{
+		software: string;
+		version?: string | null;
+		loginUrl: string;
+		loginStrategy: 'code' | 'miauth';
+		clientId?: string;
+		clientSecret?: string;
+	}> {
 		const client = new BaseApiAdapter();
-		const { data, error } = await client.instances.getLoginUrl(urlLike, {
+		return client.instances.getLoginUrl(urlLike, {
 			appCallback: 'https://suvam.io',
 			appName: 'Dhaaga',
 			appClientId: token?.clientId,
 			appClientSecret: token?.clientSecret,
 			uuid: RandomUtil.nanoId(),
 		});
-		if (error) return null;
-		return data;
 	}
 
 	/**
-	 * For misskey specifically, finalises and binds the current
-	 * bookmark status for a post object
+	 * For misskey specifically, finalizes and binds the current
+	 * bookmark status for a post-object
 	 *
 	 * This function would fail for drivers other than misskey
 	 * @param client

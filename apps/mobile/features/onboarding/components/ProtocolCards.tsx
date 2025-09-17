@@ -2,11 +2,13 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { router } from 'expo-router';
+import { Pressable, StyleSheet, FlatList } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { APP_FONTS } from '../../../styles/AppFonts';
+
+type ProtocolCardsProps = {
+	onSelectSetPagerId: (id: number) => void;
+};
 
 /**
  * This UI fragment can be shared with other
@@ -14,98 +16,78 @@ import { APP_FONTS } from '../../../styles/AppFonts';
  * footer or page decorations)
  * @constructor
  */
-function ProtocolCards() {
+function ProtocolCards({ onSelectSetPagerId }: ProtocolCardsProps) {
 	const { theme } = useAppTheme();
 	const options: {
 		label: string;
-		padding: number;
 		rightComponent: any;
 		to: string;
-		desc?: string;
+		pagerId: number;
 	}[] = [
 		{
 			label: 'Bluesky',
-			desc: '- Custom PDS (for now)',
-			padding: 0,
 			rightComponent: (
-				<SoftwareHeader
-					software={KNOWN_SOFTWARE.BLUESKY}
-					mb={0}
-					mt={0}
-					iconSizeMultiplier={3}
-				/>
+				<SoftwareHeader height={54} software={KNOWN_SOFTWARE.BLUESKY} />
 			),
 			to: APP_ROUTING_ENUM.ATPROTO_SIGNIN,
+			pagerId: 1,
 		},
 		{
 			label: 'Mastodon',
-			padding: 20,
-			desc: '+ Pleroma, Akkoma',
 			rightComponent: (
-				<SoftwareHeader
-					software={KNOWN_SOFTWARE.MASTODON}
-					mb={0}
-					mt={0}
-					iconSizeMultiplier={2.2}
-				/>
+				<SoftwareHeader height={54} software={KNOWN_SOFTWARE.MASTODON} />
 			),
 			to: APP_ROUTING_ENUM.MASTODON_SERVER_SELECTION,
+			pagerId: 2,
 		},
 		{
 			label: 'Misskey',
-			padding: 12,
-			desc: '+ Sharkey, CherryPick',
 			rightComponent: (
-				<SoftwareHeader
-					software={KNOWN_SOFTWARE.MISSKEY}
-					mb={0}
-					mt={0}
-					iconSizeMultiplier={2.5}
-				/>
+				<SoftwareHeader height={54} software={KNOWN_SOFTWARE.MISSKEY} />
 			),
 			to: APP_ROUTING_ENUM.MISSKEY_SERVER_SELECTION,
+			pagerId: 3,
+		},
+		{
+			label: 'Lemmy ⏳',
+			rightComponent: (
+				<SoftwareHeader height={54} software={KNOWN_SOFTWARE.LEMMY} />
+			),
+			to: APP_ROUTING_ENUM.MISSKEY_SERVER_SELECTION,
+			pagerId: 4,
 		},
 	];
 
 	return (
-		<View>
-			{options.map((option, i) => (
+		<FlatList
+			numColumns={2}
+			data={options}
+			renderItem={({ item }) => (
 				<Pressable
-					key={i}
 					style={[
 						styles.selectSnsBox,
 						{
-							backgroundColor: theme.palette.menubar,
-							paddingVertical: option.padding,
+							backgroundColor: theme.background.a30,
 						},
 					]}
 					onPress={() => {
-						router.push(option.to);
+						onSelectSetPagerId(item.pagerId);
 					}}
 				>
-					<View style={{ flex: 1, justifyContent: 'center' }}>
-						<AppText.SemiBold
-							style={[
-								styles.selectSnsLabel,
-								{
-									color: theme.secondary.a10,
-								},
-							]}
-						>
-							{option.label}
-						</AppText.SemiBold>
-						{option.desc && (
-							<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
-								{option.desc}
-							</AppText.Medium>
-						)}
-					</View>
-					<View style={{ width: 80, alignItems: 'center' }}>
-						{option.rightComponent}
-					</View>
+					{item.rightComponent}
+					<AppText.SemiBold
+						style={[
+							styles.selectSnsLabel,
+							{
+								color: theme.secondary.a10,
+							},
+						]}
+					>
+						{item.label}
+					</AppText.SemiBold>
 				</Pressable>
-			))}
-		</View>
+			)}
+		/>
 	);
 }
 
@@ -113,22 +95,23 @@ export default ProtocolCards;
 
 const styles = StyleSheet.create({
 	noAccountText: {
-		fontSize: 24,
+		// fontSize: 22,
 		textAlign: 'center',
 		marginTop: 48,
 		fontFamily: APP_FONTS.INTER_700_BOLD,
 		marginBottom: 32,
 	},
 	selectSnsBox: {
-		padding: 6,
-		flexDirection: 'row',
+		paddingVertical: 20,
+		// paddingBottom: 16,
 		alignItems: 'center',
 		margin: 10,
 		borderRadius: 16,
-		paddingHorizontal: 20,
+		flex: 1,
 	},
 	selectSnsLabel: {
 		fontSize: 22,
+		marginTop: 12,
 	},
 	tipContainer: {
 		alignItems: 'center',
