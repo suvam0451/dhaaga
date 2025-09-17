@@ -69,7 +69,7 @@ function SearchScreenManual() {
 		<View style={styles.manualContainer}>
 			<View style={{ width: '100%' }}>
 				<InternalLink
-					to={'/discover/trending-posts'}
+					to={'/apps/mobile/app/(tabs)/timelines/trending-posts.tsx'}
 					label={'Trending Posts'}
 					style={[
 						styles.linkSectionContainer,
@@ -81,12 +81,12 @@ function SearchScreenManual() {
 					]}
 				/>
 				<InternalLink
-					to={'/discover/trending-tags'}
+					to={'/apps/mobile/app/(tabs)/timelines/trending-tags.tsx'}
 					label={'Trending Tags'}
 					style={[styles.linkSectionContainer]}
 				/>
 				<InternalLink
-					to={'/discover/trending-links'}
+					to={'/apps/mobile/app/(tabs)/timelines/trending-links.tsx'}
 					label={'Trending Links'}
 					style={[
 						styles.linkSectionContainer,

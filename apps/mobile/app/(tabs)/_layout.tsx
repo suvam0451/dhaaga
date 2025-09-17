@@ -8,16 +8,16 @@ import {
 } from '../../components/lib/Icon';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
-const BOTTOM_NAVBAR_HEIGHT = 50; // 42 - 52
+const BOTTOM_NAVBAR_HEIGHT = 48; // 42 - 52
 const BOTTOM_NAVBAR_ICON_STYLE = {
 	height: 46,
 	width: 'auto',
 };
 
 const ICON_A_SIZE_OFFSET = 4;
-const ICON_B_SIZE_OFFSET = 10;
-const ICON_C_SIZE_OFFSET = 10;
-const ICON_D_SIZE_OFFSET = 8;
+const ICON_B_SIZE_OFFSET = 4;
+const ICON_C_SIZE_OFFSET = 8;
+const ICON_D_SIZE_OFFSET = 6;
 const ICON_E_SIZE_OFFSET = 8;
 
 export default function TabLayout() {
@@ -32,7 +32,7 @@ export default function TabLayout() {
 					return {
 						tabBarHideOnKeyboard: true,
 						tabBarStyle: {
-							backgroundColor: theme.background.a20,
+							backgroundColor: theme.background.a10,
 							borderTopWidth: 0,
 							height: BOTTOM_NAVBAR_HEIGHT,
 						},
@@ -58,18 +58,18 @@ export default function TabLayout() {
 					}}
 				/>
 				<Tabs.Screen
-					name={'discover'}
+					name={'feed'}
 					options={{
 						tabBarIcon: ({ color, size, focused }) =>
 							focused ? (
 								<Ionicons
-									name="compass-sharp"
+									name="newspaper"
 									size={size + ICON_B_SIZE_OFFSET}
 									color={color}
 								/>
 							) : (
 								<Ionicons
-									name="compass-outline"
+									name="newspaper-outline"
 									size={size + ICON_B_SIZE_OFFSET}
 									color={color}
 								/>
@@ -77,18 +77,18 @@ export default function TabLayout() {
 					}}
 				/>
 				<Tabs.Screen
-					name={'apps'}
+					name={'explore'}
 					options={{
 						tabBarIcon: ({ color, size, focused }) =>
 							focused ? (
 								<Ionicons
-									name="add-circle"
+									name="compass"
 									size={size + ICON_C_SIZE_OFFSET}
 									color={color}
 								/>
 							) : (
 								<Ionicons
-									name="add-circle-outline"
+									name="compass-outline"
 									size={size + ICON_C_SIZE_OFFSET}
 									color={color}
 								/>

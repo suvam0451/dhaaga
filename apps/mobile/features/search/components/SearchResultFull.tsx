@@ -9,7 +9,12 @@ import {
 } from '@dhaaga/core';
 import { useEffect, useState } from 'react';
 import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
-import { Pressable, StyleSheet, View } from 'react-native';
+import {
+	Pressable,
+	StyleSheet,
+	View,
+	KeyboardAvoidingView,
+} from 'react-native';
 import { AppText } from '../../../components/lib/Text';
 import { getSearchTabs } from '@dhaaga/db';
 
@@ -45,7 +50,7 @@ function WidgetExpanded() {
 	}
 
 	return (
-		<View
+		<KeyboardAvoidingView
 			style={[
 				styles.root,
 				{
@@ -73,7 +78,7 @@ function WidgetExpanded() {
 					</AppText.Medium>
 				</Pressable>
 			))}
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 

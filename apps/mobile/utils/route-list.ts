@@ -16,8 +16,8 @@ export enum APP_ROUTING_ENUM {
 	GUIDE_SETTINGS_TAB = '/profile/user-guide-settings',
 	// guides (5th tab)
 	GUIDE_MY_PROFILE = '/profile/user-guide-my-profile',
-	GUIDE_TIMELINES = '/user-guide-timelines',
-	GUIDE_COMPOSER = '/apps/user-guide',
+	GUIDE_TIMELINES = '/feed/user-guide',
+	GUIDE_COMPOSER = '/explore/user-guide',
 
 	ADD_ACCOUNT = '/profile/onboard/add-account',
 
