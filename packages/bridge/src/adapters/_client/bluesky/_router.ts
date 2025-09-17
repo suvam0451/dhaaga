@@ -13,10 +13,10 @@ import BlueskyTimelinesRouter from './timelines.js';
 import BlueskyTrendsRouter from './trends.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import BlueskyFeedRouter from './feeds.js';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMutatorRoute } from '../_router/routes/post.js';
 import { UserRoute } from '../_router/routes/user.js';
 import { getXrpcAgent } from '../_router/_api.js';
+import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;
 

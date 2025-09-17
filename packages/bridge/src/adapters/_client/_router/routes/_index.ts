@@ -17,8 +17,8 @@ import { ParserRoute } from './parser.js';
 import { ProfileRoute } from './profile.js';
 // mutators
 import { PostMutatorRoute } from './post.js';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { UserRoute } from './user.js';
+import { KNOWN_SOFTWARE } from '../../../../data/driver.js';
 
 interface ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;

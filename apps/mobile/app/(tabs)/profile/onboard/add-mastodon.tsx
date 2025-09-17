@@ -4,7 +4,7 @@ import AppTopNavbar, {
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 import { useTranslation } from 'react-i18next';
-import useMastoApiLogin from '../../../../features/onboarding/interactors/useMastoApiLogin';
+import useActivityPubAuth from '../../../../features/onboarding/interactors/useActivityPubAuth';
 import { useAssets } from 'expo-asset';
 import {
 	OnboardingSignInBanner,
@@ -17,7 +17,7 @@ import { View } from 'react-native';
 const BUTTON_COLOR = 'rgb(99, 100, 255)';
 
 function PageContent() {
-	const { isLoading, server, setServer, resolve } = useMastoApiLogin();
+	const { isLoading, Instance, setInstance, resolve } = useActivityPubAuth();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const [assets, error] = useAssets([
 		require('../../../../assets/branding/mastodon/logo.png'),
@@ -28,18 +28,18 @@ function PageContent() {
 		<>
 			<OnboardingSignInBanner
 				titleText={t(`onboarding.enterYourServer`)}
-				descText={'Join one here'}
+				descText={'Find one here'}
 				descExternalOnPress={LinkingUtils.openJoinMastodonHomepage}
 				softwareLogoAsset={assets[0]}
 			/>
 			<AppFormTextInput
 				placeholder={t(`onboarding.serverUrl`)}
-				value={server}
-				onChangeText={setServer}
+				value={Instance}
+				onChangeText={setInstance}
 				leftIcon={'server-outline'}
 			/>
 			<OnboardingSignInButton
-				canSubmit={!!server}
+				canSubmit={!!Instance}
 				isLoading={isLoading}
 				onSubmit={resolve}
 				color={BUTTON_COLOR}

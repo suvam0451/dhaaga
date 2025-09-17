@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { ApiErrorCode, LibraryResponse } from '../types/result.types.js';
 import { KNOWN_SOFTWARE } from '../data/driver.js';
 import { DriverService } from './driver.js';
+import { BaseUrlNormalizationService } from '../utils/urls.js';
 
 const NODEINFO_10 = 'http://nodeinfo.diaspora.software/ns/schema/1.0';
 const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
@@ -135,29 +135,39 @@ class ActivitypubHelper {
 	}
 
 	/**
-	 * obtain the software used by a (potential)
+	 * get the software used by a (potential)
 	 * fediverse domain
 	 * @param urlLike
 	 */
 	static async getInstanceSoftware(
 		urlLike: string,
 	): Promise<LibraryResponse<any>> {
-		const OPTS = {
-			timeout: 5000,
-		};
-
-		// fix url
-		if (urlLike.startsWith('http://') || urlLike.startsWith('https://')) {
-		} else {
-			urlLike = 'https://' + urlLike;
-		}
+		const controllerA = new AbortController();
+		const controllerB = new AbortController();
+		const timeoutA = setTimeout(() => controllerA.abort(), 5000);
+		let timeoutB: number | null = null;
 
 		try {
-			const nodeInfo = await axios.get<WelKnownNodeinfo>(
-				urlLike + '/.well-known/nodeinfo',
-				OPTS,
+			const result = await fetch(
+				BaseUrlNormalizationService.appendHttps(urlLike) +
+					'/.well-known/nodeinfo',
+				{
+					signal: controllerA.signal,
+					method: 'GET',
+				},
 			);
-			const nodeType = nodeInfo.data.links.find((l) =>
+
+			if (!result.ok) {
+				return {
+					error: {
+						code: ApiErrorCode.UNKNOWN_ERROR,
+					},
+				};
+			}
+
+			const nodeInfo: WelKnownNodeinfo = await result.json();
+
+			const nodeType = nodeInfo.links.find((l) =>
 				[NODEINFO_21, NODEINFO_20, NODEINFO_10].includes(l.rel),
 			);
 			if (!nodeType)
@@ -172,8 +182,14 @@ class ActivitypubHelper {
 				case NODEINFO_10:
 				case NODEINFO_20:
 				case NODEINFO_21: {
-					const res = await axios.get<NodeInfo21>(nodeType.href, OPTS);
-					switch (res.data.software.name) {
+					timeoutB = setTimeout(() => controllerA.abort(), 5000);
+
+					const res = await fetch(nodeType.href, {
+						method: 'GET',
+						signal: controllerB.signal,
+					});
+					const resJson: NodeInfo21 = await res.json();
+					switch (resJson.software.name) {
 						case 'mastodon':
 						case 'misskey':
 						case 'pleroma':
@@ -193,8 +209,8 @@ class ActivitypubHelper {
 						case 'meisskey': {
 							return {
 								data: {
-									software: res.data.software.name,
-									version: this.getVersion(res.data.software.version),
+									software: resJson.software.name,
+									version: this.getVersion(resJson.software.version),
 								},
 							};
 						}
@@ -237,82 +253,9 @@ class ActivitypubHelper {
 					code: ApiErrorCode.UNKNOWN_ERROR,
 				},
 			};
-		}
-	}
-
-	static async getInstanceSoftwareByHandle(handle: string, myDomain: string) {
-		const OPTS = {
-			timeout: 5000,
-		};
-
-		const threadsMatcher = /https:\/\/(www.)?threads.net\/(@.*?)$/;
-		if (threadsMatcher.test(handle)) {
-			return {
-				software: 'threads',
-				version: 'N/A',
-			};
-		}
-		const url = this.getInstanceUrlFromHandle(handle, myDomain);
-		try {
-			const nodeInfo = await axios.get<WelKnownNodeinfo>(
-				url + '/.well-known/nodeinfo',
-				OPTS,
-			);
-			const nodeType = nodeInfo.data.links.find((l) =>
-				[NODEINFO_21, NODEINFO_20, NODEINFO_10].includes(l.rel),
-			);
-			if (!nodeType) return null;
-
-			switch (nodeType.rel) {
-				case NODEINFO_10:
-				case NODEINFO_20:
-				case NODEINFO_21: {
-					const res = await axios.get<NodeInfo21>(nodeType.href, OPTS);
-					switch (res.data.software.name) {
-						case 'mastodon':
-						case 'misskey':
-						case 'pleroma':
-						case 'akkoma':
-						case 'friendica':
-						case 'firefish':
-						case 'gotosocial':
-						case 'lemmy':
-						case 'peertube':
-						case 'pixelfed':
-						case 'sharkey':
-						case 'hometown':
-						case 'cherrypick':
-						case 'iceshrimp':
-						// map to misskey
-						case 'meisskey': {
-							return {
-								software: res.data.software.name,
-								version: this.getVersion(res.data.software.version),
-							};
-						}
-						// NOTE: did not find any example servers to test with
-						// case 'iceshrimp': {
-						// 	return {
-						// 		software: 'firefish',
-						// 		version: this.getVersion(res.data.software.version),
-						// 	};
-						// }
-						// NOTE: will not implement
-						case 'writefreely': {
-							// js api is outdated
-							return null;
-						}
-						default: {
-							return {
-								software: 'unknown',
-							};
-						}
-					}
-				}
-			}
-		} catch (e: any) {
-			if (e.code) return e.code;
-			return null;
+		} finally {
+			clearTimeout(timeoutA);
+			if (timeoutB) clearTimeout(timeoutB);
 		}
 	}
 }

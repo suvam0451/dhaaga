@@ -10,7 +10,6 @@ import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import {
 	useAppAcct,
 	useAppDb,
-	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAssets } from 'expo-asset';
 import { LinkingUtils } from '../../../../utils/linking.utils';
@@ -28,7 +27,6 @@ import {
 
 function AddBluesky() {
 	const [IsLoading, setIsLoading] = useState(false);
-	const { theme } = useAppTheme();
 	const { db } = useAppDb();
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
