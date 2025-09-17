@@ -85,6 +85,7 @@ export type APP_ICON_ENUM =
 	| 'newspaper'
 	| 'no-account'
 	| 'palette'
+	| 'person-outline'
 	| 'people'
 	| 'phonebook'
 	| 'pin'
@@ -92,6 +93,7 @@ export type APP_ICON_ENUM =
 	| 'quote'
 	| 'retweet'
 	| 'save'
+	| 'server-outline'
 	| 'search'
 	| 'send'
 	| 'share'
@@ -748,6 +750,15 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'person-outline':
+				return (
+					<Ionicons
+						name={'person-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'people':
 				return (
 					<Ionicons
@@ -801,6 +812,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name={'save-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'server-outline':
+				return (
+					<Ionicons
+						name="server-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}

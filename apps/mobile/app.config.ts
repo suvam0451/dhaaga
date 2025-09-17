@@ -66,6 +66,10 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	newArchEnabled: true,
 	plugins: [
 		'expo-sqlite',
+		'expo-web-browser',
+		'expo-localization',
+		'expo-video',
+		'expo-router',
 		[
 			'expo-build-properties',
 			{
@@ -117,8 +121,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				],
 			},
 		],
-		['expo-localization'],
-		['expo-video'],
 		[
 			'expo-audio',
 			{
@@ -131,7 +133,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				assets: ['./assets/icons', './assets/licensed'],
 			},
 		],
-		['expo-router'],
 	],
 });
 
