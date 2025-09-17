@@ -76,7 +76,7 @@ function SelectAccountStack() {
 	});
 
 	function onPressAddAccount() {
-		router.navigate(APP_ROUTING_ENUM.SELECT_DRIVER);
+		router.navigate(APP_ROUTING_ENUM.ADD_ACCOUNT);
 	}
 
 	return (

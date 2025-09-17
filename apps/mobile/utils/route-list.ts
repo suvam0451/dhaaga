@@ -19,7 +19,7 @@ export enum APP_ROUTING_ENUM {
 	GUIDE_TIMELINES = '/user-guide-timelines',
 	GUIDE_COMPOSER = '/apps/user-guide',
 
-	SELECT_DRIVER = '/profile/pick-driver',
+	ADD_ACCOUNT = '/profile/onboard/add-account',
 
 	// Settings Modules
 	SETTINGS_PAGE = '/profile/settings',
