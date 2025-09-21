@@ -10,7 +10,7 @@ import {
 	useAppModalState,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import useGetProfile from '../api/useGetProfile';
+import userProfileQueryOpts from '../../../../../packages/react/src/queryOptions/userProfileQueryOpts';
 import useAppNavigator from '../../../states/useAppNavigator';
 import useUserPeekInteractor from '../interactors/useUserPeekInteractor';
 import TaperedArrow from '../components/TaperedArrow';
@@ -30,7 +30,7 @@ function UserPeekModalPresenter() {
 	const { hide, visible } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { toProfile } = useAppNavigator();
 	const { pos, userId } = useUserPeekInteractor();
-	const { data, fetchStatus } = useGetProfile({ use: 'userId', userId });
+	const { data, fetchStatus } = userProfileQueryOpts({ use: 'userId', userId });
 	const { width } = Dimensions.get('window');
 
 	if (!visible || !pos.ready) return <View />;

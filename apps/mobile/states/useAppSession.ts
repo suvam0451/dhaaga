@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
  * the required contexts
  */
 function useAppSession() {
-	// app will be covered with splash screen until everything is loaded
+	// app will be covered with a splash screen until everything is loaded
 	const [AppReady, setAppReady] = useState(false);
 	const [AccountReady, setAccountReady] = useState(true);
 	const [ProfileReady, setProfileReady] = useState(false);

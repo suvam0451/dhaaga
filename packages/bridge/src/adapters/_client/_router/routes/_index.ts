@@ -24,6 +24,14 @@ interface ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
 	server: string | null;
 
+	/**
+	 * a unique identifier for this account,
+	 * so that accidentally making the same request
+	 * with another account doesn't result in the
+	 * same response and bug out the UI
+	 */
+	key: string;
+
 	instances: InstanceRoute;
 	accounts: AccountRoute;
 	statuses: StatusesRoute;

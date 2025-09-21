@@ -99,7 +99,7 @@ function useAppNavigator() {
 	}
 
 	function toUserPosts(id: string) {
-		// probably in bottom sheet
+		// probably in the bottom sheet
 		if (!navigator || !navigator.getId) return;
 
 		console.log(id, acct.identifier);

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import SeeMore from '../components/SeeMore';
 import ThumbnailView from '../views/ThumbnailView';
-import useProfileGalleryModeInteractor from '../interactors/useProfileGalleryModeInteractor';
+import useProfileGalleryModeInteractor from '../../../../../../../packages/react/src/queryOptions/userGallery';
 import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/bridge';
 import MediaUtils from '../../../../../utils/media.utils';
 import { appDimensions } from '../../../../../styles/dimensions';

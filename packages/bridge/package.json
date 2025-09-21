@@ -28,8 +28,8 @@
     "misskey-js": "^2025.9.0"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc -p ./tsconfig.json",
-    "test": "bun test"
+    "build": "tsgo -p ./tsconfig.json",
+    "test": "vitest run"
   },
   "type": "module"
 }

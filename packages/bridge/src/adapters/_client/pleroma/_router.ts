@@ -19,6 +19,7 @@ import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
 	server: string | null;
+	key: string;
 
 	fetch: FetchWrapper;
 	instances: PleromaInstanceRouter;
@@ -42,6 +43,7 @@ class Adapter implements ApiTargetInterface {
 	) {
 		this.driver = driver;
 		this.server = server;
+		this.key = dto.clientId.toString();
 		this.fetch = FetchWrapper.create(dto.instance, dto.token);
 		this.instances = new PleromaInstanceRouter(this.fetch);
 		this.accounts = new PleromaAccountsRouter(this.fetch);

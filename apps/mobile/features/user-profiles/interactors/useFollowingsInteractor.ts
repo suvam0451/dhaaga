@@ -1,11 +1,14 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
 import { UserTimelineStateAction, useUserTimelineDispatch } from '@dhaaga/core';
-import useGetFollows from '../api/useGetFollows';
+import { useQuery } from '@tanstack/react-query';
+import { userFollowsQueryOpts } from '@dhaaga/react';
+import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
 
 function useFollowersInteractor() {
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const queryResult = useGetFollows(id, null);
+	const { client } = useAppApiClient();
+	const queryResult = useQuery(userFollowsQueryOpts(client, id, null));
 	const TimelineDispatch = useUserTimelineDispatch();
 
 	useEffect(() => {

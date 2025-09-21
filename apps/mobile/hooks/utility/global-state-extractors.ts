@@ -38,7 +38,7 @@ export function useAppApiClient() {
 export function useAppDb() {
 	return useGlobalState(
 		useShallow((o) => ({
-			db: o.db,
+			db: o.db!,
 		})),
 	);
 }

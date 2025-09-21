@@ -1,4 +1,4 @@
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
@@ -17,12 +17,15 @@ function SoftwareHeader({ software, addText, height = 64 }: Props) {
 	const { theme } = useAppTheme();
 	const Theming = useKnownSoftware(software);
 
-	const WIDTH = (Theming?.logo?.width / Theming?.logo?.height) * height;
+	const logo = Theming.logo;
+	if (logo === undefined) return <View />;
+
+	const WIDTH = (logo.width / logo.height) * height;
 	return (
 		<>
 			{/*@ts-ignore-next-line*/}
 			<Image
-				source={{ uri: Theming?.logo?.localUri }}
+				source={{ uri: logo.localUri }}
 				style={{
 					width: WIDTH,
 					height: height,

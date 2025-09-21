@@ -33,8 +33,9 @@
     "build:bridge": "npm run build --workspace=@dhaaga/bridge",
     "build:core": "npm run build --workspace=@dhaaga/core",
     "build:orm": "npm run build --workspace=@dhaaga/orm",
+    "build:react": "npm run build --workspace=@dhaaga/react",
     "build:web": "npm run build --workspace apps/web",
-    "build-deps": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core"
+    "build-deps": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react"
   },
   "workspaces": [
     "packages/*",
@@ -62,7 +63,6 @@
     "react-native-safe-area-context": "~5.6.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.21",
-    "typescript": "5.9.2"
+    "@typescript/native-preview": "^7.0.0-dev.20250921.1"
   }
 }
