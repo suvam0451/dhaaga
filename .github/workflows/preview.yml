@@ -15,6 +15,7 @@ jobs:
           node-version: latest
           cache: "npm"
       - run: npm install # Install dependencies
+      - run: npm run build-deps
       # - run: npm run build # Taken care of by "eas-build-post-install" hook
       - uses: expo/expo-github-action@v8 # setup EAS
         with:
