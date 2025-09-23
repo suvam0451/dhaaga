@@ -96,8 +96,14 @@ const personal = [
 
 const appModules = [
 	{
-		title: 'Guides',
+		title: 'Manage Accounts',
 		url: '#',
+		icon: MessageCircle,
+	},
+	{
+		title: 'About Dhaaga',
+		url: '#',
+		icon: MessageCircle,
 	},
 ];
 
@@ -147,6 +153,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					</SidebarGroupContent>
 				</SidebarGroup>
 
+				{/* Personal Section */}
+				<SidebarGroup>
+					<SidebarGroupLabel>My Account</SidebarGroupLabel>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							{personal.map((item) => (
+								<SidebarMenuItem key={item.title}>
+									<SidebarMenuButton asChild tooltip={item.title}>
+										<a href={item.url}>
+											<item.icon />
+											<span>{item.title}</span>
+										</a>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
+							))}
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
+
 				{/* Discover Section */}
 				<SidebarGroup>
 					<SidebarGroupLabel>Discover</SidebarGroupLabel>
@@ -166,12 +191,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					</SidebarGroupContent>
 				</SidebarGroup>
 
-				{/* Personal Section */}
+				{/* App Features Section */}
 				<SidebarGroup>
-					<SidebarGroupLabel>Account</SidebarGroupLabel>
+					<SidebarGroupLabel>App</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
-							{personal.map((item) => (
+							{appModules.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton asChild tooltip={item.title}>
 										<a href={item.url}>
@@ -183,11 +208,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							))}
 						</SidebarMenu>
 					</SidebarGroupContent>
-				</SidebarGroup>
-
-				<SidebarGroup>
-					<SidebarGroupLabel>App</SidebarGroupLabel>
-					<SidebarGroupContent></SidebarGroupContent>
 				</SidebarGroup>
 			</SidebarContent>
 

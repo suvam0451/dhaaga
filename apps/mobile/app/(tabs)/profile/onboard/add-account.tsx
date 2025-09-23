@@ -109,7 +109,7 @@ function MyPager() {
 	if (error || !assets) return <View />;
 
 	return (
-		<View>
+		<View style={{ marginTop: 24 }}>
 			<OnboardingSignInBanner
 				titleText={t(`onboarding.enterYourServer`)}
 				descText={'Find one here'}
@@ -130,11 +130,7 @@ function Page() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return (
-		<AppTopNavbar
-			title={'Add Account'}
-			translateY={translateY}
-			contentContainerStyle={{ marginTop: 32 }}
-		>
+		<AppTopNavbar title={'Add Account'} translateY={translateY}>
 			<MyPager />
 		</AppTopNavbar>
 	);

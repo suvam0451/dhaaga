@@ -12,10 +12,10 @@ vi.mock('../../src/queryOptions', () => ({
 }));
 
 // Import the mocked module
-import { userGallery } from '../../src/queryOptions';
+import { userGalleryQueryOpts } from '../../src/queryOptions';
 
 function useCustomHook() {
-	return useQuery(userGallery(null, null));
+	return useQuery(userGalleryQueryOpts(null, null));
 }
 
 test('activitypub client is able to fetch profile gallery', async () => {

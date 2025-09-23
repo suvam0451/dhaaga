@@ -5,12 +5,14 @@ import {
 	ViewStyle,
 	StyleSheet,
 } from 'react-native';
+import { useQuery } from '@tanstack/react-query';
+import { userProfileQueryOpts } from '@dhaaga/react';
 import { APP_KNOWN_MODAL } from '../../../states/_global';
 import {
+	useAppApiClient,
 	useAppModalState,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import userProfileQueryOpts from '../../../../../packages/react/src/queryOptions/userProfileQueryOpts';
 import useAppNavigator from '../../../states/useAppNavigator';
 import useUserPeekInteractor from '../interactors/useUserPeekInteractor';
 import TaperedArrow from '../components/TaperedArrow';
@@ -21,16 +23,19 @@ import { Fragment } from 'react';
 /**
  * Shows
  *
- * NOTE: it is a full screen transparent
+ * NOTE: it is a full-screen transparent
  * modal that consumes one click to close
  * @constructor
  */
 function UserPeekModalPresenter() {
 	const { theme } = useAppTheme();
+	const { client } = useAppApiClient();
 	const { hide, visible } = useAppModalState(APP_KNOWN_MODAL.USER_PEEK);
 	const { toProfile } = useAppNavigator();
 	const { pos, userId } = useUserPeekInteractor();
-	const { data, fetchStatus } = userProfileQueryOpts({ use: 'userId', userId });
+	const { data, fetchStatus } = useQuery(
+		userProfileQueryOpts(client, { use: 'userId', userId: userId! }),
+	);
 	const { width } = Dimensions.get('window');
 
 	if (!visible || !pos.ready) return <View />;
@@ -98,8 +103,8 @@ const styles = StyleSheet.create({
 		borderLeftWidth: 12, // Left side of the triangle
 		borderRightWidth: 12, // Right side of the triangle
 		borderTopWidth: 10, // Height of the triangle
-		borderLeftColor: 'transparent', // No color for left side
-		borderRightColor: 'transparent', // No color for right side
+		borderLeftColor: 'transparent', // No color for the left side
+		borderRightColor: 'transparent', // No color for the right side
 		borderTopColor: 'red', // Color of the arrow (bottom)
 	},
 });

@@ -85,6 +85,7 @@ function AppTopNavbar({
 				contentContainerStyle={[
 					{
 						paddingHorizontal: 8,
+						marginTop: 54,
 					},
 					contentContainerStyle,
 				]}

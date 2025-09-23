@@ -1,4 +1,4 @@
-import { userGallery } from './userGallery.js';
+import { userGalleryQueryOpts } from './user.js';
 export * from './user.js';
 
-export { userGallery };
+export { userGalleryQueryOpts };
