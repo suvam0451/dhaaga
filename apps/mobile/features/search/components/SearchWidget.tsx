@@ -11,6 +11,7 @@ import {
 	StyleSheet,
 	TextInput,
 	View,
+	KeyboardAvoidingView,
 } from 'react-native';
 import { useRef, useState } from 'react';
 import {
@@ -38,7 +39,7 @@ function SearchWidget() {
 	const MAX_WIDTH = Dimensions.get('window').width;
 	const CONTAINER_PADDING = 24;
 	const WIDGET_MAX_WIDTH = MAX_WIDTH - CONTAINER_PADDING * 2;
-	const textInputRef = useRef<TextInput>();
+	const textInputRef = useRef<TextInput>(null);
 
 	const [IsWidgetExpanded, setIsWidgetExpanded] = useState(false);
 	const rotation = useSharedValue(0);
@@ -112,7 +113,7 @@ function SearchWidget() {
 
 	const { theme } = useAppTheme();
 	return (
-		<View style={styles.root}>
+		<KeyboardAvoidingView style={styles.root}>
 			{IsWidgetExpanded && <WidgetExpanded />}
 			<Animated.View
 				style={[
@@ -163,7 +164,7 @@ function SearchWidget() {
 					/>
 				)}
 			</Animated.View>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 
@@ -172,7 +173,7 @@ export default SearchWidget;
 const styles = StyleSheet.create({
 	root: {
 		position: 'absolute',
-		bottom: 16,
+		bottom: 32,
 		width: '100%',
 	},
 

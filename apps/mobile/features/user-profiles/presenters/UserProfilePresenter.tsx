@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
-import useGetProfile from '../api/useGetProfile';
+import { userProfileQueryOpts } from '@dhaaga/react';
 import ProfileStatView from '../view/ProfileStatView';
 import ProfileAvatar from '../../../components/common/user/fragments/ProfileAvatar';
 import UserRelationPresenter from './UserRelationPresenter';
@@ -16,6 +16,7 @@ import UserProfileModulePresenter from './UserProfileModulePresenter';
 import { AppIcon } from '../../../components/lib/Icon';
 import { appDimensions } from '../../../styles/dimensions';
 import {
+	useAppApiClient,
 	useAppBottomSheet,
 	useAppManager,
 	useAppTheme,
@@ -26,13 +27,20 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../../components/lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { useQuery } from '@tanstack/react-query';
 
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 export function ProfileContextWrapped() {
+	const { client } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { data: acct, error } = useGetProfile({ use: 'userId', userId: id });
+	const { data: acct, error } = useQuery(
+		userProfileQueryOpts(client, {
+			use: 'userId',
+			userId: id,
+		}),
+	);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
 	const fields = acct?.meta?.fields;

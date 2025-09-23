@@ -49,6 +49,7 @@ export type GetSearchResultQueryDTO = {
 export type RestClientCreateDTO = {
 	instance: string;
 	token: string;
+	clientId: number | string;
 };
 
 export type Tag = MastoTag | null | undefined;

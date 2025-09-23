@@ -28,7 +28,7 @@ export function useAppAcct() {
 export function useAppApiClient() {
 	return useGlobalState(
 		useShallow((o) => ({
-			client: o.router,
+			client: o.router!,
 			driver: o.driver,
 			server: o.acct?.server,
 		})),
@@ -38,7 +38,7 @@ export function useAppApiClient() {
 export function useAppDb() {
 	return useGlobalState(
 		useShallow((o) => ({
-			db: o.db,
+			db: o.db!,
 		})),
 	);
 }

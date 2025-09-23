@@ -70,10 +70,11 @@ function WithActivitypubChatRoomContext({ children }: Props) {
 			const hash = ''; // await CryptoService.hashUserList(participantIds);
 
 			if (SeenRooms.has(hash)) {
-				if (!SeenRooms.get(hash).conversationIdsSeen.has(item.id)) {
-					SeenRooms.get(hash).conversationIdsSeen.add(item.id);
-					SeenRooms.get(hash).conversationIds.push(item.tail.getId());
-					SeenRooms.get(hash).tails.push(item.tail);
+				const _hash = SeenRooms.get(hash)!;
+				if (!_hash.conversationIdsSeen.has(item.id)) {
+					_hash.conversationIdsSeen.add(item.id);
+					_hash.conversationIds.push(item.tail.getId());
+					_hash.tails.push(item.tail);
 				}
 			} else {
 				SeenRooms.set(hash, {

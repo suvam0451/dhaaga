@@ -1,7 +1,9 @@
-import { AtprotoApiAdapter } from '@dhaaga/bridge';
-import type { ApiTargetInterface } from '@dhaaga/bridge';
 import { AppBskyActorDefs, AppBskyActorGetPreferences } from '@atproto/api';
 import { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
+import {
+	type ApiTargetInterface,
+	AtprotoApiAdapter,
+} from '../adapters/index.js';
 
 export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
 

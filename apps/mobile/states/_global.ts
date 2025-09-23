@@ -82,8 +82,8 @@ type AppDialogState = {
 		callback?: (text: string) => void,
 	) => void;
 	hide: () => void;
-	textSeed: string;
-	textSubmitCallback: (text: string) => void;
+	textSeed: string | null;
+	textSubmitCallback?: (text: string) => void;
 };
 
 type AppPubSubState = {
@@ -374,7 +374,7 @@ const useGlobalState = create<State & Actions>()(
 			set({ packId });
 		},
 		selectAccount: async (selection: Account) => {
-			AccountService.select(get().db, selection);
+			AccountService.select(get().db!, selection);
 		},
 		publishers: {
 			postPub: null,
@@ -383,7 +383,7 @@ const useGlobalState = create<State & Actions>()(
 		},
 		loadActiveProfile: async () => {
 			// load default profile/account
-			const x = new ProfileSessionManager(get().db);
+			const x = new ProfileSessionManager(get().db!);
 			if (!x.acct || !x.profile) return;
 
 			set((state) => {
@@ -392,27 +392,30 @@ const useGlobalState = create<State & Actions>()(
 				state.profile = x.profile;
 				// reset session managers
 				state.profileSessionManager = x;
-				state.acctManager = new AccountSessionManager(get().db, x.acct);
+				state.acctManager = new AccountSessionManager(get().db!, x.acct);
 			});
 		},
 		loadApp: async () => {
-			const restoreResult = await GlobalStateService.restoreAppSession(
-				get().db,
-			);
+			const _db = get().db;
+			if (!_db) return;
+
+			const restoreResult = await GlobalStateService.restoreAppSession(_db);
+			if (!restoreResult) {
+				console.log('[WARN]: restore result unavailable');
+				return;
+			}
 			set((state) => {
 				if (restoreResult.type === 'success') {
-					state.me = restoreResult.value.me;
-					state.acct = restoreResult.value.acct;
-					state.acctManager = new AccountSessionManager(
-						get().db,
-						restoreResult.value.acct,
-					);
-					state.profileSessionManager = new ProfileSessionManager(get().db);
-					state.router = restoreResult.value.router;
-					state.driver = restoreResult.value.acct.driver as KNOWN_SOFTWARE;
+					const value = restoreResult.value!;
+					state.me = value.me;
+					state.acct = value.acct;
+					state.acctManager = new AccountSessionManager(_db, value.acct);
+					state.profileSessionManager = new ProfileSessionManager(_db);
+					state.router = value.router;
+					state.driver = value.acct.driver as KNOWN_SOFTWARE;
 					state.publishers.postPub = new PostPublisherService(
-						restoreResult.value.acct.driver as KNOWN_SOFTWARE,
-						restoreResult.value.router,
+						value.acct.driver as KNOWN_SOFTWARE,
+						value.router,
 					);
 				} else {
 					state.acct = null;
@@ -425,14 +428,14 @@ const useGlobalState = create<State & Actions>()(
 			profiles: [],
 			pageIndex: -1,
 			refresh: () => {
-				if (!get().acct) return;
-				const profiles = ProfileService.getForAccount(get().db, get().acct);
+				const _acct = get().acct;
+				const _db = get().db;
+				if (!_acct || !_db) return;
+
+				const profiles = ProfileService.getForAccount(_db, _acct);
 				if (profiles.length === 0) return;
 				set((state) => {
-					state.hubState.profiles = ProfileService.getForAccount(
-						get().db,
-						get().acct,
-					);
+					state.hubState.profiles = ProfileService.getForAccount(_db, _acct);
 					state.hubState.pageIndex = 0;
 				});
 			},

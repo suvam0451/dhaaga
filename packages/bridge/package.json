@@ -1,24 +1,20 @@
 {
   "name": "@dhaaga/bridge",
-  "description": "Bridging the fediverse using various design patterns!",
-  "private": true,
+  "version": "0.16.4",
   "license": "AGPL-3.0-or-later",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./utils": {
-      "import": "./dist/utils/index.js",
-      "types": "./dist/utils/index.d.ts"
-    },
-    "./*": {
-      "import": "./dist/*",
-      "types": "./dist/*"
-    }
+  "description": "Unified client library for the fediverse, and more",
+  "keywords": [
+    "fediverse",
+    "atproto",
+    "activitypub"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suvam0451/dhaaga",
+    "directory": "packages/bridge"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@atproto/api": "^0.16.7",
     "axios": "^1.8.4",
@@ -32,8 +28,8 @@
     "misskey-js": "^2025.9.0"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.json",
-    "test": "bun test"
+    "build": "tsgo -p ./tsconfig.json",
+    "test": "vitest run"
   },
   "type": "module"
 }

@@ -10,10 +10,8 @@ import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import {
 	useAppAcct,
 	useAppDb,
-	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAssets } from 'expo-asset';
-import { LinkingUtils } from '../../../../utils/linking.utils';
 import useAtprotoLogin from '../../../../features/onboarding/interactors/useAtprotoLogin';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
@@ -21,14 +19,45 @@ import { AccountService } from '@dhaaga/db';
 import useGlobalState from '../../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import { AppFormTextInput } from '../../../../components/lib/FormInput';
-import {
-	OnboardingSignInBanner,
-	OnboardingSignInButton,
-} from '../../../../components/onboarding/OnboardingSignInBanner';
+import { OnboardingSignInButton } from '../../../../components/onboarding/OnboardingSignInBanner';
+
+export function PageContent() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const [Username, setUsername] = useState(null);
+	const [Password, setPassword] = useState(null);
+	const [IsLoading, setIsLoading] = useState(false);
+
+	const [assets, error] = useAssets([
+		require('../../../../assets/branding/mastodon/logo.png'),
+	]);
+
+	function onSubmit() {}
+
+	return (
+		<>
+			<AppFormTextInput
+				onChangeText={setUsername}
+				value={Username}
+				placeholder={'Username or email address'}
+				leftIcon={'person-outline'}
+			/>
+			<AppFormTextInput
+				placeholder={t(`onboarding.appPassword`)}
+				value={Password}
+				onChangeText={setPassword}
+				leftIcon={'lock-closed-outline'}
+			/>
+			<OnboardingSignInButton
+				canSubmit={Username && Password}
+				isLoading={IsLoading}
+				onSubmit={onSubmit}
+			/>
+		</>
+	);
+}
 
 function AddBluesky() {
 	const [IsLoading, setIsLoading] = useState(false);
-	const { theme } = useAppTheme();
 	const { db } = useAppDb();
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
@@ -95,13 +124,6 @@ function AddBluesky() {
 			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
 			contentContainerStyle={{ marginTop: 32 }}
 		>
-			<OnboardingSignInBanner
-				titleText={t(`onboarding.needBlueskyAccount`)}
-				descText={t(`onboarding.createOneHere`)}
-				descExternalOnPress={LinkingUtils.openBluesky}
-				softwareLogoAsset={assets[0]}
-			/>
-
 			<AppFormTextInput
 				onChangeText={setUsername}
 				value={Username}

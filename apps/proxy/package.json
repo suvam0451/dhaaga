@@ -1,6 +1,0 @@
-{
-  "name": "@dhaaga/proxy",
-  "description": "Source code for proxied services offered by suvam.io",
-  "module": "index.ts",
-  "type": "module"
-}

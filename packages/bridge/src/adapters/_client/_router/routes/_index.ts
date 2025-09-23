@@ -17,12 +17,20 @@ import { ParserRoute } from './parser.js';
 import { ProfileRoute } from './profile.js';
 // mutators
 import { PostMutatorRoute } from './post.js';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { UserRoute } from './user.js';
+import { KNOWN_SOFTWARE } from '../../../../data/driver.js';
 
 interface ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
 	server: string | null;
+
+	/**
+	 * a unique identifier for this account,
+	 * so that accidentally making the same request
+	 * with another account doesn't result in the
+	 * same response and bug out the UI
+	 */
+	key: string;
 
 	instances: InstanceRoute;
 	accounts: AccountRoute;

@@ -3,11 +3,8 @@
 import { SettingsTab } from '@/tabs/SettingsTab';
 import { AboutTab } from '@/tabs/AboutTab';
 import { GuidesTab } from '@/tabs/GuidesTab';
-
-type StaticTabSwitcherProps = {
-	tabId: 'settings' | 'guides' | 'about' | null;
-	active: boolean;
-};
+import AuthWorkflow from '../components/auth/AuthWorkflow';
+import { useState } from 'react';
 
 const tabMapper: Record<string, React.FC> = {
 	settings: SettingsTab,
@@ -19,11 +16,11 @@ const tabMapper: Record<string, React.FC> = {
  * Helps switch between tabs that do not require
  * persistent state management
  */
-export function StaticTabSwitcher({ active, tabId }: StaticTabSwitcherProps) {
-	if (!active || tabId === null) return <div />;
+export function StaticTabSwitcher() {
+	const [WorkspaceVisible, setWorkspaceVisible] = useState(false);
+	const [DiscoverVisible, setDiscoverVisible] = useState(false);
+	const [InboxVisible, setInboxVisible] = useState(false);
+	const [ComposerVisible, setComposerVisible] = useState(false);
 
-	const TabComponent = tabMapper[tabId];
-	if (!TabComponent) return <div />;
-
-	return <TabComponent />;
+	return <AuthWorkflow />;
 }

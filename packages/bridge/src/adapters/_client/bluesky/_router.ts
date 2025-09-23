@@ -13,16 +13,17 @@ import BlueskyTimelinesRouter from './timelines.js';
 import BlueskyTrendsRouter from './trends.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import BlueskyFeedRouter from './feeds.js';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { PostMutatorRoute } from '../_router/routes/post.js';
 import { UserRoute } from '../_router/routes/user.js';
 import { getXrpcAgent } from '../_router/_api.js';
+import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
 	server: string | null;
+	key: string;
 
 	accounts: BlueskyAccountsRouter;
 	instances: BlueskyInstanceRouter;
@@ -49,6 +50,7 @@ class Adapter implements ApiTargetInterface {
 	) {
 		this.driver = driver;
 		this.server = server;
+		this.key = dto.clientId.toString();
 		this.dto = dto;
 		this.accounts = new BlueskyAccountsRouter(this.dto);
 		this.instances = new BlueskyInstanceRouter();
@@ -63,8 +65,8 @@ class Adapter implements ApiTargetInterface {
 		this.timelines = new BlueskyTimelinesRouter(this.dto);
 		this.trends = new BlueskyTrendsRouter();
 		this.feeds = new BlueskyFeedRouter(this.dto);
-		this.post = new PostMutatorRoute(this);
-		this.user = new UserRoute(this);
+		this.post = new PostMutatorRoute(this.dto);
+		this.user = new UserRoute(this.dto);
 	}
 
 	getAgent() {

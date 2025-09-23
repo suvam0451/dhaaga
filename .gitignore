@@ -12,6 +12,10 @@ frontend/.env.**
 apps/mobile/.env.development
 apps/mobile/assets/nonfree/**
 apps/mobile/assets/licensed/**
+apps/mobile/assets/badges/**
+apps/mobile/assets/branding/**
+apps/mobile/assets/dhaaga/**
+apps/web/public/assets/**
 
 .turbo/
 

@@ -84,8 +84,8 @@ function AppTopNavbar({
 			<ScrollView
 				contentContainerStyle={[
 					{
-						paddingTop: 54,
 						paddingHorizontal: 8,
+						marginTop: 54,
 					},
 					contentContainerStyle,
 				]}

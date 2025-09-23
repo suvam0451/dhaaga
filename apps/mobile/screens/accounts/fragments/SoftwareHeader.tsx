@@ -1,5 +1,4 @@
-import { memo } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
@@ -11,55 +10,40 @@ type Props = {
 	mb?: number;
 	iconSizeMultiplier?: number;
 	addText?: boolean;
+	height?: number;
 };
 
-const ICON_SIZE_MULTIPLIER = 1.2;
-
-const SoftwareHeader = memo(function Foo({
-	software,
-	mt,
-	mb,
-	iconSizeMultiplier,
-	addText,
-}: Props) {
+function SoftwareHeader({ software, addText, height = 64 }: Props) {
 	const { theme } = useAppTheme();
 	const Theming = useKnownSoftware(software);
-	const _mt = mt === undefined ? 8 : mt;
-	const _mb = mb === undefined ? 12 : mb;
 
-	const iconSize = iconSizeMultiplier || ICON_SIZE_MULTIPLIER;
+	const logo = Theming.logo;
+	if (logo === undefined) return <View />;
 
+	const WIDTH = (logo.width / logo.height) * height;
 	return (
-		<View style={{ marginTop: _mt, marginBottom: _mb, marginLeft: 4 }}>
-			<View
+		<>
+			{/*@ts-ignore-next-line*/}
+			<Image
+				source={{ uri: logo.localUri }}
 				style={{
-					flexDirection: 'row',
-					marginBottom: 4,
-					alignItems: 'center',
+					width: WIDTH,
+					height: height,
 				}}
-			>
-				{/*@ts-ignore-next-line*/}
-				<Image
-					source={{ uri: Theming?.logo?.localUri }}
-					style={{
-						width: Theming?.width * iconSize,
-						height: Theming?.height * iconSize,
-					}}
-				/>
-				{addText && (
-					<Text
-						style={[
-							styles.accountCategoryText,
-							{ color: theme.textColor.medium },
-						]}
-					>
-						{Theming?.label}
-					</Text>
-				)}
-			</View>
-		</View>
+			/>
+			{addText && (
+				<Text
+					style={[
+						styles.accountCategoryText,
+						{ color: theme.textColor.medium },
+					]}
+				>
+					{Theming?.label}
+				</Text>
+			)}
+		</>
 	);
-});
+}
 
 const styles = StyleSheet.create({
 	accountCategoryText: {

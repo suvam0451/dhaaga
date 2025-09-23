@@ -28,6 +28,7 @@ import ProtocolCards from '../components/ProtocolCards';
 
 type AddAccountLandingFragmentProps = {
 	containerStyle?: StyleProp<ViewStyle>;
+	onSelectSetPagerId: (id: number) => void;
 };
 
 /**
@@ -38,6 +39,7 @@ type AddAccountLandingFragmentProps = {
  */
 export function AddAccountLandingFragment({
 	containerStyle,
+	onSelectSetPagerId,
 }: AddAccountLandingFragmentProps) {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
@@ -47,9 +49,9 @@ export function AddAccountLandingFragment({
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				style={[styles.noAccountText]}
 			>
-				{t(`onboarding.addAccountButton`)}
+				Select Platform
 			</AppText.SemiBold>
-			<ProtocolCards />
+			<ProtocolCards onSelectSetPagerId={onSelectSetPagerId} />
 			<View style={styles.tipContainer}>
 				<AppIcon
 					id={'info'}
@@ -72,7 +74,7 @@ export function AddAccountLandingFragment({
 }
 
 /**
- * A full screen cover when no account is selected
+ * A full-screen cover when no account is selected
  * @constructor
  */
 
@@ -125,7 +127,7 @@ function AddAccountPresenter({ tab }: AppNoAccountProps) {
 					},
 				]}
 			/>
-			<AddAccountLandingFragment />
+			<AddAccountLandingFragment onSelectSetPagerId={() => {}} />
 		</ScrollView>
 	);
 }
@@ -136,9 +138,8 @@ const styles = StyleSheet.create({
 	noAccountText: {
 		fontSize: 24,
 		textAlign: 'center',
-		marginTop: 48,
 		fontFamily: APP_FONTS.INTER_700_BOLD,
-		marginBottom: 32,
+		marginBottom: 24,
 	},
 	selectSnsBox: {
 		padding: 6,

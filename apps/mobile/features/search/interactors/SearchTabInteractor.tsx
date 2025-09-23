@@ -8,6 +8,7 @@ import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import { View } from 'react-native';
 import SearchWidget from '../components/SearchWidget';
+import QuickPost from '../../composer/components/QuickPost';
 
 function SearchTabInteractor() {
 	const { theme } = useAppTheme();
@@ -21,6 +22,12 @@ function SearchTabInteractor() {
 			<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
 				<SearchTabPresenter />
 				<SearchWidget />
+				{/*<QuickPost*/}
+				{/*	onPress={() => {}}*/}
+				{/*	style={{*/}
+				{/*		marginBottom: 64,*/}
+				{/*	}}*/}
+				{/*/>*/}
 			</View>
 		</DiscoverCtx>
 	);

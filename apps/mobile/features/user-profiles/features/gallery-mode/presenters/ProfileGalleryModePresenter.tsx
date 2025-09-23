@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, View } from 'react-native';
+import { useQuery } from '@tanstack/react-query';
 import SeeMore from '../components/SeeMore';
 import ThumbnailView from '../views/ThumbnailView';
-import useProfileGalleryModeInteractor from '../interactors/useProfileGalleryModeInteractor';
+import { userGalleryQueryOpts } from '@dhaaga/react';
 import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/bridge';
 import MediaUtils from '../../../../../utils/media.utils';
 import { appDimensions } from '../../../../../styles/dimensions';
 import CanvasPresenter from './CanvasPresenter';
 import MenuPresenter from './MenuPresenter';
+import { useAppApiClient } from '../../../../../hooks/utility/global-state-extractors';
 
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -25,11 +27,13 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 	});
 	const [CurrentIndex, setCurrentIndex] = useState(0);
 
+	const { client } = useAppApiClient();
 	useEffect(() => {
 		setMediaGalleryCtrl({ total: 0, curr: 0 });
 		setCurrentIndex(0);
 	}, [userId]);
-	const { data } = useProfileGalleryModeInteractor(userId);
+
+	const { data } = useQuery(userGalleryQueryOpts(client, userId));
 
 	useEffect(() => {
 		let images: MediaPostTuple[] = [];
@@ -50,6 +54,7 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 	const ListRef = useRef<FlatList>(null);
 
 	const onNext = useCallback(() => {
+		if (!ListRef.current) return;
 		if (MediaGalleryCtrl.total === 0) return;
 		if (MediaGalleryCtrl.curr === MediaGalleryCtrl.total - 1) {
 			setMediaGalleryCtrl({
@@ -72,6 +77,7 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 	}, [MediaGalleryCtrl]);
 
 	const onPrev = useCallback(() => {
+		if (!ListRef.current) return;
 		if (MediaGalleryCtrl.total === 0) return;
 		if (MediaGalleryCtrl.curr === 0) {
 			setMediaGalleryCtrl({
@@ -116,8 +122,8 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 				{MediaItems[CurrentIndex] && (
 					<CanvasPresenter
 						src={MediaItems[CurrentIndex].media.url}
-						width={MediaItems[CurrentIndex].media.width}
-						height={MediaItems[CurrentIndex].media.height}
+						width={MediaItems[CurrentIndex].media.width ?? 0}
+						height={MediaItems[CurrentIndex].media.height ?? 0}
 						onNext={onNext}
 						onPrev={onPrev}
 					/>

@@ -18,6 +18,7 @@ import { KNOWN_SOFTWARE } from '../../../data/driver.js';
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
 	server: string | null;
+	key: string;
 
 	instances: DefaultInstanceRouter;
 	accounts: DefaultAccountRouter;
@@ -37,6 +38,7 @@ class Adapter implements ApiTargetInterface {
 	constructor() {
 		this.driver = KNOWN_SOFTWARE.UNKNOWN;
 		this.server = null;
+		this.key = 'N/A';
 		this.instances = new DefaultInstanceRouter();
 		this.accounts = new DefaultAccountRouter();
 		this.statuses = new DefaultStatusesRouter();
