@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import AppLogo from '../../../../_shared/app/icon.png';
+import AppLogo from '../../../../_shared/assets/dhaaga/icon.png';
 import BlueskyLogo from '../../../../_shared/assets/branding/bluesky/logo.png';
 import MastodonLogo from '../../../../_shared/assets/branding/mastodon/logo.png';
 import MisskeyLogo from '../../../../_shared/assets/branding/misskey/logo.png';
