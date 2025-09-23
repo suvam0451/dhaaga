@@ -71,7 +71,7 @@ function MiAuth() {
 
 function MyPager() {
 	const [assets, error] = useAssets([
-		require('../../../../assets/icon.png'),
+		require('../../../../assets/dhaaga/icon.png'),
 		require('../../../../assets/branding/bluesky/logo.png'),
 		require('../../../../assets/branding/mastodon/logo.png'),
 		require('../../../../assets/branding/misskey/logo.png'),
@@ -125,6 +125,7 @@ function MyPager() {
 		</View>
 	);
 }
+
 function Page() {
 	const { translateY } = useScrollMoreOnPageEnd();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);

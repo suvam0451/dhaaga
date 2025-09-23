@@ -400,6 +400,10 @@ const useGlobalState = create<State & Actions>()(
 			if (!_db) return;
 
 			const restoreResult = await GlobalStateService.restoreAppSession(_db);
+			if (!restoreResult) {
+				console.log('[WARN]: restore result unavailable');
+				return;
+			}
 			set((state) => {
 				if (restoreResult.type === 'success') {
 					const value = restoreResult.value!;

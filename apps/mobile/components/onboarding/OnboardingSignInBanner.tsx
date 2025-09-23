@@ -37,9 +37,9 @@ function OnboardingSignInBanner({
 	platformSelected = true,
 	onPlatformSelectionReset,
 }: OnboardingCtaBannerProps) {
-	const [assets, error] = useAssets([require('../../assets/icon.png')]);
+	const [assets, error] = useAssets([require('../../assets/dhaaga/icon.png')]);
 	const { theme } = useAppTheme();
-	const split = useSharedValue(0); // 0 = single, 1 = split
+	const split = useSharedValue(0); // 0 = singles, 1 = split
 
 	function onPlatformReset() {
 		if (onPlatformSelectionReset) onPlatformSelectionReset();
@@ -69,13 +69,13 @@ function OnboardingSignInBanner({
 		} as any;
 	});
 
-	if (error || !assets) return <View />;
+	if (error || !assets || assets.length < 1) return <View />;
 
 	const ALL_LOGO_HEIGHT = 84;
 	const HOST_LOGO_WIDTH =
-		(assets[0].width / assets[0].height) * ALL_LOGO_HEIGHT;
+		(assets[0].width! / assets[0].height!) * ALL_LOGO_HEIGHT;
 	const TARGET_LOGO_WIDTH =
-		(softwareLogoAsset?.width / softwareLogoAsset?.height) * ALL_LOGO_HEIGHT;
+		(softwareLogoAsset?.width! / softwareLogoAsset?.height!) * ALL_LOGO_HEIGHT;
 
 	return (
 		<View style={{ marginBottom: 32 }}>
@@ -93,7 +93,7 @@ function OnboardingSignInBanner({
 						onTouchStart={onPlatformReset}
 					>
 						<Animated.Image
-							source={{ uri: softwareLogoAsset.localUri }}
+							source={{ uri: softwareLogoAsset.localUri! }}
 							style={[
 								{
 									width: TARGET_LOGO_WIDTH,
@@ -106,7 +106,7 @@ function OnboardingSignInBanner({
 						/>
 					</Animated.View>
 					<Animated.Image
-						source={{ uri: assets[0].localUri }}
+						source={{ uri: assets[0].localUri! }}
 						style={[
 							{
 								width: HOST_LOGO_WIDTH,

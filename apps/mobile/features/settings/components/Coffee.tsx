@@ -8,14 +8,16 @@ type CoffeeProps = {
 };
 
 export function CoffeeIconOnly({ containerStyle }: CoffeeProps) {
-	const [assets, error] = useAssets([require('../../../assets/bmac-icon.png')]);
+	const [assets, error] = useAssets([
+		require('../../../assets/badges/bmac-icon.png'),
+	]);
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
 
 	function onTouch() {
 		LinkingUtils.openCoffeeLink();
 	}
 
-	if (!LOADED) return <View></View>;
+	if (!assets || !LOADED) return <View />;
 	return (
 		<View
 			style={[
@@ -29,7 +31,7 @@ export function CoffeeIconOnly({ containerStyle }: CoffeeProps) {
 		>
 			{/*@ts-ignore-next-line*/}
 			<Image
-				source={assets[0].localUri}
+				source={assets[0].localUri!}
 				style={{
 					width: '100%',
 					maxWidth: 40,
@@ -44,7 +46,7 @@ export function CoffeeIconOnly({ containerStyle }: CoffeeProps) {
 
 function Coffee({ containerStyle }: CoffeeProps) {
 	const [assets, error] = useAssets([
-		require('../../../assets/bmc-button.png'),
+		require('../../../assets/badges/bmc-button.png'),
 	]);
 
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
@@ -53,7 +55,7 @@ function Coffee({ containerStyle }: CoffeeProps) {
 		LinkingUtils.openCoffeeLink();
 	}
 
-	if (!LOADED) return <View></View>;
+	if (!assets || !LOADED) return <View></View>;
 	return (
 		<View
 			style={[
@@ -67,7 +69,7 @@ function Coffee({ containerStyle }: CoffeeProps) {
 		>
 			{/*@ts-ignore-next-line*/}
 			<Image
-				source={assets[0].localUri}
+				source={assets[0].localUri!}
 				style={{
 					width: '100%',
 					maxWidth: 172,

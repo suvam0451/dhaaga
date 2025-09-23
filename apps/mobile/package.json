@@ -1,7 +1,7 @@
 {
   "name": "@dhaaga/mobile",
   "version": "0.16.4",
-  "main": "index.js",
+  "main": "expo-router/entry",
   "dependencies": {
     "@atproto/api": "^0.16.9",
     "@dhaaga/bridge": "*",

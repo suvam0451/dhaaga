@@ -34,11 +34,11 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'android.permission.WRITE_EXTERNAL_STORAGE',
 			'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
 		],
-		icon: './assets/icon.png',
+		icon: './assets/dhaaga/icon.png',
 		adaptiveIcon: {
-			foregroundImage: './assets/adaptive-icon.png',
+			foregroundImage: './assets/dhaaga/adaptive-icon.png',
 			backgroundColor: '#e7ce8b',
-			monochromeImage: './assets/adaptive-icon.png',
+			monochromeImage: './assets/dhaaga/adaptive-icon.png',
 		},
 	},
 	androidStatusBar: {
@@ -47,13 +47,13 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		translucent: false,
 	},
 	splash: {
-		image: './assets/icon.png',
+		image: './assets/dhaaga/icon.png',
 		resizeMode: 'contain',
 		backgroundColor: '#e6cf8b',
 	},
 	assetBundlePatterns: ['**/*'],
 	web: {
-		favicon: './assets/favicon.png',
+		favicon: './assets/dhaaga/favicon.png',
 	},
 	extra: {
 		eas: {
@@ -130,7 +130,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		[
 			'expo-asset',
 			{
-				assets: ['./assets/icons', './assets/licensed'],
+				assets: [
+					'./assets/dhaaga',
+					'./assets/branding',
+					'./assets/badges',
+					'./assets/licensed',
+				],
 			},
 		],
 	],

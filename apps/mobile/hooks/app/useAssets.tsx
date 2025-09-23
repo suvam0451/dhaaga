@@ -62,7 +62,13 @@ function WithAppAssetsContext({ children }: Props) {
 
 	const IsAssetsLoaded = !error && assets?.every((o) => o?.downloaded);
 
-	function getBrandLogo(input: string) {
+	function getBrandLogo(input: string): {
+		imgUrl: string | null;
+		width: number;
+		height: number;
+	} {
+		if (!IsAssetsLoaded || !assets)
+			return { imgUrl: null, width: 0, height: 0 };
 		switch (input.toLowerCase() as KNOWN_SOFTWARE) {
 			case KNOWN_SOFTWARE.AKKOMA:
 				return { imgUrl: assets[0].localUri, width: 24, height: 24 };
@@ -125,8 +131,8 @@ function WithAppAssetsContext({ children }: Props) {
 	return (
 		<AppAssetsContext.Provider
 			value={{
-				branding: assets,
-				isAssetsLoaded: IsAssetsLoaded,
+				branding: assets ?? [],
+				isAssetsLoaded: IsAssetsLoaded ?? false,
 				getBrandLogo,
 			}}
 		>

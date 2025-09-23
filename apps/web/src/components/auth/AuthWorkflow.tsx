@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import AppLogo from '../../../../_shared/app/icon.png';
-import BlueskyLogo from '../../../../_shared/branding/bluesky/logo.png';
-import MastodonLogo from '../../../../_shared/branding/mastodon/logo.png';
-import MisskeyLogo from '../../../../_shared/branding/misskey/logo.png';
-import LemmyLogo from '../../../../_shared/branding/lemmy/logo.png';
+import BlueskyLogo from '../../../../_shared/assets/branding/bluesky/logo.png';
+import MastodonLogo from '../../../../_shared/assets/branding/mastodon/logo.png';
+import MisskeyLogo from '../../../../_shared/assets/branding/misskey/logo.png';
+import LemmyLogo from '../../../../_shared/assets/branding/lemmy/logo.png';
 import {
 	IoPersonOutline,
 	IoLockClosedOutline,

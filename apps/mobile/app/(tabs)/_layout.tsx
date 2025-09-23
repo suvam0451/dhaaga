@@ -1,14 +1,13 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
-import WithAppAssetsContext from '../../hooks/app/useAssets';
 import {
 	HomeNavigationIcon,
 	ProfileTabNavbarIcon,
 } from '../../components/lib/Icon';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 
-const BOTTOM_NAVBAR_HEIGHT = 48; // 42 - 52
+const BOTTOM_NAVBAR_HEIGHT = 48; // Range: 42 to 52
 const BOTTOM_NAVBAR_ICON_STYLE = {
 	height: 46,
 	width: 'auto',
