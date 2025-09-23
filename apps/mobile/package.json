@@ -3,7 +3,6 @@
   "version": "0.16.4",
   "main": "expo-router/entry",
   "dependencies": {
-    "@atproto/api": "^0.16.9",
     "@dhaaga/bridge": "*",
     "@dhaaga/core": "*",
     "@dhaaga/db": "*",
@@ -59,7 +58,8 @@
     "react-native-webview": "13.15.0"
   },
   "peerDependencies": {
-    "@react-native-community/cli": ">=20"
+    "@react-native-community/cli": ">=20",
+    "@atproto/api": ">=0.16.0"
   },
   "private": true,
   "scripts": {
@@ -72,6 +72,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "tl:sync": "node ./i18n/sync.js",
+    "eas-build-pre-install": "cd ../.. && npm run link:all",
     "eas-build-post-install": "cd ../.. && npm run build-deps"
   },
   "type": "module",
