@@ -72,6 +72,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "tl:sync": "node ./i18n/sync.js",
+    "eas-build-pre-install": "cd ../.. && npm run link:all",
     "eas-build-post-install": "cd ../.. && npm run build-deps"
   },
   "type": "module",
