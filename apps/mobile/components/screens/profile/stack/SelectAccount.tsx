@@ -1,15 +1,7 @@
-import {
-	FlatList,
-	RefreshControl,
-	View,
-	Text,
-	Pressable,
-	StyleSheet,
-} from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { APP_FONTS } from '../../../../styles/AppFonts';
 import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AccountListForSoftware from './landing/fragments/AccountListForSoftware';
 import AppTopNavbar, {
@@ -23,9 +15,9 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
-import { appDimensions } from '../../../../styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
+import { AppButtonVariantA } from '../../../lib/Buttons';
 
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
@@ -44,7 +36,7 @@ function SelectAccountStack() {
 		}
 	}
 
-	// populate account list on load & refresh
+	// populate an account list on a load and refresh
 	function onRefresh() {
 		setRefreshing(true);
 		refresh();
@@ -96,25 +88,15 @@ function SelectAccountStack() {
 				)}
 				contentContainerStyle={{
 					paddingHorizontal: 4,
-					paddingTop: 54,
 					backgroundColor: theme.palette.bg,
 				}}
 				ListFooterComponent={
-					<View style={styles.footerContainer}>
-						<Pressable
-							onPress={onPressAddAccount}
-							style={[
-								styles.ctaButtonContainer,
-								{
-									backgroundColor: theme.primary.a0,
-								},
-							]}
-						>
-							<Text style={styles.ctaButtonText}>
-								{t(`onboarding.addAccountButton`)}
-							</Text>
-						</Pressable>
-					</View>
+					<AppButtonVariantA
+						label={t(`onboarding.addAccountButton`)}
+						loading={false}
+						onClick={onPressAddAccount}
+						style={{ width: 196, marginTop: 32 }}
+					/>
 				}
 				refreshControl={
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
@@ -125,31 +107,3 @@ function SelectAccountStack() {
 }
 
 export default SelectAccountStack;
-
-const styles = StyleSheet.create({
-	footerContainer: {
-		marginHorizontal: 16,
-		marginBottom: 48,
-		marginTop: 72,
-		marginLeft: 'auto',
-		marginRight: 'auto',
-	},
-	ctaButtonContainer: {
-		borderRadius: appDimensions.buttons.borderRadius,
-		padding: 8,
-		paddingHorizontal: 16,
-	},
-	ctaButtonText: {
-		color: 'black',
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-		fontSize: 16,
-		textAlign: 'center',
-	},
-	tipText: {
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-		textAlign: 'center',
-		marginTop: 16,
-		paddingHorizontal: 16,
-		fontSize: 14,
-	},
-});

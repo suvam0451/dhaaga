@@ -7,7 +7,7 @@ import ComposerPresenter from '../../features/composer/presenters/ComposerPresen
 import UserPeekSheetPresenter from '../../features/user-profiles/presenters/UserPeekSheetPresenter';
 import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActions';
 import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
-import AppBottomSheetSelectAccount from './modules/select-account/AppBottomSheetSelectAccount';
+import ABS_Select_Account from './modules/ABS_Select_Account';
 import AppBottomSheetPickThemePack from './modules/theme-pack/AppBottomSheetPickThemePack';
 import ABS_Link_Preview from './modules/ABS_Link_Preview';
 import AppBottomSheetHashtag from './modules/AppBottomSheetHashtag';
@@ -90,7 +90,7 @@ function Factory() {
 		case APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS:
 			return <AppBottomSheetReactionDetails />;
 		case APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT:
-			return <AppBottomSheetSelectAccount />;
+			return <ABS_Select_Account />;
 		case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
 			return <AppBottomSheetPickThemePack />;
 		case APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER:

@@ -1,13 +1,17 @@
-import { Dimensions, View, ScrollView, Alert, Text } from 'react-native';
-import { useState } from 'react';
+import {
+	Dimensions,
+	View,
+	ScrollView,
+	Alert,
+	Text,
+	TouchableOpacity,
+} from 'react-native';
 import WebView from 'react-native-webview';
-import { Button } from '@rneui/base';
 import TitleOnlyNoScrollContainer from '../../../components/containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
-import { BaseApiAdapter, KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, type MastoAccountCredentials } from '@dhaaga/bridge';
 import PleromaPasteToken from '../components/PleromaPasteToken';
-import { AccountService, ACCOUNT_METADATA_KEY } from '@dhaaga/db';
 import { APP_ROUTING_ENUM } from '../../../utils/route-list';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
 import {
@@ -17,13 +21,15 @@ import {
 	useHub,
 } from '../../../hooks/utility/global-state-extractors';
 import { APP_FONTS } from '../../../styles/AppFonts';
+import { useActivityPubAuth } from '@dhaaga/react';
+import AccountDbService from '../../../services/db/account-db.service';
+import appStyling from '../../../styles/AppStyles';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
 	const { appSub } = useAppPublishers();
 	const { db } = useAppDb();
 	const { loadAccounts } = useHub();
-	const [Code, setCode] = useState<string | null>(null);
 
 	const params = useLocalSearchParams();
 	const _signInUrl: string = params['signInUrl'] as string;
@@ -32,75 +38,21 @@ function MastodonSignInStack() {
 	const _clientId: string = params['clientId'] as string;
 	const _clientSecret: string = params['clientSecret'] as string;
 
-	// Mastodon/Pleroma need to use the callback code to work
-	function callback(state) {
-		const regex = /^https:\/\/(.*?)\/oauth\/authorize\/native\?code=(.*?)$/;
-		if (regex.test(state.url)) {
-			const code = state.url.match(regex)[2];
-			setCode(code);
-		}
-	}
+	const { RNWebviewStateChangeCallback, code, setCode, authenticate } =
+		useActivityPubAuth(_subdomain, _clientId, _clientSecret);
 
 	async function onPressConfirm() {
-		if (!db) return;
+		if (!db || !code) return;
 
-		const instance = _subdomain;
-		const token = await new BaseApiAdapter().instances.getMastodonAccessToken(
-			instance,
-			Code!,
-			_clientId,
-			_clientSecret,
-		);
+		const userData: MastoAccountCredentials | null = await authenticate();
+		if (userData === null) return;
 
-		const { data: verified, error } =
-			await new BaseApiAdapter().instances.verifyCredentials(
-				instance /**
-				 * It seems Pleroma/Akkoma give
-				 * us another token, while one
-				 * exists already (above request will fail)
-				 *
-				 * ^ In such cases, the pasted code is
-				 * itself the token
-				 */,
-				token || Code, // fucking yolo it, xDD
-			);
-
-		if (error || !verified) return;
-
-		const upsertResult = AccountService.upsert(
+		const upsertResult = AccountDbService.upsertAccountCredentials(
 			db,
-			{
-				uuid: RandomUtil.nanoId(),
-				identifier: verified.id,
-				server: _subdomain,
-				driver: _domain,
-				username: verified.username,
-				avatarUrl: verified.avatar, // TODO: this needs to be replaced with camelCase
-				displayName: verified['display_name'],
-			},
-			[
-				{
-					key: ACCOUNT_METADATA_KEY.DISPLAY_NAME,
-					value: verified['display_name'],
-					type: 'string',
-				},
-				{
-					key: ACCOUNT_METADATA_KEY.AVATAR_URL,
-					value: verified['avatar'],
-					type: 'string',
-				},
-				{
-					key: ACCOUNT_METADATA_KEY.USER_IDENTIFIER,
-					value: verified.id,
-					type: 'string',
-				},
-				{
-					key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
-					value: token || Code,
-					type: 'string',
-				},
-				{ key: 'url', value: verified.url, type: 'string' },
-			],
+			code,
+			_subdomain,
+			_domain,
+			userData,
 		);
 		if (upsertResult.isOk()) {
 			Alert.alert('Account Added. Refresh if any screen is outdated.');
@@ -117,57 +69,64 @@ function MastodonSignInStack() {
 					<WebView
 						style={{ flex: 1, minWidth: Dimensions.get('window').width - 20 }}
 						source={{ uri: _signInUrl }}
-						onNavigationStateChange={callback}
+						onNavigationStateChange={RNWebviewStateChangeCallback}
 					/>
 				</ScrollView>
 				{_domain === KNOWN_SOFTWARE.MASTODON ? (
 					<HideOnKeyboardVisibleContainer
 						style={{ marginHorizontal: 12, marginTop: 'auto', height: 'auto' }}
 					>
-						<View style={{ height: 240 }}>
-							<Text
-								style={{
-									marginVertical: 20,
-									color: theme.secondary.a10,
-									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-									textAlign: 'center',
-									fontSize: 16,
-								}}
-							>
-								Login and Confirm your account
-							</Text>
-							{Code && (
-								<View>
-									<Text
-										style={{
-											marginBottom: 12,
-											color: theme.secondary.a30,
-											fontFamily: APP_FONTS.INTER_500_MEDIUM,
-										}}
-									>
-										A valid token was detected. Proceed with adding the account
-										shown above?
-									</Text>
-								</View>
-							)}
-
-							<Button
-								disabled={!Code}
-								color={theme.primary.a0}
-								onPress={onPressConfirm}
-							>
+						{code && (
+							<View style={{ height: 240 }}>
 								<Text
 									style={{
-										color: 'black',
+										marginVertical: 20,
+										color: theme.secondary.a10,
 										fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-										paddingVertical: 4,
+										textAlign: 'center',
 										fontSize: 16,
 									}}
 								>
-									Proceed
+									Login and Confirm your account
 								</Text>
-							</Button>
-						</View>
+								{code && (
+									<View>
+										<Text
+											style={{
+												marginBottom: 12,
+												color: theme.secondary.a30,
+												fontFamily: APP_FONTS.INTER_500_MEDIUM,
+												textAlign: 'center',
+											}}
+										>
+											A valid token was detected. Proceed with adding the
+											account shown above?
+										</Text>
+									</View>
+								)}
+
+								<TouchableOpacity
+									disabled={!code}
+									style={[
+										appStyling.button,
+										{
+											backgroundColor: theme.primary.a0,
+										},
+									]}
+									onPress={onPressConfirm}
+								>
+									<Text
+										style={{
+											color: 'black',
+											fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+											fontSize: 16,
+										}}
+									>
+										Proceed
+									</Text>
+								</TouchableOpacity>
+							</View>
+						)}
 					</HideOnKeyboardVisibleContainer>
 				) : (
 					<View style={{ marginHorizontal: 12 }}>
@@ -176,7 +135,7 @@ function MastodonSignInStack() {
 								<Text>Step 3: Confirm your account</Text>
 							</HideOnKeyboardVisibleContainer>
 							<PleromaPasteToken domain={_domain} setCode={setCode} />
-							{Code ? (
+							{code ? (
 								<View>
 									<Text style={{ marginBottom: 12 }}>
 										A valid token was detected. Proceed with adding the account
@@ -188,13 +147,18 @@ function MastodonSignInStack() {
 							)}
 
 							<HideOnKeyboardVisibleContainer>
-								<Button
-									disabled={!Code}
-									color={'rgb(99, 100, 255)'}
+								<TouchableOpacity
+									disabled={!code}
+									style={[
+										appStyling.button,
+										{
+											backgroundColor: 'rgb(99, 100, 255)',
+										},
+									]}
 									onPress={onPressConfirm}
 								>
 									Proceed
-								</Button>
+								</TouchableOpacity>
 							</HideOnKeyboardVisibleContainer>
 						</View>
 					</View>

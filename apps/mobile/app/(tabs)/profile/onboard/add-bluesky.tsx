@@ -12,7 +12,7 @@ import {
 	useAppDb,
 } from '../../../../hooks/utility/global-state-extractors';
 import { useAssets } from 'expo-asset';
-import useAtprotoLogin from '../../../../features/onboarding/interactors/useAtprotoLogin';
+import useAtprotoLogin from '../../../../../../packages/react/src/auth/useAtprotoLogin';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 import { AccountService } from '@dhaaga/db';

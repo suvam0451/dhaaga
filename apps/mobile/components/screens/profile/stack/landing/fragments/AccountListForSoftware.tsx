@@ -25,7 +25,14 @@ function AccountListForSoftware({
 				<View />
 			) : (
 				<Fragment>
-					<SoftwareHeader software={software} mb={4} mt={8} addText={true} />
+					<SoftwareHeader
+						height={32}
+						software={software}
+						mb={4}
+						mt={8}
+						addText={true}
+						style={{ marginVertical: 8 }}
+					/>
 					{filteredForSoftware.map((o, i) => (
 						<AccountListingFragment
 							key={i}

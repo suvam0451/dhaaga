@@ -1,4 +1,4 @@
-import { Button } from '@rneui/themed';
+import { ReactNode } from 'react';
 import {
 	ActivityIndicator,
 	Pressable,
@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	View,
 	ViewStyle,
+	TextStyle,
 } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
@@ -16,16 +17,20 @@ import { APP_FONTS } from '../../styles/AppFonts';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { AppText } from './Text';
 import { appDimensions } from '../../styles/dimensions';
+import appStyles from '../../styles/AppStyles';
 
 type AppButtonVariantAProps = {
 	label: string;
 	loading: boolean;
+	disabled?: boolean;
 	onClick: () => void;
 	onLongClick?: () => void;
 	opts?: {
 		useHaptics?: boolean;
 	};
-	customLoadingState?: JSX.Element;
+	customLoadingState?: ReactNode;
+	style?: StyleProp<ViewStyle>;
+	textStyle?: StyleProp<TextStyle>;
 };
 
 export function AppButtonVariantA({
@@ -35,7 +40,11 @@ export function AppButtonVariantA({
 	onLongClick,
 	opts,
 	customLoadingState,
+	style,
+	textStyle,
+	disabled,
 }: AppButtonVariantAProps) {
+	const { theme } = useAppTheme();
 	function onPress() {
 		if (onClick) {
 			if (opts?.useHaptics) {
@@ -52,31 +61,36 @@ export function AppButtonVariantA({
 	}
 
 	return (
-		<Button
-			size={'md'}
-			buttonStyle={{ backgroundColor: '#333333', borderRadius: 8 }}
-			containerStyle={{ borderRadius: 8 }}
+		<TouchableOpacity
+			style={[
+				appStyles.button,
+				{
+					backgroundColor: theme.primary.a0,
+					opacity: disabled ? 0.5 : 1,
+				},
+				style,
+			]}
 			onPress={onPress}
 			onLongPress={onLongPress}
+			disabled={disabled}
 		>
-			{loading ? (
-				customLoadingState ? (
-					customLoadingState
-				) : (
-					<ActivityIndicator size={20} color={'white'} />
-				)
-			) : (
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-						opacity: 1,
-						fontFamily: 'Inter-Bold',
-					}}
-				>
-					{label}
-				</Text>
-			)}
-		</Button>
+			{loading && <ActivityIndicator size="small" color={'black'} />}
+			<Text
+				style={[
+					{
+						color: 'black',
+						// opacity: 1,
+						fontSize: 16,
+						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
+						textAlign: 'center',
+						marginLeft: loading ? 8 : 0,
+					},
+					textStyle,
+				]}
+			>
+				{label}
+			</Text>
+		</TouchableOpacity>
 	);
 }
 
@@ -104,13 +118,14 @@ export function AppButtonVariantDestructive({
 	}
 
 	return (
-		<Button
-			size={'md'}
-			buttonStyle={{
-				backgroundColor: 'red',
-				borderRadius: 8,
-			}}
-			containerStyle={{ borderRadius: 8 }}
+		<TouchableOpacity
+			style={[
+				appStyles.button,
+				{
+					backgroundColor: 'red',
+					borderRadius: 8,
+				},
+			]}
 			onPress={onPress}
 			onLongPress={onLongPress}
 		>
@@ -131,7 +146,7 @@ export function AppButtonVariantDestructive({
 					{label}
 				</Text>
 			)}
-		</Button>
+		</TouchableOpacity>
 	);
 }
 
@@ -198,7 +213,7 @@ export const AppButtonClassicInverted = memo(function Foo({
 
 type AppTimelineActionProps = {
 	label: string;
-	Icon: JSX.Element;
+	Icon: ReactNode;
 };
 
 export const AppTimelineAction = memo(function Foo({

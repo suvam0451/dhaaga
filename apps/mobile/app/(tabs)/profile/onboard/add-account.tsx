@@ -12,15 +12,49 @@ import {
 	OnboardingSignInButton,
 } from '../../../../components/onboarding/OnboardingSignInBanner';
 import { LinkingUtils } from '../../../../utils/linking.utils';
-import useActivityPubAuth from '../../../../features/onboarding/interactors/useActivityPubAuth';
+import { useDhaagaAuthFormControl } from '@dhaaga/react';
 import { AppFormTextInput } from '../../../../components/lib/FormInput';
+import { useAppManager } from '../../../../hooks/utility/global-state-extractors';
+import { router } from 'expo-router';
+import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+
+function AtProto() {}
 
 function ActivityPub() {
-	const { isLoading, Instance, setInstance, resolve } = useActivityPubAuth();
+	const { isLoading, Instance, setInstance, resolve, cachedClientTokens } =
+		useDhaagaAuthFormControl();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const { appManager } = useAppManager();
 
 	const BUTTON_COLOR = 'rgb(99, 100, 255)';
 
+	function onProcessRequest() {
+		if (!appManager) return;
+		cachedClientTokens.current =
+			appManager.storage.getAtprotoServerClientTokens(Instance);
+		resolve().then((result) => {
+			if (result.strategy !== 'activitypub') return;
+
+			const { clientId, clientSecret, signInUrl, instance, software } =
+				result.params;
+			appManager.storage.setAtprotoServerClientTokens(
+				instance,
+				clientId,
+				clientSecret,
+			);
+
+			router.push({
+				pathname: APP_ROUTING_ENUM.MASTODON_SIGNIN,
+				params: {
+					signInUrl: signInUrl,
+					subdomain: Instance,
+					domain: software,
+					clientId,
+					clientSecret,
+				},
+			});
+		});
+	}
 	return (
 		<>
 			<AppFormTextInput
@@ -32,7 +66,7 @@ function ActivityPub() {
 			<OnboardingSignInButton
 				canSubmit={!!Instance}
 				isLoading={isLoading}
-				onSubmit={resolve}
+				onSubmit={onProcessRequest}
 				color={BUTTON_COLOR}
 				colorScheme={'light'}
 			/>
@@ -41,14 +75,29 @@ function ActivityPub() {
 }
 
 function MiAuth() {
-	const { isLoading, Instance, setInstance, resolve } = useActivityPubAuth(
-		'miauth',
-		'misskey.io',
-	);
+	const { isLoading, Instance, setInstance, resolve } =
+		useDhaagaAuthFormControl('miauth', 'misskey.io');
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	const BUTTON_COLOR =
 		'linear-gradient(90deg, rgb(0, 179, 50), rgb(170, 203, 0))';
+
+	function onProcessRequest() {
+		resolve().then((result) => {
+			if (result.strategy !== 'miauth') return;
+
+			const { signInUrl, instance, software } = result.params;
+
+			router.push({
+				pathname: APP_ROUTING_ENUM.MISSKEY_SIGNIN,
+				params: {
+					signInUrl: signInUrl,
+					subdomain: instance,
+					domain: software,
+				},
+			});
+		});
+	}
 
 	return (
 		<>
@@ -61,7 +110,7 @@ function MiAuth() {
 			<OnboardingSignInButton
 				canSubmit={!!Instance}
 				isLoading={isLoading}
-				onSubmit={resolve}
+				onSubmit={onProcessRequest}
 				color={BUTTON_COLOR}
 				colorScheme={'light'}
 			/>
@@ -69,7 +118,7 @@ function MiAuth() {
 	);
 }
 
-function MyPager() {
+export function AppAuthenticationPager() {
 	const [assets, error] = useAssets([
 		require('../../../../assets/dhaaga/icon.png'),
 		require('../../../../assets/branding/bluesky/logo.png'),
@@ -132,7 +181,7 @@ function Page() {
 
 	return (
 		<AppTopNavbar title={'Add Account'} translateY={translateY}>
-			<MyPager />
+			<AppAuthenticationPager />
 		</AppTopNavbar>
 	);
 }

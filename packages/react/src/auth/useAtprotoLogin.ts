@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SuvamIoService } from '../../../services/suvamio.service';
 import { useLocalSearchParams } from 'expo-router';
-import AtprotoSessionService from '../../../services/atproto/atproto-session.service';
 
 function useAtprotoLogin() {
 	const [IsLoading, setIsLoading] = useState(false);
@@ -15,10 +13,10 @@ function useAtprotoLogin() {
 		setIsLoading(true);
 		try {
 			console.log(_state, _code, Verifier);
-			const { success, data, error } =
-				await AtprotoSessionService.exchangeCodeForSession(_code, Verifier);
+			// const { success, data, error } =
+			// 	await AtprotoSessionService.exchangeCodeForSession(_code, Verifier);
 
-			console.log(success);
+			// console.log(success);
 		} catch (e) {
 			console.log(e);
 		} finally {
@@ -35,9 +33,9 @@ function useAtprotoLogin() {
 
 	async function startLoginFlow(handle: string) {
 		setIsLoading(true);
-		const { data } = await SuvamIoService.generateAtprotoRedirectUrl(handle);
-		console.log('obtained data', data);
-		setVerifier(data.verifier);
+		// const { data } = await SuvamIoService.generateAtprotoRedirectUrl(handle);
+		// console.log('obtained data', data);
+		// setVerifier(data.verifier);
 
 		/**
 		 * will perform the oauth, redirecting the
