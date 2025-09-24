@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
 
-function useAtprotoLogin() {
+/**
+ * @deprecated WIP
+ */
+function useAtprotoOAuthLogin() {
 	const [IsLoading, setIsLoading] = useState(false);
-	const [Verifier, setVerifier] = useState(null);
+	// const [Verifier, setVerifier] = useState(null);
 
-	const params = useLocalSearchParams();
-	const _state: string = params['state'] as string;
-	const _code: string = params['code'] as string;
+	// const params = useLocalSearchParams();
+	// const _state: string = params['state'] as string;
+	// const _code: string = params['code'] as string;
 
 	async function onObtainCode() {
 		setIsLoading(true);
 		try {
-			console.log(_state, _code, Verifier);
+			// console.log(_state, _code, Verifier);
 			// const { success, data, error } =
 			// 	await AtprotoSessionService.exchangeCodeForSession(_code, Verifier);
-
 			// console.log(success);
 		} catch (e) {
 			console.log(e);
@@ -24,12 +25,12 @@ function useAtprotoLogin() {
 		}
 	}
 
-	useEffect(() => {
-		if (_state && _code) {
-			// redirection successful!
-			onObtainCode();
-		}
-	}, [_state, _code]);
+	// useEffect(() => {
+	// 	if (_state && _code) {
+	// 		// redirection successful!
+	// 		onObtainCode();
+	// 	}
+	// }, [_state, _code]);
 
 	async function startLoginFlow(handle: string) {
 		setIsLoading(true);
@@ -48,4 +49,4 @@ function useAtprotoLogin() {
 	return { startLoginFlow, isLoading: IsLoading };
 }
 
-export default useAtprotoLogin;
+export default useAtprotoOAuthLogin;

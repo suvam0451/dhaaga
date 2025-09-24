@@ -14,8 +14,8 @@ import { PostTimelinePlaceholderView } from '../components/PostSkeletonView';
 function TimelineInteractor() {
 	const { db } = useAppDb();
 
-	const State = usePostTimelineState();
-	const dispatch = usePostTimelineDispatch();
+	const State = usePostTimelineState()!;
+	const dispatch = usePostTimelineDispatch()!;
 
 	// reset the timeline on param change
 	const params = useLocalSearchParams();

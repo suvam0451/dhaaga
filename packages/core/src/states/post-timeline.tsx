@@ -529,8 +529,8 @@ function reducer(state: State, action: Actions): State {
 type DispatchType = Dispatch<Actions>;
 
 // contexts
-const StateCtx = createContext<State | null>(null);
-const DispatchCtx = createContext<DispatchType | null>(null);
+const StateCtx = createContext<State>(null!);
+const DispatchCtx = createContext<DispatchType>(null!);
 // hooks
 const usePostTimelineState = () => useContext(StateCtx);
 const usePostTimelineDispatch = () => useContext(DispatchCtx);

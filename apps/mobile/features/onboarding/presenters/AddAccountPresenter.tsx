@@ -96,7 +96,7 @@ function AddAccountPresenter({ tab }: AppNoAccountProps) {
 	function onRefresh() {
 		setIsRefreshing(true);
 		try {
-			// possibly locked because of added/deleted account
+			// possibly locked because of the added/deleted account
 			if (!acct) {
 				AccountService.ensureAccountSelection(db);
 				loadApp();

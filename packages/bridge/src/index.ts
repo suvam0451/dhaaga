@@ -178,3 +178,4 @@ export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';
 
 export * from './types.js';
+export * from './auth/index.js';

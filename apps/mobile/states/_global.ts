@@ -1,16 +1,17 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { ThemePackType } from '../assets/loaders/UseAppThemePackLoader';
 import { APP_BUILT_IN_THEMES } from '../styles/BuiltinThemes';
-import { Account, Profile, AccountService } from '@dhaaga/db';
 import {
 	ApiTargetInterface,
 	KNOWN_SOFTWARE,
 	DriverService,
+	AtProtoAuthService,
 } from '@dhaaga/bridge';
 import { SQLiteDatabase } from 'expo-sqlite';
-import AtprotoSessionService from '../services/atproto/atproto-session.service';
 import {
+	Account,
+	Profile,
+	AccountService,
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 	ProfileService,
@@ -26,11 +27,8 @@ import { PostPublisherService } from '../services/publishers/post.publisher';
 import { AppPublisherService } from '../services/publishers/app.publisher';
 import { PostTimelineStateType, PostTimelineDispatchType } from '@dhaaga/core';
 import { UserObjectType, UserParser, RandomUtil } from '@dhaaga/bridge';
-
-type AppThemePack = {
-	id: string;
-	name: string;
-};
+import AccountMetadataDbService from '../services/db/account-metadata-db.service';
+import type { AtpSessionData } from '@atproto/api';
 
 type AppModalStateBase = {
 	stateId: string;
@@ -206,8 +204,8 @@ type State = {
 	packId: string;
 	colorScheme: AppColorSchemeType;
 	setColorScheme: (themeKey: string) => void;
-	packList: AppThemePack[];
-	activePack: ThemePackType;
+	// packList: AppThemePack[];
+	// activePack: ThemePackType;
 
 	// sheets
 	bottomSheet: AppBottomSheetState;
@@ -255,8 +253,8 @@ function ModalStateBlockGenerator(
 
 type Actions = {
 	selectAccount(acct: Account): void;
-	getPacks: () => AppThemePack[];
-	setPack: (packId: string) => void;
+	// getPacks: () => AppThemePack[];
+	// setPack: (packId: string) => void;
 	appInitialize: (db: SQLiteDatabase) => void;
 	loadApp: () => Promise<void>; // loa/switch a profile
 	loadActiveProfile: (profile?: Profile) => void;
@@ -286,41 +284,52 @@ class GlobalStateService {
 				return { type: 'invalid' };
 			}
 
-			const token = AccountMetadataService.getKeyValueForAccountSync(
-				db,
-				_acct,
-				ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
-			);
-
-			let payload: any = {
-				instance: _acct.server,
-				token,
-			};
+			let payload:
+				| { instance: string; token: string }
+				| (AtpSessionData & { subdomain: string; pdsUrl: string })
+				| null = null;
 
 			// Bluesky is built different
 			if (_acct.driver === KNOWN_SOFTWARE.BLUESKY) {
-				let session = AtprotoSessionService.create(db, _acct);
-
-				// re-login login
-				if (session.checkTokenExpiry()) {
-					await AtprotoSessionService.reLogin(db, _acct);
-					session = AtprotoSessionService.create(db, _acct);
+				let session = AccountMetadataDbService.getAtProtoSession(db, _acct);
+				if (!session) {
+					console.log('[WARN]: no session found for account', _acct);
+					return { type: 'invalid' };
 				}
 
-				await session.resume(db);
-				const { success, data, reason } = await session.saveSession();
-				if (!success)
-					console.log('[INFO]: session restore status', success, reason);
+				const resumeResult = await AtProtoAuthService.resumeSession(session);
+				if (resumeResult === null) return { type: 'invalid' };
+
+				const _sess: AtpSessionData = resumeResult.nextSession;
+				const _pdsUrl = resumeResult.pdsUrl;
+
+				// save the updated session object
+				AtProtoAuthService.setAtProtoSession(db, _acct, _sess);
+
 				payload = {
-					...data,
+					..._sess,
 					subdomain: _acct.server,
-					pdsUrl: session.pdsUrl,
+					pdsUrl: _pdsUrl,
+				};
+			} else {
+				const token = AccountMetadataService.getKeyValueForAccountSync(
+					db,
+					_acct,
+					ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
+				);
+
+				payload = {
+					instance: _acct.server,
+					token: token!,
 				};
 			}
 			const _router = DriverService.generateApiClient(
 				_acct.driver,
 				_acct.server,
-				payload,
+				{
+					...payload,
+					clientId: _acct.id,
+				},
 			);
 			if (_router.isErr())
 				return { type: 'error', error: new Error(_router.error) };
@@ -352,15 +361,15 @@ const useGlobalState = create<State & Actions>()(
 		driver: KNOWN_SOFTWARE.UNKNOWN,
 		router: null,
 		me: null,
-		activePack: null,
-		packId: null,
+		// activePack: null,
+		// packId: null,
 		imageInspectModal: ModalStateBlockGenerator(
 			set,
 			APP_KNOWN_MODAL.IMAGE_INSPECT,
 		),
 		userPeekModal: ModalStateBlockGenerator(set, APP_KNOWN_MODAL.USER_PEEK),
-		packList: null,
-		theme: APP_BUILT_IN_THEMES[0],
+		// packList: null,
+		// theme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
 				const _db = new DataSource(db);
@@ -369,10 +378,10 @@ const useGlobalState = create<State & Actions>()(
 				state.publishers.appSub = new AppPublisherService();
 			});
 		},
-		getPacks: () => [],
-		setPack: (packId: string) => {
-			set({ packId });
-		},
+		// getPacks: () => [],
+		// setPack: (packId: string) => {
+		// 	set({ packId });
+		// },
 		selectAccount: async (selection: Account) => {
 			AccountService.select(get().db!, selection);
 		},

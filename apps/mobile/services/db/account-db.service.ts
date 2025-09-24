@@ -1,5 +1,6 @@
 import { ACCOUNT_METADATA_KEY, AccountService, DataSource } from '@dhaaga/db';
-import { RandomUtil } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
+import { type AtpSessionData, type AppBskyActorGetProfile } from '@atproto/api';
 
 class AccountDbService {
 	static upsertAccountCredentials(
@@ -90,6 +91,71 @@ class AccountDbService {
 					key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
 					value: code,
 					type: 'string',
+				},
+			],
+		);
+	}
+
+	static upsertAccountCredentials_AtProto(
+		db: DataSource,
+		password: string,
+		sessionObject: AtpSessionData,
+		profileData: AppBskyActorGetProfile.Response,
+	) {
+		const accessToken = sessionObject.accessJwt;
+		const refreshToken = sessionObject.refreshJwt;
+		const instance = 'bsky.social';
+		const avatarUrl = profileData.data.avatar!;
+		const displayName = profileData.data.displayName!;
+		const _username = profileData.data.handle;
+		const did = profileData.data.did;
+
+		return AccountService.upsert(
+			db,
+			{
+				uuid: RandomUtil.nanoId(),
+				identifier: profileData.data.did,
+				server: instance,
+				driver: KNOWN_SOFTWARE.BLUESKY,
+				username: _username,
+				avatarUrl,
+				displayName,
+			},
+			[
+				{
+					key: ACCOUNT_METADATA_KEY.DISPLAY_NAME,
+					value: displayName,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.AVATAR_URL,
+					value: avatarUrl,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
+					value: accessToken,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.REFRESH_TOKEN,
+					value: refreshToken,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.ATPROTO_DID,
+					value: did,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.ATPROTO_APP_PASSWORD,
+					value: password,
+					type: 'string',
+				},
+				{
+					key: ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
+					value: JSON.stringify(sessionObject),
+					type: 'json',
 				},
 			],
 		);

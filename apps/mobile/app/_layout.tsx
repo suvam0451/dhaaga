@@ -37,22 +37,22 @@ LogBox.ignoreLogs(IGNORED_LOGS);
 LogBox.ignoreAllLogs(true);
 
 // Workaround for Expo 45
-if (__DEV__) {
-	const withoutIgnored =
-		(logger: any) =>
-		(...args: any[]) => {
-			const output = args.join(' ');
-
-			if (!IGNORED_LOGS.some((log) => output.includes(log))) {
-				logger(...args);
-			}
-		};
-
-	console.log = withoutIgnored(console.log);
-	console.info = withoutIgnored(console.info);
-	console.warn = withoutIgnored(console.warn);
-	console.error = withoutIgnored(console.error);
-}
+// if (__DEV__) {
+// 	const withoutIgnored =
+// 		(logger: any) =>
+// 		(...args: any[]) => {
+// 			const output = args.join(' ');
+//
+// 			if (!IGNORED_LOGS.some((log) => output.includes(log))) {
+// 				logger(...args);
+// 			}
+// 		};
+//
+// 	console.log = withoutIgnored(console.log);
+// 	console.info = withoutIgnored(console.info);
+// 	console.warn = withoutIgnored(console.warn);
+// 	console.error = withoutIgnored(console.error);
+// }
 
 function App() {
 	const { theme } = useAppTheme();

@@ -1,7 +1,3 @@
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../components/shared/topnavbar/AppTopNavbar';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import { Alert, View } from 'react-native';
 import { useState } from 'react';
 import { router } from 'expo-router';
@@ -11,8 +7,6 @@ import {
 	useAppAcct,
 	useAppDb,
 } from '../../../../hooks/utility/global-state-extractors';
-import { useAssets } from 'expo-asset';
-import useAtprotoLogin from '../../../../../../packages/react/src/auth/useAtprotoLogin';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 import { AccountService } from '@dhaaga/db';
@@ -23,44 +17,10 @@ import { OnboardingSignInButton } from '../../../../components/onboarding/Onboar
 
 export function PageContent() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
-	const [Username, setUsername] = useState(null);
-	const [Password, setPassword] = useState(null);
-	const [IsLoading, setIsLoading] = useState(false);
-
-	const [assets, error] = useAssets([
-		require('../../../../assets/branding/mastodon/logo.png'),
-	]);
-
-	function onSubmit() {}
-
-	return (
-		<>
-			<AppFormTextInput
-				onChangeText={setUsername}
-				value={Username}
-				placeholder={'Username or email address'}
-				leftIcon={'person-outline'}
-			/>
-			<AppFormTextInput
-				placeholder={t(`onboarding.appPassword`)}
-				value={Password}
-				onChangeText={setPassword}
-				leftIcon={'lock-closed-outline'}
-			/>
-			<OnboardingSignInButton
-				canSubmit={Username && Password}
-				isLoading={IsLoading}
-				onSubmit={onSubmit}
-			/>
-		</>
-	);
-}
-
-function AddBluesky() {
+	const [Username, setUsername] = useState<string | null>(null);
+	const [Password, setPassword] = useState<string | null>(null);
 	const [IsLoading, setIsLoading] = useState(false);
 	const { db } = useAppDb();
-	const { translateY } = useScrollMoreOnPageEnd();
-	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { acct } = useAppAcct();
 	const { loadApp } = useGlobalState(
 		useShallow((o) => ({
@@ -68,26 +28,14 @@ function AddBluesky() {
 		})),
 	);
 
-	const [Username, setUsername] = useState(null);
-	const [Password, setPassword] = useState(null);
-	const [assets, error] = useAssets([
-		require('../../../../assets/branding/bluesky/logo.png'),
-	]);
-
-	const { isLoading } = useAtprotoLogin();
-
 	async function onSubmit() {
 		setIsLoading(true);
-		if (!Username || !Password) {
-			return;
-		}
+		if (!Username || !Password) return;
 
 		try {
-			const { success, reason } = await AtprotoSessionService.login(
-				db,
-				Username,
-				Password,
-			);
+			const result = await AtprotoSessionService.login(db, Username, Password);
+			if (!result) return;
+			const { success, reason } = result;
 
 			if (success) {
 				if (!acct) {
@@ -106,43 +54,34 @@ function AddBluesky() {
 		}
 	}
 
-	if (error || !assets)
-		return (
-			<AppTopNavbar
-				title={t(`topNav.secondary.blueskySignIn`)}
-				translateY={translateY}
-				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			>
-				<View style={{ flex: 1 }} />
-			</AppTopNavbar>
-		);
-
+	const BUTTON_COLOR = 'rgb(99, 100, 255)';
 	return (
-		<AppTopNavbar
-			title={t(`topNav.secondary.blueskySignIn`)}
-			translateY={translateY}
-			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			contentContainerStyle={{ marginTop: 32 }}
-		>
+		<>
 			<AppFormTextInput
 				onChangeText={setUsername}
-				value={Username}
+				value={Username!}
 				placeholder={'Username or email address'}
 				leftIcon={'person-outline'}
 			/>
 			<AppFormTextInput
 				placeholder={t(`onboarding.appPassword`)}
-				value={Password}
+				value={Password!}
 				onChangeText={setPassword}
 				leftIcon={'lock-closed-outline'}
 			/>
 			<OnboardingSignInButton
-				canSubmit={Username && Password}
+				canSubmit={!!Username && !!Password}
 				isLoading={IsLoading}
 				onSubmit={onSubmit}
+				colorScheme={'light'}
+				color={BUTTON_COLOR}
 			/>
-		</AppTopNavbar>
+		</>
 	);
+}
+
+function AddBluesky() {
+	return <View />;
 }
 
 export default AddBluesky;

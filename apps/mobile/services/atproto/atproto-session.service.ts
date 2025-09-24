@@ -1,156 +1,13 @@
-import { Agent, AtpSessionData, CredentialSession } from '@atproto/api';
-import { KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
-import {
-	Account,
-	AccountService,
-	AccountMetadataService,
-	ACCOUNT_METADATA_KEY,
-	DataSource,
-} from '@dhaaga/db';
-import { jwtDecode } from 'jwt-decode';
+import { Agent } from '@atproto/api';
+import { DataSource } from '@dhaaga/db';
+import { AtProtoAuthService } from '@dhaaga/bridge';
+import AccountDbService from '../db/account-db.service';
 
 /**
  * Helps manage session
  * for an atproto based account
  */
 class AtprotoSessionService {
-	private readonly db: DataSource;
-	private readonly acct: Account;
-	private readonly sessionManager: CredentialSession;
-	private nextSession: AtpSessionData;
-	private oldSession: AtpSessionData;
-	private nextStatusCode: string;
-	// PDS to hit, is obtainable after refreshing session
-	pdsUrl: string | null;
-
-	constructor(db: DataSource, acct: Account) {
-		this.db = db;
-		this.acct = acct;
-		this.sessionManager = new CredentialSession(
-			new URL(AtprotoSessionService.cleanLink(this.acct.server)),
-			fetch,
-			(evt, session) => {
-				this.nextStatusCode = evt;
-				if (session) this.nextSession = session;
-			},
-		);
-
-		const secret = AccountMetadataService.getKeyValueForAccountSync(
-			db,
-			this.acct,
-			ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
-		);
-		this.oldSession = JSON.parse(secret);
-	}
-
-	static create(db: DataSource, acct: Account) {
-		return new AtprotoSessionService(db, acct);
-	}
-
-	private static cleanLink(urlLike: string) {
-		if (urlLike.startsWith('http://') || urlLike.startsWith('https://')) {
-		} else {
-			urlLike = 'https://' + urlLike;
-		}
-		return urlLike.replace(/\/+$/, '');
-	}
-
-	/**
-	 * Returns whether the app token
-	 * has expired and needs a re-login
-	 */
-	checkTokenExpiry(): boolean {
-		this.sessionManager.session = this.oldSession;
-		const _jwt = jwtDecode(this.sessionManager.session.accessJwt);
-		if (!_jwt) return true;
-		return _jwt.exp < Math.floor(new Date().getTime() / 1000);
-	}
-
-	/**
-	 * Resumes the client session
-	 *
-	 * Call this before making any requests
-	 */
-	async resume(db: DataSource) {
-		this.sessionManager.session = this.oldSession;
-
-		/**
-		 * Let's see how well this holds
-		 *
-		 * Ideally, we should refresh our tokens a bit ahead of time
-		 * to work around network errors (in which case, old token
-		 * would be attempted to be used)
-		 *
-		 * FIXME: currently unable to refresh token, as the parsing is failing
-		 */
-		const _jwt = jwtDecode(this.sessionManager.session.accessJwt);
-		if (!_jwt) return this;
-
-		const IS_EXPIRED = _jwt.exp < Math.floor(new Date().getTime() / 1000);
-		try {
-			if (IS_EXPIRED) {
-				await this.sessionManager.refreshSession();
-			} else {
-				const sess = await this.sessionManager.resumeSession(
-					this.sessionManager.session,
-				);
-				const _serviceObj = (sess?.data?.didDoc as any)?.service;
-
-				if (Array.isArray(_serviceObj)) {
-					const pds = _serviceObj.find(
-						(o) =>
-							o['id'] === '#atproto_pds' &&
-							o['type'] === 'AtprotoPersonalDataServer',
-					);
-					this.pdsUrl = pds?.serviceEndpoint;
-				} else {
-					console.log('not saving pds?', _serviceObj);
-				}
-			}
-		} catch (e) {
-			console.log(e);
-			return this;
-		}
-		return this;
-	}
-
-	/**
-	 * Checks the updates tokens
-	 * and stores them in the db
-	 */
-	async saveSession() {
-		const statusCode = this.nextStatusCode;
-		switch (statusCode) {
-			case 'update': {
-				AccountMetadataService.upsert(this.db, this.acct, {
-					key: ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
-					value: JSON.stringify(this.nextSession),
-					type: 'json',
-				});
-				this.oldSession = this.nextSession;
-				return { success: true, data: this.nextSession };
-			}
-			case 'expired': {
-				return {
-					success: false,
-					data: this.oldSession,
-					reason: 'E_Token_Expired',
-				};
-			}
-			case 'network-error': {
-				return {
-					success: false,
-					data: this.oldSession,
-					reason: 'E_Network_Error',
-				};
-			}
-			default: {
-				console.log('[WARN]: atproto session event not handled', statusCode);
-				return { success: false, data: this.oldSession };
-			}
-		}
-	}
-
 	/**
 	 * Attempt to log in using
 	 * submitted credentials
@@ -167,84 +24,24 @@ class AtprotoSessionService {
 	) {
 		if (!username || !appPassword)
 			return { success: false, reason: 'E_Empty_Username_Or_Password' };
-		let storedSession = null;
-		const session = new CredentialSession(
-			new URL(service),
-			fetch,
-			(evt, session1) => {
-				console.log(evt);
-				storedSession = session1;
-			},
+
+		const result = await AtProtoAuthService.loginWithPassword(
+			username,
+			appPassword,
+			service,
 		);
+		if (!result) return;
+		const { sessionData, session } = result;
 
 		try {
-			const loginResp = await session.login({
-				identifier: username.includes('.')
-					? username
-					: `${username}.bsky.social`,
-				password: appPassword,
-			});
-
 			const agent = new Agent(session);
+			const res = await agent.getProfile({ actor: sessionData.did });
 
-			const res = await agent.getProfile({ actor: agent.did });
-
-			const accessToken = loginResp.data.accessJwt;
-			const refreshToken = loginResp.data.refreshJwt;
-			const instance = 'bsky.social';
-			const avatarUrl = res.data.avatar;
-			const displayName = res.data.displayName;
-			const _username = res.data.handle;
-			const did = res.data.did;
-
-			AccountService.upsert(
+			AccountDbService.upsertAccountCredentials_AtProto(
 				db,
-				{
-					uuid: RandomUtil.nanoId(),
-					identifier: res.data.did,
-					server: instance,
-					driver: KNOWN_SOFTWARE.BLUESKY,
-					username: _username,
-					avatarUrl,
-					displayName,
-				},
-				[
-					{
-						key: ACCOUNT_METADATA_KEY.DISPLAY_NAME,
-						value: displayName,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.AVATAR_URL,
-						value: avatarUrl,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
-						value: accessToken,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.REFRESH_TOKEN,
-						value: refreshToken,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.ATPROTO_DID,
-						value: did,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.ATPROTO_APP_PASSWORD,
-						value: appPassword,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
-						value: JSON.stringify(storedSession),
-						type: 'json',
-					},
-				],
+				appPassword,
+				sessionData,
+				res,
 			);
 
 			return { success: true };
@@ -252,152 +49,6 @@ class AtprotoSessionService {
 			console.log(e);
 			return { success: false };
 		}
-	}
-
-	/**
-	 * Attempt to log in using
-	 * submitted credentials
-	 * @param db
-	 * @param acct
-	 * @param service
-	 */
-	static async reLogin(
-		db: DataSource,
-		acct: Account,
-		service: string = 'https://bsky.social',
-	) {
-		const username = acct.username;
-		const _appPwd = AccountMetadataService.getKeyValueForAccountSync(
-			db,
-			acct,
-			ACCOUNT_METADATA_KEY.ATPROTO_APP_PASSWORD,
-		);
-
-		if (!username || !_appPwd) {
-			console.log(
-				'[WARN]: unable to restore session with currently available session data',
-			);
-			return false;
-		}
-
-		let storedSession = null;
-		const session = new CredentialSession(
-			new URL(service),
-			fetch,
-			(evt, session1) => {
-				console.log(evt);
-				storedSession = session1;
-			},
-		);
-
-		try {
-			const loginResp = await session.login({
-				identifier: username.includes('.')
-					? username
-					: `${username}.bsky.social`,
-				password: _appPwd,
-			});
-
-			const agent = new Agent(session);
-
-			const res = await agent.getProfile({ actor: agent.did });
-
-			const accessToken = loginResp.data.accessJwt;
-			const refreshToken = loginResp.data.refreshJwt;
-			const instance = 'bsky.social';
-			const avatarUrl = res.data.avatar;
-			const displayName = res.data.displayName;
-			const _username = res.data.handle;
-			const did = res.data.did;
-
-			AccountService.upsert(
-				db,
-				{
-					uuid: RandomUtil.nanoId(),
-					identifier: res.data.did,
-					server: instance,
-					driver: KNOWN_SOFTWARE.BLUESKY,
-					username: _username,
-					avatarUrl,
-					displayName,
-				},
-				[
-					{
-						key: ACCOUNT_METADATA_KEY.DISPLAY_NAME,
-						value: displayName,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.AVATAR_URL,
-						value: avatarUrl,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
-						value: accessToken,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.REFRESH_TOKEN,
-						value: refreshToken,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.ATPROTO_DID,
-						value: did,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.ATPROTO_APP_PASSWORD,
-						value: _appPwd,
-						type: 'string',
-					},
-					{
-						key: ACCOUNT_METADATA_KEY.ATPROTO_SESSION,
-						value: JSON.stringify(storedSession),
-						type: 'json',
-					},
-				],
-			);
-			console.log('new session', storedSession);
-			console.log('[INFO]: successfully re-logged');
-			return true;
-		} catch (e) {
-			console.log(e);
-			return false;
-		}
-	}
-
-	static async exchangeCodeForSession(
-		code: string,
-		verifier: string,
-		pds?: string,
-	) {
-		const body = {
-			grant_type: 'authorization_code',
-			redirect_uri: 'https://suvam.io/dhaaga',
-			code,
-			code_verifier: verifier,
-			client_id: 'https://suvam.io/dhaaga/client-metadata.json',
-		};
-
-		const response = await fetch(
-			pds ? `https://${pds}/oauth/token` : 'https://bsky.social/oauth/token',
-			{
-				method: 'POST',
-				body: JSON.stringify(body),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			},
-		);
-		if (!response.ok) {
-			console.log(response);
-			return null;
-		}
-		const data = await response.json();
-		console.log(data);
-		return data;
 	}
 }
 

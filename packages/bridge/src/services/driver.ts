@@ -78,28 +78,36 @@ class Service {
 	 * This client should be generated at runtime
 	 */
 	static generateApiClient(
-		driver: KNOWN_SOFTWARE | string,
-		server: string,
+		software: KNOWN_SOFTWARE | string,
+		instance: string,
 		payload: RestClientCreateDTO | AppAtpSessionData,
 	): ApiResult<ApiTargetInterface> {
-		if (Service.supportsAtProto(driver))
+		if (Service.supportsAtProto(software))
 			return Ok(
-				new AtprotoApiAdapter(driver, server, payload as AppAtpSessionData),
+				new AtprotoApiAdapter(software, instance, payload as AppAtpSessionData),
 			);
 
-		if (Service.supportsMisskeyApi(driver))
+		if (Service.supportsMisskeyApi(software))
 			return Ok(
-				new MisskeyApiAdapter(driver, server, payload as RestClientCreateDTO),
+				new MisskeyApiAdapter(
+					software,
+					instance,
+					payload as RestClientCreateDTO,
+				),
 			);
 
-		if (Service.supportsPleromaApi(driver))
+		if (Service.supportsPleromaApi(software))
 			return Ok(
-				new PleromaApiAdapter(driver, server, payload as RestClientCreateDTO),
+				new PleromaApiAdapter(
+					software,
+					instance,
+					payload as RestClientCreateDTO,
+				),
 			);
 
-		if (Service.supportsMastoApiV2(driver))
+		if (Service.supportsMastoApiV2(software))
 			return Ok(
-				new MastoApiAdapter(driver, server, payload as RestClientCreateDTO),
+				new MastoApiAdapter(software, instance, payload as RestClientCreateDTO),
 			);
 
 		return Ok(new BaseApiAdapter());
