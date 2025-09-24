@@ -16,7 +16,6 @@ import {
 	AppBskyGraphGetFollows,
 	ComAtprotoIdentityResolveHandle,
 } from '@atproto/api';
-import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import {
 	MastoAccount,
@@ -39,6 +38,7 @@ import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.
 import { ApiAsyncResult } from '../../../utils/api-result.js';
 import { Err, Ok } from '../../../utils/index.js';
 import { DriverWebfingerType } from '../../../types/query.types.js';
+import { getBskyAgent, getXrpcAgent } from '../../../utils/atproto.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;

@@ -32,7 +32,6 @@ class AtProtoAuthService {
 			new URL(service),
 			fetch,
 			(evt, session1) => {
-				console.log('[INFO]: atproto event', evt);
 				storedSession = session1!;
 			},
 		);
@@ -86,7 +85,6 @@ class AtProtoAuthService {
 		let nextSession: AtpSessionData | null = null;
 
 		function evtHandler(evt: AtpSessionEvent, session: AtpSessionData) {
-			// console.log('[INFO]: atproto auth event', evt, session);
 			nextEvt = evt;
 			nextSession = session;
 		}

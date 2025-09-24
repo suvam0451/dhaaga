@@ -304,7 +304,7 @@ class GlobalStateService {
 				const _pdsUrl = resumeResult.pdsUrl;
 
 				// save the updated session object
-				AtProtoAuthService.setAtProtoSession(db, _acct, _sess);
+				AccountMetadataDbService.setAtProtoSession(db, _acct, _sess);
 
 				payload = {
 					..._sess,

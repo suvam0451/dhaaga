@@ -34,7 +34,7 @@ export type AtpLoginResponse = {
 	};
 };
 
-export type AppAtpSessionData = AtpSessionData & {
+export type AppAtpSessionData = any & {
 	subdomain: string;
 	pdsUrl: string;
 	clientId: string | number;

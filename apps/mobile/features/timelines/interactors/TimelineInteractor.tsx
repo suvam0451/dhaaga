@@ -3,6 +3,7 @@ import {
 	usePostTimelineState,
 	usePostTimelineDispatch,
 	PostTimelineStateAction,
+	TimelineFetchMode,
 } from '@dhaaga/core';
 import { useLocalSearchParams } from 'expo-router';
 import { useAppDb } from '../../../hooks/utility/global-state-extractors';
@@ -10,6 +11,7 @@ import useTimelineQuery from '../api/useTimelineQuery';
 import TimelinePresenter from '../presenters/TimelinePresenter';
 import TimelineErrorView from '../view/TimelineErrorView';
 import { PostTimelinePlaceholderView } from '../components/PostSkeletonView';
+import IdleTimelineView from '../IdleTimelineView';
 
 function TimelineInteractor() {
 	const { db } = useAppDb();
@@ -66,6 +68,7 @@ function TimelineInteractor() {
 		});
 	}, [fetchStatus]);
 
+	if (State.feedType === TimelineFetchMode.IDLE) return <IdleTimelineView />;
 	if (State.items.length === 0 && !isFetched)
 		return <PostTimelinePlaceholderView />;
 	if (error) return <TimelineErrorView error={error} />;

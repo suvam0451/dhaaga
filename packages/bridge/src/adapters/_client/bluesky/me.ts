@@ -5,11 +5,11 @@ import {
 	AppBskyActorGetProfile,
 	AtpAgent,
 } from '@atproto/api';
-import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { ApiAsyncResult } from '../../../utils/api-result.js';
 import { Err, Ok } from '../../../utils/index.js';
 import { ApiErrorCode } from '../../../types/result.types.js';
+import { getBskyAgent, getXrpcAgent } from '../../../utils/atproto.js';
 
 export class BlueskyMeRouter implements MeRoute {
 	dto: AppAtpSessionData;

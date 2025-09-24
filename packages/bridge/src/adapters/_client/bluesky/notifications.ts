@@ -5,7 +5,6 @@ import {
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { MastoNotification } from '../../../types/mastojs.types.js';
 import { MegaNotification } from '../../../types/megalodon.types.js';
-import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import type {
 	AppBskyNotificationListNotifications,
 	ChatBskyConvoGetConvo,
@@ -17,6 +16,7 @@ import type {
 } from '@atproto/api';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
 import type { AppAtpSessionData } from '../../../types/atproto.js';
+import { getBskyAgent, getXrpcAgent } from '../../../utils/atproto.js';
 
 class BlueskyNotificationsRouter implements NotificationsRoute {
 	dto: AppAtpSessionData;

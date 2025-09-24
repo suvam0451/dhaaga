@@ -164,7 +164,7 @@ function ABS_Select_Account() {
 						hide();
 						router.navigate(APP_ROUTING_ENUM.ADD_ACCOUNT);
 					}}
-					style={{ marginTop: 32 }}
+					style={{ marginTop: 32, marginBottom: 64 }}
 				/>
 			)}
 			data={data}

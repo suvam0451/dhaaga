@@ -10,7 +10,6 @@ import {
 	AppBskyFeedGetTimeline,
 	AppBskyFeedSearchPosts,
 } from '@atproto/api';
-import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import {
 	InvokeBskyFunction,
 	InvokeBskyFunction_Improved,
@@ -19,6 +18,7 @@ import { AppAtpSessionData } from '../../../types/atproto.js';
 import { ApiAsyncResult } from '../../../utils/api-result.js';
 import { ApiErrorCode } from '../../../types/result.types.js';
 import { Err, Ok } from '../../../utils/index.js';
+import { getBskyAgent, getXrpcAgent } from '../../../utils/atproto.js';
 
 type FeedGetQueryDto = {
 	feed: string;

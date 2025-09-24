@@ -3,8 +3,6 @@ import {
 	StatusesRoute,
 } from '../_router/routes/statuses.js';
 import { LibraryPromise } from '../_router/routes/_types.js';
-import { Endpoints } from 'misskey-js';
-import { getBskyAgent } from '../_router/_api.js';
 import {
 	AppBskyFeedGetPostThread,
 	AtpSessionData,
@@ -19,6 +17,7 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '../../../types/driver.types.js';
+import { getBskyAgent } from '../../../utils/atproto.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
