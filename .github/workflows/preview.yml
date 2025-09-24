@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: 25
+          java-version: 21
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - uses: actions/setup-node@v5 # Install Node.js
