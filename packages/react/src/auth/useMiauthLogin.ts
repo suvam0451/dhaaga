@@ -29,7 +29,7 @@ function useMiauthLogin(instance: string, signInUrl: string) {
 
 	const lastState = useRef<string | null>(null);
 
-	function reset() {
+	function resetAuth() {
 		setIsLoading(false);
 		setCode(null);
 		setError(null);
@@ -77,7 +77,7 @@ function useMiauthLogin(instance: string, signInUrl: string) {
 		userData: UserData,
 		code: Code,
 		setCode,
-		reset,
+		reset: resetAuth,
 	};
 }
 
