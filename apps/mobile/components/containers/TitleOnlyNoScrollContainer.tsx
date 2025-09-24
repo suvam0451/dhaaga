@@ -14,7 +14,13 @@ function TitleOnlyNoScrollContainer({
 	children,
 }: TitleOnlyStackHeaderContainerProps) {
 	return (
-		<View style={{ height: '100%', backgroundColor: APP_THEME.BACKGROUND }}>
+		<View
+			style={{
+				height: '100%',
+				backgroundColor: APP_THEME.BACKGROUND,
+				display: 'flex',
+			}}
+		>
 			<Animated.View style={[styles.header]}>
 				<TopNavbarGeneric title={headerTitle} />
 			</Animated.View>

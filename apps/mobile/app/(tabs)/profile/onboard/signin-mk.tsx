@@ -1,5 +1,4 @@
-import { Dimensions, View, ScrollView, Alert } from 'react-native';
-import WebView from 'react-native-webview';
+import { Alert } from 'react-native';
 import { useMiauthLogin } from '@dhaaga/react';
 import { router, useLocalSearchParams } from 'expo-router';
 import TitleOnlyNoScrollContainer from '../../../../components/containers/TitleOnlyNoScrollContainer';
@@ -12,6 +11,7 @@ import {
 } from '../../../../hooks/utility/global-state-extractors';
 import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+import { AppAuthWebView } from '../../../../components/lib/WebView';
 
 function MisskeySignInStack() {
 	const params = useLocalSearchParams();
@@ -53,35 +53,21 @@ function MisskeySignInStack() {
 
 	return (
 		<TitleOnlyNoScrollContainer headerTitle={`Misskey Sign-In`}>
-			<View
-				style={{
-					height: '100%',
-					display: 'flex',
-				}}
-			>
-				<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-					<WebView
-						style={{
-							flex: 1,
-							minWidth: Dimensions.get('window').width - 20,
-							opacity: completed ? 0.1 : 1,
-						}}
-						source={{ uri: _signInUrl }}
-						onNavigationStateChange={RNWebviewStateChangeCallback}
-					/>
-				</ScrollView>
-
-				{completed && (
-					<AccountConfirmationPopup
-						onConfirm={confirm}
-						isLoading={false}
-						userData={userData ? { ...userData!, software: _domain } : null}
-						buttonColor={
-							'linear-gradient(90deg, rgb(0, 179, 50), rgb(170,' + ' 203, 0))'
-						}
-					/>
-				)}
-			</View>
+			<AppAuthWebView
+				uri={_signInUrl}
+				isBlurred={completed}
+				onNavigationStateChange={RNWebviewStateChangeCallback}
+			/>
+			{completed && (
+				<AccountConfirmationPopup
+					onConfirm={confirm}
+					isLoading={false}
+					userData={userData ? { ...userData!, software: _domain } : null}
+					buttonColor={
+						'linear-gradient(90deg, rgb(0, 179, 50), rgb(170,' + ' 203, 0))'
+					}
+				/>
+			)}
 		</TitleOnlyNoScrollContainer>
 	);
 }
