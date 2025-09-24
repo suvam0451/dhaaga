@@ -7,23 +7,23 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 import WebView from 'react-native-webview';
-import TitleOnlyNoScrollContainer from '../../../components/containers/TitleOnlyNoScrollContainer';
-import HideOnKeyboardVisibleContainer from '../../../components/containers/HideOnKeyboardVisibleContainer';
+import TitleOnlyNoScrollContainer from '../../../../components/containers/TitleOnlyNoScrollContainer';
+import HideOnKeyboardVisibleContainer from '../../../../components/containers/HideOnKeyboardVisibleContainer';
 import { router, useLocalSearchParams } from 'expo-router';
 import { KNOWN_SOFTWARE, type MastoAccountCredentials } from '@dhaaga/bridge';
-import PleromaPasteToken from '../components/PleromaPasteToken';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
-import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
+import PleromaPasteToken from '../../../../features/onboarding/components/PleromaPasteToken';
+import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
 import {
 	useAppDb,
 	useAppPublishers,
 	useAppTheme,
 	useHub,
-} from '../../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../../styles/AppFonts';
+} from '../../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '../../../../styles/AppFonts';
 import { useActivityPubAuth } from '@dhaaga/react';
-import AccountDbService from '../../../services/db/account-db.service';
-import appStyling from '../../../styles/AppStyles';
+import AccountDbService from '../../../../services/db/account-db.service';
+import appStyling from '../../../../styles/AppStyles';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();

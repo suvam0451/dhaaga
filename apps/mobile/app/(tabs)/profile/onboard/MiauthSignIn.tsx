@@ -2,16 +2,16 @@ import { Dimensions, View, ScrollView, Alert } from 'react-native';
 import WebView from 'react-native-webview';
 import { useMiauthLogin } from '@dhaaga/react';
 import { router, useLocalSearchParams } from 'expo-router';
-import TitleOnlyNoScrollContainer from '../../../components/containers/TitleOnlyNoScrollContainer';
-import AccountConfirmationPopup from '../AccountConfirmationPopup';
-import AccountDbService from '../../../services/db/account-db.service';
+import TitleOnlyNoScrollContainer from '../../../../components/containers/TitleOnlyNoScrollContainer';
+import AccountConfirmationPopup from '../../../../features/onboarding/AccountConfirmationPopup';
+import AccountDbService from '../../../../services/db/account-db.service';
 import {
 	useAppDb,
 	useAppPublishers,
 	useHub,
-} from '../../../hooks/utility/global-state-extractors';
-import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+} from '../../../../hooks/utility/global-state-extractors';
+import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
+import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 
 function MisskeySignInStack() {
 	const params = useLocalSearchParams();
