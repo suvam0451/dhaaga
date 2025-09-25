@@ -1,18 +1,16 @@
 import { useLocalSearchParams } from 'expo-router';
-import TitleOnlyNoScrollContainer from '../../../../../components/containers/TitleOnlyNoScrollContainer';
-import { Dimensions, ScrollView, Text, View } from 'react-native';
+import TitleOnlyNoScrollContainer from '../../components/containers/TitleOnlyNoScrollContainer';
+import { Dimensions, ScrollView, View } from 'react-native';
 import WebView from 'react-native-webview';
 import { useState } from 'react';
-import { AppText } from '../../../../../components/lib/Text';
-import HideOnKeyboardVisibleContainer from '../../../../../components/containers/HideOnKeyboardVisibleContainer';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { AppText } from '../../components/lib/Text';
+import HideOnKeyboardVisibleContainer from '../../components/containers/HideOnKeyboardVisibleContainer';
+import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '../../types/app.types';
 
-function AtProtoLoginPresenter() {
+function AtProtoOAuthLoginTest() {
 	const params = useLocalSearchParams();
-	const _pds: string = params['pds'] as string;
-	const _handle: string = params['handle'] as string;
 	const _signInUrl: string = params['signInUrl'] as string;
 	const [CallbackUrl, setCallbackUrl] = useState(null);
 	const { theme } = useAppTheme();
@@ -52,4 +50,4 @@ function AtProtoLoginPresenter() {
 	);
 }
 
-export default AtProtoLoginPresenter;
+export default AtProtoOAuthLoginTest;

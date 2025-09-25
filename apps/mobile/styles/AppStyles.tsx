@@ -12,6 +12,18 @@ const appStyling = StyleSheet.create({
 		// borderRadius: 8
 		zIndex: 99,
 	},
+	button: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		marginVertical: 8,
+		borderRadius: 8,
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		width: 148,
+	},
 });
 
 export default appStyling;

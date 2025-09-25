@@ -1,7 +1,9 @@
+import { AtpAgent, AtpSessionData } from '@atproto/api';
 import { AtprotoApiAdapter } from '../adapters/index.js';
 import { ApiAsyncResult } from './api-result.js';
 import { Err, Ok } from './result.js';
 import { ApiErrorCode } from '../types/result.types.js';
+import { AppAtpSessionData } from '../types/atproto.js';
 
 class Util {
 	static async generateFeedUrl(
@@ -25,4 +27,35 @@ class Util {
 	}
 }
 
-export { Util as AtprotoUtils };
+function getBskyAgent(dto: AtpSessionData): AtpAgent {
+	const agent = new AtpAgent({
+		service: 'https://bsky.social',
+	});
+
+	agent.sessionManager.session = dto;
+	return agent;
+}
+
+/**
+ * Some requests need to be made to the PDS directly
+ * @param dto
+ */
+function getXrpcAgent(dto: AppAtpSessionData): AtpAgent {
+	const agent = new AtpAgent({
+		service: `${dto.pdsUrl}/xrpc`,
+	});
+
+	agent.sessionManager.session = dto;
+	return agent;
+}
+
+function getChatAgent(dto: AppAtpSessionData): AtpAgent {
+	const agent = new AtpAgent({
+		service: dto.pdsUrl,
+	});
+
+	agent.sessionManager.session = dto;
+	return agent;
+}
+
+export { Util as AtprotoUtils, getBskyAgent, getXrpcAgent, getChatAgent };

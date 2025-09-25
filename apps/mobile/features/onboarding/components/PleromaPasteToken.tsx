@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_FONT } from '../../../styles/AppTheme';
@@ -6,35 +6,32 @@ import { APP_FONTS } from '../../../styles/AppFonts';
 
 type PleromaPasteTokenProps = {
 	domain: string;
-	setCode: Dispatch<SetStateAction<string>>;
+	setCode: Dispatch<SetStateAction<string | null>>;
 };
 
-const PleromaPasteToken = memo(
-	({ domain, setCode }: PleromaPasteTokenProps) => {
-		function onChangeText(input: string) {
-			console.log(input);
-			setCode(input);
-		}
+function PleromaPasteToken({ domain, setCode }: PleromaPasteTokenProps) {
+	function onChangeText(input: string) {
+		setCode(input);
+	}
 
-		if (domain === KNOWN_SOFTWARE.MASTODON) return <View />;
+	if (domain === KNOWN_SOFTWARE.MASTODON) return <View />;
 
-		if (domain !== KNOWN_SOFTWARE.PLEROMA && domain !== KNOWN_SOFTWARE.AKKOMA)
-			return <View />;
+	if (domain !== KNOWN_SOFTWARE.PLEROMA && domain !== KNOWN_SOFTWARE.AKKOMA)
+		return <View />;
 
-		return (
-			<View style={{ paddingVertical: 16 }}>
-				<TextInput
-					multiline={false}
-					placeholder={'Paste Pleroma/Akkoma token here'}
-					placeholderTextColor={'rgba(255, 255, 255, 0.6)'}
-					style={styles.textInput}
-					autoCapitalize={'none'}
-					onChangeText={onChangeText}
-				/>
-			</View>
-		);
-	},
-);
+	return (
+		<View style={{ paddingVertical: 16 }}>
+			<TextInput
+				multiline={false}
+				placeholder={'Paste Pleroma/Akkoma token here'}
+				placeholderTextColor={'rgba(255, 255, 255, 0.6)'}
+				style={styles.textInput}
+				autoCapitalize={'none'}
+				onChangeText={onChangeText}
+			/>
+		</View>
+	);
+}
 
 const styles = StyleSheet.create({
 	textInput: {
@@ -43,7 +40,6 @@ const styles = StyleSheet.create({
 		color: APP_FONT.MONTSERRAT_HEADER,
 		fontSize: 16,
 		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		// marginBottom: 24,
 	},
 });
 

@@ -10,13 +10,13 @@ import {
 	AppBskyFeedSearchPosts,
 	AppBskyUnspeccedGetPopularFeedGenerators,
 } from '@atproto/api';
-import { getBskyAgent, getXrpcAgent } from '../_router/_api.js';
 import { MastoStatus } from '../../../types/mastojs.types.js';
 import { MegaStatus } from '../../../types/megalodon.types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { ApiErrorCode } from '../../../types/result.types.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
+import { getBskyAgent, getXrpcAgent } from '../../../utils/atproto.js';
 
 class BlueskySearchRouter implements SearchRoute {
 	dto: AppAtpSessionData;

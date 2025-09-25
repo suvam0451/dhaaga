@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
@@ -11,21 +11,22 @@ type Props = {
 	iconSizeMultiplier?: number;
 	addText?: boolean;
 	height?: number;
+	style?: StyleProp<ViewStyle>;
 };
 
-function SoftwareHeader({ software, addText, height = 64 }: Props) {
+function SoftwareHeader({ software, addText, height = 64, style }: Props) {
 	const { theme } = useAppTheme();
 	const Theming = useKnownSoftware(software);
 
 	const logo = Theming.logo;
 	if (logo === undefined) return <View />;
 
-	const WIDTH = (logo.width / logo.height) * height;
+	const WIDTH = (logo.width! / logo.height!) * height;
 	return (
-		<>
+		<View style={[{ flexDirection: 'row', alignItems: 'center' }, style]}>
 			{/*@ts-ignore-next-line*/}
 			<Image
-				source={{ uri: logo.localUri }}
+				source={{ uri: logo.localUri! }}
 				style={{
 					width: WIDTH,
 					height: height,
@@ -41,14 +42,14 @@ function SoftwareHeader({ software, addText, height = 64 }: Props) {
 					{Theming?.label}
 				</Text>
 			)}
-		</>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	accountCategoryText: {
 		fontSize: 16,
-		marginLeft: 6,
+		marginLeft: 10,
 		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 	},
 });

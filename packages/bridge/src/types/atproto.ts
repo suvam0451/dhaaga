@@ -1,4 +1,4 @@
-// import { AtpSessionData } from '@atproto/api';
+import type { AtpSessionData } from '@atproto/api';
 
 export type AtpLoginResponse = {
 	success: boolean;

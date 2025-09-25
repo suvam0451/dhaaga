@@ -176,3 +176,6 @@ export { KeyExtractorUtil } from './utils/key-extractor.js';
 export type { ApiResult } from './utils/api-result.js';
 export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';
+
+export * from './types.js';
+export * from './auth/index.js';

@@ -1,9 +1,4 @@
-import {
-	View,
-	StyleSheet,
-	TouchableOpacity,
-	ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import HideOnKeyboardVisibleContainer from '../containers/HideOnKeyboardVisibleContainer';
 import { Asset, useAssets } from 'expo-asset';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -17,6 +12,7 @@ import Animated, {
 	withSpring,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
+import { AppButtonVariantA } from '../lib/Buttons';
 
 type OnboardingCtaBannerProps = {
 	titleText: string;
@@ -81,7 +77,6 @@ function OnboardingSignInBanner({
 		<View style={{ marginBottom: 32 }}>
 			<HideOnKeyboardVisibleContainer>
 				<View style={styles.logoArrayContainer}>
-					{/*</Pressable>*/}
 					<Ionicons
 						name={'close-outline'}
 						color={theme.secondary.a50}
@@ -175,68 +170,25 @@ function OnboardingSignInButton({
 				? 'white'
 				: theme.secondary.a20;
 	return (
-		<View style={{ alignItems: 'center', marginTop: 16 }}>
-			<TouchableOpacity
-				style={[
-					styles.button,
-					{ backgroundColor: color || theme.primary.a0 },
-					isLoading && styles.buttonDisabled,
-				]}
-				onPress={onSubmit}
-				disabled={isLoading || !canSubmit}
-			>
-				{isLoading ? (
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-						<ActivityIndicator size="small" color={BG_COLOR} />
-						<AppText.SemiBold
-							style={[
-								styles.buttonText,
-								{ fontSize: 16, color: BG_COLOR, marginLeft: 8 },
-							]}
-						>
-							{t(`onboarding.loginButton`)}
-						</AppText.SemiBold>
-					</View>
-				) : (
-					<AppText.SemiBold style={{ fontSize: 16, color: BG_COLOR }}>
-						{t(`onboarding.loginButton`)}
-					</AppText.SemiBold>
-				)}
-			</TouchableOpacity>
-		</View>
+		<AppButtonVariantA
+			label={t(`onboarding.loginButton`)}
+			loading={isLoading}
+			onClick={onSubmit}
+			style={{ backgroundColor: color, marginTop: 16 }}
+			textStyle={{
+				color: BG_COLOR,
+			}}
+			disabled={isLoading || !canSubmit}
+		/>
 	);
 }
 
 const styles = StyleSheet.create({
-	button: {
-		backgroundColor: '#6200ee',
-		paddingVertical: 10,
-		paddingHorizontal: 24,
-		borderRadius: 8,
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		width: 128,
-	},
-	buttonDisabled: {
-		opacity: 0.87,
-	},
-	buttonText: {
-		// color: '#fff',
-		// fontSize: 16,
-	},
 	logoArrayContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginHorizontal: 'auto',
-	},
-	inputContainerRoot: {
-		flexDirection: 'row',
-		borderWidth: 2,
-		borderColor: 'rgba(136,136,136,0.4)',
-		borderRadius: 8,
-		marginBottom: 12,
 	},
 });
 

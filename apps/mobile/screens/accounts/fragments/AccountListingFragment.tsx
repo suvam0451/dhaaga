@@ -6,12 +6,7 @@ import {
 	Pressable,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { memo, MutableRefObject } from 'react';
-import { APP_FONT } from '../../../styles/AppTheme';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import { FontAwesome } from '@expo/vector-icons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
 import {
 	Account,
@@ -37,106 +32,13 @@ type Props = {
 	onListChange: () => void;
 };
 
-type AccountOptionsProps = {
-	IsExpanded: boolean;
-	setDeleteDialogExpanded: (o: boolean) => void;
-	dialogTarget: MutableRefObject<Account>;
-	acct: Account;
-};
-
-const ICON_SIZE = 22;
-
-/**
- * @deprecated
- */
-export const AccountOptions = memo(function Foo({
-	IsExpanded,
-	dialogTarget,
-	setDeleteDialogExpanded,
-	acct,
-}: AccountOptionsProps) {
-	const { theme } = useAppTheme();
-
-	function onFixClicked() {
-		// FIXME: point this to the sql account
-		dialogTarget.current = acct;
-	}
-
-	const textStyle = {
-		color: theme.textColor.medium,
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		fontSize: 16,
-		marginTop: 4,
-	};
-
-	return (
-		<View
-			style={{
-				display: IsExpanded ? 'flex' : 'none',
-				marginTop: 8,
-				paddingHorizontal: 8,
-				borderRadius: 8,
-			}}
-		>
-			<View
-				style={{
-					flexDirection: 'row',
-					justifyContent: 'flex-start',
-					alignItems: 'center',
-					marginVertical: 8,
-					paddingVertical: 4,
-				}}
-			>
-				<TouchableOpacity style={styles.actionButton}>
-					<Octicons
-						name="browser"
-						size={ICON_SIZE}
-						color={theme.textColor.medium}
-					/>
-					<Text style={textStyle}>Edit</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.actionButton} onPress={onFixClicked}>
-					<MaterialIcons
-						name="auto-fix-high"
-						size={ICON_SIZE}
-						color={APP_FONT.MONTSERRAT_BODY}
-					/>
-					<Text style={textStyle}>Fix</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.actionButton}>
-					<Octicons
-						name="sync"
-						size={ICON_SIZE}
-						color={theme.textColor.medium}
-					/>
-					<Text style={textStyle}>Sync</Text>
-				</TouchableOpacity>
-				<TouchableOpacity
-					style={styles.actionButton}
-					onPress={() => {
-						dialogTarget.current = acct;
-						setDeleteDialogExpanded(true);
-					}}
-				>
-					<FontAwesome name="trash-o" size={ICON_SIZE} color={'#ce6779'} />
-					<Text style={textStyle}>Remove</Text>
-				</TouchableOpacity>
-			</View>
-		</View>
-	);
-});
-
 type AccountPfpProps = {
 	url: string;
 	selected: boolean;
 	onClicked: () => void;
 };
 
-export const AccountPfp = memo(function Foo({
-	url,
-	selected,
-	onClicked,
-}: AccountPfpProps) {
+export function AccountPfp({ url, selected, onClicked }: AccountPfpProps) {
 	const { theme } = useAppTheme();
 	return (
 		<Pressable
@@ -169,7 +71,7 @@ export const AccountPfp = memo(function Foo({
 			/>
 		</Pressable>
 	);
-});
+}
 
 type selectedIndicatorProps = {
 	displayName?: string;
@@ -178,7 +80,7 @@ type selectedIndicatorProps = {
 	selected: boolean;
 	onClicked: () => void;
 };
-export const AccountDetails = memo(function Foo({
+export function AccountDetails({
 	displayName,
 	username,
 	selected,
@@ -220,7 +122,7 @@ export const AccountDetails = memo(function Foo({
 			</Text>
 		</Pressable>
 	);
-});
+}
 
 function AccountListingFragment({ acct, onListChange }: Props) {
 	const { theme } = useAppTheme();
@@ -291,7 +193,7 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 				>
 					<AccountPfp
 						selected={acct.selected as boolean}
-						url={avatar}
+						url={avatar!}
 						onClicked={() => {
 							AccountService.select(db, acct);
 							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
@@ -346,21 +248,10 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
 	image: {
 		flex: 1,
 		width: '100%',
 		borderRadius: 6,
-	},
-	actionButton: {
-		flex: 1,
-		paddingVertical: 6,
-		alignItems: 'center',
-		marginRight: 8,
 	},
 	selectedIndicator: {
 		position: 'absolute',
