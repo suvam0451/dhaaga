@@ -74,18 +74,19 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-build-properties',
 			{
 				android: {
-					compileSdkVersion: 35,
-					targetSdkVersion: 35,
-					buildToolsVersion: '35.0.0',
-					// enableProguardInReleaseBuilds: false, // deprecated
+					compileSdkVersion: 36.1,
+					targetSdkVersion: 36.1,
+					buildToolsVersion: '36.1.0',
 					enableMinifyInReleaseBuilds: true,
-					enableShrinkResourcesInReleaseBuilds: false,
+					enableShrinkResourcesInReleaseBuilds: true,
 					blockedPermissions: [
 						'android.permission.SYSTEM_ALERT_WINDOW',
 						'android.permission.READ_EXTERNAL_STORAGE',
 						'android.permission.WRITE_EXTERNAL_STORAGE',
 						'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
 					],
+					buildArchs: ['arm64-v8a'],
+					enableBundleCompression: true,
 				},
 			},
 		],
