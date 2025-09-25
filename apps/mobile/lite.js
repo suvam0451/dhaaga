@@ -44,10 +44,10 @@ function tweakGradleProperties() {
 	const TARGET = './android/gradle.properties';
 	let content = fs.readFileSync(TARGET, 'utf8');
 
-	content = content.replace(
-		'reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64',
-		'reactNativeArchitectures=arm64-v8a',
-	);
+	// content = content.replace(
+	// 	'reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64',
+	// 	'reactNativeArchitectures=arm64-v8a',
+	// );
 
 	content = content.replace(
 		'expo.useLegacyPackaging=false',
