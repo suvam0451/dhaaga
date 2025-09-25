@@ -16,6 +16,8 @@ jobs:
           cache: "npm"
       - run: npm install # Install dependencies
       - run: npm run build-deps
+      - run: npm install @react-native-community/cli
+        working-directory: ./apps/mobile
       - run: node lite.js # pre-requisites scripts
         working-directory: ./apps/mobile
         env:
