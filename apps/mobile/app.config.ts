@@ -74,8 +74,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-build-properties',
 			{
 				android: {
-					compileSdkVersion: 36.1,
-					targetSdkVersion: 36.1,
+					compileSdkVersion: 36,
+					targetSdkVersion: 36,
 					buildToolsVersion: '36.1.0',
 					enableMinifyInReleaseBuilds: true,
 					enableShrinkResourcesInReleaseBuilds: true,
