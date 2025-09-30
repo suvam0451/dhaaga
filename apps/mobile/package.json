@@ -1,6 +1,6 @@
 {
   "name": "@dhaaga/mobile",
-  "version": "0.16.4",
+  "version": "0.16.5",
   "main": "expo-router/entry",
   "dependencies": {
     "@dhaaga/bridge": "*",
@@ -64,7 +64,8 @@
     "dev": "expo start --dev-client",
     "apk": "eas build -p android --profile apk",
     "aab": "eas build -p android --profile aab",
-    "client": "eas build -p android --profile dev",
+    "dev-client:adroid": "eas build -p android --profile dev",
+    "dev-client:ios": "eas build -p ios --profile dev",
     "lite:manual": "react-native build-android --mode=release && cd android && ./gradlew assembleRelease",
     "lite": "node ./lite.js",
     "android": "expo run:android",
