@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import AppLogo from '../../../public/assets/dhaaga/icon.png';
 import BlueskyLogo from '../../../public/assets/branding/bluesky/logo.png';
 import MastodonLogo from '../../../public/assets/branding/mastodon/logo.png';
@@ -190,11 +189,11 @@ function AuthModeSelection({
 						className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center"
 						onClick={() => selectionCallback('atproto')}
 					>
-						<Image
+						<img
 							src={BlueskyLogo}
 							alt="bluesky logo"
 							className="h-12 w-auto"
-							objectFit={'contain'}
+							// objectFit={'contain'}
 						/>
 						<h2 className="text-xl font-semibold mt-4">Bluesky</h2>
 					</button>
@@ -203,11 +202,11 @@ function AuthModeSelection({
 						className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center"
 						onClick={() => selectionCallback('activitypub')}
 					>
-						<Image
+						<img
 							src={MastodonLogo}
 							alt="mastodon logo"
 							className="h-12 w-auto"
-							objectFit={'contain'}
+							// objectFit={'contain'}
 						/>
 						<h2 className="text-xl font-semibold mt-4">Mastodon</h2>
 					</button>
@@ -216,11 +215,11 @@ function AuthModeSelection({
 						className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center"
 						onClick={() => selectionCallback('miauth')}
 					>
-						<Image
+						<img
 							src={MisskeyLogo}
 							alt="misskey logo"
 							className="h-12 w-auto"
-							objectFit={'contain'}
+							// objectFit={'contain'}
 						/>
 						<h2 className="text-xl font-semibold mt-4">Misskey</h2>
 					</button>
@@ -229,11 +228,11 @@ function AuthModeSelection({
 						className="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center"
 						onClick={() => selectionCallback('lemmy')}
 					>
-						<Image
+						<img
 							src={LemmyLogo}
 							alt="lemmy logo"
 							className="h-12 w-auto"
-							objectFit={'contain'}
+							// objectFit={'contain'}
 						/>
 						<h2 className="text-xl font-semibold mt-4">Lemmy ⏳</h2>
 					</button>
@@ -260,11 +259,10 @@ function AccountCreationFragment() {
 
 	return (
 		<div className="flex flex-1 flex-col max-w-md mx-auto">
-			<Image
+			<img
 				src={AppLogo}
 				alt="app logo"
 				className="h-24 w-auto rounded-md mx-auto"
-				objectFit={'contain'}
 			/>
 			<h1 className="text-3xl font-bold text-center mt-6">Add an Account</h1>
 			<h1 className="text-xl font-medium text-center mt-1 mb-6">

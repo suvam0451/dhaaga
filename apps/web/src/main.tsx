@@ -1,9 +1,14 @@
-import { AppSidebar } from '@/components/sidebars/SidebarLeft';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/sidebars/SidebarLeft';
 import { CategoryHeader } from '@/components/CategoryHeader';
 import { StaticTabSwitcher } from '@/tabs/StaticTabSwitcher';
 
-export default function Home() {
+import './globals.css';
+
+function Page() {
 	return (
 		<SidebarProvider>
 			<AppSidebar />
@@ -16,3 +21,13 @@ export default function Home() {
 		</SidebarProvider>
 	);
 }
+
+const root = document.getElementById('root');
+
+ReactDOM.createRoot(root).render(
+	<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<Page />} />
+		</Routes>
+	</BrowserRouter>,
+);
