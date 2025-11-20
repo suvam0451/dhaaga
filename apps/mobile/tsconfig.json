@@ -17,13 +17,12 @@
     "strict": false
   },
   "include": [
-    "./*.ts",
-    "./*.tsx",
-    "./*.js"
+    "./**/*.ts",
+    "./**/*.tsx",
+    "./**/*.js"
   ],
   "exclude": [
     "node_modules"
   ],
-  "files": ["*/**"],
   "extends": "expo/tsconfig.base"
 }
