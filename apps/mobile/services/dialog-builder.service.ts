@@ -1,4 +1,7 @@
-import { AppDialogInstanceState } from '../states/_global';
+import {
+	AppDialogButtonAction,
+	AppDialogInstanceState,
+} from '../states/_global';
 import { APP_POST_VISIBILITY } from '../hooks/app/useVisibility';
 import { TFunction } from 'i18next';
 import { LOCALIZATION_NAMESPACE } from '../types/app.types';
@@ -56,14 +59,14 @@ export class DialogBuilderService {
 		totalCount: number,
 		hidden: boolean,
 		actions: {
-			onMoveUp: () => void;
-			onHide: () => void;
-			onUnhide: () => void;
-			onMoveDown: () => void;
-			onRemove: () => void;
+			onMoveUp: () => Promise<void>;
+			onHide: () => Promise<void>;
+			onUnhide: () => Promise<void>;
+			onMoveDown: () => Promise<void>;
+			onRemove: () => Promise<void>;
 		},
 	): AppDialogInstanceState {
-		const _actions = [];
+		const _actions: AppDialogButtonAction[] = [];
 
 		// if (index !== 0) {
 		// 	_actions.push({

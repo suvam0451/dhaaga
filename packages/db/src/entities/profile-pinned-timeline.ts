@@ -1,12 +1,12 @@
-import { DbErrorHandler } from './_base.repo';
-import { DataSource } from '../dataSource';
-import { Account, Profile, ProfilePinnedTimeline } from '../_schema';
-import { AccountService } from './account';
-import { ProfileService } from './profile';
+import { DbErrorHandler } from './_base.repo.js';
+import { DataSource } from '../dataSource.js';
+import { Account, Profile, ProfilePinnedTimeline } from '../_schema.js';
+import { AccountService } from './account.js';
+import { ProfileService } from './profile.js';
 import { RandomUtil } from '@dhaaga/bridge';
 import type { FeedObjectType } from '@dhaaga/bridge';
-import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
-import { getTimelinePins } from '../data/driver';
+import { APP_PINNED_OBJECT_TYPE } from '../types/db.types.js';
+import { getTimelinePins } from '../data/driver.js';
 
 @DbErrorHandler()
 class Repo {
@@ -106,7 +106,9 @@ class Service {
 				active: true,
 			});
 
-			all = all.sort((a, b) => a.id - b.id);
+			all = all.sort(
+				(a: ProfilePinnedTimeline, b: ProfilePinnedTimeline) => a.id - b.id,
+			);
 			let prev = -1;
 			for (let i = 0; i < all.length; i++) {
 				if (all[i]!.itemOrder <= prev) {
@@ -146,7 +148,10 @@ class Service {
 
 		for (const pin of recommendedPins) {
 			if (
-				!currentPins.find((o) => o.category === pin && o.server === acct.server)
+				!currentPins.find(
+					(o: ProfilePinnedTimeline) =>
+						o.category === pin && o.server === acct.server,
+				)
 			) {
 				db.profilePinnedTimeline.insert({
 					uuid: RandomUtil.nanoId(),

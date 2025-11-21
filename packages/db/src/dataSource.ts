@@ -15,7 +15,7 @@ import {
 	AppSetting,
 	AccountSetting,
 	ProfileSetting,
-} from './_schema';
+} from './_schema.js';
 import { SQLiteDatabase } from 'expo-sqlite';
 
 /**

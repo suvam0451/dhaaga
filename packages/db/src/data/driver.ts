@@ -1,4 +1,4 @@
-import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
+import { APP_PINNED_OBJECT_TYPE } from '../types/db.types.js';
 import { KNOWN_SOFTWARE, DriverService } from '@dhaaga/bridge';
 
 const searchTabs = [

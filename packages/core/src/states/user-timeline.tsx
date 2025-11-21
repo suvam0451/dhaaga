@@ -12,7 +12,7 @@ import {
 import {
 	timelineReducerBaseDefaults,
 	type TimelineReducerBaseState,
-} from './_timeline.shared';
+} from './_timeline.shared.js';
 
 type State = TimelineReducerBaseState<UserObjectType> & {};
 

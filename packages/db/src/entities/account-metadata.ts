@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { DbErrorHandler, RepoTemplate } from './_base.repo';
-import { Account, AccountMetadata } from '../_schema';
-import { DataSource } from '../dataSource';
-import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result';
+import { DbErrorHandler, RepoTemplate } from './_base.repo.js';
+import { Account, AccountMetadata } from '../_schema.js';
+import { DataSource } from '../dataSource.js';
+import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result.js';
 
 export type AccountMetadataRecordType = {
 	key: string;

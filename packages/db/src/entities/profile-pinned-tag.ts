@@ -1,9 +1,9 @@
-import { DbErrorHandler } from './_base.repo';
-import { DataSource } from '../dataSource';
-import { Account, Profile, ProfilePinnedTag } from '../_schema';
-import { ProfileService } from './profile';
+import { DbErrorHandler } from './_base.repo.js';
+import { DataSource } from '../dataSource.js';
+import { Account, Profile, ProfilePinnedTag } from '../_schema.js';
+import { ProfileService } from './profile.js';
 import { RandomUtil } from '@dhaaga/bridge';
-import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
+import { APP_PINNED_OBJECT_TYPE } from '../types/db.types.js';
 
 @DbErrorHandler()
 class Repo {}

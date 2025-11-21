@@ -1,2 +1,2 @@
-export * from './media.service';
-export * from './reaction.service';
+export * from './media.service.js';
+export * from './reaction.service.js';

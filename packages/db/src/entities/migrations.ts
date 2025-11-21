@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result';
+import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result.js';
 
 type ExpoSqliteColumnDefinition = {
 	cid: number;

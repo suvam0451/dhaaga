@@ -1,20 +1,20 @@
 import { z } from 'zod';
-import { Account } from '../_schema';
-import { DbErrorHandler } from './_base.repo';
+import { Account } from '../_schema.js';
+import { DbErrorHandler } from './_base.repo.js';
 import {
 	type AccountMetadataRecordType,
 	AccountMetadataService,
-} from './account-metadata';
+} from './account-metadata.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { DataSource } from '../dataSource';
+import { DataSource } from '../dataSource.js';
 import { gt } from '@dhaaga/orm';
 import { RandomUtil } from '@dhaaga/bridge';
-import { ProfileService } from './profile';
+import { ProfileService } from './profile.js';
 import {
 	AccountCollectionService,
 	ReservedCollection,
-} from './account-collection';
-import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result';
+} from './account-collection.js';
+import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result.js';
 
 /**
  * --- Validators

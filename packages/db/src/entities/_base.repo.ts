@@ -1,4 +1,4 @@
-import { DbErrorCode, type DbResult, Err } from '../utils/db-result';
+import { DbErrorCode, type DbResult, Err } from '../utils/db-result.js';
 
 export abstract class RepoTemplate<T> {
 	static describe() {}

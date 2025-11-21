@@ -1,6 +1,6 @@
-import { DataSource } from '../dataSource';
+import { DataSource } from '../dataSource.js';
 import { RandomUtil } from '@dhaaga/bridge';
-import { Account, AccountCollection, AccountSavedPost } from '../_schema';
+import { Account, AccountCollection, AccountSavedPost } from '../_schema.js';
 
 export enum ReservedCollection {
 	DEFAULT = '__default__',

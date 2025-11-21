@@ -1,11 +1,11 @@
-import { DbErrorHandler } from './_base.repo';
-import { DataSource } from '../dataSource';
-import { Account, Profile, ProfilePinnedUser } from '../_schema';
-import { AccountService } from './account';
+import { DbErrorHandler } from './_base.repo.js';
+import { DataSource } from '../dataSource.js';
+import { Account, Profile, ProfilePinnedUser } from '../_schema.js';
+import { AccountService } from './account.js';
 import { z } from 'zod';
 import { RandomUtil } from '@dhaaga/bridge';
 import type { UserObjectType } from '@dhaaga/bridge';
-import { APP_PINNED_OBJECT_TYPE } from '../types/db.types';
+import { APP_PINNED_OBJECT_TYPE } from '../types/db.types.js';
 
 const profileUserPinCreateSchema = z.object({
 	server: z.string(),

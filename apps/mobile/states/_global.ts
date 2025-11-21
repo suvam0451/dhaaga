@@ -51,21 +51,26 @@ export enum APP_KNOWN_MODAL {
 	USER_PEEK = 'userPeekModal',
 }
 
+export type AppDialogButtonAction = {
+	// label that appears on the button
+	label: string;
+	// action to perform on press
+	onPress: () => Promise<void>;
+	// variant of the button (impacts theming)
+	variant?:
+		| 'default'
+		| 'switch'
+		| 'important'
+		| 'dismiss'
+		| 'warning'
+		| 'destructive';
+	selected?: boolean;
+};
+
 export type AppDialogInstanceState = {
 	title: string;
 	description: string[];
-	actions: {
-		label: string;
-		onPress: () => Promise<void>;
-		variant?:
-			| 'default'
-			| 'switch'
-			| 'important'
-			| 'dismiss'
-			| 'warning'
-			| 'destructive';
-		selected?: boolean;
-	}[];
+	actions: AppDialogButtonAction[];
 };
 
 type AppDialogState = {

@@ -2,7 +2,7 @@ import { DataSource } from '@dhaaga/db';
 import {
 	timelineReducerBaseDefaults,
 	type TimelineReducerBaseState,
-} from './_timeline.shared';
+} from './_timeline.shared.js';
 import { produce } from 'immer';
 import { RandomUtil, type ResultPage } from '@dhaaga/bridge';
 import type { FeedObjectType } from '@dhaaga/bridge';

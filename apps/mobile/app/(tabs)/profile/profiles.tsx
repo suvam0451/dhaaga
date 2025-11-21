@@ -32,29 +32,29 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	const { appSub } = useAppPublishers();
 	const { db } = useAppDb();
 
-	function _onDone() {
+	async function _onDone() {
 		appSub.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
 		hide();
 	}
-	function onUnhide() {
+	async function onUnhide() {
 		ProfileService.unhideProfile(db, profile.id);
 		_onDone();
 	}
 
-	function onMoveUp() {}
+	async function onMoveUp() {}
 
 	async function onRemoveConfirm() {
 		ProfileService.removeProfile(db, profile.id);
 		_onDone();
 	}
 
-	function onRemove() {
+	async function onRemove() {
 		show(DialogBuilderService.confirmProfileDeletion(onRemoveConfirm));
 	}
 
-	function onMoveDown() {}
+	async function onMoveDown() {}
 
-	function onHide() {
+	async function onHide() {
 		ProfileService.hideProfile(db, profile.id);
 		_onDone();
 	}
@@ -189,7 +189,7 @@ function Page() {
 
 				{Data.map((acct, i) => (
 					<View key={i}>
-						{acct.profiles.map((o, k) => (
+						{acct.profiles!.map((o, k) => (
 							<ProfileFragment acct={acct} profile={o} key={k} />
 						))}
 					</View>
