@@ -75,6 +75,23 @@ export function useAppTheme() {
 	);
 }
 
+export function useAppActiveSession() {
+	return useGlobalState(
+		useShallow((o) => ({
+			session: o.session,
+		})),
+	);
+}
+
+export function useAppGlobalStateActions() {
+	return useGlobalState(
+		useShallow((o) => ({
+			restoreSession: o.loadApp,
+			appInit: o.appInitialize,
+		})),
+	);
+}
+
 export function useHub() {
 	return useGlobalState(
 		useShallow((o) => ({

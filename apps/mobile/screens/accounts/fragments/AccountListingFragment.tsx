@@ -17,13 +17,12 @@ import {
 import {
 	useAppDb,
 	useAppDialog,
+	useAppGlobalStateActions,
 	useAppPublishers,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
@@ -130,11 +129,7 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 	const { show, hide } = useAppDialog();
 	const { db } = useAppDb();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.DIALOGS]);
-	const { loadApp } = useGlobalState(
-		useShallow((o) => ({
-			loadApp: o.loadApp,
-		})),
-	);
+	const { restoreSession } = useAppGlobalStateActions();
 
 	function onMoreActions() {
 		show(
@@ -145,7 +140,7 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 					show(
 						DialogBuilderService.deleteAccountConfirm(t, async () => {
 							AccountService.removeById(db, acct.id);
-							loadApp();
+							restoreSession();
 							hide();
 							onListChange();
 						}),
@@ -197,14 +192,14 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 						onClicked={() => {
 							AccountService.select(db, acct);
 							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
-							loadApp();
+							restoreSession();
 						}}
 					/>
 					<AccountDetails
 						onClicked={() => {
 							AccountService.select(db, acct);
 							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
-							loadApp();
+							restoreSession();
 						}}
 						selected={acct.selected as boolean}
 						displayName={displayName}

@@ -88,11 +88,15 @@ class Service {
 	}
 
 	static getActiveProfile(db: DataSource, acct: Account) {
-		const found = db.profile.findOne({
+		let found = db.profile.findOne({
 			accountId: acct.id,
 			selected: true,
 		});
-		if (!found) return Service.getDefaultProfile(db, acct);
+		if (!found) found = Service.getDefaultProfile(db, acct);
+		if (!found)
+			throw new Error(
+				`No profile found for account ${acct.identifier} (${acct.server})`,
+			);
 
 		Service._postSelect(db, found);
 		return found;

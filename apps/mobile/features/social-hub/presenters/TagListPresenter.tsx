@@ -7,9 +7,8 @@ import {
 	useAppAcct,
 	useAppDb,
 	useAppDialog,
+	useAppGlobalStateActions,
 } from '../../../hooks/utility/global-state-extractors';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../states/useAppNavigator';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
@@ -29,11 +28,7 @@ function TagListPresenter({
 }: Props) {
 	const { acct } = useAppAcct();
 	const { db } = useAppDb();
-	const { loadApp } = useGlobalState(
-		useShallow((o) => ({
-			loadApp: o.loadApp,
-		})),
-	);
+	const { restoreSession } = useAppGlobalStateActions();
 	const { show, hide } = useAppDialog();
 	const { toTimelineViaPin } = useAppNavigator();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
@@ -44,7 +39,7 @@ function TagListPresenter({
 				DialogBuilderService.toSwitchActiveAccount(() => {
 					AccountService.select(db, parentAcct);
 					try {
-						loadApp().then(() => {
+						restoreSession().then(() => {
 							hide();
 							toTimelineViaPin(item.id, 'tag');
 						});

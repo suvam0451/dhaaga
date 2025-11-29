@@ -58,7 +58,7 @@ class ProfileSessionManager {
 		this.db = db;
 		this.cacheManager = new Storage();
 
-		this.acct = AccountService.getSelected(this.db).unwrap();
+		this.acct = AccountService.getSelected(this.db);
 		this.profile = ProfileService.getActiveProfile(this.db, this.acct);
 		this.customEmojis = [];
 	}

@@ -31,7 +31,7 @@ function FeatureNotSupported() {
 			</AppText.SemiBold>
 			{desc.map((o, i) => (
 				<AppText.Medium
-					key={i}
+					forwardedKey={i}
 					style={[styles.sheetDesc, { color: theme.secondary.a30 }]}
 				>
 					{o}

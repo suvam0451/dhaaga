@@ -2,7 +2,11 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import useGlobalState from './_global';
 import { useShallow } from 'zustand/react/shallow';
-import { useAppDb, useHub } from '../hooks/utility/global-state-extractors';
+import {
+	useAppDb,
+	useAppGlobalStateActions,
+	useHub,
+} from '../hooks/utility/global-state-extractors';
 import SettingsService, { APP_SETTING_KEY } from '../services/settings.service';
 import useAppSettings from '../features/settings/interactors/useAppSettings';
 import { useTranslation } from 'react-i18next';
@@ -18,27 +22,19 @@ import { useTranslation } from 'react-i18next';
  * the required contexts
  */
 function useAppSession() {
-	// app will be covered with a splash screen until everything is loaded
+	// the app will be covered with a splash screen until everything is loaded
 	const [AppReady, setAppReady] = useState(false);
 	const [AccountReady, setAccountReady] = useState(true);
 	const [ProfileReady, setProfileReady] = useState(false);
 
 	const db = useSQLiteContext();
-	const { db: appDb } = useAppDb();
-	const { getValue, setValue, setAppLangauge } = useAppSettings();
+	const { getValue } = useAppSettings();
 	const { i18n } = useTranslation();
 
-	const {
-		appInitialize,
-		loadApp,
-		db: loadedDb,
-		loadActiveProfile,
-		profileManager,
-	} = useGlobalState(
+	const { db: loadedDb } = useAppDb();
+	const { appInit, restoreSession } = useAppGlobalStateActions();
+	const { loadActiveProfile, profileManager } = useGlobalState(
 		useShallow((o) => ({
-			appInitialize: o.appInitialize,
-			loadApp: o.loadApp,
-			db: o.db,
 			acct: o.acct,
 			loadActiveProfile: o.loadActiveProfile,
 			profileManager: o.profileSessionManager,
@@ -48,20 +44,21 @@ function useAppSession() {
 
 	// load essential app data
 	useEffect(() => {
+		if (!db) return;
 		setAppReady(false);
-		appInitialize(db);
-		loadApp();
+		appInit(db);
+		restoreSession();
 		loadAccounts();
 		setAppReady(true);
 	}, [db]);
 
 	// load settings
 	useEffect(() => {
-		if (!appDb) return;
-		SettingsService.init(appDb);
+		if (!loadedDb) return;
+		SettingsService.init(loadedDb);
 		const lang = getValue<string>(APP_SETTING_KEY.APP_LANGUAGE);
 		if (lang) i18n.changeLanguage(lang);
-	}, [appDb]);
+	}, [loadedDb]);
 
 	// load essential account data
 	useEffect(() => {

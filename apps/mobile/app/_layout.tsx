@@ -17,17 +17,18 @@ import ImageInspectModal from '../components/modals/ImageInspectModal';
 import { AppDialog } from '../components/lib/AppDialog';
 import { useAppTheme } from '../hooks/utility/global-state-extractors';
 import WithAppAssetsContext from '../hooks/app/useAssets';
+import polyfills from '#/utils/polyfills';
 
 import '../i18n/_loader';
 import 'fast-text-encoding'; // needed by atproto
 
 enableMapSet();
+polyfills();
 
 /**
  * Suppress these warnings...
  */
 const IGNORED_LOGS = [
-	'BSON: For React Native please polyfill crypto.getRandomValues', // this would need to be fixed later
 	'Found screens with the same name nested inside one another',
 	'Require cycle:',
 	'VirtualizedLists',

@@ -1,19 +1,9 @@
 {
-	"extends": "expo/tsconfig.base",
+	"extends": "expo/tsconfig.base.json",
 	"compilerOptions": {
 		"baseUrl": ".",
-		"jsx": "react-jsx",
-		"checkJs": false,
-		"esModuleInterop": true,
-		"target": "esnext",
-		"module": "esnext",
-		"moduleResolution": "NodeNext",
-		"resolveJsonModule": true,
-		"allowJs": true,
-		"lib": ["ESNext", "ES2015"],
-		"strictNullChecks": true,
-		"strict": false,
 		"paths": {
+			"#/*": ["./*"],
 			"multiformats/cid": ["node_modules/multiformats/types/src/cid.d.ts"]
 		}
 	},

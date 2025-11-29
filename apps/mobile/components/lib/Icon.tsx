@@ -165,6 +165,83 @@ export function HomeNavigationIcon({
 	);
 }
 
+/**
+ * A custom navigation button container,
+ * which prevents the user from interacting with the
+ * button when they are signed out.
+ * @param onPress
+ * @param onLongPress
+ * @param children
+ * @constructor
+ */
+export function NavbarButtonDisabledOnSignOut({
+	onPress,
+	onLongPress,
+	children,
+}: any) {
+	const { acct } = useAppAcct();
+
+	function onLongPressAction(e: any) {
+		if (!acct) return;
+		onLongPress();
+	}
+
+	function onPressAction(e: any) {
+		if (!acct) return;
+		onPress();
+	}
+	return (
+		<Pressable
+			style={{
+				marginVertical: 'auto',
+			}}
+			onPress={onPressAction}
+			onLongPress={onLongPressAction}
+		>
+			<View
+				style={{
+					marginHorizontal: 'auto',
+					marginVertical: 'auto',
+				}}
+			>
+				{children}
+			</View>
+		</Pressable>
+	);
+}
+
+export function ProfileTabNavbarIconButton({
+	onPress,
+	onLongPress,
+	children,
+}: any) {
+	const { show } = useAppBottomSheet();
+	const { acct } = useAppAcct();
+
+	function onLongPressAction(e: any) {
+		e.preventDefault();
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT, true);
+	}
+
+	function onPressAction(e: any) {
+		// router.navigate('/profile');
+		// router.dismiss(2);
+		onPress();
+	}
+	return (
+		<Pressable onPress={onPressAction} onLongPress={onLongPressAction}>
+			<View
+				style={{
+					marginHorizontal: 'auto',
+				}}
+			>
+				{children}
+			</View>
+		</Pressable>
+	);
+}
+
 export function ProfileTabNavbarIcon({
 	color,
 	size,
@@ -181,24 +258,14 @@ export function ProfileTabNavbarIcon({
 	}
 
 	function onPress(e: any) {
-		router.navigate('/profile');
-		router.dismiss(2);
+		// router.navigate('/profile');
+		// router.dismiss(2);
 	}
 
 	// if (visible && isAnimating) return <View />;
 	if (!acct)
 		return (
-			<TouchableOpacity
-				style={styles.accountIconTouchableContainerRight}
-				onPress={onPress}
-				onLongPress={onLongPress}
-			>
-				<MaterialIcons
-					name="no-accounts"
-					size={size + sizeOffset}
-					color={color}
-				/>
-			</TouchableOpacity>
+			<Ionicons name="settings-sharp" size={size + sizeOffset} color={color} />
 		);
 
 	return (
@@ -699,7 +766,7 @@ export function AppIcon({
 			case 'message':
 				return (
 					<AntDesign
-						name="message1"
+						name="message"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -780,7 +847,7 @@ export function AppIcon({
 			case 'pin':
 				return (
 					<AntDesign
-						name="pushpino"
+						name="pushpin"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -829,7 +896,7 @@ export function AppIcon({
 			case 'search':
 				return (
 					<AntDesign
-						name="search1"
+						name="search"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -893,7 +960,7 @@ export function AppIcon({
 			case 'to-top':
 				return (
 					<AntDesign
-						name="totop"
+						name="to-top"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -1020,19 +1087,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		flexDirection: 'row',
 	},
-	accountIconTouchableContainerRight: {
-		// height: '100%',
-		flex: 1,
-		// backgroundColor: 'red',
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		margin: 'auto',
-		// marginTop: 10,
-		// marginBottom: 8,
-		// marginRight: 4,
-		// marginLeft: -8,
-	},
+	accountIconTouchableContainerRight: {},
 	accountIconInternalContainer: {
 		borderRadius: 16,
 		borderWidth: 0.5,

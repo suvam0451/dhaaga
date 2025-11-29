@@ -21,7 +21,7 @@ import {
 	useAppAcct,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../components/lib/Text';
+import { AppText } from '#/components/lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import ProtocolCards from '../components/ProtocolCards';

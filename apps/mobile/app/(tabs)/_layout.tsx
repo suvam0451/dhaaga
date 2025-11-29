@@ -3,14 +3,20 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
 import {
 	HomeNavigationIcon,
+	NavbarButtonDisabledOnSignOut,
 	ProfileTabNavbarIcon,
-} from '../../components/lib/Icon';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+	ProfileTabNavbarIconButton,
+} from '#/components/lib/Icon';
+import {
+	useAppAcct,
+	useAppActiveSession,
+	useAppTheme,
+} from '#/hooks/utility/global-state-extractors';
 
 const BOTTOM_NAVBAR_HEIGHT = 48; // Range: 42 to 52
 const BOTTOM_NAVBAR_ICON_STYLE = {
 	height: 46,
-	width: 'auto',
+	// width: 12,
 };
 
 const ICON_A_SIZE_OFFSET = 4;
@@ -21,6 +27,8 @@ const ICON_E_SIZE_OFFSET = 8;
 
 export default function TabLayout() {
 	const { theme } = useAppTheme();
+	const { acct } = useAppAcct();
+	const { session } = useAppActiveSession();
 
 	return (
 		<View style={{ height: '100%' }}>
@@ -59,18 +67,19 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name={'feed'}
 					options={{
+						tabBarButton: NavbarButtonDisabledOnSignOut,
 						tabBarIcon: ({ color, size, focused }) =>
 							focused ? (
 								<Ionicons
 									name="newspaper"
 									size={size + ICON_B_SIZE_OFFSET}
-									color={color}
+									color={!acct ? theme.background.a50 : color}
 								/>
 							) : (
 								<Ionicons
 									name="newspaper-outline"
 									size={size + ICON_B_SIZE_OFFSET}
-									color={color}
+									color={!acct ? theme.background.a50 : color}
 								/>
 							),
 					}}
@@ -78,18 +87,19 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name={'explore'}
 					options={{
+						tabBarButton: NavbarButtonDisabledOnSignOut,
 						tabBarIcon: ({ color, size, focused }) =>
 							focused ? (
 								<Ionicons
 									name="compass"
 									size={size + ICON_C_SIZE_OFFSET}
-									color={color}
+									color={!acct ? theme.background.a50 : color}
 								/>
 							) : (
 								<Ionicons
 									name="compass-outline"
 									size={size + ICON_C_SIZE_OFFSET}
-									color={color}
+									color={!acct ? theme.background.a50 : color}
 								/>
 							),
 					}}
@@ -98,18 +108,19 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name={'notifications'}
 					options={{
+						tabBarButton: NavbarButtonDisabledOnSignOut,
 						tabBarIcon: ({ color, size, focused }) =>
 							focused ? (
 								<Ionicons
 									name="file-tray"
 									size={size + ICON_D_SIZE_OFFSET}
-									color={color}
+									color={!acct ? theme.background.a50 : color}
 								/>
 							) : (
 								<Ionicons
 									name="file-tray-outline"
 									size={size + ICON_D_SIZE_OFFSET}
-									color={color}
+									color={!acct ? theme.background.a50 : color}
 								/>
 							),
 					}}
@@ -117,10 +128,18 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name={'profile'}
 					options={{
+						tabBarBadge: session.state === 'invalid' ? 1 : undefined,
+						tabBarButton: ({ onPress, onLongPress, children }) => (
+							<ProfileTabNavbarIconButton
+								onPress={onPress}
+								onLongPress={onLongPress}
+								children={children}
+							/>
+						),
 						tabBarIcon: ({ color, size, focused }) => (
 							<ProfileTabNavbarIcon
 								color={color}
-								size={size}
+								size={size + 0}
 								focused={focused}
 								sizeOffset={ICON_E_SIZE_OFFSET}
 							/>

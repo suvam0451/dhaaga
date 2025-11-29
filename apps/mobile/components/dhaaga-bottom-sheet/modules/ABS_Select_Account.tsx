@@ -5,28 +5,28 @@ import {
 	FlatList,
 	StyleSheet,
 } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import {
 	AccountDetails,
 	AccountPfp,
-} from '../../../screens/accounts/fragments/AccountListingFragment';
-import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
+} from '#/screens/accounts/fragments/AccountListingFragment';
+import SoftwareHeader from '#/screens/accounts/fragments/SoftwareHeader';
 import { router } from 'expo-router';
 import {
 	Account,
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '@dhaaga/db';
-import useGlobalState from '../../../states/_global';
+import useGlobalState from '#/states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import { useAppListAccounts } from '../../../hooks/db/useAppListAccounts';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+import { useAppListAccounts } from '#/hooks/db/useAppListAccounts';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import {
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { AppBottomSheetMenu } from '../../lib/Menu';
-import { AppButtonVariantA } from '../../lib/Buttons';
+} from '#/hooks/utility/global-state-extractors';
+import { AppBottomSheetMenu } from '#/components/lib/Menu';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
 
 type FlashListItemProps = {
 	acct: Account;

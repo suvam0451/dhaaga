@@ -1,14 +1,11 @@
 import { RestClientCreateDTO } from '../adapters/_client/_interface.js';
 import { AtprotoApiAdapter, BaseApiAdapter, KNOWN_SOFTWARE } from '../index.js';
 import { AppAtpSessionData } from '../types/atproto.js';
-
 import {
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
 	MastoApiAdapter,
 } from '../adapters/index.js';
-import { ApiResult } from '../utils/api-result.js';
-import { Ok } from '../utils/index.js';
 import { ApiTargetInterface } from '../adapters/_client/_router/routes/_index.js';
 
 class Service {
@@ -81,36 +78,37 @@ class Service {
 		software: KNOWN_SOFTWARE | string,
 		instance: string,
 		payload: RestClientCreateDTO | AppAtpSessionData,
-	): ApiResult<ApiTargetInterface> {
+	): ApiTargetInterface {
 		if (Service.supportsAtProto(software))
-			return Ok(
-				new AtprotoApiAdapter(software, instance, payload as AppAtpSessionData),
+			return new AtprotoApiAdapter(
+				software,
+				instance,
+				payload as AppAtpSessionData,
 			);
 
-		if (Service.supportsMisskeyApi(software))
-			return Ok(
-				new MisskeyApiAdapter(
-					software,
-					instance,
-					payload as RestClientCreateDTO,
-				),
+		if (Service.supportsMisskeyApi(software)) {
+			return new MisskeyApiAdapter(
+				software,
+				instance,
+				payload as RestClientCreateDTO,
 			);
+		}
 
 		if (Service.supportsPleromaApi(software))
-			return Ok(
-				new PleromaApiAdapter(
-					software,
-					instance,
-					payload as RestClientCreateDTO,
-				),
+			return new PleromaApiAdapter(
+				software,
+				instance,
+				payload as RestClientCreateDTO,
 			);
 
 		if (Service.supportsMastoApiV2(software))
-			return Ok(
-				new MastoApiAdapter(software, instance, payload as RestClientCreateDTO),
+			return new MastoApiAdapter(
+				software,
+				instance,
+				payload as RestClientCreateDTO,
 			);
 
-		return Ok(new BaseApiAdapter());
+		throw new Error(`Software (${software}) not supported by @dhaaga/bridge`);
 	}
 }
 

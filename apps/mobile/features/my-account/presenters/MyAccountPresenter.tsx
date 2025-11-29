@@ -10,6 +10,7 @@ import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter
 import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import {
 	useAppAcct,
+	useAppActiveSession,
 	useAppApiClient,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
@@ -29,6 +30,7 @@ import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
 import ModuleItemView from '../views/ModuleItemView';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import AccountLoadError from '#/features/my-account/AccountLoadError';
 
 function MyAccountPresenter() {
 	const { onScroll } = useScrollMoreOnPageEnd();
@@ -38,6 +40,7 @@ function MyAccountPresenter() {
 	const { refetch, data } = useApiGetMyAccount();
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const { session } = useAppActiveSession();
 
 	function _refresh() {
 		setIsRefreshing(true);
@@ -46,7 +49,7 @@ function MyAccountPresenter() {
 		});
 	}
 
-	if (!acct) return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.PROFILE} />;
+	if (session.target && session.state !== 'valid') return <AccountLoadError />;
 
 	const serverModules: AppModulesProps[] = DriverService.getAccountModules(
 		t,

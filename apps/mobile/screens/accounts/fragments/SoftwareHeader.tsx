@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import useKnownSoftware from '../../../hooks/app/useKnownSoftware';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import useKnownSoftware from '#/hooks/app/useKnownSoftware';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 
 type Props = {
 	software: string;

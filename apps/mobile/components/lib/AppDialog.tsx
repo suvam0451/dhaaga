@@ -117,7 +117,7 @@ export function AppDialog() {
 
 					{state.description.map((text, i) => (
 						<AppText.Medium
-							key={i}
+							forwardedKey={i}
 							style={[
 								styles.modalDescription,
 								{

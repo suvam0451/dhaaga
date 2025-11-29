@@ -15,9 +15,9 @@ import { runOnJS } from 'react-native-reanimated';
 function useCircularListSwipe(total: number, hash: string) {
 	const [Pointer, setPointer] = useState(0);
 	const start =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
+		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
 	const end =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
+		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
 
 	useEffect(() => {
 		setPointer(0);

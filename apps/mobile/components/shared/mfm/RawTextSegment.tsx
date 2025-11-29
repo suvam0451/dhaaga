@@ -25,7 +25,7 @@ function RawTextSegment({ value, fontFamily, emphasis }: Props) {
 
 	return (
 		<AppText.Normal
-			key={k}
+			forwardedKey={k}
 			style={{
 				color: color,
 				fontFamily,

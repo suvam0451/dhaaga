@@ -1,4 +1,4 @@
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
@@ -18,6 +18,9 @@ import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
 import { AppButtonVariantA } from '../../../lib/Buttons';
+import AppTabLandingNavbar, {
+	APP_LANDING_PAGE_TYPE,
+} from '#/components/shared/topnavbar/AppTabLandingNavbar';
 
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
@@ -72,11 +75,28 @@ function SelectAccountStack() {
 	}
 
 	return (
-		<AppTopNavbar
-			title={t(`topNav.secondary.manageAccounts`)}
-			translateY={translateY}
-			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
+		<ScrollView
+			style={{
+				paddingBottom: 16,
+				backgroundColor: theme.palette.bg,
+			}}
 		>
+			<AppTabLandingNavbar
+				type={APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS}
+				menuItems={[
+					{
+						iconId: 'user-guide',
+						onPress: () => {
+							router.navigate(APP_ROUTING_ENUM.GUIDE_SETTINGS_TAB);
+						},
+					},
+				]}
+			/>
+			{/*<AppTopNavbar*/}
+			{/*	title={t(`topNav.secondary.manageAccounts`)}*/}
+			{/*	translateY={translateY}*/}
+			{/*	type={APP_TOPBAR_TYPE_ENUM.GENERIC}*/}
+			{/*>*/}
 			<FlatList
 				data={SOFTWARE_ARRAY}
 				renderItem={({ item }) => (
@@ -102,7 +122,8 @@ function SelectAccountStack() {
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
 				}
 			/>
-		</AppTopNavbar>
+			{/*</AppTopNavbar>*/}
+		</ScrollView>
 	);
 }
 

@@ -3,6 +3,7 @@ import {
 	useAppBottomSheet,
 	useAppDb,
 	useAppDialog,
+	useAppGlobalStateActions,
 	useAppTheme,
 	useHub,
 } from '../../../hooks/utility/global-state-extractors';
@@ -29,9 +30,8 @@ import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import useGlobalState, { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import { useShallow } from 'zustand/react/shallow';
 
 type Props = {
 	// account left join guaranteed
@@ -52,11 +52,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const { profiles, selectProfile } = useHub();
 	const { setCtx, show: showSheet } = useAppBottomSheet();
 	const { acct } = useAppAcct();
-	const { loadApp } = useGlobalState(
-		useShallow((o) => ({
-			loadApp: o.loadApp,
-		})),
-	);
+	const { restoreSession } = useAppGlobalStateActions();
 	const { t } = useTranslation([
 		LOCALIZATION_NAMESPACE.DIALOGS,
 		LOCALIZATION_NAMESPACE.CORE,
@@ -100,7 +96,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 				DialogBuilderService.toSwitchActiveAccount(() => {
 					AccountService.select(db, parentAcct);
 					try {
-						loadApp().then(() => {
+						restoreSession().then(() => {
 							hide();
 							setCtx({ profileId: profile.id, onChange: refresh });
 							showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
