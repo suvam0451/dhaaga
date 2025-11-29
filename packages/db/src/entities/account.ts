@@ -1,20 +1,19 @@
 import { z } from 'zod';
-import { Account } from '../_schema';
-import { DbErrorHandler } from './_base.repo';
+import { Account } from '../_schema.js';
+import { DbErrorHandler } from './_base.repo.js';
 import {
 	type AccountMetadataRecordType,
 	AccountMetadataService,
-} from './account-metadata';
+} from './account-metadata.js';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { DataSource } from '../dataSource';
+import { DataSource } from '../dataSource.js';
 import { gt } from '@dhaaga/orm';
 import { RandomUtil } from '@dhaaga/bridge';
-import { ProfileService } from './profile';
+import { ProfileService } from './profile.js';
 import {
 	AccountCollectionService,
 	ReservedCollection,
-} from './account-collection';
-import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result';
+} from './account-collection.js';
 
 /**
  * --- Validators
@@ -58,11 +57,11 @@ export class Repo {
 	static upsert(
 		db: DataSource,
 		dto: z.infer<typeof accountInsertDto>,
-	): DbResult<Account> {
+	): Account {
 		const match = Repo.getByHandleFragments(db, dto.server, dto.username);
 		if (match) {
 			ProfileService.setupDefaultProfile(db, match);
-			return Ok(match);
+			return match;
 		} else {
 			db.account.insert({
 				uuid: RandomUtil.nanoId(),
@@ -75,7 +74,7 @@ export class Repo {
 			});
 			const upserted = Repo.getByHandleFragments(db, dto.server, dto.username);
 			ProfileService.setupDefaultProfile(db, upserted!);
-			return Ok(upserted!);
+			return upserted!;
 		}
 	}
 
@@ -105,9 +104,8 @@ export class Repo {
 		return db.db.runSync(`delete from account where id = ?`, id);
 	}
 
-	static getFirstSelected(db: DataSource): DbResult<Account> {
-		const match = db.account.findOne({ selected: true });
-		return match ? Ok(match) : Err(DbErrorCode.NOT_FOUND);
+	static getFirstSelected(db: DataSource): Account | null {
+		return db.account.findOne({ selected: true });
 	}
 }
 
@@ -116,12 +114,11 @@ class Service {
 		db: DataSource,
 		acct: z.infer<typeof accountInsertDto>,
 		metadata: AccountMetadataRecordType[],
-	): DbResult<Account> {
+	): Account {
 		const upserted = Repo.upsert(db, acct);
-		return upserted.tap((result) => {
-			AccountMetadataService.upsertMultiple(db, result, metadata);
-			ProfileService.setupDefaultProfile(db, result);
-		});
+		AccountMetadataService.upsertMultiple(db, upserted, metadata);
+		ProfileService.setupDefaultProfile(db, upserted);
+		return upserted;
 	}
 
 	static async selectSync(db: DataSource, acct: Account) {}
@@ -164,10 +161,11 @@ class Service {
 		return Repo.updateSoftware(db, acct.id, driver.toString());
 	}
 
-	static getSelected(db: DataSource): DbResult<Account> {
-		return Repo.getFirstSelected(db).tap((o) => {
-			Service._postSelect(db, o);
-		});
+	static getSelected(db: DataSource): Account | null {
+		const acct = Repo.getFirstSelected(db);
+		if (!acct) throw new Error('No account selected!');
+		Service._postSelect(db, acct);
+		return acct;
 	}
 
 	static getById(db: DataSource, id: number | string): Account | null {

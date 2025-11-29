@@ -49,7 +49,7 @@ function OverviewView({ title, subtitle, description }: Props) {
 			<View style={styles.descContainer}>
 				{description.map((item, i) => (
 					<AppText.Normal
-						key={i}
+						forwardedKey={i}
 						style={[
 							styles.desc,
 							{

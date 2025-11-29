@@ -1,7 +1,7 @@
-import { KnownServer } from '../_schema';
-import { DbErrorHandler } from './_base.repo';
+import { KnownServer } from '../_schema.js';
+import { DbErrorHandler } from './_base.repo.js';
 import { KNOWN_SOFTWARE, BaseApiAdapter } from '@dhaaga/bridge';
-import { DataSource } from '../dataSource';
+import { DataSource } from '../dataSource.js';
 import { RandomUtil } from '@dhaaga/bridge';
 
 export type ServerRecordType = {

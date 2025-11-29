@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import { DbErrorHandler, RepoTemplate } from './_base.repo';
-import { Account, AccountMetadata } from '../_schema';
-import { DataSource } from '../dataSource';
-import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result';
+import { DbErrorHandler, RepoTemplate } from './_base.repo.js';
+import { Account, AccountMetadata } from '../_schema.js';
+import { DataSource } from '../dataSource.js';
 
 export type AccountMetadataRecordType = {
 	key: string;
@@ -67,10 +66,7 @@ class Repo implements RepoTemplate<AccountMetadata> {
 		}
 	}
 
-	static upsert(
-		db: DataSource,
-		dto: z.infer<typeof accountMetadataUpsertDto>,
-	): DbResult<undefined> {
+	static upsert(db: DataSource, dto: z.infer<typeof accountMetadataUpsertDto>) {
 		const where = {
 			accountId: dto.accountId,
 			key: dto.key,
@@ -91,9 +87,8 @@ class Repo implements RepoTemplate<AccountMetadata> {
 					accountId: dto.accountId,
 				});
 			}
-			return Ok(undefined);
 		} catch (e) {
-			return Err(DbErrorCode.UNKNOWN);
+			throw new Error(`failed to upsert account metadata`);
 		}
 	}
 

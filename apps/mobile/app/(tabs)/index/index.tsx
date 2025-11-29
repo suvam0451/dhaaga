@@ -14,6 +14,7 @@ import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import SignedOutScreen from '#/features/onboarding/SignedOutScreen';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -167,6 +168,7 @@ function Screen() {
 		loadAccounts();
 	}, [acct]);
 
+	if (!acct) return <SignedOutScreen />;
 	if (!acct) return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.HOME} />;
 	return <SocialHubPresenter />;
 }

@@ -48,7 +48,7 @@ function GuideFactory({ questionnaire, label }: UserGuideContainerProps) {
 						</AppText.Special>
 						{block.answers.map((answer, i) => (
 							<AppText.Normal
-								key={i}
+								forwardedKey={i}
 								style={{
 									color: theme.secondary.a10,
 									fontSize: 14,

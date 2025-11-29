@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from 'expo-sqlite';
 import { z } from 'zod';
-import { DataSource } from '../dataSource';
-import type { AppSetting } from '../_schema';
+import { DataSource } from '../dataSource.js';
+import type { AppSetting } from '../_schema.js';
 
 export const AppSettingCreateDTO = z.object({
 	key: z.string(),

@@ -24,6 +24,7 @@ export enum APP_LANDING_PAGE_TYPE {
 	MY_ACCOUNT,
 	MY_PROFILE,
 	ACCOUNT_HUB,
+	ALL_ACCOUNTS,
 }
 
 type AppTabLandingNavbarProps = {
@@ -57,6 +58,7 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 		[APP_LANDING_PAGE_TYPE.MY_ACCOUNT]: t(`topNav.secondary.myAccount`),
 		[APP_LANDING_PAGE_TYPE.MY_PROFILE]: t(`topNav.secondary.myProfile`),
 		[APP_LANDING_PAGE_TYPE.ACCOUNT_HUB]: t(`topNav.secondary.myAccount`),
+		[APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS]: 'Manage Accounts',
 	};
 
 	return (

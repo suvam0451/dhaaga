@@ -28,7 +28,7 @@ function Header() {
 	);
 }
 
-function Footer() {
+export function Footer({ hideVersion }: { hideVersion?: boolean }) {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const ICON_COLOR = theme.complementary.a0;
@@ -84,20 +84,22 @@ function Footer() {
 			<AppText.SemiBold
 				style={[
 					styles.metadataText,
-					{ color: theme.secondary.a20, fontSize: 16 },
+					{ color: theme.secondary.a40, fontSize: 15 },
 				]}
 			>
 				{t(`setting.footer`)}
 			</AppText.SemiBold>
-			<AppText.SemiBold
-				style={{
-					color: theme.primary.a0,
-					textAlign: 'center',
-					fontSize: 16,
-				}}
-			>
-				v0.17.0
-			</AppText.SemiBold>
+			{!hideVersion && (
+				<AppText.SemiBold
+					style={{
+						color: theme.primary.a0,
+						textAlign: 'center',
+						fontSize: 16,
+					}}
+				>
+					v0.17.0
+				</AppText.SemiBold>
+			)}
 		</View>
 	);
 }
@@ -290,7 +292,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	metadataText: {
-		fontSize: 18,
+		fontSize: 15,
 		textAlign: 'center',
 		marginBottom: 8,
 	},

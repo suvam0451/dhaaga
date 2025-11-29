@@ -1,8 +1,8 @@
 import * as SQLite from 'expo-sqlite';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { KnownServer, type ServerEmoji } from '../_schema';
-import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result';
-import { DATABASE_NAME } from '../types/db.types';
+import { KnownServer, type ServerEmoji } from '../_schema.js';
+import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result.js';
+import { DATABASE_NAME } from '../types/db.types.js';
 
 class Repo {
 	/**

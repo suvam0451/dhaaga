@@ -1,6 +1,6 @@
-import { RepoTemplate } from './_base.repo';
-import { Account, AccountSavedUser } from '../_schema';
-import { DataSource } from '../dataSource';
+import { RepoTemplate } from './_base.repo.js';
+import { Account, AccountSavedUser } from '../_schema.js';
+import { DataSource } from '../dataSource.js';
 import { RandomUtil } from '@dhaaga/bridge';
 import type { PostAuthorType } from '@dhaaga/bridge';
 

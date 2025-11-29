@@ -189,7 +189,6 @@ function AppPagerView({
 
 	return (
 		<View style={[{ flex: 1, position: 'relative' }, props]}>
-			{/*@ts-ignore-next-line*/}
 			<PagerView
 				ref={ref}
 				scrollEnabled={true}
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: 'transparent',
 		position: 'absolute',
-		bottom: 0,
+		bottom: 8,
 		width: '100%',
 	},
 	label: {

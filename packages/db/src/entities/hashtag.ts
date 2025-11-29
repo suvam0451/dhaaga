@@ -1,7 +1,7 @@
-import { DbErrorHandler } from './_base.repo';
+import { DbErrorHandler } from './_base.repo.js';
 import { SQLiteDatabase } from 'expo-sqlite';
-import type { Hashtag } from '../_schema';
-import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result';
+import type { Hashtag } from '../_schema.js';
+import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result.js';
 
 export type HashtagRecordType = {
 	name: string;

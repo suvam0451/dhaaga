@@ -4,10 +4,9 @@ import {
 	useAppAcct,
 	useAppDb,
 	useAppDialog,
+	useAppGlobalStateActions,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import useAppNavigator from '../../../states/useAppNavigator';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -38,11 +37,7 @@ function PinnedTimelineItemView({
 	const { theme } = useAppTheme();
 	const { db } = useAppDb();
 	const { acct } = useAppAcct();
-	const { loadApp } = useGlobalState(
-		useShallow((o) => ({
-			loadApp: o.loadApp,
-		})),
-	);
+	const { restoreSession } = useAppGlobalStateActions();
 	const { show, hide } = useAppDialog();
 	const { toTimelineViaPin } = useAppNavigator();
 
@@ -51,7 +46,7 @@ function PinnedTimelineItemView({
 			show(
 				DialogBuilderService.toSwitchActiveAccount(() => {
 					AccountService.select(db, account);
-					loadApp().then(() => {
+					restoreSession().then(() => {
 						hide();
 						toTimelineViaPin(pinId, 'feed');
 					});

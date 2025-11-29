@@ -10,7 +10,7 @@ import { RandomUtil } from '@dhaaga/bridge';
 import { useTranslation } from 'react-i18next';
 
 type AppTextProps = {
-	key?: any;
+	forwardedKey?: any;
 	keygen?: boolean;
 	color?: string;
 	children: any;
@@ -35,7 +35,7 @@ export class AppText {
 	 * @constructor
 	 */
 	static Special({
-		key,
+		forwardedKey,
 		keygen,
 		style,
 		color,
@@ -55,7 +55,7 @@ export class AppText {
 		const FONT_INCOMPATIBLE = ['jp'].includes(i18n.language);
 		return (
 			<Text
-				key={keygen ? RandomUtil.nanoId() : key}
+				key={keygen ? RandomUtil.nanoId() : forwardedKey}
 				style={[
 					_baseStyling,
 					{
@@ -76,7 +76,7 @@ export class AppText {
 	}
 
 	static Medium({
-		key,
+		forwardedKey,
 		keygen,
 		style,
 		color,
@@ -96,7 +96,7 @@ export class AppText {
 
 		return (
 			<Text
-				key={keygen ? RandomUtil.nanoId() : key}
+				key={keygen ? RandomUtil.nanoId() : forwardedKey}
 				style={[_baseStyling, { color: _color }, style]}
 				numberOfLines={numberOfLines}
 				textBreakStrategy={'simple'}
@@ -109,7 +109,7 @@ export class AppText {
 	}
 
 	static H6({
-		key,
+		forwardedKey,
 		keygen,
 		style,
 		color,
@@ -128,7 +128,7 @@ export class AppText {
 
 		return (
 			<Text
-				key={keygen ? RandomUtil.nanoId() : key}
+				key={keygen ? RandomUtil.nanoId() : forwardedKey}
 				style={[
 					_baseStyling,
 					{
@@ -144,7 +144,7 @@ export class AppText {
 	}
 
 	static H1({
-		key,
+		forwardedKey,
 		keygen,
 		style,
 		color,
@@ -163,7 +163,7 @@ export class AppText {
 
 		return (
 			<Text
-				key={keygen ? RandomUtil.nanoId() : key}
+				key={keygen ? RandomUtil.nanoId() : forwardedKey}
 				style={[
 					_baseStyling,
 					{

@@ -49,6 +49,11 @@ export type GetSearchResultQueryDTO = {
 export type RestClientCreateDTO = {
 	instance: string;
 	token: string;
+	/**
+	 * a unique identifier to help trigger react hooks
+	 * and reset all pages when the api client
+	 * changes
+	 */
 	clientId: number | string;
 };
 

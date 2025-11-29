@@ -1,5 +1,5 @@
 import { BaseEntity, Entity } from '@dhaaga/orm';
-import type { APP_PINNED_OBJECT_TYPE } from './types/db.types';
+import type { APP_PINNED_OBJECT_TYPE } from './types/db.types.js';
 
 @Entity('account')
 export class Account extends BaseEntity<Account> {

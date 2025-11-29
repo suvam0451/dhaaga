@@ -1,5 +1,3 @@
-import type { AtpSessionData } from '@atproto/api';
-
 export type AtpLoginResponse = {
 	success: boolean;
 	headers: {
@@ -37,5 +35,10 @@ export type AtpLoginResponse = {
 export type AppAtpSessionData = any & {
 	subdomain: string;
 	pdsUrl: string;
+	/**
+	 * a unique identifier to help trigger react hooks
+	 * and reset all pages when the api client
+	 * changes
+	 */
 	clientId: string | number;
 };

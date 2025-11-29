@@ -29,7 +29,7 @@ function SendButtonView({ isSending, onSend, isEnabled }: Props) {
 				marginLeft: 12,
 				backgroundColor: isEnabled ? theme.primary.a0 : theme.secondary.a50,
 				padding: 10,
-				borderRadius: '100%',
+				borderRadius: 32,
 			}}
 			onPress={onSend}
 		>

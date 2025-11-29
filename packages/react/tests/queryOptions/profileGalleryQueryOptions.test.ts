@@ -1,3 +1,4 @@
+// TODO: tests broken after vitest major version bump
 import { useQuery } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { vi, expect, test } from 'vitest';

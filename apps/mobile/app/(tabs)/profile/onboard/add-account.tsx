@@ -12,16 +12,15 @@ import {
 } from '../../../../components/onboarding/OnboardingSignInBanner';
 import { LinkingUtils } from '../../../../utils/linking.utils';
 import { useAtProtoAuth, useDhaagaAuthFormControl } from '@dhaaga/react';
-import { useShallow } from 'zustand/react/shallow';
 import { AppFormTextInput } from '../../../../components/lib/FormInput';
 import {
 	useAppAcct,
 	useAppDb,
+	useAppGlobalStateActions,
 	useAppManager,
 } from '../../../../hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
-import useGlobalState from '../../../../states/_global';
 import { AccountService } from '@dhaaga/db';
 import AccountDbService from '../../../../services/db/account-db.service';
 
@@ -37,11 +36,7 @@ function AtProto() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { db } = useAppDb();
 	const { acct } = useAppAcct();
-	const { loadApp } = useGlobalState(
-		useShallow((o) => ({
-			loadApp: o.loadApp,
-		})),
-	);
+	const { restoreSession } = useAppGlobalStateActions();
 
 	async function onSubmit() {
 		authenticate().then((res) => {
@@ -56,7 +51,7 @@ function AtProto() {
 
 			if (!acct) {
 				AccountService.ensureAccountSelection(db);
-				loadApp();
+				restoreSession();
 			}
 			Alert.alert('Account Added. Welcome to Dhaaga.');
 			router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
@@ -246,7 +241,6 @@ export function AppAuthenticationPager() {
 
 function Page() {
 	const { translateY } = useScrollMoreOnPageEnd();
-	// const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return (
 		<AppTopNavbar title={'Add Account'} translateY={translateY}>

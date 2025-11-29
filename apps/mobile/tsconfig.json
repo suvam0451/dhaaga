@@ -1,28 +1,12 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "jsx": "react-jsx",
-    "checkJs": false,
-    "esModuleInterop": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "lib": [
-      "ESNext",
-      "ES2015"
-    ],
-    "strictNullChecks": true,
-    "strict": false
-  },
-  "include": [
-    "./**/*.ts",
-    "./**/*.tsx",
-    "./**/*.js"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "extends": "expo/tsconfig.base"
+	"extends": "expo/tsconfig.base.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"#/*": ["./*"],
+			"multiformats/cid": ["node_modules/multiformats/types/src/cid.d.ts"]
+		}
+	},
+	"include": ["./**/*.ts", "./**/*.tsx", "./**/*.js"],
+	"exclude": ["node_modules"]
 }

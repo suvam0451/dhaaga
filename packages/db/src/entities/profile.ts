@@ -1,10 +1,10 @@
-import { DbErrorHandler } from './_base.repo';
-import { DataSource } from '../dataSource';
-import { Account, Profile } from '../_schema';
+import { DbErrorHandler } from './_base.repo.js';
+import { DataSource } from '../dataSource.js';
+import { Account, Profile } from '../_schema.js';
 import { eq, gt } from '@dhaaga/orm';
-import { AccountService } from './account';
-import { ProfilePinnedTimelineService } from './profile-pinned-timeline';
-import { ProfilePinnedTagService } from './profile-pinned-tag';
+import { AccountService } from './account.js';
+import { ProfilePinnedTimelineService } from './profile-pinned-timeline.js';
+import { ProfilePinnedTagService } from './profile-pinned-tag.js';
 import { RandomUtil } from '@dhaaga/bridge';
 
 @DbErrorHandler()
@@ -88,11 +88,15 @@ class Service {
 	}
 
 	static getActiveProfile(db: DataSource, acct: Account) {
-		const found = db.profile.findOne({
+		let found = db.profile.findOne({
 			accountId: acct.id,
 			selected: true,
 		});
-		if (!found) return Service.getDefaultProfile(db, acct);
+		if (!found) found = Service.getDefaultProfile(db, acct);
+		if (!found)
+			throw new Error(
+				`No profile found for account ${acct.identifier} (${acct.server})`,
+			);
 
 		Service._postSelect(db, found);
 		return found;

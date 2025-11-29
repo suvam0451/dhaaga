@@ -1,7 +1,7 @@
-import { DataSource } from '../dataSource';
-import { AccountSavedPostService } from './account-saved-post';
-import { AccountCollectionService } from './account-collection';
-import { Account } from '../_schema';
+import { DataSource } from '../dataSource.js';
+import { AccountSavedPostService } from './account-saved-post.js';
+import { AccountCollectionService } from './account-collection.js';
+import { Account } from '../_schema.js';
 
 class Repo {}
 
