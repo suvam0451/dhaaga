@@ -11,7 +11,6 @@ import {
 	StyleSheet,
 	TextInput,
 	View,
-	KeyboardAvoidingView,
 } from 'react-native';
 import { useRef, useState } from 'react';
 import {
@@ -19,8 +18,6 @@ import {
 	useDiscoverDispatch,
 	DiscoverStateAction,
 } from '@dhaaga/core';
-import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
-import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Loader } from '../../../components/lib/Loader';
 import { Feather } from '@expo/vector-icons';
@@ -61,9 +58,7 @@ function SearchWidget() {
 		});
 	};
 
-	const submitSearch = (
-		search: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
-	) => {
+	const submitSearch = (search) => {
 		dispatch({
 			type: DiscoverStateAction.APPLY_SEARCH,
 		});
@@ -113,7 +108,7 @@ function SearchWidget() {
 
 	const { theme } = useAppTheme();
 	return (
-		<KeyboardAvoidingView style={styles.root}>
+		<View style={styles.root}>
 			{IsWidgetExpanded && <WidgetExpanded />}
 			<Animated.View
 				style={[
@@ -164,7 +159,7 @@ function SearchWidget() {
 					/>
 				)}
 			</Animated.View>
-		</KeyboardAvoidingView>
+		</View>
 	);
 }
 

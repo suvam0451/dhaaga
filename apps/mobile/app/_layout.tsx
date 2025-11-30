@@ -3,12 +3,16 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Appearance, StatusBar } from 'react-native';
+import { Appearance, StatusBar, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
 import { enableMapSet } from 'immer';
 import { SQLiteProvider } from 'expo-sqlite';
+import {
+	KeyboardProvider,
+	KeyboardAvoidingView,
+} from 'react-native-keyboard-controller';
 import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '@dhaaga/db';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
@@ -20,7 +24,9 @@ import WithAppAssetsContext from '../hooks/app/useAssets';
 import polyfills from '#/utils/polyfills';
 
 import '../i18n/_loader';
-import 'fast-text-encoding'; // needed by atproto
+import 'fast-text-encoding';
+import { useNativeKeyboardAnimation } from '#/hooks/useNativeKeyboardAnimation'; // needed by atproto
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 enableMapSet();
 polyfills();
@@ -82,6 +88,14 @@ function App() {
 		}, 100);
 	}, [pathname]);
 
+	const { height } = useNativeKeyboardAnimation(20, 20);
+	const fakeView = useAnimatedStyle(() => {
+		return {
+			height: height.value,
+			marginBottom: height.value > 0 ? 0 : 0,
+		};
+	}, []);
+
 	return (
 		<SafeAreaView
 			style={{ backgroundColor: theme.background.a10, flex: 1 }}
@@ -91,24 +105,27 @@ function App() {
 				barStyle="light-content"
 				backgroundColor={theme.background.a0}
 			/>
-			<Stack
-				initialRouteName={'(tabs)'}
-				screenOptions={{
-					headerShown: false,
-					navigationBarColor: theme.background.a0,
-				}}
-			>
-				<Stack.Screen
-					name="(tabs)"
-					options={{
-						presentation: 'modal',
+			<View style={{ flex: 1 }}>
+				<Stack
+					initialRouteName={'(tabs)'}
+					screenOptions={{
+						headerShown: false,
+						navigationBarColor: theme.background.a0,
 					}}
-				/>
-			</Stack>
-			{/* Globally shared components */}
-			<ImageInspectModal />
-			<AppBottomSheet />
-			<AppDialog />
+				>
+					<Stack.Screen
+						name="(tabs)"
+						options={{
+							presentation: 'modal',
+						}}
+					/>
+				</Stack>
+				{/* Globally shared components */}
+				<ImageInspectModal />
+				<AppBottomSheet />
+				<AppDialog />
+			</View>
+			<Animated.View style={fakeView} />
 		</SafeAreaView>
 	);
 }
@@ -124,7 +141,9 @@ export default function Page() {
 					{/* Rneui Custom Themes */}
 					<ThemeProvider>
 						<GestureHandlerRootView>
-							<App />
+							<KeyboardProvider>
+								<App />
+							</KeyboardProvider>
 						</GestureHandlerRootView>
 					</ThemeProvider>
 				</WithAppAssetsContext>

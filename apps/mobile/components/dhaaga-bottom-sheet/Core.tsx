@@ -1,11 +1,4 @@
-import { Fragment } from 'react';
-import {
-	Pressable,
-	StyleSheet,
-	View,
-	KeyboardAvoidingView,
-	Platform,
-} from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import WithComposerContext from '../../features/composer/contexts/useComposerCtx';
@@ -37,6 +30,7 @@ import TimelineControllerSheetPresenter from '../../features/timelines/features/
 import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 import FeedAddSheetPresenter from '../../features/social-hub/presenters/FeedAddSheetPresenter';
 import MoreActionsSheetPresenter from '../../features/feeds/presenters/MoreActionsSheetPresenter';
+import { Fragment } from 'react';
 
 /**
  * The little handle thingy on top of every bottom sheet
@@ -44,6 +38,7 @@ import MoreActionsSheetPresenter from '../../features/feeds/presenters/MoreActio
  */
 function Handle() {
 	const { theme } = useAppTheme();
+	const { visible, hide, broadcastEndSession } = useAppBottomSheet();
 
 	return (
 		<Animated.View
@@ -59,7 +54,7 @@ function Handle() {
 		>
 			<Animated.View
 				style={{
-					height: 3,
+					height: visible ? 3 : 0,
 					width: 42,
 					backgroundColor: theme.secondary.a50,
 					marginBottom: 16,
@@ -148,7 +143,7 @@ function AppBottomSheet() {
 	}
 
 	return (
-		<View>
+		<Fragment>
 			<Pressable
 				style={{
 					position: 'absolute',
@@ -156,17 +151,17 @@ function AppBottomSheet() {
 					width: '100%',
 					backgroundColor: theme.palette.bg,
 					zIndex: appVerticalIndex.sheetBackdrop,
-					opacity: 0.48,
+					opacity: 0.32,
 				}}
 				onPress={onBottomSheetCloseEvent}
 			/>
-			<KeyboardAvoidingView
+			<View
 				style={{
 					width: '100%',
 					position: 'absolute',
+					height: visible ? 'auto' : 0,
 					zIndex: appVerticalIndex.sheetContent,
 					bottom: 0,
-					// backgroundColor: 'red',
 				}}
 			>
 				<Animated.View
@@ -179,18 +174,18 @@ function AppBottomSheet() {
 					<Handle />
 					<Factory />
 				</Animated.View>
-			</KeyboardAvoidingView>
-		</View>
+			</View>
+		</Fragment>
 	);
 }
 
 const styles = StyleSheet.create({
 	rootContainer: {
-		// bottom: 0,
-		// width: '100%',
+		bottom: 0,
+		width: '100%',
 		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
 		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
-		// zIndex: appVerticalIndex.sheetContent,
+		zIndex: appVerticalIndex.sheetContent,
 	},
 	text: {
 		textAlign: 'center',

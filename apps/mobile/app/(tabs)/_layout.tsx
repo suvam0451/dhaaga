@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { View } from 'react-native';
 import {
 	NavbarButtonDefault,
 	NavbarButtonDisabledOnSignOut,
@@ -30,129 +29,127 @@ export default function TabLayout() {
 	const { session } = useAppActiveSession();
 
 	return (
-		<View style={{ height: '100%' }}>
-			<Tabs
-				initialRouteName={'index'}
-				detachInactiveScreens={false}
-				screenOptions={() => {
-					return {
-						tabBarHideOnKeyboard: true,
-						tabBarStyle: {
-							backgroundColor: theme.background.a10,
-							borderTopWidth: 0,
-							height: BOTTOM_NAVBAR_HEIGHT,
-						},
-						tabBarIconStyle: BOTTOM_NAVBAR_ICON_STYLE,
-						tabBarActiveTintColor: theme.primary.a0,
-						tabBarInactiveTintColor: theme.secondary.a50,
-						tabBarShowLabel: false,
-						headerShown: false,
-					};
-				}}
-			>
-				<Tabs.Screen
-					name="index"
-					options={{
-						tabBarButton: NavbarButtonDefault,
-						tabBarIcon: ({ focused, color, size }) =>
-							focused ? (
-								<Ionicons
-									size={size + ICON_A_SIZE_OFFSET}
-									name="home"
-									color={color}
-								/>
-							) : (
-								<Ionicons
-									size={size + ICON_A_SIZE_OFFSET}
-									name="home-outline"
-									color={color}
-								/>
-							),
-					}}
-				/>
-				<Tabs.Screen
-					name={'feed'}
-					options={{
-						tabBarButton: NavbarButtonDisabledOnSignOut,
-						tabBarIcon: ({ color, size, focused }) =>
-							focused ? (
-								<Ionicons
-									name="newspaper"
-									size={size + ICON_B_SIZE_OFFSET}
-									color={!acct ? theme.background.a50 : color}
-								/>
-							) : (
-								<Ionicons
-									name="newspaper-outline"
-									size={size + ICON_B_SIZE_OFFSET}
-									color={!acct ? theme.background.a50 : color}
-								/>
-							),
-					}}
-				/>
-				<Tabs.Screen
-					name={'explore'}
-					options={{
-						tabBarButton: NavbarButtonDisabledOnSignOut,
-						tabBarIcon: ({ color, size, focused }) =>
-							focused ? (
-								<Ionicons
-									name="compass"
-									size={size + ICON_C_SIZE_OFFSET}
-									color={!acct ? theme.background.a50 : color}
-								/>
-							) : (
-								<Ionicons
-									name="compass-outline"
-									size={size + ICON_C_SIZE_OFFSET}
-									color={!acct ? theme.background.a50 : color}
-								/>
-							),
-					}}
-				/>
-
-				<Tabs.Screen
-					name={'notifications'}
-					options={{
-						tabBarButton: NavbarButtonDisabledOnSignOut,
-						tabBarIcon: ({ color, size, focused }) =>
-							focused ? (
-								<Ionicons
-									name="file-tray"
-									size={size + ICON_D_SIZE_OFFSET}
-									color={!acct ? theme.background.a50 : color}
-								/>
-							) : (
-								<Ionicons
-									name="file-tray-outline"
-									size={size + ICON_D_SIZE_OFFSET}
-									color={!acct ? theme.background.a50 : color}
-								/>
-							),
-					}}
-				/>
-				<Tabs.Screen
-					name={'profile'}
-					options={{
-						tabBarBadge: session.state === 'invalid' ? 1 : undefined,
-						tabBarButton: ({ onPress, onLongPress, children }) => (
-							<ProfileTabNavbarIconButton
-								onPress={onPress}
-								onLongPress={onLongPress}
-								children={children}
-							/>
-						),
-						tabBarIcon: ({ color, size, focused }) => (
-							<ProfileTabNavbarIcon
+		<Tabs
+			initialRouteName={'index'}
+			detachInactiveScreens={false}
+			screenOptions={() => {
+				return {
+					tabBarHideOnKeyboard: true,
+					tabBarStyle: {
+						backgroundColor: theme.background.a10,
+						borderTopWidth: 0,
+						height: BOTTOM_NAVBAR_HEIGHT,
+					},
+					tabBarIconStyle: BOTTOM_NAVBAR_ICON_STYLE,
+					tabBarActiveTintColor: theme.primary.a0,
+					tabBarInactiveTintColor: theme.secondary.a50,
+					tabBarShowLabel: false,
+					headerShown: false,
+				};
+			}}
+		>
+			<Tabs.Screen
+				name="index"
+				options={{
+					tabBarButton: NavbarButtonDefault,
+					tabBarIcon: ({ focused, color, size }) =>
+						focused ? (
+							<Ionicons
+								size={size + ICON_A_SIZE_OFFSET}
+								name="home"
 								color={color}
-								size={size + 0}
-								focused={focused}
-								sizeOffset={ICON_E_SIZE_OFFSET}
+							/>
+						) : (
+							<Ionicons
+								size={size + ICON_A_SIZE_OFFSET}
+								name="home-outline"
+								color={color}
 							/>
 						),
-					}}
-				/>
-			</Tabs>
-		</View>
+				}}
+			/>
+			<Tabs.Screen
+				name={'feed'}
+				options={{
+					tabBarButton: NavbarButtonDisabledOnSignOut,
+					tabBarIcon: ({ color, size, focused }) =>
+						focused ? (
+							<Ionicons
+								name="newspaper"
+								size={size + ICON_B_SIZE_OFFSET}
+								color={!acct ? theme.background.a50 : color}
+							/>
+						) : (
+							<Ionicons
+								name="newspaper-outline"
+								size={size + ICON_B_SIZE_OFFSET}
+								color={!acct ? theme.background.a50 : color}
+							/>
+						),
+				}}
+			/>
+			<Tabs.Screen
+				name={'explore'}
+				options={{
+					tabBarButton: NavbarButtonDisabledOnSignOut,
+					tabBarIcon: ({ color, size, focused }) =>
+						focused ? (
+							<Ionicons
+								name="compass"
+								size={size + ICON_C_SIZE_OFFSET}
+								color={!acct ? theme.background.a50 : color}
+							/>
+						) : (
+							<Ionicons
+								name="compass-outline"
+								size={size + ICON_C_SIZE_OFFSET}
+								color={!acct ? theme.background.a50 : color}
+							/>
+						),
+				}}
+			/>
+
+			<Tabs.Screen
+				name={'notifications'}
+				options={{
+					tabBarButton: NavbarButtonDisabledOnSignOut,
+					tabBarIcon: ({ color, size, focused }) =>
+						focused ? (
+							<Ionicons
+								name="file-tray"
+								size={size + ICON_D_SIZE_OFFSET}
+								color={!acct ? theme.background.a50 : color}
+							/>
+						) : (
+							<Ionicons
+								name="file-tray-outline"
+								size={size + ICON_D_SIZE_OFFSET}
+								color={!acct ? theme.background.a50 : color}
+							/>
+						),
+				}}
+			/>
+			<Tabs.Screen
+				name={'profile'}
+				options={{
+					tabBarBadge: session.state === 'invalid' ? 1 : undefined,
+					tabBarButton: ({ onPress, onLongPress, children }) => (
+						<ProfileTabNavbarIconButton
+							onPress={onPress}
+							onLongPress={onLongPress}
+							children={children}
+						/>
+					),
+					tabBarIcon: ({ color, size, focused }) => (
+						<ProfileTabNavbarIcon
+							color={color}
+							size={size + 0}
+							focused={focused}
+							sizeOffset={ICON_E_SIZE_OFFSET}
+						/>
+					),
+				}}
+			/>
+		</Tabs>
 	);
 }

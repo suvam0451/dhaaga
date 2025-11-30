@@ -1081,13 +1081,13 @@ export function AppToggleIcon({
 					onPress={onPress}
 				/>
 			)}
-			{count && (
+			{count ? (
 				<AppText.Medium
 					style={{ marginLeft: 4, color: flag ? activeTint : inactiveTint }}
 				>
 					{count}
 				</AppText.Medium>
-			)}
+			) : null}
 		</View>
 	);
 }

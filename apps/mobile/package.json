@@ -1,6 +1,6 @@
 {
 	"name": "@dhaaga/mobile",
-	"version": "0.16.6",
+	"version": "0.17.0",
 	"main": "expo-router/entry",
 	"dependencies": {
 		"@dhaaga/bridge": "*",

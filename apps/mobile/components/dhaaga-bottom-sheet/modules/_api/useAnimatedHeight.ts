@@ -38,7 +38,7 @@ function useAnimatedHeight() {
 				}
 				case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
 				case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG: {
-					_target = Dimensions.get('window').height * 0.55;
+					_target = Dimensions.get('window').height * 0.5;
 					break;
 				}
 				default: {

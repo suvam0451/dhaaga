@@ -55,11 +55,6 @@ function UserAddSheetPresenter() {
 		setDebouncedQuery(null);
 	}
 
-	const [ContainerHeight, setContainerHeight] = useState(0);
-	const handleLayout = (event) => {
-		setContainerHeight(event.nativeEvent.layout.height);
-	};
-
 	return (
 		<View
 			style={{
@@ -68,14 +63,14 @@ function UserAddSheetPresenter() {
 				paddingTop: 16,
 				backgroundColor: theme.background.a30,
 			}}
-			onLayout={handleLayout}
 		>
 			<Pressable
 				style={{
 					paddingHorizontal: 20,
 					flexDirection: 'row',
 					alignItems: 'center',
-					paddingVertical: 16,
+					paddingTop: 12,
+					paddingBottom: 6,
 				}}
 				onPress={onSectionPressed}
 			>
@@ -101,13 +96,11 @@ function UserAddSheetPresenter() {
 						},
 					]}
 				/>
-				<View>
-					<AppIcon
-						id={'clear'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
-						onPress={onClearSearch}
-					/>
-				</View>
+				<AppIcon
+					id={'clear'}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+					onPress={onClearSearch}
+				/>
 			</Pressable>
 
 			<FlatList

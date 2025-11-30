@@ -17,7 +17,7 @@
 	},
 	"onboarding": {
 		"addAccountButton": "Add Account",
-		"accountCreationNotSupported": "Account creation is not supported.\nYou must already own an account.",
+		"accountCreationNotSupported": "You must bring your own account.\nBluesky support is experimental.",
 		"needBlueskyAccount": "You need a Bluesky account",
 		"createOneHere": "Create one here",
 		"loginButton": "Sign In",

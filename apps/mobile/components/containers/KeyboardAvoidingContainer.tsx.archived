@@ -1,0 +1,33 @@
+import { useEffect, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
+
+function KeyboardAvoidingContainer({ children }: any) {
+	useEffect(() => {
+		const keyboardShowListener = Keyboard.addListener('keyboardDidShow', () => {
+			setFlexToggle(false);
+		});
+
+		const keyboardHideListener = Keyboard.addListener('keyboardDidHide', () => {
+			setFlexToggle(true);
+		});
+
+		return () => {
+			keyboardShowListener.remove();
+			keyboardHideListener.remove();
+		};
+	}, []);
+
+	const [flexToggle, setFlexToggle] = useState(false);
+	return (
+		<KeyboardAvoidingView
+			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+			keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+			style={flexToggle ? [{ flexGrow: 1 }] : [{ flex: 1 }]}
+			enabled={!flexToggle}
+		>
+			{children}
+		</KeyboardAvoidingView>
+	);
+}
+
+export default KeyboardAvoidingContainer;

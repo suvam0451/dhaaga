@@ -35,11 +35,9 @@ function ComposerPresenter() {
 			case 'txt': {
 				return (
 					<View style={{ height: '100%' }}>
-						<ScrollView>
-							<ComposerTopMenu />
-							<ComposerSpoiler />
-							<ComposerTextInput />
-						</ScrollView>
+						<ComposerTopMenu />
+						<ComposerSpoiler />
+						<ComposerTextInput />
 						<BottomMenuPresenter />
 					</View>
 				);
