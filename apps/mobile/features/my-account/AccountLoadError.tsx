@@ -1,24 +1,23 @@
-import { View, Text, ScrollView } from 'react-native';
-import BearError from '#/svgs/BearError';
+import { View, ScrollView } from 'react-native';
+import BearError from '#/components/svgs/BearError';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import {
 	useAppActiveSession,
+	useAppGlobalStateActions,
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import {
-	AppButtonClassicInverted,
-	AppButtonVariantA,
-} from '#/components/lib/Buttons';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
 
 function AccountLoadError() {
 	const { theme } = useAppTheme();
 	const { session } = useAppActiveSession();
+	const { restoreSession } = useAppGlobalStateActions();
 	return (
 		<ScrollView
 			style={{
@@ -27,7 +26,7 @@ function AccountLoadError() {
 			}}
 		>
 			<AppTabLandingNavbar
-				type={APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS}
+				type={APP_LANDING_PAGE_TYPE.MY_PROFILE}
 				menuItems={[
 					{
 						iconId: 'user-guide',
@@ -37,7 +36,7 @@ function AccountLoadError() {
 					},
 				]}
 			/>
-			<View style={{ width: 128, height: 256, marginHorizontal: 'auto' }}>
+			<View style={{ width: 128, height: 196, marginHorizontal: 'auto' }}>
 				<BearError />
 			</View>
 
@@ -59,24 +58,16 @@ function AccountLoadError() {
 				<AppButtonVariantA
 					style={{ marginTop: 32 }}
 					label={'Retry'}
+					loading={session.state === 'loading'}
+					onClick={restoreSession}
+				/>
+				<AppButtonVariantA
+					style={{ marginTop: 8 }}
+					label={'Reset Token'}
 					loading={false}
+					variant={'secondary'}
 					onClick={() => {}}
 				/>
-				<View>
-					<AppText.Medium
-						style={{
-							textAlign: 'center',
-							backgroundColor: theme.background.a40,
-							padding: 12,
-							borderRadius: 8,
-							minWidth: 148,
-							marginTop: 4,
-							marginHorizontal: 'auto',
-						}}
-					>
-						Log In Again
-					</AppText.Medium>
-				</View>
 			</View>
 		</ScrollView>
 	);

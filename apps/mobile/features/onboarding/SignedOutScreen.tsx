@@ -5,10 +5,10 @@ import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { useAssets } from 'expo-asset';
 import { Image } from 'expo-image';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { Footer } from '#/components/screens/profile/stack/AppSettingsPage';
 import WelcomeScreenFeatureShowcase from '#/features/onboarding/WelcomeScreenFeatureShowcase';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { router } from 'expo-router';
+import { LinkingUtils } from '#/utils/linking.utils';
 
 function Page() {
 	const [assets, error] = useAssets([require('#/assets/dhaaga/icon.png')]);
@@ -25,7 +25,7 @@ function Page() {
 			<AppText.SemiBold
 				style={{ textAlign: 'center', marginTop: 24, fontSize: 32 }}
 			>
-				Welcome
+				Dhaaga
 			</AppText.SemiBold>
 			<Image
 				source={{ uri: assets[0].localUri! }}
@@ -40,17 +40,17 @@ function Page() {
 					},
 				]}
 			/>
-			<AppText.SemiBold
-				style={{ textAlign: 'center', marginTop: 8 }}
-				emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+			<View
+				style={{
+					marginHorizontal: 28,
+					flex: 1,
+					marginVertical: 'auto',
+					justifyContent: 'center',
+				}}
 			>
-				v0.16.0
-			</AppText.SemiBold>
-
-			<View style={{ marginHorizontal: 24, marginVertical: 42 }}>
 				<WelcomeScreenFeatureShowcase />
 			</View>
-			<View style={{ marginTop: 32, flex: 1 }}>
+			<View style={{ marginBottom: 32 }}>
 				<AppButtonVariantA
 					label={'Get Started'}
 					loading={false}
@@ -59,9 +59,19 @@ function Page() {
 					}}
 					textStyle={{ fontSize: 16 }}
 				/>
-			</View>
-			<View style={{ marginBottom: 8 }}>
-				<Footer hideVersion />
+				<AppButtonVariantA
+					label={'Visit Website'}
+					loading={false}
+					variant={'secondary'}
+					onClick={LinkingUtils.openProjectWebsite}
+					textStyle={{ fontSize: 16 }}
+				/>
+				<AppText.Medium
+					style={{ textAlign: 'center', marginTop: 8 }}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
+				>
+					v0.16.5
+				</AppText.Medium>
 			</View>
 		</View>
 	);

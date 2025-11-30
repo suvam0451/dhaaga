@@ -12,12 +12,25 @@ import {
 } from 'react-native';
 import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
 import * as Haptics from 'expo-haptics';
-import { memo } from 'react';
 import { APP_FONTS } from '../../styles/AppFonts';
 import { useAppTheme } from '../../hooks/utility/global-state-extractors';
 import { AppText } from './Text';
 import { appDimensions } from '../../styles/dimensions';
 import appStyles from '../../styles/AppStyles';
+
+const BUTTON_KINDS = [
+	'primary',
+	'secondary',
+	'reversed',
+	'attention',
+	'alert',
+	'outlined',
+	'outlinedAlert',
+	'ghost',
+	'ghostSecondary',
+] as const;
+
+type ButtonVariantEnum = (typeof BUTTON_KINDS)[number];
 
 type AppButtonVariantAProps = {
 	label: string;
@@ -31,6 +44,7 @@ type AppButtonVariantAProps = {
 	customLoadingState?: ReactNode;
 	style?: StyleProp<ViewStyle>;
 	textStyle?: StyleProp<TextStyle>;
+	variant?: ButtonVariantEnum;
 };
 
 export function AppButtonVariantA({
@@ -39,10 +53,10 @@ export function AppButtonVariantA({
 	onClick,
 	onLongClick,
 	opts,
-	customLoadingState,
 	style,
 	textStyle,
 	disabled,
+	variant,
 }: AppButtonVariantAProps) {
 	const { theme } = useAppTheme();
 	function onPress() {
@@ -65,7 +79,8 @@ export function AppButtonVariantA({
 			style={[
 				appStyles.button,
 				{
-					backgroundColor: theme.primary.a0,
+					backgroundColor:
+						variant === 'secondary' ? theme.background.a40 : theme.primary.a0,
 					opacity: disabled ? 0.5 : 1,
 				},
 				style,
@@ -78,7 +93,7 @@ export function AppButtonVariantA({
 			<Text
 				style={[
 					{
-						color: 'black',
+						color: variant === 'secondary' ? theme.secondary.a10 : 'black',
 						// opacity: 1,
 						fontSize: 16,
 						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
@@ -184,7 +199,7 @@ type AppButtonClassicInvertedProps = {
 	onClick: () => void;
 };
 
-export const AppButtonClassicInverted = memo(function Foo({
+export function AppButtonClassicInverted({
 	label,
 	onClick,
 }: AppButtonClassicInvertedProps) {
@@ -209,41 +224,7 @@ export const AppButtonClassicInverted = memo(function Foo({
 			</Text>
 		</View>
 	);
-});
-
-type AppTimelineActionProps = {
-	label: string;
-	Icon: ReactNode;
-};
-
-export const AppTimelineAction = memo(function Foo({
-	Icon,
-	label,
-}: AppTimelineActionProps) {
-	return (
-		<View
-			style={{
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				marginRight: 8,
-				paddingVertical: 8,
-				paddingHorizontal: 4,
-			}}
-		>
-			{Icon}
-			<Text
-				style={{
-					color: APP_FONT.MONTSERRAT_BODY,
-					marginLeft: 4,
-					fontFamily: 'Montserrat-Bold',
-				}}
-			>
-				{label}
-			</Text>
-		</View>
-	);
-});
+}
 
 type AppButtonBottomSheetActionProps = {
 	label?: string;
@@ -263,60 +244,58 @@ export enum APP_BOTTOM_SHEET_ACTION_CATEGORY {
 /**
  * The buttons used in Dhaaga bottom sheets
  */
-export const AppButtonBottomSheetAction = memo(
-	({
-		label,
-		onPress,
-		Icon,
-		loading,
-		type,
-		style,
-		disabled,
-	}: AppButtonBottomSheetActionProps) => {
-		const { theme } = useAppTheme();
-		const bgColor: Record<APP_BOTTOM_SHEET_ACTION_CATEGORY, string> = {
-			[APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL]: theme.complementary.a0,
-			[APP_BOTTOM_SHEET_ACTION_CATEGORY.PROGRESS]:
-				APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
-		};
+export function AppButtonBottomSheetAction({
+	label,
+	onPress,
+	Icon,
+	loading,
+	type,
+	style,
+	disabled,
+}: AppButtonBottomSheetActionProps) {
+	const { theme } = useAppTheme();
+	const bgColor: Record<APP_BOTTOM_SHEET_ACTION_CATEGORY, string> = {
+		[APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL]: theme.complementary.a0,
+		[APP_BOTTOM_SHEET_ACTION_CATEGORY.PROGRESS]:
+			APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
+	};
 
-		return (
-			<TouchableOpacity
-				style={[
-					{
-						backgroundColor: bgColor[type],
-						flexDirection: 'row',
-						alignItems: 'center',
-						paddingHorizontal: 12,
-						borderRadius: 8,
-						paddingVertical: 6,
-					},
-					style,
-				]}
-				onPress={onPress}
-			>
-				{label && (
-					<Text
-						style={{
-							color: disabled ? APP_FONT.DISABLED : APP_FONT.MONTSERRAT_BODY,
-							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-						}}
-					>
-						{label}
-					</Text>
-				)}
-				{loading ? (
-					<ActivityIndicator
-						color={APP_FONT.MONTSERRAT_BODY}
-						style={{ marginLeft: 6 }}
-					/>
-				) : (
-					Icon
-				)}
-			</TouchableOpacity>
-		);
-	},
-);
+	return (
+		<TouchableOpacity
+			style={[
+				{
+					backgroundColor: bgColor[type],
+					flexDirection: 'row',
+					alignItems: 'center',
+					paddingHorizontal: 12,
+					borderRadius: 8,
+					paddingVertical: 6,
+				},
+				style,
+			]}
+			onPress={onPress}
+		>
+			{label && (
+				<Text
+					style={{
+						color: disabled ? APP_FONT.DISABLED : APP_FONT.MONTSERRAT_BODY,
+						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+					}}
+				>
+					{label}
+				</Text>
+			)}
+			{loading ? (
+				<ActivityIndicator
+					color={APP_FONT.MONTSERRAT_BODY}
+					style={{ marginLeft: 6 }}
+				/>
+			) : (
+				Icon
+			)}
+		</TouchableOpacity>
+	);
+}
 
 type AppCtaButtonProps = {
 	label: string;

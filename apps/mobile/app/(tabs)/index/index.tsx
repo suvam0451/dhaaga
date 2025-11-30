@@ -1,7 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
-import AddAccountPresenter from '../../../features/onboarding/presenters/AddAccountPresenter';
 import SocialHubPresenter from '../../../features/social-hub/presenters/SocialHubPresenter';
 import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
 import { Account } from '@dhaaga/db';
@@ -169,7 +167,6 @@ function Screen() {
 	}, [acct]);
 
 	if (!acct) return <SignedOutScreen />;
-	if (!acct) return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.HOME} />;
 	return <SocialHubPresenter />;
 }
 

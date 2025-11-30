@@ -8,18 +8,17 @@
 		"@dhaaga/db": "*",
 		"@dhaaga/orm": "*",
 		"@dhaaga/react": "*",
-		"@expo-google-fonts/bebas-neue": "^0.4.0",
-		"@expo-google-fonts/inter": "^0.4.1",
-		"@expo-google-fonts/montserrat": "^0.4.1",
-		"@expo-google-fonts/roboto": "^0.4.0",
-		"@expo/metro-runtime": "~6.1.2",
+		"@expo-google-fonts/bebas-neue": "^0.4.1",
+		"@expo-google-fonts/inter": "^0.4.2",
+		"@expo-google-fonts/montserrat": "^0.4.2",
+		"@expo-google-fonts/roboto": "^0.4.1",
 		"@expo/vector-icons": "^15.0.2",
 		"@react-native-masked-view/masked-view": "0.3.2",
 		"@react-navigation/bottom-tabs": "^7.4.0",
 		"@react-navigation/native-stack": "^7.3.16",
 		"@rneui/themed": "^4.0.0-rc.8",
 		"@shopify/flash-list": "2.0.2",
-		"@tanstack/react-query": "^5.64.2",
+		"@tanstack/react-query": "^5.90.11",
 		"expo": "~54.0.25",
 		"expo-asset": "~12.0.9",
 		"expo-audio": "~1.0.15",
@@ -42,11 +41,12 @@
 		"expo-video": "~3.0.14",
 		"expo-web-browser": "~15.0.9",
 		"fast-text-encoding": "^1.0.6",
-		"i18next": "^25.5.0",
+		"i18next": "^25.6.3",
+		"immer": "^11.0.1",
 		"jwt-decode": "^4.0.0",
 		"link-preview-js": "^3.0.14",
 		"react": "19.1.0",
-		"react-i18next": "^15.4.1",
+		"react-i18next": "^16.3.5",
 		"react-native": "0.81.5",
 		"react-native-gesture-handler": "~2.28.0",
 		"react-native-pager-view": "6.9.1",
@@ -55,7 +55,8 @@
 		"react-native-screens": "~4.16.0",
 		"react-native-svg": "15.12.1",
 		"react-native-webview": "13.15.0",
-		"react-native-worklets": "0.5.1"
+		"react-native-worklets": "0.5.1",
+		"zustand": "^5.0.9"
 	},
 	"peerDependencies": {
 		"@atproto/api": ">=0.16.0"
@@ -76,18 +77,6 @@
 		"eas-build-post-install": "cd ../.. && npm run build-deps"
 	},
 	"type": "module",
-	"expo": {
-		"doctor": {
-			"reactNativeDirectoryCheck": {
-				"exclude": [
-					"@rneui/base",
-					"@rneui/themed",
-					"immer"
-				],
-				"listUnknownPackages": false
-			}
-		}
-	},
 	"devDependencies": {
 		"typescript": "~5.9.2"
 	}

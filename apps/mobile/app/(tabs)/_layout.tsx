@@ -3,6 +3,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
 import {
 	HomeNavigationIcon,
+	NavbarButtonDefault,
 	NavbarButtonDisabledOnSignOut,
 	ProfileTabNavbarIcon,
 	ProfileTabNavbarIconButton,
@@ -54,14 +55,21 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name="index"
 					options={{
-						tabBarIcon: ({ focused, color, size }) => (
-							<HomeNavigationIcon
-								focused={focused}
-								color={color}
-								size={size}
-								sizeOffset={ICON_A_SIZE_OFFSET}
-							/>
-						),
+						tabBarButton: NavbarButtonDefault,
+						tabBarIcon: ({ focused, color, size }) =>
+							focused ? (
+								<Ionicons
+									size={size + ICON_A_SIZE_OFFSET}
+									name="home"
+									color={color}
+								/>
+							) : (
+								<Ionicons
+									size={size + ICON_A_SIZE_OFFSET}
+									name="home-outline"
+									color={color}
+								/>
+							),
 					}}
 				/>
 				<Tabs.Screen

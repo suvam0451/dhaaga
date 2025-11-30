@@ -165,6 +165,33 @@ export function HomeNavigationIcon({
 	);
 }
 
+export function NavbarButtonDefault({ onPress, onLongPress, children }: any) {
+	function onLongPressAction(e: any) {
+		onLongPress();
+	}
+
+	function onPressAction(e: any) {
+		onPress();
+	}
+	return (
+		<Pressable
+			style={{
+				marginVertical: 'auto',
+			}}
+			onPress={onPressAction}
+			onLongPress={onLongPressAction}
+		>
+			<View
+				style={{
+					marginHorizontal: 'auto',
+					marginVertical: 'auto',
+				}}
+			>
+				{children}
+			</View>
+		</Pressable>
+	);
+}
 /**
  * A custom navigation button container,
  * which prevents the user from interacting with the
@@ -172,6 +199,7 @@ export function HomeNavigationIcon({
  * @param onPress
  * @param onLongPress
  * @param children
+ * @param alwaysEnabled will never disable the button
  * @constructor
  */
 export function NavbarButtonDisabledOnSignOut({

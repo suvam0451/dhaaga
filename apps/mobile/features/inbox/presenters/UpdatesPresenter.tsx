@@ -7,19 +7,20 @@ import Header from '../components/Header';
 import FlashListService from '../../../services/flashlist.service';
 import { ListWithSkeletonPlaceholder } from '../../../ui/Lists';
 import { NotificationSkeletonView } from '../components/Skeleton';
-import { View } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
+import EmptyNotificationsView from '#/features/inbox/view/EmptyNotificationsView';
 
 function UpdatesPresenter() {
 	const { state, loadNext, maxId, append, reset } = useNotificationStore();
 	const { data, refetch, isPending, fetchStatus, isRefetching } =
 		useApiGetSubscriptionUpdates(maxId);
 
-	useEffect(() => {
-		if (fetchStatus !== 'fetching') {
-			append(data);
-		}
-	}, [fetchStatus]);
+	// FIXME: looping requests
+	// useEffect(() => {
+	// 	if (fetchStatus !== 'fetching') {
+	// 		append(data);
+	// 	}
+	// }, [fetchStatus]);
+	console.log(data);
 
 	async function refresh() {
 		reset();
@@ -45,11 +46,7 @@ function UpdatesPresenter() {
 			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.UPDATES} />}
 			onRefresh={refresh}
 			listEmpty={state.listEmpty}
-			ListEmptyComponent={
-				<View>
-					<AppText.Normal>Notification List Empty</AppText.Normal>
-				</View>
-			}
+			ListEmptyComponent={<EmptyNotificationsView />}
 		/>
 	);
 }

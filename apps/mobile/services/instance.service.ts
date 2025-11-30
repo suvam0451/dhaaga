@@ -1,5 +1,4 @@
 import { TagTargetInterface } from '@dhaaga/bridge';
-import axios from 'axios';
 
 class InstanceService {
 	static async getTagInfoCrossDomain(
@@ -37,9 +36,22 @@ class InstanceService {
 		}
 
 		try {
-			const res = await axios.post(`${theirDomain}/api/hashtags/show`, {
-				tag: tag.getName(),
+			const res = await fetch(`${theirDomain}/api/hashtags/show`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					tag: tag.getName(),
+				}),
 			});
+
+			if (!res.ok) {
+				throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+			}
+
+			const data = await res.json();
+			// return data;
 		} catch (e) {}
 
 		return {
