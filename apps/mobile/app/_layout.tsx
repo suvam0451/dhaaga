@@ -30,9 +30,11 @@ polyfills();
  */
 const IGNORED_LOGS = [
 	'Found screens with the same name nested inside one another',
-	'Require cycle:',
-	'VirtualizedLists',
-	'Warning: Text strings must be rendered within a',
+	"[Reanimated] Reading from `value` during component render. Please ensure that you don't access the `value` property nor use `get` method of a shared value while React is rendering a component.",
+	'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.',
+	'Text strings must be rendered within a <Text> component.',
+	"[Error: Call to function 'ExpoImage.loadAsync' has been rejected.\n" +
+		'→ Caused by: Failed to load the image: com.bumptech.glide.load.engine.GlideException: Received null model]',
 ];
 LogBox.ignoreLogs(IGNORED_LOGS);
 LogBox.ignoreAllLogs(true);

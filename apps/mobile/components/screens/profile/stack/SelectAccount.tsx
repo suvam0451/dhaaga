@@ -2,11 +2,7 @@ import { FlatList, RefreshControl, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
 import AccountListForSoftware from './landing/fragments/AccountListForSoftware';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../shared/topnavbar/AppTopNavbar';
 import { Account, AccountService } from '@dhaaga/db';
 import {
 	useAppDb,
@@ -65,11 +61,6 @@ function SelectAccountStack() {
 		KNOWN_SOFTWARE.BLUESKY,
 	];
 
-	const { translateY } = useScrollMoreOnPageEnd({
-		itemCount: 1,
-		updateQueryCache: () => {},
-	});
-
 	function onPressAddAccount() {
 		router.navigate(APP_ROUTING_ENUM.ADD_ACCOUNT);
 	}
@@ -92,11 +83,6 @@ function SelectAccountStack() {
 					},
 				]}
 			/>
-			{/*<AppTopNavbar*/}
-			{/*	title={t(`topNav.secondary.manageAccounts`)}*/}
-			{/*	translateY={translateY}*/}
-			{/*	type={APP_TOPBAR_TYPE_ENUM.GENERIC}*/}
-			{/*>*/}
 			<FlatList
 				data={SOFTWARE_ARRAY}
 				renderItem={({ item }) => (

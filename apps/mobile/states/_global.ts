@@ -133,16 +133,43 @@ const useGlobalState = create<AppGlobalState & AppGlobalActions>()(
 			const _db = get().db;
 			if (!_db) return;
 
+			set((state) => {
+				state.session = {
+					state: 'loading',
+					target: null,
+					me: null,
+					logs: [],
+				};
+			});
+
 			const acct = AccountService.getSelected(_db);
+			if (!acct) {
+				set((state) => {
+					state.session = {
+						state: 'idle',
+						target: null,
+						me: null,
+						logs: [],
+					};
+					state.me = null;
+					state.acct = null;
+					state.acctManager = null;
+					state.profileSessionManager = null;
+					state.router = null;
+					state.driver = KNOWN_SOFTWARE.UNKNOWN;
+					state.publishers.postPub = null;
+				});
+				return;
+			}
 			try {
 				const { acct, router, me } =
 					await AppSessionService.restoreAppSession(_db);
 
 				set((state) => {
 					state.session = {
-						state: 'idle',
-						target: null,
-						me: null,
+						state: 'valid',
+						target: acct,
+						me: me,
 						logs: [],
 					};
 					state.me = me;

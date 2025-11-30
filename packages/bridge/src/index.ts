@@ -22,7 +22,6 @@ import MastoApiPostAdapter from './implementors/status/mastodon.js';
 import MisskeyApiPostAdapter from './implementors/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
 import { InstanceApi_CustomEmojiDTO } from './adapters/_client/_router/routes/instance.js';
-import axios from 'axios';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
 import { errorBuilder } from './adapters/_client/_router/dto/api-responses.dto.js';
 import { LibraryPromise } from './adapters/_client/_router/routes/_types.js';
@@ -101,10 +100,20 @@ type MiauthSessionCheckResponse =
 	  };
 
 export const verifyMisskeyToken = async (host: string, session: string) => {
-	const res = await axios.post<MiauthSessionCheckResponse>(
-		`${host}/api/miauth/${session}/check`,
-	);
-	return res.data;
+	const res = await fetch(`${host}/api/miauth/${session}/check`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	// If the API returns JSON, parse it:
+	if (!res.ok) {
+		throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+	}
+
+	const data = await res.json(); // typed as MiauthSessionCheckResponse if you cast it
+	return data as MiauthSessionCheckResponse;
 };
 
 export { type LibraryPromise, errorBuilder };

@@ -218,7 +218,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: 'transparent',
 		position: 'absolute',
-		bottom: 8,
+		bottom: 0,
+		paddingBottom: 8,
 		width: '100%',
 	},
 	label: {

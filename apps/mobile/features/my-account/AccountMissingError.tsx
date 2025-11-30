@@ -13,7 +13,7 @@ import { router } from 'expo-router';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 
-function AccountLoadError() {
+function AccountMissingError() {
 	const { theme } = useAppTheme();
 	const { session } = useAppActiveSession();
 	const { restoreSession } = useAppGlobalStateActions();
@@ -37,25 +37,18 @@ function AccountLoadError() {
 			/>
 			<ErrorPageBuilder
 				stickerArt={<BearError />}
-				errorMessage={'Failed to load account'}
+				errorMessage={'No Account Selected'}
 				errorDescription={session.error}
 			>
 				<AppButtonVariantA
 					style={{ marginTop: 32 }}
-					label={'Retry'}
+					label={'Select Now'}
 					loading={session.state === 'loading'}
 					onClick={restoreSession}
-				/>
-				<AppButtonVariantA
-					style={{ marginTop: 8 }}
-					label={'Reset Token'}
-					loading={false}
-					variant={'secondary'}
-					onClick={() => {}}
 				/>
 			</ErrorPageBuilder>
 		</ScrollView>
 	);
 }
 
-export default AccountLoadError;
+export default AccountMissingError;

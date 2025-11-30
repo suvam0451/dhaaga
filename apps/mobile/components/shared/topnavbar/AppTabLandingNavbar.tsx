@@ -9,6 +9,7 @@ import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
+	HUB,
 	SOCIAL_HUB_ADD_TAB,
 	DISCOVER,
 	COMPOSE,
@@ -44,8 +45,9 @@ type AppTabLandingNavbarProps = {
 function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
+		[APP_LANDING_PAGE_TYPE.HOME]: 'Home',
 		[APP_LANDING_PAGE_TYPE.SOCIAL_HUB_ADD_TAB]: 'Add Profile',
-		[APP_LANDING_PAGE_TYPE.HOME]: t(`topNav.primary.hub`),
+		[APP_LANDING_PAGE_TYPE.HUB]: t(`topNav.primary.hub`),
 		[APP_LANDING_PAGE_TYPE.DISCOVER]: t(`topNav.primary.discover`),
 		[APP_LANDING_PAGE_TYPE.COMPOSE]: t(`topNav.primary.compose`),
 		[APP_LANDING_PAGE_TYPE.INBOX]: t(`topNav.primary.inbox`),
@@ -58,7 +60,7 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 		[APP_LANDING_PAGE_TYPE.MY_ACCOUNT]: t(`topNav.secondary.myAccount`),
 		[APP_LANDING_PAGE_TYPE.MY_PROFILE]: t(`topNav.secondary.myProfile`),
 		[APP_LANDING_PAGE_TYPE.ACCOUNT_HUB]: t(`topNav.secondary.myAccount`),
-		[APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS]: 'Manage Accounts',
+		[APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS]: 'My Accounts',
 	};
 
 	return (

@@ -16,6 +16,7 @@ import { appDimensions } from '../../../../styles/dimensions';
 import { ActivityPubService } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 import { PostInspector } from '@dhaaga/bridge';
+import PostStats from '#/components/common/status/PostStats';
 
 /**
  * Press this to toggle sharing status

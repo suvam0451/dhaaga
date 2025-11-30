@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
 import {
-	HomeNavigationIcon,
+	NavbarButtonDefault,
 	NavbarButtonDisabledOnSignOut,
 	ProfileTabNavbarIcon,
 	ProfileTabNavbarIconButton,
@@ -13,10 +13,9 @@ import {
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
 
-const BOTTOM_NAVBAR_HEIGHT = 48; // Range: 42 to 52
+const BOTTOM_NAVBAR_HEIGHT = 50; // Range: 42 to 52
 const BOTTOM_NAVBAR_ICON_STYLE = {
-	height: 46,
-	// width: 12,
+	height: 52,
 };
 
 const ICON_A_SIZE_OFFSET = 4;
@@ -54,14 +53,21 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name="index"
 					options={{
-						tabBarIcon: ({ focused, color, size }) => (
-							<HomeNavigationIcon
-								focused={focused}
-								color={color}
-								size={size}
-								sizeOffset={ICON_A_SIZE_OFFSET}
-							/>
-						),
+						tabBarButton: NavbarButtonDefault,
+						tabBarIcon: ({ focused, color, size }) =>
+							focused ? (
+								<Ionicons
+									size={size + ICON_A_SIZE_OFFSET}
+									name="home"
+									color={color}
+								/>
+							) : (
+								<Ionicons
+									size={size + ICON_A_SIZE_OFFSET}
+									name="home-outline"
+									color={color}
+								/>
+							),
 					}}
 				/>
 				<Tabs.Screen

@@ -18,16 +18,18 @@
     "@tailwindcss/vite": "^4.1.17",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.23.22",
-    "lucide-react": "^0.544.0",
+    "framer-motion": "^12.23.24",
+    "immer": "^11.0.1",
+    "lucide-react": "^0.555.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^7.9.3",
-    "tailwind-merge": "^3.3.1"
+    "react-router-dom": "^7.9.6",
+    "tailwind-merge": "^3.4.0",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.0.4",
+    "@vitejs/plugin-react": "^5.1.1",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.4.0",
     "vite": "^7.2.4"

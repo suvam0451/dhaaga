@@ -29,3 +29,7 @@ https://www.flaticon.com/free-sticker/notebook_7603167
 ### Party Popper
 
 https://www.flaticon.com/free-sticker/party-popper_13725209
+
+### File Empty
+
+https://www.flaticon.com/free-icon/box_13640105

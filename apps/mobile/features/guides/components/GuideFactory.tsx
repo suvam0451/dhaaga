@@ -12,7 +12,6 @@ import AppTopNavbar, {
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { appDimensions } from '../../../styles/dimensions';
 
 export type UserGuideContainerProps = {
 	questionnaire: { question: string; answers: string[] }[];
@@ -70,7 +69,7 @@ export default GuideFactory;
 
 const styles = StyleSheet.create({
 	scrollView: {
-		paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 12,
+		paddingTop: 12,
 		paddingHorizontal: 10,
 	},
 });

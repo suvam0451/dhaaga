@@ -6,10 +6,9 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
-import MailArt from '#/svgs/Mail';
-import PartyPopperArt from '#/svgs/PartyPopper';
-import BearRoadSign from '#/svgs/BearRoadSign';
-import NotebookArt from '#/svgs/Notebook';
+import MailArt from '#/components/svgs/Mail';
+import PartyPopperArt from '#/components/svgs/PartyPopper';
+import BearRoadSign from '#/components/svgs/BearRoadSign';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { useEffect, useRef, useState } from 'react';
@@ -37,7 +36,7 @@ const DISPLAY_ITEMS = [
 	{
 		title: 'Hub Profiles',
 		desc: 'Organise your interests and ideas into separate profiles. Each profile can be personalised independently!',
-		art: <NotebookArt />,
+		art: <BearRoadSign />,
 	},
 	{
 		title: 'A Cleaner Inbox',

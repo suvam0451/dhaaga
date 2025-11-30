@@ -34,25 +34,32 @@ function TimelinePresenter({ refetch, fetchStatus }: TimelinePresenterProps) {
 		});
 	}
 
-	const [debouncedFetchStatus, setDebouncedFetchStatus] = useState(false);
-	const timeoutRef = useRef(null);
-
-	const debounceFn = (state: boolean) => {
-		if (state === false && debouncedFetchStatus === true) {
-			clearTimeout(timeoutRef.current);
-			timeoutRef.current = setTimeout(() => {
-				setDebouncedFetchStatus(false);
-			}, 1000);
-		} else {
-			clearTimeout(timeoutRef.current);
-			setDebouncedFetchStatus(true);
-		}
-	};
-
-	useEffect(() => {
-		debounceFn(fetchStatus === 'fetching');
-		return () => clearTimeout(timeoutRef.current);
-	}, [fetchStatus]);
+	/**
+	 * NOTE: especially in dev mode, there is a small delay
+	 * between when the fetch status changes and when the
+	 * fetched items are rendered in the UI, causing the user
+	 * to be unable to scroll for some time, even though the
+	 * network fetch has succeeded.
+	 */
+	// const [debouncedFetchStatus, setDebouncedFetchStatus] = useState(false);
+	// const timeoutRef = useRef(null);
+	//
+	// const debounceFn = (state: boolean) => {
+	// 	if (state === false && debouncedFetchStatus === true) {
+	// 		clearTimeout(timeoutRef.current);
+	// 		timeoutRef.current = setTimeout(() => {
+	// 			setDebouncedFetchStatus(false);
+	// 		}, 1000);
+	// 	} else {
+	// 		clearTimeout(timeoutRef.current);
+	// 		setDebouncedFetchStatus(true);
+	// 	}
+	// };
+	//
+	// useEffect(() => {
+	// 	debounceFn(fetchStatus === 'fetching');
+	// 	return () => clearTimeout(timeoutRef.current);
+	// }, [fetchStatus]);
 
 	return (
 		<TimelinePostListView
@@ -61,7 +68,7 @@ function TimelinePresenter({ refetch, fetchStatus }: TimelinePresenterProps) {
 			onRefresh={onRefresh}
 			refreshing={Refreshing}
 			loadMore={loadMore}
-			fetching={debouncedFetchStatus}
+			fetching={fetchStatus === 'fetching'}
 		/>
 	);
 }

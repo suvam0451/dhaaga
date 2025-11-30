@@ -55,7 +55,6 @@ function Page() {
 		>
 			<ScrollView
 				style={{
-					paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
 					paddingHorizontal: 16,
 				}}
 			>

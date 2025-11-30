@@ -6,8 +6,6 @@ import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 
 type Props = {
 	software: string;
-	mt?: number;
-	mb?: number;
 	iconSizeMultiplier?: number;
 	addText?: boolean;
 	height?: number;

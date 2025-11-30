@@ -1,72 +1,70 @@
 {
-  "name": "dhaaga",
-  "version": "0.16.5",
-  "description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
-  "homepage": "https://suvam.io/dhaaga",
-  "author": "Debashish Patra <suvam.io>",
-  "license": "AGPL-3.0-or-later",
-  "private": true,
-  "keywords": [
-    "fediverse",
-    "bluesky",
-    "mastodon",
-    "misskey",
-    "ios",
-    "android",
-    "sharkey",
-    "meisskey",
-    "cherrypick",
-    "pleroma",
-    "akkoma"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/suvam0451/dhaaga.git"
-  },
-  "bugs": {
-    "url": "https://github.com/suvam0451/dhaaga/issues"
-  },
-  "scripts": {
-    "dev:app": "npm run dev --workspace=@dhaaga/mobile",
-    "dev:web": "npm run dev --workspace=@dhaaga/web",
-    "build:db": "npm run build --workspace=@dhaaga/db",
-    "build:bridge": "npm run build --workspace=@dhaaga/bridge",
-    "build:core": "npm run build --workspace=@dhaaga/core",
-    "build:orm": "npm run build --workspace=@dhaaga/orm",
-    "build:react": "npm run build --workspace=@dhaaga/react",
-    "build:web": "npm run build --workspace apps/web",
-    "build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
-    "link-assets:mobile": "cp -r ./apps/_shared/assets/* ./apps/mobile/assets",
-    "link-assets:web": "cp -r ./apps/_shared/assets ./apps/web/public",
-    "link:all": "npm run link-assets:mobile && npm run link-assets:web",
-    "build-deps": "npm run build:all && npm run link:all"
-  },
-  "workspaces": [
-    "packages/*",
-    "apps/mobile",
-    "apps/web"
-  ],
-  "dependencies": {
-    "immer": "^11.0.1",
-    "zod": "^4.1.13",
-    "zustand": "^5.0.8"
-  },
-  "prettier": {
-    "bracketSpacing": true,
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "tabWidth": 2,
-    "useTabs": true
-  },
-  "type": "module",
-  "overrides": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "react-native-safe-area-context": "~5.6.0"
-  },
-  "devDependencies": {
-    "@typescript/native-preview": "^7.0.0-dev.20251129.1",
-    "prettier": "^3.7.3"
-  }
+	"name": "dhaaga",
+	"version": "0.16.6",
+	"description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
+	"homepage": "https://suvam.io/dhaaga",
+	"author": "Debashish Patra <suvam.io>",
+	"license": "AGPL-3.0-or-later",
+	"private": true,
+	"keywords": [
+		"fediverse",
+		"bluesky",
+		"mastodon",
+		"misskey",
+		"ios",
+		"android",
+		"sharkey",
+		"meisskey",
+		"cherrypick",
+		"pleroma",
+		"akkoma"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/suvam0451/dhaaga.git"
+	},
+	"bugs": {
+		"url": "https://github.com/suvam0451/dhaaga/issues"
+	},
+	"scripts": {
+		"dev:app": "npm run dev --workspace=@dhaaga/mobile",
+		"dev:web": "npm run dev --workspace=@dhaaga/web",
+		"build:db": "npm run build --workspace=@dhaaga/db",
+		"build:bridge": "npm run build --workspace=@dhaaga/bridge",
+		"build:core": "npm run build --workspace=@dhaaga/core",
+		"build:orm": "npm run build --workspace=@dhaaga/orm",
+		"build:react": "npm run build --workspace=@dhaaga/react",
+		"build:web": "npm run build --workspace apps/web",
+		"build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
+		"link-assets:mobile": "cp -r ./apps/_shared/assets/* ./apps/mobile/assets",
+		"link-assets:web": "cp -r ./apps/_shared/assets ./apps/web/public",
+		"link:all": "npm run link-assets:mobile && npm run link-assets:web",
+		"build-deps": "npm run build:all && npm run link:all"
+	},
+	"workspaces": [
+		"packages/*",
+		"apps/mobile",
+		"apps/web"
+	],
+	"dependencies": {
+		"zod": "^4.1.13"
+	},
+	"prettier": {
+		"bracketSpacing": true,
+		"printWidth": 80,
+		"semi": true,
+		"singleQuote": true,
+		"tabWidth": 2,
+		"useTabs": true
+	},
+	"type": "module",
+	"overrides": {
+		"react": "19.1.0",
+		"react-dom": "19.1.0",
+		"react-native-safe-area-context": "~5.6.0"
+	},
+	"devDependencies": {
+		"@typescript/native-preview": "^7.0.0-dev.20251130.1",
+		"prettier": "^3.7.3"
+	}
 }

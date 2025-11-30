@@ -81,8 +81,9 @@ function AppLanguagePresenter() {
 					</View>
 				)}
 				contentContainerStyle={{
-					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 8,
+					paddingTop: 8,
 					paddingHorizontal: 10,
+					paddingBottom: 52,
 				}}
 			/>
 		</AppTopNavbar>

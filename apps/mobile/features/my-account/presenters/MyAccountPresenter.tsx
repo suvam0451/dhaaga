@@ -6,8 +6,6 @@ import {
 } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import ProfileLandingAccountOverview from '../../../components/screens/profile/stack/landing/fragments/ProfileLandingAccountOverview';
-import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter';
-import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import {
 	useAppAcct,
 	useAppActiveSession,
@@ -31,6 +29,7 @@ import ModuleItemView from '../views/ModuleItemView';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import AccountLoadError from '#/features/my-account/AccountLoadError';
+import AccountMissingError from '#/features/my-account/AccountMissingError';
 
 function MyAccountPresenter() {
 	const { onScroll } = useScrollMoreOnPageEnd();
@@ -49,6 +48,7 @@ function MyAccountPresenter() {
 		});
 	}
 
+	if (!session?.target) return <AccountMissingError />;
 	if (session.target && session.state !== 'valid') return <AccountLoadError />;
 
 	const serverModules: AppModulesProps[] = DriverService.getAccountModules(
@@ -78,12 +78,12 @@ function MyAccountPresenter() {
 	];
 
 	const MENU_ITEMS = [
-		{
-			iconId: 'cog' as APP_ICON_ENUM,
-			onPress: () => {
-				router.navigate(APP_ROUTING_ENUM.SETTINGS_PAGE);
-			},
-		},
+		// {
+		// 	iconId: 'cog' as APP_ICON_ENUM,
+		// 	onPress: () => {
+		// 		router.navigate(APP_ROUTING_ENUM.SETTINGS_PAGE);
+		// 	},
+		// },
 		{
 			iconId: 'user-guide' as APP_ICON_ENUM,
 			onPress: () => {

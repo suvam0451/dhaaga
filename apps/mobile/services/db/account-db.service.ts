@@ -1,15 +1,20 @@
-import { ACCOUNT_METADATA_KEY, AccountService, DataSource } from '@dhaaga/db';
+import {
+	Account,
+	ACCOUNT_METADATA_KEY,
+	AccountService,
+	DataSource,
+} from '@dhaaga/db';
 import { KNOWN_SOFTWARE, RandomUtil } from '@dhaaga/bridge';
 import { type AtpSessionData, type AppBskyActorGetProfile } from '@atproto/api';
 
 class AccountDbService {
 	static upsertAccountCredentials(
 		db: DataSource,
-		code: string,
+		accessToken: string,
 		_subdomain: string,
 		_domain: string,
 		userData: any,
-	) {
+	): Account {
 		return AccountService.upsert(
 			db,
 			{
@@ -39,7 +44,7 @@ class AccountDbService {
 				},
 				{
 					key: ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
-					value: code,
+					value: accessToken,
 					type: 'string',
 				},
 				{ key: 'url', value: userData.url, type: 'string' },

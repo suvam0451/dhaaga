@@ -199,6 +199,10 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			case KNOWN_SOFTWARE.PLEROMA:
 			case KNOWN_SOFTWARE.AKKOMA:
 			case KNOWN_SOFTWARE.MASTODON: {
+				/**
+				 * If the client id and secret are not provided,
+				 * we need to create one
+				 */
 				if (!_appClientId || !_appClientSecret) {
 					const clientIdFormData: Record<string, string> = {
 						client_name: 'Dhaaga',
@@ -226,6 +230,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					_appClientId = _body?.['client_id'];
 					_appClientSecret = _body?.['client_secret'];
 				}
+
 				const authEndpoint = `https://${urlLike}/oauth/authorize`;
 
 				// Set up parameters for the query string

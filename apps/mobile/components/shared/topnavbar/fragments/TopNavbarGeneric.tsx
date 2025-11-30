@@ -16,12 +16,12 @@ function TopNavbarGeneric({ title }: HeadersProps) {
 	const { theme } = useAppTheme();
 
 	return (
-		<View style={[styles.subHeader, { backgroundColor: theme.background.a0 }]}>
+		<View style={[styles.subHeader, { backgroundColor: theme.background.a10 }]}>
 			<TopNavbarBackButton />
 			<View style={styles.navbarTitleContainer}>
 				<AppText.SemiBold
 					style={{
-						fontSize: 16,
+						fontSize: 18,
 						color: theme.secondary.a10,
 					}}
 				>

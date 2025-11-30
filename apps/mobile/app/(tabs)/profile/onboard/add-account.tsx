@@ -3,8 +3,8 @@ import AppTopNavbar from '../../../../components/shared/topnavbar/AppTopNavbar';
 import { AddAccountLandingFragment } from '../../../../features/onboarding/presenters/AddAccountPresenter';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
-import { View, Alert } from 'react-native';
-import { useMemo, useState } from 'react';
+import { Alert, View } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
 import { useAssets } from 'expo-asset';
 import {
 	OnboardingSignInBanner,
@@ -23,6 +23,7 @@ import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import { AccountService } from '@dhaaga/db';
 import AccountDbService from '../../../../services/db/account-db.service';
+import { BackHandler } from 'react-native';
 
 function AtProto() {
 	const {
@@ -198,6 +199,25 @@ export function AppAuthenticationPager() {
 		setContentIndex(pageId);
 		setIsPlatformSelected(true);
 	}
+
+	useEffect(() => {
+		const onBackPress = () => {
+			if (IsPlatformSelected) {
+				setContentIndex(0);
+				setIsPlatformSelected(false);
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		const backHandler = BackHandler.addEventListener(
+			'hardwareBackPress',
+			onBackPress,
+		);
+
+		return () => backHandler.remove();
+	}, [IsPlatformSelected]);
 
 	function platformSelectionReset() {
 		setIsPlatformSelected(false);
