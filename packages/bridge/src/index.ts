@@ -103,7 +103,7 @@ export const verifyMisskeyToken = async (host: string, session: string) => {
 	const res = await fetch(`${host}/api/miauth/${session}/check`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json',
+			// 'Content-Type': 'application/json',
 		},
 	});
 

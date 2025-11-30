@@ -13,10 +13,11 @@ function useMiauthLogin(instance: string, signInUrl: string) {
 	} | null>();
 	const [AuthCompleted, setAuthCompleted] = useState(false);
 
-	async function autoVerifyFromSession() {
+	async function autoVerifyFromSession(session: string) {
 		if (AuthCompleted) return;
-		const res = await verifyMisskeyToken(`https://${instance}`, Code!);
+		const res = await verifyMisskeyToken(`https://${instance}`, session!);
 		if (res.ok) {
+			setCode(res.token);
 			setUserData({
 				id: res?.user?.id!,
 				displayName: res?.user?.name!,
@@ -39,12 +40,17 @@ function useMiauthLogin(instance: string, signInUrl: string) {
 
 	// Misskey has no use for the callback token
 	function RNWebviewStateChangeCallback(state: any) {
-		// repeated api calls against same code will fail
+		console.log(state);
+
+		// repeated api calls against the same code will fail
 		if (state.url === lastState.current) return;
-		const regex = /^https:\/\/suvam.io\/\?session=(.*?)/;
-		if (regex.test(state.url)) {
+
+		const regex = /^https:\/\/suvam\.io\/\?session=([^&]+)/;
+		const match = state.url.match(regex);
+		if (match) {
+			const session = match[1];
 			lastState.current = state.url;
-			autoVerifyFromSession();
+			autoVerifyFromSession(session);
 		}
 	}
 
