@@ -10,7 +10,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: APP_NAME,
 	slug: 'dhaaga',
-	version: '0.16.5',
+	version: '0.16.6',
 	orientation: 'portrait',
 	icon: './assets/dhaaga/icon.png',
 	userInterfaceStyle: 'dark',
