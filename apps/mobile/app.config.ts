@@ -34,6 +34,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'android.permission.WRITE_EXTERNAL_STORAGE',
 			'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
 		],
+		// softwareKeyboardLayoutMode: 'pan',
 		icon: './assets/dhaaga/icon.png',
 		adaptiveIcon: {
 			foregroundImage: './assets/dhaaga/adaptive-icon.png',

@@ -11,7 +11,6 @@ import {
 	StyleSheet,
 	TextInput,
 	View,
-	KeyboardAvoidingView,
 } from 'react-native';
 import { useRef, useState } from 'react';
 import {
@@ -113,7 +112,7 @@ function SearchWidget() {
 
 	const { theme } = useAppTheme();
 	return (
-		<KeyboardAvoidingView style={styles.root}>
+		<View style={styles.root}>
 			{IsWidgetExpanded && <WidgetExpanded />}
 			<Animated.View
 				style={[
@@ -164,7 +163,7 @@ function SearchWidget() {
 					/>
 				)}
 			</Animated.View>
-		</KeyboardAvoidingView>
+		</View>
 	);
 }
 

@@ -9,6 +9,7 @@ import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppT
 import { View } from 'react-native';
 import SearchWidget from '../components/SearchWidget';
 import QuickPost from '../../composer/components/QuickPost';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 
 function SearchTabInteractor() {
 	const { theme } = useAppTheme();
@@ -19,7 +20,7 @@ function SearchTabInteractor() {
 
 	return (
 		<DiscoverCtx>
-			<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
+			<View style={{ flex: 1, backgroundColor: theme.palette.bg }}>
 				<SearchTabPresenter />
 				<SearchWidget />
 				{/*<QuickPost*/}

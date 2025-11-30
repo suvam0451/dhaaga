@@ -3,12 +3,16 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Appearance, StatusBar } from 'react-native';
+import { Appearance, StatusBar, Platform } from 'react-native';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
 import { enableMapSet } from 'immer';
 import { SQLiteProvider } from 'expo-sqlite';
+import {
+	KeyboardProvider,
+	KeyboardAvoidingView,
+} from 'react-native-keyboard-controller';
 import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '@dhaaga/db';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
@@ -91,24 +95,29 @@ function App() {
 				barStyle="light-content"
 				backgroundColor={theme.background.a0}
 			/>
-			<Stack
-				initialRouteName={'(tabs)'}
-				screenOptions={{
-					headerShown: false,
-					navigationBarColor: theme.background.a0,
-				}}
+			<KeyboardAvoidingView
+				style={{ flex: 1, position: 'relative' }}
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			>
-				<Stack.Screen
-					name="(tabs)"
-					options={{
-						presentation: 'modal',
+				<Stack
+					initialRouteName={'(tabs)'}
+					screenOptions={{
+						headerShown: false,
+						navigationBarColor: theme.background.a0,
 					}}
-				/>
-			</Stack>
-			{/* Globally shared components */}
-			<ImageInspectModal />
-			<AppBottomSheet />
-			<AppDialog />
+				>
+					<Stack.Screen
+						name="(tabs)"
+						options={{
+							presentation: 'modal',
+						}}
+					/>
+				</Stack>
+				{/* Globally shared components */}
+				<ImageInspectModal />
+				<AppBottomSheet />
+				<AppDialog />
+			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);
 }
@@ -124,7 +133,9 @@ export default function Page() {
 					{/* Rneui Custom Themes */}
 					<ThemeProvider>
 						<GestureHandlerRootView>
-							<App />
+							<KeyboardProvider>
+								<App />
+							</KeyboardProvider>
 						</GestureHandlerRootView>
 					</ThemeProvider>
 				</WithAppAssetsContext>
