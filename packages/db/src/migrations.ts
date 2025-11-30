@@ -323,18 +323,18 @@ const migrations: MigrationEntry[] = [
 	},
 ];
 
-function getDbVersion(db: SQLiteDatabase): number | undefined {
-	return db.getFirstSync<{ user_version: number }>(`
+function getDbVersion(db: SQLiteDatabase): number {
+	return (
+		db.getFirstSync<{ user_version: number }>(`
 			PRAGMA user_version;
-	`)?.user_version;
+	`)?.user_version ?? 0
+	);
 }
 
 function bumpDbVersion(db: SQLiteDatabase, delta: number) {
 	const dbVersion = getDbVersion(db);
-	if (!dbVersion) return;
-
 	db.runSync(`PRAGMA user_version = ${(dbVersion + delta).toString()};`);
-	// for roll-forward migrations, write to the migrations table
+	// for roll-forward migrations, write to the migration table
 	if (delta > 0) {
 		const migration = migrations[dbVersion];
 		if (!migration) return;
@@ -356,8 +356,9 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 	// --- 0
 	// db.execSync(migrations[0].up);
 
-	let dbVersion = getDbVersion(db) || -1;
-	if (dbVersion === -1) return;
+	let dbVersion = getDbVersion(db) || 0;
+	console.log('[INFO]: db version', dbVersion);
+	// if (dbVersion === -1) return;
 
 	console.log('db version', dbVersion, APP_DB_TARGET_VERSION);
 	if (dbVersion === APP_DB_TARGET_VERSION) return;

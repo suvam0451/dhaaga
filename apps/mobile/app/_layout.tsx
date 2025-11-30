@@ -9,10 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
 import { enableMapSet } from 'immer';
 import { SQLiteProvider } from 'expo-sqlite';
-import {
-	KeyboardProvider,
-	KeyboardAvoidingView,
-} from 'react-native-keyboard-controller';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '@dhaaga/db';
 import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';

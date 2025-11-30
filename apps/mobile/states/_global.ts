@@ -142,7 +142,18 @@ const useGlobalState = create<AppGlobalState & AppGlobalActions>()(
 				};
 			});
 
-			const acct = AccountService.getSelected(_db);
+			/**
+			 * The same "idle" state needs to be set, regardless
+			 * of
+			 */
+			let acct = null;
+			let reason = null;
+			try {
+				acct = AccountService.getSelected(_db);
+			} catch (e) {
+				reason = e.message;
+			}
+
 			if (!acct) {
 				set((state) => {
 					state.session = {
@@ -161,6 +172,7 @@ const useGlobalState = create<AppGlobalState & AppGlobalActions>()(
 				});
 				return;
 			}
+
 			try {
 				const { acct, router, me } =
 					await AppSessionService.restoreAppSession(_db);
