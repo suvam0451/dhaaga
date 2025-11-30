@@ -36,7 +36,6 @@ function WithAutoHideTopNavBar({
 				style={[
 					styles.nav,
 					{
-						backgroundColor: theme.background.a20,
 						transform: [
 							{
 								translateY,

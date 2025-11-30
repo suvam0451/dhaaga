@@ -44,7 +44,7 @@ type Props = {
 function WithAppStatusContextDataContext({ children, data, dispatch }: Props) {
 	/**
 	 * Get the children of this status
-	 * in context tree
+	 * in the context tree
 	 */
 	const getChildren = useCallback(
 		(id: string) => {

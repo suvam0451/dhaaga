@@ -52,7 +52,6 @@ function PostDetailPresenter({ refetch }: Props) {
 				}
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
-					paddingHorizontal: 10,
 				}}
 				onScroll={onScroll}
 			>

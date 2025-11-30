@@ -1,11 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-	Directions,
-	FlingGestureHandlerEventPayload,
-	Gesture,
-	GestureStateChangeEvent,
-} from 'react-native-gesture-handler';
-import { runOnJS } from 'react-native-reanimated';
+import { useCallback, useEffect, useState } from 'react';
+import { Directions, Gesture } from 'react-native-gesture-handler';
 
 /**
  *
@@ -14,10 +8,8 @@ import { runOnJS } from 'react-native-reanimated';
  */
 function useCircularListSwipe(total: number, hash: string) {
 	const [Pointer, setPointer] = useState(0);
-	const start =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
-	const end =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
+	let startX = 0;
+	let finalX = 0;
 
 	useEffect(() => {
 		setPointer(0);
@@ -38,7 +30,7 @@ function useCircularListSwipe(total: number, hash: string) {
 	}, [total]);
 
 	function yoink() {
-		if (start.current.absoluteX > end.current.absoluteX) {
+		if (startX > finalX) {
 			onNext();
 		} else {
 			onPrev();
@@ -46,13 +38,14 @@ function useCircularListSwipe(total: number, hash: string) {
 	}
 
 	const fling = Gesture.Fling()
+		.runOnJS(true)
 		.direction(Directions.LEFT | Directions.RIGHT)
 		.onBegin((event) => {
-			start.current = event;
+			startX = event.absoluteX;
 		})
 		.onEnd((event) => {
-			end.current = event;
-			runOnJS(yoink)();
+			finalX = event.absoluteX;
+			yoink();
 		});
 
 	return { Pointer, fling };

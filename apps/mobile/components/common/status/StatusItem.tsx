@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import ShareIndicator from './fragments/ShareIndicator';
 import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusCore from './fragments/StatusCore';
@@ -47,13 +47,48 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 	const { acct } = useAppAcct();
 	const { dto } = useAppStatusItem();
 
-	return useMemo(() => {
-		if (!dto) return <View />;
-		if (dto.meta.isBoost) {
-			// Quote Boost
-			if (!!dto.content.raw || dto.content.media.length > 0) {
+	if (!dto) return <View />;
+	if (dto.meta.isBoost) {
+		// Quote Boost
+		if (!!dto.content.raw || dto.content.media.length > 0) {
+			return (
+				<PostContainer>
+					<StatusCore
+						hasBoost={true}
+						isPreview={isPreview}
+						isPin={isPin}
+						showFullDetails={showFullDetails}
+					/>
+				</PostContainer>
+			);
+		} else {
+			// Normal Boost + Has Reply
+			if (dto.meta.isReply) {
 				return (
 					<PostContainer>
+						<ShareIndicator
+							avatarUrl={dto.postedBy?.avatarUrl}
+							parsedDisplayName={dto.postedBy?.parsedDisplayName}
+							createdAt={dto.createdAt}
+						/>
+						<AncestorFragment />
+						<StatusCore
+							hasBoost={true}
+							hasParent={true}
+							isPreview={isPreview}
+							isPin={isPin}
+							showFullDetails={showFullDetails}
+						/>
+					</PostContainer>
+				);
+			} else {
+				return (
+					<PostContainer>
+						<ShareIndicator
+							avatarUrl={dto.postedBy?.avatarUrl}
+							parsedDisplayName={dto.postedBy?.parsedDisplayName}
+							createdAt={dto.createdAt}
+						/>
 						<StatusCore
 							hasBoost={true}
 							isPreview={isPreview}
@@ -62,68 +97,31 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 						/>
 					</PostContainer>
 				);
-			} else {
-				// Normal Boost + Has Reply
-				if (dto.meta.isReply) {
-					return (
-						<PostContainer>
-							<ShareIndicator
-								avatarUrl={dto.postedBy?.avatarUrl}
-								parsedDisplayName={dto.postedBy?.parsedDisplayName}
-								createdAt={dto.createdAt}
-							/>
-							<AncestorFragment />
-							<StatusCore
-								hasBoost={true}
-								hasParent={true}
-								isPreview={isPreview}
-								isPin={isPin}
-								showFullDetails={showFullDetails}
-							/>
-						</PostContainer>
-					);
-				} else {
-					return (
-						<PostContainer>
-							<ShareIndicator
-								avatarUrl={dto.postedBy?.avatarUrl}
-								parsedDisplayName={dto.postedBy?.parsedDisplayName}
-								createdAt={dto.createdAt}
-							/>
-							<StatusCore
-								hasBoost={true}
-								isPreview={isPreview}
-								isPin={isPin}
-								showFullDetails={showFullDetails}
-							/>
-						</PostContainer>
-					);
-				}
 			}
-		} else if (dto.meta.isReply) {
-			return (
-				<PostContainer>
-					<AncestorFragment />
-					<StatusCore
-						hasParent={true}
-						isPreview={isPreview}
-						isPin={isPin}
-						showFullDetails={showFullDetails}
-					/>
-				</PostContainer>
-			);
-		} else {
-			return (
-				<PostContainer>
-					<StatusCore
-						isPreview={isPreview}
-						isPin={isPin}
-						showFullDetails={showFullDetails}
-					/>
-				</PostContainer>
-			);
 		}
-	}, [dto, acct]);
+	} else if (dto.meta.isReply) {
+		return (
+			<PostContainer>
+				<AncestorFragment />
+				<StatusCore
+					hasParent={true}
+					isPreview={isPreview}
+					isPin={isPin}
+					showFullDetails={showFullDetails}
+				/>
+			</PostContainer>
+		);
+	} else {
+		return (
+			<PostContainer>
+				<StatusCore
+					isPreview={isPreview}
+					isPin={isPin}
+					showFullDetails={showFullDetails}
+				/>
+			</PostContainer>
+		);
+	}
 }
 
 export default StatusItem;
