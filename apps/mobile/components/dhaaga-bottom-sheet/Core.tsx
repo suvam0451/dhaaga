@@ -1,5 +1,11 @@
 import { Fragment } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import {
+	Pressable,
+	StyleSheet,
+	View,
+	KeyboardAvoidingView,
+	Platform,
+} from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
 import WithComposerContext from '../../features/composer/contexts/useComposerCtx';
@@ -142,40 +148,49 @@ function AppBottomSheet() {
 	}
 
 	return (
-		<Fragment>
+		<View>
 			<Pressable
 				style={{
 					position: 'absolute',
 					height: visible ? '100%' : 'auto',
 					width: '100%',
 					backgroundColor: theme.palette.bg,
-					opacity: 0.48,
 					zIndex: appVerticalIndex.sheetBackdrop,
+					opacity: 0.48,
 				}}
 				onPress={onBottomSheetCloseEvent}
 			/>
-			<Animated.View
-				style={[
-					styles.rootContainer,
-					{ backgroundColor: theme.background.a10 },
-					animStyle,
-				]}
+			<KeyboardAvoidingView
+				style={{
+					width: '100%',
+					position: 'absolute',
+					zIndex: appVerticalIndex.sheetContent,
+					bottom: 0,
+					// backgroundColor: 'red',
+				}}
 			>
-				<Handle />
-				<Factory />
-			</Animated.View>
-		</Fragment>
+				<Animated.View
+					style={[
+						styles.rootContainer,
+						{ backgroundColor: theme.background.a10 },
+						animStyle,
+					]}
+				>
+					<Handle />
+					<Factory />
+				</Animated.View>
+			</KeyboardAvoidingView>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	rootContainer: {
-		position: 'absolute',
-		bottom: 0,
-		width: '100%',
+		// bottom: 0,
+		// width: '100%',
 		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
 		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
-		zIndex: appVerticalIndex.sheetContent,
+		// zIndex: appVerticalIndex.sheetContent,
 	},
 	text: {
 		textAlign: 'center',
