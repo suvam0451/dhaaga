@@ -72,23 +72,24 @@ function TimelinesHeader() {
 
 	return (
 		<View style={[styles.root, { backgroundColor: theme.background.a10 }]}>
-			<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>
-				<TopNavbarBackButton />
-			</View>
+			{/*<View style={[styles.menuSection, { justifyContent: 'flex-start' }]}>*/}
+			{/*	<TopNavbarBackButton />*/}
+			{/*</View>*/}
 
-			<TouchableOpacity
+			<View
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
 					height: '100%',
 					flex: 1,
-					justifyContent: 'center',
+					// justifyContent: 'center',
+					marginLeft: 16,
 					maxWidth: '40%',
 				}}
-				onPress={onIconPress}
+				// onPress={onIconPress}
 			>
 				<Text
-					style={[styles.label, { color: theme.primary.a0 }]}
+					style={[styles.label, { color: theme.primary.a0, fontSize: 24 }]}
 					numberOfLines={1}
 				>
 					{_label || 'Unknown'}
@@ -101,7 +102,7 @@ function TimelinesHeader() {
 				{/*>*/}
 				{/*	<AppIcon id={'chevron-down'} color={theme.primary.a0} size={20} />*/}
 				{/*</View>*/}
-			</TouchableOpacity>
+			</View>
 
 			<View
 				style={[
@@ -118,7 +119,7 @@ function TimelinesHeader() {
 				>
 					<AppIcon
 						id={'layers-outline'}
-						size={appDimensions.topNavbar.iconSize}
+						size={appDimensions.topNavbar.iconSize + 6}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 						onPress={onViewTimelineController}
 					/>
@@ -132,7 +133,7 @@ function TimelinesHeader() {
 				>
 					<AppIcon
 						id={'user-guide'}
-						size={appDimensions.topNavbar.iconSize}
+						size={appDimensions.topNavbar.iconSize + 6}
 						color={theme.secondary.a20}
 						onPress={onUserGuidePress}
 					/>

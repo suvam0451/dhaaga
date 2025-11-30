@@ -23,6 +23,8 @@ import { useAppListAccounts } from '#/hooks/db/useAppListAccounts';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import {
 	useAppBottomSheet,
+	useAppDb,
+	useAppGlobalStateActions,
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
 import { AppBottomSheetMenu } from '#/components/lib/Menu';
@@ -33,11 +35,11 @@ type FlashListItemProps = {
 };
 
 function FlashListItem({ acct }: FlashListItemProps) {
-	const { selectAccount, restoreSession, db } = useGlobalState(
+	const { db } = useAppDb();
+	const { restoreSession } = useAppGlobalStateActions();
+	const { selectAccount } = useGlobalState(
 		useShallow((o) => ({
 			selectAccount: o.selectAccount,
-			restoreSession: o.loadApp,
-			db: o.db!,
 		})),
 	);
 	const { hide, refresh } = useAppBottomSheet();
@@ -140,7 +142,7 @@ function ABS_Select_Account() {
 
 	function onPressMoreAccountOptions() {
 		hide();
-		router.navigate(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
+		router.navigate(APP_ROUTING_ENUM.PROFILE_TAB);
 	}
 
 	return (

@@ -55,7 +55,7 @@ function Page() {
 					label={'Get Started'}
 					loading={false}
 					onClick={() => {
-						router.navigate(APP_ROUTING_ENUM.PROFILE_PAGE);
+						router.navigate(APP_ROUTING_ENUM.PROFILE_TAB);
 					}}
 					textStyle={{ fontSize: 16 }}
 				/>

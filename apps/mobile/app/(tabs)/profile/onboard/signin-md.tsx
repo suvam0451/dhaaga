@@ -57,7 +57,7 @@ function MastodonSignInStack() {
 			);
 			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
-			router.replace(APP_ROUTING_ENUM.PROFILE_PAGE);
+			router.replace(APP_ROUTING_ENUM.PROFILE_TAB);
 		}
 	}
 

@@ -18,7 +18,7 @@ export const appDimensions = {
 		iconSize: 26,
 		padding: 6,
 		marginLeft: 4,
-		height: 44,
+		height: 52, // 44
 		scrollViewTopPadding: 44 + 2,
 	},
 	bottomSheet: {

@@ -1,27 +1,28 @@
-import { View, Text } from 'react-native';
-import TitleOnlyNoScrollContainer from '../../components/containers/TitleOnlyNoScrollContainer';
-import { AppIcon } from '../../components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
-import { AppText } from '../../components/lib/Text';
-import {
-	BunnyMoonStare,
-	WoodenDirectionSign,
-} from '../../components/lib/AppSvg';
+import { View } from 'react-native';
+import { router } from 'expo-router';
+import TitleOnlyNoScrollContainer from '#/components/containers/TitleOnlyNoScrollContainer';
+import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
+import BearError from '#/components/svgs/BearError';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
 
 function IdleTimelineView() {
 	return (
 		<TitleOnlyNoScrollContainer headerTitle={'Timelines'}>
-			<View />
-			<View>
-				{/*<AppIcon*/}
-				{/*	id={'layers-outline'}*/}
-				{/*	size={64}*/}
-				{/*	emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}*/}
-				{/*/>*/}
-				<BunnyMoonStare width={196} opacity={0.87} />
-				<AppText.SemiBold emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
-					Timelines you browse will appear here
-				</AppText.SemiBold>
+			<ErrorPageBuilder
+				stickerArt={<BearError />}
+				errorMessage={'No Timeline Selected'}
+				errorDescription={
+					'You can pin and access various types of timelines from your personalised hub.'
+				}
+			/>
+			<View style={{ marginTop: 32 }}>
+				<AppButtonVariantA
+					label={'To Hub'}
+					loading={false}
+					onClick={() => {
+						router.navigate('/');
+					}}
+				/>
 			</View>
 		</TitleOnlyNoScrollContainer>
 	);
