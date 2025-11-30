@@ -32,6 +32,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { DialogBuilderService } from '../../../services/dialog-builder.service';
+import ComposeButton from '#/components/widgets/ComposeButton';
 
 type Props = {
 	// account left join guaranteed
@@ -355,11 +356,13 @@ function SocialHubTabPresenter({ profile }: Props) {
 					onLongPressTag={onLongPressTag}
 				/>
 			</ScrollView>
+
 			<HubProfileListView
 				onLongPressProfile={onLongPressProfile}
 				onPressAddProfile={onPressAddProfile}
 				onPressProfile={onPressProfile}
 			/>
+			<ComposeButton />
 		</View>
 	);
 }
