@@ -1,6 +1,6 @@
 {
 	"name": "@dhaaga/bridge",
-	"version": "0.16.6",
+	"version": "0.17.0",
 	"license": "AGPL-3.0-or-later",
 	"description": "Unified client library for the fediverse, and more",
 	"keywords": [
