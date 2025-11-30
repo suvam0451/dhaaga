@@ -168,8 +168,8 @@ const useGlobalState = create<AppGlobalState & AppGlobalActions>()(
 				set((state) => {
 					state.session = {
 						state: 'valid',
-						target: null,
-						me: null,
+						target: acct,
+						me: me,
 						logs: [],
 					};
 					state.me = me;

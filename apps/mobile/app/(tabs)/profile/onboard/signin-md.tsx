@@ -37,21 +37,27 @@ function MastodonSignInStack() {
 	async function onPressConfirm() {
 		if (!db || !code) return;
 
-		const userData: MastoAccountCredentials | null = await authenticate();
-		if (userData === null) return;
+		const authResponse: {
+			userData: MastoAccountCredentials;
+			accessToken: string;
+		} | null = await authenticate();
+		if (authResponse === null) return;
 
+		const { userData, accessToken } = authResponse;
 		const upsertResult = AccountDbService.upsertAccountCredentials(
 			db,
-			code,
+			accessToken,
 			_subdomain,
 			_domain,
 			userData,
 		);
-		if (upsertResult.isOk()) {
-			Alert.alert('Account Added. Refresh if any screen is outdated.');
+		if (upsertResult) {
+			Alert.alert(
+				'Account Added. Drag down to refresh if any screen feels outdated.',
+			);
 			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
-			router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
+			router.replace(APP_ROUTING_ENUM.PROFILE_PAGE);
 		}
 	}
 

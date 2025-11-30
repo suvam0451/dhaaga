@@ -53,9 +53,12 @@ function useActivityPubAuth(
 
 	/**
 	 * NOTE: the returned account credential object
-	 * is in snake case
+	 * is in the snake case
 	 */
-	async function authenticate(): Promise<MastoAccountCredentials | null> {
+	async function authenticate(): Promise<{
+		userData: MastoAccountCredentials;
+		accessToken: string;
+	} | null> {
 		if (!_clientId || !_clientSecret) {
 			setError('E_Missing_Client_Credentials');
 			return null;
@@ -68,8 +71,6 @@ function useActivityPubAuth(
 				_clientId,
 				_clientSecret,
 			);
-
-			setCode(token || Code);
 
 			const { data: verified, error } =
 				await new BaseApiAdapter().instances.verifyCredentials(
@@ -89,7 +90,7 @@ function useActivityPubAuth(
 				return null;
 			} else {
 				setUserData(verified);
-				return verified;
+				return { userData: verified, accessToken: token ?? Code };
 			}
 		} catch (e) {
 			return null;

@@ -29,6 +29,7 @@ import ModuleItemView from '../views/ModuleItemView';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import AccountLoadError from '#/features/my-account/AccountLoadError';
+import AccountMissingError from '#/features/my-account/AccountMissingError';
 
 function MyAccountPresenter() {
 	const { onScroll } = useScrollMoreOnPageEnd();
@@ -47,6 +48,7 @@ function MyAccountPresenter() {
 		});
 	}
 
+	if (!session?.target) return <AccountMissingError />;
 	if (session.target && session.state !== 'valid') return <AccountLoadError />;
 
 	const serverModules: AppModulesProps[] = DriverService.getAccountModules(
