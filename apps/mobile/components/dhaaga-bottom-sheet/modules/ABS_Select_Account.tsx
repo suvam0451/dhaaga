@@ -121,7 +121,7 @@ function FlashListItem({ acct }: FlashListItemProps) {
 						</Text>
 					)}
 				</View>
-				<SoftwareHeader height={32} software={acct.driver} />
+				<SoftwareHeader height={28} software={acct.driver} />
 			</View>
 		</TouchableOpacity>
 	);
@@ -158,17 +158,21 @@ function ABS_Select_Account() {
 					]}
 				/>
 			)}
-			ListFooterComponent={() => (
-				<AppButtonVariantA
-					label={'Add Account'}
-					loading={false}
-					onClick={() => {
-						hide();
-						router.navigate(APP_ROUTING_ENUM.ADD_ACCOUNT);
-					}}
-					style={{ marginTop: 32, marginBottom: 64 }}
-				/>
-			)}
+			ListFooterComponent={() =>
+				data.length > 0 ? (
+					<View />
+				) : (
+					<AppButtonVariantA
+						label={'Add Account'}
+						loading={false}
+						onClick={() => {
+							hide();
+							router.navigate(APP_ROUTING_ENUM.ADD_ACCOUNT);
+						}}
+						style={{ marginTop: 32, marginBottom: 64 }}
+					/>
+				)
+			}
 			data={data}
 			renderItem={({ item }) => <FlashListItem acct={item} />}
 		/>

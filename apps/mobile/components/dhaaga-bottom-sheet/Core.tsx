@@ -38,6 +38,7 @@ import { Fragment } from 'react';
  */
 function Handle() {
 	const { theme } = useAppTheme();
+	const { visible, hide, broadcastEndSession } = useAppBottomSheet();
 
 	return (
 		<Animated.View
@@ -53,7 +54,7 @@ function Handle() {
 		>
 			<Animated.View
 				style={{
-					height: 3,
+					height: visible ? 3 : 0,
 					width: 42,
 					backgroundColor: theme.secondary.a50,
 					marginBottom: 16,
@@ -150,7 +151,7 @@ function AppBottomSheet() {
 					width: '100%',
 					backgroundColor: theme.palette.bg,
 					zIndex: appVerticalIndex.sheetBackdrop,
-					opacity: 0.24,
+					opacity: 0.32,
 				}}
 				onPress={onBottomSheetCloseEvent}
 			/>
@@ -158,6 +159,7 @@ function AppBottomSheet() {
 				style={{
 					width: '100%',
 					position: 'absolute',
+					height: visible ? 'auto' : 0,
 					zIndex: appVerticalIndex.sheetContent,
 					bottom: 0,
 				}}

@@ -18,8 +18,6 @@ import {
 	useDiscoverDispatch,
 	DiscoverStateAction,
 } from '@dhaaga/core';
-import { NativeSyntheticEvent } from 'react-native/Libraries/Types/CoreEventTypes';
-import { TextInputSubmitEditingEventData } from 'react-native/Libraries/Components/TextInput/TextInput';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Loader } from '../../../components/lib/Loader';
 import { Feather } from '@expo/vector-icons';
@@ -60,9 +58,7 @@ function SearchWidget() {
 		});
 	};
 
-	const submitSearch = (
-		search: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
-	) => {
+	const submitSearch = (search) => {
 		dispatch({
 			type: DiscoverStateAction.APPLY_SEARCH,
 		});

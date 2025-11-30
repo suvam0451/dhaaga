@@ -50,7 +50,7 @@ function InboxPresenter() {
 	const { acct } = useAppAcct();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
-	if (!acct) return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.INBOX} />;
+	if (!acct) return <View />;
 
 	const tabLabels = [
 		{

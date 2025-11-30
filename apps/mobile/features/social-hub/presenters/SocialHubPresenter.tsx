@@ -18,29 +18,29 @@ function SocialHubPresenter() {
 	const { theme } = useAppTheme();
 	const { profiles, loadNext, loadPrev, pageIndex } = useHub();
 
-	const start =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
-	const end =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
+	// const start =
+	// 	useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
+	// const end =
+	// 	useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
 
-	function onFlingGesture() {
-		if (start.current.absoluteX > end.current.absoluteX) {
-			loadNext();
-		} else {
-			loadPrev();
-		}
-	}
-
-	const fling = Gesture.Fling()
-		.direction(Directions.LEFT | Directions.RIGHT)
-		.onBegin((event) => {
-			start.current = event;
-		})
-		.onEnd((event) => {
-			end.current = event;
-			onFlingGesture();
-		})
-		.runOnJS(true);
+	// function onFlingGesture() {
+	// 	if (start.current.absoluteX > end.current.absoluteX) {
+	// 		loadNext();
+	// 	} else {
+	// 		loadPrev();
+	// 	}
+	// }
+	//
+	// const fling = Gesture.Fling()
+	// 	.runOnJS(true)
+	// 	.direction(Directions.LEFT | Directions.RIGHT)
+	// 	.onBegin((event) => {
+	// 		start.current = event;
+	// 	})
+	// 	.onEnd((event) => {
+	// 		end.current = event;
+	// 		onFlingGesture();
+	// 	});
 
 	const HubComponent = useMemo(() => {
 		if (profiles.length === 0) return <View />;
@@ -49,13 +49,13 @@ function SocialHubPresenter() {
 	}, [profiles, pageIndex]);
 
 	return (
-		<GestureDetector gesture={fling}>
-			<Animated.View
-				style={{ backgroundColor: theme.palette.bg, height: '100%' }}
-			>
-				{HubComponent}
-			</Animated.View>
-		</GestureDetector>
+		// <GestureDetector gesture={fling}>
+		<Animated.View
+			style={{ backgroundColor: theme.palette.bg, height: '100%' }}
+		>
+			{HubComponent}
+		</Animated.View>
+		// </GestureDetector>
 	);
 }
 

@@ -3,7 +3,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Appearance, StatusBar, Platform } from 'react-native';
+import { Appearance, StatusBar, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
@@ -24,7 +24,9 @@ import WithAppAssetsContext from '../hooks/app/useAssets';
 import polyfills from '#/utils/polyfills';
 
 import '../i18n/_loader';
-import 'fast-text-encoding'; // needed by atproto
+import 'fast-text-encoding';
+import { useNativeKeyboardAnimation } from '#/hooks/useNativeKeyboardAnimation'; // needed by atproto
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 enableMapSet();
 polyfills();
@@ -86,6 +88,14 @@ function App() {
 		}, 100);
 	}, [pathname]);
 
+	const { height } = useNativeKeyboardAnimation(20, 20);
+	const fakeView = useAnimatedStyle(() => {
+		return {
+			height: height.value,
+			marginBottom: height.value > 0 ? 0 : 0,
+		};
+	}, []);
+
 	return (
 		<SafeAreaView
 			style={{ backgroundColor: theme.background.a10, flex: 1 }}
@@ -95,10 +105,7 @@ function App() {
 				barStyle="light-content"
 				backgroundColor={theme.background.a0}
 			/>
-			<KeyboardAvoidingView
-				style={{ flex: 1, position: 'relative' }}
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-			>
+			<View style={{ flex: 1 }}>
 				<Stack
 					initialRouteName={'(tabs)'}
 					screenOptions={{
@@ -117,7 +124,8 @@ function App() {
 				<ImageInspectModal />
 				<AppBottomSheet />
 				<AppDialog />
-			</KeyboardAvoidingView>
+			</View>
+			<Animated.View style={fakeView} />
 		</SafeAreaView>
 	);
 }

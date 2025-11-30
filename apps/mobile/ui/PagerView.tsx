@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useRef, useState } from 'react';
+import { Fragment, ReactElement, useEffect, useRef, useState } from 'react';
 import PagerView from 'react-native-pager-view';
 import {
 	Dimensions,
@@ -97,7 +97,7 @@ function Chip({ active, label, onLayout, onPress }: ChipProps) {
 
 /**
  * Allows selection of a single item
- * from list. The transition is animated.
+ * from the list. The transition is animated.
  */
 function NavBar({ items, Index, setIndex }: SingleSelectAnimatedProps) {
 	const { theme } = useAppTheme();
@@ -188,11 +188,11 @@ function AppPagerView({
 	}
 
 	return (
-		<View style={[{ flex: 1, position: 'relative' }, props]}>
+		<Fragment>
 			<PagerView
 				ref={ref}
 				scrollEnabled={true}
-				style={{ flex: 1 }}
+				style={[{ flex: 1 }, props]}
 				initialPage={TabIndex}
 				onPageScroll={onPagerViewScroll}
 				collapsable={false}
@@ -206,7 +206,7 @@ function AppPagerView({
 			{showBottomNav && (
 				<NavBar Index={TabIndex} setIndex={onChipSelected} items={labels} />
 			)}
-		</View>
+		</Fragment>
 	);
 }
 

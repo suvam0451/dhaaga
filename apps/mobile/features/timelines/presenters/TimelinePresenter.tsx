@@ -1,5 +1,5 @@
 import TimelinePostListView from '../view/TimelinePostListView';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import {
 	PostTimelineStateAction,
 	usePostTimelineState,
