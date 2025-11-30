@@ -6,8 +6,6 @@ import {
 } from 'react-native';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import ProfileLandingAccountOverview from '../../../components/screens/profile/stack/landing/fragments/ProfileLandingAccountOverview';
-import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter';
-import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import {
 	useAppAcct,
 	useAppActiveSession,
@@ -78,12 +76,12 @@ function MyAccountPresenter() {
 	];
 
 	const MENU_ITEMS = [
-		{
-			iconId: 'cog' as APP_ICON_ENUM,
-			onPress: () => {
-				router.navigate(APP_ROUTING_ENUM.SETTINGS_PAGE);
-			},
-		},
+		// {
+		// 	iconId: 'cog' as APP_ICON_ENUM,
+		// 	onPress: () => {
+		// 		router.navigate(APP_ROUTING_ENUM.SETTINGS_PAGE);
+		// 	},
+		// },
 		{
 			iconId: 'user-guide' as APP_ICON_ENUM,
 			onPress: () => {

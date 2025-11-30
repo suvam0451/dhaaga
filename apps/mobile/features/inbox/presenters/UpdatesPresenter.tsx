@@ -15,12 +15,11 @@ function UpdatesPresenter() {
 		useApiGetSubscriptionUpdates(maxId);
 
 	// FIXME: looping requests
-	// useEffect(() => {
-	// 	if (fetchStatus !== 'fetching') {
-	// 		append(data);
-	// 	}
-	// }, [fetchStatus]);
-	console.log(data);
+	useEffect(() => {
+		if (fetchStatus !== 'fetching') {
+			append(data);
+		}
+	}, [fetchStatus]);
 
 	async function refresh() {
 		reset();
@@ -31,6 +30,10 @@ function UpdatesPresenter() {
 		return FlashListService.notifications(state.items);
 	}, [state.items]);
 
+	function onEndReached() {
+		if (!isPending && data.items.length > 0) loadNext();
+	}
+
 	const IS_LOADING = listItems.length === 0 && (isPending || isRefetching);
 
 	return (
@@ -39,9 +42,7 @@ function UpdatesPresenter() {
 			ItemView={(item) => <NotificationItemPresenter item={item} />}
 			items={listItems}
 			isLoading={IS_LOADING}
-			onEndReached={() => {
-				if (!isPending) loadNext();
-			}}
+			onEndReached={onEndReached}
 			SkeletonEstimatedHeight={136}
 			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.UPDATES} />}
 			onRefresh={refresh}

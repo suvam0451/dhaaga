@@ -2,7 +2,6 @@ import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
 import {
-	HomeNavigationIcon,
 	NavbarButtonDefault,
 	NavbarButtonDisabledOnSignOut,
 	ProfileTabNavbarIcon,
@@ -14,10 +13,9 @@ import {
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
 
-const BOTTOM_NAVBAR_HEIGHT = 48; // Range: 42 to 52
+const BOTTOM_NAVBAR_HEIGHT = 50; // Range: 42 to 52
 const BOTTOM_NAVBAR_ICON_STYLE = {
-	height: 46,
-	// width: 12,
+	height: 52,
 };
 
 const ICON_A_SIZE_OFFSET = 4;

@@ -275,35 +275,17 @@ export function ProfileTabNavbarIcon({
 	size,
 	sizeOffset,
 }: NavigationIconType) {
-	const { show } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 
-	function onLongPress(e: any) {
-		e.preventDefault();
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-		show(APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT, true);
-	}
-
-	function onPress(e: any) {
-		// router.navigate('/profile');
-		// router.dismiss(2);
-	}
-
-	// if (visible && isAnimating) return <View />;
 	if (!acct)
 		return (
 			<Ionicons name="settings-sharp" size={size + sizeOffset} color={color} />
 		);
 
 	return (
-		<Pressable
-			style={styles.accountIconTouchableContainer}
-			onPress={onPress}
-			onLongPress={onLongPress}
-		>
+		<View style={styles.accountIconTouchableContainer}>
 			<View style={styles.accountIconInternalContainer}>
-				{/*@ts-ignore-next-line*/}
 				<Image
 					style={{
 						width: 38,
@@ -318,7 +300,7 @@ export function ProfileTabNavbarIcon({
 			<View style={{ width: 14 }}>
 				<Feather name="more-vertical" size={24} color={theme.secondary.a40} />
 			</View>
-		</Pressable>
+		</View>
 	);
 }
 

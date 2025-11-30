@@ -29,6 +29,10 @@ function SocialUpdatePresenter() {
 		return FlashListService.notifications(state.items);
 	}, [state.items]);
 
+	function onEndReached() {
+		if (!isPending && data.items.length > 0) loadNext();
+	}
+
 	const IS_LOADING = listItems.length === 0 && (isPending || isRefetching);
 
 	return (
@@ -37,9 +41,7 @@ function SocialUpdatePresenter() {
 			ItemView={(item) => <NotificationItemPresenter item={item} />}
 			items={listItems}
 			isLoading={IS_LOADING}
-			onEndReached={() => {
-				if (!isPending) loadNext();
-			}}
+			onEndReached={onEndReached}
 			SkeletonEstimatedHeight={136}
 			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.SOCIAL} />}
 			onRefresh={refresh}

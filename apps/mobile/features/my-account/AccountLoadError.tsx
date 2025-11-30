@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import BearError from '#/components/svgs/BearError';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
@@ -10,9 +10,8 @@ import {
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
-import { AppText } from '#/components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
+import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 
 function AccountLoadError() {
 	const { theme } = useAppTheme();
@@ -36,25 +35,11 @@ function AccountLoadError() {
 					},
 				]}
 			/>
-			<View style={{ width: 128, height: 196, marginHorizontal: 'auto' }}>
-				<BearError />
-			</View>
-
-			<View style={{ marginTop: 16, marginHorizontal: 32 }}>
-				<AppText.SemiBold
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A0}
-					style={{ fontSize: 24, textAlign: 'center' }}
-				>
-					Failed to load account
-				</AppText.SemiBold>
-				<AppText.Normal
-					style={{ marginTop: 12, fontSize: 16, textAlign: 'center' }}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
-					numberOfLines={5}
-				>
-					{session.error}
-				</AppText.Normal>
-
+			<ErrorPageBuilder
+				stickerArt={<BearError />}
+				errorMessage={'Failed to load account'}
+				errorDescription={session.error}
+			>
 				<AppButtonVariantA
 					style={{ marginTop: 32 }}
 					label={'Retry'}
@@ -68,7 +53,7 @@ function AccountLoadError() {
 					variant={'secondary'}
 					onClick={() => {}}
 				/>
-			</View>
+			</ErrorPageBuilder>
 		</ScrollView>
 	);
 }

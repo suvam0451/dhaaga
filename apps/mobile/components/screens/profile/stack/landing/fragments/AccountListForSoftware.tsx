@@ -26,12 +26,10 @@ function AccountListForSoftware({
 			) : (
 				<Fragment>
 					<SoftwareHeader
-						height={32}
+						height={26}
 						software={software}
-						mb={4}
-						mt={8}
 						addText={true}
-						style={{ marginVertical: 8 }}
+						style={{ marginVertical: 10, marginBottom: 6, marginLeft: 4 }}
 					/>
 					{filteredForSoftware.map((o, i) => (
 						<AccountListingFragment

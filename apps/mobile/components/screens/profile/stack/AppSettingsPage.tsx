@@ -1,7 +1,6 @@
 import { ScrollView, StyleSheet, View, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Ionicons } from '@expo/vector-icons';
 import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
 import AppTabLandingNavbar, {
@@ -166,18 +165,18 @@ function SettingCategoryList() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SETTINGS]);
 
 	const items = [
-		{
-			label: t(`accounts.mainMenu_Label`),
-			desc: t(`accounts.mainMenu_Desc`),
-			Icon: (
-				<MaterialIcons
-					name="manage-accounts"
-					size={26}
-					color={SETTING_CATEGORY_ICON_COLOR}
-				/>
-			),
-			to: APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS,
-		},
+		// {
+		// 	label: t(`accounts.mainMenu_Label`),
+		// 	desc: t(`accounts.mainMenu_Desc`),
+		// 	Icon: (
+		// 		<MaterialIcons
+		// 			name="manage-accounts"
+		// 			size={26}
+		// 			color={SETTING_CATEGORY_ICON_COLOR}
+		// 		/>
+		// 	),
+		// 	to: APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS,
+		// },
 		{
 			label: t(`general.mainMenu_Label`),
 			desc: t(`general.mainMenu_Desc`),
@@ -261,7 +260,9 @@ function AppSettingsPage() {
 			/>
 			<Header />
 			<SettingCategoryList />
-			<Footer />
+			<View style={{ marginTop: 64 }}>
+				<Footer />
+			</View>
 		</ScrollView>
 	);
 }
