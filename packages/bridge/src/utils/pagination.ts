@@ -22,8 +22,8 @@ class Util {
 
 type ResultPage<T> = {
 	items: T[];
-	maxId: string | null;
-	minId: string | null;
+	maxId?: string | null;
+	minId?: string | null;
 	error?: Error;
 };
 

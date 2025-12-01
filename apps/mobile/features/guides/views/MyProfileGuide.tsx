@@ -1,5 +1,5 @@
-import GuideFactory from '../../../features/guides/components/GuideFactory';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import GuidePageBuilder from '#/ui/GuidePageBuilder';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 
 const NS = { ns: LOCALIZATION_NAMESPACE.GUIDES };
@@ -38,7 +38,7 @@ function Page() {
 		},
 	];
 
-	return <GuideFactory questionnaire={qa} label={t('myAccount.label')} />;
+	return <GuidePageBuilder questionnaire={qa} label={t('myAccount.label')} />;
 }
 
 export default Page;

@@ -1,4 +1,4 @@
-import GuideFactory from '../../../features/guides/components/GuideFactory';
+import GuidePageBuilder from '#/ui/GuidePageBuilder';
 
 function Page() {
 	const qa: { question: string; answers: string[] }[] = [
@@ -39,7 +39,7 @@ function Page() {
 		},
 	];
 
-	return <GuideFactory questionnaire={qa} label={'Guide (Composer)'} />;
+	return <GuidePageBuilder questionnaire={qa} label={'Guide (Composer)'} />;
 }
 
 export default Page;

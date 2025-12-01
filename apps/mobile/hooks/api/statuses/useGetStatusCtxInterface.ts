@@ -1,20 +1,18 @@
-import useGetPostInterface from './useGetPostInterface';
 import { useEffect, useReducer } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import {
-	DriverService,
-	KNOWN_SOFTWARE,
-	PostTargetInterface,
-} from '@dhaaga/bridge';
+import { useQueries } from '@tanstack/react-query';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import statusContextReducer, {
 	defaultAppStatusContext,
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
-import { PostParser } from '@dhaaga/bridge';
 import {
 	useAppAcct,
 	useAppApiClient,
 } from '../../utility/global-state-extractors';
+import {
+	postDetailsInterfaceQueryOpts,
+	postHierarchyQueryOpts,
+} from '@dhaaga/react';
 
 /**
  * Get the context chain for a given status id
@@ -23,47 +21,23 @@ import {
 function useGetStatusCtxInterface(id: string) {
 	const { client, driver } = useAppApiClient();
 	const { acct } = useAppAcct();
-	const { data: postI } = useGetPostInterface(id);
+	const [postDetailResult, postHierarchyResult] = useQueries({
+		queries: [
+			postDetailsInterfaceQueryOpts(client, driver, id),
+			postHierarchyQueryOpts(client, driver, id),
+		],
+	});
 	const [Data, dispatch] = useReducer(
 		statusContextReducer,
 		defaultAppStatusContext,
 	);
 
-	async function api() {
-		const { data, error } = await client.statuses.getContext(id);
-		if (error) return null;
-
-		// handled by context solver, instead
-		if (DriverService.supportsAtProto(driver)) return data as any;
-
-		return {
-			ancestors: PostParser.rawToInterface<unknown[]>(
-				(data as any).ancestors,
-				driver,
-			),
-			descendants: PostParser.rawToInterface<unknown[]>(
-				(data as any).descendants,
-				driver,
-			),
-		};
-	}
-
-	const {
-		data: ctxData,
-		status,
-		fetchStatus,
-		refetch,
-	} = useQuery<{
-		ancestors: PostTargetInterface[];
-		descendants: PostTargetInterface[];
-	}>({
-		queryKey: ['status/view', id],
-		queryFn: api,
-		enabled: !!client && id !== undefined,
-	});
-
 	useEffect(() => {
-		if (fetchStatus === 'fetching' || status !== 'success') return;
+		if (
+			postHierarchyResult.fetchStatus === 'fetching' ||
+			postHierarchyResult.status !== 'success'
+		)
+			return;
 
 		/**
 		 * Handle AT Protocol
@@ -72,7 +46,7 @@ function useGetStatusCtxInterface(id: string) {
 			dispatch({
 				type: STATUS_CONTEXT_REDUCER_ACTION.INIT_ATPROTO,
 				payload: {
-					resp: ctxData,
+					resp: postHierarchyResult.data,
 					domain: driver,
 					subdomain: acct?.server,
 				},
@@ -83,21 +57,21 @@ function useGetStatusCtxInterface(id: string) {
 		 * 	Handle ActivityPub Protocol
 		 * 	- postI is required by Mastodon specifically
 		 */
-		if (!postI) return;
+		if (!postDetailResult.data) return;
 
 		dispatch({
 			type: STATUS_CONTEXT_REDUCER_ACTION.INIT,
 			payload: {
-				source: postI,
-				ancestors: (ctxData as any).ancestors,
-				descendants: (ctxData as any).descendants,
+				source: postDetailResult.data,
+				ancestors: postHierarchyResult.data.ancestors,
+				descendants: postHierarchyResult.data.descendants,
 				driver,
 				server: acct?.server,
 			},
 		});
-	}, [postI, fetchStatus]);
+	}, [postDetailResult.data, postHierarchyResult.fetchStatus]);
 
-	return { Data, dispatch, refetch };
+	return { Data, dispatch, refetch: postHierarchyResult.refetch };
 }
 
 export default useGetStatusCtxInterface;

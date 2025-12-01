@@ -1,5 +1,5 @@
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import GuideFactory from '#/features/guides/components/GuideFactory';
+import GuidePageBuilder from '#/ui/GuidePageBuilder';
 import { useTranslation } from 'react-i18next';
 
 const NS = { ns: LOCALIZATION_NAMESPACE.GUIDES };
@@ -10,7 +10,7 @@ const NS_OBJ = {
 function Page() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GUIDES]);
 
-	return <GuideFactory questionnaire={[]} label={'Sample Guide'} />;
+	return <GuidePageBuilder questionnaire={[]} label={'Sample Guide'} />;
 }
 
 export default Page;

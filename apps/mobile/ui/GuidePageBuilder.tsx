@@ -1,4 +1,4 @@
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
+import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import {
 	ScrollView,
 	StyleProp,
@@ -8,17 +8,17 @@ import {
 } from 'react-native';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../components/shared/topnavbar/AppTopNavbar';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+} from '#/components/shared/topnavbar/AppTopNavbar';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { AppText } from '#/components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 
 export type UserGuideContainerProps = {
 	questionnaire: { question: string; answers: string[] }[];
 	label: string;
 };
 
-function GuideFactory({ questionnaire, label }: UserGuideContainerProps) {
+function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 	const { translateY } = useScrollMoreOnPageEnd({});
 	const { theme } = useAppTheme();
 
@@ -65,7 +65,7 @@ function GuideFactory({ questionnaire, label }: UserGuideContainerProps) {
 	);
 }
 
-export default GuideFactory;
+export default GuidePageBuilder;
 
 const styles = StyleSheet.create({
 	scrollView: {

@@ -1,6 +1,6 @@
-import GuideFactory from '../components/GuideFactory';
+import GuidePageBuilder from '#/ui/GuidePageBuilder';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 const NS = { ns: LOCALIZATION_NAMESPACE.GUIDES };
 const NS_OBJ = {
@@ -28,7 +28,7 @@ function SettingsGuide() {
 		},
 	];
 
-	return <GuideFactory questionnaire={qa} label={t(`settings.label`)} />;
+	return <GuidePageBuilder questionnaire={qa} label={t(`settings.label`)} />;
 }
 
 export default SettingsGuide;
